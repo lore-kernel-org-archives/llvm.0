@@ -1,95 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB51621CA03;
-	Sun, 14 Jun 2026 20:31:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C434179A3;
+	Sun, 14 Jun 2026 21:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781469111; cv=none; b=m25AwlIbeQ+lOhfZlG8+n1ilPp0ZjTUpz87YgFdHRtreRVOBOke3QsyLE0pSQAKGrPTyrxJ5SEYujd65yo2+J+yq4P52ewq7jxrADQBMXZGhoDl7c95XjXEHBfXKjvV6NeVPBicjPOxbFEOWF9sUil1gq52uaxrft3A8SHv67pU=
+	t=1781472221; cv=none; b=rQ1fuw46+qivMi24GHtQnUpScR8HQufmRBfmv5qDeLvVBzZinbu7bHS9kCkw3MA8gbKnXWxp8YQw2rujldWC2xFDIo96p+4mqh31Xi5ciBt4czdYXWAGGxVupNXKMQ2SGEEfrFiwvi6cjmAcRzHhfwheE6Jxry/ZgZ5Ld2Khlho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781469111; c=relaxed/simple;
-	bh=cBWaHdoxmiq6brTd1QAtT75checZ+82ruIMMfjYriyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FCr+rwsErpDfvmmrydtePn0jRvIfMYi2KZyTInuIWDyjKIvaYWJlvlayCwY1PqSvWT1H8slGC1ctHzCDreyp0Zz4AOXJ4mM0YOQSKZ+YOVLRnKRjlul8PE3zsnqeUHZYmoHltmA0uqcHJdyQedK0l2timZWyn9XYhWbqEMUwIuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R8QdGKfg; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1781472221; c=relaxed/simple;
+	bh=QFkPJi3x1ejn22MR9q07N0k+ywQ5OJsT+m4G0sebC+Q=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=F1Ms9M002+QHIThb6NHL41k+z/oMXTqQzVxeACYzSylEnuIoriOKW6AINWZn02Alz+qbACRRx34JulJpXRkrrfi3kkskCmKmgHs+O6wPgRetd58dRFTk0tdAvr7P+pRkoO2TOHe+FaadUgbGKU4b1svH5d3Ne+/OU0SHzV9+q08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WqYRgrPp; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R8QdGKfg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WqYRgrPp"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781469108; x=1813005108;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cBWaHdoxmiq6brTd1QAtT75checZ+82ruIMMfjYriyA=;
-  b=R8QdGKfgKVl8U4E6fq5qAdJA8Elg+afsgn5pl/gpgu3B/eFPqugGolz9
-   rbopakomM9gYarNPKIgh9mh5iS+kfHhEBgT7sf3mqP+IVXSpBAZP2Bud3
-   pLu18LrHHadX5ryAEYsKHBF41Qa4HS1hCwl63C03zp3Al3zZWuWzWim6E
-   NQkqpQ+uYgOhzXjWzvxuXgCwY2b/ulu5se5LIklYaoy3HYiQtDNeXRI9q
-   geCQEAX3aRMpGAPGwFA9EACsENxmHJCvqn+X4y8bhogxTLLdelqQaiyjE
-   ZCTXdd+3oXgUzDNmkQeNOGqBlu21IQar60IUJX4qPegz0t10IzQj7YRqh
-   w==;
-X-CSE-ConnectionGUID: ES4zeS4aQT2W3MIkVnIGrw==
-X-CSE-MsgGUID: sjDOkJSJS6SoW2ga9azq6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11817"; a="81231545"
+  t=1781472218; x=1813008218;
+  h=date:from:to:cc:subject:message-id;
+  bh=QFkPJi3x1ejn22MR9q07N0k+ywQ5OJsT+m4G0sebC+Q=;
+  b=WqYRgrPpuoD51f02U+XzPa2IBHtqKNBb7wtEuaWfJUDbU+pbJ2UOQtsJ
+   i80PCaQAyBaWrr0NpeKtX1t0wW3g4GTxnFXB52vMw6k9NP+wDu0X+MRh2
+   KYoCnXZbTqtau6rtZWUnmoNDHrY230vO1fPVKUPeD03P53Gc7PP77DhJE
+   5nvVlKaGQsnPffoQitg0WaN5MTZhwz8tyuDNwYvNiGXtOxsouPQ4GPxDs
+   GNUoF03lbNO47MNufTfoe54j2YVle9997WiGCYqo4vuBBy40VJVnUTn+k
+   68E2731YQAXUQGoh6Hne+ko5LVvXSUcl13AmSi9ugN3GSPbO7LwHdKBTJ
+   Q==;
+X-CSE-ConnectionGUID: Ho+ZvYBzQUy3AnVxd91CSg==
+X-CSE-MsgGUID: i+/9k9iCSJOkhvMhfZIblg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11817"; a="82199952"
 X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
-   d="scan'208";a="81231545"
+   d="scan'208";a="82199952"
 Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2026 13:31:47 -0700
-X-CSE-ConnectionGUID: FmQOavtWS36NSancMwtHBA==
-X-CSE-MsgGUID: k7zjGeMxQayDDF18rv4Y5Q==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2026 14:23:38 -0700
+X-CSE-ConnectionGUID: OGwVcphoQgehUxzaaSE5ww==
+X-CSE-MsgGUID: VjMJnVZaQae/M7s/4TD2Gw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
-   d="scan'208";a="247175398"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 14 Jun 2026 13:31:45 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+   d="scan'208";a="247180681"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa008.jf.intel.com with ESMTP; 14 Jun 2026 14:23:37 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wYrUc-00000000RBu-17nQ;
-	Sun, 14 Jun 2026 20:31:42 +0000
-Date: Mon, 15 Jun 2026 04:31:12 +0800
+	id 1wYsIo-000000004kv-13oD;
+	Sun, 14 Jun 2026 21:23:34 +0000
+Date: Sun, 14 Jun 2026 23:23:14 +0200
 From: kernel test robot <lkp@intel.com>
-To: Ronan Marchal <ronanmarchal29@gmail.com>, rafael@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pavel@kernel.org,
-	lenb@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ronan Marchal <ronanmarchal29@gmail.com>
-Subject: Re: [PATCH] kernel/power/snapshot: Add missing kernel-doc parameter
- descriptions
-Message-ID: <202606150431.R9kR0q9p-lkp@intel.com>
-References: <20260614144158.82751-1-ronanmarchal29@gmail.com>
+To: Ronan Marchal <ronanmarchal29@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/power/snapshot.c:2042:1: error: unknown type name 'c'
+Message-ID: <202606142358.yLiBjEy1-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260614144158.82751-1-ronanmarchal29@gmail.com>
 
-Hi Ronan,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on amd-pstate/linux-next]
-[also build test ERROR on amd-pstate/bleeding-edge linus/master v7.1 next-20260612]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Ronan-Marchal/kernel-power-snapshot-Add-missing-kernel-doc-parameter-descriptions/20260614-224612
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20260614144158.82751-1-ronanmarchal29%40gmail.com
-patch subject: [PATCH] kernel/power/snapshot: Add missing kernel-doc parameter descriptions
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260615/202606150431.R9kR0q9p-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260615/202606150431.R9kR0q9p-lkp@intel.com/reproduce)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Ronan-Marchal/kernel-power-snapshot-Add-missing-kernel-doc-parameter-descriptions/20260614-224612
+head:   3640842137db0e04106ba490ff1d1d6715de9a2b
+commit: 3640842137db0e04106ba490ff1d1d6715de9a2b kernel/power/snapshot: Add missing kernel-doc parameter descriptions
+date:   7 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260614/202606142358.yLiBjEy1-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260614/202606142358.yLiBjEy1-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606150431.R9kR0q9p-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606142358.yLiBjEy1-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
