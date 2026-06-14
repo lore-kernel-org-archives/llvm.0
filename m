@@ -1,269 +1,229 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067383B1BD;
-	Sun, 14 Jun 2026 00:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1EA155C82;
+	Sun, 14 Jun 2026 01:24:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781395436; cv=none; b=DiGvGvvGOoUGSKK3zw6oVW2Y3vhFkLhVYdc6thJYqYB2hbEAMFwG5BSsgDvSqyQ6eeYQt4+dldGcV9l4oCbDS4reLlymbbhUiqziA9KhykCH2Q7MGucjbgX6juCBkZqIgntGTV0OWAonWEc0aqVAcL39ImoAMGMDE0nhUgVETdo=
+	t=1781400246; cv=none; b=FW0XcWwjpcVtQm0l0QyaLSHd22ARuYHNukx2xJnZnqRx7RoGWG2id0B9T+rPPXqZq8TQOfjfjOMQ/Cn6JlLxzRm195KTnKfNTGwO2MFRZNRCep2OchsYm3o1gDhxtpnn/D3FNX/uU45OSg/2cnZGKRsquo7DoWfTTWhf3gRWXsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781395436; c=relaxed/simple;
-	bh=VksiTXrs/c8MNTI7YJSFem1K8m/7E1Rvmk4eWCSxFoQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=aaDLidWbB/dnAd3xqkFImrHmzFgylWeSEs9iZvuGjs1HsRPN/m9R5C2wHDi4v4ZW3urBQFqWSi0fIfjh1OpfQEh9mfqmtUEipmeXb0CkpjhGYhSLEMBaWHVw6MQpgP4Ng24Kq2Eoz2s28qrAqc7Fp6K/KuXFfnMP+Noupx7GXlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ef+y7W9w; arc=none smtp.client-ip=192.198.163.17
+	s=arc-20240116; t=1781400246; c=relaxed/simple;
+	bh=bP4L/JPYGvhjM8Q+ob9eWSRSR8BVuAjZiUlMtw1t3yA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=fw/l0OymlfP3YBEIF7R8WnbaVb5fGpI/G5GpNAhyoVD/LG5Ysjos+yxIxZe8+EuN2K095IFaS6ifnhJuWmrFHU0iXgYML44uWYMypQDSbyxNUOWPrI9/L36Sb32h8iTujGgazdzaipRsvDxkyo/9zuIPxkUF3B3HpOVhiTcLRpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J5h9qw4J; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ef+y7W9w"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J5h9qw4J"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781395435; x=1812931435;
-  h=date:from:to:cc:subject:message-id;
-  bh=VksiTXrs/c8MNTI7YJSFem1K8m/7E1Rvmk4eWCSxFoQ=;
-  b=Ef+y7W9w4ZkR0nxYduAo8WdpN8tVS0av1j//zHmJLA2zTAapLNFHvkqV
-   JjrJtTxW2dwXO4p9AbcuSzyt/Wa1EI/TlnKGl9pSvB572cB37xdeyGkJR
-   Hxge3JOfeKtOVpM+Q9H17N73R4XFdDi78E7zXUJ27QwHN0Od+c6cAde7b
-   yTEOGv7LJav31j85v6bvNhj0Yddmb/OHSqVt2XZHkXjLjb3ZmqWjnOJwk
-   R42aFKNIPF+Y7JoIIZ0lJivi/gZefELU9XBJ+ytPgf1lYh1JpA61PPP/g
-   BbL9XLNH6zPvGw3L8KUVZkkqEXO/04BL4ODa//qloNa/y8IJxu4sS7D24
-   A==;
-X-CSE-ConnectionGUID: U4Fcid3aQPWb9CmdwmCfpA==
-X-CSE-MsgGUID: 2y5f9eTdTrOFwBAxI5DNWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11816"; a="82031631"
+  t=1781400244; x=1812936244;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=bP4L/JPYGvhjM8Q+ob9eWSRSR8BVuAjZiUlMtw1t3yA=;
+  b=J5h9qw4JEarNYVngdFrodmfrSscZLJfLmdmpjqcMsrWpt0KAJo3wlA4C
+   NSsmfIKeJ1MOZVJsTuYSUNOkBuCoyIowePUbXoGUCdHBNS2z4hjWfvPTX
+   8uVgx9ZOx24xWyQtybrQHardWjWlHAD4n8M4CCmZXPeVaESk7aWQAaPCL
+   1rc6A3BDagZ+K2bWOhlVS+WzKmcB4xb4K1HQLPbD3j8nnMpYOG7nA7xWA
+   aIfhpSYC7eNpOIf5WWI/GqU8s1NPWnnJuPPTxHJGBW+jqgppBcoZyotYA
+   XTlLXR/iTlIJj2Ln1F/jECfKpEOZxD4WAFiNcI/9hdOaOGx8xMniYdcgH
+   g==;
+X-CSE-ConnectionGUID: 575zc5ZSQNW4/IkTsxgXUw==
+X-CSE-MsgGUID: W0/g0wMQR5uWKsbSKwPtHg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11816"; a="82291339"
 X-IronPort-AV: E=Sophos;i="6.24,203,1774335600"; 
-   d="scan'208";a="82031631"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2026 17:03:53 -0700
-X-CSE-ConnectionGUID: 66IJr+ttRgSFrs8slLepXg==
-X-CSE-MsgGUID: ydvWA7zoSMWH+vUcvGa6vw==
+   d="scan'208";a="82291339"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2026 18:24:02 -0700
+X-CSE-ConnectionGUID: yrpEH7hWQ9qPIp+QZuQgRw==
+X-CSE-MsgGUID: 3uQ82u+QT7+Yt+tzwlLQLQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,203,1774335600"; 
-   d="scan'208";a="246245041"
 Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 13 Jun 2026 17:03:51 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 13 Jun 2026 18:24:00 -0700
 Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wYYKK-00000000QOo-3I9d;
-	Sun, 14 Jun 2026 00:03:48 +0000
-Date: Sun, 14 Jun 2026 08:03:05 +0800
+	id 1wYZZt-00000000QSI-3RMC;
+	Sun, 14 Jun 2026 01:23:57 +0000
+Date: Sun, 14 Jun 2026 09:23:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:configfs-ns.v6 1/24]
- drivers/nvme/target/bpf.h:26:9: error: call to undeclared function
- 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202606140700.QNDLr2fR-lkp@intel.com>
+To: Dave Airlie <airlied@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ Matthew Brost <matthew.brost@intel.com>
+Subject: [drm-tip:drm-tip 1/9]
+ drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c:203:1: warning: unused label 'retry'
+Message-ID: <202606140935.EiNEvxGP-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v6
-head:   65843faa046b6a3ff4953aba7319313104638535
-commit: 95eeb6714114cd17d9c4c494a28cc11d86059eef [1/24] nvmet-bpf: eBPF struct_ops support for log pages
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260614/202606140700.QNDLr2fR-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260614/202606140700.QNDLr2fR-lkp@intel.com/reproduce)
+tree:   https://gitlab.freedesktop.org/drm/tip.git drm-tip
+head:   5fc0f82c971ea3b4e1c58602c0be573a802a8670
+commit: f8363c190f6fe6cffebc8733c2375330112327f9 [1/9] Merge remote-trackin=
+g branch 'drm/drm-next' into drm-tip
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260614=
+/202606140935.EiNEvxGP-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 305=
+faf498a4e0b52b40742c927af63ab2082e1a9)
+reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archive=
+/20260614/202606140935.EiNEvxGP-lkp@intel.com/reproduce)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
+If you fix the issue in a separate patch/commit (i.e. not just a new versio=
+n of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606140700.QNDLr2fR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606140935.EiNEvxGP-lkp@i=
+ntel.com/
 
-All error/warnings (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
-   In file included from drivers/nvme/target/core.c:17:
-   In file included from drivers/nvme/target/trace.h:19:
-   In file included from drivers/nvme/target/nvmet.h:26:
->> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
-      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-         |                                            ^
->> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                               ^
->> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                            ^
->> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                        ^
-   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                  ^
-   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                               ^
->> drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                ^
->> drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                                                                    ^~~~~~~~~~~
-   6 warnings and 2 errors generated.
---
-   In file included from drivers/nvme/target/configfs.c:23:
-   In file included from drivers/nvme/target/nvmet.h:26:
->> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
-      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-         |                                            ^
->> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                               ^
->> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                            ^
->> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                        ^
-   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                  ^
-   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                               ^
->> drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                ^
->> drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                                                                    ^~~~~~~~~~~
->> drivers/nvme/target/configfs.c:1114:19: error: incompatible pointer types passing 'struct nvmet_subsys_link *' to parameter of type 'struct nvmet_subsys_link *' [-Wincompatible-pointer-types]
-    1114 |         nvmet_bpf_detach(p);
-         |                          ^
-   drivers/nvme/target/bpf.h:15:63: note: passing argument to parameter 's' here
-      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-         |                                                               ^
-   6 warnings and 3 errors generated.
---
-   In file included from drivers/nvme/target/admin-cmd.c:13:
-   In file included from drivers/nvme/target/nvmet.h:26:
->> drivers/nvme/target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
-      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-         |                                            ^
->> drivers/nvme/target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                               ^
->> drivers/nvme/target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                            ^
->> drivers/nvme/target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                        ^
-   drivers/nvme/target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                  ^
-   drivers/nvme/target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                               ^
->> drivers/nvme/target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                ^
->> drivers/nvme/target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                                                                    ^~~~~~~~~~~
->> drivers/nvme/target/admin-cmd.c:224:26: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Wincompatible-pointer-types]
-     224 |         if (nvmet_bpf_supported(ctrl->subsys, req->port)) {
-         |                                 ^~~~~~~~~~~~
-   drivers/nvme/target/bpf.h:16:61: note: passing argument to parameter 'subsys' here
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                             ^
->> drivers/nvme/target/admin-cmd.c:224:40: error: incompatible pointer types passing 'struct nvmet_port *' to parameter of type 'struct nvmet_port *' [-Wincompatible-pointer-types]
-     224 |         if (nvmet_bpf_supported(ctrl->subsys, req->port)) {
-         |                                               ^~~~~~~~~
-   drivers/nvme/target/bpf.h:16:88: note: passing argument to parameter 'port' here
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                                        ^
->> drivers/nvme/target/admin-cmd.c:228:37: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Wincompatible-pointer-types]
-     228 |                         if (nvmet_bpf_log_page_supported(req, i))
-         |                                                          ^~~
-   drivers/nvme/target/bpf.h:20:67: note: passing argument to parameter 'req' here
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                                   ^
-   drivers/nvme/target/admin-cmd.c:626:26: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Wincompatible-pointer-types]
-     626 |         if (nvmet_bpf_supported(ctrl->subsys, req->port) &&
-         |                                 ^~~~~~~~~~~~
-   drivers/nvme/target/bpf.h:16:61: note: passing argument to parameter 'subsys' here
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                             ^
-   drivers/nvme/target/admin-cmd.c:626:40: error: incompatible pointer types passing 'struct nvmet_port *' to parameter of type 'struct nvmet_port *' [-Wincompatible-pointer-types]
-     626 |         if (nvmet_bpf_supported(ctrl->subsys, req->port) &&
-         |                                               ^~~~~~~~~
-   drivers/nvme/target/bpf.h:16:88: note: passing argument to parameter 'port' here
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                                        ^
-   drivers/nvme/target/admin-cmd.c:627:35: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Wincompatible-pointer-types]
-     627 |             nvmet_bpf_log_page_supported(req, lid))
-         |                                          ^~~
-   drivers/nvme/target/bpf.h:20:67: note: passing argument to parameter 'req' here
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                                   ^
-   drivers/nvme/target/admin-cmd.c:628:33: error: incompatible pointer types passing 'struct nvmet_subsys *' to parameter of type 'struct nvmet_subsys *' [-Wincompatible-pointer-types]
-     628 |                 return nvmet_bpf_get_log_page(ctrl->subsys, req);
-         |                                               ^~~~~~~~~~~~
-   drivers/nvme/target/bpf.h:24:64: note: passing argument to parameter 'subsys' here
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                ^
-   drivers/nvme/target/admin-cmd.c:628:47: error: incompatible pointer types passing 'struct nvmet_req *' to parameter of type 'struct nvmet_req *' [-Wincompatible-pointer-types]
-     628 |                 return nvmet_bpf_get_log_page(ctrl->subsys, req);
-         |                                                             ^~~
-   drivers/nvme/target/bpf.h:24:90: note: passing argument to parameter 'req' here
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                                          ^
-   6 warnings and 10 errors generated.
---
-   In file included from drivers/nvme/target/fcloop.c:11:
-   In file included from drivers/nvme/target/../target/nvmet.h:26:
->> drivers/nvme/target/../target/bpf.h:15:44: warning: declaration of 'struct nvmet_subsys_link' will not be visible outside of this function [-Wvisibility]
-      15 | static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-         |                                            ^
->> drivers/nvme/target/../target/bpf.h:16:47: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                               ^
->> drivers/nvme/target/../target/bpf.h:16:76: warning: declaration of 'struct nvmet_port' will not be visible outside of this function [-Wvisibility]
-      16 | static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-         |                                                                            ^
->> drivers/nvme/target/../target/bpf.h:20:56: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      20 | static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-         |                                                        ^
-   drivers/nvme/target/../target/bpf.h:24:50: warning: declaration of 'struct nvmet_subsys' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                  ^
-   drivers/nvme/target/../target/bpf.h:24:79: warning: declaration of 'struct nvmet_req' will not be visible outside of this function [-Wvisibility]
-      24 | static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-         |                                                                               ^
->> drivers/nvme/target/../target/bpf.h:26:9: error: call to undeclared function 'nvmet_bpf_req_complete'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                ^
-   drivers/nvme/target/../target/bpf.h:26:61: error: use of undeclared identifier 'NVME_SC_DNR'
-      26 |         return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
-         |                                                                    ^~~~~~~~~~~
-   6 warnings and 2 errors generated.
+>> drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c:203:1: warning: unused label 're=
+try' [-Wunused-label]
+     203 | retry:
+         | ^~~~~~
+   1 warning generated.
 
 
-vim +/nvmet_bpf_req_complete +26 drivers/nvme/target/bpf.h
+vim +/retry +203 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c
 
-     8	
-     9	void nvmet_bpf_detach(struct nvmet_subsys_link *s);
-    10	bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port);
-    11	bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid);
-    12	void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req);
-    13	int __init nvmet_bpf_struct_ops_init(void);
-    14	#else
-  > 15	static inline void nvmet_bpf_detach(struct nvmet_subsys_link *s) {}
-  > 16	static inline bool nvmet_bpf_supported(struct nvmet_subsys *subsys, struct nvmet_port *port)
-    17	{
-    18		return false;
-    19	}
-  > 20	static inline bool nvmet_bpf_log_page_supported(struct nvmet_req *req, u8 lid)
-    21	{
-    22		return false;
-    23	}
-    24	static inline void nvmet_bpf_get_log_page(struct nvmet_subsys *subsys, struct nvmet_req *req)
-    25	{
-  > 26		return nvmet_bpf_req_complete(req, NVME_SC_INVALID_FIELD | NVME_SC_DNR);
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  168 =20
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  169  int amdgpu_hmm_range_get_pages(struct mmu_interval_notif=
+ier *notifier,
+d4cbff464d2932a drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2022-11-09  170  			       uint64_t start, uint64_t npages, bool rea=
+donly,
+c5b3cc417b0260a drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Sunil Khatri       =
+  2025-09-17  171  			       void *owner,
+737da5363cc07c9 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Sunil Khatri       =
+  2025-10-10  172  			       struct amdgpu_hmm_range *range)
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  173  {
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  174  	const u64 max_bytes =3D SZ_2G;
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  175 =20
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  176  	struct hmm_range *hmm_range =3D &range->hmm_range;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  177  	unsigned long *pfns;
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  178  	unsigned long end;
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  179  	int r;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  180 =20
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  181  	pfns =3D kvmalloc_array(npages, sizeof(*pfns), GFP_KERN=
+EL);
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  182  	if (unlikely(!pfns)) {
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  183  		r =3D -ENOMEM;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  184  		goto out_free_range;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  185  	}
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  186 =20
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  187  	hmm_range->notifier =3D notifier;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  188  	hmm_range->default_flags =3D HMM_PFN_REQ_FAULT;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  189  	if (!readonly)
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  190  		hmm_range->default_flags |=3D HMM_PFN_REQ_WRITE;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  191  	hmm_range->hmm_pfns =3D pfns;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  192  	hmm_range->start =3D start;
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  193  	end =3D start + npages * PAGE_SIZE;
+8c21fc49a8e637b drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Alex Sierra        =
+  2021-05-06  194  	hmm_range->dev_private_owner =3D owner;
+d8a3c1c80ceb656 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2021-03-30  195 =20
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  196  	hmm_range->notifier_seq =3D mmu_interval_read_begi=
+n(notifier);
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  197  	do {
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  198  		hmm_range->end =3D min(hmm_range->start + max_byt=
+es, end);
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  199 =20
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  200  		pr_debug("hmm range: start =3D 0x%lx, end =3D 0x%lx",
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  201  			hmm_range->start, hmm_range->end);
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  202 =20
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24 @203  retry:
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  204  		r =3D hmm_range_fault(hmm_range);
+342981fff32802a drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Honglei Huang      =
+  2026-05-29  205  		if (unlikely(r))
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  206  			goto out_free_pfns;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  207 =20
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  208  		if (hmm_range->end =3D=3D end)
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  209  			break;
+962d684b5dc0741 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Christian K=C3=B6ni=
+g      2026-02-18  210  		hmm_range->hmm_pfns +=3D max_bytes >> PAGE_SHIFT;
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  211  		hmm_range->start =3D hmm_range->end;
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  212  	} while (hmm_range->end < end);
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  213 =20
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  214  	hmm_range->start =3D start;
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  215  	hmm_range->hmm_pfns =3D pfns;
+c1420a5dd4dd2a1 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c James Zhu          =
+  2022-11-17  216 =20
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  217  	return 0;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  218 =20
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  219  out_free_pfns:
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  220  	kvfree(pfns);
+dfc74e37bdb487e drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Srinivasan Shanmuga=
+m 2025-10-23  221  	hmm_range->hmm_pfns =3D NULL;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  222  out_free_range:
+9095e5544061b16 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Philip Yang        =
+  2024-04-30  223  	if (r =3D=3D -EBUSY)
+9095e5544061b16 drivers/gpu/drm/amd/amdgpu/amdgpu_hmm.c Philip Yang        =
+  2024-04-30  224  		r =3D -EAGAIN;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  225  	return r;
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  226  }
+04d8d73dbcbe645 drivers/gpu/drm/amd/amdgpu/amdgpu_mn.c  Philip Yang        =
+  2020-02-24  227 =20
+
+:::::: The code at line 203 was first introduced by commit
+:::::: 04d8d73dbcbe645a378fca6adc6f0e7111e46c17 drm/amdgpu: add common HMM =
+get pages function
+
+:::::: TO: Philip Yang <Philip.Yang@amd.com>
+:::::: CC: Alex Deucher <alexander.deucher@amd.com>
 
 --
 0-DAY CI Kernel Test Service
