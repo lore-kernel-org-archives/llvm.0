@@ -1,124 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD0713B584;
-	Mon, 15 Jun 2026 00:43:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1471C3318
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 02:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781484185; cv=none; b=tByPw8cR/e1lVKEmVeQpNSbRWKNfC4YB3aAzLCGmAD7ehuV2H5leelER03oiqfX1t1tHuRtDyT8PwvvnhRnyiRdSsJdHMWU9HjWNMmOrMclK5qdki3O9gtkY1gpikIl0BaqnUCcc32pY1r1otPOckJ+nJqC3+tKRmWVo+qAKWtI=
+	t=1781491931; cv=none; b=BWwXiq5ErzMgK0iv9/LHJhqoGMiqt3Iu4SN241uc8n0VbLODa8nwKNoCcn3RYUKa6DJmAewzwJIHPFD7dBEBWmpmX55z1DWMjEObSvYosB0oNuHyZ6f7wt4RIzzxZliQYH9zO4g8R0s+YqN9WFas5RjwPLhb7ofB90ORJ7Pa4ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781484185; c=relaxed/simple;
-	bh=AvZdXTNtSkDZo5aV+FuouBwHA4hBOPkcsNaFuzZuWL4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X/+i7XNpnjMAMQQMADOzJQ6TD8RLKGeCa5yh9yCRhuAfF8oCPcPCJNGN5S8hoNqom0Y4HcKBYY6zk1x0VJo2t5IU3fhxxy/sV6nHTuCmMfNFAuvtwbTa/zRx/OFy7huIXbL8qaVwjvsDksl9XdnPbihsWECp9O5BC15/OHV0VVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L817aBrg; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781491931; c=relaxed/simple;
+	bh=0/1Nki0s9Hu+ZCYRaqcGOmJMizxTGbLUWsG4f7SNPis=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=R/o26H18ZThlmi+9Q29PwffVIrs8XZw0h8WmSPtUeLMhq5jq/UtgidyyyhCg0oD3uFY0A6CyIdlzbdPpAgsnUWdjnJ6eIQbH5W37enAgMWCPGXXvciVUXrtwnnsadVOEpqqxtkesr+Frk8Xj/TqeBCapLApYggI2CFOFzqgLPQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y9gKKtpx; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L817aBrg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781484183; x=1813020183;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AvZdXTNtSkDZo5aV+FuouBwHA4hBOPkcsNaFuzZuWL4=;
-  b=L817aBrgm+DoF7Qh1P1TcQWMqOoj5xBsRviTyB0j6uO1xYfC4p8w0lum
-   DKerxU3vfXATutA/T6m/NxQCj6pM7Kx+sTuuTfyVRbGyEvAp9bAPyxbtr
-   9NbUrSKlE0UljCQe6Hi2bIeThuznTgXpDMrnTBU2z5bAh1gHrnhx7F965
-   h6OYZRMPlNSbHktVv90Dx8wYVC5kdp5TizEGwsa4AHgyF9Ajs7KoZ8jrr
-   Ork/AHshnVGxTqP+0eNSsKhJk6RgLnbXAeXCe2cmYac/+pgwGgEacwtcD
-   lQoYKIh8d4PQMKKwS5NBh3IxPpSNH38C+pqSnu3zpd1O2ijj/umEQmXE2
-   g==;
-X-CSE-ConnectionGUID: iFgm+XN7QVO3He1VP5783A==
-X-CSE-MsgGUID: x9V8zctGRa+pbfmpcAfhSQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11817"; a="82233293"
-X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
-   d="scan'208";a="82233293"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2026 17:43:03 -0700
-X-CSE-ConnectionGUID: qoqDpLDbTSWJblD78y8e5g==
-X-CSE-MsgGUID: C8Pxmp9mSZ2qIN7l1XsRHg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
-   d="scan'208";a="271003255"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 14 Jun 2026 17:42:58 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wYvPj-00000000RKs-3KLk;
-	Mon, 15 Jun 2026 00:42:55 +0000
-Date: Mon, 15 Jun 2026 08:42:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: mheib@redhat.com, intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, corbet@lwn.net, anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch,
-	Mohammad Heib <mheib@redhat.com>
-Subject: Re: [Intel-wired-lan] [PATCH net-next] i40e: add devlink parameter
- for Flow Director ATR sample rate
-Message-ID: <202606150807.u6hUM8VJ-lkp@intel.com>
-References: <20260614161131.192068-1-mheib@redhat.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y9gKKtpx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781491929;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zsw2oQryK4DNOvbZcUqRaWG2rbyI0ZHqQpmAcY0fUmo=;
+	b=Y9gKKtpxNYhabO6obglYdUH2Vs2WJ0IYLdknRIuW/IyBHvY1vLKTKfHMi5eNtKijjHZD72
+	Ys+e/OS37n0IQ3uIfEj63gGDDNRne6S9lelMPHkHyRL2lmi69Nr7vR+9jZzJOECe5j5X9w
+	n2B0YedepR+3c6DfA4PTmtrMufPlYvM=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-695-kdVJik9wN0iDimDfvaqemw-1; Sun,
+ 14 Jun 2026 22:52:08 -0400
+X-MC-Unique: kdVJik9wN0iDimDfvaqemw-1
+X-Mimecast-MFC-AGG-ID: kdVJik9wN0iDimDfvaqemw_1781491927
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 49DDF19560B6
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 02:52:07 +0000 (UTC)
+Received: from [172.20.201.113] (unknown [10.30.45.66])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id CFAA61955BC0;
+	Mon, 15 Jun 2026 02:52:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
+ upstream-mainline, 8cd9520d)
+Date: Mon, 15 Jun 2026 02:52:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260614161131.192068-1-mheib@redhat.com>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <18808.126061422520800228@us-mta-695.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: GoNY_naVGQIVwLK8xkwea0Z-DDRt1rGpEgcUhp4WfuE_1781491927
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/mheib-redhat-com/i40e-add-devlink-parameter-for-Flow-Director-ATR-sample-rate/20260615-001257
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260614161131.192068-1-mheib%40redhat.com
-patch subject: [Intel-wired-lan] [PATCH net-next] i40e: add devlink parameter for Flow Director ATR sample rate
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260615/202606150807.u6hUM8VJ-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260615/202606150807.u6hUM8VJ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606150807.u6hUM8VJ-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/i40e/i40e_devlink.c:106:9: error: incompatible function pointer types initializing 'int (*)(struct devlink *, u32, union devlink_param_value *, struct netlink_ext_ack *)' (aka 'int (*)(struct devlink *, unsigned int, union devlink_param_value *, struct netlink_ext_ack *)') with an expression of type 'int (struct devlink *, u32, union devlink_param_value, struct netlink_ext_ack *)' (aka 'int (struct devlink *, unsigned int, union devlink_param_value, struct netlink_ext_ack *)') [-Wincompatible-function-pointer-types]
-     106 |                              i40e_atr_sample_rate_validate),
-         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/net/devlink.h:650:14: note: expanded from macro 'DEVLINK_PARAM_DRIVER'
-     650 |         .validate = _validate,                                          \
-         |                     ^~~~~~~~~
-   1 error generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +106 drivers/net/ethernet/intel/i40e/i40e_devlink.c
+Kernel information:
+    Commit message: Linux 7.1
 
-    93	
-    94	static const struct devlink_param i40e_dl_params[] = {
-    95		DEVLINK_PARAM_GENERIC(MAX_MAC_PER_VF,
-    96				      BIT(DEVLINK_PARAM_CMODE_RUNTIME),
-    97				      i40e_max_mac_per_vf_get,
-    98				      i40e_max_mac_per_vf_set,
-    99				      NULL),
-   100		DEVLINK_PARAM_DRIVER(I40E_DEVLINK_PARAM_ID_ATR_SAMPLE_RATE,
-   101				     "atr_sample_rate",
-   102				     DEVLINK_PARAM_TYPE_U32,
-   103				     BIT(DEVLINK_PARAM_CMODE_RUNTIME),
-   104				     i40e_atr_sample_rate_get,
-   105				     i40e_atr_sample_rate_set,
- > 106				     i40e_atr_sample_rate_validate),
-   107	};
-   108	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2600264649
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2600264649_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
