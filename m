@@ -1,120 +1,122 @@
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0695138F934
-	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 21:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781558807; cv=pass; b=m2fK2lnUQYYN9u7SZadrhPkUWo6Y0UODEhydCd8XiC45VFM3GI5lL+rL/1cKqxOvaYHWqU4TuhYiB666ReSZ0E9JZY826uWmkPATSL0aFt1vI0ic2gioeWN6q2eT6oRCDhOj8XZIUIV24bZJaKBWbhnMqmFITPM0tpF5F8nMDNI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781558807; c=relaxed/simple;
-	bh=ToZuC56F4bCiUTbRp3OuxSWwbRuPhht31/r/OtwBpF4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jmBch2o3HRSZIjflWEUwR07UtJDEaxI6CoaJ3oHb1x0AunOdHb+4SpebRriGGupkXjDlGlMuHHURKKBwfH7oIakkwXC9oagUZpsIwW3QhWV4RlyO7n4Bvixu+2C5Ud3KeSprC95pIZ6R+0siuymTKc/AAWr8ZjMXW8PGDrmC5hg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JK0kWoDz; arc=pass smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E97A3B71AA;
+	Mon, 15 Jun 2026 22:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781561311; cv=none; b=XdMLMRyuBJ1HkkzpSNkpgMVXM/qiNfHHjcGt3aI0zacbu77B48a+/ZAMqByATQ3/q7jSzInxpq5j3K5CXzJOW6W9gGbbtBUYVrHB7FOd4LMCBIWWei4cPnLYjRXBSQOIDTPYwpeKTGMICJcfeljswGJxMflnWq+YI142atZCjTg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781561311; c=relaxed/simple;
+	bh=A1u3CCew+XEdU9sVqkQt/9+6IQRkv0lNH1B+dqzCaTo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VAJL3HSwOeuEN9sGgPBjDienh8c+9zWVNrflNVnnCYGUBy9x9TIZ+fOMEypuU1Fk9cLO5CQihMppqR8vRuaBnvb7Ps/g3OSzb+28/gWljtYVy/8NXhHb21sRlRKuHsSaS/TPcUJONvI+04TptyJrwgFXKS4IExTPHWg9pG4PvFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NcpG2CRs; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JK0kWoDz"
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-68d22476e88so3733a12.0
-        for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 14:26:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781558804; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Gv2Ax0cgHXEbDIShrpQVkMeHTlAsVYTeHECgYag4rpaoYNHn7Zu7LFUcAn3Ez20iVl
-         tvJuB8Yq1hyp6rcd/37qAatSe1XCj40bbBCMd/WOdtGxHNnFnumDRS5+8Pi4N7sUCT8Y
-         f6yR22I8JYBY/VmIQKpIpgk95a5sHTkvBCYn94GS8CtzPbvQUvMw0mhL/h2kRuR4u5Od
-         RQ/mz+NSfLEo2D7iS3KqrdWrrMZ0NBitZS2Nr8CogCrRHF+2xgNWjfUVQu/UgxFgV795
-         DFpI5O8eN6zaV9jOoFUMg5AxEoT078T/TSJs9ZCZcFkzWwfOLfSMxUz9PfOk6Vxs7+/S
-         7F2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=ToZuC56F4bCiUTbRp3OuxSWwbRuPhht31/r/OtwBpF4=;
-        fh=NiNJo2t8jSjsKnip5E4MQnm1K29k8U2K/aeRXfzGHqg=;
-        b=S/hL+/r24IB285DYGAGHHsECc3+3Nl2tEB2lfk5RJWUZHJwHupqjzlF/9VszpX8Ovn
-         9X+/xsR8h9ymAEH2abqoYJkhNZC6VUXfj5LIpJmzaRaz10jW2gJ8cLzINSfZaO9U7VLn
-         8eUVhJVXPactoWiPKLPZ+D7tTlOh2l65AdTlWON3C2UQ0/dpyNrn3PrnQMK1PhUvbGc9
-         LEwNJ9idZacdzkQ1GOa9aIDlf5X7W8x0vlVDbvdkc94pALF/RjeigOWYm3ouqnVgbcmx
-         4kVRPKcqP6GQrACZESrirPcI5CbWJPHoJ73C6CGdmC9NV4PAEHH7lObeZ4ZI0upLrf3X
-         q3ww==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1781558804; x=1782163604; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ToZuC56F4bCiUTbRp3OuxSWwbRuPhht31/r/OtwBpF4=;
-        b=JK0kWoDzM7X6Ybj9lZ8z1UwLN7f8DEEzNHZ4DUHb/hWQHcSW0d5kg3LEO9rKOQrylq
-         UA5GS4EyPWgvVTJHKlkYzne6yFpWG18yZhy8Z0wHVgGvX1mHCb4aYEJ0dKzisfajZYNl
-         6opneVDmmFSMOA94mbJXZCcxPL/c0lguWQ650oIDsXXXX0QY5A0XJcwlqy0UxqhrmID/
-         8s60cxmXPATdVptFciafO8HCMKPj5YFD94V7tfnR6KJVp50Qf4ncCIiFZZe3IOlJ9/pe
-         2jXnR+/H0x7dMib1d72veJu2OYS+61ht2wPEGuzUqOdVOEXdCWC1vF9kKI+XMzRGYQ59
-         Dwzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781558804; x=1782163604;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ToZuC56F4bCiUTbRp3OuxSWwbRuPhht31/r/OtwBpF4=;
-        b=AB+gEA4bq+HGn/+EccBWugP3HTVY9OgLBXrjLAfIPDRRZJWDHUu25sNBVZ8hq77Qhr
-         JGWGMxp2WunIBNrDMEGjnCz8mCUEN6d6rtYexszdUBUjveQlV9jfUmoSSkbJSfla8xXa
-         miVJ/JP+nv/uox4bzLxL5SeiaQOFsR306QXpvFzr5x7PYUodsAUMEkCmR3mMfyVO5lUI
-         4Dxpzr8zFW136AmU0MLHEgvy2S+d4Z9rPd/Hrj7n8XGPG6bw9FYv/toQRVI8Vz/Z0wsN
-         qsWtytfW5mJVvqi89Ee96+xXtc5I1UO/PfWruJOxCpTd7X8PMsY361MBEnC3Fg4Ti7rx
-         6OyA==
-X-Forwarded-Encrypted: i=1; AFNElJ8qHAKXHhTo4bTw0hkvjTVEHIQdvqoYfDwZPuuL4QJ1F3g1vuzrPE2hzL1snbmq6BrwXgOv@lists.linux.dev
-X-Gm-Message-State: AOJu0YyXU5QrcWpjvWMnbt/9Mty92XIyVCZDmXWi7wPGsbaI4PZFylgk
-	HgL6XcYLgUzSCJD7CMxyQMuK4QPiRmO5qzzaIjhdQZPVXFJOkRmzuvxHb2UPYMnU61N/AhXq7Hy
-	FYfBNB9iVH5bZJps0O2l/DZMEpzrY7TSiU6mMcMJc
-X-Gm-Gg: Acq92OF386gI0FVXjmRxY4B/86QyM44l//fYHFBrlTSJnZmKcj7E7WnH22pWZujkieF
-	Xd0rOd7SGJFzYLBwsKtAPwRHTJWK9lQniC9gRd/+CdJ8zM4/mVljvldTtE1J1IbRnz9sY1W5NS7
-	/4g7N3zehdPzHGyIeylnzqF+9QHBinbYS8dCkA8FkiLKrT6zXzgkbLpi++upK5AyLKROj/yn2cX
-	TB+tqAg3Wewhxx7+Ojinlqe0+W6Pa/IyPc+5QrvDLvNoON+zNabfkwARk4ezKzpd6sNO9+R0cvQ
-	kGI3lhTViBEcWW12SpjhqiLkVurnZk2fW1D4AnkI6ZH1L4bw
-X-Received: by 2002:a05:6402:684:b0:683:33ae:8689 with SMTP id
- 4fb4d7f45d1cf-695085d13b5mr21597a12.4.1781558803963; Mon, 15 Jun 2026
- 14:26:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NcpG2CRs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781561309; x=1813097309;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=A1u3CCew+XEdU9sVqkQt/9+6IQRkv0lNH1B+dqzCaTo=;
+  b=NcpG2CRsX8Rjle67UpbNbT1PJPZlKkvnHGU1IZnY8pGKIHhAhvYNU9M+
+   +yN7fSgexq+o1OPRH31r1+XaX/As4I2oXQMP3rIjxPYHRe5iUUDZlx3/n
+   NiCCZxz9KUqQyVNK6AqOItqwS8P+iEtl76LnQOhsRiWdJdkylWhY+Af//
+   QhoNZjHnWCXOyZGXKG0VJPCbNj3nMgnoS9pvZjJpI3p8zuJrx0IRMhxB+
+   GmVVs68MNpl/H+rGuTPUiQBGod5s/jOKIEWRNWvE8bX0y3lBR7vGSOKF9
+   MB7IErn7mtp33+6lIDPW1HVJ4TegikItOCkaT7yWcEBRUvrUAcIQAUTGw
+   Q==;
+X-CSE-ConnectionGUID: vTYp1O0tRraU2f88lqH8MA==
+X-CSE-MsgGUID: ZPKsJr+uTDai7M811+7PpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11818"; a="82163995"
+X-IronPort-AV: E=Sophos;i="6.24,207,1774335600"; 
+   d="scan'208";a="82163995"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2026 15:08:29 -0700
+X-CSE-ConnectionGUID: imRkFM9IRCyfFMUV1Ltvrw==
+X-CSE-MsgGUID: taP2ecybTbK5wPswf4pnQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,207,1774335600"; 
+   d="scan'208";a="247645560"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 15 Jun 2026 15:08:27 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wZFTk-00000000SPc-3f8C;
+	Mon, 15 Jun 2026 22:08:24 +0000
+Date: Tue, 16 Jun 2026 06:08:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/cros_ec-hwmon-fan-curve 6/8]
+ drivers/hwmon/cros_ec_hwmon.c:426:11: warning: result of comparison of
+ constant 9223372036854775807 with expression of type 'u32' (aka 'unsigned
+ int') is always false
+Message-ID: <202606160631.PYJS1WF9-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260612162257.896792-1-xur@google.com> <20260613170143.GB3152432@ax162>
-In-Reply-To: <20260613170143.GB3152432@ax162>
-From: Rong Xu <xur@google.com>
-Date: Mon, 15 Jun 2026 14:26:31 -0700
-X-Gm-Features: AVVi8CfiVeC4233aezHEUet34ga7TDorkoyE27yShVwTmSOfx7cYTcOkCfEkcXc
-Message-ID: <CAF1bQ=S6OMwWuA=xaKy4CNvCmsAaJ2DQPi5LnfLyu6x4RnF61w@mail.gmail.com>
-Subject: Re: [PATCH] net: correcting section tags for .init and .exit data/functions
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Neal Cardwell <ncardwell@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, David Ahern <dsahern@kernel.org>, 
-	Ido Schimmel <idosch@nvidia.com>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	=?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>, 
-	Yue Haibing <yuehaibing@huawei.com>, Jeff Layton <jlayton@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Fernando Fernandez Mancera <fmancera@suse.de>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Sabrina Dubroca <sd@queasysnail.net>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-actions@lists.infradead.org, llvm@lists.linux.dev, 
-	kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
 
-After studying the warnings further, I believe this is an incorrect fix.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/cros_ec-hwmon-fan-curve
+head:   582a1b36e53f5d5ee673ad6414dd5c643373093b
+commit: 0bd9cb0132cfadeb570112043e378431fe8b6484 [6/8] hwmon: (cros_ec) Add support for displaying fan curves
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260616/202606160631.PYJS1WF9-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e19d1f51a2c80b63cd8ca95bcc757b7077112808)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260616/202606160631.PYJS1WF9-lkp@intel.com/reproduce)
 
-Normally, *_net_ops structures are intended to live in .data (permanent memory),
-even though they point to .init.text. Modpost is handling this by using
-hardcoded whitelists to allow these specific exceptions. However, this
-whitelist is
-failing in ThinLTO because ThinLTO renames *_net_ops to *_net_ops.llvm.*.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606160631.PYJS1WF9-lkp@intel.com/
 
-I am withdrawing this patch and will send a fix to modpost instead.
+All warnings (new ones prefixed by >>):
 
-Thanks,
+>> drivers/hwmon/cros_ec_hwmon.c:426:11: warning: result of comparison of constant 9223372036854775807 with expression of type 'u32' (aka 'unsigned int') is always false [-Wtautological-constant-out-of-range-compare]
+     426 |         if (temp > LONG_MAX || cros_ec_hwmon_kelvin_to_millicelsius(temp, &temp_millicelsius))
+         |             ~~~~ ^ ~~~~~~~~
+   1 warning generated.
 
--Rong
+
+vim +426 drivers/hwmon/cros_ec_hwmon.c
+
+   401	
+   402	static ssize_t temp_auto_point_temp_show(struct device *dev, struct device_attribute *attr,
+   403						 char *buf)
+   404	{
+   405		struct sensor_device_attribute_2 *sattr = to_sensor_dev_attr_2(attr);
+   406		struct cros_ec_hwmon_priv *priv = dev_get_drvdata(dev);
+   407		struct ec_thermal_config config;
+   408		long temp_millicelsius;
+   409		u32 temp;
+   410		int ret;
+   411	
+   412		scoped_guard(hwmon_lock, dev) {
+   413			ret = cros_ec_hwmon_get_thermal_config(priv->cros_ec, sattr->index, &config);
+   414			if (ret)
+   415				return ret;
+   416		}
+   417	
+   418		if (cros_ec_hwmon_attr_is_temp_fan_off(sattr))
+   419			temp = config.temp_fan_off;
+   420		else /* temp_fan_max */
+   421			temp = config.temp_fan_max;
+   422	
+   423		if (temp == 0)
+   424			return -ENODATA;
+   425	
+ > 426		if (temp > LONG_MAX || cros_ec_hwmon_kelvin_to_millicelsius(temp, &temp_millicelsius))
+   427			return -ERANGE;
+   428	
+   429		return sysfs_emit(buf, "%ld\n", temp_millicelsius);
+   430	}
+   431	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
