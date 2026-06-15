@@ -1,101 +1,128 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD7EB3B2D0D;
-	Mon, 15 Jun 2026 19:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D982D6E44
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 20:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781552703; cv=none; b=cQaRQ/FSz2PVBnFJU3+MJkj+hFWuKBuYJ4Dj5zw3IhY7ip4ZMvbpdmziaQYkdmZn1qCq8xFQ3iJ6pOIO9zyTdxpwarA4RjZZbUztCZQ4dCH8hluhTil30hAI+O/85gg2X05h/ZjnD9vaiB9WjFBbpxMNq/01h9oLOh+MBfLA5r4=
+	t=1781554339; cv=none; b=raQlHykw+3ZycwAKCcYVC8FP+wzaudtnv0C2jcQqwyeGo+XVRG2WYC7z8gKr9QWo5GZ4dbLsSk5mRnVa+GQwV62lPXLEcWV040aR3iaKO3DAXC2kdJCsuEh4btqaMcZWVgB2yAddDkEsgI3EDN5PZFmCX1ZDzGKTEUufp4ZOBMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781552703; c=relaxed/simple;
-	bh=6A7/TKhNXTrjhM8YrCcOswyRqBSZfi5KD2KistyDfxU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Smk54QaiHaWEVgxiyGrPdZKgfnf7tS/50b38WBAe+GdOYb/SUGAcRAe13bpch2Il854bWm5Tzr4jNY+hlFjNdOBPvTSQXT8nlZASy8VgO59PNGaV8wVKrQW7wYp7e+NOotoYcOijGufG7DaOcnrR0VIUiBkUWg6FZsKviD87hVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YVWje9zG; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781554339; c=relaxed/simple;
+	bh=cPPGuPf4eCq3kBd8DB0jsgCKMR2rZdsFh7olxL0B0zY=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=tWwujmU73pZqWiwDiqJKUm3ABbs4A/F839MEkN5QsFuK5D3LLqAg49hKS3LojZjhBb9O0JKcwmDyOGfQu02ngGIyhvJg96EwLBc0BONTI5GaugeizpfrxggblPc1jSgO1Q+MykdBNMJ3PwzCjM7l0/PojYAkankPtNIyiMaRqiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jfg4TWhx; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YVWje9zG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781552702; x=1813088702;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6A7/TKhNXTrjhM8YrCcOswyRqBSZfi5KD2KistyDfxU=;
-  b=YVWje9zGL44ssN0a5jrz4ziSBDZw6WfcPDvCBskvmuaRkZ+239kyX4am
-   02U0duMMDOzxJRitCv+1/+fU1Mh04MjnJqNzhqG8N3uLTfbeLwfnETfZT
-   8lH6MJyaxR3WoHmJAVyWK78iMpZiWGdHLmH36R9WY2OxmvkCs4VJjFfk9
-   iwhfxCqJVyzuVxP+cGwKA5SqCwYC4/KXBnqqhQMeACkfq40f4c5pr6Pya
-   IEj9sw19cHPxcpoQ3wHE04GZQpGVQscIAV+lk4RHHBcTL7iHxf+GjWoDx
-   VWMzzVdDApYibDk/msA6Vh4ireToYJoybCRMemzIom0DhDOO64oEoIplN
-   w==;
-X-CSE-ConnectionGUID: G1CLCwE3R1+ZaqC30RooGw==
-X-CSE-MsgGUID: mz+hvm9xSyiMESSiQRoLjA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11818"; a="82200777"
-X-IronPort-AV: E=Sophos;i="6.24,206,1774335600"; 
-   d="scan'208";a="82200777"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2026 12:45:01 -0700
-X-CSE-ConnectionGUID: dRKBKlU7SkGxJz/QYkoaDg==
-X-CSE-MsgGUID: YV7o4/qXTji8ZKwZDpIdyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,206,1774335600"; 
-   d="scan'208";a="277749421"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 15 Jun 2026 12:44:59 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wZDEu-00000000SJ8-1y6y;
-	Mon, 15 Jun 2026 19:44:56 +0000
-Date: Tue, 16 Jun 2026 03:44:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: lirongqing <lirongqing@baidu.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>, Sudeep Holla <Sudeep.Holla@arm.com>,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH] ACPI: processor: idle: Add __cpuidle to
- acpi_idle_lpi_enter
-Message-ID: <202606160341.VjG95TFw-lkp@intel.com>
-References: <20260615065401.4611-1-lirongqing@baidu.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jfg4TWhx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781554337;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=3QYrW44YXrOYEbmMsP1nQY1tV8Gc9dYF9dy1Jk5oBYY=;
+	b=Jfg4TWhxPd+OozMrTb3aoGOSCp8cPXLemieHnRO+kDQBIdkB38hyBqf3IGJKFlbNuESvB/
+	16KGkp5fjuEEfmy0fAlDipm6Xg33QMZ+QAT7DQeSITRDgjbvAIV8Bq2Nsu1isj6QS+woHv
+	BO8fV3PKVvHQ/eWVfcKj6aGD+IUzrR8=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-224-Vcljw9YLPkikwftNtvoh2g-1; Mon,
+ 15 Jun 2026 16:12:13 -0400
+X-MC-Unique: Vcljw9YLPkikwftNtvoh2g-1
+X-Mimecast-MFC-AGG-ID: Vcljw9YLPkikwftNtvoh2g_1781554333
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E2B9A19540CC
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 20:12:12 +0000 (UTC)
+Received: from [172.20.99.234] (unknown [10.30.44.221])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6D9F83008B3B;
+	Mon, 15 Jun 2026 20:12:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
+ upstream-mainline, 36808d5e)
+Date: Mon, 15 Jun 2026 20:12:12 -0000
+To: yoyang@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260615065401.4611-1-lirongqing@baidu.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <39566.126061516121300797@us-mta-224.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: wJkjsBUK6jb4gU4bT_Gxa1u1JIBml99dYSl_tVeyqnI_1781554333
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi lirongqing,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-[auto build test ERROR on rafael-pm/linux-next]
-[also build test ERROR on rafael-pm/bleeding-edge linus/master v7.1]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/lirongqing/ACPI-processor-idle-Add-__cpuidle-to-acpi_idle_lpi_enter/20260615-150110
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20260615065401.4611-1-lirongqing%40baidu.com
-patch subject: [PATCH] ACPI: processor: idle: Add __cpuidle to acpi_idle_lpi_enter
-config: x86_64-randconfig-072-20260615 (https://download.01.org/0day-ci/archive/20260616/202606160341.VjG95TFw-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260616/202606160341.VjG95TFw-lkp@intel.com/reproduce)
+Kernel information:
+    Commit message: Merge tag 'driver-core-7.2-rc1' of gitolite.kernel.org:=
+pub/scm/linux/kernel/git/driver-core/driver-core
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606160341.VjG95TFw-lkp@intel.com/
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2601435696
 
-All errors (new ones prefixed by >>):
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2601435696_ppc64le_kernel
 
->> vmlinux.o: error: objtool: acpi_idle_lpi_enter+0x44: call to acpi_processor_ffh_lpi_enter() leaves .noinstr.text section
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2601435696_x86_64_kernel_kcidb_tool_21465210_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2601435696_aarch64_kernel_kcidb_tool_21465216_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
