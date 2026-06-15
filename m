@@ -1,103 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF6423BF9F;
-	Mon, 15 Jun 2026 00:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DD0713B584;
+	Mon, 15 Jun 2026 00:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781484034; cv=none; b=We7/1O+O1tB8sZr9X8GygByEqktxKBiIgy+CTn7OL3FvKAyofNb85IXq0RQVuRb2MvsAWNomCwsh2kc8riTHfHCLn6w9kwNEnfQbfVPYbpSbsqlhK2pYkjziGqSNQAnog9820nqlutGRc3B3x8eYVT5fZbZ2OpK9e0LWp0oa2RY=
+	t=1781484185; cv=none; b=tByPw8cR/e1lVKEmVeQpNSbRWKNfC4YB3aAzLCGmAD7ehuV2H5leelER03oiqfX1t1tHuRtDyT8PwvvnhRnyiRdSsJdHMWU9HjWNMmOrMclK5qdki3O9gtkY1gpikIl0BaqnUCcc32pY1r1otPOckJ+nJqC3+tKRmWVo+qAKWtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781484034; c=relaxed/simple;
-	bh=oxFDhOh+bQGe/fGOxNU9oFVi1hkHe1pdFg3N5tdCl2M=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=aUtDmTi33D9jxYX3BGO5cZ7+2AAFLH9gbBQXVP2gRsrNdm7S75jFrwo4O/1A7cP46Q7F8g2fel/7Q9AkRfkzx+NvB0YG55PZzehwNC9uKjl5aZKJzc4B0WhgmlHo1EtW3lus8zeJlBI/sStu8Kt3oy4Qy7b5htYPbjD6VSU/+Kg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B4yZhG+g; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781484185; c=relaxed/simple;
+	bh=AvZdXTNtSkDZo5aV+FuouBwHA4hBOPkcsNaFuzZuWL4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/+i7XNpnjMAMQQMADOzJQ6TD8RLKGeCa5yh9yCRhuAfF8oCPcPCJNGN5S8hoNqom0Y4HcKBYY6zk1x0VJo2t5IU3fhxxy/sV6nHTuCmMfNFAuvtwbTa/zRx/OFy7huIXbL8qaVwjvsDksl9XdnPbihsWECp9O5BC15/OHV0VVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L817aBrg; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B4yZhG+g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F4E1F000E9;
-	Mon, 15 Jun 2026 00:40:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781484033;
-	bh=jXv4XYGmxQm1hv9jzH1x0NJtxWmVyiiGQTlcM4SJqI8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=B4yZhG+gNegJ/tNt5QfgrA6h+n+yzg0afb8ye0ArsfXV1oK/xLbqsFyapOk/JNAUG
-	 gN2c+S3aKgXZQ3GV8klAty3F3tVsNyXpaOMy98Q36pLSAIOeYq4zKFzcxwL/zXgneo
-	 +jQLJ3QDRzu5aJO9yPdMw79yflxCfBQS6kG3sISQtPYupRXMJTfo/VD65eHcH4UMMr
-	 ndvb8nea8hl51qNe3O8/oldymRSWvh8A2Z1t1T7tgQqtSv74Vr37k8sNaDFyKocEm4
-	 sAwoX01GcL17DIFDZn4vo/WsIFGlPuvIB/GqODnU9cIcE9Pd09rhS8u2o1AH30XIaU
-	 7ARKln2A7Mq4g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198693A566D2;
-	Mon, 15 Jun 2026 00:40:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L817aBrg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781484183; x=1813020183;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AvZdXTNtSkDZo5aV+FuouBwHA4hBOPkcsNaFuzZuWL4=;
+  b=L817aBrgm+DoF7Qh1P1TcQWMqOoj5xBsRviTyB0j6uO1xYfC4p8w0lum
+   DKerxU3vfXATutA/T6m/NxQCj6pM7Kx+sTuuTfyVRbGyEvAp9bAPyxbtr
+   9NbUrSKlE0UljCQe6Hi2bIeThuznTgXpDMrnTBU2z5bAh1gHrnhx7F965
+   h6OYZRMPlNSbHktVv90Dx8wYVC5kdp5TizEGwsa4AHgyF9Ajs7KoZ8jrr
+   Ork/AHshnVGxTqP+0eNSsKhJk6RgLnbXAeXCe2cmYac/+pgwGgEacwtcD
+   lQoYKIh8d4PQMKKwS5NBh3IxPpSNH38C+pqSnu3zpd1O2ijj/umEQmXE2
+   g==;
+X-CSE-ConnectionGUID: iFgm+XN7QVO3He1VP5783A==
+X-CSE-MsgGUID: x9V8zctGRa+pbfmpcAfhSQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11817"; a="82233293"
+X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
+   d="scan'208";a="82233293"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2026 17:43:03 -0700
+X-CSE-ConnectionGUID: qoqDpLDbTSWJblD78y8e5g==
+X-CSE-MsgGUID: C8Pxmp9mSZ2qIN7l1XsRHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
+   d="scan'208";a="271003255"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Jun 2026 17:42:58 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wYvPj-00000000RKs-3KLk;
+	Mon, 15 Jun 2026 00:42:55 +0000
+Date: Mon, 15 Jun 2026 08:42:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: mheib@redhat.com, intel-wired-lan@lists.osuosl.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, jiri@resnulli.us, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, corbet@lwn.net, anthony.l.nguyen@intel.com,
+	przemyslaw.kitszel@intel.com, andrew+netdev@lunn.ch,
+	Mohammad Heib <mheib@redhat.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next] i40e: add devlink parameter
+ for Flow Director ATR sample rate
+Message-ID: <202606150807.u6hUM8VJ-lkp@intel.com>
+References: <20260614161131.192068-1-mheib@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/8] tools build: bpf: Append EXTRA_CFLAGS and
- HOST_EXTRACFLAGS
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178148402863.2363016.5034665284884003104.git-patchwork-notify@kernel.org>
-Date: Mon, 15 Jun 2026 00:40:28 +0000
-References: 
- <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
-In-Reply-To: 
- <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
-To: Leo Yan <leo.yan@arm.com>
-Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- lmb@isovalent.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, acme@kernel.org,
- namhyung@kernel.org, irogers@google.com, james.clark@linaro.org,
- kees@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
- ihor.solodrai@linux.dev
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260614161131.192068-1-mheib@redhat.com>
 
-Hello:
+Hi,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+kernel test robot noticed the following build errors:
 
-On Tue, 02 Jun 2026 15:47:09 +0100 you wrote:
-> Append EXTRA_CFLAGS and HOST_EXTRACFLAGS to the BPF build.
-> 
-> This mitigates an issue introduced in GCC 15, where a {0} initializer
-> does not guarantee zeroing the entire union [1].
-> 
-> The common changes under tools to support EXTRA_CFLAGS and
-> HOST_EXTRACFLAGS are sent separately [2].  As suggested, BPF patches
-> would be picked up via the bpf tree, so this series only includes BPF
-> related changes.
-> 
-> [...]
+[auto build test ERROR on net-next/main]
 
-Here is the summary with links:
-  - [bpf-next,v2,1/8] bpftool: Pass host flags to bootstrap libbpf
-    https://git.kernel.org/bpf/bpf-next/c/9080b97689db
-  - [bpf-next,v2,2/8] bpftool: Avoid adding EXTRA_CFLAGS to HOST_CFLAGS
-    https://git.kernel.org/bpf/bpf-next/c/956841cbc3d7
-  - [bpf-next,v2,3/8] bpftool: Append extra host flags
-    https://git.kernel.org/bpf/bpf-next/c/3f2fec5b02b6
-  - [bpf-next,v2,4/8] libbpf: Initialize CFLAGS before including Makefile.include
-    https://git.kernel.org/bpf/bpf-next/c/f3846b3800a2
-  - [bpf-next,v2,5/8] tools/bpf: build: Append extra cflags
-    https://git.kernel.org/bpf/bpf-next/c/b40ba139371c
-  - [bpf-next,v2,6/8] selftests/bpf: Initialize operation name before use
-    https://git.kernel.org/bpf/bpf-next/c/55ffbe8a15b1
-  - [bpf-next,v2,7/8] selftests/bpf: Use common CFLAGS for urandom_read
-    https://git.kernel.org/bpf/bpf-next/c/584f3b7a3525
-  - [bpf-next,v2,8/8] selftests/bpf: Avoid static LLVM linking for cross builds
-    https://git.kernel.org/bpf/bpf-next/c/62617d28d9ae
+url:    https://github.com/intel-lab-lkp/linux/commits/mheib-redhat-com/i40e-add-devlink-parameter-for-Flow-Director-ATR-sample-rate/20260615-001257
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260614161131.192068-1-mheib%40redhat.com
+patch subject: [Intel-wired-lan] [PATCH net-next] i40e: add devlink parameter for Flow Director ATR sample rate
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260615/202606150807.u6hUM8VJ-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260615/202606150807.u6hUM8VJ-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606150807.u6hUM8VJ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/intel/i40e/i40e_devlink.c:106:9: error: incompatible function pointer types initializing 'int (*)(struct devlink *, u32, union devlink_param_value *, struct netlink_ext_ack *)' (aka 'int (*)(struct devlink *, unsigned int, union devlink_param_value *, struct netlink_ext_ack *)') with an expression of type 'int (struct devlink *, u32, union devlink_param_value, struct netlink_ext_ack *)' (aka 'int (struct devlink *, unsigned int, union devlink_param_value, struct netlink_ext_ack *)') [-Wincompatible-function-pointer-types]
+     106 |                              i40e_atr_sample_rate_validate),
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/net/devlink.h:650:14: note: expanded from macro 'DEVLINK_PARAM_DRIVER'
+     650 |         .validate = _validate,                                          \
+         |                     ^~~~~~~~~
+   1 error generated.
 
 
+vim +106 drivers/net/ethernet/intel/i40e/i40e_devlink.c
+
+    93	
+    94	static const struct devlink_param i40e_dl_params[] = {
+    95		DEVLINK_PARAM_GENERIC(MAX_MAC_PER_VF,
+    96				      BIT(DEVLINK_PARAM_CMODE_RUNTIME),
+    97				      i40e_max_mac_per_vf_get,
+    98				      i40e_max_mac_per_vf_set,
+    99				      NULL),
+   100		DEVLINK_PARAM_DRIVER(I40E_DEVLINK_PARAM_ID_ATR_SAMPLE_RATE,
+   101				     "atr_sample_rate",
+   102				     DEVLINK_PARAM_TYPE_U32,
+   103				     BIT(DEVLINK_PARAM_CMODE_RUNTIME),
+   104				     i40e_atr_sample_rate_get,
+   105				     i40e_atr_sample_rate_set,
+ > 106				     i40e_atr_sample_rate_validate),
+   107	};
+   108	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
