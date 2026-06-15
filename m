@@ -1,40 +1,40 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7678A29B764
-	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 13:33:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A013F4840
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 14:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781530425; cv=none; b=KTumz+n1TbzCxLBngF1FACimbYn6yLNoOR1zBTk9AlGW2B7Y5Hc/UFok/zawmyDLuLjydDzud6YVR0jkgWxmasqJzb1FbsqfBeJ08XLggJMik8n2iAcNz9dzW1HxHoyqDxhaBpyKDnMRxOD34y8vy98bKcz9k738NFlGn5nwPhU=
+	t=1781532438; cv=none; b=WrwWPUIHPR9dzRcFXPQUicNEZhu5dHZw8CkYbxhl2486+tha5Z7MbQZ+zeugVZxi0mtj/o1zoBMNCKFs7HQ9l7dYg8agMakJYZP0siKaIhqvxmGz6vtuN+53hOPO4Tut6kc0VhRCCGOMG+pHYGEw2sevYsWdH04SOibyV5I0vCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781530425; c=relaxed/simple;
-	bh=N2ntj/ynlOh+zA/3YbsZL3cEPB1z9yqFqBmhPLgjqNo=;
+	s=arc-20240116; t=1781532438; c=relaxed/simple;
+	bh=iunEIKNm11CTXyLswfX8qxc5Ol986Egd0t8gsHMmhrs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=hHxxqujLMO7p9OUxol6dt3nE/5Akx13lBGLH3/QHajBtDTaQs4Lk5hJY+tMfW4tSaMORSZWSDpkv08b6Mpv6BUWyomEc7BqsV0wNzoj9WVu6I852pLnBNvT0SCJLyZTqaY/lsGzqTpd71UdZHG1yYgr9FAVO8WZDzQUi+M1kyUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cN8CNMsq; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:Content-Type; b=AKVRdFYElhnkM6cK17eACzqPNlIoiiP4DWBxAqp+xYswdprVZrTAJz9l+J9ox6hmb6aWyyuowHTamVenjEOfPBSXy+c1ryzllg64ma9nTlCmmFYlzK6ReckOqguaD0rALSlbvt24/Hz4ABML0IE2MMyA9hQiqzvoRE3ItEWpoRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zdj55i0X; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cN8CNMsq"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zdj55i0X"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id E2C9C4E42EEE;
-	Mon, 15 Jun 2026 13:33:42 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 54432C5146A;
+	Mon, 15 Jun 2026 14:07:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B16B360015;
-	Mon, 15 Jun 2026 13:33:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 61CB9106C94F2;
-	Mon, 15 Jun 2026 15:33:35 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 20E3360015;
+	Mon, 15 Jun 2026 14:07:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AF69D106C96A5;
+	Mon, 15 Jun 2026 16:07:04 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1781530421; h=from:subject:date:message-id:to:mime-version:content-type:
+	t=1781532433; h=from:subject:date:message-id:to:mime-version:content-type:
 	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=dOWrt41fp9ZkdsfONhl/POwO170vOA3eDS7WRaAIv2Y=;
-	b=cN8CNMsqV3vnmukdqV8G3Kzmq5G8amSuHqLO4tp10lfiI1kRuxOzzSVIOf7+6AuuwloL9i
-	EG6SwhRzQHIXAoItTEt3q0xG5RNm3La0F1DIV0asn9qRlDZg4i6V45E0qd0ChV4jh3qjXT
-	inGsCfhmYmkyv6LTBNRDy2xV4NQjVWHZntpev9zX9XStGsTgIhLlMTMf9yoUXdQCN9YRwv
-	t/XfzKsI8HZSndynjUihh3WNXfQmnYPID0ISfu59px6MIQgnFV/lBYoPkbtdYnQ+r1vduy
-	l+wlZo1hfEKbr7/6vnPBb9a5YhLqeYxBhb/ysDmThYVw9njwNSrwJliPypg9Kw==
-Message-ID: <371a1df7-084c-4431-bd00-0045298e3212@bootlin.com>
-Date: Mon, 15 Jun 2026 15:33:34 +0200
+	bh=12cJkgmNpZePALEcCCii3OEhCzXZc//+4qAWWEONSCc=;
+	b=zdj55i0XH3giozHt1HpWm9UfrnYusBZsrgy8BIRAXrB12gRGFYttdKWdel5vEcrpKgU3pO
+	kBhdbrbf9QdwQ+fPiu2opW/5t31ghiReeLTz6M8Y8J0kWp7gICiIuQG7YVavMSQEiI06nh
+	XvF3aocbyXTK/ga1gpylQ0kuKXc0Um1owXiC90x7Ys+HJLXRgCbneEwZiDpMT/vI957D7Q
+	/Mj+jd+MV5kLA+KI0SHns+JUCPL7eeozwOQqR9YDjvnN/Pc7ZtsNkSm9VnBjFNVavlxozq
+	mJ5t9Eg7cg97pu12QnsGmSdYOCU/VEFxF7+986tvH4yr+YZ/rUitb7n14j6Eew==
+Message-ID: <867a39de-ccc2-4dcf-be24-ab2542d20ab6@bootlin.com>
+Date: Mon, 15 Jun 2026 16:07:03 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -42,8 +42,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 01/12] net: phylink: keep and use MAC
- supported_interfaces in phylink struct
+Subject: Re: [PATCH net-next v7 05/12] net: phylink: support late PCS provider
+ attach
 To: Christian Marangi <ansuelsmth@gmail.com>,
  Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
  <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
@@ -62,46 +62,67 @@ To: Christian Marangi <ansuelsmth@gmail.com>,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
  llvm@lists.linux.dev
 References: <20260615122950.22281-1-ansuelsmth@gmail.com>
- <20260615122950.22281-2-ansuelsmth@gmail.com>
+ <20260615122950.22281-6-ansuelsmth@gmail.com>
 Content-Language: en-US
 From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <20260615122950.22281-2-ansuelsmth@gmail.com>
+In-Reply-To: <20260615122950.22281-6-ansuelsmth@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hello Christian,
+Hi Christian,
 
 On 6/15/26 14:29, Christian Marangi wrote:
-> Add in phylink struct a copy of supported_interfaces from phylink_config
-> and make use of that instead of relying on phylink_config value.
+> Add support for late PCS provider attachment to a phylink instance.
+> This works by creating a global notifier for the PCS provider and
+> making each phylink instance that makes use of fwnode subscribe to
+> this notifier.
 > 
-> This in preparation for support of PCS handling internally to phylink
-> where a PCS can be removed or added after the phylink is created and we
-> need both a reference of the supported_interfaces value from
-> phylink_config and an internal value that can be updated with the new
-> PCS info.
+> The PCS notifier will emit the event FWNODE_PCS_PROVIDER_ADD every time
+> a new PCS provider is added.
+> 
+> phylink will then react to this event and will call the new function
+> fwnode_phylink_pcs_get_from_fwnode() that will check if the PCS fwnode
+> provided by the event is present in the pcs-handle property of the
+> phylink instance.
+> 
+> If a related PCS is found, then such PCS is added to the phylink
+> instance PCS list.
+> 
+> Then we link the PCS to the phylink instance and we refresh the supported
+> interfaces of the phylink instance.
+> 
+> Finally we check if we are in a major_config_failed scenario and trigger
+> an interface reconfiguration in the next phylink resolve.
+> 
+> In the example scenario where the link was previously torn down due to
+> removal of PCS, the link will be established again as the PCS came back
+> and is now available to phylink.
 > 
 > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 > ---
->  drivers/net/phy/phylink.c | 22 +++++++++++++++-------
->  1 file changed, 15 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> index 087ac63f9193..4d59c0dd78db 100644
-> --- a/drivers/net/phy/phylink.c
-> +++ b/drivers/net/phy/phylink.c
-> @@ -60,6 +60,11 @@ struct phylink {
->  	/* The link configuration settings */
->  	struct phylink_link_state link_config;
->  
-> +	/* What interface are supported by the current link.
-> +	 * Can change on removal or addition of new PCS.
-> +	 */
-> +	DECLARE_PHY_INTERFACE_MASK(supported_interfaces);
 
-Can you clarify a bit what you mean here ? Is that the combination of the
-interfaces the MAC supports AND the currently in-use PCS ?
+[...]
+
+> @@ -2151,6 +2204,10 @@ void phylink_destroy(struct phylink *pl)
+>  	if (pl->link_gpio)
+>  		gpiod_put(pl->link_gpio);
+>  
+> +	/* Unregister notifier for late PCS attach */
+> +	if (pl->fwnode_pcs_nb.notifier_call)
+> +		unregister_fwnode_pcs_notifier(&pl->fwnode_pcs_nb);
+
+I wanted to try this out, but I get :
+
+drivers/net/phy/phylink.c:2218:17: error: implicit declaration of function ‘unregister_fwnode_pcs_notifier’; did you mean ‘register_fwnode_pcs_notifier’? [-Werror=implicit-function-declaration]
+ 2218 |                 unregister_fwnode_pcs_notifier(&pl->fwnode_pcs_nb);
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                 register_fwnode_pcs_notifier
+
+I guess you either need to stub this, or there's a missing Kconfig
+dependency somewhere
 
 Maxime
+
+
 
