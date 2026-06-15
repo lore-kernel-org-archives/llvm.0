@@ -1,143 +1,228 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF8883F9F35
-	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 14:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A223F20F3;
+	Mon, 15 Jun 2026 14:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781533130; cv=none; b=te/4ktNn9ieSJ3CJKU/KpB9971nk/Cvonl1zoCRAnWSEVQNAi8EFznZ39X6Wmlh8vgPoIPVs+TPIuDTiDqX+rPTO3JiVUYSo63sBtk5J62SXyJNLnEDLz36P3+UcXj2HMuZrsa/xW3RmOtWehH74jVTyjN+3N+M1yoHP5Xr/cOk=
+	t=1781533493; cv=none; b=fLdaApPrNHjHUwOoIGM2zM8dw6lOPbzMDdGkKV/MmeiRbfbrhxXXcUXj0KdkeszCPp/IHN2HvJyvNthSZGGakoMrCNjRJgCXLHWn3ZT5jKKu88vomRpV+eI4tVI6Sv9KqADQmSTO0F7rY022ZhYLegfQjFSIMyrM1SbgQ4W0y10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781533130; c=relaxed/simple;
-	bh=taTuI/uTOMXjIXPXu667WK4H5vUawgRfjbE0mglsoXM=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nzNB2zzX09SC0iySxEh0RGaNIy5aMwHdd6zMZ1Zc352uobi9Qc2Ha5K+26wbFB0dX4sOYRaOgiA7wbcKmFIujIut/xS9TbeYmV6aF5iPh4owJxxpD9vCHO+OwWgSc4LdZlSectPEUZ6T9bdwjrIVVvbzy1NbqcVf66j3hWVvL5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Dt/Xwmwo; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781533493; c=relaxed/simple;
+	bh=xWmzfFk9cjQIE716I7Hu4jxNGr0hOL1BNbnX5sO/6fc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f2pQM6R4cDHSIjne4vnhT3NOuWt+UZO3k9HsLMvgOCSSBnAoXJ9Llg7chjjiLSswC/JuzGzxODESb8OWdIKwekRXetV0Pp+evxt/SoTXrdrxXcCWowwZ074q2zyM7ug6QVPyAeJX0q8v5lEVV9twVatBcJKt1ROeS2GiK+ZQW5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lTX8XjW3; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dt/Xwmwo"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-490c1915793so30222605e9.2
-        for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 07:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781533123; x=1782137923; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=hkIb+b4xA4Dtv3ljZrlwMo9RpQWTNWYQCjFJM6rj18U=;
-        b=Dt/XwmworuwuZQQjjhK7FtkH5w0OFgtb4RAifyI9kuMam6Tkjpgq8sFxmWnhAT0lsP
-         U06uY/p7uOyaiz/UYUdO3e7OGVCzQFNSx4s9JPjo3oPX1rK8VU/PN0VLkCYGSN9GzEPr
-         8Wb1cyV/CQOZU+7yyG69mn/9cTYA8A4DqhFpGzb6IWvBMQylRx6RHXPbXtl3jRz1MhgJ
-         dVLkjlI4CDgsCTGaFX4Z3xFH0vPF0Ec/pHOIa3xecdu8WugvKug21ioio4L9AGT56S+7
-         FYirPoACMIljrP9PDRG4A8Zk0zsTNFfnb1FDYhmFf6mySqhpGtv6Shj6VMWRPOXVR9X7
-         po0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781533123; x=1782137923;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hkIb+b4xA4Dtv3ljZrlwMo9RpQWTNWYQCjFJM6rj18U=;
-        b=TnhTM0PzdUKWSh32Qf2q+fvh8cbgIG/o0Af8tt07xoG97TtvGqmwgAZrrRR8pQ5ekj
-         wUk09WlQUj+FoZrYi09WEVe3BVxxDygCw9I2MBe0rFaF0m8q4zlv9Pcs0k4kDoaTDzmp
-         cj05HwrSQt3EALDxKk2bDmnwvKjR7gRJHFmU4kKyFvmCx2nU0q4kRebZ92/gD5acf78M
-         EcIOHGfPhg4IGiQ1lcgBNXbs+BMd/93jupmpCy/sl8jToQb/WL5RRoEzYL1lkgFys/8E
-         gQwyqYtDDClokveJb8LmWLtKigI2Psm9dEyd70hUI+D/r+VWbpvOQjXbInNC0i7ihaPS
-         oFDg==
-X-Forwarded-Encrypted: i=1; AFNElJ9ZFIuLbPWANgEex1dYSy6U2L372Z4p1YcROHCX781owgLpOtAsMioUJ9AewVflGJcNE4EV@lists.linux.dev
-X-Gm-Message-State: AOJu0YzCDVDVgLd8QSwEIA6YSAr/ZorzQzE8vFngjsjThSP+Ee8o+1WK
-	yGj58629bEOVbCc8yDpQNLjzjLWtUU2uy7iTwxXh96VKvKNNvwdjDfca
-X-Gm-Gg: Acq92OGHQ/brvNK+d0jdzpgn38actzqrQwhjOvvBG93qmNbKZTDPrHJpu97Vvsu/zlI
-	gKkZs+7afFIvKzzGqIPOAyNuBoukiyctjqgMEmXIzsFhMLRYGxlshFQt+XuSBT/Z52GJ75RgseC
-	USGBJAyd+OkoCTDHxU62fNG4jJ9Lf8tGRgudlnMmruSzTc07sgf6iWg7gyHW6Jz04YIxpJu86e2
-	li2zYZUnBjjjAi3xOQ4+wvOFqBSEw5Y8vCYuLv87dkkzOfWYm9FMDi+Vgm8yH8mIm0L2mY1aCVp
-	AFU9/UpYu+guKKfhfq/6jHOBZlCwBuXQ51VRc7n0wYzm5IpfUIkuHA/vnxvD1KgVcdA107b4EjI
-	iW2HFEPNGWr/awjxX5WdoCeaiwRq3AFp2YaWyhdCiAPpgEjo3mxjZUl2PXGN28Y6inFMCjb7ehT
-	J/AzUpsVzp/Awn1O5FTa9MR0nDVqkB506o1Gcni0ddAIlVndFU1W0q5A==
-X-Received: by 2002:a05:600c:3153:b0:490:e5c1:b897 with SMTP id 5b1f17b1804b1-490ec4fe7c2mr195111285e9.20.1781533122746;
-        Mon, 15 Jun 2026 07:18:42 -0700 (PDT)
-Received: from Ansuel-XPS. (93-34-88-103.ip49.fastwebnet.it. [93.34.88.103])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-492202edec6sm283566035e9.3.2026.06.15.07.18.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jun 2026 07:18:42 -0700 (PDT)
-Message-ID: <6a3009c2.561280e1.2acd9f.2f06@mx.google.com>
-X-Google-Original-Message-ID: <ajAJvXT9R7UrMqQA@Ansuel-XPS.>
-Date: Mon, 15 Jun 2026 16:18:37 +0200
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Heiner Kallweit <hkallweit1@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Saravana Kannan <saravanak@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH net-next v7 01/12] net: phylink: keep and use MAC
- supported_interfaces in phylink struct
-References: <20260615122950.22281-1-ansuelsmth@gmail.com>
- <20260615122950.22281-2-ansuelsmth@gmail.com>
- <371a1df7-084c-4431-bd00-0045298e3212@bootlin.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lTX8XjW3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781533491; x=1813069491;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xWmzfFk9cjQIE716I7Hu4jxNGr0hOL1BNbnX5sO/6fc=;
+  b=lTX8XjW3C3P2T/f1xZzs3K5IBIgQwnX9PidatXt83oprrfkrU5DTlzAi
+   g5lQKFxAt6PGkG3PHpUM6+g8bMBYMJ4jSomqCsg0f9GlM6m/kkZZjnI0q
+   E4kApyhjczQKakuEEg8cEbDTQHgOiVnVYZvnSvk9RpKCZSiq55d+7fYmh
+   KCl9AR3P36VI3+0YUDudEAb3WVS/DWbffRWGKpJFdEYlJ1PaKDaTXgv0w
+   ujtelM/Demxuej8Ludqh9TOVZC9fKA43ErP2kRHdPuNtpu0a3ZCC3Z1p0
+   T10Sq9grcwcJXF42Xf1k0ODUrH98GesW0Ez6GmRWapo6ATOBTu/qILWLl
+   g==;
+X-CSE-ConnectionGUID: hMHrOAGpT5mghqcrdpIdzg==
+X-CSE-MsgGUID: LK2sXggUR0mIo6CQcBKGCg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11818"; a="92592351"
+X-IronPort-AV: E=Sophos;i="6.24,206,1774335600"; 
+   d="scan'208";a="92592351"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jun 2026 07:24:50 -0700
+X-CSE-ConnectionGUID: 4TsW4wr/SnmyqlcrytQVLQ==
+X-CSE-MsgGUID: 0waCTAC6R1eZ3ZEHTZ0yoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,206,1774335600"; 
+   d="scan'208";a="241117966"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 15 Jun 2026 07:24:47 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wZ8F2-000000004uT-2c3K;
+	Mon, 15 Jun 2026 14:24:44 +0000
+Date: Mon, 15 Jun 2026 16:24:05 +0200
+From: kernel test robot <lkp@intel.com>
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Kaushlendra Kumar <kaushlendra.kumar@intel.com>,
+	Kees Cook <kees@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	pengpeng@iscas.ac.cn
+Subject: Re: [PATCH] thermal: intel: int3400: clean up ODVP on probe failures
+Message-ID: <202606151653.EEZuR06P-lkp@intel.com>
+References: <20260615070326.71761-1-pengpeng@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <371a1df7-084c-4431-bd00-0045298e3212@bootlin.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260615070326.71761-1-pengpeng@iscas.ac.cn>
 
-On Mon, Jun 15, 2026 at 03:33:34PM +0200, Maxime Chevallier wrote:
-> Hello Christian,
-> 
-> On 6/15/26 14:29, Christian Marangi wrote:
-> > Add in phylink struct a copy of supported_interfaces from phylink_config
-> > and make use of that instead of relying on phylink_config value.
-> > 
-> > This in preparation for support of PCS handling internally to phylink
-> > where a PCS can be removed or added after the phylink is created and we
-> > need both a reference of the supported_interfaces value from
-> > phylink_config and an internal value that can be updated with the new
-> > PCS info.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/net/phy/phylink.c | 22 +++++++++++++++-------
-> >  1 file changed, 15 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-> > index 087ac63f9193..4d59c0dd78db 100644
-> > --- a/drivers/net/phy/phylink.c
-> > +++ b/drivers/net/phy/phylink.c
-> > @@ -60,6 +60,11 @@ struct phylink {
-> >  	/* The link configuration settings */
-> >  	struct phylink_link_state link_config;
-> >  
-> > +	/* What interface are supported by the current link.
-> > +	 * Can change on removal or addition of new PCS.
-> > +	 */
-> > +	DECLARE_PHY_INTERFACE_MASK(supported_interfaces);
-> 
-> Can you clarify a bit what you mean here ? Is that the combination of the
-> interfaces the MAC supports AND the currently in-use PCS ?
-> 
+Hi Pengpeng,
 
-Combination of interface the MAC supports and the currently attached PCS
-(not the current one in use)
+kernel test robot noticed the following build warnings:
 
-The fact that it can change is due to the fact that PCS can be attached
-later and supported_interfaces can be updated accordingly.
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v7.1 next-20260612]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--- 
-	Ansuel
+url:    https://github.com/intel-lab-lkp/linux/commits/Pengpeng-Hou/thermal-intel-int3400-clean-up-ODVP-on-probe-failures/20260615-152757
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20260615070326.71761-1-pengpeng%40iscas.ac.cn
+patch subject: [PATCH] thermal: intel: int3400: clean up ODVP on probe failures
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260615/202606151653.EEZuR06P-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260615/202606151653.EEZuR06P-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606151653.EEZuR06P-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/thermal/intel/int340x_thermal/int3400_thermal.c:651:1: warning: unused label 'free_imok' [-Wunused-label]
+     651 | free_imok:
+         | ^~~~~~~~~~
+>> drivers/thermal/intel/int340x_thermal/int3400_thermal.c:659:1: warning: unused label 'free_art_trt' [-Wunused-label]
+     659 | free_art_trt:
+         | ^~~~~~~~~~~~~
+   2 warnings generated.
+
+
+vim +/free_imok +651 drivers/thermal/intel/int340x_thermal/int3400_thermal.c
+
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  556  
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  557  static int int3400_thermal_probe(struct platform_device *pdev)
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  558  {
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  559  	struct acpi_device *adev = ACPI_COMPANION(&pdev->dev);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  560  	struct int3400_thermal_priv *priv;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  561  	int result;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  562  
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  563  	if (!adev)
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  564  		return -ENODEV;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  565  
+bf4afc53b77aea drivers/thermal/intel/int340x_thermal/int3400_thermal.c Linus Torvalds      2026-02-21  566  	priv = kzalloc_obj(*priv);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  567  	if (!priv)
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  568  		return -ENOMEM;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  569  
+006f006f1e5c48 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  570  	priv->pdev = pdev;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  571  	priv->adev = adev;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  572  
+c5738dddc01be4 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  573  	result = int3400_thermal_get_uuids(priv);
+8d485da0ddee79 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  574  
+8d485da0ddee79 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  575  	/* Missing IDSP isn't fatal */
+8d485da0ddee79 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  576  	if (result && result != -ENODEV)
+c5738dddc01be4 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  577  		goto free_priv;
+c5738dddc01be4 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  578  
+8d485da0ddee79 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  579  	priv->current_uuid_index = -1;
+8d485da0ddee79 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  580  
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  581  	result = acpi_parse_art(priv->adev->handle, &priv->art_count,
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  582  				&priv->arts, true);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  583  	if (result)
+f126079123f9d0 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2015-02-25  584  		dev_dbg(&pdev->dev, "_ART table parsing error\n");
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  585  
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  586  	result = acpi_parse_trt(priv->adev->handle, &priv->trt_count,
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  587  				&priv->trts, true);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  588  	if (result)
+f126079123f9d0 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2015-02-25  589  		dev_dbg(&pdev->dev, "_TRT table parsing error\n");
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  590  
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  591  	platform_set_drvdata(pdev, priv);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  592  
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  593  	int3400_setup_gddv(priv);
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  594  
+006f006f1e5c48 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  595  	evaluate_odvp(priv);
+006f006f1e5c48 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  596  
+cbcd51e822bf51 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Rafael J. Wysocki   2023-08-30  597  	priv->thermal = thermal_tripless_zone_device_register("INT3400 Thermal", priv,
+cbcd51e822bf51 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Rafael J. Wysocki   2023-08-30  598  							      &int3400_thermal_ops,
+cbcd51e822bf51 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Rafael J. Wysocki   2023-08-30  599  							      &int3400_thermal_params);
+0ab15365ff38c8 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  600  	if (IS_ERR(priv->thermal)) {
+0ab15365ff38c8 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  601  		result = PTR_ERR(priv->thermal);
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  602  		goto free_odvp;
+0ab15365ff38c8 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  603  	}
+0ab15365ff38c8 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  604  
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  605  	priv->rel_misc_dev_res = acpi_thermal_rel_misc_device_add(
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  606  							priv->adev->handle);
+6306e68a63f262 drivers/thermal/int340x_thermal/int3400_thermal.c       Jacob Pan           2014-06-12  607  
+19ecaea2686222 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2014-12-02  608  	result = sysfs_create_group(&pdev->dev.kobj, &uuid_attribute_group);
+19ecaea2686222 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2014-12-02  609  	if (result)
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  610  		goto free_rel_misc;
+19ecaea2686222 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2014-12-02  611  
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16  612  	if (acpi_has_method(priv->adev->handle, "IMOK")) {
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16  613  		result = sysfs_create_group(&pdev->dev.kobj, &imok_attribute_group);
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16  614  		if (result)
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  615  			goto free_uuid;
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16  616  	}
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16  617  
+7931e28098a4c1 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Lee, Chun-Yi        2022-08-08  618  	if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
+13f3cbfbb8c9f3 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Thomas Weißschuh    2024-11-21  619  		result = device_create_bin_file(&pdev->dev, &bin_attr_data_vault);
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  620  		if (result) {
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  621  			kfree(priv->data_vault);
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  622  			priv->data_vault = NULL;
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  623  			goto free_uuid;
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  624  		}
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  625  	}
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  626  
+38e44da591303d drivers/thermal/int340x_thermal/int3400_thermal.c       Brian Bian          2017-08-09  627  	result = acpi_install_notify_handler(
+38e44da591303d drivers/thermal/int340x_thermal/int3400_thermal.c       Brian Bian          2017-08-09  628  			priv->adev->handle, ACPI_DEVICE_NOTIFY, int3400_notify,
+38e44da591303d drivers/thermal/int340x_thermal/int3400_thermal.c       Brian Bian          2017-08-09  629  			(void *)priv);
+38e44da591303d drivers/thermal/int340x_thermal/int3400_thermal.c       Brian Bian          2017-08-09  630  	if (result)
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  631  		goto free_sysfs;
+38e44da591303d drivers/thermal/int340x_thermal/int3400_thermal.c       Brian Bian          2017-08-09  632  
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  633  	result = production_mode_init(priv);
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  634  	if (result)
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  635  		goto free_notify;
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  636  
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  637  	return 0;
+19ecaea2686222 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2014-12-02  638  
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  639  free_notify:
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  640  	acpi_remove_notify_handler(priv->adev->handle, ACPI_DEVICE_NOTIFY,
+5c36cf27846a36 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Srinivas Pandruvada 2023-01-23  641  				   int3400_notify);
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  642  free_sysfs:
+006f006f1e5c48 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  643  	cleanup_odvp(priv);
+e9a7c526c29b0a drivers/thermal/intel/int340x_thermal/int3400_thermal.c Rafael J. Wysocki   2022-08-30  644  	if (!ZERO_OR_NULL_PTR(priv->data_vault)) {
+13f3cbfbb8c9f3 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Thomas Weißschuh    2024-11-21  645  		device_remove_bin_file(&pdev->dev, &bin_attr_data_vault);
+006f006f1e5c48 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  646  		kfree(priv->data_vault);
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  647  		priv->data_vault = NULL;
+006f006f1e5c48 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  648  	}
+0ba13c763aacb2 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Matthew Garrett     2020-04-13  649  free_uuid:
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  650  	sysfs_remove_group(&pdev->dev.kobj, &uuid_attribute_group);
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16 @651  free_imok:
+f1b07a14694be0 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Sumeet Pawnikar     2021-07-16  652  	sysfs_remove_group(&pdev->dev.kobj, &imok_attribute_group);
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  653  free_rel_misc:
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  654  	if (!priv->rel_misc_dev_res)
+0be86969ae385c drivers/thermal/int340x_thermal/int3400_thermal.c       Alexey Khoroshilov  2017-12-30  655  		acpi_thermal_rel_misc_device_remove(priv->adev->handle);
+19ecaea2686222 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2014-12-02  656  	thermal_zone_device_unregister(priv->thermal);
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  657  free_odvp:
+19f67ce6d353c4 drivers/thermal/intel/int340x_thermal/int3400_thermal.c Pengpeng Hou        2026-06-15  658  	cleanup_odvp(priv);
+f126079123f9d0 drivers/thermal/int340x_thermal/int3400_thermal.c       Srinivas Pandruvada 2015-02-25 @659  free_art_trt:
+0ab15365ff38c8 drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-23  660  	kfree(priv->trts);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  661  	kfree(priv->arts);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  662  free_priv:
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  663  	kfree(priv);
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  664  	return result;
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  665  }
+816cab931f288c drivers/thermal/int340x_thermal/int3400_thermal.c       Zhang Rui           2014-03-14  666  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
