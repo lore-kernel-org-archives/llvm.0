@@ -1,180 +1,125 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EAB53F0AB8
-	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 14:44:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619FB405C23
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 15:33:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781534661; cv=none; b=sRrA3p4KgkzF3nnHcFBo4Od+9kZqtPHhfnqJipkT3Wi9lCG/UdwhY7uYXS3fByWC2gaXc2MrNdwFo+XJRDzG0ysljg/G//Vbu3D5/s5ba8vawcIqfl1JXwKLQ7QR7IFiTVJ8hdSpzvYhvz32q58VkBxHSKEI7AocPwFAT0lGzuw=
+	t=1781537591; cv=none; b=QF/z5xcvFC9bhd7+KqYi9cgyPQyQe+1IxHcPXFHJIWFTBMXqc5sXQ4RQ+LxmvaF4RZHHdNpmq3DUmHXX6UvYtMKvJDUoXri1M6scDHEYVjSmH4zGi75LnRcFsCoDkcIiiYsKJ8U/hNyVStwRD5dqsAzcWkFANNt+4mzvUmveGHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781534661; c=relaxed/simple;
-	bh=0uLKTvbEAK+Dn2jOLZxPcDA5FGg6UyplCkgx7XgWTI0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nlqh/jAGm1Bo8w9X1G7VLazOKo6twXzIEFSAr/JkWq/u59erl2uSa+uJl8zny7yI3YaNvBV0Eg80MPnYaHBycx8HCtdmdEUqkXdKdPbSJ2H8UojdQ0y77B6pdXkgLJHrFV7AzghOnovy9OI1xuYKjECwQ/HKA0fKKF6un/FC49M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YFbbhTW9; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1781537591; c=relaxed/simple;
+	bh=4vdtIk7OosnzuKzNbDWbpM0YHVHCalG6T7JKMJv23go=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=k/xleSSwWmd6sAV2/Avpbikh6IHVloEU33Sc9ct4Uo+cXcnABI1gQZClodJnS0RdZATF1etX0dUtCK2Xog9TJit/nF4b0Udwu8e8iv1nuSP3YoCRdH6c0VAXqBMqLsWdzmroFYo90zvkIhr8QU13k2fbYHFiAz0QIj6yDdiqc/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GvEMD8ex; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YFbbhTW9"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id EF8B84E42F0D;
-	Mon, 15 Jun 2026 14:44:17 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id A343460015;
-	Mon, 15 Jun 2026 14:44:17 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 528B2106C96A2;
-	Mon, 15 Jun 2026 16:44:09 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1781534656; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=LNQ/A2/WUxw1qFzNZc5VEP3z3YtNzDc9swfW+wlF7i8=;
-	b=YFbbhTW99y38MgG/y6VAC2apnTEuaqt6BDTPv9X3YLQtVK46ALfjRfM6dV6JqDaRUgaKv1
-	Tl5JwKrF2HGbLIpA6BkSC+2OBNkydc3UsTtL6Qs1bij61KpbHSUaB2I5zj/9vHwdAslEjc
-	yxZ/sIka+VFvbfErdSPCAyXCr80uUYXDzHyhezFO2fiMGOdftv0vfRyoisP1Znms6bOc1U
-	NQDEJ6nnFnCxASwF6fHXoT0tny4ZJWkthBI6iRizavgRM6f8jvKuT39ZEl6DBL7M5T8xMu
-	5tP6/dIn7nfxVoVcmwa83SjNCEK9mT6utIwt+jm/qpxSMjTSRqDlNigCOg/iIQ==
-Message-ID: <0355da28-d3d7-41ee-ad85-632cc2e03951@bootlin.com>
-Date: Mon, 15 Jun 2026 16:44:08 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GvEMD8ex"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1781537589;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DpdJ+hjOKxbT4CB7gdBwfs5kzrdZplfBZiUE1eMQXek=;
+	b=GvEMD8ex7ihx2iR/wsud37ZiladBeC91m/YRnk0GNBFFuOQTdKMAx35eFW1R7EDGUWphvW
+	+4yPDMcoVenLDUGuxpRdU1E/FUpKxKBvNcKYxibRn2L9j0z0Gi+yn8q4lCV4U80LyBxvwa
+	r5QnSsxIW5xIJJ0yAsgYWE0WHKgiMgg=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-185-0TQSyv0hNPmp58-qtYajRw-1; Mon,
+ 15 Jun 2026 11:33:07 -0400
+X-MC-Unique: 0TQSyv0hNPmp58-qtYajRw-1
+X-Mimecast-MFC-AGG-ID: 0TQSyv0hNPmp58-qtYajRw_1781537587
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1CD3818005BC
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 15:33:07 +0000 (UTC)
+Received: from [172.20.99.234] (unknown [10.30.44.221])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B53C618005B6;
+	Mon, 15 Jun 2026 15:33:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
+ upstream-mainline, 95e56f0f)
+Date: Mon, 15 Jun 2026 15:33:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v7 05/12] net: phylink: support late PCS provider
- attach
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Heiner Kallweit
- <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>,
- Saravana Kannan <saravanak@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- llvm@lists.linux.dev
-References: <20260615122950.22281-1-ansuelsmth@gmail.com>
- <20260615122950.22281-6-ansuelsmth@gmail.com>
- <867a39de-ccc2-4dcf-be24-ab2542d20ab6@bootlin.com>
- <6a3007ce.73de60af.3a056d.d903@mx.google.com>
- <7702ac09-75fd-49de-8ad2-fceaa122b627@bootlin.com>
- <6a300da0.d5af3cef.1ca29d.19c4@mx.google.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <6a300da0.d5af3cef.1ca29d.19c4@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <51370.126061511330701751@us-mta-185.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: _FpxqC6NhXPPchaQPZWW7x_HIC4rK78G7ubxdZG1YIA_1781537587
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
+
+
+Kernel information:
+    Commit message: Merge tag 'kcsan-20260612-v7.2-rc1' of git://git.kernel=
+.org/pub/scm/linux/kernel/git/melver/linux
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2600954334
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2600954334_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: xfstests failures generic/32{6..8}
+            URL: https://redhat.atlassian.net/browse/RHEL-50644
+            Affected tests:
+                xfstests - xfs [x86_64]
+        Issue: mkfs.xfs prints warning about invalid stride unit, hardware =
+specific
+            URL: https://gitlab.com/redhat/centos-stream/tests/kernel/kerne=
+l-tests/-/issues/1924
+            Affected tests:
+                xfstests - xfs [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
 
 
-On 6/15/26 16:35, Christian Marangi wrote:
-> On Mon, Jun 15, 2026 at 04:29:04PM +0200, Maxime Chevallier wrote:
->>
->>
->> On 6/15/26 16:10, Christian Marangi wrote:
->>> On Mon, Jun 15, 2026 at 04:07:03PM +0200, Maxime Chevallier wrote:
->>>> Hi Christian,
->>>>
->>>> On 6/15/26 14:29, Christian Marangi wrote:
->>>>> Add support for late PCS provider attachment to a phylink instance.
->>>>> This works by creating a global notifier for the PCS provider and
->>>>> making each phylink instance that makes use of fwnode subscribe to
->>>>> this notifier.
->>>>>
->>>>> The PCS notifier will emit the event FWNODE_PCS_PROVIDER_ADD every time
->>>>> a new PCS provider is added.
->>>>>
->>>>> phylink will then react to this event and will call the new function
->>>>> fwnode_phylink_pcs_get_from_fwnode() that will check if the PCS fwnode
->>>>> provided by the event is present in the pcs-handle property of the
->>>>> phylink instance.
->>>>>
->>>>> If a related PCS is found, then such PCS is added to the phylink
->>>>> instance PCS list.
->>>>>
->>>>> Then we link the PCS to the phylink instance and we refresh the supported
->>>>> interfaces of the phylink instance.
->>>>>
->>>>> Finally we check if we are in a major_config_failed scenario and trigger
->>>>> an interface reconfiguration in the next phylink resolve.
->>>>>
->>>>> In the example scenario where the link was previously torn down due to
->>>>> removal of PCS, the link will be established again as the PCS came back
->>>>> and is now available to phylink.
->>>>>
->>>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
->>>>> ---
->>>>
->>>> [...]
->>>>
->>>>> @@ -2151,6 +2204,10 @@ void phylink_destroy(struct phylink *pl)
->>>>>  	if (pl->link_gpio)
->>>>>  		gpiod_put(pl->link_gpio);
->>>>>  
->>>>> +	/* Unregister notifier for late PCS attach */
->>>>> +	if (pl->fwnode_pcs_nb.notifier_call)
->>>>> +		unregister_fwnode_pcs_notifier(&pl->fwnode_pcs_nb);
->>>>
->>>> I wanted to try this out, but I get :
->>>>
->>>> drivers/net/phy/phylink.c:2218:17: error: implicit declaration of function ‘unregister_fwnode_pcs_notifier’; did you mean ‘register_fwnode_pcs_notifier’? [-Werror=implicit-function-declaration]
->>>>  2218 |                 unregister_fwnode_pcs_notifier(&pl->fwnode_pcs_nb);
->>>>       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->>>>       |                 register_fwnode_pcs_notifier
->>>>
->>>> I guess you either need to stub this, or there's a missing Kconfig
->>>> dependency somewhere
->>>>
->>>
->>> Hi yes if you want toi test just enable CONFIG_FWNODE_PCS. I forgot to add
->>> the static declaration for unregister_fwnode_pcs_notifier. 
->>
->> I'll give it a go with this yeah, I have a few devices here I'd like to
->> try this on.
->>
->> Can you CC me for the next rounds ?
->>
-> 
-> Sure, if you can would be good to check also the other commit if everything
-> is logically correct.
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Absolutely, I'm planning on doing this :) This is quite the series though,
-I'll try to give it some deeper look in the upcoming days, I expect net-next
-to close soon anyways, so that's as good as it gets for reviewing this :)
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Also, it's probably a good idea to have Sean in CC as well, I know a few people
-interested in the Xilinx PCS his series brought, hopefully he can follow-up on
-this series with the other new PCS drivers.
-
-> 
-> BTW by checking test from patchwork I can see also another fix is needed if
-> you want to test this revision.
-> 
-> phylink_create()
-> 
-> -if (config->num_possible_pcs && pl->mac_ops->mac_select_pcs) {
-> +if (config->num_possible_pcs && mac_ops->mac_select_pcs) {
-
-Ack, I'll test it with this change, thanks :)
-
-Maxime
-
-> 
-> Aside from these change I expect the current legacy code to be not
-> affected by these change.
-
-I'll probably have things to say about this "legacy" naming :)
-
-Thanks for driving this work forwards anyway, that's 
-
-> 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
