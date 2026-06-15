@@ -1,51 +1,51 @@
-Received: from GVZP280CU018.outbound.protection.outlook.com (mail-swedencentralazon11022114.outbound.protection.outlook.com [52.101.82.114])
+Received: from GV3P280CU013.outbound.protection.outlook.com (mail-swedencentralazon11020127.outbound.protection.outlook.com [52.101.75.127])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED4C3BED0F
-	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 08:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.82.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD423C0A11
+	for <llvm@lists.linux.dev>; Mon, 15 Jun 2026 08:02:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.75.127
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781510473; cv=fail; b=ommH2bIFAyjb9MNDBV75KEDbsHndjIgpmz+f9aFs17P9/aYG8S3a3ue6fEucdc2FVFWRCYK2Gz1tLWDqnHY5s9im7rFizcXiveNLJsz1OEv/1zNkELmCXQ9pE8DVSqBYTGzkPbJK4hUrVEZm6GxQHranNmzMHaN1AG0NIv5m5A4=
+	t=1781510555; cv=fail; b=OA8F5oxH0psCY3xghM+WLSb6UyQmslaQ7OrjVon01LW1a/NMhQROskLNxIttEuLw5MMS0FA1oBsimT6FfBFl41Pin8vfN60ErpAWVu6b9AmOvQH+wykMT0IdJ0I7gWcJ/aAA29xjkFkbkISienxfLQeBRJ/ESMvG/yEt8YLRNlA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781510473; c=relaxed/simple;
-	bh=k99pZ/WObxkMjtd/AKZ8skaONdCVqcAe7R4WXDjJjnI=;
+	s=arc-20240116; t=1781510555; c=relaxed/simple;
+	bh=nfS1oxtPChJ1eQfAww+fBzX1w4aCUWMzL1EVr4qKYJA=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=nuH/lKK5M6HM/36ym1equYUljU1IOBi2xiSErGg6PF/tHRzpzsyFmVZHsu17L8CE3T6CXX+fqy+8oGOG2kt5vprO0M8X2xVznja90LSd7LsIBlRcCjZia/41TZqLG6FF/Um0tachJe+yIQvIIwvqlyIc/91z6P5OtoOljQsqQD8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=permerror header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=qoW+QdP9; arc=fail smtp.client-ip=52.101.82.114
+	 Content-Type:MIME-Version; b=W06nWAsWSbgDFISYIzoPISgLm5ckOh1CRZF48KDeSV+lSbF/z4T204TAWt0kN4jjOqML2/mn9YraLemIFrYFEzVIqod8DagC59dvMcs+aVO6ClgSxaOg/DUetdilzllNDf8I41lcsuR+TNVYemJmOe9p7bBsF5GYxHafsLyAgho=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=permerror header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=Kc3crA8F; arc=fail smtp.client-ip=52.101.75.127
 Authentication-Results: smtp.subspace.kernel.org; dmarc=permerror header.from=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="qoW+QdP9"
+	dkim=pass (2048-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="Kc3crA8F"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wW94kqOruwugzWbUJPsR56rOETv1dRw+YtlQAWBYkSQlw/8wqKaF+TLwTSkEQohITRT9iaV1hrxF0aKRbJp8r9Oe+Iwdm+l5UIXVXrsDTvL1o9QlYbfvWk/pduKZiciQoQm64CEsCzEkyHeSyNqT8gngPkmPttRrJs2A9X7T3C4RxLq2MerAqNX32CADbUfDsucEhVSwNRQ7Y6MopPCiA7eLJ4RAt+jMauhrgFzy1U2bbs3ErsAk+oNwTeBgboc01xjMfp/jEtPxZSXSJeHvNzBnljGIyromwO2G8SOyjhFcJfONT7q7YRbDZh+UX6u3x1LXxVywZimbJwK4ghtYXw==
+ b=lB1kcEZmvv6DmDj31tC6fK/FBnwY+pG0E7YE+7ZEuIcAP0OQmSm1wSys1hyYaxe/OQpi7l5QShgWdlh9m7eCZutU4ounEvAFeFwXWswJyjSDBnuUYOgyVt24RTpXls8GydvzkH4vzhfoGS9oLMwICosvDzX61i/rmmtvb01Xu2KSXO29jmQ4IBBeqsVXoCVR/u87BhzGIVnajLDs8zShi9JHUDiprcRM/Dv6lwZHPb9UI79Fo4FDsZ/9eteXh2IO8/6JE+6MXDTcHATiZAVj7geKPfz4dCPLijhsmEGCjfTKF/v9Hnu2X4PorfmKJidS1BfTp4BXEh5SdR7fuoc6eg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TiL9ONWX7HKdsHTACAor4DbuwYzjCyQajpHUX4vCQrU=;
- b=p1j6bgYJB6d4Ilt+tyadI8gVugaR+lZObjTBXfIGIKHypAuOsBV2BHwuuK2ztbY7sU8ZX+OK6jExQhcgTXYXiprsPbBDHUnsKwTCneDRmL5IocPimtjeNvfGGvsurBxV9mlfvm9xzvsQY6NPdaRQYYkEjq+B6cYIp7Y383dQJc0rPZ92BKYt2gkUC/vb81yXrJ+9qBJIIW3MDlHIC0LPbqQakUQz7Psf/TZO4s5EuApnozyzv4TgBCMk0poDYqwu7zCRpRv8QYLWR99VRxrDjY91feWOW3G4JC6ETDOdKtafRofM37sg4nPK5JVWOSUvg867342erIhEsWFPG/gxJQ==
+ bh=Y2fq74+xae2EegzIdkhV1ag2IAaRBVhAwIIE0cpk6Sk=;
+ b=F9BKaxw4LZT3+GKV3lpGstYx7UgHXGp/z8nCXDFMChKp6b/vNDg0nDE+hS0FZwyAYtCqt7cEGJOkeDro0bDfEYbLUxdYV+CC+x01WSyGGrq+7arujrO/CPDhg/ycl02uVDSH+QhmZJ7JiTsl8oHHaOZbC25J1+r+FTDFCGof7l4qX/KKSE/VfWF2QkApdbKumfUE/TgX9zazFPcJ/lWNWvBnWjxdYVNrZc+KyZmcWc6eMpO+v31+xdZER74M7x2QaMTBFQU4vuqPRVUSFkuHs9bpTTLUHBMH49eOhuR0MHXy2vQI679VSC8BjX/nJLGCws6JfKzN7jPdDmJ7kGlsOw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=gaisler.com; dmarc=pass action=none header.from=gaisler.com;
  dkim=pass header.d=gaisler.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TiL9ONWX7HKdsHTACAor4DbuwYzjCyQajpHUX4vCQrU=;
- b=qoW+QdP9Ldm0k0lKh2TfUXvJ4zUa5oHuHvcyTgXXYsosgu75e22BSeZ44ndWb7/C3y/jlCWZv97/lzGBHJCquJXEh2Dr8y1jY6t05lgHbGUUnPtQHVMQI2kd9B1sHPOsHYmZtRK0uDIaGuNvu2J87R3ghm8j/gwA57nuiim1ky+ax87EYV5eS1wFsK2eUu7i5TfeAw2SnE156mMe1UXO9+njT8uUOPD5YXtvVHzeEnlkdeYFk+61+SkhCmRxCamGfB5coDc+KsKpbQ4dvIpV07ftHq9q0NogFM5Y4+MyIIvwMGytxZvW28TpMA+XhbEB30jmh58ej/oJ0GL8sXfWrg==
+ bh=Y2fq74+xae2EegzIdkhV1ag2IAaRBVhAwIIE0cpk6Sk=;
+ b=Kc3crA8FXQof0b4kWWlwxiYr3CVeqMEknX2fSHAppQ5y5ztOuBLPjce+ta7oJMuFUY6CTXcWfG/L3OzY7806jRprfs3Ih1qAOua4dBamXecjNYz9+TI/1PvD7gtbxRWeo3JuvBYa2Qm1WMhSSQgQYcxeg4ZghDmohtmwXeaHTFVJPGxh4ME0TlUOf/Uavr9fXq9uFF7HULcg6NPTZ9YZ0WpLHGHA6UzaB7QL7oCqCIbKHXRwCX0OBMTydg/MQAgPlyeZoem+Y0xBE/t0o3OUXZ27uZRicFtcEkhFK5dOMTGk+QLjQHd6Kg+V2HoeDr7kqFATpn5Zh7I+eWCuvMlbtw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=gaisler.com;
 Received: from GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:195::18)
- by GVYP280MB2063.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:365::15) with
+ by GVYP280MB0988.SWEP280.PROD.OUTLOOK.COM (2603:10a6:150:eb::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.113.18; Mon, 15 Jun
- 2026 08:01:04 +0000
+ 2026 08:02:27 +0000
 Received: from GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM
  ([fe80::be76:7636:f4ac:6773]) by GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM
  ([fe80::be76:7636:f4ac:6773%6]) with mapi id 15.21.0113.015; Mon, 15 Jun 2026
- 08:01:03 +0000
-Message-ID: <a061ffed-fa21-47ec-9472-ce1812fdf460@gaisler.com>
-Date: Mon, 15 Jun 2026 10:01:02 +0200
+ 08:02:27 +0000
+Message-ID: <eb58c07c-d244-4cb3-95c5-037500569b05@gaisler.com>
+Date: Mon, 15 Jun 2026 10:02:26 +0200
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2] sparc: Export mcount for Clang-built modules
+Subject: Re: [PATCH] sparc: Disable compat support with LLD
 To: Rosen Penev <rosenp@gmail.com>, sparclinux@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
  Nathan Chancellor <nathan@kernel.org>,
@@ -54,14 +54,14 @@ Cc: "David S. Miller" <davem@davemloft.net>,
  open list <linux-kernel@vger.kernel.org>,
  "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
  <llvm@lists.linux.dev>
-References: <20260612181503.4509-1-rosenp@gmail.com>
+References: <20260508000834.834824-1-rosenp@gmail.com>
 Content-Language: en-US
 From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <20260612181503.4509-1-rosenp@gmail.com>
+In-Reply-To: <20260508000834.834824-1-rosenp@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: GV3PEPF0001DC48.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:158:400::2e9) To GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM
+X-ClientProxiedBy: GV3PEPF0001DC43.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:158:400::2fb) To GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM
  (2603:10a6:150:195::18)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -70,117 +70,99 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GVYP280MB1290:EE_|GVYP280MB2063:EE_
-X-MS-Office365-Filtering-Correlation-Id: 927549c7-2078-4073-4dd8-08decab43efe
+X-MS-TrafficTypeDiagnostic: GVYP280MB1290:EE_|GVYP280MB0988:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ab9d5c4-288f-43ae-6061-08decab47108
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|376014|366016|1800799024|56012099006|6133799003|18002099003|22082099003;
+	BCL:0;ARA:13230040|366016|376014|23010399003|1800799024|56012099006|6133799003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	UN0dETG43Fp1hVh9HKq8fA5XTwLB86vYCj4p5Podc3hsZJujkGGzQ4lvkehNvxM9VXw/miv6+7XB0B/+2KepPQvTd5Z7KXORmBBi26qAoXYo8foQ7fiBsOUM45WvJG/VqUFPDzoorYUxXEwNqJ/WKia1/4QogFhWovtLNhBbxia8GJThz2c0H2vFW1ZQMO2V8BTfoTJlowsW6ylRdPjj1JLRqCtm/JP5kzcdoDNI1OGv5siaUXkG8IaF6N3msSIHzg+5sV8MCRjNS3aP/c2D1ZsT+O2A29ju4kNx5IeadrTpra4HOixU1dKqMcE6euWitwkGH0LPuR/KN19CRkeqNS/GqXvBlXZpDW6vrtT7h4R+q/hMWaTI2p91wNmjF0j8P+7k4DNC/ecBLleMYzuBsF9N9A+dBOosGTHVClSjDyDkpuM3hq57uS6hOd4UoS57tB2Zkr9gdC1Ug6aKtskeWlJwk3t3KuLTR2U3vlPz/xPBJJngtCegGLCqcWkGJ8CkYSoOLgJAluwLtyMxkcgvbVcR/Oyc4F7DPaTwhz6rfKnzhx+axxtP/icYv8j0JVubqwsMNmK7bnbxHEyE+kzImp1R2gXP6CC50xY+9Vawc9n2mj4FGJO2fYi0k/JNPoRKPFufGpJ8azUHlhlyrL/guqkdq/9I4+kXdlnUDbyNJr6pPgdm8ebGOguK1KW4k/ad
+	LZMijZipVUjR4xEJ1PMtjKCpn92Z2TThmYlZOKAXP6Vlw4yfCeUIGzB6BA/IMxGd7Nr3j4pZMe3qmtqOrN02cxg/tE0RtCgifqymtP7efa7C2AfGtBTokae8lTNh04IJEpJNDgXWrPdjoCcg0vXwfEBTK6J0RjLEx2CggttAHF3sXun2fI/pdQF3QVNyEVY/wys27XLmqznfjky4yWEOLoPA8r2Lhm7Tg2vrmGBovMCutXcsZbdT/vBQsROoN82l1XB4c/if23D9FLEMy7wlj70psrquPjJyGqAC3UsHEPpZ2zhc625JkErxiIXs2EPa+RPGrWoOYF6CQlcFmBKqN6VqmWqdqcNP9UFqYAgJ8GzYWCtQqf5WU6P5M47vWMwH+PK7u6LYc2rAeD9KODzpPu8RVDc2gd7oBT1C6z4IXT9ZdkHCyDoKKaoSCtFZ6yxSZpbAZIMZ4n5GYSA1G70fuJ5IXprLhjBwNI+E/8/AOUdQZ7iHafGa9Q1TNmk5KwGmpaIlEFzqIe7njcBsv0ZcKVoackVonL+Acyz7f2xJSJQgIV2X8GoxdcTev4X5m0fJxp0TTSOlF2spGlREGEuQweaMqNLZ9wsBzY30uFvL6gIfn9Y+GxS04x/PZvJ7I2cDtYvN5WqifXUBiTx130e8Hv/jFw/wXBY2b4Iq8USMcHUEEXCcrDdwyLsCRHfgJ2Ni
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(366016)(1800799024)(56012099006)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(23010399003)(1800799024)(56012099006)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TERRQXZXbDVkSG40b0hPRTZ4SVg3ZXZqaytPZnlDODVIRDRFZVZSZ085NUQy?=
- =?utf-8?B?N1crUERDdnp2OVord1VINEFZQTY5WitmRGV5MGpsclVQaXd2TncyTDY5ejFY?=
- =?utf-8?B?eDR6WW5JL1pjeDQwM2JEbHlPUEFldFdMbmt1L016dUdNODFja08yNjBVaDV1?=
- =?utf-8?B?eTVKU1EwNjFobVJvN0RDcENEQkJzL3ZKUmlSUWZYZmdUVnFRSy9YbnpCOUZS?=
- =?utf-8?B?Y0M2TXcrNjEwV2dCd1RWMkN4WWJLVTZ6TkhNVXdSajQ1VklhcHdvWEFZa2xX?=
- =?utf-8?B?QXFRc2FCMjdDS2xUMWNicEpmbmJNSW1UbnFlU3djUnMrdEVpTjI4bUFsRGRD?=
- =?utf-8?B?WWU2ZTRlYmJNU1EvYmIrMTRJOTltaW9GRGNJb0Ridy9JMlBiSzR4dkxQVzcv?=
- =?utf-8?B?MTVBb1JpY2t2T2hMT1pzWitSMGp5ME51S2VRSzAwSHl4OUU2a3BHTkRFalVj?=
- =?utf-8?B?bnBpS0JCYUNtbUlyRTd5RW9YVmhZeFU5Y3FZQXJ2Z2JBSm9MUmJTYXJTeWQr?=
- =?utf-8?B?dUFVVU1uYVVMTkNNM3BlbmxNUnVXZ2d5VlNYdWZiMHYrZTQ1WHJPVWc4L0V1?=
- =?utf-8?B?cFhBb2tSRXNhZFNnUHpkWVBJY0E2K1VIODZMb09JbnVSRFp2MEExK2dFVVJu?=
- =?utf-8?B?V3NyU0xobjBzTFByUGx4dGxXTHhFNHY4ZW0xT0lMek5JdXU0MVV0ZjN5WTI5?=
- =?utf-8?B?bytoS2VEcWErZGdORjRrVEdVTkMvbGIyTW4zckphSUZ6aUhQL3BCMlJBcG1i?=
- =?utf-8?B?SDZrM3ltOTRWOWFYMUQrR0NJZGZYVFc2UlE0Ylk4dnVhM1o0KzdhcGJ3MEQ5?=
- =?utf-8?B?blRvNEY1ODcxcm5NZHA5L3NEaCtiUVB3eXBOMlpLeXVVQUp3WHFwNnZXeWtD?=
- =?utf-8?B?NW9ENjNsMVgzNkp0a0xvRWNqQjh2MDltME5Uckp4aDlTUzl4U2Vpa1RWdytn?=
- =?utf-8?B?NjFUQlM3NDNNUUJWVzFldjVrYzlUVkFnR2FsV294Sm52SzExYTZLL01IYjlX?=
- =?utf-8?B?RnVoVUF5RENqY0ltTzZOMm1MSXdhWWhKSmF3ODlMYkhndzJiUmhuTEQ4VDFU?=
- =?utf-8?B?MkpkU0IwT0orSUJlWlpSVndEZzM4RGFTNytzY0pneUtmdDM0dVJMSEdkQkFP?=
- =?utf-8?B?L09nSFdaK2E3clJ2NnpFMmROemtwa0RabzhNNDBPV3FoZmltclV4Z0lpdS9w?=
- =?utf-8?B?bjA4ZFpCUVRZZ3dPVWY4b092NDJubzlhSlh6UnVuMVdNMmhwaEVIOW8rVUNW?=
- =?utf-8?B?b1VxbFZ1TXpWdFFBcjVmQXduWTBFS0N1ckJubzkwL0pBZTI0R0RFbTRsWGVT?=
- =?utf-8?B?TVc2YWFxSzkzaW8wSU5UZ2RlTnhZY1RISFAzZ0p1MEFEZ0p0VEN3ekNxODBq?=
- =?utf-8?B?cWw2dE9RY04rYmVkelMrekhtb3JCL0l0RkxtcS9vSEsrRVJFZmgxUU1jMXBr?=
- =?utf-8?B?NCtjWklkRWRQdW9RSzMyTmlackJucnFXVFlBWlJRNlJIL1h4TkcraDFIblZV?=
- =?utf-8?B?Y242eTFLRWw0clg1T0hNRmorZk1UR256cWdIemdQMmpLUWFSbkMrSzJVSWpu?=
- =?utf-8?B?by9PVnF6VkloUmtMK3ZocmFIVXY3Um1pRDFIL05GRC9iWHlmZ2JQUjJtNzdU?=
- =?utf-8?B?ZlpCTG9qbzFnRWZ2QW1ZR25vRUUyWW8xeUViNjhtdStGODNXbi82RGptQUdr?=
- =?utf-8?B?MDEzQTZDa3Fsd2pUKzhUaFpnLzJ0U1RiLzk2eHV5b25Qd3RJMkZaZW9ubWVQ?=
- =?utf-8?B?ZzhEelQ3OU9xdSszVFpvb2FkdjJ6eDhmWjVyRGdUSkFrOUlJMlJicml0NFBR?=
- =?utf-8?B?MngxVm9idk91M250ZTY5MzFlNExUVVZNdDZGdzNvVjlVdEgycEV3K2UyZ2JY?=
- =?utf-8?B?cGJEN1BqK0UyZUk3aGVEcVJBbGV2NUVGeXdNSGRzeitTWlphdnRZM2w3MmVI?=
- =?utf-8?B?ZFpmZ2FRb3BPTWVqNzBwT2RxRTNBcHFKTlhIUzJOYStTL044OW54K1lrc1c5?=
- =?utf-8?B?aXU1djJRdStkWko3blJ1eGlQaWc3a0pCTElETHlhTmU2bXBoL3Y0ZHI4K3pU?=
- =?utf-8?B?UThrRDZYZE96RUJya3F0RnByWnlLc3MySVo4dG5zQ1ZkUkhIWDJtRThZc0RM?=
- =?utf-8?B?RnlTeXBUUHF1cTdETVExandHY2lpNGw2OG5VdmhMd0theTVDTUdPOXBaVC9B?=
- =?utf-8?B?N0c5SE80R01pSjZjS3lqUVRCY3ozSWdDWFdpQjF0eUJMZnU2V25Lamc0SE44?=
- =?utf-8?B?azV0ZzJtb3I3TktEeWZTUk83TVpucWFtWUxzYStHeXVwKzh0NVA2dkU3RDY4?=
- =?utf-8?B?UzVHYXRJNlozWEF3NU5hWkoyeFkwMVZ3emZlZ3JmdmtQUW5KQm1lZ28rQlBJ?=
- =?utf-8?Q?EYEsz9AnloIK2AEY=3D?=
+	=?utf-8?B?TlNCN2VkeXlMck5DNGpyMW1ZUjhTcmhBUVRjd2lsQk1kdjgrVEdHM1NCakYr?=
+ =?utf-8?B?dUx5OThDcXJ6OTNZcHJQTEhjSENvVnZTdWtyTmRKUUd4aldzajhTRFNET2Vp?=
+ =?utf-8?B?c1NDQjNhOEloTndOL2hXaFpnTUFlR0k1T21QQU9waWNmdFI3eXYwV3pvdVNX?=
+ =?utf-8?B?RTZ2SnRyTUtFdlFqTE5HSGlPVGlwUnFSdDZzemMyTVdMU294KzVHVzVQeUFw?=
+ =?utf-8?B?Y0RsOVVtcDZxOHlHQWdFcThlYjNheWtvSkJvR09iMHJMY3g3aTdZNVo2TmUv?=
+ =?utf-8?B?eFp0RzVYR2dVZ3hxbDE3VXFUOEZXMEpSNjJHdzc4Ujl1blZyUVloSTlCZHh6?=
+ =?utf-8?B?dUxuN3FKOW5RbDczZytncVdSTUd3VkFaeU80R3lMQlJ3ZGNVTk5wTXFOZUZa?=
+ =?utf-8?B?Tm5adHBsTjJBR3piWU9yeUhqRndrRktnekJzQ280OVY3RjVKUjhBSHAxdWxJ?=
+ =?utf-8?B?S0hZdWkrVHZGTnlUWHU5TEtnZlY3ZnQyMkZHRWdtUTB0Wi9pU1VnZEhKeThC?=
+ =?utf-8?B?SFFLSzkwNXQyQ3RBNWl4Y01sMWd1ZFVzSjY1cHZvR1IxaGRWNy9RUHFad0d5?=
+ =?utf-8?B?bnJoRWFmd2RMSHdMQUFFN2Z6RzRUb3REWkdoUWF5aTdXaC82bUIySDhodkgw?=
+ =?utf-8?B?aHVvSE53WU8vZGwyems4YktFQmthaUplRlF4TzVtKzVLWCttNHh3OUpTbnRt?=
+ =?utf-8?B?U0xaRGFWTmhZODc1Z3J2L213dGlSbG5HTmFzeVMyRXIvQWZXek9mYjh4eFhJ?=
+ =?utf-8?B?eG5JRDZNRzkrZ0pyV2NHdElXeFZ0NFByL010aElMQ2d6TGRMaUlTTGxsVmJU?=
+ =?utf-8?B?SnJTNU1ha3BCRDJBRklrY3lkN0dEbWNmZ0txbFg1dDE4c3A1NCtZU0UweDEv?=
+ =?utf-8?B?N296NHFjNVhmT2VWYUJvREF6UGZuTk4rVkxKemZrQ28reU45SlFxQlI2R0Nl?=
+ =?utf-8?B?Slg5STkyYVJPejNGUXlyb3FMN1BhWk55NzlNTHpiNGJxY1dOUTdkY3RGWUNo?=
+ =?utf-8?B?VlEzRldEWjZMckkvVnZxV0tyYXlXU1ZBVjQxNm9FcDFZL2tPQlhGd0JPSTFh?=
+ =?utf-8?B?R1g3RG50b0FMZ1dSZWMwVXMwekZxNUVtSy8zWFkzcE9MV0IrZlc5QllseC9Y?=
+ =?utf-8?B?amNVNmhrcFZFd2xYajlDWGJDeDhqWUlrMlZnVHlBdFV4YUZGWG5TMDEzTnhI?=
+ =?utf-8?B?ZnFtbEpxRTNsbzNzQzQ1a0RMVTEvOFhOZSsyQmNsUjNselBEQ05EaEdmRVdw?=
+ =?utf-8?B?ZjdzSjQ2K1lSNkVRRlF5c2FONDZLSUQrdEw2ZVJaQkFKdVA0ZDlwMWxSd3Ir?=
+ =?utf-8?B?NXB5ZStyOWhsWnBtRzQyRE5Fb1B0SmU4aUo1ZEVweTl3WDI2Wm9lZWIwcDhx?=
+ =?utf-8?B?Y2JFS3N1anpweDZmc1BrMjJGcHBaVGVqZ0k0bzZxWG1wUmNvRWtSMVVkOURl?=
+ =?utf-8?B?cGp4UVJCTHBIdCt5b1lQZk1HS3lyYXlzbzFtYlNTSzN4VTF5djdtcEw2alE3?=
+ =?utf-8?B?eW1HWGlJc0EzbTFUWmkvQTlWNUUydm5TNjg0ZUovZHR1bTZYbFc4K2pCY3lE?=
+ =?utf-8?B?OTBEdDEweHNocVZJMjk1M0JYN3plUGxvVjE2QTdEaTZJY21rWXhvY1ZjcWcv?=
+ =?utf-8?B?d1dKMHhmWDVkdXB3TjZsbXVWREdoUTA5RDNUTFZJTXhXOXRYekRoUjErOTNz?=
+ =?utf-8?B?Uk5pU3cwUWNTZi9USjUxOE1LK1JnZ29CZENkc3V2YjgyUlRPRXlKQ0pFTTZB?=
+ =?utf-8?B?MzlpUkVDdjF1dyt5R0pCU0FVNmp0UlNOeDR0NDliRWFsOXZrKytBTmRiQUJ0?=
+ =?utf-8?B?aFVyZDhmb0hkTDlHTHpCTTBRdXhxM0FJMW9IbmpwV2Q1Vk83WGtWQzhPQ3o1?=
+ =?utf-8?B?VjRBZTZHeVYrREN6bTRCUVVpcjZvMkFtT2xaVVMrcHIwekloMDI0RjhiU1lo?=
+ =?utf-8?B?RzhyNXhPT2tXQmI2TXdaYlZ4a0tSSmdpY0d1WkJiQmVuOUJjbXMyMUNLNDRH?=
+ =?utf-8?B?ODlHRCtnLzZGa3lGd0RUVVZQbzdtR09jNmFLclRHa29UT0tad2E5L2RXWFEx?=
+ =?utf-8?B?ZjlpcDVZNUZmUmFvUXhVSUN3RHlIMDRGYld6SzFiMHJOTmorQi9zR2Rqa04z?=
+ =?utf-8?B?YnBzZ1N6Q09NRGRWR3JQUlRvMFlUU2NUZUFaVTV0M0ttR01KVXQzMC9GYjVy?=
+ =?utf-8?B?MmRtV2Qya3BVVStrQUZodWhzeFhXK2hKTy9KQzlFUC9UaFlkUFRnbUFFQVJt?=
+ =?utf-8?B?RWVuNFZMclBrczhUV2ZqRlAzVURKb1BWTHh1cEMxdkM2SzN1T2xjYkdTSkc3?=
+ =?utf-8?B?QmZ6NjlVRCtGQlJqL0xsVkN1N3BGc3VVbURqdzB2czNHWTNqOFkyS2xtSXBz?=
+ =?utf-8?Q?xWpECGVTNEuv32ok=3D?=
 X-OriginatorOrg: gaisler.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 927549c7-2078-4073-4dd8-08decab43efe
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ab9d5c4-288f-43ae-6061-08decab47108
 X-MS-Exchange-CrossTenant-AuthSource: GVYP280MB1290.SWEP280.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2026 08:01:03.5653
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Jun 2026 08:02:27.4742
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 91fa4a59-2167-458a-8318-e45d80469d7e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BKGEONhV7UtJnfWMpr7j7Hr5oUjBoIU1yJgWLAMfiPX0S3hfIkIDwtNIUzujTX/M1RjA5anxntZopTytFRaO80b/7t+7VzoKG2HAjdSlu1s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVYP280MB2063
+X-MS-Exchange-CrossTenant-UserPrincipalName: /j2hufJskfZX3OI9AdSNBkX8diXXMR7oLcb2dnaDKVYc0StIALB5c4n5eC6Ye91AuZ1vi1EO+Zkd53qVH1b8L+mn4156BrtAV/daS5u4gT4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVYP280MB0988
 
-On 2026-06-12 20:15, Rosen Penev wrote:
-> Clang emits calls to mcount for -pg on sparc64, while the
-> existing ftrace support only exports the _mcount name. With
-> FUNCTION_TRACER enabled, modules can therefore keep relocations
-> against mcount and fail during modpost:
+On 2026-05-08 02:08, Rosen Penev wrote:
+> An LLVM=1 sparc64 allmodconfig enables COMPAT and then tries to
+> build the 32-bit vDSO. That path cannot be linked with ld.lld:
 > 
->   ERROR: modpost: "mcount" [arch/sparc/kernel/chmc.ko] undefined!
+>   ld.lld: error: unknown emulation: elf32_sparc
 > 
-> _mcount and mcount are aliases in arch/sparc/lib/mcount.S. Export
-> the plain mcount alias as well so Clang-built modules can resolve
-> their profiling call target.
+> ld.lld does not support the 32-bit SPARC ELF emulation used for
+> the compat vDSO, so keep COMPAT disabled when LLD is the linker.
+> This avoids selecting an unsupported build path while leaving the
+> existing GNU ld configuration unchanged.
 > 
-> Assisted-by: Codex:GPT-5
+> Assisted-by: Codex:GPT-5.5
 > Signed-off-by: Rosen Penev <rosenp@gmail.com>
 > ---
->  v2: add declaration in asm-prototypes.h
->  arch/sparc/include/asm/asm-prototypes.h | 1 +
->  arch/sparc/lib/mcount.S                 | 1 +
->  2 files changed, 2 insertions(+)
+>  arch/sparc/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/sparc/include/asm/asm-prototypes.h b/arch/sparc/include/asm/asm-prototypes.h
-> index 270c51017212..a39a24c53216 100644
-> --- a/arch/sparc/include/asm/asm-prototypes.h
-> +++ b/arch/sparc/include/asm/asm-prototypes.h
-> @@ -26,6 +26,7 @@ void *memset(void *s, int c, size_t n);
->  typedef int TItype __attribute__((mode(TI)));
->  TItype __multi3(TItype a, TItype b);
->  void _mcount(void);
-> +void mcount(void);
-> 
->  s64 __ashldi3(s64, int);
->  s64 __lshrdi3(s64, int);
-> diff --git a/arch/sparc/lib/mcount.S b/arch/sparc/lib/mcount.S
-> index f7f7910eb41e..0309ba2c4712 100644
-> --- a/arch/sparc/lib/mcount.S
-> +++ b/arch/sparc/lib/mcount.S
-> @@ -21,6 +21,7 @@
->  	EXPORT_SYMBOL(_mcount)
->  	.globl		mcount
->  	.type		mcount,#function
-> +	EXPORT_SYMBOL(mcount)
->  _mcount:
->  mcount:
->  #ifdef CONFIG_FUNCTION_TRACER
-> --
-> 2.54.0
-> 
+> diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+> index a6b787efc2c4..681ab2fd3d8a 100644
+> --- a/arch/sparc/Kconfig
+> +++ b/arch/sparc/Kconfig
+> @@ -474,6 +474,7 @@ endmenu
+>  config COMPAT
+>  	bool
+>  	depends on SPARC64
+> +	depends on !LD_IS_LLD
+>  	default y
+>  	select HAVE_UID16
+>  	select ARCH_WANT_OLD_COMPAT_IPC
 
 Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 
