@@ -1,113 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C434179A3;
-	Sun, 14 Jun 2026 21:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF6423BF9F;
+	Mon, 15 Jun 2026 00:40:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781472221; cv=none; b=rQ1fuw46+qivMi24GHtQnUpScR8HQufmRBfmv5qDeLvVBzZinbu7bHS9kCkw3MA8gbKnXWxp8YQw2rujldWC2xFDIo96p+4mqh31Xi5ciBt4czdYXWAGGxVupNXKMQ2SGEEfrFiwvi6cjmAcRzHhfwheE6Jxry/ZgZ5Ld2Khlho=
+	t=1781484034; cv=none; b=We7/1O+O1tB8sZr9X8GygByEqktxKBiIgy+CTn7OL3FvKAyofNb85IXq0RQVuRb2MvsAWNomCwsh2kc8riTHfHCLn6w9kwNEnfQbfVPYbpSbsqlhK2pYkjziGqSNQAnog9820nqlutGRc3B3x8eYVT5fZbZ2OpK9e0LWp0oa2RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781472221; c=relaxed/simple;
-	bh=QFkPJi3x1ejn22MR9q07N0k+ywQ5OJsT+m4G0sebC+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=F1Ms9M002+QHIThb6NHL41k+z/oMXTqQzVxeACYzSylEnuIoriOKW6AINWZn02Alz+qbACRRx34JulJpXRkrrfi3kkskCmKmgHs+O6wPgRetd58dRFTk0tdAvr7P+pRkoO2TOHe+FaadUgbGKU4b1svH5d3Ne+/OU0SHzV9+q08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WqYRgrPp; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781484034; c=relaxed/simple;
+	bh=oxFDhOh+bQGe/fGOxNU9oFVi1hkHe1pdFg3N5tdCl2M=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=aUtDmTi33D9jxYX3BGO5cZ7+2AAFLH9gbBQXVP2gRsrNdm7S75jFrwo4O/1A7cP46Q7F8g2fel/7Q9AkRfkzx+NvB0YG55PZzehwNC9uKjl5aZKJzc4B0WhgmlHo1EtW3lus8zeJlBI/sStu8Kt3oy4Qy7b5htYPbjD6VSU/+Kg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B4yZhG+g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WqYRgrPp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781472218; x=1813008218;
-  h=date:from:to:cc:subject:message-id;
-  bh=QFkPJi3x1ejn22MR9q07N0k+ywQ5OJsT+m4G0sebC+Q=;
-  b=WqYRgrPpuoD51f02U+XzPa2IBHtqKNBb7wtEuaWfJUDbU+pbJ2UOQtsJ
-   i80PCaQAyBaWrr0NpeKtX1t0wW3g4GTxnFXB52vMw6k9NP+wDu0X+MRh2
-   KYoCnXZbTqtau6rtZWUnmoNDHrY230vO1fPVKUPeD03P53Gc7PP77DhJE
-   5nvVlKaGQsnPffoQitg0WaN5MTZhwz8tyuDNwYvNiGXtOxsouPQ4GPxDs
-   GNUoF03lbNO47MNufTfoe54j2YVle9997WiGCYqo4vuBBy40VJVnUTn+k
-   68E2731YQAXUQGoh6Hne+ko5LVvXSUcl13AmSi9ugN3GSPbO7LwHdKBTJ
-   Q==;
-X-CSE-ConnectionGUID: Ho+ZvYBzQUy3AnVxd91CSg==
-X-CSE-MsgGUID: i+/9k9iCSJOkhvMhfZIblg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11817"; a="82199952"
-X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
-   d="scan'208";a="82199952"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jun 2026 14:23:38 -0700
-X-CSE-ConnectionGUID: OGwVcphoQgehUxzaaSE5ww==
-X-CSE-MsgGUID: VjMJnVZaQae/M7s/4TD2Gw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,205,1774335600"; 
-   d="scan'208";a="247180681"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa008.jf.intel.com with ESMTP; 14 Jun 2026 14:23:37 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wYsIo-000000004kv-13oD;
-	Sun, 14 Jun 2026 21:23:34 +0000
-Date: Sun, 14 Jun 2026 23:23:14 +0200
-From: kernel test robot <lkp@intel.com>
-To: Ronan Marchal <ronanmarchal29@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: kernel/power/snapshot.c:2042:1: error: unknown type name 'c'
-Message-ID: <202606142358.yLiBjEy1-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B4yZhG+g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F4E1F000E9;
+	Mon, 15 Jun 2026 00:40:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781484033;
+	bh=jXv4XYGmxQm1hv9jzH1x0NJtxWmVyiiGQTlcM4SJqI8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=B4yZhG+gNegJ/tNt5QfgrA6h+n+yzg0afb8ye0ArsfXV1oK/xLbqsFyapOk/JNAUG
+	 gN2c+S3aKgXZQ3GV8klAty3F3tVsNyXpaOMy98Q36pLSAIOeYq4zKFzcxwL/zXgneo
+	 +jQLJ3QDRzu5aJO9yPdMw79yflxCfBQS6kG3sISQtPYupRXMJTfo/VD65eHcH4UMMr
+	 ndvb8nea8hl51qNe3O8/oldymRSWvh8A2Z1t1T7tgQqtSv74Vr37k8sNaDFyKocEm4
+	 sAwoX01GcL17DIFDZn4vo/WsIFGlPuvIB/GqODnU9cIcE9Pd09rhS8u2o1AH30XIaU
+	 7ARKln2A7Mq4g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198693A566D2;
+	Mon, 15 Jun 2026 00:40:30 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/8] tools build: bpf: Append EXTRA_CFLAGS and
+ HOST_EXTRACFLAGS
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178148402863.2363016.5034665284884003104.git-patchwork-notify@kernel.org>
+Date: Mon, 15 Jun 2026 00:40:28 +0000
+References: 
+ <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
+In-Reply-To: 
+ <20260602-tools_build_fix_zero_init_bpf_only-v2-0-c76e5250ea1c@arm.com>
+To: Leo Yan <leo.yan@arm.com>
+Cc: qmo@kernel.org, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ lmb@isovalent.com, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+ morbo@google.com, justinstitt@google.com, acme@kernel.org,
+ namhyung@kernel.org, irogers@google.com, james.clark@linaro.org,
+ kees@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+ ihor.solodrai@linux.dev
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Ronan-Marchal/kernel-power-snapshot-Add-missing-kernel-doc-parameter-descriptions/20260614-224612
-head:   3640842137db0e04106ba490ff1d1d6715de9a2b
-commit: 3640842137db0e04106ba490ff1d1d6715de9a2b kernel/power/snapshot: Add missing kernel-doc parameter descriptions
-date:   7 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260614/202606142358.yLiBjEy1-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260614/202606142358.yLiBjEy1-lkp@intel.com/reproduce)
+Hello:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606142358.yLiBjEy1-lkp@intel.com/
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-All errors (new ones prefixed by >>):
+On Tue, 02 Jun 2026 15:47:09 +0100 you wrote:
+> Append EXTRA_CFLAGS and HOST_EXTRACFLAGS to the BPF build.
+> 
+> This mitigates an issue introduced in GCC 15, where a {0} initializer
+> does not guarantee zeroing the entire union [1].
+> 
+> The common changes under tools to support EXTRA_CFLAGS and
+> HOST_EXTRACFLAGS are sent separately [2].  As suggested, BPF patches
+> would be picked up via the bpf tree, so this series only includes BPF
+> related changes.
+> 
+> [...]
 
->> kernel/power/snapshot.c:2042:1: error: unknown type name 'c'
-    2042 | c/**
-         | ^
-   1 error generated.
+Here is the summary with links:
+  - [bpf-next,v2,1/8] bpftool: Pass host flags to bootstrap libbpf
+    https://git.kernel.org/bpf/bpf-next/c/9080b97689db
+  - [bpf-next,v2,2/8] bpftool: Avoid adding EXTRA_CFLAGS to HOST_CFLAGS
+    https://git.kernel.org/bpf/bpf-next/c/956841cbc3d7
+  - [bpf-next,v2,3/8] bpftool: Append extra host flags
+    https://git.kernel.org/bpf/bpf-next/c/3f2fec5b02b6
+  - [bpf-next,v2,4/8] libbpf: Initialize CFLAGS before including Makefile.include
+    https://git.kernel.org/bpf/bpf-next/c/f3846b3800a2
+  - [bpf-next,v2,5/8] tools/bpf: build: Append extra cflags
+    https://git.kernel.org/bpf/bpf-next/c/b40ba139371c
+  - [bpf-next,v2,6/8] selftests/bpf: Initialize operation name before use
+    https://git.kernel.org/bpf/bpf-next/c/55ffbe8a15b1
+  - [bpf-next,v2,7/8] selftests/bpf: Use common CFLAGS for urandom_read
+    https://git.kernel.org/bpf/bpf-next/c/584f3b7a3525
+  - [bpf-next,v2,8/8] selftests/bpf: Avoid static LLVM linking for cross builds
+    https://git.kernel.org/bpf/bpf-next/c/62617d28d9ae
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-vim +/c +2042 kernel/power/snapshot.c
-
-  2041	
-> 2042	c/**
-  2043	 * enough_free_mem - Check if there is enough free memory for the image.
-  2044	 * @nr_pages: Number of non-highmem pages to copy.
-  2045	 * @nr_highmem: Number of highmem pages to copy.
-  2046	 *
-  2047	 * Check if there are enough free non-highmem pages available to save
-  2048	 * the hibernation image.
-  2049	 */
-  2050	static int enough_free_mem(unsigned int nr_pages, unsigned int nr_highmem)
-  2051	{
-  2052		struct zone *zone;
-  2053		unsigned int free = alloc_normal;
-  2054	
-  2055		for_each_populated_zone(zone)
-  2056			if (!is_highmem(zone))
-  2057				free += zone_page_state(zone, NR_FREE_PAGES);
-  2058	
-  2059		nr_pages += count_pages_for_highmem(nr_highmem);
-  2060		pr_debug("Normal pages needed: %u + %u, available pages: %u\n",
-  2061			 nr_pages, PAGES_FOR_IO, free);
-  2062	
-  2063		return free > nr_pages + PAGES_FOR_IO;
-  2064	}
-  2065	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
