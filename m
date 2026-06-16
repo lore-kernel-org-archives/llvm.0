@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB0C426EB6;
-	Tue, 16 Jun 2026 10:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E4BD436353;
+	Tue, 16 Jun 2026 10:14:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781604890; cv=none; b=WcuqWDR5R1uzouIpeSx+mE1THcunpldFNixHhav6ViPrby96SgnGpxr4I8L9FecyhkWT8RsjFF5JxrtuSbqevIlTgzp0DK9EwqOY7DyIjFxEaH+PeQaJgdkV+GCWw8vaiNwsUQaOY02/E2S8QsvSeWGO8ALovyNQK6cR/zMlCUc=
+	t=1781604898; cv=none; b=n40Dtn5YwqyWSBqHtTpl03Jtm0DtJbauCUdnIJNwh+VdIOM1SCmFKsqYztrUbrh4J5f1dtSvJftmbD1g+u6AEsvyCFNdYDth4j5mWLgw2m5a71XznHbu9WI4fAx5/MZV9NDJl59LtHUeEsv32iQs4u849XGgedgCgLh02hry+eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781604890; c=relaxed/simple;
-	bh=Ab2iWGGawQ8+zbPNFr/8zoXyc2DvPAVpLN1H32TDD4Q=;
+	s=arc-20240116; t=1781604898; c=relaxed/simple;
+	bh=rksqqppltRfps1C0V/kWm9Vp0O/XyQFsfHC+xDFl8Q4=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=C7fEO8AQbX5eFuo+YX9HHtOzr+1RWUn/D2csxZ49D91xiuxKgJF/hX7hOwSKDdjJUeX5hAzwNYR3SgJdrrCPqJdBiPSuBLiOIFsGN23zFrLPfw5496X0QinTeSi4WnhkMuR8lIJvQLQDAbTfp+ecznBAwaY+wHOZjMJ51bfjftU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nLQKHluz; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type; b=C5kEoLX/lPpc0sGyjJyEiblKJdu7uLAL2VZCJeGAHf5Iac8Yk0LJAOeoPvqkLfnXtHszuTeGDnOkQRD9362ULp31lMC8VAzPPghwoY57+cROHNatKbT9PBei6sQ1I6ZemE6UXi0MU3+pWOewJawhRxENl8Y6K19js+/cZYsuGCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WfosOFMM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nLQKHluz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196191F000E9;
-	Tue, 16 Jun 2026 10:14:47 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WfosOFMM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 331BD1F000E9;
+	Tue, 16 Jun 2026 10:14:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1781604889;
-	bh=bymKJZqbdh9ytLXLyS/sDJQBHxJNBOyH9cCWnqVp6qk=;
+	s=korg; t=1781604897;
+	bh=exNF4CJYOXCcegYmYdnsWdjTULcn10GZMXgGqPvoL2I=;
 	h=Subject:To:Cc:From:Date:In-Reply-To;
-	b=nLQKHluzJ0+1E8U9B+IabOFNVfhkopDEqFWfXxT6JBNykEFQHNzWBZxJ+ayY47rsr
-	 YSD0a+Zypfwc/bVv7vO8Ao09Y2b/tf/MCswLm4bR6NWaBK6mJ8FoIMi81cz8N1qAnV
-	 A0Jzx/qKZliTkvMincp8QNjqYC7UrR5PiXWCixdU=
-Subject: Patch "perf build: Conditionally define NDEBUG" has been added to the 6.1-stable tree
-To: acme@kernel.org,acme@redhat.com,adrian.hunter@intel.com,alexander.shishkin@linux.intel.com,bcm-kernel-feedback-list@broadcom.com,florian.fainelli@broadcom.com,gregkh@linuxfoundation.org,irogers@google.com,jolsa@kernel.org,llvm@lists.linux.dev,mark.rutland@arm.com,mingo@redhat.com,namhyung@kernel.org,nathan@kernel.org,ndesaulniers@google.com,pbonzini@redhat.com,peterz@infradead.org,seanjc@google.com,trix@redhat.com
+	b=WfosOFMMpNL+s02yRqA6UgrtEiMPIOCUQTZpVEyFcQLXem3A7OG6EVEjn7wWTHTw3
+	 ugCYl5MhKxv1JlKTGAgRbGmQ6u1Gm2dJIU+3weqKyK48jf7RzgRGa9N8JaZE2dgbJG
+	 /Znq0RSuHIWaq0obEqd+eY8Ordhb7EiIJQYE/cZ0=
+Subject: Patch "perf build: Remove -Wno-unused-but-set-variable from the flex flags when building with clang < 13.0.0" has been added to the 6.1-stable tree
+To: acme@kernel.org,acme@redhat.com,adrian.hunter@intel.com,alexander.shishkin@linux.intel.com,bcm-kernel-feedback-list@broadcom.com,florian.fainelli@broadcom.com,gregkh@linuxfoundation.org,irogers@google.com,jolsa@kernel.org,llvm@lists.linux.dev,mark.rutland@arm.com,mingo@redhat.com,namhyung@kernel.org,nathan@kernel.org,ndesaulniers@google.com,peterz@infradead.org,trix@redhat.com
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
-Date: Tue, 16 Jun 2026 15:43:43 +0530
-In-Reply-To: <20260520163320.3073037-2-florian.fainelli@broadcom.com>
-Message-ID: <2026061643-sturdy-pusher-35a0@gregkh>
+Date: Tue, 16 Jun 2026 15:43:44 +0530
+In-Reply-To: <20260520163320.3073037-6-florian.fainelli@broadcom.com>
+Message-ID: <2026061644-guileless-stunned-7d21@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,62 +44,95 @@ X-Patchwork-Hint: ignore
 
 This is a note to let you know that I've just added the patch titled
 
-    perf build: Conditionally define NDEBUG
+    perf build: Remove -Wno-unused-but-set-variable from the flex flags when building with clang < 13.0.0
 
 to the 6.1-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
-     perf-build-conditionally-define-ndebug.patch
+     perf-build-remove-wno-unused-but-set-variable-from-the-flex-flags-when-building-with-clang-13.0.0.patch
 and it can be found in the queue-6.1 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
-From stable+bounces-250203-greg=kroah.com@vger.kernel.org Wed May 20 22:29:26 2026
+From stable+bounces-250209-greg=kroah.com@vger.kernel.org Wed May 20 22:59:29 2026
 From: Florian Fainelli <florian.fainelli@broadcom.com>
-Date: Wed, 20 May 2026 09:33:16 -0700
-Subject: perf build: Conditionally define NDEBUG
+Date: Wed, 20 May 2026 09:33:20 -0700
+Subject: perf build: Remove -Wno-unused-but-set-variable from the flex flags when building with clang < 13.0.0
 To: stable@vger.kernel.org
-Cc: Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Sean Christopherson <seanjc@google.com>, Arnaldo Carvalho de Melo <acme@redhat.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), bpf@vger.kernel.org (open list:BPF [MISC]), llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT), bcm-kernel-feedback-list@broadcom.com
-Message-ID: <20260520163320.3073037-2-florian.fainelli@broadcom.com>
+Cc: Arnaldo Carvalho de Melo <acme@redhat.com>, Adrian Hunter <adrian.hunter@intel.com>, Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), bpf@vger.kernel.org (open list:BPF [MISC]), llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT), bcm-kernel-feedback-list@broadcom.com
+Message-ID: <20260520163320.3073037-6-florian.fainelli@broadcom.com>
 
-From: Ian Rogers <irogers@google.com>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit 616b14b47a86d880ba21a363440f20f82152d8f2 upstream
+clang < 13.0.0 doesn't grok -Wno-unused-but-set-variable, so just remove
+it to avoid:
 
-When a build is done without DEBUG=1 then define NDEBUG. This will
-compile out asserts and other debug code.
+  error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
+  make[4]: *** [/git/perf-6.5.0-rc4/tools/build/Makefile.build:128: /tmp/build/perf/util/pmu-flex.o] Error 1
+  make[4]: *** Waiting for unfinished jobs....
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Fixes: ddc8e4c966923ad1 ("perf build: Disable fewer bison warnings")
 Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Ian Rogers <irogers@google.com>
 Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
 Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Sean Christopherson <seanjc@google.com>
-Link: https://lore.kernel.org/r/20230330183827.1412303-1-irogers@google.com
+Link: https://lore.kernel.org/lkml/ZNUSWr52jUnVaaa%2F@kernel.org/
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/perf/Makefile.config |    1 +
- 1 file changed, 1 insertion(+)
+ tools/perf/util/Build |   20 +++++++++++++++++---
+ 1 file changed, 17 insertions(+), 3 deletions(-)
 
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -228,6 +228,7 @@ ifndef DEBUG
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -1,3 +1,6 @@
++include $(srctree)/tools/scripts/Makefile.include
++include $(srctree)/tools/scripts/utilities.mak
++
+ perf-y += arm64-frame-pointer-unwind-support.o
+ perf-y += annotate.o
+ perf-y += block-info.o
+@@ -265,15 +268,22 @@ ifeq ($(FLEX_GE_26),1)
+ else
+   flex_flags := -w
+ endif
+-CFLAGS_parse-events-flex.o  += $(flex_flags)
+-CFLAGS_pmu-flex.o           += $(flex_flags)
+-CFLAGS_expr-flex.o          += $(flex_flags)
+ 
+ # Some newer clang and gcc version complain about this
+ # util/parse-events-bison.c:1317:9: error: variable 'parse_events_nerrs' set but not used [-Werror,-Wunused-but-set-variable]
+ #  int yynerrs = 0;
+ 
+ bison_flags := -DYYENABLE_NLS=0 -Wno-unused-but-set-variable
++
++# Old clangs don't grok -Wno-unused-but-set-variable, remove it
++ifeq ($(CC_NO_CLANG), 0)
++  CLANG_VERSION := $(shell $(CLANG) --version | head -1 | sed 's/.*clang version \([[:digit:]]\+.[[:digit:]]\+.[[:digit:]]\+\).*/\1/g')
++  ifeq ($(call version-lt3,$(CLANG_VERSION),13.0.0),1)
++    bison_flags := $(subst -Wno-unused-but-set-variable,,$(bison_flags))
++    flex_flags := $(subst -Wno-unused-but-set-variable,,$(flex_flags))
++  endif
++endif
++
+ BISON_GE_382 := $(shell expr $(shell $(BISON) --version | grep bison | sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\= 382)
+ ifeq ($(BISON_GE_382),1)
+   bison_flags += -Wno-switch-enum
+@@ -286,6 +296,10 @@ ifeq ($(BISON_LT_381),1)
+   bison_flags += -DYYNOMEM=YYABORT
  endif
  
- ifeq ($(DEBUG),0)
-+CORE_CFLAGS += -DNDEBUG=1
- ifeq ($(CC_NO_CLANG), 0)
-   CORE_CFLAGS += -O3
- else
++CFLAGS_parse-events-flex.o  += $(flex_flags)
++CFLAGS_pmu-flex.o           += $(flex_flags)
++CFLAGS_expr-flex.o          += $(flex_flags)
++
+ CFLAGS_parse-events-bison.o += $(bison_flags)
+ CFLAGS_pmu-bison.o          += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
+ CFLAGS_expr-bison.o         += -DYYLTYPE_IS_TRIVIAL=0 $(bison_flags)
 
 
 Patches currently in stable-queue which might be from florian.fainelli@broadcom.com are
