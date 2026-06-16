@@ -1,142 +1,137 @@
-Received: from outbound4.mail.transip.nl (outbound4.mail.transip.nl [136.144.136.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8B33264D9
-	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 13:27:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.136.2
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781616425; cv=none; b=l9YNjC3nX0FhqLBMFyy9Hkhg5j4+LJHHSSyoHdVbU9GzFkAKYGfNDbOVDy/Qp4SJA5IBBm3/RZpS/W1irXYDVlrHrOk4r83tjRMsQNcF22PglEyHkJgkoFzEAD6xd0LCN2khuhXVMD8/8Fg7EqY+t4iTCHTbIL5ksMt2++OtaKo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781616425; c=relaxed/simple;
-	bh=QxzEAuQxibbMXRjJzE5v7vlVvETfRHRlzoNHKYQcRvo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ahZPTm31IXFPqsWm/fFd3ufncEUfekixfjbm0Le1ThR/HnF3stGw8xDSZSNZxLiMtn3rpVz8qYsVmrTzKBkx8lt//UC3dMzovqCGv74RwywYwt6/vY3TObVav/P91V1kBJvscaSCCmb2nVPVvmYZFRJ1sjCDcZz6QqBxhLEUdes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org; spf=pass smtp.mailfrom=herrie.org; dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b=r3hMYV12; arc=none smtp.client-ip=136.144.136.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=herrie.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FBE30148C
+	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 13:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781616884; cv=pass; b=L1DnuIfVWbJhW9LRKy8hyrREVDkIHdVE6oAEXVtWNeYSVv+c8PDwneI3xT2LwYeNa8JNHw0/Tp36WQxAqPQBx2lj/KsPl9dq2rY8p25OGpPLFc3A4RQ5QKrXKfTuzB5FngacGIkJRh6LKTKGOwB3gz7tsH/2rfQZKf3rqcHptw8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781616884; c=relaxed/simple;
+	bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ijzYrdcuX97sDFMGvCdTOZCMXTpvDEardi3QhKyx4p5+L8osniqeP9y7EWnCmm2vdDAAvidQCsXtcCM2N8ClsgydJqzY+o5o3pw/rpI2jqW9zCgrZxzKtuYpyytzDahEo0N1pYC39uHTwv7xpG8I5ukChp+JEc5VTrS1KHHNZYQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iq49p7FT; arc=pass smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b="r3hMYV12"
-Received: from submission10.mail.transip.nl (unknown [10.103.8.161])
-	by outbound4.mail.transip.nl (Postfix) with ESMTP id 4gfnp55MnlzwPSJ;
-	Tue, 16 Jun 2026 15:26:53 +0200 (CEST)
-Received: from [127.0.1.1] (180-93-184-31.ftth.glasoperator.nl [31.184.93.180])
-	by submission10.mail.transip.nl (Postfix) with ESMTPA id 4gfnp50TYhz1g93PY;
-	Tue, 16 Jun 2026 15:26:53 +0200 (CEST)
-From: Herman van Hazendonk <github.com@herrie.org>
-Subject: [PATCH v3 0/2] phy: qcom: usb-hs: MSM8x60 vendor ULPI init
-Date: Tue, 16 Jun 2026 15:26:52 +0200
-Message-Id: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iq49p7FT"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-30bc5fa5a2aso6723eec.0
+        for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 06:34:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781616882; cv=none;
+        d=google.com; s=arc-20240605;
+        b=RMeeBMuObWpn4cAt8TUj+7bjX6SbtfEHZSvAC/KuXBMCqYgN2wnktnz1Q4eTzYnnIt
+         Bq1tmEnIU8+Acct1SfvUKy9fkcLT2giyN/8ffTf3w2GtjM+z2It5YnPy5231HKuii+/D
+         5xaNaKXX1s3gTCVPTRSdC0+sonZFGu5xK6+n0iwHu7X9lR6XjPX0qsoWFuuuLr5sJQlA
+         h/k/PgGqJckIC6MgCWnjwsFPhoKC9zUnniNr1e7yvWNby/B5mQ6o9xezOECvxwMV19eD
+         PIMFO3qonnEb7yNk2edGKvnjonov4DC/5sxzTUOyBhrqCiQ6/hgW2cFQuZE7hRYY2mf/
+         DKUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
+        fh=G6WIHQ6vpQDGQrJwtPm603cLFZWypB8gq+ly4KmQaf4=;
+        b=Nmm0gsDBg6H83ZHoUVNfjt+dRaXuvoDZKR8qkE9xBzDYsu/coMZ/ij/YO73vtnnNVc
+         uEqS9VzOnT3uRVEc1+J2z1RrOAASZqucJ8DX8RUbbETv+kxtsRubY1diu6yklYZG+B5o
+         XCI8TpHOTa3xwoaOO0eDQLwE0ZH8dqtL/x5EGuHTh9zZvPR/nheKLFrrvd0ODkwuTFiv
+         rMiEl8+0do7R1SfQCOuzGWX+V1lfTMqxTONR81zKPbPbCDgdO6dL+fOoXgjP/R+qHCyj
+         Kg+2LvlSKe4tX03AhpOje9j8H+5W4vI8QOzQV6c04swhcqu1wyg0nzeaRBo8TPJ6lM/7
+         GGkA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1781616882; x=1782221682; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
+        b=iq49p7FTu13vMibL02eueJ0d/RjmrSwx9132Thr73GrK8RG/6ZJ5aXBSWoHFTOVdDH
+         hnZ6R/lTpZSixVVTDj3mDrOB9A1VPw1M7+sOWSopYaoNdHvWJ+M8xJZdmRWsyZr1fRt2
+         mzur2JwRRoBcb7bOMQrRJ0R+sFZcpnZ/dlCw7ZOsNBzznJ+L8+P4V7Yswev1sh5Uncnb
+         MEU2HhST37umn+EQRchAs/2QMKJFJ/gVgJrNFBcWUjAwsGHBF1MYrc/v/0htgnvZIzR/
+         afNLiG2DyXgBnkuLN6uDwptnRE+5vYsvbvgXTUH/sZ6y7XRibkt5gLKYRmS26zEP7gu8
+         IF2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781616882; x=1782221682;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
+        b=gTzRdbvD7ziOUtnIH0WFJwKTlFTlq7IHZY9iPD9VL0Q71E/40Rap0h8CbT8czaGOpF
+         g1pQd3B5U0t+PVYRynTQGpAEZyq+kRblOL6a6gkW3jEw6F8d2Q2cCpM9zZgITTlj/Qp4
+         V6vUA+8lijwoBhYfziVrolUNmHxW84iKK758zjgfdwu2vyKc03dnZJm+elCJ9+QTNCsP
+         nqYl7Zz5OlaTbO5d5xpgLVeDMIMTvNu6q8G7EQ3u4De5Qe6oc0W6eEcKgBNX5vXW4tnD
+         HjgsdDLFHguW8UA5xgmdkKgRUPkuJQbHo1KSBVGFQ3vmRl7OFlwmGQaFF2fiEwjYtVW8
+         1u/A==
+X-Forwarded-Encrypted: i=1; AFNElJ84E5g7gRNrRg642Sj8YKtN+14OQ9FP48nPVkv0OfPKuWxuZwFxVZS5Z+ZSvTb/VFGyRvcH@lists.linux.dev
+X-Gm-Message-State: AOJu0YwxcqFyCasPFBmYEEZV5t6PunL9iISI6C97A5gwRStHlVNG3NMW
+	Dl3lyrX6zuNwv3EvXrHTLRPIiZExbstF9arTztyBkPc9xoCkRaCg/Wrpk22sdf40o4Tt5UohJKU
+	QHqAKP95UjSAZMNIVrkk5VejeuBbHFw4=
+X-Gm-Gg: Acq92OHAbGC0ZXHcQ1n+TyvNrFXOPTO+S22sgLtx5fiIDY0v3aTPFy8w2EoanZ9PCoP
+	vgLqSGwVSpxZu1kTRjZpMGaBzXwtIY5ZGPTWhWlrKkHITVJdqzcxhha7SoB1DVMd0F0DjUtOpHx
+	+PjZPbl13J9goqzYQVUi06jx2ruUQfRSkLbcsgZTNG2jHF3+b7faQJhofkirEmIz4le3NRP67kV
+	ERbXFeJa+Ds8xOBvfIGykP34jB2hYbeSyUcmppW1xsfEbVTeTF/4VWo6MuwcsFB5cKZVvfVOTAg
+	EbdkPE+BDFiab3qLrAgpU4ewE5czFKaprW0BEiN7p8qPRaNySApAHAV9MJzdO3hbI+tfL5GNhlf
+	cd1ibQXs6/a/zaree2ke2IrU=
+X-Received: by 2002:a05:7300:4306:b0:304:3c33:7afd with SMTP id
+ 5a478bee46e88-3081ff5d099mr5382252eec.1.1781616882115; Tue, 16 Jun 2026
+ 06:34:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABxPMWoC/x2NQQ5AMBAAvyJ7tgkVTfiKOFS7dA+KLkLE3zWOM
- 4eZB4Qik0CbPRDpZOElJKjyDKw3YSJklxhUoXShS41yDDPvuPobDxnQC54U3BKRQ9JCGxpXNU4
- 11pqxhtRZI418/Y+uf98PCrVKtHMAAAA=
-To: Vinod Koul <vkoul@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Herman van Hazendonk <github.com@herrie.org>, 
- konrad.dybcio@oss.qualcomm.com, dmitry.baryshkov@oss.qualcomm.com
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781616413; l=3528;
- i=github.com@herrie.org; s=20240417; h=from:subject:message-id;
- bh=QxzEAuQxibbMXRjJzE5v7vlVvETfRHRlzoNHKYQcRvo=;
- b=RLcxVZCoWq7ZQlYfkLDUXilWs09Z7OWsMIY6BDvnh5qQEITspTK2w0whn+t5l4UfYygvAAOy4
- TUhdxRGfv/uBs9QFgRUtQ0RoXelFhVm9jri0MiXyuvcmx34Xif5MLHl
-X-Developer-Key: i=github.com@herrie.org; a=ed25519;
- pk=YYxdq8fb5O9vhkW3n2dCH044FPZZO5718v/du7fRhFw=
-X-Scanned-By: ClueGetter at submission10.mail.transip.nl
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=transip-a; d=herrie.org; t=1781616413; h=from:subject:to:cc:date:
- mime-version:content-type;
- bh=ACun7JswmPdJb8Ejo5q1RfESUkL4z6rwXeuZJzAnH1o=;
- b=r3hMYV12CW7ncILVmWGj4XaUdax9q6dSZj3VaGRR1f1m3rSWoaT7Q91KTVnpQqbyHRzLl8
- ggKlRsJIHUnfqNFapxYGQqhO7LtkntPHiALT0WXjwsUxaa0VraYPfTtxYYSzptN4VVo9iT
- o5ETXOH5rTPNws6eLXuZZ6XhRqq+1sP6jnJyZLqzGmzWfBnmgZw3aexTe3iPr6mYpcCftQ
- pqMJaF/e0kVydIozohR/giqfDthdMTpt6yvXcgHe2GHpZ+o2rBHy2FouRZJ/vGMSv7GjL4
- hEIkMQC5v+36hclokIfsjjGtw/9bx50KHQl65iU94B6J2xDWq6vZmgefd7Z2tQ==
-X-Report-Abuse-To: abuse@transip.nl
+References: <20260616-frame-ptr-fix-v1-1-dc6b29a631d9@google.com>
+In-Reply-To: <20260616-frame-ptr-fix-v1-1-dc6b29a631d9@google.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 16 Jun 2026 15:34:29 +0200
+X-Gm-Features: AVVi8CdWOkZz4CAAFIgrXWReHUHZXx2ovGTrzpr4YooCnTaJIfPp_aHfeTivWuk
+Message-ID: <CANiq72kek9NoFe2PCFnND1p6BRbuzgv6kT2o5jw09sWg+wau_Q@mail.gmail.com>
+Subject: Re: [PATCH] rust: Kbuild: set frame-pointer llvm module flag for CONFIG_FRAME_POINTER
+To: Alice Ryhl <aliceryhl@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Douglas Su <d0u9.su@outlook.com>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Fiona Behrens <me@kloenk.dev>, 
+	Sven Van Asbroeck <thesven73@gmail.com>, Kees Cook <kees@kernel.org>, 
+	Wedson Almeida Filho <wedsonaf@google.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev, stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-v3 (this round):
- - Re-introduce a much smaller DT binding patch following Konrad's
-   "do we have values for MTP/QRD" question and Dmitry's
-   "qcom,hsdrvslope (or similarly named) property in DT" suggestion.
- - Survey of every MSM8x60-class downstream tree I could reach --
-   Qualcomm reference (SURF/FFA/Fluid/Dragon/Fusion via
-   board-msm8x60.c on android.googlesource.com), Samsung Galaxy S2
-   family (Q1 / Celox / Dali / generic 8x60 MTP), Sony MSM8660
-   (sony-kernel-msm8660), HTC MSM8660 ports
-   (shooter / holiday / pyramid / doubleshot / shooter_u / ruby) and
-   HP TouchPad -- shows that pre-emphasis, CDR auto-reset and SE1
-   gating values are *identical* across every reference board.
-   Only the 4-bit HS driver slope in reg 0x32 [3:0] varies.
- - Patch 1/2 adds a single qcom,hs-drv-slope DT property (u32,
-   range 0..15) gated to the qcom,usb-hs-phy-msm8660 compatible.
- - Patch 2/2 hardcodes the three platform-wide writes in the driver
-   behind the same compatible match, consumes qcom,hs-drv-slope for
-   the board-specific bits, and leaves the silicon default in place
-   when the property is absent -- which matches Qualcomm's own MTP,
-   Samsung and Sony reference behaviour.
- - The bit-level meaning we *do* have comes from Code Aurora's
-   downstream arch/arm/mach-msm/include/mach/msm_hsusb_hw.h, which
-   Samsung and HP both shipped byte-for-byte identical.
- - Per Dmitry's request, both commit messages call out explicitly
-   that there is no public Qualcomm documentation describing how the
-   4-bit slope value maps to an actual slew rate / V/ns / %.  The
-   field is an opaque hardware control; boards must copy the value
-   from their vendor / downstream kernel as a measured-per-layout
-   knob, not a derived one.
+On Tue, Jun 16, 2026 at 2:30=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
+rote:
+>
+> Cc: stable@kernel.org
+> Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
 
-v2:
- - Dropped the original qcom,vendor-init-seq DT property entirely
-   and folded all the vendor-register programming into the driver
-   behind the qcom,usb-hs-phy-msm8660 compatible.
- - HS driver slope was hardcoded in v2.  v3 promotes that one
-   varying value to a DT property as Dmitry requested.
+For 6.1.y, we use Rust 1.62.0, so we don't have `-Zllvm_module_flag`,
+so we cannot go that far back. I guess we will need to accept the
+issue there.
 
-Companion TouchPad DTS work (flipping the PHY compatible from
-"qcom,usb-hs-phy-apq8064" to "qcom,usb-hs-phy-msm8660" and adding
-qcom,hs-drv-slope = <5>) will be sent separately with the rest of
-the apq8060-tenderloin DT series.
+For 6.6.y, we use Rust 1.73.0, so we don't have it either.
 
-On-device validation (HP TouchPad / APQ8060):
- - Booted with v3 + the upcoming DTS hookup.  PHY driver bound,
-   msm_hsusb HS link came up at high-speed.  No regression vs the v2
-   hardcoded build.
+For 6.12.y onward, we support Rust 1.78.0, so it is fine --
+`-Zllvm_module_flag` got added in Rust 1.76.0.
 
-Build / schema verification:
- - dt_binding_check DT_SCHEMA_FILES=.../qcom,usb-hs-phy.yaml: clean.
- - dtbs_check on qcom-apq8060-dragonboard.dtb and
-   qcom-msm8960-cdp.dtb (the two existing in-tree usb-hs-phy
-   consumers): clean.
- - drivers/phy/qualcomm/phy-qcom-usb-hs.o builds clean.
- - checkpatch.pl --strict: no warnings on either patch.
+In both 6.1.y and 6.6.y, we also don't have `rustc-min-version`,
+because the version is pinned there. That part happens to work,
+though, just due to how lax Make is... However, if the flag had been
+available, then we should probably still do it cleanly with a custom
+patch to avoid confusion.
 
-Signed-off-by: Herman van Hazendonk <github.com@herrie.org>
----
-Herman van Hazendonk (2):
-      dt-bindings: phy: qcom,usb-hs-phy: add qcom,hs-drv-slope
-      phy: qcom: usb-hs: program MSM8x60 vendor ULPI registers on power-on
+So I will instead do:
 
- .../devicetree/bindings/phy/qcom,usb-hs-phy.yaml   | 89 +++++++++++++++-------
- drivers/phy/qualcomm/phy-qcom-usb-hs.c             | 68 +++++++++++++++++
- 2 files changed, 131 insertions(+), 26 deletions(-)
----
-base-commit: 944125b4c454b58d2fe6e35f1087a932b2050dff
-change-id: 20260616-submit-phy-usb-hs-vendor-init-seq-ad39d29ccaf5
+Cc: stable@vger.kernel.org # 6.12.y and later (flag not available in
+pinned Rust in older LTSs).
 
-Best regards,
--- 
-Herman van Hazendonk <github.com@herrie.org>
-
+Cheers,
+Miguel
