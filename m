@@ -1,137 +1,231 @@
-Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outbound11.mail.transip.nl (outbound11.mail.transip.nl [136.144.136.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16FBE30148C
-	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 13:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781616884; cv=pass; b=L1DnuIfVWbJhW9LRKy8hyrREVDkIHdVE6oAEXVtWNeYSVv+c8PDwneI3xT2LwYeNa8JNHw0/Tp36WQxAqPQBx2lj/KsPl9dq2rY8p25OGpPLFc3A4RQ5QKrXKfTuzB5FngacGIkJRh6LKTKGOwB3gz7tsH/2rfQZKf3rqcHptw8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781616884; c=relaxed/simple;
-	bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ijzYrdcuX97sDFMGvCdTOZCMXTpvDEardi3QhKyx4p5+L8osniqeP9y7EWnCmm2vdDAAvidQCsXtcCM2N8ClsgydJqzY+o5o3pw/rpI2jqW9zCgrZxzKtuYpyytzDahEo0N1pYC39uHTwv7xpG8I5ukChp+JEc5VTrS1KHHNZYQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iq49p7FT; arc=pass smtp.client-ip=74.125.82.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C363101A7
+	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 13:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.136.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781616972; cv=none; b=eDrB4/SuYGUcGWbRzkUtuY76zRE7qclXDqL0qloCFUzoMqaKZM5T4cv7Q6xkr8B+ImMIUU2d6605Wzwv1DuGwDak2t1WilwvDICkyO8LnZ5RxWdYCRQXun6ODzfk9QAZ9yuWuI/swvrzwBTaO2o79jsqCphmWkA0EjZE3YtU0Ok=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781616972; c=relaxed/simple;
+	bh=alQwayR/ZWd66B+tpmSWDGPSW8rFt3k3UXDfeMFYw+E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=WaoV+S1VonLbzYKtJEAChFigvmOlgPnG0S6//y91txqlKHFt3FX7pwGxtStpwBms0raM0z0mETc00o30PiUQ738JCXtdUSONarhKokIA6giacOjcK+F5weXGJLn7AO1cCsTQ9xk+qmr1+tXjhgpOveOxMmBn46C5lHxHsPy7MsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org; spf=pass smtp.mailfrom=herrie.org; dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b=jia1Tl8/; arc=none smtp.client-ip=136.144.136.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=herrie.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iq49p7FT"
-Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-30bc5fa5a2aso6723eec.0
-        for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 06:34:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781616882; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RMeeBMuObWpn4cAt8TUj+7bjX6SbtfEHZSvAC/KuXBMCqYgN2wnktnz1Q4eTzYnnIt
-         Bq1tmEnIU8+Acct1SfvUKy9fkcLT2giyN/8ffTf3w2GtjM+z2It5YnPy5231HKuii+/D
-         5xaNaKXX1s3gTCVPTRSdC0+sonZFGu5xK6+n0iwHu7X9lR6XjPX0qsoWFuuuLr5sJQlA
-         h/k/PgGqJckIC6MgCWnjwsFPhoKC9zUnniNr1e7yvWNby/B5mQ6o9xezOECvxwMV19eD
-         PIMFO3qonnEb7yNk2edGKvnjonov4DC/5sxzTUOyBhrqCiQ6/hgW2cFQuZE7hRYY2mf/
-         DKUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
-        fh=G6WIHQ6vpQDGQrJwtPm603cLFZWypB8gq+ly4KmQaf4=;
-        b=Nmm0gsDBg6H83ZHoUVNfjt+dRaXuvoDZKR8qkE9xBzDYsu/coMZ/ij/YO73vtnnNVc
-         uEqS9VzOnT3uRVEc1+J2z1RrOAASZqucJ8DX8RUbbETv+kxtsRubY1diu6yklYZG+B5o
-         XCI8TpHOTa3xwoaOO0eDQLwE0ZH8dqtL/x5EGuHTh9zZvPR/nheKLFrrvd0ODkwuTFiv
-         rMiEl8+0do7R1SfQCOuzGWX+V1lfTMqxTONR81zKPbPbCDgdO6dL+fOoXgjP/R+qHCyj
-         Kg+2LvlSKe4tX03AhpOje9j8H+5W4vI8QOzQV6c04swhcqu1wyg0nzeaRBo8TPJ6lM/7
-         GGkA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781616882; x=1782221682; darn=lists.linux.dev;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
-        b=iq49p7FTu13vMibL02eueJ0d/RjmrSwx9132Thr73GrK8RG/6ZJ5aXBSWoHFTOVdDH
-         hnZ6R/lTpZSixVVTDj3mDrOB9A1VPw1M7+sOWSopYaoNdHvWJ+M8xJZdmRWsyZr1fRt2
-         mzur2JwRRoBcb7bOMQrRJ0R+sFZcpnZ/dlCw7ZOsNBzznJ+L8+P4V7Yswev1sh5Uncnb
-         MEU2HhST37umn+EQRchAs/2QMKJFJ/gVgJrNFBcWUjAwsGHBF1MYrc/v/0htgnvZIzR/
-         afNLiG2DyXgBnkuLN6uDwptnRE+5vYsvbvgXTUH/sZ6y7XRibkt5gLKYRmS26zEP7gu8
-         IF2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781616882; x=1782221682;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=QBqTU1PGfLqhSQsy+36DeZjxgRuZWwJQkLxSXeGDv+k=;
-        b=gTzRdbvD7ziOUtnIH0WFJwKTlFTlq7IHZY9iPD9VL0Q71E/40Rap0h8CbT8czaGOpF
-         g1pQd3B5U0t+PVYRynTQGpAEZyq+kRblOL6a6gkW3jEw6F8d2Q2cCpM9zZgITTlj/Qp4
-         V6vUA+8lijwoBhYfziVrolUNmHxW84iKK758zjgfdwu2vyKc03dnZJm+elCJ9+QTNCsP
-         nqYl7Zz5OlaTbO5d5xpgLVeDMIMTvNu6q8G7EQ3u4De5Qe6oc0W6eEcKgBNX5vXW4tnD
-         HjgsdDLFHguW8UA5xgmdkKgRUPkuJQbHo1KSBVGFQ3vmRl7OFlwmGQaFF2fiEwjYtVW8
-         1u/A==
-X-Forwarded-Encrypted: i=1; AFNElJ84E5g7gRNrRg642Sj8YKtN+14OQ9FP48nPVkv0OfPKuWxuZwFxVZS5Z+ZSvTb/VFGyRvcH@lists.linux.dev
-X-Gm-Message-State: AOJu0YwxcqFyCasPFBmYEEZV5t6PunL9iISI6C97A5gwRStHlVNG3NMW
-	Dl3lyrX6zuNwv3EvXrHTLRPIiZExbstF9arTztyBkPc9xoCkRaCg/Wrpk22sdf40o4Tt5UohJKU
-	QHqAKP95UjSAZMNIVrkk5VejeuBbHFw4=
-X-Gm-Gg: Acq92OHAbGC0ZXHcQ1n+TyvNrFXOPTO+S22sgLtx5fiIDY0v3aTPFy8w2EoanZ9PCoP
-	vgLqSGwVSpxZu1kTRjZpMGaBzXwtIY5ZGPTWhWlrKkHITVJdqzcxhha7SoB1DVMd0F0DjUtOpHx
-	+PjZPbl13J9goqzYQVUi06jx2ruUQfRSkLbcsgZTNG2jHF3+b7faQJhofkirEmIz4le3NRP67kV
-	ERbXFeJa+Ds8xOBvfIGykP34jB2hYbeSyUcmppW1xsfEbVTeTF/4VWo6MuwcsFB5cKZVvfVOTAg
-	EbdkPE+BDFiab3qLrAgpU4ewE5czFKaprW0BEiN7p8qPRaNySApAHAV9MJzdO3hbI+tfL5GNhlf
-	cd1ibQXs6/a/zaree2ke2IrU=
-X-Received: by 2002:a05:7300:4306:b0:304:3c33:7afd with SMTP id
- 5a478bee46e88-3081ff5d099mr5382252eec.1.1781616882115; Tue, 16 Jun 2026
- 06:34:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b="jia1Tl8/"
+Received: from submission10.mail.transip.nl (unknown [10.103.8.161])
+	by outbound11.mail.transip.nl (Postfix) with ESMTP id 4gfnp72L2LzkQMbd;
+	Tue, 16 Jun 2026 15:26:55 +0200 (CEST)
+Received: from [127.0.1.1] (180-93-184-31.ftth.glasoperator.nl [31.184.93.180])
+	by submission10.mail.transip.nl (Postfix) with ESMTPA id 4gfnp63lDNz1g93PY;
+	Tue, 16 Jun 2026 15:26:54 +0200 (CEST)
+From: Herman van Hazendonk <github.com@herrie.org>
+Date: Tue, 16 Jun 2026 15:26:54 +0200
+Subject: [PATCH v3 2/2] phy: qcom: usb-hs: program MSM8x60 vendor ULPI
+ registers on power-on
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260616-frame-ptr-fix-v1-1-dc6b29a631d9@google.com>
-In-Reply-To: <20260616-frame-ptr-fix-v1-1-dc6b29a631d9@google.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 16 Jun 2026 15:34:29 +0200
-X-Gm-Features: AVVi8CdWOkZz4CAAFIgrXWReHUHZXx2ovGTrzpr4YooCnTaJIfPp_aHfeTivWuk
-Message-ID: <CANiq72kek9NoFe2PCFnND1p6BRbuzgv6kT2o5jw09sWg+wau_Q@mail.gmail.com>
-Subject: Re: [PATCH] rust: Kbuild: set frame-pointer llvm module flag for CONFIG_FRAME_POINTER
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Douglas Su <d0u9.su@outlook.com>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Fiona Behrens <me@kloenk.dev>, 
-	Sven Van Asbroeck <thesven73@gmail.com>, Kees Cook <kees@kernel.org>, 
-	Wedson Almeida Filho <wedsonaf@google.com>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	llvm@lists.linux.dev, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-2-7d21fb1d1484@herrie.org>
+References: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
+In-Reply-To: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
+To: Vinod Koul <vkoul@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Herman van Hazendonk <github.com@herrie.org>, 
+ konrad.dybcio@oss.qualcomm.com, dmitry.baryshkov@oss.qualcomm.com
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781616413; l=5851;
+ i=github.com@herrie.org; s=20240417; h=from:subject:message-id;
+ bh=alQwayR/ZWd66B+tpmSWDGPSW8rFt3k3UXDfeMFYw+E=;
+ b=/b1XhJ0CbraycY+Tqc+AHHmn2cMUfL1CyJDU/KGK7BfqW5rdNmVhpiv27GH+FpI2ht5IlY55T
+ c/vgAoihMeNBsD8Zz+d952QpKtoV8GdO4NTuCqvWyJJFTkX+kj69dUX
+X-Developer-Key: i=github.com@herrie.org; a=ed25519;
+ pk=YYxdq8fb5O9vhkW3n2dCH044FPZZO5718v/du7fRhFw=
+X-Scanned-By: ClueGetter at submission10.mail.transip.nl
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=transip-a; d=herrie.org; t=1781616414; h=from:subject:to:cc:
+ references:in-reply-to:date:mime-version:content-type;
+ bh=bKwldoJ8S7M88lVIxxOm1g6Eugev8VfNz6lpMmlF2RQ=;
+ b=jia1Tl8/MzuqTkDxmvHuhVokyi+UgthIAn+hD6GqloGX8LduoXH7Us2gH9l4LRtFlixNbL
+ zog9GRrbcjtILjcD/uCNnGYMiYnGalEfdB6xcIofagKz0C6fchUYio8zl5fVJ7NM3PufJx
+ mx9jDq5Fx76S9SVcMBTmaFqK+A1GUAu3PTUfhOQ4taeL8JVNC/kLTg/ie1IvtufYdHqA62
+ 3ZaFBClEYiF3pOzL7YjmqOR20kVe1zJft+MT2scztsIav50cqHUPrpMwhJQkFlUl4ayti+
+ tpTIsMG7+6QN27Dx9zhFNl8uBhGOZjgaFDF7mPOM3KPVTRGqJEnoLXLvAXDa/Q==
+X-Report-Abuse-To: abuse@transip.nl
 
-On Tue, Jun 16, 2026 at 2:30=E2=80=AFPM Alice Ryhl <aliceryhl@google.com> w=
-rote:
->
-> Cc: stable@kernel.org
-> Fixes: 2f7ab1267dc9 ("Kbuild: add Rust support")
+The MSM8x60-class PHY needs three vendor-register tweaks for stable
+USB operation, which the legacy msm_otg driver used to drive from
+board platform data.  A survey of every MSM8x60-class downstream tree
+(Qualcomm SURF/FFA/Fluid/Dragon, Samsung Galaxy S2 family, Sony
+Xperia, HTC MSM8660 ports and HP TouchPad) shows that two of the
+three settings are identical across every board:
 
-For 6.1.y, we use Rust 1.62.0, so we don't have `-Zllvm_module_flag`,
-so we cannot go that far back. I guess we will need to accept the
-issue there.
+  - reg 0x32 [5:4] = 11b: pre-emphasis level set to 20%
+  - reg 0x36 bit 1 = 1, bit 2 = 1: CDR auto-reset and SE1 gating
+    disabled (the legacy driver inverts these bits, so setting them
+    disables the function)
 
-For 6.6.y, we use Rust 1.73.0, so we don't have it either.
+Hardcode those two unconditionally behind the existing
+qcom,usb-hs-phy-msm8660 compatible.  The bit-level documentation
+comes from the Code Aurora downstream header
+arch/arm/mach-msm/include/mach/msm_hsusb_hw.h, which Samsung and HP
+both shipped byte-for-byte identical.
 
-For 6.12.y onward, we support Rust 1.78.0, so it is fine --
-`-Zllvm_module_flag` got added in Rust 1.76.0.
+The third setting -- reg 0x32 [3:0] HS driver slope -- is genuinely
+board-specific (HP TouchPad uses 5, HTC MSM8660 ports use 1, every
+Qualcomm/Samsung/Sony reference board leaves the silicon default of
+0) and is consumed from the new qcom,hs-drv-slope DT property.  When
+the property is absent the silicon default is preserved.
 
-In both 6.1.y and 6.6.y, we also don't have `rustc-min-version`,
-because the version is pinned there. That part happens to work,
-though, just due to how lax Make is... However, if the flag had been
-available, then we should probably still do it cleanly with a custom
-patch to avoid confusion.
+No public Qualcomm documentation describes how the 4-bit slope value
+maps to an actual slew rate, V/ns or %; the field is an opaque
+hardware control whose semantics only Qualcomm knows.  Boards must
+copy the value from their vendor / downstream kernel -- this is a
+measured / tuned-per-layout knob, not a derived one.  We program the
+4 bits verbatim and trust the silicon to do the right thing.
 
-So I will instead do:
+The writes live behind a runtime flag that only matches
+"qcom,usb-hs-phy-msm8660" so the existing MSM8226/8916/8960/8974
+consumers are untouched.  They are issued *after*
+reset_control_reset() so the values survive the register restore the
+reset performs.
 
-Cc: stable@vger.kernel.org # 6.12.y and later (flag not available in
-pinned Rust in older LTSs).
+Note: HTC MSM8660 vendor kernels additionally write 0x0C to reg 0x31.
+The HP TouchPad webOS kernel does not touch that register and USB is
+stable without it, so those bits are omitted here until documentation
+is available to explain what they control.
 
-Cheers,
-Miguel
+Assisted-by: Claude:claude-opus-4-7 sparse smatch clang-analyzer coccinelle checkpatch
+Assisted-by: Sashiko:claude-opus-4-7
+Signed-off-by: Herman van Hazendonk <github.com@herrie.org>
+---
+ drivers/phy/qualcomm/phy-qcom-usb-hs.c | 68 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
+
+diff --git a/drivers/phy/qualcomm/phy-qcom-usb-hs.c b/drivers/phy/qualcomm/phy-qcom-usb-hs.c
+index 98a18987f1be..a7649a09e82c 100644
+--- a/drivers/phy/qualcomm/phy-qcom-usb-hs.c
++++ b/drivers/phy/qualcomm/phy-qcom-usb-hs.c
+@@ -20,6 +20,14 @@
+ # define ULPI_MISC_A_VBUSVLDEXTSEL	BIT(1)
+ # define ULPI_MISC_A_VBUSVLDEXT		BIT(0)
+ 
++/* MSM8x60 vendor ULPI registers (raw addresses, not ULPI_EXT_VENDOR_SPECIFIC). */
++#define ULPI_MSM_CONFIG_REG3		0x32
++# define ULPI_MSM_HSDRVSLOPE_MASK	GENMASK(3, 0)
++# define ULPI_MSM_PRE_EMPHASIS_MASK	GENMASK(5, 4)
++# define ULPI_MSM_PRE_EMPHASIS_20PCT	(3 << 4)
++#define ULPI_MSM_DIGOUT_CTRL		0x36
++# define ULPI_MSM_CDR_AUTORESET		BIT(1)
++# define ULPI_MSM_SE1_GATE		BIT(2)
+ 
+ struct ulpi_seq {
+ 	u8 addr;
+@@ -37,6 +45,9 @@ struct qcom_usb_hs_phy {
+ 	struct ulpi_seq *init_seq;
+ 	struct extcon_dev *vbus_edev;
+ 	struct notifier_block vbus_notify;
++	bool msm8x60_init;
++	bool hs_drv_slope_present;
++	u8 hs_drv_slope;
+ };
+ 
+ static int qcom_usb_hs_phy_set_mode(struct phy *phy,
+@@ -105,6 +116,41 @@ qcom_usb_hs_phy_vbus_notifier(struct notifier_block *nb, unsigned long event,
+ 	return ulpi_write(uphy->ulpi, addr, ULPI_MISC_A_VBUSVLDEXT);
+ }
+ 
++/*
++ * RMW the vendor registers to preserve silicon reserved bits.
++ * In reg 0x36 the legacy semantics are inverted: setting
++ * CDR_AUTORESET / SE1_GATE *disables* those functions.
++ */
++static int qcom_usb_hs_phy_msm8x60_init(struct qcom_usb_hs_phy *uphy)
++{
++	struct ulpi *ulpi = uphy->ulpi;
++	int reg32, reg36, ret;
++
++	reg32 = ulpi_read(ulpi, ULPI_MSM_CONFIG_REG3);
++	if (reg32 < 0)
++		return reg32;
++
++	reg32 &= ~ULPI_MSM_PRE_EMPHASIS_MASK;
++	reg32 |= ULPI_MSM_PRE_EMPHASIS_20PCT;
++
++	if (uphy->hs_drv_slope_present) {
++		reg32 &= ~ULPI_MSM_HSDRVSLOPE_MASK;
++		reg32 |= uphy->hs_drv_slope & ULPI_MSM_HSDRVSLOPE_MASK;
++	}
++
++	ret = ulpi_write(ulpi, ULPI_MSM_CONFIG_REG3, reg32);
++	if (ret)
++		return ret;
++
++	reg36 = ulpi_read(ulpi, ULPI_MSM_DIGOUT_CTRL);
++	if (reg36 < 0)
++		return reg36;
++
++	reg36 |= ULPI_MSM_CDR_AUTORESET | ULPI_MSM_SE1_GATE;
++
++	return ulpi_write(ulpi, ULPI_MSM_DIGOUT_CTRL, reg36);
++}
++
+ static int qcom_usb_hs_phy_power_on(struct phy *phy)
+ {
+ 	struct qcom_usb_hs_phy *uphy = phy_get_drvdata(phy);
+@@ -154,6 +200,12 @@ static int qcom_usb_hs_phy_power_on(struct phy *phy)
+ 			goto err_ulpi;
+ 	}
+ 
++	if (uphy->msm8x60_init) {
++		ret = qcom_usb_hs_phy_msm8x60_init(uphy);
++		if (ret)
++			goto err_ulpi;
++	}
++
+ 	if (uphy->vbus_edev) {
+ 		state = extcon_get_state(uphy->vbus_edev, EXTCON_USB);
+ 		/* setup initial state */
+@@ -214,6 +266,22 @@ static int qcom_usb_hs_phy_probe(struct ulpi *ulpi)
+ 		return -ENOMEM;
+ 	ulpi_set_drvdata(ulpi, uphy);
+ 	uphy->ulpi = ulpi;
++	uphy->msm8x60_init = of_device_is_compatible(ulpi->dev.of_node,
++						     "qcom,usb-hs-phy-msm8660");
++
++	if (uphy->msm8x60_init) {
++		u32 slope;
++
++		if (!of_property_read_u32(ulpi->dev.of_node,
++					  "qcom,hs-drv-slope", &slope)) {
++			if (slope > ULPI_MSM_HSDRVSLOPE_MASK)
++				return dev_err_probe(&ulpi->dev, -EINVAL,
++						     "qcom,hs-drv-slope out of range (max %lu)\n",
++						     ULPI_MSM_HSDRVSLOPE_MASK);
++			uphy->hs_drv_slope = slope;
++			uphy->hs_drv_slope_present = true;
++		}
++	}
+ 
+ 	size = of_property_count_u8_elems(ulpi->dev.of_node, "qcom,init-seq");
+ 	if (size < 0)
+
+-- 
+2.43.0
+
