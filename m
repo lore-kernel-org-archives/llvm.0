@@ -1,160 +1,181 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B250D26CE05;
-	Tue, 16 Jun 2026 17:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3DA2EE611;
+	Tue, 16 Jun 2026 18:01:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781631401; cv=none; b=FhjEKHDjMuKEEHSIwu5KNX5dCcLgxKZ8MA7Id7MvFY90aZvtBb+GJp3vD+zjkQrpktMyWcZFo7PH1ZJcvR1F2v0thFePbYwROTjyB8JPkw8LyEg/4ZR8xp2wJWzl87nblG8FhfGGHFE0WkdB2L1aLqFGMgBGGcd49mifzxlau20=
+	t=1781632894; cv=none; b=qqhCy3mwEnQ/lUIKic8lHOJ94iN34J0+ovFsw5gw0Ip2+xIID11n9x6PhfVmoCH91UppROMWYNqgKeseo7e5GAVt7YYLzY52xZgsbge5JYvcj42MBs/Sd1ERyV8peSQ7Gj3q7bzTlfqJB1HUTGjBfDQAtVMgkW39bfOLRQ65rJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781631401; c=relaxed/simple;
-	bh=IlgdQiVrIUvUyXtg1A3PnUxmjTNZ6p/D/ns6KhmP2oY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EGO5omilc0YToWxFU28Gp0xq7MAr0R46Rg98ggMZJa8ZfiMDyy0Ryv7ENeVSrjSMBtUAlOi3sZJR16dXVGd4bkqeOmdAuPpxQ/g2smLjARBm8g6hzNQ734SL/0CNrzLI0KF8qgSbEoP74Oc9iNokDtZLFvJWYKGdGzA3fHNe5CM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fEUUcKSy; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781632894; c=relaxed/simple;
+	bh=Rh8nKcgdnwf9t3DsidtN0bAyWENvMiSUFEEcHHTukbU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=rtoZx4kXrtvoE2fEcig31FApKGeSqFliOpNkonQ7pPJ6+f26Eb7lObIQFsl5FQuScpv28qBsTSb0DZKleFRX3l7O40kn9otjk/ccn0IKMGZvwXyffMLQy6K2oObYwldb6KN7spVk8FaURhJqYMNzVbgwO1cznCdAUdpUKWPfJ80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=kpMw7hEu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fEUUcKSy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781631399; x=1813167399;
-  h=date:from:to:cc:subject:message-id;
-  bh=IlgdQiVrIUvUyXtg1A3PnUxmjTNZ6p/D/ns6KhmP2oY=;
-  b=fEUUcKSyQ1CAB7uQ15OJS0IFzrY58E80Fxdvf/+vaxJRuBZfzVxA9AGE
-   QozUi2liDZPytohXvgp/y0zj+zvi1QouVimh9zvARCFOROfDEUJ5u4b+2
-   oTCJ8KFcgZI4QS9ycNuV+evQR1Z3ZDjErhxCD1wcIEVMqVpFholF6hkNW
-   oBbsGtERZxmBAFwXBzbuxb1TStCCwynu3Sl+zeWnjQRETZtmlGiypti3S
-   Dz9tguQ27zm27YCNAoGT1qSjUOvOTKwEpSrWzPh338AlTGfyTpJ7EHk+k
-   xqp+BrIV/zi4GMUQbNy3c9S2Us3SSb39gcSdnXAdKZ3K5KvI0uUrjvDVc
-   Q==;
-X-CSE-ConnectionGUID: a8v0AFj3QRaZX9cblWeGOg==
-X-CSE-MsgGUID: +ZhL55qeQgqxAL7yqsH6/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="82257949"
-X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="82257949"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 10:36:39 -0700
-X-CSE-ConnectionGUID: 8fCZjLf4QomJYPCJhnbUDA==
-X-CSE-MsgGUID: ijIhMbcqSDKigMtgYE2vrg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="246938020"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 16 Jun 2026 10:36:38 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wZXiE-00000000TaY-2iqc;
-	Tue, 16 Jun 2026 17:36:34 +0000
-Date: Wed, 17 Jun 2026 01:35:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org
-Subject: [arm-platforms:kvm-arm64/nv3 37/37]
- arch/arm64/kvm/sys_regs.c:222:32: warning: misleading indentation; statement
- is not part of the previous 'if'
-Message-ID: <202606170158.W9YgYBN4-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="kpMw7hEu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2691F000E9;
+	Tue, 16 Jun 2026 18:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1781632893;
+	bh=sUn2R5LRQvaL9lVGtiTUVPir0w6SZIZxrCr0UsYyKgo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=kpMw7hEuD1MINp/wPuSnzXCr76iJ7ZjN9E8saiGHvFerZSZ9nBXRvtBp+2Fi+0LrZ
+	 39qlUlZTEcMK10VyzUepts9m0Ym+nnT0WQ4Y6C2CLcJ0NNGDiLny40vEouxko6+hR/
+	 XXXxcUiMjNvQWzDQO+hdbwC41TeKJEx6PvX/lTcY=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: stable@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	patches@lists.linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Gaosheng Cui <cuigaosheng1@huawei.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Rob Herring <robh@kernel.org>,
+	Tom Rix <trix@redhat.com>,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Arnaldo Carvalho de Melo <acme@redhat.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>
+Subject: [PATCH 6.1 497/522] perf build: Disable fewer bison warnings
+Date: Tue, 16 Jun 2026 20:30:44 +0530
+Message-ID: <20260616145149.028589020@linuxfoundation.org>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260616145125.307082728@linuxfoundation.org>
+References: <20260616145125.307082728@linuxfoundation.org>
+User-Agent: quilt/0.69
+X-stable: review
+X-Patchwork-Hint: ignore
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git kvm-arm64/nv3
-head:   aa9a6e84f564417704258a20210b95d18ebf5601
-commit: aa9a6e84f564417704258a20210b95d18ebf5601 [37/37] WIP
-config: arm64-randconfig-003 (https://download.01.org/0day-ci/archive/20260617/202606170158.W9YgYBN4-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260617/202606170158.W9YgYBN4-lkp@intel.com/reproduce)
+6.1-stable review patch.  If anyone has any objections, please let me know.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606170158.W9YgYBN4-lkp@intel.com/
+------------------
 
-All warnings (new ones prefixed by >>):
+From: Ian Rogers <irogers@google.com>
 
-   arch/arm64/kvm/sys_regs.c:222:30: error: expected ';' after expression
-     222 |                         loc->loc = SR_LOC_SPECIAL : SR_LOC_MEMORY;
-         |                                                   ^
-         |                                                   ;
->> arch/arm64/kvm/sys_regs.c:222:32: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     222 |                         loc->loc = SR_LOC_SPECIAL : SR_LOC_MEMORY;
-         |                                                     ^
-   arch/arm64/kvm/sys_regs.c:221:3: note: previous statement is here
-     221 |                 if (is_hyp_ctxt(vcpu))
-         |                 ^
->> arch/arm64/kvm/sys_regs.c:222:32: warning: expression result unused [-Wunused-value]
-     222 |                         loc->loc = SR_LOC_SPECIAL : SR_LOC_MEMORY;
-         |                                                     ^~~~~~~~~~~~~
-   2 warnings and 1 error generated.
+commit ddc8e4c966923ad1137790817157c8a5f0301aec upstream
+
+If bison is version 3.8.2, reduce the number of bison C warnings
+disabled. Earlier bison versions have all C warnings disabled. Avoid
+implicit declarations of yylex by adding the declaration in the C
+file. A header can't be included as a circular dependency would occur
+due to the lexer using the bison defined tokens.
+
+Committer notes:
+
+Some recent versions of gcc and clang (noticed on Alpine Linux 3.17,
+edge, clearlinux, fedora 37, etc.
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: Tom Rix <trix@redhat.com>
+Cc: bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Link: https://lore.kernel.org/r/20230728064917.767761-6-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+[florian: Remove non-existent tools/perf/util/bpf-filter.y in 6.1.y]
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Change-Id: I62327ddbe816008197053a9234a92d9c253a2c5d
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ tools/perf/util/Build          |   12 ++++++++----
+ tools/perf/util/expr.y         |    4 +++-
+ tools/perf/util/parse-events.y |    1 +
+ tools/perf/util/pmu.y          |    3 +++
+ 4 files changed, 15 insertions(+), 5 deletions(-)
+
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -269,10 +269,14 @@ CFLAGS_parse-events-flex.o  += $(flex_fl
+ CFLAGS_pmu-flex.o           += $(flex_flags)
+ CFLAGS_expr-flex.o          += $(flex_flags)
+ 
+-bison_flags := -DYYENABLE_NLS=0
+-BISON_GE_35 := $(shell expr $(shell $(BISON) --version | grep bison | sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\)/\1\2/g') \>\= 35)
+-ifeq ($(BISON_GE_35),1)
+-  bison_flags += -Wno-unused-parameter -Wno-nested-externs -Wno-implicit-function-declaration -Wno-switch-enum -Wno-unused-but-set-variable -Wno-unknown-warning-option
++# Some newer clang and gcc version complain about this
++# util/parse-events-bison.c:1317:9: error: variable 'parse_events_nerrs' set but not used [-Werror,-Wunused-but-set-variable]
++#  int yynerrs = 0;
++
++bison_flags := -DYYENABLE_NLS=0 -Wno-unused-but-set-variable
++BISON_GE_382 := $(shell expr $(shell $(BISON) --version | grep bison | sed -e 's/.\+ \([0-9]\+\).\([0-9]\+\).\([0-9]\+\)/\1\2\3/g') \>\= 382)
++ifeq ($(BISON_GE_382),1)
++  bison_flags += -Wno-switch-enum
+ else
+   bison_flags += -w
+ endif
+--- a/tools/perf/util/expr.y
++++ b/tools/perf/util/expr.y
+@@ -7,6 +7,8 @@
+ #include "util/debug.h"
+ #define IN_EXPR_Y 1
+ #include "expr.h"
++#include "expr-bison.h"
++int expr_lex(YYSTYPE * yylval_param , void *yyscanner);
+ %}
+ 
+ %define api.pure full
+@@ -56,7 +58,7 @@
+ static void expr_error(double *final_val __maybe_unused,
+ 		       struct expr_parse_ctx *ctx __maybe_unused,
+ 		       bool compute_ids __maybe_unused,
+-		       void *scanner,
++		       void *scanner __maybe_unused,
+ 		       const char *s)
+ {
+ 	pr_debug("%s\n", s);
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -20,6 +20,7 @@
+ #include "parse-events.h"
+ #include "parse-events-bison.h"
+ 
++int parse_events_lex(YYSTYPE * yylval_param, YYLTYPE * yylloc_param , void *yyscanner);
+ void parse_events_error(YYLTYPE *loc, void *parse_state, void *scanner, char const *msg);
+ 
+ #define ABORT_ON(val) \
+--- a/tools/perf/util/pmu.y
++++ b/tools/perf/util/pmu.y
+@@ -9,6 +9,9 @@
+ #include <linux/bitmap.h>
+ #include <string.h>
+ #include "pmu.h"
++#include "pmu-bison.h"
++
++int perf_pmu_lex(void);
+ 
+ #define ABORT_ON(val) \
+ do { \
 
 
-vim +/if +222 arch/arm64/kvm/sys_regs.c
-
-   168	
-   169	#define MAPPED_EL2_SYSREG(r, m, t)					\
-   170		case r:	{							\
-   171			locate_mapped_el2_register(vcpu, r, m, t, loc);		\
-   172			break;							\
-   173		}
-   174	
-   175	static void locate_register(const struct kvm_vcpu *vcpu, enum vcpu_sysreg reg,
-   176				    struct sr_loc *loc)
-   177	{
-   178		if (!vcpu_get_flag(vcpu, SYSREGS_ON_CPU)) {
-   179			loc->loc = SR_LOC_MEMORY;
-   180			return;
-   181		}
-   182	
-   183		switch (reg) {
-   184			MAPPED_EL2_SYSREG(SCTLR_EL2,   SCTLR_EL1,
-   185					  translate_sctlr_el2_to_sctlr_el1	     );
-   186			MAPPED_EL2_SYSREG(TTBR0_EL2,   TTBR0_EL1,
-   187					  translate_ttbr0_el2_to_ttbr0_el1	     );
-   188			MAPPED_EL2_SYSREG(TTBR1_EL2,   TTBR1_EL1,   NULL	     );
-   189			MAPPED_EL2_SYSREG(TCR_EL2,     TCR_EL1,
-   190					  translate_tcr_el2_to_tcr_el1		     );
-   191			MAPPED_EL2_SYSREG(VBAR_EL2,    VBAR_EL1,    NULL	     );
-   192			MAPPED_EL2_SYSREG(AFSR0_EL2,   AFSR0_EL1,   NULL	     );
-   193			MAPPED_EL2_SYSREG(AFSR1_EL2,   AFSR1_EL1,   NULL	     );
-   194			MAPPED_EL2_SYSREG(ESR_EL2,     ESR_EL1,     NULL	     );
-   195			MAPPED_EL2_SYSREG(FAR_EL2,     FAR_EL1,     NULL	     );
-   196			MAPPED_EL2_SYSREG(MAIR_EL2,    MAIR_EL1,    NULL	     );
-   197			MAPPED_EL2_SYSREG(TCR2_EL2,    TCR2_EL1,    NULL	     );
-   198			MAPPED_EL2_SYSREG(PIR_EL2,     PIR_EL1,     NULL	     );
-   199			MAPPED_EL2_SYSREG(PIRE0_EL2,   PIRE0_EL1,   NULL	     );
-   200			MAPPED_EL2_SYSREG(POR_EL2,     POR_EL1,     NULL	     );
-   201			MAPPED_EL2_SYSREG(AMAIR_EL2,   AMAIR_EL1,   NULL	     );
-   202			MAPPED_EL2_SYSREG(ELR_EL2,     ELR_EL1,	    NULL	     );
-   203			MAPPED_EL2_SYSREG(SPSR_EL2,    SPSR_EL1,    NULL	     );
-   204			MAPPED_EL2_SYSREG(CONTEXTIDR_EL2, CONTEXTIDR_EL1, NULL	     );
-   205			MAPPED_EL2_SYSREG(SCTLR2_EL2,  SCTLR2_EL1,  NULL	     );
-   206		case CNTHCTL_EL2:
-   207			/* CNTHCTL_EL2 is super special, unless we support NV2p1 */
-   208			loc->loc = (is_hyp_ctxt(vcpu) && vcpu_el2_e2h_is_set(vcpu) ?
-   209				    SR_LOC_SPECIAL : SR_LOC_MEMORY);
-   210			break;
-   211		case CPTR_EL2:
-   212			/*
-   213			 * CPTR_EL2 is just as special, and needs a certain amount
-   214			 * of handholding. It always lives in memory, due to being
-   215			 * heavily trapped thanks to CPACR_EL1.TCPAC being RES0.
-   216			 * FEAT_NV2p1 fixes this.
-   217			 */
-   218			locate_mapped_el2_register(vcpu, CPTR_EL2, CPACR_EL1,
-   219						   translate_cptr_el2_to_cpacr_el1,
-   220						   loc);
-   221			if (is_hyp_ctxt(vcpu))
- > 222				loc->loc = SR_LOC_SPECIAL : SR_LOC_MEMORY;
-   223			break;
-   224		default:
-   225			loc->loc = locate_direct_register(vcpu, reg);
-   226		}
-   227	}
-   228	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
