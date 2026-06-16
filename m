@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AD1F309F00;
-	Tue, 16 Jun 2026 10:15:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7DF3AD505;
+	Tue, 16 Jun 2026 10:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781604907; cv=none; b=OZxlUQSOALqm+kmlocQPZ3yZ+dRhpFG5LEvctuKjdOCONtbG+WYAm6yZeNS93q+CilhNkBTnrJnb0PUZ1iZ13crSiXpcbsksFIaVb+ozM/mOZuU0YLrRIrUg9nz/i90Z+bvl+uz1dxKBvOVccWxLCLX6rahND2k4ZoEq6fxCTqY=
+	t=1781604912; cv=none; b=QLSGXFuh8+klKQq1RcYXa4dhRZyH0iHuek0YUpmnmfA2EwzPGlbOK/Z2oedyVen1oDL0LIhM56VW7+FLpe6A5LhxtxGmb2YYL7hF3FmayM9MMORcqqAK6YZ1OccfEByb38imAq5mEDzCmE1Wp0gTPmWxEKDU/Q33+EtB8V+VFiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781604907; c=relaxed/simple;
-	bh=GidBOj9Rf3rkLVbDol0Gcjf4a5oTARn+s/4uawaVoIQ=;
+	s=arc-20240116; t=1781604912; c=relaxed/simple;
+	bh=DAywrNqU+URgnFnUBkp8rWz2nNyMAvCvafyHha+nXEs=;
 	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type; b=sTA1NGPQQrTc3G97Gfs1NFFHFeQ9DL9zfg9iLJnKZDP1oca3AXg7w3IWRsrPzuXrjnbtQLX4Owo+tX/Y2yKpnT7zq6VMfEEq1PqESJLea3o7bvpDjTJcBL041qr7fdlqWwjVXBS0IZWTsPcuhWO7zUfiwU/HzcDA+YSdcWmwHAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IklcBQAl; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type; b=J2UZpYG+MM/CHI64Cro9zqNhD/PSnXORMaB4ltgEvPGQUDjklx122JuQ9AuN7TPnlo1mcQYSbnqJy+5EXc7qbuPCeoeLMF7hNz1C1vqq0BVCJo4dxzLN946n4eJ+nM0OzIV/1mMYgfeu+ExRvfeLL+sCByWbyqdKuSXjv5cw2+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ERJA7kiT; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IklcBQAl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 114901F000E9;
-	Tue, 16 Jun 2026 10:15:04 +0000 (UTC)
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ERJA7kiT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D74D11F000E9;
+	Tue, 16 Jun 2026 10:15:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
-	s=korg; t=1781604905;
-	bh=Df6PSlB7tz9mMkQWxSLAK9kI5ldBQ3tso1DCNAXPSoQ=;
+	s=korg; t=1781604910;
+	bh=J8qQPMGtvjBZ3aDzfFa0tkjGHMWPgrEMNI0bEORgO0E=;
 	h=Subject:To:Cc:From:Date:In-Reply-To;
-	b=IklcBQAlOPJw9ANytV7dKoONPn3IpmeoWEeHjV6uBSjzpH7Hn++0lO1Vcup6vJrk+
-	 QAA9eR422XTZlHdJfFVsSoN5p/0Y3UIXGE4xzatohWTBoGhPQ+YGBH+n+tzZMiCgP/
-	 FPMzY2WxLTpX7PpmAmVNiTnz9/bHAZ7rlx7qZc8o=
-Subject: Patch "tools build: Add 3-component logical version comparators" has been added to the 6.1-stable tree
-To: acme@kernel.org,acme@redhat.com,adrian.hunter@intel.com,alexander.shishkin@linux.intel.com,bcm-kernel-feedback-list@broadcom.com,florian.fainelli@broadcom.com,gregkh@linuxfoundation.org,irogers@google.com,jolsa@kernel.org,llvm@lists.linux.dev,mark.rutland@arm.com,mingo@redhat.com,namhyung@kernel.org,nathan@kernel.org,ndesaulniers@google.com,peterz@infradead.org,trix@redhat.com
+	b=ERJA7kiT5g+VJ1CVAiys7OqayyyljXTXTx2qecRrRc0+LTtC9zPeiVEIqrg1E9yht
+	 3i9Ened1ud1qxPu/sxWXztVG+XhwaPp7We2FtOCGJJguy8U0TvR2AHIW0BQ+hXRDiV
+	 WbjxvusAY4GJe/vVW+kb0NGpn8mv7kJhVI3Uqors=
+Subject: Patch "perf parse-events: Make YYDEBUG dependent on doing a debug build" has been added to the 6.1-stable tree
+To: acme@kernel.org,acme@redhat.com,adrian.hunter@intel.com,alexander.shishkin@linux.intel.com,bcm-kernel-feedback-list@broadcom.com,cuigaosheng1@huawei.com,florian.fainelli@broadcom.com,gregkh@linuxfoundation.org,irogers@google.com,james.clark@arm.com,jolsa@kernel.org,kan.liang@linux.intel.com,llvm@lists.linux.dev,mark.rutland@arm.com,mingo@redhat.com,namhyung@kernel.org,nathan@kernel.org,ndesaulniers@google.com,peterz@infradead.org,robh@kernel.org,trix@redhat.com
 Cc: <stable-commits@vger.kernel.org>
 From: <gregkh@linuxfoundation.org>
 Date: Tue, 16 Jun 2026 15:43:45 +0530
-In-Reply-To: <20260520163320.3073037-5-florian.fainelli@broadcom.com>
-Message-ID: <2026061645-hastily-hazing-4bb0@gregkh>
+In-Reply-To: <20260520163320.3073037-3-florian.fainelli@broadcom.com>
+Message-ID: <2026061644-harvest-anyhow-af34@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,78 +44,68 @@ X-Patchwork-Hint: ignore
 
 This is a note to let you know that I've just added the patch titled
 
-    tools build: Add 3-component logical version comparators
+    perf parse-events: Make YYDEBUG dependent on doing a debug build
 
 to the 6.1-stable tree which can be found at:
     http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
 
 The filename of the patch is:
-     tools-build-add-3-component-logical-version-comparators.patch
+     perf-parse-events-make-yydebug-dependent-on-doing-a-debug-build.patch
 and it can be found in the queue-6.1 subdirectory.
 
 If you, or anyone else, feels it should not be added to the stable tree,
 please let <stable@vger.kernel.org> know about it.
 
 
-From stable+bounces-250208-greg=kroah.com@vger.kernel.org Thu May 21 01:09:09 2026
+From stable+bounces-250204-greg=kroah.com@vger.kernel.org Wed May 20 22:58:26 2026
 From: Florian Fainelli <florian.fainelli@broadcom.com>
-Date: Wed, 20 May 2026 09:33:19 -0700
-Subject: tools build: Add 3-component logical version comparators
+Date: Wed, 20 May 2026 09:33:17 -0700
+Subject: perf parse-events: Make YYDEBUG dependent on doing a debug build
 To: stable@vger.kernel.org
-Cc: Arnaldo Carvalho de Melo <acme@redhat.com>, Adrian Hunter <adrian.hunter@intel.com>, Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Florian Fainelli <florian.fainelli@broadcom.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), bpf@vger.kernel.org (open list:BPF [MISC]), llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT), bcm-kernel-feedback-list@broadcom.com
-Message-ID: <20260520163320.3073037-5-florian.fainelli@broadcom.com>
+Cc: Ian Rogers <irogers@google.com>, Namhyung Kim <namhyung@kernel.org>, Adrian Hunter <adrian.hunter@intel.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Gaosheng Cui <cuigaosheng1@huawei.com>, Ingo Molnar <mingo@redhat.com>, James Clark <james.clark@arm.com>, Jiri Olsa <jolsa@kernel.org>, Kan Liang <kan.liang@linux.intel.com>, Mark Rutland <mark.rutland@arm.com>, Peter Zijlstra <peterz@infradead.org>, Rob Herring <robh@kernel.org>, bpf@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT), bcm-kernel-feedback-list@broadcom.com
+Message-ID: <20260520163320.3073037-3-florian.fainelli@broadcom.com>
 
-From: Arnaldo Carvalho de Melo <acme@redhat.com>
+From: Ian Rogers <irogers@google.com>
 
-commit a9b451509565d40a5ca3b41c39a2b758cdbc5355 upstream
+commit d4ce60190e08d84f88937019defa5e3d23409ac1 upstream
 
-The next cset needs to compare if a flex version is greater or
-equal/less than another, but since there is no canonical, generally
-available way to compare versions in the command line (sort -V, yeah,
-but...), just use awk to canonicalize the versions like is also done in
-scripts/rust_is_available.sh.
+YYDEBUG enables line numbers and other error helpers in the generated
+parse-events-bison.c. These shouldn't be generated when debugging
+isn't enabled.
 
-There was a problem spotted in linux-next where a bashism, here
-documents, aka the '<<<' stdin redirector, for strings to be used as the
-stdin for awk. Use $(shell echo | awk ...) instead.
-
+Signed-off-by: Ian Rogers <irogers@google.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 Cc: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: James Clark <james.clark@arm.com>
 Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Rob Herring <robh@kernel.org>
+Cc: bpf@vger.kernel.org
+Link: https://lore.kernel.org/r/20230911170559.4037734-2-irogers@google.com
 Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/scripts/utilities.mak |   20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ tools/perf/util/parse-events.y |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/tools/scripts/utilities.mak
-+++ b/tools/scripts/utilities.mak
-@@ -177,3 +177,23 @@ $(if $($(1)),$(call _ge_attempt,$($(1)),
- endef
- _ge_attempt = $(or $(get-executable),$(call _gea_err,$(2)))
- _gea_err  = $(if $(1),$(error Please set '$(1)' appropriately))
-+
-+# version-ge3
-+#
-+# Usage $(call version-ge3,2.6.4,$(FLEX_VERSION))
-+#
-+# To compare if a 3 component version is greater or equal to another, first use
-+# was to check the flex version to see if we can use compiler warnings as
-+# errors for one of the cases flex generates code C compilers complains about.
-+
-+version-ge3 = $(shell echo "$(1).$(2)" | awk -F'.' '{ printf("%d\n", (10000000 * $$1 + 10000 * $$2 + $$3) >= (10000000 * $$4 + 10000 * $$5 + $$6)) }')
-+
-+# version-lt3
-+#
-+# Usage $(call version-lt3,2.6.2,$(FLEX_VERSION))
-+#
-+# To compare if a 3 component version is less thjan another, first use was to
-+# check the flex version to see if we can use compiler warnings as errors for
-+# one of the cases flex generates code C compilers complains about.
-+
-+version-lt3 = $(shell echo "$(1).$(2)" | awk -F'.' '{ printf("%d\n", (10000000 * $$1 + 10000 * $$2 + $$3) < (10000000 * $$4 + 10000 * $$5 + $$6)) }')
+--- a/tools/perf/util/parse-events.y
++++ b/tools/perf/util/parse-events.y
+@@ -6,7 +6,9 @@
+ 
+ %{
+ 
++#ifndef NDEBUG
+ #define YYDEBUG 1
++#endif
+ 
+ #include <fnmatch.h>
+ #include <stdio.h>
 
 
 Patches currently in stable-queue which might be from florian.fainelli@broadcom.com are
