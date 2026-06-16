@@ -1,130 +1,111 @@
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F164D43CEC1
-	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 10:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB0C426EB6;
+	Tue, 16 Jun 2026 10:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781604835; cv=none; b=En3blvsGIP6LgaiKWOEvs2jeNa3HCyb7E9nqpMA6anbP8TCk86ivsIk8ZoRmQypccuLFJ8bfFE/4MLBefO0asbg5ArjxYSdo4Wk6AHbBAlrsH9BneBIn+xdpqXnXb8wFHKR0EBelanKLgPP1qtrgVuObJXOS0TXER2/QMYO/JQM=
+	t=1781604890; cv=none; b=WcuqWDR5R1uzouIpeSx+mE1THcunpldFNixHhav6ViPrby96SgnGpxr4I8L9FecyhkWT8RsjFF5JxrtuSbqevIlTgzp0DK9EwqOY7DyIjFxEaH+PeQaJgdkV+GCWw8vaiNwsUQaOY02/E2S8QsvSeWGO8ALovyNQK6cR/zMlCUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781604835; c=relaxed/simple;
-	bh=h39yfY9vKWcnHsup000s5QqqY2OYLsCc/BA54RYV6Fw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=chmD9CpQfFqT9K97PiS/o/W9IizyND1aReZPnP/pFpzRPhla7UJicdDVFC+1eYri9Rn4nS/psJJcK+hkuAQVAkgOBMft/pAz1dgjdBcTgBLEGZQd57H570+Ycb0Mop5PoFb+8TRvd0fdkV3Sx3ZsmNRSHQ8mzv5AUQ3UI+OFxxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=KLRdeFA2; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AkG//VcB; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	s=arc-20240116; t=1781604890; c=relaxed/simple;
+	bh=Ab2iWGGawQ8+zbPNFr/8zoXyc2DvPAVpLN1H32TDD4Q=;
+	h=Subject:To:Cc:From:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type; b=C7fEO8AQbX5eFuo+YX9HHtOzr+1RWUn/D2csxZ49D91xiuxKgJF/hX7hOwSKDdjJUeX5hAzwNYR3SgJdrrCPqJdBiPSuBLiOIFsGN23zFrLPfw5496X0QinTeSi4WnhkMuR8lIJvQLQDAbTfp+ecznBAwaY+wHOZjMJ51bfjftU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=nLQKHluz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="KLRdeFA2";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AkG//VcB"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 32199140013C;
-	Tue, 16 Jun 2026 06:13:52 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Tue, 16 Jun 2026 06:13:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1781604832; x=1781691232; bh=yscGnKM6Pn
-	1eN1WlHGZpo/1egnmUAfNS3O+ct8E0NcQ=; b=KLRdeFA2u+bknoVpi6wLPAu7Yt
-	iJdd2/Ii38ypS/HihS6Z208HihWl6c/A269wVfmNZUcYPRy3GjKQGkOU6gC1HxyP
-	2BUp6/woB2mslX+AU9Ho0gYMwxvcFE5p64q0CWPnBqZsatmqrd6lvrhXAclNpPka
-	qebzk6gT/6/oXGsthzXU43MbVuF1ZoTNub6E/rCc+Mh/Hb3o11fRbMGKaaHDQnkW
-	yZgJCWGQYI0QOG3RMmWA5ea0dX0dhcka3E1BwGV4ca1zS1Otyh772wajEB5/iW40
-	Y0WY/5C2T066kl8/Cw/jLhklnwm7p9trBzdOUuIa9GmAUmOhq/1Gx0nvF+3A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1781604832; x=1781691232; bh=yscGnKM6Pn1eN1WlHGZpo/1egnmUAfNS3O+
-	ct8E0NcQ=; b=AkG//VcBlWPkGp5+QX0CqU957h5/2UEj/XMYVfh5TkBa5JAEwFD
-	GZ8so3d42RbYMkqnnoEzqiPcSJIGRn536ajBRJAI/4q/OKVIM+UpxSBtaPLzNUwV
-	lJtrA0FNiuhAUbnnGbSavDm5A2neCdBdjRhYIggcHSxvHWcerXwmZX1XrSC3Pcad
-	kmue6YuS+5uAhjahkx89P++vVaEXZ49ff/6J49vcIttgBpjtKp6p4Z4Y3S3jyjBo
-	mCBw3GcrZRNAZAyg7ZFfkpAFrb0+gxXM4VHkLmT3YxnqfLr//pzLvX31thfL64Vi
-	aEZ7t4WQHG4AgF1k9ymbDXashyytfdr6TNQ==
-X-ME-Sender: <xms:3yExasOq_hfD91-KgcnzcWI-InKHHQ9H-HHRzn9NZAoVno9NOjh6jA>
-    <xme:3yExauo0oR8mN_VBvyV2z1-LxDwp8eZq_lCpXCWi-YTr2iBxkchLqxEuY-6_EOc8a
-    r6WETbqjxZD-JCQ-kB--2PzVfIzJwjaT4rvI4k60d1ry0KMag>
-X-ME-Received: <xmr:3yExam5hIbugwhUOCO_yLy-bHdS_WgFM3aglR68GwbEZAhD7kNSGvV61>
-X-ME-Proxy-Cause: dmFkZTFXmFjhiZ/J01Wd7/tv5c36hbRy67DrxzHLzGUvqVoob6gyrI5rUk2TRsZF3TxXXy
-    Eqgfu+llVeu6X32bw3wTR93BrAokj6h+nD5mSFQR4EGjTjQgXkzrvdL1oZSrLLHJ5ZaEXP
-    eaW04bkL9ANOpZ7eqEK9sl2/phNYVie5S4DBbmqvXJ0eCIm06lqXVM0lQBIw/hHOkFNqfb
-    AydGSX9A4rVRRF1ozlS604g7aojkY6CaiA4+XH+1yJ6XUBOQRJQ5hCsI91GjHNRmhlzUQo
-    PVL9+m9l+5dHMCHIJ1uQ0rbTva8xA/YVRH20faRhiH6bLyY/lpTO7/3+HUanxXwMnE9Of5
-    q6wYPNxxCAigFA3VjxcRBu4F0rl7MLCy61b1Hco2V1UgkgiypxPIJIROEQcnjinGrDAz42
-    6lFtYSILqUoo/GUYk91Be7xYKOFGgSI5BD3CvpndRESrU3vmNpE/RaD4bUZbmB1UUtFGMx
-    ye/XEzKUNThptMfX88SZhVxjwt/wnco1txQiuCkWjjXst6uijKmWxjnYHlg47bqVb8sR3D
-    AlCdyKGyB24en+/TRzzXfEdyuh/kbAwuSDoIjBF7O75Ohd+l8rkFEahWX8+yNoIixeT4Pn
-    x8Z1W31Tk/QVtuv3+xtJIVxNI5hpbcDragT9TeS9YWwZL+1+N5CJgPZ13c7Q
-X-ME-Proxy: <xmx:3yExak8eKc29oJxfcfyK0Od4a-87_oCLG8W7UXqv6u5hrVb5PsXG_Q>
-    <xmx:3yExaicnt6lfrQcLSaZi-mmr0qYemsDudfJuWTVe2e4R7J3yeMRy-g>
-    <xmx:3yExag1XSy9XrCi1pGc5bJxCCqyfXk1xkzZBnsX_ihulF2q77cYF6A>
-    <xmx:3yExarpV1hTtDrxhQ9JhKiBTEVTSk53lv6J_cGdraz6-SgpZJDtotw>
-    <xmx:4CExauycks29AcIPDqsus0W6Sv8WnerBEUU0rBmVMLdUsXvbFirkjbpb>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 16 Jun 2026 06:13:49 -0400 (EDT)
-Date: Tue, 16 Jun 2026 15:42:45 +0530
-From: Greg KH <greg@kroah.com>
-To: Florian Fainelli <florian.fainelli@broadcom.com>
-Cc: stable@vger.kernel.org, Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Tom Rix <trix@redhat.com>,
-	"open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-perf-users@vger.kernel.org>,
-	"open list:PERFORMANCE EVENTS SUBSYSTEM" <linux-kernel@vger.kernel.org>,
-	"open list:BPF [MISC]" <bpf@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT" <llvm@lists.linux.dev>,
-	bcm-kernel-feedback-list@broadcom.com
-Subject: Re: [PATCH stable 6.1 v2 5/5] perf build: Remove
- -Wno-unused-but-set-variable from the flex flags when building with clang <
- 13.0.0
-Message-ID: <2026061639-curfew-hexagon-386b@gregkh>
-References: <20260520163320.3073037-1-florian.fainelli@broadcom.com>
- <20260520163320.3073037-6-florian.fainelli@broadcom.com>
- <6541a5f4-a150-44b9-af27-8712cdafc1ae@broadcom.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="nLQKHluz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 196191F000E9;
+	Tue, 16 Jun 2026 10:14:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxfoundation.org;
+	s=korg; t=1781604889;
+	bh=bymKJZqbdh9ytLXLyS/sDJQBHxJNBOyH9cCWnqVp6qk=;
+	h=Subject:To:Cc:From:Date:In-Reply-To;
+	b=nLQKHluzJ0+1E8U9B+IabOFNVfhkopDEqFWfXxT6JBNykEFQHNzWBZxJ+ayY47rsr
+	 YSD0a+Zypfwc/bVv7vO8Ao09Y2b/tf/MCswLm4bR6NWaBK6mJ8FoIMi81cz8N1qAnV
+	 A0Jzx/qKZliTkvMincp8QNjqYC7UrR5PiXWCixdU=
+Subject: Patch "perf build: Conditionally define NDEBUG" has been added to the 6.1-stable tree
+To: acme@kernel.org,acme@redhat.com,adrian.hunter@intel.com,alexander.shishkin@linux.intel.com,bcm-kernel-feedback-list@broadcom.com,florian.fainelli@broadcom.com,gregkh@linuxfoundation.org,irogers@google.com,jolsa@kernel.org,llvm@lists.linux.dev,mark.rutland@arm.com,mingo@redhat.com,namhyung@kernel.org,nathan@kernel.org,ndesaulniers@google.com,pbonzini@redhat.com,peterz@infradead.org,seanjc@google.com,trix@redhat.com
+Cc: <stable-commits@vger.kernel.org>
+From: <gregkh@linuxfoundation.org>
+Date: Tue, 16 Jun 2026 15:43:43 +0530
+In-Reply-To: <20260520163320.3073037-2-florian.fainelli@broadcom.com>
+Message-ID: <2026061643-sturdy-pusher-35a0@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6541a5f4-a150-44b9-af27-8712cdafc1ae@broadcom.com>
+Content-Type: text/plain; charset=ANSI_X3.4-1968
+Content-Transfer-Encoding: 8bit
+X-stable: commit
+X-Patchwork-Hint: ignore
 
-On Wed, May 20, 2026 at 09:35:02AM -0700, Florian Fainelli wrote:
-> On 5/20/26 09:33, Florian Fainelli wrote:
-> > From: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > 
-> > clang < 13.0.0 doesn't grok -Wno-unused-but-set-variable, so just remove
-> > it to avoid:
-> > 
-> >    error: unknown warning option '-Wno-unused-but-set-variable'; did you mean '-Wno-unused-const-variable'? [-Werror,-Wunknown-warning-option]
-> >    make[4]: *** [/git/perf-6.5.0-rc4/tools/build/Makefile.build:128: /tmp/build/perf/util/pmu-flex.o] Error 1
-> >    make[4]: *** Waiting for unfinished jobs....
-> > 
-> > Fixes: ddc8e4c966923ad1 ("perf build: Disable fewer bison warnings")
-> > Cc: Adrian Hunter <adrian.hunter@intel.com>
-> > Cc: Ian Rogers <irogers@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Namhyung Kim <namhyung@kernel.org>
-> > Link: https://lore.kernel.org/lkml/ZNUSWr52jUnVaaa%2F@kernel.org/
-> > Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
-> > Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
-> > Change-Id: I8db8a372d1e83d26fbe8beda2bcf4d1a871a2b80
-> 
-> Argh, sorry the Change-Id snuck in there, let me know if you need me to
-> resubmit.
 
-I got it, no worries.
+This is a note to let you know that I've just added the patch titled
+
+    perf build: Conditionally define NDEBUG
+
+to the 6.1-stable tree which can be found at:
+    http://www.kernel.org/git/?p=linux/kernel/git/stable/stable-queue.git;a=summary
+
+The filename of the patch is:
+     perf-build-conditionally-define-ndebug.patch
+and it can be found in the queue-6.1 subdirectory.
+
+If you, or anyone else, feels it should not be added to the stable tree,
+please let <stable@vger.kernel.org> know about it.
+
+
+From stable+bounces-250203-greg=kroah.com@vger.kernel.org Wed May 20 22:29:26 2026
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Date: Wed, 20 May 2026 09:33:16 -0700
+Subject: perf build: Conditionally define NDEBUG
+To: stable@vger.kernel.org
+Cc: Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ingo Molnar <mingo@redhat.com>, Jiri Olsa <jolsa@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Namhyung Kim <namhyung@kernel.org>, Paolo Bonzini <pbonzini@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Sean Christopherson <seanjc@google.com>, Arnaldo Carvalho de Melo <acme@redhat.com>, Florian Fainelli <florian.fainelli@broadcom.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Tom Rix <trix@redhat.com>, linux-perf-users@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), linux-kernel@vger.kernel.org (open list:PERFORMANCE EVENTS SUBSYSTEM), bpf@vger.kernel.org (open list:BPF [MISC]), llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT), bcm-kernel-feedback-list@broadcom.com
+Message-ID: <20260520163320.3073037-2-florian.fainelli@broadcom.com>
+
+From: Ian Rogers <irogers@google.com>
+
+commit 616b14b47a86d880ba21a363440f20f82152d8f2 upstream
+
+When a build is done without DEBUG=1 then define NDEBUG. This will
+compile out asserts and other debug code.
+
+Signed-off-by: Ian Rogers <irogers@google.com>
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Sean Christopherson <seanjc@google.com>
+Link: https://lore.kernel.org/r/20230330183827.1412303-1-irogers@google.com
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ tools/perf/Makefile.config |    1 +
+ 1 file changed, 1 insertion(+)
+
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -228,6 +228,7 @@ ifndef DEBUG
+ endif
+ 
+ ifeq ($(DEBUG),0)
++CORE_CFLAGS += -DNDEBUG=1
+ ifeq ($(CC_NO_CLANG), 0)
+   CORE_CFLAGS += -O3
+ else
+
+
+Patches currently in stable-queue which might be from florian.fainelli@broadcom.com are
+
+queue-6.1/perf-build-remove-wno-unused-but-set-variable-from-the-flex-flags-when-building-with-clang-13.0.0.patch
+queue-6.1/perf-build-conditionally-define-ndebug.patch
+queue-6.1/perf-parse-events-make-yydebug-dependent-on-doing-a-debug-build.patch
+queue-6.1/perf-build-disable-fewer-bison-warnings.patch
+queue-6.1/tools-build-add-3-component-logical-version-comparators.patch
