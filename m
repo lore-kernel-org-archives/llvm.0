@@ -1,31 +1,31 @@
-Received: from outbound7.mail.transip.nl (outbound7.mail.transip.nl [136.144.136.7])
+Received: from outbound0.mail.transip.nl (outbound0.mail.transip.nl [149.210.149.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAADC364021
-	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 13:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.136.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1F2C36B059
+	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 13:09:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=149.210.149.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781614940; cv=none; b=Bj3rvBqlXOoGlh4vT5QPd6s0VFNuuqEdJqqLp355tNsFc7J788g0jcvqXGkjcquzaknpyF+JImGyqh0Fp9cdG8CtJaRdBElAvmI10kDji0PvZbfMVRWyPNaRHWMjuAd9wtxzI9hlTCDTJv0OtDj29SHpt+13mSbhNV2t73yz3ng=
+	t=1781615355; cv=none; b=Gck5Zh0Cq5vek7+zINsa87wyAjIDefy28TRh96P+cbB3eckR8+jR9/e5ljP2MlPj6Im/kkEH5LCON4Fw4MyRjIh+PEm7IRKKi4iC3cy+3cOrqYzswSC9KLyLfYevIPMIPGAE+GUxQ4/JMdeC86qv9mZd/c0Tx2ltiA+CTnq0HRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781614940; c=relaxed/simple;
-	bh=ptFCoVl4ejPQq6L4t3OjIwSPGRB4OMjQlhaTVIC6B98=;
+	s=arc-20240116; t=1781615355; c=relaxed/simple;
+	bh=tkpQ7s8w0fK4taqHJRA/B2dU7gCPwT5NhFTac1ssF7E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QYoS1mICL/iF7OihxbCTHdWEgKahdt2LDQM8IWbFOrVPv33H6QjhrPTGd/STFyymEk6QB9TCVSqMQc6pzV7t/XPFYABQmcAVzt0Ug/VY2qg+h8lp+iyRoBhE+yRR/4mDunv9vIsTyndlEATsclnOUgNeej/PxV/qKaSFxZ05qPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org; spf=pass smtp.mailfrom=herrie.org; dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b=stD0q1WY; arc=none smtp.client-ip=136.144.136.7
+	 In-Reply-To:To:Cc; b=NFfpoCo+tDmoamM+YARirBdtE/ohiqB35BVLM63yAwgbahue60lljxeKAsqtqWuK7v40msmXMcMCBcz4gg5nGz2UMsW9oHxs1SgyassWVMj1jsB82XgMqDrWYt/UlSjqv0ytIOFJjVwE/hY15oA05yNEAqP4rR6J4wA0lssW4z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org; spf=pass smtp.mailfrom=herrie.org; dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b=N7D6eyHg; arc=none smtp.client-ip=149.210.149.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=herrie.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b="stD0q1WY"
+	dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b="N7D6eyHg"
 Received: from submission12.mail.transip.nl (unknown [10.103.8.163])
-	by outbound7.mail.transip.nl (Postfix) with ESMTP id 4gfnFY08WVzQvxwW;
-	Tue, 16 Jun 2026 15:02:09 +0200 (CEST)
+	by outbound0.mail.transip.nl (Postfix) with ESMTP id 4gfnFW1tDtzxNs0;
+	Tue, 16 Jun 2026 15:02:07 +0200 (CEST)
 Received: from [127.0.1.1] (180-93-184-31.ftth.glasoperator.nl [31.184.93.180])
-	by submission12.mail.transip.nl (Postfix) with ESMTPA id 4gfnFX1Qrpz3SJ37Q;
-	Tue, 16 Jun 2026 15:02:08 +0200 (CEST)
+	by submission12.mail.transip.nl (Postfix) with ESMTPA id 4gfnFV32wBz3SJ37Q;
+	Tue, 16 Jun 2026 15:02:06 +0200 (CEST)
 From: Herman van Hazendonk <github.com@herrie.org>
-Date: Tue, 16 Jun 2026 15:02:06 +0200
-Subject: [PATCH v2 3/3] iio: magnetometer: st_magn: honour
- st,fullscale-milligauss DT property
+Date: Tue, 16 Jun 2026 15:02:04 +0200
+Subject: [PATCH v2 1/3] iio: common: st_sensors: honour channel endianness
+ in read_axis_data
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -33,8 +33,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260616-submit-iio-lsm303dlh-magn-fixes-v2-3-063edcf74e60@herrie.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260616-submit-iio-lsm303dlh-magn-fixes-v2-1-063edcf74e60@herrie.org>
 References: <20260616-submit-iio-lsm303dlh-magn-fixes-v2-0-063edcf74e60@herrie.org>
 In-Reply-To: <20260616-submit-iio-lsm303dlh-magn-fixes-v2-0-063edcf74e60@herrie.org>
 To: Jonathan Cameron <jic23@kernel.org>, 
@@ -48,139 +48,123 @@ To: Jonathan Cameron <jic23@kernel.org>,
  Conor Dooley <conor+dt@kernel.org>, Denis Ciocca <denis.ciocca@st.com>, 
  Linus Walleij <linusw@kernel.org>
 Cc: linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, devicetree@vger.kernel.org, 
+ llvm@lists.linux.dev, devicetree@vger.kernel.org, stable@vger.kernel.org, 
  Herman van Hazendonk <github.com@herrie.org>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1781614923; l=4762;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1781614923; l=4262;
  i=github.com@herrie.org; s=20240417; h=from:subject:message-id;
- bh=ptFCoVl4ejPQq6L4t3OjIwSPGRB4OMjQlhaTVIC6B98=;
- b=nsmHBF4qPcS6fWpU4qhjDeRybgbXWZTf8rrNPKTaeVu4nPQ1Puhoyx6JWvWFYIKNKBj5NfiwK
- oF6vgd/TsUSB5vvBuFD6bCODUShiEf54RQX1aUA7JVhPYuAxn3cy/0Q
+ bh=tkpQ7s8w0fK4taqHJRA/B2dU7gCPwT5NhFTac1ssF7E=;
+ b=GI5PZ+oz2NFvgfwhyuleiebfezY9nbuPin+gd+rEGiVlt+jZLvEaPpWKs8qihHjbR8ZleLlPi
+ T3tI5oWspXBBiZ0ImsRyxevx6zgotpmrREsx0YEJoTIFBcGmcIGAhtB
 X-Developer-Key: i=github.com@herrie.org; a=ed25519;
  pk=YYxdq8fb5O9vhkW3n2dCH044FPZZO5718v/du7fRhFw=
 X-Scanned-By: ClueGetter at submission12.mail.transip.nl
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=transip-a; d=herrie.org; t=1781614928; h=from:subject:to:cc:
+ s=transip-a; d=herrie.org; t=1781614926; h=from:subject:to:cc:
  references:in-reply-to:date:mime-version:content-type;
- bh=X+nCpIryhHub4FcQjDYfT4e8eh2iGorvyop023rL09I=;
- b=stD0q1WYODJbp98Nn08n1Jnf+vCkO7w+K4rFGAe6NtQUEO6VpZkQhDt9mrKF1FwZL561zR
- jD76ALv1lvYA871V2qK5PRXJh6Nm1uuwYkR+npWzJljR16i8K+h1F9DomoyOojPva+Serx
- mxYJpFyf8iMj8pYCW4TprNqpuctf9ztsRAbopPqql4tSyfzrw4b2oLHRjaPo7qWLkFJt3S
- bTWtKT26LYP6HyahjBkNkS+L2xoD+bpXfQdZBhSdN/VUY1MxnoZnnwSuhWOl3lnn7D1DIx
- rz0aToPacdiBCt9oz7uGm7yZLqlO9PNJR+TKIuCiiciajG8LJMBpkDO6+DQtsw==
+ bh=GanE+LwpMU/3dQ/iAwCN0mrZ872UhY+IqsGotY1ZLxE=;
+ b=N7D6eyHgncaQ149sHTL2rgYz9+StpPgtNRBwjTHOKQC4LxzqeYTJv4sVHepV5QI0KV+pdx
+ GCEWLYMextRaU/3lDoXov/gw1VZ6yMrbH1Jp4oo8Drkn//mDbTSJKP1cjNY5rgOT3fZRmD
+ a3V9AB6XDcKI8JWOi9JTp+5+OryKNTttPv4Y71qETvsu5hNo1sHnp1svMvGxegdeAwGZlv
+ Xp4OED4ylfERg+ryYFBQMCj3dogwwjphxhj4CE3De2fVoyGlajjW4ULdN5xQyy0NTIrKot
+ 34m9IQjqXDN5tYOmvOm4U2zJ//kTzmaQCCQBrqJ3uaov3ePzoaXvcM7l7b/AfQ==
 X-Report-Abuse-To: abuse@transip.nl
 
-The ST magnetometer core's common probe hardcodes fs_avl[0] -- the
-highest-sensitivity full-scale supported by the chip -- as the
-starting range. For the LSM303DLH that is +/-1.3 G; for the
-LSM303DLHC and LSM303DLM it is +/-2 G; for the LIS3MDL it is +/-4 G.
+st_sensors_read_axis_data() unconditionally decoded multi-byte
+results with get_unaligned_le16() / get_unaligned_le24() regardless
+of the channel's declared scan_type.endianness.
 
-That is the right default for "minimal noise floor at a desk", but
-it leaves no margin for boards that pick up appreciable DC bias from
-nearby PCB structures. On the HP TouchPad (apq8060 / tenderloin) the
-LSM303DLH magnetometer is mounted close enough to the surrounding
-power planes that X reads back as the chip's 0xF000 overflow
-sentinel (== -4096 raw, the value the chip publishes when the ADC
-saturates) on every sample at the chip-default range, while Y and Z
-fall well within the +/-1.3 G window.
+For every ST sensor that has used this helper since it was introduced
+this happened to be fine because the ST IMU/accel/gyro/pressure
+families publish their data registers as little-endian and the
+channel specs in those drivers declare IIO_LE accordingly.
 
-Parse the st,fullscale-milligauss device-tree property (documented
-separately in dt-bindings/iio/st,st-sensors.yaml) in the
-magnetometer common probe to select the initial fs_avl entry by its
-mg value. The DT binding pins the accepted value set per compatible
-via allOf/if-then enum clauses, so a malformed mg value fails
-dt_binding_check rather than reaching the driver. Sensors with a
-fixed full-scale (fs.addr == 0: LSM303AGR, LIS2MDL, IIS2MDC) have no
-register to switch and the property is rejected outright for them
-in the binding; the parse block is additionally gated on fs.addr as
-defence in depth against stale DTBs.
+The LSM303DLH magnetometer however publishes its X/Y/Z output as a
+pair of big-endian bytes (the H register sits at the lower address,
+0x03/0x05/0x07, and the L register immediately after), and its
+channel specs in st_magn_core.c correctly declare IIO_BE -- but
+read_axis_data() ignored that and decoded as little-endian, swapping
+the high and low bytes of every magnetometer sample. The LSM303DLHC
+and LSM303DLM share the same st_magn_16bit_channels (IIO_BE) and
+were therefore byte-swapped by the same bug; users of those parts
+will see different in_magn_*_raw values after this fix lands.
 
-Per-sensor mg ranges are listed in st_magn_sensors_settings[]. For
-LSM303DLH and LSM303DLHC/DLM the valid values are 1300, 1900, 2500,
-4000, 4700, 5600 and 8100; for LIS3MDL, LSM9DS1-magn and LSM303C-magn
-they are 4000, 8000, 12000, 16000.
+The bug is most visible on a stationary chip: in earth's field the
+true X reading is small and the high byte sits at 0x00, so swapping
+the bytes pins sysfs X at exactly the low byte's pattern (e.g. 0x00F0
+= 240). Y and Z still appear "to vary" because their magnitudes are
+larger and the noise in the low byte produces big swings in the
+swapped high byte:
 
-Empirical scale sweep on the HP TouchPad confirmed that on this
-board any fs_avl >= 1 produces non-saturated X readings:
+  before (LSM303DLH flat, sysfs in_magn_*_raw):
+      X=240 (stuck), Y= 12032..23296, Z=-16128..-9728
 
-    scale (0.001 G/LSB)  | X raw    Y raw    Z raw
-    --------------------+-------------------------------
-            1.100        | -4096    44       46    (X saturated)
-            0.855        |  -547    37       37    (clean)
-            0.670        |  -433    94      103    (clean)
-            0.450        |  -266    44       71    (clean)
-            0.400        |  -235    34       65    (clean)
-            0.330        |  -196    27       56    (clean)
-            0.230        |  -145    15       40    (clean)
+  after (direct i2c-dev big-endian decode, same chip same orientation):
+      X≈-4096, Y≈210, Z≈80     (sensible values reflecting earth's
+                                ambient field at low gauss range)
 
-2500 mg is the natural choice for tenderloin: comfortably outside
-the saturation regime while keeping useful precision for compass
-applications.
+Fix read_axis_data() to dispatch on ch->scan_type.endianness and
+call get_unaligned_be16() / get_unaligned_be24() when the channel
+declares IIO_BE. Existing IIO_LE consumers (st_accel, st_gyro,
+st_pressure, st_lsm6dsx and others) are unaffected because their
+channel specs already declare IIO_LE and the LE path is unchanged.
 
+While restructuring the branches, replace the previously implicit
+silent-success-with-uninitialised-*data fall-through for
+byte_for_channel outside 1..3 with an explicit return -EINVAL. No
+in-tree ST sensor publishes such a channel, but the new behaviour
+is strictly safer than handing userspace garbage.
+
+Fixes: 23491b513bcd ("iio:common: Add STMicroelectronics common library")
+Cc: stable@vger.kernel.org
 Assisted-by: Claude:claude-opus-4-7 sparse smatch clang-analyzer coccinelle checkpatch
 Assisted-by: Sashiko:claude-opus-4-7
 Signed-off-by: Herman van Hazendonk <github.com@herrie.org>
 ---
- drivers/iio/magnetometer/st_magn_core.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ drivers/iio/common/st_sensors/st_sensors_core.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/iio/magnetometer/st_magn_core.c b/drivers/iio/magnetometer/st_magn_core.c
-index ef348d316c00..6f369e8dddea 100644
---- a/drivers/iio/magnetometer/st_magn_core.c
-+++ b/drivers/iio/magnetometer/st_magn_core.c
-@@ -10,6 +10,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-+#include <linux/property.h>
- #include <linux/sysfs.h>
- #include <linux/iio/iio.h>
- #include <linux/iio/sysfs.h>
-@@ -608,6 +609,7 @@ int st_magn_common_probe(struct iio_dev *indio_dev)
- 	struct st_sensor_data *mdata = iio_priv(indio_dev);
- 	struct device *parent = indio_dev->dev.parent;
- 	struct st_sensors_platform_data *pdata = dev_get_platdata(parent);
-+	const char *propname;
- 	int err;
+diff --git a/drivers/iio/common/st_sensors/st_sensors_core.c b/drivers/iio/common/st_sensors/st_sensors_core.c
+index dbc5e16fbde4..76f91696f66a 100644
+--- a/drivers/iio/common/st_sensors/st_sensors_core.c
++++ b/drivers/iio/common/st_sensors/st_sensors_core.c
+@@ -498,6 +498,7 @@ static int st_sensors_read_axis_data(struct iio_dev *indio_dev,
+ 	u8 *outdata;
+ 	struct st_sensor_data *sdata = iio_priv(indio_dev);
+ 	unsigned int byte_for_channel;
++	u32 tmp;
  
- 	indio_dev->modes = INDIO_DIRECT_MODE;
-@@ -628,6 +630,36 @@ int st_magn_common_probe(struct iio_dev *indio_dev)
- 	mdata->current_fullscale = &mdata->sensor_settings->fs.fs_avl[0];
- 	mdata->odr = mdata->sensor_settings->odr.odr_avl[0].hz;
+ 	byte_for_channel = DIV_ROUND_UP(ch->scan_type.realbits +
+ 					ch->scan_type.shift, 8);
+@@ -508,12 +509,22 @@ static int st_sensors_read_axis_data(struct iio_dev *indio_dev,
+ 	if (err < 0)
+ 		return err;
  
-+	/*
-+	 * Skip fixed-FS chips (fs.addr == 0): no register to switch.
-+	 * The binding rejects the property on these compatibles too;
-+	 * the gate guards stale DTBs.
-+	 */
-+	propname = "st,fullscale-milligauss";
-+	if (mdata->sensor_settings->fs.addr &&
-+	    device_property_present(parent, propname)) {
-+		struct st_sensor_fullscale *fs = &mdata->sensor_settings->fs;
-+		u32 fs_mg;
-+		int i;
-+
-+		err = device_property_read_u32(parent, propname, &fs_mg);
-+		if (err)
-+			return err;
-+
-+		for (i = 0; i < ST_SENSORS_FULLSCALE_AVL_MAX; i++) {
-+			if (!fs->fs_avl[i].num)
-+				break;
-+			if (fs->fs_avl[i].num == fs_mg) {
-+				mdata->current_fullscale = &fs->fs_avl[i];
-+				break;
-+			}
-+		}
-+		if (mdata->current_fullscale->num != fs_mg)
-+			dev_warn(parent, "%s=%u not supported, using %u\n",
-+				 propname, fs_mg,
-+				 mdata->current_fullscale->num);
+-	if (byte_for_channel == 1)
+-		*data = (s8)*outdata;
+-	else if (byte_for_channel == 2)
+-		*data = (s16)get_unaligned_le16(outdata);
+-	else if (byte_for_channel == 3)
+-		*data = (s32)sign_extend32(get_unaligned_le24(outdata), 23);
++	if (byte_for_channel == 1) {
++		tmp = *outdata;
++	} else if (byte_for_channel == 2) {
++		if (ch->scan_type.endianness == IIO_BE)
++			tmp = get_unaligned_be16(outdata);
++		else
++			tmp = get_unaligned_le16(outdata);
++	} else if (byte_for_channel == 3) {
++		if (ch->scan_type.endianness == IIO_BE)
++			tmp = get_unaligned_be24(outdata);
++		else
++			tmp = get_unaligned_le24(outdata);
++	} else {
++		return -EINVAL;
 +	}
-+
- 	if (!pdata)
- 		pdata = (struct st_sensors_platform_data *)&default_magn_pdata;
++	*data = sign_extend32(tmp, BYTES_TO_BITS(byte_for_channel) - 1);
  
+ 	return 0;
+ }
 
 -- 
 2.43.0
