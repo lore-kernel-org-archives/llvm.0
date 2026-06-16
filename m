@@ -1,186 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E9B305688;
-	Tue, 16 Jun 2026 23:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781652130; cv=none; b=Z+cGHKocU+5MJ1i4UKdn27Iwl7QBSvJhdQTQcvqwF/dN5ngDKpqC9mouvX4s+kjkaIpNMhcc+4BmIccO7n2zMNA+8VO70VCj3ZJiJ8ISIkxOw0Qvc4oMNoqFm9pFAOGGwgmzFc8m0mBJP4FBh6uj2pXX1WxOa4pyB2O8buOmVTQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781652130; c=relaxed/simple;
-	bh=GyE5uA4olrbaPtqP2oiu58Jful2NL60LJJpCkTJR/L4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QhzbGJH0Yd2GKS/7F11CvpxZMzuIFaHsoo0G2WeM7T+R/IBxmR6GnyashaRopUgFdL9BIP7yOaLNm5zLoM5gmBaunA/V2dTFfPe3NSp/Dm9XlSVex67VAKRVxgGUBqEXSqWRnwk3jrtNW2K0L1ZSYr1y0oe6/K1OViDwk0qaO4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bbB8+IZU; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8DD35F184
+	for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 23:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781652841; cv=pass; b=glrQqminvGaU9WRu4kPiXH6TXP879fM/QmCZf76gdZZpNVeIpZ4i1/ddZkNY4uRZwsQgoGFddtRT9NUvl/3ZBEeNxbsHnJANRMsTNdeuKnHZH0fYoKMA7tqes25+4B8LmC7HyBPOnc1udZIuhQCyGdDL4TCOuhA+1FI1NP91KIo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781652841; c=relaxed/simple;
+	bh=DKyvv7X/1O6yRPGIXxYIhYBpUwPyJTAh5/xcF5c7gS8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=ejcZjG2bYQOnWs+XacpeETg1XoX1IZEqesXQSVYvEuhBg6I4lqD5QTWwMa5UAK7ZOrmqWOJ32i1KJMDJDcx3VamPDXVs1DAzPXLZd5hVbyghXsgtoYh+Mw0YehEMixTgnAUjCUPp5RGrrVJSzGb7CWiwGT+OsO+RQXJkCZWhn0I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T66KjqCL; arc=pass smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bbB8+IZU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781652128; x=1813188128;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GyE5uA4olrbaPtqP2oiu58Jful2NL60LJJpCkTJR/L4=;
-  b=bbB8+IZUNOnKLnh8z8JxPLCdidvUUULcZXCc6NTZCQwADQwW3aEv9aok
-   KlEVlyRrs0ztf/WAzzx7omw3ZXXilDSd+ypBu8S5/YGQxXXJvFchnMVUr
-   OFRAsxzJ9K+PwVkOIsO+V5fyiQNUGNd3BnenSanPHx6CDR7WOTsNBfik1
-   CyNzKknypHzGk13yHmIqoeK90VGUBkzodesVEoOygn4XtvCmC7tuLy2lR
-   iIwGfANSxPZaOnqPWDxDU+tCZNqwugenISbh6xWCu0AuLD+O28oa2AOgi
-   HdEM9uSfjPu7sRswcF0MRP1ScUZ2QiN1zsK8HkazrElS02zmYOl8ZA4EP
-   A==;
-X-CSE-ConnectionGUID: RMeTX1JXSgigMy/IaUTT0A==
-X-CSE-MsgGUID: NZz5fsn5TJKNrjhxugpjSA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="93925540"
-X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="93925540"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 16:22:07 -0700
-X-CSE-ConnectionGUID: J8SF3DM0T72Ix1jcAp/BmA==
-X-CSE-MsgGUID: naagT6PYQUi8gC/+FJOFJg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,208,1774335600"; 
-   d="scan'208";a="286018154"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 16 Jun 2026 16:22:06 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wZd6Z-000000005F3-2MGP;
-	Tue, 16 Jun 2026 23:22:03 +0000
-Date: Wed, 17 Jun 2026 01:22:02 +0200
-From: kernel test robot <lkp@intel.com>
-To: Robert Malz <robert.malz@canonical.com>, anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] ice: retry reading NVM if admin queue returns EBUSY
-Message-ID: <202606170137.V0sCfQSf-lkp@intel.com>
-References: <20260616104521.1545053-1-robert.malz@canonical.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T66KjqCL"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-460166910e6so2726970f8f.2
+        for <llvm@lists.linux.dev>; Tue, 16 Jun 2026 16:34:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1781652839; cv=none;
+        d=google.com; s=arc-20240605;
+        b=R11+vneECrty1HhUFyZuv8UqO1VKOId9SnFRM5+sjzkIMq8ZoxtT3RKVPJ4KEMCqDL
+         bjh8iWhaXmz47g4i10mYCXpBPoAPaLGad3tynFuEGMvFBjRaPvtndwc+vQV5ohfbKohq
+         oqKIS2BKS6fwSto8emQ11oB5KbSIcZLA7FfKw+Wr8W/Q5i4GpZJQYWZqhXG4Q1InWit2
+         zivzBWxDzV/8iW9gQpfniormkiDbbi1SrTiMO1FUYWrl10/d7QX6wpE7atBFTl1lbRYc
+         PScuB8+0kR9zw8nJUNSLRumgTYPehvMZ81li+h9IcTS1gC03SRdRMnVALBkwWcoTOKws
+         SHbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=KsK+QKnuC5Vq0SpReeobu7Qpix4EALGeyH0amQRwOPQ=;
+        fh=Q1rCdga5KEOqnwsZK1MmGZECVU38QS96EzyY5s2wL58=;
+        b=BIQ9yfUhsF2Ki7lwyNEG1O4QEfKO5Gz6U/qwQ2pOcufTyQNdchQ/B1yiKjEvIuMs5f
+         qm8qzPJSnKzNgt+DuIHQisiUJ6Mtkv8Cgb9l1MDS6T3KkPaatYjqJ02wAJKz1uOoKLih
+         WezOXKZIHvleFD1R6HFybNw2E0UjcUlBTw4EMrhAEeNZWPBHqo309lYOUG7QR0ESWPVj
+         EvhQgDcqOMBk6cJIejQlsCr+OLNY453XzIsxqyV6QNrlERHV0EOPbffvdo0FxrgYvX1e
+         rSe0WGW3+YDvKiY5m8EmpTh8+sBCp0SSP1SdMYYV0kfW2KG7LA7mNzOsj9Jg8d2NVygu
+         OqSw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1781652839; x=1782257639; darn=lists.linux.dev;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=KsK+QKnuC5Vq0SpReeobu7Qpix4EALGeyH0amQRwOPQ=;
+        b=T66KjqCLCY7JP+UcrLrQJzcWH/cbo6ZDN0+/HuOoV2Q1eu6Wj+rhUSYvXHdTFspztX
+         b/ylTyJqln61/c5jAZ2ntchoVcjmivE/3rgOxTfJkzwKwV+6iIQzuyfQs+V24lcnKVx4
+         ywtdcuLPaT8sRm2Kv9ua25SLnZHi+0B2xxFjCrG84cpm4oaPurfSW9GCiTVJMe28APuN
+         W7+FsUWLEZvrqiRhvlHerl4OqYLjMIeRxELlHOS5glTfEeQLSijJ9eJrOz8CZHDuzzuw
+         5kFOHVhPu9wt6j8HjZLHl57JRWGpE6W3s9YS+eYjZS5KlvqEPA9R1t3xTMJ2FW6tcYPL
+         l7ZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1781652839; x=1782257639;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KsK+QKnuC5Vq0SpReeobu7Qpix4EALGeyH0amQRwOPQ=;
+        b=S0WVjM4ia78v9m/Vp97LKFXPmbEIx7pwbAr21thgsKtpFEGxHYezvf+J0hja5C0PHj
+         SLRwGOgrPHs/7H/QhXJKrBFml+/tWfXPqVW6ApQqpmTxsE4APinhf+KwR3DrkpDf/u/E
+         9OrUUUtjOY0ZHI6Bwy4APhTjhAup1Vt7+rOiBI0Cg+5K4kGmWROwAfLSNMNnmlVp8ckd
+         hEH8CB+Gaq3EMWaOhAVPCr3e5mTT0bthx5XYvohJ0nlqF+XjiqJtgKY8un/b5o2J1PLj
+         Hwu92fTXr2swRAA2Tp2OFRopSOfUr65R+0Y3g+PNNo+CHIRd8A0spc+yY6BjpolWVCYW
+         d/1w==
+X-Gm-Message-State: AOJu0Yz3iOTkAYxsFOQGy1m5Z3sgNFmPIPHmLg11ffJbkzSXSL7Nh6SS
+	hE9II9lmCpPFmvRStl59jPd8yMUJyWDACXPj4PCSa//Z3PcU9hl8Jkf55a4CiCzchmcC4rkj13B
+	pb790vn7hwZ55wTWgg+AF0pxmlRkqgmSlWIaFrI2bKCeFF8eNji+SSsMIXLY=
+X-Gm-Gg: AfdE7ckBoU0PU1khVseBKwTQZrbrnFi7S4VRzH2NeZsWRiNQocx5Uq5tTECW8PbWQMR
+	N94ce6mqBMIz5F6C2lg5awYmCjPgd20UyTO8YidXPH8nn5wIf90rx+TMK4rkGXD1wUOoEL+5pvz
+	n8CFpa2u9qzk2ocmPIHsz5Teky0Ntd9slLTVaREJM5jxGMjkRSPvlmHXy/SyRLy0FX4YtUGw5GM
+	/FQGviOiCg9awcBepuDTHUcYJtBLiwip7p/MAs+i6sBvKLwXzN+NkJUQaWJkmz2doNQRi7o998D
+	NDcHV5+c3wkw2bznhSEb8FYiCZKpznPEq5fFhQ==
+X-Received: by 2002:a05:6000:4023:b0:43c:fc5c:a9fe with SMTP id
+ ffacd0b85a97d-46238ac9fc7mr2706693f8f.20.1781652838343; Tue, 16 Jun 2026
+ 16:33:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260616104521.1545053-1-robert.malz@canonical.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Tue, 16 Jun 2026 16:33:46 -0700
+X-Gm-Features: AVVi8Cd1Pv0u-agErODGGz4n0VeOE5HBOiwCTfSeg8OAKyD6UT5oVpWjALN_F0s
+Message-ID: <CAKwvOdm3w0TbDHL3JwBH3YUAQrc6gVr9Vp1fDAQj1xcCu1gaqQ@mail.gmail.com>
+Subject: CFP: Toolchains Track at Linux Plumbers Conf '26
+To: clang-built-linux <llvm@lists.linux.dev>, LKML <linux-kernel@vger.kernel.org>, 
+	rust-for-linux <rust-for-linux@vger.kernel.org>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Robert,
+My colleague Jose Marchesi and I would like to announce that the Call
+For Papers (CFP) is now open for the Toolchains Track at Linux
+Plumbers Conference 2026.
 
-kernel test robot noticed the following build errors:
+This year, Plumbers will take place in Prague, Czechia from Monday
+October 5th to Wednesday October 7th.  Please see
+https://lpc.events/event/20/ for more info
+about the event.
 
-[auto build test ERROR on tnguy-next-queue/dev-queue]
-[also build test ERROR on tnguy-net-queue/dev-queue linus/master v7.1 next-20260616]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The aim of the Toolchains track is to fix particular toolchain issues
+which are of the interest of the kernel and, ideally, find solutions
+in situ, making the best use of the opportunity of live discussion
+with kernel developers and maintainers. In particular, this is not
+about presenting research nor abstract/miscellaneous toolchain work.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Robert-Malz/ice-retry-reading-NVM-if-admin-queue-returns-EBUSY/20260616-185349
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20260616104521.1545053-1-robert.malz%40canonical.com
-patch subject: [PATCH] ice: retry reading NVM if admin queue returns EBUSY
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260617/202606170137.V0sCfQSf-lkp@intel.com/config)
-compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project f43d6834093b19baf79beda8c0337ab020ac5f17)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260617/202606170137.V0sCfQSf-lkp@intel.com/reproduce)
+The track will be composed of activities, of variable length depending
+on the topic being discussed. Each activity is intended to cover a
+particular topic or issue involving both the Linux kernel and one or
+more of its associated toolchains and development tools. This includes
+compiling, linking, assemblers, debuggers and debugging formats, ABI
+analysis tools, object manipulation, applied machine learning, etc.
+Few slides shall be necessary, and most of the time shall be devoted to
+actual discussion, brainstorming and seeking agreement.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606170137.V0sCfQSf-lkp@intel.com/
+To submit a proposal, please visit the below.  Click "Submit new
+abstract" then make sure to select "Toolchains Track" under the
+"Track" dropdown.
 
-All errors (new ones prefixed by >>):
+https://lpc.events/event/20/abstracts/
 
->> drivers/net/ethernet/intel/ice/ice_nvm.c:101:37: error: use of undeclared identifier 'ICE_AQ_RC_EBUSY'; did you mean 'LIBIE_AQ_RC_EBUSY'?
-     101 |                         if (hw->adminq.sq_last_status != ICE_AQ_RC_EBUSY ||
-         |                                                          ^~~~~~~~~~~~~~~
-         |                                                          LIBIE_AQ_RC_EBUSY
-   include/linux/net/intel/libie/adminq.h:380:2: note: 'LIBIE_AQ_RC_EBUSY' declared here
-     380 |         LIBIE_AQ_RC_EBUSY       = 12, /* Device or resource busy */
-         |         ^
-   1 error generated.
+Submissions close: 24 July 2026 - Speakers notified: from 31 July 2026
 
+We look forward to submissions, and hope to see you there!
 
-vim +101 drivers/net/ethernet/intel/ice/ice_nvm.c
-
-    48	
-    49	/**
-    50	 * ice_read_flat_nvm - Read portion of NVM by flat offset
-    51	 * @hw: pointer to the HW struct
-    52	 * @offset: offset from beginning of NVM
-    53	 * @length: (in) number of bytes to read; (out) number of bytes actually read
-    54	 * @data: buffer to return data in (sized to fit the specified length)
-    55	 * @read_shadow_ram: if true, read from shadow RAM instead of NVM
-    56	 *
-    57	 * Reads a portion of the NVM, as a flat memory space. This function correctly
-    58	 * breaks read requests across Shadow RAM sectors and ensures that no single
-    59	 * read request exceeds the maximum 4KB read for a single AdminQ command.
-    60	 *
-    61	 * Returns a status code on failure. Note that the data pointer may be
-    62	 * partially updated if some reads succeed before a failure.
-    63	 */
-    64	int
-    65	ice_read_flat_nvm(struct ice_hw *hw, u32 offset, u32 *length, u8 *data,
-    66			  bool read_shadow_ram)
-    67	{
-    68		u32 inlen = *length;
-    69		u32 bytes_read = 0;
-    70		int retry_cnt = 0;
-    71		bool last_cmd;
-    72		int status;
-    73	
-    74		*length = 0;
-    75	
-    76		/* Verify the length of the read if this is for the Shadow RAM */
-    77		if (read_shadow_ram && ((offset + inlen) > (hw->flash.sr_words * 2u))) {
-    78			ice_debug(hw, ICE_DBG_NVM, "NVM error: requested offset is beyond Shadow RAM limit\n");
-    79			return -EINVAL;
-    80		}
-    81	
-    82		do {
-    83			u32 read_size, sector_offset;
-    84	
-    85			/* ice_aq_read_nvm cannot read more than 4KB at a time.
-    86			 * Additionally, a read from the Shadow RAM may not cross over
-    87			 * a sector boundary. Conveniently, the sector size is also
-    88			 * 4KB.
-    89			 */
-    90			sector_offset = offset % ICE_AQ_MAX_BUF_LEN;
-    91			read_size = min_t(u32, ICE_AQ_MAX_BUF_LEN - sector_offset,
-    92					  inlen - bytes_read);
-    93	
-    94			last_cmd = !(bytes_read + read_size < inlen);
-    95	
-    96			status = ice_aq_read_nvm(hw, ICE_AQC_NVM_START_POINT,
-    97						 offset, read_size,
-    98						 data + bytes_read, last_cmd,
-    99						 read_shadow_ram, NULL);
-   100			if (status) {
- > 101				if (hw->adminq.sq_last_status != ICE_AQ_RC_EBUSY ||
-   102				    retry_cnt > ICE_SQ_SEND_MAX_EXECUTE)
-   103					break;
-   104				ice_debug(hw, ICE_DBG_NVM,
-   105					  "NVM read EBUSY error, retry %d\n",
-   106					  retry_cnt + 1);
-   107				last_cmd = false;
-   108				ice_release_nvm(hw);
-   109				msleep(ICE_SQ_SEND_DELAY_TIME_MS);
-   110				status = ice_acquire_nvm(hw, ICE_RES_READ);
-   111				if (status)
-   112					break;
-   113				retry_cnt++;
-   114			} else {
-   115				bytes_read += read_size;
-   116				offset += read_size;
-   117				retry_cnt = 0;
-   118			}
-   119		} while (!last_cmd);
-   120	
-   121		*length = bytes_read;
-   122		return status;
-   123	}
-   124	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Thanks,
+~Nick Desaulniers
