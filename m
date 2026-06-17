@@ -1,93 +1,197 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from omta40.uswest2.a.cloudfilter.net (omta40.uswest2.a.cloudfilter.net [35.89.44.39])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4032330EF6C;
-	Wed, 17 Jun 2026 19:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EF1A3AB29C
+	for <llvm@lists.linux.dev>; Wed, 17 Jun 2026 20:11:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781724254; cv=none; b=eOcSBjEEuhVknE+zhnxRofdKzjVp+8ZgruLNh+wF1oqFnNpVVpshMeVp7Fsi8HdesWUIAu9aK2Xr2Q8jufDrzxaH8sgpkSElzJSrFOVqAUX4YZHOmzf++RkjXpefwnfMqBE8q/RKulXyzqKjxzZS1mSjdSOP1C0qNxKbRYAjc6Q=
+	t=1781727092; cv=none; b=q1K6xJIAWTCwNHDNOvq+uEbiXegfoU//qboZCVO/egRTW1ejp83BAgjTRgPA4hn0zKKuh7QQswluyvNRyl+QIRmso8M/FDyJI9N3EvNG9f01cAL24do/30pROD78DcYHswr4Qv3qTK5Px0W5OxRIOVcD0I4i8pBjLS1Nnk8fGfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781724254; c=relaxed/simple;
-	bh=qFK2G9/Yl6Bi7bKYooGj0b3EilYUtFQhV33nLaZE26Y=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=DP/06v0iFLeECHKDSDxoaUMuaYBaONsoqufSJeIsNLRYJ6yyWvD+PD77qOUZ9H4gQrebr1K7cRRBxO2LGNUp2G7J1HEOMwxPvIpuBPqqGfHmO986j/nF3zBuIQM2Pu1x1w//tURxnS2MRZZmrT0HQBKMlLVOTZNvKaTcQLKPyHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G7nmCUC7; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781727092; c=relaxed/simple;
+	bh=36+PfgVOCJz9I5g25FTpnJjvcwXaWyeCjgldF1a0y7I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cEEa8pN0wF+oCwW68SHqRecbh2wfnBqyb4hY8izigvGWpkBChvPvLb6qCp6uzbmUq2bP7gjuTGmPuYvexAoTz7bufbmW1e1dWHY07gPckGDTUfMOTWpUZidZ8G7EAUNjIsN5XhQM80WyhC21KPpUw/zSAW/hEzRsiAo16+Xx05Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=StymiaLZ; arc=none smtp.client-ip=35.89.44.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G7nmCUC7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781724252; x=1813260252;
-  h=date:from:to:cc:subject:message-id;
-  bh=qFK2G9/Yl6Bi7bKYooGj0b3EilYUtFQhV33nLaZE26Y=;
-  b=G7nmCUC7uI1Jlquy2RFDJO9rDlmPvBJKnvC25s/KGc9T1uwCu24gbhHE
-   rOjxbvkMlZyVhit5Ae1AyeUAJvKU5qISznMBIn+t4OZhPu1JchJYecY2Q
-   l9U+oPM13zLRiuaoem+s4RcZS68OFqsf9HglrMXKR4+w9jJGyT4WjQ32Z
-   9d6O20LPuomB0pdLHD0vVwDXlpT0HfuVPh1gPkQMBd9CUperr+MJoCnZg
-   IzglHaYIZSwkiH6/YHH/V4zBfE1zpwZheSHxujgmg6oE/drbFw2SUIRY6
-   R4aoJ+anOUKC+papBH34y/hKFm/eyOrXeEOCTnoUFxoW2Gn2wZG/XjmIt
-   Q==;
-X-CSE-ConnectionGUID: sjBdT8GDR/aeOCUFLdwNkg==
-X-CSE-MsgGUID: DBaxJHcsTh+8fdI9U2D8wg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11820"; a="86382330"
-X-IronPort-AV: E=Sophos;i="6.24,210,1774335600"; 
-   d="scan'208";a="86382330"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2026 12:24:11 -0700
-X-CSE-ConnectionGUID: nTmzT0TbT9m/TVHaUuBpng==
-X-CSE-MsgGUID: kcLd8BhHRQ2v8zHmqTx/sA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,210,1774335600"; 
-   d="scan'208";a="253120427"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 17 Jun 2026 12:24:10 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wZvrr-00000000UvG-1SD8;
-	Wed, 17 Jun 2026 19:24:07 +0000
-Date: Thu, 18 Jun 2026 03:23:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Drew Fustini <fustini@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Adrien Ricciardi <aricciardi@baylibre.com>
-Subject: [fustini:cbqri-cache-alloc-dt 6/9]
- drivers/resctrl/cbqri_resctrl.c:760:25: warning: variable 'cbqri_cpuhp_state'
- set but not used
-Message-ID: <202606180357.Sg4Ghszc-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="StymiaLZ"
+Received: from eig-obgw-6005b.ext.cloudfilter.net ([10.0.30.162])
+	by cmsmtp with ESMTPS
+	id Zw5bwbsVmjgweZwaBwM95U; Wed, 17 Jun 2026 20:09:55 +0000
+Received: from gator4166.hostgator.com ([108.167.190.91])
+	by cmsmtp with ESMTPS
+	id Zwa3w5JdFTzOdZwa3w5j7O; Wed, 17 Jun 2026 20:09:48 +0000
+X-Authority-Analysis: v=2.4 cv=FbE3xI+6 c=1 sm=1 tr=0 ts=6a32ff13
+ a=vY9Mjuda9oMEc2E4Cx1x2A==:117 a=vY9Mjuda9oMEc2E4Cx1x2A==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
+ a=pGLkceISAAAA:8 a=P8mRVJMrAAAA:8 a=mo7Kl4tTlkleSoc0kBUA:9 a=QEXdDO2ut3YA:10
+ a=Vc1QvrjMcIoGonisw6Ob:22 a=2aFnImwKRvkU0tJ3nQRT:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=qt2TBGgT0bGtpqlS+Vx9gxbeasYa2lJIaTGRkbloxyg=; b=StymiaLZM5OJYxj7Rg11G9QXlQ
+	OsiofZK7qxxwbZEeTH/JdyMTD1O5/SkowgUfUYaAR8WwXqgNN9CMicQleDqZUQf67uSyW4ZPO9TMQ
+	wfj8fMN+OYSr+OlSKOgiMyC1DR3ffPT1h5dI4LTw1tZf6UxDu7lZ5gbjsjyWYw5YkJJcHaJJf+Hsf
+	2aMRdwDBirbpUiOMgH1KkVVlNCklxLBMudhDYVAtYeoV+BHP1w9PJJnT55wuFlPtwobDcZ2mGIPND
+	UoSpEaj8GcYePyxS5g/6HsVjc8P4ixO7hYV3YRg8aBn4+j/8tkVk87PXAC6phzFohtL16g8xHa1o+
+	eUo3umTg==;
+Received: from [177.238.16.65] (port=57678 helo=[192.168.0.12])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.99.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1wZwYb-000000037XB-2Mbf;
+	Wed, 17 Jun 2026 15:08:17 -0500
+Message-ID: <9e941b82-23d4-44e6-a240-b7949ace76ab@embeddedor.com>
+Date: Wed, 17 Jun 2026 14:08:07 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] net: dst_metadata: fix false-positive memcpy overflow
+ in tun_dst_unclone
+To: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, Johan Thomsen <write@ownrisk.dk>
+References: <20260616100332.1308294-1-i.maximets@ovn.org>
+Content-Language: en-US
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+In-Reply-To: <20260616100332.1308294-1-i.maximets@ovn.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 177.238.16.65
+X-Source-L: No
+X-Exim-ID: 1wZwYb-000000037XB-2Mbf
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.0.12]) [177.238.16.65]:57678
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfCdWNEjJ28mYyp8vGbAmJV49ZcmUkellfbp1GrYRKpOhYgO7J1FUL/gFqA6xejymFYp3QSmtOkw+ZVPobelvnFHBqsE+JfUwmmIyRrrGDbbMv15Q9zjB
+ 4qcfRuIpFF+CsVBFRqM3YvKpYkF8qDDWzBsf7xJUYc9FcevVwTsFlIKcsAAkgdjfHWitrMglYnn2PiuAeXpogQf2CO9tW4oIPNw=
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git cbqri-cache-alloc-dt
-head:   0dcf47d709583f17b82dac6c73d3c8c98903438d
-commit: 22e84e93d007cadb6ad0d51a830ab3a9cefabf65 [6/9] riscv_cbqri: resctrl: Add cache allocation via capacity block mask
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260618/202606180357.Sg4Ghszc-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e19d1f51a2c80b63cd8ca95bcc757b7077112808)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260618/202606180357.Sg4Ghszc-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606180357.Sg4Ghszc-lkp@intel.com/
+On 6/16/26 04:03, Ilya Maximets wrote:
+> kmalloc_flex() in metadata_dst_alloc() sets __counted_by for the
+> structure to the options_len, which is then initialized to zero.
+> Later, we're initializing the structure by copying the tunnel info
+> together with the options, and this triggers a warning for a potential
+> memcpy overflow, since the compiler estimates that the options can't
+> fit into the structure, even though the memory for them is actually
+> allocated.
+> 
+>   memcpy: detected buffer overflow: 104 byte write of buffer size 96
+>   WARNING: CPU: X PID: Y at lib/string_helpers.c:1036 __fortify_report
+>    skb_tunnel_info_unclone+0x179/0x190
+>    geneve_xmit+0x7fe/0xe00
 
-All warnings (new ones prefixed by >>):
+This warning has nothing to do with counted_by. See below for more
+comments.
 
->> drivers/resctrl/cbqri_resctrl.c:760:25: warning: variable 'cbqri_cpuhp_state' set but not used [-Wunused-but-set-global]
-     760 | static enum cpuhp_state cbqri_cpuhp_state;
-         |                         ^
-   1 warning generated.
+> 
+> The issue is triggered when built with clang and source fortification.
+> 
+> Fix that by doing the copy in two stages: first - the main data with
+> the options_len, then the options.  This way the correct length should
+> be known at the time of the copy.
+> 
+> It would be better if the options_len never changed after allocation,
+> but the allocation code is a little separate from the initialization
+> and it would be awkward and potentially dangerous to return a struct
+> with options_len set to a non-zero value from the metadata_dst_alloc().
+> 
+> Another option would be to use ip_tunnel_info_opts_set(), but it is
+> doing too many unnecessary operations for the use case here.
+> 
+> Fixes: 69050f8d6d07 ("treewide: Replace kmalloc with kmalloc_obj for non-scalar types")
+> Reported-by: Johan Thomsen <write@ownrisk.dk>
+> Closes: https://lore.kernel.org/netdev/CAKv6aAM8_EWgXScnKmKYm_4SwGDVBK++dzfP+Y6msUXbp99QUw@mail.gmail.com/
+> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+> ---
+> 
+> Johan, if you can test this one in your setup as well, that would
+> be great.  Thanks.
+> 
+>   include/net/dst_metadata.h | 7 +++++--
+>   1 file changed, 5 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+> index 1fc2fb03ce3f..f45d1e3163f0 100644
+> --- a/include/net/dst_metadata.h
+> +++ b/include/net/dst_metadata.h
+> @@ -164,8 +164,11 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+>   	if (!new_md)
+>   		return ERR_PTR(-ENOMEM);
+>   
+> -	memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
+> -	       sizeof(struct ip_tunnel_info) + md_size);
 
+What's going on here is that, internally, fortified memcpy() retrieves
+the destination size via __builtin_dynamic_object_size() in mode 1.
 
-vim +/cbqri_cpuhp_state +760 drivers/resctrl/cbqri_resctrl.c
+That is:
 
-   758	
-   759	/* Saved cpuhp slot from cpuhp_setup_state() for symmetric removal. */
- > 760	static enum cpuhp_state cbqri_cpuhp_state;
-   761	
+__builtin_dynamic_object_size(&new_md->u.tun_info, 1)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+For the above case, Clang returns sizeof(new_md->u.tun_info) == 96.
+
+So the warning is reporting that 104 bytes don't fit in an object of
+size 96 bytes, regardless of any counted_by annotation or allocation.
+
+Of course, in this case, the write of 104 bytes into new_md->u.tun_info
+is intentional and controlled, but what if it weren't?
+
+On the other hand, for this same case, GCC currently returns SIZE_MAX,
+which translates to -1 inside fortified memcpy(). Thus, bounds-checking
+is bypassed, which is why this warning doesn't show up with GCC.
+
+However, this is a bug in GCC. We're already looking into that.
+
+I think we've had just a handful of cases like this across the whole
+kernel tree. We can deal with them as you did here (by directly copying
+the composite structure first, and then using memcpy() to copy into the
+flexible-array member). If these cases ever become more common, we
+could create some kind of helper to do both things at once. :)
+
+> +	/* Copy in two stages to keep the __counted_by happy. */
+
+So based on my comments above, this code comment is not correct.
+
+> +	new_md->u.tun_info = md_dst->u.tun_info;
+
+This is fine.
+
+> +	memcpy(ip_tunnel_info_opts(&new_md->u.tun_info),
+> +	       ip_tunnel_info_opts(&md_dst->u.tun_info), md_size);
+
+Is ip_tunnel_info_opts() really needed here?
+
+Probably this works just fine:
+
+memcpy(new_md->u.tun_info.options, md_dst->u.tun_info.options, md_size);
+
+-Gustavo
