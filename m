@@ -1,40 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1CA285C91;
-	Wed, 17 Jun 2026 02:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA83B2F8EB1;
+	Wed, 17 Jun 2026 04:02:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781662704; cv=none; b=kuzs5O3rRwAW/Z3GsZRS2bPXIKnNNgT3mBwZCimw1NYQuP3uQQJ7dcptOxdLFP26Oid4pnTlq+fldp1S5Fhmkn/VA+0jSsfKOBk0tkIOSpUWKn4ir6sdInVVC40nabhmiqBj9T3Vqa8xUBgguV6C0lEVmY8t93Q8Ex9tGLSRJHU=
+	t=1781668968; cv=none; b=ncxhywvkhBGLGljIMqndItCUwoogNWPJBLjkD4zER6lnvvOtR4F7cXqRqhso+ejrWxPlXkF4w/4LvvmPQ4gRHuXxCLRjqNx+gvB1wL9DxSrJKEfUcMWP211u8tsdxWLwe/bs2IgAKSfz+d2Cv0/bFUv1lMdG0RA4ZtRZMttaxqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781662704; c=relaxed/simple;
-	bh=6S6kinNKyzwHcoCOniSnCBO1ZlMA70LU6tH0h2I5rZ4=;
+	s=arc-20240116; t=1781668968; c=relaxed/simple;
+	bh=v3TRQLO8OadiC0coQqe0mnaIFhzyOjLMbqXK3aHjIyw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xih0eeDcMT1kO/n3kbInsPO8kQj3hL9FtU9TNIqToXSHIV/HIBpiBhvGdwaGo03vNXaz5lfSf347i/3A/z1dU966bzmyWMXOeyYsdD0YY9Bw1bSNn1WMo84jggbKIDPYaRKoAos0FmsIN2tl+vLcSN2Kbei+2C3C8eg5ki+zlmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eRRd+A4O; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nzy2LHubtaLyK7/+fjHNshRDX9vXOpUDtu8AVo7T8dp6uZwGxqqBoBpqttx6Fi2+Cs72K1jYYKIKPV8zfRZsD+R82MLL5K1FSqCBr6u4cK9/J3v1CLu+qnKGeeA+JKhZORem44ilodKyfdpc2NtrNM0ypO52ZcmoKnqX3AEnSR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2Da2TKl; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eRRd+A4O"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 027EB1F000E9;
-	Wed, 17 Jun 2026 02:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781662703;
-	bh=CLnwqe+ZNG2WjhNx2D80eaOAWjk+a9gmduqjXe3G6yE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=eRRd+A4OcJffG/ZSnrsoIRrPdKLAmVOtZXuu7ZEC9pO+KF2thJ5jrk1367RWjoNcq
-	 e+upgtiMfva5wGOH+UyOM6WWUOR9wg9kNuTF1m70pbUV2A196YxCOFiNPjcZ8RCA9e
-	 qurv/fjvMjcptaOjsEScfTkmqyrLGsb0IVFw96mzDDovUw6whokj+bljGkhq1d/nZJ
-	 N5WQMJiZfzC2KZso+Zi7wUsDc4gGxQ03sK8qYxa4zNbV0LQiLcBaYUZqqSkMLc2GGl
-	 PPnh6rmeiJCABHrqfuCSvgfyHwqq7jvzrdBw694xA5LVa5n3nZx3C6Yh9Lu9lc8nS+
-	 u2p41jSFt5v8A==
-Date: Tue, 16 Jun 2026 19:18:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Christoph Hellwig <hch@infradead.org>
-Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
-Subject: Re: Prebuilt LLVM 22.1.7 uploaded
-Message-ID: <20260617021819.GA3864153@ax162>
-References: <20260602215932.GA1352412@ax162>
- <ajDcoAMsUMzwhIbs@infradead.org>
- <20260616184028.GA1828094@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2Da2TKl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781668967; x=1813204967;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v3TRQLO8OadiC0coQqe0mnaIFhzyOjLMbqXK3aHjIyw=;
+  b=X2Da2TKlrbdLZoOni55uTRbJzFJcV+kFBwH+3IU+Rxnr30BpMVJQPi9R
+   RrZk6heUGB1gIW69xoN2AJrG3gsD1cVNGcXJ43Sl/v3Jbnth0br0GdbYn
+   zDWSx9pUrDyd4cY9kP4ZBkqU5i4TjjhiuiEi9fYy0tzWVtyhV9MddoVsm
+   QhcHlz6KNGbR7fNY8JmPjk9jVyecwCydlx2skXAHKIshhy2/+w96a5BbA
+   HzqibHC+df/9rd6n6UL04BjPBQ4wzEYkOs7X44waMPU4FhwTwyrbHdAip
+   MISPvLev5AtvCi7TYreTePfS4dT9fFMV9nYttdWUZ6y3CqtzAlUSkcn2o
+   A==;
+X-CSE-ConnectionGUID: nUCdlLIURU6DR+Litl1DnQ==
+X-CSE-MsgGUID: /xCWR+sQQuKLTIGH4QrP5A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11819"; a="93121078"
+X-IronPort-AV: E=Sophos;i="6.24,209,1774335600"; 
+   d="scan'208";a="93121078"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jun 2026 21:02:46 -0700
+X-CSE-ConnectionGUID: 5WRkAdeaQhK+bvjbd87GOA==
+X-CSE-MsgGUID: FA7N4ovlQqy/Os+WzPvFWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,209,1774335600"; 
+   d="scan'208";a="248022880"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 16 Jun 2026 21:02:44 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wZhU8-00000000U4o-3KO8;
+	Wed, 17 Jun 2026 04:02:40 +0000
+Date: Wed, 17 Jun 2026 12:02:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wentao Liang <vulab@iscas.ac.cn>, bhelgaas@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	mika.westerberg@linux.intel.com, mani@kernel.org,
+	andriy.shevchenko@intel.com, kees@kernel.org, adiyenga@cisco.com,
+	vulab@iscas.ac.cn, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] PCI/PTM: fix refcount leak in pci_enable_ptm()
+Message-ID: <202606171116.hVjtUYrV-lkp@intel.com>
+References: <20260616141733.1688264-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,21 +66,108 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260616184028.GA1828094@ax162>
+In-Reply-To: <20260616141733.1688264-1-vulab@iscas.ac.cn>
 
-On Tue, Jun 16, 2026 at 11:40:28AM -0700, Nathan Chancellor wrote:
-> On Mon, Jun 15, 2026 at 10:18:24PM -0700, Christoph Hellwig wrote:
-> > Do you also plan to uoload a 23.x build now that this is required for
-> > using the context analysis feature in the kernel build?
-> 
-> Yes, I will. I plan to upload them today along with 22.1.8, I will reply
-> with links once they are live.
+Hi Wentao,
 
-These are now live.
+kernel test robot noticed the following build errors:
 
-aarch64: https://mirrors.edge.kernel.org/pub/tools/llvm/files/prerelease/llvm-23.0.0-51d823197cb40a57f25d00882546374d460c649e-20260616-024337-aarch64.tar.xz
-x86_64: https://mirrors.edge.kernel.org/pub/tools/llvm/files/prerelease/llvm-23.0.0-51d823197cb40a57f25d00882546374d460c649e-20260616-023936-x86_64.tar.xz
+[auto build test ERROR on pci/next]
+[also build test ERROR on pci/for-linus westeri-thunderbolt/next linus/master v7.1 next-20260616]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
--- 
-Cheers,
-Nathan
+url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/PCI-PTM-fix-refcount-leak-in-pci_enable_ptm/20260617-043856
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20260616141733.1688264-1-vulab%40iscas.ac.cn
+patch subject: [PATCH] PCI/PTM: fix refcount leak in pci_enable_ptm()
+config: powerpc-randconfig-002-20260617 (https://download.01.org/0day-ci/archive/20260617/202606171116.hVjtUYrV-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260617/202606171116.hVjtUYrV-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606171116.hVjtUYrV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pci/pcie/ptm.c:204:20: error: use of undeclared identifier 'parent'
+     204 |                         pci_disable_ptm(parent);
+         |                                         ^
+   1 error generated.
+
+
+vim +/parent +204 drivers/pci/pcie/ptm.c
+
+   162	
+   163	/**
+   164	 * pci_enable_ptm() - Enable Precision Time Measurement
+   165	 * @dev: PCI device
+   166	 *
+   167	 * Enable Precision Time Measurement for @dev.
+   168	 *
+   169	 * Return: zero if successful, or -EINVAL if @dev lacks a PTM Capability or
+   170	 * is not a PTM Root and lacks an upstream path of PTM-enabled devices.
+   171	 */
+   172	int pci_enable_ptm(struct pci_dev *dev)
+   173	{
+   174		int rc;
+   175		char clock_desc[8];
+   176	
+   177		/*
+   178		 * A device uses local PTM Messages to request time information
+   179		 * from a PTM Root that's farther upstream. Every device along
+   180		 * the path must support PTM and have it enabled so it can
+   181		 * handle the messages. Therefore, if this device is not a PTM
+   182		 * Root, the upstream link partner must have PTM enabled before
+   183		 * we can enable PTM.
+   184		 */
+   185		if (!dev->ptm_root) {
+   186			struct pci_dev *parent;
+   187	
+   188			parent = pci_upstream_ptm(dev);
+   189			if (!parent)
+   190				return -EINVAL;
+   191			/* Enable PTM for the parent */
+   192			rc = pci_enable_ptm(parent);
+   193			if (rc)
+   194				return rc;
+   195		}
+   196	
+   197		/* Already enabled? */
+   198		if (atomic_inc_return(&dev->ptm_enable_cnt) > 1)
+   199			return 0;
+   200	
+   201		rc = __pci_enable_ptm(dev);
+   202		if (rc) {
+   203			if (!dev->ptm_root)
+ > 204				pci_disable_ptm(parent);
+   205			atomic_dec(&dev->ptm_enable_cnt);
+   206			return rc;
+   207		}
+   208	
+   209		switch (dev->ptm_granularity) {
+   210		case 0:
+   211			snprintf(clock_desc, sizeof(clock_desc), "unknown");
+   212			break;
+   213		case 255:
+   214			snprintf(clock_desc, sizeof(clock_desc), ">254ns");
+   215			break;
+   216		default:
+   217			snprintf(clock_desc, sizeof(clock_desc), "%uns",
+   218				 dev->ptm_granularity);
+   219			break;
+   220		}
+   221		pci_info(dev, "PTM enabled%s, %s granularity\n",
+   222			 dev->ptm_root ? " (root)" : "", clock_desc);
+   223	
+   224		return 0;
+   225	}
+   226	EXPORT_SYMBOL(pci_enable_ptm);
+   227	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
