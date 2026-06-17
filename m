@@ -1,188 +1,168 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B08B36C0D6
-	for <llvm@lists.linux.dev>; Wed, 17 Jun 2026 23:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60611A6803;
+	Wed, 17 Jun 2026 23:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781739685; cv=none; b=ZUlrZ8NNQAh3jflOhey7h1z8lwhxmyLc2LWyqVJrJO98R3RZKZ+DqsHYCxDaJjz4caaCvcK+b9hFvBzwp5xqh+i9bFDMZS7hDnALVXQMr/l6lWRsUZvfPkwQl29yLx79xb06eUECX4OxlRwx4eATrX1eAiE3EuwsFt1Ksf5W9I4=
+	t=1781740455; cv=none; b=SklAbiPssYEE0+T3g17JzLNaaK1Ut/sc8fsWsRPa+sSfYBz+rwuAb0ZhO17mjQJIRtPYzSz3G2CLn9VmUFw6fSRa45/Y+H+loNMiTrN3pVPpzJT1tKUhtyZC3u++C9bLpgFFSqV6EVHG9iupe4f0YNHB22oEnRrRkOHf5p/xXe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781739685; c=relaxed/simple;
-	bh=1xxApD3Hb5TuHMmSOnw8rBFtZGA1Y9mAEd5x7+SWaMc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oyaupslbjy2j0iRDFa7RLuS/kvQ5OJkfYkxr7mv1smFqWaZsquflDBndYMgPzed+/wJascrA1D3OzOK5VvDswe0g4TgvSZv9AENceANVQBerHqPaIR2/H4haNpYTVxaAvd2SPgC6aEjUKxVSSJv3WlrToqo/WoLHcupgL/kWtRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N8ZmzG95; arc=none smtp.client-ip=209.85.216.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1781740455; c=relaxed/simple;
+	bh=ssdTUmGDuNFtWQKnhMR6My2aGMbLPHPkSgmhYLzqwTA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=CNCHMQkqZdHG2QeT5zwvzMFfuYPX6fZH0ATPwtngOvFe8TcY2o29yt6Uv2kvnPuPrpBCn3gjdUa5tJwiv6tFHRBcidM+q4AMYKrH+PTOg9kuW3Cf8b1FY7i21Pmu9LQp2MV5y1DrKGuV4mmrvB3XBIFIf5j0/FP/2giceI3fR08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E8BCGSJd; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N8ZmzG95"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-36dac5d5da0so112320a91.2
-        for <llvm@lists.linux.dev>; Wed, 17 Jun 2026 16:41:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1781739683; x=1782344483; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=KA3VIuiaTabMHHJ9iGApHbWoluO34hyLG8PCxZjsMXM=;
-        b=N8ZmzG95ASJtMwGXTGhOd3uAFMrKUBVseujWuMaFQx7ifZiNnsogKBEZCk6bolEY1T
-         rkvKnsrzdSeb7hyipGXtqajim5D3b+KLVwovqGD6LqDr+cl/pgs+DRXhrBjm7bINK3OM
-         cbaRLM26AVQcMcUPBDho2PgEjxFDH6jWrquTfPI21p13RGj0DTARb37wyIQv3GAr2PSX
-         xWPi4StASAO0MOJI0WZy9CmI3Q+a6zNddSv9ZDQgU4EzooUTkDu8SUwL0NhGKm6BPsxL
-         MaR5wWUXjxLVjypXMxpJwDdnoVFrlVW711RuHGRW79cwCDnvDQpwmqxCRBHGwonaZgYR
-         VUAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781739683; x=1782344483;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KA3VIuiaTabMHHJ9iGApHbWoluO34hyLG8PCxZjsMXM=;
-        b=nABnPwmf4hzYQHrfZJNPxQVVMxMLzIsnyq93izeRGkjruGUf6pIwgwdc16t42RJc77
-         ofa2sHQwURXJISh6bM+E2mmCV8oHaqn/zrLZw09qbs4u58PNAuVj+RlV2IxMpA6XnI1a
-         +raq+7JKWwLU1+xp+O4JZQL8b+SRRuOLO4Kf6QzL1RZzOT5OztMsJEbnmEpw/sapFAQa
-         ityeExwyRhwQh4ZCOq7Acp2pqPKUs9vwd9oUcuv3vksw8R5BRdJTkyFXsefEmW3XfSmx
-         usAWklXSlHILPwkVeZVt8l8ibT7LwT8Dri0/X0r/onc+6wDg8Q0rkEO/VwaVHaTeYq46
-         hddg==
-X-Forwarded-Encrypted: i=1; AFNElJ+EbzkhtID8MXQP/oF1XI1vPJfpjc6cnFdQC/CTgdwRG/mTaamEfRjL3mZZI2M6e8jmi+Dn@lists.linux.dev
-X-Gm-Message-State: AOJu0YzQOm6oLwyxO7vzWsQCCxXQ4HTlcKoa9WPlPQ3AEFku018lA07v
-	JRNgbpjkbI/6ZI8RqkUmx7na5+l8hBbyZHKGXDSL5Kw4PZ7VlOH/PpKK
-X-Gm-Gg: AfdE7clDLigNpoZy3Al8XWU3Zm6yUvfwPO0w9EY/6ZiC9pecv0rd3OYDwIugEB5l5PL
-	Et0eRtMpXXsVKDcuZyMncOpAB0z5cNDYyNpuvX/T7Axe+Sm1GNYJVX8gb/88DZw5EknVPfv1RGl
-	9xcn14j46lVWlyMrjqzcQOvoXFfI+QcPfrnRrq883JOOs2Lfz2ozrlKpNlvGcHuHyq9HpD+elkP
-	uKqNk6hk948ArBY5bYwDK6OxzvmqDUzuJpl5jAcdOP4VPvvXY0wAIRvpI7put1YdDeynU8UbkWT
-	fdA5WVIKoW50brcOTQT75BFXTivPfmDFbOJ16H/aV5FCpCoMRByIfdi3hz572EqN71fo+6GpEw1
-	UDNCuW0bU9NGfQIPnQ9PCfVgOZup8YuwTMeHQLIp/CqrCeuSisRMLNo/BQc38xTJ1a3jdmozLPZ
-	vFphOpILegonTwYlb41isjKeKq3r4f15tPV4mK5ZnCN93wU/61nC/xyMiKTGrwKhJzqKilPXrEM
-	zDAaNauEvmO+lgSGPnR254S
-X-Received: by 2002:a17:90a:e7d1:b0:369:1dcf:4a46 with SMTP id 98e67ed59e1d1-37c937055c5mr5722005a91.25.1781739683447;
-        Wed, 17 Jun 2026 16:41:23 -0700 (PDT)
-Received: from ryzen ([2601:644:8000:5b5d:7305:54ba:2fb4:e198])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-37ce68cab02sm238644a91.7.2026.06.17.16.41.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Jun 2026 16:41:22 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-wireless@vger.kernel.org
-Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH ath-next] ath9k: eeprom: alias vpdTableI onto vpdTableL to shrink stack frame
-Date: Wed, 17 Jun 2026 16:41:05 -0700
-Message-ID: <20260617234105.284358-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E8BCGSJd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781740453; x=1813276453;
+  h=date:from:to:cc:subject:message-id;
+  bh=ssdTUmGDuNFtWQKnhMR6My2aGMbLPHPkSgmhYLzqwTA=;
+  b=E8BCGSJdZFqslbD47rdKKSbNXbjhUr1uRKUzlVq2/1wC3NwFOUzWl/ro
+   TVt1uaFpOS7H8+nCFYEW2d2zLUwoY6wuzWbkXEvM23zZoZK1s7nS2vG4w
+   +MS+fSTfNYdPyKJGm/5UvpWI9TYF5MAy/NQ/NbM3rZB7mskbXBTNgrjHu
+   q2/Sr1SMHXc5xNlNkTFbVDz9LYkiw4bBk1vKKk2Bxf62U+P6MfJ3bd5RJ
+   pI6iauBprAc5z5d53a+I0DBm0UDiQLIM63bf0A7zGyIx0oidxKH5JIioJ
+   RjFWnEdpBYIb2BJ3jm+mdEIC6Ub7c8wO4eTrvVtHSHejVAFoMtMFaLTwx
+   g==;
+X-CSE-ConnectionGUID: 6RlgM3BmTIOfUMjo/zrKlg==
+X-CSE-MsgGUID: CKIP8MkNS3O9QU/C1Cu62A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11820"; a="81675121"
+X-IronPort-AV: E=Sophos;i="6.24,210,1774335600"; 
+   d="scan'208";a="81675121"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2026 16:54:12 -0700
+X-CSE-ConnectionGUID: tI6pyKXFQJGvF39cO7ru3Q==
+X-CSE-MsgGUID: PklomwYJQoK2EihFk7LhPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,210,1774335600"; 
+   d="scan'208";a="253311647"
+Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 17 Jun 2026 16:54:10 -0700
+Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wa05A-00000000V2O-1awV;
+	Wed, 17 Jun 2026 23:54:08 +0000
+Date: Thu, 18 Jun 2026 07:53:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-16 326/326]
+ sound/soc/intel/boards/bytcht_da7213.c:269:12: error: call to undeclared
+ function 'snd_soc_fixup_dai_links_platform_name'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202606180734.IcRR79nF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-vpdTableL, vpdTableR, and vpdTableI are never live simultaneously.
-vpdTableL and vpdTableR are consumed during the frequency-interpolation
-step that writes vpdTableI; after the if/else they are never read
-again.  Reuse vpdTableL for the interpolated result (what was
-vpdTableI), reducing the stack frame by one 256-byte array.
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-16
+head:   5ce50ac7d0a59c6fb15e1baa7e6824ac096fe092
+commit: 347e73ad9dec0dbc10c4c7b5678981c7bf4cb422 [326/326] ASoC: soc.h: remove compatible definition
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260618/202606180734.IcRR79nF-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project e19d1f51a2c80b63cd8ca95bcc757b7077112808)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260618/202606180734.IcRR79nF-lkp@intel.com/reproduce)
 
-The read-via-write in the else branch is safe: ath9k_hw_interpolate()
-receives vpdTableL[i][j] by value as a function argument before the
-return value is written back to vpdTableL[i][j].
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606180734.IcRR79nF-lkp@intel.com/
 
-Stack frame size change (x86_64, clang):
-  before: 0x440 (1088 B)
-  after:  0x330 (816 B)
+All errors (new ones prefixed by >>):
 
-Assisted-by: opencode:big-pickle
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/net/wireless/ath/ath9k/eeprom.c | 22 ++++++++++------------
- 1 file changed, 10 insertions(+), 12 deletions(-)
+>> sound/soc/intel/boards/bytcht_da7213.c:269:12: error: call to undeclared function 'snd_soc_fixup_dai_links_platform_name'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     269 |         ret_val = snd_soc_fixup_dai_links_platform_name(card, platform_name);
+         |                   ^
+   sound/soc/intel/boards/bytcht_da7213.c:269:12: note: did you mean 'snd_soc_card_fixup_dai_links_platform_name'?
+   include/sound/soc-card.h:285:5: note: 'snd_soc_card_fixup_dai_links_platform_name' declared here
+     285 | int snd_soc_card_fixup_dai_links_platform_name(struct snd_soc_card *card, const char *platform_name);
+         |     ^
+   1 error generated.
 
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom.c b/drivers/net/wireless/ath/ath9k/eeprom.c
-index df58dc02e104..272491ae9f29 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom.c
-@@ -464,8 +464,6 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
- 	static u8 vpdTableR[AR5416_NUM_PD_GAINS]
- 		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
--	static u8 vpdTableI[AR5416_NUM_PD_GAINS]
--		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
- 
- 	u8 *pVpdL, *pVpdR, *pPwrL, *pPwrR;
- 	u8 minPwrT4[AR5416_NUM_PD_GAINS];
-@@ -509,7 +507,7 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 						data_9287[idxL].pwrPdg[i],
- 						data_9287[idxL].vpdPdg[i],
- 						intercepts,
--						vpdTableI[i]);
-+						vpdTableL[i]);
- 			}
- 		} else if (eeprom_4k) {
- 			for (i = 0; i < numXpdGains; i++) {
-@@ -519,7 +517,7 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 						data_4k[idxL].pwrPdg[i],
- 						data_4k[idxL].vpdPdg[i],
- 						intercepts,
--						vpdTableI[i]);
-+						vpdTableL[i]);
- 			}
- 		} else {
- 			for (i = 0; i < numXpdGains; i++) {
-@@ -529,7 +527,7 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 						data_def[idxL].pwrPdg[i],
- 						data_def[idxL].vpdPdg[i],
- 						intercepts,
--						vpdTableI[i]);
-+						vpdTableL[i]);
- 			}
- 		}
- 	} else {
-@@ -568,7 +566,7 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 						vpdTableR[i]);
- 
- 			for (j = 0; j <= (maxPwrT4[i] - minPwrT4[i]) / 2; j++) {
--				vpdTableI[i][j] =
-+				vpdTableL[i][j] =
- 					(u8)(ath9k_hw_interpolate((u16)
- 					     FREQ2FBIN(centers.
- 						       synth_center,
-@@ -605,11 +603,11 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 					(minPwrT4[i] / 2)) -
- 				       tPdGainOverlap + 1 + minDelta);
- 		}
--		vpdStep = (int16_t)(vpdTableI[i][1] - vpdTableI[i][0]);
-+		vpdStep = (int16_t)(vpdTableL[i][1] - vpdTableL[i][0]);
- 		vpdStep = (int16_t)((vpdStep < 1) ? 1 : vpdStep);
- 
- 		while ((ss < 0) && (k < (AR5416_NUM_PDADC_VALUES - 1))) {
--			tmpVal = (int16_t)(vpdTableI[i][0] + ss * vpdStep);
-+			tmpVal = (int16_t)(vpdTableL[i][0] + ss * vpdStep);
- 			pPDADCValues[k++] = (u8)((tmpVal < 0) ? 0 : tmpVal);
- 			ss++;
- 		}
-@@ -621,17 +619,17 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 			tgtIndex : sizeCurrVpdTable;
- 
- 		while ((ss < maxIndex) && (k < (AR5416_NUM_PDADC_VALUES - 1))) {
--			pPDADCValues[k++] = vpdTableI[i][ss++];
-+			pPDADCValues[k++] = vpdTableL[i][ss++];
- 		}
- 
--		vpdStep = (int16_t)(vpdTableI[i][sizeCurrVpdTable - 1] -
--				    vpdTableI[i][sizeCurrVpdTable - 2]);
-+		vpdStep = (int16_t)(vpdTableL[i][sizeCurrVpdTable - 1] -
-+				    vpdTableL[i][sizeCurrVpdTable - 2]);
- 		vpdStep = (int16_t)((vpdStep < 1) ? 1 : vpdStep);
- 
- 		if (tgtIndex >= maxIndex) {
- 			while ((ss <= tgtIndex) &&
- 			       (k < (AR5416_NUM_PDADC_VALUES - 1))) {
--				tmpVal = (int16_t)((vpdTableI[i][sizeCurrVpdTable - 1] +
-+				tmpVal = (int16_t)((vpdTableL[i][sizeCurrVpdTable - 1] +
- 						    (ss - maxIndex + 1) * vpdStep));
- 				pPDADCValues[k++] = (u8)((tmpVal > 255) ?
- 							 255 : tmpVal);
--- 
-2.54.0
 
+vim +/snd_soc_fixup_dai_links_platform_name +269 sound/soc/intel/boards/bytcht_da7213.c
+
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  230  
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  231  static int bytcht_da7213_probe(struct platform_device *pdev)
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  232  {
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  233  	struct snd_soc_card *card;
+7feb2f786a46d3 Pierre-Louis Bossart  2017-10-12  234  	struct snd_soc_acpi_mach *mach;
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25  235  	const char *platform_name;
+1b55f1c6fd64ef Andy Shevchenko       2019-03-28  236  	struct acpi_device *adev;
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  237  	bool sof_parent;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  238  	int dai_index = 0;
+22a317a0505d11 Pierre-Louis Bossart  2017-10-12  239  	int ret_val = 0;
+22a317a0505d11 Pierre-Louis Bossart  2017-10-12  240  	int i;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  241  
+42432196cfb015 Guennadi Liakhovetski 2020-03-12  242  	mach = pdev->dev.platform_data;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  243  
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  244  	/* fix index of codec dai */
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  245  	for (i = 0; i < ARRAY_SIZE(dailink); i++) {
+0cc65482f5b03a Hans de Goede         2024-08-23  246  		if (dailink[i].num_codecs &&
+7d99a70b659511 Hans de Goede         2024-02-10  247  		    !strcmp(dailink[i].codecs->name, "i2c-DLGS7213:00")) {
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  248  			dai_index = i;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  249  			break;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  250  		}
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  251  	}
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  252  
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  253  	/* fixup codec name based on HID */
+1b55f1c6fd64ef Andy Shevchenko       2019-03-28  254  	adev = acpi_dev_get_first_match_dev(mach->id, NULL, -1);
+1b55f1c6fd64ef Andy Shevchenko       2019-03-28  255  	if (adev) {
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  256  		snprintf(codec_name, sizeof(codec_name),
+1b55f1c6fd64ef Andy Shevchenko       2019-03-28  257  			 "i2c-%s", acpi_dev_name(adev));
+fb1d4861f28e75 Kuninori Morimoto     2019-06-06  258  		dailink[dai_index].codecs->name = codec_name;
+14e91ddd5c02d8 Pierre-Louis Bossart  2024-08-27  259  	} else {
+14e91ddd5c02d8 Pierre-Louis Bossart  2024-08-27  260  		dev_err(&pdev->dev, "Error cannot find '%s' dev\n", mach->id);
+14e91ddd5c02d8 Pierre-Louis Bossart  2024-08-27  261  		return -ENOENT;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  262  	}
+14e91ddd5c02d8 Pierre-Louis Bossart  2024-08-27  263  
+4afda6de022857 Andy Shevchenko       2023-01-02  264  	acpi_dev_put(adev);
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  265  
+f1eebb3bf707b2 Pierre-Louis Bossart  2022-03-01  266  	/* override platform name, if required */
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25  267  	platform_name = mach->mach_params.platform;
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25  268  
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25 @269  	ret_val = snd_soc_fixup_dai_links_platform_name(card, platform_name);
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25  270  	if (ret_val)
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25  271  		return ret_val;
+686338c12a2bd2 Pierre-Louis Bossart  2019-01-25  272  
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  273  	sof_parent = snd_soc_acpi_sof_parent(&pdev->dev);
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  274  
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  275  	/* set card and driver name */
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  276  	if (sof_parent) {
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  277  		bytcht_da7213_card_driver.name = SOF_CARD_NAME;
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  278  		bytcht_da7213_card_driver.driver_name = SOF_DRIVER_NAME;
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  279  	} else {
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  280  		bytcht_da7213_card_driver.name = CARD_NAME;
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  281  		bytcht_da7213_card_driver.driver_name = DRIVER_NAME;
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  282  	}
+41656c3dc2acfe Pierre-Louis Bossart  2020-11-12  283  
+05ff312badb607 Pierre-Louis Bossart  2020-11-12  284  	/* set pm ops */
+05ff312badb607 Pierre-Louis Bossart  2020-11-12  285  	if (sof_parent)
+05ff312badb607 Pierre-Louis Bossart  2020-11-12  286  		pdev->dev.driver->pm = &snd_soc_pm_ops;
+05ff312badb607 Pierre-Louis Bossart  2020-11-12  287  
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  288  	card = devm_snd_soc_card_register(&pdev->dev, &bytcht_da7213_card_driver);
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  289  	if (!card) {
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  290  		ret_val = -ENOMEM;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  291  		dev_err(&pdev->dev,
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  292  			"snd_soc_card_register() failed %d\n", ret_val);
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  293  		return ret_val;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  294  	}
+ba5d4e9678ecc3 Kuninori Morimoto     2026-04-21  295  
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  296  	return ret_val;
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  297  }
+82cf89de2c9c2e Pierre-Louis Bossart  2017-03-09  298  
+
+:::::: The code at line 269 was first introduced by commit
+:::::: 686338c12a2bd2d27f8444901fb9ce1a4c0c0b58 ASoC: Intel: bytcht_da7213: platform name fixup support
+
+:::::: TO: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
