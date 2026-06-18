@@ -1,110 +1,93 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DC22222D0;
-	Thu, 18 Jun 2026 14:32:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39C63101A6;
+	Thu, 18 Jun 2026 18:48:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781793178; cv=none; b=Pg4zRpnWbu09UfdECOaCLhh68yNdTnQ86IKhVXBYI9dzvHGKzpXuwZTV/I2mRJ7lEeH2KvVfHnnSRTXm1AYivfl2rcpP+K3VTF4yxt1Vg7Pxr9s5GATtBk4ByLrI9vYXD7uNHb/irSebqMn/IBWt6NOnQUs6IyoPSnKL97haW2M=
+	t=1781808504; cv=none; b=J6f7VIRV6ejQsyxEdlcv/J3TnHQ9wEcZas5Gf/4c5wzDEzVKdAexMukVTZsXcOWUDpEOM1QI8iQ7l2lC0vCpWlGOtpOGsjv63dbokBOhxbTa1dw7wSwlOFdFp3b1yWk06KJjs+AyhSo7T+LBcnSFJjK0hvKydB+L2lK3LNqOUlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781793178; c=relaxed/simple;
-	bh=GcwmUk2CHSFWqPzZF0Syq5X7lELTJtORCRgtXdT7Ze0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tt67SigwWqLJpw0xKfNdWq8lNAmBMUVCr4+C/ltU4D0s1COek1hIm52Bhyxc/PMETPL/e9NgNDU5Uw8X9VTr5bh3Uj91zBXc2f3GeJnzkRAPgkbKpEMyUgxEuBprWoTcyw6mt/dU/Nd4e4Sn7/OeebPKuqlYGfaUTva/fpZVSe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mYLRQVgn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1781808504; c=relaxed/simple;
+	bh=a8lZKwtxR1QLFxofZSsJQp3G666Sh1vQXRGd8uxbTio=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=qQFqsxUUiZvW1x/FndjbKbkb95103hfCJptiIapQQO7qKLzFGyaUig+8aeJC5uBd8PTdEoStN3wlMbZik5+8P9v7603vheqLuNk84SKqjS0wOmjL41ApyPU52rGlLmqrLSDw+E+/U9UuuGIQC0CUcM0w/PAGPHeirV0o7DF1rFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FThec0mH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mYLRQVgn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECAA1F000E9;
-	Thu, 18 Jun 2026 14:32:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FThec0mH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F33431F000E9;
+	Thu, 18 Jun 2026 18:48:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1781793177;
-	bh=YD1Hh5+NvW5FZU6rOeZOC3ILpi05MqQ7oOuIhRrupMc=;
-	h=From:To:Cc:Subject:Date;
-	b=mYLRQVgnAIOBsMAuYh3BomFtUFNxlFPT7YRCp7HhsfMG5xB9BrYR7pGmtQjlnlwoD
-	 sY8hR/PqmFU+sf5cMh6KxIqB4nVEV2VaFqxvGSUVsrfpzdY0ydZjFAJUwWX8vZFuRd
-	 zN4JiI01ZF3AxL/31ReChcKyfABXXs8uLIJ006Juzd4MQsFkl+w2DV84yVIqVDPqGN
-	 Izvi/ISyJasyY1PHh/b6mZVSD4ouS8FAVqGsXsR/6h/z05rtsgkMcfEoIsfxo15LCq
-	 3dTSb6Bpz6SYq1NBNe+Muj5RJdiFa02ic0CUtalo4QHienN01xDznjj8T7n4nQzvaP
-	 QN2wPtnXGewLw==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-media@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] media: v4l2-tpg: reduce stack usage for kasan builds
-Date: Thu, 18 Jun 2026 16:32:47 +0200
-Message-Id: <20260618143252.1885475-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=k20260515; t=1781808503;
+	bh=oCygmINPBsGBUc5gfARwpyZv5FtVdqPK1NwGays5SKI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=FThec0mHCDVrZJtBHeW5ZSGmwYO9ZyoIRJbRuSqKpARopaLcxSIVOXD0AClVos5P3
+	 Qq21qGipUfUGQZIH1z60MQO84Ql/TcP6zJNCcU95w0txz2xSm55Oq3BJJ4sUGQPPDv
+	 gEwU45CDnFlgxX7hNfpMXz9a7lxVbLsM+NdMBML/9kBQGOZGmIuUfrgOxlxL/6pCEx
+	 Xt3baxHbRWFbzIb+/PQmDFLTaADAwys3pGO1i0XK3nfbE4fwdEARppNqoybioS1Kae
+	 VKKHCle/flcn+Hpl8z6bjeOKjpTsbtIH1aWNS59dmkjOzzthA7wsp3k56rbM2GWn21
+	 5RO0/DfyRM2hw==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Sami Tolvanen <samitolvanen@google.com>, 
+ Siddharth Nayyar <sidnayyar@google.com>, Petr Pavlu <petr.pavlu@suse.com>, 
+ Josh Poimboeuf <jpoimboe@kernel.org>, Eric Dumazet <edumazet@google.com>, 
+ =?utf-8?q?Ren=C3=A9_Rebe?= <rene@exactco.de>, 
+ Alexey Gladkov <legion@kernel.org>, Johan Hovold <johan@kernel.org>, 
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, xur@google.com
+Cc: kernel test robot <lkp@intel.com>
+In-Reply-To: <20260617224623.1346309-1-xur@google.com>
+References: <20260617224623.1346309-1-xur@google.com>
+Subject: Re: [PATCH v2] modpost: Ignore Clang LTO suffixes in symbol
+ matching
+Message-Id: <178180839980.3916864.18371872293093627065.b4-ty@b4>
+Date: Thu, 18 Jun 2026 11:46:39 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=976; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=a8lZKwtxR1QLFxofZSsJQp3G666Sh1vQXRGd8uxbTio=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFkmtsXsti1pUgZuLRe7U5cv2r+oYtp1+UChL/+yFkQwn
+ 3e5f4e1o5SFQYyLQVZMkaX6sepxQ8M5ZxlvnJoEM4eVCWQIAxenAEzkXgEjQ8PcWAbd9lMMzgUv
+ AoXfibXukzlgcUGl8wXn90cPtBjyghgZHjkKTJ65OUmNnTW1dG387fkZvZWSskZNWxad0bl8YMI
+ NXgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Wed, 17 Jun 2026 15:46:23 -0700, xur@google.com wrote:
+> modpost: Ignore Clang LTO suffixes in symbol matching
 
-tpg_fill_plane_buffer() is a rather complex function. While there is
-nothing wrong with it per se, I have run into corner cases with clang-22
-on s390 using KASAN that makes it run out of registers and blow the
-stack warning limit from excessive spills:
+Sashiko notes that the console variables may need the same fix but I
+have tried building several configurations with distributed ThinLTO and
+I do not see any modpost warnings so we can just wait to address that
+until later if necessary.
 
-drivers/media/common/v4l2-tpg/v4l2-tpg-core.c:2629:6: error: stack frame size (1560) exceeds limit (1536)
-      in 'tpg_fill_plane_buffer' [-Werror,-Wframe-larger-than]
- 2629 | void tpg_fill_plane_buffer(struct tpg_data *tpg, v4l2_std_id std,
+Applied to
 
-Forcing the two largest callees out of line completely avoids the problem
-and prevents all the register spills, with the stack usage for each function
-going down to a few bytes for the local variables.
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next-unstable
 
-Arguably this is a problem caused by clang rather than the code, but
-a noinline_for_stack annotation is an easy workaround.
+Thanks!
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-If anyone thinks we should track this as an llvm bug, I can help
-come up with a reproducer
----
- drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+[1/1] modpost: Ignore Clang LTO suffixes in symbol matching
+      https://git.kernel.org/kbuild/c/9a289cc425bf4
 
-diff --git a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-index 931e5dc453b9..e1d5c220f738 100644
---- a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-+++ b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
-@@ -2346,9 +2346,11 @@ static void tpg_fill_params_extras(const struct tpg_data *tpg,
- 			(params->is_60hz ? V4L2_FIELD_TOP : V4L2_FIELD_BOTTOM);
- }
- 
--static void tpg_fill_plane_extras(const struct tpg_data *tpg,
--				  const struct tpg_draw_params *params,
--				  unsigned p, unsigned h, u8 *vbuf)
-+/* noinline to work around clang KASAN issues */
-+static noinline_for_stack void
-+tpg_fill_plane_extras(const struct tpg_data *tpg,
-+		      const struct tpg_draw_params *params,
-+		      unsigned p, unsigned h, u8 *vbuf)
- {
- 	unsigned twopixsize = params->twopixsize;
- 	unsigned img_width = params->img_width;
-@@ -2483,9 +2485,9 @@ static void tpg_fill_plane_extras(const struct tpg_data *tpg,
- 	}
- }
- 
--static void tpg_fill_plane_pattern(const struct tpg_data *tpg,
--				   const struct tpg_draw_params *params,
--				   unsigned p, unsigned h, u8 *vbuf)
-+static noinline_for_stack void
-+tpg_fill_plane_pattern(const struct tpg_data *tpg, const struct tpg_draw_params *params,
-+		       unsigned p, unsigned h, u8 *vbuf)
- {
- 	unsigned twopixsize = params->twopixsize;
- 	unsigned img_width = params->img_width;
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted. Patches applied to an "unstable" branch are accepted pending
+wider testing in -next and any post-commit review; they will generally
+be moved to the main branch in a week if no issues are found.
+
+Best regards,
 -- 
-2.39.5
+Cheers,
+Nathan
+
 
