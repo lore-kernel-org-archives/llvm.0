@@ -1,123 +1,125 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8818F31ED7D
-	for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 06:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA703BF666;
+	Thu, 18 Jun 2026 07:11:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781764992; cv=none; b=JnEozgCU84YKqgKvLCnnQKbBI3tTLBQOSSQBpdu7pcOqu+nmE4yY6QleCdhajjCkxYJfPl7/5T8A4JZMgLzJ4DjlFjk3ZlqcuAXTOlKg7Zj2Ll220Xntk6a2NdIVoYDwSNNnulijx69ZgWLUy6PuWqwvo041g5wnHLfYI420Fyg=
+	t=1781766684; cv=none; b=c0X5a7lM5HqrVuJmfFHbjldO3SsPoceeSJHPpxiXzFnIkCk3GgS5hDJTwXyb7Ok468GkIRVslp2Wm522M65x2qJfS6niYqk77ZE4+rSiaA7Z3OW1GpmDT+ovfqyVVQUsBFL4gZUXdcHRmSG2K0uFpwamzkhQZgfrSC3TUToWJVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781764992; c=relaxed/simple;
-	bh=S19H8jqlLqEi7QnZ3efSV9msabbhaPHn2CDHUa89JCs=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=qbp1NMFHGu4eGuuH/ku8vmfofmWsvPbA+0wdf9Dewz1GKoQgB7aoftJeZdFX/ABLpiFaPtLr4T3PBFMphHuM8xz+sW0omZtVFcCdJ+rDbe+udqE5WNteeRvNzekK2+/tAIlDiMqZhjuHAXa+bOlShtxt3zrrao1ahHUfnHo/ufE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PSMQ9DWC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1781766684; c=relaxed/simple;
+	bh=hcbwqT6Ifmi1RjtPjrJrL1uRHTeCMFdZ/s/zVcGXoBM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BAoHxw3++OVfCVO83MQfvDkthOQJPoi7KihXP1wfkGOCw599U5nycZhJumJPO1tM+NV9rcMZhkv+9NTYVZyopl31NdHcco5/GpxU7lW7SlgZAa42QdFhfyc4v4lMvWlbQB2MrT8IelgKafeSajZ7UWof6jLUWsbmbEUzf6Sd9vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AqMdys6g; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PSMQ9DWC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1781764989;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=VLHHrpH+HlbmR2N1F7n7XUm/pIo+qA+yxxrm4V/HBSI=;
-	b=PSMQ9DWCVxO6Arhm03paztKySjRwCdQvwK4poSh2VaOhgf8vwpW6VB7ZtKFLe59rEiSVJk
-	cYe/9hWzQAkp4+g7yehX4j2mnz33I3QvP8DZomDJSqhHTAYizmbKooz/NusxoQexU3dcRY
-	7D1+ChVRyf5YNuDRmrb2InrPGrTBzd8=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-68-y-Kp8Z6rP7ykaCMtWHuevw-1; Thu,
- 18 Jun 2026 02:43:06 -0400
-X-MC-Unique: y-Kp8Z6rP7ykaCMtWHuevw-1
-X-Mimecast-MFC-AGG-ID: y-Kp8Z6rP7ykaCMtWHuevw_1781764985
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 533C21956067
-	for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 06:43:05 +0000 (UTC)
-Received: from [172.20.152.42] (unknown [10.30.45.46])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 9C1C11688;
-	Thu, 18 Jun 2026 06:43:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
- upstream-mainline, 6505114e)
-Date: Thu, 18 Jun 2026 06:43:04 -0000
-To: yoyang@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AqMdys6g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1781766682; x=1813302682;
+  h=date:from:to:cc:subject:message-id;
+  bh=hcbwqT6Ifmi1RjtPjrJrL1uRHTeCMFdZ/s/zVcGXoBM=;
+  b=AqMdys6g2Ah0KLL7EhHzzAA+/fNR80XmmW4RM/yIXU1gS7pzOlvf76Dg
+   dz0SBdwgJS6S2MaLVLSyu8tFnIy8nalYsP3011MEwpX1WnR/GG71Aclu1
+   RXCWHS1Go46cCQ+N+7vmfRej+OfRrPwmg90z/d58BvAX8oRGDGY0C4L4S
+   Jb3NrosKL5x8NDdqOPWaVxwLXPGSldvmFRMhOg3iinPbmT5cybFFQpqNo
+   SBLajE4LOp1NvYJ235eKCvFJ9eW58ELVl3jecNp9PbtwtgPE5xaKmbZjc
+   HsFAeKY94ba6C0+73PO40+iSrcmvXRvAbgIgj1au7O/hNtFu7qW4j855e
+   Q==;
+X-CSE-ConnectionGUID: gCL/Lnk8SxWuAdAaX6t5rw==
+X-CSE-MsgGUID: expFSABeT1qdsgP5y+KN8Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11820"; a="81577475"
+X-IronPort-AV: E=Sophos;i="6.24,211,1774335600"; 
+   d="scan'208";a="81577475"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2026 00:11:21 -0700
+X-CSE-ConnectionGUID: qzBcAQ27RI6FW5ECvPG2oQ==
+X-CSE-MsgGUID: FqthQmRsQfq/dO0Kqq15Eg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,211,1774335600"; 
+   d="scan'208";a="248356604"
+Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
+  by orviesa007.jf.intel.com with ESMTP; 18 Jun 2026 00:11:20 -0700
+Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wa6uD-000000005UT-1xiS;
+	Thu, 18 Jun 2026 07:11:17 +0000
+Date: Thu, 18 Jun 2026 09:10:53 +0200
+From: kernel test robot <lkp@intel.com>
+To: Shrikanth Hegde <sshegde@linux.ibm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/sched/core.c:11335:2: warning: releasing raw_spinlock
+ 'rq_lockp(rq)' that was not held
+Message-ID: <202606180950.swwWuXxx-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-Message-Id: <90725.126061802430600209@us-mta-68.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Ij0v9SinCRnu4G0pD0_JL6d9ybCOnAOfDoixGH_q7r8_1781764985
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/intel-lab-lkp/linux/commits/Shrikanth-Hegde/sched-debug-Remove-unused-schedstats/20260618-031604
+head:   bcb0c494e4af36dd6306a5a1839a0c03046053af
+commit: bec9f392fa50016e604cfacae7445d9c36729f49 sched/core: Push current task from non preferred CPU
+date:   12 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260618/202606180950.swwWuXxx-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260618/202606180950.swwWuXxx-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606180950.swwWuXxx-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'soc-arm-7.2' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/soc/soc
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2609483636
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2609483636_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2609483636_x86_64_kernel_kcidb_tool_21483495_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> kernel/sched/core.c:11335:2: warning: releasing raw_spinlock 'rq_lockp(rq)' that was not held [-Wthread-safety-analysis]
+    11335 |         rq_unlock(rq, &rf);
+          |         ^
+>> kernel/sched/core.c:11340:1: warning: raw_spinlock 'rq_lockp(__this_rq())' is not held on every path through here [-Wthread-safety-analysis]
+    11340 | }
+          | ^
+   kernel/sched/core.c:11325:2: note: raw_spinlock acquired here
+    11325 |         rq_lock(rq, &rf);
+          |         ^
+   2 warnings generated.
 
 
+vim +11335 kernel/sched/core.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+ 11312	
+ 11313	static int sched_non_preferred_cpu_push_stop(void *arg)
+ 11314	{
+ 11315		struct task_struct *p = arg;
+ 11316		struct rq *rq = this_rq();
+ 11317		struct rq_flags rf;
+ 11318		int cpu;
+ 11319	
+ 11320		/* sanity check */
+ 11321		if (cpu_preferred(rq->cpu))
+ 11322			return 0;
+ 11323	
+ 11324		raw_spin_lock_irq(&p->pi_lock);
+ 11325		rq_lock(rq, &rf);
+ 11326		rq->push_task_work_done = 0;
+ 11327	
+ 11328		update_rq_clock(rq);
+ 11329	
+ 11330		if (task_rq(p) == rq && task_on_rq_queued(p)) {
+ 11331			cpu = select_fallback_rq(rq->cpu, p);
+ 11332			rq = __migrate_task(rq, &rf, p, cpu);
+ 11333		}
+ 11334	
+ 11335		rq_unlock(rq, &rf);
+ 11336		raw_spin_unlock_irq(&p->pi_lock);
+ 11337		put_task_struct(p);
+ 11338	
+ 11339		return 0;
+ 11340	}
+ 11341	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
