@@ -1,81 +1,110 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891C5281503;
-	Thu, 18 Jun 2026 14:16:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DC22222D0;
+	Thu, 18 Jun 2026 14:32:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781792185; cv=none; b=h2rQ/9tLbA2R60aqRiBMauyCd+jdcoY71L3dtth/ZzNyZMc9KY+R2N6koGQN83osLKAyR4LxoxKnpc81jFlEeV7zQg/Ovqm9ML5E9rdRo20ipJ4uYHy/r2NHyzOxaBNtdt9coiU7KWelfoN9EMoGcRETvh1Dfxlxwmk4LSY4qqI=
+	t=1781793178; cv=none; b=Pg4zRpnWbu09UfdECOaCLhh68yNdTnQ86IKhVXBYI9dzvHGKzpXuwZTV/I2mRJ7lEeH2KvVfHnnSRTXm1AYivfl2rcpP+K3VTF4yxt1Vg7Pxr9s5GATtBk4ByLrI9vYXD7uNHb/irSebqMn/IBWt6NOnQUs6IyoPSnKL97haW2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781792185; c=relaxed/simple;
-	bh=Nrf+TCIYqU4QQRG2clM80kXtnrGxhZyrzDPenxD1Wxo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=n+gndADrHU0qmVXjI8kUJgchSyio62+w6TMo1BAtVdcRQgZJFKWK5WWeHDP/CqVoMVtjBoVw2bB6DGBqZBtFfFdtc2b4FuoaLtmhmpMurGQYZQQwYnaCsBrdvo0uZInUZNeZMTA4INiE5M9dfrkzIc3OcDHquXPbpsp8jnW1rsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HDeTMc5D; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781793178; c=relaxed/simple;
+	bh=GcwmUk2CHSFWqPzZF0Syq5X7lELTJtORCRgtXdT7Ze0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Tt67SigwWqLJpw0xKfNdWq8lNAmBMUVCr4+C/ltU4D0s1COek1hIm52Bhyxc/PMETPL/e9NgNDU5Uw8X9VTr5bh3Uj91zBXc2f3GeJnzkRAPgkbKpEMyUgxEuBprWoTcyw6mt/dU/Nd4e4Sn7/OeebPKuqlYGfaUTva/fpZVSe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mYLRQVgn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HDeTMc5D"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781792183; x=1813328183;
-  h=date:from:to:cc:subject:message-id;
-  bh=Nrf+TCIYqU4QQRG2clM80kXtnrGxhZyrzDPenxD1Wxo=;
-  b=HDeTMc5D06DSARdlO9iLrHH2ORDb9s0TRFBQSe7oknPymukg2CH0HTTe
-   dAK+jaMrkaNyXySwgcetoNo10aaQ6A6ZMqzv/u6l1mNyNaebPl5owoCNZ
-   7io1Ra1bQPTle122clv2BrProC8/+oZjGrmPFkFG3dipMIvzU5BB4RLus
-   +y8CgVW16yJ7as+uL3vwKLGMPQDc7ZFXN/7iumSm0JwUnGT/JQsI8EvnM
-   3SHMAHjW/V9ET9lcRzLeMucZN8GIAd3qPkEu0Nz5GyLM64JpnhVkWvNd4
-   PL7aWvK4agnH4DCjmLB8BnwoQNnSZGABg1ydeVtGF+6/efbOkFk1naigm
-   w==;
-X-CSE-ConnectionGUID: E/OZ25OyQniC4jzaTe8ggw==
-X-CSE-MsgGUID: r89J7GAvRHKcasMj8ADyCA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11820"; a="105429463"
-X-IronPort-AV: E=Sophos;i="6.24,211,1774335600"; 
-   d="scan'208";a="105429463"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2026 07:16:23 -0700
-X-CSE-ConnectionGUID: zw9HKaF7Sk6I3r6pQnO51A==
-X-CSE-MsgGUID: 8opIsg68ThGZVb9W9pKGBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,211,1774335600"; 
-   d="scan'208";a="248457444"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by orviesa009.jf.intel.com with ESMTP; 18 Jun 2026 07:16:22 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1waDXX-000000005WX-2ccY;
-	Thu, 18 Jun 2026 14:16:19 +0000
-Date: Thu, 18 Jun 2026 16:15:39 +0200
-From: kernel test robot <lkp@intel.com>
-To: Dongjin Kim <tobetter@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tobetter:odroid-7.1.y 64/64] .gitmodules: warning: ignored
- by one of the .gitignore files
-Message-ID: <202606181615.RpIJtU29-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mYLRQVgn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECAA1F000E9;
+	Thu, 18 Jun 2026 14:32:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1781793177;
+	bh=YD1Hh5+NvW5FZU6rOeZOC3ILpi05MqQ7oOuIhRrupMc=;
+	h=From:To:Cc:Subject:Date;
+	b=mYLRQVgnAIOBsMAuYh3BomFtUFNxlFPT7YRCp7HhsfMG5xB9BrYR7pGmtQjlnlwoD
+	 sY8hR/PqmFU+sf5cMh6KxIqB4nVEV2VaFqxvGSUVsrfpzdY0ydZjFAJUwWX8vZFuRd
+	 zN4JiI01ZF3AxL/31ReChcKyfABXXs8uLIJ006Juzd4MQsFkl+w2DV84yVIqVDPqGN
+	 Izvi/ISyJasyY1PHh/b6mZVSD4ouS8FAVqGsXsR/6h/z05rtsgkMcfEoIsfxo15LCq
+	 3dTSb6Bpz6SYq1NBNe+Muj5RJdiFa02ic0CUtalo4QHienN01xDznjj8T7n4nQzvaP
+	 QN2wPtnXGewLw==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-media@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] media: v4l2-tpg: reduce stack usage for kasan builds
+Date: Thu, 18 Jun 2026 16:32:47 +0200
+Message-Id: <20260618143252.1885475-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/tobetter/linux odroid-7.1.y
-head:   dbb4f6bd9fe8a1786673783249095632aff93442
-commit: dbb4f6bd9fe8a1786673783249095632aff93442 [64/64] ODROID-COMMON: net/wireless: add Realtek Wifi drivers
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260618/202606181615.RpIJtU29-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260618/202606181615.RpIJtU29-lkp@intel.com/reproduce)
+From: Arnd Bergmann <arnd@arndb.de>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606181615.RpIJtU29-lkp@intel.com/
+tpg_fill_plane_buffer() is a rather complex function. While there is
+nothing wrong with it per se, I have run into corner cases with clang-22
+on s390 using KASAN that makes it run out of registers and blow the
+stack warning limit from excessive spills:
 
-All warnings (new ones prefixed by >>):
+drivers/media/common/v4l2-tpg/v4l2-tpg-core.c:2629:6: error: stack frame size (1560) exceeds limit (1536)
+      in 'tpg_fill_plane_buffer' [-Werror,-Wframe-larger-than]
+ 2629 | void tpg_fill_plane_buffer(struct tpg_data *tpg, v4l2_std_id std,
 
->> .gitmodules: warning: ignored by one of the .gitignore files
-   Documentation/.renames.txt: warning: ignored by one of the .gitignore files
+Forcing the two largest callees out of line completely avoids the problem
+and prevents all the register spills, with the stack usage for each function
+going down to a few bytes for the local variables.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Arguably this is a problem caused by clang rather than the code, but
+a noinline_for_stack annotation is an easy workaround.
+
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+If anyone thinks we should track this as an llvm bug, I can help
+come up with a reproducer
+---
+ drivers/media/common/v4l2-tpg/v4l2-tpg-core.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
+index 931e5dc453b9..e1d5c220f738 100644
+--- a/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
++++ b/drivers/media/common/v4l2-tpg/v4l2-tpg-core.c
+@@ -2346,9 +2346,11 @@ static void tpg_fill_params_extras(const struct tpg_data *tpg,
+ 			(params->is_60hz ? V4L2_FIELD_TOP : V4L2_FIELD_BOTTOM);
+ }
+ 
+-static void tpg_fill_plane_extras(const struct tpg_data *tpg,
+-				  const struct tpg_draw_params *params,
+-				  unsigned p, unsigned h, u8 *vbuf)
++/* noinline to work around clang KASAN issues */
++static noinline_for_stack void
++tpg_fill_plane_extras(const struct tpg_data *tpg,
++		      const struct tpg_draw_params *params,
++		      unsigned p, unsigned h, u8 *vbuf)
+ {
+ 	unsigned twopixsize = params->twopixsize;
+ 	unsigned img_width = params->img_width;
+@@ -2483,9 +2485,9 @@ static void tpg_fill_plane_extras(const struct tpg_data *tpg,
+ 	}
+ }
+ 
+-static void tpg_fill_plane_pattern(const struct tpg_data *tpg,
+-				   const struct tpg_draw_params *params,
+-				   unsigned p, unsigned h, u8 *vbuf)
++static noinline_for_stack void
++tpg_fill_plane_pattern(const struct tpg_data *tpg, const struct tpg_draw_params *params,
++		       unsigned p, unsigned h, u8 *vbuf)
+ {
+ 	unsigned twopixsize = params->twopixsize;
+ 	unsigned img_width = params->img_width;
+-- 
+2.39.5
+
