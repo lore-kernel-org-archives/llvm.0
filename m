@@ -1,116 +1,210 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from omta36.uswest2.a.cloudfilter.net (omta36.uswest2.a.cloudfilter.net [35.89.44.35])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F1427816C;
-	Thu, 18 Jun 2026 00:58:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C839A35E1C5
+	for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 04:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.89.44.35
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781744304; cv=none; b=LmK4Vn8eTCLil5LcvNsqmgXI1IhgTc9iuX7GM3OK/9XgRqzQbOCQUe4Kh64Eu6rcUqvim64qQ/rNG75FQ3FQLNZ8nEEnmvNYhVEyNAoYofdRWEhESfMEZGw7FW6Vm9wHkBMHAzbJFHs1t3hk1kf6U8dcJeKJIh/Cd2jOz3Q/ODk=
+	t=1781755388; cv=none; b=BdpS0jOoKS+AseA43QEwVSTXyjtsBbv4XifDqsy5fNgvZjDJmCRTc9UAITpbtS8Pt/97V4N0hxeu1CDHnKUo14a2A3m/c916iAm+19KuWmtCX2UUwuTo3nAEnfImxVxJMiNeHt+FJIu6riVc6OafsZIub8gXNrTY/d8uNb7sU/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781744304; c=relaxed/simple;
-	bh=TBC066FDs+Js6ai4aj8oQrEvoG3Txy/X1SGsswvdZes=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=QTIAlIOlbTiX2dlNuZfaeiJ33AnDzbLj303AKveD2c6HT19frZGFNz6IsfcvmwTGQsgHYpUPb4db1T/L5CfaFGaunA/DeMMXZA8WjUh2IUJVAVkdmYWzz/jFqNLvrTwD5pVq84nmY0FUwMTv56WsOIad0TyGV8MyO7TjWV64GWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=exfQJRDU; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1781755388; c=relaxed/simple;
+	bh=bg/F99K/tPnZmAZ6Ws47Ut6GiqHMzrr8TP4QNB143nk=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=pl6n+yo5IaGfmBwM5ZUiwnpmmEh4bFJkPq/wptqV/RL/1YcOwxxcm2zpVMMej3o/oWgDZt5CwNJ2g+1uClawf40r+EpzfKlRoU7rJdGuGAWLk3RrcclIBc+H7WSUJpG+SMdaT9udTYu85MgmK0UfsbK/fBbXGfY+Gk+p2NTi31o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=amXzJHxV; arc=none smtp.client-ip=35.89.44.35
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="exfQJRDU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1781744303; x=1813280303;
-  h=date:from:to:cc:subject:message-id;
-  bh=TBC066FDs+Js6ai4aj8oQrEvoG3Txy/X1SGsswvdZes=;
-  b=exfQJRDUa+goLbPV+R6MI4FpcPIxacwhdnMfA4PHWT7nosXMJTYy1lS5
-   Ycq0Zk0GQXBBM71frtyiz7u3GVLJcp4jnVmBM4XuHNkEo2umYxa1Zl859
-   GUSQcdXKtnqqB6z3XwwMLLxaUZ1GRoJscC4N2JuZCTApoiDPInG/vvf2p
-   eyZgPxcdSTAASrHCMpx6DNtCfHAHYkwy3Iv7C1BX2kDQrctH2lgvccDPI
-   9/UpLGvbCvzbWz+xaq2oY9nHADDznkrNgPyZbm0xlvCICgDh9OOKuSx+E
-   vk8nfK4IppyMNNJW9avx6e3MMMNxMIpFyS2G+bZC+JPN37bNvpZhv1Ueq
-   g==;
-X-CSE-ConnectionGUID: oOZK9aSjSvubkL8CrQDdrw==
-X-CSE-MsgGUID: JOVG2mWUTB6GGDX90esgaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11820"; a="85124874"
-X-IronPort-AV: E=Sophos;i="6.24,210,1774335600"; 
-   d="scan'208";a="85124874"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jun 2026 17:58:20 -0700
-X-CSE-ConnectionGUID: /wz7/yUeSf2ODzcbYPIqUA==
-X-CSE-MsgGUID: p2r3FTFsTTGpv3iTtAZJsQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,210,1774335600"; 
-   d="scan'208";a="243864273"
-Received: from lkp-server01.sh.intel.com (HELO f0d55cb201f0) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 17 Jun 2026 17:58:19 -0700
-Received: from kbuild by f0d55cb201f0 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wa15F-00000000V8d-18E7;
-	Thu, 18 Jun 2026 00:58:17 +0000
-Date: Thu, 18 Jun 2026 08:58:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:x86/no_bug_on_isr_count 1/1]
- arch/x86/kvm/lapic.c:770:65: error: extraneous ')' before ';'
-Message-ID: <202606180808.GLXxpgBp-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="amXzJHxV"
+Received: from eig-obgw-6002b.ext.cloudfilter.net ([10.0.30.203])
+	by cmsmtp with ESMTPS
+	id a310w5OxxPpWVa3y6wW0Ig; Thu, 18 Jun 2026 04:03:06 +0000
+Received: from gator4166.hostgator.com ([108.167.190.91])
+	by cmsmtp with ESMTPS
+	id a3y5wsbTgfpvWa3y5wygEG; Thu, 18 Jun 2026 04:03:05 +0000
+X-Authority-Analysis: v=2.4 cv=Y6j4sgeN c=1 sm=1 tr=0 ts=6a336dfa
+ a=vY9Mjuda9oMEc2E4Cx1x2A==:117 a=vY9Mjuda9oMEc2E4Cx1x2A==:17
+ a=IkcTkHD0fZMA:10 a=FelO9ux0wxsA:10 a=7T7KSl7uo7wA:10 a=VwQbUJbxAAAA:8
+ a=pGLkceISAAAA:8 a=P8mRVJMrAAAA:8 a=zzpufJ8321dq2p5ObpoA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=Vc1QvrjMcIoGonisw6Ob:22 a=2aFnImwKRvkU0tJ3nQRT:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=DKdOLa8mXEQxy2aKDLRsGejsQejVOXVATZTBnELL7Ao=; b=amXzJHxV9XMN9ytNNwUyG2AKPF
+	oumqvuAvQjaLetX40l9IkrgtTUJ4F2tlBYZkyHcHi9JEQJHnh5Pb8DpBmnKZ8ZlvN1rXrsCRJmqWH
+	tfGDsBKnUrOQQCIrmRaoVy1e91w4E9gaD2NBNP17qfOvmpArQykbNCRbsVmJC+APc+hargKeNKQOI
+	zALdAcjxhlFnNlgM6yMx/P7K1+f0xdyU3ZQdAsNG/AvKw8xNrC17iZZ7EVOiIzK0yL5bK9WrJMdfL
+	Bs9sO8rJb4DeUaCrI/4//RBjD6KKuIu0ICw6tmYdzXofqDceFBL3nZTAWTLNCXs50SdqlqhNIybLc
+	4F3h+73A==;
+Received: from [177.238.16.65] (port=43238 helo=[192.168.0.37])
+	by gator4166.hostgator.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.99.2)
+	(envelope-from <gustavo@embeddedor.com>)
+	id 1wa3xx-000000045GJ-4BvT;
+	Wed, 17 Jun 2026 23:02:58 -0500
+Message-ID: <13b922ce-8450-48fd-adf7-5377989fb6e4@embeddedor.com>
+Date: Wed, 17 Jun 2026 22:02:38 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] net: dst_metadata: fix false-positive memcpy overflow
+ in tun_dst_unclone
+From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
+To: Ilya Maximets <i.maximets@ovn.org>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, Johan Thomsen <write@ownrisk.dk>
+References: <20260616100332.1308294-1-i.maximets@ovn.org>
+ <9e941b82-23d4-44e6-a240-b7949ace76ab@embeddedor.com>
+ <b16e8bac-e149-4052-b1cb-8fd3e1137f9c@ovn.org>
+ <a95aabe9-6294-42ed-8327-b7d74bb4a8c8@embeddedor.com>
+Content-Language: en-US
+In-Reply-To: <a95aabe9-6294-42ed-8327-b7d74bb4a8c8@embeddedor.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
+X-AntiAbuse: Original Domain - lists.linux.dev
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - embeddedor.com
+X-BWhitelist: no
+X-Source-IP: 177.238.16.65
+X-Source-L: No
+X-Exim-ID: 1wa3xx-000000045GJ-4BvT
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: ([192.168.0.37]) [177.238.16.65]:43238
+X-Source-Auth: gustavo@embeddedor.com
+X-Email-Count: 2
+X-Org: HG=hgshared;ORG=hostgator;
+X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
+X-Local-Domain: yes
+X-CMAE-Envelope: MS4xfMCxn/vgK7734GW1+dqO5m3HWNeLi68t924txAxY586THW0Vk+8cEzTeb/WeOMzU4XmJL0cksJNF2h5yOOEXaIk9JzGHuT/f0r/QejRzB/+y+T62PBU0
+ k4A6xwlCxwfevftENUuAZ2ep4nuW7L9iPbeEqHxEKSh+z//ejGoDmvxB9LAW90e5mHpERupuuC5LT4rkje6AbmaVrRe1I0cgyOA=
 
-tree:   https://github.com/sean-jc/linux x86/no_bug_on_isr_count
-head:   a641b87ae60a2279dc0b8db0be73d98a0f1a1c1e
-commit: a641b87ae60a2279dc0b8db0be73d98a0f1a1c1e [1/1] KVM: x86: Bug the VM, not the kernel, if the ISR count {under,over}flows
-config: x86_64-buildonly-randconfig-001-20260618 (https://download.01.org/0day-ci/archive/20260618/202606180808.GLXxpgBp-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260618/202606180808.GLXxpgBp-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606180808.GLXxpgBp-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/x86/kvm/lapic.c:770:65: error: extraneous ')' before ';'
-     770 |                 KVM_BUG_ON(apic->isr_count > MAX_APIC_VECTOR, apic->vcpu->kvm));
-         |                                                                               ^
-   arch/x86/kvm/lapic.c:811:51: error: extraneous ')' before ';'
-     811 |                 KVM_BUG_ON(apic->isr_count < 0, apic->vcpu->kvm));
-         |                                                                 ^
-   2 errors generated.
 
 
-vim +770 arch/x86/kvm/lapic.c
+On 6/17/26 16:59, Gustavo A. R. Silva wrote:
+> 
+> 
+> On 6/17/26 16:01, Ilya Maximets wrote:
+>> On 6/17/26 10:08 PM, Gustavo A. R. Silva wrote:
+>>> Hi,
+>>>
+>>> On 6/16/26 04:03, Ilya Maximets wrote:
+>>>> kmalloc_flex() in metadata_dst_alloc() sets __counted_by for the
+>>>> structure to the options_len, which is then initialized to zero.
+>>>> Later, we're initializing the structure by copying the tunnel info
+>>>> together with the options, and this triggers a warning for a potential
+>>>> memcpy overflow, since the compiler estimates that the options can't
+>>>> fit into the structure, even though the memory for them is actually
+>>>> allocated.
+>>>>
+>>>>    memcpy: detected buffer overflow: 104 byte write of buffer size 96
+>>>>    WARNING: CPU: X PID: Y at lib/string_helpers.c:1036 __fortify_report
+>>>>     skb_tunnel_info_unclone+0x179/0x190
+>>>>     geneve_xmit+0x7fe/0xe00
+>>>
+>>> This warning has nothing to do with counted_by. See below for more
+>>> comments.
+>>>
+>>>>
+>>>> The issue is triggered when built with clang and source fortification.
+>>>>
+>>>> Fix that by doing the copy in two stages: first - the main data with
+>>>> the options_len, then the options.  This way the correct length should
+>>>> be known at the time of the copy.
+>>>>
+>>>> It would be better if the options_len never changed after allocation,
+>>>> but the allocation code is a little separate from the initialization
+>>>> and it would be awkward and potentially dangerous to return a struct
+>>>> with options_len set to a non-zero value from the metadata_dst_alloc().
+>>>>
+>>>> Another option would be to use ip_tunnel_info_opts_set(), but it is
+>>>> doing too many unnecessary operations for the use case here.
+>>>>
+>>>> Fixes: 69050f8d6d07 ("treewide: Replace kmalloc with kmalloc_obj for non-scalar types")
+>>>> Reported-by: Johan Thomsen <write@ownrisk.dk>
+>>>> Closes: https://lore.kernel.org/netdev/CAKv6aAM8_EWgXScnKmKYm_4SwGDVBK++dzfP+Y6msUXbp99QUw@mail.gmail.com/
+>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+>>>> ---
+>>>>
+>>>> Johan, if you can test this one in your setup as well, that would
+>>>> be great.  Thanks.
+>>>>
+>>>>    include/net/dst_metadata.h | 7 +++++--
+>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+>>>> index 1fc2fb03ce3f..f45d1e3163f0 100644
+>>>> --- a/include/net/dst_metadata.h
+>>>> +++ b/include/net/dst_metadata.h
+>>>> @@ -164,8 +164,11 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+>>>>        if (!new_md)
+>>>>            return ERR_PTR(-ENOMEM);
+>>>> -    memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
+>>>> -           sizeof(struct ip_tunnel_info) + md_size);
+>>>
+>>> What's going on here is that, internally, fortified memcpy() retrieves
+>>> the destination size via __builtin_dynamic_object_size() in mode 1.
+>>>
+>>> That is:
+>>>
+>>> __builtin_dynamic_object_size(&new_md->u.tun_info, 1)
+>>>
+>>> For the above case, Clang returns sizeof(new_md->u.tun_info) == 96.
+>>>
+>>> So the warning is reporting that 104 bytes don't fit in an object of
+>>> size 96 bytes, regardless of any counted_by annotation or allocation.
+>>
+>> Hmm.  Does __builtin_dynamic_object_size(&new_md->u.tun_info, 1) return
+>> 104 when the options_len is 8?  If so, isn't that because it is counted
+>> by that field?  Asking because the fortification doesn't complain if we
+>> keep the full 104-byte copy as-is, but set the options_len beforehand,
+>> as tested by Johan.
+> 
+> I see. If that is the case, then, internally, fortified memcpy() ends up
+> using mode 0 instead of mode 1. Something like this:
+> 
+> __builtin_dynamic_object_size(&new_md->u.tun_info, 0)
+> 
+> The above will effectively consider the allocation and counted_by because
+> it will interpret new_md->u.tun_info as an open-ended object due to the
+> flexible-array member (in struct ip_tunnel_info) whose size is determined
+> by counted_by.
 
-   754	
-   755	static inline void apic_set_isr(int vec, struct kvm_lapic *apic)
-   756	{
-   757		if (__test_and_set_bit(APIC_VECTOR_TO_BIT_NUMBER(vec),
-   758				       apic_vector_to_isr(vec, apic)))
-   759			return;
-   760	
-   761		/*
-   762		 * With APIC virtualization enabled, all caching is disabled
-   763		 * because the processor can modify ISR under the hood.  Instead
-   764		 * just set SVI.
-   765		 */
-   766		if (unlikely(apic->apicv_active))
-   767			kvm_x86_call(hwapic_isr_update)(apic->vcpu, vec);
-   768		else {
-   769			++apic->isr_count;
- > 770			KVM_BUG_ON(apic->isr_count > MAX_APIC_VECTOR, apic->vcpu->kvm));
-   771			/*
-   772			 * ISR (in service register) bit is set when injecting an interrupt.
-   773			 * The highest vector is injected. Thus the latest bit set matches
-   774			 * the highest bit in ISR.
-   775			 */
-   776			apic->highest_isr_cache = vec;
-   777		}
-   778	}
-   779	
+Indeed. The execution stops here:
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+fortify_memcpy_chk():
+588         /*
+589          * Always stop accesses beyond the struct that contains the
+590          * field, when the buffer's remaining size is known.
+591          * (The SIZE_MAX test is to optimize away checks where the buffer
+592          * lengths are unknown.)
+593          */
+594         if (p_size != SIZE_MAX && p_size < size)
+595                 fortify_panic(func, FORTIFY_WRITE, p_size, size, true);
+
+with p_size = __builtin_dynamic_object_size(&new_md->u.tun_info, 0)
+
+The code never reaches the part where p_size_field (__bdos(&new_md->u.tun_info, 1))
+is checked at runtime because there is no need for that.
+
+So yep, this patch is okay as-is.
+
+Thanks
+-Gustavo
