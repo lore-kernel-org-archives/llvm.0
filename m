@@ -1,132 +1,327 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531F43DD50B
-	for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 11:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781783009; cv=pass; b=VhXE9a9SGAQim+dOLEKz5WvOhrF81moIjAhYDdd5wK7GVbqwyIZp/5q5BBEugaDneeyhx8NI16B67mDcOBPYbFGxKO8Tpc9Bf9DLGM4dXrHwH7TEdEdEIZf89KRCGcDvrnmndY1Od8uZwFPnaP5qprbqpiwZdAPk2AqsfJFZS3g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781783009; c=relaxed/simple;
-	bh=aiBMmDxUbkczn/Vb9JP5UZM5Zl61RSgtXrA/0C46Sgc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=skyjwmIebmef5hjpIu7GWKFCbxsRPD9Ylij6tyaKv/y4R4QtU+yQQAhiZNUoeFatcuEnXVXJu+d5dyd4G8GvRLhJg4i4Qb8YK3PtQWG/s7QFXeOv/wrETLVFmSuU6CBQUlFn3/ytYUYbXBb9vh0YrV5Fb1Ohlx0kZqAzKAOQ/CE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ownrisk.dk; spf=none smtp.mailfrom=ownrisk.dk; dkim=pass (2048-bit key) header.d=ownrisk-dk.20251104.gappssmtp.com header.i=@ownrisk-dk.20251104.gappssmtp.com header.b=EDklrMOO; arc=pass smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ownrisk.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ownrisk.dk
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F294D3F5BC4
+	for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 12:58:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1781787493; cv=none; b=VUTfu0tMXMYvX8O93iGjGw5Q1CwHct/x/7C0e2Ucwo8A1V01chwhlWe3ip64qkswQ9j148+4IcV4YOhfw0n4qa8klD8LvUm0sMANe0twcXIJMjEK/5RCakAYYpxXKYfgjX5SBJCPeM3CSIXwbHQMM+S4HziW3Sr4H2NIMwxFUfM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1781787493; c=relaxed/simple;
+	bh=QJFX6b5jHChmIhfPZp/8JffjK4erxuNtowWPt14QEvA=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=HAoDPy9c9dt4ne7aDxcknTU5uY+mzKniWWv//KXxKcPx63ndtN46vw25FNeZWkUFUcUYs5KxLd0O0Ml0aC+PDB6m1e8KNIpo81gdLQ0YbheNuPCFIzYM1ibQIJfPuC1Qpj4g6clibXtdO5te3W6p+c66cfmRy8HO0ccxIdt4GKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Troc0CzO; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ownrisk-dk.20251104.gappssmtp.com header.i=@ownrisk-dk.20251104.gappssmtp.com header.b="EDklrMOO"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8db35680d0cso20008406d6.1
-        for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 04:43:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1781783006; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZU1ikJVbDERv0uzeMnHavdshTJz0Gr4DevxZEUwMhsr7WU7Ur+U2VTNvW8v98x5Kj2
-         QUwFFuvdUMeL8HOl/byXckM5KSa69ht/OhrxPVgFM0Dvil2vqNpdH8PARVvyiPrdviOl
-         WnP07MXfH2/Hzm+a8Yyo4BOmX9mo9Nw52C4vf/79agcZWbK0vln+mE7eN6eG0ZXHcufc
-         HVyUXX36MEAWvccSyNz3/ndxePDpAdQnI7CyMFwlxag9cz1Jl7oRDjXRR+y6oRDHUp2j
-         +mbaUOejHPtRhrGOSwXpnEVuss48qQk44orKJ7ilVkfj6QktAVB9D5acpfcJHzyLELfc
-         iSFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=fGm6AcqnI1+bNBW3QZHl+Bh51II3lcjM0XYTu8SKeS0=;
-        fh=lswEEQqY29S+M8kHrxCR+Qdkw4xLGDlSvfmZ3c9MfNI=;
-        b=deW8n+9QsQxs8CoJ/Uf97uqmy6+yo8LTVUvqtoX06YXH5yTj4vViDqqqbavDErJYNX
-         E0cc50xRFbCpmz2vZAtmRc08/gixgtSrc2188m5epw6OCFBc+wk0bkjNQG3MQ0WSt8HQ
-         NqmYTEsNxd2ZCaK4lhjc4f1JCsyvFQagkyx21s62tPeyzSRpt79z1HHVBptBeR84KCVV
-         sx0oZtXsVRZ/y53qrFpuYOvLdlGK61jKs7nQ7BGFc5bFX1LrcrCd8QRO/9nJLKzNPyko
-         RXWkwsMIDlBao3/bgJNQJeFX4WI7+ISI3W1bHhxsjvjT8RFQKsOIaee/6iAvOk88nBsV
-         dnKQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Troc0CzO"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4903d730b1fso10485245e9.2
+        for <llvm@lists.linux.dev>; Thu, 18 Jun 2026 05:58:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ownrisk-dk.20251104.gappssmtp.com; s=20251104; t=1781783006; x=1782387806; darn=lists.linux.dev;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=fGm6AcqnI1+bNBW3QZHl+Bh51II3lcjM0XYTu8SKeS0=;
-        b=EDklrMOOFztR5hXtnIDOvS6+0TmdAdS04gMlCzbdlCu47BXF9T3it5e7hJgQXruzKt
-         PFNL56xdFhZJY2RWVaHTHQSYWcoqPJ+8umtTRtvIqBdaXTzAlXof8UuIM830lxGFxY9X
-         fmHNfXATdIXIyBhA4SGPHmStgOUs720VLBOs75CNBdz2HE5oQoHv/g4eQZXtjfz+k7dW
-         wdrudYFExgBesa1fd840xfqaqNPyPZuW5hXUurZjNr8zKOSF7i5s70IhGHNxVTAthPqR
-         bCKCLh8bu+w7iqvp5jzpz2PJchWkjOJimtHZTSTfSuWAhO8MYSj1iSBCYWDvwuc+sjO9
-         Vc9w==
+        d=gmail.com; s=20251104; t=1781787488; x=1782392288; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9xEFWyKzc+jMZEDnI2DAQamq42DtjPxgEVDWM9Nv978=;
+        b=Troc0CzOoX6B7NYJRmNNUcdcbWQBv6NSCD0KpfoGIx3hiprcCJkhsvJEZF2gPOWpDc
+         Cs6zz0FjueNI4Kyd/Wsvj7Ie1XZoQIayfiOTHlzD/h06vWe/mcbnaUD+FQSfdBLATHB/
+         s09msck5ethcr5tuK3nHVHWOuC1bPODflrkOFK0wF7KyfB+W96b2K79Dj27UomoQPXAO
+         x6jwypZOT4uq3cyWZMOsBBNOKu4ARLhT2uODrhYPYjC+rseF3NRlMDZn338U9zayJHYN
+         Ee4mVOcE5ka6/zIqVZkuWfwjxZpDPlbk1l3jiAl48TAaAJzlzQ3bFwCCj9H7MV9XHaj3
+         v2QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781783006; x=1782387806;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fGm6AcqnI1+bNBW3QZHl+Bh51II3lcjM0XYTu8SKeS0=;
-        b=Po2Kc38LZ2hM17XcjRDOsL3G4hywNtoZGAlU5ubLKm10WzPjp8RZD5LBdLGCD+baY4
-         XA6pTgwIivlAb/FSjw/eVcOr+K0hnLhOWPEGSlQ4VAfJ0b3hTbbPtreKvRLEQMhqIiMO
-         WcdXsGLS+fZnFzfjkeIQgmNwjEHayCYrAnreKOpamGoeKpULzwJLh8pmCS+tjgmysgae
-         JaM/AL/3ZtFROhsn8VNtCb0YTtQiVGonNSZpgENdhGtfwkSTaVvPcUVYSdcE5Ub8r+W0
-         Ij5R15zsUK7BkFdQrqv/Pdh3NqjpOzLzWFZIZ8buJLI0nuszMHQDCZRvsTbzED27zG4h
-         7rUA==
-X-Forwarded-Encrypted: i=1; AFNElJ8LSuiGU5O6NNly0SQM05Azcu6fUjqo84N0jHu1Yce+vNxEwO0T+0v59QQFTlgR8yUk9448@lists.linux.dev
-X-Gm-Message-State: AOJu0YzmlUc0Yh3D+kgg+Lcq+6JTQ5JL11HrZiKWENmUeX0RO92N4M+v
-	3Tc6JNkwewmBFB93Rvp4d2ZeYsuEqQ7KjCC0rsUpH9YBmcN5gR86XVHwfT7OUN5HI66Dam3RhvL
-	E5h67t93rquYa/TKwYvlg4J2S3J3cN1aVwCRCYXx1lg==
-X-Gm-Gg: AfdE7cl8J+cJb0tmt7c5vOtPB9sBOsisChnhdPopRn+R4F9KRpL8Y7R3KgW7CBbhnoo
-	LS+m1h89EF9S3VJUXlMlGFaflWTl1FFWTxAt4zbp4JFe0ZIerqO1jH5RBwhTmf7ekPaYvTNP///
-	Y6akHuu+507C8AFTdwjdYJ4NnuMVJYdQfhZVU/F2V3qByk/P1UP4BUeMZIOeTa0AR45Rr7chu7O
-	OZkggcUN2SnRzjbSIrCGmIQMSM/JwzYjTnXqeqiJSTUmRnUmK5fR6gO4aeK2KnavedUCANNRKpE
-	RwbyVFN4u0du2lTljluGjHgHThyQ
-X-Received: by 2002:a05:6214:4801:b0:8db:6d7d:b587 with SMTP id
- 6a1803df08f44-8dccc14dac9mr52050636d6.11.1781783005874; Thu, 18 Jun 2026
- 04:43:25 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1781787488; x=1782392288;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9xEFWyKzc+jMZEDnI2DAQamq42DtjPxgEVDWM9Nv978=;
+        b=dZiC1MHtV5/E530HS6cQlePCzj5/ZMIXtQhG4uf15sj+2deSrqZa9a1bYMIdafCEcN
+         NiBespr3d4NHRFk8/PKCwi4ehFrkr/knVqgxg/lVk4glM2ljysWqGREV3fQk0SfxSQnW
+         U8BwLwmx/Qg/2aIeTtUJxtE9V0oOnPdeAU7haOBj6kb8mpcu1zzkFeWtH8s5WDdwqjfF
+         A83ACemeGuuLOXaznSjHz3X5AkK3Vp0gyftF3gZESyfnfY7R/QsoVf++oGU4yn3MaQVz
+         c8vzPdm6M27CowbS7UDCtBSuAiBOPlb89bL2bsKOyFIKqZnV+OaMoJ5vP4ZVkcPnJJDj
+         lBRA==
+X-Forwarded-Encrypted: i=1; AFNElJ/jHHSTi354QZkF6FODN/yHGA/p5sjaje6AsbNcIBOW+FvgMG+ZlYk0gjtRHN8i019XOIq+@lists.linux.dev
+X-Gm-Message-State: AOJu0Yynpl8pL1KiTpShRVtjtwSYDwLRaFHmXUF81+Ilbdke9y1zzJTm
+	jzNsf52c4XY2iQmxu605l7+XHBRe4BaS+HR1Y6RGMUg4mkK5l9uXOL3o
+X-Gm-Gg: AfdE7cmyl+MzNAwsq5Z3RYAJAy39S2tPwvFIOL3Meg+/ApMk4Tndz7Q5TZSVObI/VQE
+	moYWXVY1FqPbGQQm9QevGyXpGBDhpH6oDFxTy32bEb47vtB36QQbNwd1x7wzcmpsj2lJMLT7vPV
+	2M0K2VwXn13d4J34zgwviBYthpPzsD+Dpke6qUFtixQPcEvT0MAN11rgDIX8T7SwP62ae4mAXy0
+	aSM6yr1LRXk4tEZvafZ+unARAbcSU2ATTjEuF5h5G84FdH4VcTHiIuK0m9m3EaoNGI45sX8dDq1
+	qCqsJNVukhe9I2I7iMwde3crYH4ZYEHN8ezAae60jMLvPHZnSktv7OyDj5OIDbwJHe4V4leRtW0
+	lgH40ydoSaLHHIQzJ+TamDvukiy/nYX2MPf0wsgbKuAH2+wDVl+6nLNdtDkGo+FxrFio+JsKr/x
+	6A51xh/2Bwzqvh1TSVnoa5JTpQBT2AXRPPeeIoKorCKXKjK2zj7Lu39zTvotl9AA==
+X-Received: by 2002:a05:600c:6219:b0:490:50c5:8153 with SMTP id 5b1f17b1804b1-492381e86e3mr53464745e9.2.1781787487908;
+        Thu, 18 Jun 2026 05:58:07 -0700 (PDT)
+Received: from Ansuel-XPS24.localdomain (93-34-88-103.ip49.fastwebnet.it. [93.34.88.103])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-49230a458f2sm241451585e9.3.2026.06.18.05.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 Jun 2026 05:58:06 -0700 (PDT)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Saravana Kannan <saravanak@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	netdev@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>
+Subject: [RFC PATCH net-next v8 00/12] net: pcs: Introduce support for fwnode PCS
+Date: Thu, 18 Jun 2026 14:57:08 +0200
+Message-ID: <20260618125752.1223-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260616100332.1308294-1-i.maximets@ovn.org>
-In-Reply-To: <20260616100332.1308294-1-i.maximets@ovn.org>
-From: Johan Thomsen <write@ownrisk.dk>
-Date: Thu, 18 Jun 2026 13:43:14 +0200
-X-Gm-Features: AVVi8Cf3XOkaQmP6GH0ARFvC4rsKf-fMT6mtyJYcQfTm0vSkjjtCI2heDspnweI
-Message-ID: <CAKv6aAMTqSo0qSng2Kv4=i6BSvJuUy9KSfeFRYx5JsYuo9=kqQ@mail.gmail.com>
-Subject: Re: [PATCH net] net: dst_metadata: fix false-positive memcpy overflow
- in tun_dst_unclone
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-> Johan, if you can test this one in your setup as well, that would
-> be great.  Thanks.
->
->  include/net/dst_metadata.h | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
-> index 1fc2fb03ce3f..f45d1e3163f0 100644
-> --- a/include/net/dst_metadata.h
-> +++ b/include/net/dst_metadata.h
-> @@ -164,8 +164,11 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
->         if (!new_md)
->                 return ERR_PTR(-ENOMEM);
->
-> -       memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
-> -              sizeof(struct ip_tunnel_info) + md_size);
-> +       /* Copy in two stages to keep the __counted_by happy. */
-> +       new_md->u.tun_info = md_dst->u.tun_info;
-> +       memcpy(ip_tunnel_info_opts(&new_md->u.tun_info),
-> +              ip_tunnel_info_opts(&md_dst->u.tun_info), md_size);
-> +
->  #ifdef CONFIG_DST_CACHE
->         /* Unclone the dst cache if there is one */
->         if (new_md->u.tun_info.dst_cache.cache) {
+This series introduce a most awaited feature that is correctly
+provide PCS with fwnode without having to use specific export symbol
+and additional handling of PCS in phylink.
 
-Hi Ilya,
+At times there were 2 different implementation (this and the one
+from Sean) but Sean agreed that this can be picked and used in favor
+of his implementation as long as his case with race condition is
+correctly handled.
 
-Sure. Just stressed it for 24 hours and - I cannot trigger the bug
-with this patch applied.
+---
+First the PCS fwnode:
 
-BR
-Johan
+The concept is to implement a producer-consumer API similar to other
+subsystem like clock or PHY.
+
+That seems to be the best solution to the problem as PCS driver needs
+to be detached from phylink and implement a simple way to provide a
+PCS while maintaining support for probe defer or driver removal.
+
+To keep the implementation simple, the PCS driver devs needs some
+collaboration to correctly implement this. This is O.K. as helper
+to correctly implement this are provided hence it's really a matter
+of following a pattern to correct follow removal of a PCS driver.
+
+A PCS provider have to implement and call fwnode_pcs_add_provider() in
+probe function and define an xlate function to define how the PCS
+should be provided based on the requested interface and phandle spec
+defined in fwnode (based on the #pcs-cells)
+
+fwnode_pcs_get() is provided to provide a specific PCS declared in
+fwnode at index.
+
+A simple xlate function is provided for simple single PCS
+implementation, fwnode_pcs_simple_get.
+
+A PCS provider on driver removal should first call
+fwnode_pcs_del_provider() to delete itself as a provider and then
+release the PCS from phylink with phylink_release_pcs() under rtnl
+lock.
+
+---
+Second PCS handling in phylink:
+
+We have the PCS problem for the only reason that in initial
+implementation, we permitted way too much flexibility to MAC driver
+and things started to deviate. At times we couldn't think SoC
+would start to put PCS outside the MAC hence it was OK to assume
+they would live in the same driver. With the introduction of
+10g in more consumer devices, we are observing a rapid growth
+of this pattern with multiple PCS external to MAC.
+
+To put a stop on this, the only solution is to give back to phylink
+control on PCS handling and enforce more robust supported interface
+definition from both MAC and PCS side.
+
+It's suggested to read patch 0003 of this series for more info, here
+a brief explaination of the idea:
+
+This series introduce handling of PCS in phylink and try to deprecate
+.mac_select_pcs.
+
+Phylink now might contain a linked list of available PCS and
+those will be used for PCS selection on phylink_major_config.
+
+MAC driver needs to define pcs_interfaces mask in phylink_config
+for every interface that needs a dedicated PCS.
+
+These PCS needs to be provided to phylink at phylink_create time
+by setting the .fill_available_pcs and .num_possible_pcs in phylink_config.
+Helpers to parse PCS from fwnode are provided
+fwnode_phylink_pcs_count() that will return the count of PCS entries
+described in the firmware node and fwnode_phylink_pcs_parse() that will
+fill a preallocated array of PCS pointer with the actual available PCS
+(ignoring the one that still needs to be probed).
+
+phylink_create() will fill the internal PCS list with the passed
+array of PCS. phylink_major_config and other user of .mac_select_pcs
+are adapted to make use of this new PCS list.
+
+The supported interface value is also moved internally to phylink
+struct. This is to handle late removal and addition of PCS.
+(the bonus effect to this is giving phylink a clear idea of what
+is actually supported by the MAC and his constraint with PCS)
+
+The supported interface mask in phylink is done by OR the
+supported_interfaces in phylink_config with every PCS in PCS list.
+
+PCS removal is supported by forcing a mac_config, refresh the
+supported interfaces and run a phy_resolve().
+
+PCS late addition is supported by introducing a global notifier
+for PCS provider. If a phylink have the pcs_interfaces mask not
+zero, it's registered to this notifier.
+
+PCS provider will emit a global PCS add event to signal any
+interface that a new PCS might be available.
+
+The function will then check if the PCS is related to the MAC
+fwnode and add it accordingly.
+
+A user for this new implementation is provided as an Airoha PCS
+driver. This was also tested downstream with the IPQ95xx QCOM SoC
+and with the help of Daniel also on the various Mediatek MT7988
+SoC with both SFP cage implementation and DSA attached.
+
+Lots of tests were done with driver unbind/bind and with interface
+up/down also by adding print to make sure major_config_fail gets
+correctly triggered and reset once the PCS comes back.
+
+The dedicated commits have longer description on the implementation
+so it's suggested to also check there for additional info.
+
+It's worth to mention that OpenWrt is currently using this on
+Mediatek SoC and QCOM ipq807x/ipq60xx/ipq50xx and Airoha are
+already ported in staging tree for testing.
+
+---
+
+Changes v8:
+- Back to RFC (net-next closed)
+- Address additional bug reported by Sashiko bot
+  - Better handle priv interface for Airoha PCS driver
+  - Better handle locking for modifying the PCS list in
+    phylink code
+  - Improve fwnode_phylink_pcs_parse() parsing on -ENOENT
+  - Better handle error condition in phylink_create()
+  - Turn down the link when current PCS is released
+- Fix compilation warning caused by copy paste error
+Changes v7:
+- Address all the bug from the Sashiko bot
+- Rename .num_available_pcs to .num_possible_pcs
+- Link PCS in phylink_create()
+- Correctly unregister the notifier on phylink_destroy()
+- Introduce fwnode_phylink_pcs_count()
+- Better handle locking in phylink for PCS handling
+- Better handle unavailable PCS at phylink_create() time
+- Improve Documentation file
+- Other minor fixes to address suggestion from bot
+- Rebase on top of net-next
+Changes v6:
+- Rebase on top of net-next
+- Add Documentation files
+- Add fw_devlink patch
+- Fix some comments typo
+- Rework the airoha_eth.c implementation with new multi serdes code
+- Extend PCS code with PCIe and USB support
+- Align schema to new property
+Changes v5:
+- Rebase on top of net-next
+- Use the new force_major_config
+- Reword some comments and commit description
+- Return -ENODEV instead of -EPROBE_DEFER to perevent race condition
+- Drop phy_interface_copy patch (Russell pushed an equivalent version)
+Changes v4:
+- Move patch 0002 phy_interface_copy to 0002 (fix bisectability
+  problem)
+- Address review from Lorenzo for Airoha ethernet driver
+- Fix kdoc error with missing Return (actually missing : before Return)
+- Fix UNMET dependency reported error for CONFIG_FWNODE_PCS
+- Revert to pcs.c instead of core.c (due to name conflict with other kmod)
+- Fix clang compilation error for Airoha PCS driver
+- Add missing inline function to pcs.h function
+Changes v3:
+- Out of RFC
+- Fix various spelling mistake
+- Drop circular dependency patch
+- Complete Airoha Ethernet phylink integration
+- Introduce .pcs_link_down PCS OP
+Changes v2:
+- Switch to fwnode
+- Implement PCS provider notifier
+- Better split changes
+- Move supported_interfaces to phylink
+- Add circular dependency patch
+- Rework handling with indirect addition/removal and
+  trigger of phylink_resolve()
+
+Christian Marangi (12):
+  net: phylink: keep and use MAC supported_interfaces in phylink struct
+  net: phylink: introduce internal phylink PCS handling
+  net: phylink: add phylink_release_pcs() to externally release a PCS
+  net: pcs: implement Firmware node support for PCS driver
+  net: phylink: support late PCS provider attach
+  net: Document PCS subsystem
+  MAINTAINERS: add myself as PCS subsystem maintainer
+  of: property: fw_devlink: Add support for "pcs-handle"
+  net: phylink: add .pcs_link_down PCS OP
+  dt-bindings: net: pcs: Document support for Airoha Ethernet PCS
+  net: pcs: airoha: add PCS driver for Airoha AN7581 SoC
+  net: airoha: add phylink support
+
+ .../bindings/net/pcs/airoha,pcs.yaml          |  261 ++
+ Documentation/networking/index.rst            |    1 +
+ Documentation/networking/pcs.rst              |  229 ++
+ MAINTAINERS                                   |    9 +
+ drivers/net/ethernet/airoha/Kconfig           |    1 +
+ drivers/net/ethernet/airoha/airoha_eth.c      |  193 +-
+ drivers/net/ethernet/airoha/airoha_eth.h      |    7 +-
+ drivers/net/ethernet/airoha/airoha_regs.h     |   12 +
+ drivers/net/pcs/Kconfig                       |    8 +
+ drivers/net/pcs/Makefile                      |    3 +
+ drivers/net/pcs/airoha/Kconfig                |   12 +
+ drivers/net/pcs/airoha/Makefile               |    7 +
+ drivers/net/pcs/airoha/pcs-airoha-common.c    | 1324 +++++++++++
+ drivers/net/pcs/airoha/pcs-airoha.h           | 1311 +++++++++++
+ drivers/net/pcs/airoha/pcs-an7581.c           | 2093 +++++++++++++++++
+ drivers/net/pcs/pcs.c                         |  261 ++
+ drivers/net/phy/phylink.c                     |  367 ++-
+ drivers/of/property.c                         |    2 +
+ include/linux/pcs/pcs-provider.h              |   41 +
+ include/linux/pcs/pcs.h                       |  140 ++
+ include/linux/phylink.h                       |   30 +
+ 21 files changed, 6264 insertions(+), 48 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/pcs/airoha,pcs.yaml
+ create mode 100644 Documentation/networking/pcs.rst
+ create mode 100644 drivers/net/pcs/airoha/Kconfig
+ create mode 100644 drivers/net/pcs/airoha/Makefile
+ create mode 100644 drivers/net/pcs/airoha/pcs-airoha-common.c
+ create mode 100644 drivers/net/pcs/airoha/pcs-airoha.h
+ create mode 100644 drivers/net/pcs/airoha/pcs-an7581.c
+ create mode 100644 drivers/net/pcs/pcs.c
+ create mode 100644 include/linux/pcs/pcs-provider.h
+ create mode 100644 include/linux/pcs/pcs.h
+
+-- 
+2.53.0
+
