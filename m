@@ -1,82 +1,78 @@
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66DA372B3C
-	for <llvm@lists.linux.dev>; Fri, 19 Jun 2026 10:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.95.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7C8388895
+	for <llvm@lists.linux.dev>; Fri, 19 Jun 2026 12:45:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.181.97.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781864621; cv=none; b=sTotAwJ4ZtLvkS8ot0UpxHbDWpn1aLpx7vczpg1QjstsRcaUmM5V2VR2hynj/L8HC1M3FjHhr70cV3unrBpOPIULCH6nOBbuK8EBgNeikB0762hwtj/aoVoN6LCXMfoWK6EIw7AK4uYneYezJF8mUrb1zaCGBijuaNDbqEPct8A=
+	t=1781873154; cv=none; b=c8tDVB4BwZ7tHG8emPmGBeBJAsUmVkzFC+0mgtJp9OsdKNTfpLTqrztbBkfHh2RWnwBLakRAFFA6k+xmQR2tN86Hhec4Scz6Dj9qvxi1SbSANKo3wTi2qULFGQAhFICAxsVKvWKpimbrVuzrhELt2dtGlAQveCQUPhtKAbOHFyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781864621; c=relaxed/simple;
-	bh=rlU6Fsomk54zDs8xzYXnvQ05msPTbxPCvks7+J7sqN4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IAxMGgH8xZdkgnshsM7zlwNmIbvUufwo/OQ3CWLTeThlhQLciIDFwhJeXG3t17UR0tTwXV44HWNln4O2ZG19tjx+8uIX+7RjFgVPp7klu/+Odg7w+kS2481FI35S0To8rEpLT/jArwmQuHzNCP0XkHwpz3VtuvRB1h+tFgFvG5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk; spf=pass smtp.mailfrom=toke.dk; arc=none smtp.client-ip=45.145.95.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=toke.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Authentication-Results: mail.toke.dk; dkim=none
-To: Rosen Penev <rosenp@gmail.com>, Rosen Penev <rosenp@gmail.com>,
- linux-wireless@vger.kernel.org
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, open list
- <linux-kernel@vger.kernel.org>, "open list:CLANG/LLVM BUILD
- SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH ath-next] ath9k: eeprom: alias vpdTableI onto vpdTableL
- to shrink stack frame
-In-Reply-To: <DJCF38062Q69.1WQ853JSRMFQ9@gmail.com>
-References: <20260617234105.284358-1-rosenp@gmail.com>
- <87pl1ofa6t.fsf@toke.dk> <DJCF38062Q69.1WQ853JSRMFQ9@gmail.com>
-Date: Fri, 19 Jun 2026 12:23:26 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <878q8ag76p.fsf@toke.dk>
+	s=arc-20240116; t=1781873154; c=relaxed/simple;
+	bh=xivFutCZ2EfyWJDK6alMYZk0Fv95CRsTRtwsuuv6g+Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QaafzNY5VmEawB6FXC4oBadoDPJGpSSHka48W433aZPTQCcF0/LA8jvZXGfHrQZIEcCG21y5iuu2M/ACfGs/zu8OnQInRs2RWNprWYzIxeSAP9SY8Jf4wM++JAwrs1v1xMxzA5IyBSO0p+s4g3FTKD+ZKV5e01l5XvmmOQpQeBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=I-love.SAKURA.ne.jp; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp; arc=none smtp.client-ip=202.181.97.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=I-love.SAKURA.ne.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=I-love.SAKURA.ne.jp
+Received: from www262.sakura.ne.jp (localhost [127.0.0.1])
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 65JCjNe5011843;
+	Fri, 19 Jun 2026 21:45:23 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from [192.168.1.6] (M106072072000.v4.enabler.ne.jp [106.72.72.0])
+	(authenticated bits=0)
+	by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 65JCjN6R011838
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+	Fri, 19 Jun 2026 21:45:23 +0900 (JST)
+	(envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <249b8ebd-1ef8-4c17-bc9c-a63c051c2369@I-love.SAKURA.ne.jp>
+Date: Fri, 19 Jun 2026 21:45:20 +0900
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] rseq: fix using an uninitialized stack variable in
+ rseq_exit_user_update
+To: Peter Zijlstra <peterz@infradead.org>, Qing Wang <wangqing7171@gmail.com>
+Cc: mathieu.desnoyers@efficios.com, dvyukov@google.com, justinstitt@google.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        mark.rutland@arm.com, mingo@kernel.org, morbo@google.com,
+        nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+        syzbot+185a631927096f9da2fc@syzkaller.appspotmail.com, tglx@kernel.org
+References: <20260601143934.GT3493090@noisy.programming.kicks-ass.net>
+ <20260602030854.574038-1-wangqing7171@gmail.com>
+ <20260602104255.GG4149641@noisy.programming.kicks-ass.net>
+Content-Language: en-US
+From: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20260602104255.GG4149641@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Anti-Virus-Server: fsav101.rs.sakura.ne.jp
+X-Virus-Status: clean
 
-"Rosen Penev" <rosenp@gmail.com> writes:
-
-> On Thu Jun 18, 2026 at 2:51 AM PDT, Toke H=C3=B8iland-J=C3=B8rgensen wrot=
-e:
->> Rosen Penev <rosenp@gmail.com> writes:
+On 2026/06/02 19:42, Peter Zijlstra wrote:
+> On Tue, Jun 02, 2026 at 11:08:54AM +0800, Qing Wang wrote:
+>> There is an bug which is an uninitialized stack variable use in
+>> `rseq_exit_user_update()` reported by syzbot:
 >>
->>> vpdTableL, vpdTableR, and vpdTableI are never live simultaneously.
->>> vpdTableL and vpdTableR are consumed during the frequency-interpolation
->>> step that writes vpdTableI; after the if/else they are never read
->>> again.  Reuse vpdTableL for the interpolated result (what was
->>> vpdTableI), reducing the stack frame by one 256-byte array.
->>>
->>> The read-via-write in the else branch is safe: ath9k_hw_interpolate()
->>> receives vpdTableL[i][j] by value as a function argument before the
->>> return value is written back to vpdTableL[i][j].
->>>
->>> Stack frame size change (x86_64, clang):
->>>   before: 0x440 (1088 B)
->>>   after:  0x330 (816 B)
+>> BUG: KMSAN: kernel-infoleak in rseq_set_ids_get_csaddr include/linux/rseq_entry.h:502 [inline]
 >>
->> Huh? These are static variables, how is this affecting stack usage?
->> I assume this is against your previous (broken) patch?
-> It's only broken on ARM + GCC. GCC + anything else and Clang + anything
-> else is fine.
+>> The local variable:
+>> ```c
+>> 	struct rseq_ids ids = {
+>> 		.cpu_id	 = task_cpu(t),
+>> 		.mm_cid	 = task_mm_cid(t),
+>> 		.node_id = cpu_to_node(ids.cpu_id),
+>> 	};
+>> ```
+> 
+> FWIW, I've no idea what that ``` nonsense is, but it does not belong in
+> Changelogs. I've removed it.
+> 
 
-That's still broken, though :)
+It seems that this problem is still happening after
+commit 6d99479799c6 ("rseq: Fix using an uninitialized stack variable
+in rseq_exit_user_update()") was applied. Please check.
 
->> Anyway, adding this kind of aliasing to fix a problem that you
->> introduced by changing working code with no real benefit is not an
->> improvement. I'm OK with fixing actual bugs, but this is just mindless
->> churn...
-> Fixing actual bugs is the goal yes. It makes sense to split up into
-> multiple parts IMO.
-
-If you're fixing an actual bug, include that in the patch description,
-and if it requires multiple patches include them in a series. Sending
-these out of context patches that just shuffle code around is just
-churn...
-
--Toke
