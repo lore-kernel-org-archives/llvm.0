@@ -1,52 +1,52 @@
-Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2423403ED
-	for <llvm@lists.linux.dev>; Fri, 19 Jun 2026 22:58:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964D336655D
+	for <llvm@lists.linux.dev>; Fri, 19 Jun 2026 22:59:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1781909937; cv=none; b=a9eT0laonKda+zaDt8bNTJNJpXsMjowAq4Yg7AbvCfoL4Oiw27s10VBUwSK5tGURmXHNLm15MrYfG/zzpftxuJDlgJKU5ZFJS1tIK3kyHR2CCOzhowKtU7rDQQUUNA53/fTgmIvY2/QsGcl90mnq+1rq2nzRg0f0QdtxYKOBe98=
+	t=1781909981; cv=none; b=mYkq8/nm5uVAPULbYeBC8k/NaKmbijEAdy8KHbq6Ry2r1OmkCcCpWsU/ihNq69MJ/txUPkICVACtsx3077+Bs3aeH0YeGa2jydcYoNS0pBiP0zcUQO9HsvrnSN/xfQR7rvZEigchDHBx11/N7HJCo2i+X0jbALqMSE93HFVIz0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1781909937; c=relaxed/simple;
-	bh=P44btkX/5G9W5QhX0wBooqqGpL5H58AxXskj6RX48zk=;
+	s=arc-20240116; t=1781909981; c=relaxed/simple;
+	bh=e/2Mln5D8xK8owW5EsqOW6UQeKNFdUiXUtf1I2RtIXM=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=cFdeXvhspc8cJaGYYYunng6B6fLqwlCcrWvLed/Cg5OpCOdlnEVWTxNNma4nvCKAdX0aw+SptFO6/nQJ5/JXRphELfNaJZWGTmR51VISIiee2kNj4Yc/YNxonGTjh9troAQd4VQZMGOSTT4d2j5lRdlb1KaKEFRYEmuRN8nyi2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.66
+	 In-Reply-To:Content-Type; b=BY/PUP//diKFN61DMG9F0+wWcErRPNAwzjB8vlsukRL2uQts3tDuOVDBPDo3l6PXWYBWL0omNTng6u5KD+Pjz2aZk6+AHn2dX4IQyq76gvzzve8xwy1YIAyRD5lhlWCok+vv9oTGQVxmAF6sb0WDbU3L+vpjSnKWe+E8fyyXt/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.67
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-4923fb1f095so13835755e9.1
-        for <llvm@lists.linux.dev>; Fri, 19 Jun 2026 15:58:55 -0700 (PDT)
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-45ef189aa1cso1789625f8f.0
+        for <llvm@lists.linux.dev>; Fri, 19 Jun 2026 15:59:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1781909934; x=1782514734;
+        d=1e100.net; s=20251104; t=1781909979; x=1782514779;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:to:subject:cc:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=07lVSutuBZtSqSTP2+DZuX+nW0UInURGUViWnvtWS0g=;
-        b=bmnVnab6AqsIhIZs8LyV/LXRkbiSt+XdpEY9qD+LtAF5S24nUsjqGhSN3IumtvOHVT
-         DKuoSKKEA7WEpaD6fxoRMEHDcj4FX5sg1rke7Ns0rophTtoOdSX/+IYBz3yDohIf1FCc
-         lC9Wi4iXf/GZSd6Oy+AXAZqLIwkZdgipCBCN5puNz/oufrEU7YpGZsrgkGBn4LMu4e3v
-         IkQblkngC19Sx+cjxPnE4dUA5RAEU0ZHjl/xq9tTP6yAGmGZoBF97Yr/Ud/Us1arOyJ5
-         CSqDmFXpXGeSeoellXuXVcjf96ww0achQwM1K7cBRb5COuYpQqQApZV6X8jABxe47FCO
-         aReA==
-X-Forwarded-Encrypted: i=1; AFNElJ+i9WqY/Cks1Ua5yg604mlzwVxH7eRwINpw06WOTnC+qm2oH85vEtI977LDUnsW0cC986Au@lists.linux.dev
-X-Gm-Message-State: AOJu0Yzlv3gyH90QfwWTa7tGxAryuA3iMx8EHe9uX3XVKhGoc6wY7EQS
-	N3HK2cbNi73Xq3JqLfKKhaUuam+jg6CVj7tdp/raB9f1qhslNinLt4zS
-X-Gm-Gg: AfdE7ckING/drcwn2n8xRfwbrmsNt3+qMsuc0lXak+01ECPNwE0T/T4uNOaOpyf6UHT
-	YSWC+bxdSbVjGFbIaKHYRaPBY5z4qwyQ7aIuAnjduMMlf7tCDQY2gcqGLUAnir3te1A4mcMQPu6
-	WiwBPTauiwMVvzwSWXZ2KjgEMoSLC6GClacbduc00YwpoEYwIsFdYfYcoNUhOcOEBWpcyS3PDlC
-	9aPtwK0etWHj5YrpW+NYutTBtTvC/UJ/ErI4rByTFeR5SqDBBdjDYtydYzO8Hrc9/oZqcrhckFP
-	4h90qRVLzMI69KH99j6xWFn8RtfRBy+/z0O24xcwngSelbZh5YI8PqMknADlaf/F7yOl/Tnjk2w
-	cKdVmwyQH3Ov87QfVcDqL6XU6KkKu/rBL+YddjeDi2kt7qQCU9DJu1ePC8BiHy0s4dd7hSLdWHf
-	TZUdZx2leZj29bs+FjIS5BR7l+tZSCGUhpqL2HwQN6TbFcNEujkdzdY2o=
-X-Received: by 2002:a05:600c:3e83:b0:492:3fb5:4697 with SMTP id 5b1f17b1804b1-492423140e0mr91571045e9.5.1781909934193;
-        Fri, 19 Jun 2026 15:58:54 -0700 (PDT)
+        bh=Yddd8uAv1z7sx4dK+pzC6v0s9Mw+xioH8fNF+U4EgkE=;
+        b=bklFrbfEXLmXHKi0flsoOL9tToJc6wlPMX0lg8L56/chgxlb62NVLcFQEkxZ+4adqy
+         JIwXNE005rIPaHfFHjmTLucTnlH2bm/6l7H7So8CCWUe4AJ1DOPGbVoWYdk5M+Ep1kvx
+         cMOxkVYiB/6gxl7yfMOQCrltwuTehvhVcKaunKiD0KUTZ9XFocOvQaXwhA2FeMu9C0Za
+         HZt5RrtpdpvFyQH9zZm373EHWUnqvR93iWQCzcwYX0aqSuen4LHSAiI+i7jcvGloar9i
+         oKjiraqnzcrr2Pw09C2oxL2hcw6+FYInNjwNQU+z96zg5/OSezOLM+87PZ2M3JT0TphN
+         L/EA==
+X-Forwarded-Encrypted: i=1; AFNElJ8UFrbHo3e/6Pm4LzTiPb17iWKphyetxrNZ1h58iPG18wwb5pGyS4ALsni9MPUtaTGaU/1Z@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx601lyE6+W5k5P1FYX3ZSSyi9hQAQdjODZxktYPrZb6b5UeS7P
+	tLyWW0zoPW72lTp1UyeaM5aSsjoAoBHx8mdJhGyiCiYn5voTD8EjEOIk
+X-Gm-Gg: AfdE7cnbYxjNX20eAiw3MajNzmJ7IdEkfocDNTaIOj4RoMQEz/9fC+pdb1ogJnCLfZV
+	YWdr6KHsVb0QTC54SBcAs8lBq2tJNkslrFPeQUnJTax/1j/Gq9Lh0bp6RsyOD/l+HbIq5PJuU2L
+	D1JQwWitLFJK+GiRtQzEd7aumRBNLK06UKLRXZbB7x3Zp48LCl8mOu3izmKx8FvUIqeKm3WcsQ+
+	9R4bb8nQaiFbQAeEIRqLVrgLsA1qaTGNnidA2erLxiRp5qUyRWHBoCztEAy76HSnTaDExVmVwcO
+	J2VTrruDZuVA4TakzaTGTX6oblbC/JYu9Cf+lwKSpQ+NquJLInMCV6bPr5pnA/vx40iwHGshXWh
+	Ez8yoVZI9tlbS+SqGg4uF8HkheG+c9qXYgqRL4eCu09O+Le9OLY0HpzcSkwZEAYoTgQmr480yJD
+	DOZepfiJTv+SFpWybD+ANMQDCtxII7S1yenwrO6Z7KQO3a
+X-Received: by 2002:a05:600c:63c7:b0:492:3fcb:22fe with SMTP id 5b1f17b1804b1-49240e23d55mr63479655e9.1.1781909978827;
+        Fri, 19 Jun 2026 15:59:38 -0700 (PDT)
 Received: from [192.168.88.241] (89-24-48-145.nat.epc.tmcz.cz. [89.24.48.145])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49240eef2basm98973675e9.2.2026.06.19.15.58.52
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4924923914fsm16164585e9.6.2026.06.19.15.59.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 Jun 2026 15:58:53 -0700 (PDT)
-Message-ID: <d967e161-f0a8-434f-9f71-a8838b8576ac@ovn.org>
-Date: Sat, 20 Jun 2026 00:58:51 +0200
+        Fri, 19 Jun 2026 15:59:38 -0700 (PDT)
+Message-ID: <f6c22c4c-68fe-4bf8-96ab-97d191cbbd16@ovn.org>
+Date: Sat, 20 Jun 2026 00:59:36 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -54,23 +54,21 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: i.maximets@ovn.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+Cc: i.maximets@ovn.org, netdev@vger.kernel.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Kees Cook <kees@kernel.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
  Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
  linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev, Johan Thomsen <write@ownrisk.dk>
+ llvm@lists.linux.dev
 Subject: Re: [PATCH net] net: dst_metadata: fix false-positive memcpy overflow
  in tun_dst_unclone
-To: "Gustavo A. R. Silva" <gustavo@embeddedor.com>, netdev@vger.kernel.org
+To: Johan Thomsen <write@ownrisk.dk>
 References: <20260616100332.1308294-1-i.maximets@ovn.org>
- <9e941b82-23d4-44e6-a240-b7949ace76ab@embeddedor.com>
- <b16e8bac-e149-4052-b1cb-8fd3e1137f9c@ovn.org>
- <a95aabe9-6294-42ed-8327-b7d74bb4a8c8@embeddedor.com>
- <13b922ce-8450-48fd-adf7-5377989fb6e4@embeddedor.com>
+ <CAKv6aAMTqSo0qSng2Kv4=i6BSvJuUy9KSfeFRYx5JsYuo9=kqQ@mail.gmail.com>
 Content-Language: en-US
 From: Ilya Maximets <i.maximets@ovn.org>
 Autocrypt: addr=i.maximets@ovn.org; keydata=
@@ -116,121 +114,41 @@ Autocrypt: addr=i.maximets@ovn.org; keydata=
  yWOKeCw9bCZX4a/uFw77TZMEq3upjeq21oi6NMTwvvWWMYuEKNi0340yZRrBdcDhbXkl9x/o
  skB2IbnvSB8iikbPng1ihCTXpA2yxioUQ96Akb+WEGopPWzlxTTK+T03G2ljOtspjZXKuywV
  Wu/eHyqHMyTu8UVcMRR44ki8wam0LMs+fH4dRxw5ck69AkV+JsYQVfI7tdOu7+r465LUfg==
-In-Reply-To: <13b922ce-8450-48fd-adf7-5377989fb6e4@embeddedor.com>
+In-Reply-To: <CAKv6aAMTqSo0qSng2Kv4=i6BSvJuUy9KSfeFRYx5JsYuo9=kqQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 6/18/26 6:02 AM, Gustavo A. R. Silva wrote:
-> 
-> 
-> On 6/17/26 16:59, Gustavo A. R. Silva wrote:
+On 6/18/26 1:43 PM, Johan Thomsen wrote:
+>> Johan, if you can test this one in your setup as well, that would
+>> be great.  Thanks.
 >>
+>>  include/net/dst_metadata.h | 7 +++++--
+>>  1 file changed, 5 insertions(+), 2 deletions(-)
 >>
->> On 6/17/26 16:01, Ilya Maximets wrote:
->>> On 6/17/26 10:08 PM, Gustavo A. R. Silva wrote:
->>>> Hi,
->>>>
->>>> On 6/16/26 04:03, Ilya Maximets wrote:
->>>>> kmalloc_flex() in metadata_dst_alloc() sets __counted_by for the
->>>>> structure to the options_len, which is then initialized to zero.
->>>>> Later, we're initializing the structure by copying the tunnel info
->>>>> together with the options, and this triggers a warning for a potential
->>>>> memcpy overflow, since the compiler estimates that the options can't
->>>>> fit into the structure, even though the memory for them is actually
->>>>> allocated.
->>>>>
->>>>>    memcpy: detected buffer overflow: 104 byte write of buffer size 96
->>>>>    WARNING: CPU: X PID: Y at lib/string_helpers.c:1036 __fortify_report
->>>>>     skb_tunnel_info_unclone+0x179/0x190
->>>>>     geneve_xmit+0x7fe/0xe00
->>>>
->>>> This warning has nothing to do with counted_by. See below for more
->>>> comments.
->>>>
->>>>>
->>>>> The issue is triggered when built with clang and source fortification.
->>>>>
->>>>> Fix that by doing the copy in two stages: first - the main data with
->>>>> the options_len, then the options.  This way the correct length should
->>>>> be known at the time of the copy.
->>>>>
->>>>> It would be better if the options_len never changed after allocation,
->>>>> but the allocation code is a little separate from the initialization
->>>>> and it would be awkward and potentially dangerous to return a struct
->>>>> with options_len set to a non-zero value from the metadata_dst_alloc().
->>>>>
->>>>> Another option would be to use ip_tunnel_info_opts_set(), but it is
->>>>> doing too many unnecessary operations for the use case here.
->>>>>
->>>>> Fixes: 69050f8d6d07 ("treewide: Replace kmalloc with kmalloc_obj for non-scalar types")
->>>>> Reported-by: Johan Thomsen <write@ownrisk.dk>
->>>>> Closes: https://lore.kernel.org/netdev/CAKv6aAM8_EWgXScnKmKYm_4SwGDVBK++dzfP+Y6msUXbp99QUw@mail.gmail.com/
->>>>> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
->>>>> ---
->>>>>
->>>>> Johan, if you can test this one in your setup as well, that would
->>>>> be great.  Thanks.
->>>>>
->>>>>    include/net/dst_metadata.h | 7 +++++--
->>>>>    1 file changed, 5 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
->>>>> index 1fc2fb03ce3f..f45d1e3163f0 100644
->>>>> --- a/include/net/dst_metadata.h
->>>>> +++ b/include/net/dst_metadata.h
->>>>> @@ -164,8 +164,11 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
->>>>>        if (!new_md)
->>>>>            return ERR_PTR(-ENOMEM);
->>>>> -    memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
->>>>> -           sizeof(struct ip_tunnel_info) + md_size);
->>>>
->>>> What's going on here is that, internally, fortified memcpy() retrieves
->>>> the destination size via __builtin_dynamic_object_size() in mode 1.
->>>>
->>>> That is:
->>>>
->>>> __builtin_dynamic_object_size(&new_md->u.tun_info, 1)
->>>>
->>>> For the above case, Clang returns sizeof(new_md->u.tun_info) == 96.
->>>>
->>>> So the warning is reporting that 104 bytes don't fit in an object of
->>>> size 96 bytes, regardless of any counted_by annotation or allocation.
->>>
->>> Hmm.  Does __builtin_dynamic_object_size(&new_md->u.tun_info, 1) return
->>> 104 when the options_len is 8?  If so, isn't that because it is counted
->>> by that field?  Asking because the fortification doesn't complain if we
->>> keep the full 104-byte copy as-is, but set the options_len beforehand,
->>> as tested by Johan.
+>> diff --git a/include/net/dst_metadata.h b/include/net/dst_metadata.h
+>> index 1fc2fb03ce3f..f45d1e3163f0 100644
+>> --- a/include/net/dst_metadata.h
+>> +++ b/include/net/dst_metadata.h
+>> @@ -164,8 +164,11 @@ static inline struct metadata_dst *tun_dst_unclone(struct sk_buff *skb)
+>>         if (!new_md)
+>>                 return ERR_PTR(-ENOMEM);
 >>
->> I see. If that is the case, then, internally, fortified memcpy() ends up
->> using mode 0 instead of mode 1. Something like this:
->>
->> __builtin_dynamic_object_size(&new_md->u.tun_info, 0)
->>
->> The above will effectively consider the allocation and counted_by because
->> it will interpret new_md->u.tun_info as an open-ended object due to the
->> flexible-array member (in struct ip_tunnel_info) whose size is determined
->> by counted_by.
+>> -       memcpy(&new_md->u.tun_info, &md_dst->u.tun_info,
+>> -              sizeof(struct ip_tunnel_info) + md_size);
+>> +       /* Copy in two stages to keep the __counted_by happy. */
+>> +       new_md->u.tun_info = md_dst->u.tun_info;
+>> +       memcpy(ip_tunnel_info_opts(&new_md->u.tun_info),
+>> +              ip_tunnel_info_opts(&md_dst->u.tun_info), md_size);
+>> +
+>>  #ifdef CONFIG_DST_CACHE
+>>         /* Unclone the dst cache if there is one */
+>>         if (new_md->u.tun_info.dst_cache.cache) {
 > 
-> Indeed. The execution stops here:
+> Hi Ilya,
 > 
-> fortify_memcpy_chk():
-> 588         /*
-> 589          * Always stop accesses beyond the struct that contains the
-> 590          * field, when the buffer's remaining size is known.
-> 591          * (The SIZE_MAX test is to optimize away checks where the buffer
-> 592          * lengths are unknown.)
-> 593          */
-> 594         if (p_size != SIZE_MAX && p_size < size)
-> 595                 fortify_panic(func, FORTIFY_WRITE, p_size, size, true);
-> 
-> with p_size = __builtin_dynamic_object_size(&new_md->u.tun_info, 0)
-> 
-> The code never reaches the part where p_size_field (__bdos(&new_md->u.tun_info, 1))
-> is checked at runtime because there is no need for that.
-> 
-> So yep, this patch is okay as-is.
+> Sure. Just stressed it for 24 hours and - I cannot trigger the bug
+> with this patch applied.
 
-Ack.  Thanks for looking into this!
+Thanks, Johan!
 
 Best regards, Ilya Maximets.
