@@ -1,81 +1,283 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B40371860;
-	Sun, 21 Jun 2026 21:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30A73537F7
+	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 04:06:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782078024; cv=none; b=FItqXo7HQ8yTXPieeMvwXjYuKBi8zO4yt+X/T7bXgvBtUFZLeehzpetgLQKoLVjvUW6bxybK1vHh4E+mEItN8PWoWm7LRYtTqJECvwwLaug2PokVwpx9U7Q620VfFpXk2CN1QwiUi77+QiqqtkJUzhQ6S+lYlqKJ4wCSvbHrBJ4=
+	t=1782101213; cv=none; b=aFOskrgCXYoMfksNu54Q3J1o1VeJUQSdcVs5m84lxqzIbkqIF2unNgJcAHLYs53UrnObElfkiyMNaB9vW3qhRtB/lWThf5olCqo35MUcq4Eo2AnDo8s4ie9vc57GLUhnVJDFwAxnIob4icAmzMtX5T4gzU0060vqrNxdbzwACW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782078024; c=relaxed/simple;
-	bh=s4/W59PERcbEb+bn87wtkHL52L8sN5RXARYgJjVdlTo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=GkpEbEAStVyH2rqhbOqthMamEkjnSthLpNeDMyfrd085irjIuSj97Cq66AC48vsLeTvnlVJRH/6C41MQV3QjCc0NDyIFGV/OkVhgm/f2kRrZqdr92nNKU0BiPWCVNv3+/228TBMBGhFfV4X6zZ9h+jQZZmqGyZ4qEGxM4vN6Sow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jvIjE25U; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782101213; c=relaxed/simple;
+	bh=sI2dRrm2rYzC5hsq52tWdXiGHIDaT9AxOFi7X+Rlza0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qe1hWheTnmmp6kY80pPhJN8AbN2QRsMLQJNExC7U7p+1fHayQ2O5IyZw2bqEWeyBGX5GnD+YjgIkp+efmPxtrEY5C88hz/jn/JweA5uUK2jT0LVl+0wxAPzpACrh+Fq6n0zJ/tldJZiVCw/UL6OMGhBqRd+daEmq6Ua+9FixSxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oHrwj+Sj; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jvIjE25U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C954F1F000E9;
-	Sun, 21 Jun 2026 21:40:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782078022;
-	bh=DUajjUcW97DEdz6Nsz6jAt2jo/oscLX1HvKOjZWvze0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=jvIjE25UVjQ+Vj+aZJrEey+FIw05Zgykui8FhDa7LXvwBDrSyZbY1R8DPfBSXrpA9
-	 fXh9PVh1TpEm724VvprNAY6Bgb45pCIKO24aU9mFESBmL79nVFKaqasTwP9iz4riyy
-	 Jqh/UlsL5GHZREcA1i8ylwDSE2bUA4E8aXCWd6SUOewB/WcatrcR8neu6rCUKnpaLb
-	 khY7UpDArIx1ilFbus99ubbcxfux3rxM/2r+punYeB2yBBeahIqbEgOf7dpQ23te9l
-	 9BAwAtBnheMNN15SUrrmlcVTTCvtNKov0chTlv4u20+G9M1ej6l2X21IsqwmV30c1S
-	 yL6yDPmDGTFMw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 569AE3AAA6E4;
-	Sun, 21 Jun 2026 21:40:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oHrwj+Sj"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1782101196;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZUWyFEvXeVLfLgRyqSt5dzUpDWIXdvcmv/YrGiPhDm0=;
+	b=oHrwj+SjzLCSYGSoHMsBlTyi/BPO1LYEAowZCiJy/BgfowxK1Nhv4wBnxGATzNJAQy2Usu
+	3Aui+a8Xl2VwYnUg4vaKt1jLEunHuuM12PdPzSO2e5i/XDE+X1RLFq1HeiZLctcF2EtPOU
+	pEKF/++lDxrY0G4TuBJvKoXJ/NqYwTU=
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Tejun Heo <tj@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: David Howells <dhowells@redhat.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Philipp Stanner <phasta@kernel.org>,
+	linux-block@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-ntfs-dev@lists.sourceforge.net,
+	linux-fsdevel@vger.kernel.org,
+	io-uring@vger.kernel.org,
+	audit@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	linux-perf-users@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	kexec@lists.infradead.org,
+	live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	rcu@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-mm@kvack.org,
+	virtualization@lists.linux.dev,
+	damon@lists.linux.dev,
+	llvm@lists.linux.dev,
+	chengkaitao <chengkaitao@kylinos.cn>
+Subject: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor state
+Date: Mon, 22 Jun 2026 12:05:30 +0800
+Message-ID: <20260622040533.29824-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] net: dst_metadata: fix false-positive memcpy overflow
- in
- tun_dst_unclone
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178207801400.510072.6522219475902983121.git-patchwork-notify@kernel.org>
-Date: Sun, 21 Jun 2026 21:40:14 +0000
-References: <20260616100332.1308294-1-i.maximets@ovn.org>
-In-Reply-To: <20260616100332.1308294-1-i.maximets@ovn.org>
-To: Ilya Maximets <i.maximets@ovn.org>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, kees@kernel.org,
- gustavoars@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
- morbo@google.com, justinstitt@google.com, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, llvm@lists.linux.dev, write@ownrisk.dk
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+From: chengkaitao <chengkaitao@kylinos.cn>
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+The list_for_each*_safe() helpers are used when the loop body may remove
+the current entry.  Their current interface, however, forces every caller
+to define a temporary cursor outside the macro and pass it in, even when
+the caller never uses that cursor directly.  For most call sites this
+extra cursor is just boilerplate required by the macro implementation.
 
-On Tue, 16 Jun 2026 12:03:29 +0200 you wrote:
-> kmalloc_flex() in metadata_dst_alloc() sets __counted_by for the
-> structure to the options_len, which is then initialized to zero.
-> Later, we're initializing the structure by copying the tunnel info
-> together with the options, and this triggers a warning for a potential
-> memcpy overflow, since the compiler estimates that the options can't
-> fit into the structure, even though the memory for them is actually
-> allocated.
-> 
-> [...]
+This is awkward because the saved next pointer is an internal detail of
+the iteration.  Callers that only remove or move the current entry do not
+need to spell it out.
 
-Here is the summary with links:
-  - [net] net: dst_metadata: fix false-positive memcpy overflow in tun_dst_unclone
-    https://git.kernel.org/netdev/net/c/4c6d43db2a4d
+The _safe() suffix has also caused confusion.  Christian Koenig pointed
+out that the name is easy to read as a thread-safe variant, especially
+for beginners, even though it only means that the iterator keeps enough
+state to tolerate removal of the current entry.  He suggested _mutable()
+as a clearer description of what the loop permits.
 
-You are awesome, thank you!
+Add *_mutable() iterator variants for list, hlist and llist.  The new
+helpers are variadic and support both forms.  In the common case, the
+caller omits the temporary cursor and the macro creates a unique internal
+cursor with typeof(pos) and __UNIQUE_ID().  If a loop really needs an
+explicit temporary cursor, the caller can still pass it and the helper
+keeps the existing *_safe() behaviour.
+
+For example, a call site may use the shorter form:
+
+  list_for_each_entry_mutable(pos, head, member)
+
+or keep the explicit temporary cursor form:
+
+  list_for_each_entry_mutable(pos, tmp, head, member)
+
+The existing *_safe() helpers remain available for compatibility.  This
+series only converts users in mm, block, kernel, init and io_uring.  If
+this approach looks acceptable, the remaining users can be converted in
+follow-up series.
+
+Changes in v3 (Christian König, Andy Shevchenko):
+- Convert safe list walks to mutable iterators
+
+Changes in v2 (Muchun Song, Andy Shevchenko):
+- Drop the list_for_each_entry_mutable*() helpers from v1 and make the
+  cursor change directly in the existing list_for_each_entry*() helpers.
+- Open-code special list walks that rely on updating the loop cursor in
+  the body, preserving their existing traversal semantics.
+
+Link to v2:
+https://lore.kernel.org/all/20260609061347.93688-1-kaitao.cheng@linux.dev/
+
+Link to v1:
+https://lore.kernel.org/all/20260529082149.76764-1-kaitao.cheng@linux.dev/
+
+Kaitao Cheng (7):
+  list: Add mutable iterator variants
+  llist: Add mutable iterator variants
+  mm: Use mutable list iterators
+  block: Use mutable list iterators
+  kernel: Use mutable list iterators
+  initramfs: Use mutable list iterator
+  io_uring: Use mutable list iterators
+
+ block/bfq-iosched.c                 |  17 +-
+ block/blk-cgroup.c                  |  12 +-
+ block/blk-flush.c                   |   4 +-
+ block/blk-iocost.c                  |  18 +-
+ block/blk-mq.c                      |   8 +-
+ block/blk-throttle.c                |   4 +-
+ block/kyber-iosched.c               |   4 +-
+ block/partitions/ldm.c              |   8 +-
+ block/sed-opal.c                    |   4 +-
+ include/linux/list.h                | 269 ++++++++++++++++++++++++----
+ include/linux/llist.h               |  81 +++++++--
+ init/initramfs.c                    |   5 +-
+ io_uring/cancel.c                   |   6 +-
+ io_uring/poll.c                     |   3 +-
+ io_uring/rw.c                       |   4 +-
+ io_uring/timeout.c                  |   8 +-
+ io_uring/uring_cmd.c                |   3 +-
+ kernel/audit_tree.c                 |   4 +-
+ kernel/audit_watch.c                |  16 +-
+ kernel/auditfilter.c                |   4 +-
+ kernel/auditsc.c                    |   4 +-
+ kernel/bpf/arena.c                  |  10 +-
+ kernel/bpf/arraymap.c               |   8 +-
+ kernel/bpf/bpf_local_storage.c      |   3 +-
+ kernel/bpf/bpf_lru_list.c           |  25 ++-
+ kernel/bpf/btf.c                    |  18 +-
+ kernel/bpf/cgroup.c                 |   7 +-
+ kernel/bpf/cpumap.c                 |   4 +-
+ kernel/bpf/devmap.c                 |  10 +-
+ kernel/bpf/helpers.c                |   8 +-
+ kernel/bpf/local_storage.c          |   4 +-
+ kernel/bpf/memalloc.c               |  16 +-
+ kernel/bpf/offload.c                |   8 +-
+ kernel/bpf/states.c                 |   4 +-
+ kernel/bpf/stream.c                 |   4 +-
+ kernel/bpf/verifier.c               |   6 +-
+ kernel/cgroup/cgroup-v1.c           |   4 +-
+ kernel/cgroup/cgroup.c              |  54 +++---
+ kernel/cgroup/dmem.c                |  12 +-
+ kernel/cgroup/rdma.c                |   8 +-
+ kernel/events/core.c                |  44 +++--
+ kernel/events/uprobes.c             |  12 +-
+ kernel/exit.c                       |   8 +-
+ kernel/fail_function.c              |   4 +-
+ kernel/gcov/clang.c                 |   4 +-
+ kernel/irq_work.c                   |   4 +-
+ kernel/kexec_core.c                 |   4 +-
+ kernel/kprobes.c                    |  16 +-
+ kernel/livepatch/core.c             |   4 +-
+ kernel/livepatch/core.h             |   4 +-
+ kernel/liveupdate/kho_block.c       |   4 +-
+ kernel/liveupdate/luo_flb.c         |   4 +-
+ kernel/locking/rwsem.c              |   2 +-
+ kernel/locking/test-ww_mutex.c      |   2 +-
+ kernel/module/main.c                |  11 +-
+ kernel/padata.c                     |   4 +-
+ kernel/power/snapshot.c             |   8 +-
+ kernel/power/wakelock.c             |   4 +-
+ kernel/printk/printk.c              |  11 +-
+ kernel/ptrace.c                     |   4 +-
+ kernel/rcu/rcutorture.c             |   3 +-
+ kernel/rcu/tasks.h                  |   9 +-
+ kernel/rcu/tree.c                   |   6 +-
+ kernel/resource.c                   |   4 +-
+ kernel/sched/core.c                 |   4 +-
+ kernel/sched/ext.c                  |  22 +--
+ kernel/sched/fair.c                 |  28 +--
+ kernel/sched/topology.c             |   4 +-
+ kernel/sched/wait.c                 |   4 +-
+ kernel/seccomp.c                    |   4 +-
+ kernel/signal.c                     |  11 +-
+ kernel/smp.c                        |   4 +-
+ kernel/taskstats.c                  |   8 +-
+ kernel/time/clockevents.c           |   6 +-
+ kernel/time/clocksource.c           |   4 +-
+ kernel/time/posix-cpu-timers.c      |   4 +-
+ kernel/time/posix-timers.c          |   3 +-
+ kernel/torture.c                    |   3 +-
+ kernel/trace/bpf_trace.c            |   4 +-
+ kernel/trace/ftrace.c               |  49 +++--
+ kernel/trace/ring_buffer.c          |  25 ++-
+ kernel/trace/trace.c                |  12 +-
+ kernel/trace/trace_dynevent.c       |   6 +-
+ kernel/trace/trace_dynevent.h       |   5 +-
+ kernel/trace/trace_events.c         |  35 ++--
+ kernel/trace/trace_events_filter.c  |   4 +-
+ kernel/trace/trace_events_hist.c    |   8 +-
+ kernel/trace/trace_events_trigger.c |  17 +-
+ kernel/trace/trace_events_user.c    |  16 +-
+ kernel/trace/trace_stat.c           |   4 +-
+ kernel/user-return-notifier.c       |   3 +-
+ kernel/workqueue.c                  |  16 +-
+ mm/backing-dev.c                    |   8 +-
+ mm/balloon.c                        |   8 +-
+ mm/cma.c                            |   4 +-
+ mm/compaction.c                     |   4 +-
+ mm/damon/core.c                     |   4 +-
+ mm/damon/sysfs-schemes.c            |   4 +-
+ mm/dmapool.c                        |   4 +-
+ mm/huge_memory.c                    |   8 +-
+ mm/hugetlb.c                        |  56 +++---
+ mm/hugetlb_vmemmap.c                |  16 +-
+ mm/khugepaged.c                     |  14 +-
+ mm/kmemleak.c                       |   7 +-
+ mm/ksm.c                            |  25 +--
+ mm/list_lru.c                       |   4 +-
+ mm/memcontrol-v1.c                  |   8 +-
+ mm/memory-failure.c                 |  12 +-
+ mm/memory-tiers.c                   |   4 +-
+ mm/migrate.c                        |  23 ++-
+ mm/mmu_notifier.c                   |   9 +-
+ mm/page_alloc.c                     |   8 +-
+ mm/page_reporting.c                 |   2 +-
+ mm/percpu.c                         |  11 +-
+ mm/pgtable-generic.c                |   4 +-
+ mm/rmap.c                           |  10 +-
+ mm/shmem.c                          |   9 +-
+ mm/slab_common.c                    |  14 +-
+ mm/slub.c                           |  33 ++--
+ mm/swapfile.c                       |   4 +-
+ mm/userfaultfd.c                    |  12 +-
+ mm/vmalloc.c                        |  24 +--
+ mm/vmscan.c                         |   7 +-
+ mm/zsmalloc.c                       |   4 +-
+ 124 files changed, 875 insertions(+), 681 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0
 
