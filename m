@@ -1,122 +1,272 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40993A3E60
-	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 10:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962373368BF;
+	Mon, 22 Jun 2026 10:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782123130; cv=none; b=dcXLOifDU5k7Z/3RNRVciP7LOVV859QlzHfH2mA829W0OaZLfG9vjMu92Q1QOtOYjO8+ZpG8ZgvjM4gv6TyqrbD7O+XMamHepDocyVDAnIkWIn45qIAaGsoe1jAjxzI65Sg5aCrrskS4w5X0+vz9FtGXV0e09wovFRcCxPV2omw=
+	t=1782125198; cv=none; b=TBW0Fwjbo0cWNdqwxU7mkc2mMoCEg9Ez/aJVb7UI/vcW85tWJvknOqlP3axs/i7OPv31C9ROy7tR1ZceHxbhp5hw4SwKybUcrwNqhdMVgybCvqF2k+PYDOVd0Gw9ZCnzO9twR5Qwd2jDJq0X+Jz0tAagyeWG5LSgbTGMV3sXtdI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782123130; c=relaxed/simple;
-	bh=MTjm18d1ksMl+UkcCVpcY52jclTDJ7Kgk74ItdgHl0s=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UzLmY1vAu/R1tg32o3EszNFJXXTtli3Rmil0vvn+I0O1eG+qN8nMjn56MqhJrleOuGWVOwbGpSJTXnDsZbJ/kDdmxbHfueWAugznyYBABO46JJ8Y5RkYp+D1LkcQwSbH/4FuM2f7/1itis53kziwAc3ww0eDGoIQ2pVCSqbyfZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c7Nj4I6F; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782125198; c=relaxed/simple;
+	bh=/hKgAevfumO8x7LfebeUyLh/erlFr2Hmr9kpKNVbH0Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RXODWZKElkwNYpFJonxchYxL7m7+buIIWgUiJMAD0MYfyKNwNMLSslVv6yBoc/HcLQI6ALqaWoX3hI7BUhDfYNAOp/d/O61d+5hIwFcf2eExAjaRh+yyxF4FlmXcJqP/2R2L+iPy0pH17SBJrNaylwgCZ4MV+XxvZHUJxlT/gKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ayKPKd7T; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c7Nj4I6F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782123127;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Lsm6oFQNENBm0Sf9fW8D7GGgKjjPRfdfKw22K4WVCR4=;
-	b=c7Nj4I6FB8ymIBbwtFDrncO2CPwVT51VMuEI/gvPnqSnZDjrAnfN4LrB3voLP6KhavQ8G2
-	BmKl0ruYy6DATc43NUclAYh92T07oWFUSSbO7idkA9tot98674tToAg3gNwrpA4RX1bkej
-	oN2mXPcU1JQsGciFr0V+NGqJrxj/cM4=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-327-HzuWLrs1MfWNbHyapZIHHA-1; Mon,
- 22 Jun 2026 06:12:06 -0400
-X-MC-Unique: HzuWLrs1MfWNbHyapZIHHA-1
-X-Mimecast-MFC-AGG-ID: HzuWLrs1MfWNbHyapZIHHA_1782123125
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9224E1956094
-	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 10:12:05 +0000 (UTC)
-Received: from [172.20.158.179] (unknown [10.30.44.85])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2BAE718005A0;
-	Mon, 22 Jun 2026 10:12:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
- upstream-mainline, ef0c9f75)
-Date: Mon, 22 Jun 2026 10:12:04 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ayKPKd7T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782125196; x=1813661196;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/hKgAevfumO8x7LfebeUyLh/erlFr2Hmr9kpKNVbH0Q=;
+  b=ayKPKd7T4JXnQnE0P5UXmManTYqpS8gbxAiFsznaNqLn8y7Zmdump/NT
+   6reVfy4KMjkU+Bi/74mVpjXrnSEpJCa7MQRpVf3ueU8vjphk6P8iMHO70
+   JkPJbpzwGlNc/3QzKDKYMzc8YhuAbsNI8KfUbhF8D4ArVwNTPmkcfJtMQ
+   18WuaHAnwV3AottO0PcGJrVPmCsLN6g1TiFNc1QChSUX1TXKS3QNtZytq
+   nBD2zx/fnYc/llBLfYpUQRUyvog2QbL/41ygnAi5DvTSuZkkrCZIuHv63
+   Ye/NfjSURRYhgEDxt/q+ge+NZr7P3ofrms7SGa4jR+EWipF5eK7yS+KtG
+   Q==;
+X-CSE-ConnectionGUID: 31YAXrU3Smmt90AtYAJ77Q==
+X-CSE-MsgGUID: yzezYtnAR8KW14kNxSZnVA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11824"; a="93506226"
+X-IronPort-AV: E=Sophos;i="6.24,218,1774335600"; 
+   d="scan'208";a="93506226"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 03:46:35 -0700
+X-CSE-ConnectionGUID: xNR2+KjtQLGBpSv9fyyNaQ==
+X-CSE-MsgGUID: i0RzaMPlRGCEVMh1muYCuA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,218,1774335600"; 
+   d="scan'208";a="253099713"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.152])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 03:46:25 -0700
+Date: Mon, 22 Jun 2026 13:46:22 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Paul Moore <paul@paul-moore.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Howells <dhowells@redhat.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
+	linux-ntfs-dev@lists.sourceforge.net,
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
+	io-uring <io-uring@vger.kernel.org>, audit@vger.kernel.org,
+	bpf <bpf@vger.kernel.org>,
+	Network Development <netdev@vger.kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	kexec@lists.infradead.org, live-patching@vger.kernel.org,
+	linux-modules@vger.kernel.org,
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	Linux Power Management <linux-pm@vger.kernel.org>,
+	rcu@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm <linux-mm@kvack.org>, virtualization@lists.linux.dev,
+	damon@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>,
+	chengkaitao <chengkaitao@kylinos.cn>,
+	Muchun Song <muchun.song@linux.dev>
+Subject: Re: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor
+ state
+Message-ID: <ajkSftEbdGoiJXYs@ashevche-desk.local>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+ <CAADnVQJmPWFT01b7DuLdtafv=8FyB84GYHNZ8zSTck+9Aw0JpA@mail.gmail.com>
+ <8c8f1849-86d3-4c69-be27-30bbdffdf616@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <91117.126062206120600387@us-mta-327.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: pwhs5T_l7-8Jtjw26TpOgwDeGlHw-eGBoIifFVAk3tw_1782123125
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8c8f1849-86d3-4c69-be27-30bbdffdf616@linux.dev>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-Hi, we tested your kernel and here are the results:
+On Mon, Jun 22, 2026 at 02:15:01PM +0800, Kaitao Cheng wrote:
+> 在 2026/6/22 13:28, Alexei Starovoitov 写道:
+> > On Sun, Jun 21, 2026 at 9:06 PM Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+...
 
+> >>  block/bfq-iosched.c                 |  17 +-
+> >>  block/blk-cgroup.c                  |  12 +-
+> >>  block/blk-flush.c                   |   4 +-
+> >>  block/blk-iocost.c                  |  18 +-
+> >>  block/blk-mq.c                      |   8 +-
+> >>  block/blk-throttle.c                |   4 +-
+> >>  block/kyber-iosched.c               |   4 +-
+> >>  block/partitions/ldm.c              |   8 +-
+> >>  block/sed-opal.c                    |   4 +-
+> >>  include/linux/list.h                | 269 ++++++++++++++++++++++++----
+> >>  include/linux/llist.h               |  81 +++++++--
+> >>  init/initramfs.c                    |   5 +-
+> >>  io_uring/cancel.c                   |   6 +-
+> >>  io_uring/poll.c                     |   3 +-
+> >>  io_uring/rw.c                       |   4 +-
+> >>  io_uring/timeout.c                  |   8 +-
+> >>  io_uring/uring_cmd.c                |   3 +-
+> >>  kernel/audit_tree.c                 |   4 +-
+> >>  kernel/audit_watch.c                |  16 +-
+> >>  kernel/auditfilter.c                |   4 +-
+> >>  kernel/auditsc.c                    |   4 +-
+> >>  kernel/bpf/arena.c                  |  10 +-
+> >>  kernel/bpf/arraymap.c               |   8 +-
+> >>  kernel/bpf/bpf_local_storage.c      |   3 +-
+> >>  kernel/bpf/bpf_lru_list.c           |  25 ++-
+> >>  kernel/bpf/btf.c                    |  18 +-
+> >>  kernel/bpf/cgroup.c                 |   7 +-
+> >>  kernel/bpf/cpumap.c                 |   4 +-
+> >>  kernel/bpf/devmap.c                 |  10 +-
+> >>  kernel/bpf/helpers.c                |   8 +-
+> >>  kernel/bpf/local_storage.c          |   4 +-
+> >>  kernel/bpf/memalloc.c               |  16 +-
+> >>  kernel/bpf/offload.c                |   8 +-
+> >>  kernel/bpf/states.c                 |   4 +-
+> >>  kernel/bpf/stream.c                 |   4 +-
+> >>  kernel/bpf/verifier.c               |   6 +-
+> >>  kernel/cgroup/cgroup-v1.c           |   4 +-
+> >>  kernel/cgroup/cgroup.c              |  54 +++---
+> >>  kernel/cgroup/dmem.c                |  12 +-
+> >>  kernel/cgroup/rdma.c                |   8 +-
+> >>  kernel/events/core.c                |  44 +++--
+> >>  kernel/events/uprobes.c             |  12 +-
+> >>  kernel/exit.c                       |   8 +-
+> >>  kernel/fail_function.c              |   4 +-
+> >>  kernel/gcov/clang.c                 |   4 +-
+> >>  kernel/irq_work.c                   |   4 +-
+> >>  kernel/kexec_core.c                 |   4 +-
+> >>  kernel/kprobes.c                    |  16 +-
+> >>  kernel/livepatch/core.c             |   4 +-
+> >>  kernel/livepatch/core.h             |   4 +-
+> >>  kernel/liveupdate/kho_block.c       |   4 +-
+> >>  kernel/liveupdate/luo_flb.c         |   4 +-
+> >>  kernel/locking/rwsem.c              |   2 +-
+> >>  kernel/locking/test-ww_mutex.c      |   2 +-
+> >>  kernel/module/main.c                |  11 +-
+> >>  kernel/padata.c                     |   4 +-
+> >>  kernel/power/snapshot.c             |   8 +-
+> >>  kernel/power/wakelock.c             |   4 +-
+> >>  kernel/printk/printk.c              |  11 +-
+> >>  kernel/ptrace.c                     |   4 +-
+> >>  kernel/rcu/rcutorture.c             |   3 +-
+> >>  kernel/rcu/tasks.h                  |   9 +-
+> >>  kernel/rcu/tree.c                   |   6 +-
+> >>  kernel/resource.c                   |   4 +-
+> >>  kernel/sched/core.c                 |   4 +-
+> >>  kernel/sched/ext.c                  |  22 +--
+> >>  kernel/sched/fair.c                 |  28 +--
+> >>  kernel/sched/topology.c             |   4 +-
+> >>  kernel/sched/wait.c                 |   4 +-
+> >>  kernel/seccomp.c                    |   4 +-
+> >>  kernel/signal.c                     |  11 +-
+> >>  kernel/smp.c                        |   4 +-
+> >>  kernel/taskstats.c                  |   8 +-
+> >>  kernel/time/clockevents.c           |   6 +-
+> >>  kernel/time/clocksource.c           |   4 +-
+> >>  kernel/time/posix-cpu-timers.c      |   4 +-
+> >>  kernel/time/posix-timers.c          |   3 +-
+> >>  kernel/torture.c                    |   3 +-
+> >>  kernel/trace/bpf_trace.c            |   4 +-
+> >>  kernel/trace/ftrace.c               |  49 +++--
+> >>  kernel/trace/ring_buffer.c          |  25 ++-
+> >>  kernel/trace/trace.c                |  12 +-
+> >>  kernel/trace/trace_dynevent.c       |   6 +-
+> >>  kernel/trace/trace_dynevent.h       |   5 +-
+> >>  kernel/trace/trace_events.c         |  35 ++--
+> >>  kernel/trace/trace_events_filter.c  |   4 +-
+> >>  kernel/trace/trace_events_hist.c    |   8 +-
+> >>  kernel/trace/trace_events_trigger.c |  17 +-
+> >>  kernel/trace/trace_events_user.c    |  16 +-
+> >>  kernel/trace/trace_stat.c           |   4 +-
+> >>  kernel/user-return-notifier.c       |   3 +-
+> >>  kernel/workqueue.c                  |  16 +-
+> >>  mm/backing-dev.c                    |   8 +-
+> >>  mm/balloon.c                        |   8 +-
+> >>  mm/cma.c                            |   4 +-
+> >>  mm/compaction.c                     |   4 +-
+> >>  mm/damon/core.c                     |   4 +-
+> >>  mm/damon/sysfs-schemes.c            |   4 +-
+> >>  mm/dmapool.c                        |   4 +-
+> >>  mm/huge_memory.c                    |   8 +-
+> >>  mm/hugetlb.c                        |  56 +++---
+> >>  mm/hugetlb_vmemmap.c                |  16 +-
+> >>  mm/khugepaged.c                     |  14 +-
+> >>  mm/kmemleak.c                       |   7 +-
+> >>  mm/ksm.c                            |  25 +--
+> >>  mm/list_lru.c                       |   4 +-
+> >>  mm/memcontrol-v1.c                  |   8 +-
+> >>  mm/memory-failure.c                 |  12 +-
+> >>  mm/memory-tiers.c                   |   4 +-
+> >>  mm/migrate.c                        |  23 ++-
+> >>  mm/mmu_notifier.c                   |   9 +-
+> >>  mm/page_alloc.c                     |   8 +-
+> >>  mm/page_reporting.c                 |   2 +-
+> >>  mm/percpu.c                         |  11 +-
+> >>  mm/pgtable-generic.c                |   4 +-
+> >>  mm/rmap.c                           |  10 +-
+> >>  mm/shmem.c                          |   9 +-
+> >>  mm/slab_common.c                    |  14 +-
+> >>  mm/slub.c                           |  33 ++--
+> >>  mm/swapfile.c                       |   4 +-
+> >>  mm/userfaultfd.c                    |  12 +-
+> >>  mm/vmalloc.c                        |  24 +--
+> >>  mm/vmscan.c                         |   7 +-
+> >>  mm/zsmalloc.c                       |   4 +-
+> >>  124 files changed, 875 insertions(+), 681 deletions(-)
+> > 
+> > Not sure what you were thinking, but this diff stat
+> > is not landable.
+> 
+> [PATCH v3 1/7] and [PATCH v3 2/7] contain the main logic and can
+> be merged directly. They are also compatible with the old API.
+> [PATCH v3 3/7] through [PATCH v3 7/7] are just simple interface
+> replacements and do not change any functional logic. They can be
+> left unmerged for now; individual modules can pick them up later
+> if needed.
+> 
+> In v2, Andy Shevchenko mentioned: "If it's done by Linus himself
+> during the day when he prepares -rc1, it's fine."
 
-Kernel information:
-    Commit message: lib: Add stale 'raid6' directory to .gitignore file
+Yes, but you need to get his blessing first to go with this.
+Have you communicated with him on this?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2618076002
+> Even so, the
+> changes in this patch series are indeed quite large and touch
+> almost every subsystem. I have only converted part of them for
+> now, so I wanted to send this out first and see what people think.
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2618076002_ppc64le_kernel
+That's why it's better to provide a script to convert (e.g., coccinelle)
+instead of tons of patches.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2618076002_x86_64_kernel_kcidb_tool_21500679_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+-- 
+With Best Regards,
+Andy Shevchenko
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-        Issue: avc: denied { create } for comm=3D"rpc.mountd"
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
 
