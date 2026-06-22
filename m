@@ -1,137 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4149379980;
-	Mon, 22 Jun 2026 22:09:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA2D535E93B;
+	Mon, 22 Jun 2026 22:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782166191; cv=none; b=fPPjarRMi1V/3IhjhJVCB0++AI+L+Lf6/uA/3xPsMA1hDwNR/c0+Hhe3hG5EUNHsrR8c/U/RtBc3f8Ue5Ad2cp2RUDzP/XYn6VdwmA9OTUGz6WCYL/qiJIRfwhMIGKGEEeFR02v8vsfHR6pixR9rQGM5T1dTUGhwp13bCCrXeJ0=
+	t=1782166973; cv=none; b=TVoe9dl8jjC6HyBU2zyRRqWKARG1WzokEQufJ62cdBxquyotnamU43SqtSw2vXGoeHh8j6EPYMf/TUnbM14gCTrPQnEfYyw6doDY/ympq2pcEAe5lEfJgbFRtHLsppHv7pBX/Lr9HAphwWtSTY8/DIMI6q7N7FmKXqaUjAx/ibw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782166191; c=relaxed/simple;
-	bh=ruOoIhIpbvhL/4HHlso/YJXqQhGkIEu0qtAbPaz0h3A=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=hfeyDreR3Fjn16aCRhAWq7EyYizzFk9elj5AcG9Cy25p8fSktyDCDJDxCwD9sEGM+LqgAkw76ht2UAF2TAeNpTg3S+RJh8tJxZpG0SEcoCEAor6oaQWn34ONhQFUwLdybGRze9XKDWTC5VtEkrMVrscrARmddNB4It9g+Q9BkWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MCsSjG4d; arc=none smtp.client-ip=198.175.65.13
+	s=arc-20240116; t=1782166973; c=relaxed/simple;
+	bh=NGhbZb21//AHvUjp14aTgxjSClU4yPXQD1V1Z+N+dPk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=oHKPobdGuJBWMkOcBy0igh3Bf3lyWf9bJ0Xlo3tffOlwZGv0oFSisv+2ZxDaTWcah7ovyxXb7PEvXY8CPvLca/ehNckm1saL1W18GlLRcFJpoTVL98tYVVeYRn0b/iDz6mUM0exbSo/kFaNvGkcCryylB17tYUeKGQhb9W6XYzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AZYO+gac; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MCsSjG4d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AZYO+gac"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782166191; x=1813702191;
-  h=date:from:to:cc:subject:message-id;
-  bh=ruOoIhIpbvhL/4HHlso/YJXqQhGkIEu0qtAbPaz0h3A=;
-  b=MCsSjG4dPx21PH54nxX3SGvo5dM/BYJONggyKSJb1bcDuyJKCHXQm0ef
-   C8i2NLVjlTGieJqTXlrpDXi/WZzrexmrz7W7DURb8Li1CFhJDuGY7grw2
-   Ucou4TJKBXtEY38oPY+nqtWpxjC1GK5UjS+XPgQXYJliOq+BmvgiL8R9M
-   yQUmxtSXf3x3aChyCWxvjijNCAkakX72YDgdqFIPV7+Vaf0Zly/VVw/Rc
-   B0sJbVe02K2kx6inMF5CEJxavGd5uaidLWrfiLY33+L7ray+lKKx49fBx
-   v33Il44lV8pTv4110NsGeXMfkFWp5ekVOIN5YIMVBVyYdkT/iswbI48s1
+  t=1782166971; x=1813702971;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=NGhbZb21//AHvUjp14aTgxjSClU4yPXQD1V1Z+N+dPk=;
+  b=AZYO+gacDV/EouvNZEDV6gOgN9C63wyjoaB8bynYNvWBgNTHHZrj/2YD
+   J20eKuwEym/srzyrIGfC8fy+SBgSo/44Ijnk5tWxGT2B5Fi3qI/liGOKG
+   DqddhvpoqoEr5RMayqhy3wfBZbNu70WenLiXbBXWaFfipkyvgxRTSTqoD
+   +FewT6GoCly+o1TSy34yKnWM2ATvdw5GBOEzJyVYpIVFJ86W39y3H2O5+
+   2v+Zb4sF6DAZiagBp9842mZnUh9TH9HTjr86k7XHfxEYmgdVp7Fh4AezG
+   dPGgEVYzE/c0pKEVwbl+DeZR20aE0BwSyHhc+an1Gpa3c8kFIBct4j8AU
    g==;
-X-CSE-ConnectionGUID: i3f6yGk3QdOureAg6WyErQ==
-X-CSE-MsgGUID: bCAVwkTNQOmW+PnZ0G9hig==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="94021331"
+X-CSE-ConnectionGUID: OqNReJ71RTOvdNHyNVOOuA==
+X-CSE-MsgGUID: uj+V6hPSSQyr1gC4rFLuyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="82676851"
 X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="94021331"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 15:09:51 -0700
-X-CSE-ConnectionGUID: LD9pa/G8TcyP8tu3TZwcKQ==
-X-CSE-MsgGUID: LfO6b7O2RhiBW3KIBhc0HA==
+   d="scan'208";a="82676851"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 15:22:50 -0700
+X-CSE-ConnectionGUID: ETh0or9RTXaG7sM32mwaiw==
+X-CSE-MsgGUID: QXMZjpQMROWCBHMItxiJww==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="253679148"
+   d="scan'208";a="246430591"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 22 Jun 2026 15:09:48 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 22 Jun 2026 15:22:49 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wbmpt-0000000020F-2wqK;
-	Mon, 22 Jun 2026 22:09:45 +0000
-Date: Tue, 23 Jun 2026 06:09:03 +0800
+	id 1wbn2U-00000000211-2ZAQ;
+	Mon, 22 Jun 2026 22:22:46 +0000
+Date: Tue, 23 Jun 2026 06:22:13 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Sebastian Reichel <sre@kernel.org>,
- Abel Vesa <abel.vesa@oss.qualcomm.com>
-Subject: [sre-misc:thinkpad-t14s-x1e 15/86]
- drivers/media/platform/qcom/camss/camss-csiphy.c:815:59: warning: variable
- 'ret' is uninitialized when used here
-Message-ID: <202606230610.qXDc0dlZ-lkp@intel.com>
+To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stefandoesinger-zx297520:mfd 69/124]
+ drivers/spi/spi-zx.c:477:17: warning: implicit conversion from 'unsigned
+ long' to 'u32' (aka 'unsigned int') changes value from 18446744073709551614
+ to 4294967294
+Message-ID: <202606230616.8oCztMjD-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-misc.git thinkpad-t14s-x1e
-head:   e56dd62df7d34f2d009ad860978cdcd913d63722
-commit: 0af43991f850a9752165155fd4d0d9944906e131 [15/86] media: qcom: camss: Add support for PHY API devices
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260623/202606230610.qXDc0dlZ-lkp@intel.com/config)
+tree:   https://gitlab.com/stefandoesinger/zx297520-kernel mfd
+head:   c94d760b3ed42a18ecbae9e63d7010c770a8c042
+commit: 412031528a775a2630dc7a0b13acf7e31b07defc [69/124] zx29 qspi driver
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260623/202606230616.8oCztMjD-lkp@intel.com/config)
 compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260623/202606230610.qXDc0dlZ-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260623/202606230616.8oCztMjD-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606230610.qXDc0dlZ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606230616.8oCztMjD-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/media/platform/qcom/camss/camss-csiphy.c:815:59: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     815 |                 dev_err(dev, "failed to get phy %s %d\n", csiphy->name, ret);
-         |                                                                         ^~~
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/media/platform/qcom/camss/camss-csiphy.c:802:9: note: initialize the variable 'ret' to silence this warning
-     802 |         int ret;
-         |                ^
-         |                 = 0
+>> drivers/spi/spi-zx.c:477:17: warning: implicit conversion from 'unsigned long' to 'u32' (aka 'unsigned int') changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
+     477 |         writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
+         |         ~~~~~~~~~~~~~~ ^~~~~~~~~~~
    1 warning generated.
 
 
-vim +/ret +815 drivers/media/platform/qcom/camss/camss-csiphy.c
+vim +477 drivers/spi/spi-zx.c
 
-   788	
-   789	/*
-   790	 * msm_csiphy_subdev_init - Initialize CSIPHY device structure and resources
-   791	 * @csiphy: CSIPHY device
-   792	 * @res: CSIPHY module resources table
-   793	 * @id: CSIPHY module id
-   794	 *
-   795	 * Return 0 on success or a negative error code otherwise
-   796	 */
-   797	int msm_csiphy_subdev_init(struct camss *camss,
-   798				   struct csiphy_device *csiphy,
-   799				   const struct camss_subdev_resources *res, u8 id)
-   800	{
-   801		struct device *dev = camss->dev;
-   802		int ret;
-   803	
-   804		csiphy->camss = camss;
-   805		csiphy->id = id;
-   806		csiphy->cfg.combo_mode = 0;
-   807		csiphy->res = &res->csiphy;
-   808	
-   809		snprintf(csiphy->name, ARRAY_SIZE(csiphy->name), "csiphy%d",
-   810			 csiphy->id);
-   811	
-   812		csiphy->phy = devm_phy_get(dev, csiphy->name);
-   813	
-   814		if (IS_ERR(csiphy->phy)) {
- > 815			dev_err(dev, "failed to get phy %s %d\n", csiphy->name, ret);
-   816			return PTR_ERR(csiphy->phy);
-   817		}
-   818	
-   819		ret = phy_init(csiphy->phy);
-   820		if (ret)
-   821			dev_err(dev, "phy %s init fail %d\n", csiphy->name, ret);
-   822	
-   823		return ret;
-   824	}
-   825	
+   473	
+   474	static void zx_qspi_remove(struct platform_device *pdev)
+   475	{
+   476		struct zx_qspi *qspi = platform_get_drvdata(pdev);
+ > 477		writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
+   478	}
+   479	
 
 --
 0-DAY CI Kernel Test Service
