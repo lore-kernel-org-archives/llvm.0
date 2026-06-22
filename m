@@ -1,272 +1,112 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962373368BF;
-	Mon, 22 Jun 2026 10:46:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92EAA37997A;
+	Mon, 22 Jun 2026 11:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782125198; cv=none; b=TBW0Fwjbo0cWNdqwxU7mkc2mMoCEg9Ez/aJVb7UI/vcW85tWJvknOqlP3axs/i7OPv31C9ROy7tR1ZceHxbhp5hw4SwKybUcrwNqhdMVgybCvqF2k+PYDOVd0Gw9ZCnzO9twR5Qwd2jDJq0X+Jz0tAagyeWG5LSgbTGMV3sXtdI=
+	t=1782127159; cv=none; b=AnaMcPXPR7TGx4BDwd3X42keHKMkU2RFkfZQ38PdkIHugkZOB5lVTT0y1U3HCQbxybtsnyPHysae9Gq0hxpLYIDTP3Cc6K0cNqCNtpbGzz8Nv4+M1/V7NmuKXN49G1f0bk4+1/MiuA8JeVEdPiE5tdvfHqr+IoOmW794YGJbOrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782125198; c=relaxed/simple;
-	bh=/hKgAevfumO8x7LfebeUyLh/erlFr2Hmr9kpKNVbH0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RXODWZKElkwNYpFJonxchYxL7m7+buIIWgUiJMAD0MYfyKNwNMLSslVv6yBoc/HcLQI6ALqaWoX3hI7BUhDfYNAOp/d/O61d+5hIwFcf2eExAjaRh+yyxF4FlmXcJqP/2R2L+iPy0pH17SBJrNaylwgCZ4MV+XxvZHUJxlT/gKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ayKPKd7T; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1782127159; c=relaxed/simple;
+	bh=UJlf8GNgKLQZTpvGkoIRxiisri3P1FyntwPyS+gewYA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=K5NCXpyvHLoqi50/Wo7L8Jym/J+nFidNHS0O3BkTpWCLus4IURIxmYKM0MfN1x1Tpxv7++anlSOXbJlh82ACoXjYnwWWrS5udyyh2Qr5eDInNmwdrFVzk81WgJeOZASF2d1cl0rT48xRabA2Lcl30Hf7K2QocSKH1Vxc/J9GyjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P88ueHgV; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ayKPKd7T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P88ueHgV"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782125196; x=1813661196;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/hKgAevfumO8x7LfebeUyLh/erlFr2Hmr9kpKNVbH0Q=;
-  b=ayKPKd7T4JXnQnE0P5UXmManTYqpS8gbxAiFsznaNqLn8y7Zmdump/NT
-   6reVfy4KMjkU+Bi/74mVpjXrnSEpJCa7MQRpVf3ueU8vjphk6P8iMHO70
-   JkPJbpzwGlNc/3QzKDKYMzc8YhuAbsNI8KfUbhF8D4ArVwNTPmkcfJtMQ
-   18WuaHAnwV3AottO0PcGJrVPmCsLN6g1TiFNc1QChSUX1TXKS3QNtZytq
-   nBD2zx/fnYc/llBLfYpUQRUyvog2QbL/41ygnAi5DvTSuZkkrCZIuHv63
-   Ye/NfjSURRYhgEDxt/q+ge+NZr7P3ofrms7SGa4jR+EWipF5eK7yS+KtG
-   Q==;
-X-CSE-ConnectionGUID: 31YAXrU3Smmt90AtYAJ77Q==
-X-CSE-MsgGUID: yzezYtnAR8KW14kNxSZnVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11824"; a="93506226"
+  t=1782127158; x=1813663158;
+  h=date:from:to:cc:subject:message-id;
+  bh=UJlf8GNgKLQZTpvGkoIRxiisri3P1FyntwPyS+gewYA=;
+  b=P88ueHgV+/Cb9J0ib4d6abPD0Spaf9Ssb396w8xsP8XVR7p2KLMJc3sz
+   ZUNYomGRT2JkQohGSqZ4LeIKXInSzxiQPdH7CwUtARaRZrLiJ79lB6FZE
+   ANgAoniYVOKNTRWQxd1AVOUTU5yZJyx4w0HE7lx9DTuRCUCwO7m/JBYQv
+   1SjosMrEbJj6hHZiGch4iLwYxE4ou8D2MEIcfGSykx8KpR/fjkGZQ+y1K
+   T826J2NaCXHHC1ape8XGshzNQZ1YRbops0hAPH+pNBJQ1Gc93An0+DGu1
+   jIhXbW8tc3ul9WbtaE6+I0Mf1r54ydKklsmnJBcNaEH0a3TcGmUxu6mZq
+   w==;
+X-CSE-ConnectionGUID: x5ujc5YwTCi8VqerEPC1AA==
+X-CSE-MsgGUID: 8pQElYDmSRmAt+4bg+zZ9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11824"; a="82622668"
 X-IronPort-AV: E=Sophos;i="6.24,218,1774335600"; 
-   d="scan'208";a="93506226"
+   d="scan'208";a="82622668"
 Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 03:46:35 -0700
-X-CSE-ConnectionGUID: xNR2+KjtQLGBpSv9fyyNaQ==
-X-CSE-MsgGUID: i0RzaMPlRGCEVMh1muYCuA==
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 04:19:18 -0700
+X-CSE-ConnectionGUID: mybT7a5OQmyCqp0BAy0Gcw==
+X-CSE-MsgGUID: s+qKMsnLTpKUP5QRPUfBDA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,218,1774335600"; 
-   d="scan'208";a="253099713"
-Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.245.152])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 03:46:25 -0700
-Date: Mon, 22 Jun 2026 13:46:22 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Kaitao Cheng <kaitao.cheng@linux.dev>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Paul Moore <paul@paul-moore.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	David Howells <dhowells@redhat.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
-	LKML <linux-kernel@vger.kernel.org>,
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
-	linux-ntfs-dev@lists.sourceforge.net,
-	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
-	io-uring <io-uring@vger.kernel.org>, audit@vger.kernel.org,
-	bpf <bpf@vger.kernel.org>,
-	Network Development <netdev@vger.kernel.org>,
-	dri-devel@lists.freedesktop.org,
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
-	kexec@lists.infradead.org, live-patching@vger.kernel.org,
-	linux-modules@vger.kernel.org,
-	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	rcu@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm <linux-mm@kvack.org>, virtualization@lists.linux.dev,
-	damon@lists.linux.dev, clang-built-linux <llvm@lists.linux.dev>,
-	chengkaitao <chengkaitao@kylinos.cn>,
-	Muchun Song <muchun.song@linux.dev>
-Subject: Re: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor
- state
-Message-ID: <ajkSftEbdGoiJXYs@ashevche-desk.local>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
- <CAADnVQJmPWFT01b7DuLdtafv=8FyB84GYHNZ8zSTck+9Aw0JpA@mail.gmail.com>
- <8c8f1849-86d3-4c69-be27-30bbdffdf616@linux.dev>
+   d="scan'208";a="253103175"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 22 Jun 2026 04:19:17 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wbcgM-0000000013F-1QlG;
+	Mon, 22 Jun 2026 11:19:14 +0000
+Date: Mon, 22 Jun 2026 19:19:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hannes Reinecke <hare@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [hare-scsi-devel:configfs-ns.v2 16/17]
+ drivers/nvme/target/loop.c:542:36: error: incomplete definition of type
+ 'struct nsproxy'
+Message-ID: <202606221944.avjlQZnR-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8c8f1849-86d3-4c69-be27-30bbdffdf616@linux.dev>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Mon, Jun 22, 2026 at 02:15:01PM +0800, Kaitao Cheng wrote:
-> 在 2026/6/22 13:28, Alexei Starovoitov 写道:
-> > On Sun, Jun 21, 2026 at 9:06 PM Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v2
+head:   e2bc6e23c907dceafa9ce30beca26cdc05bb664d
+commit: 5ee9c143b806000467a489e080f5d0f7db3af48e [16/17] nvmet-loop: skip ports from wrong namespaces
+config: i386-randconfig-017-20260622 (https://download.01.org/0day-ci/archive/20260622/202606221944.avjlQZnR-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260622/202606221944.avjlQZnR-lkp@intel.com/reproduce)
 
-...
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606221944.avjlQZnR-lkp@intel.com/
 
-> >>  block/bfq-iosched.c                 |  17 +-
-> >>  block/blk-cgroup.c                  |  12 +-
-> >>  block/blk-flush.c                   |   4 +-
-> >>  block/blk-iocost.c                  |  18 +-
-> >>  block/blk-mq.c                      |   8 +-
-> >>  block/blk-throttle.c                |   4 +-
-> >>  block/kyber-iosched.c               |   4 +-
-> >>  block/partitions/ldm.c              |   8 +-
-> >>  block/sed-opal.c                    |   4 +-
-> >>  include/linux/list.h                | 269 ++++++++++++++++++++++++----
-> >>  include/linux/llist.h               |  81 +++++++--
-> >>  init/initramfs.c                    |   5 +-
-> >>  io_uring/cancel.c                   |   6 +-
-> >>  io_uring/poll.c                     |   3 +-
-> >>  io_uring/rw.c                       |   4 +-
-> >>  io_uring/timeout.c                  |   8 +-
-> >>  io_uring/uring_cmd.c                |   3 +-
-> >>  kernel/audit_tree.c                 |   4 +-
-> >>  kernel/audit_watch.c                |  16 +-
-> >>  kernel/auditfilter.c                |   4 +-
-> >>  kernel/auditsc.c                    |   4 +-
-> >>  kernel/bpf/arena.c                  |  10 +-
-> >>  kernel/bpf/arraymap.c               |   8 +-
-> >>  kernel/bpf/bpf_local_storage.c      |   3 +-
-> >>  kernel/bpf/bpf_lru_list.c           |  25 ++-
-> >>  kernel/bpf/btf.c                    |  18 +-
-> >>  kernel/bpf/cgroup.c                 |   7 +-
-> >>  kernel/bpf/cpumap.c                 |   4 +-
-> >>  kernel/bpf/devmap.c                 |  10 +-
-> >>  kernel/bpf/helpers.c                |   8 +-
-> >>  kernel/bpf/local_storage.c          |   4 +-
-> >>  kernel/bpf/memalloc.c               |  16 +-
-> >>  kernel/bpf/offload.c                |   8 +-
-> >>  kernel/bpf/states.c                 |   4 +-
-> >>  kernel/bpf/stream.c                 |   4 +-
-> >>  kernel/bpf/verifier.c               |   6 +-
-> >>  kernel/cgroup/cgroup-v1.c           |   4 +-
-> >>  kernel/cgroup/cgroup.c              |  54 +++---
-> >>  kernel/cgroup/dmem.c                |  12 +-
-> >>  kernel/cgroup/rdma.c                |   8 +-
-> >>  kernel/events/core.c                |  44 +++--
-> >>  kernel/events/uprobes.c             |  12 +-
-> >>  kernel/exit.c                       |   8 +-
-> >>  kernel/fail_function.c              |   4 +-
-> >>  kernel/gcov/clang.c                 |   4 +-
-> >>  kernel/irq_work.c                   |   4 +-
-> >>  kernel/kexec_core.c                 |   4 +-
-> >>  kernel/kprobes.c                    |  16 +-
-> >>  kernel/livepatch/core.c             |   4 +-
-> >>  kernel/livepatch/core.h             |   4 +-
-> >>  kernel/liveupdate/kho_block.c       |   4 +-
-> >>  kernel/liveupdate/luo_flb.c         |   4 +-
-> >>  kernel/locking/rwsem.c              |   2 +-
-> >>  kernel/locking/test-ww_mutex.c      |   2 +-
-> >>  kernel/module/main.c                |  11 +-
-> >>  kernel/padata.c                     |   4 +-
-> >>  kernel/power/snapshot.c             |   8 +-
-> >>  kernel/power/wakelock.c             |   4 +-
-> >>  kernel/printk/printk.c              |  11 +-
-> >>  kernel/ptrace.c                     |   4 +-
-> >>  kernel/rcu/rcutorture.c             |   3 +-
-> >>  kernel/rcu/tasks.h                  |   9 +-
-> >>  kernel/rcu/tree.c                   |   6 +-
-> >>  kernel/resource.c                   |   4 +-
-> >>  kernel/sched/core.c                 |   4 +-
-> >>  kernel/sched/ext.c                  |  22 +--
-> >>  kernel/sched/fair.c                 |  28 +--
-> >>  kernel/sched/topology.c             |   4 +-
-> >>  kernel/sched/wait.c                 |   4 +-
-> >>  kernel/seccomp.c                    |   4 +-
-> >>  kernel/signal.c                     |  11 +-
-> >>  kernel/smp.c                        |   4 +-
-> >>  kernel/taskstats.c                  |   8 +-
-> >>  kernel/time/clockevents.c           |   6 +-
-> >>  kernel/time/clocksource.c           |   4 +-
-> >>  kernel/time/posix-cpu-timers.c      |   4 +-
-> >>  kernel/time/posix-timers.c          |   3 +-
-> >>  kernel/torture.c                    |   3 +-
-> >>  kernel/trace/bpf_trace.c            |   4 +-
-> >>  kernel/trace/ftrace.c               |  49 +++--
-> >>  kernel/trace/ring_buffer.c          |  25 ++-
-> >>  kernel/trace/trace.c                |  12 +-
-> >>  kernel/trace/trace_dynevent.c       |   6 +-
-> >>  kernel/trace/trace_dynevent.h       |   5 +-
-> >>  kernel/trace/trace_events.c         |  35 ++--
-> >>  kernel/trace/trace_events_filter.c  |   4 +-
-> >>  kernel/trace/trace_events_hist.c    |   8 +-
-> >>  kernel/trace/trace_events_trigger.c |  17 +-
-> >>  kernel/trace/trace_events_user.c    |  16 +-
-> >>  kernel/trace/trace_stat.c           |   4 +-
-> >>  kernel/user-return-notifier.c       |   3 +-
-> >>  kernel/workqueue.c                  |  16 +-
-> >>  mm/backing-dev.c                    |   8 +-
-> >>  mm/balloon.c                        |   8 +-
-> >>  mm/cma.c                            |   4 +-
-> >>  mm/compaction.c                     |   4 +-
-> >>  mm/damon/core.c                     |   4 +-
-> >>  mm/damon/sysfs-schemes.c            |   4 +-
-> >>  mm/dmapool.c                        |   4 +-
-> >>  mm/huge_memory.c                    |   8 +-
-> >>  mm/hugetlb.c                        |  56 +++---
-> >>  mm/hugetlb_vmemmap.c                |  16 +-
-> >>  mm/khugepaged.c                     |  14 +-
-> >>  mm/kmemleak.c                       |   7 +-
-> >>  mm/ksm.c                            |  25 +--
-> >>  mm/list_lru.c                       |   4 +-
-> >>  mm/memcontrol-v1.c                  |   8 +-
-> >>  mm/memory-failure.c                 |  12 +-
-> >>  mm/memory-tiers.c                   |   4 +-
-> >>  mm/migrate.c                        |  23 ++-
-> >>  mm/mmu_notifier.c                   |   9 +-
-> >>  mm/page_alloc.c                     |   8 +-
-> >>  mm/page_reporting.c                 |   2 +-
-> >>  mm/percpu.c                         |  11 +-
-> >>  mm/pgtable-generic.c                |   4 +-
-> >>  mm/rmap.c                           |  10 +-
-> >>  mm/shmem.c                          |   9 +-
-> >>  mm/slab_common.c                    |  14 +-
-> >>  mm/slub.c                           |  33 ++--
-> >>  mm/swapfile.c                       |   4 +-
-> >>  mm/userfaultfd.c                    |  12 +-
-> >>  mm/vmalloc.c                        |  24 +--
-> >>  mm/vmscan.c                         |   7 +-
-> >>  mm/zsmalloc.c                       |   4 +-
-> >>  124 files changed, 875 insertions(+), 681 deletions(-)
-> > 
-> > Not sure what you were thinking, but this diff stat
-> > is not landable.
-> 
-> [PATCH v3 1/7] and [PATCH v3 2/7] contain the main logic and can
-> be merged directly. They are also compatible with the old API.
-> [PATCH v3 3/7] through [PATCH v3 7/7] are just simple interface
-> replacements and do not change any functional logic. They can be
-> left unmerged for now; individual modules can pick them up later
-> if needed.
-> 
-> In v2, Andy Shevchenko mentioned: "If it's done by Linus himself
-> during the day when he prepares -rc1, it's fine."
+All errors (new ones prefixed by >>):
 
-Yes, but you need to get his blessing first to go with this.
-Have you communicated with him on this?
-
-> Even so, the
-> changes in this patch series are indeed quite large and touch
-> almost every subsystem. I have only converted part of them for
-> now, so I wanted to send this out first and see what people think.
-
-That's why it's better to provide a script to convert (e.g., coccinelle)
-instead of tons of patches.
-
--- 
-With Best Regards,
-Andy Shevchenko
+>> drivers/nvme/target/loop.c:542:36: error: incomplete definition of type 'struct nsproxy'
+     542 |                 if (p->net_ns != current->nsproxy->net_ns)
+         |                                  ~~~~~~~~~~~~~~~~^
+   include/linux/sched.h:72:8: note: forward declaration of 'struct nsproxy'
+      72 | struct nsproxy;
+         |        ^
+   1 error generated.
 
 
+vim +542 drivers/nvme/target/loop.c
+
+   534	
+   535	static struct nvmet_port *nvme_loop_find_port(struct nvme_ctrl *ctrl)
+   536	{
+   537		struct nvmet_port *p, *found = NULL;
+   538	
+   539		mutex_lock(&nvme_loop_ports_mutex);
+   540		list_for_each_entry(p, &nvme_loop_ports, entry) {
+   541			/* Skip ports from non-matching namespaces */
+ > 542			if (p->net_ns != current->nsproxy->net_ns)
+   543				continue;
+   544			/* if no transport address is specified use the first port */
+   545			if ((ctrl->opts->mask & NVMF_OPT_TRADDR) &&
+   546			    strcmp(ctrl->opts->traddr, p->disc_addr.traddr))
+   547				continue;
+   548			found = p;
+   549			break;
+   550		}
+   551		mutex_unlock(&nvme_loop_ports_mutex);
+   552		return found;
+   553	}
+   554	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
