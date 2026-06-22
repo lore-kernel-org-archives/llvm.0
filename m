@@ -1,200 +1,150 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f174.google.com (mail-dy1-f174.google.com [74.125.82.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D596E34252C;
-	Mon, 22 Jun 2026 17:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F70919D092
+	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 19:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782150870; cv=none; b=d6IykgZvDuq2EMQV4cs5iGp5bqmj7rGhy6lZSiWMRF+yIV9XUXhbUqmhuYXSYFPnJ/GkxUJnZbW6ttiZTXQ1ew+vKMeoMIctShU4YJFiArqZ8xjJSIQeila/PVnEhQYuXaUjDubC6sBxtMl2kMLfhXCo+W8heIUWizjiGfXfpIU=
+	t=1782155035; cv=none; b=d2edHGNAurP4MK/BwgxzZQuXZSDqkOPSsZBJqwblOSnixVJaAyVyipXWVd1Qf7Q6BpCugzN/rcITzcqs0VFYCKsz17stYTjXzVHljRCrmHaVKH4b9MwP1qfidZAzQIusgD0LuCLsPnb/u+vrP4HEGQfZ8PUJGSvPC4LlecV7fqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782150870; c=relaxed/simple;
-	bh=AlNnN2FawhFZ0ePrVFJHbOVc7lSn8rdJQCTI06vynVE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=j24AOyLlJtmY/JmIEjwzhLvPnEvd69fJbDkBtPOcCHzMau0eFVxz8bObrPGXAvpB0fvL5avlsMe6vVu9dbgu9JTjV0pvFKuky4Fmq/4dOLdroip6aAW+NAeEEUJ5cy4YNUBvFqErhXjgM9ae5oIBLzzwQ+RdfnF/hAtMFDAgOr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C8JP4Iv8; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782155035; c=relaxed/simple;
+	bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=F8XfVL0JZ538CgPlZZ6gTwgXnmVB9ai4mZT3t1gMO6BPYUtw2388vIUWmpZznH1Dj0dJogIn7puvJzwM7ArdqI14JFbleRUG40v5PtlDBJDSbFM/mh/AiYWjjSf/czbsoV88jOVeZmoTT46RlJfsfymDWqgeShcCXivAPi2Q/gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fVFsVndf; arc=none smtp.client-ip=74.125.82.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C8JP4Iv8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782150869; x=1813686869;
-  h=date:from:to:cc:subject:message-id;
-  bh=AlNnN2FawhFZ0ePrVFJHbOVc7lSn8rdJQCTI06vynVE=;
-  b=C8JP4Iv8hgVkID0/IcEvVuTdyEIoqRh74I4ddsPa0GTdy1f3idppYgpB
-   aeHsVo5A/czPkcgq8yLHwmmxFVzxjAk2VZWf9gGsa64ofj9R/midj4o8u
-   yHfePgmdcppkjFtnDhY3TN7SPkdtr45ktTu0DdA+LDAFOe3rSecVWSmIP
-   kwOUDy9lWEbEePWfzx9yHxJP+TSlN8gYAUOd9LxUql2+R7vjop5rj9L2s
-   sNVSx7qHoSMD2OhIfC9ikHYUKJrO2wgaTdG0WI1+kjNLM2MTDh/ocPdS9
-   ACIBD6ZoLAh5LpTfKV/nIlEkvPzhkttWbMvwa6uTuDFIAkfbrxnOj0Qpe
-   g==;
-X-CSE-ConnectionGUID: STwlrsOCRyWK7M29R3ZGtA==
-X-CSE-MsgGUID: T10TJErlRgi1tO0cV9saRw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="94386553"
-X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="94386553"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 10:54:29 -0700
-X-CSE-ConnectionGUID: 7i/7P049SUCraTtG7coA5A==
-X-CSE-MsgGUID: geo7jJkjQg6I2bucdUgwUw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,219,1774335600"; 
-   d="scan'208";a="246948922"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 22 Jun 2026 10:54:26 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wbiqm-000000001f0-1zL6;
-	Mon, 22 Jun 2026 17:54:24 +0000
-Date: Tue, 23 Jun 2026 01:48:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kent Overstreet <kent.overstreet@linux.dev>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [koverstreet-bcachefs:bcachefs-testing 35/95]
- fs/bcachefs/alloc/foreground.c:560:2: warning: label followed by a
- declaration is a C23 extension
-Message-ID: <202606230132.MsodX56Z-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fVFsVndf"
+Received: by mail-dy1-f174.google.com with SMTP id 5a478bee46e88-30c0a352e33so197596eec.0
+        for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 12:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782155033; x=1782759833; darn=lists.linux.dev;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
+        b=fVFsVndfg6mWKVB5EXTVDBkJ3nNQyNSuuy0dvNOIt0yrFYWUAs5viJCJZ1+sJcyX8K
+         44ipD6N+nptdUxD/Ihp50qXFW3QSSQdv+fsleMVC1msyBlvN69Jmughef5wEPgm40bAJ
+         MX2334ApBK7egBKDzD4QulH9lIqvtoHdLJc60iFcByl7w3KpdGhTxie66aqY9Gbh8jC5
+         ZvZL3QUIhb9tA1/Ge6wloUyhokLN7+TwfbMQSSZmiSQaowX7cp+oHXhk7Vcway66c1nU
+         2JKRUM1UF6dTin9s33bsTKC5EAwnJXaUl1HNBhR+Mxw4NE2ZBTWOWK5PB4UkawodUDI8
+         GJ+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782155033; x=1782759833;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uM6rjwv+rWrcNEl8KjTKnVcDSG3oUNpsPUMqnFOcLeE=;
+        b=V0dTz4gr2JkmGAFzeSLLLAZB4k40MIhRxYdvQJtKoLgJLrfHUD2s87PSavBmnviZ7y
+         lr4pqote9D9P5/Di9MjUPD6fv6fTmeBr3uo4BXjG3PXcpuOZLz8gnSiMPRbTt9seg7oU
+         dbpej+2uXIDD3c9otuKXe6pzME+GtMeLfHQp51mrg4XIU26Ss4k8MU8PfGIg2hyMiVnj
+         70sbuiHGJuQ8ExhXnVYvQ3ZLMsV108ts5soWMXRbQJddtwhNdNS0S8g6CEvPFlgCKzwS
+         wr6Ps7F6wMzQp+bA86fc8GebjpcT0OY0+j9mEI+bUfA46TgelPFUfz25l8orRKn8INJI
+         GjBg==
+X-Forwarded-Encrypted: i=1; AHgh+RqSDRmEY0Hc8HB/B+OatRe0cm85y1ryTCrTjxnnocHJ8pp0PnSi/KOUtiVWOBP0ivP7ZVIU@lists.linux.dev
+X-Gm-Message-State: AOJu0YxUJGd86Js6NxynSfs57Z7H4EdTu7IXzqUBvtEkGe3Fi4r5CtRg
+	tJe4GIaWBn6QwPDj7FgOb8bB4R3fwhD75kyzsYp79bjxZMx23BxH6ogl
+X-Gm-Gg: AfdE7ck8Yu0LwEQgdXWvX4XPjInfDOK0Q+t9QiAARqMQvpxzLeLzM7cfSFFuDxtrC1m
+	dFcZX3byDJ1b1YIqngVkrNu+HuatMokrUgi/f/utX6WKl9BjnjyF67InhKLgeU03cIoH7f27UKc
+	l/WujGZoeM2BbLFncfGsjJdLxFBVyqa9aIFnZUep8K1ExHnSPd6a8wy18lfGwJIH2zIV4yQ3w+Y
+	Hrgs9szlyXfKcyAq4jwYDkFr6+39y2A7So8NuyxaVG2QpeVIdLonHZlZRLpKALKXRwUjcgbY1X3
+	9OYhhNxorSsWVcc7VkCC75Q7W7BtcxyBOtdo5UHQAuIKWniYHW231vp4o2+yA1yD3F5a2vKm6oQ
+	v6aon0Zv55z+RBXtObehPLWDeIPj4hxpot7dWJ6BLzTkcrIHX6cO6r191oLWDF29rNQ2vpZfMoD
+	9jkXVF6FFjFLQtVIEzbkU1jTTFWv7zc9cjLEDIZIPgYsMXr9GGIbOr3F+M9mnB5qjccr0=
+X-Received: by 2002:a05:693c:2887:b0:30b:cc4e:6396 with SMTP id 5a478bee46e88-30c5553b105mr382073eec.7.1782155033135;
+        Mon, 22 Jun 2026 12:03:53 -0700 (PDT)
+Received: from ?IPv6:2a03:83e0:115c:1:6e2:c699:67c:63fe? ([2620:10d:c090:500::1:5387])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c1be4967fsm10549199eec.26.2026.06.22.12.03.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 Jun 2026 12:03:52 -0700 (PDT)
+Message-ID: <1979fc81ae7bdaabda8616cd9698a40ef8bbfaee.camel@gmail.com>
+Subject: Re: [PATCH v3 5/7] kernel: Use mutable list iterators
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>, Paul Moore <paul@paul-moore.com>,
+  Eric Paris <eparis@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann	 <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, "David S.
+ Miller" <davem@davemloft.net>, Jakub Kicinski	 <kuba@kernel.org>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend	
+ <john.fastabend@gmail.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner	
+ <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, 
+ Maarten Lankhorst	 <dev@lankhorst.se>, Maxime Ripard <mripard@kernel.org>,
+ Natalie Vock	 <natalie.vock@gmx.de>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar	 <mingo@redhat.com>, Arnaldo Carvalho de Melo
+ <acme@kernel.org>, Namhyung Kim	 <namhyung@kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Oleg Nesterov	 <oleg@redhat.com>, Peter
+ Oberparleiter <oberpar@linux.ibm.com>, Andrew Morton	
+ <akpm@linux-foundation.org>, Baoquan He <baoquan.he@linux.dev>, Mike
+ Rapoport	 <rppt@kernel.org>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Pratyush Yadav	 <pratyush@kernel.org>, Naveen N Rao <naveen@kernel.org>,
+ Josh Poimboeuf	 <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+ Miroslav Benes	 <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Will
+ Deacon <will@kernel.org>,  Boqun Feng <boqun@kernel.org>, Luis Chamberlain
+ <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>,  Daniel Gomez
+ <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, Steffen
+ Klassert	 <steffen.klassert@secunet.com>, Daniel Jordan
+ <daniel.m.jordan@oracle.com>,  "Rafael J. Wysocki"	 <rafael@kernel.org>,
+ Davidlohr Bueso <dave@stgolabs.net>, "Paul E. McKenney"	
+ <paulmck@kernel.org>, Josh Triplett <josh@joshtriplett.org>, Frederic
+ Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
+ <neeraj.upadhyay@kernel.org>, Joel Fernandes	 <joelagnelf@nvidia.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Juri Lelli	 <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>, Kees Cook <kees@kernel.org>,
+ Balbir Singh <bsingharora@gmail.com>, Anna-Maria Behnsen	
+ <anna-maria@linutronix.de>, Thomas Gleixner <tglx@kernel.org>, John Stultz	
+ <jstultz@google.com>, KP Singh <kpsingh@kernel.org>, Matt Bobrowski	
+ <mattbobrowski@google.com>, Nathan Chancellor <nathan@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>,  Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Dietmar Eggemann
+ <dietmar.eggemann@arm.com>, David Vernet	 <void@manifault.com>, Steven
+ Rostedt <rostedt@goodmis.org>
+Cc: audit@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, 	netdev@vger.kernel.org, cgroups@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, 	linux-perf-users@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, 	kexec@lists.infradead.org,
+ live-patching@vger.kernel.org, 	linux-modules@vger.kernel.org,
+ linux-crypto@vger.kernel.org, 	linux-pm@vger.kernel.org,
+ rcu@vger.kernel.org, sched-ext@lists.linux.dev, 	llvm@lists.linux.dev,
+ Kaitao Cheng <chengkaitao@kylinos.cn>
+Date: Mon, 22 Jun 2026 12:03:46 -0700
+In-Reply-To: <20260622042811.31684-1-kaitao.cheng@linux.dev>
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+	 <20260622042811.31684-1-kaitao.cheng@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
 
-tree:   https://github.com/koverstreet/bcachefs bcachefs-testing
-head:   ca944a61e079450f82be88c91e349638c75cf4b6
-commit: ca284ad06b139fe4dc8f053ada179473c1b71bb1 [35/95] bcachefs: alloc: filter spurious freelist_wait wakes on the waiter side
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260623/202606230132.MsodX56Z-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260623/202606230132.MsodX56Z-lkp@intel.com/reproduce)
+On Mon, 2026-06-22 at 12:28 +0800, Kaitao Cheng wrote:
+> From: Kaitao Cheng <chengkaitao@kylinos.cn>
+>=20
+> The safe list iteration helpers require callers to provide a temporary
+> cursor even when the cursor is only used internally by the loop. This
+> leaves many functions with otherwise unused variables whose only purpose
+> is to satisfy the old iterator interface.
+>=20
+> Use the mutable list iteration helpers for those cases. The mutable
+> helpers keep the same removal-safe traversal semantics, while allowing
+> the temporary cursor to be internal to the macro when the caller does
+> not need to observe it.
+>=20
+> Convert list, hlist and llist users under kernel/ where the temporary
+> cursor is not used outside the iteration. Keep the explicit cursor form
+> where the next entry is still needed by the surrounding code.
+>=20
+> No functional change intended.
+>=20
+> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+> ---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606230132.MsodX56Z-lkp@intel.com/
+Beside the fact that this does not apply,
+I don't see a reason why is this needed for BPF sub-tree.
 
-All warnings (new ones prefixed by >>):
-
->> fs/bcachefs/alloc/foreground.c:560:2: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     560 |         u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
-         |         ^
-   1 warning generated.
-
-
-vim +560 fs/bcachefs/alloc/foreground.c
-
-   540	
-   541	/**
-   542	 * bch2_bucket_alloc_trans - allocate a single bucket from a specific device
-   543	 * @trans:	transaction object
-   544	 * @req:	state for the entire allocation
-   545	 *
-   546	 * Returns:	an open_bucket on success, or an ERR_PTR() on failure.
-   547	 */
-   548	static struct open_bucket *bch2_bucket_alloc_trans(struct btree_trans *trans,
-   549							   struct alloc_request *req)
-   550	{
-   551		struct bch_fs *c = trans->c;
-   552		struct bch_dev *ca = req->ca;
-   553		struct open_bucket *ob = NULL;
-   554		bool freespace = READ_ONCE(ca->mi.freespace_initialized);
-   555		bool waiting = false;
-   556	
-   557		req->btree_bitmap = req->data_type == BCH_DATA_btree;
-   558		memset(&req->counters, 0, sizeof(req->counters));
-   559	again:
- > 560		u32 wake_counter_snapshot = atomic_read(&ca->alloc_wake_counter);
-   561		bch2_dev_usage_read_fast(ca, &req->usage);
-   562		u64 avail = __dev_buckets_free(ca, req->usage, req->watermark);
-   563	
-   564		if (req->usage.buckets[BCH_DATA_need_discard] >
-   565		    min(avail, ca->mi.nbuckets >> 7))
-   566			bch2_do_discards_async(c);
-   567	
-   568		if (req->usage.buckets[BCH_DATA_need_gc_gens] > avail)
-   569			bch2_gc_gens_async(c);
-   570	
-   571		if (should_invalidate_buckets(ca, req->usage))
-   572			bch2_dev_do_invalidates(ca);
-   573	
-   574		if (!avail) {
-   575			if (req->watermark > BCH_WATERMARK_normal &&
-   576			    c->recovery.pass_done < BCH_RECOVERY_PASS_check_allocations)
-   577				goto alloc;
-   578	
-   579			if (bch2_copygc_can_make_progress(ca)) {
-   580				req->copygc_can_make_progress = true;
-   581				bch2_copygc_wakeup(c);
-   582			}
-   583	
-   584			track_event_change(&c->times[BCH_TIME_blocked_allocate], true);
-   585	
-   586			if (req->cl &&
-   587			    !(req->flags & BCH_WRITE_alloc_nowait) &&
-   588			    !req->will_retry_target_devices &&
-   589			    !req->will_retry_all_devices &&
-   590			    !req->will_retry_set_devices) {
-   591				if ((!req->copygc_can_make_progress ||
-   592				     req->watermark == BCH_WATERMARK_copygc) &&
-   593				    (req->nr_effective || (req->devs_have && req->devs_have->nr))) {
-   594					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_no_progress));
-   595				} else if (!waiting) {
-   596					closure_wait(&c->allocator.freelist_wait, req->cl);
-   597					waiting = true;
-   598					goto again;
-   599				} else {
-   600					ob = ERR_PTR(bch_err_throw(c, bucket_alloc_blocked));
-   601				}
-   602			} else {
-   603				ob = ERR_PTR(bch_err_throw(c, freelist_empty));
-   604			}
-   605	
-   606			goto err;
-   607		}
-   608	
-   609		if (waiting)
-   610			bch2_alloc_wake_dev(ca);
-   611	alloc:
-   612		ob = likely(freespace)
-   613			? bch2_bucket_alloc_freelist(trans, req)
-   614			: bch2_bucket_alloc_early(trans, req);
-   615	
-   616		if (!ob && req->btree_bitmap != BTREE_BITMAP_ANY) {
-   617			req->btree_bitmap = BTREE_BITMAP_ANY;
-   618			goto alloc;
-   619		}
-   620	
-   621		if (!ob && freespace && c->recovery.pass_done < BCH_RECOVERY_PASS_check_alloc_info) {
-   622			freespace = false;
-   623			goto alloc;
-   624		}
-   625	err:
-   626		if (!ob)
-   627			ob = ERR_PTR(bch_err_throw(c, no_buckets_found));
-   628	
-   629		int ret = PTR_ERR_OR_ZERO(ob);
-   630	
-   631		if (!ret) {
-   632			ob->data_type = req->data_type;
-   633	
-   634			event_inc_trace(c, bucket_alloc, buf,
-   635				bucket_alloc_to_text(&buf, c, req, ob));
-   636		} else if (bch2_err_matches(ret, BCH_ERR_open_buckets_empty) ||
-   637			   bch2_err_matches(ret, BCH_ERR_open_bucket_alloc_blocked)) {
-   638			event_inc_trace(c, open_bucket_alloc_fail, buf,
-   639				bch2_fs_open_buckets_to_text(&buf, c));
-   640		} else if (!bch2_err_matches(ret, BCH_ERR_transaction_restart) &&
-   641			   !req->will_retry_target_devices &&
-   642			   !req->will_retry_all_devices &&
-   643			   !req->will_retry_set_devices)
-   644			event_inc_trace(c, bucket_alloc_fail, buf,
-   645				bucket_alloc_to_text(&buf, c, req, ob));
-   646	
-   647		alloc_trace_add(req, ca->dev_idx, ret, wake_counter_snapshot);
-   648	
-   649		return ob;
-   650	}
-   651	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[...]
