@@ -1,297 +1,598 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7582135CBC3
-	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 06:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FC823BCED
+	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 07:46:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782108981; cv=none; b=LqQEyCEM2AnSFnmWfXhkc5zrrPVI01gIRt1xi8ru8jKa0Z3FAQUfzshwMFuwnonrb9xosUWOCLaeiQMH/1T2PYUNJd8HAucIFrEl0OtAGUh1VGyAVgdZ39WtNumdsTCEcOXVzR7jBmDUC/mAnyDvKCgYaApIqag6zyrd23yjA4I=
+	t=1782114416; cv=none; b=dgAarvLJ5TMsjh0i6w1tRuWhOrUnfZ531SW4/90tS3SwnCwGjb6mMH/P3Tq7cdGf5J8zQJu2cWaC8qUb6gu2sInCJDPEN71mhLKCutDH4D0IcZ+VV/oqJUKfAePMmdCBXKnsC5pI2CxrxUEY8XLH3351hT0pk4RCLnodsydPB6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782108981; c=relaxed/simple;
-	bh=hk8s1HyY3dzHKU/LGLjDjlXFo8lRWPfUJ+Vkj0iR3dk=;
+	s=arc-20240116; t=1782114416; c=relaxed/simple;
+	bh=cPrDjpaMP8UPk/9f5PtlvBHpSWb21x+JJ77G3RRHGz0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F1ggR9CTuEuGVyTuf9KE1/GpZM0RPl0Knr+KdqWSBado0xvY9SUiJXosvYsSgYIB/dxltiKldZ5Tj/cKoSI3YhXdEnlzaz/N71tPKr5n6w+HtKRtarvoe15z4zBg8ZhG3DUxT0pa9V1wtV3G4adepCRLb17CIDGyiJIsVYuOmyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=t15fr1vS; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="t15fr1vS"
-Message-ID: <8c8f1849-86d3-4c69-be27-30bbdffdf616@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1782108966;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uc01vIZYGfTIV3fdEG67Z2UKVAOKK7e6urfcQoWTPXs=;
-	b=t15fr1vSWPqYuOVx1/bxMEqBYsgHtm0lD1qKuOgL6xYl94f+kJLWMkDtNXA1O6oXS4NWrk
-	UXfi4I4xGSapixdXs6K5v7yl7QxZTsj0xBO+b54oW8Z9JaKuiK5OobLxhWf+TcWH/AL++5
-	EurPaDWOivYCOI4YE0QW4UrJN1dv49Y=
-Date: Mon, 22 Jun 2026 14:15:01 +0800
+	 In-Reply-To:Content-Type; b=M6Z6/Tf8lgpGt8PT/Bxd/qf3PwtX1T1RWiXihqQdoZpRuoSoG3jGOGSgPOYgJpbUCY0wylojAMAKnYUcerk/8ZdFzYL7PA+2KYpKHmNmXrV30kLHg2h30ZNguPhozB6DModR6pHRKJH1Mvzo/y/OYEJqSEiGiL19+iHe5gm16Us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id F01C81EA370; Mon, 22 Jun 2026 15:46:45 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8810:ea00::9c4] (unknown [IPv6:2001:8003:8810:ea00::9c4])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id C00E31EA365;
+	Mon, 22 Jun 2026 15:46:40 +0800 (AWST)
+Message-ID: <cca473f2-5b5c-43fe-9df0-a9328874fbf1@davidgow.net>
+Date: Mon, 22 Jun 2026 15:46:36 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor
- state
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Jens Axboe <axboe@kernel.dk>,
- Tejun Heo <tj@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Paul Moore <paul@paul-moore.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Shakeel Butt <shakeel.butt@linux.dev>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- David Howells <dhowells@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>,
- Randy Dunlap <rdunlap@infradead.org>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>,
- "open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>,
- linux-ntfs-dev@lists.sourceforge.net,
- Linux-Fsdevel <linux-fsdevel@vger.kernel.org>,
- io-uring <io-uring@vger.kernel.org>, audit@vger.kernel.org,
- bpf <bpf@vger.kernel.org>, Network Development <netdev@vger.kernel.org>,
- dri-devel@lists.freedesktop.org,
- "linux-perf-use." <linux-perf-users@vger.kernel.org>,
- linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
- kexec@lists.infradead.org, live-patching@vger.kernel.org,
- linux-modules@vger.kernel.org,
- Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
- Linux Power Management <linux-pm@vger.kernel.org>, rcu@vger.kernel.org,
- sched-ext@lists.linux.dev, linux-mm <linux-mm@kvack.org>,
- virtualization@lists.linux.dev, damon@lists.linux.dev,
- clang-built-linux <llvm@lists.linux.dev>,
- chengkaitao <chengkaitao@kylinos.cn>, Muchun Song <muchun.song@linux.dev>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
- <CAADnVQJmPWFT01b7DuLdtafv=8FyB84GYHNZ8zSTck+9Aw0JpA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Kaitao Cheng <kaitao.cheng@linux.dev>
-In-Reply-To: <CAADnVQJmPWFT01b7DuLdtafv=8FyB84GYHNZ8zSTck+9Aw0JpA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kunit: cfi: Add test for kCFI indirect-call type
+ checks
+To: Kees Cook <kees@kernel.org>, Sami Tolvanen <samitolvanen@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ llvm@lists.linux.dev, kunit-dev@googlegroups.com,
+ Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+References: <20260618210946.it.538-kees@kernel.org>
+From: David Gow <david@davidgow.net>
+Content-Language: fr
+In-Reply-To: <20260618210946.it.538-kees@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-
-
-在 2026/6/22 13:28, Alexei Starovoitov 写道:
-> On Sun, Jun 21, 2026 at 9:06 PM Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
->>
->> From: chengkaitao <chengkaitao@kylinos.cn>
->>
->> The list_for_each*_safe() helpers are used when the loop body may remove
->> the current entry.  Their current interface, however, forces every caller
->> to define a temporary cursor outside the macro and pass it in, even when
->> the caller never uses that cursor directly.  For most call sites this
->> extra cursor is just boilerplate required by the macro implementation.
->>
->> This is awkward because the saved next pointer is an internal detail of
->> the iteration.  Callers that only remove or move the current entry do not
->> need to spell it out.
->>
->> The _safe() suffix has also caused confusion.  Christian Koenig pointed
->> out that the name is easy to read as a thread-safe variant, especially
->> for beginners, even though it only means that the iterator keeps enough
->> state to tolerate removal of the current entry.  He suggested _mutable()
->> as a clearer description of what the loop permits.
->>
->> Add *_mutable() iterator variants for list, hlist and llist.  The new
->> helpers are variadic and support both forms.  In the common case, the
->> caller omits the temporary cursor and the macro creates a unique internal
->> cursor with typeof(pos) and __UNIQUE_ID().  If a loop really needs an
->> explicit temporary cursor, the caller can still pass it and the helper
->> keeps the existing *_safe() behaviour.
->>
->> For example, a call site may use the shorter form:
->>
->>   list_for_each_entry_mutable(pos, head, member)
->>
->> or keep the explicit temporary cursor form:
->>
->>   list_for_each_entry_mutable(pos, tmp, head, member)
->>
->> The existing *_safe() helpers remain available for compatibility.  This
->> series only converts users in mm, block, kernel, init and io_uring.  If
->> this approach looks acceptable, the remaining users can be converted in
->> follow-up series.
->>
->> Changes in v3 (Christian König, Andy Shevchenko):
->> - Convert safe list walks to mutable iterators
->>
->> Changes in v2 (Muchun Song, Andy Shevchenko):
->> - Drop the list_for_each_entry_mutable*() helpers from v1 and make the
->>   cursor change directly in the existing list_for_each_entry*() helpers.
->> - Open-code special list walks that rely on updating the loop cursor in
->>   the body, preserving their existing traversal semantics.
->>
->> Link to v2:
->> https://lore.kernel.org/all/20260609061347.93688-1-kaitao.cheng@linux.dev/
->>
->> Link to v1:
->> https://lore.kernel.org/all/20260529082149.76764-1-kaitao.cheng@linux.dev/
->>
->> Kaitao Cheng (7):
->>   list: Add mutable iterator variants
->>   llist: Add mutable iterator variants
->>   mm: Use mutable list iterators
->>   block: Use mutable list iterators
->>   kernel: Use mutable list iterators
->>   initramfs: Use mutable list iterator
->>   io_uring: Use mutable list iterators
->>
->>  block/bfq-iosched.c                 |  17 +-
->>  block/blk-cgroup.c                  |  12 +-
->>  block/blk-flush.c                   |   4 +-
->>  block/blk-iocost.c                  |  18 +-
->>  block/blk-mq.c                      |   8 +-
->>  block/blk-throttle.c                |   4 +-
->>  block/kyber-iosched.c               |   4 +-
->>  block/partitions/ldm.c              |   8 +-
->>  block/sed-opal.c                    |   4 +-
->>  include/linux/list.h                | 269 ++++++++++++++++++++++++----
->>  include/linux/llist.h               |  81 +++++++--
->>  init/initramfs.c                    |   5 +-
->>  io_uring/cancel.c                   |   6 +-
->>  io_uring/poll.c                     |   3 +-
->>  io_uring/rw.c                       |   4 +-
->>  io_uring/timeout.c                  |   8 +-
->>  io_uring/uring_cmd.c                |   3 +-
->>  kernel/audit_tree.c                 |   4 +-
->>  kernel/audit_watch.c                |  16 +-
->>  kernel/auditfilter.c                |   4 +-
->>  kernel/auditsc.c                    |   4 +-
->>  kernel/bpf/arena.c                  |  10 +-
->>  kernel/bpf/arraymap.c               |   8 +-
->>  kernel/bpf/bpf_local_storage.c      |   3 +-
->>  kernel/bpf/bpf_lru_list.c           |  25 ++-
->>  kernel/bpf/btf.c                    |  18 +-
->>  kernel/bpf/cgroup.c                 |   7 +-
->>  kernel/bpf/cpumap.c                 |   4 +-
->>  kernel/bpf/devmap.c                 |  10 +-
->>  kernel/bpf/helpers.c                |   8 +-
->>  kernel/bpf/local_storage.c          |   4 +-
->>  kernel/bpf/memalloc.c               |  16 +-
->>  kernel/bpf/offload.c                |   8 +-
->>  kernel/bpf/states.c                 |   4 +-
->>  kernel/bpf/stream.c                 |   4 +-
->>  kernel/bpf/verifier.c               |   6 +-
->>  kernel/cgroup/cgroup-v1.c           |   4 +-
->>  kernel/cgroup/cgroup.c              |  54 +++---
->>  kernel/cgroup/dmem.c                |  12 +-
->>  kernel/cgroup/rdma.c                |   8 +-
->>  kernel/events/core.c                |  44 +++--
->>  kernel/events/uprobes.c             |  12 +-
->>  kernel/exit.c                       |   8 +-
->>  kernel/fail_function.c              |   4 +-
->>  kernel/gcov/clang.c                 |   4 +-
->>  kernel/irq_work.c                   |   4 +-
->>  kernel/kexec_core.c                 |   4 +-
->>  kernel/kprobes.c                    |  16 +-
->>  kernel/livepatch/core.c             |   4 +-
->>  kernel/livepatch/core.h             |   4 +-
->>  kernel/liveupdate/kho_block.c       |   4 +-
->>  kernel/liveupdate/luo_flb.c         |   4 +-
->>  kernel/locking/rwsem.c              |   2 +-
->>  kernel/locking/test-ww_mutex.c      |   2 +-
->>  kernel/module/main.c                |  11 +-
->>  kernel/padata.c                     |   4 +-
->>  kernel/power/snapshot.c             |   8 +-
->>  kernel/power/wakelock.c             |   4 +-
->>  kernel/printk/printk.c              |  11 +-
->>  kernel/ptrace.c                     |   4 +-
->>  kernel/rcu/rcutorture.c             |   3 +-
->>  kernel/rcu/tasks.h                  |   9 +-
->>  kernel/rcu/tree.c                   |   6 +-
->>  kernel/resource.c                   |   4 +-
->>  kernel/sched/core.c                 |   4 +-
->>  kernel/sched/ext.c                  |  22 +--
->>  kernel/sched/fair.c                 |  28 +--
->>  kernel/sched/topology.c             |   4 +-
->>  kernel/sched/wait.c                 |   4 +-
->>  kernel/seccomp.c                    |   4 +-
->>  kernel/signal.c                     |  11 +-
->>  kernel/smp.c                        |   4 +-
->>  kernel/taskstats.c                  |   8 +-
->>  kernel/time/clockevents.c           |   6 +-
->>  kernel/time/clocksource.c           |   4 +-
->>  kernel/time/posix-cpu-timers.c      |   4 +-
->>  kernel/time/posix-timers.c          |   3 +-
->>  kernel/torture.c                    |   3 +-
->>  kernel/trace/bpf_trace.c            |   4 +-
->>  kernel/trace/ftrace.c               |  49 +++--
->>  kernel/trace/ring_buffer.c          |  25 ++-
->>  kernel/trace/trace.c                |  12 +-
->>  kernel/trace/trace_dynevent.c       |   6 +-
->>  kernel/trace/trace_dynevent.h       |   5 +-
->>  kernel/trace/trace_events.c         |  35 ++--
->>  kernel/trace/trace_events_filter.c  |   4 +-
->>  kernel/trace/trace_events_hist.c    |   8 +-
->>  kernel/trace/trace_events_trigger.c |  17 +-
->>  kernel/trace/trace_events_user.c    |  16 +-
->>  kernel/trace/trace_stat.c           |   4 +-
->>  kernel/user-return-notifier.c       |   3 +-
->>  kernel/workqueue.c                  |  16 +-
->>  mm/backing-dev.c                    |   8 +-
->>  mm/balloon.c                        |   8 +-
->>  mm/cma.c                            |   4 +-
->>  mm/compaction.c                     |   4 +-
->>  mm/damon/core.c                     |   4 +-
->>  mm/damon/sysfs-schemes.c            |   4 +-
->>  mm/dmapool.c                        |   4 +-
->>  mm/huge_memory.c                    |   8 +-
->>  mm/hugetlb.c                        |  56 +++---
->>  mm/hugetlb_vmemmap.c                |  16 +-
->>  mm/khugepaged.c                     |  14 +-
->>  mm/kmemleak.c                       |   7 +-
->>  mm/ksm.c                            |  25 +--
->>  mm/list_lru.c                       |   4 +-
->>  mm/memcontrol-v1.c                  |   8 +-
->>  mm/memory-failure.c                 |  12 +-
->>  mm/memory-tiers.c                   |   4 +-
->>  mm/migrate.c                        |  23 ++-
->>  mm/mmu_notifier.c                   |   9 +-
->>  mm/page_alloc.c                     |   8 +-
->>  mm/page_reporting.c                 |   2 +-
->>  mm/percpu.c                         |  11 +-
->>  mm/pgtable-generic.c                |   4 +-
->>  mm/rmap.c                           |  10 +-
->>  mm/shmem.c                          |   9 +-
->>  mm/slab_common.c                    |  14 +-
->>  mm/slub.c                           |  33 ++--
->>  mm/swapfile.c                       |   4 +-
->>  mm/userfaultfd.c                    |  12 +-
->>  mm/vmalloc.c                        |  24 +--
->>  mm/vmscan.c                         |   7 +-
->>  mm/zsmalloc.c                       |   4 +-
->>  124 files changed, 875 insertions(+), 681 deletions(-)
+Le 19/06/2026 à 5:09 AM, 'Kees Cook' via KUnit Development a écrit :
+> drivers/misc/lkdtm/cfi.c already exercises kCFI's forward-edge check
+> via a debugfs trigger, but it is awkward to run from automated CI and
+> is gated on LKDTM being built in. Add a self-contained kunit test that
+> performs the same kind of indirect call through a deliberately-cast
+> function pointer and validates that kCFI catches the mismatch, plus
+> coverage that well-typed indirect calls are left undisturbed.
 > 
-> Not sure what you were thinking, but this diff stat
-> is not landable.
+> A deliberate kCFI violation is normally fatal: with
+> CONFIG_CFI_PERMISSIVE=n it kills the calling thread, and on architectures
+> where an in-kernel breakpoint is taken in NMI context (e.g. riscv)
+> it cannot even do that and panics the machine instead. To test the
+> check without depending on any of that, when CONFIG_CFI_KUNIT_TEST=y,
+> kernel/cfi.c grows a small hook, cfi_kunit_set_failure_hook(), consulted
+> by report_cfi_failure() on every kCFI trap. When the registered hook
+> counts the trap, the report is suppressed and BUG_TRAP_TYPE_WARN is
+> returned, so the arch trap handler skips the trapping instruction
+> and resumes the thread: the same "report and continue" path as
+> CFI_PERMISSIVE=y, but independent of how CFI_PERMISSIVE is configured. The
+> hook only ever claims a failure that fired during the test that armed
+> it (matched via the current task's kunit pointer), so any other CFI
+> failure behaves normally. It runs in trap context, possibly NMI-like,
+> so it stays lock-free.
+> 
+> With that in place, the kunit kCFI test adds the following tests:
+> 
+>  - forward_proto: an indirect call through a "void (*)(int *)" pointer
+>    to an "int (*)(int *)" callee, which must trip kCFI exactly once.
+> 
+>  - baseline: the same call with a matched prototype must not trip kCFI
+>    and must increment its counter (to show it actually got called).
+> 
+>  - arity sweep: matched-prototype indirect tail calls across increasing
+>    arity (1 to 7 arguments) must not trip kCFI and must return the right
+>    values. kCFI's instrumentation uses scratch registers to perform the
+>    typeid lookup and validation, which can compete with the argument
+>    registers on register-starved ABIs (e.g. arm32's r0-r3, which also
+>    forces a spill to the stack). A GCC arm32 kCFI codegen bug was
+>    observed where the callee pointer never reached the call register in
+>    a high-arity indirect tail call, leaving the kCFI prologue to read its
+>    typeid from a stale register and trapping a perfectly well-typed call.
+> 
+> The test lives in the new kernel/tests/ subdirectory rather than under
+> lib/tests/, since the code under test (kernel/cfi.c) lives in kernel/;
+> kernel/Makefile is taught to descend into tests/ when CONFIG_KUNIT is
+> set. The Kconfig sits next to "config CFI" and "config CFI_PERMISSIVE"
+> in arch/Kconfig and depends only on "KUNIT": the well-typed baseline
+> and arity cases exercise indirect-call codegen regardless of CFI,
+> while the mismatch case skips at runtime when CONFIG_CFI=n. The hook
+> makes that case work with CFI_PERMISSIVE either enabled or disabled.
+> 
+> The mismatched-prototype call uses the same "(void *)" intermediate
+> cast that LKDTM uses, which is enough to silence -Wcast-function-type
+> on the intentional mis-cast.
+> 
+> Build and boot tested with GCC 17.0.0 20260615 (with my
+> experimental kCFI series); all three kunit cases pass under qemu via
+> tools/testing/kunit/kunit.py for ARCH=x86_64 (CFI_PERMISSIVE both n and
+> y), ARCH=arm64, ARCH=arm, and ARCH=riscv.
+> 
+> Assisted-by: Claude:claude-opus-4-8[1m]
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
 
-[PATCH v3 1/7] and [PATCH v3 2/7] contain the main logic and can
-be merged directly. They are also compatible with the old API.
-[PATCH v3 3/7] through [PATCH v3 7/7] are just simple interface
-replacements and do not change any functional logic. They can be
-left unmerged for now; individual modules can pick them up later
-if needed.
+Finally got around to testing this.
 
-In v2, Andy Shevchenko mentioned: "If it's done by Linus himself
-during the day when he prepares -rc1, it's fine." Even so, the
-changes in this patch series are indeed quite large and touch
-almost every subsystem. I have only converted part of them for
-now, so I wanted to send this out first and see what people think.
+My biggest question is whether it's particularly important that this
+test works with CFI_PERMISSIVE disabled: it seems like it'd be a lot
+simpler if this just depended on CFI_PERMISSIVE=y.
 
--- 
-Thanks
-Kaitao Cheng
+(And that'd avoid the security worries with Fedora/Android building with
+CONFIG_KUNIT=m.)
+
+>  v2: fix sashiko feedback (rcu, smp, test run detection, header fix gone)
+>      https://sashiko.dev/#/patchset/20260618194001.work.490-kees%40kernel.org
+>  v1: https://lore.kernel.org/all/20260618194001.work.490-kees@kernel.org/
+> Cc: Sami Tolvanen <samitolvanen@google.com>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <david@davidgow.net>
+> Cc: Rae Moar <raemoar63@gmail.com>
+> Cc: llvm@lists.linux.dev
+> Cc: kunit-dev@googlegroups.com
+> ---
+>  arch/Kconfig             |  15 +++
+>  kernel/Makefile          |   1 +
+>  kernel/tests/Makefile    |   5 +
+>  include/linux/cfi.h      |  17 +++
+>  kernel/cfi.c             |  49 +++++++
+>  kernel/tests/cfi_kunit.c | 276 +++++++++++++++++++++++++++++++++++++++
+>  MAINTAINERS              |   1 +
+>  7 files changed, 364 insertions(+)
+>  create mode 100644 kernel/tests/Makefile
+>  create mode 100644 kernel/tests/cfi_kunit.c
+> 
+> diff --git a/arch/Kconfig b/arch/Kconfig
+> index e86880045158..c463b6f2960b 100644
+> --- a/arch/Kconfig
+> +++ b/arch/Kconfig
+> @@ -983,6 +983,21 @@ config CFI_PERMISSIVE
+>  
+>  	  If unsure, say N.
+>  
+> +config CFI_KUNIT_TEST
+> +	tristate "KUnit test kCFI indirect-call type checks at runtime" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  Builds a KUnit test that triggers kCFI type mismatches on real
+> +	  indirect calls and verifies that the violations are detected, and
+> +	  that well-typed indirect calls (including high-arity ones) are not
+> +	  disturbed. The test registers a hook in the kCFI failure path so
+> +	  its deliberate violations are counted and survived on its own
+> +	  threads, so it works with CFI_PERMISSIVE either enabled or disabled.
+> +
+> +	  For the fatal-trap behavior of a real violation, see LKDTM's "CFI_*"
+> +	  tests.
+> +
+>  config HAVE_ARCH_WITHIN_STACK_FRAMES
+>  	bool
+>  	help
+> diff --git a/kernel/Makefile b/kernel/Makefile
+> index 6785982013dc..448de4fff75c 100644
+> --- a/kernel/Makefile
+> +++ b/kernel/Makefile
+> @@ -59,6 +59,7 @@ obj-y += dma/
+>  obj-y += entry/
+>  obj-y += unwind/
+>  obj-$(CONFIG_MODULES) += module/
+> +obj-$(CONFIG_KUNIT) += tests/
+>  
+>  obj-$(CONFIG_KCMP) += kcmp.o
+>  obj-$(CONFIG_FREEZER) += freezer.o
+> diff --git a/kernel/tests/Makefile b/kernel/tests/Makefile
+> new file mode 100644
+> index 000000000000..70f1f9a5c502
+> --- /dev/null
+> +++ b/kernel/tests/Makefile
+> @@ -0,0 +1,5 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Makefile for tests of kernel/ functions.
+> +
+> +obj-$(CONFIG_CFI_KUNIT_TEST) += cfi_kunit.o
+> diff --git a/include/linux/cfi.h b/include/linux/cfi.h
+> index 0f220d29225c..e4e66a9423ca 100644
+> --- a/include/linux/cfi.h
+> +++ b/include/linux/cfi.h
+> @@ -24,6 +24,18 @@ static inline enum bug_trap_type report_cfi_failure_noaddr(struct pt_regs *regs,
+>  	return report_cfi_failure(regs, addr, NULL, 0);
+>  }
+>  
+> +#if IS_ENABLED(CONFIG_CFI_KUNIT_TEST)
+> +/*
+> + * Register a hook consulted by report_cfi_failure() on every kCFI trap. If
+> + * the hook returns true, the failure is treated as handled: the report is
+> + * suppressed and BUG_TRAP_TYPE_WARN is returned so the arch trap handler
+> + * skips the trapping instruction and resumes, regardless of CFI_PERMISSIVE.
+> + * This lets the kCFI KUnit test count deliberate violations on its own
+> + * threads without killing them. Pass NULL to unregister.
+> + */
+> +void cfi_kunit_set_failure_hook(bool (*hook)(void));
+> +#endif
+> +
+>  #ifndef cfi_get_offset
+>  /*
+>   * Returns the CFI prefix offset. By default, the compiler emits only
+> @@ -58,6 +70,11 @@ extern u32 cfi_bpf_subprog_hash;
+>  static inline int cfi_get_offset(void) { return 0; }
+>  static inline u32 cfi_get_func_hash(void *func) { return 0; }
+>  
+> +#if IS_ENABLED(CONFIG_CFI_KUNIT_TEST)
+> +/* No kCFI traps to hook when CONFIG_CFI=n; the test skips at runtime. */
+> +static inline void cfi_kunit_set_failure_hook(bool (*hook)(void)) { }
+> +#endif
+> +
+>  #define cfi_bpf_hash 0U
+>  #define cfi_bpf_subprog_hash 0U
+>  
+> diff --git a/kernel/cfi.c b/kernel/cfi.c
+> index 4dad04ead06c..8cb6a274c865 100644
+> --- a/kernel/cfi.c
+> +++ b/kernel/cfi.c
+> @@ -8,12 +8,61 @@
+>  #include <linux/bpf.h>
+>  #include <linux/cfi_types.h>
+>  #include <linux/cfi.h>
+> +#include <linux/rcupdate.h>
+>  
+>  bool cfi_warn __ro_after_init = IS_ENABLED(CONFIG_CFI_PERMISSIVE);
+>  
+> +#if IS_ENABLED(CONFIG_CFI_KUNIT_TEST)
+> +static bool (*cfi_kunit_failure_hook)(void);
+> +
+> +void cfi_kunit_set_failure_hook(bool (*hook)(void))
+> +{
+> +	WRITE_ONCE(cfi_kunit_failure_hook, hook);
+> +
+> +	/*
+> +	 * On unregister, wait for any in-flight cfi_kunit_handled() caller to
+> +	 * finish before the (possibly module-resident) hook can be freed.
+> +	 */
+> +	if (!hook)
+> +		synchronize_rcu();
+> +}
+> +EXPORT_SYMBOL_GPL(cfi_kunit_set_failure_hook);
+> +
+> +static bool cfi_kunit_handled(void)
+> +{
+> +	bool (*hook)(void);
+> +	bool handled = false;
+
+It might make sense to check KUnit is running at all here:
+
+	if (!static_branch_unlikely(&kunit_running))
+		return NULL;
+
+All of the other KUnit hooks (see, e.g, include/kunit/test-bug.h) do
+this, and while this is technically being checked within your hook when
+the current test is checked, you've already incurred cost the rcu lock
+and indirect function call by this point.
+
+> +
+> +	/*
+> +	 * Runs in CFI trap context (NMI-like on some arches); RCU is watching
+> +	 * by this point, and the read-side section pairs with the
+> +	 * synchronize_rcu() on unregister to keep the hook alive across the
+> +	 * call.
+> +	 */
+> +	rcu_read_lock();
+> +	hook = READ_ONCE(cfi_kunit_failure_hook);
+> +	if (hook)
+> +		handled = hook();
+> +	rcu_read_unlock();
+> +
+> +	return handled;
+> +}
+> +#else
+> +static inline bool cfi_kunit_handled(void) { return false; }
+> +#endif
+> +
+>  enum bug_trap_type report_cfi_failure(struct pt_regs *regs, unsigned long addr,
+>  				      unsigned long *target, u32 type)
+>  {
+> +	/*
+> +	 * Let a registered KUnit test consume and count its own deliberate
+> +	 * violations. If it claims the failure, suppress the report and tell
+> +	 * the arch handler to skip the trap and resume the thread, regardless
+> +	 * of CFI_PERMISSIVE.
+> +	 */
+> +	if (cfi_kunit_handled())
+> +		return BUG_TRAP_TYPE_WARN;
+> +
+>  	if (target)
+>  		pr_err("CFI failure at %pS (target: %pS; expected type: 0x%08x)\n",
+>  		       (void *)addr, (void *)*target, type);
+> diff --git a/kernel/tests/cfi_kunit.c b/kernel/tests/cfi_kunit.c
+> new file mode 100644
+> index 000000000000..6a149326f26a
+> --- /dev/null
+> +++ b/kernel/tests/cfi_kunit.c
+> @@ -0,0 +1,276 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit test for Kernel Control Flow Integrity (kCFI).
+> + *
+> + * Exercises properties of the compiler's KCFI indirect-call checks:
+> + *
+> + * Mirrors drivers/misc/lkdtm/cfi.c's CFI_FORWARD_PROTO test, but as a
+> + * self-contained kunit suite that drives kernel/cfi.c via the standard
+> + * indirect-call path. For the fatal-trap behavior of a real violation, see
+> + * LKDTM's "CFI_*" tests.
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <kunit/test-bug.h>
+> +#include <linux/cfi.h>
+> +
+> +/*
+> + * The test case currently expecting to count kCFI traps, and its running
+> + * count. Only ever touched for the test that armed cfi_kunit_active, so a
+> + * single counter is safe without locking.
+> + */
+> +static struct kunit *cfi_kunit_active;
+> +static int cfi_kunit_trap_count;
+> +
+> +/*
+> + * Consulted from report_cfi_failure() in kCFI trap context, which may be
+> + * NMI-like (e.g. riscv kernel breakpoints), so this must stay lock-free: it
+> + * only reads the current task's kunit pointer and touches module-static
+> + * counters. It claims the failure by counting it and asking the arch handler
+> + * to skip the trap and resume, but only when the trap fired on the very test
+> + * that armed us. Any other CFI failure is left to behave normally.
+> + */
+> +static bool cfi_kunit_failure_hook(void)
+> +{
+> +	struct kunit *test = READ_ONCE(cfi_kunit_active);
+> +
+> +	/*
+> +	 * Claim the failure only when a test is armed and it is the one
+> +	 * running on this thread. Without the NULL check, a real CFI violation
+> +	 * on a background thread (where kunit_get_current_test() is also NULL)
+> +	 * while no test is active would match and be wrongly suppressed.
+> +	 */
+> +	if (!test || kunit_get_current_test() != test)
+> +		return false;
+> +
+> +	WRITE_ONCE(cfi_kunit_trap_count, cfi_kunit_trap_count + 1);
+> +	return true;
+> +}
+> +
+> +static int called_count;
+> +
+> +/*
+> + * Two same-arity, same-arg-type callees with deliberately different return
+> + * types so that kCFI's type-hash check at the call site catches the cast.
+> + */
+> +static noinline void cfi_increment_void(int *counter)
+> +{
+> +	(*counter)++;
+> +}
+> +
+> +static noinline int cfi_increment_int(int *counter)
+> +{
+> +	(*counter)++;
+> +	return *counter;
+> +}
+> +
+> +/*
+> + * The indirect call site. Type of the function pointer is what kCFI
+> + * compares against the hash baked into the callee's __cfi_<name> prefix.
+> + */
+> +static noinline void cfi_indirect_call(void (*func)(int *))
+> +{
+> +	func(&called_count);
+> +}
+> +
+> +/*
+> + * Increasing-arity callees. Each returns a position-weighted sum of its
+> + * arguments so that a dropped, reordered, or zeroed argument produces a wrong
+> + * result rather than a coincidental match. Called with args (1, 2, 3, ...),
+> + * cfi_arityN() returns sum(i*i) for i in 1..N.
+> + */
+> +static noinline int cfi_arity1(int a)
+> +{
+> +	return a;
+> +}
+> +
+> +static noinline int cfi_arity2(int a, int b)
+> +{
+> +	return a + 2 * b;
+> +}
+> +
+> +static noinline int cfi_arity3(int a, int b, int c)
+> +{
+> +	return a + 2 * b + 3 * c;
+> +}
+> +
+> +static noinline int cfi_arity4(int a, int b, int c, int d)
+> +{
+> +	return a + 2 * b + 3 * c + 4 * d;
+> +}
+> +
+> +static noinline int cfi_arity5(int a, int b, int c, int d, int e)
+> +{
+> +	return a + 2 * b + 3 * c + 4 * d + 5 * e;
+> +}
+> +
+> +static noinline int cfi_arity6(int a, int b, int c, int d, int e, int f)
+> +{
+> +	return a + 2 * b + 3 * c + 4 * d + 5 * e + 6 * f;
+> +}
+> +
+> +static noinline int cfi_arity7(int a, int b, int c, int d, int e, int f, int g)
+> +{
+> +	return a + 2 * b + 3 * c + 4 * d + 5 * e + 6 * f + 7 * g;
+> +}
+> +
+> +/*
+> + * Tail-calling trampolines: each receives the callee as an opaque pointer
+> + * (defeating optimization) plus the arguments, then `return fn(args)` as
+> + * its final statement so the compiler lowers it to an indirect tail call.
+> + * Arity grows so the callee pointer and the kCFI scratch registers
+> + * increasingly contend with argument registers.
+> + */
+> +static noinline int cfi_tail_call1(int (*fn)(int), int a)
+> +{
+> +	return fn(a);
+> +}
+> +
+> +static noinline int cfi_tail_call2(int (*fn)(int, int), int a, int b)
+> +{
+> +	return fn(a, b);
+> +}
+> +
+> +static noinline int cfi_tail_call3(int (*fn)(int, int, int),
+> +				   int a, int b, int c)
+> +{
+> +	return fn(a, b, c);
+> +}
+> +
+> +static noinline int cfi_tail_call4(int (*fn)(int, int, int, int),
+> +				   int a, int b, int c, int d)
+> +{
+> +	return fn(a, b, c, d);
+> +}
+> +
+> +static noinline int cfi_tail_call5(int (*fn)(int, int, int, int, int),
+> +				   int a, int b, int c, int d, int e)
+> +{
+> +	return fn(a, b, c, d, e);
+> +}
+> +
+> +static noinline int cfi_tail_call6(int (*fn)(int, int, int, int, int, int),
+> +				   int a, int b, int c, int d, int e, int f)
+> +{
+> +	return fn(a, b, c, d, e, f);
+> +}
+> +
+> +static noinline int cfi_tail_call7(int (*fn)(int, int, int, int, int, int, int),
+> +				   int a, int b, int c, int d, int e, int f,
+> +				   int g)
+> +{
+> +	return fn(a, b, c, d, e, f, g);
+> +}
+> +
+> +#define CFI_MAX_ARITY 7
+> +
+> +static void cfi_kunit_forward_proto_traps(struct kunit *test)
+> +{
+> +	int before_traps = READ_ONCE(cfi_kunit_trap_count);
+> +
+> +	/* Only this case needs kCFI; the well-typed cases below run regardless. */
+> +	if (!IS_ENABLED(CONFIG_CFI))
+> +		kunit_skip(test, "kCFI is not enabled (CONFIG_CFI=n)");
+> +
+> +	/*
+> +	 * Force a kCFI type mismatch: the call site expects a callee whose
+> +	 * __cfi_ prefix encodes "void (*)(int *)", but the actual callee's
+> +	 * prefix encodes "int (*)(int *)". The (void *) intermediate cast
+> +	 * follows drivers/misc/lkdtm/cfi.c and sidesteps -Wcast-function-type
+> +	 * on the deliberate mis-cast.
+> +	 *
+> +	 * kCFI must detect this. The failure hook counts the trap and lets us
+> +	 * survive it, so control returns here normally.
+> +	 */
+> +	cfi_indirect_call((void *)cfi_increment_int);
+> +
+> +	KUNIT_EXPECT_EQ_MSG(test, READ_ONCE(cfi_kunit_trap_count), before_traps + 1,
+> +			    "mismatched-prototype indirect call was not caught by kCFI\n");
+> +}
+> +
+> +static void cfi_kunit_baseline_matched_proto(struct kunit *test)
+> +{
+> +	int before_traps = READ_ONCE(cfi_kunit_trap_count);
+> +	int before_calls = called_count;
+> +
+> +	/* Matched prototype: must NOT trap and must increment the counter. */
+> +	cfi_indirect_call(cfi_increment_void);
+> +	KUNIT_EXPECT_EQ(test, called_count, before_calls + 1);
+> +	KUNIT_EXPECT_EQ_MSG(test, READ_ONCE(cfi_kunit_trap_count), before_traps,
+> +			    "well-typed indirect call spuriously tripped kCFI\n");
+> +}
+> +
+> +static void cfi_kunit_arity_matched_calls(struct kunit *test)
+> +{
+> +	/* expected[N] = sum(i*i) for i in 1..N */
+> +	static const int expected[CFI_MAX_ARITY + 1] = {
+> +		0, 1, 5, 14, 30, 55, 91, 140,
+> +	};
+> +	int before_traps = READ_ONCE(cfi_kunit_trap_count);
+> +	int results[CFI_MAX_ARITY + 1];
+> +	int i;
+> +
+> +	results[1] = cfi_tail_call1(cfi_arity1, 1);
+> +	results[2] = cfi_tail_call2(cfi_arity2, 1, 2);
+> +	results[3] = cfi_tail_call3(cfi_arity3, 1, 2, 3);
+> +	results[4] = cfi_tail_call4(cfi_arity4, 1, 2, 3, 4);
+> +	results[5] = cfi_tail_call5(cfi_arity5, 1, 2, 3, 4, 5);
+> +	results[6] = cfi_tail_call6(cfi_arity6, 1, 2, 3, 4, 5, 6);
+> +	results[7] = cfi_tail_call7(cfi_arity7, 1, 2, 3, 4, 5, 6, 7);
+> +
+> +	for (i = 1; i <= CFI_MAX_ARITY; i++)
+> +		KUNIT_EXPECT_EQ_MSG(test, results[i], expected[i],
+> +				    "arity-%d matched indirect call returned %d, expected %d\n",
+> +				    i, results[i], expected[i]);
+> +
+> +	/*
+> +	 * None of the matched calls may trip kCFI. A spurious trap here is a
+> +	 * codegen bug, most likely the callee pointer never reaching the call
+> +	 * register under argument-register pressure.
+> +	 */
+> +	KUNIT_EXPECT_EQ_MSG(test, READ_ONCE(cfi_kunit_trap_count), before_traps,
+> +			    "a matched-prototype indirect call tripped kCFI under register pressure (codegen bug)\n");
+> +}
+> +
+> +static int cfi_kunit_init(struct kunit *test)
+> +{
+> +	WRITE_ONCE(cfi_kunit_trap_count, 0);
+> +	WRITE_ONCE(cfi_kunit_active, test);
+> +	return 0;
+> +}
+> +
+> +static void cfi_kunit_exit(struct kunit *test)
+> +{
+> +	WRITE_ONCE(cfi_kunit_active, NULL);
+> +}
+> +
+> +static int cfi_kunit_suite_init(struct kunit_suite *suite)
+> +{
+> +	cfi_kunit_set_failure_hook(cfi_kunit_failure_hook);
+> +	return 0;
+> +}
+> +
+> +static void cfi_kunit_suite_exit(struct kunit_suite *suite)
+> +{
+> +	cfi_kunit_set_failure_hook(NULL);
+> +}
+> +
+> +static struct kunit_case cfi_kunit_cases[] = {
+> +	KUNIT_CASE(cfi_kunit_baseline_matched_proto),
+> +	KUNIT_CASE(cfi_kunit_arity_matched_calls),
+> +	KUNIT_CASE(cfi_kunit_forward_proto_traps),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite cfi_kunit_suite = {
+> +	.name = "cfi",
+> +	.init = cfi_kunit_init,
+> +	.exit = cfi_kunit_exit,
+> +	.suite_init = cfi_kunit_suite_init,
+> +	.suite_exit = cfi_kunit_suite_exit,
+> +	.test_cases = cfi_kunit_cases,
+> +};
+> +kunit_test_suite(cfi_kunit_suite);
+> +
+> +MODULE_DESCRIPTION("KUnit tests for kCFI indirect-call type checks");
+> +MODULE_LICENSE("GPL");
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c8d4b913f26c..8c704a24136b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6252,6 +6252,7 @@ B:	https://github.com/ClangBuiltLinux/linux/issues
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
+>  F:	include/linux/cfi.h
+>  F:	kernel/cfi.c
+> +F:	kernel/tests/cfi_kunit.c
+>  
+>  CLANG-FORMAT FILE
+>  M:	Miguel Ojeda <ojeda@kernel.org>
 
