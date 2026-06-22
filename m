@@ -1,82 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51090364049;
-	Mon, 22 Jun 2026 09:21:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40993A3E60
+	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 10:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782120116; cv=none; b=YDa7S58lQIqcuqI2X0QtnBA4oJM7ujUehI1cjwKpz9devoizutfYwROg8tkMdZg6+QPqmV1ctpIvz3QgLLxMcBt+ziyyo7prDYecrgjSQxraTmm4nscrCspTWxhVkJbQr4+1SQA2KyDO4917y3Bm05iIexoKxUvCtUtMpMQyU24=
+	t=1782123130; cv=none; b=dcXLOifDU5k7Z/3RNRVciP7LOVV859QlzHfH2mA829W0OaZLfG9vjMu92Q1QOtOYjO8+ZpG8ZgvjM4gv6TyqrbD7O+XMamHepDocyVDAnIkWIn45qIAaGsoe1jAjxzI65Sg5aCrrskS4w5X0+vz9FtGXV0e09wovFRcCxPV2omw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782120116; c=relaxed/simple;
-	bh=uHVf0Jy6vUIHuqEDqyAkWupfMY5pJ7s8MtJ34TcNuuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pN4g+OT2enOL8eGZnGtNNjRGkl4v8N+gDhHPsMB6KbcUaJ8KbwOPwuq4hhSng4lSEHP99s1FsNCMRY3vsaNYpdq8ZrJuFeFfl2iVNgBficwILsTtKjjBhH8gJHKerB+V6Ejv8lJdSjgjA0dGSJC6s54J1Qqym8KW85ZzgYx0AzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oQu3Jp12; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782123130; c=relaxed/simple;
+	bh=MTjm18d1ksMl+UkcCVpcY52jclTDJ7Kgk74ItdgHl0s=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UzLmY1vAu/R1tg32o3EszNFJXXTtli3Rmil0vvn+I0O1eG+qN8nMjn56MqhJrleOuGWVOwbGpSJTXnDsZbJ/kDdmxbHfueWAugznyYBABO46JJ8Y5RkYp+D1LkcQwSbH/4FuM2f7/1itis53kziwAc3ww0eDGoIQ2pVCSqbyfZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=c7Nj4I6F; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oQu3Jp12"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976721F000E9;
-	Mon, 22 Jun 2026 09:21:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782120113;
-	bh=77wIqgo4jFeWA0NXSl8ibtCsUhwVKZwgljHlmjkSEoU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=oQu3Jp12M+W3sDDSDWTuMxQM8AiP6aGolGm18QnoHyGoKNq6o2sFA4yzKsJyPpBuK
-	 vBqQP8kZjsflOBIZZuF5vlOnYQ9JpZbgvder+l0ESgiEukgdBCimwROWLOAmI9lgcw
-	 94SYsR3d72svwtCy5vMjijm0SaOm/rRO5mxqIpbsB69N4a+6c6Aiuu3YBHu4VeKndY
-	 gF3YJ0hsexLVOKVgzINnZHm7Tq7VTvSrf8Ur7E1tSmZpNoiKIl8w+KvkPrd634vAW/
-	 GFfJBCLrvWjVC+L1yhpVzEJTj1LI1OB8QzK5EUS7eR+V0kv71YnNMApnw4hrmy4qBn
-	 JQlXP+pP8f39A==
-Date: Mon, 22 Jun 2026 11:21:49 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Herman van Hazendonk <github.com@herrie.org>
-Cc: Vinod Koul <vkoul@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, konrad.dybcio@oss.qualcomm.com, 
-	dmitry.baryshkov@oss.qualcomm.com
-Subject: Re: [PATCH v3 1/2] dt-bindings: phy: qcom,usb-hs-phy: add
- qcom,hs-drv-slope
-Message-ID: <20260622-thankful-vehement-bittern-0edc8d@quoll>
-References: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
- <20260616-submit-phy-usb-hs-vendor-init-seq-v3-1-7d21fb1d1484@herrie.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="c7Nj4I6F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782123127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Lsm6oFQNENBm0Sf9fW8D7GGgKjjPRfdfKw22K4WVCR4=;
+	b=c7Nj4I6FB8ymIBbwtFDrncO2CPwVT51VMuEI/gvPnqSnZDjrAnfN4LrB3voLP6KhavQ8G2
+	BmKl0ruYy6DATc43NUclAYh92T07oWFUSSbO7idkA9tot98674tToAg3gNwrpA4RX1bkej
+	oN2mXPcU1JQsGciFr0V+NGqJrxj/cM4=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-327-HzuWLrs1MfWNbHyapZIHHA-1; Mon,
+ 22 Jun 2026 06:12:06 -0400
+X-MC-Unique: HzuWLrs1MfWNbHyapZIHHA-1
+X-Mimecast-MFC-AGG-ID: HzuWLrs1MfWNbHyapZIHHA_1782123125
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9224E1956094
+	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 10:12:05 +0000 (UTC)
+Received: from [172.20.158.179] (unknown [10.30.44.85])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2BAE718005A0;
+	Mon, 22 Jun 2026 10:12:04 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
+ upstream-mainline, ef0c9f75)
+Date: Mon, 22 Jun 2026 10:12:04 -0000
+To: fs-test@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-1-7d21fb1d1484@herrie.org>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <91117.126062206120600387@us-mta-327.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: pwhs5T_l7-8Jtjw26TpOgwDeGlHw-eGBoIifFVAk3tw_1782123125
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 16, 2026 at 03:26:53PM +0200, Herman van Hazendonk wrote:
-> The MSM8x60 / APQ8060 PHY needs three vendor ULPI register tweaks for
-> stable USB operation: pre-emphasis level, CDR auto-reset and SE1
-> gating in registers 0x32 and 0x36.  A survey of MSM8x60-class
-> downstream board files (Qualcomm SURF/FFA/Fluid/Dragon, Samsung
-> Galaxy S2 family, Sony Xperia, HTC and HP TouchPad) shows that those
-> three values are identical across every reference board and can be
-> hardcoded in the driver behind the existing
-> qcom,usb-hs-phy-msm8660 compatible.
-> 
-> The only board-specific value is the 4-bit HS driver slope in bits
-> [3:0] of register 0x32:
-> 
->   HP TouchPad                                  5
->   HTC MSM8660 ports                            1
->   Qualcomm / Samsung / Sony reference boards   0 (silicon default)
-> 
-> Add a qcom,hs-drv-slope property carrying that 4-bit value, valid
-> only on the qcom,usb-hs-phy-msm8660 variant.  When the property is
-> absent the driver leaves the silicon default in place, matching the
-> behaviour of the Qualcomm reference platform.
+Hi, we tested your kernel and here are the results:
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-Best regards,
-Krzysztof
+
+Kernel information:
+    Commit message: lib: Add stale 'raid6' directory to .gitignore file
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2618076002
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2618076002_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2618076002_x86_64_kernel_kcidb_tool_21500679_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+        Issue: avc: denied { create } for comm=3D"rpc.mountd"
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D2456368
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
