@@ -1,102 +1,318 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE972AD00;
-	Mon, 22 Jun 2026 05:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782105734; cv=none; b=GC5Rvv04JijapjK3y0sFbn185sJKyKuFDlpxwhGOxwDoEUShVV9EvcqG6jg1wQE0s8niu+S2EQHfe77yIhkiYezb5VVM0TWMdbRafFnefQomx4fEET0X3s82bvTtJID45/d2Bbo2+DCCXsvbOZ/PgINaE+0k6Zr2Wv8fqwylLeM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782105734; c=relaxed/simple;
-	bh=TLqjtoxyQNBS4x+LOScCt7CwmrTyt3kjY6p33duqeE4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Ev/zTAYT7vazGoPoDRAYDe8Faj81Pf7zpbO73ibC6hSmt1pENNFvRiz8Xr1qWVczOdInpNCIw0Zg0Jxi/9NRnuf6AOv6bheQEBEozzhykDAIccQkihO4A5KMvIMoCAwvsmZCQWVD69UH5tfx3yEeuqOp0+AZ8HmoSjAtrVKEbug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPoPKF9k reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5DBA35AC1B
+	for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 05:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782106136; cv=pass; b=Z7ifcptYoPfJl9WupAGt8nojj7I8g+4Riw6D8QkwbTVoQSyEOiUhmRYjer/pMHfT0wOgv/a6LnntwMYp5mZVwMMxtRLvBJ+mdJ6sJTSdQAqm80qiWLisioRX5gc9gT3SDUgCHX/pdPTj2Q39fAnxSaJix14bGUAhNeMDtexuUVU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782106136; c=relaxed/simple;
+	bh=AVkOkRTtOGmOYW1/Vsdb3Eh/mWt3+SXrUWDOYCxFRJI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qD950rrioX0AyaU7hEkLLDasZkxlcJCdeXiUdfGOC495+RgfQZpl7qoknavveGQOC+7kmbF90GgiEPJelyFkHfWFf0Aof7kJevKX9bAD8WDNA6tfE6niaiSMchTIkWuF0CdIpydYt9CS1YWydeceqUGZ9XPVZ/LY1SBbB+EXID4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=apDCSIkK; arc=pass smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPoPKF9k"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 378331F00A3F;
-	Mon, 22 Jun 2026 05:22:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782105733;
-	bh=IjSWiRWMU9Ee27IawNNdMZlcd+pdKiRJTFL+L2RHmwk=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=VPoPKF9kD8SQIQF6VNPVqYW4nAuqARtP874wgBw9ktl1VwB0bHFPLCbcXYj7HUMxH
-	 Mj3NKz7moMW1j+SXZ5JmJDnOZXBZW5IRtgrf/R6VIt2WEKZCRvzJOEpijHbPfQq0b0
-	 nm0TeCZgQXRR4HX/TRhbDsnY+V7xNwuVA9DRk2Y55c/zCXC+PjQS50Jq+EMuggkTRd
-	 9oW5HaoUighBQ6x6uk8YcD6TgdtMpwCo25V+L/RnXeQZlOC/g45FDA5+g0tzRvIsbT
-	 YyCpmQk1Wl7rkCzOR5GCrA3tMSulv6dAwtezT3ajTjhRDdDcAq0rBDJrWSlu6Ht97u
-	 uxcDgxs29F2vw==
-Content-Type: multipart/mixed; boundary="===============3341382443539626176=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="apDCSIkK"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c85d8615b09so2705704a12.3
+        for <llvm@lists.linux.dev>; Sun, 21 Jun 2026 22:28:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782106132; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kqvBZjQRQJ+6e50M0eVqw1Q6WyCaBXHCbBfLmFiMTuzoTzoBoeg+6wwByZQgC/rYzm
+         owF67SDMetJbBhgyzdbgdWP7E4b2+XRvMJeGLyKlJAkGaPXIiRj6f+mOVWDU1Ye83WyZ
+         pibMCV4KU0kIVVZcXEho5B922BACzA3Wn+puiOosn1TkOFHXZC4JlVcLaY5nkkMT7uxO
+         0miINsZZijrXXJSgeC0Yt0VFYkjnkXoJ1vD2HReCitFORTgU/4fNfAMnilakfMYQySat
+         +8za8BRub3C2MYPOg3uOUAD+Onv0GIlTFGdSg+JfCTUeOyz4FyQFksvhKCXrFlnghL4p
+         0+4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=5KNOLAwZyaBThMY1NJgMdUSjBoVwiFJr4CThsL0B6VY=;
+        fh=PyMpqSYUH7v8C/h44pWOASIOi9L8EDKvzagBgYuDlgE=;
+        b=JNwAi6jeExvx3n5CwRw8a2I0bkYj9CrtfGVzWHlz3PekpiEkgQDzNvJikFI4Bt+fHB
+         WNOI0Fsuj9ciw3d+jOalIH6QYGf1Yg0piYBNYwMGJDcrgPHEA6/kmv/kqfaVxjybIEqF
+         M5COVKE6XAdD/HeMxTodqNA5nYsbLERr1XImMMWZYB9irDOMIw4BgEeRDDyqGZNCd1T+
+         WTazYWUCwAJeoklwiXR0XVoWTUBzn38lsOKLDi45pqaYZ/sK+Vh9QXME86JkJ6c0GfeI
+         3U9IC78Xy5Y74OnTN9gz0IJdlcYkNVqw9nYMb93mhbNmZ0CUNAlobxje9Yq6LGSS3Lmz
+         0m+w==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782106132; x=1782710932; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5KNOLAwZyaBThMY1NJgMdUSjBoVwiFJr4CThsL0B6VY=;
+        b=apDCSIkK9N7VS9rXn9cK3OK519vSQCan6MsOxiEJVU/j3Xyyjqg4VAl94aCV6O7rpT
+         ZHbbnZe/nC2OcBYwcy6aCNDicBYtcHzsk76l/Typ9o1rp3A5MbDS16sWdlLTaDBMmbTc
+         9ullrlAsVvyuiE8+2qh9AtrmRqWvw/p7Zhb/09XYCI9w6+EGC10dmyZkxeoktNuOEbzy
+         3UML/1hoYrKdV21ZEeMsoy8RPlNpt3f70oRYT0BQ4aeT0c1zrvgy9JuIi55a7IsZa1mW
+         HVOklp2N2kWaJ92OOEubMiSF40qxufV4a3eHh0XW5GRxeTiX3Np9AB0Dpw4mWoPhh4ji
+         vSOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782106132; x=1782710932;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5KNOLAwZyaBThMY1NJgMdUSjBoVwiFJr4CThsL0B6VY=;
+        b=qSJIrdBVjq8ilQxp1jUhv34fuF8SqJbsLMU29ipElAtJFDOQ3i7S++DZNHhCH5hF1X
+         HvXFO++v5SWkaU7dKM8daNFq5RFAZxsgTD/Sj/isTNFbt8W46NL2jaG8oAYnti9CWruw
+         9IxSKxksUZQU3Sn3OnXdmpwYFfNooaR+PYSlKl5IXt0m1KonX3VlwAyGk3o28nK4eclP
+         IpFuTItc5E9R/9C5iUwvYDdSg4327+VpBBIn/uo+OZWWPycIsoDnsSbBnPLaH6tg6WKF
+         wJyiT3KqRakmZ2ohJfiYYyJTdq3DLhk06Z32+wHWkYiXwulYQMzHgyHNcWyfJI1CfjUX
+         br+Q==
+X-Forwarded-Encrypted: i=1; AFNElJ8KUsJ/YaRKAN4urfMnWFjUYkPzenyvvzEbewd60m9+BdQK9vNQ1jXtvi2lhW6TfDXxfyco@lists.linux.dev
+X-Gm-Message-State: AOJu0YxxV91YNpXmFSKwz4Xzltsi+XPMAWlV+BEcp5AfiRboJ6d+uV2z
+	L/W35SbyQNgCU4qqKlJTGdQ+Kv6XgTYoQ9bPq4OL7SEO1uWPJx+xM5VleTJadKNLtQSIHhJlPSV
+	mlZXnOEhiHOH/gtg9QcT5Enky/3yuAOc=
+X-Gm-Gg: AfdE7cl5SU9VDrwac/nF7/faquQYF/Bj5G+598Oosn1AqPQN3SbilFWJjLZcShwL+wV
+	KFSzVriSPARuyDXdEEtrtG+oYRmSwNPRwt37tvQ3a5ssGKrsz1+K410TY0udJKNU8ulNo4zNqZj
+	Vd3rEoLIdKO3kYDuLe9iR4m8KnVJeKjsZSvZlKr1/wp6XGz+XraRUekjzumECsPZYffto8VNp1L
+	dMPoUGNy9o0xSMcnm+dDFmRezxRpEoe1XvB9pPsLz4qI6w+IcpiSh0vWRG378bnFx+gnWIhY8nh
+	w3QOuFb4itKzOia114D/LsjiGE7Y8UQD6KltxhljabaDrHSUKFATQUll4g2r/d9dui2cI18K0S+
+	3g4/nBK4rzUbKfy9Ey2gLkB8f
+X-Received: by 2002:a05:6a21:9102:b0:3b7:b328:4c8b with SMTP id
+ adf61e73a8af0-3bb3241d5bemr15602261637.19.1782106131632; Sun, 21 Jun 2026
+ 22:28:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <a431d311fb11ec06b89a5986cbacf2ebe983bdaddc4a93076564d83799471cad@mail.kernel.org>
-In-Reply-To: <20260622042811.31684-1-kaitao.cheng@linux.dev>
-References: <20260622042811.31684-1-kaitao.cheng@linux.dev>
-Subject: Re: [PATCH v3 5/7] kernel: Use mutable list iterators
-From: bot+bpf-ci@kernel.org
-To: kaitao.cheng@linux.dev,paul@paul-moore.com,eparis@redhat.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,dev@lankhorst.se,mripard@kernel.org,natalie.vock@gmx.de,peterz@infradead.org,mingo@redhat.com,acme@kernel.org,namhyung@kernel.org,mhiramat@kernel.org,oleg@redhat.com,oberpar@linux.ibm.com,akpm@linux-foundation.org,baoquan.he@linux.dev,rppt@kernel.org,pasha.tatashin@soleen.com,pratyush@kernel.org,naveen@kernel.org,jpoimboe@kernel.org,jikos@kernel.org,mbenes@suse.cz,pmladek@suse.com,will@kernel.org,boqun@kernel.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,steffen.klassert@secunet.com,daniel.m.jordan@oracle.com,rafael@kernel.org,dave@stgolabs.net,paulmck@kernel.org,josh@joshtriplett.org,frederic@kernel.org,neeraj.upadhyay@kernel.org,joelagnelf@nvidia.com,urezki@gmail.com
- ,juri.lelli@redhat.com,vincent.guittot@linaro.org,kees@kernel.org,bsingharora@gmail.com,anna-maria@linutronix.de,tglx@kernel.org,jstultz@google.com,kpsingh@kernel.org,mattbobrowski@google.com,nathan@kernel.org,martin.lau@linux.dev,song@kernel.org,mark.rutland@arm.com,mathieu.desnoyers@efficios.com,dietmar.eggemann@arm.com,void@manifault.com,rostedt@goodmis.org
-Cc: audit@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,cgroups@vger.kernel.org,dri-devel@lists.freedesktop.org,linux-perf-users@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kexec@lists.infradead.org,live-patching@vger.kernel.org,linux-modules@vger.kernel.org,linux-crypto@vger.kernel.org,linux-pm@vger.kernel.org,rcu@vger.kernel.org,sched-ext@lists.linux.dev,llvm@lists.linux.dev,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 22 Jun 2026 05:22:12 +0000 (UTC)
+References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+In-Reply-To: <20260622040533.29824-1-kaitao.cheng@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 21 Jun 2026 22:28:40 -0700
+X-Gm-Features: AVVi8CdydPWkgrsWeukABG1V_xsA12RL457Ae_ewOX27KaNNGTwhs0J8OHNbSBg
+Message-ID: <CAADnVQJmPWFT01b7DuLdtafv=8FyB84GYHNZ8zSTck+9Aw0JpA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/7] Prepare mutable list iterators to cache cursor state
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Jens Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Paul Moore <paul@paul-moore.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	David Howells <dhowells@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>, 
+	Randy Dunlap <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Philipp Stanner <phasta@kernel.org>, linux-block@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>, linux-ntfs-dev@lists.sourceforge.net, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, io-uring <io-uring@vger.kernel.org>, 
+	audit@vger.kernel.org, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, dri-devel@lists.freedesktop.org, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, kexec@lists.infradead.org, 
+	live-patching@vger.kernel.org, linux-modules@vger.kernel.org, 
+	Linux Crypto Mailing List <linux-crypto@vger.kernel.org>, 
+	Linux Power Management <linux-pm@vger.kernel.org>, rcu@vger.kernel.org, sched-ext@lists.linux.dev, 
+	linux-mm <linux-mm@kvack.org>, virtualization@lists.linux.dev, damon@lists.linux.dev, 
+	clang-built-linux <llvm@lists.linux.dev>, chengkaitao <chengkaitao@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============3341382443539626176==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/trace/trace_dynevent.c b/kernel/trace/trace_dynevent.c
-> index c4dfbc293bae..9e076106bee7 100644
-> --- a/kernel/trace/trace_dynevent.c
-> +++ b/kernel/trace/trace_dynevent.c
-
-[ ... ]
-
-> @@ -100,7 +100,7 @@ int dyn_event_release(const char *raw_command, struct dyn_event_operations *type
->  		return -EINVAL;
+On Sun, Jun 21, 2026 at 9:06=E2=80=AFPM Kaitao Cheng <kaitao.cheng@linux.de=
+v> wrote:
 >
->  	mutex_lock(&event_mutex);
-> -	for_each_dyn_event_safe(pos, n) {
-> +	for_each_dyn_event_safe(pos) {
->  		if (type && type != pos->ops)
->  			continue;
->  		if (!pos->ops->match(system, event,
+> From: chengkaitao <chengkaitao@kylinos.cn>
+>
+> The list_for_each*_safe() helpers are used when the loop body may remove
+> the current entry.  Their current interface, however, forces every caller
+> to define a temporary cursor outside the macro and pass it in, even when
+> the caller never uses that cursor directly.  For most call sites this
+> extra cursor is just boilerplate required by the macro implementation.
+>
+> This is awkward because the saved next pointer is an internal detail of
+> the iteration.  Callers that only remove or move the current entry do not
+> need to spell it out.
+>
+> The _safe() suffix has also caused confusion.  Christian Koenig pointed
+> out that the name is easy to read as a thread-safe variant, especially
+> for beginners, even though it only means that the iterator keeps enough
+> state to tolerate removal of the current entry.  He suggested _mutable()
+> as a clearer description of what the loop permits.
+>
+> Add *_mutable() iterator variants for list, hlist and llist.  The new
+> helpers are variadic and support both forms.  In the common case, the
+> caller omits the temporary cursor and the macro creates a unique internal
+> cursor with typeof(pos) and __UNIQUE_ID().  If a loop really needs an
+> explicit temporary cursor, the caller can still pass it and the helper
+> keeps the existing *_safe() behaviour.
+>
+> For example, a call site may use the shorter form:
+>
+>   list_for_each_entry_mutable(pos, head, member)
+>
+> or keep the explicit temporary cursor form:
+>
+>   list_for_each_entry_mutable(pos, tmp, head, member)
+>
+> The existing *_safe() helpers remain available for compatibility.  This
+> series only converts users in mm, block, kernel, init and io_uring.  If
+> this approach looks acceptable, the remaining users can be converted in
+> follow-up series.
+>
+> Changes in v3 (Christian K=C3=B6nig, Andy Shevchenko):
+> - Convert safe list walks to mutable iterators
+>
+> Changes in v2 (Muchun Song, Andy Shevchenko):
+> - Drop the list_for_each_entry_mutable*() helpers from v1 and make the
+>   cursor change directly in the existing list_for_each_entry*() helpers.
+> - Open-code special list walks that rely on updating the loop cursor in
+>   the body, preserving their existing traversal semantics.
+>
+> Link to v2:
+> https://lore.kernel.org/all/20260609061347.93688-1-kaitao.cheng@linux.dev=
+/
+>
+> Link to v1:
+> https://lore.kernel.org/all/20260529082149.76764-1-kaitao.cheng@linux.dev=
+/
+>
+> Kaitao Cheng (7):
+>   list: Add mutable iterator variants
+>   llist: Add mutable iterator variants
+>   mm: Use mutable list iterators
+>   block: Use mutable list iterators
+>   kernel: Use mutable list iterators
+>   initramfs: Use mutable list iterator
+>   io_uring: Use mutable list iterators
+>
+>  block/bfq-iosched.c                 |  17 +-
+>  block/blk-cgroup.c                  |  12 +-
+>  block/blk-flush.c                   |   4 +-
+>  block/blk-iocost.c                  |  18 +-
+>  block/blk-mq.c                      |   8 +-
+>  block/blk-throttle.c                |   4 +-
+>  block/kyber-iosched.c               |   4 +-
+>  block/partitions/ldm.c              |   8 +-
+>  block/sed-opal.c                    |   4 +-
+>  include/linux/list.h                | 269 ++++++++++++++++++++++++----
+>  include/linux/llist.h               |  81 +++++++--
+>  init/initramfs.c                    |   5 +-
+>  io_uring/cancel.c                   |   6 +-
+>  io_uring/poll.c                     |   3 +-
+>  io_uring/rw.c                       |   4 +-
+>  io_uring/timeout.c                  |   8 +-
+>  io_uring/uring_cmd.c                |   3 +-
+>  kernel/audit_tree.c                 |   4 +-
+>  kernel/audit_watch.c                |  16 +-
+>  kernel/auditfilter.c                |   4 +-
+>  kernel/auditsc.c                    |   4 +-
+>  kernel/bpf/arena.c                  |  10 +-
+>  kernel/bpf/arraymap.c               |   8 +-
+>  kernel/bpf/bpf_local_storage.c      |   3 +-
+>  kernel/bpf/bpf_lru_list.c           |  25 ++-
+>  kernel/bpf/btf.c                    |  18 +-
+>  kernel/bpf/cgroup.c                 |   7 +-
+>  kernel/bpf/cpumap.c                 |   4 +-
+>  kernel/bpf/devmap.c                 |  10 +-
+>  kernel/bpf/helpers.c                |   8 +-
+>  kernel/bpf/local_storage.c          |   4 +-
+>  kernel/bpf/memalloc.c               |  16 +-
+>  kernel/bpf/offload.c                |   8 +-
+>  kernel/bpf/states.c                 |   4 +-
+>  kernel/bpf/stream.c                 |   4 +-
+>  kernel/bpf/verifier.c               |   6 +-
+>  kernel/cgroup/cgroup-v1.c           |   4 +-
+>  kernel/cgroup/cgroup.c              |  54 +++---
+>  kernel/cgroup/dmem.c                |  12 +-
+>  kernel/cgroup/rdma.c                |   8 +-
+>  kernel/events/core.c                |  44 +++--
+>  kernel/events/uprobes.c             |  12 +-
+>  kernel/exit.c                       |   8 +-
+>  kernel/fail_function.c              |   4 +-
+>  kernel/gcov/clang.c                 |   4 +-
+>  kernel/irq_work.c                   |   4 +-
+>  kernel/kexec_core.c                 |   4 +-
+>  kernel/kprobes.c                    |  16 +-
+>  kernel/livepatch/core.c             |   4 +-
+>  kernel/livepatch/core.h             |   4 +-
+>  kernel/liveupdate/kho_block.c       |   4 +-
+>  kernel/liveupdate/luo_flb.c         |   4 +-
+>  kernel/locking/rwsem.c              |   2 +-
+>  kernel/locking/test-ww_mutex.c      |   2 +-
+>  kernel/module/main.c                |  11 +-
+>  kernel/padata.c                     |   4 +-
+>  kernel/power/snapshot.c             |   8 +-
+>  kernel/power/wakelock.c             |   4 +-
+>  kernel/printk/printk.c              |  11 +-
+>  kernel/ptrace.c                     |   4 +-
+>  kernel/rcu/rcutorture.c             |   3 +-
+>  kernel/rcu/tasks.h                  |   9 +-
+>  kernel/rcu/tree.c                   |   6 +-
+>  kernel/resource.c                   |   4 +-
+>  kernel/sched/core.c                 |   4 +-
+>  kernel/sched/ext.c                  |  22 +--
+>  kernel/sched/fair.c                 |  28 +--
+>  kernel/sched/topology.c             |   4 +-
+>  kernel/sched/wait.c                 |   4 +-
+>  kernel/seccomp.c                    |   4 +-
+>  kernel/signal.c                     |  11 +-
+>  kernel/smp.c                        |   4 +-
+>  kernel/taskstats.c                  |   8 +-
+>  kernel/time/clockevents.c           |   6 +-
+>  kernel/time/clocksource.c           |   4 +-
+>  kernel/time/posix-cpu-timers.c      |   4 +-
+>  kernel/time/posix-timers.c          |   3 +-
+>  kernel/torture.c                    |   3 +-
+>  kernel/trace/bpf_trace.c            |   4 +-
+>  kernel/trace/ftrace.c               |  49 +++--
+>  kernel/trace/ring_buffer.c          |  25 ++-
+>  kernel/trace/trace.c                |  12 +-
+>  kernel/trace/trace_dynevent.c       |   6 +-
+>  kernel/trace/trace_dynevent.h       |   5 +-
+>  kernel/trace/trace_events.c         |  35 ++--
+>  kernel/trace/trace_events_filter.c  |   4 +-
+>  kernel/trace/trace_events_hist.c    |   8 +-
+>  kernel/trace/trace_events_trigger.c |  17 +-
+>  kernel/trace/trace_events_user.c    |  16 +-
+>  kernel/trace/trace_stat.c           |   4 +-
+>  kernel/user-return-notifier.c       |   3 +-
+>  kernel/workqueue.c                  |  16 +-
+>  mm/backing-dev.c                    |   8 +-
+>  mm/balloon.c                        |   8 +-
+>  mm/cma.c                            |   4 +-
+>  mm/compaction.c                     |   4 +-
+>  mm/damon/core.c                     |   4 +-
+>  mm/damon/sysfs-schemes.c            |   4 +-
+>  mm/dmapool.c                        |   4 +-
+>  mm/huge_memory.c                    |   8 +-
+>  mm/hugetlb.c                        |  56 +++---
+>  mm/hugetlb_vmemmap.c                |  16 +-
+>  mm/khugepaged.c                     |  14 +-
+>  mm/kmemleak.c                       |   7 +-
+>  mm/ksm.c                            |  25 +--
+>  mm/list_lru.c                       |   4 +-
+>  mm/memcontrol-v1.c                  |   8 +-
+>  mm/memory-failure.c                 |  12 +-
+>  mm/memory-tiers.c                   |   4 +-
+>  mm/migrate.c                        |  23 ++-
+>  mm/mmu_notifier.c                   |   9 +-
+>  mm/page_alloc.c                     |   8 +-
+>  mm/page_reporting.c                 |   2 +-
+>  mm/percpu.c                         |  11 +-
+>  mm/pgtable-generic.c                |   4 +-
+>  mm/rmap.c                           |  10 +-
+>  mm/shmem.c                          |   9 +-
+>  mm/slab_common.c                    |  14 +-
+>  mm/slub.c                           |  33 ++--
+>  mm/swapfile.c                       |   4 +-
+>  mm/userfaultfd.c                    |  12 +-
+>  mm/vmalloc.c                        |  24 +--
+>  mm/vmscan.c                         |   7 +-
+>  mm/zsmalloc.c                       |   4 +-
+>  124 files changed, 875 insertions(+), 681 deletions(-)
 
-Does this leave the variable n unused? Looking at the function
-declaration around line 74, it still has:
+Not sure what you were thinking, but this diff stat
+is not landable.
 
-	struct dyn_event *pos, *n;
-
-but after this change n is no longer passed to for_each_dyn_event_safe().
-The macro now hides the temporary cursor internally, so n appears to be
-dead code. This would trigger -Wunused-variable warnings and break builds
-with CONFIG_WERROR=y.
-
-For comparison, the sibling change at line 219 (dyn_events_release_all)
-correctly removed the *tmp variable from its declaration.
-
-> diff --git a/kernel/trace/trace_dynevent.h b/kernel/trace/trace_dynevent.h
-> index beee3f8d7544..a4dc0812284f 100644
-> --- a/kernel/trace/trace_dynevent.h
-> +++ b/kernel/trace/trace_dynevent.h
-> @@ -115,10 +115,9 @@ int dyn_event_create(const char *raw_command, struct dyn_event_operations *type)
->  /*
->   * for_each_dyn_event	-	iterate over the dyn_event list safely
->   * @pos:	the struct dyn_event * to use as a loop cursor
-> - * @n:		the struct dyn_event * to use as temporary storage
->   */
-> -#define for_each_dyn_event_safe(pos, n)	\
-> -	list_for_each_entry_safe(pos, n, &dyn_event_list, list)
-> +#define for_each_dyn_event_safe(pos)	\
-> +	list_for_each_entry_mutable(pos, &dyn_event_list, list)
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/27930295027
---===============3341382443539626176==--
+pw-bot: cr
