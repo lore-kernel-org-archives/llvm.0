@@ -1,125 +1,88 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E7038F23F;
-	Tue, 23 Jun 2026 04:19:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9423A2E3F
+	for <llvm@lists.linux.dev>; Tue, 23 Jun 2026 04:25:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782188361; cv=none; b=DTPBCbDiiLiCRdufgRq3Q6Je7+bsN7UJn+Aiq2SDynZ366QUfa9xySzhZasHry6vEVJ9N6q9saDjzNjCO2CZkqQ7PXJTxsb1WDgXhtOER1UDlZ2pPBqefN4JPtEfv+sEDMjiTfjWp0YMiyC7Sfvypioz2iElP/A8fjwSRHTptDY=
+	t=1782188760; cv=none; b=Ybw51MM1LR3++Ja0pJwQ+nr1H9Rb9ArVe0tOcrvuYaXZOPjDix7qMwbOZf8SNqK6e8DlID7ifhq1QICfFkSiUdHu7p9Npen/gX9ldEyjNWl/qferqG1hcXdHQcNN28KlxpP9BYs1UDmosBh3ePBXOrznsLi5E+Y862KULcHgpt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782188361; c=relaxed/simple;
-	bh=se/9KKDopHs/epNOdX6RhoUGgkciV1u4rlWIT0YUxcU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=PYsNO75oSpw0rLaISyA2Jz/OwsZfOTUtI0/lG3IyC8g2RA+ao9puKOE0YJH9dzF8iNy0VbeqOV0BmBzenCUTL7SkFA64YnZCTRDTtqL6B6AWUiT4Hgd1/WaP4/alcIlcg+jIfM36rXq5/WeFpQvELl9S/sjpNJ+cA06d7zTyC6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HzvN+jm5; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782188760; c=relaxed/simple;
+	bh=wOPa1dqq+mlKJoifwWbp4RjsHBrFsS0BY3T7L5BB4Ro=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kWOzqFuFMYtMd91PkqFrlMl79O7qs31z5nEsDNkQuQZ4FR5WzFfu8VZs8WZ8D2RcQXQ/15O+A/Xfp/dcHFwYBMh6cdjHtG8X/ek2tI/8Hd6gBlG3vPRbiemuc8JwMwJ+CBTEbtDjq0cbm9MzhoT8G2LQncKB019EZGLSs0s8peA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqIdEt6i; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HzvN+jm5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782188358; x=1813724358;
-  h=date:from:to:cc:subject:message-id;
-  bh=se/9KKDopHs/epNOdX6RhoUGgkciV1u4rlWIT0YUxcU=;
-  b=HzvN+jm5abWLwO405wtctacBcEEuPLcu3YYjmUslF8J8Xs8V0v4qHd7s
-   AXT85c9glVHjI6tzu9AHoNSxg0tqRoreq35TIEXq0DaIato9zc5KR4oin
-   WU45bu+bA15+9T7fpjIg65HQ4KWOvXfVgS/q/IY7ZuAVLu65iq8gKHjSe
-   roCyAPppwpcuLAYokOaRYgf0kG/U0woi3qmtgxN9B/5xhMDQNv1OMtyOg
-   ELh3yP7L9XINNrgwp1txsaOZdYElqgVdyUYI4pMaeBKaPSdblRwbWYzi3
-   gydxKDzTZyXNq+9cs1Gjo3b/3zfIY4149uyS1nsjrp8APLt8av0AfRQ5h
-   A==;
-X-CSE-ConnectionGUID: 1834EWaGT9e1a9KXQGcQoQ==
-X-CSE-MsgGUID: nDaYEdw8RJyhwVaVO8qIqQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="105717069"
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="105717069"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 21:19:15 -0700
-X-CSE-ConnectionGUID: koFRAydSTsOgfjVvzSYklQ==
-X-CSE-MsgGUID: gzap3UgESnaWT398EnObng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
-   d="scan'208";a="279585959"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 22 Jun 2026 21:19:14 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wbsbP-000000002FH-1Q5a;
-	Tue, 23 Jun 2026 04:19:11 +0000
-Date: Tue, 23 Jun 2026 12:18:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:cleanups 9/36]
- drivers/net/arcnet/com20020.c:73:2: error: call to undeclared function
- 'TIME'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202606231221.UgUeeGJu-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqIdEt6i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8C41F00A3D
+	for <llvm@lists.linux.dev>; Tue, 23 Jun 2026 04:25:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782188759;
+	bh=WImKe0gNySjp3D4JqCdv0qGJ8o/akw0TckF/LbQn0u8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=mqIdEt6iNzTvPHpN0ep6GPsFmKeUfxoxrYt9fqJttuJqbnl9w9Tw92HPaYO+e7tNK
+	 orrG9WX2h5nrVZVdMjYARwDq4b5txT2Mcrg3cNxO3VBivs/ASkL46NVgl9rI3quwIm
+	 fZL8eLLXoQL8iBHOglZgexFryyOu802UjrbEpj7rKe4niE5PYRnNbbiv+b2QtVCRwz
+	 UuWFjZ+Ten2PEztWhlg+YmbZvCQXqGZdhZ343zFacZ3M1oXaTdY91IfI/iyQsjCEh/
+	 0WxmPe+CGuxlx3redp6txtOUhF8z3tMiqkbTJ8w0SocjdDq+yh/Pr+rslV9suhLNe5
+	 Dwg7K7lRRRX2w==
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-697bd41a4ecso1840897a12.2
+        for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 21:25:59 -0700 (PDT)
+X-Gm-Message-State: AOJu0YzQ2FOnkateB/hkbQa8wdk2MOGJDpRLv5gp0Fq5eMjkcHK7jQcG
+	fI8Xh5tM7wSHSapdmfkCi8qGCqdDPxeoeMU29zEETG1NN9Tn4apOuymyzwPnOZ4LhDfIqT1gfvh
+	ZwVvuLpdgfgm6QsxSE+jWsX7uHc8svis=
+X-Received: by 2002:a17:907:1caa:b0:bd1:ba38:c724 with SMTP id
+ a640c23a62f3a-c108ecf75dcmr38361366b.32.1782188758450; Mon, 22 Jun 2026
+ 21:25:58 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <202606231232.Q1v04anI-lkp@intel.com>
+In-Reply-To: <202606231232.Q1v04anI-lkp@intel.com>
+From: Namjae Jeon <linkinjeon@kernel.org>
+Date: Tue, 23 Jun 2026 13:25:45 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd8oAmaFo=Df1vfUx--iA5JrdTmNQjJjuzmrV+25YMHK3w@mail.gmail.com>
+X-Gm-Features: AVVi8CfJCG_UuYHKmw7vugRktWd5DKRHawdcUby9I8ObpawwAD9IBgHhe9pwj8E
+Message-ID: <CAKYAXd8oAmaFo=Df1vfUx--iA5JrdTmNQjJjuzmrV+25YMHK3w@mail.gmail.com>
+Subject: Re: [linux-next:master 14744/14955] ERROR: modpost:
+ "__hexagon_moddi3" [fs/smb/server/ksmbd.ko] undefined!
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	Steve French <stfrench@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git cleanups
-head:   759e4e4e18f43902ea6f66c481a45175490cad0c
-commit: 27573170c5c905b0eb87738b380997cc16ab1bb3 [9/36] arcnet: Remove function timing code
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260623/202606231221.UgUeeGJu-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260623/202606231221.UgUeeGJu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606231221.UgUeeGJu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/arcnet/com20020.c:73:2: error: call to undeclared function 'TIME'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      73 |         TIME(dev, "insb", count,
-         |         ^
->> drivers/net/arcnet/com20020.c:74:7: error: argument type 'void' is incomplete
-      74 |              insb(ioaddr + COM20020_REG_RW_MEMDATA, buf, count));
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/sparc/include/asm/io_64.h:249:14: note: expanded from macro 'insb'
-     249 | #define insb insb
-         |              ^
-   drivers/net/arcnet/com20020.c:87:2: error: call to undeclared function 'TIME'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      87 |         TIME(dev, "outsb", count,
-         |         ^
-   drivers/net/arcnet/com20020.c:88:7: error: argument type 'void' is incomplete
-      88 |              outsb(ioaddr + COM20020_REG_RW_MEMDATA, buf, count));
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/sparc/include/asm/io_64.h:243:15: note: expanded from macro 'outsb'
-     243 | #define outsb outsb
-         |               ^
-   4 errors generated.
-
-
-vim +/TIME +73 drivers/net/arcnet/com20020.c
-
-^1da177e4c3f415 Linus Torvalds     2005-04-16  61  
-^1da177e4c3f415 Linus Torvalds     2005-04-16  62  static void com20020_copy_from_card(struct net_device *dev, int bufnum,
-^1da177e4c3f415 Linus Torvalds     2005-04-16  63  				    int offset, void *buf, int count)
-^1da177e4c3f415 Linus Torvalds     2005-04-16  64  {
-^1da177e4c3f415 Linus Torvalds     2005-04-16  65  	int ioaddr = dev->base_addr, ofs = 512 * bufnum + offset;
-^1da177e4c3f415 Linus Torvalds     2005-04-16  66  
-^1da177e4c3f415 Linus Torvalds     2005-04-16  67  	/* set up the address register */
-e859db8ac490832 Ethan Nelson-Moore 2026-05-20  68  	outb((ofs >> 8) | RDDATAflag | AUTOINCflag,
-e859db8ac490832 Ethan Nelson-Moore 2026-05-20  69  	     ioaddr + COM20020_REG_W_ADDR_HI);
-e859db8ac490832 Ethan Nelson-Moore 2026-05-20  70  	outb(ofs & 0xff, ioaddr + COM20020_REG_W_ADDR_LO);
-^1da177e4c3f415 Linus Torvalds     2005-04-16  71  
-^1da177e4c3f415 Linus Torvalds     2005-04-16  72  	/* copy the data */
-0fec65130b9f11a Joe Perches        2015-05-05 @73  	TIME(dev, "insb", count,
-e859db8ac490832 Ethan Nelson-Moore 2026-05-20 @74  	     insb(ioaddr + COM20020_REG_RW_MEMDATA, buf, count));
-^1da177e4c3f415 Linus Torvalds     2005-04-16  75  }
-^1da177e4c3f415 Linus Torvalds     2005-04-16  76  
-
-:::::: The code at line 73 was first introduced by commit
-:::::: 0fec65130b9f11a73d74f47025491f97f82ba070 arcnet: com20020: Use arcnet_<I/O> routines
-
-:::::: TO: Joe Perches <joe@perches.com>
-:::::: CC: Michael Grzeschik <m.grzeschik@pengutronix.de>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Tue, Jun 23, 2026 at 1:19=E2=80=AFPM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
+it master
+> head:   948efecf22e49aa4bf55bb73ec79a0ddcfd38571
+> commit: 64ab25180b27fff29912cbf1728bd1ce46119156 [14744/14955] ksmbd: ret=
+urn requested create allocation size
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/202=
+60623/202606231232.Q1v04anI-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a=
+9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260623/202606231232.Q1v04anI-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202606231232.Q1v04anI-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>, old ones prefixed by <<):
+>
+> >> ERROR: modpost: "__hexagon_moddi3" [fs/smb/server/ksmbd.ko] undefined!
+We have already fixed it and applied it to our tree.
+Thanks for the report.
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
