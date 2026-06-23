@@ -1,88 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9423A2E3F
-	for <llvm@lists.linux.dev>; Tue, 23 Jun 2026 04:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0273C242925;
+	Tue, 23 Jun 2026 05:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782188760; cv=none; b=Ybw51MM1LR3++Ja0pJwQ+nr1H9Rb9ArVe0tOcrvuYaXZOPjDix7qMwbOZf8SNqK6e8DlID7ifhq1QICfFkSiUdHu7p9Npen/gX9ldEyjNWl/qferqG1hcXdHQcNN28KlxpP9BYs1UDmosBh3ePBXOrznsLi5E+Y862KULcHgpt0=
+	t=1782191729; cv=none; b=GEVW0mkf/oD76l8bLX40/5oSlQJn5z5FOb34+B57u5r2hAQk2GD1HHKL/hdoYW5ylGiYumsPho46YSzXrAQGTh6Fy8desVAISlHxR5n5F8kBmRmSL9Isgj4iDOAw33GyfWrBC+WWoI3mmrpSLg8941nhHRaCFCLpw5X6EZN8z3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782188760; c=relaxed/simple;
-	bh=wOPa1dqq+mlKJoifwWbp4RjsHBrFsS0BY3T7L5BB4Ro=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kWOzqFuFMYtMd91PkqFrlMl79O7qs31z5nEsDNkQuQZ4FR5WzFfu8VZs8WZ8D2RcQXQ/15O+A/Xfp/dcHFwYBMh6cdjHtG8X/ek2tI/8Hd6gBlG3vPRbiemuc8JwMwJ+CBTEbtDjq0cbm9MzhoT8G2LQncKB019EZGLSs0s8peA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mqIdEt6i; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782191729; c=relaxed/simple;
+	bh=DBVY4rtdgFt9pbUbu9crhWXyKHYAvYMZ9q8ViUqCCis=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mJKfjOrIXbiMduvx8xv2XhVJnnsT+NJfTGPTeWHPIdoPde+jFjSlU65pvSgt3BqPLms8YWxATDcrxbQ/Jyn7qHgA8EG5Cog0+HoSSLJH+Beoos6TVjNEJjGUBaUXqoLW/vmWLtdfvPdffDDWkgJHRPocxWM0bKxZJCfuukLcYBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GXLRf4fz; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mqIdEt6i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8C41F00A3D
-	for <llvm@lists.linux.dev>; Tue, 23 Jun 2026 04:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782188759;
-	bh=WImKe0gNySjp3D4JqCdv0qGJ8o/akw0TckF/LbQn0u8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=mqIdEt6iNzTvPHpN0ep6GPsFmKeUfxoxrYt9fqJttuJqbnl9w9Tw92HPaYO+e7tNK
-	 orrG9WX2h5nrVZVdMjYARwDq4b5txT2Mcrg3cNxO3VBivs/ASkL46NVgl9rI3quwIm
-	 fZL8eLLXoQL8iBHOglZgexFryyOu802UjrbEpj7rKe4niE5PYRnNbbiv+b2QtVCRwz
-	 UuWFjZ+Ten2PEztWhlg+YmbZvCQXqGZdhZ343zFacZ3M1oXaTdY91IfI/iyQsjCEh/
-	 0WxmPe+CGuxlx3redp6txtOUhF8z3tMiqkbTJ8w0SocjdDq+yh/Pr+rslV9suhLNe5
-	 Dwg7K7lRRRX2w==
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-697bd41a4ecso1840897a12.2
-        for <llvm@lists.linux.dev>; Mon, 22 Jun 2026 21:25:59 -0700 (PDT)
-X-Gm-Message-State: AOJu0YzQ2FOnkateB/hkbQa8wdk2MOGJDpRLv5gp0Fq5eMjkcHK7jQcG
-	fI8Xh5tM7wSHSapdmfkCi8qGCqdDPxeoeMU29zEETG1NN9Tn4apOuymyzwPnOZ4LhDfIqT1gfvh
-	ZwVvuLpdgfgm6QsxSE+jWsX7uHc8svis=
-X-Received: by 2002:a17:907:1caa:b0:bd1:ba38:c724 with SMTP id
- a640c23a62f3a-c108ecf75dcmr38361366b.32.1782188758450; Mon, 22 Jun 2026
- 21:25:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GXLRf4fz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782191728; x=1813727728;
+  h=date:from:to:cc:subject:message-id;
+  bh=DBVY4rtdgFt9pbUbu9crhWXyKHYAvYMZ9q8ViUqCCis=;
+  b=GXLRf4fzMeLegodumT66t436C46zFDiN8UatIjxh1u1oDnTn9hyj3cK9
+   YVCqfBfcZuXV2TG1F7kg6krCvllAXzBdtGHqDD3hFIEgg27c8kwyQeZtb
+   XQ00mi2lIteX8AliVagCtIExpuA1e/cf97WiwzmhDEfZV7ce8CD7ygBco
+   umAYoiNcueSpmbucBHoTbnWmgbRrtr1RZl+NY5fxBdKFAqlhujLLn7qha
+   Fmfzkvt8dGpUT3qOmZo3Rtuh0Kv+JIJ3Na5htUJOetNk9PIBXNyTZlj1N
+   JPrgzvGbV6mIDOJH8RmqZ3vsbaJytMJgNM9fa6c1TYxm+zp4LmFUKy6tK
+   g==;
+X-CSE-ConnectionGUID: NL8NA1C6SgiKSu6ejthBpA==
+X-CSE-MsgGUID: bDugBqMGRK6UUkQhALFJpw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11825"; a="94423174"
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="94423174"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2026 22:15:27 -0700
+X-CSE-ConnectionGUID: uBipYW56R9uvpX3yxLwV0g==
+X-CSE-MsgGUID: vxoKY/JJSViuTvdBxKshLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,220,1774335600"; 
+   d="scan'208";a="254503796"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 22 Jun 2026 22:15:26 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wbtTm-000000002Gd-455R;
+	Tue, 23 Jun 2026 05:15:23 +0000
+Date: Tue, 23 Jun 2026 13:14:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Linus Walleij <linusw@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arm-integrator:b4/arm-generic-irq-entry-v7.1 2/2] ld.lld:
+ error: undefined symbol: irqentry_enter
+Message-ID: <202606231306.22gK8shO-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <202606231232.Q1v04anI-lkp@intel.com>
-In-Reply-To: <202606231232.Q1v04anI-lkp@intel.com>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Tue, 23 Jun 2026 13:25:45 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8oAmaFo=Df1vfUx--iA5JrdTmNQjJjuzmrV+25YMHK3w@mail.gmail.com>
-X-Gm-Features: AVVi8CfJCG_UuYHKmw7vugRktWd5DKRHawdcUby9I8ObpawwAD9IBgHhe9pwj8E
-Message-ID: <CAKYAXd8oAmaFo=Df1vfUx--iA5JrdTmNQjJjuzmrV+25YMHK3w@mail.gmail.com>
-Subject: Re: [linux-next:master 14744/14955] ERROR: modpost:
- "__hexagon_moddi3" [fs/smb/server/ksmbd.ko] undefined!
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Steve French <stfrench@microsoft.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jun 23, 2026 at 1:19=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.g=
-it master
-> head:   948efecf22e49aa4bf55bb73ec79a0ddcfd38571
-> commit: 64ab25180b27fff29912cbf1728bd1ce46119156 [14744/14955] ksmbd: ret=
-urn requested create allocation size
-> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/202=
-60623/202606231232.Q1v04anI-lkp@intel.com/config)
-> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a=
-9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260623/202606231232.Q1v04anI-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202606231232.Q1v04anI-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
->
-> >> ERROR: modpost: "__hexagon_moddi3" [fs/smb/server/ksmbd.ko] undefined!
-We have already fixed it and applied it to our tree.
-Thanks for the report.
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git b4/arm-generic-irq-entry-v7.1
+head:   0bd2187d3034fc3ac85a5aec7924ad05c308ef41
+commit: 0bd2187d3034fc3ac85a5aec7924ad05c308ef41 [2/2] ARM: entry: Convert IRQ handling to generic IRQ entry
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260623/202606231306.22gK8shO-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260623/202606231306.22gK8shO-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606231306.22gK8shO-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> ld.lld: error: undefined symbol: irqentry_enter
+   >>> referenced by entry.c
+   >>>               arch/arm/kernel/entry.o:(arm_irq_handler) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: irqentry_exit
+   >>> referenced by entry.c
+   >>>               arch/arm/kernel/entry.o:(arm_irq_handler) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: irqentry_nmi_enter
+   >>> referenced by entry.c
+   >>>               arch/arm/kernel/entry.o:(arm_fiq_handler) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: irqentry_nmi_exit
+   >>> referenced by entry.c
+   >>>               arch/arm/kernel/entry.o:(arm_fiq_handler) in archive vmlinux.a
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
