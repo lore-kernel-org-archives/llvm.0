@@ -1,197 +1,83 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B0F931715C;
-	Tue, 23 Jun 2026 16:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB21A3B2A0;
+	Tue, 23 Jun 2026 17:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782231442; cv=none; b=H3h0iV7V994RN/2YAYy3jD+bRSL4Oak3GUNdhLOHF4HkuWvEaOsdDIZ+zH84/6zNF4QxVXahMeRo0kYJtIXD4LebyrwRH1Hf8wsGV3aFsWh9ikpcMbdAeSdFF18NUPLaMYt4Q8l/jRRIuDugtCYv0fQ3LFamq8pzpFoU+ZkDfeo=
+	t=1782235895; cv=none; b=f4mCk/pv4pJ3gEj6l0OWDRH8xcz4v2idLE+cebfaNbYZ1BuMc9Lo1orieHqG2WJTsuNENh8j2KQ1qsSkxCF0o9UzziAgG8OCUcttAyDuiHk+P8L+btJC6E+D/fkWbJvIkUwC+pmU4dcYqktUNPd5DlxbUVRsmhbXInwdeAuBoOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782231442; c=relaxed/simple;
-	bh=Xg1FP3Avyy8jw+LXcQ0ZqkmlmVB9xeFODPtgCPAtQOY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ckDt9G//zZPpivoQXHb3Y7SmM07ZbIcT/omG94Kdb0G983HkRHB0UOb6INbhAx84ugepF9tqNnE4ZjNH1CLlRGu3g4t9s+jVQU5zLLbGpZ7Fq+eKVmBRV8zw35BUw5/IpF6OpJvoGEGchsftwl2eyZYiqfNOCq2x8tY2pDDD/qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=gvearr8D; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1782235895; c=relaxed/simple;
+	bh=50rZaIYt4nR5KuIabwutHUOc0tB5zl03LqW4obL6VaA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=NrUoI8x7+wb0uSmLxV6N9CFZJyNmpRdHl5auf1npSHFCP7sYhe6twX5Is3mm2dLFF3AzAYYg/wvbacM6lXIKdK3iLcerJh1qQhpWaYEQNo21B5VagTO30L15nuGfBQUmBSDIo5obT92ZctQn+hb3GIi7jq5P50PJdnx+pXzsijg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lgWtYmFv; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="gvearr8D"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=/Aw0gOvBGCncwiX8RcjuV6QmMolEXYI4opaO65pEDkQ=; b=gvearr8DBY4yICb6NkZj4w3Pt1
-	UPa3PK2rDAWrqxEB0z7xgAruXDltS+pZUB8tphv8RlOlgQB/bDVTzpLrXAHAIaZd05diEEXSmOHX9
-	Iy3CDleH2mRnF4x0DhVI1cSN39wJRLJZ7zDQTiw0EX+IVrZbWBnvuPmB5dmeoiHfD+JKgbvoIJo+P
-	gnBe1lfb2gCLJ2xwRqo19PLK99p9ECV3rOXm0ez+wU39wjPXh698UQo3v0shDMtwvJottUi/5o62v
-	5SDDhEMstsvlN365miLaV/mLzWvjcxoh5l72lPIU0VSzwL2CpbBTJR1eZsFQktO54GuSY5aSQSF3Q
-	QitxZExA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wc3oK-001m48-08;
-	Tue, 23 Jun 2026 16:17:16 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Tue, 23 Jun 2026 09:15:35 -0700
-Subject: [PATCH v6 8/8] x86/setup: prepend embedded bootconfig cmdline
- before parse_early_param
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lgWtYmFv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782235894; x=1813771894;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=50rZaIYt4nR5KuIabwutHUOc0tB5zl03LqW4obL6VaA=;
+  b=lgWtYmFvQ1NdT+TBszWaeXZZt02NPTqS4HoHuUENr33phBBx/J4Wf+Hk
+   Yv7gVFoReGr5BvXUt1Bqcnr/PMqg0yMZpPYygG1BiZ4AbFN23p+APtnHy
+   RAost/GXwwkiIOfkg+DbVpgPKbaOt9PCEedPwcK6wZjp+qcPIHyCxwQsG
+   PUSacZmqCcJxzR9fHGpiXPEH/IgK02EY+6fI/maHJsoF+Hy9HO8w3DglJ
+   EDzw4oUDxcQ81UhGtRzkYlvTnp2GApNLSa9dFH6xqgJg6AvndCFHVC12g
+   mk9dwGG5wTXDWwUGqEDJniveVxYDJg5Ws6wmxVcPre4el0ejgny6FL1Wu
+   Q==;
+X-CSE-ConnectionGUID: 2AvuhdN0SvmnjObWta+IAg==
+X-CSE-MsgGUID: nH/i3PuqRzySzKsNmnPaTw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="82873142"
+X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
+   d="scan'208";a="82873142"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 10:31:34 -0700
+X-CSE-ConnectionGUID: Y8yySiudQIym0N392oDMYw==
+X-CSE-MsgGUID: PKzZwYaMRRyahcldtR2ULQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
+   d="scan'208";a="249605184"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 23 Jun 2026 10:31:32 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wc4y9-000000002mT-3KTo;
+	Tue, 23 Jun 2026 17:31:29 +0000
+Date: Wed, 24 Jun 2026 01:30:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stefandoesinger-zx297520:dlink 37/120] ERROR: modpost:
+ "rtl8192cu_fops" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko]
+ undefined!
+Message-ID: <202606240108.Pey63J0V-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260623-bootconfig_using_tools-v6-8-640c2f587a3c@debian.org>
-References: <20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org>
-In-Reply-To: <20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, 
- Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- linux-doc@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
- kernel-team@meta.com
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4267; i=leitao@debian.org;
- h=from:subject:message-id; bh=Xg1FP3Avyy8jw+LXcQ0ZqkmlmVB9xeFODPtgCPAtQOY=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqOrFX3ZJjk5IxI+UmiElQ5CGdg2SP6SdI0lXWy
- pxu5xEktFiJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCajqxVwAKCRA1o5Of/Hh3
- bWcKD/9ShXqLCdrlsmg9Q/odcY2aIb3K0oCPSZ4EZBvADvhpawB/cg+qMOyD+pYvhk82FtZnJZe
- WUtU3lSXiI4A/Y4vCOZtrRkdS1+UvInRip1cbGUOV9Xgd/MR7OtgysorrO7V70SWxLvQBiHUzGg
- aX6JYrMzH9z6ga1Eg0WRcPyrFncjRddt7CVX3PCEKGrYs96Lu9HNKWo9DPBwdJR88Q6/GlgfyIf
- +o7dBOC7m8ZNKBr1lCGTVGW0OzyLkNafw/X7o+nUhs1XBkygHdDupMdJvwddlYx/4he9PE93SA3
- SWn2ON+iRFczWrnkJqG/42SuqFnh4XwCVWlPWpdNHOvMqGIaHVmjKnFqkoXnjuiZOZ+itN3QtCE
- GiXS0Ir40bUMVDiR4NYJYOapXSCP6Dihm1bQNMdEUZisDHEwzaHmNF6w/rQpvhfghWn9FZRJoqF
- 7/NhH6E8kGwmSKuCoMiwLi7URtykXgTr8J7eDO1U6PDckF27ve0LVtGW7/DQ2I65RQq3iEzlOUm
- yo8LKsew8M2HI5EhqnBtwlEsU1i+iMjfYCSv8qNAwfSBxDqCpT7A6UgyzXeWo3xFIpZQPTksdvb
- oTV+PGc8XHjmzlE7Z+MbxGs+yDCFfp5df5HsNdR5HLfgF9QGTcs+uAgsA+XmvGhg9eBHoHUbRJo
- XOVouMVNQ9N+Fxw==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=us-ascii
 
-Call xbc_prepend_embedded_cmdline() in setup_arch() right after the
-CONFIG_CMDLINE merge and before strscpy(command_line, ...) so the
-build-time-rendered embedded bootconfig "kernel" subtree is part of
-boot_command_line by the time parse_early_param() runs. early_param()
-handlers (mem=, earlycon=, loglevel=, ...) now see values supplied via
-CONFIG_BOOT_CONFIG_EMBED_FILE without parsing bootconfig at runtime.
+tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
+head:   e837c4a4d860d6896e61ca44c5bac69b2500abcc
+commit: df8834593648ab0294719594eecb9e2d2e2cb341 [37/120] Try to add the wifi card in the dlink device.
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260624/202606240108.Pey63J0V-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606240108.Pey63J0V-lkp@intel.com/reproduce)
 
-Gate the prepend on the same opt-in the runtime parser uses: prepend
-when "bootconfig" is present on the command line, or when
-CONFIG_BOOT_CONFIG_FORCE is set. Detect it with parse_args(), exactly
-as setup_boot_config() does, so both agree on what counts as opt-in:
-any "bootconfig" key regardless of value (bare, =0, =1, ...), and only
-before the "--" that separates init arguments. Sharing the parser keeps
-the early and late paths from diverging -- e.g. "bootconfig=0" or a
-"-- bootconfig" meant for init must not apply the embedded keys early
-while the runtime parser skips them.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606240108.Pey63J0V-lkp@intel.com/
 
-The prepend necessarily runs before setup_boot_config() detects an
-initrd bootconfig, so an initrd cannot override the embedded "kernel"
-keys for early_param(). This is intentional: the embedded cmdline acts
-like a build-time CONFIG_CMDLINE. An initrd bootconfig's "kernel" keys
-never reached early_param() anyway (they apply late via
-extra_command_line), so nothing is lost -- the initrd keys still apply
-late, with last-wins keeping the embedded values in effect.
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- arch/x86/Kconfig        |  1 +
- arch/x86/kernel/setup.c | 43 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 44 insertions(+)
+>> ERROR: modpost: "rtl8192cu_fops" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] undefined!
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 0de23e6471973..8ab11199c16d5 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -127,6 +127,7 @@ config X86
- 	select ARCH_SUPPORTS_NUMA_BALANCING	if X86_64
- 	select ARCH_SUPPORTS_KMAP_LOCAL_FORCE_MAP	if NR_CPUS <= 4096
- 	select ARCH_SUPPORTS_CFI		if X86_64
-+	select ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG
- 	select ARCH_USES_CFI_TRAPS		if X86_64 && CFI
- 	select ARCH_SUPPORTS_LTO_CLANG
- 	select ARCH_SUPPORTS_LTO_CLANG_THIN
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index 46882ce79c3a4..c973a2cebcd04 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -6,6 +6,7 @@
-  * parts of early kernel initialization.
-  */
- #include <linux/acpi.h>
-+#include <linux/bootconfig.h>
- #include <linux/console.h>
- #include <linux/cpu.h>
- #include <linux/crash_dump.h>
-@@ -881,6 +882,37 @@ static void __init x86_report_nx(void)
-  * Note: On x86_64, fixmaps are ready for use even before this is called.
-  */
- 
-+#ifdef CONFIG_CMDLINE_FROM_BOOTCONFIG
-+static int __init bootconfig_optin(char *param, char *val,
-+				   const char *unused, void *arg)
-+{
-+	if (!strcmp(param, "bootconfig"))
-+		*(bool *)arg = true;
-+	return 0;
-+}
-+
-+/*
-+ * Did the user opt in to bootconfig on the kernel command line? Use
-+ * parse_args() so this matches setup_boot_config() exactly, including
-+ * stopping at the "--" that separates init arguments.
-+ */
-+static bool __init bootconfig_cmdline_requested(void)
-+{
-+	static char tmp_cmdline[COMMAND_LINE_SIZE] __initdata;
-+	bool found = false;
-+
-+	if (IS_ENABLED(CONFIG_BOOT_CONFIG_FORCE))
-+		return true;
-+
-+	strscpy(tmp_cmdline, boot_command_line, COMMAND_LINE_SIZE);
-+	if (IS_ERR(parse_args("bootconfig", tmp_cmdline, NULL, 0, 0, 0,
-+			      &found, bootconfig_optin)))
-+		return false;
-+
-+	return found;
-+}
-+#endif
-+
- void __init setup_arch(char **cmdline_p)
- {
- #ifdef CONFIG_X86_32
-@@ -924,6 +956,17 @@ void __init setup_arch(char **cmdline_p)
- 	builtin_cmdline_added = true;
- #endif
- 
-+#ifdef CONFIG_CMDLINE_FROM_BOOTCONFIG
-+	/*
-+	 * Prepend the build-time-rendered embedded "kernel" keys here so
-+	 * parse_early_param() below sees them, gating on the same opt-in
-+	 * as the runtime parser (see bootconfig_cmdline_requested()).
-+	 */
-+	if (bootconfig_cmdline_requested())
-+		xbc_prepend_embedded_cmdline(boot_command_line,
-+					     COMMAND_LINE_SIZE);
-+#endif
-+
- 	strscpy(command_line, boot_command_line, COMMAND_LINE_SIZE);
- 	*cmdline_p = command_line;
- 
-
--- 
-2.53.0-Meta
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
