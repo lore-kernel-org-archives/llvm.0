@@ -1,117 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56A03B27D4;
-	Tue, 23 Jun 2026 21:47:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A3A3A7826;
+	Tue, 23 Jun 2026 23:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782251244; cv=none; b=mx1f1rLlTPB5mKRaAevUSwMUER4CW1bYHbEgevhNhAbfqjCV/XtX39tHN8qBQUAUJMzbd18S3PhSD4ApnwNtVP/o84ToQgqu+GSVgXx0JY4+ob+jV6h+MQo1cJZ5oEb0KH5hO5vfj/f0kjfvs2NGYqJR0KZ6N162vc8VOIlyQLc=
+	t=1782255713; cv=none; b=G3VNpem6yrsuxo6aqvNLr6Kg8Mjhms7x7h/TGQ4B60y1fK1o0dGdcnvOKtqXa7N8mDyQCfp8F+ZXAv78LTw70bM2jGTxASelHHAzlZclHXslQx2PcalVOH12ulqsKMC4OP96GD6rz5VuFmickDR7kZLhCYUJc/QNj0BFjkp8KlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782251244; c=relaxed/simple;
-	bh=5zUhtrAdGHN5IF/2b8iNsjFUbPtdTc1dwXE8kptGCl8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=aQ20tAmz8w2GHSZy9rRmqxgJTNg8jL29DK22VswaY5v4OSemxjogtbn3ocWUyLTI/8BS7ONw3ziD6d/MtUnyG3MPZfGO2hrGlyU36gH2pQW4ywUb/taGObHRPNwjgJygHZ0isX0N2vHZ3HI5kb6ayTJZ9irzx0k1YpCDD1I8wMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rxqb9Kng; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782255713; c=relaxed/simple;
+	bh=Xzy3uMehQPlXO82Jx1ZHXfyZmUa2+tecXS7lcezgEvI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iPcvLiF8FPaoMvdOtm5WxAgmo/tNNLRE/WseqKLkGdBWfWZK0P+C1uCGxh1xIe4vCKvcjKGE/qQo9n2dfoSI4DHxYtj2IB7g8wDOnr/1HDhb42Sv5yFI5UqPbBEXOVEKRFkf88sGZNlwq/5kByYYTbeH7FNWaZ7lnlmtJY3l0wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JnbpepTy; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rxqb9Kng"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98B401F000E9;
-	Tue, 23 Jun 2026 21:47:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782251240;
-	bh=/0LMbDiDwVn7Np1c8cJ0fyDmbGJkv/yezObwHtuFrEg=;
-	h=From:Date:Subject:To:Cc;
-	b=Rxqb9Kngb9yE1x9Zj8O/LOmEJlP3NPR4EYsrPRqd3MEZyOgebqV7BL5etI73ZVU2B
-	 jaqcaVqF0QlQvg7YYh5eZKOMXSyTwGnAlQBC0lE1m3S7CEcLfpa7mnDMHTQboo+VSl
-	 OCZMs8IbyAju33w3O0R17TWc8BPyb4EqfM9F+BoTYlyE1laaWrFuUQuff9BT+/HCJa
-	 ZQArZoCHjfVw4SiMq7iJkffoJ55b/WSdFFZmjLh4dITZtnLMlqi4/L3yDv+IOR9YTz
-	 JIDiv/4I9irLT7cPg91UB6RbRxHLzxDumdFZQW/jnN5ekWsvyW0wJp6l8Jf58HJdOh
-	 SPVwHNi6Qbicw==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Tue, 23 Jun 2026 14:47:11 -0700
-Subject: [PATCH] x86/boot/compressed: Disable jump tables for clang
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JnbpepTy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782255712; x=1813791712;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Xzy3uMehQPlXO82Jx1ZHXfyZmUa2+tecXS7lcezgEvI=;
+  b=JnbpepTyjeDx2RctcZJs8fpInv2/JMAUERYup6GtoAAPBd5l+c0alZxy
+   0/tbVsP4MpK4upl5Vy37l+Vh9B2wLInl5MrwOgckFytUDxK7oKYpEC1AK
+   ict1jPAM/CdkCz56hHkfT75zl2D4wv3vVH4aKz3Htyo+NWeXBP5boH7dT
+   f4FLyn2FEVrapXqllWjbfwayC4oaGtdLkGMeAWcKmvsEQNyyABcSYIgtg
+   4cznuZNZx5fGavlnc3/Sg1lbvAAgfCPqxVg2U/L/+KiWSW6wGl3EZ5qri
+   4Ck8RvA52i+bvpjBWznyv8c+pXB6kT4wFsW6Q4B7l4W5CkmUrhvAuhU5O
+   w==;
+X-CSE-ConnectionGUID: S0U6bnJ3R4qgcwzQNmMJTg==
+X-CSE-MsgGUID: cLLwcQwqTtWwCTJr8oOp9g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="100436060"
+X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
+   d="scan'208";a="100436060"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 16:01:51 -0700
+X-CSE-ConnectionGUID: nRxOCV7bRlmchOcfl9jomQ==
+X-CSE-MsgGUID: LF8qZeEbTiaG/ZkBWBiamg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
+   d="scan'208";a="251574872"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 23 Jun 2026 16:01:49 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wcA7m-000000002wn-2mQb;
+	Tue, 23 Jun 2026 23:01:46 +0000
+Date: Wed, 24 Jun 2026 07:00:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/b4-sysfs-const-attr-prep-easy 38/57]
+ drivers/pci/slot.c:111:11: error: initializing 'struct attribute **' with an
+ expression of type 'const struct attribute *const[4]' discards qualifiers in
+ nested pointer types
+Message-ID: <202606240700.55fyYCeN-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260623-x86-boot-compressed-disable-jt-clang-v1-1-575fccd58107@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWN2wrCQAxEf6Xk2cA24FL9FfFhL1lNqV3ZVCmU/
- rtRH88wc2YD5SascO42aPwWlTob9IcO0j3MN0bJxkCOvPNEuA4eY60Lpvp4NlbljFk0xIlxtHS
- yEXLpc0mBju40gKmsWGT93Vyuf9ZXHDktXzfs+wcHk4cCiAAAAA==
-X-Change-ID: 20260622-x86-boot-compressed-disable-jt-clang-ef1dfca25098
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.16-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2658; i=nathan@kernel.org;
- h=from:subject:message-id; bh=5zUhtrAdGHN5IF/2b8iNsjFUbPtdTc1dwXE8kptGCl8=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFlW/552yF9aP6vzVmmF0a+wG+oTJFe5LzVSmDx/mU/Oz
- yn165bf7ChlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATYd7F8L+g0NvE+d0kpY1H
- zk1otnj7f554j+mvz2JXjj9K+3ea2/EAwz+7kgWMpmviT3CI37Gpi2fRW+V45uPjYLb+pIWxSyc
- xp/EAAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
 
-After a recent upstream LLVM change to start generating jump and lookup
-tables in switch statements in more instances [1], linking the
-compressed x86 boot image when CONFIG_KERNEL_ZSTD is enabled fails with:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/b4-sysfs-const-attr-prep-easy
+head:   67a3c6abb9033d2ce2a9ac12d4cfb9530148b38f
+commit: e336a966dae35aa3b0795b315b543fb744b61ff0 [38/57] pci
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260624/202606240700.55fyYCeN-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606240700.55fyYCeN-lkp@intel.com/reproduce)
 
-  ld.lld: error: Unexpected run-time relocations (.rela) detected!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606240700.55fyYCeN-lkp@intel.com/
 
-Dumping the relocations in misc.o, which is the only file influenced by
-CONFIG_KERNEL_ZSTD in the decompressor, shows dynamic relocations to
-some string constants, which correspond to the string literals in the
-switch statement in handle_zstd_error():
+All errors (new ones prefixed by >>):
 
-  Relocation section '.rela.data.rel.ro' at offset 0x277b0 contains 31 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 73a
-  0000000000000008  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 78e
-  0000000000000010  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 78e
-  0000000000000018  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 78e
-  ...
+>> drivers/pci/slot.c:111:11: error: initializing 'struct attribute **' with an expression of type 'const struct attribute *const[4]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     111 |         .attrs = pci_slot_default_attrs,
+         |                  ^~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
-This optimization is problematic for the decompressor environment, as it
-is built as -fPIE without any explicit absolute references (as described
-at the top of misc.c) while not applying any dynamic relocations, hence
-the linker assertion. To opt out of this optimization, which is of
-little value in this special early boot code, disable jump tables in the
-decompressor when building with clang. This mirrors the other x86
-startup code in arch/x86/boot/startup.
 
-Cc: stable@vger.kernel.org
-Closes: https://github.com/ClangBuiltLinux/linux/issues/2165
-Link: https://github.com/llvm/llvm-project/commit/fa02a6ed66b1700c996b49c96c6bc0eb014c9518 [1]
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- arch/x86/boot/compressed/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+vim +111 drivers/pci/slot.c
 
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index 07e0e64b9a98..1c0d29e3eeba 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -31,6 +31,7 @@ KBUILD_CFLAGS += -Wundef
- KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
- cflags-$(CONFIG_X86_32) := -march=i386
- cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
-+cflags-$(CONFIG_CC_IS_CLANG) += -fno-jump-tables
- KBUILD_CFLAGS += $(cflags-y)
- KBUILD_CFLAGS += -mno-mmx -mno-sse
- KBUILD_CFLAGS += -ffreestanding -fshort-wchar
+e4f9ab031dc86c Niklas Schnelle 2026-04-07  109  
+e4f9ab031dc86c Niklas Schnelle 2026-04-07  110  static const struct attribute_group pci_slot_default_group = {
+e4f9ab031dc86c Niklas Schnelle 2026-04-07 @111  	.attrs = pci_slot_default_attrs,
+e4f9ab031dc86c Niklas Schnelle 2026-04-07  112  };
+e4f9ab031dc86c Niklas Schnelle 2026-04-07  113  
 
----
-base-commit: 4708cac0e22cfd217f48f7cec3c35e5922efcccd
-change-id: 20260622-x86-boot-compressed-disable-jt-clang-ef1dfca25098
+:::::: The code at line 111 was first introduced by commit
+:::::: e4f9ab031dc86c9987c3619e97c5c7d8ad7afda2 PCI: s390: Expose the UID as an arch specific PCI slot attribute
 
-Best regards,
---  
-Cheers,
-Nathan
+:::::: TO: Niklas Schnelle <schnelle@linux.ibm.com>
+:::::: CC: Vasily Gorbik <gor@linux.ibm.com>
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
