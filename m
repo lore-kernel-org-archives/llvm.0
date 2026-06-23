@@ -1,101 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A3A3A7826;
-	Tue, 23 Jun 2026 23:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 492F8394470;
+	Tue, 23 Jun 2026 23:23:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782255713; cv=none; b=G3VNpem6yrsuxo6aqvNLr6Kg8Mjhms7x7h/TGQ4B60y1fK1o0dGdcnvOKtqXa7N8mDyQCfp8F+ZXAv78LTw70bM2jGTxASelHHAzlZclHXslQx2PcalVOH12ulqsKMC4OP96GD6rz5VuFmickDR7kZLhCYUJc/QNj0BFjkp8KlA=
+	t=1782257033; cv=none; b=lq4BlKmF3F5ep9wtEWGUf5TH4j1egmAWD0TCOweSLj/IDXp0gFYZJjDsSXfVn0HzKzy+78+fd7roUhE6CyVl2hANeDAaVOIUdiYBL6saD1u2ciE6lMqDAGSgC8fdEC7pfdCw4ibvE8VrCWgaOnIBcLbdbuzX4L3E6j1R1cyM1KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782255713; c=relaxed/simple;
-	bh=Xzy3uMehQPlXO82Jx1ZHXfyZmUa2+tecXS7lcezgEvI=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=iPcvLiF8FPaoMvdOtm5WxAgmo/tNNLRE/WseqKLkGdBWfWZK0P+C1uCGxh1xIe4vCKvcjKGE/qQo9n2dfoSI4DHxYtj2IB7g8wDOnr/1HDhb42Sv5yFI5UqPbBEXOVEKRFkf88sGZNlwq/5kByYYTbeH7FNWaZ7lnlmtJY3l0wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JnbpepTy; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1782257033; c=relaxed/simple;
+	bh=0SxkoX9dhkDXxGTyvSJYK7Opm2jvgOqRdTPvkCFIHYc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=QsDa7m1VmJgViJqWueYHzN+boDRloN5gK394QF4dj0PMskhYMTPSP39+YMKkFfkepP8nqKZ9tiijXHS0rvZAwRnVlauAg1M1hdhSEYuPkJHj1K8FG4ldg/CO7nbdTmqgaZVgxxJBPtOU52oBAXGP6j/mR+5Tb2Lag9Htu2mreYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hvzA9VAW; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JnbpepTy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hvzA9VAW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782255712; x=1813791712;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Xzy3uMehQPlXO82Jx1ZHXfyZmUa2+tecXS7lcezgEvI=;
-  b=JnbpepTyjeDx2RctcZJs8fpInv2/JMAUERYup6GtoAAPBd5l+c0alZxy
-   0/tbVsP4MpK4upl5Vy37l+Vh9B2wLInl5MrwOgckFytUDxK7oKYpEC1AK
-   ict1jPAM/CdkCz56hHkfT75zl2D4wv3vVH4aKz3Htyo+NWeXBP5boH7dT
-   f4FLyn2FEVrapXqllWjbfwayC4oaGtdLkGMeAWcKmvsEQNyyABcSYIgtg
-   4cznuZNZx5fGavlnc3/Sg1lbvAAgfCPqxVg2U/L/+KiWSW6wGl3EZ5qri
-   4Ck8RvA52i+bvpjBWznyv8c+pXB6kT4wFsW6Q4B7l4W5CkmUrhvAuhU5O
-   w==;
-X-CSE-ConnectionGUID: S0U6bnJ3R4qgcwzQNmMJTg==
-X-CSE-MsgGUID: cLLwcQwqTtWwCTJr8oOp9g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="100436060"
+  t=1782257032; x=1813793032;
+  h=date:from:to:cc:subject:message-id;
+  bh=0SxkoX9dhkDXxGTyvSJYK7Opm2jvgOqRdTPvkCFIHYc=;
+  b=hvzA9VAWMsBEhitS3gL3qKA3wJrT9hxRkSURIiu5uaADAnUT+pmOBEgM
+   wd3qDSV6BiB41C7MfeqnmFGgNqHMm5hChqC7UGX0XacEksLE6dwYNAZjC
+   S3IJ4jxVu2MM8koJ/5bICWdf/voaYLhpTYX6QbVKM4+X7YbTT2eHFi4u/
+   W6ihoboyeiANUIBJxNDpxMr97336r4TaVSjNKLzf4xVIglVp2+z86m7i+
+   uGdCo/Zk7X1nfIYpuWQUp2Kl4E89nU8nCfBpw7tnNlR2UWA1+cW7EgvON
+   WbY1x1LG4XJXEoTdpuR1gEjI/OMND6nFmu2Ha4utg3lhtdjr8yfcYYKy+
+   Q==;
+X-CSE-ConnectionGUID: OWNAULclQPGXXI7191pdhg==
+X-CSE-MsgGUID: 2qo+kECsQ0qhpLsfP0xZEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="86847776"
 X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="100436060"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 16:01:51 -0700
-X-CSE-ConnectionGUID: nRxOCV7bRlmchOcfl9jomQ==
-X-CSE-MsgGUID: LF8qZeEbTiaG/ZkBWBiamg==
+   d="scan'208";a="86847776"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 16:23:52 -0700
+X-CSE-ConnectionGUID: D7wAEdaIQXuSuaU+17KSTw==
+X-CSE-MsgGUID: ecAxBsH/QMaeCmYd1hPi6Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="251574872"
+   d="scan'208";a="279816809"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa004.fm.intel.com with ESMTP; 23 Jun 2026 16:01:49 -0700
+  by orviesa002.jf.intel.com with ESMTP; 23 Jun 2026 16:23:51 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wcA7m-000000002wn-2mQb;
-	Tue, 23 Jun 2026 23:01:46 +0000
-Date: Wed, 24 Jun 2026 07:00:50 +0800
+	id 1wcAT5-000000002xN-27Jn;
+	Tue, 23 Jun 2026 23:23:47 +0000
+Date: Wed, 24 Jun 2026 07:23:19 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+To: Hannes Reinecke <hare@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/b4-sysfs-const-attr-prep-easy 38/57]
- drivers/pci/slot.c:111:11: error: initializing 'struct attribute **' with an
- expression of type 'const struct attribute *const[4]' discards qualifiers in
- nested pointer types
-Message-ID: <202606240700.55fyYCeN-lkp@intel.com>
+Subject: [hare-scsi-devel:configfs-ns.v3 2/12]
+ /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld:
+ fs/configfs/mount.c:undefined reference to `init_net'
+Message-ID: <202606240746.ELXeMhBI-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/b4-sysfs-const-attr-prep-easy
-head:   67a3c6abb9033d2ce2a9ac12d4cfb9530148b38f
-commit: e336a966dae35aa3b0795b315b543fb744b61ff0 [38/57] pci
-config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260624/202606240700.55fyYCeN-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606240700.55fyYCeN-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v3
+head:   59472df96a84fb076a2b47a90a0bb353c80f239c
+commit: 0dbf11d8f95b2100f7ea5b21e40ae1fd76d5c712 [2/12] fs/configfs: dynamically allocate super_info
+config: um-randconfig-002-20260624 (https://download.01.org/0day-ci/archive/20260624/202606240746.ELXeMhBI-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606240746.ELXeMhBI-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606240700.55fyYCeN-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606240746.ELXeMhBI-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/pci/slot.c:111:11: error: initializing 'struct attribute **' with an expression of type 'const struct attribute *const[4]' discards qualifiers in nested pointer types [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     111 |         .attrs = pci_slot_default_attrs,
-         |                  ^~~~~~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +111 drivers/pci/slot.c
-
-e4f9ab031dc86c Niklas Schnelle 2026-04-07  109  
-e4f9ab031dc86c Niklas Schnelle 2026-04-07  110  static const struct attribute_group pci_slot_default_group = {
-e4f9ab031dc86c Niklas Schnelle 2026-04-07 @111  	.attrs = pci_slot_default_attrs,
-e4f9ab031dc86c Niklas Schnelle 2026-04-07  112  };
-e4f9ab031dc86c Niklas Schnelle 2026-04-07  113  
-
-:::::: The code at line 111 was first introduced by commit
-:::::: e4f9ab031dc86c9987c3619e97c5c7d8ad7afda2 PCI: s390: Expose the UID as an arch specific PCI slot attribute
-
-:::::: TO: Niklas Schnelle <schnelle@linux.ibm.com>
-:::::: CC: Vasily Gorbik <gor@linux.ibm.com>
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: warning: .tmp_vmlinux1 has a LOAD segment with RWX permissions
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: fs/configfs/mount.o: in function `configfs_ns_id':
+   fs/configfs/mount.c:(.text+0x5b): undefined reference to `init_net'
+>> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: fs/configfs/mount.c:(.text+0x260): undefined reference to `init_net'
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: fs/configfs/mount.o: in function `configfs_fill_super':
+   fs/configfs/mount.c:126:(.text+0x44f): undefined reference to `init_net'
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: fs/configfs/mount.o: in function `configfs_init':
+   fs/configfs/mount.c:218:(.init.text+0x4c): undefined reference to `init_net'
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: fs/configfs/dir.o: in function `configfs_register_subsystem':
+   fs/configfs/dir.c:1874:(.text+0x200c): undefined reference to `init_net'
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld: fs/configfs/dir.o:fs/configfs/dir.c:1943: more undefined references to `init_net' follow
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 --
 0-DAY CI Kernel Test Service
