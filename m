@@ -1,148 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0324C390CBA
-	for <llvm@lists.linux.dev>; Tue, 23 Jun 2026 19:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B5EF3976A4;
+	Tue, 23 Jun 2026 20:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782244173; cv=none; b=K+krIIWnDHSpGL2GqYa/9/h/9bMXnoY2aFGJMPAjOAR+EjMJDX90JLnJD2T5iC80UOkzF8EBKCrrukm5p72Eg0FFeD+zDH5Gj0R3mDffYrNgvMQ5MgGCgAkggLaOcwEU4xeZeVhhbXJ4r2bmPc4OZmd5t31ZqmDfLKyXeT0oPAw=
+	t=1782246237; cv=none; b=fJL5tOGPYtq/5mbhNvjC8a549Oa1zjGkN7YwbYjaWWJ6RKizQTYyT5k19aeZBdroswOQOzblsOgX4Qu+ViwFNUBSH2taNSDF6zhUzIHT3I+WSLKQYTYFbsBcgBMEZE8B99qrdleKeO4za5rOM/VAiwAOunxC6P6cqteltyFMtfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782244173; c=relaxed/simple;
-	bh=qcon5+R6+cPHD8fqy2227hLiKWbL/IUAQhjdLRQ66/c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GWelUy55BuDC02E1TBbs5QF7jre+VQKp6jdFCiYpIjbGavEUcbeQGu0ngr24VzygC//1HihPmoVMYgK+qFnM16dCkOJ/PNaW/te2VK84n3BL+ubCvxvhpycOoQ9B27HvCDCHPhOh0H/KmtAEU3nhU6Qdf5CF8I2YJ39Dh4mq6M0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mVuhfkHh; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782246237; c=relaxed/simple;
+	bh=Go5eWlXJHSVntX+2CQ8j+W5AmpWJvdGUJZDOc0J/WhQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=f8xxq8xZhsu+bTX5Rw0BWsjWzm8OmBpzQY7+P7C65+JIxkcEAgBL4vKFXasUjoGgou8As/iGQQiXwl+AbfnhScBx7E2bcAIzw91eafeNAeTPIGmDXz+KFoS1yyJi+vmlFDlL7pyAiD9D2r4Rz9gQvh2YFX+eZfRvkw8s1xxHd1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=crdbzpKW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mVuhfkHh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782244172; x=1813780172;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qcon5+R6+cPHD8fqy2227hLiKWbL/IUAQhjdLRQ66/c=;
-  b=mVuhfkHhG5edR4fcvuXYj+Z5R9WTq7J2vsjbhforhOQxUiIQO+HeoNZr
-   1yyQkuOpgVJ4R9Q/6LxCA4wiY7JgUX901Qu5smPKBokQaEcWoudcb0YvH
-   KovoGSUjXGVN+s5IVtCawi73j6LSl4qUpTdBmlfNFgju2JxusejfjZE8J
-   jOrUFxzuLpe3IkPuBldPX0MI2pnBtxF2ztfIHZYwE/b9r7jx3tm+Kxb2o
-   TsuOyAhSRr8JMSI8IgYVWCgBczIZItbbhALdUE33HDBg0/R44DswaPNSs
-   TGyrpZLW7cgQAOo6YJGevb+AwLQtczEUuCECKPgaLW+tm4bmLyY3ZPTtC
-   w==;
-X-CSE-ConnectionGUID: 43GMY14HTfah7bYq54VQ4Q==
-X-CSE-MsgGUID: SLZHJTu6StG2bK8+/vLG7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="83039468"
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="83039468"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 12:49:31 -0700
-X-CSE-ConnectionGUID: zOngNvU+Qv+N4oFIXlhjyQ==
-X-CSE-MsgGUID: 2JN4giLWSdyQl3iLBxjwyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="246692114"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.7])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 12:49:27 -0700
-Date: Tue, 23 Jun 2026 22:49:25 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: Herman van Hazendonk <github.com@herrie.org>,
-	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Denis Ciocca <denis.ciocca@gmail.com>,
-	Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Denis Ciocca <denis.ciocca@st.com>,
-	Linus Walleij <linusw@kernel.org>, linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] iio: magnetometer: st_magn: honour
- st,fullscale-milligauss DT property
-Message-ID: <ajrjRdEkZAho8h1E@ashevche-desk.local>
-References: <20260616-submit-iio-lsm303dlh-magn-fixes-v2-0-063edcf74e60@herrie.org>
- <20260616-submit-iio-lsm303dlh-magn-fixes-v2-3-063edcf74e60@herrie.org>
- <20260623202916.5f5d520e@jic23-huawei>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="crdbzpKW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2047A1F00A3A;
+	Tue, 23 Jun 2026 20:23:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782246235;
+	bh=aDOY5sMw+CXYJvAlAFZYLE2Azsgwb9nRFtjYFuPPBwI=;
+	h=From:Date:Subject:To:Cc;
+	b=crdbzpKWu4piOr9lVh/g/u0NquFNemQdB0lcLow+zRi7k4jNDwSbbZC50w4AlV3D/
+	 a/uTKjN5Bt0pTbVJ2lNjRm2fot+dRE0UpRGI5MYMrfERtjFW6q2UlstRm9QdrZixJj
+	 VSHAPlNI52HBp+IuYJLDp3y6pZfyy451Vt9POOYGHV2V7QLfy0FYEtLzpngWTL6d+X
+	 d18Htm80IiQ3WY/LuQ9YLEDFruXV7tjxCM0jaI1VVtn5YFxyD3bCll34uJ7AsYaJIg
+	 HBnKk0aHGkS2TzPBxflVm2wH/jgf9Y+hRnsFlM0/Nv1/pQj/oHzsuAevgFEfMANPF0
+	 p53IoYdCnBieg==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Tue, 23 Jun 2026 13:23:46 -0700
+Subject: [PATCH] fortify: Disable -Wstringop-overread in tests
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260623202916.5f5d520e@jic23-huawei>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260623-fix-test_fortify-for-clang-stringop-overread-v1-1-15ee8342a953@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWN2wrCMBBEf6Xsswu90aK/IiJNsqkrkpTdWJTSf
+ 3fVp+HAzJwNlIRJ4VRtILSyck4GzaECf5vSTMjBGNq6Heqh7TDyCwtpucYsheMbLdE/rIpahNO
+ cF8wridAUMMTedY07jrEfwS4XIdv/dOfLn/Xp7uTL1wH7/gHYEpNRkAAAAA==
+X-Change-ID: 20260623-fix-test_fortify-for-clang-stringop-overread-df4b31b97f47
+To: Kees Cook <kees@kernel.org>
+Cc: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, stable@vger.kernel.org, 
+ Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2215; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=Go5eWlXJHSVntX+2CQ8j+W5AmpWJvdGUJZDOc0J/WhQ=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFlWryP37pW2NnFe2P7oyiqet3/t3ed81J4l27d5n+c/w
+ 0Nxu8++6ihlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQATWXKFkeEM14zLF1c5RhnH
+ P1iilRVZrFPUJ2R4Ovnt27/Tg7RXNs1nZLjIcX6/DSvn7dpQ+YzYw09Zj9lKdygcUJtc1nvCZc2
+ UDnYA
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Tue, Jun 23, 2026 at 08:29:16PM +0100, Jonathan Cameron wrote:
-> On Tue, 16 Jun 2026 15:02:06 +0200
-> Herman van Hazendonk <github.com@herrie.org> wrote:
-> 
-> > The ST magnetometer core's common probe hardcodes fs_avl[0] -- the
-> > highest-sensitivity full-scale supported by the chip -- as the
-> > starting range. For the LSM303DLH that is +/-1.3 G; for the
-> > LSM303DLHC and LSM303DLM it is +/-2 G; for the LIS3MDL it is +/-4 G.
-> > 
-> > That is the right default for "minimal noise floor at a desk", but
-> > it leaves no margin for boards that pick up appreciable DC bias from
-> > nearby PCB structures. On the HP TouchPad (apq8060 / tenderloin) the
-> > LSM303DLH magnetometer is mounted close enough to the surrounding
-> > power planes that X reads back as the chip's 0xF000 overflow
-> > sentinel (== -4096 raw, the value the chip publishes when the ADC
-> > saturates) on every sample at the chip-default range, while Y and Z
-> > fall well within the +/-1.3 G window.
-> > 
-> > Parse the st,fullscale-milligauss device-tree property (documented
-> > separately in dt-bindings/iio/st,st-sensors.yaml) in the
-> > magnetometer common probe to select the initial fs_avl entry by its
-> > mg value. The DT binding pins the accepted value set per compatible
-> > via allOf/if-then enum clauses, so a malformed mg value fails
-> > dt_binding_check rather than reaching the driver. Sensors with a
-> > fixed full-scale (fs.addr == 0: LSM303AGR, LIS2MDL, IIS2MDC) have no
-> > register to switch and the property is rejected outright for them
-> > in the binding; the parse block is additionally gated on fs.addr as
-> > defence in depth against stale DTBs.
-> > 
-> > Per-sensor mg ranges are listed in st_magn_sensors_settings[]. For
-> > LSM303DLH and LSM303DLHC/DLM the valid values are 1300, 1900, 2500,
-> > 4000, 4700, 5600 and 8100; for LIS3MDL, LSM9DS1-magn and LSM303C-magn
-> > they are 4000, 8000, 12000, 16000.
-> > 
-> > Empirical scale sweep on the HP TouchPad confirmed that on this
-> > board any fs_avl >= 1 produces non-saturated X readings:
-> > 
-> >     scale (0.001 G/LSB)  | X raw    Y raw    Z raw
-> >     --------------------+-------------------------------
-> >             1.100        | -4096    44       46    (X saturated)
-> >             0.855        |  -547    37       37    (clean)
-> >             0.670        |  -433    94      103    (clean)
-> >             0.450        |  -266    44       71    (clean)
-> >             0.400        |  -235    34       65    (clean)
-> >             0.330        |  -196    27       56    (clean)
-> >             0.230        |  -145    15       40    (clean)
-> > 
-> > 2500 mg is the natural choice for tenderloin: comfortably outside
-> > the saturation regime while keeping useful precision for compass
-> > applications.
-> > 
-> > Assisted-by: Claude:claude-opus-4-7 sparse smatch clang-analyzer coccinelle checkpatch
-> > Assisted-by: Sashiko:claude-opus-4-7
-> Hmm. First time I remember seeing Sashiko credited like this. Seems like pretty much
-> every patch series of any complexity would end up crediting sashiko.
-> Out of curiosity were you just looking at reports, or were you running it locally to
-> help with development?
+clang recently added support for -Wstringop-overread [1], which is on by
+default like -Wfortify-source. This breaks the usage of -Werror in the
+fortify tests, resulting in the following false positive warnings in the
+kernel build:
 
-I believe it's the second one, because LKML version uses Gemini (as far as I
-understand the case). At least that's why I haven't commented on this tag.
+  warning: unsafe memcmp() usage lacked '__read_overflow2' warning in lib/test_fortify/read_overflow2-memcmp.c
+  warning: unsafe memcmp() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memcmp.c
+  warning: unsafe memchr() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memchr.c
 
--- 
-With Best Regards,
-Andy Shevchenko
+Examining the fortify test logs shows a warning like the following in
+each of the failed logs:
 
+  In file included from lib/test_fortify/read_overflow2-memcmp.c:5:
+  lib/test_fortify/test_fortify.h:34:2: error: 'memcmp' reading 17 bytes from a region of size 16 [-Werror,-Wstringop-overread]
+     34 |         TEST;
+        |         ^
+  lib/test_fortify/read_overflow2-memcmp.c:3:2: note: expanded from macro 'TEST'
+      3 |         memcmp(large, small, sizeof(small) + 1)
+        |         ^
+  1 error generated.
+
+Disable -Wstringop-overread for the fortify tests, as it defeats the
+purpose of testing the Linux specific implementation of fortify, like
+-Wfortify-source.
+
+Cc: stable@vger.kernel.org
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2168
+Link: https://github.com/llvm/llvm-project/commit/86f2e71cb8d165b59ad31a442b2391e23826133e [1]
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ lib/test_fortify/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/lib/test_fortify/Makefile b/lib/test_fortify/Makefile
+index 399cae880e1d..44cd5df41a81 100644
+--- a/lib/test_fortify/Makefile
++++ b/lib/test_fortify/Makefile
+@@ -1,6 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ ccflags-y := $(call cc-disable-warning,fortify-source)
++ccflags-y += $(call cc-disable-warning,stringop-overread)
+ 
+ quiet_cmd_test_fortify = TEST    $@
+       cmd_test_fortify = $(CONFIG_SHELL) $(src)/test_fortify.sh \
+
+---
+base-commit: 122b52f0bab007ebeb414c8280c1def17b9ed1f4
+change-id: 20260623-fix-test_fortify-for-clang-stringop-overread-df4b31b97f47
+
+Best regards,
+--  
+Cheers,
+Nathan
 
