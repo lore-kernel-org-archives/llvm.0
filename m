@@ -1,117 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from outbound3.mail.transip.nl (outbound3.mail.transip.nl [136.144.136.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DA31145B11;
-	Wed, 24 Jun 2026 04:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B23230C144
+	for <llvm@lists.linux.dev>; Wed, 24 Jun 2026 04:18:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.136.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782274080; cv=none; b=guN51BFU6AY1R7jj+EWCK2AagKICuzdohvKGNbxBpHWnF79AFXPTDj6N9Ku3pNaN5olcFh09GImv8Kz+RDXnhK8h402OtKNiZjWklJ1BeLMVOVo7SopYtHS9Zzl0AMSCVRIhyWOFomv1QOwQiqfiYyEgj25ulSDJH/X852N07y0=
+	t=1782274739; cv=none; b=rUEMVud+W3X1lEoLVMJ9Qh9zxIdIn7A2zpHxvUDZQpLUqqE5sKrxrRmb7NixhdjO3YRrZw5VG4S7GbyAsQkqXuv3EvBOuXiEIifZO+izlPoO+jJUhnbMDlxJA/+urhTCaYxLEe4RZ5GWw1z7DDlZI9WuPHjxdrL9mG8HRPMEvKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782274080; c=relaxed/simple;
-	bh=3ff+pX8LFq5N2CWd8BXGK0mylOkDN/3RGIobjIZkVsg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OXizfQJXhUg+HKX+S75uItMiZ61qg3Gn/ZJRBU/HTfY8fED1P4tAoseXuK/xetWGcMw9lbqTfheYybCc0OlhU12SNz4n+hiNWMWKW0eGnuAxUP2Z3+Dxmf+Wf2GfIxTBxCTlXcVmTcv3Zj0XGaK8WINQZ4Xy+A0UMOPvrqmd7PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VK5y8VxC; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782274739; c=relaxed/simple;
+	bh=rO6RDKpT6Pln80UtnYU28Pws9gouFaZKrGq0ASz37Xk=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=Lsb9QCT46U8QYZz+6UhgMyQovbqO113KcKaUF1UXw5/ZPlzXYE2nAlUS4JHK4IVl/KhBtLvGMoJyShaM4n71GmECESCDeH0JGUf4atimswMsKoz5JV6AOEgmyXacsqAGi/p1le/6TTNua1OMwN51/GnStt47kmkuwQtPafffeoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org; spf=pass smtp.mailfrom=herrie.org; dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b=CArvr+Qx; arc=none smtp.client-ip=136.144.136.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=herrie.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=herrie.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VK5y8VxC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782274078; x=1813810078;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=3ff+pX8LFq5N2CWd8BXGK0mylOkDN/3RGIobjIZkVsg=;
-  b=VK5y8VxC49l+qSUa5dP3VZUReKd5T/4jh5SyKAdDo8eM6BZS6SZLjt6g
-   0lOEBOyafZikp3LbT0BOjt6mbyDWNfQdoxMXDYvhZ1Gve2dA2LmaWNkut
-   dEqPU9/jvKJrPiLMwLyUaanA/wzql6Ny6R+7h1KSUnWQABXIjNrS9Dwry
-   QZej68ErDW1PdXQPe/IBL3iEQS7VRtI1WURexzZMku54VQlAH9VEGmmG7
-   0Ztl0OaoYUB4QSVtSfa6DWkrb4SShZouGaaw8oF6xxqR3PlElvpL9b0q5
-   TbwUIn9+sdptSNXsFZWtiGTW+yImWCghEwn80dW6XdL5+e/9enrK6nO8D
-   Q==;
-X-CSE-ConnectionGUID: hKG6Y4bYTNCHMV1Dv6PuhQ==
-X-CSE-MsgGUID: s42k1EWcSv2KDOuRnExONg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="86928799"
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="86928799"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 21:07:57 -0700
-X-CSE-ConnectionGUID: cSRKeKxQQM2ZR1xeyRbMDQ==
-X-CSE-MsgGUID: s24kCbmdRk+rE3be8vDNrw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="249814964"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 23 Jun 2026 21:07:56 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wcEu1-0000000036j-2aZ6;
-	Wed, 24 Jun 2026 04:07:53 +0000
-Date: Wed, 24 Jun 2026 12:07:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/b4-sysfs-const-attr-prep-easy 57/57]
- drivers/pci/hotplug/pci_hotplug_core.c:255:63: warning: variable 'slot' is
- uninitialized when used here
-Message-ID: <202606241242.MfC5ItwK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=herrie.org header.i=@herrie.org header.b="CArvr+Qx"
+Received: from submission7.mail.transip.nl (unknown [10.103.8.158])
+	by outbound3.mail.transip.nl (Postfix) with ESMTP id 4glTFy1bfLznJHq;
+	Wed, 24 Jun 2026 06:18:46 +0200 (CEST)
+Received: from transip.email (unknown [10.103.8.120])
+	by submission7.mail.transip.nl (Postfix) with ESMTPA id 4glTFx55F1z3fqZNW;
+	Wed, 24 Jun 2026 06:18:45 +0200 (CEST)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Date: Wed, 24 Jun 2026 06:18:45 +0200
+From: me@herrie.org
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Jonathan Cameron <jic23@kernel.org>, Herman van Hazendonk
+ <github.com@herrie.org>, David Lechner <dlechner@baylibre.com>,
+ =?UTF-8?Q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, Andy Shevchenko
+ <andy@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Denis Ciocca <denis.ciocca@gmail.com>,
+ Lars-Peter Clausen <lars@metafoo.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Denis Ciocca <denis.ciocca@st.com>, Linus Walleij
+ <linusw@kernel.org>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] iio: magnetometer: st_magn: honour
+ st,fullscale-milligauss DT property
+Reply-To: github.com@herrie.org
+Mail-Reply-To: github.com@herrie.org
+In-Reply-To: <ajrjRdEkZAho8h1E@ashevche-desk.local>
+References: <20260616-submit-iio-lsm303dlh-magn-fixes-v2-0-063edcf74e60@herrie.org>
+ <20260616-submit-iio-lsm303dlh-magn-fixes-v2-3-063edcf74e60@herrie.org>
+ <20260623202916.5f5d520e@jic23-huawei>
+ <ajrjRdEkZAho8h1E@ashevche-desk.local>
+User-Agent: Webmail
+Message-ID: <edcf262b530a88ee602fa07edc8382ac@herrie.org>
+X-Sender: me@herrie.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: ClueGetter at submission7.mail.transip.nl
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=transip-a; d=herrie.org; t=1782274725; h=from:reply-to:subject:to:
+ cc:references:in-reply-to:date:mime-version:content-type;
+ bh=vZzwpkr6YDR/PwERNKa7GwzN/W1k0Qr8Zoaeo1PFPLU=;
+ b=CArvr+QxwZbk6ytF/lx0qeyqxldbdmsacI9/qqys06AetieBU2Wx2bSvrc/vergX2fReK4
+ 1NKodIFeZnOuQrKYnmsmGx/WOPghBhhz1pWm9/HMraA1039OGyiy4R6mVj3zzrUEJCTzhv
+ cPfu9En219kITMKOgPTq+dfQ7ptOD5Sw03rE9Xt5HDMmOcCz/vpeWTMPHx0V4FXw5z3424
+ PA2vbGVvFg4iXpQxl07Gcl3gK5GI4f25wZPDIibe9smrdVPB4stoIeifRQ1wEJDKO5vmP0
+ o538zPioEM4h4iO1xj4DYgHqluFyCNhtWcj35/fiqwDZTbVRBDSvW/rjPB+MFQ==
+X-Report-Abuse-To: abuse@transip.nl
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/b4-sysfs-const-attr-prep-easy
-head:   67a3c6abb9033d2ce2a9ac12d4cfb9530148b38f
-commit: 67a3c6abb9033d2ce2a9ac12d4cfb9530148b38f [57/57] hotplug
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260624/202606241242.MfC5ItwK-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606241242.MfC5ItwK-lkp@intel.com/reproduce)
+On 2026-06-23 21:49, Andy Shevchenko wrote:
+> On Tue, Jun 23, 2026 at 08:29:16PM +0100, Jonathan Cameron wrote:
+>> On Tue, 16 Jun 2026 15:02:06 +0200
+>> Herman van Hazendonk <github.com@herrie.org> wrote:
+>> 
+>> > The ST magnetometer core's common probe hardcodes fs_avl[0] -- the
+>> > highest-sensitivity full-scale supported by the chip -- as the
+>> > starting range. For the LSM303DLH that is +/-1.3 G; for the
+>> > LSM303DLHC and LSM303DLM it is +/-2 G; for the LIS3MDL it is +/-4 G.
+>> >
+>> > That is the right default for "minimal noise floor at a desk", but
+>> > it leaves no margin for boards that pick up appreciable DC bias from
+>> > nearby PCB structures. On the HP TouchPad (apq8060 / tenderloin) the
+>> > LSM303DLH magnetometer is mounted close enough to the surrounding
+>> > power planes that X reads back as the chip's 0xF000 overflow
+>> > sentinel (== -4096 raw, the value the chip publishes when the ADC
+>> > saturates) on every sample at the chip-default range, while Y and Z
+>> > fall well within the +/-1.3 G window.
+>> >
+>> > Parse the st,fullscale-milligauss device-tree property (documented
+>> > separately in dt-bindings/iio/st,st-sensors.yaml) in the
+>> > magnetometer common probe to select the initial fs_avl entry by its
+>> > mg value. The DT binding pins the accepted value set per compatible
+>> > via allOf/if-then enum clauses, so a malformed mg value fails
+>> > dt_binding_check rather than reaching the driver. Sensors with a
+>> > fixed full-scale (fs.addr == 0: LSM303AGR, LIS2MDL, IIS2MDC) have no
+>> > register to switch and the property is rejected outright for them
+>> > in the binding; the parse block is additionally gated on fs.addr as
+>> > defence in depth against stale DTBs.
+>> >
+>> > Per-sensor mg ranges are listed in st_magn_sensors_settings[]. For
+>> > LSM303DLH and LSM303DLHC/DLM the valid values are 1300, 1900, 2500,
+>> > 4000, 4700, 5600 and 8100; for LIS3MDL, LSM9DS1-magn and LSM303C-magn
+>> > they are 4000, 8000, 12000, 16000.
+>> >
+>> > Empirical scale sweep on the HP TouchPad confirmed that on this
+>> > board any fs_avl >= 1 produces non-saturated X readings:
+>> >
+>> >     scale (0.001 G/LSB)  | X raw    Y raw    Z raw
+>> >     --------------------+-------------------------------
+>> >             1.100        | -4096    44       46    (X saturated)
+>> >             0.855        |  -547    37       37    (clean)
+>> >             0.670        |  -433    94      103    (clean)
+>> >             0.450        |  -266    44       71    (clean)
+>> >             0.400        |  -235    34       65    (clean)
+>> >             0.330        |  -196    27       56    (clean)
+>> >             0.230        |  -145    15       40    (clean)
+>> >
+>> > 2500 mg is the natural choice for tenderloin: comfortably outside
+>> > the saturation regime while keeping useful precision for compass
+>> > applications.
+>> >
+>> > Assisted-by: Claude:claude-opus-4-7 sparse smatch clang-analyzer coccinelle checkpatch
+>> > Assisted-by: Sashiko:claude-opus-4-7
+>> Hmm. First time I remember seeing Sashiko credited like this. Seems 
+>> like pretty much
+>> every patch series of any complexity would end up crediting sashiko.
+>> Out of curiosity were you just looking at reports, or were you running 
+>> it locally to
+>> help with development?
+> 
+> I believe it's the second one, because LKML version uses Gemini (as far 
+> as I
+> understand the case). At least that's why I haven't commented on this 
+> tag.
+I have the whole toolchain running locally to avoid too many submissions 
+and
+feedback from Sashiko with Gemini after submitting. For small drivers I 
+can run
+Gemini locally as well, usually stick with Claude Opus 4.7 since that's 
+what I
+have a subscription for. For very complicated and large drivers Claude 
+Opus
+tends to time out even with 1 or 2 hour, so I fall back to Claude Haiku 
+4.5
+(which catches quite a few things, but is not as thorough as Opus or 
+Gemini).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606241242.MfC5ItwK-lkp@intel.com/
+Seeing Sashiko tends to provide different feedback on different rounds, 
+I try
+to only submit when Sashiko and all others are clean.
 
-All warnings (new ones prefixed by >>):
+Hope this clarifies!
 
->> drivers/pci/hotplug/pci_hotplug_core.c:255:63: warning: variable 'slot' is uninitialized when used here [-Wuninitialized]
-     255 |         if (attr == &hotplug_slot_attr_power.attr && !has_power_file(slot))
-         |                                                                      ^~~~
-   drivers/pci/hotplug/pci_hotplug_core.c:253:27: note: initialize the variable 'slot' to silence this warning
-     253 |         struct hotplug_slot *slot;
-         |                                  ^
-         |                                   = NULL
-   1 warning generated.
-
-
-vim +/slot +255 drivers/pci/hotplug/pci_hotplug_core.c
-
-   250	
-   251	static umode_t hotplug_slot_attr_is_visible(struct kobject *kobj, const struct attribute *attr, int idx)
-   252	{
-   253		struct hotplug_slot *slot;
-   254	
- > 255		if (attr == &hotplug_slot_attr_power.attr && !has_power_file(slot))
-   256			return 0;
-   257	
-   258		if (attr == &hotplug_slot_attr_attention.attr && !has_attention_file(slot))
-   259			return 0;
-   260	
-   261		if (attr == &hotplug_slot_attr_latch.attr && !has_latch_file(slot))
-   262			return 0;
-   263	
-   264		if (attr == &hotplug_slot_attr_presence.attr && !has_adapter_file(slot))
-   265			return 0;
-   266	
-   267		if (attr == &hotplug_slot_attr_test.attr && !has_test_file(slot))
-   268			return 0;
-   269	
-   270		return attr->mode;
-   271	}
-   272	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Herman
