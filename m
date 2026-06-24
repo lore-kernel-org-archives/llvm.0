@@ -1,65 +1,61 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF6E2236F0;
-	Wed, 24 Jun 2026 01:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D192F531B;
+	Wed, 24 Jun 2026 03:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782265900; cv=none; b=ptKwEMkgtb/3NwINWZV7d668T2gBwmqb62okiiSh3S1p5KqbKXNj+nRU+u/uOqFRFy3fnLAzZhtvGNm3heIy6GBGwqesH+XjY5e3dHWVwY+f7nRZqQLwLeqDnVsCENFRCkT9EsuHMYd7DoekWd7Z6Iq6tTMmHkG19IYqDAHwLQQ=
+	t=1782270435; cv=none; b=YWPAGfx1V2Gb+FFOO9Ko0SweWv2yXYMoYB4HG5AjfwXxAEAqICdeKX6LQYVMy+4HMmtfT51D54MVLSLhqfN9JWVcrljTfRLOLJQRl2rRuTDQcqTxYGCYmQOE5TubduncQJJ7VbtBZsLpacOFT/GSBns/QgMle5XIeIM6pNJ5r2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782265900; c=relaxed/simple;
-	bh=YlgPqTFyJmjtQ+5qud7Cj+WUJVCW+Asvb2it3eB2Mzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KBbPJ1JkuciDISUGWMEsJDgPaLN/y3KymvfHV1OWtnmEQfHSCREnW4qpVC7KZzwvhGILl7NhVSh0dNQ+7ouxsn4pozKbnSxD1zxy8UPhOUyJtBWLKHkoiHu2GgWZs5XKWQGpIWAs2/6MCTpflg0FWjGoWh81xjUafUdBlmy8Z70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gsoyge7x; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1782270435; c=relaxed/simple;
+	bh=xEa64Y95Rwumd8X1bvjBhev70rDgWeAbfF+qHVNldEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=B6YGrcti/Vv66IJI3hTYwI+Paus4xFJiIylKknUAVWINIzBOV1DuF1Dv2ptKiwWIT3+nTw8HApi8wNFbUiwbQj4qR5AB7w3Q+IjlCseFLwkhR87Vausx2o+91KNx/0UhrCxEAI95jquWqgub2SIN4V/F8aMBJPdAE/1W0Nfp5+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gCqYf+Dy; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gsoyge7x"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gCqYf+Dy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782265899; x=1813801899;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YlgPqTFyJmjtQ+5qud7Cj+WUJVCW+Asvb2it3eB2Mzs=;
-  b=Gsoyge7xjvVOIphP9ScqXpGVU8aiSNHBtCGnN0QLhau4wq9ihfb3OjJQ
-   rZ1CRFFTwNKIqrIoQTCKHSZ0Y3XKZoTzFaeKs+WHpzV9wLzFoYjlsbT+W
-   9mDZA4/egUewivq62NIWvpyqy6ESSmyZ9IlcgRHOlVb5DIqdJigKiNstF
-   SwCo5aLYaiW33eMC/V7hr9acM49FIfVJT3pIB6L+qruzTSVi2eDd/B1Ty
-   RAg0g+B2CxqycDDTLGrrk2eNZG3FCT0BYh73QFDobpI2bo0ESQTJqmwsW
-   zmnO2vrUVqt4VHsLM6S7sJEFbU2yoczkv1Wlkk8JZYLbZvJvFFinQZiop
+  t=1782270435; x=1813806435;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xEa64Y95Rwumd8X1bvjBhev70rDgWeAbfF+qHVNldEQ=;
+  b=gCqYf+DyPxeoWwzOB99BCr0+KoV5TPYMUfaIVA4Yyt6kUsZRJCmQeRG5
+   qBgqjTxY1LMh9bocDG3ZvM2TjZArKtcSgPUXMMRumW/Z7jXpDqBlZNqhs
+   oT2A0y6tWxB+aN3HXBOjWk6rUW7WeXhsXe7CGmMriHF2nHcWkYNh/RrkC
+   zMtTPv1zo8NIZsPK8fZeTGB1TCwhTLyiJO0YH8E+uwDdZVQGvkD15FEXY
+   5YBMkZkubQWARIgg6bS6m7JOu5yxMBEvQWG4koD0KwGqF365qgHFYMfp8
+   S97VP3OZjfRukbvJQXjHuWvno1tR5q330Zj4C5K4mkNxebNzj5aswdLYm
    A==;
-X-CSE-ConnectionGUID: SlriXNBVReKp6ZjqmI4kmA==
-X-CSE-MsgGUID: InWylg7VQWWgS1/9eNLO8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="100443622"
+X-CSE-ConnectionGUID: E7OA29Z5RGalrF4rnfogag==
+X-CSE-MsgGUID: NuTMHZKPQMmH6hj4HeAb0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="82906159"
 X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="100443622"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 18:51:38 -0700
-X-CSE-ConnectionGUID: zOZulX3eSkCcuYF3WnP3aw==
-X-CSE-MsgGUID: UROBMCKGQ62dEqQwtR/2iQ==
+   d="scan'208";a="82906159"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 20:07:14 -0700
+X-CSE-ConnectionGUID: C8AxWRHjRPCin9FzFHIgyA==
+X-CSE-MsgGUID: Xyvz/p5mSwOlQoeuSwbg7Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="287812282"
+   d="scan'208";a="245326870"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 23 Jun 2026 18:51:35 -0700
+  by fmviesa006.fm.intel.com with ESMTP; 23 Jun 2026 20:07:12 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wcCm5-0000000032v-07Ea;
-	Wed, 24 Jun 2026 01:51:33 +0000
-Date: Wed, 24 Jun 2026 09:51:24 +0800
+	id 1wcDxB-0000000035P-3t5Z;
+	Wed, 24 Jun 2026 03:07:07 +0000
+Date: Wed, 24 Jun 2026 11:05:59 +0800
 From: kernel test robot <lkp@intel.com>
-To: Arnav Kapoor <kapoorarnav43@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-	Teddy Wang <teddy.wang@siliconmotion.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-staging@lists.linux.dev, linux-fbdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Arnav Kapoor <kapoorarnav43@gmail.com>
-Subject: Re: [staging] staging: sm750fb: fix remaining CamelCase issues
-Message-ID: <202606240916.wIIrdOzC-lkp@intel.com>
-References: <20260621045340.65872-1-kapoorarnav43@gmail.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/b4-sysfs-const-attr-device_attr 7/12]
+ drivers/perf/nvidia_t410_cmem_latency_pmu.c:447:25: error: incompatible
+ function pointer types initializing 'ssize_t (*)(struct device *, struct
+ device_attribute *, char *)' (aka 'long (*)(struct device *, struct
+ device_attribute *, char *)') with an expr...
+Message-ID: <202606241123.ZtjpkcdO-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,143 +63,75 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260621045340.65872-1-kapoorarnav43@gmail.com>
 
-Hi Arnav,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on staging/staging-linus]
-[also build test ERROR on v7.1]
-[cannot apply to staging/staging-testing staging/staging-next linus/master next-20260623]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arnav-Kapoor/staging-sm750fb-fix-remaining-CamelCase-issues/20260622-235207
-base:   staging/staging-linus
-patch link:    https://lore.kernel.org/r/20260621045340.65872-1-kapoorarnav43%40gmail.com
-patch subject: [staging] staging: sm750fb: fix remaining CamelCase issues
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260624/202606240916.wIIrdOzC-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606240916.wIIrdOzC-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/b4-sysfs-const-attr-device_attr
+head:   bc80ee47805905a6b1e67acf7d467ba57ffb6e7f
+commit: 858ac3375fd495c1c894b364cae0f98d8ce471a9 [7/12] device_string
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260624/202606241123.ZtjpkcdO-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606241123.ZtjpkcdO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606240916.wIIrdOzC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606241123.ZtjpkcdO-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/staging/sm750fb/sm750.c:862:23: error: no member named 'power_mode' in 'struct init_status'; did you mean 'powerMode'?
-     862 |         sm750_dev->init_parm.power_mode = 0;
-         |                              ^~~~~~~~~~
-         |                              powerMode
-   drivers/staging/sm750fb/sm750.h:42:9: note: 'powerMode' declared here
-      42 |         ushort powerMode;
-         |                ^
->> drivers/staging/sm750fb/sm750.c:863:23: error: no member named 'set_all_eng_off' in 'struct init_status'
-     863 |         sm750_dev->init_parm.set_all_eng_off = 0;
-         |         ~~~~~~~~~~~~~~~~~~~~ ^
->> drivers/staging/sm750fb/sm750.c:864:23: error: no member named 'reset_memory' in 'struct init_status'; did you mean 'resetMemory'?
-     864 |         sm750_dev->init_parm.reset_memory = 1;
-         |                              ^~~~~~~~~~~~
-         |                              resetMemory
-   drivers/staging/sm750fb/sm750.h:48:9: note: 'resetMemory' declared here
-      48 |         ushort resetMemory;
-         |                ^
->> drivers/staging/sm750fb/sm750.c:883:25: error: use of undeclared identifier 'SM750_DOUBLE_TFT'
-     883 |                         sm750_dev->pnltype = SM750_DOUBLE_TFT;
-         |                                              ^
->> drivers/staging/sm750fb/sm750.c:885:25: error: use of undeclared identifier 'SM750_DUAL_TFT'
-     885 |                         sm750_dev->pnltype = SM750_DUAL_TFT;
-         |                                              ^
-   5 errors generated.
+>> drivers/perf/nvidia_t410_cmem_latency_pmu.c:447:25: error: incompatible function pointer types initializing 'ssize_t (*)(struct device *, struct device_attribute *, char *)' (aka 'long (*)(struct device *, struct device_attribute *, char *)') with an expression of type 'ssize_t (struct device *, const struct device_attribute *, char *)' (aka 'long (struct device *, const struct device_attribute *, char *)') [-Wincompatible-function-pointer-types]
+     447 |         NV_PMU_EXT_ATTR(event, device_show_string, "config:0-1"),
+         |                                ^~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/perf/nvidia_t410_c2c_pmu.c:560:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct device *, struct device_attribute *, char *)' (aka 'long (*)(struct device *, struct device_attribute *, char *)') with an expression of type 'ssize_t (struct device *, const struct device_attribute *, char *)' (aka 'long (struct device *, const struct device_attribute *, char *)') [-Wincompatible-function-pointer-types]
+     560 |         NV_C2C_PMU_FORMAT_EVENT_ATTR,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:557:2: note: expanded from macro 'NV_C2C_PMU_FORMAT_EVENT_ATTR'
+     557 |         NV_C2C_PMU_FORMAT_ATTR(event, "config:0-3")
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:554:29: note: expanded from macro 'NV_C2C_PMU_FORMAT_ATTR'
+     554 |         NV_C2C_PMU_EXT_ATTR(_name, device_show_string, _config)
+         |                                    ^~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:561:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct device *, struct device_attribute *, char *)' (aka 'long (*)(struct device *, struct device_attribute *, char *)') with an expression of type 'ssize_t (struct device *, const struct device_attribute *, char *)' (aka 'long (struct device *, const struct device_attribute *, char *)') [-Wincompatible-function-pointer-types]
+     561 |         NV_C2C_PMU_FORMAT_ATTR(gpu_mask, "config1:0-1"),
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:554:29: note: expanded from macro 'NV_C2C_PMU_FORMAT_ATTR'
+     554 |         NV_C2C_PMU_EXT_ATTR(_name, device_show_string, _config)
+         |                                    ^~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:571:2: error: incompatible function pointer types initializing 'ssize_t (*)(struct device *, struct device_attribute *, char *)' (aka 'long (*)(struct device *, struct device_attribute *, char *)') with an expression of type 'ssize_t (struct device *, const struct device_attribute *, char *)' (aka 'long (struct device *, const struct device_attribute *, char *)') [-Wincompatible-function-pointer-types]
+     571 |         NV_C2C_PMU_FORMAT_EVENT_ATTR,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:557:2: note: expanded from macro 'NV_C2C_PMU_FORMAT_EVENT_ATTR'
+     557 |         NV_C2C_PMU_FORMAT_ATTR(event, "config:0-3")
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/perf/nvidia_t410_c2c_pmu.c:554:29: note: expanded from macro 'NV_C2C_PMU_FORMAT_ATTR'
+     554 |         NV_C2C_PMU_EXT_ATTR(_name, device_show_string, _config)
+         |                                    ^~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +862 drivers/staging/sm750fb/sm750.c
+vim +447 drivers/perf/nvidia_t410_cmem_latency_pmu.c
 
-   850	
-   851	/*	chip specific g_option configuration routine */
-   852	static void sm750fb_setup(struct sm750_dev *sm750_dev, char *src)
-   853	{
-   854		char *opt;
-   855		int swap;
-   856	
-   857		swap = 0;
-   858	
-   859		sm750_dev->init_parm.chip_clk = 0;
-   860		sm750_dev->init_parm.mem_clk = 0;
-   861		sm750_dev->init_parm.master_clk = 0;
- > 862		sm750_dev->init_parm.power_mode = 0;
- > 863		sm750_dev->init_parm.set_all_eng_off = 0;
- > 864		sm750_dev->init_parm.reset_memory = 1;
-   865	
-   866		/* defaultly turn g_hwcursor on for both view */
-   867		g_hwcursor = 3;
-   868	
-   869		if (!src || !*src) {
-   870			dev_warn(&sm750_dev->pdev->dev, "no specific g_option.\n");
-   871			goto NO_PARAM;
-   872		}
-   873	
-   874		while ((opt = strsep(&src, ":")) != NULL && *opt != 0) {
-   875			dev_info(&sm750_dev->pdev->dev, "opt=%s\n", opt);
-   876			dev_info(&sm750_dev->pdev->dev, "src=%s\n", src);
-   877	
-   878			if (!strncmp(opt, "swap", strlen("swap"))) {
-   879				swap = 1;
-   880			} else if (!strncmp(opt, "nocrt", strlen("nocrt"))) {
-   881				sm750_dev->nocrt = 1;
-   882			} else if (!strncmp(opt, "36bit", strlen("36bit"))) {
- > 883				sm750_dev->pnltype = SM750_DOUBLE_TFT;
-   884			} else if (!strncmp(opt, "18bit", strlen("18bit"))) {
- > 885				sm750_dev->pnltype = SM750_DUAL_TFT;
-   886			} else if (!strncmp(opt, "24bit", strlen("24bit"))) {
-   887				sm750_dev->pnltype = sm750_24TFT;
-   888			} else if (!strncmp(opt, "nohwc0", strlen("nohwc0"))) {
-   889				g_hwcursor &= ~0x1;
-   890			} else if (!strncmp(opt, "nohwc1", strlen("nohwc1"))) {
-   891				g_hwcursor &= ~0x2;
-   892			} else if (!strncmp(opt, "nohwc", strlen("nohwc"))) {
-   893				g_hwcursor = 0;
-   894			} else {
-   895				if (!g_fbmode[0]) {
-   896					g_fbmode[0] = opt;
-   897					dev_info(&sm750_dev->pdev->dev,
-   898						 "find fbmode0 : %s\n", g_fbmode[0]);
-   899				} else if (!g_fbmode[1]) {
-   900					g_fbmode[1] = opt;
-   901					dev_info(&sm750_dev->pdev->dev,
-   902						 "find fbmode1 : %s\n", g_fbmode[1]);
-   903				} else {
-   904					dev_warn(&sm750_dev->pdev->dev, "How many view you wann set?\n");
-   905				}
-   906			}
-   907		}
-   908	
-   909	NO_PARAM:
-   910		if (sm750_dev->revid != SM750LE_REVISION_ID) {
-   911			if (sm750_dev->fb_count > 1) {
-   912				if (swap)
-   913					sm750_dev->dataflow = sm750_dual_swap;
-   914				else
-   915					sm750_dev->dataflow = sm750_dual_normal;
-   916			} else {
-   917				if (swap)
-   918					sm750_dev->dataflow = sm750_simul_sec;
-   919				else
-   920					sm750_dev->dataflow = sm750_simul_pri;
-   921			}
-   922		} else {
-   923			/* SM750LE only have one crt channel */
-   924			sm750_dev->dataflow = sm750_simul_sec;
-   925			/* sm750le do not have complex attributes */
-   926			sm750_dev->nocrt = 0;
-   927		}
-   928	}
-   929	
+429b7638b2df55 Besar Wicaksono 2026-03-24  437  
+429b7638b2df55 Besar Wicaksono 2026-03-24  438  #define NV_PMU_EXT_ATTR(_name, _func, _config)			\
+429b7638b2df55 Besar Wicaksono 2026-03-24  439  	(&((struct dev_ext_attribute[]){				\
+429b7638b2df55 Besar Wicaksono 2026-03-24  440  		{							\
+429b7638b2df55 Besar Wicaksono 2026-03-24  441  			.attr = __ATTR(_name, 0444, _func, NULL),	\
+429b7638b2df55 Besar Wicaksono 2026-03-24  442  			.var = (void *)_config				\
+429b7638b2df55 Besar Wicaksono 2026-03-24  443  		}							\
+429b7638b2df55 Besar Wicaksono 2026-03-24  444  	})[0].attr.attr)
+429b7638b2df55 Besar Wicaksono 2026-03-24  445  
+429b7638b2df55 Besar Wicaksono 2026-03-24  446  static struct attribute *cmem_lat_pmu_formats[] = {
+429b7638b2df55 Besar Wicaksono 2026-03-24 @447  	NV_PMU_EXT_ATTR(event, device_show_string, "config:0-1"),
+429b7638b2df55 Besar Wicaksono 2026-03-24  448  	NULL
+429b7638b2df55 Besar Wicaksono 2026-03-24  449  };
+429b7638b2df55 Besar Wicaksono 2026-03-24  450  
+
+:::::: The code at line 447 was first introduced by commit
+:::::: 429b7638b2df5538e945aaa2cc189cf0d6e8fb3a perf: add NVIDIA Tegra410 CPU Memory Latency PMU
+
+:::::: TO: Besar Wicaksono <bwicaksono@nvidia.com>
+:::::: CC: Will Deacon <will@kernel.org>
 
 --
 0-DAY CI Kernel Test Service
