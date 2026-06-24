@@ -1,172 +1,110 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C155D3A6B76;
-	Wed, 24 Jun 2026 09:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156602566F7;
+	Wed, 24 Jun 2026 09:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782293312; cv=none; b=InEe0mmw98XKT5aIsK6AMw1sBCA5bFCOlhw3ZD3Tr/sMj+Nrfhgv7T0NQq0ilTpQfQYyOPOgieB3nKfFncarn8ioT9bBYUSWJ2YazUreC9IVngsOzvLOkbXvlEczf3Ye3sPZ4rSsir4SnMQzE5BBcMP5hEmyyvR0gFNKAmYVFqw=
+	t=1782293820; cv=none; b=hfc9dhXm6R0bhu+c0+J/a3mXnDn79gY9rpAB75D4yVmX/tRw0xxVR3k7LFcyX+4181qWbtIJn4qwNr3GNyktTI3KVZHKg5GlqOicKdu1t+5ORiYQI7PSz2sGmZb3PeY7xVHZFGEol24HR0F0q+Q6SCABwOlXgqgWLkWny6Avgy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782293312; c=relaxed/simple;
-	bh=t1nkGQcrJ6jBqiFjk1l/wvIDREH84FU2qpKlKPQ4/MY=;
+	s=arc-20240116; t=1782293820; c=relaxed/simple;
+	bh=cJB/GKjhRZ+tDueeEz/z4J/26HBUnbytnrhU3IDn0QA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PCw8NAXMshZvqaTjetzE874M426rzmXoLAyh4G5RGdS8kLEAzf4lYofDHMuBdK6um5i/0rbCzVEqAEbDlbtUOOZ0FN2jRMjoD0/xrHIFSyfwPPrUfxjRyHukngyHHaFdxAiQo5PyTRtAfE6Ac4BDDebxJUvQZfLdnnhw4LDGDhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SL1bribQ; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=e5Kjj5LPpnrhgTD19J5TbCYrwUI71B47IhIlWQ4wBXBbJIlm+ROJ6GRkXidJlPEHdsRsJIn3gWN/1QrKAr8M+HdvimKWyWV0YvqaT7mb5jhvEx9Y/ZIADUj+jQVRpknv+VyphweDMX2whDoRq2h157ej75Rwzlr9xaLo2Ydl1ME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ABwJ1mYU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SL1bribQ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=IH5pzL7xDJuTGOfUKdXnfgfsXZD4Qs5F0+3YJ8fUfSw=; b=SL1bribQO604ik4nFsO3yOcsvo
-	YP1BVY2dSbw++rnRjFrHq4sp0ILcMSoJtpkWqv/BFxUKdgZrqUz50cSOhlK/dsUSDU7HGkdF1ax9w
-	NFhoW557QX7utwmMe61s4OzzmOuvHsh+DhGeYXXV2V6956QbTH6tOIbBFmEQK3SNmgdOKNnwfBy9R
-	gIsuQii1dUOQvYvcXEtdUs2ZolysyZ+Yp+B0ciScwQhs9KzpGftDNyRI33j4W/QfKEMKdtoLrMKxj
-	I0drGjYnGXCv/T6vWSm+P24fN34dWGHRulcX+XaOegGA9SlgTnKyW97swcyuq5OkmMeUAmciikIVM
-	u/4wzBvQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wcJtw-00000007mR4-2YgN;
-	Wed, 24 Jun 2026 09:28:09 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 11F11300400; Wed, 24 Jun 2026 11:28:07 +0200 (CEST)
-Date: Wed, 24 Jun 2026 11:28:06 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc: kernel test robot <lkp@intel.com>, jpoimboe@kernel.org,
-	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
-Subject: Re: [linux-next:master 14191/14955] vmlinux.o: error: objtool:
- amdgpu_vm_handle_fault+0x186: sibling call from callable instruction with
- modified stack frame
-Message-ID: <20260624092806.GX48970@noisy.programming.kicks-ass.net>
-References: <202606232356.gwHMAJAW-lkp@intel.com>
- <CABXGCsMFOo-X_JeZ6qiwN8L=_4wOcf9xeS_RcDAb8XfzA6+WBA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ABwJ1mYU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53A611F00ACA;
+	Wed, 24 Jun 2026 09:36:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1782293811;
+	bh=XywJu8jRVPBxeqs9rzmHag+3ezAMWumDSW8GspGo/YY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ABwJ1mYUI9+vP81/vgxFSbY8CiLWrAs4yA6jJ/jSjUQ48IVGwavUp1cWmtPvBEx8O
+	 3L3mLCWih2znE5U3TNCpefjVZDF2uzJ04Kb5eRwp6A8R+1sacjfa3sanWBYyMcuZD3
+	 OIqHB9TLt9UoNXdsqAU8+fTG6Q68KqyHrWtcIz3oo2gSM3nnfnqV0Jn09rcxWBjktY
+	 yA5ufg5sZaXSbfHX11B4z80Km2ZRBI+ia/1dYIUUjvm/CijGqHsRa78zY4CYnKrzRG
+	 C4mNPkUPcF/wQq5bXCUGA3blB5hj05bR+uUnSoqD5I7iv357xWsKZy96jTYRGeM/vx
+	 tOgCaxJQBYThw==
+Date: Wed, 24 Jun 2026 11:36:46 +0200
+From: Ingo Molnar <mingo@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] x86/boot/compressed: Disable jump tables for clang
+Message-ID: <ajulLtY29HtgWokg@gmail.com>
+References: <20260623-x86-boot-compressed-disable-jt-clang-v1-1-575fccd58107@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABXGCsMFOo-X_JeZ6qiwN8L=_4wOcf9xeS_RcDAb8XfzA6+WBA@mail.gmail.com>
+In-Reply-To: <20260623-x86-boot-compressed-disable-jt-clang-v1-1-575fccd58107@kernel.org>
 
-On Wed, Jun 24, 2026 at 01:57:46AM +0500, Mikhail Gavrilov wrote:
-> [+Josh, +Peter: objtool question below]
+
+* Nathan Chancellor <nathan@kernel.org> wrote:
+
+> After a recent upstream LLVM change to start generating jump and lookup
+> tables in switch statements in more instances [1], linking the
+> compressed x86 boot image when CONFIG_KERNEL_ZSTD is enabled fails with:
 > 
-> On Tue, Jun 23, 2026 at 8:17 PM kernel test robot <lkp@intel.com> wrote:
-> > >> vmlinux.o: error: objtool: amdgpu_vm_handle_fault+0x186: sibling call from callable instruction with modified stack frame
+>   ld.lld: error: Unexpected run-time relocations (.rela) detected!
 > 
-> I looked into this. It is an objtool false positive on a computed goto,
-> not a problem in the patch, and not specific to clang 22.1.3.
-
-Urrgh, computed gotos :-(
-
-> Config has CONFIG_LTO_CLANG_THIN=y, CONFIG_FRAME_POINTER=y, KASAN and
-> OBJTOOL_WERROR=y. objtool runs at the vmlinux.o link stage (per-TU
-> objects are LLVM bitcode under LTO, so the single amdgpu_vm.o never
-> reaches objtool). The robot hit this with clang 22.1.3; I reproduced it
-> on the same config with my system clang 22.1.8 (CONFIG_CLANG_VERSION=
-> 220108), so it is not a 22.1.3-only codegen issue.
+> Dumping the relocations in misc.o, which is the only file influenced by
+> CONFIG_KERNEL_ZSTD in the decompressor, shows dynamic relocations to
+> some string constants, which correspond to the string literals in the
+> switch statement in handle_zstd_error():
 > 
-> What +0x186 actually is (disasm of vmlinux.o, WERROR dropped so the
-> object survives):
+>   Relocation section '.rela.data.rel.ro' at offset 0x277b0 contains 31 entries:
+>       Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+>   0000000000000000  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 73a
+>   0000000000000008  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 78e
+>   0000000000000010  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 78e
+>   0000000000000018  0000006600000001 R_X86_64_64            0000000000000000 .rodata.str1.1 + 78e
+>   ...
 > 
->   17f: 48 c7 c0 00 00 00 00   mov    $0x0,%rax
->           R_X86_64_32S  .text.amdgpu_vm_handle_fault+0x196
->   186: ff e0                  jmp    *%rax
+> This optimization is problematic for the decompressor environment, as it
+> is built as -fPIE without any explicit absolute references (as described
+> at the top of misc.c) while not applying any dynamic relocations, hence
+> the linker assertion. To opt out of this optimization, which is of
+> little value in this special early boot code, disable jump tables in the
+> decompressor when building with clang. This mirrors the other x86
+> startup code in arch/x86/boot/startup.
 > 
-> %rax is loaded via an R_X86_64_32S relocation with the address of label
-> .text.amdgpu_vm_handle_fault+0x196, and +0x196 is an unconditional jmp
-> back to +0x13e, the head of the second drm_exec_until_all_locked() loop.
-> This is the drm_exec_retry_on_contention() computed goto
-> (goto *__drm_exec_retry_ptr). There is a second identical pair at +0x194
-> -> +0x188 for the first loop. Both targets are inside the function; this
-> is not a tail call into another function. (svm_range_restore_pages() is
-> the inline stub here, CONFIG_HSA_AMD is not set, so that path is gone.)
+> Cc: stable@vger.kernel.org
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2165
+> Link: https://github.com/llvm/llvm-project/commit/fa02a6ed66b1700c996b49c96c6bc0eb014c9518 [1]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
+>  arch/x86/boot/compressed/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> So clang materialized the label address as mov $imm(reloc); jmp *%rax
-> instead of folding it into a direct jmp to the label.
+> diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+> index 07e0e64b9a98..1c0d29e3eeba 100644
+> --- a/arch/x86/boot/compressed/Makefile
+> +++ b/arch/x86/boot/compressed/Makefile
+> @@ -31,6 +31,7 @@ KBUILD_CFLAGS += -Wundef
+>  KBUILD_CFLAGS += -DDISABLE_BRANCH_PROFILING
+>  cflags-$(CONFIG_X86_32) := -march=i386
+>  cflags-$(CONFIG_X86_64) := -mcmodel=small -mno-red-zone
+> +cflags-$(CONFIG_CC_IS_CLANG) += -fno-jump-tables
 
-So, if my heat-addled brain isn't completely gone, then this all boils
-down to something like:
+So, shouldn't we just use -fno-jump-tables for *all* compilers,
+like we do in arch/x86/boot/startup/Makefile?
 
-  drm_exec_init(&exec);
-label:
-  for (;drm_exec_cleanup(&exec);) {
-     ...
-     if (unlikely(drm_exec_is_contended(&exec)))
-       goto label;
-     ...
-  }
-  ...
-  drm_exec_fini(&exec);
+The point wouldn't be to just work around any Clang
+jump-table optimization complications alone, but also
+to synchronize the build options of very early code and such.
 
-Except, you've laundered that label through a computed goto to allow
-multiple such constructs in a single function -- because can't have
-multiple identical labels etc.
+Thanks,
 
-And then clang, can't untangle the web and makes a mess of it. Which is
-really rather unfortunate, because indirect calls are yuck -- also
-retpolines and cfi and all that jazz.
-
-I do think this is very much a compiler issue, clang should never emit
-an indirect call for this. Doing that is just aweful.
-
-Also, note that if anybody were ever to use a guard() inside this
-drm_exec_until_all_locked() construct, there is no guarantee the
-computed goto will actually trip the __cleanup(). Computed goto's and
-scope do not play well together. And the moment clang emits an indirect
-call, it means it lost track of things and things *will* go sideways.
-
-And the only reason you want that label, is because nested loops,
-because without that, a simple 'continue' would do just fine.
-
-That is, I think this drm_exec_until_all_locked() thing has some
-fundamental problems the moment clang fails to optimize it away.
-Correctness really depends on the compiler not actually ever doing a
-computed goto.
-
-> For the indirect
-> jmp objtool looks for a jump table in .rodata, finds none (this is a
-> single relocated label, not an indexed table), and falls back to
-> treating it as an indirect sibling call. The frame is already set up
-> (push %rbp at +0x5, sub $0x160,%rsp at +0x16), hence "sibling call with
-> modified stack frame". Runtime is fine, the jmp lands on the intended
-> in-function label; this is purely an objtool classification issue.
-> KASAN probably
-> tips the balance: the function is inflated with __asan_* checks
-> and shadow tests, and on that body clang keeps the label in a register
-> rather than folding it.
-
-Right.
-
-> The drm_exec_until_all_locked() / drm_exec_retry_on_contention() macros
-> are used widely (amdgpu_cs, amdgpu_gem, etc.); the patch under bisect is
-> just the first to put such a loop into amdgpu_vm_handle_fault().
-
-It is also the first to cause clang to loose its mind and emit an
-indirect call. Which as I've explained above, really is a problem.
-
-> objtool question: should objtool resolve an indirect jmp whose target
-> register is loaded from a relocation pointing at a .text label inside
-> the same function, and treat it as an intra-function jump rather than a
-> sibling call? That would cover the labels-as-values / computed-goto
-> pattern that this and any future drm_exec user under LTO+KASAN will hit.
-> 
-> I am not respinning the series for this, the page-fault conversion is a
-> pure refactor with no manual stack work. Happy to test an objtool fix,
-> or to help with a drm_exec.h workaround if that is preferred over an
-> objtool change.
-
-While I do think we could teach objtool about this, I also think it
-should still emit a warning, because as stated, this pattern is very
-very suspect and likely broken :-(
-
-
+	Ingo
