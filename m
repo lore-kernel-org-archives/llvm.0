@@ -1,113 +1,172 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B2E25B092;
-	Wed, 24 Jun 2026 08:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C155D3A6B76;
+	Wed, 24 Jun 2026 09:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782290862; cv=none; b=Ts7qa0D45Jm2CyF01/1arDbd9jc51bW6JUKKOQJl9d3GRLX8ks9h7IpuWWkFwH3y/PkkijyMvv7d5A4kyVvOoAc/eRD9uAu1n2FgkhPp31tz8wADXOA0sg9dGWDrsmtTURCig52khc3dEXKUHy4BI+eOjV+LOl8q+CZSDVTBHXs=
+	t=1782293312; cv=none; b=InEe0mmw98XKT5aIsK6AMw1sBCA5bFCOlhw3ZD3Tr/sMj+Nrfhgv7T0NQq0ilTpQfQYyOPOgieB3nKfFncarn8ioT9bBYUSWJ2YazUreC9IVngsOzvLOkbXvlEczf3Ye3sPZ4rSsir4SnMQzE5BBcMP5hEmyyvR0gFNKAmYVFqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782290862; c=relaxed/simple;
-	bh=b116FrQSfFgK6uDYvZxPIGTwSn7qgoOY6QcZ7jz/mRQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=aZzOllbz9Ih9LuHESLFFmJjXRt2QAWU8lgWihSX6AA7Z0on37q3/RHh3A/h0JjYtbwIVsyJJ1OlDMbldyyacjy5RIQuKJkDnrfHXVBsmJdeqh3AyIhugqpkaMrdsUUfx4SqfJwQmg4So4zIOEkQ5tL9qZUD3Lqu15tGfyWXnKVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S/jTbya3; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782293312; c=relaxed/simple;
+	bh=t1nkGQcrJ6jBqiFjk1l/wvIDREH84FU2qpKlKPQ4/MY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PCw8NAXMshZvqaTjetzE874M426rzmXoLAyh4G5RGdS8kLEAzf4lYofDHMuBdK6um5i/0rbCzVEqAEbDlbtUOOZ0FN2jRMjoD0/xrHIFSyfwPPrUfxjRyHukngyHHaFdxAiQo5PyTRtAfE6Ac4BDDebxJUvQZfLdnnhw4LDGDhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=SL1bribQ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S/jTbya3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CB841F000E9;
-	Wed, 24 Jun 2026 08:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782290861;
-	bh=kryu94ZiuoJZhJYlAoyQe46C2YsO062c3BH0CTq4xAk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=S/jTbya37hcllfQ/CxBn33/dgOBxA+WxIvjKnDnL5VrDy3rR4TbPCQS/s+EJC0Pd8
-	 3YxRplgdwuSJqtLfUYbQGnbPI2CSumWWF+SQ2bmE9RFfqL8egDaNqH34Ipejrdx+c/
-	 xgxXEx4whOK+FbZhHHIkQMsTCkPlv8Y/ER+efHSScdC2bpNybRlUmsXK4Fkd6TBfqS
-	 yNYK0Rv3clLc0LnDsiJTEaCjeis1gbt5MvbFRb9ge4CzH+lBvVJMta9xNEKhBKeiM1
-	 4R7vXShuMfu/KWCQqDrcUHHC+eF3hkFvvSI0rW4xKh1OxlSYAkuLpI3I/me+4mM4fa
-	 w5AR4ihTcPLvg==
-Date: Wed, 24 Jun 2026 17:47:37 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jonathan Corbet
- <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
- bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [PATCH v6 6/8] Documentation: bootconfig: document build-time
- cmdline rendering
-Message-Id: <20260624174737.a4862dcd86f3d746b788d197@kernel.org>
-In-Reply-To: <20260623-bootconfig_using_tools-v6-6-640c2f587a3c@debian.org>
-References: <20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org>
-	<20260623-bootconfig_using_tools-v6-6-640c2f587a3c@debian.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SL1bribQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=IH5pzL7xDJuTGOfUKdXnfgfsXZD4Qs5F0+3YJ8fUfSw=; b=SL1bribQO604ik4nFsO3yOcsvo
+	YP1BVY2dSbw++rnRjFrHq4sp0ILcMSoJtpkWqv/BFxUKdgZrqUz50cSOhlK/dsUSDU7HGkdF1ax9w
+	NFhoW557QX7utwmMe61s4OzzmOuvHsh+DhGeYXXV2V6956QbTH6tOIbBFmEQK3SNmgdOKNnwfBy9R
+	gIsuQii1dUOQvYvcXEtdUs2ZolysyZ+Yp+B0ciScwQhs9KzpGftDNyRI33j4W/QfKEMKdtoLrMKxj
+	I0drGjYnGXCv/T6vWSm+P24fN34dWGHRulcX+XaOegGA9SlgTnKyW97swcyuq5OkmMeUAmciikIVM
+	u/4wzBvQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wcJtw-00000007mR4-2YgN;
+	Wed, 24 Jun 2026 09:28:09 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 11F11300400; Wed, 24 Jun 2026 11:28:07 +0200 (CEST)
+Date: Wed, 24 Jun 2026 11:28:06 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, jpoimboe@kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Subject: Re: [linux-next:master 14191/14955] vmlinux.o: error: objtool:
+ amdgpu_vm_handle_fault+0x186: sibling call from callable instruction with
+ modified stack frame
+Message-ID: <20260624092806.GX48970@noisy.programming.kicks-ass.net>
+References: <202606232356.gwHMAJAW-lkp@intel.com>
+ <CABXGCsMFOo-X_JeZ6qiwN8L=_4wOcf9xeS_RcDAb8XfzA6+WBA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABXGCsMFOo-X_JeZ6qiwN8L=_4wOcf9xeS_RcDAb8XfzA6+WBA@mail.gmail.com>
 
-On Tue, 23 Jun 2026 09:15:33 -0700
-Breno Leitao <leitao@debian.org> wrote:
-
-> Add a section describing CONFIG_CMDLINE_FROM_BOOTCONFIG: what it
-> does (renders the embedded "kernel" subtree to a flat cmdline at
-> build time so early_param() handlers see the values), what it
-> requires (BOOT_CONFIG_EMBED, a non-empty BOOT_CONFIG_EMBED_FILE,
-> and ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG -- currently x86 only),
-> the bootconfig opt-in semantics, the initrd-vs-embedded precedence,
-> and the soft-error overflow behavior.
+On Wed, Jun 24, 2026 at 01:57:46AM +0500, Mikhail Gavrilov wrote:
+> [+Josh, +Peter: objtool question below]
 > 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
->  Documentation/admin-guide/bootconfig.rst | 81 ++++++++++++++++++++++++++++++++
->  1 file changed, 81 insertions(+)
+> On Tue, Jun 23, 2026 at 8:17 PM kernel test robot <lkp@intel.com> wrote:
+> > >> vmlinux.o: error: objtool: amdgpu_vm_handle_fault+0x186: sibling call from callable instruction with modified stack frame
 > 
-> diff --git a/Documentation/admin-guide/bootconfig.rst b/Documentation/admin-guide/bootconfig.rst
-> index f712758472d5c..349cefbb2bbcd 100644
-> --- a/Documentation/admin-guide/bootconfig.rst
-> +++ b/Documentation/admin-guide/bootconfig.rst
-> @@ -234,6 +234,87 @@ Kconfig option selected.
->  Note that even if you set this option, you can override the embedded
->  bootconfig by another bootconfig which attached to the initrd.
->  
-> +Rendering Embedded kernel.* Keys at Build Time
-> +----------------------------------------------
-> +
-> +By default, the embedded bootconfig (``CONFIG_BOOT_CONFIG_EMBED=y``) is
-> +parsed at runtime, after ``parse_early_param()`` has already run. Early
-> +parameter handlers (``mem=``, ``earlycon=``, ``loglevel=``, ...) therefore
-> +cannot see values supplied via the embedded ``kernel`` subtree.
-> +
-> +``CONFIG_CMDLINE_FROM_BOOTCONFIG`` resolves this by rendering the
-> +``kernel`` subtree of ``CONFIG_BOOT_CONFIG_EMBED_FILE`` into a flat cmdline
-> +string at kernel build time (via ``tools/bootconfig -C``) and prepending
-> +it to ``boot_command_line`` during early architecture setup, so the keys
-> +are visible to ``parse_early_param()``.
-> +
-> +The option requires ``CONFIG_BOOT_CONFIG_EMBED=y``, a non-empty
-> +``CONFIG_BOOT_CONFIG_EMBED_FILE``, and an architecture that selects
-> +``CONFIG_ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG``. Currently only x86
-> +selects it; on other architectures the embedded bootconfig still works,
-> +but only through the late runtime parser.
+> I looked into this. It is an objtool false positive on a computed goto,
+> not a problem in the patch, and not specific to clang 22.1.3.
 
-As commented by Sashiko, here we need to mention that this option requires
-CONFIG_CMDLINE to be empty. This means user can NOT set both option
-at once (This also means user doesn't have to worry about configuration
-conflicts.)
+Urrgh, computed gotos :-(
 
-Thanks,
+> Config has CONFIG_LTO_CLANG_THIN=y, CONFIG_FRAME_POINTER=y, KASAN and
+> OBJTOOL_WERROR=y. objtool runs at the vmlinux.o link stage (per-TU
+> objects are LLVM bitcode under LTO, so the single amdgpu_vm.o never
+> reaches objtool). The robot hit this with clang 22.1.3; I reproduced it
+> on the same config with my system clang 22.1.8 (CONFIG_CLANG_VERSION=
+> 220108), so it is not a 22.1.3-only codegen issue.
+> 
+> What +0x186 actually is (disasm of vmlinux.o, WERROR dropped so the
+> object survives):
+> 
+>   17f: 48 c7 c0 00 00 00 00   mov    $0x0,%rax
+>           R_X86_64_32S  .text.amdgpu_vm_handle_fault+0x196
+>   186: ff e0                  jmp    *%rax
+> 
+> %rax is loaded via an R_X86_64_32S relocation with the address of label
+> .text.amdgpu_vm_handle_fault+0x196, and +0x196 is an unconditional jmp
+> back to +0x13e, the head of the second drm_exec_until_all_locked() loop.
+> This is the drm_exec_retry_on_contention() computed goto
+> (goto *__drm_exec_retry_ptr). There is a second identical pair at +0x194
+> -> +0x188 for the first loop. Both targets are inside the function; this
+> is not a tail call into another function. (svm_range_restore_pages() is
+> the inline stub here, CONFIG_HSA_AMD is not set, so that path is gone.)
+> 
+> So clang materialized the label address as mov $imm(reloc); jmp *%rax
+> instead of folding it into a direct jmp to the label.
+
+So, if my heat-addled brain isn't completely gone, then this all boils
+down to something like:
+
+  drm_exec_init(&exec);
+label:
+  for (;drm_exec_cleanup(&exec);) {
+     ...
+     if (unlikely(drm_exec_is_contended(&exec)))
+       goto label;
+     ...
+  }
+  ...
+  drm_exec_fini(&exec);
+
+Except, you've laundered that label through a computed goto to allow
+multiple such constructs in a single function -- because can't have
+multiple identical labels etc.
+
+And then clang, can't untangle the web and makes a mess of it. Which is
+really rather unfortunate, because indirect calls are yuck -- also
+retpolines and cfi and all that jazz.
+
+I do think this is very much a compiler issue, clang should never emit
+an indirect call for this. Doing that is just aweful.
+
+Also, note that if anybody were ever to use a guard() inside this
+drm_exec_until_all_locked() construct, there is no guarantee the
+computed goto will actually trip the __cleanup(). Computed goto's and
+scope do not play well together. And the moment clang emits an indirect
+call, it means it lost track of things and things *will* go sideways.
+
+And the only reason you want that label, is because nested loops,
+because without that, a simple 'continue' would do just fine.
+
+That is, I think this drm_exec_until_all_locked() thing has some
+fundamental problems the moment clang fails to optimize it away.
+Correctness really depends on the compiler not actually ever doing a
+computed goto.
+
+> For the indirect
+> jmp objtool looks for a jump table in .rodata, finds none (this is a
+> single relocated label, not an indexed table), and falls back to
+> treating it as an indirect sibling call. The frame is already set up
+> (push %rbp at +0x5, sub $0x160,%rsp at +0x16), hence "sibling call with
+> modified stack frame". Runtime is fine, the jmp lands on the intended
+> in-function label; this is purely an objtool classification issue.
+> KASAN probably
+> tips the balance: the function is inflated with __asan_* checks
+> and shadow tests, and on that body clang keeps the label in a register
+> rather than folding it.
+
+Right.
+
+> The drm_exec_until_all_locked() / drm_exec_retry_on_contention() macros
+> are used widely (amdgpu_cs, amdgpu_gem, etc.); the patch under bisect is
+> just the first to put such a loop into amdgpu_vm_handle_fault().
+
+It is also the first to cause clang to loose its mind and emit an
+indirect call. Which as I've explained above, really is a problem.
+
+> objtool question: should objtool resolve an indirect jmp whose target
+> register is loaded from a relocation pointing at a .text label inside
+> the same function, and treat it as an intra-function jump rather than a
+> sibling call? That would cover the labels-as-values / computed-goto
+> pattern that this and any future drm_exec user under LTO+KASAN will hit.
+> 
+> I am not respinning the series for this, the page-fault conversion is a
+> pure refactor with no manual stack work. Happy to test an objtool fix,
+> or to help with a drm_exec.h workaround if that is preferred over an
+> objtool change.
+
+While I do think we could teach objtool about this, I also think it
+should still emit a warning, because as stated, this pattern is very
+very suspect and likely broken :-(
 
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
