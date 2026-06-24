@@ -1,153 +1,127 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CC052D7817;
-	Wed, 24 Jun 2026 05:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DA2248893
+	for <llvm@lists.linux.dev>; Wed, 24 Jun 2026 05:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782279023; cv=none; b=auZRia5biegpuSeI0mYH2hS/OPJjOwdtQZpq1pDLX9XuZyorvSUw5IHil93noH3Jf8GCpF7cdgAvzWSU+Lq0EauAKWXg8q+ps7chsdQruyT5ZtzjYsnqGOAUTNVSkMwEwQqPsZjAYombIIi8rZbAcYsLG6CcFYWvpVzVBXxfXCM=
+	t=1782280173; cv=none; b=Sjj5mr6uNNpdwWuDkEkjxeICayJ3GGuckAhXsTMGaqUVsZU83oKO+mzyHxL6xed7jAyR71Z5sX902jRBKtuFRKtS4qg0pof+wYm7dZbdL6QM/zo0Ob+eXE94sGbwESsdvrPBnikF38ySW6JUaYq4VrZy5KwCd4VUW7zlqUqSSM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782279023; c=relaxed/simple;
-	bh=bYZEdOJRC1GyN0zjyVTYe8MB686HqSJLoY/ZNQV17UU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qTIHAr1gRQj6QnINeAdLw889Aj68cZz1mbITpB18VoOjwOB/3/0owv7PoPY4jfWzMWR2fA4mZ6HCL6hjMix7UpSDW6jB7jf3L9NZFJr3qx+/uqTWmMGrSkVGSDYUwdqMN/+84gxJXjH6c8TSmHensEwPeSXGKmggokL/xlQyMCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YITumgrV; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782280173; c=relaxed/simple;
+	bh=2UD1Ba21SO0RJefYK7/wC/wRqJz6OROXKyJEZo4WrbM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=fbSKnTGvaN3RD/mBzCnbyeAh0BNaPCEVgLP2hfP8Xli3B3UQ2Eciny/n7ExbhEUuqy7H4WquqQyUdbpip55HcxVAQipHWqaQ3bwDuB4ce4nGiQCOxh5BJ9f954AIsO9F57cT5ofFilH8QoEU3glOLC2sjJzUU5k2i8HVO79Kf5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=rx7sddxA; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YITumgrV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782279021; x=1813815021;
-  h=date:from:to:cc:subject:message-id;
-  bh=bYZEdOJRC1GyN0zjyVTYe8MB686HqSJLoY/ZNQV17UU=;
-  b=YITumgrVVNLIA9eGRCfT8LyqyVcL7Tc5eR0TSsOzun5/dgi9bkbfKSVn
-   DFk3DDd+BdFUBIL8YbZMv5I0Vjb7gtMhvA+YAzAuUS3uDnkAmPLFLrJAL
-   doJACkbImzcydJX0qRpBDBwR6xxY2Ha3k/P0rGgSI8KhM8fsu6jGDJWq8
-   A7fgjBwpYqvXkRoA/DR/0K6snagZUUM0zp55S6OHVlPmNDavmW0kC8Ij7
-   /Td2ANEAllNitefm1mJBuxFaf3ckmR0mHYL7WIWkCS9hwYQ8CzHpVsv/z
-   KPmIJVXsMrMFPHFOnSUyLbCs+2fWe5PH+DY6Eypn5TAHhUn5G8sVMXRiw
-   Q==;
-X-CSE-ConnectionGUID: HJe2A894S+CWaxoczhV2dQ==
-X-CSE-MsgGUID: Slbc/nA2R3yUIXLpH3ZdQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="86870605"
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="86870605"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jun 2026 22:30:20 -0700
-X-CSE-ConnectionGUID: QQn7rYAPTfaQMm7AHW4X1Q==
-X-CSE-MsgGUID: Th5YOABoTFaX9PPps0GokQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,221,1774335600"; 
-   d="scan'208";a="249751830"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 23 Jun 2026 22:30:18 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wcGBj-0000000038f-2Ux6;
-	Wed, 24 Jun 2026 05:30:15 +0000
-Date: Wed, 24 Jun 2026 13:29:53 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hannes Reinecke <hare@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [hare-scsi-devel:configfs-ns.v2 14/18]
- drivers/nvme/target/configfs.c:1809:38: warning: variable 'net_ns' is
- uninitialized when used here
-Message-ID: <202606241339.9y3AoqDU-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="rx7sddxA"
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20260624054928epoutp0300459409c8602338d3f5f608265c8871~77l7XWN6V1529215292epoutp03j
+	for <llvm@lists.linux.dev>; Wed, 24 Jun 2026 05:49:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20260624054928epoutp0300459409c8602338d3f5f608265c8871~77l7XWN6V1529215292epoutp03j
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1782280168;
+	bh=RAptsAgRillTg9ihT9mp4dczw3MEuFVKsPPvJnifRS8=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=rx7sddxAROcoIyFgKQnVLRgzSJX+uvFRxS0ZNmhv5Ls5blmhw66Ghlrrng0IR9p8K
+	 3bRlWuKcWQ6Zzu8DheUu3h9KExURH8o323o2QQgU3SB4eiZ7/Smy3WjJvl5sueQYy6
+	 riUnEsrWseYsAWR+bp1mikiZKmHSQXteEQMjXDHg=
+Received: from epsnrtp04.localdomain (unknown [182.195.42.156]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPS id
+	20260624054928epcas5p46b037bda448e455f9122a95a9983e626~77l6ziEe72827228272epcas5p43;
+	Wed, 24 Jun 2026 05:49:28 +0000 (GMT)
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40]) by
+	epsnrtp04.localdomain (Postfix) with ESMTP id 4glWGc0CxWz6B9m9; Wed, 24 Jun
+	2026 05:49:28 +0000 (GMT)
+Received: from epsmtip2.samsung.com (unknown [182.195.34.31]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20260624054927epcas5p3f8e7be966570a89e722cc718475320fa~77l6Xya9_0735707357epcas5p3d;
+	Wed, 24 Jun 2026 05:49:27 +0000 (GMT)
+Received: from localhost.localdomain (unknown [107.97.243.203]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260624054925epsmtip2374dda9b4bc1ecbabe76c265023d0a94~77l4mCgzd2341323413epsmtip2r;
+	Wed, 24 Jun 2026 05:49:25 +0000 (GMT)
+From: Maninder Singh <maninder1.s@samsung.com>
+To: linux@armlinux.org.uk, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com
+Cc: onkarnath.1@samsung.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, r.thapliyal@samsung.com,
+	Maninder Singh <maninder1.s@samsung.com>
+Subject: [PATCH 1/1] arm: backtrace-clang: fix wrong sp usage for unwinding
+Date: Wed, 24 Jun 2026 11:19:16 +0530
+Message-Id: <20260624054916.1571701-1-maninder1.s@samsung.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CMS-MailID: 20260624054927epcas5p3f8e7be966570a89e722cc718475320fa
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20260624054927epcas5p3f8e7be966570a89e722cc718475320fa
+References: <CGME20260624054927epcas5p3f8e7be966570a89e722cc718475320fa@epcas5p3.samsung.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hare/scsi-devel.git configfs-ns.v2
-head:   3d482734f1581168bb7973032424df660ce14955
-commit: 395f507329628a226fcb319ac9c6352e132fe646 [14/18] fs/configfs: balance get/put_net for configfs_ns_from_group()
-config: x86_64-randconfig-003-20260622 (https://download.01.org/0day-ci/archive/20260624/202606241339.9y3AoqDU-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606241339.9y3AoqDU-lkp@intel.com/reproduce)
+show_stack() can be called for any task, however c_backtrace always unwinds
+frames based on the "sp" register. This results in printing the backtrace of
+the current task instead of the target task.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606241339.9y3AoqDU-lkp@intel.com/
+Try with normal TC:
+==================
+       for_each_process(p) {
+               sched_show_task(p);
+       }
 
-All warnings (new ones prefixed by >>):
+[7.433271] task:kthreadd        state:S stack:0     pid:2     tgid:2     ppid:0      task_flags:0x208040 flags:0x00000000
+[7.433633] Call trace:
+[7.433640] [<80113418>] (dump_backtrace) from [<80113510>] (show_stack+0x14/0x18)
+..
+[7.433676] [<8016749c>] (sched_show_task) from [<803cb324>] (meminfo_proc_show+0x6c/0x930)
+[7.434019]  r5:8158e300 r4:8b4882d0
+[7.434024] [<803cb324>] (meminfo_proc_show) from [<80365788>] (seq_read_iter+0x148/0x4bc)
+[7.434045] [<80365788>] (seq_read_iter) from [<803c044c>] (proc_reg_read_iter+0xb8/0xc4)
+[7.434060] [<803c044c>] (proc_reg_read_iter) from [<80377104>] (copy_splice_read+0x228/0x308)
 
->> drivers/nvme/target/configfs.c:1809:38: warning: variable 'net_ns' is uninitialized when used here [-Wuninitialized]
-    1809 |         disc_subsys = nvmet_get_disc_subsys(net_ns);
-         |                                             ^~~~~~
-   drivers/nvme/target/configfs.c:1802:20: note: initialize the variable 'net_ns' to silence this warning
-    1802 |         struct net *net_ns;
-         |                           ^
-         |                            = NULL
-   drivers/nvme/target/configfs.c:2430:6: warning: variable 'old_nqn' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    2430 |         if (disc_subsys) {
-         |             ^~~~~~~~~~~
-   drivers/nvme/target/configfs.c:2436:8: note: uninitialized use occurs here
-    2436 |         kfree(old_nqn);
-         |               ^~~~~~~
-   drivers/nvme/target/configfs.c:2430:2: note: remove the 'if' if its condition is always true
-    2430 |         if (disc_subsys) {
-         |         ^~~~~~~~~~~~~~~~
-   drivers/nvme/target/configfs.c:2397:15: note: initialize the variable 'old_nqn' to silence this warning
-    2397 |         char *old_nqn, *new_nqn;
-         |                      ^
-         |                       = NULL
-   2 warnings generated.
+It should unwind frame based on passed "fp".
+(CONFIG_UNWINDER_FRAME_POINTER=y)
 
+With fix:
+=========
+[13.933732] task:kthreadd        state:S stack:0     pid:2     tgid:2     ppid:0      task_flags:0x208040 flags:0x00000000
+[13.934165] Call trace:
+[13.934604] [<80afa1a8>] (schedule) from [<8015426c>] (kthreadd+0x124/0x208)
+[13.934654]  r10:8100bbf0 r4:8116f440
+[13.934664] [<8015426c>] (kthreadd) from [<8010010c>] (ret_from_fork+0x14/0x28)
+[13.934691] Exception stack(0xf081df9c to 0xf081dfe4)
 
-vim +/net_ns +1809 drivers/nvme/target/configfs.c
+Additionally, the extra manipulation of "sp" register appears unnecessary in the "current"
+task also since the "fp" register is already provided.
 
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1797  
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1798  static struct config_group *nvmet_subsys_make(struct config_group *group,
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1799  		const char *name)
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1800  {
-56136fea189403b Hannes Reinecke   2026-06-19  1801  	struct nvmet_subsys *subsys, *disc_subsys;
-395f507329628a2 Hannes Reinecke   2026-06-19  1802  	struct net *net_ns;
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1803  
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1804  	if (sysfs_streq(name, NVME_DISC_SUBSYS_NAME)) {
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1805  		pr_err("can't create discovery subsystem through configfs\n");
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1806  		return ERR_PTR(-EINVAL);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1807  	}
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1808  
-55b4ace3bb49490 Hannes Reinecke   2026-06-12 @1809  	disc_subsys = nvmet_get_disc_subsys(net_ns);
-56136fea189403b Hannes Reinecke   2026-06-19  1810  	if (!disc_subsys)
-56136fea189403b Hannes Reinecke   2026-06-19  1811  		return ERR_PTR(-ENOENT);
-56136fea189403b Hannes Reinecke   2026-06-19  1812  	if (sysfs_streq(name, disc_subsys->subsysnqn)) {
-95409e277d83438 Hannes Reinecke   2024-04-03  1813  		pr_err("can't create subsystem using unique discovery NQN\n");
-95409e277d83438 Hannes Reinecke   2024-04-03  1814  		return ERR_PTR(-EINVAL);
-95409e277d83438 Hannes Reinecke   2024-04-03  1815  	}
-95409e277d83438 Hannes Reinecke   2024-04-03  1816  
-395f507329628a2 Hannes Reinecke   2026-06-19  1817  	net_ns = configfs_ns_from_group(group);
-55b4ace3bb49490 Hannes Reinecke   2026-06-12  1818  	subsys = nvmet_subsys_alloc(name, NVME_NQN_NVME, net_ns);
-395f507329628a2 Hannes Reinecke   2026-06-19  1819  	put_net(net_ns);
-6b7e631b927ca12 Minwoo Im         2019-04-07  1820  	if (IS_ERR(subsys))
-6b7e631b927ca12 Minwoo Im         2019-04-07  1821  		return ERR_CAST(subsys);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1822  
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1823  	config_group_init_type_name(&subsys->group, name, &nvmet_subsys_type);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1824  
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1825  	config_group_init_type_name(&subsys->namespaces_group,
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1826  			"namespaces", &nvmet_namespaces_type);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1827  	configfs_add_default_group(&subsys->namespaces_group, &subsys->group);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1828  
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1829  	config_group_init_type_name(&subsys->allowed_hosts_group,
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1830  			"allowed_hosts", &nvmet_allowed_hosts_type);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1831  	configfs_add_default_group(&subsys->allowed_hosts_group,
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1832  			&subsys->group);
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1833  
-cae5b01a2afc205 Logan Gunthorpe   2020-07-24  1834  	nvmet_add_passthru_group(subsys);
-cae5b01a2afc205 Logan Gunthorpe   2020-07-24  1835  
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1836  	return &subsys->group;
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1837  }
-a07b4970f464f13 Christoph Hellwig 2016-06-21  1838  
+Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
+Signed-off-by: Maninder Singh <maninder1.s@samsung.com>
+---
+ arch/arm/lib/backtrace-clang.S | 4 ----
+ 1 file changed, 4 deletions(-)
 
-:::::: The code at line 1809 was first introduced by commit
-:::::: 55b4ace3bb49490cca072cf61a14f8a2a6da407e nvmet: make configfs setup namespace aware
+diff --git a/arch/arm/lib/backtrace-clang.S b/arch/arm/lib/backtrace-clang.S
+index 290c52a60fc6..993410a6afd1 100644
+--- a/arch/arm/lib/backtrace-clang.S
++++ b/arch/arm/lib/backtrace-clang.S
+@@ -105,10 +105,6 @@ ENDPROC(c_backtrace)
+ 		moveq	mask, #0xfc000003
+ 		movne	mask, #0		@ mask for 32-bit
+ 
+-/*
+- * Switches the current frame to be the frame for dump_stack.
+- */
+-		add	frame, sp, #24		@ switch to false frame
+ for_each_frame:	tst	frame, mask		@ Check for address exceptions
+ 		bne	no_frame
+ 
+-- 
+2.34.1
 
-:::::: TO: Hannes Reinecke <hare@kernel.org>
-:::::: CC: Hannes Reinecke <hare@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
