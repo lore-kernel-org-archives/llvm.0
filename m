@@ -1,190 +1,238 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246662E2EF9;
-	Wed, 24 Jun 2026 10:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D402472B8;
+	Wed, 24 Jun 2026 10:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782298246; cv=none; b=InOBe77dyIHPucXlqpp2lyelq10gv6OoA3Dnga786T/NohUni/JDGN5nCJ8YGzgupOH0Dk3KmnRtgdBFaS88cy7mx+qHQyjz4754oEWcMajPo+2JVH4tGjREDeBzNsByCnACJnXWL///mQpyvm/weijsjJAL6Il/aEG2HbEdRBM=
+	t=1782298628; cv=none; b=YZVDWQXCHyw8hdVv0FH8CW3R1JKlplVJuxlqcjhER0JT976izLsVufqiW4lqQX+um1c1ZBfWxqezefxW3ACLFI4SYHucQaaHj9VB2qnmLRFBD93++hFhjNAIRuaFK8O2jCv4J4SmdPn9QhZwsw/1dDCB2h8H+iWZdBLSrs/TVVg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782298246; c=relaxed/simple;
-	bh=yXss0N0VZsuQD+oH1NHVPUKM4T/BgLzmAcJatSti0Rk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=mFse34pbxIMQDCkOyBwx59g+mFd8RmmFW6KMyGlzGsp1v0mmT3IcnVRhgJFrpq55fOU0I/nKzvmQ3EpxlaBbtGr9tssciHzDsAvpWJP4BnseDg865tQw0RE8y3E/+KkvvFdeSnIWruzE3NXiFUy3ifFzHzQU6XscML9Z5kmh9V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a03C+ACQ; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782298628; c=relaxed/simple;
+	bh=INxrUct9WLacFXvQU97hRwFXyzi29Q0Xbi0FTzMgjg8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F++XKSFqLRAmcZwHm/IoStRMxsLH9hLmkVlQZcd6UlugSh/FRfv/sRWT3elRayqXPFr+ZMPw5gfu0f5IwSrbb1Gr369DyvXsYEVKEdRyVUFCiDHtGcYd96fMvVe+DJ+ZtJ7AFaRxDpzpW/0w+ar6HIBFYXaZvlB0iNOBA0nQCtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=LnbOfjKC; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a03C+ACQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782298244; x=1813834244;
-  h=date:from:to:cc:subject:message-id;
-  bh=yXss0N0VZsuQD+oH1NHVPUKM4T/BgLzmAcJatSti0Rk=;
-  b=a03C+ACQqC5o1ABn4VdpvQAHF97sNbVJiVL+e8Qxugd7KJnK08TgH5zP
-   q2sclKjgzqoTvE52hDNpWt4TXzrG8b91hzhKzjIH2PKxRvBLTVoNYNtrw
-   7j7Kxnl/pR05UkjV39V7yNb6q0JzTPa4978PPMXxoDnxI9/Nqy7ZonJ5P
-   WcQJ8jkWz1J76yFLLHwH4mi6Jgm9CA892i9L7XPMfajjJmiDoK0AhP4K2
-   Vt/kYD75xx4jnhstvCPgu0T5/Mqyl9xTh//VIV28oKE47HIshz2f9hWgk
-   zCcZciSi1cdGSs9jB8rxZTDqcO43fwGG3kFQ8iLwCxcd5qIIlEY1P65Xv
-   A==;
-X-CSE-ConnectionGUID: t3Tv0skaS3qTo0A+J8YBYQ==
-X-CSE-MsgGUID: 3DCIS2IuS4m58Aqg/QapQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="105849669"
-X-IronPort-AV: E=Sophos;i="6.24,222,1774335600"; 
-   d="scan'208";a="105849669"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 03:50:44 -0700
-X-CSE-ConnectionGUID: rbIwypHbSrSv9qYcuHfF6w==
-X-CSE-MsgGUID: 22RZrlZPR3+mhVSDnbchxA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,222,1774335600"; 
-   d="scan'208";a="253697845"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 24 Jun 2026 03:50:43 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wcLBn-000000003ID-2Uxm;
-	Wed, 24 Jun 2026 10:50:39 +0000
-Date: Wed, 24 Jun 2026 18:49:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dave Jiang <dave.jiang@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davejiang:djiang5/gmem-private-node 3/4]
- arch/arm64/kvm/../../../virt/kvm/guest_memfd.c:610:9: error: call to
- undeclared function 'mpol_private_bind'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202606241846.d0N56pum-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="LnbOfjKC"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=N1VssuBkLJnb64uC6QOIJ5bhhJaZoJolUbRCUHd19pM=; b=LnbOfjKCrnLjDaspVU7TzOk8dX
+	yGB0rzTNA9Xx1dfRC3tr5mfxbda/KLMBiL1s401PtshNBZl5snDLX87fcw8z8YkF+QX4etfHbL/2S
+	lh/IRnlFswxdhn5tS76c43kMZ1aaIE2Myz96EEwMZWOU2BmvLuPqAeS2+xXS1jDxfgj+60jfBn0Zz
+	ptJb2QMP5bZz3PkufhMC0pfmwSGIRsj/XvNf4dg+2BGRbZKIkSGYBmeZE5g2G5voHse2DQ3U5nP6n
+	HJlwBzyJZ5UkD3XpP0AFK6nfYgOFMwTIPC1StFf7bJ/lZsGsvOxOTSrkI69Y+AOi1iB8K6zoevyMB
+	hvEklgVQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wcLHw-00000007tar-3Ng6;
+	Wed, 24 Jun 2026 10:57:01 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 4CC97300400; Wed, 24 Jun 2026 12:56:58 +0200 (CEST)
+Date: Wed, 24 Jun 2026 12:56:58 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
+Cc: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
+	kernel test robot <lkp@intel.com>, jpoimboe@kernel.org,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Linux List Kernel Mailing <linux-kernel@vger.kernel.org>
+Subject: Re: [linux-next:master 14191/14955] vmlinux.o: error: objtool:
+ amdgpu_vm_handle_fault+0x186: sibling call from callable instruction with
+ modified stack frame
+Message-ID: <20260624105658.GB48970@noisy.programming.kicks-ass.net>
+References: <202606232356.gwHMAJAW-lkp@intel.com>
+ <CABXGCsMFOo-X_JeZ6qiwN8L=_4wOcf9xeS_RcDAb8XfzA6+WBA@mail.gmail.com>
+ <20260624092806.GX48970@noisy.programming.kicks-ass.net>
+ <eb2f60d1-5b6f-479b-9e4e-a4509dd65efd@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <eb2f60d1-5b6f-479b-9e4e-a4509dd65efd@amd.com>
 
-tree:   https://github.com/davejiang/linux.git djiang5/gmem-private-node
-head:   d3d7a6f5d40881bb11ac8f9ab05421d80a884a9b
-commit: af5f1af845c19fd7e4eb7d61567fc0b41044bd7f [3/4] KVM: guest_memfd: allow binding backing memory to a NUMA node at creation
-config: arm64-randconfig-004 (https://download.01.org/0day-ci/archive/20260624/202606241846.d0N56pum-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606241846.d0N56pum-lkp@intel.com/reproduce)
+On Wed, Jun 24, 2026 at 11:48:09AM +0200, Christian König wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606241846.d0N56pum-lkp@intel.com/
+> > So, if my heat-addled brain isn't completely gone, then this all boils
+> > down to something like:
+> > 
+> >   drm_exec_init(&exec);
+> > label:
+> >   for (;drm_exec_cleanup(&exec);) {
+> >      ...
+> >      if (unlikely(drm_exec_is_contended(&exec)))
+> >        goto label;
+> >      ...
+> >   }
+> >   ...
+> >   drm_exec_fini(&exec);
+> > 
+> > Except, you've laundered that label through a computed goto to allow
+> > multiple such constructs in a single function -- because can't have
+> > multiple identical labels etc.
+> 
+> Just FYI: That's actually not the reason for this, the label name is unique now.
 
-All errors (new ones prefixed by >>):
+Yeah, I know, but I thought that the only way to transfer the name to
+the drm_exec_retry() sites was to create that computed-goto alias.
 
->> arch/arm64/kvm/../../../virt/kvm/guest_memfd.c:610:9: error: call to undeclared function 'mpol_private_bind'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     610 |                 pol = mpol_private_bind(node);
-         |                       ^
->> arch/arm64/kvm/../../../virt/kvm/guest_memfd.c:610:7: error: incompatible integer to pointer conversion assigning to 'struct mempolicy *' from 'int' [-Wint-conversion]
-     610 |                 pol = mpol_private_bind(node);
-         |                     ^ ~~~~~~~~~~~~~~~~~~~~~~~
->> arch/arm64/kvm/../../../virt/kvm/guest_memfd.c:615:9: error: call to undeclared function 'mpol_set_shared_policy_all'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     615 |                 err = mpol_set_shared_policy_all(&GMEM_I(inode)->policy, pol);
-         |                       ^
-   arch/arm64/kvm/../../../virt/kvm/guest_memfd.c:615:9: note: did you mean 'mpol_free_shared_policy'?
-   include/linux/mempolicy.h:223:20: note: 'mpol_free_shared_policy' declared here
-     223 | static inline void mpol_free_shared_policy(struct shared_policy *sp)
-         |                    ^
-   3 errors generated.
+> The computed goto is used to limit the scope you can use the retry
+> macros because we initially had problems with people using that
+> outside of the loop.
 
+Ah, also a very good reason.
 
-vim +/mpol_private_bind +610 arch/arm64/kvm/../../../virt/kvm/guest_memfd.c
+> Exactly that, yes. The nested loops are unfortunately a very common use case here.
 
-   558	
-   559	static int __kvm_gmem_create(struct kvm *kvm, loff_t size, u64 flags, int node)
-   560	{
-   561		static const char *name = "[kvm-gmem]";
-   562		struct gmem_file *f;
-   563		struct inode *inode;
-   564		struct file *file;
-   565		int fd, err;
-   566	
-   567		fd = get_unused_fd_flags(0);
-   568		if (fd < 0)
-   569			return fd;
-   570	
-   571		f = kzalloc_obj(*f);
-   572		if (!f) {
-   573			err = -ENOMEM;
-   574			goto err_fd;
-   575		}
-   576	
-   577		/* __fput() will take care of fops_put(). */
-   578		if (!fops_get(&kvm_gmem_fops)) {
-   579			err = -ENOENT;
-   580			goto err_gmem;
-   581		}
-   582	
-   583		inode = anon_inode_make_secure_inode(kvm_gmem_mnt->mnt_sb, name, NULL);
-   584		if (IS_ERR(inode)) {
-   585			err = PTR_ERR(inode);
-   586			goto err_fops;
-   587		}
-   588	
-   589		inode->i_op = &kvm_gmem_iops;
-   590		inode->i_mapping->a_ops = &kvm_gmem_aops;
-   591		inode->i_mode |= S_IFREG;
-   592		inode->i_size = size;
-   593		mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
-   594		mapping_set_inaccessible(inode->i_mapping);
-   595		/* Unmovable mappings are supposed to be marked unevictable as well. */
-   596		WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
-   597	
-   598		GMEM_I(inode)->flags = flags;
-   599	
-   600		if (IS_ENABLED(CONFIG_NUMA) && (flags & GUEST_MEMFD_FLAG_BIND_NODE)) {
-   601			struct mempolicy *pol;
-   602	
-   603			/*
-   604			 * Bind every folio (host- and guest-faulted) to @node by
-   605			 * installing a private bind on the inode's shared policy.  The
-   606			 * policy is inserted verbatim so an MPOL_F_PRIVATE node is not
-   607			 * dropped, unlike the mbind() path which requires the node to
-   608			 * opt into CAP_MEMPOLICY.
-   609			 */
- > 610			pol = mpol_private_bind(node);
-   611			if (IS_ERR(pol)) {
-   612				err = PTR_ERR(pol);
-   613				goto err_inode;
-   614			}
- > 615			err = mpol_set_shared_policy_all(&GMEM_I(inode)->policy, pol);
-   616			mpol_put(pol);
-   617			if (err)
-   618				goto err_inode;
-   619		}
-   620	
-   621		file = alloc_file_pseudo(inode, kvm_gmem_mnt, name, O_RDWR, &kvm_gmem_fops);
-   622		if (IS_ERR(file)) {
-   623			err = PTR_ERR(file);
-   624			goto err_inode;
-   625		}
-   626	
-   627		file->f_flags |= O_LARGEFILE;
-   628		file->private_data = f;
-   629	
-   630		kvm_get_kvm(kvm);
-   631		f->kvm = kvm;
-   632		xa_init(&f->bindings);
-   633		list_add(&f->entry, &GMEM_I(inode)->gmem_file_list);
-   634	
-   635		fd_install(fd, file);
-   636		return fd;
-   637	
-   638	err_inode:
-   639		iput(inode);
-   640	err_fops:
-   641		fops_put(&kvm_gmem_fops);
-   642	err_gmem:
-   643		kfree(f);
-   644	err_fd:
-   645		put_unused_fd(fd);
-   646		return err;
-   647	}
-   648	
+Yep, saw that.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> > That is, I think this drm_exec_until_all_locked() thing has some
+> > fundamental problems the moment clang fails to optimize it away.
+> > Correctness really depends on the compiler not actually ever doing a
+> > computed goto.
+> 
+> Mhm, that's not good at all but I also of hand don't see a way to
+> avoid the computed goto.
+
+Best I can come up with is something like this. Not exactly nice, but
+should be fairly trivial to do.
+
+---
+diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/drm/tests/drm_exec_test.c
+index 2fc47f3b463b..7d69c06b2dd3 100644
+--- a/drivers/gpu/drm/tests/drm_exec_test.c
++++ b/drivers/gpu/drm/tests/drm_exec_test.c
+@@ -60,6 +60,7 @@ static void test_lock(struct kunit *test)
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+ 	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
+ 		ret = drm_exec_lock_obj(&exec, &gobj);
+ 		drm_exec_retry_on_contention(&exec);
+ 		KUNIT_EXPECT_EQ(test, ret, 0);
+@@ -80,6 +81,7 @@ static void test_lock_unlock(struct kunit *test)
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+ 	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
+ 		ret = drm_exec_lock_obj(&exec, &gobj);
+ 		drm_exec_retry_on_contention(&exec);
+ 		KUNIT_EXPECT_EQ(test, ret, 0);
+@@ -107,6 +109,7 @@ static void test_duplicates(struct kunit *test)
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_IGNORE_DUPLICATES, 0);
+ 	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
+ 		ret = drm_exec_lock_obj(&exec, &gobj);
+ 		drm_exec_retry_on_contention(&exec);
+ 		KUNIT_EXPECT_EQ(test, ret, 0);
+@@ -134,6 +137,7 @@ static void test_prepare(struct kunit *test)
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+ 	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
+ 		ret = drm_exec_prepare_obj(&exec, &gobj, 1);
+ 		drm_exec_retry_on_contention(&exec);
+ 		KUNIT_EXPECT_EQ(test, ret, 0);
+@@ -166,9 +170,10 @@ static void test_prepare_array(struct kunit *test)
+ 	drm_gem_private_object_init(priv->drm, gobj2, PAGE_SIZE);
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+-	drm_exec_until_all_locked(&exec)
+-		ret = drm_exec_prepare_array(&exec, array, ARRAY_SIZE(array),
+-					     1);
++	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
++		ret = drm_exec_prepare_array(&exec, array, ARRAY_SIZE(array), 1);
++	}
+ 	KUNIT_EXPECT_EQ(test, ret, 0);
+ 	drm_exec_fini(&exec);
+ 
+@@ -181,15 +186,15 @@ static void test_multiple_loops(struct kunit *test)
+ 	struct drm_exec exec;
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+-	drm_exec_until_all_locked(&exec)
+-	{
++	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
+ 		break;
+ 	}
+ 	drm_exec_fini(&exec);
+ 
+ 	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+-	drm_exec_until_all_locked(&exec)
+-	{
++	drm_exec_until_all_locked(&exec) {
++drm_exec_label:
+ 		break;
+ 	}
+ 	drm_exec_fini(&exec);
+diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+index 8725ba92ff91..f2bfa6aa7b7b 100644
+--- a/include/drm/drm_exec.h
++++ b/include/drm/drm_exec.h
+@@ -101,17 +101,6 @@ drm_exec_obj(struct drm_exec *exec, unsigned long index)
+ #define drm_exec_for_each_locked_object_reverse(exec, obj)		\
+ 	__drm_exec_for_each_locked_object_reverse(exec, obj, __UNIQUE_ID(drm_exec))
+ 
+-/*
+- * Helper to drm_exec_until_all_locked(). Don't use directly.
+- *
+- * Since labels can't be defined local to the loop's body we use a jump pointer
+- * to make sure that the retry is only used from within the loop's body.
+- */
+-#define __drm_exec_until_all_locked(exec, _label)			 \
+-_label:									 \
+-	for (void *const __maybe_unused __drm_exec_retry_ptr = &&_label; \
+-	     drm_exec_cleanup(exec);)
+-
+ /**
+  * drm_exec_until_all_locked - loop until all GEM objects are locked
+  * @exec: drm_exec object
+@@ -121,7 +110,18 @@ _label:									 \
+  * guaranteed that no GEM object is locked.
+  */
+ #define drm_exec_until_all_locked(exec)					\
+-	__drm_exec_until_all_locked(exec, __UNIQUE_ID(drm_exec))
++	while (drm_exec_cleanup(exec))
++
++#define drm_exec_label							\
++	__label__ __drm_exec_retry;					\
++	__label__ __drm_foo;						\
++	if (0) {							\
++	__drm_exec_retry: __maybe_unused;				\
++		continue;						\
++		goto __drm_foo;						\
++	}								\
++	__drm_foo
++
+ 
+ /**
+  * drm_exec_retry_on_contention - restart the loop to grap all locks
+@@ -133,7 +133,7 @@ _label:									 \
+ #define drm_exec_retry_on_contention(exec)			\
+ 	do {							\
+ 		if (unlikely(drm_exec_is_contended(exec)))	\
+-			goto *__drm_exec_retry_ptr;		\
++			goto __drm_exec_retry;			\
+ 	} while (0)
+ 
+ /**
+@@ -158,7 +158,7 @@ static inline bool drm_exec_is_contended(struct drm_exec *exec)
+ #define drm_exec_retry(_exec)					\
+ 	do {							\
+ 		WARN_ON((_exec)->contended != DRM_EXEC_DUMMY);	\
+-		goto *__drm_exec_retry_ptr;			\
++		goto __drm_exec_retry;				\
+ 	} while (0)
+ 
+ /**
