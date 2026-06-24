@@ -1,81 +1,148 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A3826A0B9;
-	Wed, 24 Jun 2026 15:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2AC3DB30A;
+	Wed, 24 Jun 2026 15:58:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782316252; cv=none; b=JguZEAN8TtI92/Ce4APzPuoXNOyzFu8qbBGQW40szIvmEUvqtJmfdQ2AuDNw+2wPoQ+cHqfpZ1Z6iZB8QUYSSyhuC+Sxsx6DDS6OnW8sCePWJMqy2EXtlOn+Nkj9vPR7J70Cl+nemrP5ezNLWNsNvhBApSy5PNmqBNVvVX7qtxc=
+	t=1782316735; cv=none; b=nneumNvJoSjcP55nM4GFhnqo10RBm2YW7vvfhrOugNsubkFLK+8wRH7/HcmN8IM+dp6J1zNnlHymbRtGdhFnQvuB/zMR11RMyzoiWTm2PJ7maN7ZREG3ppOaKaj+kRvnk7IOU6ENrcDu23nj1CFSohvuq8yYUysGzLTDPJLX5LQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782316252; c=relaxed/simple;
-	bh=uQtzTJ6URDqpjagy1a7OXpydALicjh7xI3FPLQtdz6E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FxTu+1LE+/lizjqzBYkEVf3ZwauHWs6Px5YcwNdHYIxMtW7HElZbtUVtVN7uJ848/TGXRKsNIg15+3brnDF4rR0WdabIInpgojZfIkIZwwwL81llsV7ZCfNLAUBm73CbHJUCrMGmxCoAVslJjaQ/wdTqE9z8RF8EydeLX95RWtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=nVZynwdc; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1782316735; c=relaxed/simple;
+	bh=zCE016P94eYVlGiOfH2JxMVTtg70JKE/XyDtX/VaqDs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rb+y+79fnCdzjpolzku0WRSepg8bnAjABqi7o8/QbRf2eX9JdMAQN/muAUQMv+EDmV8HD4klw0/yjTjdY7J7eYlHnreV0lTjfmN/FkTiF5yfUzxos4p5ntOznzjsFvF6vXlXNBDTsj1EXKMrSvdYykks1C6c0JGGbfkcCIrfo8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UMhA2KSt; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="nVZynwdc"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7pRlBLyW0rZ9a8pbzBcOWWJR3Cglg/eninZwUlynwgk=; b=nVZynwdcx5kKz0BZiDTzoFN+8W
-	qam37WbJaU26Mi0zC7cLhqAd/2HT/VoKM3IlJ5RDzTke7Aj7UQhJqMSqdiTSPTR6diY9EcPXcA0X9
-	7QlU4W206TL/k7iipxTFTab7WudMlJOoFsTqoBOxXehVAHlhLjfB9Ll9MALNOnoycloeHramf1bd5
-	M9Q78G2yED5HKOmsx/nuKbmczZ8Cekh+mZLhIGVRN57ln7cDL1Jn47UNWokk0x+SPDUb8uK8ksa+a
-	ePqIhlG36LdDVu3lGQ3rrTgQRCdg24ZqRj2RW5O+QAXUcnJOm43sgymznmSAYJ9EryVUzwzXmKyo+
-	8RvvlLAA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wcPru-002X68-31;
-	Wed, 24 Jun 2026 15:50:27 +0000
-Date: Wed, 24 Jun 2026 08:50:20 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, 
-	kernel-team@meta.com
-Subject: Re: [PATCH v6 6/8] Documentation: bootconfig: document build-time
- cmdline rendering
-Message-ID: <ajv8puUv7wE7raef@gmail.com>
-References: <20260623-bootconfig_using_tools-v6-0-640c2f587a3c@debian.org>
- <20260623-bootconfig_using_tools-v6-6-640c2f587a3c@debian.org>
- <20260624174737.a4862dcd86f3d746b788d197@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UMhA2KSt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782316734; x=1813852734;
+  h=date:from:to:cc:subject:message-id;
+  bh=zCE016P94eYVlGiOfH2JxMVTtg70JKE/XyDtX/VaqDs=;
+  b=UMhA2KSt5ILoulNAIVmGz6w78zF1fprjFPF6LV2A6MaTteAX5P0YLXRM
+   Aiku0ZwEApf88pgyKoJ+nFDZHm1/ZrQtre25U4sVCqZPSocuC3dJez171
+   g2CXX1KAqDhY03dS/EVYxW7PScsz+Z7XKTYKJA1aXN1lopPT3gwCfOF4f
+   YANvzW8zNYgFxzvIZoi6oGO9vBVZVDC8sEkYWq8L1aBrXhJQ/1cNDzfbo
+   E7eKjK29a2G3qxNps9mwFYJQd2qpOM1Qyp/zUeuCHbe2uy3lKMm7suSkz
+   Yu/v9pkZLHVzHCOexmLfAAfgoi/82Xignz5wc40I8ayeGsY0Yy5rtY2Pe
+   A==;
+X-CSE-ConnectionGUID: cNL2OEdbSl2t20bKLQqVlQ==
+X-CSE-MsgGUID: DORTufsKRweXvN5PobV2Aw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="94479462"
+X-IronPort-AV: E=Sophos;i="6.24,222,1774335600"; 
+   d="scan'208";a="94479462"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 08:58:53 -0700
+X-CSE-ConnectionGUID: mSRdpW/2T8ueDqwS5mkncQ==
+X-CSE-MsgGUID: LfKV9xy1TzeTC6nDUchRrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,222,1774335600"; 
+   d="scan'208";a="254858057"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 24 Jun 2026 08:58:53 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wcQ01-000000003Sr-2277;
+	Wed, 24 Jun 2026 15:58:49 +0000
+Date: Wed, 24 Jun 2026 23:58:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-19 260/326]
+ sound/soc/mediatek/mt6797/mt6797-mt6351.c:219:6: warning: variable 'ret' is
+ used uninitialized whenever 'if' condition is false
+Message-ID: <202606242358.Yfb71Aj5-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260624174737.a4862dcd86f3d746b788d197@kernel.org>
-X-Debian-User: leitao
 
-On Wed, Jun 24, 2026 at 05:47:37PM +0900, Masami Hiramatsu wrote:
-> On Tue, 23 Jun 2026 09:15:33 -0700
-> >
-> > +The option requires ``CONFIG_BOOT_CONFIG_EMBED=y``, a non-empty
-> > +``CONFIG_BOOT_CONFIG_EMBED_FILE``, and an architecture that selects
-> > +``CONFIG_ARCH_SUPPORTS_CMDLINE_FROM_BOOTCONFIG``. Currently only x86
-> > +selects it; on other architectures the embedded bootconfig still works,
-> > +but only through the late runtime parser.
-> 
-> As commented by Sashiko, here we need to mention that this option requires
-> CONFIG_CMDLINE to be empty. This means user can NOT set both option
-> at once (This also means user doesn't have to worry about configuration
-> conflicts.)
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-19
+head:   885feafb1fe92b67450ae8ac4996368e3a6dd242
+commit: ea64c228b8dadefdf4c174a71a6e57820da75c6c [260/326] ASoC: mediatek: mt6797-mt6351: use snd_soc_card_register()
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260624/202606242358.Yfb71Aj5-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606242358.Yfb71Aj5-lkp@intel.com/reproduce)
 
-Ack! I will update.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606242358.Yfb71Aj5-lkp@intel.com/
 
---breno
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/mediatek/mt6797/mt6797-mt6351.c:219:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+     219 |         if (!card)
+         |             ^~~~~
+   sound/soc/mediatek/mt6797/mt6797-mt6351.c:222:6: note: uninitialized use occurs here
+     222 |         if (ret)
+         |             ^~~
+   sound/soc/mediatek/mt6797/mt6797-mt6351.c:219:2: note: remove the 'if' if its condition is always true
+     219 |         if (!card)
+         |         ^~~~~~~~~~
+     220 |                 ret = -ENOMEM;
+   sound/soc/mediatek/mt6797/mt6797-mt6351.c:190:9: note: initialize the variable 'ret' to silence this warning
+     190 |         int ret, i;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +219 sound/soc/mediatek/mt6797/mt6797-mt6351.c
+
+   183	
+   184	static int mt6797_mt6351_dev_probe(struct platform_device *pdev)
+   185	{
+   186		struct snd_soc_card *card;
+   187		struct snd_soc_card_driver *card_driver = &mt6797_mt6351_card_driver;
+   188		struct device_node *platform_node, *codec_node;
+   189		struct snd_soc_dai_link *dai_link;
+   190		int ret, i;
+   191	
+   192		platform_node = of_parse_phandle(pdev->dev.of_node,
+   193						 "mediatek,platform", 0);
+   194		if (!platform_node) {
+   195			dev_err(&pdev->dev, "Property 'platform' missing or invalid\n");
+   196			return -EINVAL;
+   197		}
+   198		for_each_card_driver_prelinks(card_driver, i, dai_link) {
+   199			if (dai_link->platforms->name)
+   200				continue;
+   201			dai_link->platforms->of_node = platform_node;
+   202		}
+   203	
+   204		codec_node = of_parse_phandle(pdev->dev.of_node,
+   205					      "mediatek,audio-codec", 0);
+   206		if (!codec_node) {
+   207			dev_err(&pdev->dev,
+   208				"Property 'audio-codec' missing or invalid\n");
+   209			ret = -EINVAL;
+   210			goto put_platform_node;
+   211		}
+   212		for_each_card_driver_prelinks(card_driver, i, dai_link) {
+   213			if (dai_link->codecs->name)
+   214				continue;
+   215			dai_link->codecs->of_node = codec_node;
+   216		}
+   217	
+   218		card = devm_snd_soc_card_register(&pdev->dev, card_driver);
+ > 219		if (!card)
+   220			ret = -ENOMEM;
+   221	
+   222		if (ret)
+   223			dev_err(&pdev->dev, "%s snd_soc_card_register() fail %d\n",
+   224				__func__, ret);
+   225	
+   226		of_node_put(codec_node);
+   227	put_platform_node:
+   228		of_node_put(platform_node);
+   229		return ret;
+   230	}
+   231	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
