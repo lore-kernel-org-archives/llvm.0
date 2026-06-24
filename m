@@ -1,264 +1,139 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A743C13F5
-	for <llvm@lists.linux.dev>; Wed, 24 Jun 2026 14:23:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFBE3B388E;
+	Wed, 24 Jun 2026 14:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782311011; cv=none; b=NMYyWvrVAuY00Ybg86tIgO9+Gk55A7ruXBvnDRiLNicDV3CqhyFjO7CcCo2OG2oAkz1nnih4Q5Rnme4EbeC6tIHFEzkmRzBigwNF58H1vwhaiip6RwWTYCGPU0GRq0TKDZS5Xea2EdkEm0AVLlqpBfQEQEENuIKKJJj8FTeKcE8=
+	t=1782311143; cv=none; b=j6XjI92BLP1SP/LeVlOESSRzRdYh1ueUdl9kTspD3Jdr/Uu0THcSxAz3vC2Sx9RVEyxZDWhODI0MmXg0bQwzcVLw39J2a0ZqiMyMMT4sg68fZV0LhyrpHZHPs1uYyEAR2QKwRZeOmIS3q8a8pPl+pZ+XOvHnUpxSSF9Puk4bPGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782311011; c=relaxed/simple;
-	bh=ANcnDbJl1GrE6afhpUmaNktn53Zw0TE+IUnQR7Lyflk=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UZe0F+CEM0Y+FcHXOnXA1y8Bbjw1BQRnTBQ77X5SUt5miWe/2UFu2z+MZboMk9NsMLfCO8JYbth9xgUrgBIB0+X1MdKy5UxIITLZ8XQBU61SIV+Opda4BLb4fxPsL1CrVGS24uiXZGJmabfAgXc4KMNnRswyqq5TgSsSO9nX0iE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SPPsldMu; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782311143; c=relaxed/simple;
+	bh=Fq+mm9iluQG3S6HFbziaUdfngU2xQGn3UBVIEkk97wk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=P7W7b6fMKugYDIvLw7mXH+65SM/18fA8Dcg8Yi9xkCVoHQbifTcjOzNLWNlVoaEDb012H28rmW0g6khUgfvOGNAV72Xri2f0olinEoJZeISh/P+wo02nPAuPFIuPXGDcUUdJu7tgd0lPBSo7dDcXEQrcSrHhmbmdW8faZfA/RIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dV9+u9Xv; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SPPsldMu"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4631679f204so1146818f8f.0
-        for <llvm@lists.linux.dev>; Wed, 24 Jun 2026 07:23:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782311007; x=1782915807; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Per6MI6n5CBZ4jce2Yah0coKW3mXxHCaIKwWKmwmsgQ=;
-        b=SPPsldMuVWaGiF050fuVxnnw33dWV70IYrgCZj18IVzqBIrp8NOeZvf04oY5AH9Tot
-         /z0JKFPHgCBN5LaLKr5NKLy3RnTpqQlf0Pk/sQ9zadUDLE2qJ2WNSZAQqMhjVBCBrHf2
-         /5GZHDEwehEsFg71weD67uRigMLpV++JUQf8Gw8J2ENwz20CA2n22cKefKMp2gydgpMK
-         j0rT8J34zRRj75fz2WbQfpOqUo3xfCy+/H0mbLVFfHawVcOL++u3i7hQ/0odTxUbXgjm
-         5JcgTGPoUw+I7Pj1Vc/atynXzepOiuWUX3viQuXZSGEw765ta2oGHqexNSTTgBid+rHl
-         610A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782311007; x=1782915807;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Per6MI6n5CBZ4jce2Yah0coKW3mXxHCaIKwWKmwmsgQ=;
-        b=nPEJ9UuFKkGVK3YY+KkVaSdQgX1KQZo9X7oq8yoJQRKd5ES1P7qpO5xPb1SsH+j7cR
-         oAhFCz4aGj/fAab+Xk107MNqv/GD2U3+lZCNmb6yaX/VkxQDsCyIycMXzlF9lr84BFti
-         6BS9qGd+efbyeyazb0OXxDij3kJkIj4U4mDYG0JYQve4piGA3jdAd+gkg3WNHcUiatal
-         IW5UXm5HrhS+m01jhW0r6QbiPstWGk+tLg/LJ4D2Cp4oDqNONedHH2lv6m3Um4E0waUz
-         2yWvUAKsaR0x2BVUqM4/ZvEdfMG2Aq6OJogBGnoLqDpShBdnzU512MiY1KXeAYyVMBxQ
-         sAKw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp6qcSHupi6r6ryGhmcriRXaV7cuhes9BLIEy7paB8GilpUI1d37kmz4fkPMyqieWl/dKqw@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywc5UxtzvH0ozQTvmAptovnuqJkEFrxLiPePEzi3hMvHakRCqZj
-	5kt65jBK1mz8N+pWkMrdqE2oo6+lqUxj4a4hnQpdQ6PDR7Ye+XJtePFZ
-X-Gm-Gg: AfdE7cn6HpNGz1lZSYluV04ewZ44OyqcU8l43il7p85o5tHUqCwdvo4V3GFSXvLQ91N
-	U6IYkaZGyqisBzddxnOBFnuUXgo/yZyEgDD+kRZnjKQ6c7rT9lSf+3Jx46L80OBkIE9nLwmn3TL
-	uLOPTpRR0gv71Er8DryF2zmlEN5sdJEIT4pcTeLUKymHj+jHve95XXXIMbPrT7jpsxQxwebGW3V
-	OjFwSlPfTiv+UY4rVnLz722jBNmD7jTZwREqXOr5aeFDiCBeBEKC/S59gLZuFv86dTwnCluoyvu
-	nCRKVI0Eo/bebcR4rKtKoFKbiP0pXR9Jdq+XR6hgxtXMZ0fqNbd5iR7WPYn9wT2jSJ2b3pPfpsy
-	os6+HmZBSfjv35yF6hZUC/Hv6q31X7Z7W4IPMO8COzeqJtgKxiW1B1cPSdegvwArkpBCzE5FY0s
-	+51oCK93pVNoUaPMcjOj9fgKm1LiN7rBFUFEGEtJD8b3j75iaQsQ==
-X-Received: by 2002:a05:6000:471a:b0:460:2e53:a6f6 with SMTP id ffacd0b85a97d-46d04583b35mr1261972f8f.12.1782311006854;
-        Wed, 24 Jun 2026 07:23:26 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-46c221d9405sm8183744f8f.22.2026.06.24.07.23.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Jun 2026 07:23:26 -0700 (PDT)
-Date: Wed, 24 Jun 2026 15:23:24 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>
-Cc: Kaitao Cheng <kaitao.cheng@linux.dev>, Andrew Morton
- <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, Jens
- Axboe <axboe@kernel.dk>, Tejun Heo <tj@kernel.org>, Alexander Viro
- <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
- <namhyung@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Juri Lelli
- <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, Paul
- Moore <paul@paul-moore.com>, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, "Paul E. McKenney"
- <paulmck@kernel.org>, Shakeel Butt <shakeel.butt@linux.dev>, David Howells
- <dhowells@redhat.com>, Simona Vetter <simona.vetter@ffwll.ch>, Randy Dunlap
- <rdunlap@infradead.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, Philipp
- Stanner <phasta@kernel.org>, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-ntfs-dev@lists.sourceforge.net, linux-fsdevel@vger.kernel.org,
- io-uring@vger.kernel.org, audit@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- kexec@lists.infradead.org, live-patching@vger.kernel.org,
- linux-modules@vger.kernel.org, linux-crypto@vger.kernel.org,
- linux-pm@vger.kernel.org, rcu@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-mm@kvack.org, virtualization@lists.linux.dev, damon@lists.linux.dev,
- llvm@lists.linux.dev, Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: Re: [PATCH v3 1/7] list: Add mutable iterator variants
-Message-ID: <20260624152324.3def88ce@pumpkin>
-In-Reply-To: <cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
-References: <20260622040533.29824-1-kaitao.cheng@linux.dev>
-	<20260622040533.29824-2-kaitao.cheng@linux.dev>
-	<20260622094242.64531b9a@pumpkin>
-	<351a6b67-b394-4c58-aee2-88b6c8089ad5@linux.dev>
-	<cf8467c7-b98f-44a5-9cf9-60b43b5da711@amd.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dV9+u9Xv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782311141; x=1813847141;
+  h=date:from:to:cc:subject:message-id;
+  bh=Fq+mm9iluQG3S6HFbziaUdfngU2xQGn3UBVIEkk97wk=;
+  b=dV9+u9Xva2opr3I4yEwOh76wbflDGZjqnFWdT+C0fzbGRfUL5PZl/Ayo
+   LGG5pBz2Zqn4OWmmyG7aHpNK0HOJThaiUNc4gXKFfQsQeG5qOegFI7GUd
+   GOeyZDe+fSkvgEcYhXTjVc+WQMgyjEgBcE5bzcJscYQ1XAjsr9+gnyTSU
+   seoXMJs+CYxCjBCkMOEb/fhHAYCbvrJFJ4sOkhMQG9rXWw54UKe8p8oEq
+   SPlwO5US1+o5jOvBgvh0iQhBQwLsdoxpjIFnGYsYtR9Ek2mWSnxfOEece
+   1juT7JJvJ44NY9FIwGZCl3KxnOyyAK1USYenQ6yI9LT0uz2r9BWz3sr3+
+   Q==;
+X-CSE-ConnectionGUID: PufNVxOxQPCWHfLytTd+vg==
+X-CSE-MsgGUID: Neq7ZAzcQWGP2cUTUC6ihg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11826"; a="83074973"
+X-IronPort-AV: E=Sophos;i="6.24,222,1774335600"; 
+   d="scan'208";a="83074973"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 07:25:40 -0700
+X-CSE-ConnectionGUID: 09W6dxfZQviyXknIUk0Z7w==
+X-CSE-MsgGUID: U6kNOhi1S5SLPMbiLHhJGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,222,1774335600"; 
+   d="scan'208";a="245789779"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 24 Jun 2026 07:25:38 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wcOXh-000000003Pl-1wxy;
+	Wed, 24 Jun 2026 14:25:31 +0000
+Date: Wed, 24 Jun 2026 22:24:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-19 259/326]
+ sound/soc/mediatek/mt2701/mt2701-hdmi.c:88:6: warning: variable 'ret' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202606242257.fqQb06ux-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, 24 Jun 2026 15:23:47 +0200
-Christian K=C3=B6nig <christian.koenig@amd.com> wrote:
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-19
+head:   885feafb1fe92b67450ae8ac4996368e3a6dd242
+commit: 406e3cf2881a82be44aa8ddb60795faf672bd453 [259/326] ASoC: mediatek: mt2701-hdmi: use snd_soc_card_register()
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260624/202606242257.fqQb06ux-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project a9b492db3d50683e446cd1a5c9ffaf4e92cb77a7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260624/202606242257.fqQb06ux-lkp@intel.com/reproduce)
 
-> On 6/24/26 15:14, Kaitao Cheng wrote:
-> >=20
-> >=20
-> > =E5=9C=A8 2026/6/22 16:42, David Laight =E5=86=99=E9=81=93: =20
-> >> On Mon, 22 Jun 2026 12:05:31 +0800
-> >> Kaitao Cheng <kaitao.cheng@linux.dev> wrote:
-> >> =20
-> >>> From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >>>
-> >>> The list_for_each*_safe() helpers are used when the loop body may
-> >>> remove the current entry.  Their API exposes the temporary cursor at
-> >>> every call site, even though most users only need it for the iterator
-> >>> implementation and never reference it in the loop body.
-> >>>
-> >>> Add *_mutable() variants for list and hlist iteration.  The new helpe=
-rs
-> >>> support both forms: callers may keep passing an explicit temporary cu=
-rsor
-> >>> when they need to inspect or reset it, or omit it and let the helper =
-use
-> >>> a unique internal cursor. =20
-> >>
-> >> I'm not really sure 'mutable' means anything either.
-> >> It is possible to make it valid for the loop body (or even other threa=
-ds)
-> >> to delete arbitrary list items - but that needs significant extra over=
-heads.
-> >>
-> >> It might be worth doing something that doesn't need the extra variable,
-> >> but there is little point doing all the churn just to rename things.
-> >> =20
-> >>>
-> >>> This makes call sites that only mutate the list through the current e=
-ntry
-> >>> less noisy, while keeping the existing *_safe() helpers available for
-> >>> compatibility.
-> >>>
-> >>> Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
-> >>> ---
-> >>>  include/linux/list.h | 269 +++++++++++++++++++++++++++++++++++++----=
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606242257.fqQb06ux-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/mediatek/mt2701/mt2701-hdmi.c:88:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+      88 |         if (!card)
+         |             ^~~~~
+   sound/soc/mediatek/mt2701/mt2701-hdmi.c:93:9: note: uninitialized use occurs here
+      93 |         return ret;
+         |                ^~~
+   sound/soc/mediatek/mt2701/mt2701-hdmi.c:88:2: note: remove the 'if' if its condition is always true
+      88 |         if (!card)
+         |         ^~~~~~~~~~
+      89 |                 ret = -ENOMEM;
+   sound/soc/mediatek/mt2701/mt2701-hdmi.c:65:9: note: initialize the variable 'ret' to silence this warning
+      65 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +88 sound/soc/mediatek/mt2701/mt2701-hdmi.c
+
+    56	
+    57	static int mt2701_hdmi_machine_probe(struct platform_device *pdev)
+    58	{
+    59		struct snd_soc_card *card;
+    60		struct snd_soc_card_driver *card_driver = &mt2701_hdmi_card_driver;
+    61		struct device *dev = &pdev->dev;
+    62		struct device_node *platform_node;
+    63		struct device_node *codec_node;
+    64		struct snd_soc_dai_link *dai_link;
+    65		int ret;
+    66		int i;
+    67	
+    68		platform_node = of_parse_phandle(dev->of_node, "mediatek,platform", 0);
+    69		if (!platform_node)
+    70			return dev_err_probe(dev, -EINVAL,
+    71					     "Property 'mediatek,platform' missing\n");
+    72	
+    73		for_each_card_driver_prelinks(card_driver, i, dai_link) {
+    74			if (dai_link->platforms->name)
+    75				continue;
+    76			dai_link->platforms->of_node = platform_node;
+    77		}
+    78	
+    79		codec_node = of_parse_phandle(dev->of_node, "mediatek,audio-codec", 0);
+    80		if (!codec_node) {
+    81			of_node_put(platform_node);
+    82			return dev_err_probe(dev, -EINVAL,
+    83					     "Property 'mediatek,audio-codec' missing\n");
+    84		}
+    85		mt2701_hdmi_dai_links[DAI_LINK_BE_HDMI_I2S].codecs->of_node = codec_node;
+    86	
+    87		card = devm_snd_soc_card_register(dev, card_driver);
+  > 88		if (!card)
+    89			ret = -ENOMEM;
+    90	
+    91		of_node_put(platform_node);
+    92		of_node_put(codec_node);
+    93		return ret;
+    94	}
+    95	
+
 --
-> >>>  1 file changed, 231 insertions(+), 38 deletions(-)
-> >>>
-> >>> diff --git a/include/linux/list.h b/include/linux/list.h
-> >>> index 09d979976b3b..1081def7cea9 100644
-> >>> --- a/include/linux/list.h
-> >>> +++ b/include/linux/list.h
-> >>> @@ -7,6 +7,7 @@
-> >>>  #include <linux/stddef.h>
-> >>>  #include <linux/poison.h>
-> >>>  #include <linux/const.h>
-> >>> +#include <linux/args.h>
-> >>> =20
-> >>>  #include <asm/barrier.h>
-> >>> =20
-> >>> @@ -763,28 +764,72 @@ static inline void list_splice_tail_init(struct=
- list_head *list,
-> >>>  #define list_for_each_prev(pos, head) \
-> >>>  	for (pos =3D (head)->prev; !list_is_head(pos, (head)); pos =3D pos-=
->prev)
-> >>> =20
-> >>> -/**
-> >>> - * list_for_each_safe - iterate over a list safe against removal of =
-list entry
-> >>> - * @pos:	the &struct list_head to use as a loop cursor.
-> >>> - * @n:		another &struct list_head to use as temporary storage
-> >>> - * @head:	the head for your list.
-> >>> +/*
-> >>> + * list_for_each_safe is an old interface, use list_for_each_mutable=
- instead.
-> >>>   */
-> >>>  #define list_for_each_safe(pos, n, head) \
-> >>>  	for (pos =3D (head)->next, n =3D pos->next; \
-> >>>  	     !list_is_head(pos, (head)); \
-> >>>  	     pos =3D n, n =3D pos->next)
-> >>> =20
-> >>> +#define __list_for_each_mutable_internal(pos, tmp, head)		\
-> >>> +	for (typeof(pos) tmp =3D (pos =3D (head)->next)->next;		\ =20
-> >>
-> >> Use auto
-> >> =20
-> >>> +	     !list_is_head(pos, (head));				\
-> >>> +	     pos =3D tmp, tmp =3D pos->next)
-> >>> +
-> >>> +#define __list_for_each_mutable1(pos, head)				\
-> >>> +	__list_for_each_mutable_internal(pos, __UNIQUE_ID(next), head)
-> >>> +
-> >>> +#define __list_for_each_mutable2(pos, next, head)			\
-> >>> +	list_for_each_safe(pos, next, head)
-> >>> +
-> >>>  /**
-> >>> - * list_for_each_prev_safe - iterate over a list backwards safe agai=
-nst removal of list entry
-> >>> + * list_for_each_mutable - iterate over a list safe against entry re=
-moval
-> >>>   * @pos:	the &struct list_head to use as a loop cursor.
-> >>> - * @n:		another &struct list_head to use as temporary storage
-> >>> - * @head:	the head for your list.
-> >>> + * @...:	either (head) or (next, head)
-> >>> + *
-> >>> + * next:	another &struct list_head to use as optional temporary stor=
-age.
-> >>> + *		The temporary cursor is internal unless explicitly supplied by
-> >>> + *		the caller.
-> >>> + * head:	the head for your list.
-> >>> + */
-> >>> +#define list_for_each_mutable(pos, ...)					\
-> >>> +	CONCATENATE(__list_for_each_mutable, COUNT_ARGS(__VA_ARGS__))	\
-> >>> +		(pos, __VA_ARGS__) =20
-> >>
-> >> The variable argument count logic really just slows down compilation.
-> >> Maybe there aren't enough copies of this code to make that significant.
-> >> But just because you can do it doesn't mean it is a gooD idea.
-> >> I'm also not sure it really adds anything to the readability.
-> >>
-> >> And, it you are going to make the middle argument optional there is
-> >> no need to change the macro name. =20
-> >=20
-> > Christian K=C3=B6nig and Jani Nikula also disagree with the variadic-ar=
-gument
-> > implementation approach. If we abandon that method, it means we will
-> > inevitably need to add some new macros. If mutable is not a good name,
-> > suggestions for better alternatives would be welcome; coming up with a
-> > suitable name is indeed rather tricky. =20
->=20
-> I don't think you need to add a new macro for the specific use case that =
-people want to modify the next element of the iteration.
->=20
-> If I remember your numbers correctly that is a really corner case and kee=
-ping using the existing *_safe() macros for that sounds perfectly fine to m=
-e.
-
-IIRC currently you have a choice of either:
-	define               Item that can't be deleted
-	list_for_each()	     The current item.
-	list_for_each_safe() The next item.
-There is also likely to be code that updates the variables to allow
-for other scenarios.
-
-Note that if increase a reference count and release a lock then list_for_ea=
-ch()
-is likely safer than list_for_each_safe() :-)
-
-list.h has 9 variants of the 'safe' loop.
-The bloat of another 9 is getting excessive.
-
-It has to be said that this is one of my least favourite type of list...
-
-	David
-
->=20
-> Regards,
-> Christian.
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
