@@ -1,65 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08B38382F17;
-	Thu, 25 Jun 2026 05:46:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3957E3C1092;
+	Thu, 25 Jun 2026 06:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782366381; cv=none; b=qdjBrIXKImeNmtaZ7tFMSdCCLhWxv87upVEhGQBioQBbux8/OeDIE/vuY2at2lrv236sZMI6yx2Eol26cPBA8PQifZSlgZduqX2AoqJAVf/JV7ob9IT+YxeJmYwCVIK/8FG1KJI7yTt6BLUceBvAqZhG2ewmZtbvNxJ22lrCVC4=
+	t=1782370284; cv=none; b=Pb8HAX0W9GXrpRum8h8b7+HHhp8V+RiD8ArL1JXo+iNDMTvMUpywEpkLFIUzfKVAx5ZflxHcSMsBXazyoM7INWydXyUlRozkHDeQ0614pjXJ7dN7nb+nnYAMhUWsF1egp2sZRcw2FCG0ZMBlCEjL7PQh7rjNHnxOJXa6ES8ubyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782366381; c=relaxed/simple;
-	bh=0xMLENcuy5XK64XhlRj6nQreCLFTSuOzxNb7Pm80sPE=;
+	s=arc-20240116; t=1782370284; c=relaxed/simple;
+	bh=JRevYpKLu+UkOXzSPW6dPV1skR2NA7ozHN2uxP8d7qI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FYy8j/IBqVrTaiR+mjgcJPJyTZderZ8WFcaHgKKX2zW0PVjRq+BifiL8AHRuTL9zpZh8Rh11pa0Ur5tACT/XCSrEfmIhgF6/+R68pcnyO0nq85Wv6wwEXU74ts6eHi4kxNaUTBf4aTORCkcqCXM+kwPADHl5iyXmaDOXAScZk3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UJ2FokhT; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=bxycbZSUd6QM6RImwKjrdN3NL9wm3Wz+x09DOquktlZeEyfHmg2XxNcSGs/E0cCYx7Zy9Cru1eNVdG4yUpfQ1owwS1F3amXFUphP582mqpCKPncn0t0HehgKaEfoPNAXdSbBwiwnCdHVryVWcc5PzBLxPR8LtSQXAAyKYO44bcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HQaOi42v; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UJ2FokhT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HQaOi42v"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782366378; x=1813902378;
+  t=1782370283; x=1813906283;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=0xMLENcuy5XK64XhlRj6nQreCLFTSuOzxNb7Pm80sPE=;
-  b=UJ2FokhTJW6uM3gfqsXUCKLmUICh33mjPuKFuP3Yx2T8qGMXaIKn4XZ7
-   /eHDEycC94CC1ENB6n2A9z/y0PmEqKAsqk7Eag55LpBOnI0Q+2NoJP1Im
-   zKk15kEfV7le/EGp27lMwY5peHtEFaB6nRpxmPXqrbjumLO9/i1MxcunN
-   FHjfQog4uvuJGSBxfLRZ1hofe29Zz2+eTgXi1Yl7vyW3xvWwBMD6q8e95
-   B7emPGIFi78S8sLF7sEntc8oj68H2hzd40Be/9tMaG6GnzFcUptDDJjKD
-   CSp/8sW7PLBq0Kba9KSGV95L/QasGbPAOGvTa+iT6f6EryN+6CZLRPyJd
-   Q==;
-X-CSE-ConnectionGUID: TAm2G0/mRrWap+XyH7DKFw==
-X-CSE-MsgGUID: Gb97NstYQc66fRozd1wIBA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="82121861"
-X-IronPort-AV: E=Sophos;i="6.24,223,1774335600"; 
-   d="scan'208";a="82121861"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 22:46:11 -0700
-X-CSE-ConnectionGUID: Ya1fGO+hSQ2qgsRSNC27zQ==
-X-CSE-MsgGUID: fWctwNGFTbexH2ojKAyAIg==
+  bh=JRevYpKLu+UkOXzSPW6dPV1skR2NA7ozHN2uxP8d7qI=;
+  b=HQaOi42vicykHVEpaxotA8uuh1mQIumC85BcyOO0Q2cBh31USYf7KiAu
+   VSAjrCpr5irpFBK5kno/mbh/NtzBlK7iJLpyHLRqfVPeewesieaKNBDK6
+   pvWmITSXX6EtXdzEMTeL0sMFk3mT0A8oL+fVy56uxJOa5WIw36DcfOWSa
+   dOo+iu6TCTaB/E3SHeKI92SbGjrCY4xtQVLQpGSiVfUuigzFC32OYuTiv
+   iBAPsTDrbMO9f8jZk8vJ+oMOpcnQRZySb6YtwT4VYDfh9CS9y5K8kga2C
+   WRRGshWQqQfPHcK/kOcD1CbeOrFBuyHTfj23QfDC1HvMKB3VjQCCbi/2e
+   A==;
+X-CSE-ConnectionGUID: Tpyi/pUkRuy0pilR1qlM8w==
+X-CSE-MsgGUID: V1UtCHNiRHyl8HoV7ZuWaw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="82260021"
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="82260021"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 23:51:19 -0700
+X-CSE-ConnectionGUID: e/kArBR8Q56POi4iqKA80Q==
+X-CSE-MsgGUID: dzuyUAJcSp6F0URtHGgidw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,223,1774335600"; 
-   d="scan'208";a="280543918"
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="244016462"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 24 Jun 2026 22:46:06 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 24 Jun 2026 23:51:15 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wccua-000000003wB-1xiI;
-	Thu, 25 Jun 2026 05:46:04 +0000
-Date: Thu, 25 Jun 2026 13:45:58 +0800
+	id 1wcdvc-000000003yX-0QD6;
+	Thu, 25 Jun 2026 06:51:12 +0000
+Date: Thu, 25 Jun 2026 14:50:26 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org,
-	david@kernel.org, ljs@kernel.org
+To: Hui Zhu <hui.zhu@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Kairui Song <kasong@tencent.com>,
+	Qi Zheng <qi.zheng@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dev Jain <dev.jain@arm.com>, riel@surriel.com, liam@infradead.org,
-	vbabka@kernel.org, harry@kernel.org, jannh@google.com,
-	kas@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	ryan.roberts@arm.com, anshuman.khandual@arm.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] mm/rmap: use huge_ptep_get() in try_to_unmap_one()
-Message-ID: <202606251341.jfIr1D7m-lkp@intel.com>
-References: <20260625042853.2752898-1-dev.jain@arm.com>
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH v4] mm: assert exclusive nid/zonenum bits at the
+ page/folio access sites
+Message-ID: <202606251454.M74ab4Rw-lkp@intel.com>
+References: <20260625053958.918738-1-hui.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,437 +78,71 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260625042853.2752898-1-dev.jain@arm.com>
+In-Reply-To: <20260625053958.918738-1-hui.zhu@linux.dev>
 
-Hi Dev,
+Hi Hui,
 
-kernel test robot noticed the following build errors:
+kernel test robot noticed the following build warnings:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+[auto build test WARNING on akpm-mm/mm-everything]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dev-Jain/mm-rmap-use-huge_ptep_get-in-try_to_unmap_one/20260625-123050
+url:    https://github.com/intel-lab-lkp/linux/commits/Hui-Zhu/mm-assert-exclusive-nid-zonenum-bits-at-the-page-folio-access-sites/20260625-134106
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260625042853.2752898-1-dev.jain%40arm.com
-patch subject: [PATCH] mm/rmap: use huge_ptep_get() in try_to_unmap_one()
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260625/202606251341.jfIr1D7m-lkp@intel.com/config)
+patch link:    https://lore.kernel.org/r/20260625053958.918738-1-hui.zhu%40linux.dev
+patch subject: [PATCH v4] mm: assert exclusive nid/zonenum bits at the page/folio access sites
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260625/202606251454.M74ab4Rw-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260625/202606251341.jfIr1D7m-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260625/202606251454.M74ab4Rw-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606251341.jfIr1D7m-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606251454.M74ab4Rw-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/rmap.c:2100:13: error: call to undeclared function 'huge_ptep_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2100 |                         pteval = huge_ptep_get(mm, address, pvmw.pte);
-         |                                  ^
->> mm/rmap.c:2100:11: error: assigning to 'pte_t' from incompatible type 'int'
-    2100 |                         pteval = huge_ptep_get(mm, address, pvmw.pte);
-         |                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+>> kernel/fork.c:258:18: warning: unused variable 'page' [-Wunused-variable]
+     258 |                                 struct page *page = vm_area->pages[i];
+         |                                              ^~~~
+   1 warning generated.
 
 
-vim +/huge_ptep_get +2100 mm/rmap.c
+vim +/page +258 kernel/fork.c
 
-  1980	
-  1981	/*
-  1982	 * @arg: enum ttu_flags will be passed to this argument
-  1983	 */
-  1984	static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
-  1985			     unsigned long address, void *arg)
-  1986	{
-  1987		struct mm_struct *mm = vma->vm_mm;
-  1988		DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, address, 0);
-  1989		bool anon_exclusive, ret = true;
-  1990		pte_t pteval;
-  1991		struct page *subpage;
-  1992		struct mmu_notifier_range range;
-  1993		enum ttu_flags flags = (enum ttu_flags)(long)arg;
-  1994		unsigned long nr_pages = 1, end_addr;
-  1995		unsigned long pfn;
-  1996		unsigned long hsz = 0;
-  1997		int ptes = 0;
-  1998	
-  1999		/*
-  2000		 * When racing against e.g. zap_pte_range() on another cpu,
-  2001		 * in between its ptep_get_and_clear_full() and folio_remove_rmap_*(),
-  2002		 * try_to_unmap() may return before folio_mapped() has become false,
-  2003		 * if page table locking is skipped: use TTU_SYNC to wait for that.
-  2004		 */
-  2005		if (flags & TTU_SYNC)
-  2006			pvmw.flags = PVMW_SYNC;
-  2007	
-  2008		/*
-  2009		 * For THP, we have to assume the worse case ie pmd for invalidation.
-  2010		 * For hugetlb, it could be much worse if we need to do pud
-  2011		 * invalidation in the case of pmd sharing.
-  2012		 *
-  2013		 * Note that the folio can not be freed in this function as call of
-  2014		 * try_to_unmap() must hold a reference on the folio.
-  2015		 */
-  2016		range.end = vma_address_end(&pvmw);
-  2017		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma->vm_mm,
-  2018					address, range.end);
-  2019		if (folio_test_hugetlb(folio)) {
-  2020			/*
-  2021			 * If sharing is possible, start and end will be adjusted
-  2022			 * accordingly.
-  2023			 */
-  2024			adjust_range_if_pmd_sharing_possible(vma, &range.start,
-  2025							     &range.end);
-  2026	
-  2027			/* We need the huge page size for set_huge_pte_at() */
-  2028			hsz = huge_page_size(hstate_vma(vma));
-  2029		}
-  2030		mmu_notifier_invalidate_range_start(&range);
-  2031	
-  2032		while (page_vma_mapped_walk(&pvmw)) {
-  2033			nr_pages = 1;
-  2034	
-  2035			/*
-  2036			 * If the folio is in an mlock()d vma, we must not swap it out.
-  2037			 */
-  2038			if (!(flags & TTU_IGNORE_MLOCK) &&
-  2039			    (vma->vm_flags & VM_LOCKED)) {
-  2040				ptes++;
-  2041	
-  2042				/*
-  2043				 * Set 'ret' to indicate the page cannot be unmapped.
-  2044				 *
-  2045				 * Do not jump to walk_abort immediately as additional
-  2046				 * iteration might be required to detect fully mapped
-  2047				 * folio an mlock it.
-  2048				 */
-  2049				ret = false;
-  2050	
-  2051				/* Only mlock fully mapped pages */
-  2052				if (pvmw.pte && ptes != pvmw.nr_pages)
-  2053					continue;
-  2054	
-  2055				/*
-  2056				 * All PTEs must be protected by page table lock in
-  2057				 * order to mlock the page.
-  2058				 *
-  2059				 * If page table boundary has been cross, current ptl
-  2060				 * only protect part of ptes.
-  2061				 */
-  2062				if (pvmw.flags & PVMW_PGTABLE_CROSSED)
-  2063					goto walk_done;
-  2064	
-  2065				/* Restore the mlock which got missed */
-  2066				mlock_vma_folio(folio, vma);
-  2067				goto walk_done;
-  2068			}
-  2069	
-  2070			if (!pvmw.pte) {
-  2071				if (folio_test_lazyfree(folio)) {
-  2072					if (unmap_huge_pmd_locked(vma, pvmw.address, pvmw.pmd, folio))
-  2073						goto walk_done;
-  2074					/*
-  2075					 * unmap_huge_pmd_locked has either already marked
-  2076					 * the folio as swap-backed or decided to retain it
-  2077					 * due to GUP or speculative references.
-  2078					 */
-  2079					goto walk_abort;
-  2080				}
-  2081	
-  2082				if (flags & TTU_SPLIT_HUGE_PMD) {
-  2083					/*
-  2084					 * We temporarily have to drop the PTL and
-  2085					 * restart so we can process the PTE-mapped THP.
-  2086					 */
-  2087					split_huge_pmd_locked(vma, pvmw.address,
-  2088							      pvmw.pmd, false);
-  2089					flags &= ~TTU_SPLIT_HUGE_PMD;
-  2090					page_vma_mapped_walk_restart(&pvmw);
-  2091					continue;
-  2092				}
-  2093			}
-  2094	
-  2095			/* Unexpected PMD-mapped THP? */
-  2096			VM_BUG_ON_FOLIO(!pvmw.pte, folio);
-  2097	
-  2098			address = pvmw.address;
-  2099			if (folio_test_hugetlb(folio)) {
-> 2100				pteval = huge_ptep_get(mm, address, pvmw.pte);
-  2101			} else {
-  2102				/*
-  2103				 * Handle PFN swap PTEs, such as device-exclusive ones,
-  2104				 * that actually map pages.
-  2105				 */
-  2106				pteval = ptep_get(pvmw.pte);
-  2107			}
-  2108			if (likely(pte_present(pteval))) {
-  2109				pfn = pte_pfn(pteval);
-  2110			} else {
-  2111				const softleaf_t entry = softleaf_from_pte(pteval);
-  2112	
-  2113				pfn = softleaf_to_pfn(entry);
-  2114				VM_WARN_ON_FOLIO(folio_test_hugetlb(folio), folio);
-  2115			}
-  2116	
-  2117			subpage = folio_page(folio, pfn - folio_pfn(folio));
-  2118			anon_exclusive = folio_test_anon(folio) &&
-  2119					 PageAnonExclusive(subpage);
-  2120	
-  2121			if (folio_test_hugetlb(folio)) {
-  2122				bool anon = folio_test_anon(folio);
-  2123	
-  2124				/*
-  2125				 * The try_to_unmap() is only passed a hugetlb page
-  2126				 * in the case where the hugetlb page is poisoned.
-  2127				 */
-  2128				VM_BUG_ON_PAGE(!PageHWPoison(subpage), subpage);
-  2129				/*
-  2130				 * huge_pmd_unshare may unmap an entire PMD page.
-  2131				 * There is no way of knowing exactly which PMDs may
-  2132				 * be cached for this mm, so we must flush them all.
-  2133				 * start/end were already adjusted above to cover this
-  2134				 * range.
-  2135				 */
-  2136				flush_cache_range(vma, range.start, range.end);
-  2137	
-  2138				/*
-  2139				 * To call huge_pmd_unshare, i_mmap_rwsem must be
-  2140				 * held in write mode.  Caller needs to explicitly
-  2141				 * do this outside rmap routines.
-  2142				 *
-  2143				 * We also must hold hugetlb vma_lock in write mode.
-  2144				 * Lock order dictates acquiring vma_lock BEFORE
-  2145				 * i_mmap_rwsem.  We can only try lock here and fail
-  2146				 * if unsuccessful.
-  2147				 */
-  2148				if (!anon) {
-  2149					struct mmu_gather tlb;
-  2150	
-  2151					VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
-  2152					if (!hugetlb_vma_trylock_write(vma))
-  2153						goto walk_abort;
-  2154	
-  2155					tlb_gather_mmu_vma(&tlb, vma);
-  2156					if (huge_pmd_unshare(&tlb, vma, address, pvmw.pte)) {
-  2157						hugetlb_vma_unlock_write(vma);
-  2158						huge_pmd_unshare_flush(&tlb, vma);
-  2159						tlb_finish_mmu(&tlb);
-  2160						/*
-  2161						 * The PMD table was unmapped,
-  2162						 * consequently unmapping the folio.
-  2163						 */
-  2164						goto walk_done;
-  2165					}
-  2166					hugetlb_vma_unlock_write(vma);
-  2167					tlb_finish_mmu(&tlb);
-  2168				}
-  2169				pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
-  2170				if (pte_dirty(pteval))
-  2171					folio_mark_dirty(folio);
-  2172			} else if (likely(pte_present(pteval))) {
-  2173				nr_pages = folio_unmap_pte_batch(folio, &pvmw, flags, pteval);
-  2174				end_addr = address + nr_pages * PAGE_SIZE;
-  2175				flush_cache_range(vma, address, end_addr);
-  2176	
-  2177				/* Nuke the page table entry. */
-  2178				pteval = get_and_clear_ptes(mm, address, pvmw.pte, nr_pages);
-  2179				/*
-  2180				 * We clear the PTE but do not flush so potentially
-  2181				 * a remote CPU could still be writing to the folio.
-  2182				 * If the entry was previously clean then the
-  2183				 * architecture must guarantee that a clear->dirty
-  2184				 * transition on a cached TLB entry is written through
-  2185				 * and traps if the PTE is unmapped.
-  2186				 */
-  2187				if (should_defer_flush(mm, flags))
-  2188					set_tlb_ubc_flush_pending(mm, pteval, address, end_addr);
-  2189				else
-  2190					flush_tlb_range(vma, address, end_addr);
-  2191				if (pte_dirty(pteval))
-  2192					folio_mark_dirty(folio);
-  2193			} else {
-  2194				pte_clear(mm, address, pvmw.pte);
-  2195			}
-  2196	
-  2197			/*
-  2198			 * Now the pte is cleared. If this pte was uffd-wp armed,
-  2199			 * we may want to replace a none pte with a marker pte if
-  2200			 * it's file-backed, so we don't lose the tracking info.
-  2201			 */
-  2202			pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
-  2203	
-  2204			/* Update high watermark before we lower rss */
-  2205			update_hiwater_rss(mm);
-  2206	
-  2207			if (PageHWPoison(subpage) && (flags & TTU_HWPOISON)) {
-  2208				pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
-  2209				if (folio_test_hugetlb(folio)) {
-  2210					hugetlb_count_sub(folio_nr_pages(folio), mm);
-  2211					set_huge_pte_at(mm, address, pvmw.pte, pteval,
-  2212							hsz);
-  2213				} else {
-  2214					dec_mm_counter(mm, mm_counter(folio));
-  2215					set_pte_at(mm, address, pvmw.pte, pteval);
-  2216				}
-  2217			} else if (likely(pte_present(pteval)) && pte_unused(pteval) &&
-  2218				   !userfaultfd_armed(vma)) {
-  2219				/*
-  2220				 * The guest indicated that the page content is of no
-  2221				 * interest anymore. Simply discard the pte, vmscan
-  2222				 * will take care of the rest.
-  2223				 * A future reference will then fault in a new zero
-  2224				 * page. When userfaultfd is active, we must not drop
-  2225				 * this page though, as its main user (postcopy
-  2226				 * migration) will not expect userfaults on already
-  2227				 * copied pages.
-  2228				 */
-  2229				dec_mm_counter(mm, mm_counter(folio));
-  2230			} else if (folio_test_anon(folio)) {
-  2231				swp_entry_t entry = page_swap_entry(subpage);
-  2232				pte_t swp_pte;
-  2233				/*
-  2234				 * Store the swap location in the pte.
-  2235				 * See handle_pte_fault() ...
-  2236				 */
-  2237				if (unlikely(folio_test_swapbacked(folio) !=
-  2238						folio_test_swapcache(folio))) {
-  2239					WARN_ON_ONCE(1);
-  2240					goto walk_abort;
-  2241				}
-  2242	
-  2243				/* MADV_FREE page check */
-  2244				if (!folio_test_swapbacked(folio)) {
-  2245					int ref_count, map_count;
-  2246	
-  2247					/*
-  2248					 * Synchronize with gup_pte_range():
-  2249					 * - clear PTE; barrier; read refcount
-  2250					 * - inc refcount; barrier; read PTE
-  2251					 */
-  2252					smp_mb();
-  2253	
-  2254					ref_count = folio_ref_count(folio);
-  2255					map_count = folio_mapcount(folio);
-  2256	
-  2257					/*
-  2258					 * Order reads for page refcount and dirty flag
-  2259					 * (see comments in __remove_mapping()).
-  2260					 */
-  2261					smp_rmb();
-  2262	
-  2263					if (folio_test_dirty(folio) && !(vma->vm_flags & VM_DROPPABLE)) {
-  2264						/*
-  2265						 * redirtied either using the page table or a previously
-  2266						 * obtained GUP reference.
-  2267						 */
-  2268						set_ptes(mm, address, pvmw.pte, pteval, nr_pages);
-  2269						folio_set_swapbacked(folio);
-  2270						goto walk_abort;
-  2271					} else if (ref_count != 1 + map_count) {
-  2272						/*
-  2273						 * Additional reference. Could be a GUP reference or any
-  2274						 * speculative reference. GUP users must mark the folio
-  2275						 * dirty if there was a modification. This folio cannot be
-  2276						 * reclaimed right now either way, so act just like nothing
-  2277						 * happened.
-  2278						 * We'll come back here later and detect if the folio was
-  2279						 * dirtied when the additional reference is gone.
-  2280						 */
-  2281						set_ptes(mm, address, pvmw.pte, pteval, nr_pages);
-  2282						goto walk_abort;
-  2283					}
-  2284					add_mm_counter(mm, MM_ANONPAGES, -nr_pages);
-  2285					goto discard;
-  2286				}
-  2287	
-  2288				if (folio_dup_swap(folio, subpage) < 0) {
-  2289					set_pte_at(mm, address, pvmw.pte, pteval);
-  2290					goto walk_abort;
-  2291				}
-  2292	
-  2293				/*
-  2294				 * arch_unmap_one() is expected to be a NOP on
-  2295				 * architectures where we could have PFN swap PTEs,
-  2296				 * so we'll not check/care.
-  2297				 */
-  2298				if (arch_unmap_one(mm, vma, address, pteval) < 0) {
-  2299					folio_put_swap(folio, subpage);
-  2300					set_pte_at(mm, address, pvmw.pte, pteval);
-  2301					goto walk_abort;
-  2302				}
-  2303	
-  2304				/* See folio_try_share_anon_rmap(): clear PTE first. */
-  2305				if (anon_exclusive &&
-  2306				    folio_try_share_anon_rmap_pte(folio, subpage)) {
-  2307					folio_put_swap(folio, subpage);
-  2308					set_pte_at(mm, address, pvmw.pte, pteval);
-  2309					goto walk_abort;
-  2310				}
-  2311				if (list_empty(&mm->mmlist)) {
-  2312					spin_lock(&mmlist_lock);
-  2313					if (list_empty(&mm->mmlist))
-  2314						list_add(&mm->mmlist, &init_mm.mmlist);
-  2315					spin_unlock(&mmlist_lock);
-  2316				}
-  2317				dec_mm_counter(mm, MM_ANONPAGES);
-  2318				inc_mm_counter(mm, MM_SWAPENTS);
-  2319				swp_pte = swp_entry_to_pte(entry);
-  2320				if (anon_exclusive)
-  2321					swp_pte = pte_swp_mkexclusive(swp_pte);
-  2322				if (likely(pte_present(pteval))) {
-  2323					if (pte_soft_dirty(pteval))
-  2324						swp_pte = pte_swp_mksoft_dirty(swp_pte);
-  2325					if (pte_uffd_wp(pteval))
-  2326						swp_pte = pte_swp_mkuffd_wp(swp_pte);
-  2327				} else {
-  2328					if (pte_swp_soft_dirty(pteval))
-  2329						swp_pte = pte_swp_mksoft_dirty(swp_pte);
-  2330					if (pte_swp_uffd_wp(pteval))
-  2331						swp_pte = pte_swp_mkuffd_wp(swp_pte);
-  2332				}
-  2333				set_pte_at(mm, address, pvmw.pte, swp_pte);
-  2334			} else {
-  2335				/*
-  2336				 * This is a locked file-backed folio,
-  2337				 * so it cannot be removed from the page
-  2338				 * cache and replaced by a new folio before
-  2339				 * mmu_notifier_invalidate_range_end, so no
-  2340				 * concurrent thread might update its page table
-  2341				 * to point at a new folio while a device is
-  2342				 * still using this folio.
-  2343				 *
-  2344				 * See Documentation/mm/mmu_notifier.rst
-  2345				 */
-  2346				add_mm_counter(mm, mm_counter_file(folio), -nr_pages);
-  2347			}
-  2348	discard:
-  2349			if (unlikely(folio_test_hugetlb(folio))) {
-  2350				hugetlb_remove_rmap(folio);
-  2351			} else {
-  2352				folio_remove_rmap_ptes(folio, subpage, nr_pages, vma);
-  2353			}
-  2354			if (vma->vm_flags & VM_LOCKED)
-  2355				mlock_drain_local();
-  2356			folio_put_refs(folio, nr_pages);
-  2357	
-  2358			/*
-  2359			 * If we are sure that we batched the entire folio and cleared
-  2360			 * all PTEs, we can just optimize and stop right here.
-  2361			 */
-  2362			if (nr_pages == folio_nr_pages(folio))
-  2363				goto walk_done;
-  2364			continue;
-  2365	walk_abort:
-  2366			ret = false;
-  2367	walk_done:
-  2368			page_vma_mapped_walk_done(&pvmw);
-  2369			break;
-  2370		}
-  2371	
-  2372		mmu_notifier_invalidate_range_end(&range);
-  2373	
-  2374		return ret;
-  2375	}
-  2376	
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  240  
+449e0b4ed5a16c7 Pasha Tatashin            2025-05-09  241  static bool try_release_thread_stack_to_cache(struct vm_struct *vm_area)
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  242  {
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  243  	unsigned int i;
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  244  	int nid;
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  245  
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  246  	/*
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  247  	 * Don't cache stacks if any of the pages don't match the local domain, unless
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  248  	 * there is no local memory to begin with.
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  249  	 *
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  250  	 * Note that lack of local memory does not automatically mean it makes no difference
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  251  	 * performance-wise which other domain backs the stack. In this case we are merely
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  252  	 * trying to avoid constantly going to vmalloc.
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  253  	 */
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  254  	scoped_guard(preempt) {
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  255  		nid = numa_node_id();
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  256  		if (node_state(nid, N_MEMORY)) {
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  257  			for (i = 0; i < vm_area->nr_pages; i++) {
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20 @258  				struct page *page = vm_area->pages[i];
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  259  				if (page_to_nid(page) != nid)
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  260  					return false;
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  261  			}
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  262  		}
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  263  
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  264  		for (i = 0; i < NR_CACHED_STACKS; i++) {
+47e39c793367600 Uros Bizjak               2024-05-23  265  			struct vm_struct *tmp = NULL;
+47e39c793367600 Uros Bizjak               2024-05-23  266  
+449e0b4ed5a16c7 Pasha Tatashin            2025-05-09  267  			if (this_cpu_try_cmpxchg(cached_stacks[i], &tmp, vm_area))
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  268  				return true;
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  269  		}
+262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  270  	}
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  271  	return false;
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  272  }
+e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  273  
 
 --
 0-DAY CI Kernel Test Service
