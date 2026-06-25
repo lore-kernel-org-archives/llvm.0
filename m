@@ -1,149 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3957E3C1092;
-	Thu, 25 Jun 2026 06:51:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A2C52FD681;
+	Thu, 25 Jun 2026 07:00:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782370284; cv=none; b=Pb8HAX0W9GXrpRum8h8b7+HHhp8V+RiD8ArL1JXo+iNDMTvMUpywEpkLFIUzfKVAx5ZflxHcSMsBXazyoM7INWydXyUlRozkHDeQ0614pjXJ7dN7nb+nnYAMhUWsF1egp2sZRcw2FCG0ZMBlCEjL7PQh7rjNHnxOJXa6ES8ubyI=
+	t=1782370803; cv=none; b=QnUKIxnS8epOvVu2r+d6v9dyDVw0uyj9xdhfraLaVmE4okUPjLU+ZemEqGCg+mDNAgFlm+E6LE7P1vxYc5DjaOPSZxFjpes2ZRLLKma2IKsbS6Gst1rz7Q5rpKZXPLrJJDmJf2ubUm0Agcl/e9J9kSFgKzAteRo6lWd7zHxI+Fc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782370284; c=relaxed/simple;
-	bh=JRevYpKLu+UkOXzSPW6dPV1skR2NA7ozHN2uxP8d7qI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bxycbZSUd6QM6RImwKjrdN3NL9wm3Wz+x09DOquktlZeEyfHmg2XxNcSGs/E0cCYx7Zy9Cru1eNVdG4yUpfQ1owwS1F3amXFUphP582mqpCKPncn0t0HehgKaEfoPNAXdSbBwiwnCdHVryVWcc5PzBLxPR8LtSQXAAyKYO44bcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HQaOi42v; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782370803; c=relaxed/simple;
+	bh=u4jABPlZSzfgRRcXDTKbxucxNVmhlGdcQNnwT4HDB88=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rHc8qe0efew8tkZyVs5Xc7+R+tcbQ+XOwepTRU3q2bBLkYhOyWCEPTnL3Tw9rlW8rgipY3mdsOAIEOyyzy/MS5fUsEx2KylqVfL3US+i+RWCRtYbnWQvKL2aBngJG135D5OF6g+4Bk4YGAKdlwuYAzI4tQBqvg4Qi14bSKqEYqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=XuxD/Ybc; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HQaOi42v"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782370283; x=1813906283;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JRevYpKLu+UkOXzSPW6dPV1skR2NA7ozHN2uxP8d7qI=;
-  b=HQaOi42vicykHVEpaxotA8uuh1mQIumC85BcyOO0Q2cBh31USYf7KiAu
-   VSAjrCpr5irpFBK5kno/mbh/NtzBlK7iJLpyHLRqfVPeewesieaKNBDK6
-   pvWmITSXX6EtXdzEMTeL0sMFk3mT0A8oL+fVy56uxJOa5WIw36DcfOWSa
-   dOo+iu6TCTaB/E3SHeKI92SbGjrCY4xtQVLQpGSiVfUuigzFC32OYuTiv
-   iBAPsTDrbMO9f8jZk8vJ+oMOpcnQRZySb6YtwT4VYDfh9CS9y5K8kga2C
-   WRRGshWQqQfPHcK/kOcD1CbeOrFBuyHTfj23QfDC1HvMKB3VjQCCbi/2e
-   A==;
-X-CSE-ConnectionGUID: Tpyi/pUkRuy0pilR1qlM8w==
-X-CSE-MsgGUID: V1UtCHNiRHyl8HoV7ZuWaw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="82260021"
-X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
-   d="scan'208";a="82260021"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2026 23:51:19 -0700
-X-CSE-ConnectionGUID: e/kArBR8Q56POi4iqKA80Q==
-X-CSE-MsgGUID: dzuyUAJcSp6F0URtHGgidw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
-   d="scan'208";a="244016462"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 24 Jun 2026 23:51:15 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wcdvc-000000003yX-0QD6;
-	Thu, 25 Jun 2026 06:51:12 +0000
-Date: Thu, 25 Jun 2026 14:50:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hui Zhu <hui.zhu@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Kairui Song <kasong@tencent.com>,
-	Qi Zheng <qi.zheng@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Barry Song <baohua@kernel.org>,
-	Axel Rasmussen <axelrasmussen@google.com>,
-	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [PATCH v4] mm: assert exclusive nid/zonenum bits at the
- page/folio access sites
-Message-ID: <202606251454.M74ab4Rw-lkp@intel.com>
-References: <20260625053958.918738-1-hui.zhu@linux.dev>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="XuxD/Ybc"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E9CFB2BCE;
+	Wed, 24 Jun 2026 23:59:55 -0700 (PDT)
+Received: from [10.164.19.14] (unknown [10.164.19.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 31CDA3F836;
+	Wed, 24 Jun 2026 23:59:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1782370800; bh=u4jABPlZSzfgRRcXDTKbxucxNVmhlGdcQNnwT4HDB88=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XuxD/YbcCBHLeD5/+EryCgdigQZJqPQxElywZZ0Ilifij5vaKJr4RZqj0Lvru/pd1
+	 Rkf/Sw7ploOIVlaucD7ISq1Z3UyP+NgM0R3KKQw28OG8hEDpg3fzF5EaCiet5MFZJr
+	 qzRT5ERDLz3i4MXs8olfw97jn7GefhMLUGYAieCg=
+Message-ID: <2fd3688b-b4d0-4a2f-8d49-4d4b9c512c66@arm.com>
+Date: Thu, 25 Jun 2026 12:29:53 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260625053958.918738-1-hui.zhu@linux.dev>
-
-Hi Hui,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hui-Zhu/mm-assert-exclusive-nid-zonenum-bits-at-the-page-folio-access-sites/20260625-134106
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260625053958.918738-1-hui.zhu%40linux.dev
-patch subject: [PATCH v4] mm: assert exclusive nid/zonenum bits at the page/folio access sites
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260625/202606251454.M74ab4Rw-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260625/202606251454.M74ab4Rw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606251454.M74ab4Rw-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/fork.c:258:18: warning: unused variable 'page' [-Wunused-variable]
-     258 |                                 struct page *page = vm_area->pages[i];
-         |                                              ^~~~
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/rmap: use huge_ptep_get() in try_to_unmap_one()
+To: kernel test robot <lkp@intel.com>, akpm@linux-foundation.org,
+ david@kernel.org, ljs@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, riel@surriel.com,
+ liam@infradead.org, vbabka@kernel.org, harry@kernel.org, jannh@google.com,
+ kas@kernel.org, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ ryan.roberts@arm.com, anshuman.khandual@arm.com, stable@vger.kernel.org
+References: <20260625042853.2752898-1-dev.jain@arm.com>
+ <202606251341.jfIr1D7m-lkp@intel.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <202606251341.jfIr1D7m-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +/page +258 kernel/fork.c
 
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  240  
-449e0b4ed5a16c7 Pasha Tatashin            2025-05-09  241  static bool try_release_thread_stack_to_cache(struct vm_struct *vm_area)
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  242  {
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  243  	unsigned int i;
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  244  	int nid;
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  245  
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  246  	/*
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  247  	 * Don't cache stacks if any of the pages don't match the local domain, unless
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  248  	 * there is no local memory to begin with.
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  249  	 *
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  250  	 * Note that lack of local memory does not automatically mean it makes no difference
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  251  	 * performance-wise which other domain backs the stack. In this case we are merely
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  252  	 * trying to avoid constantly going to vmalloc.
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  253  	 */
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  254  	scoped_guard(preempt) {
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  255  		nid = numa_node_id();
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  256  		if (node_state(nid, N_MEMORY)) {
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  257  			for (i = 0; i < vm_area->nr_pages; i++) {
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20 @258  				struct page *page = vm_area->pages[i];
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  259  				if (page_to_nid(page) != nid)
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  260  					return false;
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  261  			}
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  262  		}
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  263  
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  264  		for (i = 0; i < NR_CACHED_STACKS; i++) {
-47e39c793367600 Uros Bizjak               2024-05-23  265  			struct vm_struct *tmp = NULL;
-47e39c793367600 Uros Bizjak               2024-05-23  266  
-449e0b4ed5a16c7 Pasha Tatashin            2025-05-09  267  			if (this_cpu_try_cmpxchg(cached_stacks[i], &tmp, vm_area))
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  268  				return true;
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  269  		}
-262ef8e55b7ccd4 Mateusz Guzik             2025-11-20  270  	}
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  271  	return false;
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  272  }
-e540bf3162e822d Sebastian Andrzej Siewior 2022-02-17  273  
+On 25/06/26 11:15 am, kernel test robot wrote:
+> Hi Dev,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Dev-Jain/mm-rmap-use-huge_ptep_get-in-try_to_unmap_one/20260625-123050
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20260625042853.2752898-1-dev.jain%40arm.com
+> patch subject: [PATCH] mm/rmap: use huge_ptep_get() in try_to_unmap_one()
+> config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260625/202606251341.jfIr1D7m-lkp@intel.com/config)
+> compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260625/202606251341.jfIr1D7m-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202606251341.jfIr1D7m-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> mm/rmap.c:2100:13: error: call to undeclared function 'huge_ptep_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>     2100 |                         pteval = huge_ptep_get(mm, address, pvmw.pte);
+>          |                                  ^
+>>> mm/rmap.c:2100:11: error: assigning to 'pte_t' from incompatible type 'int'
+>     2100 |                         pteval = huge_ptep_get(mm, address, pvmw.pte);
+>          |                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    2 errors generated.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Weird that I need a stub. This should do:
+
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 2abaf99321e90..4661f88eee55b 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -1261,6 +1261,16 @@ static inline void hugetlb_count_sub(long l, struct mm_struct *mm)
+ {
+ }
+
++static inline pte_t huge_ptep_get(struct mm_struct *mm, unsigned long addr,
++				  pte_t *ptep)
++{
++#ifdef CONFIG_MMU
++	return ptep_get(ptep);
++#else
++	return *ptep;
++#endif
++}
++
+ static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+ 					  unsigned long addr, pte_t *ptep)
+ {
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 1c77d5dc06e9f..aa8a254efaecc 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -2095,11 +2095,16 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 		/* Unexpected PMD-mapped THP? */
+ 		VM_BUG_ON_FOLIO(!pvmw.pte, folio);
+
+-		/*
+-		 * Handle PFN swap PTEs, such as device-exclusive ones, that
+-		 * actually map pages.
+-		 */
+-		pteval = ptep_get(pvmw.pte);
++		address = pvmw.address;
++		if (folio_test_hugetlb(folio)) {
++			pteval = huge_ptep_get(mm, address, pvmw.pte);
++		} else {
++			/*
++			 * Handle PFN swap PTEs, such as device-exclusive ones,
++			 * that actually map pages.
++			 */
++			pteval = ptep_get(pvmw.pte);
++		}
+ 		if (likely(pte_present(pteval))) {
+ 			pfn = pte_pfn(pteval);
+ 		} else {
+@@ -2110,7 +2115,6 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 		}
+
+ 		subpage = folio_page(folio, pfn - folio_pfn(folio));
+-		address = pvmw.address;
+ 		anon_exclusive = folio_test_anon(folio) &&
+ 				 PageAnonExclusive(subpage);
