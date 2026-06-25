@@ -1,490 +1,242 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6724837DAB3;
-	Thu, 25 Jun 2026 08:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782376403; cv=none; b=sM/4ExVRJHvHhugl1V2NW2IWefEosIJoocRCS/LGn4PcUQA4GBbmtC2v5W0BrQIYLJ9zC0iqr08mdnOcglclxGDZrF9C8a/SkjfiBWgkzhgDIUxOUJb8Go+4O1OADfQn/9KoZVGap0/Q0RMyEBpIPMBkifu9n5Y+c5N4rsn3CmE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782376403; c=relaxed/simple;
-	bh=QOQpdRYX99uJrIP4yx5jOFaTtfw7wAxj7yj+h+7Ig/8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NV6QSl/WaBvpcaPaXRvoZ9Ie88ik9MXvQgK/zE6MzsZnt3AkYA7ActaBJjF1tPOyWlXc1MRfdoqAdaFHxCEvkzRD2XZYQSZONDtUOtVb6yFt+dVqaiJrOBLB9A5bETn6Yrfda2SHDe/C6grhKpHAmuTOK/pKkHuX7CHUvJ0UwAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eKhusr/g; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2954370D49
+	for <llvm@lists.linux.dev>; Thu, 25 Jun 2026 09:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782379136; cv=pass; b=bRNbpmZwSRZXlSyZN5lvoYDk0GUG4bfQAdvxpj3al8kmk0PBObpipWhxxnFwBf/qqP7sDsFl0zqNRkYbhWwCh6HSO8vLfT0Mu+NJh39KaOIIGPeEmTpHqcyueASt/PRRuCzOUY23f/8YTGfD3+waZErWVn5Sya53gCqSCnNJYes=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782379136; c=relaxed/simple;
+	bh=9p0e68yd6Ezsaf93rg6/oRpCVdpUDbcaLKoXuopP55Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LT8IUqbobtr9b/NaCP/YO4lAWehvJG6fFr1fZu7gqZEMyNTbJGSHF0yT0lowj1ZbhI1FD2bQqLg38EtD9p8Zm+FKw+Atc1YHx3SFqEM2vjc3vIHrtc4BEUWpglIlEQ+8lv6KCyPz2/mzzN/hF0kSNQAxDl9X2gdSz+ISEUrZQCs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vs4uBTrP; arc=pass smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eKhusr/g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782376400; x=1813912400;
-  h=date:from:to:cc:subject:message-id;
-  bh=QOQpdRYX99uJrIP4yx5jOFaTtfw7wAxj7yj+h+7Ig/8=;
-  b=eKhusr/gpbqud9PZDvT72SYjJrx9BTXB44/T4TnyfMuyIhc1mQ9yWod/
-   Nv2nBPw5OrkY+IfWineFRcj749cVJBzR1f+TbgFW/AqBn0Vv+b1UKzWXx
-   Yb15OJwY0EyMSH2uNGogAwk2MBNkPvrX3w1DPG3WFpGiKLasLa1A3qpj/
-   +DxuAduXave6Pg2ZBlTJqIy61oORTR8znvTsYT7cpp2PhPLNyj2gpeNA5
-   c2y8wZ7CQTWvAz1SS2jYeN4T+cc1KFJ9TfZ6fPKLLKpXXIhtt8sVjAk1U
-   E0XhZ7DjIqjPS7xm9Bq7VWO0fM1mW+vbCyNMDF0f2u7REVFfQ6YMOzJk3
-   g==;
-X-CSE-ConnectionGUID: o4vI+gQ0TyiLnnzR5nDTsQ==
-X-CSE-MsgGUID: pZ3YW3iVQYW/l0t6DhVtbw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="94268643"
-X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
-   d="scan'208";a="94268643"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 01:33:20 -0700
-X-CSE-ConnectionGUID: K0TAQpSRQmqygJaGZAA9Gg==
-X-CSE-MsgGUID: JEc6nZ2jSe+WFIjq/0QwcA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
-   d="scan'208";a="247343891"
-Received: from igk-lkp-server01.igk.intel.com (HELO 892db79562d4) ([10.211.93.152])
-  by fmviesa007.fm.intel.com with ESMTP; 25 Jun 2026 01:33:18 -0700
-Received: from kbuild by 892db79562d4 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wcfWN-000000006TR-4B2j;
-	Thu, 25 Jun 2026 08:33:16 +0000
-Date: Thu, 25 Jun 2026 10:32:55 +0200
-From: kernel test robot <lkp@intel.com>
-To: Dev Jain <dev.jain@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: mm/rmap.c:2100:13: error: call to undeclared function
- 'huge_ptep_get'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202606251008.oKgrpbpv-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vs4uBTrP"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c029505b389so222429666b.1
+        for <llvm@lists.linux.dev>; Thu, 25 Jun 2026 02:18:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782379133; cv=none;
+        d=google.com; s=arc-20260327;
+        b=oxbcmnWsU7BHQHXEpSKBVbwjxKjtQZZss8A4jI/DC0+A3WqXXZCr6ShlES68Sh4v8+
+         QZJ7ygiGETckYI4AcR5fWhohdpOtYa9I7O9WpLekWDY4jrRB7Q0HLr8BLvAovZBKRXg4
+         F6DQTE9i5G/w1l7tm4LVFSgI3FjHRWz1qVdxk6O+E1ZVjbznpSeXjKFHQq+TefcG53xL
+         xkqmber9KmifzfJ1DxLjveg081VmgXTA1OBFenpeE303Z94PggB3pjTfJLDu13us8HrI
+         j9PVHnCpK8izWt+7BtniRBCS5eNNZkhNv3AOmSEmKLSYNESVrTIHAVTinqyrVtNsOF6J
+         OJzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MjJHZ4zl9GiesT5N040A+7X4rJOON3O7PrTeg2fCR9s=;
+        fh=iUTSTWJ5QLdqIIgSb/tXsq95q8aIbf/ggsZ+lOh73YE=;
+        b=ZGHyIoHAiGqrLXkQ+FpOiJ2ExCcJowu8wdhfWFW/QkFaplS55CK2sidmR7QePBYTEH
+         Jd/cMoaqk2TKnRD8RUYww4baRpvhQ7bqLomjqk43l+PNr4yLd1JlfrE02HUnApQQNDUX
+         3nrC1PEZOU+xGoZrPk5wzt56l9akV+8PTFm2MW8wUDKs469Y5Oux3BsaLiLxhlA1Lq+m
+         zGnWuVXRzeuNdATPqzZor2YGCKCP+L/U9S+oaXFDLKBQ/YRbWJgzcI/IiDIX8GQlW3tH
+         5IU4xNQ6lUN4r5b1eFKGJrLfiC/+Z1eh+ieLequ/DfBfqErK7dMIqM2MwgfDUKolDrz+
+         gpSw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1782379133; x=1782983933; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MjJHZ4zl9GiesT5N040A+7X4rJOON3O7PrTeg2fCR9s=;
+        b=vs4uBTrPTZ82nifhgM2MJXI0Sraq+oMYTPn+m9S8IdjgQ6pKvfsaP7dEPZxLLrZs3q
+         dvgZnk22Yv4EK5BzYYKZ3NVZY/zHV4vvAXHIyykENXl/dz85kPsWIyoE9VnVa+9DNWey
+         SzJM7yG2N79fFe11cgNyBmfQYvsFnmlmLjunmynQG1/fvfXmH1Stcs61HSOSMoX7YulS
+         2Ss9C0LAf36C9ly4JmrRWU/cqTGgGwZFyCikTFmdVJucDEXDi/GVMxYcuZ7l5O+s1+qy
+         Gxj7EjvFhsEBc7Dc/qbX0NEGKuYOSSYxaxzaD8OlCprAZ05OP0bAvurIPtzol2cIKqBg
+         p7Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782379133; x=1782983933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MjJHZ4zl9GiesT5N040A+7X4rJOON3O7PrTeg2fCR9s=;
+        b=myieyc/4w3ScTqDprGTL6Is2O5XA9O1DxDIK9l7pUPlnqPJ3DV8PWMEwufeMeSoYY2
+         2nBixUb/4B6BcnoZKn6iMWNI8vTp6HDqwuv4eMITsdWqXS/FxojhnOJl+Wd7z03wSA+d
+         u9f2zZX2c2D8w/8xnobptCeBlB11xSXlUfB3n7BV5Q9NwCUSmc99CpYlEjUGKXPxQ1Ay
+         v15hO9W522BZi5qTZG2IqKq+SrpdKijNPJQ/nR34rUDCA797lmF+MpvWI3SflQiNR+kU
+         56iv5nXE+IJ/Hr5nzkOB2evhNoUZfncaT06ufhfbmJimvIuMu/2pbKKMCDSYQZgEVqIw
+         CFjg==
+X-Forwarded-Encrypted: i=1; AHgh+RpoGjFct+f1ilrueSFvE/X+6esCH1TAovHnXIJQB2VnQj6wEkDmM8+oatWdL7z/JXkNrUpq@lists.linux.dev
+X-Gm-Message-State: AOJu0YxZrvA75orbL456rbFTqPTkiIUX/WE+bMhC5vK81C+iq8xRwWKs
+	b3c7dNxjHlbsImIr6NY7z9YA9bpWf2QrDhdZJgnqOMTGrFbMNgVLsw4MMKY6tSBzfoRRiLBrUW7
+	ySr37B2B1P9j/eCqBytFqeBy4h7vTW/Is25vX6W9H
+X-Gm-Gg: AfdE7ckSr/UqxwlluhWl6Y25H3L9+EF2jlxIRas9QUuWSElxvfBeX6rcRLkPw7bXjwU
+	1grstZkc4PZaqHRgfcX+urAb0DRby4IPzSGpYCH1m+14fHxDsZ9XVqa2idIQ/WClhGUNWqUlC4L
+	CQrR+hOl1cfuvv75pzZtpl/qbjgBkdTXS4Kje6d/jLEeyiBhON7l/mZkrmF17VL5uOJpHCmjT8J
+	d5uCdMTeik928odUuMiZXlvENyjtQtLXSjAbOo09GJTA473FSynZnbebZQkXD1svCUtm8H+ZofH
+	qx5et4tt1p2A1vndx/mfA0AJrXY=
+X-Received: by 2002:a17:907:c588:b0:c0c:2e5d:50ab with SMTP id
+ a640c23a62f3a-c102cb6b6a5mr722184266b.0.1782379132615; Thu, 25 Jun 2026
+ 02:18:52 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260601143934.GT3493090@noisy.programming.kicks-ass.net>
+ <20260602030854.574038-1-wangqing7171@gmail.com> <20260602104255.GG4149641@noisy.programming.kicks-ass.net>
+ <249b8ebd-1ef8-4c17-bc9c-a63c051c2369@I-love.SAKURA.ne.jp>
+ <8733yiconb.ffs@fw13> <8971cc3f-c0dc-49ab-a278-690a676cd5a9@I-love.SAKURA.ne.jp>
+ <871pe1ng7m.ffs@fw13>
+In-Reply-To: <871pe1ng7m.ffs@fw13>
+From: Alexander Potapenko <glider@google.com>
+Date: Thu, 25 Jun 2026 11:18:15 +0200
+X-Gm-Features: AVVi8CdyE5UkL3VoIQDmIF9EdNK41MHrNRQoWoP0Nd_WGcwKoxJ5lk_jmlIMVPs
+Message-ID: <CAG_fn=UDJTpSn6kGU+p9JkZ_Ysph+qyuTUUcBG+vrA+50uSZsw@mail.gmail.com>
+Subject: Re: [PATCH v2] rseq: fix using an uninitialized stack variable in rseq_exit_user_update
+To: Thomas Gleixner <tglx@kernel.org>
+Cc: Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	Peter Zijlstra <peterz@infradead.org>, Qing Wang <wangqing7171@gmail.com>, 
+	mathieu.desnoyers@efficios.com, dvyukov@google.com, justinstitt@google.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, mark.rutland@arm.com, 
+	mingo@kernel.org, morbo@google.com, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, 
+	syzbot+185a631927096f9da2fc@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Dev-Jain/mm-rmap-use-huge_ptep_get-in-try_to_unmap_one/20260625-123050
-head:   ad1eeb7e9550eba95090e2be2d7bf57dec9de2e5
-commit: ad1eeb7e9550eba95090e2be2d7bf57dec9de2e5 mm/rmap: use huge_ptep_get() in try_to_unmap_one()
-date:   4 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260625/202606251008.oKgrpbpv-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260625/202606251008.oKgrpbpv-lkp@intel.com/reproduce)
+On Sat, Jun 20, 2026 at 9:51=E2=80=AFPM Thomas Gleixner <tglx@kernel.org> w=
+rote:
+>
+> On Sat, Jun 20 2026 at 07:34, Tetsuo Handa wrote:
+> > On 2026/06/20 4:32, Thomas Gleixner wrote:
+> >> %On Fri, Jun 19 2026 at 21:45, Tetsuo Handa wrote:
+> >>> On 2026/06/02 19:42, Peter Zijlstra wrote:
+> >>>> On Tue, Jun 02, 2026 at 11:08:54AM +0800, Qing Wang wrote:
+> >>>>> There is an bug which is an uninitialized stack variable use in
+> >>>>> `rseq_exit_user_update()` reported by syzbot:
+> >>>>>
+> >>>>> BUG: KMSAN: kernel-infoleak in rseq_set_ids_get_csaddr include/linu=
+x/rseq_entry.h:502 [inline]
+> >>>>>
+> >>>>> The local variable:
+> >>>>> ```c
+> >>>>>   struct rseq_ids ids =3D {
+> >>>>>           .cpu_id  =3D task_cpu(t),
+> >>>>>           .mm_cid  =3D task_mm_cid(t),
+> >>>>>           .node_id =3D cpu_to_node(ids.cpu_id),
+> >>>>>   };
+> >>>>> ```
+> >>>>
+> >>>> FWIW, I've no idea what that ``` nonsense is, but it does not belong=
+ in
+> >>>> Changelogs. I've removed it.
+> >>>>
+> >>>
+> >>> It seems that this problem is still happening after
+> >>> commit 6d99479799c6 ("rseq: Fix using an uninitialized stack variable
+> >>> in rseq_exit_user_update()") was applied. Please check.
+> >>
+> >> It seems is not really helpful. If you observe the problem can you
+> >> please provide the full debug splat?
+> >
+> > Please fetch the full debug splat from https://syzkaller.appspot.com/bu=
+g?extid=3D185a631927096f9da2fc .
+> > This problem is still happening as of commit 9ecfb2f7287a which include=
+s commit 6d99479799c6.
+>
+> That's not a code problem. That's a KMSAN/compiler issue.
+>
+> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+> > BUG: KMSAN: kernel-infoleak in rseq_set_ids_get_csaddr include/linux/rs=
+eq_entry.h:502 [inline]
+>
+> So it claims that the copy to user in rseq_set_ids_get_csaddr() is
+> leaking kernel info through an unitialized variable.
+>
+> The ids struct is on stack and was initialized correctly ...
+>
+> > BUG: KMSAN: kernel-infoleak in rseq_update_usr include/linux/rseq_entry=
+.h:536 [inline]
+> > BUG: KMSAN: kernel-infoleak in rseq_exit_user_update include/linux/rseq=
+_entry.h:645 [inline]
+>
+> here in rseq_exit_user_update().
+>
+> ffffffff90ff6433:       48 89 df                mov    %rbx,%rdi
+> ffffffff90ff6436:       e8 e5 3f db f0          call   ffffffff81daa420 <=
+task_cpu>
+> ffffffff90ff643b:       89 c7                   mov    %eax,%edi
+> ffffffff90ff643d:       89 45 98                mov    %eax,-0x68(%rbp)  =
+       ids.cpu_id
+> ffffffff90ff6440:       8b 8b 94 0b 00 00       mov    0xb94(%rbx),%ecx
+> ffffffff90ff6446:       b8 ff ff ff 9f          mov    $0x9fffffff,%eax
+> ffffffff90ff644b:       21 c1                   and    %eax,%ecx
+> ffffffff90ff644d:       89 4d 90                mov    %ecx,-0x70(%rbp)
+> ffffffff90ff6450:       89 4d 9c                mov    %ecx,-0x64(%rbp)  =
+       ids.mm_cid
+> ffffffff90ff6453:       89 7d ac                mov    %edi,-0x54(%rbp)
+> ffffffff90ff6456:       e8 25 40 db f0          call   ffffffff81daa480 <=
+cpu_to_node>
+> ffffffff90ff645b:       89 45 94                mov    %eax,-0x6c(%rbp)
+> ffffffff90ff645e:       89 45 a0                mov    %eax,-0x60(%rbp)  =
+       ids.node_id
+> ffffffff90ff6461:       c7 45 a4 00 00 00 00    movl   $0x0,-0x5c(%rbp)
+> ffffffff90ff6468:       48 8b bb 50 0b 00 00    mov    0xb50(%rbx),%rdi
+> ffffffff90ff646f:       e8 9c 3e db f0          call   ffffffff81daa310 <=
+mask_user_address>
+>
+> > BUG: KMSAN: kernel-infoleak in __rseq_exit_to_user_mode_restart include=
+/linux/rseq_entry.h:674 [inline]
+> > BUG: KMSAN: kernel-infoleak in rseq_exit_to_user_mode_restart include/l=
+inux/rseq_entry.h:703 [inline]
+> > BUG: KMSAN: kernel-infoleak in exit_to_user_mode_loop kernel/entry/comm=
+on.c:103 [inline]
+> > BUG: KMSAN: kernel-infoleak in __exit_to_user_mode_prepare include/linu=
+x/irq-entry-common.h:207 [inline]
+> > BUG: KMSAN: kernel-infoleak in irqentry_exit_to_user_mode_prepare inclu=
+de/linux/irq-entry-common.h:244 [inline]
+> > BUG: KMSAN: kernel-infoleak in irqentry_exit_to_user_mode include/linux=
+/irq-entry-common.h:315 [inline]
+> > BUG: KMSAN: kernel-infoleak in irqentry_exit+0x4a6/0xa40 kernel/entry/c=
+ommon.c:165
+> >  rseq_set_ids_get_csaddr include/linux/rseq_entry.h:502 [inline]
+> >  rseq_update_usr include/linux/rseq_entry.h:536 [inline]
+> >  rseq_exit_user_update include/linux/rseq_entry.h:645 [inline]
+> >  __rseq_exit_to_user_mode_restart include/linux/rseq_entry.h:674 [inlin=
+e]
+> >  rseq_exit_to_user_mode_restart include/linux/rseq_entry.h:703 [inline]
+> >  exit_to_user_mode_loop kernel/entry/common.c:103 [inline]
+> >  __exit_to_user_mode_prepare include/linux/irq-entry-common.h:207 [inli=
+ne]
+> >  irqentry_exit_to_user_mode_prepare include/linux/irq-entry-common.h:24=
+4 [inline]
+> >  irqentry_exit_to_user_mode include/linux/irq-entry-common.h:315 [inlin=
+e]
+> >  irqentry_exit+0x4a6/0xa40 kernel/entry/common.c:165
+> >  exc_page_fault+0x7e/0xb0 arch/x86/mm/fault.c:1539
+> >  asm_exc_page_fault+0x2b/0x30 arch/x86/include/asm/idtentry.h:595
+>
+> And then it claims that the local variable was created in a completely
+> unrelated piece of code:
+>
+> > Local variable st.i.i created at:
+> >  __do_sys_statfs fs/statfs.c:193 [inline]
+> >  __se_sys_statfs fs/statfs.c:191 [inline]
+> >  __x64_sys_statfs+0x73/0x200 fs/statfs.c:191
+> >  x64_sys_call+0x334c/0x3ea0 arch/x86/include/generated/asm/syscalls_64.=
+h:138
+>
+> The above backtrace clearly tells that the CPU cannot have been in that
+> code because it's in a user mode page fault exception.
+>
+> > Bytes 0-3 of 4 are uninitialized
+> > Memory access of size 4 starts at ffff8881192c3e78
+> > Data copied to user address 00007f05e438a680
+>
+> The code is correct and does the right thing, so something is wrong in
+> KMSAN land. Alexander?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606251008.oKgrpbpv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/rmap.c:2100:13: error: call to undeclared function 'huge_ptep_get'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2100 |                         pteval = huge_ptep_get(mm, address, pvmw.pte);
-         |                                  ^
->> mm/rmap.c:2100:11: error: assigning to 'pte_t' from incompatible type 'int'
-    2100 |                         pteval = huge_ptep_get(mm, address, pvmw.pte);
-         |                                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/huge_ptep_get +2100 mm/rmap.c
-
-  1980	
-  1981	/*
-  1982	 * @arg: enum ttu_flags will be passed to this argument
-  1983	 */
-  1984	static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
-  1985			     unsigned long address, void *arg)
-  1986	{
-  1987		struct mm_struct *mm = vma->vm_mm;
-  1988		DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, address, 0);
-  1989		bool anon_exclusive, ret = true;
-  1990		pte_t pteval;
-  1991		struct page *subpage;
-  1992		struct mmu_notifier_range range;
-  1993		enum ttu_flags flags = (enum ttu_flags)(long)arg;
-  1994		unsigned long nr_pages = 1, end_addr;
-  1995		unsigned long pfn;
-  1996		unsigned long hsz = 0;
-  1997		int ptes = 0;
-  1998	
-  1999		/*
-  2000		 * When racing against e.g. zap_pte_range() on another cpu,
-  2001		 * in between its ptep_get_and_clear_full() and folio_remove_rmap_*(),
-  2002		 * try_to_unmap() may return before folio_mapped() has become false,
-  2003		 * if page table locking is skipped: use TTU_SYNC to wait for that.
-  2004		 */
-  2005		if (flags & TTU_SYNC)
-  2006			pvmw.flags = PVMW_SYNC;
-  2007	
-  2008		/*
-  2009		 * For THP, we have to assume the worse case ie pmd for invalidation.
-  2010		 * For hugetlb, it could be much worse if we need to do pud
-  2011		 * invalidation in the case of pmd sharing.
-  2012		 *
-  2013		 * Note that the folio can not be freed in this function as call of
-  2014		 * try_to_unmap() must hold a reference on the folio.
-  2015		 */
-  2016		range.end = vma_address_end(&pvmw);
-  2017		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma->vm_mm,
-  2018					address, range.end);
-  2019		if (folio_test_hugetlb(folio)) {
-  2020			/*
-  2021			 * If sharing is possible, start and end will be adjusted
-  2022			 * accordingly.
-  2023			 */
-  2024			adjust_range_if_pmd_sharing_possible(vma, &range.start,
-  2025							     &range.end);
-  2026	
-  2027			/* We need the huge page size for set_huge_pte_at() */
-  2028			hsz = huge_page_size(hstate_vma(vma));
-  2029		}
-  2030		mmu_notifier_invalidate_range_start(&range);
-  2031	
-  2032		while (page_vma_mapped_walk(&pvmw)) {
-  2033			nr_pages = 1;
-  2034	
-  2035			/*
-  2036			 * If the folio is in an mlock()d vma, we must not swap it out.
-  2037			 */
-  2038			if (!(flags & TTU_IGNORE_MLOCK) &&
-  2039			    (vma->vm_flags & VM_LOCKED)) {
-  2040				ptes++;
-  2041	
-  2042				/*
-  2043				 * Set 'ret' to indicate the page cannot be unmapped.
-  2044				 *
-  2045				 * Do not jump to walk_abort immediately as additional
-  2046				 * iteration might be required to detect fully mapped
-  2047				 * folio an mlock it.
-  2048				 */
-  2049				ret = false;
-  2050	
-  2051				/* Only mlock fully mapped pages */
-  2052				if (pvmw.pte && ptes != pvmw.nr_pages)
-  2053					continue;
-  2054	
-  2055				/*
-  2056				 * All PTEs must be protected by page table lock in
-  2057				 * order to mlock the page.
-  2058				 *
-  2059				 * If page table boundary has been cross, current ptl
-  2060				 * only protect part of ptes.
-  2061				 */
-  2062				if (pvmw.flags & PVMW_PGTABLE_CROSSED)
-  2063					goto walk_done;
-  2064	
-  2065				/* Restore the mlock which got missed */
-  2066				mlock_vma_folio(folio, vma);
-  2067				goto walk_done;
-  2068			}
-  2069	
-  2070			if (!pvmw.pte) {
-  2071				if (folio_test_lazyfree(folio)) {
-  2072					if (unmap_huge_pmd_locked(vma, pvmw.address, pvmw.pmd, folio))
-  2073						goto walk_done;
-  2074					/*
-  2075					 * unmap_huge_pmd_locked has either already marked
-  2076					 * the folio as swap-backed or decided to retain it
-  2077					 * due to GUP or speculative references.
-  2078					 */
-  2079					goto walk_abort;
-  2080				}
-  2081	
-  2082				if (flags & TTU_SPLIT_HUGE_PMD) {
-  2083					/*
-  2084					 * We temporarily have to drop the PTL and
-  2085					 * restart so we can process the PTE-mapped THP.
-  2086					 */
-  2087					split_huge_pmd_locked(vma, pvmw.address,
-  2088							      pvmw.pmd, false);
-  2089					flags &= ~TTU_SPLIT_HUGE_PMD;
-  2090					page_vma_mapped_walk_restart(&pvmw);
-  2091					continue;
-  2092				}
-  2093			}
-  2094	
-  2095			/* Unexpected PMD-mapped THP? */
-  2096			VM_BUG_ON_FOLIO(!pvmw.pte, folio);
-  2097	
-  2098			address = pvmw.address;
-  2099			if (folio_test_hugetlb(folio)) {
-> 2100				pteval = huge_ptep_get(mm, address, pvmw.pte);
-  2101			} else {
-  2102				/*
-  2103				 * Handle PFN swap PTEs, such as device-exclusive ones,
-  2104				 * that actually map pages.
-  2105				 */
-  2106				pteval = ptep_get(pvmw.pte);
-  2107			}
-  2108			if (likely(pte_present(pteval))) {
-  2109				pfn = pte_pfn(pteval);
-  2110			} else {
-  2111				const softleaf_t entry = softleaf_from_pte(pteval);
-  2112	
-  2113				pfn = softleaf_to_pfn(entry);
-  2114				VM_WARN_ON_FOLIO(folio_test_hugetlb(folio), folio);
-  2115			}
-  2116	
-  2117			subpage = folio_page(folio, pfn - folio_pfn(folio));
-  2118			anon_exclusive = folio_test_anon(folio) &&
-  2119					 PageAnonExclusive(subpage);
-  2120	
-  2121			if (folio_test_hugetlb(folio)) {
-  2122				bool anon = folio_test_anon(folio);
-  2123	
-  2124				/*
-  2125				 * The try_to_unmap() is only passed a hugetlb page
-  2126				 * in the case where the hugetlb page is poisoned.
-  2127				 */
-  2128				VM_BUG_ON_PAGE(!PageHWPoison(subpage), subpage);
-  2129				/*
-  2130				 * huge_pmd_unshare may unmap an entire PMD page.
-  2131				 * There is no way of knowing exactly which PMDs may
-  2132				 * be cached for this mm, so we must flush them all.
-  2133				 * start/end were already adjusted above to cover this
-  2134				 * range.
-  2135				 */
-  2136				flush_cache_range(vma, range.start, range.end);
-  2137	
-  2138				/*
-  2139				 * To call huge_pmd_unshare, i_mmap_rwsem must be
-  2140				 * held in write mode.  Caller needs to explicitly
-  2141				 * do this outside rmap routines.
-  2142				 *
-  2143				 * We also must hold hugetlb vma_lock in write mode.
-  2144				 * Lock order dictates acquiring vma_lock BEFORE
-  2145				 * i_mmap_rwsem.  We can only try lock here and fail
-  2146				 * if unsuccessful.
-  2147				 */
-  2148				if (!anon) {
-  2149					struct mmu_gather tlb;
-  2150	
-  2151					VM_BUG_ON(!(flags & TTU_RMAP_LOCKED));
-  2152					if (!hugetlb_vma_trylock_write(vma))
-  2153						goto walk_abort;
-  2154	
-  2155					tlb_gather_mmu_vma(&tlb, vma);
-  2156					if (huge_pmd_unshare(&tlb, vma, address, pvmw.pte)) {
-  2157						hugetlb_vma_unlock_write(vma);
-  2158						huge_pmd_unshare_flush(&tlb, vma);
-  2159						tlb_finish_mmu(&tlb);
-  2160						/*
-  2161						 * The PMD table was unmapped,
-  2162						 * consequently unmapping the folio.
-  2163						 */
-  2164						goto walk_done;
-  2165					}
-  2166					hugetlb_vma_unlock_write(vma);
-  2167					tlb_finish_mmu(&tlb);
-  2168				}
-  2169				pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
-  2170				if (pte_dirty(pteval))
-  2171					folio_mark_dirty(folio);
-  2172			} else if (likely(pte_present(pteval))) {
-  2173				nr_pages = folio_unmap_pte_batch(folio, &pvmw, flags, pteval);
-  2174				end_addr = address + nr_pages * PAGE_SIZE;
-  2175				flush_cache_range(vma, address, end_addr);
-  2176	
-  2177				/* Nuke the page table entry. */
-  2178				pteval = get_and_clear_ptes(mm, address, pvmw.pte, nr_pages);
-  2179				/*
-  2180				 * We clear the PTE but do not flush so potentially
-  2181				 * a remote CPU could still be writing to the folio.
-  2182				 * If the entry was previously clean then the
-  2183				 * architecture must guarantee that a clear->dirty
-  2184				 * transition on a cached TLB entry is written through
-  2185				 * and traps if the PTE is unmapped.
-  2186				 */
-  2187				if (should_defer_flush(mm, flags))
-  2188					set_tlb_ubc_flush_pending(mm, pteval, address, end_addr);
-  2189				else
-  2190					flush_tlb_range(vma, address, end_addr);
-  2191				if (pte_dirty(pteval))
-  2192					folio_mark_dirty(folio);
-  2193			} else {
-  2194				pte_clear(mm, address, pvmw.pte);
-  2195			}
-  2196	
-  2197			/*
-  2198			 * Now the pte is cleared. If this pte was uffd-wp armed,
-  2199			 * we may want to replace a none pte with a marker pte if
-  2200			 * it's file-backed, so we don't lose the tracking info.
-  2201			 */
-  2202			pte_install_uffd_wp_if_needed(vma, address, pvmw.pte, pteval);
-  2203	
-  2204			/* Update high watermark before we lower rss */
-  2205			update_hiwater_rss(mm);
-  2206	
-  2207			if (PageHWPoison(subpage) && (flags & TTU_HWPOISON)) {
-  2208				pteval = swp_entry_to_pte(make_hwpoison_entry(subpage));
-  2209				if (folio_test_hugetlb(folio)) {
-  2210					hugetlb_count_sub(folio_nr_pages(folio), mm);
-  2211					set_huge_pte_at(mm, address, pvmw.pte, pteval,
-  2212							hsz);
-  2213				} else {
-  2214					dec_mm_counter(mm, mm_counter(folio));
-  2215					set_pte_at(mm, address, pvmw.pte, pteval);
-  2216				}
-  2217			} else if (likely(pte_present(pteval)) && pte_unused(pteval) &&
-  2218				   !userfaultfd_armed(vma)) {
-  2219				/*
-  2220				 * The guest indicated that the page content is of no
-  2221				 * interest anymore. Simply discard the pte, vmscan
-  2222				 * will take care of the rest.
-  2223				 * A future reference will then fault in a new zero
-  2224				 * page. When userfaultfd is active, we must not drop
-  2225				 * this page though, as its main user (postcopy
-  2226				 * migration) will not expect userfaults on already
-  2227				 * copied pages.
-  2228				 */
-  2229				dec_mm_counter(mm, mm_counter(folio));
-  2230			} else if (folio_test_anon(folio)) {
-  2231				swp_entry_t entry = page_swap_entry(subpage);
-  2232				pte_t swp_pte;
-  2233				/*
-  2234				 * Store the swap location in the pte.
-  2235				 * See handle_pte_fault() ...
-  2236				 */
-  2237				if (unlikely(folio_test_swapbacked(folio) !=
-  2238						folio_test_swapcache(folio))) {
-  2239					WARN_ON_ONCE(1);
-  2240					goto walk_abort;
-  2241				}
-  2242	
-  2243				/* MADV_FREE page check */
-  2244				if (!folio_test_swapbacked(folio)) {
-  2245					int ref_count, map_count;
-  2246	
-  2247					/*
-  2248					 * Synchronize with gup_pte_range():
-  2249					 * - clear PTE; barrier; read refcount
-  2250					 * - inc refcount; barrier; read PTE
-  2251					 */
-  2252					smp_mb();
-  2253	
-  2254					ref_count = folio_ref_count(folio);
-  2255					map_count = folio_mapcount(folio);
-  2256	
-  2257					/*
-  2258					 * Order reads for page refcount and dirty flag
-  2259					 * (see comments in __remove_mapping()).
-  2260					 */
-  2261					smp_rmb();
-  2262	
-  2263					if (folio_test_dirty(folio) && !(vma->vm_flags & VM_DROPPABLE)) {
-  2264						/*
-  2265						 * redirtied either using the page table or a previously
-  2266						 * obtained GUP reference.
-  2267						 */
-  2268						set_ptes(mm, address, pvmw.pte, pteval, nr_pages);
-  2269						folio_set_swapbacked(folio);
-  2270						goto walk_abort;
-  2271					} else if (ref_count != 1 + map_count) {
-  2272						/*
-  2273						 * Additional reference. Could be a GUP reference or any
-  2274						 * speculative reference. GUP users must mark the folio
-  2275						 * dirty if there was a modification. This folio cannot be
-  2276						 * reclaimed right now either way, so act just like nothing
-  2277						 * happened.
-  2278						 * We'll come back here later and detect if the folio was
-  2279						 * dirtied when the additional reference is gone.
-  2280						 */
-  2281						set_ptes(mm, address, pvmw.pte, pteval, nr_pages);
-  2282						goto walk_abort;
-  2283					}
-  2284					add_mm_counter(mm, MM_ANONPAGES, -nr_pages);
-  2285					goto discard;
-  2286				}
-  2287	
-  2288				if (folio_dup_swap(folio, subpage) < 0) {
-  2289					set_pte_at(mm, address, pvmw.pte, pteval);
-  2290					goto walk_abort;
-  2291				}
-  2292	
-  2293				/*
-  2294				 * arch_unmap_one() is expected to be a NOP on
-  2295				 * architectures where we could have PFN swap PTEs,
-  2296				 * so we'll not check/care.
-  2297				 */
-  2298				if (arch_unmap_one(mm, vma, address, pteval) < 0) {
-  2299					folio_put_swap(folio, subpage);
-  2300					set_pte_at(mm, address, pvmw.pte, pteval);
-  2301					goto walk_abort;
-  2302				}
-  2303	
-  2304				/* See folio_try_share_anon_rmap(): clear PTE first. */
-  2305				if (anon_exclusive &&
-  2306				    folio_try_share_anon_rmap_pte(folio, subpage)) {
-  2307					folio_put_swap(folio, subpage);
-  2308					set_pte_at(mm, address, pvmw.pte, pteval);
-  2309					goto walk_abort;
-  2310				}
-  2311				if (list_empty(&mm->mmlist)) {
-  2312					spin_lock(&mmlist_lock);
-  2313					if (list_empty(&mm->mmlist))
-  2314						list_add(&mm->mmlist, &init_mm.mmlist);
-  2315					spin_unlock(&mmlist_lock);
-  2316				}
-  2317				dec_mm_counter(mm, MM_ANONPAGES);
-  2318				inc_mm_counter(mm, MM_SWAPENTS);
-  2319				swp_pte = swp_entry_to_pte(entry);
-  2320				if (anon_exclusive)
-  2321					swp_pte = pte_swp_mkexclusive(swp_pte);
-  2322				if (likely(pte_present(pteval))) {
-  2323					if (pte_soft_dirty(pteval))
-  2324						swp_pte = pte_swp_mksoft_dirty(swp_pte);
-  2325					if (pte_uffd_wp(pteval))
-  2326						swp_pte = pte_swp_mkuffd_wp(swp_pte);
-  2327				} else {
-  2328					if (pte_swp_soft_dirty(pteval))
-  2329						swp_pte = pte_swp_mksoft_dirty(swp_pte);
-  2330					if (pte_swp_uffd_wp(pteval))
-  2331						swp_pte = pte_swp_mkuffd_wp(swp_pte);
-  2332				}
-  2333				set_pte_at(mm, address, pvmw.pte, swp_pte);
-  2334			} else {
-  2335				/*
-  2336				 * This is a locked file-backed folio,
-  2337				 * so it cannot be removed from the page
-  2338				 * cache and replaced by a new folio before
-  2339				 * mmu_notifier_invalidate_range_end, so no
-  2340				 * concurrent thread might update its page table
-  2341				 * to point at a new folio while a device is
-  2342				 * still using this folio.
-  2343				 *
-  2344				 * See Documentation/mm/mmu_notifier.rst
-  2345				 */
-  2346				add_mm_counter(mm, mm_counter_file(folio), -nr_pages);
-  2347			}
-  2348	discard:
-  2349			if (unlikely(folio_test_hugetlb(folio))) {
-  2350				hugetlb_remove_rmap(folio);
-  2351			} else {
-  2352				folio_remove_rmap_ptes(folio, subpage, nr_pages, vma);
-  2353			}
-  2354			if (vma->vm_flags & VM_LOCKED)
-  2355				mlock_drain_local();
-  2356			folio_put_refs(folio, nr_pages);
-  2357	
-  2358			/*
-  2359			 * If we are sure that we batched the entire folio and cleared
-  2360			 * all PTEs, we can just optimize and stop right here.
-  2361			 */
-  2362			if (nr_pages == folio_nr_pages(folio))
-  2363				goto walk_done;
-  2364			continue;
-  2365	walk_abort:
-  2366			ret = false;
-  2367	walk_done:
-  2368			page_vma_mapped_walk_done(&pvmw);
-  2369			break;
-  2370		}
-  2371	
-  2372		mmu_notifier_invalidate_range_end(&range);
-  2373	
-  2374		return ret;
-  2375	}
-  2376	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks for the heads-up.
+I am currently reworking both the compiler pass and the exception
+handling, which should hopefully address these problems.
