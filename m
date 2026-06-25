@@ -1,130 +1,162 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550A32F12A5
-	for <llvm@lists.linux.dev>; Thu, 25 Jun 2026 13:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED13347BA9;
+	Thu, 25 Jun 2026 13:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782395591; cv=none; b=d9c7Rvi7BxuYSVpR/g99WNzxRcgcEqaEdY1L1oNpBNeGaOhHI2f/j6oSH1GFIruq4xZIVWyH3PV1wKwz6zMFy/UEWT4MgOWXbjyQdhlqGwU2mFJy72wM27TqD6qG1xQcmjbC30XJfDw54E+QFvRkyztCXqCoVs9HQ5Iierxck7U=
+	t=1782395639; cv=none; b=eH7V1ZRNIFxLIeaxWuXBItEe1GfHYriv3bo3Y4ZhzP2yzGJRGvMoyhmkPNiwfxiiwdecdZHyagsjyTVxyj62DwWEMaKOVlfCE1wFrZaasSEhfBmnbyJSR342XJrHDKbjPY6uHMbgJFbNBvIaQAAMr6uZgwj8OloFqWicvKk1GuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782395591; c=relaxed/simple;
-	bh=SQtFv+ULta9eGMQBXY+z4grn/uhX26J0lYtnGR4EqZY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=D/1b9NVgGP1hNrisvjzeDRkd1bJIi0S1HgtRHEAvkOcSiHJku3PXzb3cGIKoEge3D3hyqv6q+l0sBOb92C4heqBQFTrFa39bAOnl2mOXNq7RAhmwgkR6D+7ykbab5NN24/KwzwxQrn2mPMygIx/44B7DCpHLLpd0N2bXaYINxIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bqpwh7mh; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782395639; c=relaxed/simple;
+	bh=3gWE6pRjmf5/L6XWnC/tL1qHBu5WeuMP/6/gGEEEuw8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h53+ba9L3mvdNma44J7Mmf2eYatl7IOclHw2ENZV7rZ4UvuotbdduoJuTQtZZfZ80njb4BjMLX+z86/D0zAWLoULZDMgDl+g3f909Rw3PE8p4z5QDz10BtlFz14IbV2v8EhImd5Cg2VvBBIpj0ItLc9NOdozcX7PRwNQwmyB8a0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OhDUqHq3; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bqpwh7mh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782395589;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8m84geMn/TlZZTZAyvtZNASypk/vWKb1CqRXS2S2Ubw=;
-	b=Bqpwh7mhMu6es9j7hWE2WUcT9mzsefyJQDkEYUfCg0BKWOHjML1Rw1GFDzen1vK5HEUVjO
-	dvGclrp1OrNs8JIGTi4/oeUB0evhlZbaKvWx5dXks/bpquXOQgrMsYz3R4HbobYZJ987/R
-	I/G0Me6DsIpUY+7jXFsJ5d1r92CpbLs=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-557-eR2Elmq7PiC7tAfkaVlwTA-1; Thu,
- 25 Jun 2026 09:53:06 -0400
-X-MC-Unique: eR2Elmq7PiC7tAfkaVlwTA-1
-X-Mimecast-MFC-AGG-ID: eR2Elmq7PiC7tAfkaVlwTA_1782395586
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E926F1805A0C
-	for <llvm@lists.linux.dev>; Thu, 25 Jun 2026 13:53:05 +0000 (UTC)
-Received: from [172.20.150.89] (unknown [10.30.45.111])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 365641956088;
-	Thu, 25 Jun 2026 13:53:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
- upstream-mainline, ab9de95c)
-Date: Thu, 25 Jun 2026 13:53:04 -0000
-To: fs-test@redhat.com, omosnace@redhat.com, mmalik@redhat.com,
- llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OhDUqHq3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782395638; x=1813931638;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3gWE6pRjmf5/L6XWnC/tL1qHBu5WeuMP/6/gGEEEuw8=;
+  b=OhDUqHq3+qusAloHf3Swz7Cbkjnfztyv3dvzWBLpgLkGgtMs+i9J/jz/
+   IwvhEx+5GSTdVlBkxSI8o3iW3VGxWffEgPJAqunLz3HfPNhtXLC9bScy6
+   0l8QwUiLY3aL8KIBiPcw+hj6Bfe7FgwPg3Il10Yc5FO4/Bf4AeiEpen1X
+   a84+eFtnp1kqSaANmkHfbTnIIT97naJar7OL1/ayO1EVO1PO01b+0ydoL
+   5XaK4Qbl1GSBfnWK2dJYxmdnIePCbUiBY8U06rKpqXeGfql3bWvzrbckc
+   3KiURHRHKk1buPcofnhvC2nB4azBBF51mlytFYjch5IflE1Ybpfp6HVcl
+   A==;
+X-CSE-ConnectionGUID: DWOMjkh1RPOwrU4PdPAamA==
+X-CSE-MsgGUID: 0iNZ1xhYTEqRrdItzvFRcA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11827"; a="83055819"
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="83055819"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 06:53:56 -0700
+X-CSE-ConnectionGUID: KXNGTLFPTSmmQt5eKAQ+dA==
+X-CSE-MsgGUID: 1RD6EuwfTpGnvlK/Rk39WQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,224,1774335600"; 
+   d="scan'208";a="248158427"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 25 Jun 2026 06:53:53 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wckWd-000000004AL-0Nhy;
+	Thu, 25 Jun 2026 13:53:51 +0000
+Date: Thu, 25 Jun 2026 21:53:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: suryasaimadhu <suryasaimadhu369@gmail.com>, andy@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	gregkh@linuxfoundation.org, dri-devel@lists.freedesktop.org,
+	linux-fbdev@vger.kernel.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	suryasaimadhu <suryasaimadhu369@gmail.com>
+Subject: Re: [PATCH] staging: fbtft: fix unaligned vmem writes when txbuf is
+ byte-offset
+Message-ID: <202606252144.F56jkpaD-lkp@intel.com>
+References: <20260625110237.304435-1-suryasaimadhu369@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <40669.126062509530603318@us-mta-557.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: jzt-Eit3cpUDHyewFgVBRUvapJhQwctL31KTi0hYLt4_1782395586
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260625110237.304435-1-suryasaimadhu369@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi suryasaimadhu,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on staging/staging-testing]
 
-Kernel information:
-    Commit message: Merge tag 'rust-7.2-2' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/ojeda/linux
+url:    https://github.com/intel-lab-lkp/linux/commits/suryasaimadhu/staging-fbtft-fix-unaligned-vmem-writes-when-txbuf-is-byte-offset/20260625-190423
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260625110237.304435-1-suryasaimadhu369%40gmail.com
+patch subject: [PATCH] staging: fbtft: fix unaligned vmem writes when txbuf is byte-offset
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260625/202606252144.F56jkpaD-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260625/202606252144.F56jkpaD-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2627524048
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606252144.F56jkpaD-lkp@intel.com/
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2627524048_ppc64le_kernel
+All errors (new ones prefixed by >>):
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        selinux-policy: serge-testsuite
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2627524048_s390x_kernel_kcidb_tool_21519687_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2627524048_aarch64_kernel_kcidb_tool_21519690_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2627524048_x86_64_kernel_kcidb_tool_21519693_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2627524048_aarch64_kernel_kcidb_tool_21519691_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+>> drivers/staging/fbtft/fbtft-bus.c:157:4: error: call to undeclared function 'put_unaligned'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     157 |                         put_unaligned(cpu_to_be16(vmem16[i]), &txbuf16[i]);
+         |                         ^
+   1 error generated.
 
 
+vim +/put_unaligned +157 drivers/staging/fbtft/fbtft-bus.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+   113	
+   114	/*****************************************************************************
+   115	 *
+   116	 *   int (*write_vmem)(struct fbtft_par *par);
+   117	 *
+   118	 *****************************************************************************/
+   119	
+   120	/* 16 bit pixel over 8-bit databus */
+   121	int fbtft_write_vmem16_bus8(struct fbtft_par *par, size_t offset, size_t len)
+   122	{
+   123		u16 *vmem16;
+   124		__be16 *txbuf16 = par->txbuf.buf;
+   125		size_t remain;
+   126		size_t to_copy;
+   127		size_t tx_array_size;
+   128		int i;
+   129		int ret = 0;
+   130		size_t startbyte_size = 0;
+   131	
+   132		remain = len / 2;
+   133		vmem16 = (u16 *)(par->info->screen_buffer + offset);
+   134	
+   135		gpiod_set_value(par->gpio.dc, 1);
+   136	
+   137		/* non buffered write */
+   138		if (!par->txbuf.buf)
+   139			return par->fbtftops.write(par, vmem16, len);
+   140	
+   141		/* buffered write */
+   142		tx_array_size = par->txbuf.len / 2;
+   143	
+   144		if (par->startbyte) {
+   145			txbuf16 = par->txbuf.buf + 1;
+   146			tx_array_size -= 2;
+   147			*(u8 *)(par->txbuf.buf) = par->startbyte | 0x2;
+   148			startbyte_size = 1;
+   149		}
+   150	
+   151		while (remain) {
+   152			to_copy = min(tx_array_size, remain);
+   153			dev_dbg(par->info->device, "to_copy=%zu, remain=%zu\n",
+   154				to_copy, remain - to_copy);
+   155	
+   156			for (i = 0; i < to_copy; i++)
+ > 157				put_unaligned(cpu_to_be16(vmem16[i]), &txbuf16[i]);
+   158	
+   159			vmem16 = vmem16 + to_copy;
+   160			ret = par->fbtftops.write(par, par->txbuf.buf,
+   161							startbyte_size + to_copy * 2);
+   162			if (ret < 0)
+   163				return ret;
+   164			remain -= to_copy;
+   165		}
+   166	
+   167		return ret;
+   168	}
+   169	EXPORT_SYMBOL(fbtft_write_vmem16_bus8);
+   170	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
