@@ -1,124 +1,209 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EAE37EFEB;
-	Fri, 26 Jun 2026 15:13:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A0536B05E;
+	Fri, 26 Jun 2026 19:14:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782486839; cv=none; b=Qm+AyaL2/JaRiPJt6roeuBUgFNRoUprFQAX4NQr08xPxthofwTQnE9BXD958MykU9jYrB/RffXegqBKibwQLEooPNN0kxs5xmZrYQKdfIz4q2zA8eYdJx3KvuZARUOVfqTLnBpJlsvxHmPxitQRg6M8OspRLdaGNA3Fm7qcfkLs=
+	t=1782501275; cv=none; b=eHkXbNeX8bKN8vQ4UNfsxof2AOnWhJWa8HMcRoX3d1OTvYXuQ2LY724aPuibcVdAP+kZIhaEtn9bK6P3ABp6ySACxgNU+OKIjLQ3LinDvWg2h+OGyu4wyM3CZYd5fgRotJ8cdP78Q2Xyc6gYrK1PHeBrkejumn/3gA15qpNhMR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782486839; c=relaxed/simple;
-	bh=z4o/HCjNcEplIXMubCeVq4CvjWXSQ1MeitIDVefnBM0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=B0xW7/3eol4b3kUaUDshsE26mwM9CgZX+Pn2V4DFA+hGC4qpawDHzOwVgbGs1AoPUMNNN+h/21cFO7/FsG9lqRzu++HOJPXzz9kXGgkXEZlFOV38JOClnk5hzxa9TMLIf5PxxepcoKTEYveM3ZVgkPth0L34FeyYsH/DeIEY3DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QOHKg2Ld; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1782501275; c=relaxed/simple;
+	bh=Uvj9han53ZGOnMq1huycOBv+PLMV6ktMEjvXTW+OIOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=U10/k3bCU1s6j0bkGxxKTk4uoXIoFswTTZDqyrTwbKLM+KiW8OC6759akLEYh0VKL//nB5eavRnjFqVE9XdqeRKhmaDz7ykJcu6iz03eFOid/oV92qBLmKKPVush13YZNEExylU3+EENlO74nC/a3pJot4xirU0NtFy2FTJDiJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=krWTUJeC; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QOHKg2Ld"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="krWTUJeC"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782486829; x=1814022829;
-  h=date:from:to:cc:subject:message-id;
-  bh=z4o/HCjNcEplIXMubCeVq4CvjWXSQ1MeitIDVefnBM0=;
-  b=QOHKg2Ldb/1m7/CDBBo8/fSExw2a+TfAXFLTrqN2fvr7nw0SGPKfv1Q9
-   70cTEj7nmFvqYsH4itR4A+XJFc45RRo7RXauJ0iqL8ZY5yohCKb5ARP2x
-   qPZFBYoD83s54CersXm1TSFuDF/XC2Tmgtmp4KigRAcJDT4d0s8DwwHHb
-   Gr+gAHZJ4oEHhKUR56mmJQ0/WsyVe/5EPUpYicgyoM8XjOEMF+hb3h75a
-   3mc0HEgmpSRGOvTgg4/iru6tWEGvURTqJUdb9ufmbz1MB2mVOsh6Alq2l
-   mUQsmVW50gIoyfUHXRd/UrDwUKp/OVenZkCp1cS4/bR1uNhYOUMSozaEY
-   A==;
-X-CSE-ConnectionGUID: j0pbpptMTZ+5zViGqMcvNg==
-X-CSE-MsgGUID: Bitxe8dSQCGdRfmTO2na4g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11829"; a="87126326"
-X-IronPort-AV: E=Sophos;i="6.24,226,1774335600"; 
-   d="scan'208";a="87126326"
+  t=1782501274; x=1814037274;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Uvj9han53ZGOnMq1huycOBv+PLMV6ktMEjvXTW+OIOI=;
+  b=krWTUJeCDOy7hxwJL5USjVapNLrE9LB3ueXGpE7o2btV/rUNIVza3fJw
+   1LYiMCEOyDV4F4iOsuyaH0iFYwIBwxeQaVpCwhqrMYr386R4+e5d6dd9M
+   IMZ4tIqsikfLw9Zsp4l46uIX2XITjKw3SNTwPQDEvA56laFjjwYsPmWLG
+   eDgSMqa1oksQDhtpZMCsy3Ttvb/Dn6jP4ZMoC8IsAokmvDo07jJeIT/g4
+   WI9PjQECBSfKMrCYUYoXNIf+iXPGQ4hYoMgces6VVEKW0rNi3DfeGiMAg
+   G9PZrjM/NWxvNxa221vS69JCmFh/O+aj2xuam1YcetY2YMdQ1W6uMDDjX
+   Q==;
+X-CSE-ConnectionGUID: y1EQ0itTR9qxb9UhW3SscA==
+X-CSE-MsgGUID: 0dIRZR2lQgyROSftjhy8cw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11829"; a="100846056"
+X-IronPort-AV: E=Sophos;i="6.24,227,1774335600"; 
+   d="scan'208";a="100846056"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2026 08:13:48 -0700
-X-CSE-ConnectionGUID: tsgQCIb9SaqQ8eSuq4v+/w==
-X-CSE-MsgGUID: /IzD56TASRyDo2yShEJ77g==
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2026 12:14:33 -0700
+X-CSE-ConnectionGUID: lZeKuejRStSDcyygLfjw3g==
+X-CSE-MsgGUID: PjwAcs+SSMOc3yclWm1SDA==
 X-ExtLoop1: 1
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Jun 2026 08:13:46 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 26 Jun 2026 12:14:31 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wd8FU-000000005B9-14H6;
-	Fri, 26 Jun 2026 15:13:44 +0000
-Date: Fri, 26 Jun 2026 23:13:40 +0800
+	id 1wdC0T-000000005Mz-0BYx;
+	Fri, 26 Jun 2026 19:14:29 +0000
+Date: Sat, 27 Jun 2026 03:13:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-06-26 328/328]
- sound/soc/fsl/mpc5200_dma.c:299:35: error: incomplete definition of type
- 'struct snd_soc_card'
-Message-ID: <202606262303.4pgfRmts-lkp@intel.com>
+Subject: [thomas-weissschuh:b4/hrtimer-header-dependencies 5/5]
+ include/linux/hrtimer_rearm.h:80:97: error: use of undeclared identifier
+ 'false'; did you mean 'else'?
+Message-ID: <202606270343.XYWq4Kgr-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-26
-head:   3b1a6af55c000fdba23910aeb597cb608b44bed6
-commit: 3b1a6af55c000fdba23910aeb597cb608b44bed6 [328/328] SoC: move struct snd_soc_card/snd_soc_card_driver to soc-card.[hc]
-config: powerpc-randconfig-001-20260626 (https://download.01.org/0day-ci/archive/20260626/202606262303.4pgfRmts-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260626/202606262303.4pgfRmts-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/hrtimer-header-dependencies
+head:   0fffc8fb3ee52eaf84481a67834faa5bb8b482b0
+commit: 0fffc8fb3ee52eaf84481a67834faa5bb8b482b0 [5/5] hrtimer: Remove inclusion of hrtimer_bases.h remove from hrtimer.h
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260627/202606270343.XYWq4Kgr-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260627/202606270343.XYWq4Kgr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606262303.4pgfRmts-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606270343.XYWq4Kgr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/fsl/mpc5200_dma.c:299:35: error: incomplete definition of type 'struct snd_soc_card'
-     299 |         struct snd_card *card = rtd->card->snd_card;
-         |                                 ~~~~~~~~~^
-   include/sound/soc.h:417:8: note: forward declaration of 'struct snd_soc_card'
-     417 | struct snd_soc_card;
-         |        ^
-   sound/soc/fsl/mpc5200_dma.c:305:19: error: incomplete definition of type 'struct snd_soc_component'
-     305 |         dev_dbg(component->dev, "psc_dma_new(card=%p, dai=%p, pcm=%p)\n",
-         |                 ~~~~~~~~~^
-   include/sound/soc.h:422:8: note: forward declaration of 'struct snd_soc_component'
-     422 | struct snd_soc_component;
-         |        ^
-   sound/soc/fsl/mpc5200_dma.c:317:3: error: field designator 'name' does not refer to any field in type 'const struct snd_soc_component_driver'
-     317 |         .name           = DRV_NAME,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~
-   3 errors generated.
+   In file included from kernel/time/vsyscall.c:10:
+   In file included from include/linux/hrtimer.h:15:
+   include/linux/hrtimer_rearm.h:79:24: error: unknown type name 'bool'
+      79 | static __always_inline bool
+         |                        ^
+>> include/linux/hrtimer_rearm.h:80:97: error: use of undeclared identifier 'false'; did you mean 'else'?
+      80 | hrtimer_rearm_deferred_user_irq(unsigned long *tif_work, const unsigned long tif_mask) { return false; }
+         |                                                                                                 ^~~~~
+         |                                                                                                 else
+>> include/linux/hrtimer_rearm.h:80:97: error: expected expression
+   include/linux/hrtimer_rearm.h:81:24: error: unknown type name 'bool'
+      81 | static __always_inline bool hrtimer_test_and_clear_rearm_deferred(void) { return false; }
+         |                        ^
+   include/linux/hrtimer_rearm.h:81:82: error: use of undeclared identifier 'false'; did you mean 'else'?
+      81 | static __always_inline bool hrtimer_test_and_clear_rearm_deferred(void) { return false; }
+         |                                                                                  ^~~~~
+         |                                                                                  else
+   include/linux/hrtimer_rearm.h:81:82: error: expected expression
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+      99 |                         set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
+     101 |                 return (set->sig[1] | set->sig[0]) == 0;
+         |                         ^        ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
+   In file included from include/vdso/datapage.h:25:
+   In file included from arch/loongarch/include/asm/vdso/arch_data.h:13:
+   In file included from arch/loongarch/include/asm/vdso.h:10:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
+      62 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from kernel/time/vsyscall.c:12:
 
 
-vim +299 sound/soc/fsl/mpc5200_dma.c
+vim +80 include/linux/hrtimer_rearm.h
 
-89dd08425273773 Jon Smirl         2009-05-23  295  
-6d1048bc115259b Kuninori Morimoto 2019-10-02  296  static int psc_dma_new(struct snd_soc_component *component,
-6d1048bc115259b Kuninori Morimoto 2019-10-02  297  		       struct snd_soc_pcm_runtime *rtd)
-89dd08425273773 Jon Smirl         2009-05-23  298  {
-552d1ef6b5a98d7 Liam Girdwood     2011-06-07 @299  	struct snd_card *card = rtd->card->snd_card;
-14ec63f678e8bea Kuninori Morimoto 2023-09-11  300  	struct snd_soc_dai *dai = snd_soc_rtd_to_cpu(rtd, 0);
-552d1ef6b5a98d7 Liam Girdwood     2011-06-07  301  	struct snd_pcm *pcm = rtd->pcm;
-dbcc34756234596 Jon Smirl         2009-05-26  302  	size_t size = psc_dma_hardware.buffer_bytes_max;
-c9bd5e690a439df Russell King      2013-06-27  303  	int rc;
-89dd08425273773 Jon Smirl         2009-05-23  304  
-60bceb8029e26c4 Kuninori Morimoto 2018-01-29  305  	dev_dbg(component->dev, "psc_dma_new(card=%p, dai=%p, pcm=%p)\n",
-89dd08425273773 Jon Smirl         2009-05-23  306  		card, dai, pcm);
-89dd08425273773 Jon Smirl         2009-05-23  307  
-c9bd5e690a439df Russell King      2013-06-27  308  	rc = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
-c9bd5e690a439df Russell King      2013-06-27  309  	if (rc)
-c9bd5e690a439df Russell King      2013-06-27  310  		return rc;
-89dd08425273773 Jon Smirl         2009-05-23  311  
-3610a6d1dbd19b3 Takashi Iwai      2021-08-02  312  	return snd_pcm_set_fixed_buffer_all(pcm, SNDRV_DMA_TYPE_DEV, card->dev,
-3610a6d1dbd19b3 Takashi Iwai      2021-08-02  313  					    size);
-89dd08425273773 Jon Smirl         2009-05-23  314  }
-89dd08425273773 Jon Smirl         2009-05-23  315  
+15dd3a9488557d Peter Zijlstra 2026-02-24  74  
+a43b4856bc0396 Peter Zijlstra 2026-02-24  75  #else  /* CONFIG_HRTIMER_REARM_DEFERRED */
+a43b4856bc0396 Peter Zijlstra 2026-02-24  76  static __always_inline void __hrtimer_rearm_deferred(void) { }
+a43b4856bc0396 Peter Zijlstra 2026-02-24  77  static __always_inline void hrtimer_rearm_deferred(void) { }
+a43b4856bc0396 Peter Zijlstra 2026-02-24  78  static __always_inline void hrtimer_rearm_deferred_tif(unsigned long tif_work) { }
+a43b4856bc0396 Peter Zijlstra 2026-02-24  79  static __always_inline bool
+a43b4856bc0396 Peter Zijlstra 2026-02-24 @80  hrtimer_rearm_deferred_user_irq(unsigned long *tif_work, const unsigned long tif_mask) { return false; }
+a43b4856bc0396 Peter Zijlstra 2026-02-24  81  static __always_inline bool hrtimer_test_and_clear_rearm_deferred(void) { return false; }
+a43b4856bc0396 Peter Zijlstra 2026-02-24  82  #endif  /* !CONFIG_HRTIMER_REARM_DEFERRED */
+a43b4856bc0396 Peter Zijlstra 2026-02-24  83  
 
-:::::: The code at line 299 was first introduced by commit
-:::::: 552d1ef6b5a98d7b95959d5b139071e3c90cebf1 ASoC: core - Optimise and refactor pcm_new() to pass only rtd
+:::::: The code at line 80 was first introduced by commit
+:::::: a43b4856bc039675165a50d9ef5f41b28520f0f4 hrtimer: Prepare stubs for deferred rearming
 
-:::::: TO: Liam Girdwood <lrg@ti.com>
-:::::: CC: Mark Brown <broonie@opensource.wolfsonmicro.com>
+:::::: TO: Peter Zijlstra <peterz@infradead.org>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
 
 --
 0-DAY CI Kernel Test Service
