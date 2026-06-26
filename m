@@ -1,121 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC79678C9C;
-	Fri, 26 Jun 2026 12:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D88E2E738E;
+	Fri, 26 Jun 2026 12:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782478231; cv=none; b=emjih/dk3Ylx5G1YVKgOvytnMds1L3B2HJFZG+8KP4BDrORohYNLMbvT0JLZxho4jIov6ya56RTpqueIxVG4tFrq/ApY2l7yg/BPSO59PhCD73M99ArGUZEbggH37eVO3NDXJ+xn9nqcS7/8DLQZxzDbHZcAWJZNvlmw2uB3AgI=
+	t=1782478237; cv=none; b=s86xzVX5d5rsOGCLbjAU9OkncO5joU7n/zFk8jHCf6OYGNyNAyu2vDbRaurUI8zwnlNyXGvNcWuX0H4senZH0eGiEJ+tOMturRL1KFhcFi7eKvawghAWxhQqSLqToFDLSmHzLAGeBPUuj0ng3hOyG9Nu2p3IhXFAMyNeiGgSNwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782478231; c=relaxed/simple;
-	bh=9DcwqRyLAMTDfL2Is/VA6OFxPa9MKQ9xfBXg/6Xbj0g=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=LTdnoyQ9nfw7d7mao+vkcPe4s2hVKJEImatk9ZL7BuI6KJ//t0xy6GPGAY/pM+MYguVke0WLS5LVYDh6Nq1R+jop4CurkVdYt1zz/HjJFmbVcLfL3/SrRXEYGXFLoI8xhQhFPSTYf5m8hyVAQTiVg2sE+eR9A+67kSZT9LBLLKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jTxmRjx0; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782478237; c=relaxed/simple;
+	bh=FONYNlnjtYQKKhWdd3PPsq2YJhbR1niQBio60BndP/A=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=jSNwKcl5m8AhPxWtNPGs18tE2AOKWxOZm4uNQwipkg7nlRrn5cZmGpcfexU2Kbf/FLlcmP3T9E400uIW8/CnQzsKbfZZNFgcehDH1J5xsdMLFBfan2yUR8BXx6DLZs2d92HHw2OBSUmT/5hcd3LJBxGeVaeXZLeB8P3qxI5F7TE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=SN+5JbWD; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jTxmRjx0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782478229; x=1814014229;
-  h=date:from:to:cc:subject:message-id;
-  bh=9DcwqRyLAMTDfL2Is/VA6OFxPa9MKQ9xfBXg/6Xbj0g=;
-  b=jTxmRjx09t8/pxVf1Vhx1AMY//LXZqACGDEykWqv1prwecRQXccNrOW5
-   Gab0VEqrEuWe8ZLPb444uFZ3YW8D2mH+SiIRl3k6p9ksC04TEjK5Zvt3U
-   w7cGn9JjG2Sn6OYqgv9TdU9fGUjiYkW4m/W1oSe8uEVTmRdizKd4mjk0V
-   nlLThRjHSlbkQ0EsLU9NFtQ5yooO9Sm/isQSNJ1aP8LpThCnDJ2S4tjHK
-   rxwOPyBtL31Y9kzEwDtMWtbVB2da6K/xwgz5wiybs1cp6qI23tL1pNegQ
-   +lWTWjYRqr3G2EgaXFSsCOQYTjivK9o0ps+2BVgRUybhsGuDvfHaXl9Pw
-   g==;
-X-CSE-ConnectionGUID: FSFV+M9STUGZ7vNxefZ12w==
-X-CSE-MsgGUID: UTYiXMXjRn+dEvM03NsIdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11829"; a="85820656"
-X-IronPort-AV: E=Sophos;i="6.24,226,1774335600"; 
-   d="scan'208";a="85820656"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2026 05:50:29 -0700
-X-CSE-ConnectionGUID: Mt/KsbRQTyShK1jqHEIbfw==
-X-CSE-MsgGUID: 4wHJWcbURiS/ya+/SgiC4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,226,1774335600"; 
-   d="scan'208";a="256218020"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 26 Jun 2026 05:50:27 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wd60m-0000000054P-20Dz;
-	Fri, 26 Jun 2026 12:50:24 +0000
-Date: Fri, 26 Jun 2026 20:49:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [morimoto:sound-cleanup-2026-06-26 325/328]
- sound/soc/fsl/mpc5200_dma.c:305:19: error: incomplete definition of type
- 'struct snd_soc_component'
-Message-ID: <202606262024.B3aEpknN-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="SN+5JbWD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=edR1O+4zo8Kn4wUlhsD/K514WXfjjVwDAwj4dTB/RZ0=; b=SN+5JbWDQdwpLI/BdRvp3uNU53
+	dRLUBoswABAsv5Hs5LEH6b579l7AbiuwFTc5rkyVQFYcjvoSsq99cDY62RqWhm6J1TBntI6QGgerj
+	NjJ6bpmJIAq8/eQPJiW1oq80OPQtDI2kQZf78KjGSui5YyQws8wcUAlVMIB1tz34x1zlBg36S2sYz
+	dY5k2m13E2gN+LCXYe2alpXAcb/VqP30k1u6CNpeKcT3cnkHSEmCq3cxOZWqCbaIt9MhlYz0zY36B
+	5Z6TGWE6XwsG8imtt7w07uEPn8/5wvN6O0wxyuP3L4zQXb0m2HhUpcmfL+Z1TUTRMmZj/YM98+iXe
+	dutrGSBQ==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wd60u-003yku-0i;
+	Fri, 26 Jun 2026 12:50:32 +0000
+From: Breno Leitao <leitao@debian.org>
+Date: Fri, 26 Jun 2026 05:50:10 -0700
+Subject: [PATCH v7 1/9] bootconfig: fix NULL-pointer arithmetic in
+ xbc_snprint_cmdline()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260626-bootconfig_using_tools-v7-1-24ab72139c29@debian.org>
+References: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
+In-Reply-To: <20260626-bootconfig_using_tools-v7-0-24ab72139c29@debian.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ Nathan Chancellor <nathan@kernel.org>, paulmck@kernel.org, 
+ Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+ linux-doc@vger.kernel.org, Breno Leitao <leitao@debian.org>, 
+ kernel-team@meta.com
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3061; i=leitao@debian.org;
+ h=from:subject:message-id; bh=FONYNlnjtYQKKhWdd3PPsq2YJhbR1niQBio60BndP/A=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqPnWLAsGV4zp4/cLsG9Kq5gQt1l6AF+/RKHEaP
+ egbSGfud5eJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaj51iwAKCRA1o5Of/Hh3
+ bXH1EACOTnmB6+IAH9McSqoCDnmPJTKpN/ps4FzFNzue5QWWbNEkn4w4qZ2ZkJKgIapdXMRf9I5
+ bzLkGnNzgA6MrzTUobv3qv+CTo1pMxFF019H9pavvRDolq1X8zYUI15X2CmdsgL6GTW+uJU8xfx
+ 5KuiuaOaEarFbq3KEfz8vsRo3B+A4+KA3n/L4+1Pf5R9mgIYYvIYj/HcJs1tl3410tQOYnl5Xbz
+ 5+wteq7mbAthKBNQtrRKtOrJHQyx2odjaU21uYNVhKw4jpKCffez+xgqAOD/+irQz1skkErQ5kk
+ 6RF2x27Av5p805tAIwCKT3uq2kLYeex/wxqYXOO1DBqCQJSo4D8Ov59N+++DmzZ92VkpIf5keHV
+ 3r85DI576wJa7ukAVGhLEj6CS8+uwkKJw2WASLZWrkS7njS9pxhujDZv8zMfQz+wDeXJVFyRhSw
+ hW8vDco36zUyCIajiID5jmP7JjUx4q4bR+2ncUJ0x0d/MwW/fg37pessxUZmae9jQZ5ZKJwcKmc
+ XcfzWwIzd6vI4hKyqTr1koAZyA/I6peNTT/1rsWOHMHllOHl2aXqMYKymedTC5llT18kIdCVkzs
+ jZFAZtEhw0++D5uYtTFym/sTRCvA88MIx6HVUGgxEZtJMKVSGec9HJGxhQwwXck8boiRjnLhZsx
+ roVXacZnAQwUqWg==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-26
-head:   3b1a6af55c000fdba23910aeb597cb608b44bed6
-commit: c085b7e7f9341cb11ce08b5cc0cb7d47ecac602b [325/328] ASoC: soc-component: capsuling Component
-config: powerpc-randconfig-001-20260626 (https://download.01.org/0day-ci/archive/20260626/202606262024.B3aEpknN-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260626/202606262024.B3aEpknN-lkp@intel.com/reproduce)
+xbc_snprint_cmdline() is meant to be called twice: first with
+buf=NULL, size=0 to probe the rendered length, then with a real
+buffer to fill it (the standard snprintf() two-pass pattern). The
+probe call makes the function compute "buf + size" (NULL + 0) and,
+on every iteration, advance "buf += ret" from that NULL base and
+pass the result back into snprintf().
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606262024.B3aEpknN-lkp@intel.com/
+Pointer arithmetic on a NULL pointer is undefined behavior. It is
+harmless in the in-kernel callers today, but the follow-up patches
+run this same code in the userspace tools/bootconfig parser at kernel
+build time, where host UBSan / FORTIFY_SOURCE abort the build.
 
-All errors (new ones prefixed by >>):
+Track a running written length (size_t) instead of mutating @buf, and
+only form "buf + len" when @buf is non-NULL. snprintf(NULL, 0, ...)
+is itself well defined and returns the would-be length, so the
+two-pass "probe then fill" usage returns identical byte counts.
 
->> sound/soc/fsl/mpc5200_dma.c:305:19: error: incomplete definition of type 'struct snd_soc_component'
-     305 |         dev_dbg(component->dev, "psc_dma_new(card=%p, dai=%p, pcm=%p)\n",
-         |                 ~~~~~~~~~^
-   include/sound/soc.h:422:8: note: forward declaration of 'struct snd_soc_component'
-     422 | struct snd_soc_component;
-         |        ^
-   sound/soc/fsl/mpc5200_dma.c:317:3: error: field designator 'name' does not refer to any field in type 'const struct snd_soc_component_driver'
-     317 |         .name           = DRV_NAME,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ lib/bootconfig.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
+diff --git a/lib/bootconfig.c b/lib/bootconfig.c
+index f445b7703fdd9..2ed9ee3dc81c7 100644
+--- a/lib/bootconfig.c
++++ b/lib/bootconfig.c
+@@ -427,10 +427,18 @@ static char xbc_namebuf[XBC_KEYLEN_MAX] __initdata;
+ int __init xbc_snprint_cmdline(char *buf, size_t size, struct xbc_node *root)
+ {
+ 	struct xbc_node *knode, *vnode;
+-	char *end = buf + size;
+ 	const char *val, *q;
++	size_t len = 0;
+ 	int ret;
+ 
++	/*
++	 * Track the running written length rather than advancing @buf, so we
++	 * never form "buf + size" or "buf += ret" while @buf is NULL (the
++	 * size-probe call passes buf=NULL, size=0). NULL pointer arithmetic
++	 * is undefined behavior and trips host UBSan / FORTIFY_SOURCE when
++	 * this renderer runs at kernel build time. snprintf(NULL, 0, ...)
++	 * itself is well defined and returns the would-be length.
++	 */
+ 	xbc_node_for_each_key_value(root, knode, val) {
+ 		ret = xbc_node_compose_key_after(root, knode,
+ 					xbc_namebuf, XBC_KEYLEN_MAX);
+@@ -439,10 +447,11 @@ int __init xbc_snprint_cmdline(char *buf, size_t size, struct xbc_node *root)
+ 
+ 		vnode = xbc_node_get_child(knode);
+ 		if (!vnode) {
+-			ret = snprintf(buf, rest(buf, end), "%s ", xbc_namebuf);
++			ret = snprintf(buf ? buf + len : NULL, rest(len, size),
++				       "%s ", xbc_namebuf);
+ 			if (ret < 0)
+ 				return ret;
+-			buf += ret;
++			len += ret;
+ 			continue;
+ 		}
+ 		xbc_array_for_each_value(vnode, val) {
+@@ -452,15 +461,15 @@ int __init xbc_snprint_cmdline(char *buf, size_t size, struct xbc_node *root)
+ 			 * whitespace.
+ 			 */
+ 			q = strpbrk(val, " \t\r\n") ? "\"" : "";
+-			ret = snprintf(buf, rest(buf, end), "%s=%s%s%s ",
+-				       xbc_namebuf, q, val, q);
++			ret = snprintf(buf ? buf + len : NULL, rest(len, size),
++				       "%s=%s%s%s ", xbc_namebuf, q, val, q);
+ 			if (ret < 0)
+ 				return ret;
+-			buf += ret;
++			len += ret;
+ 		}
+ 	}
+ 
+-	return buf - (end - size);
++	return len;
+ }
+ #undef rest
+ 
 
-vim +305 sound/soc/fsl/mpc5200_dma.c
+-- 
+2.53.0-Meta
 
-89dd0842527377 Jon Smirl         2009-05-23  295  
-6d1048bc115259 Kuninori Morimoto 2019-10-02  296  static int psc_dma_new(struct snd_soc_component *component,
-6d1048bc115259 Kuninori Morimoto 2019-10-02  297  		       struct snd_soc_pcm_runtime *rtd)
-89dd0842527377 Jon Smirl         2009-05-23  298  {
-552d1ef6b5a98d Liam Girdwood     2011-06-07  299  	struct snd_card *card = rtd->card->snd_card;
-14ec63f678e8be Kuninori Morimoto 2023-09-11  300  	struct snd_soc_dai *dai = snd_soc_rtd_to_cpu(rtd, 0);
-552d1ef6b5a98d Liam Girdwood     2011-06-07  301  	struct snd_pcm *pcm = rtd->pcm;
-dbcc3475623459 Jon Smirl         2009-05-26  302  	size_t size = psc_dma_hardware.buffer_bytes_max;
-c9bd5e690a439d Russell King      2013-06-27  303  	int rc;
-89dd0842527377 Jon Smirl         2009-05-23  304  
-60bceb8029e26c Kuninori Morimoto 2018-01-29 @305  	dev_dbg(component->dev, "psc_dma_new(card=%p, dai=%p, pcm=%p)\n",
-89dd0842527377 Jon Smirl         2009-05-23  306  		card, dai, pcm);
-89dd0842527377 Jon Smirl         2009-05-23  307  
-c9bd5e690a439d Russell King      2013-06-27  308  	rc = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
-c9bd5e690a439d Russell King      2013-06-27  309  	if (rc)
-c9bd5e690a439d Russell King      2013-06-27  310  		return rc;
-89dd0842527377 Jon Smirl         2009-05-23  311  
-3610a6d1dbd19b Takashi Iwai      2021-08-02  312  	return snd_pcm_set_fixed_buffer_all(pcm, SNDRV_DMA_TYPE_DEV, card->dev,
-3610a6d1dbd19b Takashi Iwai      2021-08-02  313  					    size);
-89dd0842527377 Jon Smirl         2009-05-23  314  }
-89dd0842527377 Jon Smirl         2009-05-23  315  
-
-:::::: The code at line 305 was first introduced by commit
-:::::: 60bceb8029e26c49549a276d5d67198cdfb57b5d ASoC: fsl: mpc5200: replace platform to component
-
-:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
