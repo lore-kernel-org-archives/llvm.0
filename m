@@ -1,133 +1,121 @@
-Received: from mail-dy1-f177.google.com (mail-dy1-f177.google.com [74.125.82.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43B3B3EC2CD
-	for <llvm@lists.linux.dev>; Fri, 26 Jun 2026 10:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782469086; cv=pass; b=Rd+FUqNifrAR101HP5fuLyQSs2lagXOqZ1XhxBrpMZkAgbxi95kWBSWhzeVKj0fts9j7NQPRnjiWNSZKTahqxjo95ARU7ymYRAfA45mRbC0oTVu3yf7pBg25tuQMKcCUKX1XJ4n7HXeKuLGeTJy15sXlcjtjJQ5Rmj2BA3r5FZk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782469086; c=relaxed/simple;
-	bh=OwEemPqInwbSVk9dzdDs5pHQn5Viy4wnF3S49Fh17/k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LLT78w0dyzgBhd3ALsP64mEMoayOpN8wOFuTJPA2aZnbFa0F/IrpJDi8CttOkE3Tyqud0NkcSasgd7Y6fdsQA+dUOS1mcYYUTibvhmvca/tXq/NHOsKi+TjxkYhvPW0eYQffNLgrjxzfRhz12w3ZBK5b1Qe/dlTBG9NuRSHlUaA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d1++0myA; arc=pass smtp.client-ip=74.125.82.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC79678C9C;
+	Fri, 26 Jun 2026 12:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782478231; cv=none; b=emjih/dk3Ylx5G1YVKgOvytnMds1L3B2HJFZG+8KP4BDrORohYNLMbvT0JLZxho4jIov6ya56RTpqueIxVG4tFrq/ApY2l7yg/BPSO59PhCD73M99ArGUZEbggH37eVO3NDXJ+xn9nqcS7/8DLQZxzDbHZcAWJZNvlmw2uB3AgI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782478231; c=relaxed/simple;
+	bh=9DcwqRyLAMTDfL2Is/VA6OFxPa9MKQ9xfBXg/6Xbj0g=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=LTdnoyQ9nfw7d7mao+vkcPe4s2hVKJEImatk9ZL7BuI6KJ//t0xy6GPGAY/pM+MYguVke0WLS5LVYDh6Nq1R+jop4CurkVdYt1zz/HjJFmbVcLfL3/SrRXEYGXFLoI8xhQhFPSTYf5m8hyVAQTiVg2sE+eR9A+67kSZT9LBLLKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jTxmRjx0; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d1++0myA"
-Received: by mail-dy1-f177.google.com with SMTP id 5a478bee46e88-30bb87c90deso74137eec.3
-        for <llvm@lists.linux.dev>; Fri, 26 Jun 2026 03:18:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782469084; cv=none;
-        d=google.com; s=arc-20260327;
-        b=GIV4+wn4JYE0bGw8ZBfb6U3Smfd9LrTtyic40xic1FvHDCUMmB7TvNFYVrCN+VMoFT
-         kRXD8wVhHsfbwTN1Lpxn9UUog/LE4jtYMLUuBPcU0WtLh1V2da/lLCvBbfb2rrUpNm/b
-         HG7F1m6NxJff4ibqxGdEWSSNHY2rzSRBT6RL1EDW48Ya9Zci8Tx0P52NF5RTc7mEmoe7
-         Oakh9pe2wi+YiUlmjcS2J/aU/pj7uRElZ+IN6t1WZu962nIcr5RgLHfR7OSJmtyOwBPS
-         6PaOiQ5nMVsa3w+rVYqtZsY5CYOwRjRz6es3vqBTPTRV/RZqB1F/UTKg0WfQIXFMKrlW
-         SMSg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OwEemPqInwbSVk9dzdDs5pHQn5Viy4wnF3S49Fh17/k=;
-        fh=d04pUyJF0mSivdcsPn3Q5Dnt28pmj3JIMUTfufoe3Lg=;
-        b=dKKRm5sVWfTTU0Cgxrad3pW/70WdXuxIzREo4aRFAg48LRHfRf9ysa0NGi/vgzn1gm
-         sRKs0ooE9owbCHcejAOKcpBxgMPJsMd5BIZUe8+4W8pB/xF8QgVPf6P5cfpkEE546uGv
-         AqqkUkSp79X9DOssDMy0h19Rg5MfhxXtfVUyvknHTR6hRnAw0TQ8EVxCnBpOvyd2U8tT
-         yRcb4l6I+YqOkO7H5MnxZKLWy6UlaWQKVNKbAWXmyfuuLsWkm7ElEOSpOec4loDfboJo
-         KmwYsdxy87UzCM+V7UguuvnMXetkv+md8u6nt7dlXEMrlxAgHMAmcR1GnFa9tztyj1G6
-         n8Lw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782469084; x=1783073884; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OwEemPqInwbSVk9dzdDs5pHQn5Viy4wnF3S49Fh17/k=;
-        b=d1++0myAqjQqJv/bi4B6YyqgmykjW7eJln/1XsDdAq+szPF5duBP3/8kyDGcllYE3d
-         I23v49/3W7urGo+VUyH84i9MOx71XmdDljJGVEpN7gAtozI+Vq+uuKBtRrhjBfo6LVsI
-         kOoZnNJGkjsLqXWZKTEK0BhTMb4UZqJUaccQuk7m//60NpJ2aK8WJhpaargnMDWky/Fy
-         2Y8/JFv0Ypp+TVzWGeB9v+SK4no+d82Te3y21T0B4zI/XieFrFSd8Ze702vim2sSHBSM
-         VF53zZYDkY5ijfsqniXth9Aj71pLaLbJiN8zabyf41w8d64EqCYoq6rPWDIL7UrjmKiP
-         CKDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782469084; x=1783073884;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OwEemPqInwbSVk9dzdDs5pHQn5Viy4wnF3S49Fh17/k=;
-        b=ob3DOecYcrw8f6SVwXinlhpy3ahJBx301K76CS3x9hmqWx7xDJRgi7ekjWPkFamHwf
-         5b15wrHvhdbDxK8wEJH8Lpdo8+OlZIiJNphlLPe8qBcnH0Xdseuwvl7wgTpP1UUPzGWq
-         Y52L1A452KTdJ4whvdZxEhn4vj5jYY6wz2j3+b4JTVs7KdDc+Pif2lqxl3oGuXzDk+Mw
-         hSoZLZsWKYw4ZryRR814+yszyw004Yba2oR9xHo2MgnqOYRLBimGMxhELNmo7Jf7+DgA
-         Gf99o3McTYaIqRo3aq0b9CW/6uF3nNueL2ebL+BOoK+l4zIye8eRIdRXod5jhSAk4mgg
-         CZvQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpZs1oPHHtdfwRwugAXlC1Y4QVlBwUHXTh9fLFoou05LgghhQPaJ8xrAfnmsD4HBhnfVbDg@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz5+luB35H3ijkmunT2pBy9NhQB6NGbBkkamm4qUxIIIK2B9zyi
-	DDm60e42taw/0F1Anw7eJDZO5iIA76/vBDJPrfLNL0tJlgb8yb/xzpJhGdgCg80Bc5XD4T/ojJC
-	yTVJKFYIyGEkpCjD2RmRM5zVZpWc45ps=
-X-Gm-Gg: AfdE7ckVMEa3VF0cGzrNwaU7FP/Xl/jt+ggyTEjFShaxa5gc0G0lefpmttqtCOxP9tA
-	uRR87l+Bz2Q3rQjR9wHXHX9lJReQG+79jAxDbXf0vjQphIBvKID4FqoRHZiPeBZ0OM3gb6okarq
-	HbmE2GH+m4zZy6Ovg+T4rlvT6zOeV6Vkvs+H9xgEZ0QgR8nwBCilLlXh2BExofUKBRN57Z7BY5b
-	bx0F4MYZiV6qjbe4kWMYrKafyN8+HYfYysX2616sWYneXa4MzieQZ78qlEaqT2o+qW/c7IUixgp
-	aiiK7Wtvx/mkT2GGOcv1z5zQAh/ew2n+l2aZStCymwlJoZYeNVaKudl+dt2XhsBiYJv0y2tIdl4
-	+fw6w7hbrcAxf
-X-Received: by 2002:a05:7300:e6c6:b0:2d5:9438:2a02 with SMTP id
- 5a478bee46e88-30c84ad9f55mr3026758eec.1.1782469084327; Fri, 26 Jun 2026
- 03:18:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jTxmRjx0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782478229; x=1814014229;
+  h=date:from:to:cc:subject:message-id;
+  bh=9DcwqRyLAMTDfL2Is/VA6OFxPa9MKQ9xfBXg/6Xbj0g=;
+  b=jTxmRjx09t8/pxVf1Vhx1AMY//LXZqACGDEykWqv1prwecRQXccNrOW5
+   Gab0VEqrEuWe8ZLPb444uFZ3YW8D2mH+SiIRl3k6p9ksC04TEjK5Zvt3U
+   w7cGn9JjG2Sn6OYqgv9TdU9fGUjiYkW4m/W1oSe8uEVTmRdizKd4mjk0V
+   nlLThRjHSlbkQ0EsLU9NFtQ5yooO9Sm/isQSNJ1aP8LpThCnDJ2S4tjHK
+   rxwOPyBtL31Y9kzEwDtMWtbVB2da6K/xwgz5wiybs1cp6qI23tL1pNegQ
+   +lWTWjYRqr3G2EgaXFSsCOQYTjivK9o0ps+2BVgRUybhsGuDvfHaXl9Pw
+   g==;
+X-CSE-ConnectionGUID: FSFV+M9STUGZ7vNxefZ12w==
+X-CSE-MsgGUID: UTYiXMXjRn+dEvM03NsIdw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11829"; a="85820656"
+X-IronPort-AV: E=Sophos;i="6.24,226,1774335600"; 
+   d="scan'208";a="85820656"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jun 2026 05:50:29 -0700
+X-CSE-ConnectionGUID: Mt/KsbRQTyShK1jqHEIbfw==
+X-CSE-MsgGUID: 4wHJWcbURiS/ya+/SgiC4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,226,1774335600"; 
+   d="scan'208";a="256218020"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 26 Jun 2026 05:50:27 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wd60m-0000000054P-20Dz;
+	Fri, 26 Jun 2026 12:50:24 +0000
+Date: Fri, 26 Jun 2026 20:49:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-06-26 325/328]
+ sound/soc/fsl/mpc5200_dma.c:305:19: error: incomplete definition of type
+ 'struct snd_soc_component'
+Message-ID: <202606262024.B3aEpknN-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260520064630.1785283-1-mkchauras@gmail.com> <20260520064630.1785283-5-mkchauras@gmail.com>
- <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
- <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com> <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-In-Reply-To: <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 26 Jun 2026 12:17:50 +0200
-X-Gm-Features: AVVi8Ccrx0kRQsHQymdfhdPBE1X5e4EB1kia4xesGjoItezYgW-_bvi72bKccEY
-Message-ID: <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, 
-	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, 
-	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
-	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, 
-	kees@kernel.org, lyude@redhat.com, airlied@gmail.com, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jun 26, 2026 at 8:50=E2=80=AFAM Mukesh Kumar Chaurasiya
-<mkchauras@gmail.com> wrote:
->
-> This corresponds to a floating point instruction. Although we have
-> disabled fpu, vsx and altivec we are still generating these. Seems like
-> we have some issue with the rustc here. I didn't dive deeper into this.
->
-> Is it ok if we keep 1.95 as base for powerpc64le?
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-06-26
+head:   3b1a6af55c000fdba23910aeb597cb608b44bed6
+commit: c085b7e7f9341cb11ce08b5cc0cb7d47ecac602b [325/328] ASoC: soc-component: capsuling Component
+config: powerpc-randconfig-001-20260626 (https://download.01.org/0day-ci/archive/20260626/202606262024.B3aEpknN-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260626/202606262024.B3aEpknN-lkp@intel.com/reproduce)
 
-It may be that it is generated but unused (we have that issue
-elsewhere -- see e.g. `rust/compiler_builtins.rs`).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606262024.B3aEpknN-lkp@intel.com/
 
-Having said that, if 1.95 is fine for the powerpc arch maintainers,
-then that is fine (s390 also used a higher minimum -- please see the
-recent change in `scripts/min-tool-version.sh`).
+All errors (new ones prefixed by >>):
 
-But please try to bisect upstream Rust to see where the change
-happened, i.e. what is the root cause? e.g. `core` changes, `rustc`
-changes, built-in LLVM changes... It could be that it is not tied to
-the `rustc` version but LLVM's.
+>> sound/soc/fsl/mpc5200_dma.c:305:19: error: incomplete definition of type 'struct snd_soc_component'
+     305 |         dev_dbg(component->dev, "psc_dma_new(card=%p, dai=%p, pcm=%p)\n",
+         |                 ~~~~~~~~~^
+   include/sound/soc.h:422:8: note: forward declaration of 'struct snd_soc_component'
+     422 | struct snd_soc_component;
+         |        ^
+   sound/soc/fsl/mpc5200_dma.c:317:3: error: field designator 'name' does not refer to any field in type 'const struct snd_soc_component_driver'
+     317 |         .name           = DRV_NAME,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
-Cheers,
-Miguel
+
+vim +305 sound/soc/fsl/mpc5200_dma.c
+
+89dd0842527377 Jon Smirl         2009-05-23  295  
+6d1048bc115259 Kuninori Morimoto 2019-10-02  296  static int psc_dma_new(struct snd_soc_component *component,
+6d1048bc115259 Kuninori Morimoto 2019-10-02  297  		       struct snd_soc_pcm_runtime *rtd)
+89dd0842527377 Jon Smirl         2009-05-23  298  {
+552d1ef6b5a98d Liam Girdwood     2011-06-07  299  	struct snd_card *card = rtd->card->snd_card;
+14ec63f678e8be Kuninori Morimoto 2023-09-11  300  	struct snd_soc_dai *dai = snd_soc_rtd_to_cpu(rtd, 0);
+552d1ef6b5a98d Liam Girdwood     2011-06-07  301  	struct snd_pcm *pcm = rtd->pcm;
+dbcc3475623459 Jon Smirl         2009-05-26  302  	size_t size = psc_dma_hardware.buffer_bytes_max;
+c9bd5e690a439d Russell King      2013-06-27  303  	int rc;
+89dd0842527377 Jon Smirl         2009-05-23  304  
+60bceb8029e26c Kuninori Morimoto 2018-01-29 @305  	dev_dbg(component->dev, "psc_dma_new(card=%p, dai=%p, pcm=%p)\n",
+89dd0842527377 Jon Smirl         2009-05-23  306  		card, dai, pcm);
+89dd0842527377 Jon Smirl         2009-05-23  307  
+c9bd5e690a439d Russell King      2013-06-27  308  	rc = dma_coerce_mask_and_coherent(card->dev, DMA_BIT_MASK(32));
+c9bd5e690a439d Russell King      2013-06-27  309  	if (rc)
+c9bd5e690a439d Russell King      2013-06-27  310  		return rc;
+89dd0842527377 Jon Smirl         2009-05-23  311  
+3610a6d1dbd19b Takashi Iwai      2021-08-02  312  	return snd_pcm_set_fixed_buffer_all(pcm, SNDRV_DMA_TYPE_DEV, card->dev,
+3610a6d1dbd19b Takashi Iwai      2021-08-02  313  					    size);
+89dd0842527377 Jon Smirl         2009-05-23  314  }
+89dd0842527377 Jon Smirl         2009-05-23  315  
+
+:::::: The code at line 305 was first introduced by commit
+:::::: 60bceb8029e26c49549a276d5d67198cdfb57b5d ASoC: fsl: mpc5200: replace platform to component
+
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
