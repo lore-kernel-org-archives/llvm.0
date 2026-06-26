@@ -1,426 +1,188 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE24392C2E
-	for <llvm@lists.linux.dev>; Fri, 26 Jun 2026 04:06:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE08D24A076;
+	Fri, 26 Jun 2026 04:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782446814; cv=none; b=AdSoUjq85Sh2Z+HR3q1+Rqfw3C64wHfTaeMMm2CjtVfWL4BpxPjD2EjKCKOF95+9ZIu8MzyI8sphuJfF9kUhGPAJXzVT8/LvryAj61NqTSzaHbrquOXMYzlK6+HIz/ll7Fr7l/kagyvtYu90KsDN/uzrpk4SPgpRxEoExunN3+M=
+	t=1782449700; cv=none; b=SyKi0L3VdwKcV8Zr18ZXUnSgaPPu80AxyRgc5SF0xQBGiexjuupb85IZLzBOgYwv1pPh6Oc1sbCSHdonPp98KcZUSDP2bLK7iyau+1uKSDdFjyJIPzcBEciB9638Ruilf7CCSpcKlsFQLmyWv6h2q4rKoU0Jmk+7VSS0oF3+M/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782446814; c=relaxed/simple;
-	bh=jQV11xTUCZBSPvA23voQsYGjWGumVS807Z/GSRVy0ZQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IWmoAVGH2YNE4619OtRkxh4C46pYdff1FjvKNyxSZO9c9yCReoHHprCVlWeZh9EXin43IJxAP6ZevjK1K0ZsSM0vxuHRDvFosElPiy2A+fq/imDMdBmjzqx6TjH4JHQh9WwBy7JVEgWMa+42t9PuvEQcfX2iEYQh0jNKSvqv210=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FJHlUFxx; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782449700; c=relaxed/simple;
+	bh=Ph97+QbvBbcufChYnurDSohcP22hoOVDdPb4UCqhVjo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X+8EFq2wH1q2DgMc7dl+4SQG9QfZblS+/FBfsqgMwImufZUf51esY/NGKrmadDBqjqOxiNv3lIRGbworD1Vrr/ETS8AsXkTJ+JZwYHKx9Lc76j3Gng2PnD7VHHxYbdszzukwTj945Mwdi+GnIZ2SvfDQMoKMmEeuJgkchWZGy38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PaAGxikn; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FJHlUFxx"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2c7f5869cddso3558195ad.1
-        for <llvm@lists.linux.dev>; Thu, 25 Jun 2026 21:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782446812; x=1783051612; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn6kHL3FAvcIWP6gEV4pUPb+nGZNbGqHTSn/PNCstag=;
-        b=FJHlUFxxB+Z1zcH7t7WMQz7tg+V1pn3zJeIoLN1ZkhM0qf/V8r9ljDu62k76HPYERN
-         f1mB97QuAbwG+hg4L2YeawcksuUo74Taqr2GGJPaBG+Fi6VIlf5Sd+HQ8ASDTiMKsH1M
-         z8GjLG2DQqmFjtB7SQiX5xsW5L8SXyln4okDElQuQVNymKCioHKy3Tes899EMmImZP+o
-         K9pZZfBWNA92aG7MY8K1e1LySblHvdFuF2N3ORHfLsvtadruS1JF9X3yiq2j7CK2bQWO
-         96yFTUp1BPUf8Rs3HQr+P0V/M+LxyTYyvWTJe4zYeALDbndgdDa/9owt1jZFSbeSP0wD
-         QPzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782446812; x=1783051612;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tn6kHL3FAvcIWP6gEV4pUPb+nGZNbGqHTSn/PNCstag=;
-        b=SFC5SrNrhohxeYNtBWRzfpltkRrQREb/7scVgzVUEdn1SC5Evrn3Z2o/FMDa5PNy+A
-         O3lXW4mAWvH6j93Zy9MyRb1s8ZqI7cDEKgGnXZsr+6W6/UEvJAdjB+5uXucXcjxCwCU8
-         GuxK7RQ97mOTdqFFYfQYJCLSTBUq1Y51z9KE8aZNerUzgWV2AHKCb02xcuP7M5Y03WxS
-         4HwO1mP79XcpSOHTBydPF6sfbsFGNGt0dB3KYZ83WuLIrzivjs348wOIgGtrwk0jVWsh
-         Db9LXQLW+xvQr3SqPIi7VpRX74s3pJ5WlS5wkxHWQsV3V7Y4EAKZmQ3VM1j5Z1taCQ8q
-         1Wgg==
-X-Forwarded-Encrypted: i=1; AHgh+RqZbnhw1JM1dlcTmpJyeCzRh5ErsdkR01ss4IjVB6gmZCfL6WWYiI8V2TBM8lkXEH/d9EqV@lists.linux.dev
-X-Gm-Message-State: AOJu0YzAU0kbO2x3r1D3bEbXaZ2i3+rprYSpK38l+y7O6YsPgJHGS35e
-	jGoAeYN/eu8Up5Kz5DJ4yYVFSeM2QXqnXPCn36uWxe4z9qqS+gnfbopQ
-X-Gm-Gg: AfdE7cmekEy0L+MLdmzH/AHix+XwbpHIpe+UyOQygboKJuuj+63rdhuZef2IN5RcxjB
-	Ek5GZOD0wSagHARKgEiKSKph+s6SJOvLbIkyDvjqCObcUpGQPhRGUbjocHFVzifeDkX1tN1ESfs
-	7o/s8SU8YuR9+oOkgKgozYoBWxKLITxPQQvJkc2KDZ0yTGj9bgDzFBXUzSAUxGEZ9fMjW6gGf1/
-	/t7LnD3nXZMasEx4jVC5S5b85FeVMAMie5gOr+pyhtZM7SrtAQRUxqAQ+Reb7aG7u1BFS5jz1i5
-	88eDDLbKjlkxqD/ZAbavfxFLXrtw5ICj+xAFATB6sNSZ2WBPDt52VcMHv9ct/HXWmMcOKVV3Ydx
-	fLIiErKqMRBGyl0KgKI1Yee579yJkaEkDLAnqf0zP5ITOeOuaXCNTSFS5s6/c0IRRO86ZRdMUY4
-	e9TPLzuR9qLvwPnkbNXysT5UpY4b7zKCkFjrfaaVgMRQprnPCkIQnzNLmM1DPDguohhSxELteRE
-	mEUMUyZAQ==
-X-Received: by 2002:a17:903:2286:b0:2c3:bab9:4961 with SMTP id d9443c01a7336-2c7fca4eab0mr53870125ad.34.1782446811767;
-        Thu, 25 Jun 2026 21:06:51 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:5b5d::e34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2c7f5ae5ecfsm31306425ad.21.2026.06.25.21.06.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Jun 2026 21:06:49 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-wireless@vger.kernel.org
-Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv3 ath-next] wifi: ath9k: eeprom: drop static from local pdadc and vpdTable arrays
-Date: Thu, 25 Jun 2026 21:06:47 -0700
-Message-ID: <20260626040647.842093-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PaAGxikn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782449699; x=1813985699;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ph97+QbvBbcufChYnurDSohcP22hoOVDdPb4UCqhVjo=;
+  b=PaAGxiknGPPOJMaCaViK2AoY64/xQPCxJMe3NO1pFatbOxmLNOgn/vdD
+   +NDYMJHCWWdFceewlpOkROcHEAuXo5scE0BwZA9t2e5JCB76D8N6aUydM
+   WFgQ/tIBxf+cQtEUapOEpt75eL65wvb9bE71gDYC+aSAE68wFAIeysfYQ
+   9sYi2Z3a/vsDg2LBlAYKqioR3hV25ECBoYZHpO+yp9AmKi4Rst72horFz
+   On24NBFYtZ7YSlU7Nxb0pIDFiP5Hkl55rN8TYR/PZOKXuqNExM40zUw7G
+   gQktVd3wJ638f8hA40cso06evZAULzXjQxMyFynyqs+axNg8CZoIXWZyu
+   w==;
+X-CSE-ConnectionGUID: Y6fURPVOQOC6ImkG0Mq4uw==
+X-CSE-MsgGUID: TRiKyw1lR1iEVSgjejJtMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11828"; a="100675472"
+X-IronPort-AV: E=Sophos;i="6.24,225,1774335600"; 
+   d="scan'208";a="100675472"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Jun 2026 21:54:59 -0700
+X-CSE-ConnectionGUID: MA5R9x/gT4O7EFxpR5rVbQ==
+X-CSE-MsgGUID: usDeWcdXRIKMfkGZAwT0qA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,225,1774335600"; 
+   d="scan'208";a="251894018"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa009.jf.intel.com with ESMTP; 25 Jun 2026 21:54:54 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wcyaY-000000004mL-3RQw;
+	Fri, 26 Jun 2026 04:54:50 +0000
+Date: Fri, 26 Jun 2026 12:54:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Hui Zhu <hui.zhu@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Kairui Song <kasong@tencent.com>,
+	Qi Zheng <qi.zheng@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Axel Rasmussen <axelrasmussen@google.com>,
+	Yuanchu Xie <yuanchu@google.com>, Wei Xu <weixugc@google.com>,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	Hui Zhu <zhuhui@kylinos.cn>
+Subject: Re: [PATCH v7] mm: assert exclusive nid/zonenum bits at the
+ page/folio access sites
+Message-ID: <202606261253.X4CwKZZJ-lkp@intel.com>
+References: <20260626032012.1049667-1-hui.zhu@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260626032012.1049667-1-hui.zhu@linux.dev>
 
-Remove the static qualifier from mutable local arrays in three EEPROM
-power-calibration functions.  These arrays are written to during normal
-operation, so static storage is both unnecessary and misleading: it
-implies sharing across calls when no such sharing is intended, and it
-makes the code subtly non-reentrant.  The sibling function in
-eeprom_9287.c already uses an automatic (stack-local) pdadcValues,
-confirming this is the correct pattern.
+Hi Hui,
 
-This keeps ~1 KB of data off the static data section at the cost of
-stack usage, consistent with the rest of the driver's coding style.
+kernel test robot noticed the following build errors:
 
-As a safety measure, also add bounds validation for the EEPROM-derived
-loop limits and indices that drive these arrays.  Without these guards,
-a malformed EEPROM calibration dataset can cause stack buffer overflows
-(vpdTable rows are 64 bytes but the fill loop runs up to 128 iterations),
-out-of-bounds reads when the VPD table has fewer than 2 entries, a
-negative-index fallback when numXpdGains == 0, and unbounded shifts in
-the pdadc adjustment functions.  All of these are reachable through
-on-device EEPROM data and were latent as BSS corruptions before the
-stack move.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Also alias vpdTableI onto vpdTableL to shrink stack frame
+url:    https://github.com/intel-lab-lkp/linux/commits/Hui-Zhu/mm-assert-exclusive-nid-zonenum-bits-at-the-page-folio-access-sites/20260626-112119
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260626032012.1049667-1-hui.zhu%40linux.dev
+patch subject: [PATCH v7] mm: assert exclusive nid/zonenum bits at the page/folio access sites
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260626/202606261253.X4CwKZZJ-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260626/202606261253.X4CwKZZJ-lkp@intel.com/reproduce)
 
-vpdTableL, vpdTableR, and vpdTableI are never live simultaneously.
-vpdTableL and vpdTableR are consumed during the frequency-interpolation
-step that writes vpdTableI; after the if/else they are never read
-again.  Reuse vpdTableL for the interpolated result (what was
-vpdTableI), reducing the stack frame by one 256-byte array.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606261253.X4CwKZZJ-lkp@intel.com/
 
-The read-via-write in the else branch is safe: ath9k_hw_interpolate()
-receives vpdTableL[i][j] by value as a function argument before the
-return value is written back to vpdTableL[i][j].
+All errors (new ones prefixed by >>):
 
-Stack frame size change (x86_64, clang):
-  before: 0x440 (1088 B)
-  after:  0x330 (816 B)
+   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
+     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3371: export_rust_path
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3361: export_compiler_path
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3840: invoke_make
+     from /zdci/src/kernel-tests/lib/kbuild.sh:4022: make
+     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
+     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
+     from /zdci/src/kernel-tests/lib/kbuild.sh:5680: make_prepare
+     from /zdci/src/kernel-tests/lib/kbuild.sh:5909: test_kernel_build
+     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
+     from /zdci/src/kernel-tests/lib/kbuild.sh:6419: compile_one_config
+     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
+     from /zdci/src/kernel-tests/bisect-test-build-error.sh:102: main
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:21:
+>> include/linux/mm.h:2:2: error: unterminated conditional directive
+       2 | #ifndef _LINUX_MM_H
+         |  ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:23:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:8:
+   In file included from include/linux/cacheflush.h:5:
+   In file included from arch/x86/include/asm/cacheflush.h:5:
+>> include/linux/mm.h:2:2: error: unterminated conditional directive
+       2 | #ifndef _LINUX_MM_H
+         |  ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:23:
+   In file included from include/linux/writeback.h:13:
+   In file included from include/linux/blk_types.h:10:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:10:
+>> include/linux/mm.h:2:2: error: unterminated conditional directive
+       2 | #ifndef _LINUX_MM_H
+         |  ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:13:
+   In file included from include/linux/pagemap.h:8:
+>> include/linux/mm.h:2:2: error: unterminated conditional directive
+       2 | #ifndef _LINUX_MM_H
+         |  ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:13:
+   In file included from include/linux/pagemap.h:17:
+   In file included from include/linux/hugetlb_inline.h:5:
+>> include/linux/mm.h:2:2: error: unterminated conditional directive
+       2 | #ifndef _LINUX_MM_H
+         |  ^
+   In file included from arch/x86/kernel/asm-offsets.c:14:
+   In file included from include/linux/suspend.h:9:
+>> include/linux/mm.h:2:2: error: unterminated conditional directive
+       2 | #ifndef _LINUX_MM_H
+         |  ^
+   6 errors generated.
+   make[3]: *** [scripts/Makefile.build:184: arch/x86/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1390: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Assisted-by: opencode:big-pickle
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- v3: clean up based on review
- v2: add bounds checks
- drivers/net/wireless/ath/ath9k/eeprom.c      | 111 ++++++++++++-------
- drivers/net/wireless/ath/ath9k/eeprom_4k.c   |   2 +-
- drivers/net/wireless/ath/ath9k/eeprom_9287.c |  33 ++++--
- drivers/net/wireless/ath/ath9k/eeprom_def.c  |  10 +-
- 4 files changed, 109 insertions(+), 47 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom.c b/drivers/net/wireless/ath/ath9k/eeprom.c
-index df58dc02e104..05f0a0d70a50 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom.c
-@@ -241,11 +241,24 @@ void ath9k_hw_fill_vpd_table(u8 pwrMin, u8 pwrMax, u8 *pPwrList,
- 			     u8 *pVpdList, u16 numIntercepts,
- 			     u8 *pRetVpdList)
- {
--	u16 i, k;
-+	u16 i, k, maxIndex;
-+	u16 range;
- 	u8 currPwr = pwrMin;
- 	u16 idxL = 0, idxR = 0;
+vim +2 include/linux/mm.h
 
--	for (i = 0; i <= (pwrMax - pwrMin) / 2; i++) {
-+	if (pwrMax < pwrMin) {
-+		pr_warn_ratelimited("ath9k: VPD table pwrMax (%u) < pwrMin (%u)\n", pwrMax, pwrMin);
-+		memset(pRetVpdList, 0, AR5416_MAX_PWR_RANGE_IN_HALF_DB);
-+		return;
-+	}
-+
-+	range = (pwrMax - pwrMin) / 2;
-+	maxIndex = min_t(u16, range, AR5416_MAX_PWR_RANGE_IN_HALF_DB - 1);
-+	if (range >= AR5416_MAX_PWR_RANGE_IN_HALF_DB)
-+		pr_warn_ratelimited("ath9k: VPD table range %u exceeds maximum, clamped to %u\n",
-+				    range, maxIndex);
-+
-+	for (i = 0; i <= maxIndex; i++) {
- 		ath9k_hw_get_lower_upper_index(currPwr, pPwrList,
- 					       numIntercepts, &(idxL),
- 					       &(idxR));
-@@ -460,12 +473,8 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 	int i, j, k;
- 	int16_t ss;
- 	u16 idxL = 0, idxR = 0, numPiers;
--	static u8 vpdTableL[AR5416_NUM_PD_GAINS]
--		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
--	static u8 vpdTableR[AR5416_NUM_PD_GAINS]
--		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
--	static u8 vpdTableI[AR5416_NUM_PD_GAINS]
--		[AR5416_MAX_PWR_RANGE_IN_HALF_DB];
-+	u8 vpdTableL[AR5416_NUM_PD_GAINS][AR5416_MAX_PWR_RANGE_IN_HALF_DB];
-+	u8 vpdTableR[AR5416_NUM_PD_GAINS][AR5416_MAX_PWR_RANGE_IN_HALF_DB];
+^1da177e4c3f41 Linus Torvalds 2005-04-16 @2  #ifndef _LINUX_MM_H
+^1da177e4c3f41 Linus Torvalds 2005-04-16  3  #define _LINUX_MM_H
+^1da177e4c3f41 Linus Torvalds 2005-04-16  4  
 
- 	u8 *pVpdL, *pVpdR, *pPwrL, *pPwrR;
- 	u8 minPwrT4[AR5416_NUM_PD_GAINS];
-@@ -473,6 +482,8 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 	int16_t vpdStep;
- 	int16_t tmpVal;
- 	u16 sizeCurrVpdTable, maxIndex, tgtIndex;
-+	u16 vpdRange, vpdFillMax;
-+	u16 vpdFillMaxArr[AR5416_NUM_PD_GAINS];
- 	bool match;
- 	int16_t minDelta = 0;
- 	struct chan_centers centers;
-@@ -506,30 +517,27 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 				minPwrT4[i] = data_9287[idxL].pwrPdg[i][0];
- 				maxPwrT4[i] = data_9287[idxL].pwrPdg[i][intercepts - 1];
- 				ath9k_hw_fill_vpd_table(minPwrT4[i], maxPwrT4[i],
--						data_9287[idxL].pwrPdg[i],
--						data_9287[idxL].vpdPdg[i],
--						intercepts,
--						vpdTableI[i]);
-+							data_9287[idxL].pwrPdg[i],
-+							data_9287[idxL].vpdPdg[i], intercepts,
-+							vpdTableL[i]);
- 			}
- 		} else if (eeprom_4k) {
- 			for (i = 0; i < numXpdGains; i++) {
- 				minPwrT4[i] = data_4k[idxL].pwrPdg[i][0];
- 				maxPwrT4[i] = data_4k[idxL].pwrPdg[i][intercepts - 1];
- 				ath9k_hw_fill_vpd_table(minPwrT4[i], maxPwrT4[i],
--						data_4k[idxL].pwrPdg[i],
--						data_4k[idxL].vpdPdg[i],
--						intercepts,
--						vpdTableI[i]);
-+							data_4k[idxL].pwrPdg[i],
-+							data_4k[idxL].vpdPdg[i], intercepts,
-+							vpdTableL[i]);
- 			}
- 		} else {
- 			for (i = 0; i < numXpdGains; i++) {
- 				minPwrT4[i] = data_def[idxL].pwrPdg[i][0];
- 				maxPwrT4[i] = data_def[idxL].pwrPdg[i][intercepts - 1];
- 				ath9k_hw_fill_vpd_table(minPwrT4[i], maxPwrT4[i],
--						data_def[idxL].pwrPdg[i],
--						data_def[idxL].vpdPdg[i],
--						intercepts,
--						vpdTableI[i]);
-+							data_def[idxL].pwrPdg[i],
-+							data_def[idxL].vpdPdg[i], intercepts,
-+							vpdTableL[i]);
- 			}
- 		}
- 	} else {
-@@ -567,19 +575,37 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 						intercepts,
- 						vpdTableR[i]);
-
--			for (j = 0; j <= (maxPwrT4[i] - minPwrT4[i]) / 2; j++) {
--				vpdTableI[i][j] =
--					(u8)(ath9k_hw_interpolate((u16)
--					     FREQ2FBIN(centers.
--						       synth_center,
--						       IS_CHAN_2GHZ
--						       (chan)),
--					     bChans[idxL], bChans[idxR],
--					     vpdTableL[i][j], vpdTableR[i][j]));
-+			vpdRange = (maxPwrT4[i] >= minPwrT4[i]) ? (maxPwrT4[i] - minPwrT4[i]) / 2 :
-+								  0;
-+			vpdFillMax = min_t(u16, vpdRange, AR5416_MAX_PWR_RANGE_IN_HALF_DB - 1);
-+			/*
-+			 * vpdTableL doubles as the interpolated output in-place.
-+			 * ath9k_hw_interpolate() receives vpdTableL[i][j] by
-+			 * value (left-pier data) before the return overwrites
-+			 * vpdTableL[i][j], and each column j is read only once
-+			 * per iteration - safe as long as vpdTableR remains a
-+			 * separate buffer.
-+			 */
-+			for (j = 0; j <= vpdFillMax; j++) {
-+				vpdTableL[i][j] = (u8)(ath9k_hw_interpolate(
-+					(u16)FREQ2FBIN(centers.synth_center, IS_CHAN_2GHZ(chan)),
-+					bChans[idxL], bChans[idxR], vpdTableL[i][j],
-+					vpdTableR[i][j]));
- 			}
- 		}
- 	}
-
-+	/*
-+	 * Compute safe VPD table index limit for each gain row.
-+	 * This mirrors the vpdFillMax computation in the else-branch
-+	 * interpolation above - both clamp the same derived value.
-+	 */
-+	for (i = 0; i < numXpdGains; i++) {
-+		vpdFillMaxArr[i] = min_t(
-+			u16, (maxPwrT4[i] >= minPwrT4[i]) ? (maxPwrT4[i] - minPwrT4[i]) / 2 : 0,
-+			AR5416_MAX_PWR_RANGE_IN_HALF_DB - 1);
-+	}
-+
- 	k = 0;
-
- 	for (i = 0; i < numXpdGains; i++) {
-@@ -605,33 +631,39 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 					(minPwrT4[i] / 2)) -
- 				       tPdGainOverlap + 1 + minDelta);
- 		}
--		vpdStep = (int16_t)(vpdTableI[i][1] - vpdTableI[i][0]);
-+		sizeCurrVpdTable = vpdFillMaxArr[i] + 1;
-+
-+		if (sizeCurrVpdTable >= 2)
-+			vpdStep = (int16_t)(vpdTableL[i][1] - vpdTableL[i][0]);
-+		else
-+			vpdStep = 1; /* no entries to diff; avoids zero-step extrapolation */
- 		vpdStep = (int16_t)((vpdStep < 1) ? 1 : vpdStep);
-
- 		while ((ss < 0) && (k < (AR5416_NUM_PDADC_VALUES - 1))) {
--			tmpVal = (int16_t)(vpdTableI[i][0] + ss * vpdStep);
-+			tmpVal = (int16_t)(vpdTableL[i][0] + ss * vpdStep);
- 			pPDADCValues[k++] = (u8)((tmpVal < 0) ? 0 : tmpVal);
- 			ss++;
- 		}
--
--		sizeCurrVpdTable = (u8) ((maxPwrT4[i] - minPwrT4[i]) / 2 + 1);
- 		tgtIndex = (u8)(pPdGainBoundaries[i] + tPdGainOverlap -
- 				(minPwrT4[i] / 2));
- 		maxIndex = (tgtIndex < sizeCurrVpdTable) ?
- 			tgtIndex : sizeCurrVpdTable;
-
- 		while ((ss < maxIndex) && (k < (AR5416_NUM_PDADC_VALUES - 1))) {
--			pPDADCValues[k++] = vpdTableI[i][ss++];
-+			pPDADCValues[k++] = vpdTableL[i][ss++];
- 		}
-
--		vpdStep = (int16_t)(vpdTableI[i][sizeCurrVpdTable - 1] -
--				    vpdTableI[i][sizeCurrVpdTable - 2]);
-+		if (sizeCurrVpdTable >= 2)
-+			vpdStep = (int16_t)(vpdTableL[i][sizeCurrVpdTable - 1] -
-+					    vpdTableL[i][sizeCurrVpdTable - 2]);
-+		else
-+			vpdStep = 1; /* no entries to diff; avoids zero-step extrapolation */
- 		vpdStep = (int16_t)((vpdStep < 1) ? 1 : vpdStep);
-
- 		if (tgtIndex >= maxIndex) {
- 			while ((ss <= tgtIndex) &&
- 			       (k < (AR5416_NUM_PDADC_VALUES - 1))) {
--				tmpVal = (int16_t)((vpdTableI[i][sizeCurrVpdTable - 1] +
-+				tmpVal = (int16_t)((vpdTableL[i][sizeCurrVpdTable - 1] +
- 						    (ss - maxIndex + 1) * vpdStep));
- 				pPDADCValues[k++] = (u8)((tmpVal > 255) ?
- 							 255 : tmpVal);
-@@ -650,6 +682,11 @@ void ath9k_hw_get_gain_boundaries_pdadcs(struct ath_hw *ah,
- 		i++;
- 	}
-
-+	/* Ensure the table contains at least one valid element. */
-+	if (k == 0) {
-+		WARN_ONCE(1, "ath9k: no PDADC values produced for gain boundaries\n");
-+		pPDADCValues[k++] = 0;
-+	}
- 	while (k < AR5416_NUM_PDADC_VALUES) {
- 		pPDADCValues[k] = pPDADCValues[k - 1];
- 		k++;
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom_4k.c b/drivers/net/wireless/ath/ath9k/eeprom_4k.c
-index 3e16cfe059f3..eec7efdc21c3 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom_4k.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom_4k.c
-@@ -288,7 +288,7 @@ static void ath9k_hw_set_4k_power_cal_table(struct ath_hw *ah,
- 	struct cal_data_per_freq_4k *pRawDataset;
- 	u8 *pCalBChans = NULL;
- 	u16 pdGainOverlap_t2;
--	static u8 pdadcValues[AR5416_NUM_PDADC_VALUES];
-+	u8 pdadcValues[AR5416_NUM_PDADC_VALUES];
- 	u16 gainBoundaries[AR5416_PD_GAINS_IN_MASK];
- 	u16 numPiers, i, j;
- 	u16 numXpdGain, xpdMask;
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom_9287.c b/drivers/net/wireless/ath/ath9k/eeprom_9287.c
-index c139ac49ccf6..043ee31f0d14 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom_9287.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom_9287.c
-@@ -366,6 +366,15 @@ static void ath9k_hw_set_ar9287_power_cal_table(struct ath_hw *ah,
- 	int16_t diff = 0;
- 	struct ar9287_eeprom *pEepData = &ah->eeprom.map9287;
-
-+	/*
-+	 * pdadcValues must be zeroed here: under EEP_OL_PWRCTRL the
-+	 * ath9k_hw_get_gain_boundaries_pdadcs() init path is skipped and
-+	 * only the unconditional diff-offset shift below runs, which would
-+	 * otherwise operate on indeterminate stack data.  eeprom_def.c
-+	 * does not need this because both branches of its OLC/!OLC fork
-+	 * fully populate the array.
-+	 */
-+	memset(pdadcValues, 0, sizeof(pdadcValues));
- 	xpdMask = pEepData->modalHeader.xpdGain;
-
- 	if (ath9k_hw_ar9287_get_eeprom_rev(ah) >= AR9287_EEP_MINOR_VER_2)
-@@ -463,13 +472,23 @@ static void ath9k_hw_set_ar9287_power_cal_table(struct ath_hw *ah,
- 					     (int32_t)AR9287_PWR_TABLE_OFFSET_DB);
- 				diff *= 2;
-
--				for (j = 0; j < ((u16)AR5416_NUM_PDADC_VALUES-diff); j++)
--					pdadcValues[j] = pdadcValues[j+diff];
--
--				for (j = (u16)(AR5416_NUM_PDADC_VALUES-diff);
--				     j < AR5416_NUM_PDADC_VALUES; j++)
--					pdadcValues[j] =
--					  pdadcValues[AR5416_NUM_PDADC_VALUES-diff];
-+				/* diff is safe: the bounds check above ensures
-+				 * it is in [0, AR5416_NUM_PDADC_VALUES), so the
-+				 * subtraction AR5416_NUM_PDADC_VALUES - diff
-+				 * cannot underflow.
-+				 */
-+				if (diff >= 0 && diff < AR5416_NUM_PDADC_VALUES) {
-+					for (j = 0; j < ((u16)AR5416_NUM_PDADC_VALUES - diff); j++)
-+						pdadcValues[j] = pdadcValues[j + diff];
-+
-+					for (j = (u16)(AR5416_NUM_PDADC_VALUES - diff);
-+					     j < AR5416_NUM_PDADC_VALUES; j++)
-+						pdadcValues[j] =
-+							pdadcValues[AR5416_NUM_PDADC_VALUES - diff];
-+				} else {
-+					ath_warn(ath9k_hw_common(ah),
-+						 "ignoring invalid PDADC offset %d\n", diff);
-+				}
- 			}
-
- 			if (!ath9k_hw_ar9287_get_eeprom(ah, EEP_OL_PWRCTRL)) {
-diff --git a/drivers/net/wireless/ath/ath9k/eeprom_def.c b/drivers/net/wireless/ath/ath9k/eeprom_def.c
-index 5ba467cb7425..3ef927f422dc 100644
---- a/drivers/net/wireless/ath/ath9k/eeprom_def.c
-+++ b/drivers/net/wireless/ath/ath9k/eeprom_def.c
-@@ -744,8 +744,14 @@ static void ath9k_adjust_pdadc_values(struct ath_hw *ah,
- 	 */
- 	if (AR_SREV_9280_20_OR_LATER(ah)) {
- 		if (AR5416_PWR_TABLE_OFFSET_DB != pwr_table_offset) {
-+			if (diff < 0 || diff >= AR5416_NUM_PDADC_VALUES) {
-+				ath_warn(ath9k_hw_common(ah), "ignoring invalid PDADC offset %d\n",
-+					 diff);
-+				return;
-+			}
-+
- 			/* shift the table to start at the new offset */
--			for (k = 0; k < (u16)NUM_PDADC(diff); k++ ) {
-+			for (k = 0; k < (u16)NUM_PDADC(diff); k++) {
- 				pdadcValues[k] = pdadcValues[k + diff];
- 			}
-
-@@ -769,7 +775,7 @@ static void ath9k_hw_set_def_power_cal_table(struct ath_hw *ah,
- 	struct cal_data_per_freq *pRawDataset;
- 	u8 *pCalBChans = NULL;
- 	u16 pdGainOverlap_t2;
--	static u8 pdadcValues[AR5416_NUM_PDADC_VALUES];
-+	u8 pdadcValues[AR5416_NUM_PDADC_VALUES];
- 	u16 gainBoundaries[AR5416_PD_GAINS_IN_MASK];
- 	u16 numPiers, i, j;
- 	int16_t diff = 0;
 --
-2.54.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
