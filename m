@@ -1,42 +1,41 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CD03314B9D
-	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:31:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330DB31E849
+	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782531081; cv=none; b=NWuApD+8sXFZUeruZmKzXt+xQue/xTzHn5DcmK2XHNXvu0N1y4NEHu2iQrOhk09q3Tr1FDrORoMhZ2hOTay+59BAHKh5/eKftkf5shfHAqTn7x4oujbNsti8FDwuDOR3GuHCjp7LJFNc6TEUm+kQAYKBFhZcU+JIz7AA5wUe+EY=
+	t=1782531082; cv=none; b=UqzofUmKPMrlUGfNw/FN2kuOVdD6qro6NV5pDWvRQi3pyjDAGN9RBnZeic79fqZtB4mYsw6HtuOODDUU9svdTp77OXQlt5Z4ZsZuF+o5Q6kmf6qhXr1wyg/aiqlymm2SoPeRKWsAAlR6S1G1chQrEcG+vwDHfYnTWTtkK6xKazc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782531081; c=relaxed/simple;
-	bh=IPPO/N5KzxecIhN7sCv6ZygxjxmYOy9rXkt7EwU9Nd0=;
+	s=arc-20240116; t=1782531082; c=relaxed/simple;
+	bh=oxr/CF0EOleBJpYQ0o3XQ1eFlhGpl9bHjVK5vcH/zUw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dt+QaYHn/KDhDnn07LKsoAb3mBAenm9IU46uRxBh6mRrI4Y1JhOlM03IcHU0Cd/SJD2+Sr3OaTcLKsjDik9QQ3jfG0kpBbHDAUBwDZbIu+YaM8st0lrC1FZqDhJr/bwNW7rwR5eJfik9ZtehjgePO8iXirRJ1/XXItBnsOkXIl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nK/TaRkR; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=RYmWi7iVLMLtEE7aNNubl5ktnJLWdeKmCorwO+qcKeqygQLo9hIt8v9x4KgkaS/txXcCu4VfWrBM3U4t6nOenia0CP73J3HIClumU+QuZBV5LWc1TfZHlMjfbDtSLmmc3ULyxA0wIZbGb/15QaOx8NyCbzryHI2jqsRKYPVKrPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mgWfATN0; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nK/TaRkR"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mgWfATN0"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 605EE1A0A15;
-	Sat, 27 Jun 2026 03:31:17 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id E17861A0A16;
+	Sat, 27 Jun 2026 03:31:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3328460233;
-	Sat, 27 Jun 2026 03:31:17 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 544C4106F1171;
-	Sat, 27 Jun 2026 05:31:13 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id AE35D60233;
+	Sat, 27 Jun 2026 03:31:19 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id EFDB3106F1174;
+	Sat, 27 Jun 2026 05:31:15 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782531075; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1782531078; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=ny8jovS05Cy6acIMNd4HSb4i/Bq9Nh8qF6KY1lLItU0=;
-	b=nK/TaRkRBR4iHTyxBMNWCYJ4T4wYBJiZ6oxhWaqyKa+JsJzKvUlCxHRT0H3GtDaI+8qsy1
-	Gq4W52Myn/x1C0cxsE8x+Eyu1dpzs7hOlB9bSBso9seiIeJSMDExKTkzjw3yz/ct5kFYsE
-	nYwX+dHMymwqHwHdJgG0kenPmwlwTcYgrVIJNw6HWaLV/qMxbdfdbNUOqoKhVnqnwWQ0mG
-	4ieZlcpNmIc6bi6Too946ntl3dO18rdMpal6CYpDjMuLeTQI8SnoeH5tt7Dcd03rTSaFd5
-	gFcVI29aKYtsOwbRK1dxjRwX0O72FZdirw8uWrGj+LdE1WfyE3apNryDlHnRyw==
+	bh=7t4wxccSVE+8YpNtCCYNB6F0KQiLmWtDWy0z8sUDzNs=;
+	b=mgWfATN05p3uSCk5D3rXBj6g9bD4yIVBqfuItCRyvbI6KDsvC2fv1WWPSdfDIE9lOuelxk
+	6M5fTRm134YoTK8EI195rhSbrE58n0mFbm6B34X8hm6H63IPLSDiNkVozzs7KKaYeQ8c7Q
+	NM6PxmnDoN3KSjZRGp6DO574Acr4cG3x4NunZibheX3PF/7ixFUrbl5xuCt+VU5Z1XEalE
+	kVCv1g/zl/Y8RfRpia+81QBgNy/LlupUqQqB3BNoqtPXwiuoicpNT/7ayocTbKjrHaned5
+	e/8q+m4aEEBYKd1S3v3IEtFBTc5B6aKp5neatpwGDkvDJAzqbUW7Z3eEP+xb1Q==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Sat, 27 Jun 2026 05:30:28 +0200
-Subject: [PATCH v5 11/38] drm/vkms: Use enabled/disabled instead of 1/0 for
- debug
+Date: Sat, 27 Jun 2026 05:30:29 +0200
+Subject: [PATCH v5 12/38] drm/vkms: Explicitly display connector status
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +44,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260627-vkms-all-config-v5-11-854aa0840926@bootlin.com>
+Message-Id: <20260627-vkms-all-config-v5-12-854aa0840926@bootlin.com>
 References: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 In-Reply-To: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -65,27 +64,27 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  Louis Chauvet <louis.chauvet@bootlin.com>, llvm@lists.linux.dev, 
  =?utf-8?q?Jos=C3=A9_Exp=C3=B3sito?= <jose.exposito@redhat.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1207;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1240;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=IPPO/N5KzxecIhN7sCv6ZygxjxmYOy9rXkt7EwU9Nd0=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PeYbFNR/zDAOgcy6qf+LVqKQj2Ych5s1YSA
- J+rWbfD3K6JAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D3hsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOJGjA//flEtStMdS9irHvAdw1FQN5JOQrLHfIe
- Yd7Y+jYRXU2QrzjWnFQrnuaIWI6EY3GKaP6mZ4eYfkgpkTGD/GFZRUpEKoQSSg0jhwxvWL7Thss
- X0d7ar+wsCtXmlHa0ejgFOZcZWevu6mNpRpMyv0CdxjzRlp+O1/yyL/CG9gQZ1xYwuEiNG9vqGx
- 6fhhvlSgVMEBTB0pXQUEvDheBWKashnwrmRInTLpMQo7XybZwfmi7UvK6TEVbTcgWsFnIe4y2AX
- BvhWp3YQcleNjD7/GHr66xy38y5d/DxAI4S+79m9v2j632cHT3QXLq9y9CnKEHE3hM2evLYEWgS
- VlRCBiSpyNZRPuWLIN2lTfhu8TNj49jg/8MyRdnpom7lMMiy6hLQ3TRqxKie4wgMd4LFQCBoZYB
- ErkIgh/vKX1phNa5i9i0LgQ3Af2XC8+ogtiX0/QK2kh5ey86Uu4XZGBHQBsAwh4p7gU07USel4D
- /03nltywZu/roLt9RKqls4lTiVw0tVcsuvC+GAay02lZ+8x5GZiUAz042+VngKKiG3xDU713Vh5
- BYo/oeg+GH611Fi+yAaYpioBBSke0IJ3jgdKvkq31UqsIiY5dLZlh3uXfL8juboGXf7gUxYCtdb
- 1HPmRABPQLuAfYxkpxqHwuSgdA+s9xDHQ4Ox7QzuGbtxEgENN2VY=
+ bh=oxr/CF0EOleBJpYQ0o3XQ1eFlhGpl9bHjVK5vcH/zUw=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0Pe03kOlBSLeLny4z2YzohoyX0ZyfDtpYSnn
+ eu936/sl3iJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D3hsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOKHmg/7BakTXcTMLBqo/YspJqXwtq3VhskmGJx
+ cDXjP+hdjJZiCCfZC8exAZqDyk2BOPqq1MyHjCDkNfGR7dVvfAf5HLu6V9G30CvjiKDLmyuBQAh
+ 4O3zD+2J4Bm9VIIBsGTQAeQkzFlrUMhU6SksHh7ZjgflyQMwLtrU4rqko0GNkP8JiycImGRB3BZ
+ t56vZfAdO7lln+YLwgCZor5DJOKgSkOINUqtvKZUa43bhlWTCG4HWTLPvFMLd2pVKweqaMINb5n
+ vs1FYS38teJqemDVRqz5kPd99kopiq3MsqdLRtgJdORRFkSwOKWv8gQxRCkuvZ4unCg2w8+GeMd
+ 3Yn/l/bxxAKsYZHuUFSKIcwyAK/Xe1skcMAE76fw60xqIPhiLNGmltfp8cniXF8VQw87xNsFIs2
+ uK+eHvKILuQaNngeRTBmy2D5eqb62z/O0RSiz1aHEVqcL7cNpdqev5fA71zrpLPTvQAiDmXkWnU
+ rJdQkWXSZSiY4uSfg9PttW4hJ0LTYTTXma3jH0MZoGqQIep+lJ2ZBconXZs+ZYAcMczF6/uq5MP
+ +BPmMol12Vgq8fWZks2/1wo8MjyPy2H2E6ahRhYQl1QkMRuYuh1R6KPJcSu2pN6i1Xh1vEDFsQQ
+ OmmkkiOEC1tG1tNvtcY4R55Joeb1Mc0TA0PBgL3z7MUc20IQdOcs=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-Debug information are mainly read by human, so display human
-readable values.
+Debug information are mainly read by human, so use full name instead
+of raw values for connector status.
 
 Reviewed-by: José Expósito <jose.exposito@redhat.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
@@ -95,28 +94,28 @@ Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
  1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index 469c57c6d1e8..4c6f3ead51d7 100644
+index 4c6f3ead51d7..9071d6864d52 100644
 --- a/drivers/gpu/drm/vkms/vkms_config.c
 +++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0+
- 
+@@ -3,6 +3,7 @@
  #include <linux/slab.h>
-+#include <linux/string_choices.h>
+ #include <linux/string_choices.h>
  
++#include <drm/drm_connector.h>
  #include <drm/drm_print.h>
  #include <drm/drm_debugfs.h>
-@@ -358,8 +359,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
+ #include <kunit/visibility.h>
+@@ -368,8 +369,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
  
- 	vkms_config_for_each_crtc(vkmsdev->config, crtc_cfg) {
- 		seq_puts(m, "crtc:\n");
--		seq_printf(m, "\twriteback=%d\n",
--			   vkms_config_crtc_get_writeback(crtc_cfg));
-+		seq_printf(m, "\twriteback=%s\n",
-+			   str_enabled_disabled(vkms_config_crtc_get_writeback(crtc_cfg)));
+ 	vkms_config_for_each_connector(vkmsdev->config, connector_cfg) {
+ 		seq_puts(m, "connector:\n");
+-		seq_printf(m, "\tstatus=%d\n",
+-			   vkms_config_connector_get_status(connector_cfg));
++		seq_printf(m, "\tstatus=%s\n",
++			   drm_get_connector_status_name(vkms_config_connector_get_status(connector_cfg)));
  	}
  
- 	vkms_config_for_each_encoder(vkmsdev->config, encoder_cfg)
+ 	return 0;
 
 -- 
 2.54.0
