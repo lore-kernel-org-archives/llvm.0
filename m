@@ -1,42 +1,42 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B41036493E
-	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C4413655E0
+	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782531141; cv=none; b=VT8666TUrFnHgiSMLo6VlRTimorx97NO72AuGpOqFo4xGdpZMD6gopeoKFK+VhWbuctR8kHDWKCtDJw+wNo9oL4UvuP+PDnlW9KtwNGvgDrbVJFpx4O4AAZzxpkc4gidnI5+m3wytCrdz9Vy7NrTzhgofxzc3F4/9o47Pz6zzZ4=
+	t=1782531144; cv=none; b=DBVhNta0CayIJF9D6aLHJ6QRCaMtpIRgwS3UyybJBe1cRjm68fU52GZ279n+1I99TLKAITmHT4h/TFpC9lrhKWG2RqRtCYStZWJyF4ydE693/QuwzciwFW3vGjY+MCH+Iu5XrmA+NG+1OvKa/0w00cws7zerx+LPiQZRWJ/pQLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782531141; c=relaxed/simple;
-	bh=rUkelz8olDDj+nzfUbh7iTwV3qWndTKVfpdkxxxyzRc=;
+	s=arc-20240116; t=1782531144; c=relaxed/simple;
+	bh=k8oCeZDYpFKVMBx6v5QpBDxqhLtzulGYOkjul9kUb00=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=USu7pDjQzXnFLtV/4ETPUlTEPk6qvojUg+RgF14K/wRrY7LPgTn7L2g+JFCiNEjUa/1sVTz9DZPP20VF/+9vTU8dQ2Jq3tor39IcjVeVpD+I3eP3Vhrp0sdO10dIt6SxStUkiO8/l4332l/6md5/AWPSn5IdQixq9Z2qC2CoQkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jCfKH6Kj; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=q4FfHwbI38YM7vKney4RFcOKCssYawnTFsxJlPIyklv3yLgqo1cxtSrWYjGpwvfbZzPocOInevtHl7RgoojrGuZ/67eeIZTQOojxBqQkHchYpXd6nvESObro/igyE0JZXQwxam79G8YRO3L+gpTAXpXiFJlMC5O8nT1mAgk2EcA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=rWFd6K0Z; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jCfKH6Kj"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="rWFd6K0Z"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 03B8E4E40A01;
-	Sat, 27 Jun 2026 03:32:18 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 7E7EA1A0A32;
+	Sat, 27 Jun 2026 03:32:20 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CC5C460233;
-	Sat, 27 Jun 2026 03:32:17 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5BCEC106F1172;
-	Sat, 27 Jun 2026 05:32:14 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 524A560233;
+	Sat, 27 Jun 2026 03:32:20 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 83C55106F1173;
+	Sat, 27 Jun 2026 05:32:16 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782531136; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1782531138; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=6gnb/UaTe/iqU91lXxm2Q2SXLtYDyf1mjuCvN6WD1Ys=;
-	b=jCfKH6KjCktl2NtwTciOgqnPRQC4KU8yYFAyz9go8nEk49I5tQ3DMBclW9wFyth8KmNv70
-	VAivmLsAWN9RiO0DkR1Zp808f5poc0RJivs4YAzXkF0RJP04HSSOsOfKJDlJ2LnTNhlx77
-	YcnL1PBzyn0788ADHLzJCQwpD1FJ9JA7Fqp2+MvS4NancaaaSoqjrXRWfZe83TvFjUgTe2
-	2oJ00BUg+Jo9ia7tIPncGbrJldW4ULQsTWaviZDBJBC34/b/2gqnLq17IdhVptEARyUzSX
-	pKfnB4MyNLLIvmZ0Jx1W6CPsiC/x64KAtXnC0oy33oD520yH3RXxcBcB/jLVWg==
+	bh=lJhOkLzdiL9CYLEKx34wGu1wb951FJ2IFjutBzAU2+o=;
+	b=rWFd6K0Z4uxqRwN8ApJqrVtc3WTKHYBEErtOxUnu+82CocN+dNnay0wemkBcrD/Y667UpJ
+	WTOqrZCpLMt7EXjTzUVcRDDqLrqWNKvNuTtL8sojou/JXbzqHJw9veiVLFONlqdOtPyTgn
+	11NvgDivUqdEsZ7sIJofJUiD62BbD6tfI8jyPGvXgClHncH/MjFMK9rwAmN/uMUt+BVakx
+	TiGl0A3WWy8W6E/faw+AD4KUm28zPZCUt7IosfGVHI/lJ03+PKaCE+kZ6jfjOFiwydwTgL
+	D0slbU3a2h5Ffn2TjQnvYFmeKK1O+mu/XAV88utF/Z+I2kxkV3GUy+++jtztRg==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Sat, 27 Jun 2026 05:30:53 +0200
-Subject: [PATCH v5 36/38] drm/vkms: Introduce configfs for dynamic
- connector creation
+Date: Sat, 27 Jun 2026 05:30:54 +0200
+Subject: [PATCH v5 37/38] drm/vkms: Add connector parent configuration in
+ vkms_config
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -44,8 +44,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260627-vkms-all-config-v5-36-854aa0840926@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260627-vkms-all-config-v5-37-854aa0840926@bootlin.com>
 References: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 In-Reply-To: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -64,328 +64,674 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Louis Chauvet <louis.chauvet@bootlin.com>, llvm@lists.linux.dev
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10758;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=24944;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=rUkelz8olDDj+nzfUbh7iTwV3qWndTKVfpdkxxxyzRc=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PiVMkMAep2XKav6wxLl6NuiGuJjmX6Nu0F0
- jux4KOAgN6JAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D4hsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOLrQRAAvn8VHBd+/5P14Vukx20AzDB7T7zzNrY
- KBEZt7wjDeNgnlgKyHMD3/pE7SSyNd80UTSCOBHIRDug++zyMoJ/wwm9AvgtkLHD5w42Q9JDiB7
- txbPkhDiNePYdDu1xxwrh3LqntorLikb3RrllCCWj/dZEG+2DJexTF6Q+ZqW91VYbiy7KSjrO5Z
- kYnov/4bUU4HR9eMntGFmdDikwni5rNdHbwX/3qUeq/o9WmzSL6r6GbTOXuTooUwE7/FCBdpCKu
- eG15ne2z0vHL/20Zcz9Cw3Zob7srJ6Z+qYVBnakLDV/YUw4Rpd2cpTJIUgpuOUOYbZ5eHqS4Flb
- 4ksP0pHKvvljWYoZ+4mRUETx8hpWPKlpisrpUhc1vozQ+sWOyacFu/PixiR22iBPP4TH8UkYD6X
- StMiKB0Vs+kGUtVYOaxVVeuwq5CrbaOcuNu7XaEIkd0c5prv7jL+GBAYIbK4pS9u2V+W4TGjlM2
- h8nw7eW1M0UNIJueENT/esizZowpCucuVLpXz09prLxfoUNFOz9bkSc2p6LUsc9JjBcWIngf69j
- NeG3VAVfCJTO/lvCxK1ZAkAyFCDdqKuXG9KXbgzx+R3IpXcIuZcvN3qjl5ar+VMzcjavbO50a9m
- 46Ps5ckbWWCmp7I2u5kgeXzVNo3ITac61GvJMcMV7/igzXRRh6nw=
+ bh=k8oCeZDYpFKVMBx6v5QpBDxqhLtzulGYOkjul9kUb00=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PiBmSru2IyZEbZ3s8ah3L0SwOl8SNF9cw56
+ bTaBDt43cGJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D4hsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOJWEhAAoIvhW3iLyAiD/XiEyGspL3exdiMJUIF
+ wNVNUd+V3KFLabvtk8D5rDS9RE0GVzb+NpC9KTCSrVxCtggkOtpGmcQu+khEkVcH2SpTGJo2XtE
+ sAYekZovHOALTVkvXGrqv0vtaGxiISPGHLWEaG8Rj7Wu+pu4hBGDqpQWHT6EDt60n/ecXwkWDzw
+ RZ37wvc1njTAiystCVCMWjIk2LyjfleGU5YKEjG5+BtGEUla/x3mHIzTi+njzriAoIWfMcg8blF
+ X3vuqwpSau3bqWrQnkUnPqN7H7sKESZWVsxEd5JM7WHmuwik2iFL4p2CZV0ZuoZho50VNM8uLGj
+ iOVIih4ViDuW22XGDykFf0ZfBB2BbfYbAFsYwk5cxDa0HYErKBLcedOTbaRr/NPoPUTLi6/4tUy
+ tyt88EZUjrwT83JMzBVgvohusynSUvbETcQOOXyU2d674lEMzi8glnfrrw16mqT9jgEqXXaTayn
+ U8F6/XO/3bVqZzspOeGnvQ15T3lwUbep5+PvXlmck5zvsFya4enamhTfMN0rn35w8MIfep5dfVe
+ uAIddRzVd//86pVGxINHcyfdhpsFDrpj2loplsRQ39VtDMU2DEx6zwxa3pkEMLIU5otFnV5A9ZF
+ 2sNTQJC8YBQrBTvRTcRik1LOhgIE1+0vnTGFzt5pCMleRfb/2xcE=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-DRM allows the connector to be created after the device. To allows
-emulating this, add two configfs attributes to connector to allows this.
+In order to fully emulate MST connector from the userspace point of view,
+add a way to configure the PATH property.
 
-Using the dynamic attribute you can set if a connector will be dynamic or
-not.
-Using the enabled attribute, you can set at runtime if a dynamic connector
-is present or not.
+Add two things:
+- port_id, to configure the MST port id (used to generate the last
+  -<port-id> in the PATH property)
+- parent, to configure the parent connector (used to
+  generate <connector-id>- or -<port-id>- in the PATH property)
 
-Co-developed-by: José Expósito <jose.exposito89@gmail.com>
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+In order to properly populate the PATH property, it should be done after
+all the connector initialization to ensure that the <connector-id> is
+known.
+
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- Documentation/ABI/testing/configfs-vkms |  14 ++++
- Documentation/gpu/vkms.rst              |   6 +-
- drivers/gpu/drm/vkms/vkms_configfs.c    | 144 ++++++++++++++++++++++++++++++--
- 3 files changed, 155 insertions(+), 9 deletions(-)
+ drivers/gpu/drm/vkms/tests/vkms_config_test.c | 269 +++++++++++++++++++++++++-
+ drivers/gpu/drm/vkms/vkms_config.c            |  50 ++++-
+ drivers/gpu/drm/vkms/vkms_config.h            |  60 +++++-
+ drivers/gpu/drm/vkms/vkms_configfs.c          |   2 +-
+ drivers/gpu/drm/vkms/vkms_connector.c         |  74 +++++++
+ drivers/gpu/drm/vkms/vkms_connector.h         |   9 +
+ drivers/gpu/drm/vkms/vkms_output.c            |   2 +
+ 7 files changed, 460 insertions(+), 6 deletions(-)
 
-diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
-index 04e2f89e3129..8a5899c52e78 100644
---- a/Documentation/ABI/testing/configfs-vkms
-+++ b/Documentation/ABI/testing/configfs-vkms
-@@ -62,6 +62,20 @@ Description:
- 	Content of the EDID for this connector. Ignored if
- 	edid_enabled is not set.
+diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+index fda23f05a0a5..a9700e265d42 100644
+--- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
++++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+@@ -396,7 +396,7 @@ static void vkms_config_test_get_connectors(struct kunit *test)
+ 	KUNIT_ASSERT_EQ(test, n_connectors, 2);
+ 	n_connectors = 0;
  
-+What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/dynamic
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	Set to 1 to create a dynamic connector (emulates DP MST).
-+	Value: 1 - dynamic, 0 - static.
-+
-+What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/enabled
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	For dynamic connectors, set to 1 to create the connector,
-+	0 to remove it. Value: 1 - enabled, 0 - disabled.
-+
- What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/possible_encoders
- Date:		Nov 2025
- Contact:	dri-devel@lists.freedesktop.org
-diff --git a/Documentation/gpu/vkms.rst b/Documentation/gpu/vkms.rst
-index 2a3e175bf67b..31569421d8f5 100644
---- a/Documentation/gpu/vkms.rst
-+++ b/Documentation/gpu/vkms.rst
-@@ -137,7 +137,7 @@ Last but not least, create one or more connectors::
+-	vkms_config_destroy_connector(connector_cfg2);
++	vkms_config_destroy_connector(config, connector_cfg2);
+ 	vkms_config_for_each_connector(config, connector_cfg) {
+ 		n_connectors++;
+ 		if (connector_cfg != connector_cfg1)
+@@ -845,7 +845,7 @@ static void vkms_config_test_invalid_connector_number(struct kunit *test)
  
-   sudo mkdir /config/vkms/my-vkms/connectors/connector0
+ 	/* Invalid: No connectors */
+ 	connector_cfg = get_first_connector(config);
+-	vkms_config_destroy_connector(connector_cfg);
++	vkms_config_destroy_connector(config, connector_cfg);
+ 	KUNIT_EXPECT_FALSE(test, vkms_config_is_valid(config));
  
--Connectors have 5 configurable attribute:
-+Connectors have 7 configurable attribute:
- 
- - status: Connection status: 1 connected, 2 disconnected, 3 unknown (same values
-   as those exposed by the "status" property of a connector)
-@@ -149,7 +149,9 @@ Connectors have 5 configurable attribute:
- - edid_enabled: Enable or not EDID for this connector. Some connectors may not have an
-   EDID but just a list of modes, this attribute allows to disable EDID property.
- - edid: Content of the EDID. Ignored if edid_enabled is not set
--
-+- dynamic: Set to 1 while configuring the device to create a dynamic connector. A dynamic
-+  connector can be used to emulate DP MST connectors.
-+- enabled: For dynamic connector, set it to 1 to create the connector, 0 to remove it.
- 
- To finish the configuration, link the different pipeline items::
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
-index f79a796c2017..f92b172e75cf 100644
---- a/drivers/gpu/drm/vkms/vkms_configfs.c
-+++ b/drivers/gpu/drm/vkms/vkms_configfs.c
-@@ -1091,6 +1091,12 @@ static ssize_t connector_status_show(struct config_item *item, char *page)
- 	return sprintf(page, "%u", status);
+ 	/* Invalid: Too many connectors */
+@@ -1233,6 +1233,267 @@ static void vkms_config_test_connector_status(struct kunit *test)
+ 	vkms_config_destroy(config);
  }
  
-+static bool connector_is_enabled(struct vkms_config_connector *connector_cfg)
++static void vkms_config_test_connector_dynamic_status(struct kunit *test)
 +{
-+	return !connector_cfg->dynamic ||
-+	       (connector_cfg->dynamic && connector_cfg->enabled);
-+}
-+
- static ssize_t connector_status_store(struct config_item *item,
- 				      const char *page, size_t count)
- {
-@@ -1110,7 +1116,7 @@ static ssize_t connector_status_store(struct config_item *item,
- 	scoped_guard(mutex, &connector->dev->lock) {
- 		vkms_config_connector_set_status(connector->config, status);
- 
--		if (connector->dev->enabled)
-+		if (connector->dev->enabled && connector_is_enabled(connector->config))
- 			vkms_trigger_connector_hotplug(connector->dev->config->dev);
- 	}
- 
-@@ -1171,7 +1177,7 @@ static ssize_t connector_type_store(struct config_item *item,
- 	}
- 
- 	scoped_guard(mutex, &connector->dev->lock) {
--		if (connector->dev->enabled)
-+		if (connector->dev->enabled && connector_is_enabled(connector->config))
- 			return -EBUSY;
- 
- 		vkms_config_connector_set_type(connector->config, val);
-@@ -1290,6 +1296,107 @@ static ssize_t connector_edid_store(struct config_item *item,
- 		    connector_status_disconnected)
- 			vkms_trigger_connector_hotplug(connector->dev->config->dev);
- 	}
-+	return count;
-+}
-+
-+static ssize_t connector_enabled_show(struct config_item *item, char *page)
-+{
-+	struct vkms_configfs_connector *connector;
-+	bool enabled;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+
-+	scoped_guard(mutex, &connector->dev->lock)
-+		enabled = vkms_config_connector_is_enabled(connector->config);
-+
-+	return sprintf(page, "%d\n", enabled);
-+}
-+
-+static ssize_t connector_enabled_store(struct config_item *item,
-+				       const char *page, size_t count)
-+{
-+	struct vkms_configfs_connector *connector;
++	struct vkms_config *config;
 +	struct vkms_config_connector *connector_cfg;
-+	bool enabled, was_enabled;
++	struct vkms_config_encoder *encoder_cfg;
++	struct vkms_config_crtc *crtc_cfg;
++	struct vkms_config_plane *plane_cfg;
++	enum drm_connector_status status;
++	int err;
 +
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+	connector_cfg = connector->config;
++	config = vkms_config_create("test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
 +
-+	if (kstrtobool(page, &enabled))
-+		return -EINVAL;
-+	scoped_guard(mutex, &connector->dev->lock) {
-+		if (!connector->dev->enabled) {
-+			vkms_config_connector_set_enabled(connector_cfg, enabled);
-+		} else {
-+			// Only dynamic connector can be enabled/disabled at runtime
-+			if (!connector_cfg->dynamic)
-+				return -EBUSY;
++	/* Create a complete pipeline */
++	crtc_cfg = vkms_config_create_crtc(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_cfg);
 +
-+			was_enabled = vkms_config_connector_is_enabled(connector_cfg);
-+			vkms_config_connector_set_enabled(connector_cfg, enabled);
++	encoder_cfg = vkms_config_create_encoder(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, encoder_cfg);
 +
-+			// Resulting configuration is invalid (missing encoder for example)
-+			// Early return to avoid drm core issue
-+			if (!vkms_config_is_valid(connector->dev->config)) {
-+				count = -EINVAL;
-+				goto rollback;
-+			}
++	connector_cfg = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg);
 +
-+			if (!was_enabled && enabled) {
-+				// Adding the connector
-+				connector_cfg->connector = vkms_connector_hot_add(connector->dev->config->dev,
-+										  connector_cfg);
-+				if (IS_ERR(connector_cfg->connector)) {
-+					count = PTR_ERR(connector_cfg->connector);
-+					goto rollback;
-+				}
-+			} else if (was_enabled && !enabled) {
-+				vkms_connector_hot_remove(connector->dev->config->dev,
-+							  connector_cfg->connector);
-+			}
-+		}
-+	}
-+	return count;
++	plane_cfg = vkms_config_create_plane(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, plane_cfg);
 +
-+rollback:
-+	vkms_config_connector_set_enabled(connector_cfg, was_enabled);
-+	return count;
++	vkms_config_plane_set_type(plane_cfg, DRM_PLANE_TYPE_PRIMARY);
++	err = vkms_config_plane_attach_crtc(plane_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_encoder_attach_crtc(encoder_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_connector_attach_encoder(connector_cfg, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	/* Test dynamic status changes */
++	status = vkms_config_connector_get_status(connector_cfg);
++	KUNIT_EXPECT_EQ(test, status, connector_status_connected);
++
++	vkms_config_connector_set_status(connector_cfg, connector_status_disconnected);
++	status = vkms_config_connector_get_status(connector_cfg);
++	KUNIT_EXPECT_EQ(test, status, connector_status_disconnected);
++
++	/* Configuration should still be valid regardless of connector status */
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	vkms_config_connector_set_status(connector_cfg, connector_status_connected);
++	status = vkms_config_connector_get_status(connector_cfg);
++	KUNIT_EXPECT_EQ(test, status, connector_status_connected);
++
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Test with unknown status */
++	vkms_config_connector_set_status(connector_cfg, connector_status_unknown);
++	status = vkms_config_connector_get_status(connector_cfg);
++	KUNIT_EXPECT_EQ(test, status, connector_status_unknown);
++
++	/* Configuration should still be valid */
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	vkms_config_destroy(config);
 +}
 +
-+static ssize_t connector_dynamic_show(struct config_item *item, char *page)
++static void vkms_config_test_dynamic_connector_validity(struct kunit *test)
 +{
-+	struct vkms_configfs_connector *connector;
-+	bool enabled;
++	struct vkms_config *config;
++	struct vkms_config_connector *connector_cfg1, *connector_cfg2;
++	struct vkms_config_encoder *encoder_cfg;
++	struct vkms_config_crtc *crtc_cfg;
++	struct vkms_config_plane *plane_cfg;
++	int err;
 +
-+	connector = connector_item_to_vkms_configfs_connector(item);
++	config = vkms_config_create("test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
 +
-+	scoped_guard(mutex, &connector->dev->lock) {
-+		enabled = vkms_config_connector_is_dynamic(connector->config);
-+	}
++	/* Create a complete pipeline */
++	crtc_cfg = vkms_config_create_crtc(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_cfg);
 +
-+	return sprintf(page, "%d\n", enabled);
++	encoder_cfg = vkms_config_create_encoder(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, encoder_cfg);
++
++	connector_cfg1 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg1);
++
++	plane_cfg = vkms_config_create_plane(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, plane_cfg);
++
++	vkms_config_plane_set_type(plane_cfg, DRM_PLANE_TYPE_PRIMARY);
++	err = vkms_config_plane_attach_crtc(plane_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_encoder_attach_crtc(encoder_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_connector_attach_encoder(connector_cfg1, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	/* Valid: Non-dynamic connector */
++	vkms_config_connector_set_dynamic(connector_cfg1, false);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Dynamic connector */
++	vkms_config_connector_set_dynamic(connector_cfg1, true);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Multiple dynamic connectors */
++	connector_cfg2 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg2);
++	vkms_config_connector_set_dynamic(connector_cfg2, true);
++	err = vkms_config_connector_attach_encoder(connector_cfg2, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	vkms_config_destroy(config);
 +}
 +
-+static ssize_t connector_dynamic_store(struct config_item *item,
-+				       const char *page, size_t count)
++static void vkms_config_test_dynamic_connector_parent_validity(struct kunit *test)
 +{
-+	struct vkms_configfs_connector *connector;
-+	struct vkms_config_connector *connector_cfg;
-+	bool dynamic;
++	struct vkms_config *config;
++	struct vkms_config_connector *connector_cfg1, *connector_cfg2, *connector_cfg3;
++	struct vkms_config_encoder *encoder_cfg;
++	struct vkms_config_crtc *crtc_cfg;
++	struct vkms_config_plane *plane_cfg;
++	int err;
 +
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+	connector_cfg = connector->config;
++	config = vkms_config_create("test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
 +
-+	if (kstrtobool(page, &dynamic))
-+		return -EINVAL;
++	/* Create a complete pipeline */
++	crtc_cfg = vkms_config_create_crtc(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_cfg);
 +
-+	scoped_guard(mutex, &connector->dev->lock) {
-+		// Can't change the dynamic status when the device is activated
-+		if (connector->dev->enabled)
-+			return -EBUSY;
++	encoder_cfg = vkms_config_create_encoder(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, encoder_cfg);
 +
-+		vkms_config_connector_set_dynamic(connector_cfg, dynamic);
-+	}
- 
- 	return count;
- }
-@@ -1299,6 +1406,8 @@ CONFIGFS_ATTR(connector_, type);
- CONFIGFS_ATTR(connector_, supported_colorspaces);
- CONFIGFS_ATTR(connector_, edid_enabled);
- CONFIGFS_ATTR(connector_, edid);
-+CONFIGFS_ATTR(connector_, dynamic);
-+CONFIGFS_ATTR(connector_, enabled);
- 
- static struct configfs_attribute *connector_item_attrs[] = {
- 	&connector_attr_status,
-@@ -1306,19 +1415,28 @@ static struct configfs_attribute *connector_item_attrs[] = {
- 	&connector_attr_supported_colorspaces,
- 	&connector_attr_edid_enabled,
- 	&connector_attr_edid,
-+	&connector_attr_dynamic,
-+	&connector_attr_enabled,
- 	NULL,
++	connector_cfg1 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg1);
++
++	plane_cfg = vkms_config_create_plane(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, plane_cfg);
++
++	vkms_config_plane_set_type(plane_cfg, DRM_PLANE_TYPE_PRIMARY);
++	err = vkms_config_plane_attach_crtc(plane_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_encoder_attach_crtc(encoder_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_connector_attach_encoder(connector_cfg1, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	/* Valid: Non-dynamic connector with no parent */
++	vkms_config_connector_set_dynamic(connector_cfg1, false);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Dynamic connector with no parent */
++	vkms_config_connector_set_dynamic(connector_cfg1, true);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Dynamic connector with dynamic parent */
++	connector_cfg2 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg2);
++	vkms_config_connector_set_dynamic(connector_cfg2, true);
++	err = vkms_config_connector_attach_encoder(connector_cfg2, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++	vkms_config_connector_attach_parent(connector_cfg2, connector_cfg1);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Dynamic connector with non-dynamic parent */
++	vkms_config_connector_set_dynamic(connector_cfg1, false);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Non-dynamic connector with no parent */
++	vkms_config_connector_attach_parent(connector_cfg2, NULL);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Multiple levels of dynamic parent-child relationships */
++	vkms_config_connector_set_dynamic(connector_cfg1, true);
++	vkms_config_connector_attach_parent(connector_cfg2, connector_cfg1);
++	connector_cfg3 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg3);
++	vkms_config_connector_set_dynamic(connector_cfg3, true);
++	err = vkms_config_connector_attach_encoder(connector_cfg3, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++	vkms_config_connector_attach_parent(connector_cfg3, connector_cfg2);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	vkms_config_destroy(config);
++}
++
++static void vkms_config_test_dynamic_connector_parent_loop(struct kunit *test)
++{
++	struct vkms_config *config;
++	struct vkms_config_connector *connector_cfg1, *connector_cfg2, *connector_cfg3;
++	struct vkms_config_encoder *encoder_cfg;
++	struct vkms_config_crtc *crtc_cfg;
++	struct vkms_config_plane *plane_cfg;
++	int err;
++
++	config = vkms_config_create("test");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, config);
++
++	/* Create a complete pipeline */
++	crtc_cfg = vkms_config_create_crtc(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, crtc_cfg);
++
++	encoder_cfg = vkms_config_create_encoder(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, encoder_cfg);
++
++	connector_cfg1 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg1);
++
++	plane_cfg = vkms_config_create_plane(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, plane_cfg);
++
++	vkms_config_plane_set_type(plane_cfg, DRM_PLANE_TYPE_PRIMARY);
++	err = vkms_config_plane_attach_crtc(plane_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_encoder_attach_crtc(encoder_cfg, crtc_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	err = vkms_config_connector_attach_encoder(connector_cfg1, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++
++	/* Valid: Single dynamic connector with no parent */
++	vkms_config_connector_set_dynamic(connector_cfg1, true);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Valid: Two dynamic connectors in a chain */
++	connector_cfg2 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg2);
++	vkms_config_connector_set_dynamic(connector_cfg2, true);
++	err = vkms_config_connector_attach_encoder(connector_cfg2, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++	vkms_config_connector_attach_parent(connector_cfg2, connector_cfg1);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Invalid: Create a loop - connector2 -> connector1 -> connector2 */
++	vkms_config_connector_attach_parent(connector_cfg1, connector_cfg2);
++	KUNIT_EXPECT_FALSE(test, vkms_config_is_valid(config));
++
++	/* Fix the loop */
++	vkms_config_connector_attach_parent(connector_cfg1, NULL);
++	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
++
++	/* Invalid: Create a longer loop - connector1 -> connector2 -> connector3 -> connector1 */
++	connector_cfg3 = vkms_config_create_connector(config);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, connector_cfg3);
++	vkms_config_connector_set_dynamic(connector_cfg3, true);
++	err = vkms_config_connector_attach_encoder(connector_cfg3, encoder_cfg);
++	KUNIT_EXPECT_EQ(test, err, 0);
++	vkms_config_connector_attach_parent(connector_cfg3, connector_cfg2);
++	vkms_config_connector_attach_parent(connector_cfg1, connector_cfg3);
++	KUNIT_EXPECT_FALSE(test, vkms_config_is_valid(config));
++
++	vkms_config_destroy(config);
++}
++
+ static struct kunit_case vkms_config_test_cases[] = {
+ 	KUNIT_CASE(vkms_config_test_empty_config),
+ 	KUNIT_CASE_PARAM(vkms_config_test_default_config,
+@@ -1259,6 +1520,10 @@ static struct kunit_case vkms_config_test_cases[] = {
+ 	KUNIT_CASE(vkms_config_test_encoder_get_possible_crtcs),
+ 	KUNIT_CASE(vkms_config_test_connector_get_possible_encoders),
+ 	KUNIT_CASE(vkms_config_test_connector_status),
++	KUNIT_CASE(vkms_config_test_connector_dynamic_status),
++	KUNIT_CASE(vkms_config_test_dynamic_connector_validity),
++	KUNIT_CASE(vkms_config_test_dynamic_connector_parent_validity),
++	KUNIT_CASE(vkms_config_test_dynamic_connector_parent_loop),
+ 	{}
  };
  
- static void connector_release(struct config_item *item)
- {
- 	struct vkms_configfs_connector *connector;
+diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
+index 98e40c6a2c5b..b9d5a2e44fd9 100644
+--- a/drivers/gpu/drm/vkms/vkms_config.c
++++ b/drivers/gpu/drm/vkms/vkms_config.c
+@@ -170,7 +170,7 @@ void vkms_config_destroy(struct vkms_config *config)
+ 		vkms_config_destroy_encoder(config, encoder_cfg);
+ 
+ 	list_for_each_entry_safe(connector_cfg, connector_tmp, &config->connectors, link)
+-		vkms_config_destroy_connector(connector_cfg);
++		vkms_config_destroy_connector(config, connector_cfg);
+ 
+ 	kfree_const(config->dev_name);
+ 	kfree(config);
+@@ -437,6 +437,41 @@ static bool valid_connector_possible_encoders(const struct vkms_config *config)
+ 	return true;
+ }
+ 
++static bool valid_connector_parents(const struct vkms_config *config)
++{
++	struct drm_device *dev = config->dev ? &config->dev->drm : NULL;
++
 +	struct vkms_config_connector *connector_cfg;
- 	struct mutex *lock;
- 
- 	connector = connector_item_to_vkms_configfs_connector(item);
-+	connector_cfg = connector->config;
- 	lock = &connector->dev->lock;
- 
- 	scoped_guard(mutex, lock) {
-+		if (connector->dev->enabled && connector_cfg->dynamic && connector_cfg->enabled)
-+			vkms_connector_hot_remove(connector->dev->config->dev,
-+						  connector_cfg->connector);
++	struct vkms_config_connector *connector_cfg_parent;
 +
- 		vkms_config_destroy_connector(connector->config);
++	vkms_config_for_each_connector(config, connector_cfg) {
++		bool expected_status = connector_cfg->enabled;
 +
- 		kfree(connector);
++		vkms_config_for_each_connector(config, connector_cfg_parent)
++			connector_cfg_parent->visited = false;
++
++		connector_cfg_parent = connector_cfg;
++		while (connector_cfg_parent) {
++			if (connector_cfg_parent->visited) {
++				drm_info(dev, "Parents of connector should not form a loop\n");
++				return false;
++			}
++
++			if (expected_status && connector_cfg_parent->enabled != expected_status) {
++				drm_info(dev, "All parents of an enabled connector must be enabled\n");
++				return false;
++			}
++
++
++
++			connector_cfg_parent->visited = true;
++			connector_cfg_parent = connector_cfg_parent->parent;
++		}
++	}
++
++	return true;
++}
++
+ bool vkms_config_is_valid(const struct vkms_config *config)
+ {
+ 	struct drm_device *dev = config->dev ? &config->dev->drm : NULL;
+@@ -503,6 +538,9 @@ bool vkms_config_is_valid(const struct vkms_config *config)
+ 	if (!valid_connector_possible_encoders(config))
+ 		return false;
+ 
++	if (!valid_connector_parents(config))
++		return false;
++
+ 	return true;
+ }
+ EXPORT_SYMBOL_IF_KUNIT(vkms_config_is_valid);
+@@ -958,8 +996,16 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
+ }
+ EXPORT_SYMBOL_IF_KUNIT(vkms_config_create_connector);
+ 
+-void vkms_config_destroy_connector(struct vkms_config_connector *connector_cfg)
++void vkms_config_destroy_connector(struct vkms_config *config,
++				   struct vkms_config_connector *connector_cfg)
+ {
++	struct vkms_config_connector *connector_cfg_tmp;
++
++	vkms_config_for_each_connector(config, connector_cfg_tmp) {
++		if (connector_cfg_tmp->parent == connector_cfg)
++			connector_cfg_tmp->parent = NULL;
++	}
++
+ 	xa_destroy(&connector_cfg->possible_encoders);
+ 	list_del(&connector_cfg->link);
+ 	kfree(connector_cfg);
+diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
+index 071887a65380..2e6ddd2922c2 100644
+--- a/drivers/gpu/drm/vkms/vkms_config.h
++++ b/drivers/gpu/drm/vkms/vkms_config.h
+@@ -143,10 +143,14 @@ struct vkms_config_encoder {
+  * @edid: Stores the current EDID. The value will be ignored if @edid_enabled is false
+  * @edid_len: Current EDID length. The value will be ignored if @edid_enabled is false
+  * @possible_encoders: Array of encoders that can be used with this connector
++ * @parent: To emulate MST connector, this will contains a pointer to the parent
++ * @port_id: To emulate MST connector, this contains the physical port id. Used to
++ *           generate the PATH property.
+  * @connector: Internal usage. This pointer should never be considered as valid.
+  *             It can be used to store a temporary reference to a VKMS connector
+  *             during device creation. This pointer is not managed by the
+  *             configuration and must be managed by other means.
++ * @visited: Internal usage. This boolean is used to do some verification on the connectors.
+  */
+ struct vkms_config_connector {
+ 	struct list_head link;
+@@ -161,9 +165,12 @@ struct vkms_config_connector {
+ 	u8 *edid;
+ 	unsigned int edid_len;
+ 	struct xarray possible_encoders;
++	struct vkms_config_connector *parent;
++	u8 port_id;
+ 
+ 	/* Internal usage */
+ 	struct vkms_connector *connector;
++	bool visited;
+ };
+ 
+ /**
+@@ -370,6 +377,56 @@ vkms_config_connector_set_edid(struct vkms_config_connector *connector_cfg,
+ 		connector_cfg->edid_len = len;
  	}
  }
-@@ -1337,6 +1455,7 @@ static int connector_possible_encoders_allow_link(struct config_item *src,
- 						  struct config_item *target)
- {
- 	struct vkms_configfs_connector *connector;
-+	struct vkms_config_connector *connector_cfg;
- 	struct vkms_configfs_encoder *encoder;
- 	int ret;
- 
-@@ -1344,14 +1463,25 @@ static int connector_possible_encoders_allow_link(struct config_item *src,
- 		return -EINVAL;
- 
- 	connector = connector_possible_encoders_item_to_vkms_configfs_connector(src);
-+	connector_cfg = connector->config;
- 	encoder = encoder_item_to_vkms_configfs_encoder(target);
- 
- 	scoped_guard(mutex, &connector->dev->lock) {
--		if (connector->dev->enabled)
--			return -EBUSY;
-+		if (connector->dev->enabled && connector_cfg->enabled) {
-+			if (!connector_cfg->dynamic)
-+				return -EBUSY;
++/**
++ * vkms_config_connector_attach_parent - Attach a connector to a parent connector
++ * @connector_cfg: Connector to attach
++ * @parent: Parent connector to attach @connector_cfg to. Can be NULL to detach the parent.
++ */
++static inline void
++vkms_config_connector_attach_parent(struct vkms_config_connector *connector_cfg,
++				    struct vkms_config_connector *parent)
++{
++	connector_cfg->parent = parent;
++}
 +
-+			ret = vkms_connector_hot_attach_encoder(connector->dev->config->dev,
-+								connector->config->connector,
-+								encoder->config->encoder);
-+			if (ret)
-+				return ret;
-+		}
++/**
++ * vkms_config_connector_get_parent - Get the parent connector of a connector
++ * @connector_cfg: Connector to get the parent from
++ *
++ * Returns:
++ * The parent connector of @connector_cfg or NULL if none is assigned yet.
++ */
++static inline struct vkms_config_connector*
++vkms_config_connector_get_parent(const struct vkms_config_connector *connector_cfg)
++{
++	return connector_cfg->parent;
++}
++
++/**
++ * vkms_config_connector_get_port_id() - Get the port ID for a connector
++ * @connector_cfg: Connector configuration to query
++ *
++ * Returns:
++ * The port ID for this connector.
++ */
++static inline u8
++vkms_config_connector_get_port_id(const struct vkms_config_connector *connector_cfg)
++{
++	return connector_cfg->port_id;
++}
++
++/**
++ * vkms_config_connector_set_port_id() - Set the port ID for a connector
++ * @connector_cfg: Connector configuration to modify
++ * @port_id: New port ID for this connector
++ */
++static inline void
++vkms_config_connector_set_port_id(struct vkms_config_connector *connector_cfg,
++				  u8 port_id)
++{
++	connector_cfg->port_id = port_id;
++}
++
  
- 		ret = vkms_config_connector_attach_encoder(connector->config,
- 							   encoder->config);
-+		if (ret)
-+			return ret;
+ /**
+  * vkms_config_get_device_name() - Return the name of the device
+@@ -1027,7 +1084,8 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
+  * vkms_config_destroy_connector() - Remove and free a connector configuration
+  * @connector_cfg: Connector configuration to destroy
+  */
+-void vkms_config_destroy_connector(struct vkms_config_connector *connector_cfg);
++void vkms_config_destroy_connector(struct vkms_config *config,
++				   struct vkms_config_connector *connector_cfg);
+ 
+ /**
+  * vkms_config_connector_attach_encoder - Attach a connector to an encoder
+diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
+index f92b172e75cf..dd2a9e450150 100644
+--- a/drivers/gpu/drm/vkms/vkms_configfs.c
++++ b/drivers/gpu/drm/vkms/vkms_configfs.c
+@@ -1435,7 +1435,7 @@ static void connector_release(struct config_item *item)
+ 			vkms_connector_hot_remove(connector->dev->config->dev,
+ 						  connector_cfg->connector);
+ 
+-		vkms_config_destroy_connector(connector->config);
++		vkms_config_destroy_connector(connector->dev->config, connector->config);
+ 
+ 		kfree(connector);
+ 	}
+diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
+index a013b53bd915..08e1828a0fb0 100644
+--- a/drivers/gpu/drm/vkms/vkms_connector.c
++++ b/drivers/gpu/drm/vkms/vkms_connector.c
+@@ -8,6 +8,76 @@
+ #include "vkms_config.h"
+ #include "vkms_connector.h"
+ 
++/**
++ * vkms_connector_build_path_property() - Build the PATH property string for MST connectors
++ * @connector: The connector to build the PATH property for
++ * @connector_cfg: The connector configuration
++ *
++ * The PATH property format is:
++ *     mst:<drm object ID of root connector>-<dash-separated list of port_id>
++ * For nested MST connectors, this builds the full path like mst:45-2-3-4-2
++ */
++static void vkms_connector_build_path_property(struct vkms_connector *connector,
++						const struct vkms_config_connector *connector_cfg)
++{
++	const struct vkms_config_connector *current_cfg = connector_cfg;
++	const struct vkms_config_connector *root_cfg = NULL;
++	struct vkms_connector *root_connector = NULL;
++	char path[128]; /* Increased size for nested MST paths */
++	int len = 0;
++	u8 port_ids[16]; /* Max 16 levels of nesting */
++	int port_count = 0;
++	int i;
++
++	if (!vkms_config_connector_get_parent(connector_cfg))
++		return;
++
++	while (current_cfg) {
++		if (port_count < ARRAY_SIZE(port_ids))
++			port_ids[port_count++] = current_cfg->port_id;
++
++		if (!vkms_config_connector_get_parent(current_cfg)) {
++			root_cfg = current_cfg;
++			break;
++		}
++
++		current_cfg = vkms_config_connector_get_parent(current_cfg);
++	}
++
++	if (!root_cfg || !root_cfg->connector)
++		return;
++
++	root_connector = root_cfg->connector;
++
++	len = snprintf(path, sizeof(path), "mst:%d", root_connector->base.base.id);
++
++	for (i = port_count - 2; i >= 0; i--) {
++		int added = snprintf(path + len, sizeof(path) - len,
++				     "-%u", port_ids[i]);
++		if (added < 0 || len + added >= sizeof(path))
++			return;
++		len += added;
++	}
++
++	drm_connector_set_path_property(&connector->base, path);
++}
++
++/**
++ * vkms_connector_update_path_properties() - Update PATH properties for all connectors
++ * @vkmsdev: VKMS device
++ *
++ * This should be called after all connectors are created to ensure parent connectors
++ * have valid DRM object IDs.
++ */
++void vkms_connector_update_path_properties(struct vkms_device *vkmsdev)
++{
++	struct vkms_config_connector *connector_cfg;
++
++	vkms_config_for_each_connector(vkmsdev->config, connector_cfg)
++		if (connector_cfg->connector)
++			vkms_connector_build_path_property(connector_cfg->connector, connector_cfg);
++}
++
+ static enum drm_connector_status vkms_connector_detect(struct drm_connector *connector,
+ 						       bool force)
+ {
+@@ -150,6 +220,8 @@ static int __must_check vkms_connector_init(struct vkms_connector *connector,
+ 		}
  	}
  
- 	return ret;
-@@ -1392,9 +1522,6 @@ static struct config_group *make_connector_group(struct config_group *group,
- 	dev = child_group_to_vkms_configfs_device(group);
- 
- 	scoped_guard(mutex, &dev->lock) {
--		if (dev->enabled)
--			return ERR_PTR(-EBUSY);
--
- 		connector = kzalloc(sizeof(*connector), GFP_KERNEL);
- 		if (!connector)
- 			return ERR_PTR(-ENOMEM);
-@@ -1408,6 +1535,9 @@ static struct config_group *make_connector_group(struct config_group *group,
- 			return ERR_PTR(ret);
- 		}
- 
-+		vkms_config_connector_set_dynamic(connector->config, connector->dev->enabled);
-+		vkms_config_connector_set_enabled(connector->config, !connector->dev->enabled);
++	drm_object_attach_property(&connector->base.base, connector->base.dev->mode_config.path_property, 0);
 +
- 		config_group_init_type_name(&connector->group, name,
- 					    &connector_item_type);
+ 	return 0;
+ }
  
+@@ -240,6 +312,8 @@ struct vkms_connector *vkms_connector_hot_add(struct vkms_device *vkmsdev,
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
++	vkms_connector_build_path_property(connector, connector_cfg);
++
+ 	ret = drm_connector_dynamic_register(&connector->base);
+ 	if (ret) {
+ 		if (connector_cfg->type == DRM_MODE_CONNECTOR_HDMIA ||
+diff --git a/drivers/gpu/drm/vkms/vkms_connector.h b/drivers/gpu/drm/vkms/vkms_connector.h
+index a235a518d5a0..f8219830aaa5 100644
+--- a/drivers/gpu/drm/vkms/vkms_connector.h
++++ b/drivers/gpu/drm/vkms/vkms_connector.h
+@@ -67,4 +67,13 @@ int vkms_connector_hot_attach_encoder(struct vkms_device *vkmsdev,
+ 				      struct vkms_connector *connector,
+ 				      struct drm_encoder *encoder);
+ 
++/**
++ * vkms_connector_update_path_properties() - Update PATH properties for all connectors
++ * @vkmsdev: VKMS device
++ *
++ * This should be called after all connectors are created to ensure parent connectors
++ * have valid DRM object IDs.
++ */
++void vkms_connector_update_path_properties(struct vkms_device *vkmsdev);
++
+ #endif /* _VKMS_CONNECTOR_H_ */
+diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
+index 50f7d88dee8b..ad901340ba7c 100644
+--- a/drivers/gpu/drm/vkms/vkms_output.c
++++ b/drivers/gpu/drm/vkms/vkms_output.c
+@@ -126,5 +126,7 @@ int vkms_output_init(struct vkms_device *vkmsdev)
+ 		}
+ 	}
+ 
++	vkms_connector_update_path_properties(vkmsdev);
++
+ 	return 0;
+ }
 
 -- 
 2.54.0
