@@ -1,41 +1,42 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E201535E92F
-	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59353612F8
+	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782531134; cv=none; b=FUWV5odTtDUuaNaLkaSXnaJZcWUEUPnsUWS7iDbaRtWrFL/YS+8zH/0Ja3eCAMqZuMQ4pTRq2WyhlgeZHxTR8OdkF8bW9ZXhQ6/UkzXl4l5QBJTKqb8E470MAH5Ie7XsGYAI2wbOeluuq74hF8S9cG/zge0uXzi41OTjqO4UTLk=
+	t=1782531136; cv=none; b=usDKcoTdBHwyEEBn58L0KnL7IjUW0Xh20GH55v+PKpqi87n7W+LtCxungayh3wFK9GJbg+WRks8twW/ZDpHuiBPiB3Qyl4NoKGkm2fO9vx+X0ROFM5DW5vHjPXLGkkEzsckZ+p2Auftl29BpZxf9daDCWbVE++nBotVllQJ6j64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782531134; c=relaxed/simple;
-	bh=Ao6pZrb2nvH3LB0XUEbR940/GYWcqu6EeHzjUYxq1t0=;
+	s=arc-20240116; t=1782531136; c=relaxed/simple;
+	bh=6OtzeaGRUdWJ+rxoK+BJnq25yaBKEu05fnz7+XvgQs0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZszEMyO+XQabEO8lkjkYy8kEFmy3I8J7zgZgY89ZnOx/bHgAVsPDNLb52upOkaUqfiHQlMV60X9s65hX7uk/IMqfHgwNOCziIwi+E7+O79eTS7e1VO6yVwKcHQSvLTFll6AAPBz1cXFN7bcM3vFRk67Yj9IAK6Ij9t0lASGT4Is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PlLyt4Ua; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=k93ZY09VF/ECqfenIQNdv5updLCMDXCSudj7fcMOaTEyX/HzdhQfYvhCc8wuz0n4045uG/LApcEMAqt80NcG2TbFyB02KDxW0n3jPZN5cHJqnQByuORwUUV8BQHrqN95mRoZvfUyHflxQ06/sbNlKQ3/s9ql6G8KVZfA4dogtZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c2/J/rX7; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PlLyt4Ua"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c2/J/rX7"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id E32EAC5CD7E;
-	Sat, 27 Jun 2026 03:32:19 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 6784C1A0A23;
+	Sat, 27 Jun 2026 03:32:13 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D33F460233;
-	Sat, 27 Jun 2026 03:32:10 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 22FC0106F116F;
-	Sat, 27 Jun 2026 05:32:07 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 3517C60233;
+	Sat, 27 Jun 2026 03:32:13 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 966E4106F1171;
+	Sat, 27 Jun 2026 05:32:09 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782531129; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1782531131; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=nkH4VZETKvurYkdud9RJs/kvMCHV1czMfcDjQ4shGTs=;
-	b=PlLyt4UaCuGMYxX4VurQd7WMTgrS9YcYORVjh+5FW3sTUUeb9cb9bYormUNm4GB3n1Wa9x
-	8hBtMAzSw+nuXA96lCQzYjslkEhcwiWfZMXzEfV/YvYrfLgnWlquRJm/QQphGHpc2dyXc3
-	V/5O2QLfmDoZN4v+Xf+KD11vsXRWKLd1kaqOGDqOeHLYXKUI7Gw7rmLwHll/Eq2bQuw1z/
-	s9puuBnq17jNFftfOAJaLE2PlbftwxUu5UMZr2Xr+S4c0Rc5HlVToG6U67bVQAp9LP1Qf4
-	95rQx/WN9qhxlBmSBcvk4OWCFEt1p/d0O58jus4looOYR3LGTyAjTM6duzeRBw==
+	bh=bRFe3ro9aROJrNYFTvq6Jfu57vXZs41ebkay/s919N8=;
+	b=c2/J/rX7v6iXPI0TEnPMp8EsRqDZsuLNuPxdnGk5Wk//ymIw+Yh/xRzL/9qFBXUdtTzYB/
+	pu9eezoPDuPB/XMtWhxDN7GBx4GgouOfse/QzTCFGeL8IxZtdXfkHe7Yha42Sj0PCrz1Qk
+	oInAYlmBQsX6HM8JM7C6gVyLmBwvZiEEVD0Jy00LhkIPYL4jrE+RBlGHV2mgWJOYrbv8kt
+	fT6yDdy6qp1ot+xh4JORnFgqaUjZuiVkv+97+5DufxwuxXELBMm3YlJgYJyXEO1urt5D/K
+	9BvYD6gvnvesAd0HF34cR1hRjhKDuPNmvd0FtVjS0Gdd8aMczOxY2PcuDZW/nw==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Sat, 27 Jun 2026 05:30:50 +0200
-Subject: [PATCH v5 33/38] drm/vkms: Introduce configfs for connector EDID
+Date: Sat, 27 Jun 2026 05:30:51 +0200
+Subject: [PATCH v5 34/38] drm/vkms: Store the enabled/disabled status for
+ connector
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -43,8 +44,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260627-vkms-all-config-v5-33-854aa0840926@bootlin.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260627-vkms-all-config-v5-34-854aa0840926@bootlin.com>
 References: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 In-Reply-To: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -63,202 +64,211 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Louis Chauvet <louis.chauvet@bootlin.com>, llvm@lists.linux.dev
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6405;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7673;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=Ao6pZrb2nvH3LB0XUEbR940/GYWcqu6EeHzjUYxq1t0=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PhFYKLJ3WtxrBwSnlAGdLXIjQsmuJ+Owegy
- TXGPa2YRACJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D4RsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOJNiA//cBvFx97dPS2evltIlSPd6o7N2t/KEUl
- CMPkQ8mptRMC2F7mU3ay2vyHsgfJm8YwjjHcYE9a5lClPjEkj1DYrYLIrwnoLGrIPhL6MEqrmNc
- S9uosOzMhwTc9E0ZV1p7Au+nXGw+lMXJYwSOzzTt0VeqpCGZLQVSTxFfFePDpPP9EuC3/Elb2td
- /Ao5txboO7ZXqU0KlTyDnv5tOywa7ErmxNbPR9GmeZ1ZBJQty/8ErP2CvKuonvSl4Wy2a4C9t5z
- UGH3HUM2TW98D75SSeS1Mphc6Bx3dVI/3bTKaw5IRACMExMpYPOkW8xQ36VxmHIojV9281BDpa9
- 5obf5bf9mz/o3gaQQfqmH7A+CJ7eHC5FD/eza0vSBCYpZm6UcTnN4RsAOdSiAnXJp0DZ+gbPeyS
- l3BTVjRywDNO+TZEH94e5OFW5/m7Wj9IgzO5OE80JkNrvwM2np/8Okf4mWGF39VY/UgD5ROlMag
- lAK3TnNWnnCNXLP2QaVG9Wks3LLtNDKz+mcUNKWzrVdi7KCr5areJBaGre0LR5vB2qoIORQmW1g
- SiMlciDUc6X68uVAllcA/aKrXJyfaen/lDZDWrZPB0xqt9oWhTvRUmBVcdSnm0GEnpp0Sb+CjJV
- y5Z1kfnjXRUze9Q2fsGz7HPF/Fm63fNC49TSoUTiJwIoVb+s0y3U=
+ bh=6OtzeaGRUdWJ+rxoK+BJnq25yaBKEu05fnz7+XvgQs0=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PhO7FDXVAXdCf9/PvuLc+kT3uUnQ2kXJx9X
+ VeL4GSdDuuJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D4RsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOIN4hAA0mThp/EKpzU9nOkB7+yLRcrvMioX0Wv
+ WPHM/RCv1FfjfczEovUMgUDxcW+4IwhlbuvKJVZXW3sBlM3vbxZTcaBhDB8lxghe+5OYqsm3C++
+ IeKxl/oYXo8z+q8P1h7Zv1W3Qb14rRU+aj/XRrFM+oZWA580T+7XKHTSwCG9FS8YYaRbCrO27PB
+ RfyAgP4eTytSqSszBw/dGuDovK1qQm3h1sBQVLhJzSlCWpqajm9KFfLegaGsqPGYYur7AJ+XUbc
+ aON1y32ChEB+MVwTknp/YYW/S0jOX0nEMdeBPt7AKld8AFR38b+KLrbx+KC6qXQnrvCh1JJYYqR
+ VPDZZiRtWlLSVtI4lNk8m9w9AeySv9/2P/AyBglC9rkXHl26aX3dj2bJQlo/LQjX5i+yW2ijb8S
+ GJG24ZZgAuL9t7a3Q/uAirfinBHWElZA3bXItKdY6OH9wihtuE21tGlW4W8IUFvPbEcxvzXddhJ
+ GfPGk/jTbAibY+JTzAO5+fptouwmaLUDmKf8wc3cLJnWX3WCf+AuzCXoiQd1VUb+r9LilCyFW9N
+ yJOrUeTUGWd3m1jRpz4Ns1dWE2EWp6F/crl0MUp+7R577y1Zz9xWhASj7ftLQbWPGFfTP/AbkDj
+ vIBzBwC1LzuGcbMzLOvMhXdkJ6Vv5zd7udaZ3Eim43JEWjY4BurE=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-Introduce new attributes to configure EDID of a connector:
-- edid_enable - chose if the connector will have an EDID or not
-- edid - raw edid content
+In order to prepare for dynamic connector configuration, we need to store
+if a connector is dynamic and if it is enabled.
 
-Due to limitation of ConfigFS, the max len of EDID is PAGE_SIZE (4kB on
-x86), it should be sufficient for many tests. One possible evolution is
-using a ConfigFS blob to allow bigger EDID.
+The two new vkms_config_connector fields will helps for that.
 
+Co-developed-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
 Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- Documentation/ABI/testing/configfs-vkms | 14 ++++++
- Documentation/gpu/vkms.rst              |  5 ++-
- drivers/gpu/drm/vkms/vkms_configfs.c    | 80 +++++++++++++++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_connector.c   |  3 ++
- 4 files changed, 101 insertions(+), 1 deletion(-)
+ .clang-format                                 |  2 +
+ drivers/gpu/drm/vkms/tests/vkms_config_test.c |  4 ++
+ drivers/gpu/drm/vkms/vkms_config.c            |  6 +++
+ drivers/gpu/drm/vkms/vkms_config.h            | 66 +++++++++++++++++++++++++++
+ drivers/gpu/drm/vkms/vkms_output.c            |  2 +-
+ 5 files changed, 79 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/ABI/testing/configfs-vkms b/Documentation/ABI/testing/configfs-vkms
-index 86f5f0beec8d..04e2f89e3129 100644
---- a/Documentation/ABI/testing/configfs-vkms
-+++ b/Documentation/ABI/testing/configfs-vkms
-@@ -48,6 +48,20 @@ Description:
- 	Value is a bitfield, where 0x1 = NO_DATA, 0x2 = SMPTE_170M_YCC,
- 	etc. See enum drm_colorspace for full list.
+diff --git a/.clang-format b/.clang-format
+index 1cc151e2adcc..0d985d30efb2 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -724,6 +724,8 @@ ForEachMacros:
+   - 'v4l2_m2m_for_each_src_buf_safe'
+   - 'virtio_device_for_each_vq'
+   - 'vkms_config_for_each_connector'
++  - 'vkms_config_for_each_connector_static'
++  - 'vkms_config_for_each_connector_dynamic'
+   - 'vkms_config_for_each_crtc'
+   - 'vkms_config_for_each_encoder'
+   - 'vkms_config_for_each_plane'
+diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+index 2b49745ee026..fda23f05a0a5 100644
+--- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
++++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
+@@ -220,6 +220,10 @@ static void vkms_config_test_default_config(struct kunit *test)
+ 				0);
+ 		KUNIT_EXPECT_EQ(test, vkms_config_connector_get_edid_enabled(connector_cfg),
+ 				false);
++		KUNIT_EXPECT_EQ(test, vkms_config_connector_is_enabled(connector_cfg),
++				true);
++		KUNIT_EXPECT_EQ(test, vkms_config_connector_is_dynamic(connector_cfg),
++				false);
+ 	}
  
-+What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/edid_enabled
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	Enable or disable EDID for this connector. Value:
-+	1 - enabled, 0 - disabled.
+ 	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
+diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
+index 1a110b8aa114..98e40c6a2c5b 100644
+--- a/drivers/gpu/drm/vkms/vkms_config.c
++++ b/drivers/gpu/drm/vkms/vkms_config.c
+@@ -597,6 +597,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
+ 
+ 	vkms_config_for_each_connector(vkmsdev->config, connector_cfg) {
+ 		seq_puts(m, "connector:\n");
++		seq_printf(m, "\t%s\n",
++			   str_enabled_disabled(vkms_config_connector_is_enabled(connector_cfg)));
+ 		seq_printf(m, "\tstatus=%s\n",
+ 			   drm_get_connector_status_name(vkms_config_connector_get_status(connector_cfg)));
+ 		seq_printf(m, "\ttype=%s\n",
+@@ -610,6 +612,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
+ 			   str_enabled_disabled(vkms_config_connector_get_edid_enabled(connector_cfg)),
+ 			   edid_len
+ 		);
++		seq_printf(m, "\tdynamic=%s\n",
++			   str_true_false(vkms_config_connector_is_dynamic(connector_cfg)));
+ 	}
+ 
+ 	return 0;
+@@ -944,6 +948,8 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
+ 	connector_cfg->status = connector_status_connected;
+ 	vkms_config_connector_set_type(connector_cfg, DRM_MODE_CONNECTOR_VIRTUAL);
+ 	vkms_config_connector_set_supported_colorspaces(connector_cfg, 0);
++	vkms_config_connector_set_dynamic(connector_cfg, false);
++	vkms_config_connector_set_enabled(connector_cfg, true);
+ 	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
+ 
+ 	list_add_tail(&connector_cfg->link, &config->connectors);
+diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
+index 7e361b6e45b0..071887a65380 100644
+--- a/drivers/gpu/drm/vkms/vkms_config.h
++++ b/drivers/gpu/drm/vkms/vkms_config.h
+@@ -132,6 +132,8 @@ struct vkms_config_encoder {
+  * @link: Link to the others connector in vkms_config
+  * @type: Store the type of connector using DRM_MODE_CONNECTOR_* values
+  * @config: The vkms_config this connector belongs to
++ * @dynamic: Store if a connector should be created with drm_connector_dynamic_init
++ * @enabled: If @dynamic, this means that the connector is currently registered in drm
+  * @status: Status (connected, disconnected...) of the connector
+  * @supported_colorspaces: Bitmask of all the supported colorspaces. Values
+  *                         are the sames as ones accepted by
+@@ -151,6 +153,8 @@ struct vkms_config_connector {
+ 	struct vkms_config *config;
+ 
+ 	int type;
++	bool enabled;
++	bool dynamic;
+ 	enum drm_connector_status status;
+ 	u32 supported_colorspaces;
+ 	bool edid_enabled;
+@@ -194,6 +198,24 @@ struct vkms_config_connector {
+ #define vkms_config_for_each_connector(config, connector_cfg) \
+ 	list_for_each_entry((connector_cfg), &(config)->connectors, link)
+ 
++/**
++ * vkms_config_for_each_connector_static - Iterate over the static vkms_config connectors
++ * @config: &struct vkms_config pointer
++ * @connector_cfg: &struct vkms_config_connector pointer used as cursor
++ */
++#define vkms_config_for_each_connector_static(config, connector_cfg) \
++	vkms_config_for_each_connector((config), (connector_cfg)) \
++		if (!(connector_cfg)->dynamic)
 +
-+What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/edid
-+Date:		Nov 2025
-+Contact:	dri-devel@lists.freedesktop.org
-+Description:
-+	Content of the EDID for this connector. Ignored if
-+	edid_enabled is not set.
++/**
++ * vkms_config_for_each_connector_dynamic - Iterate over the dynamic vkms_config connectors
++ * @config: &struct vkms_config pointer
++ * @connector_cfg: &struct vkms_config_connector pointer used as cursor
++ */
++#define vkms_config_for_each_connector_dynamic(config, connector_cfg) \
++	vkms_config_for_each_connector((config), (connector_cfg)) \
++		if ((connector_cfg)->dynamic)
 +
- What:		/sys/kernel/config/vkms/<device>/connectors/<connector>/possible_encoders
- Date:		Nov 2025
- Contact:	dri-devel@lists.freedesktop.org
-diff --git a/Documentation/gpu/vkms.rst b/Documentation/gpu/vkms.rst
-index 11058b6e6250..2a3e175bf67b 100644
---- a/Documentation/gpu/vkms.rst
-+++ b/Documentation/gpu/vkms.rst
-@@ -137,7 +137,7 @@ Last but not least, create one or more connectors::
- 
-   sudo mkdir /config/vkms/my-vkms/connectors/connector0
- 
--Connectors have 3 configurable attribute:
-+Connectors have 5 configurable attribute:
- 
- - status: Connection status: 1 connected, 2 disconnected, 3 unknown (same values
-   as those exposed by the "status" property of a connector)
-@@ -146,6 +146,9 @@ Connectors have 3 configurable attribute:
-   If supported_colorspaces is not 0, the HDR_OUTPUT_METADATA will also be created.
-   Value is a bitfield, 0x1 = NO_DATA, 0x2 = SMPTE_170M_YCC... see enum drm_colorspace
-   for full list.
-+- edid_enabled: Enable or not EDID for this connector. Some connectors may not have an
-+  EDID but just a list of modes, this attribute allows to disable EDID property.
-+- edid: Content of the EDID. Ignored if edid_enabled is not set
- 
- 
- To finish the configuration, link the different pipeline items::
-diff --git a/drivers/gpu/drm/vkms/vkms_configfs.c b/drivers/gpu/drm/vkms/vkms_configfs.c
-index e1f6e7817f97..f79a796c2017 100644
---- a/drivers/gpu/drm/vkms/vkms_configfs.c
-+++ b/drivers/gpu/drm/vkms/vkms_configfs.c
-@@ -1218,14 +1218,94 @@ static ssize_t connector_supported_colorspaces_store(struct config_item *item,
- 	return count;
+ /**
+  * vkms_config_plane_for_each_possible_crtc - Iterate over the vkms_config_plane
+  * possible CRTCs
+@@ -472,6 +494,50 @@ vkms_config_connector_set_type(struct vkms_config_connector *connector_cfg,
+ 	connector_cfg->type = type;
  }
  
-+static ssize_t connector_edid_enabled_show(struct config_item *item, char *page)
++/**
++ * vkms_config_connector_set_enabled() - If the connector is part of the device
++ * @crtc_cfg: Target connector
++ * @enabled: Add or remove the connector
++ */
++static inline void
++vkms_config_connector_set_enabled(struct vkms_config_connector *connector_cfg,
++				  bool enabled)
 +{
-+	struct vkms_configfs_connector *connector;
-+	bool enabled;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+
-+	scoped_guard(mutex, &connector->dev->lock)
-+		enabled = vkms_config_connector_get_edid_enabled(connector->config);
-+
-+	return sprintf(page, "%d\n", enabled);
++	connector_cfg->enabled = enabled;
 +}
 +
-+static ssize_t connector_edid_enabled_store(struct config_item *item,
-+					    const char *page, size_t count)
++/**
++ * vkms_config_connector_is_enabled() - If the connector is part of the device
++ * @connector_cfg: The connector
++ */
++static inline bool
++vkms_config_connector_is_enabled(const struct vkms_config_connector *connector_cfg)
 +{
-+	struct vkms_configfs_connector *connector;
-+	struct vkms_config_connector *connector_cfg;
-+	bool enabled;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+	connector_cfg = connector->config;
-+
-+	if (kstrtobool(page, &enabled))
-+		return -EINVAL;
-+
-+	scoped_guard(mutex, &connector->dev->lock)
-+	{
-+		vkms_config_connector_set_edid_enabled(connector_cfg, enabled);
-+
-+		if (connector->dev->enabled &&
-+		    vkms_config_connector_get_status(connector_cfg) !=
-+		    connector_status_disconnected)
-+			vkms_trigger_connector_hotplug(connector->dev->config->dev);
-+	}
-+	return count;
++	return connector_cfg->enabled;
 +}
 +
-+static ssize_t connector_edid_show(struct config_item *item, char *page)
++/**
++ * vkms_config_connector_set_dynamic() - If the connector is dynamic
++ * @crtc_cfg: Target connector
++ * @enabled: Enable or disable the dynamic status
++ */
++static inline void
++vkms_config_connector_set_dynamic(struct vkms_config_connector *connector_cfg,
++				  bool dynamic)
 +{
-+	struct vkms_configfs_connector *connector;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+
-+	scoped_guard(mutex, &connector->dev->lock)
-+	{
-+		unsigned int len = 0;
-+		const u8 *edid = vkms_config_connector_get_edid(connector->config, &len);
-+
-+		memcpy(page, edid, min(len, PAGE_SIZE));
-+		return min(len, PAGE_SIZE);
-+	}
-+
-+	return -EINVAL;
++	connector_cfg->dynamic = dynamic;
 +}
 +
-+static ssize_t connector_edid_store(struct config_item *item,
-+				    const char *page, size_t count)
++/**
++ * vkms_config_connector_is_enabled() - If the connector is dynamic
++ * @connector_cfg: The connector
++ */
++static inline bool
++vkms_config_connector_is_dynamic(struct vkms_config_connector *connector_cfg)
 +{
-+	struct vkms_configfs_connector *connector;
-+
-+	connector = connector_item_to_vkms_configfs_connector(item);
-+
-+	scoped_guard(mutex, &connector->dev->lock)
-+	{
-+		vkms_config_connector_set_edid(connector->config, page, count);
-+
-+		if (connector->dev->enabled &&
-+		    vkms_config_connector_get_status(connector->config) !=
-+		    connector_status_disconnected)
-+			vkms_trigger_connector_hotplug(connector->dev->config->dev);
-+	}
-+
-+	return count;
++	return connector_cfg->dynamic;
 +}
 +
- CONFIGFS_ATTR(connector_, status);
- CONFIGFS_ATTR(connector_, type);
- CONFIGFS_ATTR(connector_, supported_colorspaces);
-+CONFIGFS_ATTR(connector_, edid_enabled);
-+CONFIGFS_ATTR(connector_, edid);
+ /*
+  * vkms_config_plane_get_default_rotation() - Get the default rotation for a plane
+  * @plane_cfg: Plane to get the default rotation from
+diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
+index 406a22f1b963..13c4ca5fd39d 100644
+--- a/drivers/gpu/drm/vkms/vkms_output.c
++++ b/drivers/gpu/drm/vkms/vkms_output.c
+@@ -93,7 +93,7 @@ int vkms_output_init(struct vkms_device *vkmsdev)
+ 		}
+ 	}
  
- static struct configfs_attribute *connector_item_attrs[] = {
- 	&connector_attr_status,
- 	&connector_attr_type,
- 	&connector_attr_supported_colorspaces,
-+	&connector_attr_edid_enabled,
-+	&connector_attr_edid,
- 	NULL,
- };
- 
-diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
-index fe42ab2ba7b1..f726c7995524 100644
---- a/drivers/gpu/drm/vkms/vkms_connector.c
-+++ b/drivers/gpu/drm/vkms/vkms_connector.c
-@@ -175,6 +175,9 @@ struct vkms_connector *vkms_connector_init_static(struct vkms_device *vkmsdev,
- 
- 	drm_connector_helper_add(&connector->base, &vkms_conn_helper_funcs);
- 
-+	if (vkms_config_connector_get_edid_enabled(connector_cfg))
-+		drm_connector_attach_edid_property(&connector->base);
-+
- 	return connector;
- }
+-	vkms_config_for_each_connector(vkmsdev->config, connector_cfg) {
++	vkms_config_for_each_connector_static(vkmsdev->config, connector_cfg) {
+ 		struct vkms_config_encoder *possible_encoder;
+ 		unsigned long idx = 0;
  
 
 -- 
