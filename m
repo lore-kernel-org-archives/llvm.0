@@ -1,42 +1,41 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59353612F8
-	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95C72331ECF
+	for <llvm@lists.linux.dev>; Sat, 27 Jun 2026 03:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782531136; cv=none; b=usDKcoTdBHwyEEBn58L0KnL7IjUW0Xh20GH55v+PKpqi87n7W+LtCxungayh3wFK9GJbg+WRks8twW/ZDpHuiBPiB3Qyl4NoKGkm2fO9vx+X0ROFM5DW5vHjPXLGkkEzsckZ+p2Auftl29BpZxf9daDCWbVE++nBotVllQJ6j64=
+	t=1782531138; cv=none; b=oVg3v5uepU4ZFkI084SvHaLPwZ2LHztj0OrmI350uLa0n+zJ4x897XRBnrlnx9sUkoayWnKYn1SIy4ljNZ58igTUgMeKxuAeWF6G9xzIIn2luLRNYl2ldzpLJyPqICCUNZWPhTs45fO8zwyHDyB2XPRszSW/XD1QlAEQy5ycU3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782531136; c=relaxed/simple;
-	bh=6OtzeaGRUdWJ+rxoK+BJnq25yaBKEu05fnz7+XvgQs0=;
+	s=arc-20240116; t=1782531138; c=relaxed/simple;
+	bh=xesbCEX8y6GLslcmbN6Z9Yf2aYZOtJdUxJPnVvjTvPE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k93ZY09VF/ECqfenIQNdv5updLCMDXCSudj7fcMOaTEyX/HzdhQfYvhCc8wuz0n4045uG/LApcEMAqt80NcG2TbFyB02KDxW0n3jPZN5cHJqnQByuORwUUV8BQHrqN95mRoZvfUyHflxQ06/sbNlKQ3/s9ql6G8KVZfA4dogtZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c2/J/rX7; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=qcth/cSF2BD7H/ocOmzi2eBKLqtnRZcO8PHp5sCol8aZMuukpj8dOgq0Qie+Yk73Eh4+l51wtu61Q7KreLqA5+f8TXO5OTkMqTTc8Z2CBAh4yamzAtRWdU6xl4sodXkNvFEQiv5HSxePEzfjBZpMwpwKLh3fbVZx56vgqKXdLbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NUowejrQ; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c2/J/rX7"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NUowejrQ"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 6784C1A0A23;
-	Sat, 27 Jun 2026 03:32:13 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 99588C5CD7E;
+	Sat, 27 Jun 2026 03:32:24 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 3517C60233;
-	Sat, 27 Jun 2026 03:32:13 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 966E4106F1171;
-	Sat, 27 Jun 2026 05:32:09 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8A08A60233;
+	Sat, 27 Jun 2026 03:32:15 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 064E3106F1170;
+	Sat, 27 Jun 2026 05:32:11 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782531131; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1782531134; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=bRFe3ro9aROJrNYFTvq6Jfu57vXZs41ebkay/s919N8=;
-	b=c2/J/rX7v6iXPI0TEnPMp8EsRqDZsuLNuPxdnGk5Wk//ymIw+Yh/xRzL/9qFBXUdtTzYB/
-	pu9eezoPDuPB/XMtWhxDN7GBx4GgouOfse/QzTCFGeL8IxZtdXfkHe7Yha42Sj0PCrz1Qk
-	oInAYlmBQsX6HM8JM7C6gVyLmBwvZiEEVD0Jy00LhkIPYL4jrE+RBlGHV2mgWJOYrbv8kt
-	fT6yDdy6qp1ot+xh4JORnFgqaUjZuiVkv+97+5DufxwuxXELBMm3YlJgYJyXEO1urt5D/K
-	9BvYD6gvnvesAd0HF34cR1hRjhKDuPNmvd0FtVjS0Gdd8aMczOxY2PcuDZW/nw==
+	bh=QZVcGvUufNYmeDV6o2kpMdHjPPf3F67u9Lux32iDHyA=;
+	b=NUowejrQKlTm31V5ZVQsplnfCkVU8/RbWbZIjXO15DoHERRHayXKKW8btYHm7nHbsjMqx4
+	TAwpyggTKOrBMmaNgqo4vsvHYaTeguCCHMhNr/YbmFBzBXJYNHNZ4PK6E4Qh8+WPbq+FIg
+	M/VwUijCBehjnpfverI8bqjkJjJnNGsDDoJs4/6x8m8L3daURPZ/swdWG8P16VFcZY8B2G
+	myqMyr6s5lW91LLdyyAml8O2RtxMDltNGlaR+IYQNbRMz4T1DoFEnoaQzwW/LuJNiZKMNI
+	wWtsuwyWJbcqvYSi/APK7/gCQXTrGtif6ysHQl9mknQCwZd1m3SnNzdB1RQhjg==
 From: Louis Chauvet <louis.chauvet@bootlin.com>
-Date: Sat, 27 Jun 2026 05:30:51 +0200
-Subject: [PATCH v5 34/38] drm/vkms: Store the enabled/disabled status for
- connector
+Date: Sat, 27 Jun 2026 05:30:52 +0200
+Subject: [PATCH v5 35/38] drm/vkms: Allow to hot-add connectors
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -45,7 +44,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260627-vkms-all-config-v5-34-854aa0840926@bootlin.com>
+Message-Id: <20260627-vkms-all-config-v5-35-854aa0840926@bootlin.com>
 References: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 In-Reply-To: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
 To: Haneen Mohammed <hamohammed.sa@gmail.com>, 
@@ -64,212 +63,204 @@ Cc: Luca Ceresoli <luca.ceresoli@bootlin.com>,
  linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  Louis Chauvet <louis.chauvet@bootlin.com>, llvm@lists.linux.dev
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7673;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6175;
  i=louis.chauvet@bootlin.com; h=from:subject:message-id;
- bh=6OtzeaGRUdWJ+rxoK+BJnq25yaBKEu05fnz7+XvgQs0=;
- b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PhO7FDXVAXdCf9/PvuLc+kT3uUnQ2kXJx9X
- VeL4GSdDuuJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D4RsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOIN4hAA0mThp/EKpzU9nOkB7+yLRcrvMioX0Wv
- WPHM/RCv1FfjfczEovUMgUDxcW+4IwhlbuvKJVZXW3sBlM3vbxZTcaBhDB8lxghe+5OYqsm3C++
- IeKxl/oYXo8z+q8P1h7Zv1W3Qb14rRU+aj/XRrFM+oZWA580T+7XKHTSwCG9FS8YYaRbCrO27PB
- RfyAgP4eTytSqSszBw/dGuDovK1qQm3h1sBQVLhJzSlCWpqajm9KFfLegaGsqPGYYur7AJ+XUbc
- aON1y32ChEB+MVwTknp/YYW/S0jOX0nEMdeBPt7AKld8AFR38b+KLrbx+KC6qXQnrvCh1JJYYqR
- VPDZZiRtWlLSVtI4lNk8m9w9AeySv9/2P/AyBglC9rkXHl26aX3dj2bJQlo/LQjX5i+yW2ijb8S
- GJG24ZZgAuL9t7a3Q/uAirfinBHWElZA3bXItKdY6OH9wihtuE21tGlW4W8IUFvPbEcxvzXddhJ
- GfPGk/jTbAibY+JTzAO5+fptouwmaLUDmKf8wc3cLJnWX3WCf+AuzCXoiQd1VUb+r9LilCyFW9N
- yJOrUeTUGWd3m1jRpz4Ns1dWE2EWp6F/crl0MUp+7R577y1Zz9xWhASj7ftLQbWPGFfTP/AbkDj
- vIBzBwC1LzuGcbMzLOvMhXdkJ6Vv5zd7udaZ3Eim43JEWjY4BurE=
+ bh=xesbCEX8y6GLslcmbN6Z9Yf2aYZOtJdUxJPnVvjTvPE=;
+ b=owEBiQJ2/ZANAwAIASCtLsZbECziAcsmYgBqP0PhfL+Pnt/MD4loCw+Vxk9Tcsq9loKtboJ6K
+ CPKYMdZy8GJAk8EAAEIADkWIQRPj7g/vng8MQxQWQQgrS7GWxAs4gUCaj9D4RsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMiwyLDIACgkQIK0uxlsQLOI5bhAAkFS5OYnHyAFXe61Kcdy+SXctiEuNkGP
+ P9dxf3BOipPHMAtMnxKtDxhaOM60RNBmpZHhRSze6jF6v+XFx1vARtH572kpaj3638tKw6I+dmd
+ 3eWy9QLjRzfJyLv8rkAjRTF+qpvDsdKbyXM+tT9NkYKFE5NV92SoERl9r9Xop3K7SZ5bUBiXrIL
+ JaI4o3sKgrqyhJcG2OLtTki+js1Iq9VdlZYXy+yb29NS7mPsjBvNzzpSN/jn0bV9Tw+5FrKYScD
+ 2loHmIzL2T0hJ/3GjYPoGe10pH4ejyK8SPciSRQ+FOOLZNr90rTQgoBFNWTW1xfNcHBV5HZYqhS
+ 5JJ9P2dqZXgCZamkihqKan+G6NQy9KYriuLZYBW4B9roogAphtDIOy2BK8mkDV2vVVVaoO5EgzQ
+ nj4tP0k2/BJ/8vXdcuOOk0dEKwHkZSuInni05kHR7J05Qq4Ehz5vkhrzbQ+v/TK/8KEGdlAgSLz
+ YeGQNj7db2FNiCz5Hd8LcsXeKBtVtkjKu1je4/nVxwy3wGt5Y14d4ymGFrjmvD5DuiMx0inRT9K
+ fD7Y6I268QTmRKZIGvdfIUZ+yK0j9RfzUUKF+el+vwHvwsPtwXR+leL6TeAAh4y9OlrtNULGB2V
+ X2X1ettukcIDzMjfDRuG852ATOZrg5zsCCAO1Eu0XVPcVt0d25Ew=
 X-Developer-Key: i=louis.chauvet@bootlin.com; a=openpgp;
  fpr=8B7104AE9A272D6693F527F2EC1883F55E0B40A5
 X-Last-TLS-Session-Version: TLSv1.3
 
-In order to prepare for dynamic connector configuration, we need to store
-if a connector is dynamic and if it is enabled.
+In order to allow creating dynamic connector, add the required
+infrastructure in vkms_connector.
 
-The two new vkms_config_connector fields will helps for that.
+[Louis Chauvet: use drm_atomic_helper_connector_reset instead of
+drm_mode_config_reset because connector is not yet registered]
 
 Co-developed-by: José Expósito <jose.exposito89@gmail.com>
 Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Louis Chauvet <louis.chauvet@bootlin.com>
 ---
- .clang-format                                 |  2 +
- drivers/gpu/drm/vkms/tests/vkms_config_test.c |  4 ++
- drivers/gpu/drm/vkms/vkms_config.c            |  6 +++
- drivers/gpu/drm/vkms/vkms_config.h            | 66 +++++++++++++++++++++++++++
- drivers/gpu/drm/vkms/vkms_output.c            |  2 +-
- 5 files changed, 79 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/vkms/vkms_connector.c | 89 +++++++++++++++++++++++++++++++++++
+ drivers/gpu/drm/vkms/vkms_connector.h | 33 +++++++++++++
+ drivers/gpu/drm/vkms/vkms_output.c    |  9 ++++
+ 3 files changed, 131 insertions(+)
 
-diff --git a/.clang-format b/.clang-format
-index 1cc151e2adcc..0d985d30efb2 100644
---- a/.clang-format
-+++ b/.clang-format
-@@ -724,6 +724,8 @@ ForEachMacros:
-   - 'v4l2_m2m_for_each_src_buf_safe'
-   - 'virtio_device_for_each_vq'
-   - 'vkms_config_for_each_connector'
-+  - 'vkms_config_for_each_connector_static'
-+  - 'vkms_config_for_each_connector_dynamic'
-   - 'vkms_config_for_each_crtc'
-   - 'vkms_config_for_each_encoder'
-   - 'vkms_config_for_each_plane'
-diff --git a/drivers/gpu/drm/vkms/tests/vkms_config_test.c b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-index 2b49745ee026..fda23f05a0a5 100644
---- a/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-+++ b/drivers/gpu/drm/vkms/tests/vkms_config_test.c
-@@ -220,6 +220,10 @@ static void vkms_config_test_default_config(struct kunit *test)
- 				0);
- 		KUNIT_EXPECT_EQ(test, vkms_config_connector_get_edid_enabled(connector_cfg),
- 				false);
-+		KUNIT_EXPECT_EQ(test, vkms_config_connector_is_enabled(connector_cfg),
-+				true);
-+		KUNIT_EXPECT_EQ(test, vkms_config_connector_is_dynamic(connector_cfg),
-+				false);
- 	}
- 
- 	KUNIT_EXPECT_TRUE(test, vkms_config_is_valid(config));
-diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
-index 1a110b8aa114..98e40c6a2c5b 100644
---- a/drivers/gpu/drm/vkms/vkms_config.c
-+++ b/drivers/gpu/drm/vkms/vkms_config.c
-@@ -597,6 +597,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
- 
- 	vkms_config_for_each_connector(vkmsdev->config, connector_cfg) {
- 		seq_puts(m, "connector:\n");
-+		seq_printf(m, "\t%s\n",
-+			   str_enabled_disabled(vkms_config_connector_is_enabled(connector_cfg)));
- 		seq_printf(m, "\tstatus=%s\n",
- 			   drm_get_connector_status_name(vkms_config_connector_get_status(connector_cfg)));
- 		seq_printf(m, "\ttype=%s\n",
-@@ -610,6 +612,8 @@ static int vkms_config_show(struct seq_file *m, void *data)
- 			   str_enabled_disabled(vkms_config_connector_get_edid_enabled(connector_cfg)),
- 			   edid_len
- 		);
-+		seq_printf(m, "\tdynamic=%s\n",
-+			   str_true_false(vkms_config_connector_is_dynamic(connector_cfg)));
- 	}
- 
- 	return 0;
-@@ -944,6 +948,8 @@ struct vkms_config_connector *vkms_config_create_connector(struct vkms_config *c
- 	connector_cfg->status = connector_status_connected;
- 	vkms_config_connector_set_type(connector_cfg, DRM_MODE_CONNECTOR_VIRTUAL);
- 	vkms_config_connector_set_supported_colorspaces(connector_cfg, 0);
-+	vkms_config_connector_set_dynamic(connector_cfg, false);
-+	vkms_config_connector_set_enabled(connector_cfg, true);
- 	xa_init_flags(&connector_cfg->possible_encoders, XA_FLAGS_ALLOC);
- 
- 	list_add_tail(&connector_cfg->link, &config->connectors);
-diff --git a/drivers/gpu/drm/vkms/vkms_config.h b/drivers/gpu/drm/vkms/vkms_config.h
-index 7e361b6e45b0..071887a65380 100644
---- a/drivers/gpu/drm/vkms/vkms_config.h
-+++ b/drivers/gpu/drm/vkms/vkms_config.h
-@@ -132,6 +132,8 @@ struct vkms_config_encoder {
-  * @link: Link to the others connector in vkms_config
-  * @type: Store the type of connector using DRM_MODE_CONNECTOR_* values
-  * @config: The vkms_config this connector belongs to
-+ * @dynamic: Store if a connector should be created with drm_connector_dynamic_init
-+ * @enabled: If @dynamic, this means that the connector is currently registered in drm
-  * @status: Status (connected, disconnected...) of the connector
-  * @supported_colorspaces: Bitmask of all the supported colorspaces. Values
-  *                         are the sames as ones accepted by
-@@ -151,6 +153,8 @@ struct vkms_config_connector {
- 	struct vkms_config *config;
- 
- 	int type;
-+	bool enabled;
-+	bool dynamic;
- 	enum drm_connector_status status;
- 	u32 supported_colorspaces;
- 	bool edid_enabled;
-@@ -194,6 +198,24 @@ struct vkms_config_connector {
- #define vkms_config_for_each_connector(config, connector_cfg) \
- 	list_for_each_entry((connector_cfg), &(config)->connectors, link)
- 
-+/**
-+ * vkms_config_for_each_connector_static - Iterate over the static vkms_config connectors
-+ * @config: &struct vkms_config pointer
-+ * @connector_cfg: &struct vkms_config_connector pointer used as cursor
-+ */
-+#define vkms_config_for_each_connector_static(config, connector_cfg) \
-+	vkms_config_for_each_connector((config), (connector_cfg)) \
-+		if (!(connector_cfg)->dynamic)
-+
-+/**
-+ * vkms_config_for_each_connector_dynamic - Iterate over the dynamic vkms_config connectors
-+ * @config: &struct vkms_config pointer
-+ * @connector_cfg: &struct vkms_config_connector pointer used as cursor
-+ */
-+#define vkms_config_for_each_connector_dynamic(config, connector_cfg) \
-+	vkms_config_for_each_connector((config), (connector_cfg)) \
-+		if ((connector_cfg)->dynamic)
-+
- /**
-  * vkms_config_plane_for_each_possible_crtc - Iterate over the vkms_config_plane
-  * possible CRTCs
-@@ -472,6 +494,50 @@ vkms_config_connector_set_type(struct vkms_config_connector *connector_cfg,
- 	connector_cfg->type = type;
+diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
+index f726c7995524..a013b53bd915 100644
+--- a/drivers/gpu/drm/vkms/vkms_connector.c
++++ b/drivers/gpu/drm/vkms/vkms_connector.c
+@@ -181,9 +181,98 @@ struct vkms_connector *vkms_connector_init_static(struct vkms_device *vkmsdev,
+ 	return connector;
  }
  
-+/**
-+ * vkms_config_connector_set_enabled() - If the connector is part of the device
-+ * @crtc_cfg: Target connector
-+ * @enabled: Add or remove the connector
-+ */
-+static inline void
-+vkms_config_connector_set_enabled(struct vkms_config_connector *connector_cfg,
-+				  bool enabled)
++static void vkms_connector_dynamic_destroy(struct drm_connector *connector)
 +{
-+	connector_cfg->enabled = enabled;
++	struct vkms_connector *vkms_connector;
++
++	drm_connector_cleanup(connector);
++
++	vkms_connector = drm_connector_to_vkms_connector(connector);
++	kfree(vkms_connector);
 +}
 +
-+/**
-+ * vkms_config_connector_is_enabled() - If the connector is part of the device
-+ * @connector_cfg: The connector
-+ */
-+static inline bool
-+vkms_config_connector_is_enabled(const struct vkms_config_connector *connector_cfg)
++static const struct drm_connector_funcs vkms_dynamic_connector_funcs = {
++	.fill_modes = drm_helper_probe_single_connector_modes,
++	.reset = drm_atomic_helper_connector_reset,
++	.atomic_duplicate_state = drm_atomic_helper_connector_duplicate_state,
++	.atomic_destroy_state = drm_atomic_helper_connector_destroy_state,
++	.destroy = vkms_connector_dynamic_destroy,
++	.detect = vkms_connector_detect,
++};
++
+ void vkms_trigger_connector_hotplug(struct vkms_device *vkmsdev)
+ {
+ 	struct drm_device *dev = &vkmsdev->drm;
+ 
+ 	drm_kms_helper_hotplug_event(dev);
+ }
++
++struct vkms_connector *vkms_connector_hot_add(struct vkms_device *vkmsdev,
++					      struct vkms_config_connector *connector_cfg)
 +{
-+	return connector_cfg->enabled;
++	struct vkms_config_encoder *encoder_cfg;
++	struct vkms_connector __free(kfree) * connector = NULL;
++	int ret;
++	unsigned long idx = 0;
++
++	connector = kzalloc_obj(*connector, GFP_KERNEL);
++	if (IS_ERR(connector))
++		return connector;
++	ret = drm_connector_dynamic_init(&vkmsdev->drm,
++					 &connector->base,
++					 &vkms_dynamic_connector_funcs,
++					 connector_cfg->type,
++					 NULL);
++	if (ret)
++		return ERR_PTR(ret);
++	drm_connector_helper_add(&connector->base, &vkms_conn_helper_funcs);
++
++	vkms_config_connector_for_each_possible_encoder(connector_cfg, idx, encoder_cfg) {
++		ret = drm_connector_attach_encoder(&connector->base,
++						   encoder_cfg->encoder);
++		if (ret)
++			return ERR_PTR(ret);
++	}
++
++	drm_atomic_helper_connector_reset(&connector->base);
++
++	ret = vkms_connector_init(connector, connector_cfg);
++	if (ret)
++		return ERR_PTR(ret);
++
++	ret = drm_connector_dynamic_register(&connector->base);
++	if (ret) {
++		if (connector_cfg->type == DRM_MODE_CONNECTOR_HDMIA ||
++		    connector_cfg->type == DRM_MODE_CONNECTOR_DisplayPort ||
++		    connector_cfg->type == DRM_MODE_CONNECTOR_eDP) {
++			drm_property_destroy(connector->base.dev,
++					     connector->base.colorspace_property);
++		}
++		return ERR_PTR(ret);
++	}
++
++	return_ptr(connector);
 +}
 +
-+/**
-+ * vkms_config_connector_set_dynamic() - If the connector is dynamic
-+ * @crtc_cfg: Target connector
-+ * @enabled: Enable or disable the dynamic status
-+ */
-+static inline void
-+vkms_config_connector_set_dynamic(struct vkms_config_connector *connector_cfg,
-+				  bool dynamic)
++void vkms_connector_hot_remove(struct vkms_device *vkmsdev,
++			       struct vkms_connector *connector)
 +{
-+	connector_cfg->dynamic = dynamic;
++	drm_connector_unregister(&connector->base);
++	drm_mode_config_reset(&vkmsdev->drm);
++	drm_connector_put(&connector->base);
 +}
 +
-+/**
-+ * vkms_config_connector_is_enabled() - If the connector is dynamic
-+ * @connector_cfg: The connector
-+ */
-+static inline bool
-+vkms_config_connector_is_dynamic(struct vkms_config_connector *connector_cfg)
++int vkms_connector_hot_attach_encoder(struct vkms_device *vkmsdev,
++				      struct vkms_connector *connector,
++				      struct drm_encoder *encoder)
 +{
-+	return connector_cfg->dynamic;
-+}
++	int ret;
 +
- /*
-  * vkms_config_plane_get_default_rotation() - Get the default rotation for a plane
-  * @plane_cfg: Plane to get the default rotation from
++	ret = drm_connector_attach_encoder(&connector->base, encoder);
++	if (ret)
++		return ret;
++
++	drm_mode_config_reset(&vkmsdev->drm);
++
++	return ret;
++}
+diff --git a/drivers/gpu/drm/vkms/vkms_connector.h b/drivers/gpu/drm/vkms/vkms_connector.h
+index 85f9082c710e..a235a518d5a0 100644
+--- a/drivers/gpu/drm/vkms/vkms_connector.h
++++ b/drivers/gpu/drm/vkms/vkms_connector.h
+@@ -34,4 +34,37 @@ struct vkms_connector *vkms_connector_init_static(struct vkms_device *vkmsdev,
+  */
+ void vkms_trigger_connector_hotplug(struct vkms_device *vkmsdev);
+ 
++/**
++ * vkms_connector_hot_add() - Create a connector after the device is created
++ * @vkmsdev: Device to hot-add the connector to
++ * @connector_cfg: Connector's configuration
++ *
++ * Returns:
++ * A pointer to the newly created connector or a PTR_ERR on failure.
++ */
++struct vkms_connector *vkms_connector_hot_add(struct vkms_device *vkmsdev,
++					      struct vkms_config_connector *connector_cfg);
++
++/**
++ * vkms_connector_hot_remove() - Remove a connector after a device is created
++ * @vkmsdev: Device to containing the connector to be removed
++ * @connector: The connector to hot-remove
++ */
++void vkms_connector_hot_remove(struct vkms_device *vkmsdev,
++			       struct vkms_connector *connector);
++
++/**
++ * vkms_connector_hot_attach_encoder() - Attach a connector to a encoder after
++ * the device is created.
++ * @vkmsdev: Device containing the connector and the encoder
++ * @connector: Connector to attach to @encoder
++ * @encoder: Target encoder
++ *
++ * Returns:
++ * 0 on success or an error on failure.
++ */
++int vkms_connector_hot_attach_encoder(struct vkms_device *vkmsdev,
++				      struct vkms_connector *connector,
++				      struct drm_encoder *encoder);
++
+ #endif /* _VKMS_CONNECTOR_H_ */
 diff --git a/drivers/gpu/drm/vkms/vkms_output.c b/drivers/gpu/drm/vkms/vkms_output.c
-index 406a22f1b963..13c4ca5fd39d 100644
+index 13c4ca5fd39d..50f7d88dee8b 100644
 --- a/drivers/gpu/drm/vkms/vkms_output.c
 +++ b/drivers/gpu/drm/vkms/vkms_output.c
-@@ -93,7 +93,7 @@ int vkms_output_init(struct vkms_device *vkmsdev)
- 		}
- 	}
+@@ -117,5 +117,14 @@ int vkms_output_init(struct vkms_device *vkmsdev)
  
--	vkms_config_for_each_connector(vkmsdev->config, connector_cfg) {
-+	vkms_config_for_each_connector_static(vkmsdev->config, connector_cfg) {
- 		struct vkms_config_encoder *possible_encoder;
- 		unsigned long idx = 0;
+ 	drm_mode_config_reset(dev);
  
++	vkms_config_for_each_connector_dynamic(vkmsdev->config, connector_cfg) {
++		if (connector_cfg->enabled) {
++			connector_cfg->connector = vkms_connector_hot_add(vkmsdev, connector_cfg);
++
++			if (IS_ERR(connector_cfg->connector))
++				return PTR_ERR(connector_cfg->connector);
++		}
++	}
++
+ 	return 0;
+ }
 
 -- 
 2.54.0
