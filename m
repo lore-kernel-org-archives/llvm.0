@@ -1,90 +1,82 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378AD26738B;
-	Sat, 27 Jun 2026 11:28:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32A43392C57;
+	Sat, 27 Jun 2026 12:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782559707; cv=none; b=m5Y3yubqmj9uUHyQd1G4ZqVB+NeeXHldxCvJD/0kgBrTSZ8spYUPusFdG6xurAS4E4HUaQ0is5k5uPZ2hL5ijLU4ZX+ZZu4hVdJiAy2Om7I/T0jPEv/HS8sdutM63rpnvv/Cvg74+OY0JgPPj0MRTDSru1eQZvQVu9vBX7kfVqI=
+	t=1782562843; cv=none; b=qElVjS2bxjUYRsEtWSMcbqOUNPofSU3BeFn2IQg1mQA8idSstDqZ5WVJn+ONYT03PG7xtaXp7LYdFxq111Z4C6zuWcFsooKk0pTlzrLRpbM8clJ1+F1RSCAHfAwHIZpSJ1a6b1MCFQmKVgpMSjSRA0Wh0TSTCvcnIcLcIALR7yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782559707; c=relaxed/simple;
-	bh=0L1XyYucC16rXjHfe+STM1Whcte9oeOxB8MobY9FtDw=;
-	h=Date:From:Cc:Subject:Message-ID; b=QvZEWVCm4BniAem5m/Y+vm0Jgh0xjj/R7qq5m9neXKQOqlcvZaD2Qa9DSPzRbLO/CwVF4Nh86ICk/RU8bN+u63/vgvK7uDmEv94PaifbKrXj29YCcYXgZUm1uAqAgpBwDofrEuNm5/vnVHrT4qKrxEYED5K8BfLldiNI/QD2yUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BqmN9rG2; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1782562843; c=relaxed/simple;
+	bh=hrFiD4H+unjdfaMub7UwAPGyZRvmqY5HuiT5uz3iuqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=DTSVgRouMIlSR1eln5n2cpethZGe2vgh0a8D6Dl7jpv91xqxb2h/txZM4buonWJfJ267c+axKjGmv8i17QhBwHUBItszEZKUh4M+0QwSSBvWKgfse1ZH7fIj8/yFItLZhYJ+UVkELFQJT0tmjozFAtbP4jCvbWnJLMASCP+41S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ADt9KN+K; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BqmN9rG2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ADt9KN+K"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782559705; x=1814095705;
-  h=date:from:cc:subject:message-id;
-  bh=0L1XyYucC16rXjHfe+STM1Whcte9oeOxB8MobY9FtDw=;
-  b=BqmN9rG291Om6kVw/jHqVnfaswr82dcjqYyM0qCCV+7ZItLGWI7Sb4k9
-   SnAXyIyj+e4FcVpCY9GhyxiDlswTsHuzaXJspGfcmPQS8T4jvV3sCrzQH
-   80Al09gkhmeevuJ4BQTErd8It+j/ZA0b9U3tBe/Vwtcykqvr2F3+GDE6q
-   4ZD6pSq5tn7a77bptKusvrdMA8huL8HGo3div8btokk6qkwpk50RmUXig
-   NLcXoEEHNzl7acJr7TjTiGTHugVT0qKT4dS4+WHjP5tADsFr9YvIV1HVv
-   uVskYq6ako5kc0CE10s88xoJn+12O3/Bl3QmLQeXvYHFWMoU+2brVmZUE
-   w==;
-X-CSE-ConnectionGUID: sNdk2ankT8ytV7Hmpm6TuQ==
-X-CSE-MsgGUID: IeWetf4eSvqJozV8vKhM/Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11829"; a="82322471"
+  t=1782562840; x=1814098840;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hrFiD4H+unjdfaMub7UwAPGyZRvmqY5HuiT5uz3iuqM=;
+  b=ADt9KN+KiPnMOEQNbA9qhuTDT1wQn2O8Rr9TSUdN6/n+gANNhc5nflsz
+   q3w2YDCQra7pl/6xNx2rDhYJ7w7/8j2n9s1RIlyvImx579lwyEokNge/X
+   0unxBzm13XYrZfGucgPEAdqz+ppIVRJsok/Qw3VkMN5oesDfqqwD1jgaV
+   mkGuKyhmfu5I1uOt+0bCUh0ME3oZvQ4LQ+m/GfKKbXfsWybiGllqSAOnL
+   XaGmfG3p7uEOlSraBLW8GDqNBqHvzED1b+lKxVRicZaHunL2c16nn/N6w
+   Z6TunZUZq7WAE7/5WgtNEYahYkmBkDs2emh8EDFgR19ohzO1fajudKoqv
+   Q==;
+X-CSE-ConnectionGUID: MB1SCGJXTTyWj7nB4shBNg==
+X-CSE-MsgGUID: 7lEQEuz8TbKfi5Bsscosow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11829"; a="94718837"
 X-IronPort-AV: E=Sophos;i="6.24,228,1774335600"; 
-   d="scan'208";a="82322471"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2026 04:28:24 -0700
-X-CSE-ConnectionGUID: f3JvveUuQAqKNZwNzrjIOg==
-X-CSE-MsgGUID: pnLtbK5JTRGEfX2eZqV2iw==
+   d="scan'208";a="94718837"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jun 2026 05:20:39 -0700
+X-CSE-ConnectionGUID: UnGBsV7FQBma9kNBOcXtsg==
+X-CSE-MsgGUID: KjWvjZRHSSmgrL+LDJxYtA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,228,1774335600"; 
-   d="scan'208";a="255934254"
+   d="scan'208";a="274741313"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa005.jf.intel.com with ESMTP; 27 Jun 2026 04:28:23 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 27 Jun 2026 05:20:38 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wdRCu-000000005p7-0jFL;
-	Sat, 27 Jun 2026 11:28:20 +0000
-Date: Sat, 27 Jun 2026 19:27:22 +0800
+	id 1wdS1T-000000005qX-2I8T;
+	Sat, 27 Jun 2026 12:20:35 +0000
+Date: Sat, 27 Jun 2026 20:19:55 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: ld.lld: error:
- vmlinux.a(kernel/locking/test-ww_mutex.o):(function test_ww_mutex_exit:
- .exit.text+0x18): relocation R_RISCV_HI20 out of range: 542468 is not in
- [-524288, 524287]; references '.L_MergedGlobals.103'
-Message-ID: <202606271935.vmCzvhP8-lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/hrtimer-header-dependencies 3/5]
+ ERROR: modpost: "hrtimer_update_function"
+ [drivers/tty/serial/xilinx_uartps.ko] undefined!
+Message-ID: <202606272046.CdAww0GF-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-CC: linux-kernel@vger.kernel.org
-TO: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-CC: Andi Shyti <andi.shyti@kernel.org>
-CC: Loic Poulain <loic.poulain@oss.qualcomm.com>
-CC: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   5a66900afbd6b2a063eebad35294038a654de2b0
-commit: f0285c286bca5a1e018ba25040cef6c7806c31ef i2c: qcom-cci: Remove overcautious disable_irq() calls
-date:   11 days ago
-config: riscv-randconfig-001-20260627 (https://download.01.org/0day-ci/archive/20260627/202606271935.vmCzvhP8-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260627/202606271935.vmCzvhP8-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/hrtimer-header-dependencies
+head:   7c6a2b4d48e905380f1c24cd685e513f547f8c0a
+commit: ba84ad80de4a06659ab26ea32246250c66fc8115 [3/5] hrtimer: Move the PROVE_LOCKING variant of hrtimer_update_function() to hrtimer.c
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260627/202606272046.CdAww0GF-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260627/202606272046.CdAww0GF-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
-| Fixes: f0285c286bca ("i2c: qcom-cci: Remove overcautious disable_irq() calls")
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606271935.vmCzvhP8-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606272046.CdAww0GF-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ld.lld: error: vmlinux.a(kernel/locking/test-ww_mutex.o):(function test_ww_mutex_exit: .exit.text+0x18): relocation R_RISCV_HI20 out of range: 542468 is not in [-524288, 524287]; references '.L_MergedGlobals.103'
-   >>> referenced by test-ww_mutex.c:768 (kernel/locking/test-ww_mutex.c:768)
-   >>> defined in vmlinux.a(kernel/locking/test-ww_mutex.o)
+>> ERROR: modpost: "hrtimer_update_function" [drivers/tty/serial/xilinx_uartps.ko] undefined!
 
 --
 0-DAY CI Kernel Test Service
