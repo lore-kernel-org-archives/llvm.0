@@ -1,123 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A318C366546
-	for <llvm@lists.linux.dev>; Sun, 28 Jun 2026 04:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730999463;
+	Sun, 28 Jun 2026 05:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782619997; cv=none; b=kAFzncFdGCuYwRElBAvnCsIgWYbCj3peRo4dgxo9QwZieTDRmNmpdBRXzSXGS80rGHWpHKgqljFfnjdp5vY6Hjsj1U7plnMrGIg7NqbTPIOWEr29EPwU+wyaNlQLd9a4kOD2dQdmNST0B2wSPn+pO6IScMa5IGhMIStVweVjPv4=
+	t=1782624847; cv=none; b=Tl/Iu64wBHS5d5auBdTWjczi/SM1HXWG5jqvV8/xITzwLIOYNXz9pUkjtd3fNVEYsrIKHtyV5XLU2J+vdxUi/HwpGszdwYHsIK6f3ygZGOHqmqRNkJFQVSqtBiLZ1co8JTtQPxBp3Xa53KueFSk+xh5SIhyMnS7pQca3Tn17zfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782619997; c=relaxed/simple;
-	bh=nG5f1/IxVVipVCQxDlR7xPPChCcVVXaQJF3QQ7DD4Ow=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=d4GR31VQWr/1DVx74/cAyVEgHUNIxcJInZe4PwN1aTlRp+i1ocz6qyJSNp6ElKphxHwTxU9F0ChKsL7t44Id12aYuTxaW1uyM22f6q6WfMSPtfWeUkVNoo+ePi/xPDDDTotK8vIEZriTLZzWnUhdfWjaZmg4B9ilzjNzdZ0qQCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AA6nU41e; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782624847; c=relaxed/simple;
+	bh=Ao9Tu3/w5W4HlnzmpNv3pp6KQz2fwDe9hv1NjIhJ+0o=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=lt47j+hFwdNUCqMhoaB8Yhh3XXwu44vzS/eTwhu4ikuhIfmEZgxbElQ+LfoXa3o+LpclcPsIqOL/XR4sV6vqorB1DidsLhwQvjCqheit54lQXL35UV9RHKll/IUomiZ8fmEA0b/ABOF+cgxUEVPGEw9rZDxIsBpcnvJSCcl2uwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=q9AWHfkW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AA6nU41e"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782619988;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=GzVQsev4h5MDJML2rALWyVg9A7f+a7WBgwyDQ32pHgE=;
-	b=AA6nU41eTMPhN97Ae3wrIWJ37ec6T2tn5BQZrxlOKFl00oyMZiQDZ0ZEGPUmCRBvcKLyv9
-	ENk8bMj+vLT0vc/QB/+2GF/1yTJ32rFaJphjBEsniNXH79r9zfo8bsyN2YRpU7SYa2+Pxe
-	qVFlC/x7hLJimsPnaKDtAmXDEn6sqLA=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-556-KYtAb2RbPuybbOhVTzvksw-1; Sun,
- 28 Jun 2026 00:13:06 -0400
-X-MC-Unique: KYtAb2RbPuybbOhVTzvksw-1
-X-Mimecast-MFC-AGG-ID: KYtAb2RbPuybbOhVTzvksw_1782619986
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E8C7D1800358
-	for <llvm@lists.linux.dev>; Sun, 28 Jun 2026 04:13:05 +0000 (UTC)
-Received: from [172.20.60.60] (unknown [10.30.44.61])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 71E0D175F;
-	Sun, 28 Jun 2026 04:13:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
- upstream-mainline, 5422e496)
-Date: Sun, 28 Jun 2026 04:13:05 -0000
-To: omosnace@redhat.com, mmalik@redhat.com, llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="q9AWHfkW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85C321F000E9;
+	Sun, 28 Jun 2026 05:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1782624845;
+	bh=U8GvqtPsONGiqrdSgng3Dl86u7BfkOlwSjotfA+CRVc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=q9AWHfkWK3xyQiwev8Qy9xYMgHiUtblF/aXyVNjeozZq3oC7HZUZV0RXG5dmrZSfU
+	 Q2A7Wwign3MChDNVu4cyloKW6zTvUeoymXR646u2TO6eIQZ3iKz5jbT1ltsUah/zj3
+	 0qRwmI1KpMm1lr3DOLWSOhIGECDop207dPOPrjpM=
+Date: Sat, 27 Jun 2026 22:34:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: SeongJae Park <sj@kernel.org>
+Cc: Arnd Bergmann <arnd@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Arnd Bergmann <arnd@arndb.de>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
+ Stitt <justinstitt@google.com>, Ravi Jonnalagadda
+ <ravis.opensrc@gmail.com>, Quanmin Yan <yanquanmin1@huawei.com>,
+ damon@lists.linux.dev, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+Subject: Re: [PATCH] mm/damon/core: reduce kernel stack usage
+Message-Id: <20260627223405.3533412b4010b6ce658da01f@linux-foundation.org>
+In-Reply-To: <20260611135608.66888-1-sj@kernel.org>
+References: <20260611125704.3386176-1-arnd@kernel.org>
+	<20260611135608.66888-1-sj@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-Message-Id: <71834.126062800130600336@us-mta-556.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: SH18YSirC_LD6svE7bzlpMXqs8O7_IcbOmPSWQBycmY_1782619986
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+On Thu, 11 Jun 2026 06:56:07 -0700 SeongJae Park <sj@kernel.org> wrote:
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+> On Thu, 11 Jun 2026 14:56:57 +0200 Arnd Bergmann <arnd@kernel.org> wrote:
+> 
+> > From: Arnd Bergmann <arnd@arndb.de>
+> > 
+> > The main thread function has recently grown to the point of
+> > exceeding stack frame size warning limits in some configurations.
+> > This is what I hit on s390 with clang and CONFIG_KASAN:
+> > 
+> > mm/damon/core.c:3440:31: error: stack frame size (1352) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
+> >  3440 | static int kdamond_fn(struct damon_ctx *ctx)
 
+Well cheers to s390 for using a nice tight stack limit.
 
-Kernel information:
-    Commit message: Merge tag 'ceph-for-7.2-rc1' of https://github.com/ceph=
-/ceph-client
+> > The largest stack usage here is inside of the kdamond_tune_intervals(),
+> > so by marking that one as noinline_for_stack, the functions individually
+> > stay below the warning limit, though kdamond_fn() itself still uses
+> > hundreds of kilobytes for some reason.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2633176890
+Wait what wut.  This cannot mean that kdamond_fn() uses x00,000 bytes of
+stack, so what does it mean?
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2633176890_ppc64le_kernel
+> Thank you for this fix, Arnd!  I will also take a look in kdamond_fn() to see
+> if there are more things to reduce.
+> 
+> > 
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
+> Reviewed-by: SeongJae Park <sj@kernel.org>
+> 
+> Should we add Fixes: and Cc: stable@ too?  This function was introduced by
+> commit f04b0fedbe71 ("mm/damon/core: implement intervals auto-tuning") which
+> was merged into 6.15.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        selinux-policy: serge-testsuite
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2633176890_aarch64_kernel_kcidb_tool_21535735_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2633176890_x86_64_kernel_kcidb_tool_21535731_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2633176890_s390x_kernel_kcidb_tool_21535729_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+I don't think so - kernel is full of these offenders and it will be a
+long and painstaking process to weed them out.
