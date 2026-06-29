@@ -1,123 +1,114 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA27017745
-	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 00:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BBD037D13A
+	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 03:28:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782691331; cv=none; b=ochw93b0Y4uKO7+vKfAq3q4IiECnLnqc1cbr2375MVHpuY+0gHsyIoqkLs0VEjUEB3grnqhuarm6T20sQCnx/bV5xxpAdVUIo3g53TRx0fcypigzwIS+V+h5qlV1g1Y3ubcQILP+idmwW1jWmMVaXH5KLBhNlJOeh3aQXXSZALA=
+	t=1782703698; cv=none; b=V4dQB4Qc1+f5vaWWjwnJBwVQYaHr10OGreCcruVJopiwc1LjgV5EOBCH8xgZNo9sNR20pGK5ACm/DCXsU8qvwT9uzjCbyZ7HAfeZxoYrMujHezh8K4ZvVp8oh/NojN/JhM8O9v1G+I+7Qdi2NxwzSQ5ITbgRGSsQa5S3R4f4qw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782691331; c=relaxed/simple;
-	bh=UHA3t+hYUBdmbSfbdltMncXVknMbU/f8leDgm8hV4T4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UjU5oEuLf6/TsGBuUP0bgZSuRggeQsn3BdVp/G7ssPl9LZVS/V1Sgnob7eWh4TNKoz7S6SImaZ5ip32w0M/2mKJ4272criAZdFzPNSR3Q9a31tq+kCSmh0n4YJHS9olncSbZ3pWrsAlcoNyPaVZ/W5P/2ah9/FML7TQPfsGbpiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MriOM+Vb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782703698; c=relaxed/simple;
+	bh=yGoH8IaOmzsv5qmZmnXquKbu3+/JzCiDe89ZF27Npgo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Om8vi8IrnFHy5yjOOn+4S0AUR4hkrWkCcraQgaMfc9teMvnuAap67XHnfTT1BE+pIZqFamiXwvlhI59dNdDB6kQl2y7hSsf1jt6qbL7iSOPkN9XXeBQhgbx4pzjz38XO/d/MYvfuNiGW4jZiNlmheYMhJJSMMEEz+N4wT5ea7uY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnB9bgbR; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MriOM+Vb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782691328;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=tyfvD0sonOvCJMumrbHeZ5WBSzya6h4Sp6f+zre6MwE=;
-	b=MriOM+VbHOyEX4nMfdjz+7Y6yhlVIkcahwN94Wlxi0GdZrvp4fCVn5yHpH6GMh9AQaEJ4/
-	mHKds2gEG3ateop4+SET2mnlUpeHEwEvTddhukEd7up3DYYHUvOZqTTZbjFei6LTU+moWu
-	nH2iCila+Z08pMLn3oj2d9ygCRkl7f4=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-76-NGds8-LHNaarxq-NqB7Nbw-1; Sun,
- 28 Jun 2026 20:02:07 -0400
-X-MC-Unique: NGds8-LHNaarxq-NqB7Nbw-1
-X-Mimecast-MFC-AGG-ID: NGds8-LHNaarxq-NqB7Nbw_1782691326
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 084CE1956053
-	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 00:02:06 +0000 (UTC)
-Received: from [172.20.60.60] (unknown [10.30.44.61])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 393D71771;
-	Mon, 29 Jun 2026 00:02:04 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.1.0-0,
- upstream-mainline, 8b69c047)
-Date: Mon, 29 Jun 2026 00:02:04 -0000
-To: omosnace@redhat.com, mmalik@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnB9bgbR"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84783bce476so450964b3a.0
+        for <llvm@lists.linux.dev>; Sun, 28 Jun 2026 20:28:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782703697; x=1783308497; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uoog9qhwEH/PM5VZgEmA1A5PD5C88Zoi6u7AyRNBDsE=;
+        b=GnB9bgbRR2EOEeqb0WLmtTbXiISSU7gqqU3pH11B33asrQQ3sOtTU7Z01XNxdQOgwn
+         c/ISNcBLSleCPxUYCQzb48XlOE2km5G90LTMptqVhz2yC4cmeOY5eLqp1Iz3asvD4Uav
+         071htUPYNHvvFAKC1jgcuwuHjXZ2tLBiTezSb96BeKbsSij7/0cAcbaFDlDz8NH1Yupk
+         Z86pXfGzJS5pE8gdmamK1IC9hc83LvtrsJ4Mf2wJBa/KI2afiCTB+29CIG66FMAQyODp
+         Fy69Mrbam1V21LXMPNXWCP1o8gpKE8sxtysY7cxbi5rnleLfmSjijXgnNWKYOhPdJcn1
+         leIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782703697; x=1783308497;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uoog9qhwEH/PM5VZgEmA1A5PD5C88Zoi6u7AyRNBDsE=;
+        b=lot2mfQijRH73lCTLnOCgtSk3JaXR/YQmBwIn+/pnbp9XcO0MdXIaaLialN+eR5hji
+         8wul9D82f53nfQc5uT0UcVXOOPIxIpjzMuNB/Fvik4RATwknmfYnh2Kh373cK7RMgjch
+         9QDX1UrFTv8HVmyEXaAO/o6jiW8LLIfkcbewK8x5UkRIU6SFI5aN5Z/JsBFdyX7P0LAK
+         w3yMwsMcVenOh67SrICGFk2Zk1bwygrxJDk5K+70tLvKCkGfOjaZ6we26+ixL+WbEKDM
+         apbCDHOpQKnRrOyutNb7AQMjkX62tOHILhvMzJJRA8cqKSqa8gpFf/3Vt1lo9J50nitI
+         ZjSQ==
+X-Forwarded-Encrypted: i=1; AHgh+RquW474+KiGa54k1KjzyOR7uVBAftsRq5iVWoOlODsM6Cy36GaoBZ9Qgn/YVP1cS5NWBxJ7@lists.linux.dev
+X-Gm-Message-State: AOJu0Yy5redO08TQ7CNRZDpD98bvxm6XruRzdbn73EAiKOCB/YdmLjRd
+	1dNDpgSdihAboSbC/Bnwk0Op38trtf3fSYV8cno2cVlyPBb3EWCpqpCI
+X-Gm-Gg: AfdE7cmuXky3/DZKaO52HRYR4mYoFk6ldCCQQ80m1sz+qjyXI5CcbNK57GNwCOnIPNi
+	nsEs0wvAEyn16JWdDUs/18nEBYgNxtgnjnjnFRj+WXnqOQX74Cs+JQIFgdyRu8LIaI+5TKWh3IR
+	g0Iv9G6Bz4cWnQ5jlzDkro+j05d2BPUD7huMY4LoR4oVEBcQoYmpg5GBvx+zp07HqBwREOoqYIk
+	+Tg30lVK7JLaD7e+4LEsTmrU2no3ZOvEBXMzzdIRRUANV2hSEhhH03h3IFL/P0rMbuCxbWgA8xq
+	6rHsDEBYCmbteC5Nkd8cN0S4UJEeVo8kFjtcFvMDo7AYgP4Npo8r2FAyLyHpqTeodqme4Ftgvvi
+	YGYlPkaNFAUmT7jmD6mMAdcxzpkHYfVI/QPg1u7Ftti1dCcCQG3JH8rLgeZQxd/7EPNxKJOE99c
+	65Ly427V3mX5qRRa70KFAYt3a8E9CUDPf+5UQ7TdTkjkOfGWY5p34zmU+wMaodMURtWaSrpaS8K
+	mmmPpgZGw==
+X-Received: by 2002:a05:6a00:9452:b0:847:82dc:450e with SMTP id d2e1a72fcca58-84782dc4955mr1525887b3a.8.1782703696785;
+        Sun, 28 Jun 2026 20:28:16 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e34])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-845d8560fbasm3624666b3a.15.2026.06.28.20.28.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 28 Jun 2026 20:28:15 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] clk: thead: allow COMPILE_TEST builds
+Date: Sun, 28 Jun 2026 20:28:14 -0700
+Message-ID: <20260629032814.2344879-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-Message-Id: <08664.126062820020701169@us-mta-76.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 0JsNzhmuJwogZBwua1tK1JcBm87Wv5vfRgnpzN9CugE_1782691326
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+CLK_THEAD_TH1520_AP already allows COMPILE_TEST, but the parent clock
+Makefile only descends into drivers/clk/thead for ARCH_THEAD.  Use the
+TH1520 AP clock symbol for the directory gate instead.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+This lets the driver build on other 64-bit architectures selected for
+compile testing without selecting the T-HEAD platform.
 
+Tested with:
+make LLVM=1 ARCH=loongarch drivers/clk/thead/
 
-Kernel information:
-    Commit message: Merge tag 'input-for-v7.2-rc0-2' of git://git.kernel.or=
-g/pub/scm/linux/kernel/git/dtor/input
+Assisted-by: Codex:GPT-5.5
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/clk/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2635018586
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2635018586_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        selinux-policy: serge-testsuite
-               s390x
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2635018586_s390x_kernel_kcidb_tool_21539762_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2635018586_x86_64_kernel_kcidb_tool_21539759_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2635018586_aarch64_kernel_kcidb_tool_21539764_7
-                   Non-passing ran subtests:
-                       =E2=9A=A1 ERROR Setup
-                       =E2=9D=8C FAIL Test
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index 68145ad91035..d651e4ed3462 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -157,7 +157,7 @@ obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
+ obj-y					+= sunxi-ng/
+ obj-$(CONFIG_CLK_TEGRA)			+= tegra/
+ obj-y					+= tenstorrent/
+-obj-$(CONFIG_ARCH_THEAD)		+= thead/
++obj-$(CONFIG_CLK_THEAD_TH1520_AP)	+= thead/
+ obj-y					+= ti/
+ obj-$(CONFIG_CLK_UNIPHIER)		+= uniphier/
+ obj-$(CONFIG_ARCH_U8500)		+= ux500/
+-- 
+2.54.0
 
