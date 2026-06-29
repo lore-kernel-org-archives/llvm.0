@@ -1,98 +1,122 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A46963D6CC7
-	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 07:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AB723E1689
+	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 07:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782718120; cv=none; b=O8we0+jRtyFZx8B1A16yH31FCq1ysW/qyVCtZd50mq3z/XOOO3YANSyRVn7N4iF7V1wD4tSjbIJwn1YBGsZT9r2zLDzVzBUNjGuNCg2PKsfYBB7jFMTyEfiOItmC+CAQ8asTFihJhYl1vdAfshnsXqaGsR3dFXCZ0Nv1fBPLpLM=
+	t=1782718934; cv=none; b=l7Br7mRcJaSjMhxaG1OE85ryHzLuo5AXgwNl82isF9wb4duQ1hH4549Jxn4Lf38v94kxgqSY6i/WfcKArX1vDRceWKHoRX9WgFQDzYa+f3OimowSeuCiBs35XPrb6gV7Y6sUGyfZ6d6eN2i9/fIJbcatu1VUMF9Go4OFvFWnLhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782718120; c=relaxed/simple;
-	bh=rZvz0aou+WZ6xfcW7DezVt52N1axyhsLIrxTaxT5eWc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IJNuVOTig8ADYlGbPU9ykiDOvHKcL4yCRt9x9hU+bfms5SOHQViiAGd78gfNBoJ+HX7tUElXXUE0tMrF7whatZWypX80GEEkuLkB3fbsa0jK1UP3qvEUCpSP+tzbfBrj7vS1hF+8641Cgc5yANqvL+XTE6wOm9aTATcGzkcl/CQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=uJzRZS/e; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1782718934; c=relaxed/simple;
+	bh=iE0rbsW2APAb4cUKREJv0rQBtyhl9sjf00FAv7lOKp0=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=WXwQ08nBac8CoDwATe1Jp2J0e8DMnuF+Rs6H4PsE1PT+fMeKMZO9/CFriDP/KsFZNqY4ryD2tYQeul1ffIDBhYFDj9jnJoqzzARxFOwuVEtT6RezutOaraDtJbfFEBx4thMn6t9/8iT3OqlDlWwBoNG2KBH/39ofE9nscO3ktC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PYbBEWBv; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="uJzRZS/e"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A0E1F1A0C9B;
-	Mon, 29 Jun 2026 07:28:34 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 684445FF96;
-	Mon, 29 Jun 2026 07:28:34 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 60445106F1504;
-	Mon, 29 Jun 2026 09:28:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1782718113; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=rZvz0aou+WZ6xfcW7DezVt52N1axyhsLIrxTaxT5eWc=;
-	b=uJzRZS/e5R+g0fsbl5WTvQKTKVP43DQ+Fv4j4TKDsgOU03SLdpkMV/v/dIA5Ic3OLuSXl4
-	jStlfqA4nT5HzgjPB5OzmeZ8UOlDgwJr2ZW1jfw9G2xQjPjZSd6mFulSBLZq8aU8LG+Y58
-	jvMQi1v7a26BOOnPUZHJvRVr6+7Mq56EPv//Z1knFTFGzxgb6XV7w0Y43h94fndPuac8cj
-	n71jYXg7dbiuVaavrBCRORkBtZrSZW0aUp/s0ZRcbALbE5Zs721ShQIHjGC9SusDZsHrRR
-	Xs9sWzc5aOHJ02GwWiC5LkR19929fMNP1ZJdo4SgYzXHPDg46qqsXYoRWbrgpA==
-Message-ID: <af735626-e376-453e-b215-6d0eddd5868e@bootlin.com>
-Date: Mon, 29 Jun 2026 09:28:23 +0200
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PYbBEWBv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782718928;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=JRjg0cqKcTL9Qdvjt9Ryt68OAPGFlqb+v+WQ1au1Xvg=;
+	b=PYbBEWBvOl/Z3rkxp16h1WkOvfEVX77kKhE+E0u4WvCvEisuIgNxm1sNpXjz6FQO+309N6
+	wYSI/y93RmczaxR/eGFH5S08x637jqnS1XKn5ibUSKu5Zx3oeub0tmGMHTAYofQsQj+x65
+	VqdVUrATcciZcp5KVBOSmfdm+WWMgpw=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-552-6G9fyDmCPQ6iat-oOLO0WQ-1; Mon,
+ 29 Jun 2026 03:42:07 -0400
+X-MC-Unique: 6G9fyDmCPQ6iat-oOLO0WQ-1
+X-Mimecast-MFC-AGG-ID: 6G9fyDmCPQ6iat-oOLO0WQ_1782718926
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7BC14195604C
+	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 07:42:06 +0000 (UTC)
+Received: from [172.20.60.60] (unknown [10.30.44.61])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BE5743000232;
+	Mon, 29 Jun 2026 07:42:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc1,
+ upstream-mainline, dc59e4fe)
+Date: Mon, 29 Jun 2026 07:42:05 -0000
+To: omosnace@redhat.com, mmalik@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next v8 03/12] net: phylink: add
- phylink_release_pcs() to externally release a PCS
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Heiner Kallweit
- <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>,
- Saravana Kannan <saravanak@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- llvm@lists.linux.dev
-References: <20260618125752.1223-1-ansuelsmth@gmail.com>
- <20260618125752.1223-4-ansuelsmth@gmail.com>
- <a271385e-302d-45c7-a1df-aebd380b427b@bootlin.com>
- <6a3fc312.6161eb1e.3441bb.c0de@mx.google.com>
- <178defc6-8e60-4b0b-b3b0-f0f2a4003b68@bootlin.com>
- <6a421c2d.1e0bfc4f.b2eb6.06fb@mx.google.com>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <6a421c2d.1e0bfc4f.b2eb6.06fb@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <38332.126062903420700413@us-mta-552.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: mrL-mkNf2hWqIA3r9Y2yONeN9E-EGzv9PKrykWnlCBU_1782718926
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
+
+
+Kernel information:
+    Commit message: Linux 7.2-rc1
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2635573132
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2635573132_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        selinux-policy: serge-testsuite
+               s390x
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2635573132_s390x_kernel_kcidb_tool_21540250_7
+                   Non-passing ran subtests:
+                       =E2=9A=A1 ERROR Setup
+                       =E2=9D=8C FAIL Test
+             aarch64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2635573132_aarch64_kernel_kcidb_tool_21540255_7
+                   Non-passing ran subtests:
+                       =E2=9A=A1 ERROR Setup
+                       =E2=9D=8C FAIL Test
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2635573132_x86_64_kernel_kcidb_tool_21540252_7
+                   Non-passing ran subtests:
+                       =E2=9A=A1 ERROR Setup
+                       =E2=9D=8C FAIL Test
 
 
 
-On 6/29/26 09:18, Christian Marangi wrote:
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-> Nobody stops from implementing custom parser in fill_available_pcs and
-> return a PCS pointer created directly by the MAC. (In such case late and
-> release won't be needed as everything is present when phylink_create is
-> called)
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Ah alright :)
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
-So my only request then would be to update the phylink porting guide to at
-least point to the PCS documentation you're adding to say that the select_pcs()
-op is deprecated :
-
-https://docs.kernel.org/networking/sfp-phylink.html#rough-guide-to-converting-a-network-driver-to-sfp-phylink
-
-Thanks,
-
-Maxime
-
->
