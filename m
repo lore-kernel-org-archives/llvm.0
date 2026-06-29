@@ -1,329 +1,240 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0C43B42EF
-	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 06:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56F043C197C
+	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 07:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782716248; cv=none; b=MSz2UO46cxwkPl0OcZMaUsp6S+R+R+iknt9ylkPqFDBjRuNOKqCsrZOVGhr7AM7Dwgtq3zRBJTAwglQcH2vQNgQX4InRQew3Uem07qis431mK+FhXmppFwW1dlk98pVkqEiscMyskd/S7jA8QozFsMcfY9fhjLzP57CpXCMn6FY=
+	t=1782716713; cv=none; b=ouKw+ksHH9S2gnIvK/wrPXMR61rkUhrXSqm4duW03a7iymxvJkMVpMCPXVtAUzXaOv4LcsPBmEUWxdcjN0H+w8UgNY4jCWeL2SZh8Vhwt0mSey/DzvtUuwVmTbqmTc9NBnoeLLU594fkzaXrPbchtA1xdOdpet169ik0+12PmPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782716248; c=relaxed/simple;
-	bh=j3ne/82Yr82DgtcVaUgK5Wdw5lCJFi+rvgV8G97EiKw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dLH6lTOnFvBPAFMGUKLgCVP6qTTo2iCn3PXGaG8qKLePbFxCzDvUaFRj8cyaDFdggYU4VYZ+FV4f20NCyP4rJXO50+3SQd3VlL+7iGzmvPO0/DJgKmBgawFZ22EsIuNnaRoJbsdWdOvK1Cu1VaXCcpY/kMIiA8j0SIFlX4RJVJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qtXio51s; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=qtXio51s; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1782716713; c=relaxed/simple;
+	bh=S1hzlPC8gANr8aZdGiGeYuKVTflE4DxyuYbmc5JiOPA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JjY1N9MceFFe10sMlk9DdsCwPDXNvImz275B5O2NildqQ3+n6EvoS0osQmrSaJvgwqdvrV5bNIJy0aqIi0GDlugVBBN3PVptB12vYaqXqD0vzzzGdSniSFiMn2nAn20ovBaiLfqIkbeMg0wu43NzRYiRf1TsDvuE/CnuqWrLqho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=of/X3b2p; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qtXio51s";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="qtXio51s"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0B8F671266;
-	Mon, 29 Jun 2026 06:57:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1782716245; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kvT1/Ns4kcPPhOZM3ZKygNe0p0OIDDA1BMerN9MWMVQ=;
-	b=qtXio51s9vRBNrjVztTe2VOWwoTfcyXsYhZ4xAgnwwWAEmck5WondFV8R0yw6noaOMizw3
-	926ae94j56WeSF+EgVjDhN5FggneBHh0TdR5Y7iadexU/PDC1fg1/GjZmYb0Du7EZnv9+v
-	qhU5KRtj/+O1q/Hryvqyp08KsSuYcpY=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1782716245; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kvT1/Ns4kcPPhOZM3ZKygNe0p0OIDDA1BMerN9MWMVQ=;
-	b=qtXio51s9vRBNrjVztTe2VOWwoTfcyXsYhZ4xAgnwwWAEmck5WondFV8R0yw6noaOMizw3
-	926ae94j56WeSF+EgVjDhN5FggneBHh0TdR5Y7iadexU/PDC1fg1/GjZmYb0Du7EZnv9+v
-	qhU5KRtj/+O1q/Hryvqyp08KsSuYcpY=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 89772779A8;
-	Mon, 29 Jun 2026 06:57:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id v4wdIFQXQmqbQgAAD6G6ig
-	(envelope-from <jgross@suse.com>); Mon, 29 Jun 2026 06:57:24 +0000
-From: Juergen Gross <jgross@suse.com>
-To: linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	virtualization@lists.linux.dev,
-	llvm@lists.linux.dev
-Cc: Juergen Gross <jgross@suse.com>,
-	Ajay Kaher <ajay.kaher@broadcom.com>,
-	Alexey Makhalov <alexey.makhalov@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Subject: [PATCH v4 17/18] x86/paravirt: Use alternatives for MSR access with paravirt
-Date: Mon, 29 Jun 2026 08:55:43 +0200
-Message-ID: <20260629065544.3643253-18-jgross@suse.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260629065544.3643253-1-jgross@suse.com>
-References: <20260629065544.3643253-1-jgross@suse.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="of/X3b2p"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 5600B4E40B45;
+	Mon, 29 Jun 2026 07:05:03 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2419A5FF96;
+	Mon, 29 Jun 2026 07:05:03 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8AF9B106F14DB;
+	Mon, 29 Jun 2026 09:04:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1782716701; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=1rsMIqeUo7w/8HQ084SMthYLAbPCuimMFz6Hr3QOyaE=;
+	b=of/X3b2pqHw09oeoNd1OvSXDh4fwfA+/kKLRQreFdmzEqIgfhOA1Qr/ndrgAS+GDHD1foq
+	YVUwy2UDChvK8VCKa8bl8WHPu/RGbgHx65vTU8qf5QhD+0SjO+EkaJQD+PiMQRKealgon9
+	TuDtgKRkFFgrshWTzAVAX0UEKPDekcNslGvvWEwSaHcY0QSWF9ruFjP5u+SRAQ0XeASqZc
+	cYPYWionzUmVuXiJgbsoK9MfyrKHSIylnjEV4Hxv2eg1bnCcvScdtVZk2m50nfz7Mpw8Ir
+	N/mi42ewOEIx03TM2HzKhOkVMoYeeWZgwbOT1qao8LyiML3z7WV7A+3DF6KRQw==
+Message-ID: <178defc6-8e60-4b0b-b3b0-f0f2a4003b68@bootlin.com>
+Date: Mon, 29 Jun 2026 09:04:49 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-5.30 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	FREEMAIL_CC(0.00)[suse.com,broadcom.com,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,gmail.com,google.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,suse.com:mid,imap1.dmz-prg2.suse.org:helo];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[lkml];
-	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com]
-X-Spam-Level: 
-X-Spam-Score: -5.30
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH net-next v8 03/12] net: phylink: add
+ phylink_release_pcs() to externally release a PCS
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Heiner Kallweit
+ <hkallweit1@gmail.com>, Russell King <linux@armlinux.org.uk>,
+ Saravana Kannan <saravanak@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ netdev@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ llvm@lists.linux.dev
+References: <20260618125752.1223-1-ansuelsmth@gmail.com>
+ <20260618125752.1223-4-ansuelsmth@gmail.com>
+ <a271385e-302d-45c7-a1df-aebd380b427b@bootlin.com>
+ <6a3fc312.6161eb1e.3441bb.c0de@mx.google.com>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <6a3fc312.6161eb1e.3441bb.c0de@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-When not running as Xen PV guest, patch in the optimal MSR instructions
-via alternative and use direct calls otherwise.
+Hi Christian,
 
-This will especially have positive effects for performance when not
-running as a Xen PV guest with paravirtualization enabled, as there
-will be no call overhead for MSR access functions any longer.
+On 6/27/26 14:33, Christian Marangi wrote:
+> On Thu, Jun 25, 2026 at 04:13:14PM +0200, Maxime Chevallier wrote:
+>> Hello Christian,
+>>
+>> On 6/18/26 14:57, Christian Marangi wrote:
+>>> Add phylink_release_pcs() to externally release a PCS from a phylink
+>>> instance. This can be used to handle case when a single PCS needs to be
+>>> removed and the phylink instance needs to be refreshed.
+>>>
+>>> On calling phylink_release_pcs(), the PCS will be removed from the
+>>> phylink internal PCS list and the phylink supported_interfaces value is
+>>> reparsed with the remaining PCS interfaces.
+>>>
+>>> Also a phylink resolve is triggered to handle the PCS removal.
+>>>
+>>> The flag force_major_config is set to make phylink resolve reconfigure
+>>> the interface (even if it didn't change).
+>>> This is needed to handle the special case when the current PCS used
+>>> by phylink is removed and a major_config is needed to propagae the
+>>> configuration change. With this option enabled we also force mac_config
+>>> even if the PHY link is not up for the in-band case.
+>>>
+>>> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+>>> ---
+>>>  drivers/net/phy/phylink.c | 56 +++++++++++++++++++++++++++++++++++++++
+>>>  include/linux/phylink.h   |  2 ++
+>>>  2 files changed, 58 insertions(+)
+>>>
+>>> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+>>> index c38bcd43b8c8..064d6f5a06da 100644
+>>> --- a/drivers/net/phy/phylink.c
+>>> +++ b/drivers/net/phy/phylink.c
+>>> @@ -158,6 +158,8 @@ static const phy_interface_t phylink_sfp_interface_preference[] = {
+>>>  static DECLARE_PHY_INTERFACE_MASK(phylink_sfp_interfaces);
+>>>  
+>>>  static void phylink_run_resolve(struct phylink *pl);
+>>> +static void phylink_link_down(struct phylink *pl);
+>>> +static void phylink_pcs_disable(struct phylink_pcs *pcs);
+>>>  
+>>>  /**
+>>>   * phylink_set_port_modes() - set the port type modes in the ethtool mask
+>>> @@ -918,6 +920,60 @@ static void phylink_resolve_an_pause(struct phylink_link_state *state)
+>>>  	}
+>>>  }
+>>>  
+>>> +/**
+>>> + * phylink_release_pcs - Removes a PCS from the phylink PCS available list
+>>> + * @pcs: a pointer to the phylink_pcs struct to be released
+>>> + *
+>>> + * This function release a PCS from the phylink PCS available list if
+>>> + * actually in use. It also refreshes the supported interfaces of the
+>>> + * phylink instance by copying the supported interfaces from the phylink
+>>> + * conf and merging the supported interfaces of the remaining available PCS
+>>> + * in the list and trigger a resolve.
+>>> + */
+>>> +void phylink_release_pcs(struct phylink_pcs *pcs)
+>>> +{
+>>> +	struct phylink *pl;
+>>> +
+>>> +	ASSERT_RTNL();
+>>> +
+>>> +	pl = pcs->phylink;
+>>> +	if (!pl)
+>>> +		return;
+>>> +
+>>> +	mutex_lock(&pl->state_mutex);
+>>> +
+>>> +	list_del(&pcs->list);
+>>> +	pcs->phylink = NULL;
+>>> +
+>>> +	/*
+>>> +	 * Check if we are removing the PCS currently
+>>> +	 * in use by phylink. If this is the case, tear down
+>>> +	 * the link, force phylink resolve to reconfigure the
+>>> +	 * interface mode, disable the current PCS and set the
+>>> +	 * phylink PCS to NULL.
+>>> +	 */
+>>> +	if (pl->pcs == pcs) {
+>>> +		phylink_link_down(pl);
+>>> +		phylink_pcs_disable(pl->pcs);
+>>> +
+>>> +		pl->force_major_config = true;
+>>> +		pl->pcs = NULL;
+>>> +	}
+>>> +
+>>> +	mutex_unlock(&pl->state_mutex);
+>>> +
+>>> +	/* Refresh supported interfaces */
+>>> +	phy_interface_copy(pl->supported_interfaces,
+>>> +			   pl->config->supported_interfaces);
+>>> +	list_for_each_entry(pcs, &pl->pcs_list, list)
+>>> +		phy_interface_or(pl->supported_interfaces,
+>>> +				 pl->supported_interfaces,
+>>> +				 pcs->supported_interfaces);
+>>
+>> I've given more thought to that 'supported_interfaces' thing. This
+>> patchset redefines the meaning of
+>>
+>>   pl->config->supported_interfaces
+>>
+>> Currently, it's filled by the MAC driver and means "Every interface
+>> we can support, including the ones provided by PCSs that we can use
+>> with this MAC".
+>>
+>> It now becomes "Every interface we support without needing a PCS", at
+>> least the way I understand that.
+>>
+> 
+> Wait but with the current code using the OR logic, it still follows
+> "Every interface we can support...". The modes that needs a PCS are
+> specificed with the pcs_interfaces mask in phylink_config.
 
-Signed-off-by: Juergen Gross <jgross@suse.com>
----
-V3:
-- new patch
-V4:
-- fix build error with clang (kernel test robot)
----
- arch/x86/include/asm/paravirt-msr.h   | 136 ++++++++++++++++++++------
- arch/x86/include/asm/paravirt_types.h |   1 +
- 2 files changed, 109 insertions(+), 28 deletions(-)
+you current code is correct, I was mostly concerned about the doc
+that goes along with it :)
 
-diff --git a/arch/x86/include/asm/paravirt-msr.h b/arch/x86/include/asm/paravirt-msr.h
-index 4b71a1cd780c..ba3ee64446db 100644
---- a/arch/x86/include/asm/paravirt-msr.h
-+++ b/arch/x86/include/asm/paravirt-msr.h
-@@ -27,67 +27,147 @@ extern struct pv_msr_ops pv_ops_msr;
- #define PV_CALLEE_SAVE_REGS_MSR_THUNK(func)		\
- 	__PV_CALLEE_SAVE_REGS_THUNK(func, ".text", MSR)
- 
-+#define ASM_CLRERR	"xor %[err],%[err]\n"
-+
-+#define PV_RDMSR_VAR(__msr, __val, __type, __func, __err)		\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_2(PARAVIRT_CALL,				\
-+			RDMSR_AND_SAVE_RESULT ASM_CLRERR, X86_FEATURE_ALWAYS, \
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=d" (__err), [val] "=a" (__val),		\
-+		  ASM_CALL_CONSTRAINT					\
-+		: paravirt_ptr(pv_ops_msr, __func), "c" (__msr)		\
-+		: "cc")
-+
-+#define PV_RDMSR_CONST(__msr, __val, __type, __func, __err)		\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_3(PARAVIRT_CALL,				\
-+			RDMSR_AND_SAVE_RESULT ASM_CLRERR, X86_FEATURE_ALWAYS, \
-+			ASM_RDMSR_IMM ASM_CLRERR, X86_FEATURE_MSR_IMM,	\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=d" (__err), [val] "=a" (__val),		\
-+		  ASM_CALL_CONSTRAINT					\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  "c" (__msr), [msr] "i" (__msr)			\
-+		: "cc")
-+
-+#define PV_WRMSR(__msr, __val, __type, __func, __err)			\
-+({									\
-+	unsigned long rdx = rdx;					\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_2(PARAVIRT_CALL,				\
-+			"wrmsr;" ASM_CLRERR, X86_FEATURE_ALWAYS,	\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=a" (__err), "=d" (rdx), ASM_CALL_CONSTRAINT	\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  "0" (__val), "1" ((__val) >> 32), "c" (__msr)		\
-+		: "memory", "cc");					\
-+})
-+
-+#define PV_WRMSRNS_VAR(__msr, __val, __type, __func, __err)		\
-+({									\
-+	unsigned long rdx = rdx;					\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_3(PARAVIRT_CALL,				\
-+			"wrmsr;" ASM_CLRERR, X86_FEATURE_ALWAYS,	\
-+			ASM_WRMSRNS ASM_CLRERR, X86_FEATURE_WRMSRNS,	\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=a" (__err), "=d" (rdx), ASM_CALL_CONSTRAINT	\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  "0" (__val), "1" ((__val) >> 32), "c" (__msr)		\
-+		: "memory", "cc");					\
-+})
-+
-+#define PV_WRMSRNS_CONST(__msr, __val, __type, __func, __err)		\
-+({									\
-+	unsigned long rdx = rdx;					\
-+	asm volatile(							\
-+		"1:\n"							\
-+		ALTERNATIVE_4(PARAVIRT_CALL,				\
-+			"wrmsr;" ASM_CLRERR, X86_FEATURE_ALWAYS,	\
-+			ASM_WRMSRNS ASM_CLRERR, X86_FEATURE_WRMSRNS,	\
-+			ASM_WRMSRNS_IMM ASM_CLRERR, X86_FEATURE_MSR_IMM,\
-+			ALT_CALL_INSTR, ALT_XEN_CALL)			\
-+		"2:\n"							\
-+		_ASM_EXTABLE_TYPE_REG(1b, 2b, __type, %[err])		\
-+		: [err] "=a" (__err), "=d" (rdx), ASM_CALL_CONSTRAINT	\
-+		: paravirt_ptr(pv_ops_msr, __func),			\
-+		  [val] "0" (__val), "1" ((__val) >> 32),		\
-+		  "c" (__msr), [msr] "i" (__msr)			\
-+		: "memory", "cc");					\
-+})
-+
- static __always_inline u64 read_msr(u32 msr)
- {
- 	u64 val;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : "=a" (val), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, read_msr), "c" (msr)
--		     : "rdx");
-+	if (__builtin_constant_p(msr))
-+		PV_RDMSR_CONST(msr, val, EX_TYPE_RDMSR, read_msr, err);
-+	else
-+		PV_RDMSR_VAR(msr, val, EX_TYPE_RDMSR, read_msr, err);
- 
- 	return val;
- }
- 
- static __always_inline void write_msr(u32 msr, u64 val)
- {
--	asm volatile(PARAVIRT_CALL
--		     : ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr), "c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	u64 err;
-+
-+	PV_WRMSR(msr, val, EX_TYPE_WRMSR, write_msr, err);
- }
- 
- static __always_inline void write_msrns(u32 msr, u64 val)
- {
--	asm volatile(PARAVIRT_CALL
--		     : ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr), "c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	u64 err;
-+
-+	if (__builtin_constant_p(msr))
-+		PV_WRMSRNS_CONST(msr, val, EX_TYPE_WRMSR, write_msr, err);
-+	else
-+		PV_WRMSRNS_VAR(msr, val, EX_TYPE_WRMSR, write_msr, err);
- }
- 
- static __always_inline int read_msr_safe(u32 msr, u64 *val)
- {
--	int err;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : [err] "=d" (err), "=a" (*val), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, read_msr_safe), "c" (msr));
-+	if (__builtin_constant_p(msr))
-+		PV_RDMSR_CONST(msr, *val, EX_TYPE_RDMSR_SAFE, read_msr_safe, err);
-+	else
-+		PV_RDMSR_VAR(msr, *val, EX_TYPE_RDMSR_SAFE, read_msr_safe, err);
- 
- 	return err ? -EIO : 0;
- }
- 
- static __always_inline int write_msr_safe(u32 msr, u64 val)
- {
--	int err;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : [err] "=a" (err), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr_safe),
--			"c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	PV_WRMSR(msr, val, EX_TYPE_WRMSR_SAFE, write_msr_safe, err);
- 
- 	return err ? -EIO : 0;
- }
- 
- static __always_inline int write_msrns_safe(u32 msr, u64 val)
- {
--	int err;
-+	u64 err;
- 
--	asm volatile(PARAVIRT_CALL
--		     : [err] "=a" (err), ASM_CALL_CONSTRAINT
--		     : paravirt_ptr(pv_ops_msr, write_msr_safe),
--			"c" (msr), "a" (val)
--		     : "memory", "rdx");
-+	if (__builtin_constant_p(msr))
-+		PV_WRMSRNS_CONST(msr, val, EX_TYPE_WRMSR_SAFE, write_msr_safe, err);
-+	else
-+		PV_WRMSRNS_VAR(msr, val, EX_TYPE_WRMSR_SAFE, write_msr_safe, err);
- 
- 	return err ? -EIO : 0;
- }
-diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
-index 740ea819bbab..54f7c3d8fadf 100644
---- a/arch/x86/include/asm/paravirt_types.h
-+++ b/arch/x86/include/asm/paravirt_types.h
-@@ -442,6 +442,7 @@ extern struct paravirt_patch_template pv_ops;
- #endif	/* __ASSEMBLER__ */
- 
- #define ALT_NOT_XEN	ALT_NOT(X86_FEATURE_XENPV)
-+#define ALT_XEN_CALL	ALT_DIRECT_CALL(X86_FEATURE_XENPV)
- 
- #ifdef CONFIG_X86_32
- /* save and restore all caller-save registers, except return value */
--- 
-2.54.0
+So in the end, we'd have something like (simplified):
 
+pl->config.supported_interfaces = RGMII_xx | SGMII | 1000BaseX
+pl->config.pcs_interfaces = SGMII | 1000BaseX
+
+pcs->supported_interface = SGMII| 1000BaseX
+
+correct ?
+
+> 
+> The late add and release operates on the phylink supported_interfaces ONLY
+> when the MAC didn't specify support for it (by removing it as only the PCS
+> will declare support for it)
+> 
+> The confusion is present because everything is validated later on
+> major_config so those supported_interfaces are just an HINT that are later
+> verified with get_caps and with the pcs_validate OPs.
+> 
+> Adding the supported_interfaces to phylink is really to keep an original
+> reference of the value. This is to address a pattern I have notice where
+> the MAC driver always OR the interfaces with the one supported by the PCS.
+> (I remember it was pointed out by Russell)
+> 
+> But I'm more than open to discussion as this is something marginal to the
+> whole implementation, I'm also questioning if this OR is actually useful to
+> anything on the nth tought on this.
+> 
+> One thing that I notice is that parsing this early with AND might be
+> problematic at phylink_create, but I still have to evaluate that.
+> 
+> My take is that would be good to have some review also on the other logic
+> as I think I reached a point where Sashiko starts to comments on more or
+> less unreal problem.
+
+True, TBH all the fwnode part is something I'm a bit less familiar with though
+so maybe someone else can browse through that.
+
+FWIW, I've tested that whole series on a board that has "legacy" PCS board
+that has mvpp2 and 2 possible PCSs, and it seems to work fine so no regressions
+there :)
+
+A side note with the "legacy" naming, I'd rather have it called "built-in" or
+something like that, I don't see a clear path to porting the existing code to
+fwnode without breaking DT compat, as it's likely we'll have to remove the PCS
+register ranges out of the MAC's range. 
+
+Thanks for this work anyway, this is great !
+
+Maxime
