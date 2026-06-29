@@ -1,53 +1,53 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29BBE2E7364;
-	Mon, 29 Jun 2026 20:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23EEC3C76BB;
+	Mon, 29 Jun 2026 21:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782764153; cv=none; b=g3fqMLHulqBKbYI9j+DwR/94y7Rn0DEDsKkyNiMMeOgHWfUPHFJW8VcNdJPGNBSVJOErEy56dRxDVp06bYMLwyy5ziteEsXBROBSJIyrsecuoXGe33S31KrVaRvkEP58glFHQpxpA2Y+wCvCvNXQag3Cy20dgF+Ziis4tQw0bkA=
+	t=1782767481; cv=none; b=O1sqrQIxQMLY+0fNy69nwlePYVawdwxLcUzI7OC1YmZyj3GamWvFjHayH79sG2VGMh1aSNUz7SL4eXJln6P+ITNiuVUcBK2PPbtFZbQDUV/VrwiPGiAKgybEcZqQVfeW1TzJM6pDjrbuEU9YoyM5vSLehxviT6JB1MI64gVeOZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782764153; c=relaxed/simple;
-	bh=warvnjTh95sGDX/8A07vELdrkgGkZEgvBNy7SkTRJqw=;
+	s=arc-20240116; t=1782767481; c=relaxed/simple;
+	bh=MjMuyiEiT7hz3Zll61O2Dlr8UrFTewEY5kUnhavfLC0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FOhI85pZ0w6WY+OaFcKkm6gM4arddOBpcOmYB5jtZTA+d+Ti18hRbk0aDb91ZRKF7zITM8ZB0SEzkEVUjhFsJx3G2xybukzClXjhRYWSiwkEox2TGI2UAuiWNieyvIHJWm/7+H6rD/DI6WvL14SoYyePhXr8jjhaoK7ZKqfi4S4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BU+cqPNH; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=oZpwGtNyVcuXvIiTK4a3hpc0/Ww+IXGAeMhlDo32i6v9RsPwezfAP7AS/n69vTeVHnvN2dgjlf59jLTz+kpfV69pViu0Ojl0a9RbadI1bqssopO8mTyf8JPVpqmXe7w7rrwv09suP2oVTM0OKElzTVwK7bztiLksROht6f/2UDM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YCpZbS3S; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BU+cqPNH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YCpZbS3S"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782764151; x=1814300151;
+  t=1782767469; x=1814303469;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=warvnjTh95sGDX/8A07vELdrkgGkZEgvBNy7SkTRJqw=;
-  b=BU+cqPNHQDov/oFmmmvYJxBUhW30Y7Su4OEerTAlP8YkGVf+SjnajPts
-   j1bs2rphArpmrusUSeiGUHoxhNfjXBUoO/Mgmaketyd+Fd8sYSk7memDL
-   DL+lfNzp1PX3MrgCaDDU3VxmJtCY41v7kpKBuVa5r9mnQVncf40VO1Zok
-   W4WdQusvqZw4gT5qkD/zCPH8oNgaW244RJjH3SgbgaAdRKDkvsAv3m1f7
-   CHl8a0z2pGJPYVGMXm1ylFPOSjGrhF5xTtzCFcAG475JVAaFPSGny/OrC
-   30fikWPnShpOntfuSZ8JXrfvlksZJ6Ee4sXkdqdV0aGsi8UPkdqaz4zgV
-   Q==;
-X-CSE-ConnectionGUID: PDfuluMXT7SGERPn8ZYPsw==
-X-CSE-MsgGUID: GL8fisa2S8OeHp1Mz1+Rjg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="83341507"
+  bh=MjMuyiEiT7hz3Zll61O2Dlr8UrFTewEY5kUnhavfLC0=;
+  b=YCpZbS3SLgCW2AZuKTMbhXzC0FPpZA5Y/PfSNEQdma4IlXzMPoW+jr4N
+   yEaBby3rit8agKzOc9TnKqj/zOG5n7ts80rSZ+fJ1dWPZIOkCobT1TE+d
+   UIy105XCcmA42FwiByfZix8iZpryOFUhAUZxmI8tGMXUOguzzwHtWCgdL
+   C9cbyUbxoVC4R6eKEaiYA2DCyEo6cN0xWedf3QE8dM38JFyzl8Xx1gSTC
+   bhL3sFAq/wix5qtZIdy9EQztthq56MPFzJ28I3bZIjCOKXrIyiGV2ypAB
+   clnFLz1w7WOdwco4ijrmyeR4GaRGvKaJkvAs8dvnn4yXDyMBd1F8pMEqz
+   g==;
+X-CSE-ConnectionGUID: afiPbulwRdqSe9z7soRo7w==
+X-CSE-MsgGUID: ffAiEq9sR7yYL/paNBCe0Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="83502821"
 X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="83341507"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 13:15:50 -0700
-X-CSE-ConnectionGUID: wLTvkwjwQPalUaB2SDAT/w==
-X-CSE-MsgGUID: 2j8evGvhT6eHpyC+VHxEXQ==
+   d="scan'208";a="83502821"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 14:10:56 -0700
+X-CSE-ConnectionGUID: /Xic7++iRh2P5K14e+woKg==
+X-CSE-MsgGUID: inGOC2mNSVu5491mi9hXYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.24,232,1774335600"; 
-   d="scan'208";a="282132890"
+   d="scan'208";a="250375617"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 29 Jun 2026 13:15:48 -0700
+  by orviesa006.jf.intel.com with ESMTP; 29 Jun 2026 14:10:53 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1weIOO-000000007iv-3vOP;
-	Mon, 29 Jun 2026 20:15:44 +0000
-Date: Tue, 30 Jun 2026 04:15:37 +0800
+	id 1weJFi-000000007lX-13zX;
+	Mon, 29 Jun 2026 21:10:50 +0000
+Date: Tue, 30 Jun 2026 05:10:36 +0800
 From: kernel test robot <lkp@intel.com>
 To: Fredrik M Olsson <fredrik.m.olsson@axis.com>,
 	Alexandre Belloni <alexandre.belloni@bootlin.com>,
@@ -60,7 +60,7 @@ Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	linux-kernel@vger.kernel.org, kernel@axis.com,
 	Fredrik M Olsson <fredrik.m.olsson@axis.com>
 Subject: Re: [PATCH v3] rtc: ds1307: Add driver for Epson RX8901CE
-Message-ID: <202606300447.wDrgfpSn-lkp@intel.com>
+Message-ID: <202606300521.DkMaPRKi-lkp@intel.com>
 References: <20260629-ds1307-rx8901-add-v3-1-302dc3cbb71e@axis.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -82,18 +82,18 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Fredrik-M-Olsson/rtc-ds13
 base:   dc59e4fea9d83f03bad6bddf3fa2e52491777482
 patch link:    https://lore.kernel.org/r/20260629-ds1307-rx8901-add-v3-1-302dc3cbb71e%40axis.com
 patch subject: [PATCH v3] rtc: ds1307: Add driver for Epson RX8901CE
-config: um-randconfig-002-20260630 (https://download.01.org/0day-ci/archive/20260630/202606300447.wDrgfpSn-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260630/202606300447.wDrgfpSn-lkp@intel.com/reproduce)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260630/202606300521.DkMaPRKi-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260630/202606300521.DkMaPRKi-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606300447.wDrgfpSn-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606300521.DkMaPRKi-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/rtc/rtc-ds1307.c:2332:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+>> drivers/rtc/rtc-ds1307.c:2332:2: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
     2332 |         }
          |         ^
    1 warning generated.
