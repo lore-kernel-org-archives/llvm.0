@@ -1,123 +1,266 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E35F3F8249
-	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 09:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782724319; cv=pass; b=gY2ObpiKNym+io6xhAQ+/ts5CIOSy/PFCK9/UlW8klPWZEwH+hrEEGh77mu5JdCDKAxCLoEOTitnz6ZdmNlYTSC4Pxy9S1tj7kWNbtXpsOjQ6yM12pLWpxJNCpt8OtjtwmbR0H1eBnodYqOc6thCfFxvZsedz3wA2pgiXkG0dwo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782724319; c=relaxed/simple;
-	bh=5T5WebhApI2QU7tVIw9fLdCQvq2s3y9zxINx2el0WJc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ISxey6eV00f5/Qohs2kSyMyUPBi3+Xec38K1Ljd9OX6b1aOJ+4PwIKPaNvMe7qNhN1umgghU/yrd1L5MIzEvYteDE5RuyQ0YXZGr9nU7wLwmPU9zJC+GocuIyZXbwM3FTR9I7q1KsCyt8Xly70mp5uS1hSBeoDCg8tVJG+L903k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sQ0X5Td6; arc=pass smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C35036C598;
+	Mon, 29 Jun 2026 11:44:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782733495; cv=none; b=FeUYhbjsuGYP1yyF51bhkfmuH1xV7igPYDophpBPWhNyXdSKOt9V1KDY70HuWVYdQPRc33W2CwErZ12Fn73gya8IiPa2oDOo0Eb9sfYDUN2KMSLc0peBTg6iRNqdmIMRUl5FfkP10FlBfp8AIIF4fau5dCjrRVMDSPSGT3iis5E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782733495; c=relaxed/simple;
+	bh=YCo79FR63SB46/8lCUaYNtHCoprlN8Ok2dEtEtIT2s4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=D0HqBaAvyt9OfmM4f+pLls/KtYiCr4cwaoxe8DP11Efb0ZH7QhZ3UPig8CjHIFY8bG+jCLaN3cGaUfYddCdD6qnGmHwTgT4cWGUBl+v6vDdxnH/wdDn90toWDA34Wx5yOCDnYsJfSl/nKtOhQx4SznIC8ed6/hfKWL6ZtSPglWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G0hqR03g; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sQ0X5Td6"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-137eb8e3491so254415c88.3
-        for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 02:11:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782724317; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dvDTDyPzm3qw44Rb0NJ1b/5V/YBowPlNyG0wfUWl+G79++jsOINPnGYCBYD8J776SS
-         n4djqN73Nb+shg5UsJ56zJnBVNGMKm0fk+5m2HVqRlFJzrOU0wixGG4v6NUyLnX2cjsc
-         BzuzKKWUop7bej4LXoF4EWemqW9n9HVpKGtAjqb2D0JPseYEgHMHl0U4OWwUjkU9CtPw
-         IYnJ+hiVlGZD1bVOFvHG6EB55jSlHUTP1kX9Ui1I2pSaMkqJrzsFoKEn6L1PXo4F5wHH
-         042uz2y95A+VU9upesyI+TKvq3xpuVZPSwRrqt04sJixZlR1U/JNA6IEYF1l6WxUocZp
-         Ql2Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=5T5WebhApI2QU7tVIw9fLdCQvq2s3y9zxINx2el0WJc=;
-        fh=rhVua3CjFQL8J64golnw9TjrvkUgVIIvO/gZj9beizs=;
-        b=KgDX96T3m4hPZhsaqDycRG+X9Z5/RpHuFtytpOm+qkC1zNtQn+4tVUEn9J3oSZ7LE7
-         Mql7E1PEf8uFZZFp7CtXpZWT6PpGKFQpEwpveysHiE8tI0k/1ci/tStDZW7gnI94KsC5
-         lTUtwNsWG0gwbClemX+VXKtco9awT7BB1KU/uev4spUhvY2B75fA8GS1BMKNj84TBp//
-         mQcob8+dPum9WnAbm5RDQWnSTkE0Bqh3kQIwuL0CiLAT/FR8YFkcFXCkKaz9gWb/89FV
-         OIEShnDo8oWZNEOdNt+xangFPUjsgVGA9X3Vq/IJCvyoFz6NzR70HrgcYQAyzzw3ckub
-         cjBA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782724317; x=1783329117; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5T5WebhApI2QU7tVIw9fLdCQvq2s3y9zxINx2el0WJc=;
-        b=sQ0X5Td6ldCmYIFjxAfOMB6WMs2Zq+KGd3otKMp0DD1nGBnPrzJb68HWYVZpTJ0uxw
-         /V+ACALProYQTu6ev5UUpwHKBCayQ0gmP4bjIoye/rP8RaMApBsQ4YuFunv4hdT2ETug
-         ONiEMVt4xmHrjAtSDeBYyDoarF8wTH10RHzfpAjUUxt5pKAl3pR2CoCH6okF6SnkKZo4
-         eSnuvDsuDZXp/lhtYy5uuxT+PbHrQ73IfmDT3PJEIezzaAxsJfu6GfF6kgwdmlzRgkHi
-         MWSu3ARWys2d40Cq9gQYjDSMUT0SIUpKIYzv0w4HrcTvaoHrkvHUDCJHRf14c9ZBxs0m
-         9vkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782724317; x=1783329117;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5T5WebhApI2QU7tVIw9fLdCQvq2s3y9zxINx2el0WJc=;
-        b=K1TU6SBYqmxZ+S6tWMqlS31m6gnyPL6ut0ocRzXN/Hd9Q7MUX9cUDd93RETrEwopN0
-         6zX0yYSAvuHPUzt45GZ98T8SOYcfKNfPfWVd4kTlXy8ZHr0NlHDV4IgXPzEHaBsUYpbF
-         Sz1ZdhwQyKGat325jIzvDtcgEOKCUsCRde6d4eD5GKIiPAjDbvp7Pm33fP0/q8lukQfm
-         5A8KrEryMqJqjeVdYfRPMcubyTMJByv8uWCLFTpoFzFexDFKHRrgvAQgVSpQllyGfnE+
-         G6Tnrjr/nuRYuspCTx+FSY2cBSsUceFNa8gy02BcFkDIIxBar65dfejwQCR91mi14Ecj
-         quFw==
-X-Forwarded-Encrypted: i=1; AHgh+RoxZdiYlr9KjsTsKI301nd+HXpF1MFZa/EqjohBravvCwpWvJtSUFr3aR0q1DUstL3WAe5V@lists.linux.dev
-X-Gm-Message-State: AOJu0YzL6u5HqpmzeNYtlmy9+ObPMRORXdcVC7rgdsKjgVCupLKeEVJz
-	9hU8fM3k9AFKKwQOSF2SmtWx62Ga0tdeDJJSF50201HSwiqZV0nSa7SL1KthJmn42cRLSzoYPjx
-	LPFVW5CMu0S3hu3yE4LZoT5zWvmIPPSY=
-X-Gm-Gg: AfdE7cnCV8Gv6V5RxGYcyQQouBwVo1E6h6cVHVtUWP5z4/E7SoxnhdE03poMfc9SC2v
-	ZQvOR9qLckBGOIK4j7PYw4pRGz3ACjzzE7tjpnbvtcebho3e2+ACdeY2L+TP0P2BMl36p7JhcLh
-	Hah04WNjP+Lec17tBEZyie/vmRjs8JMNOMaKHdZ+wiVIxvWJMINwtMPYGflMCCaYitGu4HTSWWp
-	jjtA8sYxiBOzVe3ZjOqTRP8vjfaiTOEDcsaFCex0sJcPmsEtGlrSFwaNTjAEn2j/EcieuKjNd9/
-	Ume33XhNJ9PgOkGgoG3DdHZ5pSLibwX4oy8wr19Yf7r+DQm4nmFGreTAI4qN+PYtSOiTTLWYhI1
-	Y5VKKDDZB93rb
-X-Received: by 2002:a05:7300:e82c:b0:304:5074:83b1 with SMTP id
- 5a478bee46e88-30c84d1d771mr6422203eec.6.1782724317312; Mon, 29 Jun 2026
- 02:11:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G0hqR03g"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782733494; x=1814269494;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YCo79FR63SB46/8lCUaYNtHCoprlN8Ok2dEtEtIT2s4=;
+  b=G0hqR03gFJJnpJqx3Qffb6qLHTt6McNmHxbH1Iuwdm6O7xLpL9KN0VKA
+   JO1L8f8FK1fD74WZdiSMDRgURSuG/Xm7qb5IbSz1i8W+hwF6vbmfQFxqF
+   ZzZAyLwFxNFp4lJ2/JZlPtKRP+hFKG1KQlCJCRL4dnJuvZpsy6VXo/b04
+   iV+MYeZIkFHhoR4MkAC/Q5x1hl0OJvc8vVNVeXtp23+XHJRoIWUjT3ZpO
+   +CnFoZ37a6uVKiaENWUUTVKTUzYJ/WZWpPbexqvViLBtqHVTpGCDnPsTx
+   zWBH2+GKTFb1uuZPt1hEi3aI3+A3uaQaeXpr6+gSFRMoFiw7qWwV33SUW
+   g==;
+X-CSE-ConnectionGUID: NRgR3e+vROqnyhcvgULHqA==
+X-CSE-MsgGUID: 5JYW1l7nTzmnmheKeKaxjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11831"; a="83449881"
+X-IronPort-AV: E=Sophos;i="6.24,231,1774335600"; 
+   d="scan'208";a="83449881"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 04:44:51 -0700
+X-CSE-ConnectionGUID: RG6QfoPdTICmRieuFUy+gg==
+X-CSE-MsgGUID: AXelzUquQoW0/rt0w522mQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,231,1774335600"; 
+   d="scan'208";a="245575623"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa009.fm.intel.com with ESMTP; 29 Jun 2026 04:44:42 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1weAPo-000000007MD-0Q3X;
+	Mon, 29 Jun 2026 11:44:40 +0000
+Date: Mon, 29 Jun 2026 19:44:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/hrtimer-header-dependencies 6/11]
+ arch/powerpc/include/asm/ptrace.h:376:20: error: use of undeclared identifier
+ 'THREAD_SIZE'
+Message-ID: <202606291901.71u54RnN-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260520064630.1785283-1-mkchauras@gmail.com> <20260520064630.1785283-5-mkchauras@gmail.com>
- <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
- <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com> <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-In-Reply-To: <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 29 Jun 2026 11:11:44 +0200
-X-Gm-Features: AVVi8CdD4UZYMSdVoz4Zj4b5OG2locYG8F0KrVqjoorstpkR9yzH0nWzAh9oltU
-Message-ID: <CANiq72mj1P9QykK6vbPK37hZkMLwd7RcgVWEcxxuE=9OL+4bAg@mail.gmail.com>
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, 
-	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, 
-	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, 
-	tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
-	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, 
-	kees@kernel.org, lyude@redhat.com, airlied@gmail.com, 
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 
-On Mon, Jun 29, 2026 at 6:57=E2=80=AFAM Mukesh Kumar Chaurasiya
-<mkchauras@gmail.com> wrote:
->
-> Sure i'll bisect. Meanwhile i would still like to get this upstream.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/hrtimer-header-dependencies
+head:   e7540d8e6298bea30315e7fd29f5da9400aa6e9b
+commit: d24aaca1864c88c09969af091d9e73559f47f5dd [6/11] percpu
+config: powerpc64-randconfig-001 (https://download.01.org/0day-ci/archive/20260629/202606291901.71u54RnN-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260629/202606291901.71u54RnN-lkp@intel.com/reproduce)
 
-It is very early on the cycle -- I would suggest bisecting first.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202606291901.71u54RnN-lkp@intel.com/
 
-But it is up to ppc, of course.
+All errors (new ones prefixed by >>):
 
-Cheers,
-Miguel
+   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
+     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3371: export_rust_path
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3361: export_compiler_path
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3840: invoke_make
+     from /zdci/src/kernel-tests/lib/kbuild.sh:4022: make
+     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
+     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
+     from /zdci/src/kernel-tests/lib/kbuild.sh:5680: make_prepare
+     from /zdci/src/kernel-tests/lib/kbuild.sh:5909: test_kernel_build
+     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
+     from /zdci/src/kernel-tests/lib/kbuild.sh:6419: compile_one_config
+     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
+     from /zdci/src/kernel-tests/bisect-test-build-error.sh:101: main
+   In file included from arch/powerpc/kernel/asm-offsets.c:13:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:12:
+   In file included from include/linux/alloc_tag.h:11:
+   In file included from include/linux/preempt.h:79:
+   In file included from arch/powerpc/include/asm/preempt.h:5:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+   In file included from arch/powerpc/include/asm/current.h:13:
+   In file included from arch/powerpc/include/asm/paca.h:18:
+   In file included from arch/powerpc/include/asm/mmu.h:398:
+   In file included from arch/powerpc/include/asm/nohash/mmu.h:10:
+   In file included from arch/powerpc/include/asm/nohash/mmu-e500.h:318:
+   In file included from arch/powerpc/include/asm/percpu.h:28:
+   In file included from include/asm-generic/percpu.h:8:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/powerpc/include/asm/irqflags.h:12:
+   In file included from arch/powerpc/include/asm/hw_irq.h:12:
+>> arch/powerpc/include/asm/ptrace.h:376:20: error: use of undeclared identifier 'THREAD_SIZE'
+     376 |         return ((addr & ~(THREAD_SIZE - 1))  ==
+         |                           ^
+   arch/powerpc/include/asm/ptrace.h:377:35: error: use of undeclared identifier 'THREAD_SIZE'
+     377 |                 (kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
+         |                                                 ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:13:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:12:
+   In file included from include/linux/alloc_tag.h:11:
+   In file included from include/linux/preempt.h:79:
+   In file included from arch/powerpc/include/asm/preempt.h:5:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+   In file included from arch/powerpc/include/asm/current.h:13:
+   In file included from arch/powerpc/include/asm/paca.h:18:
+   In file included from arch/powerpc/include/asm/mmu.h:398:
+   In file included from arch/powerpc/include/asm/nohash/mmu.h:10:
+   In file included from arch/powerpc/include/asm/nohash/mmu-e500.h:318:
+   In file included from arch/powerpc/include/asm/percpu.h:28:
+   In file included from include/asm-generic/percpu.h:8:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/powerpc/include/asm/irqflags.h:12:
+>> arch/powerpc/include/asm/hw_irq.h:123:10: error: offsetof of incomplete type 'struct paca_struct'
+     123 |                 : "i" (offsetof(struct paca_struct, irq_soft_mask)));
+         |                        ^        ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                  ~~~~
+   arch/powerpc/include/asm/hw_irq.h:123:26: note: forward declaration of 'struct paca_struct'
+     123 |                 : "i" (offsetof(struct paca_struct, irq_soft_mask)));
+         |                                        ^
+   arch/powerpc/include/asm/hw_irq.h:156:10: error: offsetof of incomplete type 'struct paca_struct'
+     156 |                   "i" (offsetof(struct paca_struct, irq_soft_mask))
+         |                        ^        ~~~~~~
+   include/linux/stddef.h:16:32: note: expanded from macro 'offsetof'
+      16 | #define offsetof(TYPE, MEMBER)  __builtin_offsetof(TYPE, MEMBER)
+         |                                 ^                  ~~~~
+   arch/powerpc/include/asm/hw_irq.h:156:26: note: forward declaration of 'struct paca_struct'
+     156 |                   "i" (offsetof(struct paca_struct, irq_soft_mask))
+         |                                        ^
+>> arch/powerpc/include/asm/hw_irq.h:228:2: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     228 |         get_paca()->irq_happened |= PACA_IRQ_PMI;
+         |         ^
+>> arch/powerpc/include/asm/hw_irq.h:228:14: error: member reference type 'int' is not a pointer
+     228 |         get_paca()->irq_happened |= PACA_IRQ_PMI;
+         |         ~~~~~~~~~~  ^
+   arch/powerpc/include/asm/hw_irq.h:240:2: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     240 |         get_paca()->irq_happened &= ~PACA_IRQ_PMI;
+         |         ^
+   arch/powerpc/include/asm/hw_irq.h:240:14: error: member reference type 'int' is not a pointer
+     240 |         get_paca()->irq_happened &= ~PACA_IRQ_PMI;
+         |         ~~~~~~~~~~  ^
+   arch/powerpc/include/asm/hw_irq.h:249:6: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     249 |         if (get_paca()->irq_happened & PACA_IRQ_PMI)
+         |             ^
+   arch/powerpc/include/asm/hw_irq.h:249:18: error: member reference type 'int' is not a pointer
+     249 |         if (get_paca()->irq_happened & PACA_IRQ_PMI)
+         |             ~~~~~~~~~~  ^
+   arch/powerpc/include/asm/hw_irq.h:323:28: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     323 |         return __lazy_irq_pending(get_paca()->irq_happened);
+         |                                   ^
+   arch/powerpc/include/asm/hw_irq.h:323:40: error: member reference type 'int' is not a pointer
+     323 |         return __lazy_irq_pending(get_paca()->irq_happened);
+         |                                   ~~~~~~~~~~  ^
+>> arch/powerpc/include/asm/hw_irq.h:333:28: error: use of undeclared identifier 'local_paca'
+     333 |         return __lazy_irq_pending(local_paca->irq_happened);
+         |                                   ^
+   arch/powerpc/include/asm/hw_irq.h:349:13: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     349 |                 WARN_ON(!(get_paca()->irq_happened & PACA_IRQ_HARD_DIS));
+         |                           ^
+   arch/powerpc/include/asm/hw_irq.h:349:25: error: member reference type 'int' is not a pointer
+     349 |                 WARN_ON(!(get_paca()->irq_happened & PACA_IRQ_HARD_DIS));
+         |                           ~~~~~~~~~~  ^
+   arch/powerpc/include/asm/bug.h:88:25: note: expanded from macro 'WARN_ON'
+      88 |         int __ret_warn_on = !!(x);                              \
+         |                                ^
+   In file included from arch/powerpc/kernel/asm-offsets.c:13:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:7:
+   In file included from include/linux/rhashtable-types.h:12:
+   In file included from include/linux/alloc_tag.h:11:
+   In file included from include/linux/preempt.h:79:
+   In file included from arch/powerpc/include/asm/preempt.h:5:
+   In file included from include/asm-generic/preempt.h:5:
+   In file included from include/linux/thread_info.h:23:
+   In file included from arch/powerpc/include/asm/current.h:13:
+   In file included from arch/powerpc/include/asm/paca.h:18:
+   In file included from arch/powerpc/include/asm/mmu.h:398:
+   In file included from arch/powerpc/include/asm/nohash/mmu.h:10:
+   In file included from arch/powerpc/include/asm/nohash/mmu-e500.h:318:
+   In file included from arch/powerpc/include/asm/percpu.h:28:
+   In file included from include/asm-generic/percpu.h:8:
+   In file included from include/linux/irqflags.h:18:
+   In file included from arch/powerpc/include/asm/irqflags.h:12:
+   arch/powerpc/include/asm/hw_irq.h:374:6: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     374 |         if (get_paca()->irq_happened & PACA_IRQ_MUST_HARD_MASK)
+         |             ^
+   arch/powerpc/include/asm/hw_irq.h:374:18: error: member reference type 'int' is not a pointer
+     374 |         if (get_paca()->irq_happened & PACA_IRQ_MUST_HARD_MASK)
+         |             ~~~~~~~~~~  ^
+   arch/powerpc/include/asm/hw_irq.h:392:2: error: call to undeclared function 'get_paca'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     392 |         get_paca()->irq_happened &= ~PACA_IRQ_HARD_DIS;
+         |         ^
+   arch/powerpc/include/asm/hw_irq.h:392:14: error: member reference type 'int' is not a pointer
+     392 |         get_paca()->irq_happened &= ~PACA_IRQ_HARD_DIS;
+         |         ~~~~~~~~~~  ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+   make[3]: *** [scripts/Makefile.build:184: arch/powerpc/kernel/asm-offsets.s] Error 1 shuffle=1756506566
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1405: prepare0] Error 2 shuffle=1756506566
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=1756506566
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=1756506566
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/THREAD_SIZE +376 arch/powerpc/include/asm/ptrace.h
+
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  363  
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  364  /**
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  365   * regs_within_kernel_stack() - check the address in the stack
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  366   * @regs:      pt_regs which contains kernel stack pointer.
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  367   * @addr:      address which is checked.
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  368   *
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  369   * regs_within_kernel_stack() checks @addr is within the kernel stack page(s).
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  370   * If @addr is within the kernel stack, it returns true. If not, returns false.
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  371   */
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  372  
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  373  static inline bool regs_within_kernel_stack(struct pt_regs *regs,
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  374  						unsigned long addr)
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  375  {
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07 @376  	return ((addr & ~(THREAD_SIZE - 1))  ==
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  377  		(kernel_stack_pointer(regs) & ~(THREAD_SIZE - 1)));
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  378  }
+359e4284a3f37a Mahesh Salgaonkar 2010-04-07  379  
+
+:::::: The code at line 376 was first introduced by commit
+:::::: 359e4284a3f37aba7fd06d993863de2509d86f54 powerpc: Add kprobe-based event tracer
+
+:::::: TO: Mahesh Salgaonkar <mahesh@linux.vnet.ibm.com>
+:::::: CC: Benjamin Herrenschmidt <benh@kernel.crashing.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
