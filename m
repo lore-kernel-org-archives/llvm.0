@@ -1,126 +1,228 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF822820C6
-	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 04:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F196F3A9DB1
+	for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 06:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782709055; cv=none; b=I397flx7sL2lb1V80GWkzQ4pZP0dvBEtUW7LI5TP+Kb2shqARHWr4ckmpeJWAu3lt6qaIr/+UaQrPAeB3fvx3dPBcx3YTgF15iPlrhazwXVaSc5jzg0J0Qed7yO3/CG0pzfLUo5i9VUgEdLjmA26q/rCl9f5mSZeZ6agcORINEI=
+	t=1782716152; cv=none; b=JlAEhEVjE8jeooCqVFCTacCvXTCFQbSlDfk4i9mZPDfDZZhDPBAVM6hEyNDyCxEXbAf3ukXf8ebX7Bj3rJC0LfVva0KSKCfDHdcAhQi/65CUbIqvDhEfU8a8hM/5AGbLSszgmpQT+BlZ+nAlowzhk/uPC2y69EpjGTskSUEwi30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782709055; c=relaxed/simple;
-	bh=7ZcDPOPqqkFXd1DkSIusAok4l3dIR7MVGZ1CdQ4xmyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NEGiQPlcaTqE1bKLNL59ais+1SxLG8OtnKm4Y473QWUMHtJxc4KPpU/TIU+8WVCeai9InpBgWY8I9NakP0FQy4F7xb1BTHAMfXvvr+t7R9k9vLlN25Uv9U2v6JhAMtJOqEhc6Ctfid6wB1OuNcNCSguRiNxsoblnNph9a1yh72E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SHCAFRoY; arc=none smtp.client-ip=74.125.82.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1782716152; c=relaxed/simple;
+	bh=qGcvi24MVj6w1CL6DpoKlLc0989nRw/aL4d11/Tw5HA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=soGU1eqIAoI+QaNkgAOi4ElJRIYCPbNRwHqBeEndOP3gTwhoievuwEsdx4MlWPxNEoXN9sFYiwZI+2Ls0o4MqHmxluwNxQICVzQ+VvciPsb2mgxMSR/WxIzOdafY4WSj0EVREHqfntGbAQ5Q5E6Ke5CeJGHGkvEtvCRsE/pkaLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Z+D/qS+Y; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Z+D/qS+Y; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SHCAFRoY"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-30b6dad2382so5494529eec.0
-        for <llvm@lists.linux.dev>; Sun, 28 Jun 2026 21:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782709054; x=1783313854; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iQD/rHZj3a8p2S8n+F8bG5yMjsLxWvoQVhtFef2fXlQ=;
-        b=SHCAFRoYgiBA3san4aYKeXna91YXqEiNqxLGgvsrgp/oWSEf+XP5UH5BtTnofvRMCu
-         5b7PJZWknvZ0rg4h5u6uqERUeE2V7kahzg0gibV934KDDI9EJcJ08A3V7zu8svCgkefs
-         ntKowc7WdiwK6hIuBY+Mz1IzePp4IYsp8R7HEYlrrYrHgjtHsTZefFRD3v6vArnqZEHQ
-         +sOPTHnC5ovAQMN1gjmbnOMu7LWFiyqTwiinu5vwxC1bCgUzoKU5vuRPBKpcAyU4pSLU
-         enLr87QUv572oPQzGd7WQHhZGsGsgSgg5aRwiDDywwvSyrTqQXxGJREFJWn8ArA39gz3
-         T6lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782709054; x=1783313854;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iQD/rHZj3a8p2S8n+F8bG5yMjsLxWvoQVhtFef2fXlQ=;
-        b=FWENFJviaTJcK/HMhfsTs9EqKT3KqZ3ePKdwrt9HO/8df9wka/TyjADEa1iP6uxGmu
-         3a6XGHHKnRtwdm5WL1FRZ7uK6R5S0p/86kdJ6wfzfjMJAYT7ZkuF6VLGB91AJNGR+rj1
-         a4+2XasS+zUxJ2K6urnhmZ9UDh+PjTazJQi+jhUt2xIEvbjAg5Zued4KIHdsO/OAVm/q
-         TzFR8pXpZvl3mR2+igHsddW2dsIHxBOpyC741NNAmHe4NgrgG8TYKQ2s7k2mNakBxasg
-         /ddiXXYjbqgx2LOhPsjzn4Z4JU2Fnc4Tb10OPCavbgx/xRi3PSmYuuC9t2FV41EkflYg
-         ESBg==
-X-Forwarded-Encrypted: i=1; AHgh+Ros445ChDb/51g5zerRY7yObgM3eywj4t3VUmdIQsU1w/Uo7IBHCXQjBTG6heD8V8346YxO@lists.linux.dev
-X-Gm-Message-State: AOJu0YyR4oK0LxkJ8Mj9975wlFcnAMMFwh6tnkpQIH3kvepblhrXV/ap
-	vUtLdfP5d9W2Rtm6mpp9/yEavGrgHW14MoK9kyq0cpseEWnsbW/2b6OM
-X-Gm-Gg: AfdE7cn+pc1OgCsBXABblVTUrZTM5CV3TIH65/SCsGj5fFcfk6BT0Yytlzk1thRc5G7
-	OehqOGGKMbQomBZsrg/YbJRhmeT4YCBG/9vA2/gtcgssoEDPm5z0CRM+a9E/kOFTljuUVs+kMWL
-	b8A65Mbbhj+NW6QlJew2vhkm/jvFYhVXnxGKa0F/IGOmM9H44cm2qJq5kXkUy2u/RHRWu3VM1GF
-	aDjz9ZBQrbLPmTRoiC7qRfLTbSGMRqS/X1Jn3b7ivnWBO3ADC5Dekzs/+igAGVlxFKipHfECK7k
-	h4ixLMwnJFhKxrUJGjOCKiR6kfO+tf0AmEL0+iKtZVeGmvd2nLDIToBTnNfyo0VF/eS45aIdzYV
-	VTGK1c+SV8qZPim6QWoDwk0P+QA116a81mgxWqeI+RZT/BRMQaKYNOvPzUGvoOWjQ+mACZoMme7
-	pZpTMSkE5qulToDnVKPetWpjwBjXWNERwM5Q0ugL38RQcr/wvVkoCEaGK8762spnCyLXvS+7U=
-X-Received: by 2002:a05:7300:e8a9:b0:304:bce8:fa30 with SMTP id 5a478bee46e88-30c84b2c0c8mr15331021eec.5.1782709053542;
-        Sun, 28 Jun 2026 21:57:33 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.160.236])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30c7ca87caasm39851291eec.27.2026.06.28.21.57.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 28 Jun 2026 21:57:33 -0700 (PDT)
-Date: Mon, 29 Jun 2026 10:27:19 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
-	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
-	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
-	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, kees@kernel.org, 
-	lyude@redhat.com, airlied@gmail.com, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-Message-ID: <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260520064630.1785283-1-mkchauras@gmail.com>
- <20260520064630.1785283-5-mkchauras@gmail.com>
- <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
- <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Z+D/qS+Y";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Z+D/qS+Y"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 05C8275D0F;
+	Mon, 29 Jun 2026 06:55:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1782716147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=BAupgZB0PJ1OqcpHo6tTgs6hcfKTzlVTTaz41IYB01Q=;
+	b=Z+D/qS+Yw2rCgWCjViQmH/IbgyCidWrcLjn6j4Eqnyex37TFnfj3QGPpcG+MRBnSU+4eVT
+	5buEr7Harwt4J/6W9JFtSA4Yti0vaAZtta9ceDeQic88uFsvFZedKIT2XDw1bz08qreUrL
+	CLvALcSjtYTyU1YoVkY7rXgrRLpOboQ=
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1782716147; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=BAupgZB0PJ1OqcpHo6tTgs6hcfKTzlVTTaz41IYB01Q=;
+	b=Z+D/qS+Yw2rCgWCjViQmH/IbgyCidWrcLjn6j4Eqnyex37TFnfj3QGPpcG+MRBnSU+4eVT
+	5buEr7Harwt4J/6W9JFtSA4Yti0vaAZtta9ceDeQic88uFsvFZedKIT2XDw1bz08qreUrL
+	CLvALcSjtYTyU1YoVkY7rXgrRLpOboQ=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0BA25779A8;
+	Mon, 29 Jun 2026 06:55:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 7iBnAfIWQmqKQQAAD6G6ig
+	(envelope-from <jgross@suse.com>); Mon, 29 Jun 2026 06:55:46 +0000
+From: Juergen Gross <jgross@suse.com>
+To: linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-coco@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	llvm@lists.linux.dev
+Cc: Juergen Gross <jgross@suse.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Kiryl Shutsemau <kas@kernel.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	"K. Y. Srinivasan" <kys@microsoft.com>,
+	Haiyang Zhang <haiyangz@microsoft.com>,
+	Wei Liu <wei.liu@kernel.org>,
+	Dexuan Cui <decui@microsoft.com>,
+	Long Li <longli@microsoft.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+	xen-devel@lists.xenproject.org,
+	Ajay Kaher <ajay.kaher@broadcom.com>,
+	Alexey Makhalov <alexey.makhalov@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Xin Li <xin@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Subject: [PATCH v4 00/18] x86/msr: Inline rdmsr/wrmsr instructions
+Date: Mon, 29 Jun 2026 08:55:26 +0200
+Message-ID: <20260629065544.3643253-1-jgross@suse.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
+X-Spam-Flag: NO
+X-Spam-Score: -1.30
+X-Spamd-Result: default: False [-1.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:mid];
+	RCPT_COUNT_TWELVE(0.00)[36];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TAGGED_RCPT(0.00)[lkml];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_CC(0.00)[suse.com,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,intel.com,google.com,microsoft.com,oracle.com,lists.xenproject.org,broadcom.com,infradead.org,gmail.com];
+	FROM_HAS_DN(0.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLfdszjqhz8kzzb9uwpzdm8png)];
+	DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com]
+X-Spam-Level: 
 
-On Fri, Jun 26, 2026 at 12:17:50PM +0200, Miguel Ojeda wrote:
-> On Fri, Jun 26, 2026 at 8:50 AM Mukesh Kumar Chaurasiya
-> <mkchauras@gmail.com> wrote:
-> >
-> > This corresponds to a floating point instruction. Although we have
-> > disabled fpu, vsx and altivec we are still generating these. Seems like
-> > we have some issue with the rustc here. I didn't dive deeper into this.
-> >
-> > Is it ok if we keep 1.95 as base for powerpc64le?
-> 
-> It may be that it is generated but unused (we have that issue
-> elsewhere -- see e.g. `rust/compiler_builtins.rs`).
-> 
-> Having said that, if 1.95 is fine for the powerpc arch maintainers,
-> then that is fine (s390 also used a higher minimum -- please see the
-> recent change in `scripts/min-tool-version.sh`).
-> 
-> But please try to bisect upstream Rust to see where the change
-> happened, i.e. what is the root cause? e.g. `core` changes, `rustc`
-> changes, built-in LLVM changes... It could be that it is not tied to
-> the `rustc` version but LLVM's.
-> 
-> Cheers,
-> Miguel
-Hey Miguel, 
+When building a kernel with CONFIG_PARAVIRT_XXL the paravirt
+infrastructure will always use functions for reading or writing MSRs,
+even when running on bare metal.
 
-Sure i'll bisect. Meanwhile i would still like to get this upstream.
+Switch to inline RDMSR/WRMSR instructions in this case, reducing the
+paravirt overhead.
 
-Hey @Madhavan,
+The first patch is a prerequisite fix for alternative patching. Its
+is needed due to the initial indirect call needs to be padded with
+NOPs in some cases with the following patches.
 
-Can we pick this version up for ppc?
+In order to make this less intrusive, some further reorganization of
+the MSR access helpers is done in the patches 2-6.
 
-Regards,
-Mukesh
+The next 5 patches are converting the non-paravirt case to use direct
+inlining of the MSR access instructions, including the WRMSRNS
+instruction and the immediate variants of RDMSR and WRMSR if possible.
+
+Patches 12-14 are some further preparations for making the real switch
+to directly patch in the native MSR instructions easier.
+
+Patch 15 is switching the paravirt MSR function interface from normal
+call ABI to one more similar to the native MSR instructions.
+
+Patch 16 is a little cleanup patch.
+
+Patch 17 is the final step for patching in the native MSR instructions
+when not running as a Xen PV guest.
+
+Patch 18 converts the rest of the MSR helpers to __always_inline.
+
+This series has been tested to work with Xen PV and on bare metal.
+
+Based on [1] and [2].
+
+Changes since V3:
+- Rebase
+- wrmsrns() related changes (patches 9+10)
+
+Changes since V2:
+- switch back to the paravirt approach
+
+Changes since V1:
+- Use Xin Li's approach for inlining
+- Several new patches
+
+[1]: https://lore.kernel.org/lkml/20260629060526.3638272-1-jgross@suse.com/T/#t
+[2]: https://lore.kernel.org/lkml/20260629063943.3641266-1-jgross@suse.com/T/#t
+
+Juergen Gross (18):
+  x86/alternative: Support alt_replace_call() with instructions after
+    call
+  coco/tdx: Rename MSR access helpers
+  KVM: x86: Remove the KVM private read_msr() function
+  x86/msr: Minimize usage of native_*() msr access functions
+  x86/msr: Move MSR trace calls one function level up
+  x86/hyperv: Switch from __rdmsr() to native_rdmsrq()
+  x86/opcode: Add immediate form MSR instructions
+  x86/extable: Add support for immediate form MSR instructions
+  x86/msr: Make wrmsrns() a first class citizen
+  x86/msr: Introduce sync_cpu_after_wrmsrns()
+  x86/msr: Use the alternatives mechanism for RDMSR
+  x86/alternatives: Add ALTERNATIVE_4()
+  x86/paravirt: Split off MSR related hooks into new header
+  x86/paravirt: Prepare support of MSR instruction interfaces
+  x86/paravirt: Switch MSR access pv_ops functions to instruction
+    interfaces
+  x86/msr: Reduce number of low level MSR access helpers
+  x86/paravirt: Use alternatives for MSR access with paravirt
+  x86/msr: Make all MSR access functions __always_inline
+
+ arch/x86/coco/tdx/tdx.c                   |   8 +-
+ arch/x86/hyperv/hv_crash.c                |   6 +-
+ arch/x86/hyperv/ivm.c                     |   2 +-
+ arch/x86/include/asm/alternative.h        |   6 +
+ arch/x86/include/asm/fred.h               |   2 +-
+ arch/x86/include/asm/kvm_host.h           |   7 -
+ arch/x86/include/asm/msr.h                | 340 +++++++++++++++++-----
+ arch/x86/include/asm/paravirt-msr.h       | 180 ++++++++++++
+ arch/x86/include/asm/paravirt.h           |  45 ---
+ arch/x86/include/asm/paravirt_types.h     |  57 ++--
+ arch/x86/include/asm/qspinlock_paravirt.h |   4 +-
+ arch/x86/kernel/alternative.c             |   5 +-
+ arch/x86/kernel/cpu/mshyperv.c            |   4 +-
+ arch/x86/kernel/kvmclock.c                |   2 +-
+ arch/x86/kernel/paravirt.c                |  42 ++-
+ arch/x86/kvm/svm/svm.c                    |  16 +-
+ arch/x86/kvm/vmx/tdx.c                    |   2 +-
+ arch/x86/kvm/vmx/vmx.c                    |   6 +-
+ arch/x86/lib/x86-opcode-map.txt           |   5 +-
+ arch/x86/mm/extable.c                     |  46 ++-
+ arch/x86/xen/enlighten_pv.c               |  52 +++-
+ arch/x86/xen/pmu.c                        |   4 +-
+ tools/arch/x86/lib/x86-opcode-map.txt     |   5 +-
+ tools/objtool/check.c                     |   1 +
+ 24 files changed, 641 insertions(+), 206 deletions(-)
+ create mode 100644 arch/x86/include/asm/paravirt-msr.h
+
+-- 
+2.54.0
+
