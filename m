@@ -1,135 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A071D7E5C;
-	Tue, 30 Jun 2026 04:35:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D3A9312836
+	for <llvm@lists.linux.dev>; Tue, 30 Jun 2026 05:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782794107; cv=none; b=pheNFjoAztMS/pW3qEZSCae3lEbXCXt6AHBA0xKW6Et00I5BQmiEIbD+eiXTueyjFF33rIA2mmTs3zlN1bNJgbSqf5bba/6M70wVZkswmqnKgQcUihsKACZBZlRrL1bNG13t15GIByuJTdai2tLg5N5GgfQ4vXBGPh6Nj2fzpac=
+	t=1782798317; cv=none; b=qqPYs+5vgvLo/O+IolJXgQpHnudFVOj8Q4pwavZZS6BYohZvGTSH+dSuPtUlrFp/SAYLCyyPHz4vq4FjjoNF2yw+NOlv8cf+WOk0qn0ZumsSu/aj0szrQ/JxRPjU+7ydExOFWktPO96MidvcL3J+GoqV1ZstVg63G/uPviayj1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782794107; c=relaxed/simple;
-	bh=FnwAR2RKJK93E2JSOU8hxRMjsgJoTGvUcL7VaMO70Bw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=cSTYPeH/aPytkLThKrTcZ3cwjb0o3HfafbWsQNaLBdPkuKuyei7Ta01RLiEu7nxjsS41W3EKtxjWH1kgGjuQ5XhqpZJF0cWZ1drdsHJ32lSc2qEgAuemdVUT6F2ybKVoF7fvfiuA4C8NLouB7p0wenY5ojDxzp5SqbKw9+PRcKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WjLB5Cr3; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782798317; c=relaxed/simple;
+	bh=ztzealyqI6xgOkTMvJbT6VMrtOx8sF1MsZ3yt78tkI8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dC+oS8YWHCXxBtOvFj+igVp+72sLK9nEgTBfcD4WJIT/+Ts3xd5mcCK3m9H+/6rx2FaRdFG2ErSDVpI5hGfxaD253zheY7nfZMMNdv/QdcYQIFIzWygO4pEt/pSn5d54l65WIRpw5rFKpIO+qP1qqeYT34Vr71QSUHy8qDNoU4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ERnebAAB; arc=none smtp.client-ip=74.125.82.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WjLB5Cr3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782794106; x=1814330106;
-  h=date:from:to:cc:subject:message-id;
-  bh=FnwAR2RKJK93E2JSOU8hxRMjsgJoTGvUcL7VaMO70Bw=;
-  b=WjLB5Cr3CT2WLV5jc+jfugEid6EjSAOTl2ZOOt2rZpa6tmcnXKCKqmuK
-   R3om17TYfqBfQjpbJwxeww5esW37EGQmQeYpEedg6q5y0bEznDeQfOigm
-   a1Xvf+rRMPiTPmrTK90XLWSVfujiE2cz+rkPetLIQoFbNEF1rch6Kvx63
-   jx4NvVdMECVZQAcDaBfoItC0jUjZ7SBHKiueZ6FG++1A8P6xM0dvXtbPg
-   c3CexoNZKXsBKkJ6qB6GH0zG87XfgPGa9dEkeMz/SbiIqwOQ2kHqL4hOt
-   tWD1+bZYCWyEX5U1qmJj5WPt3UgeO02wU7GBfqa9PHrYi8wbL0LAXNYUU
-   Q==;
-X-CSE-ConnectionGUID: Ni670SyhRaKoClIizC0Lyg==
-X-CSE-MsgGUID: uluENUqFSwS56SnC3d3WtA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11832"; a="95006267"
-X-IronPort-AV: E=Sophos;i="6.24,233,1774335600"; 
-   d="scan'208";a="95006267"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jun 2026 21:35:05 -0700
-X-CSE-ConnectionGUID: +N90feB9Tk2lCQUIT3CoMg==
-X-CSE-MsgGUID: qD6mzDnpRGW2j0JNS42BAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,233,1774335600"; 
-   d="scan'208";a="251095684"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 29 Jun 2026 21:35:04 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1weQBL-0000000080b-1w9W;
-	Tue, 30 Jun 2026 04:35:01 +0000
-Date: Tue, 30 Jun 2026 12:33:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [broonie-ci:arm64-xs-decode 2/2] arch/arm64/mm/fault.c:80:5:
- warning: format specifies type 'unsigned long' but the argument has type
- 'unsigned long long'
-Message-ID: <202606301257.DIHcZVRB-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ERnebAAB"
+Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-139f1dfc9faso3638501c88.0
+        for <llvm@lists.linux.dev>; Mon, 29 Jun 2026 22:45:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782798315; x=1783403115; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=xie8EscmE8LK37ZpMwS/Fq6rd1I8uHsenBWRCUghSAM=;
+        b=ERnebAABXf1NysCQv3hLINplnfagpDsYtO//eMRZGitzqhTTIk5S17rTg4NIks+0FY
+         n+Jd4Tov4g/PrbHr6yS7CqvA1JZK02BFOUxJAGWfcNP0LZduE0r9EFuVmNzgb0PKf3ed
+         kQNPob/8XCSZU/XrL+V8qhjsBUs5iMesIo+oEZke8g7PPAHJ48YCMyUMwKOJ//CNSFW4
+         FA3oMkcQffcCcJgEBBQpDMFirdzPlT+/2AKHpfGTnaVkZwXAR+/9BOzFupwwzUVF5/Ig
+         l2WBMMKkcXLYHB24W/wEteSS00IfKDb3BN1GHiQFG4Kg0WxV5XOZ/aSn9Q+eq2GKLlYz
+         9/HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782798315; x=1783403115;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xie8EscmE8LK37ZpMwS/Fq6rd1I8uHsenBWRCUghSAM=;
+        b=ZjHrB8XXw5c9V9RwKk6AsgaqikFIUddE0xtMESmnDYpfZ1391roS0PxxpkXN9UlNqt
+         O1vOdUiTwpVsm55ek2dWqQGKpZPI6EyxqctbPDTRwLUYzVs70QLY6kEVXsCaeX0NHzxd
+         tEFTh6S27/H7WlyjsK7Lnvy4Vrgv1yRSdAfRtt0HV3UN5a0HWEUzU3VPFCD+Te9l6Cfw
+         Hb3xc/nFOgMN54HaaxkuYYXAiUv0WhKPMM/iE69NgN7SzM8chvBlBjDV2tgj/Ro50EXu
+         UbfPHLLy8WsSNTocz9RMbwLoJvADEn77BY/J0uJXszca/M0wl+PS34VzJzEwRGBtmStU
+         xe4Q==
+X-Forwarded-Encrypted: i=1; AFNElJ9uuw7Djd9F0s1kRBb2So9er2Lb6nJ3lD8y2e95L7WU90KyMDRD15j7qt+dp0NFsCzOzKyE@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx3Fz+uXXSvEmWA77HDebF0HNkQzBLXLfNCm3abJR2ksuNiOH+D
+	B2y6H9UOlln0eI4Uf80+NZyZe7B9VOEleAyBMZMhAENwBTiCpctE/gHP
+X-Gm-Gg: AfdE7cnktOaPrYs1Yc7+TXFVtXjg8UDXc4APKDyg55YDF868j609rXdzU+WYufoLv1H
+	EwLrAkpcgMGRf5hMA0mVGDMYlYUOXqyHl+KFbripc2R7YhDKqo+KMXYoc0/pdYA5JLJizRlF4+E
+	JX8P2IE6f8EfxbE0sUxqzdzMtELfTLg4P/HkAqubUtRdo/YCQYkZ9rDsHXdQZXkuMecS1lOvkTB
+	tzQlmblyk/xra2wuUoqoS3zphmkcushLGkNvv5WRFFuXGlwBkQ0K2yo4kCRBMuiwS0ORswpk4RV
+	kmTCQrqa9QF1i0iDPzhEO34YIS148t5MZMYQI1fG4ikIuG67w6K/6NN1OtskQx9O+BqiHeJxi/4
+	yY2B6dx92IpKz5vGEydsg/hGoFE3i2WAB10XNqWEe97dIxDj3wZ4uswhATCLASBFQWdKUODnzSh
+	yUUXpcgyXvETJdXqRW1B/Xd2sNkXRSvcAE43/za//08hCueSFQNvunL0q9
+X-Received: by 2002:a05:7022:ec0c:b0:138:637:6227 with SMTP id a92af1059eb24-13b2a1603famr1467281c88.11.1782798315173;
+        Mon, 29 Jun 2026 22:45:15 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([129.41.58.4])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b2ab0fc83sm3351411c88.3.2026.06.29.22.45.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jun 2026 22:45:14 -0700 (PDT)
+Date: Tue, 30 Jun 2026 11:15:03 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
+	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
+	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
+	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, kees@kernel.org, 
+	lyude@redhat.com, airlied@gmail.com, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
+Message-ID: <akNXvfSfue7_3tyd@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260520064630.1785283-1-mkchauras@gmail.com>
+ <20260520064630.1785283-5-mkchauras@gmail.com>
+ <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
+ <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
+ <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <CANiq72mj1P9QykK6vbPK37hZkMLwd7RcgVWEcxxuE=9OL+4bAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72mj1P9QykK6vbPK37hZkMLwd7RcgVWEcxxuE=9OL+4bAg@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git arm64-xs-decode
-head:   400df87aee7b6f393e5d363d377cb5a613f8b37a
-commit: 400df87aee7b6f393e5d363d377cb5a613f8b37a [2/2] arm64: mm: When logging data aborts only decode Xs when ISV=1
-config: arm64-randconfig-001-20260630 (https://download.01.org/0day-ci/archive/20260630/202606301257.DIHcZVRB-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260630/202606301257.DIHcZVRB-lkp@intel.com/reproduce)
+On Mon, Jun 29, 2026 at 11:11:44AM +0200, Miguel Ojeda wrote:
+> On Mon, Jun 29, 2026 at 6:57 AM Mukesh Kumar Chaurasiya
+> <mkchauras@gmail.com> wrote:
+> >
+> > Sure i'll bisect. Meanwhile i would still like to get this upstream.
+> 
+> It is very early on the cycle -- I would suggest bisecting first.
+> 
+> But it is up to ppc, of course.
+> 
+> Cheers,
+> Miguel
+Sure, I'll bisect it first.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202606301257.DIHcZVRB-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/arm64/mm/fault.c:80:5: warning: format specifies type 'unsigned long' but the argument has type 'unsigned long long' [-Wformat]
-      79 |                 pr_alert("  Xs = %lu\n",
-         |                                  ~~~
-         |                                  %llu
-      80 |                          (iss2 & ESR_ELx_Xs_MASK) >> ESR_ELx_Xs_SHIFT);
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:534:35: note: expanded from macro 'pr_alert'
-     534 |         printk(KERN_ALERT pr_fmt(fmt), ##__VA_ARGS__)
-         |                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:511:60: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +80 arch/arm64/mm/fault.c
-
-    63	
-    64	static void data_abort_decode(unsigned long esr)
-    65	{
-    66		unsigned long iss2 = ESR_ELx_ISS2(esr);
-    67	
-    68		pr_alert("Data abort info:\n");
-    69	
-    70		if (esr & ESR_ELx_ISV) {
-    71			pr_alert("  Access size = %u byte(s)\n",
-    72				 1U << ((esr & ESR_ELx_SAS) >> ESR_ELx_SAS_SHIFT));
-    73			pr_alert("  SSE = %lu, SRT = %lu\n",
-    74				 (esr & ESR_ELx_SSE) >> ESR_ELx_SSE_SHIFT,
-    75				 (esr & ESR_ELx_SRT_MASK) >> ESR_ELx_SRT_SHIFT);
-    76			pr_alert("  SF = %lu, AR = %lu\n",
-    77				 (esr & ESR_ELx_SF) >> ESR_ELx_SF_SHIFT,
-    78				 (esr & ESR_ELx_AR) >> ESR_ELx_AR_SHIFT);
-    79			pr_alert("  Xs = %lu\n",
-  > 80				 (iss2 & ESR_ELx_Xs_MASK) >> ESR_ELx_Xs_SHIFT);
-    81		} else {
-    82			pr_alert("  ISV = 0, ISS = 0x%08lx, ISS2 = 0x%08lx\n",
-    83				 esr & ESR_ELx_ISS_MASK, iss2);
-    84		}
-    85	
-    86		pr_alert("  CM = %lu, WnR = %lu, TnD = %lu, TagAccess = %lu\n",
-    87			 (esr & ESR_ELx_CM) >> ESR_ELx_CM_SHIFT,
-    88			 (esr & ESR_ELx_WNR) >> ESR_ELx_WNR_SHIFT,
-    89			 (iss2 & ESR_ELx_TnD) >> ESR_ELx_TnD_SHIFT,
-    90			 (iss2 & ESR_ELx_TagAccess) >> ESR_ELx_TagAccess_SHIFT);
-    91	
-    92		pr_alert("  GCS = %ld, Overlay = %lu, DirtyBit = %lu\n",
-    93			 (iss2 & ESR_ELx_GCS) >> ESR_ELx_GCS_SHIFT,
-    94			 (iss2 & ESR_ELx_Overlay) >> ESR_ELx_Overlay_SHIFT,
-    95			 (iss2 & ESR_ELx_DirtyBit) >> ESR_ELx_DirtyBit_SHIFT);
-    96	}
-    97	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Mukesh
