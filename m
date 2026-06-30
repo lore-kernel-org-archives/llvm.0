@@ -1,172 +1,220 @@
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EC31421F05;
-	Tue, 30 Jun 2026 13:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4213630F80C
+	for <llvm@lists.linux.dev>; Tue, 30 Jun 2026 15:34:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782826166; cv=none; b=HFe2NWyculdYFjelELygJkGMd8Fs3wxHSLzm8xOefvENEopZVTEz5IylxMhe7N9w9P6EEpEwq/uRjA/7WO/CyhDGF+f/+f9Ad0LwPYhW+mYa8zuGPYX9i36VufPDa9RganUCaWPchYpc5u4agCqJsM2Ug3CmEg8VjT0oJfnJ28E=
+	t=1782833663; cv=none; b=YmV7nfjNsxpPnfCMg0kPHOkE+pFbZ3nSQsPRK86B5H6TvBz+gbLofEPSv4fknodm9B9fPu4p1d37tC7U773ptK6/rTaxlPb0MU1NHSi5K4OMS4QxVojDXZn1SgBW9JllEh0g5TsIH6Nh1+otQBpTW3StZmqvDKMcYK6bnOnvzPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782826166; c=relaxed/simple;
-	bh=W7EGKJxgbZj+3VrD2pgQvTV0in02egkLYsEaLU9JylQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=A7vogW3QPJ8IyFmAT0zwVvlNmT8X17AsnT2kITZErunWvSQnMGNihZK7RUO+tUL6lgZeT2VyuaSI1/04OaIPhCVBVUuKeopqDs/Ah6Ml/JqbHcjP4nH0l99Tm/adkHX19k2Ru9Q38fhfO113MNhWkKtnTiKTtSxwYjRlvwmoARc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=gDOn6Ibq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=U2Sz2qW1; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1782833663; c=relaxed/simple;
+	bh=18F5UxFYsEgK/gv9G+6SwwZnxTIYni/uvnnPOwUqXnw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=riL+OW/CBOep1qkOoLkWJjk2HFwVZcp4mvmqRPcjfN/Ir7TPna0nqJRqcmWeTno6HsUDOi6UwK8bn63bAS4NPC/IPx40ZcoT60uqLX2esT49BshNBwa95G4Q804gnbLN1MRaFH5yFpahpQxr9U0ToEmAj9gwPxor6N2oMt2BYQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kASIc43n; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="gDOn6Ibq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="U2Sz2qW1"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 928AEEC00A1;
-	Tue, 30 Jun 2026 09:29:24 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Tue, 30 Jun 2026 09:29:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1782826164;
-	 x=1782912564; bh=DmrQNTItky/UiuZPOpMv0EVeheRMp8r3GydTi1+jvvU=; b=
-	gDOn6IbqlLF+rTLJJVd2GPPiUPxU+sRFV4HoMABp87+3SwXvfitPGVvrw4g6qQcH
-	k2cnZShyeoYlQjukVowJBUY3VMkWGA2T2VbS71TqIJxmCbS5vzGwBI6Fpic831Dm
-	JJXmNBwr1dLNr7xeItG5jXbTcQpkEGbpnMw9Ul94W5OVwINpsx1nsoZwpFrZmt2j
-	yyh5yFJtuECsdWonXEnb0ClcQzdMWdIbk8c6EOU9IEPTIZe9zzywdDc0sXAsY1Gr
-	Qhpku+vp7H3gtTwo5TxnDXCyMpTIjiRcjmFg5uPGEjHhNFMWZ8/8QvsUQZBabEpZ
-	D26MJV4qb+IG2ESMoLxXtQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1782826164; x=
-	1782912564; bh=DmrQNTItky/UiuZPOpMv0EVeheRMp8r3GydTi1+jvvU=; b=U
-	2Sz2qW1gSOPgMObKuVV2YI42GKrQhdzQzAgPWxK3W11CX5zc04Bu2KiJHyqTv3Cs
-	5f/i03fSvGFvwBIFNwWqKaiUHNxn1/YGIX7xjRmTXp+EEmZY9H0B1dcUXY69bIfs
-	O9YJZ8/jgQ01aMUqnJxH5OH80Msr0n6LnCQfH/SgQvn8KSyI7WemMZVPXgOjIkzG
-	iafhPik9MjtUPywDw+jiDJVlc6vhl3AYR9w+EMdZUYB5FbKxbTLJ8rs4zap1Ksn+
-	eq2tAsgc3jU1GeeQGPa0vjLIVZzAUFaPtVLGMnKUeZFthBWOZuzLoaCQhDuiwZiX
-	LCc7xVzPhgSSa2oxZy3hw==
-X-ME-Sender: <xms:s8RDanlQmxMBGZ2_V3c8hHeK2DamYOZAKm2MFxnvnrHjQXXcEl7liw>
-    <xme:s8RDalrNiNzznp_KWVyn_dGzFoOfzt3hHKnKwcJdns3fYr0MmujBDyR-xnJ94KVZC
-    1fgoMbAGZJUr-fMNhrQSmnCiDSNxjo6Pyy_YQMkQ-02icqDAPVOCw>
-X-ME-Proxy-Cause: dmFkZTFOc8kySVJaarJn+yOM4lWnvgTo8fH8pNsiBSOy3Wlxie2uyHPLm8RU9hRXTPadfd
-    VplZMh4dQE2IFFVv08Z/Mg7w7fkT9dvWYuzilA9wynMup1c5MnGCKUibzHtnIH2nk5Ezuq
-    kkmM0tmoxSB2W2a5nI9lxCKY7xgQQCKbFnEUeH6wh4Uy4vR7BjSeCnQB94Cbb7iFr1L2j3
-    WCsiK6SAuPxVElZ+Tn8QQm2DcbfiuPxXujVl7tC57fTWo7OE7M9HnpgVvznow7AxFXX8Rc
-    //4a9WXCZmtP7MrNLuW2qWwdBwwKTUSqSqtoXW30l6qtyJOZ3ttdJ5RiOlUZYUr8YESfAj
-    NjWpzaR+KfJeu3PvgOAKQ1RlrsbhFbS2S2dFNeSjtrPC+jQKE5e03zGI1HC/FPJn8XZ3Ur
-    jhyhtvO3x12/TUQ4KIh16OGDaP717xQ17u9TKr5yxedFD8ChD8shLECyYMgtXFi26cA77K
-    6fgkuPGjeoSd+zfJajKZvkV7/by5fAof+d7Wwu4uZ/Pyub+wplO0ecfJLwBAQrPeTz8lI/
-    p6KZJcSqNLKxBz9cT1ywzMNrXo4tJjui2Vvcf1C/S9zmrM9cuTiudZgUBps2LyFDsJeIXp
-    IPn0+oUPu0v5ma7acft1jGwqEA86HRXjSbmDTm5c+Vh2guohGDiYdVlXZ0iw
-X-ME-Proxy: <xmx:s8RDar041n2dZ7qGLUpXpmPMmPtitS0dv6aSQGRJT8UK4e8RV0jRqg>
-    <xmx:tMRDatzpMd3JIIWC1lq6rp9LQYDeNsyao8a0ougTnd9lqWhRbEOwDw>
-    <xmx:tMRDakiIoyys-h98bM1FFUUnRSd7hwhTi0Iw2ATjkmFIlpGhxoFgLA>
-    <xmx:tMRDaiP-8TAEkuAr6Y8KiF1O_9wlCdVRVzlofmLsMa5Fj6hkUiK2BQ>
-    <xmx:tMRDaqGIMoKsG--JyKaWiJ7bODNDXUoeKFYnKM-4bhvKAaUfx8xcetEo>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id DCBB7182007E; Tue, 30 Jun 2026 09:29:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kASIc43n"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 82F694E40BB4;
+	Tue, 30 Jun 2026 15:34:17 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 4CCB86025A;
+	Tue, 30 Jun 2026 15:34:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 01ADE106F2108;
+	Tue, 30 Jun 2026 17:34:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1782833656; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=Xd5UIka8/oKkd70b1qMZVQiEvQkYn3LD+8HM84S02oU=;
+	b=kASIc43nY9HKMceyA1lAYZEwdDAxBqODe3tbTa0Lk8sKTL8donwpIOnTcOY1SjI1+JZgJW
+	Mi5kLaH6cwXQ+fCeJUEcWRsPg7mA2fPh6AnKpEuTYSIgQKUOH3xhOmgukZTxTFrC2QOScF
+	AN4ge4AeygCuwvQgYUBTg5ynXIDrIboEH8akXFdvZKx7LSGYGNw602QQPxMP/jNCWhQMuk
+	TANmmbWFAt2weMaK3RXIoIo9d+6E+JQoL9irQGSvTpgEs6a4UYfbMYlAyQ960SP/81NQ2R
+	EyoQ5ntCPagYSVToQE7C8l9RHqc6Hm+IH8v/nAP6I8yDSk3SNkVNXSV5gb8L0g==
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Date: Tue, 30 Jun 2026 17:34:04 +0200
+Subject: [PATCH v2] drm/bridge: rename
+ drm_for_each_bridge_in_chain_scoped() to drm_for_each_bridge_in_chain()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AzfP_w-3vYjw
-Date: Tue, 30 Jun 2026 15:29:03 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrew Morton" <akpm@linux-foundation.org>,
- "SeongJae Park" <sj@kernel.org>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Ravi Jonnalagadda" <ravis.opensrc@gmail.com>,
- "Quanmin Yan" <yanquanmin1@huawei.com>, damon@lists.linux.dev,
- linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <0c57d639-259c-4498-9b7f-3ac46d669935@app.fastmail.com>
-In-Reply-To: <20260627223405.3533412b4010b6ce658da01f@linux-foundation.org>
-References: <20260611125704.3386176-1-arnd@kernel.org>
- <20260611135608.66888-1-sj@kernel.org>
- <20260627223405.3533412b4010b6ce658da01f@linux-foundation.org>
-Subject: Re: [PATCH] mm/damon/core: reduce kernel stack usage
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260630-drm-bridge-alloc-getput-for_each_bridge-2-v2-1-e0a1094cd1eb@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/52NQQqDMBBFryJZd4qZWKld9R5FJImjDqiRJJUW8
+ e5NpSfo8v0H/20ikGcK4pZtwtPKgd2cAE+ZsIOeewJuEwvM8SIRFbR+AuO5TUaPo7PQU1yeETr
+ nG9J2aH4SAZW8al0pU1Yk0t/iqePX0XrUiQcO0fn3kV7ld/2nskqQkKsSC1VoysncjXNx5Pls3
+ STqfd8/tQht9uQAAAA=
+X-Change-ID: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
+To: Miguel Ojeda <ojeda@kernel.org>, 
+ Andrzej Hajda <andrzej.hajda@intel.com>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Hui Pu <Hui.Pu@gehealthcare.com>, Ian Ray <ian.ray@gehealthcare.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ llvm@lists.linux.dev
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Sun, Jun 28, 2026, at 07:34, Andrew Morton wrote:
-> On Thu, 11 Jun 2026 06:56:07 -0700 SeongJae Park <sj@kernel.org> wrote:
->
->> On Thu, 11 Jun 2026 14:56:57 +0200 Arnd Bergmann <arnd@kernel.org> wrote:
->> 
->> > From: Arnd Bergmann <arnd@arndb.de>
->> > 
->> > The main thread function has recently grown to the point of
->> > exceeding stack frame size warning limits in some configurations.
->> > This is what I hit on s390 with clang and CONFIG_KASAN:
->> > 
->> > mm/damon/core.c:3440:31: error: stack frame size (1352) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
->> >  3440 | static int kdamond_fn(struct damon_ctx *ctx)
->
-> Well cheers to s390 for using a nice tight stack limit.
+drm_for_each_bridge_in_chain_scoped() was added in commit e46efc6a7d28
+("drm/bridge: add drm_for_each_bridge_in_chain_scoped()") to provide a
+safer alternative to drm_for_each_bridge_in_chain().
 
-To clarify, this is a stack limit that I use for my randconfig build
-across architectures, the default limit on allmodconfig is still 2048
-bytes, and s390 generally needs a little more stack than most
-other architectures.
+Following commits converted all users to the _scoped variant.
 
->
->> > The largest stack usage here is inside of the kdamond_tune_intervals(),
->> > so by marking that one as noinline_for_stack, the functions individually
->> > stay below the warning limit, though kdamond_fn() itself still uses
->> > hundreds of kilobytes for some reason.
->
-> Wait what wut.  This cannot mean that kdamond_fn() uses x00,000 bytes of
-> stack, so what does it mean?
+Finally commit 2f08387a444c ("drm/bridge: remove
+drm_for_each_bridge_in_chain()") removed the old
+drm_for_each_bridge_in_chain() macro.
 
-bytes, not kilobytes, sorry for the typo!
+It's time to rename drm_for_each_bridge_in_chain_scoped() back to the
+original name.
 
->> Should we add Fixes: and Cc: stable@ too?  This function was introduced by
->> commit f04b0fedbe71 ("mm/damon/core: implement intervals auto-tuning") which
->> was merged into 6.15.
->
-> I don't think so - kernel is full of these offenders and it will be a
-> long and painstaking process to weed them out.
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+Changes in v2:
+- Rebased on drm-misc-next, fixed conflicts, renamed new occurrences
+- Link to v1: https://lore.kernel.org/r/20251223-drm-bridge-alloc-getput-for_each_bridge-2-v1-1-0362434ae0eb@bootlin.com
+---
+ .clang-format                                  |  2 +-
+ drivers/gpu/drm/display/drm_bridge_connector.c |  4 ++--
+ drivers/gpu/drm/drm_atomic.c                   |  2 +-
+ drivers/gpu/drm/drm_bridge.c                   |  2 +-
+ drivers/gpu/drm/tests/drm_bridge_test.c        |  2 +-
+ include/drm/drm_bridge.h                       | 11 +++++------
+ 6 files changed, 11 insertions(+), 12 deletions(-)
 
-I'm mainly pushing back on regressions when they happen. In my test
-tree, I have a patch that adds a few bytes for Kconfig options that
-cause particularly large stack frames (CONFIG_KASAN_STACK,
-CONFIG_KASAN, CONFIG_64BIT, CONFIG_UBSAN_ALIGNMENT) but otherwise
-use the traditional 1024 byte limit, and I send patches when I
-run into any function that uses more. I have never managed to
-get my backlog small enough to actually send the patch that
-changes the default limits.
+diff --git a/.clang-format b/.clang-format
+index 6a3de86ab27a..5ef5743b77c9 100644
+--- a/.clang-format
++++ b/.clang-format
+@@ -167,7 +167,7 @@ ForEachMacros:
+   - 'drm_connector_for_each_possible_encoder'
+   - 'drm_exec_for_each_locked_object'
+   - 'drm_exec_for_each_locked_object_reverse'
+-  - 'drm_for_each_bridge_in_chain_scoped'
++  - 'drm_for_each_bridge_in_chain'
+   - 'drm_for_each_connector_iter'
+   - 'drm_for_each_crtc'
+   - 'drm_for_each_crtc_reverse'
+diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
+index 92f8a2d7aab4..8b54069fa53a 100644
+--- a/drivers/gpu/drm/display/drm_bridge_connector.c
++++ b/drivers/gpu/drm/display/drm_bridge_connector.c
+@@ -147,7 +147,7 @@ static void drm_bridge_connector_hpd_notify(struct drm_connector *connector,
+ 		to_drm_bridge_connector(connector);
+ 
+ 	/* Notify all bridges in the pipeline of hotplug events. */
+-	drm_for_each_bridge_in_chain_scoped(bridge_connector->encoder, bridge) {
++	drm_for_each_bridge_in_chain(bridge_connector->encoder, bridge) {
+ 		if (bridge->funcs->hpd_notify)
+ 			bridge->funcs->hpd_notify(bridge, connector, status);
+ 	}
+@@ -854,7 +854,7 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
+ 	 * detection are available, we don't support hotplug detection at all.
+ 	 */
+ 	connector_type = DRM_MODE_CONNECTOR_Unknown;
+-	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
++	drm_for_each_bridge_in_chain(encoder, bridge) {
+ 		if (!bridge->interlace_allowed)
+ 			connector->interlace_allowed = false;
+ 		if (!bridge->ycbcr_420_allowed)
+diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+index 735ab7badc2e..e5c8ef06caed 100644
+--- a/drivers/gpu/drm/drm_atomic.c
++++ b/drivers/gpu/drm/drm_atomic.c
+@@ -1554,7 +1554,7 @@ drm_atomic_add_encoder_bridges(struct drm_atomic_commit *state,
+ 		       "Adding all bridges for [encoder:%d:%s] to %p\n",
+ 		       encoder->base.id, encoder->name, state);
+ 
+-	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
++	drm_for_each_bridge_in_chain(encoder, bridge) {
+ 		/* Skip bridges that don't implement the atomic state hooks. */
+ 		if (!bridge->funcs->atomic_duplicate_state)
+ 			continue;
+diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
+index 6ead9b75ae3d..dfab82923c85 100644
+--- a/drivers/gpu/drm/drm_bridge.c
++++ b/drivers/gpu/drm/drm_bridge.c
+@@ -1817,7 +1817,7 @@ static int encoder_bridges_show(struct seq_file *m, void *data)
+ 	struct drm_printer p = drm_seq_file_printer(m);
+ 	unsigned int idx = 0;
+ 
+-	drm_for_each_bridge_in_chain_scoped(encoder, bridge)
++	drm_for_each_bridge_in_chain(encoder, bridge)
+ 		drm_bridge_debugfs_show_bridge(&p, bridge, idx++, false, true);
+ 
+ 	return 0;
+diff --git a/drivers/gpu/drm/tests/drm_bridge_test.c b/drivers/gpu/drm/tests/drm_bridge_test.c
+index 10a32620e962..430d9bc67a10 100644
+--- a/drivers/gpu/drm/tests/drm_bridge_test.c
++++ b/drivers/gpu/drm/tests/drm_bridge_test.c
+@@ -1071,7 +1071,7 @@ static void drm_test_bridge_chain_verify_fmt(struct kunit *test,
+ 	struct drm_bridge_state *bstate;
+ 	unsigned int i = 0;
+ 
+-	drm_for_each_bridge_in_chain_scoped(&priv->encoder, bridge) {
++	drm_for_each_bridge_in_chain(&priv->encoder, bridge) {
+ 		KUNIT_ASSERT_LT(test, i, num_expected);
+ 
+ 		bstate = drm_bridge_get_current_state(bridge);
+diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
+index 18f3db367dc1..0fadc39dfc12 100644
+--- a/include/drm/drm_bridge.h
++++ b/include/drm/drm_bridge.h
+@@ -1474,9 +1474,9 @@ static inline struct drm_bridge *__drm_for_each_bridge_in_chain_next(struct drm_
+ DEFINE_FREE(__drm_for_each_bridge_in_chain_cleanup, struct drm_bridge *,
+ 	if (_T) { mutex_unlock(&_T->encoder->bridge_chain_mutex); drm_bridge_put(_T); })
+ 
+-/* Internal to drm_for_each_bridge_in_chain_scoped() */
++/* Internal to drm_for_each_bridge_in_chain() */
+ static inline struct drm_bridge *
+-__drm_for_each_bridge_in_chain_scoped_start(struct drm_encoder *encoder)
++__drm_for_each_bridge_in_chain_start(struct drm_encoder *encoder)
+ {
+ 	mutex_lock(&encoder->bridge_chain_mutex);
+ 
+@@ -1489,8 +1489,7 @@ __drm_for_each_bridge_in_chain_scoped_start(struct drm_encoder *encoder)
+ }
+ 
+ /**
+- * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
+- *                                       to an encoder
++ * drm_for_each_bridge_in_chain - iterate over all bridges attached to an encoder
+  * @encoder: the encoder to iterate bridges on
+  * @bridge: a bridge pointer updated to point to the current bridge at each
+  *	    iteration
+@@ -1500,9 +1499,9 @@ __drm_for_each_bridge_in_chain_scoped_start(struct drm_encoder *encoder)
+  * Automatically gets/puts the bridge reference while iterating and locks
+  * the encoder chain mutex to prevent chain modifications while iterating.
+  */
+-#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)				\
++#define drm_for_each_bridge_in_chain(encoder, bridge)					\
+ 	for (struct drm_bridge *bridge __free(__drm_for_each_bridge_in_chain_cleanup) =	\
+-		__drm_for_each_bridge_in_chain_scoped_start((encoder));			\
++		__drm_for_each_bridge_in_chain_start((encoder));			\
+ 	     bridge;									\
+ 	     bridge = __drm_for_each_bridge_in_chain_next(bridge))			\
+ 
 
-Right now I have
+---
+base-commit: 377939b713ca89de92573e3f3662b805fecc95d5
+change-id: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
 
-5bd54760fba1 [SUBMITTED 20260622] drm/amd/display: kunit: move dc_link objects off stack
-262678481abf [SUBMITTED 20260618] usb: ucsi: huawei_gaokun: move typec_altmode off stack
-2cb955c0b224 [SUBMITTED 20260618] media: v4l2-tpg: reduce stack usage for kasan builds
-dfdc80171d8d [SUBMITTED 20260612] mlx5: avoid frame overflow warning
-e252ac86b090 [SUBMITTED 20260611] drm/amd/display: avoid large stack allocation in 
-97582da9074d [SUBMITTED 20260611] [wireless-next] wifi: mac80211: allocate backup ieee80211_nan_sched_cfg off stack
-2f707af98b86 [SUBMITTED 20260611] mm/damon/core: reduce kernel stack usage
-9fe35d5f1de6 [SUBMITTED 20260526] zstd: reducing inlining for KASAN_STACK
-82daa7698bbe [SUBMITTED 20260520] fat: avoid stack overflow warning
-dd7d4b16c1d0 [SUBMITTED 20260515] bpf: test_run: reduce kernel stack usage
-75b3f86afb91 [SUBMITTED 20260515] irqchip/ast2700-intc: reduce stack usage in kunit tests
-c5d5e99dfe31 [SUBMITTED 20250620] perf/arm-cmn: reduce stack usage in arm_cmn_probe()
-80587b5964a1 [SUBMITTED 20250620] coredump: reduce stack usage in vfs_coredump()
-89e40670333d [SUBMITTED 20250620] lib/tests: split randstruct initializer tests
-723381a3739f [SUBMITTED 20250620] binfmt_elf: reduce stackusage in kunit test
-9f7e36aa0b81 [SUBMITTED 20250620] [RFC] net/mlx5: don't build with CONFIG_CPUMASK_OFFSTACK
-7a5ea46be400 [SUBMITTED 20250620] coresight: fix building with CONFIG_CPUMASK_OFFSTACK
-40398f198b2b [SUBMITTED 20250610] drm/radeon: reduce stack frame size for radeon_cs_ioctl
-b52879e6b419 [SUBMITTED 20250221] ntb: reduce stack usage in idt_scan_mws
+Best regards,
+--  
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-and some patches that I have never sent so far. This is clearly an
-uphill battle, but kernel stack overflows are a real and build testing
-with a reasonably small limit is only one line of defense against these.
-
-     Arnd
