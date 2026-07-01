@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9E536C0AB
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1F136BCC0
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878098; cv=none; b=kZEmq9iSCRckJRSGpXwTnPad4NJuKx42M4waNDcm02Yb+unWvuZ4AWdvu7H6RtVAohZReVx7rY4iCQF/aJmCNW0SDxf8tDp13NuJD/evRVDGrFvJVFxH85eNvg3Lsu8IWmX3r9v7PprCE8WmI+RYGGtTo5Z0U8h631E0WwyTDeA=
+	t=1782878098; cv=none; b=FjvPdqB9VNvO8ZXNKWGMsgcBojqO/1/5FJDpQReF/M+1TLQkUHnvrz6SFHGQ1D8Tk5DSZ5ms4iddxgWxr0bwDniIYyB8RboQ+Om/BnsTcP3QRUGZpkKRxgtDCP1jsNIASM5Vkw7WC605xfKVEHJdpCN+NhmBAZA/c9yFFvW4DTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782878098; c=relaxed/simple;
-	bh=JjH5p8pGbrHjHBxzf/IowxQWNFOae1tY1vCyJtis+9E=;
+	bh=t5yQ/MUBnZ3uxj+UmQyRpJStf1mMklbsiACDlinDIYk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fWOhstRd/rT6V2N4b/0vELhjiPMtJrnOWfX49oaCncNS5iXqwFQVt0oHhxGwuMK+i8ZtgbQz+xvcoFP1SSWSXxStwCaFcifscCjW7JpNg7G86hK8cg64EWw6TlKaPMqSUTaYO1ZB6zyXgSgSokq6JPAe5KbaPUjGckoCX5/z3Qg=
+	 MIME-Version; b=p0ikw7Fc9IEAVSezVxUvfiyYkx4e06ZOfKWtTEgoYVflnkqd67gfFMEf5eyfa6NWNSj3+VzhbVcjHOkX+3s9imMurfAVNQvzt/nQYL1ySqOv1L7wQFMAdmZX79RA9fYwxJVl7vETrih7jqI1M1Wo2FXQ/kRiBCnvzexUw7d+Mc0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNr6DyfzKHMTF
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:36 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNs1r4HzKHMRZ
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:37 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id E814940AE3
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:45 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 52CED40B0F
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:46 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S13;
-	Wed, 01 Jul 2026 11:54:45 +0800 (CST)
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S17;
+	Wed, 01 Jul 2026 11:54:46 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 11/21] perf auxtrace: Set default period to 1 for PERF_ITRACE_PERIOD_INSTRUCTIONS type
-Date: Wed,  1 Jul 2026 03:53:45 +0000
-Message-Id: <20260701035355.752944-12-wutengda@huaweicloud.com>
+Subject: [PATCH v3 15/21] perf annotate-arm64: Support store instruction tracking
+Date: Wed,  1 Jul 2026 03:53:49 +0000
+Message-Id: <20260701035355.752944-16-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 References: <20260701035355.752944-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S13
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7tF1UGF4fWFyftF47Jwb_yoW5Xrykpr
-	n8t34fJr4kJry8Kw1xAr4UuFyfJw4YyF13GryxAryYy342gr18Jry7tr1Y9r4xWr1Ykr9r
-	Zr90g34UGr17JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S17
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFy7Jr45Zw1ruF48KF1rZwb_yoW8Zw4Upa
+	yqk34rKr42qrsYqrnxZF47Wr9xua1fJw4Ykry3AwsIyF42yrn3tFZ5KF42kFWrJrZxCw1U
+	Zw1DKr4DZ3yIkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -77,76 +77,53 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7tF1UGF4fWFyftF47Jwb_yoW5Xrykpr
 	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-When using --itrace=M for data type profiling on arm64, the 'Percent'
-values in perf annotate output are all zero:
+Extend update_insn_state() for arm64 to handle store (STR) instructions.
 
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Percent     offset       size  field
-    0.00          0       0x10  struct mmu_gather_batch  {
-    0.00          0        0x8      struct mmu_gather_batch*    next;
-    0.00        0x8        0x4      unsigned int        nr;
-    0.00        0xc        0x4      unsigned int        max;
-    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
+Unlike load instructions, store operations do not change the data type
+of the registers involved. However, arm64 store instructions sometimes
+use pre-index or post-index addressing modes (e.g., str x1, [x0, #8]!),
+which modify the base register as a side effect of the memory access.
 
-However, adding the -n option reveals non-zero sample counts:
-
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Samples     offset       size  field
-      15          0       0x10  struct mmu_gather_batch  {
-      13          0        0x8      struct mmu_gather_batch*    next;
-       2        0x8        0x4      unsigned int        nr;
-       0        0xc        0x4      unsigned int        max;
-       0       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
-
-The root cause is that when period is not explicitly specified in the
---itrace option, it remains zero after itrace_do_parse_synth_opts().
-The zero period then flows through annotated_data_type__update_samples()
-where h->period accumulates to zero, and print_annotated_data_type_value()
-calculates the 'Percent' as zero.
-
-In itrace_do_parse_synth_opts(), non-'iy' options have their period
-type set to PERF_ITRACE_PERIOD_INSTRUCTIONS, but period remains zero.
-Since a zero period is meaningless for this type, default to 1 (one
-sample per instruction).
-
-With this fix applied, the result is as follows:
-
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Percent     offset       size  field
-  100.00          0       0x10  struct mmu_gather_batch  {
-   86.67          0        0x8      struct mmu_gather_batch*    next;
-   13.33        0x8        0x4      unsigned int        nr;
-    0.00        0xc        0x4      unsigned int        max;
-    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
+Call adjust_reg_index_state() for store instructions to ensure the
+base register's offset is correctly updated in the type state. This
+maintains synchronization between the hardware register state and the
+instruction tracker's model during sequential memory operations.
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/auxtrace.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ tools/perf/util/annotate-arch/annotate-arm64.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
-index 0b851f32e98c..415b68a2bba9 100644
---- a/tools/perf/util/auxtrace.c
-+++ b/tools/perf/util/auxtrace.c
-@@ -1759,6 +1759,12 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
- 			synth_opts->period = PERF_ITRACE_DEFAULT_PERIOD;
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index b48545f35620..f283596bb058 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -430,7 +430,7 @@ static void update_insn_state_arm64(struct type_state *state,
+ 	 * the destination register itself to prevent incorrect type propagation.
+ 	 */
+ 	if (has_reg_type(state, dst->reg1) &&
+-	    strncmp(dl->ins.name, "ld", 2)) {
++	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
+ 		pr_debug_dtp("%s [%x] invalidate reg%d\n",
+ 			     dl->ins.name, insn_offset, dst->reg1);
+ 		invalidate_reg_state(&state->regs[dst->reg1]);
+@@ -442,6 +442,16 @@ static void update_insn_state_arm64(struct type_state *state,
+ 		update_load_insn_state(state, dl, src, dst);
+ 		return;
  	}
- 
-+	if (!period_set &&
-+	    synth_opts->period_type == PERF_ITRACE_PERIOD_INSTRUCTIONS) {
-+		/* Indicates a sample is taken for every instruction. */
-+		synth_opts->period = 1;
-+	}
 +
- 	return 0;
++	/* Register to memory transfers */
++	if (!strncmp(dl->ins.name, "st", 2)) {
++		/*
++		 * Store instructions do not change the register type,
++		 * but the base register must be updated for pre/post-index
++		 * modes.
++		 */
++		adjust_reg_index_state(state, dst, "str", insn_offset);
++	}
+ }
+ #endif
  
- out_err:
 -- 
 2.34.1
 
