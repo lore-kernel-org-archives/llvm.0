@@ -1,286 +1,177 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94FC3537C8
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6F436C9C1;
+	Wed,  1 Jul 2026 03:57:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878102; cv=none; b=tO7uE9EUMV4eAJZz2SGbJOi/NU17j1BdaAu1FeBj5gxjzButO/TcBYqS+0xfK7CZTUhQxaKGYN+5ooHXh175Ox9zaf5ZN3CpyMesdwIdUKibFa7PVf+fgzob9HkQD0O3rsMDqLVhLaOL4tDF3m9n4C4T+k1dEynXu1iSnYMepXo=
+	t=1782878249; cv=none; b=hhK31cT1QqqUJD/pWZbNn/ZpBq7+SCu5IU+8uOzIOhn3e7Mi0Cmou8SfIo6aAWXkUYwPVml8oAMgCWO6m0kTsmlbBEUJbLXgolsyg8dLTu/y34OI9TACPRW7iypVa8qdGxlXyxu9IycN0D1aGwBKRaOJ/CkuLRqWKNNmXrfKtus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878102; c=relaxed/simple;
-	bh=yLqobnLvOwlmio6Rns+JxmiItbufiWBxmekTU2edxJc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=c7MFIr6IOk6Z8qf2ClPc5pgZzks0HmvyRi6ZpJMNXaJi9fK7q73h6Liiv5UR9JVpzeJy//8INtLF9Lku7B5SauAAxBWGS15hYgszMu7jPRUMyAlxj9mMPZyAiTLtyC1CUDyi2jVPcSl5KN1iN1UHZO5LlNG67ViIAinSWulmlAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNs5HWQzKHMYZ
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:37 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id C9D504075D
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:46 +0800 (CST)
-Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S22;
-	Wed, 01 Jul 2026 11:54:46 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Namhyung Kim <namhyung@kernel.org>,
-	james.clark@linaro.org,
-	xueshuai@linux.alibaba.com,
-	Li Huafei <lihuafei1@huawei.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	leo.yan@linux.dev,
-	Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 20/21] perf annotate-arm64: Support per-cpu variable access tracking
-Date: Wed,  1 Jul 2026 03:53:54 +0000
-Message-Id: <20260701035355.752944-21-wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
-References: <20260701035355.752944-1-wutengda@huaweicloud.com>
+	s=arc-20240116; t=1782878249; c=relaxed/simple;
+	bh=/lzxTNKosvsOjwkCLRbwluY6JPtABAogVZ41dpyiXZQ=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=fmhxN+h1vrLIVdcm5WtdYMEeH3O4BZ/5Q1psobN8tHn2C1dmUkBh5mHHbg7rTeuTi0XXM1PamJs97CQ7HZjYy6d3yBc86uADOAcMyD8voEAi/wISOOauHzvhn2YJEK9isqfHq3e3cncvLSdpJ24GqjCDuN98tbzGNAVoTJajVCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lojNiOfV; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lojNiOfV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782878246; x=1814414246;
+  h=date:from:to:cc:subject:message-id;
+  bh=/lzxTNKosvsOjwkCLRbwluY6JPtABAogVZ41dpyiXZQ=;
+  b=lojNiOfV0Pd1fe9GFsObXpt508jmRTTysz+ezBWWdx1Ik/RAe32updZK
+   x1M+xfgVJkJv7RLYt0vRmoNS8/zhC/Nsye2dowrGyz0lKvyP0G+S5QZYW
+   AJbA15ZK2GlPfDE5pIQTJcRt1ch9XA1F1lerxuFfzjookU9w66AC3sHBU
+   jXfRuLmCootNHQShsSZrSZq1qXtAwxkA5spBiX55eEseiSCxOGjS87wbL
+   vCm+Aw/v9mksxTUTS/vjoLb4n3LGFSS/fMN8sZiLtsgX+mbOQLQmb0IQm
+   dvmCHKDg8iO4LYd9MFMhrBfpl4n86sl0rr7yxcX6okACmiBPwWiGoZkkY
+   g==;
+X-CSE-ConnectionGUID: VuYTD3VKSJ6wOHaC0EqqrA==
+X-CSE-MsgGUID: wzhJGyTdQuKiuLF2O54F7w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="82588756"
+X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
+   d="scan'208";a="82588756"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2026 20:57:26 -0700
+X-CSE-ConnectionGUID: eJLz2smGS8eGUZSyyejiyw==
+X-CSE-MsgGUID: B01e4BkoS4CLLBxGB6Nsxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
+   d="scan'208";a="249077450"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 30 Jun 2026 20:57:23 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wem4a-000000008ul-1Jpt;
+	Wed, 01 Jul 2026 03:57:18 +0000
+Date: Wed, 01 Jul 2026 11:56:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@do-not-panic.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mcgrof:blk-iobuf-pool-v2 8/13] block/blk-map.c:742:1:
+ warning: unused label 'next'
+Message-ID: <202607011106.ZWLZT9or-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S22
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xr15KrWDAF4kuw1kJFW8WFg_yoWxKr1kp3
-	s5Kry5W34ktrs7WwsaqFW7XFyF9393Gas2k345Zw1ayryIkr1DGa92kryYvFWUGF93Aw17
-	trs8Kw47XrsFkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUH0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-	WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-	bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7
-	CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5MxAI
-	w28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
-	4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxG
-	rwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-	1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
-	6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sRNg4S3UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state() for arm64 to handle per-cpu variable
-addressing.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git blk-iobuf-pool-v2
+head:   da75cc2253180af718ba0b7b3684a091b16b14fb
+commit: b88f2bfe111b8778c8bba9e0309c653966171bdd [8/13] block: bounce passthrough bios through iobuf pool folios
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260701/202607011106.ZWLZT9or-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260701/202607011106.ZWLZT9or-lkp@intel.com/reproduce)
 
-On arm64, per-cpu variables are accessed by adding a per-cpu offset
-(typically from the '__per_cpu_offset' array) to the address of a global
-variable or a local variable with '__percpu' modifier(e.g.,
-'s32 __percpu *counters' in struct percpu_counter). This results in
-instruction patterns like:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607011106.ZWLZT9or-lkp@intel.com/
 
-  ldr   x0, [x6, x5]   // Pattern A: direct load per-cpu instance
-  add   x0, x6, x5     // Pattern B: compute per-cpu address
+All warnings (new ones prefixed by >>):
 
-where x6 holds the per-cpu offset retrieved from:
+>> block/blk-map.c:742:1: warning: unused label 'next' [-Wunused-label]
+     742 | next:
+         | ^~~~~
+   block/blk-map.c:823:25: warning: unused variable 'bmd' [-Wunused-variable]
+     823 |                         struct bio_map_data *bmd = bio->bi_private;
+         |                                              ^~~
+   2 warnings generated.
 
-  adrp  x4, <page>
-  add   x4, x4, #offset          // x4 = &__per_cpu_offset
-  ldr   x6, [x4, w0, sxtw #3]    // x6 = __per_cpu_offset[cpu]
 
-and x5 is one of the following:
+vim +/next +742 block/blk-map.c
 
-  case 1: global variable
-    adrp  x5, <page>
-    add   x5, x5, #offset        // x5 = &global_var
+   670	
+   671	/**
+   672	 * blk_rq_map_user_iov - map user data to a request, for passthrough requests
+   673	 * @q:		request queue where request should be inserted
+   674	 * @rq:		request to map data to
+   675	 * @map_data:   pointer to the rq_map_data holding pages (if necessary)
+   676	 * @iter:	iovec iterator
+   677	 * @gfp_mask:	memory allocation flags
+   678	 *
+   679	 * Description:
+   680	 *    Data will be mapped directly for zero copy I/O, if possible. Otherwise
+   681	 *    a kernel bounce buffer is used.
+   682	 *
+   683	 *    A matching blk_rq_unmap_user() must be issued at the end of I/O, while
+   684	 *    still in process context.
+   685	 */
+   686	int blk_rq_map_user_iov(struct request_queue *q, struct request *rq,
+   687				struct rq_map_data *map_data,
+   688				const struct iov_iter *iter, gfp_t gfp_mask)
+   689	{
+   690		bool copy = false, map_bvec = false;
+   691		unsigned long align = blk_lim_dma_alignment_and_pad(&q->limits);
+   692		struct bio *bio = NULL;
+   693		struct iov_iter i;
+   694		int ret = -EINVAL;
+   695	
+   696		if (map_data)
+   697			copy = true;
+   698		else if (iov_iter_alignment(iter) & align)
+   699			copy = true;
+   700		else if (iov_iter_is_bvec(iter))
+   701			map_bvec = true;
+   702		else if (!user_backed_iter(iter))
+   703			copy = true;
+   704		else if (queue_virt_boundary(q))
+   705			copy = queue_virt_boundary(q) & iov_iter_gap_alignment(iter);
+   706	
+   707		if (map_bvec) {
+   708			ret = blk_rq_map_user_bvec(rq, iter);
+   709			if (!ret)
+   710				return 0;
+   711			if (ret != -EREMOTEIO)
+   712				goto fail;
+   713			/* fall back to copying the data on limits mismatches */
+   714			copy = true;
+   715		}
+   716	
+   717		i = *iter;
+   718		do {
+   719			/*
+   720			 * Try iobuf pool bounce first when copy is needed and the pool
+   721			 * can provide aligned folios for this request.
+   722			 */
+   723	#ifdef CONFIG_BLK_IOBUF_POOL
+   724			if (copy && !map_data && blk_rq_iobuf_eligible(q, &i, gfp_mask)) {
+   725				ret = bio_copy_user_iov_iobuf(rq, &i, gfp_mask);
+   726				if (!ret)
+   727					goto next;
+   728				if (ret != -EREMOTEIO)
+   729					goto unmap_rq;
+   730				/* not eligible after all; fall through to standard copy */
+   731			}
+   732	#endif
+   733			if (copy)
+   734				ret = bio_copy_user_iov(rq, map_data, &i, gfp_mask);
+   735			else
+   736				ret = bio_map_user_iov(rq, &i, gfp_mask);
+   737			if (ret) {
+   738				if (ret == -EREMOTEIO)
+   739					ret = -EINVAL;
+   740				goto unmap_rq;
+   741			}
+ > 742	next:
+   743			if (!bio)
+   744				bio = rq->bio;
+   745		} while (iov_iter_count(&i));
+   746	
+   747		return 0;
+   748	
+   749	unmap_rq:
+   750		blk_rq_unmap_user(bio);
+   751	fail:
+   752		rq->bio = NULL;
+   753		return ret;
+   754	}
+   755	EXPORT_SYMBOL(blk_rq_map_user_iov);
+   756	
 
-  case 2: local variable with '__percpu' modifier
-    ldr   x1, [x25, #32]         // x1 = local_percpu_ptr
-
-To handle such cases:
-
-1. Identify per-cpu base initialization: Detect 'adrp+add' pairs that
-   resolve to the '__per_cpu_offset' symbol and mark the destination
-   register as TSR_KIND_PERCPU_BASE.
-2. Propagate type information: During subsequent 'ldr' or 'add'
-   instructions, if one register is TSR_KIND_PERCPU_BASE, attempt to
-   resolve the type from the other register.
-
-A real-world example is shown below:
-
-  ffff8000808f2d28 <cppc_set_perf>:
-  ffff8000808f2d38:  adrp  x2, ffff800082033000
-  ffff8000808f2d3c:  add   x5, x2, #0x3f8         // x5 = &__per_cpu_offset
-  ffff8000808f2d44:  adrp  x2, ffff800081f73000
-  ffff8000808f2d48:  add   x2, x2, #0x6b8         // x2 = &cpu_pcc_subspace_idx
-  ffff8000808f2d6c:  ldr   x5, [x5, w0, sxtw #3]  // x5 = __per_cpu_offset[cpu]
-* ffff8000808f2d80:  ldr   w23, [x5, x2]          // per_cpu(cpu_pcc_subspace_idx, cpu)
-
-Before this commit, the tracker could not link x5 back to a per-cpu
-context, resulting in an incorrect data type resolution:
-
-  adrp [10] global addr=0xffff800082033000 -> reg2
-  add [14] global 0x3f8(reg2) -> reg5
-  adrp [1c] global addr=0xffff800081f73000 -> reg2
-  add [20] global 0x6b8(reg2) -> reg2
-  ldr [44] global (reg5, reg0) -> reg5 type='long unsigned int[]' size=0x1000
-  chk [58] reg5 offset=0 ok=1 kind=1 (long unsigned int[]) : Good!
-  found by insn track: 0(reg5, reg2) type-offset=0
-  final result:  type='long unsigned int' size=0x8
-
-After this commit, the tracker correctly identifies the per-cpu flow and
-resolves the actual variable type:
-
-  ldr [44] global (reg5, reg0) -> reg5 percpu base
-  chk [58] reg5 offset=0 ok=1 kind=2 percpu var : retry
-  chk [58] reg2 offset=0 ok=1 kind=7 global addr : Good!
-  found by insn track: 0(reg5, reg2) type-offset=0
-  final result:  type='int' size=0x4
-
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
----
- .../perf/util/annotate-arch/annotate-arm64.c  | 60 ++++++++++++++++++-
- tools/perf/util/annotate-data.c               | 24 +++++++-
- 2 files changed, 82 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 6f96e75d313d..ec6fd59d51a2 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -462,6 +462,15 @@ static void update_load_insn_state(struct type_state *state,
- 		u64 ip = dloc->ms->sym->start + dl->al.offset;
- 		u64 addr = src_tsr.addr + reg_offset;
- 		int offset;
-+		u8 kind;
-+		const char *var_name = NULL;
-+
-+		/* it might be per-cpu offset */
-+		if (get_global_var_info(dloc, addr, &var_name, &offset) &&
-+		    !strcmp(var_name, "__per_cpu_offset"))
-+			kind = TSR_KIND_PERCPU_BASE;
-+		else
-+			kind = TSR_KIND_TYPE;
- 
- 		if (!get_global_var_type(cu_die, dloc, ip, addr, &offset, &type_die) ||
- 		    !die_get_member_type(&type_die, offset, &type_die)) {
-@@ -470,7 +479,7 @@ static void update_load_insn_state(struct type_state *state,
- 		}
- 
- 		tsr->type = type_die;
--		tsr->kind = TSR_KIND_TYPE;
-+		tsr->kind = kind;
- 		tsr->offset = 0;
- 		tsr->addr = 0;
- 		tsr->ok = true;
-@@ -484,6 +493,28 @@ static void update_load_insn_state(struct type_state *state,
- 		}
- 		pr_debug_type_name(&tsr->type, tsr->kind);
- 	}
-+	/* Or check if it's a per-cpu access */
-+	else if (src_tsr.kind == TSR_KIND_PERCPU_BASE) {
-+		int reg2;
-+
-+		if (!src->multi_regs || src->reg1 == src->reg2 ||
-+		    sreg == src->reg2 /* retried */) {
-+			invalidate_reg_state(tsr);
-+			goto out_adjust;
-+		}
-+
-+		reg2 = src->reg2;
-+		if (!has_reg_type(state, reg2) || !state->regs[reg2].ok ||
-+		    (state->regs[reg2].kind != TSR_KIND_GLOBAL_ADDR &&
-+		     state->regs[reg2].kind != TSR_KIND_TYPE)) {
-+			invalidate_reg_state(tsr);
-+			goto out_adjust;
-+		} else {
-+			/* Treat percpu as array: resolve type from reg2 */
-+			sreg = src->reg2;
-+			goto retry;
-+		}
-+	}
- 	/* Or try another register if any */
- 	else if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2) {
- 		sreg = src->reg2;
-@@ -693,6 +724,33 @@ static void update_add_insn_state(struct type_state *state,
- 		pr_debug_dtp("add [%x] global %#x(reg%d) -> reg%d\n",
- 			     insn_offset, reg_offset, sreg, dreg);
- 	}
-+	/* Handle per-cpu base address calculation for per-cpu variables */
-+	else if (src_tsr.kind == TSR_KIND_PERCPU_BASE) {
-+		/*
-+		 * A per-cpu base acts like an array index. Adding it to
-+		 * a global variable or typed register should preserve
-+		 * the original variable's type. Inherit the type from
-+		 * the typed register.
-+		 */
-+		if (!src->multi_regs || !has_reg_type(state, src->reg2) ||
-+		    !state->regs[src->reg2].ok ||
-+		    (state->regs[src->reg2].kind != TSR_KIND_GLOBAL_ADDR &&
-+		     state->regs[src->reg2].kind != TSR_KIND_TYPE)) {
-+			invalidate_reg_state(tsr);
-+			return;
-+		}
-+
-+		tsr->type = state->regs[src->reg2].type;
-+		tsr->kind = state->regs[src->reg2].kind;
-+		tsr->offset = state->regs[src->reg2].offset;
-+		tsr->addr = state->regs[src->reg2].addr;
-+		tsr->ok = state->regs[src->reg2].ok;
-+
-+		pr_debug_dtp("add [%x] percpu (reg%d) -> reg%d",
-+			     insn_offset, sreg, dreg);
-+		pr_debug_type_name(&tsr->type, tsr->kind);
-+		return;
-+	}
- 	/* Or try another register if any */
- 	else if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2) {
- 		sreg = src->reg2;
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 6fa5cd373a46..b0bf0437168b 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -1252,11 +1252,33 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 	}
- 
- 	if (state->regs[reg].kind == TSR_KIND_PERCPU_BASE) {
--		u64 var_addr = dloc->op->offset;
-+		u64 var_addr;
- 		int var_offset;
- 
- 		pr_debug_dtp("percpu var");
- 
-+		if (arch__is_arm64(dloc->arch)) {
-+			int reg2;
-+
-+			if (!dloc->op->multi_regs ||
-+			    dloc->op->reg1 == dloc->op->reg2 || !retry)
-+				return PERF_TMR_BAIL_OUT;
-+
-+			reg2 = dloc->op->reg2;
-+			if (!has_reg_type(state, reg2) ||
-+			    !state->regs[reg2].ok ||
-+			    (state->regs[reg2].kind != TSR_KIND_GLOBAL_ADDR &&
-+			     state->regs[reg2].kind != TSR_KIND_TYPE))
-+				return PERF_TMR_NO_TYPE;
-+
-+			pr_debug_dtp(" : retry\n");
-+			retry = false;
-+			reg = reg2;
-+			goto again;
-+		}
-+
-+		var_addr = dloc->op->offset;
-+
- 		if (dloc->op->multi_regs) {
- 			int reg2 = dloc->op->reg2;
- 
--- 
-2.34.1
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
