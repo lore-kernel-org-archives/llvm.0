@@ -1,162 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CA5D38E8B6;
-	Wed,  1 Jul 2026 04:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CEB376A11
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 04:21:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878932; cv=none; b=WPThOtYbv1znvilD6r95DAVbUtV2QiBNRshLDuO11JxIga2lhDMU1l21Uti4WqYpf/WohbBOPkGSv/9sZD5Y3BEULSuzkxUgR3iz2d7KocSpQgLq1496aBydQBNcNQVgWy0PbR3VyZqV5CARHBvhwzrf7B9e/oFEOfAfxlQohz0=
+	t=1782879674; cv=none; b=VYWm4zaAgTwmU7akfEl/oB0cvtpL6KjB0LVWCX24EN9lIL26fHcC6AILAXkrdq8maSU0up77DGwHgfHxfJyeh5abvMQ72RDZu5lXoTZfOvIIvtYe7mp7LlZeqOONeJO8L3L0Ey3gD+jvi2cZCwvmA3DAVcE00EIvlHyGmnllDCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878932; c=relaxed/simple;
-	bh=7jWzZWj+b1Tr2UI88xUKvKif9s38pe0Xf5Kmod+a2VI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=gHNVbZty0LK5Dyn821Y8kShk4yu30Sz12vV6qOabVV8gl4gbjJdByJAYiuRzrXL7/I7xJZ7eXH53R7cpDnueq8mSRMSVQrlWYWc3FgWpIcrgkIdhPijlJyhFA2wN2IuRJhLzsjU0uJ6Pnwz9BtB4olscT3Yd8//1oaXPjvzKxPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CN5mUPIB; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782879674; c=relaxed/simple;
+	bh=ndidOr7I8IHgvxf1AeP1Ck+0PatfZjEXy4LWSt++W30=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=aWV/a+INeC/cnWrypQEULdFHrH/RlRuU4J1DmHKCKJz9qS+CE0qP4qda2sR1mkPMZHHnyV76zO14aRE6Kkx0MAnjvmdM9QY792HRP4tviVwr8L9uyiwCUfgq4HjHyhzr/33XNYOm+jZbn5XVki7X5kPpHQ7hLSDuFC2SuieiImY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=kmFLyz7u; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CN5mUPIB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782878924; x=1814414924;
-  h=date:from:to:cc:subject:message-id;
-  bh=7jWzZWj+b1Tr2UI88xUKvKif9s38pe0Xf5Kmod+a2VI=;
-  b=CN5mUPIBBY//89+3B2SjnYiV5KdSsW/DQ2ZZOiquE5V+8JHVgHhfbGa/
-   4yGH5YCLdtWjVhZvg8hQHd2BGOu744vcU4SVrQ3zbFT/GZGgnKxauV7mL
-   vzCnwfdwBtKVezHv7fntajyXSI2FCRD2t7YEU7WPWPiqAyqZF89x6GT12
-   JKclt8HOk9nDPro1w2+wS8Cm6NbJwmnV9Q3wizVoyEvA24ET5PbiXDQV4
-   pieWjG7wAiEROWw/A9+7t67SidXg555uo1yGqnchOZ2UhLUU06KQcJhi3
-   p3sOz127gCTakpDXCvULZbnNq47o+gMJEJc0duTmKz9VAucv9D6H86j7T
-   w==;
-X-CSE-ConnectionGUID: g90V7C7NTbitSYB1j8Njgw==
-X-CSE-MsgGUID: V+99mZD7TyOVXJU+I6vF7w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="83687621"
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="83687621"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2026 21:08:43 -0700
-X-CSE-ConnectionGUID: XZmxWjGmRv202ECaQksqyg==
-X-CSE-MsgGUID: ccSgxX9QQnGCggujYZjo/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
-   d="scan'208";a="248466788"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 30 Jun 2026 21:08:40 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wemFV-000000008vv-1Wdr;
-	Wed, 01 Jul 2026 04:08:34 +0000
-Date: Wed, 01 Jul 2026 12:08:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ben Levinsky <ben.levinsky@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mathieu Poirier <mathieu.poirier@linaro.org>
-Subject: [linux-next:master 1631/2307]
- drivers/remoteproc/remoteproc_internal.h:131:7: error: call to undeclared
- function 'ioremap_prot'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202607011210.PI7XDDb1-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="kmFLyz7u"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2c9f44ddf26so836075ad.3
+        for <llvm@lists.linux.dev>; Tue, 30 Jun 2026 21:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1782879669; x=1783484469; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wIXJacBAyEaKz61QqT13AHUcLwATDSXxJV4uZgWwmww=;
+        b=kmFLyz7uVlcN8sbqWWdoBiuDf0Sje1BMvWG86J7dGfjroIhp2lfAYnOgw1+8S0ZwGZ
+         NthS4/buWofGOqitZvu2mByyDaxkfnbun/o7d6yD9nmjwxvxlu5WYOT/WupjDnhOOLYn
+         GIk/3ukJN/T/DVB2BwhZdB0FIhrowUC0gQTslt6YB0EEukA9dOQ7z3kskdCVX1EPOrvG
+         IczK1EJelaNBI7Mxe68F1yJwNtduTveK7F2tC/LVZz4SXZTQRjLPQZWuV8TGbnt3A653
+         mFcpxfKOC6eCJLyDKyNgdBQhNj7pLtsHoNwufSvP+wbhbU/3rkHTkgBw2pKeKoCQDP6p
+         HjBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782879669; x=1783484469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wIXJacBAyEaKz61QqT13AHUcLwATDSXxJV4uZgWwmww=;
+        b=AAV4wPv95wYhL4JodRv9TSEfH7wdXVamIu9tW4CCTfczZFO+BgsM7V8kosI/+6wgKJ
+         hdsu9wjXQuMSWjF8mVEKtz6HZs/M8jgdmtYgxBB3FphjTCaEIPWCWHutTBDi819MUQgd
+         Jzn9W8pZx/inhDZjWJbCCE9/gytuCxpo/yGtTaI7ngHatp0HyCLabtMj3lJ+Xqsizqoh
+         Bia/qQp6Jsmb4g1ZW+oPoguSxk5bi4s0C+rgK1W2y/+CQvJ1AMfV/0SqL3MqcrJ/ZGHz
+         P1DYjP8xLrxip6n0wv0kCXd2E+ksDgSOMGApSzQBUwEyxu7Yl8QPfU6VuCWeKgJ9p2rm
+         ou0w==
+X-Forwarded-Encrypted: i=1; AHgh+RohUPaFzJBxOby+gA+p55Ccgl4NnPjWFX8Kt3JfucxsE8TOMTgGBfc4ur8DU/YNXF78ceNP@lists.linux.dev
+X-Gm-Message-State: AOJu0Yywf235/Go14bjSuX6TzerhA202fOO+/pgQ0SkMrzXaFvzr12UO
+	X/49s5gcBSSASSjYaga0KP6uuLFvSkpeSP/X+gCI4gUnLCuKxHJQ9l80s121ctuJL9E=
+X-Gm-Gg: AfdE7ckbGK0pr6LC4h3V0ZorzqXE4sM1dysomsrcXy8Vodx8+52VRkN0rRfh3NUi87r
+	mJVGecRkMjgn452kudwIbD7pgsyTJvYgYdbeYwmsShsj1J67vMTkoO3HcjBnNMLlYKVn3MDXaIo
+	SNPNhNhzz/VG340CwOAI4VTeu35kUHfHNretagoCr8mGYfUCoAZH3EG5bLP+9e71mIvAt02G9uA
+	dFBGEJcu7qGbW4YLbRJQGgwS4TVfKRNyufHXYpSQcCfKLMDGbiMUQTz32SOaSaLYtryp6j7+ryp
+	qcOcf3F/iRVNLcZYBSdbjjXP79IMxeJQpoY8td8aNqkuUr1BFS36EmKCHaJxFodkP0TGYe7D1Ll
+	6fWmcmRDg3Sjr9daj78nOt98jawg7FdBQyO+Xs+fiYELKkskqwVzkXD+s4qsfonk0aTW5O5UcS0
+	MNN54seAydtzNycaN5V/ekvhMBQ7MprlXj4yM49XHezH8nbA==
+X-Received: by 2002:a17:902:d54f:b0:2ca:e3f:6a4a with SMTP id d9443c01a7336-2ca7e73b1bfmr1201915ad.21.1782879669155;
+        Tue, 30 Jun 2026 21:21:09 -0700 (PDT)
+Received: from L6YN4KR4K9.bytedance.net ([139.177.225.232])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca37c73a9csm24450865ad.21.2026.06.30.21.20.53
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 30 Jun 2026 21:21:08 -0700 (PDT)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	thuth@redhat.com,
+	ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk,
+	rkrcmar@ventanamicro.com,
+	cuiyunhui@bytedance.com,
+	samuel.holland@sifive.com,
+	zong.li@sifive.com,
+	conor.dooley@microchip.com,
+	tglx@kernel.org,
+	debug@rivosinc.com,
+	seanwascoding@gmail.com,
+	andybnac@gmail.com,
+	menglong8.dong@gmail.com,
+	cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn,
+	atishp@rivosinc.com,
+	apatel@ventanamicro.com,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	arnd@arndb.de,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 0/3] riscv: improve percpu helpers and PIO mapping
+Date: Wed,  1 Jul 2026 12:20:38 +0800
+Message-Id: <cover.1782877663.git.cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   be5c93fa674f0fc3c8f359c2143abce6bbb422e6
-commit: 50227acbf4e5173db0f05ed95414512e7783889f [1631/2307] remoteproc: Add common wc-ioremap carveout callbacks
-config: s390-randconfig-002-20260701 (https://download.01.org/0day-ci/archive/20260701/202607011210.PI7XDDb1-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260701/202607011210.PI7XDDb1-lkp@intel.com/reproduce)
+Changes in v5:
+- Keep the PIO helper fix local to RISC-V: drop the generic
+  HAS_IOPORT_MAP dependency change and the generic ioport_map() change
+  from v4.
+- Add the missing linux/bits.h include for GENMASK and BITS_PER_BYTE.
+- Fix the 8/16-bit LR/SC fallback to mask subword results before writing
+  them back.
+- Use early-clobber constraints in the 8/16-bit add_return LR/SC fallback.
+- Fix this_cpu_and_4/8 to pass the intended operand to RISC-V amoand.
+- Initialize the secondary idle task pcpu_offset before starting the CPU.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607011210.PI7XDDb1-lkp@intel.com/
+Yunhui Cui (3):
+  riscv: io: avoid null-pointer arithmetic in PIO helpers
+  riscv: introduce percpu.h into include/asm
+  riscv: store percpu offset into thread_info
 
-All errors (new ones prefixed by >>):
+ arch/riscv/include/asm/asm.h         |   6 +-
+ arch/riscv/include/asm/io.h          |  26 ++-
+ arch/riscv/include/asm/percpu.h      | 287 +++++++++++++++++++++++++++
+ arch/riscv/include/asm/switch_to.h   |   8 +
+ arch/riscv/include/asm/thread_info.h |   3 +-
+ arch/riscv/kernel/asm-offsets.c      |   1 +
+ arch/riscv/kernel/smpboot.c          |   8 +
+ arch/riscv/net/bpf_jit_comp64.c      |   9 +-
+ 8 files changed, 326 insertions(+), 22 deletions(-)
+ create mode 100644 arch/riscv/include/asm/percpu.h
 
-   In file included from drivers/remoteproc/remoteproc_debugfs.c:25:
->> drivers/remoteproc/remoteproc_internal.h:131:7: error: call to undeclared function 'ioremap_prot'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     131 |         va = ioremap_wc(mem->dma, mem->len);
-         |              ^
-   arch/s390/include/asm/io.h:36:2: note: expanded from macro 'ioremap_wc'
-      36 |         ioremap_prot((addr), (size), pgprot_writecombine(PAGE_KERNEL))
-         |         ^
-   arch/s390/include/asm/io.h:30:22: note: expanded from macro 'ioremap_prot'
-      30 | #define ioremap_prot ioremap_prot
-         |                      ^
-   In file included from drivers/remoteproc/remoteproc_debugfs.c:25:
->> drivers/remoteproc/remoteproc_internal.h:131:5: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-     131 |         va = ioremap_wc(mem->dma, mem->len);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/remoteproc/remoteproc_internal.h:146:2: error: call to undeclared function 'iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     146 |         iounmap((__force __iomem void *)mem->va);
-         |         ^
-   arch/s390/include/asm/io.h:31:17: note: expanded from macro 'iounmap'
-      31 | #define iounmap iounmap
-         |                 ^
-   3 errors generated.
---
-   In file included from drivers/remoteproc/remoteproc_coredump.c:13:
->> drivers/remoteproc/remoteproc_internal.h:131:7: error: call to undeclared function 'ioremap_prot'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     131 |         va = ioremap_wc(mem->dma, mem->len);
-         |              ^
-   arch/s390/include/asm/io.h:36:2: note: expanded from macro 'ioremap_wc'
-      36 |         ioremap_prot((addr), (size), pgprot_writecombine(PAGE_KERNEL))
-         |         ^
-   arch/s390/include/asm/io.h:30:22: note: expanded from macro 'ioremap_prot'
-      30 | #define ioremap_prot ioremap_prot
-         |                      ^
-   In file included from drivers/remoteproc/remoteproc_coredump.c:13:
->> drivers/remoteproc/remoteproc_internal.h:131:5: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-     131 |         va = ioremap_wc(mem->dma, mem->len);
-         |            ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/remoteproc/remoteproc_internal.h:146:2: error: call to undeclared function 'iounmap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     146 |         iounmap((__force __iomem void *)mem->va);
-         |         ^
-   arch/s390/include/asm/io.h:31:17: note: expanded from macro 'iounmap'
-      31 | #define iounmap iounmap
-         |                 ^
-   drivers/remoteproc/remoteproc_internal.h:146:2: note: did you mean 'vunmap'?
-   arch/s390/include/asm/io.h:31:17: note: expanded from macro 'iounmap'
-      31 | #define iounmap iounmap
-         |                 ^
-   include/linux/vmalloc.h:220:13: note: 'vunmap' declared here
-     220 | extern void vunmap(const void *addr);
-         |             ^
-   3 errors generated.
+-- 
+2.39.5
 
-
-vim +/ioremap_prot +131 drivers/remoteproc/remoteproc_internal.h
-
-   125	
-   126	static inline int rproc_mem_entry_ioremap_wc(struct rproc *rproc,
-   127						     struct rproc_mem_entry *mem)
-   128	{
-   129		void __iomem *va;
-   130	
- > 131		va = ioremap_wc(mem->dma, mem->len);
-   132		if (!va) {
-   133			dev_err(&rproc->dev, "Unable to map memory region: %pa+%zx\n",
-   134				&mem->dma, mem->len);
-   135			return -ENOMEM;
-   136		}
-   137	
-   138		mem->va = (__force void *)va;
-   139	
-   140		return 0;
-   141	}
-   142	
-   143	static inline int rproc_mem_entry_iounmap(struct rproc *rproc,
-   144						  struct rproc_mem_entry *mem)
-   145	{
- > 146		iounmap((__force __iomem void *)mem->va);
-   147	
-   148		return 0;
-   149	}
-   150	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
