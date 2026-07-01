@@ -1,140 +1,167 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6095948C3E4
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 12:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51AB7441020
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 12:51:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782909666; cv=none; b=QMoJAKYEVa8+BvNyqM54zcGICS+TFfZrRTgwxhkbxcNBli1hkBwaqL19oNoz3/M4jkNTErEis6ZS3+r0pE9S3HGGpBuYqnrZzF0MymiFA/geqCeBoCwY/njKKxug7CM+vYqvs1vC/q/AFHPuVFXwk81oapJUru0Bj4uHo5Korgg=
+	t=1782910317; cv=none; b=Me/qc7r2aDKRQmhWR45myLo5m6eKAoCVhG3pmXZ7UdDzUUDDkj2pp7vEHtxTHI3Xgs4Cd80zj+8EYe9b3q3hgXNd9xnaax9KE7vxRuEQsO/kFeAtQwqdi/rblVL72lDsheW/TN+tOS+xEJQQCdDQ+jeO65ZTPpggKbQK1snUO7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782909666; c=relaxed/simple;
-	bh=vgTU6IpqehS35f26r2q57NqAGrF/RDXF3lubDqCB+Bg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PZq9pTvw70WCQTad25xMR6e+hGBr1BTyc1u8GZIXF39qCw19Nd25E5spHeQzgSOUxvkzh/Gow+gNfY7RKStQKl1OBFy7plmuf0xqRRHWOWqhRNZ2BYhPfrsimjK81P2Sc/In9kQ7eSkcbQxblpbBQ2X1CQ28XxZ7XQlepnhnuFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=QrozMMnS; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+	s=arc-20240116; t=1782910317; c=relaxed/simple;
+	bh=uGPFCFx1FqW9VMNus2a7Thw1P9za6fs0Y7aQfT5w4n8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FH18sl0LJgfH3xiwWh7TXH72Hvw++2KI5Wx3QRRavK4qGLp7isuT96/BqgUpf4yp+hAKW+9cbOmneflOYrDFbhR05XRUudfgC+SEk4rbJIStv5qYWuQdveqpJOZVf7PDx8uXmJTTHExkYPFKvdit6GJvzZhfH/DeLA6MwLOrFPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N3zjwKNN; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="QrozMMnS"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4763b0c1dcdso723884f8f.2
-        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 05:41:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N3zjwKNN"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4745492ed3aso370340f8f.1
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 05:51:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre.com; s=google; t=1782909663; x=1783514463; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=r7ceLvJFGDWzpb591woUgz7GBOYPJ1IlL6PiiR38W78=;
-        b=QrozMMnS6gy1mTjfJS+pUmuOQ0fBBczqMyVQepd7N5ru2PWi8uTC9MOHuGVSO7XUWF
-         w5PQllbumv1Obg0xgoRXpA5K7Jv+v1o82fOG23afG7UUppdqn+yr86ZgQ2hSW/ffs/oB
-         7Lp/wRhrke3lulZ2vr8mJVf9Taq+cywejhTWvZ8pCMxG94LexTsZr4RUEixPPgXTJMgl
-         fnhm3145MyjRl44+vorViutkpJzhI258IC1pbMBGsUqiK6In1fHgXFmmRcVyol6Yx2YI
-         TRur4reZhIRmed+W6a59gvmfYNcjI8BFJQpI5CAnV8iKAuzHRY1Ifhv0QdGo+SWf/izA
-         s4sA==
+        d=gmail.com; s=20251104; t=1782910315; x=1783515115; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OmWDh+E3Ix3zFJalnxUFFjV5BfDox2wF4vd/HMlyNyM=;
+        b=N3zjwKNN16tDuu+I6CuPqHaRWL+91hZJgttaJ1Ku+ZGC2xy6chXfFhwy8fijsNwI9u
+         hPa10Xa54oU3O7ofydP/ao3u/pQahZb5f3bvxJbnBtTFLXOxg2ydejUvmBM1NVXMeFxN
+         zirUPmznf/CWfe+QUIHoZmj0xsRvZ6ItYsPQJSTLhKXvuKuB/si8TptIuzExGambK31r
+         KYgyu1cmR/BxT8AmijnI/JComikUyKkpMEiVeqlzNciw78GJuKt+hKSezwUDd6l+OWWj
+         6EJdj6eRTqci84OiOj96kwZkjCEBb95Kwm3DcCRDxyci6AifxMM1Rg0IjGeG1kNFSqdw
+         ZZSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782909663; x=1783514463;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=r7ceLvJFGDWzpb591woUgz7GBOYPJ1IlL6PiiR38W78=;
-        b=mmxjDOg3bdtXN3jprmPJV9mX8GC6YZ2fluyBerCh5HNLpJQ9qM9ZoJnmSg4oQ5ikXJ
-         R+vP3mHAOO6CbYPjXhCxiFKM5wuq5jcNWtAn9GSR1IwrggcDBaBGxmzW8/1wv7S355mT
-         4uWHofcpLj0yzhCTn7QWkoiE3EEZiD9kIuNqV4GNNzVZW1BmE+B2wxo8FG6rctcgDgMR
-         9TXC8TMmwN1EA1MH/9MzdyAT8uhNu7wbd+eY5vucy4I4YCLznN07yErRUzsr2YQEZ/uA
-         8lqknQQ2ys+IdtotddndZO8ZabsV1PjgQQOAer8mrpBQjEKMVVNKMfnhR0UiGHB5AKWk
-         F1pg==
-X-Forwarded-Encrypted: i=1; AHgh+RpBj/WhoWcQqHDzANWw4oKwGiSCmSRaKNDhm0RfJfcyfHV5Ox1dUkppICbpHyGjcNFPo2WS@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx7ZaAG73zYfV8v9d720yFbDHF14H2FFIitlPeGQSnkEyGOZ1Vq
-	99D09u60LvoMh5HbuqNByYcNXkdtarWCgEbrhMKwEolKQpHHhqjo1HOrYPJaLTIMpTU=
-X-Gm-Gg: AfdE7ckfzxjHT2PDpEnk+F0rPgY5LR7M0Tbifck2VAFG1C1i3auZcH87dGR8rPuWw5H
-	Xmohj9H4LHWEOiOJrsS82WN1DscKEoYghQpZaEczHoh/jb5ozBk2Yq2vOe2Djta4xma4V1iXHBV
-	jKrLAXF2icbDqmNNPzhkLGqzI24wUc6XorvaZhSXzVNIU9jzDMcaK91KMGzW2GfVv0qhmQ0OL4a
-	DuwdzueXxgTeShMQp3b7FGB/hfMOAyFzR1wyMZfO53ui3YeYoOV66B+/bH7DboCPeTZGRAOixbE
-	6NY2aXjeAZETx5G39uFbnuMORS2XMtoRYTu5gG+zAq9Otv1q8LTg2VKKMPjMGsEfJGv/zVOo/VQ
-	nROZg2eEq5QP3TWCJpmKF0w271y8FDyE5xdVLE9qGmoklotEzmjD8//IQ7p7iqgBZ0hRy5uTvdA
-	lwY/nWwfdDpulO48Mbc9NH
-X-Received: by 2002:a05:6000:46c7:b0:470:2fb1:3db5 with SMTP id ffacd0b85a97d-477b52962ebmr358057f8f.30.1782909662884;
-        Wed, 01 Jul 2026 05:41:02 -0700 (PDT)
-Received: from localhost ([2001:4090:a246:8638:a73d:f626:6582:90ca])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47563d194b0sm17422911f8f.1.2026.07.01.05.41.02
+        d=1e100.net; s=20251104; t=1782910315; x=1783515115;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OmWDh+E3Ix3zFJalnxUFFjV5BfDox2wF4vd/HMlyNyM=;
+        b=LVqSkpko3eDy4rguLkq/Bk3EMo3pfT4mgqjkD/siopAlgB4xvFztgDOcpw7Tdv3IKM
+         Ximdvcg3gykOnC45t1Rp53mwu25H/kdXBvSbrf3Hmu2oVetwgZV3w1ntaPJPW85f+pbR
+         xzP90dGjSo8hrt/DcWQ57wGUEIWibEhbJNFSKECFm4npYoV7YqZ73OPmO9xNZ9IsbDEv
+         9dcjK9gsZtgI1pSUAN6YgUGkdBZGx0BhAsyheeQLK0SQVv4Bm1tgR35ahJGYpMuXcBYU
+         5RwKtWsS5BEefWYA0PhHThnoF7gv3ySzSdlF2qTkytXDVSqfFvOiYRiLqwH3mNqPhUmi
+         KTIg==
+X-Forwarded-Encrypted: i=1; AHgh+RroOZVqpqknzD+Jo1BBYrrV+XeAzNnf9bvo0TBUKAOOpqLrnXWKdgt04FDjMPARKBkL8q9I@lists.linux.dev
+X-Gm-Message-State: AOJu0YwdVWz/7hdvN/Hoqj7rKjXWA8N4ODlvTMO607FwJwDCG5coRY2z
+	4MewqJEKLJcKCIMPx7KuUugiDfaJEnp2Zep8PAYRA/jvQSuK79W+rRBY
+X-Gm-Gg: AfdE7cluFkKXShYjtXxDk2jBH+aW8WWsloUQl9dPh4fhLCyR1fkHTKMo6+ujVbIYibZ
+	ZcqhDKyUX3Xg0zoRe/gmeYA6k8mYQWjSse4KD4Lmc+tMws5j0eWf4Oed5vAgUgmcsGFGkAR5AfT
+	TrTrnphwKoglSFOXSizFZx+PFk9i29n9u5PaQwKi39aIWPOPKmcna3vuuFCv3cy5ms+FS2Xe7G+
+	La93z9/BNYcebyyAbbwVFUkb4Cnae3TJdt0byDCIxWw1hQePDRSMbu8IJDiU2zKkRIjxqgBZqRC
+	VY9v4irPvslI1vaAhDxKJxMXv9IiLLKFq+kM2FvWoIDLSeUN3REnRLxwxES7KkbmUt9/KnP3VQa
+	ys/sVgYbuvLzsODpaNGiAG5yFCg3KCaJ+rxdxtg0vr7nnSnyjGmsIOVewRsRlad7AoMAvtzX961
+	yONV80Opkq/j3C2V+tKGh4Xo+3be9gQe2rDYvOVDnyZxNYbj7miaS9shPGgxSJniudSD/V6Ses1
+	MH2urXGKdEkxWRQznpWgY8wlaM=
+X-Received: by 2002:a05:6000:2406:b0:46e:5c5d:b2cc with SMTP id ffacd0b85a97d-47757c6e277mr2873893f8f.23.1782910314659;
+        Wed, 01 Jul 2026 05:51:54 -0700 (PDT)
+Received: from voyt-laptop-dell.fritz.box ([2001:9e8:bd55:a800:14a4:886c:f7de:bb03])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-475671d0403sm17665051f8f.29.2026.07.01.05.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Jul 2026 05:41:02 -0700 (PDT)
-From: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-Date: Wed, 01 Jul 2026 14:39:23 +0200
-Subject: [PATCH v7 11/11] arm64: dts: ti: k3-am62p-ti-ipc-firmware: Add r5f
- nodes to pre-ram bootphase
+        Wed, 01 Jul 2026 05:51:54 -0700 (PDT)
+From: Dmitry Voytik <voytikd@gmail.com>
+To: Alexander Potapenko <glider@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>,
+	x86@kernel.org,
+	linux-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev,
+	Dmitry Voytik <voytikd@gmail.com>
+Subject: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
+Date: Wed,  1 Jul 2026 14:51:51 +0200
+Message-ID: <20260701125151.352632-1-voytikd@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260701-topic-am62a-ioddr-dt-v6-19-v7-11-e9db8b16821a@baylibre.com>
-References: <20260701-topic-am62a-ioddr-dt-v6-19-v7-0-e9db8b16821a@baylibre.com>
-In-Reply-To: <20260701-topic-am62a-ioddr-dt-v6-19-v7-0-e9db8b16821a@baylibre.com>
-To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Judith Mendez <jm@ti.com>, Daniel Schultz <d.schultz@phytec.de>, 
- Andrew Davis <afd@ti.com>, Siddharth Vadapalli <s-vadapalli@ti.com>, 
- Paresh Bhagat <p-bhagat@ti.com>, Bryan Brattlof <bb@ti.com>, 
- Jai Luthra <jai.luthra@ideasonboard.com>, Devarsh Thakkar <devarsht@ti.com>, 
- Beleswar Padhi <b-padhi@ti.com>, 
- Francesco Dolcini <francesco.dolcini@toradex.com>, 
- Stefano Radaelli <stefano.radaelli21@gmail.com>
-Cc: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
- Sebin Francis <sebin.francis@ti.com>, Kendall Willis <k-willis@ti.com>, 
- Akashdeep Kaur <a-kaur@ti.com>, linux-arm-kernel@lists.infradead.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Hari Nagalla <hnagalla@ti.com>, 
- "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1228; i=msp@baylibre.com;
- h=from:subject:message-id; bh=vgTU6IpqehS35f26r2q57NqAGrF/RDXF3lubDqCB+Bg=;
- b=owGbwMvMwCXWejAsc4KoVzDjabUkhixXrqOMLZ/SpPQcPUy3F2Rk3LwuqBFyOC34z/l3E1l28
- oVtX+3ZUcrCIMbFICumyNKZGJr2X37nseRFyzbDzGFlAhnCwMUpABMJmM7I0KZ15LlN4vNVXPvu
- v/t0m2nK6YWn6idE/mLv5npdlaZYXsXw3/vkTmO2mFwRP4V/C6/HMifyveY+mHhfyWKCxflsE9/
- X/AA=
-X-Developer-Key: i=msp@baylibre.com; a=openpgp;
- fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
+Content-Transfer-Encoding: 8bit
 
-For IO+DDR the wkup_r5fss0_core0 and the
-wkup_r5fss0_core0_lpm_metadata_region need to be accessed before RAM
-setup is done. These are used to read the lpm metadata region in which
-data is stored to resume. This needs to be done before RAM is in use to
-avoid overwriting data.
+This patch fixes broken builds with defconfig + CONFIG_KMSAN +
+CONFIG_DEBUG_INFO_*.
 
-Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
+To reproduce the issue before the fix:
+  make mrproper
+  make LLVM=1 defconfig
+  ./scripts/config -e CONFIG_KMSAN \
+    -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+  make LLVM=1 olddefconfig
+  make LLVM=1 -j(nproc) vmlinux
+  ...
+    LD      vmlinux.o
+  vmlinux.o: warning: objtool: folio_zero_user+0x801: undefined stack state
+  vmlinux.o: error: objtool: folio_zero_user+0x801: unknown CFA base reg -1
+  make[2]: *** [scripts/Makefile.vmlinux_o:76: vmlinux.o] Error 255
+
+objtool in verbose mode shows how the frame pointer is omitted:
+  make LLVM=1 OBJTOOL_VERBOSE=1 -j(nproc) vmlinux
+  ...
+  b15a2c:  folio_zero_user+0x7fc      xor    %eax,%eax
+  b15a2e:  folio_zero_user+0x7fe      mov    %rcx,%rsp
+  b15a31:  folio_zero_user+0x801      mov    %r14,%rdi
+  b15a34:  folio_zero_user+0x804      mov    %rbx,%rcx
+  b15a37:  folio_zero_user+0x807      call   0xb15a3c <__clear_pages_unrol
+
+After the fix, the frame pointer is back:
+  b15a37: 31 c0                       xor    %eax,%eax
+  b15a39: 48 89 ec                    mov    %rbp,%rsp
+  b15a3c: 4c 89 f7                    mov    %r14,%rdi
+  b15a3f: 48 89 d9                    mov    %rbx,%rcx
+  b15a42: e8 00 00 00 00              call   b15a47 <folio_zero_user+0x817>
+
+It seems the issue was introduced by
+commit 54a6b89a3db2 ("x86/mm: simplify clear_page_*")
+
+The actual fix is to revert the change how ASM_CALL_CONSTRAINT is
+positioned.
+Additionally, reintroduce asm_inline to prevent potential compiler
+rejection of inlining.
+
+Link: https://lore.kernel.org/CAAX90H2_RPnZL_dFYN7cQF6yt-wAweKKSx2=6e2aZ0kv+Pm+NQ@mail.gmail.com
+Signed-off-by: Dmitry Voytik <voytikd@gmail.com>
 ---
- arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/include/asm/page_64.h | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi b/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi
-index 8f7409da83392d2d1f160a9645ef4d68f7aaa1bf..04fcd5115b9d95e6e23c4e43782c06501a0fa601 100644
---- a/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62p-ti-ipc-firmware.dtsi
-@@ -40,6 +40,7 @@ wkup_r5fss0_core0_lpm_metadata_region: memory@9ca08000 {
- 		compatible = "shared-dma-pool";
- 		reg = <0x00 0x9ca08000 0x00 0x1000>;
- 		no-map;
-+		bootph-pre-ram;
- 	};
+diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+index 1895c207f629..de8604f0a3a1 100644
+--- a/arch/x86/include/asm/page_64.h
++++ b/arch/x86/include/asm/page_64.h
+@@ -100,12 +100,13 @@ static inline void clear_pages(void *addr, unsigned int npages)
+ 	 * __clear_pages_unrolled() are part of the inline asm register
+ 	 * specification.
+ 	 */
+-	asm volatile(ALTERNATIVE_2("call __clear_pages_unrolled",
+-				   "shrq $3, %%rcx; rep stosq", X86_FEATURE_REP_GOOD,
+-				   "rep stosb", X86_FEATURE_ERMS)
+-			: "+c" (len), "+D" (addr), ASM_CALL_CONSTRAINT
+-			: "a" (0)
+-			: "cc", "memory");
++	asm_inline volatile(
++		ALTERNATIVE_2("call __clear_pages_unrolled",
++			      "shrq $3, %%rcx; rep stosq", X86_FEATURE_REP_GOOD,
++			      "rep stosb", X86_FEATURE_ERMS)
++		: ASM_CALL_CONSTRAINT, "+c"(len), "+D"(addr)
++		: "a"(0)
++		: "cc", "memory");
+ }
+ #define clear_pages clear_pages
  
- 	wkup_r5fss0_core0_lpm_rest_region: memory@9ca09000 {
-@@ -89,6 +90,7 @@ &wkup_r5fss0_core0 {
- 			      "lpm-metadata", "lpm-context",
- 			      "dm-firmware";
- 	status = "okay";
-+	bootph-pre-ram;
- };
- 
- &mcu_r5fss0 {
-
 -- 
-2.53.0
+2.54.0
 
