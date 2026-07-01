@@ -1,61 +1,63 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55ED54A2E37
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 12:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FC948C8CE
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 12:30:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782909034; cv=none; b=LKdDNITZRCAd8SNdtpgFswTCbcJxisMSw8otgHnsZjNRSOELW3ME0HMg4iJb9eMCn1DxeEh9d4ZuENa1c8nSECrh2futF9d3VFJDozVWOYhs1dgaYHXyW9fc6qn/c7y96FKoUzbsRr+PCGtpIQFK3jaQDHtyGzM/9DxzoaNcdqQ=
+	t=1782909050; cv=none; b=lYyRKsjcS16pkrcnTZW7VU52PCnshPIzIOH6I7tErkhKfG7P/V73798tQ6OHnYBtdriaYr1JTnRwDiuyI78WxzUgZqtgdbhgR9KCbEfI7HN0Xz9NSvM4FaiKY0oTKvuBo5AtEJlzDAEzhvpEFFDDEAqf00cSunlK0k7E5bR5Ftc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782909034; c=relaxed/simple;
-	bh=ZjWVD0tSQ1mhVm/q0JGy6VGtAnh9yMg+FOzzJVCwjsQ=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=oiHtFsYFKuV/jcIyM7D3DIWFKLQC497Zm5ELuEupBDnkojMlWueOcR3hlNOmeTdfXKxYtZvJNGwjBJg6ziQ0NzNtC86XyiL78UzyvXp2CoK+EAUwgOh9xa7d7rwHy2vcthLaQEUGh3sVDeCv/BGG/ANFOJ238PB5auYxdm0jzIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Q5rd/M2+; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1782909050; c=relaxed/simple;
+	bh=lmOaxI1RXCMjG8bFhu5Ke54uH3zrNAZJOEhH2v7clo0=;
+	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ke72SMOsosMC7prvLmbYut1kkHy1XuWQTPJOYXT9yl9Qt5Fd+GMFAtgKj9M2K3vz7FMf1G5Vi+VB9gf7rKDqkeki6NoBp+5z0UFgllfroGvN/Ksh3Z5wMcIiM9Kdn3ou04juXFXDJ9HWTbKlgiH/Lc900d2LsE8QiUDN/qVeK4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=YHOB8rK4; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Q5rd/M2+"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2c9c9916f75so2806955ad.0
-        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 05:30:31 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="YHOB8rK4"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2c9b1edf2bdso3465525ad.1
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 05:30:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1782909030; x=1783513830; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=J5IzwYzPDTeWx7tKr7hSDF5l+BLDO1MD+S8kZpieZcM=;
-        b=Q5rd/M2+XdcpLvvVu6xuCXU9bd6N+T4zPFAhBYjwhjiiD9ubzU7L7zfKJFpRmz/y5a
-         hfevpvdOVKyb+PGJFAeiAIdA9K+SZqm0wKIAbbiA6X772gBsWurB1g//QAgspaPDzEgf
-         9QuGgdZw72t8/OdfCmXkdy6427GT+D2eyQ2OteSP2mq1AKoF51Bv5BcHwBCnLgdZA8fM
-         ia8CuIv9MtacwnpZB75Wi9aqteOnQcsXigfG70VEqsuBVWkeQcOVT0EEpsSk2dl4NPwH
-         myvSN2fnQJ5CyatAM5yzy+hCigelTdpyGNRkIxa/uMxThz90PltYIo6MfyU39LksaS1N
-         fshg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782909030; x=1783513830;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=bytedance.com; s=google; t=1782909048; x=1783513848; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=J5IzwYzPDTeWx7tKr7hSDF5l+BLDO1MD+S8kZpieZcM=;
-        b=Lj70QfvSfbByuI6ujTqjJ+FDWWytXvhxYtUIkhosbrBxC6djP+FxGlBZ0aXlVTKqjl
-         7wxwiFpglH2PeWaXLZ993CXC8oOr0EYkQbjE5Xhvkm4WfUOznm6M5S4wVAJqrGFhKHyv
-         3UY16KG5APB5DbdwH1O3nTahv6qlGMSBPD3+7VqkLczNoMGQUCzldCH8YGq/+QrezCAj
-         qxgYywKp9bs1mFWVcHvRkN70WicT6fGzCpVqEu5nImf+C2nWqD2euH0SB9HCB3+gXJGR
-         K74gPmkFwnpIH8pfAtL8Jz2+CJMyt1pn3uPbnh4wnt76UJaAv11bAyHoaXZlmPcA24TM
-         pz/g==
-X-Forwarded-Encrypted: i=1; AHgh+RosXsTdxu9bNQlWZfUTAPO+0np5CbuNnxx8O5m3dh5wC+mJtamgRfuOdp/X00D3Q+6Qn5R4@lists.linux.dev
-X-Gm-Message-State: AOJu0YzbszmrrjCMDR4ypOScU+dBb9w4uUDEKGQPYNSKbs9XPpJusjt0
-	eEO153xsrCe+qaigDwoELWEEcP8eXlnJkty/PO78nU8/YjxmsiZ7rakhTAt0Rwq2p6U=
-X-Gm-Gg: AfdE7cmux2rrGxbj4zWfbpZ9dlMl7f0rtb2Cj0/l6NG3LhFDM9e+bc2iSpy2kjC7OVx
-	ic+0s7bSG1jW4zI+kz7yOf10bZTkW5RgMKxI1rBEVs+XoLXQJv2oZGz7CZNH4nnKsnLV3czXH4k
-	lW8N27ZC7MaR5kc8Pr5D7XC0BlhQGaWvW/7jEIzkAcqIM2crLelDFWXitrM9EeEsMonKPV3S9dV
-	4pznnRFFO/A1Bf3HcUJj4MmK3gF9bTmDrH86x4mqcPHwVZJs7YPpXr8tj3qcqxkE29epGrFURby
-	rSMqlHYPc+nL9dHzKlY2AHMmcBWZCOpy8BbuuU8Jmd+RksDEmVgBF2v5CQRqq/SfxdCs1hgJck7
-	H4GLfQ8YxvMVCQncfwDdaa4DkFwx1wKeePpLoIoeq9nPHog/mYXMv6zhik+ZG64P3IJdKOHTc8F
-	sapMNB9KafkipX80M8CaLE5MdQX6N8AiKenMCsWI6+aZzajosa4viuyukN
-X-Received: by 2002:a17:902:d549:b0:2c9:c991:3bf0 with SMTP id d9443c01a7336-2ca7e682ad6mr16606255ad.8.1782909030457;
-        Wed, 01 Jul 2026 05:30:30 -0700 (PDT)
+        bh=zDd9DofNJHdq9P/rugFQPHi9oXh/6OPbyalY3nUgBIk=;
+        b=YHOB8rK4LOuI49JfsOyRHkMTAoXOVHek+uVGuExmCfT84GyRmwqbMyygsvaRnIwd3/
+         CFvuk2uKMvzu53KmuSFsk+doOT8SUSpPNPZh4mUHeHtRhhWj+Odd2hdOz8hdNnEhLMWz
+         2IF3hqhT2mhQVq1fMGFPGaRKiL50ZiCuBWYVbpOtC9bMAaHGkSAQ7r/0A0kSF3jAWZpl
+         i91KDv/lp9ebW8dRpcVY4lLasIRNnAo/MMqlZ8Pb/2XdDSicw63hD2l+E8SWkzECn+4P
+         tgx5jJ3twvxhIFQ/5RY9flY2rigfvTWCJ00FG622aPG1HaCR5iDhh4L0CHwg5aOM7lG3
+         9DIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782909048; x=1783513848;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zDd9DofNJHdq9P/rugFQPHi9oXh/6OPbyalY3nUgBIk=;
+        b=Gi3H68I/VUacKl3YAYtTqK5lAY+QlwEzK3SMI1adGivgp/wMPYpveh9oPtJwcoldtN
+         2Flhp5aO2CH5vBJdReSG9NAibU99STkrMT7z9XUevP+NwhmlqdacrjC5FZuKP+cyeQxj
+         Bz8oftj0AwcfAo1wa9s6mA8SRBjNqpAJn3vB8dNvrk2FhXcYvrwo301wsY/Qjl17tmQe
+         lvrEiNQu6dlTr4JPQKNBIHEJyEFYgXGou/x+nn5dWUoZwcqEbZiAEPm7M6zgHf8akDG2
+         BzTY1KjDZ1Kn8tyRcV3TKt1zd7dd9RmeoLKfFBAdK84SzTGLe6iHYUR0MrpuNq64tMLz
+         AoeA==
+X-Forwarded-Encrypted: i=1; AHgh+Royng+K0lmzunM2XyF8rjX7xrPr+PSdFUfNJoQ1Jt+V8tdZ/NnskjdqrwSPfndLZu7Zh551@lists.linux.dev
+X-Gm-Message-State: AOJu0YwpyIiBU/4zVVdx5oCueCK4I4Z5uoOmuZhQhknnpamAL+0o2rJB
+	PtdhEROaL4Lo3DMQyDP/FktVZQlPoRtVBBxtsctKxH33X46xEA76Az/UyVi7zxyZtQc=
+X-Gm-Gg: AfdE7cnuuZDP9/lQqqdJdFFvBd3lS2eY271r78rix+nmi+d4yJG/sB8TJ5rqzzdzBWQ
+	ZHueeOqUTLn0w8a6NP6Lc1O9uiq18cre1sV2a3xodIhWCj/jlhuKs4ArMoTz0mKEDEbpuIkiwO2
+	Bfc7f5Ktp6t0RntbD72aQiby0QpIxiZa2vein05LMU296tbfKuBmqUmVUUqSDv+thLxa8/G2JTO
+	Gn7qltviTiAo7qBjPjFYskYfMdt9dr+0hbSwMceM9RF7t3vn3hFo/ngkNuvrWf2KgQJBxL/0Aid
+	2NIPPy/q7hCggTp6gU9HhfsyyYokC34avpVhXTU6gVr/qW/uqMGb2XnJbE3KSM76oLpIbFN9r7N
+	Er+zJD5UGInBQ+LXIJ26mxBRrBCoXTMrLM+Th1ff6tfoVPC7S46rcw7BALWKe6ZUeEAZpwwfUUz
+	4M/0nXaDbx+lYXAVzEAdhcptOyU+OQH1tloWHwiBiK6zHNMl9yU9qsllnu
+X-Received: by 2002:a17:902:e841:b0:2c8:be9:1d9e with SMTP id d9443c01a7336-2ca7e86485dmr15171775ad.34.1782909047857;
+        Wed, 01 Jul 2026 05:30:47 -0700 (PDT)
 Received: from L6YN4KR4K9.bytedance.net ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca4bae1e2asm25166825ad.73.2026.07.01.05.30.14
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ca4bae1e2asm25166825ad.73.2026.07.01.05.30.30
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 01 Jul 2026 05:30:29 -0700 (PDT)
+        Wed, 01 Jul 2026 05:30:47 -0700 (PDT)
 From: Yunhui Cui <cuiyunhui@bytedance.com>
 To: pjw@kernel.org,
 	palmer@dabbelt.com,
@@ -105,10 +107,12 @@ To: pjw@kernel.org,
 	qingfang.deng@siflower.com.cn,
 	linux-arch@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v6 0/3] riscv: fix PIO helpers and add optimized percpu ops
-Date: Wed,  1 Jul 2026 20:29:45 +0800
-Message-Id: <20260701122948.57584-1-cuiyunhui@bytedance.com>
+Subject: [PATCH v6 1/3] riscv: io: avoid null-pointer arithmetic in PIO helpers
+Date: Wed,  1 Jul 2026 20:29:46 +0800
+Message-Id: <20260701122948.57584-2-cuiyunhui@bytedance.com>
 X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20260701122948.57584-1-cuiyunhui@bytedance.com>
+References: <20260701122948.57584-1-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -117,30 +121,69 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes in v6:
-- Drop the extra PCI_IO_ADDR() helper; directly guard the RISC-V ins*/outs*
-  helpers with CONFIG_HAS_IOPORT.
-- Add the missing <asm/cmpxchg.h> include to arch/riscv/include/asm/percpu.h
-  so cmpxchg_relaxed() and system_has_cmpxchg128() are visible.
-- Clean up the two 8/16-bit LR/SC fallback asm blocks to use consistent
-  old/new/field variable names.
+When port I/O is not supported, exposing the port-string helpers is both
+unnecessary and can make clang diagnose null-pointer arithmetic from the
+PCI_IOBASE based address expression.  Keep the MMIO string helpers
+available as before, but only provide the port I/O variants when
+CONFIG_HAS_IOPORT is enabled.
 
-Yunhui Cui (3):
-  riscv: io: avoid null-pointer arithmetic in PIO helpers
-  riscv: introduce percpu.h into include/asm
-  riscv: store percpu offset into thread_info
+Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+---
+ arch/riscv/include/asm/io.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
- arch/riscv/include/asm/asm.h         |   6 +-
- arch/riscv/include/asm/io.h          |   8 +
- arch/riscv/include/asm/percpu.h      | 288 +++++++++++++++++++++++++++
- arch/riscv/include/asm/switch_to.h   |   8 +
- arch/riscv/include/asm/thread_info.h |   3 +-
- arch/riscv/kernel/asm-offsets.c      |   1 +
- arch/riscv/kernel/smpboot.c          |   8 +
- arch/riscv/net/bpf_jit_comp64.c      |   9 +-
- 8 files changed, 317 insertions(+), 14 deletions(-)
- create mode 100644 arch/riscv/include/asm/percpu.h
-
+diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
+index 09bb5f57a9d34..92d5f831f3495 100644
+--- a/arch/riscv/include/asm/io.h
++++ b/arch/riscv/include/asm/io.h
+@@ -102,12 +102,14 @@ __io_reads_ins(reads, u32, l, __io_br(), __io_ar(addr))
+ #define readsw(addr, buffer, count) __readsw(addr, buffer, count)
+ #define readsl(addr, buffer, count) __readsl(addr, buffer, count)
+ 
++#ifdef CONFIG_HAS_IOPORT
+ __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
+ __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
+ __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
+ #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+ #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+ #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
++#endif
+ 
+ __io_writes_outs(writes,  u8, b, __io_bw(), __io_aw())
+ __io_writes_outs(writes, u16, w, __io_bw(), __io_aw())
+@@ -116,26 +118,32 @@ __io_writes_outs(writes, u32, l, __io_bw(), __io_aw())
+ #define writesw(addr, buffer, count) __writesw(addr, buffer, count)
+ #define writesl(addr, buffer, count) __writesl(addr, buffer, count)
+ 
++#ifdef CONFIG_HAS_IOPORT
+ __io_writes_outs(outs,  u8, b, __io_pbw(), __io_paw())
+ __io_writes_outs(outs, u16, w, __io_pbw(), __io_paw())
+ __io_writes_outs(outs, u32, l, __io_pbw(), __io_paw())
+ #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+ #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+ #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
++#endif
+ 
+ #ifdef CONFIG_64BIT
+ __io_reads_ins(reads, u64, q, __io_br(), __io_ar(addr))
+ #define readsq(addr, buffer, count) __readsq(addr, buffer, count)
+ 
++#ifdef CONFIG_HAS_IOPORT
+ __io_reads_ins(ins, u64, q, __io_pbr(), __io_par(addr))
+ #define insq(addr, buffer, count) __insq(PCI_IOBASE + (addr), buffer, count)
++#endif
+ 
+ __io_writes_outs(writes, u64, q, __io_bw(), __io_aw())
+ #define writesq(addr, buffer, count) __writesq(addr, buffer, count)
+ 
++#ifdef CONFIG_HAS_IOPORT
+ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
+ #define outsq(addr, buffer, count) __outsq(PCI_IOBASE + (addr), buffer, count)
+ #endif
++#endif
+ 
+ #include <asm-generic/io.h>
+ 
 -- 
 2.39.5
 
