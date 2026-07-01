@@ -1,173 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A61C1A0BF3;
-	Wed,  1 Jul 2026 05:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 946333603D5;
+	Wed,  1 Jul 2026 05:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782882358; cv=none; b=ejuT3LHBeSHqt+Pi9BD5m0WMXirp+tcqesVXpmGoiNEA0PavziPB2KN8JCJvxAyb6PkDaN7/jhaU8YmaWUHFbdn8BGEh+6hcl1JGXoGczP7Dgfi1NYWJXeO7h/1e8jKXwDhgk3vJPxXwdyCVjOZl6BL1Cm5oY3LC1EykTQ+E0gQ=
+	t=1782882778; cv=none; b=U7MN7i6J4JMt7SAjkUDQmH2LEfwE1wUH31Ds01y51i4XANPNumnB+ey5O+id5NiE7pPDCHPuinM1swmiMHbFfjn5YjCfhkvx+FqqdOXdHnrN47XTSP/WW8+i47R4OAKyPF44n/Q5Z8onwSCYeKn5PKZf8eV8s1AD1GluoCorKCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782882358; c=relaxed/simple;
-	bh=u58eJlHKQ8NVdj3jMaVgB4kaqGpjNVYB5bWjrceF3QY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=uHNKzP3eN0htrnsplto61yVcg4d5YGs8VTnGheBsqcAVUxbjaSc8OxiWAsGPrSFj+01DPhIUkp5zOBqenhwpAN7GCeavD9ofBVl8djYd6BcfTgK0ihJXoysCnHueplFD5utspj5wVb9HZEzyC3riIglmPQsqbX0hyfyFKCP+0nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mRXPPDS0 reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782882778; c=relaxed/simple;
+	bh=jQFEP3G5Omfcqd8+QcgPAZu1BuU6ZjO5SvXlcS2Sn5w=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=T5Xb7cMa2ew+w+0HjAvd+CTLK2fE+YE5xpUoWc0AYna4pxMnl8GIo61dN740SpYVYKZ0hmvs4gmJKNia2ehjIwfz32L1UGCFABzSmHRmip1yfxP75GM/Es5ng2u1sO3ms1m5G0zuhG7T6y04XPMolSW9oNkZhsfyyll5lRSpto0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iyrRybwu; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mRXPPDS0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95F4D1F000E9;
-	Wed,  1 Jul 2026 05:05:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782882357;
-	bh=cR1e3wgK4GDElvt4FzjPKvAbM9xG45FsEr5FNPN0UPE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=mRXPPDS0ZZjbX/ABIk8RUZppNUKF2fdO+GefAa2ypmx1NYKWKqfKz6gkbybOlP9El
-	 Fsq1M/qn7hn6nUob/mTvGscUqIhCvWtpQxLlXRyVZpf7l3N+dLRu41rfRKAd9ROi7S
-	 PprfyhyxOIoPj2rM5rUT+Uyvt25W3eC7DMjzbpyz69Oo/cwcCuwLJSCPH747I/ulFy
-	 Zy50Tj8K1lcvUxHAaDO8kDI6oNYQ/nxp3XoZ6L1zuxP2ZIQfz1YjhRqJ/VBnqG+I1B
-	 TleHoSF3LcqFyOSkj4KFCE+uHtseQYfeUW6v1CEY1rBTHOS4oiiKYk6pz3bjWeCD5u
-	 OcZpLy/5jMOGg==
-Content-Type: multipart/mixed; boundary="===============4104290110149668795=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iyrRybwu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782882776; x=1814418776;
+  h=date:from:to:cc:subject:message-id;
+  bh=jQFEP3G5Omfcqd8+QcgPAZu1BuU6ZjO5SvXlcS2Sn5w=;
+  b=iyrRybwuOQXFC3TPiaO1lK7Ae10X7SPi7ehe7aF+xDkAGfjUX2tupmIo
+   bKNjUxSSPKMPg3g4gyUz8pRknQTHCeN1pbwubM6NkHmX3pABEcZMFxXKH
+   djTV+qbrSLfY+RA3Xr8VQZkUQAFHgt5uGJWdXkuqPBSdIXgo5Yrrit3KN
+   /9k4580h/CPw+YnYnU6d942s/tfl1x3F99hNq/k+xIgjKKaA/z1hSyvVe
+   CPXC5BWf/lBV47oOX/ZX3732wqlcWgqqFJgjpTZDX+qfIBhTacd8ldgkN
+   iILuZUQV+wZZol6K82XovutXAmNMXZAkCTGPIXWFC6KJd9uX1CclWxlhb
+   A==;
+X-CSE-ConnectionGUID: CuMC53C+TSuK2kldHOnQkQ==
+X-CSE-MsgGUID: C8ydDWDfSVyddZb1rSQjBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="87287767"
+X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
+   d="scan'208";a="87287767"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jun 2026 22:12:56 -0700
+X-CSE-ConnectionGUID: VuxbFmV6SjejV6E8gZHUnA==
+X-CSE-MsgGUID: UO8klK1BRGiHcEsIsIhHLg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.24,235,1774335600"; 
+   d="scan'208";a="251404813"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 30 Jun 2026 22:12:52 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wenFd-000000008x5-42T1;
+	Wed, 01 Jul 2026 05:12:46 +0000
+Date: Wed, 01 Jul 2026 13:12:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kas:sdei-nmi/diag-complete-off 5/5]
+ arch/arm64/include/asm/sdei.h:56:15: error: expected identifier or '('
+Message-ID: <202607011301.rVxTXAGl-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Message-Id: <bf03528b891e5f09ec46d075649474ce5f2228e80afe1d6fe5481789e9dca9d3@mail.kernel.org>
-In-Reply-To: <d6afed2c271de42efe2a3580ea30c7601cae9c0c.1782877663.git.cuiyunhui@bytedance.com>
-References: <d6afed2c271de42efe2a3580ea30c7601cae9c0c.1782877663.git.cuiyunhui@bytedance.com>
-Subject: Re: [PATCH v5 2/3] riscv: introduce percpu.h into include/asm
-From: bot+bpf-ci@kernel.org
-To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,cuiyunhui@bytedance.com,samuel.holland@sifive.com,zong.li@sifive.com,conor.dooley@microchip.com,tglx@kernel.org,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,qingfang.deng@siflower.com.cn,linux-arch@vg
- er.kernel.org,llvm@lists.linux.dev
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  1 Jul 2026 05:05:56 +0000 (UTC)
 
---===============4104290110149668795==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git sdei-nmi/diag-complete-off
+head:   9c7998bb7f7765535361c4ac0087f1401b3eecd4
+commit: 9c7998bb7f7765535361c4ac0087f1401b3eecd4 [5/5] arm64/sdei: DIAG complete-then-CPU_OFF for the SDEI stop (Grace re-online test)
+config: arm64-randconfig-002-20260701 (https://download.01.org/0day-ci/archive/20260701/202607011301.rVxTXAGl-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260701/202607011301.rVxTXAGl-lkp@intel.com/reproduce)
 
-> diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
-> new file mode 100644
-> index 000000000000..46f1901d3bb8
-> --- /dev/null
-> +++ b/arch/riscv/include/asm/percpu.h
-> @@ -0,0 +1,283 @@
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607011301.rVxTXAGl-lkp@intel.com/
 
-[ ... ]
+All errors (new ones prefixed by >>):
 
-> +#define PERCPU_8_16_OP(name, amo_insn, sz, sfx, val_type, new_val_expr, asm_op)			\
-> +static inline void __percpu_##name##_amo_case_##sz(void *ptr, unsigned long val)		\
-> +{												\
-> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&						\
-> +		riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {				\
-> +		asm volatile ("amo" #amo_insn #sfx " zero, %[val], %[ptr]"			\
-> +			: [ptr] "+A"(*(val_type *)ptr)						\
-> +			: [val] "r"((val_type)((new_val_expr) & PERCPU_8_16_GET_MASK(sz)))	\
-> +			: "memory");								\
-> +	} else {										\
-> +		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);					\
-> +		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);				\
-> +		const u32 mask = PERCPU_8_16_GET_MASK(sz) << shift;				\
-> +		const val_type val_trunc = (val_type)((new_val_expr)				\
-> +					   & PERCPU_8_16_GET_MASK(sz));				\
-> +		u32 retx, rc;									\
-> +		val_type new_val_type;								\
-> +												\
-> +		asm volatile (									\
-> +			"0: lr.w %0, %2\n"							\
-> +			"and %3, %0, %4\n"							\
-> +			"srl %3, %3, %5\n"							\
-> +			#asm_op " %3, %3, %6\n"							\
-> +			"and %3, %3, %8\n"						\
-> +			"sll %3, %3, %5\n"							\
-> +			"and %1, %0, %7\n"							\
-> +			"or %1, %1, %3\n"							\
-> +			"sc.w %1, %1, %2\n"							\
-> +			"bnez %1, 0b\n"								\
-> +			: "=&r"(retx), "=&r"(rc), "+A"(*ptr32), "=&r"(new_val_type)		\
-> +			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(~mask),			\
-> +			  "r"(PERCPU_8_16_GET_MASK(sz))						\
-> +			: "memory");								\
-> +		}										\
-> +}
-
-[ ... ]
-
-> +#define PERCPU_8_16_RET_OP(name, amo_insn, sz, sfx, val_type, new_val_expr)			\
-> +static inline val_type __percpu_##name##_return_amo_case_##sz(void *ptr, unsigned long val)	\
-> +{												\
-> +	if (IS_ENABLED(CONFIG_RISCV_ISA_ZABHA) &&						\
-> +		riscv_has_extension_unlikely(RISCV_ISA_EXT_ZABHA)) {				\
-> +		register val_type ret;								\
-> +		asm volatile ("amo" #amo_insn #sfx " %[ret], %[val], %[ptr]"			\
-> +			: [ptr] "+A"(*(val_type *)ptr), [ret] "=r"(ret)				\
-> +			: [val] "r"((val_type)((new_val_expr) & PERCPU_8_16_GET_MASK(sz)))	\
-> +			: "memory");								\
-> +		return ret + (val_type)((new_val_expr) & PERCPU_8_16_GET_MASK(sz));		\
-> +	} else {										\
-> +		u32 *ptr32 = PERCPU_8_16_GET_PTR32(ptr);					\
-> +		const unsigned long shift = PERCPU_8_16_GET_SHIFT(ptr);				\
-> +		const u32 mask = (PERCPU_8_16_GET_MASK(sz) << shift);				\
-> +		const u32 inv_mask = ~mask;							\
-> +		const val_type val_trunc = (val_type)((new_val_expr)				\
-> +					   & PERCPU_8_16_GET_MASK(sz));				\
-> +		u32 old, new, tmp;								\
-
-This isn't a bug, but the two LR/SC fallback loops name the same roles
-differently.  The non-return loop uses:
-
-	u32 retx, rc;
-	val_type new_val_type;
-
-while the return loop above uses:
-
-	u32 old, new, tmp;
-
-The loaded word, the scratch/merge register and the computed field play the
-same role in both loops.  Could they use one consistent set of names (e.g.
-old/new/tmp) so the two loops read as clearly parallel?  As a smaller point,
-new_val_type reads like a type name rather than a value, and new shadows a
-common keyword.
-
-> +												\
-> +		asm volatile (									\
-> +			"0: lr.w %0, %3\n"							\
-> +			"and %1, %0, %4\n"							\
-> +			"srl %1, %1, %5\n"							\
-> +			"add %1, %1, %6\n"							\
-> +			"and %1, %1, %7\n"							\
-> +			"sll %1, %1, %5\n"							\
-> +			"and %2, %0, %8\n"							\
-> +			"or %2, %2, %1\n"							\
-> +			"sc.w %2, %2, %3\n"							\
-> +			"bnez %2, 0b\n"								\
-
-This isn't a bug, but the read-modify-write LR/SC sequence here is nearly
-identical to the one in PERCPU_8_16_OP, differing only in operand numbering.
-The non-return loop parameterises the operation via #asm_op, but this loop
-hardcodes add:
-
-	"add %1, %1, %6\n"
-
-Was the intent to keep the return path add-only, or could the two loops share
-one templated sequence?
-
-> +			: "=&r"(old), "=&r"(tmp), "=&r"(new), "+A"(*ptr32)			\
-> +			: "r"(mask), "r"(shift), "r"(val_trunc), "r"(PERCPU_8_16_GET_MASK(sz)), \
-> +			"r"(inv_mask)								\
-> +			: "memory");								\
-> +		return (val_type)(tmp >> shift);						\
-> +	}											\
-> +}
-
-[ ... ]
+   In file included from arch/arm64/kernel/smp.c:11:
+>> arch/arm64/include/asm/sdei.h:56:15: error: expected identifier or '('
+      56 | unsigned long sdei_arch_get_entry_point(int conduit);
+         |               ^
+   include/linux/arm_sdei.h:16:45: note: expanded from macro 'sdei_arch_get_entry_point'
+      16 | #define sdei_arch_get_entry_point(conduit)      (0)
+         |                                                  ^
+   In file included from arch/arm64/kernel/smp.c:11:
+>> arch/arm64/include/asm/sdei.h:56:15: error: expected ')'
+   include/linux/arm_sdei.h:16:45: note: expanded from macro 'sdei_arch_get_entry_point'
+      16 | #define sdei_arch_get_entry_point(conduit)      (0)
+         |                                                  ^
+   arch/arm64/include/asm/sdei.h:56:15: note: to match this '('
+   include/linux/arm_sdei.h:16:44: note: expanded from macro 'sdei_arch_get_entry_point'
+      16 | #define sdei_arch_get_entry_point(conduit)      (0)
+         |                                                 ^
+   In file included from arch/arm64/kernel/smp.c:11:
+   arch/arm64/include/asm/sdei.h:57:9: warning: 'sdei_arch_get_entry_point' macro redefined [-Wmacro-redefined]
+      57 | #define sdei_arch_get_entry_point(x)    sdei_arch_get_entry_point(x)
+         |         ^
+   include/linux/arm_sdei.h:16:9: note: previous definition is here
+      16 | #define sdei_arch_get_entry_point(conduit)      (0)
+         |         ^
+   1 warning and 2 errors generated.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+vim +56 arch/arm64/include/asm/sdei.h
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28494034360
---===============4104290110149668795==--
+9c7998bb7f77655 Kiryl Shutsemau (Meta  2026-06-30  44) 
+f5df26961853d68 James Morse            2018-01-08  45  /*
+f5df26961853d68 James Morse            2018-01-08  46   * The above entry point does the minimum to call C code. This function does
+f5df26961853d68 James Morse            2018-01-08  47   * anything else, before calling the driver.
+f5df26961853d68 James Morse            2018-01-08  48   */
+f5df26961853d68 James Morse            2018-01-08  49  struct sdei_registered_event;
+f5df26961853d68 James Morse            2018-01-08  50  asmlinkage unsigned long __sdei_handler(struct pt_regs *regs,
+f5df26961853d68 James Morse            2018-01-08  51  					struct sdei_registered_event *arg);
+f5df26961853d68 James Morse            2018-01-08  52  
+d60b228fd19985a Mark Rutland           2021-06-07  53  unsigned long do_sdei_event(struct pt_regs *regs,
+d60b228fd19985a Mark Rutland           2021-06-07  54  			    struct sdei_registered_event *arg);
+d60b228fd19985a Mark Rutland           2021-06-07  55  
+f5df26961853d68 James Morse            2018-01-08 @56  unsigned long sdei_arch_get_entry_point(int conduit);
+f5df26961853d68 James Morse            2018-01-08  57  #define sdei_arch_get_entry_point(x)	sdei_arch_get_entry_point(x)
+f5df26961853d68 James Morse            2018-01-08  58  
+
+:::::: The code at line 56 was first introduced by commit
+:::::: f5df26961853d6809d704cedcaf082c57f635a64 arm64: kernel: Add arch-specific SDEI entry code and CPU masking
+
+:::::: TO: James Morse <james.morse@arm.com>
+:::::: CC: Catalin Marinas <catalin.marinas@arm.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
