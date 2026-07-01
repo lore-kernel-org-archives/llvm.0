@@ -1,27 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 105832FDC27
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9A8236A373
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878098; cv=none; b=RAaBQSATURSjjzRiPbWzb6Yj1ij3ox8DP45y4VrIvhzhVDUOszM4zRW/bhH4wycuoYd1/M0AHmWtvd45lflfKFfT2v9JbwRvb+j7ggjy89GDtp4pjI6IcMBtMUQk3oFqXm0NZd7rUFpboCJQGUkpgs1Et64qBI6C7BXSZGdcXNo=
+	t=1782878098; cv=none; b=GE/ZOAGzV6+qbQONh6TUh1fRKkSMhxGSQPDw9iE7a/BZTez+Dl4FCPr89GMZpdnKjUTcXJWW46Gaaqhm89JIJj5HVBkfZy2s177z/AkYQQGFSUILOqo6D77Zw1n2ANMPzKtltoA8Gs7X4vZp/wVzE6FLma56ft+NGkmxFdlFTQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782878098; c=relaxed/simple;
-	bh=oLhAqwWv1/J5e8ZRIbHODcqFMh8X9NFJlRoCkLgSAZE=;
+	bh=bLezi/SX8MjrI+efADm45mrDQwz9ecAuBcCkgfyXWCI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=V5B7m5wuphrLkyN5ZGKjAGdyOuTzy14Xdgmto7qnwOWwVHt1H/qGZ9knyqFtemAuzuhe/93b5RRixhGpIRkwpQ3gFcplvSrZLBSb2JkSGGSmVdz4PkEL/JS0fBhqxqdEZi5gcUvlSBWbovSfy+u8exDht80kkmrP5YrJavFFRZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=m0YfnHN3CHTxjofR80blFSZPnyVyl+0xSoO+ChyicknO0KBd5Un+4fjupY88vUvOB/q9WzfS/8vHgd5H/TgsaGby9RXQOniSjXipBgQGMNOiNzcTwBK6ndhBn6e70g2DSXfIU18HDODNNaA5qJCck2P2FBUzNl/FmNKDscuMpJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmMz4GkmzYQtmB
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:53:51 +0800 (CST)
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNr5lM6zKHMT1
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:36 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 75D664056D
+	by mail.maildlp.com (Postfix) with ESMTP id D6CC140ADD
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:45 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S8;
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S12;
 	Wed, 01 Jul 2026 11:54:45 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 06/21] perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
-Date: Wed,  1 Jul 2026 03:53:40 +0000
-Message-Id: <20260701035355.752944-7-wutengda@huaweicloud.com>
+Subject: [PATCH v3 10/21] perf annotate: Deduplicate overlapping ARM SPE events for data type profiling
+Date: Wed,  1 Jul 2026 03:53:44 +0000
+Message-Id: <20260701035355.752944-11-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 References: <20260701035355.752944-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFyxGrW7trWDGw1fGF4kJFb_yoW5Cw4xpF
-	sxC347Jw4UW3WakwnxAF18WF1rJw48Zr4FyrW0vwsrCrsruFyUZw1fKr1j9F45X3yDJw10
-	kayqgr18Gr4rJF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S12
+X-Coremail-Antispam: 1UD129KBjvJXoWxGr4fWrWxGr4xtFW5Aw47Jwb_yoW5uFW8pF
+	srWw13KF48Xrs3Kw4fAw4xGr13K3yfXay5Grna93yqy3ZF9Fy0qFWxtw1YyFW5Xrnxt34a
+	vw4DKryUZ348taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -72,89 +72,94 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxAFyxGrW7trWDGw1fGF4kJFb_yoW5Cw4xpF
 	kF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF
 	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
 	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	r41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
 	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The current arm64 DWARF register lookup relies on 'aarch64_regstr_tbl',
-a static string table. While this works for kprobe-tracer where register
-names start with '%', it is insufficient for parsing register numbers
-directly from raw instructions (e.g., extracting '6' from 'x6' or 'w6')
-during annotation.
+When data type profiling is enabled on ARM SPE, multiple overlapping
+events (e.g., l1d-miss, tlb-access) are synthesized for a single sampled
+instruction, as shown below:
 
-Since get_dwarf_regnum() is currently used only by 'perf annotate' and
-does not affect kprobe-tracer, replace the limited table-based lookup
-with a programmatic implementation in __get_dwarf_regnum_arm64(). This
-allows resolving arm64 register names (x0-x30, w0-w30, sp, etc.) directly
-into their corresponding DWARF register numbers.
+  Available samples
+  0 arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=30/
+  0 dummy:u
+  84K l1d-miss
+  95K l1d-access
+  77K llc-miss
+  58K llc-access
+  9K tlb-miss
+  108K tlb-access
+  0 branch
+  13K remote-access
+  108K memory
+  108K instructions
+
+While 'perf report' provides an interactive menu for users to select a
+specific event to prevent duplicate counting, 'perf annotate' lacks such
+a mechanism. Consequently, it counts all instructions across these
+overlapping events, which inflates the profile and distorts the data
+type statistics.
+
+Although using the '--itrace' option can work around this issue, for example:
+
+  # perf annotate --data-type --stdio --itrace=i1i
+
+it is inconvenient for users to specify this explicitly every time.
+
+To address this, implement automatic deduplication in process_sample_event()
+by retaining only the comprehensive "instructions" event when data type
+annotation is enabled and no explicit itrace options are configured.
+
+To achieve this, also set 'event->auxtrace_info.type' in arm_spe_prep_sample()
+so that 'perf annotate' can correctly identify ARM SPE events during
+sample processing.
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../util/dwarf-regs-arch/dwarf-regs-arm64.c   | 20 +++++++++++++++++++
- tools/perf/util/dwarf-regs.c                  |  2 +-
- tools/perf/util/include/dwarf-regs.h          |  1 +
- 3 files changed, 22 insertions(+), 1 deletion(-)
+ tools/perf/builtin-annotate.c | 13 +++++++++++++
+ tools/perf/util/arm-spe.c     |  1 +
+ 2 files changed, 14 insertions(+)
 
-diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
-index 593ca7d4fccc..be55fc2a4f38 100644
---- a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
-+++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <errno.h>
-+#include <ctype.h>
- #include <dwarf-regs.h>
- #include "../../../arch/arm64/include/uapi/asm/perf_regs.h"
+diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+index 69cb72b2082a..46b2bd3fb201 100644
+--- a/tools/perf/builtin-annotate.c
++++ b/tools/perf/builtin-annotate.c
+@@ -283,9 +283,22 @@ static int process_sample_event(const struct perf_tool *tool,
+ 				struct machine *machine)
+ {
+ 	struct perf_annotate *ann = container_of(tool, struct perf_annotate, tool);
++	struct evsel *evsel = sample->evsel;
+ 	struct addr_location al;
+ 	int ret = 0;
  
-@@ -10,3 +11,22 @@ int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum)
- 
- 	return perf_regnum;
++	/*
++	 * ARM SPE synthesizes multiple overlapping events (e.g., l1d-miss,
++	 * tlb-access) for a single sampled instruction. When data type is
++	 * enabled, counting all of these overlapping events would inflate
++	 * the profile and distort the data type statistics. To avoid this,
++	 * deduplicate by retaining only the comprehensive "instructions" event.
++	 */
++	if (ann->data_type && !ann->session->itrace_synth_opts->set &&
++	    event->auxtrace_info.type == PERF_AUXTRACE_ARM_SPE &&
++	    strcmp(evsel->name, "instructions") != 0)
++		return 0;
++
+ 	addr_location__init(&al);
+ 	if (machine__resolve(machine, &al, sample) < 0) {
+ 		pr_warning("problem processing %s (%u) event at offset %#" PRIx64 ", skipping it.\n",
+diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+index 552f063f126e..e027e3b200bf 100644
+--- a/tools/perf/util/arm-spe.c
++++ b/tools/perf/util/arm-spe.c
+@@ -403,6 +403,7 @@ static void arm_spe_prep_sample(struct arm_spe *spe,
+ 	event->sample.header.type = PERF_RECORD_SAMPLE;
+ 	event->sample.header.misc = sample->cpumode;
+ 	event->sample.header.size = sizeof(struct perf_event_header);
++	event->auxtrace_info.type = PERF_AUXTRACE_ARM_SPE;
  }
-+
-+int __get_dwarf_regnum_arm64(const char *name)
-+{
-+	int reg;
-+
-+	if (!strcmp(name, "sp") || !strcmp(name, "wzr") || !strcmp(name, "xzr"))
-+		return 31;
-+
-+	if (*name != 'x' && *name != 'w')
-+		return -ENOENT;
-+
-+	name++;
-+	if (!isdigit(*name))
-+		return -ENOENT;
-+
-+	reg = strtol(name, NULL, 10);
-+
-+	return reg >= 0 && reg <= 30 ? reg : -ENOENT;
-+}
-diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
-index 797f455eba0d..bacf5c13c3bc 100644
---- a/tools/perf/util/dwarf-regs.c
-+++ b/tools/perf/util/dwarf-regs.c
-@@ -114,7 +114,7 @@ int get_dwarf_regnum(const char *name, unsigned int machine, unsigned int flags)
- 		reg = _get_dwarf_regnum(arm_regstr_tbl, name);
- 		break;
- 	case EM_AARCH64:
--		reg = _get_dwarf_regnum(aarch64_regstr_tbl, name);
-+		reg = __get_dwarf_regnum_arm64(name);
- 		break;
- 	case EM_CSKY:
- 		reg = __get_csky_regnum(name, flags);
-diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
-index 46a764cf322f..a25f038bbff2 100644
---- a/tools/perf/util/include/dwarf-regs.h
-+++ b/tools/perf/util/include/dwarf-regs.h
-@@ -105,6 +105,7 @@ int __get_dwarf_regnum_x86_64(const char *name);
- int __get_dwarf_regnum_for_perf_regnum_i386(int perf_regnum);
- int __get_dwarf_regnum_for_perf_regnum_x86_64(int perf_regnum);
  
-+int __get_dwarf_regnum_arm64(const char *name);
- int __get_dwarf_regnum_for_perf_regnum_arm(int perf_regnum);
- int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum);
- 
+ static void arm_spe__prep_branch_stack(struct arm_spe_queue *speq)
 -- 
 2.34.1
 
