@@ -1,81 +1,80 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9363A3546EF
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 14:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E026848A2C2
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 15:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.50
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782917149; cv=pass; b=J4mwNenMzsIFBtUhPSyLaOX7ipasjVrLSdxZ4tWBkpNbfqwLDA+m/VgRf1uu3WRClugBmvbEgsua5wwKi04WuT0xHJYtJA2LV+etHknxOVReR/rhWsIzfHcd+MAvdcA84F2IfCuWXtkB0p9lI0oWBA9OSAlIqB04FYUphWRF9CQ=
+	t=1782918982; cv=pass; b=myuCn3kt6glvfm9kAEHW8LPpvqSD6WdxvPdMb6XueCBZyj19PzFVGU4xUB8VHjqMXN1jXTjvacVc00rdjFzCnu3e/fYB96USgVc/hYo9HduiUswgo7TRSMsbwx8VHbyBTUwtg8kmpYnbh9sqa0TqEibosYvVlpQcspJuetbVAEI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782917149; c=relaxed/simple;
-	bh=bJEO/oQ7yFm0w+qdUyGr0FNMTVhZro5QNGVVzwLHYEI=;
+	s=arc-20240116; t=1782918982; c=relaxed/simple;
+	bh=mvkodHBxlLf/UgS7Colns3TvsFcgtHHOxTmj5HzEZMs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MagUsa6/l2HNRMoIjFWMfWJDD+UyQh8L4nDCX6EIW+zCp/iptHWcFnPcyxsQhd2zQfJevy4xxTNBg+YQmPTd10zMLnMx57CreJ/bKbMYTHaalXFr5geveHZ2IawlhesI7+lfVEFEBmf40t6ny3DUrhdOn+nYlmJZZAv+68KSMjE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=riraaef6; arc=pass smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=fbQVcBJ3g200ceudFJIOuLIu+x+vTWuXYzJHe5YNiN6/T6AuCapNqxn63P6SV+gFXDYOiqLavWh4l1rIfoYj1uwmKBpEB4S4UltDJo3PXfW+PB08KleiZjmeqmTMpy3AX9Uwg/HMWdCWuFejKemll6qoBvvBP0hGljay0n/TYZ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K3feaDKb; arc=pass smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="riraaef6"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c125bce2294so93213566b.3
-        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 07:45:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1782917145; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K3feaDKb"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-697ebe536b6so1486211a12.1
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 08:16:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782918977; cv=none;
         d=google.com; s=arc-20260327;
-        b=DwlO34lUqqtj82OrVxc6glyjuxuR3mdMpbiaNRSgUGCu+ryEBZxITPODtpmKwykvGe
-         0zJFJ5+RI9rh/Z6eYrSi/Yhq3Unh+wLukrtMXfhwYbEEYS9qap2GA6XUo0qZzQPGYmoY
-         N+wpjv5i9i1ZcwNF9Lrtd9ZmPbUDHNYnh40zaepfy/iEF6l6jn9Bm29U/TwYsSZNwKi7
-         5PuG+qywWEB2OUe7qz2hBfKBiaMFG51zHBWn9ucMs2VBXLqbZ9m9+umgE25HG4ug34KC
-         TTe/1NsaAcI3llRkiMVo0nxHys2lZYP0flnAT21WliyXvgTUasmwMWGKcG413WmRlvm/
-         d8gA==
+        b=S+ywvfy9TMGWg4PsUohhTVNup2AZWxm2F50pRFgiwbEToCUtkTkj+lBJ3rlJ3SC5Ve
+         r87vlD2BZsACa2oRds0Qpnvfck7JM7M8FZoYexYt3ixTDKLJg9vBLytFIBAlorT97H9v
+         jllKcnM2tHiE937iFnq38WxsDHHvhFwiYXp8qpD3jzMcku7a63GT/b9bC80vDaCWKEKK
+         45zneQHEVmNtIJc/TEglbTJFpN8h7aufH+vh3kseihoH+k1J9GgCgHa1eZG7cWTw3BuJ
+         d7pF8oZzPVByjBfuerDjuQ7YWGcY2nVJ28ulZLmHq2PppdjyELsXqTRs14AIiDUmMdsy
+         pEpg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=e4VxbfrJ8p894B+QfqkDR2gI77xQ9xtwNKhqCLX8M/Y=;
-        fh=Dnj9fl3hRyKvXIQwC6agtPkiDWaCi3da42eY8X2p75E=;
-        b=m3mdg+4h+1UwQJPX0PVKdGrENCXGofZdsfp76OnDOl01D7Tn3WN8wct7pTrFzp4fIE
-         kE1ufHSAKdBVu1RteYHZhx8GUnXzs99OeKrzZpQy+ymq4APxnoU4A0r5hENjp7ZXL0dw
-         PPGhRcyV9Ej8QgHh7Bp7yKQ2VyY48ArQbJ5TIjgKC0xYlevenqN0uKty7XTXZmB+sbo4
-         dedADbj3lX3GqqPeIXVFxIBVRYetHRXMLdw/uUmOyO0gwV6PYp1Hz7bYsZKp/Wf3SBkD
-         jnpFkowgQPzJkPi764JiA443bTxI4jpxgL93McGPBL1q1gc6cqt4PrrM/eJFkH7PqDMb
-         LWjQ==;
+        bh=g9Ct1t4oI3eGFO4X7XoqoWi2Q8Pv35qR9dPP8CVLRfQ=;
+        fh=VRmZjeB+eq6AFYypHb6Cly5fsSHuL8DfgjBz/P1n7Xg=;
+        b=U8Fvqo0eN1SM2uAXHWKwf47fwdq23NJjBGePSD+IhFLTpcbgHRBHdB4LS5fM2E9hC8
+         j1BVp64mqIVSOaOMwyqNv0A9dP82jRBNRfHHLKujlGmvoo+JZxECA7LQRAevwoXgEahD
+         hmoxpqGA6JlHsUAIzVgooRn0pRx4WYLXSZ0ktPliKK6eouxPC3gZnBYf9GmNE72JTLu2
+         Um3MIC3UiY5AotPu5OftzEgiAqZVl8TqqnAAe8b0jDeLsdr/wbPST/h+k8Jwi0nCHinD
+         23KfN6+mQYRxrObSocp+CUO2XtPdLXlxHdK6eN6THKZXdEb6yxsrKVUFa5XZ1vqWiWPj
+         oBeQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1782917145; x=1783521945; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1782918977; x=1783523777; darn=lists.linux.dev;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e4VxbfrJ8p894B+QfqkDR2gI77xQ9xtwNKhqCLX8M/Y=;
-        b=riraaef6ibuY3bmrNiDQR9SYYg3Z7odDI/UOoTlKsozlEOh0LjYs+Luohp9Jsw9hk4
-         WPKii6s0+WpGNdMjUCZIk8n+42Rk/IH53yqNHA2MzMdy97PYpgENouJT5hTpr4VHRQWJ
-         BwLFCn2nKzHNMg+UCpQWKoLNy9hHwE/KAdGtSFdj4A16+2oJaX44gp2exB3hb90+gLMQ
-         b/1cdjwsitJbNdhqLTZI80RpasKQxioWwKMfCJVnaOlzQQ+cvRcxxWVoa8BNSSZqNJ00
-         tTHCdahZUWj134cND5+ubfPc/UVbncjqo57mctSifARTCCAe/+P1clqWSDyTPyPqMyvg
-         YAAQ==
+        bh=g9Ct1t4oI3eGFO4X7XoqoWi2Q8Pv35qR9dPP8CVLRfQ=;
+        b=K3feaDKbzKFTbIzowjkWqt23KX/7HaR0cv3fo+F3IQgXBXpt3XrEWEb9OFlE8wytQz
+         YVsoU/pKdlGVn80bAgO3WnWgYWnJ46YhaTcHAAtwiYigtRM4jlJm5hWPOQVTPGqS6tou
+         vyBTceLqSUP5QQarddJuuHldafv2A1SNmGqzlxPjv+zKSpsx5SS51L85mY7+4UNk6unH
+         BZM1N+Q6NPakfLD2fCWKA+7vOJIFfDYDKHgI3048Tv8l3Iu3jD7iPATZ4/QGd0WCENKL
+         yPxwazPoWUVW8FI6NcWYpyCQfj2+qYUeknK9Nw10CiBUC8/7AmDXEJPbHtYkvQk/dC73
+         /0Xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1782917145; x=1783521945;
+        d=1e100.net; s=20251104; t=1782918977; x=1783523777;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=e4VxbfrJ8p894B+QfqkDR2gI77xQ9xtwNKhqCLX8M/Y=;
-        b=jnhkSqN/4ck5e9qYJYpvVzvd1CPhZXKDycxkYoCyKo7D6l6Gv/1IyowDjXu7QYNR/I
-         xzuRMumDS4GycoEZtusBpT+Wa7GvqZ5x5596jMU7GMEnceH/McgcuTl2sWBNGqrTLGVj
-         qnHEvsMhLoxCWxRxPaiuWo4nbmKW7bcrLuqZnom2cvLK+dOmrD0VhPAxDETeMFu15lVU
-         36t83isPQPMZhIupSmf6UK7WQLbW3EQ1d8pGVTtBd0IQiU7esvxjlAI7QgxNkxWd2GUN
-         09oumMHRJx/rch7m80kgNyeDwf6Wj7C+kQgYasdMIPFpFdVyn+ay555LI5trw3aLWYQ1
-         pwsg==
-X-Forwarded-Encrypted: i=1; AHgh+RropO0bYx8If+/Bbaoeja5rE/mnne8uLV9m4FiE6oAU8ZKXtYR7jZgSmLBH+DdRMFoSBeCh@lists.linux.dev
-X-Gm-Message-State: AOJu0YzBa+Xaqgm72gxEGap3y4UWowV3+yMslr7n4zWd3iVJIpbHuLe8
-	5/ba1jp1NyWj3hoJsM5ZVUsiHQ08gZ0yyMvS9qHiwq7zjYBhRIKQp7aN4ooKIa+oXnFa6o+Lp7r
-	+VqXh7aOQHM9DWNj12FluJibQz51SWHk=
-X-Gm-Gg: AfdE7cly1d/O3whDHzAwlvRyo41pNlzub4Gau6tX3j2VuhZEa82mW+In90twdiBJYpD
-	n9pSu7i6dg4vJW3zuxz6Z3IXDu8REPFbwsiUsZHJ2AcXobruHFIyARADfqnX2nC+Cz3yDXacClH
-	EHneT7mKHbb6a9cwjrGu7ow1CS3LVpeWXfXSqad5CMm0t+o6eJN5TCdit/T+/cW4h5IhJf+FMpa
-	IXDTi4RBg6UylBSniDUDwblotMjM/xWVbaehlhGPi2H5LPsGp7fbST9JxUkQQMdoCqihpk/hXW8
-	shs0HWQXfSPE8hIdVNfPjTSSfyvmDN832GNmAyWs63bPUCrlOLAs8AMsGkItqBrNFxJBiqKaIni
-	qYHuAH4x9ZA==
-X-Received: by 2002:a17:906:209c:b0:bd5:7c2:7622 with SMTP id
- a640c23a62f3a-c12ae84ed2emr37794766b.49.1782917144825; Wed, 01 Jul 2026
- 07:45:44 -0700 (PDT)
+        bh=g9Ct1t4oI3eGFO4X7XoqoWi2Q8Pv35qR9dPP8CVLRfQ=;
+        b=py/NrAtMYzM0VQnB6vQlMBphF+nwTlfyH2lbFaqOUGmoA92pMCnmb8fEs+IXCFAPST
+         cMrKHQkk7FKPaSQD4/QOSVgF8it4c+EcFOSiEhV0jQJGSOZOUcq0mdZZtS3sDfi9ZpwU
+         8LQddhGvRFSXm9YnV+yIUolsEOExeD/nTPkwaydU2EsQy4sTetZSK5Vk52RQItQ76fKY
+         fKQKETeUy49LNhaNBxE/UcGbpZJyGztWU+VCu/CkuombatiT8MKf/SW9vn7r5YAIMFaq
+         SdD/48d0g1gTU5QGReO+DrfKI5VlKmf5NjdJogKm4cU2Rd/wZnEQQhbkns3RRghDdCXb
+         KwsA==
+X-Forwarded-Encrypted: i=1; AHgh+RpzyETK/7C2qzvoKbxz5WZRyeV7AvAdlI6fUJR706G5SVntr33IbyXmdA/zhtg414HS8A+n@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4C1PwiwXpwIlsTvy3JytfesLz7fbVsgfNd9+VsO2+TWTZtiE2
+	zZfTlMtws7hIYArcKk4XfI5TDYZ/9CQtCygaZaUKheUciU1c5OaT4YhyOsarN+m9l/GwJTbdNqE
+	MpuLSaym/2UXuvkXhM7KBwYFVtNCPq0rGuuMpsj+D
+X-Gm-Gg: AfdE7cm1s5v5aSlVLAl4J4dxx1h0DyiCA37kQW1/QVlsKX5WhUCb1vr4g5pSHarQB0g
+	vk/luoS/tx4IbsTJF76ODpFywK0XJtt+ICg2MXt7zxKyKfwqpk7xxPQSYLGqARNXm2EyCbpuXkk
+	iYrlna4rUic5n37eqh6G2DCLD6iKgLicEp7PmME5BDsyJevsYMDtJUpUAOh5oeS1vlBNQYPJ/aD
+	5+V7QyEzlq+X9nWUvwo3TA4cSMfsQ8EBxL1knzG0ilhkqegKqZ4f64P3hQjtQxCJVPp1ueI9n1f
+	JWBvwtEA4pwnBHuGp9dIkyqLr+RenUlYLeCq
+X-Received: by 2002:a05:6402:34d2:b0:698:4699:59d with SMTP id
+ 4fb4d7f45d1cf-6989f33c106mr1053721a12.17.1782918976573; Wed, 01 Jul 2026
+ 08:16:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,13 +82,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260701125151.352632-1-voytikd@gmail.com> <CAG_fn=Wor0586c077D+0D+NYh+bkhqPhVVzoAANsaLGxbjLpTQ@mail.gmail.com>
-In-Reply-To: <CAG_fn=Wor0586c077D+0D+NYh+bkhqPhVVzoAANsaLGxbjLpTQ@mail.gmail.com>
-From: Dmitry Voytik <voytikd@gmail.com>
-Date: Wed, 1 Jul 2026 16:45:18 +0200
-X-Gm-Features: AVVi8Cc5uxeIqIiWFOkSKOfAxIKeqvxsA19JWQ6Lc_aOQEpsu8EAzjAqokjWnsY
-Message-ID: <CAAX90H31D3y-q1RJ=ah+hhPj2_apUh-rGtmwwp8vBzDNZcLH5A@mail.gmail.com>
+ <CAAX90H31D3y-q1RJ=ah+hhPj2_apUh-rGtmwwp8vBzDNZcLH5A@mail.gmail.com>
+In-Reply-To: <CAAX90H31D3y-q1RJ=ah+hhPj2_apUh-rGtmwwp8vBzDNZcLH5A@mail.gmail.com>
+From: Alexander Potapenko <glider@google.com>
+Date: Wed, 1 Jul 2026 17:15:36 +0200
+X-Gm-Features: AVVi8CcT-ikLzaLh0i71cpWmg-Xsyf2H8TgZcmrLinyuDA6tKonIkBw_YC0GzxI
+Message-ID: <CAG_fn=VA4P2YVNHSHxzeChFg45LhoYLnj4jrLMq+jVGnt__wPQ@mail.gmail.com>
 Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
-To: Alexander Potapenko <glider@google.com>
+To: Dmitry Voytik <voytikd@gmail.com>
 Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
 	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
 	Josh Poimboeuf <jpoimboe@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
@@ -102,94 +102,85 @@ Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, Peter Zij
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Alexander,
-
-On Wed, Jul 1, 2026 at 3:18=E2=80=AFPM Alexander Potapenko <glider@google.c=
-om> wrote:
+On Wed, Jul 1, 2026 at 4:45=E2=80=AFPM Dmitry Voytik <voytikd@gmail.com> wr=
+ote:
 >
-> On Wed, Jul 1, 2026 at 2:51=E2=80=AFPM Dmitry Voytik <voytikd@gmail.com> =
-wrote:
-> >
-> > This patch fixes broken builds with defconfig + CONFIG_KMSAN +
-> > CONFIG_DEBUG_INFO_*.
-> >
-> > To reproduce the issue before the fix:
-> >   make mrproper
-> >   make LLVM=3D1 defconfig
-> >   ./scripts/config -e CONFIG_KMSAN \
-> >     -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> >   make LLVM=3D1 olddefconfig
-> >   make LLVM=3D1 -j(nproc) vmlinux
-> >   ...
-> >     LD      vmlinux.o
-> >   vmlinux.o: warning: objtool: folio_zero_user+0x801: undefined stack s=
-tate
-> >   vmlinux.o: error: objtool: folio_zero_user+0x801: unknown CFA base re=
-g -1
-> >   make[2]: *** [scripts/Makefile.vmlinux_o:76: vmlinux.o] Error 255
-> >
-> > objtool in verbose mode shows how the frame pointer is omitted:
-> >   make LLVM=3D1 OBJTOOL_VERBOSE=3D1 -j(nproc) vmlinux
-> >   ...
-> >   b15a2c:  folio_zero_user+0x7fc      xor    %eax,%eax
-> >   b15a2e:  folio_zero_user+0x7fe      mov    %rcx,%rsp
-> >   b15a31:  folio_zero_user+0x801      mov    %r14,%rdi
-> >   b15a34:  folio_zero_user+0x804      mov    %rbx,%rcx
-> >   b15a37:  folio_zero_user+0x807      call   0xb15a3c <__clear_pages_un=
-rol
-> >
-> > After the fix, the frame pointer is back:
-> >   b15a37: 31 c0                       xor    %eax,%eax
-> >   b15a39: 48 89 ec                    mov    %rbp,%rsp
-> >   b15a3c: 4c 89 f7                    mov    %r14,%rdi
-> >   b15a3f: 48 89 d9                    mov    %rbx,%rcx
-> >   b15a42: e8 00 00 00 00              call   b15a47 <folio_zero_user+0x=
-817>
-> >
-> > It seems the issue was introduced by
-> > commit 54a6b89a3db2 ("x86/mm: simplify clear_page_*")
-> >
-> > The actual fix is to revert the change how ASM_CALL_CONSTRAINT is
-> > positioned.
-> > Additionally, reintroduce asm_inline to prevent potential compiler
-> > rejection of inlining.
-> >
-> > Link: https://lore.kernel.org/CAAX90H2_RPnZL_dFYN7cQF6yt-wAweKKSx2=3D6e=
-2aZ0kv+Pm+NQ@mail.gmail.com
-> > Signed-off-by: Dmitry Voytik <voytikd@gmail.com>
-> Have you tried running KMSAN with this fix?
+> Hi Alexander,
 >
-> I tried running with the config that Thomas posted at
-> https://lore.kernel.org/all/87tsqjq3i3.ffs@fw13/
-> (https://tglx.de/~tglx/config.fail), and it still hangs for me.
+> On Wed, Jul 1, 2026 at 3:18=E2=80=AFPM Alexander Potapenko <glider@google=
+.com> wrote:
+> >
+> > On Wed, Jul 1, 2026 at 2:51=E2=80=AFPM Dmitry Voytik <voytikd@gmail.com=
+> wrote:
+> > >
+> > > This patch fixes broken builds with defconfig + CONFIG_KMSAN +
+> > > CONFIG_DEBUG_INFO_*.
+> > >
+> > > To reproduce the issue before the fix:
+> > >   make mrproper
+> > >   make LLVM=3D1 defconfig
+> > >   ./scripts/config -e CONFIG_KMSAN \
+> > >     -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+> > >   make LLVM=3D1 olddefconfig
+> > >   make LLVM=3D1 -j(nproc) vmlinux
+> > >   ...
+> > >     LD      vmlinux.o
+> > >   vmlinux.o: warning: objtool: folio_zero_user+0x801: undefined stack=
+ state
+> > >   vmlinux.o: error: objtool: folio_zero_user+0x801: unknown CFA base =
+reg -1
+> > >   make[2]: *** [scripts/Makefile.vmlinux_o:76: vmlinux.o] Error 255
+> > >
+> > > objtool in verbose mode shows how the frame pointer is omitted:
+> > >   make LLVM=3D1 OBJTOOL_VERBOSE=3D1 -j(nproc) vmlinux
+> > >   ...
+> > >   b15a2c:  folio_zero_user+0x7fc      xor    %eax,%eax
+> > >   b15a2e:  folio_zero_user+0x7fe      mov    %rcx,%rsp
+> > >   b15a31:  folio_zero_user+0x801      mov    %r14,%rdi
+> > >   b15a34:  folio_zero_user+0x804      mov    %rbx,%rcx
+> > >   b15a37:  folio_zero_user+0x807      call   0xb15a3c <__clear_pages_=
+unrol
+> > >
+> > > After the fix, the frame pointer is back:
+> > >   b15a37: 31 c0                       xor    %eax,%eax
+> > >   b15a39: 48 89 ec                    mov    %rbp,%rsp
+> > >   b15a3c: 4c 89 f7                    mov    %r14,%rdi
+> > >   b15a3f: 48 89 d9                    mov    %rbx,%rcx
+> > >   b15a42: e8 00 00 00 00              call   b15a47 <folio_zero_user+=
+0x817>
+> > >
+> > > It seems the issue was introduced by
+> > > commit 54a6b89a3db2 ("x86/mm: simplify clear_page_*")
+> > >
+> > > The actual fix is to revert the change how ASM_CALL_CONSTRAINT is
+> > > positioned.
+> > > Additionally, reintroduce asm_inline to prevent potential compiler
+> > > rejection of inlining.
+> > >
+> > > Link: https://lore.kernel.org/CAAX90H2_RPnZL_dFYN7cQF6yt-wAweKKSx2=3D=
+6e2aZ0kv+Pm+NQ@mail.gmail.com
+> > > Signed-off-by: Dmitry Voytik <voytikd@gmail.com>
+> > Have you tried running KMSAN with this fix?
+> >
+> > I tried running with the config that Thomas posted at
+> > https://lore.kernel.org/all/87tsqjq3i3.ffs@fw13/
+> > (https://tglx.de/~tglx/config.fail), and it still hangs for me.
+>
+> I only tested the fix with defconfig + CONFIG_KMSAN +
+> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT + olddefconfig.
+>
+> qemu-system-x86_64 \
+>     -kernel arch/x86/boot/bzImage \
+>     -append "console=3DttyS0" \
+>     -nographic \
+>     -m 8G -smp 4 \
+>     -serial file:serial_output.log
+>
+> Booting from ROM..
+> [    0.000000] Linux version 7.1.0-14280-g3dd2bc904bda
+> (voyt@voyt-laptop-dell) (clang version 22.1.6, LLD 22.1.6) #2 SMP
+> PREEMPT_DYNAMIC Wed Jul  1 16:25:28 CEST 2026
+> ...
 
-I only tested the fix with defconfig + CONFIG_KMSAN +
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT + olddefconfig.
-
-qemu-system-x86_64 \
-    -kernel arch/x86/boot/bzImage \
-    -append "console=3DttyS0" \
-    -nographic \
-    -m 8G -smp 4 \
-    -serial file:serial_output.log
-
-Booting from ROM..
-[    0.000000] Linux version 7.1.0-14280-g3dd2bc904bda
-(voyt@voyt-laptop-dell) (clang version 22.1.6, LLD 22.1.6) #2 SMP
-PREEMPT_DYNAMIC Wed Jul  1 16:25:28 CEST 2026
-...
-[    2.274314] Starting KernelMemorySanitizer
-[    2.274356] ATTENTION: KMSAN is a debugging tool! Do not use it on
-production machines!
-[    2.357699] Dynamic Preempt: lazy
-[    2.390793] rcu: Preemptible hierarchical RCU implementation.
-[    2.391032] rcu:     RCU event tracing is enabled.
-[    2.391256] rcu:     RCU restricting CPUs from NR_CPUS=3D64 to nr_cpu_id=
-s=3D4.
-...
-[   53.009112] /dev/root: Can't open blockdev
-[   53.012357] VFS: Cannot open root device "" or unknown-block(0,0): error=
- -6
-[   53.013186] Please append a correct "root=3D" boot option; here are
-the available partitions:
-...
+In fact I think the hangs are being caused by CONFIG_UNWINDER_ORC=3Dy,
+sorry for the noise.
