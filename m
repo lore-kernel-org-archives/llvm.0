@@ -1,28 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1230E36B054
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1E436AB6B
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878099; cv=none; b=DBE9zGe3KZIeMEnW0oVNJY9kExYm2CSAFacqnA+tLx/GCyAoAxYC3AtsQWEmAt5C7XmHEmqRkCzTeqorkkh54IwoC5zIxe3BchvHki7NPFU3/1WbQcbgLv7iFMDnlNvbNnt74zKqbXQunhtKqOSpaFtoudbh3hK6uWL3gsOaCDI=
+	t=1782878100; cv=none; b=jfevBE6JRizvfSEXqnE9544quPAvzHuo3Zhtf5olo8O52/Z2HZGYIj5jXDujjVyt6q0gjMhggLMqYr961K5lPtZj6fBlrn4LM6/PAPCCHsVJ8Ne29JIi/TKeXyTUUmzkbF3ZczScTR3bgdm4LSiBx/jS/fTHfCmFuOLlVE1zd1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878099; c=relaxed/simple;
-	bh=GLKJajIofyOl1aHrvfXzb2NpNKve2Cc/K2d+Zc9jF/U=;
+	s=arc-20240116; t=1782878100; c=relaxed/simple;
+	bh=ADrfowPkLRf4ZXEM3AyAfzU5RoiI/brduXrsy8p8VVs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JUl+TfFHb8NXxyEy5NBDGQgsARUIJHtXbvV0rdt0lf4bcyP0E3kmCzmWovpReXScQuHCZ+LITNr4l0LeopJix5HDnwxweO35FvYTNLXxJIwcPiNMrs6AyEMT27F8DcBwGH1W9D1Ws1YGVIJVP8pv+RiaQJdMxvcGIIqdEpAnkGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=B91586Z0I+9ACJEguXZq3gB5Qkrl9MGsDEnQLewmV3O6ehlaef4NhYt5nr/95dju75EEbKn5lwy5+sUdhIrUqC45AJNdbXElNwefP921FcaU99V2RDIJ3+p9pfxl8JStru+7bOltUS/8a6R7fyZxoDPsNA6ps4WziAJ5fHjM1qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmN04j0JzYQtt4
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:53:52 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNr533YzKHMSV
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:36 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 81C6C40B26
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:46 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id C021340ADD
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:45 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S19;
-	Wed, 01 Jul 2026 11:54:46 +0800 (CST)
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S11;
+	Wed, 01 Jul 2026 11:54:45 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 17/21] perf annotate-arm64: Support 'mov' instruction tracking
-Date: Wed,  1 Jul 2026 03:53:51 +0000
-Message-Id: <20260701035355.752944-18-wutengda@huaweicloud.com>
+Subject: [PATCH v3 09/21] perf annotate-arm64: Implement extract_op_location() callback
+Date: Wed,  1 Jul 2026 03:53:43 +0000
+Message-Id: <20260701035355.752944-10-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 References: <20260701035355.752944-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S19
-X-Coremail-Antispam: 1UD129KBjvJXoWxXryDZw1DKw48WF47Kw1fCrg_yoWrAw1fpa
-	4DC345G39rtr42gFsIqrWxXr9a9ws7Kr129r90vwnIvFW3Kr1rKa97Kay3ZF45Xry8Cr17
-	Jw4DKrZxWw42kF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S11
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr4rXw1rur4fAry5XF43ZFb_yoWrZF15pw
+	4j9345tr17tr4Yq3WfZFs7WFy3Cw1fGas09rWfA39xArs7ZF1kXa1IkF1a9Fy3Jr9xC34j
+	vF4UtrW8Zr1UGaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -72,127 +72,148 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxXryDZw1DKw48WF47Kw1fCrg_yoWrAw1fpa
 	kF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF
 	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
 	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
+	r41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
 	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state() for arm64 to support register-to-register and
-immediate-to-register 'mov' instructions.
+Implement the extract_op_location() callback for the arm64 architecture
+to handle its specific assembly syntax and addressing modes.
 
-For register-to-register 'mov' (e.g., mov dreg, sreg), propagate data type
-information from the source register to the destination register.
+The extractor handles:
+1. Standalone immediate operands (e.g., #0x10).
+2. Memory references with diverse addressing modes:
+   - Signed offset: [base, #imm]
+   - Pre-index: [base, #imm]!
+   - Post-index: [base], #imm
+3. Multi-register operands and primary/secondary register extraction.
 
-For immediate-to-register 'mov' (e.g., mov dreg, #imm), store the immediate
-value in the destination register's imm_value field and set its kind to
-TSR_KIND_CONST, allowing subsequent instructions to resolve it as a
-constant.
-
-A real-world example is shown below:
-
-  ffff8000803eebf8 <get_vma_policy>:
-  ffff8000803eec20:  mov  x21, x0          // x0 (struct vm_area_struct*) -> x21
-  ffff8000803eec28:  ldr  x2, [x0, #112]
-  ffff8000803eec2c:  cbz  x2, ffff8000803eec94 <get_vma_policy+0x9c>
-* ffff8000803eec94:  ldr  x0, [x21, #152]
-
-Before this commit, the type of x21 was unknown, causing the subsequent
-inference to fail:
-
-  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
-  chk [9c] reg21 offset=0x98 ok=0 kind=0 cfa : no type information
-  final result: no type information
-
-After this commit, the type of x21 is correctly inferred as 'vm_area_struct':
-
-  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
-  mov [28] reg0 -> reg21 type='struct vm_area_struct*' size=0x8
-  chk [9c] reg21 offset=0x98 ok=1 kind=1 (struct vm_area_struct*) : Good!
-  found by insn track: 0x98(reg21) type-offset=0x98
-  final result:  type='struct vm_area_struct' size=0xb0
+With this callback in place, 'perf annotate' can now resolve memory
+locations and register types on arm64, marking the initial enablement
+of data type profiling for this architecture.
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 52 +++++++++++++++++++
- 1 file changed, 52 insertions(+)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 64 +++++++++++++++++++
+ tools/perf/util/annotate.h                    | 10 +++
+ 2 files changed, 74 insertions(+)
 
 diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 255ccaf33130..be07a85057c8 100644
+index 451500def8c1..77b6f4841c84 100644
 --- a/tools/perf/util/annotate-arch/annotate-arm64.c
 +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -527,6 +527,51 @@ static void update_store_insn_state(struct type_state *state,
- 	adjust_reg_index_state(state, dst, "str", insn_offset);
+@@ -261,6 +261,69 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
+ 	return ops;
  }
  
-+static void update_mov_insn_state(struct type_state *state,
-+				  struct disasm_line *dl,
-+				  struct annotated_op_loc *src,
-+				  struct annotated_op_loc *dst)
++static int extract_op_location_arm64(const struct arch *arch,
++				     struct disasm_line *dl __maybe_unused,
++				     const char *op_str, int op_idx __maybe_unused,
++				     struct annotated_op_loc *op_loc)
 +{
-+	struct type_state_reg *tsr;
-+	u32 insn_offset = dl->al.offset;
-+	int sreg = src->reg1;
-+	int dreg = dst->reg1;
++	const char *s = op_str;
++	char *p = NULL;
 +
-+	if (!has_reg_type(state, dreg))
-+		return;
++	if (op_str == NULL)
++		return 0;
 +
-+	tsr = &state->regs[dreg];
-+	tsr->copied_from = -1;
-+
-+	if (src->imm) {
-+		tsr->kind = TSR_KIND_CONST;
-+		tsr->imm_value = src->offset;
-+		tsr->offset = 0;
-+		tsr->ok = true;
-+
-+		pr_debug_dtp("mov [%x] imm=%#x -> reg%d\n",
-+			     insn_offset, tsr->imm_value, dreg);
-+		return;
++	/* Handle standalone immediate operands (e.g., #0x10) */
++	if (*s == arch->objdump.imm_char) {
++		op_loc->offset = strtol(s + 1, &p, 0);
++		if (p && p != s + 1)
++			op_loc->imm = true;
++		return 0;
 +	}
 +
-+	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
-+		invalidate_reg_state(tsr);
-+		return;
++	/*
++	 * Handle memory references (e.g., [x0, #8]), identify
++	 * arm64 specific addressing modes
++	 */
++	if (*s == arch->objdump.memory_ref_char) {
++		op_loc->mem_ref = true;
++
++		p = strchr(s, ']');
++		if (p == NULL)
++			return -1;
++
++		/* Pre-index: [base, #imm]! */
++		if (p[1] == '!')
++			op_loc->addr_mode = PERF_ADDR_MODE_PRE_INDEX;
++		/* Post-index: [base], #imm */
++		else if (p[1] == ',' && strchr(p + 1, arch->objdump.imm_char))
++			op_loc->addr_mode = PERF_ADDR_MODE_POST_INDEX;
++		/* Signed offset: [base{, #imm}] */
++		else
++			op_loc->addr_mode = PERF_ADDR_MODE_SIGNED_OFFSET;
++
++		s++;
 +	}
 +
-+	tsr->type = state->regs[sreg].type;
-+	tsr->kind = state->regs[sreg].kind;
-+	tsr->imm_value = state->regs[sreg].imm_value;
-+	tsr->offset = state->regs[sreg].offset;
-+	tsr->ok = state->regs[sreg].ok;
++	/* Extract the primary register */
++	op_loc->reg1 = arch__dwarf_regnum(arch, s);
++	if (op_loc->reg1 == -1)
++		return -1;
 +
-+	if (tsr->kind == TSR_KIND_TYPE || tsr->kind == TSR_KIND_POINTER)
-+		tsr->copied_from = sreg;
++	/* Move to the next symbol of the operand, if any */
++	s = strchr(s, ',');
++	if (s == NULL)
++		return 0;
++	s = skip_spaces(s + 1);
 +
-+	pr_debug_dtp("mov [%x] reg%d -> reg%d", insn_offset, sreg, dreg);
-+	pr_debug_type_name(&tsr->type, tsr->kind);
++	/* Parse secondary register or immediate offset */
++	if (op_loc->multi_regs)
++		op_loc->reg2 = arch__dwarf_regnum(arch, s);
++	else if (*s == arch->objdump.imm_char)
++		op_loc->offset = strtol(s + 1, &p, 0);
++
++	return 0;
 +}
 +
- static void update_insn_state_arm64(struct type_state *state,
- 				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
- 				    struct disasm_line *dl)
-@@ -544,6 +589,7 @@ static void update_insn_state_arm64(struct type_state *state,
- 	 * the destination register itself to prevent incorrect type propagation.
- 	 */
- 	if (has_reg_type(state, dst->reg1) &&
-+	    strcmp(dl->ins.name, "mov") &&
- 	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
- 		pr_debug_dtp("%s [%x] invalidate reg%d\n",
- 			     dl->ins.name, insn_offset, dst->reg1);
-@@ -551,6 +597,12 @@ static void update_insn_state_arm64(struct type_state *state,
- 		return;
- 	}
+ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 				   const char *cpuid __maybe_unused)
+ {
+@@ -279,6 +342,7 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	arch->objdump.memory_ref_char	  = '[';
+ 	arch->objdump.imm_char		  = '#';
+ 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
++	arch->extract_op_location	  = extract_op_location_arm64;
  
-+	/* Register to register or imm value to register transfers */
-+	if (!strcmp(dl->ins.name, "mov")) {
-+		update_mov_insn_state(state, dl, src, dst);
-+		return;
-+	}
+ 	/* bl, blr */
+ 	err = regcomp(&arm->call_insn, "^blr?$", REG_EXTENDED);
+diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+index 5a0a913af53a..670dc7944628 100644
+--- a/tools/perf/util/annotate.h
++++ b/tools/perf/util/annotate.h
+@@ -494,12 +494,21 @@ int annotate_check_args(void);
+ 
+ int arch__dwarf_regnum(const struct arch *arch, const char *str);
+ 
++enum annotated_addr_mode {
++	PERF_ADDR_MODE_NONE = 0,
 +
- 	/* Memory to register transfers */
- 	if (!strncmp(dl->ins.name, "ld", 2)) {
- 		update_load_insn_state(state, dloc, dl, src, dst);
++	PERF_ADDR_MODE_SIGNED_OFFSET,
++	PERF_ADDR_MODE_PRE_INDEX,
++	PERF_ADDR_MODE_POST_INDEX,
++};
++
+ /**
+  * struct annotated_op_loc - Location info of instruction operand
+  * @reg1: First register in the operand
+  * @reg2: Second register in the operand
+  * @offset: Memory access offset in the operand
+  * @segment: Segment selector register
++ * @addr_mode: Addressing mode, only valid if @mem_ref is true
+  * @mem_ref: Whether the operand accesses memory
+  * @multi_regs: Whether the second register is used
+  * @imm: Whether the operand is an immediate value (in offset)
+@@ -509,6 +518,7 @@ struct annotated_op_loc {
+ 	int reg2;
+ 	int offset;
+ 	u8 segment;
++	u8 addr_mode;
+ 	bool mem_ref;
+ 	bool multi_regs;
+ 	bool imm;
 -- 
 2.34.1
 
