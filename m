@@ -1,218 +1,140 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 756F2480DCD;
-	Wed,  1 Jul 2026 12:38:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2066948165E
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 12:40:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782909540; cv=none; b=EIhuGJlh/fsX1vBmyS/t7WzsLk2c4rizQ6G7vDj+voYUu6lntgro6bvZL4q6/mQtRfznnpQncTl4jILKkz5SMAbHQNYoOCigmG7d7jq2g/Q0gjmcGqgHQyj0CQvOPuNjNkBZIDZrv6mlKJaFUqzxjvqYPMKnnVf5usvFAzse86I=
+	t=1782909650; cv=none; b=sIiuLwrRRsBoBddt/nMp6qrrEuopk01HiS0aCNMpfbOPZs4pllfin3An5qJ5vkfQ1wNGu+ez3rePUP+KzLj9jVVo7P/J5PoqwhYLeoLIe8eQEB7crFh1Nkk07imWGSoGQilsqfRefy2AiMeiNP3EBivYsAfPbMV8sT4LgWm2AYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782909540; c=relaxed/simple;
-	bh=AwewDJtObQedp0iqnaU6tor13GazPTeID0ZEBQdRrb4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rLrp3vIEZiap81wimo92JpIMP6f3oZjXKiJ1WGkyFca6Ri/xZGd/2lPptKNxs66k7DX7X3LEcX3jUmf44FecYs2MoLA7f1U34MzlXq+I3eewXjHYUPOoLd6zuwHIi+/CaK9Qg73vm1YzUzaZUx38QNOO56IVYo9yu+eoshruF+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MV4nRdsn; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782909650; c=relaxed/simple;
+	bh=xJhx36MS26Ugt3HIC/X2CbJ51kDEkatoPsKwiaxCXCQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OS5ptM8VBwnhGJs6658IkR64yQXRdcsa84/+qGWspEfHtgLkamrBQQ+0XQaz+mwcf71z4mAn1Ek0LEI0ogOkDACzbVVUroStZMa/bx7XOtD3nebvkEqHcixS7Xyj5ORzmKIJl/0XIvz9K0oZfS7Lzng2u1U7V2p+9HR4blbCHHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=PQMU/BtD; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MV4nRdsn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782909538; x=1814445538;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=AwewDJtObQedp0iqnaU6tor13GazPTeID0ZEBQdRrb4=;
-  b=MV4nRdsnM66p/rzY2XYvLilt2e3MOQGvkZb9rLG00QJwI9rY1DOKHHQU
-   JsiZgS9+ADxQmN1a2zxsGdR0mq3Qy8ydZihhtsxs12smjpsiwwpVlqaiU
-   UPjiPxwdAE1Fpr2/GiiNb+DOsSpPk/I/AovXhTQV/5m9B0pAKH80nKIQn
-   YPGIPMK1TG0v4aq1tfxZWL6mzIxrA5BXtti0bi0Q8RvopollB4KIIi5eU
-   fj/+0PuVaho/89nT6/KC7xkIFVGtIvwj9XqFcccKTIXRhZQXA3qv9Wqiu
-   qr7SJCObZh41VKdfC/2Qmz56b+D2pnPR/z+lk2lwEFLZHHKYddcLIQ+nC
-   A==;
-X-CSE-ConnectionGUID: gE7mP/9TRgqhhAbx75CwAw==
-X-CSE-MsgGUID: +rplMaAJQVSiKTjW3AWUNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="71164777"
-X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
-   d="scan'208";a="71164777"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 05:38:58 -0700
-X-CSE-ConnectionGUID: lJxqaXX3Tk2CheDhoIQ5rg==
-X-CSE-MsgGUID: i8XVqhrXSYmYtkJtNYzOMQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
-   d="scan'208";a="252684306"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa007.jf.intel.com with ESMTP; 01 Jul 2026 05:38:56 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1weuDM-000000009Hh-2m71;
-	Wed, 01 Jul 2026 12:38:52 +0000
-Date: Wed, 01 Jul 2026 20:38:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/hrtimer-header-dependencies 6/6]
- kernel/time/timekeeping.c:1684:16: error: use of undeclared identifier
- 'HRTIMER_BASE_REALTIME'
-Message-ID: <202607012020.CeEmwJum-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="PQMU/BtD"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4629051c9d1so465609f8f.2
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 05:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1782909648; x=1783514448; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lExvIVm/qhAmBiXb4s7Ug/WTGW/jVwYWmx7ZmSxI+IU=;
+        b=PQMU/BtDAskIErc402+CA1ul5DhiMiDU4690LMmhSyJGJhl9nZef+t3qkKyqkk/1NA
+         koVTR79QCLRFbwosbnjiPGghYZY6fZGlRVLDcLqNLWPoF2u3jeY6LqCR1AQMCVBRDWOm
+         Q3TdXTZ9m4sMWdt6YPwxG1Yhd3mLIebDDRKh7g5MFGcmlrh8+YBjZ07IcuRiRnyurkU1
+         dwyAXd+FvChit4BqQuGwTuHVvuZAG/mb73nYzqAPY2HOwpXsq6xuDtcBw3J64+bWG1QI
+         X3wWfJ0CFXYPXOjPXu3c089/R/J1LnFC7k2I026SB8QS52izWV0QA4urjzKfFFP1M0fk
+         MKZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782909648; x=1783514448;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lExvIVm/qhAmBiXb4s7Ug/WTGW/jVwYWmx7ZmSxI+IU=;
+        b=effF8ovpE8M6V14W0J8FawNC3Xq1j473KXiMWolkqop8VAT0Wj5PqgNL5fwvSpNmR+
+         +Vim41wXIbyqrD4RIayoO5q9xJqTF9KYvD5XJDful5fB/bExKhyZ8jsOS5sLVjN5e0pZ
+         0UWdmxVlchAzwT9xCCjlFgeXNrEN9KwX+DXmY1gMXu4tV/s4BaK6rsMnUuedwwAma15Y
+         bvqRV1SRXRBizKMDAIkHSgsARKRo3ZlfMqEJY9bFn/tWFD0iAuNCi/iZXYoxEIwXa5PT
+         tkqY2xZ9wrR8/uWWDcEInp7UBBl/SI4C1z0iL4QBYuEQRPXOYlYbuGsl1BK/pGgUoldB
+         GI5A==
+X-Forwarded-Encrypted: i=1; AHgh+Roku1P8OnBo9/Idn5Y+BwMIifRZQSNfOmQr3Od/mYkjB1P9M5v9FCG91ZOH61vTYivP6mT5@lists.linux.dev
+X-Gm-Message-State: AOJu0YxNQs59NETRdkFLc80DmkkWBboIJx4gp3A4WT5x8yq0OmhDO8+/
+	Ymo8M8Jxt8l8wv/M+1WUaMztG0mX2OCmEzafl9INYN7+qGfVkEzwbg8Yu8kHSY+FabA=
+X-Gm-Gg: AfdE7ckX/h+9cplz5Nc4VdyRLaFnfsIGLWFPsRSUV9l8vlGBlqRWF4w3X6umU0QrF+X
+	JH/mus62QM354NRMh45gHIX8jCT6Wt3pqjeGfEEwTnCDeUhWY8637JijYjFhXGbNiLe7VpA6sol
+	7nRoJiOPLIfTlN+PjEwMwu37Iym1KLrZV7nfLCBRO05xreqSnHl5u7no4E6wykPjS0vdL8oNbK3
+	6DzwkHIP0VOBRdAgyYfJqGPK5gxcE2SV9o2KkmpJxW2R/16qNW5g8zgIwoCzbKlwUULwEmfR65v
+	kLIrFnhSVXgmDZ40rHB/wrrbZQJ3otyprTkEC3F+4xtm/DpxG28tE3tWwgATwmdJYpUhf+UbuDK
+	qEOEsVNMDiluU6uDfCJJgUnLSjEHNg/ltNc8Zasq64KRp1/tv7AEExIjqNng5H/x3cyrW/FxuEp
+	O+9o/X7wn8Ow==
+X-Received: by 2002:adf:e009:0:20b0:474:6a5b:860b with SMTP id ffacd0b85a97d-477b4fb2955mr401340f8f.37.1782909647645;
+        Wed, 01 Jul 2026 05:40:47 -0700 (PDT)
+Received: from localhost ([2001:4090:a246:8638:a73d:f626:6582:90ca])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47566c0deacsm17848753f8f.26.2026.07.01.05.40.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Jul 2026 05:40:47 -0700 (PDT)
+From: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
+Date: Wed, 01 Jul 2026 14:39:13 +0200
+Subject: [PATCH v7 01/11] arm64: dts: ti: k3-am62a-phycore-som: Fix wkup
+ R5F memory region size
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260701-topic-am62a-ioddr-dt-v6-19-v7-1-e9db8b16821a@baylibre.com>
+References: <20260701-topic-am62a-ioddr-dt-v6-19-v7-0-e9db8b16821a@baylibre.com>
+In-Reply-To: <20260701-topic-am62a-ioddr-dt-v6-19-v7-0-e9db8b16821a@baylibre.com>
+To: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Judith Mendez <jm@ti.com>, Daniel Schultz <d.schultz@phytec.de>, 
+ Andrew Davis <afd@ti.com>, Siddharth Vadapalli <s-vadapalli@ti.com>, 
+ Paresh Bhagat <p-bhagat@ti.com>, Bryan Brattlof <bb@ti.com>, 
+ Jai Luthra <jai.luthra@ideasonboard.com>, Devarsh Thakkar <devarsht@ti.com>, 
+ Beleswar Padhi <b-padhi@ti.com>, 
+ Francesco Dolcini <francesco.dolcini@toradex.com>, 
+ Stefano Radaelli <stefano.radaelli21@gmail.com>
+Cc: Vishal Mahaveer <vishalm@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Sebin Francis <sebin.francis@ti.com>, Kendall Willis <k-willis@ti.com>, 
+ Akashdeep Kaur <a-kaur@ti.com>, linux-arm-kernel@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Hari Nagalla <hnagalla@ti.com>, 
+ "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1530; i=msp@baylibre.com;
+ h=from:subject:message-id; bh=xJhx36MS26Ugt3HIC/X2CbJ51kDEkatoPsKwiaxCXCQ=;
+ b=kA0DAAoWhcFWaZAVSlMByyZiAGpFCnyjGaxDR9qbBVnjN/qS5E5NRZGzZonOGc1Sdrm+xQu/K
+ Yh1BAAWCgAdFiEEiWFVZv8fucZjoqazhcFWaZAVSlMFAmpFCnwACgkQhcFWaZAVSlMRBwD/R8D5
+ k4DLFbAre6LCFFxtN42qd7BzTXZEuQeC+r9vtfEBAONbUMoSrUIisHZJ7wMtgjwHi7BPgHJORi4
+ RdPks5AoH
+X-Developer-Key: i=msp@baylibre.com; a=openpgp;
+ fpr=BADD88DB889FDC3E8A3D5FE612FA6A01E0A45B41
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/hrtimer-header-dependencies
-head:   0e0dec10cf362a392e4fe54d84f43509556d903e
-commit: 0e0dec10cf362a392e4fe54d84f43509556d903e [6/6] hrtimer: Remove inclusion of hrtimer_bases.h remove from hrtimer.h
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260701/202607012020.CeEmwJum-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 6cc609bb250b21b47fc7d394b4019101e9983597)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260701/202607012020.CeEmwJum-lkp@intel.com/reproduce)
+The wkup_r5fss0_core0_memory_region was reserved with only
+0x0f00000 but the MCU SDK linker for the wkup R5F firmware on
+AM62A defines the DM code/data DDR footprint differently:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607012020.CeEmwJum-lkp@intel.com/
+    /* DDR for DM R5F code/data [ size 27 MiB + 364 KB ] */
+    DDR                         : ORIGIN = 0x9CAA5000 LENGTH = 0x1B5B000
 
-All errors (new ones prefixed by >>):
+which results in an end at 0x9e600000. For this memory region which
+starts at 0x9c900000 this means a length of:
 
->> kernel/time/timekeeping.c:1684:16: error: use of undeclared identifier 'HRTIMER_BASE_REALTIME'
-    1684 |         clock_was_set(CLOCK_SET_WALL);
-         |                       ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:180:7: note: expanded from macro 'CLOCK_SET_WALL'
-     180 |         (BIT(HRTIMER_BASE_REALTIME) | BIT(HRTIMER_BASE_REALTIME_SOFT) | \
-         |              ^~~~~~~~~~~~~~~~~~~~~
->> kernel/time/timekeeping.c:1684:16: error: use of undeclared identifier 'HRTIMER_BASE_REALTIME_SOFT'; did you mean 'HRTIMER_MODE_REL_SOFT'?
-    1684 |         clock_was_set(CLOCK_SET_WALL);
-         |                       ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:180:36: note: expanded from macro 'CLOCK_SET_WALL'
-     180 |         (BIT(HRTIMER_BASE_REALTIME) | BIT(HRTIMER_BASE_REALTIME_SOFT) | \
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hrtimer.h:54:2: note: 'HRTIMER_MODE_REL_SOFT' declared here
-      54 |         HRTIMER_MODE_REL_SOFT   = HRTIMER_MODE_REL | HRTIMER_MODE_SOFT,
-         |         ^
->> kernel/time/timekeeping.c:1684:16: error: use of undeclared identifier 'HRTIMER_BASE_TAI'
-    1684 |         clock_was_set(CLOCK_SET_WALL);
-         |                       ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:181:7: note: expanded from macro 'CLOCK_SET_WALL'
-     181 |          BIT(HRTIMER_BASE_TAI) | BIT(HRTIMER_BASE_TAI_SOFT))
-         |              ^~~~~~~~~~~~~~~~
->> kernel/time/timekeeping.c:1684:16: error: use of undeclared identifier 'HRTIMER_BASE_TAI_SOFT'
-    1684 |         clock_was_set(CLOCK_SET_WALL);
-         |                       ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:181:31: note: expanded from macro 'CLOCK_SET_WALL'
-     181 |          BIT(HRTIMER_BASE_TAI) | BIT(HRTIMER_BASE_TAI_SOFT))
-         |                                      ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:1755:17: error: use of undeclared identifier 'HRTIMER_BASE_REALTIME'
-    1755 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:180:7: note: expanded from macro 'CLOCK_SET_WALL'
-     180 |         (BIT(HRTIMER_BASE_REALTIME) | BIT(HRTIMER_BASE_REALTIME_SOFT) | \
-         |              ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:1755:17: error: use of undeclared identifier 'HRTIMER_BASE_REALTIME_SOFT'; did you mean 'HRTIMER_MODE_REL_SOFT'?
-    1755 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:180:36: note: expanded from macro 'CLOCK_SET_WALL'
-     180 |         (BIT(HRTIMER_BASE_REALTIME) | BIT(HRTIMER_BASE_REALTIME_SOFT) | \
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hrtimer.h:54:2: note: 'HRTIMER_MODE_REL_SOFT' declared here
-      54 |         HRTIMER_MODE_REL_SOFT   = HRTIMER_MODE_REL | HRTIMER_MODE_SOFT,
-         |         ^
-   kernel/time/timekeeping.c:1755:17: error: use of undeclared identifier 'HRTIMER_BASE_TAI'
-    1755 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:181:7: note: expanded from macro 'CLOCK_SET_WALL'
-     181 |          BIT(HRTIMER_BASE_TAI) | BIT(HRTIMER_BASE_TAI_SOFT))
-         |              ^~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:1755:17: error: use of undeclared identifier 'HRTIMER_BASE_TAI_SOFT'
-    1755 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:181:31: note: expanded from macro 'CLOCK_SET_WALL'
-     181 |          BIT(HRTIMER_BASE_TAI) | BIT(HRTIMER_BASE_TAI_SOFT))
-         |                                      ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:3006:17: error: use of undeclared identifier 'HRTIMER_BASE_REALTIME'
-    3006 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:180:7: note: expanded from macro 'CLOCK_SET_WALL'
-     180 |         (BIT(HRTIMER_BASE_REALTIME) | BIT(HRTIMER_BASE_REALTIME_SOFT) | \
-         |              ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:3006:17: error: use of undeclared identifier 'HRTIMER_BASE_REALTIME_SOFT'; did you mean 'HRTIMER_MODE_REL_SOFT'?
-    3006 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:180:36: note: expanded from macro 'CLOCK_SET_WALL'
-     180 |         (BIT(HRTIMER_BASE_REALTIME) | BIT(HRTIMER_BASE_REALTIME_SOFT) | \
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/hrtimer.h:54:2: note: 'HRTIMER_MODE_REL_SOFT' declared here
-      54 |         HRTIMER_MODE_REL_SOFT   = HRTIMER_MODE_REL | HRTIMER_MODE_SOFT,
-         |         ^
-   kernel/time/timekeeping.c:3006:17: error: use of undeclared identifier 'HRTIMER_BASE_TAI'
-    3006 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:181:7: note: expanded from macro 'CLOCK_SET_WALL'
-     181 |          BIT(HRTIMER_BASE_TAI) | BIT(HRTIMER_BASE_TAI_SOFT))
-         |              ^~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:3006:17: error: use of undeclared identifier 'HRTIMER_BASE_TAI_SOFT'
-    3006 |                 clock_was_set(CLOCK_SET_WALL);
-         |                               ^~~~~~~~~~~~~~
-   kernel/time/tick-internal.h:181:31: note: expanded from macro 'CLOCK_SET_WALL'
-     181 |          BIT(HRTIMER_BASE_TAI) | BIT(HRTIMER_BASE_TAI_SOFT))
-         |                                      ^~~~~~~~~~~~~~~~~~~~~
-   kernel/time/timekeeping.c:2029:13: warning: variable 'suspend_timing_needed' set but not used [-Wunused-but-set-global]
-    2029 | static bool suspend_timing_needed;
-         |             ^
-   1 warning and 12 errors generated.
+    0x9e600000 - 0x9c900000 = 0x1d00000
 
+Link: https://github.com/TexasInstruments/mcupsdk-core-k3/blob/k3_main/examples/drivers/ipc/ipc_rpmsg_echo_linux/am62ax-sk/r5fss0-0_freertos/ti-arm-clang/linker.cmd
+Fixes: 8dd0ac27fcd1 ("arm64: dts: ti: k3-am62a-phycore-som: Enable Co-processors")
+Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
+---
+ arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vim +/HRTIMER_BASE_REALTIME +1684 kernel/time/timekeeping.c
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi
+index de4048a3564bcac9558f88c94381f07db30d4f99..e13da7c95a30459e7649f284689039b89a95f651 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am62a-phycore-som.dtsi
+@@ -67,7 +67,7 @@ wkup_r5fss0_core0_dma_memory_region: memory@9c800000 {
+ 
+ 		wkup_r5fss0_core0_memory_region: memory@9c900000 {
+ 			compatible = "shared-dma-pool";
+-			reg = <0x00 0x9c900000 0x00 0xf00000>;
++			reg = <0x00 0x9c900000 0x00 0x01d00000>;
+ 			no-map;
+ 		};
+ 
 
-02ecee07ca30f7 Lakshmi Sowjanya D 2024-05-13  1651  
-8524070b7982d7 John Stultz        2007-05-08  1652  /**
-21f7eca555ad14 pang.xunlei        2014-11-18  1653   * do_settimeofday64 - Sets the time of day.
-21f7eca555ad14 pang.xunlei        2014-11-18  1654   * @ts:     pointer to the timespec64 variable containing the new time
-8524070b7982d7 John Stultz        2007-05-08  1655   *
-8524070b7982d7 John Stultz        2007-05-08  1656   * Sets the time of day to the new time and update NTP and notify hrtimers
-8524070b7982d7 John Stultz        2007-05-08  1657   */
-21f7eca555ad14 pang.xunlei        2014-11-18  1658  int do_settimeofday64(const struct timespec64 *ts)
-8524070b7982d7 John Stultz        2007-05-08  1659  {
-21f7eca555ad14 pang.xunlei        2014-11-18  1660  	struct timespec64 ts_delta, xt;
-8524070b7982d7 John Stultz        2007-05-08  1661  
-7a8e61f8478639 Thomas Gleixner    2019-03-23  1662  	if (!timespec64_valid_settod(ts))
-8524070b7982d7 John Stultz        2007-05-08  1663  		return -EINVAL;
-8524070b7982d7 John Stultz        2007-05-08  1664  
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1665  	scoped_guard (raw_spinlock_irqsave, &tk_core.lock) {
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1666  		struct timekeeper *tks = &tk_core.shadow_timekeeper;
-8524070b7982d7 John Stultz        2007-05-08  1667  
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1668  		timekeeping_forward_now(tks);
-8524070b7982d7 John Stultz        2007-05-08  1669  
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1670  		xt = tk_xtime(tks);
-4e8c11b6b3f0b6 Yu Liao            2021-12-13  1671  		ts_delta = timespec64_sub(*ts, xt);
-1e75fa8be9fb61 John Stultz        2012-07-13  1672  
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1673  		if (timespec64_compare(&tks->wall_to_monotonic, &ts_delta) > 0) {
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1674  			timekeeping_restore_shadow(&tk_core);
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1675  			return -EINVAL;
-e1d7ba8735551e Wang YanQing       2015-06-23  1676  		}
-e1d7ba8735551e Wang YanQing       2015-06-23  1677  
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1678  		tk_set_wall_to_mono(tks, timespec64_sub(tks->wall_to_monotonic, ts_delta));
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1679  		tk_set_xtime(tks, ts);
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1680  		timekeeping_update_from_shadow(&tk_core, TK_UPDATE_ALL);
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1681  	}
-8524070b7982d7 John Stultz        2007-05-08  1682  
-17a1b8826b451c Thomas Gleixner    2021-07-13  1683  	/* Signal hrtimers about time change */
-17a1b8826b451c Thomas Gleixner    2021-07-13 @1684  	clock_was_set(CLOCK_SET_WALL);
-8524070b7982d7 John Stultz        2007-05-08  1685  
-2d87a0674bd60d Ondrej Mosnacek    2019-04-10  1686  	audit_tk_injoffset(ts_delta);
-b8ac29b40183a6 Jason A. Donenfeld 2022-07-17  1687  	add_device_randomness(ts, sizeof(*ts));
-bba9898ef39966 Anna-Maria Behnsen 2024-10-09  1688  	return 0;
-8524070b7982d7 John Stultz        2007-05-08  1689  }
-21f7eca555ad14 pang.xunlei        2014-11-18  1690  EXPORT_SYMBOL(do_settimeofday64);
-8524070b7982d7 John Stultz        2007-05-08  1691  
+-- 
+2.53.0
 
-:::::: The code at line 1684 was first introduced by commit
-:::::: 17a1b8826b451c80e7999a7c68e06b70579b2b8f hrtimer: Add bases argument to clock_was_set()
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
