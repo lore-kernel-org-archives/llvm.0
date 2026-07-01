@@ -1,27 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1F136BCC0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1230E36B054
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878098; cv=none; b=FjvPdqB9VNvO8ZXNKWGMsgcBojqO/1/5FJDpQReF/M+1TLQkUHnvrz6SFHGQ1D8Tk5DSZ5ms4iddxgWxr0bwDniIYyB8RboQ+Om/BnsTcP3QRUGZpkKRxgtDCP1jsNIASM5Vkw7WC605xfKVEHJdpCN+NhmBAZA/c9yFFvW4DTc=
+	t=1782878099; cv=none; b=DBE9zGe3KZIeMEnW0oVNJY9kExYm2CSAFacqnA+tLx/GCyAoAxYC3AtsQWEmAt5C7XmHEmqRkCzTeqorkkh54IwoC5zIxe3BchvHki7NPFU3/1WbQcbgLv7iFMDnlNvbNnt74zKqbXQunhtKqOSpaFtoudbh3hK6uWL3gsOaCDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878098; c=relaxed/simple;
-	bh=t5yQ/MUBnZ3uxj+UmQyRpJStf1mMklbsiACDlinDIYk=;
+	s=arc-20240116; t=1782878099; c=relaxed/simple;
+	bh=GLKJajIofyOl1aHrvfXzb2NpNKve2Cc/K2d+Zc9jF/U=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p0ikw7Fc9IEAVSezVxUvfiyYkx4e06ZOfKWtTEgoYVflnkqd67gfFMEf5eyfa6NWNSj3+VzhbVcjHOkX+3s9imMurfAVNQvzt/nQYL1ySqOv1L7wQFMAdmZX79RA9fYwxJVl7vETrih7jqI1M1Wo2FXQ/kRiBCnvzexUw7d+Mc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=JUl+TfFHb8NXxyEy5NBDGQgsARUIJHtXbvV0rdt0lf4bcyP0E3kmCzmWovpReXScQuHCZ+LITNr4l0LeopJix5HDnwxweO35FvYTNLXxJIwcPiNMrs6AyEMT27F8DcBwGH1W9D1Ws1YGVIJVP8pv+RiaQJdMxvcGIIqdEpAnkGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNs1r4HzKHMRZ
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:37 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmN04j0JzYQtt4
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:53:52 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 52CED40B0F
+	by mail.maildlp.com (Postfix) with ESMTP id 81C6C40B26
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:46 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S17;
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S19;
 	Wed, 01 Jul 2026 11:54:46 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 15/21] perf annotate-arm64: Support store instruction tracking
-Date: Wed,  1 Jul 2026 03:53:49 +0000
-Message-Id: <20260701035355.752944-16-wutengda@huaweicloud.com>
+Subject: [PATCH v3 17/21] perf annotate-arm64: Support 'mov' instruction tracking
+Date: Wed,  1 Jul 2026 03:53:51 +0000
+Message-Id: <20260701035355.752944-18-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 References: <20260701035355.752944-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S17
-X-Coremail-Antispam: 1UD129KBjvJXoW7CFy7Jr45Zw1ruF48KF1rZwb_yoW8Zw4Upa
-	yqk34rKr42qrsYqrnxZF47Wr9xua1fJw4Ykry3AwsIyF42yrn3tFZ5KF42kFWrJrZxCw1U
-	Zw1DKr4DZ3yIkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S19
+X-Coremail-Antispam: 1UD129KBjvJXoWxXryDZw1DKw48WF47Kw1fCrg_yoWrAw1fpa
+	4DC345G39rtr42gFsIqrWxXr9a9ws7Kr129r90vwnIvFW3Kr1rKa97Kay3ZF45Xry8Cr17
+	Jw4DKrZxWw42kF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -77,53 +77,122 @@ X-Coremail-Antispam: 1UD129KBjvJXoW7CFy7Jr45Zw1ruF48KF1rZwb_yoW8Zw4Upa
 	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state() for arm64 to handle store (STR) instructions.
+Extend update_insn_state() for arm64 to support register-to-register and
+immediate-to-register 'mov' instructions.
 
-Unlike load instructions, store operations do not change the data type
-of the registers involved. However, arm64 store instructions sometimes
-use pre-index or post-index addressing modes (e.g., str x1, [x0, #8]!),
-which modify the base register as a side effect of the memory access.
+For register-to-register 'mov' (e.g., mov dreg, sreg), propagate data type
+information from the source register to the destination register.
 
-Call adjust_reg_index_state() for store instructions to ensure the
-base register's offset is correctly updated in the type state. This
-maintains synchronization between the hardware register state and the
-instruction tracker's model during sequential memory operations.
+For immediate-to-register 'mov' (e.g., mov dreg, #imm), store the immediate
+value in the destination register's imm_value field and set its kind to
+TSR_KIND_CONST, allowing subsequent instructions to resolve it as a
+constant.
+
+A real-world example is shown below:
+
+  ffff8000803eebf8 <get_vma_policy>:
+  ffff8000803eec20:  mov  x21, x0          // x0 (struct vm_area_struct*) -> x21
+  ffff8000803eec28:  ldr  x2, [x0, #112]
+  ffff8000803eec2c:  cbz  x2, ffff8000803eec94 <get_vma_policy+0x9c>
+* ffff8000803eec94:  ldr  x0, [x21, #152]
+
+Before this commit, the type of x21 was unknown, causing the subsequent
+inference to fail:
+
+  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
+  chk [9c] reg21 offset=0x98 ok=0 kind=0 cfa : no type information
+  final result: no type information
+
+After this commit, the type of x21 is correctly inferred as 'vm_area_struct':
+
+  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
+  mov [28] reg0 -> reg21 type='struct vm_area_struct*' size=0x8
+  chk [9c] reg21 offset=0x98 ok=1 kind=1 (struct vm_area_struct*) : Good!
+  found by insn track: 0x98(reg21) type-offset=0x98
+  final result:  type='struct vm_area_struct' size=0xb0
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-arch/annotate-arm64.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 52 +++++++++++++++++++
+ 1 file changed, 52 insertions(+)
 
 diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index b48545f35620..f283596bb058 100644
+index 255ccaf33130..be07a85057c8 100644
 --- a/tools/perf/util/annotate-arch/annotate-arm64.c
 +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -430,7 +430,7 @@ static void update_insn_state_arm64(struct type_state *state,
+@@ -527,6 +527,51 @@ static void update_store_insn_state(struct type_state *state,
+ 	adjust_reg_index_state(state, dst, "str", insn_offset);
+ }
+ 
++static void update_mov_insn_state(struct type_state *state,
++				  struct disasm_line *dl,
++				  struct annotated_op_loc *src,
++				  struct annotated_op_loc *dst)
++{
++	struct type_state_reg *tsr;
++	u32 insn_offset = dl->al.offset;
++	int sreg = src->reg1;
++	int dreg = dst->reg1;
++
++	if (!has_reg_type(state, dreg))
++		return;
++
++	tsr = &state->regs[dreg];
++	tsr->copied_from = -1;
++
++	if (src->imm) {
++		tsr->kind = TSR_KIND_CONST;
++		tsr->imm_value = src->offset;
++		tsr->offset = 0;
++		tsr->ok = true;
++
++		pr_debug_dtp("mov [%x] imm=%#x -> reg%d\n",
++			     insn_offset, tsr->imm_value, dreg);
++		return;
++	}
++
++	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
++		invalidate_reg_state(tsr);
++		return;
++	}
++
++	tsr->type = state->regs[sreg].type;
++	tsr->kind = state->regs[sreg].kind;
++	tsr->imm_value = state->regs[sreg].imm_value;
++	tsr->offset = state->regs[sreg].offset;
++	tsr->ok = state->regs[sreg].ok;
++
++	if (tsr->kind == TSR_KIND_TYPE || tsr->kind == TSR_KIND_POINTER)
++		tsr->copied_from = sreg;
++
++	pr_debug_dtp("mov [%x] reg%d -> reg%d", insn_offset, sreg, dreg);
++	pr_debug_type_name(&tsr->type, tsr->kind);
++}
++
+ static void update_insn_state_arm64(struct type_state *state,
+ 				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
+ 				    struct disasm_line *dl)
+@@ -544,6 +589,7 @@ static void update_insn_state_arm64(struct type_state *state,
  	 * the destination register itself to prevent incorrect type propagation.
  	 */
  	if (has_reg_type(state, dst->reg1) &&
--	    strncmp(dl->ins.name, "ld", 2)) {
-+	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
++	    strcmp(dl->ins.name, "mov") &&
+ 	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
  		pr_debug_dtp("%s [%x] invalidate reg%d\n",
  			     dl->ins.name, insn_offset, dst->reg1);
- 		invalidate_reg_state(&state->regs[dst->reg1]);
-@@ -442,6 +442,16 @@ static void update_insn_state_arm64(struct type_state *state,
- 		update_load_insn_state(state, dl, src, dst);
+@@ -551,6 +597,12 @@ static void update_insn_state_arm64(struct type_state *state,
  		return;
  	}
-+
-+	/* Register to memory transfers */
-+	if (!strncmp(dl->ins.name, "st", 2)) {
-+		/*
-+		 * Store instructions do not change the register type,
-+		 * but the base register must be updated for pre/post-index
-+		 * modes.
-+		 */
-+		adjust_reg_index_state(state, dst, "str", insn_offset);
-+	}
- }
- #endif
  
++	/* Register to register or imm value to register transfers */
++	if (!strcmp(dl->ins.name, "mov")) {
++		update_mov_insn_state(state, dl, src, dst);
++		return;
++	}
++
+ 	/* Memory to register transfers */
+ 	if (!strncmp(dl->ins.name, "ld", 2)) {
+ 		update_load_insn_state(state, dloc, dl, src, dst);
 -- 
 2.34.1
 
