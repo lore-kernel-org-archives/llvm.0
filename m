@@ -1,148 +1,160 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2FD314D1A;
-	Wed,  1 Jul 2026 11:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782906409; cv=none; b=PXXmeg08ADKQuJShDdr40y9X7DhJqPVhxNHx/TsJXPydXT2OJRhbcdODW2ENis+fghPrcMSvtmp2nlN+lIMEofN2Qk6doiOb4XE333ieeF2cLGFsCWx/TC0Rq5qGKbWAL7fPIuzR0SIY61RKpVpfAwLUBsuaDbRyGMUlxiYO0k4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782906409; c=relaxed/simple;
-	bh=xEu87upj1bhcgtLx9DyYhRrCIIGiO4d3TuqJb8zHMUk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=JaiKVwc6NtT0SKGgqRifu/HtR3YxGm3YJFbSofmh7F/33FvQ1C7OxfQBTHFVUWYxjfhYizkmvYFAIabibTBSvRsJhA4zOvJYNSJqmTz9uUeFvjH+yMIbUvjN072Q6Slt8TpGYO3wpvE7AV5hwAp6QstlVIqsAyBrPQmOKmDn6EQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LhsrsLVx; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED648480DD4
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:57:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782907070; cv=pass; b=IFN54nv1oIFtvtb3Hp2w0DPjijtnugCTjH6DZxcWoyp4O0gRwV4L4f/90VQSoADrqUaM4Cx7IK3aS36VAc8RjhdWVfcOSfPNm3x2qcPKMoPzU/U134J3QAv3v86swPzNUO+Tb86NsHdLby/MGyW3dBo2dZvzCIXLlkYlaoEZ71M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782907070; c=relaxed/simple;
+	bh=k/m7mOwOe2VK+7j1exKhxSnw3ozmGI8iEWqvbTFE6eI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uMJWnxl61Sz+aTo9RBHWNA4cVkTJQNoukhMyQbeSzWnfqAOhPhkIJGqp/Kwe7rrd/Ab3+GahxFzKqQFB/7ENkVPIo8JPdambul0jNvvn/M4DYcpDxd7CPbxAPuAshlv86nHzPIEYOQlqkNifuRCpkQDuIPirFs+nNkp3HoiMGx0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=F0O9jt/O; arc=pass smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LhsrsLVx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782906407; x=1814442407;
-  h=date:from:to:cc:subject:message-id;
-  bh=xEu87upj1bhcgtLx9DyYhRrCIIGiO4d3TuqJb8zHMUk=;
-  b=LhsrsLVxOZa7n+JIChtFgU3YWp6C9J2Yonp53dS7bKQvLPLkU2mw5YNk
-   ezFH3kzMqZs8E9ZjJ5nmN8YqnOD86XuwN0h0i1oA7NoVjBo+vhxqlqHFi
-   s4jIdtZ8SSagjyAhr6JBnhD/hNAG493ln5IuaNYZFOziP2H8t5QVu69D0
-   HRfOAcnAyPw17fIlh0QyJ8dMP2AqjJC6/37K+1lkLgsX+NcJpFEY71+5N
-   ltzBJmlWG4RmTwKDHkMBnq+9+YBI2Kt7bFL2MTwn/MO9hItzd2OeSZoNp
-   pVvVxSowNFtruZn6RS1akc2rAzzdR12GMDVyFp1tghgC1Qk3iQ9cmVTkr
-   Q==;
-X-CSE-ConnectionGUID: 9OajaR0TTnKI4kv6Z9TuQw==
-X-CSE-MsgGUID: c6b51mqbThWVF7zZneWucQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11833"; a="95020993"
-X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
-   d="scan'208";a="95020993"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 04:46:47 -0700
-X-CSE-ConnectionGUID: F6dq/KVBRmS9ilzx/L9EAQ==
-X-CSE-MsgGUID: HoYs3XeyTK+I3oF+xbeDlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,141,1779174000"; 
-   d="scan'208";a="252673650"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa007.jf.intel.com with ESMTP; 01 Jul 2026 04:46:45 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wetOs-000000000lx-1cuA;
-	Wed, 01 Jul 2026 11:46:42 +0000
-Date: Wed, 01 Jul 2026 13:45:58 +0200
-From: kernel test robot <lkp@intel.com>
-To: Birger Koblitz <mail@birger-koblitz.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: drivers/net/usb/ax88179_178a.c:1351:16: warning: variable
- 'tmp16' is uninitialized when passed as a const pointer argument here
-Message-ID: <202607011343.hXWnOWjt-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="F0O9jt/O"
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-44868d6a066so156811fac.3
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 04:57:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782907065; cv=none;
+        d=google.com; s=arc-20260327;
+        b=CoeQBOY7iKAkygWpYDiD7+ahp2vSBWWC7Ae3RT55AccjVZNlO1lj6OiafVqbyEQzVl
+         2uFQJG+xtDWH9un56Z40LMZ/SAnk32N0F/T4uxuKNULt+vRJLex8ciDdxbnxZ9j3Ot0m
+         tu6czfrJysR1Q7rAivL67T+Y3TitE+5zFZHvLhwV5z1MFRDgKHFOmJB/LUfUIAypKNmo
+         PgXYWpvkpOT1WV+dz2lR4OzaBIHA/pgeZ4iHjMMHM+gc1j4r5ag8myxcFCNB4AGM7XYF
+         FK3/CFF16DB5fOJLlpeSX3KpH7uOnT8oAcFqC9DcptX8r0QpJYUsxkI02UZtLIbgdwRx
+         2dzQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
+        fh=3iZ6af9FIeyAisnbBRvJkIjsNBh7pCOoDoJtDbYMY4s=;
+        b=LLvUL1fpvIzqWbcKvvFgC03ilyzcbtzusX7W1zYtFFE4H3K6C8hiFeIKqPSRQBMW/R
+         dL1bS//DjFRlH7W7W36LWoo5PjZvdyxWKXTBUEiTvqtNgtFxj+jqVfzao9zq+shzN6gA
+         qbx7xt7SfOsa9nr8mDMOy+ESpzep+w9648ywWhoDaaNliqQNvumXH0JVLkPeGLnqtk8H
+         j+Q1r70r+BrXM6Or9TcHAMuNqXYZjQ680NUSJmcKQtui1m2rY+xIjdrZ8R1HKXwjOWvj
+         mpg79XEd+cqMqF3gcYwaNIfvUuYpJxAy/U9feGi1ZFUEtkVZkTqoEyd6AUigVoKrWe10
+         AFRg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1782907065; x=1783511865; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
+        b=F0O9jt/OOGQGljbOaArca3NtQu0+HphvdhqcooZ3wFZ0f9swxMZVeo3uCXzFESw5jR
+         KmflLfwqhEmPx5F6jh1yGsdSDiYGsCkFatt6n/Q8lWIW/8G0H4BZ1VJtqu5vi9X4s438
+         hzXyiZpK5IxXGx+eqD2xS1f21uz2JLwo49YPuU1Y9KQsNMx9rjjPBVEi3DTmDIC4Y3y5
+         BMpPmRoSUHFkIn/vc7lkJcllhKkrO4h9b7Z0qUMYL0H4QZhF7TIYpMCalDJurRlU6nng
+         dp1uyoPqB0flybpkbqkyYUCVsMysKX7b59h/PS+hUJBG9BBma3kCqE2SCi/IjAsrO68V
+         M0SA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782907065; x=1783511865;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lqKxpCifHTwVLxyMY/FMijSWYZ0kJMALXZou2Lu6auM=;
+        b=UU/SSbQoW1OfbbKvJgrOny+IDJ2WmJ0NwaHF9D/sKyMiKOmbGvDxU3rDnYYIRtqqhC
+         g4z5Bx25/9A80gWa3FeVuoqKD5NumcMaS9kzXFEpLoiabEg444d0qdWlI4tVKc45Zwf9
+         EwxtC0+GrZ+QjZcBncwRaQ2rT4/1IR6PGqziufXR8lwBnAo8TPYoBIFvL+AD8f1m9KVh
+         c0U69QpbhQwblr+2anv7X80gz6K6htazH7kO1oSMbDaxTZHmmiLtvu/rXXvd39OguKIP
+         UY+xmZkXAlALEhmePdfQmf6InzCEEh3Vf0g64+PpGgVaxCqRUaxwsyzdk5wbolswn2W8
+         jssg==
+X-Forwarded-Encrypted: i=1; AFNElJ88CvCVRwQma+aawh12SJzBqS22zKrbKm99GvZDWnZfp7F3JrVpdfzZWFQjXUeoi9Ewtuwk@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx0VYxc8e6iCnW3XT8DkyTFg4nMtrbcg4z8QGFeLKajrsg9CKSV
+	WUvoj5EzNyp8Xnc18BUTZdIxkMRIaP1Pr8oFhxucsbDhKFKKBeHlpJk9W5jb8MtMWElENDI6dU2
+	l/UZYsBbZ3pMi+mapb/D8Cf01w2TlpjdU04SPn+Qurw==
+X-Gm-Gg: AfdE7ckYndckRExMYmvJ0ey4cAGGiYeA2OuUpGJo3gcGyRJz8jfNmsEnV//SWYfqYXO
+	xqTgNZS2dadqLZKC7Y2sdwXM9DwiZiKM2HMGzc+X7sqiYMxxnn7J33E7pHq9qPv0aM7wuhZwIGj
+	5v1magmnuxkyQkipFAObvKkVaezp7a2s86uvKcAl5i07rRJyaLovgSshU6gQiZNYzh2SmMGKMeB
+	0+LK0WwZAJNcDlF3TTkn8M4xo/z+uYZry4raY8Zr09zjNu5J/mGgR+UUEXPjlJiI5wb59p35eU=
+X-Received: by 2002:a05:6808:1389:b0:492:5bf0:d29f with SMTP id
+ 5614622812f47-4960f0d2101mr838181b6e.37.1782907065542; Wed, 01 Jul 2026
+ 04:57:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <cover.1782877663.git.cuiyunhui@bytedance.com> <7988df83f6341ea045ebd7294af2e8907dbd5ee7.1782877663.git.cuiyunhui@bytedance.com>
+ <ea525a80-1e6f-4304-a371-3ec17d91ee96@app.fastmail.com>
+In-Reply-To: <ea525a80-1e6f-4304-a371-3ec17d91ee96@app.fastmail.com>
+From: yunhui cui <cuiyunhui@bytedance.com>
+Date: Wed, 1 Jul 2026 19:57:33 +0800
+X-Gm-Features: AVVi8Ce8Hvhgv036NZvyTtBZ5NMmFq-2bEMlGWh7WwSjecXpQvRJF8LZ_SFRCM4
+Message-ID: <CAEEQ3wnDACZ08kk6ycpgXezgyS5zxi+P_vF_yBScK2sxU+UKaw@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v5 1/3] riscv: io: avoid null-pointer
+ arithmetic in PIO helpers
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Dennis Zhou <dennis@kernel.org>, 
+	Tejun Heo <tj@kernel.org>, "Christoph Lameter (Ampere)" <cl@gentwo.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, pulehui@huawei.com, 
+	puranjay@kernel.org, Thomas Huth <thuth@redhat.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Ben Dooks <ben.dooks@codethink.co.uk>, 
+	=?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <rkrcmar@ventanamicro.com>, 
+	Samuel Holland <samuel.holland@sifive.com>, Zong Li <zong.li@sifive.com>, 
+	"Conor.Dooley" <conor.dooley@microchip.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Deepak Gupta <debug@rivosinc.com>, seanwascoding@gmail.com, 
+	Andy Chiu <andybnac@gmail.com>, menglong8.dong@gmail.com, cyrilbur@tenstorrent.com, 
+	Vivian Wang <wangruikang@iscas.ac.cn>, Atish Patra <atishp@rivosinc.com>, 
+	Anup Patel <apatel@ventanamicro.com>, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, qingfang.deng@siflower.com.cn, 
+	Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Birger-Koblitz/ax88179_178a-Fix-endianness-of-pause-watermark-register/20260701-135544
-head:   1c753e5b45c1b7bacbdf78591bacbf018f7859cd
-commit: a4caa62490a0d1e1eee3f961639ef1e48b858d36 ax88179_178a: Add VLAN offload support for AX88179A
-date:   6 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260701/202607011343.hXWnOWjt-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260701/202607011343.hXWnOWjt-lkp@intel.com/reproduce)
+Hi Arnd,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607011343.hXWnOWjt-lkp@intel.com/
+On Wed, Jul 1, 2026 at 2:25=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> On Wed, Jul 1, 2026, at 06:20, Yunhui Cui wrote:
+> > @@ -56,6 +56,8 @@
+> >  #define __io_pbw()   RISCV_FENCE(iow, o)
+> >  #define __io_paw()   RISCV_FENCE(o, io)
+> >
+> > +#define PCI_IO_ADDR(addr)    ((void __iomem *)((unsigned long)PCI_IOBA=
+SE
+> > + (addr)))
+>
+> This does not seem to have any purpose, is this just left over
+> from the previous version?
+>
+> >
+> > +#ifdef CONFIG_HAS_IOPORT
+> >  __io_reads_ins(ins,  u8, b, __io_pbr(), __io_par(addr))
+> >  __io_reads_ins(ins, u16, w, __io_pbr(), __io_par(addr))
+> >  __io_reads_ins(ins, u32, l, __io_pbr(), __io_par(addr))
+> > -#define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, =
+count)
+> > -#define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, =
+count)
+> > -#define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, =
+count)
+> > +#define insb(addr, buffer, count) __insb(PCI_IO_ADDR(addr), buffer, co=
+unt)
+> > +#define insw(addr, buffer, count) __insw(PCI_IO_ADDR(addr), buffer, co=
+unt)
+> > +#define insl(addr, buffer, count) __insl(PCI_IO_ADDR(addr), buffer, co=
+unt)
+> > +#endif
+>
+> As far as I can tell, just adding the #ifdef here should be sufficient.
 
-All warnings (new ones prefixed by >>):
+Okay.
 
->> drivers/net/usb/ax88179_178a.c:1351:16: warning: variable 'tmp16' is uninitialized when passed as a const pointer argument here [-Wuninitialized-const-pointer]
-    1351 |                                                   2, 2, &tmp16);
-         |                                                          ^~~~~
-   1 warning generated.
+>
+>       Arnd
 
-
-vim +/tmp16 +1351 drivers/net/usb/ax88179_178a.c
-
-  1309	
-  1310	static int
-  1311	ax88179_set_features(struct net_device *net, netdev_features_t features)
-  1312	{
-  1313		u8 tmp;
-  1314		struct usbnet *dev = netdev_priv(net);
-  1315		struct ax88179_data *data = dev->driver_priv;
-  1316		netdev_features_t changed = net->features ^ features;
-  1317	
-  1318		if (changed & NETIF_F_IP_CSUM) {
-  1319			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
-  1320			tmp ^= AX_TXCOE_TCP | AX_TXCOE_UDP;
-  1321			ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
-  1322		}
-  1323	
-  1324		if (changed & NETIF_F_IPV6_CSUM) {
-  1325			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
-  1326			tmp ^= AX_TXCOE_TCPV6 | AX_TXCOE_UDPV6;
-  1327			ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_TXCOE_CTL, 1, 1, &tmp);
-  1328		}
-  1329	
-  1330		if (changed & NETIF_F_RXCSUM) {
-  1331			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_RXCOE_CTL, 1, 1, &tmp);
-  1332			tmp ^= AX_RXCOE_IP | AX_RXCOE_TCP | AX_RXCOE_UDP |
-  1333			       AX_RXCOE_TCPV6 | AX_RXCOE_UDPV6;
-  1334			ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RXCOE_CTL, 1, 1, &tmp);
-  1335			data->rx_checksum = !!(features & NETIF_F_RXCSUM);
-  1336		}
-  1337	
-  1338		if (changed & NETIF_F_HW_VLAN_CTAG_FILTER) {
-  1339			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_CONTROL, 1, 1, &tmp);
-  1340			tmp ^= AX_VLAN_CONTROL_VFE;
-  1341			ax88179_write_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_CONTROL, 1, 1, &tmp);
-  1342			if (features & NETIF_F_HW_VLAN_CTAG_FILTER) {
-  1343				for (int i = 0; i < 256; i++) {
-  1344					u16 tmp16;
-  1345					/* Address */
-  1346					tmp = i;
-  1347					ax88179_write_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_ADDRESS,
-  1348							  1, 1, &tmp);
-  1349					/* Data */
-  1350					ax88179_write_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_DATA0,
-> 1351							  2, 2, &tmp16);
-  1352					tmp = AX_VLAN_CONTROL_WE;
-  1353					ax88179_write_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_CONTROL,
-  1354							  1, 1, &tmp);
-  1355				}
-  1356			}
-  1357		}
-  1358	
-  1359		if (changed & NETIF_F_HW_VLAN_CTAG_RX) {
-  1360			ax88179_read_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_CONTROL, 1, 1, &tmp);
-  1361			tmp ^= AX_VLAN_CONTROL_VSO;
-  1362			ax88179_write_cmd(dev, AX_ACCESS_MAC, AX88179A_VLAN_ID_CONTROL, 1, 1, &tmp);
-  1363		}
-  1364	
-  1365		return 0;
-  1366	}
-  1367	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Yunhui
