@@ -1,27 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6F736C9D0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9E536C0AB
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878098; cv=none; b=o5XqPoen/8ex8xwSRLnlUVXCbvXicZhsK4mjPLmlvSF3U/TLsUqOhSTOIhHVa5hlp56qrTjQ5saDf6hkN1i9eQ/AoDcp2K1aM6yC9N0CQlY5OGWOy5o92pREonjLuR201+HiMQHczlxJHUUpi38tnEZdGyleYLnIqzaU3/Wzf4o=
+	t=1782878098; cv=none; b=kZEmq9iSCRckJRSGpXwTnPad4NJuKx42M4waNDcm02Yb+unWvuZ4AWdvu7H6RtVAohZReVx7rY4iCQF/aJmCNW0SDxf8tDp13NuJD/evRVDGrFvJVFxH85eNvg3Lsu8IWmX3r9v7PprCE8WmI+RYGGtTo5Z0U8h631E0WwyTDeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782878098; c=relaxed/simple;
-	bh=+70x/ecQEOKmm3RSXwvxtfQLbWkszBP/qJA7UE63iio=;
+	bh=JjH5p8pGbrHjHBxzf/IowxQWNFOae1tY1vCyJtis+9E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OOHl8g9kGkUgsH0/g4Ty/15PoTaFmtQ+n/22Riiy3D2wx9Wt+zV7aNW6GBMNBSghWawCUssnp39gz4sJJHvDotW+jhKt34Rxt2pxIbmoryNNo9wngHR3+OXr5dj0En8Br98+dVAKelBjCjiUPsD0EMpYGAZ0Ur984e0P0ZDyADI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=fWOhstRd/rT6V2N4b/0vELhjiPMtJrnOWfX49oaCncNS5iXqwFQVt0oHhxGwuMK+i8ZtgbQz+xvcoFP1SSWSXxStwCaFcifscCjW7JpNg7G86hK8cg64EWw6TlKaPMqSUTaYO1ZB6zyXgSgSokq6JPAe5KbaPUjGckoCX5/z3Qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmN01LMKzYQtrL
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:53:52 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNr6DyfzKHMTF
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:36 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 0E3354058F
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:46 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id E814940AE3
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:45 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S14;
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S13;
 	Wed, 01 Jul 2026 11:54:45 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 12/21] perf annotate-data: Extract invalidate_reg_state() as a common helper
-Date: Wed,  1 Jul 2026 03:53:46 +0000
-Message-Id: <20260701035355.752944-13-wutengda@huaweicloud.com>
+Subject: [PATCH v3 11/21] perf auxtrace: Set default period to 1 for PERF_ITRACE_PERIOD_INSTRUCTIONS type
+Date: Wed,  1 Jul 2026 03:53:45 +0000
+Message-Id: <20260701035355.752944-12-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 References: <20260701035355.752944-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S14
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17urWDCFg_yoW5Gw17p3
-	yDC347Gw43Gr4FgwnxJFW3XFWF9r1fXa4Fk3sYywn7ZFWIyrn3JF97XFy5tFW7Xr93Cw12
-	yw1qgr4DJ3yxGaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S13
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7tF1UGF4fWFyftF47Jwb_yoW5Xrykpr
+	n8t34fJr4kJry8Kw1xAr4UuFyfJw4YyF13GryxAryYy342gr18Jry7tr1Y9r4xWr1Ykr9r
+	Zr90g34UGr17JaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -77,72 +77,76 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17urWDCFg_yoW5Gw17p3
 	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The invalidate_reg_state() function is currently static and only used
-within the x86 data type profiling implementation. To prepare for adding
-arm64 instruction tracking support, extract it as a common helper that
-can be shared across architectures.
+When using --itrace=M for data type profiling on arm64, the 'Percent'
+values in perf annotate output are all zero:
 
-No functional change intended.
+Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+============================================================================
+ Percent     offset       size  field
+    0.00          0       0x10  struct mmu_gather_batch  {
+    0.00          0        0x8      struct mmu_gather_batch*    next;
+    0.00        0x8        0x4      unsigned int        nr;
+    0.00        0xc        0x4      unsigned int        max;
+    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+                                };
+
+However, adding the -n option reveals non-zero sample counts:
+
+Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+============================================================================
+ Samples     offset       size  field
+      15          0       0x10  struct mmu_gather_batch  {
+      13          0        0x8      struct mmu_gather_batch*    next;
+       2        0x8        0x4      unsigned int        nr;
+       0        0xc        0x4      unsigned int        max;
+       0       0x10          0      struct encoded_page*[]      encoded_pages;
+                                };
+
+The root cause is that when period is not explicitly specified in the
+--itrace option, it remains zero after itrace_do_parse_synth_opts().
+The zero period then flows through annotated_data_type__update_samples()
+where h->period accumulates to zero, and print_annotated_data_type_value()
+calculates the 'Percent' as zero.
+
+In itrace_do_parse_synth_opts(), non-'iy' options have their period
+type set to PERF_ITRACE_PERIOD_INSTRUCTIONS, but period remains zero.
+Since a zero period is meaningless for this type, default to 1 (one
+sample per instruction).
+
+With this fix applied, the result is as follows:
+
+Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+============================================================================
+ Percent     offset       size  field
+  100.00          0       0x10  struct mmu_gather_batch  {
+   86.67          0        0x8      struct mmu_gather_batch*    next;
+   13.33        0x8        0x4      unsigned int        nr;
+    0.00        0xc        0x4      unsigned int        max;
+    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+                                };
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-arch/annotate-x86.c | 9 ---------
- tools/perf/util/annotate-data.c              | 9 +++++++++
- tools/perf/util/annotate-data.h              | 1 +
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ tools/perf/util/auxtrace.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-index 6a4b4bdcd7a7..ef84b9593a39 100644
---- a/tools/perf/util/annotate-arch/annotate-x86.c
-+++ b/tools/perf/util/annotate-arch/annotate-x86.c
-@@ -206,15 +206,6 @@ static int x86__cpuid_parse(struct arch *arch, const char *cpuid)
- }
+diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+index 0b851f32e98c..415b68a2bba9 100644
+--- a/tools/perf/util/auxtrace.c
++++ b/tools/perf/util/auxtrace.c
+@@ -1759,6 +1759,12 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+ 			synth_opts->period = PERF_ITRACE_DEFAULT_PERIOD;
+ 	}
  
- #ifdef HAVE_LIBDW_SUPPORT
--static void invalidate_reg_state(struct type_state_reg *reg)
--{
--	reg->kind = TSR_KIND_INVALID;
--	reg->ok = false;
--	reg->lifetime_active = false;
--	reg->lifetime_end = 0;
--	reg->copied_from = -1;
--}
--
- static void update_insn_state_x86(struct type_state *state,
- 				  struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				  struct disasm_line *dl)
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 4e4c58764082..104b80d471f1 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -638,6 +638,15 @@ struct type_state_stack *findnew_stack_state(struct type_state *state,
- 	return stack;
- }
- 
-+void invalidate_reg_state(struct type_state_reg *reg)
-+{
-+	reg->kind = TSR_KIND_INVALID;
-+	reg->ok = false;
-+	reg->lifetime_active = false;
-+	reg->lifetime_end = 0;
-+	reg->copied_from = -1;
-+}
++	if (!period_set &&
++	    synth_opts->period_type == PERF_ITRACE_PERIOD_INSTRUCTIONS) {
++		/* Indicates a sample is taken for every instruction. */
++		synth_opts->period = 1;
++	}
 +
- /* Maintain a cache for quick global variable lookup */
- struct global_var_entry {
- 	struct rb_node node;
-diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index c26130744260..453e13bbe3e2 100644
---- a/tools/perf/util/annotate-data.h
-+++ b/tools/perf/util/annotate-data.h
-@@ -258,6 +258,7 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- 				Dwarf_Die *type_die, int ptr_offset);
- struct type_state_stack *find_stack_state(struct type_state *state,
- 						int offset);
-+void invalidate_reg_state(struct type_state_reg *reg);
- bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
- 				u64 ip, u64 var_addr, int *var_offset,
- 				Dwarf_Die *type_die);
+ 	return 0;
+ 
+ out_err:
 -- 
 2.34.1
 
