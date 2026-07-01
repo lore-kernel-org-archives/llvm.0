@@ -1,28 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F3A13D51E
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40DF02D1303
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878091; cv=none; b=d0FyL54Y5rGjRRu3kotk0+r7Lw5g7ZQ4xkwl/jNLe/HGNcmXCFaLanY60KXfZtAwF60Pc7OHCrkhssdlG1rZJNab3J2t/cWg0rbynksjX26IZ4jHZgSkuM4Pcx1COoHn8jlo8yTdFgrq+mylOBr2k0fj3M9itY2/MoWvIKu5UuU=
+	t=1782878091; cv=none; b=UN16FPxl4dvsvAqIfMP0q2uvVrHjQwcy3us532LPTAIq3YoTt8fmBY71AnJcr/UFMv94535pPtHAuguWRsKUChPVmL3pHQhN/FWjdCdbMhnjtvQyvnvj8HmFI1tvdKaiN7v6TXVnItQ8shiaeRkOBgH9PDy+ka6lAtsqbGxT4Hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1782878091; c=relaxed/simple;
-	bh=IWyQGAE/Ea5jkHiSWm8yrIn7AN2/9ebbWqpKKLd/YpY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uqL4tKbeCzpamXFdC8H99TiPfD5OVJLOkXuw3URwWtRLKONI5/Y6ytc0jkta15A+u3Kdy1+A1LGZ/shptTtu72nQIr75iFdiVNfDVL0jY/5Z+rgh00u+o1TcDGjyWr9qL13dtVJBJ0mGzXRUlFBUdoBhp6jpU/tJpoTtr716aNA=
+	bh=kpVvmDvHt/AAAD2Lm7yEEytyUaXIZ/JrSaJ8Kf+7v1k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=smoteh/cJWZOvG1QotdweEpNzGHIJG9KF8j/xbkMBKVqTjyXUg14U+67zeaPMTJ7wtESkHtzO32HqduCAvTazqz2+5+uN+4vLxZNTUpA57ft+O+deS++AijzfLJRpVVHQUuEXP2lBCR+ed1+c8b9tnXjhhun1LD84ULWiOl8+ig=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmMz1fCpzYQtmB
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmMz0Qg9zYQtlD
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:53:51 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 1A22240756
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:45 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id DFADD4058D
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:44 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S4;
-	Wed, 01 Jul 2026 11:54:44 +0800 (CST)
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S2;
+	Wed, 01 Jul 2026 11:54:43 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,12 +43,10 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 02/21] perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
-Date: Wed,  1 Jul 2026 03:53:36 +0000
-Message-Id: <20260701035355.752944-3-wutengda@huaweicloud.com>
+Subject: [PATCH v3 00/21] perf arm64: Support data type profiling
+Date: Wed,  1 Jul 2026 03:53:34 +0000
+Message-Id: <20260701035355.752944-1-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
-References: <20260701035355.752944-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,241 +54,259 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF4rKFyrWF1xJF48GF18Grg_yoWxArW7pa
-	1DC345Jan5XF1fWw4fJa1kX34a93yfXF1Yk3yxK39akFnIkrn3XFWxKFya9Fn8Gry8Ww42
-	vFs0yF15Wrn3JrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I
-	0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k2
-	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
-	IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMI
-	IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRQL00DUUUU
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw4UtryxuF1rJw47Xw15XFb_yoWDJFy3pF
+	sxC3yfJr4UJrW0gwn3X3yxW34aga1fJay5Gryrt3ySyr1jyFyktFZ7tF4SyFWfGr98Aw47
+	tr1qyr1UuF18AaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUBCb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402
+	YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20x
+	yl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWU
+	JVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7V
+	AKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42
+	IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRQ2-0DUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The jump and adrp instructions parsed by libcapstone currently lack
-symbolic representation and use a '#' prefix for addresses. This
-format is inconsistent with objdump's output, which causes subsequent
-parsing in jump__parse() and arm64_mov__parse() to fail.
+This patch series implements data type profiling support for arm64,
+enabling 'perf annotate --data-type' to resolve memory locations and
+variable types on arm64 platforms.
 
-Example mismatch:
-  Current: b #0xffff8000800114c8
-  Fix:     b ffff8000800114c8 <el0t_64_sync+0x108>
+The main changes since v2 include:
+v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
 
-  Current: adrp x18, #0xffff800081f5f000
-  Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
+* Reworking operand parsing, where src/dst are now set based on the
+  actual instruction definition rather than always treating the left
+  operand as src and the right as dst (Namhyung Kim).
 
-Fix this by implementing extended formatting for these arm64
-instructions during symbol__disassemble_capstone(). This ensures
-the output matches objdump's expected style, including the raw
-address and the associated <symbol+offset> suffix.
+* Register state handling has been improved, with better support for
+  TSR_KIND_CONST and proper invalidation of dst for unsupported
+  instructions.
 
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
----
- tools/perf/util/capstone.c | 131 +++++++++++++++++++++++++++++++++----
- tools/perf/util/disasm.c   |   5 ++
- tools/perf/util/disasm.h   |   1 +
- 3 files changed, 125 insertions(+), 12 deletions(-)
+* Several bug fixes are included, such as fixing a refcount leak, a
+  global type resolving error (James Clark), unconditional call to
+  arch->extract_op_location() (sashiko [1]). --itrace=i1i is now enabled
+  by default for ARM SPE data type profiling to avoid overlapping
+  events (James Clark).
 
-diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-index 9bba78ee0c5a..a9c0a1d2eb03 100644
---- a/tools/perf/util/capstone.c
-+++ b/tools/perf/util/capstone.c
-@@ -218,6 +218,12 @@ static int capstone_init(uint16_t e_machine, csh *cs_handle, bool is64, bool is_
- 		 * on x86 by investigating instruction details.
- 		 */
- 		perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
-+	} else if (machine__normalized_is(machine, "arm64")) {
-+		/*
-+		 * Same as x86: arm64 needs instruction details to resolve
-+		 * symbolic addresses
-+		 */
-+		perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
- 	}
- 
- 	return 0;
-@@ -292,10 +298,6 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
- 	struct map *map = args->ms->map;
- 	struct symbol *sym;
- 
--	/* TODO: support more architectures */
--	if (!arch__is_x86(args->arch))
--		return;
--
- 	if (insn->detail == NULL)
- 		return;
- 
-@@ -347,6 +349,116 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
- 	}
- }
- 
-+static int print_default_format(struct cs_insn *insn, char *buf, size_t len)
-+{
-+	return scnprintf(buf, len, "       %-7s %s",
-+			 insn->mnemonic, insn->op_str);
-+}
-+
-+static void format_capstone_insn_x86(struct cs_insn *insn, char *buf,
-+				     size_t len, struct annotate_args *args,
-+				     u64 addr)
-+{
-+	int printed;
-+
-+	printed = print_default_format(insn, buf, len);
-+	buf += printed;
-+	len -= printed;
-+
-+	print_capstone_detail(insn, buf, len, args, addr);
-+}
-+
-+static bool is_pc_relative_insn(struct cs_insn *insn)
-+{
-+	int i;
-+
-+	if (insn->id == ARM64_INS_ADR || insn->id == ARM64_INS_ADRP)
-+		return true;
-+
-+	if (insn->detail == NULL)
-+		return false;
-+
-+	for (i = 0; i < insn->detail->groups_count; i++) {
-+		if (insn->detail->groups[i] == ARM64_GRP_JUMP ||
-+		    insn->detail->groups[i] == ARM64_GRP_CALL ||
-+		    insn->detail->groups[i] == ARM64_GRP_BRANCH_RELATIVE)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void format_capstone_insn_arm64(struct cs_insn *insn, char *buf,
-+				       size_t len, struct annotate_args *args,
-+				       u64 addr)
-+{
-+	struct map *map = args->ms->map;
-+	struct symbol *sym;
-+	char *last_imm, *endptr;
-+	u64 orig_addr;
-+	struct map *found_map = NULL;
-+
-+	print_default_format(insn, buf, len);
-+	/*
-+	 * Adjust instructions to keep the existing behavior with objdump.
-+	 *
-+	 * Example conversion:
-+	 * From: b #0xffff8000800114c8
-+	 * To:   b ffff8000800114c8 <el0t_64_sync+0x108>
-+	 */
-+	if (is_pc_relative_insn(insn)) {
-+		/* Extract last immediate value as address */
-+		last_imm = strrchr(buf, '#');
-+		if (!last_imm)
-+			return;
-+
-+		orig_addr = strtoull(last_imm + 1, &endptr, 16);
-+		if (endptr == last_imm + 1)
-+			return;
-+
-+		/* Relocate map that contains the address */
-+		if (dso__kernel(map__dso(map))) {
-+			found_map = maps__find(map__kmaps(map), orig_addr);
-+			if (found_map == NULL)
-+				return;
-+			map = found_map;
-+		}
-+
-+		/* Convert it to map-relative address for search */
-+		addr = map__map_ip(map, orig_addr);
-+
-+		sym = map__find_symbol(map, addr);
-+		if (sym == NULL) {
-+			map__put(found_map);
-+			return;
-+		}
-+
-+		/* Symbolize the resolved address */
-+		len = len - (last_imm - buf);
-+		if (addr == sym->start) {
-+			scnprintf(last_imm, len, "%"PRIx64" <%s>",
-+				  orig_addr, sym->name);
-+		} else {
-+			scnprintf(last_imm, len, "%"PRIx64" <%s+%#"PRIx64">",
-+				  orig_addr, sym->name, addr - sym->start);
-+		}
-+		map__put(found_map);
-+	}
-+}
-+
-+static void format_capstone_insn(struct cs_insn *insn, char *buf, size_t len,
-+				 struct annotate_args *args, u64 addr)
-+{
-+	/* TODO: support more architectures */
-+	if (arch__is_x86(args->arch))
-+		format_capstone_insn_x86(insn, buf, len, args, addr);
-+	else if (arch__is_arm64(args->arch))
-+		format_capstone_insn_arm64(insn, buf, len, args, addr);
-+	else {
-+		print_default_format(insn, buf, len);
-+	}
-+}
-+
- struct find_file_offset_data {
- 	u64 ip;
- 	u64 offset;
-@@ -426,14 +538,9 @@ int symbol__disassemble_capstone(const char *filename, struct symbol *sym,
- 
- 	free_count = count = perf_cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
- 	for (i = 0, offset = 0; i < count; i++) {
--		int printed;
--
--		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
--				    "       %-7s %s",
--				    insn[i].mnemonic, insn[i].op_str);
--		print_capstone_detail(&insn[i], disasm_buf + printed,
--				      sizeof(disasm_buf) - printed, args,
--				      start + offset);
-+		format_capstone_insn(&insn[i], disasm_buf,
-+				     sizeof(disasm_buf), args,
-+				     start + offset);
- 
- 		args->offset = offset;
- 		args->line = disasm_buf;
-diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index 0a1a7e9cf3ef..bd28829cb00d 100644
---- a/tools/perf/util/disasm.c
-+++ b/tools/perf/util/disasm.c
-@@ -203,6 +203,11 @@ bool arch__is_powerpc(const struct arch *arch)
- 	return arch->id.e_machine == EM_PPC || arch->id.e_machine == EM_PPC64;
- }
- 
-+bool arch__is_arm64(const struct arch *arch)
-+{
-+	return arch->id.e_machine == EM_AARCH64;
-+}
-+
- static void ins_ops__delete(struct ins_operands *ops)
- {
- 	if (ops == NULL)
-diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-index 25756e3f47e4..06c664fd4fc2 100644
---- a/tools/perf/util/disasm.h
-+++ b/tools/perf/util/disasm.h
-@@ -111,6 +111,7 @@ struct annotate_args {
- const struct arch *arch__find(uint16_t e_machine, uint32_t e_flags, const char *cpuid);
- bool arch__is_x86(const struct arch *arch);
- bool arch__is_powerpc(const struct arch *arch);
-+bool arch__is_arm64(const struct arch *arch);
- 
- extern const struct ins_ops call_ops;
- extern const struct ins_ops dec_ops;
+Patch organization
+==================
+
+The series is organized as follows:
+
+1. Fix refcount leak in print_capstone_detail(). (Patches 01)
+
+2. Fix disassembly mismatches (Patches 02-03)
+   Current perf annotate supports three disassembly backends: llvm,
+   capstone, and objdump. On arm64, inconsistencies between the output
+   of these backends (specifically llvm/capstone vs. objdump) often
+   prevent the tracker from correctly identifying registers and offsets.
+   These patches resolve these mismatches, ensuring consistent instruction
+   parsing across all supported backends.
+
+3. Infrastructure for arm64 operand parsing (Patches 04-09)
+   These patches establish the necessary infrastructure for arm64-specific
+   operand handling. This includes implementing new callbacks and data
+   structures to manage arm64's unique addressing modes and register sets.
+   This foundation is essential for the subsequent type-tracking logic.
+
+4. ARM SPE even handling (Patches 10-11)
+   Patch 10 automatically deduplicates overlapping ARM SPE events (e.g.,
+   l1d-miss, tlb-access) in 'perf annotate' by retaining only the
+   "instructions" event when data type profiling is enabled. Patch 11
+   defaults the itrace period to 1 for PERF_ITRACE_PERIOD_INSTRUCTIONS
+   to fix zero 'Percent' values in annotate output.
+
+5. Core instruction tracking (Patches 12-21)
+   These patches implement the core logic for type tracking on arm64,
+   covering several key types of instructions, including:
+   * Memory Access: ldr/str variants (including stack-based access).
+   * Arithmetic & Data Processing: mov, add, and adrp.
+   * Special Access: System register access (mrs) and per-cpu variable
+     tracking.
+
+The implementation draws inspiration from the existing x86 logic while
+adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
+perf annotate can successfully resolve memory locations and register types,
+providing basic support for data type profiling on arm64 platforms.
+
+Example Result
+==============
+
+# perf mem record -a -K -- sleep 1
+# perf annotate --data-type --stdio --type-stat
+Annotate data type stats:
+total 1138, ok 876 (77.0%), bad 262 (23.0%)
+-----------------------------------------------------------
+         6 : no_sym
+        42 : no_var
+       206 : no_typeinfo
+         8 : bad_offset
+       237 : insn_track
+
+Annotate type: 'struct page' in [kernel.kallsyms] (66948 samples):
+============================================================================
+ Percent     offset       size  field
+  100.00          0       0x40  struct page      {
+    9.01          0        0x8      long unsigned int   flags;
+   57.99        0x8       0x28      union        {
+   57.99        0x8       0x28          struct   {
+   33.00        0x8       0x10              union        {
+   33.00        0x8       0x10                  struct list_head        lru {
+   33.00        0x8        0x8                      struct list_head*   next;
+    0.00       0x10        0x8                      struct list_head*   prev;
+                                                };
+   33.00        0x8       0x10                  struct   {
+   33.00        0x8        0x8                      void*       __filler;
+    0.00       0x10        0x4                      unsigned int        mlock_count;
+   ...
+
+Each patch's type profiling results are as follows:
+
+Patch | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
+------+--------+--------+-------------+------------+------------+------
+0010  | 6      | 493    | -           | -          | -          | 56.2%
+0013  | 6      | 42     | 438         | 2          | 11         | 57.1%
+0014  | 6      | 42     | 399         | 1          | 51         | 60.6%
+0015  | 6      | 42     | 398         | 1          | 52         | 60.7%
+0016  | 6      | 42     | 393         | 1          | 57         | 61.2%
+0017  | 6      | 42     | 376         | 3          | 72         | 62.5%
+0018  | 6      | 42     | 305         | 7          | 139        | 68.4%
+0019  | 6      | 42     | 218         | 8          | 225        | 75.9%
+0020  | 6      | 42     | 217         | 8          | 226        | 76.0%
+0021  | 6      | 42     | 206         | 8          | 237        | 77.0%
+
+A few notes:
+* Capstone fails to build when rebased to the base-commit (known issue,
+  not yet fixed [4]). I disabled it locally for testing.
+* Among the remaining 23% bad annotation, about 14% comes from compiler
+  generated prologue or epilogue code (e.g., stp	x21, x22, [sp, #32]).
+  No solution has been identified for this so far.
+
+Testing
+=======
+
+Tested on arm64 (all passed):
+
+  # perf test -v "perf data type profiling tests"
+  81: perf data type profiling tests                                                                  : Ok
+
+  === Test Summary ===
+  Passed main tests : 1
+  Passed subtests   : 0
+  Skipped tests     : 0
+  Failed tests      : 0
+
+Tested on x86. The profiling results show no change before/after applying
+this patch series:
+
+  before : total 880, ok 711 (80.8%), bad 169 (19.2%)
+  after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
+
+Changelog
+=========
+
+v2 -> v3:
+  - v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
+  - Instead of always parsing the left operand as src and the right operand as
+    dst, set them based on the actual instruction definition. (Namhyung Kim)
+  - Fix refcount leak in print_capstone_detail().
+  - Remove useless '<' check when parsing 'addr <symbol>' in arm64_mov__parse().
+  - Add example comments in arm64_ldst__parse().
+  - Split arch__dwarf_regnum() changes into a separate commit.
+  - Rename annotated_addr_mode enum: INSN_ADDR_* -> PERF_ADDR_MODE_*.
+  - Set caller-saved registers in init_type_state().
+  - For instructions with addressing mode, always goto adjust_reg_index_state()
+    at the end to update the src register state.
+  - Handle TSR_KIND_CONST registers for 'mov' and 'add' instructions.
+  - Invalidate dst register for all other unsupported instructions.
+  - Verify type DIE is task_struct pointer before caching globally.
+  - Enable --itrace=i1i by default for ARM SPE data type profiling in 'perf annotate'
+    to avoid overlapping event counting for the same instruction. (James Clark)
+  - Fix global variable type resolving error in check_matching_type(). (James Clark)
+  - Address review comments from sashiko [1]:
+    - Fix unconditional call to arch->extract_op_location()
+    - Handle multi_regs correctly
+    - Fix invalid register state in error path
+    - Other misc fixes
+v1 -> v2:
+  - v1: https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+  - Fix inconsistencies in arm64 instruction output across llvm, capstone,
+    and objdump disassembly backends.
+  - Support arm64-specific addressing modes and operand formats. (Leo Yan)
+  - Extend instruction tracking to support mov and add instructions,
+    along with per-cpu and stack variables.
+  - Include real-world examples in commit messages to demonstrate
+    practical effects. (Namhyung Kim)
+  - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
+
+Please let me know if you have any feedback.
+
+Thanks,
+Tengda
+
+[1] https://sashiko.dev/#/patchset/20260403094800.1418825-1-wutengda%40huaweicloud.com
+[2] https://developer.arm.com/documentation/102374/0103
+[3] https://github.com/flynd/asmsheets/releases/tag/v8
+[4] https://lore.kernel.org/all/aiCgbmUtlMCM4Xzt@x1/#t
+
+
+Tengda Wu (21):
+  perf capstone: Fix kernel map reference count leak
+  perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
+  perf llvm: Fix arm64 adrp instruction disassembly mismatch with
+    objdump
+  perf annotate-arm64: Generalize arm64_mov__parse to support more
+    instructions
+  perf annotate-arm64: Handle load and store instructions
+  perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
+  perf annotate: Adapt arch__dwarf_regnum() for arm64
+  perf annotate: Introduce extract_op_location callback for
+    arch-specific parsing
+  perf annotate-arm64: Implement extract_op_location() callback
+  perf annotate: Deduplicate overlapping ARM SPE events for data type
+    profiling
+  perf auxtrace: Set default period to 1 for
+    PERF_ITRACE_PERIOD_INSTRUCTIONS type
+  perf annotate-data: Extract invalidate_reg_state() as a common helper
+  perf annotate-arm64: Enable instruction tracking support
+  perf annotate-arm64: Support load instruction tracking
+  perf annotate-arm64: Support store instruction tracking
+  perf annotate-arm64: Support stack variable tracking
+  perf annotate-arm64: Support 'mov' instruction tracking
+  perf annotate-arm64: Support 'add' instruction tracking
+  perf annotate-arm64: Support 'adrp' instruction to track global
+    variables
+  perf annotate-arm64: Support per-cpu variable access tracking
+  perf annotate-arm64: Support 'mrs' instruction to track 'current'
+    pointer
+
+ tools/perf/builtin-annotate.c                 |  13 +
+ .../perf/util/annotate-arch/annotate-arm64.c  | 901 +++++++++++++++++-
+ .../util/annotate-arch/annotate-powerpc.c     |  10 +
+ tools/perf/util/annotate-arch/annotate-x86.c  |  97 +-
+ tools/perf/util/annotate-data.c               |  77 +-
+ tools/perf/util/annotate-data.h               |   8 +-
+ tools/perf/util/annotate.c                    | 108 +--
+ tools/perf/util/annotate.h                    |  12 +
+ tools/perf/util/arm-spe.c                     |   1 +
+ tools/perf/util/auxtrace.c                    |   6 +
+ tools/perf/util/capstone.c                    | 144 ++-
+ tools/perf/util/disasm.c                      |   5 +
+ tools/perf/util/disasm.h                      |   5 +
+ .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
+ tools/perf/util/dwarf-regs.c                  |   2 +-
+ tools/perf/util/include/dwarf-regs.h          |   1 +
+ tools/perf/util/llvm.c                        |  50 +
+ 17 files changed, 1307 insertions(+), 153 deletions(-)
+
+
+base-commit: 7de6ae9e12207ec146f2f3f1e58d1a99317e88bc
 -- 
 2.34.1
 
