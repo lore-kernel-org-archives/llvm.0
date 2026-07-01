@@ -1,166 +1,174 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E226312832;
-	Wed,  1 Jul 2026 22:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C50A3C345A
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 23:07:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782946581; cv=none; b=KGsiwYPoYw2D1mpZtPH8EXEdxGLKdz8+PenWdCIH1a4q98Htjt/AFO9XQIyESIS0gJGmj2R7ggVzIxyrRkPAWcP5TA3A2YJCLdUPc0ftOLHeif/4WEEN8BlC9vIEaUgoT3g2xFL3Z01drUVOsEMkyoubaSoSqv+UREab9MYIj7w=
+	t=1782947238; cv=none; b=q/a+1IAD3O0r63U5I+LNtW14eVKglUwmN7YKTn+FmeBFG9nGvVf7JXMEHPN0bxnjvw76wsPYCLCI+LFzuCtwYDCxKD5O9NVaFF1I//73yj6t3EVYBj9hyaSe3Shg/NBkcoWLA5zx1YpO9EE5hSkfvw0ArynOwmV2882IrLHT6wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782946581; c=relaxed/simple;
-	bh=FSOP4zm4cit4g8DmSosxGX2AMoQVEEHnukJPngJ4e/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=UNGLGdGMtjjxtG05gpGxmv3/BhqgQED9aNlDAyU7nr29vDgyoxK07R4YcNzu2rPLmgjKul/6KOaL265xqa7neAmdTjDND2DzIXOfqfpAcQ30o/X4GWuWD6111ZDBFUNUKcwZbxRd5z7KdS5sKJYNCTjiuw8KyS/axJ/aOuDaDv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpcKECuA; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782947238; c=relaxed/simple;
+	bh=kDc1uEwwsz+khShkTHZMmtl904cSBkx8DaTp4B39jNY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=qxhyfjR+bM0/iRl5qWX7B8SuM6EZsORh5hPSsLdllCiqQDZyNVU5zSZAqcB0KXyyYz4qZeN2a8Y/65JGOxIaVMawFZbnqcy+7SRL/6yXOXtaXoB/9t0l8foGCamhgP0JXMLrjRZ2PnCrXtzpcRUzanqrW/b4P7NF5sVpBO6rR2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fdE102m/; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpcKECuA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782946579; x=1814482579;
-  h=date:from:to:cc:subject:message-id;
-  bh=FSOP4zm4cit4g8DmSosxGX2AMoQVEEHnukJPngJ4e/Q=;
-  b=bpcKECuAlA1ODc6sIhkUV3HMpm7IpXEkIZCK0iLp0KT8Wf/Kp37n5Yg6
-   +XPoefrYLapZ0pLw7vs4ly6oySFTtqPkiL/CzYK7XmFFN8aycdNn0gDMA
-   hfXrHFvyqJGC1cRVY3Qb4G7Up24O8BgN9ynvNKS269rBuH36YLHptidBn
-   06gt76jXCUybRJ+le8hXWdlMTI/mo5AfSahJ9wFxWcBqg5rqmtOScRYXg
-   5F1pM7r2uAAlGw/oCjnJl9Lv3U6a39b79Q+5RUNy4RSH+lZSQ2rzaYqXO
-   HYiQMr6kwBDFzN26nIgYkSnR6l0SRXiJQtUl297h/n2gG3PnDQ/0xvmqU
-   g==;
-X-CSE-ConnectionGUID: 7f96YYB3TkCQsHHnqa3SRw==
-X-CSE-MsgGUID: Mf2N8E7+QhOos+FrbfZn2A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="87522905"
-X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
-   d="scan'208";a="87522905"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 15:56:19 -0700
-X-CSE-ConnectionGUID: zdm3OqZpRgmKq7+gvnIRHQ==
-X-CSE-MsgGUID: 30G14wY1R+ufIchBoJD+1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
-   d="scan'208";a="277003916"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 01 Jul 2026 15:56:16 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wf3qo-000000009hH-1dZG;
-	Wed, 01 Jul 2026 22:56:14 +0000
-Date: Thu, 02 Jul 2026 06:56:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sudeep Holla <sudeep.holla@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sudeep-holla:b4/acpi_scmi_pcc 9/23]
- drivers/firmware/arm_scmi/transports/mailbox.c:252:1: warning: unused label
- 'err_free_chan_receiver'
-Message-ID: <202607020643.aeL4FIjK-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fdE102m/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1782947236;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8B65/I8GYURpH/ouE1U4pYhV4f5bwOGTW8eYQjqr3mc=;
+	b=fdE102m/CATLjX56lK0bEldNpjGMbIQYAlgQYg8HdkUZR6QzQfSVuZro/Dp+gEDKmgbgm/
+	FMm4bnc0aDifDXsqaMkkDt/qHAr2JchAb3D9bk6gFHHGRotnRrsGDS8PFIXKXCuwjSkmFG
+	yr2MaT3TJ4oFfG/eYNonXhFoMimY1rM=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-618-DupFlTDBOlCJkburwWwXtA-1; Wed,
+ 01 Jul 2026 19:07:11 -0400
+X-MC-Unique: DupFlTDBOlCJkburwWwXtA-1
+X-Mimecast-MFC-AGG-ID: DupFlTDBOlCJkburwWwXtA_1782947228
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ECFF6185D69E;
+	Wed,  1 Jul 2026 23:07:06 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.80.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5399230001BE;
+	Wed,  1 Jul 2026 23:07:00 +0000 (UTC)
+Date: Wed, 1 Jul 2026 19:06:58 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
+	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
+	wangyuli@aosc.io, loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/8] LoongArch: Mark special sections for KLP support
+Message-ID: <akWdkjS4zXYoj0-O@redhat.com>
+References: <20260608100852.325413-1-dongtai.guo@linux.dev>
+ <20260608100852.325413-3-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+In-Reply-To: <20260608100852.325413-3-dongtai.guo@linux.dev>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Mimecast-MFC-PROC-ID: R-yqM9ZdU7jG2oJeL6hYh8Yax5T9cIFDqw1CXLsITSU_1782947228
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/acpi_scmi_pcc
-head:   bdcaa5728f17002c1091efd93dd082c9c23ddd39
-commit: 1bfaf4c65e542a88331bfd51d59d27b827a2282d [9/23] firmware: arm_scmi: Unwind P2A receiver mailbox setup failure
-config: i386-buildonly-randconfig-005-20260702 (https://download.01.org/0day-ci/archive/20260702/202607020643.aeL4FIjK-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260702/202607020643.aeL4FIjK-lkp@intel.com/reproduce)
+On Mon, Jun 08, 2026 at 06:08:46PM +0800, George Guo wrote:
+> From: George Guo <guodongtai@kylinos.cn>
+>
+> objtool needs to split the kernel's special sections into per-entry
+> symbols when generating livepatch modules. Mark them so it can:
+>
+>  - .altinstructions and __ex_table are read-only, so set an explicit
+>    entry size via SHF_MERGE (ALT_INSTR_SIZE / EXTABLE_SIZE).
+>
+>  - __bug_table and __jump_table are writable. SHF_MERGE cannot be
+>    combined with SHF_WRITE (Clang rejects it), so annotate each entry
+>    with ANNOTATE_DATA_SPECIAL instead, mirroring x86/arm64.
+>
+> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+> ---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607020643.aeL4FIjK-lkp@intel.com/
+Hi George,
 
-All warnings (new ones prefixed by >>):
+Disclaimer: I don't have LoongArch hardware, so the best I can do with
+this patchset is to read and poke at it with (cross) compilation.
 
->> drivers/firmware/arm_scmi/transports/mailbox.c:252:1: warning: unused label 'err_free_chan_receiver' [-Wunused-label]
-     252 | err_free_chan_receiver:
-         | ^~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+For the special sections, said cross compiler (loongarch64-linux-gnu-gcc
+(GCC) 15.2.1 20250808 (Red Hat Cross 15.2.1-1)) is interesting as it
+appears to emit relocs in special sections (__ex_table,
+.altinstructions, __bug_table, __jump_table) that point to local
+assembler labels in the function's text section rather than the section
+symbol + offset.
 
+An example gcc / loongarch .rela__ex_table section looks like:
 
-vim +/err_free_chan_receiver +252 drivers/firmware/arm_scmi/transports/mailbox.c
+  Relocation section '.rela__ex_table' at offset 0x6a28 contains 10 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000005d00000063 R_LARCH_32_PCREL       00000000000011f0 .L1^B4 + 0
+  0000000000000004  0000005e00000063 R_LARCH_32_PCREL       00000000000011f4 .L2^B1 + 0
+  [ ... snip ... ]
 
-   181	
-   182	static int mailbox_chan_setup(struct scmi_chan_info *cinfo, struct device *dev,
-   183				      bool tx)
-   184	{
-   185		const char *desc = tx ? "Tx" : "Rx";
-   186		struct device *cdev = cinfo->dev;
-   187		struct scmi_mailbox *smbox;
-   188		int ret, a2p_rx_chan, p2a_chan, p2a_rx_chan;
-   189		struct mbox_client *cl;
-   190	
-   191		ret = mailbox_chan_validate(cdev, &a2p_rx_chan, &p2a_chan, &p2a_rx_chan);
-   192		if (ret)
-   193			return ret;
-   194	
-   195		if (!tx && !p2a_chan)
-   196			return -ENODEV;
-   197	
-   198		smbox = devm_kzalloc(dev, sizeof(*smbox), GFP_KERNEL);
-   199		if (!smbox)
-   200			return -ENOMEM;
-   201	
-   202		smbox->shmem = core->shmem->setup_iomap(cinfo, dev, tx, NULL,
-   203							&smbox->io_ops);
-   204		if (IS_ERR(smbox->shmem))
-   205			return PTR_ERR(smbox->shmem);
-   206	
-   207		cl = &smbox->cl;
-   208		cl->dev = cdev;
-   209		cl->tx_prepare = tx ? tx_prepare : NULL;
-   210		cl->rx_callback = rx_callback;
-   211		cl->tx_block = false;
-   212		cl->knows_txdone = tx;
-   213	
-   214		smbox->chan = mbox_request_channel(cl, tx ? 0 : p2a_chan);
-   215		if (IS_ERR(smbox->chan)) {
-   216			ret = PTR_ERR(smbox->chan);
-   217			if (ret != -EPROBE_DEFER)
-   218				dev_err(cdev,
-   219					"failed to request SCMI %s mailbox\n", desc);
-   220			return ret;
-   221		}
-   222	
-   223		/* Additional unidirectional channel for TX if needed */
-   224		if (tx && a2p_rx_chan) {
-   225			smbox->chan_receiver = mbox_request_channel(cl, a2p_rx_chan);
-   226			if (IS_ERR(smbox->chan_receiver)) {
-   227				ret = PTR_ERR(smbox->chan_receiver);
-   228				smbox->chan_receiver = NULL;
-   229				if (ret != -EPROBE_DEFER)
-   230					dev_err(cdev, "failed to request SCMI Tx Receiver mailbox\n");
-   231				goto err_free_chan;
-   232			}
-   233		}
-   234	
-   235		if (!tx && p2a_rx_chan) {
-   236			smbox->chan_platform_receiver = mbox_request_channel(cl, p2a_rx_chan);
-   237			if (IS_ERR(smbox->chan_platform_receiver)) {
-   238				ret = PTR_ERR(smbox->chan_platform_receiver);
-   239				smbox->chan_platform_receiver = NULL;
-   240				if (ret != -EPROBE_DEFER)
-   241					dev_err(cdev, "failed to request SCMI P2A Receiver mailbox\n");
-   242				goto err_free_chan;
-   243			}
-   244		}
-   245	
-   246		cinfo->transport_info = smbox;
-   247		smbox->cinfo = cinfo;
-   248		mutex_init(&smbox->chan_lock);
-   249	
-   250		return 0;
-   251	
- > 252	err_free_chan_receiver:
-   253		mbox_free_channel(smbox->chan_receiver);
-   254	err_free_chan:
-   255		mbox_free_channel(smbox->chan);
-   256		return ret;
-   257	}
-   258	
+Unlike everywhere else ...
+
+llvm / loongarch:
+
+  Relocation section '.rela__ex_table' at offset 0x5710 contains 10 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000200000063 R_LARCH_32_PCREL       0000000000000000 .text + 2a70
+  0000000000000004  0000000200000063 R_LARCH_32_PCREL       0000000000000000 .text + 2a74
+
+gcc / x86:
+
+  Relocation section '.rela__ex_table' at offset 0x40f50 contains 2 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 1596
+  0000000000000004  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 159b
+
+llvm / x86:
+
+  Relocation section '.rela__ex_table' at offset 0x343d8 contains 2 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 231a
+  0000000000000004  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 231f
+
+gcc / aarch64:
+
+  Relocation section '.rela__ex_table' at offset 0x448c8 contains 10 entries:
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 24bc
+  0000000000000004  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 2524
+  [ ... snip ... ]
+
+llvm / aarch64 Relocation section '.rela__ex_table' at offset 0x37760 contains 10 entries:
+
+      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+  0000000000000000  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 2730
+  0000000000000004  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 264c
+  [ ... snip ... ]
+
+The objtool/klp-diff.c implications is that
+convert_reloc_secsym_to_sym() doesn't handle such non-section symbol
+relocs in special sections:
+
+	if (!is_sec_sym(sym))
+		return 0;
+
+That early return leaves the reloc pointing at a .L* symbol that is
+never cloned into the output livepatch object.  When
+clone_special_section() later calls should_keep_special_sym() to decide
+whether to include each table entry, it cannot map the reloc to an
+included function and silently drops it.  In the __ex_table case above,
+the patched function's entries are missing from the .ko.  As far as I
+can tell, this problem applies to other special sections (like
+.altinstructions, etc.) as well.
+
+If not GCC / GAS is to be supported, then klp-diff will need to handle
+this alternate relocation format.  Perhaps these could be pre-converted
+in convert_reloc_secsym_to_sym() to the general form (func_sym +
+(label_offset - func_offset)) that is expected?  I don't know if that's
+enough to keep everything hanging together, but might be a place to
+start.
 
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Joe
+
