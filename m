@@ -1,28 +1,28 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C326369D61
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB7536AB57
 	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 03:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782878096; cv=none; b=oG3JTxwC7QkkmlQ9rKQeGgBZGj0vJC20y3utktFBCeJDmC5XjYevT+p7x/M4QA5XG4xYn0gTkva5IfIoyVgAJE0WNkUZx4qtAoA+uHVtQB3dFrzuSZoJQOyxUcmtSBH0XzB8+JuZkNoTmgKds7Er4Rhz8li0HCHZMCxyAY+yrhY=
+	t=1782878097; cv=none; b=VTFsEJ69L/sCEXj/mrXMKWJ/Nna5V1sE8THjBsPwvUcC7ugPeRbJqoWc2vQcTbofszci8Qk2lNvUWpvZD3ehnJ8s1TbHuHOMREXyymnQZJDBzCh4vQwYGZCtHZXPCM9IsGw5NyO5FenToKtBUvWJZmFM/R5wfh1nsB8fScq4hEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782878096; c=relaxed/simple;
-	bh=xl9labs792xEkN7k0Wk/NXufCudutXOTOJ+nHhG1IEs=;
+	s=arc-20240116; t=1782878097; c=relaxed/simple;
+	bh=+FSvKGx4UNK8xcHkjhsXhYHL7gVypSXdcGSQ4na/n3Y=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dC9p/g410UcyY2xxII4S+kc9Aib1sFOn6as9G00SqZRbpcHz72cWNQAEmBUNv5YglUDhXoNZM7gqW7JH4DMGuTdhMgw6SoPsQqxto/Glb+F9xhi4xTPYpu/6x82bKdh1dsw5mCrYfEvfwDsFpyusm33jIq4+lnA62jh/DiZHA2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=rVIJl0IJvPihcShfAh5MuJ5R3n11dctrmg5aXfrEfJkWtwoA7o75f29c9oTm+H4Cfv6/Z8IQ7cEG4U0TytoypqRYhLEGA1twqe007epiU+psQns5Q8XngmFYF05hFLYLwusQT4SDeTAuGshX6kjYcCRVkMDZWccx4akSrexdaVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gqmMz5wz5zYQtqc
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:53:51 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gqmNs2VLczKHMWp
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:37 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id ACFCC40AD6
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:45 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 67B964058F
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 11:54:46 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S10;
-	Wed, 01 Jul 2026 11:54:45 +0800 (CST)
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBXiyWAj0RqCne9AQ--.26189S18;
+	Wed, 01 Jul 2026 11:54:46 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v3 08/21] perf annotate: Introduce extract_op_location callback for arch-specific parsing
-Date: Wed,  1 Jul 2026 03:53:42 +0000
-Message-Id: <20260701035355.752944-9-wutengda@huaweicloud.com>
+Subject: [PATCH v3 16/21] perf annotate-arm64: Support stack variable tracking
+Date: Wed,  1 Jul 2026 03:53:50 +0000
+Message-Id: <20260701035355.752944-17-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 References: <20260701035355.752944-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxtr13tF4kJw4kuF18Kw4UArb_yoWfKFW7pw
-	4Du345tr1rKr4YqwsrXFs5W3Wakw48WF1Y9r17K39rAFs2yrn5Jan2gF1ayF1rtrZxur1j
-	vF4qqr48XryrCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:_Ch0CgBXiyWAj0RqCne9AQ--.26189S18
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xry3Kw18Gw18GFW8trWfAFb_yoW7Kr47pF
+	WDCa4agrsrtr4SgFs3JFZrJr93Wws7Kr1jkr90vwn2yFy2yrn5Ka95tFW2vFW5JrZ7Zw1U
+	Jw1DKr4DX3y29aDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHYb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -72,318 +72,209 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxtr13tF4kJw4kuF18Kw4UArb_yoWfKFW7pw
 	kF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF
 	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
 	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+	r41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+	4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAI
 	cVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Assembly syntax for operands varies significantly across different
-architectures, which prevents the operand location (op_loc) parsing
-logic in annotate_get_insn_location() from being directly reused.
+Extend update_insn_state() for arm64 to track data types stored on the
+stack. This allows 'perf annotate' to maintain type information for
+local variables that are spilled to or loaded from stack slots.
 
-To simplify the core logic and improve maintainability, move the
-operand parsing inside the for_each_insn_op_loc loop into arch-specific
-extract_op_location callbacks. This refactoring is intended to be a
-cleanup with no functional changes.
+The implementation handles:
 
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+1. Stack Loads (LDR): Identify when a register is loaded from a stack
+   slot and update the register's type state based on the tracked
+   stack content or compound member types.
+
+2. Stack Stores (STR): Update or create new stack state entries when
+   a tracked register type is stored to the stack.
+
+With these changes, the instruction tracker can now follow data types
+as they move between registers and memory, specifically for function
+local variables and compiler-spilled values on arm64.
+
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../util/annotate-arch/annotate-powerpc.c     | 10 ++
- tools/perf/util/annotate-arch/annotate-x86.c  | 82 ++++++++++++++++
- tools/perf/util/annotate.c                    | 94 ++-----------------
- tools/perf/util/annotate.h                    |  2 +
- tools/perf/util/disasm.h                      |  4 +
- 5 files changed, 105 insertions(+), 87 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 124 +++++++++++++++++-
+ 1 file changed, 117 insertions(+), 7 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-powerpc.c b/tools/perf/util/annotate-arch/annotate-powerpc.c
-index 218207b52581..8d0b8def5955 100644
---- a/tools/perf/util/annotate-arch/annotate-powerpc.c
-+++ b/tools/perf/util/annotate-arch/annotate-powerpc.c
-@@ -390,6 +390,15 @@ static void update_insn_state_powerpc(struct type_state *state,
- }
- #endif /* HAVE_LIBDW_SUPPORT */
- 
-+static int extract_op_location_powerpc(const struct arch *arch __maybe_unused,
-+				       struct disasm_line *dl,
-+				       const char *op_str __maybe_unused, int op_idx,
-+				       struct annotated_op_loc *op_loc)
-+{
-+	get_powerpc_regs(dl->raw.raw_insn, !op_idx, op_loc);
-+	return 0;
-+}
-+
- const struct arch *arch__new_powerpc(const struct e_machine_and_e_flags *id,
- 				     const char *cpuid __maybe_unused)
- {
-@@ -406,5 +415,6 @@ const struct arch *arch__new_powerpc(const struct e_machine_and_e_flags *id,
- #ifdef HAVE_LIBDW_SUPPORT
- 	arch->update_insn_state = update_insn_state_powerpc;
- #endif
-+	arch->extract_op_location = extract_op_location_powerpc;
- 	return arch;
- }
-diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-index 7e6136536393..6a4b4bdcd7a7 100644
---- a/tools/perf/util/annotate-arch/annotate-x86.c
-+++ b/tools/perf/util/annotate-arch/annotate-x86.c
-@@ -2,6 +2,7 @@
- #include <string.h>
- #include <linux/compiler.h>
- #include <linux/zalloc.h>
-+#include <linux/ctype.h>
- #include <assert.h>
- #include <inttypes.h>
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index f283596bb058..255ccaf33130 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -11,6 +11,8 @@
+ #include "../disasm.h"
  #include "../annotate-data.h"
-@@ -809,6 +810,86 @@ static void update_insn_state_x86(struct type_state *state,
- }
- #endif
+ #include "../debug.h"
++#include "../map.h"
++#include "../symbol.h"
  
-+/*
-+ * Get register number and access offset from the given instruction.
-+ * It assumes AT&T x86 asm format like OFFSET(REG).  Maybe it needs
-+ * to revisit the format when it handles different architecture.
-+ * Fills @reg and @offset when return 0.
-+ */
-+static int extract_reg_offset(const struct arch *arch, const char *str,
-+			      struct annotated_op_loc *op_loc)
+ struct arch_arm64 {
+ 	struct arch arch;
+@@ -357,6 +359,7 @@ static void adjust_reg_index_state(struct type_state *state,
+ }
+ 
+ static void update_load_insn_state(struct type_state *state,
++				   struct data_loc_info *dloc,
+ 				   struct disasm_line *dl,
+ 				   struct annotated_op_loc *src,
+ 				   struct annotated_op_loc *dst)
+@@ -368,6 +371,8 @@ static void update_load_insn_state(struct type_state *state,
+ 	int reg_offset;
+ 	int sreg = src->reg1;
+ 	int dreg = dst->reg1;
++	int fbreg = dloc->fbreg;
++	int fboff = 0;
+ 
+ 	if (!has_reg_type(state, dreg))
+ 		goto out_adjust;
+@@ -375,7 +380,52 @@ static void update_load_insn_state(struct type_state *state,
+ 	tsr = &state->regs[dreg];
+ 	tsr->copied_from = -1;
+ 
++	if (dloc->fb_cfa) {
++		u64 ip = dloc->ms->sym->start + dl->al.offset;
++		u64 pc = map__rip_2objdump(dloc->ms->map, ip);
++
++		if (die_get_cfa(dloc->di->dbg, pc, &fbreg, &fboff) < 0)
++			fbreg = -1;
++	}
++
+ retry:
++	/* Check stack variables with offset */
++	if (sreg == fbreg || sreg == state->stack_reg) {
++		struct type_state_stack *stack;
++		int offset = src->offset - fboff;
++
++		stack = find_stack_state(state, offset);
++		if (stack == NULL) {
++			invalidate_reg_state(tsr);
++			goto out_adjust;
++		} else if (!stack->compound) {
++			tsr->type = stack->type;
++			tsr->kind = stack->kind;
++			tsr->offset = stack->ptr_offset;
++			tsr->ok = true;
++		} else if (die_get_member_type(&stack->type,
++					       offset - stack->offset,
++					       &type_die)) {
++			tsr->type = type_die;
++			tsr->kind = TSR_KIND_TYPE;
++			tsr->offset = 0;
++			tsr->ok = true;
++		} else {
++			invalidate_reg_state(tsr);
++			goto out_adjust;
++		}
++
++		if (sreg == fbreg) {
++			pr_debug_dtp("ldr [%x] -%#x(stack) -> reg%d",
++				     insn_offset, -offset, dreg);
++		} else {
++			pr_debug_dtp("ldr [%x] %#x(reg%d) -> reg%d",
++				     insn_offset, offset, sreg, dreg);
++		}
++		pr_debug_type_name(&tsr->type, tsr->kind);
++		goto out_adjust;
++	}
++
+ 	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
+ 		invalidate_reg_state(tsr);
+ 		return;
+@@ -413,6 +463,70 @@ static void update_load_insn_state(struct type_state *state,
+ 	adjust_reg_index_state(state, src, "ldr", insn_offset);
+ }
+ 
++static void update_store_insn_state(struct type_state *state,
++				    struct data_loc_info *dloc,
++				    struct disasm_line *dl,
++				    struct annotated_op_loc *src,
++				    struct annotated_op_loc *dst)
 +{
-+	char *p;
++	struct type_state_reg *tsr;
++	u32 insn_offset = dl->al.offset;
++	int sreg = src->reg1;
++	int dreg = dst->reg1;
++	int fbreg = dloc->fbreg;
++	int fboff = 0;
 +
-+	if (arch->objdump.register_char == 0)
-+		return -1;
++	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok)
++		goto out_adjust;
 +
++	if (dloc->fb_cfa) {
++		u64 ip = dloc->ms->sym->start + dl->al.offset;
++		u64 pc = map__rip_2objdump(dloc->ms->map, ip);
++
++		if (die_get_cfa(dloc->di->dbg, pc, &fbreg, &fboff) < 0)
++			fbreg = -1;
++	}
++
++	/* Check stack variables with offset */
++	if (dreg == fbreg || dreg == state->stack_reg) {
++		struct type_state_stack *stack;
++		int offset = dst->offset - fboff;
++
++		tsr = &state->regs[sreg];
++
++		stack = find_stack_state(state, offset);
++		if (stack) {
++			if (!stack->compound)
++				set_stack_state(stack, offset, tsr->kind,
++						&tsr->type, tsr->offset);
++		} else {
++			findnew_stack_state(state, offset, tsr->kind,
++					    &tsr->type, tsr->offset);
++		}
++
++		if (dst->reg1 == fbreg) {
++			pr_debug_dtp("str [%x] reg%d -> -%#x(stack)",
++				     insn_offset, sreg, -offset);
++		} else {
++			pr_debug_dtp("str [%x] reg%d -> %#x(reg%d)",
++				     insn_offset, sreg, offset, dreg);
++		}
++		if (tsr->offset != 0) {
++			pr_debug_dtp(" reg%d offset %#x ->",
++				     sreg, tsr->offset);
++		}
++		pr_debug_type_name(&tsr->type, tsr->kind);
++	}
++
++out_adjust:
 +	/*
-+	 * It should start from offset, but it's possible to skip 0
-+	 * in the asm.  So 0(%rax) should be same as (%rax).
-+	 *
-+	 * However, it also start with a segment select register like
-+	 * %gs:0x18(%rbx).  In that case it should skip the part.
++	 * Store instructions do not change the register type,
++	 * but the base register must be updated for pre/post-index
++	 * modes.
 +	 */
-+	if (*str == arch->objdump.register_char) {
-+		/* FIXME: Handle other segment registers */
-+		if (!strncmp(str, "%gs:", 4))
-+			op_loc->segment = INSN_SEG_X86_GS;
-+
-+		while (*str && !isdigit(*str) &&
-+		       *str != arch->objdump.memory_ref_char)
-+			str++;
-+	}
-+
-+	op_loc->offset = strtol(str, &p, 0);
-+	op_loc->reg1 = arch__dwarf_regnum(arch, p);
-+	if (op_loc->reg1 == -1)
-+		return -1;
-+
-+	/* Get the second register */
-+	if (op_loc->multi_regs)
-+		op_loc->reg2 = arch__dwarf_regnum(arch, p + 1);
-+
-+	return 0;
++	adjust_reg_index_state(state, dst, "str", insn_offset);
 +}
 +
-+static int extract_op_location_x86(const struct arch *arch,
-+				   struct disasm_line *dl __maybe_unused,
-+				   const char *op_str, int op_idx __maybe_unused,
-+				   struct annotated_op_loc *op_loc)
-+{
-+	const char *s = op_str;
-+	char *p = NULL;
-+
-+	if (op_str == NULL)
-+		return 0;
-+
-+	if (strchr(op_str, arch->objdump.memory_ref_char)) {
-+		op_loc->mem_ref = true;
-+		return extract_reg_offset(arch, op_str, op_loc);
-+	}
-+
-+	/* FIXME: Handle other segment registers */
-+	if (!strncmp(op_str, "%gs:", 4)) {
-+		op_loc->segment = INSN_SEG_X86_GS;
-+		op_loc->offset = strtol(op_str + 4,
-+					&p, 0);
-+		if (p && p != op_str + 4)
-+			op_loc->imm = true;
-+		return 0;
-+	}
-+
-+	if (*s == arch->objdump.register_char) {
-+		op_loc->reg1 = arch__dwarf_regnum(arch, s);
-+	} else if (*s == arch->objdump.imm_char) {
-+		op_loc->offset = strtol(s + 1, &p, 0);
-+		if (p && p != s + 1)
-+			op_loc->imm = true;
-+	}
-+
-+	return 0;
-+}
-+
- const struct arch *arch__new_x86(const struct e_machine_and_e_flags *id, const char *cpuid)
- {
- 	struct arch *arch = zalloc(sizeof(*arch));
-@@ -848,5 +929,6 @@ const struct arch *arch__new_x86(const struct e_machine_and_e_flags *id, const c
- #ifdef HAVE_LIBDW_SUPPORT
- 	arch->update_insn_state = update_insn_state_x86;
- #endif
-+	arch->extract_op_location = extract_op_location_x86;
- 	return arch;
- }
-diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-index ecd367582315..7d5cf57a110d 100644
---- a/tools/perf/util/annotate.c
-+++ b/tools/perf/util/annotate.c
-@@ -2474,51 +2474,6 @@ int arch__dwarf_regnum(const struct arch *arch, const char *str)
- 	return reg;
- }
+ static void update_insn_state_arm64(struct type_state *state,
+ 				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
+ 				    struct disasm_line *dl)
+@@ -439,18 +553,14 @@ static void update_insn_state_arm64(struct type_state *state,
  
--/*
-- * Get register number and access offset from the given instruction.
-- * It assumes AT&T x86 asm format like OFFSET(REG).  Maybe it needs
-- * to revisit the format when it handles different architecture.
-- * Fills @reg and @offset when return 0.
-- */
--static int extract_reg_offset(const struct arch *arch, const char *str,
--			      struct annotated_op_loc *op_loc)
--{
--	char *p;
--
--	if (arch->objdump.register_char == 0)
--		return -1;
--
--	/*
--	 * It should start from offset, but it's possible to skip 0
--	 * in the asm.  So 0(%rax) should be same as (%rax).
--	 *
--	 * However, it also start with a segment select register like
--	 * %gs:0x18(%rbx).  In that case it should skip the part.
--	 */
--	if (*str == arch->objdump.register_char) {
--		if (arch__is_x86(arch)) {
--			/* FIXME: Handle other segment registers */
--			if (!strncmp(str, "%gs:", 4))
--				op_loc->segment = INSN_SEG_X86_GS;
--		}
--
--		while (*str && !isdigit(*str) &&
--		       *str != arch->objdump.memory_ref_char)
--			str++;
--	}
--
--	op_loc->offset = strtol(str, &p, 0);
--	op_loc->reg1 = arch__dwarf_regnum(arch, p);
--	if (op_loc->reg1 == -1)
--		return -1;
--
--	/* Get the second register */
--	if (op_loc->multi_regs)
--		op_loc->reg2 = arch__dwarf_regnum(arch, p + 1);
--
--	return 0;
--}
--
- /**
-  * annotate_get_insn_location - Get location of instruction
-  * @arch: the architecture info
-@@ -2549,6 +2504,7 @@ int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
- 	struct ins_operands *ops;
- 	struct annotated_op_loc *op_loc;
- 	int i;
-+	int ret;
- 
- 	if (ins__is_lock(&dl->ins))
- 		ops = dl->ops.locked.ops;
-@@ -2574,49 +2530,13 @@ int annotate_get_insn_location(const struct arch *arch, struct disasm_line *dl,
- 		/* Invalidate the register by default */
- 		op_loc->reg1 = -1;
- 		op_loc->reg2 = -1;
-+		op_loc->mem_ref = mem_ref;
-+		op_loc->multi_regs = multi_regs;
- 
--		if (insn_str == NULL) {
--			if (!arch__is_powerpc(arch))
--				continue;
--		}
--
--		/*
--		 * For powerpc, call get_powerpc_regs function which extracts the
--		 * required fields for op_loc, ie reg1, reg2, offset from the
--		 * raw instruction.
--		 */
--		if (arch__is_powerpc(arch)) {
--			op_loc->mem_ref = mem_ref;
--			op_loc->multi_regs = multi_regs;
--			get_powerpc_regs(dl->raw.raw_insn, !i, op_loc);
--		} else if (strchr(insn_str, arch->objdump.memory_ref_char)) {
--			op_loc->mem_ref = true;
--			op_loc->multi_regs = multi_regs;
--			extract_reg_offset(arch, insn_str, op_loc);
--		} else {
--			const char *s = insn_str;
--			char *p = NULL;
--
--			if (arch__is_x86(arch)) {
--				/* FIXME: Handle other segment registers */
--				if (!strncmp(insn_str, "%gs:", 4)) {
--					op_loc->segment = INSN_SEG_X86_GS;
--					op_loc->offset = strtol(insn_str + 4,
--								&p, 0);
--					if (p && p != insn_str + 4)
--						op_loc->imm = true;
--					continue;
--				}
--			}
--
--			if (*s == arch->objdump.register_char) {
--				op_loc->reg1 = arch__dwarf_regnum(arch, s);
--			}
--			else if (*s == arch->objdump.imm_char) {
--				op_loc->offset = strtol(s + 1, &p, 0);
--				if (p && p != s + 1)
--					op_loc->imm = true;
--			}
-+		if (arch->extract_op_location) {
-+			ret = arch->extract_op_location(arch, dl, insn_str, i, op_loc);
-+			if (ret)
-+				return ret;
- 		}
+ 	/* Memory to register transfers */
+ 	if (!strncmp(dl->ins.name, "ld", 2)) {
+-		update_load_insn_state(state, dl, src, dst);
++		update_load_insn_state(state, dloc, dl, src, dst);
+ 		return;
  	}
  
-diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
-index 1aa6df7d1618..5a0a913af53a 100644
---- a/tools/perf/util/annotate.h
-+++ b/tools/perf/util/annotate.h
-@@ -492,6 +492,8 @@ int annotate_parse_percent_type(const struct option *opt, const char *_str,
- 
- int annotate_check_args(void);
- 
-+int arch__dwarf_regnum(const struct arch *arch, const char *str);
-+
- /**
-  * struct annotated_op_loc - Location info of instruction operand
-  * @reg1: First register in the operand
-diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-index 06c664fd4fc2..8796f92769f9 100644
---- a/tools/perf/util/disasm.h
-+++ b/tools/perf/util/disasm.h
-@@ -16,6 +16,7 @@ struct symbol;
- struct data_loc_info;
- struct type_state;
- struct disasm_line;
-+struct annotated_op_loc;
- 
- struct e_machine_and_e_flags {
- 	uint32_t e_flags;
-@@ -49,6 +50,9 @@ struct arch {
- 				struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				struct disasm_line *dl);
+ 	/* Register to memory transfers */
+ 	if (!strncmp(dl->ins.name, "st", 2)) {
+-		/*
+-		 * Store instructions do not change the register type,
+-		 * but the base register must be updated for pre/post-index
+-		 * modes.
+-		 */
+-		adjust_reg_index_state(state, dst, "str", insn_offset);
++		update_store_insn_state(state, dloc, dl, src, dst);
++		return;
+ 	}
+ }
  #endif
-+	int		(*extract_op_location)(const struct arch *arch, struct disasm_line *dl,
-+					       const char *op_str, int op_idx,
-+					       struct annotated_op_loc *op_loc);
- };
- 
- struct ins {
 -- 
 2.34.1
 
