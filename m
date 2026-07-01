@@ -1,168 +1,129 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E02234D93C;
-	Wed,  1 Jul 2026 22:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782945915; cv=none; b=OCR1aWpnwn16NrhaUa5yaGkrMKNyOV2QX96x5ECg0aYXNlET6x/Pdxu9FBnvjiWK+cBK4CmmH12bf6tHS8ZcZoet9j+zJDnTh5O2wDo+8JIUukJQ8Hrh7VgHGBPO4/T56wSqZIFGZG+0NL5eObW/uLQRRPhj2jdtpmlRRxANwlk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782945915; c=relaxed/simple;
-	bh=kADgQX2eGAt64r/MvidfUMnPw/8Re/0iSpvJIkRlKeE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=MxytpOEzASfPaIe0oEIfLLJ+YDnMaxe7QAcGCDBQadLPHtDTvLMgD0brZ+L35Vd23CTtwgIGV9fyQxK1VtJjtuePbhOhyy4/SfKA0oqKXPaSRwvi1qcSAk32WW6bHncM+IWuBhOfIujgzZJVmraPY0nuHzSyacm39P5R4QPmRRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lpeCtXub; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9F434D93C
+	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 22:48:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1782946110; cv=pass; b=K+t7mat5mhKF+xptHCUwNCl3y2xgyl5gVWM56/1sT+3SR1PEGY2aJJkBE65StB5lID3GOsDvxr4Wg4INRoFxRZZftm8klPMAAD19SSuswlJ/BnQ8Jme4Ghp04+KowyqR7DJtiTpan3XbbsMT2A10qR44PtB+XoYfbu/NJNd6JsY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1782946110; c=relaxed/simple;
+	bh=SuV/RveQMwmgPdBsG3oB7KB0fRA+6EblRb6Qr0sJC6g=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gsIqXtHqSgPGgBENaXjqiwzMj5bGuzS5Gd3j3XmzZfzfNVke/2sBd4WPo0WlRRrdBP/PbwBYo8GyZqS6AMpZUmqX/8O31bIKo30i8bXjblcfyM7hGxTuV424mDtS2Zzyxpf7ym61EmHQAd6oTCvS+PCtVbCfVRoEtmscb9az0is=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLrixUBw; arc=pass smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lpeCtXub"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782945913; x=1814481913;
-  h=date:from:to:cc:subject:message-id;
-  bh=kADgQX2eGAt64r/MvidfUMnPw/8Re/0iSpvJIkRlKeE=;
-  b=lpeCtXubTcil7NByaQ7pV129c66OxStM5krRrGRm8ux6NjRV/eZ3ie8w
-   6HUjpkSOwKkx/zTdy4/MtCWY4bPio1fWIVGD2n/nvxhsKYbifS60VRuxd
-   d68mJHzyfE5Bvd0NUPqSiVxyVmkqD9hF6GFboeTXX1IR7ShmiueFLhnle
-   g1wyKPN0848anqa/ltwNymuSol5lKma/VFj7f7AbIZh2FwXT5oi67VfZB
-   kOutPMjodLhaE3tHTUAWPEd/TMaJJ1loa0QfmpYqu9p92tqhWONpjzTyI
-   OFS8PYj/Lqoc607+AnaZaFn9lgZp7ooSevGKpZKtOOgXhKe709K7ocBMy
-   Q==;
-X-CSE-ConnectionGUID: hgztwqd3QFiU1VH9mWuJRw==
-X-CSE-MsgGUID: bXdH+9ZJQfq70BB5IbNVCw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="83742469"
-X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
-   d="scan'208";a="83742469"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 15:45:13 -0700
-X-CSE-ConnectionGUID: 5+GyF86/TsiHqGQHc2oWuA==
-X-CSE-MsgGUID: 7p1R1H43Qqux+/JvCC9kpA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
-   d="scan'208";a="246334186"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Jul 2026 15:45:11 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wf3fr-000000009h5-1nL3;
-	Wed, 01 Jul 2026 22:45:07 +0000
-Date: Thu, 02 Jul 2026 06:43:37 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sudeep Holla <sudeep.holla@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sudeep-holla:b4/acpi_scmi_pcc 19/23]
- drivers/firmware/arm_scmi/driver.c:3072:18: error: call to undeclared
- function 'acpi_device_hid'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202607020623.psaiEySG-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLrixUBw"
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c125bce2294so137526266b.3
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 15:48:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1782946107; cv=none;
+        d=google.com; s=arc-20260327;
+        b=EKzWlwLAWz5/02P49q/CtePtwdp7syJ+aKoGWHxxf0S7t2cMolLnS07kSCGjkb81Vk
+         NztALRDoQXxIpZ6qIHi5tiscXuvzPmJhxps9iJlCoPVZ4v4dyQogj7u0cZQKJmrsfUUO
+         CBPTEDkghT5dBz4955M+4UUKuZI6JMRmtrxTLMkP4O0jQ1W/GCUDzohtJROvbqYqjN36
+         31IRnY/zBPlZHPeyO6z1Gpdj++04dPwOM58zslaQqhEt/MhMDJs6NM3Qgwq3CSVV52WP
+         V5rsEJpqT+6VAzJCvYdHWJXabQoP/5yT4FLFHsTUFXoa5LhdDU5GmOSKHVbv1dZKgs2U
+         fQow==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7Y7K42Pthy/h/C6rphgJepVh7B3oR9NKzsJz8MEYLdg=;
+        fh=iiTLUbn/v9vGoGxyWNzap5BnIPa8ATusosnszXFz3vE=;
+        b=OhIvnb96LIgN9bO2QPmRbXBREHmqUG2DIvbC+NX01VEpc0VbMxfhQA7gWeip+L954V
+         8kqNuPH0pDYMG0bkbztqEquya3kU9bBv3UluLG7hM78lG3rGGRnuaraZ2EGnIXiARlT1
+         x2gmOyvlSRX67hsmjZcPzxvY26b5fLilNaODm8lWS5kAA/KTH++Nwfr903PD5DUsISWJ
+         ecNiFkvnpHx5itI+Bt5BuMssMauAe56s2xk0gpvzjjPVz0E43govcpaczvgyCAnrleSF
+         wQmfH9tUKUWq/JSB77DnIRllctYaXkQCvbwqgZnl5ld1VBq8zedR7WI6pju43Zi5HAPL
+         I/Tw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1782946107; x=1783550907; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7Y7K42Pthy/h/C6rphgJepVh7B3oR9NKzsJz8MEYLdg=;
+        b=MLrixUBwksUT1FWraCE0xSm+qPVon5SsQ5PAkrK+gBIJp8G2CgIzyj2HkhGUbytIvX
+         kKz/Vbdi4z+m7yFdyPD9wDZHbs1PNToVhyc/xVYweKJTXmjmu1vtaoojBwOf4YeCwmYT
+         TwEVI8dkZsC5iRTfsal7ZsdZMwznSRPPFafWGjPOlweyJghVwiJ2izElH84R5INtXSjZ
+         262p7vBVOy6BP9PCBGoIPkX1Rhu2uIle/2pv1PfqhDuUlACmJ3R+GuuVH59ng3/FrP9W
+         t+p4LBfA3NivtFqSK/ADuyHFaNTuS8/dQvyjycWUNiErEQ0daLlBhxw1TDrJnznqyTtT
+         cegg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782946107; x=1783550907;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7Y7K42Pthy/h/C6rphgJepVh7B3oR9NKzsJz8MEYLdg=;
+        b=NtpJTaJssA+hP6Mrvk8K38rt/TcZqt+JEp5yCCJzFjwqCGOYxW/R3nAB4FCuTdfRfl
+         XQWNzRErBedNmjWoI0zBCE5ouLVmm+sk7tLDLDnIdUJD8s7UXs3rBaEBVKDomGeG8X9t
+         USSrHd4qIdkMviks8KmlNyjxq/Z6kiW7dmmyALNWnyds7fX9fDFNCHqXnnP6RU2YZ6CP
+         hBvKwHDkqtBEbByafviy4/BxPfFoyZixGdxuX+qL8hAlrCJb2tZMJOuqIx/GBOJKxPPE
+         E161WyBQFIgusUXYlnPk/ovFeaqVsccBpCcXWLRtyj6B9UPTUiH+3Vp86zaMSZ+hgLv3
+         m6jw==
+X-Forwarded-Encrypted: i=1; AHgh+RoQGYbe1CZ2JKTbDJEyKwwm0jQR989YHrVG91ZftpVRQ8ZAaIDkEbSDv7JfAjfVkDuAv1FJ@lists.linux.dev
+X-Gm-Message-State: AOJu0Yzpt+jfH1aGr8i6vDZv9IkhA4x9/J7Vw09Q1387M/unYa4aItT+
+	sv7y1UFebHW6W1Vz8Qx4A4t3MtWJAeACi+sKhiFI9mGG/Z/nFg1aVG+ltQ+8Z6PjNp73zC0ZOsv
+	xvYh7+bWrrXbVm5Y6xJZEKEBuBdeSDvI=
+X-Gm-Gg: AfdE7cmJG9BoyJhMEpOLR6tSX3ePWVZoveC+j1DwyZdgVfljULh0mCWQyFZydGX0QwM
+	iBOq+Pzu2UiabHMS8D3NnHPo03tPH4T5rf+ocpXfCR7k/w2cgjkGOONBukjARKnQH//MyIVslyP
+	DOTzuAn5fzDhGDnUmVVXWJ01yHxALBgwVpntFApzmwinnGXftvA8wn1YebkEvusK1+CXXgfHNr9
+	PTug6StOOGg7mS1wP+fValGbnUwAt804qp4VSc6qw72ZH7svX9F31I7QZtufZiwrsauaLNHb5k5
+	XN9qEhUyLtyc0ePoDvatfjbRP02Z2w0NOBbM5WXFUmbDQ1g4tuhgDzhKlVjtw+yjZjA0enM+Uf9
+	zZRQYqbCkZA==
+X-Received: by 2002:a17:906:f851:b0:c12:9fb7:3e68 with SMTP id
+ a640c23a62f3a-c12ae7af993mr118796666b.38.1782946107350; Wed, 01 Jul 2026
+ 15:48:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260701125151.352632-1-voytikd@gmail.com> <CAG_fn=Wor0586c077D+0D+NYh+bkhqPhVVzoAANsaLGxbjLpTQ@mail.gmail.com>
+ <CAAX90H31D3y-q1RJ=ah+hhPj2_apUh-rGtmwwp8vBzDNZcLH5A@mail.gmail.com> <CAG_fn=VA4P2YVNHSHxzeChFg45LhoYLnj4jrLMq+jVGnt__wPQ@mail.gmail.com>
+In-Reply-To: <CAG_fn=VA4P2YVNHSHxzeChFg45LhoYLnj4jrLMq+jVGnt__wPQ@mail.gmail.com>
+From: Dmitry Voytik <voytikd@gmail.com>
+Date: Thu, 2 Jul 2026 00:47:59 +0200
+X-Gm-Features: AVVi8CdTiFW68fd4xueUqXpI0l3PKu1X-5785Y8Ch-vZEDPAQtgM96icXgvaUBA
+Message-ID: <CAAX90H0XdhYLPRctHKnpT8i-qYUrJH3WqDAq17M4pDB_p=Ymbg@mail.gmail.com>
+Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
+To: Alexander Potapenko <glider@google.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Ankur Arora <ankur.a.arora@oracle.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Marco Elver <elver@google.com>, x86@kernel.org, 
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, linux-mm@kvack.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/acpi_scmi_pcc
-head:   bdcaa5728f17002c1091efd93dd082c9c23ddd39
-commit: f17b84ab4e8011a39adfbbf053b2cac4433e6918 [19/23] firmware: arm_scmi: Fall back to ACPI HID when "compatible" is absent
-config: i386-buildonly-randconfig-004-20260702 (https://download.01.org/0day-ci/archive/20260702/202607020623.psaiEySG-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260702/202607020623.psaiEySG-lkp@intel.com/reproduce)
+On Wed, Jul 1, 2026 at 5:16=E2=80=AFPM Alexander Potapenko <glider@google.c=
+om> wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607020623.psaiEySG-lkp@intel.com/
+> In fact I think the hangs are being caused by CONFIG_UNWINDER_ORC=3Dy,
+> sorry for the noise.
 
-All error/warnings (new ones prefixed by >>):
+No worries!
+Just in case, I double checked with current Linus' tree, defconfig +
+KMSAN + DEBUG_INFO_* ,
+and it looks like CONFIG_UNWINDER_ORC gets enabled:
 
->> drivers/firmware/arm_scmi/driver.c:3072:18: error: call to undeclared function 'acpi_device_hid'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3072 |                 c_ptr = adev ? acpi_device_hid(adev) : "unknown";
-         |                                ^
-   drivers/firmware/arm_scmi/driver.c:3072:18: note: did you mean 'acpi_device_handle'?
-   include/linux/acpi.h:896:27: note: 'acpi_device_handle' declared here
-     896 | static inline acpi_handle acpi_device_handle(struct acpi_device *adev)
-         |                           ^
->> drivers/firmware/arm_scmi/driver.c:3072:16: warning: pointer/integer type mismatch in conditional expression ('int' and 'char *') [-Wconditional-type-mismatch]
-    3072 |                 c_ptr = adev ? acpi_device_hid(adev) : "unknown";
-         |                              ^ ~~~~~~~~~~~~~~~~~~~~~   ~~~~~~~~~
-   1 warning and 1 error generated.
+git pull -r
+make mrproper
+make LLVM=3D1 defconfig
+./scripts/config -e CONFIG_KMSAN \
+  -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+make LLVM=3D1 olddefconfig
+make LLVM=3D1 W=3Dce -j(nproc) bzImage
 
+grep CONFIG_UNWINDER_ORC .config
+CONFIG_UNWINDER_ORC=3Dy
 
-vim +/acpi_device_hid +3072 drivers/firmware/arm_scmi/driver.c
-
-  3050	
-  3051	static struct scmi_debug_info *scmi_debugfs_common_setup(struct scmi_info *info)
-  3052	{
-  3053		char top_dir[16];
-  3054		struct dentry *trans, *top_dentry;
-  3055		struct scmi_debug_info *dbg;
-  3056		struct acpi_device *adev;
-  3057		const char *c_ptr = NULL;
-  3058	
-  3059		dbg = devm_kzalloc(info->dev, sizeof(*dbg), GFP_KERNEL);
-  3060		if (!dbg)
-  3061			return NULL;
-  3062	
-  3063		dbg->name = kstrdup(fwnode_get_name(dev_fwnode(info->dev)), GFP_KERNEL);
-  3064		if (!dbg->name) {
-  3065			devm_kfree(info->dev, dbg);
-  3066			return NULL;
-  3067		}
-  3068	
-  3069		if (fwnode_property_read_string(dev_fwnode(info->dev), "compatible",
-  3070						&c_ptr)) {
-  3071			adev = ACPI_COMPANION(info->dev);
-> 3072			c_ptr = adev ? acpi_device_hid(adev) : "unknown";
-  3073		}
-  3074		dbg->type = kstrdup(c_ptr, GFP_KERNEL);
-  3075		if (!dbg->type) {
-  3076			kfree(dbg->name);
-  3077			devm_kfree(info->dev, dbg);
-  3078			return NULL;
-  3079		}
-  3080	
-  3081		snprintf(top_dir, 16, "%d", info->id);
-  3082		top_dentry = debugfs_create_dir(top_dir, scmi_top_dentry);
-  3083		trans = debugfs_create_dir("transport", top_dentry);
-  3084	
-  3085		dbg->is_atomic = info->desc->atomic_enabled &&
-  3086					is_transport_polling_capable(info->desc);
-  3087	
-  3088		debugfs_create_str("instance_name", 0400, top_dentry,
-  3089				   (char **)&dbg->name);
-  3090	
-  3091		debugfs_create_u32("atomic_threshold_us", 0400, top_dentry,
-  3092				   (u32 *)&info->desc->atomic_threshold);
-  3093	
-  3094		debugfs_create_str("type", 0400, trans, (char **)&dbg->type);
-  3095	
-  3096		debugfs_create_bool("is_atomic", 0400, trans, &dbg->is_atomic);
-  3097	
-  3098		debugfs_create_u32("max_rx_timeout_ms", 0400, trans,
-  3099				   (u32 *)&info->desc->max_rx_timeout_ms);
-  3100	
-  3101		debugfs_create_u32("max_msg_size", 0400, trans,
-  3102				   (u32 *)&info->desc->max_msg_size);
-  3103	
-  3104		debugfs_create_u32("tx_max_msg", 0400, trans,
-  3105				   (u32 *)&info->tx_minfo.max_msg);
-  3106	
-  3107		debugfs_create_u32("rx_max_msg", 0400, trans,
-  3108				   (u32 *)&info->rx_minfo.max_msg);
-  3109	
-  3110		if (IS_ENABLED(CONFIG_ARM_SCMI_DEBUG_COUNTERS))
-  3111			scmi_debugfs_counters_setup(dbg, trans);
-  3112	
-  3113		dbg->top_dentry = top_dentry;
-  3114	
-  3115		if (devm_add_action_or_reset(info->dev,
-  3116					     scmi_debugfs_common_cleanup, dbg))
-  3117			return NULL;
-  3118	
-  3119		return dbg;
-  3120	}
-  3121	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+and the kernel boots in qemu, so maybe something else is causing
+(another?) issue?
