@@ -1,165 +1,148 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40ACA1FF1DA
-	for <llvm@lists.linux.dev>; Thu,  2 Jul 2026 02:54:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FC3A30CD81
+	for <llvm@lists.linux.dev>; Thu,  2 Jul 2026 02:55:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782960862; cv=none; b=YnLk9fGcb5FwQ/1hrDCHNQlGI5F1jeWxo2wZI3Q9U+1cNRaMUAMJb7XfrXNC2Bg4SUn6NVx9gFWuK/RcTVWRe3hFB1pJnRIu4y7wTHhx3eQcBb/sKC3AgQfmrUD4jHfLMD9CAapBnfCobVO3SGEl35x7L0JtvKrsgxcNCCTTWQI=
+	t=1782960915; cv=none; b=QuRcXWN9V6CFbx4o336ZOV2osysRqF/xmtuzVogUyOqUpkA/RAK1lB80sTbUn0vJ3oeyEThtG9/SCOrX2CyW/0vS5ss3XD9ufelIGXDMF0qX2j+7iVAYVLJKz3KDmuOaek4iw9fKZMMW1OVd+OCQzm15uIESOLZLc83vwFc3EkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782960862; c=relaxed/simple;
-	bh=tL9NH42OQNeDEkTaHJuv0PCGDPPXbhCZ+SsTJlKBaUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ab+k9+8LMcxQ7m9BHPZrRjOU5voN7iTDtBtlAUe/GfMDmCeCc4CDfpGEKrr9+inL85JFY8ycJLrGWfrdR8U6BnwX5oH+YneXqJFl1O/u52jn4NCZZnC9nzcSm11fFJWFCPOF9c1/7jZ87qTI25ut5lVJkVcoLOHTtUR8nMB/2u4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Wau1r4b4; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1782960915; c=relaxed/simple;
+	bh=pGDpUoR+YVfr0eRZnyVNQJ79pTwqmoMZJvjcbiau6fI=;
+	h=From:To:Subject:Date:Message-Id:MIME-Version; b=bGnFBTVJmD82yHIY39hDUlKcTlrSVuxbaV3wiyB9N/tQgs//SVPMlPUN0eDZ7UxC8/hu+7HDLzLtpOhkXiOS1tJTYK/FaTG0EUd/x0NDrKvHlPKMLtj+HyJFW5/LltKqh7NRkEuQdk3Piy3Cfiaz9dPsLvADYP6y4We2B/VG570=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=KuOlQLvT; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Wau1r4b4"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0A99740E01B4;
-	Thu,  2 Jul 2026 02:54:19 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id kn1GuhSAvRpl; Thu,  2 Jul 2026 02:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1782960849; bh=3hStA21eE7y1OWGDE78iE1VwyUh5r1fukeg8JEHNDIk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Wau1r4b4rDWBbCeZpmK2bNh9bCEpW76ya/hOORlts+w7J/AUG5azHmRsEJPYzgb2t
-	 G6l6jVjfa5sBObjh8qxnMfiXRZPIUYN4cAxkMzkZz56gNy0av+3Ok1Clqaf6gzEnAw
-	 0qJGRo0D5HoTBSwCb+1mVWLHZGFgOsHtNkoZUo+FOGg8YlUFSAInck2EguipF2U3J2
-	 sFxeYZYH1oVnr1K6MhmF+ezgfvKKrjDnw9ANEZIHBjsG1ST6Cqag7n9bsPVoH0kQpa
-	 O5GMOmSJEV+eDKlG+ifNpw8VVw2Q3nMz1v2RKq8r+HyhCLtCu1c9dmh5obEBNsNZZk
-	 kxQ4ZEUe6BdZrmJrsSJgPTj2u13XvjrjkEvNE3K3r1KvSIt6k3xu4sGpk1r78Yc/BJ
-	 BfRtrw1SE/Thng81+s/UF9fe/lYcmLNCHzkwj51Q3biwvtt9YtyKA5VEIBig0OHLrI
-	 o88vFb3fr+2we3jt3ALD6iuctrplDcy0JoW63awokyKu4WI5WOgYIDFgPCEx5JNtk+
-	 ruLlYcaR8CUqhMWK3eChttgWmyvn5jkZDcKjXmJPd8HcJfk9zNgWwfktFIfHEDtOKA
-	 NKVs2MXe92c5Llqvuosg/lTbuYBGunrj2D36jFcOC896ad+UTiKgxz0RXaM9zAgsOY
-	 MeDVJQs75mojt9jbQKya7xak=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1a])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3672F40E0140;
-	Thu,  2 Jul 2026 02:53:46 +0000 (UTC)
-Date: Wed, 1 Jul 2026 19:53:42 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Dmitry Voytik <voytikd@gmail.com>, linux-toolchains@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Ankur Arora <ankur.a.arora@oracle.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Marco Elver <elver@google.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
-	linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
-Message-ID: <20260702025342.GJakXStrsCmIRnEwFD@fat_crate.local>
-References: <20260701125151.352632-1-voytikd@gmail.com>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="KuOlQLvT"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-37fc02e660bso932332a91.0
+        for <llvm@lists.linux.dev>; Wed, 01 Jul 2026 19:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1782960913; x=1783565713; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bzv59asYaYM1r1NY8KtOkB7QhvGiD1GkLe9qJuyqT78=;
+        b=KuOlQLvTaz8wnMUIAIQxAg/mggEi+Nfm7mPZz4VEnfE1Da7rn/rk4RVUydnqV1ICoE
+         CVtR3QVhbXD6ltt21Scs96CeLqydze5BwISMqswdU35502PNHy3VLdmYgsYpmSbrhYPH
+         7DdSbL3zhGfHYwcDjSoxpD1dWCKBvLDiE04RChrZtvzo1OUoCL3ckwRZWQ8+LK9fpXBy
+         M0TgS+UkdUwPPX4hdrGW0fDH6ayL0H1pHMJQWwT5BkAEfqfNgrPvWT4LjP4m2hSJD1UH
+         tuZjZz1FABvnYVmDZlKxNHYcuGA9TvyEM082D4uuMm6XDTi84vKvGTA2bx+NYzmwW6UZ
+         plBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1782960913; x=1783565713;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bzv59asYaYM1r1NY8KtOkB7QhvGiD1GkLe9qJuyqT78=;
+        b=S5vWVxeW5UHLjubrKnJZX8W0z0HXXashPpLIyIly90TdMWry4TmC5g5Y2xyXf2NuC2
+         1mjTdvYMTdKLgnPW5cyGxBTvYbsx6Y9hfNl/MAL0wAcNQNW+mu6Fqrz0j8UWVG1xcINg
+         FcewTNE6MxeD1f4fdA9D5Vlh/Q8Oudti3vCnByk6FHTiD3Y3DBg/QP712YdSg3dCSFe6
+         134jo0/aV3OPm1Rp8XkE3uLFi6trzOtRQDO1U/q5b6nUxGaZY3EDiFOkacBagLiSDCCz
+         awPV+skcJRyhKLc/IWUmu4snQ6p8nHaYiL4/2pG5KYVJKJhQ4xOKPT6RKkc+5WUQ5B6a
+         7WUQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3uHyf6ptH0SXtvy63p8Hx0n0YCPGt6ZDBam+v3XH942jNzmnbHyMDVmC2vP+ZaYxJQdNJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YygURtj+nRqnk3bdFBWtlR+ncls0jH7H3ZqZeDN64cYCghkZ4Ju
+	Cpbi7szxeUNbdTo4vhzk+vV9HclSS2fPHtfC73ObxBoTyDBVccb1Lsmhwc69LKFGuIs=
+X-Gm-Gg: AfdE7cmLhhLz7m2/hdmVkDEaWD+q17o2d30Ji9noSO8CY5iXK2n/UPZvrQMEbTvAX8q
+	2UzVxgFU02l6Blv4/Mf0zTRqNoRsmwcxDqfPbezs/Ht9UvKk/Ds0x5KbBkkt0sfF47tXtl7Vlxj
+	OIP4kSz2mHnag8Azd/zmnGrlO1bu083GEjVqqZqKMyNNi4xLJ75hJID8guUt3DyNHYKvGZn/N4m
+	RdGWHMPU0DMLmhB/SUrpLbgOn965fCHD0JeXjcFVSaLRl4DNu/JmtWaiRh3h+2Rl8+RjMq9F2Dp
+	dBglJMGqYaGYG3f4XDuI1C0kYxFeRPbUsVXEkQ6RUFaN/j+EFLTTVKZt5nxliQFE1HK97+8M40r
+	GUMrSgBplqxH8T72yQ4iDfvla2s0Rnkc9n/ARVpfDve/Ul3kqQxGoBjvnSysXYojMxR1f0zC7k+
+	EA42mNiNWINdvF8FfbSNBRjZtA6YVyMywch7EO9Ev5MnSFAytOStwUEbb5
+X-Received: by 2002:a17:90b:580e:b0:37f:f89a:a1e6 with SMTP id 98e67ed59e1d1-380a9e38790mr4709918a91.0.1782960912995;
+        Wed, 01 Jul 2026 19:55:12 -0700 (PDT)
+Received: from L6YN4KR4K9.bytedance.net ([139.177.225.248])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-30f0bb80f5csm4358686eec.15.2026.07.01.19.54.56
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 01 Jul 2026 19:55:12 -0700 (PDT)
+From: Yunhui Cui <cuiyunhui@bytedance.com>
+To: pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	dennis@kernel.org,
+	tj@kernel.org,
+	cl@gentwo.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	bjorn@kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	thuth@redhat.com,
+	ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk,
+	rkrcmar@ventanamicro.com,
+	cuiyunhui@bytedance.com,
+	samuel.holland@sifive.com,
+	zong.li@sifive.com,
+	conor.dooley@microchip.com,
+	tglx@kernel.org,
+	debug@rivosinc.com,
+	seanwascoding@gmail.com,
+	andybnac@gmail.com,
+	menglong8.dong@gmail.com,
+	cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn,
+	atishp@rivosinc.com,
+	apatel@ventanamicro.com,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	bpf@vger.kernel.org,
+	arnd@arndb.de,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v7 0/3] riscv: fix PIO helpers and add optimized percpu ops
+Date: Thu,  2 Jul 2026 10:54:40 +0800
+Message-Id: <20260702025443.83389-1-cuiyunhui@bytedance.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260701125151.352632-1-voytikd@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 01, 2026 at 02:51:51PM +0200, Dmitry Voytik wrote:
-> This patch fixes broken builds with defconfig + CONFIG_KMSAN +
-> CONFIG_DEBUG_INFO_*.
-> 
-> To reproduce the issue before the fix:
->   make mrproper
->   make LLVM=1 defconfig
->   ./scripts/config -e CONFIG_KMSAN \
->     -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
->   make LLVM=1 olddefconfig
->   make LLVM=1 -j(nproc) vmlinux
->   ...
->     LD      vmlinux.o
->   vmlinux.o: warning: objtool: folio_zero_user+0x801: undefined stack state
->   vmlinux.o: error: objtool: folio_zero_user+0x801: unknown CFA base reg -1
->   make[2]: *** [scripts/Makefile.vmlinux_o:76: vmlinux.o] Error 255
-> 
-> objtool in verbose mode shows how the frame pointer is omitted:
->   make LLVM=1 OBJTOOL_VERBOSE=1 -j(nproc) vmlinux
->   ...
->   b15a2c:  folio_zero_user+0x7fc      xor    %eax,%eax
->   b15a2e:  folio_zero_user+0x7fe      mov    %rcx,%rsp
->   b15a31:  folio_zero_user+0x801      mov    %r14,%rdi
->   b15a34:  folio_zero_user+0x804      mov    %rbx,%rcx
->   b15a37:  folio_zero_user+0x807      call   0xb15a3c <__clear_pages_unrol
-> 
-> After the fix, the frame pointer is back:
->   b15a37: 31 c0                       xor    %eax,%eax
->   b15a39: 48 89 ec                    mov    %rbp,%rsp
->   b15a3c: 4c 89 f7                    mov    %r14,%rdi
->   b15a3f: 48 89 d9                    mov    %rbx,%rcx
->   b15a42: e8 00 00 00 00              call   b15a47 <folio_zero_user+0x817>
-> 
-> It seems the issue was introduced by
-> commit 54a6b89a3db2 ("x86/mm: simplify clear_page_*")
-> 
-> The actual fix is to revert the change how ASM_CALL_CONSTRAINT is
-> positioned.
+Changes in v7:
+- Address the Sashiko comment about inconsistent AND helper naming: rename
+  the RISC-V internal percpu helpers from andnot to and, and make all
+  this_cpu_and_*() wrappers pass the operand directly.  This is a readability
+  cleanup only; the generated operations still implement the same plain AND
+  semantics required by this_cpu_and().
+- Undefine internal percpu helper macros prior to including <asm-generic/percpu.h>
+  as recommended by bpf-ci/Sashiko review. This prevents macro leakage into the
+  global namespace and has no impact on generated code or runtime behavior.
 
-Why?
+Yunhui Cui (3):
+  riscv: io: avoid null-pointer arithmetic in PIO helpers
+  riscv: introduce percpu.h into include/asm
+  riscv: store percpu offset into thread_info
 
-Where does it say that the current stack ptr dependency needs to be the first
-asm input operand?
+ arch/riscv/include/asm/asm.h         |   6 +-
+ arch/riscv/include/asm/io.h          |   8 +
+ arch/riscv/include/asm/percpu.h      | 300 +++++++++++++++++++++++++++
+ arch/riscv/include/asm/switch_to.h   |   8 +
+ arch/riscv/include/asm/thread_info.h |   3 +-
+ arch/riscv/kernel/asm-offsets.c      |   1 +
+ arch/riscv/kernel/smpboot.c          |   8 +
+ arch/riscv/net/bpf_jit_comp64.c      |   9 +-
+ 8 files changed, 329 insertions(+), 14 deletions(-)
+ create mode 100644 arch/riscv/include/asm/percpu.h
 
-If that were the case, we have a bunch more of those bugs around the tree.
-
-Anyway, + linux-toolchains.
-
-> Additionally, reintroduce asm_inline to prevent potential compiler
-> rejection of inlining.
-> 
-> Link: https://lore.kernel.org/CAAX90H2_RPnZL_dFYN7cQF6yt-wAweKKSx2=6e2aZ0kv+Pm+NQ@mail.gmail.com
-> Signed-off-by: Dmitry Voytik <voytikd@gmail.com>
-> ---
->  arch/x86/include/asm/page_64.h | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
-> index 1895c207f629..de8604f0a3a1 100644
-> --- a/arch/x86/include/asm/page_64.h
-> +++ b/arch/x86/include/asm/page_64.h
-> @@ -100,12 +100,13 @@ static inline void clear_pages(void *addr, unsigned int npages)
->  	 * __clear_pages_unrolled() are part of the inline asm register
->  	 * specification.
->  	 */
-> -	asm volatile(ALTERNATIVE_2("call __clear_pages_unrolled",
-> -				   "shrq $3, %%rcx; rep stosq", X86_FEATURE_REP_GOOD,
-> -				   "rep stosb", X86_FEATURE_ERMS)
-> -			: "+c" (len), "+D" (addr), ASM_CALL_CONSTRAINT
-> -			: "a" (0)
-> -			: "cc", "memory");
-> +	asm_inline volatile(
-> +		ALTERNATIVE_2("call __clear_pages_unrolled",
-> +			      "shrq $3, %%rcx; rep stosq", X86_FEATURE_REP_GOOD,
-> +			      "rep stosb", X86_FEATURE_ERMS)
-> +		: ASM_CALL_CONSTRAINT, "+c"(len), "+D"(addr)
-> +		: "a"(0)
-> +		: "cc", "memory");
->  }
->  #define clear_pages clear_pages
-  
 -- 
-Regards/Gruss,
-    Boris.
+2.39.5
 
-https://people.kernel.org/tglx/notes-about-netiquette
