@@ -1,217 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357A12D3725;
-	Thu,  2 Jul 2026 01:47:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40ACA1FF1DA
+	for <llvm@lists.linux.dev>; Thu,  2 Jul 2026 02:54:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782956854; cv=none; b=FoU2v5KsTh4HwmdZ14+5wfXQFT6Zv8/3/truDlAZ1zyiKVRuHa6APLqKvnxA9hF3a5wTnoWahIrta682CVNsTVCLlapGpUqt0v/qC7EKDJocovqEKFvTUfUdyvloTA//BEHKd5R7BdivKa1DfiQaFYGnQAY33ti/wa9pUKSini4=
+	t=1782960862; cv=none; b=YnLk9fGcb5FwQ/1hrDCHNQlGI5F1jeWxo2wZI3Q9U+1cNRaMUAMJb7XfrXNC2Bg4SUn6NVx9gFWuK/RcTVWRe3hFB1pJnRIu4y7wTHhx3eQcBb/sKC3AgQfmrUD4jHfLMD9CAapBnfCobVO3SGEl35x7L0JtvKrsgxcNCCTTWQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782956854; c=relaxed/simple;
-	bh=4mPBMXuL34W4zZpQApyW6quzYUVVkB/951xz2nfrou4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=R7efxcxDUu1drO9gBNkx0H5bZ2wo2p8fWzdLpx4r/PSjtuhTqPrGeoh0g40V/DVDmKzQiuUspByZJsMp/pZwUN0R5QuulPbOfyr0zXpAs1GxwRCgZ98XGTPn2DK9b1eo3paXmyJalDDgpYK2VbwC/Db5Hyzt39VtimakQTIznt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nrX55lCz; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782960862; c=relaxed/simple;
+	bh=tL9NH42OQNeDEkTaHJuv0PCGDPPXbhCZ+SsTJlKBaUo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ab+k9+8LMcxQ7m9BHPZrRjOU5voN7iTDtBtlAUe/GfMDmCeCc4CDfpGEKrr9+inL85JFY8ycJLrGWfrdR8U6BnwX5oH+YneXqJFl1O/u52jn4NCZZnC9nzcSm11fFJWFCPOF9c1/7jZ87qTI25ut5lVJkVcoLOHTtUR8nMB/2u4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Wau1r4b4; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nrX55lCz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782956852; x=1814492852;
-  h=date:from:to:cc:subject:message-id;
-  bh=4mPBMXuL34W4zZpQApyW6quzYUVVkB/951xz2nfrou4=;
-  b=nrX55lCzV86YyV+oMgB7+1GWnoWbkhLn6UV7KB96WIep9F3Buicyybwc
-   oNPP7bVlCETLOtW3ct0c9WWjrMqRFZxkkb7rg3+8lg+5l3jR7nzPjcNaY
-   GTJUXA33wF9MJoYtZ7+pr2fIPUX21mBGDx2qhIXzWQH8IFo2fMebGDsc8
-   CzaY4uq2aKX7KAHgbqXidzYeDT7HdPcGfaU9wLwpQB7g3lV56PlQfeiGC
-   Bdag6Oz03DL2M35hip+Zll4aC1YtpuVUut7kbvb4iUyd6Kf8rVuJfoIYm
-   btJeQJlCo5Lhl5c0/Anc4pGNV7ZYXGhUW6G/ugcVvzPtdjUTxxnZy4vof
-   Q==;
-X-CSE-ConnectionGUID: l7u4XJ1IQJ+/MmM0LXUmlQ==
-X-CSE-MsgGUID: O1xSRXPrTJmNvyZpSlV4VQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="94298299"
-X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
-   d="scan'208";a="94298299"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 18:47:32 -0700
-X-CSE-ConnectionGUID: eoWq4utOSQ2zuEndqwj5fA==
-X-CSE-MsgGUID: jkZmHq5dTISUxnHulBarGw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
-   d="scan'208";a="248742955"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 01 Jul 2026 18:47:30 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wf6WD-000000009qb-1SgL;
-	Thu, 02 Jul 2026 01:47:14 +0000
-Date: Thu, 02 Jul 2026 09:45:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Yeoreum Yun <yeoreum.yun@arm.com>
-Subject: [davidhildenbrand:ptval_print 2/2]
- include/asm-generic/pgtable-nop4d.h:35:29: error: function cannot return
- array type 'pgd_t' (aka 'unsigned long[2]')
-Message-ID: <202607020926.X3vSXV4v-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Wau1r4b4"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 0A99740E01B4;
+	Thu,  2 Jul 2026 02:54:19 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id kn1GuhSAvRpl; Thu,  2 Jul 2026 02:54:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1782960849; bh=3hStA21eE7y1OWGDE78iE1VwyUh5r1fukeg8JEHNDIk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Wau1r4b4rDWBbCeZpmK2bNh9bCEpW76ya/hOORlts+w7J/AUG5azHmRsEJPYzgb2t
+	 G6l6jVjfa5sBObjh8qxnMfiXRZPIUYN4cAxkMzkZz56gNy0av+3Ok1Clqaf6gzEnAw
+	 0qJGRo0D5HoTBSwCb+1mVWLHZGFgOsHtNkoZUo+FOGg8YlUFSAInck2EguipF2U3J2
+	 sFxeYZYH1oVnr1K6MhmF+ezgfvKKrjDnw9ANEZIHBjsG1ST6Cqag7n9bsPVoH0kQpa
+	 O5GMOmSJEV+eDKlG+ifNpw8VVw2Q3nMz1v2RKq8r+HyhCLtCu1c9dmh5obEBNsNZZk
+	 kxQ4ZEUe6BdZrmJrsSJgPTj2u13XvjrjkEvNE3K3r1KvSIt6k3xu4sGpk1r78Yc/BJ
+	 BfRtrw1SE/Thng81+s/UF9fe/lYcmLNCHzkwj51Q3biwvtt9YtyKA5VEIBig0OHLrI
+	 o88vFb3fr+2we3jt3ALD6iuctrplDcy0JoW63awokyKu4WI5WOgYIDFgPCEx5JNtk+
+	 ruLlYcaR8CUqhMWK3eChttgWmyvn5jkZDcKjXmJPd8HcJfk9zNgWwfktFIfHEDtOKA
+	 NKVs2MXe92c5Llqvuosg/lTbuYBGunrj2D36jFcOC896ad+UTiKgxz0RXaM9zAgsOY
+	 MeDVJQs75mojt9jbQKya7xak=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1a])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3672F40E0140;
+	Thu,  2 Jul 2026 02:53:46 +0000 (UTC)
+Date: Wed, 1 Jul 2026 19:53:42 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Dmitry Voytik <voytikd@gmail.com>, linux-toolchains@vger.kernel.org
+Cc: Alexander Potapenko <glider@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Marco Elver <elver@google.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
+Message-ID: <20260702025342.GJakXStrsCmIRnEwFD@fat_crate.local>
+References: <20260701125151.352632-1-voytikd@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260701125151.352632-1-voytikd@gmail.com>
 
-tree:   https://github.com/davidhildenbrand/linux ptval_print
-head:   dc3342ef64ac75a436edc8bfec8e3826e15f0a91
-commit: dc3342ef64ac75a436edc8bfec8e3826e15f0a91 [2/2] mm: optimize pmdp_get() and friends for folded pagetable levels
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260702/202607020926.X3vSXV4v-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260702/202607020926.X3vSXV4v-lkp@intel.com/reproduce)
+On Wed, Jul 01, 2026 at 02:51:51PM +0200, Dmitry Voytik wrote:
+> This patch fixes broken builds with defconfig + CONFIG_KMSAN +
+> CONFIG_DEBUG_INFO_*.
+> 
+> To reproduce the issue before the fix:
+>   make mrproper
+>   make LLVM=1 defconfig
+>   ./scripts/config -e CONFIG_KMSAN \
+>     -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>   make LLVM=1 olddefconfig
+>   make LLVM=1 -j(nproc) vmlinux
+>   ...
+>     LD      vmlinux.o
+>   vmlinux.o: warning: objtool: folio_zero_user+0x801: undefined stack state
+>   vmlinux.o: error: objtool: folio_zero_user+0x801: unknown CFA base reg -1
+>   make[2]: *** [scripts/Makefile.vmlinux_o:76: vmlinux.o] Error 255
+> 
+> objtool in verbose mode shows how the frame pointer is omitted:
+>   make LLVM=1 OBJTOOL_VERBOSE=1 -j(nproc) vmlinux
+>   ...
+>   b15a2c:  folio_zero_user+0x7fc      xor    %eax,%eax
+>   b15a2e:  folio_zero_user+0x7fe      mov    %rcx,%rsp
+>   b15a31:  folio_zero_user+0x801      mov    %r14,%rdi
+>   b15a34:  folio_zero_user+0x804      mov    %rbx,%rcx
+>   b15a37:  folio_zero_user+0x807      call   0xb15a3c <__clear_pages_unrol
+> 
+> After the fix, the frame pointer is back:
+>   b15a37: 31 c0                       xor    %eax,%eax
+>   b15a39: 48 89 ec                    mov    %rbp,%rsp
+>   b15a3c: 4c 89 f7                    mov    %r14,%rdi
+>   b15a3f: 48 89 d9                    mov    %rbx,%rcx
+>   b15a42: e8 00 00 00 00              call   b15a47 <folio_zero_user+0x817>
+> 
+> It seems the issue was introduced by
+> commit 54a6b89a3db2 ("x86/mm: simplify clear_page_*")
+> 
+> The actual fix is to revert the change how ASM_CALL_CONSTRAINT is
+> positioned.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607020926.X3vSXV4v-lkp@intel.com/
+Why?
 
-All errors (new ones prefixed by >>):
+Where does it say that the current stack ptr dependency needs to be the first
+asm input operand?
 
-   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
-     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3371: export_rust_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3361: export_compiler_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3840: invoke_make
-     from /zdci/src/kernel-tests/lib/kbuild.sh:4022: make
-     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
-     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5680: make_prepare
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5909: test_kernel_build
-     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
-     from /zdci/src/kernel-tests/lib/kbuild.sh:6419: compile_one_config
-     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
-     from /zdci/src/kernel-tests/bisect-test-build-error.sh:101: main
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:13:
-   In file included from include/asm-generic/pgtable-nopud.h:7:
->> include/asm-generic/pgtable-nop4d.h:35:29: error: function cannot return array type 'pgd_t' (aka 'unsigned long[2]')
-      35 | static inline pgd_t pgdp_get(pgd_t *p4dp)
-         |                             ^
->> include/asm-generic/pgtable-nop4d.h:39:9: error: incompatible pointer to integer conversion returning 'pgd_t' (aka 'unsigned long[2]') from a function with result type 'int' [-Wint-conversion]
-      39 |         return dummy;
-         |                ^~~~~
-   include/asm-generic/pgtable-nop4d.h:39:9: warning: address of stack memory associated with local variable 'dummy' returned [-Wreturn-stack-address]
-      39 |         return dummy;
-         |                ^~~~~
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
+If that were the case, we have a bunch more of those bugs around the tree.
 
+Anyway, + linux-toolchains.
 
-vim +35 include/asm-generic/pgtable-nop4d.h
+> Additionally, reintroduce asm_inline to prevent potential compiler
+> rejection of inlining.
+> 
+> Link: https://lore.kernel.org/CAAX90H2_RPnZL_dFYN7cQF6yt-wAweKKSx2=6e2aZ0kv+Pm+NQ@mail.gmail.com
+> Signed-off-by: Dmitry Voytik <voytikd@gmail.com>
+> ---
+>  arch/x86/include/asm/page_64.h | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/page_64.h b/arch/x86/include/asm/page_64.h
+> index 1895c207f629..de8604f0a3a1 100644
+> --- a/arch/x86/include/asm/page_64.h
+> +++ b/arch/x86/include/asm/page_64.h
+> @@ -100,12 +100,13 @@ static inline void clear_pages(void *addr, unsigned int npages)
+>  	 * __clear_pages_unrolled() are part of the inline asm register
+>  	 * specification.
+>  	 */
+> -	asm volatile(ALTERNATIVE_2("call __clear_pages_unrolled",
+> -				   "shrq $3, %%rcx; rep stosq", X86_FEATURE_REP_GOOD,
+> -				   "rep stosb", X86_FEATURE_ERMS)
+> -			: "+c" (len), "+D" (addr), ASM_CALL_CONSTRAINT
+> -			: "a" (0)
+> -			: "cc", "memory");
+> +	asm_inline volatile(
+> +		ALTERNATIVE_2("call __clear_pages_unrolled",
+> +			      "shrq $3, %%rcx; rep stosq", X86_FEATURE_REP_GOOD,
+> +			      "rep stosb", X86_FEATURE_ERMS)
+> +		: ASM_CALL_CONSTRAINT, "+c"(len), "+D"(addr)
+> +		: "a"(0)
+> +		: "cc", "memory");
+>  }
+>  #define clear_pages clear_pages
+  
+-- 
+Regards/Gruss,
+    Boris.
 
-    34	
-  > 35	static inline pgd_t pgdp_get(pgd_t *p4dp)
-    36	{
-    37		pgd_t dummy = { 0 };
-    38	
-  > 39		return dummy;
-    40	}
-    41	#define pgdp_get pgdp_get
-    42	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://people.kernel.org/tglx/notes-about-netiquette
