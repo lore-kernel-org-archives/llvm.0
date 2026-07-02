@@ -1,174 +1,217 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C50A3C345A
-	for <llvm@lists.linux.dev>; Wed,  1 Jul 2026 23:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357A12D3725;
+	Thu,  2 Jul 2026 01:47:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782947238; cv=none; b=q/a+1IAD3O0r63U5I+LNtW14eVKglUwmN7YKTn+FmeBFG9nGvVf7JXMEHPN0bxnjvw76wsPYCLCI+LFzuCtwYDCxKD5O9NVaFF1I//73yj6t3EVYBj9hyaSe3Shg/NBkcoWLA5zx1YpO9EE5hSkfvw0ArynOwmV2882IrLHT6wo=
+	t=1782956854; cv=none; b=FoU2v5KsTh4HwmdZ14+5wfXQFT6Zv8/3/truDlAZ1zyiKVRuHa6APLqKvnxA9hF3a5wTnoWahIrta682CVNsTVCLlapGpUqt0v/qC7EKDJocovqEKFvTUfUdyvloTA//BEHKd5R7BdivKa1DfiQaFYGnQAY33ti/wa9pUKSini4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782947238; c=relaxed/simple;
-	bh=kDc1uEwwsz+khShkTHZMmtl904cSBkx8DaTp4B39jNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=qxhyfjR+bM0/iRl5qWX7B8SuM6EZsORh5hPSsLdllCiqQDZyNVU5zSZAqcB0KXyyYz4qZeN2a8Y/65JGOxIaVMawFZbnqcy+7SRL/6yXOXtaXoB/9t0l8foGCamhgP0JXMLrjRZ2PnCrXtzpcRUzanqrW/b4P7NF5sVpBO6rR2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fdE102m/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1782956854; c=relaxed/simple;
+	bh=4mPBMXuL34W4zZpQApyW6quzYUVVkB/951xz2nfrou4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=R7efxcxDUu1drO9gBNkx0H5bZ2wo2p8fWzdLpx4r/PSjtuhTqPrGeoh0g40V/DVDmKzQiuUspByZJsMp/pZwUN0R5QuulPbOfyr0zXpAs1GxwRCgZ98XGTPn2DK9b1eo3paXmyJalDDgpYK2VbwC/Db5Hyzt39VtimakQTIznt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nrX55lCz; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fdE102m/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1782947236;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8B65/I8GYURpH/ouE1U4pYhV4f5bwOGTW8eYQjqr3mc=;
-	b=fdE102m/CATLjX56lK0bEldNpjGMbIQYAlgQYg8HdkUZR6QzQfSVuZro/Dp+gEDKmgbgm/
-	FMm4bnc0aDifDXsqaMkkDt/qHAr2JchAb3D9bk6gFHHGRotnRrsGDS8PFIXKXCuwjSkmFG
-	yr2MaT3TJ4oFfG/eYNonXhFoMimY1rM=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-618-DupFlTDBOlCJkburwWwXtA-1; Wed,
- 01 Jul 2026 19:07:11 -0400
-X-MC-Unique: DupFlTDBOlCJkburwWwXtA-1
-X-Mimecast-MFC-AGG-ID: DupFlTDBOlCJkburwWwXtA_1782947228
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id ECFF6185D69E;
-	Wed,  1 Jul 2026 23:07:06 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.80.46])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5399230001BE;
-	Wed,  1 Jul 2026 23:07:00 +0000 (UTC)
-Date: Wed, 1 Jul 2026 19:06:58 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
-	wangyuli@aosc.io, loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/8] LoongArch: Mark special sections for KLP support
-Message-ID: <akWdkjS4zXYoj0-O@redhat.com>
-References: <20260608100852.325413-1-dongtai.guo@linux.dev>
- <20260608100852.325413-3-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nrX55lCz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782956852; x=1814492852;
+  h=date:from:to:cc:subject:message-id;
+  bh=4mPBMXuL34W4zZpQApyW6quzYUVVkB/951xz2nfrou4=;
+  b=nrX55lCzV86YyV+oMgB7+1GWnoWbkhLn6UV7KB96WIep9F3Buicyybwc
+   oNPP7bVlCETLOtW3ct0c9WWjrMqRFZxkkb7rg3+8lg+5l3jR7nzPjcNaY
+   GTJUXA33wF9MJoYtZ7+pr2fIPUX21mBGDx2qhIXzWQH8IFo2fMebGDsc8
+   CzaY4uq2aKX7KAHgbqXidzYeDT7HdPcGfaU9wLwpQB7g3lV56PlQfeiGC
+   Bdag6Oz03DL2M35hip+Zll4aC1YtpuVUut7kbvb4iUyd6Kf8rVuJfoIYm
+   btJeQJlCo5Lhl5c0/Anc4pGNV7ZYXGhUW6G/ugcVvzPtdjUTxxnZy4vof
+   Q==;
+X-CSE-ConnectionGUID: l7u4XJ1IQJ+/MmM0LXUmlQ==
+X-CSE-MsgGUID: O1xSRXPrTJmNvyZpSlV4VQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="94298299"
+X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
+   d="scan'208";a="94298299"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 18:47:32 -0700
+X-CSE-ConnectionGUID: eoWq4utOSQ2zuEndqwj5fA==
+X-CSE-MsgGUID: jkZmHq5dTISUxnHulBarGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,142,1779174000"; 
+   d="scan'208";a="248742955"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 01 Jul 2026 18:47:30 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wf6WD-000000009qb-1SgL;
+	Thu, 02 Jul 2026 01:47:14 +0000
+Date: Thu, 02 Jul 2026 09:45:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [davidhildenbrand:ptval_print 2/2]
+ include/asm-generic/pgtable-nop4d.h:35:29: error: function cannot return
+ array type 'pgd_t' (aka 'unsigned long[2]')
+Message-ID: <202607020926.X3vSXV4v-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <20260608100852.325413-3-dongtai.guo@linux.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-MFC-PROC-ID: R-yqM9ZdU7jG2oJeL6hYh8Yax5T9cIFDqw1CXLsITSU_1782947228
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Jun 08, 2026 at 06:08:46PM +0800, George Guo wrote:
-> From: George Guo <guodongtai@kylinos.cn>
->
-> objtool needs to split the kernel's special sections into per-entry
-> symbols when generating livepatch modules. Mark them so it can:
->
->  - .altinstructions and __ex_table are read-only, so set an explicit
->    entry size via SHF_MERGE (ALT_INSTR_SIZE / EXTABLE_SIZE).
->
->  - __bug_table and __jump_table are writable. SHF_MERGE cannot be
->    combined with SHF_WRITE (Clang rejects it), so annotate each entry
->    with ANNOTATE_DATA_SPECIAL instead, mirroring x86/arm64.
->
-> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-> ---
+tree:   https://github.com/davidhildenbrand/linux ptval_print
+head:   dc3342ef64ac75a436edc8bfec8e3826e15f0a91
+commit: dc3342ef64ac75a436edc8bfec8e3826e15f0a91 [2/2] mm: optimize pmdp_get() and friends for folded pagetable levels
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260702/202607020926.X3vSXV4v-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260702/202607020926.X3vSXV4v-lkp@intel.com/reproduce)
 
-Hi George,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607020926.X3vSXV4v-lkp@intel.com/
 
-Disclaimer: I don't have LoongArch hardware, so the best I can do with
-this patchset is to read and poke at it with (cross) compilation.
+All errors (new ones prefixed by >>):
 
-For the special sections, said cross compiler (loongarch64-linux-gnu-gcc
-(GCC) 15.2.1 20250808 (Red Hat Cross 15.2.1-1)) is interesting as it
-appears to emit relocs in special sections (__ex_table,
-.altinstructions, __bug_table, __jump_table) that point to local
-assembler labels in the function's text section rather than the section
-symbol + offset.
+   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
+     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3371: export_rust_path
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3361: export_compiler_path
+     from /zdci/src/kernel-tests/lib/kbuild.sh:3840: invoke_make
+     from /zdci/src/kernel-tests/lib/kbuild.sh:4022: make
+     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
+     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
+     from /zdci/src/kernel-tests/lib/kbuild.sh:5680: make_prepare
+     from /zdci/src/kernel-tests/lib/kbuild.sh:5909: test_kernel_build
+     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
+     from /zdci/src/kernel-tests/lib/kbuild.sh:6419: compile_one_config
+     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
+     from /zdci/src/kernel-tests/bisect-test-build-error.sh:101: main
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:31:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/arm/include/asm/pgtable.h:13:
+   In file included from include/asm-generic/pgtable-nopud.h:7:
+>> include/asm-generic/pgtable-nop4d.h:35:29: error: function cannot return array type 'pgd_t' (aka 'unsigned long[2]')
+      35 | static inline pgd_t pgdp_get(pgd_t *p4dp)
+         |                             ^
+>> include/asm-generic/pgtable-nop4d.h:39:9: error: incompatible pointer to integer conversion returning 'pgd_t' (aka 'unsigned long[2]') from a function with result type 'int' [-Wint-conversion]
+      39 |         return dummy;
+         |                ^~~~~
+   include/asm-generic/pgtable-nop4d.h:39:9: warning: address of stack memory associated with local variable 'dummy' returned [-Wreturn-stack-address]
+      39 |         return dummy;
+         |                ^~~~~
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                         ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
+      98 |                 return (set->sig[3] | set->sig[2] |
+         |                                       ^        ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                          ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
+         |                                          ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                          ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     115 |                         (set1->sig[2] == set2->sig[2]) &&
+         |                                          ^         ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                      ^      ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
+     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
+         |                                      ^      ~
+   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
+      17 |         unsigned long sig[_NSIG_WORDS];
+         |         ^
+   In file included from arch/arm/kernel/asm-offsets.c:14:
+   In file included from include/linux/mm.h:36:
+   In file included from include/linux/rcuwait.h:6:
+   In file included from include/linux/sched/signal.h:6:
+   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
+     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
+     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
 
-An example gcc / loongarch .rela__ex_table section looks like:
 
-  Relocation section '.rela__ex_table' at offset 0x6a28 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000005d00000063 R_LARCH_32_PCREL       00000000000011f0 .L1^B4 + 0
-  0000000000000004  0000005e00000063 R_LARCH_32_PCREL       00000000000011f4 .L2^B1 + 0
-  [ ... snip ... ]
+vim +35 include/asm-generic/pgtable-nop4d.h
 
-Unlike everywhere else ...
-
-llvm / loongarch:
-
-  Relocation section '.rela__ex_table' at offset 0x5710 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000063 R_LARCH_32_PCREL       0000000000000000 .text + 2a70
-  0000000000000004  0000000200000063 R_LARCH_32_PCREL       0000000000000000 .text + 2a74
-
-gcc / x86:
-
-  Relocation section '.rela__ex_table' at offset 0x40f50 contains 2 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 1596
-  0000000000000004  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 159b
-
-llvm / x86:
-
-  Relocation section '.rela__ex_table' at offset 0x343d8 contains 2 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 231a
-  0000000000000004  0000000200000002 R_X86_64_PC32          0000000000000000 .text + 231f
-
-gcc / aarch64:
-
-  Relocation section '.rela__ex_table' at offset 0x448c8 contains 10 entries:
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 24bc
-  0000000000000004  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 2524
-  [ ... snip ... ]
-
-llvm / aarch64 Relocation section '.rela__ex_table' at offset 0x37760 contains 10 entries:
-
-      Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-  0000000000000000  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 2730
-  0000000000000004  0000000200000105 R_AARCH64_PREL32       0000000000000000 .text + 264c
-  [ ... snip ... ]
-
-The objtool/klp-diff.c implications is that
-convert_reloc_secsym_to_sym() doesn't handle such non-section symbol
-relocs in special sections:
-
-	if (!is_sec_sym(sym))
-		return 0;
-
-That early return leaves the reloc pointing at a .L* symbol that is
-never cloned into the output livepatch object.  When
-clone_special_section() later calls should_keep_special_sym() to decide
-whether to include each table entry, it cannot map the reloc to an
-included function and silently drops it.  In the __ex_table case above,
-the patched function's entries are missing from the .ko.  As far as I
-can tell, this problem applies to other special sections (like
-.altinstructions, etc.) as well.
-
-If not GCC / GAS is to be supported, then klp-diff will need to handle
-this alternate relocation format.  Perhaps these could be pre-converted
-in convert_reloc_secsym_to_sym() to the general form (func_sym +
-(label_offset - func_offset)) that is expected?  I don't know if that's
-enough to keep everything hanging together, but might be a place to
-start.
+    34	
+  > 35	static inline pgd_t pgdp_get(pgd_t *p4dp)
+    36	{
+    37		pgd_t dummy = { 0 };
+    38	
+  > 39		return dummy;
+    40	}
+    41	#define pgdp_get pgdp_get
+    42	
 
 --
-Joe
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
