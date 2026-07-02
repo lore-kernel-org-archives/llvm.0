@@ -1,196 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68BC8175A9C
-	for <llvm@lists.linux.dev>; Thu,  2 Jul 2026 20:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 015CB306776;
+	Thu,  2 Jul 2026 20:05:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783022429; cv=none; b=t4h9RNBax3jQrGOuCsHVMS3v7rFsX2XGqtsipUq9t2uP6RYDDtCr0BNMiANkf40r8fWIVdTsdynypQFk/1JpZphRIesj472YVt2EyGLmo95iRjOhiLj01ygpqZMSA/dZJ80cUTOF9vp0CmKZojS23/kBUBiva1rJw5bexX/V+JY=
+	t=1783022707; cv=none; b=WhSCzAe4656sRoEKh2qDDRnv0jla+STm0XX/nVj1H5mkanWsQAEd/WOLmMGaQxWz4ZBxrao36nWAFbqotRobwUdGqzSy6VXgUwWyAWFjFjxaGJUSMPcQCf3DST98oiWnncohowLsjKsK6M7El43KPRYlxd5ydslZhmKpo3MRL2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783022429; c=relaxed/simple;
-	bh=rACSdKpoLnV/hBjV8rM9vAK5K4UQ0NdFBrLa4EE/F8s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=J0+mwcIrJl1UMJtfa1uywmsqRdSZ/7VsGzNmxF4RarNtNTOiXVOnkJVVj61vqbRZxKWLYdSz9OdYLN0VH/CDt4/g4PgTt/m7DCDbOXX/S/EcZPFyPgPNkdQFppMyAbZZf4gTVDFC9WNJPBxeS3PW+leNVlutnZ8eeL9dHM2RiLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=G6jvHjaS; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783022707; c=relaxed/simple;
+	bh=vObZxhY41K/aMiSBJ+1LTUqYlYO+tprBv3piLMyT97c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WZil2BxjEBUI0e3MSQD3dRGg47Xcgk4k5SZ374wRCCPLGD+xRZACAhRjVOD8wPLO/5NrwrM1ZW+RnlMgCs72hNc6scxRv/vLUEPos1l9DPD/25poDMJa/x0xbeeJFrBlOq24DXg51aDidqoXT2fGh8VVUHaN8psaOb2K5iq7JTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eCRj2YwN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="G6jvHjaS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783022425;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l/lB8bTJ0EyNsIX6BYhLdG+YbNBS2otPFvnCug1uqq4=;
-	b=G6jvHjaSrgRlY0w9eGAc9Z9JqW/BzVuV6Hd7N7X4m1EkDsQnReAlzKrGegid8l4Zqe5II3
-	3Bj1lTDPPUYMMgI3uaz5HnFPTwTN/hzo4ml5kuQPejwJfe23WDS116BKh9vlPcZjmUOA8Z
-	4G1cWUSoT0uEuPkb/ddt126l/OXU3iw=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-43-XxULGeL9MfegSBDwmfEAEw-1; Thu,
- 02 Jul 2026 16:00:19 -0400
-X-MC-Unique: XxULGeL9MfegSBDwmfEAEw-1
-X-Mimecast-MFC-AGG-ID: XxULGeL9MfegSBDwmfEAEw_1783022416
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D1ED195419B;
-	Thu,  2 Jul 2026 20:00:14 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.80.46])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8B0153002D2F;
-	Thu,  2 Jul 2026 20:00:07 +0000 (UTC)
-Date: Thu, 2 Jul 2026 16:00:04 -0400
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
-	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
-	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
-	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
-	wangyuli@aosc.io, loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/8] LoongArch: Add livepatch build (KLP) support
-Message-ID: <akbDROiVKjbkqMZL@redhat.com>
-References: <20260608100852.325413-1-dongtai.guo@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eCRj2YwN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 334471F000E9;
+	Thu,  2 Jul 2026 20:05:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783022706;
+	bh=vObZxhY41K/aMiSBJ+1LTUqYlYO+tprBv3piLMyT97c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=eCRj2YwNj9K/5Dxsk/0XDDLdTFn3HKYKGTqouG8VJY1g2bC5bBv0EMjJAVoqP+8EG
+	 Um5WFhANUNd9gSZWLrt135jWQ7MYG6q/Qb4SDNj9aXI/E4JAEu6k4a38cOauO3Ed5m
+	 MndWBEUzoSTZxEoDUtyECKExJblFQl1aPN661e1LqerHn9fTzFYcr6G+tSRjxvyPU8
+	 KbLa2q5SAL01XEBaWoWiCFGcaLJA1OP0T3JksknCT8TgcCM7QYjLfeuiQBAjRVEbJ3
+	 L11sacjOLf00FMdIivyNQD4OirB3NpPugrlt1UdASNL05HjpTPvwp+11xQ9+usfUTq
+	 4jRJpQocpXssA==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>, Dmitry Voytik <voytikd@gmail.com>
+Cc: Borislav Petkov <bp@alien8.de>, linux-toolchains@vger.kernel.org,
+ Alexander Potapenko <glider@google.com>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Dmitry Vyukov <dvyukov@google.com>, Andrew Morton
+ <akpm@linux-foundation.org>, Ankur Arora <ankur.a.arora@oracle.com>, "H .
+ Peter Anvin" <hpa@zytor.com>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Marco Elver
+ <elver@google.com>, x86@kernel.org, linux-kernel@vger.kernel.org,
+ kasan-dev@googlegroups.com, linux-mm@kvack.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
+In-Reply-To: <87se61npie.ffs@fw13>
+References: <20260701125151.352632-1-voytikd@gmail.com>
+ <20260702025342.GJakXStrsCmIRnEwFD@fat_crate.local>
+ <CAAX90H0V-=Gy1FyBT9qop2=RvhBxbOPLu6+DYpPH2pTehT=nRw@mail.gmail.com>
+ <20260702111550.GH751831@noisy.programming.kicks-ass.net>
+ <87se61npie.ffs@fw13>
+Date: Thu, 02 Jul 2026 22:05:03 +0200
+Message-ID: <87mrw9nonk.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20260608100852.325413-1-dongtai.guo@linux.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-MFC-PROC-ID: N7r5oqNKUgCLfID68Ep8EjkuR7wRgS-ryGCRk7zDs0M_1783022416
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-On Mon, Jun 08, 2026 at 06:08:44PM +0800, George Guo wrote:
-> This series adds LoongArch support for the klp-build livepatch tooling,
-> enabling automated livepatch module generation using objtool on
-> LoongArch.
+On Thu, Jul 02 2026 at 21:46, Thomas Gleixner wrote:
+> On Thu, Jul 02 2026 at 13:15, Peter Zijlstra wrote:
+>> A quick test with folio_zero_user() seems to suggest the
+>> ASM_CALL_CONSTRAINT movement (your patch) generates the same code for
+>> defconfg as does the unmodified code. The change from the thread linked
+>> above (input constraint on __builtin_frame_address(0)) generates
+>> different code.
+>>
+>> A third option is to force FRAME_POINTER=y for KMSAN builds -- for now,
+>> until clang is taught to be less insane.
 >
-> It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
-> below) and extends it with the LoongArch-specific objtool and build
-> pieces, plus a few LoongArch toolchain/relocation fixes required to make
-> livepatch modules load and run correctly.
+> With FRAME_POINTER=y I get now with clang-22
 >
+> vmlinux.o: warning: objtool: folio_zero_user+0xa7b: stack state mismatch: reg1[4]=-1+0 reg2[4]=-2-336
+> vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x64: relocation to !ENDBR: machine_kexec_prepare+0x8f0
+>
+> That's with your objtool patch applied. When I remove that then the
+> folio_zero_user one goes away. The relocation to !ENDBR stays.
+>
+> Oh well...
 
-Ok, what am I doing wrong here:
-
-- Git tree is jpoimboe/klp-build-arm64 + this patchset
-- Using clang v21.1.8 and a defconfig + CONFIG_LIVEPATCH requirements
-- A simple patch to net/core/dev.c :: netif_rx_internal()
-
-$ clang --version
-clang version 21.1.8 (Fedora 21.1.8-4.fc43)
-Target: x86_64-redhat-linux-gnu
-Thread model: posix
-InstalledDir: /usr/bin
-Configuration file: /etc/clang/x86_64-redhat-linux-gnu-clang.cfg
-
-Setup and build the reference kernel:
-
-  $ ARCH=loongarch LLVM=1 make defconfig
-  $ ./scripts/config --file .config \
-           --set-val CONFIG_FTRACE y \
-           --set-val CONFIG_KALLSYMS_ALL y \
-           --set-val CONFIG_FUNCTION_TRACER y \
-           --set-val CONFIG_DYNAMIC_FTRACE y \
-           --set-val CONFIG_DYNAMIC_DEBUG y \
-           --set-val CONFIG_LIVEPATCH y
-  $ ARCH=loongarch LLVM=1 make olddefconfig
-  $ grep LIVEPATCH .config
-  CONFIG_HAVE_LIVEPATCH=y
-  CONFIG_LIVEPATCH=y
-
-  $ ARCH=loongarch LLVM=1 make -j$(nproc)
-  ...
-
-Then provide this small patch:
-
-  $ cat test.patch
-  diff --git a/net/core/dev.c b/net/core/dev.c
-  index 06c195906231..14fd3d5f351a 100644
-  --- a/net/core/dev.c
-  +++ b/net/core/dev.c
-  @@ -5717,6 +5717,7 @@ static int netif_rx_internal(struct sk_buff *skb)
-                  unsigned int qtail;
-
-                  ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail);
-  +               pr_info("test");
-          }
-          return ret;
-   }
-
-to klp-build:
-
-  $ ARCH=loongarch LLVM=1 ./scripts/livepatch/klp-build -T test.patch
-  Validating patch(es)
-  Building original kernel
-  LoongArch detected: adding -fno-direct-access-external-data to KBUILD_CFLAGS_KERNEL
-  Cannot find symbol for section 5: .text.sched_clock.
-  kernel/sched/build_utility.o: failed
-
-The "Cannot find symbol for section" error message comes out of the
-recordmcount script.
-
-What's strange is that arch/loongarch/Makefile wants to use patchable
-function entry:
-
-  ifdef CONFIG_DYNAMIC_FTRACE
-  KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-  CC_FLAGS_FTRACE := -fpatchable-function-entry=2
-  endif
-
-but Kconfig doesn't set it up for LoongArch.  If I select when
-DYNAMIC_FTRACE is turned on, like:
-
-  diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-  index 1dbf51ba9d6a..6d9bc4a580d9 100644
-  --- a/arch/loongarch/Kconfig
-  +++ b/arch/loongarch/Kconfig
-  @@ -139,6 +139,7 @@ config LOONGARCH
-          select HAVE_DMA_CONTIGUOUS
-          select HAVE_DYNAMIC_FTRACE
-          select HAVE_DYNAMIC_FTRACE_WITH_ARGS
-  +       select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY if DYNAMIC_FTRACE
-          select HAVE_FTRACE_REGS_HAVING_PT_REGS
-          select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
-          select HAVE_DYNAMIC_FTRACE_WITH_REGS
-
-then rebuild the kernel and retry klp-build, it at least completes the
-original and patched kernel builds:
-
-  $ ARCH=loongarch LLVM=1 ./scripts/livepatch/klp-build -T test.patch
-  Validating patch(es)
-  Building original kernel
-  LoongArch detected: adding -fno-direct-access-external-data to KBUILD_CFLAGS_KERNEL
-  vmlinux.o: warning: objtool: __efistub_efi_boot_kernel(): unexpected end of section .init.text.efi_boot_kernel
-  Copying original object files
-  Fixing patch(es)
-  Building patched kernel
-  LoongArch detected: adding -fno-direct-access-external-data to KBUILD_CFLAGS_KERNEL
-  vmlinux.o: warning: objtool: __efistub_efi_boot_kernel(): unexpected end of section .init.text.efi_boot_kernel
-  Copying patched object files
-  Generating original checksums
-  Generating patched checksums
-  Diffing objects
-  vmlinux.o: changed function: netif_rx_internal
-  vmlinux.o: error: objtool: __jump_table_23683+0x8: duplicate reloc
-  error: klp-build: objtool klp diff failed
-  error: klp-build: line 829: '( cd "$ORIG_CSUM_DIR"; [[ -v VERBOSE ]] && echo "cd $ORIG_CSUM_DIR && ${cmd[*]}"; "${cmd[@]}" > >(tee -a "$log") 2> >(tee -a "$log" | "${filter[@]}" 1>&2) || die "objtool klp diff failed" )'
-
-but ends with a new error on "duplicate reloc" out of klp-build.
-
-What compiler / kernel config should I be trying with this patchset?
-
-Thanks,
-
---
-Joe
-
+And none of this boots when KMSAN=y ....
