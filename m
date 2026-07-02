@@ -1,125 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from flow-a4-smtp.messagingengine.com (flow-a4-smtp.messagingengine.com [103.168.172.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03EBD34D397;
-	Thu,  2 Jul 2026 04:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56449384CDE
+	for <llvm@lists.linux.dev>; Thu,  2 Jul 2026 06:21:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782965359; cv=none; b=E/ouyJhGyDoqqAxP/GrUzbNkg8j0Ti1fx8JG5holGU/HsJcn2o7IcRYduv6XGjMsvAmvYeUiKzF4unVqB2x9/qzdx9mZ1+46oa2Qw+LixRSPUK9JH1GHKBPZJ9sxegkiSWCY5obPQS9BY2whCXK0iGUA9QAKxDi/H2wTE9ygAtU=
+	t=1782973271; cv=none; b=Mq3Gku+vyPqFl6BQXtaflPKV/ik7GQIheb22gJmkhskOqIPcXPe+C1vDqAJHTIOc+HBaOuS57lX+RXpuwNZkY6KtObv3tf0YL1T2ZL4lzNh2/iudtDcw2iWeeNbTKFLqo04MNpkfWHjvIJtEBnDKkr6j5aWP1JW8YVne5GxiCGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782965359; c=relaxed/simple;
-	bh=N91hSTRvkIO3kD+ETSjc1M6ta7Q20vnWiKJavF/cqXA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=clg8tgwEk0co+SWrt7+Q9QXClPWHJrFIh13Ri88R23QCOMg9OVKTddyk4Pjd7rfstYA4cncsIiVbqSIuN/ZSEuXHxin72uKvoUbxYJMYPKN4ELJkKgdoW4lGfQSFMMQWYhTwguMRqHmo7WMAocOZeqvdQKq1QwGMe2zfbhotQ5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AaGH66q5; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1782973271; c=relaxed/simple;
+	bh=gtNJnOoM3M3WWrtb/BDrLaX2se0o79gQY7jHyTuquhs=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=tlQtBtaDHS4MODLlcpCDwd+pG4LQQrlTOXrvU5PLiQ7CZ2WjtVySyNOLev2aQY25rKJi3jxt5BUCzEDQF732DcOOUQMLRVCEC2la4sYSnMqHoZP1jdwElmrNK0PgFVMW2qBnzSFztceD2GCTs87YmDtJsWxVtq7XWGgDAdBWRVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pHG6L5mH; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nL/rU/Yw; arc=none smtp.client-ip=103.168.172.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AaGH66q5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1782965359; x=1814501359;
-  h=date:from:to:cc:subject:message-id;
-  bh=N91hSTRvkIO3kD+ETSjc1M6ta7Q20vnWiKJavF/cqXA=;
-  b=AaGH66q53wRFnI9IVuFtS7utGQ3p6w4rJvsi55udBNvBGKCrIYbmjtDK
-   +Lq4Yj0hNBhGFfCmsdfnTgbJymIzIHH20oAMezblJPCRAGpAIIeuBbyvv
-   F6Eg8BR6oL6zIhihzyNwK8JCO9kUwYxANCYmlIj6Hpv8BcWO/2qje1rnz
-   Pz3/mQJL/kL16g5Xc3ql1AMSKnxkVY2a0vmLqnWNsD2UjyIRyPz96x5jj
-   K53YaoT1x/nk0Ulam2Qc1fUSE74r7KM4/6C17TFOuEDJxayCjJqJrTLIq
-   z/8sfaamAmLz1y1OIvmRUqOXkXAA04rx5Hl+25DvEG7e+PCLdYXH0l6Im
-   g==;
-X-CSE-ConnectionGUID: a0h8vRVPR+ubyqmPtrpSSg==
-X-CSE-MsgGUID: WzA2BJlCTWKataQ3Tn01zQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="106501718"
-X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
-   d="scan'208";a="106501718"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 21:09:16 -0700
-X-CSE-ConnectionGUID: gIqroMsPQsux2ryJS52QsQ==
-X-CSE-MsgGUID: YFJc261YR5G/Q4Rn+VclFA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
-   d="scan'208";a="252311208"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 01 Jul 2026 21:09:14 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wf8je-000000009yV-2lvt;
-	Thu, 02 Jul 2026 04:09:10 +0000
-Date: Thu, 02 Jul 2026 12:08:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Harry Yoo (Oracle)" <harry@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [harry:kmalloc-no-objext-rfc-v1r2 3/3] mm/slab.h:397:10:
- error: use of undeclared identifier 'KMALLOC_NO_OBJ_EXT'
-Message-ID: <202607021256.JaPXbde2-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pHG6L5mH";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nL/rU/Yw"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id EFC121380BEE;
+	Thu,  2 Jul 2026 02:21:05 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Thu, 02 Jul 2026 02:21:06 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1782973265;
+	 x=1782980465; bh=b3PWSBg4KChgsJan4tuQCL8jbVLFvYUrGfeJer055uM=; b=
+	pHG6L5mHwpZ3+t5ToOn88ZFsBk/C4OTZhsX4TG3c/Jn22zYlndw3yAb5k+Xi0afh
+	pmgxFuvKvn2WzbHsGmYr8xpNhshaVrqt8RX/YVKMcsNY7+HhVHcAUKmJCtg0C8iJ
+	pq6uQxeZKcxSHthNbdF2GgtA/DtusqRQMjNsF9VDT+ehZsXFv3K0UH/81+Z17GAW
+	qmsyyAhPIYBsJFRGSDOmS8s0QjXy57JKLTBlLoy2divLD816rwL5dRpZuum7DQ+T
+	2jG0Vi428hRsMde6LRDHrXKy+ohPp1d/bjF9p1bA3Q6PxLStspEz6TERmv7GyLpB
+	TjjgXYDVBay3ayP5X4Sp+A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm2; t=1782973265; x=1782980465; bh=b
+	3PWSBg4KChgsJan4tuQCL8jbVLFvYUrGfeJer055uM=; b=nL/rU/Yw5uhaXwXhi
+	Pd3VAx3B2hx7wViUybdKoAQE+tVB17JWqmgJ85oRMoaLYHDoDWVbGQqP7/jPlIPU
+	hzbo9kt/XdamhIBRpkOv4/lunP1reK+zNkZgOQjxx115BlKGKezHMD05psIryBAj
+	5LRCN7P9/fAgRQO8SWm/ccU53eWMTgwM9u2dEhWtqDmP0bBoyNtcEzjQh3+7oJ1B
+	ZjGO8+Gmq9TqtIRRgJOO3n9v6MLzQ8TSKTFNIABkPUFjxvQtCrMk6GYaK/w6YIf9
+	vvIaPZTtgA5tQsOEZsbx6RUGGOSIIQXvDiI07XWpmunN5bmAAH1o1FX6lIjes+k4
+	FJCQg==
+X-ME-Sender: <xms:TgNGak7Ze3et09HaNnBg_7EeQDX1WpWebr4V831dQRQ0tvGSRYeivA>
+    <xme:TgNGagtubviHB1QN1yH-MEOhjFwJ8OckeYJXHlsGjoKr7RueVhicU1OBsXy2_s9kp
+    RsZM6FGHSlUvd4aJTwHseRgONcCnDljF7qFg43tXxjmj3ZPxkWMv4q4>
+X-ME-Proxy-Cause: dmFkZTFLXnvGPrjS72UE2Cqoo5k3ZB5gW2fmq0+H7vA6q9/xqCZId+5ccMWvDzoGXPw/0n
+    bjmGiO0C5Lo3nj4814huzfyegsEBWSnqZoUE37P6yUUBXeBynDaNZOtEBZabAT6pGBLEgU
+    TEXwWHPQDy4swa2ntT+PIpDMucMVt6OvaMl5lrlzMeK7PZwOzrwQDo9+/Gzz/Ie0GPu+Tm
+    kbTjJ/ulLLG9DyncXMFNYmwJcjO6WDGqMUTanigqlUey17X5CJkl0f5gb2UEykQU+/4Cjo
+    mfffcyLiE7gORaIWIJTK/7sCi1c8oo/WWzgxdhxPbFkX7CHDV/F+fGNobcmZI3WILujIku
+    kiedAWW3wRu29mXJiSRShIxXoXZ5aZqgbsuWLiW6ge3WV8Hb+V3JwhBVZWtnluFGL+P1Ns
+    4Z5fVXr51VV6UZILO2z+SSwiFlEu7tZlvb5FQn7yigxfSJGrT4rMcV3J/B+VlYDYX5gEDU
+    V6u8xf8P2wj9O9ZpESK00kmIyUHTVbXQlq6l7G4dzuHWpBQG8cvL7+wxEaBV6d8AzjoyNB
+    5/rkY8Z2KYSOkqZoV39s+5tQtJs9f64Or/qTG1GQcjMVv0vUkB43dqvpcEeDCp2r5ZAyW1
+    Anmp3iBPSl4IC2zBhhx5W5jKsXeXS7eXQveoueb2CZRFXBR0D+w/2xtPZQlg
+X-ME-Proxy: <xmx:TgNGaqCgZyrr9Xnr787Z91vrIHBNiHjg43elOA4_XUWAhfKmGuwMdw>
+    <xmx:TgNGagSOcRYgdkPiRpDyOyP4_XAjmTow4SSXpP2BodR0JaFbxyJeqQ>
+    <xmx:TgNGamKPz_fqI_hnI52rvFsBrZFhzD9m9HQVojzO4Mmyabb9IIP9fg>
+    <xmx:TgNGap5OGCVE8hEKbrsOGNvpaduUNlxToEz72V_Qp4afO3lJIy6hRg>
+    <xmx:UQNGalg_WH4O8rD15jW7viiZk_F5cGP2IcPo9TPcvYnUn-YFbaXQEXfz>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id C0D98182007E; Thu,  2 Jul 2026 02:21:02 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-ThreadId: AGRLTTzEx-Mw
+Date: Thu, 02 Jul 2026 08:20:42 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Yunhui Cui" <cuiyunhui@bytedance.com>, "Paul Walmsley" <pjw@kernel.org>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
+ "Dennis Zhou" <dennis@kernel.org>, "Tejun Heo" <tj@kernel.org>,
+ "Christoph Lameter (Ampere)" <cl@gentwo.org>,
+ "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>,
+ =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, pulehui@huawei.com,
+ puranjay@kernel.org, "Thomas Huth" <thuth@redhat.com>,
+ "Andrew Jones" <ajones@ventanamicro.com>,
+ "Ben Dooks" <ben.dooks@codethink.co.uk>,
+ =?UTF-8?Q?Radim_Kr=C4=8Dm=C3=A1=C5=99?= <rkrcmar@ventanamicro.com>,
+ "Samuel Holland" <samuel.holland@sifive.com>,
+ "Zong Li" <zong.li@sifive.com>,
+ "Conor.Dooley" <conor.dooley@microchip.com>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Deepak Gupta" <debug@rivosinc.com>,
+ seanwascoding@gmail.com, "Andy Chiu" <andybnac@gmail.com>,
+ menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
+ "Vivian Wang" <wangruikang@iscas.ac.cn>,
+ "Atish Patra" <atishp@rivosinc.com>,
+ "Anup Patel" <apatel@ventanamicro.com>, linux-riscv@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, qingfang.deng@siflower.com.cn,
+ Linux-Arch <linux-arch@vger.kernel.org>, llvm@lists.linux.dev
+Message-Id: <c190a4ea-8c87-4b4a-9146-20e06d0250b0@app.fastmail.com>
+In-Reply-To: <20260702025443.83389-2-cuiyunhui@bytedance.com>
+References: <20260702025443.83389-1-cuiyunhui@bytedance.com>
+ <20260702025443.83389-2-cuiyunhui@bytedance.com>
+Subject: Re: [PATCH v7 1/3] riscv: io: avoid null-pointer arithmetic in PIO helpers
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/harry/linux.git kmalloc-no-objext-rfc-v1r2
-head:   a734609d2f387a9e682d352e9f28599744cc300b
-commit: a734609d2f387a9e682d352e9f28599744cc300b [3/3] mm/slab: prevent unbounded recursion in free path with new kmalloc type
-config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260702/202607021256.JaPXbde2-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260702/202607021256.JaPXbde2-lkp@intel.com/reproduce)
+On Thu, Jul 2, 2026, at 04:54, Yunhui Cui wrote:
+> When port I/O is not supported, exposing the port-string helpers is both
+> unnecessary and can make clang diagnose null-pointer arithmetic from the
+> PCI_IOBASE based address expression.  Keep the MMIO string helpers
+> available as before, but only provide the port I/O variants when
+> CONFIG_HAS_IOPORT is enabled.
+>
+> Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607021256.JaPXbde2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/mempool.c:19:
->> mm/slab.h:397:10: error: use of undeclared identifier 'KMALLOC_NO_OBJ_EXT'
-     397 |                 type = KMALLOC_NO_OBJ_EXT;
-         |                        ^~~~~~~~~~~~~~~~~~
-   1 error generated.
---
-   In file included from mm/oom_kill.c:51:
->> mm/slab.h:397:10: error: use of undeclared identifier 'KMALLOC_NO_OBJ_EXT'
-     397 |                 type = KMALLOC_NO_OBJ_EXT;
-         |                        ^~~~~~~~~~~~~~~~~~
-   mm/oom_kill.c:508:28: warning: variable 'oom_reaper_th' set but not used [-Wunused-but-set-global]
-     508 | static struct task_struct *oom_reaper_th;
-         |                            ^
-   1 warning and 1 error generated.
-
-
-vim +/KMALLOC_NO_OBJ_EXT +397 mm/slab.h
-
-   381	
-   382	/*
-   383	 * Find the kmem_cache structure that serves a given size of
-   384	 * allocation
-   385	 *
-   386	 * This assumes size is larger than zero and not larger than
-   387	 * KMALLOC_MAX_CACHE_SIZE and the caller must check that.
-   388	 */
-   389	static inline struct kmem_cache *
-   390	kmalloc_slab(size_t size, kmem_buckets *b, gfp_t flags, kmalloc_token_t token,
-   391		     unsigned int alloc_flags)
-   392	{
-   393		unsigned int index;
-   394		enum kmalloc_cache_type type = kmalloc_type(flags, token);
-   395	
-   396		if (alloc_flags & SLAB_ALLOC_NO_OBJ_EXT)
- > 397			type = KMALLOC_NO_OBJ_EXT;
-   398	
-   399		if (!b)
-   400			b = &kmalloc_caches[type];
-   401		if (size <= 192)
-   402			index = kmalloc_size_index[size_index_elem(size)];
-   403		else
-   404			index = fls(size - 1);
-   405	
-   406		return (*b)[index];
-   407	}
-   408	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
