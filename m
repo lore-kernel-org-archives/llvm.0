@@ -1,99 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775E134D389;
-	Thu,  2 Jul 2026 04:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B016B34388D;
+	Thu,  2 Jul 2026 04:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1782965274; cv=none; b=B8qPf44BF8fXziQk00gL4dEPx2zPtZ5SRd81TdV9cJVPkd2aHjFc1oX1oP5kRE37kCq+/EwEpabaRjp8EIsLL4cKEJZkz//ffE2auc0lbJ2zu9oEkayBxU1ELveRMVw1PYmwKrvmfOgeeON1G2rr0oB4M3s7+cMccRwZKwzL1Vo=
+	t=1782965357; cv=none; b=sVx1EVqoyyz0XnpikiIVMPohSqKZxX+gC6ssjepywyHbMlYxYyritNTuJQRpHIKWtzoGB0arHfQOOmge0RY11xvCzcYgK9nDZhgvC8kB0hKxXnnZs0DHmcEYNh2O29uiirOB8D7Pf6qsVsu9twwoc3V+dTzThgC4DgR0dJZHN0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1782965274; c=relaxed/simple;
-	bh=0zDpt9rBgLyC9VA4+6J8GTHQlnGiGK0pxjqPM+lFMfU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=FRivEd5G+ASS004r8TLKmEtRhTF0OctcizXVS06eAISoVV83HDFKE0txDdHQmAXPQJWNnEfOZgi++kV/WXxwDFsr1DNy6y1X4tDpHt7nxdFgZiIGYgN1JVapNeD0+wKHjvBPNAb+5gbFkMZncPyz569qSLOmEkqiFZYozYgAZNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+A32ihn reason="signature verification failed"; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1782965357; c=relaxed/simple;
+	bh=h1+6yqj0R8F6IQ/OPuARtslnjE0NHnS4aU50DcFrlU0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=PfteXgv5SpVScMc2fdW3WbgHP40moW8e6BUrIx2gWrlwomELY/XSFleRyu04yy/DaJroBaNVi5GshWu4RtT48Ovs1Pk9SLP+7NotAhPtmEwFtJK/S792cERR63gKaLP7LJxXVmfjJtGNm+sXFh8kqsMD8yXgCQQ9bcS3dJMffII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YhEBVUsY; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+A32ihn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57F051F000E9;
-	Thu,  2 Jul 2026 04:07:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1782965273;
-	bh=DnEVEcJDxsyM432WD69nOlBblOFD/CeS/4w4EcraZIU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=l+A32ihnWo8GqzDaLubXnRmf7NUq6k3fcrvbRJ81KHvT4qyyck8EwSViWmtlQ4y+E
-	 PYKyGDVV4MK7yNcQNhnqQG/hdihqKL39ueM7zwmAl6eako+ml/Mo8bAqQ3TWAsm73f
-	 9kyoIFuNuEDoiQUWo2SvrVxn5rxXpyvA6kjX7BXfwB8kZohk/KGSH8StjUDoimJfU9
-	 DbNUA+JXOfKATIWb6fH1SrLZL62Cv+u9VSiD6dKif1HDogW5+N+GhFebA4HHhfjDby
-	 xvVh9vhQ+kElVu0/GmhRl6/N9J8AatENAVvJ6yg7msgVgpaMexhx3yVc0l4Wb4BpPa
-	 SXWYhEaXb/TYw==
-Content-Type: multipart/mixed; boundary="===============1457489896787659387=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YhEBVUsY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1782965356; x=1814501356;
+  h=date:from:to:cc:subject:message-id;
+  bh=h1+6yqj0R8F6IQ/OPuARtslnjE0NHnS4aU50DcFrlU0=;
+  b=YhEBVUsYutc25m+u+QScYrMXV4mEst9VQLCNJF2+po7r34Gjj4Ik4/zQ
+   C3bVdimvtiv374Zh7fzNjjRuTWOUpXoHkylgF073Lx3U65SlN/512a+za
+   MkbAG8B/f4ahilfoq/ZaeCFLuJbEd4WoDUmZ5utpVfkIF8oKmTb4A09J5
+   v9Xnr2+ogV/XXsCSiY33mB6oqk0BW8TOMgQ8L3x9coC2+/6AInZCiAfH7
+   yyXbkVlIN4yWxXjizxb32tKaXgX2dplAOeyI6OZef9HtzqwNQz9CRf3te
+   pI6+qvJWGf7FlQbdwYgGxZ5O1RZbRnMq2NvurVvFfHbp/fF5V5B0iovIE
+   g==;
+X-CSE-ConnectionGUID: R3ZM30vITkSndm6E/X+goA==
+X-CSE-MsgGUID: BH71ss4mTp6HAh5imAHBxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11834"; a="106501716"
+X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
+   d="scan'208";a="106501716"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Jul 2026 21:09:16 -0700
+X-CSE-ConnectionGUID: EF1vYp7HRGm4uncoggisvQ==
+X-CSE-MsgGUID: 4aFK6aqAS5KPlIYNBhHvfA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,143,1779174000"; 
+   d="scan'208";a="252311206"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa008.jf.intel.com with ESMTP; 01 Jul 2026 21:09:14 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wf8je-000000009yZ-30Ra;
+	Thu, 02 Jul 2026 04:09:10 +0000
+Date: Thu, 02 Jul 2026 12:08:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sudeep Holla <sudeep.holla@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [sudeep-holla:b4/acpi_scmi_pcc 22/23] Warning:
+ drivers/firmware/arm_scmi/transports/pcc.c:61 Excess struct member 'shmem'
+ description in 'scmi_pcc'
+Message-ID: <202607021259.T67Z9ycs-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Message-Id: <cee66b78b5bad62e6107ce7579d7e613ad05a258aef8d0ab279b706543651a13@mail.kernel.org>
-In-Reply-To: <20260702025443.83389-4-cuiyunhui@bytedance.com>
-References: <20260702025443.83389-4-cuiyunhui@bytedance.com>
-Subject: Re: [PATCH v7 3/3] riscv: store percpu offset into thread_info
-From: bot+bpf-ci@kernel.org
-To: cuiyunhui@bytedance.com,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,dennis@kernel.org,tj@kernel.org,cl@gentwo.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,thuth@redhat.com,ajones@ventanamicro.com,ben.dooks@codethink.co.uk,rkrcmar@ventanamicro.com,cuiyunhui@bytedance.com,samuel.holland@sifive.com,zong.li@sifive.com,conor.dooley@microchip.com,tglx@kernel.org,debug@rivosinc.com,seanwascoding@gmail.com,andybnac@gmail.com,menglong8.dong@gmail.com,cyrilbur@tenstorrent.com,wangruikang@iscas.ac.cn,atishp@rivosinc.com,apatel@ventanamicro.com,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-mm@kvack.org,bpf@vger.kernel.org,arnd@arndb.de,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com,qingfang.deng@siflower.com.cn,linux-arch@vg
- er.kernel.org,llvm@lists.linux.dev
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu,  2 Jul 2026 04:07:52 +0000 (UTC)
 
---===============1457489896787659387==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Sudeep,
 
-> diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-> index e9e8ba83e632..137a49488325 100644
-> --- a/arch/riscv/include/asm/asm.h
-> +++ b/arch/riscv/include/asm/asm.h
-> @@ -91,11 +91,7 @@
->
->  #ifdef CONFIG_SMP
->  .macro asm_per_cpu dst sym tmp
-> -	lw    \tmp, TASK_TI_CPU_NUM(tp)
-> -	slli  \tmp, \tmp, RISCV_LGPTR
-> -	la    \dst, __per_cpu_offset
-> -	add   \dst, \dst, \tmp
-> -	REG_L \tmp, 0(\dst)
-> +	REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
->  	la    \dst, \sym
->  	add   \dst, \dst, \tmp
->  .endm
+First bad commit (maybe != root cause):
 
-This isn't a bug, but asm_per_cpu was the only reader of TASK_TI_CPU_NUM,
-and it now loads TASK_TI_PCPU_OFFSET(tp) instead.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/sudeep.holla/linux.git b4/acpi_scmi_pcc
+head:   bdcaa5728f17002c1091efd93dd082c9c23ddd39
+commit: 3527482b5aac070ec7c5ef2b085567c531a5991e [22/23] firmware: arm_scmi: transport: Add ACPI PCC transport
+config: loongarch-randconfig-001-20260702 (https://download.01.org/0day-ci/archive/20260702/202607021259.T67Z9ycs-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260702/202607021259.T67Z9ycs-lkp@intel.com/reproduce)
 
-> diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-> index af827448a609..fbf53b66b0e0 100644
-> --- a/arch/riscv/kernel/asm-offsets.c
-> +++ b/arch/riscv/kernel/asm-offsets.c
-> @@ -38,6 +38,7 @@ void asm_offsets(void)
->  	OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
->
->  	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-> +	OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset);
->  	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
->  	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
->  	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607021259.T67Z9ycs-lkp@intel.com/
 
-A tree-wide search now finds TASK_TI_CPU_NUM only at its definition in
-asm_offsets():
+All warnings (new ones prefixed by >>):
 
-	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
+>> Warning: drivers/firmware/arm_scmi/transports/pcc.c:61 Excess struct member 'shmem' description in 'scmi_pcc'
+>> Warning: drivers/firmware/arm_scmi/transports/pcc.c:61 Excess struct member 'shmem' description in 'scmi_pcc'
 
-with no remaining users (TASK_TI_CPU is a separate symbol still referenced
-by entry.S).  Could this OFFSET() line be dropped as well?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/28562450933
---===============1457489896787659387==--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
