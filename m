@@ -1,312 +1,156 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B59A3D25D0
-	for <llvm@lists.linux.dev>; Fri,  3 Jul 2026 12:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783081788; cv=none; b=mBRJm4aVF1UPYv+3yKkVEIv4yv9LK82l0kG17vkFNvg0+DrlGZ2o8v8nSO97WtYGIhX9tmoqSfWw+fRCv3XjEob11ZPvbUu04OhyUABZiEMaiegKL0NmDhtl/JsOgVYr3G/1tLNvtJ9kuRuY8jpZX6Jdet0pllFmBgNKrcM4QBQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783081788; c=relaxed/simple;
-	bh=FEBzvjejuL5Wk3/ofSc031Mibgz6Oq/oRtx+X35kxgI=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JpmcEHQl/KyZ9zim7kag4Qo2PTvW0kYnCcJwHaUDo8uacdCZVO2RiR2Pz2vC4UjpfQQ8YED0jxYiuRW4vmugZ9Sd6LTDDAruR7OUh3VwFeGRWjfr71v33XSg3JBd3Z5jKFmyTKn22YKrTeT1JMhlOU7hUJzs6LAxBpgz2EbZpOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=VOcbtsYP; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703343D9541
+	for <llvm@lists.linux.dev>; Fri,  3 Jul 2026 13:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783087029; cv=pass; b=LdP/T9TeJjEWZTEmDU8gBARWMc1+dJStRw4R089vNjpeAAW0Rr9beyQL95h9ajsirpQCWkahMT6qJkz9gQiKyf2twqKYPF4aGXxr/6re0lA2IUfT7+yKOoEfwv11h6JXfAz9uCrMfo1+v+UrScAOhawjbuea3agEvCC9VIpRcQ4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783087029; c=relaxed/simple;
+	bh=hVvP+u6yM5Mqcyx98ZiEMoPB/tESb1RKnQit6hmGlqI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r+IVr4Le/yFJS7EwcnJzLReUPuuT/z0lBn4YP1SCSN9/J3+n1Ixa6nJtaIHWzJ++1r/3r1kClrXIayo250RYCyBq4TGnzBjLje6vjoLNg4IqCAf4hsb4QikMvnQ+v9Sh8ZQzJ9L6IyxhEpwZu3ggu46mb4U9vmgjkTKhijXNLnM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=scRLmCfB; arc=pass smtp.client-ip=209.85.210.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="VOcbtsYP"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-847921eed4aso568851b3a.3
-        for <llvm@lists.linux.dev>; Fri, 03 Jul 2026 05:29:42 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="scRLmCfB"
+Received: by mail-ot1-f41.google.com with SMTP id 46e09a7af769-7e6b5737bb2so460447a34.1
+        for <llvm@lists.linux.dev>; Fri, 03 Jul 2026 06:57:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783087026; cv=none;
+        d=google.com; s=arc-20260327;
+        b=nH/trnrV5/mh23ArcKrwvmLspql0ynwvs6N64wX2YBv7eh3mJr2hSrHxyoJBcIrfW3
+         LAoB8tb8c1R3RJxZwfoNpdXQhqOsl2w5jZ2awFAjU/oh92rrOnaO0HggfFzurs8sw4Yb
+         3vxqDPYmhwCJasJRxu9Ef4/58HSs5/irQOg1W2Ad1706fXEA22tM746oxtnM4vTYzNXj
+         fwPmJ+q3bKeycqQ8BoSWGaalod5igIdZoCzYndHAqzoR8A2EcbbjZSOBTGzPJoOYdFpX
+         4s7GwOd7rHEky85S1Bi07SZz5xpZ8CzHJTQFI2mhbI4zIC4u5zonl1ciWEOoVbYGN3FP
+         tlLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nASBmgGmFajYNDw+sfEzifcL6cg7Q3JMObUhW3cut4I=;
+        fh=Wweel56kqpzlso+So7wRTHieSVdfl0nFuIxoWrlG5Lo=;
+        b=lPDFRvl884cru0pspMGhGPslvCJM8zZp77kQkmgcrAwoVyFcM3Qu7hWFDeOlj34feF
+         DKJO5ZaohZ6D5Xd2z8uQu2nE7yJXBvO9kUysUDYGnu9TeyzbvB7ZmzrozhGu9EQv3xET
+         JNnmKOYJVA36WiG+pdUr2dvsOX9aGEhITCbtCYKldrm2G12CvgrrLo5yPa6RVRYON53j
+         gzwEV/k25oiwzeL3ifnDqFxw1DZ8srxlzXw1VPRZiXOW2hHPZCChXCFSbi56E9QTqrJs
+         rd6dNsrt95x+rET7+cgDi0PZ2VUGOXf+JuHAlFE8w4rWIcE8BWOppveXHSHpT6V+Mg52
+         ca2Q==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1783081782; x=1783686582; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=xWymMkKQ8Nzs1dbNd9FV2sO0HsdChXyI0jaB18RfcJ8=;
-        b=VOcbtsYPNVcXg+7GmSc/7Zy5iJzwqqAdn48/elYj35cKMO1pLDzYJLyOO0BdkzWN9E
-         si1TjkR0nMToRjNTbBu1HYIWupg95X5xg/48CcDohdRUinl7PmAItgYDCvpmzrRkHxJU
-         hMx3OQvybttOK1KTNMokCM7d/6t5Biwq5EhOXqonGpKhnfP+k+0/IAqiYfVVak24jJh5
-         sDL2HQ5RYtNN4Ty+gIdXne8SEucVBk3BzPWaGwavF8/6DHgiq6SdUYg6nVZEcCRNL/rx
-         tUUGavzEru6Cj9bRMxAG0UO23BuwRp6R1IJwLxH4iVpU4IydLBZDf4UyIYlhSaH43XlJ
-         pdaA==
+        d=gmail.com; s=20251104; t=1783087026; x=1783691826; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nASBmgGmFajYNDw+sfEzifcL6cg7Q3JMObUhW3cut4I=;
+        b=scRLmCfBDB0M/0vnqcrKEuGc0KLgb/ZjwBvCoTeuuoAZnuP9ESMb/r9wD0jdm1lcT4
+         aPNQ3JKEuogt5tmTu5uANZgI4EDEVOrvKCIsBcW//X66S3av+mpvQk2SQ5vAr+EhrPQQ
+         rycI6z611QHIZ/sbXj2IGaGxUBGsypcFidUs+8ZmTM2FqwAVsolelpU91pRQb5uXF7B0
+         uR5vdXbdmRLTHjOM85CZjVIoEDXoo4OZyVfu8Rfx7nDC+PHi4NcusBSmjq8Utb+cZ+By
+         erFPT5bXf1PiX8tZRvKLyAIJQ5KHLGkLBiiuRGnk1ZxUbchx+pIyGO1CFWtd2sBmzRcH
+         RBrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783081782; x=1783686582;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=xWymMkKQ8Nzs1dbNd9FV2sO0HsdChXyI0jaB18RfcJ8=;
-        b=o3rrdXtlFnkmgCMwv15ZWDYoGeZkIoe36twBemAVSJzIEivZGMPkuBjsegF6x2ujmx
-         tjLyAIVsF0WQzNSxApIn4avDsOIXIMayaYPe+ZNTrKV8jsVU4utbYrjaBe5pgzXWwTiW
-         kb0Ex1OKA4cOjkkk9HKxJ+q6DbkEFjOCP55p2ppd1ax0P6onbiRnbe/d7V6acpJboMHR
-         UlLb8a5X2JVbwRARel4v84vKa+XrFNX141FvGO7iInJ5NmOatLPj6mJ5kwvc7H0NiE3r
-         0zf1TZkB4xunxUSRSfUK71EK9ZJVyHUy/3AcUZp0l755YozDYH16KgYHLYzU0myTOe80
-         fhSQ==
-X-Forwarded-Encrypted: i=1; AFNElJ+8y8YxYNnjygMKfRPhVgm05ArLWgZEYlo7gQ/gQiT8mUlNir0f4PJhc+9gS0yFnu4C5tpM@lists.linux.dev
-X-Gm-Message-State: AOJu0YzOiR0Q4asNwqwYmX764K4uoEgF2Na8zPsKxKWpSdeygwr5qdin
-	eyzVuwEnm/HADRYdFnFlmwSywVgc6IGAR3klCmUrR8NFigFfMADNFfxM6SBXnvrVcNc=
-X-Gm-Gg: AfdE7cmEsAAO3o4ey9/lUmq+0uzpTn16N6BfNYyAMZq62T7oGgEIJrnlGoqo9ke0SZB
-	HmcayGHir43wNmMO7ibMfioAcsq/ErIJPcVCL5f/of7R5OPzCly8b2EiJ7T3+EYNCEa6ix8ydfu
-	iP/3ggvy8MCeQvakNxqsfTuyOukRfjjiO+AWiod5tpl23xyqS3TlsOlh/RIys0ltoXH5n7vR/je
-	JIK1WlO3ppqTi8hMeGJf2oX2kWhnWakAQvmIxRtXvKSEIVnFURiUxcc+mT7FLWhxOwXg6n6t6f0
-	o7JN6WYU9wKl0oEiP9nVGqC2HFHUwrOJOvjndDGjKpbL0oaPYIakBWqQKcjDlINrCNDTsbpxkb+
-	hq1eb9N/VrZEJZ7QW4z4xR7TLePNOtve9sVvYYu5MolEKcxefLSoS+lirufzJtl7iF3sasXe8eu
-	ioldK9Tt++Y1F0ooZtUdSJquwTzkLZIuF6HhOf9PgiGBnRr2VMMUs=
-X-Received: by 2002:a05:6a20:3d8b:b0:3b4:7758:e397 with SMTP id adf61e73a8af0-3bff407cf53mr12548308637.16.1783081781880;
-        Fri, 03 Jul 2026 05:29:41 -0700 (PDT)
-Received: from L6YN4KR4K9.bytedance.net ([139.177.225.224])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c9e8f3d74ccsm2705551a12.9.2026.07.03.05.29.27
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Fri, 03 Jul 2026 05:29:40 -0700 (PDT)
-From: Yunhui Cui <cuiyunhui@bytedance.com>
-To: pjw@kernel.org,
-	palmer@dabbelt.com,
-	aou@eecs.berkeley.edu,
-	alex@ghiti.fr,
-	dennis@kernel.org,
-	tj@kernel.org,
-	cl@gentwo.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	bjorn@kernel.org,
-	pulehui@huawei.com,
-	puranjay@kernel.org,
-	thuth@redhat.com,
-	ajones@ventanamicro.com,
-	ben.dooks@codethink.co.uk,
-	rkrcmar@ventanamicro.com,
-	cuiyunhui@bytedance.com,
-	samuel.holland@sifive.com,
-	zong.li@sifive.com,
-	conor.dooley@microchip.com,
-	tglx@kernel.org,
-	debug@rivosinc.com,
-	seanwascoding@gmail.com,
-	andybnac@gmail.com,
-	menglong8.dong@gmail.com,
-	cyrilbur@tenstorrent.com,
-	wangruikang@iscas.ac.cn,
-	atishp@rivosinc.com,
-	apatel@ventanamicro.com,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org,
-	arnd@arndb.de,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	qingfang.deng@siflower.com.cn,
-	linux-arch@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v8 3/3] riscv: store percpu offset into thread_info
-Date: Fri,  3 Jul 2026 20:28:32 +0800
-Message-Id: <20260703122832.15984-4-cuiyunhui@bytedance.com>
-X-Mailer: git-send-email 2.39.2 (Apple Git-143)
-In-Reply-To: <20260703122832.15984-1-cuiyunhui@bytedance.com>
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
+        d=1e100.net; s=20251104; t=1783087026; x=1783691826;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nASBmgGmFajYNDw+sfEzifcL6cg7Q3JMObUhW3cut4I=;
+        b=bFo3BsEKzXbPFDKb686JwQeO8PKZQ89e0HLCWltFTD2yo6V8xd9xLRIvd9jmWTBiO5
+         dQgSAYRKITdLXDMKAVrC3GlWplfZt9hduk+UiBrUkoGdWxizOB1OoJDxj73uyhS0XksP
+         TaMaDl1C4MDqklrnoaOpPx9rsoUAXHrfMuYc7MdsW2uMRqcRkZfwwiRezAPDNnyIWEPW
+         7ncwAKeQ6bONNgJDzqkcU4w8ZCRmCBB44TzUwLE5qIfDPY3EhRbM83S2JqbiDPjs2pBu
+         DoheZ9lqgKa0rmIocKhhFV06CfkjggtfMwjJtDine2hRG9FR4AIugGonu8s/2AdIbJE5
+         /5wA==
+X-Gm-Message-State: AOJu0YxWZdy2MugkzytsZhwhDcUPixgJVim1yl7rUiVLqdfM9kGExdUJ
+	nfwK+Xms3pN+tRVVebwm2wciPC+aTrkdYSkLqSPbQEDzn1kPAHOfrbPENAglZC5BDKFcFd4pKfV
+	c6ISiB7+gHPUk84VsStna/VrPpAkLvh/fqjxWNMnEncfK
+X-Gm-Gg: AfdE7clxz04zd8Jgb6dSedPbK2pyPV9VvyUmC/+yXVenvPs7roqykhVBoMcouXwJABD
+	fuQqHadpq4pAv+JQrVDtKbZuy6+NfAabTIHymC3OZ6Q5bF1VOro/4WhfHYj07iNZGlngwEChTNQ
+	eHTL+wAf1exYOpqz1vFKQ09/NJxauBStE2L7bxJLlsQBf9CkDS7SdNBzlljVUOrELsr8z4w9D5d
+	VAA13Ue4S5mx3WtFtaPKd/W/8ScFUi6MFTVW8S6jjz+yw8zOjJmAXNzsD/fZ4pTrAnEbyzpJM0=
+X-Received: by 2002:a05:6830:6f45:b0:7e9:b4d0:df75 with SMTP id
+ 46e09a7af769-7eb4cc56976mr7034576a34.29.1783087026315; Fri, 03 Jul 2026
+ 06:57:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <202607031837.HSmBj8pr-lkp@intel.com>
+In-Reply-To: <202607031837.HSmBj8pr-lkp@intel.com>
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date: Fri, 3 Jul 2026 18:56:54 +0500
+X-Gm-Features: AVVi8CdHQupey23YWEsUas1M0EpNc9-M0aUb-pflQdFjPWNzAQA9rXMMh6ms9WY
+Message-ID: <CABXGCsNFxBF6BJBBOK6Wzm9ELA4_o=yjkkCr7rSbmUQBK24e4w@mail.gmail.com>
+Subject: Re: drivers/gpu/drm/amd/amdgpu/amdgpu.o: error: objtool:
+ amdgpu_vm_handle_fault+0x16b: sibling call from callable instruction with
+ modified stack frame
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Alex Deucher <alexander.deucher@amd.com>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-RISC-V percpu addressing currently derives the base offset from the CPU
-number and __per_cpu_offset[]. Cache the current CPU percpu offset in
-thread_info so percpu accesses can load it directly.
+On Fri, Jul 3, 2026 at 3:17=E2=80=AFPM kernel test robot <lkp@intel.com> wr=
+ote:
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   d2c9a99135da931377240942d44f3dea104cedb8
+> commit: 7152b248dc3c8d5fa8629e99ed5655dd41b51562 drm/amdgpu: fix recursiv=
+e ww_mutex acquire in amdgpu_devcoredump_format
+> date:   2 weeks ago
+> config: x86_64-randconfig-004 (https://download.01.org/0day-ci/archive/20=
+260703/202607031837.HSmBj8pr-lkp@intel.com/config)
+> compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e984=
+6648fd6183ee6d8cbdb4502213fcf902a211)
+> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
+ve/20260703/202607031837.HSmBj8pr-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of
+> the same patch/commit), kindly add following tags
+> | Fixes: 7152b248dc3c ("drm/amdgpu: fix recursive ww_mutex acquire in amd=
+gpu_devcoredump_format")
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202607031837.HSmBj8pr-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/gpu/drm/amd/amdgpu/amdgpu.o: error: objtool: amdgpu_vm_handle_=
+fault+0x16b: sibling call from callable instruction with modified stack fra=
+me
+>
 
-Keep the cached value up to date for the boot CPU, context switches and
-secondary CPU bringup. Initialize secondary idle tasks before they start
-running so early percpu accesses use the secondary CPU offset rather than
-inheriting the boot CPU value.
+Same drm_exec computed-goto issue as the other two reports, now on
+Linus' master. +0x16b is the drm_exec_retry_on_contention() computed
+goto in amdgpu_vm_handle_fault() lowered to an indirect jmp (jmp *reg
+to an in-function label loaded via an R_X86_64_32S relocation), which
+objtool can't resolve to an intra-function jump and so treats as an
+indirect sibling call. Same mechanism analyzed here for clang and gcc:
 
-With asm_per_cpu no longer deriving the offset from the CPU number, drop
-the stale TASK_TI_CPU_NUM asm offset as well.
+  https://lore.kernel.org/oe-kbuild-all/20260624092806.GX48970@noisy.progra=
+mming.kicks-ass.net/
+  https://github.com/llvm/llvm-project/issues/205544
 
-Link: https://lists.riscv.org/g/tech-privileged/topic/risc_v_tech_arch_review/113437553?page=2
-Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
----
- arch/riscv/include/asm/asm.h         | 6 +-----
- arch/riscv/include/asm/percpu.h      | 4 ++++
- arch/riscv/include/asm/switch_to.h   | 8 ++++++++
- arch/riscv/include/asm/thread_info.h | 3 ++-
- arch/riscv/kernel/asm-offsets.c      | 2 +-
- arch/riscv/kernel/smpboot.c          | 8 ++++++++
- arch/riscv/net/bpf_jit_comp64.c      | 9 +--------
- 7 files changed, 25 insertions(+), 15 deletions(-)
+Note the bisect: this instance is attributed to 7152b248dc3c
+("drm/amdgpu: fix recursive ww_mutex acquire in amdgpu_devcoredump_
+format"), but that commit only touches amdgpu_dev_coredump.c and does
+not change amdgpu_vm_handle_fault(). The drm_exec conversion that
+introduced the pattern is 9920249a5288 ("drm/amdgpu: convert
+amdgpu_vm_lock_by_pasid() to drm_exec"). The randconfig-004 attribution
+here is a bisect artifact, so the suggested Fixes: tag points at the
+wrong commit.
 
-diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.h
-index e9e8ba83e632f..137a49488325e 100644
---- a/arch/riscv/include/asm/asm.h
-+++ b/arch/riscv/include/asm/asm.h
-@@ -91,11 +91,7 @@
- 
- #ifdef CONFIG_SMP
- .macro asm_per_cpu dst sym tmp
--	lw    \tmp, TASK_TI_CPU_NUM(tp)
--	slli  \tmp, \tmp, RISCV_LGPTR
--	la    \dst, __per_cpu_offset
--	add   \dst, \dst, \tmp
--	REG_L \tmp, 0(\dst)
-+	REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
- 	la    \dst, \sym
- 	add   \dst, \dst, \tmp
- .endm
-diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
-index 76b1b8c1fb953..9bf9f4cf4ca5a 100644
---- a/arch/riscv/include/asm/percpu.h
-+++ b/arch/riscv/include/asm/percpu.h
-@@ -9,7 +9,9 @@
- #include <asm/alternative-macros.h>
- #include <asm/cmpxchg.h>
- #include <asm/cpufeature-macros.h>
-+#include <asm/current.h>
- #include <asm/hwcap.h>
-+#include <asm/thread_info.h>
- 
- #define PERCPU_RW_OPS(sz)						\
- static inline unsigned long __percpu_read_##sz(void *ptr)		\
-@@ -279,6 +281,8 @@ _pcp_protect_return(__percpu_add_return_amo_case_64, pcp, val)
- })
- #endif
- 
-+#define __my_cpu_offset (((struct thread_info *)current)->pcpu_offset)
-+
- #undef PERCPU_RW_OPS
- #undef __PERCPU_AMO_OP_CASE
- #undef PERCPU_OP
-diff --git a/arch/riscv/include/asm/switch_to.h b/arch/riscv/include/asm/switch_to.h
-index 0e71eb82f920c..733b6cd306e40 100644
---- a/arch/riscv/include/asm/switch_to.h
-+++ b/arch/riscv/include/asm/switch_to.h
-@@ -88,6 +88,13 @@ static inline void __switch_to_envcfg(struct task_struct *next)
- 			:: "r" (next->thread.envcfg) : "memory");
- }
- 
-+static inline void __switch_to_pcpu_offset(struct task_struct *next)
-+{
-+#ifdef CONFIG_SMP
-+	next->thread_info.pcpu_offset = __my_cpu_offset;
-+#endif
-+}
-+
- extern struct task_struct *__switch_to(struct task_struct *,
- 				       struct task_struct *);
- 
-@@ -122,6 +129,7 @@ do {							\
- 	if (switch_to_should_flush_icache(__next))	\
- 		local_flush_icache_all();		\
- 	__switch_to_envcfg(__next);			\
-+	__switch_to_pcpu_offset(__next);		\
- 	((last) = __switch_to(__prev, __next));		\
- } while (0)
- 
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 55019fdfa9eca..f10ba62b61016 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -53,6 +53,7 @@
- struct thread_info {
- 	unsigned long		flags;		/* low level flags */
- 	int                     preempt_count;  /* 0=>preemptible, <0=>BUG */
-+	int			cpu;
- 	/*
- 	 * These stack pointers are overwritten on every system call or
- 	 * exception.  SP is also saved to the stack it can be recovered when
-@@ -60,8 +61,8 @@ struct thread_info {
- 	 */
- 	long			kernel_sp;	/* Kernel stack pointer */
- 	long			user_sp;	/* User stack pointer */
--	int			cpu;
- 	unsigned long		syscall_work;	/* SYSCALL_WORK_ flags */
-+	unsigned long		pcpu_offset;
- #ifdef CONFIG_SHADOW_CALL_STACK
- 	void			*scs_base;
- 	void			*scs_sp;
-diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-offsets.c
-index a75f0cfea1e9f..f4f7ee976cd94 100644
---- a/arch/riscv/kernel/asm-offsets.c
-+++ b/arch/riscv/kernel/asm-offsets.c
-@@ -38,6 +38,7 @@ void asm_offsets(void)
- 	OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
- 
- 	OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
-+	OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset);
- 	OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_count);
- 	OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
- 	OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
-@@ -50,7 +51,6 @@ void asm_offsets(void)
- 	OFFSET(TASK_TI_A2, task_struct, thread_info.a2);
- #endif
- 
--	OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
- #ifdef CONFIG_RISCV_USER_CFI
- 	OFFSET(TASK_TI_CFI_STATE, task_struct, thread_info.user_cfi_state);
- 	OFFSET(TASK_TI_USER_SSP, task_struct, thread_info.user_cfi_state.user_shdw_stk);
-diff --git a/arch/riscv/kernel/smpboot.c b/arch/riscv/kernel/smpboot.c
-index f6ef57930b50a..7876854d16279 100644
---- a/arch/riscv/kernel/smpboot.c
-+++ b/arch/riscv/kernel/smpboot.c
-@@ -191,6 +191,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
- 	int ret;
- 	tidle->thread_info.cpu = cpu;
-+	tidle->thread_info.pcpu_offset = per_cpu_offset(cpu);
- 
- 	ret = start_secondary_cpu(cpu, tidle);
- 	if (!ret) {
-@@ -208,6 +209,11 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- }
- #endif
- 
-+void __init smp_prepare_boot_cpu(void)
-+{
-+	__my_cpu_offset = per_cpu_offset(smp_processor_id());
-+}
-+
- void __init smp_cpus_done(unsigned int max_cpus)
- {
- }
-@@ -233,6 +239,8 @@ asmlinkage __visible void smp_callin(void)
- 	mmgrab(mm);
- 	current->active_mm = mm;
- 
-+	__my_cpu_offset = per_cpu_offset(smp_processor_id());
-+
- #ifdef CONFIG_HOTPLUG_PARALLEL
- 	cpuhp_ap_sync_alive();
- #endif
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index c03c1de16b79a..eab93d5258e9e 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1395,15 +1395,8 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 			if (rd != rs)
- 				emit_mv(rd, rs, ctx);
- #ifdef CONFIG_SMP
--			/* Load current CPU number in T1 */
--			emit_lw(RV_REG_T1, offsetof(struct thread_info, cpu),
-+			emit_ld(RV_REG_T1, offsetof(struct thread_info, pcpu_offset),
- 				RV_REG_TP, ctx);
--			/* Load address of __per_cpu_offset array in T2 */
--			emit_addr(RV_REG_T2, (u64)&__per_cpu_offset, extra_pass, ctx);
--			/* Get address of __per_cpu_offset[cpu] in T1 */
--			emit_sh3add(RV_REG_T1, RV_REG_T1, RV_REG_T2, ctx);
--			/* Load __per_cpu_offset[cpu] in T1 */
--			emit_ld(RV_REG_T1, 0, RV_REG_T1, ctx);
- 			/* Add the offset to Rd */
- 			emit_add(rd, rd, RV_REG_T1, ctx);
- #endif
--- 
-2.39.5
+The drm_exec macros are being reworked to drop the computed goto, which
+will fix this on both compilers. Not respinning the series; happy to
+test the drm_exec.h change once it lands.
 
+--=20
+Best Regards,
+Mike Gavrilov.
