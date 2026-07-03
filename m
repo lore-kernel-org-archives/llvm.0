@@ -1,39 +1,60 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25161F30A9
-	for <llvm@lists.linux.dev>; Fri,  3 Jul 2026 17:38:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89E225B09C;
+	Fri,  3 Jul 2026 17:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783100288; cv=none; b=h1QeO6fnyCVkrpxaiYUv8vqY/oAVvTIOduIvY+3i3Z7g/cbZ3h7BwtiIAy6Fm68JbOjLvi3coeQS1oTI4ljg7ieuO4LaEuRwjTYyH69Q742GO1WGLANqwbycwowF9HPsYM//OEXatNNWir7IAFl1ydy4lGXrhTu9UQkWHtn/wm4=
+	t=1783100311; cv=none; b=kG01s583yGTYSAmjCrRsk6DMwdDIuGKqvk4HpO58ltib4BvG/0y4vMJQFrijUKRpo04teZSVXOADT+P+sz2/0i86wZfPA6aJ5+gFrGmTb5aKRWEfYk2kcu5puhokRbiTioztb7SDsvSX+ry9zPrFvCIr2Mn3Z5NCUBmbXiPKmZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783100288; c=relaxed/simple;
-	bh=pLtsCsOfijt8xo3gRyBBTroxn7rCT5iIyFQSa01dmjA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TNZFpPGpbE9CzFy4NcQ3AkBMh5EpsG/67GHBIQA82V3mpYACKMAV8uipZowmkQix6UFIP5TCv3kgKYWX/RVqXFe09jCMQ16Ai9g7QGWcFV2X8hY5Ze0eqx90+Ov34wqD+8gyCvmXfSx4PAjwXq0KuXCt2orvEBBSrVw6mlniuYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=P4yv3Hc4; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1783100311; c=relaxed/simple;
+	bh=Qvz2ZBpKY96vXNRdZAm8mtgNTkrMlOGXNtkGTIFWDIY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=BFJ4FktZ9Ndl41eCqa+ueAVY6PJ8n3wuBb0U60Ystl5LkG0bnFuCMEsumdDjJZ7yFD+i2Khq1/GQmCrcSG8SZuwqwwt0NNBc0hbBKIAshvK9SMM1/en1RNeYruHyoWNYffjYUd5PAyWZjizFhtIUVfFL1gL7C1+E4JpsbB6ozOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KCc/AI3M; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="P4yv3Hc4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1783100284;
-	bh=pLtsCsOfijt8xo3gRyBBTroxn7rCT5iIyFQSa01dmjA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P4yv3Hc4qBgE64KqV/gBRr8j4dLkhq0/E5NaPyGOn1qoolAYBic+bSezLBIkuAlzy
-	 m1ns2cje7JPKi4iO19Va0r+WBdPlpKFlh+raoVg9bne0zGaOdScyYb0Nu95DE/Wpj3
-	 aHLfXm1bG/vwHVj9E1gaeXVDZVmU4XebXvvZbugU=
-Date: Fri, 3 Jul 2026 19:38:01 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Daniel Palmer <daniel@thingy.jp>
-Cc: w@1wt.eu, linux-kernel@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 3/3] selftests/nolibc: Add test for getcwd() and
- readlink()
-Message-ID: <24e874dd-9bf0-46b2-b22e-73ec3c6ff941@t-8ch.de>
-References: <20260702085101.3304547-1-daniel@thingy.jp>
- <20260702085101.3304547-4-daniel@thingy.jp>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KCc/AI3M"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783100310; x=1814636310;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Qvz2ZBpKY96vXNRdZAm8mtgNTkrMlOGXNtkGTIFWDIY=;
+  b=KCc/AI3MFj8akf6I46MSFZ7y9hckZ+NJsBQyuCBxWHeZbKNr3M3CxWKF
+   O5l/fPKbnuate6Xk9QyBffpBFz0zSd4sCpF1Q9Mw26gWO0LGK89PuHSAH
+   eTlMibO3QKc4/Avwvx6b7kz+3Ca23duUHLZQ6vraNT1ac6wu0j3kzdHWk
+   FhRJoneNZZu39MinYsBTZ6DXUgVqIoj+XqN2H5MuH28wbCHBmxNRkXekB
+   pHMD0KZI8nwDcMT1RVwcbndP0pKfL4dwekzb2wRnyQwL1Ov3hEuylW9hw
+   h8I6YcC8+O95GowVftLr1Mt1P5gwNA0DTXXzkuDUfAWvqFxQPrYAX+pf9
+   A==;
+X-CSE-ConnectionGUID: tRUhqrGsRRelcY3pwRh1Vg==
+X-CSE-MsgGUID: /9TEVesNScKZf3XetimMyw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11836"; a="83946875"
+X-IronPort-AV: E=Sophos;i="6.25,145,1779174000"; 
+   d="scan'208";a="83946875"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2026 10:38:29 -0700
+X-CSE-ConnectionGUID: In/n3TebR2GmkmSyMYphtA==
+X-CSE-MsgGUID: mBo2TAK9TzKv+8Tlo1CK3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,145,1779174000"; 
+   d="scan'208";a="291303775"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 03 Jul 2026 10:38:27 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wfhnt-00000000COv-19Uq;
+	Fri, 03 Jul 2026 17:36:33 +0000
+Date: Sat, 04 Jul 2026 01:23:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Alex Deucher <alexander.deucher@amd.com>,
+ "Christian =?utf-8?Q?K=C3=B6nig"?= <christian.koenig@amd.com>
+Subject: vmlinux.o: error: objtool: amdgpu_vm_handle_fault+0x186:
+ sibling call from callable instruction with modified stack frame
+Message-ID: <202607040159.GopyEswS-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,66 +62,29 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260702085101.3304547-4-daniel@thingy.jp>
 
-(+Cc clang/llvm folks, scroll down to test_getcwd())
+Hi Mikhail,
 
-Hi Daniel,
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-On 2026-07-02 17:51:01+0900, Daniel Palmer wrote:
-> Add a test that uses both getcwd() and readlink() so that both
-> are exercised.
-> 
-> First the happy path is tested by fetching what should be the
-> same string via getcwd() and readlink() and checking they match.
-> 
-> Then a few different combinations of bad parameters are passed to
-> getcwd() to make sure it returns NULL and sets errno in those
-> cases.
-> 
-> Signed-off-by: Daniel Palmer <daniel@thingy.jp>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d2c9a99135da931377240942d44f3dea104cedb8
+commit: 9920249a5288e7cbec222cd52996bbd9aac7ec9e drm/amdgpu: convert amdgpu_vm_lock_by_pasid() to drm_exec
+date:   2 weeks ago
+config: x86_64-randconfig-006 (https://download.01.org/0day-ci/archive/20260704/202607040159.GopyEswS-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260704/202607040159.GopyEswS-lkp@intel.com/reproduce)
 
-Applied, thanks.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 9920249a5288 ("drm/amdgpu: convert amdgpu_vm_lock_by_pasid() to drm_exec")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607040159.GopyEswS-lkp@intel.com/
 
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 53 ++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index c1c1ce43a047..ad3f6e0751be 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -854,6 +854,58 @@ static int test_dirent(void)
->  	return 0;
->  }
->  
-> +static int test_getcwd(void)
-> +{
+All errors (new ones prefixed by >>):
 
-I removed the static from this function.
-When it is inlined the tests fail on SPARC on clang.
-It seems the system call register is clobbered before the syscall is
-invoked. It works fine on GCC.
-The fix in [0] makes things a bit better, but not completely.
+>> vmlinux.o: error: objtool: amdgpu_vm_handle_fault+0x186: sibling call from callable instruction with modified stack frame
 
-To reproduce:
-
-* Check out the branch for-next in [1]
-* Apply [0]
-* cd tools/testing/selftests/nolibc
-* ./run-tests.sh -m user -l sparc32
-* Only run the problematic testcase: ./nolibc-test syscall:1
-
-(The "sparc64" configuration is also broken,
-it looks like the same issue)
-
-This happens for me with clang 22.1.6.
-
-(...)
-
-[0] https://lore.kernel.org/lkml/20260703-nolibc-sparc-asm-v1-1-c7fe73e2e777@weissschuh.net/
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/nolibc/linux-nolibc.git/
-
-
-Thomas
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
