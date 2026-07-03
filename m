@@ -1,226 +1,96 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D70DF242D97
-	for <llvm@lists.linux.dev>; Fri,  3 Jul 2026 15:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC2A621D3D2;
+	Fri,  3 Jul 2026 16:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783094383; cv=none; b=Ql+d0+ZcAtUMHWD8VnvtbKOjhDaEa0JypVoLfCSKZ5Ju76+D/GXtwKwOCDwrQ072N/r/AxOYOYkg1Dj9VZhFd367LzDu949sbia8uaMAlFcFCCuDkulFiqzA/dXSOMLhypy+UNCaRBLlePVtnkoR1yWfDrAGHp0qBqemne0bbSs=
+	t=1783094838; cv=none; b=R778UgH0rZ+N4/VYh2Ic96RIxDDljjcY/CEC151G2ixrtSRaA0BIvsDaWbXBJA7lP/swhrBeHK9b0pJrh4qJFzG6ZGUmQ0mI2M2x1Ib3MoSU9V7JqJW60wpr7FG3Gn1oTm37bgeNOgWvgmN+4BykzIHadpKFSX/7dyau3Jh17hg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783094383; c=relaxed/simple;
-	bh=LtzRHa4S4rPTUgEwozVMlAabdZ8ppziHriuOR+LjU2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V0uuL3c3lI72GbKdaWv4EXXbPW4uKtyYDgaeM/It4FJ75b9LmPSlSjKxxWviUjA1F8RrX3li4hsWCLD+VAStgZhItx2WxZU1hx6JjqJjMuRsrXA6CtCf2qgnXOOUBdD3jSx9FNWB6DHPR3ZHxNUbEs3raR1Vc4iW5zjH40WnoXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=rFltoTdZ; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1783094838; c=relaxed/simple;
+	bh=pHyPUUkDzvqglo3vPTWOfCBgIOjVk8sWMzaX0GChg/c=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=T93T17lUxrCXFd6Mu0cu1DMDgJlFoRIladVggvm9do1NG4hGLUIgFGkqbP93EWj9fiJiVOzbh6BtgZvs8m8UX1Hp1lQ9FFbQp96BoZUpXeaC3Da3E0EAU6x3yyjGB0losH6udYjbj8z6h6rH2IE23zEvqUtmQAOnP2iY9tHf/OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ThPZpm0Z; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="rFltoTdZ"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id C664AC49F5B;
-	Fri,  3 Jul 2026 15:59:51 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E9C2860300;
-	Fri,  3 Jul 2026 15:59:39 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 49986104C94EF;
-	Fri,  3 Jul 2026 17:59:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1783094378; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=UAkYp7gR6GAcUen6AlxpDy3Nj/vEGnp3F2Wlq67o3bQ=;
-	b=rFltoTdZgqbm2HJwiltf2Qo4lOebH3TEUCPNI0qhVAfkF2o2kikVDblkVeFTka6wzSnEwI
-	ni3WiyK9ENgA8ZCvJvXJuRAPNA+cLx6jrt9MNHrD0ftxgm2kfaMaCt84u6DzfrK4pWqeIO
-	LK+mpqeT+zImhp/SilEKb2YkRpPCEN13UZfas0EDrzjystPweMJNLBJ8+RJMEcU4U+oGGh
-	GDbwJsKvI2gxGUb01miTgK4jlYstf0f/S9waU/cm8LZpVGw6fGE/DinjmecDvINgvtYREV
-	2UvMofpXIYfXZjw2SxDJ88PYYMvcQ7yrLIgh7WZTZ2dTOruowAzieXgCnVi5Pw==
-Message-ID: <71806ff3-e8e8-487a-b90c-39b3239866ec@bootlin.com>
-Date: Fri, 3 Jul 2026 17:59:31 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ThPZpm0Z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783094837; x=1814630837;
+  h=date:from:to:cc:subject:message-id;
+  bh=pHyPUUkDzvqglo3vPTWOfCBgIOjVk8sWMzaX0GChg/c=;
+  b=ThPZpm0ZcrCBA7tsDOdIj8qg1qIZTJTGVd+hHDxp6D8UWa0D+TR7/by3
+   kPAeuNSwTMAqBiPmletxP9LoACMz52k2usF/mK6Gham5ZSDxuNNwMZ0wd
+   IGLS5iLFkyaerROO1f+FYYycDlD4E0L8/lf3g0ZRKy6V4oxaGjrsiGgim
+   wyAxpuWiwKOGeuxM7SicyrKe5hRr+WjgdwoFMH6ic7eyzS4VlyE9Y4UMr
+   nz/UcGzlDwP4Dlr3TlRfWXG3MwpyLd+94tKC5l1VaO1ui81yyK0hT9+XX
+   4lsbrvShCAU9wXaaMs3ER8p7BmMyA5x8HIL7zhtz5yuHELBWJ1LwwzxS7
+   g==;
+X-CSE-ConnectionGUID: SyKqugPiRNmCeefeVl77iw==
+X-CSE-MsgGUID: uZSysIkWR0q67EUmQtZPIg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11836"; a="83712675"
+X-IronPort-AV: E=Sophos;i="6.25,145,1779174000"; 
+   d="scan'208";a="83712675"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2026 09:07:16 -0700
+X-CSE-ConnectionGUID: +6UfSMEkQbOPUWAb77pNmQ==
+X-CSE-MsgGUID: kjfhg7lHT7ux9lS+qOQrEA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,145,1779174000"; 
+   d="scan'208";a="277472315"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by fmviesa001.fm.intel.com with ESMTP; 03 Jul 2026 09:07:15 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wfgQ4-000000001Y5-2ztR;
+	Fri, 03 Jul 2026 16:07:12 +0000
+Date: Fri, 03 Jul 2026 18:06:53 +0200
+From: kernel test robot <lkp@intel.com>
+To: Javen Xu <javen_xu@realsil.com.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: drivers/net/phy/realtek/realtek_main.c:20:10: fatal error:
+ 'net/phy/realtek_phy.h' file not found
+Message-ID: <202607031838.AH9yVOtc-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] drm/bridge: rename
- drm_for_each_bridge_in_chain_scoped() to drm_for_each_bridge_in_chain()
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Miguel Ojeda
- <ojeda@kernel.org>, Andrzej Hajda <andrzej.hajda@intel.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: Hui Pu <Hui.Pu@gehealthcare.com>, Ian Ray <ian.ray@gehealthcare.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
- llvm@lists.linux.dev
-References: <20260630-drm-bridge-alloc-getput-for_each_bridge-2-v2-1-e0a1094cd1eb@bootlin.com>
-From: Louis Chauvet <louis.chauvet@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20260630-drm-bridge-alloc-getput-for_each_bridge-2-v2-1-e0a1094cd1eb@bootlin.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+
+tree:   https://github.com/intel-lab-lkp/linux/commits/javen/r8169-add-speed-in-private-struct/20260703-173649
+head:   4088a221c3a777072eddaf9d63a3b69c2eaf9982
+commit: 4088a221c3a777072eddaf9d63a3b69c2eaf9982 r8169: add phylink support for RTL8127atf
+date:   6 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260703/202607031838.AH9yVOtc-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260703/202607031838.AH9yVOtc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607031838.AH9yVOtc-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/net/phy/realtek/realtek_main.c:20:10: fatal error: 'net/phy/realtek_phy.h' file not found
+      20 | #include <net/phy/realtek_phy.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+>> drivers/net/ethernet/realtek/r8169_main.c:35:10: fatal error: 'net/phy/realtek_phy.h' file not found
+      35 | #include <net/phy/realtek_phy.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +20 drivers/net/phy/realtek/realtek_main.c
 
-On 6/30/26 17:34, Luca Ceresoli wrote:
-> drm_for_each_bridge_in_chain_scoped() was added in commit e46efc6a7d28
-> ("drm/bridge: add drm_for_each_bridge_in_chain_scoped()") to provide a
-> safer alternative to drm_for_each_bridge_in_chain().
-> 
-> Following commits converted all users to the _scoped variant.
-> 
-> Finally commit 2f08387a444c ("drm/bridge: remove
-> drm_for_each_bridge_in_chain()") removed the old
-> drm_for_each_bridge_in_chain() macro.
-> 
-> It's time to rename drm_for_each_bridge_in_chain_scoped() back to the
-> original name.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+c4277d21ab694c drivers/net/phy/realtek/realtek_main.c Heiner Kallweit 2026-01-10 @20  #include <net/phy/realtek_phy.h>
+097c2aa89f22f5 drivers/net/phy/realtek.c              Johnson Leung   2008-02-03  21  
 
-Reviewed-by: Louis Chauvet <louis.chauvet@bootlin.com>
-
-> ---
-> Changes in v2:
-> - Rebased on drm-misc-next, fixed conflicts, renamed new occurrences
-> - Link to v1: https://lore.kernel.org/r/20251223-drm-bridge-alloc-getput-for_each_bridge-2-v1-1-0362434ae0eb@bootlin.com
-> ---
->   .clang-format                                  |  2 +-
->   drivers/gpu/drm/display/drm_bridge_connector.c |  4 ++--
->   drivers/gpu/drm/drm_atomic.c                   |  2 +-
->   drivers/gpu/drm/drm_bridge.c                   |  2 +-
->   drivers/gpu/drm/tests/drm_bridge_test.c        |  2 +-
->   include/drm/drm_bridge.h                       | 11 +++++------
->   6 files changed, 11 insertions(+), 12 deletions(-)
-> 
-> diff --git a/.clang-format b/.clang-format
-> index 6a3de86ab27a..5ef5743b77c9 100644
-> --- a/.clang-format
-> +++ b/.clang-format
-> @@ -167,7 +167,7 @@ ForEachMacros:
->     - 'drm_connector_for_each_possible_encoder'
->     - 'drm_exec_for_each_locked_object'
->     - 'drm_exec_for_each_locked_object_reverse'
-> -  - 'drm_for_each_bridge_in_chain_scoped'
-> +  - 'drm_for_each_bridge_in_chain'
->     - 'drm_for_each_connector_iter'
->     - 'drm_for_each_crtc'
->     - 'drm_for_each_crtc_reverse'
-> diff --git a/drivers/gpu/drm/display/drm_bridge_connector.c b/drivers/gpu/drm/display/drm_bridge_connector.c
-> index 92f8a2d7aab4..8b54069fa53a 100644
-> --- a/drivers/gpu/drm/display/drm_bridge_connector.c
-> +++ b/drivers/gpu/drm/display/drm_bridge_connector.c
-> @@ -147,7 +147,7 @@ static void drm_bridge_connector_hpd_notify(struct drm_connector *connector,
->   		to_drm_bridge_connector(connector);
->   
->   	/* Notify all bridges in the pipeline of hotplug events. */
-> -	drm_for_each_bridge_in_chain_scoped(bridge_connector->encoder, bridge) {
-> +	drm_for_each_bridge_in_chain(bridge_connector->encoder, bridge) {
->   		if (bridge->funcs->hpd_notify)
->   			bridge->funcs->hpd_notify(bridge, connector, status);
->   	}
-> @@ -854,7 +854,7 @@ struct drm_connector *drm_bridge_connector_init(struct drm_device *drm,
->   	 * detection are available, we don't support hotplug detection at all.
->   	 */
->   	connector_type = DRM_MODE_CONNECTOR_Unknown;
-> -	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
-> +	drm_for_each_bridge_in_chain(encoder, bridge) {
->   		if (!bridge->interlace_allowed)
->   			connector->interlace_allowed = false;
->   		if (!bridge->ycbcr_420_allowed)
-> diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-> index 735ab7badc2e..e5c8ef06caed 100644
-> --- a/drivers/gpu/drm/drm_atomic.c
-> +++ b/drivers/gpu/drm/drm_atomic.c
-> @@ -1554,7 +1554,7 @@ drm_atomic_add_encoder_bridges(struct drm_atomic_commit *state,
->   		       "Adding all bridges for [encoder:%d:%s] to %p\n",
->   		       encoder->base.id, encoder->name, state);
->   
-> -	drm_for_each_bridge_in_chain_scoped(encoder, bridge) {
-> +	drm_for_each_bridge_in_chain(encoder, bridge) {
->   		/* Skip bridges that don't implement the atomic state hooks. */
->   		if (!bridge->funcs->atomic_duplicate_state)
->   			continue;
-> diff --git a/drivers/gpu/drm/drm_bridge.c b/drivers/gpu/drm/drm_bridge.c
-> index 6ead9b75ae3d..dfab82923c85 100644
-> --- a/drivers/gpu/drm/drm_bridge.c
-> +++ b/drivers/gpu/drm/drm_bridge.c
-> @@ -1817,7 +1817,7 @@ static int encoder_bridges_show(struct seq_file *m, void *data)
->   	struct drm_printer p = drm_seq_file_printer(m);
->   	unsigned int idx = 0;
->   
-> -	drm_for_each_bridge_in_chain_scoped(encoder, bridge)
-> +	drm_for_each_bridge_in_chain(encoder, bridge)
->   		drm_bridge_debugfs_show_bridge(&p, bridge, idx++, false, true);
->   
->   	return 0;
-> diff --git a/drivers/gpu/drm/tests/drm_bridge_test.c b/drivers/gpu/drm/tests/drm_bridge_test.c
-> index 10a32620e962..430d9bc67a10 100644
-> --- a/drivers/gpu/drm/tests/drm_bridge_test.c
-> +++ b/drivers/gpu/drm/tests/drm_bridge_test.c
-> @@ -1071,7 +1071,7 @@ static void drm_test_bridge_chain_verify_fmt(struct kunit *test,
->   	struct drm_bridge_state *bstate;
->   	unsigned int i = 0;
->   
-> -	drm_for_each_bridge_in_chain_scoped(&priv->encoder, bridge) {
-> +	drm_for_each_bridge_in_chain(&priv->encoder, bridge) {
->   		KUNIT_ASSERT_LT(test, i, num_expected);
->   
->   		bstate = drm_bridge_get_current_state(bridge);
-> diff --git a/include/drm/drm_bridge.h b/include/drm/drm_bridge.h
-> index 18f3db367dc1..0fadc39dfc12 100644
-> --- a/include/drm/drm_bridge.h
-> +++ b/include/drm/drm_bridge.h
-> @@ -1474,9 +1474,9 @@ static inline struct drm_bridge *__drm_for_each_bridge_in_chain_next(struct drm_
->   DEFINE_FREE(__drm_for_each_bridge_in_chain_cleanup, struct drm_bridge *,
->   	if (_T) { mutex_unlock(&_T->encoder->bridge_chain_mutex); drm_bridge_put(_T); })
->   
-> -/* Internal to drm_for_each_bridge_in_chain_scoped() */
-> +/* Internal to drm_for_each_bridge_in_chain() */
->   static inline struct drm_bridge *
-> -__drm_for_each_bridge_in_chain_scoped_start(struct drm_encoder *encoder)
-> +__drm_for_each_bridge_in_chain_start(struct drm_encoder *encoder)
->   {
->   	mutex_lock(&encoder->bridge_chain_mutex);
->   
-> @@ -1489,8 +1489,7 @@ __drm_for_each_bridge_in_chain_scoped_start(struct drm_encoder *encoder)
->   }
->   
->   /**
-> - * drm_for_each_bridge_in_chain_scoped - iterate over all bridges attached
-> - *                                       to an encoder
-> + * drm_for_each_bridge_in_chain - iterate over all bridges attached to an encoder
->    * @encoder: the encoder to iterate bridges on
->    * @bridge: a bridge pointer updated to point to the current bridge at each
->    *	    iteration
-> @@ -1500,9 +1499,9 @@ __drm_for_each_bridge_in_chain_scoped_start(struct drm_encoder *encoder)
->    * Automatically gets/puts the bridge reference while iterating and locks
->    * the encoder chain mutex to prevent chain modifications while iterating.
->    */
-> -#define drm_for_each_bridge_in_chain_scoped(encoder, bridge)				\
-> +#define drm_for_each_bridge_in_chain(encoder, bridge)					\
->   	for (struct drm_bridge *bridge __free(__drm_for_each_bridge_in_chain_cleanup) =	\
-> -		__drm_for_each_bridge_in_chain_scoped_start((encoder));			\
-> +		__drm_for_each_bridge_in_chain_start((encoder));			\
->   	     bridge;									\
->   	     bridge = __drm_for_each_bridge_in_chain_next(bridge))			\
->   
-> 
-> ---
-> base-commit: 377939b713ca89de92573e3f3662b805fecc95d5
-> change-id: 20251223-drm-bridge-alloc-getput-for_each_bridge-2-2318aa93b69e
-> 
-> Best regards,
-> --
-> Luca Ceresoli, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-> 
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
