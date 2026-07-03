@@ -1,198 +1,176 @@
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30FC3BCD17
-	for <llvm@lists.linux.dev>; Fri,  3 Jul 2026 10:34:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03D963D1CC5
+	for <llvm@lists.linux.dev>; Fri,  3 Jul 2026 12:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783074886; cv=pass; b=s4olzhP7tjO5l2Ttm4ZI5XMKO+zfiU4uzrohEGEAg2IxnzLZQppDbeG2ZqErpxp294FbT2TglajKwdf0FOUJVmWhRlAWZVGuNJ6wQs7BEyrYxISZYPpq+AnRUw3J4pxjPqCdfjc3s47N1AJajVaHqXEgfLs7KhXjIpcjgWGCig8=
+	t=1783081623; cv=pass; b=btw74sffBxWx2Qq/denhnJDfLpXQLgRLgN0YPi3MLpjXrvZz5A02nXrU91c21Z1k+mngPx1hDjS5LT/+/2O+nGycFrGVAD9qUtuB/JgQnchhKgbFSElR3/U9dt7dFQe8FwSZQPPb9sRX2gdztJGWpdaOyf9lNfPUTG4KUUKz5Wg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783074886; c=relaxed/simple;
-	bh=Fs2CmYxbU+mlQVEyAgokNOpFSjVBOFACynX9Hr/8NwM=;
+	s=arc-20240116; t=1783081623; c=relaxed/simple;
+	bh=GUfkYu7J9XEsKoG+enQvpADK4Syud+mLtRMB/3CPQ1A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ClYmc55b2qSLDIacxCWimTQ56MMWkURPqIyIElgu03dBJyKaP5L0nrq3rxMn8ZiGJW7swv3fM4tNduBImIWVQM43OZ8Oh20dqYV8WhhtNr9WX9jZrDYo1qlEDWaRUrI4rNWHFE6px8iBLLwpWyUNB2EzUc8oFu75o0wj8E086hQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aqaJvQ6p; arc=pass smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=eyqeZSaDxlAxyGn66uueJ95YG/T2rU34zT4zKA++VwnbV5n4HJnuTFXtA45wuW0eh3daVffmPQnf0kqY5bC+PVOWdLOijq6oC387HY2DDyL05PCt5sBSZ2AguJ2PAEtv58E4YvxfUhN7NKDi2XAY1O9hhGc0MnWk+LPbiufJml4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Zw6QOoQ6; arc=pass smtp.client-ip=209.85.160.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aqaJvQ6p"
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-697564cb69eso865438a12.0
-        for <llvm@lists.linux.dev>; Fri, 03 Jul 2026 03:34:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783074883; cv=none;
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Zw6QOoQ6"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-44cc65b0a7fso1184181fac.0
+        for <llvm@lists.linux.dev>; Fri, 03 Jul 2026 05:27:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783081621; cv=none;
         d=google.com; s=arc-20260327;
-        b=moqvcndNpQfPpG4TU88WYLAilyHmDwWPI6GEKJytGldRznn/m0gIImwiLunuNDkdG/
-         eDmTFUGsF42CqHlJeCgoioNPiCZNNvEuKev0Vg6HI8SSEGt0H+ykNUWqU9yZeSq4eUSk
-         +FvTHHPXH8vgKouNneIppF8UPcNLQC30KhacZaf7Nj/tlTwZSOFGXJFzVniTo98ne13A
-         ksxNy3eBA5aBgdrKM+77oowIdxA6zHpiOkxHo3QYuD644fg+9t/i7mF4kt9aqh8jYOEt
-         YfkwE2TltPVPvNqSK8Qtec15wSs6QudXu9zA9xHSGO6E+kKud2rH9bZxKw9Yzj2c8UnX
-         HM/Q==
+        b=QRJXGGate7nLGPYcbb05crD5GJTKPaSWVLgyW+yCpG4+DYIfKSIrkghEXw8DUQxjz4
+         ni+lLU/J7x2mS09fVvZKtFlti/txAR/uwAig04fJHo+aMg2yBl805Vxj5+flMyQg6Xii
+         uEeLCcJwX+aT6JpBmmoPSg5899UZOysHjsR9T1tyvdrzbWHUsYuWtcfeKM8EDVGSxkX5
+         Z4RwmPnAnYufmci6VGjC3vXL6YCe7GdeGJEvbE8DrO6t2Dpvqc/RKG2V2Y/FDLT2dnhm
+         +GmRV9BsGTSDHusbFRFYYcT3mLOmubMPsVwcW1ak5/7i25N+Fi5IiZnmxISImfYhBR3Y
+         WDnw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=h8LUR4Sbsf/2HA6eQ/tW5neVxNihHuerj3teR8ao+Zg=;
-        fh=H2VLI8x2nipITaneJ7uEZMNrq73h8+MWQPT+7sHdk2k=;
-        b=HgGeuBKcdxwSt/1CPOQcIVGFewEPEpZ+tG0aka/2pkd+vevOD6jOYs3hPfpNUaGBzP
-         9fDSK7pbEnf302EfDY0awn9LBlqmWhAK0P9bFP23GIUWY+8YOv6k+yUIKdq0DONpX1z6
-         h/8mdjAXy6bdTQBCl+rawFDkg+gYFTgyV6pnB35aotw11pkCFL/bFNVh47WlWrRakDa6
-         drG9j7fGJlo/ecvM3IvkQc8JpZrJLFq8buNHl0dFLieDHrgOwz89MC4gUwfi0/tb93lG
-         w0aWqNhJRyATxjok+kDwqMfvdv0ARokZQO9CJvbFjprqHXUgdVuaJA/XpDdkSa2VG9W4
-         TPBA==;
+        bh=mkcwegeSHRA8Rtq4C78mf0gL9tHt8vO0ljYRm2yfd08=;
+        fh=aN/QWMv6+f7ROibvgk+SHvd/ZimVHiPYPl2wdBo419c=;
+        b=f1v6CDbsnDs2QA+vnM4rKiyiOlpMZdOD6Lmg+M7RzLiV1Ax8fH1T7yPnac5CiFgRtN
+         n7YpKTrZ3N9rr4Y4X5AYZaUOZgosvw9kKgmrf4pPZLEbeU8TvMyA8isq0KUJfjmhGMnj
+         D/wJtZsDKhK/DE8OjsBThg6rS2bVN7/ynfow8QBDEi94GZtuMWaIp/OJTdIGBI0ZOFgG
+         MUiRg94TFEK9GPN+5dqgz/DSSAnhx6GSHov/orTEeoOJmZjRDDJAvqUpIrTwrxIg5tBh
+         qNESlKFZdGzSjQy9PBMpwuEMmrRcjXf7unU7cxqgo6pGBlOc3UgI73mgzbUWycvX89Oy
+         411Q==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783074883; x=1783679683; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=h8LUR4Sbsf/2HA6eQ/tW5neVxNihHuerj3teR8ao+Zg=;
-        b=aqaJvQ6p9rhSteJcp3IaJGp8AtiVxmE9w6814o/1rSkJY3W2tP7ut9YLLI4IfqFP6H
-         7Je9I+tVIXvHzGj3ejz8NZjEhKxJHdMvi7DOG+urb+jIWSgElGy1aPGhMvV3SPEGv96P
-         hf3bJeumfxBMByB4blPtspOL705sGuKKB5aQ6SJxUjNUuKDy4q2WbkEdwTKB5wxPnDl7
-         BrmJIq1o+ry1tXbcSpwvoUDQSE/XwZgCaemfSRYx129flr2XwUj8lb+cwsOve09imUZE
-         6PuUo9L7sl5PY1LYdFcgu+2GZVOK15WVBJCerlYjyegyLK5qT8x/3OPRnHsKbWpeRiIR
-         DpnQ==
+        d=bytedance.com; s=google; t=1783081621; x=1783686421; darn=lists.linux.dev;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mkcwegeSHRA8Rtq4C78mf0gL9tHt8vO0ljYRm2yfd08=;
+        b=Zw6QOoQ6s/DFcTlvVXCp68UZOJgnM6siqMAoHttCpdw8hykVX7GNaOtuOgyLOaCGwK
+         wsjofhcABLVfSf2paa5xpa5Bc88XLcm3nq/iSN41OoEYvUpW/Z627B/JWT1P11yuxu0O
+         mHYAvLFs08KVHJHtZpG/lPBAPIgD3XK7xLxpKTQdMAFGaryYLmmaI/uKwAXal/CN4gOt
+         d2/9mHTqPs1tjtLcLvRz4FThyxnR/i0SYcSD4NPCcTn26IRMWgeGSdR5DblvbgidklVj
+         tfCoBUoDqDYE2CSDgrhyLLpu1OmTTFe/wgPGq6mUv3nntOg9AeZhKhfMA+iGwfLSKFoR
+         UlJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783074883; x=1783679683;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=h8LUR4Sbsf/2HA6eQ/tW5neVxNihHuerj3teR8ao+Zg=;
-        b=I6WuLqlAo9ODBGGuAlSxVnRazXvSlRV7jSxN0vV8CyaMaYbFYrvrrETQOSP3uCZPXU
-         Vp7/zGSplr0tKd5Bos5hnY8o7lQ8HDYYLV0PQBMSKynQc62Va8VYpIx0dzAPVH5GE2ht
-         R3W3Sc+6YO4X17a4Xhv6kf9od2ssrwuoczW7beA6rj6Ft9OP279CqjSEWe3lLaf7aqTr
-         LTdBtpIroCQDnM0qF0GHv6UFJmwB6ttwEehtQ3BazFKy6jPhW8LxkKOS0jFYcZdGIR1W
-         H2u79Z9vCi04rwHL3caMFgrrg6zMkhCKiOafQRplDXTKbljYlHLvsekU+CH1wMDrojSO
-         O31A==
-X-Forwarded-Encrypted: i=1; AHgh+RoxzqNRGG0alN+il0Jwg6baLaToypBJULAUJkTOvWxXpLoozfjHBnixAYhyS3Yi52VSPo6V@lists.linux.dev
-X-Gm-Message-State: AOJu0YxXUsnicDEF37jmCzOwKx1SfayQe3JEtuk/TcgMdbqjuWj1j6QH
-	u/E4AlUfp200/5dR9QayNaOO8LAB+cPa/eyQCb4ADHjXKZFEH7Pc7pAO3PesuGlMis0Zykw/Rjc
-	dD43R96Tv4mwfY4dqKklxkfn+4mGnI5Y=
-X-Gm-Gg: AfdE7ckwieq8NjTpcqWI/wuE90mk4i+g5kgxerTL4rPdvej/BJL+KTREPkpUjXSKvRg
-	bjPNX+1Yjqj9cdzK+G8DDlCXJoj1XJ5wrH9yzzgZvHaPkjvNEBYZM6M77qu4jfbru8Jacmdelpe
-	9IiwGcmHKj3S/9GoDNKhNvHoXWpxXlxf0TnOp12s1PRurwuFXidlp0zOrGrDAtIxEbJ8+4pmYqr
-	NdvOqwrkCfrN1aJ+2izYz36CSOlYSQUdROGwzxkeJgkG7rtVv6Kcxv+ifjSTT5k6MOBTyIoXlGZ
-	QEXf3dhvA+yOmLqs3GzcOlFZ8Dh9jePePB7UyxWFkXlxcdMH3rtEM6OGAcWQDqFcW5OT4UQdftB
-	pE5YJGXky0wW+Q0yyV8TY
-X-Received: by 2002:a17:907:3c96:b0:c12:39b4:413a with SMTP id
- a640c23a62f3a-c12ae4a691dmr467743866b.23.1783074880994; Fri, 03 Jul 2026
- 03:34:40 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1783081621; x=1783686421;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=mkcwegeSHRA8Rtq4C78mf0gL9tHt8vO0ljYRm2yfd08=;
+        b=QdSgJTnBQXua6I2RM3/BJRLeRrMkUIpRikw/ts9LrYhDvOL07uA8hjtdpCx2SvSjJi
+         V0SqQIowWkdnf4NQT+FZpx5Dt7+tBVVHUyvFeB+Rhe46oesFkS6tMj5e5T3xh87ZUc4+
+         FU55bHeb+uA795j9fbaXNAL2rd3tJN6oM0bx0UdZRanBTdXkNLt8lNXBvTkIIaK/6TuG
+         diacYI9i2cYdWxcb8VcsS/YPcAP1Imyb30ZqXeUkxECSQuUQZD689GV7BTCAlE2kJMb3
+         J5PEsVixI7ziOCOc4C+vAz8bREt3xN03lPL2C/qpZEeC3RQ63u5z3Hoo2lNtrE9+ySGO
+         cJVw==
+X-Forwarded-Encrypted: i=1; AFNElJ9966DT+SlfsJ3nxnqi0WP7EFClFG0ljgYQDieJOGqj8m47uE42/qQAp0gnsJte5EdAut62@lists.linux.dev
+X-Gm-Message-State: AOJu0YysfTL6ATLOCQ2WB1I0H9vg1O9RyPKscHXVQvzQY5EYmq/lMTS+
+	YcE6nf6b1a+YArVZVZFVKJ7m0abc51AL1OVy5vJjgoy1CByJjNuHPXiSZsxPLJVkY2r3Yj0U8ZF
+	yx5jedniD9Z4gaENdLgiPe/mmUUgyrKl+UYPAh03MfA==
+X-Gm-Gg: AfdE7cnXRnnK4nXPI6YSQ0PW5iqg8jFyKcFixzIFCm+nGMcmU1uEJ7TTyI/xFc4jI0O
+	Jag2fyv8Wf+QaCeU0GD+s9ag/BFlkZ6ENIgbrfBZxwXbDcq6r5CVSGcQRNKtHk9aiJrbTOtJv9j
+	MdWDMFjYDftZn0CJyjLEzY8F8uy49+gIPArCO/ZkNEipcjDhdE2/4ANOEJTwIxTzBTiGFCVDKZt
+	p9DTq1duBIfXTd60jQ3+xOCbvUoEXA1BW3XmvFcGg3U38tgs3qlTLfSMQ2ctkA37EY8H3wtIbi1
+	x5oT9okQKCvhcg==
+X-Received: by 2002:a05:6809:6:20b0:496:100e:35f8 with SMTP id
+ 5614622812f47-497e1e43cedmr1478072b6e.21.1783081615982; Fri, 03 Jul 2026
+ 05:26:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260701125151.352632-1-voytikd@gmail.com> <20260702025342.GJakXStrsCmIRnEwFD@fat_crate.local>
- <CAAX90H0V-=Gy1FyBT9qop2=RvhBxbOPLu6+DYpPH2pTehT=nRw@mail.gmail.com>
- <20260702111550.GH751831@noisy.programming.kicks-ass.net> <87se61npie.ffs@fw13>
- <87mrw9nonk.ffs@fw13>
-In-Reply-To: <87mrw9nonk.ffs@fw13>
-From: Dmitry Voytik <voytikd@gmail.com>
-Date: Fri, 3 Jul 2026 12:34:14 +0200
-X-Gm-Features: AVVi8CeNxREOJYVsvGFt7qdLJ3ZpuKcTnebSQ9SjudTefEGZU-k9b63Ysrg3hes
-Message-ID: <CAAX90H3Nw+=gKOxPXpOwvDrbvWzUjgtyGoRJhCwsWz61s2XbQw@mail.gmail.com>
-Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Borislav Petkov <bp@alien8.de>, linux-toolchains@vger.kernel.org, 
-	Alexander Potapenko <glider@google.com>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Ankur Arora <ankur.a.arora@oracle.com>, "H . Peter Anvin" <hpa@zytor.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Marco Elver <elver@google.com>, x86@kernel.org, linux-kernel@vger.kernel.org, 
-	kasan-dev@googlegroups.com, linux-mm@kvack.org, llvm@lists.linux.dev
+References: <20260702025443.83389-4-cuiyunhui@bytedance.com> <cee66b78b5bad62e6107ce7579d7e613ad05a258aef8d0ab279b706543651a13@mail.kernel.org>
+In-Reply-To: <cee66b78b5bad62e6107ce7579d7e613ad05a258aef8d0ab279b706543651a13@mail.kernel.org>
+From: yunhui cui <cuiyunhui@bytedance.com>
+Date: Fri, 3 Jul 2026 20:26:44 +0800
+X-Gm-Features: AVVi8CcDmMKspGUBCgXqug4CkmXz20IK78kFtcg22LCfN8fJHodpSJeX2_dNFaw
+Message-ID: <CAEEQ3wmTJU1-5e81fy0wnv6gCP4n0cdydOW-Hj7pFJxhFj+6MA@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH v7 3/3] riscv: store percpu offset into thread_info
+To: bot+bpf-ci@kernel.org
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
+	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, 
+	thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, 
+	rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, 
+	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com, 
+	seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com, 
+	cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com, 
+	apatel@ventanamicro.com, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
+	arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn, 
+	llvm@lists.linux.dev, martin.lau@kernel.org, clm@meta.com, 
+	ihor.solodrai@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Thomas,
+Hi bot+bpf-ci,
 
-On Thu, Jul 2, 2026 at 10:05=E2=80=AFPM Thomas Gleixner <tglx@kernel.org> w=
-rote:
+On Thu, Jul 2, 2026 at 12:08=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> On Thu, Jul 02 2026 at 21:46, Thomas Gleixner wrote:
-> > On Thu, Jul 02 2026 at 13:15, Peter Zijlstra wrote:
-> >> A quick test with folio_zero_user() seems to suggest the
-> >> ASM_CALL_CONSTRAINT movement (your patch) generates the same code for
-> >> defconfg as does the unmodified code. The change from the thread linke=
-d
-> >> above (input constraint on __builtin_frame_address(0)) generates
-> >> different code.
-> >>
-> >> A third option is to force FRAME_POINTER=3Dy for KMSAN builds -- for n=
-ow,
-> >> until clang is taught to be less insane.
+> > diff --git a/arch/riscv/include/asm/asm.h b/arch/riscv/include/asm/asm.=
+h
+> > index e9e8ba83e632..137a49488325 100644
+> > --- a/arch/riscv/include/asm/asm.h
+> > +++ b/arch/riscv/include/asm/asm.h
+> > @@ -91,11 +91,7 @@
 > >
-> > With FRAME_POINTER=3Dy I get now with clang-22
-> >
-> > vmlinux.o: warning: objtool: folio_zero_user+0xa7b: stack state mismatc=
-h: reg1[4]=3D-1+0 reg2[4]=3D-2-336
-> > vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x64: relocation to !END=
-BR: machine_kexec_prepare+0x8f0
-> >
-> > That's with your objtool patch applied. When I remove that then the
-> > folio_zero_user one goes away. The relocation to !ENDBR stays.
-> >
-> > Oh well...
+> >  #ifdef CONFIG_SMP
+> >  .macro asm_per_cpu dst sym tmp
+> > -     lw    \tmp, TASK_TI_CPU_NUM(tp)
+> > -     slli  \tmp, \tmp, RISCV_LGPTR
+> > -     la    \dst, __per_cpu_offset
+> > -     add   \dst, \dst, \tmp
+> > -     REG_L \tmp, 0(\dst)
+> > +     REG_L \tmp, TASK_TI_PCPU_OFFSET(tp)
+> >       la    \dst, \sym
+> >       add   \dst, \dst, \tmp
+> >  .endm
 >
-> And none of this boots when KMSAN=3Dy ....
-
-Thanks for checking this!
-I wonder if we are debugging clang here because I just retested the patch w=
-ith
-CONFIG_FRAME_POINTER on the current Linus' tree and it works in my env:
-
-clang --version
-clang version 22.1.6
-
-git pull -r
-git show -s --oneline -2
-21f3d2b2069e (HEAD -> master) x86/mm: fix objtool failure with KMSAN enable=
+> This isn't a bug, but asm_per_cpu was the only reader of TASK_TI_CPU_NUM,
+> and it now loads TASK_TI_PCPU_OFFSET(tp) instead.
+>
+> > diff --git a/arch/riscv/kernel/asm-offsets.c b/arch/riscv/kernel/asm-of=
+fsets.c
+> > index af827448a609..fbf53b66b0e0 100644
+> > --- a/arch/riscv/kernel/asm-offsets.c
+> > +++ b/arch/riscv/kernel/asm-offsets.c
+> > @@ -38,6 +38,7 @@ void asm_offsets(void)
+> >       OFFSET(TASK_THREAD_SUM, task_struct, thread.sum);
+> >
+> >       OFFSET(TASK_TI_CPU, task_struct, thread_info.cpu);
+> > +     OFFSET(TASK_TI_PCPU_OFFSET, task_struct, thread_info.pcpu_offset)=
+;
+> >       OFFSET(TASK_TI_PREEMPT_COUNT, task_struct, thread_info.preempt_co=
+unt);
+> >       OFFSET(TASK_TI_KERNEL_SP, task_struct, thread_info.kernel_sp);
+> >       OFFSET(TASK_TI_USER_SP, task_struct, thread_info.user_sp);
+>
+> A tree-wide search now finds TASK_TI_CPU_NUM only at its definition in
+> asm_offsets():
+>
+>         OFFSET(TASK_TI_CPU_NUM, task_struct, thread_info.cpu);
+>
+> with no remaining users (TASK_TI_CPU is a separate symbol still reference=
 d
-d2c9a99135da (origin/master, origin/HEAD) Merge tag 'device-id-rework'
-of git://git.kernel.org/pub/scm/linux/kernel/git/ukleinek/linux
+> by entry.S).  Could this OFFSET() line be dropped as well?
 
-make mrproper
-make LLVM=3D1 defconfig
-./scripts/config \
-  -e CONFIG_KMSAN \
-  -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
-  -e UNWINDER_FRAME_POINTER
-make LLVM=3D1 olddefconfig
-make LLVM=3D1 W=3Dce -j(nproc) bzImage
+ Thanks, will fix in v8.
 
-grep -e CONFIG_KMSAN=3D -e CONFIG_FRAME_POINTER \
-  -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT .config
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/285624=
+50933
 
-CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=3Dy
-CONFIG_FRAME_POINTER=3Dy
-CONFIG_KMSAN=3Dy
-
-qemu-system-x86_64 \
-  -kernel arch/x86/boot/bzImage \
-  -accel kvm \
-  -append "console=3DttyS0" \
-  -nographic \
-  -m 8G -smp 4 \
-  -serial file:serial_out.log
-
-grep -e 'Linux version' -A1 -e KernelMemorySanitizer -e 'append a
-correct' serial_out.log
-
-[    0.000000] Linux version 7.2.0-rc1-00009-gb0b29f0286be
-(voyt@voyt-laptop-dell) (clang version 22.1.6, LLD 22.1.6) #1 SMP
-PREEMPT_DYNAMIC Fri Jul  3 11:55:02 CEST 2026
-[    0.000000] Command line: console=3DttyS0
---
-[    0.218380] Starting KernelMemorySanitizer
-[    0.218382] ATTENTION: KMSAN is a debugging tool! Do not use it on
-production machines!
---
-[    4.037384] Please append a correct "root=3D" boot option; here are
-the available partitions:
-[    4.037772] 0b00         1048575 sr0
-
-
-Could another CONFIG_ be the culprit on your side? Or, has your clang
-version some different (buggy?) behaviour?
+Thanks,
+Yunhui
