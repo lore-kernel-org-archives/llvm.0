@@ -1,268 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA4F171CD;
-	Sat,  4 Jul 2026 02:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57BF313C918
+	for <llvm@lists.linux.dev>; Sat,  4 Jul 2026 03:32:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783132825; cv=none; b=hPnVPW8eL9pvWfXTQqxzSpS6DYLZGvAVxoRvMplXPNHIYBwx6hEBboCMR2/NIjAr6Z35EOr/RISyIGaJDBssuyhaXZM8fTg5UCZr/lfo60dStIqO3R/+xAwEcVwojJLTItDNYDiSLwzEDEzfS6SlatMJppASvtELbGK4stBsz4E=
+	t=1783135938; cv=none; b=bv26d47KcXW+GzxE5K9fzicqlZ9Dqt2Hj9u/7LuSbaaal0/YOyZbHucbZER3fHKNzBzjwXCmdYl/VSCOKUlraH7sb2x8REbKA7EwZYnD9HDvSop6aNq1wwaBz31qq12FG9drHEfM7r9DRPTXueK/AWUDZcNXeeJlBNkYsDvJgqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783132825; c=relaxed/simple;
-	bh=EpbQ2gsNgum2WSmaF16V21ehDBRsvil2h/Q5c/F5oDw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Cny6TYH5b5317Jlomy3bSDqED3ckLz13HJXnaJMV4GP7AjYUk0Ybv1pI8q+bh/v/Ed71evMk4OTsqKvdW6tFlwGLpTaxhK5gF7OLPyxOsWHi5sCXx9u/CH/DecgMdRVO/eYxtRDAbHDNwsB4hZwJJHZG0NfWKY5tzbjSCvWF2XY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n9B7eE7c; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783135938; c=relaxed/simple;
+	bh=CR+l5V/8zuaHxbxXKbEGGAiLVBy1B9BkIYp1IRPm5LE=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=iTEbaYpBQ4Sb4M4zJqcVTrNLYanmByRkXJXgyOCk7N2QO03JyPnmIQvMQLbSnHAjjycBropntgIffGNY3B7V2Aq+B4zdp+XMn7XT4sYdazEvphadmXBNuWqJeYVo/WSLj5ifmaf0249vIITeO2Kjr9Sbu04kteqkUXcsBLdDg+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FTQlTKO3; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n9B7eE7c"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783132824; x=1814668824;
-  h=date:from:to:cc:subject:message-id;
-  bh=EpbQ2gsNgum2WSmaF16V21ehDBRsvil2h/Q5c/F5oDw=;
-  b=n9B7eE7ccZCSfHDSQ1xpXqSlUdIulHGtO8gDkFelEFYy6oykJjBTdGaX
-   YDZlJFTEIMrDXmWmh875pEzX+OCJHsMQQWKEDIaB6dLWl7/KlASiQiiDD
-   +5KH3xsB3Q2Lcg6YrQr5BgzKyv4LvI8DUpyc9QmJM4aYRqha2SWawJb/n
-   fESFPCMG4oyGepePdFto7o4mqa80TPRV8dHpJ1IzMGQL9GSC3yUMjsC3T
-   bKgRK/HT1e3iLh0fBfiyrijxuxLBG6GdTuTr9wazBsrE7DIWXCueOflZ5
-   Y9GK1IvtH0jGuJtqMKqoS3EtMe/XPpAtNLFR2knCc/ULr/ELSY9wwoO4a
-   w==;
-X-CSE-ConnectionGUID: oPj0vq3kT8OUnoEjLjeFEg==
-X-CSE-MsgGUID: Psy7dnqhS2Szn3N5Xqaw7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11836"; a="83645847"
-X-IronPort-AV: E=Sophos;i="6.25,145,1779174000"; 
-   d="scan'208";a="83645847"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jul 2026 19:40:23 -0700
-X-CSE-ConnectionGUID: dq+IpUSPTleWk9LdmsxEhw==
-X-CSE-MsgGUID: 51Jm6Lo0SLKa+PfbI1WUdg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,145,1779174000"; 
-   d="scan'208";a="258122388"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Jul 2026 19:40:21 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wfqIk-00000000CmJ-3ZCM;
-	Sat, 04 Jul 2026 02:40:18 +0000
-Date: Sat, 04 Jul 2026 10:39:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [davidhildenbrand:folded_pgtable 13/13]
- include/asm-generic/pgtable-nop4d.h:46:36: error: call to undeclared function
- 'pgd_val'; ISO C99 and later do not support implicit function declarations
-Message-ID: <202607041001.lwd0KBN0-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FTQlTKO3"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783135935;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=XfCuCRK362VNz/3/pK40OI9ciGq4wba6Xs1q01pe5PI=;
+	b=FTQlTKO3SlQSIltF885E+vB2xzzAkvxgz1e4f/43LwSPTY6+IgIvUDwJKx6uIwgwUUv9br
+	S9l91Hj2Bi5e87hadXNDKz2mc10hu2TjnjgD0g5MnbrbXUT94zYSnTirP8qOQnsSjb7IP+
+	hu/zR3hXwLkkr9XzJYo/gnEQm+GQifg=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-461-ai6059q3MvyX7FzwDzSemg-1; Fri,
+ 03 Jul 2026 23:32:14 -0400
+X-MC-Unique: ai6059q3MvyX7FzwDzSemg-1
+X-Mimecast-MFC-AGG-ID: ai6059q3MvyX7FzwDzSemg_1783135933
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0400B1944D3E
+	for <llvm@lists.linux.dev>; Sat,  4 Jul 2026 03:32:13 +0000 (UTC)
+Received: from [172.20.209.159] (unknown [10.30.45.50])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 7CE561944B29;
+	Sat,  4 Jul 2026 03:32:12 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc1,
+ upstream-mainline, 71dfdfb0)
+Date: Sat, 04 Jul 2026 03:32:12 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <43807.126070323321400195@us-mta-461.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: NWcrHpFwq9MPXjAz--8JsvxNopVMNntg3hbZ2HjPnVI_1783135933
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/davidhildenbrand/linux folded_pgtable
-head:   898b37f4865d94ff198bb62dfe2517a6d1b7d44e
-commit: 898b37f4865d94ff198bb62dfe2517a6d1b7d44e [13/13] mm/pgtable: catch abuse of folded dummy pgd_t/p4d_t/pud_t
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20260704/202607041001.lwd0KBN0-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260704/202607041001.lwd0KBN0-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607041001.lwd0KBN0-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   WARN /zdci/src/lkp/lib/log.sh:131:in `log_warn': /opt/cross/rustc-1.96.0-bindgen-0.72.1 doesn't exist
-     from /zdci/src/kernel-tests/lib/debug.sh:164: kbuild_log_warn
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3371: export_rust_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3361: export_compiler_path
-     from /zdci/src/kernel-tests/lib/kbuild.sh:3840: invoke_make
-     from /zdci/src/kernel-tests/lib/kbuild.sh:4022: make
-     from /zdci/src/kernel-tests/common.sh:202: redirect_error_to_screen
-     from /zdci/src/kernel-tests/common.sh:210: redirect_command_errors
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5680: make_prepare
-     from /zdci/src/kernel-tests/lib/kbuild.sh:5909: test_kernel_build
-     from /zdci/src/kernel-tests/lib/builder/base.sh:442: builder_execute_build
-     from /zdci/src/kernel-tests/lib/kbuild.sh:6419: compile_one_config
-     from /zdci/src/kernel-tests/lib/builder/base.sh:88: builder_compile
-     from /zdci/src/kernel-tests/bisect-test-build-error.sh:101: main
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/x86/include/asm/irqflags.h:100:
-   In file included from arch/x86/include/asm/paravirt.h:10:
-   In file included from arch/x86/include/asm/paravirt_types.h:12:
-   In file included from arch/x86/include/asm/pgtable_types.h:354:
->> include/asm-generic/pgtable-nop4d.h:46:36: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      46 |         BUILD_BUG_ON(__builtin_constant_p(pgd_val(*pgd)));
-         |                                           ^
-   include/asm-generic/pgtable-nop4d.h:46:36: note: did you mean 'pgd_bad'?
-   include/asm-generic/pgtable-nop4d.h:22:19: note: 'pgd_bad' declared here
-      22 | static inline int pgd_bad(pgd_t pgd)            { return 0; }
-         |                   ^
-   include/asm-generic/pgtable-nop4d.h:53:36: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      53 |         BUILD_BUG_ON(__builtin_constant_p(pgd_val(*pgdp)));
-         |                                           ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/x86/include/asm/irqflags.h:100:
-   In file included from arch/x86/include/asm/paravirt.h:10:
-   In file included from arch/x86/include/asm/paravirt_types.h:12:
-   In file included from arch/x86/include/asm/pgtable_types.h:380:
->> include/asm-generic/pgtable-nopud.h:53:36: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      53 |         BUILD_BUG_ON(__builtin_constant_p(p4d_val(*p4d)));
-         |                                           ^
-   include/asm-generic/pgtable-nop4d.h:58:24: note: expanded from macro 'p4d_val'
-      58 | #define p4d_val(x)                              (pgd_val((x).pgd))
-         |                                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/x86/include/asm/irqflags.h:100:
-   In file included from arch/x86/include/asm/paravirt.h:10:
-   In file included from arch/x86/include/asm/paravirt_types.h:12:
-   In file included from arch/x86/include/asm/pgtable_types.h:380:
-   include/asm-generic/pgtable-nopud.h:61:36: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      61 |         BUILD_BUG_ON(__builtin_constant_p(p4d_val(*p4dp)));
-         |                                           ^
-   include/asm-generic/pgtable-nop4d.h:58:24: note: expanded from macro 'p4d_val'
-      58 | #define p4d_val(x)                              (pgd_val((x).pgd))
-         |                                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/x86/include/asm/irqflags.h:100:
-   In file included from arch/x86/include/asm/paravirt.h:10:
-   In file included from arch/x86/include/asm/paravirt_types.h:12:
-   In file included from arch/x86/include/asm/pgtable_types.h:404:
->> include/asm-generic/pgtable-nopmd.h:55:36: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      55 |         BUILD_BUG_ON(__builtin_constant_p(pud_val(*pud)));
-         |                                           ^
-   include/asm-generic/pgtable-nopud.h:66:24: note: expanded from macro 'pud_val'
-      66 | #define pud_val(x)                              (p4d_val((x).p4d))
-         |                                                  ^
-   include/asm-generic/pgtable-nop4d.h:58:24: note: expanded from macro 'p4d_val'
-      58 | #define p4d_val(x)                              (pgd_val((x).pgd))
-         |                                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:15:
-   In file included from include/linux/completion.h:12:
-   In file included from include/linux/swait.h:7:
-   In file included from include/linux/spinlock.h:59:
-   In file included from include/linux/irqflags.h:18:
-   In file included from arch/x86/include/asm/irqflags.h:100:
-   In file included from arch/x86/include/asm/paravirt.h:10:
-   In file included from arch/x86/include/asm/paravirt_types.h:12:
-   In file included from arch/x86/include/asm/pgtable_types.h:404:
-   include/asm-generic/pgtable-nopmd.h:63:36: error: call to undeclared function 'pgd_val'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      63 |         BUILD_BUG_ON(__builtin_constant_p(pud_val(*pudp)));
-         |                                           ^
-   include/asm-generic/pgtable-nopud.h:66:24: note: expanded from macro 'pud_val'
-      66 | #define pud_val(x)                              (p4d_val((x).p4d))
-         |                                                  ^
-   include/asm-generic/pgtable-nop4d.h:58:24: note: expanded from macro 'p4d_val'
-      58 | #define p4d_val(x)                              (pgd_val((x).pgd))
-         |                                                  ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:14:
-   In file included from include/linux/suspend.h:5:
-   In file included from include/linux/swap.h:9:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:17:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/pgd_val +46 include/asm-generic/pgtable-nop4d.h
+Kernel information:
+    Commit message: Merge tag 'vfs-7.2-rc2.fixes' of git://git.kernel.org/p=
+ub/scm/linux/kernel/git/vfs/vfs
 
-    43	
-    44	static __always_inline p4d_t *p4d_offset(pgd_t *pgd, unsigned long address)
-    45	{
-  > 46		BUILD_BUG_ON(__builtin_constant_p(pgd_val(*pgd)));
-    47		return (p4d_t *)pgd;
-    48	}
-    49	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2650497086
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2650497086_ppc64le_kernel
+
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
