@@ -1,111 +1,96 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DCD30C150
-	for <llvm@lists.linux.dev>; Sat,  4 Jul 2026 13:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC8D288BA;
+	Sat,  4 Jul 2026 14:13:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783172590; cv=none; b=k+r4xdbsIC8tuJ7e3mLKgtjbIL1OMxc4r9G5Xs294zExIut9j9JuTR8VOKJ4eDpf1ct9rNCA5yB1ltcT6YUwtJ0Tq/CIx+bCmj+Rnood1oGkxy0rblv0JpKpbf6ImfFAMVaqbyrqOr121/n47GIEfIsnAMYJf1PtKb6xYdVXkfI=
+	t=1783174434; cv=none; b=fgqWlhSDWE99immfp6G3UrrvU0nZgr93CkC6lXzPf1HH57jE5lVhj3z4HIVNIizilqd7tj2nZGbI2N9NId6hjFeZHA5UzxUBxhCL1Sxc5bI1qpqRewHSN6v84oF/lvQwjT787BgLRBm99IFG5ZK5vUToQu/ByeiPRe40vLB1eNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783172590; c=relaxed/simple;
-	bh=fAUq6WP6tuZrYLnJr5ywLAHRedTrYb93GW0gA5vQEd4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HYbwOaWyk994eqHwQQ30hCveltCxOoWH0J2zWiBQmljzhUgPa4QiR4Ol2Kx/BZO4hM2gBG9AM9D6SVc85iFlOXzhra4hx7sApX/KYhb1wbWMwROKIn0mFTr1IM4CdOaoBhwqQBhby0VnVitoCw9YtZKrVd7ejgnpoQKZZrXKLiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hpgT2JPl; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783174434; c=relaxed/simple;
+	bh=haHFTXmDQ5aiiw5QM8Z1oIYQg5A3tgVLGwdXjbQ0puw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CXZkaKpVia4cbdHZ3whdflzZifLD3w0EDoKJomCUTD+RyL6J2oawFg/q6kue3G04n4D55RHbkX3QCkCank3OLL55OpSpeSAWc1oc9CFcGDhq2GzhLuiX93h7mwQ6F97EUTxioEgJyEQeZPR0AB8Um/J5gs2EHV9UZX1p8iQ2CH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PL/ZCsd1; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hpgT2JPl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783172588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IWLa+OvP8rc7wAgavkLHPgfOUq+525Ewkj0owrgj1Ok=;
-	b=hpgT2JPlPLpIjoQlSxUsUJGFjMbJ7/T34WCo5G8M5axWRzMrEFyTWdwPYTWIkafO291ZzT
-	+u2Bc6ItZ/Au9rTC0gA6axyg+L9QyTFcOzOLzPgbcLTs/oJplESSfT0qvhbNhsPA0/P83X
-	HE/jBBA+dRYoR8FkomtIL8n6XzLNopM=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-253-In4WiL-DNqqVBi5_E-qWEA-1; Sat,
- 04 Jul 2026 09:43:06 -0400
-X-MC-Unique: In4WiL-DNqqVBi5_E-qWEA-1
-X-Mimecast-MFC-AGG-ID: In4WiL-DNqqVBi5_E-qWEA_1783172585
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A4F4C19560A3
-	for <llvm@lists.linux.dev>; Sat,  4 Jul 2026 13:43:05 +0000 (UTC)
-Received: from [172.20.209.159] (unknown [10.30.45.50])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 5084030030E0;
-	Sat,  4 Jul 2026 13:43:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc1,
- upstream-mainline, dac0b8c5)
-Date: Sat, 04 Jul 2026 13:43:04 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PL/ZCsd1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783174432; x=1814710432;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=haHFTXmDQ5aiiw5QM8Z1oIYQg5A3tgVLGwdXjbQ0puw=;
+  b=PL/ZCsd1IDaxhWOzWnkaxMG2nZ7qp6WmMEGiAE3Iw51vdkslzBAZUP1b
+   OSoUuBse0VhvDNgmXdEe9J3UzNN2ctGKkWiGd/lZw2IxCcLNbM0TRa5hC
+   lvXzwmBYOwrhn39il2JzDZ65s9B7DAYaKzm28xe5/oKiPNWz9tc/oY/Tx
+   9tOotRkjh6O9QjS2017k1Cs5EO7BfnXwVQQ7qsW+b9NQMMOY93Q06z6dB
+   cwjhIQz3ssAjJVwvH4nomEu4Mi1p7OYRoY+zkyy5wen6CU8++wgMjCD6H
+   VepKXhWQr7BFjwc9JBBXYR7f3h2+xJSQ2IG2Ko9klRrZYksK7zVAKZBRv
+   w==;
+X-CSE-ConnectionGUID: 1BspFlupStWk/8CtXSyJOA==
+X-CSE-MsgGUID: /l99gezbRnGN89SZt9+MNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11837"; a="86432040"
+X-IronPort-AV: E=Sophos;i="6.25,147,1779174000"; 
+   d="scan'208";a="86432040"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2026 07:13:51 -0700
+X-CSE-ConnectionGUID: PDxd48G8Rl+ulU/Rsg6ZdQ==
+X-CSE-MsgGUID: HyDxZS8JSJuC469nzXvMfw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,147,1779174000"; 
+   d="scan'208";a="283392842"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 04 Jul 2026 07:13:49 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wg17q-00000000D63-05F2;
+	Sat, 04 Jul 2026 14:13:46 +0000
+Date: Sat, 4 Jul 2026 22:12:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: adi25charis@gmail.com, vireshk@kernel.org, johan@kernel.org,
+	elder@kernel.org, gregkh@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Aditya Chari S <adi25charis@gmail.com>
+Subject: Re: [PATCH] staging: greybus: bootrom: power off module on timeout
+Message-ID: <202607042245.XyM6HiC2-lkp@intel.com>
+References: <20260704071926.6606-1-adi25charis@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <65358.126070409430600245@us-mta-253.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: YULfHdqt7dF_VMYNg3TAd6oQrpYEki0wdsPHBmd7suo_1783172585
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260704071926.6606-1-adi25charis@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on staging/staging-testing]
 
-Kernel information:
-    Commit message: Merge tag 'drm-fixes-2026-07-04' of https://gitlab.free=
-desktop.org/drm/kernel
+url:    https://github.com/intel-lab-lkp/linux/commits/adi25charis-gmail-com/staging-greybus-bootrom-power-off-module-on-timeout/20260704-152129
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260704071926.6606-1-adi25charis%40gmail.com
+patch subject: [PATCH] staging: greybus: bootrom: power off module on timeout
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260704/202607042245.XyM6HiC2-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260704/202607042245.XyM6HiC2-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2651128447
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607042245.XyM6HiC2-lkp@intel.com/
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2651128447_ppc64le_kernel
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> ERROR: modpost: "gb_svc_intf_eject" [drivers/staging/greybus/gb-bootrom.ko] undefined!
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
