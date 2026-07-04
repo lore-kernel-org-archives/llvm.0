@@ -1,211 +1,320 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CE920DD51;
-	Sat,  4 Jul 2026 11:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783163146; cv=none; b=ezih8vvC+JVdvcjAJ4Sgk+VgygHhugTWlKYxIFSwmWcpUHxsJH8CLO37EpdNQvoAGoMbuXbclAfXQpdySEhvOU4X6mXBq3H3+yGq3eBMX3VZjszwwbrGot0CAFogUNUd8q9QDeTmqv75CaZ/NluXAsXxM5ISPJhmqjSueTIbpDE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783163146; c=relaxed/simple;
-	bh=Qvakh3eFdiYUr6uFSZ60TZlggQth34es1Wdyp0F+AiM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=I8MUnFEnqjU1qJ3h4z4TWipM4v5DkfLIdYeWUzKJYcLaF665jRVpAxdgggRedp8mCgu9dY0ZyfCd0sa2/YPpvrNtg3z37ZuwFUK77UbHY1YW7fqbDRImbwmVau3RuB6SjNnBeDosCypNjd1HQPZ3nM7NZbL9eUoL/oszYqPDxeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LP2w0CJi; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509792E2663
+	for <llvm@lists.linux.dev>; Sat,  4 Jul 2026 11:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783164756; cv=pass; b=pzys2QYeSav5BnvpUcAtySaJFWb89Zo+bleNQGibxNN7FRXdBJNoXuXFt0oYGbSfMoJUlvmRefkQFcpzU2jonz3xwprOASmDSDrFK9n8zKYKJ9JYcPgCsieM4ydxb11vK1on19lj3fk9XTZbGk0PwoY0SmMUdCqPzWGNAdF6wDI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783164756; c=relaxed/simple;
+	bh=8OTCBWbdCtmuwJeFimchV1AxQzt329vUxOdL5TjRnb8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M8b5IwCSRH6rLtczpRRxSbf+CuyxhtRPyTkXdM5vzvr8BkNWkDf0356bAgNQFxZq1GToinHi9v2MAgWUyh/9dF5x5/2Wjn5O1MVc3gAnyfUWzTfk/aNNmVgFcY/K9FmMd78/tv/3wXE4A1ZIjQ8UQzzclz7MwXS//AOEY+Xmw0M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nZUsbuPr; arc=pass smtp.client-ip=209.85.210.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LP2w0CJi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783163144; x=1814699144;
-  h=date:from:to:cc:subject:message-id;
-  bh=Qvakh3eFdiYUr6uFSZ60TZlggQth34es1Wdyp0F+AiM=;
-  b=LP2w0CJiBXG92G+NNmqLNt40PYGf4SBhxwI4xOCq8nqfA0kZn72BiWKn
-   MQWyMXgQsqcAcy45Hrka/VtuN/yHIQCqKRX2mkaLtwrrb3Gf8N13Oyf4m
-   bkwB1ZI+YT2Vrj5jDmnhumSU+gBN5K3TzC9zvKLmu1o0UjOLPQv53TonB
-   /1vsrJf6rUgjepNsiFmIk7+ts00F0D3KI8+cGIbjT7XetRH0h9w/HJPCV
-   XZ/F2kHnIvbGRsvcd4oCJ9kWXeAVjr8nWneH9ZYYUulsiEsrDAzOKzfae
-   M6YpjgSATHdHBRb6HYP36aGAEQ9fl115njBxtnuJ1reAhEFzOsOKI9iRl
-   w==;
-X-CSE-ConnectionGUID: yR8HrxyzTHehuWJf55w6XA==
-X-CSE-MsgGUID: LHe2cpE3T9KiTP5wamoh/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11836"; a="87560128"
-X-IronPort-AV: E=Sophos;i="6.25,147,1779174000"; 
-   d="scan'208";a="87560128"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2026 04:05:43 -0700
-X-CSE-ConnectionGUID: I6+gtwRwQL2LCUQClqCF0Q==
-X-CSE-MsgGUID: 2xi0s8M+SLOLf3Nv07Q/IA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,147,1779174000"; 
-   d="scan'208";a="258185157"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Jul 2026 04:05:41 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wfyBg-00000000D11-1BVW;
-	Sat, 04 Jul 2026 11:05:33 +0000
-Date: Sat, 04 Jul 2026 19:05:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Bryan O'Donoghue" <bod@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: 
- [bod:qcom-laptops-v6.18-rc4-camss-icp-bps-ipe-icp-boots+stats-b4 120/121]
- drivers/media/platform/qcom/camss/camss-icp.c:151:15: warning: format
- specifies type 'unsigned long long' but the argument has type
- 'resource_size_t' (aka 'unsigned int')
-Message-ID: <202607041822.fXGqM145-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nZUsbuPr"
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-7e9f69ee6f4so1209663a34.2
+        for <llvm@lists.linux.dev>; Sat, 04 Jul 2026 04:32:35 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783164754; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ojrQX4B1Hm8Y7CTGfqrcetIJReRGvL5KlpJwG3NSE0sjcMVfAggkx/svrrgArPRNmO
+         lZzvN+rO6e57JDohr/OX93kKGyf56a2Pbj8uMggCA6ufYK3ToOutBZLfbzBV2Lxhd3QV
+         fGuboscbB3Xtl6QRXISChLGzItSSAa4MTpELP+QKQ7Fus743Rkbb35TIWRdb2qm4V07V
+         ScIX8lkWkKzxLRQUKYRmXElzVVT4YF4mog5NixYMXfrejq/QBbXhgb38i6DTlV85Yiwq
+         HMn2SgSKdcodpFgel7ggVYaOpt/8/VaZ4YBiFjXpVdbgVc6enLRLC2t6lUd2xlHyVMmn
+         dDvA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=EWxbVxt0bUrbMOVyYOzNg2L9Hi49TedpZAPD1zNG07k=;
+        fh=RYictS3nFLjillzjMoz2EnccAQU7h1IGSCLw7XO3mgo=;
+        b=pF7N7fcsHDL5fa1ObtL33Q/mchOkq8HWgVMbxmTPsNZ+N5x/zvAmOdJQXA3owNdLAh
+         2KZ8KRseOtW+TygwayPjOJkKlyVU21bzHUml5trFQJoPIVvWTqV31Y9kptKFjXoeFB5N
+         XWeZXu9dCkvDMndjFSmuXLHeueBYVxz5mzbhhmqvoZmfa9+EtqvdonzYPSZghM4eFrNU
+         6bXPdDW6qDLpIVGJ7LIVYhoYywHtwnui3Ky4YBIo+AoiqP17G4MdilqaJlb3Hv569ksA
+         rPOJPulGg80RPHBKqhNn9D8Xq4eb5PXK3Z3P6PQ9MH/D+DUzW6Qj6ZInXpmayu9+RyJU
+         RSww==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783164754; x=1783769554; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=EWxbVxt0bUrbMOVyYOzNg2L9Hi49TedpZAPD1zNG07k=;
+        b=nZUsbuPrqGI4w7/YRNDNiy0RSfz6W+c1M0RZA1h7SFu+0dHMehECc1yRHy1B3sWCcj
+         NSkNKIvyJQnGr4Qcvoyda1BB5vGspTZlJjIk1wcgIhdDJwStg/ioQm/DAT+FppzwDD71
+         67XLB2wBBDDRHkD/d7OaJfoXIhrnLLQrzVkd1MeuhNV8WEk0dfGA9XfUF25WPiEay1sE
+         KiRhsofiPXynHK4EzRz2Nf4uwxxEVi4d+/UumYdj0vzXo/OmaKGngcpG23N0P2/e7aea
+         RMTUEiUaJJy4ojLIKondnfkrEKMDdmQBD9H8KRGsCl4QeLsmBP6J9ijy+7/rORyYd7gE
+         EP7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783164754; x=1783769554;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=EWxbVxt0bUrbMOVyYOzNg2L9Hi49TedpZAPD1zNG07k=;
+        b=czSLdtObpspa4+A2mPeWB7o7iTnFf9o5NRB0ouMFHN1jAsCQTlcad+bhMiDEPEE/ek
+         +S2DANmRdXBJY3J2cG3kP+gbctuWw0GZxmj5tAvoAWF6FnbbkaPmyV081xsKrBvbRif5
+         VbphfXaOeTPQqTdOflMegIwpR86cxZnmWHjGKK9Y/A3fjenwXExQtZ/SACa2ZuMnn92I
+         KbP3rXo4KczN/JNykrdZri/fAEgFzMjRX5Tx6xQHgG1AvJCL4vibTS8XNAhnmmUATMHt
+         wcQf6ilJXzM00B2eAZWMau5d38bJO69ZxY9PSRofH7cf75RUDqTt8jjz8xqq25ymOckx
+         xIbQ==
+X-Forwarded-Encrypted: i=1; AFNElJ/wxNXHVzRXTZLWWOEchmB5Nr5Owj8YsdFd6x25egnE1R/FYykrn4mgQRUtmwQ6xBpW35xj@lists.linux.dev
+X-Gm-Message-State: AOJu0YwHdMNgrmpw9ZRaCvc7vrcIy6bJRhSHLiKJDwAGtXCO0gTC7+cC
+	kxm7Inh6r+Gd1AryfE+nbXDaexNnF99MTu4xUeW7NQVKYY2PCsFsuimcOEi1BS0g4G7OmI3ybJ5
+	AObQSQcVh4FoyaMYvG3cq4d8CpHp3Hjo=
+X-Gm-Gg: AfdE7clXqTLxUJn30ZYqKWusg4ok3g/2W/pkFcG4jJHZAg933qCCd5HWJ07PVl70PYZ
+	kqxHsvezeIDw2gNFOuzRd+hHwjzjAzHFgGK/qyXlr0yVt2Wq4iIxTfaJyoPth+ivQBb/EMC8hP4
+	76OJP4wGXkD2Y9uQq5CKe8Qu86gv/qNOPiYXtAmJDh3UswsB3eefhwIpWjq4sIrf4bLePb5WhPS
+	ofNfS3jwYR3t/w60bdQT+xGXtgdPljD3fIwjHzBSSMExXoTEU6trpl/Ai8Khy6YtofPKRr+U+M=
+X-Received: by 2002:a05:6830:258e:b0:7e6:f2dd:93c3 with SMTP id
+ 46e09a7af769-7eb7ff1bee0mr1941047a34.15.1783164754180; Sat, 04 Jul 2026
+ 04:32:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260704084133.122053-1-christian.koenig@amd.com>
+In-Reply-To: <20260704084133.122053-1-christian.koenig@amd.com>
+From: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Date: Sat, 4 Jul 2026 16:32:22 +0500
+X-Gm-Features: AVVi8CcK_S66JOwlm4n0LTy0xr_IGeFKHbpsM77Kmo3cE5f0eLtGIWRvXB6zhGs
+Message-ID: <CABXGCsPB4V6h-vUHwQ0Fo=bsdn66xP4fOOOezwWw2hiKh5TRJQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/drm_exec: avoid indirect goto
+To: christian.koenig@amd.com
+Cc: dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org, 
+	peterz@infradead.org, jpoimboe@kernel.org, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Bryan,
+On Sat, Jul 4, 2026 at 1:41=E2=80=AFPM Christian K=C3=B6nig
+<ckoenig.leichtzumerken@gmail.com> wrote:
+>
+> The drm_exec component uses a variable with scope limited to the for() an=
+d
+> an indirect goto to allow instantiating multiple macros in the same
+> function.
+>
+> This unfortunately doesn't work well with certain compilers when the
+> indirect goto can't be lowered to a direct jump.
+>
+> Switch the indirect goto to a direct goto, the drawback is that we now
+> can't use the dma_exec_until_all_locked() macro in the same function
+> multiple times.
+>
+> The is currently only one user of this and only as a hacky workaround
+> which is about to be removed.
+>
+> So document that the __label__ statement should be used when the macro is
+> used multiple times and fix the tests and the only use case where that is
+> necessary.
+>
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c |  2 ++
+>  drivers/gpu/drm/tests/drm_exec_test.c  | 24 ++++++++++++------
+>  include/drm/drm_exec.h                 | 34 ++++++++++++++------------
+>  3 files changed, 36 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd=
+/amdgpu/amdgpu_vm.c
+> index fee4c94c2585..fc28d0fdad37 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> @@ -3011,6 +3011,8 @@ bool amdgpu_vm_handle_fault(struct amdgpu_device *a=
+dev, u32 pasid,
+>         is_compute_context =3D vm->is_compute_context;
+>
+>         if (is_compute_context) {
+> +               __label__ drm_exec_retry;
+> +
+>                 /* Release the root PD lock since svm_range_restore_pages
+>                  * might try to take it.
+>                  * TODO: rework svm_range_restore_pages so that this isn'=
+t
+> diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/drm/test=
+s/drm_exec_test.c
+> index 2fc47f3b463b..7a374e462348 100644
+> --- a/drivers/gpu/drm/tests/drm_exec_test.c
+> +++ b/drivers/gpu/drm/tests/drm_exec_test.c
+> @@ -180,19 +180,27 @@ static void test_multiple_loops(struct kunit *test)
+>  {
+>         struct drm_exec exec;
+>
+> -       drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> -       drm_exec_until_all_locked(&exec)
+>         {
+> -               break;
+> +               __label__ drm_exec_retry;
+> +
+> +               drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> +               drm_exec_until_all_locked(&exec)
+> +               {
+> +                       break;
+> +               }
+> +               drm_exec_fini(&exec);
+>         }
+> -       drm_exec_fini(&exec);
+>
+> -       drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> -       drm_exec_until_all_locked(&exec)
+>         {
+> -               break;
+> +               __label__ drm_exec_retry;
+> +
+> +               drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> +               drm_exec_until_all_locked(&exec)
+> +               {
+> +                       break;
+> +               }
+> +               drm_exec_fini(&exec);
+>         }
+> -       drm_exec_fini(&exec);
+>         KUNIT_SUCCEED(test);
+>  }
+>
+> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+> index 8725ba92ff91..cc2937185a9f 100644
+> --- a/include/drm/drm_exec.h
+> +++ b/include/drm/drm_exec.h
+> @@ -101,17 +101,6 @@ drm_exec_obj(struct drm_exec *exec, unsigned long in=
+dex)
+>  #define drm_exec_for_each_locked_object_reverse(exec, obj)             \
+>         __drm_exec_for_each_locked_object_reverse(exec, obj, __UNIQUE_ID(=
+drm_exec))
+>
+> -/*
+> - * Helper to drm_exec_until_all_locked(). Don't use directly.
+> - *
+> - * Since labels can't be defined local to the loop's body we use a jump =
+pointer
+> - * to make sure that the retry is only used from within the loop's body.
+> - */
+> -#define __drm_exec_until_all_locked(exec, _label)                       =
+\
+> -_label:                                                                 =
+        \
+> -       for (void *const __maybe_unused __drm_exec_retry_ptr =3D &&_label=
+; \
+> -            drm_exec_cleanup(exec);)
+> -
+>  /**
+>   * drm_exec_until_all_locked - loop until all GEM objects are locked
+>   * @exec: drm_exec object
+> @@ -119,9 +108,18 @@ _label:                                             =
+                        \
+>   * Core functionality of the drm_exec object. Loops until all GEM object=
+s are
+>   * locked and no more contention exists. At the beginning of the loop it=
+ is
+>   * guaranteed that no GEM object is locked.
+> + *
+> + * A global label name drm_exec_retry is used, if you need to use more t=
+han one
+> + * instance of this macro in the same function the label needs to be mad=
+e local
+> + * to the block with the __label__ keyword.
+>   */
+>  #define drm_exec_until_all_locked(exec)                                 =
+       \
+> -       __drm_exec_until_all_locked(exec, __UNIQUE_ID(drm_exec))
+> +       for (bool const __maybe_unused __drm_exec_loop =3D false;        =
+ \
+> +            drm_exec_cleanup(exec);)                                   \
+> +               if (false) {                                            \
+> +drm_exec_retry: __maybe_unused;                                         =
+       \
+> +                       continue;                                       \
+> +               } else
+>
+>  /**
+>   * drm_exec_retry_on_contention - restart the loop to grap all locks
+> @@ -129,12 +127,14 @@ _label:                                            =
+                        \
+>   *
+>   * Control flow helper to continue when a contention was detected and we=
+ need to
+>   * clean up and re-start the loop to prepare all GEM objects.
+> + * The __drm_exec_loop check exists to prevent usage outside of an
+> + * drm_exec_until_all_locked() loop.
+>   */
+>  #define drm_exec_retry_on_contention(exec)                     \
+>         do {                                                    \
+>                 if (unlikely(drm_exec_is_contended(exec)))      \
+> -                       goto *__drm_exec_retry_ptr;             \
+> -       } while (0)
+> +                       goto drm_exec_retry;                    \
+> +       } while (__drm_exec_loop)
+>
+>  /**
+>   * drm_exec_is_contended - check for contention
+> @@ -154,12 +154,14 @@ static inline bool drm_exec_is_contended(struct drm=
+_exec *exec)
+>   *
+>   * Unconditionally retry the loop to lock all objects. For consistency,
+>   * the exec object needs to be newly initialized.
+> + * The __drm_exec_loop check exists to prevent usage outside of an
+> + * drm_exec_until_all_locked() loop.
+>   */
+>  #define drm_exec_retry(_exec)                                  \
+>         do {                                                    \
+>                 WARN_ON((_exec)->contended !=3D DRM_EXEC_DUMMY);  \
+> -               goto *__drm_exec_retry_ptr;                     \
+> -       } while (0)
+> +               goto drm_exec_retry;                            \
+> +       } while (__drm_exec_loop)
+>
+>  /**
+>   * drm_exec_ticket - return the ww_acquire_ctx for this exec context
+> --
+> 2.43.0
+>
 
-First bad commit (maybe != root cause):
+Tested on the configs that originally tripped objtool, the error is gone
+with this patch:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bod/linux.git qcom-laptops-v6.18-rc4-camss-icp-bps-ipe-icp-boots+stats-b4
-head:   ebd1e440443121d18f730ab2aeea5586a754f36f
-commit: 782e70f1ad20204721b37ade4a33837e76ac3b86 [120/121] media: qcom: camss: Switch on ICP and BPS as make options
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260704/202607041822.fXGqM145-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260704/202607041822.fXGqM145-lkp@intel.com/reproduce)
+  - gcc, non-LTO: amdgpu_vm.o builds clean
+    (was amdgpu_vm_handle_fault+0x169 / +0x97)
+  - clang, non-LTO: amdgpu_vm.o builds clean
+    (was amdgpu_vm_handle_fault+0x12d)
+  - clang + ThinLTO + KASAN, OBJTOOL_WERROR=3Dy: full vmlinux.o link
+    passes objtool (was amdgpu_vm_handle_fault+0x186 / +0x16b)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607041822.fXGqM145-lkp@intel.com/
+x86_64, clang 22.1.8.
 
-All warnings (new ones prefixed by >>):
+Tested-by: Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
 
-   In file included from drivers/media/platform/qcom/camss/camss-icp.c:26:
-   In file included from drivers/media/platform/qcom/camss/camss-icp.h:14:
-   drivers/media/platform/qcom/camss/camss-icp-hfi.h:479:36: warning: declaration of 'struct icp_device' will not be visible outside of this function [-Wvisibility]
-     479 | int icp_hfi_set_ubwc_config(struct icp_device *icp, u32 dev_type,
-         |                                    ^
-   drivers/media/platform/qcom/camss/camss-icp-hfi.h:480:15: warning: declaration of 'struct icp_ubwc_cfg' will not be visible outside of this function [-Wvisibility]
-     480 |                             struct icp_ubwc_cfg *cfg);
-         |                                    ^
->> drivers/media/platform/qcom/camss/camss-icp.c:151:15: warning: format specifies type 'unsigned long long' but the argument has type 'resource_size_t' (aka 'unsigned int') [-Wformat]
-     150 |         dev_dbg(icp->dev, "FW memory: phys=0x%pa size=%llu\n",
-         |                                                       ~~~~
-         |                                                       %u
-     151 |                 &res.start, resource_size(&res));
-         |                             ^~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                      ~~~     ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
-     285 |                            dev, fmt, ##__VA_ARGS__)
-         |                                 ~~~    ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/media/platform/qcom/camss/camss-icp.c:224:6: warning: no previous prototype for function 'icp_dump_gp_regs' [-Wmissing-prototypes]
-     224 | void icp_dump_gp_regs(struct camss_icp *icp, const char *label)
-         |      ^
-   drivers/media/platform/qcom/camss/camss-icp.c:224:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     224 | void icp_dump_gp_regs(struct camss_icp *icp, const char *label)
-         | ^
-         | static 
-   drivers/media/platform/qcom/camss/camss-icp.c:243:17: warning: unused variable 'dev' [-Wunused-variable]
-     243 |         struct device *dev = hfi->dev;
-         |                        ^~~
-   drivers/media/platform/qcom/camss/camss-icp.c:240:6: warning: no previous prototype for function 'icp_hfi_latch_regs' [-Wmissing-prototypes]
-     240 | void icp_hfi_latch_regs(struct camss_icp *icp)
-         |      ^
-   drivers/media/platform/qcom/camss/camss-icp.c:240:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     240 | void icp_hfi_latch_regs(struct camss_icp *icp)
-         | ^
-         | static 
-   drivers/media/platform/qcom/camss/camss-icp.c:578:15: error: initializing 'const char **const' with an expression of type 'const char *const[20]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     578 |         .clk_names = x1e80100_clk_names,
-         |                      ^~~~~~~~~~~~~~~~~~
-   drivers/media/platform/qcom/camss/camss-icp.c:580:15: error: initializing 'const char **const' with an expression of type 'const char *const[4]' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
-     580 |         .noc_names = x1e80100_noc_names,
-         |                      ^~~~~~~~~~~~~~~~~~
-   6 warnings and 2 errors generated.
+FWIW the kernel test robot reported this many times across trees (clang
+LTO, clang non-LTO, and gcc builds); it's all the same drm_exec
+computed-goto pattern. Full list if you want to add Reported-by/Closes:
 
+Fixes: 9920249a5288 ("drm/amdgpu: convert amdgpu_vm_lock_by_pasid() to
+drm_exec")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202606231854.7LeCtlLe-lkp@int=
+el.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202606232356.gwHMAJAW-lkp@int=
+el.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202606240753.kYjobJVl-lkp@int=
+el.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202606241110.iUga5vVw-lkp@int=
+el.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202607031446.1PWG18mN-lkp@int=
+el.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202607031837.HSmBj8pr-lkp@int=
+el.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202607040159.GopyEswS-lkp@int=
+el.com/
 
-vim +151 drivers/media/platform/qcom/camss/camss-icp.c
-
-63514548c205d2 Bryan O'Donoghue 2026-07-03  121  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  122  /* Load firmware */
-63514548c205d2 Bryan O'Donoghue 2026-07-03  123  static int icp_load_firmware(struct camss_icp *icp)
-63514548c205d2 Bryan O'Donoghue 2026-07-03  124  {
-63514548c205d2 Bryan O'Donoghue 2026-07-03  125  	const struct camss_icp_resources *icp_res = icp->icp_res;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  126  	const struct firmware *fw;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  127  	struct device_node *node;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  128  	struct resource res;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  129  	const char *fw_name;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  130  	char fw_path[64];
-63514548c205d2 Bryan O'Donoghue 2026-07-03  131  	void *vaddr;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  132  	ssize_t fw_size;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  133  	int ret;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  134  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  135  	ret = of_property_read_string(icp->dev->of_node, "firmware-name", &fw_name);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  136  	if (ret)
-63514548c205d2 Bryan O'Donoghue 2026-07-03  137  		return ret;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  138  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  139  	snprintf(fw_path, sizeof(fw_path), "%s.mdt", fw_name);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  140  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  141  	node = of_parse_phandle(icp->dev->of_node, "memory-region", 0);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  142  	if (!node)
-63514548c205d2 Bryan O'Donoghue 2026-07-03  143  		return -ENODEV;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  144  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  145  	ret = of_address_to_resource(node, 0, &res);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  146  	of_node_put(node);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  147  	if (ret)
-63514548c205d2 Bryan O'Donoghue 2026-07-03  148  		return ret;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  149  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  150  	dev_dbg(icp->dev, "FW memory: phys=0x%pa size=%llu\n",
-63514548c205d2 Bryan O'Donoghue 2026-07-03 @151  		&res.start, resource_size(&res));
-63514548c205d2 Bryan O'Donoghue 2026-07-03  152  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  153  	ret = firmware_request_nowarn(&fw, fw_path, icp->dev);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  154  	if (ret)
-63514548c205d2 Bryan O'Donoghue 2026-07-03  155  		return ret;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  156  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  157  	fw_size = qcom_mdt_get_size(fw);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  158  	if (fw_size < 0 || (size_t)fw_size > resource_size(&res)) {
-63514548c205d2 Bryan O'Donoghue 2026-07-03  159  		release_firmware(fw);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  160  		return -EINVAL;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  161  	}
-63514548c205d2 Bryan O'Donoghue 2026-07-03  162  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  163  	vaddr = ioremap_wc(res.start, resource_size(&res));
-63514548c205d2 Bryan O'Donoghue 2026-07-03  164  	if (!vaddr) {
-63514548c205d2 Bryan O'Donoghue 2026-07-03  165  		release_firmware(fw);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  166  		return -ENOMEM;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  167  	}
-63514548c205d2 Bryan O'Donoghue 2026-07-03  168  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  169  	ret = qcom_mdt_load(icp->dev, fw, fw_path, icp_res->pas_id, vaddr,
-63514548c205d2 Bryan O'Donoghue 2026-07-03  170  			    res.start, resource_size(&res), NULL);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  171  	iounmap(vaddr);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  172  	release_firmware(fw);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  173  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  174  	if (ret == 0) {
-63514548c205d2 Bryan O'Donoghue 2026-07-03  175  		dev_dbg(icp->dev, "Firmware loaded: %s (%zd bytes)\n", fw_path, fw_size);
-63514548c205d2 Bryan O'Donoghue 2026-07-03  176  		icp->fw_phys = res.start;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  177  		icp->fw_size = fw_size;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  178  	}
-63514548c205d2 Bryan O'Donoghue 2026-07-03  179  
-63514548c205d2 Bryan O'Donoghue 2026-07-03  180  	return ret;
-63514548c205d2 Bryan O'Donoghue 2026-07-03  181  }
-63514548c205d2 Bryan O'Donoghue 2026-07-03  182  
-
-:::::: The code at line 151 was first introduced by commit
-:::::: 63514548c205d2605589a9789c27343506074acd media: qcom: camss: qcom-icp: Add minimal ICP driver with HFI infrastrucutre
-
-:::::: TO: Bryan O'Donoghue <bod@kernel.org>
-:::::: CC: Bryan O'Donoghue <bod@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Best Regards,
+Mike Gavrilov.
