@@ -1,95 +1,89 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC8D288BA;
-	Sat,  4 Jul 2026 14:13:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E3E298CAB;
+	Sat,  4 Jul 2026 17:42:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783174434; cv=none; b=fgqWlhSDWE99immfp6G3UrrvU0nZgr93CkC6lXzPf1HH57jE5lVhj3z4HIVNIizilqd7tj2nZGbI2N9NId6hjFeZHA5UzxUBxhCL1Sxc5bI1qpqRewHSN6v84oF/lvQwjT787BgLRBm99IFG5ZK5vUToQu/ByeiPRe40vLB1eNo=
+	t=1783186924; cv=none; b=Wcu4GCW7g3TrE8EKmcWT2BMioyFI/30cFu19bRYxaGQ2TMjd54jURgMQ9w6deH3Zx5P4ul5JgPLK7Bg+JEITYf7qOqj8+xoK2+faZUBhGwrvbwwlmChwMTX+XI12ZgOsHw8OQntLxbtJEJuHZHbZ7cCOih6/IhfRbe3NZlwSwDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783174434; c=relaxed/simple;
-	bh=haHFTXmDQ5aiiw5QM8Z1oIYQg5A3tgVLGwdXjbQ0puw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CXZkaKpVia4cbdHZ3whdflzZifLD3w0EDoKJomCUTD+RyL6J2oawFg/q6kue3G04n4D55RHbkX3QCkCank3OLL55OpSpeSAWc1oc9CFcGDhq2GzhLuiX93h7mwQ6F97EUTxioEgJyEQeZPR0AB8Um/J5gs2EHV9UZX1p8iQ2CH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PL/ZCsd1; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1783186924; c=relaxed/simple;
+	bh=lP20iD2/yM8zpQ8AXBCmnZ3ySgfCY1xuCJ+Vkl9xvI4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tH6+LHG1zw15aCJxereSLFUbimEKFY8XYS+vGDtHIw3wNMACXli/0kgZ8SX1KO4tPKIH6XxNzZKmilPCIV7F4l9s15SvbLAKxvpHKcXGeKR1ZpAu0fvugT4eKIqPSw7iig0qtHJGfNxhcusBmcvqBSA8NMqTF229fbZyfFUp+nw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dTvMr9FB; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PL/ZCsd1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dTvMr9FB"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783174432; x=1814710432;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=haHFTXmDQ5aiiw5QM8Z1oIYQg5A3tgVLGwdXjbQ0puw=;
-  b=PL/ZCsd1IDaxhWOzWnkaxMG2nZ7qp6WmMEGiAE3Iw51vdkslzBAZUP1b
-   OSoUuBse0VhvDNgmXdEe9J3UzNN2ctGKkWiGd/lZw2IxCcLNbM0TRa5hC
-   lvXzwmBYOwrhn39il2JzDZ65s9B7DAYaKzm28xe5/oKiPNWz9tc/oY/Tx
-   9tOotRkjh6O9QjS2017k1Cs5EO7BfnXwVQQ7qsW+b9NQMMOY93Q06z6dB
-   cwjhIQz3ssAjJVwvH4nomEu4Mi1p7OYRoY+zkyy5wen6CU8++wgMjCD6H
-   VepKXhWQr7BFjwc9JBBXYR7f3h2+xJSQ2IG2Ko9klRrZYksK7zVAKZBRv
-   w==;
-X-CSE-ConnectionGUID: 1BspFlupStWk/8CtXSyJOA==
-X-CSE-MsgGUID: /l99gezbRnGN89SZt9+MNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11837"; a="86432040"
-X-IronPort-AV: E=Sophos;i="6.25,147,1779174000"; 
-   d="scan'208";a="86432040"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2026 07:13:51 -0700
-X-CSE-ConnectionGUID: PDxd48G8Rl+ulU/Rsg6ZdQ==
-X-CSE-MsgGUID: HyDxZS8JSJuC469nzXvMfw==
+  t=1783186922; x=1814722922;
+  h=date:from:to:cc:subject:message-id;
+  bh=lP20iD2/yM8zpQ8AXBCmnZ3ySgfCY1xuCJ+Vkl9xvI4=;
+  b=dTvMr9FBbQo0wC5FnqLo5IzinjSCy/3Pq5K2MhKmNjtN4fiY8eE326Mq
+   3LSYHfzkqJB848f2uEcP0gpNpMNXcyA8dh61A/sbCtCduxnbime0WC4EW
+   W9a0FiSl1mPvyW7Y70rIdAr5YAFyAnjibBtCrg/jq/nFzSL7tyqikxPxl
+   Ck4y7s2BHkCbNAD9Rqm6uTAvc+a/Lqd4u5aDui9vvkfSOcR6iEHSRUkb4
+   BtVD5tOUY5RLh8ohsTi+XqoEPRymG4PetoGaqtsa/HzumL1yvZ7U2Hb5w
+   /70th3YKhZW3T5aDfVaacpQzTFDvZ5gvSwxMOhqlCWRU4D5WIIGEFLvOz
+   Q==;
+X-CSE-ConnectionGUID: ubuqDUISTzicAupOBjTrVw==
+X-CSE-MsgGUID: F+OIjHbRQvepNd1xpSeVmA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11837"; a="86436941"
+X-IronPort-AV: E=Sophos;i="6.25,148,1779174000"; 
+   d="scan'208";a="86436941"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jul 2026 10:42:02 -0700
+X-CSE-ConnectionGUID: 1wG8N9MNTY6ENMbMR46yiw==
+X-CSE-MsgGUID: XHku7kJZQiC4b+qoutbNYg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,147,1779174000"; 
-   d="scan'208";a="283392842"
+X-IronPort-AV: E=Sophos;i="6.25,148,1779174000"; 
+   d="scan'208";a="246958287"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 04 Jul 2026 07:13:49 -0700
+  by fmviesa009.fm.intel.com with ESMTP; 04 Jul 2026 10:42:00 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wg17q-00000000D63-05F2;
-	Sat, 04 Jul 2026 14:13:46 +0000
-Date: Sat, 4 Jul 2026 22:12:46 +0800
+	id 1wg4NK-00000000DC7-1NnF;
+	Sat, 04 Jul 2026 17:41:58 +0000
+Date: Sun, 05 Jul 2026 01:41:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: adi25charis@gmail.com, vireshk@kernel.org, johan@kernel.org,
-	elder@kernel.org, gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Aditya Chari S <adi25charis@gmail.com>
-Subject: Re: [PATCH] staging: greybus: bootrom: power off module on timeout
-Message-ID: <202607042245.XyM6HiC2-lkp@intel.com>
-References: <20260704071926.6606-1-adi25charis@gmail.com>
+To: "Bryan O'Donoghue" <bod@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: 
+ [bod:qcom-laptops-v6.18-rc4-camss-icp-bps-ipe-icp-boots+stats-b4 121/121]
+ usr/include/linux/videodev2.h:2550:20: error: field has incomplete type
+ 'struct timespec'
+Message-ID: <202607050136.f7zoWXgo-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260704071926.6606-1-adi25charis@gmail.com>
 
-Hi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on staging/staging-testing]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/adi25charis-gmail-com/staging-greybus-bootrom-power-off-module-on-timeout/20260704-152129
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260704071926.6606-1-adi25charis%40gmail.com
-patch subject: [PATCH] staging: greybus: bootrom: power off module on timeout
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260704/202607042245.XyM6HiC2-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bod/linux.git qcom-laptops-v6.18-rc4-camss-icp-bps-ipe-icp-boots+stats-b4
+head:   ebd1e440443121d18f730ab2aeea5586a754f36f
+commit: ebd1e440443121d18f730ab2aeea5586a754f36f [121/121] media: uapi: qcom-camss-stats-params
+config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260705/202607050136.f7zoWXgo-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260704/202607042245.XyM6HiC2-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260705/202607050136.f7zoWXgo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607042245.XyM6HiC2-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607050136.f7zoWXgo-lkp@intel.com/
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
->> ERROR: modpost: "gb_svc_intf_eject" [drivers/staging/greybus/gb-bootrom.ko] undefined!
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/media/qcom/camss/camss-stats-params.h:102:
+>> usr/include/linux/videodev2.h:2550:20: error: field has incomplete type 'struct timespec'
+    2550 |         struct timespec                 timestamp;
+         |                                         ^
+   usr/include/linux/videodev2.h:2550:9: note: forward declaration of 'struct timespec'
+    2550 |         struct timespec                 timestamp;
+         |                ^
+   1 error generated.
 
 --
 0-DAY CI Kernel Test Service
