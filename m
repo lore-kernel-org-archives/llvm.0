@@ -1,139 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B933DE45A;
-	Mon,  6 Jul 2026 20:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79FF73E51D6;
+	Mon,  6 Jul 2026 20:32:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783369006; cv=none; b=Gv1y2bE3RXPSLMG34mWbMjvl9oPRty6R/REAUJZLT2/ROlvnUdv5yGOvMn68BOJhTGWP/NZSLzhmS9GjfoeFyzM/hAyiWYmKqjN6w9RwyY6YzTuhfI6a5lCJfNQNfBDEVcVqfYGTmXAiEhS3+1Nd6MUlPmJze9BwOPF4C2mseoQ=
+	t=1783369965; cv=none; b=lwjqDwzAn61wQGyD/OPo2DOCLIoHUiLjXTOugvg2nSdSv5XLM3r9h31Yjn6SNdaTvfs1DrSUDOjnukGfvmJhnh0Wl3hyKxV4gb8u2yqGetiqiTWVh9OLtSoDeZVYBCpo3kwWbOZxE3Jd9OiI7cky6VISoVRe1fIODyI7rQBfTCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783369006; c=relaxed/simple;
-	bh=nZMrtP0DC8iBaqKYgMmMrO1jrvXDkETi7hReXQsahmM=;
+	s=arc-20240116; t=1783369965; c=relaxed/simple;
+	bh=Ko08GvIsATD7W4fZ0bXn29Idi2JyZAYBxOkITh40uKk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SEryYPW4V24+T7cosHQbkeDopO42zLTCDQXeTAdHuewNABHSej/xHTF71EGFbzOJBa4HnGev5D2o5Uf1sb/+4sYJE/6XkJ3O7g+nYQsQZwJHMa3pA96m6VVLhBxrfhcsHZZ+XZZcKzpl08IO7bKjsT44McrokcJ++FLZxwQplQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDNtmue2; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=fh55L6nbvmNhdVJjcWJSW5SvgCzJ7vraTgbsIfy7HQEaC6Pqd6qvZr5WkTX0YT6l0Rm+Xp4Gd9x64kYMHjrvgJp6AD+KCDxvwpCOSTdCArLP8M0ndChozWyEJBOXvNf3S2cXPLYhWBMkJC1WM7C9g0mDH1XIKpMCGmXq+akKe4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtlsOkBc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDNtmue2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E681F00A3A;
-	Mon,  6 Jul 2026 20:16:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtlsOkBc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CAF1F000E9;
+	Mon,  6 Jul 2026 20:32:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783369004;
-	bh=PGuV6jeesFdKzccH9KIxy2qzDvsa3jcfI3T0fBRPPQo=;
+	s=k20260515; t=1783369962;
+	bh=tReoj6mgg/6ZWwSRpcfhoID6uqkN9iVnSNmWeWZLj6M=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RDNtmue2li5VZvEYGKotXJPXHSlBWfcQdpFSwGQhKRndG6sIMx6xtdT3SGHLglLIn
-	 7d7pVsDtpp/NR/Qb/vQ70fvGTO92UjdvvodOS2DqtU/neEX+qFXxfr4xl+a2+0qOCN
-	 XF/z9cjeSxjZSHgdbxR327IhIqCP2kz35gmKus/F+vKIeGqmgA9l/YHSt9jPG6EyRw
-	 Z1YDFHpGBrT36dWHzvFNy6dKLwamAI+T6h+SJ77QZO9FiZ6Tmt7aXY6J9q+YlDsRWL
-	 1KF1jDns+DKbW78dnBHq1OEmE3Fx5HLJ70kIUj8mu6liUx72QU7aK+Qj5Ta28Ba/xl
-	 Tm2sLOyRmH1rQ==
-Date: Mon, 6 Jul 2026 13:16:38 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Carlos Bilbao <carlos.bilbao@kernel.org>,
-	Avadhut Naik <avadhut.naik@amd.com>, linux-kernel@vger.kernel.org,
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-	llvm@lists.linux.dev, gosst-kernel <gosst-kernel@google.com>,
-	android-kernel-team <android-kernel-team@google.com>,
-	kernel-dynamic-tools <kernel-dynamic-tools@google.com>
-Subject: Re: [PATCH] MAINTAINERS: update ndesaulniers
-Message-ID: <20260706201638.GA2661146@ax162>
-References: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
+	b=MtlsOkBcbwaEzGOKx6glVk2Oxc6UkoOZWG4QHnn4QW87cklEJV0a8+VzCx/U1PiyI
+	 /t6bP9iQNEUYYLoebd5oFk9y0GWGjc09cJOGL5/sHekwxmWqWoZunv8j949RTskHAX
+	 XddQZZYhPq6Bk6t4bLjK1fJrvlbHfRnffPdtN5UJ8fOhNdAWSGxQHQjNlUWHehW0Hc
+	 vSo+KxNeS72hE/1cT5JbvNoHA1NK9cau08aS84CqVSZwCkWJZjB+jeoMhgcVpoQwnC
+	 who+NUvKm2CKS8da5xIZdYGu4q1/9F6KPwA8YXTHDwWdtbqiDwEVvBr1ws9WXMtAFS
+	 BndNxoaCXQskw==
+Date: Mon, 6 Jul 2026 13:32:41 -0700
+From: Drew Fustini <fustini@kernel.org>
+To: Brian Masney <bmasney@redhat.com>
+Cc: Rosen Penev <rosenp@gmail.com>, linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] clk: thead: allow COMPILE_TEST builds
+Message-ID: <akwQ6Tg2KR9wWXfx@x1>
+References: <20260629032814.2344879-1-rosenp@gmail.com>
+ <akvj9WXsHJw5-n2p@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
+In-Reply-To: <akvj9WXsHJw5-n2p@redhat.com>
 
-On Thu, May 28, 2026 at 02:38:41PM -0700, Nick Desaulniers wrote:
-> I'm coming back.  I will return.  I will possess your body, and I'll
-> make LKML burn.
+On Mon, Jul 06, 2026 at 01:20:53PM -0400, Brian Masney wrote:
+> Hi Rosen,
 > 
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> On Sun, Jun 28, 2026 at 08:28:14PM -0700, Rosen Penev wrote:
+> > CLK_THEAD_TH1520_AP already allows COMPILE_TEST, but the parent clock
+> > Makefile only descends into drivers/clk/thead for ARCH_THEAD.  Use the
+> > TH1520 AP clock symbol for the directory gate instead.
+> > 
+> > This lets the driver build on other 64-bit architectures selected for
+> > compile testing without selecting the T-HEAD platform.
+> > 
+> > Tested with:
+> > make LLVM=1 ARCH=loongarch drivers/clk/thead/
+> > 
+> > Assisted-by: Codex:GPT-5.5
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+> >  drivers/clk/Makefile | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+> > index 68145ad91035..d651e4ed3462 100644
+> > --- a/drivers/clk/Makefile
+> > +++ b/drivers/clk/Makefile
+> > @@ -157,7 +157,7 @@ obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
+> >  obj-y					+= sunxi-ng/
+> >  obj-$(CONFIG_CLK_TEGRA)			+= tegra/
+> >  obj-y					+= tenstorrent/
+> > -obj-$(CONFIG_ARCH_THEAD)		+= thead/
+> > +obj-$(CONFIG_CLK_THEAD_TH1520_AP)	+= thead/
+> 
+> Right now, CLK_THEAD_TH1520_AP is the only Kconfig defined in the thead
+> subdirectory. What about when/if someone adds a second Kconfig, and
+> that's the only one that's enabled?
+> 
+> Would it be better to have this as obj-y?
+> 
+> Brian
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+I think obj-y would make sense. AP is just one of several TH1520 SoC
+subsystems with a clock controller. Support may some day be added for
+the other controllers.
 
-Linus, could you apply this directly? It fell off my radar and I think
-it is worth getting in sooner rather than later. I am not sure when my
-next fixes pull will be. Thanks a lot!
-
-> ---
->  .mailmap                                                               | 1 -
->  Documentation/process/embargoed-hardware-issues.rst                    | 2 +-
->  Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst | 2 +-
->  MAINTAINERS                                                            | 2 +-
->  4 files changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/.mailmap b/.mailmap
-> index a009f73d7ea5..f863781b0102 100644
-> --- a/.mailmap
-> +++ b/.mailmap
-> @@ -634,7 +634,6 @@ Nicholas Piggin <npiggin@gmail.com> <npiggin@kernel.dk>
->  Nicholas Piggin <npiggin@gmail.com> <npiggin@suse.de>
->  Nicholas Piggin <npiggin@gmail.com> <nickpiggin@yahoo.com.au>
->  Nicholas Piggin <npiggin@gmail.com> <piggin@cyberone.com.au>
-> -Nick Desaulniers <nick.desaulniers+lkml@gmail.com> <ndesaulniers@google.com>
->  Nicolas Ferre <nicolas.ferre@microchip.com> <nicolas.ferre@atmel.com>
->  Nicolas Pitre <nico@fluxnic.net> <nicolas.pitre@linaro.org>
->  Nicolas Pitre <nico@fluxnic.net> <nico@linaro.org>
-> diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Documentation/process/embargoed-hardware-issues.rst
-> index 34e00848e0da..d07f16c3c7b8 100644
-> --- a/Documentation/process/embargoed-hardware-issues.rst
-> +++ b/Documentation/process/embargoed-hardware-issues.rst
-> @@ -308,7 +308,7 @@ an involved disclosed party. The current ambassadors list:
->  
->    Google	Kees Cook <keescook@chromium.org>
->  
-> -  LLVM		Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> +  LLVM		Nick Desaulniers <ndesaulniers@google.com>
->    ============= ========================================================
->  
->  If you want your organization to be added to the ambassadors list, please
-> diff --git a/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst b/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst
-> index 9d444b9c46d3..7d4d694967c7 100644
-> --- a/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst
-> +++ b/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst
-> @@ -287,7 +287,7 @@ revelada involucrada. La lista de embajadores actuales:
->  
->    Google	Kees Cook <keescook@chromium.org>
->  
-> -  LLVM		Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> +  LLVM		Nick Desaulniers <ndesaulniers@google.com>
->    ============= ========================================================
->  
->  Si quiere que su organización se añada a la lista de embajadores, por
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 461a3eed6129..2f06cc2e463c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6259,7 +6259,7 @@ F:	.clang-format
->  
->  CLANG/LLVM BUILD SUPPORT
->  M:	Nathan Chancellor <nathan@kernel.org>
-> -R:	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-> +R:	Nick Desaulniers <ndesaulniers@google.com>
->  R:	Bill Wendling <morbo@google.com>
->  R:	Justin Stitt <justinstitt@google.com>
->  L:	llvm@lists.linux.dev
-> 
-> ---
-> base-commit: 8fde5d1d47f69db6082dfa34500c27f8485389a5
-> change-id: 20260528-im_back_baby-1ade32dc049e
-> 
-> Best regards,
-> --  
-> Nick Desaulniers <ndesaulniers@google.com>
-> 
-
--- 
-Cheers,
-Nathan
+Thanks,
+Drew
