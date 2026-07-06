@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0B615A864;
-	Mon,  6 Jul 2026 01:39:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ED621FF1B5;
+	Mon,  6 Jul 2026 02:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783301955; cv=none; b=VRs4fGOQCF5EzIF0TElLDr6YpaLK1kky9uR3e9/EramSeqje2b4qhxt+u57DkPJyIIqkEqssrrItwsKhSzuVisOd1BNfshEndj9uKHZVEtmTgulJBZNNwERv111wHcKAis6nbBuiWeo0Om6i1Kiap6mTigBKB18CjKcFYuvVXBE=
+	t=1783305187; cv=none; b=hu559QSffw5+VPor+q9s98z981KagmfBPYz5qyHm0OW5LpK/ttkaNxSWaP6kWrpd30J0EwJIgqIyEMVKnUaOeSQ2R4J6MiUm21ox5+sS+gTBfv1vOLqCAJeyb0hfIpRCBsaMqEuCXP1M4+jZcfrulmOARthQjgZZvqCYD9dkglY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783301955; c=relaxed/simple;
-	bh=Op/slMsb5UHOy/HOMqAdSgXqr3CWywrd9wzFnc+0nbs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pBazjt137HJulCYEFgtYbUGSgixnnYuaDwaAUvbFK+It2XrXw7tLDL32OHU0TPWaH3cAn7LzGnLLq/SQwAB4BB4DObGy/leuLEC0BY6y0PmQ5VKhVHx3yva4uyWOwUanVya8/Y9nzwjx8RLuOo5DuBBQp/NhlwBqmhGb6SDAq+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fqZcAVF1; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1783305187; c=relaxed/simple;
+	bh=IAy9LdMSgb0uZg//tiIqkRrX/2OgYxARyUu4PKwLyF0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=adnyhOnSgUnJ7ArP22PViBq3pYCdz/OanwrfTkJjODmyQ2lQDj1RG7b0fabbout6i2mkdY2PKDTlLSNvltsMYWxdln0s4pGFNf8GQTFHdDSTrKWMhmjEHl/ltIhuKSMKqNckkYiYaMpmkZ7T/qJiVYvrpv/Y2YcqT5Ogmh4l7+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LXJ4RccT; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fqZcAVF1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LXJ4RccT"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783301953; x=1814837953;
+  t=1783305184; x=1814841184;
   h=date:from:to:cc:subject:message-id;
-  bh=Op/slMsb5UHOy/HOMqAdSgXqr3CWywrd9wzFnc+0nbs=;
-  b=fqZcAVF14dDBOCpyp/v+Oa6kt2dZD4E34VxeUF2Q5kS1DGo2S1Et2BPh
-   60qp7eyVxh2hQNLL9cC6K7OxZVtvHmRJIavW4RNkHuDO01WRcRwBhstaY
-   lZDu3T0f8B7nK8eIixuspvO4t7WGv/kOneISwlij3mi74krnGXthc/zwW
-   jWFu50L4mKkGapfV07scQq3H/ETDnolgGo6kd7ckpa5Wy1bHIDAaiAgCi
-   8FRiVQVrFNJ26dpkZGqe4NOR2isAcdQ0PFiuxA5aAKG5Q1BfneUjB/70g
-   lxGDAMUW8EzXUvruivu68Vha8qMrO/NMOABBKfIaal4+BwOJTbZcd0bNA
-   Q==;
-X-CSE-ConnectionGUID: G6HQrgKiRoOaV+nE5oNxDA==
-X-CSE-MsgGUID: 5KOZySFCQkatLzA5igmPzg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11838"; a="106726812"
+  bh=IAy9LdMSgb0uZg//tiIqkRrX/2OgYxARyUu4PKwLyF0=;
+  b=LXJ4RccTzuZuDJ37uoWBl24Dxa/tpOfsmvRhvGHlZSFH/bKCPKiQ/YYu
+   gIbELelIXUyxDTUBvxB5B/JnS8EowYN0xi815em8dfDD/fVXhfrt6ZuF9
+   9sPDCX54XAWkBac0ndHX4q+XatRc/3n7GViUUHsY8LfaYj1AY+RBU5Z0V
+   9yRDPWQSv2dVslOyFJ3Jtrm8BJ3ZGrkVAIkRShYTDXcud12K1Ez/3Pxkf
+   W7kKjndyORbfXgPnaR74BCR0j5HIBSp7QJlshMpfPnJx1Ep7wAA8Mgd9b
+   vAzbJXWkyKy/r6xReOA2xRiQPYa/efs4i8/2bwvniTxi8SeFMYASHf749
+   g==;
+X-CSE-ConnectionGUID: Xq2glfKiTDC41ONMwGezcw==
+X-CSE-MsgGUID: iX/WB8ncQD+meQ38Bg6fhw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11838"; a="83802747"
 X-IronPort-AV: E=Sophos;i="6.25,149,1779174000"; 
-   d="scan'208";a="106726812"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2026 18:39:12 -0700
-X-CSE-ConnectionGUID: hnjZV1+jT1+61gIgUxiBRg==
-X-CSE-MsgGUID: AwAErie/TtuwTU+qu9BczA==
+   d="scan'208";a="83802747"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2026 19:33:03 -0700
+X-CSE-ConnectionGUID: NuCeuhseSXWe/Va1i9bc4w==
+X-CSE-MsgGUID: gkQx88PtSXuREX9fhvN6Sg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,149,1779174000"; 
-   d="scan'208";a="250909428"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by fmviesa008.fm.intel.com with ESMTP; 05 Jul 2026 18:39:10 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+   d="scan'208";a="276803915"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Jul 2026 19:33:02 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wgYId-0000000022n-1nhC;
-	Mon, 06 Jul 2026 01:39:07 +0000
-Date: Mon, 06 Jul 2026 03:38:15 +0200
+	id 1wgZ8l-00000000E1b-1jtx;
+	Mon, 06 Jul 2026 02:32:59 +0000
+Date: Mon, 06 Jul 2026 10:32:24 +0800
 From: kernel test robot <lkp@intel.com>
-To: Dan Williams <djbw@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [devsec-tsm:devsec-phase2 13/24]
- include/linux/pci-tsm.h:190:13: error: no member named 'ide_cap' in 'struct
- pci_dev'
-Message-ID: <202607060301.XwJgMU3N-lkp@intel.com>
+To: Richard Kuo <rkuo@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Brian Cain <bcain@kernel.org>
+Subject: [bcain:bcain/qemu_boot 20/65] make[3]: *** No rule to make
+ target 'arch/hexagon/boot/dts/msm8960_fluid.dtb', needed by
+ 'arch/hexagon/boot/dts/'.
+Message-ID: <202607061024.DMPwTWHh-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,69 +61,25 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/devsec/tsm devsec-phase2
-head:   fca18645f5a7726a7d2723322a520ecff3e72b45
-commit: 21936ae130218b2976ee091c948248c5f84dcb71 [13/24] PCI, device core: Add private memory access for DEVICE_TRUST_TCB
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260706/202607060301.XwJgMU3N-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607060301.XwJgMU3N-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/qemu_boot
+head:   ef08242d98c508f43ee1f90745d10c61de4ee9ce
+commit: abe97c987224d2686550fd938cd15c284c1132c3 [20/65] hexagon: update build system and Kconfig
+config: hexagon-randconfig-001-20260706 (https://download.01.org/0day-ci/archive/20260706/202607061024.DMPwTWHh-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607061024.DMPwTWHh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607060301.XwJgMU3N-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607061024.DMPwTWHh-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   In file included from drivers/pci/pci-driver.c:22:
->> include/linux/pci-tsm.h:190:13: error: no member named 'ide_cap' in 'struct pci_dev'
-     190 |                 if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
-         |                     ~~~~  ^
-   1 error generated.
-
-
-vim +190 include/linux/pci-tsm.h
-
-6aa0f2799e2d90 Dan Williams 2026-03-02  166  
-3225f52cde56f4 Dan Williams 2025-10-31  167  /* physical function0 and capable of 'connect' */
-3225f52cde56f4 Dan Williams 2025-10-31  168  static inline bool is_pci_tsm_pf0(struct pci_dev *pdev)
-3225f52cde56f4 Dan Williams 2025-10-31  169  {
-3225f52cde56f4 Dan Williams 2025-10-31  170  	if (!pdev)
-3225f52cde56f4 Dan Williams 2025-10-31  171  		return false;
-3225f52cde56f4 Dan Williams 2025-10-31  172  
-3225f52cde56f4 Dan Williams 2025-10-31  173  	if (!pci_is_pcie(pdev))
-3225f52cde56f4 Dan Williams 2025-10-31  174  		return false;
-3225f52cde56f4 Dan Williams 2025-10-31  175  
-3225f52cde56f4 Dan Williams 2025-10-31  176  	if (pdev->is_virtfn)
-3225f52cde56f4 Dan Williams 2025-10-31  177  		return false;
-3225f52cde56f4 Dan Williams 2025-10-31  178  
-3225f52cde56f4 Dan Williams 2025-10-31  179  	/*
-3225f52cde56f4 Dan Williams 2025-10-31  180  	 * Allow for a Device Security Manager (DSM) associated with function0
-3225f52cde56f4 Dan Williams 2025-10-31  181  	 * of an Endpoint to coordinate TDISP requests for other functions
-3225f52cde56f4 Dan Williams 2025-10-31  182  	 * (physical or virtual) of the device, or allow for an Upstream Port
-3225f52cde56f4 Dan Williams 2025-10-31  183  	 * DSM to accept TDISP requests for the Endpoints downstream of the
-3225f52cde56f4 Dan Williams 2025-10-31  184  	 * switch.
-3225f52cde56f4 Dan Williams 2025-10-31  185  	 */
-3225f52cde56f4 Dan Williams 2025-10-31  186  	switch (pci_pcie_type(pdev)) {
-3225f52cde56f4 Dan Williams 2025-10-31  187  	case PCI_EXP_TYPE_ENDPOINT:
-3225f52cde56f4 Dan Williams 2025-10-31  188  	case PCI_EXP_TYPE_UPSTREAM:
-3225f52cde56f4 Dan Williams 2025-10-31  189  	case PCI_EXP_TYPE_RC_END:
-3225f52cde56f4 Dan Williams 2025-10-31 @190  		if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
-3225f52cde56f4 Dan Williams 2025-10-31  191  			break;
-3225f52cde56f4 Dan Williams 2025-10-31  192  		fallthrough;
-3225f52cde56f4 Dan Williams 2025-10-31  193  	default:
-3225f52cde56f4 Dan Williams 2025-10-31  194  		return false;
-3225f52cde56f4 Dan Williams 2025-10-31  195  	}
-3225f52cde56f4 Dan Williams 2025-10-31  196  
-3225f52cde56f4 Dan Williams 2025-10-31  197  	return PCI_FUNC(pdev->devfn) == 0;
-3225f52cde56f4 Dan Williams 2025-10-31  198  }
-3225f52cde56f4 Dan Williams 2025-10-31  199  
-
-:::::: The code at line 190 was first introduced by commit
-:::::: 3225f52cde56f46789a4972d3c54df8a4d75f022 PCI/TSM: Establish Secure Sessions and Link Encryption
-
-:::::: TO: Dan Williams <dan.j.williams@intel.com>
-:::::: CC: Dan Williams <dan.j.williams@intel.com>
+>> make[3]: *** No rule to make target 'arch/hexagon/boot/dts/msm8960_fluid.dtb', needed by 'arch/hexagon/boot/dts/'.
+   make[3]: Target 'arch/hexagon/boot/dts/' not remade because of errors.
+--
+>> make[4]: *** No rule to make target 'arch/hexagon/boot/dts/msm8960_fluid.dtb', needed by 'arch/hexagon/boot/dts/msm8960_fluid.dtb.S'.
+   make[4]: Target 'arch/hexagon/boot/dts/' not remade because of errors.
 
 --
 0-DAY CI Kernel Test Service
