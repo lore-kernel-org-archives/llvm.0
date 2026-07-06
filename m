@@ -1,124 +1,127 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57FA4189AD
-	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 17:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783360362; cv=none; b=r0UduR9Lz+UlP9GI7aPPs2wno6GwEpgeOdLm+Ohk9b2enemdg/2cgSbOiIXuVauEYEAtFnUoryRqEosdNkjvg2aO53GVFHHBJ9zGHxtyUGGAEz2VlEl3+LwYSqKOly/gk4GIwfYohqvmBHGePcFTjlluJRl+eN5qyVuBY2QbNao=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783360362; c=relaxed/simple;
-	bh=GnkKxSJ7Xk2y+xY1zEhFtkt9ZoxLrW9bqQv35sZxlOk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=J+3XSOPq93dSVKTOk+VQl+G3grD5ZfOarTjpEKXATKoSdJZVH6maYBPPyjfloT4Lpwi8ILwFBhrpFrbXVcGsjNht89YgRL+Rr4lpOvDZECVwZt1Zt8VhI2yz+6ooCMXrKaaEzBbHMhXdQsY3ks6+v6obDQB0Kl/uoz1oGmvH7p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BvZu4PIN; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DF441DEC9
+	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 17:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783360558; cv=pass; b=AUcrSa0oXrW0xaPmJ1zbPkiBzSDCXEYG8EC6aUoKu9DGnTzWO0NhxUduEJqbWK8bz/NENUGOxO3oMlOLOBH2oCiKmEygtWgol/9iQnwOD0HZqN53xxqmpR6lUbrSz0KwhYLEXsTCvgK8LerN2494WCJNQu7wqHIa9HVCXz5ABaM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783360558; c=relaxed/simple;
+	bh=s21emSiFBXRhIG4adzOt8PS21mYSI/BQjSGzMfPEb60=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QT6Oy1DEFh7/tWA3KM2jroY3cbezLEI0ZVYCglvb9TLtWueLBmvyIUYu96AlyrwCmJOLunQ29CTtRuTJCwAO4OzUChKddohV0IZPFjJAyrpNk26EZRwUrUfmA89rdvoVlWa3RMuMfLFaOUzLJniJYsr14zPHNfibmWjCHrCeBiI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SMeuVQss; arc=pass smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BvZu4PIN"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2cc8bde6318so26482585ad.3
-        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 10:52:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SMeuVQss"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84536ecfc5bso3330610b3a.2
+        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 10:55:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783360556; cv=none;
+        d=google.com; s=arc-20260327;
+        b=cY/cpot01yhX0AQVn15+fqkwkoxRNuX3LP60VoFcdaYx0N5Az6auEFzIBCFU6SB3ys
+         MUDAJVXIDzrZwmqNQpDFGzwV/tIh0PwXYUi/ooKwHnyAZlgASE90PUcXpRQj43sz+8Kn
+         4JsQrAXxx91OwQ4nYlRlHrvGTX5vGBLF7WcnxqlFFNShPRZiEd0Ff90BHtLm3rjz4xml
+         Xfz6Ee98wdPyMLPmYka1Rw2xxmjHNIgvGEaxUH5LtWOa4tXfe7At0l5bV29JzTWTuKb7
+         D64+TWKzgV3JnNmErhl1KbbVDK35m3eE+myPSwkyCmJbx13waAHW7oZiCxuLAsxqj7ID
+         aSmQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
+        fh=rs8LPe380aiF7ZS82/WpV2UusKq0Q894lmIrbw7/qC8=;
+        b=YsRb1E8bcr1VoBb0v7tvSS9IuHRU3i69k904tc3J6umLPToEgpxV0j2sSAM0InS+bA
+         tvEqo17hktekcwBEwmfFmmhfRJFrqyjjLyXzEEnjHTVOtUyswWrJIndVj2IC+P+hm1Ky
+         9RqsAZl7DEtTMraKarziq/x1SWyF5mcDpeYuXmVvx13tBBaFv59DPMkrcrDfPe9GG2Vu
+         4s3gumok/6pbqzSZJqh3boPQRxPZwDDbOeFvN4MKLh7dg8mRDERsEpWHXfaeN3Yq8qG7
+         CAx7XK5kakTvnrq4AoxJnj78mH2UFWXEsxL8uAulPT7//P9NvIeUiBkGvWrXIPduNtZV
+         YIow==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783360359; x=1783965159; darn=lists.linux.dev;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=A6A8xAuC1RftYdiH1Z5a7OhOer4aDxqV+KFlphF++dQ=;
-        b=BvZu4PINNyWlFxU7lVlTuANlhs92AvMelyMGaukdVTRX3hzBhRUKySJ1mvdY50VJwP
-         YqbO4/eu3yUYefbStq0+t7TUBUacf6ilEw5iLksUbYtNPibO1Q69ioi7/oFBb/zVash2
-         4AKLjmEVzVxHeEuKCs5DCsRBviTbpe4aqMOUhM5pXoPD+ts8ELgRq4azAJoAH94KYYyr
-         NBXvq39dIvb6oJUe09vI33Z75NoKUDFebQxRNFSkM4lVhBkv6uRmb0g0VwVTYbOnQKS6
-         kXGohd7XY+PCG9DhYE1I4UMM8+YKJISpP3+DRjPS3g+CNc1IGjLKk+lDKU4Vji9BuX/g
-         8oeQ==
+        d=google.com; s=20251104; t=1783360556; x=1783965356; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
+        b=SMeuVQssiarnVo8f9icsw6orqEMNQ/UEdIpAvfsrsTdUPwSrMqSxt36GwpL2s9LplN
+         ouWie9REP6iloW+AT/A0ljWbV/mKZqaUQLR1FzSYs11a7VVV+t7q+0e+rxu+roeHS96p
+         JUGxKzKwGes6XR5yhpvox6yDSb5qd928X0Ja8DEMcSkdZikl++LIax768bz2wdILtvLp
+         uSb9JaWU4K5UuogldKwKUKseTm2uMKHbdZ83CLK5maL+B1CDYl7Xw2JZLj9ZKuYxSI+X
+         UsFjQEDCDp8yxDg062QP/XJ4DNDlYrRgDiuMtn8atf1FO6sPpSL6dO0nqy6WDLjoULa3
+         EYwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783360359; x=1783965159;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A6A8xAuC1RftYdiH1Z5a7OhOer4aDxqV+KFlphF++dQ=;
-        b=TqqXo4iLuMz6k4Gu45eQiq6ksOu5ngA2n7O7dkNn6+sRDuZxDIOEX+X1+kNvlSsB9M
-         V2njB8OUZLCLVxYP0yPbYmm7NwvxeIF6qKw7dQVgz1f8OBwX/qUbbA/XjIyWCClBeB3a
-         kLINXnSgzNxL+7rzoaw4oe1NceXN1KyClyQU0wj4X75MJb3ISAJGzooMPmaUfIpdO8Zw
-         j2xP8Ac6y7ZXczQqKwu4lseZITNSfWMqJkmINBnifh1U6FYAaIIHoewcysMFqvOTAEzL
-         IjQFaMBJwFRpz8u9Uyy6W3QiuYHSogkx2S7EQOflr+glbaHk/XWMuiaursujkmYrYs9E
-         t+9Q==
-X-Forwarded-Encrypted: i=1; AHgh+RouxZpRkYvERXyfbEfYSzdbXyGHLqr8kQUPTupl+ig0Gw0tZ9P3GdoJjsZBIM5BHLaAAOGn@lists.linux.dev
-X-Gm-Message-State: AOJu0YwnDGSPa0b1/5drn/ndiIViN+9k76+bjzqS19KHJEPRmyr6OL0W
-	Ibnp3dKqupyp3MWpdnLK0vFKl/awh+dy15WhpKEOC5ym+k7L0oCVOKywigi5DaCwVlIZNmMkEA+
-	7NdLYPQ+YU0zcBw==
-X-Received: from plgs8.prod.google.com ([2002:a17:902:ea08:b0:2cc:9345:c60a])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:f745:b0:2ca:d874:c6cf with SMTP id d9443c01a7336-2ccbe40bcbfmr16844165ad.4.1783360358471;
- Mon, 06 Jul 2026 10:52:38 -0700 (PDT)
-Date: Mon,  6 Jul 2026 17:52:28 +0000
+        d=1e100.net; s=20251104; t=1783360556; x=1783965356;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
+        b=YeVjZL7/g/gLUVo4r0LbH8HEqbkENc8F34yywGSJNxjjDzpSmAO3TtdQuzdyDTZf67
+         6Icktx5LHDsifHkjzCIQUydHm8/KucZ9Z/CXh5fKBpuLm4m7QJ+h38qDzxZUNhymLFuJ
+         mqO1w4+X3jxwlzQSRluXXJBEMha5lQYAi0A7Xd7Us/LEmTy5sWoxjhevlBbbx+WuNGeM
+         5krbfMjoouzj4Kdc0nuORfVxXFZ6FuK64TnxCVEbJrVMdQU7PMZg6OBDlQ0tI9EGgqsZ
+         f/w+sG/zL9LMHdvb2Kw8KvheyOPuzQTADZS8Gs1/CuGihTwK+qIgsIy36m6D9Sg89fjY
+         wWrg==
+X-Forwarded-Encrypted: i=1; AHgh+RprDWeomU7+BZwmtPl2PYS85EvSpeXdA4DbxhYJCMyP83w6CkU7P/1GJcYZqtqFriKqXPdP@lists.linux.dev
+X-Gm-Message-State: AOJu0YzgbR1ZChJYOSdgKVBiLUVLt4DClL9c6VCigtqJP2AXnwHYSbK7
+	q7H7XN9VnECDqjblpcDGHyGRMdth47oOtsP4oVA0/986Hk0ZS58Ta9jJGaKIeq+Tg6TUZuWj5Uw
+	YwktP8/8XmGL1ptSkeYvLFHybc6Iy/L09azyDVdyc
+X-Gm-Gg: AfdE7clp43o3nmFFybuxCwM0o3Z3CH8IqbgeWblGlUngHk5Mqmn2VdfCk8U0bZiKKDp
+	D5xmHoHpj0SIYNkGu62WpSLpk7D6tNVplqvzyfbCm4w+zdpRa2UnAL24ecv52anQYPU1kEpcE9G
+	qD2kwx77XAg/uh7Uzn5pfqCOXDvo8BF0uOU+cth6m4b1W5/VnFn5gU7tfWMP1cbZGKXDpi210JS
+	OywX5w3cQdY6GaG0fmwywxbyKjQeDUMFCvJo/Px447IDjwwqgKK5BlB9cZ7YR2+INiW8axp
+X-Received: by 2002:a05:6a21:3988:b0:3bf:6c08:fb8e with SMTP id
+ adf61e73a8af0-3c08eecc5f1mr1926858637.48.1783360555946; Mon, 06 Jul 2026
+ 10:55:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
-Message-ID: <20260706175228.2468730-1-dmatlack@google.com>
-Subject: [PATCH v2] selftests: harness: Mark test fixture objects __maybe_unused
+MIME-Version: 1.0
+References: <20260706175228.2468730-1-dmatlack@google.com>
+In-Reply-To: <20260706175228.2468730-1-dmatlack@google.com>
 From: David Matlack <dmatlack@google.com>
+Date: Mon, 6 Jul 2026 10:55:28 -0700
+X-Gm-Features: AVVi8Ce5nbB5dQBx-YTPg7rJMXNHy2ZTmt6qPpfE6nxI2-mw0XhdUMdNTXLndXI
+Message-ID: <CALzav=f4-mCCvu1fL4DUQ3saetcqCumvfEmQuDFmH5X2SHXqEA@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: harness: Mark test fixture objects __maybe_unused
 To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	llvm@lists.linux.dev
 Cc: Andy Lutomirski <luto@amacapital.net>, Bill Wendling <morbo@google.com>, 
 	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Will Drewry <wad@chromium.org>, David Matlack <dmatlack@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
+	Alex Williamson <alex@shazbot.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mark global test fixture object pointers __maybe_unused since they may
-not ever be read (e.g. if fixture variants are used instead).
+On Mon, Jul 6, 2026 at 10:52=E2=80=AFAM David Matlack <dmatlack@google.com>=
+ wrote:
+>
+> Mark global test fixture object pointers __maybe_unused since they may
+> not ever be read (e.g. if fixture variants are used instead).
+>
+> clang made a change to -Wunused-but-set-variable (split out into its own
+> subwarning, -Wunused-but-set-global) that causes this warning to be
+> emitted for various selftests and can be upgraded to an error in
+> selftest that set -Werror.
+>
+> VFIO selftests have been broken since commit ff556bd98348 ("vfio:
+> selftests: Add -Wall and -Werror to the Makefile"), and the net
+> selftests builds have been noisy due to -Wall.
+>
+> Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked p=
+rocesses")
+> Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
+> Reported-by: Aaron Lewis <aaronlewis@google.com>
+> Signed-off-by: David Matlack <dmatlack@google.com>
 
-clang made a change to -Wunused-but-set-variable (split out into its own
-subwarning, -Wunused-but-set-global) that causes this warning to be
-emitted for various selftests and can be upgraded to an error in
-selftest that set -Werror.
+Sorry I forgot to apply Alex's Reviewed-by tag from v1:
 
-VFIO selftests have been broken since commit ff556bd98348 ("vfio:
-selftests: Add -Wall and -Werror to the Makefile"), and the net
-selftests builds have been noisy due to -Wall.
-
-Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked processes")
-Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reported-by: Aaron Lewis <aaronlewis@google.com>
-Signed-off-by: David Matlack <dmatlack@google.com>
----
-v2:
- - Update commit message about the change to clang (Nathan)
- - Correct the Fixes: tag (Nathan)
-
-v1: https://lore.kernel.org/linux-kselftest/20260630213341.1664345-1-dmatlack@google.com/
-
-Note: The fixes tag is commit 24cf65a62266 ("selftests/harness: Share
-_metadata between forked processes"), which refactored TEST_F to share
-test metadata across processes using mmap and convereted the test
-fixture object from a static struct to a static pointer. Prior to commit
-24cf65a62266 the static struct was always used once (the address of it
-was taken and passed to __register_test()), but after the static pointer
-was always assigned but potentially never read.
-
-Cc: Nathan Chancellor <nathan@kernel.org>
-
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 261e4df94d9d..29a19bc87084 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
- 				!__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
- 			fixture_name##_teardown(_metadata, self, variant); \
- 	} \
--	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-+	static struct __test_metadata *_##fixture_name##_##test_name##_object __maybe_unused; \
- 	static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
- 			_register_##fixture_name##_##test_name(void) \
- 	{ \
-
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
--- 
-2.55.0.rc2.803.g1fd1e6609c-goog
-
+   https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@shazbot.=
+org/
