@@ -1,215 +1,180 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4491A3A8FEE;
-	Mon,  6 Jul 2026 15:28:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783351714; cv=none; b=IDinFWV0gvxH1UWD2ubaHRc8oIcXLZqkBr0+mnqaJZcZeUOuBY0GaUcCZokOMjpIffNrt63Ru315bhPFm2tkPIj2U65IBPOWjGW6KQ364zAAw57aCKDE5JZY1FCRavnkJtIYggJ/V6hRJ8Beu2l4Z8tLkWe/pFMB7m3qNoDM7vw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783351714; c=relaxed/simple;
-	bh=Kx0R10CEtuT7dVwxzZnlGtk8d2BtAd7kwxR4Q9KdOp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=odPRdKtBMbzUI1Im09Tp36TIjXltTp/KdF/30UtoUUjc4zCsj555XgXNW/z53BnMeLDQEjNnyCnsIfafCzHA+ANHO9ABL+bYBSB/FUUr/WRV2SliojAHa+4JFhSFQWeq2TNX7U+U6bp6HKKUoNRBwgwMhL0jTHyOjWvbtVSWuBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHPP5DuG; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4158342A158
+	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 16:42:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783356128; cv=pass; b=jehchkc3BWW46S8Q0UJDx6JmmYow/SX6j93jQL+HFSvEpTV2pTkNOisC5Lbl7DGl0CD4Ee7Mtze0qFcP8lqqX/rh9sq11EdtLNnZRNs9bfvbuUs/BTjxXKOTBIy0CubTTkpiK6Py3Q7GPgZTJI6A1w/f2IraHv6SE0xB1SbbqGY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783356128; c=relaxed/simple;
+	bh=VNYai2/KPlhkeALcWLLZ0ukJRHgn91vQcKUBUKFOdDs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ONGt57/a8ICSB/3p0FTLDsyQZTKLSfn5FXEBE8SppJbur/dNoiVO2542v6AOCvRN0xO/vsC/k9gK+/NpcLPuTKYSd1OW2+j0jrEySnCQ7cdb6LtK4FuxP3v98+WhNoqfGh36R4K97SR1nyK3ayvl0gfL4AYxegPV2i1MHGpYT4M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HYDOCFCv; arc=pass smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHPP5DuG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783351712; x=1814887712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Kx0R10CEtuT7dVwxzZnlGtk8d2BtAd7kwxR4Q9KdOp0=;
-  b=SHPP5DuGhwk3dNMtOkXB+K0b7yop4CuRWyw808+Q93eYU447i5nDjANl
-   vpSu81HAoUgfq+/FO8QMzm0HWCYOMVVkAJHY04mAfz/Ws4TCZi655t9KJ
-   N+v/ZQTPOW7O/o1zGm8wsIjk9QSEHv+wlCloYKkU9/Sv/SZosz0syadiq
-   Ydumest/rdGGgsdd8WP7Dt22lhVPOmyvIDZ2/TZ2vFEKAJ37/xUqPZ478
-   uu0VMs3YbWxDwuxc0iaolBBdgNsVDCgvag9xGkFA/js8HYpRwIzA8niuY
-   DOUcFm1uhf+jSJ4Sf6KXf5vIuEP8kPxDankAKeAnQmwBPEkONMJNv+pGN
-   g==;
-X-CSE-ConnectionGUID: WGCAjOb4QIuLiCKgKjrHpw==
-X-CSE-MsgGUID: UldSrg+2QkGNuXcauzzPpw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11838"; a="83760415"
-X-IronPort-AV: E=Sophos;i="6.25,149,1779174000"; 
-   d="scan'208";a="83760415"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jul 2026 08:28:32 -0700
-X-CSE-ConnectionGUID: qeSsvuFKQWW/DlBsmwRgrw==
-X-CSE-MsgGUID: Q8NX88hiSP+EOWE0QzcwWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,149,1779174000"; 
-   d="scan'208";a="283833104"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 06 Jul 2026 08:28:30 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wglEt-00000000EUV-1S9t;
-	Mon, 06 Jul 2026 15:28:07 +0000
-Date: Mon, 6 Jul 2026 23:27:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	anthony.l.nguyen@intel.com, netdev@vger.kernel.org,
-	Jedrzej Jagielski <jedrzej.jagielski@intel.com>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [Intel-wired-lan] [PATCH iwl-next v2] ixgbe: E610: force phy
- link to get down when interface is down
-Message-ID: <202607062312.8lqgVLms-lkp@intel.com>
-References: <20260706094330.186341-1-jedrzej.jagielski@intel.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HYDOCFCv"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cca0c5799eso11515025ad.0
+        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 09:42:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783356126; cv=none;
+        d=google.com; s=arc-20260327;
+        b=fxD4R1DBdaV/jVLZiClsRgXIoW3hU70tD3xA5P480PgnbG5XmGu8QFrTGLy2rMwxS4
+         AXQVil3kF07rCryy52+lfIdGaWEJGYnWG8+k7ZYGBcm5gb1E/FK2ddDDqfOsdb+HMIps
+         04qiXWNjFRl6AxgDWAjBfyPvmiRF8yefpp6iDBkH1jt+NukZWYN+CvV/AXAhL71CC3hb
+         Cj8Od1EA2NO2Na0Q4XWqydlWzud2b3xo2k1K+hEspgO6OgSIv5XYPHvFoYonYQY+3ktt
+         zZ9+azxFLdAYt0nu1uZXy7W5IL490bUBC+meAKX5MYfraZzSdnVyU55mcKtlpz+sLH98
+         G6Ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iyZ+He5uw82sFpn1+aSH51zefpGUJmYOMzfP9sVDRu0=;
+        fh=SdA7ZvxVHJwelPpIGDhiw2xaezPXkzQEC6akjg5h88o=;
+        b=mKUiI2hLEpHVI1wHz7lwjLFpzjNYkVytvDfiQF9DvnixekMa/++pj5XoCqk7c32NUw
+         MFPBTxUObvfNQNrPh/Ptfyba9/YJehQ04c2EgCx3VzyxVtHrBkeWXUl8KsSLYzKwPwf+
+         VmA8GjHFRM8layNLTGCLcX1N4zvXtjdJZQfjAzn3DWq7KFkNi75dEaVy5cdsgJjtBwOe
+         791BeZomKii633KjDrVA6a0ipjHQVw41cdHTMN3ORpP04B6zrUKjMhEnQqBYeWMRzPkY
+         5hz+oQZzesX9Vra2ZhgH1mCjgbhnzvu3A1/QJsC84eg9O9gTaoE8fz4k3IiO/OeyWZ9A
+         PNFw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1783356126; x=1783960926; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=iyZ+He5uw82sFpn1+aSH51zefpGUJmYOMzfP9sVDRu0=;
+        b=HYDOCFCvwM1RMvHc3wpEUz8QcjBivB3fQzt/i1ILdZSrAgpu5Ns3kLsFFXnPME3TJX
+         76omQzxxhKRBynhA3wLDjAHIIaDlMFKr3QIGdrCpFKWf7riYrQueaZkjY3otsPIiBbqD
+         3DWa7T7V53aapRZcvB4z4FTs+Ox4KEQygnDtUPclM1Mee3XSmaTbq5esXqF/w5Se1itC
+         ucXtBKQCyllhNI1xD5emwcs+kp4Y9fe3kSpDgqTlcuGQJhbFz/tufGuzkm3smnYW4NXh
+         emSBppIGStTNfXZyA8jeh9qYE6fotb8Xxdf9F0OQCg8OtEQz7Vx4NtRI2pHrFATPg8Pw
+         naiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783356126; x=1783960926;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iyZ+He5uw82sFpn1+aSH51zefpGUJmYOMzfP9sVDRu0=;
+        b=MJ22hHc+0QzghH+76csYW7Z2Uv/Pg0iUYVMOOC8vQwHbKxrW0zttYa2biE187YawPT
+         3dT+7wUh3L5eQMwW76WHVCdJnq+KZrgRpLgRMNlxmvQd/4R8CztlXHBz2OisZMWL8/Eo
+         rJauujxEar87tFLdWl39unfwxdOSYlrYLCC9HnyEtA47WSi4Z5l9TsanNvG5p4KEV4Uv
+         Bf2udPUHQXWeIVc5kRMTOY7+Rnutqe3EyTmIIQDuTUSmLlsQDDXPsc3qjAsCEHrEe4cK
+         2L3zVpodhci+Nr/YsleCtFckn7yQ2bH/sf+b/m6sOtm85fm5usXGZd2fqN/JFmsEQIFA
+         5KVQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqZgZW7hkcbIhH7d2+ERRMxF8+XqMaxIKcSEE1W42MuI0bz2aIdyG6Cj9EOxVXRz84YLGbp@lists.linux.dev
+X-Gm-Message-State: AOJu0YxoIZgwp2bGzc6fGQrWjcTgvDkJ6S/1w9Y5arKUseehwEMG8ZJR
+	Vmo0jIs1j5N/W18JOBSwrSxL2Vp0eVX3lRHTwgwmzidCHneAiJRWvNLne2erX8WkJskXHr57Tzm
+	k4/xMtkSgvBxz1uVofJM7s0Awc4GUjTmWWbxCdLXF
+X-Gm-Gg: AfdE7cn3HNvtrjC/DxU55sUc8BRCXL/l8RotHlUdPZtIeaGPDK6X9CMIoIj87xWuxjv
+	rDhxZVlNDP2mm8x1yB23Q6kD4E6wtY10BNDMkPYso6vvo14iU9TUMMOB315fSyzN7ERJAEWSvp/
+	fXCgGCsPxnBNoO4sGc3w2OKIHi4GYcN0L6eULVHAu2Z6wE+vgR5xSYHMa0x9rMyqjvd0sJwZUau
+	qNFktK1uZa9/8vQf11KRtASnJNj7qMngPAxaPYnrJ4/hTf0RyybAHYB/z+hjFYbjNuYmA3+
+X-Received: by 2002:a05:6a20:c799:b0:3bf:aa1f:4881 with SMTP id
+ adf61e73a8af0-3c08ef34b2dmr1593273637.56.1783356126046; Mon, 06 Jul 2026
+ 09:42:06 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706094330.186341-1-jedrzej.jagielski@intel.com>
+References: <20260630213341.1664345-1-dmatlack@google.com> <20260630165244.0d013bbc@shazbot.org>
+ <20260701024906.GA3960633@ax162>
+In-Reply-To: <20260701024906.GA3960633@ax162>
+From: David Matlack <dmatlack@google.com>
+Date: Mon, 6 Jul 2026 09:41:39 -0700
+X-Gm-Features: AVVi8CePgqxvFszRnZoJMtiuDb6vccWgIQj_T8klBJuvC17Cx9M9s08vrURGQT0
+Message-ID: <CALzav=dVQ1EpQ2x4zZWv0akqPryQuMXqE_vKG3LuC0-2NorT1w@mail.gmail.com>
+Subject: Re: [PATCH] selftests: harness: Mark test fixture objects __maybe_unused
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Alex Williamson <alex@shazbot.org>, Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev, Andy Lutomirski <luto@amacapital.net>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Raghavendra Rao Ananta <rananta@google.com>, Vipin Sharma <vipinsh@google.com>, Will Drewry <wad@chromium.org>, 
+	Aaron Lewis <aaronlewis@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Jedrzej,
+On Tue, Jun 30, 2026 at 7:49=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> On Tue, Jun 30, 2026 at 04:52:44PM -0600, Alex Williamson wrote:
+> > On Tue, 30 Jun 2026 21:33:41 +0000
+> > David Matlack <dmatlack@google.com> wrote:
+> >
+> > > Mark test fixture objects __maybe_unused since they will not be used
+> > > when there are fixture variants (the variants will be used instead).
+> > >
+> > > This fixes the VFIO selftest build with clang and -Werror:
+> > >
+> > > vfio_dma_mapping_mmio_test.c:106:1: error: variable '_vfio_dma_mappin=
+g_mmio_test_map_full_bar_object' set but not used [-Werror,-Wunused-but-set=
+-global]
+> > >   106 | TEST_F(vfio_dma_mapping_mmio_test, map_full_bar)
+> > >       | ^
+> > > ./../kselftest_harness.h:398:2: note: expanded from macro 'TEST_F'
+> > >   398 |         __TEST_F_IMPL(fixture_name, test_name, -1, TEST_TIMEO=
+UT_DEFAULT)
+> > >       |         ^
+> > > ./../kselftest_harness.h:470:33: note: expanded from macro '__TEST_F_=
+IMPL'
+> > >   470 |         static struct __test_metadata *_##fixture_name##_##te=
+st_name##_object; \
+> > >       |
+> > >
+> > > Fixes: ff556bd98348 ("vfio: selftests: Add -Wall and -Werror to the M=
+akefile")
+> > > Reported-by: Aaron Lewis <aaronlewis@google.com>
+> > > Signed-off-by: David Matlack <dmatlack@google.com>
+> > > ---
+> > >  tools/testing/selftests/kselftest_harness.h | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/test=
+ing/selftests/kselftest_harness.h
+> > > index 261e4df94d9d..29a19bc87084 100644
+> > > --- a/tools/testing/selftests/kselftest_harness.h
+> > > +++ b/tools/testing/selftests/kselftest_harness.h
+> > > @@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *=
+s, int c, size_t n)
+> > >                             !__atomic_test_and_set(_metadata->no_tear=
+down, __ATOMIC_RELAXED)) \
+> > >                     fixture_name##_teardown(_metadata, self, variant)=
+; \
+> > >     } \
+> > > -   static struct __test_metadata *_##fixture_name##_##test_name##_ob=
+ject; \
+> > > +   static struct __test_metadata *_##fixture_name##_##test_name##_ob=
+ject __maybe_unused; \
+> > >     static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
+> > >                     _register_##fixture_name##_##test_name(void) \
+> > >     { \
+> > >
+> > > base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
+> >
+> > Reviewed-by: Alex Williamson <alex@shazbot.org>
+> >
+> > Kees/Shuah, I can take this through the vfio tree if you prefer, it
+> > fixes a commit that entered through vfio selftests.  Thanks,
+>
+> Not that it is a big deal or matters all too much but I do not think
+> this fixes tag is entirely accurate. The blamed commit may have
+> introduced the build warning/error in the VFIO code but that same
+> warning could occur in any selftest code, as evidenced by the exact same
+> patch submitted a month ago:
+>
+>   https://lore.kernel.org/20260530054722.271157-1-kuniyu@google.com/
+>
+> clang made a change to -Wunused-but-set-variable (split out into its own
+> subwarning, -Wunused-but-set-global) that exposes this. Personally, I
+> find that change explains the problem better but this one makes it clear
+> that it can become fatal with -Werror.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on tnguy-next-queue/dev-queue]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jedrzej-Jagielski/ixgbe-E610-force-phy-link-to-get-down-when-interface-is-down/20260706-180351
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tnguy/next-queue.git dev-queue
-patch link:    https://lore.kernel.org/r/20260706094330.186341-1-jedrzej.jagielski%40intel.com
-patch subject: [Intel-wired-lan] [PATCH iwl-next v2] ixgbe: E610: force phy link to get down when interface is down
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260706/202607062312.8lqgVLms-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607062312.8lqgVLms-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607062312.8lqgVLms-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:7572:4: error: call to undeclared function 'e_error'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    7572 |                         e_error(drv, "Cannot set PHY link down\n");
-         |                         ^
->> drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:7572:12: error: use of undeclared identifier 'drv'
-    7572 |                         e_error(drv, "Cannot set PHY link down\n");
-         |                                 ^~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8928:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8928 |         cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_HW_VLAN,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8929 |                                    IXGBE_ADVTXD_DCMD_VLE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8932:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8932 |         cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSO,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8933 |                                    IXGBE_ADVTXD_DCMD_TSE);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8936:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8936 |         cmd_type |= IXGBE_SET_FLAG(tx_flags, IXGBE_TX_FLAGS_TSTAMP,
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    8937 |                                    IXGBE_ADVTXD_MAC_TSTAMP);
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8940:14: warning: division by zero is undefined [-Wdivision-by-zero]
-    8940 |         cmd_type ^= IXGBE_SET_FLAG(skb->no_fcs, 1, IXGBE_ADVTXD_DCMD_IFCS);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8951:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8951 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8952 |                                         IXGBE_TX_FLAGS_CSUM,
-         |                                         ~~~~~~~~~~~~~~~~~~~~
-    8953 |                                         IXGBE_ADVTXD_POPTS_TXSM);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8956:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8956 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8957 |                                         IXGBE_TX_FLAGS_IPV4,
-         |                                         ~~~~~~~~~~~~~~~~~~~~
-    8958 |                                         IXGBE_ADVTXD_POPTS_IXSM);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8961:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8961 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8962 |                                         IXGBE_TX_FLAGS_IPSEC,
-         |                                         ~~~~~~~~~~~~~~~~~~~~~
-    8963 |                                         IXGBE_ADVTXD_POPTS_IPSEC);
-         |                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8969:19: warning: division by zero is undefined [-Wdivision-by-zero]
-    8969 |         olinfo_status |= IXGBE_SET_FLAG(tx_flags,
-         |                          ^~~~~~~~~~~~~~~~~~~~~~~~
-    8970 |                                         IXGBE_TX_FLAGS_CC,
-         |                                         ~~~~~~~~~~~~~~~~~~
-    8971 |                                         IXGBE_ADVTXD_CC);
-         |                                         ~~~~~~~~~~~~~~~~
-   drivers/net/ethernet/intel/ixgbe/ixgbe_main.c:8918:26: note: expanded from macro 'IXGBE_SET_FLAG'
-    8918 |          ((u32)(_input & _flag) / (_flag / _result)))
-         |                                 ^ ~~~~~~~~~~~~~~~~~
-   8 warnings and 2 errors generated.
-
-
-vim +/e_error +7572 drivers/net/ethernet/intel/ixgbe/ixgbe_main.c
-
-  7544	
-  7545	/**
-  7546	 * ixgbe_close - Disables a network interface
-  7547	 * @netdev: network interface device structure
-  7548	 *
-  7549	 * Returns 0, this is not allowed to fail
-  7550	 *
-  7551	 * The close entry point is called when an interface is de-activated
-  7552	 * by the OS.  The hardware is still under the drivers control, but
-  7553	 * needs to be disabled.  A global MAC reset is issued to stop the
-  7554	 * hardware, and all transmit and receive resources are freed.
-  7555	 **/
-  7556	int ixgbe_close(struct net_device *netdev)
-  7557	{
-  7558		struct ixgbe_adapter *adapter = ixgbe_from_netdev(netdev);
-  7559	
-  7560		ixgbe_ptp_stop(adapter);
-  7561	
-  7562		if (netif_device_present(netdev))
-  7563			ixgbe_close_suspend(adapter);
-  7564	
-  7565		ixgbe_fdir_filter_exit(adapter);
-  7566	
-  7567		if (adapter->flags2 & IXGBE_FLAG2_LINK_DOWN_ON_CLOSE) {
-  7568			int err;
-  7569	
-  7570			err = ixgbe_disable_phy_link(&adapter->hw);
-  7571			if (err)
-> 7572				e_error(drv, "Cannot set PHY link down\n");
-  7573	
-  7574			ixgbe_handle_link_down(adapter);
-  7575		}
-  7576	
-  7577		ixgbe_release_hw_control(adapter);
-  7578	
-  7579		return 0;
-  7580	}
-  7581	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks for the additional context Nathan. I can send out a quick v2
+today with an updated commit message to capture these details and
+a better fixes tag.
