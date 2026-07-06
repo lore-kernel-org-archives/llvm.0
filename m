@@ -1,132 +1,139 @@
-Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325383AEF47
-	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 18:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B933DE45A;
+	Mon,  6 Jul 2026 20:16:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783362725; cv=none; b=sh9RPHj5buW2A72leGgam5vYa/y43hxx8tRuHOrKFOeLdbZe8+R3IyGi7ScvfXOmQb2weJv8H6x7PH29Wk0HEE9R9jwL4Xdlaa1Hr+xYFzPtI8wiUzidfKJWlkMuSET6NEFvtNan05W15ArSDkQgtgjFqosj0yfazMBcIQq3nQQ=
+	t=1783369006; cv=none; b=Gv1y2bE3RXPSLMG34mWbMjvl9oPRty6R/REAUJZLT2/ROlvnUdv5yGOvMn68BOJhTGWP/NZSLzhmS9GjfoeFyzM/hAyiWYmKqjN6w9RwyY6YzTuhfI6a5lCJfNQNfBDEVcVqfYGTmXAiEhS3+1Nd6MUlPmJze9BwOPF4C2mseoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783362725; c=relaxed/simple;
-	bh=LQpZuqWDhGaY8Lp7XP00kP+hrd4jA3kaR16Fcs8BB8Q=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=mjYeCQo4JY9vBQE7YD3bUTEaZxLoQITS5uX9XOVhM5zDDSB1k5EIkHIzf4AvmZ/aOU8V+nvKCwuKgIhQPOwwurX1fzEojG/86oI3FbtPSSec4AxkyZDMBeKYScvJFA1wnmNcsBxb0NjDfq5hz+Mzx8xHg+BmALxo9J08oKKKNT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SGmwXBek; arc=none smtp.client-ip=209.85.160.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+	s=arc-20240116; t=1783369006; c=relaxed/simple;
+	bh=nZMrtP0DC8iBaqKYgMmMrO1jrvXDkETi7hReXQsahmM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SEryYPW4V24+T7cosHQbkeDopO42zLTCDQXeTAdHuewNABHSej/xHTF71EGFbzOJBa4HnGev5D2o5Uf1sb/+4sYJE/6XkJ3O7g+nYQsQZwJHMa3pA96m6VVLhBxrfhcsHZZ+XZZcKzpl08IO7bKjsT44McrokcJ++FLZxwQplQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RDNtmue2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SGmwXBek"
-Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-44d2204d393so2632590fac.0
-        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 11:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783362723; x=1783967523; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zaPUDS5X61bEGf4R9DTCwdGD0nVsXP4UZeidWRH5cHA=;
-        b=SGmwXBekM5AZM3pqoSzY/X8JthXkw/cHnG/cYg2DgGtn3Ok6zdJxeZCfqapybZAEMe
-         JMqLHlnzgdJ76stf3UFHF+1zLjJAzqPhpi9zsdsaO/G5JVKFkMVvSets8CY9ypSVKSDp
-         8+kuQHAOIWiDSW6HwWTK09ELWRAFKsQ8d83IzAB4bDboZdUu+EGM/twy0XquJjv6RqoH
-         R6OKXDh1VRMto3MSHEmlvDyj1gqe1sjZRG8uSDVbgQn6FYVVPzG+51LA+oG79IHGFc4/
-         Izislleo2/+aSaKenjPY7ZoQD/FBrUNyKrUxfS51fVtBLxan5U/ya8xM0UyatmuHKZMY
-         s1JA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783362723; x=1783967523;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zaPUDS5X61bEGf4R9DTCwdGD0nVsXP4UZeidWRH5cHA=;
-        b=PnuZbkkVEwJKuzZwk2YuB4LSCJ7sgmOpfmVW9OYW5QBmqx11PwvWWMszIP7CKs+iBm
-         yuYo4/FOAzMcjZ04xqNxv0Fa85Z/Cl6v9EkhJSMCBYyGKWZojjUldvv9fugsTXLchGVl
-         gS/jsHG1rxgrQvfQb/wCrj2EpCo2D3SL2NL36n6NrIATbVY2VDPdDGOfTb1TJ3pSXU4K
-         6qQpkxA0rs41Mdct4lH+r3PBaidmIGy/VM5dL+6SLRAytn/VR0p4sNux28I32MUj77nX
-         glucRZ1TmKojlEpEOIx4OsJhutcsD0KCRJ0FuEkXstx/36PcNsJ/zvTaVw7LnZxAjUdz
-         zVzQ==
-X-Forwarded-Encrypted: i=1; AFNElJ/OIqbiCusqHjDWh0JXUUV+Ob7o+bCbtj4gaGpsrp23BNiEKmDFVw/oAmAKLqvTYW4TUSdw@lists.linux.dev
-X-Gm-Message-State: AOJu0YwGLw6gb/OEE47ANLFJPG1MKIGyaLnSGT1sCX2QCfeC48djg39v
-	Tx3bXhIZl+y9BvJ/kIJpql6m8J9ZLf/sckNyCx/vmvE+RurRiTyw9mjs393m0fbvGobjRViQme4
-	jBO/iOVvl0lBa0w==
-X-Received: from oacg2.prod.google.com ([2002:a05:6870:d202:b0:448:c6c8:879e])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6820:4b02:b0:6a1:50eb:d519 with SMTP id 006d021491bc7-6a3556d62a2mr1000185eaf.58.1783362722788;
- Mon, 06 Jul 2026 11:32:02 -0700 (PDT)
-Date: Mon,  6 Jul 2026 18:31:54 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RDNtmue2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E681F00A3A;
+	Mon,  6 Jul 2026 20:16:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783369004;
+	bh=PGuV6jeesFdKzccH9KIxy2qzDvsa3jcfI3T0fBRPPQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RDNtmue2li5VZvEYGKotXJPXHSlBWfcQdpFSwGQhKRndG6sIMx6xtdT3SGHLglLIn
+	 7d7pVsDtpp/NR/Qb/vQ70fvGTO92UjdvvodOS2DqtU/neEX+qFXxfr4xl+a2+0qOCN
+	 XF/z9cjeSxjZSHgdbxR327IhIqCP2kz35gmKus/F+vKIeGqmgA9l/YHSt9jPG6EyRw
+	 Z1YDFHpGBrT36dWHzvFNy6dKLwamAI+T6h+SJ77QZO9FiZ6Tmt7aXY6J9q+YlDsRWL
+	 1KF1jDns+DKbW78dnBHq1OEmE3Fx5HLJ70kIUj8mu6liUx72QU7aK+Qj5Ta28Ba/xl
+	 Tm2sLOyRmH1rQ==
+Date: Mon, 6 Jul 2026 13:16:38 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	Will Deacon <will@kernel.org>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Carlos Bilbao <carlos.bilbao@kernel.org>,
+	Avadhut Naik <avadhut.naik@amd.com>, linux-kernel@vger.kernel.org,
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+	llvm@lists.linux.dev, gosst-kernel <gosst-kernel@google.com>,
+	android-kernel-team <android-kernel-team@google.com>,
+	kernel-dynamic-tools <kernel-dynamic-tools@google.com>
+Subject: Re: [PATCH] MAINTAINERS: update ndesaulniers
+Message-ID: <20260706201638.GA2661146@ax162>
+References: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.rc2.803.g1fd1e6609c-goog
-Message-ID: <20260706183154.2660394-1-dmatlack@google.com>
-Subject: [PATCH v3] selftests: harness: Mark test fixture objects __maybe_unused
-From: David Matlack <dmatlack@google.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Andy Lutomirski <luto@amacapital.net>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
-	"=?UTF-8?q?Micka=C3=ABl=20Sala=C3=BCn?=" <mic@digikod.net>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Will Drewry <wad@chromium.org>, David Matlack <dmatlack@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Alex Williamson <alex@shazbot.org>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260528-im_back_baby-v1-1-25d355efdbae@google.com>
 
-Mark _##fixture_name##_##test_name##_object __maybe_unused since it may
-not ever be read. This pointer is only read in XFAIL_ADD(), which tests
-are not required to use.
+On Thu, May 28, 2026 at 02:38:41PM -0700, Nick Desaulniers wrote:
+> I'm coming back.  I will return.  I will possess your body, and I'll
+> make LKML burn.
+> 
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-clang made a change to -Wunused-but-set-variable (split out into its own
-subwarning, -Wunused-but-set-global) that causes this warning to be
-emitted for various selftests and can be upgraded to an error in
-selftest that set -Werror.
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 
-VFIO selftests have been broken since commit ff556bd98348 ("vfio:
-selftests: Add -Wall and -Werror to the Makefile"), and the net
-selftests builds have been noisy due to -Wall.
+Linus, could you apply this directly? It fell off my radar and I think
+it is worth getting in sooner rather than later. I am not sure when my
+next fixes pull will be. Thanks a lot!
 
-Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked processes")
-Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reported-by: Aaron Lewis <aaronlewis@google.com>
-Reviewed-by: Alex Williamson <alex@shazbot.org>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Signed-off-by: David Matlack <dmatlack@google.com>
----
-v3:
- - Pick up Kuniyuki's Reviewed-by tag.
- - Pick up Alex's Reviewed-by tag from v1.
- - Fix commit description accuracy (Kuniyuki)
+> ---
+>  .mailmap                                                               | 1 -
+>  Documentation/process/embargoed-hardware-issues.rst                    | 2 +-
+>  Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst | 2 +-
+>  MAINTAINERS                                                            | 2 +-
+>  4 files changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/.mailmap b/.mailmap
+> index a009f73d7ea5..f863781b0102 100644
+> --- a/.mailmap
+> +++ b/.mailmap
+> @@ -634,7 +634,6 @@ Nicholas Piggin <npiggin@gmail.com> <npiggin@kernel.dk>
+>  Nicholas Piggin <npiggin@gmail.com> <npiggin@suse.de>
+>  Nicholas Piggin <npiggin@gmail.com> <nickpiggin@yahoo.com.au>
+>  Nicholas Piggin <npiggin@gmail.com> <piggin@cyberone.com.au>
+> -Nick Desaulniers <nick.desaulniers+lkml@gmail.com> <ndesaulniers@google.com>
+>  Nicolas Ferre <nicolas.ferre@microchip.com> <nicolas.ferre@atmel.com>
+>  Nicolas Pitre <nico@fluxnic.net> <nicolas.pitre@linaro.org>
+>  Nicolas Pitre <nico@fluxnic.net> <nico@linaro.org>
+> diff --git a/Documentation/process/embargoed-hardware-issues.rst b/Documentation/process/embargoed-hardware-issues.rst
+> index 34e00848e0da..d07f16c3c7b8 100644
+> --- a/Documentation/process/embargoed-hardware-issues.rst
+> +++ b/Documentation/process/embargoed-hardware-issues.rst
+> @@ -308,7 +308,7 @@ an involved disclosed party. The current ambassadors list:
+>  
+>    Google	Kees Cook <keescook@chromium.org>
+>  
+> -  LLVM		Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> +  LLVM		Nick Desaulniers <ndesaulniers@google.com>
+>    ============= ========================================================
+>  
+>  If you want your organization to be added to the ambassadors list, please
+> diff --git a/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst b/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst
+> index 9d444b9c46d3..7d4d694967c7 100644
+> --- a/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst
+> +++ b/Documentation/translations/sp_SP/process/embargoed-hardware-issues.rst
+> @@ -287,7 +287,7 @@ revelada involucrada. La lista de embajadores actuales:
+>  
+>    Google	Kees Cook <keescook@chromium.org>
+>  
+> -  LLVM		Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> +  LLVM		Nick Desaulniers <ndesaulniers@google.com>
+>    ============= ========================================================
+>  
+>  Si quiere que su organización se añada a la lista de embajadores, por
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 461a3eed6129..2f06cc2e463c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6259,7 +6259,7 @@ F:	.clang-format
+>  
+>  CLANG/LLVM BUILD SUPPORT
+>  M:	Nathan Chancellor <nathan@kernel.org>
+> -R:	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
+> +R:	Nick Desaulniers <ndesaulniers@google.com>
+>  R:	Bill Wendling <morbo@google.com>
+>  R:	Justin Stitt <justinstitt@google.com>
+>  L:	llvm@lists.linux.dev
+> 
+> ---
+> base-commit: 8fde5d1d47f69db6082dfa34500c27f8485389a5
+> change-id: 20260528-im_back_baby-1ade32dc049e
+> 
+> Best regards,
+> --  
+> Nick Desaulniers <ndesaulniers@google.com>
+> 
 
-v2: https://lore.kernel.org/linux-kselftest/20260706175228.2468730-1-dmatlack@google.com/
-
-v1: https://lore.kernel.org/linux-kselftest/20260630213341.1664345-1-dmatlack@google.com/
-
-Note: The fixes tag is commit 24cf65a62266 ("selftests/harness: Share
-_metadata between forked processes"), which refactored TEST_F to share
-test metadata across processes using mmap and convereted the test
-fixture object from a static struct to a static pointer. Prior to commit
-24cf65a62266 the static struct was always used once (the address of it
-was taken and passed to __register_test()), but after the static pointer
-was always assigned but potentially never read.
-
-Cc: Nathan Chancellor <nathan@kernel.org>
-
- tools/testing/selftests/kselftest_harness.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-index 261e4df94d9d..29a19bc87084 100644
---- a/tools/testing/selftests/kselftest_harness.h
-+++ b/tools/testing/selftests/kselftest_harness.h
-@@ -467,7 +467,7 @@ static inline void __kselftest_memset_safe(void *s, int c, size_t n)
- 				!__atomic_test_and_set(_metadata->no_teardown, __ATOMIC_RELAXED)) \
- 			fixture_name##_teardown(_metadata, self, variant); \
- 	} \
--	static struct __test_metadata *_##fixture_name##_##test_name##_object; \
-+	static struct __test_metadata *_##fixture_name##_##test_name##_object __maybe_unused; \
- 	static void __attribute__((constructor(KSELFTEST_PRIO_TEST))) \
- 			_register_##fixture_name##_##test_name(void) \
- 	{ \
-
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
 -- 
-2.55.0.rc2.803.g1fd1e6609c-goog
-
+Cheers,
+Nathan
