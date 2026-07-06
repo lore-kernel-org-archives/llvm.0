@@ -1,80 +1,82 @@
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DF441DEC9
-	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 17:55:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CBB436BEE
+	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 18:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783360558; cv=pass; b=AUcrSa0oXrW0xaPmJ1zbPkiBzSDCXEYG8EC6aUoKu9DGnTzWO0NhxUduEJqbWK8bz/NENUGOxO3oMlOLOBH2oCiKmEygtWgol/9iQnwOD0HZqN53xxqmpR6lUbrSz0KwhYLEXsTCvgK8LerN2494WCJNQu7wqHIa9HVCXz5ABaM=
+	t=1783361223; cv=pass; b=SA6nNpBWQdVW3GtK4LIknYfceBWgxX1LdeixWuFEypX44PBV6ucXK2mGsGNiAZtibkE92yhQu6jcUBFvUvI8Bm5/dgcuSCoE8tAmxwBomTzdQ2BEwibnqjkbJE6+KHLF9PW57hosyGpIZyDGSyW/kfOH3YPQHZuDWOizKKcPep0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783360558; c=relaxed/simple;
-	bh=s21emSiFBXRhIG4adzOt8PS21mYSI/BQjSGzMfPEb60=;
+	s=arc-20240116; t=1783361223; c=relaxed/simple;
+	bh=uMrMUI4UiH1bTD08Nrh+4d7dEyXFH++5+rlUyuRsk6c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QT6Oy1DEFh7/tWA3KM2jroY3cbezLEI0ZVYCglvb9TLtWueLBmvyIUYu96AlyrwCmJOLunQ29CTtRuTJCwAO4OzUChKddohV0IZPFjJAyrpNk26EZRwUrUfmA89rdvoVlWa3RMuMfLFaOUzLJniJYsr14zPHNfibmWjCHrCeBiI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SMeuVQss; arc=pass smtp.client-ip=209.85.210.170
+	 To:Cc:Content-Type; b=hMk10Yadzm1mQyT5trSziV7TEeAo6UUVKP+hyn61GwfXk3TlwgEuc3vlyDuP/rarmAqs5VI8VPfQ9TOTTQ2w2BGFAcWOfYN2BfYjZD0iPue1GAmxexLzkjDkFZ6CwS+paJ2sbcmz0Nl+IVeOh7q4CcI2ZZ6qzX3wxXU0kkfgbrY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O2lYT+mR; arc=pass smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SMeuVQss"
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-84536ecfc5bso3330610b3a.2
-        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 10:55:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1783360556; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O2lYT+mR"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso18640175ad.2
+        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 11:07:00 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783361220; cv=none;
         d=google.com; s=arc-20260327;
-        b=cY/cpot01yhX0AQVn15+fqkwkoxRNuX3LP60VoFcdaYx0N5Az6auEFzIBCFU6SB3ys
-         MUDAJVXIDzrZwmqNQpDFGzwV/tIh0PwXYUi/ooKwHnyAZlgASE90PUcXpRQj43sz+8Kn
-         4JsQrAXxx91OwQ4nYlRlHrvGTX5vGBLF7WcnxqlFFNShPRZiEd0Ff90BHtLm3rjz4xml
-         Xfz6Ee98wdPyMLPmYka1Rw2xxmjHNIgvGEaxUH5LtWOa4tXfe7At0l5bV29JzTWTuKb7
-         D64+TWKzgV3JnNmErhl1KbbVDK35m3eE+myPSwkyCmJbx13waAHW7oZiCxuLAsxqj7ID
-         aSmQ==
+        b=gRbqjtR3xFyHf8JoEtnHAw/ibJRfkRanoKHKQ7pInjMwZ+dQngrEY0N+qQMfRDMuzB
+         XCHFsSUz4ARsR+piJpegpj/kyaMTLSQT/uM6dhUnTbyRiirznHR0zMgTeNFCbEcDEQhH
+         0/rhrk5MwAIQnFYgSJZ3br1RMBEpJ5+tkZjxmakEg9shqI+lAhUE5aiCe7gOCNDnRdi2
+         oBiJ4NAPN2WHPYCNH5K/0KzwEbW4d5a+McL60XIm49ef16lKGB4AXvME5YFk0pgx2ooR
+         5XNMYncFrAhqJLvVZx4Ve2Y4MlNxm4QYOfmQO1RR53Lasb+jc8eOBbWWFm71XSCkVoBF
+         S6xA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
-        fh=rs8LPe380aiF7ZS82/WpV2UusKq0Q894lmIrbw7/qC8=;
-        b=YsRb1E8bcr1VoBb0v7tvSS9IuHRU3i69k904tc3J6umLPToEgpxV0j2sSAM0InS+bA
-         tvEqo17hktekcwBEwmfFmmhfRJFrqyjjLyXzEEnjHTVOtUyswWrJIndVj2IC+P+hm1Ky
-         9RqsAZl7DEtTMraKarziq/x1SWyF5mcDpeYuXmVvx13tBBaFv59DPMkrcrDfPe9GG2Vu
-         4s3gumok/6pbqzSZJqh3boPQRxPZwDDbOeFvN4MKLh7dg8mRDERsEpWHXfaeN3Yq8qG7
-         CAx7XK5kakTvnrq4AoxJnj78mH2UFWXEsxL8uAulPT7//P9NvIeUiBkGvWrXIPduNtZV
-         YIow==;
+        bh=uMrMUI4UiH1bTD08Nrh+4d7dEyXFH++5+rlUyuRsk6c=;
+        fh=IPxdbsgyoTiE26aiD5xEoLmr3eAvvMvut791qeW+g+I=;
+        b=eTCQxrE926Xet8eikFIQzxSO72gb5klJM62txcX5yMMZejCKIIRGZL7wRHK/837w4o
+         vjDVTOKs9Wo5QK1ErQmRBbeWAtot3ELaXgM5D4kzjW0xl/gI7G1UUgruC0h2k3bwRYwL
+         mprXMIDjasdXMnjBKZC1JenODz232CfZKgJDu0rMyxg+6TgruWIavXiP+j4H1G2BAyPU
+         gOqzklb5bpLTYwpyedyYWGoazhy0+/alhjAsI+S+W+Aj39Rum4hGIctfoV6GfDRb3M4a
+         5bYNLuUqZTjh2hvaapXmKrrr4fSU0EO50GqkdRrIPuyNrnI6dZdwRHlYFOLuBakn2SdW
+         Zj8w==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1783360556; x=1783965356; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1783361220; x=1783966020; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
-        b=SMeuVQssiarnVo8f9icsw6orqEMNQ/UEdIpAvfsrsTdUPwSrMqSxt36GwpL2s9LplN
-         ouWie9REP6iloW+AT/A0ljWbV/mKZqaUQLR1FzSYs11a7VVV+t7q+0e+rxu+roeHS96p
-         JUGxKzKwGes6XR5yhpvox6yDSb5qd928X0Ja8DEMcSkdZikl++LIax768bz2wdILtvLp
-         uSb9JaWU4K5UuogldKwKUKseTm2uMKHbdZ83CLK5maL+B1CDYl7Xw2JZLj9ZKuYxSI+X
-         UsFjQEDCDp8yxDg062QP/XJ4DNDlYrRgDiuMtn8atf1FO6sPpSL6dO0nqy6WDLjoULa3
-         EYwg==
+        bh=uMrMUI4UiH1bTD08Nrh+4d7dEyXFH++5+rlUyuRsk6c=;
+        b=O2lYT+mR6z3QEVWWMG+dhsiBNXyzmY8V6eDTfOdHZSdAKVf3Sg7A5bEcMrUTd/I53z
+         PGgQXxo5uQLWxkdf9/mlQRkksMW9dPM/saNkc2qR+pl+e6LI4AmZCoW7L3jOUZkUgQB9
+         IvV5jd9IBglfryPTC7kbWVyTdhpG//Y+j7S1NqndguSNA35NwNjRMr3YgpDoaNeQkMxp
+         A2vofE9bSH5AlCRy2UBJjWU/OJJ0bzL1bTao4cG5iA7CwtxFn4bmjNzGHwCP8bR5lCjI
+         VlEMGEpRbXemn8xKSx8wY+FH7LG6j7vuOq6nTiOWeas9VnceOHqPbViNcrZUQl+hwYyK
+         a/2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783360556; x=1783965356;
+        d=1e100.net; s=20251104; t=1783361220; x=1783966020;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=c9xYvgWpSIsvxmmbSKcwuxv2TlolNkK+hPjDZbbXCRg=;
-        b=YeVjZL7/g/gLUVo4r0LbH8HEqbkENc8F34yywGSJNxjjDzpSmAO3TtdQuzdyDTZf67
-         6Icktx5LHDsifHkjzCIQUydHm8/KucZ9Z/CXh5fKBpuLm4m7QJ+h38qDzxZUNhymLFuJ
-         mqO1w4+X3jxwlzQSRluXXJBEMha5lQYAi0A7Xd7Us/LEmTy5sWoxjhevlBbbx+WuNGeM
-         5krbfMjoouzj4Kdc0nuORfVxXFZ6FuK64TnxCVEbJrVMdQU7PMZg6OBDlQ0tI9EGgqsZ
-         f/w+sG/zL9LMHdvb2Kw8KvheyOPuzQTADZS8Gs1/CuGihTwK+qIgsIy36m6D9Sg89fjY
-         wWrg==
-X-Forwarded-Encrypted: i=1; AHgh+RprDWeomU7+BZwmtPl2PYS85EvSpeXdA4DbxhYJCMyP83w6CkU7P/1GJcYZqtqFriKqXPdP@lists.linux.dev
-X-Gm-Message-State: AOJu0YzgbR1ZChJYOSdgKVBiLUVLt4DClL9c6VCigtqJP2AXnwHYSbK7
-	q7H7XN9VnECDqjblpcDGHyGRMdth47oOtsP4oVA0/986Hk0ZS58Ta9jJGaKIeq+Tg6TUZuWj5Uw
-	YwktP8/8XmGL1ptSkeYvLFHybc6Iy/L09azyDVdyc
-X-Gm-Gg: AfdE7clp43o3nmFFybuxCwM0o3Z3CH8IqbgeWblGlUngHk5Mqmn2VdfCk8U0bZiKKDp
-	D5xmHoHpj0SIYNkGu62WpSLpk7D6tNVplqvzyfbCm4w+zdpRa2UnAL24ecv52anQYPU1kEpcE9G
-	qD2kwx77XAg/uh7Uzn5pfqCOXDvo8BF0uOU+cth6m4b1W5/VnFn5gU7tfWMP1cbZGKXDpi210JS
-	OywX5w3cQdY6GaG0fmwywxbyKjQeDUMFCvJo/Px447IDjwwqgKK5BlB9cZ7YR2+INiW8axp
-X-Received: by 2002:a05:6a21:3988:b0:3bf:6c08:fb8e with SMTP id
- adf61e73a8af0-3c08eecc5f1mr1926858637.48.1783360555946; Mon, 06 Jul 2026
- 10:55:55 -0700 (PDT)
+        bh=uMrMUI4UiH1bTD08Nrh+4d7dEyXFH++5+rlUyuRsk6c=;
+        b=ScgBr+dQDAuellvgKVw3ci6gQwst6KZ8Zjr+P9S0d7kajyh65xyVHdWcP7u58o2SVx
+         7BJONbEZRxzOFHGAHwTL1jZmWYF/0igNT7IwytEWm7h+7xAfRR9usICaMY7L7e6BhIPA
+         tGTpMvia/y9Me/z0v68w6lI4E6THp5dI0Ou9WYX0A5Jh7E8YzvEcLXhaEom2OgBzEyWK
+         2MhXGwU3S9ihodCjIUlVuzVqfVPds+Suc05g0c8Gq84gQIdd1VuRi/cU8xCtS7pwb/yA
+         MJ9DBBqpDks+ofVKyX3XmdrB+p1/F7h8VnApjmb9sLvj44WrSYIXC7CJRbZ5AnwaVm7+
+         qYDw==
+X-Forwarded-Encrypted: i=1; AHgh+RrQxBKP9ohI0tr6Jyi9cVtGpCe+n57wNu8MsZYUbUBOB7cKXLC7/5+HW5jMxa/kr5wI89A9@lists.linux.dev
+X-Gm-Message-State: AOJu0YzF5taC9LibC89xRnPSpruTI4w/gHadIPLiu5jBR4YI2ItcUKzi
+	0zTrCMjQW94zJ4cu7k+0KRDfj5LDON2caBTr+XmHX8GOdMF7x/BBUEGvxZraQbJWeZ0jLOgmNJj
+	7mru8x1jrol9dzh3M4MBPEkNNfu1CJlp2Dn8m32B0
+X-Gm-Gg: AfdE7clkasDEJlCDLSaY0R1FUXEVql7qRxPFWS6Pa4YI/Ilh9DP3ui1JFARcEWWKWhk
+	mxZth6PceFc9zmKj2GzAiVAt+dytw1IQffPvKQ83NPnhPjPKXABF4gb55sDtpK20iyGpTQ5/cwV
+	ei6j0+VxfvAT3Xo9p5b+8oxuM3rI5n4mM2a0trebd+sC0OLRKOBb525BWRCiz4Y/R//fht/Sl2e
+	AXtzES5GBVWvGcO4ILkl9opgBtDAHiMUxGlVIi2MklQAvolC6TfkoHL6IeMRm4YZj7mGQ+VN/RZ
+	C5smcYhCG8dYuw7YvdjgdKuq+5CPZNj0/CyQAYrMwN3RoIP4rkUSqUKeEnlXh2SdhbOjeMGjjY+
+	M0xisidSTKvaPDG+OgLIFG0e3vbOQj3lvRcciXqA=
+X-Received: by 2002:a17:903:244e:b0:2ca:cb8a:f26b with SMTP id
+ d9443c01a7336-2ccbe3f7890mr19740575ad.10.1783361219085; Mon, 06 Jul 2026
+ 11:06:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,20 +85,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260706175228.2468730-1-dmatlack@google.com>
 In-Reply-To: <20260706175228.2468730-1-dmatlack@google.com>
-From: David Matlack <dmatlack@google.com>
-Date: Mon, 6 Jul 2026 10:55:28 -0700
-X-Gm-Features: AVVi8Ce5nbB5dQBx-YTPg7rJMXNHy2ZTmt6qPpfE6nxI2-mw0XhdUMdNTXLndXI
-Message-ID: <CALzav=f4-mCCvu1fL4DUQ3saetcqCumvfEmQuDFmH5X2SHXqEA@mail.gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Mon, 6 Jul 2026 11:06:46 -0700
+X-Gm-Features: AVVi8CcBQh81dXbjkWyXxADhbwcVGrpYq-P2xONh21cgosHQiIwPIcGgha-co4Q
+Message-ID: <CAAVpQUAgt9TmpGMkWC-sA8tOPyCwM=T+07Dt5FazHk1PfWmGGQ@mail.gmail.com>
 Subject: Re: [PATCH v2] selftests: harness: Mark test fixture objects __maybe_unused
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	llvm@lists.linux.dev
-Cc: Andy Lutomirski <luto@amacapital.net>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
+To: David Matlack <dmatlack@google.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev, Andy Lutomirski <luto@amacapital.net>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>, 
 	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
 	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
-	Alex Williamson <alex@shazbot.org>
+	Will Drewry <wad@chromium.org>, Aaron Lewis <aaronlewis@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
@@ -105,6 +105,10 @@ On Mon, Jul 6, 2026 at 10:52=E2=80=AFAM David Matlack <dmatlack@google.com>=
 >
 > Mark global test fixture object pointers __maybe_unused since they may
 > not ever be read (e.g. if fixture variants are used instead).
+
+Not very accurate; using fixtures w/ XFAIL_ADD() does not trigger
+the warning.
+
 >
 > clang made a change to -Wunused-but-set-variable (split out into its own
 > subwarning, -Wunused-but-set-global) that causes this warning to be
@@ -121,7 +125,7 @@ rocesses")
 > Reported-by: Aaron Lewis <aaronlewis@google.com>
 > Signed-off-by: David Matlack <dmatlack@google.com>
 
-Sorry I forgot to apply Alex's Reviewed-by tag from v1:
+Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 
-   https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@shazbot.=
-org/
+Not sure why Shuah didn't pick my patch though :/
+https://lore.kernel.org/all/20260530054722.271157-1-kuniyu@google.com/
