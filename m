@@ -1,172 +1,129 @@
-Received: from out-21.smtp.spacemail.com (out-21.smtp.spacemail.com [66.29.159.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD31415A864
-	for <llvm@lists.linux.dev>; Mon,  6 Jul 2026 01:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.29.159.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0B615A864;
+	Mon,  6 Jul 2026 01:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783301819; cv=none; b=I1xKAFzUkNtrBGNU/aNaQt7hlaqzvxEWDweHNdpQQaRNeIEwmch+Zb3CgoIFqIXecsSp3CCyR3r1wLWWtQCvAOcfc6WIgg3PvA1G5lkw7UlDCOEwJPRRes9SHI+nzflbFBzyLtfgmcV0FQ5x8cw7WLxeFLPpWtW5too+o+YLVy8=
+	t=1783301955; cv=none; b=VRs4fGOQCF5EzIF0TElLDr6YpaLK1kky9uR3e9/EramSeqje2b4qhxt+u57DkPJyIIqkEqssrrItwsKhSzuVisOd1BNfshEndj9uKHZVEtmTgulJBZNNwERv111wHcKAis6nbBuiWeo0Om6i1Kiap6mTigBKB18CjKcFYuvVXBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783301819; c=relaxed/simple;
-	bh=HyEqGbayGnvhC9h1TBFxEK9QF1cFOv+6uZ+d8nJ/32U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rlqaVmoCjTnzEioC8uc6JNhIhqxnAgiG5RdY90w1rEXfOBsXRb210SIGhlCYstEKCpAroVMxP/zzoR36mRkgqa2R9yMlJL1dY2FcvkrVurzplJBN/sTvgo6mFjpvWwSQLU8erfgD8W13ugJtymMQwjyy2ms2mfqtSKHPhTKlL6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev; spf=pass smtp.mailfrom=gurudas.dev; dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b=G2EfseSQ; arc=none smtp.client-ip=66.29.159.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gurudas.dev
+	s=arc-20240116; t=1783301955; c=relaxed/simple;
+	bh=Op/slMsb5UHOy/HOMqAdSgXqr3CWywrd9wzFnc+0nbs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=pBazjt137HJulCYEFgtYbUGSgixnnYuaDwaAUvbFK+It2XrXw7tLDL32OHU0TPWaH3cAn7LzGnLLq/SQwAB4BB4DObGy/leuLEC0BY6y0PmQ5VKhVHx3yva4uyWOwUanVya8/Y9nzwjx8RLuOo5DuBBQp/NhlwBqmhGb6SDAq+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fqZcAVF1; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b="G2EfseSQ"
-Received: from [192.168.1.96] (107-194-158-19.lightspeed.sntcca.sbcglobal.net [107.194.158.19])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4gtn5Y3Yqtz6tkR;
-	Mon, 06 Jul 2026 01:36:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gurudas.dev;
-	s=spacemail; t=1783301810;
-	bh=tM+AcZKfOAoskfcs0wU7letSfehw7FN+lx/KixPmf/k=;
-	h=From:Date:Subject:To:Cc:From;
-	b=G2EfseSQ0jflfZawScIWDGocVvLr4VQkoRtQ7HyKiCG4KLimBCQ/hzJqTsSX7GTnT
-	 1hlXjcuI0avn8kBed/8apUiVnwn+xKIIpISheqqyjg7vPimhwx6LVrQ6vOtZF4ep1N
-	 VQg0z8ah1c4YNoe+eSWlSoSRaE+5cZVqHAn4XHYmoFhhdWndGCxjQTYf7dr7H6PvDn
-	 Htx/ydkQ4ETfX7yqVb4rCkh+vvrCFWXRZ2O510xJQPoDWAQhQhoD0JS2wgx8Qn4r6V
-	 BNbQiXkkg2y6Od0gCsxYe+Bl2dj1U5uO/zUkHiaxno0DhVjwiRvUuT/lC6no7HtFoh
-	 9iH+yeMZvW5HQ==
-From: Guru Das Srinagesh <linux@gurudas.dev>
-Date: Sun, 05 Jul 2026 18:36:48 -0700
-Subject: [PATCH] block: rnull: use vertical import style
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fqZcAVF1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783301953; x=1814837953;
+  h=date:from:to:cc:subject:message-id;
+  bh=Op/slMsb5UHOy/HOMqAdSgXqr3CWywrd9wzFnc+0nbs=;
+  b=fqZcAVF14dDBOCpyp/v+Oa6kt2dZD4E34VxeUF2Q5kS1DGo2S1Et2BPh
+   60qp7eyVxh2hQNLL9cC6K7OxZVtvHmRJIavW4RNkHuDO01WRcRwBhstaY
+   lZDu3T0f8B7nK8eIixuspvO4t7WGv/kOneISwlij3mi74krnGXthc/zwW
+   jWFu50L4mKkGapfV07scQq3H/ETDnolgGo6kd7ckpa5Wy1bHIDAaiAgCi
+   8FRiVQVrFNJ26dpkZGqe4NOR2isAcdQ0PFiuxA5aAKG5Q1BfneUjB/70g
+   lxGDAMUW8EzXUvruivu68Vha8qMrO/NMOABBKfIaal4+BwOJTbZcd0bNA
+   Q==;
+X-CSE-ConnectionGUID: G6HQrgKiRoOaV+nE5oNxDA==
+X-CSE-MsgGUID: 5KOZySFCQkatLzA5igmPzg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11838"; a="106726812"
+X-IronPort-AV: E=Sophos;i="6.25,149,1779174000"; 
+   d="scan'208";a="106726812"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jul 2026 18:39:12 -0700
+X-CSE-ConnectionGUID: hnjZV1+jT1+61gIgUxiBRg==
+X-CSE-MsgGUID: AwAErie/TtuwTU+qu9BczA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,149,1779174000"; 
+   d="scan'208";a="250909428"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 05 Jul 2026 18:39:10 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wgYId-0000000022n-1nhC;
+	Mon, 06 Jul 2026 01:39:07 +0000
+Date: Mon, 06 Jul 2026 03:38:15 +0200
+From: kernel test robot <lkp@intel.com>
+To: Dan Williams <djbw@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [devsec-tsm:devsec-phase2 13/24]
+ include/linux/pci-tsm.h:190:13: error: no member named 'ide_cap' in 'struct
+ pci_dev'
+Message-ID: <202607060301.XwJgMU3N-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260705-rfl-vert-imp-2-v1-1-e6ab69c55095@gurudas.dev>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ5EQBBA0atIraeS0hM6XEVmoammZAapNiIRd
- 9dYvsX/OwRW4QBlsoPyKkGmMSJ9JdD09dgxShsNhkxOljJU/8WVdUH5zWiwcK62lvL27QliNCt
- 72e5h9Xkc/m7gZrkucBwnmsWDW3IAAAA=
-X-Change-ID: 20260705-rfl-vert-imp-2-9bba7706d3f0
-To: Andreas Hindborg <a.hindborg@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Jens Axboe <axboe@kernel.dk>, Miguel Ojeda <ojeda@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-block@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Guru Das Srinagesh <linux@gurudas.dev>
-X-Mailer: b4 0.15.2
-X-Envelope-From: linux@gurudas.dev
 
-Convert `use` imports to vertical layout for better readability and
-maintainability.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/devsec/tsm devsec-phase2
+head:   fca18645f5a7726a7d2723322a520ecff3e72b45
+commit: 21936ae130218b2976ee091c948248c5f84dcb71 [13/24] PCI, device core: Add private memory access for DEVICE_TRUST_TCB
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260706/202607060301.XwJgMU3N-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607060301.XwJgMU3N-lkp@intel.com/reproduce)
 
-Signed-off-by: Guru Das Srinagesh <linux@gurudas.dev>
----
-Came across a recent commit bc58905eb07 ("samples: rust_misc_device: use
-vertical import style") and found a few more locations that could
-benefit from this cleanup. No functional changes.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607060301.XwJgMU3N-lkp@intel.com/
 
-Separating out patches per-subsystem as per the review feedback in [0].
+All errors (new ones prefixed by >>):
 
-Tested via:
+   In file included from drivers/pci/pci-driver.c:22:
+>> include/linux/pci-tsm.h:190:13: error: no member named 'ide_cap' in 'struct pci_dev'
+     190 |                 if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
+         |                     ~~~~  ^
+   1 error generated.
 
-	$ make LLVM=1 rustfmtcheck || echo "fail"
-	$
 
-Initially thought that rust-for-linux/rust-block-next was the right base
-branch to use, which is why I didn't group this with [1] based on
-rust-next that I sent out a short while ago. Using rust-next as base for
-this patch.
+vim +190 include/linux/pci-tsm.h
 
-[0]: https://lore.kernel.org/lkml/20260628-b4-rust-vertical-imports-v1-0-98bc71d4810b@gurudas.dev/
-[1]: https://lore.kernel.org/lkml/20260705-rfl-vert-imp-v1-1-2f07946a905f@gurudas.dev/
----
- drivers/block/rnull/configfs.rs | 25 ++++++++++++++++++++-----
- drivers/block/rnull/rnull.rs    | 13 ++++++++++---
- 2 files changed, 30 insertions(+), 8 deletions(-)
+6aa0f2799e2d90 Dan Williams 2026-03-02  166  
+3225f52cde56f4 Dan Williams 2025-10-31  167  /* physical function0 and capable of 'connect' */
+3225f52cde56f4 Dan Williams 2025-10-31  168  static inline bool is_pci_tsm_pf0(struct pci_dev *pdev)
+3225f52cde56f4 Dan Williams 2025-10-31  169  {
+3225f52cde56f4 Dan Williams 2025-10-31  170  	if (!pdev)
+3225f52cde56f4 Dan Williams 2025-10-31  171  		return false;
+3225f52cde56f4 Dan Williams 2025-10-31  172  
+3225f52cde56f4 Dan Williams 2025-10-31  173  	if (!pci_is_pcie(pdev))
+3225f52cde56f4 Dan Williams 2025-10-31  174  		return false;
+3225f52cde56f4 Dan Williams 2025-10-31  175  
+3225f52cde56f4 Dan Williams 2025-10-31  176  	if (pdev->is_virtfn)
+3225f52cde56f4 Dan Williams 2025-10-31  177  		return false;
+3225f52cde56f4 Dan Williams 2025-10-31  178  
+3225f52cde56f4 Dan Williams 2025-10-31  179  	/*
+3225f52cde56f4 Dan Williams 2025-10-31  180  	 * Allow for a Device Security Manager (DSM) associated with function0
+3225f52cde56f4 Dan Williams 2025-10-31  181  	 * of an Endpoint to coordinate TDISP requests for other functions
+3225f52cde56f4 Dan Williams 2025-10-31  182  	 * (physical or virtual) of the device, or allow for an Upstream Port
+3225f52cde56f4 Dan Williams 2025-10-31  183  	 * DSM to accept TDISP requests for the Endpoints downstream of the
+3225f52cde56f4 Dan Williams 2025-10-31  184  	 * switch.
+3225f52cde56f4 Dan Williams 2025-10-31  185  	 */
+3225f52cde56f4 Dan Williams 2025-10-31  186  	switch (pci_pcie_type(pdev)) {
+3225f52cde56f4 Dan Williams 2025-10-31  187  	case PCI_EXP_TYPE_ENDPOINT:
+3225f52cde56f4 Dan Williams 2025-10-31  188  	case PCI_EXP_TYPE_UPSTREAM:
+3225f52cde56f4 Dan Williams 2025-10-31  189  	case PCI_EXP_TYPE_RC_END:
+3225f52cde56f4 Dan Williams 2025-10-31 @190  		if (pdev->ide_cap || (pdev->devcap & PCI_EXP_DEVCAP_TEE))
+3225f52cde56f4 Dan Williams 2025-10-31  191  			break;
+3225f52cde56f4 Dan Williams 2025-10-31  192  		fallthrough;
+3225f52cde56f4 Dan Williams 2025-10-31  193  	default:
+3225f52cde56f4 Dan Williams 2025-10-31  194  		return false;
+3225f52cde56f4 Dan Williams 2025-10-31  195  	}
+3225f52cde56f4 Dan Williams 2025-10-31  196  
+3225f52cde56f4 Dan Williams 2025-10-31  197  	return PCI_FUNC(pdev->devfn) == 0;
+3225f52cde56f4 Dan Williams 2025-10-31  198  }
+3225f52cde56f4 Dan Williams 2025-10-31  199  
 
-diff --git a/drivers/block/rnull/configfs.rs b/drivers/block/rnull/configfs.rs
-index 7c2eb5c0b722..2149b47db697 100644
---- a/drivers/block/rnull/configfs.rs
-+++ b/drivers/block/rnull/configfs.rs
-@@ -1,15 +1,30 @@
- // SPDX-License-Identifier: GPL-2.0
- 
--use super::{NullBlkDevice, THIS_MODULE};
-+use super::{
-+    NullBlkDevice,
-+    THIS_MODULE, //
-+};
- use kernel::{
--    block::mq::gen_disk::{GenDisk, GenDiskBuilder},
--    configfs::{self, AttributeOperations},
-+    block::mq::gen_disk::{
-+        GenDisk,
-+        GenDiskBuilder, //
-+    },
-+    configfs::{
-+        self,
-+        AttributeOperations, //
-+    },
-     configfs_attrs,
--    fmt::{self, Write as _},
-+    fmt::{
-+        self,
-+        Write as _, //
-+    },
-     new_mutex,
-     page::PAGE_SIZE,
-     prelude::*,
--    str::{kstrtobool_bytes, CString},
-+    str::{
-+        kstrtobool_bytes,
-+        CString, //
-+    },
-     sync::Mutex,
- };
- 
-diff --git a/drivers/block/rnull/rnull.rs b/drivers/block/rnull/rnull.rs
-index 0ca8715febe8..d58d2c4c5f63 100644
---- a/drivers/block/rnull/rnull.rs
-+++ b/drivers/block/rnull/rnull.rs
-@@ -10,12 +10,19 @@
-         self,
-         mq::{
-             self,
--            gen_disk::{self, GenDisk},
--            Operations, TagSet,
-+            gen_disk::{
-+                self,
-+                GenDisk, //
-+            },
-+            Operations,
-+            TagSet, //
-         },
-     },
-     prelude::*,
--    sync::{aref::ARef, Arc},
-+    sync::{
-+        aref::ARef,
-+        Arc, //
-+    },
- };
- 
- module! {
+:::::: The code at line 190 was first introduced by commit
+:::::: 3225f52cde56f46789a4972d3c54df8a4d75f022 PCI/TSM: Establish Secure Sessions and Link Encryption
 
----
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
-change-id: 20260705-rfl-vert-imp-2-9bba7706d3f0
+:::::: TO: Dan Williams <dan.j.williams@intel.com>
+:::::: CC: Dan Williams <dan.j.williams@intel.com>
 
-Best regards,
---  
-Guru Das Srinagesh <linux@gurudas.dev>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
