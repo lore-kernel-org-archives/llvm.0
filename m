@@ -1,267 +1,298 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012068.outbound.protection.outlook.com [52.101.43.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E52EF324B2D;
-	Tue,  7 Jul 2026 08:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783413036; cv=none; b=UGz3CUFhQkPKvqw6EC5zrJfwLAxroAAp6gZhan9u+ZPMjMxDu+i4xJDPBE9vSXr9Q8hP/eo3qdSs76YCcSeIUZ8nS9FR4HnteHhKOgBcO6IOg678gRmR2WKcXjt7yRZFYFZZnI9CFXnJ438gr9LGswRlbcPP+11C/CFnJnoeSZo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783413036; c=relaxed/simple;
-	bh=nP5SS8TSn5a1GQ/GBM9vcN4zxKMjiK9AstDAgspH3Ms=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gM7S4y2poXbJDAb0cLSllqEY0XouC7cldRd9KZntwS0F4gvpzCoTC+3o5wiJ8pk/AwoSAs/sX2Sd0TLNpJDDDg1pHcF+9o1+84ykE7vvo3Xu9JeIwNvsJaYMPKeO2hlH+F4WKlpEhzvhqGWBVTWHBCCCbXSXBtGfr/f2hoJX4YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fEFi/gRZ; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37C138F93B;
+	Tue,  7 Jul 2026 09:11:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.68
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783415474; cv=fail; b=TJNfAubPA7X7wKbLqQOr0pXt9pbb31NqiIhi7cJ7HB8HRvLwFIf1LffwTVQpTVSJQltNnGSsXfCNFDbRgLpukW+EL5T9veAnu2ATThwgKPk405xyTWvTPEjkISCWkgyY+uv8F7yA11xlsH+DQY7Z5fLfU28bWc65751f14PGRaE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783415474; c=relaxed/simple;
+	bh=R22+lPnU4QdR+aKA9hit6YUoO515+4HlunSklvnfyc0=;
+	h=Message-ID:Date:Subject:From:To:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=V2aTQC1UnNBcEASC1TK6jq+/qCp01ovEdCxMbJuTN/2WFc2MucIe59UPXp3LXQW+TDBMvNi6f37Y5y1GPS1M8nSV347O/Lt5T6hdXqGsjOXPeuZHyhCg8kQk3mXHFCokEfdg1L1BxLk49AmbGduAKTU4IVmajLwZKMe5jimYLks=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=M37MhmFr; arc=fail smtp.client-ip=52.101.43.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fEFi/gRZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783413034; x=1814949034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nP5SS8TSn5a1GQ/GBM9vcN4zxKMjiK9AstDAgspH3Ms=;
-  b=fEFi/gRZe9hjx9v6SrDla8SHH4JGLGFSt8D1SK1Kqr6qilITFeUO2XGu
-   L5yWntpXjM+bhEANoGBnbp4F7ENrjX748eW8Tb3THUClYUD79CELahwnb
-   buaXkOITUj2AzmCzQIorw01OZ1QKJN+An5bnRWgL1mSaHTNDq80y5NRfG
-   jhzxJZJpE8V5chGDq1EzlTKwiEywRN0gk1ovEmmH+6/qjcGXciHPpwHkN
-   33LSiJ1JPuS/qpbHUD7bmUUWQ78pNVoXSQJCzXCQnSj4w0d1+NzGv1GTk
-   +lCFMpyQtQH4wAKBpopU5PRe+f/zKI0ZBo9UtxIF0ZLEEIpuzlud9Af0z
-   w==;
-X-CSE-ConnectionGUID: KFDPs85pSmqedOmbRjp3CQ==
-X-CSE-MsgGUID: r/vfQhSURhmoqGr2KtWeeg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11839"; a="83031799"
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="83031799"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2026 01:30:33 -0700
-X-CSE-ConnectionGUID: LZSYVUCuQJyacjLdi8uxMg==
-X-CSE-MsgGUID: dM7jaC+ZThG2ZHIge1VmMg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="254588886"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa009.jf.intel.com with ESMTP; 07 Jul 2026 01:30:30 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wh1Bt-00000000F9t-3HG1;
-	Tue, 07 Jul 2026 08:30:06 +0000
-Date: Tue, 7 Jul 2026 16:29:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yonggil Song <yonggil.song@samsung.com>,
-	"jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-	"chao@kernel.org" <chao@kernel.org>,
-	"corbet@lwn.net" <corbet@lwn.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Yonggil Song <yonggil.song@samsung.com>,
-	"linux-f2fs-devel@lists.sourceforge.net" <linux-f2fs-devel@lists.sourceforge.net>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Dongjin Kim <dongjin_.kim@samsung.com>,
-	Seokhwan Kim <sukka.kim@samsung.com>,
-	Daejun Park <daejun7.park@samsung.com>
-Subject: Re: [PATCH] f2fs: introduce gcless mount option to avoid foreground
- GC
-Message-ID: <202607071623.ZxOpKv3S-lkp@intel.com>
-References: <20260706062043epcms2p16928216befdca1242bc2d3cd7cb34afe@epcms2p1>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="M37MhmFr"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=mrGxHrBwJRtGaQ3X9ksx2g/8KTYnSJpcpLxj9qDygGBQK//Yz/W2M5amSDTbYP0JOwDKl7flLuIyWnaGGLNczl1zSHeWrunfp9HuoSen3CatZbGbma+cJwg0TcGRt5+mZs+BrJvTozKKc7ZCVveFmlA8TGG8YyxELMi6X0aE2aYmlikXL8437bMkJGV75JxBdZtcto5NoO5bQWgdqR/puN9VyPbLdj1yJRe7S7Hc98o9hUf7GOT4iHjaTKniEzh5eRHHyWtd+96CZEqcs0xjivf2VAHj2QszDn6MhkFNNpwDMjWllSkLwzWigGimNo6UlR5H0jP+Rs4i7ur9lJNTDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TxFYqRvQnTm0HwfSa2fx4RisAUDyGGSuxwL4wVlb3eI=;
+ b=nhRBtwlGDymnXhwtZj49IPt6L9NQjF5Fm74kn3vkSpxd6KQEkW1RMuoY2dwa/9VazlRzjQkKhD5ocmR0893+2WkTI/YPrau3cGKYXFUEqwzTLH5ng741ECWF2zH6uFFZeR6G5Q5EfuqhsVSpLX6VMCx24Sd53V/Wl2S6nZwdCwgob37/9p9lKJjL0n+C7EMlmDeA8Bs+ncO/XeA4MRJTW4NbGiEGM87MKFZBj5VW/u+y01y6knm2bMAIwQyzk2mB/XmNlh4gTM+5kM8YzS8GxE/NpRtP3d8AnfnfYvhqBPYb9IDcKFIMbjj5Ccdl4UUkd24YDy1mYcKrbUmNE6AZEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TxFYqRvQnTm0HwfSa2fx4RisAUDyGGSuxwL4wVlb3eI=;
+ b=M37MhmFrxxxPo7WPv3WfpF9oWFTbE9aaSRkkB8C0/xdpg8C4ybRlM/e6LwsjWcxZSQ59TiTcV/L3v9FNK1Fbe5Y0I60w4L0IdDUWUuCe7zopJoYEGol9Fs+l9NuMJvH0p6D2j5NUhykL0ue8l8ZF7IYSZL4cEq003tRPQJ4ar2Q=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com (2603:10b6:510:13c::22)
+ by DM6PR12MB4044.namprd12.prod.outlook.com (2603:10b6:5:21d::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.181.13; Tue, 7 Jul
+ 2026 09:11:08 +0000
+Received: from PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c]) by PH7PR12MB5685.namprd12.prod.outlook.com
+ ([fe80::ce69:cfae:774d:a65c%5]) with mapi id 15.21.0181.008; Tue, 7 Jul 2026
+ 09:11:08 +0000
+Message-ID: <c575453f-d798-4745-b67d-4476825dfa64@amd.com>
+Date: Tue, 7 Jul 2026 11:11:00 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/drm_exec: avoid indirect goto
+From: =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+To: mikhail.v.gavrilov@gmail.com, dri-devel@lists.freedesktop.org,
+ amd-gfx@lists.freedesktop.org, peterz@infradead.org, jpoimboe@kernel.org,
+ llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>,
+ Maxime Ripard <mripard@kernel.org>, Simona Vetter <simona@ffwll.ch>,
+ David Airlie <airlied@gmail.com>
+References: <20260704084133.122053-1-christian.koenig@amd.com>
+Content-Language: en-US
+In-Reply-To: <20260704084133.122053-1-christian.koenig@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: FR0P281CA0169.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b4::11) To PH7PR12MB5685.namprd12.prod.outlook.com
+ (2603:10b6:510:13c::22)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260706062043epcms2p16928216befdca1242bc2d3cd7cb34afe@epcms2p1>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5685:EE_|DM6PR12MB4044:EE_
+X-MS-Office365-Filtering-Correlation-Id: 75c5041a-40f3-4133-0fa1-08dedc07ae10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|23010399003|56012099006|18002099003|22082099003|11063799006|921020;
+X-Microsoft-Antispam-Message-Info:
+	Gsb3wZgdK/Jdc8Ys4XKJ/CxDXFguLrLVatF9bfZyh9QNMkTfLZYJqYc37/zEBx6GSLNO1MO2oTb+VqNHNmBxlRkXDPkg7bMhmux1IS6T87R6EF9wWYahJDRP6od/8PjjJTsVQOg1K1BY3cSy5BGxXVJ7S+IXtklZS9TBqOcWsKVCkDIF+dfx6oNPubg1Z6d0v0aJldGLeilH8QcCV2PR/joDTpDTjuX0jyv3iKdd1W9P6D04guhs/7wIIB8UpZK08YPZk2w9uAGxwXNZr+7bcH3i2i1CdhgoxLs0AakrxfADiKLn31O1yvLb4dqnboILszzb+PbLP/UgzKsoi4X4gZ9NY4Yr+7NBcI064aIFFMw2Wil3ZTlb5W+aMzXAt61sa3+Dk6LDZIVxQONkZYp9kE+n9wAL+e/NCbR81DCbWg3P+Ej9TSJc/slwH35nLT2qSWi7RGS1q3bqaf15lmXDWuX2RkWCqeR94OA1VwFX+db49Y1+jnv+aYvMSx/GP32A/4BOks3L4S1uZCU6FaEhyptVmNEp3ns17YVSOxXx/NVwDQiTAm/yVhluu/lUn+OAg+3CNUNeouetWVGTUnqCtKxpkxlugjMIQldGUOo0VXK5d3bX720R0B167gLgIF8BsDyFMfg4kT/wIuQbNODus59i/KFyja3q0AfTwICd0xj3gUtwpykVBOOvZmtLaF8upw3T4smXZ1Uf6fQsatKM5g==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5685.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(23010399003)(56012099006)(18002099003)(22082099003)(11063799006)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?c1NLczh3SDBIWFZiNTJ5NGRUYnVMRUFTL3UvSmJNNVFVcTdxL0hkWWsxVkR1?=
+ =?utf-8?B?a21zWFBJNmNVTUJlR3l5TGtIblV6MmNxd1RmNjhqbE0yWEZBUlVGVjQ2MWhZ?=
+ =?utf-8?B?RldUSjlFMmI0N0k5dGxkUFc2aDl1Tlk4N2lFMTRLMXZMRTBrbUtPWSt5Nit6?=
+ =?utf-8?B?ck10MjJFWk1jWENSOXRrZmUxbXppUm1FM0VjdTRmVVJUbTV3UHRsSHNKWGVM?=
+ =?utf-8?B?azkyNXRwY2lLUUw4dVVsWDRRYU54aG1qYWc5UTZ5bnQ2KzhzL0ZzWEJNV2tR?=
+ =?utf-8?B?T29GVG9McFNtdzZlUXUyZzJlSi9jbFl2TWtaaGFneW5lSS9zcTEwZjlydlNm?=
+ =?utf-8?B?SHlGbVZPUHdvNi9jY292TFkrSHdrQjFycGI3SkVXSzB1eEVwYW5hYW9uMkFt?=
+ =?utf-8?B?VDlyT1VCMmlCd3FJQ0JBeVMwSjk3UExka3kxZ3BCckQvZ0NKM1ZaMlAvUWxC?=
+ =?utf-8?B?bTRyZ2swNUJMdmdTdU8wSWZEL2dDT0JieWFsbGl3MVVkdHJsRWVtMG1TQlQ1?=
+ =?utf-8?B?eDRhUTR5ci8vNnV0SXV4ZTYyZzlIN1U3QkI1MjhyZ2t5NzJXZ2NoOGV3YTdY?=
+ =?utf-8?B?OTdmRUtxeHBreTJKcG9sSTlrUkVKL016dU5tclZEdEhYOVZ6ajYreDdickdB?=
+ =?utf-8?B?aTFYZ2xKM1pOczkzcTd6MXliWUZwZURRSzVESDlreFloUTJpWXg2NW5ueXhk?=
+ =?utf-8?B?SVltcGhHVE5ERFdBVlp4dDczQ0lsUXNzbERWaEF2NW5CckttNkF0dXN0YTRu?=
+ =?utf-8?B?cXVHaHBtemZXVkRnVWJ4VTZnN1l2QlhNalRJZSttQXhwU0ZkL3laMWFnQUY5?=
+ =?utf-8?B?YkNDNFFFOW1ZTGpvekZNZXZOVVh1a3J6ZTFWQnNtTlJCbmphbW5FczRVTlgz?=
+ =?utf-8?B?VVpLVzNENlFmb0V2ekoxaDBlL3YyR0pwdGdXZWl0Q0ZuUXNHQmxZcHBIN1ZH?=
+ =?utf-8?B?SkNpY0F6OWFTNFc0UE5DN2hpRGwrTWU2VlgzVW05dDM3c1VIRWR2cm5YNkdl?=
+ =?utf-8?B?VHIwZHI3Zy9PQ1Y1OEJlcTFKenJ0YmlHTS9reVo5N29MTU1XZUN0MGxnZ1Q1?=
+ =?utf-8?B?cnhML3hnUllCaEgrekRJcHN4YlQxOGk2dE5NNm9DVlJObTJFNnpYU2g4cGVl?=
+ =?utf-8?B?ZmFwRTVTODBNb1Yra0pZcXdCQlI5R1NkVU5YMHJjZlRBQ21pSE1nbm5XN0Fz?=
+ =?utf-8?B?ejVMM2UrY25ZalM4dkdJQXNXQVpNNDhORXNZcnpqL0Q4RFFrOTdYZEVXV29M?=
+ =?utf-8?B?eTZJOFd1WEdtc2o0MUxFZW1tbGtzMjFoSTBBeVBDb0dMOE5DSnNwTnVHYlVr?=
+ =?utf-8?B?eS9oTlE0bzlGWHp0Smx5bzZsNkRqR0ZLbGkwMnRvWkNvZXJWV3NocWIrNjBp?=
+ =?utf-8?B?L2N1dVBPbW9LejZOQVkzOGpXRWR4RnNHYUZVSzZpNVQ3SkM0SXpRdjNJOERr?=
+ =?utf-8?B?Z3gyK2owTXBrMDR2Q28rcU95SVptbTFJVEVoOWNiaDhqWWdxZkVCSllld3E3?=
+ =?utf-8?B?M2R3NjZjWndhVDJ2Wkxodjg4d0YrK3dzMCtjS3dMY2NZemlrOVJ0alhvaitH?=
+ =?utf-8?B?WEhzUG9KUkRvMkIxOFJadkczNHlXQVdNOUtSQUJXOGZsU09HQ1plNU0xODZp?=
+ =?utf-8?B?ZmUxbmlab3Nha05SQjZYellkcGRKRzVSalFGK1BZL0VxNFFtcGhjcWRoeWlj?=
+ =?utf-8?B?OHF3dWg5NG1DelA2WUdIUm5nWUxvNFlCUkh1dDRrZU13VzAxWlU5aDBFNFZz?=
+ =?utf-8?B?dFBLVTBrUTc0Z2MwdjVVVmVKcG9FdW1YOFMxQlJZRzl2NFdSaC9Nazc5QWts?=
+ =?utf-8?B?b0JJU21neWRheHNWV2l2TTdkUmVnUnVQK0ZMNWZjWDcyRHBSUTI2UHllNGVr?=
+ =?utf-8?B?eHFJZDJoZFVDVGZKT3M2ZEVyZ0cyME0rL3ZxdWo0NmdPU3F0Q09oNjhlb2Vx?=
+ =?utf-8?B?SVc0dnZnaGZOUjdFQzk0cERCYU5UckM3ZWFOZVczUjhlNmsxQnNCQ2EwZjU0?=
+ =?utf-8?B?SVNJNW1GYS9hVnpIcDFqd25CSGZ6WVgyci8wcnNCaEZTS3d4NHRNN3pNMXVI?=
+ =?utf-8?B?QkJXRGRnajdUV1Y4WWttdVlISmwvdWNTU1J5cnJOdjU1Zk1wMkovK3hOdEJF?=
+ =?utf-8?B?U3h4YWJzNE1RRG1UengreDdUWWRKUWJjTUxQTzU3ck42ekc4ZVRFTzZFWlRp?=
+ =?utf-8?B?V2NqbmorVzNCSW9Rc3hSNDdEZUlWY3VMMmFnTVd6YmgyS2QxcXJ4bE10QTJL?=
+ =?utf-8?B?M0NDaVdCR241R2VlYk02aVF0c2dMWk1UaHd0cE12NlhQbnh6dktVVFQwNDd3?=
+ =?utf-8?Q?2P7anBssBx2BxlqGat?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 75c5041a-40f3-4133-0fa1-08dedc07ae10
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5685.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jul 2026 09:11:07.9790
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fp/z+wgZQkI9Dgtg3tvP0SOYy7RaXDTjXgnPCXPEy7qEp8lVADXYzCzlgEuabDm1
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4044
 
-Hi Yonggil,
+Adding a few more people to comment and review.
 
-kernel test robot noticed the following build warnings:
+Thanks Mike for the pointers, going to add them to the patch before pushing it to drm-misc-fixes.
 
-[auto build test WARNING on cb8ff3ead9a3fc43727980be58c7099506f65261]
+@Thomas, Maxime, Simona, Dave can anybody give me an rb or comment?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yonggil-Song/f2fs-introduce-gcless-mount-option-to-avoid-foreground-GC/20260706-154229
-base:   cb8ff3ead9a3fc43727980be58c7099506f65261
-patch link:    https://lore.kernel.org/r/20260706062043epcms2p16928216befdca1242bc2d3cd7cb34afe%40epcms2p1
-patch subject: [PATCH] f2fs: introduce gcless mount option to avoid foreground GC
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260707/202607071623.ZxOpKv3S-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260707/202607071623.ZxOpKv3S-lkp@intel.com/reproduce)
+Thanks,
+Christian.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607071623.ZxOpKv3S-lkp@intel.com/
+On 7/4/26 10:41, Christian König wrote:
+> The drm_exec component uses a variable with scope limited to the for() and
+> an indirect goto to allow instantiating multiple macros in the same
+> function.
+> 
+> This unfortunately doesn't work well with certain compilers when the
+> indirect goto can't be lowered to a direct jump.
+> 
+> Switch the indirect goto to a direct goto, the drawback is that we now
+> can't use the dma_exec_until_all_locked() macro in the same function
+> multiple times.
+> 
+> The is currently only one user of this and only as a hacky workaround
+> which is about to be removed.
+> 
+> So document that the __label__ statement should be used when the macro is
+> used multiple times and fix the tests and the only use case where that is
+> necessary.
+> 
+> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Christian König <christian.koenig@amd.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c |  2 ++
+>  drivers/gpu/drm/tests/drm_exec_test.c  | 24 ++++++++++++------
+>  include/drm/drm_exec.h                 | 34 ++++++++++++++------------
+>  3 files changed, 36 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> index fee4c94c2585..fc28d0fdad37 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_vm.c
+> @@ -3011,6 +3011,8 @@ bool amdgpu_vm_handle_fault(struct amdgpu_device *adev, u32 pasid,
+>  	is_compute_context = vm->is_compute_context;
+>  
+>  	if (is_compute_context) {
+> +		__label__ drm_exec_retry;
+> +
+>  		/* Release the root PD lock since svm_range_restore_pages
+>  		 * might try to take it.
+>  		 * TODO: rework svm_range_restore_pages so that this isn't
+> diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/drm/tests/drm_exec_test.c
+> index 2fc47f3b463b..7a374e462348 100644
+> --- a/drivers/gpu/drm/tests/drm_exec_test.c
+> +++ b/drivers/gpu/drm/tests/drm_exec_test.c
+> @@ -180,19 +180,27 @@ static void test_multiple_loops(struct kunit *test)
+>  {
+>  	struct drm_exec exec;
+>  
+> -	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> -	drm_exec_until_all_locked(&exec)
+>  	{
+> -		break;
+> +		__label__ drm_exec_retry;
+> +
+> +		drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> +		drm_exec_until_all_locked(&exec)
+> +		{
+> +			break;
+> +		}
+> +		drm_exec_fini(&exec);
+>  	}
+> -	drm_exec_fini(&exec);
+>  
+> -	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> -	drm_exec_until_all_locked(&exec)
+>  	{
+> -		break;
+> +		__label__ drm_exec_retry;
+> +
+> +		drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT, 0);
+> +		drm_exec_until_all_locked(&exec)
+> +		{
+> +			break;
+> +		}
+> +		drm_exec_fini(&exec);
+>  	}
+> -	drm_exec_fini(&exec);
+>  	KUNIT_SUCCEED(test);
+>  }
+>  
+> diff --git a/include/drm/drm_exec.h b/include/drm/drm_exec.h
+> index 8725ba92ff91..cc2937185a9f 100644
+> --- a/include/drm/drm_exec.h
+> +++ b/include/drm/drm_exec.h
+> @@ -101,17 +101,6 @@ drm_exec_obj(struct drm_exec *exec, unsigned long index)
+>  #define drm_exec_for_each_locked_object_reverse(exec, obj)		\
+>  	__drm_exec_for_each_locked_object_reverse(exec, obj, __UNIQUE_ID(drm_exec))
+>  
+> -/*
+> - * Helper to drm_exec_until_all_locked(). Don't use directly.
+> - *
+> - * Since labels can't be defined local to the loop's body we use a jump pointer
+> - * to make sure that the retry is only used from within the loop's body.
+> - */
+> -#define __drm_exec_until_all_locked(exec, _label)			 \
+> -_label:									 \
+> -	for (void *const __maybe_unused __drm_exec_retry_ptr = &&_label; \
+> -	     drm_exec_cleanup(exec);)
+> -
+>  /**
+>   * drm_exec_until_all_locked - loop until all GEM objects are locked
+>   * @exec: drm_exec object
+> @@ -119,9 +108,18 @@ _label:									 \
+>   * Core functionality of the drm_exec object. Loops until all GEM objects are
+>   * locked and no more contention exists. At the beginning of the loop it is
+>   * guaranteed that no GEM object is locked.
+> + *
+> + * A global label name drm_exec_retry is used, if you need to use more than one
+> + * instance of this macro in the same function the label needs to be made local
+> + * to the block with the __label__ keyword.
+>   */
+>  #define drm_exec_until_all_locked(exec)					\
+> -	__drm_exec_until_all_locked(exec, __UNIQUE_ID(drm_exec))
+> +	for (bool const __maybe_unused __drm_exec_loop = false;		\
+> +	     drm_exec_cleanup(exec);)					\
+> +		if (false) {						\
+> +drm_exec_retry: __maybe_unused;						\
+> +			continue;					\
+> +		} else
+>  
+>  /**
+>   * drm_exec_retry_on_contention - restart the loop to grap all locks
+> @@ -129,12 +127,14 @@ _label:									 \
+>   *
+>   * Control flow helper to continue when a contention was detected and we need to
+>   * clean up and re-start the loop to prepare all GEM objects.
+> + * The __drm_exec_loop check exists to prevent usage outside of an
+> + * drm_exec_until_all_locked() loop.
+>   */
+>  #define drm_exec_retry_on_contention(exec)			\
+>  	do {							\
+>  		if (unlikely(drm_exec_is_contended(exec)))	\
+> -			goto *__drm_exec_retry_ptr;		\
+> -	} while (0)
+> +			goto drm_exec_retry;			\
+> +	} while (__drm_exec_loop)
+>  
+>  /**
+>   * drm_exec_is_contended - check for contention
+> @@ -154,12 +154,14 @@ static inline bool drm_exec_is_contended(struct drm_exec *exec)
+>   *
+>   * Unconditionally retry the loop to lock all objects. For consistency,
+>   * the exec object needs to be newly initialized.
+> + * The __drm_exec_loop check exists to prevent usage outside of an
+> + * drm_exec_until_all_locked() loop.
+>   */
+>  #define drm_exec_retry(_exec)					\
+>  	do {							\
+>  		WARN_ON((_exec)->contended != DRM_EXEC_DUMMY);	\
+> -		goto *__drm_exec_retry_ptr;			\
+> -	} while (0)
+> +		goto drm_exec_retry;				\
+> +	} while (__drm_exec_loop)
+>  
+>  /**
+>   * drm_exec_ticket - return the ww_acquire_ctx for this exec context
 
-All warnings (new ones prefixed by >>):
-
-   In file included from fs/f2fs/dir.c:14:
->> fs/f2fs/f2fs.h:2945:4: warning: shift count >= width of type [-Wshift-count-overflow]
-    2945 |                         test_opt(sbi, RESERVE_NODE));
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   In file included from fs/f2fs/dir.c:14:
-   fs/f2fs/f2fs.h:2953:6: warning: shift count >= width of type [-Wshift-count-overflow]
-    2953 |         if (test_opt(sbi, RESERVE_NODE) &&
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   2 warnings generated.
---
-   In file included from fs/f2fs/super.c:33:
->> fs/f2fs/f2fs.h:2945:4: warning: shift count >= width of type [-Wshift-count-overflow]
-    2945 |                         test_opt(sbi, RESERVE_NODE));
-         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   In file included from fs/f2fs/super.c:33:
-   fs/f2fs/f2fs.h:2953:6: warning: shift count >= width of type [-Wshift-count-overflow]
-    2953 |         if (test_opt(sbi, RESERVE_NODE) &&
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
->> fs/f2fs/super.c:520:6: warning: shift count >= width of type [-Wshift-count-overflow]
-     520 |         if (test_opt(sbi, RESERVE_NODE) &&
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   fs/f2fs/super.c:526:39: warning: shift count >= width of type [-Wshift-count-overflow]
-     526 |         if (!test_opt(sbi, RESERVE_ROOT) && !test_opt(sbi, RESERVE_NODE) &&
-         |                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   fs/f2fs/super.c:1528:6: warning: shift count >= width of type [-Wshift-count-overflow]
-    1528 |         if (test_opt(sbi, RESERVE_NODE) &&
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   fs/f2fs/super.c:1529:21: warning: shift count >= width of type [-Wshift-count-overflow]
-    1529 |                         (ctx->opt_mask & BIT(F2FS_MOUNT_RESERVE_NODE)) &&
-         |                                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   fs/f2fs/super.c:1534:21: warning: shift count >= width of type [-Wshift-count-overflow]
-    1534 |                 ctx->opt_mask &= ~BIT(F2FS_MOUNT_RESERVE_NODE);
-         |                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   fs/f2fs/super.c:2475:37: warning: shift count >= width of type [-Wshift-count-overflow]
-    2475 |         if (test_opt(sbi, RESERVE_ROOT) || test_opt(sbi, RESERVE_NODE))
-         |                                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/f2fs/f2fs.h:150:26: note: expanded from macro 'test_opt'
-     150 |         (F2FS_OPTION(sbi).opt & BIT(F2FS_MOUNT_##option))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/vdso/bits.h:7:26: note: expanded from macro 'BIT'
-       7 | #define BIT(nr)                 (UL(1) << (nr))
-         |                                        ^  ~~~~
-   8 warnings generated.
-
-
-vim +2945 fs/f2fs/f2fs.h
-
-e48e16f3e37fac Daeho Jeong 2026-01-10  2916  
-3bac20a8f011b8 Jaegeuk Kim 2022-11-30  2917  extern void f2fs_mark_inode_dirty_sync(struct inode *inode, bool sync);
-0abd675e97e60d Chao Yu     2017-07-09  2918  static inline int inc_valid_node_count(struct f2fs_sb_info *sbi,
-000519f27866af Chao Yu     2017-07-06  2919  					struct inode *inode, bool is_inode)
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2920  {
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2921  	block_t	valid_block_count;
-2141879369681f Chunhai Guo 2025-08-07  2922  	unsigned int valid_node_count, avail_user_node_count;
-0f1c6ede6da9f7 Chao Yu     2024-02-20  2923  	unsigned int avail_user_block_count;
-af033b2aa8a874 Chao Yu     2018-09-20  2924  	int err;
-0abd675e97e60d Chao Yu     2017-07-09  2925  
-af033b2aa8a874 Chao Yu     2018-09-20  2926  	if (is_inode) {
-af033b2aa8a874 Chao Yu     2018-09-20  2927  		if (inode) {
-af033b2aa8a874 Chao Yu     2018-09-20  2928  			err = dquot_alloc_inode(inode);
-af033b2aa8a874 Chao Yu     2018-09-20  2929  			if (err)
-af033b2aa8a874 Chao Yu     2018-09-20  2930  				return err;
-af033b2aa8a874 Chao Yu     2018-09-20  2931  		}
-af033b2aa8a874 Chao Yu     2018-09-20  2932  	} else {
-af033b2aa8a874 Chao Yu     2018-09-20  2933  		err = dquot_reserve_block(inode, 1);
-af033b2aa8a874 Chao Yu     2018-09-20  2934  		if (err)
-af033b2aa8a874 Chao Yu     2018-09-20  2935  			return err;
-0abd675e97e60d Chao Yu     2017-07-09  2936  	}
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2937  
-c40e15a9a59f79 Yangtao Li  2022-12-21  2938  	if (time_to_inject(sbi, FAULT_BLOCK))
-812c60564ca721 Chao Yu     2017-11-13  2939  		goto enospc;
-812c60564ca721 Chao Yu     2017-11-13  2940  
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2941  	spin_lock(&sbi->stat_lock);
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2942  
-0f1c6ede6da9f7 Chao Yu     2024-02-20  2943  	valid_block_count = sbi->total_valid_block_count + 1;
-2141879369681f Chunhai Guo 2025-08-07  2944  	avail_user_block_count = get_available_block_count(sbi, inode,
-2141879369681f Chunhai Guo 2025-08-07 @2945  			test_opt(sbi, RESERVE_NODE));
-300a842937fbcf Chao Yu     2021-12-11  2946  
-0f1c6ede6da9f7 Chao Yu     2024-02-20  2947  	if (unlikely(valid_block_count > avail_user_block_count)) {
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2948  		spin_unlock(&sbi->stat_lock);
-0abd675e97e60d Chao Yu     2017-07-09  2949  		goto enospc;
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2950  	}
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2951  
-2141879369681f Chunhai Guo 2025-08-07  2952  	avail_user_node_count = sbi->total_node_count - F2FS_RESERVED_NODE_NUM;
-2141879369681f Chunhai Guo 2025-08-07  2953  	if (test_opt(sbi, RESERVE_NODE) &&
-2141879369681f Chunhai Guo 2025-08-07  2954  			!__allow_reserved_root(sbi, inode, true))
-2141879369681f Chunhai Guo 2025-08-07  2955  		avail_user_node_count -= F2FS_OPTION(sbi).root_reserved_nodes;
-ef86d70994b57c Gu Zheng    2013-11-19  2956  	valid_node_count = sbi->total_valid_node_count + 1;
-2141879369681f Chunhai Guo 2025-08-07  2957  	if (unlikely(valid_node_count > avail_user_node_count)) {
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2958  		spin_unlock(&sbi->stat_lock);
-0abd675e97e60d Chao Yu     2017-07-09  2959  		goto enospc;
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2960  	}
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2961  
-ef86d70994b57c Gu Zheng    2013-11-19  2962  	sbi->total_valid_node_count++;
-ef86d70994b57c Gu Zheng    2013-11-19  2963  	sbi->total_valid_block_count++;
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2964  	spin_unlock(&sbi->stat_lock);
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2965  
-000519f27866af Chao Yu     2017-07-06  2966  	if (inode) {
-000519f27866af Chao Yu     2017-07-06  2967  		if (is_inode)
-000519f27866af Chao Yu     2017-07-06  2968  			f2fs_mark_inode_dirty_sync(inode, true);
-000519f27866af Chao Yu     2017-07-06  2969  		else
-0abd675e97e60d Chao Yu     2017-07-09  2970  			f2fs_i_blocks_write(inode, 1, true, true);
-000519f27866af Chao Yu     2017-07-06  2971  	}
-ef86d70994b57c Gu Zheng    2013-11-19  2972  
-41382ec43255b5 Jaegeuk Kim 2016-05-16  2973  	percpu_counter_inc(&sbi->alloc_valid_block_count);
-0abd675e97e60d Chao Yu     2017-07-09  2974  	return 0;
-0abd675e97e60d Chao Yu     2017-07-09  2975  
-0abd675e97e60d Chao Yu     2017-07-09  2976  enospc:
-af033b2aa8a874 Chao Yu     2018-09-20  2977  	if (is_inode) {
-af033b2aa8a874 Chao Yu     2018-09-20  2978  		if (inode)
-af033b2aa8a874 Chao Yu     2018-09-20  2979  			dquot_free_inode(inode);
-af033b2aa8a874 Chao Yu     2018-09-20  2980  	} else {
-0abd675e97e60d Chao Yu     2017-07-09  2981  		dquot_release_reservation_block(inode, 1);
-af033b2aa8a874 Chao Yu     2018-09-20  2982  	}
-0abd675e97e60d Chao Yu     2017-07-09  2983  	return -ENOSPC;
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2984  }
-39a53e0ce0df01 Jaegeuk Kim 2012-11-28  2985  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
