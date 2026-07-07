@@ -1,163 +1,194 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3107A3EB81E
-	for <llvm@lists.linux.dev>; Tue,  7 Jul 2026 17:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF72D34B1A3;
+	Tue,  7 Jul 2026 18:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783444330; cv=none; b=ecwSUtBtWYEJXFVPftDB8hMIXLanKwFdtC5kn2vnubeW2p60LgMovUH/u9jiZvaodKGQfDLs4rmczwg183rjXy28B3BN6yqVPo0vVEQO2XLfZ1ItNC1bq6Fveg+ZyGsY72yGU1HaiXr1hgv1rypFt08KPWWa/iwhoun3I1n6CpI=
+	t=1783449067; cv=none; b=i3lQceHsPob2KkSaz+Npvoub3812yr7NZIzYITjUevOj1OfKnNP1r/RLk6bar2FIBveKriueZVLBWX3bYZDFru7MN53XXy5kue3YztknKQtF2Zx1bv0nzTlqbtDSwKByVnWnmNJqcdn1GiPPR0pTnBnTw2U+oSWdxsZQAZAeWSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783444330; c=relaxed/simple;
-	bh=MZlwoLji55LDEIi/ba35T6ENHdW58XbSVzpHtLVVU/w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OuVeEVm9Oh+3GMHp9Vcer+8S0cGNhBDp1GzfcIDHlQI4pB2Pmr29vIaV/NMDkZh0Zt54vvbtbezxQTeB7CkelPzzm5HLaLXnJB46OR5cldpC+0tjDfX4mCyOCO7usyPJajbXhCPd76rsdtWzaH5X4AQlPe9CXanxyFWvLIBPxUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3SoRaHM; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783449067; c=relaxed/simple;
+	bh=xyLiC1Mxei9/XpWir9Y65Ho+I8GXJyHl2yKOusLk7aE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Hr+KksDCKJx7aHmirOsRPZDRrnB85uSs+M4EwDVu2wV1WdXlWq0Cr0RooH4iuCE9+bj8yjdJEihXM0gJBUTzNuX64Eab0zBCgQtxI2H/RoQMrfz1QDiMj4DSbHVXhLQJqdF9eBqcFiZw+Vx6ySBlgnaP9ndQntpwrE0mweQOXLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N8V2kOzl; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3SoRaHM"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c9e2489e117so2575884a12.0
-        for <llvm@lists.linux.dev>; Tue, 07 Jul 2026 10:12:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783444328; x=1784049128; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=maQBLqx55rvjjXzubLY4/j31Yf1uTR7Ozp3LJ/moHrI=;
-        b=X3SoRaHMRjPqYQcIXiKROjfx6fayBdMtMbp0CcveFdE2fAMEfUX3m6tTYUJWKxhzqi
-         KgnyjQrbQ9Ng2IaLhZGRi5mQ73gENBlIGDjiAffheP3NkLMrv6dB3HicEdJK3gVqB0HH
-         Px7sU1dZlsuNNng/Sfi0J/hVIJgojBKJYkg8s5WlTs2+w7QOdvnDAQuC7dnfbS1/eGgB
-         losg8sNw3bkLqtIokf2ZeDXTVF+6habd575R2Udklw9u7KGeg9L5URjFviIDMvuu7fwr
-         qVmHkV467WDdNINTmpt9X/9rsmRRC3iJKAXDnmUUC53PlUX34bbJ8K49hKxj7v5Zvtoq
-         kdkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783444328; x=1784049128;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=maQBLqx55rvjjXzubLY4/j31Yf1uTR7Ozp3LJ/moHrI=;
-        b=gSspKJAdAN+ay1QUKqIeBQ0CuxBF6rN2IoEcmSO3UgV350uXzMGzUbjL8ppd0VUblP
-         3gC4SxbbdH7l4oppKkKKWXtWbCwblw6R5aQQgJQrNg08jAFlCYKixSpkpaWdhH/vVZkd
-         OjRMeD7D6Oji7PYFK/jFo+wVENavTWsN+3KpYNlRXxxENY7/MZbXVj1tFHWw4jxOElur
-         +kRNJPmJyyyqyS8jOcXMc6AIkttnE0SlLOTYAYf7175z97S09tsDsKgF4zNftNpZy9XD
-         h6cOr/X2QMaah+BCYMgb52GoXsYoJjqwzP3sdv0Hgglg8Ss5uXxOgiO3WKAtnWJRDbLm
-         HyxA==
-X-Forwarded-Encrypted: i=1; AHgh+RoDkHDce8Yvc5MhU2BcR9+XPbt+dxqOu4tkbGcTVZJPU13xfcgbvYysKaci7YJSpYS1OrcE@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw6UD5QXH1V3TE55OvQ6mqmbiRYK/WYjfBIcWv7jQVTlvrE3qW4
-	gaaCVmPsgjW2eGmGca4SbbckB4Uf9tziz+y3pjvTbUJCAyfCr1IF8ph5
-X-Gm-Gg: AfdE7cmEehm+QedXOC3m+tCbR+CdyXWoAyQd6etXv3qXLXuPofOFWEsU510DybvNJE0
-	5z4xIVdn/VB+uQF0ALf0wpJ19K42y9NQGKoVTJn3U7t+FpZJJ47XE/EjDKS22K+GRuqAwR3qThJ
-	umFWJHJCwa4E+bv/Ed1iH2SrENf7gzUy9t8LR8S65cqNWAnK7uQwuKU9wdnklmNWE4oePqTXQsT
-	Jz3Etzx5pf+RaraLArCaRDtZo1b3TCQaqHEuFs5ZmypLBlgmHtIeJg++Lkwlyw6QnKI9sbj35Hk
-	YlBaPpKKD/PK8HGUcoZxC6d0RDp0ZY+p5CN7C92Mt2muxwl7gkfix5CvUAuV5eJifdLqHOFna6H
-	bcEue75V6C5VFllXVt0x2D4B+5U7ytcy7qnZWN13CT4gkpVjnCuzYXCRw/kjZ/VWL9aO6oDqTir
-	mhYT+tyeocZM/nVzC+uElV9utBIcx84vdixrdKOkKEXQtWxHGBVjKQ5VTu8Kik
-X-Received: by 2002:a05:6a21:e098:b0:3bf:e94e:e38d with SMTP id adf61e73a8af0-3c08ef09cdbmr7227999637.43.1783444328420;
-        Tue, 07 Jul 2026 10:12:08 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.160.236])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13b659d8da9sm15539333c88.14.2026.07.07.10.11.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 10:12:08 -0700 (PDT)
-Date: Tue, 7 Jul 2026 22:41:53 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: Link Mauve <linkmauve@linkmauve.fr>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, maddy@linux.ibm.com, 
-	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, peterz@infradead.org, 
-	jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, 
-	ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, tmgross@umich.edu, 
-	dakr@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, daniel.almeida@collabora.com, 
-	acourbot@nvidia.com, fujita.tomonori@gmail.com, gregkh@linuxfoundation.org, 
-	prafulrai522@gmail.com, tamird@kernel.org, kees@kernel.org, lyude@redhat.com, 
-	airlied@gmail.com, linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-Message-ID: <ak0yWkEQtCzBt9qe@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260520064630.1785283-5-mkchauras@gmail.com>
- <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
- <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
- <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <CANiq72mj1P9QykK6vbPK37hZkMLwd7RcgVWEcxxuE=9OL+4bAg@mail.gmail.com>
- <akNXvfSfue7_3tyd@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <akyiZBPCaZOOyTw6@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <akzTCxnSgxba7Yen@luna>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N8V2kOzl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783449065; x=1814985065;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xyLiC1Mxei9/XpWir9Y65Ho+I8GXJyHl2yKOusLk7aE=;
+  b=N8V2kOzlbAfZhyBaPNTFV7lyR+JiYBgDKRs6cgnaYAf3vK+yt5c58cQL
+   qxgvg3sQeO6aSV1XKaFPzz2LGTbETQVt5CZK7uPPhHX4ZvoIUEcVxrBWl
+   vzftbAhIKBO6yF41O+3kvs7o4Ch8H7uR9T/P3hphBkLHe/IKDSkTWwZBO
+   ELMCxha6Q190GWjx31bZHbUbNRt9YOgxuN28hVbF+Ge6kaGD2Q65u+Ivn
+   tuEx1vQrkbnn9oZheMzXnA73BQq0dm9lEizLRvWOSSvrhWZELz81XjH/V
+   Hcb1aJPhazjj17EebDwdAMJz/SxHlG0YaeFuVNPa/hZrqyC8oUXYjj1nx
+   w==;
+X-CSE-ConnectionGUID: 8tLiP311RcGUFoOHwYySyg==
+X-CSE-MsgGUID: AZUxLALBQKSLqSJ4l2QiJA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11840"; a="84161128"
+X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
+   d="scan'208";a="84161128"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2026 11:31:04 -0700
+X-CSE-ConnectionGUID: FhoXgeHTQK+QkePPK4aq7w==
+X-CSE-MsgGUID: VhU86E7PSGmQJoaAx920jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
+   d="scan'208";a="250713317"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa007.fm.intel.com with ESMTP; 07 Jul 2026 11:31:02 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1whAZP-00000000FZb-34Pm;
+	Tue, 07 Jul 2026 18:30:59 +0000
+Date: Wed, 08 Jul 2026 02:30:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/vdso-sysfs 2/2]
+ arch/x86/include/asm/asm-offsets.h:1:10: fatal error:
+ 'generated/asm-offsets.h' file not found
+Message-ID: <202607080233.LnYBhKdu-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <akzTCxnSgxba7Yen@luna>
+Content-Type: text/plain; charset=us-ascii
 
-On Tue, Jul 07, 2026 at 12:20:59PM +0200, Link Mauve wrote:
-> On Tue, Jul 07, 2026 at 12:41:37PM +0530, Mukesh Kumar Chaurasiya wrote:
-> > On Tue, Jun 30, 2026 at 11:15:03AM +0530, Mukesh Kumar Chaurasiya wrote:
-> > > On Mon, Jun 29, 2026 at 11:11:44AM +0200, Miguel Ojeda wrote:
-> > > > On Mon, Jun 29, 2026 at 6:57 AM Mukesh Kumar Chaurasiya
-> > > > <mkchauras@gmail.com> wrote:
-> > > > >
-> > > > > Sure i'll bisect. Meanwhile i would still like to get this upstream.
-> > > > 
-> > > > It is very early on the cycle -- I would suggest bisecting first.
-> > > > 
-> > > > But it is up to ppc, of course.
-> > > > 
-> > > > Cheers,
-> > > > Miguel
-> > Hey Miguel,
-> > 
-> > I was able to bisect this. This got fixed in 1.87 with
-> > #![feature(asm_experimental_arch)].
-> 
-> On 1.85.0 though, with this feature allowed, the kernel gets built
-> perfectly without any need for 1.87.0.  You might want to require 1.87.0
-> only with altivec enabled, whereas on 32-bit we can build on 1.85.0 just
-> fine.
-> 
-Even without altivec and vsx disabled, It's not building for ppc64le.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/vdso-sysfs
+head:   8ae6b40fd6f555925afd049732cb12e502f22a4d
+commit: 8ae6b40fd6f555925afd049732cb12e502f22a4d [2/2] vDSO, kbuild: Provide debug variants of vDSO at runtime
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260708/202607080233.LnYBhKdu-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260708/202607080233.LnYBhKdu-lkp@intel.com/reproduce)
 
-Regards,
-Mukesh
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607080233.LnYBhKdu-lkp@intel.com/
 
-> > 
-> > 1st commit that contributed towards this is
-> > e4f539ea17a3 ("Bump to version 1.87.0")
-> > 
-> > This caused another issue to come up while building
-> > 
-> > ```
-> > error: extern blocks must be unsafe
-> >   --> /home/mkchauras/.local/rustc-src/lib/rustlib/src/rust/library/core/src/../../stdarch/crates/core_arch/src/powerpc/vsx.rs:38:1
-> >    |
-> > 38 | / extern "C" {
-> > 39 | |     #[link_name = "llvm.ppc.altivec.vperm"]
-> > 40 | |     fn vperm(
-> > 41 | |         a: vector_signed_int,
-> > ...  |
-> > 44 | |     ) -> vector_signed_int;
-> > 45 | | }
-> >    | |_^
-> > ```
-> > 
-> > Which is fixed by 
-> > a78d1b092c9c ("Update stdarch")
-> > 
-> > Both these commits went in 1.87.0 and fixed the build.
-> > 
-> > Regards,
-> > Mukesh
-> > 
-> > > Sure, I'll bisect it first.
-> > > 
-> > > Regards,
-> > > Mukesh
-> > 
-> 
-> -- 
-> Link Mauve
+All errors (new ones prefixed by >>):
+
+   In file included from arch/x86/entry/vdso/vdso32/vclock_gettime.c:1:
+   In file included from arch/x86/entry/vdso/vdso32/../common/vclock_gettime.c:11:
+   In file included from include/linux/time.h:6:
+   In file included from include/linux/math64.h:6:
+   In file included from include/linux/math.h:6:
+   In file included from arch/x86/include/asm/div64.h:8:
+   In file included from include/linux/log2.h:12:
+   In file included from include/linux/bitops.h:28:
+   In file included from include/asm-generic/bitops/generic-non-atomic.h:7:
+   In file included from arch/x86/include/asm/barrier.h:5:
+   In file included from arch/x86/include/asm/alternative.h:8:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/x86/entry/vdso/vdso32/vgetcpu.c:1:
+   In file included from arch/x86/entry/vdso/vdso32/../common/vgetcpu.c:8:
+   In file included from include/linux/kernel.h:23:
+   In file included from include/linux/bitops.h:28:
+   In file included from include/asm-generic/bitops/generic-non-atomic.h:7:
+   In file included from arch/x86/include/asm/barrier.h:5:
+   In file included from arch/x86/include/asm/alternative.h:8:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/x86/entry/vdso/vdso64/vclock_gettime.c:1:
+   In file included from arch/x86/entry/vdso/vdso64/../common/vclock_gettime.c:11:
+   In file included from include/linux/time.h:60:
+   In file included from include/linux/time32.h:13:
+   In file included from include/linux/timex.h:67:
+   In file included from arch/x86/include/asm/timex.h:5:
+   In file included from arch/x86/include/asm/processor.h:5:
+   In file included from arch/x86/include/asm/processor-flags.h:6:
+   In file included from include/linux/mem_encrypt.h:17:
+   In file included from arch/x86/include/asm/mem_encrypt.h:18:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:289: arch/x86/entry/vdso/vdso32/vgetcpu.o] Error 1
+   In file included from arch/x86/entry/vdso/vdso64/vgetrandom.c:7:
+   In file included from lib/vdso/getrandom.c:12:
+   In file included from arch/x86/include/asm/barrier.h:5:
+   In file included from arch/x86/include/asm/alternative.h:8:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/x86/entry/vdso/vdso32/system_call.S:9:
+   In file included from arch/x86/include/asm/alternative.h:8:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   In file included from arch/x86/entry/vdso/vdso64/vgetrandom-chacha.S:7:
+   In file included from arch/x86/include/asm/frame.h:5:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from arch/x86/entry/vdso/vdso64/vgetcpu.c:1:
+   In file included from arch/x86/entry/vdso/vdso64/../common/vgetcpu.c:8:
+   In file included from include/linux/kernel.h:23:
+   In file included from include/linux/bitops.h:28:
+   In file included from include/asm-generic/bitops/generic-non-atomic.h:7:
+   In file included from arch/x86/include/asm/barrier.h:5:
+   In file included from arch/x86/include/asm/alternative.h:8:
+   In file included from arch/x86/include/asm/asm.h:130:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   make[3]: *** [scripts/Makefile.build:435: arch/x86/entry/vdso/vdso32/system_call.o] Error 1
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:435: arch/x86/entry/vdso/vdso64/vgetrandom-chacha.o] Error 1
+   In file included from arch/x86/entry/vdso/vdso32/sigreturn.S:5:
+>> arch/x86/include/asm/asm-offsets.h:1:10: fatal error: 'generated/asm-offsets.h' file not found
+       1 | #include <generated/asm-offsets.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:435: arch/x86/entry/vdso/vdso32/sigreturn.o] Error 1
+   make[3]: *** [scripts/Makefile.build:289: arch/x86/entry/vdso/vdso64/vgetrandom.o] Error 1
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:289: arch/x86/entry/vdso/vdso64/vgetcpu.o] Error 1
+   1 error generated.
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:289: arch/x86/entry/vdso/vdso32/vclock_gettime.o] Error 1
+   make[3]: Target 'arch/x86/entry/vdso/vdso32/vdso32.so.dbg' not remade because of errors.
+   make[2]: *** [Makefile:1551: arch/x86/entry/vdso/vdso32/vdso32.so.dbg] Error 2
+   make[3]: *** [scripts/Makefile.build:289: arch/x86/entry/vdso/vdso64/vclock_gettime.o] Error 1
+   make[3]: Target 'arch/x86/entry/vdso/vdso64/vdso64.so.dbg' not remade because of errors.
+   make[2]: *** [Makefile:1551: arch/x86/entry/vdso/vdso64/vdso64.so.dbg] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +1 arch/x86/include/asm/asm-offsets.h
+
+559df2e0210352 Sam Ravnborg 2009-04-19 @1  #include <generated/asm-offsets.h>
+
+:::::: The code at line 1 was first introduced by commit
+:::::: 559df2e0210352f83926d178c40c51142292a18c kbuild: move asm-offsets.h to include/generated
+
+:::::: TO: Sam Ravnborg <sam@ravnborg.org>
+:::::: CC: Michal Marek <mmarek@suse.cz>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
