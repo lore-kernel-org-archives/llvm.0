@@ -1,112 +1,145 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 237F62EA480
-	for <llvm@lists.linux.dev>; Tue,  7 Jul 2026 00:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCE13D4121
+	for <llvm@lists.linux.dev>; Tue,  7 Jul 2026 07:11:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783385783; cv=none; b=bUfaH4jlb7pvDHItfFgQCaf+t4rqe8y7i1CtAD9wtogW62lXTJ8W1HvxHFVMgAyMDzFwX/cXOM9EJABqNaxtWGb/0De5BSMSc741wYuc0GM5NVCQwjaD0KSVmICUPTaZc0OnY3k2OibejDEoePN9nxVHh4fo8pwQ4wmqbohacXY=
+	t=1783408317; cv=none; b=gs27CQ2yYpN5LQNlH30Kty2WFCWjIGjm3g4QItolBrkMHdCry6EO38Rr9FfeLjEerEjPmpJjVw6Rw8XPHVCr1jvAvLI5tIG42beZY/x8JNF/UEA+OPrMfgD3D1oR9uT8p5bPcUBgGn4gm8wtFbQoMz44ehb1L92zDUowiIL7vh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783385783; c=relaxed/simple;
-	bh=AtP1ly62yHRiqJ1z0VVHy+4e1Wq02i/Dfs5QoupcSNc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J5qhgfjVlN2SYQb3vkFnQUJJaBzx0KTYCKHnIhqNrQWkp2Vol4Nt5nCjc8aVrk++CX8ndLq4JEOLKzHszLWk5EKFIa58bEPWW2XZIheYMtSdO2M01RH0mRIM5igAtzmkmJkO7z7/0F/UYSfGD/5dBTnYyThvV95BKIP+XM7npKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W2nM7kH+; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1783408317; c=relaxed/simple;
+	bh=dYEdQ18sgc+rSkPRjPzl6r1N6/BcC4c2WoZoXXxoK4s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l5w8nFeHPBh7TdbK1nWijuFhA9QqzD1yYiYkinvsKFOAYdUCnFNe3t76iG2DYgz52RiLIeV1OSWgdLle+7+KC4kf6AvW8EhmgxQw6hpWhjH2Q9p/gaod4m8uoOebl1kiveK51v8dS9to2IFjNhSxGAhE2NDualEf9sasdg9nZgE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZZ7nbI3; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W2nM7kH+"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-385ea3ce80dso1697525a91.2
-        for <llvm@lists.linux.dev>; Mon, 06 Jul 2026 17:56:21 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZZ7nbI3"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc6dd436c6so20358065ad.2
+        for <llvm@lists.linux.dev>; Tue, 07 Jul 2026 00:11:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783385781; x=1783990581; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WwT1m+lGw989aBCp7ntY5F2Cxo1vcQEFm2G6bjMfeX8=;
-        b=W2nM7kH+HSeN2FOB+N5VjWkwpgdqt0RacBF7nDJn+RxBf40zYAFj741FyFVJyzvZ0m
-         2QtLPXy6/ic6VhBte0ObZkDd1h6SN6rufiBAjeRRquiqbXeCwjerwl/1AK1HtXFd6X9z
-         R4MfYeDDpL25hI2mDa7OrpEYSO5KFkLDdh6ZeOdBSHzO2hrWEb1UeDI0+l1Fa/S1V6tp
-         Uf9Tv38KbBI+JU6NUrG75/bzvbauoHlM0aldwcmhz7NvRm7RuwCOd0PJE3B0bw/5wL00
-         KWYtZGHrhnkCCk1Dh4HzEeUgMUR65NeQO352hpJi+GFLA7ODJRPeb5uJn4CTDLS714vK
-         eAPA==
+        d=gmail.com; s=20251104; t=1783408311; x=1784013111; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=uKV78wv3WbZUmoFpUcsGcDjAxX6ML3nr/lm0iF69y48=;
+        b=SZZ7nbI3pdugUTB1Yq/GKvgl2j0mLeGiTwz5+YA2+Fbfj945FO7O8B7eXWFUTQNgXN
+         961w9mn/zM4vph4+OqcrCmqb06468SJY3OBzhJNDoQTR7NvYltA84oJgFeYKo4cBHxNd
+         /h9xBogvD2f0NqCy84LH1rvwdLAoc0eLMTy8Qzt8hVpsOFDlz7IpiJFXdhuE/OPJIeCT
+         8AYyn8TTrW6nXD2siul45TtcnshfNobZXvMo/MViuGwr8ud9kLnJfE4zQzOVEm4JTvcN
+         XAd33xd1KwgiQJ6R5SPHVu7VK4jXqLHam+Uc7ZaXN57Kn8luICYq7O3BlMaJhOci8Pel
+         b+Xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783385781; x=1783990581;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WwT1m+lGw989aBCp7ntY5F2Cxo1vcQEFm2G6bjMfeX8=;
-        b=UmoDeIBV1jqwhKBt/bi7XXjmToYa4Q1ZB+AVdr+P/mKIbXPEEAZJd4JTR/juOupI1h
-         /bIscJP1tVnxM126OL8pRR4NZO9M4IB3w1YCjnpfUuxnc5jiLLU1NZ6449jEZfHALVj3
-         BjNv/4BQDADZCmdEu0BlQsNCrJFnRgsbLIcjR4uHVuPQtaFo90KHeypQxbaaDyNZgwyS
-         Ryedvgqr3zRIsWZWPFYPLbIVVNOj18eE0ItsoRH7PDSF7RqWL3Hj5ZGS2InbI3bDR5iO
-         UemNFjMfMRtZH61SNrW6MfG7A+U03WRPMaon+jgp59rbAgw29kKZITC3HmVkKD2TDxE7
-         gPDg==
-X-Forwarded-Encrypted: i=1; AHgh+RoyalO3jiHO0UBCotjb7J4jtKnFSjTG9Nwv10UbhKGcs0w/YCheGUnCb7hoMiugi4S0HW1L@lists.linux.dev
-X-Gm-Message-State: AOJu0YzWr9kJDXQcCHQCuhmy2Un1nYqYRVOYHHKx/SNtqE8iDK7Toqyi
-	eXV9t6fpvsPxUFRaS6s3scnXpq6BFXrnkRv7P2bFKNjk/byy4imEMFXA
-X-Gm-Gg: AfdE7ckR5ZGgFSWYmMynPookNqIHS5AUkAxAPJtqoexC1xMWDoIVxkYujzPNmB+sjfN
-	m5/fq3ifPT0jkSQ1iL/fAmECFpsxnsjNvvT3RHhMmIn/b3XxiZFwbY1B/NUvbZoDRCrMLPymX0t
-	rSkp+v7gNljU+8+G3WlFhthsWjnEVb375pcYGRUqE+JPfPUDIeCVAPTWX2/ksPOsu2Ad+C/V1xe
-	azjdmjjKpLO/kTbU3yCRSkUpAFQTmotTgwp/6zFaA2DoaUC5uPdlyDK7zjlG2MnZbvc5SwUljvh
-	ZpWvfAWAQVZ6TehqfY/FgDPsvOeiOL8tGwRm/ZML2NOWEGNc2VwxPjYMwmeARr0oW4YjqawfMaB
-	x/JHDAIhSSmd8BWQ/tneU5w/sOKnrC1fVdUYTVsBfPiamuPermejY/lKLaie6dZoCYWRcftY6E3
-	J5HHxiAWtk5X1OxWzPuapKt76Tr/3nrOlBzWVK1z1b2dQXBy3RisP7ebDk1nsGBVKfMhgz7Pe3O
-	eq0QOZ2Ag==
-X-Received: by 2002:a17:90b:1d01:b0:381:bf9f:be37 with SMTP id 98e67ed59e1d1-38755768660mr3288581a91.5.1783385781345;
-        Mon, 06 Jul 2026 17:56:21 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-387d100b7acsm176090a91.4.2026.07.06.17.56.19
+        d=1e100.net; s=20251104; t=1783408311; x=1784013111;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=uKV78wv3WbZUmoFpUcsGcDjAxX6ML3nr/lm0iF69y48=;
+        b=mDOBOhRKnoxRqhKiVVcsIZWnsmCuEXUKCNZHyorQkiuEsoa1pZBah5CIhyo9x+5BBE
+         i24kUIYItrdhklCcaa6ofPYFuchlGI/RtmBW0lr7ihJ1LgXUxCdRBe+VDzG5a+uLGFTC
+         lMoK63ODG05d2UqI++gT6SQa8EuZki73r/tmGuAB8g2vqgQH+od58b1V/JaPnl3eKGXh
+         OtkFeawLVg5BC+JAZnp6rWW2WSBEwpa2bPztvDkW3mpEnhZZcrN0agWtCAystOHkdbJd
+         fvDYxyH2rp5cG//WjBMBITLOKx1ezb6ynxy708+aD0ZbDSIddvmk3f9wHQ4r6I+PdwZM
+         uwMg==
+X-Forwarded-Encrypted: i=1; AHgh+RpbINOPVihYnk3EJw1r93tsEdjcA2Yso+x5K80uounOrda8FdZMF4MF2xzq5lOOUdWUKqJi@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyk+GfWHFFWKGjg8yWqYdHKayyqLHUF8bWsyv+ErPou0lKjR+hH
+	8FsbxZz6ytQp8ohl9LoeoIBNsBY4/LdEyT0ICsz68SKby2+IkZud2NWT
+X-Gm-Gg: AfdE7cm0VpVTVB1rINSComGqwxR+Kcs8Qn6urrIfX1KmcepPL3Rz05YOIVmt6jbJxyj
+	dTpj/RqQDzlmri2qSlE1uWvFhRvhoHjev1bo9pQCRpxknDD/ETWoIV/n03ED1sPjXiU1okuasBv
+	LWtW0lJ1l/zCB5OhypleZPb2NiSSA+94sw94rD5hFhgNj7xY8T6TOWw4qE8nkRcEXxs2v1+Y0PR
+	dztjgPinPUBkIjQQeuMJpC1sNZLk2ZlghX6TZQkhDxBqiDzAQSHJUcneorq3oKuIFYLrkIUIQDx
+	OpzpAXBXYsueleaHi/nMol3jeetcwdEUoyvGiJvZQMSKvwWsnFwVABbUI6cUYkrsm+0PImEnxl5
+	g5Y1P6EJL9MH+GvDVztu4OihDR5G+TxsE+pIkJC/f7hznpS5G6ezZncH6fRyMYZDYZY5yvgoKJR
+	bpxrpuShZdq6ss1tAYTj+3/Q8Wpl2MVlnexZfdD5RC4KeBPRgnzlRq/0FI56TCaYfyK3ei8Mc=
+X-Received: by 2002:a17:903:4683:b0:2ca:be8:62d with SMTP id d9443c01a7336-2ccbf085003mr50131725ad.32.1783408311212;
+        Tue, 07 Jul 2026 00:11:51 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.160.236])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf74cbsm6556115ad.18.2026.07.07.00.11.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jul 2026 17:56:20 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-clk@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Brian Masney <bmasney@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv2] clk: thead: allow COMPILE_TEST builds
-Date: Mon,  6 Jul 2026 17:56:19 -0700
-Message-ID: <20260707005619.1229238-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        Tue, 07 Jul 2026 00:11:50 -0700 (PDT)
+Date: Tue, 7 Jul 2026 12:41:37 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
+	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
+	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
+	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
+	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, kees@kernel.org, 
+	lyude@redhat.com, airlied@gmail.com, linuxppc-dev@lists.ozlabs.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
+Message-ID: <akyiZBPCaZOOyTw6@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260520064630.1785283-1-mkchauras@gmail.com>
+ <20260520064630.1785283-5-mkchauras@gmail.com>
+ <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
+ <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
+ <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <CANiq72mj1P9QykK6vbPK37hZkMLwd7RcgVWEcxxuE=9OL+4bAg@mail.gmail.com>
+ <akNXvfSfue7_3tyd@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <akNXvfSfue7_3tyd@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
 
-Follow the pattern of many other directories in this Makefile (sunxi-ng,
-tenstorrent, ti, etc.) by using obj-y. This allows COMPILE_TEST to
-select the driver without having CONFIG_ARCH_THEAD enabled
+On Tue, Jun 30, 2026 at 11:15:03AM +0530, Mukesh Kumar Chaurasiya wrote:
+> On Mon, Jun 29, 2026 at 11:11:44AM +0200, Miguel Ojeda wrote:
+> > On Mon, Jun 29, 2026 at 6:57 AM Mukesh Kumar Chaurasiya
+> > <mkchauras@gmail.com> wrote:
+> > >
+> > > Sure i'll bisect. Meanwhile i would still like to get this upstream.
+> > 
+> > It is very early on the cycle -- I would suggest bisecting first.
+> > 
+> > But it is up to ppc, of course.
+> > 
+> > Cheers,
+> > Miguel
+Hey Miguel,
 
-Tested with:
-make LLVM=1 ARCH=loongarch drivers/clk/thead/
+I was able to bisect this. This got fixed in 1.87 with
+#![feature(asm_experimental_arch)].
 
-Assisted-by: Codex:GPT-5.5
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- v2: use obj-y
- drivers/clk/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+1st commit that contributed towards this is
+e4f539ea17a3 ("Bump to version 1.87.0")
 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index f6a71fd6d872..bbcedf5d60ea 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -157,7 +157,7 @@ obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
- obj-y					+= sunxi-ng/
- obj-$(CONFIG_CLK_TEGRA)			+= tegra/
- obj-y					+= tenstorrent/
--obj-$(CONFIG_ARCH_THEAD)		+= thead/
-+obj-y					+= thead/
- obj-y					+= ti/
- obj-$(CONFIG_CLK_UNIPHIER)		+= uniphier/
- obj-$(CONFIG_ARCH_U8500)		+= ux500/
--- 
-2.55.0
+This caused another issue to come up while building
 
+```
+error: extern blocks must be unsafe
+  --> /home/mkchauras/.local/rustc-src/lib/rustlib/src/rust/library/core/src/../../stdarch/crates/core_arch/src/powerpc/vsx.rs:38:1
+   |
+38 | / extern "C" {
+39 | |     #[link_name = "llvm.ppc.altivec.vperm"]
+40 | |     fn vperm(
+41 | |         a: vector_signed_int,
+...  |
+44 | |     ) -> vector_signed_int;
+45 | | }
+   | |_^
+```
+
+Which is fixed by 
+a78d1b092c9c ("Update stdarch")
+
+Both these commits went in 1.87.0 and fixed the build.
+
+Regards,
+Mukesh
+
+> Sure, I'll bisect it first.
+> 
+> Regards,
+> Mukesh
