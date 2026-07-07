@@ -1,145 +1,234 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CCE13D4121
-	for <llvm@lists.linux.dev>; Tue,  7 Jul 2026 07:11:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C047C3B8130;
+	Tue,  7 Jul 2026 07:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783408317; cv=none; b=gs27CQ2yYpN5LQNlH30Kty2WFCWjIGjm3g4QItolBrkMHdCry6EO38Rr9FfeLjEerEjPmpJjVw6Rw8XPHVCr1jvAvLI5tIG42beZY/x8JNF/UEA+OPrMfgD3D1oR9uT8p5bPcUBgGn4gm8wtFbQoMz44ehb1L92zDUowiIL7vh4=
+	t=1783408894; cv=none; b=tc+qV+p8Jl8zBY3OFNcayy+DwAsvuFc2+3o0I64R5fTb5c9IOUQr95mYQnztoLOIigaFOGY1/nHWYMsCBpwsWIQq36pFF6GMr8R9nE+aoFpWe3YwumsIPHHcCiWx2nVsTSYzBYqvLwG7yzR9UjB3Am2zdwoDnEq6k4xyVFC/idU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783408317; c=relaxed/simple;
-	bh=dYEdQ18sgc+rSkPRjPzl6r1N6/BcC4c2WoZoXXxoK4s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l5w8nFeHPBh7TdbK1nWijuFhA9QqzD1yYiYkinvsKFOAYdUCnFNe3t76iG2DYgz52RiLIeV1OSWgdLle+7+KC4kf6AvW8EhmgxQw6hpWhjH2Q9p/gaod4m8uoOebl1kiveK51v8dS9to2IFjNhSxGAhE2NDualEf9sasdg9nZgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SZZ7nbI3; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1783408894; c=relaxed/simple;
+	bh=MeQcpc2tDQ5s9leAsYyxZOMA2rT3vEy3DB+XblR7N2w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gKxgSM7wFy9RlDMs3eRBSlgYs8NpEof/WUA3sl/X9cpKYs/xsypjTX0F5gVzzJPrcz1NRDyVod37IQ2SY97CyyNy1bfQzsP25mLJTqpooLgK6LtV9UhKiBRjhKd7tUIkFMJgNEf+UJFdf10BiAYkWXC+i2YexSw+Q3IYgECDax4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qUnewggN; arc=none smtp.client-ip=95.215.58.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SZZ7nbI3"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc6dd436c6so20358065ad.2
-        for <llvm@lists.linux.dev>; Tue, 07 Jul 2026 00:11:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783408311; x=1784013111; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uKV78wv3WbZUmoFpUcsGcDjAxX6ML3nr/lm0iF69y48=;
-        b=SZZ7nbI3pdugUTB1Yq/GKvgl2j0mLeGiTwz5+YA2+Fbfj945FO7O8B7eXWFUTQNgXN
-         961w9mn/zM4vph4+OqcrCmqb06468SJY3OBzhJNDoQTR7NvYltA84oJgFeYKo4cBHxNd
-         /h9xBogvD2f0NqCy84LH1rvwdLAoc0eLMTy8Qzt8hVpsOFDlz7IpiJFXdhuE/OPJIeCT
-         8AYyn8TTrW6nXD2siul45TtcnshfNobZXvMo/MViuGwr8ud9kLnJfE4zQzOVEm4JTvcN
-         XAd33xd1KwgiQJ6R5SPHVu7VK4jXqLHam+Uc7ZaXN57Kn8luICYq7O3BlMaJhOci8Pel
-         b+Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783408311; x=1784013111;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=uKV78wv3WbZUmoFpUcsGcDjAxX6ML3nr/lm0iF69y48=;
-        b=mDOBOhRKnoxRqhKiVVcsIZWnsmCuEXUKCNZHyorQkiuEsoa1pZBah5CIhyo9x+5BBE
-         i24kUIYItrdhklCcaa6ofPYFuchlGI/RtmBW0lr7ihJ1LgXUxCdRBe+VDzG5a+uLGFTC
-         lMoK63ODG05d2UqI++gT6SQa8EuZki73r/tmGuAB8g2vqgQH+od58b1V/JaPnl3eKGXh
-         OtkFeawLVg5BC+JAZnp6rWW2WSBEwpa2bPztvDkW3mpEnhZZcrN0agWtCAystOHkdbJd
-         fvDYxyH2rp5cG//WjBMBITLOKx1ezb6ynxy708+aD0ZbDSIddvmk3f9wHQ4r6I+PdwZM
-         uwMg==
-X-Forwarded-Encrypted: i=1; AHgh+RpbINOPVihYnk3EJw1r93tsEdjcA2Yso+x5K80uounOrda8FdZMF4MF2xzq5lOOUdWUKqJi@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyk+GfWHFFWKGjg8yWqYdHKayyqLHUF8bWsyv+ErPou0lKjR+hH
-	8FsbxZz6ytQp8ohl9LoeoIBNsBY4/LdEyT0ICsz68SKby2+IkZud2NWT
-X-Gm-Gg: AfdE7cm0VpVTVB1rINSComGqwxR+Kcs8Qn6urrIfX1KmcepPL3Rz05YOIVmt6jbJxyj
-	dTpj/RqQDzlmri2qSlE1uWvFhRvhoHjev1bo9pQCRpxknDD/ETWoIV/n03ED1sPjXiU1okuasBv
-	LWtW0lJ1l/zCB5OhypleZPb2NiSSA+94sw94rD5hFhgNj7xY8T6TOWw4qE8nkRcEXxs2v1+Y0PR
-	dztjgPinPUBkIjQQeuMJpC1sNZLk2ZlghX6TZQkhDxBqiDzAQSHJUcneorq3oKuIFYLrkIUIQDx
-	OpzpAXBXYsueleaHi/nMol3jeetcwdEUoyvGiJvZQMSKvwWsnFwVABbUI6cUYkrsm+0PImEnxl5
-	g5Y1P6EJL9MH+GvDVztu4OihDR5G+TxsE+pIkJC/f7hznpS5G6ezZncH6fRyMYZDYZY5yvgoKJR
-	bpxrpuShZdq6ss1tAYTj+3/Q8Wpl2MVlnexZfdD5RC4KeBPRgnzlRq/0FI56TCaYfyK3ei8Mc=
-X-Received: by 2002:a17:903:4683:b0:2ca:be8:62d with SMTP id d9443c01a7336-2ccbf085003mr50131725ad.32.1783408311212;
-        Tue, 07 Jul 2026 00:11:51 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.160.236])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9bf74cbsm6556115ad.18.2026.07.07.00.11.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jul 2026 00:11:50 -0700 (PDT)
-Date: Tue, 7 Jul 2026 12:41:37 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com, 
-	aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, 
-	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org, nathan@kernel.org, 
-	nick.desaulniers+lkml@gmail.com, morbo@google.com, justinstitt@google.com, 
-	daniel.almeida@collabora.com, acourbot@nvidia.com, fujita.tomonori@gmail.com, 
-	gregkh@linuxfoundation.org, prafulrai522@gmail.com, tamird@kernel.org, kees@kernel.org, 
-	lyude@redhat.com, airlied@gmail.com, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH V16 4/7] rust/powerpc: Set min rustc version for powerpc
-Message-ID: <akyiZBPCaZOOyTw6@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260520064630.1785283-1-mkchauras@gmail.com>
- <20260520064630.1785283-5-mkchauras@gmail.com>
- <CANiq72nPOMkZXpMpwTLFg4xjFfmyf_O_x2FN_nrNBsxeNu178Q@mail.gmail.com>
- <ahVb4k-2rC4EYZF9@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <aj4gAdy2siBxONpo@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <CANiq72=EVsTFkQK3LWrT2Gs5UKKViemGkv1WuitY6NOEtvcsNg@mail.gmail.com>
- <akH6yuDH9ZwXVoVA@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
- <CANiq72mj1P9QykK6vbPK37hZkMLwd7RcgVWEcxxuE=9OL+4bAg@mail.gmail.com>
- <akNXvfSfue7_3tyd@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qUnewggN"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783408884;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Bmv7zXhBcj7/STN4MChdYvHH/8l8XAPSnk/Tz1Mkcho=;
+	b=qUnewggN+jE8Zis1Z074O4hdxEkeuSABbiV/SKUs1UKRlG2PitGdjzLOLt87yKuoxVe/Nc
+	Wtzl0CjBH8xM0KsERViMsgsAqW8uS9XgeOv0OwRKfCOhruQX4LUx4rXATEb5Z66XYCU0so
+	fFvAKmzS8/RqZfV3+ynfHR6umHkBFi4=
+From: George Guo <dongtai.guo@linux.dev>
+To: chenhuacai@kernel.org,
+	jpoimboe@kernel.org,
+	peterz@infradead.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com
+Cc: kernel@xen0n.name,
+	joe.lawrence@redhat.com,
+	rostedt@goodmis.org,
+	ardb@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn,
+	jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn,
+	guodongtai@kylinos.cn,
+	xry111@xry111.site,
+	wangyuli@aosc.io,
+	loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/12] LoongArch: Add livepatch build (KLP) support
+Date: Tue,  7 Jul 2026 15:20:19 +0800
+Message-Id: <20260707072031.231066-1-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <akNXvfSfue7_3tyd@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jun 30, 2026 at 11:15:03AM +0530, Mukesh Kumar Chaurasiya wrote:
-> On Mon, Jun 29, 2026 at 11:11:44AM +0200, Miguel Ojeda wrote:
-> > On Mon, Jun 29, 2026 at 6:57 AM Mukesh Kumar Chaurasiya
-> > <mkchauras@gmail.com> wrote:
-> > >
-> > > Sure i'll bisect. Meanwhile i would still like to get this upstream.
-> > 
-> > It is very early on the cycle -- I would suggest bisecting first.
-> > 
-> > But it is up to ppc, of course.
-> > 
-> > Cheers,
-> > Miguel
-Hey Miguel,
+This series adds LoongArch support for the klp-build livepatch tooling,
+enabling automated livepatch module generation using objtool on
+LoongArch.
 
-I was able to bisect this. This got fixed in 1.87 with
-#![feature(asm_experimental_arch)].
+It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
+below, unchanged from v1/v2) and extends it with the LoongArch-specific
+objtool and build pieces, plus toolchain/relocation fixes required to
+make livepatch modules load, generate, and run correctly under both GCC
+and Clang.
 
-1st commit that contributed towards this is
-e4f539ea17a3 ("Bump to version 1.87.0")
+Overview:
 
-This caused another issue to come up while building
+ - Patches 1-8 are unchanged from v2 [3]: the LoongArch objtool hooks,
+   special-section marking, the -fPIC/-mdirect-extern-access fixes,
+   EFI linking, KLP_SYSCALL_DEFINEx() support, and finally wiring up
+   LoongArch klp-build (kept last so the series stays bisectable).
+ - Patches 9-12 are new in v3, fixing issues Joe Lawrence found across
+   two rounds of review by actually running the full klp-build flow
+   (see Changes since v2 below for details).
 
-```
-error: extern blocks must be unsafe
-  --> /home/mkchauras/.local/rustc-src/lib/rustlib/src/rust/library/core/src/../../stdarch/crates/core_arch/src/powerpc/vsx.rs:38:1
-   |
-38 | / extern "C" {
-39 | |     #[link_name = "llvm.ppc.altivec.vperm"]
-40 | |     fn vperm(
-41 | |         a: vector_signed_int,
-...  |
-44 | |     ) -> vector_signed_int;
-45 | | }
-   | |_^
-```
+All new patches (9-12) fix bugs in objtool/klp-diff.c and the LoongArch
+Kconfig; none of them touch other architectures.
 
-Which is fixed by 
-a78d1b092c9c ("Update stdarch")
+Testing:
 
-Both these commits went in 1.87.0 and fixed the build.
+GCC on LoongArch hardware: livepatch modules generated, loaded, and
+exercised (unchanged from v2).
 
-Regards,
-Mukesh
+Clang 21.1.8 on LoongArch hardware, reproduced end to end with Joe's
+exact test case (test-joe.patch below), since it happens to exercise
+patches 10-12 together: netif_rx_internal() has __ex_table entries,
+a __bug_table entry, and three __jump_table static keys, one of which
+(a tracepoint's key) is unexported and not defined in the same
+translation unit -- exactly the case patch 12 fixes.
 
-> Sure, I'll bisect it first.
-> 
-> Regards,
-> Mukesh
+  $ cat test-joe.patch
+  diff --git a/net/core/dev.c b/net/core/dev.c
+  index 06c195906231..14fd3d5f351a 100644
+  --- a/net/core/dev.c
+  +++ b/net/core/dev.c
+  @@ -5717,6 +5717,7 @@ static int netif_rx_internal(struct sk_buff *skb)
+                  unsigned int qtail;
+
+                  ret = enqueue_to_backlog(skb, smp_processor_id(), &qtail);
+  +               pr_info("test");
+          }
+          return ret;
+   }
+
+  $ LLVM=/path/to/clang-21/bin/ ./scripts/livepatch/klp-build -T test-joe.patch
+  ...
+  $ ls livepatch-test-joe.ko
+
+klp-build completes cleanly: no "duplicate reloc" (patch 12), no
+"Cannot find symbol for section" (patch 9), and the __ex_table/
+__jump_table entries for netif_rx_internal are present in the output
+module (patches 10-11).  The module was then loaded into a VM running
+a matching Clang-built kernel:
+
+  # insmod livepatch-test-joe.ko
+  [  105.584252] livepatch: enabling patch 'livepatch_test_joe'
+  [  105.586141] livepatch: 'livepatch_test_joe': starting patching transition
+  [  106.824310] livepatch: 'livepatch_test_joe': patching complete
+  [  120.036530] test
+
+  # cat /sys/kernel/livepatch/livepatch_test_joe/{enabled,transition}
+  1
+  0
+
+Toggling the netif_rx tracepoint exercises the jump-table relocation
+patch 12 folds for the unexported __tracepoint_netif_rx key, and lets
+us cross-check the patch's own pr_info() against independent evidence
+that the static branch actually flipped:
+
+  # echo 1 > /sys/kernel/debug/tracing/events/net/netif_rx/enable
+  # ping -c2 127.0.0.1
+  # cat /sys/kernel/debug/tracing/trace | tail -4
+              ping-1267    [001] b....   472.753651: netif_rx: dev=lo skbaddr=... len=84
+              ping-1267    [001] b.s2.   472.753671: netif_rx: dev=lo skbaddr=... len=84
+              ping-1267    [001] b....   473.762993: netif_rx: dev=lo skbaddr=... len=84
+              ping-1267    [001] b.s2.   473.763096: netif_rx: dev=lo skbaddr=... len=84
+  # dmesg | tail -4
+  [  472.753653] test
+  [  472.753671] test
+  [  473.762994] test
+  [  473.763096] test
+
+Each traced packet has a matching "test" line at the same timestamp
+(microsecond-aligned), confirming the tracepoint's static-key
+relocation and the patch's own code path are both live at once.
+Disabling and unloading works cleanly:
+
+  # echo 0 > /sys/kernel/livepatch/livepatch_test_joe/enabled
+  [  557.922932] livepatch: 'livepatch_test_joe': starting unpatching transition
+  [  558.905248] livepatch: 'livepatch_test_joe': unpatching complete
+  # rmmod livepatch_test_joe
+
+Changes since v2 [3]:
+ - Patches 1-8 are unchanged.
+ - New patch 9: select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY.
+   arch/loongarch/Makefile already builds with
+   -fpatchable-function-entry=2, but nothing selected this, so kbuild
+   ran a pointless recordmcount pass on every object.  Harmless under
+   GCC (GAS always emits a section symbol for recordmcount to anchor
+   on), but it fails under Clang with -ffunction-sections (as klp-build
+   uses) for any __weak function that ends up alone in its section,
+   e.g. sched_clock.  (Joe Lawrence)
+ - New patch 10: convert local-label references in special sections.
+   GCC/GAS on LoongArch reference __ex_table/__bug_table/__jump_table
+   entries via a local text label instead of the usual "section symbol
+   + offset" that objtool's klp-diff.c assumes; the label is never
+   cloned into the livepatch module, so such entries were silently
+   dropped from GCC-built modules with no error at build or load time.
+   (Joe Lawrence)
+ - New patch 11: fix ANNOTATE_DATA_SPECIAL parsing for the same local
+   label references.  create_fake_symbols() computed each annotated
+   entry's offset from the relocation's addend alone, which is only
+   correct for the section-symbol form; with local labels, every entry
+   in a special section got offset 0, producing a single fake symbol
+   that covered (and pulled into the output module) the section's
+   entire contents instead of just the patched function's entries.
+   Found while verifying patch 10 with a real special-section entry.
+ - New patch 12: fold LoongArch's paired ADD/SUB relocations into a
+   single PC-relative one.  The "key - ." field of a __jump_table entry
+   can come out as two relocations at the same offset (R_LARCH_ADD64 +
+   R_LARCH_SUB64) when Clang's integrated assembler encounters a key
+   that isn't defined in the same translation unit (e.g. a tracepoint's
+   static key); objtool only allows one relocation per offset, so
+   cloning such an entry failed with "duplicate reloc".  (Joe Lawrence)
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/log/?h=klp-build-arm64
+[2] https://lore.kernel.org/all/20260604065317.219777-1-dongtai.guo@linux.dev/
+[3] https://lore.kernel.org/all/20260608100852.325413-1-dongtai.guo@linux.dev/
+
+George Guo (12):
+  objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+  LoongArch: Mark special sections for KLP support
+  livepatch/klp-build: disable direct-extern-access for LoongArch to fix
+    kernel panic
+  livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect
+    symbol references
+  LoongArch: Fix EFI linking with -fdata-sections
+  objtool/klp: Add LoongArch jump opcode bytes support
+  klp-build: Add LoongArch syscall patching macro
+  LoongArch: Add livepatch build (KLP) support
+  LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+  objtool/klp: Convert local label references in special sections
+  objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label
+    references
+  objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
+
+ arch/loongarch/Kconfig                        |   2 +
+ arch/loongarch/include/asm/alternative-asm.h  |   5 +-
+ arch/loongarch/include/asm/alternative.h      |   6 +-
+ arch/loongarch/include/asm/asm-extable.h      |  10 +-
+ arch/loongarch/include/asm/bug.h              |   1 +
+ arch/loongarch/include/asm/jump_label.h       |   2 +
+ arch/loongarch/kernel/asm-offsets.c           |  20 ++++
+ arch/loongarch/kernel/vmlinux.lds.S           |   2 +-
+ include/linux/livepatch_helpers.h             |  22 ++++
+ scripts/livepatch/klp-build                   |  36 +++++-
+ tools/objtool/Makefile                        |   3 +-
+ tools/objtool/arch/loongarch/decode.c         | 108 ++++++++++++++++++
+ .../objtool/arch/loongarch/include/arch/elf.h |  18 +++
+ tools/objtool/klp-diff.c                      |  57 ++++++++-
+ 14 files changed, 280 insertions(+), 12 deletions(-)
+
+
+base-commit: 85afaba140a4b9f20fe8c8a64b24fc85f022d981
+-- 
+2.25.1
+
