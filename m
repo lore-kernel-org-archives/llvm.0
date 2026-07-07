@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2D0423798;
-	Tue,  7 Jul 2026 21:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 183C042087C;
+	Tue,  7 Jul 2026 23:03:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783460224; cv=none; b=gbrF8YvLvHlAjc3E3/1GwtRwNVnmdAIRu43fHpGq0wsDe1/ijSv8mcH80EYdRw1BKlblsFqGQ2ZF2JIwvznsvvpIZUsC6S5g06no6Uqihczldzz7HK/N3OavAsR7kHPDZAfljVwLwGQVvt7pYLVvCbm88xaHk7rZcd0ZYNPFg+U=
+	t=1783465402; cv=none; b=HK9+M/3U1DAVaxebs2AxEb76P7L3TTAfgUTrzTwbpBh5BEmmUEbXKZOWu1/dae0Yz3gCXp3jdpA07h6XEftAPWgJpg2NhBtPztrGaaiN3DkCEle3AjiLIxuo2HUpbLUM8cGvJTb6Wk1fWVxF0uJfDFGhQlTPTZvlYvde6Z7sM+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783460224; c=relaxed/simple;
-	bh=2F/S+1hBprqCLM49OR+NNg8mhJtN1KDcYGVD8Yj65So=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=I2ugVGyQsbVKLIkLzZ53lD1q4S808tJbLcStiKumsNbCuA0V3fXhmY+abdo9/WXAw2/2L7LySm5UTdBMj8YUSGWbOVAPRma9c04mtJ9SMiiKat5u08WxTOOpatYpRVmIovCWBsxxhMrJt3WF3X1QMGhRH5jeF0I819Q3uDufMbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OkZ8N5mg; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1783465402; c=relaxed/simple;
+	bh=S89fNCs0/nbl2lHbOY0PQBokoSSgRoinFrMmZQ3td6s=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rpoRvbpGqJO/LIETzYGfQEnzReHJYQWVxZB7gvJ4cqSylW1F8ZcaaGlX2JYuSWWoWJgRXgTC89BxobnDNTM0fliZt9ZXswK8vDUgMm399gStdU8Stvib7Q2+wWfaLnHJjl8kfA2yF5r7toOeONdqpuoSd9NwpdGbJtqfjPyh/iI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l3VmIQKK; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OkZ8N5mg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l3VmIQKK"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783460223; x=1814996223;
+  t=1783465400; x=1815001400;
   h=date:from:to:cc:subject:message-id;
-  bh=2F/S+1hBprqCLM49OR+NNg8mhJtN1KDcYGVD8Yj65So=;
-  b=OkZ8N5mgMyh4wTRz9wA6dmiBW1ygODONo4z+wHgC5QFZAcho5w57IuJ2
-   xHS5JWXY+4FARKhbJqvPRwuASdVO+LX+7ttgNcaOJUAw5g+7rVOXpqkvi
-   jUkx4TetnXQDGyrtULkHiyqY7OWdKZVXBj9dGYLG3gUBTHpkCB4qGoBg/
-   qGP9ckMnJ0RDSTFR3IVbBggKLDQ1lonco22vkSk5z85IzC3K2gxlU02JH
-   VprvKMuDigpUbgfOiwSoc65YjAaIAEMztfhAOd7DFdNQPm5pmShXtZVID
-   jAvxnvFAlxW0OnPN89IgIleHaZ1+5pvjVlkb9RFw1NR1tNja9TxyEPvJ0
-   w==;
-X-CSE-ConnectionGUID: RBsSQlvKS/+GDF9XK0D2wg==
-X-CSE-MsgGUID: ibOiRQn3S86Gpedap/bBiQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11840"; a="83895514"
+  bh=S89fNCs0/nbl2lHbOY0PQBokoSSgRoinFrMmZQ3td6s=;
+  b=l3VmIQKKUV+GC9WAmiRvvJECdLS6rD/XcfrsJJmVHVVpR0JE5H+0RgNB
+   kQle0H92gANMcMrRXml2r7oMiYJLI77mr1Bj9+zX/FYkUux46Hx9f0X4N
+   rC3ZW7+I4Uw2LYA+Ja335R5y6ZhsLKRaSry0wHZNg+iguUXDVL8okKKaw
+   yR8wehF+2eeQt20rS0RrTST09HZUWR/q1h5GGpDI/9B3BEu0S9qxsZEz+
+   rKMHBCUhbFv8mOG8Gnf+d4UJ+dDBPCHgo9YyxIxveTTsyrFgiCaYa3sFX
+   57NVGNmumLRXVym7hgGx4R6dCxhww0HgaPD8iU4HrQx1Tn1aKAbV68q3G
+   A==;
+X-CSE-ConnectionGUID: kmMcU8JtQFSurReUOullKw==
+X-CSE-MsgGUID: 6APJI1utTRqXpoKIwLSC4A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11840"; a="84180421"
 X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="83895514"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2026 14:37:02 -0700
-X-CSE-ConnectionGUID: TIb1FG2MSvGmTwV2pFMGxA==
-X-CSE-MsgGUID: vPX8fwY0TCiTHUC6pGwdhg==
+   d="scan'208";a="84180421"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jul 2026 16:03:19 -0700
+X-CSE-ConnectionGUID: vMT9ci5cQkKMwS4dUtvb/Q==
+X-CSE-MsgGUID: zry1P70wSPC1FydDA47BVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="250124118"
+   d="scan'208";a="257706693"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 07 Jul 2026 14:36:59 -0700
+  by orviesa003.jf.intel.com with ESMTP; 07 Jul 2026 16:03:16 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1whDTI-00000000Fhb-12LO;
-	Tue, 07 Jul 2026 21:36:53 +0000
-Date: Wed, 08 Jul 2026 05:36:30 +0800
+	id 1whEos-00000000Fjz-0Xlh;
+	Tue, 07 Jul 2026 23:03:14 +0000
+Date: Wed, 08 Jul 2026 07:02:21 +0800
 From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [broonie-ci:kvm-arm64-sme 4/30]
- arch/arm64/kernel/fpsimd.c:518:5: warning: format specifies type 'unsigned
- long long' but the argument has type 'int'
-Message-ID: <202607080542.LD9Mh3ue-lkp@intel.com>
+To: Oliver Upton <oupton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Marc Zyngier <maz@kernel.org>, "Wei-Lin Chang" <weilin.chang@arm.com>
+Subject: [linux-next:master 3509/4300]
+ arch/arm64/kvm/hyp/pgtable.c:1359:13: warning: implicit conversion from 'int'
+ to 's8' (aka 'signed char') changes value from 2147483647 to -1
+Message-ID: <202607080650.sMl0aR2a-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,141 +61,65 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git kvm-arm64-sme
-head:   489202b3db0a02f59477f8ec63009dc3d998341f
-commit: b77633efe7c6ef49465e89432b3fd7d1541d3b3a [4/30] arm64/fpsimd: Decide to save ZT0 and streaming mode FFR at bind time
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260708/202607080542.LD9Mh3ue-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   5c73cd9f0819c1c44e373e3dabb68318b1de1a12
+commit: 100baf0184896f859290a684f864b8200d8ac872 [3509/4300] KVM: arm64: Ensure level is always initialized when relaxing perms
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260708/202607080650.sMl0aR2a-lkp@intel.com/config)
 compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
 rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260708/202607080542.LD9Mh3ue-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260708/202607080650.sMl0aR2a-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607080542.LD9Mh3ue-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607080650.sMl0aR2a-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/arm64/kernel/fpsimd.c:518:5: warning: format specifies type 'unsigned long long' but the argument has type 'int' [-Wformat]
-     517 |                         pr_crit("%llu %llu\n",
-         |                                  ~~~~
-         |                                  %d
-     518 |                                 sve_get_vl() != sve_vl_from_vq(vq));
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:544:34: note: expanded from macro 'pr_crit'
-     544 |         printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:511:60: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:483:19: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ~~~~    ^~~~~~~~~~~
->> arch/arm64/kernel/fpsimd.c:517:21: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
-     517 |                         pr_crit("%llu %llu\n",
-         |                                       ~~~^
-   include/linux/printk.h:544:26: note: expanded from macro 'pr_crit'
-     544 |         printk(KERN_CRIT pr_fmt(fmt), ##__VA_ARGS__)
-         |                                 ^~~
-   include/linux/printk.h:401:21: note: expanded from macro 'pr_fmt'
-     401 | #define pr_fmt(fmt) fmt
-         |                     ^~~
-   include/linux/printk.h:511:53: note: expanded from macro 'printk'
-     511 | #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-         |                                                     ^~~
-   include/linux/printk.h:483:11: note: expanded from macro 'printk_index_wrap'
-     483 |                 _p_func(_fmt, ##__VA_ARGS__);                           \
-         |                         ^~~~
-   2 warnings generated.
+>> arch/arm64/kvm/hyp/pgtable.c:1359:13: warning: implicit conversion from 'int' to 's8' (aka 'signed char') changes value from 2147483647 to -1 [-Wconstant-conversion]
+    1359 |         s8 level = TLBI_TTL_UNKNOWN;
+         |            ~~~~~   ^~~~~~~~~~~~~~~~
+   arch/arm64/include/asm/tlbflush.h:163:26: note: expanded from macro 'TLBI_TTL_UNKNOWN'
+     163 | #define TLBI_TTL_UNKNOWN        INT_MAX
+         |                                 ^~~~~~~
+   include/vdso/limits.h:8:19: note: expanded from macro 'INT_MAX'
+       8 | #define INT_MAX         ((int)(~0U >> 1))
+         |                          ^~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-vim +518 arch/arm64/kernel/fpsimd.c
+vim +1359 arch/arm64/kvm/hyp/pgtable.c
 
-   452	
-   453	/*
-   454	 * Ensure FPSIMD/SVE storage in memory for the loaded context is up to
-   455	 * date with respect to the CPU registers. Note carefully that the
-   456	 * current context is the context last bound to the CPU stored in
-   457	 * last, if KVM is involved this may be the guest VM context rather
-   458	 * than the host thread for the VM pointed to by current. This means
-   459	 * that we must always reference the state storage via last rather
-   460	 * than via current, if we are saving KVM state then it will have
-   461	 * ensured that the type of registers to save is set in last->to_save.
-   462	 */
-   463	static void fpsimd_save_user_state(void)
-   464	{
-   465		struct cpu_fp_state const *last =
-   466			this_cpu_ptr(&fpsimd_last_state);
-   467		/* set by fpsimd_bind_task_to_cpu() or fpsimd_bind_state_to_cpu() */
-   468		bool save_sve_regs = false;
-   469		bool save_ffr;
-   470		unsigned int vq;
-   471	
-   472		WARN_ON(!system_supports_fpsimd());
-   473		WARN_ON(preemptible());
-   474	
-   475		if (test_thread_flag(TIF_FOREIGN_FPSTATE))
-   476			return;
-   477	
-   478		if (system_supports_fpmr())
-   479			*(last->fpmr) = read_sysreg_s(SYS_FPMR);
-   480	
-   481		/*
-   482		 * Save SVE state if it is live.
-   483		 *
-   484		 * The syscall ABI discards live SVE state at syscall entry. When
-   485		 * entering a syscall, fpsimd_syscall_enter() sets to_save to
-   486		 * FP_STATE_FPSIMD to allow the SVE state to be lazily discarded until
-   487		 * either new SVE state is loaded+bound or fpsimd_syscall_exit() is
-   488		 * called prior to a return to userspace.
-   489		 */
-   490		if ((last->to_save == FP_STATE_CURRENT && test_thread_flag(TIF_SVE)) ||
-   491		    last->to_save == FP_STATE_SVE) {
-   492			save_sve_regs = true;
-   493			save_ffr = true;
-   494			vq = SYS_FIELD_GET(ZCR_ELx, LEN, last->zcr) + 1;
-   495		}
-   496	
-   497		if (system_supports_sme()) {
-   498			u64 *svcr = last->svcr;
-   499	
-   500			*svcr = read_sysreg_s(SYS_SVCR);
-   501	
-   502			if (*svcr & SVCR_ZA_MASK)
-   503				sme_save_state(last->sme_state,
-   504					       last->smcr & SMCR_ELx_EZT0);
-   505	
-   506			/* If we are in streaming mode override regular SVE. */
-   507			if (*svcr & SVCR_SM_MASK) {
-   508				save_sve_regs = true;
-   509				save_ffr = last->smcr & SMCR_ELx_FA64;
-   510				vq = SYS_FIELD_GET(SMCR_ELx, LEN, last->smcr) + 1;
-   511			}
-   512		}
-   513	
-   514		if (IS_ENABLED(CONFIG_ARM64_SVE) && save_sve_regs) {
-   515			/* Get the configured VL from RDVL, will account for SM */
-   516			if (WARN_ON(sve_get_vl() != sve_vl_from_vq(vq))) {
- > 517				pr_crit("%llu %llu\n",
- > 518					sve_get_vl() != sve_vl_from_vq(vq));
-   519				/*
-   520				 * Can't save the user regs, so current would
-   521				 * re-enter user with corrupt state.
-   522				 * There's no way to recover, so kill it:
-   523				 */
-   524				force_signal_inject(SIGKILL, SI_KERNEL, 0, 0);
-   525				return;
-   526			}
-   527	
-   528			sve_save_state(last->sve_state, save_ffr);
-   529			fpsimd_save_common(last->st);
-   530			*last->fp_type = FP_STATE_SVE;
-   531		} else {
-   532			fpsimd_save_state(last->st);
-   533			*last->fp_type = FP_STATE_FPSIMD;
-   534		}
-   535	}
-   536	
+  1354	
+  1355	int kvm_pgtable_stage2_relax_perms(struct kvm_pgtable *pgt, u64 addr,
+  1356					   enum kvm_pgtable_prot prot, enum kvm_pgtable_walk_flags flags)
+  1357	{
+  1358		kvm_pte_t xn = 0, set = 0, clr = 0;
+> 1359		s8 level = TLBI_TTL_UNKNOWN;
+  1360		int ret;
+  1361	
+  1362		if (prot & KVM_PTE_LEAF_ATTR_HI_SW)
+  1363			return -EINVAL;
+  1364	
+  1365		if (prot & KVM_PGTABLE_PROT_R)
+  1366			set |= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_R;
+  1367	
+  1368		if (prot & KVM_PGTABLE_PROT_W)
+  1369			set |= KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W;
+  1370	
+  1371		ret = stage2_set_xn_attr(prot, &xn);
+  1372		if (ret)
+  1373			return ret;
+  1374	
+  1375		set |= xn & KVM_PTE_LEAF_ATTR_HI_S2_XN;
+  1376		clr |= ~xn & KVM_PTE_LEAF_ATTR_HI_S2_XN;
+  1377	
+  1378		ret = stage2_update_leaf_attrs(pgt, addr, 1, set, clr, NULL, &level, flags);
+  1379		if (!ret || ret == -EAGAIN)
+  1380			kvm_call_hyp(__kvm_tlb_flush_vmid_ipa_nsh, pgt->mmu, addr, level);
+  1381		return ret;
+  1382	}
+  1383	
 
 --
 0-DAY CI Kernel Test Service
