@@ -1,115 +1,123 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 540BC43935C
-	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 16:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A2F3A59BC
+	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 19:18:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783527660; cv=none; b=L3JeXTzrCiVpjvcwabGfBa60WFkf//e1KhkPi66JFecEsP0pzLqGCmsVgRaKEf7sBxfqHdLWdg0efHleXe3iVDXal+8maAJjDpGauQbePkofvtSZhqJxxg1On7uRbd21zZD83StvwdGMiKv1fxqrUdTZer8Db/WRfZPFaref+dM=
+	t=1783538308; cv=none; b=jNOkEeUeP5/SAM8wSkypEhNR1Y4H/pJmne4lx7xLbA1ewuJNbqdJU22eDHqLqcKdXHyAevkdY637ZRCO41BukLkistdM4p4bihlYnt8K3BCcurTvBei9Jg5WdSoPIC7Qghhg368id0VvysuFvdJ5tekE2dLBVxyode2kOADiy+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783527660; c=relaxed/simple;
-	bh=PPjhDWa+0AEAs/Q0tIcWkxY7V7zsF1IrAWp1MaUwiDk=;
+	s=arc-20240116; t=1783538308; c=relaxed/simple;
+	bh=Nuobs42GWN9jY9nFDEzqJGYWYg8zA3CPFZD6afRvhWo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QzVM2ADba3/f6oxCzyosV8tAJ0aw2fcHRblOMgN3Z5o6gg07TnoVHXTN39BtSVVmHaDrrmaVQib1f7tY4l8YFqmtJNrI7mRN3UtnlBihtLCLMjlilojQ73NzV5Vh4ZDnRIK0Z8npPo13R1PNGgX8FT+mbK2EmSHxZeWOUeP5N1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=bIGlaoTP; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	 In-Reply-To:Content-Type:Content-Disposition; b=mxgG7PJxoZI0P8JvUxlJmxTbXXxZiK4pQ62q5oBCZ1zM4mffvuuLlhc3rlFcEbCpy0MtlLlod+Pj4KCgKoQ+nDsQZdqvAplbsfbO1dGSyv81y5KHD+oXxfNs6cTRp0Bn8235J3t7vwltiTYYWYKyAf4D6P/ykRemChjvyTjVeJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B8e0M+aR; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="bIGlaoTP"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-92e5c92c389so46157285a.3
-        for <llvm@lists.linux.dev>; Wed, 08 Jul 2026 09:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1783527657; x=1784132457; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aNrEM48/kUAtSeWbSxXUhqAsANl+gd1l+W0ysjw18Qo=;
-        b=bIGlaoTPm/lhbL9+Vm4Q54At3pAVwKVK5KjaLfyPr4C0rgHZFLdWGEd3al2xthr+zk
-         MRe4mzAiVMI9aTEZ+eEzQrdJlWjy35uEwwqedQbYDz+crMnD3Dd1MaSJJk2hJ4FqUCDn
-         zrQ0+RqlLxx6CbYsgMfHtYBEK4QSYzKEAr5kV7hgv6uDe/CR1JmElKNhSHaZq9z8yooz
-         wBxmTllvxd9ahn0KX23cujouhIJGflyHwuSDpJkRLjT4bZ1IbDRynUtNsZx4c5PUjdg1
-         G8ledpIPBBT2KHu8bKKV0hnmSnHh2HfFISVwRUCkozvC2O8n9x0atIE8S9xZbQPpxg66
-         dtGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783527657; x=1784132457;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aNrEM48/kUAtSeWbSxXUhqAsANl+gd1l+W0ysjw18Qo=;
-        b=YpYMA4FsKUC0tBNwmMwk+aXU+boy8XIugsL1js7f6QnvljtOtwZ+6yP1HSVXeDUFi6
-         iLWBc8vGVbHqdEz8NbXrTKDQHkYSZPC3lviboOGkwV6JmBBuI5kVyUXIucYkebq13z25
-         SIX3EW5IVFFVWUk7eYQT+C5TUK/w7+qCYSYisajqRiIDzwjZSS6qD6s6Vo/AfR/tfpM8
-         3yP4esRKtlNVowlkYs4trOzt9jm0mXqk0uXNQ5VCAJtTxg3SYLHvvszSamCGFRD95NTR
-         KTVPc7q5lWxvYfKCEpBDnOpkmU5zzJ0lMCDJqx1uuBa64ZvYMQYNExTiDFTrDeUospgH
-         SLkg==
-X-Forwarded-Encrypted: i=1; AHgh+RoBd60XCyWE1sYiYqZsCt7N3XB978xvVuSEbO9XSMtfQvVFI+Wedf8HFXNFWbdGzVLIyLxH@lists.linux.dev
-X-Gm-Message-State: AOJu0YwkiUaJ0BUb9bY0z/W7FC6Q6utAok18TdqFuSNfMIAjcGa0RB/S
-	YUCgEQneFqBwDTJ209Dko8ocushZu0ZYYPGdpRtmOZ9xCrvkY4vWE5spNpVhjsMr/Ko=
-X-Gm-Gg: AfdE7clw+fq2NTuuELpa3GRz7se3OCv+eCk3NCUizr7V2NgLbFvtrIn7fmfnbAmsKK4
-	O/MtN3rT+INoq0HUiZtTxKuiGv2FJPx1WlRGgXIQa+aY2nM13GiPedZJH/NT24d7eFsZdohyFIM
-	WFTSCjzUGt2J1HaeFC/u1Dphckb9LTEoEwIKA9Wn2M1YAZHRSIU0PCoZA42OSbf5TXlqgQxd6ED
-	JSXpnJiqNcE4Luwu0q2x5wkHC5JuNZKAhSl+QOfMLEXKBanzC17wJAcG6/SPqI3KXhX0Xx1HbUi
-	ZcjCaqiZO5idcHsDHYlmjV+rBukJ8aPnnNyIr3gP6qo1dQnj+SuiRGyymLmO3lQ/h/4bwOPBTWj
-	bwSOAwDW96Ig4qYgV+eVLA4lyvN+abWhPPxbcroIE06QEH8/h8O6iwREoLzDc6gAbL5BYaXWtXF
-	BSDXttUxjjP6K8yg/CWxttD4S33hQitP28ejbj0eKMNW9EjwDYgn/oISIgIJKl96+u3xAX
-X-Received: by 2002:a05:620a:4041:b0:92b:67e6:8ab4 with SMTP id af79cd13be357-92ecf671299mr280183485a.62.1783527657124;
-        Wed, 08 Jul 2026 09:20:57 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-92e90ba1a3dsm1471710285a.15.2026.07.08.09.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 09:20:56 -0700 (PDT)
-Date: Wed, 8 Jul 2026 12:20:52 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [tip:core/entry 2/3] arch/s390/include/asm/entry-common.h:49:18:
- error: call to undeclared function 'task_stack_page'; ISO C99 and later do
- not support implicit function declarations
-Message-ID: <ak545Coj9ogxnt4_@gourry-fedora-PF4VCD3F>
-References: <202607081402.DO1ePla3-lkp@intel.com>
- <877bn5sxl3.ffs@fw13>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B8e0M+aR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783538306;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=BvzY/mZGKEJx6zIsYvZa88M0P3VBfNQj1yFZq68GFbc=;
+	b=B8e0M+aRiW5j0+e0JrAYCPlgv3zD9MTbbguoqLpu5jIz05WoFJ2806UYEs8YBp4HgpR16u
+	xIA0KC6CibkjTtPb6vs83V42GDMSIcSz6QBf4xFph6NMJ2DOOykN4VsBKPrdfEVjhxvW0l
+	ASGmbA6rcWOEHoaGlpIFDtniMIro/vE=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-20-Ks6cFFghP2WYJsger330qw-1; Wed,
+ 08 Jul 2026 15:18:19 -0400
+X-MC-Unique: Ks6cFFghP2WYJsger330qw-1
+X-Mimecast-MFC-AGG-ID: Ks6cFFghP2WYJsger330qw_1783538297
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 565A91800615;
+	Wed,  8 Jul 2026 19:18:15 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.80.46])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id EB6591800370;
+	Wed,  8 Jul 2026 19:18:09 +0000 (UTC)
+Date: Wed, 8 Jul 2026 15:18:07 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
+	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
+	wangyuli@aosc.io, loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/12] klp-build: Add LoongArch syscall patching macro
+Message-ID: <ak6ibxwACKMK8it2@redhat.com>
+References: <20260707072031.231066-1-dongtai.guo@linux.dev>
+ <20260707072031.231066-8-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <20260707072031.231066-8-dongtai.guo@linux.dev>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: wjILKYSzvjd_G4Ya3i6SveVLxokP6xWJP5PWG_Wcqyo_1783538297
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877bn5sxl3.ffs@fw13>
 
-On Wed, Jul 08, 2026 at 10:19:04AM +0200, Thomas Gleixner wrote:
-> On Wed, Jul 08 2026 at 14:56, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git core/entry
-> > head:   34ef6308418f138395a664bf9f5d80ace9825ac6
-> > commit: 7fc04d7044aaa5ffe2afe78979fe6ddd5da24f10 [2/3] syscall_user_dispatch: Make it configurable in Kconfig
-> > config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260708/202607081402.DO1ePla3-lkp@intel.com/config)
-> > compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 0a2fb2a2269da0e2a3e230beb6cad39ca314db33)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260708/202607081402.DO1ePla3-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202607081402.DO1ePla3-lkp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> >    In file included from arch/s390/kernel/traps.c:24:
-> >    In file included from include/linux/entry-common.h:5:
-> >>> arch/s390/include/asm/entry-common.h:49:18: error: call to undeclared function 'task_stack_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-> >       49 |         pai_kernel_exit(current_pt_regs());
+On Tue, Jul 07, 2026 at 03:20:26PM +0800, George Guo wrote:
+> From: George Guo <guodongtai@kylinos.cn>
 > 
-> Bah. I missed to spot the header ordering change putting the
-> asm/... includes in front. I really hate our include mess.
+> Add LoongArch support for KLP_SYSCALL_DEFINEx(), mirroring the generic
+> __SYSCALL_DEFINEx() pattern from include/linux/syscalls.h.
 > 
-> Let me fix that up.
->
+> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+> ---
+>  include/linux/livepatch_helpers.h | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/include/linux/livepatch_helpers.h b/include/linux/livepatch_helpers.h
+> index 4b647b83865f..a8aad067177b 100644
+> --- a/include/linux/livepatch_helpers.h
+> +++ b/include/linux/livepatch_helpers.h
+> @@ -91,6 +91,28 @@
+>  	}								\
+>  	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
+>  
+> +#elif defined(CONFIG_LOONGARCH)
+> +
+> +#define __KLP_SYSCALL_DEFINEx(x, name, ...)                             \
+> +	__diag_push();                                                  \
+> +	__diag_ignore(GCC, 8, "-Wattribute-alias",                      \
+> +		      "Type aliasing is used to sanitize syscall arguments");\
+> +	asmlinkage long sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))       \
+> +		__attribute__((alias(__stringify(__se_sys##name))));    \
+> +	ALLOW_ERROR_INJECTION(sys##name, ERRNO);                        \
+> +	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__));\
+> +	asmlinkage long __se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__)); \
+> +	asmlinkage long __attribute__((optimize("-fno-optimize-sibling-calls")))\
+> +			__se_sys##name(__MAP(x,__SC_LONG,__VA_ARGS__))  \
+> +	{                                                               \
+> +		long ret = __klp_do_sys##name(__MAP(x,__SC_CAST,__VA_ARGS__));\
+> +		__MAP(x,__SC_TEST,__VA_ARGS__);                         \
+> +		__PROTECT(x, ret,__MAP(x,__SC_ARGS,__VA_ARGS__));       \
+> +		return ret;                                             \
+> +	}                                                               \
+> +	__diag_pop();                                                   \
+> +	static inline long __klp_do_sys##name(__MAP(x,__SC_DECL,__VA_ARGS__))
+> +
+>  #endif
 
-Ah, I wasn't 100% sure on this - noted for the future.
+Nit: The other macros in livepatch_helpers use tabs to pad out to the
+line continuation '\'.
 
-Sorry about the headache and thank you for the fixup.
+--
+Joe
 
-~Gregory
