@@ -1,47 +1,47 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300A5424640
-	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 13:54:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06C542DA2E
+	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 15:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783518887; cv=none; b=flx7m1eh+Aq0CykcJIyHM9kd7486GMxYVLbyv+ATko0ooWJf/tYK4q5zz2Nj/+Ok1dlFErrEI6lcZlvSBTVbcKg/NLgrALZ8ur5ouZbPc0hsGcc4qMVlSWlOsQWzlHbWzwLP40AUth+sPDvEP0RZ8KZt4UTUfXlMY2d+c/rCaP8=
+	t=1783523127; cv=none; b=rICRL2ELOwk6RBGDA+Za9YTVjaqwQuaSv7Ou9HqK6xz3t4aaqi4wwTJGugjnN7YB1RAps/n+I0VcTw8T2vNHhHpd3BDaZZMhqB0ng5AWxgqi840lYGWx3PqfbwGcCbxzhvyqZPPyY+61nMhQJ3FkJdhHjQW2UDBpMdO1vl1xXjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783518887; c=relaxed/simple;
-	bh=SjiW6ERHS9Z2yaDAhoQdEShUzxO6v2nFKQKuoJ2Vge8=;
+	s=arc-20240116; t=1783523127; c=relaxed/simple;
+	bh=45nCfmPtRGhWwWGA/UlmV0ZkrWyvtYCwuI7ANzgmblk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=kxdMTVnf6/UZTFavVwGZ0nJgYpiyTaQF3V7YGGcd8vFry5GvlmwZ/kWAoAXu2dMxLHxMAzS9XutGd1kRTWnUMSzwLQm4ZJUZ5azGL6ERKxzzuTGOLwkhIegrjQ8HxO8CiAarkiL7lpqpLfrjulMKQKV3/bt6ri8+ggTbsYD6TB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Aa227MDb; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type:Content-Disposition; b=oKukUH5Y31+JH6slKRw+aEfC+WD4Pg7N5eDTfumwDJLzRJSPS3WLrItZREq9Xm92fH5+xUFmtChU/3aWaiCDr2X5pBlH0/YWVHNMXe+8wDwzIo7K9q970d1yBSoIasdVJ9FJlKP6LXanSYTzfqAoR5viRsPd5MjQrhPR8L7AD14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CXv6tR0s; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Aa227MDb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CXv6tR0s"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783518872;
+	s=mimecast20190719; t=1783523125;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=KDn+ZB5QDmMZlAymNbimx46tA1OJX7SIC3YtbFxxLtw=;
-	b=Aa227MDbuYyReU+KFb0aSh9TOsik1xUzCGUFycUpheZkXp0PvaL9jbQuc+WbMdCrGc+NQq
-	BztfYa/tEvWsywJUpNvfvfAesGnPqiCDaoma70ElWRkQNlmheqx5Aklq4Oi09l8Uy/mZ7x
-	HCLqzhw3vDryOyXo13b+CaD2KaCs30Q=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+	bh=oiHynRISoOwm99WuNq3SEqzdBDkhCTcAiYfgAom2HcA=;
+	b=CXv6tR0sEWsB5FezDOSHuFIHebP1tSSiuppx9GIV9dxeVHtG1VdO2N+3mCDZT3Rt6X5t6D
+	+hM0DyjWjotZiEbZ2xeZ0D9ADQX5p8aB4eJIyvqY31bIvVPp5JgJRGxJtvSXHP4WqZAIRh
+	LVTA6H+iPPx+74cM8T1u/oUhCw7u644=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-304-2nD2FG_uMEybatzCU5d3YA-1; Wed,
- 08 Jul 2026 09:54:29 -0400
-X-MC-Unique: 2nD2FG_uMEybatzCU5d3YA-1
-X-Mimecast-MFC-AGG-ID: 2nD2FG_uMEybatzCU5d3YA_1783518866
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-77-q4fSLNdbNEK7TUm6eLmJzQ-1; Wed,
+ 08 Jul 2026 11:05:18 -0400
+X-MC-Unique: q4fSLNdbNEK7TUm6eLmJzQ-1
+X-Mimecast-MFC-AGG-ID: q4fSLNdbNEK7TUm6eLmJzQ_1783523114
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 838B01800EF8;
-	Wed,  8 Jul 2026 13:54:24 +0000 (UTC)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 57F8918052CC;
+	Wed,  8 Jul 2026 15:05:12 +0000 (UTC)
 Received: from redhat.com (unknown [10.22.80.46])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 98BA31800347;
-	Wed,  8 Jul 2026 13:54:18 +0000 (UTC)
-Date: Wed, 8 Jul 2026 09:54:16 -0400
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 916951955F7B;
+	Wed,  8 Jul 2026 15:05:05 +0000 (UTC)
+Date: Wed, 8 Jul 2026 11:05:03 -0400
 From: Joe Lawrence <joe.lawrence@redhat.com>
 To: George Guo <dongtai.guo@linux.dev>
 Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
@@ -53,54 +53,120 @@ Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
 	wangyuli@aosc.io, loongarch@lists.linux.dev,
 	live-patching@vger.kernel.org, llvm@lists.linux.dev,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 05/12] LoongArch: Fix EFI linking with -fdata-sections
-Message-ID: <ak5WiNb51kGB1p2f@redhat.com>
+Subject: Re: [PATCH v3 04/12] livepatch/klp-build: build LoongArch with -fPIC
+ to keep GOT-indirect symbol references
+Message-ID: <ak5nH60j4Rdn50n-@redhat.com>
 References: <20260707072031.231066-1-dongtai.guo@linux.dev>
- <20260707072031.231066-6-dongtai.guo@linux.dev>
+ <20260707072031.231066-5-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <20260707072031.231066-6-dongtai.guo@linux.dev>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-X-Mimecast-MFC-PROC-ID: pI-RWG9l1kmBAPabhPKen5Gc83FsGt01IThxzUV_HbU_1783518866
+In-Reply-To: <20260707072031.231066-5-dongtai.guo@linux.dev>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Mimecast-MFC-PROC-ID: -mjLNIklFMtRXkZQEt-vQkLqdOl8ro8DHCwAVAQzI3w_1783523114
 X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Jul 07, 2026 at 03:20:24PM +0800, George Guo wrote:
+On Tue, Jul 07, 2026 at 03:20:23PM +0800, George Guo wrote:
 > From: George Guo <guodongtai@kylinos.cn>
 > 
-> When building with func-fdata-sections, the .init.bss section gets split
-
-nit: s/func-fdata-sections/-fdata-sections
-
-> up into a bunch of .init.bss.<var> sections.  Make sure they get linked
-> into .init.data.
+> On LoongArch, klp-build livepatch modules panic when a patched function
+> references a global defined in the same compilation unit (e.g.
+> SYSCALL_DEFINE1(newuname) -> 'uts_sem' in kernel/sys.c).
 > 
+> With CONFIG_RELOCATABLE=y the kernel is already -fPIE, so this is not
+> absolute addressing; the problem is GOT indirection. For a same-unit
+> global, -fPIE emits a direct PC-relative reference (R_LARCH_PCALA_*) and
+> skips the GOT, while -fPIC routes it through the GOT (R_LARCH_GOT_PC_*).
+> klp-build extracts the patched function into a separate module while
+> 'uts_sem' stays in the core kernel, and the klp relocation machinery can
+> only redirect such a cross-object reference through a GOT entry. The
+> direct -fPIE reference has no GOT slot to fix up, so once the function is
+> relocated its target is wrong and it faults.
+> 
+> Force -fPIC for LoongArch KLP builds; -fPIE is not enough, as it
+> optimizes away the very GOT indirection KLP relies on.
+> 
+> This depends on the preceding patch: -fPIC is passed via KCFLAGS, but the
+> arch adds -fPIE via KBUILD_CFLAGS_KERNEL, which kbuild applies after
+> KCFLAGS (so -fPIE would win). That patch's command-line
+> KBUILD_CFLAGS_KERNEL= assignment replaces the arch value and drops -fPIE,
+> letting -fPIC take effect. The two patches must stay together.
+> 
+
+This might be my personal preference, but I think it would be quicker to
+review patches: ("livepatch/klp-build: disable direct-extern-access for
+LoongArch to fix kernel panic") ("livepatch/klp-build: build LoongArch
+with -fPIC to keep GOT-indirect symbol references") if they were
+squashed into one patch.
+
+With that, the commit messages can drop the forward/backward references,
+while the combined commit remains complete thought, i.e. for LoongArch
+KLP builds, replace the arch's KBUILD_CFLAGS_KERNEL (dropping -fPIE and
+-mdirect-extern-access) and add -fPIC via KCFLAGS instead.
+
 > Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
 > Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
 > Signed-off-by: George Guo <guodongtai@kylinos.cn>
 > ---
->  arch/loongarch/kernel/vmlinux.lds.S | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  scripts/livepatch/klp-build | 19 +++++++++++++++++--
+>  1 file changed, 17 insertions(+), 2 deletions(-)
 > 
-> diff --git a/arch/loongarch/kernel/vmlinux.lds.S b/arch/loongarch/kernel/vmlinux.lds.S
-> index 840d944c2f73..dc5fa017db94 100644
-> --- a/arch/loongarch/kernel/vmlinux.lds.S
-> +++ b/arch/loongarch/kernel/vmlinux.lds.S
-> @@ -96,7 +96,7 @@ SECTIONS
->  #endif
+> diff --git a/scripts/livepatch/klp-build b/scripts/livepatch/klp-build
+> index 27fe8824ef12..42cd58aff3d8 100755
+> --- a/scripts/livepatch/klp-build
+> +++ b/scripts/livepatch/klp-build
+> @@ -557,8 +557,15 @@ build_kernel() {
+>  	local cmd=()
 >  
->  	.init.bss : {
-> -		*(.init.bss)
-> +		*(.init.bss .init.bss.*)
+>  	local ARCH_KBUILD_CFLAGS_KERNEL=""
+> +	local ARCH_KCFLAGS=""
+>  
+>  	if [[ -v CONFIG_LOONGARCH && "$CONFIG_LOONGARCH" == "y" ]]; then
+> +		# -fPIC replaces the kernel's -fPIE (added under CONFIG_RELOCATABLE);
+> +		# without that config there is no -fPIE to replace.
+> +		[[ "${CONFIG_RELOCATABLE:-}" == "y" ]] || \
+> +			die "LoongArch klp-build requires CONFIG_RELOCATABLE=y"
+> +		ARCH_KCFLAGS="-fPIC"
+> +
+>  		# -mdirect-extern-access only exists under explicit relocs, and this
+>  		# function replaces KBUILD_CFLAGS_KERNEL wholesale (safe only then;
+>  		# the non-explicit build puts -Wa,-mla-global-with-pcrel there).
+> @@ -599,8 +606,16 @@ build_kernel() {
+>  		cmd+=("-s")
+>  	fi
+>  	cmd+=("-j$JOBS")
+> -	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections")
+> -	cmd+=("KBUILD_CFLAGS_KERNEL=$ARCH_KBUILD_CFLAGS_KERNEL")
+> +	cmd+=("KCFLAGS=-ffunction-sections -fdata-sections${ARCH_KCFLAGS:+ $ARCH_KCFLAGS}")
+> +	# -fPIC is added for KLP via KCFLAGS above; the arch adds -fPIE via
+> +	# KBUILD_CFLAGS_KERNEL, which kbuild places after KCFLAGS on the
+> +	# built-in compile line.  -fPIC/-fPIE is last-one-wins, so -fPIE would
+> +	# win.  Setting KBUILD_CFLAGS_KERNEL on the command line replaces the
+> +	# arch value (not append), which drops -fPIE and lets -fPIC win.  Only
+> +	# do this when an arch needs it (LoongArch).
+> +	if [[ -n "$ARCH_KBUILD_CFLAGS_KERNEL" ]]; then
+> +		cmd+=("KBUILD_CFLAGS_KERNEL=$ARCH_KBUILD_CFLAGS_KERNEL")
+> +	fi
+>  	cmd+=("vmlinux")
+>  	cmd+=("modules")
+>  
 
-Both arch/arm64/kernel/vmlinux.lds.S and
-arch/loongarch/kernel/vmlinux.lds.S contain a "/* from the EFI stub */"
-comment documenting the wildcard.  Might be worth adding for v4.
+I'd also pull out the configuration checks into validate_config() to be
+consistent:
+
+  if [[ -v CONFIG_LOONGARCH ]]; then
+       [[ -v CONFIG_AS_HAS_EXPLICIT_RELOCS ]] || \
+           die "LoongArch klp-build requires CONFIG_AS_HAS_EXPLICIT_RELOCS=y"
+       [[ -v CONFIG_RELOCATABLE ]] || \
+           die "LoongArch klp-build requires CONFIG_RELOCATABLE=y"
+  fi
+
+and then build_kernel() only needs to adjust the cmd / flags accordingly.
 
 --
 Joe
