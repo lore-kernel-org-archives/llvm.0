@@ -1,103 +1,353 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A01B3FB7E9;
-	Wed,  8 Jul 2026 21:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9851B3FAE0A
+	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 22:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783547978; cv=none; b=dtvTQOHLq5MZM0SadGA1SqDKfP8XNT86p7c8ZrHtGP5W+qGcnzTkisQ19mx9GwBZncvWAKRF7KfmnsxamqPxs1hwDBDbJ4UBSbMH+Htc5G0o1Xl0nPAN4k/xYxzT0wuBSkrfyYnDmPYIcGnJIREEr3CffcblETip7k1h96I0Y0E=
+	t=1783549978; cv=none; b=uA/ZC3NOVUSWIdMz6/Ax+83eeUMB96Q67jiPedYMw40q2V/5y3Tb1+ybpJ9PWOz6yrqH3BxHd9HdvrqjiQwmGT5ZB/kQ+E/v4r8kApn484sah+hJ8pAjPFJ37x391yNGYl4dSXlOls2g3sZODwTir5KBX0uZlS0OsISwkrEabZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783547978; c=relaxed/simple;
-	bh=W+57LXS4riDEbNg5KCl62OXorn3j1qzPxvDKnBcwzQk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=T/EYeVEWlpsIhGS92qj3Ora65v1fjLnzruk6jGl5o0dq5RVUXBPMf5XioOvazbhHQQdysWFUdnmR18cA40WE1LOEAc1QmFFC2CW5wXjweJn9wcI7sGWjgGmabPg4xG/yh4thkoDxhh8/55BlK3LBdZLN7no8jiuMrBWWdbm4xYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jvdVBKeY; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783549978; c=relaxed/simple;
+	bh=swODgbekQmS1CFeZ9iG/ZEs5COm4cAVix6GliQDtetY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 In-Reply-To:Content-Type:Content-Disposition; b=h+OnzjKzSAKh71EXPGJcDpbLwDVccak22vFt3AD0kIhiB9qVkHshDY8vnUwr5UiEXfqc/08k2gpx8+n/MFAEfALTioaZn5kEZQK94KYrTv8pzB6CwB/1wy2x+oLxGN/Ob9jE+pTmV6VB3teO8ReBnEaRKL5SoBn52QHdtHpxuX0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XsNR6tID; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jvdVBKeY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783547977; x=1815083977;
-  h=date:from:to:cc:subject:message-id;
-  bh=W+57LXS4riDEbNg5KCl62OXorn3j1qzPxvDKnBcwzQk=;
-  b=jvdVBKeYJlKuyj4j37AePu51i2+pcMaSyfyNZzW+bfB3rw5B1VsWSLgW
-   4sJ+Z062RU1dsQwZpxQnv/5NRTt2CpNcJJiPalE1vNpY/fZ8pmn9lci1o
-   TNbw49KOY92nF163n9M88zeoc+m1cS/WCtDRtmAZa3mLp9Zd47oA6lrhY
-   AH2mpT6ZolAPreok+hyAXrSrHMGA/XCQuV/mlkGzbFY2QFBFXMJ1SEXOK
-   mQnbJjngrm+TIqLpopFHVls54Ayje3/fuVvNciFXAOo2ijmnx0ENOZv9u
-   /5X9G0JTAZx2IJkSi61ncKiD2LCaBOiqH0m/SWiA40AKrE2D2KmNsOnm/
-   A==;
-X-CSE-ConnectionGUID: dY4Qmi0VQ1WZB/WfUC/Q6g==
-X-CSE-MsgGUID: 0aERfO2DRDOzBBZPQmDB7A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="107018517"
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="107018517"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 14:59:36 -0700
-X-CSE-ConnectionGUID: lcO+TWuJQ82QYGwl1EoM+w==
-X-CSE-MsgGUID: Cq/kZYYxTSOsrvtNi80Jqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="252657393"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 08 Jul 2026 14:59:35 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1whaIm-000000002nl-2AKv;
-	Wed, 08 Jul 2026 21:59:32 +0000
-Date: Wed, 08 Jul 2026 23:58:41 +0200
-From: kernel test robot <lkp@intel.com>
-To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [vbabka:objext_split 10/14] mm/slab.h:702:47: error: no
- member named '_ctref' in 'struct slabobj_ext'
-Message-ID: <202607082351.xSIajZFs-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XsNR6tID"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783549975;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E/T4EWXW79x7TDZV95U66XrCatSBiUQKKPW4UkScdA4=;
+	b=XsNR6tIDylw3W/SyNe65PKO0Wo9uwYtOjrz+lRZEz0G+vALEmPuqvYoVtUF+TeQwSLSVwD
+	7ePqNlC8JoHcycaBMWYmhW3JwqpSs7Rct5dnqkW+Pnf9gOIWbliG023f7uIbJlSGlguXri
+	Ud5lV0j+eFCYT46wfvBdlrCflIm15a8=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-152-c4VGxBctPoqaxYYIYg0UGQ-1; Wed,
+ 08 Jul 2026 18:32:51 -0400
+X-MC-Unique: c4VGxBctPoqaxYYIYg0UGQ-1
+X-Mimecast-MFC-AGG-ID: c4VGxBctPoqaxYYIYg0UGQ_1783549969
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BA54F1956041;
+	Wed,  8 Jul 2026 22:32:46 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.80.46])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C1BA1800592;
+	Wed,  8 Jul 2026 22:32:40 +0000 (UTC)
+Date: Wed, 8 Jul 2026 18:32:37 -0400
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: George Guo <dongtai.guo@linux.dev>
+Cc: chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
+	jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
+	kernel@xen0n.name, rostedt@goodmis.org, ardb@kernel.org,
+	nathan@kernel.org, nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn, guodongtai@kylinos.cn, xry111@xry111.site,
+	wangyuli@aosc.io, loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 02/12] LoongArch: Mark special sections for KLP support
+Message-ID: <ak7QBSm3mmDlB-4u@redhat.com>
+References: <20260707072031.231066-1-dongtai.guo@linux.dev>
+ <20260707072031.231066-3-dongtai.guo@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+In-Reply-To: <20260707072031.231066-3-dongtai.guo@linux.dev>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Mimecast-MFC-PROC-ID: 4tBx0LhgQeY1ewjQTBVZbctrGf3fDfUxa0WBS9CG00M_1783549969
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi Vlastimil,
+On Tue, Jul 07, 2026 at 03:20:21PM +0800, George Guo wrote:
+> From: George Guo <guodongtai@kylinos.cn>
+> 
+> objtool needs to split the kernel's special sections into per-entry
+> symbols when generating livepatch modules. Mark them so it can:
+> 
+>  - .altinstructions and __ex_table are read-only, so set an explicit
+>    entry size via SHF_MERGE (ALT_INSTR_SIZE / EXTABLE_SIZE).
+> 
+>  - __bug_table and __jump_table are writable. SHF_MERGE cannot be
+>    combined with SHF_WRITE (Clang rejects it), so annotate each entry
+>    with ANNOTATE_DATA_SPECIAL instead, mirroring x86/arm64.
+> 
+> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+> ---
+>  arch/loongarch/include/asm/alternative-asm.h |  5 +++--
+>  arch/loongarch/include/asm/alternative.h     |  6 ++++--
+>  arch/loongarch/include/asm/asm-extable.h     | 10 ++++++++--
+>  arch/loongarch/include/asm/bug.h             |  1 +
+>  arch/loongarch/include/asm/jump_label.h      |  2 ++
+>  arch/loongarch/kernel/asm-offsets.c          | 20 ++++++++++++++++++++
+>  6 files changed, 38 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/alternative-asm.h b/arch/loongarch/include/asm/alternative-asm.h
+> index 7dc29bd9b2f0..d940d9d2c0e1 100644
+> --- a/arch/loongarch/include/asm/alternative-asm.h
+> +++ b/arch/loongarch/include/asm/alternative-asm.h
+> @@ -5,6 +5,7 @@
+>  #ifdef __ASSEMBLER__
+>  
+>  #include <asm/asm.h>
+> +#include <generated/asm-offsets.h>
+>  
+>  /*
+>   * Issue one struct alt_instr descriptor entry (need to put it into
+> @@ -33,7 +34,7 @@
+>  	.fill - (((144f-143f)-(141b-140b)) > 0) * ((144f-143f)-(141b-140b)) / 4, 4, 0x03400000
+>  142 :
+>  
+> -	.pushsection .altinstructions, "a"
+> +	.pushsection .altinstructions, "aM", @progbits, ALT_INSTR_SIZE
+>  	altinstruction_entry 140b, 143f, \feature, 142b-140b, 144f-143f
+>  	.popsection
+>  
+> @@ -63,7 +64,7 @@
+>  		(alt_max_short(new_len1, new_len2) - (old_len)) / 4, 4, 0x03400000
+>  142 :
+>  
+> -	.pushsection .altinstructions, "a"
+> +	.pushsection .altinstructions, "aM", @progbits, ALT_INSTR_SIZE
+>  	altinstruction_entry 140b, 143f, \feature1, 142b-140b, 144f-143f, 142b-141b
+>  	altinstruction_entry 140b, 144f, \feature2, 142b-140b, 145f-144f, 142b-141b
+>  	.popsection
+> diff --git a/arch/loongarch/include/asm/alternative.h b/arch/loongarch/include/asm/alternative.h
+> index b5bae21fb3c8..8f7712ed2f4e 100644
+> --- a/arch/loongarch/include/asm/alternative.h
+> +++ b/arch/loongarch/include/asm/alternative.h
+> @@ -70,7 +70,8 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
+>  /* alternative assembly primitive: */
+>  #define ALTERNATIVE(oldinstr, newinstr, feature)			\
+>  	OLDINSTR(oldinstr, 1)						\
+> -	".pushsection .altinstructions,\"a\"\n"				\
+> +	".pushsection .altinstructions, \"aM\", @progbits, "            \
+> +		 __stringify(ALT_INSTR_SIZE) "\n"                       \
+>  	ALTINSTR_ENTRY(feature, 1)					\
+>  	".popsection\n"							\
+>  	".subsection 1\n" \
+> @@ -79,7 +80,8 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
+>  
+>  #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
+>  	OLDINSTR_2(oldinstr, 1, 2)					\
+> -	".pushsection .altinstructions,\"a\"\n"				\
+> +	".pushsection .altinstructions, \"aM\", @progbits, "            \
+> +			__stringify(ALT_INSTR_SIZE) "\n"                \
+>  	ALTINSTR_ENTRY(feature1, 1)					\
+>  	ALTINSTR_ENTRY(feature2, 2)					\
+>  	".popsection\n"							\
+> diff --git a/arch/loongarch/include/asm/asm-extable.h b/arch/loongarch/include/asm/asm-extable.h
+> index d60bdf2e6377..2d7eef7c0b39 100644
+> --- a/arch/loongarch/include/asm/asm-extable.h
+> +++ b/arch/loongarch/include/asm/asm-extable.h
+> @@ -7,10 +7,15 @@
+>  #define EX_TYPE_UACCESS_ERR_ZERO	2
+>  #define EX_TYPE_BPF			3
+>  
+> +#ifndef COMPILE_OFFSETS
+> +#include <asm/asm-offsets.h>
+> +#endif
+> +
+>  #ifdef __ASSEMBLER__
+>  
+>  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
+> -	.pushsection	__ex_table, "a";		\
+> +	.pushsection    __ex_table, "aM", @progbits,    \
+> +			EXTABLE_SIZE;                   \
+>  	.balign		4;				\
+>  	.long		((insn) - .);			\
+>  	.long		((fixup) - .);			\
+> @@ -29,7 +34,8 @@
+>  #include <asm/gpr-num.h>
+>  
+>  #define __ASM_EXTABLE_RAW(insn, fixup, type, data)	\
+> -	".pushsection	__ex_table, \"a\"\n"		\
+> +	".pushsection   __ex_table, \"aM\", @progbits, "\
+> +	 __stringify(EXTABLE_SIZE) "\n"                 \
+>  	".balign	4\n"				\
+>  	".long		((" insn ") - .)\n"		\
+>  	".long		((" fixup ") - .)\n"		\
+> diff --git a/arch/loongarch/include/asm/bug.h b/arch/loongarch/include/asm/bug.h
+> index d090a5bec5eb..14e3acbaad8d 100644
+> --- a/arch/loongarch/include/asm/bug.h
+> +++ b/arch/loongarch/include/asm/bug.h
+> @@ -25,6 +25,7 @@
+>  #define __BUG_ENTRY(cond_str, flags)				\
+>  		.pushsection __bug_table, "aw";			\
+>  		.align 2;					\
+> +		__ANNOTATE_DATA_SPECIAL;				\
+>  	10000:	.long 10001f - .;				\
+>  		_BUGVERBOSE_LOCATION(WARN_CONDITION_STR(cond_str) __FILE__, __LINE__) \
+>  		.short flags;					\
+> diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
+> index 7ef4ae3abf08..d20f0fa24b6b 100644
+> --- a/arch/loongarch/include/asm/jump_label.h
+> +++ b/arch/loongarch/include/asm/jump_label.h
+> @@ -12,6 +12,7 @@
+>  #include <linux/types.h>
+>  #include <linux/stringify.h>
+>  #include <asm/asm.h>
+> +#include <linux/objtool.h>
+>  
+>  #define HAVE_JUMP_LABEL_BATCH
+>  
+> @@ -27,6 +28,7 @@
+>  #define JUMP_TABLE_ENTRY(key, label)			\
+>  	 ".pushsection	__jump_table, \"aw\"	\n\t"	\
+>  	 ".align	" __stringify(PTRLOG) "	\n\t"	\
+> +	 ANNOTATE_DATA_SPECIAL "\n\t"			\
+>  	 ".long		1b - ., " label " - .	\n\t"	\
+>  	 JUMP_LABEL_TYPE  key " - .		\n\t"	\
+>  	 ".popsection				\n\t"
+> diff --git a/arch/loongarch/kernel/asm-offsets.c b/arch/loongarch/kernel/asm-offsets.c
+> index 2cc953f113ac..470323aa022c 100644
+> --- a/arch/loongarch/kernel/asm-offsets.c
+> +++ b/arch/loongarch/kernel/asm-offsets.c
+> @@ -18,6 +18,8 @@
+>  #include <asm/ftrace.h>
+>  #include <asm/sigframe.h>
+>  #include <vdso/datapage.h>
+> +#include <asm/alternative.h>
+> +#include <asm/extable.h>
+>  
+>  static void __used output_ptreg_defines(void)
+>  {
+> @@ -323,3 +325,21 @@ static void __used output_vdso_defines(void)
+>  	DEFINE(__VDSO_PAGES, VDSO_NR_PAGES);
+>  	BLANK();
+>  }
+> +
+> +static void __used output_extable_defines(void)
+> +{
+> +	COMMENT("LoongArch exception table entry offsets.");
+> +
+> +	DEFINE(EXTABLE_SIZE, sizeof(struct exception_table_entry));
+> +	BLANK();
+> +}
+> +
+> +static void __used output_alt_instr_defines(void)
+> +{
+> +	COMMENT("LoongArch alternative instructions offsets.");
+> +
+> +	DEFINE(ALT_INSTR_SIZE, sizeof(struct alt_instr));
+> +	BLANK();
+> +}
+> +
+> +
+> -- 
+> 2.25.1
+> 
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Hello George,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vbabka/linux.git objext_split
-head:   8bd682e28958694beba958e2a3af94c6e1789819
-commit: 510dc45196b1495bba6f15a6f3348ace5c983136 [10/14] mm/slab: abstract slabobj_ext.ref access
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260708/202607082351.xSIajZFs-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260708/202607082351.xSIajZFs-lkp@intel.com/reproduce)
+I've run into another test case while exercising v3 on LoongArch (Clang
+build).I
+       a
+Setup
+=====
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607082351.xSIajZFs-lkp@intel.com/
+Maybe my config was too small, but I couldn't find any existing vmlinux
+.c file that emits .altinstructions on LoongArch, all in-tree
+ALTERNATIVE() sites are in arch/loongarch/lib/*.S, which we can't modify
+with klp-build.
 
-All errors (new ones prefixed by >>):
+I added a minimal dummy function to arch/loongarch/kernel/alternative.c
+so I could test:
 
-   In file included from mm/mempool.c:21:
->> mm/slab.h:702:47: error: no member named '_ctref' in 'struct slabobj_ext'
-     702 |         return &slab_obj_ext(slab, obj_exts, index)->_ctref;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  ^
-   1 error generated.
+  $ cat base-vmlinux.patch
+  diff --git a/arch/loongarch/kernel/alternative.c b/arch/loongarch/kernel/alternative.c
+  index 0e0c766df1e3..01d81db79b3f 100644
+  --- a/arch/loongarch/kernel/alternative.c
+  +++ b/arch/loongarch/kernel/alternative.c
+  @@ -3,6 +3,7 @@
+   #include <linux/mm.h>
+   #include <linux/module.h>
+   #include <asm/alternative.h>
+  +#include <asm/cpu.h>
+   #include <asm/cacheflush.h>
+   #include <asm/inst.h>
+   #include <asm/sections.h>
+  @@ -245,3 +246,15 @@ void __init alternative_instructions(void)
+   
+          alternatives_patched = 1;
+   }
+  +
+  +/*
+  + * klp-build repro hook: vmlinux .c function with ALTERNATIVE().
+  + */I
+  +staatic int klp_build_alt_test_base = 10;
+  +
+  +static noinline int __used klp_build_alt_test_compute(int input)
+  +{
+  +       asm volatile(ALTERNATIVE("nop", "nop", CPU_FEATURE_FPU) : : : "memory");
+  +
+  +       return input + klp_build_alt_test_base;
+  +}
 
+Then a one-line klp-build patch to modify the function:
 
-vim +702 mm/slab.h
+  $ cat test-alternatives.patch
+  diff --git a/arch/loongarch/kernel/alternative.c b/arch/loongarch/kernel/alternative.c
+  index 01d81db79b3f..f5d5c4f0d8ef 100644
+  --- a/arch/loongarch/kernel/alternative.c
+  +++ b/arch/loongarch/kernel/alternative.c
+  @@ -256,5 +256,5 @@ static noinline int __used klp_build_alt_test_compute(int input)
+   {
+          asm volatile(ALTERNATIVE("nop", "nop", CPU_FEATURE_FPU) : : : "memory");
+   
+  -       return input + klp_build_alt_test_base;
+  +       return input + klp_build_alt_test_base + 1;
 
-   694	
-   695	static inline union codetag_ref *slab_obj_ext_codetag_ref(struct slab *slab,
-   696						unsigned long obj_exts, const void *obj)
-   697	{
-   698		unsigned int index;
-   699	
-   700		index = obj_to_index(slab->slab_cache, slab, obj);
-   701	
- > 702		return &slab_obj_ext(slab, obj_exts, index)->_ctref;
-   703	}
-   704	
+Repro
+=====
 
+Build the kernel as usual, then klp-build the test-alternatives.patch:
+
+  $ patch -p1 < base-vmlinux.patch
+  patching file arch/loongarch/kernel/alternative.c
+  $ ARCH=loongarch LLVM=1 make -j$(nproc)
+  ...
+  $ ARCH=loongarch LLVM=1 ./sIcripts/livepatch/klp-build -T test-alternatives.patch
+                             a
+Result
+======
+
+klp-build gets through the diff step, then fails linking the livepatch
+module:
+
+  ...
+  Diffing objects
+  vmlinux.o: changed function: klp_build_alt_test_compute
+  Building patch module: livepatch-test-alternatives.ko
+  livepatch-test-alternatives.o: error: objtool: .text.klp_build_alt_test_compute+0x14: special: can't find new instruction
+  make[3]: *** [/home/jolawren/src/linux/scripts/Makefile.build:507: livepatch-test-alternatives.o] Error 255
+  make[3]: *** Deleting file 'livepatch-test-alternatives.o'
+  make[2]: *** [/home/jolawren/src/linux/Makefile:2141: .] Error 2
+  make[1]: *** [/home/jolawren/src/linux/Makefile:248: __sub-make] Error 2
+  make: *** [Makefile:248: __sub-make] Error 2
+  error: klp-build: line 964: '"${cmd[@]}" > >(tee -a "$log") 2> >(tee -a "$log" 1>&2)'
+
+Should v3 (or a follow-up patch) include the inline alternative
+cloning support?  Or is patching functions that contain ALTERNATIVE()
+intentionally out of scope for LoongArch KLP for now?
+
+If the latter, it would be worth calling out explicitly as this patch
+reads as though .altinstructions is supported end-to-end. 
+
+Regards,
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Joe
+
