@@ -1,63 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F91402428
-	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 08:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4984028D2
+	for <llvm@lists.linux.dev>; Wed,  8 Jul 2026 08:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783499135; cv=none; b=pRSt0RXhhMeA+BCtjV6JHw3BRzcp2UnnlRF2d6PJKequHBcVqHcQuW/9yza/afEklsPvCvwteX+CCoyP9rB1PKShJhW7NmfWjZGj5gyhckFP/BSJG7NauW96HY57Wu8Y2IyW0gcz3liPu/0UUZYlseSV0Ws/KdQBowIevxK8tts=
+	t=1783499143; cv=none; b=SxI2HpOsv73Xd73+A1ZotEYOBuXqy1Jd6kwb0+59ir2vP+78vAt8dgjhDE8B8JcctHkRwZ1nrjCNFSfSIgDRhQ1RrcjxcjPEw/ew7CM/trF7UKw01wbq+TD43yhadi/29O+ldYaz1xoi7EJjv3K3VLRKGThAKcVJYSxvJfZVPgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783499135; c=relaxed/simple;
-	bh=uV4k2f8/fiWG5QwZfIZIbmPLrhF5ER9yMDh4lwxe6QU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bkNllIplR9k5U/SkaxrSewFj7qk8z3dWy37ram2MW2MWEITwfIi6QOvEMKfSYkawFo18MP51jbzGzp1KQtF2my3uwzcb/OI/BeR+2tymsUJAFkzt4jS5sC+G9SXUhHb5akLIvx+/Jqe7LH5aqieo9A/bBEkepoVFndmRfbQk2JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Votcnf8Y; arc=none smtp.client-ip=209.85.216.53
+	s=arc-20240116; t=1783499143; c=relaxed/simple;
+	bh=fXIh5PA7kbCyYYosmW/TTl0n7NYNoz+MhA4tzXltjEY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=JGibg+JVcEza+tYLSTFslbffazCCTXa7IjPLUUjoPutUkC1zJVJVP6JYXImcvGqGUK5r3raqPOmwSbRAmgwPTqJuX8NLokOrqdhH+Wv77uV9uSMOZmWI7nHWNA4vjUvnQ413a8B16/PmobwnnW4jgvhOB/0ipfZcG8wFbrtTkdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ozclbIo7; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Votcnf8Y"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-382ef647e20so459045a91.1
-        for <llvm@lists.linux.dev>; Wed, 08 Jul 2026 01:25:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ozclbIo7"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cce6a0c9c3so4727435ad.1
+        for <llvm@lists.linux.dev>; Wed, 08 Jul 2026 01:25:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783499124; x=1784103924; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1783499136; x=1784103936; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=kqHcDJLpqtPG3b1h3n4CGDV6Uky+owIJPUMSqpt6iVU=;
-        b=Votcnf8YVx911nTbSBESGCIG1WzbZHBLxz1nXubBg+8R+5pXB4ppfofjKCOYQNjRSk
-         kszUgCYOjuFyQXcuaCeJzxZBf0j4c/kZVWKDyAbYSHnSY+qrYdId0idK8eFPNXPIoX+5
-         NyKzqGAlqYOAhLCn8RsSJ2HD2WCmfs0WddCh/kFhBaxuPY1H4wGmbg8MkGym/5tB7WFN
-         WvvvxA93iQSlUrTUYVs4+qBqODRhsCFGU4jFtGLUPqJJ3QwZ6NvPRGdGFKNrrv56KY9+
-         qml/aNJrqxt7xnQoIzCRhi96QW3ZIOHOJThB02XPr+UnCY9JOgi9BReuZHkIkBj6axrJ
-         xTrw==
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9e/NFLIY5ko2z4Ua5YIOk54c8MAKLBSvbGyu1AtkwQs=;
+        b=ozclbIo7u11S27o4MUrBqopR077ZzhkN19Mup3/T6pbTLyOE/HY9gwju79tNszthnr
+         Qv+cPSEuXnF7gPdnuRGMO5IGoa+nyteDq1A9sU/JXI+T9D7OmESqSqHVKsans/P5IBoa
+         b+VWWs8eno8WgITWfNWGTPmobu56w6wIladwH4QeEHOHSs4cUGSz97z7NAUhDct3t+YA
+         9YkHvdLVlPjnQZPyRufsC75aVJFXOZ7iWvrISPU7Qb6ajBCWW9ThVGZycZ5tcNnyUriS
+         5LXA8KmB0Rh938j1qSlyMgReNlBB3gdHRZ8gNOd3w4O1uGMWEqRI71v0c1NVqdOBcutO
+         mMwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783499124; x=1784103924;
+        d=1e100.net; s=20251104; t=1783499136; x=1784103936;
         h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=kqHcDJLpqtPG3b1h3n4CGDV6Uky+owIJPUMSqpt6iVU=;
-        b=pqCk4STCyg+JbVLoaiRqfbHSrJz2B6ZMty2Yv8SoEfogWimaH8uEl4k7EqqRwyW5wd
-         +SrxInaYwP93j3AJxmSDebJs2e/kDKjyRpNAk9oRkHgBWHe+nk3B0vL2B9FyECcMD55m
-         2gE6tbEeCyjyfVopDmVTmTgOSDsGpmZRo6N5QEgA1eHQ4qJjuipx0EJMt2LekzJ1qYvg
-         w9u3cPxoa+tXZu7j4QS5U7/0EI1p82zwzXACkOv8e2JBa1kseLOow69N9e4zbrEHCq+v
-         xBmwXYX68eiQt+2o9T6wANS+mXIn5iPmu50c+bOeAbRUi4Iu10pHVe4sRwdl/kQNPxRE
-         0O+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqTJVp8i1KHKgbkiU0usQRXt66asS6erQiBCpIThhoJMWCAtdIwe9u7QmeBh/CVVZHB1Uhi@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy6R1XA4GpDcnjjU2k2uHRs6t2EuFrnw7lu+9dSA+uHJtWIZCoI
-	rKyOUmzsSzJoFwKMJCyvFB77QHIZP/eHxxmiBiPdOOkLjwkJARtFsodS
-X-Gm-Gg: AfdE7ck3GFT1K/jAFf2+yD4JiA/BVVXMkb+sXmBHLsUM/hFR4qaX2MaCZ4eUy/31IAH
-	juj2UNXlcIJa+onCxkjs/5Fn7VkCKf/dF/6kkJB2R2906sMxId9aMAI9p9U6EdiyRz7XO+1yOec
-	REzmrdYBOlaaGjR9sqLBvqGAIVX8leZWsDUvZYnLaAriVnDK4eBAZwi2gLtXkk47NdngbaoF75l
-	F3RazSOz4X5nJ0J0ISUHKV5lOxrtdjftBCpxx5xP3W4UtKrRXchzYP6oI6hbtSnaj29VFTY7Q39
-	JtlEfPCYuEsw5Ga/1kGCLSp3XcJCruEHzzyy08jvsCXJf/fvuFNlhij6jg5a3M4+tfo8a68atHe
-	TQgw6tYQRyy54sNAZ9VgIm02IqeTu/xgV8emzsoMWBp3TlJVqNzOdKP4xmhwDXaXCgMgri2A9w/
-	G0syDc7AtOqR3u/8LBQ9IpzlGCd1awYTI0P64Da3Y/14RxOU1QgSq9RZN18Xsgt/3VQg==
-X-Received: by 2002:a05:6a20:5482:b0:3b3:be1f:c89b with SMTP id adf61e73a8af0-3c0bcff89edmr1826587637.22.1783499123695;
-        Wed, 08 Jul 2026 01:25:23 -0700 (PDT)
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9e/NFLIY5ko2z4Ua5YIOk54c8MAKLBSvbGyu1AtkwQs=;
+        b=Udd2TADdtUSJ5ZDUn0Y8bTxiJbFV+g5vTDKOyGrTVSxjHnH21a5orF3AkjoUBMiyeT
+         8W9DEu+kIc6H0AwmYVefG6ZC96WOJb5OSsZ/qo02HxGQRMZnkl00wqsZB+b6m4/lF4Jq
+         /2LzgQv8UfSJhTU4OWTFcy5cMwmINcamNnGTTTm/DsbvBNZxPAileMACAfJ3ZLvEDl56
+         bE0O64SS0fJMBVuGrnl91Nz77uJUrFDCvFU+9DaKEfrR/1XpOVuz6R7K4A6s7N2uJeTQ
+         3ch3zZBmwv/r9S/jdaZiqZhFI8h8BBQPcVYUnRN8MaUPVjkvoPu8atKyd1rgIhmPkGyC
+         WNkA==
+X-Forwarded-Encrypted: i=1; AHgh+RplCBO2kn0JJyfP1Kl5wGezPGRkcMdQLKgCA4u4EZs/H6oxxN3gLVjC4HTKelWGFKuZe9If@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw1QLIdUOWd6H6o+iOOsh1OtPUg6FfnINzQ7nqADNwt7IhP5mow
+	HP2/btvlxI8h5MpZyWvhvc7yWezU83S58C2cZ+TGDvJ2jDrk29EDSe5e
+X-Gm-Gg: AfdE7cmQUB0XZ5qchVX6s1kDss4L+Rrl+M6DHDdBtD3OvC8Ba4C+5Wj1iTAbmB1ENKJ
+	dtPCWaJuBLYJLgVIHoC7LyQ3U5uUHmS0RVqhUGumdfydo8xBNzyr8Jiu0DlVtAhkCuuTAkL+sVn
+	Gzi/QzTP5Hm05NNZr7PkKZiGha9B4rNp4tdC3+NlT24p7D8CHcJ3le3S3aMaHtIpJLlsywnNAax
+	pmvJblRmsRwmg7O6RKEZxTYNj+fgan2Yp+mMqYYMZ93ugUrnFm8+DU9WNsTdjDocK06/9z/GaVV
+	WJYRapQgPKpNHX6g558lNbvxNc1NjzlMTlmmHYXrnCS/Lvhu6JdFBGBXvvkzQYY48UtXfrgNFt0
+	kFe6eFl90S7VuEDMCuvG3h+6IobeLSD4WYspCVJtDRPB9Pllsgf/H+7/0ZObXsNMxlpY998eHci
+	FUdaqeKCi1nqUP1wPk7Oly+x0Rx5xaY86yVBrTL7qxKUBj+buj2LAGQZL3kquNBojUnA==
+X-Received: by 2002:a05:6a21:6e8f:b0:3b4:931c:3c7c with SMTP id adf61e73a8af0-3c0bcea2f17mr1778731637.44.1783499135994;
+        Wed, 08 Jul 2026 01:25:35 -0700 (PDT)
 Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com.com ([106.51.160.236])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117462f5c7sm19975117eec.0.2026.07.08.01.25.12
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3117462f5c7sm19975117eec.0.2026.07.08.01.25.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jul 2026 01:25:23 -0700 (PDT)
+        Wed, 08 Jul 2026 01:25:35 -0700 (PDT)
 From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
 To: maddy@linux.ibm.com,
 	mpe@ellerman.id.au,
@@ -99,9 +99,10 @@ To: maddy@linux.ibm.com,
 	linux-kernel@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH V17 1/7] rust: Fix "multiple candidates for rmeta dependency core" error
-Date: Wed,  8 Jul 2026 13:54:48 +0530
-Message-ID: <20260708082454.1254320-2-mkchauras@gmail.com>
+Cc: =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
+Subject: [PATCH V17 2/7] dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER is disabled
+Date: Wed,  8 Jul 2026 13:54:49 +0530
+Message-ID: <20260708082454.1254320-3-mkchauras@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260708082454.1254320-1-mkchauras@gmail.com>
 References: <20260708082454.1254320-1-mkchauras@gmail.com>
@@ -111,153 +112,51 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When building Rust code for powerpc64le with LLVM=1 and -j1, rustc
-encounters an error: "multiple candidates for `rmeta` dependency `core`
-found", with two candidates:
-1. The host's standard library from the rustup toolchain
-2. The kernel's custom libcore.rmeta in the rust/ directory
+When building with LLVM=1 for architectures like powerpc where
+CONFIG_DMA_SHARED_BUFFER is not enabled, the build fails with:
 
-This occurs because the build system uses `-L$(objtree)/rust` for host
-library builds (proc_macro2, quote, syn), which causes rustc to search
-the rust/ directory. During this search, rustc finds both the kernel's
-custom libcore.rmeta and gains access to the host's standard library,
-creating a conflict.
+  ld.lld: error: undefined symbol: dma_resv_reset_max_fences
+  >>> referenced by helpers.c
+  >>>               rust/helpers/helpers.o:(rust_helper_dma_resv_unlock)
 
-The solution is to separate host libraries into a dedicated rust/host/
-subdirectory and use `-L$(objtree)/rust/host` for host builds instead
-of `-L$(objtree)/rust`. This ensures that:
+The issue occurs because:
+1. CONFIG_DEBUG_MUTEXES=y is enabled
+2. CONFIG_DMA_SHARED_BUFFER is not enabled
+3. dma_resv_reset_max_fences() is declared in the header when
+   CONFIG_DEBUG_MUTEXES is set
+4. But the function is only compiled in drivers/dma-buf/dma-resv.c,
+   which is only built when CONFIG_DMA_SHARED_BUFFER is enabled
+5. Rust helpers call dma_resv_unlock() which calls
+   dma_resv_reset_max_fences(), causing an undefined symbol
 
-1. Host library builds (proc_macro2, quote, syn) only search rust/host/
-   and never encounter the kernel's libcore.rmeta
-2. Proc macro builds use `-L$(objtree)/rust/host` to find their
-   dependencies
+Fix this by compiling `dma-resv.c` file only when CONFIG_DMA_SHARED_BUFFER
+is enabled.
 
-Special handling is added for rustdoc-pin_init, which is a host build
-(to access the alloc crate) but depends on proc macros from the main
-rust/ directory. It uses explicit `--extern` paths to reference the
-proc macros without adding `-L$(objtree)/rust`, which would reintroduce
-the conflict.
-
-The rust/host/ directory is added to clean-files to ensure it's removed
-during `make clean`.
-
-Link: https://github.com/Rust-for-Linux/linux/issues/105
-Link: https://github.com/linuxppc/issues/issues/451
+Fixes: 9b836641d3bf ("rust: helpers: Add bindings/wrappers for dma_resv_lock")
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Gary Guo <gary@garyguo.net>
 Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
 ---
- rust/Makefile | 42 +++++++++++++++++++++++-------------------
- 1 file changed, 23 insertions(+), 19 deletions(-)
+ rust/helpers/helpers.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/rust/Makefile b/rust/Makefile
-index a870d1616c71..17b2f329c13d 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -3,6 +3,9 @@
- # Where to place rustdoc generated documentation
- rustdoc_output := $(objtree)/Documentation/output/rust/rustdoc
- 
-+# Clean generated host directory
-+clean-files := host/
-+
- obj-$(CONFIG_RUST) += core.o compiler_builtins.o ffi.o
- always-$(CONFIG_RUST) += exports_core_generated.h
- 
-@@ -33,7 +36,7 @@ endif
- 
- obj-$(CONFIG_RUST) += exports.o
- 
--always-$(CONFIG_RUST) += libproc_macro2.rlib libquote.rlib libsyn.rlib
-+always-$(CONFIG_RUST) += host/libproc_macro2.rlib host/libquote.rlib host/libsyn.rlib
- 
- always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated.rs
- always-$(CONFIG_RUST_KERNEL_DOCTESTS) += doctests_kernel_generated_kunit.c
-@@ -163,7 +166,7 @@ quiet_cmd_rustdoc = RUSTDOC $(if $(rustdoc_host),H, ) $<
- 	$(rustc_target_envs) \
- 	OBJTREE=$(abspath $(objtree)) \
- 	$(RUSTDOC) $(filter-out $(skip_flags) --remap-path-scope=%,$(if $(rustdoc_host),$(rust_common_flags),$(rust_flags))) \
--		$(rustc_target_flags) -L$(objtree)/$(obj) \
-+		$(rustc_target_flags) -L$(objtree)/$(obj)$(if $(rustdoc_host),/host) \
- 		-Zunstable-options --generate-link-to-definition \
- 		--output $(rustdoc_output) \
- 		--crate-name $(subst rustdoc-,,$@) \
-@@ -261,6 +264,7 @@ rustdoc-pin_init_internal: $(src)/pin-init/internal/src/lib.rs \
- 
- rustdoc-pin_init: private rustdoc_host = yes
- rustdoc-pin_init: private rustc_target_flags = $(pin_init-flags) \
-+    --extern pin_init_internal=$(objtree)/$(obj)/$(libpin_init_internal_name) \
-     --extern alloc --cfg feature=\"alloc\"
- rustdoc-pin_init: $(src)/pin-init/src/lib.rs rustdoc-pin_init_internal \
-     rustdoc-macros FORCE
-@@ -572,23 +576,23 @@ quiet_cmd_rustc_procmacrolibrary = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_Q
- 	$(if $(skip_clippy),$(RUSTC),$(RUSTC_OR_CLIPPY)) \
- 		$(filter-out $(skip_flags),$(rust_common_flags) $(rustc_target_flags)) \
- 		--emit=dep-info=$(depfile) --emit=link=$@ --crate-type rlib -O \
--		--out-dir $(objtree)/$(obj) -L$(objtree)/$(obj) \
-+		--out-dir $(objtree)/$(obj)/host -L$(objtree)/$(obj)/host \
- 		--crate-name $(patsubst lib%.rlib,%,$(notdir $@)) $<
- 
--$(obj)/libproc_macro2.rlib: private skip_clippy = 1
--$(obj)/libproc_macro2.rlib: private rustc_target_flags = $(proc_macro2-flags)
--$(obj)/libproc_macro2.rlib: $(src)/proc-macro2/lib.rs FORCE
-+$(obj)/host/libproc_macro2.rlib: private skip_clippy = 1
-+$(obj)/host/libproc_macro2.rlib: private rustc_target_flags = $(proc_macro2-flags)
-+$(obj)/host/libproc_macro2.rlib: $(src)/proc-macro2/lib.rs FORCE
- 	+$(call if_changed_dep,rustc_procmacrolibrary)
- 
--$(obj)/libquote.rlib: private skip_clippy = 1
--$(obj)/libquote.rlib: private skip_flags = $(quote-skip_flags)
--$(obj)/libquote.rlib: private rustc_target_flags = $(quote-flags)
--$(obj)/libquote.rlib: $(src)/quote/lib.rs $(obj)/libproc_macro2.rlib FORCE
-+$(obj)/host/libquote.rlib: private skip_clippy = 1
-+$(obj)/host/libquote.rlib: private skip_flags = $(quote-skip_flags)
-+$(obj)/host/libquote.rlib: private rustc_target_flags = $(quote-flags)
-+$(obj)/host/libquote.rlib: $(src)/quote/lib.rs $(obj)/host/libproc_macro2.rlib FORCE
- 	+$(call if_changed_dep,rustc_procmacrolibrary)
- 
--$(obj)/libsyn.rlib: private skip_clippy = 1
--$(obj)/libsyn.rlib: private rustc_target_flags = $(syn-flags)
--$(obj)/libsyn.rlib: $(src)/syn/lib.rs $(obj)/libquote.rlib FORCE
-+$(obj)/host/libsyn.rlib: private skip_clippy = 1
-+$(obj)/host/libsyn.rlib: private rustc_target_flags = $(syn-flags)
-+$(obj)/host/libsyn.rlib: $(src)/syn/lib.rs $(obj)/host/libquote.rlib FORCE
- 	+$(call if_changed_dep,rustc_procmacrolibrary)
- 
- quiet_cmd_rustc_procmacro = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET)) P $@
-@@ -598,26 +602,26 @@ quiet_cmd_rustc_procmacro = $(if $(skip_clippy),RUSTC,$(RUSTC_OR_CLIPPY_QUIET))
- 		-Clinker-flavor=gcc -Clinker=$(HOSTCC) \
- 		-Clink-args='$(call escsq,$(KBUILD_PROCMACROLDFLAGS))' \
- 		--emit=dep-info=$(depfile) --emit=link=$@ --extern proc_macro \
--		--crate-type proc-macro -L$(objtree)/$(obj) \
-+		--crate-type proc-macro -L$(objtree)/$(obj)/host \
- 		--crate-name $(patsubst lib%.$(procmacro-extension),%,$(notdir $@)) \
- 		@$(objtree)/include/generated/rustc_cfg $<
- 
- # Procedural macros can only be used with the `rustc` that compiled it.
- $(obj)/$(libzerocopy_derive_name): private skip_clippy = 1
- $(obj)/$(libzerocopy_derive_name): private rustc_target_flags = $(zerocopy_derive-flags)
--$(obj)/$(libzerocopy_derive_name): $(src)/zerocopy-derive/lib.rs $(obj)/libproc_macro2.rlib \
--    $(obj)/libquote.rlib $(obj)/libsyn.rlib FORCE
-+$(obj)/$(libzerocopy_derive_name): $(src)/zerocopy-derive/lib.rs $(obj)/host/libproc_macro2.rlib \
-+    $(obj)/host/libquote.rlib $(obj)/host/libsyn.rlib FORCE
- 	+$(call if_changed_dep,rustc_procmacro)
- 
- $(obj)/$(libmacros_name): private rustc_target_flags = \
-     --extern proc_macro2 --extern quote --extern syn
--$(obj)/$(libmacros_name): $(src)/macros/lib.rs $(obj)/libproc_macro2.rlib \
--    $(obj)/libquote.rlib $(obj)/libsyn.rlib FORCE
-+$(obj)/$(libmacros_name): $(src)/macros/lib.rs $(obj)/host/libproc_macro2.rlib \
-+    $(obj)/host/libquote.rlib $(obj)/host/libsyn.rlib FORCE
- 	+$(call if_changed_dep,rustc_procmacro)
- 
- $(obj)/$(libpin_init_internal_name): private rustc_target_flags = $(pin_init_internal-flags)
- $(obj)/$(libpin_init_internal_name): $(src)/pin-init/internal/src/lib.rs \
--    $(obj)/libproc_macro2.rlib $(obj)/libquote.rlib $(obj)/libsyn.rlib FORCE
-+    $(obj)/host/libproc_macro2.rlib $(obj)/host/libquote.rlib $(obj)/host/libsyn.rlib FORCE
- 	+$(call if_changed_dep,rustc_procmacro)
- 
- # `rustc` requires `-Zunstable-options` to use custom target specifications
+diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
+index 998e31052e66..4b90a1390ad5 100644
+--- a/rust/helpers/helpers.c
++++ b/rust/helpers/helpers.c
+@@ -58,7 +58,9 @@
+ #include "cred.c"
+ #include "device.c"
+ #include "dma.c"
++#ifdef CONFIG_DMA_SHARED_BUFFER
+ #include "dma-resv.c"
++#endif
+ #include "drm.c"
+ #include "drm_gpuvm.c"
+ #include "err.c"
 -- 
 2.55.0
 
