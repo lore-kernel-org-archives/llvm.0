@@ -1,142 +1,81 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA2F36C59E;
-	Wed,  8 Jul 2026 11:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D062C346FA4;
+	Wed,  8 Jul 2026 13:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783508426; cv=none; b=BEVs/klR6eFWvtNM3i9yKG/ANpmdCs8ifN+nVNG1yeOZN3xH/ISAFsFT4Zbs07AMDUCBu9dquVDhl0ATtMsjQExmRXv47CNVqH1JIGHTp+RFwZguMSQLMO0rvwehHvhS8qftRMmJAguGAhPtP+TI4UqIVVUkGCxOfgBQzCjFF2M=
+	t=1783517405; cv=none; b=F8MklljX4jIxEezm8CzRQ1j3UmSN7N7yO6cDRGI+kltgIjGo2MJn0ilbk21SM7nyKz4rJe9utw9/muM1u649juPTbwfYXuzwSr7UORLMmLyv7IFTEdQfs7PG8nlRHOwd17XpUkHlL95O+KS6zVc6y4xzq+0hi6uLBm8hwNJPqmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783508426; c=relaxed/simple;
-	bh=RgFp3t0xXEJuRU59u8geFWyHTZrH6eXJzcU9jj8DX2I=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Ckl8m7uUrYfAmTNcuec7/PlM/5mc2VYzVTbxpPWjmu0+6oqtpjvTKBq4p26EJEP7S9s1j9FfbzIw29F5tHHx1q8U2OWc1NL8rc0yPTkpUu8niGlZ0ZMOtIoxh4wH49zVzG0iztQ3R5GQtxhr9pjA4nxBxsFzhl15Qo/B1q5Hdus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KdkPdMqi; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783517405; c=relaxed/simple;
+	bh=M03bABgfeH1vQxaRx91yzwdNJMV3GDWiz437kVa1sM0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=vBdvcyvH//YHBsm9rhRkX0cw061/DOgtCJI5RdLeZ0QMi7PUUzG/247u/wQj+/WJFfKceYtsn2kbNmq9DKpMzdnG0H/psduSj+pSpgWyrHjNyxU0cVArHNakurNLDk0juwZUrfvnPypjBWKNoQWgnBbm6J7iq6eUhY/8jfyfOO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=eyeorHBz; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KdkPdMqi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783508422; x=1815044422;
-  h=date:from:to:cc:subject:message-id;
-  bh=RgFp3t0xXEJuRU59u8geFWyHTZrH6eXJzcU9jj8DX2I=;
-  b=KdkPdMqiTv5OCwQEHOshYCMeuQXg8Vdgsl6TTo+0mmKWDjg8GFBRI9Dk
-   7gvKgXXgF7HwYUCbUsDJHLw6C4YOFccmsg1pke99Tt5oJHYuPg6jzNFGF
-   Xq71Tox1lToyw5rDe+3Sl8UM1pH0qxJU2t/bORT97vgOyADwjFTYUrsrn
-   ykHU3wufSpunMX9pEgnlza3rBfn2ly/DPca57S+NTiYTb2HD5W7Bs2q0J
-   u3pTx15/YESkUIE6LLjFX2jj/iJbgNd/Cq3j8ZUOafZl5t5tFWKFYNx8z
-   QtMecnDbg3DIfiHHnw81hwzzapKnbOveLKxvsVtloFj0t0d6HtZTnA7ua
-   A==;
-X-CSE-ConnectionGUID: mEhah3EhRLGUoB200MM9xQ==
-X-CSE-MsgGUID: Y/WEgV1+TlmB40Wp+NGiCg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11840"; a="83279513"
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="83279513"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 04:00:21 -0700
-X-CSE-ConnectionGUID: SvT0GAjvSmSz+aT2OvWsZw==
-X-CSE-MsgGUID: EJqI0mu5TnmoQW8XBaR8og==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,153,1779174000"; 
-   d="scan'208";a="292451236"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 08 Jul 2026 04:00:19 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1whQ0m-000000002kj-458x;
-	Wed, 08 Jul 2026 11:00:16 +0000
-Date: Wed, 08 Jul 2026 12:59:36 +0200
-From: kernel test robot <lkp@intel.com>
-To: Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- Florian Westphal <fw@strlen.de>
-Subject: [netfilter-nf:testing 11/20]
- net/netfilter/ipset/ip_set_hash_gen.h:379:21: warning: result of comparison
- of constant -1 with expression of type 'u8' (aka 'unsigned char') is always
- false
-Message-ID: <202607081250.ODagxDyb-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="eyeorHBz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1783517394;
+	bh=0lsf6gGfCY3XhTEU6LMoC5aiZhuoVlhT4fXzJilHE54=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=eyeorHBzJEORaM3YlQMfELGV8ZwrD5OmxmzXnx/2jbHdNOpc/JlU/Pzga4pmsjYoE
+	 KMiml60/VVobuG+Kqx29FrZBBhN7W1G6IeEhfbJSG5BSi2SDDnQsDmmuxqPSovhne4
+	 0Kn03tXoo+kZJSQbabxS1baL5Mxvk9UJJyf8YcwM=
+Received: from [127.0.0.1] (2607-8700-5500-e873-0000-0000-0000-1001.16clouds.com [IPv6:2607:8700:5500:e873::1001])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 830E765B57;
+	Wed,  8 Jul 2026 09:29:48 -0400 (EDT)
+Message-ID: <d89e9c660f06489c59c2f1f7fae0547abbefac71.camel@xry111.site>
+Subject: Re: [PATCH v3 12/12] objtool/klp: Fold LoongArch paired ADD/SUB
+ relocations into PCREL
+From: Xi Ruoyao <xry111@xry111.site>
+To: WANG Rui <wangrui@loongson.cn>, George Guo <dongtai.guo@linux.dev>, 
+	chenhuacai@kernel.org, jpoimboe@kernel.org, peterz@infradead.org,
+ jikos@kernel.org, 	mbenes@suse.cz, pmladek@suse.com
+Cc: kernel@xen0n.name, joe.lawrence@redhat.com, rostedt@goodmis.org, 
+	ardb@kernel.org, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
+	yangtiezhu@loongson.cn, jiaxun.yang@flygoat.com, liukexin@kylinos.cn, 
+	guodongtai@kylinos.cn, wangyuli@aosc.io, loongarch@lists.linux.dev, 
+	live-patching@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-kernel@vger.kernel.org
+Date: Wed, 08 Jul 2026 21:29:46 +0800
+In-Reply-To: <20260707072031.231066-13-dongtai.guo@linux.dev>
+References: <20260707072031.231066-1-dongtai.guo@linux.dev>
+	 <20260707072031.231066-13-dongtai.guo@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git testing
-head:   c2fbcb9151957c3d921a7441cf080e49eb13b05d
-commit: a900abcb974bae821a5d4ae79ad3442808915416 [11/20] netfilter: ipset: rework cidr bookkeeping
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260708/202607081250.ODagxDyb-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260708/202607081250.ODagxDyb-lkp@intel.com/reproduce)
+On Tue, 2026-07-07 at 15:20 +0800, George Guo wrote:
+> From: George Guo <guodongtai@kylinos.cn>
+>=20
+> On LoongArch, the "key - ." field of a __jump_table entry can come out
+> as two relocations at the same offset, R_LARCH_ADD64 plus
+> R_LARCH_SUB64.=C2=A0 clang's integrated assembler emits this pair when th=
+e
+> key symbol is not defined in the same translation unit (for example
+> __tracepoint_netif_rx); GAS, and clang for locally-defined keys,
+> produce a single R_LARCH_64_PCREL instead, which is why GCC builds do
+> not hit this.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607081250.ODagxDyb-lkp@intel.com/
+Hmm, is this a flaw in LLVM?  We have
 
-All warnings (new ones prefixed by >>):
+config AS_HAS_THIN_ADD_SUB
+    def_bool $(cc-option,-Wa$(comma)-mthin-add-sub) || AS_IS_LLVM
 
-   In file included from net/netfilter/ipset/ip_set_hash_ipportnet.c:131:
->> net/netfilter/ipset/ip_set_hash_gen.h:379:21: warning: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-     379 |         if (unlikely(found == -1))
-         |                      ~~~~~ ^  ~~
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   In file included from net/netfilter/ipset/ip_set_hash_ipportnet.c:391:
->> net/netfilter/ipset/ip_set_hash_gen.h:379:21: warning: result of comparison of constant -1 with expression of type 'u8' (aka 'unsigned char') is always false [-Wtautological-constant-out-of-range-compare]
-     379 |         if (unlikely(found == -1))
-         |                      ~~~~~ ^  ~~
-   include/linux/compiler.h:77:42: note: expanded from macro 'unlikely'
-      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
-         |                                             ^
-   2 warnings generated.
+so we are already expecting LLVM to emit R_LARCH_64_PCREL always instead
+of ADD64/SUB64.
 
-
-vim +379 net/netfilter/ipset/ip_set_hash_gen.h
-
-   364	
-   365	static void
-   366	mtype_del_cidr(struct ip_set *set, struct htype *h, u8 cidr, u8 n)
-   367	{
-   368		struct net_prefixes *nets, *tmp;
-   369		u8 i, j, found, len = 0;
-   370	
-   371		spin_lock_bh(&set->lock);
-   372		nets = __ipset_dereference(h->rnets[n]);
-   373		for (i = 0, found = -1; i < nets->len; i++) {
-   374			if (nets->nets[i].count)
-   375				len++;
-   376			if (nets->nets[i].cidr == cidr)
-   377				found = i;
-   378		}
- > 379		if (unlikely(found == -1))
-   380			return;
-   381		nets->nets[found].count--;
-   382		if (nets->nets[found].count)
-   383			goto unlock;
-   384		len--;
-   385		tmp = kzalloc(sizeof(struct net_prefixes) +
-   386			      len * sizeof(struct net_prefix), GFP_ATOMIC);
-   387		if (!tmp)
-   388			/* Leave a hole */
-   389			return;
-   390		tmp->len = len;
-   391		for (i = 0, j = 0; i < nets->len; i++) {
-   392			if (!nets->nets[i].count || i == found)
-   393				continue;
-   394			tmp->nets[j].cidr = nets->nets[i].cidr;
-   395			tmp->nets[j++].count = nets->nets[i].count;
-   396		}
-   397		rcu_assign_pointer(h->rnets[n], tmp);
-   398		kfree_rcu(nets, rcu);
-   399	unlock:
-   400		spin_unlock_bh(&set->lock);
-   401	}
-   402	#endif
-   403	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Xi Ruoyao <xry111@xry111.site>
