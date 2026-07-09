@@ -1,331 +1,138 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 754F237649A
-	for <llvm@lists.linux.dev>; Thu,  9 Jul 2026 08:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901B03EDACC;
+	Thu,  9 Jul 2026 09:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783584090; cv=none; b=Us/EjUpCFiJq1rllaysDrB7cb3WEgXtk8Nj9H7lgKCj9VlTiIDKCw+hMXdJ3qHb4h/Y0gGueFtuHmERBJ5B7tN2o5R/OGO/SXIlvKioZawYCKjHakqJeZWUOUFs8kRYr+rYAOuN95d3dzk36w8lJ/1z5Efv8kxoYSAfY+MH8FBI=
+	t=1783588278; cv=none; b=SDd/qIOmXmeMvPsKpTnWrnZreg7e7PN5ogv/cFM0yCtXkbXbxE23Bu2tuf1gYRMUoJDj31uhKNrNZnfQR/L5ais8nYVKVXcKTDcTbBS9ZwWS3NR5Ppjk1+pHHR12wGVAXEncIn6qv3aiqsc3WFMeIk4I0PwE2/OBCnGUz+46Cw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783584090; c=relaxed/simple;
-	bh=i0Kfr/xO1WjvEAE2BQmV7SEo8KCYE6pIyyyOMGcIdEs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ObgH6rQtspATPb8bwhP1BYFYGzo6QFzYsiF1tx9KszCrwLhunY2i7LF8wSODrLtm/DoaOkS3/93l9Vos3O03bhsbWsRVUpxaY5T5HyzNpT0/Zqt7l3pNXRT6A2NmqJjtbb8qFGXUYGwIKuOB7ocl8Gueq/7aDieA4jeE6RCTuVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4gwnTm65GPzYQtpk
-	for <llvm@lists.linux.dev>; Thu,  9 Jul 2026 16:01:16 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 423E540D32
-	for <llvm@lists.linux.dev>; Thu,  9 Jul 2026 16:01:23 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgDHIm9QVU9q6HdeAg--.28623S2;
-	Thu, 09 Jul 2026 16:01:21 +0800 (CST)
-Message-ID: <9bfa380f-eacc-4e31-a21e-603a0c43f137@huaweicloud.com>
-Date: Thu, 9 Jul 2026 16:01:20 +0800
+	s=arc-20240116; t=1783588278; c=relaxed/simple;
+	bh=qImldtwQcmZ9mUR0zxQV4DvRCcGx0tCto0V4v5TyQ24=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BE6D80s2e7DXDIACmIBRLj8xp9UHNKOgCuiIioYj+0mlXtifk3fAXw+L79s1/jlLPdhv5JX5tspQvhfSdpp/ozrB5JRGvAEjQENQX4NNu7mwXehrfiSr2ZhC+eK4fFmiZccc1Ub0MOymDxFUqCiHTY5gnZO9qEoP3HLpxvzvlE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hjf2C9Vk; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hjf2C9Vk"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783588277; x=1815124277;
+  h=date:from:to:cc:subject:message-id;
+  bh=qImldtwQcmZ9mUR0zxQV4DvRCcGx0tCto0V4v5TyQ24=;
+  b=Hjf2C9VkqBbJDlyYf7h8z4iSKzJpqcpPsaE1mcmAV4aT//EeCkMthru5
+   3uaWELnx04QbeGL73PIWjHU7Ps9eDTqXuBn8eyZeWDKy2h4XQ4P6PScKo
+   4qSgbfsI11yn2/cSfOO/anQjMJUxMd2pVkpKnwPLm3r04m0fMVSQFQcfG
+   cW/WdH/vv5Kj4uM14AgOQVkcoKIm9iee3zDiH/GmEFGly0/ICf6731/hB
+   PvQpCEQOOFFNavpQcwUUXit5JL5N5gx84pU2Q6Ma0c0FY/VQUJAFTa2ut
+   git27gKW6tx4EQWdM3cdyaJxGM/FDC2bYi/UYpcoNs7QroHQ282kXwBG5
+   g==;
+X-CSE-ConnectionGUID: XwpqdJ/HRzmmF2MZ65AbSw==
+X-CSE-MsgGUID: RmtbrfQHS1+cZv0xKBTEXg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84141515"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="84141515"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 02:11:16 -0700
+X-CSE-ConnectionGUID: c9uD7gtTRYODHIZaYGuAtw==
+X-CSE-MsgGUID: O4hMbCS5QeKK41luCJSbWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="292722922"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 09 Jul 2026 02:11:14 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1whkmi-00000000HUh-2e5G;
+	Thu, 09 Jul 2026 09:11:09 +0000
+Date: Thu, 09 Jul 2026 17:10:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Richard Kuo <rkuo@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Brian Cain <bcain@kernel.org>
+Subject: [bcain:bcain/qemu_boot 20/69] Makefile:1629: warning:
+ overriding recipe for target 'dtbs'
+Message-ID: <202607091634.UXr9Ddde-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/21] perf arm64: Support data type profiling
-To: Namhyung Kim <namhyung@kernel.org>
-Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
- Li Huafei <lihuafei1@huawei.com>, Peter Zijlstra <peterz@infradead.org>,
- leo.yan@linux.dev, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260701035355.752944-1-wutengda@huaweicloud.com>
- <ak83j6sZGGqwW8Ak@z2>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <ak83j6sZGGqwW8Ak@z2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgDHIm9QVU9q6HdeAg--.28623S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3KFWUAFW5Zw4UXF43WF1DGFg_yoWDKFW8pF
-	ZxCayfGr4UJrWYgwnxX3yxXFyagw4fJa48Gryrt34Skr1jyF95tFZ7tF1SkFWkGrZ8Cw12
-	yr4qyF15Zr1rAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	bAw3UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git bcain/qemu_boot
+head:   89efd48e5609f41280973bc49df20ffe80177690
+commit: abe97c987224d2686550fd938cd15c284c1132c3 [20/69] hexagon: update build system and Kconfig
+config: hexagon-randconfig-001 (https://download.01.org/0day-ci/archive/20260709/202607091634.UXr9Ddde-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260709/202607091634.UXr9Ddde-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607091634.UXr9Ddde-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Makefile:1629: warning: overriding recipe for target 'dtbs'
+   arch/hexagon/Makefile:83: warning: ignoring old recipe for target 'dtbs'
+   make[2]: *** [Makefile:2184: .] Error 2 shuffle=2075589911
+   make[2]: Target '__all' not remade because of errors.
+--
+>> Makefile:1629: warning: overriding recipe for target 'dtbs'
+   arch/hexagon/Makefile:83: warning: ignoring old recipe for target 'dtbs'
+   scripts/Makefile.clean:12: arch/hexagon/platform/sm8150/Makefile: No such file or directory
+   make[3]: *** No rule to make target 'arch/hexagon/platform/sm8150/Makefile'.
+   scripts/Makefile.clean:12: Failed to remake makefile 'arch/hexagon/platform/sm8150/Makefile'.
+   make[2]: *** [Makefile:2189: _clean_arch/hexagon/platform/sm8150] Error 2 shuffle=2075589911
+   make[2]: Target 'distclean' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=2075589911
+   make[1]: Target 'distclean' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=2075589911
+   make: Target 'distclean' not remade because of errors.
+--
+>> Makefile:1629: warning: overriding recipe for target 'dtbs'
+   arch/hexagon/Makefile:83: warning: ignoring old recipe for target 'dtbs'
+--
+>> Makefile:1629: warning: overriding recipe for target 'dtbs'
+   arch/hexagon/Makefile:83: warning: ignoring old recipe for target 'dtbs'
+--
+>> /kbuild/src/Makefile:1629: warning: overriding recipe for target 'dtbs'
+   /kbuild/src/arch/hexagon/Makefile:83: warning: ignoring old recipe for target 'dtbs'
+   /kbuild/src/scripts/Makefile.clean:12: /kbuild/src/arch/hexagon/platform/sm8150/Makefile: No such file or directory
+   make[3]: *** No rule to make target '/kbuild/src/arch/hexagon/platform/sm8150/Makefile'.
+   /kbuild/src/scripts/Makefile.clean:12: Failed to remake makefile '/kbuild/src/arch/hexagon/platform/sm8150/Makefile'.
+   make[2]: *** [/kbuild/src/Makefile:2189: _clean_arch/hexagon/platform/sm8150] Error 2 shuffle=2075589911
+   make[2]: Target 'mrproper' not remade because of errors.
+   make[1]: *** [/kbuild/src/Makefile:248: __sub-make] Error 2 shuffle=2075589911
+   make[1]: Target 'mrproper' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=2075589911
+   make: Target 'mrproper' not remade because of errors.
+--
+>> Makefile:1629: warning: overriding recipe for target 'dtbs'
+   arch/hexagon/Makefile:83: warning: ignoring old recipe for target 'dtbs'
 
 
+vim +/dtbs +1629 Makefile
 
-On 2026/7/9 13:54, Namhyung Kim wrote:
-> Hello,
-> 
-> On Wed, Jul 01, 2026 at 03:53:34AM +0000, Tengda Wu wrote:
->> This patch series implements data type profiling support for arm64,
->> enabling 'perf annotate --data-type' to resolve memory locations and
->> variable types on arm64 platforms.
->>
->> The main changes since v2 include:
->> v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
->>
->> * Reworking operand parsing, where src/dst are now set based on the
->>   actual instruction definition rather than always treating the left
->>   operand as src and the right as dst (Namhyung Kim).
->>
->> * Register state handling has been improved, with better support for
->>   TSR_KIND_CONST and proper invalidation of dst for unsupported
->>   instructions.
->>
->> * Several bug fixes are included, such as fixing a refcount leak, a
->>   global type resolving error (James Clark), unconditional call to
->>   arch->extract_op_location() (sashiko [1]). --itrace=i1i is now enabled
->>   by default for ARM SPE data type profiling to avoid overlapping
->>   events (James Clark).
->>
->> Patch organization
->> ==================
->>
->> The series is organized as follows:
->>
->> 1. Fix refcount leak in print_capstone_detail(). (Patches 01)
->>
->> 2. Fix disassembly mismatches (Patches 02-03)
->>    Current perf annotate supports three disassembly backends: llvm,
->>    capstone, and objdump. On arm64, inconsistencies between the output
->>    of these backends (specifically llvm/capstone vs. objdump) often
->>    prevent the tracker from correctly identifying registers and offsets.
->>    These patches resolve these mismatches, ensuring consistent instruction
->>    parsing across all supported backends.
->>
->> 3. Infrastructure for arm64 operand parsing (Patches 04-09)
->>    These patches establish the necessary infrastructure for arm64-specific
->>    operand handling. This includes implementing new callbacks and data
->>    structures to manage arm64's unique addressing modes and register sets.
->>    This foundation is essential for the subsequent type-tracking logic.
->>
->> 4. ARM SPE even handling (Patches 10-11)
->>    Patch 10 automatically deduplicates overlapping ARM SPE events (e.g.,
->>    l1d-miss, tlb-access) in 'perf annotate' by retaining only the
->>    "instructions" event when data type profiling is enabled. Patch 11
->>    defaults the itrace period to 1 for PERF_ITRACE_PERIOD_INSTRUCTIONS
->>    to fix zero 'Percent' values in annotate output.
->>
->> 5. Core instruction tracking (Patches 12-21)
->>    These patches implement the core logic for type tracking on arm64,
->>    covering several key types of instructions, including:
->>    * Memory Access: ldr/str variants (including stack-based access).
->>    * Arithmetic & Data Processing: mov, add, and adrp.
->>    * Special Access: System register access (mrs) and per-cpu variable
->>      tracking.
->>
->> The implementation draws inspiration from the existing x86 logic while
->> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
->> perf annotate can successfully resolve memory locations and register types,
->> providing basic support for data type profiling on arm64 platforms.
->>
->> Example Result
->> ==============
->>
->> # perf mem record -a -K -- sleep 1
->> # perf annotate --data-type --stdio --type-stat
->> Annotate data type stats:
->> total 1138, ok 876 (77.0%), bad 262 (23.0%)
->> -----------------------------------------------------------
->>          6 : no_sym
->>         42 : no_var
->>        206 : no_typeinfo
->>          8 : bad_offset
->>        237 : insn_track
->>
->> Annotate type: 'struct page' in [kernel.kallsyms] (66948 samples):
->> ============================================================================
->>  Percent     offset       size  field
->>   100.00          0       0x40  struct page      {
->>     9.01          0        0x8      long unsigned int   flags;
->>    57.99        0x8       0x28      union        {
->>    57.99        0x8       0x28          struct   {
->>    33.00        0x8       0x10              union        {
->>    33.00        0x8       0x10                  struct list_head        lru {
->>    33.00        0x8        0x8                      struct list_head*   next;
->>     0.00       0x10        0x8                      struct list_head*   prev;
->>                                                 };
->>    33.00        0x8       0x10                  struct   {
->>    33.00        0x8        0x8                      void*       __filler;
->>     0.00       0x10        0x4                      unsigned int        mlock_count;
->>    ...
->>
->> Each patch's type profiling results are as follows:
->>
->> Patch | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
->> ------+--------+--------+-------------+------------+------------+------
->> 0010  | 6      | 493    | -           | -          | -          | 56.2%
->> 0013  | 6      | 42     | 438         | 2          | 11         | 57.1%
->> 0014  | 6      | 42     | 399         | 1          | 51         | 60.6%
->> 0015  | 6      | 42     | 398         | 1          | 52         | 60.7%
->> 0016  | 6      | 42     | 393         | 1          | 57         | 61.2%
->> 0017  | 6      | 42     | 376         | 3          | 72         | 62.5%
->> 0018  | 6      | 42     | 305         | 7          | 139        | 68.4%
->> 0019  | 6      | 42     | 218         | 8          | 225        | 75.9%
->> 0020  | 6      | 42     | 217         | 8          | 226        | 76.0%
->> 0021  | 6      | 42     | 206         | 8          | 237        | 77.0%
->>
->> A few notes:
->> * Capstone fails to build when rebased to the base-commit (known issue,
->>   not yet fixed [4]). I disabled it locally for testing.
->> * Among the remaining 23% bad annotation, about 14% comes from compiler
->>   generated prologue or epilogue code (e.g., stp	x21, x22, [sp, #32]).
->>   No solution has been identified for this so far.
->>
->> Testing
->> =======
->>
->> Tested on arm64 (all passed):
->>
->>   # perf test -v "perf data type profiling tests"
->>   81: perf data type profiling tests                                                                  : Ok
->>
->>   === Test Summary ===
->>   Passed main tests : 1
->>   Passed subtests   : 0
->>   Skipped tests     : 0
->>   Failed tests      : 0
->>
->> Tested on x86. The profiling results show no change before/after applying
->> this patch series:
->>
->>   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
->>   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
->>
->> Changelog
->> =========
->>
->> v2 -> v3:
->>   - v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
->>   - Instead of always parsing the left operand as src and the right operand as
->>     dst, set them based on the actual instruction definition. (Namhyung Kim)
->>   - Fix refcount leak in print_capstone_detail().
->>   - Remove useless '<' check when parsing 'addr <symbol>' in arm64_mov__parse().
->>   - Add example comments in arm64_ldst__parse().
->>   - Split arch__dwarf_regnum() changes into a separate commit.
->>   - Rename annotated_addr_mode enum: INSN_ADDR_* -> PERF_ADDR_MODE_*.
->>   - Set caller-saved registers in init_type_state().
->>   - For instructions with addressing mode, always goto adjust_reg_index_state()
->>     at the end to update the src register state.
->>   - Handle TSR_KIND_CONST registers for 'mov' and 'add' instructions.
->>   - Invalidate dst register for all other unsupported instructions.
->>   - Verify type DIE is task_struct pointer before caching globally.
->>   - Enable --itrace=i1i by default for ARM SPE data type profiling in 'perf annotate'
->>     to avoid overlapping event counting for the same instruction. (James Clark)
->>   - Fix global variable type resolving error in check_matching_type(). (James Clark)
->>   - Address review comments from sashiko [1]:
->>     - Fix unconditional call to arch->extract_op_location()
->>     - Handle multi_regs correctly
->>     - Fix invalid register state in error path
->>     - Other misc fixes
->> v1 -> v2:
->>   - v1: https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->>   - Fix inconsistencies in arm64 instruction output across llvm, capstone,
->>     and objdump disassembly backends.
->>   - Support arm64-specific addressing modes and operand formats. (Leo Yan)
->>   - Extend instruction tracking to support mov and add instructions,
->>     along with per-cpu and stack variables.
->>   - Include real-world examples in commit messages to demonstrate
->>     practical effects. (Namhyung Kim)
->>   - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
->>
->> Please let me know if you have any feedback.
-> 
-> Thanks for working on this!  The patchset looks well-organized and it's
-> nice that you added some real world examples for better understanding.
-> 
-> I think Sashiko found many real issues that need to be handled.  Let's
-> fix them first.  I'll leave comment on the patches separately.
-> 
-> Thanks,
-> Namhyung
-> 
+37c8a5fafa3bb7 Rob Herring     2018-01-10  1620  
+ee47620367d5b5 Masahiro Yamada 2022-07-24  1621  %.dtb: dtbs_prepare
+75e895343d5a2f Rob Herring     2021-12-08  1622  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+37c8a5fafa3bb7 Rob Herring     2018-01-10  1623  
+ee47620367d5b5 Masahiro Yamada 2022-07-24  1624  %.dtbo: dtbs_prepare
+75e895343d5a2f Rob Herring     2021-12-08  1625  	$(Q)$(MAKE) $(build)=$(dtstree) $(dtstree)/$@
+ce88c9c79455fb Viresh Kumar    2021-01-29  1626  
+ee47620367d5b5 Masahiro Yamada 2022-07-24  1627  PHONY += dtbs dtbs_prepare dtbs_install dtbs_check
+ee47620367d5b5 Masahiro Yamada 2022-07-24  1628  dtbs: dtbs_prepare
+24507871c3c6ae Masahiro Yamada 2024-01-09 @1629  	$(Q)$(MAKE) $(build)=$(dtstree) need-dtbslist=1
+37c8a5fafa3bb7 Rob Herring     2018-01-10  1630  
 
-Thanks! I'll incorporate all the feedback and work on the fixes. Looking forward
-to sending the next revision.
+:::::: The code at line 1629 was first introduced by commit
+:::::: 24507871c3c6ae4f6b460b016da7ff434cd34149 kbuild: create a list of all built DTB files
 
-Thanks,
-Tengda
+:::::: TO: Masahiro Yamada <masahiroy@kernel.org>
+:::::: CC: Masahiro Yamada <masahiroy@kernel.org>
 
->>
->> [1] https://sashiko.dev/#/patchset/20260403094800.1418825-1-wutengda%40huaweicloud.com
->> [2] https://developer.arm.com/documentation/102374/0103
->> [3] https://github.com/flynd/asmsheets/releases/tag/v8
->> [4] https://lore.kernel.org/all/aiCgbmUtlMCM4Xzt@x1/#t
->>
->>
->> Tengda Wu (21):
->>   perf capstone: Fix kernel map reference count leak
->>   perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
->>   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
->>     objdump
->>   perf annotate-arm64: Generalize arm64_mov__parse to support more
->>     instructions
->>   perf annotate-arm64: Handle load and store instructions
->>   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
->>   perf annotate: Adapt arch__dwarf_regnum() for arm64
->>   perf annotate: Introduce extract_op_location callback for
->>     arch-specific parsing
->>   perf annotate-arm64: Implement extract_op_location() callback
->>   perf annotate: Deduplicate overlapping ARM SPE events for data type
->>     profiling
->>   perf auxtrace: Set default period to 1 for
->>     PERF_ITRACE_PERIOD_INSTRUCTIONS type
->>   perf annotate-data: Extract invalidate_reg_state() as a common helper
->>   perf annotate-arm64: Enable instruction tracking support
->>   perf annotate-arm64: Support load instruction tracking
->>   perf annotate-arm64: Support store instruction tracking
->>   perf annotate-arm64: Support stack variable tracking
->>   perf annotate-arm64: Support 'mov' instruction tracking
->>   perf annotate-arm64: Support 'add' instruction tracking
->>   perf annotate-arm64: Support 'adrp' instruction to track global
->>     variables
->>   perf annotate-arm64: Support per-cpu variable access tracking
->>   perf annotate-arm64: Support 'mrs' instruction to track 'current'
->>     pointer
->>
->>  tools/perf/builtin-annotate.c                 |  13 +
->>  .../perf/util/annotate-arch/annotate-arm64.c  | 901 +++++++++++++++++-
->>  .../util/annotate-arch/annotate-powerpc.c     |  10 +
->>  tools/perf/util/annotate-arch/annotate-x86.c  |  97 +-
->>  tools/perf/util/annotate-data.c               |  77 +-
->>  tools/perf/util/annotate-data.h               |   8 +-
->>  tools/perf/util/annotate.c                    | 108 +--
->>  tools/perf/util/annotate.h                    |  12 +
->>  tools/perf/util/arm-spe.c                     |   1 +
->>  tools/perf/util/auxtrace.c                    |   6 +
->>  tools/perf/util/capstone.c                    | 144 ++-
->>  tools/perf/util/disasm.c                      |   5 +
->>  tools/perf/util/disasm.h                      |   5 +
->>  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
->>  tools/perf/util/dwarf-regs.c                  |   2 +-
->>  tools/perf/util/include/dwarf-regs.h          |   1 +
->>  tools/perf/util/llvm.c                        |  50 +
->>  17 files changed, 1307 insertions(+), 153 deletions(-)
->>
->>
->> base-commit: 7de6ae9e12207ec146f2f3f1e58d1a99317e88bc
->> -- 
->> 2.34.1
->>
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
