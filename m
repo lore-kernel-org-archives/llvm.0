@@ -1,132 +1,205 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73F3285CAD;
-	Thu,  9 Jul 2026 07:47:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24289386C1C
+	for <llvm@lists.linux.dev>; Thu,  9 Jul 2026 07:49:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783583231; cv=none; b=lUw5EDU0pOcuhOMVyM4lybBI7nxIhJRzwRzgGD6a1tY56GVgXcuDROxlzFCzU7K5DXt7gmmPMT6FSXj0MqODrZkt6j5CINCNtn5uTFVHDOKXWdCuwBBi8YVQX1O01BszRhFD9j8aiAHK8Z4gmv25qmP1mkQqXn1EQ0ZqbCDee6I=
+	t=1783583357; cv=none; b=EHAGQOH6nVZdPbqtFN+21NNxRm2F3ok0YXy/1HtYwmImuiiVsPpgA2nkEOVL/4elAGzRbM2E0STrdlE/YjmRXDHSFlnxo32Gt6x7c2lc53WAeIAzpEfI1EOWCQM+nRWGiJfg4cYdzWlRtS5zL4iVhUaUHPnNwf7oYGms3dnX3X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783583231; c=relaxed/simple;
-	bh=XDiT+tIOIk0brL7tKqyT3t9lZBpkiLYMsQSLugJ8oPE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=aU0XEg8HOSMyPZjB5MMOfIBZJ4kEuvgLo1VUI3rpDSNycGWdoqQ9Qt5sPqtUPkEX/rHEoE+848Fjo2hhbKTgTxDf0FOS4/T71Kb1M0yLSAvPJxSxl+K+XvD7QD5eZftOhp6BhnfhVsDCYxfpoQvTIV/DwzEqQoOWdr5BJ95CZCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i9hAtIbn; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i9hAtIbn"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783583230; x=1815119230;
-  h=date:from:to:cc:subject:message-id;
-  bh=XDiT+tIOIk0brL7tKqyT3t9lZBpkiLYMsQSLugJ8oPE=;
-  b=i9hAtIbnLI0OuShDG/eVtzjoGVHKOo2amYSQR91cqiTC2fITWB+ruU/l
-   GkDaVu4EAvchpnfzrH8zZmcNDLPYuoUJk5OGVtToSC/nEhH0JPbBop7ey
-   HQ5A06kcv093v6/4+ThEFmKabH/kQ5JFV/OKb6w56sXAHvR2TuQHiXg62
-   dHHr9pskHrOtzzfnlSwP1+bR7sx3tUnACVu/mcxAzCbHg191RrkSM8zPJ
-   EO4EzlJOw8HtRuOZbYdo1eE06OoDzXwqlPRrKXeozGMZygvLIhVG/B2U4
-   7jPFkDmgg6kD/8nQkuDtCzAb2oClZZy8boh+MY6BJ395YEno4uhIduq26
-   w==;
-X-CSE-ConnectionGUID: RxpXJPpcTq6wTXLZY1Vj/A==
-X-CSE-MsgGUID: BkGxc5sVS3GWcZQGeaor4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="101684402"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="101684402"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 00:47:10 -0700
-X-CSE-ConnectionGUID: 59cavj57Rri+6jDaU6ZOsA==
-X-CSE-MsgGUID: MBl1TSD/T3SWjKdXxv/ejA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="253421851"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa010.jf.intel.com with ESMTP; 09 Jul 2026 00:47:08 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1whjTO-000000002wv-0WVa;
-	Thu, 09 Jul 2026 07:47:06 +0000
-Date: Thu, 09 Jul 2026 09:46:15 +0200
-From: kernel test robot <lkp@intel.com>
-To: Phil Sutter <phil@nwl.cc>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: net/netfilter/nfnetlink_hook.c:375:16: error: expected ';'
- after expression
-Message-ID: <202607090956.vur8s2T9-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1783583357; c=relaxed/simple;
+	bh=O7QBDW9Zkh1L58j6bU3woZ9V6ZfaPjO090CvphD3CJg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hcXlIpna1hunMht5TbF4FXow3UfsjD5FH8wJ0qctmfY4QZouXK9m8S2aQgd25lEeF2HTD2WquVQwLk7HIMrsKfGBL5hhLKcBT1S3n3FxGX0sdxT27nBPfNKws3agmgP8oVQaj/LgBomXlONCWBdN6nd9P3YIWi38zURi5BUTq9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4gwnCK4jSTzKHMSF
+	for <llvm@lists.linux.dev>; Thu,  9 Jul 2026 15:48:45 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id DA2034057D
+	for <llvm@lists.linux.dev>; Thu,  9 Jul 2026 15:49:07 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAnWVpyUk9qy9JgAg--.22944S2;
+	Thu, 09 Jul 2026 15:49:07 +0800 (CST)
+Message-ID: <8812e4e2-3a3b-4f32-bdb8-b963bc21b301@huaweicloud.com>
+Date: Thu, 9 Jul 2026 15:49:06 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/21] perf llvm: Fix arm64 adrp instruction
+ disassembly mismatch with objdump
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
+ Li Huafei <lihuafei1@huawei.com>, Peter Zijlstra <peterz@infradead.org>,
+ leo.yan@linux.dev, Ian Rogers <irogers@google.com>,
+ Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260701035355.752944-1-wutengda@huaweicloud.com>
+ <20260701035355.752944-4-wutengda@huaweicloud.com> <ak89Hg1SWnn0DHCk@z2>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <ak89Hg1SWnn0DHCk@z2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgAnWVpyUk9qy9JgAg--.22944S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxZFyrZr4rWr13GrykWw4fuFg_yoWrCF4Upr
+	WDGayfGF4UJr1fuwsI9r4UuF90krWktrW5Kr43Jw4Ikrs3Cas3C34xGrW293W7Xryqvw15
+	Zr4Y9FW7WF1DJFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	bAw3UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Phil-Sutter/netfilter-nfnetlink_hook-Pass-cb-object-to-nfnl_hook_dump_nat/20260709-004129
-head:   82b3ae63423bde6a0a2c963376b2feab3c1d404b
-commit: 82b3ae63423bde6a0a2c963376b2feab3c1d404b netfilter: nfnetlink_hook: Fix for concurrent NAT hooks dump and change
-date:   15 hours ago
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260709/202607090956.vur8s2T9-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260709/202607090956.vur8s2T9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607090956.vur8s2T9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/netfilter/nfnetlink_hook.c:375:16: error: expected ';' after expression
-     375 |                 ctx->natv = 0
-         |                              ^
-         |                              ;
-   1 error generated.
 
 
-vim +375 net/netfilter/nfnetlink_hook.c
+On 2026/7/9 14:18, Namhyung Kim wrote:
+> On Wed, Jul 01, 2026 at 03:53:37AM +0000, Tengda Wu wrote:
+>> The operands of 'adrp' instructions parsed by libllvm are currently
+>> represented as raw immediates rather than the "address <symbol+offset>"
+>> format used by objdump. This inconsistency causes arm64_mov__parse()
+>> to fail when parsing these instructions during post-processing.
+>>
+>> Example of the mismatch:
+>>   Current: adrp x18, 8014
+>>   Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
+>>
+>> Fix this by manually extracting the target address from the raw adrp
+>> instruction via symbol_lookup_callback(). The address is then converted
+>> to a specific symbol during symbol__disassemble_llvm() and formatted
+>> to match objdump's output, ensuring compatibility with existing
+>> parsers.
+>>
+>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>> ---
+>>  tools/perf/util/llvm.c | 50 ++++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 50 insertions(+)
+>>
+>> diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+>> index a0deb742a733..533d47e8084d 100644
+>> --- a/tools/perf/util/llvm.c
+>> +++ b/tools/perf/util/llvm.c
+>> @@ -94,6 +94,7 @@ static void init_llvm(void)
+>>  struct symbol_lookup_storage {
+>>  	u64 branch_addr;
+>>  	u64 pcrel_load_addr;
+>> +	u64 pcrel_adrp_addr;
+>>  };
+>>  
+>>  static const char *
+>> @@ -108,6 +109,18 @@ symbol_lookup_callback(void *disinfo, uint64_t value,
+>>  		storage->branch_addr = value;
+>>  	else if (*ref_type == LLVMDisassembler_ReferenceType_In_PCrel_Load)
+>>  		storage->pcrel_load_addr = value;
+> 
+> Is this used by arm64?  If not, would be possible to reuse
+> pcrel_load_addr unless it'd complicate the code significantly?
+> 
+> I think it's the common concept of PC-relative addressing while it
+> requires two instructions to set up the final address on arm64.
+> 
+> Thanks,
+> Namhyung
+> 
+> 
 
-   340	
-   341	static int nfnl_hook_dump_nat(struct sk_buff *nlskb,
-   342				      struct netlink_callback *cb,
-   343				      const struct nf_hook_ops *ops, int family)
-   344	{
-   345		struct nf_nat_lookup_hook_priv *priv = ops->priv;
-   346		struct nf_hook_entries *e = rcu_dereference(priv->entries);
-   347		struct nfnl_dump_hook_data *ctx = cb->data;
-   348		struct nf_hook_ops **nat_ops;
-   349		unsigned int i = cb->args[1];
-   350		int err = 0;
-   351	
-   352		if (!e)
-   353			return 0;
-   354	
-   355		if (!ctx->natv)
-   356			ctx->natv = (unsigned long)e;
-   357	
-   358		if (i >= e->num_hook_entries ||
-   359		    ctx->natv != (unsigned long)e) {
-   360			cb->seq++;
-   361			return -EINTR;
-   362		}
-   363	
-   364		nat_ops = nf_hook_entries_get_hook_ops(e);
-   365	
-   366		for (; i < e->num_hook_entries; i++) {
-   367			err = nfnl_hook_dump_one(nlskb, ctx, nat_ops[i],
-   368						 ops->priority, family,
-   369						 cb->nlh->nlmsg_seq);
-   370			if (err)
-   371				break;
-   372		}
-   373	
-   374		if (!err) {
- > 375			ctx->natv = 0
-   376			i = 0;
-   377		}
-   378		cb->args[1] = i;
-   379		return err;
-   380	}
-   381	
+I initially tried to reuse it directly, but it didn't seem to work properly
+in some cases. After checking the LLVM interface implementation, I came up
+with this change. I'll take another look at the details. If reuse is feasible,
+I'll optimize this patch.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Tengda
+
+
+>> +	else if (*ref_type == LLVMDisassembler_ReferenceType_In_ARM64_ADRP) {
+>> +		uint64_t adrp_imm;
+>> +
+>> +		/* immhi (bits 23:5) and immlo (bits 30:29) */
+>> +		adrp_imm = ((value & 0x00ffffe0) >> 3) | ((value >> 29) & 0x3);
+>> +		/* Sign-extend the 21-bit immediate to 64-bit */
+>> +		if (adrp_imm & (1ULL << 20))
+>> +			adrp_imm |= ~((1ULL << 21) - 1);
+>> +
+>> +		/* Calculate the target page address */
+>> +		storage->pcrel_adrp_addr = (address & ~0xFFFLL) + (adrp_imm << 12);
+>> +	}
+>>  	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+>>  	return NULL;
+>>  }
+>> @@ -204,6 +217,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+>>  
+>>  		storage.branch_addr = 0;
+>>  		storage.pcrel_load_addr = 0;
+>> +		storage.pcrel_adrp_addr = 0;
+>>  
+>>  		/*
+>>  		 * LLVM's API has the code be disassembled as non-const, cast
+>> @@ -227,6 +241,42 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+>>  				free(name);
+>>  			}
+>>  		}
+>> +		if (storage.pcrel_adrp_addr != 0) {
+>> +			/*
+>> +			 * ADRP (Address Page) instructions encode a 21-bit signed
+>> +			 * immediate offset relative to the current PC's page.
+>> +			 *
+>> +			 * To maintain consistency with standard objdump output,
+>> +			 * we truncate the raw encoded immediate at the comma
+>> +			 * and replace it with the resolved absolute page address.
+>> +			 *
+>> +			 * Example conversion:
+>> +			 * From: adrp x18, 8014
+>> +			 * To:   adrp x18, ffff800081f5f000 <this_cpu_vector>
+>> +			 */
+>> +			char *name;
+>> +			char *s = strchr(disasm_buf, ',');
+>> +
+>> +			if (s == NULL)
+>> +				goto err;
+>> +
+>> +			s++;
+>> +			*s = '\0';
+>> +			disasm_len = strlen(disasm_buf);
+>> +			disasm_len += scnprintf(disasm_buf + disasm_len,
+>> +						sizeof(disasm_buf) - disasm_len,
+>> +						" %"PRIx64,
+>> +						storage.pcrel_adrp_addr);
+>> +			name = llvm_name_for_data(dso, filename,
+>> +						  storage.pcrel_adrp_addr);
+>> +			if (name) {
+>> +				disasm_len += scnprintf(disasm_buf + disasm_len,
+>> +							sizeof(disasm_buf) -
+>> +							disasm_len,
+>> +							" <%s>", name);
+>> +				free(name);
+>> +			}
+>> +		}
+>>  		if (storage.pcrel_load_addr != 0) {
+>>  			char *name = llvm_name_for_data(dso, filename,
+>>  							storage.pcrel_load_addr);
+>> -- 
+>> 2.34.1
+>>
+
