@@ -1,237 +1,304 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05FC1B4223;
-	Thu,  9 Jul 2026 01:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83222E173B;
+	Thu,  9 Jul 2026 05:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783560043; cv=none; b=mECqGihiZ9ips2rF6Zm1myrgGHZ1Z5WnO2NtEOr1jrmhxDOvsO/kloxG6NpEy2wc6o5KEh5+R8NuTLfJZKPZhjoN1kDDfMGHb3XksSXkTG3kWmKPtpo2TAbZ3PQaEHwunNzxPsHzBcbxEXw1PT5P4cpp7u53QVFjsS+5qO07wRI=
+	t=1783576467; cv=none; b=i8KEUb5tTWJGg3HRHiO8/AlsIEJP4PBfedllZCqAqENj88n4FqnHrO1wtroROYCrwP1dozFEfNeujpZ7GkFTooBpCDU6yllp2MkmDScHGJRkgb9aQ2QttdxX88xh48MwMyPS1zWoth/hWr2rG63/TVXhiZ+iiWAbrV+zVmsgytc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783560043; c=relaxed/simple;
-	bh=LttNXcGFbufaKTBAr4+JQHSVCQEjsZ32ZOusNaxmB28=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=QVoL4dVfM1BkhdcIw08ZlsoqmyU08Ktc97vFC6WzbcawxHkt3A1Hd+f54Cgf0QnLD3smOlmmziVl6qfsr0eJFDu9PpCHi9OjFKhPomAP/oG5/PSYqn1o4DMsdtVEN1p1jQSy2LWUF+O8hcOYRapJrMj91f4J1SnZDwk3BvPj0Qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X2EQ3+R5; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783576467; c=relaxed/simple;
+	bh=Ic1uwGlEK4XESVOQw1MQvN5CapS4sveotajTDYIWJ8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gY2HmnUJMz88VBEfmEafz0T5o0U1jxHJAugu/kTQI6YykmYB+UdfMT83hYkQNWMyu3ILhw/6093IZ1nSsFvRXJpQMf1dgc6p06L96GIi0AWqYr1Pc2Br8ZtdO7rviUb4DlNcm7vcxqPj6MiW5/HGVlxofbCUZfUzS8q9qWrk1FM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzaE7B+g; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X2EQ3+R5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783560041; x=1815096041;
-  h=date:from:to:cc:subject:message-id;
-  bh=LttNXcGFbufaKTBAr4+JQHSVCQEjsZ32ZOusNaxmB28=;
-  b=X2EQ3+R5u1E6AtSvcqV4Akky/+x12nLAeSCP3AFx+hw/T+3+WOUCuIa0
-   s1Z2gx+vZ7Re0ENKODqBqir8VmeB1gQ30okUKYjoqePs+IEqO5WijwbF4
-   d/8u1vDxU6WxsPx1BmJ+xie4IVUvF9TLQPNW2fN+qOY/jkG818TFoOkn2
-   pPqB3oTm3+IWC9f4bFIl8vZP5SRvzC4rl1lHgP496O7Ri6VJXK2FdZUd5
-   pKdw6/yxTHO81nXpQ0FelxRPmsUE37U/U4s3eHgLB+csgER2A4C0T7LN6
-   ZX/uX8k1w7I8Gt7F0qTQ1tctkAvwMiRe223Zg94lDhQZ63g81MNlWuKTL
-   g==;
-X-CSE-ConnectionGUID: +ZXfC37iRsiSZPz0alGWWw==
-X-CSE-MsgGUID: yQCBtGT1Q0KID7aTTnfHPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="86779696"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="86779696"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jul 2026 18:20:40 -0700
-X-CSE-ConnectionGUID: agD6otz5Q1+rpLgJPJArDQ==
-X-CSE-MsgGUID: /e05WLaZQdqHE1Jlx/0EFg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="251076537"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa007.fm.intel.com with ESMTP; 08 Jul 2026 18:20:38 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1whdRL-00000000H7b-2269;
-	Thu, 09 Jul 2026 01:20:35 +0000
-Date: Thu, 09 Jul 2026 09:19:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Chen-Yu Tsai" <wenst@chromium.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [wens:mtk-wip 28/60]
- drivers/input/mouse/elan_i2c_core.c:1258:10: error: call to undeclared
- function 'regulator_bulk_enable_and_wait'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202607090837.afHOrVIm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzaE7B+g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DF51F000E9;
+	Thu,  9 Jul 2026 05:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783576465;
+	bh=9rK45uHfg3sCGD5lJd5qtMbJf3oULmDqqKREt6/XzB8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=BzaE7B+gP6S1g/LIzQc3QpKK0f5IFqUb3HXJVcUfIYcWfhqjXfv2ARDPbcJiWLeNC
+	 /qhUx82DMWeYFLmYmggwuYpW/sSPX8yBKMFHLRnXGQzVQXp1H0yKjhdWYapDfjHO1K
+	 DJjDQw3s7YaK8fNz3K456mL92V2QVdmUOzSUYlYzPlQ594K8o6Adwv/M50B84NVeom
+	 F08+YvTaUk8MCL/RlmxCgI8CgfBwQGH/OwbGmBSAHNJE3p+kbXHaoSahaXsnqI9RcG
+	 2PPlrqmH/ku1s8ynF+aY/rOQkJCB67ReUUxwJrUx1BMcdBKk9CaXPnpvSv6bCvZYmh
+	 iBrIDlUQfndMQ==
+Date: Wed, 8 Jul 2026 22:54:23 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
+	Li Huafei <lihuafei1@huawei.com>,
+	Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 00/21] perf arm64: Support data type profiling
+Message-ID: <ak83j6sZGGqwW8Ak@z2>
+References: <20260701035355.752944-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260701035355.752944-1-wutengda@huaweicloud.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git mtk-wip
-head:   6bb13b3f06e1186263e25a011225629d221dcf65
-commit: d6806397b23038f2497ae717bc64bd25c22c1e07 [28/60] Input: elan_i2c: Support vddio regulator supply
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260709/202607090837.afHOrVIm-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260709/202607090837.afHOrVIm-lkp@intel.com/reproduce)
+Hello,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607090837.afHOrVIm-lkp@intel.com/
+On Wed, Jul 01, 2026 at 03:53:34AM +0000, Tengda Wu wrote:
+> This patch series implements data type profiling support for arm64,
+> enabling 'perf annotate --data-type' to resolve memory locations and
+> variable types on arm64 platforms.
+> 
+> The main changes since v2 include:
+> v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
+> 
+> * Reworking operand parsing, where src/dst are now set based on the
+>   actual instruction definition rather than always treating the left
+>   operand as src and the right as dst (Namhyung Kim).
+> 
+> * Register state handling has been improved, with better support for
+>   TSR_KIND_CONST and proper invalidation of dst for unsupported
+>   instructions.
+> 
+> * Several bug fixes are included, such as fixing a refcount leak, a
+>   global type resolving error (James Clark), unconditional call to
+>   arch->extract_op_location() (sashiko [1]). --itrace=i1i is now enabled
+>   by default for ARM SPE data type profiling to avoid overlapping
+>   events (James Clark).
+> 
+> Patch organization
+> ==================
+> 
+> The series is organized as follows:
+> 
+> 1. Fix refcount leak in print_capstone_detail(). (Patches 01)
+> 
+> 2. Fix disassembly mismatches (Patches 02-03)
+>    Current perf annotate supports three disassembly backends: llvm,
+>    capstone, and objdump. On arm64, inconsistencies between the output
+>    of these backends (specifically llvm/capstone vs. objdump) often
+>    prevent the tracker from correctly identifying registers and offsets.
+>    These patches resolve these mismatches, ensuring consistent instruction
+>    parsing across all supported backends.
+> 
+> 3. Infrastructure for arm64 operand parsing (Patches 04-09)
+>    These patches establish the necessary infrastructure for arm64-specific
+>    operand handling. This includes implementing new callbacks and data
+>    structures to manage arm64's unique addressing modes and register sets.
+>    This foundation is essential for the subsequent type-tracking logic.
+> 
+> 4. ARM SPE even handling (Patches 10-11)
+>    Patch 10 automatically deduplicates overlapping ARM SPE events (e.g.,
+>    l1d-miss, tlb-access) in 'perf annotate' by retaining only the
+>    "instructions" event when data type profiling is enabled. Patch 11
+>    defaults the itrace period to 1 for PERF_ITRACE_PERIOD_INSTRUCTIONS
+>    to fix zero 'Percent' values in annotate output.
+> 
+> 5. Core instruction tracking (Patches 12-21)
+>    These patches implement the core logic for type tracking on arm64,
+>    covering several key types of instructions, including:
+>    * Memory Access: ldr/str variants (including stack-based access).
+>    * Arithmetic & Data Processing: mov, add, and adrp.
+>    * Special Access: System register access (mrs) and per-cpu variable
+>      tracking.
+> 
+> The implementation draws inspiration from the existing x86 logic while
+> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
+> perf annotate can successfully resolve memory locations and register types,
+> providing basic support for data type profiling on arm64 platforms.
+> 
+> Example Result
+> ==============
+> 
+> # perf mem record -a -K -- sleep 1
+> # perf annotate --data-type --stdio --type-stat
+> Annotate data type stats:
+> total 1138, ok 876 (77.0%), bad 262 (23.0%)
+> -----------------------------------------------------------
+>          6 : no_sym
+>         42 : no_var
+>        206 : no_typeinfo
+>          8 : bad_offset
+>        237 : insn_track
+> 
+> Annotate type: 'struct page' in [kernel.kallsyms] (66948 samples):
+> ============================================================================
+>  Percent     offset       size  field
+>   100.00          0       0x40  struct page      {
+>     9.01          0        0x8      long unsigned int   flags;
+>    57.99        0x8       0x28      union        {
+>    57.99        0x8       0x28          struct   {
+>    33.00        0x8       0x10              union        {
+>    33.00        0x8       0x10                  struct list_head        lru {
+>    33.00        0x8        0x8                      struct list_head*   next;
+>     0.00       0x10        0x8                      struct list_head*   prev;
+>                                                 };
+>    33.00        0x8       0x10                  struct   {
+>    33.00        0x8        0x8                      void*       __filler;
+>     0.00       0x10        0x4                      unsigned int        mlock_count;
+>    ...
+> 
+> Each patch's type profiling results are as follows:
+> 
+> Patch | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
+> ------+--------+--------+-------------+------------+------------+------
+> 0010  | 6      | 493    | -           | -          | -          | 56.2%
+> 0013  | 6      | 42     | 438         | 2          | 11         | 57.1%
+> 0014  | 6      | 42     | 399         | 1          | 51         | 60.6%
+> 0015  | 6      | 42     | 398         | 1          | 52         | 60.7%
+> 0016  | 6      | 42     | 393         | 1          | 57         | 61.2%
+> 0017  | 6      | 42     | 376         | 3          | 72         | 62.5%
+> 0018  | 6      | 42     | 305         | 7          | 139        | 68.4%
+> 0019  | 6      | 42     | 218         | 8          | 225        | 75.9%
+> 0020  | 6      | 42     | 217         | 8          | 226        | 76.0%
+> 0021  | 6      | 42     | 206         | 8          | 237        | 77.0%
+> 
+> A few notes:
+> * Capstone fails to build when rebased to the base-commit (known issue,
+>   not yet fixed [4]). I disabled it locally for testing.
+> * Among the remaining 23% bad annotation, about 14% comes from compiler
+>   generated prologue or epilogue code (e.g., stp	x21, x22, [sp, #32]).
+>   No solution has been identified for this so far.
+> 
+> Testing
+> =======
+> 
+> Tested on arm64 (all passed):
+> 
+>   # perf test -v "perf data type profiling tests"
+>   81: perf data type profiling tests                                                                  : Ok
+> 
+>   === Test Summary ===
+>   Passed main tests : 1
+>   Passed subtests   : 0
+>   Skipped tests     : 0
+>   Failed tests      : 0
+> 
+> Tested on x86. The profiling results show no change before/after applying
+> this patch series:
+> 
+>   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
+>   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
+> 
+> Changelog
+> =========
+> 
+> v2 -> v3:
+>   - v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
+>   - Instead of always parsing the left operand as src and the right operand as
+>     dst, set them based on the actual instruction definition. (Namhyung Kim)
+>   - Fix refcount leak in print_capstone_detail().
+>   - Remove useless '<' check when parsing 'addr <symbol>' in arm64_mov__parse().
+>   - Add example comments in arm64_ldst__parse().
+>   - Split arch__dwarf_regnum() changes into a separate commit.
+>   - Rename annotated_addr_mode enum: INSN_ADDR_* -> PERF_ADDR_MODE_*.
+>   - Set caller-saved registers in init_type_state().
+>   - For instructions with addressing mode, always goto adjust_reg_index_state()
+>     at the end to update the src register state.
+>   - Handle TSR_KIND_CONST registers for 'mov' and 'add' instructions.
+>   - Invalidate dst register for all other unsupported instructions.
+>   - Verify type DIE is task_struct pointer before caching globally.
+>   - Enable --itrace=i1i by default for ARM SPE data type profiling in 'perf annotate'
+>     to avoid overlapping event counting for the same instruction. (James Clark)
+>   - Fix global variable type resolving error in check_matching_type(). (James Clark)
+>   - Address review comments from sashiko [1]:
+>     - Fix unconditional call to arch->extract_op_location()
+>     - Handle multi_regs correctly
+>     - Fix invalid register state in error path
+>     - Other misc fixes
+> v1 -> v2:
+>   - v1: https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
+>   - Fix inconsistencies in arm64 instruction output across llvm, capstone,
+>     and objdump disassembly backends.
+>   - Support arm64-specific addressing modes and operand formats. (Leo Yan)
+>   - Extend instruction tracking to support mov and add instructions,
+>     along with per-cpu and stack variables.
+>   - Include real-world examples in commit messages to demonstrate
+>     practical effects. (Namhyung Kim)
+>   - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
+> 
+> Please let me know if you have any feedback.
 
-All errors (new ones prefixed by >>):
+Thanks for working on this!  The patchset looks well-organized and it's
+nice that you added some real world examples for better understanding.
 
->> drivers/input/mouse/elan_i2c_core.c:1258:10: error: call to undeclared function 'regulator_bulk_enable_and_wait'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1258 |         error = regulator_bulk_enable_and_wait(ARRAY_SIZE(data->supplies), data->supplies,
-         |                 ^
-   drivers/input/mouse/elan_i2c_core.c:1258:10: note: did you mean 'regulator_bulk_enable'?
-   include/linux/regulator/consumer.h:465:19: note: 'regulator_bulk_enable' declared here
-     465 | static inline int regulator_bulk_enable(int num_consumers,
-         |                   ^
-   drivers/input/mouse/elan_i2c_core.c:1415:11: error: call to undeclared function 'regulator_bulk_enable_and_wait'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1415 |                 error = regulator_bulk_enable_and_wait(ARRAY_SIZE(data->supplies),
-         |                         ^
-   2 errors generated.
+I think Sashiko found many real issues that need to be handled.  Let's
+fix them first.  I'll leave comment on the patches separately.
 
+Thanks,
+Namhyung
 
-vim +/regulator_bulk_enable_and_wait +1258 drivers/input/mouse/elan_i2c_core.c
-
-  1218	
-  1219	static int elan_probe(struct i2c_client *client)
-  1220	{
-  1221		const struct elan_transport_ops *transport_ops;
-  1222		struct device *dev = &client->dev;
-  1223		struct elan_tp_data *data;
-  1224		unsigned long irqflags;
-  1225		int error;
-  1226	
-  1227		if (IS_ENABLED(CONFIG_MOUSE_ELAN_I2C_I2C) &&
-  1228		    i2c_check_functionality(client->adapter, I2C_FUNC_I2C)) {
-  1229			transport_ops = &elan_i2c_ops;
-  1230		} else if (IS_ENABLED(CONFIG_MOUSE_ELAN_I2C_SMBUS) &&
-  1231			   i2c_check_functionality(client->adapter,
-  1232						   I2C_FUNC_SMBUS_BYTE_DATA |
-  1233							I2C_FUNC_SMBUS_BLOCK_DATA |
-  1234							I2C_FUNC_SMBUS_I2C_BLOCK)) {
-  1235			transport_ops = &elan_smbus_ops;
-  1236		} else {
-  1237			dev_err(dev, "not a supported I2C/SMBus adapter\n");
-  1238			return -EIO;
-  1239		}
-  1240	
-  1241		data = devm_kzalloc(dev, sizeof(struct elan_tp_data), GFP_KERNEL);
-  1242		if (!data)
-  1243			return -ENOMEM;
-  1244	
-  1245		i2c_set_clientdata(client, data);
-  1246	
-  1247		data->ops = transport_ops;
-  1248		data->client = client;
-  1249		init_completion(&data->fw_completion);
-  1250		mutex_init(&data->sysfs_mutex);
-  1251	
-  1252		data->supplies[0].supply = "vcc";
-  1253		data->supplies[1].supply = "vddio";
-  1254		error = devm_regulator_bulk_get(dev, ARRAY_SIZE(data->supplies), data->supplies);
-  1255		if (error)
-  1256			return dev_err_probe(dev, error, "Failed to get regulators\n");
-  1257	
-> 1258		error = regulator_bulk_enable_and_wait(ARRAY_SIZE(data->supplies), data->supplies,
-  1259						       ETP_POWER_ON_DELAY_US);
-  1260		if (error) {
-  1261			dev_err(dev, "Failed to enable regulators: %d\n", error);
-  1262			return error;
-  1263		}
-  1264	
-  1265		error = devm_add_action_or_reset(dev, elan_disable_regulator, data);
-  1266		if (error) {
-  1267			dev_err(dev, "Failed to add disable regulator action: %d\n",
-  1268				error);
-  1269			return error;
-  1270		}
-  1271	
-  1272		/* Make sure there is something at this address */
-  1273		error = i2c_smbus_read_byte(client);
-  1274		if (error < 0) {
-  1275			dev_dbg(&client->dev, "nothing at this address: %d\n", error);
-  1276			return -ENXIO;
-  1277		}
-  1278	
-  1279		/* Initialize the touchpad. */
-  1280		error = elan_initialize(data, false);
-  1281		if (error)
-  1282			return error;
-  1283	
-  1284		error = elan_query_device_info(data);
-  1285		if (error)
-  1286			return error;
-  1287	
-  1288		error = elan_query_device_parameters(data);
-  1289		if (error)
-  1290			return error;
-  1291	
-  1292		dev_info(dev,
-  1293			 "Elan Touchpad: Module ID: 0x%04x, Firmware: 0x%04x, Sample: 0x%04x, IAP: 0x%04x\n",
-  1294			 data->product_id,
-  1295			 data->fw_version,
-  1296			 data->sm_version,
-  1297			 data->iap_version);
-  1298	
-  1299		dev_dbg(dev,
-  1300			"Elan Touchpad Extra Information:\n"
-  1301			"    Max ABS X,Y:   %d,%d\n"
-  1302			"    Width X,Y:   %d,%d\n"
-  1303			"    Resolution X,Y:   %d,%d (dots/mm)\n"
-  1304			"    ic type: 0x%x\n"
-  1305			"    info pattern: 0x%x\n",
-  1306			data->max_x, data->max_y,
-  1307			data->width_x, data->width_y,
-  1308			data->x_res, data->y_res,
-  1309			data->ic_type, data->pattern);
-  1310	
-  1311		/* Set up input device properties based on queried parameters. */
-  1312		error = elan_setup_input_device(data);
-  1313		if (error)
-  1314			return error;
-  1315	
-  1316		if (device_property_read_bool(&client->dev, "elan,trackpoint")) {
-  1317			error = elan_setup_trackpoint_input_device(data);
-  1318			if (error)
-  1319				return error;
-  1320		}
-  1321	
-  1322		/*
-  1323		 * Platform code (ACPI, DTS) should normally set up interrupt
-  1324		 * for us, but in case it did not let's fall back to using falling
-  1325		 * edge to be compatible with older Chromebooks.
-  1326		 */
-  1327		irqflags = irq_get_trigger_type(client->irq);
-  1328		if (!irqflags)
-  1329			irqflags = IRQF_TRIGGER_FALLING;
-  1330	
-  1331		error = devm_request_threaded_irq(dev, client->irq, NULL, elan_isr,
-  1332						  irqflags | IRQF_ONESHOT,
-  1333						  client->name, data);
-  1334		if (error) {
-  1335			dev_err(dev, "cannot register irq=%d\n", client->irq);
-  1336			return error;
-  1337		}
-  1338	
-  1339		error = input_register_device(data->input);
-  1340		if (error) {
-  1341			dev_err(dev, "failed to register input device: %d\n", error);
-  1342			return error;
-  1343		}
-  1344	
-  1345		if (data->tp_input) {
-  1346			error = input_register_device(data->tp_input);
-  1347			if (error) {
-  1348				dev_err(&client->dev,
-  1349					"failed to register TrackPoint input device: %d\n",
-  1350					error);
-  1351				return error;
-  1352			}
-  1353		}
-  1354	
-  1355		return 0;
-  1356	}
-  1357	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> [1] https://sashiko.dev/#/patchset/20260403094800.1418825-1-wutengda%40huaweicloud.com
+> [2] https://developer.arm.com/documentation/102374/0103
+> [3] https://github.com/flynd/asmsheets/releases/tag/v8
+> [4] https://lore.kernel.org/all/aiCgbmUtlMCM4Xzt@x1/#t
+> 
+> 
+> Tengda Wu (21):
+>   perf capstone: Fix kernel map reference count leak
+>   perf capstone: Fix arm64 jump/adrp disassembly mismatch with objdump
+>   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
+>     objdump
+>   perf annotate-arm64: Generalize arm64_mov__parse to support more
+>     instructions
+>   perf annotate-arm64: Handle load and store instructions
+>   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
+>   perf annotate: Adapt arch__dwarf_regnum() for arm64
+>   perf annotate: Introduce extract_op_location callback for
+>     arch-specific parsing
+>   perf annotate-arm64: Implement extract_op_location() callback
+>   perf annotate: Deduplicate overlapping ARM SPE events for data type
+>     profiling
+>   perf auxtrace: Set default period to 1 for
+>     PERF_ITRACE_PERIOD_INSTRUCTIONS type
+>   perf annotate-data: Extract invalidate_reg_state() as a common helper
+>   perf annotate-arm64: Enable instruction tracking support
+>   perf annotate-arm64: Support load instruction tracking
+>   perf annotate-arm64: Support store instruction tracking
+>   perf annotate-arm64: Support stack variable tracking
+>   perf annotate-arm64: Support 'mov' instruction tracking
+>   perf annotate-arm64: Support 'add' instruction tracking
+>   perf annotate-arm64: Support 'adrp' instruction to track global
+>     variables
+>   perf annotate-arm64: Support per-cpu variable access tracking
+>   perf annotate-arm64: Support 'mrs' instruction to track 'current'
+>     pointer
+> 
+>  tools/perf/builtin-annotate.c                 |  13 +
+>  .../perf/util/annotate-arch/annotate-arm64.c  | 901 +++++++++++++++++-
+>  .../util/annotate-arch/annotate-powerpc.c     |  10 +
+>  tools/perf/util/annotate-arch/annotate-x86.c  |  97 +-
+>  tools/perf/util/annotate-data.c               |  77 +-
+>  tools/perf/util/annotate-data.h               |   8 +-
+>  tools/perf/util/annotate.c                    | 108 +--
+>  tools/perf/util/annotate.h                    |  12 +
+>  tools/perf/util/arm-spe.c                     |   1 +
+>  tools/perf/util/auxtrace.c                    |   6 +
+>  tools/perf/util/capstone.c                    | 144 ++-
+>  tools/perf/util/disasm.c                      |   5 +
+>  tools/perf/util/disasm.h                      |   5 +
+>  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |  20 +
+>  tools/perf/util/dwarf-regs.c                  |   2 +-
+>  tools/perf/util/include/dwarf-regs.h          |   1 +
+>  tools/perf/util/llvm.c                        |  50 +
+>  17 files changed, 1307 insertions(+), 153 deletions(-)
+> 
+> 
+> base-commit: 7de6ae9e12207ec146f2f3f1e58d1a99317e88bc
+> -- 
+> 2.34.1
+> 
