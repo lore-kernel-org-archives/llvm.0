@@ -1,110 +1,91 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C39C3C4154
-	for <llvm@lists.linux.dev>; Fri, 10 Jul 2026 15:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2132C3C4154;
+	Fri, 10 Jul 2026 15:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783698732; cv=none; b=mJN9KH5+E81pESpXz//8GD4oKISGYuYJpWoRYCK7PFIa9CAmxIPTxt6sfKp60UGXTm/hyXX+BsMARpfZ+D4DBZiJ+GIeXmYYQ2KX79bmMMS10VEvnO6NSUlGsG+0gKyYb82spnt3fzdirDNM+bTX+twdcVR32kdLVxXsY1deao4=
+	t=1783698874; cv=none; b=DGOZ/TIrvRsm/KQfNSp2QlH8uuCGVbDSCquHFQbXpPbK2LS0CzKs3T7z/ml6mh434xxca4Bh+Xe6cxvieI1aNob8BEnffSzZurUX8D0tw2kpyn+raxaLF6W06TIyL1bpIo+e8ZSADYHlVJcIuowqd/1SFbMArzmG89EcBAsSAp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783698732; c=relaxed/simple;
-	bh=xzI7YuLXKFYrd7L8nHNnvdDrH4tXOOPD1UrJum7eyuI=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=HEWSygQVAqmioZ+IoM2Ak5KJ4R+CPk1twGxeuG+Gf4gF5abL1XnWJopKplAtythz4rSBue7i4ayspIMSybFrp1RW59cIJ7kBFDnhG5ua+whxGDtgB+wD8qHdW6XbLGRh+GgPWLv6Xu0yV1g/pebgNxhSFqIf5nSf98OAkEl696s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K1pq3LrY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783698874; c=relaxed/simple;
+	bh=s5T2JjqqaqbIxAPQ50lDYsTnJonVhiMf2bwb7GQIwUw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rpS4a0B81XljrbNpZj7owjaQu3AxDYp7JiLJtV0wgMANxAHOBfJ/yOvnMHIZ4K1IYnASAeB+eFUfNT4d2/mVmdoO9WvIzCQmX/6hRfGFHb4T06ZVt42RJUZpZ3aOJHc31ZMIQurVzCzJg0ZozKLaP2/B7eqwk0apet7Z8JSJLPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdEMVgMY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K1pq3LrY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783698730;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=O/rVyQwwQIxRbQsN38bmPDyprWm7NaceMB06EZwY4/c=;
-	b=K1pq3LrYMjy0ROkBunQzx0R9WjW3eoqwMGJtWk0mBXVSPgPaarihMdw45orndbgLpFkn+g
-	eJ0LUaf7SdjK0+JssKOBMt8iFP62FJcspCp/fL4dhSd2Z3l5Q1QpecoQDlRsaqtMILDUVV
-	c+6ZK61trQVCceGTcRzNLEeBZ/Htf4U=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-290-W3az4SQ3MS6yPSbFknC2Rw-1; Fri,
- 10 Jul 2026 11:52:08 -0400
-X-MC-Unique: W3az4SQ3MS6yPSbFknC2Rw-1
-X-Mimecast-MFC-AGG-ID: W3az4SQ3MS6yPSbFknC2Rw_1783698728
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C576E1955DC4
-	for <llvm@lists.linux.dev>; Fri, 10 Jul 2026 15:52:07 +0000 (UTC)
-Received: from [172.20.146.15] (unknown [10.30.45.65])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 4E7F11955F7B;
-	Fri, 10 Jul 2026 15:52:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc2,
- upstream-mainline, 2c7c88a4)
-Date: Fri, 10 Jul 2026 15:52:06 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdEMVgMY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD731F000E9;
+	Fri, 10 Jul 2026 15:54:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783698872;
+	bh=q8JFJnGL7bYpyB0Nd3W5/BlyuGxY4w1vWSoT+qn+jRM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=mdEMVgMY2egcdqlOZigj3izdHYytjawO2k2ygqW3cDtSggkUddybGs7MVLp1gRLwN
+	 FndXB9O6qhc0HGX2m/T4If2s6wGGmq96KeD6xltV8BtFx8P0wrcYGjiWXo9jhtUNHC
+	 ZmpkuLZfwvbhyJLxPd1AcbWTgdlm2ihoJPsjmMuZ9xAxPTVoMScvZiKgGW4Q9rEvSA
+	 C2nI0ruQHsVaGC9xpsnF6siroLYz7Eh7zPToog1Y7lytJtVyonnistw74HbxuMyvkW
+	 peDK8erA3A6KdiEQ85rNEKqsUU2FdWFZAnTR9SmMc4RJjMD+4fEdJ/cwSfCAIPMHY5
+	 Z34bqaUvJsJXw==
+Date: Fri, 10 Jul 2026 08:54:28 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Stefano Garzarella <sgarzare@redhat.com>
+Cc: kernel test robot <lkp@intel.com>,
+	Bobby Eshleman <bobbyeshleman@meta.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: Re: ld.lld: error: vmlinux.a(af_vsock.o at 1186296) <inline
+ asm>:5:8: unpredictable STXR instruction, status is also a source
+Message-ID: <20260710155428.GA3149665@ax162>
+References: <202607061644.jD93AjWc-lkp@intel.com>
+ <CAGxU2F5KvtLSgT9pzhv8YxcP_j9L7usXqKY+W446XxLAovdbog@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <59010.126071011520801637@us-mta-290.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: OuypT18A5PD5hs58mwSKugx4N-8F8w6Vqv4RrvkSgRw_1783698728
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGxU2F5KvtLSgT9pzhv8YxcP_j9L7usXqKY+W446XxLAovdbog@mail.gmail.com>
 
-Hi, we tested your kernel and here are the results:
+On Fri, Jul 10, 2026 at 04:22:20PM +0200, Stefano Garzarella wrote:
+> On Mon, 6 Jul 2026 at 10:44, kernel test robot <lkp@intel.com> wrote:
+> >
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> > head:   8cdeaa50eae8dad34885515f62559ee83e7e8dda
+> > commit: 102eab95f025b4d3f3a6c0a858400aca2af2fe52 vsock: lock down child_ns_mode as write-once
+> > date:   4 months ago
+> > config: arm64-randconfig-001-20260706 (https://download.01.org/0day-ci/archive/20260706/202607061644.jD93AjWc-lkp@intel.com/config)
+> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607061644.jD93AjWc-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Fixes: 102eab95f025 ("vsock: lock down child_ns_mode as write-once")
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202607061644.jD93AjWc-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> ld.lld: error: vmlinux.a(af_vsock.o at 1186296) <inline asm>:5:8: unpredictable STXR instruction, status is also a source
+> >    stlxr   w8, w8, [x21]
+> >    ^
+> >
+> 
+> Could this be related to https://github.com/llvm/llvm-project/issues/106380 ?
+> That issue seems fixed in llvm >= 20
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+Indeed, this is resolved by
 
+  https://github.com/llvm/llvm-project/commit/7183771834d9035ffbedd8f1ff9233b16722b986
 
-Kernel information:
-    Commit message: Merge tag 'net-7.2-rc3' of git://git.kernel.org/pub/scm=
-/linux/kernel/git/netdev/net
+in LLVM 20.1.0, I confirmed with a reverse bisect. It looks like
+this issue triggers on undefined values being passed to inline asm but I
+don't see where there is an undefined value in the blamed commit but I
+did not look too hard. Presumably this is around the try_cmpxchg() in
+vsock_net_set_child_mode(). I am not sure this will be easily to
+workaround so we might just have to leave it broken.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2665341184
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2665341184_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2665341184_x86_64_kernel_kcidb_tool_21614404_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+-- 
+Cheers,
+Nathan
