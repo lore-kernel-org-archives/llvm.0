@@ -1,60 +1,59 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE8642D8382;
-	Fri, 10 Jul 2026 17:38:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7934036A37B;
+	Fri, 10 Jul 2026 17:38:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783705087; cv=none; b=CWLLvHyBopF1bvZ+qtQoTnICicmNOtyy4xy2IRU6VTtqzfD258d7Am2Oo3yHQeUR+KkQ8hJd3m84Wlz8Hy+sLpZGzvxuvvbGQl0e/O0pQCz/qxe901aZvoVxp80JZr1J5jvudaGXHioglKKtyuXuPEW158enS3Y949M5IWDA5nU=
+	t=1783705089; cv=none; b=BNzMb9ZReyyULm+zDMapHeE5K4wEGCjlP0TG79Y09Zy6iC5GBk8+ao8bMaL4JDwMCB0NRlYuzmDeJ/ZmEhNIc6/uQ3j0JULZmRmfxd2RAhUhkmQiX+O/q4BN/kLeZzvVNA1KhO1x2mn6C0p1aO9B9Nt1/EpIvjqGxuXgWvmGZj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783705087; c=relaxed/simple;
-	bh=fEu/GrD3g8HmXDSbvEp3FNnOnZ7e1d/mMwN0+NbRaAA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=pSrrCRibaQal9ZRPyPeUzpRjDE/gBo+b+WtBqWbnV5arpYmPO9pfgOTQY7CUGhUw8uKkxWbtu17oLOM3Z6uTCJX3gShezU8vB0RFEwTAuf8qDUQE6M1JJEJfSfNxB7MaJBqss0JoAMFkuKfFhyF3IPeI5vmvzoqrmwDEDoSUDzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JRRZZNtT; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1783705089; c=relaxed/simple;
+	bh=VJ3WyYE/W43/hF5UgHe91gyrNyWza08wu9OVUuzx0F4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=dHbQ64SOFiPPB9Xj9Uayrx+Y9th5E8kzgbyfu6Gr/tTtBtr8zaBqTZ38zsHH7Z8yDq+WPm76ha/5uz9F7QNe+/NLFghw4RVr0OSFhe/quZ1+kpebWLncbeD+HwkgGti2FqI9vLh4cIoVUIY1URc6SyHZ0q+HoNSSjZbewSSCR0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F8og5qZ+; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JRRZZNtT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F8og5qZ+"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783705085; x=1815241085;
+  t=1783705088; x=1815241088;
   h=date:from:to:cc:subject:message-id;
-  bh=fEu/GrD3g8HmXDSbvEp3FNnOnZ7e1d/mMwN0+NbRaAA=;
-  b=JRRZZNtTnBJCMkSAEk0B/Og9aHtmE+pMSouq+nMpRZZvFKY+avSvgmya
-   lD5O769iSo0OfBgF4XvsMEuWxycGhhAzjYjWVzbpwyRRoRgjbPJOJU23b
-   +jmH5VIysBSUOcwdYZhtwfmG6D4NcfQWRz5iPQrBsKRjyLgK/xiWfbxL3
-   LEn7yFa1vJ+z5cyXz0NIpVNKsTfK0A1vsdhgMfYp5UbGiKRjnZ6Zuzrb8
-   CTfyC8UyMOEcithxLjyP2L6cZrXsuVFTIOiz3eanM7OTUeLfWtpzlX3QX
-   56D/lh3/y+7uaItqsYsPVheMN18H+55DOkhSGwHqsr5+dq6i6yo0w1cku
-   A==;
-X-CSE-ConnectionGUID: T+vWNW9GQc6BvXHE5gYR6g==
-X-CSE-MsgGUID: K4SWE2NlTKWL0vvbfBOcpQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84187920"
+  bh=VJ3WyYE/W43/hF5UgHe91gyrNyWza08wu9OVUuzx0F4=;
+  b=F8og5qZ+OW2nRLhrhXk+yDaZ+PHDr8lcKzGCJqrNYbhm/e6FB8sRBEai
+   riimX33yl+fMhs1gZj6PeaOixKFFtlobGgyeROJXz/OryzMuDeXJQ/7wv
+   iGn/2yvdbGeGeufPmoYIuDGZclP93wuSQuDPZ0Uyp+KhnngrxvJahLEhR
+   0aLzkOIZneimar+6raswssmuNzu7fsddOt7QuYYz3JMwp931L4Uxzpjdn
+   ivsk+pAwG9lBvgkCqcSw5QslNqtqcgTBctAYPQnlJYtT5z7brSUfQwrCd
+   pyV9zC0uY5AU7Qp/00WqJzKth3+gAEce/oKPsas5ETN3KQ6oiVz7De9Ud
+   g==;
+X-CSE-ConnectionGUID: yNn8YSk5ToGOcdRS2NFktA==
+X-CSE-MsgGUID: VNzXKdCfTxyw6PvwS6knLA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84187922"
 X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84187920"
+   d="scan'208";a="84187922"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
   by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 10:38:05 -0700
-X-CSE-ConnectionGUID: 6GkkIIM7RE6cEipJFVOluQ==
-X-CSE-MsgGUID: YKQBRPQcQR21aeQlDSUzQQ==
+X-CSE-ConnectionGUID: KhmuHTfrRwWmpMLHrOuZ4g==
+X-CSE-MsgGUID: 77hjN/MfRyeQCa7SLzrkzA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="293134998"
+   d="scan'208";a="293135000"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 10 Jul 2026 10:38:03 -0700
+  by orviesa001.jf.intel.com with ESMTP; 10 Jul 2026 10:38:04 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wiFAm-00000000JBt-1phZ;
+	id 1wiFAm-00000000JBv-2KFk;
 	Fri, 10 Jul 2026 17:38:00 +0000
-Date: Sat, 11 Jul 2026 01:37:46 +0800
+Date: Sat, 11 Jul 2026 01:37:50 +0800
 From: kernel test robot <lkp@intel.com>
-To: Gregory Price <gourry@gourry.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: 
- [gourryinverse:scratch/gourry/cxl/compression/file_cleancache 85/98]
- mm/cram.c:785:9: error: call to undeclared function
- 'add_private_memory_driver_managed'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202607110149.Brcg1dl7-lkp@intel.com>
+To: Mahe Tardy <mahe.tardy@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Jordan Rife <jordan@jrife.io>
+Subject: [linux-next:master 5404/5655] net/core/filter.c:12578:18:
+ warning: unused variable 'nskb'
+Message-ID: <202607110140.JeJZ6GIa-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,142 +61,106 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/gourryinverse/linux scratch/gourry/cxl/compression/file_cleancache
-head:   bcd0bfca5b64d6cbb5aadb07554b9bd218e0df85
-commit: b91721666fdaddeaac4caa01b7f220f13ad984d6 [85/98] mm/cram: core compressed-RAM tier API
-config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260711/202607110149.Brcg1dl7-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607110149.Brcg1dl7-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   bee763d5f341b99cf472afeb508d4988f62a6ca1
+commit: f3603df9aebb2a2fe2f745bd71ca38aeca60e6e7 [5404/5655] bpf: Add bpf_icmp_send kfunc
+config: i386-buildonly-randconfig-001-20260710 (https://download.01.org/0day-ci/archive/20260711/202607110140.JeJZ6GIa-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607110140.JeJZ6GIa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607110149.Brcg1dl7-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607110140.JeJZ6GIa-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> mm/cram.c:785:9: error: call to undeclared function 'add_private_memory_driver_managed'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     785 |                 ret = add_private_memory_driver_managed(nid, ranges[i].start,
-         |                       ^
->> mm/cram.c:787:5: error: use of undeclared identifier 'MHP_MERGE_RESOURCE'
-     787 |                                 MHP_MERGE_RESOURCE, MMOP_ONLINE_MOVABLE, &cn->np);
-         |                                 ^
-   2 errors generated.
+>> net/core/filter.c:12578:18: warning: unused variable 'nskb' [-Wunused-variable]
+    12578 |         struct sk_buff *nskb;
+          |                         ^~~~
+   1 warning generated.
 
 
-vim +/add_private_memory_driver_managed +785 mm/cram.c
+vim +/nskb +12578 net/core/filter.c
 
-   711	
-   712	/**
-   713	 * cram_register() - donate physical region(s) to CRAM as a private node
-   714	 * @nid:         target NUMA node
-   715	 * @ranges:      perceived physical regions to donate (struct range, end-inclusive)
-   716	 * @n:           number of ranges
-   717	 * @zratio:      hw compression ratio, per-mille N:1 (3:1 => 3000, 1:1 => 1000)
-   718	 * @ops:         driver callbacks.  ops.owner (= THIS_MODULE) pins the module for
-   719	 *               the node's lifetime.  Stored by value.
-   720	 * @driver_data: the driver's per-node object, the ops callback cookie and np
-   721	 *               owner.  Opaque to CRAM (keyed operations use @nid).
-   722	 *
-   723	 * CRAM owns the node lifecycle.  It hotplugs each range as an N_MEMORY_PRIVATE
-   724	 * node (caps = CRAM_NP_CAPS, backed by &cn->np), onlines movable, and starts
-   725	 * kswapd for LRU aging / writeback.  The driver does no hotplug of its own.
-   726	 *
-   727	 * Return: 0 on success.  -errno on failure (nothing left onlined on failure).
-   728	 */
-   729	int cram_register(int nid, const struct range *ranges, unsigned int n,
-   730			  u32 zratio, struct cram_ops ops, void *driver_data)
-   731	{
-   732		struct cram_node *cn;
-   733		unsigned int i, added = 0;
-   734		int ret;
-   735	
-   736		if (!cram_valid_nid(nid) || !ranges || !n)
-   737			return -EINVAL;
-   738	
-   739		/* Pin the driver module for the node's lifetime (NULL = built-in). */
-   740		if (!try_module_get(ops.owner))
-   741			return -EBUSY;
-   742	
-   743		cn = kzalloc(sizeof(*cn), GFP_KERNEL);
-   744		if (!cn) {
-   745			ret = -ENOMEM;
-   746			goto err_module;
-   747		}
-   748		cn->ranges = kmemdup(ranges, n * sizeof(*ranges), GFP_KERNEL);
-   749		if (!cn->ranges) {
-   750			ret = -ENOMEM;
-   751			goto err_free;
-   752		}
-   753		cn->nr_ranges = n;
-   754		cn->zratio = zratio;
-   755		cn->current_ratio = zratio;	/* assume configured ratio until reported */
-   756		cn->alloc_allowed = true;	/* demotions permitted until the driver revokes */
-   757		cn->ops = ops;
-   758		cn->driver_data = driver_data;
-   759		cn->nid = nid;
-   760		cn->np.owner = driver_data;
-   761		cn->np.caps = CRAM_NP_CAPS;
-   762		refcount_set(&cn->refcount, 1);
-   763		INIT_WORK(&cn->wmark_work, cram_wmark_work_fn);
-   764		INIT_WORK(&cn->promote_work, cram_promote_work_fn);
-   765		spin_lock_init(&cn->promote_lock);
-   766		INIT_LIST_HEAD(&cn->balloon_pages);
-   767		mutex_init(&cn->balloon_mutex);
-   768	
-   769		mutex_lock(&cram_mutex);
-   770	
-   771		/* Accretion / re-register onto an existing node is not yet supported. */
-   772		if (cram_nodes[nid]) {
-   773			mutex_unlock(&cram_mutex);
-   774			ret = -EBUSY;
-   775			goto err_ranges;
-   776		}
-   777	
-   778		/*
-   779		 * CRAM owns the node.  Hotplug each range as a private node (the first
-   780		 * call node_private_register()s &cn->np) and online it movable.  On a
-   781		 * failure roll back the ranges already added (fresh/empty, so the atomic
-   782		 * ranges-offline succeeds).
-   783		 */
-   784		for (i = 0; i < n; i++) {
- > 785			ret = add_private_memory_driver_managed(nid, ranges[i].start,
-   786					range_len(&ranges[i]), "System RAM (cram)",
- > 787					MHP_MERGE_RESOURCE, MMOP_ONLINE_MOVABLE, &cn->np);
-   788			if (ret) {
-   789				if (added)
-   790					offline_and_remove_memory_ranges(cn->ranges, added);
-   791				mutex_unlock(&cram_mutex);
-   792				goto err_ranges;
-   793			}
-   794			added++;
-   795		}
-   796	
-   797		/*
-   798		 * Publish the control node first, then arm the CRAM mask last.  Once
-   799		 * node_is_cram() / cram_pick_node() observe the node, cram_nodes[nid] is
-   800		 * already valid.  Teardown clears the mask first, the mirror image.
-   801		 */
-   802		static_branch_inc(&cram_enabled);
-   803		rcu_assign_pointer(cram_nodes[nid], cn);
-   804		node_set(nid, cram_node_mask);
-   805	
-   806		/* Start kswapd on the private node for LRU aging and writeback */
-   807		kswapd_run(nid);
-   808	
-   809		mutex_unlock(&cram_mutex);
-   810		return 0;
-   811	
-   812	err_ranges:
-   813		kfree(cn->ranges);
-   814	err_free:
-   815		kfree(cn);
-   816	err_module:
-   817		module_put(ops.owner);
-   818		return ret;
-   819	}
-   820	EXPORT_SYMBOL_GPL(cram_register);
-   821	
+ 12553	
+ 12554	/**
+ 12555	 * bpf_icmp_send - Send an ICMP control message
+ 12556	 * @skb_ctx: Packet that triggered the control message
+ 12557	 * @type: ICMP type (only ICMP_DEST_UNREACH/ICMPV6_DEST_UNREACH supported)
+ 12558	 * @code: ICMP code (0-15 except ICMP_FRAG_NEEDED for IPv4, 0-6 for IPv6)
+ 12559	 *
+ 12560	 * Sends an ICMP control message in response to the packet. The original packet
+ 12561	 * is cloned before sending the ICMP message, so the BPF program can still let
+ 12562	 * the packet pass if desired.
+ 12563	 *
+ 12564	 * Currently only ICMP_DEST_UNREACH (IPv4) and ICMPV6_DEST_UNREACH (IPv6) are
+ 12565	 * supported.
+ 12566	 *
+ 12567	 * Return: 0 on success (send attempt), negative error code on failure:
+ 12568	 *         -EBUSY: Recursion detected
+ 12569	 *         -EPROTONOSUPPORT: Non-IP protocol
+ 12570	 *         -EOPNOTSUPP: Unsupported ICMP type
+ 12571	 *         -EINVAL: Invalid code parameter
+ 12572	 *         -ENETUNREACH: No usable route/dst for the ICMP reply
+ 12573	 *         -ENOMEM: Memory allocation failed
+ 12574	 */
+ 12575	__bpf_kfunc int bpf_icmp_send(struct __sk_buff *skb_ctx, int type, int code)
+ 12576	{
+ 12577		struct sk_buff *skb = (struct sk_buff *)skb_ctx;
+ 12578		struct sk_buff *nskb;
+ 12579		struct sock *sk;
+ 12580	
+ 12581		sk = skb_to_full_sk(skb);
+ 12582		if (sk && sk->sk_kern_sock &&
+ 12583		    (sk->sk_protocol == IPPROTO_ICMP || sk->sk_protocol == IPPROTO_ICMPV6))
+ 12584			return -EBUSY;
+ 12585	
+ 12586		if (!skb_valid_dst(skb))
+ 12587			return -ENETUNREACH;
+ 12588	
+ 12589		switch (skb->protocol) {
+ 12590	#if IS_ENABLED(CONFIG_INET)
+ 12591		case htons(ETH_P_IP): {
+ 12592			if (type != ICMP_DEST_UNREACH)
+ 12593				return -EOPNOTSUPP;
+ 12594			if (code < 0 || code > NR_ICMP_UNREACH ||
+ 12595			    code == ICMP_FRAG_NEEDED) /* needs a valid next-hop MTU */
+ 12596				return -EINVAL;
+ 12597	
+ 12598			nskb = skb_clone(skb, GFP_ATOMIC);
+ 12599			if (!nskb)
+ 12600				return -ENOMEM;
+ 12601	
+ 12602			memset(IPCB(nskb), 0, sizeof(*IPCB(nskb)));
+ 12603			icmp_send(nskb, type, code, 0);
+ 12604			consume_skb(nskb);
+ 12605			break;
+ 12606		}
+ 12607	#endif
+ 12608	#if IS_ENABLED(CONFIG_IPV6)
+ 12609		case htons(ETH_P_IPV6):
+ 12610			if (type != ICMPV6_DEST_UNREACH)
+ 12611				return -EOPNOTSUPP;
+ 12612			if (code < 0 || code > ICMPV6_REJECT_ROUTE)
+ 12613				return -EINVAL;
+ 12614	
+ 12615			nskb = skb_clone(skb, GFP_ATOMIC);
+ 12616			if (!nskb)
+ 12617				return -ENOMEM;
+ 12618	
+ 12619			memset(IP6CB(nskb), 0, sizeof(*IP6CB(nskb)));
+ 12620			icmpv6_send(nskb, type, code, 0);
+ 12621			consume_skb(nskb);
+ 12622			break;
+ 12623	#endif
+ 12624		default:
+ 12625			return -EPROTONOSUPPORT;
+ 12626		}
+ 12627	
+ 12628		return 0;
+ 12629	}
+ 12630	
 
 --
 0-DAY CI Kernel Test Service
