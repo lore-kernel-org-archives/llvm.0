@@ -1,91 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2132C3C4154;
-	Fri, 10 Jul 2026 15:54:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 579323064AE
+	for <llvm@lists.linux.dev>; Fri, 10 Jul 2026 15:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783698874; cv=none; b=DGOZ/TIrvRsm/KQfNSp2QlH8uuCGVbDSCquHFQbXpPbK2LS0CzKs3T7z/ml6mh434xxca4Bh+Xe6cxvieI1aNob8BEnffSzZurUX8D0tw2kpyn+raxaLF6W06TIyL1bpIo+e8ZSADYHlVJcIuowqd/1SFbMArzmG89EcBAsSAp4=
+	t=1783698930; cv=none; b=K1PaY7r03mpovAi7OlRKKxE0YHKLooIdAWmpftG8ShJojeazb52LbBUtqvQM7OKss/fLtueDuoArMweG3VlOC/V6zU2hCc/6w4gfLVrXO2ctZgdjZg9Y+RoWGycEyXNNc/xKdanh8iRFWI8uUQQM4UhwmFNVX368HEnXCV1xcM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783698874; c=relaxed/simple;
-	bh=s5T2JjqqaqbIxAPQ50lDYsTnJonVhiMf2bwb7GQIwUw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rpS4a0B81XljrbNpZj7owjaQu3AxDYp7JiLJtV0wgMANxAHOBfJ/yOvnMHIZ4K1IYnASAeB+eFUfNT4d2/mVmdoO9WvIzCQmX/6hRfGFHb4T06ZVt42RJUZpZ3aOJHc31ZMIQurVzCzJg0ZozKLaP2/B7eqwk0apet7Z8JSJLPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mdEMVgMY; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mdEMVgMY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AD731F000E9;
-	Fri, 10 Jul 2026 15:54:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783698872;
-	bh=q8JFJnGL7bYpyB0Nd3W5/BlyuGxY4w1vWSoT+qn+jRM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mdEMVgMY2egcdqlOZigj3izdHYytjawO2k2ygqW3cDtSggkUddybGs7MVLp1gRLwN
-	 FndXB9O6qhc0HGX2m/T4If2s6wGGmq96KeD6xltV8BtFx8P0wrcYGjiWXo9jhtUNHC
-	 ZmpkuLZfwvbhyJLxPd1AcbWTgdlm2ihoJPsjmMuZ9xAxPTVoMScvZiKgGW4Q9rEvSA
-	 C2nI0ruQHsVaGC9xpsnF6siroLYz7Eh7zPToog1Y7lytJtVyonnistw74HbxuMyvkW
-	 peDK8erA3A6KdiEQ85rNEKqsUU2FdWFZAnTR9SmMc4RJjMD+4fEdJ/cwSfCAIPMHY5
-	 Z34bqaUvJsJXw==
-Date: Fri, 10 Jul 2026 08:54:28 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Stefano Garzarella <sgarzare@redhat.com>
-Cc: kernel test robot <lkp@intel.com>,
-	Bobby Eshleman <bobbyeshleman@meta.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: Re: ld.lld: error: vmlinux.a(af_vsock.o at 1186296) <inline
- asm>:5:8: unpredictable STXR instruction, status is also a source
-Message-ID: <20260710155428.GA3149665@ax162>
-References: <202607061644.jD93AjWc-lkp@intel.com>
- <CAGxU2F5KvtLSgT9pzhv8YxcP_j9L7usXqKY+W446XxLAovdbog@mail.gmail.com>
+	s=arc-20240116; t=1783698930; c=relaxed/simple;
+	bh=QXzL/asffhKe/0ho8h2qcuZoIXtXaztBg7eKLa96qBk=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Fe5Jy3qpdMHRZXZVKF8szNxQ0k28uJc4G9flLFsvp37YIQTDGnDNCD3qruL9xx7RStg8u4eNbNZaltn5dxA7A4hGA0zM2CrSfKcBxR6kmViTDLPWrM5jNS4iHQi1VLcQHGzKLnEmOBUGJc758yNIDo1JA1B7lmBK2SHL+bKlFsc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf16.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay01.hostedemail.com (Postfix) with ESMTP id EB2BE1C3C34;
+	Fri, 10 Jul 2026 15:55:25 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id F41F62000E;
+	Fri, 10 Jul 2026 15:55:21 +0000 (UTC)
+Date: Fri, 10 Jul 2026 11:55:31 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Puranjay Mohan
+ <puranjay@kernel.org>, Clayton Craft <clayton@craftyguy.net>, Xu Kuohai
+ <xukuohai@huaweicloud.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org, Florent Revest
+ <revest@chromium.org>, Xu Kuohai <xukuohai@huawei.com>, Ben Cressey
+ <ben@cressey.dev>
+Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without
+ CALL_OPS
+Message-ID: <20260710115531.626f1e09@gandalf.local.home>
+In-Reply-To: <alD7Rr659mGVznQp@linux.dev>
+References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+	<alD7Rr659mGVznQp@linux.dev>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGxU2F5KvtLSgT9pzhv8YxcP_j9L7usXqKY+W446XxLAovdbog@mail.gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 1b516kuk3c4c1rip1isp7pq1m9efroyd
+X-Rspamd-Server: rspamout08
+X-Rspamd-Queue-Id: F41F62000E
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX18VXkSf3RGQ5/OWlm4BQJh8NrDk/AyK9ZA=
+X-HE-Tag: 1783698921-218184
+X-HE-Meta: U2FsdGVkX1/ARi1Y+mMDcyLyMrsGbKd8T7pdCf3U5E+/bEmvRcWpNpXMmXFAgmgQMwx0coL3oTGo4ESx3LzWsN1pJmM3FEVw1cXW/ZqiiFvJm6lNo4WwQBEjcMMBNGYhriRw/3qCHxJrXwO57UxmANF2ZDarJOslhYoxzt+nKE+Egpr8HTSxXDGHCy6fYPwOT6MLrGRO6VDzD9hgX0Exofx8itHAHSGHRhc9oL/9FOeNb4otrGD6dqzaYuIeMhNuoIMGctXbBVpWkX/CEtLSyx35MgrrZpd3sC/vh8JCgQ7Ar6kabtuYyRvO16SvoSWN
 
-On Fri, Jul 10, 2026 at 04:22:20PM +0200, Stefano Garzarella wrote:
-> On Mon, 6 Jul 2026 at 10:44, kernel test robot <lkp@intel.com> wrote:
-> >
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   8cdeaa50eae8dad34885515f62559ee83e7e8dda
-> > commit: 102eab95f025b4d3f3a6c0a858400aca2af2fe52 vsock: lock down child_ns_mode as write-once
-> > date:   4 months ago
-> > config: arm64-randconfig-001-20260706 (https://download.01.org/0day-ci/archive/20260706/202607061644.jD93AjWc-lkp@intel.com/config)
-> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607061644.jD93AjWc-lkp@intel.com/reproduce)
-> >
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Fixes: 102eab95f025 ("vsock: lock down child_ns_mode as write-once")
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202607061644.jD93AjWc-lkp@intel.com/
-> >
-> > All errors (new ones prefixed by >>):
-> >
-> > >> ld.lld: error: vmlinux.a(af_vsock.o at 1186296) <inline asm>:5:8: unpredictable STXR instruction, status is also a source
-> >    stlxr   w8, w8, [x21]
-> >    ^
-> >
+On Fri, 10 Jul 2026 14:07:01 +0000
+"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev> wrote:
+
+> Hi all,
 > 
-> Could this be related to https://github.com/llvm/llvm-project/issues/106380 ?
-> That issue seems fixed in llvm >= 20
+> Just a gentle ping on this series. It has Reviewed-by from Puranjay
+> Mohan, Acked-by from Xu Kuohai on both patches, and Tested-by from
+> Clayton Craft and Nathan Chancellor, with no outstanding comments since
+> Jun 11.
+> 
+> Could you please consider picking this up for the next cycle?
+> 
 
-Indeed, this is resolved by
+As this is arm64 specific, the decision lies with the arm64 maintainers.
 
-  https://github.com/llvm/llvm-project/commit/7183771834d9035ffbedd8f1ff9233b16722b986
-
-in LLVM 20.1.0, I confirmed with a reverse bisect. It looks like
-this issue triggers on undefined values being passed to inline asm but I
-don't see where there is an undefined value in the blamed commit but I
-did not look too hard. Presumably this is around the try_cmpxchg() in
-vsock_net_set_child_mode(). I am not sure this will be easily to
-workaround so we might just have to leave it broken.
-
--- 
-Cheers,
-Nathan
+-- Steve
