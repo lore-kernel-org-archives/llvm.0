@@ -1,87 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D43937B415;
-	Fri, 10 Jul 2026 18:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F08E33121F;
+	Fri, 10 Jul 2026 19:18:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783706846; cv=none; b=US62I42sZSloN3+dqyhhqZh/ctqp8i6GCVXmvGV35OAVByQecna34zdfImBm4OdXVhEt2D3z5zNgmAnz5vNkuPsqRoBHZmmJn3Etxsm4OlGABh8/D+P77VrA24PWmQs+fZsUKBB7QswMZJwXnrFnG+oX7ICJe72kBu1qUFCDLfM=
+	t=1783711090; cv=none; b=O7mCbz1bhoPkDY9tXrFuRCoMNSFw+vikGVZz8ti4qhJSQrYeo/SagZrB1A/UeiDcuH8VqI7/V6QR0uFb5+W9MZNZNpRGtkX4klE7MEa1M6dsCwFHQsxU7TZVcJ+C0930IGfcjDIgqn5ypBpYyncRSIzx4CDzC26YKJrQEMXXuIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783706846; c=relaxed/simple;
-	bh=lcpICsyTNqKGxTwAISCqIqc1zQK9fexyXV9marLETHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NllHFZwTt4CqObPcMlLXDuXfRSr3grbLPnQe3bCYzC9sYOPSAOD9T0pwNtmS7FSpup1PmC559PJYVm/n3MSlGrOxIE0v/UD752WL/5jUajjO5DUUQKgsGA7u0lfoDg+FdSW3G1HOxY+96lufIHeXe2z+i/6hHSR6/RVH4eAMwdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dkavSFY6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1783711090; c=relaxed/simple;
+	bh=2U0aLcLDGNOA93LV8u1qOTnrjqBRNYbHHVerl/FtJ1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DVyOQGULnwXSWIYF55UlOuNAINibpO9Och4hhbdTyX7UCV4TyBNJ7l3TmG6KNvgA83s1ExU3FK4qTR6twUsAEsXhZ4MNrMYf4iHjpIX0aF/PN1wK7r0qDiGsqLON0LP9TSDtkaNmTQWJ4EXOAU18azWlcBzqyjQ5glSyvSY+34Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S5qKez8J; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dkavSFY6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEDBA1F00A3F;
-	Fri, 10 Jul 2026 18:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1783706843;
-	bh=4G+nAEbDkSf79QMV/VmVVdOvQKG969j3uYzdvbfr1YQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dkavSFY62Auhika3QZ0PRVc9ADe2tkbwq27tSizdqnfHX5gERCYyQe9zNd5RrT88i
-	 P3FzInuzog0a8hTeSNMcLExpSuYi3ftDEtQJabZHKhZE/1SH5CTjylRJKvcorRNlVS
-	 UMWZKqFoldUpyeC9xTgE9wKLkuFXoD0lcwVsC9YmpbJIyFpJe7wifI1CGNuCXak9EF
-	 O9S1FDP5sWdmT4kbRgYr357br2cTvPyY3NtyEuqT7BtleRnlCdGmCDipdLmuFSmRSx
-	 LPYR8OwT/Ga3KBKzZLX3pl0M1w/iVzlG3isCSHWt8V//Dlyk/2hRg5ZLDY6N+zbuHH
-	 fWzRyd2UFwIQw==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Mathieu Poirier <mathieu.poirier@linaro.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Val Packett <val@packett.cool>
-Cc: =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
-	Luca Weiss <luca@lucaweiss.eu>,
-	Vladimir Lypak <vladimir.lypak@gmail.com>,
-	=?UTF-8?q?Barnab=C3=A1s=20Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S5qKez8J"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1783711088; x=1815247088;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2U0aLcLDGNOA93LV8u1qOTnrjqBRNYbHHVerl/FtJ1s=;
+  b=S5qKez8Jq4eKfb7aADbtviUzGM1xefPX/1eyldlGUGaaXzHOXEeRQ2O3
+   foBrFvi80y72YPZ53pFJnAheZ3v2xCMNeVlEEVwCPy1FRo863QCh7PKDr
+   ACPWYICFBMk+jNEFx8vTdMgXrTnGJwH/w5k+U0KHQKQ3tn/BHY/MCv03x
+   4MTnIUM+BQ5IanrrlRSAclS7uxKtegJqECaUhrlttBrBlCQRVYnSjXnR7
+   lDGjOd8dfDNNCo/sP678QRiSz7cVfxCHa2TeYptBdbZBWHBiheh/6Vdrm
+   AJhefgFiIffHfZMoYapaXShh0Po+Y4seT5ACplnIvpVLnMpkKE3SfG3Br
+   g==;
+X-CSE-ConnectionGUID: wxveFJyRTjSTVlD72mT/xA==
+X-CSE-MsgGUID: 1puZ2QakQH+V+lBghbQfkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84435253"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="84435253"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 12:18:08 -0700
+X-CSE-ConnectionGUID: WYArwfLqTVuK6N7Bm+RxfQ==
+X-CSE-MsgGUID: h8wxA/nSTuSbYNqwM8kysQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="253843474"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 10 Jul 2026 12:18:06 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wiGja-00000000JHd-3B5J;
+	Fri, 10 Jul 2026 19:18:02 +0000
+Date: Sat, 11 Jul 2026 03:17:57 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dmitry Baryshkov <lumag@kernel.org>,
 	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	~postmarketos/upstreaming@lists.sr.ht,
-	linux@mainlining.org,
-	phone-devel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-remoteproc@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] remoteproc: qcom_wcnss: Fix handling the lack of PD regulators in v3
-Date: Fri, 10 Jul 2026 13:07:07 -0500
-Message-ID: <178370682982.2572738.1804514769753985254.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260201210230.911220-1-val@packett.cool>
-References: <20260201210230.911220-1-val@packett.cool>
+	Deepak Kumar Singh <deepak.singh@oss.qualcomm.com>,
+	Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+Subject: Re: [PATCH] usb: typec: ucsi: ucsi_glink: Prevent suspend during
+ UCSI notification handling
+Message-ID: <202607110241.diOWToQ0-lkp@intel.com>
+References: <20260710-ucsi_glink_wakeup-v1-1-7d97ea628d92@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260710-ucsi_glink_wakeup-v1-1-7d97ea628d92@oss.qualcomm.com>
+
+Hi Jishnu,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on 2cb6eac064c8334418a76999468f68696a8dfe71]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jishnu-Prakash/usb-typec-ucsi-ucsi_glink-Prevent-suspend-during-UCSI-notification-handling/20260710-182232
+base:   2cb6eac064c8334418a76999468f68696a8dfe71
+patch link:    https://lore.kernel.org/r/20260710-ucsi_glink_wakeup-v1-1-7d97ea628d92%40oss.qualcomm.com
+patch subject: [PATCH] usb: typec: ucsi: ucsi_glink: Prevent suspend during UCSI notification handling
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260711/202607110241.diOWToQ0-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project b3e6e6dabdc02153552a64fc74ff5c7532447eed)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607110241.diOWToQ0-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607110241.diOWToQ0-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/typec/ucsi/ucsi_glink.c:352:39: error: no member named 'wakeup' in 'struct dev_pm_info'
+     352 |                 pm_wakeup_ws_event(ucsi->dev->power.wakeup,
+         |                                    ~~~~~~~~~~~~~~~~ ^
+   1 error generated.
 
 
-On Sun, 01 Feb 2026 17:55:03 -0300, Val Packett wrote:
-> The changes introduced to handle single power domain platforms have
-> swapped the info pointer increment from num_pd_vregs to num_pds, which
-> would shift the info pointer past the end of the array for pronto-v3,
-> which does not list power domain regulators in vregs.
-> 
-> This showed up as a difference between GCC- and LLVM-compiled kernels
-> on SDM632 devices, where only with LLVM one would get the
-> "regulator request with no identifier" error, because the out-of-bounds
-> memory ended up being zeroed. Fix by skipping the increment when there
-> are more power domains than regulators.
-> 
-> [...]
+vim +352 drivers/usb/typec/ucsi/ucsi_glink.c
 
-Applied, thanks!
+   338	
+   339	static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
+   340	{
+   341		struct pmic_glink_ucsi *ucsi = priv;
+   342		const struct pmic_glink_hdr *hdr = data;
+   343	
+   344		switch (le32_to_cpu(hdr->opcode)) {
+   345		case UC_UCSI_READ_BUF_REQ:
+   346			pmic_glink_ucsi_read_ack(ucsi, data, len);
+   347			break;
+   348		case UC_UCSI_WRITE_BUF_REQ:
+   349			pmic_glink_ucsi_write_ack(ucsi, data, len);
+   350			break;
+   351		case UC_UCSI_USBC_NOTIFY_IND:
+ > 352			pm_wakeup_ws_event(ucsi->dev->power.wakeup,
+   353					   UCSI_GLINK_WAKEUP_TIMEOUT_MS, true);
+   354			schedule_work(&ucsi->notify_work);
+   355			break;
+   356		}
+   357	}
+   358	
 
-[1/1] remoteproc: qcom_wcnss: Fix handling the lack of PD regulators in v3
-      commit: 3dbc90b9c22ea96e37bf55f6011e63b5123ec668
-
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
