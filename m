@@ -1,86 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A359486329;
-	Fri, 10 Jul 2026 00:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2083ADBAD
+	for <llvm@lists.linux.dev>; Fri, 10 Jul 2026 07:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783644264; cv=none; b=XPqA3usB1FncJldrhRR8wjhI/XwlkjC631Xl0rXEyVmHIVqVumGe1V6EtJ08lESs1Sp6z55t0Vw0AkzptTnthKg2GJaSWJYC7+A4YVyBwv8pj+5FXSr6a1H1MPl3XY3MIpjLT6FBesOJ/ycIlCYQZFweLGvsSqiFQbeUy/H9QqI=
+	t=1783669132; cv=none; b=dTpLOrcoB6voWJpMKW2eVfY2GSzBVLXUfaajWKP1lb0AqwohKOv3Tg2SQVSAtG9+/xhAhyOVfym90QryJmSiI7M9aVweXE563dXCbGYt1nP6JeyIyyrLuHJmC0yrcSQ3mYriroNQbBx3X+GpcNXgTvft+TZ4syLstyKVAYZkVjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783644264; c=relaxed/simple;
-	bh=w7CUkjmGxatJBiJUw3LuLkhyzsYPio+AJhCNAAkyB5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=UfncBpmdmsiZxPw0EOD6kqevHZC99t2pRy4TYE2icZ1S/XmXcIdBx2M/tVMFvl+fD92I++ht+EmaFxDdYSIgwhZ7mnYbgUVX1t1BHPmF3L2bXUp3uXeSpO9YGukM+tcZae4nU2U4DD6Sg93M0J1+Cm3at0d4uFDqoznBf97dp+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a7nHmuSJ; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783669132; c=relaxed/simple;
+	bh=xSNIeyQeUHQgZHGjLA322pu93/7oHBT7D8w6q7YwSZU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qiLCRR4JVzoimH/aIabUy3Ek4LGshm+o4gYYcBIojC/x4djUaPgCR//Nr9+fknOIbp0Xx8M8wzHvwtafXSDksGelbmQTjWuJqvkdpftJxdBDnI8WN2tVuVT54xabsLWKgS+fLdAFLnnPoD3xsWahbQyFXkSkbGYNaV8KiAU5WXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KCdmfVNq; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a7nHmuSJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783644263; x=1815180263;
-  h=date:from:to:cc:subject:message-id;
-  bh=w7CUkjmGxatJBiJUw3LuLkhyzsYPio+AJhCNAAkyB5Y=;
-  b=a7nHmuSJ8IyCe28NHmSCKy75vusBxG6Hqsce1/4RvrbAMvnJDfP2T2Ds
-   0tlvYGEVG3HhRBkJJ3BMJhNuMApY15erXqVF2pwR+kBOVWFEjuAHAfp0d
-   jEXn2hUIrli1zgsQyxOPpH8xyzqwWIsyGcHqLaseRO6X9x3AqO54Ujeip
-   aoju3ba+vQ9oJLdTik3wTCxQhll5hRxNDhJ4ZdJJLWmfXG0wg/gXhVJ+F
-   zs4Hhsyc6UMduxQWQw8Ze6iQidTECaRLL60sDYr8FJCKWO8p/3qf2a01N
-   q99/kk+uPVXMZKT/l8vPLwAT9hJghXC1Tunn/IinG47RAr3sfk6c70UeE
-   w==;
-X-CSE-ConnectionGUID: /rL9jZ8eTfeU/BuN+qDd9w==
-X-CSE-MsgGUID: 57tb5hBNQo6DyNpaWaiNnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="101768632"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="101768632"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2026 17:44:22 -0700
-X-CSE-ConnectionGUID: CjPQEVvySCec9h4nTh+Ajg==
-X-CSE-MsgGUID: pRaXLPz2Q8as0JTqnQaEkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="284833663"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa002.jf.intel.com with ESMTP; 09 Jul 2026 17:44:20 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1whzLl-00000000IJf-0WMZ;
-	Fri, 10 Jul 2026 00:44:17 +0000
-Date: Fri, 10 Jul 2026 08:43:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Breno Leitao <leitao@debian.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-efi@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
-Subject: [efi:next 2/7] vmlinux.o: warning: objtool:
- efi_crash_gracefully_on_page_fault+0xc3: efi_rts_park_worker() missing
- __noreturn in .c/.h or NORETURN() in noreturns.h
-Message-ID: <202607100848.iWPxdkhX-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KCdmfVNq"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783669127;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=xSNIeyQeUHQgZHGjLA322pu93/7oHBT7D8w6q7YwSZU=;
+	b=KCdmfVNqyUT+aXz3av1Mlph3kPfUMFvt9IgSgl9i9QJvbLNnPzbn5BL/edpQDexUYk5Hsd
+	foiRM5fDCMMMM50djFYVXvJXBq4Jqc6CAfYRiBVdkmkv81vVneipr84BsiWqiSPCTiqm1t
+	32MvIDJjIvV1wzIg9suxmuSZ+bGKH1U=
+From: George Guo <dongtai.guo@linux.dev>
+To: joe.lawrence@redhat.com
+Cc: chenhuacai@kernel.org,
+	jpoimboe@kernel.org,
+	peterz@infradead.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	kernel@xen0n.name,
+	rostedt@goodmis.org,
+	ardb@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn,
+	jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn,
+	guodongtai@kylinos.cn,
+	xry111@xry111.site,
+	wangyuli@aosc.io,
+	loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 04/12] livepatch/klp-build: build LoongArch with -fPIC to keep GOT-indirect symbol references
+Date: Fri, 10 Jul 2026 15:38:27 +0800
+Message-ID: <20260710073827.27064-1-dongtai.guo@linux.dev>
+In-Reply-To: <ak5nH60j4Rdn50n-@redhat.com>
+References: <ak5nH60j4Rdn50n-@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Breno,
+Hi Joe,
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+> This might be my personal preference, but I think it would be quicker to
+> review patches: [...] if they were squashed into one patch.
+[...]
+> the combined commit remains complete thought, i.e. for LoongArch
+> KLP builds, replace the arch's KBUILD_CFLAGS_KERNEL (dropping -fPIE and
+> -mdirect-extern-access) and add -fPIC via KCFLAGS instead.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/efi/efi.git next
-head:   cf790fdb851867532b9a0f88588dcce648dbffe9
-commit: 3e5ba97c181e32ca9b810414272b57bb7600998e [2/7] efi/runtime-wrappers: factor out efi_rts_park_worker()
-config: x86_64-buildonly-randconfig-006-20260710 (https://download.01.org/0day-ci/archive/20260710/202607100848.iWPxdkhX-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260710/202607100848.iWPxdkhX-lkp@intel.com/reproduce)
+Makes sense. I'll squash patches 03 and 04 into a single patch and drop
+the forward/backward references from the commit message.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607100848.iWPxdkhX-lkp@intel.com/
+> I'd also pull out the configuration checks into validate_config() to be
+> consistent:
+[...]
+> and then build_kernel() only needs to adjust the cmd / flags accordingly.
 
-All warnings (new ones prefixed by >>):
+Agreed. I'll move the CONFIG_RELOCATABLE / CONFIG_AS_HAS_EXPLICIT_RELOCS
+checks into validate_config() and leave build_kernel() to just set the
+flags.
 
->> vmlinux.o: warning: objtool: efi_crash_gracefully_on_page_fault+0xc3: efi_rts_park_worker() missing __noreturn in .c/.h or NORETURN() in noreturns.h
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+George
