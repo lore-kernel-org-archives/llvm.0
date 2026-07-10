@@ -1,162 +1,100 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F8533CF021
-	for <llvm@lists.linux.dev>; Fri, 10 Jul 2026 22:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DDD830C157;
+	Fri, 10 Jul 2026 22:37:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783722675; cv=none; b=mkWDul08v6khlZaBbT1XQsJQjnEainhTP9JIp/T9aTN/K/MdzIRPV8ExYpS+J5N8suJgcq4hYK69ZJCm5vj9QTwnlrMcRX5B5Njpf5hbQZEttXy8i6EStRwGxFviFKA1v7ZNkgwX+DtDoWhvSvavk65E0PfYsMNfPlWZebP9Mi0=
+	t=1783723066; cv=none; b=FREhJeId9L+U5JNz3tW0t3UHhhtSOPbFdB/xuqn26OQu8nGfr+Uy8U6fhR6DInfNJveo82knyZKV4cLY/KXuHzwyevqsqr2QYu0ndtIaxnIsGUM39aH1ypScR0yd+vTtnJuFeghrcPPqnG2gZy4aSOLHJhbBj7y1kOWRmYCn23c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783722675; c=relaxed/simple;
-	bh=KNU956WbXUTuSnCzMU/9cD+JnhsZzaznC141dmSOsok=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LAu8QlYLDbvaf00hC7LnPtoQSawgGFGgL2CwEghzlgcpHuumfZdiSAdvFQLrpN1y1d8EQ7Myxmf5+JAUTsswfNOhnMeXOPR7+a9ZF7TcAQKSAgj+F2TyKU15b/8NaOWiPr/KYn96XvIsxeqqb/CYIEn+rugTGFe4RoLB5joCxCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v/h/SoCI; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783723066; c=relaxed/simple;
+	bh=KS6hI+mDf1SsatlLUsAm1p1t6WWvAS0GWb80PZS9N9k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G78DbRqJlXGqCETfWblpZWB0u/hGZzgABBYuwVqggCn1zUa+dga/cGq61IfhlAFFMZoszkZ/eYnmR4ngnngfNbhNOsQugOZM7jtClVusIv49zUt41PCDgrCBp2WJkVlsg8Ljvh1RMknbrKXBKCIjYtTeaZ2/PdZfH5dl/Np76IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gTXOJZXU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v/h/SoCI"
-Message-ID: <dc6cc14c-3ec8-48ee-8152-f24643679dfc@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783722670;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VoPzMG2SN6nIvki88FrSOBZdQ9DO7hqanhNeX70pujM=;
-	b=v/h/SoCIzt0ttRzOTf0222LerJN6TpFZXUrDgl+0eaDO49Meyn7V51LJkPhmIkJ1FcCWyS
-	P4WLRknp2ItKTuDgEAhKJHBOI4vK/UuJc+tOA8uAxFXXfWzJ+eLuzgLM6JITt1PyDwU8xP
-	uauauAP2P4eUuFfJEIcSonEnsZw7+rk=
-Date: Fri, 10 Jul 2026 15:30:58 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gTXOJZXU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 416F61F000E9;
+	Fri, 10 Jul 2026 22:37:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783723064;
+	bh=TsLZqe25Bg2E8d7AhewrbCTsf0pH4EyObAN5qi7E++w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gTXOJZXUnLGGVUjnQYmIkMR9gThXna/fpTvYP72WoDQTrVsjo1jali1uZ2SJu5Y66
+	 PwVLjQBpcSYXNzn0sRlynxfCnIhOmjD9KuzUFZZWdvLqcY4n2pC0qCurV8g+bFo/B6
+	 xmGjG2iDagp47PUNDkeN8fwZmUu0Xgd4x1rLk5xxrlDgWrMDDC/qHnIp+e5JPX3Ox9
+	 kjxyX/ohopezNHnc3AMM+mRW9Hiqns3RjzjAA422103rwTjvAI1NaUn4E6hg+eeVN4
+	 Xa4iHqpoWCyTIyI6RH1cT6XbQ8MxIxkUU1AMfH+0CwkDJoG8JjpxL0R5yyePlDm7V/
+	 6b9I2Xyv1IpmQ==
+Date: Fri, 10 Jul 2026 18:37:40 -0400
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linuxppc-dev@lists.ozlabs.org,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>
+Subject: Re: [powerpc:fixes-test 10/12] kernel/sched/core.c:7449:1: error:
+ type specifier missing, defaults to 'int'; ISO C99 and later do not support
+ implicit int
+Message-ID: <20260710223740.GA2667378@ax162>
+References: <202607110422.frjmJOf8-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 5/6] tools/build: selftests: Allow versioning LLVM lld
-To: James Clark <james.clark@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org
-References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org>
- <20260518-james-perf-llvm-version-v2-5-f12cc4f031d8@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260518-james-perf-llvm-version-v2-5-f12cc4f031d8@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202607110422.frjmJOf8-lkp@intel.com>
 
-On 5/18/26 2:03 AM, James Clark wrote:
-> Building with LLVM=... could result in a different version of lld being
-> used than the main toolchain for liburandom_read.so because it's
-> hardcoded to "lld" in this makefile.
+On Sat, Jul 11, 2026 at 04:54:17AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git fixes-test
+> head:   afc2830892a128a13a65f677271a0a48aeb61b5e
+> commit: 4747e17fe063720a30b1c0075bae3e8f8acd26f4 [10/12] powerpc/32: Use HAVE_PREEMPT_DYNAMIC_CALL instead of HAVE_PREEMPT_DYNAMIC_KEY
+> config: powerpc-randconfig-002-20260711 (https://download.01.org/0day-ci/archive/20260711/202607110422.frjmJOf8-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607110422.frjmJOf8-lkp@intel.com/reproduce)
 > 
-> Make it consistent with the rest of the LLVM toolchain by adding an LLD
-> variable to Makefile.include. Keep the fallback for other architectures
-> in tools/testing/selftests/bpf/Makefile as it seems like it's something
-> specific to this make rule and shouldn't be global.
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202607110422.frjmJOf8-lkp@intel.com/
 > 
-> Clang only accepts either a full path to "/x/x/ld.lld" or "lld-15" style
-> inputs to "-fuse-ld=", so the only way to make it work with both
-> prefixed and postfixed paths is to always take the full path. Also I
-> don't think the original use of "lld" over "ld.lld" was significant as
-> this is always a linux build, so that can be changed to make it work in
-> both cases.
+> All errors (new ones prefixed by >>):
 > 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/scripts/Makefile.include       | 2 ++
->  tools/testing/selftests/bpf/Makefile | 8 ++++----
->  2 files changed, 6 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index 380ad84ac51e..5c2d505cba62 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -67,6 +67,7 @@ ifneq ($(LLVM),)
->    $(call allow-override,HOSTAR,$(LLVM_PREFIX)llvm-ar$(LLVM_SUFFIX))
->    $(call allow-override,LD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,HOSTLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
-> +  $(call allow-override,LLD,$(LLVM_PREFIX)ld.lld$(LLVM_SUFFIX))
->    $(call allow-override,CXX,$(LLVM_PREFIX)clang++$(LLVM_SUFFIX))
->    $(call allow-override,STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_STRIP,$(LLVM_PREFIX)llvm-strip$(LLVM_SUFFIX))
-> @@ -91,6 +92,7 @@ else
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
->    $(call allow-override,LLC,llc)
-> +  $(call allow-override,LLD,ld.lld)
->    $(call allow-override,LLVM_CONFIG,llvm-config)
->    $(call allow-override,LLVM_OBJCOPY,llvm-objcopy)
->    $(call allow-override,LLVM_STRIP,llvm-strip)
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 6ef6872adbc3..836e783f0170 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -245,9 +245,9 @@ $(OUTPUT)/%:%.c
->  
->  # LLVM's ld.lld doesn't support all the architectures, so use it only on x86
->  ifeq ($(SRCARCH),$(filter $(SRCARCH),x86 riscv))
-> -LLD := lld
-> +USE_LD := $(shell command -v $(LLD))
->  else
-> -LLD := $(shell command -v $(LD))
-> +USE_LD := $(shell command -v $(LD))
+> >> kernel/sched/core.c:7449:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+>     7449 | EXPORT_STATIC_CALL_TRAMP(preempt_schedule);
+>          | ^
+>    include/linux/static_call.h:223:2: note: expanded from macro 'EXPORT_STATIC_CALL_TRAMP'
+>      223 |         ARCH_ADD_TRAMP_KEY(name)
+>          |         ^
+> >> kernel/sched/core.c:7449:26: error: a parameter list without types is only allowed in a function definition
+>     7449 | EXPORT_STATIC_CALL_TRAMP(preempt_schedule);
+>          |                          ^
 
-Can confirm v2 fixes the v1 breakage I reported.
+This happens with GCC as well.
 
-One nit on the empty USE_LD case the bot raised. It isn't actually a
-build failure: if command -v finds nothing, USE_LD is empty and clang
-gets a bare "-fuse-ld=".
+  In file included from include/linux/tracepoint.h:22,
+                   from include/trace/syscall.h:5,
+                   from include/linux/syscalls.h:95,
+                   from include/linux/syscalls_api.h:1,
+                   from kernel/sched/core.c:16:
+  include/linux/static_call.h:223:9: warning: data definition has no type or storage class
+    223 |         ARCH_ADD_TRAMP_KEY(name)
+        |         ^~~~~~~~~~~~~~~~~~
+  kernel/sched/core.c:7449:1: note: in expansion of macro 'EXPORT_STATIC_CALL_TRAMP'
+   7449 | EXPORT_STATIC_CALL_TRAMP(preempt_schedule);
+        | ^~~~~~~~~~~~~~~~~~~~~~~~
+  include/linux/static_call.h:223:9: error: type defaults to 'int' in declaration of 'ARCH_ADD_TRAMP_KEY' [-Wimplicit-int]
+  kernel/sched/core.c:7449:1: note: in expansion of macro 'EXPORT_STATIC_CALL_TRAMP'
+   7449 | EXPORT_STATIC_CALL_TRAMP(preempt_schedule);
+        | ^~~~~~~~~~~~~~~~~~~~~~~~
+  kernel/sched/core.c:7449:1: error: parameter names (without types) in function declaration [-Wdeclaration-missing-parameter-type]
+   7449 | EXPORT_STATIC_CALL_TRAMP(preempt_schedule);
+        | ^~~~~~~~~~~~~~~~~~~~~~~~
 
-Since it's unintentional, how about we just add a check to ensure the
-linker was found?
-
-Something like:
-
-    $(Q)test -n "$(USE_LD)" || { \
-        echo "$@: linker '$(LINKER)' not found - add it to PATH, or pass \
-        LLVM=/path/ or LLD=/abs/ld.lld" >&2; exit 1; }
-
-
->  endif
->  
->  # Filter out -static for liburandom_read.so and its dependent targets so that static builds
-> @@ -258,7 +258,7 @@ $(OUTPUT)/liburandom_read.so: urandom_read_lib1.c urandom_read_lib2.c liburandom
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) \
->  		     $(filter %.c,$^) $(filter-out -static,$(LDLIBS)) \
->  		     -Wno-unused-command-line-argument \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,--version-script=liburandom_read.map \
->  		     -fPIC -shared -o $@
->  
-> @@ -268,7 +268,7 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
->  		     $(filter-out -static,$(CFLAGS) $(LDFLAGS)) $(filter %.c,$^) \
->  		     -Wno-unused-command-line-argument \
->  		     -lurandom_read $(filter-out -static,$(LDLIBS)) -L$(OUTPUT) \
-> -		     -fuse-ld=$(LLD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
-> +		     -fuse-ld=$(USE_LD) -Wl,-znoseparate-code -Wl,--build-id=sha1 \
->  		     -Wl,-rpath=. -o $@
->  
->  $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
-> 
-
+-- 
+Cheers,
+Nathan
