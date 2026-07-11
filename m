@@ -1,119 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2C018AE2;
-	Sat, 11 Jul 2026 04:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F522F8E90
+	for <llvm@lists.linux.dev>; Sat, 11 Jul 2026 05:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783743490; cv=none; b=BSVUPhMHMYYIaD+LJWtjqeJLA8oI2m6K6htGYe2Yo8QqOpays9WSWe87vCpfIglF3aeBKV5BI5Hu5+tauSXicMY4w7LhuQKRYD+N5cTSl88InwqHUl+yrDNG5PrnRxmlaE9OEQHBIVNC7Cizh1ru7+t44AgrM1dadP728Tkr31o=
+	t=1783748593; cv=none; b=cAbLoeqwi+igVfV0ag1BscWzT/1MczAWTh3ICQOeDR8ApeqibfXmQtQD9cwWknx0UadBcy+s11/a+kbp5Cpxv4fE4ZXHELNOzC/zNb63t7YEYbH/ulbl7q8gf4ZoNadeYzuF51mIdwNgNVjjYspIS9F56vSzpHEPv9VFA7wtCIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783743490; c=relaxed/simple;
-	bh=FA52AUVYUu1KxUNTvrjbXYcbMfQrisdyqxKyYHJ/9mc=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qh6dXswx/3jM4iHSZGF4fJyPLIkKckb0f37r/f+tW+XUbdwHWoAfiyiQLZ3GziKQWpM9JHSWnmkFCiUPE+3A4IYELzjDvTzl5/mSFb3Tp06Ms2iEZHDDdfTRFoG7av21xZJubBVNz3FW9RK5kLDgvRLI9ifO6UpFZ8b8Qfmr5SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UaDQ38cT; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783748593; c=relaxed/simple;
+	bh=l95iJnprqa2e6ZbhH5nmmCcGhHNSSt80hjNhTqjt890=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=EMN9CL1MXmkmbh2PE8WH/cLyR+keL5qx6Zh76XaTe42OrlOU0XNwP1TZZVIoWhvVLnSDo1+NpNV3IauvoeV+AOKBcru17Lzwrr2Jxr065kcDaMJlMzghr0PbvRWk+xRB0FzMFyUqfGql+v92B0xYGR0mxqv60cXmrDAzEEEztYw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TanUgkgf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UaDQ38cT"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783743488; x=1815279488;
-  h=date:from:to:cc:subject:message-id;
-  bh=FA52AUVYUu1KxUNTvrjbXYcbMfQrisdyqxKyYHJ/9mc=;
-  b=UaDQ38cTLJgSGf9Fj3JCObF+RdCOO3zptFsD8w+yvqL7ie8BO6iMYAd6
-   I73FBLwGiFzL6cloQ7PwXUOoGk8DNqAfKhb3fN8bK7URYCTDo1Fboxeg2
-   UQj3qiqqxNtR7a/vG5EnWuxe30ScG/+J6+jxDEHNnTcNZa8ZLOS+2tSh3
-   l+LgSJIPtVvOkuCIrNBvxGRe1LLCGATTwkBI+SIApegDdI3JJPiN9XlkX
-   OSZ3uA4XvxTrf7MC67LG3hFvtsLVf0sfxwpudJqylJxZqFzngY0J/L1Uz
-   Plfj7Dsw2lnOWgskDmhFYRFhV+wfG1RkGpTEKjbx26pQL63xApLyrwDzh
-   w==;
-X-CSE-ConnectionGUID: a4vlYiO4Sj2GRdrXEqb3Hw==
-X-CSE-MsgGUID: pKdc/DQWQlKnmPfw9KRhqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84488378"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84488378"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jul 2026 21:18:07 -0700
-X-CSE-ConnectionGUID: At6aBBfOTr+tBEgO2+29cg==
-X-CSE-MsgGUID: 8E5SAngsRi6Iy/uv9zd7Hw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="258927963"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa004.jf.intel.com with ESMTP; 10 Jul 2026 21:18:06 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wiPAA-00000000Jih-4976;
-	Sat, 11 Jul 2026 04:18:02 +0000
-Date: Sat, 11 Jul 2026 12:17:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: sofus <sofus.c@icloud.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/240-isp 55/56]
- drivers/media/platform/apple/avd/avd-hw.c:96:58: warning: shift count >=
- width of type
-Message-ID: <202607111256.m7DRIagP-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TanUgkgf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783748590;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=iHBsj/jVYWVgz2eXNTErmMXAqrHwyZKpFOC3NyUDkcU=;
+	b=TanUgkgfcnso7MNUXb0M+2BmNaKGPe/9cZ7NrCQ6nnNtwBybn6ohrqVayYr03PyxEwmBzh
+	jh0hKKJ3EDmcxOukRa7blA5XP4NP9+BBWokK7U19yKKTFYT8DbrImuPvqWIMhEMlB5hP+7
+	Ngt6krLNjEmm13xxIXlb41nQI48ddp0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-683-NC8B34JbNy6aLSxf1c6pCw-1; Sat,
+ 11 Jul 2026 01:43:07 -0400
+X-MC-Unique: NC8B34JbNy6aLSxf1c6pCw-1
+X-Mimecast-MFC-AGG-ID: NC8B34JbNy6aLSxf1c6pCw_1783748586
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 999261805A10
+	for <llvm@lists.linux.dev>; Sat, 11 Jul 2026 05:43:06 +0000 (UTC)
+Received: from [172.20.146.15] (unknown [10.30.45.65])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D6E491800595;
+	Sat, 11 Jul 2026 05:43:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc2,
+ upstream-mainline, d96fcfe1)
+Date: Sat, 11 Jul 2026 05:43:05 -0000
+To: fs-test@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <36800.126071101430700105@us-mta-683.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 0jGzvU61PYybg2mKO_oRWd1H_ebr8CBj6qUkBH7LusA_1783748586
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/AsahiLinux/linux bits/240-isp
-head:   edd1529cbf30f69240acea99fa8225683c555200
-commit: 9d77b27426e338bbf4f4df0676c1e064e046527e [55/56] media: apple: add avd driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260711/202607111256.m7DRIagP-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project b3e6e6dabdc02153552a64fc74ff5c7532447eed)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607111256.m7DRIagP-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607111256.m7DRIagP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/apple/avd/avd-hw.c:96:58: warning: shift count >= width of type [-Wshift-count-overflow]
-      96 |                 w32(AVD_V4_VP_INSN_FIFO_IOVA_HI + (fifo_idx * 4), addr >> 32);
-         |                                                                        ^  ~~
-   drivers/media/platform/apple/avd/avd-hw.c:110:57: warning: shift count >= width of type [-Wshift-count-overflow]
-     110 |         w32(AVD_V5_VP_INSN_FIFO_IOVA_HI + (fifo_idx * 4), addr >> 32);
-         |                                                                ^  ~~
-   2 warnings generated.
---
-   In file included from drivers/media/platform/apple/avd/avd-h264.c:24:
->> drivers/media/platform/apple/avd/avd-inst.h:41:29: warning: shift count >= width of type [-Wshift-count-overflow]
-      41 |                 push(avd, ctx, (u32)(addr >> 32));
-         |                                           ^  ~~
->> drivers/media/platform/apple/avd/avd-h264.c:383:20: warning: shift count >= width of type [-Wshift-count-overflow]
-     383 |                         | (u32)(slc_a84 >> 32), "slc_a7c_cmd_set_coded_slice");
-         |                                         ^  ~~
-   2 warnings generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +96 drivers/media/platform/apple/avd/avd-hw.c
+Kernel information:
+    Commit message: Merge tag 'arm64-fixes' of git://git.kernel.org/pub/scm=
+/linux/kernel/git/arm64/linux
 
-    89	
-    90	void t8112_configure_stream(struct avd_dev *avd, dma_addr_t addr, u8 fifo_idx,
-    91				  u32 vp_slot)
-    92	{
-    93		if (avd->variant->quirks & AVD_QUIRK_LSR) {
-    94			w32(AVD_V4_VP_INSN_FIFO_IOVA_LO + (fifo_idx * 4), addr >> 8);
-    95		} else {
-  > 96			w32(AVD_V4_VP_INSN_FIFO_IOVA_HI + (fifo_idx * 4), addr >> 32);
-    97			w32(AVD_V4_VP_INSN_FIFO_IOVA_LO + (fifo_idx * 4), addr & 0xffffffff);
-    98		}
-    99		w32(AVD_V4_VP_INSN_FIFO_MASK + (fifo_idx * 4), 0);
-   100		w32(AVD_V4_VP_INSN_FIFO_CACH + (fifo_idx * 4), 0);
-   101		w32(AVD_V4_VP_INSN_FIFO_XFER + (fifo_idx * 4), 0);
-   102	
-   103		m32(AVD_V4_VP_CTRL_CM3_IRQ_MASK + (vp_slot * 4), AVD_VP_CM3_MASK);
-   104		m32(AVD_V4_PP_CTRL_CM3_IRQ_MASK, AVD_PP_CM3_MASK);
-   105	}
-   106	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2668268688
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2668268688_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2668268688_x86_64_kernel_kcidb_tool_21621090_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
