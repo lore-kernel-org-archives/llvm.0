@@ -1,140 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1572066DE;
-	Sat, 11 Jul 2026 12:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783774517; cv=none; b=u8dEh7+qy+ZTyGLcX154RWNioQj5LoPVDoo5FfFqvxl3L0RYgv2+CyHnV/+VXVjVLriv2ThdvVVMgF4DSyqVzNKqPyn1I+GwHSmAROOz9NquDlsV0ZtMf/gHJ0KXD4En4BJbz4jd4tVGEgNAO+Q5ct7Sop1S3V+rUQxKyoNkxkU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783774517; c=relaxed/simple;
-	bh=9yCfQocRiz4+f6dr1Madb/hlPXfZ2DDAlrT4hO0bP64=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NiYW+CNAs+sW7v1HvDPkSNIpnPXWODCtGxlSBk9ZwEpimW5a6KfL1E+SaE+1ULjKeeSx15a+ni0l9m5merujQTnd+asWAVlzRvXHDPkzPOqV9VBRwqzSTSsxPts7EZh1a6jfebapWwPVRPsB7NepMCK/A1A0UzKj0CCtqcZPYI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KqCF4Rp3; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6AD2066DE
+	for <llvm@lists.linux.dev>; Sat, 11 Jul 2026 12:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1783774616; cv=pass; b=HmC2OtMOZIxWQoYBhH8mvr9MV5M3ajFaYIkFQwxur91IWGu6bslTck29LMTcZMD8ZHvGzRMrjy+JgBu8FbVSSMbFUFFrsQijKK2MvmzZU2L/EdcGnJLchf4FM4APXc5SFS3Kx4mJhPxMVMHUCaPaA4DQQZ21NpV/hsA3qk7rllA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1783774616; c=relaxed/simple;
+	bh=cr34BVttG6VMuUWlKjc0l0poutE/RxT/K6tws13Z0Rg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eGe5HTeN329T73LrAaUTSGIflCnf03wvVQs5CZv9MgHl+TYuXhvtjd2gECX3Z2STypnI47xV3QCSfzzNY9pAt9NgtMfJKYp+wTa0Z46qQnpYpbVdML07tskeEIwNCnp6Slyg42n0W6kuwTio0bRS/P5dBiVmsW3Ytv1zgBPYn+8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Oj1est/G; arc=pass smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KqCF4Rp3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783774516; x=1815310516;
-  h=date:from:to:cc:subject:message-id;
-  bh=9yCfQocRiz4+f6dr1Madb/hlPXfZ2DDAlrT4hO0bP64=;
-  b=KqCF4Rp3Lafmi7eAPMETHSRDzanRwP81d4m80dsxy82ZwNVC5ux/IRTk
-   yyrB85Sc9LVOybSoiFSI3zvnUJfP7wgXMgsiG1/rluJvRpvStwmf1VQPP
-   2lgpIs+4p0R0yFTdfC2oAYESH6FZh09sUXhhBR25QaNAIJIt4LDJcLHaR
-   msvuYRqsINaDu1zctr2S2dClkVRcqth51FJD5M1zPZzgX5IX21/ZgBB4S
-   FzS6U1WOoNiBvI63goy+4e0yDjEgiEBEfv0g6AnATygxcgBbn6PVpNDhT
-   l+peOcmYbZh3lSvYQAzyh/MeOK6RF4/1Y8lkN3gjEyt8jIVtaibSGwGvM
-   A==;
-X-CSE-ConnectionGUID: tUNlFWhYR8K9dIzYjL6iTQ==
-X-CSE-MsgGUID: yT41VbdTSjiln4zN/a4mTg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84505445"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84505445"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2026 05:55:15 -0700
-X-CSE-ConnectionGUID: YOR+xpKeRHmLXH86iDmZCQ==
-X-CSE-MsgGUID: BsdfnQYSTJGDF/CMuKXZZQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="254623791"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 11 Jul 2026 05:55:13 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wiXEY-00000000K3r-1kCP;
-	Sat, 11 Jul 2026 12:55:08 +0000
-Date: Sat, 11 Jul 2026 20:54:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Mark Brown <broonie@kernel.org>
-Subject: [linux-next:master 5603/5655] arch/x86/kvm/msrs.c:654:7:
- error: call to undeclared function 'static_cpu_has'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202607112000.6Z3R9tRe-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Oj1est/G"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2c988e16bb3so6189845ad.0
+        for <llvm@lists.linux.dev>; Sat, 11 Jul 2026 05:56:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1783774614; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZA+skQ0Zhs3qmqQr/z/9Td+fazJsNJp5QXvut4Ca57+BuAu5ipR4ZpH7eE7mKhgSIU
+         VsBGD3RGdbukjt5YDw+8SFUlssZRmh1+YjjiYrxVJAepkjGB3lt0yQEBlKvzgDZwOkq/
+         vWINGHOGwx7YPIcC4N06uvCVOuyfoNq8+Doez6kKG8IAf5MNHeEzSDIkVDtNYESJZcqP
+         ZEcdL0vun7TDFCePliR70/IJ5hA2zeCbsbP9d+ZTYerQAqg8rKDGRtjPtLCMOgKlchTJ
+         HbucJGI7OOD6mq7/321a7z/m0gH+YoRIV5xdKIl6Va0UK7PtL290FJYmQeaFHyFllGUp
+         8gSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=j6tjRunywnAeib7tZl4T028gbRZoamS1yIZMH8Mrn+c=;
+        fh=hgRFtUWMalRePKFFuD+SzeFmPiamwZiyNJLcunPgLoo=;
+        b=MX/MDbFJRLjAg8+MPzk777ytbe5MeyO8ySk7F9yRwGBXMKFesaJMEr4vejEPAFgXUv
+         D2nXFWENINj9D5+UCFTEwI3SA+ikLOAuY4yLQh+eWoay02msKiiinSngVu6lvwueojDL
+         2hLxMv4fC7cOs3gzsN1CsH2tBUYVCPVJ6vmjXJNBo7RLOqoNyJjr6ZIPg+epQ5spzieH
+         neKONVfwYAvGY4AYsTv0cUxNNJLojjulem0AShehAN1SyWl4J5XfhDGAVU2+kncrUpMY
+         p6i/WAwHfDHksc33mhOrdcuuMXX3cK2bxuBaXOA8eW8E92kfCCeuBv0spTQCSlFA8hLC
+         oA3A==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783774614; x=1784379414; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=j6tjRunywnAeib7tZl4T028gbRZoamS1yIZMH8Mrn+c=;
+        b=Oj1est/GigBqI4xTMLEZt69xZFcjgzn/XJpHZt/Ur1UZMPHEiAlWrpVbfuSiWKKdeP
+         /RXxXHJjXTUDGUI/6s6pB78XREUZwiFZkCXNMPNGQ+enDKYToR6f4t+7G9XvnrDtJvvI
+         UC8qrSXnLp3TdueOdHMP/ZOalKUf7ba4cs0raXyzIrJ18ILjAxl8DT2ax+uqk3LOPnBU
+         /V216JHd8f/12kfmCH1pN+M4AZ5GUTf9/oZgMYRY/r8rBjHJaXVDbtG9YktisQ0/owji
+         rPROixWnv0HedHEpnmpHZ+g/TELKAJq3uNelEnGKMQeRssJp89DZVK5iZGE7G57azfOe
+         Bs5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783774614; x=1784379414;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=j6tjRunywnAeib7tZl4T028gbRZoamS1yIZMH8Mrn+c=;
+        b=Issbmh16wFaRk14EuGxT9F1kbcvg251EzPwmYfdXlDxMkuUIgZqkKx19XL4bB5hAKH
+         Xha+mBknwgASwdHEcCfRg6+ji8W+5WDRC2QAwwc28wdJKN+86DgmrTHRXfQjD8Tn0os/
+         SNgb/NKyVKlpVsKtPpzVKflacyUl0rK/grG0qEC2s+jRXXmBhsSC8/mE/wLjpKnTxI3k
+         byy1jDF5k9LOc1bvokw0F3piFU7Yy/KWxD4sjtVKjcOAAQKXFXliKv/cTtQNrnHsLgoy
+         6CkqH0RwE27ij9oD/NgNNwHBMgNFcvVatEKtH4yJOc9RMMo+SEEC3Qg+AgbG5VLOHK+k
+         mttQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqFnKwqYAy/FsvtZRorzvM/z7jvNDPq+d5tjkQLFPzraDCy9iL0OfRqL7Gf5/GftrVwcarH@lists.linux.dev
+X-Gm-Message-State: AOJu0YwHaNK7FquJ7JBA5aeVtFfPC1v+1uOM0P/+bfLo5Fuvd9kFwlIT
+	ZhcEVnhsYBbJHFJLYLMFFd/fDqIiybRjv/C8NokmbxnNtbymbmv8fGFoga/mnzAdYsnmHnM4CPx
+	/PTdF6KwIJOEM/KQ/HlEKmZyIik/Zfns=
+X-Gm-Gg: AfdE7cmg1z8nmhDEPURyNNtMNOqzaslplAuVi+v/mklR/je2KdXUi9nf0pa8Y3CUzh0
+	gx/IzaOlEc/UF/bPMwjjhfUOpBX5UriLw4wscXZi/Ye+Dv0QlZsPbLm8gsLlGdO18dps0ZT6TFq
+	36+ewQsRJ4Y3zyB2mLhash+o1wM1ZID098DzpTiFCExZy2KzQMZZl5UNBbgT/NFd5YoibetNBF7
+	0e73Sr/7UwDfGv215TUi4gWcOn1hvWquCZimSiTGdg58SEj5+GrLPBcNj5Kg+9cXEy7zwGHsS6Q
+	KtL2eD6OKY42xkci8oVCFm2RauKZsFdWgk/yRJTKxJBuKwfYmVJcb6GrdkbUuMmxLkbIUD8Fd/v
+	AOmvivpW/tdQp
+X-Received: by 2002:a17:90a:dfc4:b0:37f:ea8e:ab79 with SMTP id
+ 98e67ed59e1d1-38dc78226dbmr2320021a91.2.1783774614151; Sat, 11 Jul 2026
+ 05:56:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <20260708082454.1254320-1-mkchauras@gmail.com> <20260708082454.1254320-3-mkchauras@gmail.com>
+In-Reply-To: <20260708082454.1254320-3-mkchauras@gmail.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Sat, 11 Jul 2026 14:56:40 +0200
+X-Gm-Features: AUfX_myT4Cl9iDVoRO-w6Sfw5_PJOQ6oQg6JiFlTfoXu1j8VbTkYVMyuZ_7giAk
+Message-ID: <CANiq72nw6SM21M3y=xXd81kT+bPbctnpPVi4QGL4K2XUS6bUzg@mail.gmail.com>
+Subject: Re: [PATCH V17 2/7] dma-resv: Fix undefined symbol when
+ CONFIG_DMA_SHARED_BUFFER is disabled
+To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>, Andreas Hindborg <a.hindborg@kernel.org>
+Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org, 
+	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org, 
+	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, tmgross@umich.edu, 
+	dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org, 
+	acourbot@nvidia.com, work@onurozkan.dev, nathan@kernel.org, 
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
+	fujita.tomonori@gmail.com, joelagnelf@nvidia.com, gregkh@linuxfoundation.org, 
+	prafulrai522@gmail.com, nsc@kernel.org, japo@linux.ibm.com, 
+	lina+kernel@asahilina.net, j@jannau.net, airlied@gmail.com, 
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   bee763d5f341b99cf472afeb508d4988f62a6ca1
-commit: d9b292f64e4bc5ab3e14dc0b89a7b0cc47c11e00 [5603/5655] Merge branch 'next' of git://git.kernel.org/pub/scm/virt/kvm/kvm.git
-config: x86_64-randconfig-071-20260710 (https://download.01.org/0day-ci/archive/20260711/202607112000.6Z3R9tRe-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607112000.6Z3R9tRe-lkp@intel.com/reproduce)
+On Wed, Jul 8, 2026 at 10:25=E2=80=AFAM Mukesh Kumar Chaurasiya (IBM)
+<mkchauras@gmail.com> wrote:
+>
+> When building with LLVM=3D1 for architectures like powerpc where
+> CONFIG_DMA_SHARED_BUFFER is not enabled, the build fails with:
+>
+>   ld.lld: error: undefined symbol: dma_resv_reset_max_fences
+>   >>> referenced by helpers.c
+>   >>>               rust/helpers/helpers.o:(rust_helper_dma_resv_unlock)
+>
+> The issue occurs because:
+> 1. CONFIG_DEBUG_MUTEXES=3Dy is enabled
+> 2. CONFIG_DMA_SHARED_BUFFER is not enabled
+> 3. dma_resv_reset_max_fences() is declared in the header when
+>    CONFIG_DEBUG_MUTEXES is set
+> 4. But the function is only compiled in drivers/dma-buf/dma-resv.c,
+>    which is only built when CONFIG_DMA_SHARED_BUFFER is enabled
+> 5. Rust helpers call dma_resv_unlock() which calls
+>    dma_resv_reset_max_fences(), causing an undefined symbol
+>
+> Fix this by compiling `dma-resv.c` file only when CONFIG_DMA_SHARED_BUFFE=
+R
+> is enabled.
+>
+> Fixes: 9b836641d3bf ("rust: helpers: Add bindings/wrappers for dma_resv_l=
+ock")
+> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
+> Reviewed-by: Gary Guo <gary@garyguo.net>
+> Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607112000.6Z3R9tRe-lkp@intel.com/
+Andreas sent a similar one to:
 
-Note: the linux-next/master HEAD bee763d5f341b99cf472afeb508d4988f62a6ca1 builds fine.
-      It may have been fixed somewhere.
+  https://lore.kernel.org/rust-for-linux/20260708-dma-shared-buffer-config-=
+v1-1-8c1571000855@kernel.org/
 
-All errors (new ones prefixed by >>):
+This is earlier, but please see his approach & Sashiko's note.
 
->> arch/x86/kvm/msrs.c:654:7: error: call to undeclared function 'static_cpu_has'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     654 |         if (!static_cpu_has(X86_FEATURE_XSAVES) &&
-         |              ^
-   arch/x86/kvm/msrs.c:654:7: note: did you mean '__static_cpu_has'?
-   arch/x86/include/asm/cpufeature.h:99:29: note: '__static_cpu_has' declared here
-      99 | static __always_inline bool __static_cpu_has(u16 bit)
-         |                             ^
-   1 error generated.
+Backlinking here for reference.
 
-
-vim +/static_cpu_has +654 arch/x86/kvm/msrs.c
-
-7a268308015843 Sean Christopherson 2026-06-12  623  
-7a268308015843 Sean Christopherson 2026-06-12  624  static int set_efer(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-7a268308015843 Sean Christopherson 2026-06-12  625  {
-7a268308015843 Sean Christopherson 2026-06-12  626  	u64 old_efer = vcpu->arch.efer;
-7a268308015843 Sean Christopherson 2026-06-12  627  	u64 efer = msr_info->data;
-7a268308015843 Sean Christopherson 2026-06-12  628  	int r;
-7a268308015843 Sean Christopherson 2026-06-12  629  
-7a268308015843 Sean Christopherson 2026-06-12  630  	if (efer & efer_reserved_bits)
-7a268308015843 Sean Christopherson 2026-06-12  631  		return 1;
-7a268308015843 Sean Christopherson 2026-06-12  632  
-7a268308015843 Sean Christopherson 2026-06-12  633  	if (!msr_info->host_initiated) {
-7a268308015843 Sean Christopherson 2026-06-12  634  		if (!__kvm_valid_efer(vcpu, efer))
-7a268308015843 Sean Christopherson 2026-06-12  635  			return 1;
-7a268308015843 Sean Christopherson 2026-06-12  636  
-7a268308015843 Sean Christopherson 2026-06-12  637  		if (is_paging(vcpu) &&
-7a268308015843 Sean Christopherson 2026-06-12  638  		    (vcpu->arch.efer & EFER_LME) != (efer & EFER_LME))
-7a268308015843 Sean Christopherson 2026-06-12  639  			return 1;
-7a268308015843 Sean Christopherson 2026-06-12  640  	}
-7a268308015843 Sean Christopherson 2026-06-12  641  
-7a268308015843 Sean Christopherson 2026-06-12  642  	efer &= ~EFER_LMA;
-7a268308015843 Sean Christopherson 2026-06-12  643  	efer |= vcpu->arch.efer & EFER_LMA;
-7a268308015843 Sean Christopherson 2026-06-12  644  
-7a268308015843 Sean Christopherson 2026-06-12  645  	r = kvm_x86_call(set_efer)(vcpu, efer);
-7a268308015843 Sean Christopherson 2026-06-12  646  	if (r) {
-7a268308015843 Sean Christopherson 2026-06-12  647  		WARN_ON(r > 0);
-7a268308015843 Sean Christopherson 2026-06-12  648  		return r;
-7a268308015843 Sean Christopherson 2026-06-12  649  	}
-7a268308015843 Sean Christopherson 2026-06-12  650  
-7a268308015843 Sean Christopherson 2026-06-12  651  	if ((efer ^ old_efer) & KVM_MMU_EFER_ROLE_BITS)
-7a268308015843 Sean Christopherson 2026-06-12  652  		kvm_mmu_reset_context(vcpu);
-7a268308015843 Sean Christopherson 2026-06-12  653  
-7a268308015843 Sean Christopherson 2026-06-12 @654  	if (!static_cpu_has(X86_FEATURE_XSAVES) &&
-7a268308015843 Sean Christopherson 2026-06-12  655  	    (efer & EFER_SVME))
-7a268308015843 Sean Christopherson 2026-06-12  656  		kvm_hv_xsaves_xsavec_maybe_warn(vcpu);
-7a268308015843 Sean Christopherson 2026-06-12  657  
-7a268308015843 Sean Christopherson 2026-06-12  658  	return 0;
-7a268308015843 Sean Christopherson 2026-06-12  659  }
-7a268308015843 Sean Christopherson 2026-06-12  660  
-
-:::::: The code at line 654 was first introduced by commit
-:::::: 7a268308015843c7e8b15dda588b2e9adf45223f KVM: x86: Move the bulk of MSR specific code from x86.c to msrs.{c,h}
-
-:::::: TO: Sean Christopherson <seanjc@google.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
