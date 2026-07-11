@@ -1,165 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0B938D6A2;
-	Sat, 11 Jul 2026 13:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892612C21F7
+	for <llvm@lists.linux.dev>; Sat, 11 Jul 2026 15:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783776438; cv=none; b=VvDHwc1eH8NsirUuVMR45Gs45wLhhuAfZXOUspvxI2te5RcIDjABoJBvkMGhOA+M1XL6S/xLpvWVwIkDESOpxEp3Aog8yf5/GcPWuVIl7roXT1Hob1+YY7pBUOMPqNkn1xBO47T8wzpvgwF7T94N0e9ZCU2D0aWBkcHDuw8pb4w=
+	t=1783784533; cv=none; b=UC5DwDreuXdDWDXQv8mtf/G2ou8RLEnJFEQyTo4mdl6HIcIbbwvYN7iU/gnE++NMNmWeDJ74I59zhn/aJdSABSnbaiZni4124Kp3NPeUuKvh8VzCj06909URwoVgKvJb58RlV23QePxFMqThXXaXKIJ5Snbs8GZZOFhTlQwVGNA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783776438; c=relaxed/simple;
-	bh=QMRwmmcabKQsDt2EYSGPCKTrdu5/Efzn6kpB0nGGT5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AJLNt5e2bWSWyBEg8AtNKnSRHE9JX/o0dfgm+J2aV/hYoWC39czGQGd/Kyz1i79Ei7RVn8a9TnETB6udFYQxnJ5dnm47HCMZFPixqEp40MyRUiSg+jxV0MhOOcjNjnaZkuwxIwfdPFPL2bZfy6x61N4qTlXT8UNY0+1e+oHW4Z0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=djXpW8DF; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783784533; c=relaxed/simple;
+	bh=i6afbv0utEgx+s23THC5dNUNWsUE2gT70ARzSJEQF/w=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=M/Gz5YNP/XOSXhn1OCO96jfVLgoSiKXfCNygbU9KxgN3hqShIfHv24hL3F1kPA1wPs9c+sS9YPL4LCrpTQa0q/Jeb2/NSQegKxKvmhbUnmYr6n/1Tm+VN5GH8jIrO5Pfwr6AeBq10zmROUNavWhOiCzHtvrq/6tJwq+Eh4qIpI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=JhZUOX/L; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="djXpW8DF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783776436; x=1815312436;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QMRwmmcabKQsDt2EYSGPCKTrdu5/Efzn6kpB0nGGT5U=;
-  b=djXpW8DFMmytLvE1Cx8JRGjkJNqI+wiQpFIdY3cG8EKt05qqArilIeCo
-   FNNHV1NyX22lJkrJxU+u/aIFYWuxolBg2PZoE43bgrXN0ZS/gBavJDq3S
-   ESDXUXlFgB1A287pafKKoYlLIfcBAtjLJTpxCK+pP+0EXBW1KXh65DRHr
-   yCexhtb7boIkS7aYr0McrQIJhPi2NPpbi8XaUcPgR4jkey1H30pvgJTYG
-   IWfoFLxHShzVacVLH3UfTIi4Su9btUz/YVrSISVaNkQ+CMttilBu+zzZQ
-   w8jWXbd0Tr5K0PuQUWVdNePP/X2Y2Tyh5/4Y+HWBCYg39RB5a5RMinBNf
-   w==;
-X-CSE-ConnectionGUID: rNydQeP0T2GoXHjovX2ehQ==
-X-CSE-MsgGUID: MIIqw+EqTDadVLI7gG2NaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84649711"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84649711"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Jul 2026 06:27:15 -0700
-X-CSE-ConnectionGUID: km0FdE8EQwS8E6vFC4DnIw==
-X-CSE-MsgGUID: AFD9okqYQpmb3ZBBQN83ew==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="250711149"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Jul 2026 06:27:13 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wiXja-000000003M9-3DKs;
-	Sat, 11 Jul 2026 13:27:10 +0000
-Date: Sat, 11 Jul 2026 15:27:06 +0200
-From: kernel test robot <lkp@intel.com>
-To: Hongling Zeng <zenghongling@kylinos.cn>, akpm@linux-foundation.org,
-	david@fromorbit.com, qi.zheng@linux.dev, roman.gushchin@linux.dev,
-	muchun.song@linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, zhongling0719@126.com,
-	Hongling Zeng <zenghongling@kylinos.cn>, stable@vger.kernel.org
-Subject: Re: [PATCH] mm: shrinker: fix double-free in alloc_shrinker_info
- error path
-Message-ID: <202607111559.uTGMAUhC-lkp@intel.com>
-References: <20260711041823.95135-1-zenghongling@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="JhZUOX/L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1783784529;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VihxL5zfazjF2qLWR5JH1CGStVdu/UpILcK0kyBVj+U=;
+	b=JhZUOX/Ll5DWogmNVF44PwPTYDynvRLzcr34VvfmhNqJqTuGUREhWIspYzsqT8PVDu+1ig
+	l87Hv3II8IyxXUKlrDKmZ6P30/74NHK+kcm4bX0q7s1QL48QHILfF9EQVYr2j6pkYmzv6K
+	WsQs5o0cdCxVLovwt0NhRZSyp4eZiPo=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-641-RuaMwgx_O--GJbdw_cDAgw-1; Sat,
+ 11 Jul 2026 11:42:07 -0400
+X-MC-Unique: RuaMwgx_O--GJbdw_cDAgw-1
+X-Mimecast-MFC-AGG-ID: RuaMwgx_O--GJbdw_cDAgw_1783784527
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DEA2E1955F72
+	for <llvm@lists.linux.dev>; Sat, 11 Jul 2026 15:42:06 +0000 (UTC)
+Received: from [172.20.146.15] (unknown [10.30.45.65])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 333F219560A1;
+	Sat, 11 Jul 2026 15:42:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc2,
+ upstream-mainline, dd3210c4)
+Date: Sat, 11 Jul 2026 15:42:05 -0000
+To: fs-test@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260711041823.95135-1-zenghongling@kylinos.cn>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Message-Id: <18330.126071111420700210@us-mta-641.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: qZmfKTeM9DXQxFQoJcCYbkOKYUzn5fHg2pzPvy0aIQQ_1783784527
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hongling,
+Hi, we tested your kernel and here are the results:
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v7.2-rc2]
-[cannot apply to akpm-mm/mm-everything linus/master next-20260710]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongling-Zeng/mm-shrinker-fix-double-free-in-alloc_shrinker_info-error-path/20260711-122040
-base:   v7.2-rc2
-patch link:    https://lore.kernel.org/r/20260711041823.95135-1-zenghongling%40kylinos.cn
-patch subject: [PATCH] mm: shrinker: fix double-free in alloc_shrinker_info error path
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260711/202607111559.uTGMAUhC-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260711/202607111559.uTGMAUhC-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607111559.uTGMAUhC-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/shrinker.c:108:10: error: call to undeclared function 'shrinker_info_protected'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     108 |                 info = shrinker_info_protected(memcg, nid);
-         |                        ^
->> mm/shrinker.c:108:8: error: incompatible integer to pointer conversion assigning to 'struct shrinker_info *' from 'int' [-Wint-conversion]
-     108 |                 info = shrinker_info_protected(memcg, nid);
-         |                      ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> mm/shrinker.c:117:30: error: conflicting types for 'shrinker_info_protected'
-     117 | static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
-         |                              ^
-   mm/shrinker.c:108:10: note: previous implicit declaration is here
-     108 |                 info = shrinker_info_protected(memcg, nid);
-         |                        ^
-   3 errors generated.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
 
-vim +/shrinker_info_protected +108 mm/shrinker.c
+Kernel information:
+    Commit message: Merge tag 'regulator-fix-v7.2-rc2' of git://git.kernel.=
+org/pub/scm/linux/kernel/git/broonie/regulator
 
-    76	
-    77	int alloc_shrinker_info(struct mem_cgroup *memcg)
-    78	{
-    79		int nid, ret = 0;
-    80		int array_size = 0;
-    81		int failed_nid;
-    82	
-    83		mutex_lock(&shrinker_mutex);
-    84		array_size = shrinker_unit_size(shrinker_nr_max);
-    85		for_each_node(nid) {
-    86			struct shrinker_info *info = kvzalloc_node(sizeof(*info) + array_size,
-    87								   GFP_KERNEL, nid);
-    88			if (!info)
-    89				goto err;
-    90			info->map_nr_max = shrinker_nr_max;
-    91			if (shrinker_unit_alloc(info, NULL, nid)) {
-    92				kvfree(info);
-    93				goto err;
-    94			}
-    95			rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, info);
-    96		}
-    97		mutex_unlock(&shrinker_mutex);
-    98	
-    99		return ret;
-   100	
-   101	err:
-   102		failed_nid = nid;
-   103		for_each_node(nid) {
-   104			struct shrinker_info *info;
-   105	
-   106			if (nid >= failed_nid)
-   107				break;
- > 108			info = shrinker_info_protected(memcg, nid);
-   109			rcu_assign_pointer(memcg->nodeinfo[nid]->shrinker_info, NULL);
-   110			shrinker_unit_free(info, 0);
-   111			kvfree(info);
-   112		}
-   113		mutex_unlock(&shrinker_mutex);
-   114		return -ENOMEM;
-   115	}
-   116	
- > 117	static struct shrinker_info *shrinker_info_protected(struct mem_cgroup *memcg,
-   118							     int nid)
-   119	{
-   120		return rcu_dereference_protected(memcg->nodeinfo[nid]->shrinker_info,
-   121						 lockdep_is_held(&shrinker_mutex));
-   122	}
-   123	
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2669061663
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2669061663_ppc64le_kernel
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2669061663_x86_64_kernel_kcidb_tool_21622504_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
