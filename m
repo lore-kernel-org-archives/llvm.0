@@ -1,110 +1,202 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0667739D6FA
-	for <llvm@lists.linux.dev>; Sun, 12 Jul 2026 11:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08DF23815E3
+	for <llvm@lists.linux.dev>; Sun, 12 Jul 2026 12:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783854189; cv=none; b=St2jYNHUTEnWOUHP1oL6QBkpzEVaPezPJwVGKucdiW4/5TxUkD+giOClo0qzCFh5NHGFDBL0hy7i8UdVPCMCSsKjIob1JFya2IgkXNHjymKcdedpFFml6WEOMAhMi0xEsV/hiTUTAsMZbi2BhXTjnjtqhMMjICzlxKf+vEKi1Y8=
+	t=1783858132; cv=none; b=FPvxSjwFWdnugtNs5snMcdkkfZQQplZX1JzYvKCTCvDIRp8X9lcdEK1dfOy7M4hF7mSaVBvE4Bpr9pPlioyeKlwtYMvQ3zIeif3FX960G1Bp+I/1G7rGEwAhSqc/rtbw1SUE2x4mgMfT3oTeA0vIyBpdjbYusrzRF5A0UmsBNF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783854189; c=relaxed/simple;
-	bh=0AC0azJJ7JHmNikrOQq851DAIjwrBYY+FOjL30xU+5Q=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=UlP4lIr6eNbIqyazPYMIcMH6koRe/2/0lbdzdvha6TKj+KXicC89F8OD6CktA4XUq4iZpxMhB6jNpbv0Rg3fw8JuaEQ/XmGEKZ6kFjoP5njvu2B4CKW30rE1jWmWTIGnm2/boiAEC8ebOzGAcjQ7TqgYpYVd1L/JuZL0kTfcngI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IatUPgBR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1783858132; c=relaxed/simple;
+	bh=pDQGgOI51v7B8IxzwR27wEG6G8cVPR5Hlaz/kQw4AtY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tInQvqUDWCpD5NneAX0f7vmThNEPfZWI06SdfD5ncS0N+e5yoRng2wVlAF1CvDEJs+yh5mFDFuIZduzhwGC/5i5srJeHOSG+5jW7/x2REMk3kSamq5mHlAxLh/kOFz2duTrS3vUsuLsDwIkJgGU1REhhapMaWFobY68uRcZMS9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c8RT30gI; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IatUPgBR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1783854186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=PY8s3eBSj6pkNx0DlgGGjZgXztIxolBCY4+zoO6zCew=;
-	b=IatUPgBRgHnUCwkcgWSU0+aBfbYXTLXCBim1w1dMXZv6GddLhH4P+2e+HQcvrCnM0J1/FM
-	ODbV4LAjP4mmqLHMCZP86u+RHEt9qJinczplSC9wgaOFKkte/YbWjBeID+wt9j+OnlGyQZ
-	ET8UweiyZQ0qwr3IULP66M+CfKpmZKA=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-UKF2rolZNEmDcwKQSJbYYQ-1; Sun,
- 12 Jul 2026 07:03:05 -0400
-X-MC-Unique: UKF2rolZNEmDcwKQSJbYYQ-1
-X-Mimecast-MFC-AGG-ID: UKF2rolZNEmDcwKQSJbYYQ_1783854184
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 73F101956055
-	for <llvm@lists.linux.dev>; Sun, 12 Jul 2026 11:03:04 +0000 (UTC)
-Received: from [172.20.146.15] (unknown [10.30.45.65])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 02ED41800661;
-	Sun, 12 Jul 2026 11:03:02 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc2,
- upstream-mainline, 44696aa3)
-Date: Sun, 12 Jul 2026 11:03:02 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c8RT30gI"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-493f75f7172so12129815e9.1
+        for <llvm@lists.linux.dev>; Sun, 12 Jul 2026 05:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1783858129; x=1784462929; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fPDvzFIiqCdivNjWyVBd/1diSMnrRTpEbgxd7LdADq4=;
+        b=c8RT30gIhWQSGqdoUVsqVR+Pxxa7n10NHxbMRoFYU+wJ2B9tGzxONPXI91F4EjqUdy
+         /qNNrQjylklw4LbHPNa+xdASWc4WPa0a73R3Cq0EDsyTHhRIqFSFR5bVrKZ9ak28rQnI
+         O/C06yz64Vjg0WAZBu1lEkxfCdl/zwTlGbx+bnJ2Ed8CgfPPonvH4AG/zzWZRHiVC6DI
+         uOs0TQIdH48VdDSiOBzjmrd3bfyb2xtUUSPsvkL5zG7lYY4cdkg+h31BHJqE/+KG6BJI
+         n321Z0d97pYtKWLxZ2sxcuzbuEIENO0VdXvKKU127L33ZK7ajYrRWCpzWfBBvwentcaO
+         TBQg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1783858129; x=1784462929;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fPDvzFIiqCdivNjWyVBd/1diSMnrRTpEbgxd7LdADq4=;
+        b=VFxjbNWJWAvEv/wjTeTpLPffVNxSH5hHQpo7QJH8Lm4WhS4nfGpa8oxfWM3gH9RuEY
+         4389/EfeZ6pKF0BmyrcwokDWqiJF5rpn799cn1PX1lwkBgkApen4VPCaMv5DsjXj/UzR
+         OaIU0W/Z4N9ZTHrhRSPv7K+0OiYVCp9Xn5msP6XtQZqk9z9cAcD8R1hJpnwkGqDKeYDj
+         JAfrt5Da9EV0bvu7xpeLY1CjGTIl0HjdlpsAHrZ0QmkVdx2sFj1kcQn0kO3D0tx6bI7v
+         slYUrlDxCyLtn7uzFFPhHQRMGFOgWW9CiyMjzb6VJkGOBBG7vRyOrLrURNgqYHk3klvc
+         BAhw==
+X-Forwarded-Encrypted: i=1; AHgh+RoXjunhPBPMBKDfTESNIZP9WnTy/aoJM04VORgdSTSrok9ix7YqzQZJ/XkaQI14+h7amgMu@lists.linux.dev
+X-Gm-Message-State: AOJu0YzC3eNEKvCnqODnlts/YN0T6CwtNmdJgejDr2N9GaDMfRa2eD6i
+	HxXAtBHn4pfQgCvwVuZh42T5HSvGs+BflrofrS+CHZ/EpRU7iVPKsquk
+X-Gm-Gg: AfdE7clUmQwfX+iAFcpWfeeQsc6y4UbpQIMCpYLGnWcisb7WVymzF3Z6MSwS5g/MTYf
+	coto7wf6ZO6knIYAPvRvSevKV1klPbd6nCCFMC3j0L5mYA8cIgAYgXREka9dgv67aBURCg6woto
+	I4a8SzzP/TZqqNmQlK+dbM5Axp+dcJaKL68uOzbJereX1o0QRhzOV9t+DBQeYNju4kPCRx4tkIf
+	flX0+Wx3t91/I7YmIXUCahU4mxDr4MUXt0NWwonV5AuwgU9sQzH4gLDCXd/VE83aS4W+gQMs8nZ
+	CT3tzvcgnZK8KNiIkDDVvuZi5E/1JsQG7GLmQ6Cv5WvAjN4DE4XWXu7T9MPWVVEa0ERY3LF6SxI
+	OlgW2P93KTTtdeOU/1dIGaLVzoT54WRHQIqjPDkzr+KJispVaoAwj9JnIdhDsAcW1lzksrY9tIX
+	rzj0a8Ye2p8o96Kb8KkY1eKD4b/tzBxPgakqQpKdAXv77xw3ro/gaXkBdY2fqX3aksvBFXsjgPd
+	sakMj9TXfpL4boRgoDCv/2LMA6xevHmxzp4HE8W2sQoVT7SGmnDN3pk
+X-Received: by 2002:a05:600c:4fca:b0:492:437a:a653 with SMTP id 5b1f17b1804b1-493f8826c59mr54375365e9.26.1783858128965;
+        Sun, 12 Jul 2026 05:08:48 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-095-117-112-249.95.117.pool.telefonica.de. [95.117.112.249])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-493eb742d0esm287633135e9.13.2026.07.12.05.08.47
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 12 Jul 2026 05:08:48 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Vlastimil Babka <vbabka@kernel.org>,
+	Harry Yoo <harry@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Hao Li <hao.li@linux.dev>,
+	Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Karl Mehltretter <kmehltretter@gmail.com>
+Subject: [RFC PATCH] slab: don't assume alignment on allocators that may return ZERO_SIZE_PTR
+Date: Sun, 12 Jul 2026 14:07:28 +0200
+Message-Id: <20260712120728.96628-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <35982.126071207030501762@us-mta-657.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: PWKcGFozLnGXUIimj0zXO-a0c44lyJc01ldkEi1Jqac_1783854184
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi, we tested your kernel and here are the results:
+__kmalloc_noprof(), __kmalloc_node_noprof(), and __kmalloc_flags_noprof()
+are annotated with __assume_kmalloc_alignment, which expands to
+__assume_aligned(ARCH_KMALLOC_MINALIGN). All three can return
+ZERO_SIZE_PTR, currently (void *)16, for zero-sized requests. When
+ARCH_KMALLOC_MINALIGN exceeds 16, this contradicts the annotation.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+Compilers may use this false assumption to reduce ZERO_OR_NULL_PTR() to a
+NULL check, losing recognition of ZERO_SIZE_PTR. Current GCC and Clang
+retain the existing range check through kmalloc's inline wrapper, so no
+functional miscompile was reproduced with the current source form. However,
+both eliminate an exact ZERO_SIZE_PTR comparison on the same return value.
+With Clang, UBSAN also reports the invalid alignment assumption at boot.
 
+Changing ZERO_SIZE_PTR to satisfy the annotation would make its value and
+the range accepted by ZERO_OR_NULL_PTR() architecture-dependent. Avoid that
+semantic change by dropping the annotation from the general kmalloc entry
+points. Retain it on the cache helpers, which cannot return the sentinel.
+Allocation behavior is unchanged.
 
-Kernel information:
-    Commit message: Merge tag 'input-for-v7.2-rc2' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/dtor/input
+Kernels before v7.2 do not have __kmalloc_flags_noprof().
+Backports to those kernels only need the include/linux/slab.h change.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2670037556
+Fixes: 94a58c360a45 ("slab.h: sprinkle __assume_aligned attributes")
+Fixes: f6d50ab29afd ("mm/slab: introduce kmalloc_flags()")
+Cc: <stable@vger.kernel.org> # needs adjustment before v7.2
+Assisted-by: Claude:claude-opus-4-8
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+---
 
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2670037556_ppc64le_kernel
+Notes:
+    This is RFC because the alignment contract can be corrected in three ways:
+    
+      1. Remove the annotation from entry points that can return ZERO_SIZE_PTR
+         (this patch). On armv5 this increases .text by 1120 bytes (0.02%);
+         no measurable change was seen on arm64.
+    
+      2. Cap the assumed alignment at 16. This preserves some alignment
+         information but couples the annotation to the current sentinel value.
+    
+      3. Change ZERO_SIZE_PTR to satisfy ARCH_KMALLOC_MINALIGN. This makes the
+         long-standing sentinel architecture-dependent and either expands the
+         range accepted by ZERO_OR_NULL_PTR() or requires changing that macro.
+    
+    On armv5, Clang UBSAN reports the invalid alignment assumption during boot;
+    the report disappears with this patch.
+    
+    Clang 22 and GCC 13 retain ZERO_OR_NULL_PTR()'s existing range check through
+    _kmalloc_noprof(), so no functional miscompile was reproduced in current
+    code. This is an optimizer limitation, not a guarantee. For a kmalloc return
+    value, writing the check as "!p || p == ZERO_SIZE_PTR" causes both compilers
+    to remove the ZERO_SIZE_PTR comparison. Built into an armv5 kernel with that
+    form, a zero-size allocation is then no longer recognised and is dereferenced:
+    
+      Unable to handle kernel NULL pointer dereference at virtual address 00000010
+      Internal error: Oops: 805 [#1] ARM
+      PC is at __fc_init+0x3c/0x60
+      Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
+    
+    Without the annotation the comparison is retained and the kernel boots.
+    
+    Would the slab maintainers prefer removing the annotation or retaining a
+    weaker, valid alignment guarantee?
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2670037556_aarch64_kernel_kcidb_tool_21624909_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+ include/linux/slab.h | 12 ++++++++----
+ mm/slab.h            |  3 ++-
+ 2 files changed, 10 insertions(+), 5 deletions(-)
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 51f03f18c9a7..1c63048f6467 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -632,8 +632,12 @@ static inline unsigned int arch_slab_minalign(void)
+ 
+ /*
+  * kmem_cache_alloc and friends return pointers aligned to ARCH_SLAB_MINALIGN.
+- * kmalloc and friends return pointers aligned to both ARCH_KMALLOC_MINALIGN
+- * and ARCH_SLAB_MINALIGN, but here we only assume the former alignment.
++ * Objects allocated by kmalloc and friends are aligned to both
++ * ARCH_KMALLOC_MINALIGN and ARCH_SLAB_MINALIGN, but here we only assume the
++ * former alignment.
++ *
++ * This guarantee does not apply to ZERO_SIZE_PTR, which is not an allocated
++ * object.
+  */
+ #define __assume_kmalloc_alignment __assume_aligned(ARCH_KMALLOC_MINALIGN)
+ #define __assume_slab_alignment __assume_aligned(ARCH_SLAB_MINALIGN)
+@@ -939,10 +943,10 @@ unsigned int kmem_cache_sheaf_size(struct slab_sheaf *sheaf);
+  */
+ 
+ void *__kmalloc_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags)
+-				__assume_kmalloc_alignment __alloc_size(1);
++				__alloc_size(1);
+ 
+ void *__kmalloc_node_noprof(DECL_KMALLOC_PARAMS(size, b, token), gfp_t flags, int node)
+-				__assume_kmalloc_alignment __alloc_size(1);
++				__alloc_size(1);
+ 
+ void *__kmalloc_cache_noprof(struct kmem_cache *s, gfp_t flags, size_t size)
+ 				__assume_kmalloc_alignment __alloc_size(3);
+diff --git a/mm/slab.h b/mm/slab.h
+index 281a65233795..aea1373c7f83 100644
+--- a/mm/slab.h
++++ b/mm/slab.h
+@@ -28,9 +28,10 @@ static inline bool alloc_flags_allow_spinning(const unsigned int alloc_flags)
+ 	return !(alloc_flags & SLAB_ALLOC_NOLOCK);
+ }
+ 
++/* Can return ZERO_SIZE_PTR, so not tagged __assume_kmalloc_alignment. */
+ void *__kmalloc_flags_noprof(DECL_TOKEN_PARAMS(size, token), gfp_t flags,
+ 				  unsigned int alloc_flags, int node)
+-				  __assume_kmalloc_alignment __alloc_size(1);
++				  __alloc_size(1);
+ 
+ static __always_inline __alloc_size(1) void *_kmalloc_flags_noprof(size_t size,
+ 		gfp_t flags, unsigned int alloc_flags, int node, kmalloc_token_t token)
+-- 
+2.39.5 (Apple Git-154)
 
