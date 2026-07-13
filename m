@@ -1,205 +1,101 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E40437474
-	for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 14:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13D732B981;
+	Mon, 13 Jul 2026 16:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783953219; cv=none; b=Wbo3hvqQccxCijlHmZhnihXKaK+xixFBO71zd0ZxzQ6TdyJ1lhAd7EZkHJNw6fNanAbhAldRPyT2PvN9mhnGOQjwW7vWCq54MFQb/bI7kd4MrePxC0y8IbAJg1YAP2eYb4ftyHKU8zWcaPR8GY+HGy/CRN+FQjLdBGzJ+WN5OOM=
+	t=1783958783; cv=none; b=W15EcwX+vzWDdiR6WIfRSjNSQO9SfIv2GN0d0pOfxnCeX/tNr4TCB95LHmmQ0DdjkB14itdMHUyyFHMfx2JFxLgBXxCZI2Egr6WLBv0v2LczkGWb521LyI6e6ndAyBlvxqj3u7G/OUfjqMcnZDPBRnh8uHJv0PyrY5rOiCoQE74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783953219; c=relaxed/simple;
-	bh=rcYOTNdcj2ibiwqJfeJZQ8JuzAGrI+5pZvaHR/F+XvE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HHmURo65OtCV2Bicxf2cu/TRVy3FYpG+NHa1xyOCJA4dzwGrGJvRL/0c1NeNyWxe26WdnbM9gVFidv7s/iEOWaILmSSZC1k18+lgNbIfpVWiTaRVgsZyQdvvIY4RSBZx8sYAAWEqpKQeOnACUs50Ky4y0z5597DtrvNs1OxFBIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X7+Ieqn2; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1783958783; c=relaxed/simple;
+	bh=VyCf2KO3b6BZYv6zXvqnRCAJZI1xlPZ+/BE0FaM/Vpo=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gp1/LbU1odYcjabt3xwrgurc7nka7s3CJJ4dEfeYlWmsUl9UiZjIseRCMsLIUJtJ7/rm5QYucCamS06kMGFhuBXWjh6xpEt+3+64SVRfBw8jlar4aiUfZssiRYQbe9bncNNwCOjJOTs5OoRujN3HwxjefLQdm1Xmgy8qEbco+aQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgOVBnsJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X7+Ieqn2"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1783953214;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Z8Y2MZq+OsXMv1ZBbMCu0RMLJ/nz8XEP3l5zITko3Sw=;
-	b=X7+Ieqn2v0Wu1W6tHVlyw6iottaQb0tPXKJZesrNF2HkF3USEoUZjtGDnDH7XsdRVy+8j/
-	qtD6hZT0sEd3k3mKs+0FnNKF23xY6ToyG7UxbbYQ9+zS7rQ+Hb3Dguxe3q9V7ZATdfiGyT
-	pI6WUWfimaeww3e9EbYAx4C7nxKr4Ok=
-From: George Guo <dongtai.guo@linux.dev>
-To: joe.lawrence@redhat.com
-Cc: chenhuacai@kernel.org,
-	jpoimboe@kernel.org,
-	peterz@infradead.org,
-	jikos@kernel.org,
-	mbenes@suse.cz,
-	pmladek@suse.com,
-	kernel@xen0n.name,
-	rostedt@goodmis.org,
-	ardb@kernel.org,
-	nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com,
-	yangtiezhu@loongson.cn,
-	jiaxun.yang@flygoat.com,
-	liukexin@kylinos.cn,
-	guodongtai@kylinos.cn,
-	xry111@xry111.site,
-	wangyuli@aosc.io,
-	loongarch@lists.linux.dev,
-	live-patching@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 02/12] LoongArch: Mark special sections for KLP support
-Date: Mon, 13 Jul 2026 22:33:24 +0800
-Message-ID: <20260713143324.16887-1-dongtai.guo@linux.dev>
-In-Reply-To: <ak7QBSm3mmDlB-4u@redhat.com>
-References: <ak7QBSm3mmDlB-4u@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgOVBnsJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 918FF1F000E9;
+	Mon, 13 Jul 2026 16:06:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1783958779;
+	bh=8sREOdH2a2htYhcoNY3FO6500dVHGW+aOExsdSBP7gE=;
+	h=From:Date:Subject:To:Cc;
+	b=kgOVBnsJV/dzCfiLkop7Aq9syK9dQdA70XrI4DJC1Uqb6pK9jFZStKHzBo4Gz7/lT
+	 Byaxq+Ql6E8kvCJYEw/bj9U0e/NDu3Trewz7NUOI3IopWrhE/fGXAo4R0mXjwPdEmP
+	 RPuO7LIrcab2csfcciRBQI4AngQeraN/a3vIhTeQb7iVqyhhWC0EqqMAaCr2Zxjks1
+	 W0AmZJPpvjzSYw4uLewLCTJc62WK9PLa2bM+mukey1mHDuD0utWA8YIXqtRprQs6TA
+	 9Ag//sSrR67/UKEyGUQI6c9qLGCm/7E4OYmPONqSe9YrsDPWfPN7niluRKSZXq11zZ
+	 hKJpDrIiut+Fg==
+From: Mark Brown <broonie@kernel.org>
+Date: Mon, 13 Jul 2026 17:04:04 +0100
+Subject: [PATCH] ASoC: simple-card: Fix clang build
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260713-asoc-fix-simple-card-build-v1-1-671ad44ad1a0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAHMMVWoC/yXMywqDQAxA0V+RrBvwOaK/UrqIM1EjvphUEcR/d
+ 1qXBy73BGUvrFBHJ3jeRWWZA5JXBLanuWMUFwxpnJq4TDIkXSy2cqDKtI6MlrzDZpPRocmLlrO
+ KTOEIwmD1HML//P15rFszsP3+jnBdN6VqZr5+AAAA
+X-Change-ID: 20260713-asoc-fix-simple-card-build-645fe39a65da
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1357; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=VyCf2KO3b6BZYv6zXvqnRCAJZI1xlPZ+/BE0FaM/Vpo=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqVQz4/MVwdaq8f9O/hjxaWf64/Xrhg2RFyzK2a
+ ujeJsxik7uJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCalUM+AAKCRAk1otyXVSH
+ 0K+DB/4vxj9i7xC0UXsBU76vso9/590QJ3b1SdNmWUK9yPYjI9L5wJaAjmaI3gdSIrLQQOlqKPQ
+ IB5SsWxfW79LSOLXABuC2ZqkRb/sjHz647yh3o9Q+A5QUG+Ut5ubv2wOV56olS1BJSso9lgc1nY
+ IAVfMEAIGxRMXv6yP4lfPmQpqzrpkN/7qTqhuC4r9PMnMfMq+A63T49Tb0PmIculP2NNhNIAzHB
+ kIiwkLkEv6onwq8E+B3JrrYN+lNeZQZuXTi6jDV81+IH6waWLj1SUnqYcHw7doX6wVkG8HcsoBo
+ uoHG+7rTxzQfJKV+S1mehJtxd6wBEqRFqqmO58UKjU+zkBwZ
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Hi Joe,
+Jumping over the allocation of the link_info for a missing dev breaks
+the build:
 
-Thanks for the test case.
+/tmp/next/build/sound/soc/generic/simple-card.c:676:3: error: cannot jump from this goto statement to its label
+  676 |                 goto end;
+      |                 ^
+/tmp/next/build/sound/soc/generic/simple-card.c:679:20: note: jump bypasses initialization of variable with __attribute__((cleanup))
+  679 |         struct link_info *li __free(kfree) = kzalloc_obj(*li);
+      |                           ^
 
-> Should v3 (or a follow-up patch) include the inline alternative
-> cloning support?  Or is patching functions that contain ALTERNATIVE()
-> intentionally out of scope for LoongArch KLP for now?
+Fixes: 7f20b9b05b3a ("ASoC: simple-card: merge extra method into simple_parse_of()")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ sound/soc/generic/simple-card.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It should be supported.  It is a real gap, and there is a fix.
-
-LoongArch emits the ALTERNATIVE replacement into ".subsection 1", the
-same as arm64.  The replacement is appended to the function's own
-section, after the body.  objtool already handles that layout for arm64,
-through two pieces that LoongArch was missing:
-
-  - arm64's ALTERNATIVE macros wrap the replacement with
-    ANNOTATE_DATA_SPECIAL / ANNOTATE_DATA_SPECIAL_END, so
-    create_fake_symbols() makes a fake symbol for the replacement block.
-  - arm64 defines ARCH_HAS_INLINE_ALTS, so clone_inline_alternatives()
-    clones that block after the function.
-
-LoongArch had neither.  So clone_inline_alternatives() was a no-op, the
-replacement was never cloned, and objtool reported "can't find new
-instruction".
-
-The fix adds both, matching arm64: annotate the replacement in the
-ALTERNATIVE and ALTERNATIVE_2 macros (asm and inline-asm), and define
-ARCH_HAS_INLINE_ALTS in objtool.  It keeps the .subsection layout, so no
-objtool logic changes.
-
-With it, your exact test case builds.  I verified on LoongArch hardware
-with Clang 21.  The replacement is cloned as its own fake symbol, and the
-.altinstructions entry points at it:
-
-  DEBUG: vmlinux.o: _text_klp_build_alt_test_compute_110 [+DATA]
-  DEBUG: vmlinux.o:  .altinstructions+0x4: _text_klp_build_alt_test_compute_110+0x0 [NOTYPE LOCAL]
-  vmlinux.o: changed function: klp_build_alt_test_compute
-  Building patch module: livepatch-test-alternatives.ko
-  SUCCESS
-
-I will fold this into the next revision.  In the series it splits in two:
-the annotation goes with the special-section marking, which is this patch
-(LoongArch: Mark special sections for KLP support), and the
-ARCH_HAS_INLINE_ALTS define goes with the objtool arch hooks.
-
-Diff below.
+diff --git a/sound/soc/generic/simple-card.c b/sound/soc/generic/simple-card.c
+index abfbc9fd7c6d..6e98e973e525 100644
+--- a/sound/soc/generic/simple-card.c
++++ b/sound/soc/generic/simple-card.c
+@@ -673,7 +673,7 @@ static int simple_parse_of(struct simple_util_priv *priv)
+ 	int ret = -EINVAL;
+ 
+ 	if (!dev)
+-		goto end;
++		return simple_ret(priv, ret);
+ 
+ 	ret = -ENOMEM;
+ 	struct link_info *li __free(kfree) = kzalloc_obj(*li);
 
 ---
- arch/loongarch/include/asm/alternative-asm.h  | 5 ++++-
- arch/loongarch/include/asm/alternative.h      | 5 ++++-
- tools/objtool/arch/loongarch/include/arch/elf.h | 1 +
- 3 files changed, 9 insertions(+), 2 deletions(-)
+base-commit: a5ee3180a2a7bbbd84af70ef98283b3f3e6a821e
+change-id: 20260713-asoc-fix-simple-card-build-645fe39a65da
 
-diff --git a/arch/loongarch/include/asm/alternative-asm.h b/arch/loongarch/include/asm/alternative-asm.h
-index d940d9d2c0e1..92122a258a8e 100644
---- a/arch/loongarch/include/asm/alternative-asm.h
-+++ b/arch/loongarch/include/asm/alternative-asm.h
-@@ -6,6 +6,7 @@
+Best regards,
+--  
+Mark Brown <broonie@kernel.org>
 
- #include <asm/asm.h>
- #include <generated/asm-offsets.h>
-+#include <linux/annotate.h>
-
- /*
-  * Issue one struct alt_instr descriptor entry (need to put it into
-@@ -39,9 +40,11 @@
- 	.popsection
-
- 	.subsection 1
-+	ANNOTATE_DATA_SPECIAL
- 143 :
- 	\newinstr
- 144 :
-+	ANNOTATE_DATA_SPECIAL_END
- 	.previous
- .endm
-
-@@ -70,11 +73,13 @@
- 	.popsection
-
- 	.subsection 1
-+	ANNOTATE_DATA_SPECIAL
- 143 :
- 	\newinstr1
- 144 :
- 	\newinstr2
- 145 :
-+	ANNOTATE_DATA_SPECIAL_END
- 	.previous
- .endm
-
-diff --git a/arch/loongarch/include/asm/alternative.h b/arch/loongarch/include/asm/alternative.h
-index 8f7712ed2f4e..1d3ac2f667d1 100644
---- a/arch/loongarch/include/asm/alternative.h
-+++ b/arch/loongarch/include/asm/alternative.h
-@@ -7,6 +7,7 @@
- #include <linux/types.h>
- #include <linux/stddef.h>
- #include <linux/stringify.h>
-+#include <linux/objtool.h>
- #include <asm/asm.h>
-
- struct alt_instr {
-@@ -75,7 +76,9 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
- 	ALTINSTR_ENTRY(feature, 1)					\
- 	".popsection\n"							\
- 	".subsection 1\n" \
-+	ANNOTATE_DATA_SPECIAL "\n" \
- 	ALTINSTR_REPLACEMENT(newinstr, feature, 1)			\
-+	ANNOTATE_DATA_SPECIAL_END "\n" \
- 	".previous\n"
-
- #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
-@@ -86,8 +89,10 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
- 	ALTINSTR_ENTRY(feature2, 2)					\
- 	".popsection\n"							\
- 	".subsection 1\n" \
-+	ANNOTATE_DATA_SPECIAL "\n" \
- 	ALTINSTR_REPLACEMENT(newinstr1, feature1, 1)			\
- 	ALTINSTR_REPLACEMENT(newinstr2, feature2, 2)			\
-+	ANNOTATE_DATA_SPECIAL_END "\n" \
- 	".previous\n"
-
- /*
-diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
-index 0103f27fccfc..e2843679f24e 100644
---- a/tools/objtool/arch/loongarch/include/arch/elf.h
-+++ b/tools/objtool/arch/loongarch/include/arch/elf.h
-@@ -46,6 +46,7 @@
- #define R_TEXT32		R_LARCH_32_PCREL
- #define R_TEXT64		R_LARCH_32_PCREL
-
-+#define ARCH_HAS_INLINE_ALTS	1
- #define ARCH_HAS_PAIRED_RELOCS	1
-
- struct elf;
-
-Thanks,
-George
