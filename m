@@ -1,99 +1,205 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597203E7BC4;
-	Mon, 13 Jul 2026 14:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65E40437474
+	for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 14:33:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783952307; cv=none; b=UYmCaLeNXq4jCBOfOIOtcQrmWsJd8cq0HcnfQbiGcnZXDOJdMp+0i8YWJCIDSJwIRybLZer350IwWpw1DcU0PZFmbr6Re9ncka25qshbPRu2nsglN7aWoT184XZBWc/tYeqgIxN20B2JpIZLZsXXoa1akg3ZevdRU5t6A9TfxAw=
+	t=1783953219; cv=none; b=Wbo3hvqQccxCijlHmZhnihXKaK+xixFBO71zd0ZxzQ6TdyJ1lhAd7EZkHJNw6fNanAbhAldRPyT2PvN9mhnGOQjwW7vWCq54MFQb/bI7kd4MrePxC0y8IbAJg1YAP2eYb4ftyHKU8zWcaPR8GY+HGy/CRN+FQjLdBGzJ+WN5OOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783952307; c=relaxed/simple;
-	bh=KtZnuIUCXP/uiTmx6iNInDp+FPnUT5DTzRUdx1Xqw94=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r9aIiRFo9+QrgXlvznuWxPlk94YjokpqD4uZHGNoXon9sMB0bwt9+ed23b0KcodKCzcrgaZJoZyMEiq5EarBCzQz/NRd8zxU+BZuHHJe7gCz9jEqVZJ+7BDQFFPQjdAALNcZBiKtkX3ffcpTdsNRf5PtR2XLRthjqqu3gYM3s4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eSkZAhzI; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1783953219; c=relaxed/simple;
+	bh=rcYOTNdcj2ibiwqJfeJZQ8JuzAGrI+5pZvaHR/F+XvE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=HHmURo65OtCV2Bicxf2cu/TRVy3FYpG+NHa1xyOCJA4dzwGrGJvRL/0c1NeNyWxe26WdnbM9gVFidv7s/iEOWaILmSSZC1k18+lgNbIfpVWiTaRVgsZyQdvvIY4RSBZx8sYAAWEqpKQeOnACUs50Ky4y0z5597DtrvNs1OxFBIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X7+Ieqn2; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eSkZAhzI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1783952305; x=1815488305;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KtZnuIUCXP/uiTmx6iNInDp+FPnUT5DTzRUdx1Xqw94=;
-  b=eSkZAhzIeRN9WcXgNpvh4LYf6BWUbMpwfPQLCNvABSHNt7wrB7aG50DL
-   +pL3/h/92GyPR8akQKg/vbrOhXASsQtx+NUgdRZAoZsNWISQHE1+kBgWA
-   TZP1/DRIm7YN2AmZEjYx7SJR22RBJgmw6Cgkk7FLujIEikBY2qVh9QHzR
-   WKzNzg8R7Rcer3dOCySFQBIZRSG3gh+KNoxThofzz6JMV8wV3IItI5yys
-   Wo0HF58KB6KJSJ1yvN5O3G0UpXFCVKXT6FAUsKa1I2p84Oxgid+h53qhc
-   D/WAPE4zIuSsPWQUlOZ0b0reeW3GalK1NhFjGzErEpxPNgC8ALm//BhTu
-   Q==;
-X-CSE-ConnectionGUID: AZOIQMJYRySpUwvuvRusuw==
-X-CSE-MsgGUID: YdgtnyBWTlygLlwiKiuV9Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="84526261"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="84526261"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 07:18:25 -0700
-X-CSE-ConnectionGUID: KT0+kf7sTKyGHvnbnre84w==
-X-CSE-MsgGUID: rdgSVN8rRiCn9TVPnBmq4w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="259425405"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 13 Jul 2026 07:18:23 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wjHUC-000000003kr-3hCT;
-	Mon, 13 Jul 2026 14:18:20 +0000
-Date: Mon, 13 Jul 2026 16:17:24 +0200
-From: kernel test robot <lkp@intel.com>
-To: David 'equinox' Lamparter <equinox@diac24.net>,
-	Matthieu Baerts <matttbe@kernel.org>,
-	Mat Martineau <martineau@kernel.org>,
-	Geliang Tang <geliang@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, mptcp@lists.linux.dev,
-	David 'equinox' Lamparter <equinox@diac24.net>
-Subject: Re: [PATCH net-next] mptcp: sockopt: implement IPV6_TCLASS
-Message-ID: <202607131605.i02odG4b-lkp@intel.com>
-References: <20260713080634.296011-1-equinox@diac24.net>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X7+Ieqn2"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1783953214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z8Y2MZq+OsXMv1ZBbMCu0RMLJ/nz8XEP3l5zITko3Sw=;
+	b=X7+Ieqn2v0Wu1W6tHVlyw6iottaQb0tPXKJZesrNF2HkF3USEoUZjtGDnDH7XsdRVy+8j/
+	qtD6hZT0sEd3k3mKs+0FnNKF23xY6ToyG7UxbbYQ9+zS7rQ+Hb3Dguxe3q9V7ZATdfiGyT
+	pI6WUWfimaeww3e9EbYAx4C7nxKr4Ok=
+From: George Guo <dongtai.guo@linux.dev>
+To: joe.lawrence@redhat.com
+Cc: chenhuacai@kernel.org,
+	jpoimboe@kernel.org,
+	peterz@infradead.org,
+	jikos@kernel.org,
+	mbenes@suse.cz,
+	pmladek@suse.com,
+	kernel@xen0n.name,
+	rostedt@goodmis.org,
+	ardb@kernel.org,
+	nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com,
+	yangtiezhu@loongson.cn,
+	jiaxun.yang@flygoat.com,
+	liukexin@kylinos.cn,
+	guodongtai@kylinos.cn,
+	xry111@xry111.site,
+	wangyuli@aosc.io,
+	loongarch@lists.linux.dev,
+	live-patching@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 02/12] LoongArch: Mark special sections for KLP support
+Date: Mon, 13 Jul 2026 22:33:24 +0800
+Message-ID: <20260713143324.16887-1-dongtai.guo@linux.dev>
+In-Reply-To: <ak7QBSm3mmDlB-4u@redhat.com>
+References: <ak7QBSm3mmDlB-4u@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260713080634.296011-1-equinox@diac24.net>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi David,
+Hi Joe,
 
-kernel test robot noticed the following build errors:
+Thanks for the test case.
 
-[auto build test ERROR on net-next/main]
+> Should v3 (or a follow-up patch) include the inline alternative
+> cloning support?  Or is patching functions that contain ALTERNATIVE()
+> intentionally out of scope for LoongArch KLP for now?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-equinox-Lamparter/mptcp-sockopt-implement-IPV6_TCLASS/20260713-162825
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260713080634.296011-1-equinox%40diac24.net
-patch subject: [PATCH net-next] mptcp: sockopt: implement IPV6_TCLASS
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260713/202607131605.i02odG4b-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260713/202607131605.i02odG4b-lkp@intel.com/reproduce)
+It should be supported.  It is a real gap, and there is a fix.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607131605.i02odG4b-lkp@intel.com/
+LoongArch emits the ALTERNATIVE replacement into ".subsection 1", the
+same as arm64.  The replacement is appended to the function's own
+section, after the body.  objtool already handles that layout for arm64,
+through two pieces that LoongArch was missing:
 
-All errors (new ones prefixed by >>):
+  - arm64's ALTERNATIVE macros wrap the replacement with
+    ANNOTATE_DATA_SPECIAL / ANNOTATE_DATA_SPECIAL_END, so
+    create_fake_symbols() makes a fake symbol for the replacement block.
+  - arm64 defines ARCH_HAS_INLINE_ALTS, so clone_inline_alternatives()
+    clones that block after the function.
 
->> ld.lld: error: undefined symbol: ipv6_setsockopt
-   >>> referenced by sockopt.c:404 (net/mptcp/sockopt.c:404)
-   >>>               vmlinux.o:(mptcp_setsockopt)
+LoongArch had neither.  So clone_inline_alternatives() was a no-op, the
+replacement was never cloned, and objtool reported "can't find new
+instruction".
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+The fix adds both, matching arm64: annotate the replacement in the
+ALTERNATIVE and ALTERNATIVE_2 macros (asm and inline-asm), and define
+ARCH_HAS_INLINE_ALTS in objtool.  It keeps the .subsection layout, so no
+objtool logic changes.
+
+With it, your exact test case builds.  I verified on LoongArch hardware
+with Clang 21.  The replacement is cloned as its own fake symbol, and the
+.altinstructions entry points at it:
+
+  DEBUG: vmlinux.o: _text_klp_build_alt_test_compute_110 [+DATA]
+  DEBUG: vmlinux.o:  .altinstructions+0x4: _text_klp_build_alt_test_compute_110+0x0 [NOTYPE LOCAL]
+  vmlinux.o: changed function: klp_build_alt_test_compute
+  Building patch module: livepatch-test-alternatives.ko
+  SUCCESS
+
+I will fold this into the next revision.  In the series it splits in two:
+the annotation goes with the special-section marking, which is this patch
+(LoongArch: Mark special sections for KLP support), and the
+ARCH_HAS_INLINE_ALTS define goes with the objtool arch hooks.
+
+Diff below.
+
+---
+ arch/loongarch/include/asm/alternative-asm.h  | 5 ++++-
+ arch/loongarch/include/asm/alternative.h      | 5 ++++-
+ tools/objtool/arch/loongarch/include/arch/elf.h | 1 +
+ 3 files changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/arch/loongarch/include/asm/alternative-asm.h b/arch/loongarch/include/asm/alternative-asm.h
+index d940d9d2c0e1..92122a258a8e 100644
+--- a/arch/loongarch/include/asm/alternative-asm.h
++++ b/arch/loongarch/include/asm/alternative-asm.h
+@@ -6,6 +6,7 @@
+
+ #include <asm/asm.h>
+ #include <generated/asm-offsets.h>
++#include <linux/annotate.h>
+
+ /*
+  * Issue one struct alt_instr descriptor entry (need to put it into
+@@ -39,9 +40,11 @@
+ 	.popsection
+
+ 	.subsection 1
++	ANNOTATE_DATA_SPECIAL
+ 143 :
+ 	\newinstr
+ 144 :
++	ANNOTATE_DATA_SPECIAL_END
+ 	.previous
+ .endm
+
+@@ -70,11 +73,13 @@
+ 	.popsection
+
+ 	.subsection 1
++	ANNOTATE_DATA_SPECIAL
+ 143 :
+ 	\newinstr1
+ 144 :
+ 	\newinstr2
+ 145 :
++	ANNOTATE_DATA_SPECIAL_END
+ 	.previous
+ .endm
+
+diff --git a/arch/loongarch/include/asm/alternative.h b/arch/loongarch/include/asm/alternative.h
+index 8f7712ed2f4e..1d3ac2f667d1 100644
+--- a/arch/loongarch/include/asm/alternative.h
++++ b/arch/loongarch/include/asm/alternative.h
+@@ -7,6 +7,7 @@
+ #include <linux/types.h>
+ #include <linux/stddef.h>
+ #include <linux/stringify.h>
++#include <linux/objtool.h>
+ #include <asm/asm.h>
+
+ struct alt_instr {
+@@ -75,7 +76,9 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
+ 	ALTINSTR_ENTRY(feature, 1)					\
+ 	".popsection\n"							\
+ 	".subsection 1\n" \
++	ANNOTATE_DATA_SPECIAL "\n" \
+ 	ALTINSTR_REPLACEMENT(newinstr, feature, 1)			\
++	ANNOTATE_DATA_SPECIAL_END "\n" \
+ 	".previous\n"
+
+ #define ALTERNATIVE_2(oldinstr, newinstr1, feature1, newinstr2, feature2)\
+@@ -86,8 +89,10 @@ extern void apply_alternatives(struct alt_instr *start, struct alt_instr *end);
+ 	ALTINSTR_ENTRY(feature2, 2)					\
+ 	".popsection\n"							\
+ 	".subsection 1\n" \
++	ANNOTATE_DATA_SPECIAL "\n" \
+ 	ALTINSTR_REPLACEMENT(newinstr1, feature1, 1)			\
+ 	ALTINSTR_REPLACEMENT(newinstr2, feature2, 2)			\
++	ANNOTATE_DATA_SPECIAL_END "\n" \
+ 	".previous\n"
+
+ /*
+diff --git a/tools/objtool/arch/loongarch/include/arch/elf.h b/tools/objtool/arch/loongarch/include/arch/elf.h
+index 0103f27fccfc..e2843679f24e 100644
+--- a/tools/objtool/arch/loongarch/include/arch/elf.h
++++ b/tools/objtool/arch/loongarch/include/arch/elf.h
+@@ -46,6 +46,7 @@
+ #define R_TEXT32		R_LARCH_32_PCREL
+ #define R_TEXT64		R_LARCH_32_PCREL
+
++#define ARCH_HAS_INLINE_ALTS	1
+ #define ARCH_HAS_PAIRED_RELOCS	1
+
+ struct elf;
+
+Thanks,
+George
