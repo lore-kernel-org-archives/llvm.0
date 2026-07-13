@@ -1,75 +1,76 @@
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011A73D1CB4
-	for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 23:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D219738C42F
+	for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 23:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783984571; cv=none; b=SqnnoUtc8t0KJRinbCkPJcpitRiwQrQ+d+vVGYAqQ0wx2kJv2pRT3r/8o6Uw8KF/B639txusfPAggQZZK2JQQl97kSXVV1aduEuphvdFzYZsZWcO6C2Ny+iYQseElF3R6WA0kDsKfqY6nhK/4OYmxq19vlQ7750oUKM0WqsnuXk=
+	t=1783984646; cv=none; b=KMM0YBsRsuv7LsI/m4cPqDSk9sr3Ac3WmlXPUsrNA7wgLOPGivDykbsXZOgEUD+lP+QEZemY+HYAbK/8mbH+2QDsoOrOf8Y9g88T09lh6xDAsOHsKQ8AigQixa921AQpEdXWg5NbAKCJZEwfTuscoPadQpHYqW8x1X8jHiKuil8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783984571; c=relaxed/simple;
-	bh=xi4XLb5qBsbOyGboUbhPURXcEV7axu9PupvEt5dLKSg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mAvcoG+rq64eL3zJPvwy+EH5sgAPK8l4HTvhErbbuGJAiy6SvXjoIx2biBHzzAa8c8T3YgXtxeDNkA1jEIqH5CBXM0QJyWgoO8C6l/vXtP9DdBo0BBf/DYMQtEp8wDq/T1jyK6U8Zocks1SRDfO7FGzYytTS+dwQGlbAwkwVmcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aXhWNp/C; arc=none smtp.client-ip=209.85.215.180
+	s=arc-20240116; t=1783984646; c=relaxed/simple;
+	bh=7KJbLB4w0OJZHRVNOcvglTEvTdy3FR50ECp4VayMpm0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kDo1maejye+78Yyw9XvtGz6tvYlMLpksa+YQrkDor7tUD81gteenGs5ugP46WXwyLcVYjL9acrkAw/dSY3nbP7eINoAsP128QjIgHydw/YQP5u+/9Bs6CQkvaVaicZo5NYBKaLhsF6HK/6kCuO+pRT4EBNCcctWzf9AqdsgBAFc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bvSvRVNd; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aXhWNp/C"
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-c9c26a5fb98so263015a12.0
-        for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 16:16:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bvSvRVNd"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38e041ea211so1151299a91.0
+        for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 16:17:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783984567; x=1784589367; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1783984644; x=1784589444; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hW14DA5ad6cBBgJfRTqHvDQ+60aG/svK+L09SG/oC1w=;
-        b=aXhWNp/CEDBiuEi5wMTQy7w5q6/gFnTMqdfDIeZrf1mKKc+mmFoeJqukmxs5XPpgpe
-         1X1TBUcJSHIc6sTfnsktLVMDE1wpgd7lVz6mYD2EhemIUtAq56p6vsd5gyaI/7/fFrAC
-         x14ySKsIQLOuoM2G7azJ7EkO5z0uempdH6VF+atbIe5+Hl+k1OxWE0eYVsqpmKpw1z2K
-         iLCdYwGxDQp24rRyp5/vsm+oUmEgcyXbJwdgyn/nAHNEYHHrr05kUJf0r+EGrFrjpfYL
-         jjmDT/OM1OuRRJErzyHQr+JfOEPqP5V7WyGHKiuETQJwmkkuuK0M40887hxVoUbZKPaT
-         u1sQ==
+        bh=+FL5XSAFXC/lBCBY2+tuXGzEqpVa/8UNV4Ia4+5Gn4U=;
+        b=bvSvRVNdf28u4xSvmP3DBlXGsU82QcZVWUXYlHufRd9IwmozAXX2OYWtqGlUzvlu3W
+         jCYIY1HrU5oo1yW+Kp/wpnRxNcwEu7EvD83DW4UAcrMo4YqGpPZvND0OEi1kSNg7lJm8
+         XZAKuwEQCAtZ5yGeG+6X+jPnCil2h94Invqb9ZPAZuox1zbA+v3EHuBvXAnHhg15P4zZ
+         HlNN1xDLQkVeG77xVXwcFpfKKR1zs1YFsjinr39VjwJtb0EqlRbs2+nXe7TKX+rKNq4W
+         ftdPP9WGLAomUE3+dRz/V7rpaLb0fC5eevxDA+jVzlhazYTQURXa4BZwvCkdSiWi8fvp
+         +E0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783984567; x=1784589367;
+        d=1e100.net; s=20251104; t=1783984644; x=1784589444;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=hW14DA5ad6cBBgJfRTqHvDQ+60aG/svK+L09SG/oC1w=;
-        b=UT5z6S70mb0iUTfKw2vjQmpthE3wF9VJqeONNCf+d5XUqakzOcBmR9Z05nnuzBvGie
-         sP6Q8/LhTwWKXDw4ABgOxcR/1I0Zwo1Phtz9NdayhPT5R7jwgaQHSr3GyAhcWph0pHxX
-         n4L5ZK2b3Ge7Wc+m4fE/kS4cRuxjRuMz4TsOZteu8fouczFoEz+AoD66umCKuDDuhOsT
-         wfVbyL73Z8nTXBBZszWloueFY1VJFZjyQJHg4JYW/asB5Sz7AKGwZoYH2PlJMdahAYO4
-         4wCPqvztZNlU81CLPosFMPqW0KLdnpnb9WixshH2plCahnl8fEgv/vj5cRa1eyZWkVKw
-         ve9A==
-X-Forwarded-Encrypted: i=1; AHgh+RpraoItzq+duorrq1upVjjpO+bMxNNVUsb3kXiEv1X17OQz5Yu6QpgACayQUmB3C+BjA2ye@lists.linux.dev
-X-Gm-Message-State: AOJu0YzDKiKmE/9K7M2DJuoSCdmRXP7bUvVUTFexdR/0sGNn5HX08iY9
-	OOI93BCgU4VdUPqqP+di48irVWeq9wPpl0c4DsLzdxe4HD+8kIlax/yC
-X-Gm-Gg: AfdE7clwDewzr0pEmf5l0+BSojZlrB+eSRSDsHa2PcTCBkh6+BgQa+xtMmLHnOiyDM8
-	wCUYM6nOleAIWVb/x4Vy4+wACd5tdTW2olx0z25PQvLA1W9jqFvDlh73ivyECKFuUIP0Bg9nTuU
-	+qnw437+k08o6UmlyR+gLrHRcRmTgKZXN5T1Rz4sp4BQuvhynMMRKYYfNj37OBSSD2tVTbhi1aA
-	kdoz3pSjzxEjUqzDq25CbymTPmH+fTBHpW/5Cj1dHZ2Vrg+/wVzsOikBktv+5hfI+8OvFs26Dgu
-	P+FOQEc5sdu1umQ9XUfQOSGhOTt+hOjX7eKUW1zmrRJlNOwtMopFv5e0UtKQdqV3ZK0VjT/RWbM
-	4VUYd/40GlmVHrN1C4Y+SmAZFhBeA7Bjl4K+JrybOrWO7vlWbYi2ty/PJVXcN27wyFADXeOzuC3
-	GQWC5fCajzJK84ANycxHUKiLecRqK3kXKiQ+FtWFEjJPOSN7DJzOZyMLxHGhdwHvXCpXtH5CQ3u
-	aejPJGzcc60qVXk57k0b/egNddDmz/IcLfSpxKRkeXziwt1uvU+EtIe/Cx4cKI+uRHaWShGEHev
-X-Received: by 2002:a05:6a21:2d44:b0:39b:bc11:9ec5 with SMTP id adf61e73a8af0-3c0f093fbc7mr16423792637.13.1783984566492;
-        Mon, 13 Jul 2026 16:16:06 -0700 (PDT)
+        bh=+FL5XSAFXC/lBCBY2+tuXGzEqpVa/8UNV4Ia4+5Gn4U=;
+        b=LnFZpIMQSfi10NtwwbG07yeTDOmamDpbQsIbRn42pfCsw4YldDxtgFeyPWiqeDJ5wu
+         lTmLCmvrndgvcXa0eAElHP9FnppKmu7BEDbFJ2raSmRZrNwS/Ao2b92D2p+LKEwVegE3
+         y+SXzFK8Rm2qMnpm4d4mQL5j7iZDaPbkB6Hsv+g+a8oEjZWwqREk/gvYRNYP+7SM0BI7
+         YLf99CE+/F33cqizMlICkbBnFeChxpEJVGqouGTepUMXObD9kDzPS8t59TMr+svukTz5
+         USitByktzIc0WRWEVthea7kuh+27NoiSI+gWkUImcbe/jeXvkwKvwyQzcVgovezouFVi
+         WAuA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr4vNfklXI1E9cxm4fF45/n94eHR/Mhms+hm84w9s95gTXaXmQ9uznx633nWWGKoGFSHQ+r@lists.linux.dev
+X-Gm-Message-State: AOJu0YypgGBBDclXYCqqPNk8xcYBSE8Ca3hWyp/l74N4ApG73d2Mv/Ob
+	2iRjdkDAT0tzs90DGREa9QDPG77Bu3yJfh+aw0gTmiSvkBDPSeSahFRh
+X-Gm-Gg: AfdE7cmgemdDyNM4MDshb4M4LMJdrM9hpD6gJUZpxGySSbjKSIkuLWBSkQklpS0irJx
+	bLjHTeKjhym6RhZHtGyMlLRuwkGuiQUSxzTgjpyQN066tD6qjoP+VoEBiFbLITKZKPWYPF+UMLF
+	htTUdR1KzVhvIcXdc/JUOITnSjyByefHtAciJeuA40VABqA0Jgav5XdXqOaJu7XpMnul9kaTcOq
+	p+qqfJ+UKCFwQGzDW58GGvOhFppN1JeMr2mKBI0XLUM+cfdCVf8Jc+hQIqLNNGy/CbqcZKyKl46
+	KvvxDFfEa22VPHACjDRWHh/p2mvyOl/tnq6KLZ6F7DBBkIxTgme/f1Blyovl5UbVtNPzHY4Szms
+	ipnf62Hd7ql0MT1SyMeuCJNkuXwYNgx9fuVEjYLMB/sWSCsMuP7amg1Wdq2CoTgI3GJlUsUlfZS
+	KiWjyB9Uvo0ewLmBddGL5xwZal2vERb54n06npcaBtoJMFQfC7Ld3dkgYAe/9UJA/RUeE207vvo
+	gxZ4uNhq98VLyGTG0cfbQmgE4hw/9GjP3IZr/eKn2ZR1PfOPzenze8KI6Pj4Xbirw==
+X-Received: by 2002:a17:90b:3cc4:b0:37d:f206:a2ac with SMTP id 98e67ed59e1d1-38e1add8aeemr101308a91.7.1783984644079;
+        Mon, 13 Jul 2026 16:17:24 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca5b3162a49sm8888835a12.15.2026.07.13.16.16.05
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e172b8020sm518328a91.3.2026.07.13.16.17.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 16:16:05 -0700 (PDT)
+        Mon, 13 Jul 2026 16:17:23 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
-To: linux-usb@vger.kernel.org
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To: linux-mtd@lists.infradead.org
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] usb: ohci-ppc-of: use platform for irq and ioremap
-Date: Mon, 13 Jul 2026 16:16:04 -0700
-Message-ID: <20260713231604.1090044-1-rosenp@gmail.com>
+Subject: [PATCH] mtd: mpc5121_nfc: use platform for irq and ioremap
+Date: Mon, 13 Jul 2026 16:17:22 -0700
+Message-ID: <20260713231722.1095470-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,131 +80,118 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace the open-coded of_address_to_resource() plus devm_ioremap_resource()
-sequence with devm_platform_get_and_ioremap_resource(), which looks up the
-resource and maps it in one call. The helper returns a pointer to the
-resource, so update rsrc_start / rsrc_len to dereference it and assign the
-mapped address to hcd->regs. Use a separate on-stack resource (ehci_res)
-for the unrelated ibm,usb-ehci-440epx erratum lookup rather than aliasing
-the returned resource pointer.
+Replace the open-coded of_address_to_resource() plus devm_request_mem_region()
+and devm_ioremap() sequence with a single devm_platform_ioremap_resource()
+call, which folds the resource lookup, region reservation and mapping into
+one step and returns an ERR_PTR on failure, checked with IS_ERR() and
+propagated via PTR_ERR().
 
 Switch IRQ acquisition from irq_of_parse_and_map() to platform_get_irq(),
 which only retrieves the interrupt the OF/platform core has already set up
 rather than transferring mapping ownership to the driver. Drop the now
-unneeded irq_dispose_mapping() calls (probe error path and
-ohci_hcd_ppc_of_remove()) and the now-unused of_irq.h include, keeping
-linux/of_address.h for the erratum block's of_address_to_resource().
+unneeded of_irq.h include.
 
-Behaviorally equivalent with respect to region reservation: the prior code
-used devm_ioremap_resource(), which already reserved the region.
+This is behaviorally equivalent: the driver already reserved the region
+with devm_request_mem_region(), so the non-overlapping reg requirement of
+devm_platform_ioremap_resource() was already satisfied.
 
-Built for PowerPC (ppc44x_defconfig + CONFIG_USB_OHCI_HCD_PPC_OF) with
-LLVM=1; drivers/usb/host/ohci-hcd.o (which includes ohci-ppc-of.c)
-compiles cleanly.
+Drop the now-unused regs_paddr / regs_size locals, which previously only
+fed the open-coded request/ioremap calls. Keep the linux/of_address.h
+include, as of_iomap() is still used elsewhere in the driver.
+
+Built for PowerPC (mpc512x_defconfig + CONFIG_MTD_NAND_MPC5121_NFC) with
+LLVM=1; drivers/mtd/nand/raw/mpc5121_nfc.o compiles cleanly.
 
 Assisted-by: opencode:hy3-free
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/usb/host/ohci-ppc-of.c | 44 +++++++++++++---------------------
- 1 file changed, 16 insertions(+), 28 deletions(-)
+ drivers/mtd/nand/raw/mpc5121_nfc.c | 39 +++++++++---------------------
+ 1 file changed, 12 insertions(+), 27 deletions(-)
 
-diff --git a/drivers/usb/host/ohci-ppc-of.c b/drivers/usb/host/ohci-ppc-of.c
-index acd0a0e398a4..3a965b9c04fa 100644
---- a/drivers/usb/host/ohci-ppc-of.c
-+++ b/drivers/usb/host/ohci-ppc-of.c
-@@ -17,7 +17,6 @@
- #include <linux/signal.h>
+diff --git a/drivers/mtd/nand/raw/mpc5121_nfc.c b/drivers/mtd/nand/raw/mpc5121_nfc.c
+index 97b4e7f3e1bb..e6594548b7e0 100644
+--- a/drivers/mtd/nand/raw/mpc5121_nfc.c
++++ b/drivers/mtd/nand/raw/mpc5121_nfc.c
+@@ -23,7 +23,6 @@
+ #include <linux/mtd/partitions.h>
  #include <linux/of.h>
  #include <linux/of_address.h>
 -#include <linux/of_irq.h>
  #include <linux/platform_device.h>
  
- static int
-@@ -87,7 +86,9 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
- 	struct device_node *dn = op->dev.of_node;
- 	struct usb_hcd *hcd;
- 	struct ohci_hcd	*ohci;
+ #include <asm/mpc5121.h>
+@@ -618,14 +617,14 @@ static int mpc5121_nfc_probe(struct platform_device *op)
+ 	struct clk *clk;
+ 	struct device *dev = &op->dev;
+ 	struct mpc5121_nfc_prv *prv;
 -	struct resource res;
-+	struct resource *res;
-+	struct resource ehci_res;
+ 	struct mtd_info *mtd;
+ 	struct nand_chip *chip;
+-	unsigned long regs_paddr, regs_size;
+ 	const __be32 *chips_no;
 +	void __iomem *regs;
- 	int irq;
+ 	int resettime = 0;
+ 	int retval = 0;
+ 	int rev, len;
++	int irq;
  
- 	int rv;
-@@ -103,30 +104,21 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
+ 	/*
+ 	 * Check SoC revision. This driver supports only NFC
+@@ -637,6 +636,14 @@ static int mpc5121_nfc_probe(struct platform_device *op)
+ 		return -ENXIO;
+ 	}
  
- 	dev_dbg(&op->dev, "initializing PPC-OF USB Controller\n");
- 
--	rv = of_address_to_resource(dn, 0, &res);
--	if (rv)
--		return rv;
-+	regs = devm_platform_get_and_ioremap_resource(op, 0, &res);
++	regs = devm_platform_ioremap_resource(op, 0);
 +	if (IS_ERR(regs))
 +		return PTR_ERR(regs);
 +
 +	irq = platform_get_irq(op, 0);
 +	if (irq < 0)
 +		return irq;
- 
- 	hcd = usb_create_hcd(&ohci_ppc_of_hc_driver, &op->dev, "PPC-OF USB");
- 	if (!hcd)
++
+ 	prv = devm_kzalloc(dev, sizeof(*prv), GFP_KERNEL);
+ 	if (!prv)
  		return -ENOMEM;
- 
--	hcd->rsrc_start = res.start;
--	hcd->rsrc_len = resource_size(&res);
--
--	hcd->regs = devm_ioremap_resource(&op->dev, &res);
--	if (IS_ERR(hcd->regs)) {
--		rv = PTR_ERR(hcd->regs);
--		goto err_rmr;
--	}
--
--	irq = irq_of_parse_and_map(dn, 0);
--	if (!irq) {
--		dev_err(&op->dev, "%s: irq_of_parse_and_map failed\n",
--			__FILE__);
--		rv = -EBUSY;
--		goto err_rmr;
--	}
-+	hcd->rsrc_start = res->start;
-+	hcd->rsrc_len = resource_size(res);
-+	hcd->regs = regs;
- 
- 	ohci = hcd_to_ohci(hcd);
- 	if (is_bigendian) {
-@@ -158,20 +150,18 @@ static int ohci_hcd_ppc_of_probe(struct platform_device *op)
- 	* the ehci driver is loaded.
- 	*/
- 	if (np !=  NULL) {
--		if (!of_address_to_resource(np, 0, &res)) {
--			if (!request_mem_region(res.start, 0x4, hcd_name)) {
-+		if (!of_address_to_resource(np, 0, &ehci_res)) {
-+			if (!request_mem_region(ehci_res.start, 0x4, hcd_name)) {
- 				writel_be((readl_be(&ohci->regs->control) |
- 					OHCI_USB_SUSPEND), &ohci->regs->control);
- 					(void) readl_be(&ohci->regs->control);
- 			} else
--				release_mem_region(res.start, 0x4);
-+				release_mem_region(ehci_res.start, 0x4);
- 		} else
- 			pr_debug("%s: cannot get ehci offset from fdt\n", __FILE__);
- 		of_node_put(np);
+@@ -660,17 +667,7 @@ static int mpc5121_nfc_probe(struct platform_device *op)
+ 		return retval;
  	}
  
--	irq_dispose_mapping(irq);
--err_rmr:
-  	usb_put_hcd(hcd);
- 
- 	return rv;
-@@ -185,8 +175,6 @@ static void ohci_hcd_ppc_of_remove(struct platform_device *op)
- 
- 	usb_remove_hcd(hcd);
- 
--	irq_dispose_mapping(hcd->irq);
+-	prv->irq = irq_of_parse_and_map(dn, 0);
+-	if (!prv->irq) {
+-		dev_err(dev, "Error mapping IRQ!\n");
+-		return -EINVAL;
+-	}
 -
- 	usb_put_hcd(hcd);
- }
+-	retval = of_address_to_resource(dn, 0, &res);
+-	if (retval) {
+-		dev_err(dev, "Error parsing memory region!\n");
+-		return retval;
+-	}
++	prv->irq = irq;
  
+ 	chips_no = of_get_property(dn, "chips", &len);
+ 	if (!chips_no || len != sizeof(*chips_no)) {
+@@ -678,19 +675,7 @@ static int mpc5121_nfc_probe(struct platform_device *op)
+ 		return -EINVAL;
+ 	}
+ 
+-	regs_paddr = res.start;
+-	regs_size = resource_size(&res);
+-
+-	if (!devm_request_mem_region(dev, regs_paddr, regs_size, DRV_NAME)) {
+-		dev_err(dev, "Error requesting memory region!\n");
+-		return -EBUSY;
+-	}
+-
+-	prv->regs = devm_ioremap(dev, regs_paddr, regs_size);
+-	if (!prv->regs) {
+-		dev_err(dev, "Error mapping memory region!\n");
+-		return -ENOMEM;
+-	}
++	prv->regs = regs;
+ 
+ 	mtd->name = "MPC5121 NAND";
+ 	chip->legacy.dev_ready = mpc5121_nfc_dev_ready;
 -- 
 2.55.0
 
