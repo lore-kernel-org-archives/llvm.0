@@ -1,141 +1,236 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987443EE1F2
-	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 09:36:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4F8A38D3E0;
+	Tue, 14 Jul 2026 12:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784021768; cv=none; b=NVF9DSVnfULttpzaN/ODmrqMQNHBRocejyK8KTeEFBrM9SbWA77vthGvsM0lvqfdIG3pEkZPPl8JDFeAr3zv1Vj4WTFtZ8+yeNeV2HoWfFr1466zQVBVq/HNBIqrkP5agFWysDC0IMKr4jbLsR5KqK/IXjRuUN5BdjAkGtNIK9o=
+	t=1784030599; cv=none; b=PLnZSDSyrKj7ePBarQlYPi4Nm0Vt+hPujPzLJ0hxBKjNpVIRGpYexy734+cpfqpZee2BDzmiP73iIgDdVsU0RjkqOB1pLS7sQJnfVUHWm3QMr3EjW642hh1Usk66/AXWZn51puca5FYlAASvfS9CjkgvS5fucoJUcFLtscWS3A8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784021768; c=relaxed/simple;
-	bh=UF53KwwF+oAUSilICLt0Nu5fjrF/uLjngnHZ091+a2s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=bK00KuRTfjlsNptTmzfuXu2JkEVwd5inPIzJq0h7KnsIG22skVZ0uZGtg/smsjlIa+VJIJq/6gMTAayINGtHWg/WUmY12P6sJSRzL4/o+Zor/+a4HJtPCjPL59ly6TYsoC9n9XdFF8WGlfCROB0/wCTxfScvBZMICWm3DgMG0PA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VKM3+nZJ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784030599; c=relaxed/simple;
+	bh=yPXzGXrlMBlFsvgWTxIdJ2RO/Qu0nGNJycckS51pV8A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nCymMs5jjtlKq0s85PN0R6FY+gKfzLtmS79mH//P0eixe2DhjztZvOe394CfXYp6aZyhLHHMKhz3xzN2sfiSQMGl9bI9kEP7OA/VgIfGkLN7ZOWFinJr4rDW3ZWi9U9+hX48CA95GSOLEnPUSfpk9+bm29bKtEbeQJrnRoQav2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DhKTT1ZN; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VKM3+nZJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784021765;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TBrhCMaLeefe3xIZ3hlRm/zq3XAKTj0MtjlETtKb8Pw=;
-	b=VKM3+nZJwZpHPKMgWa+9V8D0MAoHLkPu8h4M8L8DV8+MVq2LSDQPrsG2hb5t6b3pZ8QNnb
-	Izz8zoC/wN8O6kxwaos1ecVS2m9/yZn66/kPVJADLyOyzdKA4W1sLVRgC5C66rSu1XcL3l
-	096WqfReLFbD311Oc0K1NAx9jIkfML0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-590-OyiqRRmMMoCS2inqXO-lJA-1; Tue, 14 Jul 2026 05:36:02 -0400
-X-MC-Unique: OyiqRRmMMoCS2inqXO-lJA-1
-X-Mimecast-MFC-AGG-ID: OyiqRRmMMoCS2inqXO-lJA_1784021761
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-493bdaf8549so39637995e9.2
-        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 02:36:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784021761; x=1784626561;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TBrhCMaLeefe3xIZ3hlRm/zq3XAKTj0MtjlETtKb8Pw=;
-        b=pRFEqnyFmQY/dAjTBAGL4GH/gG6oPC7PjwW4LeTce2sPna3Gci0UmOgOdkk9lcQ5vc
-         SgbBdwCb0dfMNTsSBLq0rc0seGjKKKavbHgf7FtUfNZlz9qp6bm6aeGJ6ZQqD+/REpLK
-         rupzU+otuXxe4/a8Rw2cf9TmF4TQxTA026379lTuP1yeolCSeK2KdJt6I4v+bxwBwZQn
-         SA2HV+wGdOS1HgYnXxokH2OQyyFxO+N0vZrfQHXon/9P+zBWDCrARoJvtcC73DKzmKl1
-         yCYhi3qALHrx57h97mx1uCySJ4nSXhhLWH0mVMUUJ9lNvp88D8+j1DapwaA+vJBLbFP4
-         pQtA==
-X-Forwarded-Encrypted: i=1; AHgh+RoCT4MXYr0cvUH5OjTEI9T/lwj4Fv/NtS7SP4STLLn8gbdOobJ2oJAlJ19JGGwNB44XLFkr@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz9V4WNIbJGmaXFyfwSmrQ27IpDKdJ8tHWI8XtYnbDP3P2oYkte
-	1flGHcSSu1+v9jxd/txuWSz+qpQgY4kigEsDhtyDatHjl/ze/wPmi7qXGj1RVdODc2XvC4QJaas
-	JL1vcBwit4WaR06VwD4N2rsVs+fUjA2neTiLQiLfiRe9sNAFERcXhjjA=
-X-Gm-Gg: AfdE7clmOsHEB02EyF3BcIbBLMOGngQk3pG/6gCZxM6mRQRxJmRVEbL59rZT+col4wM
-	GRM2iijaTy7jg5nPG0haF5lB+ZxInWLh3PF4WUcdfx6l2hnDmKexuPGvL36FafyvlsXoHQbQqY/
-	EkH3JyyJl4YuSYZlGX0vM2bUi6d5n4uWwg0gTiTHDc1ysi1da1/Fxs/PvjRqZKrYVvDv5IertK2
-	Xad9I2lQwsgMzb2igU2fGKiPk85FjsZc68S2YYjFBnwmNlAthimGqHLHYyKD0/TA0FyFgtiIBQ8
-	OcnHtAtTZNwNc9hO5FIBOLXfFitavfouMAOHtbXEWhr1CKqwutvBBGhQArdhCFipAfyir3+Cmpy
-	QGUF4U8B29cLHB+6sQFguAg4PnkVN1luydohGnVny4LOTLHR4Dp9958Ex8b0h
-X-Received: by 2002:a05:600c:a4d:b0:493:e4b2:5290 with SMTP id 5b1f17b1804b1-493f87e5a62mr129201905e9.12.1784021760724;
-        Tue, 14 Jul 2026 02:36:00 -0700 (PDT)
-X-Received: by 2002:a05:600c:a4d:b0:493:e4b2:5290 with SMTP id 5b1f17b1804b1-493f87e5a62mr129201545e9.12.1784021760325;
-        Tue, 14 Jul 2026 02:36:00 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-34-22-35.business.telecomitalia.it. [79.34.22.35])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4950a32c65asm61563095e9.14.2026.07.14.02.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 02:35:59 -0700 (PDT)
-Date: Tue, 14 Jul 2026 11:35:54 +0200
-From: Stefano Garzarella <sgarzare@redhat.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: ld.lld: error: vmlinux.a(af_vsock.o at 1186296) <inline
- asm>:5:8: unpredictable STXR instruction, status is also a source
-Message-ID: <alYCoW08UPIGV9np@sgarzare-redhat>
-References: <202607061644.jD93AjWc-lkp@intel.com>
- <CAGxU2F5KvtLSgT9pzhv8YxcP_j9L7usXqKY+W446XxLAovdbog@mail.gmail.com>
- <20260710155428.GA3149665@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DhKTT1ZN"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784030595; x=1815566595;
+  h=date:from:to:cc:subject:message-id;
+  bh=yPXzGXrlMBlFsvgWTxIdJ2RO/Qu0nGNJycckS51pV8A=;
+  b=DhKTT1ZNDowxO4XIKmbTeaxQqL4IrSay8+CjILBRfunp2zjegS7Gqcwd
+   nAjxmCFvbqugVPlQG1Q3xLKVejJIMWk4vV8+a6n/dwBcbgGPKkL5vikeC
+   lNzhk05uDYLaHzUUhGck8wfhfBZoWVU3VyckOm9hbI+GOQzH1tAsCSVJ+
+   PTsha7MKH1jf1fWNpvDwD/nGNEGMBFYMidzHpR783xdm4af6rjKxRSYMl
+   JTLgDm2gjF1hDjAYxePHQmLyEeSrJRDrqksSL8uUWuzLmqGkXTuyuNZQw
+   a1lh4ANaNRwenWJDwYZZem1vb3sJiv2T2/9Ej/ynWx9ilyJvsHwa7PH+N
+   Q==;
+X-CSE-ConnectionGUID: gw8FBwKQSYmHVteJ+UQEXQ==
+X-CSE-MsgGUID: teVxfOxuQKGbqzNBera0ng==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="110197024"
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="110197024"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 05:03:14 -0700
+X-CSE-ConnectionGUID: cRIzMZcrSOScpeK6Cuorxw==
+X-CSE-MsgGUID: Uz61meS/TKKs+xvCMAI1Zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="254090929"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 14 Jul 2026 05:03:12 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wjbqv-000000003z3-3qTu;
+	Tue, 14 Jul 2026 12:03:09 +0000
+Date: Tue, 14 Jul 2026 14:02:45 +0200
+From: kernel test robot <lkp@intel.com>
+To: Shivank Garg <shivankg@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: mm/rmap.c:2522:7: error: call to undeclared function
+ 'huge_pte_dirty'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202607141439.zBAJhYoU-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-In-Reply-To: <20260710155428.GA3149665@ax162>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: YztgVCVhL--1LtduIqm2V5jNPr88wAdGNHYJpwqzzQo_1784021761
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
 
-On Fri, Jul 10, 2026 at 08:54:28AM -0700, Nathan Chancellor wrote:
->On Fri, Jul 10, 2026 at 04:22:20PM +0200, Stefano Garzarella wrote:
->> On Mon, 6 Jul 2026 at 10:44, kernel test robot <lkp@intel.com> wrote:
->> >
->> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
->> > head:   8cdeaa50eae8dad34885515f62559ee83e7e8dda
->> > commit: 102eab95f025b4d3f3a6c0a858400aca2af2fe52 vsock: lock down child_ns_mode as write-once
->> > date:   4 months ago
->> > config: arm64-randconfig-001-20260706 (https://download.01.org/0day-ci/archive/20260706/202607061644.jD93AjWc-lkp@intel.com/config)
->> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
->> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260706/202607061644.jD93AjWc-lkp@intel.com/reproduce)
->> >
->> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> > the same patch/commit), kindly add following tags
->> > | Fixes: 102eab95f025 ("vsock: lock down child_ns_mode as write-once")
->> > | Reported-by: kernel test robot <lkp@intel.com>
->> > | Closes: https://lore.kernel.org/oe-kbuild-all/202607061644.jD93AjWc-lkp@intel.com/
->> >
->> > All errors (new ones prefixed by >>):
->> >
->> > >> ld.lld: error: vmlinux.a(af_vsock.o at 1186296) <inline asm>:5:8: unpredictable STXR instruction, status is also a source
->> >    stlxr   w8, w8, [x21]
->> >    ^
->> >
->>
->> Could this be related to https://github.com/llvm/llvm-project/issues/106380 ?
->> That issue seems fixed in llvm >= 20
->
->Indeed, this is resolved by
->
->  https://github.com/llvm/llvm-project/commit/7183771834d9035ffbedd8f1ff9233b16722b986
->
->in LLVM 20.1.0, I confirmed with a reverse bisect. It looks like
+tree:   https://github.com/intel-lab-lkp/linux/commits/Shivank-Garg/mm-rmap-Add-batched-version-of-folio_try_share_anon_rmap_pte/20260712-154356
+head:   f8b98e18fdb1e935473b34c81c54112651ac2e3d
+commit: b1567f49975671161a4df476e9068bda9c3df9ae mm/rmap: split try_to_migrate_hugetlb_one() out of try_to_migrate_one()
+date:   2 days ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607141439.zBAJhYoU-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607141439.zBAJhYoU-lkp@intel.com/reproduce)
 
-Thanks for checking!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607141439.zBAJhYoU-lkp@intel.com/
 
->this issue triggers on undefined values being passed to inline asm but I
->don't see where there is an undefined value in the blamed commit but I
->did not look too hard. Presumably this is around the try_cmpxchg() in
+All errors (new ones prefixed by >>):
 
-Yeah, I suspected the same.
+>> mm/rmap.c:2522:7: error: call to undeclared function 'huge_pte_dirty'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    2522 |                 if (huge_pte_dirty(pteval))
+         |                     ^
+   1 error generated.
 
->vsock_net_set_child_mode(). I am not sure this will be easily to
->workaround so we might just have to leave it broken.
 
-I think so, I can't see any simple workaround :-(
+vim +/huge_pte_dirty +2522 mm/rmap.c
 
-Thanks,
-Stefano
+  2443	
+  2444	/*
+  2445	 * Replace the hugetlb page table mapping for folio with migration entries.
+  2446	 *
+  2447	 * @arg: enum ttu_flags will be passed to this argument.
+  2448	 */
+  2449	static bool try_to_migrate_hugetlb_one(struct folio *folio,
+  2450			struct vm_area_struct *vma, unsigned long address, void *arg)
+  2451	{
+  2452		const unsigned long hsz = huge_page_size(hstate_vma(vma));
+  2453		DEFINE_FOLIO_VMA_WALK(pvmw, folio, vma, address, 0);
+  2454		enum ttu_flags flags = (enum ttu_flags)(long)arg;
+  2455		bool anon_exclusive, writable, ret = true;
+  2456		bool anon = folio_test_anon(folio);
+  2457		struct mm_struct *mm = vma->vm_mm;
+  2458		struct mmu_notifier_range range;
+  2459		unsigned long pfn;
+  2460		struct page *page;
+  2461		pte_t pteval;
+  2462	
+  2463		range.end = vma_address_end(&pvmw);
+  2464		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma->vm_mm,
+  2465					address, range.end);
+  2466		/* If sharing is possible, start and end will be adjusted accordingly. */
+  2467		adjust_range_if_pmd_sharing_possible(vma, &range.start, &range.end);
+  2468		mmu_notifier_invalidate_range_start(&range);
+  2469	
+  2470		if (page_vma_mapped_walk(&pvmw)) {
+  2471			address = pvmw.address;
+  2472			pteval = huge_ptep_get(mm, address, pvmw.pte);
+  2473			if (likely(pte_present(pteval)))
+  2474				pfn = pte_pfn(pteval);
+  2475			else
+  2476				pfn = softleaf_to_pfn(softleaf_from_pte(pteval));
+  2477	
+  2478			page = folio_page(folio, pfn - folio_pfn(folio));
+  2479			anon_exclusive = anon && PageAnonExclusive(page);
+  2480	
+  2481			/*
+  2482			 * huge_pmd_unshare may unmap an entire PMD page. There is no
+  2483			 * way of knowing exactly which PMDs may be cached for this mm,
+  2484			 * so we must flush them all. start/end were already adjusted
+  2485			 * above to cover this range.
+  2486			 */
+  2487			flush_cache_range(vma, range.start, range.end);
+  2488	
+  2489			/*
+  2490			 * To call huge_pmd_unshare, i_mmap_rwsem must be held in write
+  2491			 * mode. Caller needs to explicitly do this outside rmap
+  2492			 * routines. We also must hold hugetlb vma_lock in write mode.
+  2493			 * Lock order dictates acquiring vma_lock BEFORE i_mmap_rwsem.
+  2494			 * We can only try lock here and fail if unsuccessful.
+  2495			 */
+  2496			if (!anon) {
+  2497				struct mmu_gather tlb;
+  2498	
+  2499				VM_WARN_ON_ONCE(!(flags & TTU_RMAP_LOCKED));
+  2500				if (!hugetlb_vma_trylock_write(vma)) {
+  2501					ret = false;
+  2502					goto walk_done;
+  2503				}
+  2504	
+  2505				tlb_gather_mmu_vma(&tlb, vma);
+  2506				if (huge_pmd_unshare(&tlb, vma, address, pvmw.pte)) {
+  2507					hugetlb_vma_unlock_write(vma);
+  2508					huge_pmd_unshare_flush(&tlb, vma);
+  2509					tlb_finish_mmu(&tlb);
+  2510					/*
+  2511					 * The PMD table was unmapped,
+  2512					 * consequently unmapping the folio.
+  2513					 */
+  2514					goto walk_done;
+  2515				}
+  2516				hugetlb_vma_unlock_write(vma);
+  2517				tlb_finish_mmu(&tlb);
+  2518			}
+  2519	
+  2520			/* Nuke the hugetlb page table entry */
+  2521			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+> 2522			if (huge_pte_dirty(pteval))
+  2523				folio_mark_dirty(folio);
+  2524			writable = pte_write(pteval);
+  2525	
+  2526			VM_WARN_ON_FOLIO(writable && anon && !anon_exclusive, folio);
+  2527	
+  2528			if (PageHWPoison(page)) {
+  2529				pteval = swp_entry_to_pte(make_hwpoison_entry(page));
+  2530				hugetlb_count_sub(folio_nr_pages(folio), mm);
+  2531				set_huge_pte_at(mm, address, pvmw.pte, pteval, hsz);
+  2532			} else if (likely(pte_present(pteval)) && pte_unused(pteval) &&
+  2533				   !userfaultfd_armed(vma)) {
+  2534				/*
+  2535				 * The guest indicated that the page content is of no
+  2536				 * interest anymore. Simply discard the pte, vmscan
+  2537				 * will take care of the rest.
+  2538				 */
+  2539				dec_mm_counter(mm, mm_counter(folio));
+  2540			} else {
+  2541				pte_t swp_pte;
+  2542	
+  2543				/*
+  2544				 * arch_unmap_one() is expected to be a NOP on
+  2545				 * architectures where we could have PFN swap PTEs,
+  2546				 * so we'll not check/care.
+  2547				 */
+  2548				if (arch_unmap_one(mm, vma, address, pteval) < 0) {
+  2549					set_huge_pte_at(mm, address, pvmw.pte,
+  2550							pteval, hsz);
+  2551					ret = false;
+  2552					goto walk_done;
+  2553				}
+  2554	
+  2555				/* See folio_try_share_anon_rmap_pte(): clear PTE first. */
+  2556				if (anon_exclusive &&
+  2557				    hugetlb_try_share_anon_rmap(folio)) {
+  2558					set_huge_pte_at(mm, address, pvmw.pte,
+  2559							pteval, hsz);
+  2560					ret = false;
+  2561					goto walk_done;
+  2562				}
+  2563	
+  2564				/*
+  2565				 * Store the pfn of the page in a special migration
+  2566				 * pte. do_swap_page() will wait until the migration
+  2567				 * pte is removed and then restart fault handling.
+  2568				 */
+  2569				swp_pte = make_migration_swp_pte(page, pteval,
+  2570								 writable, anon_exclusive);
+  2571				set_huge_pte_at(mm, address, pvmw.pte, swp_pte, hsz);
+  2572				trace_set_migration_pte(address, pte_val(swp_pte),
+  2573							folio_order(folio));
+  2574			}
+  2575	
+  2576			hugetlb_remove_rmap(folio);
+  2577			if (vma->vm_flags & VM_LOCKED)
+  2578				mlock_drain_local();
+  2579			folio_put(folio);
+  2580	walk_done:
+  2581			page_vma_mapped_walk_done(&pvmw);
+  2582		}
+  2583	
+  2584		mmu_notifier_invalidate_range_end(&range);
+  2585	
+  2586		return ret;
+  2587	}
+  2588	
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
