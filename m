@@ -1,155 +1,196 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C645B2E173D;
-	Tue, 14 Jul 2026 06:49:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784011792; cv=none; b=TLhvPTNJbib4EjTImbQV/Nbkvc7UjDkHhXvdZNZanHTYRS7CLbVWAejZZODBsSdbWxwYd/aoqE9APBSkH7AeCiiwVTj+eFHy+UQztzulMZNYlDRcX7RzuNQYN67fRn6vMJabiwc+RGkpy+nUPU6WYceYJQ1Vb8VZEA6wlw1bTFE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784011792; c=relaxed/simple;
-	bh=k25tR3t/12RBKq2b3YV6UPKsIMCjvTXZilkpDi2/D6k=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CZiFVz4nvNRRKfLMg74Z22IIfxyoknFGwjSDRJeV4Ehovgm/U4OfdtNGZWh9rC5e5IzJr1QMse5Fyh++/aSyvcIeQdxGVyEg+XRLDYAgpmDFuW5YcM/VOEI2OnWV42b3DzkLgNSWGE5x/ygGCqCLVgaKEA2y7D4UT4+IYpixE9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q5X7FMZ4; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1127C3F871E
+	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 08:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784018476; cv=pass; b=WklKpu1kq3CT9QHzgpMteTkiXoQcjuZBOdO1JKl0IXYSEnUxKcUbj5ahMEmE7IGbZWqI7W3GwfPaQBd1Uzl0GeGoBb/iDJ2kedMrYHK18D9ELenb2K5b1C3Ktv8Jud9sC+pyeUJINdf8lvNgrm9N689dQ51iBOLtGeXg2ou2dC0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784018476; c=relaxed/simple;
+	bh=nbSPde3UkSVASsOM4r9b2J4uWTBw0+497lxH2wBCk1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lF9JD1njLbRpK3AFZFMtyAQGKDE0qSyfhCcKiDGtIuvrFuodj2m5hKaVlJKiDqQbwU3AtMRDSvNtBDm600tSj4ZkGBMTBmb6VUSu5YNISS8PxqExZQr7hsBBUVKkO+yhoFX/Rvph39gJd+f0ZlIqDPUF0MtsrUCJ3AQ+06WiRwA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=v0ZvMMw8; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q5X7FMZ4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784011789; x=1815547789;
-  h=date:from:to:cc:subject:message-id;
-  bh=k25tR3t/12RBKq2b3YV6UPKsIMCjvTXZilkpDi2/D6k=;
-  b=Q5X7FMZ4n//wNl8Dd4GfLr89S6+4JTHehTy29TEsfWipJbZiG4YlMOz7
-   hyppoV50fCOcAlbv7bpI8D+nEZCm/RcYZvdoG0cCYqpVnQrX4crqn/svC
-   HCPS7M3kEhMfNnYS8yk6z6rvfuvjDYCGxWjva3zYT+jKqPfDGU1dxWlen
-   QE/uqSjvAJSbhSUMOtLwsQHPHl9co7fKMI/j9VToxCi62sCAieTXLAQLd
-   ilV6XijTLKKcuIoKV9KtV2csZVuzjz/CuhQHPl4dRl0SheYX0+/o31Rbl
-   avHvHIFLx5ZV50xmSPJQPmz36KJ7cBoVjRg9b/HVFupLAk0//DZsZSGQj
-   w==;
-X-CSE-ConnectionGUID: 29m8BcekSce73hMoiIZJ3g==
-X-CSE-MsgGUID: x/i2c8VMQAO95sr49RHqoA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="95273433"
-X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
-   d="scan'208";a="95273433"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 23:49:48 -0700
-X-CSE-ConnectionGUID: q43yn4OiQWyhjhGcpdDluw==
-X-CSE-MsgGUID: 3BdGRF+PT3i8pEucSC0eGg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
-   d="scan'208";a="254027844"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa006.jf.intel.com with ESMTP; 13 Jul 2026 23:49:48 -0700
-Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wjWxd-000000003uX-1Of8;
-	Tue, 14 Jul 2026 06:49:45 +0000
-Date: Tue, 14 Jul 2026 08:48:46 +0200
-From: kernel test robot <lkp@intel.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: kernel/bpf/diagnostics.c:179:40: warning: diagnostic
- behavior may be improved by adding the 'format(printf, 2, 3)' attribute to
- the declaration of 'diag_write'
-Message-ID: <202607140852.i9ntTAJ9-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="v0ZvMMw8"
+Received: from monolith.lan (unknown [185.77.218.2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pav)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4gzt7J3c1Gz49Q40;
+	Tue, 14 Jul 2026 11:41:00 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1784018461;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qfKwqt20ln/lNPj08FQSGLMybK9KhqCVH3d4zCDXX1U=;
+	b=v0ZvMMw8K8/WjpuoKV+Z+nByXF8LzZkI9k9aYmpRWgxXYQSU3jUXDnAdr3REjdJS/C3+ee
+	p9rB16M/l0C5c6xLp+9vG7+v2fgkcxwl38b2cXd7pX9wKL2OTt1OGHeQs631ghB/VEv5QR
+	zMnWlJnI6m7pEbfDafqsjEa40IE1WT9C8fuV5VnHeFlL06c23U5yyMaOpTuj6fVurwQMsg
+	nJIDrosSQwTrHmplH5r7TpPbJwZ5DFrP71zugMeo0GNOR39D/NCsY6fdekBVMKWjoNBRqM
+	KDb+sv6TsbamVcUTHHVyu9ahvJmt4zaXU1YbqtkStxoK6FH2W/NZiYMhq3UJtg==
+ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1784018461;
+	b=hum3WxCumSkNr8+6Ac4AxaXiUaC17Xg191o5z0CrFxSWHkYNs2ktWxZ80KTuROT6Dl77j6
+	rRDwDyVKIWHhwa/Ba8xF72fLigMPM4yV5vftGZqpBqBkkXmAmHIKjwefgO9aFBgTzv9ySC
+	x5I5eQPZhdO6ijOYXVf0LKkXXGErHoBb2S79S7Fjc0AP/ReqDQ9pYkscjxy7SKePTDCrw1
+	DQdUTk3PccVU65qxU1pSUvWJuSgz15oBMiEKiS8pSHOsJeZEbZ4C3ElT0otNpOolhi6pac
+	PSK/JUeEkRpvrRF50Hj1ObhsytXHP2HlOz5/Hy9o5XYFj4mn6xqO+DZ3NDUt/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1784018461;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=qfKwqt20ln/lNPj08FQSGLMybK9KhqCVH3d4zCDXX1U=;
+	b=sxutrsi88ntQgIeNG0+LAZgzcsfFyexVpDzocSG44eeH90qt2Ekc5Kae8mxUdjSa7+RVYX
+	qRORN+aS1pBDGSM+7OuwwKyvwTATyKo3gQNHW/sliyXhbTRhupga7afi4P3O09GMWVJ44m
+	LmenZFmTj4PmXrog4Ufv0PMb8rmLxcrs1u3hMimCeovY2mtArxl7mgVcpbZCgQICfxVvZg
+	CvAdhnwecs8MYdcf4zEMssZgZkvcsG3I7RzLns68iFLm6grrURpHY3HXfMe7UUwbEHUBEK
+	YiJFBt+SjkG0wmWKY640KfFYdHDZ2zz5lc5CDCsWc3ElxAIavqdTCqinkIW9Yg==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=pav smtp.mailfrom=pav@iki.fi
+From: Pauli Virtanen <pav@iki.fi>
+To: linux-bluetooth@vger.kernel.org
+Cc: Pauli Virtanen <pav@iki.fi>,
+	marcel@holtmann.org,
+	luiz.dentz@gmail.com,
+	elver@google.com,
+	bvanassche@acm.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 1/3] Bluetooth: L2CAP: avoid maybe-return-locked in l2cap_get_chan_by_scid/dcid
+Date: Tue, 14 Jul 2026 11:40:49 +0300
+Message-ID: <aaf5b46dd2519f7b3c7e74f9b232be2130ca30db.1784018377.git.pav@iki.fi>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/bpf-Add-verifier-diagnostics-report-helpers/20260713-235352
-head:   481b092f62f3f331a53a188543b27495e7a1763c
-commit: 1d00722166456d81ed4d556f7d213f162146d1ce bpf: Add verifier diagnostic event log
-date:   15 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607140852.i9ntTAJ9-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607140852.i9ntTAJ9-lkp@intel.com/reproduce)
+Replace the maybe-return-locked pattern in l2cap_get_chan_by_scid/dcid()
+by doing locking in the caller after NULL check. This allows adding
+context analysis annotations for the locking.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607140852.i9ntTAJ9-lkp@intel.com/
+Signed-off-by: Pauli Virtanen <pav@iki.fi>
+---
 
-All warnings (new ones prefixed by >>):
+Notes:
+    v2:
+    - split code changes and adding annotations to separate patches
+    - remove self-evident comment
 
->> kernel/bpf/diagnostics.c:179:40: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_write' [-Wmissing-format-attribute]
-     171 | static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
-         | __attribute__((format(printf, 2, 3))) 
-     172 | {
-     173 |         va_list args;
-     174 | 
-     175 |         if (!bpf_diag_enabled(env))
-     176 |                 return;
-     177 | 
-     178 |         va_start(args, fmt);
-     179 |         bpf_verifier_vlog(&env->log, fmt, args);
-         |                                               ^
-   kernel/bpf/diagnostics.c:171:13: note: 'diag_write' declared here
-     171 | static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^
-   kernel/bpf/diagnostics.c:321:48: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of 'diag_vprint_indented' [-Wmissing-format-attribute]
-     314 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
-         | __attribute__((format(printf, 2, 0))) 
-     315 | {
-     316 |         char *buf;
-     317 | 
-     318 |         if (!bpf_diag_enabled(env))
-     319 |                 return;
-     320 | 
-     321 |         buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
-         |                                                       ^
-   kernel/bpf/diagnostics.c:314:13: note: 'diag_vprint_indented' declared here
-     314 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
-         |             ^
-   kernel/bpf/diagnostics.c:432:77: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_insn_print' [-Wmissing-format-attribute]
-     422 | static void diag_insn_print(void *private_data, const char *fmt, ...)
-         | __attribute__((format(printf, 2, 3))) 
-     423 | {
-     424 |         struct bpf_diag_insn_ctx *ctx = private_data;
-     425 |         struct bpf_diag_insn_buf *buf = &ctx->buf;
-     426 |         va_list args;
-     427 | 
-     428 |         if (buf->len >= buf->size)
-     429 |                 return;
-     430 | 
-     431 |         va_start(args, fmt);
-     432 |         buf->len += vscnprintf(buf->buf + buf->len, buf->size - buf->len, fmt, args);
-         |                                                                                    ^
-   kernel/bpf/diagnostics.c:422:13: note: 'diag_insn_print' declared here
-     422 | static void diag_insn_print(void *private_data, const char *fmt, ...)
-         |             ^
-   kernel/bpf/diagnostics.c:738:13: warning: unused function 'diag_print_history' [-Wunused-function]
-     738 | static void diag_print_history(struct bpf_verifier_env *env)
-         |             ^~~~~~~~~~~~~~~~~~
-   kernel/bpf/diagnostics.c:594:13: warning: unused function 'diag_report_reason' [-Wunused-function]
-     594 | static void diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^~~~~~~~~~~~~~~~~~
-   kernel/bpf/diagnostics.c:608:13: warning: unused function 'diag_report_suggestion' [-Wunused-function]
-     608 | static void diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   6 warnings generated.
+ net/bluetooth/l2cap_core.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index 538ae9aa3479..322a1895c1bd 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -109,7 +109,7 @@ static struct l2cap_chan *__l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ }
+ 
+ /* Find channel with given SCID.
+- * Returns a reference locked channel.
++ * Returns a reference.
+  */
+ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ 						 u16 cid)
+@@ -117,18 +117,14 @@ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ 	struct l2cap_chan *c;
+ 
+ 	c = __l2cap_get_chan_by_scid(conn, cid);
+-	if (c) {
+-		/* Only lock if chan reference is not 0 */
++	if (c)
+ 		c = l2cap_chan_hold_unless_zero(c);
+-		if (c)
+-			l2cap_chan_lock(c);
+-	}
+ 
+ 	return c;
+ }
+ 
+ /* Find channel with given DCID.
+- * Returns a reference locked channel.
++ * Returns a reference.
+  */
+ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+ 						 u16 cid)
+@@ -136,12 +132,8 @@ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+ 	struct l2cap_chan *c;
+ 
+ 	c = __l2cap_get_chan_by_dcid(conn, cid);
+-	if (c) {
+-		/* Only lock if chan reference is not 0 */
++	if (c)
+ 		c = l2cap_chan_hold_unless_zero(c);
+-		if (c)
+-			l2cap_chan_lock(c);
+-	}
+ 
+ 	return c;
+ }
+@@ -4364,6 +4356,8 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	if (chan->state != BT_CONFIG && chan->state != BT_CONNECT2 &&
+ 	    chan->state != BT_CONNECTED) {
+ 		cmd_reject_invalid_cid(conn, cmd->ident, chan->scid,
+@@ -4475,6 +4469,8 @@ static inline int l2cap_config_rsp(struct l2cap_conn *conn,
+ 	if (!chan)
+ 		return 0;
+ 
++	l2cap_chan_lock(chan);
++
+ 	switch (result) {
+ 	case L2CAP_CONF_SUCCESS:
+ 		l2cap_conf_rfc_get(chan, rsp->data, len);
+@@ -4581,6 +4577,8 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	rsp.dcid = cpu_to_le16(chan->scid);
+ 	rsp.scid = cpu_to_le16(chan->dcid);
+ 	l2cap_send_cmd(conn, cmd->ident, L2CAP_DISCONN_RSP, sizeof(rsp), &rsp);
+@@ -4618,6 +4616,8 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	if (chan->state != BT_DISCONN) {
+ 		l2cap_chan_unlock(chan);
+ 		l2cap_chan_put(chan);
+@@ -5115,6 +5115,8 @@ static inline int l2cap_le_credits(struct l2cap_conn *conn,
+ 	if (!chan)
+ 		return -EBADSLT;
+ 
++	l2cap_chan_lock(chan);
++
+ 	max_credits = LE_FLOWCTL_MAX_CREDITS - chan->tx_credits;
+ 	if (credits > max_credits) {
+ 		BT_ERR("LE credits overflow");
+@@ -6974,6 +6976,8 @@ static void l2cap_data_channel(struct l2cap_conn *conn, u16 cid,
+ 		return;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	BT_DBG("chan %p, len %d", chan, skb->len);
+ 
+ 	/* If we receive data on a fixed channel before the info req/rsp
+-- 
+2.55.0
 
-vim +179 kernel/bpf/diagnostics.c
-
-   170	
-   171	static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
-   172	{
-   173		va_list args;
-   174	
-   175		if (!bpf_diag_enabled(env))
-   176			return;
-   177	
-   178		va_start(args, fmt);
- > 179		bpf_verifier_vlog(&env->log, fmt, args);
-   180		va_end(args);
-   181	}
-   182	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
