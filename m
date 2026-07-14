@@ -1,155 +1,163 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16667370D6D;
-	Tue, 14 Jul 2026 03:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC952D8DCA;
+	Tue, 14 Jul 2026 05:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784000211; cv=none; b=PX8v75QeUe7Du4o1R9XHH2WnWMqVVPvYnH9A5WuW0DjVSbFHKcx7rddYCJZdpVTH3J5PAWNiVZFE5UYmppaJN7RhJFb+1GAG+lsKb8O+P0ygO0jB2sp+s6CL5lP0rnTNCH/cX8gPR1nx7LF+trG0bw1if7ECms4ks+x+V6RfjVc=
+	t=1784005669; cv=none; b=lDwywBNUjChvdSkMobnl+K95/ANHkApJRQ5EYQttTqlcR5KZzDA4OoJAn8qlm0IjFKbaOLRW0398fWqcriVBykFtVMjJq/I3QmsUAOzSx5YOYMU21QMU4NZNGitrSRifrErXbJFfMSQ0OkVCDXbUjtdrrzpbV28k4NSrYAPTo+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784000211; c=relaxed/simple;
-	bh=5eCcIL4oxMV+SkkS0K44HVewVkr6API4IPwHUXYMYU0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jWjHNDMFqaaE2gcYGAQOEESQWchgz0McdRJT3W6t03OHW7dUaYnwm2SqBzRk1BwIgmwLQHN0ax4qALow4aZjdQARa2KX3LVnY4g1Mf8MPMOmo1wA26TtBQjhzKzq/rGgRara1DWN6sAQa9LGhcX+zAKkMFKE0c4Jch34MQpMQ+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W0E+4kzm; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1784005669; c=relaxed/simple;
+	bh=fIqr3w7apKhaTPAR89n/+Iu9ke2D6YI+23vEXTDhR6w=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=JMmLZKwGswR9EeyAuuxT6nX87QY4NQusJuPySeCdLvTbWhaRMayPUUo5iPZQjuK6F7cmNI0W1ywXmB4N+9Zcs9pAhAW8o/ofLwVw28bJyUzuS9swd3Fcvms6w3trWBXA9x/P/Y/pW7bK29/uwye333da/mDwNzbTt+3VaXiGSc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cyn2ZFhe; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W0E+4kzm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cyn2ZFhe"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784000208; x=1815536208;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5eCcIL4oxMV+SkkS0K44HVewVkr6API4IPwHUXYMYU0=;
-  b=W0E+4kzm3Jxrbyyy0aIsQuEoNWYJf17D8cCXa8QTKyk4todDPJHOjafD
-   /C9kOSTjP4A1jG16Eq3YGtF186dOnCFRl3NzeNX74JhEL43hrdqUnykwM
-   PHHLTt4GYl6nPtTUbDirAJOiT0sDcfzH/owSeELtioJM8QbIMNaeSBebX
-   +E4sslrbmDgxNX3wGRs0kT/M82TGns+BCu6Oh4stcPMJSe7ZEyZGsNPw+
-   ar+6CWGqxvJDJTn/uw/Vzyvl3dElTgdVBnZUiG8m+nu60nADdsTcYZVND
-   D95JC24/EhLV7scHdGM1YxHwhPtRpON8bOHwZa6TYivKZ5WJqGMtu1wXE
+  t=1784005667; x=1815541667;
+  h=date:from:to:cc:subject:message-id;
+  bh=fIqr3w7apKhaTPAR89n/+Iu9ke2D6YI+23vEXTDhR6w=;
+  b=cyn2ZFheuqTC33vaA8OmrgEwrJggo2sD5uylGQ898fDu9EtKAuyso0+l
+   CCRUISrNm7Alc+SbIRLV1jvbUAG8+d/Ybo71aQtVdC1Euq39gngldj/H/
+   VQgWakaAOc+rSoj4KMArA84K7sFf4+mk7+8EzG3YJEIVTAj88ECmR0Rxi
+   z/+8sECczcoYNONo1mX/6jlZCmh6Krbl49k9jFM3TZI2wtCgvnpcbeIQK
+   bw+Q5BW9zZN67lYngfRg1Ds2r4GdlHSvNbZB8SqJ8I1zkv+1wUvy4Fkfj
+   WtMj2WVvU9F+SXW10TnqGMfmZKLoKpxdx76VdcLSiYMjySQhcYvQmWL+8
    Q==;
-X-CSE-ConnectionGUID: enf+W3KjRO6+9wAxsWdlew==
-X-CSE-MsgGUID: r0LGn+YLQEmkboyOUTZ1AA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="110162107"
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="110162107"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 20:36:47 -0700
-X-CSE-ConnectionGUID: VzoiWrt2TreOTxJFUMVWJA==
-X-CSE-MsgGUID: xq3MnKdWQwO5PsCiajxmbQ==
+X-CSE-ConnectionGUID: oUYlQ1daTEWUMTR5hlYySA==
+X-CSE-MsgGUID: jYPxWCfZRKGKHxMrVylujQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="84640885"
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="84640885"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 22:07:46 -0700
+X-CSE-ConnectionGUID: tyHskaqWTAq2tYsSimRsPg==
+X-CSE-MsgGUID: u5h4PeZYT2CbD5K6wT9zgg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
-   d="scan'208";a="259308756"
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="279011426"
 Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
-  by orviesa003.jf.intel.com with ESMTP; 13 Jul 2026 20:36:45 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 13 Jul 2026 22:07:45 -0700
 Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wjTwo-000000003rt-2uLo;
-	Tue, 14 Jul 2026 03:36:42 +0000
-Date: Tue, 14 Jul 2026 05:36:18 +0200
+	id 1wjVMt-000000003sT-1gWr;
+	Tue, 14 Jul 2026 05:07:43 +0000
+Date: Tue, 14 Jul 2026 07:07:30 +0200
 From: kernel test robot <lkp@intel.com>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log
- level
-Message-ID: <202607140517.PEmgml8m-lkp@intel.com>
-References: <20260713153910.2556007-18-memxor@gmail.com>
+ 0day robot <lkp@intel.com>
+Subject: kernel/bpf/diagnostics.c:328:77: warning: diagnostic
+ behavior may be improved by adding the 'format(printf, 2, 3)' attribute to
+ the declaration of 'diag_insn_print'
+Message-ID: <202607140753.mH4et9Aj-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260713153910.2556007-18-memxor@gmail.com>
 
-Hi Kumar,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 9a3a07d06e7d74f4aecc51396c771149336ac55d]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/bpf-Add-verifier-diagnostics-report-helpers/20260713-235352
-base:   9a3a07d06e7d74f4aecc51396c771149336ac55d
-patch link:    https://lore.kernel.org/r/20260713153910.2556007-18-memxor%40gmail.com
-patch subject: [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log level
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607140517.PEmgml8m-lkp@intel.com/config)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/bpf-Add-verifier-diagnostics-report-helpers/20260713-235352
+head:   481b092f62f3f331a53a188543b27495e7a1763c
+commit: 680f28821329be1a104e6110eadde4658c51eab7 bpf: Add source and instruction diagnostic context
+date:   13 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607140753.mH4et9Aj-lkp@intel.com/config)
 compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607140517.PEmgml8m-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607140753.mH4et9Aj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607140517.PEmgml8m-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607140753.mH4et9Aj-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   kernel/bpf/diagnostics.c:38:40: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_log' [-Wmissing-format-attribute]
-      30 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
+   kernel/bpf/diagnostics.c:166:40: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_log' [-Wmissing-format-attribute]
+     158 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
          | __attribute__((format(printf, 2, 3))) 
-      31 | {
-      32 |         va_list args;
-      33 | 
-      34 |         if (!bpf_diag_enabled(env))
-      35 |                 return;
-      36 | 
-      37 |         va_start(args, fmt);
-      38 |         bpf_verifier_vlog(&env->log, fmt, args);
+     159 | {
+     160 |         va_list args;
+     161 | 
+     162 |         if (!bpf_diag_enabled(env))
+     163 |                 return;
+     164 | 
+     165 |         va_start(args, fmt);
+     166 |         bpf_verifier_vlog(&env->log, fmt, args);
          |                                               ^
-   kernel/bpf/diagnostics.c:30:13: note: 'diag_log' declared here
-      30 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
+   kernel/bpf/diagnostics.c:158:13: note: 'diag_log' declared here
+     158 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
          |             ^
->> kernel/bpf/diagnostics.c:89:48: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of 'diag_vprint_indented' [-Wmissing-format-attribute]
-      82 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+   kernel/bpf/diagnostics.c:217:48: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of 'diag_vprint_indented' [-Wmissing-format-attribute]
+     210 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
          | __attribute__((format(printf, 2, 0))) 
-      83 | {
-      84 |         char *buf;
-      85 | 
-      86 |         if (!bpf_diag_enabled(env))
-      87 |                 return;
-      88 | 
-      89 |         buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
+     211 | {
+     212 |         char *buf;
+     213 | 
+     214 |         if (!bpf_diag_enabled(env))
+     215 |                 return;
+     216 | 
+     217 |         buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
          |                                                       ^
-   kernel/bpf/diagnostics.c:82:13: note: 'diag_vprint_indented' declared here
-      82 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+   kernel/bpf/diagnostics.c:210:13: note: 'diag_vprint_indented' declared here
+     210 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
          |             ^
-   kernel/bpf/diagnostics.c:130:13: warning: unused function 'diag_report_reason' [-Wunused-function]
-     130 | static void diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^~~~~~~~~~~~~~~~~~
-   kernel/bpf/diagnostics.c:144:13: warning: unused function 'diag_report_suggestion' [-Wunused-function]
-     144 | static void diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
+>> kernel/bpf/diagnostics.c:328:77: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_insn_print' [-Wmissing-format-attribute]
+     318 | static void diag_insn_print(void *private_data, const char *fmt, ...)
+         | __attribute__((format(printf, 2, 3))) 
+     319 | {
+     320 |         struct bpf_diag_insn_ctx *ctx = private_data;
+     321 |         struct bpf_diag_insn_buf *buf = &ctx->buf;
+     322 |         va_list args;
+     323 | 
+     324 |         if (buf->len >= buf->size)
+     325 |                 return;
+     326 | 
+     327 |         va_start(args, fmt);
+     328 |         buf->len += vscnprintf(buf->buf + buf->len, buf->size - buf->len, fmt, args);
+         |                                                                                    ^
+   kernel/bpf/diagnostics.c:318:13: note: 'diag_insn_print' declared here
+     318 | static void diag_insn_print(void *private_data, const char *fmt, ...)
+         |             ^
+   kernel/bpf/diagnostics.c:446:2: error: call to undeclared function 'diag_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     446 |         diag_write(env, "  %s\n", source_lane);
+         |         ^
+   kernel/bpf/diagnostics.c:446:2: note: did you mean 'down_write'?
+   include/linux/rwsem.h:241:13: note: 'down_write' declared here
+     241 | extern void down_write(struct rw_semaphore *sem) __acquires(sem);
+         |             ^
+   kernel/bpf/diagnostics.c:455:2: error: call to undeclared function 'diag_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     455 |         diag_write(env, "  %s%*d | %s\n", diag_insn->idx == focus_insn_idx ? ">>> " : "    ",
+         |         ^
+   kernel/bpf/diagnostics.c:531:3: error: call to undeclared function 'diag_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     531 |                 diag_write(env, "  %*s | %*s^-- %s: %s\n", line_width + 4, "", indent, "", label,
+         |                 ^
+   kernel/bpf/diagnostics.c:606:2: error: call to undeclared function 'diag_write'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     606 |         diag_write(env, "  Source context:\n");
+         |         ^
+   3 warnings and 4 errors generated.
 
 
-vim +89 kernel/bpf/diagnostics.c
+vim +328 kernel/bpf/diagnostics.c
 
-    81	
-    82	static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
-    83	{
-    84		char *buf;
-    85	
-    86		if (!bpf_diag_enabled(env))
-    87			return;
-    88	
-  > 89		buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
-    90		if (!buf) {
-    91			diag_log(env, "%s<failed to allocate diagnostic text>\n", BPF_DIAG_TEXT_INDENT);
-    92			return;
-    93		}
-    94	
-    95		diag_print_wrapped_text(env, buf);
-    96		kfree(buf);
-    97	}
-    98	
+   317	
+   318	static void diag_insn_print(void *private_data, const char *fmt, ...)
+   319	{
+   320		struct bpf_diag_insn_ctx *ctx = private_data;
+   321		struct bpf_diag_insn_buf *buf = &ctx->buf;
+   322		va_list args;
+   323	
+   324		if (buf->len >= buf->size)
+   325			return;
+   326	
+   327		va_start(args, fmt);
+ > 328		buf->len += vscnprintf(buf->buf + buf->len, buf->size - buf->len, fmt, args);
+   329		va_end(args);
+   330	}
+   331	
 
 --
 0-DAY CI Kernel Test Service
