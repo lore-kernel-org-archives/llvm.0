@@ -1,106 +1,138 @@
-Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FA642BE95
-	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 21:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A0F83EDE78
+	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 23:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784066180; cv=none; b=VOHtLdk6sGB/Ib1a8/+HJ3c6KBNKCvHKvqljsqWvkuKhOdnowLdVk8dTsgpXOmbG4gMkZoc2Wa3yzOXi+a4QiDzsRrUUfo+LxLXFTepunVi0Rc07tbvM0SUDYbZVBiEaceIX3lqV8UndujqHYB+ZL/RM75OyZJTz3C9lS7mERb4=
+	t=1784072555; cv=none; b=N1WOCgwdN8pfNKUCrS6KK4kIlLRy7Of1z5n0sWSp0MtRycCbRs2w8poPHfBnYM6qP98MSA3a12IjikRifvYTQJLD8I96DUqZNzHCzpO1aqzWSG3YfpVV9INH1U1JjBpWDSnLDBqXZSPvCaLfq50wwbKOyqA0nrnwKRt3zZAtmxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784066180; c=relaxed/simple;
-	bh=7DdPj62ioNH/IRVopzKLFDEzS9gnNwDwF8CehRbEYzA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KfH2gETtnckavBvC5rfZzEId/iie/5dlXBtCBsdrIhXv1z4t8BWQvQ/nKnVGF2aHsDkDp1e27XJYahCYwTNmFlyT4H2mSWq9iHfYxKKnu+rK0agvDcY5R9AdDQEYthV/hetRi2rKs6Nxy7Om5GVDLAqBmA8KcQyNwh0u5VMMQYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay04.hostedemail.com (Postfix) with ESMTP id CDB891A04F9;
-	Tue, 14 Jul 2026 21:56:16 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id C1EF72002E;
-	Tue, 14 Jul 2026 21:56:13 +0000 (UTC)
-Date: Tue, 14 Jul 2026 17:56:17 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Vincent Donnefort <vdonnefort@google.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, Marc Zyngier <maz@kernel.org>, Thomas
- =?UTF-8?B?V2Vpw59zY2h1aA==?= <linux@weissschuh.net>, Paolo Bonzini
- <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] tracing: ring-buffer: allowlist clang-generated symbols
-Message-ID: <20260714175617.319a6ec7@gandalf.local.home>
-In-Reply-To: <ajKgjNuHUlteSziZ@google.com>
-References: <20260616164211.3733326-1-arnd@kernel.org>
-	<ajKgjNuHUlteSziZ@google.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1784072555; c=relaxed/simple;
+	bh=DIgognXgae4/GVNIoSHQv4tSnIRy6YAm2SspBfvmHtU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iwqKy8c1vdSl9/uZrfvJ06hf36GzJB8jXvLc8qNqWle4Y7rs0/Aj0aHEXjQ4GRiZXwdXt3P2wCwiQYWw1fz+dBLFkxO+tuVuVFTnyKQM0soyj6OaewVVaS6MGxE9ObdKq2V5DozTQZKiGCYK6Ky9GmcK9JIOONLE2un4fFelCzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wvap4JuT; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wvap4JuT"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38759bcd877so4217647a91.2
+        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 16:42:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784072554; x=1784677354; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=hLFUs5RlkL8vn6uwW0uOp3ziZXbVN3pyew+ndI5sC2g=;
+        b=Wvap4JuTrUe/Vu9vioISH1g56UQI+NZOdZq6ZvHPzhSgwqdvWI8nxUaUat3HMcRjLy
+         19dwONVu5R0tkAwxau31U0eaFse67xmSlJPzuSqoWWUcLDKGFCc5iPsvkWwBIVaEIxe/
+         zloQYNWuFGdter7w4pgOEiAabn9lcIKEKbErLE3zoJOGDEn3wKBp60nAI7idEKWcnPvF
+         90QxatL8/W0hSvhkHMiwWouOhxBDqOPpIK8xfzfTqtcfDDX1CpE96NCWp2EO3ReNZS6k
+         8xJ4jbgv0bKlDqmHtjeIyGAC/mlel5yHWdRxry0UkUOS26i6NtcbQmporJiuT4duC6tg
+         X/zQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784072554; x=1784677354;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=hLFUs5RlkL8vn6uwW0uOp3ziZXbVN3pyew+ndI5sC2g=;
+        b=HAkYMaym+9dAsVlW9YiBKPpnQUmN3/J18njIWiVWwRNja+2eDmSn3nMehebuIfy7FI
+         aXlvLhsmQyEXFxT090ibMusFrgOei/LPMne7u69X4kre+uOoE/xSjYXqXIOSOuzjWpBW
+         QxuX+otV5UYQkpMP0A2MlZR8HFStm6aOxpm/dkM9yg72vwrRBAq1RcZ6667XcTP9LBus
+         wl/mSoHyBpUFS2JH7crTkHUJfkZKmx23gnaNySEYuTwdKXg/bXhHEQxVsePRBO1+0c3y
+         3AVRzxMiaWdP37q9F3auUT2LJRhSxMCq1eMedjDe3tVgJblKv2PDnBNcgNTAeNhJbHBS
+         kEBw==
+X-Forwarded-Encrypted: i=1; AHgh+Rpz17tVapMfkcjqP4tGNGBXNEoocv5h8Fnce2O2TD3VVqBN78uxJ7qARkJT+qjTtcxraCqU@lists.linux.dev
+X-Gm-Message-State: AOJu0YyDVbDY5kOKutus86nQA9oueFQLsX5UX0UNciX30Er3CnwLe8Pm
+	haRsrpk8uRWCpnj1V68pZm4RiQzQZm54yzh5FResv82ALhu7MCQpRTpO
+X-Gm-Gg: AfdE7cn0V+FmEF091q5Xz6Uk3paFuYQifp7z/Zk/yh0b7K1scZ0I++b3eUjNGgdwjos
+	MJmnTOcKBr1nCNmvYiwmPvmt755M8vu5FshjP7q7Sn2fxjr5oG5r85ADmH1yl4bogfFNS3hNRu0
+	Jsvn5R5AmR9QHlrKWHMO7ESIdynBFYR+ZU2T2nLacMNGzqmcCl6NQe7fyWPCOHP7BlmiJbbz2sV
+	8rI8dyuuMs6FCTe6+BbdjofdyYOMUKiVtN5M8qXXrGa+U7c95Mm9cznP1RHxkH/nrmHNLhqfpY1
+	tX85nyjaA0q0HAj4YjHgx5s/eZ5SeZ85JlwPYDloa1c/5+plSBO2yKe4xPaIy5iP0VpysYq+7XE
+	TwboqWrlg+IahqR1MZOq9cW3C4zZ25Ek3ByCe9C1VlZ+ygHRq4tzYYNSiqhGynZyFQYKGzTCUHo
+	m86AsOuSSPyUrVYMN0j/7B7ga+wrJ4WNHjrmwZVuIHxhcg5zbyGTCAlzU6U+Q00xMRqVpkR/sLY
+	FmOEXBvQH4ZQgDmfU2HFIGHUtCg3oglPd56/yyFhObZZNj/vO3sebdTNBxtV2uHHw==
+X-Received: by 2002:a17:90b:4c02:b0:36a:c4b:76cf with SMTP id 98e67ed59e1d1-38e2a0c346bmr532833a91.23.1784072553829;
+        Tue, 14 Jul 2026 16:42:33 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e34])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ccc9d1e279sm124751785ad.45.2026.07.14.16.42.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 16:42:32 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-gpio@vger.kernel.org
+Cc: Linus Walleij <linusw@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] gpio: logicvc: use devm_platform_get_and_ioremap_resource()
+Date: Tue, 14 Jul 2026 16:42:30 -0700
+Message-ID: <20260714234230.886636-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: C1EF72002E
-X-Stat-Signature: cm83ch4cm4cud5cbo654w4xyg8g3nk86
-X-Rspamd-Server: rspamout03
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/Tgr5xFE1/yqADqrbJ00SeD0hjBPci7d0=
-X-HE-Tag: 1784066173-901489
-X-HE-Meta: U2FsdGVkX18/qu7TigBlqFoxO0rpb5MjFw69z3FjYMhXRKnt+qxwUHwwBI/xV8rXEELYP8eLou+liLqR4UG3rMKOTpTKu4iYK8FZwOgRYHHP1jhXU9kZBT4y3Pa3TJGS5uqo+V8GHchqh/m4qjMKjc6JzQNE1MW2XgLpWDNn/ZTElWls4AbCEk7hUvBQu4YhG1h+lPb784ikZfPgLD2ZK0IM+RD6a+ImvXiKfJp5uPXeuANoD33baSEPROg4l1bnu1IP++EZwLf/blnQkLtmd+G7kjY0fhSlkMsmV1ImnjFv1w3oNrP6pKyl9IzGKGIc/Re1PgV8s9KZfUEQn+ZoJiM9dg28t2q4
+Content-Transfer-Encoding: 8bit
 
-On Wed, 17 Jun 2026 14:26:36 +0100
-Vincent Donnefort <vdonnefort@google.com> wrote:
+In the regmap fallback path, replace of_address_to_resource() plus
+devm_ioremap_resource() with devm_platform_get_and_ioremap_resource(),
+which looks up the resource and maps it in one call. The helper returns a
+pointer to the resource, so update resource_size() to dereference it.
 
-> On Tue, Jun 16, 2026 at 06:42:03PM +0200, Arnd Bergmann wrote:
-> > From: Arnd Bergmann <arnd@arndb.de>
-> > 
-> > In randconfig build testing using clang-22, I came across two
-> > sets of extra symbols in the ring buffer code that may get
-> > inserted by the compiler:
-> > 
-> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
-> >          U memset
-> > 
-> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
-> >                  U llvm_gcda_emit_arcs
-> >                  U llvm_gcda_emit_function
-> >                  U llvm_gcda_end_file
-> >                  U llvm_gcda_start_file
-> >                  U llvm_gcda_summary_info
-> >                  U llvm_gcov_init
-> > 
-> > Add all of these to the allowlist.
-> > 
-> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > ---
-> >  kernel/trace/Makefile | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-> > index f934ff586bd4..aa8564fb8ff4 100644
-> > --- a/kernel/trace/Makefile
-> > +++ b/kernel/trace/Makefile
-> > @@ -146,6 +146,7 @@ KASAN_SANITIZE_undefsyms_base.o := y  
-> 
-> Would "GCOV_PROFILE_undefsyms_base.o := y" work?
+Drop the now-unused linux/of_address.h include; of_node is still used by
+syscon_node_to_regmap() and platform_get_resource() resolves the same MEM
+resource that of_address_to_resource(of_node, 0) did.
 
-Arnd?
+Built for ARM (multi_v7_defconfig + CONFIG_GPIO_LOGICVC) with LLVM=1;
+drivers/gpio/gpio-logicvc.o compiles cleanly.
 
--- Steve
+Assisted-by: opencode:hy3-free
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/gpio/gpio-logicvc.c | 13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
 
-> 
-> >  
-> >  UNDEFINED_ALLOWLIST = __asan __gcov __kasan __kcsan __hwasan __sancov __sanitizer __tsan __ubsan __msan \
-> >  		      __aeabi_unwind_cpp __s390_indirect_jump __x86_indirect_thunk simple_ring_buffer \
-> > +		      memset llvm_gcda llvm_gcov \
-> >  		      $(shell $(NM) -u $(obj)/undefsyms_base.o 2>/dev/null | awk '{print $$2}')
-> >  
-> >  quiet_cmd_check_undefined = NM      $<
-> > -- 
-> > 2.39.5
-> >   
+diff --git a/drivers/gpio/gpio-logicvc.c b/drivers/gpio/gpio-logicvc.c
+index cb9dbcc290ad..54a7598c7384 100644
+--- a/drivers/gpio/gpio-logicvc.c
++++ b/drivers/gpio/gpio-logicvc.c
+@@ -8,7 +8,6 @@
+ #include <linux/gpio/driver.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+-#include <linux/of_address.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/mfd/syscon.h>
+@@ -102,20 +101,14 @@ static int logicvc_gpio_probe(struct platform_device *pdev)
+ 
+ 	/* Grab our own regmap if that fails. */
+ 	if (IS_ERR(logicvc->regmap)) {
+-		struct resource res;
++		struct resource *res;
+ 		void __iomem *base;
+ 
+-		ret = of_address_to_resource(of_node, 0, &res);
+-		if (ret) {
+-			dev_err(dev, "Failed to get resource from address\n");
+-			return ret;
+-		}
+-
+-		base = devm_ioremap_resource(dev, &res);
++		base = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
+ 		if (IS_ERR(base))
+ 			return PTR_ERR(base);
+ 
+-		logicvc_gpio_regmap_config.max_register = resource_size(&res) -
++		logicvc_gpio_regmap_config.max_register = resource_size(res) -
+ 			logicvc_gpio_regmap_config.reg_stride;
+ 
+ 		logicvc->regmap =
+-- 
+2.55.0
 
