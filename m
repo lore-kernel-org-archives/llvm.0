@@ -1,55 +1,58 @@
 Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1127C3F871E
-	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 08:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A853F3E3152
+	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 08:41:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784018476; cv=pass; b=WklKpu1kq3CT9QHzgpMteTkiXoQcjuZBOdO1JKl0IXYSEnUxKcUbj5ahMEmE7IGbZWqI7W3GwfPaQBd1Uzl0GeGoBb/iDJ2kedMrYHK18D9ELenb2K5b1C3Ktv8Jud9sC+pyeUJINdf8lvNgrm9N689dQ51iBOLtGeXg2ou2dC0=
+	t=1784018479; cv=pass; b=svxm13zQCXb7JJ1qqvH7RQ1TLLzyUObj1A2337d+/2cObzQURFqiay8FDCC5hS0EO4NJn4m8wXgFem4+3zgUROw2q2sYZS/HuPsEZhgGLsB+H+kCXTodByfQw39HKG+lNwimXECOQmuAqqq+S836hjBGENNwSVZCtayNUhPce7Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784018476; c=relaxed/simple;
-	bh=nbSPde3UkSVASsOM4r9b2J4uWTBw0+497lxH2wBCk1o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lF9JD1njLbRpK3AFZFMtyAQGKDE0qSyfhCcKiDGtIuvrFuodj2m5hKaVlJKiDqQbwU3AtMRDSvNtBDm600tSj4ZkGBMTBmb6VUSu5YNISS8PxqExZQr7hsBBUVKkO+yhoFX/Rvph39gJd+f0ZlIqDPUF0MtsrUCJ3AQ+06WiRwA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=v0ZvMMw8; arc=pass smtp.client-ip=185.185.170.37
+	s=arc-20240116; t=1784018479; c=relaxed/simple;
+	bh=RxU+HTMT4e7gqntzch9vJgiaNm5ZGZt+PRgQScwOTos=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=EgZqqHysmoqBE/GvfefzcdftWxs1pUOyS0NScEPNRGPLW0LBh3uQd5FYM/5Q2l4a0s1nzfl+4aKSCySp3qXP5x82HlgnBYFcHDMj5yKXAokTMjC/rrDb7/mPgEiMGgUHgSRKI5iCuR1FmH8cFff7fjDH86vJ8xCG5AanSbCN4v0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=PS0I4NIF; arc=pass smtp.client-ip=185.185.170.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="v0ZvMMw8"
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="PS0I4NIF"
 Received: from monolith.lan (unknown [185.77.218.2])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: pav)
-	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4gzt7J3c1Gz49Q40;
-	Tue, 14 Jul 2026 11:41:00 +0300 (EEST)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4gzt7P2Nbmz49Q7r;
+	Tue, 14 Jul 2026 11:41:05 +0300 (EEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-	t=1784018461;
+	t=1784018465;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qfKwqt20ln/lNPj08FQSGLMybK9KhqCVH3d4zCDXX1U=;
-	b=v0ZvMMw8K8/WjpuoKV+Z+nByXF8LzZkI9k9aYmpRWgxXYQSU3jUXDnAdr3REjdJS/C3+ee
-	p9rB16M/l0C5c6xLp+9vG7+v2fgkcxwl38b2cXd7pX9wKL2OTt1OGHeQs631ghB/VEv5QR
-	zMnWlJnI6m7pEbfDafqsjEa40IE1WT9C8fuV5VnHeFlL06c23U5yyMaOpTuj6fVurwQMsg
-	nJIDrosSQwTrHmplH5r7TpPbJwZ5DFrP71zugMeo0GNOR39D/NCsY6fdekBVMKWjoNBRqM
-	KDb+sv6TsbamVcUTHHVyu9ahvJmt4zaXU1YbqtkStxoK6FH2W/NZiYMhq3UJtg==
-ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1784018461;
-	b=hum3WxCumSkNr8+6Ac4AxaXiUaC17Xg191o5z0CrFxSWHkYNs2ktWxZ80KTuROT6Dl77j6
-	rRDwDyVKIWHhwa/Ba8xF72fLigMPM4yV5vftGZqpBqBkkXmAmHIKjwefgO9aFBgTzv9ySC
-	x5I5eQPZhdO6ijOYXVf0LKkXXGErHoBb2S79S7Fjc0AP/ReqDQ9pYkscjxy7SKePTDCrw1
-	DQdUTk3PccVU65qxU1pSUvWJuSgz15oBMiEKiS8pSHOsJeZEbZ4C3ElT0otNpOolhi6pac
-	PSK/JUeEkRpvrRF50Hj1ObhsytXHP2HlOz5/Hy9o5XYFj4mn6xqO+DZ3NDUt/A==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mmcNuCzruBf46D7jtK0IDQXcz3yC7dwreqOBRSsfTAs=;
+	b=PS0I4NIFk+kXN1BgJaJj6kvJrPa8P55EeBLwwdgIkUQKcltE+LxgFw8b/uf06YyIZs3VJT
+	DWMkRrjP5KOs5mMvy0L977o/GIk/tzcRZq3VXvDwRubuSpXdvDg/7oBzy9HWqvHT20+RPD
+	Qkol+IyB1JMQxGmnUggqX23hiOA9qKXInMiMgTs/vitS7BogYdbzBn4y99BPD5Dwh1tJwv
+	nT1d9govN7cvvTr63Dz+0cRH9jUwX5ngZ1cply7Eis49NoDS1NuF0wZcV2wDug4fOHzj3P
+	E5It5cjfR0zAyWGH5mjEK8mkB/5qmxypWpq4R4gM3rjWNhjbNsdCiRXhp0P7RQ==
+ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=lahtoruutu; cv=none; t=1784018465;
+	b=s2RxHCpEp/DUVv0EWIoSRQpb0gvsyUpuVl0OjUDA+71M6BJytsq1VvV8e3lcw4Z45dlhUd
+	fbaGYaE1viNjNNJJpnu8hxHXgyoIK80Lt41agLTkoH+yT8/xGBx2S2gqMh6S6RKyxYMiy1
+	kPSy4e3aKu6CYn+fYG8x88r2ko4apyLW2gCIUIECv62XBHuTgrS6rhxS3/ocACErCasc6Y
+	Ntt2rUOoivIXdK3dNZ0NBxF/qmoVHxIjlaUr1f96wbHUhWn0Al/CR7P1ND91/Ypz6HfqBT
+	rO5MNU93WU2f5vC8/7iKKb3UU1N+vTKRH+TZdODGVBbLHEG1nhH4URoQFaR3Og==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=lahtoruutu; t=1784018461;
+	s=lahtoruutu; t=1784018465;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=qfKwqt20ln/lNPj08FQSGLMybK9KhqCVH3d4zCDXX1U=;
-	b=sxutrsi88ntQgIeNG0+LAZgzcsfFyexVpDzocSG44eeH90qt2Ekc5Kae8mxUdjSa7+RVYX
-	qRORN+aS1pBDGSM+7OuwwKyvwTATyKo3gQNHW/sliyXhbTRhupga7afi4P3O09GMWVJ44m
-	LmenZFmTj4PmXrog4Ufv0PMb8rmLxcrs1u3hMimCeovY2mtArxl7mgVcpbZCgQICfxVvZg
-	CvAdhnwecs8MYdcf4zEMssZgZkvcsG3I7RzLns68iFLm6grrURpHY3HXfMe7UUwbEHUBEK
-	YiJFBt+SjkG0wmWKY640KfFYdHDZ2zz5lc5CDCsWc3ElxAIavqdTCqinkIW9Yg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=mmcNuCzruBf46D7jtK0IDQXcz3yC7dwreqOBRSsfTAs=;
+	b=X0/GtUU/BaCZqgTSIa+YqOzcX38iysbEEmz08gRgGGMqViAO8qZvu2TvkXtfN0jeGbqxOd
+	WKFI5vx4+HMWrBta2E9pY/bFGRkQNovO4BmyD8QwxKb9wN9Q9sl/OcvACYlrNyDknutpcd
+	ibhKBNBU0Kubo3F3XpLRsYZYNANMLsyXX6Mv2WFceXj3iOkuwSTDvhko5z3eZzlZLRCZvQ
+	voRdxtHIZbTbSt5mJla5jOHBeTrMnP3iUsDiLqUxP2I/JlgllfSkMVJefo3Zf3R4km5EgX
+	n51jbj0XpFMT5FQVt+/sx7dyXYG1tKJpJ6HZ4utMqGnZBkQDEM9z4kDzfhn8Jw==
 ARC-Authentication-Results: i=1;
 	ORIGINATING;
 	auth=pass smtp.auth=pav smtp.mailfrom=pav@iki.fi
@@ -62,10 +65,12 @@ Cc: Pauli Virtanen <pav@iki.fi>,
 	bvanassche@acm.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v2 1/3] Bluetooth: L2CAP: avoid maybe-return-locked in l2cap_get_chan_by_scid/dcid
-Date: Tue, 14 Jul 2026 11:40:49 +0300
-Message-ID: <aaf5b46dd2519f7b3c7e74f9b232be2130ca30db.1784018377.git.pav@iki.fi>
+Subject: [PATCH v2 2/3] Bluetooth: L2CAP: add locking annotations for l2cap_chan_lock/unlock
+Date: Tue, 14 Jul 2026 11:40:50 +0300
+Message-ID: <a0e6db05b52994c3c27d854e2d35ab0256b93769.1784018377.git.pav@iki.fi>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <aaf5b46dd2519f7b3c7e74f9b232be2130ca30db.1784018377.git.pav@iki.fi>
+References: <aaf5b46dd2519f7b3c7e74f9b232be2130ca30db.1784018377.git.pav@iki.fi>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -74,9 +79,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace the maybe-return-locked pattern in l2cap_get_chan_by_scid/dcid()
-by doing locking in the caller after NULL check. This allows adding
-context analysis annotations for the locking.
+Add minimal context analysis annotations to l2cap_chan_lock/unlock() and
+callers required for no warnings.
 
 Signed-off-by: Pauli Virtanen <pav@iki.fi>
 ---
@@ -84,113 +88,71 @@ Signed-off-by: Pauli Virtanen <pav@iki.fi>
 Notes:
     v2:
     - split code changes and adding annotations to separate patches
-    - remove self-evident comment
+    
+    Possibly the l2cap_ops::alloc_skb callback should have generally
+    __must_hold(&chan->lock) and not just in l2cap_sock.c
+    
+    This would imply l2cap_chan_send() should hold the lock, but trying to
+    add the annotations reveals l2cap_chan_send is called without chan->lock
+    from some places:
+    
+    net/bluetooth/smp.c:589:2: warning: calling function 'l2cap_chan_send' requires holding mutex 'conn->smp->lock' exclusively [-Wthread-safety-analysis]
+      589 |         l2cap_chan_send(chan, &msg, 1 + len, NULL);
+          |         ^
+    1 warning generated.
+    net/bluetooth/6lowpan.c:455:8: warning: calling function 'l2cap_chan_send' requires holding mutex 'chan->lock' exclusively [-Wthread-safety-analysis]
+      455 |         err = l2cap_chan_send(chan, &msg, skb->len, NULL);
+          |               ^
+    
+    Don't know now if the context in these places allows l2cap_chan_lock()
 
- net/bluetooth/l2cap_core.c | 28 ++++++++++++++++------------
- 1 file changed, 16 insertions(+), 12 deletions(-)
+ include/net/bluetooth/l2cap.h | 2 ++
+ net/bluetooth/l2cap_core.c    | 1 +
+ net/bluetooth/l2cap_sock.c    | 1 +
+ 3 files changed, 4 insertions(+)
 
+diff --git a/include/net/bluetooth/l2cap.h b/include/net/bluetooth/l2cap.h
+index ef6ce1c20a4f..53a68fc32f10 100644
+--- a/include/net/bluetooth/l2cap.h
++++ b/include/net/bluetooth/l2cap.h
+@@ -825,11 +825,13 @@ struct l2cap_chan *l2cap_chan_hold_unless_zero(struct l2cap_chan *c);
+ void l2cap_chan_put(struct l2cap_chan *c);
+ 
+ static inline void l2cap_chan_lock(struct l2cap_chan *chan)
++	__acquires(&chan->lock)
+ {
+ 	mutex_lock_nested(&chan->lock, atomic_read(&chan->nesting));
+ }
+ 
+ static inline void l2cap_chan_unlock(struct l2cap_chan *chan)
++	__releases(&chan->lock)
+ {
+ 	mutex_unlock(&chan->lock);
+ }
 diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 538ae9aa3479..322a1895c1bd 100644
+index 322a1895c1bd..5a76c348712d 100644
 --- a/net/bluetooth/l2cap_core.c
 +++ b/net/bluetooth/l2cap_core.c
-@@ -109,7 +109,7 @@ static struct l2cap_chan *__l2cap_get_chan_by_scid(struct l2cap_conn *conn,
- }
+@@ -4078,6 +4078,7 @@ static struct l2cap_chan *l2cap_new_connection(struct l2cap_conn *conn,
  
- /* Find channel with given SCID.
-- * Returns a reference locked channel.
-+ * Returns a reference.
-  */
- static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
- 						 u16 cid)
-@@ -117,18 +117,14 @@ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
- 	struct l2cap_chan *c;
- 
- 	c = __l2cap_get_chan_by_scid(conn, cid);
--	if (c) {
--		/* Only lock if chan reference is not 0 */
-+	if (c)
- 		c = l2cap_chan_hold_unless_zero(c);
--		if (c)
--			l2cap_chan_lock(c);
--	}
- 
- 	return c;
- }
- 
- /* Find channel with given DCID.
-- * Returns a reference locked channel.
-+ * Returns a reference.
-  */
- static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
- 						 u16 cid)
-@@ -136,12 +132,8 @@ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
- 	struct l2cap_chan *c;
- 
- 	c = __l2cap_get_chan_by_dcid(conn, cid);
--	if (c) {
--		/* Only lock if chan reference is not 0 */
-+	if (c)
- 		c = l2cap_chan_hold_unless_zero(c);
--		if (c)
--			l2cap_chan_lock(c);
--	}
- 
- 	return c;
- }
-@@ -4364,6 +4356,8 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
- 		return 0;
- 	}
- 
-+	l2cap_chan_lock(chan);
-+
- 	if (chan->state != BT_CONFIG && chan->state != BT_CONNECT2 &&
- 	    chan->state != BT_CONNECTED) {
- 		cmd_reject_invalid_cid(conn, cmd->ident, chan->scid,
-@@ -4475,6 +4469,8 @@ static inline int l2cap_config_rsp(struct l2cap_conn *conn,
- 	if (!chan)
- 		return 0;
- 
-+	l2cap_chan_lock(chan);
-+
- 	switch (result) {
- 	case L2CAP_CONF_SUCCESS:
- 		l2cap_conf_rfc_get(chan, rsp->data, len);
-@@ -4581,6 +4577,8 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
- 		return 0;
- 	}
- 
-+	l2cap_chan_lock(chan);
-+
- 	rsp.dcid = cpu_to_le16(chan->scid);
- 	rsp.scid = cpu_to_le16(chan->dcid);
- 	l2cap_send_cmd(conn, cmd->ident, L2CAP_DISCONN_RSP, sizeof(rsp), &rsp);
-@@ -4618,6 +4616,8 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
- 		return 0;
- 	}
- 
-+	l2cap_chan_lock(chan);
-+
- 	if (chan->state != BT_DISCONN) {
- 		l2cap_chan_unlock(chan);
- 		l2cap_chan_put(chan);
-@@ -5115,6 +5115,8 @@ static inline int l2cap_le_credits(struct l2cap_conn *conn,
- 	if (!chan)
- 		return -EBADSLT;
- 
-+	l2cap_chan_lock(chan);
-+
- 	max_credits = LE_FLOWCTL_MAX_CREDITS - chan->tx_credits;
- 	if (credits > max_credits) {
- 		BT_ERR("LE credits overflow");
-@@ -6974,6 +6976,8 @@ static void l2cap_data_channel(struct l2cap_conn *conn, u16 cid,
- 		return;
- 	}
- 
-+	l2cap_chan_lock(chan);
-+
- 	BT_DBG("chan %p, len %d", chan, skb->len);
- 
- 	/* If we receive data on a fixed channel before the info req/rsp
+ static void l2cap_connect(struct l2cap_conn *conn, struct l2cap_cmd_hdr *cmd,
+ 			  u8 *data, u8 rsp_code)
++	__context_unsafe(/* conditional locking */)
+ {
+ 	struct l2cap_conn_req *req = (struct l2cap_conn_req *) data;
+ 	struct l2cap_conn_rsp rsp;
+diff --git a/net/bluetooth/l2cap_sock.c b/net/bluetooth/l2cap_sock.c
+index 735167f73f31..4afc5b370b97 100644
+--- a/net/bluetooth/l2cap_sock.c
++++ b/net/bluetooth/l2cap_sock.c
+@@ -1740,6 +1740,7 @@ static void l2cap_sock_state_change_cb(struct l2cap_chan *chan, int state,
+ static struct sk_buff *l2cap_sock_alloc_skb_cb(struct l2cap_chan *chan,
+ 					       unsigned long hdr_len,
+ 					       unsigned long len, int nb)
++	__must_hold(&chan->lock)
+ {
+ 	struct sock *sk = chan->data;
+ 	struct sk_buff *skb;
 -- 
 2.55.0
 
