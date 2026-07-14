@@ -1,151 +1,155 @@
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B3C381B16
-	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 06:23:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784010207; cv=pass; b=DGW2DsADW/tIVUuiKUeGYkn/dhMEGO5P8XZUVxhbOrHhy9wCdTxVMQOaEvLpgkiSgh/DzsQORgRYQQtdSGqkOYNIyzhvOOySNEXiWZzh+reGKaq3A50o1nkcushqPie9kvNUS4hj7T6tI8tC9aSuscfW0errgpjA58SB/aLOEa4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784010207; c=relaxed/simple;
-	bh=Wnrg0Gu0f2+9+eCpNmhH2Vvi2/B647p4odZ67Sj98Qg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fKCxzx8O2AmpxfRxjhX51cBkCU3xiKa5fGqK7lU+BPSTd+x3xFkfQqKdynGRflgeqhLhw8gcnW9ShhvSL9yR+NnWeR8QVNzk9VTwNv1qdhO1UV9texjm/SHtZ6o41t3RHL01l75lbTTTKRxzE+eUqRqq00sB3p6bW7OYDHGPX6c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=NIKYa8xX; arc=pass smtp.client-ip=209.85.160.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C645B2E173D;
+	Tue, 14 Jul 2026 06:49:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784011792; cv=none; b=TLhvPTNJbib4EjTImbQV/Nbkvc7UjDkHhXvdZNZanHTYRS7CLbVWAejZZODBsSdbWxwYd/aoqE9APBSkH7AeCiiwVTj+eFHy+UQztzulMZNYlDRcX7RzuNQYN67fRn6vMJabiwc+RGkpy+nUPU6WYceYJQ1Vb8VZEA6wlw1bTFE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784011792; c=relaxed/simple;
+	bh=k25tR3t/12RBKq2b3YV6UPKsIMCjvTXZilkpDi2/D6k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=CZiFVz4nvNRRKfLMg74Z22IIfxyoknFGwjSDRJeV4Ehovgm/U4OfdtNGZWh9rC5e5IzJr1QMse5Fyh++/aSyvcIeQdxGVyEg+XRLDYAgpmDFuW5YcM/VOEI2OnWV42b3DzkLgNSWGE5x/ygGCqCLVgaKEA2y7D4UT4+IYpixE9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Q5X7FMZ4; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="NIKYa8xX"
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-4513435cdd2so1461724fac.2
-        for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 23:23:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784010203; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mV08WbnsEJJzvr1wUtjKJaqrjCXnD/p+eitSKp7SyHkr+k7C54ouezPuTZ5QcMnek7
-         dUE52flp1nZeeorqjeCH758SB7k8aJCNuHYvuo/1aGj6Gf2z0D9jUUtaIe4FcWyMRxbM
-         tvK6vfuvBR77ejh3zUcsd+HH5fwmZ1DGHcU+AAQDIWQwFOxTuuuvaAhF8LWwRTBi5aud
-         8/PkwyKmJ2bth3RCjUNOiUp30ilMG9buAk9dfszEs9ws9jXwNcAz/1ydnHeKbBs2N3v7
-         zDhDRrVemrFhkKkGas143UV7quBnx9t1lZndw3ffGdZclWOtk3fqfgKYBwtz53l1hQQz
-         1v5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UmwZ2JdGpnQjzlIbtGvTSfdYg7lmImsp/NzZpGZ4h5M=;
-        fh=ZJkW+/rtBwFFKmzIqLw/NpiD8L0qEw5ukbswVH0Ryt0=;
-        b=e8cOMQ6pbZUpR79Up1Yz1+KiYdtAjhK8721XT3R2DMWMnkY9ypReSpz9oYX+Jigwld
-         avDuMUgM0ysyRYxjB4wUW7s2seqkuYRC6hKS5h0mGRJYfnvgjnJ5KGLmI1hlChGKR9qV
-         cuBufoaA0/1XuoinrEpERvn/JbijrD879eSn2ZMCVQWxz8Ev6cJQBs6m34aNI0is2k/O
-         akoqsVR08em+901e4+1/IL8CHRo4oruYTlHeZwxBVH3ScgaEN6iLFCLNEBTSfZDgyJJy
-         kufs6bR6+MEC/pp2nYGezfjOEelqYWqEhSfx/RsGd92DNS27xgMLPXQ5KkJ0exI9pwNS
-         qxHw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1784010203; x=1784615003; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UmwZ2JdGpnQjzlIbtGvTSfdYg7lmImsp/NzZpGZ4h5M=;
-        b=NIKYa8xXsf0KpcGBsYP2wE973EagiMULPOYT2EHyWKRgiO1PD8tEXkKKIL86DwTZDF
-         /QUCmZC/yV0QNkeZ9HfF+FqXiVudy24pIQ7M4rYcp3yAy0uT4I5sLpMKSteXlBeNoK0j
-         da+hbUtfXAhcVtyLU4+v5ZCoTRMoj9zuRXBuSkWxLF2CUnWFeiVqzIELAR1sJ6m6QqDB
-         aD6/dT2tZw429As5STDo5I9V/qLZx0TFKshtzG6x39ij+iMQr/v3i4fBBxUYvYB2PEZo
-         E8NgzxfZSBqjKNIJnGtZ3TgTXH9I42ladkyz8fP6JqkgFHeKK1XXQ9mXGHTdgDqCnXZ6
-         I92w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784010203; x=1784615003;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UmwZ2JdGpnQjzlIbtGvTSfdYg7lmImsp/NzZpGZ4h5M=;
-        b=Ra2Y+DB5YV/K4DVOsygNwYpUlw+kKekPuMg6cDgPHXpLd1Ve6Ctu5DxbLg3ueihB5e
-         /42wem7vaUbmLXFXlGzZQhRwsuF5RrxRniUNtgxv4voHqaaHyP++eRkxjzwkszF/aB6P
-         tI5rEf54mdG8ke7hhAjVam9UeeKdqp20+o8uZHqjUVaqthLyrwhNJpN88VUtsF/Rhlta
-         9/TRSclzT82/Z8pq/wa3/f7FWxhdEgr/9MTVtoshW4FvXZOV1BNLP3UH2tchpgLOQKxE
-         tOqRlS/RxHoIv0eJeEE6UX9ad+5J6N3I4X9qTEmk0gDvNBJgJukbFEz8ZNMB9jKODKxa
-         GMhQ==
-X-Forwarded-Encrypted: i=1; AFNElJ9bp7w173Xcv3G8zIfQiZ7us0BCyYyzgs26jVLBMd3mEyqBseyu0JUnlg388cFhuhlhDzyY@lists.linux.dev
-X-Gm-Message-State: AOJu0YzYHlukWIb75w2pDi9UFGvdOA/dKn0RRbUucjZ4Tcqm1V2prOvJ
-	61BOlwqWBQVBmXEQ1xMlcIL3jcMSd67syZmukMxTLuk8KShP6gBmBMZSG4n+dF4qPSYsm7MMB5n
-	zTlyUKha8PK/u1EQxZ6rT8nnvQCxKMOSDiV2FLzbUcg==
-X-Gm-Gg: AfdE7cnPm+Drs/tWuUDCLjPTV89eu8ZHeM2oTc4BKLhWv7R+nrzh5K+Fr3cQPn5IrxR
-	DVob+wcXmHDUrnN3IXKdYezGk5aHmbbu8lxRdN6zTK371ExfGACfBv5RCQFXrAOKGhLr9xfAeq9
-	B1iNHWCZHsM8ai/zg1+lH5pdk3NiNQu7PNEHL7wvJQ++ZM187J47tldBnJ7sEApaXJcaa8sWcVI
-	RQEUdWha4lczuMhsc1NCHXuGwE59IUu6bfprNfIMe8JMMh2ddJ19abyr3mueUMLcQyVo0nGJhY=
-X-Received: by 2002:a05:6808:1b24:b0:495:f79d:b08e with SMTP id
- 5614622812f47-4a47a6c1d27mr439710b6e.21.1784010203197; Mon, 13 Jul 2026
- 23:23:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Q5X7FMZ4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784011789; x=1815547789;
+  h=date:from:to:cc:subject:message-id;
+  bh=k25tR3t/12RBKq2b3YV6UPKsIMCjvTXZilkpDi2/D6k=;
+  b=Q5X7FMZ4n//wNl8Dd4GfLr89S6+4JTHehTy29TEsfWipJbZiG4YlMOz7
+   hyppoV50fCOcAlbv7bpI8D+nEZCm/RcYZvdoG0cCYqpVnQrX4crqn/svC
+   HCPS7M3kEhMfNnYS8yk6z6rvfuvjDYCGxWjva3zYT+jKqPfDGU1dxWlen
+   QE/uqSjvAJSbhSUMOtLwsQHPHl9co7fKMI/j9VToxCi62sCAieTXLAQLd
+   ilV6XijTLKKcuIoKV9KtV2csZVuzjz/CuhQHPl4dRl0SheYX0+/o31Rbl
+   avHvHIFLx5ZV50xmSPJQPmz36KJ7cBoVjRg9b/HVFupLAk0//DZsZSGQj
+   w==;
+X-CSE-ConnectionGUID: 29m8BcekSce73hMoiIZJ3g==
+X-CSE-MsgGUID: x/i2c8VMQAO95sr49RHqoA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="95273433"
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="95273433"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 23:49:48 -0700
+X-CSE-ConnectionGUID: q43yn4OiQWyhjhGcpdDluw==
+X-CSE-MsgGUID: 3BdGRF+PT3i8pEucSC0eGg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,163,1779174000"; 
+   d="scan'208";a="254027844"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 13 Jul 2026 23:49:48 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wjWxd-000000003uX-1Of8;
+	Tue, 14 Jul 2026 06:49:45 +0000
+Date: Tue, 14 Jul 2026 08:48:46 +0200
+From: kernel test robot <lkp@intel.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: kernel/bpf/diagnostics.c:179:40: warning: diagnostic
+ behavior may be improved by adding the 'format(printf, 2, 3)' attribute to
+ the declaration of 'diag_write'
+Message-ID: <202607140852.i9ntTAJ9-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
- <20260703122832.15984-2-cuiyunhui@bytedance.com> <74ffb0c5-4edd-7b64-3d3f-be76c2aec4c2@kernel.org>
-In-Reply-To: <74ffb0c5-4edd-7b64-3d3f-be76c2aec4c2@kernel.org>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Tue, 14 Jul 2026 14:23:12 +0800
-X-Gm-Features: AUfX_mxF_EkkHPpXwVLSHWKREo9gY6a3BeqhKBMKR6LcYXx54wa2zu3a3fsDMQ8
-Message-ID: <CAEEQ3wk8gK9pam2da=o5mbfzU3-5EtfH5nyhAoVfCoy+7UuCGA@mail.gmail.com>
-Subject: Re: [External] Re: [PATCH v8 1/3] riscv: io: avoid null-pointer
- arithmetic in PIO helpers
-To: Paul Walmsley <pjw@kernel.org>
-Cc: palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	dennis@kernel.org, tj@kernel.org, cl@gentwo.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org, 
-	thuth@redhat.com, ajones@ventanamicro.com, ben.dooks@codethink.co.uk, 
-	rkrcmar@ventanamicro.com, samuel.holland@sifive.com, zong.li@sifive.com, 
-	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com, 
-	seanwascoding@gmail.com, andybnac@gmail.com, menglong8.dong@gmail.com, 
-	cyrilbur@tenstorrent.com, wangruikang@iscas.ac.cn, atishp@rivosinc.com, 
-	apatel@ventanamicro.com, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org, 
-	arnd@arndb.de, nathan@kernel.org, nick.desaulniers+lkml@gmail.com, 
-	morbo@google.com, justinstitt@google.com, qingfang.deng@siflower.com.cn, 
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
+tree:   https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/bpf-Add-verifier-diagnostics-report-helpers/20260713-235352
+head:   481b092f62f3f331a53a188543b27495e7a1763c
+commit: 1d00722166456d81ed4d556f7d213f162146d1ce bpf: Add verifier diagnostic event log
+date:   15 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607140852.i9ntTAJ9-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607140852.i9ntTAJ9-lkp@intel.com/reproduce)
 
-On Tue, Jul 14, 2026 at 2:04=E2=80=AFAM Paul Walmsley <pjw@kernel.org> wrot=
-e:
->
-> On Fri, 3 Jul 2026, Yunhui Cui wrote:
->
-> > When port I/O is not supported, exposing the port-string helpers is bot=
-h
-> > unnecessary and can make clang diagnose null-pointer arithmetic from th=
-e
-> > PCI_IOBASE based address expression.  Keep the MMIO string helpers
-> > available as before, but only provide the port I/O variants when
-> > CONFIG_HAS_IOPORT is enabled.
-> >
-> > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
-> > Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->
-> Thanks, queued for v7.2-rc.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607140852.i9ntTAJ9-lkp@intel.com/
 
-Thanks for queuing patch 1.
+All warnings (new ones prefixed by >>):
 
-That patch is independent and safe to take as-is.
+>> kernel/bpf/diagnostics.c:179:40: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_write' [-Wmissing-format-attribute]
+     171 | static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
+         | __attribute__((format(printf, 2, 3))) 
+     172 | {
+     173 |         va_list args;
+     174 | 
+     175 |         if (!bpf_diag_enabled(env))
+     176 |                 return;
+     177 | 
+     178 |         va_start(args, fmt);
+     179 |         bpf_verifier_vlog(&env->log, fmt, args);
+         |                                               ^
+   kernel/bpf/diagnostics.c:171:13: note: 'diag_write' declared here
+     171 | static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
+         |             ^
+   kernel/bpf/diagnostics.c:321:48: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of 'diag_vprint_indented' [-Wmissing-format-attribute]
+     314 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+         | __attribute__((format(printf, 2, 0))) 
+     315 | {
+     316 |         char *buf;
+     317 | 
+     318 |         if (!bpf_diag_enabled(env))
+     319 |                 return;
+     320 | 
+     321 |         buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
+         |                                                       ^
+   kernel/bpf/diagnostics.c:314:13: note: 'diag_vprint_indented' declared here
+     314 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+         |             ^
+   kernel/bpf/diagnostics.c:432:77: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_insn_print' [-Wmissing-format-attribute]
+     422 | static void diag_insn_print(void *private_data, const char *fmt, ...)
+         | __attribute__((format(printf, 2, 3))) 
+     423 | {
+     424 |         struct bpf_diag_insn_ctx *ctx = private_data;
+     425 |         struct bpf_diag_insn_buf *buf = &ctx->buf;
+     426 |         va_list args;
+     427 | 
+     428 |         if (buf->len >= buf->size)
+     429 |                 return;
+     430 | 
+     431 |         va_start(args, fmt);
+     432 |         buf->len += vscnprintf(buf->buf + buf->len, buf->size - buf->len, fmt, args);
+         |                                                                                    ^
+   kernel/bpf/diagnostics.c:422:13: note: 'diag_insn_print' declared here
+     422 | static void diag_insn_print(void *private_data, const char *fmt, ...)
+         |             ^
+   kernel/bpf/diagnostics.c:738:13: warning: unused function 'diag_print_history' [-Wunused-function]
+     738 | static void diag_print_history(struct bpf_verifier_env *env)
+         |             ^~~~~~~~~~~~~~~~~~
+   kernel/bpf/diagnostics.c:594:13: warning: unused function 'diag_report_reason' [-Wunused-function]
+     594 | static void diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
+         |             ^~~~~~~~~~~~~~~~~~
+   kernel/bpf/diagnostics.c:608:13: warning: unused function 'diag_report_suggestion' [-Wunused-function]
+     608 | static void diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
+         |             ^~~~~~~~~~~~~~~~~~~~~~
+   6 warnings generated.
 
-For patches 2/3, we later found that the percpu try_cmpxchg fallback path c=
-an
-expose a variable-shadowing issue in the current RISC-V cmpxchg macro
-implementation in arch/riscv/include/asm/cmpxchg.h.
 
-I'll address that in the next revision of the percpu patches, so please jus=
-t
-take patch 1 from v8 for now.
+vim +179 kernel/bpf/diagnostics.c
 
->
->
-> - Paul
+   170	
+   171	static void diag_write(struct bpf_verifier_env *env, const char *fmt, ...)
+   172	{
+   173		va_list args;
+   174	
+   175		if (!bpf_diag_enabled(env))
+   176			return;
+   177	
+   178		va_start(args, fmt);
+ > 179		bpf_verifier_vlog(&env->log, fmt, args);
+   180		va_end(args);
+   181	}
+   182	
 
-
-Thanks,
-Yunhui
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
