@@ -1,148 +1,156 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 797191DED5B
-	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 00:28:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16667370D6D;
+	Tue, 14 Jul 2026 03:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1783988887; cv=none; b=Cw93r937VNokQDm5Bi770/BOA5QI+y/mzSGZ+KBhD4eB0NibiXq1BmEJGYAvN26xdN895ytEZ42zF3Zp5g15WhVtrTsBKHzmSSIFYmg/Per0UNcDXmt/Vb0fN0zzjaqJjJ/Ki+dJJS+H10Q4cxErokPTPFAQ3nU2jp8oR4Jx1Eo=
+	t=1784000211; cv=none; b=PX8v75QeUe7Du4o1R9XHH2WnWMqVVPvYnH9A5WuW0DjVSbFHKcx7rddYCJZdpVTH3J5PAWNiVZFE5UYmppaJN7RhJFb+1GAG+lsKb8O+P0ygO0jB2sp+s6CL5lP0rnTNCH/cX8gPR1nx7LF+trG0bw1if7ECms4ks+x+V6RfjVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1783988887; c=relaxed/simple;
-	bh=5iy63XHbqBSfeIqFa1/srtHbQ/+BlH6A+g/VbecZvj8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QnNfsm1D8T4s+FSTDsX/XB0cOzbut3U5Nju8TYuRARKeh2NDDUqAm2Fo2L+N9x6HGIJMCwcym6XIrhgiY1EcF5UOaMZyxt6eRDoiBvxbohJ02fRE0vnhCom2iIpgw5XcNI/FnLsFjqdQ5eSkgNDEmdYzvkj9JNxya8YvZfe33fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KPK40pZE; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784000211; c=relaxed/simple;
+	bh=5eCcIL4oxMV+SkkS0K44HVewVkr6API4IPwHUXYMYU0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jWjHNDMFqaaE2gcYGAQOEESQWchgz0McdRJT3W6t03OHW7dUaYnwm2SqBzRk1BwIgmwLQHN0ax4qALow4aZjdQARa2KX3LVnY4g1Mf8MPMOmo1wA26TtBQjhzKzq/rGgRara1DWN6sAQa9LGhcX+zAKkMFKE0c4Jch34MQpMQ+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=W0E+4kzm; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KPK40pZE"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8487b7b4066so3419400b3a.1
-        for <llvm@lists.linux.dev>; Mon, 13 Jul 2026 17:28:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1783988886; x=1784593686; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=R35+AhKuoC4oYnI/b9RPi99MFz3JDij1EKLCf/1SkNo=;
-        b=KPK40pZE4RMigZl2ZILyYQaDrkpNOnG+h3r3+kOfj+W30Gol6oswV34bhlVjcufbwn
-         l56JXDub5sYLaVGf7jczSjl/y4e6LYU/RwxvxF4GCbxt+0Aj6LRr17lXh9oMEgChI640
-         sq0ZxpSnTLvGAGQ8jAcN9wo0SznSAPhsnbagjLWReAw2DTC7joRg7S+iESJKOnhkHQ0m
-         Wp92EetyPumEC8QBfKeIkfLCcG9kYKolLUSISVFeR9e8uH8FPT1LMTi/sl/6hunws+Ut
-         OP7obWnmQEhCv2s70Kqji31MBTUUXbbndvLQ0lNGFN1gADRGnSwp0eNDyLf+q+yura9F
-         Bq+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1783988886; x=1784593686;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=R35+AhKuoC4oYnI/b9RPi99MFz3JDij1EKLCf/1SkNo=;
-        b=qw8XYBooq6RzHIYTjRc2nZD/QJhj3GIK0rCFymne1vm6ZWX/Ot3qEZST2y/smTcNqM
-         idndLi4XkOXhwHqh+Cvcx9OeMlsSp2z1yzDxC/C1ifGXjAUg0/G4zPM/55wG31EfKqVU
-         XKiqNVvOnXKh6+8puzvCfx5v7OcSOBrfbdUQsAx+YVVMSp9HRqXOyh0X+7OdBYHaAkP9
-         uX6JCh8zvh2irNgQVk4xm3Oo2o9kzmvKSjruiPO69fqeUT6epUDPmM9qPehsH+rxUNU7
-         Za/qOIJW7BOLqnNnSyJIWYK2VKaDEOW1FSn4EJWol6HOIwE6ZnAd5RqBNEJYMo9x+CMn
-         2JAQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoP/RXRCJbstLF7xs8aMHx9WCfD4BgU0CRfFW4GnETiCoXrCcc4LvQC2ymzJ051xjsVB1eJ@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywwkvp6RrXSwjl/FxWzZR99VbvL3Gbo0GuGQsOwemcO5Qo74/Nw
-	Jmh5XI2Ny33eqxEvp9w6xOjzg5lTOJpvY1zs265RQZwhOiI5YtsRPzz2
-X-Gm-Gg: AfdE7cmVayoCkR2sLux8VTe3eEN4zVxaQBBKiqxLGZRYL85vi+k5x0mGaECzdSYZFx7
-	KB+2ecUeD7S4rc4mvoiKKcL56A3BHt16fPV8YhoPlBL3YtaVDUEmSpNLxeIixYuRmp5zQ7+zG0B
-	kRex67fd7hUd9RBaUTMJTAKEKQq2c3CTHDrg8pRQa2PmM2PNGDjT8TbTuo8Inj91LVkwdEnWb7a
-	QoUVGg1Fet680n8ZIIK3XIA1rQzHnIiMf7ptjDQD4FoB6ECzz2x/CXtchKjebJ5IMz3PyMAJ/V5
-	pqT9hOjQcjunjWISz6dKtxd1+Q7miElnDOKkHBaN7okE+zv59lcFh81GqvpyKd29+9X7Ar8lGOx
-	lOMLg1wJXFsGWSZMVO7cTkTZgX2FZ4N/Iy7yLgD18V+3TSpLLGi/4YphmlZ7qDmW/Y9qfVf6AHo
-	ipM0U4F9eYNV4FC3GnxpO2q6VudQO96AHapbg2nbj6rrx2t7G6JRUMyfnqmdspx8GD30eI48DDo
-	15RIwXL9kKOclFPhWFoG87mnRyNDvJaF2JfKY/TD6zONhZN0VRNE0D/YY/FEdRxsg==
-X-Received: by 2002:a05:6a00:12e9:b0:848:662c:cb85 with SMTP id d2e1a72fcca58-848895dc921mr10952862b3a.6.1783988885724;
-        Mon, 13 Jul 2026 17:28:05 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84a4f81a5absm537906b3a.54.2026.07.13.17.28.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jul 2026 17:28:05 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: dmaengine@vger.kernel.org
-Cc: Vinod Koul <vkoul@kernel.org>,
-	Frank Li <Frank.Li@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] dmaengine: mv_xor: use devm_platform_ioremap_resource()
-Date: Mon, 13 Jul 2026 17:28:03 -0700
-Message-ID: <20260714002803.1414307-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="W0E+4kzm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784000208; x=1815536208;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5eCcIL4oxMV+SkkS0K44HVewVkr6API4IPwHUXYMYU0=;
+  b=W0E+4kzm3Jxrbyyy0aIsQuEoNWYJf17D8cCXa8QTKyk4todDPJHOjafD
+   /C9kOSTjP4A1jG16Eq3YGtF186dOnCFRl3NzeNX74JhEL43hrdqUnykwM
+   PHHLTt4GYl6nPtTUbDirAJOiT0sDcfzH/owSeELtioJM8QbIMNaeSBebX
+   +E4sslrbmDgxNX3wGRs0kT/M82TGns+BCu6Oh4stcPMJSe7ZEyZGsNPw+
+   ar+6CWGqxvJDJTn/uw/Vzyvl3dElTgdVBnZUiG8m+nu60nADdsTcYZVND
+   D95JC24/EhLV7scHdGM1YxHwhPtRpON8bOHwZa6TYivKZ5WJqGMtu1wXE
+   Q==;
+X-CSE-ConnectionGUID: enf+W3KjRO6+9wAxsWdlew==
+X-CSE-MsgGUID: r0LGn+YLQEmkboyOUTZ1AA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11841"; a="110162107"
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="110162107"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jul 2026 20:36:47 -0700
+X-CSE-ConnectionGUID: VzoiWrt2TreOTxJFUMVWJA==
+X-CSE-MsgGUID: xq3MnKdWQwO5PsCiajxmbQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,154,1779174000"; 
+   d="scan'208";a="259308756"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 13 Jul 2026 20:36:45 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wjTwo-000000003rt-2uLo;
+	Tue, 14 Jul 2026 03:36:42 +0000
+Date: Tue, 14 Jul 2026 05:36:18 +0200
+From: kernel test robot <lkp@intel.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Emil Tsalapatis <emil@etsalapatis.com>, kkd@meta.com,
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log
+ level
+Message-ID: <202607140517.PEmgml8m-lkp@intel.com>
+References: <20260713153910.2556007-18-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260713153910.2556007-18-memxor@gmail.com>
 
-Replace the two open-coded platform_get_resource() plus devm_ioremap()
-sequences with devm_platform_ioremap_resource() for the low and high XOR
-register windows. This folds the resource lookup and mapping into a
-single call and returns an ERR_PTR on failure, checked with IS_ERR() and
-propagated via PTR_ERR().
+Hi Kumar,
 
-devm_platform_ioremap_resource() reserves the region via
-devm_request_mem_region(), which requires non-overlapping reg ranges. All
-XOR nodes in the Marvell DTS describe two distinct 0x100 register windows
-that do not overlap each other, and sibling XOR nodes interleave without
-overlapping, so the newly-reserving mapping introduces no region
-conflict.
+kernel test robot noticed the following build warnings:
 
-Built for ARM (defconfig + CONFIG_MV_XOR) with LLVM=1;
-drivers/dma/mv_xor.o compiles cleanly.
+[auto build test WARNING on 9a3a07d06e7d74f4aecc51396c771149336ac55d]
 
-Assisted-by: opencode:hy3-free
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/dma/mv_xor.c | 23 ++++++-----------------
- 1 file changed, 6 insertions(+), 17 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Kumar-Kartikeya-Dwivedi/bpf-Add-verifier-diagnostics-report-helpers/20260713-235352
+base:   9a3a07d06e7d74f4aecc51396c771149336ac55d
+patch link:    https://lore.kernel.org/r/20260713153910.2556007-18-memxor%40gmail.com
+patch subject: [PATCH bpf-next v3 17/17] bpf: Gate verifier diagnostics on log level
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607140517.PEmgml8m-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607140517.PEmgml8m-lkp@intel.com/reproduce)
 
-diff --git a/drivers/dma/mv_xor.c b/drivers/dma/mv_xor.c
-index 25ed61f1b089..fe2e6b9ec185 100644
---- a/drivers/dma/mv_xor.c
-+++ b/drivers/dma/mv_xor.c
-@@ -1309,7 +1309,6 @@ static int mv_xor_probe(struct platform_device *pdev)
- 	const struct mbus_dram_target_info *dram;
- 	struct mv_xor_device *xordev;
- 	struct mv_xor_platform_data *pdata = dev_get_platdata(&pdev->dev);
--	struct resource *res;
- 	unsigned int max_engines, max_channels;
- 	int i, ret;
- 
-@@ -1319,23 +1318,13 @@ static int mv_xor_probe(struct platform_device *pdev)
- 	if (!xordev)
- 		return -ENOMEM;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!res)
--		return -ENODEV;
-+	xordev->xor_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(xordev->xor_base))
-+		return PTR_ERR(xordev->xor_base);
- 
--	xordev->xor_base = devm_ioremap(&pdev->dev, res->start,
--					resource_size(res));
--	if (!xordev->xor_base)
--		return -EBUSY;
--
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	if (!res)
--		return -ENODEV;
--
--	xordev->xor_high_base = devm_ioremap(&pdev->dev, res->start,
--					     resource_size(res));
--	if (!xordev->xor_high_base)
--		return -EBUSY;
-+	xordev->xor_high_base = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(xordev->xor_high_base))
-+		return PTR_ERR(xordev->xor_high_base);
- 
- 	platform_set_drvdata(pdev, xordev);
- 
--- 
-2.55.0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607140517.PEmgml8m-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
+
+   kernel/bpf/diagnostics.c:38:40: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'diag_log' [-Wmissing-format-attribute]
+      30 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
+         | __attribute__((format(printf, 2, 3))) 
+      31 | {
+      32 |         va_list args;
+      33 | 
+      34 |         if (!bpf_diag_enabled(env))
+      35 |                 return;
+      36 | 
+      37 |         va_start(args, fmt);
+      38 |         bpf_verifier_vlog(&env->log, fmt, args);
+         |                                               ^
+   kernel/bpf/diagnostics.c:30:13: note: 'diag_log' declared here
+      30 | static void diag_log(struct bpf_verifier_env *env, const char *fmt, ...)
+         |             ^
+>> kernel/bpf/diagnostics.c:89:48: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 0)' attribute to the declaration of 'diag_vprint_indented' [-Wmissing-format-attribute]
+      82 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+         | __attribute__((format(printf, 2, 0))) 
+      83 | {
+      84 |         char *buf;
+      85 | 
+      86 |         if (!bpf_diag_enabled(env))
+      87 |                 return;
+      88 | 
+      89 |         buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
+         |                                                       ^
+   kernel/bpf/diagnostics.c:82:13: note: 'diag_vprint_indented' declared here
+      82 | static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+         |             ^
+   kernel/bpf/diagnostics.c:130:13: warning: unused function 'diag_report_reason' [-Wunused-function]
+     130 | static void diag_report_reason(struct bpf_verifier_env *env, const char *fmt, ...)
+         |             ^~~~~~~~~~~~~~~~~~
+   kernel/bpf/diagnostics.c:144:13: warning: unused function 'diag_report_suggestion' [-Wunused-function]
+     144 | static void diag_report_suggestion(struct bpf_verifier_env *env, const char *fmt, ...)
+         |             ^~~~~~~~~~~~~~~~~~~~~~
+   4 warnings generated.
+
+
+vim +89 kernel/bpf/diagnostics.c
+
+    81	
+    82	static void diag_vprint_indented(struct bpf_verifier_env *env, const char *fmt, va_list args)
+    83	{
+    84		char *buf;
+    85	
+    86		if (!bpf_diag_enabled(env))
+    87			return;
+    88	
+  > 89		buf = kvasprintf(GFP_KERNEL_ACCOUNT, fmt, args);
+    90		if (!buf) {
+    91			diag_log(env, "%s<failed to allocate diagnostic text>\n", BPF_DIAG_TEXT_INDENT);
+    92			return;
+    93		}
+    94	
+    95		diag_print_wrapped_text(env, buf);
+    96		kfree(buf);
+    97	}
+    98	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
