@@ -1,229 +1,492 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A7C4D8DAB
-	for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 16:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDA44DA534;
+	Tue, 14 Jul 2026 16:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784047309; cv=none; b=Cwm44n1HKSMGA6LOmjxaQ88tyRxS0L7S78MPMS8dNAguvd7yR6WCCjATplUBQEkAcuVny5OfECPtAWLtUI+qM3ukWmyAYPHbdFZjuJ6EYHs/o35HgWL/egdQeyKvjCLM0abdT9arzjHJEmAUwnKwRgeVQ6JSAa6jQu/umMISVBU=
+	t=1784047962; cv=none; b=IrabHWMVSmsOX+VOGcQpXqYC0IZEm421YKVHr2FDp0IEX2mJriuSoI5NM7RiDwbOipcFmqKOZrwlzEeqpZYAPYE24Fz1Qq3qw+9YkUZftiAzOZlBUt+5RHCDwtKd61nu+N3nO/WZcq3BeugJ6jE3fjTy+L1K8tXcZCgK3Y5LiUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784047309; c=relaxed/simple;
-	bh=+UZ2C/SIqj6Dtle1yIQ62BUp8tDwxi+DEhc0LgCFf7E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HJ+1alNnddpU61J3n/LL8b8gSmN7IDsIoqNXHmwaI0S9vi28tPAYltX69lNWMRaJZTLSIdD4CoD09pOxFR9H08RBDV29BLs1TFCUcbAKxH8M0nAh8DvLTDX/sJuhzuVuxn9uRI/aDwrWe3oMCOoKAl7/byLXPjqO6I4szLygw9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u8+1CMmI; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1784047962; c=relaxed/simple;
+	bh=G2sUneMItuBdDm8dXRE6YjL2dOniX+BtzGbTiLtIHJ4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=BKcD/4Y8S9VfxTrcz7S9hgG1RMsIeHTNBTcZQZwbA6FgM1zV0+YmFyLGNdxJ/Czzdy8VtQ9cznBMVsOqJ8fUu2HN9FFLVfQ/O/T3tUWoVfi/li26zGM3qqXLW3Fy/zApJD3rwLtPxiHYyrNg3WiNcHUtQAdp0N+989ptV3agDgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VibjhtyL; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u8+1CMmI"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4758bd3731bso931373f8f.0
-        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 09:41:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1784047305; x=1784652105; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dAGdTmKiRz8gSXgEL0AxMvGfkn4LlPlutVrGbCWXhWI=;
-        b=u8+1CMmIiwV/2hluMtZQoamo61fIPq/wBMuyLiRRUFEFsUggervbUtmK3zoshi91pP
-         SG3q2ok5vYCProDCNM3POoK1yvo/tJVLLKE6P/rkVqLHBvpyJZE/VRnKCiP/SWOR0mQc
-         ZOpx9xFJxbUisMK5j21VdrD+b4H8E6QUgE53MGA9OjVS6dwXNwRx39fOTLuMxmAwrnf5
-         fTr2dzaX1i+B8grXNJWECyVk0TnrYuIdo2aLefwGDFFbrQyyy+lJek/xzmdxdE5zE4H2
-         ezERwbqlHtxJpgE9puUbmTbITGUmSuWCjkAZyPD4+OC9YRYqqHcP5R4FZC0RvCl5nml4
-         onfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784047305; x=1784652105;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dAGdTmKiRz8gSXgEL0AxMvGfkn4LlPlutVrGbCWXhWI=;
-        b=mGn15Cvtp46883WnTBzCXgc9d1/9gp4V/eUmGGPoD1BoNAUus8d02HLkof3FuNhE14
-         TzNpMKgAezQcg+XX6oARSbL7WSK3IPW4sAhVxEwPOSDxC49Csn8HP3bd4QN0aReESoIC
-         HnU3R2HmtszN0IyuiAfPHathVmmVw9RBsYyRBJYYSX3/aGx6f8PvLND3sTMADJgmoqSK
-         Ua8FYP6e/FrgdgEq6n9G9WkQcSASh83cd+4KND5EiDNcQGwxgJ1mhcPdHcPJUie/ysV/
-         QyPSYOqxgKizazqt8aQgp3bjlmzYbd3ptR3y5RNBSOcMixrrD2A7Ye4cRT/IlM8QAilg
-         Tp7g==
-X-Forwarded-Encrypted: i=1; AHgh+RqTBODWIl7txFPPhZN31iCSR/G9x+pgX0LTsKEE2H2Ag2+OGZ1ZLnXg6xpmeBknMw2+7Lvo@lists.linux.dev
-X-Gm-Message-State: AOJu0YyLs0UJcHYaUE26EPBYxsqjNzprPLJYoSvDePGZlctk2sly2+F3
-	1DKDrlOzN1bmOslK49DZU/zAN+KrPTa84bNIOtKa28r/F2PN/y0Znz9OrddJqEfSuMo=
-X-Gm-Gg: AfdE7cmmLhGe00BMDJJ4XVxS/EqRHIsh0kkX91eekEmEauOQASwuZG37kclboQG3mxL
-	t4z1ZRXzxhegXzLrl8YciOi9sPJbLZa+rRdd1bngHkV5MNpWFxd0pU2ooOXgqnFtmsfMLqxpXdo
-	cmaxuIBR7cPOZpGjTSRlaTF1WnUiBczVuTbfvR4nF5mWNF509hPUxhx2LhwlkQ6UEAkxFdvHVJj
-	mVbO3lOTia7i0Xy0/uBfgK1xX3fl54VPihZL4ZwUeV+t53uVzqtRk0AMIEsRIgLEhHxTiX60JRG
-	VbICc8ZM3mY2+gQbRQg4fXVGy5O4Z6U4cNoN55HDs8LsNoOmnf8n9sRC+swji4yw7EgEv0j1yhI
-	aeP1fc6VjfARr84ImtvwjThNfZBVVOWXl8MdpdoCYKqbWiRj41QqpCFf6usLrlcB7GeduLUtJ5A
-	2RS1fMJ4VPAKG7WAH3yq2m8A==
-X-Received: by 2002:a05:6000:184d:b0:474:3708:c8 with SMTP id ffacd0b85a97d-47f2dcc0d79mr17004061f8f.15.1784047305565;
-        Tue, 14 Jul 2026 09:41:45 -0700 (PDT)
-Received: from [172.27.236.80] ([212.187.182.161])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f4635aa34sm8766325f8f.15.2026.07.14.09.41.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jul 2026 09:41:45 -0700 (PDT)
-Message-ID: <a8d4ab9b-b2e3-407c-9898-1b9f7339f448@linaro.org>
-Date: Tue, 14 Jul 2026 17:41:43 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VibjhtyL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784047961; x=1815583961;
+  h=date:from:to:cc:subject:message-id;
+  bh=G2sUneMItuBdDm8dXRE6YjL2dOniX+BtzGbTiLtIHJ4=;
+  b=VibjhtyLFiFesttAKvQk2iWzDl6IEA0zj4V4VFWEwSSQiTSUpfB1ekrQ
+   Y/B0kP+CA7gUj2eGvhFwTvThP8vpE5TWI5OoUANzMxHJ7swkoEMULQhWN
+   X+UJROyRNS4k5apngVboqB/NCoQzV9GWCKt7FrqFtRsf3Dlaik2ua1RXU
+   OMH+N69LlSrBoFY8Csj89fygey3CFEyA6vPhURqAgvTw/MtH23/NHofve
+   mt5EiFK7HXnGveT4f+HcW7AyN7LGF9N9OF3qGUHT/X4RZyX+GZCf3dwjo
+   ty0X9pM7TPzdsBhqguoVsZxgSlYG6EhR9JCtoPbJi4Ho5B3xaZJ1G8MhB
+   g==;
+X-CSE-ConnectionGUID: vlS7KhG9ThisStk1+tzQ6Q==
+X-CSE-MsgGUID: KV0tQ9DMRdy11HpL70OM4A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11846"; a="88576806"
+X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
+   d="scan'208";a="88576806"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 09:52:34 -0700
+X-CSE-ConnectionGUID: QU9WmLG+Sl2xqxtKtknDGw==
+X-CSE-MsgGUID: KI5FQ/47QaS+Rbw3C5fgTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
+   d="scan'208";a="259485583"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by orviesa003.jf.intel.com with ESMTP; 14 Jul 2026 09:52:31 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wjgMv-0000000042n-0Mhy;
+	Tue, 14 Jul 2026 16:52:29 +0000
+Date: Tue, 14 Jul 2026 18:52:03 +0200
+From: kernel test robot <lkp@intel.com>
+To: Anil Gurumurthy <agurumurthy@marvell.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>, Nilesh Javali <njavali@marvell.com>,
+ Hannes Reinecke <hare@kernel.org>
+Subject: drivers/scsi/qla2xxx/qla_iocb.c:4833:22: warning: variable
+ 'ha' set but not used
+Message-ID: <202607141827.R9mpeMZx-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/6] tools/build: Allow versioning LLVM readelf
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>
-References: <20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org>
- <20260518-james-perf-llvm-version-v2-4-f12cc4f031d8@linaro.org>
- <c366293c-7bcd-4e28-b3c4-575203403489@linux.dev>
-Content-Language: en-US
-From: James Clark <james.clark@linaro.org>
-In-Reply-To: <c366293c-7bcd-4e28-b3c4-575203403489@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+
+tree:   https://github.com/intel-lab-lkp/linux/commits/Nilesh-Javali/scsi-qla2xxx-Add-29xx-series-PCI-device-ID-support/20260714-180455
+head:   a91be341107d322b5c157a8eb685f7d8d4d9277b
+commit: 54ee318c616f5b1c3ee4b8eef9c9b51ee47179f4 scsi: qla2xxx: Update IO path to use 128-byte IOCBs for 29xx
+date:   7 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260714/202607141827.R9mpeMZx-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260714/202607141827.R9mpeMZx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607141827.R9mpeMZx-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/scsi/qla2xxx/qla_iocb.c:4833:22: warning: variable 'ha' set but not used [-Wunused-but-set-variable]
+    4833 |         struct qla_hw_data *ha;
+         |                             ^
+   1 warning generated.
+--
+>> Warning: drivers/scsi/qla2xxx/qla_iocb.c:137 function parameter 'ha' not described in 'qla2x00_prep_cont_type1_iocb'
+>> Warning: drivers/scsi/qla2xxx/qla_iocb.c:5023 Excess function parameter 'bundling' description in 'qla29xx_build_scsi_crc_2_iocbs'
+>> Warning: drivers/scsi/qla2xxx/qla_iocb.c:137 function parameter 'ha' not described in 'qla2x00_prep_cont_type1_iocb'
+>> Warning: drivers/scsi/qla2xxx/qla_iocb.c:5023 Excess function parameter 'bundling' description in 'qla29xx_build_scsi_crc_2_iocbs'
 
 
+vim +/ha +4833 drivers/scsi/qla2xxx/qla_iocb.c
 
-On 10/07/2026 23:29, Ihor Solodrai wrote:
-> On 5/18/26 2:03 AM, James Clark wrote:
->> Documentation/kbuild/llvm.rst mentions that readelf is included in the
->> LLVM toolchain, but it's not currently included in this block.
->>
->> Add it so that LLVM=... options also apply to readelf. Users in tools/
->> were Perf which was hardcoding it, and another was the BPF makefile.
->> Both already include Makefile.include so convert them to use the new
->> variable.
->>
->> It also didn't have the cross compile prefix, so either readelf didn't
->> mind opening cross binaries, or it wasn't working for cross builds.
-> 
-> I'm pretty sure it's the former. readelf/llvm-readelf are only used
-> libbpf makefile to read ELF symbol tables, which should be arch-independent.
-> 
-> We've been cross-compiling the kernel (and libbpf) on BPF CI for a
-> long time. So the unprefixed readelf is already working, and adding
+  4813	
+  4814	/*
+  4815	 * Note: the 29xx extended path reuses qla24xx_configure_prot_mode() -- the
+  4816	 * SCSI-prot-op to PO_MODE_DIF_* translation is independent of the IOCB
+  4817	 * generation.
+  4818	 */
+  4819	
+  4820	/**
+  4821	 * qla29xx_build_scsi_type_6_iocbs() - Build IOCB command utilizing Command
+  4822	 * Type 6 IOCB types on the 29xx extended ring.
+  4823	 * @sp: SRB command to process
+  4824	 * @cmd_pkt: Command type 6 extended IOCB
+  4825	 * @tot_dsds: Total number of segments to transfer
+  4826	 */
+  4827	static void
+  4828	qla29xx_build_scsi_type_6_iocbs(srb_t *sp, struct cmd_type_6_ext *cmd_pkt,
+  4829		uint16_t tot_dsds)
+  4830	{
+  4831		struct dsd64 *cur_dsd = NULL, *next_dsd;
+  4832		scsi_qla_host_t	*vha;
+> 4833		struct qla_hw_data *ha;
+  4834		struct scsi_cmnd *cmd;
+  4835		struct	scatterlist *cur_seg;
+  4836		uint8_t avail_dsds;
+  4837		uint8_t first_iocb = 1;
+  4838		uint32_t dsd_list_len;
+  4839		struct dsd_dma *dsd_ptr;
+  4840		struct ct6_dsd *ctx;
+  4841		struct qla_qpair *qpair = sp->qpair;
+  4842	
+  4843		cmd = GET_CMD_SP(sp);
+  4844	
+  4845		/* Update entry type to indicate Command Type 6 IOCB */
+  4846		put_unaligned_le32(COMMAND_TYPE_6, &cmd_pkt->entry_type);
+  4847	
+  4848		/* No data transfer */
+  4849		if (!scsi_bufflen(cmd) || cmd->sc_data_direction == DMA_NONE) {
+  4850			cmd_pkt->byte_count = cpu_to_le32(0);
+  4851			goto function_end;
+  4852		}
+  4853	
+  4854		vha = sp->vha;
+  4855		ha = vha->hw;
+  4856	
+  4857		/* Set transfer direction */
+  4858		if (cmd->sc_data_direction == DMA_TO_DEVICE) {
+  4859			cmd_pkt->control_flags = cpu_to_le16(CF_WRITE_DATA);
+  4860			qpair->counters.output_bytes += scsi_bufflen(cmd);
+  4861			qpair->counters.output_requests++;
+  4862		} else if (cmd->sc_data_direction == DMA_FROM_DEVICE) {
+  4863			cmd_pkt->control_flags = cpu_to_le16(CF_READ_DATA);
+  4864			qpair->counters.input_bytes += scsi_bufflen(cmd);
+  4865			qpair->counters.input_requests++;
+  4866		}
+  4867	
+  4868		cur_seg = scsi_sglist(cmd);
+  4869		ctx = &sp->u.scmd.ct6_ctx;
+  4870	
+  4871		while (tot_dsds) {
+  4872			avail_dsds = (tot_dsds > QLA_DSDS_PER_IOCB) ?
+  4873			    QLA_DSDS_PER_IOCB : tot_dsds;
+  4874			tot_dsds -= avail_dsds;
+  4875			dsd_list_len = (avail_dsds + 1) * QLA_DSD_SIZE;
+  4876	
+  4877			dsd_ptr = list_first_entry(&qpair->dsd_list, struct dsd_dma,
+  4878						   list);
+  4879			next_dsd = dsd_ptr->dsd_addr;
+  4880			list_del(&dsd_ptr->list);
+  4881			qpair->dsd_avail--;
+  4882			list_add_tail(&dsd_ptr->list, &ctx->dsd_list);
+  4883			ctx->dsd_use_cnt++;
+  4884			qpair->dsd_inuse++;
+  4885	
+  4886			if (first_iocb) {
+  4887				first_iocb = 0;
+  4888				put_unaligned_le64(dsd_ptr->dsd_list_dma,
+  4889						   &cmd_pkt->dsd[0].address);
+  4890				cmd_pkt->dsd[0].length = cpu_to_le32(dsd_list_len);
+  4891			} else {
+  4892				put_unaligned_le64(dsd_ptr->dsd_list_dma,
+  4893						   &cur_dsd->address);
+  4894				cur_dsd->length = cpu_to_le32(dsd_list_len);
+  4895				cur_dsd++;
+  4896			}
+  4897			cur_dsd = next_dsd;
+  4898			while (avail_dsds) {
+  4899				append_dsd64(&cur_dsd, cur_seg);
+  4900				cur_seg = sg_next(cur_seg);
+  4901				avail_dsds--;
+  4902			}
+  4903		}
+  4904	
+  4905		/* Null termination */
+  4906		if (cur_dsd) {
+  4907			cur_dsd->address = 0;
+  4908			cur_dsd->length = 0;
+  4909			cur_dsd++;
+  4910		}
+  4911		cmd_pkt->control_flags |= CF_DATA_SEG_DESCR_ENABLE;
+  4912	function_end:
+  4913		return;
+  4914	}
+  4915	
+  4916	/*
+  4917	 * Note: the 29xx extended path reuses qla24xx_calc_dsd_lists() -- the
+  4918	 * DSD-list-per-IOCB arithmetic (based on QLA_DSDS_PER_IOCB) is generation-
+  4919	 * agnostic.
+  4920	 */
+  4921	
+  4922	/**
+  4923	 * qla29xx_build_scsi_iocbs() - Build IOCB command utilizing Command Type 7
+  4924	 * IOCB types on the 29xx extended ring.
+  4925	 * @sp: SRB command to process
+  4926	 * @cmd_pkt: Command type 7 extended IOCB
+  4927	 * @tot_dsds: Total number of segments to transfer
+  4928	 * @req: pointer to request queue
+  4929	 */
+  4930	static void __maybe_unused
+  4931	qla29xx_build_scsi_iocbs(srb_t *sp, struct cmd_type_7_ext *cmd_pkt,
+  4932		uint16_t tot_dsds, struct req_que *req)
+  4933	{
+  4934		uint8_t	avail_dsds;
+  4935		struct dsd64 *cur_dsd;
+  4936		scsi_qla_host_t	*vha;
+  4937		struct scsi_cmnd *cmd;
+  4938		struct scatterlist *sg;
+  4939		int i;
+  4940		struct qla_qpair *qpair = sp->qpair;
+  4941	
+  4942		cmd = GET_CMD_SP(sp);
+  4943	
+  4944		/* Update entry type to indicate Command Type 7 IOCB */
+  4945		put_unaligned_le32(COMMAND_TYPE_7, &cmd_pkt->entry_type);
+  4946	
+  4947		/* No data transfer */
+  4948		if (!scsi_bufflen(cmd) || cmd->sc_data_direction == DMA_NONE) {
+  4949			cmd_pkt->byte_count = cpu_to_le32(0);
+  4950			return;
+  4951		}
+  4952	
+  4953		vha = sp->vha;
+  4954	
+  4955		/* Set transfer direction */
+  4956		if (cmd->sc_data_direction == DMA_TO_DEVICE) {
+  4957			cmd_pkt->task_mgmt_flags = cpu_to_le16(TMF_WRITE_DATA);
+  4958			qpair->counters.output_bytes += scsi_bufflen(cmd);
+  4959			qpair->counters.output_requests++;
+  4960		} else if (cmd->sc_data_direction == DMA_FROM_DEVICE) {
+  4961			cmd_pkt->task_mgmt_flags = cpu_to_le16(TMF_READ_DATA);
+  4962			qpair->counters.input_bytes += scsi_bufflen(cmd);
+  4963			qpair->counters.input_requests++;
+  4964		}
+  4965	
+  4966		/* NUM_CMD67_DSDS DSDs available in the Command Type 7 ext IOCB */
+  4967		avail_dsds = NUM_CMD67_DSDS;
+  4968		cur_dsd = &cmd_pkt->dsd[0];
+  4969	
+  4970		scsi_for_each_sg(cmd, sg, tot_dsds, i) {
+  4971			struct cont_a64_entry_ext *cont_pkt;
+  4972	
+  4973			/* Allocate additional continuation packets? */
+  4974			if (avail_dsds == 0) {
+  4975				/*
+  4976				 * NUM_CONT1_DSDS DSDs are available in the Continuation
+  4977				 * Type 1 extended IOCB.
+  4978				 */
+  4979				cont_pkt = qla2900_prep_cont_type1_iocb(vha, req);
+  4980				cur_dsd = cont_pkt->dsd;
+  4981				avail_dsds = ARRAY_SIZE(cont_pkt->dsd);
+  4982			}
+  4983	
+  4984			append_dsd64(&cur_dsd, sg);
+  4985			avail_dsds--;
+  4986		}
+  4987	}
+  4988	
+  4989	/*
+  4990	 * Note: the 29xx extended path reuses qla24xx_set_t10dif_tags() (defined
+  4991	 * earlier in this file) -- the T10-DIF ref/app tag layout is identical
+  4992	 * between the 24xx and 29xx extended CRC_2 IOCBs (both share the same
+  4993	 * fw_dif_context layout inside struct crc_context).
+  4994	 */
+  4995	
+  4996	/*
+  4997	 * Note: the 29xx extended CRC_2 path reuses the 24xx SG walkers
+  4998	 * (qla24xx_get_one_block_sg, qla24xx_walk_and_build_sglist_no_difb,
+  4999	 * qla24xx_walk_and_build_sglist, qla24xx_walk_and_build_prot_sglist).
+  5000	 * The DSD-chain / CRC-context layout they produce is generation-agnostic;
+  5001	 * only the IOCB that points at the chain (Type-6/7/CRC_2 vs their _ext
+  5002	 * variants) differs between generations, and that is handled by the
+  5003	 * separate qla29xx_build_* builders.
+  5004	 *
+  5005	 * The walkers that take a struct qla_tc_param *tc are invoked with tc=NULL
+  5006	 * here because the 29xx fast-path does not use the tape/copy offload.
+  5007	 */
+  5008	
+  5009	/**
+  5010	 * qla29xx_build_scsi_crc_2_iocbs() - Build IOCB command utilizing Command
+  5011	 * Type CRC_2 IOCB types on the 29xx extended ring.
+  5012	 * @sp: SRB command to process
+  5013	 * @cmd_pkt: Command type CRC_2 extended IOCB
+  5014	 * @tot_dsds: Total number of segments to transfer
+  5015	 * @tot_prot_dsds: Total number of segments with protection information
+  5016	 * @fw_prot_opts: Protection options to be passed to firmware
+  5017	 * @bundling: Bundling flag
+  5018	 *
+  5019	 * Returns 0 if successful, 1 otherwise.
+  5020	 */
+  5021	static int
+  5022	qla29xx_build_scsi_crc_2_iocbs(srb_t *sp, struct cmd_type_crc_2_ext *cmd_pkt,
+> 5023		uint16_t tot_dsds, uint16_t tot_prot_dsds, uint16_t fw_prot_opts)
+  5024	{
+  5025		struct dsd64		*cur_dsd;
+  5026		__be32			*fcp_dl;
+  5027		scsi_qla_host_t		*vha;
+  5028		struct scsi_cmnd	*cmd;
+  5029		uint32_t		total_bytes = 0;
+  5030		uint32_t		data_bytes;
+  5031		uint32_t		dif_bytes;
+  5032		uint8_t			bundling = 1;
+  5033		uint16_t		blk_size;
+  5034		struct crc_context	*crc_ctx_pkt = NULL;
+  5035		struct qla_hw_data	*ha;
+  5036		uint8_t			additional_fcpcdb_len;
+  5037		uint16_t		fcp_cmnd_len;
+  5038		struct fcp_cmnd		*fcp_cmnd;
+  5039		dma_addr_t		crc_ctx_dma;
+  5040	
+  5041		cmd = GET_CMD_SP(sp);
+  5042	
+  5043		/* Update entry type to indicate Command Type CRC_2 IOCB */
+  5044		put_unaligned_le32(COMMAND_TYPE_CRC_2, &cmd_pkt->entry_type);
+  5045	
+  5046		vha = sp->vha;
+  5047		ha = vha->hw;
+  5048	
+  5049		/* No data transfer */
+  5050		data_bytes = scsi_bufflen(cmd);
+  5051		if (!data_bytes || cmd->sc_data_direction == DMA_NONE) {
+  5052			cmd_pkt->byte_count = cpu_to_le32(0);
+  5053			return QLA_SUCCESS;
+  5054		}
+  5055	
+  5056		cmd_pkt->vp_index = cpu_to_le16(sp->vha->vp_idx);
+  5057	
+  5058		/* Set transfer direction */
+  5059		if (cmd->sc_data_direction == DMA_TO_DEVICE)
+  5060			cmd_pkt->control_flags_1 = cpu_to_le16(CF_WRITE_DATA);
+  5061		else if (cmd->sc_data_direction == DMA_FROM_DEVICE)
+  5062			cmd_pkt->control_flags_1 = cpu_to_le16(CF_READ_DATA);
+  5063	
+  5064		if ((scsi_get_prot_op(cmd) == SCSI_PROT_READ_INSERT) ||
+  5065		    (scsi_get_prot_op(cmd) == SCSI_PROT_WRITE_STRIP) ||
+  5066		    (scsi_get_prot_op(cmd) == SCSI_PROT_READ_STRIP) ||
+  5067		    (scsi_get_prot_op(cmd) == SCSI_PROT_WRITE_INSERT))
+  5068			bundling = 0;
+  5069	
+  5070		/* Allocate CRC context from global pool */
+  5071		crc_ctx_pkt = sp->u.scmd.crc_ctx =
+  5072		    dma_pool_zalloc(ha->dl_dma_pool, GFP_ATOMIC, &crc_ctx_dma);
+  5073	
+  5074		if (!crc_ctx_pkt)
+  5075			goto crc_queuing_error;
+  5076	
+  5077		crc_ctx_pkt->crc_ctx_dma = crc_ctx_dma;
+  5078	
+  5079		sp->flags |= SRB_CRC_CTX_DMA_VALID;
+  5080	
+  5081		/* Set handle */
+  5082		crc_ctx_pkt->handle = cmd_pkt->handle;
+  5083	
+  5084		INIT_LIST_HEAD(&crc_ctx_pkt->dsd_list);
+  5085	
+  5086		qla24xx_set_t10dif_tags(sp, (struct fw_dif_context *)
+  5087		    &crc_ctx_pkt->ref_tag, tot_prot_dsds);
+  5088	
+  5089		/* Determine SCSI command length -- align to 4 byte boundary */
+  5090		if (cmd->cmd_len > 16) {
+  5091			additional_fcpcdb_len = cmd->cmd_len - 16;
+  5092			if ((cmd->cmd_len % 4) != 0) {
+  5093				/* SCSI cmd > 16 bytes must be multiple of 4 */
+  5094				goto crc_queuing_error;
+  5095			}
+  5096			fcp_cmnd_len = 12 + cmd->cmd_len + 4;
+  5097		} else {
+  5098			additional_fcpcdb_len = 0;
+  5099			fcp_cmnd_len = 12 + 16 + 4;
+  5100		}
+  5101	
+  5102		fcp_cmnd = &crc_ctx_pkt->fcp_cmnd;
+  5103	
+  5104		fcp_cmnd->additional_cdb_len = additional_fcpcdb_len;
+  5105		if (cmd->sc_data_direction == DMA_TO_DEVICE)
+  5106			fcp_cmnd->additional_cdb_len |= 1;
+  5107		else if (cmd->sc_data_direction == DMA_FROM_DEVICE)
+  5108			fcp_cmnd->additional_cdb_len |= 2;
+  5109	
+  5110		int_to_scsilun(cmd->device->lun, &fcp_cmnd->lun);
+  5111		memcpy(fcp_cmnd->cdb, cmd->cmnd, cmd->cmd_len);
+  5112		cmd_pkt->fcp_cmnd_dseg_len = cpu_to_le16(fcp_cmnd_len);
+  5113		put_unaligned_le64(crc_ctx_dma + CRC_CONTEXT_FCPCMND_OFF,
+  5114				   &cmd_pkt->fcp_cmnd_dseg_address);
+  5115		fcp_cmnd->task_management = 0;
+  5116		fcp_cmnd->task_attribute = TSK_SIMPLE;
+  5117	
+  5118		cmd_pkt->fcp_rsp_dseg_len = 0; /* Let response come in status iocb */
+  5119	
+  5120		/* Compute dif len and adjust data len to include protection */
+  5121		dif_bytes = 0;
+  5122		blk_size = cmd->device->sector_size;
+  5123		dif_bytes = (data_bytes / blk_size) * 8;
+  5124	
+  5125		switch (scsi_get_prot_op(GET_CMD_SP(sp))) {
+  5126		case SCSI_PROT_READ_INSERT:
+  5127		case SCSI_PROT_WRITE_STRIP:
+  5128			total_bytes = data_bytes;
+  5129			data_bytes += dif_bytes;
+  5130			break;
+  5131	
+  5132		case SCSI_PROT_READ_STRIP:
+  5133		case SCSI_PROT_WRITE_INSERT:
+  5134		case SCSI_PROT_READ_PASS:
+  5135		case SCSI_PROT_WRITE_PASS:
+  5136			total_bytes = data_bytes + dif_bytes;
+  5137			break;
+  5138		default:
+  5139			WARN_ON_ONCE(1);
+  5140			return 1;
+  5141		}
+  5142	
+  5143		if (!qla2x00_hba_err_chk_enabled(sp))
+  5144			fw_prot_opts |= 0x10; /* Disable Guard tag checking */
+  5145		/* HBA error checking enabled */
+  5146		else {
+  5147			if ((scsi_get_prot_type(GET_CMD_SP(sp)) == SCSI_PROT_DIF_TYPE1)
+  5148			    || (scsi_get_prot_type(GET_CMD_SP(sp)) ==
+  5149				SCSI_PROT_DIF_TYPE2))
+  5150				fw_prot_opts |= BIT_10;
+  5151			else if (scsi_get_prot_type(GET_CMD_SP(sp)) ==
+  5152			    SCSI_PROT_DIF_TYPE3)
+  5153				fw_prot_opts |= BIT_11;
+  5154		}
+  5155	
+  5156		if (!bundling) {
+  5157			cur_dsd = &crc_ctx_pkt->u.nobundling.data_dsd[0];
+  5158		} else {
+  5159			/*
+  5160			 * Configure Bundling if we need to fetch interleaving
+  5161			 * protection PCI accesses
+  5162			 */
+  5163			fw_prot_opts |= PO_ENABLE_DIF_BUNDLING;
+  5164			crc_ctx_pkt->u.bundling.dif_byte_count = cpu_to_le32(dif_bytes);
+  5165			crc_ctx_pkt->u.bundling.dseg_count = cpu_to_le16(tot_dsds -
+  5166								tot_prot_dsds);
+  5167			cur_dsd = &crc_ctx_pkt->u.bundling.data_dsd[0];
+  5168		}
+  5169	
+  5170		/* Finish the common fields of CRC pkt */
+  5171		crc_ctx_pkt->blk_size = cpu_to_le16(blk_size);
+  5172		crc_ctx_pkt->prot_opts = cpu_to_le16(fw_prot_opts);
+  5173		crc_ctx_pkt->byte_count = cpu_to_le32(data_bytes);
+  5174		crc_ctx_pkt->guard_seed = cpu_to_le16(0);
+  5175		/* Fibre channel byte count */
+  5176		cmd_pkt->byte_count = cpu_to_le32(total_bytes);
+  5177		fcp_dl = (__be32 *)(crc_ctx_pkt->fcp_cmnd.cdb + 16 +
+  5178		    additional_fcpcdb_len);
+  5179		*fcp_dl = htonl(total_bytes);
+  5180	
+  5181		/* Walks data segments */
+  5182	
+  5183		cmd_pkt->control_flags_1 |= cpu_to_le16(CF_DATA_SEG_DESCR_ENABLE);
+  5184	
+  5185		if (!bundling && tot_prot_dsds) {
+  5186			if (qla24xx_walk_and_build_sglist_no_difb(ha, sp,
+  5187				cur_dsd, tot_dsds, NULL))
+  5188				goto crc_queuing_error;
+  5189		} else if (qla24xx_walk_and_build_sglist(ha, sp, cur_dsd,
+  5190				(tot_dsds - tot_prot_dsds), NULL))
+  5191			goto crc_queuing_error;
+  5192	
+  5193		if (bundling && tot_prot_dsds) {
+  5194			/* Walks dif segments */
+  5195			cmd_pkt->control_flags_1 |= cpu_to_le16(CF_DIF_SEG_DESCR_ENABLE);
+  5196			cur_dsd = &crc_ctx_pkt->u.bundling.dif_dsd;
+  5197			if (qla24xx_walk_and_build_prot_sglist(ha, sp, cur_dsd,
+  5198					tot_prot_dsds, NULL))
+  5199				goto crc_queuing_error;
+  5200		}
+  5201		qla29xx_copy_dif_iocb_data(cmd_pkt, crc_ctx_pkt, bundling);
+  5202	
+  5203		return QLA_SUCCESS;
+  5204	
+  5205	crc_queuing_error:
+  5206		/* Cleanup will be performed by the caller */
+  5207		return QLA_FUNCTION_FAILED;
+  5208	}
+  5209	
 
-I think "working" isn't technically correct when you take into account 
-the documented behavior of the versioned LLVM= option [1]. You would get 
-one version of the toolchain used for some of the build and a different 
-version used here. That's what caused the build failure in Perf that 
-resulted in the tidyup, because they're not always compatible.
-
-[1]: Documentation/kbuild/llvm.rst
-
-> the $(CROSS_COMPILE) prefix only adds a new requirement.
-> 
-> I don't think this change in tools/lib/bpf/Makefile is a good idea,
-> we could potentially break some environments. Even though hardcoded
-> readelf doesn't look nice.
-> 
-> 
-
-IMO it's worth the risk for the cleanup, it also helps to stop 
-propagating it with future copy pastes.
-
-Do you think it's likely that someone has CROSS_COMPILE set but doesn't 
-have that readelf installed? Installing gcc-aarch64-linux-gnu on 
-Debian/Ubuntu gives you aarch64-linux-gnu-readelf, so it would have to 
-be a unique setup to not have it.
-
-It sounds like maybe you want this bpf makefile to explicitly use 
-'HOSTREADELF', if you're really sure it never requires arch specific 
-stuff? If we added that it would fit better with the rest of the 
-cleanup. But I think 'READELF' is less confusing and take the risk of 
-some build breakages.
-
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->>   tools/lib/bpf/Makefile         | 8 ++++----
->>   tools/perf/Makefile.perf       | 1 -
->>   tools/scripts/Makefile.include | 2 ++
->>   3 files changed, 6 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
->> index 168140f8e646..180dca9c57c8 100644
->> --- a/tools/lib/bpf/Makefile
->> +++ b/tools/lib/bpf/Makefile
->> @@ -114,12 +114,12 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
->>   
->>   TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
->>   
->> -GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
->> +GLOBAL_SYM_COUNT = $(shell $(READELF) -s --wide $(BPF_IN_SHARED) | \
->>   			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
->>   			   sed 's/\[.*\]//' | \
->>   			   awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->>   			   sort -u | wc -l)
->> -VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
->> +VERSIONED_SYM_COUNT = $(shell $(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
->>   			      sed 's/\[.*\]//' | \
->>   			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->>   			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
->> @@ -182,12 +182,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
->>   		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
->>   		     "Please make sure all LIBBPF_API symbols are"	 \
->>   		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
->> -		readelf -s --wide $(BPF_IN_SHARED) |			 \
->> +		$(READELF) -s --wide $(BPF_IN_SHARED) |			 \
->>   		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
->>   		    sed 's/\[.*\]//' |					 \
->>   		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
->>   		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
->> -		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
->> +		$(READELF) --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
-> 
->>   		    sed 's/\[.*\]//' |					 \
->>   		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
->>   		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
->> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
->> index 0aba14f22a06..63276bf55856 100644
->> --- a/tools/perf/Makefile.perf
->> +++ b/tools/perf/Makefile.perf
->> @@ -215,7 +215,6 @@ FLEX    ?= flex
->>   BISON   ?= bison
->>   STRIP   = strip
->>   AWK     = awk
->> -READELF ?= readelf
->>   
->>   # include Makefile.config by default and rule out
->>   # non-config cases
->> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
->> index e81e5b479c56..380ad84ac51e 100644
->> --- a/tools/scripts/Makefile.include
->> +++ b/tools/scripts/Makefile.include
->> @@ -73,6 +73,7 @@ ifneq ($(LLVM),)
->>     $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
->>     $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
->>     $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
->> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
->>   else
->>     # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
->>     $(call allow-override,CC,$(CROSS_COMPILE)gcc)
->> @@ -80,6 +81,7 @@ else
->>     $(call allow-override,LD,$(CROSS_COMPILE)ld)
->>     $(call allow-override,CXX,$(CROSS_COMPILE)g++)
->>     $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
->> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
->>   
->>     # Host versions aren't prefixed
->>     $(call allow-override,HOSTAR,ar)
->>
-> 
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
