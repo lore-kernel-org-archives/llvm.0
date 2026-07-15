@@ -1,148 +1,96 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0ED61F7575
-	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 02:19:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238543C1085;
+	Wed, 15 Jul 2026 07:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784081978; cv=none; b=mWZ5DqpaJcpSjPYM2KUDDpaiWpZxDkAMVienNm5XARvURl7dOnvlTXC3wk75XJ/36EVowVMnS/qf0cxQyuL0mWKMlXa77i7rxFdfJX8p+O3xn24ARmlT+dd9cbESFdDb7Q4/G2iOI4kFEu+CcaGhh7hyizm2tPtzLx23f9jjKWI=
+	t=1784099795; cv=none; b=PwbAjWO/G6aIdrtsi531Lof3MQkYvhx7h1HIXKrlGc5foHJNdWZVY6XyftO0cMH7WhQTGo6NW3AiAPVkgqLpl7+saACyZBgW6hxjV8BgPblceuE6cFEQF50l29ftRjTwqHAg88/wsJqO+cYg59rkf8lIw64SKdS2oJRxnide1u8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784081978; c=relaxed/simple;
-	bh=9hNvJLwHoOEou8LLYeKhtdn5GPgGf0qbTrk5z2xNAq0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OQyKN/JyLEJ5i0STonDq5cFaolTlDnEx0V0ag3IS2w8ohtlcnPEII8i3tIsTnx2itJqDAgGBI7jRQ1aKyBx0iuwBWRTcm/YyBh5Mc3nmJVV+qTLmmQDCK73aV2W33TepFlsfpqrWC6RFhdPWhqTo6pW5wsn/66PBaPgAaasYkaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fYMRFvoH; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784099795; c=relaxed/simple;
+	bh=mUUXDzIcw0mcNGG4K9zCUUSQf+YSTow4/aQXUoBMo6g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bFhevAXc2u6u4XkQ+iaW4eCOuFe8w0/tkR754xKTHvOLNB1LpJLISQBR0R1NXKHfEw5agYM/EZoZmClRNIQL0E9bYuGcX08jC14vorAj8aVLhbXl+4oCgA3eoa+LYRbEws/ImjDhmZGh3epzYklQKueIAV9VvUP61TbQN4XqF7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVj0U921; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fYMRFvoH"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso54741335ad.1
-        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 19:19:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784081976; x=1784686776; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3+A/CsOvZ5kwNPw68MEUIBx9OhApXOPeGcI1WPKSM0g=;
-        b=fYMRFvoHYdFTXZspal9iW/suUcMsPeZpz/KF7h+Xr3f1gqQ5CWDXibi4bjd+cxqUxx
-         9EiozUUwtxmaqcM8rHXUS+czbt7aiPk3urPRgdFG5jacXUMpTmT/s3GIuBiwVXCX7WtB
-         eDDjOXCbQdGvzP3kX+0S12bChAoQ6wYzmdeRWNJFXfzPoxYBCLhjXPH9mXeZ47TKu405
-         iadIr8LYize/fY3i1kYV0FQ/JqDP6KA9QHFKSLKW6Oin4Hi3Dom8T2MGOqk568jElcYj
-         3ATIqDCYGzKYuTDjqozh/BuoGRqAdn1FcRongBdWTm6fgWRhCGHu+HZUJhn2n5FroIZH
-         xdoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784081976; x=1784686776;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=3+A/CsOvZ5kwNPw68MEUIBx9OhApXOPeGcI1WPKSM0g=;
-        b=Sa3HLqw6L/6bIYkuOH1CWVIcwqlzcoa3a2NVkF6lEDxmc8Q5nVDPrOCde9pkQ4pLNB
-         CM81xEELr0+Kpo4MFKbIfn5J/UEsMUGt8j88CP7LC3jabqiAQiMp1UJBAvAP9M/Agwoc
-         Ez7aZ6uoqI+OLqJx9Y4njhGHd9+I/qNlP8Ggfvya0+gGjd1a7BEkOpSwp9q/YcKWIk87
-         PVLxQ/u2xamMcR1+vkNPulfjBUP/K+SQn9ke6eMuaN1PTjpVWYesM/bCvKcAK5HKOAyA
-         KDZaOYysmWz77XxejrUD540BFbXuJ7OyyT4pg9IxwdEDcWAbXAJyacaK7d6HTcq4rfUo
-         RJ0w==
-X-Forwarded-Encrypted: i=1; AHgh+RqRCl9BAEDMrb4DaFmd3BlQtj3KVvWSO8dlyPLNVAPt53LnnE/1WYut5QcD59FoSiJ/mo9D@lists.linux.dev
-X-Gm-Message-State: AOJu0YwprwigmDc+FGskVjV7t2CeK+buo5ny/+sA9YfHpFJ4q504f+Wa
-	NKgEAqCkqX69fxVypboMdXoZduEjJuMoHGZX+1atG6HllffNFllThR4g
-X-Gm-Gg: AfdE7ckbFbstBWOKOEQd0fnJM5/1iW/v4yqfFkRijUQ2/3nmoc0DpmgyLiVth+K+7vL
-	f7sRA8ILcxnr61uR2ZVRlp38riEO0yp3dOo5CrqutdVoWdKvjUm/YAUYl9CQCwAI9XHFb/0lAYE
-	NdJXSZoQbjcGELqgVa8QM49ZoET330I4FWyv0YRmJGot0a9xLqrEmMjcvoXuBb9sVmoBfJFuLP2
-	Z+oUKXHwEtSZcRp1rWcf6A7ZcHQJCwLi4UxVXcFceIKglQDW3Rv8+/R5ZAAWIrJwovXPe5IZ2KN
-	cJSbgMQn4eDXDnQi11Qlicf31FvhKQMa642sVEUW/MmJWeJFa8S65qSwNuvrdKzB5JL9m/MYzoJ
-	SJRuQsT9u1qrPyotQZ1c/DXsny6DPqMUW8r4CbJHSrA1rIaQo8k1aBdK7/H7+ZNKJGA/vFiOPYK
-	rk0BU/1rAKIdiRWDFMc0TZe8cTCL4TxX6runWvtuMxKsqP6MTXEPBIHW/x3lphGpr4SFEU34St+
-	u8MxUCSwlg3QlpyfMHHIsC/TaD9hf/1XVcJZP6ehw6VG8Lw7o1pn+fZLPcqxrmNtQ==
-X-Received: by 2002:a05:6a20:3d92:b0:3c0:9c1a:893e with SMTP id adf61e73a8af0-3c34d8c599fmr6957139637.70.1784081976192;
-        Tue, 14 Jul 2026 19:19:36 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca7f626fb78sm8653754a12.13.2026.07.14.19.19.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 19:19:35 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-rtc@vger.kernel.org
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVj0U921"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA7E1F000E9;
+	Wed, 15 Jul 2026 07:16:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784099785;
+	bh=jQ2rHGVHhZnI1VpFpJARPFPB2YSMCYGI+AO8GVUrX14=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=HVj0U921ej/t+5c6AGWCAJoX3hiPUwE/UzL5k3L9uziBpL4L9DqbCj2btZS2UDkj1
+	 oG8CLHn/uT5bQ0o90s5YDyybwRF460d2FsN885DNr6uFm/BeGMRU5TbXWedrUk8yoS
+	 4fll4CioTsNFvSZHLmtmFmNJB0j9Y91qZb7G5dwrOvp5ztxfFhIqlH5I7A3glRcGO6
+	 6ZfmYQzo6M8Wyo7LBYxhMlNdF0HVBJIUSdBx3dzE7BLG+kUF0kgX/E7GM7pAou4uSc
+	 hEivl/3/DgefFFbpla+gSEroB70OWLv+wli/DyB6v1zIw/Wh5c2pZ7TpYL0tZfVg7D
+	 4I7j4dSe356ew==
+Date: Wed, 15 Jul 2026 00:16:23 -0700
+From: Drew Fustini <fustini@kernel.org>
+To: Brian Masney <bmasney@redhat.com>
+Cc: Rosen Penev <rosenp@gmail.com>, linux-clk@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32 ARCHITECTURE),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32 ARCHITECTURE),
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] rtc: stmp3xxx: use devm_platform_ioremap_resource()
-Date: Tue, 14 Jul 2026 19:19:33 -0700
-Message-ID: <20260715021933.1551663-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCHv2] clk: thead: allow COMPILE_TEST builds
+Message-ID: <alczxxLUf11F97t8@x1>
+References: <20260707005619.1229238-1-rosenp@gmail.com>
+ <ak0T7zxwwSn_L57X@redhat.com>
+ <ak8/8ixE7IS7kKdz@x1>
+ <CABx5tqLynfd-uku+iLNHrnLu4k0rXn=yBi2oU6b2HNEZT=0vaw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABx5tqLynfd-uku+iLNHrnLu4k0rXn=yBi2oU6b2HNEZT=0vaw@mail.gmail.com>
 
-Replace the open-coded platform_get_resource() plus devm_ioremap()
-sequence with a single devm_platform_ioremap_resource() call, which folds
-the resource lookup and mapping into one step and returns an ERR_PTR on
-failure, checked with IS_ERR() and propagated via PTR_ERR().
+On Thu, Jul 09, 2026 at 08:05:40AM -0400, Brian Masney wrote:
+> Hey Drew,
+> 
+> On Thu, Jul 9, 2026 at 2:30 AM Drew Fustini <fustini@kernel.org> wrote:
+> > On Tue, Jul 07, 2026 at 10:57:51AM -0400, Brian Masney wrote:
+> > > On Mon, Jul 06, 2026 at 05:56:19PM -0700, Rosen Penev wrote:
+> > > > Follow the pattern of many other directories in this Makefile (sunxi-ng,
+> > > > tenstorrent, ti, etc.) by using obj-y. This allows COMPILE_TEST to
+> > > > select the driver without having CONFIG_ARCH_THEAD enabled
+> > > >
+> > > > Tested with:
+> > > > make LLVM=1 ARCH=loongarch drivers/clk/thead/
+> > > >
+> > > > Assisted-by: Codex:GPT-5.5
+> > > > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > >
+> > > Reviewed-by: Brian Masney <bmasney@redhat.com>
+> >
+> > This doesn't apply to 7.2-rc or next for me due to the surrounding
+> > context, but I agree with the change itself.
+> >
+> > Acked-by: Drew Fustini <fustini@kernel.org>
+> >
+> > Brian - do you think this should be routed through my thead-clk tree or
+> > go through the main clk tree?
+> 
+> It'd be great if you could pick this up through the thead-clk tree.
+> 
+> Brian
 
-Move the mapping ahead of the devm_kzalloc() so that an error or deferred
-probe is handled before the rtc_data allocation, avoiding needless work.
+I have applied this thead-clk-for-next:
 
-The fsl,stmp3xxx-rtc nodes in imx23.dtsi (reg = <0x8005c000 0x2000>) and
-imx28.dtsi (reg = <0x80056000 0x2000>) each provide a single
-non-overlapping IORESOURCE_MEM window, so the region reservation now
-performed by devm_platform_ioremap_resource() introduces no conflict.
+https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?id=b2ee00d0bf4cca5dd02702fc339d2b523191966f
 
-Built for ARM (mxs_defconfig + CONFIG_RTC_DRV_STMP) with LLVM=1;
-drivers/rtc/rtc-stmp3xxx.o compiles cleanly.
+If not problems in next, thne I'll create a v7.3 pull request for
+thead-clk.
 
-Assisted-by: opencode:hy3-free
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/rtc/rtc-stmp3xxx.c | 19 ++++++-------------
- 1 file changed, 6 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
-index 7afcd14aeee5..05f128ccf827 100644
---- a/drivers/rtc/rtc-stmp3xxx.c
-+++ b/drivers/rtc/rtc-stmp3xxx.c
-@@ -245,28 +245,21 @@ static void stmp3xxx_rtc_remove(struct platform_device *pdev)
- static int stmp3xxx_rtc_probe(struct platform_device *pdev)
- {
- 	struct stmp3xxx_rtc_data *rtc_data;
--	struct resource *r;
-+	void __iomem *io;
- 	u32 rtc_stat;
- 	u32 pers0_set, pers0_clr;
- 	u32 crystalfreq = 0;
- 	int err;
- 
-+	io = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(io))
-+		return PTR_ERR(io);
-+
- 	rtc_data = devm_kzalloc(&pdev->dev, sizeof(*rtc_data), GFP_KERNEL);
- 	if (!rtc_data)
- 		return -ENOMEM;
- 
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
--		dev_err(&pdev->dev, "failed to get resource\n");
--		return -ENXIO;
--	}
--
--	rtc_data->io = devm_ioremap(&pdev->dev, r->start, resource_size(r));
--	if (!rtc_data->io) {
--		dev_err(&pdev->dev, "ioremap failed\n");
--		return -EIO;
--	}
--
-+	rtc_data->io = io;
- 	rtc_data->irq_alarm = platform_get_irq(pdev, 0);
- 
- 	rtc_stat = readl(rtc_data->io + STMP3XXX_RTC_STAT);
--- 
-2.55.0
-
+Thanks,
+Drew
