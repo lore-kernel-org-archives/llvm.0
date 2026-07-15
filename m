@@ -1,117 +1,132 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163D5377A91;
-	Wed, 15 Jul 2026 23:40:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739173CF204;
+	Wed, 15 Jul 2026 23:46:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784158812; cv=none; b=lDWLokrB+3xBMMQlgwySvqPo7bQm7Z1K/fN8P7OtCti5Pz7POo1o9nTGoLdkYTmCfphtz3CyyhrNQRdVZ1a5C2Afq8HEDsN5QtBI8MZTdFRkK6oCD8kv0EnHwahBrOoi2JVYY6jz3/HEeNEK+rRy34steJ4u7G26OX8RQ8u4eiM=
+	t=1784159177; cv=none; b=vBIlxWskg1S9U/rStYYfia6I0tBKT69Tj9gp3VsJjH5niYHD58118MKa3xghrgD/xNI1KamLifXBxvv67Ngq2UHaJVKd+6b+Bjr6zC3ei/hXeRr1QekGJfnaZ2hol0wmft92KAqcml8DNxoPrAepWD22uDPw+jLc10KCmJCjwdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784158812; c=relaxed/simple;
-	bh=Dxpqj/8dKgrWFkpgccpFkentl0kmdJsj6682or5SiHs=;
+	s=arc-20240116; t=1784159177; c=relaxed/simple;
+	bh=dMoHufLvD7MkkNMJXcpSScmSapAuttAYNZQQtpNnMMM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gRMs2A7+DrYvSVHQlOJeykokYS4fb7rqvNwz5UMlXiFhcQyR0xxvJw2MsPGKJBKzdOUNAH1Hn1Ummtirb0pSFiEIrvRZncFK1OU3iyLIl97+xLrOWcMW1wkW8f7HS25JH8U2omobH3Ngp59+h51Njxa+nOdC+q7tfYpKsM2UPd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAN1zj0G; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=SAn1VBGgpTmEC08NOiOIyGb3KSbTV6T4wvS3UjZqU4S2e7wcXr1DB3Y2Y+L5WUVNhoqVfdmzn5BSufW4MNdO8jei5hnm+Yc3eWY5IlJcCBOp1WuGUtk8V13Tv5lLeZ4XA9ISXldorFDVvZ3LDX/uH0Mg/00W02pAh+/QxpLLhoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hqFN18X4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAN1zj0G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB2941F000E9;
-	Wed, 15 Jul 2026 23:40:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hqFN18X4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E8F1F000E9;
+	Wed, 15 Jul 2026 23:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784158810;
-	bh=+h/jDmZfTpzINdBC677m6zUdXppV6mEd0tUSUbjimu0=;
+	s=k20260515; t=1784159176;
+	bh=9M8j7I7VdmUl3g1TXrlGhuKxddx/mKZm9ejkTrkF5to=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=mAN1zj0GBNk9ttnLGDXv7p0eGbtYs6/yuTPLXZOU6yianhwzSYFIsZsGVioZpB/Ag
-	 hX8BYlH00DoViJpPiQA71vKICH8r9F61ULtB5z17IEq8exP+Bn44qRc5FI79f4jWMv
-	 ci0CByyS4KdsWArDayHVQJkMw+ELOoVROhn5CfXw6XIU8SzDUeIduuuZbFWtLZle3i
-	 7bAIbko4VZgJEKA0xQXGJyiArVYJSWkhCWKyUxdns4d+BV7LkZAOjfwsSY4sF/OaDP
-	 mdunccaTEXVhuhZzm0m2jTARlncIr7qPNkJdGcFRxcyJmtONGf06C+6F4MJzR4yhme
-	 7sWxF12dWZQgA==
-Date: Wed, 15 Jul 2026 19:40:05 -0400
-From: Nathan Chancellor <nathan@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Vincent Donnefort <vdonnefort@google.com>,
-	Arnd Bergmann <arnd@kernel.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	b=hqFN18X4ZmdicG79qc7kKagp6mZYoLt9/bXSXKUt86xuENBjF1IE4rrrZqZYb+Beg
+	 izV9nOPHPoUoovny0IkOGpEnrFlvhMcrJotPZfxh7tysJX1gEgsGopimk3o15mNXae
+	 Y0qxLPw4ndrWM+i3UGahJ80d+cL4K4ST4S9e3bh2yiNOT9g3Afmf3tPPZoGsGoU6Mq
+	 IpVmnlmhZRVpJIFrCslfNoku8YEqM2YOCPLEvy+otidtPPdxAm9GKCdte6bzdMS0qj
+	 tdOyZJ7cgmYJCH9sjr1Nq0bNtX46ovrG7y4+pl1vpigKGizAEWbuBNpdoOrikbWgo9
+	 Be3aLVhUGZbSA==
+Date: Wed, 15 Jul 2026 16:46:13 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: James Clark <james.clark@linaro.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Marc Zyngier <maz@kernel.org>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-	Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] tracing: ring-buffer: allowlist clang-generated symbols
-Message-ID: <20260715234005.GB3672352@ax162>
-References: <20260616164211.3733326-1-arnd@kernel.org>
- <ajKgjNuHUlteSziZ@google.com>
- <20260714175617.319a6ec7@gandalf.local.home>
- <cc1232f7-fa15-4e1b-ba24-3d77dcb813c9@app.fastmail.com>
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, bpf@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
+Message-ID: <algbxQAAmurxms8X@google.com>
+References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <cc1232f7-fa15-4e1b-ba24-3d77dcb813c9@app.fastmail.com>
+In-Reply-To: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
 
-On Wed, Jul 15, 2026 at 09:38:21AM +0200, Arnd Bergmann wrote:
-> On Tue, Jul 14, 2026, at 23:56, Steven Rostedt wrote:
-> > On Wed, 17 Jun 2026 14:26:36 +0100 Vincent Donnefort <vdonnefort@google.com> wrote:
-> >
-> >> On Tue, Jun 16, 2026 at 06:42:03PM +0200, Arnd Bergmann wrote:
-> >> > From: Arnd Bergmann <arnd@arndb.de>
-> >> > 
-> >> > In randconfig build testing using clang-22, I came across two
-> >> > sets of extra symbols in the ring buffer code that may get
-> >> > inserted by the compiler:
-> >> > 
-> >> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
-> >> >          U memset
-> >> > 
-> >> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
-> >> >                  U llvm_gcda_emit_arcs
-> >> >                  U llvm_gcda_emit_function
-> >> >                  U llvm_gcda_end_file
-> >> >                  U llvm_gcda_start_file
-> >> >                  U llvm_gcda_summary_info
-> >> >                  U llvm_gcov_init
-> >> > 
-> >> > Add all of these to the allowlist.
-> >> > 
-> >> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >> > ---
-> >> >  kernel/trace/Makefile | 1 +
-> >> >  1 file changed, 1 insertion(+)
-> >> > 
-> >> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
-> >> > index f934ff586bd4..aa8564fb8ff4 100644
-> >> > --- a/kernel/trace/Makefile
-> >> > +++ b/kernel/trace/Makefile
-> >> > @@ -146,6 +146,7 @@ KASAN_SANITIZE_undefsyms_base.o := y  
-> >> 
-> >> Would "GCOV_PROFILE_undefsyms_base.o := y" work?
-> >
-> > Arnd?
+Hello BPF folks,
+
+On Wed, Jul 15, 2026 at 03:53:47PM +0100, James Clark wrote:
+> I ran into the build issue mentioned in the first commit, because using
+> an option like LLVM=-15 is a documented way to build [1], but only
+> some of the LLVM tools defined in tools/ support this.
 > 
-> Yes, turning off gcov for this file should avoid the llvm_gcda and
-> llvm_gcov symbols, but not the memset() symbol.
+> After fixing that, a lot of other tidyups fell out. I didn't go too far,
+> for example some selftests include tools/testing/selftests/lib.mk which
+> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+> tools/scripts/Makefile.include and I stopped before touching the former.
+> Some other non build scripts hard code toolchains and I didn't touch
+> those either, this change is only focused on things that already
+> include Makefile.include.
+> 
+> [1]: Documentation/kbuild/llvm.rst
+> 
+> Signed-off-by: James Clark <james.clark@linaro.org>
+> ---
+> Changes in v4:
+> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
+>   already picks the correct sibling lld version. (Sashiko)
+> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org
+> 
+> Changes in v3:
+> - Add warning for empty $USE_LD
+> - Use $HOSTREADELF in bpf Makefile
+> - Rebase on v7.2-rc3
+> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org
+> 
+> Changes in v2:
+> - Fix selftests/bpf build. LLD needs to take the full path to be used
+>   with -fuse-ld=
+> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
+> 
+> ---
+> James Clark (4):
+>       tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+>       tools/build: Indent if else blocks
+>       tools/build: Allow versioning LLVM readelf
+>       tools/build: selftests: Remove some duplicate toolchain definitions
+> 
+>  tools/bpf/resolve_btfids/Makefile    |  3 --
+>  tools/lib/api/Makefile               |  4 --
+>  tools/lib/bpf/Makefile               |  8 ++--
+>  tools/lib/subcmd/Makefile            |  4 --
+>  tools/lib/symbol/Makefile            |  4 --
+>  tools/perf/Makefile.perf             |  7 ----
+>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++----------------
+>  tools/testing/selftests/bpf/Makefile |  1 -
+>  8 files changed, 46 insertions(+), 62 deletions(-)
 
-This would actually turn on GCOV for this translation unit and cause the
-llvm_gcda and llvm_gcov symbols to be included in UNDEFINED_ALLOWLIST
-via the $(NM) call.
+Are you ok with this change and going through perf tree?
 
-> All the other features that leave annotations are handled by
-> listing the symbol names (__asan __gcov __kasan __kcsan __hwasan
-> __sancov __sanitizer __tsan __ubsan __msan), so I think for
-> consistency it makes sense to treat llvm gcov the same way
-> we handle gcc gcov and the rest.
+Thanks,
+Namhyung
 
-I do tend to agree with this though, as opposed to using
-GCOV_PROFILE_... or ..._SANTIZE variables.
-
--- 
-Cheers,
-Nathan
+> ---
+> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+> 
+> Best regards,
+> -- 
+> James Clark <james.clark@linaro.org>
+> 
