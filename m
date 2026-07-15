@@ -1,178 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A025C42FCCF;
-	Wed, 15 Jul 2026 19:12:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DD041F5F0
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 20:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784142798; cv=none; b=ocMqU8xyGBVpB6RY2VrsNjShRZbiTN9guuS2jhttOf0n1t8odWRI6InJA3LOZ4wMOW94KV7DVEt+D+gOzfpJYeYkqQeevYZl+WSsj4WmsEoO1kVDHUmwzYm90GUSsbHVXfL3p0ohF5XaHVvjCn1EYhIOuQNKHPvFjOGIAKWwye8=
+	t=1784145686; cv=none; b=FRBnS+Ar9+l1lMOpxU4w3y84vp0TfDEOmlx02tLzAPxgpMzmjiJmVKkUXMNm2gkhua6H22GHE92DJx7LdMtOoUIlxAVIDcdQIT3cSBT0igxHo9mmcQYXVd4SmRLg1A7dHhPBbxknih2ZYPoLkxRhlGQy9SK9tDbL8BtM/4yyzT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784142798; c=relaxed/simple;
-	bh=+e6WArOpGfBJmkNVtC1sEC4jNnxBzfLBaz71ANfRWX8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=McAPqL2A/5nlGEPAYi1g7jYFMV1a/u3JP4v9CRBHAyBmq1ydmwJEkzOq0NswgIVCimnOKDU1f+QOhofotYPhLdzGrkGhePVZiChalzlIDFSQ3B8ntrbLsEBMR+xMOG5QddwkYOXg7+BsYGeaInzhE1/ONGQWUfT/ohVkKA/YSKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ThkLp/3D; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784145686; c=relaxed/simple;
+	bh=uwxmuyKFx6g5q5HJXgqVNf9gdV44Jter6qaifngoZlM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lOLfP67n8SEgD4LM9nKq+DrikoNbI/0yQML0N0edWtqdM7XHMD4omGmJ6DXeP5tduGbd9FKSHXK2Mny+yY640s8bjyU3Mwz5SLPMXz5QvUlr87gllTEP5krWI73fTMV2oXM1TReUl2He8qGa05Ug8fu9Dp3NjSmPBC3rDYXVQAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OIsyIa1T; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ThkLp/3D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4925E1F00A3A;
-	Wed, 15 Jul 2026 19:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784142776;
-	bh=9oVCCdJZ6i0nGcuAu+X52AzRGPPFJc6TOHwzZS5ksvI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ThkLp/3DbgYhs8eYeG60ITWsTanEfafHo4P1Dis5gx0XzPaUQWEsAbGIH6EDFvhR7
-	 grngim+iQWZ9dA2fKdCAVHOz3HgAbhsBhk3FUeAKNF2EZszlUHcaJB5iyzZOpPHmCt
-	 EM1HN13QrPkmdzcrubqrVzA5pcIma3IRaejhabRFP2r+ZLwRgS1efXtDaRW9RBOiru
-	 lsLeoFn1sQP60GH72OpM33N+Yid61Z+hs9WQRVFdiMXqlEv7/tD2qxgvj17YS48kGN
-	 jczXQJMF51moHrReRTbJQo0WxP5640NY0BqghhhmXOh0M1dKvOYR1b0f/YsuJ+ehtE
-	 7Q4cFug10BGjA==
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 5E4A0F40068;
-	Wed, 15 Jul 2026 15:12:55 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Wed, 15 Jul 2026 15:12:55 -0400
-X-ME-Sender: <xms:t9tXai3LM5gP4pb83_8lwyGYjL8IxVLq3WnbEDrZ-vFeC6d08nxqxw>
-    <xme:t9tXavz1wIh1_YEXExlr9yorUaDDeunVqrlPowmCryLHu4sipndSpEqJlrijTrS7M
-    dE1qfH4rKjEoQCrKkg1E9eKydMiyYUF1cY_TQnHgq7HjkvSQUhDEQ>
-X-ME-Received: <xmr:t9tXajnu-pDrundjT5KEYWuEGkA1Xn5jBr0Ieerz88EnoQNTnVqoKaeQnz26SLJlBmFNqcuCWV9EuecScL2e-ed7mD5JW5F9>
-X-ME-Proxy-Cause: dmFkZTFravVrf3m1MWAOqu03Ewy0VcAX7ERyeMWoyOAJjzaLpK1CFtXM1o/PM+kYHNzt+v
-    vXewgjU7nnGz+GB+//KkYeTgtn3zL8y5gaT5XMhmOldD2IStpkEHfXLfoSCYJ5gKoDMJtZ
-    KTE2O0bgoAmCbrvWb96MCVZjml/MZFehGkTy6vMxRAzvgCXWz8W+pPQf2vNplzPYmlKDc6
-    xy/LN3YuDOAcJjJWDhdla2Onqx55C6dgFJqjBuhfmgvpEBihLQf5XtA+gU2Pw2YvaARRPo
-    aYDDJgcOmNA3x2PkLZceYJH7GslTjvvxpI4gNfu2bhk4Ew2u+cqUNTX+veexZ2gFx6WIkZ
-    g+7P8n6OsMNsXJXghrZMkd4leU28/Jj2zM7eXOG6vrTskwzUtoCq7wpBBvyKwWDuGIyeSm
-    ynEx4Oo6A9c6OcYZAq1dvBSp8Upw3YLC9f9jmBibRU1vx3U5CuXTlHbs3D3tClkzfGIEQB
-    Fkn6EgjPhNU/tNjcjJaBXCkDo69gvxGj9qUmdgL0E+yUTBpf1SVcir3XyDnAWvnVtIKCqe
-    rfmWBbFJRHv9QHKn+f/iVy251FNxMJV8j9N4zbwJ8mLApwsWfgrM5UFWIf8P0WqvS6xgVT
-    Fnp0RucLfWas7dkzslbbVNJ/t3+Ci/97WamE1be3e42QMkqqwOW+0IfifaIg
-X-ME-Proxy: <xmx:t9tXaq9GYPEmFEHwapYNE7ex01_yST_bkfvgTvMeF6h64fv9S9ZyXg>
-    <xmx:t9tXamoRGHr0d3gZIbsy3Qvv70-joycrW1qT2cRdC-s5vOUBufH_Hw>
-    <xmx:t9tXamJCfljY_2EO1CoIpkGpd1WX6mzG8EzaF7xTSYWvx76xNqogVg>
-    <xmx:t9tXao0oZG6x2T5IoPH1yL-9Bl8jbZXOEkliAVsbib5BBUhc7KeBqQ>
-    <xmx:t9tXatWkz7GQif861JbELg6lfoEW-9OdTFwGQyPqFPfVUJz3xcTq9yrf>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 15 Jul 2026 15:12:54 -0400 (EDT)
-Date: Wed, 15 Jul 2026 12:12:53 -0700
-From: Boqun Feng <boqun@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: Lyude Paul <lyude@redhat.com>, llvm@lists.linux.dev,
-	oe-kbuild-all@lists.linux.dev, Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Gary Guo <gary@garyguo.net>, Ilya Leoshkevich <iii@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [boqun:rust-rcu 14/27] rust/helpers/interrupt.c:17:9: warning:
- static function 'arch_local_save_flags' is used in an inline function with
- external linkage
-Message-ID: <alfbtUKkXANyGyYf@tardis.local>
-References: <202607131219.euJHPSJ5-lkp@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OIsyIa1T"
+Message-ID: <1a3378d8-2148-488f-a385-a20335553a9c@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1784145677;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=8V5CX44D4jZQ0nRMWUdMxp0ZQiAGX/gtKoCLQP9d5Jo=;
+	b=OIsyIa1TcYFh3nvcfnHzc4LyZ91jfE5QUxWO/MMKVE3Wxpcf0mmZL1JYd/77NeCKRCbSR2
+	VegVVMGxr4y8jPoCtVz2xy3fyzPYcF4WvDd6BSH+PjJXO1wPriA1oSkb8QUDiG6Osvd2Od
+	UoraCX3qu4QOEuDgU8Ad7bUsnGKSwnI=
+Date: Wed, 15 Jul 2026 13:00:58 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202607131219.euJHPSJ5-lkp@intel.com>
+Subject: Re: [PATCH v4 3/4] tools/build: Allow versioning LLVM readelf
+To: James Clark <james.clark@linaro.org>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra
+ <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
+ <20260715-james-perf-llvm-version-v4-3-6dfdf984b435@linaro.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260715-james-perf-llvm-version-v4-3-6dfdf984b435@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-[Cc s390]
+On 7/15/26 7:53 AM, James Clark wrote:
+> Documentation/kbuild/llvm.rst mentions that readelf is included in the
+> LLVM toolchain, but it's not currently included in this block.
+> 
+> Add it so that LLVM=... options also apply to readelf. Users in tools/
+> were Perf which was hardcoding it, and another was the BPF makefile.
+> Both already include Makefile.include so convert them to use the new
+> variables.
+> 
+> Where readelf wasn't doing anything arch specific, use HOSTREADELF
+> because it's more likely to be installed.
+> 
+> Reviewed-by: Ian Rogers <irogers@google.com>
+> Signed-off-by: James Clark <james.clark@linaro.org>
+> ---
+>  tools/lib/bpf/Makefile         | 8 ++++----
+>  tools/perf/Makefile.perf       | 1 -
+>  tools/scripts/Makefile.include | 4 ++++
+>  3 files changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
+> index eca584fb061e16013e76827e4203f6be0477a73e..269fe21fc8da73083367b3c122bdd2b718e12bc5 100644
+> --- a/tools/lib/bpf/Makefile
+> +++ b/tools/lib/bpf/Makefile
+> @@ -115,12 +115,12 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
+>  
+>  TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
+>  
+> -GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
+> +GLOBAL_SYM_COUNT = $(shell $(HOSTREADELF) -s --wide $(BPF_IN_SHARED) | \
+>  			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
+>  			   sed 's/\[.*\]//' | \
+>  			   awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
+>  			   sort -u | wc -l)
+> -VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
+> +VERSIONED_SYM_COUNT = $(shell $(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
+>  			      sed 's/\[.*\]//' | \
+>  			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
+>  			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
+> @@ -183,12 +183,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
+>  		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
+>  		     "Please make sure all LIBBPF_API symbols are"	 \
+>  		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
+> -		readelf -s --wide $(BPF_IN_SHARED) |			 \
+> +		$(HOSTREADELF) -s --wide $(BPF_IN_SHARED) |		 \
+>  		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
+>  		    sed 's/\[.*\]//' |					 \
+>  		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
+>  		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
+> -		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
+> +		$(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so |	 \
 
-On Mon, Jul 13, 2026 at 12:45:07PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/boqun/linux.git rust-rcu
-> head:   dcecd5f6e71e2437c8abe333ee2426fbe63e6398
-> commit: 27e30521043c39ca18ea3e28f825f9c7bd30b580 [14/27] rust: Introduce interrupt module
-> config: s390-randconfig-002-20260713 (https://download.01.org/0day-ci/archive/20260713/202607131219.euJHPSJ5-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260713/202607131219.euJHPSJ5-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202607131219.euJHPSJ5-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from rust/helpers/helpers.c:68:
-> >> rust/helpers/interrupt.c:17:9: warning: static function 'arch_local_save_flags' is used in an inline function with external linkage [-Wstatic-in-inline]
->       17 |         return irqs_disabled();
->          |                ^
->    include/linux/irqflags.h:256:3: note: expanded from macro 'irqs_disabled'
->      256 |                 raw_local_save_flags(_flags);           \
->          |                 ^
->    include/linux/irqflags.h:184:11: note: expanded from macro 'raw_local_save_flags'
->      184 |                 flags = arch_local_save_flags();        \
->          |                         ^
->    rust/helpers/interrupt.c:15:1: note: use 'static' to give inline function 'rust_helper_irqs_disabled' internal linkage
->       15 | __rust_helper bool rust_helper_irqs_disabled(void)
->          | ^
->          | static 
->    rust/helpers/helpers.c:38:23: note: expanded from macro '__rust_helper'
->       38 | #define __rust_helper __always_inline
->          |                       ^
->    include/linux/compiler_attributes.h:55:41: note: expanded from macro '__always_inline'
->       55 | #define __always_inline                 inline __attribute__((__always_inline__))
->          |                                         ^
->    include/linux/compiler_types.h:235:16: note: expanded from macro 'inline'
->      235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
->          |                ^
->    arch/s390/include/asm/irqflags.h:46:48: note: 'arch_local_save_flags' declared here
->       46 | static arch_local_irq_attributes unsigned long arch_local_save_flags(void)
->          |                                                ^
->    1 warning generated.
-> --
->    In file included from rust/helpers/helpers.c:68:
-> >> rust/helpers/interrupt.c:17:9: warning: static function 'arch_local_save_flags' is used in an inline function with external linkage [-Wstatic-in-inline]
->    17 |         return irqs_disabled();
->    |                ^
->    include/linux/irqflags.h:256:3: note: expanded from macro 'irqs_disabled'
->    256 |                 raw_local_save_flags(_flags);           \
->    |                 ^
->    include/linux/irqflags.h:184:11: note: expanded from macro 'raw_local_save_flags'
->    184 |                 flags = arch_local_save_flags();        \
->    |                         ^
->    rust/helpers/interrupt.c:15:1: note: use 'static' to give inline function 'rust_helper_irqs_disabled' internal linkage
->    15 | __rust_helper bool rust_helper_irqs_disabled(void)
->    | ^
->    | static
->    rust/helpers/helpers.c:38:23: note: expanded from macro '__rust_helper'
->    38 | #define __rust_helper __always_inline
->    |                       ^
->    include/linux/compiler_attributes.h:55:41: note: expanded from macro '__always_inline'
->    55 | #define __always_inline                 inline __attribute__((__always_inline__))
->    |                                         ^
->    include/linux/compiler_types.h:235:16: note: expanded from macro 'inline'
->    235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
->    |                ^
->    arch/s390/include/asm/irqflags.h:46:48: note: 'arch_local_save_flags' declared here
->    46 | static arch_local_irq_attributes unsigned long arch_local_save_flags(void)
->    |                                                ^
->    1 warning generated.
->    warning: 1 warning emitted
+Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
+Thanks!
+
+>  		    sed 's/\[.*\]//' |					 \
+>  		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
+>  		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf> index 476b8dcaef58cb1f3fa75f46a647c2cfe2352767..4d0d7ae02e06b117487a17691c4e62a138428ac5 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -215,7 +215,6 @@ FLEX    ?= flex
+>  BISON   ?= bison
+>  STRIP   = strip
+>  AWK     = awk
+> -READELF ?= readelf
+>  
+>  # include Makefile.config by default and rule out
+>  # non-config cases
+> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
+> index e81e5b479c563321e458b2a7ad8fca2b4607a254..46a3872b87624a7bf475d9b42a3e471f36789dfd 100644
+> --- a/tools/scripts/Makefile.include
+> +++ b/tools/scripts/Makefile.include
+> @@ -73,6 +73,8 @@ ifneq ($(LLVM),)
+>    $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
+>    $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
+>    $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
+> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
+> +  $(call allow-override,HOSTREADELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
+>  else
+>    # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
+>    $(call allow-override,CC,$(CROSS_COMPILE)gcc)
+> @@ -80,11 +82,13 @@ else
+>    $(call allow-override,LD,$(CROSS_COMPILE)ld)
+>    $(call allow-override,CXX,$(CROSS_COMPILE)g++)
+>    $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
+> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
+>  
+>    # Host versions aren't prefixed
+>    $(call allow-override,HOSTAR,ar)
+>    $(call allow-override,HOSTCC,gcc)
+>    $(call allow-override,HOSTLD,ld)
+> +  $(call allow-override,HOSTREADELF,readelf)
+>  
+>    # Some tools still require Clang, LLC and/or LLVM utils
+>    $(call allow-override,CLANG,clang)
 > 
 
-This seems not a Rust-only issue to me, basically you got the warning
-whenever you have an inline function calling irqs_disabled(). I'm a bit
-curious why 1b301f5f28ba ("s390/irqflags: do not instrument
-arch_local_irq_*() with KMSAN") wanted to add noinline when KMSAN=y, all
-you need is noinstr, no?
-
-Regards,
-Boqun
-
-> 
-> vim +/arch_local_save_flags +17 rust/helpers/interrupt.c
-> 
->     14	
->     15	__rust_helper bool rust_helper_irqs_disabled(void)
->     16	{
->   > 17		return irqs_disabled();
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
