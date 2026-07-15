@@ -1,105 +1,84 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4F849552C
-	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 20:02:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 126623BB105;
+	Wed, 15 Jul 2026 20:35:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784145779; cv=none; b=JIk0dHvllziA+v83W+bfui8z73LZxrLoBmZsH1jXsD+/w1uAZrZbPGI54jUiP+73wAAHrw96qmJoM3Ofj3IU2rmBBxECULIm2tydF+aBNLs4A+5ms5DmXc2GgKCFWq/gDZ/YQzSZN079ZDgUYyO5i99Y9wys9AdhLavxXTn+cHA=
+	t=1784147741; cv=none; b=BCk5jzIMYdMGumaopnr/WBagTq5IHB1YSz3oyeTRnmAZ+6HL+jXuO+S+kIcwrFYk1u/Rtp0DrEsoQCnxXWfXW1QavHjCyrOHL6E7+0PRVBD4wQMkr+1sKNNaoLBypMEhUxdJbpV/sHQ+fP7RR9Mas//jI9qS/Vm9KanpkfpfZ5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784145779; c=relaxed/simple;
-	bh=wBmEZDzYRvWOYr5klbQELQXSgjjyjWGnQiwI/wr/IaA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k29TDq8QUFzoIrtNMM/WAV2brb244r3Noe27+YaobnEhdOgvFCHskTZGB3uu9NgXDtseg5t7LwYTrNakXzBUqmfbJM8Cmk7nfx9uj7ZHQtN/HE2+oyCqYFNtIUC/rsqhaKr7AqsHz9CISIhFwwCXR6KB0RiS/Udho3hgZZotUIM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w+sjgD9k; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1784147741; c=relaxed/simple;
+	bh=jyj5oY7/bNCuAy4dJe/HGUwcNUOBqHGwmGVx2gunTOc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=VeaoByOwbd50lmK705Zs54GXeKsL0vi9IsXZyyMrXroL5/hI0qcnPR29WunVANCTOuO9dP/2T2yliEmHsGD5fZIMaQ1mKt3wT8Xr5ULnb4eqPqTylkVx7wKyVwaW9k2ajYkad8CojCaRVOv9ASV5UB3ZMtNTCE6DnQENsdhnGuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QXziWs6D; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w+sjgD9k"
-Message-ID: <45986fae-1abd-4ff9-91f1-35181e3c352d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784145774;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lHdKvQh/rlWKeApfpf/tzMK4TSbvkElaRfjKMW0v+s4=;
-	b=w+sjgD9kRBTS4n/JBtM49px5s+fkS9PIsiCxnbaDy0j/AnFF1vYfPzgn0TizoQ4m9ag1Ec
-	YvVmNjyIK8m0uAMcuRtJ36RHRXMHnrw0uOtEE3lpEGjh72LmyZdEGgsM7TAhFsS5jU9a/h
-	xBMgCohVBD057+oXaSIrshSKq+YK/E0=
-Date: Wed, 15 Jul 2026 13:02:44 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QXziWs6D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784147738; x=1815683738;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=jyj5oY7/bNCuAy4dJe/HGUwcNUOBqHGwmGVx2gunTOc=;
+  b=QXziWs6DmwBnPfSO2Ys1udGng0cNp01VqUbjxkdhQVXazry6aHiBKn0f
+   Xc3nxEdI6P2weHTmhHIn6a3BPcPpHPGPrgrbInpXW5XMQS8rW1P2ANulL
+   dDI/vacO8pT29l8q0go8iaKf0bARm7zaudzpHTwWwq62aVPEeseYSIx/o
+   dc4tvdDmGnwYeiWYK2STYW6IPsoNH7KZ9NB5Lk3vaUWCGIcDEp5vuZdhL
+   ALfcNd3a7TY0H+Rc8AkDCFGY530xykh417JDvLxakRGuiOE4m3a+FT1BZ
+   9d8rWVXKZcg2QQ9TJpnLNIM0LhWSMkwbsJ/B2RB4lGnB8c4qIz1wjiMAN
+   w==;
+X-CSE-ConnectionGUID: ZA3MD8cQQdOPAqsPmUjSag==
+X-CSE-MsgGUID: kiF5yWQgTSqT9Dd7qBUGrg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11847"; a="107599514"
+X-IronPort-AV: E=Sophos;i="6.25,166,1779174000"; 
+   d="scan'208";a="107599514"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2026 13:35:38 -0700
+X-CSE-ConnectionGUID: wJfcEv0KTmm88wrB0uRYMQ==
+X-CSE-MsgGUID: LDQ87g9bSOWzf9C30XtfKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,166,1779174000"; 
+   d="scan'208";a="294517999"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by orviesa001.jf.intel.com with ESMTP; 15 Jul 2026 13:35:37 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wk6KM-000000004Kj-0xJx;
+	Wed, 15 Jul 2026 20:35:34 +0000
+Date: Wed, 15 Jul 2026 22:35:01 +0200
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 79/96] ld.lld:
+ error: undefined symbol: HRTIMER_BASE_AUX0
+Message-ID: <202607152237.g7x3SYqB-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 4/4] tools/build: selftests: Remove some duplicate
- toolchain definitions
-To: James Clark <james.clark@linaro.org>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
- <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
 
-On 7/15/26 7:53 AM, James Clark wrote:
-> Try to remove some, but not all duplicate toolchain definitions. In
-> these instances, their makefiles already include
-> tools/scripts/Makefile.include which defines these in a consistent way.
-> 
-> STRIP is the only one that was set with an '=', but I don't think it
-> was significant so that difference can be dropped.
-> 
-> Signed-off-by: James Clark <james.clark@linaro.org>
-> ---
->  tools/bpf/resolve_btfids/Makefile    | 3 ---
->  tools/lib/api/Makefile               | 4 ----
->  tools/lib/subcmd/Makefile            | 4 ----
->  tools/lib/symbol/Makefile            | 4 ----
->  tools/perf/Makefile.perf             | 6 ------
->  tools/testing/selftests/bpf/Makefile | 1 -
->  6 files changed, 22 deletions(-)
-> 
-> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> index 7672208f65e4bc245c03603634d3aa0093a91096..6fdb6302e0a28e9166175822f42cfbb4f4eb24e5 100644
-> --- a/tools/bpf/resolve_btfids/Makefile
-> +++ b/tools/bpf/resolve_btfids/Makefile
-> @@ -20,9 +20,6 @@ HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)
->  		  CROSS_COMPILE="" CLANG_CROSS_FLAGS="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
->  
->  RM      ?= rm
-> -HOSTCC  ?= gcc
-> -HOSTLD  ?= ld
-> -HOSTAR  ?= ar
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   aae9c6fcfe1b60e4a63da0fe64f8ffe470b0fa29
+commit: 69bfefa1c9bf52492df144e6ad0daf86f82a3727 [79/96] DELETEME
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260715/202607152237.g7x3SYqB-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260715/202607152237.g7x3SYqB-lkp@intel.com/reproduce)
 
-Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607152237.g7x3SYqB-lkp@intel.com/
 
->  HOSTPKG_CONFIG ?= pkg-config
->  CROSS_COMPILE =
->  
-> [...]
-> 
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: HRTIMER_BASE_AUX0
+   >>> referenced by hrtimer.c:2247 (kernel/time/hrtimer.c:2247)
+   >>>               vmlinux.o:(hrtimers_disable_clock)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
