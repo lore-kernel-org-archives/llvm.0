@@ -1,75 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3DD5392831;
-	Wed, 15 Jul 2026 16:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D1F2ED870;
+	Wed, 15 Jul 2026 16:03:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784131264; cv=none; b=m2EX4l1LnFdo2Q3FU//f7vsmvsfd3FcH4kllGAU2w3JByqFa5PdHlFjQ1h7xBVA/kHl85XMDr0Ndto8WIJUZCUuHRUM3u+gLoeUy0A9DrR/3FBN36YujabD5LlAYawuRtXXmaj8kuO3ogJiufdLzDsaWdof1JxJOt7qTFmKvTpU=
+	t=1784131392; cv=none; b=Zoet7HM1wIDIdMF6VsMAayoB6EA2LShLHxcueYLtx029rPacbBUtF/KFeTyRGCbgh+y2aeuibA0vsC6Qd2KHrRDZ4C0djxfl+chO6G9z3nA2zLEo5nB9X6wFnfIzjWd35dB0wqod0NLW5h7Ikv7j9yPx5WVuSaWD1Jc7pX62HAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784131264; c=relaxed/simple;
-	bh=HL7nEZMAAgNcFtaLjWcaPJUNshIHasOvdflE1dWR3p8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Klek8d6p0xOrYNrO5Bm3EnMzBkHzwnwrcSlA31osllXXqprmO7rbgpk/fGGG4Apjb6bLOam1rWgjmDe1uDfubWd8OcMpM3/ApmxFY9jVat6MbzRxS26SOTCITZwkyOLj3E1e5kgfOl4tnLwC3y6B1oYz6DmlqzAsrbbiN0aboSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WdjXiX8Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784131392; c=relaxed/simple;
+	bh=8b7qsmXxnW91dNcuGNzXlqxsWLCWfqu2R3Anp8PZC7s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XKQ2Sf4yUUR86OgNnC6tB6+zxtqTT1B38Vs8b0fawuWKVqN3VV2LGGNf2QqYKQz8apQTeDTIi7+Q2FQeyBTmozAwNRfMV68OoznHq8dDavaYrYjs2fhpGv4miGSF6HpKsz9TwJoOdbQjlMHAIcpN9fTfLoapGPXG4Pp8OOSUg1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jLIBzgLE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WdjXiX8Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 731011F000E9;
-	Wed, 15 Jul 2026 16:01:02 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jLIBzgLE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8931F000E9;
+	Wed, 15 Jul 2026 16:03:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784131262;
-	bh=FqiL/TPz9Zg7B3uOQuWSBDQK8s+wqi1hgVKaOFrfCyU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=WdjXiX8ZUR9fbMyqUPf0EmeiJCY0OolHPBzLeXdRu330DwIg/dF+aItKukNIQOq85
-	 PnqcM7zAERCY6Fd+peleXqu3p63m6g5jpzQCQpWcs2jp6pVej2Xy4DReD9gspiDKJ3
-	 Ub8O6t16L5JZVvysLKBYZ9BvBQP6XomBzNSESKYtqGtqJP6wa6OC35Vfo6X2imoau9
-	 LrmEdgkNGVQMjQ0+7wSWeEjYYxvaVL8Md4hd4VFGcA40SELiUuToDrAo2qgjDso8kH
-	 WNs+DcgUaLmyzoYqYhMItCywX9DxCt//7Zbcr3dpqo4LNho3L9QFHkm+kNHjGIId6q
-	 aMpQieX3QxYLw==
+	s=k20260515; t=1784131391;
+	bh=ZHRySce1DX+MQ4tELLMpD5Y/ibRTeQsmyUSPCPd64Kg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jLIBzgLElQfSK8tCiIynsgCXvR+lTL2RG9w11+UjXajcRddrvp2W14wF0z8O+8WbT
+	 JCwR1x11SN1JpWnhIWzQQ92Q608ClvEMjcS6o+2F5UEW1aKYL5HQ9fIhWKQGdOlK+U
+	 u6oJJiC4fRNtRnFcJquXI12tEnINkWBoxUgzvng1bt9DmuNm5NOUzqvL7NUg7TagJZ
+	 bM4uH727xKLbZheSQNKuW+Ij5/5xUwbK7TJXRFXZOvAvDeyOfNJROXknblc0h2CMkd
+	 FT0H2CvNvGbuq0i04N5IuzvAA1eNayA2t9O3dyNdWjCZ65aaUcRPdL3Me6dkzmHOuM
+	 tl5PWNTUP8E8w==
+Date: Wed, 15 Jul 2026 09:03:10 -0700
 From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+To: David Matlack <dmatlack@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, Andy Lutomirski <luto@amacapital.net>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] fortify: Disable -Wstringop-overread in tests
-Date: Wed, 15 Jul 2026 09:00:53 -0700
-Message-Id: <178413125012.626806.1119650870376955370.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260623-fix-test_fortify-for-clang-stringop-overread-v1-1-15ee8342a953@kernel.org>
-References: <20260623-fix-test_fortify-for-clang-stringop-overread-v1-1-15ee8342a953@kernel.org>
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Aaron Lewis <aaronlewis@google.com>,
+	Alex Williamson <alex@shazbot.org>
+Subject: Re: [PATCH v3] selftests: harness: Mark test fixture objects
+ __maybe_unused
+Message-ID: <202607150902.F17F8DE5@keescook>
+References: <20260706183154.2660394-1-dmatlack@google.com>
+ <CALzav=f3KaNQd2NgCTxU=VSXWujV+qjyQuNJp_hy1-U36RMPpg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALzav=f3KaNQd2NgCTxU=VSXWujV+qjyQuNJp_hy1-U36RMPpg@mail.gmail.com>
 
-On Tue, 23 Jun 2026 13:23:46 -0700, Nathan Chancellor wrote:
-> clang recently added support for -Wstringop-overread [1], which is on by
-> default like -Wfortify-source. This breaks the usage of -Werror in the
-> fortify tests, resulting in the following false positive warnings in the
-> kernel build:
+On Tue, Jul 14, 2026 at 09:24:36AM -0700, David Matlack wrote:
+> On Mon, Jul 6, 2026 at 11:32 AM David Matlack <dmatlack@google.com> wrote:
+> >
+> > Mark _##fixture_name##_##test_name##_object __maybe_unused since it may
+> > not ever be read. This pointer is only read in XFAIL_ADD(), which tests
+> > are not required to use.
+> >
+> > clang made a change to -Wunused-but-set-variable (split out into its own
+> > subwarning, -Wunused-but-set-global) that causes this warning to be
+> > emitted for various selftests and can be upgraded to an error in
+> > selftest that set -Werror.
+> >
+> > VFIO selftests have been broken since commit ff556bd98348 ("vfio:
+> > selftests: Add -Wall and -Werror to the Makefile"), and the net
+> > selftests builds have been noisy due to -Wall.
+> >
+> > Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between forked processes")
+> > Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > Reported-by: Aaron Lewis <aaronlewis@google.com>
+> > Reviewed-by: Alex Williamson <alex@shazbot.org>
+> > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > Signed-off-by: David Matlack <dmatlack@google.com>
 > 
->   warning: unsafe memcmp() usage lacked '__read_overflow2' warning in lib/test_fortify/read_overflow2-memcmp.c
->   warning: unsafe memcmp() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memcmp.c
->   warning: unsafe memchr() usage lacked '__read_overflow' warning in lib/test_fortify/read_overflow-memchr.c
+> Kees and Shuah, is it ok if Alex takes this through the VFIO tree? [1]
+> This fixes a bug exposed by recent VFIO selftests commit ff556bd98348
+> ("vfio: selftests: Add -Wall and -Werror to the Makefile").
 > 
-> [...]
+> [1] https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@shazbot.org/
 
-Applied to for-next/hardening, thanks!
-
-[1/1] fortify: Disable -Wstringop-overread in tests
-      https://git.kernel.org/kees/c/c1f3e770eec2
-
-Take care,
+Yeah, please do. This has ample review. :)
 
 -- 
 Kees Cook
-
