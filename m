@@ -1,75 +1,78 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3B71917CD
-	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 01:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0ED61F7575
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 02:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784078222; cv=none; b=W7s2xRxLH+Mabwlceerqr4Dd/VsHVYrCkSn+OMCyCKxuYvvn2P/pWroRw7oHipocMtUMq/TfxxlTXgknIVQNR0fOAhpU5anRHNDKOIwvxy/g9BG5xOJXkzvZKu2ETIOXws00FRJu6G8X6hBYZK9BZ1Sb1MTYTWpJzj9p86aFa6A=
+	t=1784081978; cv=none; b=mWZ5DqpaJcpSjPYM2KUDDpaiWpZxDkAMVienNm5XARvURl7dOnvlTXC3wk75XJ/36EVowVMnS/qf0cxQyuL0mWKMlXa77i7rxFdfJX8p+O3xn24ARmlT+dd9cbESFdDb7Q4/G2iOI4kFEu+CcaGhh7hyizm2tPtzLx23f9jjKWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784078222; c=relaxed/simple;
-	bh=BP/51ZrzCuUH18tmFa47SYVzg6KlW1yHQnc30QxX/js=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rxTK4o4hN7tEsDKbq+CRbul/Nc1HphvKsIwm/9CB/fR+k6TG0eWFAeSzVhzr5gTzepalI/cxFqFCyE3tm732jMUOCz2y0jMgbA6NKavNavBxIox6ubMTx3owDDrjuNTVFZs90XD9pa58fTrxGkChvle8ge8vsi4hbrA+2l+XHLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZr4Ksc/; arc=none smtp.client-ip=209.85.215.178
+	s=arc-20240116; t=1784081978; c=relaxed/simple;
+	bh=9hNvJLwHoOEou8LLYeKhtdn5GPgGf0qbTrk5z2xNAq0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OQyKN/JyLEJ5i0STonDq5cFaolTlDnEx0V0ag3IS2w8ohtlcnPEII8i3tIsTnx2itJqDAgGBI7jRQ1aKyBx0iuwBWRTcm/YyBh5Mc3nmJVV+qTLmmQDCK73aV2W33TepFlsfpqrWC6RFhdPWhqTo6pW5wsn/66PBaPgAaasYkaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fYMRFvoH; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZr4Ksc/"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ca957432c7fso3357879a12.1
-        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 18:17:00 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fYMRFvoH"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso54741335ad.1
+        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 19:19:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784078220; x=1784683020; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1784081976; x=1784686776; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MwJBrQ0pKijpyzFHsFaJHm7N376wuBcGnxSFAS9F0K4=;
-        b=IZr4Ksc/PAd4PB2wMKHFgMqGl8yOxg9th4n3md6UGqOh/n3t6HS9dpyRDIgYyfFuje
-         i1kBhqVlQzRGYDnBRrPIkP5E8maWAItFyglqNKUfW3UYceKWB25IPyHIrQsJOzOjJdaB
-         GJDvll8HUwWZZgT/aYbIkapvHQxmD5xcQgqyB3AkbE9+5D2GvE+IDiSmXaBmi+oIuGdR
-         h4x2sAFbMTsd7uPz7/rzdlIUC/6dE+OGsn0Q//F29oA8xE/FMlkQifYgbe1rSzHYmS6Y
-         kYIHb7OAOIZhXrx41xb4n3A941KtS2kFJ2U2G5je5cX2mJo0ipKWwxAIxMZ5nVzX3Tgi
-         DUeg==
+        bh=3+A/CsOvZ5kwNPw68MEUIBx9OhApXOPeGcI1WPKSM0g=;
+        b=fYMRFvoHYdFTXZspal9iW/suUcMsPeZpz/KF7h+Xr3f1gqQ5CWDXibi4bjd+cxqUxx
+         9EiozUUwtxmaqcM8rHXUS+czbt7aiPk3urPRgdFG5jacXUMpTmT/s3GIuBiwVXCX7WtB
+         eDDjOXCbQdGvzP3kX+0S12bChAoQ6wYzmdeRWNJFXfzPoxYBCLhjXPH9mXeZ47TKu405
+         iadIr8LYize/fY3i1kYV0FQ/JqDP6KA9QHFKSLKW6Oin4Hi3Dom8T2MGOqk568jElcYj
+         3ATIqDCYGzKYuTDjqozh/BuoGRqAdn1FcRongBdWTm6fgWRhCGHu+HZUJhn2n5FroIZH
+         xdoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784078220; x=1784683020;
+        d=1e100.net; s=20251104; t=1784081976; x=1784686776;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=MwJBrQ0pKijpyzFHsFaJHm7N376wuBcGnxSFAS9F0K4=;
-        b=RKgKpDsDPEbWRt8dZROSAW2UM9XP22bAUHqndq9ufXWRenhHgJjUeIG8/bbIL0sFaT
-         MvlaD6jl0fMlHVI2VXXE/o1hMe31OgbWGbDBQx9F/HPYAW+PX9ezrbP7rJBOGD8cGW7s
-         4OKR9zW24m7wMRN4bIf25031LTQtK2Fqz7pDlNnTgheXFsCkqx39hZFj1lfVr5KWgkgW
-         6IHXE44MdA8usu5d+NMUmZaEoSmvmvyYn+jn6YrUlE4DuaRRXY7GoYuXqj15vJdGBjIl
-         3PRqMsJ83Ho0a3FC368rHP8ICeyz7nr8vva0cH4vh8gGDPpF1KRdAd8K7Hsg1pPBpJoX
-         FF/g==
-X-Forwarded-Encrypted: i=1; AHgh+Ro+XL7iQZ6v9zYaxjdMzlsbrjwnmd7pNYqRfOGTgLReelUOzT2eFciST3SUkZPq+mkOqH6/@lists.linux.dev
-X-Gm-Message-State: AOJu0YzpSm+GLfwj48cG7pnEj19uboGrNhxPo0kutHP8OBwF4lgHIYtl
-	ahUjlM7ioJeMu0G8YdOfVMat0gCU9kFBDdAXTER45vTQew1fNRDypt6w
-X-Gm-Gg: AfdE7cnerLWh4+FNU2FoH3gCPS+Xha3cJHX5Ix6jDu1v7zgSJNYD+dIy5yLZKvbswM+
-	Nip86QtKzP14A9DQ/0rbmGUNEZep12kC2oBzdSyq1rZFxURYmW+TH5mcwg+INNylZirkRgpkwR6
-	bYz5t6HBPP+m4KLVw4o1hCfB7KbCmfftGEcvyV/DhwHST78qCTAVFuc74Q3ppK9P26jkg0hMgfW
-	A2STxB32qjfPVl3JhXLZCGKnNDHVOu4JZ1B9dVzxeWZ9dF8SxYGIuQlfwA9+GFJV4zyTJRBl+fe
-	U8xUFK/0/OkDrnB72UbVDNHY7fc+qzDCxS5SqtINYedK1Z4kj+WH6AvCuicxLhIdJVTu96Vkp5g
-	D9Zp68AFHkd6rrmcQ8o9QzpmstkHSPRpoGFu7YNfXL/W7VqBtpwdW6Xa5l5RoWj4ymye4mk5w8d
-	WMvEk37RJ0MEmc2Psbfe/rKl5HaNeENQFqXWxmXuP08RWo2LSYFGhz0FaJvgRiQgOW+3/Apc1/e
-	aHJZ/RtutXYVbsUy/fll0kD1hazyeqNIG2DdZk223BVpRcZPvwXRfpNFxfO/9QlmA==
-X-Received: by 2002:a05:6a21:7a9b:b0:3bf:64cd:c45e with SMTP id adf61e73a8af0-3c35731bd15mr5639748637.4.1784078220446;
-        Tue, 14 Jul 2026 18:17:00 -0700 (PDT)
+        bh=3+A/CsOvZ5kwNPw68MEUIBx9OhApXOPeGcI1WPKSM0g=;
+        b=Sa3HLqw6L/6bIYkuOH1CWVIcwqlzcoa3a2NVkF6lEDxmc8Q5nVDPrOCde9pkQ4pLNB
+         CM81xEELr0+Kpo4MFKbIfn5J/UEsMUGt8j88CP7LC3jabqiAQiMp1UJBAvAP9M/Agwoc
+         Ez7aZ6uoqI+OLqJx9Y4njhGHd9+I/qNlP8Ggfvya0+gGjd1a7BEkOpSwp9q/YcKWIk87
+         PVLxQ/u2xamMcR1+vkNPulfjBUP/K+SQn9ke6eMuaN1PTjpVWYesM/bCvKcAK5HKOAyA
+         KDZaOYysmWz77XxejrUD540BFbXuJ7OyyT4pg9IxwdEDcWAbXAJyacaK7d6HTcq4rfUo
+         RJ0w==
+X-Forwarded-Encrypted: i=1; AHgh+RqRCl9BAEDMrb4DaFmd3BlQtj3KVvWSO8dlyPLNVAPt53LnnE/1WYut5QcD59FoSiJ/mo9D@lists.linux.dev
+X-Gm-Message-State: AOJu0YwprwigmDc+FGskVjV7t2CeK+buo5ny/+sA9YfHpFJ4q504f+Wa
+	NKgEAqCkqX69fxVypboMdXoZduEjJuMoHGZX+1atG6HllffNFllThR4g
+X-Gm-Gg: AfdE7ckbFbstBWOKOEQd0fnJM5/1iW/v4yqfFkRijUQ2/3nmoc0DpmgyLiVth+K+7vL
+	f7sRA8ILcxnr61uR2ZVRlp38riEO0yp3dOo5CrqutdVoWdKvjUm/YAUYl9CQCwAI9XHFb/0lAYE
+	NdJXSZoQbjcGELqgVa8QM49ZoET330I4FWyv0YRmJGot0a9xLqrEmMjcvoXuBb9sVmoBfJFuLP2
+	Z+oUKXHwEtSZcRp1rWcf6A7ZcHQJCwLi4UxVXcFceIKglQDW3Rv8+/R5ZAAWIrJwovXPe5IZ2KN
+	cJSbgMQn4eDXDnQi11Qlicf31FvhKQMa642sVEUW/MmJWeJFa8S65qSwNuvrdKzB5JL9m/MYzoJ
+	SJRuQsT9u1qrPyotQZ1c/DXsny6DPqMUW8r4CbJHSrA1rIaQo8k1aBdK7/H7+ZNKJGA/vFiOPYK
+	rk0BU/1rAKIdiRWDFMc0TZe8cTCL4TxX6runWvtuMxKsqP6MTXEPBIHW/x3lphGpr4SFEU34St+
+	u8MxUCSwlg3QlpyfMHHIsC/TaD9hf/1XVcJZP6ehw6VG8Lw7o1pn+fZLPcqxrmNtQ==
+X-Received: by 2002:a05:6a20:3d92:b0:3c0:9c1a:893e with SMTP id adf61e73a8af0-3c34d8c599fmr6957139637.70.1784081976192;
+        Tue, 14 Jul 2026 19:19:36 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-313b4cbafa1sm83586250eec.6.2026.07.14.18.16.59
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ca7f626fb78sm8653754a12.13.2026.07.14.19.19.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 18:16:59 -0700 (PDT)
+        Tue, 14 Jul 2026 19:19:35 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
-To: linux-ide@vger.kernel.org
-Cc: Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
+To: linux-rtc@vger.kernel.org
+Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
+	linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32 ARCHITECTURE),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32 ARCHITECTURE),
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] ata: ahci_da850: use devm_platform_ioremap_resource()
-Date: Tue, 14 Jul 2026 18:16:58 -0700
-Message-ID: <20260715011658.1284298-1-rosenp@gmail.com>
+Subject: [PATCH] rtc: stmp3xxx: use devm_platform_ioremap_resource()
+Date: Tue, 14 Jul 2026 19:19:33 -0700
+Message-ID: <20260715021933.1551663-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,61 +82,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace the open-coded platform_get_resource(IORESOURCE_MEM, 1) plus
-devm_ioremap() sequence with devm_platform_ioremap_resource(pdev, 1),
-which looks up resource index 1 (the power-down control register),
-reserves it and maps it in one call, returning an ERR_PTR checked with
-IS_ERR()/PTR_ERR(). Resource index 0 (the AHCI register block) is still
-mapped separately as hpriv->mmio via ahci_platform_get_resources().
+Replace the open-coded platform_get_resource() plus devm_ioremap()
+sequence with a single devm_platform_ioremap_resource() call, which folds
+the resource lookup and mapping into one step and returns an ERR_PTR on
+failure, checked with IS_ERR() and propagated via PTR_ERR().
 
-Built for ARM (davinci_all_defconfig + CONFIG_AHCI_DA850) with LLVM=1;
-drivers/ata/ahci_da850.o compiles cleanly.
+Move the mapping ahead of the devm_kzalloc() so that an error or deferred
+probe is handled before the rtc_data allocation, avoiding needless work.
+
+The fsl,stmp3xxx-rtc nodes in imx23.dtsi (reg = <0x8005c000 0x2000>) and
+imx28.dtsi (reg = <0x80056000 0x2000>) each provide a single
+non-overlapping IORESOURCE_MEM window, so the region reservation now
+performed by devm_platform_ioremap_resource() introduces no conflict.
+
+Built for ARM (mxs_defconfig + CONFIG_RTC_DRV_STMP) with LLVM=1;
+drivers/rtc/rtc-stmp3xxx.o compiles cleanly.
 
 Assisted-by: opencode:hy3-free
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/ata/ahci_da850.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+ drivers/rtc/rtc-stmp3xxx.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/ata/ahci_da850.c b/drivers/ata/ahci_da850.c
-index f97566c420f8..4e53ff96d712 100644
---- a/drivers/ata/ahci_da850.c
-+++ b/drivers/ata/ahci_da850.c
-@@ -162,7 +162,6 @@ static int ahci_da850_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct ahci_host_priv *hpriv;
- 	void __iomem *pwrdn_reg;
--	struct resource *res;
- 	u32 mpy;
- 	int rc;
+diff --git a/drivers/rtc/rtc-stmp3xxx.c b/drivers/rtc/rtc-stmp3xxx.c
+index 7afcd14aeee5..05f128ccf827 100644
+--- a/drivers/rtc/rtc-stmp3xxx.c
++++ b/drivers/rtc/rtc-stmp3xxx.c
+@@ -245,28 +245,21 @@ static void stmp3xxx_rtc_remove(struct platform_device *pdev)
+ static int stmp3xxx_rtc_probe(struct platform_device *pdev)
+ {
+ 	struct stmp3xxx_rtc_data *rtc_data;
+-	struct resource *r;
++	void __iomem *io;
+ 	u32 rtc_stat;
+ 	u32 pers0_set, pers0_clr;
+ 	u32 crystalfreq = 0;
+ 	int err;
  
-@@ -198,22 +197,14 @@ static int ahci_da850_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
-+	pwrdn_reg = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(pwrdn_reg))
-+		return PTR_ERR(pwrdn_reg);
++	io = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(io))
++		return PTR_ERR(io);
 +
- 	rc = ahci_platform_enable_resources(hpriv);
- 	if (rc)
- 		return rc;
+ 	rtc_data = devm_kzalloc(&pdev->dev, sizeof(*rtc_data), GFP_KERNEL);
+ 	if (!rtc_data)
+ 		return -ENOMEM;
  
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
--	if (!res) {
--		rc = -ENODEV;
--		goto disable_resources;
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!r) {
+-		dev_err(&pdev->dev, "failed to get resource\n");
+-		return -ENXIO;
 -	}
 -
--	pwrdn_reg = devm_ioremap(dev, res->start, resource_size(res));
--	if (!pwrdn_reg) {
--		rc = -ENOMEM;
--		goto disable_resources;
+-	rtc_data->io = devm_ioremap(&pdev->dev, r->start, resource_size(r));
+-	if (!rtc_data->io) {
+-		dev_err(&pdev->dev, "ioremap failed\n");
+-		return -EIO;
 -	}
 -
- 	da850_sata_init(dev, pwrdn_reg, hpriv->mmio, mpy);
++	rtc_data->io = io;
+ 	rtc_data->irq_alarm = platform_get_irq(pdev, 0);
  
- 	rc = ahci_platform_init_host(pdev, hpriv, &ahci_da850_port_info,
+ 	rtc_stat = readl(rtc_data->io + STMP3XXX_RTC_STAT);
 -- 
 2.55.0
 
