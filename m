@@ -1,96 +1,147 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238543C1085;
-	Wed, 15 Jul 2026 07:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28E23B840E
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 07:38:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784099795; cv=none; b=PwbAjWO/G6aIdrtsi531Lof3MQkYvhx7h1HIXKrlGc5foHJNdWZVY6XyftO0cMH7WhQTGo6NW3AiAPVkgqLpl7+saACyZBgW6hxjV8BgPblceuE6cFEQF50l29ftRjTwqHAg88/wsJqO+cYg59rkf8lIw64SKdS2oJRxnide1u8=
+	t=1784101127; cv=none; b=ZbsLS2jfP1Q9u0NbTLlm9GbHJit+MQNn43g1s1DMovPZakxzk9vO90Y7DEFtIJ51LUiHLAFhEE/I4sAFCaRXWj+oFle84x/ONfgh1dRSbuidF+qlWn4n4Ts4qdilKeqHgOLpUsb1UdkkwZR4cp+07ey2CyOCchLg7skesbl/d0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784099795; c=relaxed/simple;
-	bh=mUUXDzIcw0mcNGG4K9zCUUSQf+YSTow4/aQXUoBMo6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bFhevAXc2u6u4XkQ+iaW4eCOuFe8w0/tkR754xKTHvOLNB1LpJLISQBR0R1NXKHfEw5agYM/EZoZmClRNIQL0E9bYuGcX08jC14vorAj8aVLhbXl+4oCgA3eoa+LYRbEws/ImjDhmZGh3epzYklQKueIAV9VvUP61TbQN4XqF7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HVj0U921; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784101127; c=relaxed/simple;
+	bh=XSRRLwolK3xoZ+k/7/FUhEpWRce7+QI7JVMV8Kh3KfE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=G6CAEOGSDVSyrJvBoSCRjBH3SEKnP0yZxHrmI6wCsCidBhkgRUhYjDWw27Tyf2fZyKXalyGpM3WrvEizlyj9fL4getN3p1q/MRUJLIr7hx+30i8Q45qLO9Mkuyv6PoxQ8FO6/uKjTIFrNSfimJnbAK7Waf28RP8s3e1526WzSZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=xCT+In72; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gzlkiJd8; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HVj0U921"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA7E1F000E9;
-	Wed, 15 Jul 2026 07:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784099785;
-	bh=jQ2rHGVHhZnI1VpFpJARPFPB2YSMCYGI+AO8GVUrX14=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=HVj0U921ej/t+5c6AGWCAJoX3hiPUwE/UzL5k3L9uziBpL4L9DqbCj2btZS2UDkj1
-	 oG8CLHn/uT5bQ0o90s5YDyybwRF460d2FsN885DNr6uFm/BeGMRU5TbXWedrUk8yoS
-	 4fll4CioTsNFvSZHLmtmFmNJB0j9Y91qZb7G5dwrOvp5ztxfFhIqlH5I7A3glRcGO6
-	 6ZfmYQzo6M8Wyo7LBYxhMlNdF0HVBJIUSdBx3dzE7BLG+kUF0kgX/E7GM7pAou4uSc
-	 hEivl/3/DgefFFbpla+gSEroB70OWLv+wli/DyB6v1zIw/Wh5c2pZ7TpYL0tZfVg7D
-	 4I7j4dSe356ew==
-Date: Wed, 15 Jul 2026 00:16:23 -0700
-From: Drew Fustini <fustini@kernel.org>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Rosen Penev <rosenp@gmail.com>, linux-clk@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCHv2] clk: thead: allow COMPILE_TEST builds
-Message-ID: <alczxxLUf11F97t8@x1>
-References: <20260707005619.1229238-1-rosenp@gmail.com>
- <ak0T7zxwwSn_L57X@redhat.com>
- <ak8/8ixE7IS7kKdz@x1>
- <CABx5tqLynfd-uku+iLNHrnLu4k0rXn=yBi2oU6b2HNEZT=0vaw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="xCT+In72";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gzlkiJd8"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id DE26FEC0139;
+	Wed, 15 Jul 2026 03:38:43 -0400 (EDT)
+Received: from phl-imap-05 ([10.202.2.95])
+  by phl-compute-04.internal (MEProxy); Wed, 15 Jul 2026 03:38:43 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1784101123;
+	 x=1784187523; bh=ExRSIByqaOkUS6AX7i0RcHic5dXGvj4bnAtuT0fQZ/0=; b=
+	xCT+In72hTc0d/arkvcmP371r6VFMDsOH53mEj3YaNvh0OTyNxi6vFs7+qTYwiQn
+	16jQThKxnajs63xyeNyy38UoAvfUnOuPBxTztp+gZD/Zd875qvUe2/Vn6qkllu4i
+	FCy8BcDiEXkFzKmGUL3VwDKz+IxbAtrYQY1T4G3R3tHD/+dZW1AtLoSE5aIFM3op
+	smXiAIvR9wvTpkSZeWjQZx1emrv64FqIzJMtzovoz0rw1DnVHhlBPG/sPjjMF9NW
+	6tnLx3neKrekJ8ddX0tY/Ut1RV3Uk/GTTkKC4piW5duo6/2khgEB3D9BaX985YAl
+	QwxAc9enLOYODUIWUfs1Gg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784101123; x=
+	1784187523; bh=ExRSIByqaOkUS6AX7i0RcHic5dXGvj4bnAtuT0fQZ/0=; b=g
+	zlkiJd8MuEzBgALCY3LAQq1LrjrFzSHDasvX5jxWI/r/uTOfQPi4E/YNAAngl64u
+	TRaFxFFxZztV1G/0VKCCeb7jdltTo21yPZJJZ3bfY8kaFy58zuoAT6WR6uzoPvQ4
+	82JxjMfrfn3Sk0M4pHuoK8VvT11DVdEJFUO2Aao0cObGlDbRUp65Y7TUqR9UXzzd
+	BaW9aiSsttcJSqShrwQlPh7/qDp5k8cA4P+C/KkzO4nLItc8DIoRUqLj8jEYkKm8
+	oSrsg01vM3024bdzLHyHd4nfoWZrrwWCeHD7psMdk8qtu0j8b/MlaA6RDM/JNGR4
+	mDmFnZw3cXKOt0ytWoRig==
+X-ME-Sender: <xms:AzlXauy9neX8ITKPhDUTu9sZ-_Xyr8jN4IwA8ytJdNxT9uixQKF_Ag>
+    <xme:AzlXalG56hWSeo83dv-JQaJNggknYDw7HowY8Q7liwkGABswbhJSG98LPyKtUZRUY
+    Tm9BK6ySuyLNxGl76OnZLDtK4-oXH3442mL2hjkqZ3xIAJsCYCVHtc>
+X-ME-Proxy-Cause: dmFkZTFc7hJUD3UEDARrx/iCvNX/XeS+ZefNUMDqqiB+RwQlreGU70zG672pw7wAm9kv9e
+    LkbHflBAIfhzAcKrdZO4R025kHGqD+ozaXiawu+ga3eLDFbDUPNz3yDw7CzYEAsEHX6dYi
+    lIh3MMIlqvLqrPLpEl+RKANlbmZrZvtYoVu90XD+97zPjYd/+5wuXpISNau1JRYMuTr0JH
+    WWYAXzO470LuBktu4WgV1XGggC9FQs7DgdSMnt8zw1OzoZPRhzsrB07SQ23dPSICynxQ3l
+    uGJx1smSuUTW+YhRyRv7lI/oHJJuMGTqAKYUUCrf2eALDOGoF6tqQ5jZd5d5/elSbYKiYk
+    aJp4mwAFHc7L4eqijuZMIdw7GutqG1FX/vEQnK+ND7UYP9fglXt2ASXWZdo1xMJN7JMwrO
+    h2XkHbMmBtLoeuqwxWU50buJGJPN9E1jmekYg4mNJsY32exUIaJ8enISlYJjJzYtExrTJ8
+    h8FM8cb/Ug38YTacuy/PYXvHoIPpJU6hHnnXsgy08gA3Yb1OkgrER6xMfeO91X1Are2kWs
+    3AKxr2cgEq+mocUs7Y6Yxo5r6NSGex9zcNkUWm78iaIi88bPITe3qnMxCqPNeUfjksbCod
+    aMIswSagOK9vTjPq3bT4suoJOcbhN3DR9O+tsc94Zy/qWrdNDqRko5gAqvgg
+X-ME-Proxy: <xmx:AzlXam3OWuULux3PSFdcjHPu1ius9xgyjjz7pbg3cTfxmBwR7JEOsg>
+    <xmx:AzlXaphFRkNx05RUsecoS8pMnIfODkLtctTZ3ul7LySxvNZjMu4RcA>
+    <xmx:AzlXauqhdSBA6flk3g0c1eKYONYy_yyZ2zNnPTDWK3IMjSxIHT4lKw>
+    <xmx:AzlXakP81wePaNEjQrMwvAO_o5IoCH8SQR0Dr3ocuSZ57q2MHOXpwA>
+    <xmx:AzlXanraP-Ajs9S6c9N3Emlj9GqB3gsOMLlLexmBd-yumPkkYJqKWOrY>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 459371820082; Wed, 15 Jul 2026 03:38:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABx5tqLynfd-uku+iLNHrnLu4k0rXn=yBi2oU6b2HNEZT=0vaw@mail.gmail.com>
+X-ThreadId: ATTSxKVuwHDZ
+Date: Wed, 15 Jul 2026 09:38:21 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Steven Rostedt" <rostedt@goodmis.org>,
+ "Vincent Donnefort" <vdonnefort@google.com>
+Cc: "Arnd Bergmann" <arnd@kernel.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
+ "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ "Marc Zyngier" <maz@kernel.org>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ "Paolo Bonzini" <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
+Message-Id: <cc1232f7-fa15-4e1b-ba24-3d77dcb813c9@app.fastmail.com>
+In-Reply-To: <20260714175617.319a6ec7@gandalf.local.home>
+References: <20260616164211.3733326-1-arnd@kernel.org>
+ <ajKgjNuHUlteSziZ@google.com> <20260714175617.319a6ec7@gandalf.local.home>
+Subject: Re: [PATCH] tracing: ring-buffer: allowlist clang-generated symbols
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jul 09, 2026 at 08:05:40AM -0400, Brian Masney wrote:
-> Hey Drew,
-> 
-> On Thu, Jul 9, 2026 at 2:30 AM Drew Fustini <fustini@kernel.org> wrote:
-> > On Tue, Jul 07, 2026 at 10:57:51AM -0400, Brian Masney wrote:
-> > > On Mon, Jul 06, 2026 at 05:56:19PM -0700, Rosen Penev wrote:
-> > > > Follow the pattern of many other directories in this Makefile (sunxi-ng,
-> > > > tenstorrent, ti, etc.) by using obj-y. This allows COMPILE_TEST to
-> > > > select the driver without having CONFIG_ARCH_THEAD enabled
-> > > >
-> > > > Tested with:
-> > > > make LLVM=1 ARCH=loongarch drivers/clk/thead/
-> > > >
-> > > > Assisted-by: Codex:GPT-5.5
-> > > > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > >
-> > > Reviewed-by: Brian Masney <bmasney@redhat.com>
-> >
-> > This doesn't apply to 7.2-rc or next for me due to the surrounding
-> > context, but I agree with the change itself.
-> >
-> > Acked-by: Drew Fustini <fustini@kernel.org>
-> >
-> > Brian - do you think this should be routed through my thead-clk tree or
-> > go through the main clk tree?
-> 
-> It'd be great if you could pick this up through the thead-clk tree.
-> 
-> Brian
+On Tue, Jul 14, 2026, at 23:56, Steven Rostedt wrote:
+> On Wed, 17 Jun 2026 14:26:36 +0100 Vincent Donnefort <vdonnefort@google.com> wrote:
+>
+>> On Tue, Jun 16, 2026 at 06:42:03PM +0200, Arnd Bergmann wrote:
+>> > From: Arnd Bergmann <arnd@arndb.de>
+>> > 
+>> > In randconfig build testing using clang-22, I came across two
+>> > sets of extra symbols in the ring buffer code that may get
+>> > inserted by the compiler:
+>> > 
+>> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
+>> >          U memset
+>> > 
+>> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
+>> >                  U llvm_gcda_emit_arcs
+>> >                  U llvm_gcda_emit_function
+>> >                  U llvm_gcda_end_file
+>> >                  U llvm_gcda_start_file
+>> >                  U llvm_gcda_summary_info
+>> >                  U llvm_gcov_init
+>> > 
+>> > Add all of these to the allowlist.
+>> > 
+>> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>> > ---
+>> >  kernel/trace/Makefile | 1 +
+>> >  1 file changed, 1 insertion(+)
+>> > 
+>> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
+>> > index f934ff586bd4..aa8564fb8ff4 100644
+>> > --- a/kernel/trace/Makefile
+>> > +++ b/kernel/trace/Makefile
+>> > @@ -146,6 +146,7 @@ KASAN_SANITIZE_undefsyms_base.o := y  
+>> 
+>> Would "GCOV_PROFILE_undefsyms_base.o := y" work?
+>
+> Arnd?
 
-I have applied this thead-clk-for-next:
+Yes, turning off gcov for this file should avoid the llvm_gcda and
+llvm_gcov symbols, but not the memset() symbol.
 
-https://git.kernel.org/pub/scm/linux/kernel/git/fustini/linux.git/commit/?id=b2ee00d0bf4cca5dd02702fc339d2b523191966f
+All the other features that leave annotations are handled by
+listing the symbol names (__asan __gcov __kasan __kcsan __hwasan
+__sancov __sanitizer __tsan __ubsan __msan), so I think for
+consistency it makes sense to treat llvm gcov the same way
+we handle gcc gcov and the rest.
 
-If not problems in next, thne I'll create a v7.3 pull request for
-thead-clk.
-
-Thanks,
-Drew
+      Arnd
