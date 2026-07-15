@@ -1,60 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049782D6E64;
-	Wed, 15 Jul 2026 21:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 944BB346FAD;
+	Wed, 15 Jul 2026 23:01:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784151652; cv=none; b=b8gUCa67QtsgQOuuiPTo6+uNTHD1bHTMjox1Z2Mw01+GsATEiVPvmZDOLQ1TeovtBnhyaTPbwaSlQM+7/KWtNP0QcAwwhYIYUhBB0R2chW2E2Od3cVfdnjSlSfqsEjFntU7wXtQKbNc8AQkY7IP0xvKqy3XcsqfDiLWaztqTRvs=
+	t=1784156513; cv=none; b=eaF7DGMiBoC83J1nvqNgNkeyJAgYdQAZmQBXQeLRlz/po40I6nBQGcPiUxNsCl3DecUl5Udna41xUFaUntEaNSgWkT+uUvLzm/UpnNlszBDEOHsPMiTYaf9sfbaIvRgWZ/rihubnTIJ0Q/R6uzC5Q1j01NtaEycDGvaHdckzYdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784151652; c=relaxed/simple;
-	bh=tkhVVefCPqJ5tScp1KbZWc7Atmy844FNxHFY1z/LQQo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=n1ippF/aue2+5mvCKKK8qf53ZJSWyBPUuQyT8KLyKNeKwvoZtL0XPhIn6TQ+8RF566iPYSuRMwlZK5nwmZC/R9P/e4WdmBLy0aN81KaPY3NGB1DpZaFau7UwV4NOjbKg76UyGMf1iNvwoeADHOwSUtZWbMPp12g3Bj40G1p5+PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gif009dd; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1784156513; c=relaxed/simple;
+	bh=pbpLMZKQ9vVqEQt0Ph3zMyy2nYXjk9R39ObJoqHatAA=;
+	h=Date:From:Cc:Subject:Message-ID; b=rVCsZM0s4PQJWnh8cKmSXsjCRDHqD4WMCn3kVNOuFfN/DanAw7IWhu5udGPR+PE27vck3YbtiIfeJF3hjv1eXLD2DZHFhtC5KH0Y8qLKpXMOeV0IjzVxj77KA1iUr3svHz/WgDX8wUwzzxJgkYVdBeQf6VjX5CfiFesyN60Jo/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f15zp4Ii; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gif009dd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f15zp4Ii"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784151651; x=1815687651;
-  h=date:from:to:cc:subject:message-id;
-  bh=tkhVVefCPqJ5tScp1KbZWc7Atmy844FNxHFY1z/LQQo=;
-  b=gif009ddRA3uWkzhLbqwbIKPpNp50nRsLic7wOnYLWwtrVUGvVyljKjG
-   SfWi4m3q+wDEQ4ngnjgyzZi0jPVTFoQw7N5/b/VfGQJn4mUOwcCKVZ4Jj
-   zqAo96upv7Za/rBjxIZFHp1m0mNqoZYqa93YRzFzm6pA+y5krbG7uO09l
-   LgEyVR9xJYRfhiM3bZn5BR4NkTjlSbQuGghLepDM34uCCdARgtWLNOhgt
-   pgluSSWJHw5vt1FDm0CRRYr69Q27plD5j+5qP4rbtvJlM6USF1t1Cv74V
-   8obc+JS96OtMawpUmnJ2oEBHE8kddD2CqyFNDuye6kYGJO1z2sahMFiEK
-   A==;
-X-CSE-ConnectionGUID: I5pAad3DQOO2TWlfp3bGJA==
-X-CSE-MsgGUID: 47LdjtocSNejV8P/FG7jOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11847"; a="96319750"
+  t=1784156512; x=1815692512;
+  h=date:from:cc:subject:message-id;
+  bh=pbpLMZKQ9vVqEQt0Ph3zMyy2nYXjk9R39ObJoqHatAA=;
+  b=f15zp4IicbWvEytEKeo5cAeAD4oEZczR6fc8yH5vTpEz3pc05gm/3G7X
+   HpvfpXtMuJXX1ylDXAHoGZ4uwQmE5Cjx5UNbdpzj6fYTsYI7imNRIOyyj
+   ++UM5Oi1tkFQuoQbn4EFntwvI5O/uyk1f25d6AytJdtuBfCtMamTdMPEr
+   LgBhmU8g6PBsBDVF00FEz5MmUvv/NgPWaolNfrPolp+K5yz1y/OPeVRpC
+   crchNJ+/knLZoGcb8OubECVgYSIMSemsLnXRaq0/uKklKeB+hZicH1tuQ
+   09KrI0zxstRDMx97tC/Fe9IJrkqfgCww35+rEEr5Bf7zGtOl0fXWvVeH9
+   w==;
+X-CSE-ConnectionGUID: vlQb80VKSPuTol5sCc7Cqw==
+X-CSE-MsgGUID: KgLtefzWQNWr8rjD6zIyQA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11847"; a="83795376"
 X-IronPort-AV: E=Sophos;i="6.25,166,1779174000"; 
-   d="scan'208";a="96319750"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2026 14:40:51 -0700
-X-CSE-ConnectionGUID: Wk053MJBSWOGnCaBWRbNLA==
-X-CSE-MsgGUID: dIyV8pXQS4SlbnZ9TQa8Xg==
+   d="scan'208";a="83795376"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jul 2026 16:01:51 -0700
+X-CSE-ConnectionGUID: N1ku6JjQTOe4kX8PWQ9V7w==
+X-CSE-MsgGUID: +yW4emMORJegm8p/nRXwsg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,166,1779174000"; 
-   d="scan'208";a="294528595"
+   d="scan'208";a="260133887"
 Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 15 Jul 2026 14:40:48 -0700
+  by orviesa004.jf.intel.com with ESMTP; 15 Jul 2026 16:01:50 -0700
 Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wk7LS-00000000O1W-1S9i;
-	Wed, 15 Jul 2026 21:40:46 +0000
-Date: Thu, 16 Jul 2026 05:40:28 +0800
+	id 1wk8br-00000000O4Q-2Hbq;
+	Wed, 15 Jul 2026 23:01:47 +0000
+Date: Thu, 16 Jul 2026 07:00:46 +0800
 From: kernel test robot <lkp@intel.com>
-To: Tyrel Datwyler <tyreld@linux.ibm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-renesas-soc@vger.kernel.org,
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [geert-renesas-drivers:master 4646/4880] Warning:
- drivers/scsi/ibmvscsi/ibmvfc-core.c:4942 function parameter 'protocol' not
- described in 'ibmvfc_alloc_target'
-Message-ID: <202607160546.9qT6UbFy-lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [pci:controller/cadence 4/4]
+ drivers/pci/controller/cadence/pcie-cadence-debugfs.c:230:18: warning:
+ conditional expression between different enumeration types ('enum
+ cdns_pcie_hpa_ltssm' and 'enum cdns_pcie_lga_ltssm')
+Message-ID: <202607160602.7AOJf7Sj-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -62,22 +60,58 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git master
-head:   cbf4a77e77ce7c4a2907a798c7f624dfaf65da57
-commit: 275460787107280d4e1f7946d6d17ea070780cef [4646/4880] scsi: ibmvfc: Allocate targets based on protocol
-config: powerpc64-randconfig-002-20260715 (https://download.01.org/0day-ci/archive/20260716/202607160546.9qT6UbFy-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project b3e6e6dabdc02153552a64fc74ff5c7532447eed)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260716/202607160546.9qT6UbFy-lkp@intel.com/reproduce)
+CC: linux-pci@vger.kernel.org
+TO: Hans Zhang <18255117159@163.com>
+CC: Manivannan Sadhasivam <mani@kernel.org>
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git controller/cadence
+head:   d70e964dc099821f6c159d8f40aa7be2c62ecfd2
+commit: d70e964dc099821f6c159d8f40aa7be2c62ecfd2 [4/4] PCI: cadence: Add LGA IP debugfs for LTSSM status
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260716/202607160602.7AOJf7Sj-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260716/202607160602.7AOJf7Sj-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607160546.9qT6UbFy-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607160602.7AOJf7Sj-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> Warning: drivers/scsi/ibmvscsi/ibmvfc-core.c:4942 function parameter 'protocol' not described in 'ibmvfc_alloc_target'
->> Warning: drivers/scsi/ibmvscsi/ibmvfc-core.c:4942 function parameter 'protocol' not described in 'ibmvfc_alloc_target'
+>> drivers/pci/controller/cadence/pcie-cadence-debugfs.c:230:18: warning: conditional expression between different enumeration types ('enum cdns_pcie_hpa_ltssm' and 'enum cdns_pcie_lga_ltssm') [-Wenum-compare-conditional]
+     230 |                    pci->is_hpa ? hpa_ltssm : lga_ltssm);
+         |                                ^ ~~~~~~~~~   ~~~~~~~~~
+   1 warning generated.
+
+
+vim +230 drivers/pci/controller/cadence/pcie-cadence-debugfs.c
+
+   209	
+   210	static int ltssm_status_show(struct seq_file *s, void *v)
+   211	{
+   212		struct cdns_pcie *pci = s->private;
+   213		enum cdns_pcie_lga_ltssm lga_ltssm;
+   214		enum cdns_pcie_hpa_ltssm hpa_ltssm;
+   215		const char *str_ltssm;
+   216		u32 val;
+   217	
+   218		if (pci->is_hpa) {
+   219			val = cdns_pcie_hpa_readl(pci, REG_BANK_IP_REG,
+   220						  CDNS_PCIE_HPA_PHY_DBG_STS_REG0);
+   221			hpa_ltssm = FIELD_GET(CDNS_PCIE_HPA_LTSSM_STATUS_MASK, val);
+   222			str_ltssm = cdns_pcie_hpa_ltssm_status_string(hpa_ltssm);
+   223		} else {
+   224			val = cdns_pcie_readl(pci, CDNS_PCIE_LM_BASE);
+   225			lga_ltssm = FIELD_GET(CDNS_PCIE_LGA_LTSSM_STATUS_MASK, val);
+   226			str_ltssm = cdns_pcie_lga_ltssm_status_string(lga_ltssm);
+   227		}
+   228	
+   229		seq_printf(s, "%s (0x%02x)\n", str_ltssm,
+ > 230			   pci->is_hpa ? hpa_ltssm : lga_ltssm);
+   231	
+   232		return 0;
+   233	}
+   234	
 
 --
 0-DAY CI Kernel Test Service
