@@ -1,147 +1,148 @@
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28E23B840E
-	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 07:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821594657F6
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 12:39:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784101127; cv=none; b=ZbsLS2jfP1Q9u0NbTLlm9GbHJit+MQNn43g1s1DMovPZakxzk9vO90Y7DEFtIJ51LUiHLAFhEE/I4sAFCaRXWj+oFle84x/ONfgh1dRSbuidF+qlWn4n4Ts4qdilKeqHgOLpUsb1UdkkwZR4cp+07ey2CyOCchLg7skesbl/d0s=
+	t=1784119190; cv=none; b=pSdtc8QX2v1opQrzxKsXwPLOuXFZVFuoWoOY5SlG81HlwzJlUG82RsE9YrLIAjssDGd0RmzeNj5ECNHCV0Qopsj8csLGrtm071cBpDDDIgbY2ZHpLRCW8hO3h5PeiiXO8RQ2k7Pqth3S8Hio0i0wMcsmCGTjFXEk/t1jXP0kBgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784101127; c=relaxed/simple;
-	bh=XSRRLwolK3xoZ+k/7/FUhEpWRce7+QI7JVMV8Kh3KfE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=G6CAEOGSDVSyrJvBoSCRjBH3SEKnP0yZxHrmI6wCsCidBhkgRUhYjDWw27Tyf2fZyKXalyGpM3WrvEizlyj9fL4getN3p1q/MRUJLIr7hx+30i8Q45qLO9Mkuyv6PoxQ8FO6/uKjTIFrNSfimJnbAK7Waf28RP8s3e1526WzSZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=xCT+In72; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gzlkiJd8; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1784119190; c=relaxed/simple;
+	bh=455wlYCUNnMcrIdVi41A5Y7HIm5ipb4kz3mpabm/Y0w=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=QzxTM9UcDP0UUVj9/epg9rMGkuAzquij/sAHt8iC60nausal4P5tmLJTMzdTpMq1Se1iPM86GT1kt1+kNjxq3vKVw2sGTsr/ve4QfEfibxSy+NhwTngAKk5/jngdser6hnjqVfKQpZajYcYQYg5y23B7ApXjXcrfeK58qqEmhqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HD9+goVy; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="xCT+In72";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gzlkiJd8"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id DE26FEC0139;
-	Wed, 15 Jul 2026 03:38:43 -0400 (EDT)
-Received: from phl-imap-05 ([10.202.2.95])
-  by phl-compute-04.internal (MEProxy); Wed, 15 Jul 2026 03:38:43 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1784101123;
-	 x=1784187523; bh=ExRSIByqaOkUS6AX7i0RcHic5dXGvj4bnAtuT0fQZ/0=; b=
-	xCT+In72hTc0d/arkvcmP371r6VFMDsOH53mEj3YaNvh0OTyNxi6vFs7+qTYwiQn
-	16jQThKxnajs63xyeNyy38UoAvfUnOuPBxTztp+gZD/Zd875qvUe2/Vn6qkllu4i
-	FCy8BcDiEXkFzKmGUL3VwDKz+IxbAtrYQY1T4G3R3tHD/+dZW1AtLoSE5aIFM3op
-	smXiAIvR9wvTpkSZeWjQZx1emrv64FqIzJMtzovoz0rw1DnVHhlBPG/sPjjMF9NW
-	6tnLx3neKrekJ8ddX0tY/Ut1RV3Uk/GTTkKC4piW5duo6/2khgEB3D9BaX985YAl
-	QwxAc9enLOYODUIWUfs1Gg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784101123; x=
-	1784187523; bh=ExRSIByqaOkUS6AX7i0RcHic5dXGvj4bnAtuT0fQZ/0=; b=g
-	zlkiJd8MuEzBgALCY3LAQq1LrjrFzSHDasvX5jxWI/r/uTOfQPi4E/YNAAngl64u
-	TRaFxFFxZztV1G/0VKCCeb7jdltTo21yPZJJZ3bfY8kaFy58zuoAT6WR6uzoPvQ4
-	82JxjMfrfn3Sk0M4pHuoK8VvT11DVdEJFUO2Aao0cObGlDbRUp65Y7TUqR9UXzzd
-	BaW9aiSsttcJSqShrwQlPh7/qDp5k8cA4P+C/KkzO4nLItc8DIoRUqLj8jEYkKm8
-	oSrsg01vM3024bdzLHyHd4nfoWZrrwWCeHD7psMdk8qtu0j8b/MlaA6RDM/JNGR4
-	mDmFnZw3cXKOt0ytWoRig==
-X-ME-Sender: <xms:AzlXauy9neX8ITKPhDUTu9sZ-_Xyr8jN4IwA8ytJdNxT9uixQKF_Ag>
-    <xme:AzlXalG56hWSeo83dv-JQaJNggknYDw7HowY8Q7liwkGABswbhJSG98LPyKtUZRUY
-    Tm9BK6ySuyLNxGl76OnZLDtK4-oXH3442mL2hjkqZ3xIAJsCYCVHtc>
-X-ME-Proxy-Cause: dmFkZTFc7hJUD3UEDARrx/iCvNX/XeS+ZefNUMDqqiB+RwQlreGU70zG672pw7wAm9kv9e
-    LkbHflBAIfhzAcKrdZO4R025kHGqD+ozaXiawu+ga3eLDFbDUPNz3yDw7CzYEAsEHX6dYi
-    lIh3MMIlqvLqrPLpEl+RKANlbmZrZvtYoVu90XD+97zPjYd/+5wuXpISNau1JRYMuTr0JH
-    WWYAXzO470LuBktu4WgV1XGggC9FQs7DgdSMnt8zw1OzoZPRhzsrB07SQ23dPSICynxQ3l
-    uGJx1smSuUTW+YhRyRv7lI/oHJJuMGTqAKYUUCrf2eALDOGoF6tqQ5jZd5d5/elSbYKiYk
-    aJp4mwAFHc7L4eqijuZMIdw7GutqG1FX/vEQnK+ND7UYP9fglXt2ASXWZdo1xMJN7JMwrO
-    h2XkHbMmBtLoeuqwxWU50buJGJPN9E1jmekYg4mNJsY32exUIaJ8enISlYJjJzYtExrTJ8
-    h8FM8cb/Ug38YTacuy/PYXvHoIPpJU6hHnnXsgy08gA3Yb1OkgrER6xMfeO91X1Are2kWs
-    3AKxr2cgEq+mocUs7Y6Yxo5r6NSGex9zcNkUWm78iaIi88bPITe3qnMxCqPNeUfjksbCod
-    aMIswSagOK9vTjPq3bT4suoJOcbhN3DR9O+tsc94Zy/qWrdNDqRko5gAqvgg
-X-ME-Proxy: <xmx:AzlXam3OWuULux3PSFdcjHPu1ius9xgyjjz7pbg3cTfxmBwR7JEOsg>
-    <xmx:AzlXaphFRkNx05RUsecoS8pMnIfODkLtctTZ3ul7LySxvNZjMu4RcA>
-    <xmx:AzlXauqhdSBA6flk3g0c1eKYONYy_yyZ2zNnPTDWK3IMjSxIHT4lKw>
-    <xmx:AzlXakP81wePaNEjQrMwvAO_o5IoCH8SQR0Dr3ocuSZ57q2MHOXpwA>
-    <xmx:AzlXanraP-Ajs9S6c9N3Emlj9GqB3gsOMLlLexmBd-yumPkkYJqKWOrY>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 459371820082; Wed, 15 Jul 2026 03:38:43 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HD9+goVy"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-493c19bad03so48191675e9.2
+        for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 05:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1784119186; x=1784723986; darn=lists.linux.dev;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=pqmS0wGyyzISZUi2iZDsoqebuB59CdpacRLQw8zIRIw=;
+        b=HD9+goVyIJjmrKyt6Y803x4N8m4zewWzwroS/i4vHAFC2VBCcqO/TX7GaAvEeXunkH
+         Odm+WjSV0ydctnq1T7jn5Ny2/mO4KpPa2A4xUKRLHQ1UelyMX2ESxWfBS386oeGclKsc
+         fmmR4Wui/bv1HQ+hn7ckSJ0I3URbq95axrZ/ilgS9XEh6bOwHzNruxUZs0PHDj26ejkg
+         TIFu1F/ngLByfjhtssnU1Gl7v5/RcSPiA1qU3TdelAHZNhAF72tnOAYyj/sX8KrOC0tg
+         stxpD5dmtI9pDurGqCgakKc8BLe3pfNJ69TfEtHyGgpVx1o31AliB6XaL1T7HqOdFckQ
+         vN3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784119186; x=1784723986;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=pqmS0wGyyzISZUi2iZDsoqebuB59CdpacRLQw8zIRIw=;
+        b=l4Au0NBMpxpE+6uUjql6zraDuDNix4BKpPF2PpIOjdtnc4OKmTmE7R7VH/C/6yf3uH
+         PDtw2KKS1F/MlEDa/J66vjP1DT9YuerA2WniVWil9k1EaE6g6HcD1mEadCcXGkByizKU
+         cNeLRBDo9gdEzVhl3EK1t1fghgUHvwWl+wfOLm9GLO/lsb2PUceQaQRMkJDkItDSN/5f
+         /Uz7BCzBTD2J2h6K2AVipItX35YhbUY7O/zWf6S63rmMl96aWBvaIgPxnTP8BNU9oKxQ
+         Vpmcn+gjCCVzbYHCEQiRJ4MkO6E8w4tdXu1raPQujE3Ta8zppxVLUaqu1ijvL0B09DpM
+         aLYQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpYpQFhrv1szwiCPBOGcq5awbrWc1POO7bRtkzGMIVgeiPdJYqZNMq73n8vWLAJ6nrR7isK@lists.linux.dev
+X-Gm-Message-State: AOJu0Yx50I2c7piGwyxlTTK1OLhOF3wzfzW7dfT7N2hoH6g7B8syFode
+	3Yhs6cdqktb6oYThMX5cA/PtY6AdUg308DmF6aB6ZVTS5m/aoV5Xa4vXny6INgCdx/g=
+X-Gm-Gg: AfdE7cmjcLLgqhuRSt3f8c1MVIo9lWeR8nKZg7hUUHeubtEHdSaZYYXIFyTiCPED/4v
+	2JacIie8MLgf5v2WIUqSD81F97YhQlCgnR+lPNEV84dsK3c86XeTwBgfTzhlR3dSrQFSvr+MgXx
+	lmEDy4aD2uIQ4gPzOdWe7ViW7DbqEDQNpdij2I+181zO+sHIBTj7pDE21d/wFB64EIxSfCjJxnZ
+	MhrFjP6WlZi9ZnLR6txxtQPzzi8eNf+TZj73AQCGyCrcFI8Ml6pvAIhgY4uB2061sI981BiUpMn
+	/cGj7dZTFHonz+/spfmYgRtpLsE7aJ39FviW64I09nHbmeTukNuOAEb0ganlklZ2w2kT4D8K+Vg
+	5hfqQ7edJQdi1ZXyTp7aXOiGsMqYfhLYtHoMMxkJRT7ZCnuOgcDWGlgu1tZl9LWPFud0jfjNn/T
+	qX/eo5/7O6YB33mUQyeQ5467qxOWkp2OSz
+X-Received: by 2002:a05:600c:6a0b:b0:493:d2b1:48c8 with SMTP id 5b1f17b1804b1-4953c28b6e7mr23273595e9.33.1784119186462;
+        Wed, 15 Jul 2026 05:39:46 -0700 (PDT)
+Received: from e133063.arm.com ([212.187.182.162])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4953c710facsm32360695e9.2.2026.07.15.05.39.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jul 2026 05:39:46 -0700 (PDT)
+From: James Clark <james.clark@linaro.org>
+Subject: [PATCH v3 0/5] tools/build: Allow versioning of all LLVM tools
+Date: Wed, 15 Jul 2026 13:39:16 +0100
+Message-Id: <20260715-james-perf-llvm-version-v3-0-8854bfe5af7e@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: ATTSxKVuwHDZ
-Date: Wed, 15 Jul 2026 09:38:21 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Steven Rostedt" <rostedt@goodmis.org>,
- "Vincent Donnefort" <vdonnefort@google.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>,
- "Bill Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
- "Marc Zyngier" <maz@kernel.org>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- "Paolo Bonzini" <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, llvm@lists.linux.dev
-Message-Id: <cc1232f7-fa15-4e1b-ba24-3d77dcb813c9@app.fastmail.com>
-In-Reply-To: <20260714175617.319a6ec7@gandalf.local.home>
-References: <20260616164211.3733326-1-arnd@kernel.org>
- <ajKgjNuHUlteSziZ@google.com> <20260714175617.319a6ec7@gandalf.local.home>
-Subject: Re: [PATCH] tracing: ring-buffer: allowlist clang-generated symbols
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHR/V2oC/3XNQQ6CMBCF4auQrq3plILoynsYF2VaoAYomZpGQ
+ 7i7hcREFyz/Sd43MwuWnA3sks2MbHTB+TFFfsgYdnpsLXcmNZNClqIA4A892MAnSw3v+zjwaGn
+ dcJXrGrAuajwZltYT2ca9Nvl2T9258PT03h5FWK9fU+2aEbjgJWoEfdYKK3Pt3ajJHz21bEWj/
+ IWqfUgmqAGJqBqRg6n+oGVZPneZK28IAQAA
+X-Change-ID: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+To: Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, James Clark <james.clark@linaro.org>
+X-Mailer: b4 0.14.2
 
-On Tue, Jul 14, 2026, at 23:56, Steven Rostedt wrote:
-> On Wed, 17 Jun 2026 14:26:36 +0100 Vincent Donnefort <vdonnefort@google.com> wrote:
->
->> On Tue, Jun 16, 2026 at 06:42:03PM +0200, Arnd Bergmann wrote:
->> > From: Arnd Bergmann <arnd@arndb.de>
->> > 
->> > In randconfig build testing using clang-22, I came across two
->> > sets of extra symbols in the ring buffer code that may get
->> > inserted by the compiler:
->> > 
->> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
->> >          U memset
->> > 
->> > Unexpected symbols in kernel/trace/simple_ring_buffer.o:
->> >                  U llvm_gcda_emit_arcs
->> >                  U llvm_gcda_emit_function
->> >                  U llvm_gcda_end_file
->> >                  U llvm_gcda_start_file
->> >                  U llvm_gcda_summary_info
->> >                  U llvm_gcov_init
->> > 
->> > Add all of these to the allowlist.
->> > 
->> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> > ---
->> >  kernel/trace/Makefile | 1 +
->> >  1 file changed, 1 insertion(+)
->> > 
->> > diff --git a/kernel/trace/Makefile b/kernel/trace/Makefile
->> > index f934ff586bd4..aa8564fb8ff4 100644
->> > --- a/kernel/trace/Makefile
->> > +++ b/kernel/trace/Makefile
->> > @@ -146,6 +146,7 @@ KASAN_SANITIZE_undefsyms_base.o := y  
->> 
->> Would "GCOV_PROFILE_undefsyms_base.o := y" work?
->
-> Arnd?
+I ran into the build issue mentioned in the first commit, because using
+an option like LLVM=-15 is a documented way to build [1], but only
+some of the LLVM tools defined in tools/ support this.
 
-Yes, turning off gcov for this file should avoid the llvm_gcda and
-llvm_gcov symbols, but not the memset() symbol.
+After fixing that, a lot of other tidyups fell out. I didn't go too far,
+for example some selftests include tools/testing/selftests/lib.mk which
+reimplements some of the LLVM_SUFFIX stuff, but other selftests include
+tools/scripts/Makefile.include and I stopped before touching the former.
+Some other non build scripts hard code toolchains and I didn't touch
+those either, this change is only focused on things that already
+include Makefile.include.
 
-All the other features that leave annotations are handled by
-listing the symbol names (__asan __gcov __kasan __kcsan __hwasan
-__sancov __sanitizer __tsan __ubsan __msan), so I think for
-consistency it makes sense to treat llvm gcov the same way
-we handle gcc gcov and the rest.
+[1]: Documentation/kbuild/llvm.rst
 
-      Arnd
+Signed-off-by: James Clark <james.clark@linaro.org>
+---
+Changes in v3:
+- Add warning for empty $USE_LD
+- Use $HOSTREADELF in bpf Makefile
+- Rebase on v7.2-rc3
+- Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version-v2-0-f12cc4f031d8@linaro.org
+
+Changes in v2:
+- Fix selftests/bpf build. LLD needs to take the full path to be used
+  with -fuse-ld=
+- Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version-v1-0-6cac1a9a4c8d@linaro.org
+
+---
+James Clark (5):
+      tools/build: Allow versioning of all LLVM tools defined in Makefile.include
+      tools/build: Indent if else blocks
+      tools/build: Allow versioning LLVM readelf
+      tools/build: selftests: Allow versioning LLVM lld
+      tools/build: selftests: Remove some duplicate toolchain definitions
+
+ tools/bpf/resolve_btfids/Makefile    |  3 --
+ tools/lib/api/Makefile               |  4 --
+ tools/lib/bpf/Makefile               |  8 ++--
+ tools/lib/subcmd/Makefile            |  4 --
+ tools/lib/symbol/Makefile            |  4 --
+ tools/perf/Makefile.perf             |  7 ----
+ tools/scripts/Makefile.include       | 79 ++++++++++++++++++++----------------
+ tools/testing/selftests/bpf/Makefile | 13 +++---
+ 8 files changed, 56 insertions(+), 66 deletions(-)
+---
+base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
+change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
+
+Best regards,
+-- 
+James Clark <james.clark@linaro.org>
+
