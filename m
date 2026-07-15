@@ -1,296 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FBC0221DAE;
-	Wed, 15 Jul 2026 00:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD66305660
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 01:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784076134; cv=none; b=S/5NfpcZ05JQiLaBD7f5IF9ktc5OYNjBOsKzjk6KufqazmLD08jK9QuaK0zQZ2T/vvhWzLkIb+fK3RAEPc9LlZjBP/2WNykfpUgebrFr4TClFjxkvpeGUqgOCUO0QpKfHlsXJxjrh2yqQwKgx9egDjaY+z6Rpfm76jkZsxJACvc=
+	t=1784077908; cv=none; b=F1sC2H2kwCXJBQdQPqJIJLaDqs4YQSRPRYU9+q6hQJPrAvuUrgsOlPCtK6hz49W2GRAaJsVC2Nv5e9jnnSuUSLC3B8sw7ClgF6kJEi4sadE5Mh3N+KfHyrWVYJSb/TvYu6MILjjZtkaNPXRXiNT+ebURqjn2wpkZqca3mZxMk7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784076134; c=relaxed/simple;
-	bh=sL+necVGTYvUx/eD7gGzK0wo54TyzhOOpdT7Ea+Go4o=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=GQCYUiT92RkTJstxhC3jTIz9JnGBZBnmW8IjTOi6HUPiwIjifz2u9OXZT754e3mKe6HPMQ9Y3vU066TalQS0TnFjPoQWSHyS7wka9p5uhPwL036bcZJr4KNQ5IaZUAvbAzc05wKcTDoVuPiYAygCC5wVr17STibv06RIMg8lhUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nWju8Fmy; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1784077908; c=relaxed/simple;
+	bh=9PAzvIUeGeWlH6fTPvnNN6J8nWpRGsBqz4064BPR1Vs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Hj5pad+DeRRdBGnVYiYQymSqhZJdaMqf3mWkULcD6UKxmLjAyh/+N0vcHcfSqjCLv3rJsB/+6f5sbpLeaVzvDiruqY3h4CZPQhmZiEo3pe9Kym0jxZCz/GL1QfOECcW36EODC6dr1z7/CCFzdh6ryn6MY44mGAXcIcHV0u8BvrE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yr8s9ArX; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nWju8Fmy"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784076129; x=1815612129;
-  h=date:from:to:cc:subject:message-id;
-  bh=sL+necVGTYvUx/eD7gGzK0wo54TyzhOOpdT7Ea+Go4o=;
-  b=nWju8FmyXGsgTS7j0ZMth8drxdqpRHK3g/p2bqN3clHTaipdEqhpYomo
-   zJcts2hfM9grTGobRDlUItQCsF6+0FIqOkcVuh5cSSyJVJFHDMr/ZeWGL
-   b1MhBo4mc2ayGI0fkNCaJvDpeqxYWBN0XPiwDVNCYBfshfCSQVgc3aXS3
-   W960wepevAe10Cjyg1XZiGLIJZO4OYLggQuEUP7sj+iXakzCuisWRG6xU
-   +M0XzqKiYnRi7AtXo0KH2VXH0tQiVv672QmOnqe/zApueQW+c6wtCPHwD
-   b/3iUWft5/i+ul9/7PWeqnSaMGek0eZBzkU6ec8VWS0EhjaNSXfLGNmct
-   g==;
-X-CSE-ConnectionGUID: Bdo8rjMhQ4S09gaYPd1OoA==
-X-CSE-MsgGUID: uXeEYuJMS6eNWAjHT+PrLg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11847"; a="102129578"
-X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
-   d="scan'208";a="102129578"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Jul 2026 17:42:09 -0700
-X-CSE-ConnectionGUID: YPP8cwCCRHam6RenG3U4uA==
-X-CSE-MsgGUID: QU00GT3LSiOO2h6l6jaJIw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,164,1779174000"; 
-   d="scan'208";a="280434822"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa001.fm.intel.com with ESMTP; 14 Jul 2026 17:42:06 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wjnhK-00000000NAz-10gc;
-	Wed, 15 Jul 2026 00:42:02 +0000
-Date: Wed, 15 Jul 2026 08:41:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Praveen Talari <praveen.talari@oss.qualcomm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-serial@vger.kernel.org,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Subject: [tty:tty-next 31/41]
- drivers/tty/serial/qcom_geni_serial.c:1925:4: error: cannot jump from this
- goto statement to its label
-Message-ID: <202607150830.LsNxeVYw-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yr8s9ArX"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cc6dd436c6so18817265ad.2
+        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 18:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784077904; x=1784682704; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=7t3rulmgzdudnQm0VJU/fmU5yA2DaWNz98HbbPrWp/M=;
+        b=Yr8s9ArXe+Xrq2yIRdhtLrhhTQEJnj4etBH6xapcXn8wuMPcLjS8i4a6TD8GWEraH2
+         wHrMQHvtT8ftitKwOv2zTwkGEJpbaVJSxpXPX4bOxtQRQ3TXmRskDwQUzDosqrFLjcCn
+         GDXaVp60Vl+bgWPxxBB+O/JTYhVUg0jbPZqWcrwOFgcuNsKfc8rNswO7cnMpKsty8PAt
+         xSwg/QP6GZt3ap1IPV2mO/XOZj6PIuNeAMhrsyfS8Z9/yKyQ9Tn4xdeRnr4p6Os4xqVr
+         6+s+M1E2f6w2A66t4fi4B3mbzuA7JNUUhmB/FabGkpypGyTZp+UZpM41tC3eCLvZsBou
+         d+8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784077904; x=1784682704;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=7t3rulmgzdudnQm0VJU/fmU5yA2DaWNz98HbbPrWp/M=;
+        b=p8boViGk/fMhm27+fkYqJ4Ps1OLTiyabS6xsC6XDUR8FMlUo1UiBzsP5Q32bDnWcIT
+         mizskKCT3PYUIMxdCj+hNFhPrzq2DDoPab0sA2XTD/2k1FwYIKsW4l9voufX2XIe8bDF
+         tNQKGLRhjh7j50oqxFHYL0tvHOCbiSFAHF+jYriWmKSJbRcsQP5WqQgrBGJuuQv16cvV
+         MW+7m/WOTX7LgB+JgrpplziBsUH4dGb6ZQ3aT7yB8dC2VdSJ3kiMtoaPwa1C13T3D500
+         Qks8Vwa7xa1TReMnyAOD5Gzo2LHV85GQObzEco8F7UGd5Y8H6NWQRvxoTP0EU0RFyAoI
+         Jehg==
+X-Forwarded-Encrypted: i=1; AHgh+RrPOfCQXCFyDuz2WdGMmWeYUCNqmKqw7I4j8VeJ9a1VugEMehVsqNZ0et3AA+uIwel9XL3u@lists.linux.dev
+X-Gm-Message-State: AOJu0YxV4KaKpSp6sy/xFEO5E0x9My72lS6xDkpDVYe0msf1hNYt+oaN
+	CDH4eWpExLX5wDYnXWXsnMtrlC0CiJ+PZUBDPAbi9uvmiX/HtTB8nJsT
+X-Gm-Gg: AfdE7cl41S6o9HzAbASHrp9jzQ8j1y/6vq4UTARweYJ1CTPNyia8JTyXzR4q0nQhRzP
+	bdD8ngrvdL+NI2B/3ifuzRX8dLS+xCOuzktXUnDEK2rAikuvqBHOsiHKaHqSkf/qW5w16Lh5m3x
+	lPhKDk2SpZviHEOsg9NEs8lDoNuSzLRkyK/Y8t+OX+LJef6fakv/lY2Vh66ZZxAcGb6EcuYcJIP
+	KaXf91d9aTAJoEX1ez4OvlOjLk3Rf8oPuS0jvXQMgEvDQaF6DQHKXBCHxNF8hnl22MHafDfrSzA
+	0zYZbXoO9sP7UYaeZRJC9MS8YMYKiIdl8na647fYxOW4aZZ+NPFfdCGAR3vYLKOmjtNJgv/Xdk2
+	nLZlc7v1y7FHjTEO4gtLhV060oARqkqbnZSwBDadiDvns5IYvIMqrv4dRIFbhg7PqnjMoVuViM5
+	hBYGpyoIJGmQkBlEKSPMtLknW7nisUx2DXoiav6B24M9gd2EA80E3lI3FbWsebzR5lg5UVhTGxQ
+	ms/nwTBmczhiLzvumNTQpij36Q1zJE6xfb97dYmYGGOupLL/ja92CxzYkAI7j+b2A==
+X-Received: by 2002:a17:902:f706:b0:2c9:97a8:afef with SMTP id d9443c01a7336-2ce9f3c2c44mr142226605ad.40.1784077904158;
+        Tue, 14 Jul 2026 18:11:44 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e34])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cee5ccb579sm26357165ad.52.2026.07.14.18.11.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jul 2026 18:11:43 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-pci@vger.kernel.org
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/ZYNQ ARCHITECTURE),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] PCI: xilinx: use fwnode_irq_get() for INTx IRQ lookup
+Date: Tue, 14 Jul 2026 18:11:41 -0700
+Message-ID: <20260715011142.1261469-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-next
-head:   c1d4ce2d9eaeccd7e8aef7ec1109df49eaf4f503
-commit: 3d71f8d7eeb374d0eb84c64c6ffd68bdcc0d42d4 [31/41] serial: qcom-geni: remove .pm callback, use runtime PM in startup/shutdown
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260715/202607150830.LsNxeVYw-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project b3e6e6dabdc02153552a64fc74ff5c7532447eed)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260715/202607150830.LsNxeVYw-lkp@intel.com/reproduce)
+Replace irq_of_parse_and_map() with fwnode_irq_get(dev_fwnode(dev), 0)
+in xilinx_pcie_parse_dt(). For an OF-backed device this is equivalent to
+the previous call, but uses the generic firmware-node API.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607150830.LsNxeVYw-lkp@intel.com/
+Unlike irq_of_parse_and_map(), fwnode_irq_get() returns a positive IRQ or
+a negative errno and never 0 (it rewrites 0 to -EINVAL). Store the result
+in an int and check for irq < 0, returning the error (including
+-EPROBE_DEFER). This also adds the error handling the previous code
+lacked, where irq_of_parse_and_map() failures were passed straight into
+devm_request_irq().
 
-All errors (new ones prefixed by >>):
+Built for ARM (multi_v7_defconfig + CONFIG_PCIE_XILINX) with LLVM=1;
+drivers/pci/controller/pcie-xilinx.o compiles cleanly.
 
->> drivers/tty/serial/qcom_geni_serial.c:1925:4: error: cannot jump from this goto statement to its label
-    1925 |                         goto error;
-         |                         ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1916:3: error: cannot jump from this goto statement to its label
-    1916 |                 goto error;
-         |                 ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1911:3: error: cannot jump from this goto statement to its label
-    1911 |                 goto error;
-         |                 ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1887:3: error: cannot jump from this goto statement to its label
-    1887 |                 goto error;
-         |                 ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1881:3: error: cannot jump from this goto statement to its label
-    1881 |                 goto error;
-         |                 ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1872:4: error: cannot jump from this goto statement to its label
-    1872 |                         goto error;
-         |                         ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1864:4: error: cannot jump from this goto statement to its label
-    1864 |                         goto error;
-         |                         ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   drivers/tty/serial/qcom_geni_serial.c:1848:3: error: cannot jump from this goto statement to its label
-    1848 |                 goto error;
-         |                 ^
-   drivers/tty/serial/qcom_geni_serial.c:1931:44: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1931 |         PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-         |                                                   ^
-   8 errors generated.
+Assisted-by: opencode:hy3-free
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/pci/controller/pcie-xilinx.c | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/pci/controller/pcie-xilinx.c b/drivers/pci/controller/pcie-xilinx.c
+index 4aa139abac16..a7b069f7673a 100644
+--- a/drivers/pci/controller/pcie-xilinx.c
++++ b/drivers/pci/controller/pcie-xilinx.c
+@@ -20,10 +20,10 @@
+ #include <linux/of_address.h>
+ #include <linux/of_pci.h>
+ #include <linux/of_platform.h>
+-#include <linux/of_irq.h>
+ #include <linux/pci.h>
+ #include <linux/pci-ecam.h>
+ #include <linux/platform_device.h>
++#include <linux/property.h>
+ 
+ #include "../pci.h"
+ 
+@@ -535,7 +535,7 @@ static int xilinx_pcie_parse_dt(struct xilinx_pcie *pcie)
+ 	struct device *dev = pcie->dev;
+ 	struct device_node *node = dev->of_node;
+ 	struct resource regs;
+-	unsigned int irq;
++	int irq;
+ 	int err;
+ 
+ 	err = of_address_to_resource(node, 0, &regs);
+@@ -548,7 +548,10 @@ static int xilinx_pcie_parse_dt(struct xilinx_pcie *pcie)
+ 	if (IS_ERR(pcie->reg_base))
+ 		return PTR_ERR(pcie->reg_base);
+ 
+-	irq = irq_of_parse_and_map(node, 0);
++	irq = fwnode_irq_get(dev_fwnode(dev), 0);
++	if (irq < 0)
++		return irq;
++
+ 	err = devm_request_irq(dev, irq, xilinx_pcie_intr_handler,
+ 			       IRQF_SHARED | IRQF_NO_THREAD,
+ 			       "xilinx-pcie", pcie);
+-- 
+2.55.0
 
-vim +1925 drivers/tty/serial/qcom_geni_serial.c
-
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1799  
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1800  static int qcom_geni_serial_probe(struct platform_device *pdev)
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1801  {
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1802  	int ret = 0;
-71581242164f112 Colin Ian King              2021-04-23  1803  	int line;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1804  	struct qcom_geni_serial_port *port;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1805  	struct uart_port *uport;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1806  	struct resource *res;
-066cd1c4e4b9b43 Karthikeyan Ramasubramanian 2018-04-06  1807  	int irq;
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1808  	struct uart_driver *drv;
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1809  	const struct qcom_geni_device_data *data;
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1810  
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1811  	data = of_device_get_match_data(&pdev->dev);
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1812  	if (!data)
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1813  		return -EINVAL;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1814  
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1815  	if (data->console) {
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1816  		drv = &qcom_geni_console_driver;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1817  		line = of_alias_get_id(pdev->dev.of_node, "serial");
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1818  	} else {
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1819  		drv = &qcom_geni_uart_driver;
-08b0adb1ae5456a Dmitry Baryshkov            2021-06-22  1820  		line = of_alias_get_id(pdev->dev.of_node, "serial");
-08b0adb1ae5456a Dmitry Baryshkov            2021-06-22  1821  		if (line == -ENODEV) /* compat with non-standard aliases */
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1822  			line = of_alias_get_id(pdev->dev.of_node, "hsuart");
-8a8a66a1a18a1db Girish Mahadevan            2018-07-13  1823  	}
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1824  
-c3e7966c60745f8 Zong Jiang                  2025-08-12  1825  	port = get_port_from_line(line, data->console, &pdev->dev);
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1826  	if (IS_ERR(port)) {
-6a10635e90e8cb0 Karthikeyan Ramasubramanian 2018-05-03  1827  		dev_err(&pdev->dev, "Invalid line %d\n", line);
-6a10635e90e8cb0 Karthikeyan Ramasubramanian 2018-05-03  1828  		return PTR_ERR(port);
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1829  	}
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1830  
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1831  	uport = &port->uport;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1832  	/* Don't allow 2 drivers to access the same port */
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1833  	if (uport->private_data)
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1834  		return -ENODEV;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1835  
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1836  	uport->dev = &pdev->dev;
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1837  	port->dev_data = data;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1838  	port->se.dev = &pdev->dev;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1839  	port->se.wrapper = dev_get_drvdata(pdev->dev.parent);
-4b2601ae3066dab Praveen Talari              2025-07-21  1840  
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1841  	ret = port->dev_data->resources_init(uport);
-4b2601ae3066dab Praveen Talari              2025-07-21  1842  	if (ret)
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1843  		return ret;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1844  
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1845  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1846  	if (!res) {
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1847  		ret = -EINVAL;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1848  		goto error;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1849  	}
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1850  
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1851  	uport->mapbase = res->start;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1852  
-4fcc287f3c69245 Anup Kulkarni               2025-06-03  1853  	uport->rs485_config = qcom_geni_rs485_config;
-4fcc287f3c69245 Anup Kulkarni               2025-06-03  1854  	uport->rs485_supported = qcom_geni_rs485_supported;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1855  	port->tx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1856  	port->rx_fifo_depth = DEF_FIFO_DEPTH_WORDS;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1857  	port->tx_fifo_width = DEF_FIFO_WIDTH_BITS;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1858  
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1859  	if (!data->console) {
-2aaa43c70778333 Bartosz Golaszewski         2022-12-29  1860  		port->rx_buf = devm_kzalloc(uport->dev,
-2aaa43c70778333 Bartosz Golaszewski         2022-12-29  1861  					    DMA_RX_BUF_SIZE, GFP_KERNEL);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1862  		if (!port->rx_buf) {
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1863  			ret = -ENOMEM;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1864  			goto error;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1865  		}
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1866  
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1867  		port->rx_dma_addr = dma_map_single(pdev->dev.parent, port->rx_buf,
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1868  						   DMA_RX_BUF_SIZE, DMA_FROM_DEVICE);
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1869  		if (dma_mapping_error(pdev->dev.parent, port->rx_dma_addr)) {
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1870  			ret = -EIO;
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1871  			dev_err(&pdev->dev, "Failed to map RX DMA buffer: %d\n", ret);
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1872  			goto error;
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1873  		}
-f9d690b6ece7ec9 satya priya                 2020-03-06  1874  	}
-f9d690b6ece7ec9 satya priya                 2020-03-06  1875  
-f3974413cf0209b Akash Asthana               2020-01-06  1876  	port->name = devm_kasprintf(uport->dev, GFP_KERNEL,
-f3974413cf0209b Akash Asthana               2020-01-06  1877  			"qcom_geni_serial_%s%d",
-f3974413cf0209b Akash Asthana               2020-01-06  1878  			uart_console(uport) ? "console" : "uart", uport->line);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1879  	if (!port->name) {
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1880  		ret = -ENOMEM;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1881  		goto error;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1882  	}
-f3974413cf0209b Akash Asthana               2020-01-06  1883  
-066cd1c4e4b9b43 Karthikeyan Ramasubramanian 2018-04-06  1884  	irq = platform_get_irq(pdev, 0);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1885  	if (irq < 0) {
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1886  		ret = irq;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1887  		goto error;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1888  	}
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1889  
-066cd1c4e4b9b43 Karthikeyan Ramasubramanian 2018-04-06  1890  	uport->irq = irq;
-8f122698a64b877 Dmitry Safonov              2019-12-13  1891  	uport->has_sysrq = IS_ENABLED(CONFIG_SERIAL_QCOM_GENI_CONSOLE);
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1892  
-40ec6d41c841e27 Bartosz Golaszewski         2022-12-29  1893  	if (!data->console)
-f3974413cf0209b Akash Asthana               2020-01-06  1894  		port->wakeup_irq = platform_get_irq_optional(pdev, 1);
-f3974413cf0209b Akash Asthana               2020-01-06  1895  
-9fa3c4b1fa379f2 Roja Rani Yarubandi         2020-03-04  1896  	if (of_property_read_bool(pdev->dev.of_node, "rx-tx-swap"))
-9fa3c4b1fa379f2 Roja Rani Yarubandi         2020-03-04  1897  		port->rx_tx_swap = true;
-9fa3c4b1fa379f2 Roja Rani Yarubandi         2020-03-04  1898  
-9fa3c4b1fa379f2 Roja Rani Yarubandi         2020-03-04  1899  	if (of_property_read_bool(pdev->dev.of_node, "cts-rts-swap"))
-9fa3c4b1fa379f2 Roja Rani Yarubandi         2020-03-04  1900  		port->cts_rts_swap = true;
-9fa3c4b1fa379f2 Roja Rani Yarubandi         2020-03-04  1901  
-e42d6c3ec0c7ade Douglas Anderson            2020-06-26  1902  	port->private_data.drv = drv;
-e42d6c3ec0c7ade Douglas Anderson            2020-06-26  1903  	uport->private_data = &port->private_data;
-f3974413cf0209b Akash Asthana               2020-01-06  1904  	platform_set_drvdata(pdev, port);
-f3974413cf0209b Akash Asthana               2020-01-06  1905  
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1906  	irq_set_status_flags(uport->irq, IRQ_NOAUTOEN);
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1907  	ret = devm_request_irq(uport->dev, uport->irq, qcom_geni_serial_isr,
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1908  			IRQF_TRIGGER_HIGH, port->name, uport);
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1909  	if (ret) {
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1910  		dev_err(uport->dev, "Failed to get IRQ ret %d\n", ret);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1911  		goto error;
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1912  	}
-3e4aaea7a0391d4 Akash Asthana               2019-10-10  1913  
-4fcc287f3c69245 Anup Kulkarni               2025-06-03  1914  	ret = uart_get_rs485_mode(uport);
-4fcc287f3c69245 Anup Kulkarni               2025-06-03  1915  	if (ret)
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1916  		goto error;
-4fcc287f3c69245 Anup Kulkarni               2025-06-03  1917  
-f3974413cf0209b Akash Asthana               2020-01-06  1918  	if (port->wakeup_irq > 0) {
-f3974413cf0209b Akash Asthana               2020-01-06  1919  		device_init_wakeup(&pdev->dev, true);
-f3974413cf0209b Akash Asthana               2020-01-06  1920  		ret = dev_pm_set_dedicated_wake_irq(&pdev->dev,
-8b7103f31950443 Akash Asthana               2019-10-10  1921  						port->wakeup_irq);
-8b7103f31950443 Akash Asthana               2019-10-10  1922  		if (ret) {
-f3974413cf0209b Akash Asthana               2020-01-06  1923  			device_init_wakeup(&pdev->dev, false);
-a53be6945f5123c Viken Dadhaniya             2025-03-27  1924  			ida_free(&port_ida, uport->line);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10 @1925  			goto error;
-8b7103f31950443 Akash Asthana               2019-10-10  1926  		}
-8b7103f31950443 Akash Asthana               2019-10-10  1927  	}
-f3974413cf0209b Akash Asthana               2020-01-06  1928  
-fb47423dc7bf433 Praveen Talari              2026-01-08  1929  	devm_pm_runtime_enable(port->se.dev);
-fb47423dc7bf433 Praveen Talari              2026-01-08  1930  
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1931  	PM_RUNTIME_ACQUIRE_IF_ENABLED(uport->dev, pm);
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1932  	ret = PM_RUNTIME_ACQUIRE_ERR(&pm);
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1933  	if (ret < 0) {
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1934  		dev_err(uport->dev, "Failed to resume and get %d\n", ret);
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1935  		goto error;
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1936  	}
-3d71f8d7eeb374d Praveen Talari              2026-07-10  1937  
-fb47423dc7bf433 Praveen Talari              2026-01-08  1938  	ret = uart_add_one_port(drv, uport);
-fb47423dc7bf433 Praveen Talari              2026-01-08  1939  	if (ret)
-fb47423dc7bf433 Praveen Talari              2026-01-08  1940  		goto error;
-fb47423dc7bf433 Praveen Talari              2026-01-08  1941  
-f3974413cf0209b Akash Asthana               2020-01-06  1942  	return 0;
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1943  
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1944  error:
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1945  	if (port->rx_dma_addr) {
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1946  		dma_unmap_single(pdev->dev.parent, port->rx_dma_addr,
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1947  				 DMA_RX_BUF_SIZE, DMA_FROM_DEVICE);
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1948  		port->rx_dma_addr = 0;
-bafe277d6c5a8bc Praveen Talari              2026-07-01  1949  	}
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1950  	dev_pm_domain_detach_list(port->pd_list);
-abffd1e6c4f1c97 Praveen Talari              2025-11-10  1951  	return ret;
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1952  }
-c4f528795d1add8 Karthikeyan Ramasubramanian 2018-03-14  1953  
-
-:::::: The code at line 1925 was first introduced by commit
-:::::: abffd1e6c4f1c9746ffd3fb5c659668efc221714 serial: qcom-geni: Enable Serial on SA8255p Qualcomm platforms
-
-:::::: TO: Praveen Talari <praveen.talari@oss.qualcomm.com>
-:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
