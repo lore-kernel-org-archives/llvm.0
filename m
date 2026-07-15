@@ -1,40 +1,41 @@
 Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DD041F5F0
-	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 20:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4F849552C
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 20:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784145686; cv=none; b=FRBnS+Ar9+l1lMOpxU4w3y84vp0TfDEOmlx02tLzAPxgpMzmjiJmVKkUXMNm2gkhua6H22GHE92DJx7LdMtOoUIlxAVIDcdQIT3cSBT0igxHo9mmcQYXVd4SmRLg1A7dHhPBbxknih2ZYPoLkxRhlGQy9SK9tDbL8BtM/4yyzT4=
+	t=1784145779; cv=none; b=JIk0dHvllziA+v83W+bfui8z73LZxrLoBmZsH1jXsD+/w1uAZrZbPGI54jUiP+73wAAHrw96qmJoM3Ofj3IU2rmBBxECULIm2tydF+aBNLs4A+5ms5DmXc2GgKCFWq/gDZ/YQzSZN079ZDgUYyO5i99Y9wys9AdhLavxXTn+cHA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784145686; c=relaxed/simple;
-	bh=uwxmuyKFx6g5q5HJXgqVNf9gdV44Jter6qaifngoZlM=;
+	s=arc-20240116; t=1784145779; c=relaxed/simple;
+	bh=wBmEZDzYRvWOYr5klbQELQXSgjjyjWGnQiwI/wr/IaA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lOLfP67n8SEgD4LM9nKq+DrikoNbI/0yQML0N0edWtqdM7XHMD4omGmJ6DXeP5tduGbd9FKSHXK2Mny+yY640s8bjyU3Mwz5SLPMXz5QvUlr87gllTEP5krWI73fTMV2oXM1TReUl2He8qGa05Ug8fu9Dp3NjSmPBC3rDYXVQAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OIsyIa1T; arc=none smtp.client-ip=91.218.175.173
+	 In-Reply-To:Content-Type; b=k29TDq8QUFzoIrtNMM/WAV2brb244r3Noe27+YaobnEhdOgvFCHskTZGB3uu9NgXDtseg5t7LwYTrNakXzBUqmfbJM8Cmk7nfx9uj7ZHQtN/HE2+oyCqYFNtIUC/rsqhaKr7AqsHz9CISIhFwwCXR6KB0RiS/Udho3hgZZotUIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w+sjgD9k; arc=none smtp.client-ip=91.218.175.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OIsyIa1T"
-Message-ID: <1a3378d8-2148-488f-a385-a20335553a9c@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w+sjgD9k"
+Message-ID: <45986fae-1abd-4ff9-91f1-35181e3c352d@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1784145677;
+	t=1784145774;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8V5CX44D4jZQ0nRMWUdMxp0ZQiAGX/gtKoCLQP9d5Jo=;
-	b=OIsyIa1TcYFh3nvcfnHzc4LyZ91jfE5QUxWO/MMKVE3Wxpcf0mmZL1JYd/77NeCKRCbSR2
-	VegVVMGxr4y8jPoCtVz2xy3fyzPYcF4WvDd6BSH+PjJXO1wPriA1oSkb8QUDiG6Osvd2Od
-	UoraCX3qu4QOEuDgU8Ad7bUsnGKSwnI=
-Date: Wed, 15 Jul 2026 13:00:58 -0700
+	bh=lHdKvQh/rlWKeApfpf/tzMK4TSbvkElaRfjKMW0v+s4=;
+	b=w+sjgD9kRBTS4n/JBtM49px5s+fkS9PIsiCxnbaDy0j/AnFF1vYfPzgn0TizoQ4m9ag1Ec
+	YvVmNjyIK8m0uAMcuRtJ36RHRXMHnrw0uOtEE3lpEGjh72LmyZdEGgsM7TAhFsS5jU9a/h
+	xBMgCohVBD057+oXaSIrshSKq+YK/E0=
+Date: Wed, 15 Jul 2026 13:02:44 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 3/4] tools/build: Allow versioning LLVM readelf
+Subject: Re: [PATCH v4 4/4] tools/build: selftests: Remove some duplicate
+ toolchain definitions
 To: James Clark <james.clark@linaro.org>,
  Arnaldo Carvalho de Melo <acme@kernel.org>,
  Namhyung Kim <namhyung@kernel.org>
@@ -55,111 +56,50 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  llvm@lists.linux.dev, bpf@vger.kernel.org, linux-perf-users@vger.kernel.org,
  linux-kselftest@vger.kernel.org
 References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
- <20260715-james-perf-llvm-version-v4-3-6dfdf984b435@linaro.org>
+ <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260715-james-perf-llvm-version-v4-3-6dfdf984b435@linaro.org>
+In-Reply-To: <20260715-james-perf-llvm-version-v4-4-6dfdf984b435@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 7/15/26 7:53 AM, James Clark wrote:
-> Documentation/kbuild/llvm.rst mentions that readelf is included in the
-> LLVM toolchain, but it's not currently included in this block.
+> Try to remove some, but not all duplicate toolchain definitions. In
+> these instances, their makefiles already include
+> tools/scripts/Makefile.include which defines these in a consistent way.
 > 
-> Add it so that LLVM=... options also apply to readelf. Users in tools/
-> were Perf which was hardcoding it, and another was the BPF makefile.
-> Both already include Makefile.include so convert them to use the new
-> variables.
+> STRIP is the only one that was set with an '=', but I don't think it
+> was significant so that difference can be dropped.
 > 
-> Where readelf wasn't doing anything arch specific, use HOSTREADELF
-> because it's more likely to be installed.
-> 
-> Reviewed-by: Ian Rogers <irogers@google.com>
 > Signed-off-by: James Clark <james.clark@linaro.org>
 > ---
->  tools/lib/bpf/Makefile         | 8 ++++----
->  tools/perf/Makefile.perf       | 1 -
->  tools/scripts/Makefile.include | 4 ++++
->  3 files changed, 8 insertions(+), 5 deletions(-)
+>  tools/bpf/resolve_btfids/Makefile    | 3 ---
+>  tools/lib/api/Makefile               | 4 ----
+>  tools/lib/subcmd/Makefile            | 4 ----
+>  tools/lib/symbol/Makefile            | 4 ----
+>  tools/perf/Makefile.perf             | 6 ------
+>  tools/testing/selftests/bpf/Makefile | 1 -
+>  6 files changed, 22 deletions(-)
 > 
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index eca584fb061e16013e76827e4203f6be0477a73e..269fe21fc8da73083367b3c122bdd2b718e12bc5 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -115,12 +115,12 @@ PC_FILE		:= $(addprefix $(OUTPUT),$(PC_FILE))
+> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+> index 7672208f65e4bc245c03603634d3aa0093a91096..6fdb6302e0a28e9166175822f42cfbb4f4eb24e5 100644
+> --- a/tools/bpf/resolve_btfids/Makefile
+> +++ b/tools/bpf/resolve_btfids/Makefile
+> @@ -20,9 +20,6 @@ HOST_OVERRIDES := AR="$(HOSTAR)" CC="$(HOSTCC)" LD="$(HOSTLD)" ARCH="$(HOSTARCH)
+>  		  CROSS_COMPILE="" CLANG_CROSS_FLAGS="" EXTRA_CFLAGS="$(HOSTCFLAGS)"
 >  
->  TAGS_PROG := $(if $(shell which etags 2>/dev/null),etags,ctags)
->  
-> -GLOBAL_SYM_COUNT = $(shell readelf -s --wide $(BPF_IN_SHARED) | \
-> +GLOBAL_SYM_COUNT = $(shell $(HOSTREADELF) -s --wide $(BPF_IN_SHARED) | \
->  			   cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' | \
->  			   sed 's/\[.*\]//' | \
->  			   awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->  			   sort -u | wc -l)
-> -VERSIONED_SYM_COUNT = $(shell readelf --dyn-syms --wide $(OUTPUT)libbpf.so | \
-> +VERSIONED_SYM_COUNT = $(shell $(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so | \
->  			      sed 's/\[.*\]//' | \
->  			      awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}' | \
->  			      grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 | sort -u | wc -l)
-> @@ -183,12 +183,12 @@ check_abi: $(OUTPUT)libbpf.so $(VERSION_SCRIPT)
->  		     "versioned symbols in $^ ($(VERSIONED_SYM_COUNT))." \
->  		     "Please make sure all LIBBPF_API symbols are"	 \
->  		     "versioned in $(VERSION_SCRIPT)." >&2;		 \
-> -		readelf -s --wide $(BPF_IN_SHARED) |			 \
-> +		$(HOSTREADELF) -s --wide $(BPF_IN_SHARED) |		 \
->  		    cut -d "@" -f1 | sed 's/_v[0-9]_[0-9]_[0-9].*//' |	 \
->  		    sed 's/\[.*\]//' |					 \
->  		    awk '/GLOBAL/ && /DEFAULT/ && !/UND/ {print $$NF}'|  \
->  		    sort -u > $(OUTPUT)libbpf_global_syms.tmp;		 \
-> -		readelf --dyn-syms --wide $(OUTPUT)libbpf.so |		 \
-> +		$(HOSTREADELF) --dyn-syms --wide $(OUTPUT)libbpf.so |	 \
+>  RM      ?= rm
+> -HOSTCC  ?= gcc
+> -HOSTLD  ?= ld
+> -HOSTAR  ?= ar
 
 Acked-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Thanks!
-
->  		    sed 's/\[.*\]//' |					 \
->  		    awk '/GLOBAL/ && /DEFAULT/ && !/UND|ABS/ {print $$NF}'|  \
->  		    grep -Eo '[^ ]+@LIBBPF_' | cut -d@ -f1 |		 \
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf> index 476b8dcaef58cb1f3fa75f46a647c2cfe2352767..4d0d7ae02e06b117487a17691c4e62a138428ac5 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -215,7 +215,6 @@ FLEX    ?= flex
->  BISON   ?= bison
->  STRIP   = strip
->  AWK     = awk
-> -READELF ?= readelf
+>  HOSTPKG_CONFIG ?= pkg-config
+>  CROSS_COMPILE =
 >  
->  # include Makefile.config by default and rule out
->  # non-config cases
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index e81e5b479c563321e458b2a7ad8fca2b4607a254..46a3872b87624a7bf475d9b42a3e471f36789dfd 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -73,6 +73,8 @@ ifneq ($(LLVM),)
->    $(call allow-override,LLC,$(LLVM_PREFIX)llc$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_CONFIG,$(LLVM_PREFIX)llvm-config$(LLVM_SUFFIX))
->    $(call allow-override,LLVM_OBJCOPY,$(LLVM_PREFIX)llvm-objcopy$(LLVM_SUFFIX))
-> +  $(call allow-override,READELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
-> +  $(call allow-override,HOSTREADELF,$(LLVM_PREFIX)llvm-readelf$(LLVM_SUFFIX))
->  else
->    # Allow setting various cross-compile vars or setting CROSS_COMPILE as a prefix.
->    $(call allow-override,CC,$(CROSS_COMPILE)gcc)
-> @@ -80,11 +82,13 @@ else
->    $(call allow-override,LD,$(CROSS_COMPILE)ld)
->    $(call allow-override,CXX,$(CROSS_COMPILE)g++)
->    $(call allow-override,STRIP,$(CROSS_COMPILE)strip)
-> +  $(call allow-override,READELF,$(CROSS_COMPILE)readelf)
->  
->    # Host versions aren't prefixed
->    $(call allow-override,HOSTAR,ar)
->    $(call allow-override,HOSTCC,gcc)
->    $(call allow-override,HOSTLD,ld)
-> +  $(call allow-override,HOSTREADELF,readelf)
->  
->    # Some tools still require Clang, LLC and/or LLVM utils
->    $(call allow-override,CLANG,clang)
+> [...]
 > 
 
