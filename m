@@ -1,75 +1,75 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DACF370ACC
-	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 01:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3B71917CD
+	for <llvm@lists.linux.dev>; Wed, 15 Jul 2026 01:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784078138; cv=none; b=oq8w4gLSEYHVv57XxRkFWvLDwwq67hPh99QbvXtEAQ9bv9u/dLD8GNnOkHW6GSs8vySoi+vgnJ7S6YISMnCflYzkgxX8vNiCEN4ZTiOIc4CsOp6Z2m99+xtbo7ESzzQ4XHRqH3+bqpSfAWNbDR4uHqG6MytURdTLhZNX/LZiHeE=
+	t=1784078222; cv=none; b=W7s2xRxLH+Mabwlceerqr4Dd/VsHVYrCkSn+OMCyCKxuYvvn2P/pWroRw7oHipocMtUMq/TfxxlTXgknIVQNR0fOAhpU5anRHNDKOIwvxy/g9BG5xOJXkzvZKu2ETIOXws00FRJu6G8X6hBYZK9BZ1Sb1MTYTWpJzj9p86aFa6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784078138; c=relaxed/simple;
-	bh=rsXZicNA6CgICpzQ4UlJMXAShtqDyxeuEyA3g+edfNE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DHFJYX368eCUKDOShklgdaS3m2xfznd2peqkY49PVcjTkXfBDM9nPP4Dytjb303KZ5d5/B/KQHa0i3Q+rcP1dQsgw//0q3bE1+h4I/10E5TpLR6DVbwlkUU45snOopyNTyyuvFhQoKhsYXVeOPVIT8ll3h0WSMSWrIWNuG754+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cI+pVbtr; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1784078222; c=relaxed/simple;
+	bh=BP/51ZrzCuUH18tmFa47SYVzg6KlW1yHQnc30QxX/js=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rxTK4o4hN7tEsDKbq+CRbul/Nc1HphvKsIwm/9CB/fR+k6TG0eWFAeSzVhzr5gTzepalI/cxFqFCyE3tm732jMUOCz2y0jMgbA6NKavNavBxIox6ubMTx3owDDrjuNTVFZs90XD9pa58fTrxGkChvle8ge8vsi4hbrA+2l+XHLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZr4Ksc/; arc=none smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cI+pVbtr"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-381891a9525so5264915a91.3
-        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 18:15:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZr4Ksc/"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-ca957432c7fso3357879a12.1
+        for <llvm@lists.linux.dev>; Tue, 14 Jul 2026 18:17:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784078136; x=1784682936; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1784078220; x=1784683020; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jcGjK0t9D92tDFqE5kgmtmyyKNtamGW2f/Lgn1+ZlUM=;
-        b=cI+pVbtrtoImGeG8tPF6nZvn962MnPW80VksLaeynCCe8f/JnCxmz5xU39/K35yk7k
-         6hpxfPpcMX+qI8Fi3WOCw1wDbOvw1uEIWzD03f8/JG8KL9SxyiipXKwIJU6UfngpJp79
-         ZFkDwQNRt0uQ+5x09EY0viFEdQXBXuqCcrhpzcHedOn5gYHlinarR12L/WpUhgKXQVUK
-         LyUY8nv/IDdMuKVYri2uxLD0YywPMadNiuOQCrChdIwKXDgd7kSHrVFsLOfBS+bo3ny5
-         xDs7PLvBxCUVwtzgTtsXRCTvT+qLQu0Iugl6WIInjWArJVmex+yXTFuZFPH+eunhJO5c
-         feBw==
+        bh=MwJBrQ0pKijpyzFHsFaJHm7N376wuBcGnxSFAS9F0K4=;
+        b=IZr4Ksc/PAd4PB2wMKHFgMqGl8yOxg9th4n3md6UGqOh/n3t6HS9dpyRDIgYyfFuje
+         i1kBhqVlQzRGYDnBRrPIkP5E8maWAItFyglqNKUfW3UYceKWB25IPyHIrQsJOzOjJdaB
+         GJDvll8HUwWZZgT/aYbIkapvHQxmD5xcQgqyB3AkbE9+5D2GvE+IDiSmXaBmi+oIuGdR
+         h4x2sAFbMTsd7uPz7/rzdlIUC/6dE+OGsn0Q//F29oA8xE/FMlkQifYgbe1rSzHYmS6Y
+         kYIHb7OAOIZhXrx41xb4n3A941KtS2kFJ2U2G5je5cX2mJo0ipKWwxAIxMZ5nVzX3Tgi
+         DUeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784078136; x=1784682936;
+        d=1e100.net; s=20251104; t=1784078220; x=1784683020;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=jcGjK0t9D92tDFqE5kgmtmyyKNtamGW2f/Lgn1+ZlUM=;
-        b=Uy77KvvtaIazh2EpsgCs3XpY/xW59/HwQQ7FTZGI+xGnEk1jCP3zjScssWst55bgRS
-         Mzvrtrwp6Ll6BcXZkfeFhJlM+CxbUiIg5PdFwPu8xumq01y+ZASPpJqssQAe4dkZz0ew
-         yCNm0vk4nak5RoItK9iU/FbSI9hOJh8AdpVml9xFRmR08YreiQO0C2F7FlezbciqOiRA
-         BIeFgQxhIhFQXJuIFQhEY2FkyiL5MCzoqPAzh6OncbTT9122HLYK4kmmcwlmJjPQC62u
-         iHGNLVarztbILyZWvZfB+evQObR5bgYxAH3Ovw+QklTBDMLAt6hVyjKHCh3/o9bwfTkZ
-         Gk/Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpWSQSNmkfdChigfc9GcFZdP7OQAhw+ztWWEuAalfRnOnywTUPB/Gh7u/U1T0qoMMwAMVqy@lists.linux.dev
-X-Gm-Message-State: AOJu0YyuJt+4NdidjwqhvbaK/qLOxGOxT8B36FoU3x2A91q957qbJcOG
-	rS8QwlEnzG38e2wEQFSD9p33SFgpnfNMQXiFnjYOiShD1bXgEbekU3XD
-X-Gm-Gg: AfdE7ckL80GUxlU9iTouI49wKrJUzRCzm+2z9Ns8hvHnVMtIfEn35091FrYr9dWIwIH
-	DY4Y0jQ/cR80v16Rvav8eqBV8OwxF3Y4r7NJoOAGKhfx+chyF9iLOmnblLIzaQXVvDHH759f3xF
-	IUH2dH0w1Z9+VZl26I7GLPNsklooNaKc5agIumT1ScFlBpJtRnxIIxMiO3sFsrHSKwpH7SXK4h5
-	/X8sh9gOcawAegiLT/nJ0YYCv7XMcMHDrOrDLA0x1EMFtpGYHt71MKiACy7+bK8tN5SHMdDnJkm
-	EvgiKLsr9dbajQaizSg8V68Mf5uB2hgtipfWkFbgood2Yd3/Jy2cIDCqCftHc6gj8bZV5xpZt5C
-	IPmQG3Ds3QYPYaHtd85sA6KVSYgpCl9Dv8iMvtKScEClctO3i8pCdVggTZ9cQmv+SyNcAFZS8NU
-	oPZCPO2SbvahEXt94xQsB1J/e1Ys9Grr1RYaHRjWLwynV3FN2kuiKD+nhJOcynOpaIySG9AM2lC
-	XSu/tf1N4MwfCql0y4eaDRqzW/Gb1Q9h1RdaIss9S34OPbeqM8FTpD6EhB2JQ96ow==
-X-Received: by 2002:a17:90b:4cc5:b0:38e:2524:7272 with SMTP id 98e67ed59e1d1-38e25247950mr2152483a91.39.1784078136280;
-        Tue, 14 Jul 2026 18:15:36 -0700 (PDT)
+        bh=MwJBrQ0pKijpyzFHsFaJHm7N376wuBcGnxSFAS9F0K4=;
+        b=RKgKpDsDPEbWRt8dZROSAW2UM9XP22bAUHqndq9ufXWRenhHgJjUeIG8/bbIL0sFaT
+         MvlaD6jl0fMlHVI2VXXE/o1hMe31OgbWGbDBQx9F/HPYAW+PX9ezrbP7rJBOGD8cGW7s
+         4OKR9zW24m7wMRN4bIf25031LTQtK2Fqz7pDlNnTgheXFsCkqx39hZFj1lfVr5KWgkgW
+         6IHXE44MdA8usu5d+NMUmZaEoSmvmvyYn+jn6YrUlE4DuaRRXY7GoYuXqj15vJdGBjIl
+         3PRqMsJ83Ho0a3FC368rHP8ICeyz7nr8vva0cH4vh8gGDPpF1KRdAd8K7Hsg1pPBpJoX
+         FF/g==
+X-Forwarded-Encrypted: i=1; AHgh+Ro+XL7iQZ6v9zYaxjdMzlsbrjwnmd7pNYqRfOGTgLReelUOzT2eFciST3SUkZPq+mkOqH6/@lists.linux.dev
+X-Gm-Message-State: AOJu0YzpSm+GLfwj48cG7pnEj19uboGrNhxPo0kutHP8OBwF4lgHIYtl
+	ahUjlM7ioJeMu0G8YdOfVMat0gCU9kFBDdAXTER45vTQew1fNRDypt6w
+X-Gm-Gg: AfdE7cnerLWh4+FNU2FoH3gCPS+Xha3cJHX5Ix6jDu1v7zgSJNYD+dIy5yLZKvbswM+
+	Nip86QtKzP14A9DQ/0rbmGUNEZep12kC2oBzdSyq1rZFxURYmW+TH5mcwg+INNylZirkRgpkwR6
+	bYz5t6HBPP+m4KLVw4o1hCfB7KbCmfftGEcvyV/DhwHST78qCTAVFuc74Q3ppK9P26jkg0hMgfW
+	A2STxB32qjfPVl3JhXLZCGKnNDHVOu4JZ1B9dVzxeWZ9dF8SxYGIuQlfwA9+GFJV4zyTJRBl+fe
+	U8xUFK/0/OkDrnB72UbVDNHY7fc+qzDCxS5SqtINYedK1Z4kj+WH6AvCuicxLhIdJVTu96Vkp5g
+	D9Zp68AFHkd6rrmcQ8o9QzpmstkHSPRpoGFu7YNfXL/W7VqBtpwdW6Xa5l5RoWj4ymye4mk5w8d
+	WMvEk37RJ0MEmc2Psbfe/rKl5HaNeENQFqXWxmXuP08RWo2LSYFGhz0FaJvgRiQgOW+3/Apc1/e
+	aHJZ/RtutXYVbsUy/fll0kD1hazyeqNIG2DdZk223BVpRcZPvwXRfpNFxfO/9QlmA==
+X-Received: by 2002:a05:6a21:7a9b:b0:3bf:64cd:c45e with SMTP id adf61e73a8af0-3c35731bd15mr5639748637.4.1784078220446;
+        Tue, 14 Jul 2026 18:17:00 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31198cb2b99sm58425447eec.26.2026.07.14.18.15.34
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-313b4cbafa1sm83586250eec.6.2026.07.14.18.16.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jul 2026 18:15:35 -0700 (PDT)
+        Tue, 14 Jul 2026 18:16:59 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
-To: linux-crypto@vger.kernel.org
-Cc: Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
+To: linux-ide@vger.kernel.org
+Cc: Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] crypto: hisilicon/sec: use devm_platform_ioremap_resource in sec_map_io
-Date: Tue, 14 Jul 2026 18:15:33 -0700
-Message-ID: <20260715011533.1278258-1-rosenp@gmail.com>
+Subject: [PATCH] ata: ahci_da850: use devm_platform_ioremap_resource()
+Date: Tue, 14 Jul 2026 18:16:58 -0700
+Message-ID: <20260715011658.1284298-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,58 +79,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace the open-coded platform_get_resource() plus devm_ioremap()
-sequence in the SEC_NUM_ADDR_REGIONS loop with
-devm_platform_ioremap_resource(), which fetches the resource, requests
-the region and maps it in one call. Switch the error check to
-IS_ERR()/PTR_ERR() and drop the now-unused struct resource pointer.
+Replace the open-coded platform_get_resource(IORESOURCE_MEM, 1) plus
+devm_ioremap() sequence with devm_platform_ioremap_resource(pdev, 1),
+which looks up resource index 1 (the power-down control register),
+reserves it and maps it in one call, returning an ERR_PTR checked with
+IS_ERR()/PTR_ERR(). Resource index 0 (the AHCI register block) is still
+mapped separately as hpriv->mmio via ahci_platform_get_resources().
 
-The driver only maps indices 0 and 1 (SEC_COMMON, SEC_SAA). On hip07 the
-corresponding reg regions (0xd0000000, 0xd2000000) are 0x10000 each and
-disjoint, so the region reservation added by devm_ioremap_resource() is
-exclusive and does not introduce overlap failures.
-
-Built for arm64 (drivers/crypto/hisilicon/sec/sec_drv.o) with LLVM=1.
+Built for ARM (davinci_all_defconfig + CONFIG_AHCI_DA850) with LLVM=1;
+drivers/ata/ahci_da850.o compiles cleanly.
 
 Assisted-by: opencode:hy3-free
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/crypto/hisilicon/sec/sec_drv.c | 19 +++----------------
- 1 file changed, 3 insertions(+), 16 deletions(-)
+ drivers/ata/ahci_da850.c | 17 ++++-------------
+ 1 file changed, 4 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/crypto/hisilicon/sec/sec_drv.c b/drivers/crypto/hisilicon/sec/sec_drv.c
-index 129cb6faa0b7..2514a5e1f9b4 100644
---- a/drivers/crypto/hisilicon/sec/sec_drv.c
-+++ b/drivers/crypto/hisilicon/sec/sec_drv.c
-@@ -1010,25 +1010,12 @@ static void sec_queue_base_init(struct sec_dev_info *info,
- 
- static int sec_map_io(struct sec_dev_info *info, struct platform_device *pdev)
- {
+diff --git a/drivers/ata/ahci_da850.c b/drivers/ata/ahci_da850.c
+index f97566c420f8..4e53ff96d712 100644
+--- a/drivers/ata/ahci_da850.c
++++ b/drivers/ata/ahci_da850.c
+@@ -162,7 +162,6 @@ static int ahci_da850_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct ahci_host_priv *hpriv;
+ 	void __iomem *pwrdn_reg;
 -	struct resource *res;
- 	int i;
+ 	u32 mpy;
+ 	int rc;
  
- 	for (i = 0; i < SEC_NUM_ADDR_REGIONS; i++) {
--		res = platform_get_resource(pdev, IORESOURCE_MEM, i);
--
--		if (!res) {
--			dev_err(info->dev, "Memory resource %d not found\n", i);
--			return -EINVAL;
--		}
--
--		info->regs[i] = devm_ioremap(info->dev, res->start,
--					     resource_size(res));
--		if (!info->regs[i]) {
--			dev_err(info->dev,
--				"Memory resource %d could not be remapped\n",
--				i);
--			return -EINVAL;
--		}
-+		info->regs[i] = devm_platform_ioremap_resource(pdev, i);
-+		if (IS_ERR(info->regs[i]))
-+			return PTR_ERR(info->regs[i]);
+@@ -198,22 +197,14 @@ static int ahci_da850_probe(struct platform_device *pdev)
+ 		return -EINVAL;
  	}
  
- 	return 0;
++	pwrdn_reg = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(pwrdn_reg))
++		return PTR_ERR(pwrdn_reg);
++
+ 	rc = ahci_platform_enable_resources(hpriv);
+ 	if (rc)
+ 		return rc;
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+-	if (!res) {
+-		rc = -ENODEV;
+-		goto disable_resources;
+-	}
+-
+-	pwrdn_reg = devm_ioremap(dev, res->start, resource_size(res));
+-	if (!pwrdn_reg) {
+-		rc = -ENOMEM;
+-		goto disable_resources;
+-	}
+-
+ 	da850_sata_init(dev, pwrdn_reg, hpriv->mmio, mpy);
+ 
+ 	rc = ahci_platform_init_host(pdev, hpriv, &ahci_da850_port_info,
 -- 
 2.55.0
 
