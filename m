@@ -1,89 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013061.outbound.protection.outlook.com [40.93.196.61])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5594400DE8
-	for <llvm@lists.linux.dev>; Thu, 16 Jul 2026 14:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784210898; cv=none; b=u0LElB1wvOcxLDTBmjCS2O95Nt3vLMmUrby8jaYFS2HgWMegSBfo0TcTxE8kgmU9nPCNTRfRWzIi6aKoQKRXBmjbYM1g8sYNX7zdf1c+9odWiwMHWTf3gdnKNQS55C0l8v1ls+JYjEOzBwvlV61pVmnVVVz3dqx2Y5N63s/O+2s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784210898; c=relaxed/simple;
-	bh=4HLWWkU7m5CWTiq/0e+PaS/ZG8H549LpnSL8J7it2sg=;
-	h=From:In-Reply-To:MIME-Version:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h7IM8wVb3/g2OgKA/ykwWtjBQa4BrG/i5KThLFd0mElpBCG+bOeuqoV5MYLS0T9Wl7pe13shnrCLOwvbS00roqT8debcY0JZ1EuPclnRiZgZ5jq3E87W4gpIJ16zCWOBTGniqv8rTFcjHCl61Dz8urDM3idSWErMjRRxJvpEe1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZvvWDlM/; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FBB043785A;
+	Thu, 16 Jul 2026 17:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.61
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784221420; cv=fail; b=u6sd9PM+ufXqiAWEfZbPxDoYCgmSIfgf4leITKjgYIxOUSUQ2uagmtV++k0joGG5kyD14m4qWYMl8j0zb7W+GhMy1jmIPWQxHeHNy7rU5HzrvYItNzjrHq8b1Lkk13qpQWoQwufrn1odm/mQt6UuFixC2/zSDjyhq4plu017Rys=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784221420; c=relaxed/simple;
+	bh=RNxftcYAWrzxIPfWdt0hRQcyqXniFFAC9b+HROvlWlU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=BfpgjQtQmnikh6hTXVkiK7KHOY4QNkvvaT4SZW5g7twbBYtuMIvjm56LqpQ4tGQ+h1aurtgIvYT9vi6KBTZ4SX+BAXTaTqf9LMovWn4fp7gElDy624v7EwCNUoCfyY+RNSnz1128rgEhY1NszUDzt6kAVBI+2NftOCVhEM/QYuw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=EKLPFww+; arc=fail smtp.client-ip=40.93.196.61
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZvvWDlM/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE101F00A3A
-	for <llvm@lists.linux.dev>; Thu, 16 Jul 2026 14:08:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784210895;
-	bh=G6VljwOz1Mocqmu55HYxuVcSQLH2az2JkNAYci+ltSU=;
-	h=From:In-Reply-To:References:Date:Subject:To:Cc;
-	b=ZvvWDlM/wETenmyF+Zj0qixr2rZ5mJCGmJQrQpuaJzkITGMfbvCZpVoU7/FrltjmC
-	 RWWU/8dDdr+0FsTHqX6gUnOSADyQW++WMBmw+Ol9yvZfaCGuky+q8TbidEeVxretSZ
-	 q9Luew7Vy3imK27zgtICZiUQ43YKcVQIRs/vSDE6m4aOz+WW4Ni4Zc6JYXlDN67isI
-	 ROWpQSDmnXhngdhLVtRAVL496NAeJTIil7ZrCC7OcyGum6s5JZaupG3Y8CDnXeGgcy
-	 0PdnWcdBUpORTUGSFBOZ4DJKXfuoAtukiU5v/G7HEovKTQfViiQmCN7m4Na1RaQReT
-	 dMI+agA2LWMqg==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-39c8dbf4ef0so58779201fa.2
-        for <llvm@lists.linux.dev>; Thu, 16 Jul 2026 07:08:14 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Ro5HHCvmLmaUyOhqYZgqM/Dy6hFU/YdNFq0V5TCofgPyUxtrMruoN9DpRsVoy7/UFiIJkwO@lists.linux.dev
-X-Gm-Message-State: AOJu0YyjTdJJU2EVDzCUP2pMhji3eJxT3QOgKnpvCmPP+GmGaSJ4swyL
-	QQXxmE+04m3Z6E42gt6FexXHrNW+W1xU3hpHVkTMiFJvgmpMTQoaihkZvLyKbAoQzN5AJTG3M7o
-	SsEY8IJwBaxes07b435k4NSyZhREDbkyiF4MPPbg8zg==
-X-Received: by 2002:a2e:bc12:0:b0:39b:119d:aa02 with SMTP id
- 38308e7fff4ca-39daa75c2e9mr26745301fa.5.1784210893665; Thu, 16 Jul 2026
- 07:08:13 -0700 (PDT)
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 16 Jul 2026 09:08:12 -0500
-Received: from 969154062570 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 16 Jul 2026 09:08:12 -0500
-From: Bartosz Golaszewski <brgl@kernel.org>
-In-Reply-To: <20260714234230.886636-1-rosenp@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EKLPFww+"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Lu8oQjOR+Rs5B3NyemSSxJkJ26eUmw7NhcfEWzt0fngaYDB3iHe/IL3MOjZKMypNcIhlOY3m0KlRSHIaHZjEzZcLa5LIB+PTJEq1H+Lydw5NXQJRIjLv/kjZHqJHn6UFBH0xrcrH7fTywQfd1BwSTVlU3JNP0FeLdfOWHAwqdRsN3rBWFDwsrm6YZv0azXdRWC8ceUhs7oFmBExebkkBz3DT6knxNTKZSKgLNm+mjHOKCitJYDHSJPiZbmRMsaFrne/TC1pnXF+rG0usjt5l9uEjS4FKkB0ldEZV8vcy0Im/up0gv0POXXphcfFSkkGDB5GjpJ4qg7kvvK6+HPUJdw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TUN/a6w8yIfp6SLHmD687iLllmRcYxz7sJAAt6wpeDg=;
+ b=U8yBoBt1zy15oDRDQRK2/MUGnyMZG+oYtvxTPOmD9OPE52C82ntyx3XakxPglzhyLxjl+E/7tqMNr15xXiqL9SpT+7MJ87dDnhsqXfEc+YsHK1AEld2fNtPOwHR+0SopGd3aEn1MNhRKyzRdArDvUVBXHhXGH+TSMXO9/kxflg65Qso08RN1lHNWRLfGgUSFWyrDziTfhdRhM8tOmPqtosFU7bHJ7kmxEQ7caZhAF0F/2jgOQo1tYGG2oghKvXkSK1HaW8GkY/yZSlGkZNgS+1gZ0oC/JPphtVsIVupK02wSfNr8dpdhBb11yQ0zsxL0Fn22JyvI/4Z2mHbOk6v1iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TUN/a6w8yIfp6SLHmD687iLllmRcYxz7sJAAt6wpeDg=;
+ b=EKLPFww+k1hYXpelwZiaocxJ9ZjzkUwhEP/LC6Xsa2RjiFDQJSyWiNL/EKtAXaOGFxpB1LAZqLCsaplUTAFWR5wnkqi1rcSiaNrVCbuzfOoBqSJqE0SmKlCQGFxG8jmXdqHMk5KIqc/16pi/Jnwuq8n9VFNPdvw2XlAraxQRB9ZGs7VZOcCtaIsgPZ81YPWjoTTzccYXX7L5TEhryNOlxQkwNrjcMf9tTqWbSkVKqoYGdOK8t4bTZCUESD6uqfa1NhNCfFhA9ZNTZTfQpGNkxJ1PsUacRxhD6C5ms0C4SGeAoBaMhhCX5NJiNi/LeMV+Aq3Ldd4pO61sqEsVbSzknw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com (2603:10b6:408:2a1::19)
+ by CH3PR12MB9731.namprd12.prod.outlook.com (2603:10b6:610:253::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.202.18; Thu, 16 Jul
+ 2026 17:03:28 +0000
+Received: from LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528]) by LV8PR12MB9620.namprd12.prod.outlook.com
+ ([fe80::299d:f5e0:3550:1528%4]) with mapi id 15.21.0202.014; Thu, 16 Jul 2026
+ 17:03:28 +0000
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Alex Williamson <alex@shazbot.org>,
+	David Matlack <dmatlack@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Mark Bloch <mbloch@nvidia.com>,
+	Bill Wendling <morbo@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	netdev@vger.kernel.org,
+	Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>
+Cc: patches@lists.linux.dev
+Subject: [PATCH v3 01/11] net/mlx5: Add IFC structures for CQE and WQE
+Date: Thu, 16 Jul 2026 14:03:17 -0300
+Message-ID: <1-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
+In-Reply-To: <0-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
+References:
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: YT3PR01CA0108.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:85::25) To LV8PR12MB9620.namprd12.prod.outlook.com
+ (2603:10b6:408:2a1::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260714234230.886636-1-rosenp@gmail.com>
-Date: Thu, 16 Jul 2026 09:08:12 -0500
-X-Gmail-Original-Message-ID: <CAMRc=MfNZgOgMNC_6Fsho-FytLpjp+_b06vOUVfWcmscK9up6Q@mail.gmail.com>
-X-Gm-Features: AUfX_myDt3czsqN7UP5TaeRmPNLp6AuQ_B-AKsuLFtZmgq4Ln8LtZ7V4rBUIQjs
-Message-ID: <CAMRc=MfNZgOgMNC_6Fsho-FytLpjp+_b06vOUVfWcmscK9up6Q@mail.gmail.com>
-Subject: Re: [PATCH] gpio: logicvc: use devm_platform_get_and_ioremap_resource()
-To: Rosen Penev <rosenp@gmail.com>
-Cc: Linus Walleij <linusw@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9620:EE_|CH3PR12MB9731:EE_
+X-MS-Office365-Filtering-Correlation-Id: 53c17132-d676-4438-5bdc-08dee35c2852
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|7416014|366016|23010399003|921020|22082099003|18002099003|10067099003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info:
+	2+dvNkawpC1In216huTQFtNviVBJ2cYpRCwphQXepHbh1HKJJAtHqZOZA7+2mgQuCuI140ajaMFl1rBJeQrDBoA0boNyKMLMxgt3U358/SCvZLJD3XkDk3FP3L/AByx8pLxIgovyGLbBnfs4cJRaeYEUJNV2Fcyzi0GItSkBW1g8X4fj7+gEnkmwPwfnCYopGaHxer2IeFR+tJ71xQwL+R93CeiYTekfckmCw2kl/QARA7YNokOvmJlPnc3ITZWbzWiIKUNfY115CSu3utEPaJvzx3AyHdLx1NdpEeh+bfkT+Wp7goDfbM3Qqjtrs8vTf2q+h4H520DNeRE15B8IZJPsi0uaK2aw6AKWkQrPXV09jh7949vOOJYrVqMiK6kVTzZzrHNHLDqnsrwDMirV+LCHe9CVeEp5URHwThI6HwlKSnPBdyrPpRF2n6u7+AuL6ykgmfKd8tM30iq9bAlStyGyOeNvvFmTOO0hemMKZa43o7w0fzAfCC3EZWjcMhn/jvGLapIkPb5FbxQVPKGTXGO/QjY6PXlkH/x+r4m+CTNLwbpm6CZK/J3XwKmVhpPQZ2bqftdBYFsp9Crtr9NJKAZmAcBC8G9dcHc6EICBytphN10w9nSNmAO30q6KYw3/eGqCuMIIUpq2RcXrLsSLVpvCk+0fl9RiE3Czd4yTrcKo8GrlI1dn81WEWv/sPM6qzmpSO56jKSe5Jkq0Oop3CQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9620.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016)(23010399003)(921020)(22082099003)(18002099003)(10067099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?K33BfoEqmktm4bL6FfpfPvxozURw6JqJiaxBMllroexPUcZ0K6u3fQ+IPpA0?=
+ =?us-ascii?Q?lTGL0+0KZRkGzJmeC3liUkvK3MowkEPQ5Bbq2BK0DHVy60fDz4YyXlb96C6K?=
+ =?us-ascii?Q?Bh3Em6jcZFSV5wKCEMIB76phqcgG2eVMUCFQ/q01HtdbBBDSf0uFSwXo+UEI?=
+ =?us-ascii?Q?65MOvm8QWInKq678p346yC8k2rIOXyvy59uDg2FXnD4RXR0qnip4yPVjnf7x?=
+ =?us-ascii?Q?i5ZVaCPtLtrrf+8WVWvOZrsfZXytBfS5I/w5YTxlvmsJF4ouu0hxL0jzxDLB?=
+ =?us-ascii?Q?lHe1E3z8nfuqUE7TO2JcVSPLaFOyc3mpzw/0ds4OAF+/lVP9T2d6e+4SX8Qb?=
+ =?us-ascii?Q?5/fvrLs8s4LImIlCZIAZ2E/vdn8cX91SbV8VX+MGTvDQis4jzxW5HlyuXL9z?=
+ =?us-ascii?Q?yTKMXCeN3D0UBpKJqF6Bqa3VYldeH9Jf5q50HIeFJklGv+syaMt3IG/fPRMt?=
+ =?us-ascii?Q?+6lygL1ML7uA9hh36y3HCdQuR5iUlaT68NcdXS/3uUqgoaJ0elUwpDwaS0Ma?=
+ =?us-ascii?Q?BU0qnFP95CD0QY285cpohdjfe1qj0nZQjKmVfXex+uqWIb9g3okgiNgTf8j8?=
+ =?us-ascii?Q?BnlOwutPdZL5CKMg8I3fWbWXgyu5iTKP0wrINwwfVMztTLeCnYgSWmnBuXP0?=
+ =?us-ascii?Q?QyF+jMQRus6G4XiBONtrIKkH+P9EuC0mnSYi/Mdjuu+GflQQcyUW8lcpd8/3?=
+ =?us-ascii?Q?0RLuKWOGc7gAKxqqwdNoif/VlGJPn/15umxyuKIn+Eul/cWvR78belDvQ+Mj?=
+ =?us-ascii?Q?J2wYiFl2JvvROrnAEoOYP8cs01GViVX4THfqwbns/dalfRgAabYdWjamPDbA?=
+ =?us-ascii?Q?7/qHcI+tzVfjP3/PQfKidaPiNSJj/4xIGAUQnr2koRuP0DzGZ3Xmtlh0SC6g?=
+ =?us-ascii?Q?IZaqfRRXQFBrhnfzs9ujXQEYwnRKjMDvyc4mv0yYTbodvesrE8c+4UqxgTyE?=
+ =?us-ascii?Q?gHX9Q1QJhKKJNvemkSnIP0edRv9OmY66gRH/vzLRQGIGY6HkNYrOu0wDjSvm?=
+ =?us-ascii?Q?fKKN92YWod+c1QHjcby+GGRD6rDdEsECfuu2HJEiRhfbm7u9V2rzUo7brO20?=
+ =?us-ascii?Q?Es0XaXq2SGjSmLKGFum9gRmRin2jAK5oIPWu3/5paiLlKWinIwgMZpzhJDYM?=
+ =?us-ascii?Q?/aVhCfSdpgZJKE0T/V3T9GQmmrAUO7e2JrmOpC5prUqUbhFJkP8gDc474uxX?=
+ =?us-ascii?Q?umxoUeBiOlc1rok7pa1wdrg+4+YPx2qHhois0+JYelVWZKmSS8Xfa78D576D?=
+ =?us-ascii?Q?p9VssoxWEevlYd77ZaR7J1nr/+GlRbnnPMp6NedPNHMDFhw4AV4jmf1QyKYR?=
+ =?us-ascii?Q?TEbhOfZkMEGSetW/BNNhUPxj4m49ANDlpEuUiDj5EiOrApFIdO9tHb7CRxR9?=
+ =?us-ascii?Q?3ORbLtKRRw9iDDlCjly1LKy9PsyEmT/qFrilnHzb+tvaXnO8nDB+0f1sONmf?=
+ =?us-ascii?Q?JJcOyBmY+uLljgHqVFoyDtmY4kZvhzzn4I1HXmI6+VyuLDiGy/dkc22/vhfA?=
+ =?us-ascii?Q?jctXy3lWZkSRnb/bCFRUVqIOweSGheIJrnR3dDt+iF/rRBKx722GMfEjaoq9?=
+ =?us-ascii?Q?q7KtDkuBfv25txkiH7kRi5hWXN2wni6Fv1+vEGFUloK7HXy0hfkk4axNbeV/?=
+ =?us-ascii?Q?Aq9gasNyS7dskq1zXtenBkwjABEK0lynx80diZ1Nm/OAF+J6EAfTssFpeQX5?=
+ =?us-ascii?Q?7rtAL8sEyBwG3EvhANC1p2ehmBDyULhh9Zjg7HHCEBoF1kWl?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 53c17132-d676-4438-5bdc-08dee35c2852
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9620.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jul 2026 17:03:28.7705
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OryPv0QLFTtY/TwVmrBitvPEdes9WUSG+mlgn5a9HI3REPMSLEQSpRj39IsOF+yO
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9731
 
-On Wed, 15 Jul 2026 01:42:30 +0200, Rosen Penev <rosenp@gmail.com> said:
-> In the regmap fallback path, replace of_address_to_resource() plus
-> devm_ioremap_resource() with devm_platform_get_and_ioremap_resource(),
-> which looks up the resource and maps it in one call. The helper returns a
-> pointer to the resource, so update resource_size() to dereference it.
->
-> Drop the now-unused linux/of_address.h include; of_node is still used by
-> syscon_node_to_regmap() and platform_get_resource() resolves the same MEM
-> resource that of_address_to_resource(of_node, 0) did.
->
-> Built for ARM (multi_v7_defconfig + CONFIG_GPIO_LOGICVC) with LLVM=3D1;
-> drivers/gpio/gpio-logicvc.o compiles cleanly.
->
+Building the WQE and CQE using the IFC system is easier than with a
+C layout struct. Add definitions for their layout. Structs for:
 
-That's interesting because I'm seeing this:
+  - wqe_ctrl_seg_bits (16B): WQE control segment
+  - wqe_raddr_seg_bits (16B): RDMA remote address segment
+  - wqe_data_seg_bits (16B): data segment
+  - cqe64_bits (64B): 64-byte CQE with error syndrome union
 
-drivers/gpio/gpio-logicvc.c: In function =E2=80=98logicvc_gpio_probe=E2=80=
-=99:
-drivers/gpio/gpio-logicvc.c:93:13: error: unused variable =E2=80=98ret=E2=
-=80=99
-[-Werror=3Dunused-variable]
-   93 |         int ret;
-      |             ^~~
+The VFIO mlx5 selftest will use these.
 
-Bart
+Assisted-by: Claude:claude-opus-4.6
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+---
+ include/linux/mlx5/mlx5_ifc.h | 55 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
+
+diff --git a/include/linux/mlx5/mlx5_ifc.h b/include/linux/mlx5/mlx5_ifc.h
+index 695c86ee6d7a3f..a83eb731764a0f 100644
+--- a/include/linux/mlx5/mlx5_ifc.h
++++ b/include/linux/mlx5/mlx5_ifc.h
+@@ -5979,6 +5979,61 @@ struct mlx5_ifc_cqe_error_syndrome_bits {
+ 	u8         syndrome[0x8];
+ };
+ 
++struct mlx5_ifc_wqe_ctrl_seg_bits {
++	u8         opmod[0x8];
++	u8         wqe_index[0x10];
++	u8         opcode[0x8];
++
++	u8         qp_or_sq[0x18];
++	u8         reserved_at_38[0x2];
++	u8         ds[0x6];
++
++	u8         signature[0x8];
++	u8         reserved_at_48[0x10];
++	u8         fm[0x3];
++	u8         reserved_at_5b[0x1];
++	u8         ce[0x2];
++	u8         se[0x1];
++	u8         reserved_at_5f[0x1];
++
++	u8         imm[0x20];
++};
++
++struct mlx5_ifc_wqe_raddr_seg_bits {
++	u8         raddr[0x40];
++
++	u8         rkey[0x20];
++	u8         reserved_at_60[0x20];
++};
++
++struct mlx5_ifc_wqe_data_seg_bits {
++	u8         reserved_at_0[0x1];
++	u8         byte_count[0x1f];
++
++	u8         lkey[0x20];
++
++	u8         addr[0x40];
++};
++
++struct mlx5_ifc_cqe64_bits {
++	u8         reserved_at_0[0x1a0];
++
++	union {
++		u8         reserved_at_1a0[0x20];
++		struct mlx5_ifc_cqe_error_syndrome_bits error_syndrome;
++	};
++
++	u8         send_wqe_opcode[0x8];
++	u8         qpn_or_dctn_or_flow_tag[0x18];
++
++	u8         wqe_counter[0x10];
++	u8         signature[0x8];
++	u8         opcode[0x4];
++	u8         cqe_format[0x2];
++	u8         se[0x1];
++	u8         owner[0x1];
++};
++
+ struct mlx5_ifc_qp_context_extension_bits {
+ 	u8         reserved_at_0[0x60];
+ 
+-- 
+2.43.0
+
