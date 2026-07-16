@@ -1,152 +1,212 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CE4412C07;
-	Thu, 16 Jul 2026 11:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306081D61BC
+	for <llvm@lists.linux.dev>; Thu, 16 Jul 2026 12:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784203026; cv=none; b=kD9QS0iRVGj2FeHvJtA9kn+rtCJtCC+AGEyWfqa+8dLTHosYh/ZLeiVoz9w9HVDbPp6NQgtAl80WdWUpUKYBBZJ7loKw/iRSaN0jX5dAXiaEZ3u8eLNkvw0UAcUlnV1Lu/P0EcIOt3wM3z34bFkFPcbVpzwpeWttxkxereKhBrk=
+	t=1784205973; cv=none; b=tPaaMw0Vi2816hAloN1dO8zIwCKCi0wBdZhicTOedFP5sFpUVk34eEVh3uJ6O3v1HFZwm3X0ichWHafAn+D0f4PnThUceNaokfglntJ+ph0VLSJDc99UO0t6+O92k/RE/UvkkfkXfmaOUb8S/YE6gauTCQv26tlNap/Chrizj3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784203026; c=relaxed/simple;
-	bh=kcjgYzHQ2udbVwJaCqp2Hqwjv09AzW1l7wO7KdsKUmw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RP2EglcsL9QQ/W0DHNzT4MCgtoRn13swlbnYRgdpXFYv30l6ueuHPRqb1RfRAPTb1P16JI9XFxFqP/gE+Z0OKa6nZCM9ssmW2X9whikjrgFOTnhffS7/sZUGXC1q4Rl57sOu/Wp8wDIeNsNTEqQ5WX2P9w8IKV6a9BEcBj7PbVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=T+gmIyEW; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="T+gmIyEW"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66GABwYI2910913;
-	Thu, 16 Jul 2026 11:56:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=AGXtMw+HwzzAwMk768TRelfDyJc5Qy
-	mAdFtZS2nAbyw=; b=T+gmIyEWnUO0Mc7s5xIBX81mySIm8sukmbKrTclkUhK2Qd
-	od7kHJJFyXZcej9uvyv70NSrDtWECW0FLyhC7ZmjNb5xczFMccdGF/ekNr6VGe9L
-	Z+8UMFne91AXDq5YUeOeezTSui+uC4SGWwrR6kNlbQXPLM7+a3lga1zEuIqkvzLY
-	C4nwS8jtwlR1EW5FRBw1mDrW8xgk2gpQfuih2MAvh4SP8TqRos2uDixj/elVidRC
-	bSpZ+Clqo+8pCSkhj7BRNzGuoZVoQgCylBUgj1yae+m3Wv08ZrUIb8C+kQFqZr4m
-	8snMpYoKrI4V9RzoKZwPe/Oj1ehTAmfbFlwnuoLA==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fbepxrkry-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jul 2026 11:56:59 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66GBnZnL005270;
-	Thu, 16 Jul 2026 11:56:58 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fc15k4sx2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 16 Jul 2026 11:56:58 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66GBusl438535670
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 16 Jul 2026 11:56:54 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 252662004B;
-	Thu, 16 Jul 2026 11:56:54 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A05AA20040;
-	Thu, 16 Jul 2026 11:56:53 +0000 (GMT)
-Received: from osiris (unknown [9.111.27.209])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 16 Jul 2026 11:56:53 +0000 (GMT)
-Date: Thu, 16 Jul 2026 13:56:52 +0200
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Boqun Feng <boqun@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: kernel test robot <lkp@intel.com>, Lyude Paul <lyude@redhat.com>,
-        llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Benno Lossin <lossin@kernel.org>,
-        Andreas Hindborg <a.hindborg@kernel.org>, Gary Guo <gary@garyguo.net>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [boqun:rust-rcu 14/27] rust/helpers/interrupt.c:17:9: warning:
- static function 'arch_local_save_flags' is used in an inline function with
- external linkage
-Message-ID: <20260716115652.25491C83-hca@linux.ibm.com>
-References: <202607131219.euJHPSJ5-lkp@intel.com>
- <alfbtUKkXANyGyYf@tardis.local>
+	s=arc-20240116; t=1784205973; c=relaxed/simple;
+	bh=5tEna8nwF9D4kqBmOX7zciSJS5c+LLEuZqAruUjqfpQ=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=janzmzsn1cHA1///yjQ8h/55Dz12Y7dOu4Ph/q+WalVvhQboxFQ/rMRqDrjLh3JFdQMEcYTndNIfdYy2wKQYn3XihKUgIBfwWula3twnPFBO79EVrJizfQuXR1Q8SddAxjGqDvytQjI1evgs2bn8CjMqHVY9g4NR34X03qb1uyE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h1CST6fgpzKHMQP
+	for <llvm@lists.linux.dev>; Thu, 16 Jul 2026 20:45:29 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id D99FD4058C
+	for <llvm@lists.linux.dev>; Thu, 16 Jul 2026 20:46:03 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgD3KVuK0lhqbmDJBQ--.61146S2;
+	Thu, 16 Jul 2026 20:46:03 +0800 (CST)
+Message-ID: <cd081966-36e3-42a6-a06b-27b56b3dd663@huaweicloud.com>
+Date: Thu, 16 Jul 2026 20:46:01 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alfbtUKkXANyGyYf@tardis.local>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 4orCvh7Ps8WAunvz7Rt1No978nm8Ndhl
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzE2MDEyMSBTYWx0ZWRfX5nVQJ+OAFLkg
- aKr2vjuPkarmbtBwBpqfDuG7rKWHMgaj9pnSNhi89VqGzKIAOpVaw/Gi5uI2hjwqZDGv/LRvS3E
- qjFKqb4prbWanaR3XfDd+VhRLlTUqkk=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzE2MDEyMSBTYWx0ZWRfX/TsqNFYlnMKW
- ZnZ+JeY8LenYBcONeK/42ICJYAN2qbmX9YI7SEgELrtrfLm/Tu6eshoSZNiviBOseBPBo8iKKgF
- SuEB+/UI43miFBCBip38EWS4vtj26G84ETKVsraZkAHP2QZ3sPF2bRTX80x5EVV/9bSyN9IR/6l
- cNkC1AEgnrLzw7jEOfDi78ZhSRRFC1VhpEYOv+cjYvhsrUy5aOTsUcxNlF8/smjkFm6cToITzse
- GCT8IhJt4HkGs70SMRvcu+8Fpz33ZY9RF+XfW9zqK1PmeuaHyRmrAzPfGG+4XtbQKUmYOwARlvd
- kmD2e5lhECwdQ8QeTn3kU+PzKXukqGC9DdZhqsLMM5UugNYNAn55u1LBgXKCXw15FjqdgsoF95R
- VX46q8ctEPAuaRkIJmnKcatjauQMzJXG+10Hyysos/ZkhJhGisWK2xOzlNCnK/4EdeqNwJPimE1
- wbz8S/qpPmoDjeaJJHg==
-X-Authority-Analysis: v=2.4 cv=XbS5Co55 c=1 sm=1 tr=0 ts=6a58c70b cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=kj9zAlcOel0A:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=BoKzBCvMNuogcYMSMhUA:9
- a=CjuIK1q_8ugA:10
-X-Proofpoint-ORIG-GUID: 4orCvh7Ps8WAunvz7Rt1No978nm8Ndhl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-16_04,2026-07-15_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 suspectscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
- priorityscore=1501 adultscore=0 malwarescore=0 impostorscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607160121
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/21] perf llvm: Fix arm64 adrp instruction
+ disassembly mismatch with objdump
+From: Tengda Wu <wutengda@huaweicloud.com>
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
+ Li Huafei <lihuafei1@huawei.com>, Peter Zijlstra <peterz@infradead.org>,
+ leo.yan@linux.dev, Ian Rogers <irogers@google.com>,
+ Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260701035355.752944-1-wutengda@huaweicloud.com>
+ <20260701035355.752944-4-wutengda@huaweicloud.com> <ak89Hg1SWnn0DHCk@z2>
+ <8812e4e2-3a3b-4f32-bdb8-b963bc21b301@huaweicloud.com>
+Content-Language: en-US
+In-Reply-To: <8812e4e2-3a3b-4f32-bdb8-b963bc21b301@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgD3KVuK0lhqbmDJBQ--.61146S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1DuFyUCry5Jw1kXw15CFg_yoWrKr13pr
+	WDKFW3JF4UJr1fursI9F1UuFyYkrWvqr4agr43Jw4IkrnIya43CryxGr4293WUZrWqvw4U
+	Zr4j9FW3WFn8JrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On Wed, Jul 15, 2026 at 12:12:53PM -0700, Boqun Feng wrote:
-> [Cc s390]
-> >    In file included from rust/helpers/helpers.c:68:
-> > >> rust/helpers/interrupt.c:17:9: warning: static function 'arch_local_save_flags' is used in an inline function with external linkage [-Wstatic-in-inline]
-> >    17 |         return irqs_disabled();
-> >    |                ^
-> >    include/linux/irqflags.h:256:3: note: expanded from macro 'irqs_disabled'
-> >    256 |                 raw_local_save_flags(_flags);           \
-> >    |                 ^
-> >    include/linux/irqflags.h:184:11: note: expanded from macro 'raw_local_save_flags'
-> >    184 |                 flags = arch_local_save_flags();        \
-> >    |                         ^
-> >    rust/helpers/interrupt.c:15:1: note: use 'static' to give inline function 'rust_helper_irqs_disabled' internal linkage
-> >    15 | __rust_helper bool rust_helper_irqs_disabled(void)
-> >    | ^
-> >    | static
-> >    rust/helpers/helpers.c:38:23: note: expanded from macro '__rust_helper'
-> >    38 | #define __rust_helper __always_inline
-> >    |                       ^
-> >    include/linux/compiler_attributes.h:55:41: note: expanded from macro '__always_inline'
-> >    55 | #define __always_inline                 inline __attribute__((__always_inline__))
-> >    |                                         ^
-> >    include/linux/compiler_types.h:235:16: note: expanded from macro 'inline'
-> >    235 | #define inline inline __gnu_inline __inline_maybe_unused notrace
-> >    |                ^
-> >    arch/s390/include/asm/irqflags.h:46:48: note: 'arch_local_save_flags' declared here
-> >    46 | static arch_local_irq_attributes unsigned long arch_local_save_flags(void)
-> >    |                                                ^
-> >    1 warning generated.
-> >    warning: 1 warning emitted
-> > 
+
+
+On 2026/7/9 15:49, Tengda Wu wrote:
 > 
-> This seems not a Rust-only issue to me, basically you got the warning
-> whenever you have an inline function calling irqs_disabled(). I'm a bit
-> curious why 1b301f5f28ba ("s390/irqflags: do not instrument
-> arch_local_irq_*() with KMSAN") wanted to add noinline when KMSAN=y, all
-> you need is noinstr, no?
+> 
+> On 2026/7/9 14:18, Namhyung Kim wrote:
+>> On Wed, Jul 01, 2026 at 03:53:37AM +0000, Tengda Wu wrote:
+>>> The operands of 'adrp' instructions parsed by libllvm are currently
+>>> represented as raw immediates rather than the "address <symbol+offset>"
+>>> format used by objdump. This inconsistency causes arm64_mov__parse()
+>>> to fail when parsing these instructions during post-processing.
+>>>
+>>> Example of the mismatch:
+>>>   Current: adrp x18, 8014
+>>>   Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
+>>>
+>>> Fix this by manually extracting the target address from the raw adrp
+>>> instruction via symbol_lookup_callback(). The address is then converted
+>>> to a specific symbol during symbol__disassemble_llvm() and formatted
+>>> to match objdump's output, ensuring compatibility with existing
+>>> parsers.
+>>>
+>>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>>> ---
+>>>  tools/perf/util/llvm.c | 50 ++++++++++++++++++++++++++++++++++++++++++
+>>>  1 file changed, 50 insertions(+)
+>>>
+>>> diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+>>> index a0deb742a733..533d47e8084d 100644
+>>> --- a/tools/perf/util/llvm.c
+>>> +++ b/tools/perf/util/llvm.c
+>>> @@ -94,6 +94,7 @@ static void init_llvm(void)
+>>>  struct symbol_lookup_storage {
+>>>  	u64 branch_addr;
+>>>  	u64 pcrel_load_addr;
+>>> +	u64 pcrel_adrp_addr;
+>>>  };
+>>>  
+>>>  static const char *
+>>> @@ -108,6 +109,18 @@ symbol_lookup_callback(void *disinfo, uint64_t value,
+>>>  		storage->branch_addr = value;
+>>>  	else if (*ref_type == LLVMDisassembler_ReferenceType_In_PCrel_Load)
+>>>  		storage->pcrel_load_addr = value;
+>>
+>> Is this used by arm64?  If not, would be possible to reuse
+>> pcrel_load_addr unless it'd complicate the code significantly?
+>>
+>> I think it's the common concept of PC-relative addressing while it
+>> requires two instructions to set up the final address on arm64.
+>>
+>> Thanks,
+>> Namhyung
+>>
 
-While the combination of __always_inline and noinstr _seems_ to work
-with clang, this looks just wrong to me. I guess we really would need
-a (single) out-of-line variant of the affected functions in question
-for KMSAN.
+I checked the LLVM internal implementation and conducted further experiments.
+You are correct, arm64 does not trigger LLVMDisassembler_ReferenceType_In_PCrel_Load
+at all. Instead, it utilizes its own architecture-specific reference types
+like LLVMDisassembler_ReferenceType_In_ARM64_ADRP, _LDRXl, etc.
+Therefore, 'pcrel_load_addr' is completely safe to reuse here.
 
-Ilya, since that was your commit, does that sound sane?
+I will reuse 'pcrel_load_addr' to avoid adding unnecessary fields and
+optimize this patch in the next version.
+
+Thanks,
+Tengda
+
+> 
+>>> +	else if (*ref_type == LLVMDisassembler_ReferenceType_In_ARM64_ADRP) {
+>>> +		uint64_t adrp_imm;
+>>> +
+>>> +		/* immhi (bits 23:5) and immlo (bits 30:29) */
+>>> +		adrp_imm = ((value & 0x00ffffe0) >> 3) | ((value >> 29) & 0x3);
+>>> +		/* Sign-extend the 21-bit immediate to 64-bit */
+>>> +		if (adrp_imm & (1ULL << 20))
+>>> +			adrp_imm |= ~((1ULL << 21) - 1);
+>>> +
+>>> +		/* Calculate the target page address */
+>>> +		storage->pcrel_adrp_addr = (address & ~0xFFFLL) + (adrp_imm << 12);
+>>> +	}
+>>>  	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+>>>  	return NULL;
+>>>  }
+>>> @@ -204,6 +217,7 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+>>>  
+>>>  		storage.branch_addr = 0;
+>>>  		storage.pcrel_load_addr = 0;
+>>> +		storage.pcrel_adrp_addr = 0;
+>>>  
+>>>  		/*
+>>>  		 * LLVM's API has the code be disassembled as non-const, cast
+>>> @@ -227,6 +241,42 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+>>>  				free(name);
+>>>  			}
+>>>  		}
+>>> +		if (storage.pcrel_adrp_addr != 0) {
+>>> +			/*
+>>> +			 * ADRP (Address Page) instructions encode a 21-bit signed
+>>> +			 * immediate offset relative to the current PC's page.
+>>> +			 *
+>>> +			 * To maintain consistency with standard objdump output,
+>>> +			 * we truncate the raw encoded immediate at the comma
+>>> +			 * and replace it with the resolved absolute page address.
+>>> +			 *
+>>> +			 * Example conversion:
+>>> +			 * From: adrp x18, 8014
+>>> +			 * To:   adrp x18, ffff800081f5f000 <this_cpu_vector>
+>>> +			 */
+>>> +			char *name;
+>>> +			char *s = strchr(disasm_buf, ',');
+>>> +
+>>> +			if (s == NULL)
+>>> +				goto err;
+>>> +
+>>> +			s++;
+>>> +			*s = '\0';
+>>> +			disasm_len = strlen(disasm_buf);
+>>> +			disasm_len += scnprintf(disasm_buf + disasm_len,
+>>> +						sizeof(disasm_buf) - disasm_len,
+>>> +						" %"PRIx64,
+>>> +						storage.pcrel_adrp_addr);
+>>> +			name = llvm_name_for_data(dso, filename,
+>>> +						  storage.pcrel_adrp_addr);
+>>> +			if (name) {
+>>> +				disasm_len += scnprintf(disasm_buf + disasm_len,
+>>> +							sizeof(disasm_buf) -
+>>> +							disasm_len,
+>>> +							" <%s>", name);
+>>> +				free(name);
+>>> +			}
+>>> +		}
+>>>  		if (storage.pcrel_load_addr != 0) {
+>>>  			char *name = llvm_name_for_data(dso, filename,
+>>>  							storage.pcrel_load_addr);
+>>> -- 
+>>> 2.34.1
+>>>
+
