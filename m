@@ -1,83 +1,84 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2E6F372EC5
-	for <llvm@lists.linux.dev>; Fri, 17 Jul 2026 15:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DE5F390C85;
+	Fri, 17 Jul 2026 19:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784303451; cv=none; b=tV/bcLXI+1Iadx8ON/WnsgT8wnaclY6AtIAWE3pZ8KUI1ffm8plPaRJAwtdfzTYRvWx4QNGM37fTqxpfrEDZoBsQ+tXUbwY32UDzR1l1mHcuDzEfqRvxMIXlFuR5bjOhRdlKThrFGmb4pxaJEpW+PvkS4gy9ZUl1SM0s5X345jY=
+	t=1784317812; cv=none; b=C3cHk7kUG9lwkK9JpDU6VMpIxgDUNRzzuo+r32NUo+EFEPfuf0Unw8vc06ym0HCNBZr1QxshB7aR3/K9O4KJdNbFD0ZzNwn9PUutuiWGIk0h0cvh1/JUiVPENEeMY2n1jOPCDBNA0FxBTSIUHp+m6bszBcT2TzeLCInIKq9bi1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784303451; c=relaxed/simple;
-	bh=c2mOqcPvdD7LzOk5QYPPKRQfmBLDYjUOW3UfvOr/1i8=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=UbBx6Qulz99mXuQFRtacED2Q4JxR/Xw/UnrLLc3QMbBGdy4GWvd3B2vd7ezVRO2DUkLl6R6vT+L8acxO5C/tN8aLgQrEv/cNg3ci/1OjMrI6JU+ifjCc/Np+yaMNMGYWQTW4AeNITKiGcn21ybtC5gHgPX238hwlsXX3qxi4g+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=onnw7U40; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1784317812; c=relaxed/simple;
+	bh=zWBt+DDVR50Xvb9PyVldsVSOQ90jdQJp7euTcObsFR0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XrCw0V3gp3+64prkdOEaaa7h+s3trvW4SUjCWMxFtBYaGB2gPC5k6YADUPvkG97cKXKm7IqGiyB/Zrdg1dPieHXpy91OkScnc3iUthawQ1Z4WFk4pRcSh2kE/kpBVcA4HSmIQXdL299d0Uh4PH4HesjOpa8oRvzozIZ/zbF2ubQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mEfPrIKB; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="onnw7U40"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 264564E40E20;
-	Fri, 17 Jul 2026 15:50:48 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id EDD5060361;
-	Fri, 17 Jul 2026 15:50:47 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 23ADA11BD0B40;
-	Fri, 17 Jul 2026 17:50:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1784303447; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=RlpOR2hQnjsKRnEmWR65VlWNVy2hx4ffoGcWJTmsnjg=;
-	b=onnw7U403jrPUo24OjG95EFKfHyLNVy/reRKnJyuXJIQx6Nj9QWRERIuEzFt5urzyGAsv5
-	BdhuzedMKbJ3+fHqyEqAEWy0kYCHrS0QjsQP7C6OCYvFaWUDrqT9lkv2Z+nncFQ/wjBHko
-	Lf6TafpM6jRpW0cGd96LRMXirpaSKI0VcqH43YmmBtmO3N703iShRtmrbkES8EYN5A2mO9
-	2blTb0OOUcOyz2DYCEbea4LWoQabcgYr8QuHKhXO65h48GwvGL3YM6NKg7FAA4htfU1bYG
-	GjNyPCdlZKHJ08FmbriiSSDY659ZTXedTJJ3RdPlO1P1KPNA86OBbb1CeH8OVw==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: linux-mtd@lists.infradead.org, Rosen Penev <rosenp@gmail.com>
-Cc: Richard Weinberger <richard@nod.at>, 
- Vignesh Raghavendra <vigneshr@ti.com>, 
- Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
- Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-In-Reply-To: <20260713231722.1095470-1-rosenp@gmail.com>
-References: <20260713231722.1095470-1-rosenp@gmail.com>
-Subject: Re: [PATCH] mtd: mpc5121_nfc: use platform for irq and ioremap
-Message-Id: <178430344591.4129650.4707095787373481148.b4-ty@bootlin.com>
-Date: Fri, 17 Jul 2026 17:50:45 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mEfPrIKB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784317810; x=1815853810;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=zWBt+DDVR50Xvb9PyVldsVSOQ90jdQJp7euTcObsFR0=;
+  b=mEfPrIKB0nMPnrtCv202wwabgMu/hYmq0+yNaAYnFlmUMM0elOGj8/Ai
+   ZMk3ULYjBSeFcHxXpmdN+nUPTAgtnkoNqciUwZBsib8+EebK5Ig9DH7CQ
+   G8pKpUQok/OD3q70s2CTGqpyr6TMr+uYWSHu2bAH0Uv4efLHsjJacLHwz
+   LEjU2Oy4IT+C8VZvBey3PoN63fOGr+C3/OXa5vglzcia2ydgLkHNqgFev
+   WCbCu8U/vX+dm+4/He+cSgM88X3BjWsAPMp70I/3HsCnjH13J2timdr+y
+   kLnj/HVQpf22ChNTqQzOqj3qN6KLAfrDoLsP+2Rs8BAtP9WJhbw8mnikZ
+   Q==;
+X-CSE-ConnectionGUID: bz/UOA90T7yuJH6pK7vzjg==
+X-CSE-MsgGUID: RcRe/plQTxWfLNSC2j3ZVw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11849"; a="87539390"
+X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
+   d="scan'208";a="87539390"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 12:50:09 -0700
+X-CSE-ConnectionGUID: 0ILIiV2GQJynK6f24B7t+A==
+X-CSE-MsgGUID: zUTZpYGvS8qtFSz5gg8EVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
+   d="scan'208";a="256951971"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 17 Jul 2026 12:50:07 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wkoZQ-00000000T6N-2YG1;
+	Fri, 17 Jul 2026 19:50:04 +0000
+Date: Sat, 18 Jul 2026 03:49:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 2/31] ERROR:
+ modpost: "ktime_mono_to_aux" [kernel/time/time_test.ko] undefined!
+Message-ID: <202607180345.0XKGQTHJ-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
 
-On Mon, 13 Jul 2026 16:17:22 -0700, Rosen Penev wrote:
-> Replace the open-coded of_address_to_resource() plus devm_request_mem_region()
-> and devm_ioremap() sequence with a single devm_platform_ioremap_resource()
-> call, which folds the resource lookup, region reservation and mapping into
-> one step and returns an ERR_PTR on failure, checked with IS_ERR() and
-> propagated via PTR_ERR().
-> 
-> Switch IRQ acquisition from irq_of_parse_and_map() to platform_get_irq(),
-> which only retrieves the interrupt the OF/platform core has already set up
-> rather than transferring mapping ownership to the driver. Drop the now
-> unneeded of_irq.h include.
-> 
-> [...]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   36b70ed194973abf48fbb212bf61d246721391d8
+commit: 26bfd7e75b8185be25577c735682f077070822ec [2/31] timekeeping: time_test: Add a test for auxiliary to monotonic clock conversions
+config: um-randconfig-001-20260717 (https://download.01.org/0day-ci/archive/20260718/202607180345.0XKGQTHJ-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5c0dfced1adc55429e32b1db08570abd3a219d85)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260718/202607180345.0XKGQTHJ-lkp@intel.com/reproduce)
 
-Applied to mtd/next, thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607180345.0XKGQTHJ-lkp@intel.com/
 
-[1/1] mtd: mpc5121_nfc: use platform for irq and ioremap
-      commit: 355efa360ba3b9ed242f444c69fbafa84a29a525
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Patche(s) should be available on mtd/linux.git and will be
-part of the next PR (provided that no robot complains by then).
+>> ERROR: modpost: "ktime_mono_to_aux" [kernel/time/time_test.ko] undefined!
+>> ERROR: modpost: "ktime_aux_to_mono" [kernel/time/time_test.ko] undefined!
 
-Kind regards,
-Miquèl
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
