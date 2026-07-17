@@ -1,81 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7916A3F6612;
-	Fri, 17 Jul 2026 11:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8623F9F28
+	for <llvm@lists.linux.dev>; Fri, 17 Jul 2026 12:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784288729; cv=none; b=d5qoldxvyHovy/qUXxdC6yEspodinhsYWdzsKIrDAOk6diN6ScjQLTtiNPZu/nrpMO9ZmI5JAh+UO9N5YsVFBCheBvtRjdMladOgKeqxZ+Eoaka2TSffl2PdN3k6UIoaOdWyKkIvATZZ9oFZpqKR+GSUQ/d9YA3MnYNe9DcxpZg=
+	t=1784292343; cv=none; b=T4CXDen5ThDvb4xnTsJcUhL1AcnBizKWZihIrnpgoQQyBnjAPOJr7q61zVWvbEJgs9+v5fRDuMxtenaYe9yEO2N7usNNTZZNtVvrmdZepfcDNhR9D3Ulz73g8YK3oRKbkvuz7vzrJw5UFGSh4Zff/Ups+l4rrs424Wg9Gg0XPc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784288729; c=relaxed/simple;
-	bh=aa9u7Oq3GjNW3rNuKeaMW0nAEz8OJRfic1LiWiljdVo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=o93MkWsrgbp6XjGaOdtEFMJKhXYYSjIB+xu24zKTJj91rCrbg6qZkhhGhr9p/jvzw10EKL9YYzJHayrZqrktn7Zb046aMBrDO0q4JENBE7uXuQMIukItgI2p469+Bf3K0UjIGP6bOAoJq4asPhJpyFpI90GYtqnLUh1PtBB+elA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KKSHR7w8; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1784292343; c=relaxed/simple;
+	bh=RieLsRVJ1mDAmUp0yKGXNWj7JDhW1POVMFYiCRfMPo4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MXpHQggzSNFG+Jw1h3ykfmmr/l0D+A37bejVo8TtOPLeQYqOu8QzGtvlS02dyUVW2QZn18Z7GpBxSckH14FZ1crVgSuec/S57DQSC1XlMly8x5RdcF9WxVfuKg6WH1ixETgao7hsX2IXByQghjwZsNQtl2t1lW3AnZ20VvMFVaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/rN4uVB; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KKSHR7w8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784288727; x=1815824727;
-  h=date:from:to:cc:subject:message-id;
-  bh=aa9u7Oq3GjNW3rNuKeaMW0nAEz8OJRfic1LiWiljdVo=;
-  b=KKSHR7w8vPaQfz1qZ5Ho4PBa/znn4tIlHkKxwS5ATPARfbenV4bz8h8C
-   VHuKMV083CUkjTc52L84/RI8KByCn17s6gTXFsdBmxut50h4ExO0qrpQU
-   XAjZrF4BO94bZUwBZNSBcCC8vWsfO4es6CeW7bEDasGUFq4rg1mkWGFeG
-   jRsMJmr3Tkm+1HU8sK4zAqic2VdrlyjyCCUavhf/sLTEzpDidJ3ZCCEeX
-   qL0CS+k/fkEqQaMAHeFmE3ImwjcUe2stOanVUVG7eTMUHMj6PMqTW//Mb
-   jr/DVp6dev7gIYwizfIgXswu8d4gCd+z9bYqy6PYU5lOQLNPNNn7khAJy
-   A==;
-X-CSE-ConnectionGUID: CcB+/LuRStmq0Ba2J2PUUw==
-X-CSE-MsgGUID: /b5Ed0EmS5ahl8OBfwf1KA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11848"; a="96471802"
-X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
-   d="scan'208";a="96471802"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 04:45:24 -0700
-X-CSE-ConnectionGUID: 3xLc2rlJQ4qCsLUNjsyv+A==
-X-CSE-MsgGUID: rXtSR5FVRAuPrqZcApnMCA==
-X-ExtLoop1: 1
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa003.fm.intel.com with ESMTP; 17 Jul 2026 04:45:21 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wkh0J-00000000ShW-0PU0;
-	Fri, 17 Jul 2026 11:45:19 +0000
-Date: Fri, 17 Jul 2026 19:44:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alejandro Lucero <alucerop@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dave Jiang <dave.jiang@intel.com>, Dan Williams <djbw@kernel.org>
-Subject: [linux-next:master 1815/7063] ld.lld: error: undefined
- symbol: devm_cxl_probe_mem
-Message-ID: <202607171907.Sx7DGEqG-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/rN4uVB"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47db714766aso776765f8f.0
+        for <llvm@lists.linux.dev>; Fri, 17 Jul 2026 05:45:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784292339; x=1784897139; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=pidhZMI94NTBLbc5TNcQD1D0S0S0XdPelFHQKt6o2CM=;
+        b=T/rN4uVB4JotuC634fcqGadHwmmQpoH55yKCPvvOu885lGPV8nrrVRo27tYXX9+TwM
+         mD91Jmw1KjqMFeacCxUwPftmA05cqvJOAxQPrN3yUMvoV7QQhbd/OSvpaVLPqikDk8yp
+         N5CqGzPSlOIlVVxD2criJ0rBIojw+NWCT7HIS4XUETOsO0asl+X+f90lGhMskLDKOIB+
+         MfKC+IXDGc8q9DEicCDjXdXjDK/a2jLXNx4n/BYxg4b3/qYj8/4E74vTeD1ptaaR6PZd
+         pMQw7An0C7yZeHrlpiRrWp0WCSZ7S0ZWQJtzvSY3FTgK4lA1ZOPJlXXfeWKiAAMv/5+b
+         byDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784292339; x=1784897139;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pidhZMI94NTBLbc5TNcQD1D0S0S0XdPelFHQKt6o2CM=;
+        b=PHtfSUrTjgRJyy1w5sJBHzNp3PcXTjNfAT3PIqOrmljppk47qeiLzilpURYf0LILMj
+         jMy8MH4nXdP6iFbjyQm5bzqxdPv++EqEy8CNPTotoh+jfdJXOf1m6XadEwOpl0YSmzOS
+         duKcNtGfNH8XpgV2E0TX+uZb3RWAVMafizWHYZ417LTuDbtlrFYwFRiBNqHnxQBc65V/
+         C3B2kVLfc9TA1y5oSUN9EBwBilyf93GeTSqZgv4oQyC/Owjcdgw1nbxSCDNblXVtfYmp
+         booFi/7geylqse6HKA+XvV/xh2UEUsn9lNRup+GXCv5q5l2YI3zTyjij0vMY6xEIH+kr
+         3G0A==
+X-Forwarded-Encrypted: i=1; AHgh+RqztNNKSG7y48XmyrDtx58+UIbOMxv7sIdpf6xBtnt1fiq+T3nhp4AjQkD+P5JJSqXse+R3@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz9K01wQuLK7Kra17OyfX8H/xbiPyOvidk0NY8yu3Rgo9/qNuvE
+	pjuYXhGqjh2YdWgby4ibKFu/4AYJK6oWcMWp277OPJOhZw8901x08YFL
+X-Gm-Gg: AfdE7clPdnvEnBYAT5Wz6WBjEFJ7i8CYvnWSuGcyYhmzsCVXePKu6WApD7e4HWyc1KA
+	1Wk/cXi+wWFokJUYHPunjZ6nJ9is6BHLWYR4UnExiDqx4IrtjX/HEI/lf/yy2WlWLPt0r0TTKiQ
+	6YskswRC3Z2cMCDwdiqXslSsdBcGR62Gn+2B9To6QkFc+VB/hWrWCo33Ok4YN2z8UrrVAERUGS7
+	wQ7/LlB3erpslfCBz0WHC/ve5VJZVb5k/oSCVqswRQsaxKsXNHLUwotY4O2mX+CnurqWLyd4xWN
+	Qp41i428xmjztPsB2NS6c5rkj7X22i/u/VneQeQm2nPpMajMf2j6fkUqWFnLyP2yHRe6VwLJje7
+	MsZVMFUDn9jyLh0ZTno8Zi4Qcc+X8fYqmZjJLyr8FO1wmO/W8oWrePVNG+7QG9ZbHEPbu5eRWFI
+	aAOquQ0a9oyuJDs4adMJJBOl5q0ekDvnoBwgs+FIZlF51mvEtVxlo4Xm3pwCXqJ4PvFD52p2XJW
+	9lPvT2t82v02nwIw1LhSfw+JgBf1aCbqCsPyj+PaxIR0B8A11nwHXY3U/eHfU+X59PhYAoRSuN4
+	3cBdKHnqHxN1Aq5uUA==
+X-Received: by 2002:a5d:5987:0:b0:47d:f6a5:1fbb with SMTP id ffacd0b85a97d-47f623bc322mr3149483f8f.13.1784292338518;
+        Fri, 17 Jul 2026 05:45:38 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-a56c-5c01-55c4-777b-77ab-69e3.310.pool.telefonica.de. [2a02:3100:a56c:5c01:55c4:777b:77ab:69e3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f63ec7e49sm3499778f8f.19.2026.07.17.05.45.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jul 2026 05:45:38 -0700 (PDT)
+Date: Fri, 17 Jul 2026 14:45:36 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: "Vlastimil Babka (SUSE)" <vbabka@kernel.org>
+Cc: Harry Yoo <harry@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [RFC PATCH] slab: don't assume alignment on allocators that may
+ return ZERO_SIZE_PTR
+Message-ID: <aloin36NATD9-tVQ@unknown748F3CBA5068>
+References: <20260712120728.96628-1-kmehltretter@gmail.com>
+ <f2def8bd-4eb8-4e5f-a22f-4061297ddb03@kernel.org>
+ <d6b1bd1b-3800-4bf2-bd0d-f0e6201810f3@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d6b1bd1b-3800-4bf2-bd0d-f0e6201810f3@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1a1757b76427f6201bfe0bf1bea9f7574f332a93
-commit: 0418860ef2ca8ab4e696ce3913fd76660c881c0e [1815/7063] sfc: obtain and map cxl range using devm_cxl_probe_mem
-config: s390-randconfig-002-20260717 (https://download.01.org/0day-ci/archive/20260717/202607171907.Sx7DGEqG-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260717/202607171907.Sx7DGEqG-lkp@intel.com/reproduce)
+On Mon, Jul 13, 2026 at 06:53:40PM +0100, Vlastimil Babka (SUSE) wrote:
+> On 7/13/26 07:18, Harry Yoo wrote:
+> > 
+> > Bumping ZERO_SIZE_PTR to something smaller than PAGE_SIZE should still
+> > work: (addr < PAGE_SIZE) check still works, and accessing it still
+> > causes a fault. No arch should have ARCH_KMALLOC_MINALIGN >= PAGE_SIZE?
+> 
+> Yeah, I don't see why anything should mind if the value changes to a larger
+> one, if it's still well below PAGE_SIZE.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607171907.Sx7DGEqG-lkp@intel.com/
+That should work for the affected architectures. The maximum effective
+ARCH_KMALLOC_MINALIGN is 128 bytes.
+It exceeds 16 on 32-bit arm, ARC, non-coherent MIPS and similar
+configurations (32/64/128). Before commit 9382bc44b5f5 ("arm64: allow
+kmalloc() caches aligned to the smaller cache_line_size()"), arm64 also
+used 128 via ARCH_DMA_MINALIGN.
 
-All errors (new ones prefixed by >>):
+Preserve 16 where possible:
 
->> ld.lld: error: undefined symbol: devm_cxl_probe_mem
-   >>> referenced by efx_cxl.c
-   >>>               drivers/net/ethernet/sfc/efx_cxl.o:(efx_cxl_init) in archive vmlinux.a
+	#define ZERO_SIZE_PTR ((void *)(ARCH_KMALLOC_MINALIGN > 16 ? \
+					ARCH_KMALLOC_MINALIGN : 16))
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+with static_assert(ARCH_KMALLOC_MINALIGN <= 128) after the effective
+definition. This only changes architectures that need it.
+
+The max value 128 remains below VFS_PTR_POISON (245) and
+LIST_POISON1 (256) even before POISON_POINTER_DELTA is added.
+
+A fixed value of 128 for all architectures would be problematic: s390
+does not need the alignment change, and its lowcore uses address 128.
+
+On affected architectures, the current ZERO_OR_NULL_PTR() range check
+would accept values from 0 up to 128. 
+
+Exact NULL-or-sentinel comparison may be preferable for hardening.
+This was discussed in 2016 [1][2]. For a power-of-two sentinel, 
+current GCC and Clang can optimize the comparisons to a mask/test.
+
+With exact matching, applying POISON_POINTER_DELTA to ZERO_SIZE_PTR could
+also be offered as a configurable hardening option.
+
+[1] https://lore.kernel.org/all/1479376267-18486-1-git-send-email-mpe@ellerman.id.au/
+[2] https://lore.kernel.org/all/alpine.DEB.2.20.1611181146330.26818@east.gentwo.org/
+
+Karl
