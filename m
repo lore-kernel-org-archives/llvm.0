@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5284A126BF1;
-	Fri, 17 Jul 2026 20:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78C633655E8;
+	Fri, 17 Jul 2026 22:04:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784319656; cv=none; b=Le1wMmI7PhvAwi1Nb0D2wpnw5lTpqiEBfsYeiQCU2aKs3uCcUvVaV2imYZNYNFaoqLAeMd4qm3vl3XrTagmQlLK5AxJJKgpKhtBrvg0CTCRD+anNktYasbZOaJLjKvn5gqsHk91oDxgjcQuMz6Gu46+4GLc8m5cDwHNzeFNe+es=
+	t=1784325847; cv=none; b=uKm17cqb+27Bg7RLvmpLrrMAVxAljWjt+P3ColnCKrrgCaPKZnSojHBi2TxMEpMCeWMZ7s6PuJ4rVjT6Jg9xt+8gFYARX4qMcXODejnrFNUTux2uCSTBqkhNuMVQBtvDb/nMy97OSQBrLdqQ1ntv3R33TgVseFH9niSjLqnlyhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784319656; c=relaxed/simple;
-	bh=Mr5XyXPU1R/xUh0cqoXIPGPbtYHdNz0Qojrzwv8Z7rA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ovVNYXZUdfeu3RrcGgndHqN7G34X3QAvhfqak2MQvpkosYoKnSe0/gnCqRl2Pp1ognrBc1JRtb8wr5rmHZfsu8n5IfLzXftuXV2ehReASCj5m20/V45u2haw1IR53lRN8mA9uRBLj4WBzlbdtqTfw9U7n6y4N6+RQkIegwUCCJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QFFI3Inc; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1784325847; c=relaxed/simple;
+	bh=bgtFZZwyVVeVM3s2gQBrdXHJYd5XB37T3985IXmFeeg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bIiydSXic+eWnjBhsQaybsk+/LyfJozcsusM7RN2ph1XARbdKBOkCwmyQWpDEUdnUmeK/zgAlzzv9IJ+Gfy9WcQmNgZqd5kSu967QE8q3NqL0gzY0rPNxkXWK35G2meJ/O7CWMKEIcpZl30uO1lC5YoBfQV6JMwwl3JFN3JUdoE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RKW+1b2t; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QFFI3Inc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RKW+1b2t"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784319654; x=1815855654;
+  t=1784325845; x=1815861845;
   h=date:from:to:cc:subject:message-id;
-  bh=Mr5XyXPU1R/xUh0cqoXIPGPbtYHdNz0Qojrzwv8Z7rA=;
-  b=QFFI3IncpIIOeHb7/HWw4qvQd++eoAsdMnNX2ruvlbXCas9wIuOgyw1o
-   T0wzRmhzvoaod9FeouwAIWs7z+SlbFSKfLkxLqYXBheBPPJFDzFBITuLz
-   z6qgCGMfqnfTlZOuRdGZcs43HBgrWr9vJCpn7hoDQvwzlaEoECKlLfHxU
-   JmSwJvE1jV8NXfx89HnRyXrZpJSRC5k2pIain0Nczkx/NFrHb9ZI6umck
-   rM8YB9q+oKllICNGoZhKxsP1m7TOgfrTi30ybrgjdinqKlczwm7kU3+GK
-   YqvD5szvmowlRMgUEiqzPIyIypoSh4T0BwYPpIf4/oWq36IDrOfOHfJuv
-   g==;
-X-CSE-ConnectionGUID: lZWHTf0sQNC1XHE/D05O+A==
-X-CSE-MsgGUID: YdDxscQQTCyUXBPGrMSl9Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11849"; a="95593975"
-X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
-   d="scan'208";a="95593975"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 13:20:53 -0700
-X-CSE-ConnectionGUID: BAYcl6mDRzugjpYsDGgplQ==
-X-CSE-MsgGUID: mSz9NW5wQqu4nvLap2je9g==
+  bh=bgtFZZwyVVeVM3s2gQBrdXHJYd5XB37T3985IXmFeeg=;
+  b=RKW+1b2trtU+Wg+aLPEm37QNVSiurb8FQSu+FVlmWLSyEUnlX9qoptz6
+   rgcpUWS3ALWZAHQSavwpPIwLg0tjw5DdsqQQnDHdAbFu5f//V8Kd9O+3P
+   M6f8D7/trErfqIflvVrtu+uSZ9k+aGGHcskSEK0Z08+WucEujJfjaThu+
+   M7jdV6rv4tfdmD2UdAeVlR2o+qwrWeSMtspdbjSI77iok1/sKQRUom33v
+   D/+2Xnq+4jDGiFl/2GpKX86oY/dHuLplxyy2dVaEvMOS5+8XcdeT+2ULz
+   NX2ty0PLnWCsfsdAoiQWegZK3IXSliTE5rj3b83nflVXzizu156SsvTcb
+   Q==;
+X-CSE-ConnectionGUID: 8/CxZtKCRGqn2OYb9HAQzA==
+X-CSE-MsgGUID: DSti4TM8S1OeE98oEQ9H8g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11849"; a="102552988"
+X-IronPort-AV: E=Sophos;i="6.25,170,1779174000"; 
+   d="scan'208";a="102552988"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 15:04:04 -0700
+X-CSE-ConnectionGUID: cNKEmxTsREGEo66tTVWLSA==
+X-CSE-MsgGUID: YDvEJihwT/GpEbPgbSjBHA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
-   d="scan'208";a="280160933"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa002.fm.intel.com with ESMTP; 17 Jul 2026 13:20:52 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+X-IronPort-AV: E=Sophos;i="6.25,170,1779174000"; 
+   d="scan'208";a="261166920"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5a8ed462067) ([10.211.93.152])
+  by orviesa005.jf.intel.com with ESMTP; 17 Jul 2026 15:04:03 -0700
+Received: from kbuild by e5a8ed462067 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wkp36-00000000T8B-1gKM;
-	Fri, 17 Jul 2026 20:20:46 +0000
-Date: Sat, 18 Jul 2026 04:20:13 +0800
+	id 1wkqf2-000000005eH-2gVd;
+	Fri, 17 Jul 2026 22:04:00 +0000
+Date: Sat, 18 Jul 2026 00:03:00 +0200
 From: kernel test robot <lkp@intel.com>
-To: Xu Lu <luxu.kernel@bytedance.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Paul Walmsley <pjw@kernel.org>
-Subject: [linux-next:master 6105/7063]
- arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is
- uninitialized when used here
-Message-ID: <202607180449.FJLkX0Mf-lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-next 24/24]
+ fs/netfs/write_collect.c:155:7: warning: variable 'fpos' is used
+ uninitialized whenever 'if' condition is true
+Message-ID: <202607172354.5AwTxoqH-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,235 +60,129 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   1a1757b76427f6201bfe0bf1bea9f7574f332a93
-commit: 6dfbb04908eb630ae6a592454b28c2f666a20a5a [6105/7063] riscv: mm: Apply Svinval in update_mmu_cache()
-config: riscv-randconfig-001-20260717 (https://download.01.org/0day-ci/archive/20260718/202607180449.FJLkX0Mf-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260718/202607180449.FJLkX0Mf-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
+head:   4b31f42776fcd3c9eaf2c27084026e98aeed5ddc
+commit: 4b31f42776fcd3c9eaf2c27084026e98aeed5ddc [24/24] netfs: Combine prepare and issue ops and grab the buffers on request
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260717/202607172354.5AwTxoqH-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260717/202607172354.5AwTxoqH-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607180449.FJLkX0Mf-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607172354.5AwTxoqH-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   In file included from arch/riscv/kernel/asm-offsets.c:9:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
-   1 warning generated.
---
-   In file included from drivers/message/fusion/mptbase.c:50:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:13:
-   In file included from arch/riscv/include/asm/uaccess.h:13:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
-   drivers/message/fusion/mptbase.c:2299:6: warning: variable 'a' set but not used [-Wunused-but-set-variable]
-    2299 |         u8      *a;
-         |                  ^
-   drivers/message/fusion/mptbase.c:2815:6: warning: variable 'sz_first' set but not used [-Wunused-but-set-variable]
-    2815 |         int sz_first, sz_last;
-         |             ^
-   drivers/message/fusion/mptbase.c:2815:16: warning: variable 'sz_last' set but not used [-Wunused-but-set-variable]
-    2815 |         int sz_first, sz_last;
-         |                       ^
-   drivers/message/fusion/mptbase.c:3964:6: warning: variable 'diag1val' set but not used [-Wunused-but-set-variable]
-    3964 |         u32 diag1val = 0;
-         |             ^
-   drivers/message/fusion/mptbase.c:6977:17: warning: variable 'time_count' set but not used [-Wunused-but-set-variable]
-    6977 |         unsigned long    time_count;
-         |                          ^
-   drivers/message/fusion/mptbase.c:7146:17: warning: variable 'time_count' set but not used [-Wunused-but-set-variable]
-    7146 |         unsigned long    time_count;
-         |                          ^
-   7 warnings generated.
---
-   In file included from drivers/message/fusion/mptsas.c:46:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:13:
-   In file included from arch/riscv/include/asm/uaccess.h:13:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
-   drivers/message/fusion/mptsas.c:1449:5: warning: variable 'fw_id' set but not used [-Wunused-but-set-variable]
-    1449 |         u8 fw_id;
-         |            ^
-   drivers/message/fusion/mptsas.c:1527:5: warning: variable 'fw_id' set but not used [-Wunused-but-set-variable]
-    1527 |         u8 fw_id;
-         |            ^
-   drivers/message/fusion/mptsas.c:4790:17: warning: variable 'timeleft' set but not used [-Wunused-but-set-variable]
-    4790 |         unsigned long    timeleft;
-         |                          ^
-   drivers/message/fusion/mptsas.c:4870:9: warning: variable 'termination_count' set but not used [-Wunused-but-set-variable]
-    4870 |         u32                      termination_count;
-         |                                  ^
-   drivers/message/fusion/mptsas.c:4871:9: warning: variable 'query_count' set but not used [-Wunused-but-set-variable]
-    4871 |         u32                      query_count;
-         |                                  ^
-   6 warnings generated.
---
-   In file included from drivers/message/fusion/mptscsih.c:47:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/riscv/include/asm/elf.h:12:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:13:
-   In file included from arch/riscv/include/asm/uaccess.h:13:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
-   drivers/message/fusion/mptscsih.c:1036:8: warning: variable 'channel' set but not used [-Wunused-but-set-variable]
-    1036 |         int              channel, id;
-         |                          ^
-   drivers/message/fusion/mptscsih.c:1036:17: warning: variable 'id' set but not used [-Wunused-but-set-variable]
-    1036 |         int              channel, id;
-         |                                   ^
-   drivers/message/fusion/mptscsih.c:1148:15: warning: variable 'ioc' set but not used [-Wunused-but-set-variable]
-    1148 |         MPT_ADAPTER     *ioc;
-         |                          ^
-   drivers/message/fusion/mptscsih.c:1177:6: warning: variable 'sz1' set but not used [-Wunused-but-set-variable]
-    1177 |         int sz1;
-         |             ^
-   drivers/message/fusion/mptscsih.c:1522:17: warning: variable 'time_count' set but not used [-Wunused-but-set-variable]
-    1522 |         unsigned long    time_count;
-         |                          ^
-   drivers/message/fusion/mptscsih.c:2345:15: warning: variable 'vtarget' set but not used [-Wunused-but-set-variable]
-    2345 |         VirtTarget              *vtarget;
-         |                                  ^
-   7 warnings generated.
---
-   In file included from arch/riscv/kernel/asm-offsets.c:9:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
-   1 warning generated.
-   In file included from kernel/sched/rq-offsets.c:5:
-   In file included from kernel/sched/sched.h:17:
-   In file included from include/linux/sched/signal.h:9:
-   In file included from include/linux/sched/task.h:13:
-   In file included from include/linux/uaccess.h:13:
-   In file included from arch/riscv/include/asm/uaccess.h:13:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
-   1 warning generated.
-   In file included from <built-in>:4:
-   In file included from lib/vdso/getrandom.c:15:
-   In file included from include/uapi/linux/mman.h:5:
-   In file included from arch/riscv/include/asm/mman.h:7:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
->> arch/riscv/include/asm/pgtable.h:584:47: warning: variable 'asid' is uninitialized when used here [-Wuninitialized]
-     584 |                         local_sinval_vma(address + nr * PAGE_SIZE, asid);
-         |                                                                    ^~~~
-   arch/riscv/include/asm/pgtable.h:571:20: note: initialize the variable 'asid' to silence this warning
-     571 |         unsigned long asid;
-         |                           ^
-         |                            = 0
+>> fs/netfs/write_collect.c:155:7: warning: variable 'fpos' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     155 |                 if (!bvecq->bv[slot].bv_page) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/write_collect.c:187:7: note: uninitialized use occurs here
+     187 |                 if (fpos + fsize >= collected_to)
+         |                     ^~~~
+   fs/netfs/write_collect.c:155:3: note: remove the 'if' if its condition is always false
+     155 |                 if (!bvecq->bv[slot].bv_page) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     156 |                         WARN_ONCE(1, "R=%08x slot already cleared?\n", wreq->debug_id);
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     157 |                         fsize = bvecq->bv[slot].bv_len;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     158 |                         goto skip;
+         |                         ~~~~~~~~~~
+     159 |                 }
+         |                 ~
+   fs/netfs/write_collect.c:137:26: note: initialize the variable 'fpos' to silence this warning
+     137 |                 unsigned long long fpos, fend;
+         |                                        ^
+         |                                         = 0
    1 warning generated.
 
 
-vim +/asid +584 arch/riscv/include/asm/pgtable.h
+vim +155 fs/netfs/write_collect.c
 
-   561	
-   562	#define pgd_ERROR(e) \
-   563		pr_err("%s:%d: bad pgd " PTE_FMT ".\n", __FILE__, __LINE__, pgd_val(e))
-   564	
-   565	
-   566	/* Commit new configuration to MMU hardware */
-   567	static inline void update_mmu_cache_range(struct vm_fault *vmf,
-   568			struct vm_area_struct *vma, unsigned long address,
-   569			pte_t *ptep, unsigned int nr)
-   570	{
-   571		unsigned long asid;
-   572	
-   573		/*
-   574		 * Svvptc guarantees that the new valid pte will be visible within
-   575		 * a bounded timeframe, so when the uarch does not cache invalid
-   576		 * entries, we don't have to do anything.
-   577		 */
-   578		if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SVVPTC))
-   579			return;
-   580	
-   581		if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SVINVAL)) {
-   582			local_sfence_w_inval();
-   583			while (nr--)
- > 584				local_sinval_vma(address + nr * PAGE_SIZE, asid);
-   585			local_sfence_inval_ir();
-   586			return;
-   587		}
-   588	
-   589		/*
-   590		 * The kernel assumes that TLBs don't cache invalid entries, but
-   591		 * in RISC-V, SFENCE.VMA specifies an ordering constraint, not a
-   592		 * cache flush; it is necessary even after writing invalid entries.
-   593		 * Relying on flush_tlb_fix_spurious_fault would suffice, but
-   594		 * the extra traps reduce performance.  So, eagerly SFENCE.VMA.
-   595		 */
-   596		asid = get_mm_asid(vma->vm_mm);
-   597		while (nr--)
-   598			local_flush_tlb_page_asid(address + nr * PAGE_SIZE, asid);
-   599	}
-   600	
+   111	
+   112	/*
+   113	 * Unlock any folios we've finished with.
+   114	 */
+   115	static void netfs_writeback_unlock_folios(struct netfs_io_request *wreq,
+   116						  unsigned int *notes)
+   117	{
+   118		struct bvecq *bvecq = wreq->collect_cursor.bvecq;
+   119		unsigned long long collected_to = wreq->collected_to;
+   120		unsigned int slot = wreq->collect_cursor.slot;
+   121	
+   122		if (WARN_ON_ONCE(!bvecq)) {
+   123			pr_err("[!] Writeback unlock found empty buffer!\n");
+   124			netfs_dump_request(wreq);
+   125			return;
+   126		}
+   127	
+   128		if (wreq->origin == NETFS_PGPRIV2_COPY_TO_CACHE) {
+   129			if (netfs_pgpriv2_unlock_copied_folios(wreq))
+   130				*notes |= MADE_PROGRESS;
+   131			return;
+   132		}
+   133	
+   134		for (;;) {
+   135			struct folio *folio;
+   136			struct netfs_folio *finfo;
+   137			unsigned long long fpos, fend;
+   138			size_t fsize, flen;
+   139	
+   140			/* Try to clean up the head of the queue if it appears to be
+   141			 * used up, but we need to be very careful - the cleanup can
+   142			 * catch the dispatcher, which could lead to us having nothing
+   143			 * left in the queue, causing the front and back pointers to
+   144			 * end up on different tracks.  To avoid this, we must always
+   145			 * keep at least one segment in the queue.
+   146			 */
+   147			if (!bvecq_acquire_slot(bvecq, slot)) {
+   148				wreq->collect_cursor.slot = slot;
+   149				if (!bvecq_delete_spent(&wreq->collect_cursor))
+   150					return;
+   151				bvecq = wreq->collect_cursor.bvecq;
+   152				slot  = wreq->collect_cursor.slot;
+   153			}
+   154	
+ > 155			if (!bvecq->bv[slot].bv_page) {
+   156				WARN_ONCE(1, "R=%08x slot already cleared?\n", wreq->debug_id);
+   157				fsize = bvecq->bv[slot].bv_len;
+   158				goto skip;
+   159			}
+   160	
+   161			folio = page_folio(bvecq->bv[slot].bv_page);
+   162			if (WARN_ONCE(!folio_test_writeback(folio),
+   163				      "R=%08x: folio %lx is not under writeback\n",
+   164				      wreq->debug_id, folio->index))
+   165				trace_netfs_folio(folio, netfs_folio_trace_not_under_wback);
+   166	
+   167			fpos = folio_pos(folio);
+   168			fsize = folio_size(folio);
+   169			finfo = netfs_folio_info(folio);
+   170			flen = finfo ? finfo->dirty_offset + finfo->dirty_len : fsize;
+   171	
+   172			fend = min_t(unsigned long long, fpos + flen, wreq->i_size);
+   173	
+   174			trace_netfs_collect_folio(wreq, folio, fend, collected_to);
+   175	
+   176			/* Unlock any folio we've transferred all of. */
+   177			if (collected_to < fend)
+   178				break;
+   179	
+   180			wreq->nr_group_rel += netfs_folio_written_back(folio);
+   181			wreq->cleaned_to = fpos + fsize;
+   182			*notes |= MADE_PROGRESS;
+   183	
+   184			bvecq->bv[slot].bv_page = NULL;
+   185		skip:
+   186			slot++;
+   187			if (fpos + fsize >= collected_to)
+   188				break;
+   189		}
+   190	
+   191		wreq->collect_cursor.slot = slot;
+   192	}
+   193	
 
 --
 0-DAY CI Kernel Test Service
