@@ -1,100 +1,103 @@
-Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D9F2E5B21;
-	Fri, 17 Jul 2026 14:17:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784297839; cv=pass; b=SLxz1xBmX4wEEyX3mEt6BM/4cruYtaARkJ04kTUdX8ar/vFyD2TQDIGge/A7nCmaeCwqdZUCHnE4d9wE0ipQtAkxtSgouFS4fL87XU0CfdWkwwHPJMQaM8MaBS8ZUyQl+d9e0S5g6j4k1AEjHhIhL45RRkmx6GjuK2du/xzMh1g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784297839; c=relaxed/simple;
-	bh=1NzIq33Rk1skyMOZjZs6TKz7uab11yLglT40Ls7rp+c=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=K1P1J0kU0P14dL9EXMEy2xHpl1nAfO/GCKE/qsZejKCkki/AYK0+7cThQGeq2Qbs5P9z19gru+TPDHALLDSW24jpJCOQ1nnek4A8BgLzTMJfr5t27eEH3E0MvwMzzD9ZcI/HUKwbBAUh9sRGMh8KVdxgSUo1rq6zdEU+8SyOYO0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=IovFTTOd; arc=pass smtp.client-ip=136.143.188.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C6942A7A0;
+	Fri, 17 Jul 2026 14:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784299280; cv=none; b=MdvJFItnE1IyNUXd/q96B4XKqjQ5loOlw9plf2r44SfweAAD9DLQIJzmoFVC1mxy9khm0LVL0iuZRxtyAk4E3la4D8wjb1taXjhCpHqeLyvgULtEu44gw+echavnsZL4q4ybAQpUnCvJeEAHKltMj2rviAfbiDE8VRkh4EyXZ9A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784299280; c=relaxed/simple;
+	bh=P7+weuB8QPihtexURhNCZhXnN56KXtsnnE8UOHMwujY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ie9UGjlSsX1vc7JtraD6XnpC66+BgGZ/C4AZ3hTA5L1WPcmBW5njyStLIMoYjgeYPXDYwYf99+sTYjld3CV94Z/OWjvGgu9Qma9OMX2DpcnzRnCXtPcyBp7Q25TVm7E8WWtGD5c9gZYl7TuM0d3DYrBdbAF2ylwA1QsAFKHnRBU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FwUvlr6T; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="IovFTTOd"
-ARC-Seal: i=1; a=rsa-sha256; t=1784297826; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=CDkMTTxuUuk7SF1KddlgIXqNWa+X+ryUZ6W7ZBjtxo2+tVrR8KCgP9NZPYzos+A7cA7MVkWBHliKgNl1v2IL3m+8NWaAH1CJ0Nm1fSJMP3fMugyZ1HtCUyGuB161uveZoGaRcrkaziS2TMdHTJi4/Cqi8fBjvEDmZ5emCh2GTy8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1784297826; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=epmNXjS7d94Ny0G3QrInR/+5Mb0BLlrxlvJkC02EnzE=; 
-	b=lxVfX2xUkWcVskpBJpSlIB/adeVtQFT4Q/gi1No48Zvh2n4F2/PtLd905EcLQV0qeSQPzM9Kb1nHAOGn5qKOeGJu4E/VrK2VAI40GaUcieNPecHI9CO8Cqsh77Ga1wMnsUNNhi6y3p+R1dfrF30U6Dbm3Sj861nCoGV5Sq0/X9c=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=yoavmoshe.com;
-	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
-	dmarc=pass header.from=<linux@yoavmoshe.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784297826;
-	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=epmNXjS7d94Ny0G3QrInR/+5Mb0BLlrxlvJkC02EnzE=;
-	b=IovFTTOdduyuOxDCRlNJ6SZVMU99gB64Zo1SoVFAAIsF7eiDSryxPaP9nNl/sjpl
-	SUsYKCICECArOdFUQdKF3wUYlI2WO2xKACFSd2KkW+Ysf6eiWwVSQRmTHKN+KEUbhBg
-	k9RjqdlDBdQKK7p0oVVV8V40jCbL0UOaFp3cP0JI=
-Received: by mx.zohomail.com with SMTPS id 1784297824078494.6809075628678;
-	Fri, 17 Jul 2026 07:17:04 -0700 (PDT)
-From: Yo'av Moshe <linux@yoavmoshe.com>
-To: Frank Li <Frank.Li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Russell King <linux@armlinux.org.uk>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yo'av Moshe <linux@yoavmoshe.com>
-Subject: [PATCH] ARM: imx: Fix suspend/resume crash with Clang CFI
-Date: Fri, 17 Jul 2026 16:16:48 +0200
-Message-ID: <20260717141648.1007059-1-linux@yoavmoshe.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FwUvlr6T"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784299277; x=1815835277;
+  h=date:from:to:cc:subject:message-id;
+  bh=P7+weuB8QPihtexURhNCZhXnN56KXtsnnE8UOHMwujY=;
+  b=FwUvlr6TJ+Dk5nrQ9/mUZiyOdbklmS/ePmDHm7wWSpgbYGSReSlkjddH
+   VqVxXV5PQobCxyzO+z1pKNc6DtHZ1tEcrb4btl4suvcNV5EXfahv8dimK
+   E5hWtXHX7EqHur5BNErXgGnzvHyjIjJ+1MYypKf0AAjMZI4+KgEyGMMFQ
+   EzxZc9fCcTFDBca8f9bowL4b/0OWkQb0/HnwgK2RkZKstDo2GCh3twCJ8
+   LN9r0OKaWdYtVqiZeUXEw+WPylJ00xzIZlqvQW/2GWi26mG0L7jvOpP+h
+   QEVu9m/J1BZfLQVyUzwrJF47WTs2WH9Gn9Lo3Y/fRC7BueYtQADeDBZUO
+   g==;
+X-CSE-ConnectionGUID: U3EVK4yeRBabfB+6FK5ThA==
+X-CSE-MsgGUID: 9RYf95X/Qn+CvAgcjWRDrA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11848"; a="87516902"
+X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
+   d="scan'208";a="87516902"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Jul 2026 07:41:15 -0700
+X-CSE-ConnectionGUID: NbWLz20BQ0uSL4KXeslg7g==
+X-CSE-MsgGUID: XhVPiD5pQQyqU9PKjzYiTw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,169,1779174000"; 
+   d="scan'208";a="281255464"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa001.fm.intel.com with ESMTP; 17 Jul 2026 07:41:13 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wkjkP-00000000SpM-18SS;
+	Fri, 17 Jul 2026 14:41:07 +0000
+Date: Fri, 17 Jul 2026 22:40:33 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-07-16 311/311]
+ sound/soc/soc-component.c:1889:2: error: call to undeclared function
+ 'snd_soc_unregister_component_by_driver'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202607172252.wSErSxwz-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-Relocated suspend code in OCRAM lacks compiler-generated CFI type
-signatures. When CONFIG_CFI=y is active, the indirect call to
-imx6_suspend_in_ocram_fn triggers a strict CFI violation panic.
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-07-16
+head:   e51d2e02d8d4c974132f00eec9d2215a476084f0
+commit: e5f6e49182359560489330edda8ea8db0fe3e07b [311/311] ASoC: soc-component: remove compatible definition
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260717/202607172252.wSErSxwz-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5c0dfced1adc55429e32b1db08570abd3a219d85)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260717/202607172252.wSErSxwz-lkp@intel.com/reproduce)
 
-Annotate imx6q_suspend_finish with __nocfi to bypass CFI checking
-for this specific indirect call.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607172252.wSErSxwz-lkp@intel.com/
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Yo'av Moshe <linux@yoavmoshe.com>
----
-Tested on a Kobo Clara HD (i.MX6SLL SoC) running postmarketOS edge. 
-Before this patch, suspending the device caused an immediate silent 
-hang requiring a hard-reboot. With this patch applied, suspend and 
-resume work successfully.
+All errors (new ones prefixed by >>):
 
- arch/arm/mach-imx/pm-imx6.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> sound/soc/soc-component.c:1889:2: error: call to undeclared function 'snd_soc_unregister_component_by_driver'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1889 |         snd_soc_unregister_component_by_driver(dev, *cmpnt_drv);
+         |         ^
+   1 error generated.
 
-diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
-index a671ca498..d9b0c1803 100644
---- a/arch/arm/mach-imx/pm-imx6.c
-+++ b/arch/arm/mach-imx/pm-imx6.c
-@@ -360,7 +360,7 @@ int imx6_set_lpm(enum mxc_cpu_pwr_mode mode)
- 	return 0;
- }
- 
--static int imx6q_suspend_finish(unsigned long val)
-+static int __nocfi imx6q_suspend_finish(unsigned long val)
- {
- 	if (!imx6_suspend_in_ocram_fn) {
- 		cpu_do_idle();
--- 
-2.55.0
 
+vim +/snd_soc_unregister_component_by_driver +1889 sound/soc/soc-component.c
+
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1884  
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1885  static void devm_component_release(struct device *dev, void *res)
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1886  {
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1887  	const struct snd_soc_component_driver **cmpnt_drv = res;
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1888  
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08 @1889  	snd_soc_unregister_component_by_driver(dev, *cmpnt_drv);
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1890  }
+f547a858c9abcb1 Kuninori Morimoto 2026-07-08  1891  
+
+:::::: The code at line 1889 was first introduced by commit
+:::::: f547a858c9abcb132c18ff0f09700d925b069c21 ASoC: soc-component: move devm_snd_soc_component_register()
+
+:::::: TO: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+:::::: CC: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
