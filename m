@@ -1,40 +1,40 @@
 Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87551FC8;
-	Sat, 18 Jul 2026 09:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0A9279DCC;
+	Sat, 18 Jul 2026 11:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784366408; cv=pass; b=ShqbpD6hrdWW3aW27/2pQjYN1WWrLZsFCaiN7Q5SOH+rV3TLiUK/i0DMhq/udi/MpfJ8VlCU/rJ7wntMJwSqgp6DUyM+GrOQ5F+6mY5eN44hTUZX+eFymf9QjKyl7RYB9ZrTUw3mWc7O0b3eDcO5FKIkh6gwDgsEMMaFZqsYcvc=
+	t=1784373258; cv=pass; b=JZHuxXWWEm+4yV6FmG1k7hOq1/OPhJjhvmllOREbwonqbfO5jO/qh5SRkJZtj6yhJ2RG9BgZ9FlnC3dFAXIzFFy18doRydV04Z15e2suoVrlL+f/8A93RTyw2XFDE7LcyK72Z6zcTKbWTvJ/aTm7RZy/CPmyFpwiMTs93iXl5fk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784366408; c=relaxed/simple;
-	bh=+AnUnmKMdsW3k6lE+A4uqkuIuINsqdE9rCxoVs0ar+s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gw1s+MFoSDp6QQmQZ38s9htz0x1+shb+Dz4nqVt5IOf4BGneGfV0ZLg9KUEZsmdDi6Vxp5aMVHWJEsy+JsnIZYEJnbnrOQTSqKB6azs7qoj6/hPbujCI73YACXRtyPbZxjInbyeMPmdRmrG9DypubFaw5bOObobjghENqDAb2cA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=l/aUp9Uv; arc=pass smtp.client-ip=136.143.188.11
+	s=arc-20240116; t=1784373258; c=relaxed/simple;
+	bh=FUF/L0YQUgnbI0bPv9EPxElG5C9UkN++rcE66XWvi9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HBqx2qEy3fANyeDA8VrV4jPTVhXALqaEZJH2PxuIE4d5qnMUtV+/y1D1XyHedCzW6sqwr2vKgFV0/O3ZWkQzZJGU/hJtP7GEcQTfEQGnv5aYVRyJljxQFhhQ78tpmR+Gm1Rv0XlmCqTlduaxDZuTOdGZ0BLAm2dIxC3Rdy9qoKo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=OjxlDIQP; arc=pass smtp.client-ip=136.143.188.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="l/aUp9Uv"
-ARC-Seal: i=1; a=rsa-sha256; t=1784366396; cv=none; 
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="OjxlDIQP"
+ARC-Seal: i=1; a=rsa-sha256; t=1784373246; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=d4uXtXsojZ9niWNoSNItuz9oSsih7XWUHwEUcdNQ/w2WZFcHE3GJooCCqckeW6s46Xyn54rotrOTxjiUsXGPFo4BSS4cBm3g/YNyDuf3fOaEQW0JAhJL3Xmdv0EDYwreQXgbdJq1/1QTn1/XKzIYxYR2io+B8vD4XOZ48AQ742I=
+	b=if8p2g63ITDvhABr/zWpriI9BywMAXDKj3F8s6oHylzQxuV9QMb8rigA5TzlZ102uNdhAFlD9LatMSG9xF2fzrlmcuWLAjWOpnD9W0kQ5PnO5Q8ObHvdse9gbtadOpRmCttMcW26VPQQdAnJi22KeeMfBz6Z0dOYzeLK8VKuP0Y=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1784366396; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=hAQh92xiHuxy24em2szgQVZY3Sgo8YJL/c+Vt1olVPE=; 
-	b=KlmFzUVym2NLPQ7lclvO2JhFV0N05sNvtsnw6hIq2OtTTrTPDUyhY7TzN3juwwn6Jr6UVUbrGKFbw51tBdfjLXBUbQDAJwcas0vjMy0RTbc7SuF2UHYlgXQN13lqqcaw0y+uCmLKWJFO5MYgp2MB0Ut77npbDGLMXIMCcFqKUzE=
+	t=1784373246; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=rWVwE/9DychYc9K/smhGvixkna2otDPJRQGtaKRGia8=; 
+	b=lUq+iEFnrSttvegBx1BRVaCPqc+3NKbHvjjluyqDXZ8svEORYUqT0zU9SoEgzOLSPI4kZTxsUmHVAvWp93AdfNpPpEjh8dSXUCa3pExEsfZgsgMBM2YenRy/QOtXdQjcKJRN9mGlQmlQ6UpbUoxG8vbetR/BQGc1y/fg/h2Dm2U=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=yoavmoshe.com;
 	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
 	dmarc=pass header.from=<linux@yoavmoshe.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784366396;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784373246;
 	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
 	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=hAQh92xiHuxy24em2szgQVZY3Sgo8YJL/c+Vt1olVPE=;
-	b=l/aUp9Uv05QViHiGl8c1Lv4Fsq52btodrCQfR3iJcZhpWrC2bDSXkVaILnvy0s5E
-	ESJqQq4yllokG0Bf0Qz3U/pFHqhBEMLdMScIu+WhHjHmXiiEdHq28fyD2xmXzbXWD/E
-	jKs1uaTv7aJP88W3945DzoJ5AGKF2N4Un64t9n2I=
-Received: by mx.zohomail.com with SMTPS id 1784366393113119.4825574702162;
-	Sat, 18 Jul 2026 02:19:53 -0700 (PDT)
+	bh=rWVwE/9DychYc9K/smhGvixkna2otDPJRQGtaKRGia8=;
+	b=OjxlDIQPZsu0xwlECLDxUoqFVJpPMd0C3flJrzhOgyl//qNXxbC2+dWxSfP9mMDb
+	SmclIl6IqaNPBtVBtOQIwAPGMzBqZBxttm77vABDO/NWGppuD3LQzGvDgtJe8oJXugn
+	9Det5OsDIAYohDiaR5fjSli0xnhniJS2fLuOb98M=
+Received: by mx.zohomail.com with SMTPS id 1784373244727305.1665306068262;
+	Sat, 18 Jul 2026 04:14:04 -0700 (PDT)
 From: Yo'av Moshe <linux@yoavmoshe.com>
 To: Frank Li <Frank.Li@nxp.com>,
 	Sascha Hauer <s.hauer@pengutronix.de>,
@@ -51,9 +51,9 @@ Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
 	stable@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Yo'av Moshe <linux@yoavmoshe.com>
-Subject: [PATCH v2] ARM: imx: Fix suspend/resume crash with Clang CFI
-Date: Sat, 18 Jul 2026 11:19:17 +0200
-Message-ID: <20260718091917.81738-1-linux@yoavmoshe.com>
+Subject: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
+Date: Sat, 18 Jul 2026 13:13:40 +0200
+Message-ID: <20260718111340.159896-1-linux@yoavmoshe.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -68,12 +68,15 @@ Relocated suspend code in OCRAM lacks compiler-generated CFI type
 signatures. When CONFIG_CFI=y is active, the indirect call to
 imx6_suspend_in_ocram_fn triggers a strict CFI violation panic.
 
-Annotate imx6q_suspend_finish with __nocfi to bypass CFI checking
-for this specific indirect call.
-
-Additionally, protect the imx6_suspend_in_ocram_fn pointer by marking
-it __ro_after_init to prevent it from being used as a CFI bypass
-exploit vector.
+To resolve this safely without reducing CFI protection scope:
+1. Create a minimal wrapper function imx6_suspend_in_ocram annotated
+   with __nocfi to handle the unverified indirect call.
+2. Remove the __nocfi annotation from the main imx6q_suspend_finish
+   function to preserve full CFI coverage for other indirect calls
+   in that scope (such as cpu_do_idle() and flush_cache_all()).
+3. Mark global variables ccm_base, suspend_ocram_base, and the
+   imx6_suspend_in_ocram_fn pointer as __ro_after_init to prevent
+   them from being used as target vectors for CFI bypass exploits.
 
 Cc: stable@vger.kernel.org
 Signed-off-by: Yo'av Moshe <linux@yoavmoshe.com>
@@ -83,35 +86,54 @@ Before this patch, suspending the device caused an immediate silent
 hang requiring a hard-reboot. With this patch applied, suspend and 
 resume work successfully.
 
-Differences from v1:
-- Added __ro_after_init to imx6_suspend_in_ocram_fn to prevent it
-  from being exploited as a CFI bypass gadget.
+Differences from v2:
+- Restrained __nocfi scope by adding a dedicated, minimal 1-line 
+  wrapper function (imx6_suspend_in_ocram) for the OCRAM call, 
+  avoiding disabling CFI checks for cpu_do_idle() and flush_cache_all().
+- Marked global pointers ccm_base and suspend_ocram_base as
+  __ro_after_init to fully neutralize Write-What-Where exploit bypasses.
 
- arch/arm/mach-imx/pm-imx6.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ arch/arm/mach-imx/pm-imx6.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
-index a671ca498..b425a4701 100644
+index a671ca498..3d5b960c5 100644
 --- a/arch/arm/mach-imx/pm-imx6.c
 +++ b/arch/arm/mach-imx/pm-imx6.c
-@@ -63,7 +63,7 @@
+@@ -61,9 +61,9 @@
+ #define MX6Q_SUSPEND_OCRAM_SIZE		0x1000
+ #define MX6_MAX_MMDC_IO_NUM		33
  
- static void __iomem *ccm_base;
- static void __iomem *suspend_ocram_base;
+-static void __iomem *ccm_base;
+-static void __iomem *suspend_ocram_base;
 -static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase);
++static void __iomem *ccm_base __ro_after_init;
++static void __iomem *suspend_ocram_base __ro_after_init;
 +static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase) __ro_after_init;
  
  /*
   * suspend ocram space layout:
-@@ -360,7 +360,7 @@ int imx6_set_lpm(enum mxc_cpu_pwr_mode mode)
+@@ -360,6 +360,11 @@ int imx6_set_lpm(enum mxc_cpu_pwr_mode mode)
  	return 0;
  }
  
--static int imx6q_suspend_finish(unsigned long val)
-+static int __nocfi imx6q_suspend_finish(unsigned long val)
++static void __nocfi imx6_suspend_in_ocram(void __iomem *ocram_vbase)
++{
++	imx6_suspend_in_ocram_fn(ocram_vbase);
++}
++
+ static int imx6q_suspend_finish(unsigned long val)
  {
  	if (!imx6_suspend_in_ocram_fn) {
- 		cpu_do_idle();
+@@ -374,7 +379,7 @@ static int imx6q_suspend_finish(unsigned long val)
+ 		if (!((struct imx6_cpu_pm_info *)
+ 			suspend_ocram_base)->l2_base.vbase)
+ 			flush_cache_all();
+-		imx6_suspend_in_ocram_fn(suspend_ocram_base);
++		imx6_suspend_in_ocram(suspend_ocram_base);
+ 	}
+ 
+ 	return 0;
 -- 
 2.55.0
 
