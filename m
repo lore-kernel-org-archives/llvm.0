@@ -1,72 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C257275B15;
-	Sat, 18 Jul 2026 03:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784344016; cv=none; b=jjDK1FBm0k125Gmg7l8fztKCQ5jUqbP7w4fdRbZUQO1qe1Xev07wzQlL1dCWHQxIB6rUQlBC9XXpRgRzxHQO3FcwkxZTThYPqX9wKN9sst5+97DILr5gaQm0/lxGG/t3cw7q/wGDav4PfL7jlFL0hZJN8CtJ8q73L3EIzCnxSeI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784344016; c=relaxed/simple;
-	bh=p4JOB36lGcXPFHPbt56Bg74bGnjwWfVYuns2nlJL0RQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u4RC3vHVy+P1XjQA9cNTgMDOlowdcbtrQiAhRRFuH8vvi4JXHnhiszu+WgyPD0JurrYSN0/qfv+rb6vqo+hoZ7/j8rm7eDjR36m7OWdQpje5fwmCvaXut6MnNDTirxNY8kVf/UDh0NTvUbHn2Vs0mCNhIxumeOL1KsXWLKOCy4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iqng4EZ7; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E87551FC8;
+	Sat, 18 Jul 2026 09:20:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784366408; cv=pass; b=ShqbpD6hrdWW3aW27/2pQjYN1WWrLZsFCaiN7Q5SOH+rV3TLiUK/i0DMhq/udi/MpfJ8VlCU/rJ7wntMJwSqgp6DUyM+GrOQ5F+6mY5eN44hTUZX+eFymf9QjKyl7RYB9ZrTUw3mWc7O0b3eDcO5FKIkh6gwDgsEMMaFZqsYcvc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784366408; c=relaxed/simple;
+	bh=+AnUnmKMdsW3k6lE+A4uqkuIuINsqdE9rCxoVs0ar+s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gw1s+MFoSDp6QQmQZ38s9htz0x1+shb+Dz4nqVt5IOf4BGneGfV0ZLg9KUEZsmdDi6Vxp5aMVHWJEsy+JsnIZYEJnbnrOQTSqKB6azs7qoj6/hPbujCI73YACXRtyPbZxjInbyeMPmdRmrG9DypubFaw5bOObobjghENqDAb2cA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=l/aUp9Uv; arc=pass smtp.client-ip=136.143.188.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iqng4EZ7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52F731F000E9;
-	Sat, 18 Jul 2026 03:06:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784344014;
-	bh=uR5S0lZ/RW8bcQ30G7ut92wNe6S6K/xrg98kIv24WU0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=iqng4EZ7lXnuFin1qMNho5aQGpHf1qA/6+Zh0okDapYrEnmAphs6ahQcSqEW/JYdA
-	 9o2JodyVDPpGoKNJtNt7gwWhYGI1kx++28xbfEp0qEyMhX0a2S26VIG8hOlk65IJ46
-	 1lnFQr0HfENBbiRetJZvAcVedfPv8Vdk8IMjBbLKW3opuhXUZJ8qdgjB0KStBvcjAD
-	 ZWP73epa5NVhuj44RHEv1hbHQ2cVHsUpe+9i1Hmmgv1y0kUUTqu5jIZUAd3lpt05pf
-	 K0JTPbzsG6S3q4V54Q9jYUfvHAs8DC+eGDU4iTmdHiOrZV+FxsaM3EKW9ZHVclsTdj
-	 jNaVvQZmXAEPA==
-Message-ID: <68fd3c1a-e3b7-4689-898f-d47e95e5fcc0@kernel.org>
-Date: Sat, 18 Jul 2026 12:06:51 +0900
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="l/aUp9Uv"
+ARC-Seal: i=1; a=rsa-sha256; t=1784366396; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=d4uXtXsojZ9niWNoSNItuz9oSsih7XWUHwEUcdNQ/w2WZFcHE3GJooCCqckeW6s46Xyn54rotrOTxjiUsXGPFo4BSS4cBm3g/YNyDuf3fOaEQW0JAhJL3Xmdv0EDYwreQXgbdJq1/1QTn1/XKzIYxYR2io+B8vD4XOZ48AQ742I=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1784366396; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=hAQh92xiHuxy24em2szgQVZY3Sgo8YJL/c+Vt1olVPE=; 
+	b=KlmFzUVym2NLPQ7lclvO2JhFV0N05sNvtsnw6hIq2OtTTrTPDUyhY7TzN3juwwn6Jr6UVUbrGKFbw51tBdfjLXBUbQDAJwcas0vjMy0RTbc7SuF2UHYlgXQN13lqqcaw0y+uCmLKWJFO5MYgp2MB0Ut77npbDGLMXIMCcFqKUzE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=yoavmoshe.com;
+	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
+	dmarc=pass header.from=<linux@yoavmoshe.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784366396;
+	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=hAQh92xiHuxy24em2szgQVZY3Sgo8YJL/c+Vt1olVPE=;
+	b=l/aUp9Uv05QViHiGl8c1Lv4Fsq52btodrCQfR3iJcZhpWrC2bDSXkVaILnvy0s5E
+	ESJqQq4yllokG0Bf0Qz3U/pFHqhBEMLdMScIu+WhHjHmXiiEdHq28fyD2xmXzbXWD/E
+	jKs1uaTv7aJP88W3945DzoJ5AGKF2N4Un64t9n2I=
+Received: by mx.zohomail.com with SMTPS id 1784366393113119.4825574702162;
+	Sat, 18 Jul 2026 02:19:53 -0700 (PDT)
+From: Yo'av Moshe <linux@yoavmoshe.com>
+To: Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Russell King <linux@armlinux.org.uk>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yo'av Moshe <linux@yoavmoshe.com>
+Subject: [PATCH v2] ARM: imx: Fix suspend/resume crash with Clang CFI
+Date: Sat, 18 Jul 2026 11:19:17 +0200
+Message-ID: <20260718091917.81738-1-linux@yoavmoshe.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ata: ahci_da850: use devm_platform_ioremap_resource()
-To: Rosen Penev <rosenp@gmail.com>, linux-ide@vger.kernel.org
-Cc: Niklas Cassel <cassel@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
- <llvm@lists.linux.dev>
-References: <20260715011658.1284298-1-rosenp@gmail.com>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20260715011658.1284298-1-rosenp@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On 7/15/26 10:16, Rosen Penev wrote:
-> Replace the open-coded platform_get_resource(IORESOURCE_MEM, 1) plus
-> devm_ioremap() sequence with devm_platform_ioremap_resource(pdev, 1),
-> which looks up resource index 1 (the power-down control register),
-> reserves it and maps it in one call, returning an ERR_PTR checked with
-> IS_ERR()/PTR_ERR(). Resource index 0 (the AHCI register block) is still
-> mapped separately as hpriv->mmio via ahci_platform_get_resources().
-> 
-> Built for ARM (davinci_all_defconfig + CONFIG_AHCI_DA850) with LLVM=1;
-> drivers/ata/ahci_da850.o compiles cleanly.
-> 
-> Assisted-by: opencode:hy3-free
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+Relocated suspend code in OCRAM lacks compiler-generated CFI type
+signatures. When CONFIG_CFI=y is active, the indirect call to
+imx6_suspend_in_ocram_fn triggers a strict CFI violation panic.
 
-Applied to for-7.3. Thanks!
+Annotate imx6q_suspend_finish with __nocfi to bypass CFI checking
+for this specific indirect call.
 
+Additionally, protect the imx6_suspend_in_ocram_fn pointer by marking
+it __ro_after_init to prevent it from being used as a CFI bypass
+exploit vector.
+
+Cc: stable@vger.kernel.org
+Signed-off-by: Yo'av Moshe <linux@yoavmoshe.com>
+---
+Tested on a Kobo Clara HD (i.MX6SLL SoC) running postmarketOS edge. 
+Before this patch, suspending the device caused an immediate silent 
+hang requiring a hard-reboot. With this patch applied, suspend and 
+resume work successfully.
+
+Differences from v1:
+- Added __ro_after_init to imx6_suspend_in_ocram_fn to prevent it
+  from being exploited as a CFI bypass gadget.
+
+ arch/arm/mach-imx/pm-imx6.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
+index a671ca498..b425a4701 100644
+--- a/arch/arm/mach-imx/pm-imx6.c
++++ b/arch/arm/mach-imx/pm-imx6.c
+@@ -63,7 +63,7 @@
+ 
+ static void __iomem *ccm_base;
+ static void __iomem *suspend_ocram_base;
+-static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase);
++static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase) __ro_after_init;
+ 
+ /*
+  * suspend ocram space layout:
+@@ -360,7 +360,7 @@ int imx6_set_lpm(enum mxc_cpu_pwr_mode mode)
+ 	return 0;
+ }
+ 
+-static int imx6q_suspend_finish(unsigned long val)
++static int __nocfi imx6q_suspend_finish(unsigned long val)
+ {
+ 	if (!imx6_suspend_in_ocram_fn) {
+ 		cpu_do_idle();
 -- 
-Damien Le Moal
-Western Digital Research
+2.55.0
+
