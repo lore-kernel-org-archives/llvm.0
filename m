@@ -1,62 +1,64 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16EA282F29
-	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA571311C32
+	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:50:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784497845; cv=none; b=uCrv7Krwy7bCETYVUZUCXk4ZGmGSFC6Wo1u+2ZI5Lyd9O3CoTSK7LZ6krwEPPBn9tFzP0kvFUE/fy/5a2pVNvFYUI1TexlklYN4PSe1ZSlP0Hc9LVSMhQqtTMwAbvNRg43c1bzcB8e/+qSqWwXNoJ5RyybBipR0yREM0thqK5s0=
+	t=1784497848; cv=none; b=slcuG7mhMH8xLSs+HOwloh/YrxObgugnjCzOYJDNrz8YG+HRYvX1ikbbY2it9RlAwErfcVkuVVmHxNB5IzwUJvvSlNIj0H8dUnVVUVpgOffnNtgdo0ZTHNLszoevOFhxorMBwJn82usOSY0T78JnHbaitzCwBGKipgam1R/5IW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784497845; c=relaxed/simple;
-	bh=ImMEQc8V036XgFro0YZ75qNqprVm/a715A3QCjmfGTk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nRAwE0GYyC2mQ7G12ZHTl5CtYgWiE2oc1R7tAxte6CEvWwejyqk38fLbM4a9RxdR9iVW5CIMP79KHZJ8czNkex2y+s3AT5t3dBjucHgLuDPDmeheR/aUeJnblfhDgUpeQa1AD9Hy6zi72KT48HWtzl7lMY2dhEI9ELYimGIGMyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNlyJEpM; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1784497848; c=relaxed/simple;
+	bh=z2jvO4b7tvtzk/zUy5qdlg4JlkqUFIt42V4sDGTZLWw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gYVALd89agobEGgYCM2nYhQFgyPJNHtsm87d3PytkVxWyzv5Z1vbga23O3wlUFpDD/4fW//LCuW+pR6dWXD/AXJLwstWYYzIl+O7hqKfuUjJNiF6X+K8XUFVt2gFUqPXJFS3k9fNDC/iMdjuDbc/0+58vqiq8o47hOU220lMYU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MTtkxfcR; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNlyJEpM"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ca64c3ce5fso106217595ad.3
-        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:50:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MTtkxfcR"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso66154575ad.2
+        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:50:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784497844; x=1785102644; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vfVcfxp6vUJ0JCSMDQ+w04nlcu7oMz5ArZqbKOQ6dJQ=;
-        b=QNlyJEpMiwQfboPCQT3bvhpAeDEEMB8GeRKreG3YqC8sblCPfnxU4SD4jkoGdvspXm
-         KSFfCidz3asYwLHSfGzDOTuKWlPyYbmzgF0kntGHzj48/GyMTI3Oan8/EqYFkvTyDdYx
-         C+2F+e3NUUEBN1zdy+3EwN6bjG8swmCuO826IlagagqAQauf+8QLNOTfzHHOUIKH2O90
-         HwkhlMJhX22TVuo4RxfeV/8hCvnztDzL3EgU/+O7/EB7BQdTqVRCUNvmI8nbe/mYZWGY
-         L4wC/HnyEeUrTrqLEZmNlrZHLih48EXyC346ALRqhqwIHzdlNUh+NPHHOq0qEJ8LZbdw
-         5Dqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784497844; x=1785102644;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1784497846; x=1785102646; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=vfVcfxp6vUJ0JCSMDQ+w04nlcu7oMz5ArZqbKOQ6dJQ=;
-        b=fh5KWcXiuYx8UiJMJ4/SKsNE1njNjL53otLIrijrosS/vATrpaylAt6BubysNQU2EE
-         Pz8f8b+MTcMtOV7QB+/d1jXhUVQLIxuqbqS7v/6bjl/aK9f60ErWlTA0C17zhb0MlBvB
-         xE76QvjUOel72WWDRTfuA01h8NZJV8+oGJM/SMAXe0cyqxpY3PMmhaWV7yvKEwhMuqIF
-         Ez8uFpvlK75DBkUEEmixwnMOU3g+98nOrQv992DCdGK2nJjBZVC8isDy2UXyV75NA0Po
-         d1pd/+8j50vJTdQ0R1jyGPtOsL7QRMd6dLrD1z7seTJVDbF6apZK5QRMA2OUr6tklFf8
-         VFPQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rqq/JdgKmeUTUv74d5jVmP1JmrzQNSxrzNjQSCtnqgUtaEYh7V/ew2z8dDMzxt76aKFp1iJ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzZe0dzrhRaA77m4WqxBx6YKqqDV0I1c1rTVWdMoe+xtc7cKXo8
-	IEGavseYEhZ1fuB4rpxEqhGZ6i2dPIODOjFkARlSxkAhfSAQx+/6SQEu
-X-Gm-Gg: AfdE7cnOG5zt/CRTJ21cC/ck9xwhZjeV61W3HkgdsrLorYlNcA/Rdi51955JxxWFJpt
-	d8tmVRrq2Nx1BxYz/R3M9Jicju871ywCe9+OUjAIkFoBatxHq/mCC7qnjBmieUfKc5ETYzapzF8
-	PYk1RjeeZ0SeyaJFeJEMXdkeLtH8yygn2bnLzyKCFMtWdcsXH9g6Hvy1kebyQR4J9Ga/ItOkcYk
-	ifIjyEcknZySce692KV4FZ8WjxyB1BZrUYcV8rKQEa+zrt0vSQXr0UFYZiYdK+cZO/L4i7ShZKD
-	U5aky98j3amFKFQ7GBAB3sEppkzwUhpG+cZ/9LuB5MFW5791wHzjr8uWZD0D7i1hqZhXyJMZt/T
-	NlmtxvnQEXcxOAk8Pk2qW28TK5EaKVw0Bs7rrYVXa9F449V2YmYajQDyPipzKkXtTCIw4Ua9oD5
-	E2U63alMNaTxCPmt1EU1HtNUx7k8uzUCmG9eH8XkNwt3Hbz7DMtzhHgysSk+3ns29Pg50ZlshL0
-	swNg3l4prVCUFpJg7nyF8xjn43YgHBm8r7JKc4y/xp1EfolyB8EIYM=
-X-Received: by 2002:a17:903:298c:b0:2ca:4b7a:4a02 with SMTP id d9443c01a7336-2cf34a7bfe4mr127277915ad.43.1784497844128;
-        Sun, 19 Jul 2026 14:50:44 -0700 (PDT)
+        bh=VhJl3YkYSOoC4SqmTcp6WH/00PPU77CFhgqYr4GFFyQ=;
+        b=MTtkxfcRZTXet3J+rk8Rnd7Z1drQqG2iwKUMyiytahdflP6GRobVJkkcoFUTofq5Es
+         Vy4Tn2+OGiYGPXhynoVTBDPOkp3EnsZPefXKFF7P5XqNOtyk+areLQvXa2+A6NKujKpE
+         yM5VMsn1ylZax6J5ViYb3Duh6oYH/L23CA5YqSf0db75jAuH7G9v572mt3epSdAjX8lM
+         60/tLziatbK5IrXEXQ0itGzcMoUFKGpiIHe5n/gGtYf6WpGNea8auMG/KxTyyHq6+tFR
+         9xq/UBtznPylumllYKQNp56st27h2SjvkfKr2biNag2oSEi1rlji3NzUSXbolMKNA0EI
+         a8eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784497846; x=1785102646;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=VhJl3YkYSOoC4SqmTcp6WH/00PPU77CFhgqYr4GFFyQ=;
+        b=p+bfPNxwMtsiPo7dHSTnm2AGm5TWBtCJZ+CLhrTtlTdx+NRQQx67E3kKsFG5YcSPTi
+         Va/F3BtxN3OHutBWkSZ/i60ZwJAWV85ug138SjW72hHiKAnJiIxvmjDTJsL/o2q36Ngz
+         2kDDOJcnK1iS2LwGILON1dQiugjHLmUTeGuP0az7dZskntsZGj9KjrUx3h8X4v+6uwAq
+         Cr8dZGN1QlYpiLwXygeY6kbqa7GqnPaBoaHW3Oi/jxz3ERhncebi9ULwLYni4ZK3pHpT
+         Lb9W4MH5kPWzfwtf89BFPBbdL4upsFnrnsyEXfFmxAf8eBD9iqtotif5Cg2av83yCtfZ
+         VMmw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro+Kb6T9fe67r86/0PlMlX1ZuIPpOYkYBdNyDX1unlVEe0EXRV5+640Ge/a7A1MlnD1bgsG@lists.linux.dev
+X-Gm-Message-State: AOJu0YyA+uCpUQoVwMomUaa/FkZyV6X7TtYKLH7LRtmZY2Tw+frgSaUe
+	0ibJV1jTly5ujx2XnX9z3t48u68WNCRrIJFaE0E+yeDy2Znnw0u67BN+
+X-Gm-Gg: AfdE7clnaKevutNbuLeH0Gr3prPDmjOl+oMC12xszqRWuYhsoWzIAasBAjsQrScoLsR
+	XuZ9oObqpTUX0iJZBEqbWAgMiEuvUBUYuHZtrtafSkCrE8H7oU4r/iZXEo/LjUFeKIXvldwyYyO
+	dsa6iaeqMUdLboxBtB40A99Va2FEoU5iBBhmr/whXm6PXAf5dNvyy4O39HrhLdr5hBMXt3UZj8t
+	dIok8CZtbdwjC1o2BfeDQZEhwKFsLbFjdzGbFSNSoilFN2YjOOKTau54tWKFuKIDwZbGIH01h3d
+	qd95GS1WDmzhe7HDSzNYCmjbI8Jze+8fhEkOsyJV/pnIlFIPPISjvxIZF0dt4wtIRJ2HpaqW2c8
+	gZA5iCqzJf5JJuKPZnZlP/G1RRN7tZ8/kplMqFxZt3DqtOabrmiHqwqhGdCPbeUvxyDxJiYKcDw
+	xI1zqNbc/ZWIX1+w2LKlNXKnVmcBiVLu9+KD34+1QEY8O7LKTTfYPCCdMkZT4yrf1kSFxE7xjFw
+	xmQkFkUZ9NalKDf8HZE4jV5oDGsvLEdq3lM04MWzf1Vu5vgz9yJ8h8=
+X-Received: by 2002:a17:903:a8f:b0:2ce:a600:6022 with SMTP id d9443c01a7336-2cf34850c21mr126436495ad.7.1784497845982;
+        Sun, 19 Jul 2026 14:50:45 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344b78e2sm44745845ad.24.2026.07.19.14.50.41
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344b78e2sm44745845ad.24.2026.07.19.14.50.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 14:50:43 -0700 (PDT)
+        Sun, 19 Jul 2026 14:50:45 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-clk@vger.kernel.org
 Cc: Michael Turquette <mturquette@baylibre.com>,
@@ -75,10 +77,12 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
 	linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32 ARCHITECTURE),
 	linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32 ARCHITECTURE),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv2 0/2] clk: stm32: fix COMPILE_TEST builds
-Date: Sun, 19 Jul 2026 14:50:38 -0700
-Message-ID: <20260719215040.767232-1-rosenp@gmail.com>
+Subject: [PATCHv2 1/2] clk: stm32: add missing bitfield.h header
+Date: Sun, 19 Jul 2026 14:50:39 -0700
+Message-ID: <20260719215040.767232-2-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260719215040.767232-1-rosenp@gmail.com>
+References: <20260719215040.767232-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -87,23 +91,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The STM32MP clock drivers have COMPILE_TEST in their Kconfig depends, but
-they fail to build (and are not even compiled) when ARCH_STM32 is disabled.
-The first patch adds a missing bitfield.h include so the drivers build
-standalone, and the second wires up the Makefile gate to the STM32MP clock
-symbol so the directory is actually traversed under COMPILE_TEST.
+It seems some ARM header includes this and the build passes there, but
+nowhere else. Note that the driver has COMPILE_TEST in depends.
 
-v2: split up in two patches.
-
-Rosen Penev (2):
-  clk: stm32: add missing bitfield.h header
-  clk: stm32: allow STM32MP COMPILE_TEST builds
-
- drivers/clk/Makefile              | 2 +-
+Fixes: 37ae8501cdb0 ("clk: stm32: introduce clocks for STM32MP21 platfor")
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
  drivers/clk/stm32/clk-stm32mp21.c | 1 +
  drivers/clk/stm32/clk-stm32mp25.c | 1 +
- 3 files changed, 3 insertions(+), 1 deletion(-)
+ 2 files changed, 2 insertions(+)
 
+diff --git a/drivers/clk/stm32/clk-stm32mp21.c b/drivers/clk/stm32/clk-stm32mp21.c
+index c8a37b716bd5..bdb17419908c 100644
+--- a/drivers/clk/stm32/clk-stm32mp21.c
++++ b/drivers/clk/stm32/clk-stm32mp21.c
+@@ -4,6 +4,7 @@
+  * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/bus/stm32_firewall_device.h>
+ #include <linux/clk-provider.h>
+ #include <linux/io.h>
+diff --git a/drivers/clk/stm32/clk-stm32mp25.c b/drivers/clk/stm32/clk-stm32mp25.c
+index 52f0e8a12926..eb0bc918ecee 100644
+--- a/drivers/clk/stm32/clk-stm32mp25.c
++++ b/drivers/clk/stm32/clk-stm32mp25.c
+@@ -4,6 +4,7 @@
+  * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+  */
+ 
++#include <linux/bitfield.h>
+ #include <linux/bus/stm32_firewall_device.h>
+ #include <linux/clk-provider.h>
+ #include <linux/io.h>
 -- 
 2.55.0
 
