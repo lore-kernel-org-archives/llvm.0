@@ -1,88 +1,77 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4AA30F7EB
-	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:50:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55162B9B7
+	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784497854; cv=none; b=Zt6vMBsth9/5S9tMrSngdVJNJZyXWf5fdpCaKKcUGZFShEY9IXzK3fHtwx4OzKR0pgQwQgHd0Yq+5dzM39vppJVm4g70U7F7Z0ggUR2B5138uyER38cfg5pnGxRnIiMOPCPArSbPC4ct8NDt9ZcY8avFGgQAcZhFsD+Cfd88wQY=
+	t=1784498104; cv=none; b=EJtjnM8BMlIaCNYyjnK/XjMDiZ7Ad//2kepLWH987QOhmTOvxTm/S3cVvUrwXrfNtMfTFv6pelAu+e61X1RbU/AfiqxTss46saAzo0Tw0kgHFS058ottrzvHAchoPBPYS53T3UTH5JxIT6jLksXwR84Tdgkvwwjo4lPaA5o3eiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784497854; c=relaxed/simple;
-	bh=0uY0iiDoWci9ie3IlgyibA84n8mhnz5u87H+NUZz4Y8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T6OFBbjhYZQIzMbv0EwKkGFZuylFbmRw+mueLnViMPT5KIBl2uT6PhC6omBvJPpnnWtiQfoWpNrdjjYuTcH5+EV4mxvA/zPgnODQtu6q4UXsdyUdXYgNi/a0JkLZpBFU70u6eeutdnm8VqPE6pII2Tgc7oT/cchMxY3QR1W7bwI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DxTHE1T8; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1784498104; c=relaxed/simple;
+	bh=61vvSIKYM+LWKM6oFYcX3eT/sAmIhKSkc4d74ycVjuk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YMli+q+u3APlKqDFMBwZXnQJasY7ocYJLxI65l/tSsAyCW522rLejSf+PMpE35ODhWY6Afh+IXlEhHv2GT9l+YbdrEqDTI/uM5D962uVx5Xp1B0avt/e8chR8dIfAg3omQvGlzRijIFphUEl1ch8YLWx5ljZWxGtysObh+kJtR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K/tZogOe; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DxTHE1T8"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cf6d65d8a7so2590695ad.0
-        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:50:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/tZogOe"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so5719111a91.0
+        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:55:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784497852; x=1785102652; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=KEZSCCPTXF+79jewlZrbFumF51dyS7Eb1UAau5L87rc=;
-        b=DxTHE1T8+X/Ay7vRackMgJyiRWC+JkzRzP2JDqVrW++Xosm5aVzr2Hn1j/47QObJd4
-         zvA8ik9EVZKX2MGqLPjbGWA7FaNb+WnmrOjI5SD5jHXyJEzGPOz4NVU5fZXCuYsJyHoS
-         e1GzOKKmkNpLichLEa9352Lfkd1kFETVkdocIdMcZdg98OkXNAmLTxY1QbKMhVYkTYFw
-         Z46ZGPvGviVHaE3tNjmYx0k/FpGJtQWUMEclCH1JcP9l+8Snxn387byUAytx87hjoZua
-         pYjRSPQ+3CFRksCQ8MTtBHjbnjeD8G5ZzHxaAcH1vSqXcm5gqewehHV1j7ocYxlt5ifx
-         ijDQ==
+        d=gmail.com; s=20251104; t=1784498102; x=1785102902; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=jqplnvUpyuLn1RyaGhBCqEh9+v5GI4sy/8jnr2JsNU8=;
+        b=K/tZogOeFVFJthvV3O2N6/qpQtKm1KEROyV9wbnQMjjFvJrtD4uOdJNOybaZnlNX1f
+         E4jpIQQb7QduA++Ypzs0wAZHo0YM/vQnXvxKt1bScg5aLt6Ud4PDz8WICxNXoe0kLkaR
+         r9MHrIHvRCY2j+LGCXZGDYtJ4UPXtRxcCp5JTvH6ySFBSjS/qOcvChweBoS12ngnxxDe
+         deQb0tdO+AGJ5hRRunvP4d3URrhmwlFoAt3GHx5/hHcVXAAn5HIIa9d6qM1fVLmQM0hq
+         Vwr4HWSCkWvLm1XtPVWfhN8JKAEPjOrYGVXYtlufGOb/L7boHQVub5fogM4CB1UXcIlw
+         mMkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784497852; x=1785102652;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=KEZSCCPTXF+79jewlZrbFumF51dyS7Eb1UAau5L87rc=;
-        b=CG8vYheIwYoCJOZmah+1TCvAHnow+YBWP1WpWvBjszOm4IadNQZizwaFkz8sqsumF4
-         fPawMHpsUYcZsoV6IN8fB7PxJQ25U03Vmfivqwxs01yyrOBz5lz4a2YdO+IBfKT3okA7
-         DCqVOWiJMy9sVKm89q6LJWz6pEpfF6uo3/j+I+7jML8akQZoWq39nrP03dASvYKJAvDU
-         fjQdztGit3yv1rs2Trk2czmtTcmN0TBp2ERuY/HDh5pgwnUVaD5AbU/ncbYNgW+7UEQx
-         0dTIwaBVefQQUXMBEPn/CarsJ+jWMfsyzmpaNU/mGU5yE0BPY73kXSOQaKPEDfK7Oouj
-         Gdjw==
-X-Forwarded-Encrypted: i=1; AHgh+RpQjME5VUY6ROphN8VvvkHoXidQBi7BQ+xvi5Ft9YwiBr8G7f4zboQ+uICDDnSP87qoyT93@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx2XIcjm5gPcdyEljkpnNg6Zq0WhOQnygZ71mFSher8XACG6hNe
-	2qpw6gDSclVUADvK+bDoTFB/5V/1etwN0E2PVLIm5OHZk5a48I8APsv1
-X-Gm-Gg: AfdE7cl3Xbv0WFwwWrpOlIdp7FPfA+I3lr0Q4OyV616avy1afKcdJ804BpjQgtbMcX6
-	e8Sp7v3RtMFweJk2nATtYDuFTA5asW61hryRH9ZQKcvqbvcIT2HeYWB05CEO/AszvMGneJnO2Ai
-	vrzc1r5CKHo1xPcii/df9q15CR5pgRhrhJ+oFADUTZyiYNDPhaomtt0+7xXNPTocTJMk4XKmi2V
-	LvRJ1ePUXlWpwMw22/DxLB/dtB/E5zumVxu4IX26JVf2tbfI/GU1c7eTGV+z5SS84vWlGtTylFZ
-	ChUaCCVv5jhXx/4EbHZtlBnIWuLiJRN3ao7j0BZSCi98fV8AvkjVa8dLAH9B/6qPxkw0xbL3Xzj
-	o3BZHd2bhBAhC5tT7YoL38Qo6g5w6AOZ9rNO3I6ELjlRGhiEBBSbJPKv0TLGXFe5tvrsSIOBcCY
-	tTyo5Urla00O2bidQpHLV+WyD8xO9RVAI0KlKm8F6A2E7ZFhTBQa6A5Vs1BUF0l+qblZwGoGhb6
-	vjntE6OXrLEAgxPhHXItm+L2M3cC5Dh3TKOMQVcwL9duAOi1k4+g8ww9Ei57hYKxQ==
-X-Received: by 2002:a17:902:ec8e:b0:2c9:e961:d256 with SMTP id d9443c01a7336-2cf3494afcemr121576355ad.27.1784497852491;
-        Sun, 19 Jul 2026 14:50:52 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784498102; x=1785102902;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=jqplnvUpyuLn1RyaGhBCqEh9+v5GI4sy/8jnr2JsNU8=;
+        b=pGZ0qEIqMRkSMb6FO0FzmZwbxOhivb07ABV35f2rRj2henyn7k0WawqBXqfq14mer3
+         G0xmHHlleRod1D7Kz0xBtLN/iY0LkRp5iUXwAiJCJWCx1kz5BT0IGnuZZ1POnE7vi9Dv
+         S32FSvz+EjLQs7QAfauc8FJt24tL7cp+BCseV5sTEp8mGHcfnp+eGI70nrzcdlacQ1w8
+         mPwpxBkhJldMcq2afCrRsY2MDmyT6cbNqHghRGhvktMxVWrLi9DupVIy1BwHRWXX5CTk
+         burkDN+FBDHFC8tc2age6OSt4KbvM+ocYmbI6yJBtzFsIEA3eUQdU5mmCucgGE+efrYH
+         7X8g==
+X-Forwarded-Encrypted: i=1; AHgh+RpG1zWQBQjyt1jEA8zQoBvpHlubGs5dfLzL23uuV/urqYiuq2iKpwpHh/TyoHhrp/xjwrbO@lists.linux.dev
+X-Gm-Message-State: AOJu0Yz35pcPzwGRfPSi7+SOBOCyXdZ4sQg0JhzM7rrtVmtkeeFqK/9/
+	WKyD5ZjZpr0nfUnjjks+naVEJlvgetUT0uQASD/mSbvlrT2Kt0DPNgI2
+X-Gm-Gg: AfdE7ckXCPe1F295vDOgAXo1gD775OXkGYJYBjoj4fywsriI9DcsDqAO1Qdriq5T835
+	vSStaUsQSKLU2qwrX+z6LSAvNMLZ3eqQ17AVVoHYj+IpXtW1C8z7VKBmZtLZiiDn6aq8WV0v5Wt
+	OIqI3fV2Eta6dgfy4x4c+qEMM96w6Ay9OGQNMfEGnlpKiQTCuwfxV/7hNc/3EoESu8yCkDD9e2d
+	cbPET0ZVAtRrLHv8LFL1nLfKCs0qdkjmd7utLGE5iLuMf2kF640ls8S8faK/3yWW2vu7V44OCgb
+	yGS5ckZE0g3G7A4XFTUiab4Wt8iwXn1UlWDcCVoa8+xuYRSFZWVwTcIvJoVWfyKpBfIamuR9mip
+	ZYVH7wieI8o7kCe/x9ZWXN9UbNaTV72HDFDdSzVhkRu3xHbNiQQ/CALMQldeUMzkGBQefW2Cq5e
+	dyddZMJ7l7SakbwxNx/yH2Qph0cuUA24+DZ5nG2lhZM7GybJF56qKpm/r+b04DpHHN5LClHW3ZO
+	In6hiZZhanNNdtjwUCLI8fNWmMXgs/hauNLCp7j/ByFZprtUM+exS4=
+X-Received: by 2002:a17:90b:2dc1:b0:375:2a38:1d40 with SMTP id 98e67ed59e1d1-38e4b5166b7mr11097602a91.20.1784498102013;
+        Sun, 19 Jul 2026 14:55:02 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344b78e2sm44745845ad.24.2026.07.19.14.50.46
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e4afd2dd6sm4574677a91.4.2026.07.19.14.54.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 14:50:48 -0700 (PDT)
+        Sun, 19 Jul 2026 14:54:59 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-clk@vger.kernel.org
 Cc: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Brian Masney <bmasney@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
-	Nicolas Le Bayon <nicolas.le.bayon@foss.st.com>,
-	Alok Tiwari <alok.a.tiwari@oracle.com>,
 	linux-kernel@vger.kernel.org (open list),
-	linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32 ARCHITECTURE),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32 ARCHITECTURE),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv2 2/2] clk: stm32: allow STM32MP COMPILE_TEST builds
-Date: Sun, 19 Jul 2026 14:50:40 -0700
-Message-ID: <20260719215040.767232-3-rosenp@gmail.com>
+Subject: [PATCH] clk: hisilicon: hi3660-stub: use devm_platform_ioremap_resource
+Date: Sun, 19 Jul 2026 14:54:56 -0700
+Message-ID: <20260719215456.787188-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260719215040.767232-1-rosenp@gmail.com>
-References: <20260719215040.767232-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -91,32 +80,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-COMMON_CLK_STM32MP already allows COMPILE_TEST, but the parent clock
-Makefile only descends into drivers/clk/stm32 for ARCH_STM32.  Use the
-STM32MP clock symbol for that directory gate instead.
+Replace the open-coded platform_get_resource() plus devm_ioremap()
+sequence with devm_platform_ioremap_resource(), which fetches the
+resource, requests the region and maps it in one call. Switch the error
+check to IS_ERR()/PTR_ERR() and drop the now-unused struct resource
+pointer.
 
-Tested with:
-make LLVM=1 ARCH=loongarch drivers/clk/stm32/
+The only in-tree user (stub_clock@e896b500 in hi3660.dtsi) has a single
+0x100-byte reg region, so the region reservation added by
+devm_ioremap_resource() is exclusive and does not introduce overlap
+failures.
 
-Assisted-by: Codex:GPT-5.5
+Built for ARM (drivers/clk/hisilicon/clk-hi3660-stub.o) with LLVM=1.
+
+Assisted-by: opencode:hy3-free
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/clk/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/clk/hisilicon/clk-hi3660-stub.c | 10 +++-------
+ 1 file changed, 3 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 8383f9f1da51..bbcedf5d60ea 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -151,7 +151,7 @@ obj-y					+= spacemit/
- obj-$(CONFIG_PLAT_SPEAR)		+= spear/
- obj-y					+= sprd/
- obj-$(CONFIG_ARCH_STI)			+= st/
--obj-$(CONFIG_ARCH_STM32)		+= stm32/
-+obj-$(CONFIG_COMMON_CLK_STM32MP)	+= stm32/
- obj-y					+= starfive/
- obj-$(CONFIG_ARCH_SUNXI)		+= sunxi/
- obj-y					+= sunxi-ng/
+diff --git a/drivers/clk/hisilicon/clk-hi3660-stub.c b/drivers/clk/hisilicon/clk-hi3660-stub.c
+index 7c8b00ee6019..1b81f26670ed 100644
+--- a/drivers/clk/hisilicon/clk-hi3660-stub.c
++++ b/drivers/clk/hisilicon/clk-hi3660-stub.c
+@@ -124,7 +124,6 @@ static struct clk_hw *hi3660_stub_clk_hw_get(struct of_phandle_args *clkspec,
+ static int hi3660_stub_clk_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct resource *res;
+ 	unsigned int i;
+ 	int ret;
+ 
+@@ -139,12 +138,9 @@ static int hi3660_stub_clk_probe(struct platform_device *pdev)
+ 	if (IS_ERR(stub_clk_chan.mbox))
+ 		return PTR_ERR(stub_clk_chan.mbox);
+ 
+-	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!res)
+-		return -EINVAL;
+-	freq_reg = devm_ioremap(dev, res->start, resource_size(res));
+-	if (!freq_reg)
+-		return -ENOMEM;
++	freq_reg = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(freq_reg))
++		return PTR_ERR(freq_reg);
+ 
+ 	freq_reg += HI3660_STUB_CLOCK_DATA;
+ 
 -- 
 2.55.0
 
