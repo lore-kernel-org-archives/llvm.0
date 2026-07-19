@@ -1,158 +1,127 @@
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA6430C148
-	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:43:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784497438; cv=none; b=IbMjy8rnoOUdPDX5N7C9Kv6LhqBsVOGJ83NGacixEQz9tCajOGCBFDXyNl8Pz7KEpdMI5PJN4J5LcOdGfrndTxz5LNeq0vsHcg6bJWUU9To+VlEC7Ar4CsGH6PseQUNvGp4oPZgzLQ6PM1z8q4HhPBQSWkh2MndlGYohMxzNwyg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784497438; c=relaxed/simple;
-	bh=8Cao4YSvyyxi8IkEpgt42VHy5qSQ+ev50GEinysOTY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fuYuslQosqnAdWJPpQRwK2QuTCvGa0URzZSxnp4u2TAGtCqJjrYNkfWVChy+QSuzPDMYekrDsxbYdAnPwFmxaFsnIOlm/lvR+Ll+sgWWEw7swR3Qvj4Mx9B6oS8Hpvp7E24tDgt82WYT7mtW1mOkJ1DP7Pzk7NXJDvI18Ost6KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FSPpQcHW; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A003112B2
+	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784497459; cv=pass; b=sdqKqxXVEDOpUChkvEUug53/rY4nFaH5CaEZnaA7BXsBqU6Y3ZE5IEIzhhtoA8yiYyirLaloAQv3/ZfkYyZclGY/SYLgT9c5EHeq77pTqTKDEx488MUuMYpfEFNbijfYd/h56j7GSXU8gtAvAlW1hf0w400pUPLA5OMsMZuCH1s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784497459; c=relaxed/simple;
+	bh=qsCYuckKASREOCqrWu2OiTP9uAhxU/090DtklF6jGXg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fi7UkOBQMkM80d2h5qLCuS2EYuqULdn7eYCgQjQ82VEqqS52y8BvkzM9HfS0O9rx+lsDtQ3jHCqleksjmYCytFcPT5fkddE0KFt4OJ+gvQ8ueV/mRus87YTA82ZObKEO8qqf3/4bEsDw+aEl/7D6oKmrvubm4w/q+XPxCpQIfwE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmfCAAbQ; arc=pass smtp.client-ip=209.85.208.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FSPpQcHW"
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92b21f65b60so296705785a.1
-        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:43:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmfCAAbQ"
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3997a448ecbso64891151fa.0
+        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:44:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784497455; cv=none;
+        d=google.com; s=arc-20260327;
+        b=LSwomEBgOHW/ym1R7QdU9fIblBjlrTandjFUQNprMY5lfB9LhKdY+n2LzVoNTmxCUo
+         ITxbLWwyhNDIqYvI4eypcjRjHUdhNUh8TK1RS9KMx7xPRz0pgCm2outBfQj2C8Wcd56B
+         ofP5Ihm+Y2LhTxv7nPxJEzBDzUrIeUurzbdawIvux5wRqfqxPlsNxnDP0M0KNJMts0YT
+         zi6egC0omafb+t8ucMU9Lfq36yEtZupLmYa/dmm7aAvOjtp8omjIpfFkFZPJZooQ+RqR
+         YQ4yrOjcgwZZcJg/EGvrC2BVhn8GAG+LfZdXW7hAr9s1MSvgTnb/KJa11es6PtZ6KrkJ
+         9f4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bfdfHA5WCA+spIZWH2utCUt8Mub2WpDVKDTvo9VEZbA=;
+        fh=IitqKRdmfYo37y+2dquwLV1au4ksDPlPmW1PLUE4UIk=;
+        b=JVroiIEqQmf6Z3BvrvwzN4Mr5qLn16yVTFB04WC/u6xEnv1NiCjZiTeCUcQeh6mvFE
+         DTQj/NJMwBcCAltc+QDOIevwgiBvR5yIgCkZsXAnfFkdZctKuVzZ+wmc7DtEHOBdeqhg
+         HVZS5ahJtN5kxh8/2ITnHj2aeBa923zPFu+lmkRsheaBnP7j5rakdas8NA/+zh4mdBy5
+         +8SRE6nyPl6er2/UfxbzAHiwb76Ib4OJhUPwr9rexih9DOwc8QUE483oAbTl4x6Z+i1M
+         JPa0YExygtQ5ybmF089QyRg1O3ybxCi2OnSwixJjR+wbGzSMDzc3Y34Mq5Ir2RDZ+BHg
+         bprA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784497434; x=1785102234; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lo+kG++Zl0Kl2zxIYPSuQhtBBH9noHj84CgVxWP736w=;
-        b=FSPpQcHWaQ2ZG43tqNs0kELojPrAbivke3yMn8fn97TyErZ/wDE7uCugENzjtpRGn6
-         i0KUIlXN1tSGBJpJnEn/hIXyVZ0xyqpRnC74OQfyrKBHqDsgIy0UDJqhsuLBYGGfodlR
-         C/hJLE5VD17vS7i/rMSo1o3fzSzNLt81TdWKycAibZCrykUfOaOIyNdu3xgvJkcYAkaS
-         CuS4+rSoVUUAPIvAA++dn4CWntPU6Q055kN1uqeLmSldtRht8pcCEUkZ3nnsTbbft0sv
-         5Qsa4L1v5PghOxG6gyVBKgxt3o618mb3zEYk2s9OHs3a9MTMdQCiBplbDkLthUxRKTBV
-         lyuw==
+        d=gmail.com; s=20251104; t=1784497455; x=1785102255; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bfdfHA5WCA+spIZWH2utCUt8Mub2WpDVKDTvo9VEZbA=;
+        b=bmfCAAbQn75hDC49hzHofzKk0QLfvOsljTBjc0dMmb87oFbAjOggZ757VbC8osVV3L
+         gBrqTZYYHtSsiCn2GzgfrwJ0f/gJlA12+cLj3W91rsxqyWZdVnBhu8Ga7ZrpEX1ZEnPH
+         rg4UOd3EjeWBhIIPlOoUZVYtcuKet72vdh221gXD6lBBCRIma78pkCOoxZT40U2W4Cqb
+         BGI5fN05CvVIz+rg1CgKK6TYuC9wKvwT2sk213lCwfqQNw1O4ayxU4U/DCTVrBXDSiJ0
+         ddp5vItGkn3BLdFS31L0WMrTYqF7d7/txUF7Hqq0aejMOuM/CKi9XAn3dWs/zszX0b2y
+         Q07Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784497434; x=1785102234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lo+kG++Zl0Kl2zxIYPSuQhtBBH9noHj84CgVxWP736w=;
-        b=RQym2c10AXdlF102QTnwWAcrBrb9CyLSKZfF07VJnDwKgCXyaaPvTDLmWsRFoRpp1A
-         XyL11ZZ8j5UtmTWtWfwS9WRzsa+gW3T4ZlikjRQkGldG+dQNESUeq7ALe7id5Eaum2xY
-         0ZUjqT8GCHDliS/aavX9234xLG462wAkAcA73j1/iNOKSWONVplaAyfKcKvJ3IWKBHV0
-         AtrRVaDV101W1HZOgrjLiimJiwiAUVPyouzr+JMxDVkOmFZgWWh7FoLEvzpEtBLaEeYY
-         uZaBEJIPe2y/LpO1TxL4ynZ/xL//OyoUXM8e4leKyeDE2Nh2Wv68OzC9bkcDKzmJn2VC
-         5+EQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrcGYLhdcxqh3B/cFHCiRCxUkjQTNC3aud6IErx+mqBeyjfpVyE/NdNj+Jq3L47L0Teo8st@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw+mjV69rSkWYtYTFwL2x0Bk3BTkBwKdxJDCFniHzm492PMxxKF
-	6stot6nw8t3OiaXcy5MfnXcWSp67z/wWqnwdqdXPyuxhQMEssj3X0If3
-X-Gm-Gg: AfdE7ckUHITk7DKoPqnHBkwg18MN6ZosOAVRfOc1ifx3ipGadALBMqRkhFUpBOPx7rp
-	DZDpoCrkpnDw+tMLXzzZRfnDwkatZELxC8/QC5lIU/1sml0RmdeJA8+nwyTUTzr+OxHT3loYF16
-	IjiodqkpHwmygO81o4uUYZRbQ+Julaf+do5k0J2CmMb1P+Q8G15p3PQwdRw6f8w3POC51N6Matv
-	fDRnMQXPZEw1iKLMTmJU5U1vsd/0ZB2PIR+qyJbnJCT7997dyNj+/pdslg/Ue7uSc1ofPmvDgjv
-	L6nXI4cgGgpr3F72X8+8/uWlxpRXfbxy/IMx3BMn87nwXWsc50N2hXRjRBhw2y83W+6wbRt9nTQ
-	FwQJstyQCn+i7b2C9DuuAoWq7uS3pfQzMKgtuTd0V6w2/ss+YD5UvXjEMS9+kvRtPq5e0EC/+x6
-	Zmc7GBnBr39oxXzzp2z6b9tyErmPHD/3k4GJ1xUNUH9wxFBT5f5+uP/osQ+LIO9hI2eF7/6ewkp
-	zzZDThyg95gcOs3FPp+q0xgslhw/JiUKCtoqscuK9jbAQ/c+XbAXZQ=
-X-Received: by 2002:a05:620a:440b:b0:915:5216:e5bf with SMTP id af79cd13be357-930b492fe84mr1146363085a.22.1784497434363;
-        Sun, 19 Jul 2026 14:43:54 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b542e60asm744171885a.31.2026.07.19.14.43.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 14:43:52 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-clk@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Brian Masney <bmasney@redhat.com>,
-	=?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje@dujemihanovic.xyz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Marvell PXA1908 SOC support),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] clk: mmp: allow COMPILE_TEST builds
-Date: Sun, 19 Jul 2026 14:43:49 -0700
-Message-ID: <20260719214349.734351-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20251104; t=1784497455; x=1785102255;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bfdfHA5WCA+spIZWH2utCUt8Mub2WpDVKDTvo9VEZbA=;
+        b=Wx91aMxytrOjqINvNMCLvj0tEJRC61yR+csrNh/zceJ6QzIw25Rn70MkfCi6Ykaep5
+         MVYB3UDf9+ZHjLmEMUwHRRZ1Ox6oW8X+Nj6KSMTXuytp+DfheCZb62PD+mMdg7k+WPQM
+         9DKiXfXomiNxpc3f1oNTvy7Lc/ZsInKvb5UCyvFhawRIbLlQsT3SbyJf8AbH3EpyP4YQ
+         MvHlmFbFMub3cjf9lVCQy/x5K5DvamwfkbxuDa0+WCAZQ2cZtOn35/MyEQrR7BcWq/kg
+         bS3HIUtbQMi4loXLnccNWwJ+ngEQXif3GNnRVrlPA/maZToJ9xEQb+SNWLNyjhoIvTr/
+         Xo/A==
+X-Forwarded-Encrypted: i=1; AHgh+Rq6IlHwQ8oMGYFPYdWHff173mG4cMRijp/rdum8unNoZ+d27QszJpCuesrI5pHybvvr7N87@lists.linux.dev
+X-Gm-Message-State: AOJu0YyCgK10KO9CIkhgamHDq290mtyDZgMLqUqC+75gzxsNz2+HIMrJ
+	hVO6IwfYtBXqu3zMeVliQiYzScObJiuHiRlzx9jXJAkMNYT8To5AoPF4Zf+tGi5GhOA5caHpmOp
+	b7VLzYuPror//4XDir1kCh4W+IK1zH0s=
+X-Gm-Gg: AfdE7cljpZUNT0k5fbTrv2sPr1qb9iLDnp701IrI/uRbi9qYmWC7dX/VkUC6vsntgTa
+	GNGABkcn0SBAqSce9XXu7hVUGsGkC27nmJCUju3nJHy5PtNJy498yINM8TK2bKsbdeI69wjEP3Z
+	3MPDuucZijsVwKt+Pj3SOQjqXbztTTGCMs4XjI9GlLb2IrTcVmLPp1YR1fwdR9/+NF8ZAiilVHU
+	WaSB21XH42TsTQc3+WiwU/IpoEAc4GhAhFB/TvLIQbXg5pGoDy9xrfhLw3F7hgSsOo6biz8Uk2o
+	FFnloeDlLqot1sK4U3IcpOKl7jfIsw9w4VdLJ6dMB9dMFPSnqTrccHmrXTb/Nq/Zy/nCmtKgI9S
+	K6UbCqXMS4TjAR7YAPKSxy7Q1ekjhDbpHMLjHslLdLm7oSSI5eq91ce8bMcgagwOlTSNvI7/E
+X-Received: by 2002:a05:6512:66d7:20b0:5b0:1f7c:254d with SMTP id
+ 2adb3069b0e04-5b28f9b9f21mr1377355e87.58.1784497454636; Sun, 19 Jul 2026
+ 14:44:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260509051110.1061393-1-rosenp@gmail.com> <agHu78VflprAM7Yj@redhat.com>
+In-Reply-To: <agHu78VflprAM7Yj@redhat.com>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Sun, 19 Jul 2026 14:44:03 -0700
+X-Gm-Features: AUfX_mydAb8OKQC-V9pRIVqyJYvnD-MKgJEDEArKFjqMm6JFlPXOW7FXXxffczQ
+Message-ID: <CAKxU2N9Wf07ZNvVyOz=WR+8TdzxoivnAp5x3_FN5rqpU6M7maw@mail.gmail.com>
+Subject: Re: [PATCH] clk: hisilicon: allow COMPILE_TEST builds
+To: Brian Masney <bmasney@redhat.com>
+Cc: linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The MMP clock directory is only entered for ARCH_MMP, even though the
-PXA1908 and MMP2 audio clock symbols can already be selected for
-COMPILE_TEST.
-
-Add a hidden MMP clock family gate, select it from the compile-testable MMP
-clock symbols, and use that symbol for the parent Makefile descent.  Keep
-ARCH_MMP as the default provider for existing platform builds.
-
-Tested with:
-make LLVM=1 ARCH=loongarch drivers/clk/mmp/
-
-Assisted-by: Codex:GPT-5.5
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- drivers/clk/Kconfig     | 2 ++
- drivers/clk/Makefile    | 2 +-
- drivers/clk/mmp/Kconfig | 5 +++++
- 3 files changed, 8 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 16191b297150..cb69872401fd 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -457,12 +457,14 @@ config COMMON_CLK_STM32H7
- 
- config COMMON_CLK_MMP2
- 	def_bool COMMON_CLK && (MACH_MMP2_DT || MACH_MMP3_DT)
-+	select COMMON_CLK_MMP
- 	help
- 	  Support for Marvell MMP2 and MMP3 SoC clocks
- 
- config COMMON_CLK_MMP2_AUDIO
-         tristate "Clock driver for MMP2 Audio subsystem"
-         depends on COMMON_CLK_MMP2 || COMPILE_TEST
-+        select COMMON_CLK_MMP
-         help
-           This driver supports clocks for Audio subsystem on MMP2 SoC.
- 
-diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-index 4b2c089f46a1..8383f9f1da51 100644
---- a/drivers/clk/Makefile
-+++ b/drivers/clk/Makefile
-@@ -130,7 +130,7 @@ obj-y					+= mediatek/
- obj-$(CONFIG_ARCH_MESON)		+= meson/
- obj-y					+= microchip/
- ifeq ($(CONFIG_COMMON_CLK), y)
--obj-$(CONFIG_ARCH_MMP)			+= mmp/
-+obj-$(CONFIG_COMMON_CLK_MMP)		+= mmp/
- endif
- obj-y					+= mstar/
- obj-y					+= mvebu/
-diff --git a/drivers/clk/mmp/Kconfig b/drivers/clk/mmp/Kconfig
-index b0d2fea3cda5..35a069034b28 100644
---- a/drivers/clk/mmp/Kconfig
-+++ b/drivers/clk/mmp/Kconfig
-@@ -1,10 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
-+config COMMON_CLK_MMP
-+	bool
-+	default ARCH_MMP
-+
- config COMMON_CLK_PXA1908
- 	bool "Clock driver for Marvell PXA1908"
- 	depends on ARCH_MMP || COMPILE_TEST
- 	depends on OF
- 	default y if ARCH_MMP && ARM64
-+	select COMMON_CLK_MMP
- 	select AUXILIARY_BUS
- 	help
- 	  This driver supports the Marvell PXA1908 SoC clocks.
--- 
-2.55.0
-
+On Mon, May 11, 2026 at 8:00=E2=80=AFAM Brian Masney <bmasney@redhat.com> w=
+rote:
+>
+> On Fri, May 08, 2026 at 10:11:10PM -0700, Rosen Penev wrote:
+> > The HiSilicon clock symbols already depend on ARCH_HISI or COMPILE_TEST=
+,
+> > but the parent clock Makefile only descends into the hisilicon director=
+y
+> > when ARCH_HISI is enabled.
+> >
+> > Add a hidden family gate selected by the HiSilicon clock and reset symb=
+ols,
+> > default it for ARCH_HISI, and use it for the parent Makefile descent.  =
+This
+> > keeps existing platform builds unchanged while allowing compile-test
+> > coverage.
+> >
+> > Tested with:
+> > make LLVM=3D1 ARCH=3Dloongarch drivers/clk/hisilicon/
+> >
+> > Assisted-by: Codex:GPT-5.5
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+>
+> Reviewed-by: Brian Masney <bmasney@redhat.com>
+Should I resend?
+>
