@@ -1,127 +1,109 @@
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A003112B2
-	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784497459; cv=pass; b=sdqKqxXVEDOpUChkvEUug53/rY4nFaH5CaEZnaA7BXsBqU6Y3ZE5IEIzhhtoA8yiYyirLaloAQv3/ZfkYyZclGY/SYLgT9c5EHeq77pTqTKDEx488MUuMYpfEFNbijfYd/h56j7GSXU8gtAvAlW1hf0w400pUPLA5OMsMZuCH1s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784497459; c=relaxed/simple;
-	bh=qsCYuckKASREOCqrWu2OiTP9uAhxU/090DtklF6jGXg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fi7UkOBQMkM80d2h5qLCuS2EYuqULdn7eYCgQjQ82VEqqS52y8BvkzM9HfS0O9rx+lsDtQ3jHCqleksjmYCytFcPT5fkddE0KFt4OJ+gvQ8ueV/mRus87YTA82ZObKEO8qqf3/4bEsDw+aEl/7D6oKmrvubm4w/q+XPxCpQIfwE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bmfCAAbQ; arc=pass smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C16EA282F29
+	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784497845; cv=none; b=uCrv7Krwy7bCETYVUZUCXk4ZGmGSFC6Wo1u+2ZI5Lyd9O3CoTSK7LZ6krwEPPBn9tFzP0kvFUE/fy/5a2pVNvFYUI1TexlklYN4PSe1ZSlP0Hc9LVSMhQqtTMwAbvNRg43c1bzcB8e/+qSqWwXNoJ5RyybBipR0yREM0thqK5s0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784497845; c=relaxed/simple;
+	bh=ImMEQc8V036XgFro0YZ75qNqprVm/a715A3QCjmfGTk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nRAwE0GYyC2mQ7G12ZHTl5CtYgWiE2oc1R7tAxte6CEvWwejyqk38fLbM4a9RxdR9iVW5CIMP79KHZJ8czNkex2y+s3AT5t3dBjucHgLuDPDmeheR/aUeJnblfhDgUpeQa1AD9Hy6zi72KT48HWtzl7lMY2dhEI9ELYimGIGMyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QNlyJEpM; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bmfCAAbQ"
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-3997a448ecbso64891151fa.0
-        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:44:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784497455; cv=none;
-        d=google.com; s=arc-20260327;
-        b=LSwomEBgOHW/ym1R7QdU9fIblBjlrTandjFUQNprMY5lfB9LhKdY+n2LzVoNTmxCUo
-         ITxbLWwyhNDIqYvI4eypcjRjHUdhNUh8TK1RS9KMx7xPRz0pgCm2outBfQj2C8Wcd56B
-         ofP5Ihm+Y2LhTxv7nPxJEzBDzUrIeUurzbdawIvux5wRqfqxPlsNxnDP0M0KNJMts0YT
-         zi6egC0omafb+t8ucMU9Lfq36yEtZupLmYa/dmm7aAvOjtp8omjIpfFkFZPJZooQ+RqR
-         YQ4yrOjcgwZZcJg/EGvrC2BVhn8GAG+LfZdXW7hAr9s1MSvgTnb/KJa11es6PtZ6KrkJ
-         9f4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bfdfHA5WCA+spIZWH2utCUt8Mub2WpDVKDTvo9VEZbA=;
-        fh=IitqKRdmfYo37y+2dquwLV1au4ksDPlPmW1PLUE4UIk=;
-        b=JVroiIEqQmf6Z3BvrvwzN4Mr5qLn16yVTFB04WC/u6xEnv1NiCjZiTeCUcQeh6mvFE
-         DTQj/NJMwBcCAltc+QDOIevwgiBvR5yIgCkZsXAnfFkdZctKuVzZ+wmc7DtEHOBdeqhg
-         HVZS5ahJtN5kxh8/2ITnHj2aeBa923zPFu+lmkRsheaBnP7j5rakdas8NA/+zh4mdBy5
-         +8SRE6nyPl6er2/UfxbzAHiwb76Ib4OJhUPwr9rexih9DOwc8QUE483oAbTl4x6Z+i1M
-         JPa0YExygtQ5ybmF089QyRg1O3ybxCi2OnSwixJjR+wbGzSMDzc3Y34Mq5Ir2RDZ+BHg
-         bprA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QNlyJEpM"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ca64c3ce5fso106217595ad.3
+        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784497455; x=1785102255; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bfdfHA5WCA+spIZWH2utCUt8Mub2WpDVKDTvo9VEZbA=;
-        b=bmfCAAbQn75hDC49hzHofzKk0QLfvOsljTBjc0dMmb87oFbAjOggZ757VbC8osVV3L
-         gBrqTZYYHtSsiCn2GzgfrwJ0f/gJlA12+cLj3W91rsxqyWZdVnBhu8Ga7ZrpEX1ZEnPH
-         rg4UOd3EjeWBhIIPlOoUZVYtcuKet72vdh221gXD6lBBCRIma78pkCOoxZT40U2W4Cqb
-         BGI5fN05CvVIz+rg1CgKK6TYuC9wKvwT2sk213lCwfqQNw1O4ayxU4U/DCTVrBXDSiJ0
-         ddp5vItGkn3BLdFS31L0WMrTYqF7d7/txUF7Hqq0aejMOuM/CKi9XAn3dWs/zszX0b2y
-         Q07Q==
+        d=gmail.com; s=20251104; t=1784497844; x=1785102644; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vfVcfxp6vUJ0JCSMDQ+w04nlcu7oMz5ArZqbKOQ6dJQ=;
+        b=QNlyJEpMiwQfboPCQT3bvhpAeDEEMB8GeRKreG3YqC8sblCPfnxU4SD4jkoGdvspXm
+         KSFfCidz3asYwLHSfGzDOTuKWlPyYbmzgF0kntGHzj48/GyMTI3Oan8/EqYFkvTyDdYx
+         C+2F+e3NUUEBN1zdy+3EwN6bjG8swmCuO826IlagagqAQauf+8QLNOTfzHHOUIKH2O90
+         HwkhlMJhX22TVuo4RxfeV/8hCvnztDzL3EgU/+O7/EB7BQdTqVRCUNvmI8nbe/mYZWGY
+         L4wC/HnyEeUrTrqLEZmNlrZHLih48EXyC346ALRqhqwIHzdlNUh+NPHHOq0qEJ8LZbdw
+         5Dqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784497455; x=1785102255;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bfdfHA5WCA+spIZWH2utCUt8Mub2WpDVKDTvo9VEZbA=;
-        b=Wx91aMxytrOjqINvNMCLvj0tEJRC61yR+csrNh/zceJ6QzIw25Rn70MkfCi6Ykaep5
-         MVYB3UDf9+ZHjLmEMUwHRRZ1Ox6oW8X+Nj6KSMTXuytp+DfheCZb62PD+mMdg7k+WPQM
-         9DKiXfXomiNxpc3f1oNTvy7Lc/ZsInKvb5UCyvFhawRIbLlQsT3SbyJf8AbH3EpyP4YQ
-         MvHlmFbFMub3cjf9lVCQy/x5K5DvamwfkbxuDa0+WCAZQ2cZtOn35/MyEQrR7BcWq/kg
-         bS3HIUtbQMi4loXLnccNWwJ+ngEQXif3GNnRVrlPA/maZToJ9xEQb+SNWLNyjhoIvTr/
-         Xo/A==
-X-Forwarded-Encrypted: i=1; AHgh+Rq6IlHwQ8oMGYFPYdWHff173mG4cMRijp/rdum8unNoZ+d27QszJpCuesrI5pHybvvr7N87@lists.linux.dev
-X-Gm-Message-State: AOJu0YyCgK10KO9CIkhgamHDq290mtyDZgMLqUqC+75gzxsNz2+HIMrJ
-	hVO6IwfYtBXqu3zMeVliQiYzScObJiuHiRlzx9jXJAkMNYT8To5AoPF4Zf+tGi5GhOA5caHpmOp
-	b7VLzYuPror//4XDir1kCh4W+IK1zH0s=
-X-Gm-Gg: AfdE7cljpZUNT0k5fbTrv2sPr1qb9iLDnp701IrI/uRbi9qYmWC7dX/VkUC6vsntgTa
-	GNGABkcn0SBAqSce9XXu7hVUGsGkC27nmJCUju3nJHy5PtNJy498yINM8TK2bKsbdeI69wjEP3Z
-	3MPDuucZijsVwKt+Pj3SOQjqXbztTTGCMs4XjI9GlLb2IrTcVmLPp1YR1fwdR9/+NF8ZAiilVHU
-	WaSB21XH42TsTQc3+WiwU/IpoEAc4GhAhFB/TvLIQbXg5pGoDy9xrfhLw3F7hgSsOo6biz8Uk2o
-	FFnloeDlLqot1sK4U3IcpOKl7jfIsw9w4VdLJ6dMB9dMFPSnqTrccHmrXTb/Nq/Zy/nCmtKgI9S
-	K6UbCqXMS4TjAR7YAPKSxy7Q1ekjhDbpHMLjHslLdLm7oSSI5eq91ce8bMcgagwOlTSNvI7/E
-X-Received: by 2002:a05:6512:66d7:20b0:5b0:1f7c:254d with SMTP id
- 2adb3069b0e04-5b28f9b9f21mr1377355e87.58.1784497454636; Sun, 19 Jul 2026
- 14:44:14 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784497844; x=1785102644;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vfVcfxp6vUJ0JCSMDQ+w04nlcu7oMz5ArZqbKOQ6dJQ=;
+        b=fh5KWcXiuYx8UiJMJ4/SKsNE1njNjL53otLIrijrosS/vATrpaylAt6BubysNQU2EE
+         Pz8f8b+MTcMtOV7QB+/d1jXhUVQLIxuqbqS7v/6bjl/aK9f60ErWlTA0C17zhb0MlBvB
+         xE76QvjUOel72WWDRTfuA01h8NZJV8+oGJM/SMAXe0cyqxpY3PMmhaWV7yvKEwhMuqIF
+         Ez8uFpvlK75DBkUEEmixwnMOU3g+98nOrQv992DCdGK2nJjBZVC8isDy2UXyV75NA0Po
+         d1pd/+8j50vJTdQ0R1jyGPtOsL7QRMd6dLrD1z7seTJVDbF6apZK5QRMA2OUr6tklFf8
+         VFPQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rqq/JdgKmeUTUv74d5jVmP1JmrzQNSxrzNjQSCtnqgUtaEYh7V/ew2z8dDMzxt76aKFp1iJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YzZe0dzrhRaA77m4WqxBx6YKqqDV0I1c1rTVWdMoe+xtc7cKXo8
+	IEGavseYEhZ1fuB4rpxEqhGZ6i2dPIODOjFkARlSxkAhfSAQx+/6SQEu
+X-Gm-Gg: AfdE7cnOG5zt/CRTJ21cC/ck9xwhZjeV61W3HkgdsrLorYlNcA/Rdi51955JxxWFJpt
+	d8tmVRrq2Nx1BxYz/R3M9Jicju871ywCe9+OUjAIkFoBatxHq/mCC7qnjBmieUfKc5ETYzapzF8
+	PYk1RjeeZ0SeyaJFeJEMXdkeLtH8yygn2bnLzyKCFMtWdcsXH9g6Hvy1kebyQR4J9Ga/ItOkcYk
+	ifIjyEcknZySce692KV4FZ8WjxyB1BZrUYcV8rKQEa+zrt0vSQXr0UFYZiYdK+cZO/L4i7ShZKD
+	U5aky98j3amFKFQ7GBAB3sEppkzwUhpG+cZ/9LuB5MFW5791wHzjr8uWZD0D7i1hqZhXyJMZt/T
+	NlmtxvnQEXcxOAk8Pk2qW28TK5EaKVw0Bs7rrYVXa9F449V2YmYajQDyPipzKkXtTCIw4Ua9oD5
+	E2U63alMNaTxCPmt1EU1HtNUx7k8uzUCmG9eH8XkNwt3Hbz7DMtzhHgysSk+3ns29Pg50ZlshL0
+	swNg3l4prVCUFpJg7nyF8xjn43YgHBm8r7JKc4y/xp1EfolyB8EIYM=
+X-Received: by 2002:a17:903:298c:b0:2ca:4b7a:4a02 with SMTP id d9443c01a7336-2cf34a7bfe4mr127277915ad.43.1784497844128;
+        Sun, 19 Jul 2026 14:50:44 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e35])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf344b78e2sm44745845ad.24.2026.07.19.14.50.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jul 2026 14:50:43 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Gabriel Fernandez <gabriel.fernandez@foss.st.com>,
+	Nicolas Le Bayon <nicolas.le.bayon@foss.st.com>,
+	Alok Tiwari <alok.a.tiwari@oracle.com>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32 ARCHITECTURE),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32 ARCHITECTURE),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCHv2 0/2] clk: stm32: fix COMPILE_TEST builds
+Date: Sun, 19 Jul 2026 14:50:38 -0700
+Message-ID: <20260719215040.767232-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260509051110.1061393-1-rosenp@gmail.com> <agHu78VflprAM7Yj@redhat.com>
-In-Reply-To: <agHu78VflprAM7Yj@redhat.com>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Sun, 19 Jul 2026 14:44:03 -0700
-X-Gm-Features: AUfX_mydAb8OKQC-V9pRIVqyJYvnD-MKgJEDEArKFjqMm6JFlPXOW7FXXxffczQ
-Message-ID: <CAKxU2N9Wf07ZNvVyOz=WR+8TdzxoivnAp5x3_FN5rqpU6M7maw@mail.gmail.com>
-Subject: Re: [PATCH] clk: hisilicon: allow COMPILE_TEST builds
-To: Brian Masney <bmasney@redhat.com>
-Cc: linux-clk@vger.kernel.org, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, May 11, 2026 at 8:00=E2=80=AFAM Brian Masney <bmasney@redhat.com> w=
-rote:
->
-> On Fri, May 08, 2026 at 10:11:10PM -0700, Rosen Penev wrote:
-> > The HiSilicon clock symbols already depend on ARCH_HISI or COMPILE_TEST=
-,
-> > but the parent clock Makefile only descends into the hisilicon director=
-y
-> > when ARCH_HISI is enabled.
-> >
-> > Add a hidden family gate selected by the HiSilicon clock and reset symb=
-ols,
-> > default it for ARCH_HISI, and use it for the parent Makefile descent.  =
-This
-> > keeps existing platform builds unchanged while allowing compile-test
-> > coverage.
-> >
-> > Tested with:
-> > make LLVM=3D1 ARCH=3Dloongarch drivers/clk/hisilicon/
-> >
-> > Assisted-by: Codex:GPT-5.5
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
->
-> Reviewed-by: Brian Masney <bmasney@redhat.com>
-Should I resend?
->
+The STM32MP clock drivers have COMPILE_TEST in their Kconfig depends, but
+they fail to build (and are not even compiled) when ARCH_STM32 is disabled.
+The first patch adds a missing bitfield.h include so the drivers build
+standalone, and the second wires up the Makefile gate to the STM32MP clock
+symbol so the directory is actually traversed under COMPILE_TEST.
+
+v2: split up in two patches.
+
+Rosen Penev (2):
+  clk: stm32: add missing bitfield.h header
+  clk: stm32: allow STM32MP COMPILE_TEST builds
+
+ drivers/clk/Makefile              | 2 +-
+ drivers/clk/stm32/clk-stm32mp21.c | 1 +
+ drivers/clk/stm32/clk-stm32mp25.c | 1 +
+ 3 files changed, 3 insertions(+), 1 deletion(-)
+
+-- 
+2.55.0
+
