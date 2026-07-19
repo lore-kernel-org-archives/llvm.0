@@ -1,75 +1,78 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 440F92F3C37
-	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:35:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BA6430C148
+	for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 21:43:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784496937; cv=none; b=UFEJuDyxmpSIaLCGA6Ysk/Hrc2QDZiAXeX/OdzoC4Jj1p/HfYoflesoDLgf6xtRUyY6kSTFIs8UUCtJfFclYGrsYgrvEWdplQy6zRjTpQjGPjV3Tee61ByMrp6LTJnU7f6ySZ7Y+lzsiRRJ4MjxYX80zAa0cTgn6o2fiQ282FPg=
+	t=1784497438; cv=none; b=IbMjy8rnoOUdPDX5N7C9Kv6LhqBsVOGJ83NGacixEQz9tCajOGCBFDXyNl8Pz7KEpdMI5PJN4J5LcOdGfrndTxz5LNeq0vsHcg6bJWUU9To+VlEC7Ar4CsGH6PseQUNvGp4oPZgzLQ6PM1z8q4HhPBQSWkh2MndlGYohMxzNwyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784496937; c=relaxed/simple;
-	bh=esUOiMasj4ZHEuYo63Aye+NAP8L6S4TDhw4yuUZNZSw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gYYkI2odIgEiFu4QRGLBOou5m0lzFB+uT7WQSdk4nsW5D+vsDMxr+Nbt+9Ltr8T/bEEqLBc4E5XRiZv1T0Y3w+fc43LMix1I86g+Qu1mrm6exkyZ2+Wzi0EtyR6OIPG8b14wadW8iIqDVXeNkJ0sGFC6jA74oNr4WbUPo1H34FM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EdVab1Ge; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1784497438; c=relaxed/simple;
+	bh=8Cao4YSvyyxi8IkEpgt42VHy5qSQ+ev50GEinysOTY0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fuYuslQosqnAdWJPpQRwK2QuTCvGa0URzZSxnp4u2TAGtCqJjrYNkfWVChy+QSuzPDMYekrDsxbYdAnPwFmxaFsnIOlm/lvR+Ll+sgWWEw7swR3Qvj4Mx9B6oS8Hpvp7E24tDgt82WYT7mtW1mOkJ1DP7Pzk7NXJDvI18Ost6KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FSPpQcHW; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EdVab1Ge"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ce7d2adef4so88779925ad.3
-        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:35:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FSPpQcHW"
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-92b21f65b60so296705785a.1
+        for <llvm@lists.linux.dev>; Sun, 19 Jul 2026 14:43:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784496935; x=1785101735; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1784497434; x=1785102234; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wgYgNn21iMfT90MYm2UMdq21JQLGfcBKlRVJ7r9wOUQ=;
-        b=EdVab1Ge7EV86zTZyZSnovjhyqb8JJjNjx9KlZtxhf+VRBnEOkXdHMmw5GA2SaDJ/H
-         3f4DsAg3CZEDf1wx2snj1nBkbNvJBFgkE1lmyaeF3sYO7eOGDfcqlIh/KRL4A87vDq7P
-         aCeBfkW2DN5+w7BbyNB1KhLK5djrtZYDsIrP0Len+k+mgkgHh7zGWneLXVMtzb6HK+c7
-         vJIOZq0q5g5gMuxu7czQeCAq4D1apTrgXUkNutKr1L8pUpx3hirPULo0CDvtyrwsQEig
-         bC/CazAY7Ptd9R8jrzw4Eedcxdmy7mZLrP+bt1n5+GQ4jFcvdLio6eeZ6aeplPXLJAIr
-         CRSA==
+        bh=lo+kG++Zl0Kl2zxIYPSuQhtBBH9noHj84CgVxWP736w=;
+        b=FSPpQcHWaQ2ZG43tqNs0kELojPrAbivke3yMn8fn97TyErZ/wDE7uCugENzjtpRGn6
+         i0KUIlXN1tSGBJpJnEn/hIXyVZ0xyqpRnC74OQfyrKBHqDsgIy0UDJqhsuLBYGGfodlR
+         C/hJLE5VD17vS7i/rMSo1o3fzSzNLt81TdWKycAibZCrykUfOaOIyNdu3xgvJkcYAkaS
+         CuS4+rSoVUUAPIvAA++dn4CWntPU6Q055kN1uqeLmSldtRht8pcCEUkZ3nnsTbbft0sv
+         5Qsa4L1v5PghOxG6gyVBKgxt3o618mb3zEYk2s9OHs3a9MTMdQCiBplbDkLthUxRKTBV
+         lyuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784496935; x=1785101735;
+        d=1e100.net; s=20251104; t=1784497434; x=1785102234;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=wgYgNn21iMfT90MYm2UMdq21JQLGfcBKlRVJ7r9wOUQ=;
-        b=iwNJuZYOTcGugxm9yoO5z/MP9C8ElbL7wvnj8GcQe34YUFqQ20kXO4q7aBqfjN300O
-         9kCVouUBmueQ4HUBTHzYo/S6phqH0pBiZE/xKVbDd0mGv+43r/f6S/74sxsWFDuNxV/K
-         76GLxHWZDbHKiVm7auQNB9d3bhiBoc/0rEeJyTuObyleIPVeVsGb8Wr/MNCb7BVKptap
-         AUgP3Jn6PLY0KRpSeVt0fk+SrgWXmeym7nWIEl8Y09+v9X+oUcDuQlycygKDKzbCgFx/
-         L9m9D7yKxqfFub4qePokQLYWnhvUNNko7TlzybeLC8ILSrvz1FAIYB9QviU2ibG0sd/m
-         KFXw==
-X-Forwarded-Encrypted: i=1; AHgh+RprZUmhJKTut7SNK5sFitMsHEn5W3WzwybBMuIAiuMN+ntQOE6EQDJC5bgNPE8Jpk+geILw@lists.linux.dev
-X-Gm-Message-State: AOJu0YyJXzmNbyhw9/R9loUpsfXfgXietlgwSGkZoNNc4o7pWW6Q272B
-	7GXdYpiTen626hE70lcuIgsJwopH3lBIvt5UL8FKmDZan0e9w6G9Jjr0ERZ52w==
-X-Gm-Gg: AfdE7cl+eYx2Dy+fqYpM4NvNm9UsmeyIzWNN3Y8u/ohTs/h8QWUymOAMGJ5WrxiPP3G
-	JZUX/7FlvnNgq/CECe2vmVvqCOnjSL+rJcX8x29e3zoGUFe9LzAyi6Gb1wCW7sng8TJh4LlN+Hp
-	/3W2vN4yEbHduyvBzs2oIdwzDaeTddj3ZKLTnzp4mOAxRDUbx3FlVg6q4OGM8axlZqSTqz+7GNA
-	Z2/N9SWtuHuoGj8y94pWSzhs0DUPfeoa7OtBm+mGGvI1KzGFJlxO/LVzacJwBY8f/k8MrwwNKVB
-	2YwIEvmO5J7914ChS4GcrtgGMaFq81O/KXXwPBOq2wOWZIJbwdkg9uY8FteffpnOdR8C39ydp3/
-	fFmk6IQr4QuyFchWKF0/0pAeIiANI90eZW+oWeDikvIBxNpGjqEmcb6LCGlbHDCeIb/VpHriDpo
-	1OHfIAigJieXl3QsdZfX93m+FSqbH9cS71FkhXi99/v004Fqn1dx7PstOjNI1qrKRjJ74LQk7Qr
-	9U0AnTW1mRBzcySGEMqTl+VI2jOAF366N0n8snxIxoFFjoHV7s8e6Q=
-X-Received: by 2002:a17:903:380f:b0:2ca:4f33:e86f with SMTP id d9443c01a7336-2cf348456ecmr124912865ad.12.1784496935365;
-        Sun, 19 Jul 2026 14:35:35 -0700 (PDT)
+        bh=lo+kG++Zl0Kl2zxIYPSuQhtBBH9noHj84CgVxWP736w=;
+        b=RQym2c10AXdlF102QTnwWAcrBrb9CyLSKZfF07VJnDwKgCXyaaPvTDLmWsRFoRpp1A
+         XyL11ZZ8j5UtmTWtWfwS9WRzsa+gW3T4ZlikjRQkGldG+dQNESUeq7ALe7id5Eaum2xY
+         0ZUjqT8GCHDliS/aavX9234xLG462wAkAcA73j1/iNOKSWONVplaAyfKcKvJ3IWKBHV0
+         AtrRVaDV101W1HZOgrjLiimJiwiAUVPyouzr+JMxDVkOmFZgWWh7FoLEvzpEtBLaEeYY
+         uZaBEJIPe2y/LpO1TxL4ynZ/xL//OyoUXM8e4leKyeDE2Nh2Wv68OzC9bkcDKzmJn2VC
+         5+EQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrcGYLhdcxqh3B/cFHCiRCxUkjQTNC3aud6IErx+mqBeyjfpVyE/NdNj+Jq3L47L0Teo8st@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw+mjV69rSkWYtYTFwL2x0Bk3BTkBwKdxJDCFniHzm492PMxxKF
+	6stot6nw8t3OiaXcy5MfnXcWSp67z/wWqnwdqdXPyuxhQMEssj3X0If3
+X-Gm-Gg: AfdE7ckUHITk7DKoPqnHBkwg18MN6ZosOAVRfOc1ifx3ipGadALBMqRkhFUpBOPx7rp
+	DZDpoCrkpnDw+tMLXzzZRfnDwkatZELxC8/QC5lIU/1sml0RmdeJA8+nwyTUTzr+OxHT3loYF16
+	IjiodqkpHwmygO81o4uUYZRbQ+Julaf+do5k0J2CmMb1P+Q8G15p3PQwdRw6f8w3POC51N6Matv
+	fDRnMQXPZEw1iKLMTmJU5U1vsd/0ZB2PIR+qyJbnJCT7997dyNj+/pdslg/Ue7uSc1ofPmvDgjv
+	L6nXI4cgGgpr3F72X8+8/uWlxpRXfbxy/IMx3BMn87nwXWsc50N2hXRjRBhw2y83W+6wbRt9nTQ
+	FwQJstyQCn+i7b2C9DuuAoWq7uS3pfQzMKgtuTd0V6w2/ss+YD5UvXjEMS9+kvRtPq5e0EC/+x6
+	Zmc7GBnBr39oxXzzp2z6b9tyErmPHD/3k4GJ1xUNUH9wxFBT5f5+uP/osQ+LIO9hI2eF7/6ewkp
+	zzZDThyg95gcOs3FPp+q0xgslhw/JiUKCtoqscuK9jbAQ/c+XbAXZQ=
+X-Received: by 2002:a05:620a:440b:b0:915:5216:e5bf with SMTP id af79cd13be357-930b492fe84mr1146363085a.22.1784497434363;
+        Sun, 19 Jul 2026 14:43:54 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2cf3448dac2sm45278195ad.3.2026.07.19.14.35.32
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-930b542e60asm744171885a.31.2026.07.19.14.43.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jul 2026 14:35:33 -0700 (PDT)
+        Sun, 19 Jul 2026 14:43:52 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
-To: linux-edac@vger.kernel.org
-Cc: Borislav Petkov <bp@alien8.de>,
-	Tony Luck <tony.luck@intel.com>,
+To: linux-clk@vger.kernel.org
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Brian Masney <bmasney@redhat.com>,
+	=?UTF-8?q?Duje=20Mihanovi=C4=87?= <duje@dujemihanovic.xyz>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Marvell PXA1908 SOC support),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] EDAC/cpc925: manage mci lifetime via devres and simplify ioremap
-Date: Sun, 19 Jul 2026 14:35:32 -0700
-Message-ID: <20260719213532.695530-1-rosenp@gmail.com>
+Subject: [PATCH] clk: mmp: allow COMPILE_TEST builds
+Date: Sun, 19 Jul 2026 14:43:49 -0700
+Message-ID: <20260719214349.734351-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -79,139 +82,77 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace the open-coded platform_get_resource() +
-devm_request_mem_region() + devm_ioremap() sequence with the single
-helper devm_platform_ioremap_resource(), dropping the redundant -ENOENT
-and -EBUSY error paths.
+The MMP clock directory is only entered for ARCH_MMP, even though the
+PXA1908 and MMP2 audio clock symbols can already be selected for
+COMPILE_TEST.
 
-Register an edac_mc_free() callback via devm_add_action_or_reset()
-immediately after edac_mc_alloc() so the mem_ctl_info is owned by devres
-and freed automatically on both probe failure and device removal. Drop
-the explicit edac_mc_free() from the probe error path and
-cpc925_remove(); the now-redundant devres group open/release calls are
-removed as well.
+Add a hidden MMP clock family gate, select it from the compile-testable MMP
+clock symbols, and use that symbol for the parent Makefile descent.  Keep
+ARCH_MMP as the default provider for existing platform builds.
 
-Built for powerpc (CONFIG_EDAC_CPC925) with LLVM=1;
-drivers/edac/cpc925_edac.o compiles cleanly and passes checkpatch
---strict.
+Tested with:
+make LLVM=1 ARCH=loongarch drivers/clk/mmp/
 
-Assisted-by: opencode:hy3-free
+Assisted-by: Codex:GPT-5.5
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/edac/cpc925_edac.c | 56 ++++++++++++--------------------------
- 1 file changed, 17 insertions(+), 39 deletions(-)
+ drivers/clk/Kconfig     | 2 ++
+ drivers/clk/Makefile    | 2 +-
+ drivers/clk/mmp/Kconfig | 5 +++++
+ 3 files changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/edac/cpc925_edac.c b/drivers/edac/cpc925_edac.c
-index 9c9e4369c041..e4384ddece08 100644
---- a/drivers/edac/cpc925_edac.c
-+++ b/drivers/edac/cpc925_edac.c
-@@ -903,6 +903,13 @@ static int cpc925_mc_get_channels(void __iomem *vbase)
- 	return dual;
- }
+diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
+index 16191b297150..cb69872401fd 100644
+--- a/drivers/clk/Kconfig
++++ b/drivers/clk/Kconfig
+@@ -457,12 +457,14 @@ config COMMON_CLK_STM32H7
  
-+static void cpc925_edac_free(void *data)
-+{
-+	struct mem_ctl_info *mci = data;
+ config COMMON_CLK_MMP2
+ 	def_bool COMMON_CLK && (MACH_MMP2_DT || MACH_MMP3_DT)
++	select COMMON_CLK_MMP
+ 	help
+ 	  Support for Marvell MMP2 and MMP3 SoC clocks
+ 
+ config COMMON_CLK_MMP2_AUDIO
+         tristate "Clock driver for MMP2 Audio subsystem"
+         depends on COMMON_CLK_MMP2 || COMPILE_TEST
++        select COMMON_CLK_MMP
+         help
+           This driver supports clocks for Audio subsystem on MMP2 SoC.
+ 
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index 4b2c089f46a1..8383f9f1da51 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -130,7 +130,7 @@ obj-y					+= mediatek/
+ obj-$(CONFIG_ARCH_MESON)		+= meson/
+ obj-y					+= microchip/
+ ifeq ($(CONFIG_COMMON_CLK), y)
+-obj-$(CONFIG_ARCH_MMP)			+= mmp/
++obj-$(CONFIG_COMMON_CLK_MMP)		+= mmp/
+ endif
+ obj-y					+= mstar/
+ obj-y					+= mvebu/
+diff --git a/drivers/clk/mmp/Kconfig b/drivers/clk/mmp/Kconfig
+index b0d2fea3cda5..35a069034b28 100644
+--- a/drivers/clk/mmp/Kconfig
++++ b/drivers/clk/mmp/Kconfig
+@@ -1,10 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
++config COMMON_CLK_MMP
++	bool
++	default ARCH_MMP
 +
-+	edac_mc_free(mci);
-+}
-+
- static int cpc925_probe(struct platform_device *pdev)
- {
- 	static int edac_mc_idx;
-@@ -910,37 +917,14 @@ static int cpc925_probe(struct platform_device *pdev)
- 	struct edac_mc_layer layers[2];
- 	void __iomem *vbase;
- 	struct cpc925_mc_pdata *pdata;
--	struct resource *r;
- 	int res = 0, nr_channels;
- 
- 	edac_dbg(0, "%s platform device found!\n", pdev->name);
- 
--	if (!devres_open_group(&pdev->dev, cpc925_probe, GFP_KERNEL)) {
--		res = -ENOMEM;
--		goto out;
--	}
--
--	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!r) {
-+	vbase = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(vbase)) {
- 		cpc925_printk(KERN_ERR, "Unable to get resource\n");
--		res = -ENOENT;
--		goto err1;
--	}
--
--	if (!devm_request_mem_region(&pdev->dev,
--				     r->start,
--				     resource_size(r),
--				     pdev->name)) {
--		cpc925_printk(KERN_ERR, "Unable to request mem region\n");
--		res = -EBUSY;
--		goto err1;
--	}
--
--	vbase = devm_ioremap(&pdev->dev, r->start, resource_size(r));
--	if (!vbase) {
--		cpc925_printk(KERN_ERR, "Unable to ioremap device\n");
--		res = -ENOMEM;
--		goto err2;
-+		return PTR_ERR(vbase);
- 	}
- 
- 	nr_channels = cpc925_mc_get_channels(vbase) + 1;
-@@ -955,10 +939,12 @@ static int cpc925_probe(struct platform_device *pdev)
- 			    sizeof(struct cpc925_mc_pdata));
- 	if (!mci) {
- 		cpc925_printk(KERN_ERR, "No memory for mem_ctl_info\n");
--		res = -ENOMEM;
--		goto err2;
-+		return -ENOMEM;
- 	}
- 
-+	if (devm_add_action_or_reset(&pdev->dev, cpc925_edac_free, mci))
-+		return -ENOMEM;
-+
- 	pdata = mci->pvt_info;
- 	pdata->vbase = vbase;
- 	pdata->edac_idx = edac_mc_idx++;
-@@ -988,7 +974,7 @@ static int cpc925_probe(struct platform_device *pdev)
- 
- 	if (edac_mc_add_mc(mci) > 0) {
- 		cpc925_mc_printk(mci, KERN_ERR, "Failed edac_mc_add_mc()\n");
--		goto err3;
-+		goto err;
- 	}
- 
- 	cpc925_add_edac_devices(vbase);
-@@ -996,17 +982,10 @@ static int cpc925_probe(struct platform_device *pdev)
- 	/* get this far and it's successful */
- 	edac_dbg(0, "success\n");
- 
--	res = 0;
--	goto out;
-+	return 0;
- 
--err3:
-+err:
- 	cpc925_mc_exit(mci);
--	edac_mc_free(mci);
--err2:
--	devm_release_mem_region(&pdev->dev, r->start, resource_size(r));
--err1:
--	devres_release_group(&pdev->dev, cpc925_probe);
--out:
- 	return res;
- }
- 
-@@ -1022,7 +1001,6 @@ static void cpc925_remove(struct platform_device *pdev)
- 	cpc925_mc_exit(mci);
- 
- 	edac_mc_del_mc(&pdev->dev);
--	edac_mc_free(mci);
- }
- 
- static struct platform_driver cpc925_edac_driver = {
+ config COMMON_CLK_PXA1908
+ 	bool "Clock driver for Marvell PXA1908"
+ 	depends on ARCH_MMP || COMPILE_TEST
+ 	depends on OF
+ 	default y if ARCH_MMP && ARM64
++	select COMMON_CLK_MMP
+ 	select AUXILIARY_BUS
+ 	help
+ 	  This driver supports the Marvell PXA1908 SoC clocks.
 -- 
 2.55.0
 
