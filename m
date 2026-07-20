@@ -1,110 +1,128 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88782E62B3
-	for <llvm@lists.linux.dev>; Mon, 20 Jul 2026 03:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9104E3A542B;
+	Mon, 20 Jul 2026 04:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784519591; cv=none; b=nED6lc5s95uWtaztW2Z/tspArsEKnNLmDtIGZQtEijEDEfVww8ArTgDhc7fK3bFgDg39EKMKqUV6riXZi8eSY0oz7QfnGE8YUHjg1JZZwC2CSuZZ7+L79TjswNcrFti6PeAb3XJJ7UU7gpNwTb6H59jtMxhQ9tN4Lr61Uic4D24=
+	t=1784520013; cv=none; b=nWsOsIEhyGf/ZPbfoxEtqmoIfV4tAl46gpzov+qbiYicLOCh5gnYNpX4gsxOG9rvtdHMsmdQCRGTe6b6AuSjmofp1vcpNyDUb1jVkuPOly3/d5M0R6h8D4XfHIYuRss+eFRhRFyyOYfYjrYPodKc4rR/rTPUjrFGdOwhsNfAmhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784519591; c=relaxed/simple;
-	bh=2YmJUsJK6qB9FY2H2S2t1DJoEIC4R6B8UJYOjaiLBn0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=dssFAyRDFxOQyfEA39ZSIrpFbpCGVIG0oBX/E0V9sYBDMRF9dvgAITlzHiAFc6bTznLCWL5By9MONLoomIRxAm2Wz6uvfzP/dhg2UZa7zG0X4RXrI7kJfCcpBmKxJY3XXmQqn8B2vRFeaIcOc2Y9QkFCAyPdJ1xKFZDlrAao5SI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qyn0Dd6p; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1784520013; c=relaxed/simple;
+	bh=8hxwepvwRNJWG6kAFHYrlks8EgP7LT+DhNIq5eyZkgA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=fMgO4RSPX0Pia9nypowi2JEajlobgIDMKMJeDdtgPMpcnx0STh0Er21n8LZYGYn3vAdz4A6IQ6T6OsZOaaKc0x8X+c7SXTeJU2cYM5bl2v4XXxyOdcplf9iFcbFgcZml5e7tvwNlT4VwDHRbTVkc5ynpRlMgaqFDx86WGIlTCcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=T+pZl7Aj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Cx/HANVw; arc=none smtp.client-ip=202.12.124.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qyn0Dd6p"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784519588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=J8nWyIlBYLfS3dKxk/e/ti2E0jLLYGYTEEKO4up4JxA=;
-	b=Qyn0Dd6pMwtlhmjbfTvRZZXYveMtlSGXM24AyK8pYF1Au2DJrd1WtDr4Yu2WXRfk4NlUzI
-	AxtfcTjukmQqgMqrhFu87w3hjwmAj6q0q75mVsf65DtU28jn3j3zp13YnfG8EtoFMBHWSC
-	4AZL6JOrign0YY/zClvVpAqueOJGepY=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-267-gLqYB5yzNOKiJaAau8w5Rg-1; Sun,
- 19 Jul 2026 23:53:07 -0400
-X-MC-Unique: gLqYB5yzNOKiJaAau8w5Rg-1
-X-Mimecast-MFC-AGG-ID: gLqYB5yzNOKiJaAau8w5Rg_1784519586
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 246B21800BDF
-	for <llvm@lists.linux.dev>; Mon, 20 Jul 2026 03:53:06 +0000 (UTC)
-Received: from [172.20.159.80] (unknown [10.30.44.85])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8DB8618001DC;
-	Mon, 20 Jul 2026 03:53:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc3,
- upstream-mainline, 980ab36a)
-Date: Mon, 20 Jul 2026 03:53:05 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="T+pZl7Aj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Cx/HANVw"
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailflow.stl.internal (Postfix) with ESMTP id 49E7B13002DC;
+	Mon, 20 Jul 2026 00:00:09 -0400 (EDT)
+Received: from phl-imap-16 ([10.202.2.88])
+  by phl-compute-09.internal (MEProxy); Mon, 20 Jul 2026 00:00:09 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1784520009;
+	 x=1784523609; bh=pks8NSaA+5EntNYd31Fvj/x0Gef6lBSUxpuNusRUtWU=; b=
+	T+pZl7AjzIgv6+NN9omjPqra4NuZVQcoCFJ736hpUfKXeBwc5NmbBo3lpfyG/5fV
+	RtxZaD/5DySUCxVsp100Yvs+PcadEVnkyaKGyhV8k55lUFMYsyDTukIztHKMfm/R
+	3pgUFwsyRqjmtZ8nXm7ERw6S6ToSlQ3e6UMoUYHvotKnbvUbrQ0wLO5k4lzS+gP0
+	D7SmPKavqrue4nZflXjTKTWOOqK5Ek2VkrVFH1sYQE/PX9H/IFuy3xEndBvsSzcF
+	6ds+zFJKkMORs6YI2eHu9+BTBtorlF72OO2jSafRWTUDALBYCKHK28l+WQIbDiM0
+	fhHT5Lw46FvfMeQp+xo0DQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1784520009; x=
+	1784523609; bh=pks8NSaA+5EntNYd31Fvj/x0Gef6lBSUxpuNusRUtWU=; b=C
+	x/HANVwJgobuQWErE2hyvUaqO5ECWZRo1/VSTi6kTN4JjKz++zZ9w/MElIqJNCK0
+	DHsjK1myWbL0sMwRy32UuLuY+RqXwn8B+rlAlB7b/er2N1x7E+Bi1OV9Gt9P/ebr
+	4izEJUzVk5rCW1XzIJ6+xZ7QbfyOT/Q+3NJKOuTetUrxqcxw9J1RFFDpdL2vmXKZ
+	c8IEDh9djJd6GyQQQjnbvM5N32LMxT9gheAYDOeuY/fDV8NBewmRZNXhBRCru/ef
+	1vBpSB4uh2HUd1DEHVV1YBoGzNrZWPWWf5mLAl/4ECZ6FD5v5DfeNuo4A6P6ZoTS
+	CiV0H1yH7EsElHe8QeNHQ==
+X-ME-Sender: <xms:SJ1dauwqv5VsVQdq005ZXBCsO3guKUa8CIwUQ6RvZ3b8oEPheH5o5w>
+    <xme:SJ1dalEiFJgscsSxXyCgFqywjKSWlgPi-ucqselVJtfxFiLHsEJV-b1yA_R5pHCZJ
+    cFOkyvh0lomDK3sb-taILuCZKDD0J96lIWVpIAOYt2_s-_Nk2qzZAg>
+X-ME-Proxy-Cause: dmFkZTGhKstYLaAN2GiTT4l29zGUepsRdOtJZ7qimrgY64/Gb+a/5gas8/+eDhM00XjHp7
+    FdFd8OKRBQeyW6Ocazq5drep90p2XPJuVbyS1ccaMgljLDLzD7DyRQuy+Ka/8hSxTSIEkN
+    kjzgSUwL5RCljSLRR6ODL+DaeL7OIQv+5CFN3cO/m8VQaB+MApx3ndo7QaVmwhrAsY8XbY
+    JeqAprDQ2qDyqmtgAaDhPzwUXZpJmDAV8pdDTRi+4duvaFZWZVTzOuMIksETMwbI3KdC7N
+    IQ1fIZ8yPsyZvqLeX5id55yxh3qzNZxtHSmcnNvnFxHDuqp8fsPTF1SOAYX+FpjP7FLaKg
+    NuVNY5k8k0suv7tMg7xJHjpzYmDA/l1OzeCxYNWrcXgAah1fNKgKqSxojNJpagv8ZHSOgc
+    mMWB07cqM8MgY+RFks1B3uCuJ8tXJtKJBp+TgrPjqj41hDVfh54rI5Fa+dDhvvCAiZ8/LD
+    dt84wEO9HziKNNUh6ib9vkohZjRzGzrYmsT9usIZf8Ryw3EkOV8XnGELj6d91fadnf9LAa
+    2WleP4ILslRGpPpMqatVL7KUtKhLpJOEWRKq5h/AfvCuc/9NWSbo5WaVvmPwOwhG2yPR/4
+    KkuFss4FILLkpcDU7A8DOj7L3rSQp9aikLV5wKrA6Vj5bGGaVLgw6vla5pKQ
+X-ME-Proxy: <xmx:SJ1dakAH59F2MIM6M7flSldqL3yS0ILIaK-Dmktaqqtre0MFrXuz-w>
+    <xmx:SJ1dam9MgzDcx7R3TpCs9lHQNXTisAYSf_Wpj-SegESJFSOhQMuw2A>
+    <xmx:SJ1daoRB7h9HwGJjzICkQNs1xum0NYOoP6J8YehVQyczLL4HhaMM3Q>
+    <xmx:SJ1daiVkyvyYJnll183BOuBwADivEG0TcjaKi_Q8TFT_WHE-65-eZQ>
+    <xmx:SJ1daq5oXPJLMhnkIyFZOQ42Od3ngN9LJdLSzXWMpQC0xnJoVpkWWQnN>
+Feedback-ID: i51fe4b43:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2A4E62CC0083; Mon, 20 Jul 2026 00:00:08 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <06655.126071923530700281@us-mta-267.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: NlnUuk2TJE_X9FDEOyLrjcrrIcl4MEfbG9ugpZKrkWA_1784519586
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AtrZI9yLaAjF
+Date: Mon, 20 Jul 2026 12:59:46 +0900
+From: "FUJITA Tomonori" <tomo@flapping.org>
+To: "Boqun Feng" <boqun@kernel.org>, "kernel test robot" <lkp@intel.com>
+Cc: =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, llvm@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, "Paul E. McKenney" <paulmck@kernel.org>,
+ "Gary Guo" <gary@garyguo.net>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Miguel Ojeda" <ojeda@kernel.org>
+Message-Id: <378be3c6-2789-49f0-95bf-44f0f61a24b4@app.fastmail.com>
+In-Reply-To: <al15JgmfEzQHF3YA@MacBook-0RXW5>
+References: <202607190048.vAGhOcAV-lkp@intel.com>
+ <al15JgmfEzQHF3YA@MacBook-0RXW5>
+Subject: Re: [paulmckrcu:dev.2026.07.13b 75/86] warning: constant `WARN_ON_FLAGS` is
+ never used
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi, we tested your kernel and here are the results:
+Hi,
+Thanks for the report.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+On Mon, Jul 20, 2026, at 10:25 AM, Boqun Feng wrote:
+> On Sun, Jul 19, 2026 at 12:38:20AM +0800, kernel test robot wrote:
+>> tree:   https://github.com/paulmckrcu/linux dev.2026.07.13b
+>> head:   04b88652be5bc3b092a63198d1b2bebaf46b9e72
+>> commit: f41634950050921c691e1fabdafc0304c2aedfdf [75/86] rust: sync: add SRCU abstraction
+>> config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260719/202607190048.vAGhOcAV-lkp@intel.com/config)
+>> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+>> rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+>> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260719/202607190048.vAGhOcAV-lkp@intel.com/reproduce)
+>> 
+>> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+>> the same patch/commit), kindly add following tags
+>> | Reported-by: kernel test robot <lkp@intel.com>
+>> | Closes: https://lore.kernel.org/oe-kbuild-all/202607190048.vAGhOcAV-lkp@intel.com/
+>> 
+>> All warnings (new ones prefixed by >>):
+>> 
+>> >> warning: constant `WARN_ON_FLAGS` is never used
+>>    --> rust/kernel/bug.rs:126:19
+>>    |
+>>    126 |               const WARN_ON_FLAGS: u32 = $crate::bug::bugflag_taint($crate::bindings::TAINT_WARN);
+>>    |                     ^^^^^^^^^^^^^
+>
+> [Cc Miguel and Tomo]
+>
+> Is this one supposed to fix the issue?
+>
+> 	https://lore.kernel.org/rust-for-linux/20260712102802.3013600-1-tomo@flapping.org/
 
+It doesn't. I've just sent a fix:
 
-Kernel information:
-    Commit message: Merge tag 'block-7.2-20260717' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/axboe/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2688736192
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2688736192_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2688736192_aarch64_kernel_kcidb_tool_21675316_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+https://lore.kernel.org/rust-for-linux/20260720035510.4048145-1-tomo@flapping.org/
