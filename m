@@ -1,83 +1,147 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out-13.smtp.spacemail.com (out-13.smtp.spacemail.com [63.250.43.96])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25661408039;
-	Tue, 21 Jul 2026 05:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784611811; cv=pass; b=JNg4TQfsvZofU9VDX4zPb8Q7KQUMHiHOyH7KwJ7pJHXtj65DLgV1s7SyzlK9bYqNwRUQSSjAY/NMlyKsGInBcn8QRD+EgtD/dUoMq+EKrdgs8k8WWW5I6t9xXnX+RyW31cdmc6gF+DldLU+p2NhNJfD+YhHts6mefUUqKOjbHAc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784611811; c=relaxed/simple;
-	bh=3T0/hE0Stcsw2vObmLCtl5WoxVyBzpYUy5cEmhuJKSA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NYi70TjU+SJsO3ODDTcA5Ol65ICobdsHTxvbq/gmZ974nmfV5V+Xxm5/d4VT3TCuf9vLqQM/brAvQyQEbbfZZ+KlIHoUxOzAsfO95xWQnwsjgaIgnrPNMX70HSKAwpljDzo15sV7MfT0L47CeZe4rPVwhKGacwl0WbPrrua/KOA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=d3O4CyJ5; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719B9435518
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 07:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.96
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784620234; cv=none; b=cgk7iMWAYbeNwC5HRE679D8/0Kict9nPjFaMi4Tre7dJ946yOIAl67Ac2Tm3voec3WOFzdHSunzGJcu7iUHWFZimNDlV6OE4a01ol7AMRsS//INqECXcf7exc5E+JX64uNvB9THnR676MWkpyd0iUCFMJ8z+NAZVGFe70yfceKs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784620234; c=relaxed/simple;
+	bh=Y/RQvv9LaQgt95iibZZ4uufhSLgFPy8tTOyXYtrR7yg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WjFYk+z4thZWhuvLFtB9stUN7e1He0l0hxy77P6Xcs4RLMkgEUujE7JdEmhcg/ylDBbUClVU41uwdhg1miE6Jk2T9dmiBHsz9GaxThtYGSg+bz1c3MHQhe/qeeyqKitc6kq7KK7Mn1g+AYSfbG/28SNtrPocZblm67Y+2MBgM3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev; spf=pass smtp.mailfrom=gurudas.dev; dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b=gY0rYPpn; arc=none smtp.client-ip=63.250.43.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gurudas.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="d3O4CyJ5"
-ARC-Seal: i=1; a=rsa-sha256; t=1784611796; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=JAZiciWAxdxaDBm2ejDbsi2u4MRQYwPOdjHpziQKaz+RowHBvMLWn+kLCDNKLLs8g4wtAVvM/FzolwdWcLSV4H47537+9qtUVThJ1nL3KTlhE2ERm2THFFbUnApys5fJymWy09ngFRAtityti0PZnb4XEAH7ahijy2VRGRabNj4=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1784611796; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=usf/+HzMy5QNUILiRJd2VbwOtJqgY9KL8yy6nGvOQ84=; 
-	b=LPK/Wr8gDaTuY7nY2XrqDfoLOuo2JQbFFvRdeZW9M1jaMc1gMfXLA+tARUskHG8dY/xA+v3A2Ze7lt7GBqDY0xx361k/wP1bI5JLrcl8ihJ/sZQUfgS2Oj8A6iDkXYuQ6gxRNA8zt686L+qbYkFgTfISvym/y4LjE77KdUnlGEc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=yoavmoshe.com;
-	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
-	dmarc=pass header.from=<linux@yoavmoshe.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784611796;
-	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=usf/+HzMy5QNUILiRJd2VbwOtJqgY9KL8yy6nGvOQ84=;
-	b=d3O4CyJ53P11soT2mNxOURxEvpxU4BlR180UjT86gX0AMs7wGKVUpN96CyeKLIEF
-	SwFCQUWLCU926lM7CMz9Ue62NHNtklAmQCyE/p2Sw/wSXqfu05tu3d9+C4Pm7RPYGVV
-	R467EkaGJjGtcUDv3/8FYFZkF8ni0gPvV12kYfPc=
-Received: by mx.zohomail.com with SMTPS id 178461179350753.645045637920475;
-	Mon, 20 Jul 2026 22:29:53 -0700 (PDT)
-Message-ID: <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com>
-Date: Tue, 21 Jul 2026 07:29:50 +0200
+	dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b="gY0rYPpn"
+Received: from gurudas.dev (107-194-158-19.lightspeed.sntcca.sbcglobal.net [107.194.158.19])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.spacemail.com (Postfix) with ESMTPSA id 4h48gp578vz2x9B;
+	Tue, 21 Jul 2026 07:50:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gurudas.dev;
+	s=spacemail; t=1784620231;
+	bh=zA2cPnAA92Xrj4Tj9D0WkWnQLAGKwGz9kgEDoAwbDH8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gY0rYPpnmzdJfsPD+BFHyAgFbaXKuWK/yCorZvKAFcnCZAx3QvuPvJOvlAUrHKEHB
+	 uunmuUMC/dKZ1q8ft7CZZKRpIxsKX/sLjXGIe+bjcSvYJEoqF+9Zqv5wAuXV7+7Gpq
+	 uDfq0s0iuyPyyqiJVo1EZOCoUFC+YbkrbhZ9iNgL7DCK3E9y4ihvBy6+yO2JueK7EQ
+	 i7KElcIMkKAMfqewjI5TWt6yYHS9fWSPAXcWE3NmycI038uJxnnQmtr3cTXitnG0+g
+	 2oqt3ylO5PDkUbDurg/+Vj8/a++nH3DlXuG109IdpflgHY1Mhp3bkemzykQDcE/uMn
+	 SpMDWS2IxFfFQ==
+Date: Tue, 21 Jul 2026 00:50:28 -0700
+From: Guru Das Srinagesh <linux@gurudas.dev>
+To: Link Mauve <linkmauve@linkmauve.fr>
+Cc: Michal Wilczynski <m.wilczynski@samsung.com>,
+	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-riscv@lists.infradead.org, linux-pwm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] pwm: th1520: use vertical import style
+Message-ID: <al8kxC4y3rviugTh@gurudas.dev>
+Mail-Followup-To: Link Mauve <linkmauve@linkmauve.fr>,
+	Michal Wilczynski <m.wilczynski@samsung.com>,
+	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Fu Wei <wefu@redhat.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-riscv@lists.infradead.org, linux-pwm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+References: <20260705-pwm-rust-vert-imp-v1-1-753dbbfc6061@gurudas.dev>
+ <ak3-rU3IRYaLTCC5@luna>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
-To: Sami Tolvanen <samitolvanen@google.com>, Yo'av Moshe <linux@yoavmoshe.com>
-Cc: Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
- Russell King <linux@armlinux.org.uk>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- llvm@lists.linux.dev, stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260718111340.159896-1-linux@yoavmoshe.com>
- <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
-Content-Language: en-GB, sv-SE
-From: Yo'av Moshe <linux@yoavmoshe.com>
-In-Reply-To: <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ak3-rU3IRYaLTCC5@luna>
+X-Envelope-From: linux@gurudas.dev
 
-On 2026-07-20 9:29 PM, Sami Tolvanen wrote:
-> Would it be possible to just copy the 4-byte CFI hash prefix to OCRAM
-> when relocating the function? If not, the __nocfi approach seems
-> reasonable to me.
+On Wed, Jul 08, 2026 at 09:39:25AM +0200, Link Mauve wrote:
+> On Sun, Jul 05, 2026 at 07:52:05PM -0700, Guru Das Srinagesh wrote:
+> > Convert `use` imports to vertical layout for better readability and
+> > maintainability.
+> > 
+> > Signed-off-by: Guru Das Srinagesh <linux@gurudas.dev>
+> > ---
+> > Came across a recent commit bc58905eb07 ("samples: rust_misc_device: use
+> > vertical import style") and found a few more locations that could
+> > benefit from this cleanup. No functional changes.
+> > 
+> > Separating out patches per-subsystem as per the review feedback in [0].
+> > 
+> > Tested via:
+> > 
+> >     $ make LLVM=1 rustfmtcheck || echo "fail"
+> >     $
+> > 
+> > [0]: https://lore.kernel.org/lkml/20260628-b4-rust-vertical-imports-v1-0-98bc71d4810b@gurudas.dev/
+> > ---
+> >  drivers/pwm/pwm_th1520.rs | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/drivers/pwm/pwm_th1520.rs b/drivers/pwm/pwm_th1520.rs
+> > index 3e3fa51ccef9..2a3b107157ac 100644
+> > --- a/drivers/pwm/pwm_th1520.rs
+> > +++ b/drivers/pwm/pwm_th1520.rs
+> > @@ -23,15 +23,21 @@
+> >  use core::ops::Deref;
+> >  use kernel::{
+> >      clk::Clk,
+> > -    device::{Bound, Core, Device},
+> > +    device::{
+> > +        Bound,
+> > +        Core,
+> > +        Device, //
+> > +    },
+> >      devres,
+> >      io::{
+> >          mem::IoMem,
+> >          Io, //
+> >      },
+> > -    of, platform,
+> > +    of,
+> > +    platform, //
 > 
-> Sami
+> Same here, you just need the empty comment after time, not the one after
+> platform.
 
-I gave this a try - I tried copying 4 bytes from before imx6_suspend
-into OCRAM, but when I tested it on physical hardware (Kobo Clara HD),
-it still crashed on suspend.
-
-I suspect it's because imx6_suspend is written in assembly
-(suspend-imx6.S) rather than C, so Clang doesn't emit a CFI hash prefix
-before it in the first place.
-
-Best regards,
-Yo'av
+Done, thank you for the review.
