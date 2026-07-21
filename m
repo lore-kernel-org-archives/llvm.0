@@ -1,207 +1,204 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C0363B27EC;
-	Tue, 21 Jul 2026 08:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5B1466B57
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 11:39:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784622921; cv=none; b=HKvI10fUfJKj1fcuRhWogZ5hf9a5Lq2JOCejca1YeYkp2trQkxbVl/bgKmsI21fZx4srWNFWRiz8+aX66Igb8+NA/2LcRJbPbjjLapFaQ7i6z9B85QYNGvvnNUWIITYPSJERad+qlxJ4JvUaGst10V3P62dEI2jQsL/WV3uJuu8=
+	t=1784634002; cv=none; b=qMZWIkwsMyKhE8xGtJat9uM4XwIAvveGxhp/sk/PTxIpoyvOlqSjJRmKWET//WyoiVNqCa70czI2eoh+L5bGUTfGHIrrk9G0zIYni/eyj2qExFmDlhv3ySHaN9n+d7rSRlwSO4JihBbkMxbfW/V0rNRYY42uaxwCkIoApiggYZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784622921; c=relaxed/simple;
-	bh=TqBuk+y222S/0JZKUqdHbjn0+vuZEHvbtEuhuz+DG3Q=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=oa2JUOxk88JZzt9FEr/cqhuPgus4ZZ9hdcddgEaX6naUojbMRKZfoYjT6iV7e/dJFXQgucp3I4XCyPXKvJUybq1a7Y7GStenp7PMZzg1T8+dkEXGqBXt4wBtxNOZIKIrLdetbjDXTsIXnoSdhx+PkovoY5SqqKWZLgbg1vL1kbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CFCR2Py6; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CFCR2Py6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784622920; x=1816158920;
-  h=date:from:to:cc:subject:message-id;
-  bh=TqBuk+y222S/0JZKUqdHbjn0+vuZEHvbtEuhuz+DG3Q=;
-  b=CFCR2Py63rxYEJbz0Bk606FFcoWxiB0TKNTeoK4QwcjWYakmxxGYgDvt
-   cs6tQAWCtggOHKq86XAIZb067omVrQvFijgS1fEaN9Bpbkk5Mo6qISUvy
-   nXzyA1/imaLxhb2df9BxZyVcpcil61rW/hZe+WfwUN8MoJMt2glKPBGXp
-   US7htcr8BSa3J8NljSls9oYkV83wqkDKrbJu14oJ2mv31WN4JnxP+l6cE
-   Jetmt4hHFo7Zkzkfk0TWDzo/C0A7heSgu9R0DdoshlsHmpOOlhrtRo3gl
-   FCwpG7L8azBP/z/UXxzLJ+Th1Opv+LX9/5foLsXTeahYgXOFV8yQ2a2Ji
-   w==;
-X-CSE-ConnectionGUID: tCGEjyupR16Qh6i+l4A2lg==
-X-CSE-MsgGUID: MAjFSjyOSGSgo2FGVOmKCQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11852"; a="85415879"
-X-IronPort-AV: E=Sophos;i="6.25,176,1779174000"; 
-   d="scan'208";a="85415879"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 01:35:19 -0700
-X-CSE-ConnectionGUID: d5RZ3SEmRri6LcdJvCLOeA==
-X-CSE-MsgGUID: CnKPypL6RuCxoLTVF9u7jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,176,1779174000"; 
-   d="scan'208";a="295907026"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 21 Jul 2026 01:35:08 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wm5wP-00000000XQ3-11uQ;
-	Tue, 21 Jul 2026 08:35:05 +0000
-Date: Tue, 21 Jul 2026 16:34:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Andrew Morton <akpm@linux-foundation.org>,
- Linux Memory Management List <linux-mm@kvack.org>
-Subject: [linux-next:master 6918/7793] mm/page_owner.c:818:22: error:
- passing 'memdesc_flags_t *' to parameter of incompatible type
- 'memdesc_flags_t'; remove &
-Message-ID: <202607211642.g3Xlz5F8-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1784634002; c=relaxed/simple;
+	bh=JXWdx8p2WhqAD942C81MkHbveCEBg991JO/9hHnkfyo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BxPMbBas3/8otsbxUONShzuxPlQwQSQGBQMjfIqc/81K5SincG7yVbR7VVwcIHrqpbo3gUucrAG7ckEqRj83VgdLxf6MWx7cvu4GkeN/I3ZflldihOmCj+J3AmDVAuqpTdd8+5PGVnjj8MEffXxis/3Fom3Bo7dsb75YU81Etow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h4Flj4S3mzKHMd9
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 19:39:13 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 9580E4058C
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 19:39:55 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCnAW6KWl9qfBEcCA--.5778S2;
+	Tue, 21 Jul 2026 19:39:55 +0800 (CST)
+Message-ID: <f7a94138-e29f-4b1a-948d-ef4933e7d0c5@huaweicloud.com>
+Date: Tue, 21 Jul 2026 19:39:53 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 11/21] perf auxtrace: Set default period to 1 for
+ PERF_ITRACE_PERIOD_INSTRUCTIONS type
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Li Huafei <lihuafei1@huawei.com>, Shuai Xue <xueshuai@linux.alibaba.com>,
+ Namhyung Kim <namhyung@kernel.org>, James Clark <james.clark@linaro.org>
+References: <20260701035355.752944-1-wutengda@huaweicloud.com>
+ <20260701035355.752944-12-wutengda@huaweicloud.com>
+ <07c8c780-5eeb-4310-80cd-3ff18952a688@intel.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <07c8c780-5eeb-4310-80cd-3ff18952a688@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:cCh0CgCnAW6KWl9qfBEcCA--.5778S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4xAF47ArWrXrW8Gw4Durg_yoWrKrWfpr
+	n8tFWfJr4kXry8KwnFyr47Za4fAw4jqF1UG3s3JrWjy34j9ry8tFy7tr15CF4xGrnYkr9r
+	ZFZ0qr1Uury5JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
+	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
+	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
+	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
+	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
+	0PDUUUU
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   3fe08b9796f36ef437ab9328e7dd1e5ff2d66603
-commit: 2e3c4a69b0c52d1f75d13c3ac380625143888e18 [6918/7793] mm-page_owner-add-numa-node-filter-fix
-config: i386-randconfig-r134-20260721 (https://download.01.org/0day-ci/archive/20260721/202607211642.g3Xlz5F8-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260721/202607211642.g3Xlz5F8-lkp@intel.com/reproduce)
+Hi Adrian,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607211642.g3Xlz5F8-lkp@intel.com/
+On 2026/7/21 16:08, Adrian Hunter wrote:
+> On 01/07/2026 06:53, Tengda Wu wrote:
+>> When using --itrace=M for data type profiling on arm64, the 'Percent'
+>> values in perf annotate output are all zero:
+>>
+>> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+>> ============================================================================
+>>  Percent     offset       size  field
+>>     0.00          0       0x10  struct mmu_gather_batch  {
+>>     0.00          0        0x8      struct mmu_gather_batch*    next;
+>>     0.00        0x8        0x4      unsigned int        nr;
+>>     0.00        0xc        0x4      unsigned int        max;
+>>     0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+>>                                 };
+>>
+>> However, adding the -n option reveals non-zero sample counts:
+>>
+>> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+>> ============================================================================
+>>  Samples     offset       size  field
+>>       15          0       0x10  struct mmu_gather_batch  {
+>>       13          0        0x8      struct mmu_gather_batch*    next;
+>>        2        0x8        0x4      unsigned int        nr;
+>>        0        0xc        0x4      unsigned int        max;
+>>        0       0x10          0      struct encoded_page*[]      encoded_pages;
+>>                                 };
+>>
+>> The root cause is that when period is not explicitly specified in the
+>> --itrace option, it remains zero after itrace_do_parse_synth_opts().
+>> The zero period then flows through annotated_data_type__update_samples()
+>> where h->period accumulates to zero, and print_annotated_data_type_value()
+>> calculates the 'Percent' as zero.
+> 
+> The period is for instructions samples i.e. options 'i' or 'y'.  Why is
+> it being used in the 'M' case?  What samples are being synthesized in
+> that case?
+> 
 
-Note: the linux-next/master HEAD 3fe08b9796f36ef437ab9328e7dd1e5ff2d66603 builds fine.
-      It may have been fixed somewhere.
+The 'M' case is just one example. On arm64, 't' and 'f' also have the
+same percent-zero issue.
 
-All errors (new ones prefixed by >>):
+How ARM SPE synthesizes events:
 
->> mm/page_owner.c:818:22: error: passing 'memdesc_flags_t *' to parameter of incompatible type 'memdesc_flags_t'; remove &
-     818 |                         nid = memdesc_nid(&page_flags);
-         |                                           ^~~~~~~~~~~
-   include/linux/mm.h:2291:47: note: passing argument to parameter 'mdf' here
-    2291 | static inline int memdesc_nid(memdesc_flags_t mdf)
-         |                                               ^
-   1 error generated.
+ARM SPE can synthesize multiple event types from a single instruction.
+For example, the 'M' case targets instructions that cause memory
+interaction events, while the 't' case targets instructions that trigger
+TLB access/miss events. Users can specify the desired event types via
+the itrace option to obtain corresponding data type profiling results.
 
+How data type computes Percent:
 
-vim +818 mm/page_owner.c
+Data type profiling computes Percent based on the period. The flow is as
+follows:
 
-   727	
-   728	static ssize_t
-   729	read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
-   730	{
-   731		unsigned long pfn;
-   732		struct page *page;
-   733		struct page_ext *page_ext;
-   734		struct page_owner *page_owner;
-   735		depot_stack_handle_t handle;
-   736		struct page_owner_filter_state *state = file->private_data;
-   737	
-   738		if (!static_branch_unlikely(&page_owner_inited))
-   739			return -EINVAL;
-   740	
-   741		page = NULL;
-   742		if (*ppos == 0)
-   743			pfn = min_low_pfn;
-   744		else
-   745			pfn = *ppos;
-   746		/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
-   747		while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
-   748			pfn++;
-   749	
-   750		/* Find an allocated page */
-   751		for (; pfn < max_pfn; pfn++) {
-   752			/*
-   753			 * This temporary page_owner is required so
-   754			 * that we can avoid the context switches while holding
-   755			 * the rcu lock and copying the page owner information to
-   756			 * user through copy_to_user() or GFP_KERNEL allocations.
-   757			 */
-   758			struct page_owner page_owner_tmp;
-   759	
-   760			/*
-   761			 * If the new page is in a new MAX_ORDER_NR_PAGES area,
-   762			 * validate the area as existing, skip it if not
-   763			 */
-   764			if ((pfn & (MAX_ORDER_NR_PAGES - 1)) == 0 && !pfn_valid(pfn)) {
-   765				pfn += MAX_ORDER_NR_PAGES - 1;
-   766				continue;
-   767			}
-   768	
-   769			page = pfn_to_page(pfn);
-   770			if (skip_buddy_pages(&pfn, page))
-   771				continue;
-   772	
-   773			page_ext = page_ext_get(page);
-   774			if (unlikely(!page_ext))
-   775				continue;
-   776	
-   777			/*
-   778			 * Some pages could be missed by concurrent allocation or free,
-   779			 * because we don't hold the zone lock.
-   780			 */
-   781			if (!test_bit(PAGE_EXT_OWNER, &page_ext->flags))
-   782				goto ext_put_continue;
-   783	
-   784			/*
-   785			 * Although we do have the info about past allocation of free
-   786			 * pages, it's not relevant for current memory usage.
-   787			 */
-   788			if (!test_bit(PAGE_EXT_OWNER_ALLOCATED, &page_ext->flags))
-   789				goto ext_put_continue;
-   790	
-   791			page_owner = get_page_owner(page_ext);
-   792	
-   793			/*
-   794			 * Don't print "tail" pages of high-order allocations as that
-   795			 * would inflate the stats.
-   796			 */
-   797			if (!IS_ALIGNED(pfn, 1 << page_owner->order))
-   798				goto ext_put_continue;
-   799	
-   800			/*
-   801			 * Access to page_ext->handle isn't synchronous so we should
-   802			 * be careful to access it.
-   803			 */
-   804			handle = READ_ONCE(page_owner->handle);
-   805			if (!handle)
-   806				goto ext_put_continue;
-   807	
-   808			if (state->nid_filter_enabled) {
-   809				int nid;
-   810				memdesc_flags_t page_flags = READ_ONCE(page->flags);
-   811	
-   812				/*
-   813				 * Bypass PF_POISONED_CHECK() in page_to_nid() to avoid
-   814				 * VM_BUG_ON when accessing poisoned pages.
-   815				 */
-   816				if (page_flags.f == PAGE_POISON_PATTERN)
-   817					goto ext_put_continue;
- > 818				nid = memdesc_nid(&page_flags);
-   819				if (!node_isset(nid, state->nid_filter))
-   820					goto ext_put_continue;
-   821			}
-   822	
-   823			/* Record the next PFN to read in the file offset */
-   824			*ppos = pfn + 1;
-   825	
-   826			page_owner_tmp = *page_owner;
-   827			page_ext_put(page_ext);
-   828			return print_page_owner(buf, count, pfn, page,
-   829					&page_owner_tmp, handle, state);
-   830	ext_put_continue:
-   831			page_ext_put(page_ext);
-   832			cond_resched();
-   833		}
-   834	
-   835		return 0;
-   836	}
-   837	
+arm_spe_prep_sample():
+        sample->period = spe->synth_opts.period;
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+__hists__add_entry():
+        he.stat.period = sample->period;
+
+annotated_data_type__update_samples():
+        h->period += period;
+        h->addr[offset].period += period;
+
+print_annotated_data_value():
+        double percent = h->period ? (100.0 * period / h->period) : 0;
+
+Therefore, if synth_opts.period is not specified (remains zero), the
+final Percent calculation results in zero.
+
+As you pointed out, if period is intended to be limited to only the 'i'
+and 'y' options, then setting period to 1 in the current patch may not
+be appropriate.
+
+In fact, within print_annotated_data_value(), Percent could also be
+computed from the sample count. Moreover, I noticed that 'perf annotate'
+already has a --percent-type parameter that allows users to specify
+whether Percent is based on period or hit (which I understand to be the
+sample count). Perhaps it would be more reasonable to adapt
+print_annotated_data_value() to honor the --percent-type parameter
+instead.
+
+Thanks,
+Tengda
+
+>>
+>> In itrace_do_parse_synth_opts(), non-'iy' options have their period
+>> type set to PERF_ITRACE_PERIOD_INSTRUCTIONS, but period remains zero.
+>> Since a zero period is meaningless for this type, default to 1 (one
+>> sample per instruction).
+>>
+>> With this fix applied, the result is as follows:
+>>
+>> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+>> ============================================================================
+>>  Percent     offset       size  field
+>>   100.00          0       0x10  struct mmu_gather_batch  {
+>>    86.67          0        0x8      struct mmu_gather_batch*    next;
+>>    13.33        0x8        0x4      unsigned int        nr;
+>>     0.00        0xc        0x4      unsigned int        max;
+>>     0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+>>                                 };
+>>
+>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>> ---
+>>  tools/perf/util/auxtrace.c | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+>> index 0b851f32e98c..415b68a2bba9 100644
+>> --- a/tools/perf/util/auxtrace.c
+>> +++ b/tools/perf/util/auxtrace.c
+>> @@ -1759,6 +1759,12 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+>>  			synth_opts->period = PERF_ITRACE_DEFAULT_PERIOD;
+>>  	}
+>>  
+>> +	if (!period_set &&
+>> +	    synth_opts->period_type == PERF_ITRACE_PERIOD_INSTRUCTIONS) {
+>> +		/* Indicates a sample is taken for every instruction. */
+>> +		synth_opts->period = 1;
+>> +	}
+>> +
+>>  	return 0;
+>>  
+>>  out_err:
+> 
+
