@@ -1,82 +1,51 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D843C3BF7;
-	Mon, 20 Jul 2026 20:53:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0A0410F1;
+	Tue, 21 Jul 2026 00:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784580814; cv=none; b=dZUTLgUeDP+NzCccW9AQXvl/lMfmVixvKulEBmzy9dByDC299CJ3RyXk9wOHzZ4mH7Io6PrlscZwXm6MzV3YRzfLXAISLmvEU+OgxkgzuAImQ3KBQRE5YMhm3TK7ehZO+JwrWcjpokN/9t9CbngsfElxVmdhyfNs506n3sWA0wU=
+	t=1784592727; cv=none; b=nDrBC3ZgZ4aoMK/uh8VkhKfRu2goy3xbSHzmlwoMTPBSMf33jVdaoF/g8s6JrltgB+pTm9u3eTLVfDPltJJlRip5WKz3XOHZn93+s65wJfJxlxh6EgGkhvDa6sCCrJARHA3TpJLgoTMV19YEhDgvvdaKs8UfEancYtLwt+rzcxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784580814; c=relaxed/simple;
-	bh=xNGHfZFJOSvi5ZB/bgCt2e5/PoA8SaVrwdd2Hji1bo4=;
+	s=arc-20240116; t=1784592727; c=relaxed/simple;
+	bh=FuVrgXP7lMIHKi453Aiwl8puJACKfO5cBs5WKc3tPEQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GMV/Ue9J+6gQtftCUkL/FNh4tck1py1J4d2JQL/x/KhpNXmtt83+QP+UDnrjUPtBElJAODFa3DzKgwxJhcB09/nWFihsnz2BlagmNLpLZzjTnRgYygdaxXKobUO0NYP2dTyD4xy5Ldsbagod66CYdsurEoqJLC8K37jb3vO8V1k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kWRD/WwS; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	 Content-Type:Content-Disposition:In-Reply-To; b=SEVUp6KbaFXHml9HNGoTYhmOCdDWUJ8wRnvj8ECFqstg8R9vIJN0gcppbPo3HB2Z3CevcA5LLSdBzWWslDP/3rBAfsxwsEvh1a0Nmg5CrjjbdU4gOIvSQG5tg3sqf0UzVHJ38mb6EPR9jq0p6UowSGncjFoGQzEzuO4eogni+LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N7lsda8w; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kWRD/WwS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=rLkNesRCYNFOq+ZuVFxEEhkM0txhhysUwpvEFeMD4Fw=; b=kWRD/WwSdH3oQGCu/bb2MqxLFt
-	GxxMAXajZYFA8mU3N1Pm9DTmh8P/j0xPt/6IE5Pei2n1jaMYNVOfrjUkv5qnofA/1mh5DxHW6vw6w
-	G6xJB9AiVVAZK+u8aHNV/3Pt2rqgYDi1iqaQ5Jt98DQbpEtpuFBvr45lX/W5wsB0Shy0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1wluz9-00DK2K-VG; Mon, 20 Jul 2026 22:53:11 +0200
-Date: Mon, 20 Jul 2026 22:53:11 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Natalie Vock <nat@pixelcluster.dev>
-Cc: Taehee Yoo <ap420073@gmail.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Alexei Starovoitov <ast@kernel.org>, amd-gfx@lists.freedesktop.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Bill Wendling <morbo@google.com>, bpf@vger.kernel.org,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	David Airlie <airlied@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Felix Kuehling <Felix.Kuehling@amd.com>,
-	Hoyeon Lee <hoyeon.rhee@gmail.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Leon Romanovsky <leon@kernel.org>, linaro-mm-sig@lists.linaro.org,
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Mark Bloch <mbloch@nvidia.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N7lsda8w"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13A8E1F000E9;
+	Tue, 21 Jul 2026 00:12:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784592725;
+	bh=VXlc6HT4lYc03UjhyLS3oPG/+n1mY3bfDktU1WUYqAY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=N7lsda8wgWs09xBOYAOmoQ90scQZUIW+wwU1JYnB2SddZXloWe42l+bWx5uwn9N7t
+	 ZBVK83YqBKcyJEQertnaLibX5qRO0C4BrYJuT7G4yxEazd/Z8+MUj7mVwC5+qnc6Mn
+	 6VF1MOp5sIBOBvryDTOhV2dGnDxVqSks4fhlaHpZm0dmocljiyGJWvjw3ONlBNErtE
+	 l89OQJQKwriJc6g4AfWsSp9EXFT8+k0iOjTE8+Zke53X4p+f08FMrjhtA1Vc6EGgF6
+	 qZPmeYU3CN5TWEq+oaRLPPHplOFeom5DDPpTYGYIoChe5QkGk2GFT71XEWkhXA60jg
+	 r4eP6jXHiaCEw==
+Date: Mon, 20 Jul 2026 17:11:59 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Linus Walleij <linusw@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Zhen Lei <thunder.leizhen@huawei.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	=?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	linux-arm-kernel@lists.infradead.org,
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>,
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Yonghong Song <yonghong.song@linux.dev>
-Subject: Re: [RFC PATCH net-next 08/13] drm/amdkfd: add GPU instruction
- emitter and disassembler
-Message-ID: <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
-References: <20260719175857.4071636-1-ap420073@gmail.com>
- <20260719175857.4071636-9-ap420073@gmail.com>
- <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev>
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3] ARM: traps: Implement KCFI trap handler for ARM32
+Message-ID: <20260721001159.GA3326792@ax162>
+References: <20260715175223.make.153-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,39 +54,59 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev>
+In-Reply-To: <20260715175223.make.153-kees@kernel.org>
 
-On Mon, Jul 20, 2026 at 10:05:33PM +0200, Natalie Vock wrote:
-> On 7/19/26 19:58, Taehee Yoo wrote:
-> > Add the AMD GCN (gfx9/gfx10) instruction encoder used to build the GPU
-> > shaders that knod dispatches, plus a matching disassembler used for
-> > debugging the generated code.
+On Wed, Jul 15, 2026 at 10:52:27AM -0700, Kees Cook wrote:
+> ARM32 GCC KCFI[1] violations currently show as generic "Oops - undefined
+> instruction" errors, making debugging CFI failures difficult. Add a proper
+> KCFI trap handler similar to the aarch64 implementation to provide clear
+> CFI error messages, including the call target and the expected type.
 > 
-> Is it really necessary to have a full-on compiler and disassembler in the
-> kernel driver? This patch is massive and I'm wondering how much benefit it
-> really provides. Is there really no way to move GPU compilation out of the
-> kernel, one way or another? Could you get acceptable perf with a static
-> shader that interprets BPF programs at runtime? Such a shader can be
-> compiled beforehand and just embedded into the kernel - there's prior art
-> there with the CWSR trap handler in amdkfd.
+> Clang and GCC trap CFI failures differently on ARM32. Clang lowers
+> its checks to a BKPT, handled via the breakpoint/prefetch-abort path
+> in hw_breakpoint.c, which cannot recover the target or expected type
+> and so must report via report_cfi_failure_noaddr(). GCC instead lowers
+> KCFI checks to a UDF (undefined instruction) whose immediate encodes
+> the registers involved, so the handler can decode it and call the full
+> report_cfi_failure() with the target and expected type.
 > 
-> In case you really, really need to compile the BPF to native ISA, could you
-> still have userspace take care of that in one way or another?
+> The GCC ARM32 KCFI implementation uses UDF instructions with a specific
+> encoding pattern:
+> - UDF instruction format: cccc 0111 1111 imm12 1111 imm4
+> - 16-bit immediate reconstructed from bits 19-8 and 3-0
+> - KCFI encoding: 0x8000 | (type_reg_num << 5) | (target_reg_num & 31)
+> - Bit 15: KCFI trap identifier (0x8000)
+> - Bits 9-5: Type ID register field (0x1F when unavailable)
+> - Bits 4-0: Target address register number
+> 
+> When the type register field is 0x1F (the type was spilled rather than
+> kept in a register), the handler walks back up to 6 preceding
+> instructions to recover the 32-bit type ID from the four EOR-immediate
+> instructions the compiler emits, similar to x86 CFI trap reconstruction.
+> 
+> The handler is dispatched directly from do_undefinstr() rather than
+> through register_undef_hook(). A registered hook is only installed once
+> initcalls run, so any KCFI violation that fires earlier in boot would be
+> reported as a generic "undefined instruction"; calling the decoder from
+> the exception handler itself catches failures from the very first
+> instruction. Dispatching directly also lets the handler ignore
+> non-kernel-mode UDFs, preventing a user process from spoofing the KCFI
+> encoding.
+> 
+> Both the UDF handler and the Clang breakpoint handler in hw_breakpoint.c
+> act on the report_cfi_failure*() result identically (oops on a fatal
+> violation, or skip the trapping instruction under CFI permissive mode)
+> so factor that shared tail into arm_cfi_handle_failure(), declared in
+> asm/traps.h.
+> 
+> Link: https://inbox.sourceware.org/gcc-patches/20260618204539.824446-6-kees@kernel.org/ [1]
+> Signed-off-by: Kees Cook <kees@kernel.org>
 
-There was a long and painful discussion about P4, and offloading it to
-hardware. The proponents of that wanted to do the compilation stage in
-user space to produce a binary blob, but it was hard to prove that the
-P4 passed to the kernel for software processing, and the binary blob
-passed to the hardware actually where the same. It opened up the path
-for closed source P4 where the kernel never got to see the actual P4
-code. So it was not really offload, but kernel bypass.
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-So having a compiler in the kernel is probably the correct way to go,
-if you want to be friendly to open source.
+I tested this in QEMU using LKDTM, which shows lkdtm_increment_int() as
+the target of the failed call.
 
-The other option is to get the GPU to do the compilation itself, so
-you pass BPF byte codes to the GPU and it generates its own native
-code. I've no idea if that is possible, but clang can target OpenMP,
-so maybe it is possible to move this compiler into the GPU?
-
-      Andrew
+-- 
+Cheers,
+Nathan
