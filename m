@@ -1,147 +1,94 @@
-Received: from out-13.smtp.spacemail.com (out-13.smtp.spacemail.com [63.250.43.96])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719B9435518
-	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 07:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.250.43.96
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A63B437842
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 07:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784620234; cv=none; b=cgk7iMWAYbeNwC5HRE679D8/0Kict9nPjFaMi4Tre7dJ946yOIAl67Ac2Tm3voec3WOFzdHSunzGJcu7iUHWFZimNDlV6OE4a01ol7AMRsS//INqECXcf7exc5E+JX64uNvB9THnR676MWkpyd0iUCFMJ8z+NAZVGFe70yfceKs=
+	t=1784620492; cv=none; b=aGtRsIjzeqanQGE0Egdqiyb+1p8628Ys+RnNtPQrHTZH9VGEkCf+5mFijRj9Rcu5D3nywIWyD+/dK+OwD+w7WZjr4IDrIQtdjhX7ix/tmRYJzqVvVJ63ixsQKV27RbdxGJ53x0cMkZBmWW1S2211REwrgpbL+JTbjAdy5iqieyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784620234; c=relaxed/simple;
-	bh=Y/RQvv9LaQgt95iibZZ4uufhSLgFPy8tTOyXYtrR7yg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WjFYk+z4thZWhuvLFtB9stUN7e1He0l0hxy77P6Xcs4RLMkgEUujE7JdEmhcg/ylDBbUClVU41uwdhg1miE6Jk2T9dmiBHsz9GaxThtYGSg+bz1c3MHQhe/qeeyqKitc6kq7KK7Mn1g+AYSfbG/28SNtrPocZblm67Y+2MBgM3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev; spf=pass smtp.mailfrom=gurudas.dev; dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b=gY0rYPpn; arc=none smtp.client-ip=63.250.43.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gurudas.dev
+	s=arc-20240116; t=1784620492; c=relaxed/simple;
+	bh=dCFp8azqbtjMnvLCWbCJTpVJiM5s5tHj5DD4OdLTAbw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M3Zo51Vln5LA09WW0APmYOsJcuGvtrUR/DFt8Q7LrrqEg3FJV5Ch10xOiwD+zEVXvx3vdBmSpRsYs54KPyM/uAygUOWaU0PFHu9KC9PpM7bdvhkmlnYzgXqKzmC5F/TdarmcBn5bCivB5rbuoE/fNTK2lEVVvuzreU7M8slFVTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YdkkD2rs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b="gY0rYPpn"
-Received: from gurudas.dev (107-194-158-19.lightspeed.sntcca.sbcglobal.net [107.194.158.19])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4h48gp578vz2x9B;
-	Tue, 21 Jul 2026 07:50:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gurudas.dev;
-	s=spacemail; t=1784620231;
-	bh=zA2cPnAA92Xrj4Tj9D0WkWnQLAGKwGz9kgEDoAwbDH8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gY0rYPpnmzdJfsPD+BFHyAgFbaXKuWK/yCorZvKAFcnCZAx3QvuPvJOvlAUrHKEHB
-	 uunmuUMC/dKZ1q8ft7CZZKRpIxsKX/sLjXGIe+bjcSvYJEoqF+9Zqv5wAuXV7+7Gpq
-	 uDfq0s0iuyPyyqiJVo1EZOCoUFC+YbkrbhZ9iNgL7DCK3E9y4ihvBy6+yO2JueK7EQ
-	 i7KElcIMkKAMfqewjI5TWt6yYHS9fWSPAXcWE3NmycI038uJxnnQmtr3cTXitnG0+g
-	 2oqt3ylO5PDkUbDurg/+Vj8/a++nH3DlXuG109IdpflgHY1Mhp3bkemzykQDcE/uMn
-	 SpMDWS2IxFfFQ==
-Date: Tue, 21 Jul 2026 00:50:28 -0700
-From: Guru Das Srinagesh <linux@gurudas.dev>
-To: Link Mauve <linkmauve@linkmauve.fr>
-Cc: Michal Wilczynski <m.wilczynski@samsung.com>,
-	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-riscv@lists.infradead.org, linux-pwm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] pwm: th1520: use vertical import style
-Message-ID: <al8kxC4y3rviugTh@gurudas.dev>
-Mail-Followup-To: Link Mauve <linkmauve@linkmauve.fr>,
-	Michal Wilczynski <m.wilczynski@samsung.com>,
-	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-riscv@lists.infradead.org, linux-pwm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-References: <20260705-pwm-rust-vert-imp-v1-1-753dbbfc6061@gurudas.dev>
- <ak3-rU3IRYaLTCC5@luna>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YdkkD2rs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E07301F00AC4
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 07:54:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784620490;
+	bh=dCFp8azqbtjMnvLCWbCJTpVJiM5s5tHj5DD4OdLTAbw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=YdkkD2rsb1Y9B6pAe1+97frJrUSdrI9pUkkIQiEGLcPCjxQBEOaohGm1EMYDRRErF
+	 HSdcB/p61C6TGoVXpDp2YsyHapcdnrxYybT0Q7qXzeCtyNDC6eXAFYA6l3828R6N7K
+	 bXuGIsfHmv400yRtXz3XMPAxbI3+Pr/2z0yKg0Kk4HA0bfig9cfem23jHxkYY1sd9X
+	 8YYa/twa4g5x2ZBzgv68ygJXs8YayaqPhUFvimNLgzUiCOAPC3506UMi6ow2q0MckE
+	 IVc7DcHBg1osEkH4Ji0uwUOUQNw0lx9bHRTHJjPWjfQ2lvlFqPRQr8aNsfZ48YxqYA
+	 mfi+85oBUjDeQ==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5b2a74f25feso133957e87.0
+        for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 00:54:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpwJ0C1yOXXsSqLJAJzpq5OwamRuWpEsrQI0N8qNf54HYpw+nshJ7OVQuaqIzySXUeN6+uW@lists.linux.dev
+X-Gm-Message-State: AOJu0YwL0pSKJZ089wfiPc7RPkdx3n146J18nRHDZzFR4UjHEDtE+xy+
+	TDM7fYV2X6iEmaHFjGA4fPz5f1DqqXul4WpgY9vvIaF31HRTvKVVk7vJGEY4zwYiKj9DRXiqM9K
+	bBo9TQ/QSKlOveAjD1IRwdPh01jQDwzs=
+X-Received: by 2002:ac2:5b4a:0:b0:5b0:177f:beab with SMTP id
+ 2adb3069b0e04-5b28f9b8ab1mr2888376e87.44.1784620489665; Tue, 21 Jul 2026
+ 00:54:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ak3-rU3IRYaLTCC5@luna>
-X-Envelope-From: linux@gurudas.dev
+References: <20260715175223.make.153-kees@kernel.org>
+In-Reply-To: <20260715175223.make.153-kees@kernel.org>
+From: Linus Walleij <linusw@kernel.org>
+Date: Tue, 21 Jul 2026 09:54:37 +0200
+X-Gmail-Original-Message-ID: <CAD++jLk549ZcSjpRN0G27i1C-n-k-dOpmgvfZBgmHQ5s0F6dJg@mail.gmail.com>
+X-Gm-Features: AUfX_mzMwCV8Z7xeaNpPDzFxYqTYvhmmKEur1wOLmu4Wv6aUpsrNZUfEjvv8O44
+Message-ID: <CAD++jLk549ZcSjpRN0G27i1C-n-k-dOpmgvfZBgmHQ5s0F6dJg@mail.gmail.com>
+Subject: Re: [PATCH v3] ARM: traps: Implement KCFI trap handler for ARM32
+To: Kees Cook <kees@kernel.org>
+Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-arm-kernel@lists.infradead.org, 
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 08, 2026 at 09:39:25AM +0200, Link Mauve wrote:
-> On Sun, Jul 05, 2026 at 07:52:05PM -0700, Guru Das Srinagesh wrote:
-> > Convert `use` imports to vertical layout for better readability and
-> > maintainability.
-> > 
-> > Signed-off-by: Guru Das Srinagesh <linux@gurudas.dev>
-> > ---
-> > Came across a recent commit bc58905eb07 ("samples: rust_misc_device: use
-> > vertical import style") and found a few more locations that could
-> > benefit from this cleanup. No functional changes.
-> > 
-> > Separating out patches per-subsystem as per the review feedback in [0].
-> > 
-> > Tested via:
-> > 
-> >     $ make LLVM=1 rustfmtcheck || echo "fail"
-> >     $
-> > 
-> > [0]: https://lore.kernel.org/lkml/20260628-b4-rust-vertical-imports-v1-0-98bc71d4810b@gurudas.dev/
-> > ---
-> >  drivers/pwm/pwm_th1520.rs | 12 +++++++++---
-> >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/pwm/pwm_th1520.rs b/drivers/pwm/pwm_th1520.rs
-> > index 3e3fa51ccef9..2a3b107157ac 100644
-> > --- a/drivers/pwm/pwm_th1520.rs
-> > +++ b/drivers/pwm/pwm_th1520.rs
-> > @@ -23,15 +23,21 @@
-> >  use core::ops::Deref;
-> >  use kernel::{
-> >      clk::Clk,
-> > -    device::{Bound, Core, Device},
-> > +    device::{
-> > +        Bound,
-> > +        Core,
-> > +        Device, //
-> > +    },
-> >      devres,
-> >      io::{
-> >          mem::IoMem,
-> >          Io, //
-> >      },
-> > -    of, platform,
-> > +    of,
-> > +    platform, //
-> 
-> Same here, you just need the empty comment after time, not the one after
-> platform.
+On Wed, Jul 15, 2026 at 7:52=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
 
-Done, thank you for the review.
+> ARM32 GCC KCFI[1] violations currently show as generic "Oops - undefined
+> instruction" errors, making debugging CFI failures difficult. Add a prope=
+r
+> KCFI trap handler similar to the aarch64 implementation to provide clear
+> CFI error messages, including the call target and the expected type.
+
+Reviewed-by: Linus Walleij <linusw@kernel.org>
+
+> Clang and GCC trap CFI failures differently on ARM32. Clang lowers
+> its checks to a BKPT, handled via the breakpoint/prefetch-abort path
+> in hw_breakpoint.c, which cannot recover the target or expected type
+> and so must report via report_cfi_failure_noaddr(). GCC instead lowers
+> KCFI checks to a UDF (undefined instruction) whose immediate encodes
+> the registers involved, so the handler can decode it and call the full
+> report_cfi_failure() with the target and expected type.
+
+Aha, that explains a few things.
+
+The UDF is a better approach for ARM I think (Russell will know best).
+
+As noted from earlier conversation the breakpoint usecase overloading
+on ARM is a mess, and we would certainly like to avoid it if possible,
+albeit I have a patch in Russell's patch tracker to paper it over.
+
+Do you think that long term we could switch Clang to do what
+GCC does?
+
+Yours,
+Linus Walleij
