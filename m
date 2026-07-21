@@ -1,151 +1,88 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7F953FF8B6
-	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 01:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784599142; cv=none; b=jCp+O4ke2J8leTJc3J4DJ1K75mjIyDTfZUfNxaKwnmPnz7wT5km9rGgH5vcxNQIq22BW1gqFd5ONBUEs5zFMCOiGeWHC6odqkwtAxVTyLap7R8UJMwzZSScGDA8W1IklitljZ8hU0EVmyVJm8ZDsrGDEN0/mqRFy/2iUHAmbV54=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784599142; c=relaxed/simple;
-	bh=64BryWhazFiSQGTHWsvVf9n0qNYmhx/nkK0q5awa1cI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KatRawS6VZVmOG1PVSd3Ys2y1UfeX4dsIFeo45JRVbqnPbr6B7ZbA+lGhj+4k6Fca/2Sn4+NG7W4yXZTyohf8atIHjODHPo+4knNYjo1Xc1DT08Btzij8q0BmODM8DL/pbkRFT1AOv56Ep4dHQYULEDzTTn8awyEfxdVcGGo3LM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pJOvLer6; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C182D7393;
+	Tue, 21 Jul 2026 05:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784611231; cv=pass; b=DTD0jnAnj+HTDGpbIn6CK7ihPI6+nMVOhcdtWnze+mIzRw/upQHoO0JjGKH6YeDGy4DTpST2y96bp9/zWS/kka7MAOOywzqxt0ajErxECyuJ8Ll4EdjQxNfLupwcxS+ItvsZz3NRcyrKcAHv1wk8b1dALpMJpzr4zScRLRD7QU0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784611231; c=relaxed/simple;
+	bh=Sqyd2iI5fkWmHnSlSSQrdsfjb/NYarTLfaWlS+hcGYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ufJZJlsf8UdUu4FWftwQKIScbt+BRe8Ew2i1AgXyPDVCt2qXLsmEQuBOwfL9IVWqt3Dc2ouFFNEd7V/kDQNdWYnZOrATWtLkRaINjJC+p2irZo6Tw2YRplSa/zKDzGNkUE11sWnl75xLU4/pFzN80UmS5PQ0/puSXtzUKelwWIY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=ClKTDFa1; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pJOvLer6"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so3155210a91.0
-        for <llvm@lists.linux.dev>; Mon, 20 Jul 2026 18:58:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784599139; x=1785203939; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=4L7OFyjs0agWHOOlRPNJjGmbLFr+eh96a4dzibePYvg=;
-        b=pJOvLer6/zujobu1shYDtpRHIbWX43nVpKmWwhtMAOps7cTaI93TIHNJ2lxKGhGYtc
-         SVeG8NEmTYzdp83EvQ0mygGJpkbPyTcoyqkMSTYiEfoVpkcfi8kBNFokHNxjgIwKfj/E
-         4UIh2oLT0cm5M0E9AyRJkvJteVDte+yuF8ykbCJlIAFqEMIk4ned0/+8zRgaZsUjw8Cb
-         YRQWUDiYsLTCYma+UoKUMnnRxpiQlqGys6H65ag9f5/AwrEm1oHGcNGHG3JlsBHf5LH4
-         dZtOQjlRlzVcVfBiVmymXLKX/tv0cZRvi+1fqKN4dUUiXtno9zOMbOCJTJzqXQWuCmBF
-         eRjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784599139; x=1785203939;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=4L7OFyjs0agWHOOlRPNJjGmbLFr+eh96a4dzibePYvg=;
-        b=CY67VF+DtZdZNJblgv2DGjRtwUedyt0tL3Z6zzFEqC0giOF6doBwn4QXjpz2mdS5d9
-         95WVE8wF+IlvjsyNbLkdmx++4Eu9elhCHQ1O8Oh+U2Obw/zuEnr0a9qgEDEnHk4gsemh
-         gXi3+jJv53twQ4nlyQ5RM0tZPnSHig4qw63+zjg9Q9G2OGo7TM4g+GYI/mhv8eibOdZQ
-         +RHJuL2mhP63DjNOUju55fIjZia7b0V2Woss8vofEeP3v6l/riHxFoeirjAYxnwO0NRc
-         IYiMilZZNu4BZ0zGNfEHDD7niJP4JFQbDCCcTw4rUThOSeo1/RZoSYZep/JizTVIydkc
-         PaHA==
-X-Forwarded-Encrypted: i=1; AHgh+RpUZgi+66N1IOGtIwc6W3WnalvRXe8naY1TL6+gueyHoMVD+SOMTAwv3hYJpMF4MDqUVXfn@lists.linux.dev
-X-Gm-Message-State: AOJu0YwBLtLDqaXTowZ7Wy1SCP+um449XPJUa3jNZaU5BjLIDP4xlfhf
-	koqbULSyMSEgT6O1ntdL6SefXtue6jXntstErbnKVnpu414vwbraUkus
-X-Gm-Gg: AR+sD13vcm+E0m+gKO/AI3F+27tuMLR9DuLoeZomPLfVM8bkq+Sjy7QIVw535z7a2Lr
-	+Bd1RUNbu7ZnSXSpc6K8MGJCMlL59WqwvgktIO1OTwMNcjZrzCF8E1TnkINbp/kFgvGuWww2Bsn
-	XkKeqb+5ZHX1A7OF1XPYoTNu4+bvdXsKwpJY6zK3k6UFf+IN97z89CInZNQEZZVf0kz+QHbIuGi
-	iD9g8DQD/37gu4fWEtY39gIzKSIaSdtzBMkMOO1bu8gaaeRhjfTUpVFt8cpqEhGdS+Fawr9sHut
-	Ea/gz9zy9ZcPKKFzMZYHpoYVv5q23cUz0W/8LDteGwbWC8yDn6nAjkTOxojqTN0MdoKXbFSkhg3
-	BPxDsMN1mk3hZa1zkNSjlVku/HOhnNIdnR/NJel7U6Ej4zU9Mv3CZWzG2TwA9pYw853QxreeCHW
-	oTUkRw0QNZgeiBCI+Zc9G7e0jFP2fJ1L12xEwAFJFI4JvYloe+3J4TO4OuvEvFHWYPJbsaXlpuT
-	aGtFfqT612fVmPRXaG3VG0VZtQtfyJvNH9Mod3FByVsQuyU+gWmttY=
-X-Received: by 2002:a17:90b:2891:b0:37f:9e21:91d8 with SMTP id 98e67ed59e1d1-38e4b68268bmr15320913a91.15.1784599138974;
-        Mon, 20 Jul 2026 18:58:58 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38e92064c77sm620646a91.1.2026.07.20.18.58.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jul 2026 18:58:57 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-ide@vger.kernel.org
-Cc: Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv2] ata: pata_pxa: use devres for DMA channel management
-Date: Mon, 20 Jul 2026 18:58:56 -0700
-Message-ID: <20260721015856.17503-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="ClKTDFa1"
+ARC-Seal: i=1; a=rsa-sha256; t=1784611218; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=YXldcrMVRv9AwB2SCKvjY5ah80LK7PLbegwI5zE7S33lG/zc8ZuXYp2ztLQFu3okbgIWEjZ8C2gu7RdVwU4ouOXmT8yjzVQbbASBSbVoJ+3DqzhT+gTuLdSACs+kWCU1SunSKB1qK/J7qwE6V50VdCEJ0Kp/0xd8X42UWk+ffPU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1784611218; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=MeAIg/nFoLV4HPdy7uK9Th+eYhFPpG/Q07Hu7di9WW4=; 
+	b=f538/rQMV8XuRF0T0jIM11UM/z50ftLwDvASkGvmQFRmJQu3cwvby3BwzD9xCAa86dPEFvIvg3/NK3Hg1/Nqk7+e1g74CsiWPm1kP1t5takI1wYzUDsn31MRyar80CZ7FaNiPm0QQcysVyR5fqFKCHHOJlSmKnz5Bk8fY48ttjY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=yoavmoshe.com;
+	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
+	dmarc=pass header.from=<linux@yoavmoshe.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784611218;
+	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=MeAIg/nFoLV4HPdy7uK9Th+eYhFPpG/Q07Hu7di9WW4=;
+	b=ClKTDFa1P9nJhbRjKKoB9/a6FYZyD47U4yY7+fn5Ub2/dgBWFIa+EI02zvx4/U+I
+	4JkT+KJA5zRFF9gRqRPPobS/1eBtGpiW/qtuVc4+1roCziNf+cdGN1iBwVRVo62efW/
+	3/aUJGqVIsGXJy4hPnl15PvXXXHOTVg1h+6MnYT4=
+Received: by mx.zohomail.com with SMTPS id 1784611216000751.5066369487145;
+	Mon, 20 Jul 2026 22:20:16 -0700 (PDT)
+Message-ID: <38fd4fc1-7aad-464d-9d8c-5667ebcff89f@yoavmoshe.com>
+Date: Tue, 21 Jul 2026 07:20:11 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Yo'av Moshe <linux@yoavmoshe.com>
+Cc: Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Russell King <linux@armlinux.org.uk>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ llvm@lists.linux.dev, stable@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260718111340.159896-1-linux@yoavmoshe.com>
+ <CAKwvOd=eAC-Mz0kZhbHQMFOY=ba=WXDH6X_Zzh6KGfuq5PmJ4A@mail.gmail.com>
+Content-Language: en-GB, sv-SE
+From: Yo'av Moshe <linux@yoavmoshe.com>
+In-Reply-To: <CAKwvOd=eAC-Mz0kZhbHQMFOY=ba=WXDH6X_Zzh6KGfuq5PmJ4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-Convert the DMA channel request to devm_dma_request_chan() so the
-channel is released automatically on device teardown. This removes
-the explicit dma_release_channel() calls in the probe error paths
-and in pxa_ata_remove(), simplifying the driver.
+On 2026-07-20 6:53 PM, Nick Desaulniers wrote:
+> 
+> Are we able to just put __nocfi on the declaration of
+> `imx6_suspend_in_ocram_fn`, rather than bother with a wrapper
+> (imx6_suspend_in_ocram)? I don't know if that works, but surely you
+> can test that quickly?
+Thanks for the suggestion! I tested placing __nocfi directly on the
+imx6_suspend_in_ocram_fn variable declaration:
 
-Use ata_platform_remove_one() which is now equivalent to what remains of
-the remove function after dma_release_channel() removal.
+    static void (* __nocfi imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase);
 
-Built as a module for arm/pxa_defconfig (CONFIG_PATA_PXA=m) with
-LLVM=1 W=1; no new warnings.
+Unfortunately, Clang ignores no_sanitize("cfi") on variable declarations and
+emits a compiler warning:
 
-Assisted-by: opencode:hy3-free
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- v2: Use ata_platform_remove_one()
- drivers/ata/pata_pxa.c | 22 ++++------------------
- 1 file changed, 4 insertions(+), 18 deletions(-)
+    warning: 'no_sanitize' attribute argument 'cfi' not supported on a
+    global variable [-Wignored-attributes]
 
-diff --git a/drivers/ata/pata_pxa.c b/drivers/ata/pata_pxa.c
-index c816997dc0a9..a694f6a178e3 100644
---- a/drivers/ata/pata_pxa.c
-+++ b/drivers/ata/pata_pxa.c
-@@ -262,40 +262,26 @@ static int pxa_ata_probe(struct platform_device *pdev)
- 	/*
- 	 * Request the DMA channel
- 	 */
--	data->dma_chan = dma_request_chan(&pdev->dev, "data");
-+	data->dma_chan = devm_dma_request_chan(&pdev->dev, "data");
- 	if (IS_ERR(data->dma_chan))
- 		return PTR_ERR(data->dma_chan);
-+
- 	ret = dmaengine_slave_config(data->dma_chan, &config);
- 	if (ret < 0) {
- 		dev_err(&pdev->dev, "dma configuration failed: %d\n", ret);
--		dma_release_channel(data->dma_chan);
- 		return ret;
- 	}
- 
- 	/*
- 	 * Activate the ATA host
- 	 */
--	ret = ata_host_activate(host, irq, ata_sff_interrupt,
-+	return ata_host_activate(host, irq, ata_sff_interrupt,
- 				pdata->irq_flags, &pxa_ata_sht);
--	if (ret)
--		dma_release_channel(data->dma_chan);
--
--	return ret;
--}
--
--static void pxa_ata_remove(struct platform_device *pdev)
--{
--	struct ata_host *host = platform_get_drvdata(pdev);
--	struct pata_pxa_data *data = host->ports[0]->private_data;
--
--	dma_release_channel(data->dma_chan);
--
--	ata_host_detach(host);
- }
- 
- static struct platform_driver pxa_ata_driver = {
- 	.probe		= pxa_ata_probe,
--	.remove		= pxa_ata_remove,
-+	.remove		= ata_platform_remove_one,
- 	.driver		= {
- 		.name		= DRV_NAME,
- 	},
--- 
-2.55.0
+Because Clang ignores it, it still injects the CFI check at the call site.
+I tested this on physical hardware (Kobo Clara HD), and it crashes on suspend.
 
+Best regards,
+Yo'av
