@@ -1,187 +1,159 @@
-Received: from mail-pj2-f3.google.com (mail-pj2-f3.google.com [74.125.227.131])
+Received: from mail-pj2-f1.google.com (mail-pj2-f1.google.com [74.125.227.129])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EE87322B87
-	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 16:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.131
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784651796; cv=pass; b=p7LlHXPFdCoogGsJP/kxnM3vIX80Nk/9xhYKb6dt+XBcPEfhoIgrAs/AIo0WcSmLOdWtoDC2t95D6F8517XOG6sQKoXOTP7LLiJoqi8g6HeKd6vmUju/w0BUeNDmMgf4giiAMgl+TeLys79sIGbuSyEUcs5mcVQp60bF/saQgGY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784651796; c=relaxed/simple;
-	bh=CNPPoWv60vr6t7jcqE+3A/Q+NYsoUCXVG+74URQb7f8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UWCsBqIIOBbzCqm9zkjV/kLKLoleha6qyNScyexrbTODqvfFWNPs/tPLyX2uc+bV3Gay8et2keLvcgxQXhLb+vcUFvxGqWRvmrV9hjohNpYDDg5jyFQaBeeaXOOssRw+yqrVtCGGO9w3iL8goGRMWvvXTvi598qbFJ8wFw2CmOw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ij94JwTU; arc=pass smtp.client-ip=74.125.227.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ECFD4D90A8
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 17:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.129
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784656119; cv=none; b=PyhS0afLh8eEs3JR9HhtL8tggjktvMdk5zzIvDo/l5DmTjlocBI0BI6QN6kFDPsoxP4q30Cki9C4krYUjvk55bavimIZeG+x/YSdSk5JAG9NpQPbQugaMWEXlfVJO7qnCyLI4Z9jljJrdejjDvP9Q2iLaCHeIod3YnxolYRGsWU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784656119; c=relaxed/simple;
+	bh=uxpBSxsdvw9bPVWAq3FN82g9IP6N274Ej/qPp1bMJpo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nusOs530RvdBdWdlD1gP2NJvzLVUm0/+PW/TRJbIABvi2MkiThp7rJTbrZtVLK8GsNLu6lEQj/3l1itnXTAQC9i+I7ttvNuzk018IrUEK8LWVzbTG1Qb2Xln4QefDhd3lh9T+0EEHjQyBpQVoUsoSsWs47pGP97aQd0abqDPuaE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=n7CyVrRA; arc=none smtp.client-ip=74.125.227.129
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ij94JwTU"
-Received: by mail-pj2-f3.google.com with SMTP id d9443c01a7336-2ccbff2e6a7so67612015ad.1
-        for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 09:36:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784651795; cv=none;
-        d=google.com; s=arc-20260327;
-        b=fNRS6N0CRzaZ8Igb8wTi2RBs3fwqHEHEJ39cT/TqCnT2AucfPnGDNvAkxmAOVNvTSK
-         XLfHfNT+tSeHFmP1yyNP6UeW4lqBsIKXwY28Ya3D2tqptHjCZaJpxECDLv7+QAMpGvRd
-         WMmuSCubSE65U5dlYstyofYevsDz6zIgEhESqYGgAWbLlLGKSqOBOnH3uSLY0SUHpPJz
-         MIDBVDtd7F9kOn0ZD4AkhrnlsG3BHH2KWraD0X48ZWYJxzMSFBFj556uNqMJPS2Q9hIg
-         aX3QOsZ4NmlkhY+4lPqIRRYPFpRFCM3tjVw1QH6C06XSPrboTd2KdGXTrYi+TRudwBEi
-         cmjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=vVqgX84jQjtV56FO/L90fCXJ4uFy/82Ndepm6gSaM0k=;
-        fh=fnuS4CkshYy+4sOx88fEBfeLPt7Zd/Mwcl+EIPxsiHY=;
-        b=iDENjPKlMqP84jCZKJWT/F+GvbXozxOjV30Y/FzKjs25CItifcNoBG5h73LMorgGTj
-         b2sguV9qkIZyPfdZ4pLc0WprE+AZ5WkihdrOHGSHsmnHxy77TD1Fz7gQkMF+M07dnnBH
-         VZ64xWpXg+SZeYnYiixMV3VIdoAagcHcu5ecQeWHkv0ZU59B2jiRa0Ldg0vT2tW16OxY
-         1LGBnzmKNsO1owvRwte8OcxmGVOBVbEfXGlhV7Q2fhSI+HjlseK0/NFajuxpuJCt5mXy
-         XkIHkI0qVlf+VwJ+MlOlUVTBZdiYRN4PmzrbiE1kms0lnwBVIWFprjS3BvaDArCzzniZ
-         gcHw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="n7CyVrRA"
+Received: by mail-pj2-f1.google.com with SMTP id 98e67ed59e1d1-3810f0aba07so6527315a91.1
+        for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 10:48:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784651795; x=1785256595; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=vVqgX84jQjtV56FO/L90fCXJ4uFy/82Ndepm6gSaM0k=;
-        b=Ij94JwTUaTEeooum/2FbuNibs3Gj8mztVjPM6psq9RGyNeojT1QnDGx3hX5kbq8cjO
-         XPvWVBJZLKjCxMNX6zaAi3K7NCyh7sDkt1Vs4gNVQnDnTAFzVSwsVA60n1Rjv6Rqs7FL
-         cNHFK9CSi5KxSdGkmoqpa3l4DzDZzUYprcyfbuHj0Mqfo5Us1h0z8C1i+IVP+JOVfb89
-         8VuajCWGsVJWiaEf1KCGdhWy6Gh0go44K6dcTUaaMlT60vjnnDrtiLMRlEARvR/czy22
-         mMIgeVT7m+xqDLsxhsAtp1HbbheQgxPdMd1ffYSjdzjAy4LRcftylUKyC3jYw3cTk9Kf
-         jVpg==
+        d=gmail.com; s=20251104; t=1784656117; x=1785260917; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ocH8UcOo4UY0LfArAy9N9P4eBtmhXMCHbqhRio/RB1c=;
+        b=n7CyVrRAXrwsUBTfjHAAEQAq6dbuDFA3w345FIuvxhERRNaBrcIDUMG7XwaIDLWzRG
+         rxVQifHNhegBNKrHrRj+VuapOfwguP9AICX4qTZ/w+oZ+dDtdU7kuzz0afbybbRaVbuy
+         MsXmx6m73GKBBCvGoPxrD5wJ0TRaTiY2xud0i8vb2pZ4rWNoP7RSk9wdXlOKmVVaZa4Q
+         KMz32CneF6qyFCc20BKQzq05GoA3FBs2CJmCtqPGSuzntvIP8MQgo0uhu7Do6fv+tZkX
+         +6KkmD5Sgtrp4unu337Bjq8ugengPFB373uKkpgM5qIXbew1ecVk1e/AcMKNdP5D5Fyy
+         qiMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784651795; x=1785256595;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=vVqgX84jQjtV56FO/L90fCXJ4uFy/82Ndepm6gSaM0k=;
-        b=CHC/Afw12Td7ia5o8GY3MMBVQnWb535qJGVgMf34xFfuS2gG7F+qaLKXnzfND/fugr
-         w3wao2cRU41zNBd3BcOjmHABT0/dhXZ8JCRGugqAbrpQRrRuSSWpgbNZBChhjI7e3th4
-         9H3ApiHbTQ9FmWFHsEPxHxnOXlU+orlt3XXevTFDw89DlVILIgETYfCSvDr4Tvns2txM
-         i0tzvuvnpNmntSMhITGJJLo04aBMNTiNNZVpjRSoNozArOxtzdK5DNyg1KmbFX0MUI4T
-         Nv6fkjGqQiW8D3kKTNndHbD9qn2wdh6+QoLCi/T+L3GOgHHKWTWETaxQa/0EAmb8wybd
-         HCqQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqDFL3FlsP8U8wNPPWEMx21IobNkwP3DGgCZdYaLxXF+cIuCfSXFZpBTq5pcTtstJePMLcH@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz+S4X8Ea4/Gh+1Bz9RFJLJzCz1lc9fT1RjdsDzSH8ja4i93DSw
-	5c6pM7C46vPRTe5DY0lMd+gmGpnKKpzicDoazOV8edkOumWhmVTEGTE5EkYXnpJUjIrd1T8RJCr
-	979YwZi/+vT8hJ9ENnIGUUV5A6ia0QQ==
-X-Gm-Gg: AR+sD13w3xMM+LCn9iDx+t1xuIExh8Zj7DGI2il7GRUpys7QY0wcb0cfCD/4ZoCKzbU
-	/xg568/zXuTxxl3Xzgvu3N3hP7+hs5YfAUmcYxxfm7sQgi8uj8hIGCmX5VJvNZKJczOaRRLN2FD
-	pOf86+AzbS7wSM6gwKd0A2zu4Kp4fABR/HdhV7bJiZL+54ph0wXJXmzBoDywh4C9qy5yhOnWIWm
-	r0JoxD+AxvoMjMuQ6+Ru3t8haT/Bun8ZTdSQAKXifefVnSQ0+HdmL6l9/l6vqk/4Y0s2jQC/Kn4
-	Ev7aCaHEreG3lU5Qeyc=
-X-Received: by 2002:a17:903:3bcf:b0:2ca:ed41:d33d with SMTP id
- d9443c01a7336-2cf34a80342mr224602735ad.45.1784651794678; Tue, 21 Jul 2026
- 09:36:34 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784656117; x=1785260917;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ocH8UcOo4UY0LfArAy9N9P4eBtmhXMCHbqhRio/RB1c=;
+        b=hJJrPvMBob5AQC1ywZ9iwCgQXf5Ad+oCMbwFJaLS/T0QvnfHfyggNMu4a4x+ZPT03g
+         WFoAv+/vb03zB+JVCUAR22VVbJKNUDZWFyKOsJB5JEcgaFgNKWLhZfupg/VlDfk8dnPr
+         w8QHl7IX4n5EkRfyJbdbBDk9xym5zMretf6lGvv6EfbNh87oDm/PSwxlVsUvuwSVpDj4
+         zUCjHehVbwsUinYR3E1nFqXv0qx2VvcJXOF4+P38hrEo9fYhN5y46HtwzJtLlbrm1Agw
+         SUn14Os/nRWQUdUyfP55zvAQm6iVtRZCOe548cAQjbav3VhWiBHxH6K5UeDXFu/xbETD
+         2Iyg==
+X-Forwarded-Encrypted: i=1; AHgh+RrleX1uUE5tKQFkM454RKU27guBtqmg4T/HUr+kIGURV9M9oVSald6hulCexPRla+ZNAH6L@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxsp/ndL9ss120IEbVRtgHBtUFt69SxeuJx4LjagsaQiW65hkGP
+	cQsThEk4sb1KxvBk155mGelNyN50buH2YS/Obw9XwW2IkEDQBqG0f5PI
+X-Gm-Gg: AR+sD107w0yJctgEZZQ5KAZsjRGodkxd+2rWeDSk6M7jn6Vw2DLrAW/47lyh1pgFctd
+	mN+0jEnXcBj19xIYEwpPow6I/HmSa1URiK7NvQObQdf8ja7sw7umPTO4A2smEgnOJSPGY1xusLH
+	zONGRYScK8goGEjtAI5YZMgpwsjv8onLQJtDlc1kdjByhIewgKtjAMVr6hf9i02sGXfltPfmOXZ
+	iTPisNx4bvN9EuyYJbXyZBTtcSsQ/Z8j7WYIK+bPjR9eqrbVcYyk3cEWtnlPFY6Y1PtcwT6vR3Y
+	yUCLH5zqTpzPa+zFHi1qdknhcy5Dcfl6rGqbOab2qYGaq2F6M/m829mF3nwtEe2CRb/0V8BTcYi
+	7Vnxs9aIxjr57H4NK0GRUFk54/4g86K0PUnN/mJ+NXuP6BVMTbS8v7+6IAByOXJdHFzks8tEh
+X-Received: by 2002:a17:90b:3ccd:b0:38e:11ba:992e with SMTP id 98e67ed59e1d1-38e4b57dd07mr19138219a91.35.1784656116703;
+        Tue, 21 Jul 2026 10:48:36 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:68::])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13ce29c2c93sm47964768c88.3.2026.07.21.10.48.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jul 2026 10:48:36 -0700 (PDT)
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-mm@kvack.org,
+	kernel-team@meta.com,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Ziyang Men <ziyang.meme@gmail.com>
+Subject: [PATCH v2 0/4] selftests: shared lib.bpf.mk for building BPF progs and skeletons
+Date: Tue, 21 Jul 2026 10:48:29 -0700
+Message-ID: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260719175857.4071636-1-ap420073@gmail.com> <20260719175857.4071636-9-ap420073@gmail.com>
- <41e73be8-242a-4e7b-b085-439375303590@pixelcluster.dev> <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
-In-Reply-To: <8dfbef48-db20-4642-8f50-e37f46af6627@lunn.ch>
-From: Hoyeon Lee <hoyeon.rhee@gmail.com>
-Date: Wed, 22 Jul 2026 01:36:22 +0900
-X-Gm-Features: AUfX_myNLtLISc21KdgKa-JpkJ-v8hHK4oD3B4RXKoOMKPs4a14geDJhHunEcxY
-Message-ID: <CAJ=ss6_iUvP3Be735V6_dD0JTF96=NZWe5_G_p0nubdRvCZ==Q@mail.gmail.com>
-Subject: Re: [RFC PATCH net-next 08/13] drm/amdkfd: add GPU instruction
- emitter and disassembler
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Natalie Vock <nat@pixelcluster.dev>, Taehee Yoo <ap420073@gmail.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, Alexei Starovoitov <ast@kernel.org>, 
-	amd-gfx@lists.freedesktop.org, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Andrii Nakryiko <andrii@kernel.org>, Bill Wendling <morbo@google.com>, bpf@vger.kernel.org, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, David Airlie <airlied@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Donald Hunter <donald.hunter@gmail.com>, 
-	dri-devel@lists.freedesktop.org, Eduard Zingerman <eddyz87@gmail.com>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Eric Dumazet <edumazet@google.com>, 
-	Felix Kuehling <Felix.Kuehling@amd.com>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Justin Stitt <justinstitt@google.com>, 
-	Kees Cook <kees@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Leon Romanovsky <leon@kernel.org>, 
-	linaro-mm-sig@lists.linaro.org, linux-hardening@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-rdma@vger.kernel.org, llvm@lists.linux.dev, 
-	Mark Bloch <mbloch@nvidia.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Michael Chan <michael.chan@broadcom.com>, Nathan Chancellor <nathan@kernel.org>, netdev@vger.kernel.org, 
-	Nick Desaulniers <ndesaulniers@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Saeed Mahameed <saeedm@nvidia.com>, 
-	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>, Simon Horman <horms@kernel.org>, 
-	Song Liu <song@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, Tariq Toukan <tariqt@nvidia.com>, 
-	Yonghong Song <yonghong.song@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 21, 2026 at 5:53=E2=80=AFAM Andrew Lunn <andrew@lunn.ch> wrote:
->
-> On Mon, Jul 20, 2026 at 10:05:33PM +0200, Natalie Vock wrote:
-> > On 7/19/26 19:58, Taehee Yoo wrote:
-> > > Add the AMD GCN (gfx9/gfx10) instruction encoder used to build the GP=
-U
-> > > shaders that knod dispatches, plus a matching disassembler used for
-> > > debugging the generated code.
-> >
-> > Is it really necessary to have a full-on compiler and disassembler in t=
-he
-> > kernel driver? This patch is massive and I'm wondering how much benefit=
- it
-> > really provides. Is there really no way to move GPU compilation out of =
-the
-> > kernel, one way or another? Could you get acceptable perf with a static
-> > shader that interprets BPF programs at runtime? Such a shader can be
-> > compiled beforehand and just embedded into the kernel - there's prior a=
-rt
-> > there with the CWSR trap handler in amdkfd.
-> >
-> > In case you really, really need to compile the BPF to native ISA, could=
- you
-> > still have userspace take care of that in one way or another?
->
-> There was a long and painful discussion about P4, and offloading it to
-> hardware. The proponents of that wanted to do the compilation stage in
-> user space to produce a binary blob, but it was hard to prove that the
-> P4 passed to the kernel for software processing, and the binary blob
-> passed to the hardware actually where the same. It opened up the path
-> for closed source P4 where the kernel never got to see the actual P4
-> code. So it was not really offload, but kernel bypass.
->
-> So having a compiler in the kernel is probably the correct way to go,
-> if you want to be friendly to open source.
->
-> The other option is to get the GPU to do the compilation itself, so
-> you pass BPF byte codes to the GPU and it generates its own native
-> code. I've no idea if that is possible, but clang can target OpenMP,
-> so maybe it is possible to move this compiler into the GPU?
->
+This series re-factors the bpf-related toolchain for selftests, which
+currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
+into a single includable fragment, tools/testing/selftests/lib.bpf.mk,
+and wires up three consumers. We believe this will simplify the work for
+configuraing selftests with the bpf, for both the existing and future ones.
 
-Hi Natalie and Andrew,
-Thank you both for the review and suggestions.
+Patch 1 adds lib.bpf.mk: it builds the in-tree libbpf.a and a host
+bpftool, generates vmlinux.h from the kernel's BTF, compiles *.bpf.c into
+BPF objects and skeletons, and exports the include paths, a bpf_link
+helper, and BPF_LDLIBS.  Use can control the behavior by several knobs
+(source layout/suffix, extra headers/cflags, skeleton suffix,
+subskeletons, output dirs) that can be used commonly in general cases.
 
-We tried running a BPF interpreter on the GPU using OpenCL in an early
-prototype. The interpreter overhead dominated because each BPF
-instruction required many native GPU instructions, so the performance
-was not practical. Since this was only an early feasibility prototype,
-we do not have benchmark data suitable for a meaningful comparison.
+Patch 2 adds a new selftest, test_memcg_stat_cross_cpu, under
+selftests/cgroup. This test is a memory-cgroup statistics correctness
+test that compares the memcg BPF kfuncs against memory.stat over a whole
+cgroup subtree charged across many CPUs, and checks the cross-CPU rstat
+flush. It is the first in-tree consumer of lib.bpf.mk outside
+selftests/bpf.
 
-Based on that result, we chose to compile BPF directly into native GPU
-instructions. Moving compilation to userspace would also raise the
-problem Andrew described: the kernel could no longer easily establish
-that the verified BPF program and the submitted GPU binary are
-equivalent. We have not tried compiling on the GPU itself, but that may
-be worth investigating separately.
+Patches 3 and 4 convert the duplicated parts in Makefile for two
+existing duplicating bpf consumers, the selftests/hid and
+selftests/sched_ext, to lib.bpf.mk.  The generated skeletons keep
+a byte-identical public API and land in the same locations as before.
+The folders build cleanly under both plain make and LLVM=1.
 
-The disassembler is only used for debugging the generated GPU
-instructions and is not required for execution. We can leave it out of
-the initial series and submit it separately if needed.
+Changes since v1:
+  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
+    skeleton suffix, subskeletons, configurable output dirs) so it can
+    serve hid and sched_ext, not just cgroup.
+  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
+    to the shared fragment.
 
-Regards,
-Hoyeon Lee
+Ziyang Men (4):
+  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
+  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
+  selftests/hid: build the BPF program via the shared lib.bpf.mk
+  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
 
->       Andrew
+ tools/testing/selftests/cgroup/.gitignore     |   6 +
+ tools/testing/selftests/cgroup/Makefile       |  21 +
+ tools/testing/selftests/cgroup/config         |   4 +
+ .../selftests/cgroup/lib/cgroup_util.c        |  48 ++
+ .../cgroup/lib/include/cgroup_util.h          |   1 +
+ .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 ++
+ .../selftests/cgroup/memcg_stat_cross_cpu.h   |  27 +
+ .../cgroup/test_memcg_stat_cross_cpu.c        | 780 ++++++++++++++++++
+ tools/testing/selftests/hid/Makefile          | 182 +---
+ tools/testing/selftests/lib.bpf.mk            | 247 ++++++
+ tools/testing/selftests/sched_ext/Makefile    | 153 +---
+ 11 files changed, 1275 insertions(+), 280 deletions(-)
+ create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
+ create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
+ create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
+ create mode 100644 tools/testing/selftests/lib.bpf.mk
+
+
+base-commit: 6eb8711ece2ce27e52e327a5b7a628ed39b97f45
+-- 
+2.53.0-Meta
+
