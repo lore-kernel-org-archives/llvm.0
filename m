@@ -1,151 +1,253 @@
-Received: from out-06.smtp.spacemail.com (out-06.smtp.spacemail.com [66.29.159.77])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB8F8434E38;
-	Tue, 21 Jul 2026 08:05:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.29.159.77
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784621103; cv=none; b=dIdLvQ1mZnoSnA/zwSsqhT6pBo/WK3DU2ACxjjKTpjDzS0hgpNTsaGqFFzZjlDn3stErwoPG71PEIKw7e+bo+F5cXd8Fc9pYuAo0K7p7mdpJ6gx1+GFAc7MkI3wrMiJS9GBzwtV1red9tsUQr3cF/rCquDNEvdwujFN99ghY2Ho=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784621103; c=relaxed/simple;
-	bh=qL1EPVm5LN4CZqdymCMs6TfKj1CSrSaIZtTpOTHMoVY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=M6ceY7shyzzMtj+SHZmYdvT1P/6Mbuv7P/ZMtdrxBj7xcApZ2iQFrbRJnR0gzYHO7lbXDIpgKq9kqho3ApeFBelDXd/Ocx77NJVH9+efAWGAKr2jHpCbC284AQ6lCUjjLqrV8g2B7wKKfOJq+HnciqXIqE3YeUkcN3Rkh67i5Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev; spf=pass smtp.mailfrom=gurudas.dev; dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b=BAZ3xd8I; arc=none smtp.client-ip=66.29.159.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gurudas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gurudas.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E6740800F
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 08:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784621354; cv=fail; b=rPO+R26/yrPbaAbwcqSarkeSUFfVHfEv0BnsbjtHslkXGTiLigmLlYqreZ4zww+KkZlKYjlNsyRrp4KAOBxcwIIps9QDUnbWidBsdltrTei6tR1Kvl8g7nG4KxMeRRuVk9E/NHVAFA69ox9NjH8SgDEQxy4/8JQk0VNs4HIgAdc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784621354; c=relaxed/simple;
+	bh=iPYAy4bk7RRF/MNN9SRM594VzI3wxaQ5q5elKYuNPi4=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=hhJgLT1AlQZqNsxv9S0rcHVeNiqwaUiYNthruYEWxZMiCgALR5KP/Kbcn/elqp2TI9kP4i9dF7GHObyuZ0d3MSlQc2n20SbTc6s02siGlwG3ZDEOI+qv7ZKose+QRc+C0JTaSGOJcYG3EHd0RsadapQ686iUVb7F7SpugaMuuCk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fbWeJ6gy; arc=fail smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gurudas.dev header.i=@gurudas.dev header.b="BAZ3xd8I"
-Received: from [192.168.1.103] (107-194-158-19.lightspeed.sntcca.sbcglobal.net [107.194.158.19])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.spacemail.com (Postfix) with ESMTPSA id 4h48nl05RCz8sWP;
-	Tue, 21 Jul 2026 07:55:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gurudas.dev;
-	s=spacemail; t=1784620539;
-	bh=SbNS+ybHkw3MgxjtBGr8q4vWgkNrJNLqPSGFi2khhe8=;
-	h=From:Date:Subject:To:Cc:From;
-	b=BAZ3xd8I45DXRMez9mF8CuAmHfvh/5W8rGrxktB4KRVTIwwYllrTmN+7/Mm1QsPVl
-	 5XIb/fqUvrYneGXJTdzgVtRpIilFPQk1xEVEK99wSLwY+P6S8uhK539cVxp5vuZ6ok
-	 zh7VJQ6/4HOpkIuyzEa7/c8yF1n9FoIjLS2v91P/H501iT20TUBZPTeX8O9XXIx6ul
-	 3fHjjAJbbYYGtX02Xs8ccoEtcW+uA4ei/UQRQkwubNtWnSIGv+Xo0fXGGiuUZkpxh3
-	 kKmkl+vShv/okimc3/6N3qlT7Lz+AqM2MREnHB3FXri3a1alTvnweFervx1/nL+3vE
-	 YvAP9sIe420sQ==
-From: Guru Das Srinagesh <linux@gurudas.dev>
-Date: Tue, 21 Jul 2026 00:55:30 -0700
-Subject: [PATCH v2] samples: rust_dma: use vertical import style
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fbWeJ6gy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784621353; x=1816157353;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=iPYAy4bk7RRF/MNN9SRM594VzI3wxaQ5q5elKYuNPi4=;
+  b=fbWeJ6gyaI7HATbD7nYcDexqy73zaxtzKfwE5DPnBTEcNKU7XunixL8J
+   cwN+SFOizF+qsMeKbEvBnV68aRHb98y+3kDjXPcvfJR1dQ4mvUEfP20+Y
+   wck9g8jvT1Mhur2laRdwVPBZRU3cdakTcYqm4PLSjD2s0/QeKXvZdS5t6
+   6pAR+Z4iBIU3i2V4r7bxKBNvK9FD6tqFxTSmeaweoQ8drMT1CzGYg5Y1V
+   E+o2PySBcsKwvh4QvY3scF2B4cNAMh0b1dd6rrYeSA68pgQxImno7Ucby
+   iMtjAF+GpUeItEIkL3CRe+/47W1F+EE7t8j2hH8w+7WFX2Y/B8H3fqngI
+   A==;
+X-CSE-ConnectionGUID: iC6rbVTkRlmLtcjTS+3ZjA==
+X-CSE-MsgGUID: YwcPSD7HQcqvdFm61aKDxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11852"; a="85068565"
+X-IronPort-AV: E=Sophos;i="6.25,176,1779174000"; 
+   d="scan'208";a="85068565"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 01:09:12 -0700
+X-CSE-ConnectionGUID: pH5akjZuQ9+is+WiEplyhw==
+X-CSE-MsgGUID: RezT8YTRRl2ykSbUzVIJyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,176,1779174000"; 
+   d="scan'208";a="251365573"
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jul 2026 01:09:12 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 21 Jul 2026 01:09:11 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43 via Frontend Transport; Tue, 21 Jul 2026 01:09:11 -0700
+Received: from CH1PR05CU001.outbound.protection.outlook.com (52.101.193.48) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.43; Tue, 21 Jul 2026 01:09:11 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=spta5aoT4LGHIRxcrbfsl71NhYbvtrWV381QXAvjKoBnLgyhPYD9JdX2/u+V48mW74nGJ96OzxuuIhHEseaikf3bFrJC/aCtcV2g78pEa4GeRc0z5toXWSfchJs3ZgvOS3ID5j4v8yDxRyV8MKOPUFM1om03baa0/TG4D2tjCiNNX1pkRxSF0sNUjle0ytYCjKLPTQP6g5gYepLbUki93cICeP5w+1DecU6vitQtSla0N//s3uKcJ+uqZVPJ9BNpTzM4jGhGHQSJ/qTlnnXQ2TngXqAt9y4gP/wc7iEhF95XbMg0PYaSPPcsTIn0UkUmMht6W0F0svevWtR5jid3qw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CTrItQi2efJI5qehPGcm7hg657YaN/ckHxxAak2JjVg=;
+ b=fCK6pqbazb3NzimTTxZnLezTqlgIdPBwq77iiM8M6dbWsKs3nG4Hqs+tYXvEiTXrnw6GK9s6bJIkcJvh+Q21Y1OZ/8Jgu4JvVqADALno9ojQK9AFTsJnB9CAedc/vXheiAo4Xf/ksLwrAKpCQ6vg8DUOZxPB5pzoD9SFTnGKsNUriU0wigif59qvnbtj6AG/+uEQfMd+JarkigBrGMGMKHjjQ0xAOz+srAGubXuttM40/VaYca06nNA4sFQipk/0WrYC+W70vjdDL5tgknV7i/sBG7fuofNRGA5pXN5y0l7QbmUIFVk2ukSoj7LouiqeNpty8PQZkit/XAMxGMgxHg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from IA1PR11MB7198.namprd11.prod.outlook.com (2603:10b6:208:419::15)
+ by DM3PPF195D11F0C.namprd11.prod.outlook.com (2603:10b6:f:fc00::f0c) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.245.10; Tue, 21 Jul
+ 2026 08:09:03 +0000
+Received: from IA1PR11MB7198.namprd11.prod.outlook.com
+ ([fe80::2c4e:e92a:4fa:a456]) by IA1PR11MB7198.namprd11.prod.outlook.com
+ ([fe80::2c4e:e92a:4fa:a456%3]) with mapi id 15.21.0223.017; Tue, 21 Jul 2026
+ 08:09:03 +0000
+Message-ID: <07c8c780-5eeb-4310-80cd-3ff18952a688@intel.com>
+Date: Tue, 21 Jul 2026 11:08:57 +0300
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 11/21] perf auxtrace: Set default period to 1 for
+ PERF_ITRACE_PERIOD_INSTRUCTIONS type
+To: Tengda Wu <wutengda@huaweicloud.com>, Namhyung Kim <namhyung@kernel.org>,
+	<james.clark@linaro.org>, <xueshuai@linux.alibaba.com>, Li Huafei
+	<lihuafei1@huawei.com>
+CC: Peter Zijlstra <peterz@infradead.org>, <leo.yan@linux.dev>, Ian Rogers
+	<irogers@google.com>, Kim Phillips <kim.phillips@arm.com>, Mark Rutland
+	<mark.rutland@arm.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, "Ingo
+ Molnar" <mingo@redhat.com>, Bill Wendling <morbo@google.com>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Alexander Shishkin
+	<alexander.shishkin@linux.intel.com>, Zecheng Li <zli94@ncsu.edu>,
+	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20260701035355.752944-1-wutengda@huaweicloud.com>
+ <20260701035355.752944-12-wutengda@huaweicloud.com>
+Content-Language: en-US
+From: Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: c/o Alberga Business Park,
+ 6 krs, Bertel Jungin Aukio 5, 02600 Espoo, Business Identity Code: 0357606 -
+ 4, Domiciled in Helsinki
+In-Reply-To: <20260701035355.752944-12-wutengda@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DUZP191CA0059.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:10:4fa::13) To IA1PR11MB7198.namprd11.prod.outlook.com
+ (2603:10b6:208:419::15)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260721-rfl-vert-imp-v2-1-71ce0df519f2@gurudas.dev>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WNQQ6CMBBFr0Jm7Zi2Cg2uuIdhAXQKYxTIFBoN4
- e4Crl2+5P33FwgkTAFuyQJCkQMP/QbmlEDTVX1LyG5jMMpkyqoUxT8xkkzIrxGdNrWr6ZLbxsI
- 2GYU8v4/cvfxxmOsHNdPe2I2OwzTI5/iLevf+pKNGjcYrm1+zKlepL9pZZleFs6MI5bquXyVnB
- di8AAAA
-X-Change-ID: 20260705-rfl-vert-imp-d12bdbe397c7
-To: Danilo Krummrich <dakr@kernel.org>, Link Mauve <linkmauve@linkmauve.fr>, 
- Abdiel Janulgue <abdiel.janulgue@gmail.com>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Robin Murphy <robin.murphy@arm.com>, 
- Andreas Hindborg <a.hindborg@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
- Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
- Trevor Gross <tmgross@umich.edu>, Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
-Cc: driver-core@lists.linux.dev, rust-for-linux@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Guru Das Srinagesh <linux@gurudas.dev>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- llvm@lists.linux.dev
-X-Mailer: b4 0.15.2
-X-Envelope-From: linux@gurudas.dev
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR11MB7198:EE_|DM3PPF195D11F0C:EE_
+X-MS-Office365-Filtering-Correlation-Id: 07e5903b-291e-4414-3b38-08dee6ff53f6
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|366016|7416014|376014|1800799024|3023799007|56012099006|11063799006|4143699003|10067099003|6133799003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: hmYnZH1bEEBVicBEPvlduXbhwETr72N7q2YFTZjybCgbC7HVvDpbZ2t+WeQbQaDMqItS++DFijxWUbt7553lXSAwSeTWsbXjRnelr4Xuc+5qKqM7RylivDqEQItOpTb24rHwTq1sseKBPEUtVZOyv+tr0o4DTEplgn79CaFbNOQXE3jPhByv7yxWBmVsNExVUQfw2P1sf6pggYJM482Clt+RoAKaY2s/GG5/7rmKKqD9RPkfTl7ttmnw9oO6VvsKvGeVPZWHLLQ/uM692nj5v0rPUOXsPVqQz0am7mwz5JsRKOBz4Fdu2FpzTlOLFbE73EPq6Yrf/IFnmVeu7++8GTkntTFxmYILmTSa8Au2wyJLBHQbOPUDj+YhsY3p2iPLFnSkEK8I1PnyLIWZrEtTOkX/Oi5Rp7LTGUt+o8MSTo6pS9W7XCQp7C6XJ4AczzbCLeUHByN694XXZCtMmlD4g7ldcyrAp4ThKhvBYsID5izVVqu6wYMKIxk6XLcHUVXEMdvhTrzoykoU9c68KQgU16yr9XmpVd8x7ilwfU10aRz7qNc558xJ0e3xbAODHPVDn1dJNrXnqM2+/KT9Qb26pYSQyX51WGOceY/lPAcMjLsK0Fl/vhqcjSjxa0rH6kShS4vYyrd6vu7caQhurqCn6WKpM2K/FTMUenmrnnMlNgI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR11MB7198.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(7416014)(376014)(1800799024)(3023799007)(56012099006)(11063799006)(4143699003)(10067099003)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d3d5Q0xaZkEyMWRIZjVKbUJzMkpDT0hMNk1hanZlQ2pZK2U2VWZ3Sk8rUVFB?=
+ =?utf-8?B?c25yRWJhODE2WXI1N1FUNWhjVThVWGtBMVh6b3RkYlVuYTRCSmorcFFtbm1L?=
+ =?utf-8?B?SWNCRXE0ZHpZTTJUT3ZocnlXTVJ0b09JdG0zOVY1SVcxUWFrOTcwTkYvYzR5?=
+ =?utf-8?B?cDhmQnF6bFBSYXZ2aDl3NjFnbnNLeUVPSjJ2UUxhZlVaK1pvUFV0a0pSUTVP?=
+ =?utf-8?B?WnhHYmI1K3BCMlZ5WmpsUC8zR1ZYTWhPQ2RSQWw3WlFwc1gvUGw4RlZOYTZj?=
+ =?utf-8?B?b1lQLzYydlpBTlBBaGltYnRad05zN1JUVzBRNEdpU1RvYmNUMHN3Q2FzaHdp?=
+ =?utf-8?B?UjI0dFhnMnU4Um9aUkJHdWU2UnUrZWM2NUJIYjcxWVJFanltSFUwNmpRMU44?=
+ =?utf-8?B?Zy9YbWNzSWNUVUhHNTA2bXdvK1lHYzdsRGJoY1ZhWE85cWFaa0Q3ZGRJRFlK?=
+ =?utf-8?B?VFVTQ3diVkFWalA5dVN1TFFTNEZCNDZ5QlE3TmFFZEpwMUU5dEViRlJNc1Rp?=
+ =?utf-8?B?ZmROcmFxMGNHMU1raW1SeWdWVStyTlJkU1lTOGJJQlQ1S3hja3NQVXA0b1cv?=
+ =?utf-8?B?N25sbnpjcFhQcXpncTNzdDJydTNlSE5EM1N4RTlaY3hLRXdqMk4xRnprVXZh?=
+ =?utf-8?B?OXpRWmZadmh0b1R5amNyVmxuVHJ3WHFFTTVBRU5sWTBUdS90WFhBcnk4M05a?=
+ =?utf-8?B?b2xreWhTNm9KZ3ZaTk9tamxCQTFuaFZhNDNPdmw3MG1helpEemZrcnBBVXZI?=
+ =?utf-8?B?Y01zNnB0U3NrZ3pBYm5LdGVsZHlucnJLaG5oRVFGUDFjZSt5ZWlCWEtjRVpQ?=
+ =?utf-8?B?bzZZOFdnbml0UGtpbHJFcWNBc09kcTJjYmdPUUMvbE9kUmwrTXplbktJMW8w?=
+ =?utf-8?B?R3FvU0ZJN1lxK0l3WjhVN0hleUpKZmdVekJ5eUh4eVlyTzU0Y0ZNMlpPODJX?=
+ =?utf-8?B?NDVnRzR2Y280bnBERHVsYVpKeU1USnVHeTZQUTRYblE3WVRmR25MRDdPQ3pu?=
+ =?utf-8?B?N1hhcHZXdmZ6U1RtcnF0aVIrT2hwOW5UbHY3d1lwVnR4U3NjbG9pUjlBc29M?=
+ =?utf-8?B?dC8xZkcwWS83YWJSRVNGSVNKZWU0ejdmWk5FTWN5b2NISVRXcS9qYm16R1Q0?=
+ =?utf-8?B?bXBCQWxobFRyQVcyWlhKZUtRQ0w4K1RFZE5QQ0QveUNMR2NkcTJ2VWltMlhN?=
+ =?utf-8?B?SEVxQWprRlZ5bjd5Um9FZS9PTVF4bGt4VC81UUV3NGFJajdKS01oRmVYQ0ww?=
+ =?utf-8?B?aW5iTHgrMVk1T2Y3dFloRGluWFo3Ui9WbWhQcTZXcWdVcEtqWjI1VlRWVEZa?=
+ =?utf-8?B?RFpnWEQ5b1hFVnZDem1UVjBIL2FCN0hKWXhWRWZ5alRkc1VFUUZvUm9rbjU1?=
+ =?utf-8?B?YTI5UHBnOFdPNDR3di9DZlNXSFV4U1BONUxWQ0FFZUJhV1VCcnJLblkvUFMz?=
+ =?utf-8?B?cVdNYzRlcEZmOE5mNzYyQUhISlE2TXAyNW13dEVwWDBxNXltdUR5d3RLZld4?=
+ =?utf-8?B?dDhFY2RRaTgvZThMdHppT1RkNlAyU1M0M0FVZ3Z2dGRuV2c1RFRZTnZpeEV4?=
+ =?utf-8?B?LytCZzRzbzU3YVhsTWpxV0l2NXNBcEJFcUNJeHRMdm5FeExEeU5TeDR5MDB5?=
+ =?utf-8?B?YU1aTGI2KzcvLzh6ZTFtVVZLNjgzR3RETFNKVVFJbldxTFZFaDZUUHYxK1hm?=
+ =?utf-8?B?VC9MdU9JSW9ENVFkZGlOQXF1bHNMVThzRDJ4c0x1cmpTNWo2ZkFHT3RacExp?=
+ =?utf-8?B?VCtiYUFiNUZWdXQxLzkwQkVSeUxXVXNQNlZkZmZ3c2U0VFJleDhOS0pETGVx?=
+ =?utf-8?B?T1dDQnBaV2drNmV1Mk42MXlIdEJwOXB3NGoxRTRhcDdZTVVTQWkwR01NcUNa?=
+ =?utf-8?B?dDdDVk1LaXN3a2xhWkY5Z3NRSmJSUW5MbGRuZDRabnFCdFIzWGxyMUJzcGhX?=
+ =?utf-8?B?dEgxWHNVRDFQUURGSjlwZ0dvajBBOW1zM3REa3JVK3RQOENEU2FBcXJrakNG?=
+ =?utf-8?B?ZkoxREVJWVZ2WnJkZ2ZYTEJLYW45K3ZTNWxINjNHKzE5bG5tMVBMWExkeDl4?=
+ =?utf-8?B?RnBLejdzR2xMUWxvVE16S1NrdkUzVnBYazVvRTlwUWF4RTI3RjM4a2hQVC8w?=
+ =?utf-8?B?YlI2bnl2R2E5UkFnSmlHNG1MZW5oNGlvWHRmQzBSS3ZYelZ0SWRicEJ2R1BD?=
+ =?utf-8?B?UE02amlMbWhsSC9uK0tzUndZZFZVRUUxQVFZUXNhNVlJTVpueThNUDRpTGl5?=
+ =?utf-8?B?UHhCS2prbGF0SEFrZ3N3Y3pMN3Y2b2dnSVdIWFlWZkhsTjBJL1lMMG5qVnl0?=
+ =?utf-8?B?S2hFdklsT2F5cFNvV3p6SU00VkVJcm1TSUY1RG1IUU4vM3BsaUV5Qzl4bG94?=
+ =?utf-8?Q?U9yV44H/Mwqif7QY=3D?=
+X-Exchange-RoutingPolicyChecked: PJUsxonQCeCDxxQHzm3fbBIT8Nk0Dqi3/svEm21sqpWuOs70UKbS08znW/zhSBuAB6GNORtQa+MVfeP8PD+obncKxUfwqCoCxWR1Pi/J69c0+3b0LJ9qOj9VibNjKtBIJSfDEOMmnnEf98BblntDEMemkrvLiWMLSx8YIsZuntTly5UclCgdZo/9jB2MGa+nm4YCXwD2v2m6eVP8gtTQ/v00UbMW1JCZ2gjuNSyrzbvL/Jx7h+/y+YOjKdJs2q1YTummhFK/FaTX/ktVbC+EohJ09AuBI/Qx9fG6gfg6+B7HE7L4R8gjh0vwR1/MZxwoezmBcEYhHUtqgUr97qPTUg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 07e5903b-291e-4414-3b38-08dee6ff53f6
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR11MB7198.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jul 2026 08:09:03.5815
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2kx5oPB49jo6e0+UAbOCR9QqO3TL3Py/s1POKjq/xfet/8u4yJ+mvpd4KLVcqwnSC+FfyeOWdkhvuIWbGxw3Ng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPF195D11F0C
+X-OriginatorOrg: intel.com
 
-Convert `use` imports to vertical layout for better readability and
-maintainability.
+On 01/07/2026 06:53, Tengda Wu wrote:
+> When using --itrace=M for data type profiling on arm64, the 'Percent'
+> values in perf annotate output are all zero:
+> 
+> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+> ============================================================================
+>  Percent     offset       size  field
+>     0.00          0       0x10  struct mmu_gather_batch  {
+>     0.00          0        0x8      struct mmu_gather_batch*    next;
+>     0.00        0x8        0x4      unsigned int        nr;
+>     0.00        0xc        0x4      unsigned int        max;
+>     0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+>                                 };
+> 
+> However, adding the -n option reveals non-zero sample counts:
+> 
+> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+> ============================================================================
+>  Samples     offset       size  field
+>       15          0       0x10  struct mmu_gather_batch  {
+>       13          0        0x8      struct mmu_gather_batch*    next;
+>        2        0x8        0x4      unsigned int        nr;
+>        0        0xc        0x4      unsigned int        max;
+>        0       0x10          0      struct encoded_page*[]      encoded_pages;
+>                                 };
+> 
+> The root cause is that when period is not explicitly specified in the
+> --itrace option, it remains zero after itrace_do_parse_synth_opts().
+> The zero period then flows through annotated_data_type__update_samples()
+> where h->period accumulates to zero, and print_annotated_data_type_value()
+> calculates the 'Percent' as zero.
 
-Signed-off-by: Guru Das Srinagesh <linux@gurudas.dev>
----
-Came across a recent commit bc58905eb07 ("samples: rust_misc_device: use
-vertical import style") and found a few more locations that could
-benefit from this cleanup. No functional changes.
+The period is for instructions samples i.e. options 'i' or 'y'.  Why is
+it being used in the 'M' case?  What samples are being synthesized in
+that case?
 
-Separating out patches per-subsystem as per the review feedback in [0].
-
-Tested via:
-
-	$ make LLVM=1 rustfmtcheck || echo "fail"
-	$
-
-[0]: https://lore.kernel.org/lkml/20260628-b4-rust-vertical-imports-v1-0-98bc71d4810b@gurudas.dev/
----
-Changes in v2:
-- Link Mauve: Relocated empty terminal comment from middle of imports to
-  end of all imports
-- Link to v1: https://patch.msgid.link/20260705-rfl-vert-imp-v1-1-2f07946a905f@gurudas.dev
-
-To: Danilo Krummrich <dakr@kernel.org>
-To: Abdiel Janulgue <abdiel.janulgue@gmail.com>
-To: Daniel Almeida <daniel.almeida@collabora.com>
-To: Robin Murphy <robin.murphy@arm.com>
-To: Andreas Hindborg <a.hindborg@kernel.org>
-To: Miguel Ojeda <ojeda@kernel.org>
-To: Boqun Feng <boqun@kernel.org>
-To: Gary Guo <gary@garyguo.net>
-To: Björn Roy Baron <bjorn3_gh@protonmail.com>
-To: Benno Lossin <lossin@kernel.org>
-To: Alice Ryhl <aliceryhl@google.com>
-To: Trevor Gross <tmgross@umich.edu>
-To: Tamir Duberstein <tamird@kernel.org>
-To: Alexandre Courbot <acourbot@nvidia.com>
-To: Onur Özkan <work@onurozkan.dev>
-To: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <nick.desaulniers+lkml@gmail.com>
-To: Bill Wendling <morbo@google.com>
-To: Justin Stitt <justinstitt@google.com>
-Cc: driver-core@lists.linux.dev
-Cc: rust-for-linux@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev
----
- samples/rust/rust_dma.rs | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
-
-diff --git a/samples/rust/rust_dma.rs b/samples/rust/rust_dma.rs
-index 5046b4628d0e..fc958d496c3e 100644
---- a/samples/rust/rust_dma.rs
-+++ b/samples/rust/rust_dma.rs
-@@ -12,10 +12,14 @@
-         Device,
-         DmaMask, //
-     },
--    page, pci,
-+    page,
-+    pci,
-     prelude::*,
--    scatterlist::{Owned, SGTable},
--    sync::aref::ARef,
-+    scatterlist::{
-+        Owned,
-+        SGTable, //
-+    },
-+    sync::aref::ARef, //
- };
- 
- #[pin_data(PinnedDrop)]
-
----
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
-change-id: 20260705-rfl-vert-imp-d12bdbe397c7
-
-Best regards,
---  
-Guru Das Srinagesh <linux@gurudas.dev>
+> 
+> In itrace_do_parse_synth_opts(), non-'iy' options have their period
+> type set to PERF_ITRACE_PERIOD_INSTRUCTIONS, but period remains zero.
+> Since a zero period is meaningless for this type, default to 1 (one
+> sample per instruction).
+> 
+> With this fix applied, the result is as follows:
+> 
+> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+> ============================================================================
+>  Percent     offset       size  field
+>   100.00          0       0x10  struct mmu_gather_batch  {
+>    86.67          0        0x8      struct mmu_gather_batch*    next;
+>    13.33        0x8        0x4      unsigned int        nr;
+>     0.00        0xc        0x4      unsigned int        max;
+>     0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+>                                 };
+> 
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+> ---
+>  tools/perf/util/auxtrace.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+> index 0b851f32e98c..415b68a2bba9 100644
+> --- a/tools/perf/util/auxtrace.c
+> +++ b/tools/perf/util/auxtrace.c
+> @@ -1759,6 +1759,12 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+>  			synth_opts->period = PERF_ITRACE_DEFAULT_PERIOD;
+>  	}
+>  
+> +	if (!period_set &&
+> +	    synth_opts->period_type == PERF_ITRACE_PERIOD_INSTRUCTIONS) {
+> +		/* Indicates a sample is taken for every instruction. */
+> +		synth_opts->period = 1;
+> +	}
+> +
+>  	return 0;
+>  
+>  out_err:
 
