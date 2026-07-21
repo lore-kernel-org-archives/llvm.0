@@ -1,204 +1,119 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5B1466B57
-	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 11:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F198E33F597
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 14:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784634002; cv=none; b=qMZWIkwsMyKhE8xGtJat9uM4XwIAvveGxhp/sk/PTxIpoyvOlqSjJRmKWET//WyoiVNqCa70czI2eoh+L5bGUTfGHIrrk9G0zIYni/eyj2qExFmDlhv3ySHaN9n+d7rSRlwSO4JihBbkMxbfW/V0rNRYY42uaxwCkIoApiggYZw=
+	t=1784644394; cv=none; b=WmhhWw7Tc0WTEgO7td0TrlCo6i1zfsg6bLdUArO57GuZORtWzr3y9xPrUvuDAFnSDEh/Zxwgbfy7UKCh3ZwqOkbnLlmeG86a4QpuKbTnGg6kX4KC/Y4ERoBGPM4jj3F3aO8Fy1s1tK98RCaUhVGP4Bipe+RCBezRsS6F/BKdeuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784634002; c=relaxed/simple;
-	bh=JXWdx8p2WhqAD942C81MkHbveCEBg991JO/9hHnkfyo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BxPMbBas3/8otsbxUONShzuxPlQwQSQGBQMjfIqc/81K5SincG7yVbR7VVwcIHrqpbo3gUucrAG7ckEqRj83VgdLxf6MWx7cvu4GkeN/I3ZflldihOmCj+J3AmDVAuqpTdd8+5PGVnjj8MEffXxis/3Fom3Bo7dsb75YU81Etow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4h4Flj4S3mzKHMd9
-	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 19:39:13 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 9580E4058C
-	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 19:39:55 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgCnAW6KWl9qfBEcCA--.5778S2;
-	Tue, 21 Jul 2026 19:39:55 +0800 (CST)
-Message-ID: <f7a94138-e29f-4b1a-948d-ef4933e7d0c5@huaweicloud.com>
-Date: Tue, 21 Jul 2026 19:39:53 +0800
+	s=arc-20240116; t=1784644394; c=relaxed/simple;
+	bh=lnr3v4i2HZ7e+iyHefoNWm3QwMfx67GoGpjKOB166rg=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=aOZ9PPtH2g5kG9vCVcleI1UFc+COo10O3izMQRZY5O4UGNQVPxNmrdgr4BhL1CI0EM5vcOt9TvS9C+6b5k0V+qtxLbKC4Af/zs+GGNiHON+T3w/gBvN9IeM3VeIlaLOGCooFcscmQ7aj5QbS6cbRW462oe1i3jCZPQbi2DhVMo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VvUM9GUg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VvUM9GUg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784644391;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=zR/w/bnt0hAUTasdffwDGuV3DRhAdLquz1gORWbliPM=;
+	b=VvUM9GUgUb2STwW1QsGBsKGE055sJFKVLbtQ5NdtMQalblo9qnlzfdLZ0vB+1DTVo9rAYb
+	oehcddttsTazQNqzw6nf0+TGlFMOH7RQGWBqXv9Fdo17y2dkBXJZ7zNUepdNcG6VUxKCZo
+	PYyJanLDffrjEiW19VaTbkXyinXyViA=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-53-WUJG1JObPaSrPbnsc_Tb3Q-1; Tue,
+ 21 Jul 2026 10:33:08 -0400
+X-MC-Unique: WUJG1JObPaSrPbnsc_Tb3Q-1
+X-Mimecast-MFC-AGG-ID: WUJG1JObPaSrPbnsc_Tb3Q_1784644387
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4BB46180ABE7
+	for <llvm@lists.linux.dev>; Tue, 21 Jul 2026 14:33:07 +0000 (UTC)
+Received: from [172.20.157.123] (unknown [10.30.44.126])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8DE451800616;
+	Tue, 21 Jul 2026 14:33:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc4,
+ upstream-mainline, b95f03f0)
+Date: Tue, 21 Jul 2026 14:33:06 -0000
+To: llvm@lists.linux.dev, fs-test@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 11/21] perf auxtrace: Set default period to 1 for
- PERF_ITRACE_PERIOD_INSTRUCTIONS type
-To: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Shuai Xue <xueshuai@linux.alibaba.com>,
- Namhyung Kim <namhyung@kernel.org>, James Clark <james.clark@linaro.org>
-References: <20260701035355.752944-1-wutengda@huaweicloud.com>
- <20260701035355.752944-12-wutengda@huaweicloud.com>
- <07c8c780-5eeb-4310-80cd-3ff18952a688@intel.com>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <07c8c780-5eeb-4310-80cd-3ff18952a688@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:cCh0CgCnAW6KWl9qfBEcCA--.5778S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxur4xAF47ArWrXrW8Gw4Durg_yoWrKrWfpr
-	n8tFWfJr4kXry8KwnFyr47Za4fAw4jqF1UG3s3JrWjy34j9ry8tFy7tr15CF4xGrnYkr9r
-	ZFZ0qr1Uury5JaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWU
-	JVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUIa
-	0PDUUUU
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <22004.126072110330800629@us-mta-53.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: mk9FBMdqvxxOe4DDHDubezvOwl-e69l14FP9Tgssd8c_1784644387
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Adrian,
+Hi, we tested your kernel and here are the results:
 
-On 2026/7/21 16:08, Adrian Hunter wrote:
-> On 01/07/2026 06:53, Tengda Wu wrote:
->> When using --itrace=M for data type profiling on arm64, the 'Percent'
->> values in perf annotate output are all zero:
->>
->> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
->> ============================================================================
->>  Percent     offset       size  field
->>     0.00          0       0x10  struct mmu_gather_batch  {
->>     0.00          0        0x8      struct mmu_gather_batch*    next;
->>     0.00        0x8        0x4      unsigned int        nr;
->>     0.00        0xc        0x4      unsigned int        max;
->>     0.00       0x10          0      struct encoded_page*[]      encoded_pages;
->>                                 };
->>
->> However, adding the -n option reveals non-zero sample counts:
->>
->> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
->> ============================================================================
->>  Samples     offset       size  field
->>       15          0       0x10  struct mmu_gather_batch  {
->>       13          0        0x8      struct mmu_gather_batch*    next;
->>        2        0x8        0x4      unsigned int        nr;
->>        0        0xc        0x4      unsigned int        max;
->>        0       0x10          0      struct encoded_page*[]      encoded_pages;
->>                                 };
->>
->> The root cause is that when period is not explicitly specified in the
->> --itrace option, it remains zero after itrace_do_parse_synth_opts().
->> The zero period then flows through annotated_data_type__update_samples()
->> where h->period accumulates to zero, and print_annotated_data_type_value()
->> calculates the 'Percent' as zero.
-> 
-> The period is for instructions samples i.e. options 'i' or 'y'.  Why is
-> it being used in the 'M' case?  What samples are being synthesized in
-> that case?
-> 
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-The 'M' case is just one example. On arm64, 't' and 'f' also have the
-same percent-zero issue.
 
-How ARM SPE synthesizes events:
+Kernel information:
+    Commit message: Merge tag 'mm-hotfixes-stable-2026-07-20-11-37' of git:=
+//git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
 
-ARM SPE can synthesize multiple event types from a single instruction.
-For example, the 'M' case targets instructions that cause memory
-interaction events, while the 't' case targets instructions that trigger
-TLB access/miss events. Users can specify the desired event types via
-the itrace option to obtain corresponding data type profiling results.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2691714766
 
-How data type computes Percent:
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2691714766_ppc64le_kernel
 
-Data type profiling computes Percent based on the period. The flow is as
-follows:
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2691714766_x86_64_kernel_kcidb_tool_21683533_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
 
-arm_spe_prep_sample():
-        sample->period = spe->synth_opts.period;
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-__hists__add_entry():
-        he.stat.period = sample->period;
 
-annotated_data_type__update_samples():
-        h->period += period;
-        h->addr[offset].period += period;
 
-print_annotated_data_value():
-        double percent = h->period ? (100.0 * period / h->period) : 0;
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-Therefore, if synth_opts.period is not specified (remains zero), the
-final Percent calculation results in zero.
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-As you pointed out, if period is intended to be limited to only the 'i'
-and 'y' options, then setting period to 1 in the current patch may not
-be appropriate.
-
-In fact, within print_annotated_data_value(), Percent could also be
-computed from the sample count. Moreover, I noticed that 'perf annotate'
-already has a --percent-type parameter that allows users to specify
-whether Percent is based on period or hit (which I understand to be the
-sample count). Perhaps it would be more reasonable to adapt
-print_annotated_data_value() to honor the --percent-type parameter
-instead.
-
-Thanks,
-Tengda
-
->>
->> In itrace_do_parse_synth_opts(), non-'iy' options have their period
->> type set to PERF_ITRACE_PERIOD_INSTRUCTIONS, but period remains zero.
->> Since a zero period is meaningless for this type, default to 1 (one
->> sample per instruction).
->>
->> With this fix applied, the result is as follows:
->>
->> Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
->> ============================================================================
->>  Percent     offset       size  field
->>   100.00          0       0x10  struct mmu_gather_batch  {
->>    86.67          0        0x8      struct mmu_gather_batch*    next;
->>    13.33        0x8        0x4      unsigned int        nr;
->>     0.00        0xc        0x4      unsigned int        max;
->>     0.00       0x10          0      struct encoded_page*[]      encoded_pages;
->>                                 };
->>
->> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
->> ---
->>  tools/perf/util/auxtrace.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
->> index 0b851f32e98c..415b68a2bba9 100644
->> --- a/tools/perf/util/auxtrace.c
->> +++ b/tools/perf/util/auxtrace.c
->> @@ -1759,6 +1759,12 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
->>  			synth_opts->period = PERF_ITRACE_DEFAULT_PERIOD;
->>  	}
->>  
->> +	if (!period_set &&
->> +	    synth_opts->period_type == PERF_ITRACE_PERIOD_INSTRUCTIONS) {
->> +		/* Indicates a sample is taken for every instruction. */
->> +		synth_opts->period = 1;
->> +	}
->> +
->>  	return 0;
->>  
->>  out_err:
-> 
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
