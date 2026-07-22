@@ -1,88 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2F643E9F4;
-	Wed, 22 Jul 2026 21:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815094582C5
+	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 23:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784756418; cv=none; b=tvOS/hEOw9ndqyM+1uNh83OdeHTpa/fOk3cP+2x46GEpOCk8Kuhnugul2uy1AORQzGzKMJrwR/20qUJkBzJrcLEWtCeMhOPnCVkN34XbUgQd9v8WmZ8g1SK6QNMJkKKyVB9gR9oz0XRvDVBkxM5DG1AGyoey5fWQEC7ttMcsh04=
+	t=1784761939; cv=none; b=XxSB5tLSD9MyfpujPdUcwgfLOv0ksBkTrz9gnLETk9B9T0h82bM6y5302epVcPKScLfGgtjxjwEuk8U1j+H+y7Bp1HHhTzWqU8oiWkS6QQBEvIpA/BuDINILKeDuPsUNFXNrMLMWxQv8MCkEYvz6Z4gflRRVAkvHFcqmZjDQ5PM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784756418; c=relaxed/simple;
-	bh=LHGRFLXQfRcR+pvqeqZGWFDrFa2LhclQR1cE8OQjQwQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lkFVn7pY+zz4naG2OxFLoK05Yu6GMCt/eWIyMcgaDrRbyhEtLxrCd0AXVKzgYt/VMwRfRIx0018s0yuCFYvSdQ72bLL4BfKBihC+QALY3H00U+p4K4OIh/V7MXH3I8HNIJcMg8s2bxPYRMTg1GGrwOLQYhBcfCWfQkXtJuNU7Ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUPZN7pW; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784761939; c=relaxed/simple;
+	bh=8mJEiqWpJ3Uy4dQUJYF07RJY9w1WOi0WCyECqoz+Mms=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Jtx9NWvU3bGwDN9vwCL55kWHmi6BCa/XF3OepmSvYOKTZQziaWm4ywqcGMcX31k1CjVM15akwxVhe4VF/OmzOocZxGtL09Q7iw93Qw3uqw+oot7CwWL9e954cqQ4UKZFTyzMAuZQfxn8mOhXGNqmUuxk3M4QBdrF7ZfVRqkhOwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IGabVT2v; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUPZN7pW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19DB1F00A3D;
-	Wed, 22 Jul 2026 21:40:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784756413;
-	bh=+eMYlOGfJ10tYybtvyrsW1lB+RoAnjB3FfjZYdMkZkE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=AUPZN7pWFQ8uxNPRAe4YDaLWmhexm824Tfmx7Fb/7Qj8Xjp1s+JDFfA0QfJ2sC2Hn
-	 aXnEEM6d1eIruBNgHtfE6cnyP2fxiBhmrHGdhcKL9yUmaxwS6wfPTbyYPNdxfLMvaI
-	 GLwleQEecZXVWfg2JhxChcVGypsbOvolr65aisR/x1JfjW/gX+OsHFLF8x8GvzXL+N
-	 lhiquT01UYjN0fDVSZ6aS3PGWTFq++8xZO62wmfSy6ZllHAU3wb5OWHmfirAWz4qtX
-	 Al+yVvDRcGgr4+p8XPw8aHh+sfIYnsv0DuFQtCPky6xPCFeDiLsy6CemEV0iTUUL4u
-	 cneF5UJf738sA==
-From: Will Deacon <will@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IGabVT2v"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-84e04df8c46so12348b3a.2
+        for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 16:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1784761938; x=1785366738; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=zi7GSMqA7QuxsTCwMKttd2kWd+CObdR4i6iXZa5Nm8Q=;
+        b=IGabVT2vK+pePoVBNPIdDrY+kv7m2IA7Dc0Rpmy3oYutDDcJdIUx5PcOFKa9Ci6qBR
+         2fG+78HvxQTQcQRGpj7gkIFwNbY0L6p6aVdzeNr918qdoIuGO6jX10PeMcpe0Zf1XVzG
+         QhMrOxnikOOxTpcY6hKfKzTR2t/lEeHmkNXBJO8u8a5uN/X9LW0SX45ADv2sFdHGmOoq
+         cDABItpoLqifwWaCwbAVVHcspp6RUkRd8v4c8M1+8mNxOFQnXBIwpmMwxR8nVC9x319W
+         V9XXTaZC8IJvPGlNQh+//nDOnMPw0lT4Y0pyOzppMM8/nefJ/5HN3PtP7EXXnevKIgch
+         HyFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784761938; x=1785366738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=zi7GSMqA7QuxsTCwMKttd2kWd+CObdR4i6iXZa5Nm8Q=;
+        b=hXzH7+BzJTyiDmh3TicTteMMLqvgVm85kWr419mXxn1rfP87SKbeIL+5LhGT2A56Nq
+         /9iVg1CPfIXri2UemyvcjJCkkhq9Gx80f1OikLgRnKP9DDp/ywC5CjtsJR6dtgqP6iZ/
+         zh8mFMfWSAzAXof0/+SpbxjpkId7J8JzFV6tsyeu61uaR4BDL3p/eMgj5PJPClOUNXHb
+         ONT2JJNafCam4tgwyXzc09rqsy8io2ggV5v7i0Icz6V3TQj7b+HCOYxHOEXPXjWKhooY
+         I0r8VA1cDYoOw0TaBxtuyZTg2TIERM03v6M9f92L+Q9KTjz0mK+6JWv1u+wibI/u5q3d
+         McvA==
+X-Forwarded-Encrypted: i=1; AHgh+RpFk010dptvRSeB5H/jOP3O8o2ZNRXpy1l9+B4anT+iuaoZx3baCWtN2b6168z1XwEaZ9cP@lists.linux.dev
+X-Gm-Message-State: AOJu0YzRCO2kxNHlzcxrXssxIIOOW0xO/6uMUwflMwfMBxhzQsjw786g
+	fTRHgRZ7VcrockRoRB8LpyZ7Wa7h3jMPYiKVv2geddR38GDLurBeT5dQ
+X-Gm-Gg: AR+sD11OFjQyNQUcOCBW4TFcvg7KsF/RGwj3wKD+EYIXwKjjSPce+2fjKNqsK11a5Dm
+	Rg8Ti9XzYl/ZSE7Ur0v4iob7QLWTWnJQs/ShOnKeBUT5Rh8LGiMtgVcEQEwb8UT+HcjAgjDH842
+	xPxXrLjRfGkfUIx7Pj/umeLJOAvnToSZLx1GHABSBZxqfTPS2WlxagRuKTXBzcGXsQlGpA2xCvQ
+	5j64zzTwrxGdzYB/q4xWivQI6znUAbz+kyuuzAFeO0+wOupXcxd55Dd903g6LddMy/YD1w48YZP
+	XVTANzCGadhnrQyv1lHwqB7fBkhcepZxmJLCEXSf89jPiZhHoJQsJFkZZXfPamVTrlc+TqcMOTh
+	ToUZEYfBHZZycn+ApqpyBtBpWm9mKF9h+3TX8lgyJ5eS7xt7Y06KWK2l8FxahCECm3UwwSGkG+3
+	ZvrDVGnhPjPkQvy7o133xyb/8fi3NxhaxHbfUhIsR2B232tKrtw2ykn1lNOUuO3Cf26K5NgtIQI
+	8ea0e0DWEQqky4qgXA5KfTroHMNoAzn8pbpbHyi8mFnXXekadj5uGw=
+X-Received: by 2002:a05:6a20:e290:b0:3b4:8f57:3205 with SMTP id adf61e73a8af0-3c44b18a0bfmr515631637.36.1784761937803;
+        Wed, 22 Jul 2026 16:12:17 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e35])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbb9656c076sm695300a12.19.2026.07.22.16.12.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 16:12:16 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-pci@vger.kernel.org
+Cc: Marc Zyngier <maz@kernel.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	bpf@vger.kernel.org,
-	Florent Revest <revest@chromium.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huawei.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-Date: Wed, 22 Jul 2026 22:39:25 +0100
-Message-ID: <178475345276.2109707.13204683362381752837.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] PCI: apple: use fwnode_irq_get() for port IRQ lookup
+Date: Wed, 22 Jul 2026 16:12:14 -0700
+Message-ID: <20260722231214.857760-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On Tue, 09 Jun 2026 05:19:25 +0000, Jose Fernandez (Anthropic) wrote:
-> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
-> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
-> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
-> would change the offset of the pre-function type hash (see
-> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
-> and the compiler support needed to reconcile the two does not exist
-> yet.
-> 
-> [...]
+Replace irq_of_parse_and_map() with fwnode_irq_get() on the PCIe
+controller device's fwnode, indexed by port->idx. This is equivalent
+for an OF-backed fwnode but uses the generic firmware-node API.
 
-Applied to arm64 (for-next/misc), thanks!
+Unlike irq_of_parse_and_map(), fwnode_irq_get() returns a positive IRQ
+or a negative errno and never 0 (it rewrites 0 to -EINVAL). So store
+the result in an int and check for irq < 0, propagating the error
+(including -EPROBE_DEFER) instead of the previous unsigned int with an
+`if (!irq)` check that could never catch a negative failure.
 
-[1/2] arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OPS
-      https://git.kernel.org/arm64/c/123b4fc0f857
-[2/2] arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
-      https://git.kernel.org/arm64/c/9315e22b0c0a
+Built for arm64 (defconfig + CONFIG_PCIE_APPLE) with LLVM=1;
+drivers/pci/controller/pcie-apple.o compiles cleanly.
 
-Cheers,
+Assisted-by: opencode:hy3-free
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ drivers/pci/controller/pcie-apple.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+index c2cffc0659f4..535acf274b78 100644
+--- a/drivers/pci/controller/pcie-apple.c
++++ b/drivers/pci/controller/pcie-apple.c
+@@ -400,14 +400,13 @@ static int apple_pcie_port_setup_irq(struct apple_pcie_port *port)
+ {
+ 	struct fwnode_handle *fwnode = &port->np->fwnode;
+ 	struct apple_pcie *pcie = port->pcie;
+-	unsigned int irq;
++	int irq;
+ 	u32 val = 0;
+ 
+ 	/* FIXME: consider moving each interrupt under each port */
+-	irq = irq_of_parse_and_map(to_of_node(dev_fwnode(port->pcie->dev)),
+-				   port->idx);
+-	if (!irq)
+-		return -ENXIO;
++	irq = fwnode_irq_get(dev_fwnode(pcie->dev), port->idx);
++	if (irq < 0)
++		return irq;
+ 
+ 	port->domain = irq_domain_create_linear(fwnode, 32,
+ 						&apple_port_irq_domain_ops,
 -- 
-Will
+2.55.0
 
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
