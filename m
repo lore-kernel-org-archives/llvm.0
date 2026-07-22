@@ -1,120 +1,163 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC234BC020;
-	Wed, 22 Jul 2026 09:56:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 385B04D8D8D
+	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 11:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784714203; cv=none; b=PwFkzyZNJ0Te4yLhZsmd5KG1+glDG8tgJawca1Xo014SZxKJtyfVQP3iydjmiZLpCzg6cZMbMWTZ/ilQH6xaUo20eb5kp+WbXoQ0+Nvx/l+Jog5R1OOLE9ZQaAdFQeZTlK1vynem8psiNaavLrUyoMws17wncjZ0Tmwg/z1GDDc=
+	t=1784719647; cv=none; b=qwq91VmuQKAfY5oYO2oNdZDcL3WuQ4j7vga0ECDLSFsz9pHLSM2qnWfddoZruQfSeF16AuBw5oelA+Z84o4P94lDfqQbe4o5DF+wY95K9AtRPRrKYERXZy75nnuPlcxbz1RzIYzOcWF/Ail7Qrxc12hqJk3Yz4sjTdWpoD1RAl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784714203; c=relaxed/simple;
-	bh=qCqgJPnb1PxUj3vAIUc97Jw/ZJZwfxIx8z1tmUOsYTE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=f2qMXv2bnlSLrtf/Xpd+fic28YN3/TS2zCN/B2uBMKvVIV/XnYX0iwdYdgHw/o5aXxRQnn0h10zWmejjlQLnuLMg8+dXdi44WkQH0kKgm4yxRH5YNNikT4L+Vdg4zbNrmVRL+noIykYYWw9bIwUzkkviht/pe2/FZIxXpZ3bo4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iTTuEnUK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784719647; c=relaxed/simple;
+	bh=rS7wf5obUCkE4Gf53y0K0jxXoIuFyh9G9HlfBjwYUTo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=X/finl859dV/TkRpPYRs2TThhbZb1tJJL93EyfX2c4mkR62EceyR5iECZe2LzcA6FfEY4JuGMkHMa+Q3YsCOvWRzpjHPOUSVv5t6q0K+hD6n+txV11RqSHT5Fa2joP3ZqueTdUdnamHfPW399C6N7LTKNcbljh+3UIHF/tiDEWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eBsbfDoM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fN51ijhz; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=eBsbfDoM; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=fN51ijhz; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iTTuEnUK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 842D71F00A3D;
-	Wed, 22 Jul 2026 09:56:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784714199;
-	bh=2UKinxtwpUhNzmCHSNfCxB0o/RysIEhOfeODCNlOPoo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=iTTuEnUKQW7C4i55BdkYOSG2Awg+qdtvweW4/rglmXgra31Eu+PM6mPv/cht4UWFk
-	 fLrjFvUrnn1wqgTk6wnnrN93sXSi3+UffEfcG3KILa8CLmML82j0oCAM/KHWuDt1bl
-	 sYpXlT+DrNmidRHMyJDMpwaFQyr+DkigbsumgMPOAv+WQ26Fqe5qBmPMtzV7ihzoIJ
-	 uXznuCuGQxaKAbAmgZFgLhYEUIMK3a7sMSzPALT0Sm74HXS0RvxY6QmJ92ju59MN17
-	 unSXjen5rxZCe+xajZDk4GmGgueRR1Js5Wcer9bDa0Fl1luJCxMNLfTAa0O/2+yako
-	 LSAUkAc4Vlg6w==
-Content-Type: multipart/mixed; boundary="===============2757309040262801300=="
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eBsbfDoM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fN51ijhz";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="eBsbfDoM";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="fN51ijhz"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 85B247AA70;
+	Wed, 22 Jul 2026 11:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784719640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Hk5heLSfWVGLMTsYmNur//qH4lMk/i0VVzTcJAiotY=;
+	b=eBsbfDoM6PpveRchhYZmhJ0rXBm2DSKDF0yFnxjgSKsSUD8lI/g+OzlyQ3IPebZiP3WePO
+	txi+v/+xCpeIMqqFG6dLWkLVewMid2w55Wsdqr5yTLGp6eIM0SfYGzdluFOl0kG/BiuwtK
+	rBTvZd+Y0SfEiPtTn+qakWLdSwyBHAk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784719640;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Hk5heLSfWVGLMTsYmNur//qH4lMk/i0VVzTcJAiotY=;
+	b=fN51ijhzfQuBh81XoWOuoT2Swyybspd7fUEr7gh6fIYG/LoLJ66fkdFS4Sh7ofBbh3RhIc
+	ifqoIwW2eOXG00CA==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=eBsbfDoM;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=fN51ijhz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1784719640; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Hk5heLSfWVGLMTsYmNur//qH4lMk/i0VVzTcJAiotY=;
+	b=eBsbfDoM6PpveRchhYZmhJ0rXBm2DSKDF0yFnxjgSKsSUD8lI/g+OzlyQ3IPebZiP3WePO
+	txi+v/+xCpeIMqqFG6dLWkLVewMid2w55Wsdqr5yTLGp6eIM0SfYGzdluFOl0kG/BiuwtK
+	rBTvZd+Y0SfEiPtTn+qakWLdSwyBHAk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1784719640;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1Hk5heLSfWVGLMTsYmNur//qH4lMk/i0VVzTcJAiotY=;
+	b=fN51ijhzfQuBh81XoWOuoT2Swyybspd7fUEr7gh6fIYG/LoLJ66fkdFS4Sh7ofBbh3RhIc
+	ifqoIwW2eOXG00CA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 283F6779B0;
+	Wed, 22 Jul 2026 11:27:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id BS79BRipYGphMwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 22 Jul 2026 11:27:20 +0000
+Date: Wed, 22 Jul 2026 13:27:19 +0200
+Message-ID: <878q73gt7s.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-sound@vger.kernel.org,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Microchip (AT91) SoC support),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b)
+Subject: Re: [PATCH] ALSA: atmel: ac97c: use platform helpers and devm cleanup
+In-Reply-To: <20260721225411.815553-1-rosenp@gmail.com>
+References: <20260721225411.815553-1-rosenp@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Message-Id: <1358b841fb4669aa04fcb84247b91c74dfc8f4749f665f5c2a058d6c2bb17640@mail.kernel.org>
-In-Reply-To: <20260721174833.1232771-2-ziyang.meme@gmail.com>
-References: <20260721174833.1232771-2-ziyang.meme@gmail.com>
-Subject: Re: [PATCH v2 1/4] selftests: add shared lib.bpf.mk to build BPF progs and skeletons
-From: bot+bpf-ci@kernel.org
-To: ziyang.meme@gmail.com,shuah@kernel.org,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,jikos@kernel.org,bentiss@kernel.org,void@manifault.com,eddyz87@gmail.com
-Cc: arighi@nvidia.com,changwoo@igalia.com,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,inwardvessel@gmail.com,mykolal@meta.com,nathan@kernel.org,linux-kselftest@vger.kernel.org,cgroups@vger.kernel.org,linux-input@vger.kernel.org,sched-ext@lists.linux.dev,linux-mm@kvack.org,kernel-team@meta.com,bpf@vger.kernel.org,llvm@lists.linux.dev,linux-kernel@vger.kernel.org,ziyang.meme@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 22 Jul 2026 09:56:37 +0000 (UTC)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Flag: NO
+X-Rspamd-Action: no action
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.51 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_TO(0.00)[gmail.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	DWL_DNSWL_BLOCKED(0.00)[suse.de:dkim];
+	DKIM_TRACE(0.00)[suse.de:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: 85B247AA70
+X-Spam-Score: -3.51
 
---===============2757309040262801300==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, 22 Jul 2026 00:54:11 +0200,
+Rosen Penev wrote:
+> 
+> Convert atmel_ac97c_probe() to the managed APIs. Replace the open-coded
+> platform_get_resource() + ioremap() with devm_platform_ioremap_resource(),
+> which requests and maps the AC97C register window in one call. Switch the
+> clock to devm_clk_get_enabled(), the card to snd_devm_card_new(), and the
+> interrupt to devm_request_irq(). The now-unnecessary error-path cleanup
+> and the manual teardown in atmel_ac97c_remove() are dropped, since devm
+> handles them.
+> 
+> platform_get_irq() was already used; tighten its error check to irq < 0.
+> 
+> Both resource and IRQ lookups are equivalent for a platform-backed
+> device. The AC97C register window is owned solely by this driver, so the
+> new region request cannot conflict with another claimant, and it is
+> mapped exactly once (no double mapping).
+> 
+> No functional change; built for ARM (allmodconfig + SND_ATMEL_AC97C)
+> with LLVM=1 and sound/atmel/ac97c.o compiles cleanly.
+> 
+> Assisted-by: opencode:hy3-free
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
 
-> diff --git a/tools/testing/selftests/lib.bpf.mk b/tools/testing/selftests/lib.bpf.mk
-> new file mode 100644
-> index 000000000000..6f175c6568e9
-> --- /dev/null
-> +++ b/tools/testing/selftests/lib.bpf.mk
-
-[ ... ]
-
-> +# ---- libbpf (target) ------------------------------------------------------
-> +# Pass ARCH/CROSS_COMPILE/CC through: lib.mk's CC is file-origin and is not
-> +# exported, so without this the libbpf sub-make would rebuild for the host under
-> +# a pure-LLVM cross build (make LLVM=1 ARCH=<arch>).  -fPIC keeps the static
-> +# libbpf linkable into position-independent (PIE) test binaries.
-> +$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile) \
-> +	   $(APIDIR)/linux/bpf.h | $(BUILD_DIR)/libbpf
-> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
-> +		    ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) CC="$(CC)"     \
-> +		    EXTRA_CFLAGS='-g -O0 -fPIC'				      \
-> +		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
-
-This rule hardcodes EXTRA_CFLAGS='-g -O0 -fPIC' for the libbpf sub-make.
-tools/testing/selftests/bpf/Makefile instead passes
-EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)'.
-
-With -O0 pinned here, is there a way for someone to build the selftests
-(including libbpf) with -O2, or with sanitizer flags?  Could this at least
-honor the EXTRA_CFLAGS or USERCFLAGS that lib.mk already defines?
-
-The same hardcoding shows up in the host libbpf and host bpftool rules
-below, so the same question applies to them:
-
-> +# ---- libbpf (host) -- a distinct rule only when cross-compiling -----------
-> +ifneq ($(BPFOBJ),$(HOST_BPFOBJ))
-> +$(HOST_BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile) \
-> +		| $(HOST_BUILD_DIR)/libbpf
-> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) ARCH= CROSS_COMPILE=	      \
-> +		    OUTPUT=$(HOST_BUILD_DIR)/libbpf/ CC=$(HOSTCC) LD=$(HOSTLD) \
-> +		    EXTRA_CFLAGS='-g -O0'				      \
-> +		    DESTDIR=$(HOST_SCRATCH_DIR) prefix= all install_headers
-> +endif
-> +
-> +# ---- bpftool (host) -------------------------------------------------------
-> +$(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) \
-> +		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
-> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFTOOLDIR)		  \
-> +		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) \
-> +		    EXTRA_CFLAGS='-g -O0'			  \
-> +		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/		  \
-> +		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/	  \
-> +		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/		  \
-> +		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install-bin
-
-[ ... ]
-
-On the commit message:
-
->     This saves much work for configuring selftests in other folder, such the cgroup.
-
-This isn't a bug, but could this sentence be tightened?  "in other
-folder" and "such the cgroup" read a little awkwardly, and the preceding
-text already explains the deduplication rationale.  Perhaps something like
-"This eases adding BPF-based selftests in other directories, such as
-cgroup."
+Applied to for-next branch.  Thanks.
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/29908293077
---===============2757309040262801300==--
+Takashi
