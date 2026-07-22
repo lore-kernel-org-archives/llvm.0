@@ -1,134 +1,123 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4CC3624AB
-	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 15:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784732484; cv=pass; b=AvgBsIeSkmeltoncXspsdLRGHmPiLPYqTR4R/+bVinTy+K2IgT35uarhpvY00tHcnx0Q7sEu/HI5CoVXrKRDV7d40GSCkFhLrvSYIA886y366naYgv3b9fCvrqre+z3pqfQvfdKTkkoS0ECUgi4kWfIs5VuCEku8w9ljbRBWAq4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784732484; c=relaxed/simple;
-	bh=VI4OwuFEOitISKsCf5TtIc8+gelg15Dp+6Rf9Tq1qX0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MqpNu+cFjmpK3uZ/LZAVhwOkbsecmPNH4uzo6bP46Wb5na/youxEooXe77sonvyWuAF9WTBMnxQ78nhqQm9Af/tybklbCSA4Ai7TOMid5NeMBmuJgFH4Ss2OcCPMM2lwdr0uqtQPBRrc6UEDpa6iPnnZofS4poMBxMLvkHgsvSQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m/OgcmjJ; arc=pass smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC828411F89
+	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 17:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784741109; cv=none; b=WLcHcH2/xO0wPhb9nC77bknfWnarGDzY8L21wa71AQ8I9ETX70LenLDSocVGt1Bf1mBDDXiXu8LGr7Uu832UmQYI64tru6Vdq+QabRe8Aum/PWz1C3cVilhsvqIPu3w4db/3aLMa1LwK8+zxaVMfa6X8dxhpK/gDa4P/bRsvZLo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784741109; c=relaxed/simple;
+	bh=zWRJXCy2wjVlrC6Ts2vSMU+M0dIL/NNVsL3qymVX1C8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GypjSc2g5xQmL3vm0wSUPCoyAm6X+i3KS9fqZG7T9AXaKY3KFInZe/P8MzB+JNjLg9Ef0REEu951WUo0fI6kcttpUsT4SpSuGNy9UC490xAnNYqOvOgMYW8HuFVAW9sqRLIdTRvH0RVtjoHgqC70/03GmQF8iuyNTq5T/lg9j7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a4JAOYWp; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m/OgcmjJ"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-51c01c79467so1415831cf.0
-        for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 08:01:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784732482; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lmssVR8TJe6ClUuFBefQOBJUSMdGWg3p81WfgUQQTh3r2KsA7nXhekcmeFBRkkb9nL
-         r1zDEuazjbPC26vZGyOK1qN2rHOTEFvXEcuJBgjMFhyNUOsWFfdSuEmn3t0wyGS+RcjG
-         xvUlj/9cQuJQg6Z+py7OMlc+MNnhxf0EWWse8bL8N9jPxZo4onBKJcqS8KRQ7NnCxhET
-         Y/x4JW1WP7pB2LEmdVCeUirqaWyst2+dxzVIwOiCc7cy1KceVL0ydYjgkP7dXewCMvdr
-         eKpU1vkl/OIWU8VUCGSny4aLkmyruMMQOpuXU3GBSPQJhSb+hvoboBnkDJdxKBfr2v4Q
-         /y7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IUDdFmL3+NA+J1/tlIoHIkJZpryeycSZRENBb+lv4ow=;
-        fh=BkD44RNs4+6Fy41tu+KDc9Azrq1dTIOnhRsHCZ4U4GM=;
-        b=PWfSnqsm5++Plup/XbxkRHnWlBMXkGcbDc9K/Vtnj5hIoK4z2DbAWLe+T/QxpZHmPb
-         woO8iIOG4a+ZORo6vOOaO8EKdSv8nia+EAvRmuWAepEPlt/259GSSJx40Pqx6uKFTEls
-         mtcZDJDiVEi+iieGoK/NUoTmmR2ECeeWkFNs8gCysmm6dyCtIbQxyKnlYdmeLCnvtaa+
-         LyvNA95swtxn72YL2PzUM8GJzXKAYbebU5UggOYN0AXu0hf73E36vFRjZtiLSYQW+9ZO
-         qOyaGUcv5skj1/H9YR5S2KTF+uAqSna7MF2HEKlTMmULnY8YV5gEnmuctH52MDyoifKV
-         NaPw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a4JAOYWp"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8485b358552so376057b3a.2
+        for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 10:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784732482; x=1785337282; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IUDdFmL3+NA+J1/tlIoHIkJZpryeycSZRENBb+lv4ow=;
-        b=m/OgcmjJaUFF49Zo/Ih0sifXwPyAHCiacPyMPt6iMZQZYfrd3Yh1mlB8sxCoe9vQ/z
-         fqQLq1Xe6UJQacZamWHFG5J4evTzZnFDsrwdrHdfX1dhvEVkngv/INrWOiBo1BwnHmwg
-         1IqSr9m/oDpRza5vA8asd6c0fxCHim6qAgCZTEKup/SQpupFTp0EMqY0xhvZ6vs8KRpB
-         oeFCXRqq4oct55TOQqJPQUKALSNK14dRnkM+8uuYAKRoBW4OkndtuY57k1eW/z/aQ8yt
-         JzUryfxpI2PIcZLoNIHuyXvLJsqeN6sAhlqiPAm1fZRZxs4jO5cTMF7IKDIqqcrtjCcz
-         KU8Q==
+        d=gmail.com; s=20251104; t=1784741103; x=1785345903; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=1w/L0JEj1tAoEtTkbuyiqxCj7tfW27Vj36Bhq5Zj1YU=;
+        b=a4JAOYWp6VxX2eXL0zoR20O7iwMnap8pCgZwH2oMJVmFJyP8eHw8IrTzxYQtS0nm3E
+         kg+ZQps8uLM1vpQlHRn4DOH/X+0fB0HVIgWpdtFTeevXcFDgXwr1c5akPIOHWZhndwa9
+         npbiQSAWAnao55FGxUzhySdBNPkphJxrjET5wGiLYKTZAo+5d5dc62JtgZ14/Tzfk7Dz
+         X8bi4v1Svux4FC+HDEHtoBzKIF05NSa/A4LPyfK1je1ugGZd8pCLhrMrtOy1UxIfbihI
+         46mM24I6l9Jdg65My9asFmanjuMO3Xe2JTu+hQUG941P7mrtx8K0l6KBdbC9IIMo7QjC
+         NOkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784732482; x=1785337282;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IUDdFmL3+NA+J1/tlIoHIkJZpryeycSZRENBb+lv4ow=;
-        b=PhBC6tZ+qcwyzKdwhTQsa6JYHapTMA7mtm8APqNhbiQDsIubjTGRJTEMUToi5bngJM
-         RRUkgFGZCtAqz2i52c+h9Th8t8lCcsvzMx5qn5R+tJ/DLpLcxNFwaH/aMUPxDpWRWgEw
-         Kwohcnt/kfp80XCGppwQ60PEXD/d0WtrVF+6eiPlu8hRmQKxYIe87ejuUhc9i4Z0qwzc
-         LwpWyrjAbhH1AcEmvcQhtMmBHxLOpZheR/nPfkBrHd+TGHUAOqoGA1EHW7EYXXZzFJ0N
-         yPcIqcjzucqaDC9pWR/pZWGjblCkKdcLmxzxSelAGixpQcP/vEUNlX8MlL7BeHiLf6BE
-         dVVQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoKCrhjuZqkTzLm7IaiTkAF/52gyPgaHsHvkiodWFXewvJv42spDUD9fjQB39QCU7lXbIAb@lists.linux.dev
-X-Gm-Message-State: AOJu0YzRuMY6gfRS7kdoeTpY7lGOm8CGt3/M5VIQSuYr8pYZ8Ht2UkM5
-	LNTYxkrYKyIgmIBLJHrzdFD2pf5Q4Lyna7AuZnfXgIUSrKkpajdY9nHPF/z1VpAvaTBX3R61HF0
-	+rX4HPsajU3ZmVkq0QuA5bZKDVuYSqz1JXqzO3Jag
-X-Gm-Gg: AR+sD10uQuO+56kTsLe8W8Ab4xfTNZgGxwjP+kHLAHNr3i+XuwslJZVkFdOFoZiVkNb
-	mgMWDuLRz1W2+px/0F+dnC+13Fe8KmHXBhJTUhNMlGf0W2KIqOzAZPN1nTi1/9olp3Bymzv8RDZ
-	2Uqi163cEK7mJ/LcIF7M4QiX+0h+K6UzHuNswk3sVHqc+ue1VUYLu6E+NKMYjo+Jhg5ghe4Too7
-	vGotpPRRtB4fhNXp9XXcIgiCEova45xxuzoFb8YZSrP7JK2PTwek8LIvIieblxaahudqg==
-X-Received: by 2002:ac8:5fcc:0:b0:50f:b69a:f4a8 with SMTP id
- d75a77b69052e-527ef057dc5mr8866391cf.7.1784732480733; Wed, 22 Jul 2026
- 08:01:20 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1784741103; x=1785345903;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1w/L0JEj1tAoEtTkbuyiqxCj7tfW27Vj36Bhq5Zj1YU=;
+        b=VFqSdB7SyfmFqPqAMhGQel28nvlHoqZ7Yz18kwlrcq7TlShj7GWmrdAsqMNtVrrkzD
+         rv2hNhFea5zHFfyTJW4ldQuHCYcTxjFUDQzREwGYtPXfd9lYgLnfJGgoj5xlmoj4R1Om
+         1zfj9J2U36tZXrujuuBLOVp2XE9QSzcArngYM0jsxPUcgm4o5XRastugbdu95gV4WAsx
+         8/JniVGfH790jc5mKapdU6CsUzB1wuBTpsTeSicDHsyU9uooGRcYEBQlKtMYibEBM1hk
+         ocz3HFwKmsEz9OSyoRU+rbvn+yPHThhOFektCkSruBcBC1IJG4508xk8Ot+Jxuw/OOr8
+         P1Ig==
+X-Forwarded-Encrypted: i=1; AHgh+RoecRkgrKRj48pFsxXcygD+W14gvNwHs82YtifiCAQlQQgU5gcMHdO7obm7TQITzJ5GyrCg@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywws+6RT6N9PDhxRq+YyVSZ2hhh6PMU0Z5gLb1T9HAp2pYUaW/W
+	b7W7u0uNoN5yughZ1ABR+9al0/lGxfQzRy8f6IkbjjymsCYc2y8gJ6ta
+X-Gm-Gg: AR+sD13APQj4ATAWxzm/cEUvMgyGuC555GDA5rRajWL26NjxIo5Kwjr8Squ8XK7CBnS
+	AH8fkPi7lCu4PPZKgJrLxH5jCmz6iNZZFK1PWWjO+CRrf4NOD30NawrAfK+MT2XnXdIVyj5h01V
+	+blEE/3CQGxukI1kcD8piJkGLBx30DuQ7SNCapuraV1oj/umPK+yuCA6ufS+OgTrP8DD6ITfZWv
+	WHnRWWqSDZXxPXi2InNuLOE/HaTSalc3wVPb8m4AmfZzuSbjdKNtm9bGKZcqc6RCyPabYby2yXj
+	nsxVgZut1O1eh4uL3RUnlvAd3ewvJlKjX4AOybbftLjUCHFUk4ZwAMI0dRf/Qf2BgzymJMz4lgE
+	xDFbQzxdDdFGIIkhrzCv6KPyfErs6LUeZOa/+FRtY6VF5nnr8dQfR/JfRNkuQdkIqkn0GlX7FIa
+	d0axrbSC+wOMxZeRAiAngDnqpvCABZXgjgIEoMNZ/v+4xQ
+X-Received: by 2002:a05:6a00:2e07:b0:848:2f84:730 with SMTP id d2e1a72fcca58-84c294e6a56mr23499585b3a.67.1784741102709;
+        Wed, 22 Jul 2026 10:25:02 -0700 (PDT)
+Received: from buffalo-ssd (M014013071096.v4.enabler.ne.jp. [14.13.71.96])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e1757488csm1645603b3a.33.2026.07.22.10.24.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jul 2026 10:25:02 -0700 (PDT)
+From: Akari Tsuyukusa <akkun11.open@gmail.com>
+To: Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: Yingjoe Chen <yingjoe.chen@mediatek.com>,
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM SUB-ARCHITECTURES),
+	linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support),
+	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b),
+	Akari Tsuyukusa <akkun11.open@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] arm: mediatek: fix secondary CPU boot on Thumb-2 kernels with Clang
+Date: Thu, 23 Jul 2026 02:24:43 +0900
+Message-ID: <20260722172443.534251-1-akkun11.open@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260718111340.159896-1-linux@yoavmoshe.com> <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
- <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com> <20260721180950.GA3684684@ax162>
- <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com>
-In-Reply-To: <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 22 Jul 2026 08:00:44 -0700
-X-Gm-Features: AUfX_myRDvh7sB8bTl-K_5M53o7Jc2MxCOtToMgfXS4NBIZfb2fG6H4OMTOIhfE
-Message-ID: <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
-Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
-To: "Yo'av Moshe" <linux@yoavmoshe.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
-	stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 22, 2026 at 5:54=E2=80=AFAM Yo'av Moshe <linux@yoavmoshe.com> w=
-rote:
->
-> On 2026-07-21 8:09 PM, Nathan Chancellor wrote:
-> > Does using SYM_TYPED_FUNC_START for imx6_suspend() make that work?
-> > Something like this builds fine for me and I see
-> > __kcfi_typeid_imx6_suspend generated by Clang.
-> Hi Nathan,
->
-> Thanks for the suggestion!
->
-> Unfortunately my physical board died, so I couldn't test this on hardware=
-.
-> However, I gave your patch a try under QEMU emulation (with CONFIG_CFI=3D=
-y
-> and copying the 4-byte hash into OCRAM before fncpy), and it still
-> triggered a CFI panic when suspending:
->
->     __und_svc_finish from imx6q_suspend_finish+0x78/0xd0
->
-> It seems like the hash generated for assembly doesn't match what the C co=
-de
-> expects at the call site.
+When building with CONFIG_THUMB2_KERNEL=y and Clang, secondary CPUs
+fail to come online with "CPU1: failed to come online". The address
+written to the jump register has bit 0 set, causing the secondary CPU
+to start in Thumb mode.
 
-Are relocations applied to this code before the function is copied?
-Because SYM_TYPED_FUNC_START doesn't embed the actual CFI hash in the
-binary, just a reference to a symbol that contains the hash, and it
-relies on the kernel to apply relocations before indirect calls are
-made to the function.
+secondary_startup_arm is ARM-mode code (.arm) and, on a Thumb-2 kernel,
+expects to be entered in ARM mode in order to switch to Thumb via the
+standard sequence at that label. Starting in Thumb mode causes the CPU
+to execute ARM instructions as Thumb, resulting in an immediate crash.
 
-Sami
+Clear bit 0 of the entry address so the CPU always starts in ARM mode.
+
+Tested on Lenovo YOGA Tablet 10 (Wi-Fi).
+
+Fixes: 0cda07001a94 ("ARM: mediatek: add smp bringup code")
+Assisted-by: DeepSeek:deepseek-v4-pro
+Cc: stable@vger.kernel.org
+Signed-off-by: Akari Tsuyukusa <akkun11.open@gmail.com>
+---
+ arch/arm/mach-mediatek/platsmp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/mach-mediatek/platsmp.c b/arch/arm/mach-mediatek/platsmp.c
+index 6b0943d95555..9a7c65fc3ae1 100644
+--- a/arch/arm/mach-mediatek/platsmp.c
++++ b/arch/arm/mach-mediatek/platsmp.c
+@@ -124,7 +124,7 @@ static void __init __mtk_smp_prepare_cpus(unsigned int max_cpus, int trustzone)
+ 	 * write the address of slave startup address into the system-wide
+ 	 * jump register
+ 	 */
+-	writel_relaxed(__pa_symbol(secondary_startup_arm),
++	writel_relaxed(__pa_symbol(secondary_startup_arm) & ~1,
+ 			mtk_smp_base + mtk_smp_info->jump_reg);
+ }
+ 
+-- 
+2.54.0
+
