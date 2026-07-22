@@ -1,123 +1,88 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC828411F89
-	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 17:25:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784741109; cv=none; b=WLcHcH2/xO0wPhb9nC77bknfWnarGDzY8L21wa71AQ8I9ETX70LenLDSocVGt1Bf1mBDDXiXu8LGr7Uu832UmQYI64tru6Vdq+QabRe8Aum/PWz1C3cVilhsvqIPu3w4db/3aLMa1LwK8+zxaVMfa6X8dxhpK/gDa4P/bRsvZLo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784741109; c=relaxed/simple;
-	bh=zWRJXCy2wjVlrC6Ts2vSMU+M0dIL/NNVsL3qymVX1C8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GypjSc2g5xQmL3vm0wSUPCoyAm6X+i3KS9fqZG7T9AXaKY3KFInZe/P8MzB+JNjLg9Ef0REEu951WUo0fI6kcttpUsT4SpSuGNy9UC490xAnNYqOvOgMYW8HuFVAW9sqRLIdTRvH0RVtjoHgqC70/03GmQF8iuyNTq5T/lg9j7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a4JAOYWp; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8E414749E6;
+	Wed, 22 Jul 2026 17:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784742424; cv=pass; b=bYCbH22wrYkmcyjbFibQi8u3PcLcIghgGDhAonxbDPgf9yKpBo6IliBNfX/HbkhATZaVDm4kX9/mh0u3RBIcNbcaJPyowHLRbIWvZMKpxgcjx+95jjR9yTlpOxsWNB4P1did2LgNXeFfAZq1KlZ+kumNydlvkN7abf2NEXoyiac=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784742424; c=relaxed/simple;
+	bh=XCrzWIHXMTC6vLxmZAYmJB0rVPxCp1X90KZnT66wKo8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H1kHYTEv5Za/mKT+/2g/vsk/qzjJ7mhbjOwPi7ADYOMFW4uYfde96UH8OJDPD3wxk6Iv2llMzEPFxcxklxTmr3kDpZBCtIv6Ah8KHmZr29FyepUtbFrw9OeB/1doMZyJtf2RFGWTcAhN6Vn6aZYX53/POx3zca4uwQ4CYk568VA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=VNxQAg5B; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a4JAOYWp"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8485b358552so376057b3a.2
-        for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 10:25:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784741103; x=1785345903; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=1w/L0JEj1tAoEtTkbuyiqxCj7tfW27Vj36Bhq5Zj1YU=;
-        b=a4JAOYWp6VxX2eXL0zoR20O7iwMnap8pCgZwH2oMJVmFJyP8eHw8IrTzxYQtS0nm3E
-         kg+ZQps8uLM1vpQlHRn4DOH/X+0fB0HVIgWpdtFTeevXcFDgXwr1c5akPIOHWZhndwa9
-         npbiQSAWAnao55FGxUzhySdBNPkphJxrjET5wGiLYKTZAo+5d5dc62JtgZ14/Tzfk7Dz
-         X8bi4v1Svux4FC+HDEHtoBzKIF05NSa/A4LPyfK1je1ugGZd8pCLhrMrtOy1UxIfbihI
-         46mM24I6l9Jdg65My9asFmanjuMO3Xe2JTu+hQUG941P7mrtx8K0l6KBdbC9IIMo7QjC
-         NOkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784741103; x=1785345903;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=1w/L0JEj1tAoEtTkbuyiqxCj7tfW27Vj36Bhq5Zj1YU=;
-        b=VFqSdB7SyfmFqPqAMhGQel28nvlHoqZ7Yz18kwlrcq7TlShj7GWmrdAsqMNtVrrkzD
-         rv2hNhFea5zHFfyTJW4ldQuHCYcTxjFUDQzREwGYtPXfd9lYgLnfJGgoj5xlmoj4R1Om
-         1zfj9J2U36tZXrujuuBLOVp2XE9QSzcArngYM0jsxPUcgm4o5XRastugbdu95gV4WAsx
-         8/JniVGfH790jc5mKapdU6CsUzB1wuBTpsTeSicDHsyU9uooGRcYEBQlKtMYibEBM1hk
-         ocz3HFwKmsEz9OSyoRU+rbvn+yPHThhOFektCkSruBcBC1IJG4508xk8Ot+Jxuw/OOr8
-         P1Ig==
-X-Forwarded-Encrypted: i=1; AHgh+RoecRkgrKRj48pFsxXcygD+W14gvNwHs82YtifiCAQlQQgU5gcMHdO7obm7TQITzJ5GyrCg@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywws+6RT6N9PDhxRq+YyVSZ2hhh6PMU0Z5gLb1T9HAp2pYUaW/W
-	b7W7u0uNoN5yughZ1ABR+9al0/lGxfQzRy8f6IkbjjymsCYc2y8gJ6ta
-X-Gm-Gg: AR+sD13APQj4ATAWxzm/cEUvMgyGuC555GDA5rRajWL26NjxIo5Kwjr8Squ8XK7CBnS
-	AH8fkPi7lCu4PPZKgJrLxH5jCmz6iNZZFK1PWWjO+CRrf4NOD30NawrAfK+MT2XnXdIVyj5h01V
-	+blEE/3CQGxukI1kcD8piJkGLBx30DuQ7SNCapuraV1oj/umPK+yuCA6ufS+OgTrP8DD6ITfZWv
-	WHnRWWqSDZXxPXi2InNuLOE/HaTSalc3wVPb8m4AmfZzuSbjdKNtm9bGKZcqc6RCyPabYby2yXj
-	nsxVgZut1O1eh4uL3RUnlvAd3ewvJlKjX4AOybbftLjUCHFUk4ZwAMI0dRf/Qf2BgzymJMz4lgE
-	xDFbQzxdDdFGIIkhrzCv6KPyfErs6LUeZOa/+FRtY6VF5nnr8dQfR/JfRNkuQdkIqkn0GlX7FIa
-	d0axrbSC+wOMxZeRAiAngDnqpvCABZXgjgIEoMNZ/v+4xQ
-X-Received: by 2002:a05:6a00:2e07:b0:848:2f84:730 with SMTP id d2e1a72fcca58-84c294e6a56mr23499585b3a.67.1784741102709;
-        Wed, 22 Jul 2026 10:25:02 -0700 (PDT)
-Received: from buffalo-ssd (M014013071096.v4.enabler.ne.jp. [14.13.71.96])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e1757488csm1645603b3a.33.2026.07.22.10.24.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jul 2026 10:25:02 -0700 (PDT)
-From: Akari Tsuyukusa <akkun11.open@gmail.com>
-To: Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Yingjoe Chen <yingjoe.chen@mediatek.com>,
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM SUB-ARCHITECTURES),
-	linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support),
-	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b),
-	Akari Tsuyukusa <akkun11.open@gmail.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] arm: mediatek: fix secondary CPU boot on Thumb-2 kernels with Clang
-Date: Thu, 23 Jul 2026 02:24:43 +0900
-Message-ID: <20260722172443.534251-1-akkun11.open@gmail.com>
-X-Mailer: git-send-email 2.54.0
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="VNxQAg5B"
+ARC-Seal: i=1; a=rsa-sha256; t=1784742411; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=msFSU0cXWpZHma5l8e1RgE+vsAuTgCi0+2fZtmz2bkSkCak8aCcWxqaxHD8V+IKirv3a9/hpED5T5hW57OKAVI3q7upgQEOcKgWOBQGfyIaSSwQLYjGX9nak33gsU2VKXDC7FONDF/L36DB+9c96fDvaig4/YinNeSocTDlfzBM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1784742411; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=XCrzWIHXMTC6vLxmZAYmJB0rVPxCp1X90KZnT66wKo8=; 
+	b=jCiSzJ7J/PinuTxMmiSZpOKV6gQZKSVlq62LfvVEtNgC62cqMi1ejyraBHr6We+KPolbvQ0CQJD1RSp9S/GA5urWCEbJHsRe59pwqEWuXLMfmbkKpbmkgNZdRoN5aB2pCrxcnxhfsKAESFbgS90Liai9UGH6x3YRoAe5xe8EjvY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=yoavmoshe.com;
+	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
+	dmarc=pass header.from=<linux@yoavmoshe.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1784742410;
+	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=XCrzWIHXMTC6vLxmZAYmJB0rVPxCp1X90KZnT66wKo8=;
+	b=VNxQAg5BokdoSQOY/uISQM8jI/tpEcYc+vHRmCnkNiGXivOucZT3kDX9OihMBQrj
+	aClr0C5SbCXW7DI116JO7imxlKcYTrieUV6uxOkoX9rQW5nRSGnImtzCTIoD6Wr54eE
+	552Kz3FvsvldHt5mVRFsb4TkJQ4Wv/dQikURjbP0=
+Received: by mx.zohomail.com with SMTPS id 1784742407582988.2620092098992;
+	Wed, 22 Jul 2026 10:46:47 -0700 (PDT)
+Message-ID: <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com>
+Date: Wed, 22 Jul 2026 19:46:42 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
+To: Sami Tolvanen <samitolvanen@google.com>, Yo'av Moshe <linux@yoavmoshe.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ llvm@lists.linux.dev, stable@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260718111340.159896-1-linux@yoavmoshe.com>
+ <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
+ <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com>
+ <20260721180950.GA3684684@ax162>
+ <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com>
+ <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
+Content-Language: en-GB, sv-SE
+From: Yo'av Moshe <linux@yoavmoshe.com>
+In-Reply-To: <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-When building with CONFIG_THUMB2_KERNEL=y and Clang, secondary CPUs
-fail to come online with "CPU1: failed to come online". The address
-written to the jump register has bit 0 set, causing the secondary CPU
-to start in Thumb mode.
+On 2026-07-22 5:00 PM, Sami Tolvanen wrote:
+> Are relocations applied to this code before the function is copied?
+> Because SYM_TYPED_FUNC_START doesn't embed the actual CFI hash in the
+> binary, just a reference to a symbol that contains the hash, and it
+> relies on the kernel to apply relocations before indirect calls are
+> made to the function.
+Hi Sami,
 
-secondary_startup_arm is ARM-mode code (.arm) and, on a Thumb-2 kernel,
-expects to be entered in ARM mode in order to switch to Thumb via the
-standard sequence at that label. Starting in Thumb mode causes the CPU
-to execute ARM instructions as Thumb, resulting in an immediate crash.
+AFAICT, kernel relocations are already applied at boot before fncpy()
+is called during init.
 
-Clear bit 0 of the entry address so the CPU always starts in ARM mode.
+I think the issue might be a parameter mismatch: in C, the pointer is
+declared as taking a parameter `void (*)(void __iomem *)`, but in assembly
+`imx6_suspend` has no parameters, so Clang generates two different hashes
+for them?
 
-Tested on Lenovo YOGA Tablet 10 (Wi-Fi).
-
-Fixes: 0cda07001a94 ("ARM: mediatek: add smp bringup code")
-Assisted-by: DeepSeek:deepseek-v4-pro
-Cc: stable@vger.kernel.org
-Signed-off-by: Akari Tsuyukusa <akkun11.open@gmail.com>
----
- arch/arm/mach-mediatek/platsmp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm/mach-mediatek/platsmp.c b/arch/arm/mach-mediatek/platsmp.c
-index 6b0943d95555..9a7c65fc3ae1 100644
---- a/arch/arm/mach-mediatek/platsmp.c
-+++ b/arch/arm/mach-mediatek/platsmp.c
-@@ -124,7 +124,7 @@ static void __init __mtk_smp_prepare_cpus(unsigned int max_cpus, int trustzone)
- 	 * write the address of slave startup address into the system-wide
- 	 * jump register
- 	 */
--	writel_relaxed(__pa_symbol(secondary_startup_arm),
-+	writel_relaxed(__pa_symbol(secondary_startup_arm) & ~1,
- 			mtk_smp_base + mtk_smp_info->jump_reg);
- }
- 
--- 
-2.54.0
-
+Best regards,
+Yo'av
