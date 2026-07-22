@@ -1,201 +1,88 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AF435C696
-	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 21:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784754227; cv=pass; b=toylbJfPaBIFqNLZI0y6sjlmWeLFh7nTTvRkvccu9+hGxENkcC44WYRmUE1fw+q8fiQJmR+WjfUv3ksr95iHfIwZeCn8h8Rmk59MW8Eu+qhuZ2UAd/7/ynXCb8G0XUtpR6PPlJWgE9EkdyeK4khKfsDgaMvOVQp/pFf7nAgrVUE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784754227; c=relaxed/simple;
-	bh=pqw+4F5UxMsZ+Gmhe/bd3XKvqXdh+gUmrlvL4jHSYEw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HHLw/hbc48GBu8OHl3STdUZuW/RojqN6qOXgFCMBnLM+uhrPdT/aNroTegKIV86OLARCcKs7xyhdM0vgsea4n0XRkE0DkmvYXoY3gwPS3CrJTDGlsQQllfdnQy+gE/BUH6xnrpSW+m76hyYxX20prCYqGXj80oX4zA73TLhU2t4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Lxd0yakq; arc=pass smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2F643E9F4;
+	Wed, 22 Jul 2026 21:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784756418; cv=none; b=tvOS/hEOw9ndqyM+1uNh83OdeHTpa/fOk3cP+2x46GEpOCk8Kuhnugul2uy1AORQzGzKMJrwR/20qUJkBzJrcLEWtCeMhOPnCVkN34XbUgQd9v8WmZ8g1SK6QNMJkKKyVB9gR9oz0XRvDVBkxM5DG1AGyoey5fWQEC7ttMcsh04=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784756418; c=relaxed/simple;
+	bh=LHGRFLXQfRcR+pvqeqZGWFDrFa2LhclQR1cE8OQjQwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lkFVn7pY+zz4naG2OxFLoK05Yu6GMCt/eWIyMcgaDrRbyhEtLxrCd0AXVKzgYt/VMwRfRIx0018s0yuCFYvSdQ72bLL4BfKBihC+QALY3H00U+p4K4OIh/V7MXH3I8HNIJcMg8s2bxPYRMTg1GGrwOLQYhBcfCWfQkXtJuNU7Ow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AUPZN7pW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Lxd0yakq"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-69c1220bd51so15982706a12.3
-        for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 14:03:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784754224; cv=none;
-        d=google.com; s=arc-20260327;
-        b=aRoGBGN3WKri0JWXkNdCRxZvNvadGo8ztZgE091Y4/Q480H8bDtZvPaKz7roy1pYFi
-         vRi6bwF1Z3/kZZLawgHqKI3f8zHTgTvI37l74Oae+g184A9uY7K6CYgAW/vUlsWOpgd2
-         3353uGITUg2Wr8tGVaMVyf6+3fiwQXGN3YgC0uOMheFYByIVEr3a3Jsb/oCCSyU6cIXx
-         8k2Wrv8YE9BL891vmhXvWUHmATSqXYYc78n3xRndPD6D/gF4J6F3Yw26PK3TtKFMpTjE
-         G56KUNjv6gGGWNWb9FYIXXiDiKXwfW7BeL3x4OiW7yFEWODgMqMyfW/BtAI780vzkeQr
-         nvrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=iDk9GJaFBzM0ar9MYB8RB/ZFgtMZjf2y1b5NLaLr2MU=;
-        fh=ImInda5L/hRR5weX/3GZGShVixE33pDu3xSUAW3YcKQ=;
-        b=hL4qAGo2N3+u/1kbfolXpalF7wm+k6h6/vEptfi+MjqP54YFc2mriyxKQO0aZyKPN3
-         nK4rcv77ZsTXZl1NJKHBrSMk3+e72f3Ip+8QqMVWp54Ayvn6MLoYJiAnqQr8imQqGsmq
-         miSt+UwSQPrNH+OLNQ714gDHl73sDQczzKMGWMjK6gsarH8qITpFH2eAjBsR4EKaIutk
-         8gmfOaGd4FF5MQOeRnB4ZuAh9xH6NGFuzhrDK0Grnnqu9JMEactJeeLijj0uT3Kc7gj1
-         ok12qsKGd3SPcRIe0pKndESkEf6fAFJb+BP2kHmQNAr6sCFaB891jROUasXsXP2rFpI3
-         4kEQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784754224; x=1785359024; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=iDk9GJaFBzM0ar9MYB8RB/ZFgtMZjf2y1b5NLaLr2MU=;
-        b=Lxd0yakqP4RkC0pWhb5XbaoxE3K12xPy9IPVw9EuOiwEDpH+5330CzUsuLy6jmeDTl
-         MHpl32U9OUq8uOocN9Ot3iXyhjRVCkOgjTcxh/Ugrfk55YrO6A2eAY28ryLCRgOSSGAa
-         j3zPfdHm/Ko/7kV5JJ/EW9i1oqQhB11rJ8u+pn02M8AajCBV+FZLLfaRwWZ2krLMO38J
-         mYkuyySb77l+KVNkx6APjqc+r9VmdhnZ2JtF0S42D0GNZnfhEHJdSowuDQL/LloVoual
-         2s2a/vUvbyoPm4FcnX8QcVjH7nEg9NFPH5tLnwX6ESVrJ245enqlgHKBpAZcPUoonkqC
-         8z8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784754224; x=1785359024;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=iDk9GJaFBzM0ar9MYB8RB/ZFgtMZjf2y1b5NLaLr2MU=;
-        b=VLgU7EuCUmVaOWZQPq5bXOwbBpy74nhSzDSN2kFDPOQuTvsH86heeXPfnMyj3kDaFZ
-         DpYMlLi2/bKdWAhqOgi3kmZ8JQmJoZnV3YDQuYnkTwsugihEhcKN3+NDmP9pz75CdEgy
-         xyfYIi++inJGerRnRWSyLIEfQPAWThVqVV/ZD5SxBSnnBcr/kek/x/gijbsOhBy2OhRp
-         0oJ9JEicSFT0uH0aYxc5VnYiYE4eblvBtqk29M2ZneRyKWwzeZHnkpWgelogVfV+rm3k
-         fqGAMN7f54xFmtwgQAoGbZgKdjhQKXtAAq388Dv/VZ2scX7hAIetguzm1ZJaM9Jv8snb
-         PyXw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq5eiOfCwf6TFvDeK+SQK9S3zwSwRMFo1EkXQkgYjlA0MwjAnEbf/+ZvOahW9pLBlqhZYD4@lists.linux.dev
-X-Gm-Message-State: AOJu0YxbbjDxRZScNs92OoVttYY86+Q7hVoeYCv+Z/pSmxMyyhE5+iyH
-	WbyzucOrmjZM966627BEDJGaKjnMCU9xX4YyO7DZGQ20tqIvsG8h2VP2HDwn4saR6avezkkfowq
-	XAvz3ZkDGTpvPvfVD61Zsy7P1Zd6otAoOXVlSqQhx
-X-Gm-Gg: AR+sD10mxMu6jY01JInqgEklD1URzEaxFKNQiOOeCl26LIlAGtZTTEjqSQhghc2DrhX
-	iXYXfBkVJZVxwiOV7MDHIH/q/YXfHMmWc0rQrJVkscsWzNhOnEoEMzTPonVyUV4GGDs27X6W2ig
-	b4OnYw4zioQ05MCE+yYVyjhjv9umA4kh9Ooh3a7818bk3zykgMls3g3R5asAMKw4voh7VfkIdK/
-	sx0MqYSlMlXmKIk9cV1/QcMFgJnGOD2z73tbPAZoL/WhUKBL9wxlTmSsuwSNmf6IjGiBmvyU/qb
-	3VStNcIdMNtSCB4f1wzvozNishLL4Iad9F/gcXHeLS8lA3E+1XAQCloGP+tGPAPFWgRm18s=
-X-Received: by 2002:a17:907:7245:b0:c12:b227:614b with SMTP id
- a640c23a62f3a-c1c507c5992mr22090766b.27.1784754223030; Wed, 22 Jul 2026
- 14:03:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AUPZN7pW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19DB1F00A3D;
+	Wed, 22 Jul 2026 21:40:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1784756413;
+	bh=+eMYlOGfJ10tYybtvyrsW1lB+RoAnjB3FfjZYdMkZkE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=AUPZN7pWFQ8uxNPRAe4YDaLWmhexm824Tfmx7Fb/7Qj8Xjp1s+JDFfA0QfJ2sC2Hn
+	 aXnEEM6d1eIruBNgHtfE6cnyP2fxiBhmrHGdhcKL9yUmaxwS6wfPTbyYPNdxfLMvaI
+	 GLwleQEecZXVWfg2JhxChcVGypsbOvolr65aisR/x1JfjW/gX+OsHFLF8x8GvzXL+N
+	 lhiquT01UYjN0fDVSZ6aS3PGWTFq++8xZO62wmfSy6ZllHAU3wb5OWHmfirAWz4qtX
+	 Al+yVvDRcGgr4+p8XPw8aHh+sfIYnsv0DuFQtCPky6xPCFeDiLsy6CemEV0iTUUL4u
+	 cneF5UJf738sA==
+From: Will Deacon <will@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	bpf@vger.kernel.org,
+	Florent Revest <revest@chromium.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huawei.com>
+Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
+Date: Wed, 22 Jul 2026 22:39:25 +0100
+Message-ID: <178475345276.2109707.13204683362381752837.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260722172443.534251-1-akkun11.open@gmail.com>
-In-Reply-To: <20260722172443.534251-1-akkun11.open@gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 22 Jul 2026 14:03:31 -0700
-X-Gm-Features: AUfX_mzKunA_ErzQZrqRUgnl5wCMQPxyOcP43n29TIvcYdToB-p2ggVGLa6Vk7o
-Message-ID: <CAKwvOdnbPKoTy72EvfpKtT9Ne-r+O0j99KFX8OvjGk8ZxsuEGw@mail.gmail.com>
-Subject: Re: [PATCH] arm: mediatek: fix secondary CPU boot on Thumb-2 kernels
- with Clang
-To: Akari Tsuyukusa <akkun11.open@gmail.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Russell King <linux@armlinux.org.uk>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Yingjoe Chen <yingjoe.chen@mediatek.com>, 
-	"moderated list:ARM SUB-ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Mediatek SoC support" <linux-kernel@vger.kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>, stable@vger.kernel.org, 
-	Arnd Bergmann <arnd@kernel.org>, Ard Biesheuvel <ardb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 22, 2026 at 10:25=E2=80=AFAM Akari Tsuyukusa <akkun11.open@gmai=
-l.com> wrote:
->
-> When building with CONFIG_THUMB2_KERNEL=3Dy and Clang, secondary CPUs
+On Tue, 09 Jun 2026 05:19:25 +0000, Jose Fernandez (Anthropic) wrote:
+> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
+> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
+> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
+> would change the offset of the pre-function type hash (see
+> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
+> and the compiler support needed to reconcile the two does not exist
+> yet.
+> 
+> [...]
 
-Specifically, was LLVM=3D1 or CC=3Dclang or something else used?
+Applied to arm64 (for-next/misc), thanks!
 
-> fail to come online with "CPU1: failed to come online". The address
-> written to the jump register has bit 0 set, causing the secondary CPU
-> to start in Thumb mode.
+[1/2] arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OPS
+      https://git.kernel.org/arm64/c/123b4fc0f857
+[2/2] arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
+      https://git.kernel.org/arm64/c/9315e22b0c0a
 
-Ah, yeah missing those is going to be a noticeable perf hit!
+Cheers,
+-- 
+Will
 
->
-> secondary_startup_arm is ARM-mode code (.arm) and, on a Thumb-2 kernel,
-> expects to be entered in ARM mode in order to switch to Thumb via the
-> standard sequence at that label. Starting in Thumb mode causes the CPU
-> to execute ARM instructions as Thumb, resulting in an immediate crash.
->
-> Clear bit 0 of the entry address so the CPU always starts in ARM mode.
-
-Thanks for the patch. Any idea why this isn't an issue for
-GCC+GAS+BFD? Perhaps there's a difference in the LLVM tools that we
-need to address?
-
-There's definitely some difference between clang and GAS here.
-https://github.com/llvm/llvm-project/issues/211376
-
-I wonder if perhaps a better machine-agnostic assembler-agnostic
-assembler-version-agnostic patch would be something like:
-
-```
-diff --git a/arch/arm/kernel/head.S b/arch/arm/kernel/head.S
-index f22c50d4bd41..687ee7063a73 100644
---- a/arch/arm/kernel/head.S
-+++ b/arch/arm/kernel/head.S
-@@ -383,6 +383,7 @@ ENDPROC(__create_page_tables)
- ENTRY(secondary_startup_arm)
-  THUMB(        badr    r9, 1f          )       @ Kernel is entered in ARM.
-  THUMB(        bx      r9              )       @ If this is a Thumb-2 kern=
-el,
-+ENDPROC(secondary_startup_arm)
-  THUMB(        .thumb                  )       @ switch to Thumb now.
-  THUMB(1:                      )
- ENTRY(secondary_startup)
-@@ -429,7 +430,6 @@ ARM_BE8(eor r4, r4, r5)                     @
-without using a temp reg.
-                                                @ (return control reg)
-        ret     r12
- ENDPROC(secondary_startup)
--ENDPROC(secondary_startup_arm)
-
- ENTRY(__secondary_switched)
- #if defined(CONFIG_VMAP_STACK) && !defined(CONFIG_ARM_LPAE)
-
-```
-
-Can you perhaps help test/verify that Akari?
-
-
->
-> Tested on Lenovo YOGA Tablet 10 (Wi-Fi).
->
-> Fixes: 0cda07001a94 ("ARM: mediatek: add smp bringup code")
-> Assisted-by: DeepSeek:deepseek-v4-pro
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Akari Tsuyukusa <akkun11.open@gmail.com>
-> ---
->  arch/arm/mach-mediatek/platsmp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/mach-mediatek/platsmp.c b/arch/arm/mach-mediatek/pl=
-atsmp.c
-> index 6b0943d95555..9a7c65fc3ae1 100644
-> --- a/arch/arm/mach-mediatek/platsmp.c
-> +++ b/arch/arm/mach-mediatek/platsmp.c
-> @@ -124,7 +124,7 @@ static void __init __mtk_smp_prepare_cpus(unsigned in=
-t max_cpus, int trustzone)
->          * write the address of slave startup address into the system-wid=
-e
->          * jump register
->          */
-> -       writel_relaxed(__pa_symbol(secondary_startup_arm),
-> +       writel_relaxed(__pa_symbol(secondary_startup_arm) & ~1,
->                         mtk_smp_base + mtk_smp_info->jump_reg);
->  }
->
-> --
-> 2.54.0
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
