@@ -1,119 +1,70 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 982D04749E0
-	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 18:04:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784743474; cv=pass; b=YdN/POs0hGWO6IThHnIcFNHm/jRhiqNhGoLxyEw2wBiv9SGKrcVs64wJGQK+VVDk+EniV4vCPSki+3A9AcXApFdzln5DZHA32m1Zu71tj1gfUOBLpKR8TO5lckqvveLbOtm/aUQGOS3mA6qzvSnN6EJk76IsH6ku+xJVNPdXOr0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784743474; c=relaxed/simple;
-	bh=+5ssgy8v1nToduf2dudMHLP7F3zMv+EGGsLhk51SR5k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JDcfOYPcIQqukN9dGzBEUAL4rK3mDdhzI1KnoSwK7/HjIauG1VSMaXq3Vhw0PV7Qj2o3WjNZvdkr+SYdc/u8/g212ny5DKF+sj8sx5EJ8tPGLV9GTfXp8ysLz6cMRapwjL67FF/HW0xdNnY1BXwaMLg0GkIwBdayb+D2qZ5X8ho=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aUT6/n59; arc=pass smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B32538D407
+	for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 18:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784744108; cv=none; b=QuaVGkUm4jPRoA8WMk1dX4FvN5PVoF/ieEEqZoPXs9rqvtf1B2Gu16KXFwBH9jyGkRz5Jz1RXO0S9Aniol8KZHpelvElNWLVMX4dv7Bx0HGZnN6nkbtraRAI/VQNDssJ3YnCswW8JuT5jaaRzstUWRgvFi9i50lendMEjKIwEG0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784744108; c=relaxed/simple;
+	bh=GN+utSwRlB5lYW9kIhcTxgBFbfVHimumowCYj8zmgtE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NN8DPdG0kq4BoVfsaXEPwkSO4/mwaQesUVf5YFB7zBfcWn0iT3NCJ2NexOoOtYhduXbirGYIk1WQKppx88iSl7kfzmIvqCk0Syow+akHzrzopRSKcD96Jran/G/Fbhw1Z6n+VjAHKvhb3J/i0mA6C6xKktHVxMAugeI8YFTlYjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=mQvnNE92; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aUT6/n59"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-51c01c79467so14491cf.0
-        for <llvm@lists.linux.dev>; Wed, 22 Jul 2026 11:04:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1784743471; cv=none;
-        d=google.com; s=arc-20260327;
-        b=NPh0KuogQeBn7np6iI0Y0cXs1IyuCZJQK09B+jZb+fyGhFkaHpzL5vchZkiVqlv2i5
-         c7pMG3BNB1qNy+9f8rLL4U2wtCfFdX7lRPgN73RxyrjqmVFyJV4ct1dCOb3T5bbkvNTb
-         fFh7Cuyc49Mp3c6oFecZRW3OjZRj9n0Xn5LG/ZLvoT+Nae1lWeHyNxeN1yuHlYZVjP+v
-         l9jnCboALageozgHqXZqrxGEsLEWmS/5kYxe8bT/Kw458dEoTGvWr4Zu93CNpxeFV9Ta
-         F61PWAE0hCJSmhrIQ/pKFzA68ekPDBIb5ls+B/Dzkm9nnLyShtAXxUsaghauh6f+53LX
-         m5cA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+5ssgy8v1nToduf2dudMHLP7F3zMv+EGGsLhk51SR5k=;
-        fh=zxB0OX9e9uB5PhMwK5+wq4O3aiQNcrZqoeuAkKilW/w=;
-        b=RnjeVbItzokt4J/4nUA7poUQXQQ03TfxOUzTqQa6bBa40RVwcDujls9PSqcSmSL156
-         GWaEKZmvcxKbCOHordznEHZLf38gI0tpKz9GvJDkXvUXGFILfP0d5ZskKUcZ79Nwugei
-         49A/X/XQpA5X+jYA++0Wjdaw3adCfzPEcMN5u+SnklARDHpT/489sG5fmOaddLzXZbFZ
-         NgyDR9nbYAbBQGYoTYtfUrlwBOdrPLiz3jR4JQ/LtOketAE4nm3yTwrM4T8N0HVep5jw
-         XRYwZufg5NNQ5F4W/SCayVdh6FRcgzrS0/4QdMGxgFQpHR83uUhrDdb9Yc5q07Kmw6lx
-         chIw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1784743471; x=1785348271; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=+5ssgy8v1nToduf2dudMHLP7F3zMv+EGGsLhk51SR5k=;
-        b=aUT6/n59VAgnW+gS7Mgt8lmtev7E7PL7j2f6FI3x69jKxnTouBJYRK0NG6MNoXLZk+
-         79yQaDNfMZj655m9tEh1nVhnv4EGhUva/Pu3neX7Ho6ywfBSwz2m/AHJwJ6Jk8GOF/rD
-         vnQb/MpD3ksoOtGF7orxe+jlkO447fO8iCnpCJGemSBPbwduM+3RvcYvWtE4DDKa4MNJ
-         j4d9xsFSpzqKvnaUkXXLt8ety44oW8JiLDSc8EPGAERi12gfH5p/9bCedbe+lk/HK3qT
-         U0bQNjiy617SKBjXPOCYbI7by69XVq1vX8AJxWivmFfNW4qLt/RyJtSN5vWeLBkJWDoD
-         fRZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784743471; x=1785348271;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=+5ssgy8v1nToduf2dudMHLP7F3zMv+EGGsLhk51SR5k=;
-        b=MkCx2qq/8bCaVdEHTgVByKhSxvst+NQE/Js1pC9T9TchaN9Hn7aOQRjfdPQXq3mLt7
-         S451bZ7be90T/QKjHOocuYDcY60cGAi+PW93iTPfwFK+4CWlajg7ntplgL52Nu4x8Ip0
-         yYPKIBc8ASN3gHQ/9nYGG73qKUap5yDE+zqcHHawwej/Z/Bq7cMT1oflvC10ewMrQtZJ
-         PuZgDf6CCrsQ5g6Y3Tb+qw5KSFA+AB8PH1ZrtKLdnm1DC33gc2DJHytHqxEH5ioZDYYB
-         5kuYfqpzUlWKkOv9KZhvuQwpcwrk3ftE8NMsKI87J7SINsno7EvFQlipPHeRlS+ZkwR4
-         N//g==
-X-Forwarded-Encrypted: i=1; AHgh+RrSGcsFCIu3Yp0C3SELHLsBXFs9li/rQX+L8Yl9+7Bf+QIzrjbufcKnx8PiLXD562qr3OM+@lists.linux.dev
-X-Gm-Message-State: AOJu0YwLCKEzMaAy3Q8C8lSRXGYC8gqytOYysqJwJzYTDnAxXNkUKzrQ
-	aJkBb28uRH3RhbdlfCWq7Rs8KUZPDofTE3L9U5NFeERyNp2LYdyrYb8mQdClP2MuU+QK4dF/HLF
-	qCf7wAy2MA0FI7m2HebobXm/ksB5RB4du6V8nklTX
-X-Gm-Gg: AR+sD1046uCidUSNoBdd00SvQ9/XFJsLkASIaUXLycQkryUu8Uqu9ijopjmxrv1GUwW
-	ImMZUZGQ95BDW2Z/f9AMT1ktAv974xhl8YEatpogJXdgXMFfvkWBEnV4EuEAdMizfRKMffjXvk1
-	syGHgozc4h2YNTIVgepTvj3qggWxO26bsPkkyqRBM+M3YbBmmN5gRkMX6IV4fGQBr7sVa4ZQzoY
-	1ZjoqbEQe8lP1JXEsCUspmwNGwYfoCvsKzBIckU1WNQeiiVY9pMlLo1YHY=
-X-Received: by 2002:ac8:43cb:0:b0:51c:935d:8d74 with SMTP id
- d75a77b69052e-5283be3e9d4mr374341cf.9.1784743470255; Wed, 22 Jul 2026
- 11:04:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="mQvnNE92"
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4h52V24ym8z1XM6JH;
+	Wed, 22 Jul 2026 18:15:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1784744103; x=1787336104; bh=GN+utSwRlB5lYW9kIhcTxgBF
+	bfVHimumowCYj8zmgtE=; b=mQvnNE92kjVVL+zCiAiLWhndH6UAisDT666jQfs+
+	pDnkx7YwEU+zhj9BNO7r9NRlrNjK6fk2k+scL1IMxPxRSnEjHh854Cta7WE0Dc6k
+	0Y/dPKI5a7mHIbHq+r+4G0fKCHAaeytoBXG9abBJ6G1HIjT/3S6dmOaB6RSOUPkw
+	VGxgZznTD5KT9Wo4FJlyp1jrJ5rj2dZEeDtzDAPqI0o4WOniP2UNXSLjkMYfPtIJ
+	OOIfc/ZjvDVstC/yc4fAO/c4Pk4GMPWBGfz1PqT4hhJ7YohAYSw9pV5FxpIBOpzC
+	EzUnLfZZhBMfvQ0ot5YA+DrnsJGItJM+jS61TDl5TnNezQ==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id fJL73B4XUTFB; Wed, 22 Jul 2026 18:15:03 +0000 (UTC)
+Received: from [100.119.48.131] (unknown [104.135.180.219])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4h52Tx1RJxz1XM5kD;
+	Wed, 22 Jul 2026 18:15:00 +0000 (UTC)
+Message-ID: <ce5d8cef-5fa4-445d-88d7-6cdb2388d932@acm.org>
+Date: Wed, 22 Jul 2026 11:14:59 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260718111340.159896-1-linux@yoavmoshe.com> <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
- <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com> <20260721180950.GA3684684@ax162>
- <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com> <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
- <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com>
-In-Reply-To: <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com>
-From: Sami Tolvanen <samitolvanen@google.com>
-Date: Wed, 22 Jul 2026 11:03:53 -0700
-X-Gm-Features: AUfX_mwbxqkU-iAMaiWQ1yNey3EgrzgXznb4NhUQjYMjtNDBUtwxFYY_8mI2M90
-Message-ID: <CABCJKud+GsBVv+XMTsi_4QAaTHo7jXD2Hyvi9wqKd7x3i2xyAg@mail.gmail.com>
-Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
-To: "Yo'av Moshe" <linux@yoavmoshe.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
-	stable@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] Bluetooth: L2CAP: avoid maybe-return-locked in
+ l2cap_get_chan_by_scid/dcid
+To: Pauli Virtanen <pav@iki.fi>, linux-bluetooth@vger.kernel.org
+Cc: marcel@holtmann.org, luiz.dentz@gmail.com, elver@google.com,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <aaf5b46dd2519f7b3c7e74f9b232be2130ca30db.1784018377.git.pav@iki.fi>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <aaf5b46dd2519f7b3c7e74f9b232be2130ca30db.1784018377.git.pav@iki.fi>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 22, 2026 at 10:47=E2=80=AFAM Yo'av Moshe <linux@yoavmoshe.com> =
-wrote:
->
-> I think the issue might be a parameter mismatch: in C, the pointer is
-> declared as taking a parameter `void (*)(void __iomem *)`, but in assembl=
-y
-> `imx6_suspend` has no parameters, so Clang generates two different hashes
-> for them?
+On 7/14/26 1:40 AM, Pauli Virtanen wrote:
+> Replace the maybe-return-locked pattern in l2cap_get_chan_by_scid/dcid()
+> by doing locking in the caller after NULL check. This allows adding
+> context analysis annotations for the locking.
 
-As long as the C prototype for the assembly function matches the
-function pointer type, the hashes should also match. Can you dump the
-hash prefix from the OCRAM and compare it to the disassembly of the
-call site?
-
-Sami
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
