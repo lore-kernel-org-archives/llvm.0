@@ -1,124 +1,131 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6766B488D87
-	for <llvm@lists.linux.dev>; Thu, 23 Jul 2026 18:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784832198; cv=none; b=AqQkhQpXsO42MlbaApDg1rEBEcAV+4tsypEyuGlxPfctXNdZmogQ4lOGZWseKjUArputDqUp8q8I/EtPkQbIryUJKpoUd+F5DJbRyCP58cBKwc9N4y1cQcxQpU8+DxWIb2LNvDsuem3hLxDQAebeJ+30XZuSv7urlx26wCWgV04=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784832198; c=relaxed/simple;
-	bh=lDHcUQhjp+ufrTLqRx19uaAdtbMHK+VE9YGwgg5/+V4=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=j7og1htZ8F2Il2mf2Ro7WMBqqdOjoOnXenuxMEIb3IR22GmPN66UP/fkVRPlR53Ut6wH97Cdx6TWji/tr7ijHoyjgA00OKkGa4ziWyLjdcB2JIU2kmIN5os5LgyIG9VL57NBrHaKDbYV+QxPxmTdTc9ZZqj/6UUYnavT4mBP4q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OqqUxDaX; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEB793C108B
+	for <llvm@lists.linux.dev>; Thu, 23 Jul 2026 19:22:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1784834553; cv=pass; b=PlEGUZMLEljlN5KgyvnkvBJqkXhgF10wziarD5DmoNa3PU+NMxewu1feaH6RDG8DSfMADdVU1JKUDomuDFTVAVQqs0zQMKqGBDCOVfTw4HwmEqJj4ryz8CDaRbDvSgIJMHwwDwu4M9dcMJgoCLGqHVSs97SGxoaGHAO4vxqjqL4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1784834553; c=relaxed/simple;
+	bh=CQzDk6eLJ3OVzLdnUWi9gbK+31evwXTddGNItHuRUwQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cWCKYIrAh0/8KIZs5ZNbXQPaczc2FRQcIDwQDOgTZx8uac20fX8oGEIo0Zj2LILvveeZKkKEpNaIX3dEP5GSuLfVlRs44sqeikJb3ca7u1n2H4EAErUBR4rljeWDgoK/yHS9uOhqSnLivc3KXPdsxsSOUEKFEQ8kodGZbPh1L7Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ljOWnw7S; arc=pass smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OqqUxDaX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1784832191;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=IlrZaGFLXFora76IVixmh9oJMX80VSTt1ddym/2VwJ0=;
-	b=OqqUxDaXLvpzbSwWTRnsQQXlGJ36Nwr4VtIXP6koJlWsbjY7+ZoOwSlkq0/j6n2QcbBBHH
-	65+/zLIHhEa43GFBuolRsDmNaepQ3qVudYWf7WRwFRGLFFAKm6G0Qvv+c6T5j3y3fM5YeI
-	6xHVhZG8nXfx2IU0u1vwmdAVQrYDb2s=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-544-v1vGiSMrP8qrJuQ9UbGoXQ-1; Thu,
- 23 Jul 2026 14:43:10 -0400
-X-MC-Unique: v1vGiSMrP8qrJuQ9UbGoXQ-1
-X-Mimecast-MFC-AGG-ID: v1vGiSMrP8qrJuQ9UbGoXQ_1784832189
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 11C4D1944B0D
-	for <llvm@lists.linux.dev>; Thu, 23 Jul 2026 18:43:09 +0000 (UTC)
-Received: from [172.20.176.224] (unknown [10.30.44.218])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 908C215A1;
-	Thu, 23 Jul 2026 18:43:08 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc4,
- upstream-mainline, 248951dd)
-Date: Thu, 23 Jul 2026 18:43:08 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ljOWnw7S"
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-51c01c79467so52421cf.0
+        for <llvm@lists.linux.dev>; Thu, 23 Jul 2026 12:22:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1784834550; cv=none;
+        d=google.com; s=arc-20260327;
+        b=HIGLPw1G8tTpOZAmy2R7dBoExDxNdZrcgbKngug5qgVTQ7UaTDVFM480KIvtksUngs
+         ECIqu3EGfOuS79l7rEBwpfYp4+SFZ8qp0v38vNPiZWqGCudYRjzzjgNr1QRyvMQyvI1y
+         ynfzVsvqp8bHHaqRHy4nBXySTMjCcydwWzE/eVykmoSRuqWjziMkzhqSf4+c4zSacdyG
+         p1Y5dTzbQ2wi6QqRi7IiJuA443aUQ205isbFJUVfsKXASw3/vT64EM04A2C+AKql0euH
+         DEnvx99tI6YIIZ5I9ufDdr8GCxmSo/5f+/aHRpy3oF8sYzAK4HhsiHOJxEyQQ3AZLnqV
+         vkjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=CQzDk6eLJ3OVzLdnUWi9gbK+31evwXTddGNItHuRUwQ=;
+        fh=PiTK+jsdqCHyarDIKqi7TE9phXu31Tk5cp/S8Hc3MI4=;
+        b=G0EYeg6KW7c3IM/bMghEK4xxSbyhdiKQ3vPJ/LiNGDkwdEIW8CMnBZrMhW4SscXgqe
+         gnR6yehsQGOTcB/SYwD1HWSaqNdf46dg1ijbQdGl+gTcPo0TrZ12ytclxVMOYGF3GSGH
+         lCSQswyAgmyGapHlSQEgGPQRC7/i5J1btO3r4ZEXQgDbsWyisHM3yXQR9pWRKHPZFQmy
+         KEzqm/uZGKk5dXxnTqdxZPoZCLURvWnU5VtgH5ywAQ8wCb+Im6IL8rNMt+AmGAvgAwBZ
+         S2Crwe+XWgO4A9mcFH8GcX1m/PyBbaLl5EUGPzXTGpiSmbMGllJlY8Q9jE3Wl5xUV9nd
+         PKSw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1784834550; x=1785439350; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=CQzDk6eLJ3OVzLdnUWi9gbK+31evwXTddGNItHuRUwQ=;
+        b=ljOWnw7SM0HyJsxzf9duhW3Ip7sOzv3smVZjvb1VDkBeKKlmg23MWzJKs7F9/BUUAm
+         pr9c1tmENVGD/QKVMs5UL1zzsT0glF3Z6WaPBV5iMw3jR4edD0bmMpZYRIU2Pz5efG9x
+         Giiwm2X0UD65VNL8R7kc0FLeWJVgTwOMoc9FhH5zMoZFB/uMjY3eXuV0/m78WmaARB0k
+         L896J8XcDmXZdI8wVDmClatPRQso4uflS1Z76NfZAbYW3SCNjaxmu5DCG0AsIJ1kHnfI
+         1bWKH9a7QHZwbFlXCqX1nfXv6G6TEjqfNusxjUoTuihJuG2DHQAzKoIUPJhiAAXOZwqc
+         qQiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1784834550; x=1785439350;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CQzDk6eLJ3OVzLdnUWi9gbK+31evwXTddGNItHuRUwQ=;
+        b=k1Fty31flNHv6p6GGb4nIgYHtCliXuusOAbCtE0bsdOedpdXTNJ0U+g8besGFqXJEh
+         tRSSfR8T9OMi0iA+S10Z3992fgfmyJc5VE62TX0pdDSj+NzFlQyRTIyPBTyVIlmPvWzp
+         8y5OeGRZwwhpaHS9b2o3KSBNPuGfizjoQ8wKljpgNpdWVj4DGXIdB6pTLL+CzIVMt8H6
+         ZmNIky3UEibCIMW+6crKIIDudYPq09q/7OgxYeJY+Z5EVrO9I2zS0HydwlLU7stqBzRZ
+         cSrnj+TzESeV6wrcrZYpBaKsTya5aNco5lpxxTvm2NwkqrojdXRnWtGV+cekhq7l5hwq
+         y4Hw==
+X-Forwarded-Encrypted: i=1; AHgh+Rpl1rT73Ho5mrP+fKLlxMZ1HiMq5RWB210A3e8d17thQeeKZisqRPcl2NMFZX4ROV8vzNGY@lists.linux.dev
+X-Gm-Message-State: AOJu0YwfUxJgJl4Qptrdbeud1oj/rTh9bEIae2x+CYdxTHHlwP8Mcj2z
+	Ph55nNkgHCwEmazbJqrQPrSmL1EqKO+aTPBcwe6rndAhM9i1gmRflfu+VjaFL0zR27k/B/BHXwG
+	wF9EMimyXu8+1soxLUUwpxZVTOPug95wFfLq+68yd
+X-Gm-Gg: AR+sD11qIjiQl6uDhTHQM9hpH12I5rBFDVA40eCmqBIcYlCIoSxkWkVqAG34PEx5tvG
+	tA/mIkAuykK2yQgY80xGMInzW2jU8gWUTZkMXHVb7WFBA5R0PQ9t7qY/8fToEVU+URAi+DMhJfi
+	5lRP+gi+iFJyENXE0BJ5QfiwDuUKL1o9GlsiVB0yLIDAZRxc3V9UBNPiMNPcnGLp5qzEvMm06M3
+	Bu05cMpTYxJUPdZILTC03nnMSTx9ZgumC/WCjo5ZCanpI9aE2ddUWRIxh1oFJ7+iRfBkg==
+X-Received: by 2002:a05:622a:5790:b0:51c:ad5:93be with SMTP id
+ d75a77b69052e-5284a9ed117mr1848021cf.8.1784834549852; Thu, 23 Jul 2026
+ 12:22:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-Message-Id: <98378.126072314431000596@us-mta-544.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Mk1-pTwshR1Q6Q4QgudOv5D0X9mY2u9vZXfQL9v4OF8_1784832189
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+References: <20260718111340.159896-1-linux@yoavmoshe.com> <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
+ <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com> <20260721180950.GA3684684@ax162>
+ <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com> <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
+ <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com> <CABCJKud+GsBVv+XMTsi_4QAaTHo7jXD2Hyvi9wqKd7x3i2xyAg@mail.gmail.com>
+ <415ffa24-a30b-43b2-aa6a-a1cde3bd4ef0@yoavmoshe.com>
+In-Reply-To: <415ffa24-a30b-43b2-aa6a-a1cde3bd4ef0@yoavmoshe.com>
+From: Sami Tolvanen <samitolvanen@google.com>
+Date: Thu, 23 Jul 2026 12:21:52 -0700
+X-Gm-Features: AUfX_mwIn057sYLi7onMumtMkCOBiIb6bjljRVwkdb130ocIXYLLv9gbv_H9dWo
+Message-ID: <CABCJKud9B8vB-J8f0HLHw6EgEKVWzy+Q1PrNxpO_6yCGtEyi8A@mail.gmail.com>
+Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
+To: "Yo'av Moshe" <linux@yoavmoshe.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Frank Li <Frank.Li@nxp.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
+	stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+On Thu, Jul 23, 2026 at 6:30=E2=80=AFAM Yo'av Moshe <linux@yoavmoshe.com> w=
+rote:
+>
+> On 2026-07-22 8:03 PM, Sami Tolvanen wrote:
+> > As long as the C prototype for the assembly function matches the
+> > function pointer type, the hashes should also match. Can you dump the
+> > hash prefix from the OCRAM and compare it to the disassembly of the
+> > call site?
+> Here is what I saw when checking the disassembly in vmlinux:
+>
+> 1. Call site expected hash in pm-imx6.c: 0xA488EBFC
+> 2. SYM_TYPED_FUNC_START hash prefix in suspend-imx6.S: 0xd4d4d4d4
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED (Did not boot)
+What's the value for the __kcfi_typeid_imx6_suspend symbol in
+vmlinux.o? I would expect the hash value to look a bit more random.
 
+> It looks like because suspend-imx6.S is an assembly file, Clang emits
+> the default assembly type ID (0xd4d4d4d4) for it, which doesn't match
+> the C call site expectation (0xA488EBFC).
 
-Kernel information:
-    Commit message: Merge tag 'hwmon-for-v7.2-rc5' of git://git.kernel.org/=
-pub/scm/linux/kernel/git/groeck/linux-staging
+Clang doesn't actually emit type hashes for assembly functions.
+SYM_TYPED_FUNC_START just adds a reference to the
+__kcfi_typeid_<functionname> symbol that contains a hash calculated
+for the C prototype.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2694804967
-
-One or more kernel builds failed:
-    Builds that are failing to boot:
-         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
-t:2694804967_ppc64le_kernel
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2694804967_aarch64_kernel_kcidb_tool_21693250_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2694804967_x86_64_kernel_kcidb_tool_21693247_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+Sami
