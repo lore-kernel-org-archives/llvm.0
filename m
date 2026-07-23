@@ -1,74 +1,96 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF13E357CF1;
-	Thu, 23 Jul 2026 07:38:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF57D3546DE;
+	Thu, 23 Jul 2026 07:43:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784792327; cv=none; b=KjhlQoPtXHdnLFh3eI9QuUekOaKsIHuM4xmoBC/9tqnasXcQaCQvXyrUjL2EwA+lXv1eG2XbQCK5pdTqgzyxTGhi7tiXoY+T6hIj6WpMQe5RepabbpHH8N9mpJubMiBus4qIC7r4Zwl8AKXFvESeEi3SNNDQcHKmrFbmPYjI96U=
+	t=1784792600; cv=none; b=QTnOnsWnitu/9zu6gC37QpLqTCEngGSDUT9+4LTJSZ+g/eh/YbppZZ25EzVAL3YfOSKC6SvtoYMHHlJ/vftUrAiGRH1dhMxf73zo52vwmqZQHuzhZO6b9SkV/mdd/htv4v95vkFkNWWeWpK8htvap3hDqqCnIzLXj5/uoGvkl8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784792327; c=relaxed/simple;
-	bh=CO1f4aosNSLye7zU/DQeod99ElhBKyCkI6zhwnrM9tk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DNEi8PX0kPp18r6MGSZwGxEEjskU/ei3YB42zAGxrwBeM6N5TQRDAtLX8+WcJ0A1oMLWxzmIZ3HxojOR2XNn2xT+SAp8Y4chsRsu9MOk9CGOlxiBdgVyGIKBYBO880LMJFnkIaQMyHxtFhxy4u+26BEb29uB/VpgwhdBKE7uby4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c1g/+QQg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1784792600; c=relaxed/simple;
+	bh=yz/kYUVoqF/Q+7U51MhLgv4WFlA3Vdaedf719DFlrew=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Suy9dox7+oqAJQeaMClTp92y5JnAyR1G42NsvqUq1gbuTLlcnHxh3+alD7bvBQlTeIBNqwrvCz7YIB5YLCSILBE8m5/VVjBPwEK276e3U1TE+G426t/s5FYZsWicZ8bkQmftU/bDW0at9PFfSooGpFw9mR38Ik16HjaPwgkrJ7s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FUIGMmdj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c1g/+QQg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05DA1F000E9;
-	Thu, 23 Jul 2026 07:38:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FUIGMmdj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DFEF1F00A3A;
+	Thu, 23 Jul 2026 07:43:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1784792322;
-	bh=iuiDmSH0SRYIWcVGps58GDwNZklOhP1xqWJA5fYrB8s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=c1g/+QQgVYGExMYF+sAfaKFEJDNM0V2PzOSTpJXsR7ep7aliOs/sxkhK/5rFBAl7w
-	 ojkd979O0pWu77CMJYKmbg8wb8K8fdOplNzV0BwngJE70M/GNyR00RwOCltVADYnpy
-	 3TawtmiNM+1ZyBrPvTQ9eAaBNLS4RxuFctWF1638aayOPlbct5E8ytaY9dYacAYbl2
-	 NlsAMK/kD8UTsKY83b+6JTBOWnDxoUcQoxrAViG9HCwxPyHSdfN0L9VE1a/+3RjFm7
-	 kIvt/9zJz7FeSjtYyrpMYsunh0+MoeUNQnbyyLmm4vvrJ2JCne3zYNeDiLS9snUwBg
-	 w0c470QboQFKw==
-Message-ID: <26f01958-7476-4e72-adb5-0ee0028c5347@kernel.org>
-Date: Thu, 23 Jul 2026 16:38:39 +0900
+	s=k20260515; t=1784792598;
+	bh=F6XY//ydgNSpkLf+lVbabFseEYg/xUbV7Btbw9HRILs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=FUIGMmdjl97nhoMeBUy5MtIxzb+SMMNYVbGP3gw0hFnucPumTYLfVZ7cFexoH7U0i
+	 BGz6Yy971VJNi7/vt4DiKvaq93EpCsVLTiVW5xF+TUXUU2Rx0T4r1gJv+gR2Y1It8W
+	 fjnWNsAoeI42fifvzNPil7rxTuLpMT/tvCKpzz47C88AWLnRmcfzxKG6SkGObQZrKy
+	 ua/qQt6g0CbwmKZB9hPvQQjIImDBXp+qPcdwXw6kIsi+72Zg5WHWLTwWN2Cupfx+XZ
+	 gi8daIe7SO0gwpfMUwAZEm97rmmhUMW4kxa3Rjxz2U1U34vVI+rLXe2PCSDMqPvS8a
+	 XXo7WvvkdUv1Q==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wmo5K-00000007voK-25GY;
+	Thu, 23 Jul 2026 07:43:14 +0000
+Date: Thu, 23 Jul 2026 08:43:14 +0100
+Message-ID: <86a4riduct.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-pci@vger.kernel.org,	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kwilczynski@kernel.org>,	Manivannan
+ Sadhasivam <mani@kernel.org>,	Rob Herring <robh@kernel.org>,	Bjorn Helgaas
+ <bhelgaas@google.com>,	Nathan Chancellor <nathan@kernel.org>,	Nick
+ Desaulniers <ndesaulniers@google.com>,	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,	linux-kernel@vger.kernel.org (open
+ list),	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD
+ SUPPORT:Keyword:b(?i:clang|llvm)b)
+Subject: Re: [PATCH] PCI: apple: use fwnode_irq_get() for port IRQ lookup
+In-Reply-To: <20260722231214.857760-1-rosenp@gmail.com>
+References: <20260722231214.857760-1-rosenp@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCHv2] ata: pata_pxa: use devres for DMA channel management
-To: Rosen Penev <rosenp@gmail.com>, linux-ide@vger.kernel.org
-Cc: Niklas Cassel <cassel@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b"
- <llvm@lists.linux.dev>
-References: <20260721015856.17503-1-rosenp@gmail.com>
-Content-Language: en-US
-From: Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20260721015856.17503-1-rosenp@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: rosenp@gmail.com, linux-pci@vger.kernel.org, lpieralisi@kernel.org, kwilczynski@kernel.org, mani@kernel.org, robh@kernel.org, bhelgaas@google.com, nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 7/21/26 10:58, Rosen Penev wrote:
-> Convert the DMA channel request to devm_dma_request_chan() so the
-> channel is released automatically on device teardown. This removes
-> the explicit dma_release_channel() calls in the probe error paths
-> and in pxa_ata_remove(), simplifying the driver.
+On Thu, 23 Jul 2026 00:12:14 +0100,
+Rosen Penev <rosenp@gmail.com> wrote:
 > 
-> Use ata_platform_remove_one() which is now equivalent to what remains of
-> the remove function after dma_release_channel() removal.
+> Replace irq_of_parse_and_map() with fwnode_irq_get() on the PCIe
+> controller device's fwnode, indexed by port->idx. This is equivalent
+> for an OF-backed fwnode but uses the generic firmware-node API.
 > 
-> Built as a module for arm/pxa_defconfig (CONFIG_PATA_PXA=m) with
-> LLVM=1 W=1; no new warnings.
+> Unlike irq_of_parse_and_map(), fwnode_irq_get() returns a positive IRQ
+> or a negative errno and never 0 (it rewrites 0 to -EINVAL). So store
+> the result in an int and check for irq < 0, propagating the error
+> (including -EPROBE_DEFER) instead of the previous unsigned int with an
+> `if (!irq)` check that could never catch a negative failure.
 > 
-> Assisted-by: opencode:hy3-free
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> Built for arm64 (defconfig + CONFIG_PCIE_APPLE) with LLVM=1;
+> drivers/pci/controller/pcie-apple.o compiles cleanly.
 
-Applied to for-7.3. Thanks!
+But what is the point of this change? This driver is strongly OF-only,
+and there is no parallel universe where it would support ACPI.
 
+But more importantly: -EPROBE_DEFER would make things worse, because
+there is nothing in the driver that actually deals with a state
+rollback on probe failure.  Today, we rely on failing hard.
+
+As it stands, I don't think this change is worse the hassle it has the
+potential to generate.
+
+Thanks,
+
+	M.
 
 -- 
-Damien Le Moal
-Western Digital Research
+Without deviation from the norm, progress is not possible.
