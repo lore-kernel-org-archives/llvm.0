@@ -1,173 +1,218 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE5744C4F7
-	for <llvm@lists.linux.dev>; Fri, 24 Jul 2026 17:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5A3837A83F;
+	Fri, 24 Jul 2026 19:59:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784913593; cv=none; b=Y4vyjS/a94oUDq1Gw6DA+iEgN+HM8aigmhZm5dRpf909U4PqCrdHRHo6DC+KmlgYlr8W0yHKIfZCtDXuxwLg5IGpUXeiKa9sp24h1DXJqevv9+jCDGFqmuaaMbtZb4j3zoX2EBD7mZF8l8RQYwiwKUbWYrPGPZgXdVr1UFtpo8w=
+	t=1784923194; cv=none; b=KzRjz0afVWvP3eu4As7/KBUjy4kF4xSd4P9LiYXdoer7pKMBsEszp8yz13Ili9xPCJh59H5X9ODDKMghcEI8vGL+an+R+F6HDbhLQAQM9FUEWtSvJtGKaj7kmlkA150QVg0ib/otetfXzzwUEpTmPMkcOzSstKyZfbG8mimNXDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784913593; c=relaxed/simple;
-	bh=h43OVubBFOUqhHHcp0LrQGUoL7yyuyHZKEUxyYWHBUE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=MFkrrqa5WI4lV8Up9XTfKpRkRTARN6Ah65MbDCvgG1TpHDubKYjQAgpHUP0+TrAG7RhsecxXOkeoKh8mU4d59XzOsn/b1y3t75zgJkkk215wZebZHtzfLgoFxcFTZw1qbx9h3FboquW8KpY0XpbScYNUtE21qySneXZ+5W1JRbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EzGYqGqE; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1784923194; c=relaxed/simple;
+	bh=SbY/z2G14VfBKyw5F7RWOby3NQITC3DFUds4Hsanyos=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MaOjtdYN1fKMegcAUYcEnmHCjLq0+mq7/1ZyoL+NEEG9rPyVYKLamWBvQHuWOpRopkwaJR2KceneV4cIk9sjIEOkCZzTq9b7esb15x+7cW8xgecKv6G2hvjAQEoYbuvxAv+JaidgM6t6uWkgSbRxRinhiwaVNKga5TQ9VkSOBas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JL8AJKpo; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EzGYqGqE"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495459712d2so1878435e9.1
-        for <llvm@lists.linux.dev>; Fri, 24 Jul 2026 10:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1784913587; x=1785518387; darn=lists.linux.dev;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KowxSJVmc3vRiPdHyROrkjM4WewCaL2j1J/8LxUkYtk=;
-        b=EzGYqGqEuwHACHQQl19PyD5lbfoFHnOHrIT/zjd7UjR3gbjmQJMzN0z3JS8Dz4TfFC
-         4GKZij5DlfPpQRuOXL/8lSmpHxoXYNgzF6fYFb9+wVj7bTu3d3PhAcXYiNrUCD1CQuoW
-         ccpUNZqjvOglfTwxVNEJRpoxXd9wNH7NSWUK0idSyVJqP3SsAuUDlo0h5KgAl4Wkfuro
-         XMAGudm96A0TbKJ7c8O2DslVlfnDIHW6iubYpy1GH17jTpaqwq9mfWFqXziZOSpMqAtG
-         nP0alup1iD1ztKe/Hko85TMDl2rLRvp8462d3FHtQ0zsvKITocVxCXY5eY2YTljSPwmw
-         SSvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1784913587; x=1785518387;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KowxSJVmc3vRiPdHyROrkjM4WewCaL2j1J/8LxUkYtk=;
-        b=G6hFW6pTo1XOvMdb9etD2M8/f12N02KG83NVOZ54+FbeUy5HB1RucA5t6GYl+pQ1o4
-         78lbdBeg6d/kc+ohR/X2/yu8wCRK/hZYuyJEHQwpffQoExRG0Q1IvyY8pczkhY5OFLRU
-         qFoNP8kjeTUM64WqgGAPb4nHJWSDOKOcbI16/18n4Kxm7lO3Zh0H7zAH+ggeser8eTko
-         NFrUqi/Mef96bnSHb75PgF+H3LTz1C/msbN3X0Yh46JySCE+JRNimNPO5WWBaJ58vnW6
-         1cNXAVrsrvRTjkScfqi0jXbCYBwPicqYm42LgiZtZnzVXV9Ickz+MWMCsw63llSpMUr8
-         Uwfw==
-X-Forwarded-Encrypted: i=1; AHgh+RrUTn5spwsjKv457esjQilZ6lER48k0xe2TFB5tzIw8U0ayYYxYZMI8V1d9qXo5nhUs4vHj@lists.linux.dev
-X-Gm-Message-State: AOJu0Ywmze5XExLaqBDtYTZp6IxjQkWaQoZl4AZCO/yPIGZqVD3XZ9sF
-	orkeMgY0oQrdV1kZRKMgV9/WKvfbgj+/bMynlceaklr/tdKAiWjEfBUK
-X-Gm-Gg: AR+sD12TLirSk72wD60tzr2CI7H0N2sNgcwdnSPjfW0nZTUR7TkCJY0G0rcF3xYfxtt
-	nTsLn5ZNGVEttRkZcTzFi3c2F3F8lA3/c+yVR4+y3aVTQchCrh8lQJEEWpD8fzmSlCWx0e208JB
-	juxSHPReg6E1aZxE6MxL72bXu70ySyRZ/6robOgAt4xR7CBWXadcf/yDTjX4Rn9UMSbt3+gUjan
-	vxyBBIGSRxJy1BcGvGypGqkQxlAUzlFePYdLK4JjdKYtzyLDXyeM0kRiGYX45VtaeHsFR6P7AbC
-	ONjzgWoJCgnVsn8PCIj05EwsCd5PVe5OwYu0Hl6YhPssUjwRBhDZGjwhY2Fe03LC8q+YnYpzZf+
-	sfoDUxLBPyh67orix4KtklGFasvLMSeqF7aRUtEIrctKrpPqfx50S4wcvZSU7dOMh+GEi+YJNOf
-	FlXjcwX3ulToerlGWUf/fjvZTQ1HjABO29mhj/lsR1oTxkaH5kcy/GcMRDS3Mm9f3waKh+6pBnO
-	/o+tXayeuTsG0PArqnOJY0AFr1lTzNpE+Lk4WwAZIZB
-X-Received: by 2002:a05:600c:5942:b0:495:6397:14b1 with SMTP id 5b1f17b1804b1-49573cf0ec2mr67839245e9.34.1784913586592;
-        Fri, 24 Jul 2026 10:19:46 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4957f5665f0sm49342725e9.0.2026.07.24.10.19.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jul 2026 10:19:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JL8AJKpo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1784923193; x=1816459193;
+  h=date:from:to:cc:subject:message-id;
+  bh=SbY/z2G14VfBKyw5F7RWOby3NQITC3DFUds4Hsanyos=;
+  b=JL8AJKpoxoU+2kr9r+z369zfOLdAYQ1duHhVE3t1V5LKO6l0njD7KmdC
+   N0OB+pET6EvFf/XZg5A829K4WZIRefztrrlk3N+xwEfs5NPJVmcjznSlf
+   CKoOJclI23KoWv0HzYNN55BEvbZO9gXQPPCcDiv0PNhGDgdUCcCb9Bt6Z
+   CLVxj5vsxDH3B6yfzG41HIgQzesjgAbkLaZCMb58zVelvtKYMfTjOelgb
+   Y33SbgA428m5xge8/7Y7vJUfX3HnQpteSPGMINM6bOKAQM602aCtV92MH
+   1rGoiKiVYo3x7lfu1iDhRxw5MXtdUxux4Tk/BTbXj2zYU8GEHnoa95VTQ
+   A==;
+X-CSE-ConnectionGUID: EebGI+goSYqIlgbmN/6uXQ==
+X-CSE-MsgGUID: aWTvXlF3T4KFUU8noL5Icg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11855"; a="103006155"
+X-IronPort-AV: E=Sophos;i="6.25,183,1779174000"; 
+   d="scan'208";a="103006155"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2026 12:59:53 -0700
+X-CSE-ConnectionGUID: dXd37oBPQ0aEVeeExmwm4g==
+X-CSE-MsgGUID: erIcaRiiT5KnWqW9QvEIMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,183,1779174000"; 
+   d="scan'208";a="254868464"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by fmviesa010.fm.intel.com with ESMTP; 24 Jul 2026 12:59:50 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wnM3g-00000000bB9-0vZQ;
+	Fri, 24 Jul 2026 19:59:48 +0000
+Date: Sat, 25 Jul 2026 03:59:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:netfs-next 29/29] fs/netfs/write_issue.c:786:2:
+ warning: label at end of compound statement is a C2x extension
+Message-ID: <202607250410.XBdx5UBS-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 24 Jul 2026 19:19:45 +0200
-Message-Id: <DK6Z25AV02BM.3KXO0EMCMP2W9@gmail.com>
-Cc: "Arnaldo Carvalho de Melo" <acme@kernel.org>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Nathan Chancellor" <nathan@kernel.org>, "Nick
- Desaulniers" <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Peter Zijlstra"
- <peterz@infradead.org>, "Ingo Molnar" <mingo@redhat.com>, "Mark Rutland"
- <mark.rutland@arm.com>, "Alexander Shishkin"
- <alexander.shishkin@linux.intel.com>, "Ian Rogers" <irogers@google.com>,
- "Adrian Hunter" <adrian.hunter@intel.com>, "Shuah Khan" <shuah@kernel.org>,
- <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>,
- <bpf@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 0/4] tools/build: Allow versioning of all LLVM tools
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Namhyung Kim" <namhyung@kernel.org>, "James Clark"
- <james.clark@linaro.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260715-james-perf-llvm-version-v4-0-6dfdf984b435@linaro.org>
- <algbxQAAmurxms8X@google.com>
-In-Reply-To: <algbxQAAmurxms8X@google.com>
 
-On Thu Jul 16, 2026 at 1:46 AM CEST, Namhyung Kim wrote:
-> Hello BPF folks,
->
-> On Wed, Jul 15, 2026 at 03:53:47PM +0100, James Clark wrote:
->> I ran into the build issue mentioned in the first commit, because using
->> an option like LLVM=3D-15 is a documented way to build [1], but only
->> some of the LLVM tools defined in tools/ support this.
->>
->> After fixing that, a lot of other tidyups fell out. I didn't go too far,
->> for example some selftests include tools/testing/selftests/lib.mk which
->> reimplements some of the LLVM_SUFFIX stuff, but other selftests include
->> tools/scripts/Makefile.include and I stopped before touching the former.
->> Some other non build scripts hard code toolchains and I didn't touch
->> those either, this change is only focused on things that already
->> include Makefile.include.
->>
->> [1]: Documentation/kbuild/llvm.rst
->>
->> Signed-off-by: James Clark <james.clark@linaro.org>
->> ---
->> Changes in v4:
->> - Drop "tools/build: selftests: Allow versioning LLVM lld", clang
->>   already picks the correct sibling lld version. (Sashiko)
->> - Link to v3: https://lore.kernel.org/r/20260715-james-perf-llvm-version=
--v3-0-8854bfe5af7e@linaro.org
->>
->> Changes in v3:
->> - Add warning for empty $USE_LD
->> - Use $HOSTREADELF in bpf Makefile
->> - Rebase on v7.2-rc3
->> - Link to v2: https://lore.kernel.org/r/20260518-james-perf-llvm-version=
--v2-0-f12cc4f031d8@linaro.org
->>
->> Changes in v2:
->> - Fix selftests/bpf build. LLD needs to take the full path to be used
->>   with -fuse-ld=3D
->> - Link to v1: https://lore.kernel.org/r/20260514-james-perf-llvm-version=
--v1-0-6cac1a9a4c8d@linaro.org
->>
->> ---
->> James Clark (4):
->>       tools/build: Allow versioning of all LLVM tools defined in Makefil=
-e.include
->>       tools/build: Indent if else blocks
->>       tools/build: Allow versioning LLVM readelf
->>       tools/build: selftests: Remove some duplicate toolchain definition=
-s
->>
->>  tools/bpf/resolve_btfids/Makefile    |  3 --
->>  tools/lib/api/Makefile               |  4 --
->>  tools/lib/bpf/Makefile               |  8 ++--
->>  tools/lib/subcmd/Makefile            |  4 --
->>  tools/lib/symbol/Makefile            |  4 --
->>  tools/perf/Makefile.perf             |  7 ----
->>  tools/scripts/Makefile.include       | 77 ++++++++++++++++++++---------=
--------
->>  tools/testing/selftests/bpf/Makefile |  1 -
->>  8 files changed, 46 insertions(+), 62 deletions(-)
->
-> Are you ok with this change and going through perf tree?
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next
+head:   ddfc7002233eb9ca7143c363820b7480d5f705de
+commit: ddfc7002233eb9ca7143c363820b7480d5f705de [29/29] netfs: Combine prepare and issue ops and grab the buffers on request
+config: arm-randconfig-002-20260724 (https://download.01.org/0day-ci/archive/20260725/202607250410.XBdx5UBS-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260725/202607250410.XBdx5UBS-lkp@intel.com/reproduce)
 
-Sorry for the delay, yes, feel free to take it through your tree.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607250410.XBdx5UBS-lkp@intel.com/
 
-> Thanks,
-> Namhyung
->
->> ---
->> base-commit: a13c140cc289c0b7b3770bce5b3ad42ab35074aa
->> change-id: 20260511-james-perf-llvm-version-43ab1cb5bc7d
->>
->> Best regards,
->> --
->> James Clark <james.clark@linaro.org>
->>
+All warnings (new ones prefixed by >>):
 
+>> fs/netfs/write_issue.c:786:2: warning: label at end of compound statement is a C2x extension [-Wc2x-extensions]
+     786 |         } while ((folio = writeback_iter(mapping, wbc, folio, &error)));
+         |         ^
+   1 warning generated.
+--
+>> fs/netfs/write_collect.c:155:7: warning: variable 'fpos' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     155 |                 if (!bvecq->bv[slot].bv_page) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~
+   fs/netfs/write_collect.c:187:7: note: uninitialized use occurs here
+     187 |                 if (fpos + fsize >= collected_to)
+         |                     ^~~~
+   fs/netfs/write_collect.c:155:3: note: remove the 'if' if its condition is always false
+     155 |                 if (!bvecq->bv[slot].bv_page) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     156 |                         WARN_ONCE(1, "R=%08x slot already cleared?\n", wreq->debug_id);
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     157 |                         fsize = bvecq->bv[slot].bv_len;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     158 |                         goto skip;
+         |                         ~~~~~~~~~~
+     159 |                 }
+         |                 ~
+   fs/netfs/write_collect.c:137:26: note: initialize the variable 'fpos' to silence this warning
+     137 |                 unsigned long long fpos, fend;
+         |                                        ^
+         |                                         = 0
+   1 warning generated.
+
+
+vim +786 fs/netfs/write_issue.c
+
+1ca4169c391c37 David Howells 2024-10-02  717  
+288ace2f57c9d0 David Howells 2024-03-18  718  /*
+288ace2f57c9d0 David Howells 2024-03-18  719   * Write some of the pending data back to the server
+288ace2f57c9d0 David Howells 2024-03-18  720   */
+2df86547b23dab David Howells 2024-03-08  721  int netfs_writepages(struct address_space *mapping,
+288ace2f57c9d0 David Howells 2024-03-18  722  		     struct writeback_control *wbc)
+288ace2f57c9d0 David Howells 2024-03-18  723  {
+288ace2f57c9d0 David Howells 2024-03-18  724  	struct netfs_inode *ictx = netfs_inode(mapping->host);
+288ace2f57c9d0 David Howells 2024-03-18  725  	struct netfs_io_request *wreq = NULL;
+ddfc7002233eb9 David Howells 2026-04-09  726  	struct netfs_wb_params params = {};
+288ace2f57c9d0 David Howells 2024-03-18  727  	struct folio *folio;
+288ace2f57c9d0 David Howells 2024-03-18  728  	int error = 0;
+288ace2f57c9d0 David Howells 2024-03-18  729  
+41376400c4717f David Howells 2026-06-25  730  	if (!netfs_wb_begin(ictx, wbc->sync_mode == WB_SYNC_NONE))
+288ace2f57c9d0 David Howells 2024-03-18  731  		return 0;
+288ace2f57c9d0 David Howells 2024-03-18  732  
+288ace2f57c9d0 David Howells 2024-03-18  733  	/* Need the first folio to be able to set up the op. */
+288ace2f57c9d0 David Howells 2024-03-18  734  	folio = writeback_iter(mapping, wbc, NULL, &error);
+288ace2f57c9d0 David Howells 2024-03-18  735  	if (!folio)
+288ace2f57c9d0 David Howells 2024-03-18  736  		goto out;
+288ace2f57c9d0 David Howells 2024-03-18  737  
+288ace2f57c9d0 David Howells 2024-03-18  738  	wreq = netfs_create_write_req(mapping, NULL, folio_pos(folio), NETFS_WRITEBACK);
+288ace2f57c9d0 David Howells 2024-03-18  739  	if (IS_ERR(wreq)) {
+288ace2f57c9d0 David Howells 2024-03-18  740  		error = PTR_ERR(wreq);
+288ace2f57c9d0 David Howells 2024-03-18  741  		goto couldnt_start;
+288ace2f57c9d0 David Howells 2024-03-18  742  	}
+288ace2f57c9d0 David Howells 2024-03-18  743  
+9920a8c10ad11f David Howells 2026-04-09  744  	if (bvecq_buffer_init(&wreq->load_cursor, GFP_NOFS) < 0)
+9920a8c10ad11f David Howells 2026-04-09  745  		goto nomem;
+ddfc7002233eb9 David Howells 2026-04-09  746  	bvecq_pos_set(&params.dispatch_cursor, &wreq->load_cursor);
+ddfc7002233eb9 David Howells 2026-04-09  747  	bvecq_pos_set(&wreq->collect_cursor, &wreq->load_cursor);
+9920a8c10ad11f David Howells 2026-04-09  748  
+2b1424cd131cfa David Howells 2025-05-19  749  	__set_bit(NETFS_RREQ_OFFLOAD_COLLECTION, &wreq->flags);
+288ace2f57c9d0 David Howells 2024-03-18  750  	trace_netfs_write(wreq, netfs_write_trace_writeback);
+4824e5917f907c David Howells 2024-03-26  751  	netfs_stat(&netfs_n_wh_writepages);
+288ace2f57c9d0 David Howells 2024-03-18  752  
+ddfc7002233eb9 David Howells 2026-04-09  753  	if (wreq->io_streams[1].avail)
+ddfc7002233eb9 David Howells 2026-04-09  754  		params.notes |= NOTE_CACHE_AVAIL;
+ddfc7002233eb9 David Howells 2026-04-09  755  
+288ace2f57c9d0 David Howells 2024-03-18  756  	do {
+ddfc7002233eb9 David Howells 2026-04-09  757  		_debug("wbiter %lx", folio->index);
+288ace2f57c9d0 David Howells 2024-03-18  758  
+ddfc7002233eb9 David Howells 2026-04-09  759  		if (!wreq->spare) {
+ddfc7002233eb9 David Howells 2026-04-09  760  			wreq->spare = bvecq_alloc_one(BVECQ_STD_SLOTS, GFP_NOFS);
+ddfc7002233eb9 David Howells 2026-04-09  761  			if (!wreq->spare) {
+ddfc7002233eb9 David Howells 2026-04-09  762  				folio_redirty_for_writepage(wbc, folio);
+ddfc7002233eb9 David Howells 2026-04-09  763  				folio_unlock(folio);
+ddfc7002233eb9 David Howells 2026-04-09  764  				error = -ENOMEM;
+ddfc7002233eb9 David Howells 2026-04-09  765  				goto end_loop;
+ddfc7002233eb9 David Howells 2026-04-09  766  			}
+ddfc7002233eb9 David Howells 2026-04-09  767  		}
+288ace2f57c9d0 David Howells 2024-03-18  768  
+288ace2f57c9d0 David Howells 2024-03-18  769  		if (netfs_folio_group(folio) != NETFS_FOLIO_COPY_TO_CACHE &&
+288ace2f57c9d0 David Howells 2024-03-18  770  		    unlikely(!test_bit(NETFS_RREQ_UPLOAD_TO_SERVER, &wreq->flags))) {
+288ace2f57c9d0 David Howells 2024-03-18  771  			set_bit(NETFS_RREQ_UPLOAD_TO_SERVER, &wreq->flags);
+288ace2f57c9d0 David Howells 2024-03-18  772  			wreq->netfs_ops->begin_writeback(wreq);
+ddfc7002233eb9 David Howells 2026-04-09  773  			if (wreq->io_streams[0].avail) {
+ddfc7002233eb9 David Howells 2026-04-09  774  				params.notes |= NOTE_UPLOAD_AVAIL;
+ddfc7002233eb9 David Howells 2026-04-09  775  				/* Order setting the active flag after other fields. */
+ddfc7002233eb9 David Howells 2026-04-09  776  				smp_store_release(&wreq->io_streams[0].active, true);
+288ace2f57c9d0 David Howells 2024-03-18  777  			}
+b6a713fd34b949 David Howells 2026-06-25  778  		}
+ddfc7002233eb9 David Howells 2026-04-09  779  
+ddfc7002233eb9 David Howells 2026-04-09  780  		params.notes &= NOTES__KEEP_MASK;
+ddfc7002233eb9 David Howells 2026-04-09  781  		netfs_queue_wb_folio(wreq, wbc, folio, &params);
+ddfc7002233eb9 David Howells 2026-04-09  782  		error = netfs_issue_streams(wreq, &params);
+ddfc7002233eb9 David Howells 2026-04-09  783  		if (!error)
+ddfc7002233eb9 David Howells 2026-04-09  784  			bvecq_pos_step(&params.dispatch_cursor);
+ddfc7002233eb9 David Howells 2026-04-09  785  end_loop:
+288ace2f57c9d0 David Howells 2024-03-18 @786  	} while ((folio = writeback_iter(mapping, wbc, folio, &error)));
+288ace2f57c9d0 David Howells 2024-03-18  787  
+ddfc7002233eb9 David Howells 2026-04-09  788  	netfs_end_issue_write(wreq, &params);
+ddfc7002233eb9 David Howells 2026-04-09  789  
+9920a8c10ad11f David Howells 2026-04-09  790  	bvecq_pos_unset(&wreq->load_cursor);
+ddfc7002233eb9 David Howells 2026-04-09  791  	bvecq_pos_unset(&params.dispatch_cursor);
+ddfc7002233eb9 David Howells 2026-04-09  792  	for (int i = 0; i < NR_IO_STREAMS; i++)
+ddfc7002233eb9 David Howells 2026-04-09  793  		bvecq_pos_unset(&wreq->io_streams[i].dispatch_cursor);
+2b1424cd131cfa David Howells 2025-05-19  794  	netfs_wake_collector(wreq);
+288ace2f57c9d0 David Howells 2024-03-18  795  
+20d72b00ca814d David Howells 2025-05-19  796  	netfs_put_request(wreq, netfs_rreq_trace_put_return);
+a9d47a50cf257f David Howells 2024-07-18  797  	_leave(" = %d", error);
+288ace2f57c9d0 David Howells 2024-03-18  798  	return error;
+288ace2f57c9d0 David Howells 2024-03-18  799  
+9920a8c10ad11f David Howells 2026-04-09  800  nomem:
+9920a8c10ad11f David Howells 2026-04-09  801  	error = -ENOMEM;
+9920a8c10ad11f David Howells 2026-04-09  802  	netfs_put_failed_request(wreq);
+288ace2f57c9d0 David Howells 2024-03-18  803  couldnt_start:
+ac5f95ac5d6d0f David Howells 2026-06-25  804  	if (error == -ENOMEM) {
+ac5f95ac5d6d0f David Howells 2026-06-25  805  		folio_redirty_for_writepage(wbc, folio);
+ac5f95ac5d6d0f David Howells 2026-06-25  806  		folio_unlock(folio);
+ac5f95ac5d6d0f David Howells 2026-06-25  807  		folio = writeback_iter(mapping, wbc, folio, &error);
+ac5f95ac5d6d0f David Howells 2026-06-25  808  		WARN_ON_ONCE(folio != NULL);
+ac5f95ac5d6d0f David Howells 2026-06-25  809  	} else {
+288ace2f57c9d0 David Howells 2024-03-18  810  		netfs_kill_dirty_pages(mapping, wbc, folio);
+ac5f95ac5d6d0f David Howells 2026-06-25  811  	}
+288ace2f57c9d0 David Howells 2024-03-18  812  out:
+41376400c4717f David Howells 2026-06-25  813  	netfs_wb_end(ictx);
+a9d47a50cf257f David Howells 2024-07-18  814  	_leave(" = %d", error);
+288ace2f57c9d0 David Howells 2024-03-18  815  	return error;
+288ace2f57c9d0 David Howells 2024-03-18  816  }
+2df86547b23dab David Howells 2024-03-08  817  EXPORT_SYMBOL(netfs_writepages);
+288ace2f57c9d0 David Howells 2024-03-18  818  
+
+:::::: The code at line 786 was first introduced by commit
+:::::: 288ace2f57c9d06dd2e42bd80d03747d879a4068 netfs: New writeback implementation
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: David Howells <dhowells@redhat.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
