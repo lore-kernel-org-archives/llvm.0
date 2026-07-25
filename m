@@ -1,104 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9B733C1BE;
-	Sat, 25 Jul 2026 01:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1EC2C21E6
+	for <llvm@lists.linux.dev>; Sat, 25 Jul 2026 03:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1784942568; cv=none; b=Sl5a3zTEl8WeLe5zCb4yvFRYhEp/oPF7E1K4fL0Wc2f7zoVoxj/vfUOnMAU2RIxfmpGqw3EqpQuxuA+38Ip5WU14oo23tkqZbkAxln0vTehx/43jVPO6Xw6dmwMaEOCn/ycgTS/6hXrJ4N8NAPFhqLpEIXkqmEKKQP9+IW33UsA=
+	t=1784949796; cv=none; b=pqfvvtX/dzRWQeAYNx/mUjVoJEwoITac/uMFk4Z/ENH1wIgpyQKL3JW3toDQuSgYE+9ilCbqI4Fh+Z/GjaJt5WM3PCV8fadaMHAmlxq1SyVJjkfLKISG1RILLDbE8oPlQ5orxp40fqipKJNKFv+AupaX0gBFbjKYANaARPEkVNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1784942568; c=relaxed/simple;
-	bh=z89TiYrHF8S6hnr2jlfbZelgHdLEmvhtm3TeUzTTusA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=kOSAvYWig/tbnH6rW5rTxpjb8SRmcr7ovgdYYFX7KJtDwg9xssy3THHu/WRVaX9mURkpGmRPq+mTMA9rW32zKoT38r3WDV7Z0/Wcm/txE6u+nA/wLLh1H/ZkjsQSpT5ph6nBr2/77VB13BrN9tZ1HCbmHYOLJ8GxNGZq41VwoRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NrY6PTqc; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1784949796; c=relaxed/simple;
+	bh=sxVOrCeJDdMEt1PwQ6cegfD0rrvxNv5cj/l0I6KQqTc=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=ib9fOgsWwZbNq8cV++F9WEdpRnmRv/ilJXLnTAJTQr+lWlu9bO0Th3J5uwVsDaEZqxqryEWwzM4TGwYWwaXZOgEvVvQdzpFikZqwhVyyihR6XAX7G8yvCuqNGUhby/OHCiiuBBwxXiPAdbPxsn0e9/VemQPtRjN9BIyO5O5r/GI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZjjkumTS; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NrY6PTqc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1784942565; x=1816478565;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z89TiYrHF8S6hnr2jlfbZelgHdLEmvhtm3TeUzTTusA=;
-  b=NrY6PTqcgNOVHMIDipofO7aKcFvl7OR9Fn3Q5VHK7Ci/lmCz91mAfK86
-   djDOu7u6wxqA9H1jO7u0fforgow7Vv5tVbMLwUJf8xA86Gn9tH3GCkNDK
-   sZV9hdAZWInf7ZAdGCbYL5wn74sxA/nsZccqK/DYFqFZphAXaAAdKV+B9
-   gMesNhluXz3+YfeGbU+FILX0Ur4U+u710R8ssFBll2A3F9UKnghgvsMdo
-   d+yYgl9EVa58/QHzr1rRqW775UazKMzYOMceFda33IUIkCsjnrWiZFg29
-   MgBUXqroAVF0MGh4Wk3K1HFVnpSAvRE0eJZkjMz2siyWKUKP4xghE3MTk
-   w==;
-X-CSE-ConnectionGUID: HdLswJiERfOSDIvL0dmZyA==
-X-CSE-MsgGUID: WwgiaHemSe2sHXY3ZuUb7Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11855"; a="84592200"
-X-IronPort-AV: E=Sophos;i="6.25,183,1779174000"; 
-   d="scan'208";a="84592200"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jul 2026 18:22:42 -0700
-X-CSE-ConnectionGUID: n4eluMK6SR+ViuVNgb4Hew==
-X-CSE-MsgGUID: sKnXlI5hQ/eDZVOtwpZUdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,183,1779174000"; 
-   d="scan'208";a="288838674"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
-  by orviesa002.jf.intel.com with ESMTP; 24 Jul 2026 18:22:41 -0700
-Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wnR66-00000000158-3nvw;
-	Sat, 25 Jul 2026 01:22:38 +0000
-Date: Sat, 25 Jul 2026 03:22:36 +0200
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?"Andr=C3=A9?= Almeida" <andrealmeid@igalia.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: scripts/syscalltbl.sh: 100: Syntax error: redirection
- unexpected
-Message-ID: <202607250346.BuwihS2v-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZjjkumTS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1784949793;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZQaFO0fWDGLb5g2ngDH+8qxB7hTQwwXzn88FpMdUibY=;
+	b=ZjjkumTSsrQa8p79x2lJ8enAdM3vkZhxNRdBq+ZYJz6LCbZQOBrZDGAH6aj2740py6NMcP
+	NAZXiiVSWshWPGa+iPImwfvpObic0wduGuJa1i8dogbay1DuLv6EnyatU9o6PWIYEUISWq
+	2dtg8byyyeWZJ83rn2U+oYFGMPK883Y=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-218-D_katFuoOcGg0f28awvd5w-1; Fri,
+ 24 Jul 2026 23:23:09 -0400
+X-MC-Unique: D_katFuoOcGg0f28awvd5w-1
+X-Mimecast-MFC-AGG-ID: D_katFuoOcGg0f28awvd5w_1784949788
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id AA5B01800BED
+	for <llvm@lists.linux.dev>; Sat, 25 Jul 2026 03:23:08 +0000 (UTC)
+Received: from [172.20.176.224] (unknown [10.30.44.218])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 381C515B0;
+	Sat, 25 Jul 2026 03:23:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL (MISSED 49 of 88): Test report for master
+ (7.2.0-rc4, upstream-mainline, 48a5a7ab)
+Date: Sat, 25 Jul 2026 03:23:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Message-Id: <14864.126072423230900207@us-mta-218.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: grzcBNcr0cI_L7671LcaNxJB11o_nByHUyel3Qb4NOA_1784949788
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Andr-Almeida/syscalls-Create-unified-partial-table-for-all-archs/20260725-040333
-head:   8c63d3ddb37ca9ef5da08071f85493dd0b281816
-commit: d1da21b66eb29855b0d6a4d81ddfeb31efd2f125 syscalls: Create unified partial table for all archs
-date:   5 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260725/202607250346.BuwihS2v-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260725/202607250346.BuwihS2v-lkp@intel.com/reproduce)
+Hi, we tested your kernel and here are the results:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607250346.BuwihS2v-lkp@intel.com/
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED (Did not boot)
 
-All errors (new ones prefixed by >>):
 
->> scripts/syscalltbl.sh: 100: Syntax error: redirection unexpected
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:52: arch/x86/include/generated/asm/syscalls_32.h] Error 2
->> scripts/syscallhdr.sh: 114: Syntax error: redirection unexpected
->> scripts/syscallhdr.sh: 114: Syntax error: redirection unexpected
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:29: arch/x86/include/generated/uapi/asm/unistd_32.h] Error 2
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:43: arch/x86/include/generated/uapi/asm/unistd_64.h] Error 2
->> scripts/syscalltbl.sh: 100: Syntax error: redirection unexpected
->> scripts/syscallhdr.sh: 114: Syntax error: redirection unexpected
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:55: arch/x86/include/generated/asm/syscalls_64.h] Error 2
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:39: arch/x86/include/generated/uapi/asm/unistd_x32.h] Error 2
->> scripts/syscallhdr.sh: 114: Syntax error: redirection unexpected
->> scripts/syscallhdr.sh: 114: Syntax error: redirection unexpected
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:34: arch/x86/include/generated/asm/unistd_32_ia32.h] Error 2
-   make[3]: *** [arch/x86/entry/syscalls/Makefile:48: arch/x86/include/generated/asm/unistd_64_x32.h] Error 2
-   make[3]: Target 'all' not remade because of errors.
-   make[2]: *** [arch/x86/Makefile:256: archheaders] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+Kernel information:
+    Commit message: Merge tag 'v7.2-rc4-smb3-client-fixes' of git://git.sam=
+ba.org/sfrench/cifs-2.6
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2701538265
+
+One or more kernel builds failed:
+    Builds that are failing to boot:
+         ppc64le - https://datawarehouse.cki-project.org/kcidb/builds/redha=
+t:2701538265_ppc64le_kernel
+
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, s390x, x86_64]
+    /distribution/command [aarch64, s390x, x86_64]
+    /test/misc/machineinfo [aarch64, s390x, x86_64]
+    Boot test [aarch64, s390x, x86_64]
+    CKI/restraint [aarch64, s390x, x86_64]
+    Reboot test [aarch64, s390x, x86_64]
+    SELinux Custom Module Setup [aarch64, s390x, x86_64]
+    selinux-policy: serge-testsuite [s390x, x86_64]
+    Storage - blktests - throtl [s390x]
+    Storage - blktests - ublk [s390x]
+    stress: stress-ng - cpu-cache [s390x]
+    stress: stress-ng - memory [s390x]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
