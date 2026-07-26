@@ -1,61 +1,63 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08741F09A5
-	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 10:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A873537F31B
+	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 10:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785060797; cv=none; b=fhihxtH5l2+GWR6+6BELkLAz+SoI40vG2UoJFiG6I3b+mwMG5Q5L9pRhoi6uPU3wTpbSrvH21wRBylE72+SOzSx/a9dSaGdIzCB7vAaV0Yn8t6qi9aMaU7jUAmUnm5JQlypzuqD41AL9VkyJnjUJm8af/YdS2Njp/uKeGkdI1t8=
+	t=1785060801; cv=none; b=GwCchWXomUIw/RFhHBqzqET5i+uJUhpGNjaQpwkIWJgf+QXRH5mcfzaaAn+NC6lutzLpy9ZWAan/U787X2oxBzUctyLLEsbRq2ySMDh2fva1uFkq/PJb4kzYc7a1rPKiLLV/TUT6YC2QS8T3MEtlq2HBHPTGiN59YB+Z2se+lno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785060797; c=relaxed/simple;
-	bh=hMbwhWX1Er1b+7H8vHCWQZO1kW/LGuAOr5+dXSIawrE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fNU73U/6LizbMiliNqbzdaFv1hhqEhL53dpn6VNkBtu4WqL2iOyUhyM4rnOceLA3hmvnsZ9qESFIO9UEdwq6rWws7F8R2dsbCUxDIZGnMpmG7W0JVgjT52JCexxu7GMO2uLAjOM5i6a+TMKct8yc3SaiVKChRKR/CiIWtn7T5hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=kkAUy+6G; arc=none smtp.client-ip=209.85.215.171
+	s=arc-20240116; t=1785060801; c=relaxed/simple;
+	bh=ZTVsyCMmNTiYhRegmleQ63YdYf87zoFj0XuRPlTwKTc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=tKd9F/UQSVeWi4E729IWCEBkgWWbYWGlFzsaBhi2qilftTFSMCFDvtbNdxxgzqQODKhwK72EqVO38YsK9kbFvxXjU49Kt1RhvNXjUP0AZMubVpsfepL/xVuVYet9bff0xvaeYgv6+fjrGX1TgqpyRmRDUUtGchC/jXin81PuzU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=bPM/Q0vq; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="kkAUy+6G"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c999f162c9aso1287043a12.3
-        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 03:13:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="bPM/Q0vq"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2ca64c3ce5fso21510555ad.3
+        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 03:13:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785060795; x=1785665595; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wcAzVpejed4McahzXYzgR83QcZ2K+/EUa6LpMYvOA98=;
-        b=kkAUy+6GIKVla7YITQ2YEyjexwOjtWiEGmQlsHKxM4gavV0Y7S9VZevz6zwGFdsYny
-         D0H8meiX3LiBAv5aseYX+YhTPXddJB40csKKPRPbZrBssnObWO2NLL08EBu5v17vJ2Tm
-         lYJTlYM6H9Po2vKc+2nt3YpixJPnP0L2UjjSoW/BDH1Wyy5HfvAI7rp08NI4VT401Vhw
-         3GJsWIKvg1LVcyy/zsVBtZ0C4t1fDrmxd8bCmIsEWCzAFSnXWaE0u0nI2wP2esuqpBmA
-         ZVowr9ub8TInj6CjToh9fFcm+0BA68ZnjmFpJEWZIfJFxkpiU6UVvltF2fUNUagFljFL
-         aeKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785060795; x=1785665595;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=openresty.com; s=google; t=1785060799; x=1785665599; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=wcAzVpejed4McahzXYzgR83QcZ2K+/EUa6LpMYvOA98=;
-        b=O5omvCmNVhLhOrSMsfjYQ7hyWsFRZLbPBtb7vmDF7uoBKo6qUDsU+V8TliANyH5JXZ
-         BtdYUV6wxX6CNtIF/axoJ5Kr4zhV2wbEBBiM4WnatrD7EbOqC9CB5gODh5qu93lFJN+g
-         FedsitmySc9AZLsHt+ttEFXNT9bcDBRZh2LPD7zJ7vLLSOMmsPeK7KSigdBVyYGSv0GW
-         JmWnMVkMSpyGDP9TEWfxu84n00L7AXhIi+EWatJyBmoPl7K0doirhEu6BFKLMC3IZfOB
-         y5eDbyEmR4UPZI8e5/0mtmyw977rF/FaJTY+QyNiUi8mk1KNb4o+3o5zHY80vBaTPw9E
-         hZ5Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpBbaiOLx5p32F1YpxWTPahTCZbc8YcTJBLVaz9bgC6TAXk9z7KN0mJWSzN8+5eCfibfEzg@lists.linux.dev
-X-Gm-Message-State: AOJu0YxUg3xGExmOfoC8ZA7o5ep3nmcXkwlD7aqB6ZJ6ATJc3t395xyi
-	49IxFkSWO3evOtf2ntUq4m5Axso/xUIx9S5cj03dvfhtwwrQOEQOiDjkogJi51tIt7c=
-X-Gm-Gg: AR+sD12/fBzfQ9bOEJbKQumRW6cBz4PfJDI0h2q6ha//XwPzDfB1X3ZnJZleyJRjgeJ
-	x9qjaOpqTzgbQo0+SDZFBsaoZd33B2cm+23i7GRJfN7VZKisJJ6jwEV0p7SeXMXtJm8f0lzJGkq
-	4cOOqWfgre1mv8aifs7DinDxLWaQFUYm0q4bUqaSv/kElar5MbzAD4kH1zGLKTzYAoyj5y6Hgx3
-	uov0/gsteS8O2aYOQQHANIxsWxY0lpSp4ZeSZN0/sl5XFgg29o88dQQPm7xjwecv0lxBOhTKKYC
-	f+u4404KUoAPlh8JDa5PMvMHzq4fnNOfjIBGVPSMERwdS08KJwDOu/62dcrW/VlSVWqK4l2NTX2
-	Ob4+mU47+Hoq+GF11wyqXnaiY5GTNLi4F9KyRWLMxBcpR7r4VXTsNw4MY9CTMm/5s4D+FfClSp8
-	U019TXRyIoH7nfKQ==
-X-Received: by 2002:a05:6a21:394c:b0:3bf:d1f9:b1df with SMTP id adf61e73a8af0-3c67e0c9effmr4541605637.54.1785060795098;
-        Sun, 26 Jul 2026 03:13:15 -0700 (PDT)
+        bh=6vm5tLIDnBxoRlmuntR1gC/2V5EsdXXeIFZY5yD6sLc=;
+        b=bPM/Q0vqn8E0lJ0MOKz1U4fgiJabB782p3m6hGk6i4Pu0JKzt56LqeKT7TTO2nQx+L
+         xpUiGiYDSGEsTQhtF3scZx9Sxw7AOnHrAX8SU7D6tNZgKZczdg4LzG5g88nt303+zPQi
+         Klhrp+CkEjE6sotTYiU8AqElqLUxextHZV3R7sq2jcCfTNf75R+yyA0Xp36yzvPsZVul
+         B+4m7quZsK1hr5/SPycKfC63JCC33rMF2RpyMDsOblBlhg4oUxNZEol3JeTvtBmw7DKF
+         dp2nd3gltmeI+wsUTRmQ7TQSfrDQKIihUaJ+J8PonsGXvFsFC+ccvgvQQAzWXJc86ptx
+         3a7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785060799; x=1785665599;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=6vm5tLIDnBxoRlmuntR1gC/2V5EsdXXeIFZY5yD6sLc=;
+        b=rwOqVV5UkId3Qk7Z47cZP9kyxQdgHg0xqRgL92mwV49/bpCIvFDx5gpTahWEcT8D56
+         mmPX3EExLocdC9WQbanhd35FwD7v0Yv6U7BRP8ijjhKpSIuEVjog2+01ix+nGlGp3Vvm
+         RH/8tdPnc2FQ00h+9XrZcTGHXWnDbnye5Cu8RliZ5ymhWdbPqVhwPwdjtJBlcSo+bW3y
+         L6u9WNF3EJF6+MPfvPji6YdE1fGhti4zbHbtgXg/j413RNd4DtqHjrd2WHkOYrng5MSw
+         IPkb7mX4TghHlZojClzCZuNEaC0lwc/2Eoxt36O4V3WKXHhXVsBsMqgqtbz+QUQIof2u
+         MSdg==
+X-Forwarded-Encrypted: i=1; AHgh+RrHFiABkttbvxmJ6eAlWTgZYc4FpTKwnuAovF1+BnJ5X23rd6jgDPwu/HHAu+1HGfqbZx1M@lists.linux.dev
+X-Gm-Message-State: AOJu0YxQugHSnsT3XzZ+JSLEcXxBHmFgoFwO0HVJRkidXZcWRTLCqmPm
+	W0tFjHvmF5wY7vbv35rdXyxyxKIvk3zPEHgB3HZhfS2kpgeWnGuPhm6OMCn343tfwkY=
+X-Gm-Gg: AR+sD11AQ9f+g9wU1RViFdkxc/kPlC9ZrtIzlIG1l+ShgsUFvarD8sOTrbzSPwuoFor
+	ywZaYHkMr04C603xO32qy1RTnLRZQMOnsb+V243N46/OWLqpKhz1iJhJ1DrtoWTXlXpLr5SOusB
+	6ILeGynmXnibsbORBNcg9SGa4AdEwyXyNS7FbumHRoOYyquaN6jAfbxhEWve+b+1vrjpXwduz1G
+	2cUV3XprkFsWQE7L43BKSQM19DvnJSRLl/5lQ0HizUa3+qUB5D6E/BnSby73+mOQ4U8XVkOOD9R
+	RgPd95Tqg39jChkwtsLO0rw6FDh+3aRMYCkCvHbLqSuXftqqRAgY/UIGuUMM+gUxXYNUNfbtFJk
+	0GmPWPyrMtxXXNmQhEyoFe5Mt7INpRKAkeJ0HRmFB+wFl1zxm55Xsan3/ZEFx3D7PFVGc1sGx3v
+	buyeVLL0XMjdO4G6IZs67+FW2Y
+X-Received: by 2002:a05:6a20:c79a:b0:3c3:7a0a:18a7 with SMTP id adf61e73a8af0-3c67e13a7a8mr4326893637.55.1785060799033;
+        Sun, 26 Jul 2026 03:13:19 -0700 (PDT)
 Received: from integral2.. ([2402:8780:1329:2779:9db7:a8ec:2e1c:53e1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.11
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2026 03:13:14 -0700 (PDT)
+        Sun, 26 Jul 2026 03:13:18 -0700 (PDT)
 From: Ammar Faizi <ammarfaizi2@openresty.com>
 To: Willy Tarreau <w@1wt.eu>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
@@ -71,10 +73,12 @@ Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	gwml@gnuweeb.org
-Subject: [PATCH 0/4] nolibc: syscall() and abs() fixes, plus a cleanup
-Date: Sun, 26 Jul 2026 17:13:01 +0700
-Message-Id: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+Subject: [PATCH 1/4] tools/nolibc: evaluate syscall() arguments before the arch macros
+Date: Sun, 26 Jul 2026 17:13:02 +0700
+Message-Id: <20260726101306.3772237-2-ammarfaizi2@openresty.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,58 +87,180 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi,
+Per the GCC docs, local `register` variables aren't guaranteed to
+survive a function call, and you shouldn't put code between the
+register assignment and the `asm` block:
 
-A small set of fixes and a cleanup. Tested on x86-64 and i386.
+    https://gcc.gnu.org/onlinedocs/gcc/Local-Register-Variables.html
 
-This contains:
- 
-- Evaluate syscall() arguments before they reach the arch macros. The
-  __nolibc_syscallN() macros drop their arguments into local register
-  variables, which GCC does not guarantee to survive a function call,
-  so an argument such as strlen(msg) clobbers the registers that were
-  already set up and the wrong syscall is made. Reproduced with gcc on
-  i386 and x86-64 at -O0, -O1, -O2, -O3 and -Os.
- 
-- Avoid signed overflow in abs(), labs() and llabs(): negate in the
-  corresponding unsigned type, so passing the type minimum no longer
-  invokes undefined behavior. The value is still not representable in
-  the result type, so the minimum is returned unchanged. Under the:
+The __nolibc_syscallN() macros put their arguments into local register
+variables. syscall() drops caller expressions straight into those
+macros, so this:
 
-    -fsanitize=undefined -fsanitize-trap=all
+    static char msg[] = "Hello, World!\n";
+    syscall(__NR_write, 1, msg, strlen(msg));
 
-  flags the selftests are built with, the old code did not merely
-  return an unspecified answer, it died with SIGILL (thrown by ud2).
- 
-- Add an abs() range test walking abs(), labs() and llabs() over the
-  interesting points of their argument type: the minimum, the minimum
-  plus one, an ordinary negative value, zero and the maximum.
- 
-- Remove the dead __ARCH_WANT_SYS_OLD_SELECT from arch-x86.h and
-  arch-arm.h. It lost its last user when select() was reimplemented on
-  top of pselect6 for every architecture.
- 
-Patches 1 and 2 are fixes. Patch 3 is the selftest that covers patch 2,
-and patch 4 is a pure cleanup.
+runs the wrong syscall. On x86-64, GCC doesn't reload %rax, %rdi, and
+%rsi after the strlen() call, so only %rdx ends up correct.
 
+Fix it by evaluating the arguments into temporaries first, before they
+reach the arch macros.
+
+Before this patch (bug):
+```
+0000000000401000 <main>:
+    pushq  %rcx
+    movl   $0x403000,%edi
+    callq  401153 <strlen>  # strlen() clobbers %rax, %rdi, %rsi.
+    movq   %rax,%rdx        # BUG: %rax, %rdi, %rsi are wrong.
+    syscall                 # Only %rdx is correct.
+    [...]
+    popq   %rdx
+    retq
+```
+
+After this patch (fixed):
+```
+0000000000401000 <main>:
+    pushq  %rcx
+    movl   $0x403000,%edi
+    callq  40116c <strlen>
+    movl   $0x1,%edi       # %rdi = 1 (stdout)
+    movl   $0x403000,%esi  # %rsi = msg
+    movq   %rax,%rdx       # %rdx = strlen(msg)
+    movl   $0x1,%eax       # %rax = __NR_write
+    syscall
+    [...]
+    popq   %rdx
+    retq
+```
+
+Reproduced with gcc on i386 and x86-64 at -O0, -O1, -O2, -O3 and -Os.
+
+Found this bug after a chat with Alviro. I also attempted to report a
+similar problem to the GCC bugzilla:
+
+    https://gcc.gnu.org/bugzilla/show_bug.cgi?id=126290
+
+The solution from GNU developers is: use hard register constraints
+(introduced in GCC 16) to reliably force asm operands into specific
+registers, though Clang hasn't merged its version yet:
+
+    https://gcc.gnu.org/onlinedocs/gcc-16.1.0/gcc/Hard-Register-Constraints.html
+    https://github.com/llvm/llvm-project/pull/85846
+
+Once hard register constraints are widely available (in the future),
+a reliable inline asm for a syscall may look like this:
+```
+    #define syscall6(N, ARG1, ARG2, ARG3, ARG4, ARG5, ARG6) ({ \
+        long long ret = (N);  \
+        __asm__ volatile(     \
+            "syscall"         \
+            : "+{rax}"(ret)   \
+            : "{rdi}"(ARG1),  \
+              "{rsi}"(ARG2),  \
+              "{rdx}"(ARG3),  \
+              "{r10}"(ARG4),  \
+              "{r8}"(ARG5),   \
+              "{r9}"(ARG6)    \
+            : "rcx", "r11", "memory"); \
+        (ret);  \
+    })
+```
+
+Cc: Yichun Zhang <yichun@openresty.com>
+Fixes: 53fcfafa8c5c ("tools/nolibc/unistd: add syscall()")
+Reported-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
 Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
 ---
+ tools/include/nolibc/sys/syscall.h | 72 +++++++++++++++++++++++++++++-
+ 1 file changed, 71 insertions(+), 1 deletion(-)
 
-Ammar Faizi (4):
-  tools/nolibc: evaluate syscall() arguments before the arch macros
-  tools/nolibc: stdlib: avoid signed overflow in abs() and friends
-  selftests/nolibc: add abs() range test
-  tools/nolibc: remove dead __ARCH_WANT_SYS_OLD_SELECT
-
- tools/include/nolibc/arch-arm.h              |  3 -
- tools/include/nolibc/arch-x86.h              |  3 -
- tools/include/nolibc/stdlib.h                | 12 +++-
- tools/include/nolibc/sys/syscall.h           | 72 +++++++++++++++++++-
- tools/testing/selftests/nolibc/nolibc-test.c | 47 +++++++++++++
- 5 files changed, 127 insertions(+), 10 deletions(-)
-
-
-base-commit: 070cf03f5ec454eec9c42827ee9f3c0b3fad09f1
+diff --git a/tools/include/nolibc/sys/syscall.h b/tools/include/nolibc/sys/syscall.h
+index 7f06314fcf0d..b91b82846fe4 100644
+--- a/tools/include/nolibc/sys/syscall.h
++++ b/tools/include/nolibc/sys/syscall.h
+@@ -10,9 +10,79 @@
+ #ifndef _NOLIBC_SYS_SYSCALL_H
+ #define _NOLIBC_SYS_SYSCALL_H
+ 
++/*
++ * The __nolibc_syscallN() macros assign their arguments to local register
++ * variables. A compiler only has to keep such a variable in its register
++ * right before the asm statement it feeds, so an argument expression which
++ * contains a function call gets evaluated once the earlier arguments already
++ * sit in their registers, and the call then clobbers them.
++ *
++ * Caller-supplied expressions enter here, so bind them to temporaries first
++ * and only hand plain variables over. __auto_type preserves the original
++ * type, so nothing gets truncated on the way.
++ */
++#define __nolibc_syscall_eval0(_n)					\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__nolibc_syscall0(__sc_n);					\
++})
++#define __nolibc_syscall_eval1(_n, _a1)					\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__auto_type __sc_a1 = (_a1);					\
++	__nolibc_syscall1(__sc_n, __sc_a1);				\
++})
++#define __nolibc_syscall_eval2(_n, _a1, _a2)				\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__auto_type __sc_a1 = (_a1);					\
++	__auto_type __sc_a2 = (_a2);					\
++	__nolibc_syscall2(__sc_n, __sc_a1, __sc_a2);			\
++})
++#define __nolibc_syscall_eval3(_n, _a1, _a2, _a3)			\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__auto_type __sc_a1 = (_a1);					\
++	__auto_type __sc_a2 = (_a2);					\
++	__auto_type __sc_a3 = (_a3);					\
++	__nolibc_syscall3(__sc_n, __sc_a1, __sc_a2, __sc_a3);		\
++})
++#define __nolibc_syscall_eval4(_n, _a1, _a2, _a3, _a4)			\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__auto_type __sc_a1 = (_a1);					\
++	__auto_type __sc_a2 = (_a2);					\
++	__auto_type __sc_a3 = (_a3);					\
++	__auto_type __sc_a4 = (_a4);					\
++	__nolibc_syscall4(__sc_n, __sc_a1, __sc_a2, __sc_a3, __sc_a4);	\
++})
++#define __nolibc_syscall_eval5(_n, _a1, _a2, _a3, _a4, _a5)		\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__auto_type __sc_a1 = (_a1);					\
++	__auto_type __sc_a2 = (_a2);					\
++	__auto_type __sc_a3 = (_a3);					\
++	__auto_type __sc_a4 = (_a4);					\
++	__auto_type __sc_a5 = (_a5);					\
++	__nolibc_syscall5(__sc_n, __sc_a1, __sc_a2, __sc_a3, __sc_a4,	\
++			  __sc_a5);					\
++})
++#define __nolibc_syscall_eval6(_n, _a1, _a2, _a3, _a4, _a5, _a6)	\
++({									\
++	__auto_type __sc_n = (_n);					\
++	__auto_type __sc_a1 = (_a1);					\
++	__auto_type __sc_a2 = (_a2);					\
++	__auto_type __sc_a3 = (_a3);					\
++	__auto_type __sc_a4 = (_a4);					\
++	__auto_type __sc_a5 = (_a5);					\
++	__auto_type __sc_a6 = (_a6);					\
++	__nolibc_syscall6(__sc_n, __sc_a1, __sc_a2, __sc_a3, __sc_a4,	\
++			  __sc_a5, __sc_a6);				\
++})
++
+ #define ___nolibc_syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
+ #define __nolibc_syscall_narg(...) ___nolibc_syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
+-#define __nolibc_syscall(N, ...) __nolibc_syscall##N(__VA_ARGS__)
++#define __nolibc_syscall(N, ...) __nolibc_syscall_eval##N(__VA_ARGS__)
+ #define __nolibc_syscall_n(N, ...) __nolibc_syscall(N, __VA_ARGS__)
+ #define _syscall(...) __nolibc_syscall_n(__nolibc_syscall_narg(__VA_ARGS__), ##__VA_ARGS__)
+ #define syscall(...) __sysret(_syscall(__VA_ARGS__))
 -- 
 Ammar Faizi
 
