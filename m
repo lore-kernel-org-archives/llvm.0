@@ -1,124 +1,140 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C1EB280018
-	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 06:09:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08741F09A5
+	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 10:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785046144; cv=none; b=HMpKJs6KYVf1Fb76GKFRAywhgOJz9Zd/+iRIZvKctCpXJ60ENo2go/tDk0LkFwmqW58HEkxUdbSUz8PYD/pCiWT3cloI7pxv45YYiE1GusG36IeObCynG3udKLgR/xgPZNWu31TaTVDdL5VJZNPWNLbs70t7SQTy2TYuW4TIDTw=
+	t=1785060797; cv=none; b=fhihxtH5l2+GWR6+6BELkLAz+SoI40vG2UoJFiG6I3b+mwMG5Q5L9pRhoi6uPU3wTpbSrvH21wRBylE72+SOzSx/a9dSaGdIzCB7vAaV0Yn8t6qi9aMaU7jUAmUnm5JQlypzuqD41AL9VkyJnjUJm8af/YdS2Njp/uKeGkdI1t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785046144; c=relaxed/simple;
-	bh=Z7TFJuHVHJKvY8/Mc6ddE/wit6HJie13aC7mOZ54YNU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZltCVuEtBXVrkFTaYS3yMjr3XkTMmPztNXM3dwUtoA4h8m62B/QHXyYFsr8AxMGJ8bCpOJ3kmPD3KRHKuMGtoXpah4yrYLsw8FKXiXSBrZGcIdwoY3J8sINhKxA80QO7DLI4RZkDsmgxcXCJ7u/aW1n21drAhnk65KC+nCox05k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DVimlzul; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785060797; c=relaxed/simple;
+	bh=hMbwhWX1Er1b+7H8vHCWQZO1kW/LGuAOr5+dXSIawrE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fNU73U/6LizbMiliNqbzdaFv1hhqEhL53dpn6VNkBtu4WqL2iOyUhyM4rnOceLA3hmvnsZ9qESFIO9UEdwq6rWws7F8R2dsbCUxDIZGnMpmG7W0JVgjT52JCexxu7GMO2uLAjOM5i6a+TMKct8yc3SaiVKChRKR/CiIWtn7T5hA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=kkAUy+6G; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DVimlzul"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-84e0688b859so935304b3a.0
-        for <llvm@lists.linux.dev>; Sat, 25 Jul 2026 23:09:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="kkAUy+6G"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c999f162c9aso1287043a12.3
+        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 03:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785046142; x=1785650942; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7UFhWQOa/vwyik9QrUHaltpmfCg9gV5b8FYD7Vbdi7U=;
-        b=DVimlzul2fRc1PLxZtxNNJS5BokxTCkz3sS6UUaZwzZMA4/2BPS7dWOwlnjY3Gruza
-         Jl2df60qDPMds3bspRhTGpzS7q5LupRKgPTiQG75nr76iPWaPoERHyIlmVBRoP6iUdWj
-         ppYrprecWVN3xlwGUr6veUqa1KR5DM25nTPgT2oooP7IUWPcxYyM84TX22T3P5PZ+pjH
-         Clo/USu7k6eV80JQa6ZN2vc6ld9IwHU2I9zIJ1aEHnWnH+Wf01+vvA1fVHvogojKK61B
-         39uImDR/22FS/x2Qfs8DGyDGBRqPqf2D5ORsdh4SNoUHW9hlWCATfEofBT/+c8pL9e74
-         64EA==
+        d=openresty.com; s=google; t=1785060795; x=1785665595; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=wcAzVpejed4McahzXYzgR83QcZ2K+/EUa6LpMYvOA98=;
+        b=kkAUy+6GIKVla7YITQ2YEyjexwOjtWiEGmQlsHKxM4gavV0Y7S9VZevz6zwGFdsYny
+         D0H8meiX3LiBAv5aseYX+YhTPXddJB40csKKPRPbZrBssnObWO2NLL08EBu5v17vJ2Tm
+         lYJTlYM6H9Po2vKc+2nt3YpixJPnP0L2UjjSoW/BDH1Wyy5HfvAI7rp08NI4VT401Vhw
+         3GJsWIKvg1LVcyy/zsVBtZ0C4t1fDrmxd8bCmIsEWCzAFSnXWaE0u0nI2wP2esuqpBmA
+         ZVowr9ub8TInj6CjToh9fFcm+0BA68ZnjmFpJEWZIfJFxkpiU6UVvltF2fUNUagFljFL
+         aeKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785046142; x=1785650942;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7UFhWQOa/vwyik9QrUHaltpmfCg9gV5b8FYD7Vbdi7U=;
-        b=NyDZaz2KmcQJXVMRbBvnQHtnM1nizi0a371kW9dsuWWe/t/6F7DhGvq8x8L/Usp032
-         b8p0XfaecEZ/PHj1kTUyjLGP6ANbfTN8GvfmSxJ7xhU3SBFtSdSzGUVJrYHvEXLmhhCs
-         ucJYHto4k2zDD+4NQBHFKXQF3O0FG5qNzlQrkNkqiFV8rm4vDFf2kNKxgXGibcsmY+62
-         x3C1fX46ACVhhMjK8wcD8CwuGTVEdAKx6VpxrEYeDuuTeSlewiXbwP92T7Iekfu9SbFH
-         hSX8k4bo6iipOP6hVmKsMU2oqBnf3laxq6e23AqDoTc6pUBQUusZX89pcIOZ1QJEx8aU
-         yNCg==
-X-Forwarded-Encrypted: i=1; AHgh+RoK5mOXt2a00lvrgFixmRQJmGpFXfXqAZSMKvAKl8glW5PcLD9siYm4NAs6dWGTGCzPW5XQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw4vSp7NxTPQb73pkM4lRSUqf8shehhS9DrvVD49/My2G4wMnME
-	gJCYZcoWZWmTTI5Ru9YolrWdcA+idOFtVYdjp5Db9O+w4Guw8rCsODdj
-X-Gm-Gg: AR+sD10jg4h2k0bGl9zxfZSz4QUifgTsIG2ySjAkyn14Psy1n8WLgTl/YMGF6TIIb/m
-	MlU07xyDc1g/ib2ZxreeI9i+YsX/vKmFw12vU+lxG6f5x+J4LwMM3HDaFIY1WOQZYrv2mv/hCZq
-	oJR6ehefSrr5ot5Y3Xkw0MvUXHbxD67qVssZTOt5qspRliL3dc5qfzOHDGIsPjQ/YitoN2cBWbC
-	rVkmBPyrRgyeeyVCjqL6XLIcevqKl1GJyHTanUfpko8NGy646ywsuqS88CVis3doy1KXoP3zdLL
-	Q/opVmEYENEgbIFHdbF1gUrDVRLh6QVVN0npPasr9fWR5Hj/Q7DGuDo1TtW0KxkLHW6SufYz5u7
-	9rnm4UMk0EKrxziOCzyR6bDdswdhR93FS9OBJc+PHfI++Jjil9TWLgWfU/LAA2DTcFoaGNnVqui
-	JC5gbImR5G4Zf+KG/QCwSh4pO2UHjhBgPJyQ==
-X-Received: by 2002:a05:6a00:390f:b0:847:8d54:f4f9 with SMTP id d2e1a72fcca58-84e595810c1mr3014064b3a.51.1785046142393;
-        Sat, 25 Jul 2026 23:09:02 -0700 (PDT)
-Received: from buffalo-ssd (M014013071096.v4.enabler.ne.jp. [14.13.71.96])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84e533d1644sm1609938b3a.37.2026.07.25.23.08.59
+        d=1e100.net; s=20251104; t=1785060795; x=1785665595;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wcAzVpejed4McahzXYzgR83QcZ2K+/EUa6LpMYvOA98=;
+        b=O5omvCmNVhLhOrSMsfjYQ7hyWsFRZLbPBtb7vmDF7uoBKo6qUDsU+V8TliANyH5JXZ
+         BtdYUV6wxX6CNtIF/axoJ5Kr4zhV2wbEBBiM4WnatrD7EbOqC9CB5gODh5qu93lFJN+g
+         FedsitmySc9AZLsHt+ttEFXNT9bcDBRZh2LPD7zJ7vLLSOMmsPeK7KSigdBVyYGSv0GW
+         JmWnMVkMSpyGDP9TEWfxu84n00L7AXhIi+EWatJyBmoPl7K0doirhEu6BFKLMC3IZfOB
+         y5eDbyEmR4UPZI8e5/0mtmyw977rF/FaJTY+QyNiUi8mk1KNb4o+3o5zHY80vBaTPw9E
+         hZ5Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpBbaiOLx5p32F1YpxWTPahTCZbc8YcTJBLVaz9bgC6TAXk9z7KN0mJWSzN8+5eCfibfEzg@lists.linux.dev
+X-Gm-Message-State: AOJu0YxUg3xGExmOfoC8ZA7o5ep3nmcXkwlD7aqB6ZJ6ATJc3t395xyi
+	49IxFkSWO3evOtf2ntUq4m5Axso/xUIx9S5cj03dvfhtwwrQOEQOiDjkogJi51tIt7c=
+X-Gm-Gg: AR+sD12/fBzfQ9bOEJbKQumRW6cBz4PfJDI0h2q6ha//XwPzDfB1X3ZnJZleyJRjgeJ
+	x9qjaOpqTzgbQo0+SDZFBsaoZd33B2cm+23i7GRJfN7VZKisJJ6jwEV0p7SeXMXtJm8f0lzJGkq
+	4cOOqWfgre1mv8aifs7DinDxLWaQFUYm0q4bUqaSv/kElar5MbzAD4kH1zGLKTzYAoyj5y6Hgx3
+	uov0/gsteS8O2aYOQQHANIxsWxY0lpSp4ZeSZN0/sl5XFgg29o88dQQPm7xjwecv0lxBOhTKKYC
+	f+u4404KUoAPlh8JDa5PMvMHzq4fnNOfjIBGVPSMERwdS08KJwDOu/62dcrW/VlSVWqK4l2NTX2
+	Ob4+mU47+Hoq+GF11wyqXnaiY5GTNLi4F9KyRWLMxBcpR7r4VXTsNw4MY9CTMm/5s4D+FfClSp8
+	U019TXRyIoH7nfKQ==
+X-Received: by 2002:a05:6a21:394c:b0:3bf:d1f9:b1df with SMTP id adf61e73a8af0-3c67e0c9effmr4541605637.54.1785060795098;
+        Sun, 26 Jul 2026 03:13:15 -0700 (PDT)
+Received: from integral2.. ([2402:8780:1329:2779:9db7:a8ec:2e1c:53e1])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 25 Jul 2026 23:09:01 -0700 (PDT)
-Date: Sun, 26 Jul 2026 15:08:57 +0900
-From: Akari Tsuyukusa <akkun11.open@gmail.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Russell King <linux@armlinux.org.uk>, 
-	Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Yingjoe Chen <yingjoe.chen@mediatek.com>, 
-	"moderated list:ARM SUB-ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
-	"open list:ARM/Mediatek SoC support" <linux-kernel@vger.kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>, stable@vger.kernel.org, Ard Biesheuvel <ardb@google.com>
-Subject: Re: [PATCH] arm: mediatek: fix secondary CPU boot on Thumb-2 kernels
- with Clang
-Message-ID: <amWfjDyn0jrnIf63@buffalo-ssd>
-References: <20260722172443.534251-1-akkun11.open@gmail.com>
- <CAKwvOdnbPKoTy72EvfpKtT9Ne-r+O0j99KFX8OvjGk8ZxsuEGw@mail.gmail.com>
- <amHYO1c-5vzqSekt@buffalo-ssd>
- <ef007a23-46bd-41d6-83ff-264831341093@app.fastmail.com>
+        Sun, 26 Jul 2026 03:13:14 -0700 (PDT)
+From: Ammar Faizi <ammarfaizi2@openresty.com>
+To: Willy Tarreau <w@1wt.eu>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
+	LLVM Mailing List <llvm@lists.linux.dev>,
+	Yichun Zhang <yichun@openresty.com>,
+	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	gwml@gnuweeb.org
+Subject: [PATCH 0/4] nolibc: syscall() and abs() fixes, plus a cleanup
+Date: Sun, 26 Jul 2026 17:13:01 +0700
+Message-Id: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ef007a23-46bd-41d6-83ff-264831341093@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 23, 2026 at 11:53:14AM +0200, Arnd Bergmann wrote:
-> On Thu, Jul 23, 2026, at 11:15, Akari Tsuyukusa wrote:
-> > Can you send your fix as PATCH?
-> > I think your approach is better than mine.
-> 
-> I think we should wait for the llvm issue to be resolved first, to
-> document whether this is considered a bug in the kernel or the
-> assembler, and to see if any other kernel code may be affected
-> by the same thing.
-> 
-> Looking around other .S files, I see the same
-> pattern in stext(), cpu_resume_arm(), mcpm_entry_point(),
-> all of which start in arm mode but end in thumb.
+Hi,
 
-It's a LLVM bug.
-The LLVM assembler source code explicitly mentions this limitation:
+A small set of fixes and a cleanup. Tested on x86-64 and i386.
 
-  ///
-  /// FIXME: there is a corner case where the state is changed in between the
-  /// label definition and the .type directive. This is not expected to occur
-  /// in practice, and handling it would require the backend to track IsThumb
-  /// for every label.
-  ///
+This contains:
+ 
+- Evaluate syscall() arguments before they reach the arch macros. The
+  __nolibc_syscallN() macros drop their arguments into local register
+  variables, which GCC does not guarantee to survive a function call,
+  so an argument such as strlen(msg) clobbers the registers that were
+  already set up and the wrong syscall is made. Reproduced with gcc on
+  i386 and x86-64 at -O0, -O1, -O2, -O3 and -Os.
+ 
+- Avoid signed overflow in abs(), labs() and llabs(): negate in the
+  corresponding unsigned type, so passing the type minimum no longer
+  invokes undefined behavior. The value is still not representable in
+  the result type, so the minimum is returned unchanged. Under the:
 
-https://github.com/llvm/llvm-project/pull/211641/changes
+    -fsanitize=undefined -fsanitize-trap=all
 
-However, it will take some time for an LLVM release with this fix to
-become available. Since LLVM (>=15.0.0) is an officially supported
-toolchain, leaving the kernel with bug(s?) on supported LLVM versions
-isn't ideal.
-I think we should apply a workaround in the kernel for now.
+  flags the selftests are built with, the old code did not merely
+  return an unspecified answer, it died with SIGILL (thrown by ud2).
+ 
+- Add an abs() range test walking abs(), labs() and llabs() over the
+  interesting points of their argument type: the minimum, the minimum
+  plus one, an ordinary negative value, zero and the maximum.
+ 
+- Remove the dead __ARCH_WANT_SYS_OLD_SELECT from arch-x86.h and
+  arch-arm.h. It lost its last user when select() was reimplemented on
+  top of pselect6 for every architecture.
+ 
+Patches 1 and 2 are fixes. Patch 3 is the selftest that covers patch 2,
+and patch 4 is a pure cleanup.
 
-Best Regards,
-Akari
+Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
+---
+
+Ammar Faizi (4):
+  tools/nolibc: evaluate syscall() arguments before the arch macros
+  tools/nolibc: stdlib: avoid signed overflow in abs() and friends
+  selftests/nolibc: add abs() range test
+  tools/nolibc: remove dead __ARCH_WANT_SYS_OLD_SELECT
+
+ tools/include/nolibc/arch-arm.h              |  3 -
+ tools/include/nolibc/arch-x86.h              |  3 -
+ tools/include/nolibc/stdlib.h                | 12 +++-
+ tools/include/nolibc/sys/syscall.h           | 72 +++++++++++++++++++-
+ tools/testing/selftests/nolibc/nolibc-test.c | 47 +++++++++++++
+ 5 files changed, 127 insertions(+), 10 deletions(-)
+
+
+base-commit: 070cf03f5ec454eec9c42827ee9f3c0b3fad09f1
+-- 
+Ammar Faizi
+
