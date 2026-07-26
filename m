@@ -1,63 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA51F305693
-	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 10:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7D929B766
+	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 10:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785060805; cv=none; b=at1DeW78mbK/LMv3J4ik7QZTHSP4/3XdFlXLns2uqXa3rO+CPhv3+Ib9atKhBfdQXhn2ci/4KC8bU0v5ge3s4Wv0Cvw9tv5Xrdkhfw0kIXwxlOERvYEm/ZK/hpMmMJZQwS0kWTzIt7JZQBULHsVOqsZK1pY3e1nhSA+nHKP20is=
+	t=1785060809; cv=none; b=GwipoIHNNDQJ8yLoMii0CsEYspahAw7FQUkIjySEmvHHFe1T+i/f00U1KzzwW5y3El+4mk8BPVB7FjxsVSXJnI8RyPL41fTgv6Pha1z4LR2rvLmXuXF2SwwkeAsP/fPMrI+H+rC6WXUoyuwFZs2A9KaYBR3eSaiJSA1xwOhzhlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785060805; c=relaxed/simple;
-	bh=QOdOi199BViQDB2zktzRARAZBH5W7lFBr1ovz4QbkjI=;
+	s=arc-20240116; t=1785060809; c=relaxed/simple;
+	bh=7OCUhmo3YD9ofJoscwFmxQOt4jzM3aGcuPX2u6bhnOM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rl5wNk1mVdQDslG2IZsgCb+HCHRZrIvrLXYp/hIk57gun8ysQ6Wg5m8S7xBORbGZ7iD+vdV47m51EaksxWZx95qWQqm1zBSaZnjjUzVZfGoXg5UZJtz5/g+EWT9TaSgmcOJz1ofCLQ7mzLN+bTu2vfsDG2SHvls1M7SnnK9LD3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=URfUGJVv; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=GQN5Q7n7qo70cuiYmoYzR5stvsseFhn9g4D0kMiS1Hr9BIOSYzVupD5GnCYhzKuiYNoM6lZQQOUN2twiDapUA0+CO8pdz3+iorJeUN6tXA26lWl0S5YLHcWkR2arWbyT++MHeLAg682EzO3aGxwovVb1aPTLbW144gKz+u6JFz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=l5WJX7cb; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="URfUGJVv"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-38e08baf860so1823132a91.2
-        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 03:13:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="l5WJX7cb"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-84e3007a2b7so1551106b3a.0
+        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 03:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785060803; x=1785665603; darn=lists.linux.dev;
+        d=openresty.com; s=google; t=1785060807; x=1785665607; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=IzYyTqubCWXIpDP8ZIyMuH6xumXv5Qqvgs5r4fwNWNM=;
-        b=URfUGJVvdQla4S6H9b8n77GvFbavHndXQ1+HQ8Sc6BYRrfDgFHsOA2W3EVX4phgF7Q
-         VApC3icRviXLCBcl7n6nIjDhdq08rRKROGKshlX6IzrRxLXv9REYXWo7ccSTTZtcDBoQ
-         o7vkG+oJDFpk3Nn5ZHyYbyoTgtee8JP+6oneFTkYqhiV0dM6vtJnHh5a3KFs2jRvpcc1
-         DL0kdJ5wYRY+ElmKBAJ04rgpPwmqf24q1j6IXbDhtYAwMGWaEHcBSoL+PLEYNYA/sbLl
-         h4di6i4bqOSRolqHngQze3XU0kZAtv9oBEZRb8V+KPnec4o5hbTqbCP+L49eaIHGOUan
-         ESxw==
+        bh=DFzxRl2W6j8iJng14jgnrShRQTusWOg9FAzc5E6yZYg=;
+        b=l5WJX7cb3DHgHlcjdM8mwj3cRtb7iXl7/e5GWEZIwG0lLJA2kcAr89W/h6IcP2rA71
+         Xw5FSSojiLU76sYfmvaiocMTHgmDYWRsYdtvKERHqk+cuaSmmoOwnDRcRgNsKXUazUVs
+         w7K1uIVUjg9ktMR7FQ11/KdmhAascwuV9/XQQ3avwsq9bmrTBGLaEHIwbyzXZlHwGkQy
+         VZwPpmGqI0LPH/4APjWhPgYrqfdpGANtoAqjYX5KOKgY+hreiLQ0H1BAnRaPWO/M6zfs
+         U4ozNVnxDI9Spl5EubU4rBudLPSO4Oqa9zgpD0oif8jIB9p8by/iiHWWdX2wE3Rl45Ln
+         77wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785060803; x=1785665603;
+        d=1e100.net; s=20251104; t=1785060807; x=1785665607;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IzYyTqubCWXIpDP8ZIyMuH6xumXv5Qqvgs5r4fwNWNM=;
-        b=lM04i3tgKfUSzK+R6FsgXuhYHkV0oJbF6tQ64XVp2VUl1fR29wuauAvDrBXhJ5W5/D
-         /Y4zy9D2HxWJfUNDh9WVwsbFu/VP4HemSFgjYklHuZMhKQhguyPMWr6QyAwd3vorWGyu
-         gFesS5de8CxYHMdvwzU/bCQ5jZgh0SAvEX4NzYMVonMfa6BZs2OLrgDHc/JgLDiH0U9s
-         EA6nB0JQA8WoEnxxed6h8rVi3bC/9UtNrl1FiWMUJuzkeryE99pMgZKnBUtAMsgOdvO+
-         GoByAGpm/3uPOvZtruoUbJNXOIu9l6cFgVHJnIOHFZ6K/cmQxHIHO2zQ0cMBjN5VMWl3
-         +uZQ==
-X-Forwarded-Encrypted: i=1; AHgh+RokxgD4WpDJ20LW6W64g/a7eSMFQhWk3v224ThS1oa/ACWV7djKusdKkI6H2mgS0WiDjIgJ@lists.linux.dev
-X-Gm-Message-State: AOJu0YzxRYwAAXthHmY27eSnBCT+Ljoo21zIH15sM98JZkaRR4QYhQ0j
-	IeVbK7erKBnjWbYLFe75qHLggdoGUoDBhxPrRLCPdSJfJO0jkRTY9/bB468coH+sOVs=
-X-Gm-Gg: AR+sD11HBDg+JuuRzZ7kepr85GU4aaEVq9YGCgPvYPzTxnKgFQEkzksWJSnZUg6atIU
-	BD4X9gVj8ixDF855bFMyTzhrk/liih6NaHLFRWzJlIr++NR9/xfcd4gI0SS6nV9sGi73RsPfyQD
-	rYH9sPRvGilyTh52CbGWuOVFlLoycs4c8r38gTfSn5uPBmrmkCAv5GOi9/XkeZ4U1zJzzEavbqb
-	WFk62aq2GG8B/huAM5tw3oIfby8Oomb5MGSbr1pvSwaK5q9qqkEgox5qsNtLd10z50M2/SyhtnH
-	htaL1UVZVsoQl5xH1Ci9Jo7zV7Dk+Q2RxudR30FDuton9w24LbZsNQGsyijdH83/y7O2C2hzYuw
-	b3hcGxvEqN85zC5lHosA2wP1Lee4YduVoj6oK3h7Glnhleba/5w/slmWUbvBnHZQy3UU44YZSMz
-	mcioe6jexiQLookw==
-X-Received: by 2002:a17:90b:254c:b0:387:e0db:3d8d with SMTP id 98e67ed59e1d1-38f298859c2mr4688509a91.40.1785060803000;
-        Sun, 26 Jul 2026 03:13:23 -0700 (PDT)
+        bh=DFzxRl2W6j8iJng14jgnrShRQTusWOg9FAzc5E6yZYg=;
+        b=rync/83YeK4xL7oTkjGnkjAh+L9xV3esXXAjUQDV04dr8+IHBa653vZfrKuDo4NJZ1
+         pOH2YnPgWzX4vcaw7MLZPzUDTlJLyMgfmQL4HDjdejyIUyPOJOngvwgzZk2ArHqwyDGI
+         mIlgkdHonL2FEHYOi6ay1I+FNkMCmeuRYhH3q+cuXpbbhIeyj2cnmsKaNza1TGBDlDBC
+         tc/LkuSmnpMo43xpN90Dm2c0xt+Qe7LNNer1T/G8dwwRqpYakqhJzYHdvPQ3eX7gCzpt
+         T2wrFbu4jnP0TywdzL1CBWMsWI8vXjwTAKmGYZIEZna5dOcioRPOQnU1dlauNH8GOv9H
+         67Lg==
+X-Forwarded-Encrypted: i=1; AHgh+RrbvZoKGWldeakHsyPSwmbbkPZpF7yUj5g9+nofVM/U3pSBtin/+2sozij8OWtlIY1z4zz3@lists.linux.dev
+X-Gm-Message-State: AOJu0Yxo2jUMtARp3KeO9m+p+kOulo+mQcypNnGIK3Hxo16EeCXzAVeN
+	rDMBGpFkND2BzcIMAxUxoMFA9kBt1LPFpR89F7xlby4PzfyhYAhIZhbkizK0s1T4pvU=
+X-Gm-Gg: AR+sD10EZQ1ka88qjeHbtuXJpeUJMz1RerKE9LmgktaEMkW/RFClO5ClbP15YUFm8G4
+	HTKLtMZFvO11/zZc3LwNopTyq0F/jK65NKPpt9ECvCOWn58EIVvXk6c1+9qeWbLetQ2nU0ZgfFG
+	pLwJYAJI+/cTI9cSYlnsLWYo7Pv9SIZ5XtDLE5T/dXv2wDh4LRzyfAaIIPE+/ZL1MXTprxRcaeU
+	LeWIiuw1+vF5oOVGJZOWwvBuIYgfP/34R0ZIcSZnG8JwE+9sDf9PbjTzmF3KgAa1POB7OVUbCcd
+	5rRNI5wB8TY548572HH5I2/aA7QjO9Q90b94Lgqmxg4ZnV+75ErUBZ5kXCfcIqOCFKzJKcXHAPM
+	SQniwY9gu640BTDaNUHjUjzfJ5grRmV+dU215eQYAzyNvtWgSJJKiczvCGNTvMHlWJyQknZlM3I
+	td0f8NgpQJedwVcQ==
+X-Received: by 2002:a05:6a21:681:b0:3b4:75c0:3ec0 with SMTP id adf61e73a8af0-3c67daaaf88mr4403603637.30.1785060807009;
+        Sun, 26 Jul 2026 03:13:27 -0700 (PDT)
 Received: from integral2.. ([2402:8780:1329:2779:9db7:a8ec:2e1c:53e1])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.19
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-314bc59e9fesm17243981eec.27.2026.07.26.03.13.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2026 03:13:22 -0700 (PDT)
+        Sun, 26 Jul 2026 03:13:26 -0700 (PDT)
 From: Ammar Faizi <ammarfaizi2@openresty.com>
 To: Willy Tarreau <w@1wt.eu>,
 	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
@@ -73,9 +73,9 @@ Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	gwml@gnuweeb.org
-Subject: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in abs() and friends
-Date: Sun, 26 Jul 2026 17:13:03 +0700
-Message-Id: <20260726101306.3772237-3-ammarfaizi2@openresty.com>
+Subject: [PATCH 3/4] selftests/nolibc: add abs() range test
+Date: Sun, 26 Jul 2026 17:13:04 +0700
+Message-Id: <20260726101306.3772237-4-ammarfaizi2@openresty.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
 References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
@@ -87,79 +87,100 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Negating the smallest negative value of a signed type overflows, which
-is undefined behavior. The selftests are built with:
+The existing abs/abs_noop cases only cover abs(-10) and abs(10), and
+labs() and llabs() have no coverage at all.  Nothing exercises the type
+minimum, where negating the argument overflows.
+
+Add a case walking all three functions over the interesting points of
+their argument type: the minimum, the minimum plus one, an ordinary
+negative value, zero and the maximum. At the minimum the absolute
+value is not representable and the argument is returned unchanged.
+
+Both the arguments and the results have to be hidden from the
+optimizer. The compiler knows these functions never return a negative
+value, so it folds the comparisons at build time otherwise, and that
+would equally hide the overflow being tested for.
+
+Note that the overflow itself is only reported through the:
 
     -fsanitize=undefined -fsanitize-trap=all
 
-so a caller passing INT_MIN does not merely get an unspecified answer,
-it dies (on both x86-64 and i386):
+flags the suite already builds with; without them the wrapped result
+is the same as the correct one. With the flags, and with the preceding
+fix reverted, the run dies with SIGILL on this test on both i386 and
+x86-64.
 
-    A simple test program:
-
-      printf("x = %d\n", abs(INT_MIN));
-
-    $ ./ab
-    Illegal instruction (core dumped)
-
-    (gdb) bt
-    #0  0x0000000000401009 in main ()
-    (gdb) x/6i main
-       0x401000 <main>:     mov    $0x80000000,%eax
-       0x401005 <main+5>:   neg    %eax
-       0x401007 <main+7>:   jno    0x40100b <main+11>
-    => 0x401009 <main+9>:   ud2
-       0x40100b <main+11>:  push   %rax
-       0x40100c <main+12>:  mov    $0x80000000,%esi
-
-Negate in the corresponding unsigned type instead. The value still
-cannot be represented in the result type, so the minimum is returned
-unchanged.
-
-Cc: Yichun Zhang <yichun@openresty.com>
 Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
 Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
 ---
- tools/include/nolibc/stdlib.h | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 47 ++++++++++++++++++++
+ 1 file changed, 47 insertions(+)
 
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 1816c2368b68..8d86044f759f 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
-  * As much as possible, please keep functions alphabetically sorted.
-  */
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 996e8d13508e..4dc2ffea63bd 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1728,6 +1728,52 @@ int test_alloca(void)
+ 	return *x - 0x1234;
+ }
  
-+/*
-+ * The absolute value of the smallest negative value is not representable in
-+ * the result type. Negate in the unsigned type so that the overflow is
-+ * defined and return it unchanged, like the other libcs do.
-+ */
++/* abs(), labs() and llabs() over the whole range of their argument type */
++int test_abs_range(void)
++{
++	int i, ri;
++	long l, rl;
++	long long ll, rll;
 +
- static __inline__
- int abs(int j)
++	/*
++	 * Both the inputs and the results have to stay opaque: the compiler
++	 * knows abs() and friends never return a negative value and would
++	 * otherwise fold the comparisons below at build time, which would also
++	 * hide the undefined behavior that is being tested for.
++	 */
++	i = INT_MIN; l = LONG_MIN; ll = LLONG_MIN;
++	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
++	ri = abs(i); rl = labs(l); rll = llabs(ll);
++	__asm__ ("" : "+r" (ri), "+r" (rl), "+r" (rll));
++	/* the absolute value is not representable, the input is returned */
++	if (ri != INT_MIN || rl != LONG_MIN || rll != LLONG_MIN)
++		return 1;
++
++	i = INT_MIN + 1; l = LONG_MIN + 1; ll = LLONG_MIN + 1;
++	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
++	ri = abs(i); rl = labs(l); rll = llabs(ll);
++	__asm__ ("" : "+r" (ri), "+r" (rl), "+r" (rll));
++	if (ri != INT_MAX || rl != LONG_MAX || rll != LLONG_MAX)
++		return 2;
++
++	i = -42; l = -42; ll = -42;
++	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
++	if (abs(i) != 42 || labs(l) != 42 || llabs(ll) != 42)
++		return 3;
++
++	i = 0; l = 0; ll = 0;
++	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
++	if (abs(i) != 0 || labs(l) != 0 || llabs(ll) != 0)
++		return 4;
++
++	i = INT_MAX; l = LONG_MAX; ll = LLONG_MAX;
++	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
++	if (abs(i) != INT_MAX || labs(l) != LONG_MAX || llabs(ll) != LLONG_MAX)
++		return 5;
++
++	return 0;
++}
++
+ int test_difftime(void)
  {
--	return j >= 0 ? j : -j;
-+	return j >= 0 ? j : (int)-(unsigned int)j;
- }
- 
- static __inline__
- long labs(long j)
- {
--	return j >= 0 ? j : -j;
-+	return j >= 0 ? j : (long)-(unsigned long)j;
- }
- 
- static __inline__
- long long llabs(long long j)
- {
--	return j >= 0 ? j : -j;
-+	return j >= 0 ? j : (long long)-(unsigned long long)j;
- }
- 
- /* must be exported, as it's used by libgcc for various divide functions */
+ 	if (difftime(200., 100.) != 100.)
+@@ -1943,6 +1989,7 @@ int run_stdlib(int min, int max)
+ 		CASE_TEST(toupper_noop);            EXPECT_EQ(1, toupper('A'), 'A'); break;
+ 		CASE_TEST(abs);                     EXPECT_EQ(1, abs(-10), 10); break;
+ 		CASE_TEST(abs_noop);                EXPECT_EQ(1, abs(10), 10); break;
++		CASE_TEST(abs_range);               EXPECT_ZR(1, test_abs_range()); break;
+ 		CASE_TEST(alloca);                  EXPECT_ZR(1, test_alloca()); break;
+ 		CASE_TEST(difftime);                EXPECT_ZR(1, test_difftime()); break;
+ 		CASE_TEST(memchr_foobar6_o);        EXPECT_STREQ(1, memchr("foobar", 'o', 6), "oobar"); break;
 -- 
 Ammar Faizi
 
