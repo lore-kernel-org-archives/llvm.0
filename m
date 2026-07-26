@@ -1,93 +1,127 @@
-Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
+Received: from mta1.formilux.org (mta1.formilux.org [51.159.59.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DBA30FF36;
-	Sun, 26 Jul 2026 15:37:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785080222; cv=pass; b=cRIpHP1M1OHEGcMiWmrs/JSuXP+v/gotqPim1vYw3UoOonKty8w5goPEVAVE+PveDvDFqoRVOb0SvwTSl8FVhGTIt9Z00fl8df0xhZMCGXnPG2iTBP3XRz/p85gouyRNPL1JCQ99dAuUDbY0u8fKjd0GSiuUqL/+GxnYXEyOB7Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785080222; c=relaxed/simple;
-	bh=jx3dugEnzBY0Gfmo9vO84OdhOEvWmAjH4BuLb642vfg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qd9Ub5xO79WFd6WEj+Tm/++5wNXrSRsJuTMcMk4RRx7r6ItT+sFNZ59/f3NqvQ31LwNb0/i9eMLNbQgp8ExwoHX/5dQ2NSLY+2OZyHsuzlwREEXVCrjjR5lSdZKez4bJIOvUp/xL8hQ3l7VOwtCKBPenvuZbW8kX3CcjrmmqCpM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=YvcB1De+; arc=pass smtp.client-ip=136.143.188.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2B7A35674C
+	for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 16:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.59.229
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785081683; cv=none; b=KKWSIOKIJZq6akASckkRHtZG88ngpYKuLFJx9TblGk0Im8d2msYx7iPCfCK5hTTWaiDvE96eYsoRhj43/b/oHRyaGflncBffS9eYBKHBRavwbXQYz8djB+HNI1XN89vgG/ONSzNhCDsv7M4Ert6Pw21asg3F7bwxTa0Hsxk2Mdg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785081683; c=relaxed/simple;
+	bh=qc8TI7coDHDMk6rrvcGxqI4PK/ClhXefLf/6sg/ahJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvneAuwQCAnYCCGJxE3WREwsM3XrvYF5Fb4QeZy/iOVl6++sLoM4/d4/yBXwmJ4OtcORticQS4N8t3hEDMp4r7hUYeF8B+FogjuVuqRSssXna68ME/qwA5zPMIJB62KuI1eP2u3XOsY6lEXGNH4hfloG8dkWYaybJo5ajXat8Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b=RcqlGY0a; arc=none smtp.client-ip=51.159.59.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="YvcB1De+"
-ARC-Seal: i=1; a=rsa-sha256; t=1785080208; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=UQkiHcR47z+NddFmPqTtLtUT2swz187cbX/2AVnTJtSZ02EZbiqbDcl0Akb082IiNoeBN2qWsolXCQaRwK8q52PlKZrUgNiexAEc5z2kSoZyWk+VByKkCRA77ctXHxBvHozhGf71aa62EBqeKnC2aYROlbYUPJw6tahKbqGKqxc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1785080208; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=x7TPMOFy5N7Qt3AEzaq7fEAwVHo0rxFfUpnGX0hgRII=; 
-	b=eXcNIGq5cR0e8AUPw0rYOwRRu4okpnbbwiD1Bx+PtezpjmtWe/USiIeH3X215ERL2pG8/+/gbYqMT93W9oHGViOIdVqcvUZBUUQfUXxVyaoIqjllI7DPi6H5rRMHNmq+tFmnGgxQYl8yCnmNuFlCQGHoSae4uU6VbOwOI9G4NW4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=yoavmoshe.com;
-	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
-	dmarc=pass header.from=<linux@yoavmoshe.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785080208;
-	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=x7TPMOFy5N7Qt3AEzaq7fEAwVHo0rxFfUpnGX0hgRII=;
-	b=YvcB1De+mncJrPRAlk5ny1KEork4Szs9K+6dGJZPUai2/MnH6M5GKuWbmoB24pX6
-	vm+jYWQ/lKLP78ywllGhmMCZO0iLMA1WD1hePr+i7bBn4o7d7d4G3i+pRcDV3++iS+U
-	ysxBxBXL7mpSq8uo0i9KlD2nKSW5ycZhLal9Xnyk=
-Received: by mx.zohomail.com with SMTPS id 1785080203910869.7147545207597;
-	Sun, 26 Jul 2026 08:36:43 -0700 (PDT)
-Message-ID: <91cb0f21-e78a-4931-b123-937c6a01592c@yoavmoshe.com>
-Date: Sun, 26 Jul 2026 17:36:37 +0200
+	dkim=pass (1024-bit key) header.d=1wt.eu header.i=@1wt.eu header.b="RcqlGY0a"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=1wt.eu; s=mail;
+	t=1785081672; bh=FjX+HZlxW+WsZ2V2ep3yP0QJydoexSzmKp0lKAEIC/4=;
+	h=From:Message-ID:From;
+	b=RcqlGY0aok5ZCGzOZcodOlpFs8c3UU6srA9sF7UB/uQmZycm8Ruxr/62oiF70kV9I
+	 7KmhruYAofFx93JyYTAqD6+ah+8gAocaB3WRmDfzG/d4hy7SNOTLaWQjjvqYV/GYSI
+	 YPfrYq6zmb9+D1KNrLkvjFbsaACgVVWsZN11ni1M=
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by mta1.formilux.org (Postfix) with ESMTP id 730DBC0A72;
+	Sun, 26 Jul 2026 18:01:12 +0200 (CEST)
+Date: Sun, 26 Jul 2026 18:01:11 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Ammar Faizi <ammarfaizi2@openresty.com>,
+        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
+        LLVM Mailing List <llvm@lists.linux.dev>,
+        Yichun Zhang <yichun@openresty.com>,
+        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+        Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
+Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in abs()
+ and friends
+Message-ID: <amYvRyLKZzEsFyq9@1wt.eu>
+References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+ <20260726101306.3772237-3-ammarfaizi2@openresty.com>
+ <20260726151334.4c1ec6f1@pumpkin>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
-To: Nick Desaulniers <ndesaulniers@google.com>,
- Sami Tolvanen <samitolvanen@google.com>, Yo'av Moshe <linux@yoavmoshe.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
- stable@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260718111340.159896-1-linux@yoavmoshe.com>
- <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
- <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com>
- <20260721180950.GA3684684@ax162>
- <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com>
- <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
- <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com>
- <CABCJKud+GsBVv+XMTsi_4QAaTHo7jXD2Hyvi9wqKd7x3i2xyAg@mail.gmail.com>
- <415ffa24-a30b-43b2-aa6a-a1cde3bd4ef0@yoavmoshe.com>
- <CABCJKud9B8vB-J8f0HLHw6EgEKVWzy+Q1PrNxpO_6yCGtEyi8A@mail.gmail.com>
- <12a46993-82a5-4109-87fa-61b8fcf764aa@yoavmoshe.com>
- <CABCJKufoQ0fX797M01t7CkTgMEwNCELY1=ptZsxr=jWOR-KAyA@mail.gmail.com>
- <CAKwvOdnaOy-nyZ=8oLw4N-_hA9JZVdP2BhR8cweCAOhsy4VG6w@mail.gmail.com>
-Content-Language: en-GB, sv-SE
-From: Yo'av Moshe <linux@yoavmoshe.com>
-In-Reply-To: <CAKwvOdnaOy-nyZ=8oLw4N-_hA9JZVdP2BhR8cweCAOhsy4VG6w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260726151334.4c1ec6f1@pumpkin>
 
-On 2026-07-24 10:49 PM, Nick Desaulniers wrote:
-> Yeah, Yo'av did you test further modifications that explicitly copy
-> the hash prefix? I assumed Nathan's change _plus some additional tweak
-> to copy not just imx6_suspend to OCRAM which I assume the code already
-> does, but I would imagine you need another change to copy
-> __kcfi_typeid_imx6_suspend into OCRAM just before the function.  Was
-> that tested?
-Yes, I tried that as well and it unfortunately didn't work.
+On Sun, Jul 26, 2026 at 03:13:34PM +0100, David Laight wrote:
+> On Sun, 26 Jul 2026 17:13:03 +0700
+> Ammar Faizi <ammarfaizi2@openresty.com> wrote:
+> 
+> > Negating the smallest negative value of a signed type overflows, which
+> > is undefined behavior. The selftests are built with:
+> > 
+> >     -fsanitize=undefined -fsanitize-trap=all
+> > 
+> > so a caller passing INT_MIN does not merely get an unspecified answer,
+> > it dies (on both x86-64 and i386):
+> > 
+> >     A simple test program:
+> > 
+> >       printf("x = %d\n", abs(INT_MIN));
+> > 
+> >     $ ./ab
+> >     Illegal instruction (core dumped)
+> > 
+> >     (gdb) bt
+> >     #0  0x0000000000401009 in main ()
+> >     (gdb) x/6i main
+> >        0x401000 <main>:     mov    $0x80000000,%eax
+> >        0x401005 <main+5>:   neg    %eax
+> >        0x401007 <main+7>:   jno    0x40100b <main+11>
+> >     => 0x401009 <main+9>:   ud2  
+> >        0x40100b <main+11>:  push   %rax
+> >        0x40100c <main+12>:  mov    $0x80000000,%esi
+> > 
+> > Negate in the corresponding unsigned type instead. The value still
+> > cannot be represented in the result type, so the minimum is returned
+> > unchanged.
+> > 
+> > Cc: Yichun Zhang <yichun@openresty.com>
+> > Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
+> > Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
+> > Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
+> > ---
+> >  tools/include/nolibc/stdlib.h | 12 +++++++++---
+> >  1 file changed, 9 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
+> > index 1816c2368b68..8d86044f759f 100644
+> > --- a/tools/include/nolibc/stdlib.h
+> > +++ b/tools/include/nolibc/stdlib.h
+> > @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
+> >   * As much as possible, please keep functions alphabetically sorted.
+> >   */
+> >  
+> > +/*
+> > + * The absolute value of the smallest negative value is not representable in
+> > + * the result type. Negate in the unsigned type so that the overflow is
+> > + * defined and return it unchanged, like the other libcs do.
+> > + */
+> > +
+> >  static __inline__
+> >  int abs(int j)
+> >  {
+> > -	return j >= 0 ? j : -j;
+> > +	return j >= 0 ? j : (int)-(unsigned int)j;
+> 
+> An alternative expression is -(j + 1) - 1
+> gcc (and I think clang) optimise it to just -j.
 
-I tested Nathan's change along with explicitly copying the 4-byte
-prefix from before imx6_suspend into OCRAM right before calling fncpy().
-However, when checking the compiled binary, "&imx6_suspend - 4" just
-contained padding rather than the hash, so the copied 4-byte value
-didn't match what the call site expected.
+This one would give -j -2, but ~(j - 1) would work, just like
+(~j + 1). However here the benefit of the casts in Ammar's
+version is that it's obvious that it's only playing with same
+size casts with no extra operation.
 
-Yo'av
+Willy
