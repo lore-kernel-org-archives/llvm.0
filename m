@@ -1,105 +1,118 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0772034D4DE
-	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 01:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18C011DF72C
+	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 02:01:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785116276; cv=none; b=raOtG6CV1nyrOg4LaKHezePwg5j3fPqzW++Cx3dBrP0v6UayIZv2Sju/wJ+nKKIZU7LrqWpAmXBv6qZAXkNB5P25ajB8bFAJIv6Qdm6zHYPjWcj38OpFZYOfhShvgOWLDjKX/R2cgQSFgTVif+yqAtb0OYvjRBduDUs4B+i3TP8=
+	t=1785117676; cv=none; b=ev0dUf1IA+0WawRE0mVNl3o2yxpFK7V37UZ74yVlMYGm+bBbfUsb/j/hz1E9QnepV7/vm0aukp5WNLhemb2nVnR+gKQDvP+MUl8wAcdyUbJIuTkxR+haei5LG3mDg/eteZANZl72I8XnvZGMGPLzrSCMmXxTV4ixn5FKPDF46Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785116276; c=relaxed/simple;
-	bh=4Du12IrYdFkkEnXL/yNSCK5B4x+jmIWWPczOqwUqqTY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dy+xANusLewBWaYrHesfpzgf10REzzA+d/NBeZiFKrXM8kWxeiIe51iV9OYJhYald4Cz2rB65MKTTqNpzZoUQyLFmuDybVJjzy2G8Z29d+QBLuEQNOwZ4bZLAhjGCu6AO1AfX/yvUbh8bQu+JfaMHfZqiWiuUXOPZL6FHoXoTfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoS6DCwH; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785117676; c=relaxed/simple;
+	bh=beGwk2ll/Kvg5JK6MK4vn6gQZ/EyqfU2I1zL3w+Koco=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=avrF+fbqDcq7vqvGwWjgmSNgiA4M42Mxr1V5Tc/uMZYoMRIsQW6GQYUCeZjm88vb7GxAK2SnahOND4vGQogJQE+MqstTdqZJsfTsZuCJNb0I+ZurhSEsLDJ2Kf8r6l37OsG1lMKesy4LkYF813/kOySpE9R3OUeCiiyH/IJ/eTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=hzdXbh6h; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoS6DCwH"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-471eeac43bfso1843986f8f.3
-        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 18:37:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="hzdXbh6h"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38f0f132f56so1393907a91.0
+        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 19:01:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785116269; x=1785721069; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=X5WxXKv3tM/juHDs7F+fi+T5krsvThiBbf/3eNS3EFY=;
-        b=SoS6DCwHIMFHIqUNY/rtC2KGYrY0UDwuYOGt4ytpKaD5CAeOAu8rC0FprsPNB0Mm6n
-         6B5WrzspQvdpSvtn4+W97XHLSPhmMBZYjMi+ntlogmHCllv8PDx7Hs6/700ah4fl7hAU
-         ZHTDvq1q0K8BBpnoMLNKv46poZ6MNlC76xolSOOeFCOYZPTYG1eD8JqeneN0u3yPw36n
-         zQV0DP3aN1aWOmNZROLJhwAZz8/bNur21ov/9Cpjol47dEmwGd/fT4UmmqOrEPlJtLnq
-         7iEi8f+ZJi2DWhxT8dt0mVv2okCst7vQgnYyG5TJA/fL+6pZK2btgeQ2ElZmfgoIO1Rd
-         vhzQ==
+        d=openresty.com; s=google; t=1785117674; x=1785722474; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:subject:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=q1yc0HP4n9/5TsAEOfrGcMa0kXz8+ZC1koTHwFdPfKw=;
+        b=hzdXbh6hCweafAqmocOcGlofqjVAzDT0MsiybFGnRxG+FY7fqCCawaRy4EjL9KhjCV
+         xnL7gkcvyOEYWyOLHiecVDjynzlKVR2YeLFpJJmRVcdQIqtiA84gs+NQnOk8sw0LbdAc
+         CxYdaHjttCnFkumQjFM4GkVsQZrxZR3XydPEVaSivbMkeABdEJynw2G8zUp2cFTBUYI8
+         lFp9X+vT0tkbqO/uGXo8bfOOLxiGE9PQc3e+cClYXRl5g2NT9WakJlxpTxx1W4OXx15B
+         rQMfGnySQ/uk9dcZklE7qxEw7n1BqayLABZNJTqc6jrimvUXMBdJtstmlAMab/DlVy0B
+         MkBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785116269; x=1785721069;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=X5WxXKv3tM/juHDs7F+fi+T5krsvThiBbf/3eNS3EFY=;
-        b=KxTmN5ott36S9xjvHxo6ofMQ2Wpf0kXIuENowMQi7xsNjTQv+A4Wwmx3k3U/gEJZT1
-         VYB2VEquKU3ZoiYUeyTa2BtGQDN8Af9qJ8XDFSXMZGvNabf0phjumz//GrKK3wIEAfDj
-         uflg7Iyi998vU6OJcU7aQTPb6etVNRQoNppAO7v2whrUR0eI6+O4uF2ImfAvRjPE7oQI
-         4XekjWqGfrIPujwliCcApqveteYeCv3Xv2wpFjxS5Yh0sJdEifgoy4OyC8GWO3+t/SCP
-         /Cgm4uTSKZeKWSnuUQJ8uoJEHd0rodOYV0PPoWuHr2Uk27WaFzM9tq7QLymW8Fh2MjF2
-         rGnA==
-X-Forwarded-Encrypted: i=1; AHgh+RqdMTGB4Mc2DVpLsCli5PFKC8oQX+ERQjDqL1eT5J0gGYaBfg9dZ+rUnOPwvLGGhfzPH/Pi@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw3OeUbxuAFd7t5PRqG0bOB+4EwRCKmuwnfJMkaQwkuyHsxzvk1
-	Kbqfi+HNhdRzi/JtmK6Uh7cSM5X7G73MZBf7lJ29tuVvZOu7CaK9Ehq5WL7QSHxw
-X-Gm-Gg: AR+sD12yqJCgR+BBgBOHNmlt3qp2lbooPCZYhDj7BzYWu0UgLda9W/WRn/SjcKx/1ms
-	pWyi55pW4QNa8Nwry4dIPLgkegieAUj6757evDiLFqBO+QH/Ayw6eY4D63l55y37Ta34XucCvow
-	CN1VEWUQVyEJaKveo0gAJq2omZykoyCk8H0pK3Zq8dMzOcirVw+B0FFhvjvF2N6CkHz0ZAjw/Wp
-	iwGHOWGOpm0YcWts2XMKB1Rq7W82dKHHKznYRky8GKtuwEZFVsw3UtQ5E2w0gZCHIEMco2Gadbh
-	w6kIaWjaTTNaIPMlpbDZGF3XfkH9hRcZ+ybV0DIxCECmGbhhiVBehJXtF416QCTEdSF0UZdn2uV
-	Di6R3sA/WneR5FzyHwUW78hoTKcomD0/rXjIXyC8DtSbsdxEwUwabLdd9AUNu99TqP7VorJa/0L
-	BegVxjJe9BR9IYDu9z3Vb4CPDjWDFz7FtKtgc9M6Z/qysZFeDUxtTJzQJv7wJb6TVSTkXLo8fjW
-	jhvfKFgEi9sva+SyDstAeZOXLNHw6g61Ij5tygRJl8=
-X-Received: by 2002:a05:6000:2512:b0:47f:4fa9:ae42 with SMTP id ffacd0b85a97d-47f9fc8c4dbmr8796069f8f.11.1785116268631;
-        Sun, 26 Jul 2026 18:37:48 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-095-114-116-215.95.114.pool.telefonica.de. [95.114.116.215])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85bb57cfsm45492653f8f.11.2026.07.26.18.37.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 26 Jul 2026 18:37:48 -0700 (PDT)
-Date: Mon, 27 Jul 2026 03:37:16 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Kees Cook <kees@kernel.org>
-Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
-	Linus Walleij <linusw@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Sami Tolvanen <samitolvanen@google.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
-	Arnd Bergmann <arnd@arndb.de>, =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-arm-kernel@lists.infradead.org, 
-	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3] ARM: traps: Implement KCFI trap handler for ARM32
-Message-ID: <ama1UiT1Jxy-PvVN@gmail.com>
-References: <20260715175223.make.153-kees@kernel.org>
+        d=1e100.net; s=20251104; t=1785117674; x=1785722474;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:subject:from:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=q1yc0HP4n9/5TsAEOfrGcMa0kXz8+ZC1koTHwFdPfKw=;
+        b=Cdw1D3eKpsrDplfXR++Yu066qAPrPAU0vXp2HY1+mdjcAHlB21ue7BBa1cliPjKGwu
+         94OgStQ4XT1LzEBBTxEJngIM9F2p7+W8/2Scoe6eONqYjHk2NjNqyc1hMzGvaY4gIdrn
+         ec5CtNMK7+z6uWtnSZeau4OkxlVxZl2WIVKiyxoith7/U6Ty2+QF4102e6Peg19VxFby
+         LS/AVZP3oZtBoRLeQuXYORSaucZifwTUxzM+nStbYCZKthV2WZ3I5qr/OXT2pMcYyjDF
+         AdoRxxWUKa0O8ObvshUjiIi4OuGGybkF9VrGjMdliryv6BGssFvZRnIX+rQ4wKZCeNvq
+         QY6g==
+X-Forwarded-Encrypted: i=1; AHgh+RpJ94fXOQSJcRJjxoBXeFYRLnm8AAtK4+aAHQk3QwFKFH25BtXKUXVqIsncIKy+vV0RBwXD@lists.linux.dev
+X-Gm-Message-State: AOJu0YzD6mFvBpMb5ALM/RIFd61DPc1Zhxos7OeahFO7fgyaFprVMBFA
+	Hv1CF03HaXU0RxQdDFXNWujVr4aNbVNVRHD7CrRGDk68Ymi+neSlx6GiMBoq9NvCoW6f9wQXoaW
+	A2t9Zh3n/ig==
+X-Gm-Gg: AR+sD11EyBR1bRxAK7D5g6SsxLWO4G2dNly5B4jlN3akQMluz0SLweI3g9GlhPVrtG9
+	SL9ZEsx8iWi9H9jEZPHr3KOZ7f5aezw+npNg1eey+yP+bkPDzghoOURj4HoJUI6cbq76gAu1Vcf
+	ZWOTvCcSATSzS4v5GSexIDpol5mazAB/0M+GFuqB3+CsdyeWJZhcsmmguFUo00o/P0SeEsnZuWq
+	NO+llpv8eJ82nY17xLkKSscwdnHn4o4incVovFLKV6gTEjgLGnIBxXcIsHRBkXcVIjprcnd2vrh
+	2DN/LSfJiOfQojQ2jjbgRsVzop857T8LuaDfDpBndBxW7gWjmDt/R1g1nAWcKo8ankLTZyq/V0h
+	aZeDB5nXZtUtsc3uPBBtDa0Cn3imPyrRz6YQqP8Yt01zE/cX9cOzQ21MZEkTrzyiAXRAUx8JFV7
+	Mp2yIDBnhH3lF2QntbxaZI4JPEjgrAnNf9YeTyFgTszcJUm9L1wI2e0GLR0iJUFIh/9m6nFno=
+X-Received: by 2002:a17:90b:2d83:b0:37f:a913:1554 with SMTP id 98e67ed59e1d1-38f1f005916mr9214393a91.16.1785117674140;
+        Sun, 26 Jul 2026 19:01:14 -0700 (PDT)
+Received: from ?IPV6:2402:8780:1329:2779:943f:461f:3cbe:df62? ([2402:8780:1329:2779:943f:461f:3cbe:df62])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13d130a8421sm44855913c88.10.2026.07.26.19.01.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 26 Jul 2026 19:01:13 -0700 (PDT)
+Message-ID: <4e22086c-8a60-4965-8d78-a946dc54eaa3@openresty.com>
+Date: Mon, 27 Jul 2026 09:01:09 +0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260715175223.make.153-kees@kernel.org>
+User-Agent: Mozilla Thunderbird
+From: Ammar Faizi <ammarfaizi2@openresty.com>
+Subject: Re: [PATCH 3/4] selftests/nolibc: add abs() range test
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Willy Tarreau <w@1wt.eu>,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
+ LLVM Mailing List <llvm@lists.linux.dev>, Yichun Zhang
+ <yichun@openresty.com>,
+ Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ gwml@gnuweeb.org
+References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
+ <20260726101306.3772237-4-ammarfaizi2@openresty.com>
+ <8bdacaf3-7f93-4095-8875-4c13a273fe3d@t-8ch.de>
+ <6a5f7481-124f-48ad-ab44-577b12d33592@openresty.com>
+Content-Language: en-US
+In-Reply-To: <6a5f7481-124f-48ad-ab44-577b12d33592@openresty.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 15, 2026 at 10:52:27AM +0100, Kees Cook wrote:
-> +			/* Check for EOR/EORS immediate: cccc 0010 0x1n Rn Rd immediate */
-> +			if ((instr_prev & 0x0fe00000) == 0x02200000) {
-> +				/* Extract EOR immediate value and XOR to reconstruct type */
-> +				u32 rotate = (instr_prev >> 8) & 0xf;
-> +				u32 imm8 = instr_prev & 0xff;
-> +				u32 imm32 = (imm8 >> (rotate * 2)) | (imm8 << (32 - rotate * 2));
+On 7/27/26 8:32 AM, Ammar Faizi wrote:
+> On 7/27/26 3:00 AM, Thomas Weißschuh wrote:
+>> We have _NOLIBC_OPTIMIZER_HIDE_VAR() for this.
+> 
+> Oh, I missed it.
+> 
+>> Maybe it can be made variadic.
 
-With CONFIG_UBSAN_SHIFT=y, I reproduced the following in QEMU with GCC
-v14 KCFI and LKDTM CFI_FORWARD_PROTO:
+Oh wait, tools/testing/selftests/nolibc/nolibc-test.c is compiled
+twice. One for libc, one for nolibc. The test cannot use
+_NOLIBC_OPTIMIZER_HIDE_VAR(), it breaks libc:
+```
+$ make -f Makefile.nolibc run-libc-test
+nolibc-test.c: In function ‘test_abs_range’:
+nolibc-test.c:1756:9: error: implicit declaration of function ‘_NOLIBC_OPTIMIZER_HIDE_VAR’ [-Wimplicit-function-declaration]
+  1756 |         _NOLIBC_OPTIMIZER_HIDE_VAR(ll, l, i);
+       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+make: *** [Makefile.nolibc:278: libc-test] Error 1
+```
 
-  UBSAN: shift-out-of-bounds in arch/arm/kernel/traps.c:555:48
-  shift exponent 32 is too large for 32-bit type 'unsigned int'
+What approach do you prefer?
 
-Could this use ror32() from <linux/bitops.h> instead?
+-- 
+Ammar Faizi
 
-Thanks,
-Karl
