@@ -1,61 +1,59 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807E636A341;
-	Mon, 27 Jul 2026 14:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B312387341;
+	Mon, 27 Jul 2026 14:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785161840; cv=none; b=Vnrq0eDdq4J5v1l/OJCPOP3K1b3vS2SHcG/AGWnDlh4ynFzkvE1gfaWSAN33SOkqqBbgCLWOd6B5xMc+FpAnr6dL0sn/xWU6xGc34Z90ZTj92nv4IBmQQUBS6jHS2weX59cf9yt6gFGMUWY4PMIvAP33FKrhh//J4fvve7ULk2A=
+	t=1785162724; cv=none; b=lODmIydZvF3ulrusAbC8CW4N74xvSPqNd/aGXK9E28NIP3X7gjiiDgz/FjSuhxRq3RNsZBagC5LB+qhLMXePsHFc1qI6GtxzZo6zZXrEsz6N3jNtMd36FEYBY/EsTgU5LKaFGNNnPyfrBJcLnj2BPuOn7HkXpPHu15E6Hm08EvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785161840; c=relaxed/simple;
-	bh=W0LDqCKA179puVTQiKIqtNzvTFEEQSbPg55/HvmXFT0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uWB5mqCmFD7y/1ggvSYzaJ8xOrDn1DOiax+ba2qwgD4hUcci3ioDC853L4TjV/l3/ed1BFbymj4KTWJr2o6gAwk9ktyq42D/JAf3XLxPGkSExQvtzZqqSHh6yNWKKP1IV7K//SX8s81daOD1pah/j0iNMC32XlK0S0dTAYb2n3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kI5tk6Xb; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1785162724; c=relaxed/simple;
+	bh=PC03vSEvQCTrr/hd/WBL4apcZdWW5yTfE9mGchulFU0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PK3GJdaJZ7ELM/bOit9v25j47LUGYbb8z1o4cZyUj7Uea1uW9VkK4bV+VWqir1/use+0MSI8NL1iM1DPtI17ocA2DvorslJV4/IY83BXrjawTTBTRgdbDGihd5bq5njxFN6QP2hbP9BtWqOICaldL1nbtsx5H/XUpyOPYDQStc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=a0jh3DCS; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kI5tk6Xb"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66RDnD4Q2291893;
-	Mon, 27 Jul 2026 14:17:03 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="a0jh3DCS"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66RDmdtU2373014;
+	Mon, 27 Jul 2026 14:31:45 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=FvFzWMfRLP+PxVN7zAgIg/nKJWi907
-	i0oZ9/ENeqpA0=; b=kI5tk6XbtF1oDWm1Nv0ncKPi54rcgN5499BpStgpxjsdPd
-	n44xfP/3G2RlW7os9WKFGmtxYf8rAONqJnWFwknn3SuZOSZVyNCInt0Kd8vaBk7e
-	axCASKuHx4ZDwyMEMjLGCYssIXo2Eu4TQ9XjSE9EJ1qs0BScs8NvpluHQTV9v81A
-	uYlNJbtHQVm/E/S6i7UNZVwEDrZWIQ6yvqwNyVsnSWejC9O8i0yfVEiPpGxYFnJv
-	iduTC486B00e9ctAQQOSMxXrZQENwY2C1xqx5PMrh4yAHvPA0bMfcLMhI2hEi1X7
-	rEw4g5m+8QAYjSBsatScSPAEHmosdnoUpvyoITmQ==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmv0ng0cy-1
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=rGhjnL4PI81TK3QrI
+	ZxIwkT6bcOXxX6BlHcY64m3kuM=; b=a0jh3DCSkRL0N0TMBoeg9HKrP2fBSCvzq
+	R8cQ+Fd7G31t4vzjvKkHi4EuewUxmBCgCm8VJLMAlAeUpxyMyoKZGZV+JIFuSKIO
+	zSu1nJFF6oKaNFZ6oLzlLOo0D9QgHKGBqev/7mjHOVR/mQlSAsXU+IUJFBh/8nRf
+	BnzudJPSkGuXtVeLShQVG2SMscKIwBp5Lt8O2S8a1+zmdYp2h5J09nKDJfiBE5qG
+	Oqo8qTsn5WlP1/M/R05iFQ4RJQeOti1TNcHo7qMrfCJteOEquUf5il1peOJh3HHy
+	VrfGDh1raDJkXWqm70sUg8pDdmn9gEeLRGpxmW0TfMlripCaIZOWg==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmuw78gqh-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jul 2026 14:17:02 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66REBEMY020472;
-	Mon, 27 Jul 2026 14:17:01 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fna5xwdw8-1
+	Mon, 27 Jul 2026 14:31:44 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66REQVwh008422;
+	Mon, 27 Jul 2026 14:31:43 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fn7fq5w8r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jul 2026 14:17:01 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66REGwgX30540240
+	Mon, 27 Jul 2026 14:31:43 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66REVdTj12059090
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Jul 2026 14:16:58 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E57452011C;
-	Mon, 27 Jul 2026 13:52:31 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 316462011B;
-	Mon, 27 Jul 2026 13:52:31 +0000 (GMT)
-Received: from osiris (unknown [9.111.92.67])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 27 Jul 2026 13:52:31 +0000 (GMT)
-Date: Mon, 27 Jul 2026 15:52:29 +0200
+	Mon, 27 Jul 2026 14:31:39 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id AF9E520078;
+	Mon, 27 Jul 2026 14:05:36 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 51E962006A;
+	Mon, 27 Jul 2026 14:05:36 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 27 Jul 2026 14:05:15 +0000 (GMT)
 From: Heiko Carstens <hca@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
+To: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
         Juergen Christ <jchrist@linux.ibm.com>,
         Ilya Leoshkevich <iii@linux.ibm.com>,
         Dominik Steenken <dost@de.ibm.com>,
@@ -65,79 +63,100 @@ Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
         Maxim Khmelevskii <max@linux.ibm.com>,
         Jens Remus <jremus@linux.ibm.com>,
         Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
-        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: llvm@lists.linux.dev, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/6] s390/Kconfig: Select ARCH_SUPPORTS_CFI
-Message-ID: <20260727135229.11274A39-hca@linux.ibm.com>
-References: <20260724141318.1037434-1-hca@linux.ibm.com>
- <20260724141318.1037434-6-hca@linux.ibm.com>
- <20260725010004.GA1686739@ax162>
+Subject: [PATCH v2 3/6] s390: Add ftrace_stub_graph
+Date: Mon, 27 Jul 2026 16:05:10 +0200
+Message-ID: <20260727140514.116501-4-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260727140514.116501-1-hca@linux.ibm.com>
+References: <20260727140514.116501-1-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260725010004.GA1686739@ax162>
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
 X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI3MDEzMiBTYWx0ZWRfXybABj6qeuKlq
- shpLduYRncpd2UDnOjgFrADssQ01ntj3sIQNao7HJyYKjPSF2/KJFtFdxwkhIm/nTN+B6Iz5Xt5
- eGrLSZTrtZ97u92pbyAuA4jR1WP/rA8=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI3MDEzMiBTYWx0ZWRfX/xmonw2aZNvm
- sWViXLldaOrWPftEAlEa1UxHcnVk1skOzfGuxSSKAcPS8v4Y3RcwEm7PgD3vngC/1q9xYjW87RM
- jHkI9lETLEBuPVVNI7PgSrePCv4w8oggHJiUScCXg4Yjwl8YZtMcIImn2cFHdTV6GOuoaO3un57
- ozYUJiiiQiRIq3S0uG8O5SKlvZPexBeSJ6w/mC2wZp/F9ty87QRqgQseEeREsZKutxnSSiZqbMN
- nzGKYnJuZ+aY1zbI4wXeKx7Yx34Lcaj1Tbp+hgqgLcaG3toBHmpKo79ynmSWkbcbhQFevyGAX9E
- Cgh95LNUo+ZiWmEva+IDYITwR7RiRtOkTGiUHCbbfn44V3hs5dI31EIFD3rkzB67iFkmigixGd4
- M48phmsXV2dnVmgC4BGwPcfGgiVHrd881cbUw8w9fqgBMxDeBtoceBI5+F6/4/0VbxpF6bh9y6g
- SeJweFeE927OAqcNxZw==
-X-Authority-Analysis: v=2.4 cv=b5WCJNGx c=1 sm=1 tr=0 ts=6a67685f cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=kj9zAlcOel0A:10 a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=QUYGkz1GEY4_jyd1gQUA:9
- a=CjuIK1q_8ugA:10
-X-Proofpoint-GUID: vMhr7Ox03rhvdv6QrXTkbcxHn9IpPdex
-X-Proofpoint-ORIG-GUID: nuXJq4p0HBEtzkdiDKBObrq_O90kCWkP
+X-Proofpoint-GUID: b2X7SkazEYeAxxbrdMi91umbLVlzJXQw
+X-Proofpoint-ORIG-GUID: g5XL5PGU7qDS381EEaX3bOkc7eA12Npx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI3MDEzNiBTYWx0ZWRfX0emBqaYliJ9o
+ xbA1GN8CKJY8Y6Msp3t+zolodC0nAyYHjc8RRYui5W7CYq1U2bxeWlWaz4792rltWLZ3d8K08GD
+ PovwxPFdCSiymdGnrBPFYhKOyvHhVWD94TROiaqcwI1D2eCWf83Xr0laOZWPWvruRepHqvFlWeW
+ 2gDdddBIkuEJHqHjI6VRdhSU+13W141P8djWA87I45ZuMqcdO6rhTuFd3K4LERok+azyO+KwNZF
+ TOHtsjDv8YtS+WJvARs7Pmq4iUch6u2ZMGEvTgvmzAvTSGj8kVFlkhd9gico061Oxywxq2Y5sw3
+ GcywWSpkDcNK64WfWNIeRV5blyFOJsS9KYJqd7odbLpFi2OW74KB60uqAJIiE+YN3cE5hMq0+qf
+ GSCaIcKFsWmmx+QpsQ1ANkIzmwSm2eA9DvafbKz86a0FXicgw71smoa5TBIdcEnAbTEW7aSxsc1
+ YVjzXRU5BfZjxaNMkWQ==
+X-Authority-Analysis: v=2.4 cv=SKFykuvH c=1 sm=1 tr=0 ts=6a676bd0 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8 a=-AIEXUT1W0u7Szh5zmwA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI3MDEzNiBTYWx0ZWRfX9/hGv4Igv+1P
+ /0zMFdgCjCmuVgQWz9sZhGdQm92ljFOI25LlrloAth69QuMNlHLB5KjXCUTcYLclUnRf23kdLLA
+ /TdneCxmRLy+0YfBJh94zzOBlCRiP0M=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-07-27_04,2026-07-24_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 phishscore=0 suspectscore=0 clxscore=1015 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607270132
+ priorityscore=1501 malwarescore=0 clxscore=1015 adultscore=0
+ lowpriorityscore=0 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2607270136
 
-On Fri, Jul 24, 2026 at 06:00:04PM -0700, Nathan Chancellor wrote:
-> Hi Heiko,
-> 
-> On Fri, Jul 24, 2026 at 04:13:17PM +0200, Heiko Carstens wrote:
-> > With all prerequisites in place select ARCH_SUPPORTS_CFI.
-> > 
-> > Note that this support is supposed to work with the generic kcfi support
-> > which is provided by clang. This comes with a couple of limitations:
-> 
-> Consider adding
-> 
->   select ARCH_USES_CFI_GENERIC_LLVM_PASS if CC_IS_CLANG
-> 
-> to this change in case there are problems such as the one worked around
-> by commit c57f5fee54df ("libeth: xdp: Disable generic kCFI pass for
-> libeth_xdp_tx_xmit_bulk()"). Whenever clang grows an s390 backend
-> expansion for kCFI, that can be version gated pretty easily.
+This is the s390 variant of commit f3a0c23f2539 ("riscv: Add
+ftrace_stub_graph"):
 
-Thanks, I'll add that.
+"Commit 883bbbffa5a4 ("ftrace,kcfi: Separate ftrace_stub() and
+ftrace_stub_graph()") added a separate ftrace_stub_graph function for
+CFI_CLANG. Add the stub to fix FUNCTION_GRAPH_TRACER compatibility
+with CFI."
 
-> I will test this series fully next week.
+Reviewed-by: Jens Remus <jremus@linux.ibm.com>
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ arch/s390/kernel/mcount.S | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-Highly appreciated!
+diff --git a/arch/s390/kernel/mcount.S b/arch/s390/kernel/mcount.S
+index 1fec370fecf4..6bc44c767642 100644
+--- a/arch/s390/kernel/mcount.S
++++ b/arch/s390/kernel/mcount.S
+@@ -4,6 +4,7 @@
+  *
+  */
+ 
++#include <linux/cfi_types.h>
+ #include <linux/linkage.h>
+ #include <asm/asm-offsets.h>
+ #include <asm/ftrace.h>
+@@ -34,10 +35,16 @@
+ 
+ 	.section .kprobes.text, "ax"
+ 
+-SYM_FUNC_START(ftrace_stub)
++SYM_TYPED_FUNC_START(ftrace_stub)
+ 	BR_EX	%r14
+ SYM_FUNC_END(ftrace_stub)
+ 
++#ifdef CONFIG_FUNCTION_GRAPH_TRACER
++SYM_TYPED_FUNC_START(ftrace_stub_graph)
++	BR_EX	%r14
++SYM_FUNC_END(ftrace_stub_graph)
++#endif
++
+ SYM_CODE_START(ftrace_stub_direct_tramp)
+ 	lgr	%r1, %r0
+ 	BR_EX	%r1
+-- 
+2.53.0
 
-I'm going to send a v2 soon, which addresses your feedback, and
-hopefully all AI findings too.
