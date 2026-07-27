@@ -1,132 +1,122 @@
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07C517DFE7
-	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 01:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785115320; cv=pass; b=CAE3OnNoUL0q3OU5MzAE2yYMXzUulW+h7+hmitlnUnvNptZGUPWFpYz50rjiXigu2P/9tinK4gGSsJ552ExurTyDpmDM/ZkPgRY+s62rWJnAjfsrw7txbt0ePaH14Uu5qen1xZEtrudKCgOVCZK7LX+EcEgQR+vQn5fkFQ1QWjg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785115320; c=relaxed/simple;
-	bh=+sxQLKuw0cjXxCS9yLiDpRnTJAOs9NwiU0H/rnryQlM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ozFjGFHNaIvlAzlBZkxVYX9vToNcY511ZF7O6Mkc1GJePcgzte07rtIc9xDV97Qi7KhLA2FSLpFDlISbKHakxJg+XxhSx6jZ9LHBfk2ehulJHxRNNVivKHPxb81Vzd3qlezXOCn1rFMAHW/KwES5qSqN7iZtm4J2fOMsQPSAuDA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=lE4qBV+0; arc=pass smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E3692931C6
+	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 01:28:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785115726; cv=none; b=YQ7gC7hgP7EBCmn9IQd+cj+69egeMzVUJonjZILmjoJlqIcwIn55L4y2hkCVpVR1GtOyneRLiMCQ/cqO+ZfJyFIRL/t+PNSm5AsQrzVP4Uo8O/EUwgnWhtSfXEhiQjer22DQftQxnw5OgAKEZlYmoqtoRB1tgbMmgVss7jWuS7g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785115726; c=relaxed/simple;
+	bh=LsdNLXzG+2oi8st6LkBT/jm25MgJi7X7MpYpwrwfa08=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kCJ6/JqvKZ3ky4E3CMk7QUK5uvzukNGeq9Jih2DgW+cc8wKVFuIvphMZMsQeDzTVLNE2AG9EifZbyJgSv2n6qowSWM5jL9LBMuyXMEf8iccg1y6QLKAq4vLk7JbJlx1MnjEnQLh205w1VulaA8PoGufMzHWbPb0Vexk3VqT+W9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SWSp8+sm; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="lE4qBV+0"
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-845c92bc464so1594658b3a.2
-        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 18:21:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785115318; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mrhd/kef74QVFkaVCY3zeaPgwu2CM0GDTqaI1qqVYn4Y0rjKOGHaOgb61OFsKs9ksq
-         b7RPfwJgXZBH7khwjOf5HrwDffS4EGtoxiTB985X7j1l4DHRUhAG+auMzboOEy39xvFq
-         8L12+atzWS22GcWUkcpeC2875orGEqUe0AIgHjO23GLDPnXzSdxUpikjYTMhscxfDrcY
-         y5b/oap8Nh72EcY2oiWqWlVzLnIrFl54Z8HijvUNuGjgHNkbfMNeAM/fZqMbGBDMN+Le
-         OG/phg43kd7dkaWc3vByeMxX2cR5Nz/wzBpp3R7xX7Fs8cKLD8ZDsey9JR7vHEeaqG9+
-         1BNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=+sxQLKuw0cjXxCS9yLiDpRnTJAOs9NwiU0H/rnryQlM=;
-        fh=4zzPNHlowLexQJwH+WY6ReaEwQLpsJ1+oqTMrrV655w=;
-        b=A/5LtT+gJQo3wJzO8jKOhVJlau783vhMAMaUQdlnOTLob3cNx4oej/0uNCjVrkqi5E
-         AdRQnPDokW4KKL0UZe23bkmlR1UVPtH+A7+zC3J4g+0I1YJQmgh0Lfhzip3I49pmnVtD
-         p9gcr64SSPIw3WGgNMt6kCsvAL04cRFHb49BiX5Qz7ZEXMUnnHupAHbO39MDiclRtI4I
-         lKzp4OCTMM+f5kym1pb9j8f5e2zolpBwWsfK1ViwtAby+NPQ0bWsk4oLawqvhDSlbrDA
-         R5B/2Wr1fFDk9XUIxv+CulGS9sti9Y3yS8vWrEAgBByvhdADqQ2tk/CwPgB/Th31vlQm
-         nnXA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SWSp8+sm"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-47db714766aso1585580f8f.0
+        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 18:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785115318; x=1785720118; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1785115723; x=1785720523; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=+sxQLKuw0cjXxCS9yLiDpRnTJAOs9NwiU0H/rnryQlM=;
-        b=lE4qBV+0NMn6oYrio5Qx2a90/IQhRvFYC4hfsYvz8opisc0mjz+YlIPXtv+xTmWpUJ
-         2WboiNoMvL9FrvD9UaVRxua74iyJLyBTO2ufAurL0KT02jkFok2fvfFL1u78O6O/RJG0
-         j/bskuOVcrRtp4lUiDyKLRDraBYaNcEUzrslrqUk61Ozp21HgYWbHnlV9GC1aMf392vT
-         ZQDCka/u/YCNiX+pYQUqY3DtJ9hfA8f9NBIt5ELWtulEEQCSYJhwvOQeIjBiyg4lXp0y
-         98qvASScC0ge58g26lg/U4fmYy2tYmdtZgZwkQoz48vEU+CSgXMUXGkO4ODFAHAOPamr
-         6ETw==
+        bh=J+YAafdUWyy4iyACMaMYl4fxl/7MRA/3Ye5L0fqVOqU=;
+        b=SWSp8+smnEaWCK4BMEQp0IOj9a3fBBPWUwl5IYHw94+BKrednVbinDDw1jHaytyrqb
+         BxR52hJtKfkUhtd1V6id2wSjjsFOthNdaDb0vRjEnRh6ZxLwoYwHiNp796ylmb42LXaS
+         DtLV99XRHazTmO0puDxn6Vg5+nKMScFbiRunpCNCw5A8RSUXV/ERi9wNw9lS2MJC4uWX
+         FxrTMNkZdQ8laIeR2QksjTNl54D70a37isgKNLo7bN4GTHaaMgaMvTVa7r52lG5US7kW
+         AdDdKJg0/3onF4Mh+eW551bTQhHCLEFBw0dwRkeAcJ5sKtB5Azn41aSn8J/yHDgNHji8
+         R71Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785115318; x=1785720118;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785115723; x=1785720523;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=+sxQLKuw0cjXxCS9yLiDpRnTJAOs9NwiU0H/rnryQlM=;
-        b=ksmig3BxhpD272vkXNqksrOhcxnCHoO7DDFjoAfhDqFzs+7G2BSNZL02p6/+rOqcb1
-         AmN4cmx/I6waebIqca5+yVVsqJNVJvxjWYw1iTd99nC2gCYLhes2AEBNavdU2lpffsit
-         8nwPd5lBFeVaSpMqThK+eey/hiFfwcQRrM4+ZW11eNkHNoyHgVi7KOj8j3HfYWoWrJ+w
-         Qc/swmwWvvCG+WMP/UebSgPYKvssKVUAd3qsvxUE2g35lfzKHZERVuC53Kmq6wfRIDjt
-         eqEDfo7gmaU8sOjWUxcpY9yC5IjdKsrH+jvAJ6xSBShBarqefO/jo0AWbuqrXmEnClJA
-         SIdw==
-X-Forwarded-Encrypted: i=1; AHgh+RoqrjqE197a2WsOUuEOK5zN7KvDpCNiiYHLKN6SkfMgcQQdVhcf/Yf/c8j7DuGj4zj9RAn0@lists.linux.dev
-X-Gm-Message-State: AOJu0YwetK/V/8spH9WN32OQTDFkXQFqUv5mfickF7IWJIebVufkEhTL
-	af1HxC1tPueJ+UWVoeVkT9tX4tUOh3CtMUA2+5MDYyyyE/ktPBZ/R44v9MJyIXmbVuMEnbgPq7K
-	6CP6q+4wsTk4fIzCoqtgDNzD/Lzrc+Y3Tn1ps8b6SZA==
-X-Gm-Gg: AR+sD10cF7wZZugglhWbkxl0FEwJSDqZC33R89UN3N7GUCSU8BMl7YExeDFHw+r+QWm
-	v/SNw2kkAP0iORDcG/gCkXZGBmtOaAn4Nd5ja/xukBI1bQEhHUHl4zrhPFHfd76rBO7wCMMK8kD
-	XR/u7Fd0CHycNF2+CtYc0/VW9luFhed0riGabHpM+QFFKtixKPMLqB+3hZg2WkJDY+f/ahBYQSo
-	iLjY9I/WIZtlzUn2AZ6YTbV6u0Vs0ZFOZZlHu1aHgbNtFk0jV8QHFRTbJV5I5YF1jkP9adGXtRf
-	TKep5wG3OATWeZmAQwwO+IaBwqgxg9A=
-X-Received: by 2002:a05:6a00:1d95:b0:848:7f8a:8d0e with SMTP id
- d2e1a72fcca58-84e595a7496mr4718407b3a.55.1785115318121; Sun, 26 Jul 2026
- 18:21:58 -0700 (PDT)
+        bh=J+YAafdUWyy4iyACMaMYl4fxl/7MRA/3Ye5L0fqVOqU=;
+        b=drkRnZm/m3ZQcSA6L2giShe64uz6TChBtu2RaCcfmHzGDjUmCoOj0UTUhr679Kx1r4
+         u8WENMFwSzLCkAIz7A1UQNQffdKJiezuFnBSz1fVtT67Ph/GDG3lHzHJM1cV3M2zUyMG
+         fIMSxTFs9T8fZyiiBuCdRdfRbC5Sx6z3WhLahF0fuvXq82gtVIZQBZA0YFu1Lj4b6xSv
+         XWdXdALGPVTxqxzV1a4tu5zrgjW5weYCK5MVTl5psQKQ5yBdaMSWfOEoiMVhR4cN1F/U
+         e230L/rJ/WtABI4Thv7K+Gr0Qo2LbGs6PiMxRgo1j+M+pkVZTl0Cq9EYan1iPgdt3u9p
+         poQw==
+X-Forwarded-Encrypted: i=1; AHgh+RoZPO6ZVglEavVEi0uY/oD5DnuHI3h6y4sToTZ1Zx2D7BEFaPpovNu7xu7ONMCFysO00664@lists.linux.dev
+X-Gm-Message-State: AOJu0YyCMvc3p/n7PkGToQJSwHBDHET7Daptu/UszULpW9I0Zh1cfsNB
+	hbc0rs24N+mn2+FSYsuRvOyJfKv9VrFIvYoz1tTphC3y4TsgGGvg4s7b
+X-Gm-Gg: AR+sD10d/lZZESE1Qc6Kbd8aL0Dro5uVem2xQmVxaQECGJ0647vnoceKA2aADlKZROk
+	metTqxrWiq1Z5B0kj/DDhuFrGRhYHvjT0D9YQHpbBLvsP2Jk2FShYzAI6/XwSRldSyVaQpNAgV0
+	2OUIu2aAag5+31Ocd0gm52pYxa7MKI57RsLbI4nEcdWuSwnpm5i9NBI4PbQLZZqNYL5fOvFV4TK
+	FbaPJkoQH1DZ4pBh7xFOnx6rEekzi5i8H+eMr0idjbB5XE0BOTxVrDZ0wR2Jx/OtOiCbIPrlIOb
+	ACZ/02WdN7HXAgIqRsKUc87fGzPGVV30+/i1xzBrwMi44cqIrzBDyIegiaSAjCuikjlK84QOG1v
+	TMBIWs+p8M/ilOHqiYMeAMsQhEIWbBNZnEzAHDSCN6IYdzWDgYpIWUVF5fV6MXLlc5t/ub3kuN+
+	TeVq7om+Hlul2+aRMRsBlp5faXsefvux5QhmG3MiurjemH5eUMUJNdueYKTdo/5kgH3aw6028hp
+	ZNHXC3VZx5Uyi5gOT5U/KHLJBOCRAYB7xLW8Mpjuvo=
+X-Received: by 2002:a05:6000:2903:b0:45a:5392:3a19 with SMTP id ffacd0b85a97d-47f9cdff8abmr11557115f8f.16.1785115723100;
+        Sun, 26 Jul 2026 18:28:43 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-095-114-116-215.95.114.pool.telefonica.de. [95.114.116.215])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f96d4656bsm27341954f8f.21.2026.07.26.18.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jul 2026 18:28:41 -0700 (PDT)
+Date: Mon, 27 Jul 2026 03:28:09 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Kees Cook <kees@kernel.org>
+Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+	Linus Walleij <linusw@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-arm-kernel@lists.infradead.org, 
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3] ARM: traps: Implement KCFI trap handler for ARM32
+Message-ID: <amazbT2M9PQgb_Vq@gmail.com>
+References: <20260715175223.make.153-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
- <20260726101306.3772237-2-ammarfaizi2@openresty.com> <dca5a72c-3186-4f94-bd94-aab127dec64e@t-8ch.de>
-In-Reply-To: <dca5a72c-3186-4f94-bd94-aab127dec64e@t-8ch.de>
-From: Ammar Faizi <ammarfaizi2@openresty.com>
-Date: Mon, 27 Jul 2026 08:21:45 +0700
-X-Gm-Features: AUfX_myUzCZmK-8Zv44YuE1wIuIVGakPvkXtDYtj6PnztbYhLf6rbdX9Uwoz990
-Message-ID: <CA+KFgX76tbg_LTh6-PO-zrmhWtrjP4y3u47s1wximVFUQKq=uA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] tools/nolibc: evaluate syscall() arguments before the
- arch macros
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>, LLVM Mailing List <llvm@lists.linux.dev>, 
-	Yichun Zhang <yichun@openresty.com>, 
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260715175223.make.153-kees@kernel.org>
 
-On Mon, Jul 27, 2026 at 3:16=E2=80=AFAM Thomas Wei=C3=9Fschuh wrote:
-> __auto_type is only supported from GCC 4.9. I think this is old enough,
-> but it should be mentioned at least.
-> We really should have a documented policy for that.
+On Wed, Jul 15, 2026 at 10:52:27AM +0100, Kees Cook wrote:
+> +/* UDF base pattern with KCFI bit: cond=0xe, 0x7f, xxxx, 1xxx, 0xf, xxxx */
+> +#define CFI_UDF_IMM_BASE    0xe7f008f0
+> +#define CFI_UDF_IMM_MASK    0xfff008f0	/* Mask for UDF + KCFI bit matching */
 
-I suggest using the Linux kernel's minimal requirements. It's GCC 8.1
-or Clang 17.0.1. Ref: https://docs.kernel.org/process/changes.html
+With this patch applied, KGDB and CONFIG_CFI cannot be used together. 
+Setting a breakpoint causes Oops as CFI failure.
 
-What do you think?
+This patch on top of "ARM: breakpoint: CFI breakpoints only on demand",
+multi_v7_defconfig + CONFIG_CFI=y + KGDB/KGDB_KDB/MAGIC_SYSRQ, THUMB2_KERNEL=n,
+clang 22.1.8 LLVM=1, qemu-system-arm -M virt -cpu cortex-a15, booted with
+kgdboc=ttyAMA0. 
 
-Should this be documented in nolibc.h as a comment?
+Then "echo g > /proc/sysrq-trigger":
 
-> I'd like to apply the same thing to the __nolibc_syscallN()
-> usage within nolibc itself. While today we seem not to have any
-> problematic cases, at least I was not aware of the issue and breakage
-> might creep in accidentally. We can problably rename the
-> architecture-specific macros to __nolibc_syscall_archN()
-> and make __nolibc_syscall() the properly evaluating wrapper.
+  sysrq: DEBUG
+  CFI failure at kgdb_breakpoint+0x2c/0x58 (target: kgdb_breakpoint+0x2c/0x58; expected type: 0xc0472d70)
+  Internal error: Oops - CFI: 0 [#1] SMP ARM
+  Modules linked in:
+  CPU: 0 UID: 0 PID: 1 Comm: init Not tainted 7.2.0-rc3-00278-g38436106b2f5-dirty #1 VOLUNTARY
+  Hardware name: Generic DT based system
+  PC is at kgdb_breakpoint+0x2c/0x58
+  LR is at kgdb_breakpoint+0x2c/0x58
+  pc : [<c0472d70>]    lr : [<c0472d70>]    psr: 60000013
+  sp : e080dea8  ip : 00000000  fp : 0021a1c0
+  r10: 00000000  r9 : 00000000  r8 : c2004048
+  r7 : c2205d9c  r6 : 00000000  r5 : c1609558  r4 : c22bb994
+  r3 : 00000000  r2 : 00000000  r1 : 00000000  r0 : 00000000
+  Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+  ...
+   kgdb_breakpoint from __handle_sysrq+0x150/0x158
 
-My current approach aims to make the changes less invasive (that is, I
-don't touch arch-specific code for this one problem). But if the
-introduction of __nolibc_syscall_archN() is preferred, let's go with
-that.
 
-For now, I will wait for more discussion on this before sending a
-revised version.
-
---=20
-Ammar Faizi
+Thanks,
+Karl
