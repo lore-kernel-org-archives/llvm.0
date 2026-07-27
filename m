@@ -1,174 +1,105 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4EAE2F49FD
-	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 01:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0772034D4DE
+	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 01:37:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785115987; cv=none; b=sBWl19ECqWoTy0zjW4mIf0f/1olUNRbbNn0PosTI0aUOjgHkLyBTuXWvrCxKOYD4k3tSqPeptI97CqvL1NdXL1x+TrsB5E1lZdwkb+p5HCR88uhxVQMm1FjDyDiADoJJmlevb5uMU6czqzffnka9peTyOvZBetiAsErACO1/8D4=
+	t=1785116276; cv=none; b=raOtG6CV1nyrOg4LaKHezePwg5j3fPqzW++Cx3dBrP0v6UayIZv2Sju/wJ+nKKIZU7LrqWpAmXBv6qZAXkNB5P25ajB8bFAJIv6Qdm6zHYPjWcj38OpFZYOfhShvgOWLDjKX/R2cgQSFgTVif+yqAtb0OYvjRBduDUs4B+i3TP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785115987; c=relaxed/simple;
-	bh=JvhlWiHubvipXGwiyYDoGh8n5w2sId5TPv7IkZCZSf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uqejXWSKJddSlRg9BKoei4aVceezOvlQZWRZNzCpxUHJDMPi3SEULzz6ZOwvwqDPbgzM9CDGPp5DKojWy0FwwJJCuNrBmEDiUPjlwvvNz9TSLbSAF7RhMtj6U/xpCDOHRJXW8//d8GSxPdM2ppUABMye207xPe7TQzbJIGyQEjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=f7BJpFft; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
+	s=arc-20240116; t=1785116276; c=relaxed/simple;
+	bh=4Du12IrYdFkkEnXL/yNSCK5B4x+jmIWWPczOqwUqqTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dy+xANusLewBWaYrHesfpzgf10REzzA+d/NBeZiFKrXM8kWxeiIe51iV9OYJhYald4Cz2rB65MKTTqNpzZoUQyLFmuDybVJjzy2G8Z29d+QBLuEQNOwZ4bZLAhjGCu6AO1AfX/yvUbh8bQu+JfaMHfZqiWiuUXOPZL6FHoXoTfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SoS6DCwH; arc=none smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="f7BJpFft"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38511175ad3so1383224a91.2
-        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 18:33:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SoS6DCwH"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-471eeac43bfso1843986f8f.3
+        for <llvm@lists.linux.dev>; Sun, 26 Jul 2026 18:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785115984; x=1785720784; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QS8YqykbG3lvtABz9lYv5yB3o6Nx9CfZmlJ/xUd/ZDo=;
-        b=f7BJpFft7sOt0pv6CoIbWml7RA9oR6WvdEClzDawDCZwIxKH5BfF7XbVHV43v60Phj
-         IqReAWz96J5B2UqWImzhXZGN+PrV9pAr23fdfdF5/SRAWDk/x3qHje0UTHmTQKJ1rl2P
-         7j5x+b8ojyi2Vuf6/T9wIGiDuA8Hz3suQKd2X2PH1bKrEjx5pK13ZNsjkZvUVs6k+Ndc
-         3aAtC1qJG2+opsD1AbRKvD7yu1JoeXxmdN9JIjjlNq9xT8S10XiwR9Y3/KyH2GFpAY5k
-         7ER7CEwgAty5xkImhf83uJiO9PxU6xpXhhmm58JtLz0PtripI3j19Er0w+QzZUSjJOOH
-         zQ1Q==
+        d=gmail.com; s=20251104; t=1785116269; x=1785721069; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=X5WxXKv3tM/juHDs7F+fi+T5krsvThiBbf/3eNS3EFY=;
+        b=SoS6DCwHIMFHIqUNY/rtC2KGYrY0UDwuYOGt4ytpKaD5CAeOAu8rC0FprsPNB0Mm6n
+         6B5WrzspQvdpSvtn4+W97XHLSPhmMBZYjMi+ntlogmHCllv8PDx7Hs6/700ah4fl7hAU
+         ZHTDvq1q0K8BBpnoMLNKv46poZ6MNlC76xolSOOeFCOYZPTYG1eD8JqeneN0u3yPw36n
+         zQV0DP3aN1aWOmNZROLJhwAZz8/bNur21ov/9Cpjol47dEmwGd/fT4UmmqOrEPlJtLnq
+         7iEi8f+ZJi2DWhxT8dt0mVv2okCst7vQgnYyG5TJA/fL+6pZK2btgeQ2ElZmfgoIO1Rd
+         vhzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785115984; x=1785720784;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QS8YqykbG3lvtABz9lYv5yB3o6Nx9CfZmlJ/xUd/ZDo=;
-        b=IQrGySZjv5OcJoDFXpiaCAUL3GEihmAI4ac6Ax2nF1I7orKMwD/ihGkca5DYWgKJHo
-         uPyscIiN2AEe39RbKiLoWE2FKg1Jmwzzq4QXVyv8wR1PMLuxqAEDHEkNDagLuk4tY+yO
-         P8npoAD1UgOaBsN2wwjL1xkT/NkchkPYz6AAtF7H7SYFV1/bPlU67tZFdmQ+Y8tzRMuW
-         swQ9GmvE2F8VsolQ3ZxvHmM0DdXz31gt6OfU0DYdL4atEas3y+KErGzfvp6HiGn9C9Yz
-         WVhkJfMEkWRa7vlEGu/eTRQvBQ8w6Si22Z8AOG3J7n61ZCgSQZF4hKGy+zodgSWi4TmX
-         NabA==
-X-Forwarded-Encrypted: i=1; AHgh+RoXqqSIoqMYx5wDj6ryNnFEfysyBqFrUqB03Ysu3gpq6WceA2nAyC3gVAHF8SmL2ipQmW5Z@lists.linux.dev
-X-Gm-Message-State: AOJu0YwHQuywU542uf0mMRUuLeOcAkMw2XS0LiN+Ps16UmdbszKla+S7
-	6YOrAfwrFXTydkaq1TTQyAeDEA4ksYE7+LX+gYqEvFDNdElZqiPdjyIi5ggdT+9TojI=
-X-Gm-Gg: AR+sD13Xl9Tfl5Oruh4BBn7DLYRjdM3obrBPAsFC8zQMQsA17OhZ6zqApG3oj/HTa3m
-	FySVJfkqudRwRvw/IeoLpMkLXNzNZEcLM2ac7DBOtqwqNCL58BZMCatoowYAd9kOZoICWGll4Hp
-	ISQhcB18pe4C6TXSgyFqJYG9fk6RVpdmQoat3tk0GdYBGjrYcuzvPvnxPBNN0Moiqgsh1hOdb0V
-	DfK5TuHl9d5SB5ygIwQvvGU4htLYrH6z6SI885S7eKAGpms2dadP/K+k2zH+9J+CCAoPK++f3KE
-	WXBLSbtU1XmERG7N1YPvyDPMvaIwTKH7dNyVQL960boMCpPjc1PFtaLjJr73sA9xj5HXm+7TFrQ
-	va6as0ls8lr5yr8AqwqdEekQVPtwGnvm1b3eU9/QbtRgwhI+p3+JEcQ/ocsz/UDRNaMKRe47JnR
-	34k2yK+8tLEFDFMsXKuu/HVdyTCv5S8mPIfM725Aa0eUXx11pXXwes3v+G5mg28TNuzjBTImQ=
-X-Received: by 2002:a05:6a21:695:b0:3c3:64cc:311a with SMTP id adf61e73a8af0-3c67dd65ec9mr6364557637.22.1785115984125;
-        Sun, 26 Jul 2026 18:33:04 -0700 (PDT)
-Received: from ?IPV6:2402:8780:1329:2779:943f:461f:3cbe:df62? ([2402:8780:1329:2779:943f:461f:3cbe:df62])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13e53094d65sm18958049c88.13.2026.07.26.18.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 26 Jul 2026 18:33:03 -0700 (PDT)
-Message-ID: <6a5f7481-124f-48ad-ab44-577b12d33592@openresty.com>
-Date: Mon, 27 Jul 2026 08:32:58 +0700
+        d=1e100.net; s=20251104; t=1785116269; x=1785721069;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=X5WxXKv3tM/juHDs7F+fi+T5krsvThiBbf/3eNS3EFY=;
+        b=KxTmN5ott36S9xjvHxo6ofMQ2Wpf0kXIuENowMQi7xsNjTQv+A4Wwmx3k3U/gEJZT1
+         VYB2VEquKU3ZoiYUeyTa2BtGQDN8Af9qJ8XDFSXMZGvNabf0phjumz//GrKK3wIEAfDj
+         uflg7Iyi998vU6OJcU7aQTPb6etVNRQoNppAO7v2whrUR0eI6+O4uF2ImfAvRjPE7oQI
+         4XekjWqGfrIPujwliCcApqveteYeCv3Xv2wpFjxS5Yh0sJdEifgoy4OyC8GWO3+t/SCP
+         /Cgm4uTSKZeKWSnuUQJ8uoJEHd0rodOYV0PPoWuHr2Uk27WaFzM9tq7QLymW8Fh2MjF2
+         rGnA==
+X-Forwarded-Encrypted: i=1; AHgh+RqdMTGB4Mc2DVpLsCli5PFKC8oQX+ERQjDqL1eT5J0gGYaBfg9dZ+rUnOPwvLGGhfzPH/Pi@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw3OeUbxuAFd7t5PRqG0bOB+4EwRCKmuwnfJMkaQwkuyHsxzvk1
+	Kbqfi+HNhdRzi/JtmK6Uh7cSM5X7G73MZBf7lJ29tuVvZOu7CaK9Ehq5WL7QSHxw
+X-Gm-Gg: AR+sD12yqJCgR+BBgBOHNmlt3qp2lbooPCZYhDj7BzYWu0UgLda9W/WRn/SjcKx/1ms
+	pWyi55pW4QNa8Nwry4dIPLgkegieAUj6757evDiLFqBO+QH/Ayw6eY4D63l55y37Ta34XucCvow
+	CN1VEWUQVyEJaKveo0gAJq2omZykoyCk8H0pK3Zq8dMzOcirVw+B0FFhvjvF2N6CkHz0ZAjw/Wp
+	iwGHOWGOpm0YcWts2XMKB1Rq7W82dKHHKznYRky8GKtuwEZFVsw3UtQ5E2w0gZCHIEMco2Gadbh
+	w6kIaWjaTTNaIPMlpbDZGF3XfkH9hRcZ+ybV0DIxCECmGbhhiVBehJXtF416QCTEdSF0UZdn2uV
+	Di6R3sA/WneR5FzyHwUW78hoTKcomD0/rXjIXyC8DtSbsdxEwUwabLdd9AUNu99TqP7VorJa/0L
+	BegVxjJe9BR9IYDu9z3Vb4CPDjWDFz7FtKtgc9M6Z/qysZFeDUxtTJzQJv7wJb6TVSTkXLo8fjW
+	jhvfKFgEi9sva+SyDstAeZOXLNHw6g61Ij5tygRJl8=
+X-Received: by 2002:a05:6000:2512:b0:47f:4fa9:ae42 with SMTP id ffacd0b85a97d-47f9fc8c4dbmr8796069f8f.11.1785116268631;
+        Sun, 26 Jul 2026 18:37:48 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-095-114-116-215.95.114.pool.telefonica.de. [95.114.116.215])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47f85bb57cfsm45492653f8f.11.2026.07.26.18.37.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 26 Jul 2026 18:37:48 -0700 (PDT)
+Date: Mon, 27 Jul 2026 03:37:16 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Kees Cook <kees@kernel.org>
+Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, 
+	Linus Walleij <linusw@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Sami Tolvanen <samitolvanen@google.com>, Zhen Lei <thunder.leizhen@huawei.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, linux-arm-kernel@lists.infradead.org, 
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3] ARM: traps: Implement KCFI trap handler for ARM32
+Message-ID: <ama1UiT1Jxy-PvVN@gmail.com>
+References: <20260715175223.make.153-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] selftests/nolibc: add abs() range test
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>,
- Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
- Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>,
- LLVM Mailing List <llvm@lists.linux.dev>, Yichun Zhang
- <yichun@openresty.com>,
- Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- gwml@gnuweeb.org
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
- <20260726101306.3772237-4-ammarfaizi2@openresty.com>
- <8bdacaf3-7f93-4095-8875-4c13a273fe3d@t-8ch.de>
-Content-Language: en-US
-From: Ammar Faizi <ammarfaizi2@openresty.com>
-In-Reply-To: <8bdacaf3-7f93-4095-8875-4c13a273fe3d@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260715175223.make.153-kees@kernel.org>
 
-On 7/27/26 3:00 AM, Thomas Weißschuh wrote:
->> +/* abs(), labs() and llabs() over the whole range of their argument type */
->> +int test_abs_range(void)
->> +{
->> +	int i, ri;
->> +	long l, rl;
->> +	long long ll, rll;
-> 
-> Reverse xmas?
+On Wed, Jul 15, 2026 at 10:52:27AM +0100, Kees Cook wrote:
+> +			/* Check for EOR/EORS immediate: cccc 0010 0x1n Rn Rd immediate */
+> +			if ((instr_prev & 0x0fe00000) == 0x02200000) {
+> +				/* Extract EOR immediate value and XOR to reconstruct type */
+> +				u32 rotate = (instr_prev >> 8) & 0xf;
+> +				u32 imm8 = instr_prev & 0xff;
+> +				u32 imm32 = (imm8 >> (rotate * 2)) | (imm8 << (32 - rotate * 2));
 
-Fixed for the next revision.
+With CONFIG_UBSAN_SHIFT=y, I reproduced the following in QEMU with GCC
+v14 KCFI and LKDTM CFI_FORWARD_PROTO:
 
->> +
->> +	/*
->> +	 * Both the inputs and the results have to stay opaque: the compiler
->> +	 * knows abs() and friends never return a negative value and would
->> +	 * otherwise fold the comparisons below at build time, which would also
->> +	 * hide the undefined behavior that is being tested for.
->> +	 */
->> +	i = INT_MIN; l = LONG_MIN; ll = LLONG_MIN;
->> +	__asm__ ("" : "+r" (i), "+r" (l), "+r" (ll));
-> 
-> We have _NOLIBC_OPTIMIZER_HIDE_VAR() for this.
+  UBSAN: shift-out-of-bounds in arch/arm/kernel/traps.c:555:48
+  shift exponent 32 is too large for 32-bit type 'unsigned int'
 
-Oh, I missed it.
+Could this use ror32() from <linux/bitops.h> instead?
 
-> Maybe it can be made variadic.
-Sounds good to me.
-
-Does the following patch look good?
-
-From: Ammar Faizi <ammarfaizi2@openresty.com>
-Date: Sun, 26 Jul 2026 13:17:14 -0700
-Subject: [PATCH] tools/nolibc: make _NOLIBC_OPTIMIZER_HIDE_VAR() variadic
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-The macro only takes a single variable, so code that needs to hide
-several at once has to either repeat it or open-code an asm statement
-with a list of operands. Accept up to four variables and build the
-operand list from them.
-
-Existing single-argument users are unaffected; the code generated for
-the callers in stdio.h is unchanged on i386 and x86-64.
-
-Suggested-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
----
-  tools/include/nolibc/compiler.h | 15 +++++++++++++--
-  1 file changed, 13 insertions(+), 2 deletions(-)
-
-diff --git a/tools/include/nolibc/compiler.h b/tools/include/nolibc/compiler.h
-index f2d7a81d0d7c..ed69f6d26f56 100644
---- a/tools/include/nolibc/compiler.h
-+++ b/tools/include/nolibc/compiler.h
-@@ -77,8 +77,19 @@
-  #  define __nolibc_static_assert(_t)
-  #endif
-  
--/* Make the optimizer believe the variable can be manipulated arbitrarily. */
--#define _NOLIBC_OPTIMIZER_HIDE_VAR(var)	__asm__ ("" : "+r" (var))
-+#define __nolibc_hide1(_1)		"+r" (_1)
-+#define __nolibc_hide2(_1, ...)		"+r" (_1), __nolibc_hide1(__VA_ARGS__)
-+#define __nolibc_hide3(_1, ...)		"+r" (_1), __nolibc_hide2(__VA_ARGS__)
-+#define __nolibc_hide4(_1, ...)		"+r" (_1), __nolibc_hide3(__VA_ARGS__)
-+#define ___nolibc_hide_narg(_1, _2, _3, _4, N, ...) N
-+#define __nolibc_hide_narg(...)		___nolibc_hide_narg(__VA_ARGS__, 4, 3, 2, 1)
-+#define __nolibc_hide(N, ...)		__nolibc_hide##N(__VA_ARGS__)
-+#define __nolibc_hide_n(N, ...)		__nolibc_hide(N, __VA_ARGS__)
-+
-+/* Make the optimizer believe the variables can be manipulated arbitrarily. */
-+#define _NOLIBC_OPTIMIZER_HIDE_VAR(...)					\
-+	__asm__ ("" : __nolibc_hide_n(__nolibc_hide_narg(__VA_ARGS__),	\
-+				      __VA_ARGS__))
-  
-  #if __nolibc_has_feature(undefined_behavior_sanitizer)
-  #  if defined(__clang__)
-
--- 
-Ammar Faizi
-
+Thanks,
+Karl
