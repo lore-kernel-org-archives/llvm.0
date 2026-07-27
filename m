@@ -1,195 +1,217 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CB12F8EA5;
-	Mon, 27 Jul 2026 14:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C51C334C2E
+	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 14:15:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785161163; cv=none; b=L7+M0lHyRsLK+Cx5Xeo1kvqA0/DzG9Y8sgCiDiuEjn3rrZJcYI3dQw9HCLyiURiqnchbtw1puv/SNTCUuhBaNQsD7ppFiWlW7Yaa+j/K/Tc4qiT2RwyFNV25Efy/VD4nToXgGshppTBpr5XQpOPRGIa1cb80P/gLoO7w0T6b5hY=
+	t=1785161715; cv=none; b=aVt9V2FIoxHcfjzqLyYslosxeae5HTgOGGpB9vJvxQJZz8yCUrLmyiz8Nr9VP1SdlW3shv5/BaafrKUEuMEmA6MYHj/DiKP+HJS86D/j+pT1Zq11ore+YiA2iryT7OBu9N9AH6NXS4YXa5v9IQCTSSyRzepWBA4dfpxjgK8Zwc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785161163; c=relaxed/simple;
-	bh=nPUesl3mFSTrx3xAZmt/puQaip42ElJrPvMDkkij+aM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kzn0ymwADGyLAb/PPgVcE8oPjAJnCvcquwNDjksi7eDeCrFZ3k7LIo33u4UJx8FlXufMo24F68PyQ1g4yBpTO3yYXuvkaI63x7lCt8jj+sRR0Xq2twe58MBWhfCFT3DCbSv643IzSxRozUT5BtSCwNqGFXEbmvm4x7wCXhzswP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mHUGLzI8; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1785161715; c=relaxed/simple;
+	bh=Uyoxg0VngG1eblhnsxq/0sNeZxIxf2r+M6vCgv3jgbo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=idXSeqg9zIxF57jJDnBgDq2TdnzOxjH09f8gr9cqNWgkH3hwp5J7qqF6spHxTKpWCQkwG9DCqJ6wuPMZJzKojHYihC1h32IopR9kwjSf0gzT5xOMYHJEIaQpwo0jvQfGvi6phtxKkV2MxmS6v6L7eCAaMUqdVYGh0PGlGAQQbf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IDD+Vti6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mHUGLzI8"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 66RDnevM2412527;
-	Mon, 27 Jul 2026 14:05:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=nc+wucjUOwacrswBE
-	ezmtQySPAR9e78ErAQlW+vqnBM=; b=mHUGLzI84V8P7QUPXcWUkKHPvQNN4de7k
-	xzUiUGa/1tyHVdDHpfSQgJvHceXv+yqw5dm53rrzLiOBgZpv8FU89pxWTK7Exa/Q
-	WMKG7jpT3Q5lQ76nQIZ6YtW7l7Rz0Jmy9EINpVkCfjU01bIBoRflh0JJ2hlQ9dFs
-	qWENs/Olc+aOeLu4RpJmoclxCbQhRPeIo91tO/hrNMG14SvfwBXfGEvyYNPSquNJ
-	nbzSMvc6yr46aAT0GZ6JplHhAyCHMpt5GhxnNtaC83JZ5GJ45D9UJyT0W58DwaPb
-	vzUyEjPBMFBrXXDLLjxAJXVexQ1p38D1dmh9rUfPaVSBa76SzKTMA==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fmuwcqygr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jul 2026 14:05:42 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 66RDubk5011123;
-	Mon, 27 Jul 2026 14:05:42 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fn9pg5f27-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jul 2026 14:05:41 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 66RE5bmk52625740
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 27 Jul 2026 14:05:38 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C8BB620084;
-	Mon, 27 Jul 2026 14:05:37 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7644720083;
-	Mon, 27 Jul 2026 14:05:37 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 27 Jul 2026 14:05:37 +0000 (GMT)
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
-        Juergen Christ <jchrist@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Dominik Steenken <dost@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Maxim Khmelevskii <max@linux.ibm.com>,
-        Jens Remus <jremus@linux.ibm.com>,
-        Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: llvm@lists.linux.dev, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] s390/Kconfig: Select ARCH_SUPPORTS_CFI
-Date: Mon, 27 Jul 2026 16:05:13 +0200
-Message-ID: <20260727140514.116501-7-hca@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260727140514.116501-1-hca@linux.ibm.com>
-References: <20260727140514.116501-1-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IDD+Vti6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF141F01559
+	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 14:15:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785161713;
+	bh=5bBuDYxkCou9htY5z2TUBhK6y1aRMfiXwIPI1z4yTEg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=IDD+Vti6B54GcAhYdWKlF6xLNU6yzM3/k8qXv0J5wuoxna7ochiKa49dDAOi3GLP8
+	 OtrkEs0xVgUCzvMbWFG4kf767vfQtcDPatRAH0Dz9Kcnak+gYgoOWJNi2o0D/gwhAV
+	 9t6PHxeXQLqGyuRHmAp/SPeJmm9BxkKmcFJgPkRyY010xhbQVFtdCCK7TaMmKgT4+C
+	 R2pXoLeqZAU5HrUSjYs1LrbLB7gezWW8lYskjVazXGAXeNTJzhr+ygg2Ztoi8a//Qs
+	 hveEyrTDde8RFeluQkh5UtpfnyBJyJiUACIAbOcAEBri32uZUF14x5rpmE4HW5kM2F
+	 n+M5aXfvFepdA==
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-69f2c67650aso4266335a12.2
+        for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 07:15:12 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RqDLGUev/9K8oXchc9KmJMURsYL1ptZ46Ychd65IJAY2FyMwUE5n+kO9J6yKOQdLBFoUuZo@lists.linux.dev
+X-Gm-Message-State: AOJu0YxH8tO0jSlH5zXVRvXac4UV+G54Tgf9X1eHzQqgD93YIoBXV0N5
+	FMx1eMEGJdw1h1RRxQOZ6vCwKJUREGmen3dlan04og8E0By0kWxI8t+b+1jWW5UBcsaT9Em0liZ
+	YwEmXwDkoPkQ7IFNdUXFjg5tOkEQnNiY=
+X-Received: by 2002:a05:6402:51ca:b0:69f:2c1d:d821 with SMTP id
+ 4fb4d7f45d1cf-69fc116f808mr3787084a12.35.1785161711450; Mon, 27 Jul 2026
+ 07:15:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: g5w9kKXPPL_mJe3ikFxCv1T0ZdfSx7Uy
-X-Proofpoint-Spam-Info: AW1haW4tMjYwNzI3MDEzMiBTYWx0ZWRfX+RotPxjuDric
- +2qLLpRMhmzijdK/2NnJiz8NSA09+lv40oZ01fohSLg3W0uQdCLkxcD3kMxtx8GHT/7mmKA6zTq
- Y5Viof0y+ceDjgUUof9dmeopmx7qLQ0=
-X-Authority-Analysis: v=2.4 cv=E/z9Y6dl c=1 sm=1 tr=0 ts=6a6765b7 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=RAioF0-LDSMA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=RzCfie-kr_QcCd8fBx8p:22 a=VnNF1IyMAAAA:8 a=qhuSvAhk5ZVRJEhCuTsA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwNzI3MDEzMiBTYWx0ZWRfX82l8NH4Rzv+4
- Tig4QUpeXZgusmt2k0BlxlT4jvINtts+q+RVlkndKYysbQMKV8IX004tOYoUTIaBeWPk0o9aISB
- LPQjFxI5Q5LU80NXfFvLjtuHl7KLOrMDgFNQwA5bFhrektx+zhg2oZirXYqcdqO2/X/vKGBTUr9
- 9uoFbm9UA5a92H8P/Sl1FiyUx7H8OIYTSXYtQHaDbCYM4fqIkIZtHvdSFXXzwzEyIG36eWXZKf5
- 1EsXQmIfhQ2H5jjjvmk0W6UPikCxQ4VQ3bOqyr7joFH6KcCZTUDMxE5nsPGJbCU6hUc4g3vkT2k
- KFv4gd9aotXv8RixOPYAPrXeVTJlkjwP2Xi+g/i8C+px3vQi9eH569k4UipxGy7ZyiueSPzPx1o
- /4chAYK2VxMsa0wWJNUE2uqdcyN2P1QZaaMcMJ0rJ3PMPgQrk4sM8nG1AS7A5b2F+MxSlyHk095
- qpdBM9MM6cbi8kQo79Q==
-X-Proofpoint-GUID: D1blFMAAOvY_Z4U4DEWagJ7CsHeiG_yE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-07-27_04,2026-07-24_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- adultscore=0 priorityscore=1501 spamscore=0 clxscore=1015 phishscore=0
- lowpriorityscore=0 bulkscore=0 malwarescore=0 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2607270132
+References: <20260724114128.31451-1-dongtai.guo@linux.dev>
+In-Reply-To: <20260724114128.31451-1-dongtai.guo@linux.dev>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 27 Jul 2026 22:15:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7=WxEov9S3TTMxd1GORov-0dtuRWTgFH-B31teXpVNQw@mail.gmail.com>
+X-Gm-Features: AUfX_mzFw-Ljy9Z5wQ5sfW9LGBkrPdKlUKDzxIUYfv0QustQ-NnObo9gN15ufjA
+Message-ID: <CAAhV-H7=WxEov9S3TTMxd1GORov-0dtuRWTgFH-B31teXpVNQw@mail.gmail.com>
+Subject: Re: [PATCH v4 00/14] LoongArch: Add livepatch build (KLP) support
+To: George Guo <dongtai.guo@linux.dev>
+Cc: jpoimboe@kernel.org, peterz@infradead.org, jikos@kernel.org, 
+	mbenes@suse.cz, pmladek@suse.com, kernel@xen0n.name, joe.lawrence@redhat.com, 
+	rostedt@goodmis.org, ardb@kernel.org, nathan@kernel.org, 
+	nick.desaulniers+lkml@gmail.com, yangtiezhu@loongson.cn, 
+	jiaxun.yang@flygoat.com, wangrui@loongson.cn, liukexin@kylinos.cn, 
+	guodongtai@kylinos.cn, xry111@xry111.site, wangyuli@aosc.io, 
+	loongarch@lists.linux.dev, live-patching@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-With all prerequisites in place select ARCH_SUPPORTS_CFI.
+Hi, George,
 
-Note that this support is supposed to work with the generic kCFI support
-which is provided by clang. This comes with a couple of limitations:
+On Fri, Jul 24, 2026 at 7:41=E2=80=AFPM George Guo <dongtai.guo@linux.dev> =
+wrote:
+>
+> This series adds LoongArch support for the klp-build livepatch tooling,
+> enabling automated livepatch module generation using objtool on
+> LoongArch.
+>
+> It is based on Josh Poimboeuf's klp-build series [1] (see base-commit
+> below, unchanged from v1-v3) and extends it with the LoongArch-specific
+> objtool and build pieces, plus the toolchain and relocation fixes
+> required to make livepatch modules load, generate, and run correctly
+> under both GCC and Clang.
+>
+> Collaboration
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> Patch 1 ("objtool/LoongArch: Add arch_adjusted_addend() for KLP support")
+> and patch 7 ("LoongArch: Add livepatch build (KLP) support") overlap with
+> WangYuli's earlier LoongArch KLP work [2]. Both now carry
+> Co-developed-by/Signed-off-by: WangYuli.
+>
+> WangYuli, please check that the attribution is recorded correctly. If you
+> consider any other patch in this series to overlap your work, point it ou=
+t
+> and I will add the tags in the final version.
+>
+> Overview
+> =3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  - Patches 1-8: the LoongArch objtool hooks, special-section marking
+>    (including the inline ALTERNATIVE() replacement), the combined
+>    -fPIC / -mno-direct-extern-access build fix, EFI linking, the syscall
+>    patching macro, and wiring up LoongArch klp-build.
+>  - Patches 9-14: objtool/klp-diff fixes found by running the full
+>    klp-build flow under GCC and Clang.
+>
+> Testing
+> =3D=3D=3D=3D=3D=3D=3D
+>
+> The klp-build integration tests were run on LoongArch under both GCC and
+> Clang: cmdline-string, proc-version, data-new, gcc-static-local-var-6,
+> syscall, new-globals, new-function, and shadow-newpid. All of them now
+> generate a livepatch module, load it, and run.
+>
+> new-function and shadow-newpid did not build under Clang before this
+> version; the new objtool/klp-diff patches fix the Clang-specific
+> failures the suite surfaced. Joe Lawrence's test case was also
+> reproduced end to end on a Clang-built kernel in a VM (patch load,
+> tracepoint toggle, clean unload).
+>
+> Changes since v3 [3]
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+>  - Merged the two build-flag patches (-mno-direct-extern-access and
+>    -fPIC) into one. The combined patch is one complete thought: for
+>    LoongArch KLP builds, replace the arch's KBUILD_CFLAGS_KERNEL (droppin=
+g
+>    -fPIE and -mdirect-extern-access) and add -fPIC via KCFLAGS. (Joe
+>    Lawrence)
+>  - Moved the LoongArch config checks (CONFIG_RELOCATABLE,
+>    CONFIG_AS_HAS_EXPLICIT_RELOCS) into validate_config(). (Joe Lawrence)
+>  - Patch 4 (EFI): fixed the changelog wording and added the
+>    "/* from the EFI stub */" comment on the wildcard, matching arm64 and
+>    riscv. (Joe Lawrence)
+>  - Patch 6 (syscall macro): pad the line continuations with tabs. (Joe
+>    Lawrence)
+>  - New patch 12: enable inline ALTERNATIVE() cloning. Joe hit
+>    "can't find new instruction" livepatching a function that contains an
+>    ALTERNATIVE(). Mark the .subsection 1 replacement with
+>    ANNOTATE_DATA_SPECIAL (patch 2) and define ARCH_HAS_INLINE_ALTS for
+>    LoongArch objtool (patch 12), mirroring arm64. (Joe Lawrence)
+>  - New patch 13: keep the tablejump annotation table entries. klp-diff
+>    dropped the table-side word of each .discard.tablejump_annotate pair,
+>    which crashed objtool on the patch module.
+>  - New patch 14: rewrite PC-relative data references to GOT. File-local
+>    static data uses a direct pcalau12i/addi.d pair that cannot reach
+>    vmlinux from the far livepatch module; convert it to a GOT-indirect
+>    load when the klp relocation is created. This affects GCC and Clang.
+>
+> On patch 11 (fold paired ADD/SUB relocations): Clang's integrated
+> assembler emits the ADD64/SUB64 pair for a "sym - ." whose symbol is
+> undefined in the current object, where GAS with -mthin-add-sub emits a
+> single R_LARCH_64_PCREL. Reported to LLVM as issue #210052 [4]. The fold
+> is kept regardless, since shipping Clang emits the pair.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/lo=
+g/?h=3Dklp-build-arm64
+> [2] https://lore.kernel.org/loongarch/20251203091039.125259-1-wangyuli@ao=
+sc.io/
+> [3] https://lore.kernel.org/all/20260707072031.231066-1-dongtai.guo@linux=
+.dev/
+> [4] https://github.com/llvm/llvm-project/issues/210052
+>
+> George Guo (14):
+>   objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+>   LoongArch: Mark special sections for KLP support
+>   livepatch/klp-build: use -fPIC and drop direct-extern-access on
+>     LoongArch
+>   LoongArch: Fix EFI linking with -fdata-sections
+>   objtool/klp: Add LoongArch jump opcode bytes support
+>   klp-build: Add LoongArch syscall patching macro
+>   LoongArch: Add livepatch build (KLP) support
+>   LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+>   objtool/klp: Convert local label references
+>   objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label
+>     references
+>   objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
+>   objtool/LoongArch: Enable inline alternative cloning for KLP
+>   objtool/klp: Keep LoongArch tablejump annotation table entries
+>   objtool/klp: Rewrite PC-relative data references to GOT on LoongArch
 
-The generic kCFI implementation does not generate a .kcfi_traps section,
-nor is a special instruction used in case a checksum mismatch is detected.
+It is better to reorganize this series like this:
 
-This means in case of checksum mismatch the kernel just crashes. It should
-be quite easy to tell by the surrounding code that a crash happened because
-of a checksum mismatch.
+objtool/klp: Convert local label references
+objtool/klp: Fix ANNOTATE_DATA_SPECIAL parsing for local label references
+objtool/klp: Add LoongArch jump opcode bytes support
+objtool/klp: Fold LoongArch paired ADD/SUB relocations into PCREL
+objtool/klp: Keep LoongArch tablejump annotation table entries
+objtool/klp: Rewrite PC-relative data references to GOT on LoongArch
+objtool/LoongArch: Add arch_adjusted_addend() for KLP support
+objtool/LoongArch: Enable inline alternative cloning for KLP
+klp-build: use -fPIC and drop direct-extern-access on LoongArch
+klp-build: Add LoongArch syscall patching macro
+LoongArch: Mark special sections for KLP support
+LoongArch: Fix EFI linking with -fdata-sections
+LoongArch: Add livepatch build (KLP) support
+LoongArch: Select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+Huacai
 
-If clang and/or gcc provide a .kcfi_traps section it will be possible to
-print proper CFI messages instead of just crashing the kernel (enable
-ARCH_USES_CFI_TRAPS).
-
-In addition this also means that CFI_PERMISSIVE does not work. Even if the
-option is selected the kernel will crash in case of checksum mismatch.
-
-However it seems to be acceptable to enable kCFI support to the kernel now
-even if it is not perfect. Later clang and gcc extensions are required to
-improve this.
-
-As of now a crash caused by a CFI failure looks like this:
-
-illegal operation: 0001 ilc:1 [#1]SMP
-Modules linked in: bpf_testmod(OE)
-CPU: 0 UID: 0 PID: 92 Comm: test_progs Tainted: G           OE       7.2.0-rc4-00021-gc35ed7a1ca22-dirty #3 PREEMPTLAZY
-Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-Hardware name: IBM 3931 A01 703 (KVM/Linux)
-Krnl PSW : 0704e00180000000 00000166d4853a0a (bpf_task_work_callback+0x176/0x290)
-           R:0 T:1 IO:1 EX:1 Key:0 M:1 W:0 P:0 AS:3 CC:2 PM:0 RI:0 EA:3
-Krnl GPRS: 0400000069b02e96 000001665471856c 0000000084dc1000 000000008084da58
-           000000008084da60 000000005ff492bf 0000000000000000 00000000809de300
-           fffffffffff7ffff 00000000000a0337 00000000809e4d00 000000008437b100
-           00000000801bc288 00000000801bc280 00000166d48538fc 000000e6d502ba90
-Krnl Code: 00000166d48539fa: e320c0400004       lg      %r2,64(%r12)
-           00000166d4853a00: e340c0480004       lg      %r4,72(%r12)
-          *00000166d4853a06: a7640001           brc     6,00000166d4853a08
-          >00000166d4853a0a: 0de1               basr    %r14,%r1
-           00000166d4853a0c: e300b6580095       llh     %r0,1624(%r11)
-           00000166d4853a12: ec040009027e       cij     %r0,2,4,00000166d4853a24
-           00000166d4853a18: a70affff           ahi     %r0,-1
-           00000166d4853a1c: 4000b658           sth     %r0,1624(%r11)
-Call Trace:
- [<00000166d4853a0a>] bpf_task_work_callback+0x176/0x290
-...
-
-The disassembly contains the brc instruction (branch into the instruction
-itself with two byte offset to execute an illegal instruction, and the
-following basr instruction used for an indirect branch.
-
-Reviewed-by: Jens Remus <jremus@linux.ibm.com>
-Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
----
- arch/s390/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
-index 84404e6778d5..ec96595cae39 100644
---- a/arch/s390/Kconfig
-+++ b/arch/s390/Kconfig
-@@ -144,6 +144,7 @@ config S390
- 	select ARCH_MHP_MEMMAP_ON_MEMORY_ENABLE
- 	select ARCH_STACKWALK
- 	select ARCH_SUPPORTS_ATOMIC_RMW
-+	select ARCH_SUPPORTS_CFI
- 	select ARCH_SUPPORTS_DEBUG_PAGEALLOC
- 	select ARCH_SUPPORTS_HUGETLBFS
- 	select ARCH_SUPPORTS_INT128 if CC_HAS_INT128 && CC_IS_CLANG
-@@ -151,6 +152,7 @@ config S390
- 	select ARCH_SUPPORTS_NUMA_BALANCING
- 	select ARCH_SUPPORTS_PAGE_TABLE_CHECK
- 	select ARCH_SUPPORTS_PER_VMA_LOCK
-+	select ARCH_USES_CFI_GENERIC_LLVM_PASS if CC_IS_CLANG
- 	select ARCH_USE_BUILTIN_BSWAP
- 	select ARCH_USE_CMPXCHG_LOCKREF
- 	select ARCH_USE_SYM_ANNOTATIONS
--- 
-2.53.0
-
+>
+>  arch/loongarch/Kconfig                        |   2 +
+>  arch/loongarch/include/asm/alternative-asm.h  |  10 +-
+>  arch/loongarch/include/asm/alternative.h      |  11 +-
+>  arch/loongarch/include/asm/asm-extable.h      |  10 +-
+>  arch/loongarch/include/asm/bug.h              |   1 +
+>  arch/loongarch/include/asm/jump_label.h       |   2 +
+>  arch/loongarch/kernel/asm-offsets.c           |  18 ++
+>  arch/loongarch/kernel/vmlinux.lds.S           |   2 +-
+>  include/linux/livepatch_helpers.h             |  22 ++
+>  scripts/livepatch/klp-build                   |  43 +++-
+>  tools/arch/loongarch/include/asm/inst.h       |  11 +
+>  tools/objtool/Makefile                        |   3 +-
+>  tools/objtool/arch/loongarch/decode.c         | 212 ++++++++++++++++++
+>  .../objtool/arch/loongarch/include/arch/elf.h |  35 +++
+>  tools/objtool/klp-diff.c                      | 105 ++++++++-
+>  15 files changed, 473 insertions(+), 14 deletions(-)
+>
+>
+> base-commit: 85afaba140a4b9f20fe8c8a64b24fc85f022d981
+> --
+> 2.53.0
+>
