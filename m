@@ -1,177 +1,138 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2163DDAF7
-	for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 07:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9961823393B;
+	Mon, 27 Jul 2026 08:06:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785137543; cv=none; b=uShNyEDQOxtQ8MK1y0FqgK0ykxhZZXa2d0rjcCnKwLioloxrk7rg7+m5+Dmb8t+c9kNLW2JbNklzNa4MY+IJVKuFGhwcfkiqe/hLyQMhB1J/OqVnSL9KXEi50j3uA1g4N16J8bXO60cp1Qg36efUTct3UdbExBsEMLYUGSxJcAc=
+	t=1785139614; cv=none; b=Y64Sb9T+GK0bzi+erHnVvWkX/LB+fzscJClfQ9hF3IOOnuHEO8RUq/pvodU8onudslZgX+TGbbSDJy8/+VrutzDDYy/a5leyHehNqvHHQiDSsqyr8+kYIDj7Lafwq+PgoGNnqkBlepm7E2jM6Lf2/beayWylXlnY6HU7q3sgZuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785137543; c=relaxed/simple;
-	bh=AhaZ2ac8oEimySxpNjIfoYtWcC/kc92M7RxeTjSTuOs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HmY9Lwu+QN/Dbg0xia86QBhoYdHNNEK3em3Wkz1Zpic2UwFWfbzqwBzUD1hBXV1YOPKuLhqdd7/r+sDn/YK4yxnjPN6ejA/hymUKm9dwgSzyM4O3aYbpxsFOPtsu1zhXUwfmpk1IsnOAGi/6i4K3HSPcpBFgljanbESUx7Uqmk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQkJnqys; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785139614; c=relaxed/simple;
+	bh=KnU0D/LiroEaALd+3d0b3S9nheiF6IAaanFOXkI4ehc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=egxT5rv9awShCRuUCv85ji0BaV8mq8QSxagDQHoUeWsT4q3lz64fF0yHCBel/bqKA5Xi//H6ikcl0UavTujn/7VPbhJTW6V2m4Oe0roE9NMMPRzaP2kR7DNfpkLTV74DfryMCppJ6K6+Ujim0cz2q77ybMlMgQhkE9IVEb6vV0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dNR1IUIc; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQkJnqys"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4954aff6088so19883945e9.3
-        for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 00:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785137540; x=1785742340; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=yOW/nYL4to09ZFRK9TrJFYsB5lOpHRRLHeRIsAezmMY=;
-        b=YQkJnqysgs0K+L9VYk2Dl1lX1rzjUrlkH3uGVEg6+Upy4zmdGuIF0lH2npGfCtS7Dm
-         TKFrt7dPJJt4yc2UTGCKufu3RqQxHuDZUq7jFG9ESCgCnDVVbIS0ZnuouZWiePO+2Ewl
-         R3kVcR3QQErLkfd0l6NNGWxC7ukzVpYsrE892GgZTusizF5gU5WuGwchnmiMM/3HL4vD
-         T+4D6FRiIW+iknzbrPSKOxutOZRRk8/vU8KmqZc3Atsv6KPwRdIA1hdPzJbctgKIAZuT
-         UqP+s7tHe1bjMaQ5fLPwUPpQXrdeTR4cCC6D9yjKx/wbyV5GDH2HzgnydG+m9DO8drug
-         OxBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785137540; x=1785742340;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=yOW/nYL4to09ZFRK9TrJFYsB5lOpHRRLHeRIsAezmMY=;
-        b=aD8eJzhJVo49rR5tDDwXuf+o4LQvT86rpSmv9MrynGQ8Lb06cCnvqcZmC2tm6VZ3NB
-         weY6uIEuhmpIcPa6aAPmBlBu4jc7KzehbaejdcFx1Z7ZsrOeV4DLEislNzXQz9pOTXcS
-         GXVcFL4z0P9JoTDJRA+dXNkuK4spcWLM1+66qG3OhKWypECRqIdqMBb3x/5XWUNgcxAv
-         /kvEVcq/GLNMjJIAfBHSiUgOj1Qdaf2qB24ynUGOAFaR9XSTbs2iqDtlbqSTA3QcgrW+
-         ecXnK6Zhk7BDIllE77y/9NZws7zyfikwvwP7XuMJmNLMiT3vR0JyPxdxr6eaTuI1+J74
-         buTg==
-X-Forwarded-Encrypted: i=1; AHgh+Rp1IRSu31KQoxgo93ujE21gRSXRJfPIqE8ckJPxsuN/QXEONTkSxRfUvhYD2GHu2l68cwC6@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy67Pr8KbOFZYNv9n5GFJeY9t6itsVSDG4sPRY0zR90LqcmjLst
-	SbOmIn0cChU2mPHtvxwsRFC3cVupdkqQgPtUqEnwdyes196zPCIFSxqW
-X-Gm-Gg: AR+sD121EuGB2ZMwWuUF0xjFVIu5IuNhWJorkSv0j4u9M3t2VnfMHJ8SLGhZgPgp7+m
-	xanJZCDZ9YW083M3GMcTZjh0hFeFzwjdfHAecgytEPTeA3OTMTdodpaFj5ckqmGuuP2ZqAEZn5k
-	5YpNDubXqS9kQwnPaDxj91VOTm6tid9wAE8g4aSPEL0zs5qv/5wSHf7XGnD3AC2sh8Ibe3Nl8PK
-	8mbS1yWSA7DJDlEJnwMi2jS9GV2m/jEG4uw/qvHHqhiqEnXjo1LrzKQgo1uvpCZv/I4loqeAi9h
-	HM/nGuKHWeDI6Dn4761ECKZDFSfU6ESswQzi7Sf1EVCpE6bgwV63ix+nAshvrcR2OZLNz6Wo8zV
-	VM4cmjDymBvtI3E5UrfJY6zlPXxk/i3XckSOS3z23lqfG9tRC+Gu/bhJA2zlLbF1RSr3xpcs9YK
-	qQu0cpYzx3/U8AZkblXunzS6TMuGGdWYu6JI9c7r0=
-X-Received: by 2002:a05:600c:3586:b0:496:bffb:fb7b with SMTP id 5b1f17b1804b1-496bffbfc25mr23100895e9.10.1785137539393;
-        Mon, 27 Jul 2026 00:32:19 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-496b4ee1d31sm219425825e9.5.2026.07.27.00.32.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 27 Jul 2026 00:32:18 -0700 (PDT)
-Date: Mon, 27 Jul 2026 08:32:12 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Ammar Faizi <ammarfaizi2@openresty.com>, Thomas =?UTF-8?B?V2Vpw59zY2h1?=
- =?UTF-8?B?aA==?= <linux@weissschuh.net>, Linux Kernel Mailing List
- <linux-kernel@vger.kernel.org>, Linux Kselftest Mailing List
- <linux-kselftest@vger.kernel.org>, LLVM Mailing List
- <llvm@lists.linux.dev>, Yichun Zhang <yichun@openresty.com>, Alviro
- Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan
- <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, gwml@gnuweeb.org
-Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in
- abs() and friends
-Message-ID: <20260727083212.223cb1ae@pumpkin>
-In-Reply-To: <amYvRyLKZzEsFyq9@1wt.eu>
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
-	<20260726101306.3772237-3-ammarfaizi2@openresty.com>
-	<20260726151334.4c1ec6f1@pumpkin>
-	<amYvRyLKZzEsFyq9@1wt.eu>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dNR1IUIc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785139611; x=1816675611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KnU0D/LiroEaALd+3d0b3S9nheiF6IAaanFOXkI4ehc=;
+  b=dNR1IUIcGjqPluL6K7GT/lsgnn26R7KzMyJJrbqFJhtz8P9hUzAqLgv3
+   xk4Jd59BhLiGimuyIBYK2w4+gG38VFLwYEWKJY60kA1oriGdYkOFLXz2Y
+   pjmCtQf8Z0gIECOnnw0ewJZyN+KBUtOK+gvvDbwtj8YpVjItEer9dkS9J
+   ht1IG4k/+9DTlEhZmvEMeRL6niZYjMiq+O7wHlV20qeHEskIpFoney3bF
+   iXQXbL479dRU8nwcO8yYKEwBItJTORXTQWWAD8+r4Nu9WElsylxAyeWaN
+   uooZyFtkL7kkSiKrMe+tpmCGeC5jA5pT+AOHXJM3A3ZRF7lx5VSwM87F9
+   A==;
+X-CSE-ConnectionGUID: kgAOpWQcR0OsV3JBj9zDzQ==
+X-CSE-MsgGUID: y5C7FgPgRPup+90JziahxQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11857"; a="89526921"
+X-IronPort-AV: E=Sophos;i="6.25,188,1779174000"; 
+   d="scan'208";a="89526921"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 01:06:50 -0700
+X-CSE-ConnectionGUID: AXbDLOhyQtmBf/KFE0UOwA==
+X-CSE-MsgGUID: rxkjCoCgTg+tR2ivBWo7IQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,188,1779174000"; 
+   d="scan'208";a="259412904"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by orviesa007.jf.intel.com with ESMTP; 27 Jul 2026 01:06:48 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1woGMH-000000001Y2-3J6W;
+	Mon, 27 Jul 2026 08:06:45 +0000
+Date: Mon, 27 Jul 2026 10:06:13 +0200
+From: kernel test robot <lkp@intel.com>
+To: jipinghuang <jipihuan@qti.qualcomm.com>, rafael@kernel.org,
+	daniel.lezcano@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jipinghuang <jipihuan@qti.qualcomm.com>
+Subject: Re: [PATCH] Fixed a bug related to thermal framework boundary
+ conditions: trip points do not need to be updated when polling is active,
+ whereas they must be update to re-enable the irq when polling is inactive
+Message-ID: <202607271050.J6ZhMOwT-lkp@intel.com>
+References: <20260727035037.554303-1-jipihuan@qti.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260727035037.554303-1-jipihuan@qti.qualcomm.com>
 
-On Sun, 26 Jul 2026 18:01:11 +0200
-Willy Tarreau <w@1wt.eu> wrote:
+Hi jipinghuang,
 
-> On Sun, Jul 26, 2026 at 03:13:34PM +0100, David Laight wrote:
-> > On Sun, 26 Jul 2026 17:13:03 +0700
-> > Ammar Faizi <ammarfaizi2@openresty.com> wrote:
-> >   
-> > > Negating the smallest negative value of a signed type overflows, which
-> > > is undefined behavior. The selftests are built with:
-> > > 
-> > >     -fsanitize=undefined -fsanitize-trap=all
-> > > 
-> > > so a caller passing INT_MIN does not merely get an unspecified answer,
-> > > it dies (on both x86-64 and i386):
-> > > 
-> > >     A simple test program:
-> > > 
-> > >       printf("x = %d\n", abs(INT_MIN));
-> > > 
-> > >     $ ./ab
-> > >     Illegal instruction (core dumped)
-> > > 
-> > >     (gdb) bt
-> > >     #0  0x0000000000401009 in main ()
-> > >     (gdb) x/6i main
-> > >        0x401000 <main>:     mov    $0x80000000,%eax
-> > >        0x401005 <main+5>:   neg    %eax
-> > >        0x401007 <main+7>:   jno    0x40100b <main+11>  
-> > >     => 0x401009 <main+9>:   ud2    
-> > >        0x40100b <main+11>:  push   %rax
-> > >        0x40100c <main+12>:  mov    $0x80000000,%esi
-> > > 
-> > > Negate in the corresponding unsigned type instead. The value still
-> > > cannot be represented in the result type, so the minimum is returned
-> > > unchanged.
-> > > 
-> > > Cc: Yichun Zhang <yichun@openresty.com>
-> > > Cc: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> > > Fixes: bf5e8a78bede ("tools/nolibc: add abs() and friends")
-> > > Signed-off-by: Ammar Faizi <ammarfaizi2@openresty.com>
-> > > ---
-> > >  tools/include/nolibc/stdlib.h | 12 +++++++++---
-> > >  1 file changed, 9 insertions(+), 3 deletions(-)
-> > > 
-> > > diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-> > > index 1816c2368b68..8d86044f759f 100644
-> > > --- a/tools/include/nolibc/stdlib.h
-> > > +++ b/tools/include/nolibc/stdlib.h
-> > > @@ -32,22 +32,28 @@ static __attribute__((unused)) char itoa_buffer[21];
-> > >   * As much as possible, please keep functions alphabetically sorted.
-> > >   */
-> > >  
-> > > +/*
-> > > + * The absolute value of the smallest negative value is not representable in
-> > > + * the result type. Negate in the unsigned type so that the overflow is
-> > > + * defined and return it unchanged, like the other libcs do.
-> > > + */
-> > > +
-> > >  static __inline__
-> > >  int abs(int j)
-> > >  {
-> > > -	return j >= 0 ? j : -j;
-> > > +	return j >= 0 ? j : (int)-(unsigned int)j;  
-> > 
-> > An alternative expression is -(j + 1) - 1
-> > gcc (and I think clang) optimise it to just -j.  
-> 
-> This one would give -j -2,
+kernel test robot noticed the following build errors:
 
-Gah, I meant -(j + 1) + 1 :-(
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v7.2-rc5 next-20260726]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> but ~(j - 1) would work, just like
-> (~j + 1). However here the benefit of the casts in Ammar's
-> version is that it's obvious that it's only playing with same
-> size casts with no extra operation.
+url:    https://github.com/intel-lab-lkp/linux/commits/jipinghuang/Fixed-a-bug-related-to-thermal-framework-boundary-conditions-trip-points-do-not-need-to-be-updated-when-polling-is-activ/20260727-115235
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20260727035037.554303-1-jipihuan%40qti.qualcomm.com
+patch subject: [PATCH] Fixed a bug related to thermal framework boundary conditions: trip points do not need to be updated when polling is active, whereas they must be update to re-enable the irq when polling is inactive
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260727/202607271050.J6ZhMOwT-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260727/202607271050.J6ZhMOwT-lkp@intel.com/reproduce)
 
-They only work for 2s compliment.
-While that is normal (and required for the next? C version)
-it isn't actually required by C.
-(Not that gcc supports '1s compliment' or 'sign overpunch'.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607271050.J6ZhMOwT-lkp@intel.com/
 
-	David
+All errors (new ones prefixed by >>):
 
-> 
-> Willy
+>> drivers/thermal/thermal_trip.c:64:83: error: use of undeclared identifier 'trip_temp'
+      64 |         if (tz->prev_low_trip == low && tz->prev_high_trip == high && tz->temperature >= trip_temp)
+         |                                                                                          ^~~~~~~~~
+   1 error generated.
 
+
+vim +/trip_temp +64 drivers/thermal/thermal_trip.c
+
+    53	
+    54	void thermal_zone_set_trips(struct thermal_zone_device *tz, int low, int high)
+    55	{
+    56		int ret;
+    57	
+    58		lockdep_assert_held(&tz->lock);
+    59	
+    60		if (!tz->ops.set_trips)
+    61			return;
+    62	
+    63		/* No need to change trip points */
+  > 64		if (tz->prev_low_trip == low && tz->prev_high_trip == high && tz->temperature >= trip_temp)
+    65			return;
+    66	
+    67		tz->prev_low_trip = low;
+    68		tz->prev_high_trip = high;
+    69	
+    70		dev_dbg(&tz->device,
+    71			"new temperature boundaries: %d < x < %d\n", low, high);
+    72	
+    73		/*
+    74		 * Set a temperature window. When this window is left the driver
+    75		 * must inform the thermal core via thermal_zone_device_update.
+    76		 */
+    77		ret = tz->ops.set_trips(tz, low, high);
+    78		if (ret)
+    79			dev_err(&tz->device, "Failed to set trips: %d\n", ret);
+    80	}
+    81	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
