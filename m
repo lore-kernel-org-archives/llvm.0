@@ -1,68 +1,68 @@
 Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CACC3ACA40
-	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 12:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331033ACA6E
+	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 12:43:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785242590; cv=none; b=sxjFqNFY0voafUDlbJdLjAbkkp/KsGOZWX5Olq7l4h1E2C/QE8wXZ2dxbYMcJsn+E/7tb8yw88z3U4htP/SBI5vrvdXwKbbRERGmIvDRV5a79LxMR0g212Smb/65A91vn9aoGbhYzRqpgWJ9TOSYlvZyWcZGRrRSoSTo8hpQpN0=
+	t=1785242590; cv=none; b=El0I2vcXkTpHmj20hV3S2QLvRs9v+FIq6ycJl1y4bxHuXtkmD9uAQx7aQW4WRkdpjcV8Hw5Qp73y4hTiw7FoHAQnSiCkNAwqrfmMx1Gs9K3FM7e/ah8FqGDTzQmulD2sptiVKSYv6waz8pg68UfLlcXU6CxYeW4tdltdHNnbFuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785242590; c=relaxed/simple;
-	bh=+I542TCyEiR2dkdc/EjJMpQVyAenOURWCaveKVfQk5U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fdIwU7ZdyfGW7N/Z3HYXNmD58pfbcuXq44LHWjRgj/BOCt43LGqiOuMv1wuklnpt7ORl5Alwcj2tV2vci44FwmcVgHufYvY9cVaBJBGWnLkQlw8sEnCT+HvN+vccJeWvHQIbs6edE56/zaDMCSAR0EXEXFsyDKDnNLJdS49jjR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xYGhTbEi; arc=none smtp.client-ip=209.85.208.52
+	bh=RRAPtpAYKD4cfGwxNOC6QT4BUAvhWpgnDPyObJltgWs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=j1parsY4Neb+UHZW8YTuKNcbG9BWhdsxjGEXlaDJm0sPzQDSaULpVn63pcYmR1YmBIjXaZEZ/HqRPD60NGA/bCF+rXkfT7ddOpgN37w8bNoVkv+xxK3kGk8iOOUliH56rUuTbONA8lyAfyzGolT3D51pRm/5tzOKPruSNpv5PX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DxkToCtV; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xYGhTbEi"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6a02aedabadso1451508a12.1
-        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 05:43:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DxkToCtV"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-69fe400c14aso3970797a12.2
+        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 05:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1785242586; x=1785847386; darn=lists.linux.dev;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=fD4Ka0zrPbVAg4KYEq8UyY0zj2IasFwu7KBSI8jg6EM=;
-        b=xYGhTbEizxd8jGrVLav7FdlRDbfE4gVoLqm5WwRktmf8vdcfghO0bQewXgbbvoiU2c
-         /FlvIAMfdge78VS2c1jgbQC3a5SLzD/CEBArcL4JE+0JmoyN6c73ZZXKbcw9zfKjE1ju
-         aK99TxlXeWfbuxnv/RM8DckRS+8Xw1GE/L8FKRDYjFzMTQfa8cERCg+g3BG/UmvkQt5F
-         D3GkmbkYDJnfP9iLjrlbqlTNDRkUQW1p6k6QIsHIZV1CtHH8TI20+k91dn1lQv6PZHUo
-         zINMnP7ml3mZtm4FZi7XVElkCZrBtxPxahkiHL6iO+bByY0if5LUcAXMUwUD9OFpcAhd
-         jyXA==
+        d=linaro.org; s=google; t=1785242587; x=1785847387; darn=lists.linux.dev;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+/FdTYHBFIWgj2aIzUMsnbW+FrCu/VZ/kY6SILWA9Uc=;
+        b=DxkToCtV+f0nFApOp9CSoC/qNZee/Q/NC2X8q4jIKrG/lhz2DS86tjHSpZKYCmYrfl
+         4PT9abp/PU0RhruL+JT+QtrZZKKQRA9VmtczYgteyx6t2y+H1SGU4tzdITwvw7Dk5l2A
+         OCLp2QjB66iiFNLLzGAchMcijmdxEspsSJeBucE+WPXgC7X73+2Ub56I5C/0gTuIGK4i
+         nP/UTqz0rLzH1Z0VfMPxdg9NC+xSK1zbIqHl2KbrXuRybkKwQKmE7RAM8uBnFqJZuQ9O
+         Q2A+OUI6voLYmVCveLHxAoEGrL1d2mAa2QHN9i46cYABUvJSaF/W2ZcHOjcZ0cXvMPuJ
+         EqKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785242586; x=1785847386;
-        h=cc:to:content-transfer-encoding:content-type:mime-version
-         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=fD4Ka0zrPbVAg4KYEq8UyY0zj2IasFwu7KBSI8jg6EM=;
-        b=B2sQdaTsD1fWumONx22Nz7HjJj7YZdzwlVGq1NrvKgNN76n7iY0H81eyMoUKvlu73w
-         ZLK3fEpIdDd1I/pSYtz4GNZT4VKdUpV3p1ZfqO/ykh6CvlVWSFCYv2IxcVN8uHHq2OJ9
-         pSZ4wwVr8cKG5qxRM+LmQEkn31Sm+THuFOCjTVoD/JAgbeBY9ZYDXfmXV2ZDzOxHtq5h
-         VG0d1NYya+uFO6Tb+Z1H58EWETtwcek3nxg32P5qIKbdxlzlWtNUJFRZNiGNr/t387OC
-         uX2OjKPFQD9u46X+gUhco+kEjj8cqH6ifuH/axGjjJ34BJejzFd1J6stExzei678oyes
-         UHeg==
-X-Forwarded-Encrypted: i=1; AHgh+RpiidmPBq0MAgYIKAPH0DWkAy6hB5oQkHupHpyXKKghdeKoWL7cusY+2l1l3/LspE4XMOPM@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyj7goxlOrwSLKgYq8sTy/a+e1twkQhuwIiertJJxNKmDZnszJK
-	qkuYuBryA0KkW1/x8He+iLHVyHQ+ZrRVH5audPnXCzqJyNhls0/HxWVe55u9btbR3etAkELR65a
-	vQGvQL53GFg==
-X-Gm-Gg: AR+sD13z76GmDpWnkjr+Zi54Xect6PevgT6UYhs40vZ73G1+sxCs4PGQ2y/AaRFjjbA
-	B5A/CMoDPaksbhKmn/estiu6JERu8xSbqv6upW9XdGyh4AioCE6WHTNST7xNUGaVwK+Il+cZ2sE
-	P74vyCVfG96QHK3eBgM6h0qO5z/awCVnTVVlqUq9Fn9tIjPlYmE59OOjBH3OdHgKd356FfK89k3
-	7+MtghN5sfEJyunovLSklOG3dJRIk4yCCo0N9dhzKYU1uqc60sffuYA/4fFRDBOslE+bPhr2+mZ
-	bfswyRykNr5f/DVF+bLu8LZngNQeO1s1tyhme30p4Pa5oigshGss5rJlQxF4mZV2j9zhMgGIfTs
-	NwNE1OiP18PhZb7Klb+GaYVYfidyCjC7b4nzVCD/IQmS0CJL0g9DJs9xjTuZIPcOVQWgTS6DNIw
-	JrQdlazVmtE9rq0vSSqBKwfBvtNPHoNVr0ys6VN2ylU/5t4ttHyWKQV0b7tPk1nfT1kA==
-X-Received: by 2002:a17:907:d113:b0:c12:5e26:da50 with SMTP id a640c23a62f3a-c1f7223e43amr112857566b.65.1785242585774;
-        Tue, 28 Jul 2026 05:43:05 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785242587; x=1785847387;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :content-type:mime-version:subject:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=+/FdTYHBFIWgj2aIzUMsnbW+FrCu/VZ/kY6SILWA9Uc=;
+        b=c17C86/F8gEogW8sTEVp8/QFd5qD5gb75xFTOf4NyE66h/cEPwnPwWNw2d5XDpefLQ
+         hXoFszK3+06TL7jsTThxfKKnMOnLv2R6wZ2EvHwk43tJJ5CVsi/v3qrb0nX+U3Ku4Di4
+         2f8zPBxud1b6fOfIV4OKt6XOoc74KO0wXU6igBb2Ki+YkYxxCaEIMC+E4Xu6sdr3sE/0
+         BdtY6v5Tju0qCyu1r1m1UaPQtPpfCe2vn4oX3rrKZYLjocdKJyHx6eH+Z5lyzVE6bJUz
+         LGK6TfzuSjikz/prCKjD+AQluOC9jb8BsEB5vrwL5YKg1IcIOK05Kd9rWfpcMxynOeSW
+         6xBA==
+X-Forwarded-Encrypted: i=1; AHgh+RpBBFsKt6Gq5ZezrxbrWW7iOhVb9TO1Fa1cMBr1I+zFVq0pfpH3d93RlOXEtV/Ef2GSyIm9@lists.linux.dev
+X-Gm-Message-State: AOJu0YyEzmY5kuttfcj/+O5Xiah503WIysL98XYfsEZVz18KVdViCUgM
+	+tbeSQGR2e4c5oWt8y+aTJuMZgAkWPXM1R8isV1Ihowg9OgPaJ+UoMlBEJYSeaxDihU=
+X-Gm-Gg: AR+sD10o9lAUyDW6J58nWRqwqzAo2uq6jNt4PxErIl3ddlEiJIzSua2myms1dwnAm+P
+	QjdtqzdTIrFUkzA11ktDZoJTwfDHVPttBTfN5uYO0RZ1wsmoFy0d1NqdVCyfqJfXcCjb/YLj99f
+	78HOUktyOuhmJ1OFU3Y6Khhnzf0F3+niKkYGeM3Y2GX3C/MelMQNpejmfooE/POrAEf4pvQ04UB
+	cgcI4vu5/cDxf1hW8FUznIleeldBVXqyw6nbRl/WQr3DdJrAC4Tl+HTnyUlCvN1nGPJkAyPK4mc
+	4XzK1rh+qJ1KueJOxvK2b83agshJVHJYQobCAesS/A2irQkLQc4IxbNLvPrjdZWn9exjZICEUDU
+	7TNKVwTLFHTBEk5B2Nt5Qlf8cedcYG6z4OhabvDIWuTvoW6Df68hYyHbUaNuPX1fb9ooRpaQknc
+	TRZPtYNMb3G9EKdMQ5xV21w6QV8UMQR9gTLmFP7LVaKIgLr21xl1QOcun16y8+EO0vMg==
+X-Received: by 2002:a17:907:3f82:b0:c1c:208c:c04c with SMTP id a640c23a62f3a-c1f71e468ebmr108420166b.27.1785242587150;
+        Tue, 28 Jul 2026 05:43:07 -0700 (PDT)
 Received: from puffmais2.c.googlers.com (150.230.32.34.bc.googleusercontent.com. [34.32.230.150])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1c32c902d2sm745805766b.34.2026.07.28.05.43.04
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c1c32c902d2sm745805766b.34.2026.07.28.05.43.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jul 2026 05:43:04 -0700 (PDT)
+        Tue, 28 Jul 2026 05:43:05 -0700 (PDT)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Subject: [PATCH 0/2] kbuild: link-vmlinux.sh: more reliable 3rd pass
- linking
-Date: Tue, 28 Jul 2026 13:42:38 +0100
-Message-Id: <20260728-linux-kallsyms-fix-v1-0-1a665156c898@linaro.org>
+Date: Tue, 28 Jul 2026 13:42:39 +0100
+Subject: [PATCH 1/2] kallsyms: add symbol size for kallsyms symbols that
+ can change size
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,10 +71,9 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAL6jaGoC/x2MSQqAMAwAvyI5G9C6+xXx4JJqsFZpUBTx7xaPM
- zDzgJBjEqiDBxydLLxZD3EYwDB3diLk0TOoSOVRoUo0bI8Ll84YuVdBzRdWGWmdVn2R9Qn4cHf
- k9T9t2vf9AII7pq5kAAAA
-X-Change-ID: 20260728-linux-kallsyms-fix-95eff49b75b3
+Message-Id: <20260728-linux-kallsyms-fix-v1-1-1a665156c898@linaro.org>
+References: <20260728-linux-kallsyms-fix-v1-0-1a665156c898@linaro.org>
+In-Reply-To: <20260728-linux-kallsyms-fix-v1-0-1a665156c898@linaro.org>
 To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
  Nick Desaulniers <ndesaulniers@google.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
@@ -86,45 +85,65 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.14.3
 
-link-vmlinux.sh currently only uses the file size of
-.tmp_vmlinux?.kallsyms.o to determine if it needs to do a third pass. I
-was hitting a case where file size didn't change, but symbols changed
-sufficiently to still move subsequent symbols in vmlinux to invalidate
-kallsyms.
+Add symbol size for kallsyms symbols that can change size so that sizes
+can be determined easily without having to manually calculate them
+when inspecting the object files (.tmp_vmlinux?.kallsyms.o or
+.tmp_vmlinux?). Without, the assembler records the symbol size as 0.
 
-In particular kallsyms_names grew by one byte between
-.tmp_vmlinux1.kallsyms.o and .tmp_vmlinux2.kallsyms.o, moving the next
-symbol to the next alignment offset (4 bytes), moving many subsequent
-symbols in the final vmlinux image in turn (until abosrbed by further
-alignment instructions). This failed the final link with:
-
-    Inconsistent kallsyms data
-    Try "make KALLSYMS_EXTRA_PASS=1" as a workaround
-
-The two patches here are independent of each other:
-* Patch 2 in this series addresses the actual issue and also has a more
-  detailed explanation with exact failure case
-* Patch 1 could be omitted if deemed useless, but I found it useful
-  while debugging the issue. It just updates the kallsyms.c to instruct
-  the assembler to also emit symbol sizes.
-
-Cheers,
-Andre'
+This is primarily useful as a debugging aid in case of linker errors as
+part of link-vmlinux.sh, and because symbol size doesn't have to align
+with the offset to the next symbol due to padding/alignment.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
-André Draszik (2):
-      kallsyms: add symbol size for kallsyms symbols that can change size
-      kbuild: link-vmlinux.sh: improve detection of third pass requirement
 
- scripts/kallsyms.c      |  4 ++++
- scripts/link-vmlinux.sh | 20 +++++++++++++++++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
 ---
-base-commit: 0d33d21e47d9dc66f91e44da3fc9220c74d93df7
-change-id: 20260728-linux-kallsyms-fix-95eff49b75b3
+I've opted to only add this for symbols that can change between runs
+where relevant, in particular kallsyms_num_syms and
+kallsyms_token_index have a static size. While kallsyms_seqs_of_names
+depends on table_cnt, kallsyms_offsets does so as well, i.e. is covered
+already.
 
-Best regards,
+If you think for consistency just to do this for all symbols, please
+let me know.
+---
+ scripts/kallsyms.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 37d5c095ad22..494852ade6d8 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -398,11 +398,13 @@ static void write_src(void)
+ 		strcpy((char *)table[i]->sym, buf);
+ 		printf("\t/* %s */\n", table[i]->sym);
+ 	}
++	printf(".size kallsyms_names, . - kallsyms_names\n");
+ 	printf("\n");
+ 
+ 	output_label("kallsyms_markers");
+ 	for (i = 0; i < markers_cnt; i++)
+ 		printf("\t.long\t%u\n", markers[i]);
++	printf(".size kallsyms_markers, . - kallsyms_markers\n");
+ 	printf("\n");
+ 
+ 	free(markers);
+@@ -415,6 +417,7 @@ static void write_src(void)
+ 		printf("\t.asciz\t\"%s\"\n", buf);
+ 		off += strlen(buf) + 1;
+ 	}
++	printf(".size kallsyms_token_table, . - kallsyms_token_table\n");
+ 	printf("\n");
+ 
+ 	output_label("kallsyms_token_index");
+@@ -441,6 +444,7 @@ static void write_src(void)
+ 			       (unsigned int)table[i]->addr, table[i]->sym);
+ 		}
+ 	}
++	printf(".size kallsyms_offsets, . - kallsyms_offsets\n");
+ 	printf("\n");
+ 
+ 	sort_symbols_by_name();
+
 -- 
-André Draszik <andre.draszik@linaro.org>
+2.55.0.229.g6434b31f56-goog
 
