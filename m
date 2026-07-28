@@ -1,112 +1,117 @@
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 128D537BE6C
-	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 16:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785256647; cv=pass; b=r4+VaeQ8VhcxHS7t6O7v00FrwGfjVBkmDvMRhewkzZx+4HcF2fUS9N/t+5lU1TxQ2paAv9vxtvXVKKdTHzaHT0+J+Z9w3AZCYME/sxdHbNshdt6LweQ6o9/4+RMljvldGfGFqRhfmy2FDUiwQKfI/Idcn1Zd67uTUpwJu152TA8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785256647; c=relaxed/simple;
-	bh=e60hLNUfOHBXIsyuGgm6D2Ff7yg2lTBDzp9uEofiwDA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L2DbyjxSlSCFEcQxmpZfjDfpy6VXdHQzh6DCune/IC6kjO8YpW2WFh3LJftcHIDE8pC5Z8qzFwoHLGgiJoFaDBA3bBdoDB6uDxeCFrl/glB+k6jhFGs5eMiW7fTcjRhz6/UG15sk1fuTBGNoS990+anjztJNyw7l5zQAjtpj8qc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=QH+mvebw; arc=pass smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5A039021D
+	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 16:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785257608; cv=none; b=jfgNkrWUJx2BwXWJ/VLxyXrvsQz/1D9b+jdcD4oMgJwOwHZrQv3k8waXodH1c410YX52PScB9fWJ1z7ricreWFvaoUk3jKCRr9ovsSwv2lJHAh4UBTULLKPewo7pqS6cKF9EXT8o/PZ+HUb+T4Z0yE6XkDOsJWn06MFaNcRXPvc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785257608; c=relaxed/simple;
+	bh=kTJ8PG13VccAf/UnFEdjF6pIKkjG29SPsjujryYhJgo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fJbxHHxgbicGa09OoCCWW9aIZPBAmleYMY2dqF0yjTbbbAj3NIahiQ5jUdFNv5kuU9AN5Z+4JVrPeMpt9BTCfNAHtRt3A6MlDuwmYL9lQYeIdqQv8qiVkiztusiWqyma75qBzTwfWPo6OFdCzAhlFkqfBMpcqUcP/TPI/BB7qCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G2U6k4Qv; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="QH+mvebw"
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2cf6d65d8a7so1541075ad.0
-        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 09:37:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785256645; cv=none;
-        d=google.com; s=arc-20260327;
-        b=D/13JalkI3gitGsNm/vprHEKPEDkBcs/EUFRNMZMPJRhTPhLOn65DtaZMxtIiTVdYz
-         z5WaKcWa4b40yDaVckGMl2cv0t5N0T0WprZt/qoOFpXXX7eLkdgnSiA2oRxJuyLonHwe
-         JRN9ZvVK4e6sv3skItLSH84qoSOelE4u3Qs70K18eJ4F2K1LhGf7GMq9J5JtdkHSmnMd
-         feL4EAcEvehZMP/DNrs1oNlsKuS8qDpgvmJ3PYxS+F6vNBgj1DC7KmaroU+G4RyBEOW2
-         WCfMxGnosVt5ca/DRFUIbyAMCkrUB6jPvVu5b48pg46Pu6CO3Sm7IB4xAZsDjJbYPJ62
-         cr8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=e60hLNUfOHBXIsyuGgm6D2Ff7yg2lTBDzp9uEofiwDA=;
-        fh=2wQRjKR5BkirDZ+ZWfLcD8nZzuL/i8p7ipN0jyKdiUo=;
-        b=s6JBLTgUFRsncHbHI0a0npqQc6ybCuejXrUiN80y5GMrcxDJFmTSHvXC/3Cb/IHriY
-         IyBd+4bgGGm4fC+Z/ywqZjeizO6bYHlJyZnoW0ibsySbdpRnAEQWKws3K8hXnej0Td+9
-         kw73Z4ySR89TlKL/EkiAFIWx8Xd8YjE4zWh45z/WEcSBDd3zWfcR4Iw/tKz/hmjsndKE
-         NEYv7H5ILiO+VcSuoD4s3XmhPP6506lYXpjEPGnzT0D8AdhxSsHlfUEdQJC4E3Sv9YhG
-         80Z369YywcVOqI3ORurH+xMgeSpcCqa+nR2eHrhIGyweK4O7vjQsW0MQcCKiyj3qczjg
-         X6kw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G2U6k4Qv"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38511175ad3so21774a91.2
+        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 09:53:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785256645; x=1785861445; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=e60hLNUfOHBXIsyuGgm6D2Ff7yg2lTBDzp9uEofiwDA=;
-        b=QH+mvebwI48qwijtdHP7tbZK6U3agqtg/w72dbsGllLup4GdFcvMis8E5EjAZnYJ7u
-         VMd3pqXOmT1o+RjNpli0+IgnqJ6F1k2uuZq8W2uMnZlxqAVTrTubjH8DI0yUX7e5Mzb4
-         SjoEttybIQLVx4r1j0ZcLig09FbFAZxhrUSqNdWoG3pu9do0KFyZZ2xdOlLhdCFHRHw4
-         XUmvABJanw3T+4uMrTqixHWWXDG4n2GC5D6ho2Ee5+ijKyRVEonjX6JZTZ0c4v2qdPRC
-         lkTYmNvLjeqOrrebrrqCfub455z801eLXqViWr+J5Fpg1CfpZWTv3kEgyBCTVPjiX6e5
-         Wp6w==
+        d=gmail.com; s=20251104; t=1785257606; x=1785862406; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=HhYWZOa0HkN7WiWXxoj866N4nnOOceoPTUkPqNFCddo=;
+        b=G2U6k4QvFqiDZuh/qcs9dX2rvj8FA8h7E/PIFTPMitcrwnVsuryeMhyTJf0WhTkv9A
+         NofKKx14rUEel3dGKd5++nbIuVTGn69C+kw8DAENqBcYGTya4LcC51tB2yj1iTDCCWcc
+         yZbL2cTKd4gpG3z2WlCFEapENCGIUv9y2Mvmzd4wlCU8HZgXNJceArmDp660ySasee+Q
+         DDCerQkD+oPwXgu1MVkMtFgjrMCq9TDlBVAeDzf0w8FulXxUajC0kb9RAhh5fabl7lOO
+         BzKEV4AwePlS6kIbTYbR2EyUVsfKc65DXzg85za15fC3IcFNR60q6uB5IzF1Ruu32FpX
+         u9Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785256645; x=1785861445;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=e60hLNUfOHBXIsyuGgm6D2Ff7yg2lTBDzp9uEofiwDA=;
-        b=cfZG7QUCSdjzyohzk6hOYYjkd1JSp10xbMYYpXHxSVa+BLMbmoLRxF0W3i8sN4kZ3p
-         2dhBMeVIKXqJp/CRAgoHYLIy8DY764IPtjgcZ3vojIeCnZOo0Y7OI+cZKlzsL9VHzE7S
-         3BqFtT/DcWw4I92/Ow7+mP+5L1GRoTVN+oQwrrkVO1oIfXFnuDkjhD2JatUxEqdSdwNG
-         7w/jS9gYmXFqHHuh7m7JsliPy3i/DzJCO4xU81xSU1zKO2DNbrwZOjjtQnUArlCfSwsr
-         n0yuEGSt+sBM07d7Dv36Q6IaUdwfJLiPMFh+uSc4X8pshKs0QRbefj8TPY3pIfAv7vIl
-         3PXg==
-X-Forwarded-Encrypted: i=1; AHgh+RrlatbtCr7bnWHiKoXNszGMpOGz1GfLIc7q8Z7wYwTKJJkfG38hIkKg5R1u9EM3lC+ceiWf@lists.linux.dev
-X-Gm-Message-State: AOJu0YzppeVcCaGbR2++2CIQ6aSmi8Pu3GloPEMxKya5tT0IRu/YdSYO
-	L/i0sPIBfYrzbaUdWA6TdXe7EHjITy8a/OEcjSrTrDBde1ta9zXCYvISEWpwD8FvwSpfbJnC6Dl
-	tOi7SKIGhksb4CBq6iyDE1f68dHkCBJHKTQeNpB+s1w==
-X-Gm-Gg: AR+sD12Rm7Ofp7VTd11mvn8/fiNhp+qUaidTZvy63dy/om+BzPLj85ruybEq/dfydRe
-	HA6zKOprKknp9969wC1MESFDqa13p9xncr0XbrpqpBT7O8m86LrP4qZ3h72AZW9nAUMqiDIzd2H
-	q9SIvQA5VQa0gK9p8GuIh8Ko7IC4ssfw26tqpk2uSMKX+eCOuWKY4mYhBD5U6Ww2bQ4N8ReTOKY
-	faE83JzHKqjsBe4BA1hba2x5TyUfEq+PUY/7Y2+5rthh35DpH2qej2/ttSNSQQbELtGUbVgn8Pz
-	wqjFye4bx3grJ+Rl4DfC
-X-Received: by 2002:a17:902:f710:b0:2ca:a03a:29b2 with SMTP id
- d9443c01a7336-2d015c9c0c4mr43627675ad.8.1785256645434; Tue, 28 Jul 2026
- 09:37:25 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1785257606; x=1785862406;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=HhYWZOa0HkN7WiWXxoj866N4nnOOceoPTUkPqNFCddo=;
+        b=ju+PHbGbptsNuowsCX3ytrPimBGPxHG0+obk0DSdUIXAcaynfHPOBsQCJWCeP+8h27
+         1Ij/708f2OHC+DWUb4ExoUTl8Hx+YAZTvUABCLRkgcMP+aAHpH699A096pK9m6FJL5JG
+         poxMMDUQ5h1tinw1/S61OqBrgNmmbNUqEp3jEKPcE5J2JKOYd81j5gMpLgmvwLX1VDfr
+         pT44YDMhIICA7YVCgwXbntQfQwTQ/1uvN8Htae0JgIjeTVNKl7Dh+fIo2OvY11BDO1Gq
+         DyZ/I/FE1S+xcGN6jGIRu3+9+jftPgq2A6Ev7ENHlTFyphJZzXA9cv0QtLA06cH+WN3R
+         krvg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro/wvC2kpwtVYve+1KxImT/etkWxSMkXxYrgGE8594lIKgV42ye+NjH6bJk5c/wIW+zJTaf@lists.linux.dev
+X-Gm-Message-State: AOJu0YxogaVzOQvQcWFh884zUxC/DhFd4sHOBmOM6C++Iggb01nADCGH
+	kY6I4gq1CDPCREuWFX0MQaywwEks3ZL7Mfpsp/9YKBw+tmKAcJv0lI8y
+X-Gm-Gg: AR+sD1166S4h+HVxeRLSGIgWr6Ud5s6VBZzjukQfBRufdPVHeusKYvA4EhKLhXcZ6Lu
+	0P4qsJy/xEX/hBO8/Ggnrl1rAAomDezP/19ndU9QR83RU7aBTu9Vfyb5B/wNkeYc93XHnFXq2aX
+	K3rbdoEc1Vw+3Ep0j2/MW1LLAdw0XGiH3iDZy9I2E/3eYtOLfivI3C99124FSbj1I+8mcuQ//8h
+	qqzpzwNDvzzBXFMBxLylgi/Bt0OBgZczMAdpF8m4Y2ADbugcJo++F8wjt2w6dy/NZVcEFHMu8+r
+	nZlJL/rnDyiGSNb5tW18KYAu5ARDL+61uUDd2/op1QPiYZzQwOoJ4HxpeBwO3vLR3pYGnf3VdQ/
+	j9812XIPcYvUgVjUCq3XzXNSzZZzGyDwPauVK/WFYEUVzz35ltNtjdIFBvHrkbl7XY6mcgsQYJi
+	0EyEkhEDDyFpTyXz/XZlKFvMczvm/l62F3bvszET3Ig8ksw8GmGUozM0pPUhQ+WBQ3JEdPPopMh
+	i5f+bBKgjCC86/5nhylaFwpKzjDfpCtEsbm0Uazrwqz8hc=
+X-Received: by 2002:a17:90b:3886:b0:38e:8021:2ea9 with SMTP id 98e67ed59e1d1-38f6a36245dmr3663482a91.19.1785257606006;
+        Tue, 28 Jul 2026 09:53:26 -0700 (PDT)
+Received: from localhost.localdomain ([2405:acc0:1306:9d5b:e192:4a0c:2079:ffb7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504b15f77sm618980eec.4.2026.07.28.09.53.15
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 28 Jul 2026 09:53:25 -0700 (PDT)
+From: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+To: Sami Tolvanen <samitolvanen@google.com>,
+	Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] cfi: Ignore non-allocated module trap sections
+Date: Tue, 28 Jul 2026 22:38:04 +0545
+Message-ID: <20260728165304.56449-1-acharyalaxman8848@gmail.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
- <20260726101306.3772237-3-ammarfaizi2@openresty.com> <20260728094626.0fb1a467@pumpkin>
- <700de276-8949-4587-a853-935dc7c6433f@t-8ch.de>
-In-Reply-To: <700de276-8949-4587-a853-935dc7c6433f@t-8ch.de>
-From: Ammar Faizi <ammarfaizi2@openresty.com>
-Date: Tue, 28 Jul 2026 23:37:14 +0700
-X-Gm-Features: AUfX_mwWfHzpzL7Vmi1IA8MN2qfSLLCaLQx7BQcvXqsKNTbMGCEFSoHGZxrEbDU
-Message-ID: <CA+KFgX6899SdedfWrYD0aC0wfogjQ=-5C0D8mbGjxAeS8gOYyA@mail.gmail.com>
-Subject: Re: [PATCH 2/4] tools/nolibc: stdlib: avoid signed overflow in abs()
- and friends
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: David Laight <david.laight.linux@gmail.com>, Willy Tarreau <w@1wt.eu>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>, LLVM Mailing List <llvm@lists.linux.dev>, 
-	Yichun Zhang <yichun@openresty.com>, 
-	Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>, Shuah Khan <shuah@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, gwml@gnuweeb.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 28, 2026 at 11:31=E2=80=AFPM Thomas Wei=C3=9Fschuh wrote:
-> So I think we should keep the functions as they are.
+rewrite_section_headers() initially sets sh_addr for every section to its
+address in the temporary module image. Only SHF_ALLOC sections are later
+copied to module memory and have sh_addr updated.
 
-Okay, I'll drop the abs() related patches in the next version.
+module_cfi_finalize() accepts any section named __kcfi_traps. A malformed
+module can therefore leave mod->kcfi_traps pointing into the temporary
+image, which is freed after loading. A later CFI trap would then scan freed
+memory.
 
---=20
-Ammar Faizi
+Require the trap section to be allocated before retaining its address.
+Clang emits .kcfi_traps with SHF_ALLOC, so valid modules are unchanged.
+
+Fixes: 89245600941e ("cfi: Switch to -fsanitize=kcfi")
+Cc: stable@vger.kernel.org
+Signed-off-by: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+---
+ kernel/cfi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/cfi.c b/kernel/cfi.c
+index 4dad04ead06c..3ee67b723ab4 100644
+--- a/kernel/cfi.c
++++ b/kernel/cfi.c
+@@ -74,7 +74,8 @@ void module_cfi_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+ 	secstrings = (char *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+ 
+ 	for (i = 1; i < hdr->e_shnum; i++) {
+-		if (strcmp(secstrings + sechdrs[i].sh_name, "__kcfi_traps"))
++		if (strcmp(secstrings + sechdrs[i].sh_name, "__kcfi_traps") ||
++		    !(sechdrs[i].sh_flags & SHF_ALLOC))
+ 			continue;
+ 
+ 		mod->kcfi_traps = (s32 *)sechdrs[i].sh_addr;
+-- 
+2.51.2
+
