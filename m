@@ -1,80 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A1F37FF7A;
-	Mon, 27 Jul 2026 21:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24E912B9B7;
+	Tue, 28 Jul 2026 00:18:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785189001; cv=none; b=CRfiR3CwAW9uNLF7K1+fiUUJWG4Bop1QASblSwj8odnm08S1mNTjAJaADOBtTNMaUZdvxhtFzQG0rH9+0MukhZQdSmbIHOlhpS91y5ssnDRY2DBt7CtRPSxjy43vkjtyOXGUy8JiL1gmXf94Wvm4TRiq+gGQHOfakuOeFk2p0As=
+	t=1785197909; cv=none; b=pTwRtmWykj4q1fB6TjdyEBysMhI9w/huHknJKZawLHj0k+syD3x2kz2oNBDLwNXDvJXtyJ5DX8NKu20G6gGYOOWShyBUoYJUrBK7iC4zh4vX7iFOHaMMinorVD01x41eashfWxpi1GaytZ2hdVhTLEn4iqrfdtLYw8bwdNA3Iug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785189001; c=relaxed/simple;
-	bh=ZdnYkiMELaWqD42Ovbdv3F3kuvZwORX5M1d0YI894i0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=euFsEH9qlOs/4KPVC0zh3blBrpbkePf5vLptadh7OjPFGfZrbacsJzvEZ7RKArjnVX/HaMRx/Kp2wP9Uaj/Ai+wl7whk1oZtFM9Av1YskXJ1xt7t0Nw3wAUntVO/ucQgNoNI9Mb0lJD5F1thLR5njYOtGeOE0JZGQtzlxS4W6LA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVWTMr2c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785197909; c=relaxed/simple;
+	bh=1mRsYpISSnVCF6D+M/UKACIP6oDEl/yc1/eRE31qjXg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=AG1f4i9yZrMlRUU1kS47SrBmOnHgm8prG3f5/8dbb9Je4Dk4z3q/VDcdWGLDMupt1CkIDqOw/9D5K6LkKKLzUMGB7ABIVPaTJqf7ndL1YXTEEXyJyeMgSINVcr5E1Tds9lysFqm83FiT/JDSQF+3kM+h2/bz4XV7wl+tYz/wNbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bNq6V8xS; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVWTMr2c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D7541F000E9;
-	Mon, 27 Jul 2026 21:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785189000;
-	bh=rMfeYsP5GdnuDCfgJKEm3wwcc5Ecr2dv1YHRl9juiCI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YVWTMr2cX4ewrBWHXUcAbrlt/cYMv2t1rAY6OmzwAk0jxEusNqzHhIvI+IFi8gusK
-	 jeVo2x71CzuTqqbU9a+WJJEvzb73ShnQO3gqhTrXt7a2TPzCUTVkNh3hhVBylazW4/
-	 4CeRyCI/IFRdnNyAJZiu6XWl0fPPuPV/CAOpVXlO5mgkBjqTvlCxPdL58ayHHdjWJ5
-	 RjdQn+7QE6cmJ2wIBqxj7yx5OPwo/Ife3L3H08yQxcj+ptQNRXXCFsaXSPJmOUv/8M
-	 z+lqEfGJ6x5P9pMufpzSSTCyZsvQVy0wiah9b9n0VGDo1ovNXxn8YJv2O47SoUwgEy
-	 X3/tWKU4SI1CQ==
-Date: Mon, 27 Jul 2026 22:49:52 +0100
-From: Will Deacon <will@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Hongyan Xia <hongyan.xia@transsion.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>, Oleg Nesterov <oleg@redhat.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jiazi Li <jiazi.li@transsion.com>, Pu Hu <hupu@transsion.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [RFC PATCH 9/9] arm64/debug: Mark debug exception helpers
- __always_inline
-Message-ID: <amfSgECpzET7JHTr@willie-the-truck>
-References: <cover.1785153469.git.hongyan.xia@transsion.com>
- <eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
- <CAKwvOd=HeG=z1j2qB-SX3NQ=62ERr=KpQNZyqqp2Qy4kZ54RLw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bNq6V8xS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785197907; x=1816733907;
+  h=date:from:to:cc:subject:message-id;
+  bh=1mRsYpISSnVCF6D+M/UKACIP6oDEl/yc1/eRE31qjXg=;
+  b=bNq6V8xSY2dFFVyxRtGokZV72Gi4IaBSfb6yfcciAu/2YBuJ81nehGZZ
+   cY3R0X1YQv/3YNJVmQjYT2vdxMnUO45kc/i/SRBwZ2VAYTafnSCLrv6Va
+   +7N3wmujUJfBoiERsEXb/xYNYarMzMeFYY/RhLmaQ6WAmLObQsAhfkgrA
+   lGrL9BuBPSV2uZ81DlnrmB/3CglHkXfq+HuP0cPgFQHitb4M6M3dlHa0V
+   ZmjizTHS57yz7MSzvKxSdSYySDjNQ8KnLFPv5frMppgRraBiuK5K8rX2w
+   46aGQUB+m8JHfTvHGg4AQ0sxiM/HoiyWTKQSDYauCDYjkZYhCfoiUxgl7
+   w==;
+X-CSE-ConnectionGUID: C0E1IySkQsGneYObz8pL/g==
+X-CSE-MsgGUID: I1aw5q7/SyakvRBrqhtS1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11858"; a="111319392"
+X-IronPort-AV: E=Sophos;i="6.25,189,1779174000"; 
+   d="scan'208";a="111319392"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jul 2026 17:18:26 -0700
+X-CSE-ConnectionGUID: MLokgi5STLOJHTxu1bI+Ug==
+X-CSE-MsgGUID: Xu/VFChcQISv3cdMF1uH5A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,189,1779174000"; 
+   d="scan'208";a="263859221"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by orviesa005.jf.intel.com with ESMTP; 27 Jul 2026 17:18:24 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1woVWY-000000001ny-1C3S;
+	Tue, 28 Jul 2026 00:18:22 +0000
+Date: Tue, 28 Jul 2026 02:17:36 +0200
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@do-not-panic.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mcgrof:blk-iobuf-pool-v5 6/9] block/ioctl.c:958:8: error:
+ call to undeclared function 'blk_uring_cmd_alloc_iobuf'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202607280222.VZqM8mZL-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKwvOd=HeG=z1j2qB-SX3NQ=62ERr=KpQNZyqqp2Qy4kZ54RLw@mail.gmail.com>
 
-On Mon, Jul 27, 2026 at 12:22:32PM -0700, Nick Desaulniers wrote:
-> On Mon, Jul 27, 2026 at 5:25 AM Hongyan Xia <hongyan.xia@transsion.com> wrote:
-> >  arch/arm64/include/asm/esr.h       | 2 +-
-> >  arch/arm64/include/asm/percpu.h    | 2 +-
-> >  arch/arm64/include/asm/preempt.h   | 4 ++--
-> >  arch/arm64/include/asm/ptrace.h    | 4 ++--
-> >  arch/arm64/kernel/debug-monitors.c | 2 +-
-> >  include/linux/kprobes.h            | 8 ++++----
-> 
-> It might not be appropriate for the changes to kprobes.h to go through
-> the arm64 tree, but maybe it is?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git blk-iobuf-pool-v5
+head:   de80bacbf04a137715357b6a2948d9f29a18d990
+commit: 37ff77d98dbfae93b246dadfe1d25b768b9e8798 [6/9] block: add a uring command for pool-backed fixed buffers
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260728/202607280222.VZqM8mZL-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260728/202607280222.VZqM8mZL-lkp@intel.com/reproduce)
 
-They look pretty trivial, so we can take 'em with Masami's Ack once the
-rest of the series has been reviewed.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607280222.VZqM8mZL-lkp@intel.com/
 
-Will
+All errors (new ones prefixed by >>):
+
+>> block/ioctl.c:958:8: error: call to undeclared function 'blk_uring_cmd_alloc_iobuf'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     958 |         ret = blk_uring_cmd_alloc_iobuf(cmd, pool, buf_index, len, issue_flags);
+         |               ^
+   block/ioctl.c:958:8: note: did you mean 'blkdev_cmd_alloc_iobuf'?
+   block/ioctl.c:948:12: note: 'blkdev_cmd_alloc_iobuf' declared here
+     948 | static int blkdev_cmd_alloc_iobuf(struct io_uring_cmd *cmd,
+         |            ^
+     949 |                                   struct block_device *bdev, u64 buf_index,
+     950 |                                   u64 len, unsigned int issue_flags)
+     951 | {
+     952 |         struct blk_iobuf_pool *pool;
+     953 |         int ret;
+     954 | 
+     955 |         pool = blk_queue_get_iobuf_pool(bdev_get_queue(bdev));
+     956 |         if (!pool)
+     957 |                 return -EOPNOTSUPP;
+     958 |         ret = blk_uring_cmd_alloc_iobuf(cmd, pool, buf_index, len, issue_flags);
+         |               ~~~~~~~~~~~~~~~~~~~~~~~~~
+         |               blkdev_cmd_alloc_iobuf
+   1 error generated.
+
+
+vim +/blk_uring_cmd_alloc_iobuf +958 block/ioctl.c
+
+   947	
+   948	static int blkdev_cmd_alloc_iobuf(struct io_uring_cmd *cmd,
+   949					  struct block_device *bdev, u64 buf_index,
+   950					  u64 len, unsigned int issue_flags)
+   951	{
+   952		struct blk_iobuf_pool *pool;
+   953		int ret;
+   954	
+   955		pool = blk_queue_get_iobuf_pool(bdev_get_queue(bdev));
+   956		if (!pool)
+   957			return -EOPNOTSUPP;
+ > 958		ret = blk_uring_cmd_alloc_iobuf(cmd, pool, buf_index, len, issue_flags);
+   959		blk_iobuf_pool_put(pool);
+   960		return ret;
+   961	}
+   962	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
