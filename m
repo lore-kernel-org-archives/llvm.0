@@ -1,81 +1,81 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56D963AC0F3
-	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 06:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F3C3BBFCD
+	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 06:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785219265; cv=pass; b=ZF/I4HL0uecW38ONKyL3VG9p02fR3ykBNHLNjycJMfEcig0uR3w6UvZehnBn4xwBhfQUUcw+k2T2B7PmOVLDPZi6LQKcrKnquQTwFlN8Kd2S+kTEKvaKbGhC9YFhua4dUEIYnTWVt1aVM2qrezwHiTcjlahFQ+g+qTbuSjRE85U=
+	t=1785221500; cv=pass; b=OsWNiSLdNY9kZq0W5n6DlRUWMgUGD4vCBzPsl0SeuhlaajUXtnUxh8TW/jP9psv91+WEOFfgCEg+zoJrWBnk1ETJ01JVAjTUOqktxMg6R6bDfm5Cg5WjoQx6ptKrqAKGkWJ2eYWV8QVUb0HdDZjF4qrxqZHFHKloJ9LLIovYdG0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785219265; c=relaxed/simple;
-	bh=T9emucQeZo8TGHwKdlSTbVZSHcqzzCT/Oq7w5042AWE=;
+	s=arc-20240116; t=1785221500; c=relaxed/simple;
+	bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TDsciEHCUM4quz20TawsNLINmpqGxxN4OUQiDR0SD1SfMwDxf/wUWZAne1ITf1/vZeNuTgBGA84pv9jMrow/1YVZToZF0DQZcs+Zy/hXUL65T44csxrO8oaeqRiAmQCEDrx+Es1q++CSlAXWkemXjD1WkWIJAcZGrPDe1RTjwr0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=G9fP4Zg1; arc=pass smtp.client-ip=209.85.216.45
+	 To:Cc:Content-Type; b=hhFo0VKlUozLMDP7gZB5LQW8yFELgWwioOBhjmYx791MuTK9y2JQegJIxNUxSkKhjstEOquBnGejkf0GGB99WklXOJ2hLGMKoowyiLkb+8LrkgwYoGNMnCepDiItAz8gqgKd9Ph9aiEqy4CmRmPqsMH+Rr+kV2fhOmApyVtIlYw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com; spf=pass smtp.mailfrom=openresty.com; dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b=Nl9OCEfK; arc=pass smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=openresty.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openresty.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="G9fP4Zg1"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-382ef647e20so3543549a91.1
-        for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 23:14:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785219263; cv=none;
+	dkim=pass (2048-bit key) header.d=openresty.com header.i=@openresty.com header.b="Nl9OCEfK"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38dcbade417so3738461a91.1
+        for <llvm@lists.linux.dev>; Mon, 27 Jul 2026 23:51:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785221498; cv=none;
         d=google.com; s=arc-20260327;
-        b=OvH7mSlBQGi6Pf7xqvFBw0pDEaOfNgFLDPAsxQLsU4rI/SV7EaYW2n4QV0E3G98HLg
-         wDlDnWfwWJeV/dtYxOJSF8V7BQf1rXGD7ks065X8SyqSt2L6yfdYP94vYafiSrNa8KDc
-         3oluH0a6uol8QvOTLBFAawfpZ6Fh0b9dOiWZs0nldrzI10MYX79sN+DfZJA0u97AHtBo
-         7Xjad+DkpxqvioGk3tcYWEhKZAA9PJ5qk+gN81tEn+lR2u1JaNgrQCObrE6ufYuKZ7B8
-         pwlcWyYQzlES45qVw1gBXDZK8hSIlKVZ7OHQDEOpzAqpz4bmen1a8TVXB6MR0yGrwXgO
-         9I3g==
+        b=Cp6vkCitWa8gDm7N1QOknVVHQ5gZfLdytEke4MoOYbQfofxdKi2ULW12BpLDpM2VEF
+         r+QYt3GHbkCfPFCe8jKKolPMX9M+VvE8AbIxhxyRWCc4Fu7McPllXrgYkmVeWMTAcXoy
+         o2yDE43vOyq3gtxzgPsoZubfwVUV15oXXZonaU8hz0o4KFKSsYET1OAIeegAr6dZ65sl
+         PznERgWuzwJ0ZMq+Yc9WglpAmihSDcAxnmglvd8oHrqRy/0USlQNYSFm4mJDWQokZodn
+         fAnrFgjODOLGx96KzRlC7l7lGTO4SNwbe+RPhT0/9X2uUcygOkQEEnUpgADYLTXgJz88
+         P6tg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=T9emucQeZo8TGHwKdlSTbVZSHcqzzCT/Oq7w5042AWE=;
-        fh=rXUZxCLWGriDz48XZcs9ZTdo611/HCXPO07Cnp2fDnA=;
-        b=O4T1EfZ2Awr3xWNTri5ulve0yab4lLnMGw0Pnyx/o4mijBDZKSgw8vufo83ePBSwmO
-         tZp3tjSROV7dEIOcr1r2Li7MHzUcFQdE+IRQkqXqM0EvkEQxaCNi3+4tNeLFgJjKjf03
-         KeDYWrpCnfXCBW1u4gaS68ejO95DHBw9sdyCFdmqtF99J35/9Wss0xbrnI83gZrV7Tsw
-         F0oh4Crc3pT6FszuBiD4nR2AH9yCRzffvByyPaPcqqN+vjsnOGwrl+T33e5Ra0rHHihB
-         An46RUeFI0MGzH+r4xFpqD91b3Xxc9WaNFeiONRD4MdOvXdB98DESLVPy2JLoI9XIKXS
-         y0eQ==;
+        bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+        fh=pLPH7UD7TP0SSuuEfXPR2+gF5Zph2SL7BRoe3o8aG2I=;
+        b=G7kihgxlO0WiBzI27VRJMgHx4a95RNlay6F+Mw0MLkQ47GTc7vmQLumw696t3a3+Cb
+         Q3dcuH+j4wYuxWmfPp4uw5O64EIWYFNTPKe2TV6entzYRghDJ0TGc68wz3M3jdUWudwX
+         AVDfs/sS5hdtPokJbD8FB99l4WZ5EGRaNxpls8t6B4WhdcYGaBMRejfC8AMt8w8Xpq5L
+         4OdBKbiILcIVftTG/0kq2TMZxbla6fWkZCyDAjagHoVwqRZzlnfPOtrYlh5g8oHD6JfA
+         ImsPnP5OFwcJs3q8ANNnhYYGgg79VwncZsuYHlqYIuBRfSIB2vxeRo90YDZyGCxH8xjb
+         drkQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openresty.com; s=google; t=1785219263; x=1785824063; darn=lists.linux.dev;
+        d=openresty.com; s=google; t=1785221498; x=1785826298; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=T9emucQeZo8TGHwKdlSTbVZSHcqzzCT/Oq7w5042AWE=;
-        b=G9fP4Zg1MUjKOKO6A0buomeUXHfxW1Iz1pSVJ0IMXWAmJPjNcx+95Puts2TgNMyL4N
-         0RShk+9n6ZArFY9wF49EgG6qeWXuTKzgaVfgJODZ6Y9PX20Ad/qcDSKN6bDEkft4M5FO
-         SHClf+hGPEym4kCOE5Xr0GMuKfxYSxe80aZMq2FGJmayerPqzXd5e/vzSH6ZscJpUIuS
-         isbMJVT59Pxngdaa3MFcezlZVYLCyT+razu/I2oh01gu+iBhxwWWCpAPJsjkxGdkd5fP
-         dVatIbZnP2Wljsc/HTvxkfUmnPWR6QrfW8/sFLy1e/OOuqOH57WaW9Y9ey/LJQW33ab2
-         n6+g==
+        bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+        b=Nl9OCEfKGNyMthwxQ9gLPTo98tt6iJaxkuvSL5MM1/OuDlobHMfeVcbdufwFT1klwi
+         guLVtcDh3SK9NLzuP4Ky/hRUgO7qbPbhHlTn65+Mv95RPYZrBBvdsgh8/EF7xc8WpUwD
+         Ea+YDN5pHQNkxMXydYzGGU0tD0Xyzkp8YgHvRRDpNR+ASA6nEHg1aaxi+xzfLfpYu4QM
+         /cZ990uobxaHsqDAysw7Qrqfn/XyJN6ZozyK2NomEhjRKI4Moc2fuAK7zMuRpu486gLc
+         NIyQefjAaCE39GqpYPcuRyXatZBsFAnUqrmb5R2wJaEadpOgh1GughfTMwioxBzc6S5j
+         1ryA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785219263; x=1785824063;
+        d=1e100.net; s=20251104; t=1785221498; x=1785826298;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=T9emucQeZo8TGHwKdlSTbVZSHcqzzCT/Oq7w5042AWE=;
-        b=Wr7bTrIvMIY2ulGsjvuqWC02IrpyLnLuqDFi+HvrCre7q18TIIj0Pza+++EeJTaEPH
-         VlwzRsnRgw+J/ZFTEDPvBRV9RhiaTBaGTCyY3jlaSHQkv15U5n1emHLYueTTYpv9G+lm
-         Jnel9GghVgfB0Kq6Hgwn5Zl3uJtNs7NLN4HLiJu/z3k65gy48G2H3GVvs2TJnPQSM/2D
-         wlq6m8qE6IA0/LRKqmO7qHDG63uGOxgzbG83o8iPncaA37Skprvk7vrERsiNsmaC1LEX
-         UWNnQGDZGCuJjzGjIDPoYcJ8tLugnIdwcWV6+HQY2Km2tuRc7VDBMOFinBkPgjK1n5tb
-         hlsg==
-X-Forwarded-Encrypted: i=1; AHgh+RoLefvFvXY/K/77eiHAALKpo9r8/FG9zOJBorhD73Wsc3Z00TGfW0nMteFxANanLcoH9HKo@lists.linux.dev
-X-Gm-Message-State: AOJu0YyXYk/bEuApmv5eTyvouZ/V9hMP80WEPQQwvBKtMjrY0cEY6TsL
-	FKd5Dvw4X2F50AvKvpiuAT9f9rQIOvKZdMKFpKEcdCALrEAQA393wHV+sgKFhq2apv63LQZ6W9I
-	VjsGLJtQVWLGOP3koet42HYeWGBFkE87csvIRw0a0eQ==
-X-Gm-Gg: AR+sD10xzCiOxr3n6AVzyhN1xunQWf9ZpntGNvh+sSHKLomuZwBMZj+bLbK4Am03jhk
-	0tsuSgAI6g+/L10zgtdYitAD9PUejpyrgX9MfqFw7vcnF4bbKc49Wk/uAi51RajI/WtwHE1XpCA
-	beCLJad4AlsS8tJ5RilIIyBc6J/85oc4blVaklSa0Cnyjo2iNRwyBwqEU/SVzHiliSSGZOWpgIl
-	NqaI8UF5A4RMN7sswvv8bqyhCVsy/Iy/tvybQTRdGAvG5hEl9+DT83SUrkmuLubFxQtkwGag+YE
-	hlH6RRxiJCH5BCA9SsrOqEgfCIgGg2I=
-X-Received: by 2002:a17:90a:e7ce:b0:381:cef1:11b0 with SMTP id
- 98e67ed59e1d1-38f6a54400bmr1094669a91.33.1785219263585; Mon, 27 Jul 2026
- 23:14:23 -0700 (PDT)
+        bh=vFllPMWB+mv1Zu8+0oUcBSDE9JeZYdHZxMZ2PiPZMRs=;
+        b=QNcy5d6PII+svJ+L9gA3+19EZ+nod1/05+Jnlqrd7rnu2iS8cNHJOijPdvZfqBzY22
+         5Sh4ZYLIvC6g/wSihImTr5ObAX0xv48ieMIzV060zt6lV3grbi+qiKofwt+FV0I0rFBa
+         mY/BZhcoxCNLJRFKZ+cxdIDtvPUeSx8hshMWv774mzgum66QCEKU8H9OuwQqsS21lySW
+         ipTd+ml5B5U/22Nfpv9mREEMJuKIKRWDfN8fwUSRKR5/JYVEUa/PV3CmleJEzFRUjhin
+         2gtj6kc4m+a0T3SYAmHmw3mG8euCD9BJu8+b1Dy36ocjr2r/Vow/ckCiN44d3v8k5EHA
+         pI7w==
+X-Forwarded-Encrypted: i=1; AHgh+RqpqncVglySKw+A628zWd+Ge/79HL2jf9HSlehXQ2p2JQtMqmtMR0RZPWdSP8/LhJxck/5h@lists.linux.dev
+X-Gm-Message-State: AOJu0Ywaey7f7Oa3AJ8MkvqNY+5gRxButUPSduru+PJpeXJ/KqbYljM+
+	Qgqdp82TtJfgLDNpzYdqOrNvWGT85ltHKGQBic5evYBIna0aEODwcEkFkfJjzy0GSHWw1pMh+fL
+	njfk5ZEuQd8WS0wTpKyjn2zJm8Pu4D0OIXTqKlwbyhQ==
+X-Gm-Gg: AR+sD10A+66nPrH23up28pEkLa7koWKJYHWOP0lxfjJpzII2piC5ocZhF7pXrSCzCt7
+	wkb34juJEVgCA0U4+zCxmcndKt/NTYg8dy/ysAQx7J3bC2TFQ4U+B9oV+qfpS1Qp/NzbLTKsw6r
+	haRXuFiHRGL3fNy06t1v5VnMV2tO+MldUVr/JWcXdMIv2fUrsKv5jMiICcrCqX7kvhyx8p1jBK0
+	ZeSQ65+c6R2tkOgkDOxkbd1ZKs4Wr3jVXV23m+zViQy9sLAeuitFE9ZZSBei0Hot1STEuTBkrMs
+	AXeRGZOhnR2uy4tQFaXs
+X-Received: by 2002:a17:90b:51c5:b0:380:71eb:4014 with SMTP id
+ 98e67ed59e1d1-38f6a37e87fmr1398283a91.15.1785221498096; Mon, 27 Jul 2026
+ 23:51:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,15 +83,15 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 References: <20260726101306.3772237-1-ammarfaizi2@openresty.com>
- <20260726101306.3772237-4-ammarfaizi2@openresty.com> <8bdacaf3-7f93-4095-8875-4c13a273fe3d@t-8ch.de>
- <6a5f7481-124f-48ad-ab44-577b12d33592@openresty.com> <4e22086c-8a60-4965-8d78-a946dc54eaa3@openresty.com>
- <625278ef-06fc-466f-8b69-9a37d5097b18@t-8ch.de>
-In-Reply-To: <625278ef-06fc-466f-8b69-9a37d5097b18@t-8ch.de>
+ <20260726101306.3772237-2-ammarfaizi2@openresty.com> <dca5a72c-3186-4f94-bd94-aab127dec64e@t-8ch.de>
+ <ambQ4715PGeb6uFq@1wt.eu> <6a6c1738-bdbf-4beb-9abc-e9c38434b8ac@t-8ch.de>
+In-Reply-To: <6a6c1738-bdbf-4beb-9abc-e9c38434b8ac@t-8ch.de>
 From: Ammar Faizi <ammarfaizi2@openresty.com>
-Date: Tue, 28 Jul 2026 13:14:11 +0700
-X-Gm-Features: AUfX_myLYoIJCIgc0mPggQI10oPJrc_4hFq4UqwvYtZQeCyZIllsnLCigd4kxHw
-Message-ID: <CA+KFgX7vVA8sUBz_ngVCnA_DW11eC4r=EDatKBP0QUQYcC62Bg@mail.gmail.com>
-Subject: Re: [PATCH 3/4] selftests/nolibc: add abs() range test
+Date: Tue, 28 Jul 2026 13:51:25 +0700
+X-Gm-Features: AUfX_mwNMBgSu4dTxFsUacHTqp-RjCOEkBg0s1vRYDZbBtotdldmDUVB9cpOwoI
+Message-ID: <CA+KFgX51SLUKcpLhaLT0sT-b1k0k==am6ooaGj3VaFMkLMmWxg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] tools/nolibc: evaluate syscall() arguments before the
+ arch macros
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 Cc: Willy Tarreau <w@1wt.eu>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
 	Linux Kselftest Mailing List <linux-kselftest@vger.kernel.org>, LLVM Mailing List <llvm@lists.linux.dev>, 
@@ -102,12 +102,15 @@ Cc: Willy Tarreau <w@1wt.eu>, Linux Kernel Mailing List <linux-kernel@vger.kerne
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 27, 2026 at 11:13=E2=80=AFPM Thomas Wei=C3=9Fschuh wrote:
-> Do we need to hide the variables for a regular libc?
-> If not, we can have a dummy definition of _NOLIBC_OPTIMIZER_HIDE_VAR().
+On Mon, Jul 27, 2026 at 11:19=E2=80=AFPM Thomas Wei=C3=9Fschuh wrote:
+> On 2026-07-27 05:30:43+0200, Willy Tarreau wrote:
+> > Well, at other places we already have typeof(arg) which is exactly the
+> > same, more explicit, and doesn't come with such restrictions, so I'd
+> > rather suggest we use it instead.
+>
+> Agreed.
 
-I think not; I'll go with a dummy definition of _NOLIBC_OPTIMIZER_HIDE_VAR(=
-).
+Noted, I'll use __typeof__() in the next version.
 
 --=20
 Ammar Faizi
