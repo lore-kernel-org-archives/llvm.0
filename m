@@ -1,178 +1,114 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6DA3A7F75
-	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 17:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B503A9D9C
+	for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 17:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785259911; cv=none; b=VlD1A1k+2tB+Nr0XaJshSDVeemNtlhjk7Di8bmTSE7LnKE4IKWP37G6O9Z60+UScY6tIzBzTDE9X/Mr06VIImZ+m2GFp3486FrMCP19rf6eg199b+mk4aaQndYWzvoXGa0gmFyEF/30Y3TbC6b3eeq/VOrhyoGN9kc9EuCYvhNI=
+	t=1785261104; cv=none; b=A9tZTlbnsXoEbHuLP59Uu3tzKo5LlXCfeWSuS44ESBWDRFliMuX3EEFrLETR10N1r1x+qA1HQjbSY8E9dWiVN4BHWUVp8SiXBElL8uEusgSvm+6OeOMvecKyiNI60K9FAI/6J5rLmO6qoojynO9DNS573kdfmRMi6PIKypJ6R08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785259911; c=relaxed/simple;
-	bh=KwxVOT9RanBvHZZjm9RuSigNIRCQICh1YKEM1MGk1YA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KOAgJwVKLjy/zm3iNTU76O5KV2lCLD2smh+U3tOYKftc70PfuTjXmD5Fctf1JETgNGzNVqgr6xfFEFFFycYm1doGpJiKRgfAI2b91p0MQ09e5OpwUUO2K/MPLPL+ii41GbF8YUF/9PHAELdYsguishB7TSnrS1+b7EAMbK+RVJ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=NdB6N83X; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1785261104; c=relaxed/simple;
+	bh=5EDgkKunk3EuSfc9T+Q1eBOxRVhrPV7cos5ouOKzp5Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sd6/p1zgyn9rozLq9cLDO0xrCDV+pLVo0Cr4Ab5gy93IoV5N6yo3LMhQjxrNp+b36b6EexMDmOcP7LKO6tqSTU2tXNP2Y+K2wLuu0G1AFtU5cBNQSs3iqBFJGVIYyxhOsAbu6T+khdUjDmXq7K0BpmC/eS1ygPrFomdQb18KY4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gsJCLlRD; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="NdB6N83X"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B526169E;
-	Tue, 28 Jul 2026 10:31:43 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 500643F763;
-	Tue, 28 Jul 2026 10:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785259907; bh=KwxVOT9RanBvHZZjm9RuSigNIRCQICh1YKEM1MGk1YA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NdB6N83X3iLpzBAs56YxTADvdNoNZXoS0zfJgLFb2XlYkQy2TH7DB2JXkyRnHUZXl
-	 MpeXExUY6kB+w7GT0Op7HI0Bud9xBTrMwOuKLk0qVrWzTWhu2yK43hZw7aYkKKUMvq
-	 LeqhuiBGAg5g3/XwD1qO7BaxvXDtzMHG5MRlXcs4=
-Date: Tue, 28 Jul 2026 18:31:43 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
-	bpf@vger.kernel.org, Florent Revest <revest@chromium.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Xu Kuohai <xukuohai@huawei.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-Message-ID: <amjnf5gz0xP5PTSB@J2N7QTR9R3>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gsJCLlRD"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cc61541f8cso20630575ad.0
+        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 10:51:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785261102; x=1785865902; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=i8W8t5tftK1vDc1qsPICPRCSPFcmSyMyPg0AlpPcMPM=;
+        b=gsJCLlRDhK4TDu5zIkEcoRGdAvwVfqWCuLYARHgcpi8WjOH8Dh74Pd7SzD7kMHzxCF
+         W3BfhxLuFe0jZz9sG9594TyucwEswHuMYygL6Dy2EBQrRrVM8iB0wxS9FFHGXNrMNTtF
+         m3htPIHc7I29F5rVR3QKkOK/OgW66B2Bf9EXum14AvTRxIwMSPk/s0QwSgNLHKUXRvw+
+         Ed4wYE61YgurmMsy5F6Q+bqzF+lU9vdoCKigQdmb4y411YZ27i4CHVfaivbzWq6NN77k
+         iRVyCOjvxEx+xvu84bkslRSGvkUW2etqPmbO6RzhGrUQAKGEeuWGMlWZc3JqPCzAoUWi
+         Z/OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785261102; x=1785865902;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=i8W8t5tftK1vDc1qsPICPRCSPFcmSyMyPg0AlpPcMPM=;
+        b=Ficz3h4CdyhH+HlL+3ri10VI8RKYmLDFceOBySd/C9c0NWB3N3NkoHfXnvLnHmgUls
+         53/QnpOzQDjcIm1iQRT6QfIUZPxryWxjppObh3Pn49DwmHyC9r74g7sLibgErrjQQktR
+         jJRQs7xCEK9/0CMKqvHgAxh3HlBgoyBfQgD0ZLfFgbRPj3bpwb4uMa237BAvSu3L0TvZ
+         2Es5ep2Bd5CSpT5dA/ufbr2x8UkjiHVkzwcJiZU46E+T2COmYDvKbjSYlGjh1ME5jK7g
+         OapKLlCzljC/DoJlPGUw6ft0Wm/idxvyLkLrnSACC0WbVJFkjFavyJPhXhxF6wWzrPcH
+         mVig==
+X-Forwarded-Encrypted: i=1; AHgh+RoM0x0Y7hVSrgCn9AsztTd5JsWpGQr3hF0LJgJmIHFMUj/HW8te3yWxyKMoNuiXD2iAjw6O@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPxyHyi4FXrtS2hWnW3H+kUzboSPIJ0ENJMtsrnr8Q/0jV+NsX
+	DkW+H7cP80NC56gEJNGN7+pg5oM0+2LzrnCmmRXJiy5yAaXaki2eSSka
+X-Gm-Gg: AR+sD12+1xwPINpRjTlGx7Rvhy38n2O8GlbiflFOz699qgeyXWE4/lC/bu097Er9atL
+	6PPWdjwJZ5ZPQ7dJW1EBZRTxUo9ttpvC4NTJXYJKuqd6MQblRl89snjFnUjXZVtTV0mXYJx1bsi
+	665vZaA9p6+vsisAv+FS6MNLO/u1l3j4/AjbHcb9f5j9auuEIxNxFQ70ob8PNrznM2ntqX+/T+l
+	5wD0Cobe4kgVpbi+DazngBz92vMf12KJdZFqm6P7JtFjuYng4u5pu6VA/ZigxZ/16uKfmM8/ReN
+	XwvpUvVPYYYzd681TFsMODb0dJOm7mX1l7JMTASKbXJG+a4z+L4Wj76Ylt3i1uQhtPoJE90nv69
+	w1QAOntuKXezKiR+peY7qMTHu9Hjv10fU366hcaYpzoJcNj+Ax+knyhs1EFNZ62uAbOL1P/k9ck
+	mm8nmzIRjr1/jlSKWAjCBudU2ec8RVooJJtlPZOfmD6jj4AwwyDV9cPjPAirtLU5KZfv20iR05l
+	UnnmQEwYSl4UcsMI5we2oB5F9eaAcf4C4mc
+X-Received: by 2002:a17:903:1848:b0:2cf:af20:4254 with SMTP id d9443c01a7336-2d015c9b78dmr40007835ad.10.1785261102038;
+        Tue, 28 Jul 2026 10:51:42 -0700 (PDT)
+Received: from localhost.localdomain ([2405:acc0:1306:9d5b:e192:4a0c:2079:ffb7])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31504cc63fesm777040eec.15.2026.07.28.10.51.38
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 28 Jul 2026 10:51:41 -0700 (PDT)
+From: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+To: samitolvanen@google.com,
+	kees@kernel.org
+Cc: nathan@kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH] cfi: Ignore non-allocated module trap sections
+Date: Tue, 28 Jul 2026 23:36:34 +0545
+Message-ID: <20260728175135.65578-1-acharyalaxman8848@gmail.com>
+X-Mailer: git-send-email 2.51.2
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jun 09, 2026 at 05:19:25AM +0000, Jose Fernandez (Anthropic) wrote:
-> On arm64, HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS is currently selected
-> only when DYNAMIC_FTRACE_WITH_CALL_OPS is available. CALL_OPS, in
-> turn, is mutually exclusive with kCFI: the pre-function NOPs it needs
-> would change the offset of the pre-function type hash (see
-> baaf553d3bc3 ("arm64: Implement HAVE_DYNAMIC_FTRACE_WITH_CALL_OPS")),
-> and the compiler support needed to reconcile the two does not exist
-> yet.
-> 
-> The result is that a CONFIG_CFI=y arm64 kernel has no
-> ftrace direct calls at all, so register_fentry() fails with -ENOTSUPP
-> and no BPF trampoline can attach: fentry/fexit, fmod_ret and BPF LSM
-> programs are all unavailable. Deployments that want both kCFI
-> hardening and BPF-based security monitoring currently have to give
-> one of them up. systemd's bpf-restrict-fs feature hits this today:
-> https://lore.kernel.org/all/20250610232418.GA3544567@ax162/
-> 
-> CALL_OPS is an optimization for direct calls, not a dependency.
-> In-BL-range trampolines are reached by a direct branch without
-> consulting the ops pointer, and out-of-range trampolines already
-> fall back to ftrace_caller, where the DIRECT_CALLS machinery
-> (call_direct_funcs() storing the trampoline in ftrace_regs, the
-> ftrace_caller tail-call) is gated on DIRECT_CALLS alone. 
+rewrite_section_headers() initially sets sh_addr for every section to its
+address in the temporary module image. Only SHF_ALLOC sections are later
+copied to module memory and have sh_addr updated.
 
-It's true that this is not a strict functional dependency, but there is
-a substantial performance cliff here.
+module_cfi_finalize() accepts any section named __kcfi_traps. A malformed
+module can therefore leave mod->kcfi_traps pointing into the temporary
+image, which is freed after loading. A later CFI trap would then scan freed
+memory.
 
-With CALL_OPS we only fall back to the ftrace_ops_list_func() when there
-are multiple ops associated with a given callsite. Where we have a
-single ops for a callsite, if the direct call is out of range, the
-ftrace caller will call trace_ops::direct_call.
+Require the trap section to be allocated before retaining its address.
+Clang emits .kcfi_traps with SHF_ALLOC, so valid modules are unchanged.
 
-Without CALL_OPS, if there are unrelated ops registered (attached to
-difrerent callsites), the ftrace_caller trampoline will call
-ftrace_ops_list_func(), and we'll iterate over all of the registered ops
-to find the relevant ops and trampoline, every time an out-of-range
-direct call is used.
+Fixes: 89245600941e ("cfi: Switch to -fsanitize=kcfi")
+Cc: stable@vger.kernel.org
+Signed-off-by: Laxman Acharya Padhya <acharyalaxman8848@gmail.com>
+---
+ kernel/cfi.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-So the big questions are:
+diff --git a/kernel/cfi.c b/kernel/cfi.c
+index 4dad04ead..3ee67b723 100644
+--- a/kernel/cfi.c
++++ b/kernel/cfi.c
+@@ -74,7 +74,8 @@ void module_cfi_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
+ 	secstrings = (char *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+ 
+ 	for (i = 1; i < hdr->e_shnum; i++) {
+-		if (strcmp(secstrings + sechdrs[i].sh_name, "__kcfi_traps"))
++		if (strcmp(secstrings + sechdrs[i].sh_name, "__kcfi_traps") ||
++		    !(sechdrs[i].sh_flags & SHF_ALLOC))
+ 			continue;
+ 
+ 		mod->kcfi_traps = (s32 *)sechdrs[i].sh_addr;
+-- 
+2.51.2
 
-(1) How often is a direct call being made?
-(2) Where does BPF allocate its direct call trampolines?
-
-From a skim of arch/arm64/mm/init.c, EXECMEM_BPF covers
-VMALLOC_START..VMALLOC_END, the vast majority of which is out-of-range
-for a BL from the core kernel or a module. So if EXECMEM_BPF is used,
-that's likely to be problematic.  Hopefully I'm missing something such
-that BPF trampolines are almost always allocated in-range of a BL?
-
-When we originally implemented CALL_OPS and DIRECT_CALLS for arm64, the
-understanding was that we'd have many ops with direct calls. We believed
-that the ftrace_ops_list_func() penalty was so substantial that it
-wasn't worthwhile supporting direct calls in a configuration where
-bouncing through that would be common.
-
-If we need to support this configuration, then I strongly suspect we
-need to make other changes too in order for it to be worthwhile.
-
-> s390 and loongarch ship HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS this
-> way, without having CALL_OPS at all.
-
-Following from the comment regarding EXECMEM_BPF above, it looks like
-both s390 and loongarch don't define EXECMEM_BPF, and only define
-EXECMEM_DEFAULT with a subsstantially limited range, which I suspect
-keeps their direct calls within range.
-
-> Patch 1 prepares ftrace_modify_call() to build without CALL_OPS by
-> widening its #ifdef and using the existing ftrace_rec_update_ops()
-> wrapper (no functional change for current configurations). Patch 2
-> drops the CALL_OPS requirement from the DIRECT_CALLS select.
-> 
-> Configurations that keep CALL_OPS (clang !CFI, and GCC without
-> CC_OPTIMIZE_FOR_SIZE) are unchanged. We verified this: in an arm64
-> clang build, every object file is byte-identical before and after
-> the series except ftrace.o itself, and its disassembly is identical.
-> CFI builds (and GCC -Os builds) gain working direct calls, with
-> out-of-range attachments taking the ftrace_caller dispatch path
-> instead of the per-callsite fast path.
-
-Can you comment on how you've tested in-range vs out-of-range
-attachements here?
-
-> We tested on a 6.18.y-based kernel and on this base with clang
-> kCFI builds (CONFIG_CFI=y, enforcing) under qemu (TCG, and KVM on an
-> arm64 host) and on GB200-based arm64 hardware: fentry/fexit, fmod_ret
-> and BPF LSM programs load, attach and execute; the ftrace-direct
-> sample modules (including both modify samples, exercising
-> ftrace_modify_call()) run cleanly; no CFI violations observed. The
-> fentry_test, fexit_test, fentry_fexit, fexit_sleep, fexit_stress,
-> modify_return, tracing_struct, lsm and trampoline_count selftests and
-> the ftrace direct-call selftests (test.d/direct) pass on the new
-> configuration with results identical to a CALL_OPS kernel built from
-> the same tree, and a broader test_progs sweep showed no differences
-> attributable to this series. Without the series, all of the above
-> fail at attach time with -ENOTSUPP.
-
-Have you made any performance measurements, or was this just functional
-enablement?
-
-Mark.
-
-> riscv has the same gap (its DIRECT_CALLS select also requires
-> CALL_OPS, and its CALL_OPS is likewise !CFI); if this approach is
-> acceptable for arm64 we can follow up there.
-> 
-> ---
-> Jose Fernandez (Anthropic) (2):
->       arm64: ftrace: prepare ftrace_modify_call() for use without CALL_OPS
->       arm64: ftrace: allow DIRECT_CALLS without CALL_OPS
-> 
->  arch/arm64/Kconfig         | 2 +-
->  arch/arm64/kernel/ftrace.c | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 254f49634ee16a731174d2ae34bc50bd5f45e731
-> change-id: 20260607-arm64-ftrace-direct-calls-152230ef7077
-> 
-> Best regards,
-> --  
-> Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-> 
