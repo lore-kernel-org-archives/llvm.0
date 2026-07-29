@@ -1,155 +1,171 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2E2A37B41F;
-	Wed, 29 Jul 2026 17:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617E242C511
+	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 18:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785346304; cv=none; b=AOGhyZ2I1YjrGrneUz4EaXL+Z7UqKb4VZKp+W+JZmjqAhFapKgbCK9ycj8ZoJ0le4ZuWu8SoHzdsHCzFM2jX5gKx4nDoos+KwstaWsE5NGTA9MMo7CT9siYQpbvD2Xk0t+M3RLsZBySO+dKxrqEkSos/AFidz41OUF8xrPrL1pA=
+	t=1785348497; cv=none; b=FWlM8zpo8X/zNSssNNwtkKq97Tp48Ua1KwCwTJn1MtAPl+R8iDYV4VQBzlwCct7haRFPGLhn++GveGEwXvsZKOarvJyxc007CgnVVoaNL/tLw/HKfGarI6U8ktwQahMl1KREhZZY8KSCtk9nnnv0CVL8rkgneNsZDMESNsZ530E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785346304; c=relaxed/simple;
-	bh=zWVwF/lm7dvlg+xSfinW+aXkp6TMOCYZFjDz5MdKjGE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=JyTWmhMlwa7/JVJtf2Svuu5AfEfBrvb8ZecdIRNpvimyXF4qCKRUsZmy85hc2g2xaQ0X/bDjl+qYv2+Q2aEfMUz2u89sw7CU1HtnAJ46kgITA4nkwnX2fNO+tmzPQHBts6OUaH0BWA77wOCd6Rkusft3DZHHIuOLaq/6UAdi/BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RR/Sni2N; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785348497; c=relaxed/simple;
+	bh=Hm6PGFaiPPS83t1EGaQig5GY2imSX3sSXllvUW8uUYQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AAYTSbJZ2vpQwoJlCWt+QIoZwvO0pXX0dpazUqiufQD2Os3X+nF2v3Jc1+h94wbyuDM6dU+U4DpsMXHKxcJ82W4QLWC04g/H8w3RcwlDs+tOWJGbOXLJA+2bRO7Xh3a0ZGjZO8+fRR4ZWQnmwRe/aGRuUlnF67ohf4OlNzmKNt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rostedt.org; spf=pass smtp.mailfrom=rostedt.org; dkim=pass (2048-bit key) header.d=rostedt.org header.i=@rostedt.org header.b=JRdh59Gv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=b+GMsB8B; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rostedt.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rostedt.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RR/Sni2N"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785346303; x=1816882303;
-  h=date:from:to:cc:subject:message-id;
-  bh=zWVwF/lm7dvlg+xSfinW+aXkp6TMOCYZFjDz5MdKjGE=;
-  b=RR/Sni2N+tLPG/8Kow8PnZmQj24Ngx2ZHP8eGpsIGLhRmab76Ekbj8J/
-   ZntbxXhc34fJOV5E0BXq/0IniYEM0pvwV9IGe7uQz7+O0gemqelC5spnx
-   xyLAgDg9Y/UUxztZKy0Nk3h1O4RQa7reTX7dTynP/6LglYyqvBBgWWBjL
-   31dpbBayiqvK5MvZFcLM8SGBQuD8XiRHalkO3Ao/59aX0Jupvn5PquPTP
-   d7NzcjXJ/VuOlS0q8R64J4HF+wpVecFacsAO9oL8vz0Fox992j+0H4rEd
-   dVHOBCRD2ucAXrtACiNlRtFJwln3ZA/gzdAId2a35N4DXPrAHTEwlaEZe
-   g==;
-X-CSE-ConnectionGUID: gJJRHe82RuyP66iMXn9ypA==
-X-CSE-MsgGUID: 5zsgkm0vSIKFFPVjOcTM4Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="86079018"
-X-IronPort-AV: E=Sophos;i="6.25,192,1779174000"; 
-   d="scan'208";a="86079018"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 10:31:42 -0700
-X-CSE-ConnectionGUID: cGiixbKxT7uuGsf+GyYx9g==
-X-CSE-MsgGUID: uRDdDtL0QGaaFsJSp63BvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,192,1779174000"; 
-   d="scan'208";a="298289801"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 29 Jul 2026 10:31:41 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wp882-00000000fYl-0fjR;
-	Wed, 29 Jul 2026 17:31:38 +0000
-Date: Thu, 30 Jul 2026 01:31:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Akari Tsuyukusa <akkun11.open@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Brian Masney <bmasney@redhat.com>
-Subject: [masneyb:clk-misc-round-two-for-v7.3 15/45]
- drivers/clk/mediatek/clk-mt8173-infracfg.c:131:29: error: use of undeclared
- identifier 'clk_data'
-Message-ID: <202607300133.MCJfTRc1-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=rostedt.org header.i=@rostedt.org header.b="JRdh59Gv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="b+GMsB8B"
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id D8C4014002E6;
+	Wed, 29 Jul 2026 14:08:11 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-09.internal (MEProxy); Wed, 29 Jul 2026 14:08:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rostedt.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1785348491;
+	 x=1785434891; bh=NwF6WahzMHm2895PJCZr64azvFZo3rJf0ZJJcnJOyTI=; b=
+	JRdh59GvEw2YJjNl4b0sb2XXDN/Wb2PCc/JW2F/OV/a7kRmZ1FITXfoI7p0tHTaa
+	PQfszlVejq3AKOGIYMQOVDwUGQBfYl9XxtIiJpAMGDFPb19lvoltUVFNTztlks+m
+	Om3B8fS/cHK/74JHMylRgDm0kSQ/X/s2bPIacOm35jJTKdriFb5QGfpQJrY9FMp9
+	loU7WNOFAV1hd+pI6vt6xPrgbEzy/j9+0r++VSFSWVmBJrcYasOnQHuDBamNUDP+
+	Pj9vL0+thOKtr2e3HD437RT4jjVTaIqyy65XLoJKhVDrTKwWbImbXZejxFV5TPZj
+	FC4mTzZlGLCfuGEtRglsfA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1785348491; x=
+	1785434891; bh=NwF6WahzMHm2895PJCZr64azvFZo3rJf0ZJJcnJOyTI=; b=b
+	+GMsB8BaZzp9S8uTtN2iW19GRLMCZGSp3VyhrRheqXMvJBLUaMENric23PgprnJD
+	nHSxBtYmlEnhyGrwozhx+cQ/0W5yS1t6L3oP2Dld7mD+CLhv+BShND6GcBiRYBaP
+	8Iy2MSEp9eAT+Q8oT76faaJF7Mh87fdOBkEJ1GnPYlvTL2Bf4GQIzP3uZfrHxaTe
+	dogakftHkBPHR29e/nmeBME5RrgL7UndR6O031XBs9L1Sf6iF+ws0WLch4hGsprZ
+	NEYtQI5v2663sQ4i5x6upgzj0Izl+uevzcFEWIYWJ3qRAimaR4lShiX0FQf/hoRD
+	aSINvusbC8nowItbuWp/w==
+X-ME-Sender: <xms:i0FqahhvI6KHKauYf_IyzQZIy7_zl0CAr-6dWfkCngQGSu2O6gNWxg>
+    <xme:i0FqamaRFOOyx-jGTE4cRmB_MMTOoDuv7vtzGXnUCgoMptFFHi9YOOIbrq7BpeUIk
+    Mb3edO6KE5cq8dGtjqfMOsqO4BNirUMEl8Z_g_DXmPx-39El-yG26o>
+X-ME-Received: <xmr:i0FqaiOaJSdwHME7YRhRV89o6RnwAiqdny4zwCKU1urScVh8w3DltkhOEzMcVLnU3tJxM4eN>
+X-ME-Proxy-Cause: dmFkZTERBjXApnrZrwfYcYubtd8IizaaJqU0kamfvzZdOJhvnPPUf06TI5DFPDTIcatc28
+    2an4NFY/41OsegM7YIizOcF3moFF5tPsTqvOEWMQ49m/J9ujLJLevMme8PQF2WUY5QmBm6
+    nz5aape8gfrzo7xjNg52J0NJs/H4wY2qB2dO5GSMsEmMJIUk/rcHiWJhe20Z6NwiObz3Zq
+    WST4S9B1DwsDaGGoeQe7/o/DEIO98FM6f2Pi93sG4xJiOjE4RmWz9v5f/bX5w5JPRan3cw
+    07qPOtAsZ2FWnKk+GUM3y2FQotAisp7eo1YGmOF5z85KHeLwJts5U1vJy5sA5C2K8HGZOk
+    3Bjp6FkzfsKLiass48861fo/4E0zzIvGq6ByRJTsHEwMciPmcsNZktiMu5OhwEmv57UMXo
+    ZKc/YcbrEZqakZat4X2VOMt1S71EUwUqpjXyCW4MoE7F5GSFUp8vdZEFBwwXM/ghCGugAU
+    BOZyy/vjfXooose5kT6eg2PhaoNf62OTrq2Cy55Rp22J22kjvzvz/vMBQW0s8QS5+IvJ9z
+    m7rnUc8W0NlQn7g+fUcB7JlG/CT+z6MrN7Aqy8BEP5cx0sxrtyVKUChNUFRs3CeFp0UnHO
+    7pl2URwtEkDfDgPeNdo14bH/g924Y+OGcIPl2hCq/P/K4kryJG6+lvlEz+OA
+X-ME-Proxy: <xmx:i0FqaiTEk4Px3IqRWyOkYSyoiqXYfXwwX1WvdWljVc7YUMXKh5-unQ>
+    <xmx:i0Fqat7fgWxLdBgGJXISIihWXY6hiTMv6aNJjTAN7jmgXHhrHMb6yw>
+    <xmx:i0FqalZt0XGFuASztUrqxEPNuEGH_xf577Ar7ulgqgxf4GO_06xlag>
+    <xmx:i0FqahZv1EOEd6ncLcch_4PePD-5cJpSomOqh2vqcgvENPJRFiuY9w>
+    <xmx:i0FqatanVUSGSY54zh1guP6xSXN33irC96kRL2jFnJmgAxSp2N8YF8xV>
+Feedback-ID: id06e481b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 29 Jul 2026 14:08:10 -0400 (EDT)
+Date: Wed, 29 Jul 2026 14:08:46 -0400
+From: Steven Rostedt <steven@rostedt.org>
+To: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Hongyan Xia <hongyan.xia@transsion.com>, Will Deacon <will@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Dennis Zhou <dennis@kernel.org>,
+ Tejun Heo <tj@kernel.org>, Christoph Lameter <cl@gentwo.org>, Oleg Nesterov
+ <oleg@redhat.com>, Naveen N Rao <naveen@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Jiazi Li <jiazi.li@transsion.com>,
+ Pu Hu <hupu@transsion.com>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "linux-mm@kvack.org"
+ <linux-mm@kvack.org>, "linux-trace-kernel@vger.kernel.org"
+ <linux-trace-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+ <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH 9/9] arm64/debug: Mark debug exception helpers
+ __always_inline
+Message-ID: <20260729140846.3c18f437@gandalf.local.home>
+In-Reply-To: <eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
+References: <cover.1785153469.git.hongyan.xia@transsion.com>
+	<eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-tree:   https://github.com/masneyb/linux clk-misc-round-two-for-v7.3
-head:   e2eec03ed313a8180ebe4eb9e32a6b8429f804a5
-commit: d29088009b4afdb7fc1f3cbb6ba3364e483b17d9 [15/45] clk: mediatek: mt8173: fix memory leak on module removal
-config: s390-randconfig-002-20260729 (https://download.01.org/0day-ci/archive/20260730/202607300133.MCJfTRc1-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 890b11e09e45e9d8b29f2f94f22052be3934e757)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260730/202607300133.MCJfTRc1-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607300133.MCJfTRc1-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/clk/mediatek/clk-mt8173-infracfg.c:131:29: error: use of undeclared identifier 'clk_data'
-     131 |         platform_set_drvdata(pdev, clk_data);
-         |                                    ^~~~~~~~
-   1 error generated.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
 
-vim +/clk_data +131 drivers/clk/mediatek/clk-mt8173-infracfg.c
+Masami,
 
-    78	
-    79	static void clk_mt8173_infra_init_early(struct device_node *node)
-    80	{
-    81		int i;
-    82	
-    83		infra_clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
-    84		if (!infra_clk_data)
-    85			return;
-    86	
-    87		for (i = 0; i < CLK_INFRA_NR_CLK; i++)
-    88			infra_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
-    89	
-    90		mtk_clk_register_factors(infra_early_divs,
-    91					 ARRAY_SIZE(infra_early_divs), infra_clk_data);
-    92	
-    93		of_clk_add_hw_provider(node, of_clk_hw_onecell_get, infra_clk_data);
-    94	}
-    95	CLK_OF_DECLARE_DRIVER(mtk_infrasys, "mediatek,mt8173-infracfg",
-    96			      clk_mt8173_infra_init_early);
-    97	
-    98	static int clk_mt8173_infracfg_probe(struct platform_device *pdev)
-    99	{
-   100		struct device_node *node = pdev->dev.of_node;
-   101		int r, i;
-   102	
-   103		if (!infra_clk_data) {
-   104			infra_clk_data = mtk_alloc_clk_data(CLK_INFRA_NR_CLK);
-   105			if (!infra_clk_data)
-   106				return -ENOMEM;
-   107		} else {
-   108			for (i = 0; i < CLK_INFRA_NR_CLK; i++)
-   109				if (infra_clk_data->hws[i] == ERR_PTR(-EPROBE_DEFER))
-   110					infra_clk_data->hws[i] = ERR_PTR(-ENOENT);
-   111		}
-   112	
-   113		r = mtk_clk_register_gates(&pdev->dev, node, infra_gates,
-   114					   ARRAY_SIZE(infra_gates), infra_clk_data);
-   115		if (r)
-   116			return r;
-   117	
-   118		r = mtk_clk_register_cpumuxes(&pdev->dev, node, cpu_muxes,
-   119					      ARRAY_SIZE(cpu_muxes), infra_clk_data);
-   120		if (r)
-   121			goto unregister_gates;
-   122	
-   123		r = of_clk_add_hw_provider(node, of_clk_hw_onecell_get, infra_clk_data);
-   124		if (r)
-   125			goto unregister_cpumuxes;
-   126	
-   127		r = mtk_register_reset_controller_with_dev(&pdev->dev, &clk_rst_desc);
-   128		if (r)
-   129			goto unregister_clk_hw;
-   130	
- > 131		platform_set_drvdata(pdev, clk_data);
-   132	
-   133		return 0;
-   134	
-   135	unregister_clk_hw:
-   136		of_clk_del_provider(node);
-   137	unregister_cpumuxes:
-   138		mtk_clk_unregister_cpumuxes(cpu_muxes, ARRAY_SIZE(cpu_muxes), infra_clk_data);
-   139	unregister_gates:
-   140		mtk_clk_unregister_gates(infra_gates, ARRAY_SIZE(infra_gates), infra_clk_data);
-   141		return r;
-   142	}
-   143	
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Mon, 27 Jul 2026 12:25:48 +0000
+Hongyan Xia <hongyan.xia@transsion.com> wrote:
+
+> From: Hongyan Xia <hongyan.xia@transsion.com>
+> 
+> Static inline should be enough to actually inline functions for most
+> compilers, but my Clang-19 somehow thinks it's better to outline them.
+> These tiny helpers then live in normal .text sections instead of
+> .noinstr sections, violating noinstr.
+> 
+> Mark them __always_inline so the compiler can never outline them.
+> 
+> Signed-off-by: Hongyan Xia <hongyan.xia@transsion.com>
+> ---
+>  arch/arm64/include/asm/esr.h       | 2 +-
+>  arch/arm64/include/asm/percpu.h    | 2 +-
+>  arch/arm64/include/asm/preempt.h   | 4 ++--
+>  arch/arm64/include/asm/ptrace.h    | 4 ++--
+>  arch/arm64/kernel/debug-monitors.c | 2 +-
+>  include/linux/kprobes.h            | 8 ++++----
+
+Are you OK with this patch? If so, can you ack it?
+
+-- Steve
+
+>  6 files changed, 11 insertions(+), 11 deletions(-)
+> 
+
+[..]
+
+> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+> index 8c4f3bb24429..5880445ed0f0 100644
+> --- a/include/linux/kprobes.h
+> +++ b/include/linux/kprobes.h
+> @@ -384,17 +384,17 @@ static inline void kprobe_ftrace_kill(void) {}
+>  struct kprobe *get_kprobe(void *addr);
+>  
+>  /* kprobe_running() will just return the current_kprobe on this CPU */
+> -static inline struct kprobe *kprobe_running(void)
+> +static __always_inline struct kprobe *kprobe_running(void)
+>  {
+>  	return __this_cpu_read(current_kprobe);
+>  }
+>  
+> -static inline void reset_current_kprobe(void)
+> +static __always_inline void reset_current_kprobe(void)
+>  {
+>  	__this_cpu_write(current_kprobe, NULL);
+>  }
+>  
+> -static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
+> +static __always_inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
+>  {
+>  	return this_cpu_ptr(&kprobe_ctlblk);
+>  }
+> @@ -449,7 +449,7 @@ static inline struct kprobe *get_kprobe(void *addr)
+>  {
+>  	return NULL;
+>  }
+> -static inline struct kprobe *kprobe_running(void)
+> +static __always_inline struct kprobe *kprobe_running(void)
+>  {
+>  	return NULL;
+>  }
+
