@@ -1,204 +1,245 @@
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3254CA286
-	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 18:18:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785349117; cv=pass; b=Mfa1hSf/A21upRJReUPX0dsAFCXNn5Hm9a8mNRIOlbHoUlFCAi6f3ZiwndCZmI37B+2Y/5V8b/d+W9j/y+XoptoHUyOl3ftweNj3E9QjkDugg5zSs/mPeKkNm1azEROK2oYP8j9nWg2gN4n2sy4EBYP1tiRxTv2dyp2lsbfE6+g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785349117; c=relaxed/simple;
-	bh=iF3MsUaiv9wYvTwNatTrzedOqyxinRERB8Oc68E6Mdw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZOfS35SEAB3n0E6U5APtUIsXM6N8KXtM+BKj+x9GjiRddzqatqjrJP73K+n8qyC8qmbmg/aTgE3f5k10kZ4lb7JogVYXllkYRoFp/cnp/pLvYYX/Cg0IC7c415iEGR33tj9Gm6BDtdL4z1f4RcC9k5zhqwib3KNhWgEPyakEK9E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G24kGuvw; arc=pass smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09ED83A7F62;
+	Wed, 29 Jul 2026 21:16:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785359781; cv=none; b=hbNaurU6YJsEDUUxkvQP3iM4/mkVtayHt2z+76hV2VTKpXnRgmu1hP+N4pqR9KZHHEJmP0rL6/fSkEdHQgkkxrczDHylEwWHv6CPUu2uy/dANMWdKJLgLwBzMMA0fV3uI4jGDuiFq+Z1EmqRlhGDIPJC/ZJRh3Aw5dHy+pB2ZWE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785359781; c=relaxed/simple;
+	bh=/E9S0+w5sV2vcAaEfaye2O1aU3oewtHO6IOTKhHxi0Y=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cqysNlkDLMnXD5DYCZeI7KS97VDNpmIpojCe9sKuGAZTsvqDwo0aYHe3VDB1GyRGN3d1M9w8graW4BPiU//f3DuV0z2QsgVarLI2Mr3uvShRKFrkyiuCYpHhXFYIpYoVZ5WMAy/xFQAcUj7c5HruDTqrxBWb2dHWz02z2TQ6w2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z3LFvkXm; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G24kGuvw"
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-69e8ea2783aso1847609a12.3
-        for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 11:18:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785349107; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dp85AZoZ6ZwqKl+Z/4WGR3hPyxVY/KJRM2PAL+lS/ziLGRcIsZxhprSfsDQCOwA84T
-         WubNe+oi0PTAG9q4iEBzROrpycCQUsOygPae1ntrnPbyDcbXwgc5kG4q6NoWpLlSAo+z
-         PE+gnhpJ3NiP438yHwrdaKUyG34ZzfVpq0ccwAhtOiJyv4o//eFgwacdDvahww4wHbng
-         GONxKl3kKE4LlBmelJiL9T1uN5qsfcXI6nX5rUu41RWyIRlF9r9hU0SCGiSfZIKqSZmV
-         JFFFrhutZdfaxzEY0ZgsiQcZ216FVzgbx8U5W7e0DE+TlKol0QOqotPM2RjNb6CgPpee
-         YzKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=rcCuHqVYCKL4ZVfAAcjqS5FtBduw+dbkV1WkEbl+SbI=;
-        fh=CVZutePVkf4mciHg3avg+4t1PqMG34PIHqZy8bGld8o=;
-        b=Qw3/+kq2itztNW6EXTfysgWlyzNi1zoatDRetKgKhJC/IHobeTUlMUU0Q32rsfu50y
-         8RXqvCimVZgAtQqLbt5aSL5QHmmujpoU0rH1gc7Fp9L21/Eb/IF1jyrLLcHAX82Z+hXa
-         hWr9fF0hsc29YnWF9JAaKSw9qb1sMCaLMHuRV/aLNM4u+z1mH9dNM3ep3zg/46J4PfLx
-         k6/fP00JKFezAQTa60XXvZ8p2cBQN5SIf1uq1m1BiZdAXInT1it4OhJ4ovqDVwTDbajp
-         kx1ymBFO1Ibtqsn/HnWQQe2AM9u+/9MSksJxyag5xDi4GmH8bDOw9AKgJ69ACcBWFHUe
-         kRNQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785349107; x=1785953907; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=rcCuHqVYCKL4ZVfAAcjqS5FtBduw+dbkV1WkEbl+SbI=;
-        b=G24kGuvw1n+4Nm7KABWrSG4+tFb3QRrD8svLwMRGgbBcoVi2GY0nc3sEjREzIP5Fra
-         0fLvY2MvWMBG0vUFcdykRYLNIAXHHyKiD4TtXe2T8CG3Yva6/E2pHLYdU7zeJ951/6sY
-         YXhrycgbdVBjj/hT0ZBDJdgGMM/ukJYTIICnhggp7SGkC86tBLDAxJHZ76ZnOeZXiVIT
-         Bo0bkORvDq1Eq9g6n8VQ4C6gP9oLJFPFLnpHMyGuAgNgpTe6G6/3XOwdNXhfl9/OG/xo
-         2DnF8rw4TbdFIqkni5m8+y6c0bad8Hu52dHApVKKkEHqq9BKWNxZ6Tj5uVdeC0hVmwc7
-         BOFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785349107; x=1785953907;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rcCuHqVYCKL4ZVfAAcjqS5FtBduw+dbkV1WkEbl+SbI=;
-        b=NbjjxBfoBB9cF7wGSclxylUaHv1MoVP3Lz4Na1Gl9d0TP7P/tORbLBNJQQd9C3zJ8E
-         vi+YJ//3VrJ6Z3vuV1T7lNbdOZZ2xHgoMcnJ77e2Jb+wx4Z80GWM8YHD8moxoMdOwluO
-         moa31sp0U6mT4ajPJuvf/0GBy2gnxk7aVe+/B3H9uztLDBIZz0USnfNjKWhFSUiGxJAQ
-         GSUoCTJbmPqXr+CQ+gZztc6oX5oEbkyrqXVlhVkTZDcitPYiGNuxDqX6G7hfEy7ZCyZ7
-         hOmihb8kKcmz28pn9bYW9i7UeXIDXDGFBw4e1bPMWt27a1TPfhl/9tDERa9+uXWT9ui/
-         Qwng==
-X-Forwarded-Encrypted: i=1; AHgh+RoQjtn/gX/QVkfYWWfhVnTJIKFWfBJY2cHdPt0uQRC7zLfZ8ZtfQx8yPSpVUx0tFLhzwYWQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yy0YdNMFif3l8LaeTQmDcQHG7bFB2l5stMXhmoxhDagPgICg2Eu
-	LIBwAGSiIdesNw1b3IMZdQt8Zdvp5+AXZnUeUvsog5yZKXF2bwvStv/NJOdQRsM+bDgMUus76Cs
-	Wxm3HXimdtQWTc8ok7R9Urdp5HUGnRHY=
-X-Gm-Gg: AR+sD12vHyuJPraAYgpaI20XC+xT/oUo7uFnVz1SwcRPFVa5d5p+IgJTWJGuc2C8yRt
-	dDyMWTcFPcykJdZAcIev4B318nwytc1c7cTuM92hcSJqYD9d62ji49nlSlhKOniNYxuvlmp1dl7
-	uHLxrh7jF3SxDDx7eqNA4R6Sdmt7fCHCX0sie2YXyKvES4SYWqpR+dzWZJm++jbhYuJgguukq3D
-	bDvQqHamxwyLDkCECZjc37vd9+ZiAjyz+TaKR7BfsX55urcSmHT1ncuxitBKDnJXZ4yqzZcp9lx
-	sa7T1tVv/DmDsuxcfa0t28MzJuRbv1CrNn3aV+I6+WwDxWxyU2gKF/c6FqjdNXyIdH4fdPBf/mA
-	9FUz34VAWk+y9ChOI9sWxesljhHiq2h+kyKa0ph7DsfsiU2IaVf/xgJ334rwS4cWFoE31Sjn8e/
-	E2MDktM8Owsy5l7MxoybXPUrQawhizJQw9OT3cOnu45hDucICSL0cFYsSdhEnG47SVCQ==
-X-Received: by 2002:a05:6402:e0c:b0:698:be4d:ca2a with SMTP id
- 4fb4d7f45d1cf-6a034a398cfmr4241255a12.15.1785349107364; Wed, 29 Jul 2026
- 11:18:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z3LFvkXm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785359779; x=1816895779;
+  h=date:from:to:cc:subject:message-id;
+  bh=/E9S0+w5sV2vcAaEfaye2O1aU3oewtHO6IOTKhHxi0Y=;
+  b=Z3LFvkXmcVA1Tj80HJv/2qu+bqpzBnWzDBy5YiFUtACjAiRbWRYNi3Kt
+   dbw9tHQKlxErEgE9ImOB/lmspMM4BsXrf3U4751VswyMlTlFv21jW6+S1
+   R58xGDEWI3HbFcUhSKolAX6heZNMSmWBM5aD9MgpZdYMZrtDlDVRjNKhG
+   sSltegb9AbjHiAY27b1/fe+QASyh8avIbfqJViXbzqwKbKOWzR1jhKNS/
+   DavGig+AQGurLI27p8bys8EeaQGXGVaiRWPbGHCY0VhvfQ/OKLDkTPfQ5
+   dQkUaPsaOTp3/m2c9Dt1G2XxoumBKM9+9ZCC8tvzfN5wPMlb60CYpm5s8
+   g==;
+X-CSE-ConnectionGUID: Yq9qs8GpRg2OqJnfD3Xnbw==
+X-CSE-MsgGUID: JMXVRFx6TwCKNq61sUE5DA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="86166034"
+X-IronPort-AV: E=Sophos;i="6.25,193,1779174000"; 
+   d="scan'208";a="86166034"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 14:16:17 -0700
+X-CSE-ConnectionGUID: gNLVPEK1SWGgAohSkvvOew==
+X-CSE-MsgGUID: 2zsAQkTeSGCncilBwLNyZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,193,1779174000"; 
+   d="scan'208";a="264386231"
+Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
+  by orviesa005.jf.intel.com with ESMTP; 29 Jul 2026 14:16:15 -0700
+Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wpBdM-00000000fgd-41kV;
+	Wed, 29 Jul 2026 21:16:12 +0000
+Date: Thu, 30 Jul 2026 05:15:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: LiangCheng Wang <zaq14760@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Thomas Zimmermann <tzimmermann@suse.de>
+Subject: drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame
+ size (19320) exceeds limit (8192) in 'pixpaper_panel_hw_init'
+Message-ID: <202607300433.8npIqx2t-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260716205811.800920-1-rosenp@gmail.com> <g3gtckpqgacw44jqqb5hb3oejpelxvbba47tdwsvksxbbskygp@mcwtsbypoyar>
-In-Reply-To: <g3gtckpqgacw44jqqb5hb3oejpelxvbba47tdwsvksxbbskygp@mcwtsbypoyar>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Wed, 29 Jul 2026 11:18:15 -0700
-X-Gm-Features: AUfX_mxrjUfVZ84R9XbJRtIPW_yLO3WV_Dd3HDwSinvRF3cFNjojFlllhS1HjGw
-Message-ID: <CAKxU2N_f1nN4Oo94V9MY6Q-wp66j=3kodfMs0BeXVGB9XivvNA@mail.gmail.com>
-Subject: Re: [PATCHv2] PCI: xilinx: use fwnode_irq_get() for INTx IRQ lookup
-To: Manivannan Sadhasivam <mani@kernel.org>
-Cc: linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Michal Simek <michal.simek@amd.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, 
-	"moderated list:ARM/ZYNQ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 29, 2026 at 9:00=E2=80=AFAM Manivannan Sadhasivam <mani@kernel.=
-org> wrote:
->
-> On Thu, Jul 16, 2026 at 01:58:11PM -0700, Rosen Penev wrote:
-> > Replace irq_of_parse_and_map() with fwnode_irq_get(dev_fwnode(dev), 0)
-> > in xilinx_pcie_parse_dt(). For an OF-backed device this is equivalent t=
-o
-> > the previous call, but uses the generic firmware-node API.
-> >
->
-> What is the benefit of using fwnode API for OF only driver?
-I get conflicting information. Apparently of_irq_get needs a call to
-irq_dispose_mapping but fwnode_irq_get does not. irq_of_parse_and_map
-definitely does.
->
-> - Mani
->
-> > Unlike irq_of_parse_and_map(), fwnode_irq_get() returns a positive IRQ =
-or
-> > a negative errno and never 0 (it rewrites 0 to -EINVAL). Store the resu=
-lt
-> > in an int and check for irq < 0, returning the error (including
-> > -EPROBE_DEFER). This also adds the error handling the previous code
-> > lacked, where irq_of_parse_and_map() failures were passed straight into
-> > devm_request_irq().
-> >
-> > Built for ARM (multi_v7_defconfig + CONFIG_PCIE_XILINX) with LLVM=3D1;
-> > drivers/pci/controller/pcie-xilinx.o compiles cleanly.
-> >
-> > Assisted-by: opencode:hy3-free
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > ---
-> >  v2: use dev_err_probe to handle EPROBE_DEFER.
-> >  drivers/pci/controller/pcie-xilinx.c | 15 ++++++++-------
-> >  1 file changed, 8 insertions(+), 7 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/pcie-xilinx.c b/drivers/pci/control=
-ler/pcie-xilinx.c
-> > index 4aa139abac16..58532296182f 100644
-> > --- a/drivers/pci/controller/pcie-xilinx.c
-> > +++ b/drivers/pci/controller/pcie-xilinx.c
-> > @@ -20,10 +20,10 @@
-> >  #include <linux/of_address.h>
-> >  #include <linux/of_pci.h>
-> >  #include <linux/of_platform.h>
-> > -#include <linux/of_irq.h>
-> >  #include <linux/pci.h>
-> >  #include <linux/pci-ecam.h>
-> >  #include <linux/platform_device.h>
-> > +#include <linux/property.h>
-> >
-> >  #include "../pci.h"
-> >
-> > @@ -535,7 +535,7 @@ static int xilinx_pcie_parse_dt(struct xilinx_pcie =
-*pcie)
-> >       struct device *dev =3D pcie->dev;
-> >       struct device_node *node =3D dev->of_node;
-> >       struct resource regs;
-> > -     unsigned int irq;
-> > +     int irq;
-> >       int err;
-> >
-> >       err =3D of_address_to_resource(node, 0, &regs);
-> > @@ -548,7 +548,10 @@ static int xilinx_pcie_parse_dt(struct xilinx_pcie=
- *pcie)
-> >       if (IS_ERR(pcie->reg_base))
-> >               return PTR_ERR(pcie->reg_base);
-> >
-> > -     irq =3D irq_of_parse_and_map(node, 0);
-> > +     irq =3D fwnode_irq_get(dev_fwnode(dev), 0);
-> > +     if (irq < 0)
-> > +             return irq;
-> > +
-> >       err =3D devm_request_irq(dev, irq, xilinx_pcie_intr_handler,
-> >                              IRQF_SHARED | IRQF_NO_THREAD,
-> >                              "xilinx-pcie", pcie);
-> > @@ -585,10 +588,8 @@ static int xilinx_pcie_probe(struct platform_devic=
-e *pdev)
-> >       pcie->dev =3D dev;
-> >
-> >       err =3D xilinx_pcie_parse_dt(pcie);
-> > -     if (err) {
-> > -             dev_err(dev, "Parsing DT failed\n");
-> > -             return err;
-> > -     }
-> > +     if (err)
-> > +             return dev_err_probe(dev, err, "Parsing DT failed\n");
-> >
-> >       xilinx_pcie_init_port(pcie);
-> >
-> > --
-> > 2.55.0
-> >
->
-> --
-> =E0=AE=AE=E0=AE=A3=E0=AE=BF=E0=AE=B5=E0=AE=A3=E0=AF=8D=E0=AE=A3=E0=AE=A9=
-=E0=AF=8D =E0=AE=9A=E0=AE=A4=E0=AE=BE=E0=AE=9A=E0=AE=BF=E0=AE=B5=E0=AE=AE=
-=E0=AF=8D
+Hi LiangCheng,
+
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   fc02acf6ac0ccde0c805c2daa9148683cdd01ba8
+commit: c9e70639f5915f2d084a0126e62fe53a52c29cea drm: tiny: Add support for Mayqueen Pixpaper e-ink panel
+date:   11 months ago
+config: x86_64-randconfig-014-20260730 (https://download.01.org/0day-ci/archive/20260730/202607300433.8npIqx2t-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260730/202607300433.8npIqx2t-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: c9e70639f591 ("drm: tiny: Add support for Mayqueen Pixpaper e-ink panel")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607300433.8npIqx2t-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:3:
+   In file included from include/linux/compiler_types.h:171:
+   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
+      28 | #define __SANITIZE_ADDRESS__
+         |         ^
+   <built-in>:353:9: note: previous definition is here
+     353 | #define __SANITIZE_ADDRESS__ 1
+         |         ^
+>> drivers/gpu/drm/tiny/pixpaper.c:579:12: warning: stack frame size (19320) exceeds limit (8192) in 'pixpaper_panel_hw_init' [-Wframe-larger-than]
+     579 | static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
+         |            ^
+   2 warnings generated.
+
+
+vim +/pixpaper_panel_hw_init +579 drivers/gpu/drm/tiny/pixpaper.c
+
+   578	
+ > 579	static int pixpaper_panel_hw_init(struct pixpaper_panel *panel)
+   580	{
+   581		struct pixpaper_error_ctx err = { .errno_code = 0 };
+   582	
+   583		gpiod_set_value_cansleep(panel->reset, 0);
+   584		msleep(50);
+   585		gpiod_set_value_cansleep(panel->reset, 1);
+   586		msleep(50);
+   587	
+   588		pixpaper_wait_for_panel(panel);
+   589	
+   590		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_4D, &err);
+   591		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_4D_CONFIG, &err);
+   592		if (err.errno_code)
+   593			goto init_fail;
+   594		pixpaper_wait_for_panel(panel);
+   595	
+   596		pixpaper_send_cmd(panel, PIXPAPER_CMD_PANEL_SETTING, &err);
+   597		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG, &err);
+   598		pixpaper_send_data(panel, PIXPAPER_PSR_CONFIG2, &err);
+   599		if (err.errno_code)
+   600			goto init_fail;
+   601		pixpaper_wait_for_panel(panel);
+   602	
+   603		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SETTING, &err);
+   604		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG1, &err);
+   605		pixpaper_send_data(panel, PIXPAPER_PWR_CONFIG2, &err);
+   606		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
+   607		pixpaper_send_data(panel, PIXPAPER_PWR_VSPL_15V, &err);
+   608		pixpaper_send_data(panel, PIXPAPER_PWR_VSN_4V, &err);
+   609		pixpaper_send_data(panel, PIXPAPER_PWR_VSP_8_2V, &err);
+   610		if (err.errno_code)
+   611			goto init_fail;
+   612		pixpaper_wait_for_panel(panel);
+   613	
+   614		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_OFF_SEQUENCE, &err);
+   615		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG1, &err);
+   616		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG2, &err);
+   617		pixpaper_send_data(panel, PIXPAPER_PFS_CONFIG3, &err);
+   618		if (err.errno_code)
+   619			goto init_fail;
+   620		pixpaper_wait_for_panel(panel);
+   621	
+   622		pixpaper_send_cmd(panel, PIXPAPER_CMD_BOOSTER_SOFT_START, &err);
+   623		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG1, &err);
+   624		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG2, &err);
+   625		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG3, &err);
+   626		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG4, &err);
+   627		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG5, &err);
+   628		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG6, &err);
+   629		pixpaper_send_data(panel, PIXPAPER_BTST_CONFIG7, &err);
+   630		if (err.errno_code)
+   631			goto init_fail;
+   632		pixpaper_wait_for_panel(panel);
+   633	
+   634		pixpaper_send_cmd(panel, PIXPAPER_CMD_PLL_CONTROL, &err);
+   635		pixpaper_send_data(panel, PIXPAPER_PLL_CONFIG, &err);
+   636		if (err.errno_code)
+   637			goto init_fail;
+   638		pixpaper_wait_for_panel(panel);
+   639	
+   640		pixpaper_send_cmd(panel, PIXPAPER_CMD_TEMP_SENSOR_CALIB, &err);
+   641		pixpaper_send_data(panel, PIXPAPER_TSE_CONFIG, &err);
+   642		if (err.errno_code)
+   643			goto init_fail;
+   644		pixpaper_wait_for_panel(panel);
+   645	
+   646		pixpaper_send_cmd(panel, PIXPAPER_CMD_VCOM_INTERVAL, &err);
+   647		pixpaper_send_data(panel, PIXPAPER_CDI_CONFIG, &err);
+   648		if (err.errno_code)
+   649			goto init_fail;
+   650		pixpaper_wait_for_panel(panel);
+   651	
+   652		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_60, &err);
+   653		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG1, &err);
+   654		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_60_CONFIG2, &err);
+   655		if (err.errno_code)
+   656			goto init_fail;
+   657		pixpaper_wait_for_panel(panel);
+   658	
+   659		pixpaper_send_cmd(panel, PIXPAPER_CMD_RESOLUTION_SETTING, &err);
+   660		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_H, &err);
+   661		pixpaper_send_data(panel, PIXPAPER_TRES_HRES_L, &err);
+   662		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_H, &err);
+   663		pixpaper_send_data(panel, PIXPAPER_TRES_VRES_L, &err);
+   664		if (err.errno_code)
+   665			goto init_fail;
+   666		pixpaper_wait_for_panel(panel);
+   667	
+   668		pixpaper_send_cmd(panel, PIXPAPER_CMD_GATE_SOURCE_START, &err);
+   669		pixpaper_send_data(panel, PIXPAPER_GSST_S_START, &err);
+   670		pixpaper_send_data(panel, PIXPAPER_GSST_RESERVED, &err);
+   671		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_H, &err);
+   672		pixpaper_send_data(panel, PIXPAPER_GSST_G_START_L, &err);
+   673		if (err.errno_code)
+   674			goto init_fail;
+   675		pixpaper_wait_for_panel(panel);
+   676	
+   677		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E7, &err);
+   678		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E7_CONFIG, &err);
+   679		if (err.errno_code)
+   680			goto init_fail;
+   681		pixpaper_wait_for_panel(panel);
+   682	
+   683		pixpaper_send_cmd(panel, PIXPAPER_CMD_POWER_SAVING, &err);
+   684		pixpaper_send_data(panel, PIXPAPER_PWS_CONFIG, &err);
+   685		if (err.errno_code)
+   686			goto init_fail;
+   687		pixpaper_wait_for_panel(panel);
+   688	
+   689		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E0, &err);
+   690		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E0_CONFIG, &err);
+   691		if (err.errno_code)
+   692			goto init_fail;
+   693		pixpaper_wait_for_panel(panel);
+   694	
+   695		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B4, &err);
+   696		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B4_CONFIG, &err);
+   697		if (err.errno_code)
+   698			goto init_fail;
+   699		pixpaper_wait_for_panel(panel);
+   700	
+   701		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_B5, &err);
+   702		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_B5_CONFIG, &err);
+   703		if (err.errno_code)
+   704			goto init_fail;
+   705		pixpaper_wait_for_panel(panel);
+   706	
+   707		pixpaper_send_cmd(panel, PIXPAPER_CMD_UNKNOWN_E9, &err);
+   708		pixpaper_send_data(panel, PIXPAPER_UNKNOWN_E9_CONFIG, &err);
+   709		if (err.errno_code)
+   710			goto init_fail;
+   711		pixpaper_wait_for_panel(panel);
+   712	
+   713		return 0;
+   714	
+   715	init_fail:
+   716		drm_err(&panel->drm, "Hardware initialization failed (err=%d)\n",
+   717			err.errno_code);
+   718		return err.errno_code;
+   719	}
+   720	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
