@@ -1,125 +1,1040 @@
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445BE32B13A
-	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 03:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3C631DD97
+	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 04:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785296468; cv=none; b=Pbtw3aK4x42cOyNku8k+64w7jsf2U8UUGLYyOmM5QZyZs9THKIHsRmtsep6gyy30AeFDGWyYx93SzBnMVFj4m8tKyEa+BdtzDd1u8+qCOKOZUvEjauOQJqXdkMZABddS0U8ABBgMzj71FtmZj+mciMz02lLKk6A7rgwwjPpkkUY=
+	t=1785300363; cv=none; b=DKGmMpVjb1JW71BdFcz2yGMps3jEUxc1jJ2+b+bCOWYKEiU6w94NxGwFYAVMy4E+xoUB0IMHNMpg1V48jQM2oiNvFeGDZNb7VbUMMXrMSBNUsUM8uPMMblR/hWOy9bcfNte8019IklBg9sESmFQi3rQK1JU4VGUu8icaJqhs3L0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785296468; c=relaxed/simple;
-	bh=kyg5rzY90hhDhLDLHmSGbHFlONdb32qcU/dO4mwBsso=;
-	h=Mime-Version:Subject:From:To:CC:Message-ID:Date:Content-Type:
-	 References; b=t92bn2ZWzE2o8DczoU52gViE/ee3kHSHbJuYPbjIVtg902jPPpvEWCvMeP5LzEe+0qmXuJggmYrDHS8SfWxPPPVd+GT7vHINW/TDrQmvn25SXxmEQsKEmaf+5HE9k39y8LB/3QQ4V++D9962WKIWDAwvfxpcoxFF8l3XvFofifY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=o+gNIbZu; arc=none smtp.client-ip=203.254.224.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1785300363; c=relaxed/simple;
+	bh=6XkbK0+T0V6QVDBsFh/wV4AR1s5PUSojrdEWSbNU7A4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OE0vmdG5dOPYYtGCNrJbrqIOCn5d+egBRnUFOZ6kgfX9h6w0b2cmz2x50x8LiYhTCcnUmNMi5ttBhJ6IlQ8UM/5OzitM7z7y1LPHLrfEweT2vk/LYOLcvnww4/xyiuNp/jsTPjq0UQpbZ80RIWEkTC60rkiFEYNfmhBk9Ewpl6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gI3Fs0P4; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="o+gNIbZu"
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260729034102epoutp01e7b9648fbbba3b66bd7543aa2212922f~GpayXrDLL1814218142epoutp01m
-	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 03:41:02 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260729034102epoutp01e7b9648fbbba3b66bd7543aa2212922f~GpayXrDLL1814218142epoutp01m
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1785296463;
-	bh=kyg5rzY90hhDhLDLHmSGbHFlONdb32qcU/dO4mwBsso=;
-	h=Subject:Reply-To:From:To:CC:Date:References:From;
-	b=o+gNIbZuglU3pJ6E/08bcqgXiDLLj2QuQLa5HVyjFlKgt5G0x0EFNapHwOWpivqQF
-	 RmRSinAEBpISCm1r4CkjhUXpdzpY4W5zs2JgFXHGOSSIb+oDJCghT1sjukw/MlTd1H
-	 AsjBz73iGEM3sC5IfRys2NPg1xsgC6igPW/8ZMMs=
-Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
-	20260729034101epcas5p1a82e6097e73bb6c7ba322230094ba9c1~Gpaxa3qtv1874118741epcas5p19;
-	Wed, 29 Jul 2026 03:41:01 +0000 (GMT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39]) by
-	epsnrtp01.localdomain (Postfix) with ESMTP id 4h8ymF6k2Qz6B9m7; Wed, 29 Jul
-	2026 03:41:01 +0000 (GMT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gI3Fs0P4"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cc61541f8cso24938465ad.0
+        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 21:46:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785300360; x=1785905160; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QeHZfm5vRvOsKclPrij/OdGrKhaiZ9j8mCQkR9PaENc=;
+        b=gI3Fs0P48JvJ6VYaS0S4lgLwjAHYfLpjsgOZ2OihsEne3R3Xv95DX7zIYwH0l8lUJv
+         JLYYU4cwEe7mq1/01t7CWxHODAgZHM9fkeBf/D4Q5sLUCT9iloorql1YXJBM5oEFX9Iz
+         1IaeeX/uO7QZFzi/l9wLuFkAOz5mZ284x3VEHN2mbN8CF47kMXUwoz1qvXClsTqGvB+W
+         wHXIdEktBeyZADyF8Psid3UYnjJTzaUhrG+z+BeaemWe7FvmqV8MdwiitCrUNO+wyywE
+         AwAq98o9FQtqJy8D2zKDPZyaKjr9m5/Pm7ZC/ACn8pndnS0EWyiURTtIdKZT5Fcr9lKr
+         PlhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785300360; x=1785905160;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QeHZfm5vRvOsKclPrij/OdGrKhaiZ9j8mCQkR9PaENc=;
+        b=P1aObC9ih7nsv7xGtbjb+LHqSfHg2N0ow7XFHwMLyuSeNX1TwuFFOJeijgI7lDjcn4
+         bX5FZF0OvDKlng9odLGzdfKkOIWUDo5ixR+4NLhSoSdJfE2F2qRiLvogAXcym4j00KPK
+         9BvwgR214w9+HEJAa+VGU16On5vpFFxr/HIuEi3Kl2Vz6iqGoVaXdwblTRBhWvO1M1bV
+         oQYZhih4Ydo3U0EtX9ufppPegmAqXLIaR/2QtGGVeaE+LCz+jxS3GT3bj4+Ql8T7/zNk
+         GxvjYQg+IrlaxlHR0yuROF06/F5RbJrwagSL3gVqjU5cvVmwmmtPX3Q68Hzs/tjWM2lI
+         wSXQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq82qsn73zRR7YyWCNWS2gFk2wC046vLQdsYjzgY5CqUdEQLf1PBk0u3HI2p0IHEHtVlqoF@lists.linux.dev
+X-Gm-Message-State: AOJu0YyPE1lo1G+XbTHX1kpPdd3AvSZz895MBM5EYYUIPhrEsrJq2kFC
+	ERgIiLjCquifH9zSntUvEQO5XefIzvGlxCDNiQnO0lD5s57trJgyzlM5
+X-Gm-Gg: AR+sD12Go08P7ErhRixrPilHL9xusDHvDUMSD9GSjI8TAjXP/jB1SHkxDynyriNV8eG
+	IteIaQutixWqbsXMEX7u6cEkcc8lnwhrYJ4MTkGd+PXHef6URrRMvHkmSoxIs9bmy5BULIAVOkS
+	y2Us481P1sV9vKK4GWPpAa5YUBq2t1RwnvS/XPSOHsQUG0IQmZvo42skTfUJznVGC78oHbU/J4w
+	zCUAptrWnDitvyGrSsxuCW023lGV/m8t70Pot5DZRZNSXq9u+uwp0JOnvL/4eqssZpI8Derkhq7
+	MYK6okEiTwEkonlO9Fy0UWWXeidHH2iKzBQsCWg1nLxHFZrm2e8hmVRQ02YItBLlB5v/snpPhXJ
+	4JwmZMYINNqu70JOaqhPAJVgXPs7P32T5REyak7l+pFFNHxDaiBAxeExDnnGs7ZSz2SsTSP8dQd
+	yUdVQn4ngFUvwYLpjDr8xF9uJbH3pqulrq5ahrcCxek/v98yOFPPzmJ56xLELKiD4fRPnrB44ES
+	cDYNLoPe1uGPxqBd3vT
+X-Received: by 2002:a17:903:1b07:b0:2ce:b43e:44da with SMTP id d9443c01a7336-2d02672bacbmr8394535ad.17.1785300359576;
+        Tue, 28 Jul 2026 21:45:59 -0700 (PDT)
+Received: from localhost ([112.204.126.243])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-2d022a4af04sm5097755ad.31.2026.07.28.21.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jul 2026 21:45:59 -0700 (PDT)
+From: Alex Yeo <alexyeo362@gmail.com>
+To: platform-driver-x86@vger.kernel.org
+Cc: alexyeo362@gmail.com,
+	Kenneth Chan <kenneth.t.chan@gmail.com>,
+	Hans de Goede <hansg@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [RFC PATCH v8] platform/x86: panasonic-laptop: add fan speed mode for newer models
+Date: Wed, 29 Jul 2026 12:43:31 +0800
+Message-ID: <20260729044332.382862-1-alexyeo362@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Subject: RE: [PATCH 1/1] arm: backtrace-clang: fix wrong sp usage for
- unwinding
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From: Maninder Singh <maninder1.s@samsung.com>
-To: "linux@armlinux.org.uk" <linux@armlinux.org.uk>, "nathan@kernel.org"
-	<nathan@kernel.org>, "nick.desaulniers+lkml@gmail.com"
-	<nick.desaulniers+lkml@gmail.com>, "morbo@google.com" <morbo@google.com>,
-	"justinstitt@google.com" <justinstitt@google.com>
-CC: Onkarnath <onkarnath.1@samsung.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Rohit Thapliyal <r.thapliyal@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
-Date: Wed, 29 Jul 2026 09:11:01 +0530
-X-CMS-MailID: 20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5
-References: <CGME20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Ping=21 Any comments?
+The following is divided into 2 sections:
+ - (DRIVER) Driver and testing details
+ - (REVERSE ENGINEERING NOTES) To explain and document
+   basis for the driver code.
 
-> show_stack() can be called for any task, however c_backtrace always unwin=
-ds
-> frames based on the =22sp=22 register. This results in printing the backt=
-race of
-> the current task instead of the target task.
->=20
-> Try with normal TC:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> =C2=A0=20=C2=A0=20=C2=A0=20=20for_each_process(p)=20=7B=0D=0A>=20=C2=A0=
-=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=20sched_show_task=
-(p);=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=20=20=7D=0D=0A>=20=0D=0A>=20=5B7.433=
-271=5D=20task:kthreadd=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20state:S=20stack:0=
-=C2=A0=20=C2=A0=20=20pid:2=C2=A0=20=C2=A0=20=20tgid:2=C2=A0=20=C2=A0=20=20p=
-pid:0=C2=A0=20=C2=A0=20=C2=A0=20task_flags:0x208040=20flags:0x00000000=0D=
-=0A>=20=5B7.433633=5D=20Call=20trace:=0D=0A>=20=5B7.433640=5D=20=5B<8011341=
-8>=5D=20(dump_backtrace)=20from=20=5B<80113510>=5D=20(show_stack+0x14/0x18)=
-=0D=0A>=20..=0D=0A>=20=5B7.433676=5D=20=5B<8016749c>=5D=20(sched_show_task)=
-=20from=20=5B<803cb324>=5D=20(meminfo_proc_show+0x6c/0x930)=0D=0A>=20=5B7.4=
-34019=5D=C2=A0=20r5:8158e300=20r4:8b4882d0=0D=0A>=20=5B7.434024=5D=20=5B<80=
-3cb324>=5D=20(meminfo_proc_show)=20from=20=5B<80365788>=5D=20(seq_read_iter=
-+0x148/0x4bc)=0D=0A>=20=5B7.434045=5D=20=5B<80365788>=5D=20(seq_read_iter)=
-=20from=20=5B<803c044c>=5D=20(proc_reg_read_iter+0xb8/0xc4)=0D=0A>=20=5B7.4=
-34060=5D=20=5B<803c044c>=5D=20(proc_reg_read_iter)=20from=20=5B<80377104>=
-=5D=20(copy_splice_read+0x228/0x308)=0D=0A>=20=0D=0A>=20It=20should=20unwin=
-d=20frame=20based=20on=20passed=20=22fp=22.=0D=0A>=20(CONFIG_UNWINDER_FRAME=
-_POINTER=3Dy)=0D=0A>=20=0D=0A>=20With=20fix:=0D=0A>=20=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=0D=0A>=20=5B13.933732=5D=20task:kthreadd=C2=A0=20=C2=A0=20=C2=A0=20=
-=C2=A0=20state:S=20stack:0=C2=A0=20=C2=A0=20=20pid:2=C2=A0=20=C2=A0=20=20tg=
-id:2=C2=A0=20=C2=A0=20=20ppid:0=C2=A0=20=C2=A0=20=C2=A0=20task_flags:0x2080=
-40=20flags:0x00000000=0D=0A>=20=5B13.934165=5D=20Call=20trace:=0D=0A>=20=5B=
-13.934604=5D=20=5B<80afa1a8>=5D=20(schedule)=20from=20=5B<8015426c>=5D=20(k=
-threadd+0x124/0x208)=0D=0A>=20=5B13.934654=5D=C2=A0=20r10:8100bbf0=20r4:811=
-6f440=0D=0A>=20=5B13.934664=5D=20=5B<8015426c>=5D=20(kthreadd)=20from=20=5B=
-<8010010c>=5D=20(ret_from_fork+0x14/0x28)=0D=0A>=20=5B13.934691=5D=20Except=
-ion=20stack(0xf081df9c=20to=200xf081dfe4)=0D=0A>=20=0D=0A>=20Additionally,=
-=20the=20extra=20manipulation=20of=20=22sp=22=20register=20appears=20unnece=
-ssary=20in=20the=20=22current=22=0D=0A>=20task=20also=20since=20the=20=22fp=
-=22=20register=20is=20already=20provided.=0D=0A>=20=0D=0A>=20Signed-off-by:=
-=20Onkarnath=20=0D=0A>=20Signed-off-by:=20Maninder=20Singh=20=0D=0A>=20---=
-=0D=0A>=20=20arch/arm/lib/backtrace-clang.S=20=7C=204=20----=0D=0A>=20=201=
-=20file=20changed,=204=20deletions(-)=0D=0A>=20=0D=0A>=20diff=20--git=20a/a=
-rch/arm/lib/backtrace-clang.S=20b/arch/arm/lib/backtrace-clang.S=0D=0A>=20i=
-ndex=20290c52a60fc6..993410a6afd1=20100644=0D=0A>=20---=20a/arch/arm/lib/ba=
-cktrace-clang.S=0D=0A>=20+++=20b/arch/arm/lib/backtrace-clang.S=0D=0A>=20=
-=40=40=20-105,10=20+105,6=20=40=40=20ENDPROC(c_backtrace)=0D=0A>=20=20=09=
-=09moveq=09mask,=20=230xfc000003=0D=0A>=20=20=09=09movne=09mask,=20=230=09=
-=09=40=20mask=20for=2032-bit=0D=0A>=20=20=0D=0A>=20-/*=0D=0A>=20-=20*=20Swi=
-tches=20the=20current=20frame=20to=20be=20the=20frame=20for=20dump_stack.=
-=0D=0A>=20-=20*/=0D=0A>=20-=09=09add=09frame,=20sp,=20=2324=09=09=40=20swit=
-ch=20to=20false=20frame=0D=0A>=20=20for_each_frame:=09tst=09frame,=20mask=
-=09=09=40=20Check=20for=20address=20exceptions=0D=0A>=20=20=09=09bne=09no_f=
-rame=0D=0A>=20=20=0D=0A>=20--=20=0D=0A>=202.34.1=0D=0A=0D=0A
+DRIVER:
+
+I have a CF-SR4 and Linux works out of the box. Compared to
+previous models, this one runs the fans at high speed by default
+when the computer starts.
+
+When the EC controls the fan, the minimum speed is somewhere
+between 70-80% and is a lot higher than it needs to be.
+
+This issue is not present when using Windows 11 as it takes control over
+the fan and ramps it down to an appropriate speed.
+
+Implementation:
+
+ - fan mode: the driver does not cache state. It relies on querying
+   via ACPI every time the fan mode is read. If other code like IPF were to
+   change anything outside of the driver, it should not conflict.
+ - ownership: hwmon owns the fan. If any other part of the code
+   including callbacks to other subsystems such as thermal want to
+   interact with the fan, it uses the hwmon lock.
+ - hwmon lock: guard() used instead of manual mutex lock/unlock
+ - hwmon lock is used for the entire duration the hwmon device exists
+ - quirks are used as I cannot guarantee this feature or implementation
+   is the same across all models. This is to be on the safe side as the
+   Let's Note line goes back a long time and changes may have unintended
+   effects on older models.
+ - suspend: the laptop only supports s2idle. Since the driver cannot
+   run during this state, it hands control back to the EC (auto mode) on
+   suspend. It is expected that any fan control daemon retake control
+   when waking up from suspend.
+ - thermal: while the hwmon code expects pwm1_enable before it can set
+   the speed, calling thermal on a specific speed will automatically set
+   the fan mode to manual (in addition to setting the speed).
+ - name: both hwmon and thermal expose the fan as "panasonic_pwm_fan"
+ - driver unload: set fan back to auto mode when driver is unloaded
+ - logging: added: +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+   so logs on dmesg are easier to read and grep
+
+Testing:
+ - tested on a real CF-SR4
+ - tested without thermald
+ - tested with thermald (needs XML config for fan)
+ - tested hwmon pwm and thermal via "echo xxx | tee"
+ - tested suspend-resume
+ - tested on an older model (CF-QV9) to verify changes did not break
+   older models
+ - builds cleanly on v7.2-rc4 with W=1 C=1
+ - backported and tested on stable v7.0.12 (daily-use system)
+
+REVERSE ENGINEERING NOTES:
+
+The following notes are included for completeness and to document the
+firmware behavior that motivated the resulting code.
+They are not required to review the driver itself.
+
+When Windows 11 is booted up, the high fan speeds persist just until the
+login screen. Once the login screen shows up, the fan spins down.
+
+After analyzing the DSDT and SSDT of the computer, I have found the
+following:
+
+File ssdt10.dsl under \_SB.PC00.LPCB.EC0:
+
+Name (CEFM, Zero)
+Method (SEFM, 1, Serialized)
+{
+    CEFM = Arg0
+    REFM ()
+}
+
+Method (REFM, 0, Serialized)
+{
+    If ((\S0IX == 0x03))
+    {
+        Local0 = 0x05
+    }
+    ElseIf ((CEFM == Zero))
+    {
+        Local0 = Zero
+    }
+    Else
+    {
+        Local0 = 0x02
+    }
+
+    \_SB.PC00.LPCB.EC0.EC88 (0xB5, 0x79, Local0, Zero)
+}
+
+\_SB.PC00.LPCB.EC0.CEFM would seem be the current value
+for the current fan mode. On startup, this is set to 0.
+
+Based on the code SEFM seems the be the method to set the fan
+mode to manual.
+
+An interesting thing to note in this snippet is that the EC expects
+the OS to talk to it during S0IX in order to set a special mode
+for the fan. While setting 0x05 as a fan mode is possible from
+the OS by calling EC88 directly, I am restricting the driver
+to only use the following values when calling SEFM():
+
+0x00 - automatic
+0x01 - manual / OSPM
+
+Methods to talk to the EC directly (ex: EC88()) are not used in this
+patch.
+
+I had tested out booting Windows 11 to check as to why the firmware
+implements the fan this way.
+It appears that Intel IPF (Innovation Platform Framework)
+being used by the vendor in order to control the fan at the OS level.
+
+Once SEFM is called, there is a function with a standard name _FSL
+that does exist in the UEFI spec that defines an OSPM fan, but it
+is under a non-standard path that is not declared on ACPI.
+
+I did check if specific functions related to the fan are gated by
+OS-specific checks via methods like _OSI, but this does not seem
+to be the case. The highest version of Windows the ACPI code checks
+for is "Windows 2015" and spoofing the OS did not unlock the fan.
+
+Upon closer inspection on Windows, Intel IPF has a file here
+that is of particular interest:
+C:\Windows\system32\drivers\DriverData\Intel\IPF\dv\override.dv
+
+Extracting strings here reveals:
+\_SB_.PC00.LPCB.EC0_.TFN1
+
+Which is the correct path of the fan on ACPI (as opposed to the one
+defined on ACPI by the device itself).
+
+With this path, functions such as _FSL (\_SB.PC00.LPCB.EC0.TFN1._FSL)
+can be called to set the fan speed.
+Note that SEFM (\_SB.PC00.LPCB.EC0.SEFM) must be called first
+with 0x02 before manual control is allowed.
+
+Looking into the ACPI code for Intel IPF
+Specifically at "b23ba85d-c8b7-3542-88de-8de2ffcfd698" the vendor
+appears to have inserted bespoke instructions for the EC.
+
+If IPF is not running, the fan mode is 0 and system power is locked
+to around ~20W (measured from the wall) when a dummy load is run on the
+CPU. If IPF is running it takes control of the fan and unlocks higher
+power limits from the platform. (\_SB.PC00.LPCB.EC0.SEPL)
+
+In my case, it allowed the system to consume ~40W from the wall when
+running a dummy load. At boot, the system is basically capped to around
+half power. As the laptop was designed for OSPM (via IPF) SEFM appears
+to be part of a handoff procedure meant for the OS to take control.
+
+Interestingly enough, running thermald actually completes this handoff
+and allows the system to consume the full range of power.
+If thermald is not installed and SEPL is not called,
+the system would restrict itself to half power.
+Once thermald has a chance to run once, it leaves the power "unlocked".
+
+While thermald can potentially run the SEFM() method as it is coded in
+ACPI, the lack of override for the correct fan path means it cannot
+control the fan to implement active thermal policy. This is why thermal
+is also exposed in addition to hwmon. If thermald is used, this allows
+it to set the fan speed. For Windows, the override is in the form of
+specifying the correct ACPI path of the fan so it can call _FSL itself.
+
+While the point of the patch is exposing the OSPM fan via standard
+kernel interfaces (hwmon and thermal), I do note both the fan and the
+platform power limit here as it is part of its OSPM specific quirks.
+
+When the fan is in manual mode, the EC itself can still intervene if the
+processor gets too hot. Based on observation the trip point for this is
+at around 90C. When this happens, it does not touch the fan mode and fan
+speed setting. If any fan control program were to be running, it would
+not detect an external change if it were to read back those values.
+
+The fan is PWM controlled and does not support reading RPM. Its current
+speed cannot be read if the fan control is automatic / handed off
+to the EC.
+
+It may also be interesting to note that on Windows 11, the OS still has
+control of the fan even during S0IX. I have observed the fan to run at a
+higher minimum speed than what the EC sets on auto mode during S0IX.
+
+When Linux enters s2idle and the fan is on auto mode, the EC detects
+the new power state and lowers the minimum fan speed to around 10%.
+In short, it appears the vendor did design the system fan to still be
+running during modern standby.
+
+Signed-off-by: Alex Yeo <alexyeo362@gmail.com>
+---
+
+Changes in v8:
+ - Complete rework of the cover letter. Incorporated new findings and
+   restructured to explain code changes and findings.
+ - Significant rework of the code from v7
+ - Used hwmon mutex for locking together with guard
+ - Organized imports in alphabetical order
+ - Removed unnecessary comments
+ - Put fan on auto mode when entering suspend and when unloading the
+   driver
+ - Reviewed comments since v1 and apply past feedback to the entire
+   patch
+ - Removed unnecessary pr messages and reformatted messages to have
+   consistent case + a more end-user oriented format (e.g. do not use
+   internal function names as part of the message).
+ - Removed unnecessary gotos and replace with return
+
+v7:
+ - Added comment to explain mutex pwm_fan_lock
+ - Address spurious changes and other comments
+ - Removed redundant "error:" when using pr_err
+ - Removed __func__ when calling pr_err
+ - Drop out label to return directly
+ - Use guard via cleanup.h for mutexes (eliminate goto)
+ - Used __free() in place of kfree(buffer.pointer)
+ - Put NULL on new line for HWMON_CHANNEL_INFO
+ - Unconditionally initialize the fan mutex
+
+v4-v6:
+ - addressed sashiko bot feedback regarding code bugs and hwmon ABI violations
+
+v3:
+ - use hwmon and thermal instead of sysfs
+ - include missing imports
+ - implemented quriks and quirk matching
+
+v2:
+ - fix style errors
+ - fix malformed error messages
+
+> Includes should be added in alphabetical order (per each subdirectory
+> block).
+
+This was done
+
+> Don't leave empty lines in between variable declarations. Please use
+> reverse-xmas tree order when you can (when no internal dependencies
+> between local var don't force your hand).
+
+This was applied
+
+>> +    param[0].integer.value = pwm_mode;
+>> +    input.count = 1; /* takes one arg */
+>
+> Remove comment.
+
+Unnecessary comments such as these were removed throughout the entire patch
+
+> I'm not sure if clang is happy with how scoping is here so these should
+> have {} around each case.
+
+As I have used the hwmon lock instead of a driver-level mutex, the code
+that needs this change does not exist anymore.
+
+As per Guenter's feedback, the hwmon lock was used with guard for this
+patch. As a consequence, hwmon is now the primary owner of the PWM fan.
+
+I have redone the cover letter to incorporate previous findings and
+additional details that explains the code in this patch. The
+implementation section should describe the current code in this v8
+patch.
+
+One additional thing I have noticed is that once the fan speed is set
+manually, the same speed setting persists even during standby. The
+laptop is only capable of s2idle and there appears to be an expectation
+by the firmware that the OS will still talk do it during. To remedy this, I
+have put in code that puts the fan on auto mode when entering suspend:
+
+>+static int acpi_pcc_hotkey_suspend(struct device *dev)
+>+{
+>+	struct pcc_acpi *pcc = acpi_driver_data(ACPI_COMPANION(dev));
+>+	int error;
+>+
+>+	if (!pcc->pwm_fan_hwmon)
+>+		return 0;
+>+
+>+	guard(hwmon_lock)(pcc->pwm_fan_hwmon);
+>+
+>+	error = pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_AUTO);
+>+	if (error)
+>+		pr_warn("failed to set fan to auto mode on suspend\n");
+>+
+>+	return 0;
+>+}
+
+I do not restore state on wakeup as I expect the userspace fan daemon to
+retake control of the fan. This is so the system is not put in an
+unintended state should the userspace fan control daemon fail to come
+back.
+
+While not prompted, I have also added code to put the fan on automatic
+mode when the driver is removed / unloaded:
+
+>+	int error;
+>+
+>+	if (pcc->pwm_fan_cdev)
+>+		thermal_cooling_device_unregister(pcc->pwm_fan_cdev);
+>+	if (pcc->pwm_fan_hwmon)
+>+		hwmon_device_unregister(pcc->pwm_fan_hwmon);
+>+
+>+	if (pcc->quirks && pcc->quirks->has_ospm_pwm_fan) {
+>+		error = pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_AUTO);
+>+		if (error)
+>+			pr_warn("failed to set fan to auto mode on driver unload\n");
+>+	}
+
+As this is executed after the thermal and hwmon devices are removed, it
+does not use the hwmon lock.
+In this section, the thermal device is unloaded first before hwmon.
+
+Several minor changes have also been made to correct bugs and compiler
+warnings and potential issues.
+
+>+static umode_t pcc_pwm_fan_hwmon_is_visible(const void *data,
+>+					    enum hwmon_sensor_types type,
+>+					    u32 attr, int channel)
+>+{
+>+	if (type != hwmon_pwm)
+>+		return 0;
+>+
+>+	switch (attr) {
+>+	case hwmon_pwm_input:
+>+	case hwmon_pwm_enable:
+>+		return 0644;
+>+	default:
+>+		return 0;
+>+	}
+>+}
+
+For example, this function was updated to also check attr.
+
+>+	int status;
+>+
+>+	status = pcc_pwm_fan_mode_get(&pwm_mode);
+>+	if (status < 0) {
+>+		pr_err("failed to get fan status\n");
+>+		return status;
+>+	}
+
+This code had mistakenly used acpi_status for status instead of an int,
+which made the conditional impossible. This was corrected.
+
+>+	if (pcc->quirks && pcc->quirks->has_ospm_pwm_fan) {
+>+		pcc->pwm_fan_hwmon = hwmon_device_register_with_info(&pdev->dev,
+>+								     "panasonic_pwm_fan",
+>+								     pcc,
+>+								     &pcc_pwm_fan_hwmon_chip_info,
+>+								     NULL);
+>+		if (IS_ERR(pcc->pwm_fan_hwmon)) {
+>+			pr_err("failed to register hwmon device\n");
+>+			pcc->pwm_fan_hwmon = NULL;
+>+			return 0;
+>+		}
+>+
+>+		pcc->pwm_fan_cdev = thermal_cooling_device_register("panasonic_pwm_fan",
+>+								    pcc, &pcc_pwm_fan_cdev_ops);
+>+		if (IS_ERR(pcc->pwm_fan_cdev)) {
+>+			pr_err("failed to register thermal cooling device\n");
+>+			pcc->pwm_fan_cdev = NULL;
+>+		}
+>+	}
+
+Incorporating previous comments, this section was further simplified to
+remove the unnecessary gotos and use returns instead. I will note that
+as the fan is not a critical part of the driver, it treats errors with
+creating the hwmon and thermal devices as warnings.
+
+>+#define ACPI_PCC_FAN_PWM_AUTO		0x00
+>+#define ACPI_PCC_FAN_PWM_MANUAL		0x01
+>+#define HWMON_PCC_FAN_ENABLE_AUTO	0x02
+>+#define HWMON_PCC_FAN_ENABLE_MANUAL	0x01
+
+The comment here was removed and
+HWMON_PCC_FAN_PWM_AUTO and HWMON_PCC_FAN_PWM_MANUAL
+was replaced to:
+HWMON_PCC_FAN_ENABLE_AUTO and HWMON_PCC_FAN_ENABLE_MANUAL
+so the name itself describes what its for.
+
+
+I hope this addresses the concerns and feedback raised thus far.
+
+Thank you
+
+ drivers/platform/x86/panasonic-laptop.c | 468 +++++++++++++++++++++++-
+ 1 file changed, 454 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/platform/x86/panasonic-laptop.c b/drivers/platform/x86/panasonic-laptop.c
+index b83113c26f88..24ac1793be05 100644
+--- a/drivers/platform/x86/panasonic-laptop.c
++++ b/drivers/platform/x86/panasonic-laptop.c
+@@ -119,22 +119,33 @@
+  *		- v0.1  start from toshiba_acpi driver written by John Belmonte
+  */
+ 
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
+ #include <linux/acpi.h>
+ #include <linux/backlight.h>
+ #include <linux/bits.h>
+ #include <linux/ctype.h>
++#include <linux/dmi.h>
++#include <linux/errno.h>
++#include <linux/hwmon.h>
+ #include <linux/i8042.h>
+ #include <linux/init.h>
+ #include <linux/input.h>
+ #include <linux/input/sparse-keymap.h>
+ #include <linux/kernel.h>
++#include <linux/minmax.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
++#include <linux/pm.h>
++#include <linux/printk.h>
+ #include <linux/seq_file.h>
+ #include <linux/serio.h>
+ #include <linux/slab.h>
++#include <linux/sysfs.h>
++#include <linux/thermal.h>
+ #include <linux/types.h>
+ #include <linux/uaccess.h>
++
+ #include <acpi/video.h>
+ 
+ MODULE_AUTHOR("Hiroshi Miura <miura@da-cha.org>");
+@@ -164,6 +175,15 @@ MODULE_LICENSE("GPL");
+ 
+ #define ACPI_PCC_INPUT_PHYS	"panasonic/hkey0"
+ 
++#define ACPI_PCC_FAN_PWM_AUTO		0x00
++#define ACPI_PCC_FAN_PWM_MANUAL		0x01
++#define HWMON_PCC_FAN_ENABLE_AUTO	0x02
++#define HWMON_PCC_FAN_ENABLE_MANUAL	0x01
++
++struct quirk_entry {
++	bool has_ospm_pwm_fan;
++};
++
+ /* LCD_TYPEs: 0 = Normal, 1 = Semi-transparent
+    ECO_MODEs: 0x03 = off, 0x83 = on
+ */
+@@ -197,9 +217,11 @@ static const struct acpi_device_id pcc_device_ids[] = {
+ MODULE_DEVICE_TABLE(acpi, pcc_device_ids);
+ 
+ #ifdef CONFIG_PM_SLEEP
++static int acpi_pcc_hotkey_suspend(struct device *dev);
+ static int acpi_pcc_hotkey_resume(struct device *dev);
+ #endif
+-static SIMPLE_DEV_PM_OPS(acpi_pcc_hotkey_pm, NULL, acpi_pcc_hotkey_resume);
++static SIMPLE_DEV_PM_OPS(acpi_pcc_hotkey_pm,
++			 acpi_pcc_hotkey_suspend, acpi_pcc_hotkey_resume);
+ 
+ static struct platform_driver acpi_pcc_driver = {
+ 	.probe = acpi_pcc_hotkey_probe,
+@@ -238,19 +260,38 @@ static const struct key_entry panasonic_keymap[] = {
+ };
+ 
+ struct pcc_acpi {
+-	acpi_handle		handle;
+-	unsigned long		num_sifr;
+-	int			sticky_key;
+-	int			eco_mode;
+-	int			mute;
+-	int			ac_brightness;
+-	int			dc_brightness;
+-	int			current_brightness;
+-	u32			*sinf;
+-	struct acpi_device	*device;
+-	struct input_dev	*input_dev;
+-	struct backlight_device	*backlight;
+-	struct platform_device	*platform;
++	acpi_handle			handle;
++	unsigned long			num_sifr;
++	int				sticky_key;
++	int				eco_mode;
++	int				mute;
++	int				ac_brightness;
++	int				dc_brightness;
++	int				current_brightness;
++	u32				*sinf;
++	struct quirk_entry		*quirks;
++	struct acpi_device		*device;
++	struct input_dev		*input_dev;
++	struct backlight_device		*backlight;
++	struct platform_device		*platform;
++	struct thermal_cooling_device	*pwm_fan_cdev;
++	struct device			*pwm_fan_hwmon;
++};
++
++static struct quirk_entry quirk_cf_sr4 = {
++	.has_ospm_pwm_fan = true,
++};
++
++static const struct dmi_system_id pcc_quirks[] = {
++	{
++		.ident = "Panasonic Connect Co., Ltd. CFSR4-1",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Panasonic Connect Co., Ltd."),
++			DMI_MATCH(DMI_PRODUCT_NAME, "CFSR4-1"),
++		},
++		.driver_data = &quirk_cf_sr4,
++	},
++	{},
+ };
+ 
+ /*
+@@ -507,6 +548,135 @@ static int set_optd_power_state(int new_state)
+ 	return result;
+ }
+ 
++static int pcc_pwm_fan_mode_get(int *pwm_mode)
++{
++	unsigned long long state;
++	acpi_status status;
++
++	status = acpi_evaluate_integer(NULL, "\\_SB.PC00.LPCB.EC0.CEFM", NULL,
++				       &state);
++	if (ACPI_FAILURE(status)) {
++		pr_err("cannot get fan mode via CEFM\n");
++		return -EIO;
++	}
++
++	if (state == ACPI_PCC_FAN_PWM_AUTO)
++		*pwm_mode = HWMON_PCC_FAN_ENABLE_AUTO;
++	else if (state > 0)
++		*pwm_mode = HWMON_PCC_FAN_ENABLE_MANUAL;
++	else
++		return -EINVAL;
++
++	return 0;
++}
++
++static int pcc_pwm_fan_mode_set(int acpi_pwm_mode)
++{
++	struct acpi_object_list input;
++	union acpi_object param[1];
++	acpi_status status;
++
++	param[0].integer.value = acpi_pwm_mode;
++	param[0].type = ACPI_TYPE_INTEGER;
++	input.pointer = param;
++	input.count = 1;
++
++	status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.SEFM", &input,
++				      NULL);
++	if (ACPI_FAILURE(status)) {
++		pr_err("cannot set fan mode via SEFM\n");
++		return -EIO;
++	}
++
++	return 0;
++}
++
++static int pcc_pwm_fan_speed_read(int *acpi_pwm_speed)
++{
++	struct acpi_buffer buffer = { ACPI_ALLOCATE_BUFFER, NULL };
++	acpi_status status;
++	int pwm_mode;
++	int result;
++
++	result = pcc_pwm_fan_mode_get(&pwm_mode);
++	if (result < 0) {
++		pr_err("failed to get fan status\n");
++		return result;
++	}
++
++	/* If fan is in auto mode, it will return a bogus value */
++	if (pwm_mode == HWMON_PCC_FAN_ENABLE_AUTO)
++		return -ENODATA;
++
++	status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.TFN1._FST",
++				      NULL, &buffer);
++	if (ACPI_FAILURE(status)) {
++		pr_err("failed to get pwm speed\n");
++		return -EIO;
++	}
++
++	union acpi_object *obj __free(kfree) = buffer.pointer;
++
++	if (!obj || obj->type != ACPI_TYPE_PACKAGE || obj->package.count < 3) {
++		pr_err("invalid _FST package structure (expected 3)\n");
++		return -EINVAL;
++	}
++
++	if (obj->package.elements[1].type != ACPI_TYPE_INTEGER) {
++		pr_err("_FST element at index 1 is not an integer\n");
++		return -EINVAL;
++	}
++
++	if (obj->package.elements[1].integer.value > 100) {
++		pr_err("_FST element at index 1 is an integer out of bounds\n");
++		return -EINVAL;
++	}
++
++	*acpi_pwm_speed = obj->package.elements[1].integer.value;
++	return 0;
++}
++
++static int pcc_pwm_fan_speed_set(int set_pwm_speed)
++{
++	struct acpi_object_list input;
++	union acpi_object param[1];
++	acpi_status fsl_status;
++	int pwm_mode;
++	int status;
++
++	status = pcc_pwm_fan_mode_get(&pwm_mode);
++	if (status < 0) {
++		pr_err("failed to get fan status\n");
++		return status;
++	}
++
++	if (pwm_mode == HWMON_PCC_FAN_ENABLE_AUTO) {
++		status = pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_MANUAL);
++		if (status < 0) {
++			pr_err("set fan PWM to manual failed\n");
++			return status;
++		}
++	}
++
++	if (set_pwm_speed < 0 || set_pwm_speed > 100) {
++		pr_err("fan speed level out of bounds\n");
++		return -EINVAL;
++	}
++
++	param[0].integer.value = set_pwm_speed;
++	param[0].type = ACPI_TYPE_INTEGER;
++	input.pointer = param;
++	input.count = 1;
++
++	fsl_status = acpi_evaluate_object(NULL, "\\_SB.PC00.LPCB.EC0.TFN1._FSL",
++					  &input, NULL);
++	if (ACPI_FAILURE(fsl_status)) {
++		pr_err("setting of fan speed via ._FSL failed\n");
++		return -EIO;
++	}
++
++	return 0;
++}
+ 
+ /* sysfs user interface functions */
+ 
+@@ -825,6 +995,219 @@ static const struct attribute_group pcc_attr_group = {
+ 	.is_visible	= pcc_sysfs_is_visible,
+ };
+ 
++static const struct hwmon_channel_info *const pcc_pwm_fan_hwmon_info[] = {
++	HWMON_CHANNEL_INFO(pwm, HWMON_PWM_INPUT | HWMON_PWM_ENABLE),
++	NULL
++};
++
++static int pcc_pwm_fan_hwmon_speed_read(struct pcc_acpi *pcc, long *val)
++{
++	int pwm_speed;
++	int status;
++
++	status = pcc_pwm_fan_speed_read(&pwm_speed);
++	if (status < 0)
++		return status;
++
++	/* ACPI PWM range is 0-100 */
++	if (pwm_speed < 0 || pwm_speed > 100)
++		return -EINVAL;
++
++	*val = (pwm_speed * 255) / 100;
++	return 0;
++}
++
++static int pcc_pwm_fan_hwmon_mode_read(struct pcc_acpi *pcc, long *val)
++{
++	int pwm_mode;
++	int status;
++
++	status = pcc_pwm_fan_mode_get(&pwm_mode);
++	if (status < 0) {
++		pr_err("failed to get fan pwm mode\n");
++		return status;
++	}
++
++	switch (pwm_mode) {
++	case HWMON_PCC_FAN_ENABLE_AUTO:
++		*val = HWMON_PCC_FAN_ENABLE_AUTO;
++		return 0;
++	case HWMON_PCC_FAN_ENABLE_MANUAL:
++		*val = HWMON_PCC_FAN_ENABLE_MANUAL;
++		return 0;
++	default:
++		return -EINVAL;
++	}
++}
++
++static int pcc_pwm_fan_hwmon_read(struct device *dev,
++				  enum hwmon_sensor_types type, u32 attr,
++				  int channel, long *val)
++{
++	struct pcc_acpi *pcc = dev_get_drvdata(dev);
++
++	if (type != hwmon_pwm)
++		return -EOPNOTSUPP;
++
++	switch (attr) {
++	case hwmon_pwm_input:
++		return pcc_pwm_fan_hwmon_speed_read(pcc, val);
++	case hwmon_pwm_enable:
++		return pcc_pwm_fan_hwmon_mode_read(pcc, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static int pcc_pwm_fan_hwmon_mode_set(struct pcc_acpi *pcc, long val)
++{
++	switch (val) {
++	case HWMON_PCC_FAN_ENABLE_AUTO:
++		return pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_AUTO);
++	case HWMON_PCC_FAN_ENABLE_MANUAL:
++		return pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_MANUAL);
++	default:
++		return -EINVAL;
++	}
++}
++
++static int pcc_pwm_fan_hwmon_speed_set(struct pcc_acpi *pcc, long val)
++{
++	int pwm_speed_vendor_val;
++	int pwm_mode;
++	int status;
++
++	val = clamp_val(val, 0, 255);
++	pwm_speed_vendor_val = (val * 100) / 255;
++
++	status = pcc_pwm_fan_mode_get(&pwm_mode);
++	if (status < 0) {
++		pr_err("failed to get fan pwm mode\n");
++		return status;
++	}
++
++	if (pwm_mode != HWMON_PCC_FAN_ENABLE_MANUAL)
++		return -EOPNOTSUPP;
++
++	status = pcc_pwm_fan_speed_set(pwm_speed_vendor_val);
++	if (status < 0) {
++		pr_err("failed to set fan pwm\n");
++		return status;
++	}
++	return 0;
++}
++
++static int pcc_pwm_fan_hwmon_write(struct device *dev,
++				   enum hwmon_sensor_types type, u32 attr,
++				   int channel, long val)
++{
++	struct pcc_acpi *pcc = dev_get_drvdata(dev);
++
++	if (type != hwmon_pwm)
++		return -EOPNOTSUPP;
++
++	switch (attr) {
++	case hwmon_pwm_enable:
++		return pcc_pwm_fan_hwmon_mode_set(pcc, val);
++	case hwmon_pwm_input:
++		return pcc_pwm_fan_hwmon_speed_set(pcc, val);
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++
++static umode_t pcc_pwm_fan_hwmon_is_visible(const void *data,
++					    enum hwmon_sensor_types type,
++					    u32 attr, int channel)
++{
++	if (type != hwmon_pwm)
++		return 0;
++
++	switch (attr) {
++	case hwmon_pwm_input:
++	case hwmon_pwm_enable:
++		return 0644;
++	default:
++		return 0;
++	}
++}
++
++static const struct hwmon_ops pcc_pwm_fan_hwmon_ops = {
++	.is_visible = pcc_pwm_fan_hwmon_is_visible,
++	.read = pcc_pwm_fan_hwmon_read,
++	.write = pcc_pwm_fan_hwmon_write,
++};
++
++static const struct hwmon_chip_info pcc_pwm_fan_hwmon_chip_info = {
++	.ops = &pcc_pwm_fan_hwmon_ops,
++	.info = pcc_pwm_fan_hwmon_info,
++};
++
++static int pcc_pwm_fan_thermal_max_state(struct thermal_cooling_device *cdev,
++					 unsigned long *state)
++{
++	*state = 100;
++	return 0;
++}
++
++static int pcc_pwm_fan_thermal_get_current_pwm(struct thermal_cooling_device *cdev,
++					       unsigned long *state)
++{
++	struct pcc_acpi *pcc = cdev->devdata;
++	int current_pwm;
++	int pwm_mode;
++	int status;
++
++	guard(hwmon_lock)(pcc->pwm_fan_hwmon);
++
++	status = pcc_pwm_fan_mode_get(&pwm_mode);
++	if (status < 0) {
++		pr_err("failed to get fan pwm mode\n");
++		return status;
++	}
++	if (pwm_mode == HWMON_PCC_FAN_ENABLE_AUTO) {
++		*state = 100; /* Return max cooling when EC controls fan */
++		return 0;
++	}
++
++	status = pcc_pwm_fan_speed_read(&current_pwm);
++	if (status < 0)
++		return status;
++
++	if (current_pwm > 100)
++		current_pwm = 100;
++	if (current_pwm < 0)
++		return -EINVAL;
++
++	*state = current_pwm;
++	return 0;
++}
++
++static int pcc_pwm_fan_thermal_set_fan_pwm(struct thermal_cooling_device *cdev,
++					   unsigned long state)
++{
++	struct pcc_acpi *pcc = cdev->devdata;
++	int status;
++
++	guard(hwmon_lock)(pcc->pwm_fan_hwmon);
++
++	if (state > 100)
++		return -EINVAL;
++
++	status = pcc_pwm_fan_speed_set((int)state);
++	if (status < 0) {
++		pr_err("failed to set fan speed pwm\n");
++		return status;
++	}
++
++	return 0;
++}
++
++static const struct thermal_cooling_device_ops pcc_pwm_fan_cdev_ops = {
++	.get_max_state = pcc_pwm_fan_thermal_max_state,
++	.get_cur_state = pcc_pwm_fan_thermal_get_current_pwm,
++	.set_cur_state = pcc_pwm_fan_thermal_set_fan_pwm,
++};
+ 
+ /* hotkey input device driver */
+ 
+@@ -977,10 +1360,28 @@ static int acpi_pcc_hotkey_resume(struct device *dev)
+ 
+ 	return 0;
+ }
++
++static int acpi_pcc_hotkey_suspend(struct device *dev)
++{
++	struct pcc_acpi *pcc = acpi_driver_data(ACPI_COMPANION(dev));
++	int error;
++
++	if (!pcc->pwm_fan_hwmon)
++		return 0;
++
++	guard(hwmon_lock)(pcc->pwm_fan_hwmon);
++
++	error = pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_AUTO);
++	if (error)
++		pr_warn("failed to set fan to auto mode on suspend\n");
++
++	return 0;
++}
+ #endif
+ 
+ static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+ {
++	const struct dmi_system_id *dmi_id;
+ 	struct backlight_properties props;
+ 	struct acpi_device *device;
+ 	struct pcc_acpi *pcc;
+@@ -1026,6 +1427,12 @@ static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+ 	strscpy(acpi_device_name(device), ACPI_PCC_DEVICE_NAME);
+ 	strscpy(acpi_device_class(device), ACPI_PCC_CLASS);
+ 
++	dmi_id = dmi_first_match(pcc_quirks);
++	if (dmi_id) {
++		pcc->quirks = dmi_id->driver_data;
++		pr_debug("quirk detect: enabled quirks for %s\n", dmi_id->ident);
++	}
++
+ 	result = acpi_pcc_init_input(pcc);
+ 	if (result) {
+ 		pr_err("Error installing keyinput handler\n");
+@@ -1097,6 +1504,27 @@ static int acpi_pcc_hotkey_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	i8042_install_filter(panasonic_i8042_filter, NULL);
++
++	if (pcc->quirks && pcc->quirks->has_ospm_pwm_fan) {
++		pcc->pwm_fan_hwmon = hwmon_device_register_with_info(&pdev->dev,
++								     "panasonic_pwm_fan",
++								     pcc,
++								     &pcc_pwm_fan_hwmon_chip_info,
++								     NULL);
++		if (IS_ERR(pcc->pwm_fan_hwmon)) {
++			pr_err("failed to register hwmon device\n");
++			pcc->pwm_fan_hwmon = NULL;
++			return 0;
++		}
++
++		pcc->pwm_fan_cdev = thermal_cooling_device_register("panasonic_pwm_fan",
++								    pcc, &pcc_pwm_fan_cdev_ops);
++		if (IS_ERR(pcc->pwm_fan_cdev)) {
++			pr_err("failed to register thermal cooling device\n");
++			pcc->pwm_fan_cdev = NULL;
++		}
++	}
++
+ 	return 0;
+ 
+ out_platform:
+@@ -1123,6 +1551,18 @@ static void acpi_pcc_hotkey_remove(struct platform_device *pdev)
+ {
+ 	struct acpi_device *device = ACPI_COMPANION(&pdev->dev);
+ 	struct pcc_acpi *pcc = acpi_driver_data(device);
++	int error;
++
++	if (pcc->pwm_fan_cdev)
++		thermal_cooling_device_unregister(pcc->pwm_fan_cdev);
++	if (pcc->pwm_fan_hwmon)
++		hwmon_device_unregister(pcc->pwm_fan_hwmon);
++
++	if (pcc->quirks && pcc->quirks->has_ospm_pwm_fan) {
++		error = pcc_pwm_fan_mode_set(ACPI_PCC_FAN_PWM_AUTO);
++		if (error)
++			pr_warn("failed to set fan to auto mode on driver unload\n");
++	}
+ 
+ 	i8042_remove_filter(panasonic_i8042_filter);
+ 
+-- 
+2.55.0
+
