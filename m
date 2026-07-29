@@ -1,164 +1,135 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC634A2E1A
-	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 14:03:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630D14052BE;
+	Wed, 29 Jul 2026 16:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785333786; cv=none; b=e+wKWKffGEvtr7HvZhOB0zS08J0TxIS2+O8NNG4caEadWmb5pYdZ6TIZrLTRyO3oJ3gG8/SBAuwlud3e4EkV3J0QaWqrRMs4Aqgptz0uIzq1LOxmanhtiQ+SF+nb7bbPsdhFmcXx2YlBoUTNXqAzg/QPs2ic13+YVGRDbtFQY4g=
+	t=1785340840; cv=none; b=DpR6WlOyI2FPp+RcLczHgpEaDfrItMw6rnBoHcuoLg8MAAzwlTSKNFsGnzjKu2NRNJMwyRAaYXL5JhlxTuGjTxubjjXQ+d+wpd8FgguIF2aFBjInG8s7uqlPwzArASVrKW3DKbEUoNr6Cjlof1f6aRdjc5vp3inoqP9UwwdJgGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785333786; c=relaxed/simple;
-	bh=BZpQ7IVdFrwHA2ABPj+zHZ3Ft4jyy4tFRzJRCl6Ezmk=;
+	s=arc-20240116; t=1785340840; c=relaxed/simple;
+	bh=/6vPJeqcvtvtCvZtmsJi6u6JB0QeylO/CDur/wmJJgI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MPkqf7CzvfbvTnX63Oh2O0eOuQ6u/Nr/jxrvl6k5p0CN2xtaDnd5Lxq2+Z9UySf/VU7ChbdgeAsmVBUFyvTNVMpfPBkqgSE/aRC0mjgqh2mnTmYiAowq8Not8kXpxr8+CyhmEhAaGa7RxOKHqesj36N8CNVWd6KNhw93P/k4K9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LrgSg9yR; arc=none smtp.client-ip=91.218.175.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=rHPFXtGdwJ0IubzkvyNhE3WTwmhl3H0QqfgiRQh7GdIqU/up/GqZ/oP5hlCeDcMZVswJ0rfp65XUtNAo51q6SVSALWDYOVCCrEA9+90H+BNJdjJmUFFGZjJTRmWibPfYp0/1Bgwbu3AL7lKErdYhkF6USrUqERlObVyAtySFfao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ReVk91Su; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LrgSg9yR"
-Date: Wed, 29 Jul 2026 14:02:52 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785333781;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LE0auUINu/x6r3MKpGL6ong08p31tBcJtb4U+bAewvE=;
-	b=LrgSg9yRhS5W6xpkWx9r9+eDJkKcDzCNDS9+j6/SbnNx7o1wA6fzFR1r67s/mndVmEfaim
-	RZtbpkihgWk1BnX65qwR4pDAyWvKTUhW+0X24ftnH+8hmcZUDkFCO9B7z9WHutNEx2YbwM
-	pefAngwFnMiQOtvHGUzT0YMZIBj5fKk=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	Florent Revest <revest@chromium.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huawei.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-Message-ID: <amn7cBQ-cqs2XlKV@linux.dev>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
- <amjnf5gz0xP5PTSB@J2N7QTR9R3>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ReVk91Su"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172621F000E9;
+	Wed, 29 Jul 2026 16:00:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785340839;
+	bh=maBSX4x4149xGscMIRI+eWtyIRtwupXnBB1oY9K+LCE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ReVk91SuVmAlMIEJUY3lALq9p7JPqmfIp4FaohTAVCG9zjpLA1rXW6DEK5pI6L3Lt
+	 Vlx87KwvhrLeAoNAVYOi/q5YmeXaj0kJwvjNIY4COk3g0Hz5BAWYn8kQdRGXoSpCcb
+	 3oXa3D7femsLl2w2LIZeNtUjZSkMmxHbrDXPB6BjJKCOzcWNHQWos3V4tqQB2c5Lxo
+	 A8onamXl+69+QslW9DcoMrZWd8ik8NoWZR2KxQY6rjFTgoLH87q40v3bjdw8vxKZWC
+	 NO//u9SWUEcGpR9kInUwCfRLACoMQ8SCsvEcjZKiyfFra8KlWBQgg4qpcRAYw4OMjo
+	 LJXZZ5v7U3yEw==
+Date: Wed, 29 Jul 2026 18:00:29 +0200
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Michal Simek <michal.simek@amd.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"moderated list:ARM/ZYNQ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCHv2] PCI: xilinx: use fwnode_irq_get() for INTx IRQ lookup
+Message-ID: <g3gtckpqgacw44jqqb5hb3oejpelxvbba47tdwsvksxbbskygp@mcwtsbypoyar>
+References: <20260716205811.800920-1-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <amjnf5gz0xP5PTSB@J2N7QTR9R3>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260716205811.800920-1-rosenp@gmail.com>
 
-Hi Mark,
+On Thu, Jul 16, 2026 at 01:58:11PM -0700, Rosen Penev wrote:
+> Replace irq_of_parse_and_map() with fwnode_irq_get(dev_fwnode(dev), 0)
+> in xilinx_pcie_parse_dt(). For an OF-backed device this is equivalent to
+> the previous call, but uses the generic firmware-node API.
+> 
 
-Thanks for the review, answers inline.
+What is the benefit of using fwnode API for OF only driver?
 
-On Tue, Jul 28, 2026 at 06:31:43PM +0100, Mark Rutland wrote:
-> So the big questions are:
->
-> (1) How often is a direct call being made?
+- Mani
 
-The workloads that want this are always-on. In our case a BPF LSM
-security monitor covers file, exec and socket hooks, so it sits on
-syscall-rate paths on busy machines, and fentry-based observability
-behaves the same way. That is why we measured per-call dispatch cost
-below.
+> Unlike irq_of_parse_and_map(), fwnode_irq_get() returns a positive IRQ or
+> a negative errno and never 0 (it rewrites 0 to -EINVAL). Store the result
+> in an int and check for irq < 0, returning the error (including
+> -EPROBE_DEFER). This also adds the error handling the previous code
+> lacked, where irq_of_parse_and_map() failures were passed straight into
+> devm_request_irq().
+> 
+> Built for ARM (multi_v7_defconfig + CONFIG_PCIE_XILINX) with LLVM=1;
+> drivers/pci/controller/pcie-xilinx.o compiles cleanly.
+> 
+> Assisted-by: opencode:hy3-free
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  v2: use dev_err_probe to handle EPROBE_DEFER.
+>  drivers/pci/controller/pcie-xilinx.c | 15 ++++++++-------
+>  1 file changed, 8 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/pcie-xilinx.c b/drivers/pci/controller/pcie-xilinx.c
+> index 4aa139abac16..58532296182f 100644
+> --- a/drivers/pci/controller/pcie-xilinx.c
+> +++ b/drivers/pci/controller/pcie-xilinx.c
+> @@ -20,10 +20,10 @@
+>  #include <linux/of_address.h>
+>  #include <linux/of_pci.h>
+>  #include <linux/of_platform.h>
+> -#include <linux/of_irq.h>
+>  #include <linux/pci.h>
+>  #include <linux/pci-ecam.h>
+>  #include <linux/platform_device.h>
+> +#include <linux/property.h>
+>  
+>  #include "../pci.h"
+>  
+> @@ -535,7 +535,7 @@ static int xilinx_pcie_parse_dt(struct xilinx_pcie *pcie)
+>  	struct device *dev = pcie->dev;
+>  	struct device_node *node = dev->of_node;
+>  	struct resource regs;
+> -	unsigned int irq;
+> +	int irq;
+>  	int err;
+>  
+>  	err = of_address_to_resource(node, 0, &regs);
+> @@ -548,7 +548,10 @@ static int xilinx_pcie_parse_dt(struct xilinx_pcie *pcie)
+>  	if (IS_ERR(pcie->reg_base))
+>  		return PTR_ERR(pcie->reg_base);
+>  
+> -	irq = irq_of_parse_and_map(node, 0);
+> +	irq = fwnode_irq_get(dev_fwnode(dev), 0);
+> +	if (irq < 0)
+> +		return irq;
+> +
+>  	err = devm_request_irq(dev, irq, xilinx_pcie_intr_handler,
+>  			       IRQF_SHARED | IRQF_NO_THREAD,
+>  			       "xilinx-pcie", pcie);
+> @@ -585,10 +588,8 @@ static int xilinx_pcie_probe(struct platform_device *pdev)
+>  	pcie->dev = dev;
+>  
+>  	err = xilinx_pcie_parse_dt(pcie);
+> -	if (err) {
+> -		dev_err(dev, "Parsing DT failed\n");
+> -		return err;
+> -	}
+> +	if (err)
+> +		return dev_err_probe(dev, err, "Parsing DT failed\n");
+>  
+>  	xilinx_pcie_init_port(pcie);
+>  
+> -- 
+> 2.55.0
+> 
 
-> (2) Where does BPF allocate its direct call trampolines?
->
-> From a skim of arch/arm64/mm/init.c, EXECMEM_BPF covers
-> VMALLOC_START..VMALLOC_END, the vast majority of which is out-of-range
-> for a BL from the core kernel or a module. So if EXECMEM_BPF is used,
-> that's likely to be problematic.  Hopefully I'm missing something such
-> that BPF trampolines are almost always allocated in-range of a BL?
-
-You're not missing anything. BPF trampolines come from bpf_prog_pack,
-which allocates via EXECMEM_BPF, and we confirmed the consequence at
-runtime. Across every boot and attach in the measurements below, the
-trampoline landed in the same execmem slot while the kernel text moved
-with KASLR, 50-90 TB out of BL range. Only a handful of boots, but
-EXECMEM_BPF spans all of vmalloc and has no reason to land near
-kernel text, so I would expect out-of-range to be the common case
-here rather than the exception.
-
-> When we originally implemented CALL_OPS and DIRECT_CALLS for arm64, the
-> understanding was that we'd have many ops with direct calls. We believed
-> that the ftrace_ops_list_func() penalty was so substantial that it
-> wasn't worthwhile supporting direct calls in a configuration where
-> bouncing through that would be common.
->
-> If we need to support this configuration, then I strongly suspect we
-> need to make other changes too in order for it to be worthwhile.
-
-Agreed. One idea I would like your opinion on is an in-range
-allocation preference for BPF trampolines, since execmem seems to
-have the shape for it on arm64 already. EXECMEM_DEFAULT prefers the
-module_direct_base window ("prefer to allocate within direct branch
-range of the kernel") and falls back when that neighborhood is full,
-while EXECMEM_BPF spans all of vmalloc with no preference. Giving
-trampolines the same preference would need no new dispatch machinery,
-and the measurements below suggest it recovers 93% of the gap to the
-CALL_OPS baseline. Does that direction sound right to you, or is
-there something in the CALL_OPS design that argues against it? If it
-holds up I am happy to write it as a follow-up to this series.
-
-> Following from the comment regarding EXECMEM_BPF above, it looks like
-> both s390 and loongarch don't define EXECMEM_BPF, and only define
-> EXECMEM_DEFAULT with a subsstantially limited range, which I suspect
-> keeps their direct calls within range.
-
-That matches our reading. Their limited EXECMEM_DEFAULT ranges keep
-direct calls in range by construction, same idea as the above.
-
-> Can you comment on how you've tested in-range vs out-of-range
-> attachements here?
-
-Reachability is decided per attach at patch time.
-ftrace_find_callable_addr() picks the direct BL when the target is in
-range and ftrace_caller when it is not. In our runs we read the live
-trampoline and patch-site addresses from /proc/kallsyms and computed
-the BL-range verdict for every attach, and every attach came out
-out-of-range. So all of the original series validation was
-out-of-range too, per the allocation behavior above.
-
-To get numbers for the in-range side we forced it on a test rig
-instead of writing the real change. A small bench-only patch (six
-lines) makes arch_alloc_bpf_trampoline() allocate from
-execmem_alloc(EXECMEM_MODULE_TEXT, ...) instead of bpf_prog_pack, and
-the guest boots with nokaslr so the module window is always within
-reach. From there the existing reach check does the rest and patches
-the direct BL by itself. So the rig only tells us what in-range is
-worth, the allocator preference above is what I would actually
-implement.
-
-> Have you made any performance measurements, or was this just functional
-> enablement?
-
-The original posting was functional enablement, so after your review
-we measured the per-call cost. The rig is a KVM guest with 8 vcpus on
-an arm64 Graviton metal host, 6.18.36 with this series, fentry on
-__arm64_sys_getpid, 20M calls per run, per-call overhead taken as
-traced minus untraced. Six passes across three fresh boots per
-configuration, ranges below are min to max over those six passes.
-
-  CALL_OPS baseline (CFI off):              17.8-18.3 ns
-  series path, out-of-range, no other ops:  34.5-35.6 ns  (~2.0x)
-  same, plus N unrelated ftrace_ops
-  (function tracer on vfs_read):
-    N=1                                     41 ns
-    N=4                                     53 ns
-    N=8                                     68 ns
-    N=16                                    98 ns
-  in-range trampoline (rig above):          18.7-19.4 ns  (~1.2 ns more)
-
-The extra-ops rows are the ftrace_ops_list_func() cost you were
-worried about, a straight 3.9 ns per registered op, and paid
-everywhere since the traced callsite never matches their filter. The
-in-range trampoline closes 93% of the gap to baseline, though the
-passes still sit a bit above, so not quite identical.
-
-Thanks,
-Jose
+-- 
+மணிவண்ணன் சதாசிவம்
