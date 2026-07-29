@@ -1,97 +1,75 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F001A682A;
-	Wed, 29 Jul 2026 01:43:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CE21A268;
+	Wed, 29 Jul 2026 01:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785289421; cv=none; b=kB9I1qWcUPutBppJg6pY6I4x3bycBZ6/0ZNiTP3Xg4p/CqgI4O73NYDuY0t9b/W7AI7tCJB6FU0FBEbGF094HMSPZDGHv1qxpwqKe+2x0X93v/cV2oIaJTxxAfUnjJencoOEkdenF2vZVf97uvpXARvpKvIHtQRmKWgDfVVqETg=
+	t=1785289878; cv=none; b=rU3GBX3Gs/A6fwMPw1Wn8diE2FaFKL8I61jPyaSlXS3OT6uWNEjinQ8RgVqUu8x0oQ/VTgh3fZJRa+P/uCHKAQR/SCUXpIlz585Op/8ujzQmTctcGCFERl9tT4yc4eGG916FXDnEruPyQAMrh0y4wx8FTqGIfUtkx4Jlve9AftE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785289421; c=relaxed/simple;
-	bh=6b+MAhHNko/hyC8q4FeN74Uwy8X7clpSHUBKI05PU48=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lnIfzJApqgKUowe1K2gSDX420ZXQHiKUgh9m3YiBFAPE7/5e7Ufo3PpvO7qq6bk/u703n4tbFSsXGnf2ne02W1tPKoTAFBgAPD/CGl396DIeo9rwKOzsTybZHMImA9a6LRBsVirfT15EdEtzHRfIMv2j8PjrQDOHL5FXpIUYjWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a3YZ4ghX; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1785289878; c=relaxed/simple;
+	bh=GCojX0lZPiINQ3A8Gqg/nP5PUh3bcSjqvNYub0BxtNs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mU43n/Vso/l63FsKvqPWkfKZkYsFkcKd6xnFU+ubaXY4DP5aTTKgfaGgyU8xt7jZ7PT2GjqSi6t1yx1trv+hmYC43SUvSxFueQ8sa7nSBew/dIQhQEa3GQi2bt+W0rdyrNuUHRRHAcocGoFb8qGl2jomw9BdF46OG73XGxTB0D8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cj5CMxh5; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a3YZ4ghX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cj5CMxh5"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785289418; x=1816825418;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6b+MAhHNko/hyC8q4FeN74Uwy8X7clpSHUBKI05PU48=;
-  b=a3YZ4ghXw5RLtQ57vE4aSNL2lQ6e7dFh13mG5ic6FRjOIJh+6vUdAExi
-   nGHWag6nRq2O8id13xCMal624ds0BF0xHdH69JzX/fCN+7nSv9+n1QURU
-   Gi2lIlKk88WXpk6yOIPRaO/j+Me3lM+yi4tM3fUfTSJIHKdFynMkoqaHy
-   9eZkNoKYDJDNsGTvw2BbF++xXeeet7ydbs93kZtJyfMxQEDTShYW9wxhw
-   8y/7mmF/n9hj704AdagyGRxrTMlj4vI5pKCrFrO30sKLq9bYFNn+MQnP/
-   W6irv+U6tCVPkNmhYXUT3W5wTO3drmmryqtLEetlUH7i37XcbgdEWJ2Mx
-   A==;
-X-CSE-ConnectionGUID: BHnZg/X2SpuZN0Ubeageqg==
-X-CSE-MsgGUID: gaNtU7fFSu2XseY+DTzEkQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="86079766"
+  t=1785289876; x=1816825876;
+  h=date:from:to:cc:subject:message-id;
+  bh=GCojX0lZPiINQ3A8Gqg/nP5PUh3bcSjqvNYub0BxtNs=;
+  b=Cj5CMxh5lpYW2LijpTT7oZ/7XzjHWsTOeoUxzNwcabNB2ZN5N+dIaO/i
+   dKNJUwf1lzxiCXsxgq0JtUPztN5yX43Kc/KPzj374yt/4o1PfK+21h6Nb
+   IHBJkGnawCYFBDcA3GhVnAvQ+Kyr2ca2ASMMppP/keLGhUrJNaZXG4mpj
+   K7MKds3KcB2x0mfWlYOf9sYhLVqhHjXG4OjYogBFI4NJ6cKsLcfCABKKQ
+   mp6v5TZ+KF1zzs083M6Fy0Dn1hDe/4ITqAI3ARC0WAnnqDSHgYkGlbqng
+   FVYHSh7rCLV4j/H9j7FOUwOlH1A8sUBR+sAFniJJHEeWz9ZUx6vEKkxKf
+   Q==;
+X-CSE-ConnectionGUID: QOGGOd9XTsyHZ7mEVbGM0Q==
+X-CSE-MsgGUID: WQgz2VlMSFeQJPbk/Pa7LQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="111434720"
 X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="86079766"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 18:43:37 -0700
-X-CSE-ConnectionGUID: 5QtGGf0GTlm2UHq7xdj1yw==
-X-CSE-MsgGUID: N8magdpaRvWMUH0EguDb/Q==
+   d="scan'208";a="111434720"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 18:51:16 -0700
+X-CSE-ConnectionGUID: z/acK+hcSqm35wdeKeYKwg==
+X-CSE-MsgGUID: 2MPgRUH3RMOuV4jAENuZgQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="255561444"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 28 Jul 2026 18:43:33 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 28 Jul 2026 18:51:14 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wotKU-00000000evn-3NJ4;
-	Wed, 29 Jul 2026 01:43:30 +0000
-Date: Wed, 29 Jul 2026 09:42:52 +0800
+	id 1wotRw-0000000024K-1X1p;
+	Wed, 29 Jul 2026 01:51:12 +0000
+Date: Wed, 29 Jul 2026 03:50:54 +0200
 From: kernel test robot <lkp@intel.com>
-To: Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>,
-	Steve French <sfrench@samba.org>,
-	Paulo Alcantara <pc@manguebit.org>
+To: Bryam Vargas <hexlabsecurity@proton.me>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Shyam Prasad N <sprasad@microsoft.com>,
-	samba-technical@lists.samba.org,
-	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
-	Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tom Talpey <tom@talpey.com>,
-	Bharath SM <bharathsm@microsoft.com>,
-	David Howells <dhowells@redhat.com>
-Subject: Re: [PATCH] smb: client: reject a tree connect response whose byte
- count is too small
-Message-ID: <202607290953.sMPYxQPT-lkp@intel.com>
-References: <20260728-b4-disp-6b8e68d4-v1-1-e69277237297@proton.me>
+ 0day robot <lkp@intel.com>
+Subject: fs/smb/client/cifssmb.c:1791:19: warning: implicit
+ conversion from 'int' to 'enum smb_eio_trace' changes value from 128 to -128
+Message-ID: <202607290344.fvDmgRPA-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260728-b4-disp-6b8e68d4-v1-1-e69277237297@proton.me>
 
-Hi Bryam,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 4235cb24ec1e8e96843f3671ba4da2a6ccca2c7b]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bryam-Vargas-via-B4-Relay/smb-client-reject-a-tree-connect-response-whose-byte-count-is-too-small/20260729-024634
-base:   4235cb24ec1e8e96843f3671ba4da2a6ccca2c7b
-patch link:    https://lore.kernel.org/r/20260728-b4-disp-6b8e68d4-v1-1-e69277237297%40proton.me
-patch subject: [PATCH] smb: client: reject a tree connect response whose byte count is too small
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260729/202607290953.sMPYxQPT-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260729/202607290953.sMPYxQPT-lkp@intel.com/reproduce)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Bryam-Vargas-via-B4-Relay/smb-client-reject-a-tree-connect-response-whose-byte-count-is-too-small/20260729-024634
+head:   d893e4288f59fd7cc9dc88506cddc9f5218d02ea
+commit: d893e4288f59fd7cc9dc88506cddc9f5218d02ea smb: client: reject a tree connect response whose byte count is too small
+date:   7 hours ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260729/202607290344.fvDmgRPA-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260729/202607290344.fvDmgRPA-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607290953.sMPYxQPT-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607290344.fvDmgRPA-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
