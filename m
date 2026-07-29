@@ -1,128 +1,105 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369381531E8
-	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 00:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785284017; cv=pass; b=p7bj+Lk7nYvQ80f0KJHsoALLSnzISGcnYD3SyuoCI/BspCuX5PacMoNQ3vbpFXkjxAh9506F2epASOW5E7blGyt9kJpLQMs6g8QvRx5oc2PhssllkjUowQKFs74146NyLC0s/dFbKUq+T7+28ahUdKFXFpaUWsnboERAWvSnyfs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785284017; c=relaxed/simple;
-	bh=h9aXM5QjNGMidHsRvBobL9YrXwlC8T0grjYAblNyM9c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NaLGxQWkfTeP3pgY0LWqanE2N81QhHintzkN3R58NWWABFGAIj18Ww7gQNv0RpBzEsYXjHei2Fuxqi6u54V5zUb3yq6h0lUgiwPD7De4zFLc0Ap5z7H/14c10fFlYNduXpacPrM4qpBDthO0eQ2ROQGwRw2E7bKNVzvxjF+EGpM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SFmBonep; arc=pass smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6538246778
+	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 00:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785284536; cv=none; b=TYpltJ61nzIoBzvHp45MFik7AFAgMSmwNqlcA8Vs8uf6lLYVRHWdhHx/nbm8FByLrlFb4hpY3OAr9bZ80qOk3SHCvOI5JwRAe+SoH3yNp+HS1YGTmRUzdri5KM8n3L2lqyL1nXGD3PvEgp1i1ztUPnoWa3vFf/xLW2ZjlvNj44M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785284536; c=relaxed/simple;
+	bh=KdMNOkcDjhS3VlnH58Xe4BLTAoXdjAgs95bPedNeSZI=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=sW5GJPtQYUFcefX2yy5HuaWSMEMv1NJEbLhRs6ABZINS0EAOh+M6J8SGV92N0hHjnUMtAyvBorMXwmIQGfk0jYii9ow3aA6h1UQ4u6Ql3/+p3kGOV3DnnRbWtIJLPxUaUQQZoI/77qaplLNYCS95o0S66j7gMM/hpNK95iVpuC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=K1pHCUGY; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SFmBonep"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-6984169c126so554535a12.1
-        for <llvm@lists.linux.dev>; Tue, 28 Jul 2026 17:13:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785284014; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mih2VZuLB6ink6XCUafog7pnlGU1B57sRhazGVsK+MR6M4GaZCgDlVOQwB40Cbl5p2
-         fsIvZEA2I/gLKfULmUOD7es0sGPE2Q8P8dkMCCWprM8793Zue6IflYtaRjzAHoduRwzr
-         OuT7ftOCZDc3xQufvsubu9cBO471P8IXulH78eL6Gr4Ep1YTROw/xJMBPF0vXLQDSc3N
-         ulCGXF+CgGI470HAGHHwdcpSOXRZAJUp6zKn5sVeT9A4hVbvsCbrpdlGzbtNyNGiM6Ge
-         UA2dMNVdwarWqoGdGhx9oGqxuDKI35tlPzVyHtbELatXrNDLrGIJgJRWfqeS9CDamv6U
-         h+6w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FZhPcLBAd3HL2IyjlVRA4vkZ5wn1M3m3VwbYPjbw23s=;
-        fh=0KXJdorwPQZZ/NXsdTNyJ3ZrixQg+ieYT9hNSpC8TzQ=;
-        b=kiAAUVOleCQp4brMpGuZug56JjANd+wSfZkPE/TUxkiixROLJy1j8HQSkzo9OOo4iS
-         hPM51ZmbtSQV5n3aMQcsNNWIxk6LpJbttYpghQSHeguti8AGIk2annl+Y3Ca4KNd6cdR
-         FDFRX0phlJ4KxY13DrPKDRZS6MzyewCbhVdqpxPgTHG2NQKsa48WF7h3rnndXdWq2sh0
-         xH5eJ/HJWdGHlajF+CSTvNjRmIy7CIwdz6bLZ9moscXItqWRKFHL6CrlzFFpy5ceoYYj
-         z5BWEhWSpII4nVe+QUaiR+8ovTvpNrziJAcaG2t5XAUAXwCwHPs1T1QpCvjYprBZJq5z
-         t6Jg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785284014; x=1785888814; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=FZhPcLBAd3HL2IyjlVRA4vkZ5wn1M3m3VwbYPjbw23s=;
-        b=SFmBonepzF5CM1SVVlVP1r914ZKcai/fO7NQ4gj7i6ksxs27kkltaAU3uz1dPhPEL3
-         X7ret0WF4EqMouG3Vqq5ENVKg7tsjyVQn8CLs2JhUnu+znN8PKjpTj9RK0qBidJFEFNs
-         OhrMD02ouaHKOLrXRieqF4gYfSpFkNf4DRXA7TbxftiqVmU90HASFoGcLQTcJ3USHufu
-         EuCjUCEH62MG+W5hXOpPYFBZ0MQf9U2DZNbchsEAoZSh9g+slk++pidX6vFyCQVRLtt8
-         nMyLkmP4/h16QpAEMZdD98qGWnzdVYY3fEvfMV4Wje+5aXhVTOHh8DWg8VY8ewYyQ8aR
-         v7tQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785284014; x=1785888814;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FZhPcLBAd3HL2IyjlVRA4vkZ5wn1M3m3VwbYPjbw23s=;
-        b=aqpvD7YIqN47Xr/DAb9S+QQkDoYat6/HSTgZ60Q/q3cRXzxfsju3R+n3eRjYsBFoIj
-         9ZubtgFTRiPNgtaguuKtlaR61haxfudysNx3HIMlw1kxw4/XL3y1gD/hVMsriTNwZKQl
-         L/My3XO/I1LgYxs/2L4Nq0QoZeOKVU187OZKU+/xhaSukIDgncyykuPHtu97V06i2Une
-         JElb/q1fMsa7+UWJ0JLvuxLEd0E0Pw+X1rAzXyeYbBgin50peQo3CIz89KaogSPio03n
-         Cb6CZUj7AKcmxf/kvqu7XwiLciMQG9baCvmJZhHvX7GH4FRopMqPG9MYSaCbEXYzF15K
-         IfmA==
-X-Forwarded-Encrypted: i=1; AHgh+RpfbmQtBPPh60VHnu4qh9okhPwmeg3bA9ekWFyITeN2PIPt7QWgO/8/HQuIca3YXnBkM0KB@lists.linux.dev
-X-Gm-Message-State: AOJu0YzTY8MnkRkc2GbZOfdIySqBagBf6fT3igNSc3HFcFKHFUvruDID
-	PhvhpBeLZI7spwhWiC2OvX+yHn/cofqnKQ4w4R3s6515QeDFTJBe0yOJxUSU1fsy4Jy5W/8PhxT
-	M/ccKnef0kjhWKraAa90gVuXgSzq5MUo=
-X-Gm-Gg: AR+sD11E7bGyXMj6xB8LKOjDwhxVUWQxHRT5+DLKKMZjlhYsI7OHNmpxM5c72VtvbjP
-	C/qTVHZkeGoC4dazQpldo4NQ9QX44/adA76AwWdoSya235ye1evOJE+zFhHs4iad2Qd1Ne76Ls3
-	DYxNK6N9gmcm36t//IawxfJVi5RHPnk7fXN2pHuJd3HiVdNqK8b0MaCt98bD1NxoJCR/hVD/fpk
-	zFkBF/O0lO7JJEXE6TphbqcVcOpBbFvddLyeiml5y0nDSMztT9SSUTOPludCHd+VxbZ0P8WZK46
-	clK3SZWRiCiKXcuD3AACNZz/LQ55Clo4yp6GdXUvspo92UX4kEPTMCBBkrjjp1hRwcHaBTQ8jJ0
-	BZJfsVDbb09WXC/i0Thl6ulrgjsV7S8Ryy9vZ04tdFrZWc1sf6VtEwFlmVQuczSqAtflw0Puy+4
-	5APz4fW2NX5tgPpZE/0xgP7EElDazF8mJDrreeKHDes4mcH0g+sIyGxHU=
-X-Received: by 2002:a05:6402:24c8:b0:697:ecb4:b86c with SMTP id
- 4fb4d7f45d1cf-6a034a0b240mr1758311a12.2.1785284014277; Tue, 28 Jul 2026
- 17:13:34 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="K1pHCUGY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785284530;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=WXEUsYl1RxBks764jNt5t2mMaQGqYDI4WWh7oiMcFn8=;
+	b=K1pHCUGYQdOptFmLvWJkVcp8X1TBaJgerLvK7jZ+kX8gEKC2wSiTAOLzSaWApg80iuXuPt
+	5BD3ghecHEzh+HQgGGb8AFOhsNN8Fel4IwHN391l/eFJEuvLHAhl3tTlBMFIV0B/z7kgjT
+	p1dSbTINwCTSLvj/YY3XpWCD2NSOEvw=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-533-4S0KL1hhPnK6fs7jcewYFg-1; Tue,
+ 28 Jul 2026 20:22:08 -0400
+X-MC-Unique: 4S0KL1hhPnK6fs7jcewYFg-1
+X-Mimecast-MFC-AGG-ID: 4S0KL1hhPnK6fs7jcewYFg_1785284527
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 553A91956094
+	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 00:22:07 +0000 (UTC)
+Received: from [172.20.176.224] (unknown [10.30.44.218])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id ABB0419560AB;
+	Wed, 29 Jul 2026 00:22:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc5,
+ upstream-mainline, fc02acf6)
+Date: Wed, 29 Jul 2026 00:22:06 -0000
+To: fs-test@redhat.com, llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260714234609.902367-1-rosenp@gmail.com> <alhXciS9G_bGB2re@SMW015318>
- <20260719155822.GAalz0Hj3XT97KkPOk@fat_crate.local> <CAKxU2N-vMNR+ES2YYuJh+6XASmZ04cnFodb4kP4zRBW0mbEKaw@mail.gmail.com>
- <20260728224059.GAamkv-4LJPspOw5ZV@fat_crate.local>
-In-Reply-To: <20260728224059.GAamkv-4LJPspOw5ZV@fat_crate.local>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Tue, 28 Jul 2026 17:13:22 -0700
-X-Gm-Features: AUfX_mxHW0ADcbLB742WYGYN1hzAzsCDZWTuKdLexmZw6VpD6MNkUeIKBO7Hquw
-Message-ID: <CAKxU2N_=DMAxM=-QRZ_J5Tt2rbjXs7C4uJRQTWF-xTquL_oFvQ@mail.gmail.com>
-Subject: Re: [PATCH] EDAC: fsl_ddr: use devm_platform_ioremap_resource()
-To: Borislav Petkov <bp@alien8.de>
-Cc: Frank Li <Frank.li@oss.nxp.com>, linux-edac@vger.kernel.org, 
-	Frank Li <Frank.Li@nxp.com>, Tony Luck <tony.luck@intel.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"open list:EDAC-FSL_DDR" <imx@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <06732.126072820220800179@us-mta-533.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: BUzlynTXh2W1NoX3WBklu0fRpOah6AN9ASzy0t3Cf7E_1785284527
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jul 28, 2026 at 3:41=E2=80=AFPM Borislav Petkov <bp@alien8.de> wrot=
-e:
->
-> On Tue, Jul 28, 2026 at 03:08:25PM -0700, Rosen Penev wrote:
-> > The unfortunate part of that is sashiko does not understand v2 patches
-> > and whatnot. Meaning it will always complain about things fixed in
-> > other patches.
->
-> That's fine as long as we've replied to the patches and said why it is ok=
-. LLM
-> is just a tool, at least for now and how it is used with Sashiko.
->
-> What is more important here is finding real hw to test it on. I'm hoping =
-Frank
-> on Cc will move...
-Based on some git log/grep, I don't see many devices that use this
-driver unfortunately.
->
-> --
-> Regards/Gruss,
->     Boris.
->
-> https://people.kernel.org/tglx/notes-about-netiquette
+Hi, we tested your kernel and here are the results:
+
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
+
+
+Kernel information:
+    Commit message: Merge tag 'platform-drivers-x86-v7.2-4' of git://git.ke=
+rnel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2713428282
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2713428282_x86_64_kernel_kcidb_tool_21747963_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
