@@ -1,217 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CE21A268;
-	Wed, 29 Jul 2026 01:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 445BE32B13A
+	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 03:41:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785289878; cv=none; b=rU3GBX3Gs/A6fwMPw1Wn8diE2FaFKL8I61jPyaSlXS3OT6uWNEjinQ8RgVqUu8x0oQ/VTgh3fZJRa+P/uCHKAQR/SCUXpIlz585Op/8ujzQmTctcGCFERl9tT4yc4eGG916FXDnEruPyQAMrh0y4wx8FTqGIfUtkx4Jlve9AftE=
+	t=1785296468; cv=none; b=Pbtw3aK4x42cOyNku8k+64w7jsf2U8UUGLYyOmM5QZyZs9THKIHsRmtsep6gyy30AeFDGWyYx93SzBnMVFj4m8tKyEa+BdtzDd1u8+qCOKOZUvEjauOQJqXdkMZABddS0U8ABBgMzj71FtmZj+mciMz02lLKk6A7rgwwjPpkkUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785289878; c=relaxed/simple;
-	bh=GCojX0lZPiINQ3A8Gqg/nP5PUh3bcSjqvNYub0BxtNs=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=mU43n/Vso/l63FsKvqPWkfKZkYsFkcKd6xnFU+ubaXY4DP5aTTKgfaGgyU8xt7jZ7PT2GjqSi6t1yx1trv+hmYC43SUvSxFueQ8sa7nSBew/dIQhQEa3GQi2bt+W0rdyrNuUHRRHAcocGoFb8qGl2jomw9BdF46OG73XGxTB0D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cj5CMxh5; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785296468; c=relaxed/simple;
+	bh=kyg5rzY90hhDhLDLHmSGbHFlONdb32qcU/dO4mwBsso=;
+	h=Mime-Version:Subject:From:To:CC:Message-ID:Date:Content-Type:
+	 References; b=t92bn2ZWzE2o8DczoU52gViE/ee3kHSHbJuYPbjIVtg902jPPpvEWCvMeP5LzEe+0qmXuJggmYrDHS8SfWxPPPVd+GT7vHINW/TDrQmvn25SXxmEQsKEmaf+5HE9k39y8LB/3QQ4V++D9962WKIWDAwvfxpcoxFF8l3XvFofifY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=o+gNIbZu; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cj5CMxh5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785289876; x=1816825876;
-  h=date:from:to:cc:subject:message-id;
-  bh=GCojX0lZPiINQ3A8Gqg/nP5PUh3bcSjqvNYub0BxtNs=;
-  b=Cj5CMxh5lpYW2LijpTT7oZ/7XzjHWsTOeoUxzNwcabNB2ZN5N+dIaO/i
-   dKNJUwf1lzxiCXsxgq0JtUPztN5yX43Kc/KPzj374yt/4o1PfK+21h6Nb
-   IHBJkGnawCYFBDcA3GhVnAvQ+Kyr2ca2ASMMppP/keLGhUrJNaZXG4mpj
-   K7MKds3KcB2x0mfWlYOf9sYhLVqhHjXG4OjYogBFI4NJ6cKsLcfCABKKQ
-   mp6v5TZ+KF1zzs083M6Fy0Dn1hDe/4ITqAI3ARC0WAnnqDSHgYkGlbqng
-   FVYHSh7rCLV4j/H9j7FOUwOlH1A8sUBR+sAFniJJHEeWz9ZUx6vEKkxKf
-   Q==;
-X-CSE-ConnectionGUID: QOGGOd9XTsyHZ7mEVbGM0Q==
-X-CSE-MsgGUID: WQgz2VlMSFeQJPbk/Pa7LQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="111434720"
-X-IronPort-AV: E=Sophos;i="6.25,191,1779174000"; 
-   d="scan'208";a="111434720"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2026 18:51:16 -0700
-X-CSE-ConnectionGUID: z/acK+hcSqm35wdeKeYKwg==
-X-CSE-MsgGUID: 2MPgRUH3RMOuV4jAENuZgQ==
-X-ExtLoop1: 1
-Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
-  by fmviesa003.fm.intel.com with ESMTP; 28 Jul 2026 18:51:14 -0700
-Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wotRw-0000000024K-1X1p;
-	Wed, 29 Jul 2026 01:51:12 +0000
-Date: Wed, 29 Jul 2026 03:50:54 +0200
-From: kernel test robot <lkp@intel.com>
-To: Bryam Vargas <hexlabsecurity@proton.me>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: fs/smb/client/cifssmb.c:1791:19: warning: implicit
- conversion from 'int' to 'enum smb_eio_trace' changes value from 128 to -128
-Message-ID: <202607290344.fvDmgRPA-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="o+gNIbZu"
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20260729034102epoutp01e7b9648fbbba3b66bd7543aa2212922f~GpayXrDLL1814218142epoutp01m
+	for <llvm@lists.linux.dev>; Wed, 29 Jul 2026 03:41:02 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20260729034102epoutp01e7b9648fbbba3b66bd7543aa2212922f~GpayXrDLL1814218142epoutp01m
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1785296463;
+	bh=kyg5rzY90hhDhLDLHmSGbHFlONdb32qcU/dO4mwBsso=;
+	h=Subject:Reply-To:From:To:CC:Date:References:From;
+	b=o+gNIbZuglU3pJ6E/08bcqgXiDLLj2QuQLa5HVyjFlKgt5G0x0EFNapHwOWpivqQF
+	 RmRSinAEBpISCm1r4CkjhUXpdzpY4W5zs2JgFXHGOSSIb+oDJCghT1sjukw/MlTd1H
+	 AsjBz73iGEM3sC5IfRys2NPg1xsgC6igPW/8ZMMs=
+Received: from epsnrtp01.localdomain (unknown [182.195.42.153]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPS id
+	20260729034101epcas5p1a82e6097e73bb6c7ba322230094ba9c1~Gpaxa3qtv1874118741epcas5p19;
+	Wed, 29 Jul 2026 03:41:01 +0000 (GMT)
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39]) by
+	epsnrtp01.localdomain (Postfix) with ESMTP id 4h8ymF6k2Qz6B9m7; Wed, 29 Jul
+	2026 03:41:01 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+Mime-Version: 1.0
+Subject: RE: [PATCH 1/1] arm: backtrace-clang: fix wrong sp usage for
+ unwinding
+Reply-To: maninder1.s@samsung.com
+Sender: Maninder Singh <maninder1.s@samsung.com>
+From: Maninder Singh <maninder1.s@samsung.com>
+To: "linux@armlinux.org.uk" <linux@armlinux.org.uk>, "nathan@kernel.org"
+	<nathan@kernel.org>, "nick.desaulniers+lkml@gmail.com"
+	<nick.desaulniers+lkml@gmail.com>, "morbo@google.com" <morbo@google.com>,
+	"justinstitt@google.com" <justinstitt@google.com>
+CC: Onkarnath <onkarnath.1@samsung.com>,
+	"linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
+	<llvm@lists.linux.dev>, Rohit Thapliyal <r.thapliyal@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
+Date: Wed, 29 Jul 2026 09:11:01 +0530
+X-CMS-MailID: 20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+X-CMS-RootMailID: 20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5
+References: <CGME20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Bryam-Vargas-via-B4-Relay/smb-client-reject-a-tree-connect-response-whose-byte-count-is-too-small/20260729-024634
-head:   d893e4288f59fd7cc9dc88506cddc9f5218d02ea
-commit: d893e4288f59fd7cc9dc88506cddc9f5218d02ea smb: client: reject a tree connect response whose byte count is too small
-date:   7 hours ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260729/202607290344.fvDmgRPA-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260729/202607290344.fvDmgRPA-lkp@intel.com/reproduce)
+Ping=21 Any comments?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607290344.fvDmgRPA-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> fs/smb/client/cifssmb.c:1791:19: warning: implicit conversion from 'int' to 'enum smb_eio_trace' changes value from 128 to -128 [-Wconstant-conversion]
-    1791 |                         return smb_EIO(smb_eio_trace_write_too_far);
-         |                                ~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/cifssmb.c:1982:17: warning: implicit conversion from 'int' to 'enum smb_eio_trace' changes value from 128 to -128 [-Wconstant-conversion]
-    1982 |                         rc = smb_EIO(smb_eio_trace_write_too_far);
-         |                              ~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/smb/client/cifssmb.c:2074:19: warning: implicit conversion from 'int' to 'enum smb_eio_trace' changes value from 128 to -128 [-Wconstant-conversion]
-    2074 |                         return smb_EIO(smb_eio_trace_write_too_far);
-         |                                ~~~~~~~ ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   3 warnings generated.
-
-
-vim +1791 fs/smb/client/cifssmb.c
-
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1761  
-ec637e3ffb6b97 fs/cifs/cifssmb.c       Steve French     2005-12-12  1762  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1763  int
-6d5786a34d98bf fs/cifs/cifssmb.c       Pavel Shilovsky  2012-06-20  1764  CIFSSMBWrite(const unsigned int xid, struct cifs_io_parms *io_parms,
-dbbab32574c384 fs/cifs/cifssmb.c       Al Viro          2016-09-05  1765  	     unsigned int *nbytes, const char *buf)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1766  {
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1767  	int rc = -EACCES;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1768  	WRITE_REQ *pSMB = NULL;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1769  	WRITE_RSP *pSMBr = NULL;
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1770  	int bytes_returned, wct;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1771  	__u32 bytes_sent;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1772  	__u16 byte_count;
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1773  	__u32 pid = io_parms->pid;
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1774  	__u16 netfid = io_parms->netfid;
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1775  	__u64 offset = io_parms->offset;
-96daf2b09178d8 fs/cifs/cifssmb.c       Steve French     2011-05-27  1776  	struct cifs_tcon *tcon = io_parms->tcon;
-83bfbd0bb9025f fs/smb/client/cifssmb.c David Howells    2025-09-05  1777  	unsigned int count = io_parms->length, in_len;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1778  
-a24e2d7d8f5123 fs/cifs/cifssmb.c       Steve French     2010-04-03  1779  	*nbytes = 0;
-a24e2d7d8f5123 fs/cifs/cifssmb.c       Steve French     2010-04-03  1780  
-f96637be081141 fs/cifs/cifssmb.c       Joe Perches      2013-05-04  1781  	/* cifs_dbg(FYI, "write at %lld %d bytes\n", offset, count);*/
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1782  	if (tcon->ses == NULL)
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1783  		return -ECONNABORTED;
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1784  
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1785  	if (tcon->ses->capabilities & CAP_LARGE_FILES)
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1786  		wct = 14;
-4c3130efda1ef4 fs/cifs/cifssmb.c       Steve French     2008-12-09  1787  	else {
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1788  		wct = 12;
-4c3130efda1ef4 fs/cifs/cifssmb.c       Steve French     2008-12-09  1789  		if ((offset >> 32) > 0) {
-4c3130efda1ef4 fs/cifs/cifssmb.c       Steve French     2008-12-09  1790  			/* can not handle big offset for old srv */
-f80ac7eda1cf52 fs/smb/client/cifssmb.c David Howells    2025-10-24 @1791  			return smb_EIO(smb_eio_trace_write_too_far);
-4c3130efda1ef4 fs/cifs/cifssmb.c       Steve French     2008-12-09  1792  		}
-4c3130efda1ef4 fs/cifs/cifssmb.c       Steve French     2008-12-09  1793  	}
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1794  
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1795  	rc = smb_init(SMB_COM_WRITE_ANDX, wct, tcon, (void **) &pSMB,
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1796  		      (void **) &pSMBr);
-83bfbd0bb9025f fs/smb/client/cifssmb.c David Howells    2025-09-05  1797  	if (rc < 0)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1798  		return rc;
-83bfbd0bb9025f fs/smb/client/cifssmb.c David Howells    2025-09-05  1799  	in_len = rc;
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1800  
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1801  	pSMB->hdr.Pid = cpu_to_le16((__u16)pid);
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1802  	pSMB->hdr.PidHigh = cpu_to_le16((__u16)(pid >> 16));
-fa2989f4473413 fs/cifs/cifssmb.c       Pavel Shilovsky  2011-05-26  1803  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1804  	/* tcon and ses pointer are checked in smb_init */
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1805  	if (tcon->ses->server == NULL)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1806  		return -ECONNABORTED;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1807  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1808  	pSMB->AndXCommand = 0xFF;	/* none */
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1809  	pSMB->Fid = netfid;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1810  	pSMB->OffsetLow = cpu_to_le32(offset & 0xFFFFFFFF);
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1811  	if (wct == 14)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1812  		pSMB->OffsetHigh = cpu_to_le32(offset >> 32);
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1813  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1814  	pSMB->Reserved = 0xFFFFFFFF;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1815  	pSMB->WriteMode = 0;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1816  	pSMB->Remaining = 0;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1817  
-50c2f753887270 fs/cifs/cifssmb.c       Steve French     2007-07-13  1818  	/* Can increase buffer size if buffer is big enough in some cases ie we
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1819  	can send more if LARGE_WRITE_X capability returned by the server and if
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1820  	our buffer is big enough or if we convert to iovecs on socket writes
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1821  	and eliminate the copy to the CIFS buffer */
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1822  	if (tcon->ses->capabilities & CAP_LARGE_WRITE_X) {
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1823  		bytes_sent = min_t(const unsigned int, CIFSMaxBufSize, count);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1824  	} else {
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1825  		bytes_sent = (tcon->ses->server->maxBuf - MAX_CIFS_HDR_SIZE)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1826  			 & ~0xFF;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1827  	}
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1828  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1829  	if (bytes_sent > count)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1830  		bytes_sent = count;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1831  	pSMB->DataOffset =
-83bfbd0bb9025f fs/smb/client/cifssmb.c David Howells    2025-09-05  1832  		cpu_to_le16(offsetof(struct smb_com_write_req, Data));
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1833  	if (buf)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1834  		memcpy(pSMB->Data, buf, bytes_sent);
-dbbab32574c384 fs/cifs/cifssmb.c       Al Viro          2016-09-05  1835  	else if (count != 0) {
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1836  		/* No buffer */
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1837  		cifs_buf_release(pSMB);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1838  		return -EINVAL;
-e30dcf3a1905b4 fs/cifs/cifssmb.c       Steve French     2005-09-20  1839  	} /* else setting file size with write of zero bytes */
-e30dcf3a1905b4 fs/cifs/cifssmb.c       Steve French     2005-09-20  1840  	if (wct == 14)
-e30dcf3a1905b4 fs/cifs/cifssmb.c       Steve French     2005-09-20  1841  		byte_count = bytes_sent + 1; /* pad */
-ad7a2926b9e53c fs/cifs/cifssmb.c       Steve French     2008-02-07  1842  	else /* wct == 12 */
-e30dcf3a1905b4 fs/cifs/cifssmb.c       Steve French     2005-09-20  1843  		byte_count = bytes_sent + 5; /* bigger pad, smaller smb hdr */
-ad7a2926b9e53c fs/cifs/cifssmb.c       Steve French     2008-02-07  1844  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1845  	pSMB->DataLengthLow = cpu_to_le16(bytes_sent & 0xFFFF);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1846  	pSMB->DataLengthHigh = cpu_to_le16(bytes_sent >> 16);
-83bfbd0bb9025f fs/smb/client/cifssmb.c David Howells    2025-09-05  1847  	in_len += byte_count;
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1848  
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1849  	if (wct == 14)
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1850  		pSMB->ByteCount = cpu_to_le16(byte_count);
-50c2f753887270 fs/cifs/cifssmb.c       Steve French     2007-07-13  1851  	else { /* old style write has byte count 4 bytes earlier
-50c2f753887270 fs/cifs/cifssmb.c       Steve French     2007-07-13  1852  		  so 4 bytes pad  */
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1853  		struct smb_com_writex_req *pSMBW =
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1854  			(struct smb_com_writex_req *)pSMB;
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1855  		pSMBW->ByteCount = cpu_to_le16(byte_count);
-1c9551878c4629 fs/cifs/cifssmb.c       Steve French     2005-08-30  1856  	}
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1857  
-83bfbd0bb9025f fs/smb/client/cifssmb.c David Howells    2025-09-05  1858  	rc = SendReceive(xid, tcon->ses, (struct smb_hdr *) pSMB, in_len,
-dbbab32574c384 fs/cifs/cifssmb.c       Al Viro          2016-09-05  1859  			 (struct smb_hdr *) pSMBr, &bytes_returned, 0);
-44c581866e2ae4 fs/cifs/cifssmb.c       Pavel Shilovsky  2012-05-28  1860  	cifs_stats_inc(&tcon->stats.cifs_stats.num_writes);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1861  	if (rc) {
-f96637be081141 fs/cifs/cifssmb.c       Joe Perches      2013-05-04  1862  		cifs_dbg(FYI, "Send error in write = %d\n", rc);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1863  	} else {
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1864  		*nbytes = le16_to_cpu(pSMBr->CountHigh);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1865  		*nbytes = (*nbytes) << 16;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1866  		*nbytes += le16_to_cpu(pSMBr->Count);
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1867  
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1868  		/*
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1869  		 * Mask off high 16 bits when bytes written as returned by the
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1870  		 * server is greater than bytes requested by the client. Some
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1871  		 * OS/2 servers are known to set incorrect CountHigh values.
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1872  		 */
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1873  		if (*nbytes > count)
-6513a81e9325d7 fs/cifs/cifssmb.c       Suresh Jayaraman 2010-03-31  1874  			*nbytes &= 0xFFFF;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1875  	}
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1876  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1877  	cifs_buf_release(pSMB);
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1878  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1879  	/* Note: On -EAGAIN error only caller can retry on handle based calls
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1880  		since file handle passed in no longer valid */
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1881  
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1882  	return rc;
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1883  }
-^1da177e4c3f41 fs/cifs/cifssmb.c       Linus Torvalds   2005-04-16  1884  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> show_stack() can be called for any task, however c_backtrace always unwin=
+ds
+> frames based on the =22sp=22 register. This results in printing the backt=
+race of
+> the current task instead of the target task.
+>=20
+> Try with normal TC:
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> =C2=A0=20=C2=A0=20=C2=A0=20=20for_each_process(p)=20=7B=0D=0A>=20=C2=A0=
+=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20=20sched_show_task=
+(p);=0D=0A>=20=C2=A0=20=C2=A0=20=C2=A0=20=20=7D=0D=0A>=20=0D=0A>=20=5B7.433=
+271=5D=20task:kthreadd=C2=A0=20=C2=A0=20=C2=A0=20=C2=A0=20state:S=20stack:0=
+=C2=A0=20=C2=A0=20=20pid:2=C2=A0=20=C2=A0=20=20tgid:2=C2=A0=20=C2=A0=20=20p=
+pid:0=C2=A0=20=C2=A0=20=C2=A0=20task_flags:0x208040=20flags:0x00000000=0D=
+=0A>=20=5B7.433633=5D=20Call=20trace:=0D=0A>=20=5B7.433640=5D=20=5B<8011341=
+8>=5D=20(dump_backtrace)=20from=20=5B<80113510>=5D=20(show_stack+0x14/0x18)=
+=0D=0A>=20..=0D=0A>=20=5B7.433676=5D=20=5B<8016749c>=5D=20(sched_show_task)=
+=20from=20=5B<803cb324>=5D=20(meminfo_proc_show+0x6c/0x930)=0D=0A>=20=5B7.4=
+34019=5D=C2=A0=20r5:8158e300=20r4:8b4882d0=0D=0A>=20=5B7.434024=5D=20=5B<80=
+3cb324>=5D=20(meminfo_proc_show)=20from=20=5B<80365788>=5D=20(seq_read_iter=
++0x148/0x4bc)=0D=0A>=20=5B7.434045=5D=20=5B<80365788>=5D=20(seq_read_iter)=
+=20from=20=5B<803c044c>=5D=20(proc_reg_read_iter+0xb8/0xc4)=0D=0A>=20=5B7.4=
+34060=5D=20=5B<803c044c>=5D=20(proc_reg_read_iter)=20from=20=5B<80377104>=
+=5D=20(copy_splice_read+0x228/0x308)=0D=0A>=20=0D=0A>=20It=20should=20unwin=
+d=20frame=20based=20on=20passed=20=22fp=22.=0D=0A>=20(CONFIG_UNWINDER_FRAME=
+_POINTER=3Dy)=0D=0A>=20=0D=0A>=20With=20fix:=0D=0A>=20=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=0D=0A>=20=5B13.933732=5D=20task:kthreadd=C2=A0=20=C2=A0=20=C2=A0=20=
+=C2=A0=20state:S=20stack:0=C2=A0=20=C2=A0=20=20pid:2=C2=A0=20=C2=A0=20=20tg=
+id:2=C2=A0=20=C2=A0=20=20ppid:0=C2=A0=20=C2=A0=20=C2=A0=20task_flags:0x2080=
+40=20flags:0x00000000=0D=0A>=20=5B13.934165=5D=20Call=20trace:=0D=0A>=20=5B=
+13.934604=5D=20=5B<80afa1a8>=5D=20(schedule)=20from=20=5B<8015426c>=5D=20(k=
+threadd+0x124/0x208)=0D=0A>=20=5B13.934654=5D=C2=A0=20r10:8100bbf0=20r4:811=
+6f440=0D=0A>=20=5B13.934664=5D=20=5B<8015426c>=5D=20(kthreadd)=20from=20=5B=
+<8010010c>=5D=20(ret_from_fork+0x14/0x28)=0D=0A>=20=5B13.934691=5D=20Except=
+ion=20stack(0xf081df9c=20to=200xf081dfe4)=0D=0A>=20=0D=0A>=20Additionally,=
+=20the=20extra=20manipulation=20of=20=22sp=22=20register=20appears=20unnece=
+ssary=20in=20the=20=22current=22=0D=0A>=20task=20also=20since=20the=20=22fp=
+=22=20register=20is=20already=20provided.=0D=0A>=20=0D=0A>=20Signed-off-by:=
+=20Onkarnath=20=0D=0A>=20Signed-off-by:=20Maninder=20Singh=20=0D=0A>=20---=
+=0D=0A>=20=20arch/arm/lib/backtrace-clang.S=20=7C=204=20----=0D=0A>=20=201=
+=20file=20changed,=204=20deletions(-)=0D=0A>=20=0D=0A>=20diff=20--git=20a/a=
+rch/arm/lib/backtrace-clang.S=20b/arch/arm/lib/backtrace-clang.S=0D=0A>=20i=
+ndex=20290c52a60fc6..993410a6afd1=20100644=0D=0A>=20---=20a/arch/arm/lib/ba=
+cktrace-clang.S=0D=0A>=20+++=20b/arch/arm/lib/backtrace-clang.S=0D=0A>=20=
+=40=40=20-105,10=20+105,6=20=40=40=20ENDPROC(c_backtrace)=0D=0A>=20=20=09=
+=09moveq=09mask,=20=230xfc000003=0D=0A>=20=20=09=09movne=09mask,=20=230=09=
+=09=40=20mask=20for=2032-bit=0D=0A>=20=20=0D=0A>=20-/*=0D=0A>=20-=20*=20Swi=
+tches=20the=20current=20frame=20to=20be=20the=20frame=20for=20dump_stack.=
+=0D=0A>=20-=20*/=0D=0A>=20-=09=09add=09frame,=20sp,=20=2324=09=09=40=20swit=
+ch=20to=20false=20frame=0D=0A>=20=20for_each_frame:=09tst=09frame,=20mask=
+=09=09=40=20Check=20for=20address=20exceptions=0D=0A>=20=20=09=09bne=09no_f=
+rame=0D=0A>=20=20=0D=0A>=20--=20=0D=0A>=202.34.1=0D=0A=0D=0A
