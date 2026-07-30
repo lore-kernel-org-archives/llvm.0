@@ -1,74 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E39E175A68;
-	Thu, 30 Jul 2026 03:48:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A335D38AC97
+	for <llvm@lists.linux.dev>; Thu, 30 Jul 2026 04:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785383303; cv=none; b=GM5BJ1adhcJQLtGOsM9NiYNwTuLPcWXGbexsAdzDakwcwNBFowk7rH7XPlelLF3knm5qaBiH6k1qo4/9tmNF6KrcqS1uhSfrbrmNmm9i88OeMgM4PszYfm3mPeXdM69YOirMliZs1YObeGP4UdAEdNQKWzFLASm7exGFkjk7wP8=
+	t=1785384734; cv=none; b=mjuf2SOFnIZ+VHwx9XmtOQ0wVyKIQjq14+Y3nsZEtjuF7WInGiqoGbNAk+/FHe3y7/yW00p3+1x2Ei99UoWh6l1bimxPpXAStO87tilJi9HeUk7KupgGDNl7QsFx79vqDondKZ9Nsw7jVv/00mXsLWZmfR8Q/LkEa/vLuT2M6po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785383303; c=relaxed/simple;
-	bh=mRzy/A8QP1rJEwW9vicUPjGnGofkSi1PxtTk8kLG0qY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=as3t0esMEtNlzV9gpEv//ux22weu23kLJttiunolsywyeRsdYO6sr44nsVGk+65aIxivTFqzW6qgrxkz9Pxld+A9iF24DldTZysZaypFVk8vfJPcZ4aiRAgmUmOZYLSSG87kMHieg/Z5Td7w0YcjG0aBJvVRTXKqshavDJ6WHvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lh3SI/4G; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785384734; c=relaxed/simple;
+	bh=0IrwCkEl/joxA1U334xQyaku/RNk0l2+6hH9yXxsv9Y=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=et2z6j2iKSN/cAVNJUa45dAhw0WorggK4GAjG4FAd3hzI/gN8n2BTJEbHQa6dPqdR/a8f2JukwJIOnlydh0p5tRrqt6RaUIi4I0mDnb36ivbpphBHuAj+FVYKTlSf4xVdqV3iqN00CIlCLsJtbhI66DzN0llTTJNVkDkO6F5qgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O681lWme; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lh3SI/4G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530061F000E9;
-	Thu, 30 Jul 2026 03:48:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785383301;
-	bh=Fz0OgPJHskeZCecIhowCqY7VOgUdIoTQSDl165K/eiA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Lh3SI/4G3RDTWRTW0NdHgz98g1xe5CFI4f5qgm15wero2ItllUSHgs45TZPbQYL2Q
-	 rCHS6Zze5Q9Y2/ARfhG2TffPAN3NS6mLuKT6e4uzyPXMIDVdwLQ2DDgyYzf0aRy36e
-	 CcdN19IHoaSAO4dl38o5KBknoP0CUOlRdYqRBHyzIn73xiP0LwfPnhxls9HSeOr4ex
-	 Mr1oKYRbef3TG8pQez/gWER5ZdMct9iKrj4F5ocJlwCd9PrJW9wA9ijlbyLp0uwC9Z
-	 bgZ67ckMARrD6Y5ujaicC3KFybE51P26CACDPAeatppWbrZYAoKyLmILliJjeKPUeb
-	 S/e3xi5pSTRWQ==
-Date: Thu, 30 Jul 2026 05:48:12 +0200
-From: Manivannan Sadhasivam <mani@kernel.org>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Michal Simek <michal.simek@amd.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	"moderated list:ARM/ZYNQ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCHv2] PCI: xilinx: use fwnode_irq_get() for INTx IRQ lookup
-Message-ID: <5ea47pp3ctiieqahn3mkcg3dqrlmwdgdjyv6pa65qmjuqop4lb@tbax2lojuwkr>
-References: <20260716205811.800920-1-rosenp@gmail.com>
- <g3gtckpqgacw44jqqb5hb3oejpelxvbba47tdwsvksxbbskygp@mcwtsbypoyar>
- <CAKxU2N_f1nN4Oo94V9MY6Q-wp66j=3kodfMs0BeXVGB9XivvNA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O681lWme"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785384731;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RA4kpCnl/KQsa8zSFMuITVbSCOBQqK2s/7wBT+z/Br8=;
+	b=O681lWmeG2NEAF7empSaG0yrCF9Ag5ssr3DVSgMnFzjQYJkzBjjQJq5+Va+VTb14jw5Qu1
+	K+N7xlmdy+lRhL32zeYifvDwCTA4K26K4HTt60s9fTKRzCrE2lla7EUZaJWme97mdEC88K
+	VgKGyaeUyCAnBJTjd/PFAfubLNY2kQ8=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-210-BqB9HDxMOUK-TZkq6f8YPw-1; Thu,
+ 30 Jul 2026 00:12:09 -0400
+X-MC-Unique: BqB9HDxMOUK-TZkq6f8YPw-1
+X-Mimecast-MFC-AGG-ID: BqB9HDxMOUK-TZkq6f8YPw_1785384728
+Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 653C0180044D
+	for <llvm@lists.linux.dev>; Thu, 30 Jul 2026 04:12:08 +0000 (UTC)
+Received: from [172.20.176.224] (unknown [10.30.44.218])
+	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2210941C;
+	Thu, 30 Jul 2026 04:12:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc5,
+ upstream-mainline, fc46aed5)
+Date: Thu, 30 Jul 2026 04:12:07 -0000
+To: llvm@lists.linux.dev, fs-test@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKxU2N_f1nN4Oo94V9MY6Q-wp66j=3kodfMs0BeXVGB9XivvNA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Message-Id: <54093.126073000120900361@us-mta-210.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 8JlpE28R-x4pb5BIFeLGHjtHxI2ert4WGiAoCb095EQ_1785384728
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 29, 2026 at 11:18:15AM -0700, Rosen Penev wrote:
-> On Wed, Jul 29, 2026 at 9:00 AM Manivannan Sadhasivam <mani@kernel.org> wrote:
-> >
-> > On Thu, Jul 16, 2026 at 01:58:11PM -0700, Rosen Penev wrote:
-> > > Replace irq_of_parse_and_map() with fwnode_irq_get(dev_fwnode(dev), 0)
-> > > in xilinx_pcie_parse_dt(). For an OF-backed device this is equivalent to
-> > > the previous call, but uses the generic firmware-node API.
-> > >
-> >
-> > What is the benefit of using fwnode API for OF only driver?
-> I get conflicting information. Apparently of_irq_get needs a call to
-> irq_dispose_mapping but fwnode_irq_get does not.
+Hi, we tested your kernel and here are the results:
 
-That's not true. fwnode_irq_get() becomes a wrapper to of_irq_get() if OF is
-used. So both needs a call to irq_dispose_mapping() in the error path.
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-- Mani
 
--- 
-மணிவண்ணன் சதாசிவம்
+Kernel information:
+    Commit message: Merge tag 'for-linus' of git://git.kernel.org/pub/scm/v=
+irt/kvm/kvm
+
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2716959078
+
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2716959078_x86_64_kernel_kcidb_tool_21756234_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
