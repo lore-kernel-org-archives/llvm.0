@@ -1,233 +1,74 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F1AB36493F;
-	Thu, 30 Jul 2026 02:23:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E39E175A68;
+	Thu, 30 Jul 2026 03:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785378228; cv=none; b=rCl1joXO7gqet7ODqDsYfe3fMiD3er9ngohuG6ZQrGOfxL3c2+N1LFtwFRU1KMavg8hP4gIkNfvjfJ89U1IB8HDKIyiGaFsvsXK92p/5+F6EvFiwyyZqCrzY2ofY8ke0Up8rpYXsBxCpIO9YeuVTpPjDOmikuixsFlbYVzHfpRM=
+	t=1785383303; cv=none; b=GM5BJ1adhcJQLtGOsM9NiYNwTuLPcWXGbexsAdzDakwcwNBFowk7rH7XPlelLF3knm5qaBiH6k1qo4/9tmNF6KrcqS1uhSfrbrmNmm9i88OeMgM4PszYfm3mPeXdM69YOirMliZs1YObeGP4UdAEdNQKWzFLASm7exGFkjk7wP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785378228; c=relaxed/simple;
-	bh=P5EpUQaH2DbBZ6df/qGwvRSNwMkt/6l69zALNrSPUZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=FbRE0+3/Kyar1QYouxAgdnFieQrbsoRFhzEoioPOmqjoTpNqSDTf+Cg8UfepwDG8MGAt7IYw+wfdbzQH0e0ahR4IVNMlHY7awOgjf+Muerj1SgIHBJbIzlRKxtWZmgAB5mI5DKB5+0n+01QPay7xBdGZGfrSLsPeCtub63ouiDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hQtddymL; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785383303; c=relaxed/simple;
+	bh=mRzy/A8QP1rJEwW9vicUPjGnGofkSi1PxtTk8kLG0qY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=as3t0esMEtNlzV9gpEv//ux22weu23kLJttiunolsywyeRsdYO6sr44nsVGk+65aIxivTFqzW6qgrxkz9Pxld+A9iF24DldTZysZaypFVk8vfJPcZ4aiRAgmUmOZYLSSG87kMHieg/Z5Td7w0YcjG0aBJvVRTXKqshavDJ6WHvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lh3SI/4G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hQtddymL"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785378226; x=1816914226;
-  h=date:from:to:cc:subject:message-id;
-  bh=P5EpUQaH2DbBZ6df/qGwvRSNwMkt/6l69zALNrSPUZ4=;
-  b=hQtddymL6su6zRtuwRRIJNWzejC2d+sSOZ4iQabg4S+4tt0Ck4nN03MJ
-   SLltEIzHw/7gxR1o7hq6snJvx1VPXPYk6wziW8WMDiBy+o1ZnluH5arQy
-   drC1RFlNKVPlUaIBm9wzebHjbpM1uJqVAVkTABECybp19xCLpuMlKjnfM
-   GjJcdL9rBZ6akH8LSYyfZNHQq+u+Awotq6hrgG87bxOvX4c5/tH8QWUQq
-   A/9uGY6M95hNNOjwmkr8Pxy0wUQEj9hlvxBTC3pLfMaKTmaA3hzEyfgNk
-   BdJ3acUwqZfstiTPzlIGKyveuIJzoUL7yLgEmpHP5js+5DsWH9CGMch9h
-   A==;
-X-CSE-ConnectionGUID: rTHGBimrQ0ar7b4UY8ghyA==
-X-CSE-MsgGUID: lpy3ayNYSBKEiw0iqJc4Cg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11859"; a="89672819"
-X-IronPort-AV: E=Sophos;i="6.25,193,1779174000"; 
-   d="scan'208";a="89672819"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2026 19:23:45 -0700
-X-CSE-ConnectionGUID: 1Ljtrx4BTwa5zvNSRiYF1g==
-X-CSE-MsgGUID: inCIkAc4T6WFOd/C9p0ZKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,193,1779174000"; 
-   d="scan'208";a="258937403"
-Received: from lkp-server02.sh.intel.com (HELO ea128546eb3d) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 29 Jul 2026 19:23:44 -0700
-Received: from kbuild by ea128546eb3d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wpGQp-00000000fvW-3Ljo;
-	Thu, 30 Jul 2026 02:23:36 +0000
-Date: Thu, 30 Jul 2026 10:22:59 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Pratyush Yadav (Google)" <pratyush@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Subject: [linux-next:master 7971/10444]
- include/linux/kexec_handover.h:47:41: error: use of undeclared identifier
- 'HPAGE_PMD_ORDER'
-Message-ID: <202607301001.ARjK0D4v-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lh3SI/4G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530061F000E9;
+	Thu, 30 Jul 2026 03:48:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785383301;
+	bh=Fz0OgPJHskeZCecIhowCqY7VOgUdIoTQSDl165K/eiA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Lh3SI/4G3RDTWRTW0NdHgz98g1xe5CFI4f5qgm15wero2ItllUSHgs45TZPbQYL2Q
+	 rCHS6Zze5Q9Y2/ARfhG2TffPAN3NS6mLuKT6e4uzyPXMIDVdwLQ2DDgyYzf0aRy36e
+	 CcdN19IHoaSAO4dl38o5KBknoP0CUOlRdYqRBHyzIn73xiP0LwfPnhxls9HSeOr4ex
+	 Mr1oKYRbef3TG8pQez/gWER5ZdMct9iKrj4F5ocJlwCd9PrJW9wA9ijlbyLp0uwC9Z
+	 bgZ67ckMARrD6Y5ujaicC3KFybE51P26CACDPAeatppWbrZYAoKyLmILliJjeKPUeb
+	 S/e3xi5pSTRWQ==
+Date: Thu, 30 Jul 2026 05:48:12 +0200
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-pci@vger.kernel.org, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Bjorn Helgaas <bhelgaas@google.com>, Michal Simek <michal.simek@amd.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	"moderated list:ARM/ZYNQ ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCHv2] PCI: xilinx: use fwnode_irq_get() for INTx IRQ lookup
+Message-ID: <5ea47pp3ctiieqahn3mkcg3dqrlmwdgdjyv6pa65qmjuqop4lb@tbax2lojuwkr>
+References: <20260716205811.800920-1-rosenp@gmail.com>
+ <g3gtckpqgacw44jqqb5hb3oejpelxvbba47tdwsvksxbbskygp@mcwtsbypoyar>
+ <CAKxU2N_f1nN4Oo94V9MY6Q-wp66j=3kodfMs0BeXVGB9XivvNA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKxU2N_f1nN4Oo94V9MY6Q-wp66j=3kodfMs0BeXVGB9XivvNA@mail.gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   78bc8af4affb9a732504eb22eeac7d1e50883853
-commit: f476132a8999edf2225185652dce98a42347e8c9 [7971/10444] mm/mm_init: don't rely on memblock to get KHO scratch migratetype
-config: x86_64-randconfig-001-20260729 (https://download.01.org/0day-ci/archive/20260730/202607301001.ARjK0D4v-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260730/202607301001.ARjK0D4v-lkp@intel.com/reproduce)
+On Wed, Jul 29, 2026 at 11:18:15AM -0700, Rosen Penev wrote:
+> On Wed, Jul 29, 2026 at 9:00 AM Manivannan Sadhasivam <mani@kernel.org> wrote:
+> >
+> > On Thu, Jul 16, 2026 at 01:58:11PM -0700, Rosen Penev wrote:
+> > > Replace irq_of_parse_and_map() with fwnode_irq_get(dev_fwnode(dev), 0)
+> > > in xilinx_pcie_parse_dt(). For an OF-backed device this is equivalent to
+> > > the previous call, but uses the generic firmware-node API.
+> > >
+> >
+> > What is the benefit of using fwnode API for OF only driver?
+> I get conflicting information. Apparently of_irq_get needs a call to
+> irq_dispose_mapping but fwnode_irq_get does not.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202607301001.ARjK0D4v-lkp@intel.com/
+That's not true. fwnode_irq_get() becomes a wrapper to of_irq_get() if OF is
+used. So both needs a call to irq_dispose_mapping() in the error path.
 
-All errors (new ones prefixed by >>):
+- Mani
 
-   In file included from kernel/liveupdate/kho_block.c:24:
->> include/linux/kexec_handover.h:47:41: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-      47 |         if (kho_scratch_overlap(PFN_PHYS(pfn), pageblock_nr_pages << PAGE_SHIFT))
-         |                                                ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from kernel/liveupdate/kho_block.c:24:
->> include/linux/kexec_handover.h:47:41: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-      47 |         if (kho_scratch_overlap(PFN_PHYS(pfn), pageblock_nr_pages << PAGE_SHIFT))
-         |                                                ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   2 errors generated.
---
-   In file included from kernel/liveupdate/luo_flb.c:45:
->> include/linux/kexec_handover.h:47:41: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-      47 |         if (kho_scratch_overlap(PFN_PHYS(pfn), pageblock_nr_pages << PAGE_SHIFT))
-         |                                                ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from kernel/liveupdate/luo_flb.c:45:
->> include/linux/kexec_handover.h:47:41: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-      47 |         if (kho_scratch_overlap(PFN_PHYS(pfn), pageblock_nr_pages << PAGE_SHIFT))
-         |                                                ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from kernel/liveupdate/luo_flb.c:49:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/liveupdate/luo_flb.c:49:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/liveupdate/luo_flb.c:49:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/liveupdate/luo_flb.c:49:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/liveupdate/luo_flb.c:49:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[1]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from kernel/liveupdate/luo_flb.c:49:
-   In file included from include/linux/module.h:20:
-
-
-vim +/HPAGE_PMD_ORDER +47 include/linux/kexec_handover.h
-
-    43	
-    44	static inline enum migratetype kho_scratch_migratetype(unsigned long pfn,
-    45							       enum migratetype mt)
-    46	{
-  > 47		if (kho_scratch_overlap(PFN_PHYS(pfn), pageblock_nr_pages << PAGE_SHIFT))
-    48			return MIGRATE_CMA;
-    49		return mt;
-    50	}
-    51	#else
-    52	static inline bool kho_is_enabled(void)
-    53	{
-    54		return false;
-    55	}
-    56	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+மணிவண்ணன் சதாசிவம்
