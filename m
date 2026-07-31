@@ -1,110 +1,90 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486BE1F5842
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 03:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8819735E929;
+	Fri, 31 Jul 2026 05:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785469931; cv=none; b=HXfcppzvxX4uQ5wdWCDIqzRRthAeHRJxV1+A5riyq98w38Blix9LUcQESMVvAIqT1mEWbUtBX51mWubdwws9cJ+FiHfaI9GEfGRpX6vtdBktf6XCGiecup1883uYYzKsKQmBsaZGt3aKz+O2MHW8DDkRAFIfbGi7kQvink3jri0=
+	t=1785477419; cv=none; b=H8kKYXKWQJ4dB0+GPEuTJjifXW2jrI3ex6pY6mZkKlFAFYzumEbeSOHDZyk1g5Z8zP7HLpFU7r+p2zk5/Xq0bUlgPxr1I61zdANjmTm0trFoH6nTo/J+iOZDwpOulPw89XAeyODcjPoMOt69ZXPh1DI1nphnaPeUYBT+sae79DY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785469931; c=relaxed/simple;
-	bh=CTO6RWB1AvipRKCyEksPtEMq2O3SEwDKbQbD4dak98E=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=omOWBw/qAF2Uy+3WHg8n0dp38ruWhw4eiwjal2izx+JJxn+jPB2pPyceU9cOjLYY536ksduQ1lPLk23aslksbottXiMh/B6wEh6UB8dh5LxPfUE8B2Vf6SQ10xIiPM9IRkeNfk6FjS9zMyBvxkiOdFhlpe5lZwROEHLhGjOrOV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=a0irSMuI; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785477419; c=relaxed/simple;
+	bh=AljTJV5Ws9V+g5P206WN8LT515CPMgr8kwITomUc758=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tik2TMRTaduRUrcgWa77MHHKjpYz9uD2b5TJCEYXN1zpoDUgK7F/T5L8zqw2MQePrIGgMyWAF/5Dow9I9LIa/V0jdFBb1GmH4WTKm7JedzW/9CbryjwXRniKBVCqowbnTH5bAmM3HCmIsC9FpLhjHIHJh2QYBRPM42enxitNq7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AMlOMK/p; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="a0irSMuI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785469929;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DAzWK0n1Acg2TmKaPjCnCRhNTEKnofQ2DDLkdlntAYk=;
-	b=a0irSMuIP+aWFOZUZfOKCJgL73jrx5uPRejt6ueQpaUwRfOaIaaC/6bHOXRbbrDPdHyiBj
-	5hBExeIxaZP1gHDW8771RlsI1Kc2q8fOqX3ZV6D71jGy46FMbqxZ0y1iQKK49SUMGvnHht
-	Ckt13bTO0l7u8sgNdtENPessidsZ1xg=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-186-VwG95zlAOdK9XxTXmhNO9w-1; Thu,
- 30 Jul 2026 23:52:06 -0400
-X-MC-Unique: VwG95zlAOdK9XxTXmhNO9w-1
-X-Mimecast-MFC-AGG-ID: VwG95zlAOdK9XxTXmhNO9w_1785469926
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BBEA21956080
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 03:52:05 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 442DD180044F;
-	Fri, 31 Jul 2026 03:52:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc5,
- upstream-mainline, 8ba098e6)
-Date: Fri, 31 Jul 2026 03:52:04 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AMlOMK/p"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785477417; x=1817013417;
+  h=date:from:to:cc:subject:message-id;
+  bh=AljTJV5Ws9V+g5P206WN8LT515CPMgr8kwITomUc758=;
+  b=AMlOMK/pMzMfNhyKbNNZHPXRNCyctPTLGYsAtbrq9VlIlGtjSK8yvBT8
+   fV+uVcYM1lNxycjGgZw1MXz/yej0IWEMAc/x/g172LIJYf1uU34a58Q57
+   8KIEEMHSOioBuAYbvnfm8pXf6JxddB8n9mKZOnDeDFhlDiYjRxc/mDoBR
+   Fyl7HiDL9bYLbkG5iIpQwj4fQ5G3o1f9O2rCQJjOLe1vzA4TRUdG338Fs
+   cliwozBZC04RnwsDBBdagQg4e1nGJFbefJ0zilpP2EyfRAXQnFS+YrpGT
+   zNaYG1uA/bUAMQAHpd6ccXgzeV7zbDVRrueAkoRZNtmOllp+iLm6sUtj9
+   g==;
+X-CSE-ConnectionGUID: 72bxKe7QREu4lHZwuVvPtQ==
+X-CSE-MsgGUID: nV6Lrfr7Rre2k4CL1KM+ww==
+X-IronPort-AV: E=McAfee;i="6800,10657,11860"; a="111647033"
+X-IronPort-AV: E=Sophos;i="6.25,195,1779174000"; 
+   d="scan'208";a="111647033"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Jul 2026 22:56:57 -0700
+X-CSE-ConnectionGUID: jeBKPaPOSpqb/kUVM/qHNQ==
+X-CSE-MsgGUID: DB7ke7KZRFOB/R2hoCNeGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,195,1779174000"; 
+   d="scan'208";a="258705009"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by orviesa006.jf.intel.com with ESMTP; 30 Jul 2026 22:56:56 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wpgEn-000000002WY-1Yzv;
+	Fri, 31 Jul 2026 05:56:53 +0000
+Date: Fri, 31 Jul 2026 07:56:52 +0200
+From: kernel test robot <lkp@intel.com>
+To: Luis Chamberlain <mcgrof@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [mcgrof:blk-iobuf-pool-v5-premap-iova 12/14] Warning:
+ block/blk-mq-dma.c:235 cannot understand function prototype: '/*  * Premapped
+ path: the buffer is persistently DMA-mapped as one contiguous IOVA  *
+ (dma_iova_*), so hand the whole mapping to the iterator as a single segment 
+ * instead of allocati...
+Message-ID: <202607310722.zfznlplf-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
-Message-Id: <17109.126073023520600469@us-mta-186.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 2ddHl3O0zzQ1HuVUJcTPJal0BQyMikNrVzQFSNXgKhM_1785469926
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git blk-iobuf-pool-v5-premap-iova
+head:   912328a605c4767433d483436a2d592d06063095
+commit: ca011e66fdccef93bc916c7cf32323ad7b6fe2e2 [12/14] block, io_uring: premap a pool buffer to exceed the dma_opt clamp
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260731/202607310722.zfznlplf-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260731/202607310722.zfznlplf-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202607310722.zfznlplf-lkp@intel.com/
 
+All warnings (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'v7.2-rc5-smb3-client-fixes' of git://git.sam=
-ba.org/sfrench/cifs-2.6
+>> Warning: block/blk-mq-dma.c:235 cannot understand function prototype: '/*  * Premapped path: the buffer is persistently DMA-mapped as one contiguous IOVA  * (dma_iova_*), so hand the whole mapping to the iterator as a single segment  * instead of allocating an IOVA per I/O.  This is what lets a premapped request  * exceed the dma_opt_mapping_size() clamp folded into max_hw_sectors.  The  * completion path must NOT unmap it (see nvme_unmap_data).  *  * NOTE: this emits the mapping from its start, i.e. it assumes the request  * covers the buffer from offset 0.  The whole-buffer fixed-buffer command path  * used by the pool selftest satisfies that; an arbitrary buffer offset needs'
+   Warning: block/blk-mq-dma.c:430 Excess function parameter 'state' description in 'blk_rq_integrity_dma_map_iter_next'
+   Warning: block/blk-mq-dma.c:430 Excess function parameter 'state' description in 'blk_rq_integrity_dma_map_iter_next'
+--
+   Warning: block/blk-map.c:366 Excess function parameter 'op' description in 'bio_copy_kern'
+>> Warning: block/blk-map.c:516 function parameter 'opts' not described in 'blk_rq_map_user_iov_opts'
+>> Warning: block/blk-map.c:516 expecting prototype for blk_rq_map_user_iov(). Prototype was for blk_rq_map_user_iov_opts() instead
+   Warning: block/blk-map.c:366 Excess function parameter 'op' description in 'bio_copy_kern'
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2720393917
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2720393917_aarch64_kernel_kcidb_tool_21764504_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2720393917_x86_64_kernel_kcidb_tool_21764501_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
