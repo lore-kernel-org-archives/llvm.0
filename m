@@ -1,105 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22135330307
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 21:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3266B1799F;
+	Fri, 31 Jul 2026 22:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785534791; cv=none; b=V9mvF0CrfxVK+lEoMq21YJzURZeavhZi32m+DANM3RirMNb+7CR4fTnDdE+/nnOc75oQOvmBNPXT+xreyTEIFftVsT6O3vY2myWiADtcXWyeAvIIpbPGUnXNAq9UEhnowjL0oik/AJzhBJ4pCKOAR8Wizwk8+6KRarvVOUUwVAg=
+	t=1785536715; cv=none; b=pCRYWReQu/HBOyV3HTBJtBFWmFGWOBkyrDcTBQpcNC1QIPiASSwAlQM6WktG4bvSfzuEZIeO4JENLH17ttr8ay8xMV/CuMhMd4n6fhpiND4OKC8cmD2831NDXvKFO9p7QHTPmYy6d3kkNGodz+kD/hcphpgk/+Xyp25AJ7Z19vA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785534791; c=relaxed/simple;
-	bh=w8/HOGLQJaIFXHECdbuvV3wDgmy8WBZkOPEiW5ZzHdM=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=usMSd5EVMJO9VFXi9GjXGiw5izZKNXNh8muXzSAayInLSIbrAp8R/lecqdXZoIcHVhYRZJB2/CZdb7us7SWKa6udphKvaLzRLjZz7MylQ0lJ48/qDXiqMXkg9gflBNOeZ6Pe8LbpH/Lg7tXOTQC4HuCi2L2pQU4XrBzvdc8lXbc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=B09Kp/UW; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785536715; c=relaxed/simple;
+	bh=8uLa+aBy84lQ8Ar85C22DzL1eNjKio6ZGnagqriymYo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jEMujU70TS9gHQIM/MBOWoqXJ41pRBVb97saN0eyI2EtaFjwKLXhGzh8qPGJNjU5gTTgmgu+Nl2EcwRiQAF6pvYK0wLGJRKhx3D1RAqlXWdW1fOkOnBZId6GWhbUuZD/T4yodbnkT6SDi3VnX620z6lEViuQ/A2VxApykWy8JGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Th2t3B19; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="B09Kp/UW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785534789;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6s76YqHMs5oPxH0bZSyPczvXL/G+B3gMMyLZsZJmJb0=;
-	b=B09Kp/UW9KZJe4IiSfDJyNZUb07cZmvTrJmpkTF7+6F4RNGmG0RhoGivha95+JJ2tB77HV
-	eNy+l9+eXTZDWpT+QbajD4IjuRo9OrUs4ebMsSnIgmheFRvKdVEy25BZSO2e3lgO63GTCz
-	wwF9t8K6tqDEz5wyW7uCMuvOIOMyVdU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-659-YsgYHkPCNd-wMAh4Acy6kQ-1; Fri,
- 31 Jul 2026 17:53:07 -0400
-X-MC-Unique: YsgYHkPCNd-wMAh4Acy6kQ-1
-X-Mimecast-MFC-AGG-ID: YsgYHkPCNd-wMAh4Acy6kQ_1785534786
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9B8AD195608E
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 21:53:06 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 159E630002EA;
-	Fri, 31 Jul 2026 21:53:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc5,
- upstream-mainline, 596254ec)
-Date: Fri, 31 Jul 2026 21:53:05 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Th2t3B19"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785536712; x=1817072712;
+  h=date:from:to:cc:subject:message-id;
+  bh=8uLa+aBy84lQ8Ar85C22DzL1eNjKio6ZGnagqriymYo=;
+  b=Th2t3B196VIA5JXLv/SYzNlKgdKbJEhdbJlEcEhXMAp9l+kteAWQcAnj
+   Kcn6+2gtDvH5tHvfHzhu+RPRm5mA0A1+VFvA08c3qROMu+PsanUo/+IxZ
+   cnD41/iGnvPQajfzU6B3xrlIXNoo70gYEotukpMf/AEUoSbpKxKK9ST14
+   CawK3/0q2ciHpe9tS0k3TYzqkdZ4ZLYZnoBSuStKuEk9Z/qR1y8r42tmz
+   ckYD2G95JbOPw4+yIfoB/i0sVOK01+/hiAeo1SZWdaCtbCJZsO0M76niC
+   vR+waxHVOksmcSeRlyVAeHTEamzOQ9UITWJzquKFgBexPbOCapr++weWh
+   w==;
+X-CSE-ConnectionGUID: dJFinNZbRLmqXDAQ4zytAg==
+X-CSE-MsgGUID: 6vzbA6qxTpOLx21P9lbPNw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11861"; a="86038804"
+X-IronPort-AV: E=Sophos;i="6.25,197,1779174000"; 
+   d="scan'208";a="86038804"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 15:25:11 -0700
+X-CSE-ConnectionGUID: TA3q+lBJQnC5h8rhE3z6FQ==
+X-CSE-MsgGUID: Jh3k+NhbT4C9uLqsXfAecQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,197,1779174000"; 
+   d="scan'208";a="262642815"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 31 Jul 2026 15:25:10 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wpvf9-000000002K9-1lSJ;
+	Fri, 31 Jul 2026 22:25:07 +0000
+Date: Sat, 01 Aug 2026 06:25:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: YoungSoo Shin <shinys000114@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Dongjin Kim <tobetter@gmail.com>
+Subject: [tobetter:odroid-7.2.y 1/58]
+ drivers/video/fbdev/sh1106fb.c:20:10: fatal error: 'linux/of_gpio.h' file not
+ found
+Message-ID: <202608010536.efb85MQE-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <21509.126073117530701168@us-mta-659.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: D_rgVIwiruPQlyg4lYiBUy89BTXtShNEM79P8hMuGVI_1785534786
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi, we tested your kernel and here are the results:
+tree:   https://github.com/tobetter/linux odroid-7.2.y
+head:   b975acfb39259020dffed242fcfba388a6f4e354
+commit: a7f14d616999ff734886c89b75b3f701b77ffd2d [1/58] ODROID-COMMON: fbdev: add support for Sino Wealth SH1106 OLED controller
+config: i386-randconfig-006-20260801 (https://download.01.org/0day-ci/archive/20260801/202608010536.efb85MQE-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260801/202608010536.efb85MQE-lkp@intel.com/reproduce)
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608010536.efb85MQE-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-Kernel information:
-    Commit message: Merge tag 'pci-v7.2-fixes-1' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/pci/pci
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2722696870
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2722696870_aarch64_kernel_kcidb_tool_21770827_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+>> drivers/video/fbdev/sh1106fb.c:20:10: fatal error: 'linux/of_gpio.h' file not found
+      20 | #include <linux/of_gpio.h>
+         |          ^~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +20 drivers/video/fbdev/sh1106fb.c
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+  > 20	#include <linux/of_gpio.h>
+    21	#include <linux/uaccess.h>
+    22	
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
