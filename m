@@ -1,118 +1,100 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7981A0BF1;
-	Fri, 31 Jul 2026 00:09:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221E7253B42
+	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 01:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785456583; cv=none; b=JVG6bj5ipo9ut4HMGgdNK21EJBj4hVQP7dFsEsKVu4/Pwbvrv8WlUEMGld0fg7N9m4nrxQlA6gvEYF7Nmo8nWRyDZ2mo5VnGYZk64yBRVo1uO+vunBSmcl/a6dT0DdR1flA/ExFtruoo3IsB43ErqffPhhSq65rkwpUaTwbFVmg=
+	t=1785460894; cv=none; b=h8sp7ppYmzm6Uf1n9ygR6SBwfr0iDMpGMJVoI7nuYCspgJSG2LfW5vmPetAhWYXwp2HgZG4BHtUAyifRqgs3U+03cUARL7rk4v2gYxTIlw7R51Q+Lhgh62ulahkMg0bS3Q1uJkFbz5VvnXq0n2LygajigVNIhLT5LXNEz3QkoMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785456583; c=relaxed/simple;
-	bh=GKe8KMcBfKi9yq3nQNy75PmaRGDNOIQgeBU2D4squOg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZVlT25BDoJ1g6361JJgnIyYX/i3FGx5wTrgwSPG8IxDweh2zLf/8HrmBVPW+EEhjnlhyq9dBeyngkNd9D92AQHjwSFbq6zvaeob/7oBgPhdmqID/v+5qL8++BjjZLrDkkaAtTCmf7Pjb2ZmnyGBVZBY03FS8LI+bbs077h7b0Fw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=N6GngwbY; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1785460894; c=relaxed/simple;
+	bh=+4rmNqUCv5cZ7pndOhXrQMHAQ4UxfWW+wlQP/2xHpmA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=StjcfHBya2bUZSSMUOdbYIb/wjhaVuPeCF0WHON8e8RaZBfFrSzshNJ7KcNaNrTnMvWsnOMMUT2jCw9GgA0utfDyyypJuKOtkCC/VyqVrCag/EpenT7NVWXF9JiihnNV7zJ2ADrENGO74yPhG1kKYGmmmZu6HCh9hZWVrBWXlm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gi2wK84m; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="N6GngwbY"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id E866E40E02B7;
-	Fri, 31 Jul 2026 00:09:38 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id hMLnETdj4O5t; Fri, 31 Jul 2026 00:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1785456568; bh=75gnVvubIjZ/JcinfW6jurHPR5o9ZNDI0cPnaOl57CM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N6GngwbYy+rpHGZlVO2Cy5HvhA/j/50ITpOj956b+6A7vbkQGDD9p3NOEK5+VvNPg
-	 ZdK8AatHfPAYZFXPN47xRrIjBabsoqOX01WbHrh146dLtNoBoH8jvE6nJPE9MPsftc
-	 srxfaJxvBsVYdvCmOSrfVPXy0sV2aNTKtTtL7VwRSaBVkS2KhdGpJ4ZxFTZRpXI3Aj
-	 EMNYeLEbDLDyA39PlpKwb9aOmoWggrAv+tuEN0Hky2P9epAHCrpsRgjGT2Uh7c8lJ9
-	 fuOFVZbyzLWaNP/d4nraD3ykkXA1/IYJ67QqoqriTFnSzZ3gcdUIP0eJg8KsC8as10
-	 aa/6go3ZFtBlPFQDTT2ujnJH5iBYstKiOzzoNtkOYP0ubYw3+3wmrsD6pl3quTWGIv
-	 VxsFQL1oLjzsYlk6fEfm+RRKj1B5E5OvnLSVOmuqzqm6GZ/pFdhl9IKnPmUrkom+Lq
-	 9vc1o2NfsQnMt0uRvUINcT5UDR3YvpxpCshR1AqtoSsQT0nYBXrYYdT5Vp3yE4bl9d
-	 7Be6Wwx2hwYHAJiRYgpg2QOnhVO9LTCG3h5wAvXYCT3o4AlaKE+Grh62IM8eIB6nPy
-	 M0kwIsyScWlGSUgJDpjPQkEFnNmvnoJSEHxnSQ3nxXMp0zuTf7moSklr9xTjTDSm5f
-	 g3ZCcm3Ggwm6Mr7l28JlRiRA=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1b])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 40F7640E00B8;
-	Fri, 31 Jul 2026 00:09:17 +0000 (UTC)
-Date: Thu, 30 Jul 2026 17:09:14 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-edac@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gi2wK84m"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38e08baf860so477114a91.2
+        for <llvm@lists.linux.dev>; Thu, 30 Jul 2026 18:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785460892; x=1786065692; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=M0IyVD+1y/522lnq/7Lp1HsNfM3GsCs6wBHZ3/ZAaR0=;
+        b=Gi2wK84mmh7CpHuAO7Q5dHUrQxqdiCq1sBAU8NjmpDZ2ZoGXUCG8Qh5ucoobzC13ui
+         sX8jK8LV7TAUqopC7HgToA2/KSm51OpZPW8r2EsQ1LyuMvqN+bMZraRgBVcOcXJ2uOU8
+         gke7Sm5q/bVyTH/5R1Xoms0wg5PL5cn9r9LfZiXGM3sr1E8nGfzLSNsZPf2hVMGWvDms
+         yG8jlVDkVGK8mZwTN9uvgJvhBBSYklvCo2HNaqkIycIQD8rEbvOqowei/yHArMdRDZbm
+         bKWCow3eyyQMNaA7noUjvCWhltJRT+oh0xd6QZU6Krd8Q0zl0xaK+/v93iyD2ZN+XxQs
+         nPFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785460892; x=1786065692;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=M0IyVD+1y/522lnq/7Lp1HsNfM3GsCs6wBHZ3/ZAaR0=;
+        b=s/IGSUh77EzMuzyYcN2s2V08grdNIihTIIB/259mzKCtPtduxVxJVvqCToRuxwpFY9
+         Lhkgv29NhJNADnN6xTFdsnlDD+FJr7Q1mLuvCMNjX1tUhcN4EFK4kHZj529Tp/QKt7bs
+         T0hIBQ/PFeuN7r+k8vM2ytrISf/8DLy79B7HbOS/ELroPFUC9GY0HPeHSpHbggW+VxOL
+         IhWv4B3y9VYIYId86Ut8yKo5CEh0lgcecmsdklx4jV22zFc1iDEoBosKydrUW9k3apkD
+         uxd+IK1NFNsNmDRDRAY06UdGcaUTFrTVOKNbPHKCEQafUsj/zmprWV/R7VeRcBS+MRT+
+         4/PQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqSUu97KZwN8lcAiMzdPlc60sIrlRYqS/9Zna4R++rmhsKJywkOtqDPM5v2VdcmMwRaMvvg@lists.linux.dev
+X-Gm-Message-State: AOJu0Yyj9Gm+kFKXRuhyoPmPM6jkrC4RP7MHqKv7tPrW83gN5j+DpXhc
+	7RMlH0z1ROio2YFF/j062e/iLDLPVIBc3+JKeC4CcDpnP5I7265nXEAo
+X-Gm-Gg: AR+sD10D+dCcLtVmxNCjPm5Mlx7J1/lIjFDhxIRlIFJBpHFzRBDcPMrEGGU5AvXUp67
+	1Nq87iM8YsNkHkdFd1kb1noyg+lTqNSRimHQ/inMcLrR4qFu+a7/OsGeXK2ItIdM1lYGd9isPiU
+	MZ4mD/NXXpiIfh7pLD5chR3xEWZluRTwuZ+x2htoeYMSvRo657lKreceRtYJOBRxnFmbtvJgL8d
+	Pi4KMC9QWZJkAHnU5dYnUG7KwVoV8TOTPitjbBXEu/g8Yng6yIwPpCN9NldCiZd9J1pIPPLkpVJ
+	loXB1cdflZLmDa9GHJTjrP2Q04POKAbJWNjVQfBQD1XHC8aiOyQvHl3wdnry2jdDSKD+wmwTqHF
+	rbkt8F6IqkpSEYGwt7wbygHSSE1+imS9wk9Ebyg1qraHaEYCvQxuV8NejKsYtfZnVwO8HBkiO5F
+	KBU28jlh/AFF+dgNmnIoAO2QkI5fm1s0H75q08IfHT0eX0iBO4UTc6uqZXXe4hchjIHqTMMKdPm
+	U88rkZjki/WMw2S9iv8Yn13/mts6j0eM+ReXjqoKznVMXOLtNTBM0HEenhamFvl3wa+GgKx8G7R
+	u3qIhR5bYajahJSH/TXfmWsNJlh7JvVEJAuWig==
+X-Received: by 2002:a17:90b:5188:b0:387:e0db:3d8d with SMTP id 98e67ed59e1d1-38fb14917afmr92506a91.40.1785460892423;
+        Thu, 30 Jul 2026 18:21:32 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e35])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38facf50124sm198867a91.3.2026.07.30.18.21.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 30 Jul 2026 18:21:31 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-edac@vger.kernel.org
+Cc: Frank Li <Frank.Li@nxp.com>,
+	Borislav Petkov <bp@alien8.de>,
 	Tony Luck <tony.luck@intel.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	"open list:EDAC-FSL_DDR" <imx@lists.linux.dev>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] EDAC: fsl_ddr: use devm_platform_ioremap_resource()
-Message-ID: <20260731000914.GJamvnqpHP9L5b8s_h@fat_crate.local>
-References: <20260714234609.902367-1-rosenp@gmail.com>
+	York Sun <york.sun@nxp.com>,
+	imx@lists.linux.dev (open list:EDAC-FSL_DDR),
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCHv2 0/3] EDAC/fsl_ddr: some cleanups
+Date: Thu, 30 Jul 2026 18:21:27 -0700
+Message-ID: <20260731012130.1212640-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260714234609.902367-1-rosenp@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jul 14, 2026 at 04:46:09PM -0700, Rosen Penev wrote:
-> Subject: Re: [PATCH] EDAC: fsl_ddr: use devm_platform_ioremap_resource()
+First one is a cleanup for devm_platform_ioremap_resource() and some bugs.
 
-Before you send patches in the future, do:
+Others are issues flagged by sashiko.
 
-git log -p drivers/edac/fsl_ddr_edac.c
+Rosen Penev (3):
+  EDAC/fsl_ddr: use devm_platform_ioremap_resource()
+  EDAC/fsl_ddr: use non devm for request_irq()
+  EDAC/fsl_ddr: restore MC error registers on probe failure
 
-and look at how things are formatted there. For example, the subject prefix
-is:
-
-EDAC/fsl_ddr: ...
-
-and so on.
-
-The EDAC tree uses the same rules as the tip tree, you might want to read them
-before sending patches:
-
-https://docs.kernel.org/process/maintainer-tip.html
-
-> Replace the open-coded of_address_to_resource() plus devm_request_mem_region()
-> and devm_ioremap() sequence with devm_platform_ioremap_resource(), which folds
-> the resource lookup, region reservation and mapping into one step and returns
-> an ERR_PTR checked with IS_ERR()/PTR_ERR().
-> 
-> Behaviorally equivalent with respect to region reservation: the driver
-> already reserved the region, so the non-overlapping reg requirement was
-> already satisfied. Drop the now-unused linux/of_address.h include.
-> 
-> Built for arm64 (defconfig + CONFIG_EDAC_FSL_DDR) with LLVM=1;
-> drivers/edac/fsl_ddr_edac.o compiles cleanly.
-
-Testing blurb belongs ...
-
-> Assisted-by: opencode:hy3-free
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> ---
-
-... here, under the three "---" so that it doesn't land in the commit message.
-
-Thx.
+ drivers/edac/fsl_ddr_edac.c | 56 ++++++++++++-------------------------
+ 1 file changed, 18 insertions(+), 38 deletions(-)
 
 -- 
-Regards/Gruss,
-    Boris.
+2.55.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
