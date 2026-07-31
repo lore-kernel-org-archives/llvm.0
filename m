@@ -1,107 +1,116 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50EC5381B0F
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 23:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50F1645C6FB;
+	Fri, 31 Jul 2026 23:22:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785540131; cv=none; b=o1oOeMsycta5DhajWyI8v1vSIqYKOmBvFmrERgs1+7b2FE47EyMSdsQ9ewFh0nrXR5uQfOJL68oYRilGg2gH0Wv45oy21TEKHm4NIUTFpg48x+7jRxVOzGC1F5eaX5itmYivdsu1xxNDDi/Q8MasiBLbkgSUQDmtlT56oNirsPA=
+	t=1785540148; cv=none; b=Sx/pCtXYXmz2/dcme00xZnig+g+JmsqzxXMewEakzBdSjoW1q09DeuhICN2PABrSRqITkNxV/mWqG6yxR2hTXK+Mx/4oKPYPXv7XyeDtBQED9JUf3MQeFOJhBCH/pjO/uX4dNPkKmFX+cEV7CB09rQsZzILXxndji1Q0STtQktA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785540131; c=relaxed/simple;
-	bh=1mMlCEyzP5PCzLwK8uawgsRvDZehD23jbNJ3GO3XhZ8=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RSfcjp1YlJE8xx4QifPQnXwXIGsDmpbkPtszbRL9jy/DK7Io1pUrDXcg+J55C56hR06Y0sFC3y/Ef4hpQW02q5ooNZ/xwbzVvUmD0nxq8OCYybyAvuvmjLIQeOFqDlicsVpol4KfRR/YVuRPDTXzCOWk27bxgMOhKxwxqIVkx4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HRC9Fvrm; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785540148; c=relaxed/simple;
+	bh=523cXtNjm0QXrh4neuhzn/H7vGgf0cRD9aq9YHCrER4=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=H82r767NwIcsItOZUH7vtGTw2plxkeoYST7xU4cBfWSeZ3K2UIgwXJJXN/CtBxfqjkINAnGGJsfItDrjS2FfzSInOO/ATXfs1ZNdJP8SOhAZH3jYCzI5vIzjmt8Cd/Y72IdWo9Iy5sbHFP+z+l4LhgY0ZZNtsClMesJy1F2WcFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACLTv/hX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HRC9Fvrm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785540129;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uEsy4Fy0ufH993kOnO9eAyKZfW/+2iAeH1z/EKSFVZc=;
-	b=HRC9FvrmtjvEpEQt4AU5XXaUKfQd5X5oEk4siIpLNU1ZO4usMTWb1A8X6iJ/Q6SQMmbXAd
-	pfNMlB/TELnd/pzoXAN2zk+vbzsm31ZIrdGTFgiFjtxpWfK1E3d52+B+EwdltIa+CxopyD
-	UpZyM0ViFmy5Kp67WmouXZ2HMSYiX+w=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-417-V5r6L4A4MB-LUaunLPLexQ-1; Fri,
- 31 Jul 2026 19:22:07 -0400
-X-MC-Unique: V5r6L4A4MB-LUaunLPLexQ-1
-X-Mimecast-MFC-AGG-ID: V5r6L4A4MB-LUaunLPLexQ_1785540127
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D936719560B2
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 23:22:06 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8964D30002E9;
-	Fri, 31 Jul 2026 23:22:06 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.2.0-rc5,
- upstream-mainline, 6269cc6f)
-Date: Fri, 31 Jul 2026 23:22:06 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACLTv/hX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 666F11F00AC4;
+	Fri, 31 Jul 2026 23:22:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785540147;
+	bh=wBOnGNR2qLSVLRJLGB4ATvlgCqlZ0OR+uxAy9mmP6b8=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=ACLTv/hXKH+LWepYmsrE1eotCkS4b4hc1b/ee21wX+zmrx7AlMUtFGgtGAGXH4WsO
+	 0CDCnfi7WWnr4WkK3o1lBJJVPiANuppMoMW5miBAykHnGrTGOedGQ0WaK6QAxuT7kg
+	 0St63So0pxELu/sNqsILU2ZaYWrdNSYKLw2KLn4xL8nkjBUFv0W8wkYUNX0rElACsB
+	 m3UhzGHsa+sEUW5GoLaMKT0GjFe8S84x2hMAqdJcoHGWFiL5bNs/16/aprKZyDfppT
+	 mfOI90BAAbKPwG9MuEajKckYQuM+0Jpy4/rQmIqjDVC4GpEYhmvaNF0Cew7teWkjvY
+	 Q7i8mBwKYIaGg==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <77647.126073119220700785@us-mta-417.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: mrciP2m5iHVKgkXA6UiYIqmck3zwKYwFgi5LUNxupoo_1785540127
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 0/2] kbuild: link-vmlinux.sh: more reliable 3rd pass
+ linking
+From: Nathan Chancellor <nathan@kernel.org>
+To: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Tudor Ambarus <tudor.ambarus@linaro.org>, Juan Yescas <jyescas@google.com>, 
+ Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com, 
+ linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev
+In-Reply-To: <20260728-linux-kallsyms-fix-v1-0-1a665156c898@linaro.org>
+References: <20260728-linux-kallsyms-fix-v1-0-1a665156c898@linaro.org>
+Date: Fri, 31 Jul 2026 16:22:17 -0700
+Message-Id: <178554013759.3652505.7898833065785451675.b4-review@b4>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2177; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=523cXtNjm0QXrh4neuhzn/H7vGgf0cRD9aq9YHCrER4=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFm5evqal/mq3kisOnLxRZ1H6dqfPwRV5P7/W2L8IcB87
+ 6GQyug1HaUsDGJcDLJiiizVj1WPGxrOOct449QkmDmsTCBDGLg4BWAiS6Yz/BVRnLP7/erstV8v
+ PPz0xuf3xh+albMXfJ0vXvXYbnuB06EDDP8LJu48o1k7T/WHp8SNgJm/9mobfauKvfH4agJv6fo
+ bm17yAwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+Hi Andre,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+> link-vmlinux.sh currently only uses the file size of
+> .tmp_vmlinux?.kallsyms.o to determine if it needs to do a third pass. I
+> was hitting a case where file size didn't change, but symbols changed
+> sufficiently to still move subsequent symbols in vmlinux to invalidate
+> kallsyms.
+> 
+> In particular kallsyms_names grew by one byte between
+> .tmp_vmlinux1.kallsyms.o and .tmp_vmlinux2.kallsyms.o, moving the next
+> symbol to the next alignment offset (4 bytes), moving many subsequent
+> symbols in the final vmlinux image in turn (until abosrbed by further
+> alignment instructions). This failed the final link with:
+> 
+>     Inconsistent kallsyms data
+>     Try "make KALLSYMS_EXTRA_PASS=1" as a workaround
+> 
+> The two patches here are independent of each other:
+> * Patch 2 in this series addresses the actual issue and also has a more
+>   detailed explanation with exact failure case
+> * Patch 1 could be omitted if deemed useless, but I found it useful
+>   while debugging the issue. It just updates the kallsyms.c to instruct
+>   the assembler to also emit symbol sizes.
+> 
+> Cheers,
+> Andre'
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
+> ---
+> André Draszik (2):
+>       kallsyms: add symbol size for kallsyms symbols that can change size
+>       kbuild: link-vmlinux.sh: improve detection of third pass requirement
 
-Tested-by: CKI Project <cki-project@redhat.com>
+Thanks a lot for this series! This "Inconsistent kallsyms data" has been
+plauging our continuous integration for quite a while but I could never
+consistently reproduce the problem enough to actually investigate it. I
+have run it through my full test matrix and not noticed any additional
+problems. I will continue to hammer on it to see if this message ever
+occurs again.
 
-Kernel information:
-    Commit message: Merge tag 'spi-fix-v7.2-rc5' of git://git.kernel.org/pu=
-b/scm/linux/kernel/git/broonie/spi
+Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2722812033
+This should probably have some decent soak time in -next to make sure it
+does not introduce any regressions. If we do not take it for 7.3 at this
+point, I will make sure it gets applied as soon as 7.3-rc1 is out,
+aiming to submit it for 7.4.
 
-One or more kernel tests failed:
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+One note: the diff in the scissor area of second patch makes it fail to
+apply.
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+-- 
+Cheers,
+Nathan
 
