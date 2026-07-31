@@ -1,92 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3266B1799F;
-	Fri, 31 Jul 2026 22:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D8A33E0245;
+	Fri, 31 Jul 2026 23:20:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785536715; cv=none; b=pCRYWReQu/HBOyV3HTBJtBFWmFGWOBkyrDcTBQpcNC1QIPiASSwAlQM6WktG4bvSfzuEZIeO4JENLH17ttr8ay8xMV/CuMhMd4n6fhpiND4OKC8cmD2831NDXvKFO9p7QHTPmYy6d3kkNGodz+kD/hcphpgk/+Xyp25AJ7Z19vA=
+	t=1785540052; cv=none; b=GUUj25FvOjbkzMu6MpoIVSSJUCk9WQ2dY5eoiqe9MAu2IHmJ8Gq0JFhQ4ptgj5DmJx5oya7r7G3KXVMBMWrYBjar3OAfOLCgPDCUdg6zp/5XCMeQXzPDGlvAAmF9qBEs7MmXLYU5yCPQK7JhMCnYfn8vo5k3Igz1+DuUOODqP2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785536715; c=relaxed/simple;
-	bh=8uLa+aBy84lQ8Ar85C22DzL1eNjKio6ZGnagqriymYo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=jEMujU70TS9gHQIM/MBOWoqXJ41pRBVb97saN0eyI2EtaFjwKLXhGzh8qPGJNjU5gTTgmgu+Nl2EcwRiQAF6pvYK0wLGJRKhx3D1RAqlXWdW1fOkOnBZId6GWhbUuZD/T4yodbnkT6SDi3VnX620z6lEViuQ/A2VxApykWy8JGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Th2t3B19; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785540052; c=relaxed/simple;
+	bh=U/9Yv45n+yTl+HXiF4bKi1PnabpimsQQpbyopaFT01Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NyLxVlblne9ZpKN3L/wUXC+qDLkk9OBEfBhZ+8vXsDVhE5xzKbDMTnknzoLbuHm35U58jkJkGTpyW0Jts2rj2NmsbMYf14yK5da3dRD7e0aIPP4WNH+hot1XGXiOsE0RBgNDZbxWWHX2nYVJbImFkQ59p0K3OwmTjm9pTMjJsPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=g5+AwHmF; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Th2t3B19"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785536712; x=1817072712;
-  h=date:from:to:cc:subject:message-id;
-  bh=8uLa+aBy84lQ8Ar85C22DzL1eNjKio6ZGnagqriymYo=;
-  b=Th2t3B196VIA5JXLv/SYzNlKgdKbJEhdbJlEcEhXMAp9l+kteAWQcAnj
-   Kcn6+2gtDvH5tHvfHzhu+RPRm5mA0A1+VFvA08c3qROMu+PsanUo/+IxZ
-   cnD41/iGnvPQajfzU6B3xrlIXNoo70gYEotukpMf/AEUoSbpKxKK9ST14
-   CawK3/0q2ciHpe9tS0k3TYzqkdZ4ZLYZnoBSuStKuEk9Z/qR1y8r42tmz
-   ckYD2G95JbOPw4+yIfoB/i0sVOK01+/hiAeo1SZWdaCtbCJZsO0M76niC
-   vR+waxHVOksmcSeRlyVAeHTEamzOQ9UITWJzquKFgBexPbOCapr++weWh
-   w==;
-X-CSE-ConnectionGUID: dJFinNZbRLmqXDAQ4zytAg==
-X-CSE-MsgGUID: 6vzbA6qxTpOLx21P9lbPNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11861"; a="86038804"
-X-IronPort-AV: E=Sophos;i="6.25,197,1779174000"; 
-   d="scan'208";a="86038804"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Jul 2026 15:25:11 -0700
-X-CSE-ConnectionGUID: TA3q+lBJQnC5h8rhE3z6FQ==
-X-CSE-MsgGUID: Jh3k+NhbT4C9uLqsXfAecQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,197,1779174000"; 
-   d="scan'208";a="262642815"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 31 Jul 2026 15:25:10 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wpvf9-000000002K9-1lSJ;
-	Fri, 31 Jul 2026 22:25:07 +0000
-Date: Sat, 01 Aug 2026 06:25:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: YoungSoo Shin <shinys000114@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dongjin Kim <tobetter@gmail.com>
-Subject: [tobetter:odroid-7.2.y 1/58]
- drivers/video/fbdev/sh1106fb.c:20:10: fatal error: 'linux/of_gpio.h' file not
- found
-Message-ID: <202608010536.efb85MQE-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="g5+AwHmF"
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id F1F9040E00B8;
+	Fri, 31 Jul 2026 23:20:41 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id sJzj9oJgD8z3; Fri, 31 Jul 2026 23:20:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1785540032; bh=nE/loPIfIGHulK7EYK3oGTaS2BuMx1WLwvyaaTRjU+A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g5+AwHmFTIgT2cGV3dieb9WNSyV1UY9mk6jR3bOhJxbPK023qqngYRoaLQCDgO34g
+	 yYTCY92RLYxLfShKanIwbw7UjaJyrqkk2wfj2d7ztnJvjhhUegDR290/PitBRCCN+K
+	 UcbE0IaheG1pC0ZpUVgbA4Von0sj2JB2TsMUV1UroZAZEPTgQjLdouu4ExcXyfe6FW
+	 2v/eacsoq4qMQouvD2iFVVWSYl4ZlNbTf+sFkvpbz6z+9aoHOHPfXzF5/qRoBo3cgv
+	 Kvzd6PWLz1jAp+ImYoRFGfh1xhrNy1Fg3WBOpnu7BFHdy5NhgJ6SSA+QnXpO6rhokw
+	 m91O6ud4xI+td6EHDfvcqADdVlsFP5hEmFVUP8h/PO20aTD6/z/F3lwauo1U2aMRW/
+	 19OHb/7b7JlWMzBmG922OelsISJSPRX4JbH4feXuM4OiQInEWN0XUksYXq4f0jRjAJ
+	 TNCu7FmT54wXt+xPtPscyBTJMLVQeUcrHMnLaS/Cj+CUHyL9NkgLtHKe1E6l/IWJHG
+	 MKQ8dusFzuFVQsfybTxPVytgOAEqHmr9rvwQjPq0n1yd/WvBkueJaWaAloCm3DWYC5
+	 zmWzqzgQ1HqAZweYC4dSHHGQj1td6OEbkq4ZPqy3pUVgrwhF3JY3KZ+7eTh8m+QJIq
+	 kc/6Md5KSkvDUqslXEtH2IuM=
+Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::1b])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 5284240E0140;
+	Fri, 31 Jul 2026 23:20:19 +0000 (UTC)
+Date: Fri, 31 Jul 2026 16:20:15 -0700
+From: Borislav Petkov <bp@alien8.de>
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: Rosen Penev <rosenp@gmail.com>, linux-edac@vger.kernel.org,
+	Frank Li <Frank.Li@nxp.com>, Tony Luck <tony.luck@intel.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"open list:EDAC-FSL_DDR" <imx@lists.linux.dev>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Subject: Re: [PATCH] EDAC: fsl_ddr: use devm_platform_ioremap_resource()
+Message-ID: <20260731232015.GDam0trw0zPrA7pw_3@fat_crate.local>
+References: <20260714234609.902367-1-rosenp@gmail.com>
+ <alhXciS9G_bGB2re@SMW015318>
+ <20260719155822.GAalz0Hj3XT97KkPOk@fat_crate.local>
+ <CAKxU2N-vMNR+ES2YYuJh+6XASmZ04cnFodb4kP4zRBW0mbEKaw@mail.gmail.com>
+ <20260728224059.GAamkv-4LJPspOw5ZV@fat_crate.local>
+ <amubjArdXOgTzNCX@SMW015318>
+ <20260731000407.GIamvmdwHRq_PSgyvc@fat_crate.local>
+ <amy45S6tBC4CjdWa@SMW015318>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <amy45S6tBC4CjdWa@SMW015318>
 
-tree:   https://github.com/tobetter/linux odroid-7.2.y
-head:   b975acfb39259020dffed242fcfba388a6f4e354
-commit: a7f14d616999ff734886c89b75b3f701b77ffd2d [1/58] ODROID-COMMON: fbdev: add support for Sino Wealth SH1106 OLED controller
-config: i386-randconfig-006-20260801 (https://download.01.org/0day-ci/archive/20260801/202608010536.efb85MQE-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260801/202608010536.efb85MQE-lkp@intel.com/reproduce)
+On Fri, Jul 31, 2026 at 10:01:57AM -0500, Frank Li wrote:
+> There are too many pre-existing issues at recent review, we are trying to
+> clean up these, but it takes time. I am not sure this driver is in the front
+> of queue.
+> 
+> But I help will review if I see these patches.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608010536.efb85MQE-lkp@intel.com/
+Right, I doubt that anyone would jump at fixing those but we'll see. And yes,
+I'd appreciate review and testing.
 
-All errors (new ones prefixed by >>):
+As to fixing those - I'll simply stop taking any new features to the driver
+until issues are fixed or addressed or commented on and hopefully, with a team
+effort, we'll get them sorted out.
 
->> drivers/video/fbdev/sh1106fb.c:20:10: fatal error: 'linux/of_gpio.h' file not found
-      20 | #include <linux/of_gpio.h>
-         |          ^~~~~~~~~~~~~~~~~
-   1 error generated.
+:-)
 
+Thx.
 
-vim +20 drivers/video/fbdev/sh1106fb.c
+-- 
+Regards/Gruss,
+    Boris.
 
-  > 20	#include <linux/of_gpio.h>
-    21	#include <linux/uaccess.h>
-    22	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://people.kernel.org/tglx/notes-about-netiquette
