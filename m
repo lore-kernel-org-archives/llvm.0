@@ -1,109 +1,103 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F1F93BCD14
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 15:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785510812; cv=pass; b=SiT6L+kFoCSqde4eR4mHjF44ANx/PFOOgl1SWFeP+0S4Ak6ftE5/2H3MwQmk2aMjoTNdQhmZ/RpIa3iuKPdGi0jnF6z1LYuujqRA1iwK0/kFa89GpxFM4x/vsXm2JYKI+98ncoyoymm7+ae/ICTfiDMZTC57FmvLQcg3oIvcbXA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785510812; c=relaxed/simple;
-	bh=j29T6C2HDgifm3l7fOE7DlV8uu3qURs8bKG7v3t1fYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EIrWtpEGavIIzjXQATyNjDUTcF8sXorLV/wusikWbDK8jvzb6wXkojaNwyGVozu4Kfe8fh+IQSJzjqxDjaSpc3zd/jgYYxvbASamNcdWOvYwYUpO5PzcxvXK5/GFcmiQ3OMhazUsQc3tieUMTpmQyITjoosbLlOfhKMOw0D4Rsk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HOigwtl/; arc=pass smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1ABE4418CA;
+	Fri, 31 Jul 2026 15:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785511991; cv=none; b=eYa9Af5mApk/2Euo6EpuFhkWnqmbMfkL2yLULryJNsoMJG6y3qZkm9dpQKV9cpJk//yIBLfQJd5+AZyBkAyE37C9nkaFDwozfihLrS9iFPzL0vFitaN8gxCc4FKfOdOMJPrgnkHXo774fE+hCL5FJE1YyICl8TwveJbrVa3TbqA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785511991; c=relaxed/simple;
+	bh=0dWQj9ihmGFFtSxlkvXIgi9q6aif89ZggO8Om1VmpdE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r2KsN52Qorz+cmlJ2jHSxrtxhqpZFlZCpvf9YxaweK7z1U2hKgfeI1ge/aYKZRO0T7DJJSLNpgngemO3p7eqlxd50tpibI7Q45V5Fq2y7oV4vWxker4hEy0CF93QfHD+vf3hFQcT9Qz5t52/RuhsnjBinEgeyuwrVhGr8gXiGTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5ztE7ec; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HOigwtl/"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cecdc24b1cso1090525ad.1
-        for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 08:13:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785510811; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Ns9/eZLJyr8hZJsQv+7XNDG6Z+UA5s3Pwm1MO1ofp2GorHDD88tt+Rok4G9x/UDS+C
-         4KrNtnysFfErKw2w2JD+b5wtqmsf6fAfujrFfAkH9JDsu5hQLGXJWiX8Xuxq1Y6C0JXu
-         oNIBQHpXi2BU3kJ6oeTI1rSYfOVsdAQoHyzp2CNcWsC0L7FIyf92mB9bZm497TqruT8i
-         GTcJWXnDhrBYkkcc6jKBJWkoBptYN1uOiYPbAfdYe/dC5Wn9iUWNnF1VvS00um2IoU+A
-         FbrDbmVm4/MYEbeTvsw8I6UZ47+2HCKwRQhMncHj+T2ez26cczK9KlKUQxnr8nxuNEod
-         pc8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j29T6C2HDgifm3l7fOE7DlV8uu3qURs8bKG7v3t1fYE=;
-        fh=a94DuNl/P9tR0t05m3yYVXu4c7oGechnPXKKBgVhga4=;
-        b=Ew8SsotaPsuCD3EHEd0yR9Ce9ylKWjJCRetE3C11IJ9zW4OiTqTyN4Hasuy1asdmic
-         lhfcs9qKfsf2/vwjetxV8+6gKT1xdbzPMc50jj4QhPgKxhSYU31n1Lj40OVWi1ntkwqv
-         zS2p3SEaVtwd06qu7J0RkEwYlD2uRRUgb8eOTjiV6O1ItGc4NJ/vPUz1sittkJR7WPBL
-         PC9x832mGLWUC7AIO7ouOyiBcBar9o8RQkKIg5DoKdIb0MXIgvaWmdPYrA8WoFNgUze0
-         SVCSw/ysqdBI7yJnoRHriRr7rDKJf+kSYOz2DFCOX9rbNjFXjToCJWZGGAXhiRBtbrgF
-         /zDw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785510811; x=1786115611; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=j29T6C2HDgifm3l7fOE7DlV8uu3qURs8bKG7v3t1fYE=;
-        b=HOigwtl/dbKiAm1KLeRpqGk5h/UFQwhPH3nVygmsvDdQ0+ZgHnq/KtBeLmkIvBNQwX
-         +EYlP+fml2Z8axTkf/bVWX5P9m9mlsfRvMFymn0Jbx9R6Id2AeISM6+hJaIBQ9BscJNS
-         P/iiiWi/UFCNJjJWSMd3+SL89Um+paejleooScNqhKlUHfBFYnDFvLBBO6cAeBUrMYEx
-         DT70i02T3fh7ffdy9zGZA70RCKNkcmcm0dnzlBlpD0dwDZ6MEK1o1DKG7d8HPHsw5SLp
-         UssiNiGvrWTw5kvFwJLFu6YVEsfAjS4K+guLjeNko0rjGXoUUDVgerGxm8xpIP6qEM70
-         AqAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785510811; x=1786115611;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=j29T6C2HDgifm3l7fOE7DlV8uu3qURs8bKG7v3t1fYE=;
-        b=LWvQl/EIVP2thZ2EJN+SVK7N03KE/wVBjwcjFXFi9tmwYFZodFWaGSNyCm2YsKH5yy
-         z8K/qQ7x1yzwPGMQybYaDJcrIuX0BKNSR7ejggYWfQ22l9R9S7/Sb3D1kj6tS/wawBgz
-         xboJ0VTVKX3LeKlbrhU4S6Xvgbj5wKaSpwJa6hdFl+WOYztY27XLJiGVhCzIjIPpLcmo
-         DE6pXxbuVhbV47c6sark2RhswuLwYOemNfAN2SkDL3J2UGz0T9a3fCN2xiNbFC8fMQKB
-         DYah8MWaxW5Gx/PukvVL1Mx8NMuzrxUdy9pnlcWohMLuMCtPzAsaNAjFy0l/fNfNIJAO
-         mvvw==
-X-Forwarded-Encrypted: i=1; AHgh+RqovWnlYJyIyGlcrkMYW8kYvLXjOmuABTp1i2zl0RnNYbV2o7VPz55t+wIw2GoplfCNaDwA@lists.linux.dev
-X-Gm-Message-State: AOJu0YzRX2AHjGa2SXbs4UKTTJzjvR9QNBKaAnS8brQyzlb0rq1mFzbZ
-	/DxenV4+mPStXFXc5lQM3cJwSka4li89UkQTzjdmEB8ThpG8zq906FMOaQR9jREvzFmdXnjC6Fa
-	CcIhzk4pJwqhBYKPUODt3YJsfuMdcIa4=
-X-Gm-Gg: AR+sD11UAnTIBlP8K7nhNPovrBoG4nvH1I9Rbq7FUW/lTIuhx+7RiYa93f476wCIp6H
-	9t2a4t+tZ6MLgomOyYv0hkNUuNBXSt0eviHtXja3caId6ra5mNEGqNXDv8XsKsE3p/YFbzkx7Ub
-	tMMoxTLU98NkI/gpYWUxU3tayBzH2/MjOLhRwfjO5sg6FF7wotdJxUMH9A1g+OVKWxhlzwrbpgr
-	O/90Rhkt1uM+kxQIwGMCufHLNinLvQMRS2xaMVNrh4TUyT32hbdw3IhwWSIsjW97ITrkUHdsxMC
-	gh+OR4uNjtkTqLejMeHl3JVrHfG/7aHM9lOZPzmA/iiyRcQ985DCdRa6qyw8bl44h2th9PzuiAA
-	9at3hmryLWCdlLfIW8hatB630PVBG/lQPyR6CoXCv+bd1OuFGaSP0dMeTCVrS1FL5RdT6iEw=
-X-Received: by 2002:a17:902:f78b:b0:2c9:e846:a582 with SMTP id
- d9443c01a7336-2d05206277emr6050695ad.0.1785510810738; Fri, 31 Jul 2026
- 08:13:30 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5ztE7ec"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8724E1F000E9;
+	Fri, 31 Jul 2026 15:33:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785511985;
+	bh=KhDy/vBNcEPq+mP7p3WoUkWGMGgv5pEJANZTYx2EKn0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=G5ztE7ecZEoSK0y08pA79fMk55/KLod3GsfhqlbCxUaf7hHZBeUSZ6/lgz5bwPTT2
+	 G0WwWAL9zeexepe4ga4DyhEF9W03kD7WYnksH8LqJbu+HEQzgAAqHYuAHWCF+NjH7R
+	 tIxegUTUlWGLSHPA+CqCTpS18NRb1eqzt5MbGAcEAabGY2rosoqZr+2+yYEpt6YJLe
+	 F80s6KqcDvtYndkVUVqxhZG0exTQSx/rHenQMa0eQSyVBofMogy02dKzZyYG8OXwAk
+	 SSMwPqdm2U5ztb2oZTjOkNPTvDUupgbyfkjm529v4EdpA6bPwsiEprcWw9UmczpWvC
+	 JmxwiZAhZBwZg==
+Date: Fri, 31 Jul 2026 17:33:02 +0200
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
+	oe-kbuild-all@lists.linux.dev, Paolo Abeni <pabeni@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Simon Horman <horms@kernel.org>
+Subject: Re: [linux-next:master 10570/10862]
+ drivers/net/ethernet/airoha/airoha_eth.c:3470:18: warning: division by zero
+ is undefined
+Message-ID: <amzALtFffHRXcefS@lore-desk>
+References: <202607311850.6p0ZUVq4-lkp@intel.com>
+ <amy2RIReGPFzDSVW@lore-desk>
+ <CANiq72nFoPshLi_8OAYxpda-rJnRCh=UpB2CovMZXj+vo3BDeA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <202607311850.6p0ZUVq4-lkp@intel.com> <amy2RIReGPFzDSVW@lore-desk>
-In-Reply-To: <amy2RIReGPFzDSVW@lore-desk>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 31 Jul 2026 17:13:18 +0200
-X-Gm-Features: AUfX_mzV5YdpsTyhkA4IWD2DZsnjJYS5s09tasm0ljwol0yZLuOuBYodZ2UDeME
-Message-ID: <CANiq72nFoPshLi_8OAYxpda-rJnRCh=UpB2CovMZXj+vo3BDeA@mail.gmail.com>
-Subject: Re: [linux-next:master 10570/10862] drivers/net/ethernet/airoha/airoha_eth.c:3470:18:
- warning: division by zero is undefined
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: kernel test robot <lkp@intel.com>, llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, 
-	Paolo Abeni <pabeni@redhat.com>, Alexander Lobakin <aleksander.lobakin@intel.com>, 
-	Simon Horman <horms@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="UEYi+ZA98FZUsaLc"
+Content-Disposition: inline
+In-Reply-To: <CANiq72nFoPshLi_8OAYxpda-rJnRCh=UpB2CovMZXj+vo3BDeA@mail.gmail.com>
+
+--UEYi+ZA98FZUsaLc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 31, 2026 at 5:03=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.or=
-g> wrote:
->
-> Is it a false-positive? I can't see how sizeof((arr)[0]) can be 0 here.
+> On Fri, Jul 31, 2026 at 5:03=E2=80=AFPM Lorenzo Bianconi <lorenzo@kernel.=
+org> wrote:
+> >
+> > Is it a false-positive? I can't see how sizeof((arr)[0]) can be 0 here.
+>=20
+> `CONFIG_SMP` is not set, so the spinlock is empty, no?
 
-`CONFIG_SMP` is not set, so the spinlock is empty, no?
+ack, right. We can just use AIROHA_NUM_NETDEV_TX_RINGS instead of ARRAY_SIZ=
+E().
 
-Cheers,
-Miguel
+diff --git a/drivers/net/ethernet/airoha/airoha_eth.c b/drivers/net/etherne=
+t/airoha/airoha_eth.c
+index dba7c52c0896..64619e9a704d 100644
+--- a/drivers/net/ethernet/airoha/airoha_eth.c
++++ b/drivers/net/ethernet/airoha/airoha_eth.c
+@@ -3467,7 +3467,7 @@ static int airoha_alloc_gdm_device(struct airoha_eth =
+*eth,
+ 	netdev->dev.of_node =3D of_node_get(np);
+ 	dev =3D netdev_priv(netdev);
+ 	u64_stats_init(&dev->stats.syncp);
+-	for (i =3D 0; i < ARRAY_SIZE(dev->txq_lock); i++)
++	for (i =3D 0; i < AIROHA_NUM_NETDEV_TX_RINGS; i++)
+ 		spin_lock_init(&dev->txq_lock[i]);
+ 	dev->port =3D port;
+ 	dev->eth =3D eth;
+
+Regards,
+Lorenzo
+
+>=20
+> Cheers,
+> Miguel
+
+--UEYi+ZA98FZUsaLc
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCamzALgAKCRA6cBh0uS2t
+rIj+AP998czAY3FErj3QecQmqgheoFOtcZ5wa/cDA6iyG8UgpAEAlDhfQPBDnZHG
+pBHqEVuvCiAcdQsQ78iLgkZ6TgtIkAc=
+=hcT8
+-----END PGP SIGNATURE-----
+
+--UEYi+ZA98FZUsaLc--
