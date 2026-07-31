@@ -1,261 +1,195 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BB02BE630
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 20:36:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A17A37A498
+	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 20:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785530204; cv=pass; b=on7fi/+KVUDKAKRAYncWsRJ3/DQE86oXcE7O/w1bxZ//Q3Jm9EBpJ2hEg1Nlsp/x9ATMNhIoyMcNJxerpeKcsGDh+zVV4cz0gsgIXGMO+t9lWFHcnzS7k1UDoWbyzn8G7KAo8kDusT9esrcHeh8FrW/j2GM1EnctDt+HzEkKrNw=
+	t=1785530384; cv=pass; b=h8Av+YSq0yuWX6HaEiw0dpzmN4QyxPiJ5HVbvfdQ/e1ZMwZH1HKbFegEPwF5sX9wURxNFw6oPHtlv1/AKjkhMNwoRkmGjOSiboiVmRLDHRwn3UJp/1BAk8b8NdlFqxgmD9ILlbdHvlyULF08y5Tv4RS80tXU8LkPa+8h/WqZ7Rw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785530204; c=relaxed/simple;
-	bh=RyE3J0Y1+7LCKGkS0jntWxTTBz990Qjv/JfMHtBY3A0=;
+	s=arc-20240116; t=1785530384; c=relaxed/simple;
+	bh=H8MZFv0NlxX8AAFiW92wo8pS7F9Nxis4TWuHY0ym0Ls=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NJQqv/+yFj2JCWVNQH0rA2UFb3snF8LxM9QxtUx7hX499vJCWV3p/Qz2ErScbcZLM3TRCyTgag5us0CcdfKU6XU7LwY02Uk8AsJPnOr6ClW3TcTs49cWLsgFFf2W9eW3QrFadaMT5OYySfAofc0R5xGqFhP8i4b4PauDA86LuFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A97TcgDD; arc=pass smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=FTxm/C0f25EWC+Byqd71YKRILV4YCAoKvHy2b9pjIr++6UN+dNfikkRlY4bOgCAO1xGlbJ4Qxr5pTgr7wTYmwcY0iaSNHmKe9w1o4TIHLWnbiojsPQRGCTMzGiHmXIDDoxuJqsf9Ksf6oRIRDy+a8J4VgDJJT0ltxI5ZqOfZvaI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W4EhRfum; arc=pass smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A97TcgDD"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c1670dad7a8so198599466b.3
-        for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 13:36:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785530201; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W4EhRfum"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6a051904222so2201450a12.2
+        for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 13:39:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785530380; cv=none;
         d=google.com; s=arc-20260327;
-        b=Er8E8w5Gdu54icXtN6s9RtDLED6OrpfkDSB6iykE99/JX84foUK9UZwGJjU/Ls6NFa
-         L2BuJ9rSBo0qN6J4XJmB4Hacngp4hN8hhYDj+mDFI4p0ZbiFOQkmc+XI69LcDBLnGyQj
-         mL+SpISptv5e0cVApV41bXOm39mLssEVAB7moy0k+anonN/nKrvVQkZ7eHKkpU3hdPF1
-         cd4j0STyA2jaiF97q4OqguL0KymE+PnyZok+yOTwhWAa2pE5sUqKX4QmNGY2LVuLs3QA
-         BhQThjO5Mhwax2xniX9imAVbDUtqHyvWud1FJLdPRECt8XbxCDEWHkmmtsB7ur8cN4Rp
-         XAJA==
+        b=mYpmx79Ri56g7J1rAHIqOfMt244K8TqMxR0n4mJ+CPQ0HsKpahOWVb34yXkb2fAohm
+         7VT7gq/ffyRwR7lJAGL2DXSnGuHgMefKLWoWJDFz9q9nOOtQWEMd9CY6Nrq1hzMnNTxN
+         JH9yF0Wob24cjZ6QDGMporH/y9ggKXSD9uwsuhmUFZpaCJOdfw+9cs43pj+dWqGBOnSx
+         bgKQ2queTZAgGFE6w3ozvu3C2X8J6a02yB2IPY4i7cOLeLnVgsGD3eIqCy5nQfovHH7B
+         by5wnWQTumxypVJxwIJ3e2mlGWMNXSUIoJh0KEBFLHZrzjc/SM3Gp5oK8meQ6+qTdOZd
+         o00g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=IeOorEEUd8BaAscyYTvJRWktSlgU1smXQ5VbUxTHhfQ=;
-        fh=UK0OwsYLsgXhZfCWbHHhKGdLHEN5E9W69sO2bI0fhck=;
-        b=BDfKyGPsb9xo2m6jQW9tnqPFMNrqH6i/3e9q9sbDT/u1xj0yOKqqhBSlRtxGCfyuX1
-         3pRag4bb84KAaL1SuP8QO+VKdcXDJVDctR3WQF2FcJiZH7mFVjq8rcesJKNZZXV1hqV6
-         klCMwhAsDEr5C7MsUZfttIxX5KEoD0UIdULkDRDiKe5Ra5/mMatM10D/81m29huUK80v
-         gmns6nb9lynnQ5GLcdNtR4pZSzXhwixBjkQv9dz9OpUamyDFKk62Ed35H8MDtGR6PhT+
-         EAYKmoyiqaZyOxLJLfhPixuDhwU0PXBi1Wv5syUCMpGhnO8ED0z+qb0Xa/DT3aUSEtD4
-         9pww==;
+        bh=FNr3QEOyUa22hJiDCuM7GWGwzbMpwlCTnE3ShI9qpY8=;
+        fh=kJqV+iR/FCNxztoxVqeS/feJhM0Q/m0c4gH/wcoEkaE=;
+        b=NhsrQZI59J1kJqDYc9AQALes16yqw1D58Mh2N/kZbs+ABGQDncvjUrn4CStS6gLWGf
+         Dfgi9xj6Viaylfx+aq6OmlJ5gcLY+ZxZxvBSFhGxtEBK4CVaubgayS8xq2ayKX449sLm
+         y7GrCTq5N/qfUq/XIw30MQaYOM/vKP4/Gp/GO3TMWpFgA1DD6LptOmFkCiRAQUy1cAsq
+         HAe3rEYcLKSRMrDBouDGZM3DPpxK/F3vii7KgfuoCVNsUoPxUlFJ3QxgTvuowRcHf8i3
+         78pOj96JYpo0PRWnsVFDdNPbSM0HvgL4yg3eJfAMb6IWD6USDFoz7YafaGpF0cqfqx/x
+         i+dQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785530201; x=1786135001; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1785530380; x=1786135180; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=IeOorEEUd8BaAscyYTvJRWktSlgU1smXQ5VbUxTHhfQ=;
-        b=A97TcgDDtWjBjSFEGjNbbluxJc9WQx8MKToRcr8aiuyyUCWeKKCKyy8L7tXVCO5x74
-         UK3bjcuHwvzaPLDR4EdxJu8GKU70nLofni1L3/qRRjGvT1LXgus/Ayu7lpzYMDB6i62A
-         Qo+9hRSRV6Imt8Fbsw4JKKOvVHUvve+eEy9KNVIQNZ0fD6+XxFnzS7yi9Wai0ufBNKkJ
-         LrGsuWNazV4itrgVBMUXSoJK4O2qjxJan6+oDqLY7+gTw9fgzWt0SaVGlR8C4OG3nuOG
-         7nf4mzG8cjSmQgPsp6RcW00zPBZPbsKZIQeKbsYPNxL+ZCV167gLopr0SiMx8f9Dg7+e
-         g2OQ==
+        bh=FNr3QEOyUa22hJiDCuM7GWGwzbMpwlCTnE3ShI9qpY8=;
+        b=W4EhRfumj3QZ6KmvUVPUuNLtXNjVbEaJmbYaqPzbOmaQ3zlUqZSghE2QzrsUZtrCoU
+         MyOcyVvQ/m9lka0fXCX1rwk20Z2wR8UO9kmUWF3fbzzfdyAcDR6cWgQ2DT2YtTQFXtTH
+         CD9QILhipL6joQPFGel7ldpcBlX7xzu34q4Za1+oPoAY9i1g32ZLx4XXYTtaIYlD3WPF
+         UtCUTdky7QG7oMUhfBGehzOnDNsQr6UZVNm7LLBCU18eMEz3lxcFnIKNBfKBx3P/yPY3
+         uFI046kiBBSAu/36tA3zNqqPsYiuGRLpaEOGeEjvf1aZ2ePDC/ngNEExlQRtkF1y4NYX
+         EM/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785530201; x=1786135001;
+        d=1e100.net; s=20251104; t=1785530380; x=1786135180;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=IeOorEEUd8BaAscyYTvJRWktSlgU1smXQ5VbUxTHhfQ=;
-        b=AcEluUvYZXcfoLfZNcKqc2zBSpFR5y7FeQA5CpJ59iehTm66B3LC9YR13k3d35p+0B
-         8FLlFdT9GB9lbsmjLtNEK0jnTxmMt5ppS+bDWb+LdODR1CZ2jxsm6QtUv0ut5qi/K1j+
-         bvfPhZ9fO5EijKH8EghcoiTq5b0UAMvfS7XTcEIZ7p8OGjbPUsexTMtQzur2/EUrYAr3
-         o5Muu+NtBtJIrdlMqpzW+5DG4DxDZIPVTlk5YjUblOlMxwjB0DNyzP1m0ZrNlKEU2ice
-         8oLibQUTRvf9qHApGi/DYhobn9m5U5xRFCnMT9l/ZLKPkQHqg14S6DUBw1HJ6eLVyiKA
-         D1Qg==
-X-Forwarded-Encrypted: i=1; AHgh+RrE9F42Zb+pGq9uE3EwiZXJp+bOWDOtpet6bovH2z/jEO1fMm56PxYR1t2NR4Fmq73F4qiu@lists.linux.dev
-X-Gm-Message-State: AOJu0YygyEHvRt6eDNgkhacIZsNKHXMo8bLBWHUvrszOsRFCMtWdrroM
-	tG18bFxDDowDidn6C5Vr+j6yat6o7AxsoHmGMDnlSjKAHvfrs+YG/txc9gZXATGK9oSGZCzpZLl
-	LKHj4P2e4oDcJK2sG/pRkeJZxuQaZJ8JV9ubxonxk
-X-Gm-Gg: AR+sD10RFzeyA87Ogj80jUlzm04gE2Qc5Wcg0YxOWXExQ0SJt2zDMppnM3QK87QR2DG
-	5mKpxU2cEaVB8MRxRZiW+4bdQKNdkyAgBCNto8pC/XbTeZ2QHvTS+duhZ2y5h/4uDgkmm3O2hIO
-	c5k41A8Yh/TU9jp4GZ3J6H/9RE1We7bE6iQCsl2znT0ZB7sll+PhwufWF2HesCk2ly+3R70bzdK
-	4k8twYuDSQEpw9gAU2Uhq7BDDrBI0ZeLvaiJfbXRvfUz8uUDa8BqZtT+inr/zxW4hclt7oPUSut
-	fGolMuNkUVhkHJjKtFCF3zUet4RR9mmEbE2Op/zNxSozqLQQCneGOmDfwH6bYWJcuQftg+FLUpH
-	IFxf9sLYcDykQafEyaLGZZMbvZ3raB+aCBcRKkvTlvuq9p6Q/UrV7p9l4PwI=
-X-Received: by 2002:a17:906:4549:b0:c15:b133:9dfe with SMTP id
- a640c23a62f3a-c1fe8374a57mr43361366b.43.1785530200610; Fri, 31 Jul 2026
- 13:36:40 -0700 (PDT)
+        bh=FNr3QEOyUa22hJiDCuM7GWGwzbMpwlCTnE3ShI9qpY8=;
+        b=rPqVNPG4nNUrp4U4Rs0c46+mtVmkQG56EY/LN0GVQ3ly6yOt/45t46yRyvzfyuKEr6
+         KzFXw+Y6sd2nUZTbzI3/4aNnUARCwChFPF4aGe30R+Ki7EDLHxU7pKO1X74Duo1emKxS
+         POyJK3bPvjijOdLOzvm9cG1Neyh4/fxMGDdcyN/ICbfCKAamhEI5h7reIa0v9YW/KtZq
+         SzJFg8nlXfYMhXb04t61kOQ+zPg99kmlATZZpY4uz2x6c9FLFcDmUNznjm805YVBeolR
+         DeBLldklyI549bYMno3OZ8V5RouH3Ovz/9HB4+uQfeHG7dpJiyUDPixcgDTBYuwZAlOl
+         Fsdg==
+X-Forwarded-Encrypted: i=1; AHgh+RqnIFVomrD97Z9EcoiszbcvbLu27xrMN0sCTEbnR8vRj4Uyv3xEsNqh5Kc+YWymfSGRc3CF@lists.linux.dev
+X-Gm-Message-State: AOJu0YxVjxUxIwyZfa501ssMWZ6gZInzf/e79wRGv7gvC2fljGiO474d
+	z/oszyFzkr/NiDg60oAzDdYvIziH0jvDWFeblSTscJbSDdoesxQl+WswkkHyymDf9la3eBp5tIf
+	bHzFBOpoYYq1AwnlW8SeLO7Tui7P4ptk=
+X-Gm-Gg: AR+sD12faQy9kSTRK1yeW8e4bfG4ocKhLic8PYxm5qALi2q9no1wRGhQA8uysv2U+j4
+	CiKzTNUsMKXhGapKWwi1ipn/HC+ExQFvAwPhhOISHVC8rpTDEQZFiE6El6NuUkiVVpMe8mPspyf
+	ABrBTgYE3rRg4/jr2vhYBmJK/PGTsjOGTgFOKGWFAFIxzCBgpnOIgOiPUOuUi6AQj5Elq6IaU59
+	LjZ5de+auT7YyYxhzsTpig6MGYoD9Ev5FCSZsa1GSx3EPYjUmMD3UFXjU7J7nn1H6Y3TIT/EjWu
+	KyUAi1s1K/ljwQh5uJn8mw97JSIuemINlVulEEW7IQw+8iBEknmA3QF0Jvd6t0ByCYWKhCWqVWs
+	s4xQHbilPAsX6kzXKq1Jjkh1HCQ9+1NUC7jAAHMPr60UXHnrIwy1pYbVAClpzNZY38lYQlLqZhN
+	uCCd6tKAT0uKu6EX+az9ayTXUo095DHzHCis9G2M0i5U7JSLLDRDk5Kr8=
+X-Received: by 2002:a05:6402:40c9:b0:698:56e7:8eb3 with SMTP id
+ 4fb4d7f45d1cf-6a0a7c72578mr560606a12.14.1785530380407; Fri, 31 Jul 2026
+ 13:39:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260731-always-inline-list-add-v1-1-d29f54ce5477@google.com>
- <CAKwvOd=6xCKkLLLmSXz1S95jOjRSDGyQbUwp5=yNJeau5q9eJQ@mail.gmail.com> <CAKwvOd=44Wjh4b2OH8+GygqWW=rvjy2aX5VKGtaiRRNF5fV7qg@mail.gmail.com>
-In-Reply-To: <CAKwvOd=44Wjh4b2OH8+GygqWW=rvjy2aX5VKGtaiRRNF5fV7qg@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 31 Jul 2026 13:36:27 -0700
-X-Gm-Features: AUfX_mwwZZRBY0lqURljds29pZ2fQ2LnTLcUc4PSUx_-vgMFjaO_CVymwznOoDw
-Message-ID: <CAKwvOdn75h+=WYz7edMwXydPKTDY7Emwcy4D2eKF+n=ztG7Q6Q@mail.gmail.com>
-Subject: Re: [PATCH] Mark list_add and __list_add as __always_inline
-To: Jordan R Abrahams-Whitehead <ajordanr@google.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Eric Dumazet <edumazet@google.com>, Kees Cook <kees@kernel.org>, Marco Elver <melver@google.com>, 
-	Giuliano Procida <gprocida@google.com>, Yabin Cui <yabinc@google.com>
+References: <20260731012130.1212640-1-rosenp@gmail.com> <20260731012130.1212640-4-rosenp@gmail.com>
+ <amy3yueMqBFVCz3T@SMW015318>
+In-Reply-To: <amy3yueMqBFVCz3T@SMW015318>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Fri, 31 Jul 2026 13:39:28 -0700
+X-Gm-Features: AUfX_mytarzAXc_eavVZLWZPAYjlwauapJxxWfxCCdbUg0_v8GNzgaIDe_yz5Tw
+Message-ID: <CAKxU2N_+tBqqngTepnTQy7his_2UTAAc36cMjgfZsOG94ryt+A@mail.gmail.com>
+Subject: Re: [PATCHv2 3/3] EDAC/fsl_ddr: restore MC error registers on probe failure
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: linux-edac@vger.kernel.org, Frank Li <Frank.Li@nxp.com>, 
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, York Sun <york.sun@nxp.com>, 
+	"open list:EDAC-FSL_DDR" <imx@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jul 31, 2026 at 1:30=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Fri, Jul 31, 2026 at 7:57=E2=80=AFAM Frank Li <Frank.li@oss.nxp.com> wro=
+te:
 >
-> On Fri, Jul 31, 2026 at 1:29=E2=80=AFPM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
+> On Thu, Jul 30, 2026 at 06:21:30PM -0700, Rosen Penev wrote:
+> > fsl_mc_err_probe() clears FSL_MC_ERR_DISABLE and, in EDAC_OPSTATE_INT
+> > mode, sets FSL_MC_ERR_INT_EN to enable error reporting. If a later
+> > initialization step fails and jumps to the err/err2 labels, the cleanup
+> > only frees driver memory and does not restore these hardware registers.
 > >
-> > On Fri, Jul 31, 2026 at 1:15=E2=80=AFPM Jordan R Abrahams-Whitehead
-> > <ajordanr@google.com> wrote:
-> > >
-> > > This commit resolves an issue where modpost section
-> > > verification fails due to section mismatches between list_add
-> > > and its callers.
-> > >
-> > > At present, list_add (and its internal __list_add) are called from
-> > > both .text and .init code sections. Since inlining can vary per call
-> > > site, list_add can be 4 different states:
-> > >
-> > >   list_add in text with arguments to non-.init.data values
-> > >   list_add in init with arguments to static .init.data values
-> > >   list_add in init with arguments to non-.init.data values
-> > >   list_add in text with arguments to static .init.data values
-> > >
-> > > It is last instance that ends up causing the section mismatch caused =
-by
-> > > constant propagation of the address of static libs inside the `dir_ad=
-d`
+> > This leaves the memory controller configured to generate interrupts whi=
+le
+> > no handler is successfully registered, which can cause an unhandled
+> > interrupt storm on the shared IRQ line. Restore FSL_MC_ERR_DISABLE,
+> > FSL_MC_ERR_INT_EN and the SBE threshold in both error paths.
 > >
-> > I think you meant `static __initdata LIST_HEADs`? (not `static libs`).
-> > Maybe AKPM could fix that up for you when applying?
+> > Do not pre-initialize orig_ddr_err_disable/orig_ddr_err_sbe to 0; the
+> > err path must only restore registers that were actually modified.
+> > Split the error labels so early failures (before the first hardware
+> > write at line ~~580) jump to err_free, which does cleanup without
+> > touching hardware registers. Save orig_ddr_err_sbe alongside
+> > orig_ddr_err_disable so the err label correctly restores both
+> > registers, avoiding stale bootloader state clobbers.
 > >
-> > > as seen below (with the dir_list being defined statically in
-> > > initramfs.c, resting in .init.data).
-> > >
-> > >   WARNING: modpost: vmlinux.o: section mismatch in reference: __list_=
-add
-> > >   (section: .text.unlikely.) -> dir_list (section: .init.data)
-> > >
-> > > Because of these section matching requirements, semantically,
-> > > __list_add and list_add MUST be inlined. This will then ensure
-> > > callers inside .init will receive a list_add that exists and refers
-> > > to only .init data, and list_add code in .text sections will only ref=
-er
-> > > to non-init data.
-> > >
-> > > This issue manifests predominently in AutoFDO with clang, which is ve=
-ry
-> > > hesitant to inline cold functions such as list_add even when marked
-> > > `inline`. Marking them as `__always_inline` therefore matches the
-> > > existing semantic constraints imposed by modpost's section mismatch
-> > > checks.
-> > >
-> >
-> > Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> > Tested-by: Nick Desaulniers <ndesaulniers@google.com>
-
-I can also find internal reports about this from two other folks;
-worth attributing on the fix IMO.
-
-Reported-by: Giuliano Procida <gprocida@google.com>
-Reported-by: Yabin Cui <yabinc@google.com>
-
-> >
-> > We've been seeing this particularly on Android and ChromeOS while
-> > trying to enable AutoFDO, which seems more likely to outline cold
-> > code.  include/linux/init.h defines __init as __cold.
-> >
-> > I saw no change in size for x86 defconfig; enabling
-> > CONFIG_LIST_HARDENED resulted in a change of a few bytes (i.e. less
-> > that 0.01%).  I assume we don't care as much about the size if
-> > CONFIG_DEBUG_LIST is set.  Checked with bloaty and
-> > scripts/bloat-o-meter (thanks to Eric for pointing out that tool in
-> > the linked thread).
-> >
-> > I never heard back from Kees or Marco about their thoughts on this in
-> > relation to
-> > commit b16c42c8fde8 ("list_debug: Introduce inline wrappers for debug c=
-hecks")
-> > but I wouldn't mind an Ack (or Nack) from at least one of them.
-> >
-> > > Closes: https://github.com/ClangBuiltLinux/linux/issues/2173
-> > > Signed-off-by: Jordan R Abrahams-Whitehead <ajordanr@google.com>
-> > > Suggested-by: Nathan Chancellor <nathan@kernel.org>
-> > > Suggested-by: Eric Dumazet <edumazet@google.com>
-> > > Link: https://lore.kernel.org/all/CANn89iJVQe=3DwedLheJmjZjOTJsWHijT0=
-jZs=3DiRxKssJZbjAxHw@mail.gmail.com/
+> > Built for arm64 (defconfig + CONFIG_EDAC_FSL_DDR) with LLVM=3D1;
+> > drivers/edac/fsl_ddr_edac.o compiles cleanly.
 >
-> Also, I think we might want this applied with:
+> You can put this after ---, this is redunctant, every patch must pass
+> build.
+Will remove.
 >
-> Cc: stable@vger.kernel.org
->
-> since I believe CrOS saw issues as far back as 6.1.
->
-> > > ---
-> > >  include/linux/list.h | 15 +++++++++++----
-> > >  1 file changed, 11 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/include/linux/list.h b/include/linux/list.h
-> > > index 09d979976b3b..59f8aa0905d3 100644
-> > > --- a/include/linux/list.h
-> > > +++ b/include/linux/list.h
-> > > @@ -150,10 +150,13 @@ static inline bool __list_del_entry_valid(struc=
-t list_head *entry)
-> > >   *
-> > >   * This is only for internal list manipulation where we know
-> > >   * the prev/next entries already!
-> > > + *
-> > > + * Must be inlined to ensure it can be safely called
-> > > + * with initdata arguments.
-> > >   */
-> > > -static inline void __list_add(struct list_head *new,
-> > > -                             struct list_head *prev,
-> > > -                             struct list_head *next)
-> > > +static __always_inline void __list_add(struct list_head *new,
-> > > +                                      struct list_head *prev,
-> > > +                                      struct list_head *next)
-> > >  {
-> > >         if (!__list_add_valid(new, prev, next))
-> > >                 return;
-> > > @@ -171,8 +174,12 @@ static inline void __list_add(struct list_head *=
-new,
-> > >   *
-> > >   * Insert a new entry after the specified head.
-> > >   * This is good for implementing stacks.
-> > > + *
-> > > + * Must be inlined to ensure it can be safely called
-> > > + * with initdata arguments.
-> > >   */
-> > > -static inline void list_add(struct list_head *new, struct list_head =
-*head)
-> > > +static __always_inline void list_add(struct list_head *new,
-> > > +                                    struct list_head *head)
-> > >  {
-> > >         __list_add(new, head, head->next);
-> > >  }
-> > >
-> > > ---
-> > > base-commit: fc46aed51f6280801f43a2cf4b5060cc33b572f9
-> > > change-id: 20260730-always-inline-list-add-363639606e26
-> > >
-> > > Best regards,
-> > > --
-> > > Jordan R Abrahams-Whitehead <ajordanr@google.com>
-> > >
+> Frank
 > >
+> > Fixes: ea2eb9a8b620 ("EDAC, fsl-ddr: Separate FSL DDR driver from MPC85=
+xx")
+> > Assisted-by: opencode:hy3-free
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+> >  drivers/edac/fsl_ddr_edac.c | 14 +++++++++-----
+> >  1 file changed, 9 insertions(+), 5 deletions(-)
 > >
+> > diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+> > index c505fb268474..139277c4e2f0 100644
+> > --- a/drivers/edac/fsl_ddr_edac.c
+> > +++ b/drivers/edac/fsl_ddr_edac.c
+> > @@ -577,23 +577,22 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >       pdata->orig_ddr_err_disable =3D ddr_in32(pdata, FSL_MC_ERR_DISABL=
+E);
+> >       ddr_out32(pdata, FSL_MC_ERR_DISABLE, 0);
+> >
+> > +     /* store the original SBE threshold */
+> > +     pdata->orig_ddr_err_sbe =3D ddr_in32(pdata, FSL_MC_ERR_SBE) & 0xf=
+f0000;
+> > +
+> >       /* clear all error bits */
+> >       ddr_out32(pdata, FSL_MC_ERR_DETECT, ~0);
+> >
+> >       res =3D edac_mc_add_mc_with_groups(mci, fsl_ddr_dev_groups);
+> >       if (res) {
+> >               edac_dbg(3, "failed edac_mc_add_mc()\n");
+> > -             goto err;
+> > +             goto err1;
+> >       }
+> >
+> >       if (edac_op_state =3D=3D EDAC_OPSTATE_INT) {
+> >               ddr_out32(pdata, FSL_MC_ERR_INT_EN,
+> >                         DDR_EIE_MBEE | DDR_EIE_SBEE);
+> >
+> > -             /* store the original error management threshold */
+> > -             pdata->orig_ddr_err_sbe =3D ddr_in32(pdata,
+> > -                                                FSL_MC_ERR_SBE) & 0xff=
+0000;
+> > -
+> >               /* set threshold to 1 error per interrupt */
+> >               ddr_out32(pdata, FSL_MC_ERR_SBE, 0x10000);
+> >
+> > @@ -621,6 +620,11 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >
+> >  err2:
+> >       edac_mc_del_mc(&op->dev);
+> > +     ddr_out32(pdata, FSL_MC_ERR_INT_EN, 0);
+> > +err1:
+> > +     ddr_out32(pdata, FSL_MC_ERR_DISABLE,
+> > +               pdata->orig_ddr_err_disable);
+> > +     ddr_out32(pdata, FSL_MC_ERR_SBE, pdata->orig_ddr_err_sbe);
+> >  err:
+> >       edac_mc_free(mci);
+> >       return res;
 > > --
-> > Thanks,
-> > ~Nick Desaulniers
->
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---=20
-Thanks,
-~Nick Desaulniers
+> > 2.55.0
+> >
+> >
