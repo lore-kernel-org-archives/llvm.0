@@ -1,99 +1,204 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FAB11F30BB;
-	Fri, 31 Jul 2026 15:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6147144781A
+	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 16:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785512888; cv=none; b=QI+EMj/6yoYZuU9rdfsTW3SwJlfseXhEykV6KaU31vq/AtrRCaAJ7pS1fJqX6B7fm2D+oAlRawCkqCC7TPyxbrmHueHFkY5cLAlWRLGB0tgMfJaKWdzgFySOjuyKX2bxhAaSaG/S0KXEbirHFxBjWwZrlfP8nqQcxTHIhmU/dRQ=
+	t=1785514538; cv=none; b=cAInZvTOQRGKvlvXge96Ibd1kz5p5qMLqp7vxGNS4+dFVuhUux8TdsPrLvXVPkwloI465SCiRbTFabG/MByD15lZmN6VH7R6kbqn86RbHkOLjq+OzuDhIZxdhMzct5ml+f14nE/DejR7ZZwfOd9XIfmolVXvH23nEgzl9H4jMm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785512888; c=relaxed/simple;
-	bh=E2lAHYOV1zA4r1eCJaIfPG87QPoFujjOI6UdDYwo/Xs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=VKtBHb0FNxsBaUHfv55C4crYlhTDJnT1AJ2nkQj3M6kFF3RgpV7BTXqvOSoHRbMRoyNC5YXCINnRbLfSWPk/kCR4tnfFqIZiVtENdQ2O8I4MIlOC7nvXp02U+9yV3Drlo02IAVw2AUwdK0ZD6Ll35X7aLfUrMSnxa0SxUKy7/K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nnoasHzs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785514538; c=relaxed/simple;
+	bh=EC4Qldz0I8//eu8X9qUqICG1s0ODDvI3gx2a299M5Cs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aEkdGWQHZGfvC5/MQp14CHHkl3dwr/vQdTr0h3wus82Vos8c1Ai64xXvknkAdExpx06s8ZWIlEIbhr6mfmU6VJUnGP1j2qXNlSI06sWW3DJhGXpUlvrEYg9iKheqjF+oJg2hXbwMRua5mCJsrSZ6iJD9apQeWVkGJm6vJSJvBws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=D5ysb3m8; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nnoasHzs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5989B1F000E9;
-	Fri, 31 Jul 2026 15:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785512886;
-	bh=4lJnn4e7C9hE6wEWtqXYdtrs6SZibcqzJoHLR3d96n8=;
-	h=From:Date:Subject:To:Cc;
-	b=nnoasHzsDdLvEN2QpeRX1ph5kHse9vG8b5v0LLU9Pgf+Jij8GtrLXweeDr0HICtJ5
-	 cMDJZHdbE0vlsdQRmKbergVjSarNn3ymSq7iG64hsibhPaY/usqwMhE77E+QlWhjrx
-	 RNuf0VS0RWAJMTybz8zNMcoHVOpGsCnUuwZPsEp209gn25zqw+91vdD2jMkvrS/WNM
-	 +3XQhojPT0nWmtDo0CHtqudif05HiW35HoIVSAUFNT9ih1q4RrOiJvMd+4jHY95tUG
-	 +XdDWuZMArvbjWOEpFzw0pVq1ibZX+3Ipx1mMljhIBadglr6hb0p+U1II4sQ85F7Fm
-	 0aeNbqh5flXSw==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Fri, 31 Jul 2026 17:47:38 +0200
-Subject: [PATCH net-next] net: airoha: fix ARRAY_SIZE() division by zero on
- UP builds
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="D5ysb3m8"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FC70204C;
+	Fri, 31 Jul 2026 09:15:27 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419BA3F86F;
+	Fri, 31 Jul 2026 09:15:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1785514531; bh=EC4Qldz0I8//eu8X9qUqICG1s0ODDvI3gx2a299M5Cs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=D5ysb3m8w0oV0jAuBPN2EE+x7/QiB3HmzsLsl9Of48PCq8y3Avccb+Y8RjUcWjGAw
+	 rOgeZKxweIvJrVq0r88o419dcChgko7LZGWsupv8c7SKqE0dJYqqxK/kbRxbJNaEn6
+	 KdEEXCxRq4MU5tuCGf1pHIl25TaKJf1Xf9FZlbJ8=
+Date: Fri, 31 Jul 2026 17:15:25 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Hongyan Xia <hongyan.xia@transsion.com>
+Cc: Will Deacon <will@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>, Oleg Nesterov <oleg@redhat.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jiazi Li <jiazi.li@transsion.com>, Pu Hu <hupu@transsion.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: Re: [RFC PATCH 9/9] arm64/debug: Mark debug exception helpers
+ __always_inline
+Message-ID: <amzKHV5fBeRFhwlJ@J2N7QTR9R3>
+References: <cover.1785153469.git.hongyan.xia@transsion.com>
+ <eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260731-airoha-spinlock-array-fix-v1-1-863a7e239a5f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqDQAwAvyI5N+CuUm2/UjzENdagZCUrxSL+3
- cXjDMwckNiEE7yLA4x/kiRqBvcoIEykX0YZMoMv/bNsKockFifCtIouMcxIZvTHUXYcfPUam7Z
- 2oW8h96tx1vf7A8obKu8bdOd5ARE5m6x1AAAA
-X-Change-ID: 20260731-airoha-spinlock-array-fix-d239f7841cb8
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Simon Horman <horms@kernel.org>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc: linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, netdev@vger.kernel.org, 
- llvm@lists.linux.dev, Miguel Ojeda <ojeda@kernel.org>, 
- kernel test robot <lkp@intel.com>, Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
 
-airoha_alloc_gdm_device() initializes the txq_lock[] array iterating
-over ARRAY_SIZE(dev->txq_lock). ARRAY_SIZE() expands to
-sizeof(dev->txq_lock) / sizeof((dev->txq_lock)[0]), but on UP builds
-(CONFIG_SMP unset, CONFIG_DEBUG_SPINLOCK unset) arch_spinlock_t is an
-empty struct, so sizeof(spinlock_t) is zero and the expression is a
-compile-time division by zero (undefined behavior), reported by clang
-as "division by zero is undefined [-Wdivision-by-zero]".
+On Mon, Jul 27, 2026 at 12:25:48PM +0000, Hongyan Xia wrote:
+> From: Hongyan Xia <hongyan.xia@transsion.com>
+> 
+> Static inline should be enough to actually inline functions for most
+> compilers, but my Clang-19 somehow thinks it's better to outline them.
+> These tiny helpers then live in normal .text sections instead of
+> .noinstr sections, violating noinstr.
+> 
+> Mark them __always_inline so the compiler can never outline them.
+> 
+> Signed-off-by: Hongyan Xia <hongyan.xia@transsion.com>
+> ---
+>  arch/arm64/include/asm/esr.h       | 2 +-
+>  arch/arm64/include/asm/percpu.h    | 2 +-
+>  arch/arm64/include/asm/preempt.h   | 4 ++--
+>  arch/arm64/include/asm/ptrace.h    | 4 ++--
+>  arch/arm64/kernel/debug-monitors.c | 2 +-
+>  include/linux/kprobes.h            | 8 ++++----
+>  6 files changed, 11 insertions(+), 11 deletions(-)
 
-Since the array is statically sized with AIROHA_NUM_NETDEV_TX_RINGS,
-use the named constant as loop bound instead of ARRAY_SIZE().
+I think this should be split into separate patches. In particular, the
+preempt count helpers are used in mane other places than debug
+exceptions, and if those are used in noinstr code today, we need to
+backport those as fixes.
 
-Fixes: 78a35725e533 ("net: airoha: defer GDM3/GDM4 WAN mode and GDM2 loopback to QoS offload")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202607311850.6p0ZUVq4-lkp@intel.com/
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- drivers/net/ethernet/airoha/airoha_eth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Mark.
 
-diff --git a/drivers/net/ethernet/airoha/airoha_eth.c b/drivers/net/ethernet/airoha/airoha_eth.c
-index dba7c52c0896..64619e9a704d 100644
---- a/drivers/net/ethernet/airoha/airoha_eth.c
-+++ b/drivers/net/ethernet/airoha/airoha_eth.c
-@@ -3467,7 +3467,7 @@ static int airoha_alloc_gdm_device(struct airoha_eth *eth,
- 	netdev->dev.of_node = of_node_get(np);
- 	dev = netdev_priv(netdev);
- 	u64_stats_init(&dev->stats.syncp);
--	for (i = 0; i < ARRAY_SIZE(dev->txq_lock); i++)
-+	for (i = 0; i < AIROHA_NUM_NETDEV_TX_RINGS; i++)
- 		spin_lock_init(&dev->txq_lock[i]);
- 	dev->port = port;
- 	dev->eth = eth;
-
----
-base-commit: 2fbade66245059c78daeaccfce13ecf499fffb51
-change-id: 20260731-airoha-spinlock-array-fix-d239f7841cb8
-
-Best regards,
--- 
-Lorenzo Bianconi <lorenzo@kernel.org>
-
+> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
+> index f816f5d77f1a..a75bfdb7e5fe 100644
+> --- a/arch/arm64/include/asm/esr.h
+> +++ b/arch/arm64/include/asm/esr.h
+> @@ -437,7 +437,7 @@
+>  #ifndef __ASSEMBLER__
+>  #include <asm/types.h>
+>  
+> -static inline unsigned long esr_brk_comment(unsigned long esr)
+> +static __always_inline unsigned long esr_brk_comment(unsigned long esr)
+>  {
+>  	return esr & ESR_ELx_BRK64_ISS_COMMENT_MASK;
+>  }
+> diff --git a/arch/arm64/include/asm/percpu.h b/arch/arm64/include/asm/percpu.h
+> index b57b2bb00967..d4cae47fde8c 100644
+> --- a/arch/arm64/include/asm/percpu.h
+> +++ b/arch/arm64/include/asm/percpu.h
+> @@ -29,7 +29,7 @@ static inline unsigned long __hyp_my_cpu_offset(void)
+>  	return read_sysreg(tpidr_el2);
+>  }
+>  
+> -static inline unsigned long __kern_my_cpu_offset(void)
+> +static __always_inline unsigned long __kern_my_cpu_offset(void)
+>  {
+>  	unsigned long off;
+>  
+> diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
+> index 932ea4b62042..326f221c3f56 100644
+> --- a/arch/arm64/include/asm/preempt.h
+> +++ b/arch/arm64/include/asm/preempt.h
+> @@ -41,14 +41,14 @@ static inline bool test_preempt_need_resched(void)
+>  	return !current_thread_info()->preempt.need_resched;
+>  }
+>  
+> -static inline void __preempt_count_add(int val)
+> +static __always_inline void __preempt_count_add(int val)
+>  {
+>  	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
+>  	pc += val;
+>  	WRITE_ONCE(current_thread_info()->preempt.count, pc);
+>  }
+>  
+> -static inline void __preempt_count_sub(int val)
+> +static __always_inline void __preempt_count_sub(int val)
+>  {
+>  	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
+>  	pc -= val;
+> diff --git a/arch/arm64/include/asm/ptrace.h b/arch/arm64/include/asm/ptrace.h
+> index 39582511ad72..460726224299 100644
+> --- a/arch/arm64/include/asm/ptrace.h
+> +++ b/arch/arm64/include/asm/ptrace.h
+> @@ -336,11 +336,11 @@ static inline unsigned long regs_get_kernel_argument(struct pt_regs *regs,
+>  struct task_struct;
+>  int valid_user_regs(struct user_pt_regs *regs, struct task_struct *task);
+>  
+> -static inline unsigned long instruction_pointer(struct pt_regs *regs)
+> +static __always_inline unsigned long instruction_pointer(struct pt_regs *regs)
+>  {
+>  	return regs->pc;
+>  }
+> -static inline void instruction_pointer_set(struct pt_regs *regs,
+> +static __always_inline void instruction_pointer_set(struct pt_regs *regs,
+>  		unsigned long val)
+>  {
+>  	regs->pc = val;
+> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
+> index a970ab6327cd..66cb8151f5df 100644
+> --- a/arch/arm64/kernel/debug-monitors.c
+> +++ b/arch/arm64/kernel/debug-monitors.c
+> @@ -146,7 +146,7 @@ postcore_initcall(debug_monitors_init);
+>  /*
+>   * Single step API and exception handling.
+>   */
+> -static void set_user_regs_spsr_ss(struct user_pt_regs *regs)
+> +static __always_inline void set_user_regs_spsr_ss(struct user_pt_regs *regs)
+>  {
+>  	regs->pstate |= DBG_SPSR_SS;
+>  }
+> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
+> index 8c4f3bb24429..5880445ed0f0 100644
+> --- a/include/linux/kprobes.h
+> +++ b/include/linux/kprobes.h
+> @@ -384,17 +384,17 @@ static inline void kprobe_ftrace_kill(void) {}
+>  struct kprobe *get_kprobe(void *addr);
+>  
+>  /* kprobe_running() will just return the current_kprobe on this CPU */
+> -static inline struct kprobe *kprobe_running(void)
+> +static __always_inline struct kprobe *kprobe_running(void)
+>  {
+>  	return __this_cpu_read(current_kprobe);
+>  }
+>  
+> -static inline void reset_current_kprobe(void)
+> +static __always_inline void reset_current_kprobe(void)
+>  {
+>  	__this_cpu_write(current_kprobe, NULL);
+>  }
+>  
+> -static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
+> +static __always_inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
+>  {
+>  	return this_cpu_ptr(&kprobe_ctlblk);
+>  }
+> @@ -449,7 +449,7 @@ static inline struct kprobe *get_kprobe(void *addr)
+>  {
+>  	return NULL;
+>  }
+> -static inline struct kprobe *kprobe_running(void)
+> +static __always_inline struct kprobe *kprobe_running(void)
+>  {
+>  	return NULL;
+>  }
+> -- 
+> 2.47.3
+> 
