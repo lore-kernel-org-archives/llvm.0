@@ -1,65 +1,65 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E54C2DF6E9
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 01:21:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E806A276038
+	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 01:21:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785460897; cv=none; b=QHBjMdtqWw1TYDmJY0KdDfC+AgIMTnJ4gxbsQ0lHyP9F4q6CIODKyla1U1cOe2n367MyXNjSewc9XWWh1k9/rWgBkuvBUc64Cb/31Kfn18JDDTJsnNIeXE8PEAaYkcHdmcfdl9v0AW93W2OK9STiEdVJ0IiEnX+yKbSlM7vBAt4=
+	t=1785460901; cv=none; b=iXfrjSpcr97BfDS4ND5mHX9QcfqW/Axu5jEgosCpRq0fIuIbt4jTgxE7sgE+Hdlyk6rM2xLw4mBUvFdIzuR+pRH4yq8J8IG2vcs9dA/QP6ZPXcAJFBfb0rDPVSk0UIdEtTrlff4PYQyVw3LJwRAnKEykpntOyh/zI2Hc0vsJ8jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785460897; c=relaxed/simple;
-	bh=EXM737zPqfFOz8c2oTEgN+Z9Ea1EJcWSCZdWPrOgRko=;
+	s=arc-20240116; t=1785460901; c=relaxed/simple;
+	bh=xsFVWzxEmP1xtSwF4J0aOwtU5FsqXzYKJ4uqEQVsIDs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BByyq2HvUOfzEroXNscPxTs+2ay4fpYOH+siI3K6Nc2teVa/idiG8EPlQ5ZH9CE01w7cllmmIi4V/nNFpYrvBKvDeuQNIky1FEjPhYtw6WLnFexgGMvVi92Qvh28rhUojnzY0+wx2iIYRPq2TE06tqc5TI1sOvpnqODdc/4ZFxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XgU+LOgu; arc=none smtp.client-ip=209.85.216.45
+	 MIME-Version; b=LP4ElJEiIyhXwwqk2nJp+/v8xO/hNxmjWQxdKUG8JZDP/RM3xwPBASBf9TgV+ttumy+PjuNoD9GmBkDl7EijjDWy1WV1X4hOVmbDZflWSSNQfDc0FIf84gQA8qkXtpzWXSayeiThlYw6guA6iBuDH+p0FKEOMx1PlL+V098F7+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oiafnBUj; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XgU+LOgu"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38e347638adso642128a91.0
-        for <llvm@lists.linux.dev>; Thu, 30 Jul 2026 18:21:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oiafnBUj"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e07ebd263so316279a91.1
+        for <llvm@lists.linux.dev>; Thu, 30 Jul 2026 18:21:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785460895; x=1786065695; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1785460897; x=1786065697; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tQZ7kr/xVyL8NQz8gujRJuKRFxvmEh5rg2s5p7tnoi8=;
-        b=XgU+LOguha8Cu31eFx8DAABWWySEw+xLwZinMi3FsN9vVaP4hqgm2WQi/GK3RZnNWD
-         AGeTaM7h3iD7bvD62txwx/1wKlbz4MpbqKFYQrg88Ausv9XEorZYhCmy99X8OOFBxzi/
-         L99vO2kLVsqrqL0ZppTIQcDfvYKribUcJQbDJr+ZIXaOZjOJsrdDIVw9+qQICSvRJOuq
-         d5/qvohOcvD16OtRA2F1rmC21IIVR13pWoorzXsOA++gC5ywvoEvScMHyjSbc+DHh9FI
-         9vZJLQo5DhDSnEYB7P1XMZjsvSfjVSN9h+asGVGRnQOCxVg8tBqSSNhxaK5hqy2P84p/
-         rB8g==
+        bh=jg8//SIb3wCfw25zWTdBtLReUkKBuqQ+hnflSQ8n1KE=;
+        b=oiafnBUjtZJzMYSuj1BLInF82mZ0PY79XO47YUR0coy8TMqBeFODioPuF8lvxtC4Fv
+         n8IeEJRbBvqTsGtCZS3CFn1WTQiSf/vgQT0dNhs8D9QWaftXJP+I/3SuSqp22beTYgWw
+         i/nMx40BbTU+9zN4uKhrkx5O6sJ8z3fg17ZAtlcZpi/kp0nOOVaXJO2r66j+S2xKEVbe
+         NPWtgLxPx5fxnwq+abWLibkZ7cE0IJnvDpkMLpdRifGBtXfPE7aqH3jw+RblVA1EvoL1
+         r7i9B1gQkgP/Ul0xAnjD2OdfMQMfehKYs16E/UC4ZgF8dHBpM9MZTqWaIYxA6Udh4MND
+         0GCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785460895; x=1786065695;
+        d=1e100.net; s=20251104; t=1785460897; x=1786065697;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tQZ7kr/xVyL8NQz8gujRJuKRFxvmEh5rg2s5p7tnoi8=;
-        b=S4rrxN7s9k4xmkIFkFULLdYYeSEYZo8XihGlEtGYmlsiwjS74IFf4keuoxfN65H358
-         qducDDe5MZ+7IKzWILGVqdrQqKX9UQ3gkdNv8dd7LgZLMLE/a5awgX8I52ki7UrrE2zk
-         qbEGsdSIuFik1zFzCgUXwAJpX+OLwE6Dpq4iYZaSEuLcNCD6LPtLYNZ2zoNpaDb5nJtE
-         fdGtX49USfeCSZLI3sT5RQvCzbbbFpfEdtsyZGI8fa436NDY5tm3dBDF+tZN1KTA7RCh
-         cUFJEi4UYG1QevhxW2LZUVnFfnn1vUEQPm/h99UK4Z3drVUxNpli6NbtSV+iruaM+093
-         PpUA==
-X-Forwarded-Encrypted: i=1; AHgh+RrcfLsr7b9gaX/H8gBnESjzri6EUh9MzKj6Musp5HHbWo18sBFXsRQWlLQl3lipehcQAMA5@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw2yzM7DiNvk6USdeldvN/g6ZIF7KhHoqaMu4WAaPkgtdAT/qH3
-	Ui7+o9oc7p/m1l/RJA88/OrM7WiSdRO2DKyvB6G6XqNjl9dK1L5LgsN5
-X-Gm-Gg: AR+sD12r6bPrRLH5FYg9Fsj5h9krGcIoCwH9P7zevT1jSk26e4kcV7BSb83IgSNWp5n
-	Pns8rVvE0nO+cqXXzsIgysCV76E9tD3XhroGcbCAHzrOKWHmF93VttuO8BWUo6cM99iarb+jC2x
-	2gLwPMii4zJKZwg/hcZt9IkwaVC5997SiwyM55WnDdODfSFFWXEHkh6hLvOrMyRyU8CsTlxgXVt
-	OxiFJQOooBR4+rij8SZDfWdloP49tA/lcpsdpVubUsEKgnWovK/zpegXQmwFB6sibmYVvgILial
-	8lUbiR846uR4/OHbKg+QP9ZIpwEiRDbo9R9FggzKIebW96T7ClGupVTAJcb6Drrbih/4O+KBbku
-	FphT4IrYeztKSEnatQVk1vFhish8CoaltTNdlbvaww+BYd06IO7KmiIYLQQCJ6zXRiYIEQtm0er
-	Q4QMwUh/hmr2jAuQOfBlsTZVjXzhkkxN3nNDh+KZUyt6s448myAwC9LDGZRpRj4MmjK4B6wLYER
-	jvquavwesbFVR6z9fbMy06ZDrgZBGn9splM1Nr6mhqvPN8L/3oHkHkTnO+SZPioQVO6IeiSbi5o
-	1GWztQDGYQQziPnmwkcrA68nQlcNXjILj06YAXVgDwCVidBg
-X-Received: by 2002:a17:90b:4ac1:b0:381:c500:b0d1 with SMTP id 98e67ed59e1d1-38fb13c3a7amr108448a91.20.1785460895317;
-        Thu, 30 Jul 2026 18:21:35 -0700 (PDT)
+        bh=jg8//SIb3wCfw25zWTdBtLReUkKBuqQ+hnflSQ8n1KE=;
+        b=GJcIZUPopGNcaWhaVfLBEPjFXpoCM7OQo4KHuJYIr/Mw/rN7kWFqG/wJJUMz+PhF5l
+         yIM8gljquIYNatZGK/ErWl7j/y1exitLaRS19vL9IRz984z8Nfd4SmpPN/rhojjc71HV
+         AuYhpS4EC9fjq1N/mdjQ+iEEo3INC3E5OFbLTEH84U9bY8Nndlo2NsBF9Nu0NwF3vaNt
+         HwN/jZSynaKbsgx7xOH2KY7ZCZwDPk8ZAdH+UhGCfS68XhmTv2e2eiOrbprv0lNkGgJR
+         cucrGt9nYCWxd4BV3rObxShs4aV2a1+J1KrPoKDL6CxrYAE3teOjv/vjBSrXRLwIJvxu
+         f75A==
+X-Forwarded-Encrypted: i=1; AHgh+RqGDxRhpB3BvItLkjy9ogIG6Pb5vZoNcWvleDBEKb4lorHMowupByQA32bV1TmIs5sHDp4C@lists.linux.dev
+X-Gm-Message-State: AOJu0YxuffYv2zfxYXyU/2GI/bd1BQERFuBECxw5UF9ETcPB7kZRdxP3
+	zNTOK/cniDa2vf8buFiu+dP9iQ44qbAYsmduejgAHI3hleY07L5o0GNg
+X-Gm-Gg: AR+sD11kts17DWWPCepxHLn7Dfr2ZJze818keotgAA9Wx+suJKJvS1d1ks1amrTg/lB
+	D4Y9+risM0bR7JQzfKuDPY97PLnkut3mwZHxr1cY3xgF4m3+39XGNT/UYPGrvSQrOpZs/T479M9
+	XED8URbP0lnu3tCiqzJ09tTvxL4RORqQJUmaG5/v2Lrzr9k22tCX1t31Wql07reezbWZ+5niVDG
+	PamTt9NGXzCKyJ/mN/54XWK7PaINKJvrRtaUPk9Pp7wgKOzt3amygU5BLRzfO+9HuO62Qdonb6x
+	o9abUSnJ8DlSU+KxDdu8nopTBHW+LGBLzFqW+8etJ04yId16wTOl4azXIYvC6A0THRmQJSawSlH
+	tBRdo5vqJgofn9RVxe+0oi1zkUzYlqBU2FJBxULgqXt5Mc8fYNVt+/5YtLXNFZqPB9J3m1PME1/
+	lW4tmrbu+FETW+Wsm44E5+NyfP/KzDZINiRqKEc8rk0ynnoo00CTrP6zNaMsi0s0XCPdsLhsp3j
+	LKeK6CAGEgFhtKO7fWda4M1XCbwZq+EMW7mh/LVmZQX8QL+Uvz+/6PpAk8tNBCSVr5YBkw+V083
+	cFfQ9raeHJg6UTyOTEl38JEPL7axA1RxadxYWg==
+X-Received: by 2002:a17:90b:1650:b0:38e:ad9d:1151 with SMTP id 98e67ed59e1d1-38fb11368d2mr135362a91.4.1785460897057;
+        Thu, 30 Jul 2026 18:21:37 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38facf50124sm198867a91.3.2026.07.30.18.21.34
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-38facf50124sm198867a91.3.2026.07.30.18.21.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jul 2026 18:21:34 -0700 (PDT)
+        Thu, 30 Jul 2026 18:21:36 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
 To: linux-edac@vger.kernel.org
 Cc: Frank Li <Frank.Li@nxp.com>,
@@ -73,9 +73,9 @@ Cc: Frank Li <Frank.Li@nxp.com>,
 	imx@lists.linux.dev (open list:EDAC-FSL_DDR),
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv2 2/3] EDAC/fsl_ddr: use non devm for request_irq()
-Date: Thu, 30 Jul 2026 18:21:29 -0700
-Message-ID: <20260731012130.1212640-3-rosenp@gmail.com>
+Subject: [PATCHv2 3/3] EDAC/fsl_ddr: restore MC error registers on probe failure
+Date: Thu, 30 Jul 2026 18:21:30 -0700
+Message-ID: <20260731012130.1212640-4-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260731012130.1212640-1-rosenp@gmail.com>
 References: <20260731012130.1212640-1-rosenp@gmail.com>
@@ -87,35 +87,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-We need to tear down the irq before edac_mc_free() to avoid a use after
-free on teardown as request_irq uses mci as dev_id.
+fsl_mc_err_probe() clears FSL_MC_ERR_DISABLE and, in EDAC_OPSTATE_INT
+mode, sets FSL_MC_ERR_INT_EN to enable error reporting. If a later
+initialization step fails and jumps to the err/err2 labels, the cleanup
+only frees driver memory and does not restore these hardware registers.
 
+This leaves the memory controller configured to generate interrupts while
+no handler is successfully registered, which can cause an unhandled
+interrupt storm on the shared IRQ line. Restore FSL_MC_ERR_DISABLE,
+FSL_MC_ERR_INT_EN and the SBE threshold in both error paths.
+
+Do not pre-initialize orig_ddr_err_disable/orig_ddr_err_sbe to 0; the
+err path must only restore registers that were actually modified.
+Split the error labels so early failures (before the first hardware
+write at line ~~580) jump to err_free, which does cleanup without
+touching hardware registers. Save orig_ddr_err_sbe alongside
+orig_ddr_err_disable so the err label correctly restores both
+registers, avoiding stale bootloader state clobbers.
+
+Built for arm64 (defconfig + CONFIG_EDAC_FSL_DDR) with LLVM=1;
+drivers/edac/fsl_ddr_edac.o compiles cleanly.
+
+Fixes: ea2eb9a8b620 ("EDAC, fsl-ddr: Separate FSL DDR driver from MPC85xx")
+Assisted-by: opencode:hy3-free
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/edac/fsl_ddr_edac.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/edac/fsl_ddr_edac.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
-index 3745eec67335..c505fb268474 100644
+index c505fb268474..139277c4e2f0 100644
 --- a/drivers/edac/fsl_ddr_edac.c
 +++ b/drivers/edac/fsl_ddr_edac.c
-@@ -599,7 +599,7 @@ int fsl_mc_err_probe(struct platform_device *op)
+@@ -577,23 +577,22 @@ int fsl_mc_err_probe(struct platform_device *op)
+ 	pdata->orig_ddr_err_disable = ddr_in32(pdata, FSL_MC_ERR_DISABLE);
+ 	ddr_out32(pdata, FSL_MC_ERR_DISABLE, 0);
  
- 		/* register interrupts */
- 		pdata->irq = platform_get_irq(op, 0);
--		res = devm_request_irq(&op->dev, pdata->irq,
-+		res = request_irq(pdata->irq,
- 				       fsl_mc_isr,
- 				       IRQF_SHARED,
- 				       "[EDAC] MC err", mci);
-@@ -635,6 +635,7 @@ void fsl_mc_err_remove(struct platform_device *op)
++	/* store the original SBE threshold */
++	pdata->orig_ddr_err_sbe = ddr_in32(pdata, FSL_MC_ERR_SBE) & 0xff0000;
++
+ 	/* clear all error bits */
+ 	ddr_out32(pdata, FSL_MC_ERR_DETECT, ~0);
  
- 	if (edac_op_state == EDAC_OPSTATE_INT) {
- 		ddr_out32(pdata, FSL_MC_ERR_INT_EN, 0);
-+		free_irq(pdata->irq, mci);
+ 	res = edac_mc_add_mc_with_groups(mci, fsl_ddr_dev_groups);
+ 	if (res) {
+ 		edac_dbg(3, "failed edac_mc_add_mc()\n");
+-		goto err;
++		goto err1;
  	}
  
- 	ddr_out32(pdata, FSL_MC_ERR_DISABLE,
+ 	if (edac_op_state == EDAC_OPSTATE_INT) {
+ 		ddr_out32(pdata, FSL_MC_ERR_INT_EN,
+ 			  DDR_EIE_MBEE | DDR_EIE_SBEE);
+ 
+-		/* store the original error management threshold */
+-		pdata->orig_ddr_err_sbe = ddr_in32(pdata,
+-						   FSL_MC_ERR_SBE) & 0xff0000;
+-
+ 		/* set threshold to 1 error per interrupt */
+ 		ddr_out32(pdata, FSL_MC_ERR_SBE, 0x10000);
+ 
+@@ -621,6 +620,11 @@ int fsl_mc_err_probe(struct platform_device *op)
+ 
+ err2:
+ 	edac_mc_del_mc(&op->dev);
++	ddr_out32(pdata, FSL_MC_ERR_INT_EN, 0);
++err1:
++	ddr_out32(pdata, FSL_MC_ERR_DISABLE,
++		  pdata->orig_ddr_err_disable);
++	ddr_out32(pdata, FSL_MC_ERR_SBE, pdata->orig_ddr_err_sbe);
+ err:
+ 	edac_mc_free(mci);
+ 	return res;
 -- 
 2.55.0
 
