@@ -1,204 +1,243 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6147144781A
-	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 16:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785514538; cv=none; b=cAInZvTOQRGKvlvXge96Ibd1kz5p5qMLqp7vxGNS4+dFVuhUux8TdsPrLvXVPkwloI465SCiRbTFabG/MByD15lZmN6VH7R6kbqn86RbHkOLjq+OzuDhIZxdhMzct5ml+f14nE/DejR7ZZwfOd9XIfmolVXvH23nEgzl9H4jMm4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785514538; c=relaxed/simple;
-	bh=EC4Qldz0I8//eu8X9qUqICG1s0ODDvI3gx2a299M5Cs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aEkdGWQHZGfvC5/MQp14CHHkl3dwr/vQdTr0h3wus82Vos8c1Ai64xXvknkAdExpx06s8ZWIlEIbhr6mfmU6VJUnGP1j2qXNlSI06sWW3DJhGXpUlvrEYg9iKheqjF+oJg2hXbwMRua5mCJsrSZ6iJD9apQeWVkGJm6vJSJvBws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=D5ysb3m8; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C55B44C50E
+	for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 17:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785518083; cv=pass; b=Fs5tXtQEBxD97uS3qOVHWZVAatwONUtgJ/A21MA7ElbH/v0+WAErEnSZ3vDmP1x9cIoBJ+kE6FO3qIpXVA5sF8p7SsjT6GtyNaIQX8mIzbt4wfgQPbFWrSOIUtbpDd8s0NmQkjwgG9/kx4U0TDispS5Ba/sxuDhd4jlLrxq9gKA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785518083; c=relaxed/simple;
+	bh=QesLJjfO+CQSI1uPEdZ3w/rry6iX1InymxI+UL8wQKs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UQ8joaWg26LVl2x9gR38Qu9/BKkw1x0u2TFdjJCp0TV133H2Ty5KBXJ6o3mnR2QaPHFUtfxc1wWVbcr2bwOGDn8rurhOxMtfByW4pxgvZgeDIyd9FxG5VFOfhAOBJOalpI2uOlhe5jnLmdOb4uZ/OSQNv/R8jPejFiPXNAelo7s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LQ8lf7SM; arc=pass smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="D5ysb3m8"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5FC70204C;
-	Fri, 31 Jul 2026 09:15:27 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 419BA3F86F;
-	Fri, 31 Jul 2026 09:15:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785514531; bh=EC4Qldz0I8//eu8X9qUqICG1s0ODDvI3gx2a299M5Cs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=D5ysb3m8w0oV0jAuBPN2EE+x7/QiB3HmzsLsl9Of48PCq8y3Avccb+Y8RjUcWjGAw
-	 rOgeZKxweIvJrVq0r88o419dcChgko7LZGWsupv8c7SKqE0dJYqqxK/kbRxbJNaEn6
-	 KdEEXCxRq4MU5tuCGf1pHIl25TaKJf1Xf9FZlbJ8=
-Date: Fri, 31 Jul 2026 17:15:25 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Hongyan Xia <hongyan.xia@transsion.com>
-Cc: Will Deacon <will@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>, Oleg Nesterov <oleg@redhat.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jiazi Li <jiazi.li@transsion.com>, Pu Hu <hupu@transsion.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-mm@kvack.org" <linux-mm@kvack.org>,
-	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>
-Subject: Re: [RFC PATCH 9/9] arm64/debug: Mark debug exception helpers
- __always_inline
-Message-ID: <amzKHV5fBeRFhwlJ@J2N7QTR9R3>
-References: <cover.1785153469.git.hongyan.xia@transsion.com>
- <eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LQ8lf7SM"
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a08a2b7e5bso680137a12.1
+        for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 10:14:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785518080; cv=none;
+        d=google.com; s=arc-20260327;
+        b=qlwant1hpvJHpjdMTtCaEGHh+zE/wXLxZ0v0YVMelja4x+CLc5+qCtkfU6Mr2E6Z+y
+         XwtZaPJv7mX261yDA6I0NtQn6acqjj1UM4XoKY68WqSs2Y86g32MksdYlEjqZ6BeKaPs
+         LvLCfAhL4ZcV81CjkxT1aQg1U2eR+MVRvQpc8l9NIs21S+ElVRvEoSyPasTMMMENjWpF
+         FrdTDzbc8aG1n6gGxJV/gYFpI0qkDBpcx1Hsj5djkhCB8iAN0wwjeJp+ECpLvIT/QdT8
+         b9NuKY2j5Mtkj9nfkFtYLJlujUtjU/jDaCjAYs3EouVRMwq5TYjHrKRaG6izbSusWMTo
+         NmDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SHfwJhTJcZEKfM/V12t6FGxcs59B4/LW6Z/5dwS+YL8=;
+        fh=znNxEwFHctWlp10vZgZY6MAeV0+zAWIcoUeTu2MOZmg=;
+        b=oZ9rVoyZQtB0H79Uk2Pyue8IGM0vTcpOgKencyjQ5f7ZDpYvaO4wQXBdL3PnpDAcKa
+         H+JiFBE6SmlQWsfsUNDBP9efgFxv1E3BSXHA/nne8SrCch1kXW1DAr6qTZ6RpZKlEpNW
+         98QV84ahxi1sfDqt+qKUlEF/korBTAkYlEsiD3l5UWKJgjHNkMp3bg16UyRjnIADORY9
+         30m83YhC8DjLWIH1RTe4j5984PLCLRn6oeTbPcohBAs+SZ4UcpmaegyTXaRhHdsau2ol
+         E8DDax6pf+cymCCsReqGXNweZKUISXmizmw8HuJEz7vko+1ZitfYaWKlSKzzqmZ2MzF0
+         jo/w==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785518080; x=1786122880; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SHfwJhTJcZEKfM/V12t6FGxcs59B4/LW6Z/5dwS+YL8=;
+        b=LQ8lf7SMoIeZD91Oez7N58UrD8JLKhs5V7YElaS16lryK04n2v360/W+BSkjI6cBSm
+         8FOTR/zQqGWP4xR+Q40cECeyjqmOuFAW7A2GqgixIT0yFLh78nocFo0JJa8E8lVn7bvX
+         7FIyf8XN+foplnCG/WtNOCjwJmEnQk7i7aDXGcQbLnixIMP4QZh3z/G8SHohVzznFS/+
+         ti57WryBlO2Ivfbj9H0nTrrx4K4nFisOMTfFJg2NTKfOixII+eq5qOC+C/rrtXiTzbs0
+         dyk3WFmmmxFFTQYSkm3aOfkbXLG/k/XYSPOYUK6hpzu06K2oseYK02qB/I8j29HkHp/I
+         HcdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785518080; x=1786122880;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SHfwJhTJcZEKfM/V12t6FGxcs59B4/LW6Z/5dwS+YL8=;
+        b=Z2aFWdAuPlNNRycBxxps1vYqs8bPBwZj7xDDpMyYbJoNhOmYpYmSjFcRos3h7b10t6
+         u6ZroANGSopELH4d9JvvJhctWQmqFsqsz0cVgV5O4OLCHP8jAio8/l1Iwm55c+7VZOoP
+         vm7oMBrOdaFGnumPo6YJ54VkgjdS2TOYVSEIT5FCIIgDO7P5nBDWP+LcvO0BzGnWl2vP
+         uEyy2Alm2MBe/bDD8QwmpYlYdugoOc1Vt0s1ZOZbb5I/EMW4v3ycQgkJ1ZYtVDHL3P4w
+         3NNvx2F2KEH5sBIYcA79h4yd6G7CoEuPCqdYpqNXpLfYYvtxbCSGZB1ehLgHWVMMvBWd
+         dj2w==
+X-Forwarded-Encrypted: i=1; AHgh+RpG2RPVPE9pfX9AXuupnAeUS2eykwZxlMCnherFOpZZLy//dVK2AVPi0OAq6ch2STcJQVCu@lists.linux.dev
+X-Gm-Message-State: AOJu0YznbwaV1uCA1asENk8S9zGzMQ1Jg9belyQYQR4fm3kRYkY3GIal
+	4rRnePNJRmkzS+ubfHnt7HVAsGWC5AbO8H+7KVm7dM/kF0XTxFiEtmTQ0eaOS1JYn0bRFAxhs7C
+	jkZkp0Wo7C8rhWmIWuy/2BZSeuVojqpeXZg==
+X-Gm-Gg: AR+sD135bPen2cQh4462NbRML0TnLmSa3HXL2yIVYmxIOgNXRAmRPycWQ8WKyijt4yh
+	gJqpzIdsnkNWR6J/RM1cGODG2dN2KNMvb7IJsn+6ro23vBU35tuCdQfTPUVj0ThbMUdD6VdnuzR
+	6WzNMucFomnTcVVXVQ9mOjr9Edk3PwP9XN2w41u8OPBZ1cH5xDhwrLz1zA3rE02KHD5euus6inW
+	iEdT63GtQohM0wAhUZWUwOjyV3pQKYN1VvZ9e3Y+Hk7k3uCUrbJdR5cqXt+QO1oXCumTaupn2/0
+	68fqgaREiqdY6IJ992IYoECEsvk0gn+ozZRG0xbf6KvKcqWdei8EgLea3FV2a9fGcpgR9KZM4+2
+	BHTBJChQkXsIc4JXCBAYbMCpHTJQLI3mXAaODL3iMgrjRuQZ38vmQyUWt5KaZmVDedIAdt7fDbD
+	A721ijAmeuQqhNHLly+UIehTYuAi9hNt4V6pInQGS9FXIow0BVl2qCPMaJNeoHFUIG10AHkh3xy
+	Itc8g==
+X-Received: by 2002:a05:6402:20c7:20b0:698:8857:9ff0 with SMTP id
+ 4fb4d7f45d1cf-6a09b1428f3mr1180287a12.16.1785518079567; Fri, 31 Jul 2026
+ 10:14:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <eb38b41ae1b3216ec69fb45555ef5df57efd7b8d.1785153469.git.hongyan.xia@transsion.com>
+References: <20260731012130.1212640-1-rosenp@gmail.com> <20260731012130.1212640-2-rosenp@gmail.com>
+ <amy5lCeSFyvmGixj@SMW015318>
+In-Reply-To: <amy5lCeSFyvmGixj@SMW015318>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Fri, 31 Jul 2026 10:14:26 -0700
+X-Gm-Features: AUfX_mzFrlXDrgTTIRJCLGV2of7qZMoZSDe2mpZqZ_ZmRsSrWJc1TipvLntE12k
+Message-ID: <CAKxU2N-dbMD-F8A16+KEkf8Hvq4=m2YO7X4jx7Q9zEfqGmbzkA@mail.gmail.com>
+Subject: Re: [PATCHv2 1/3] EDAC/fsl_ddr: use devm_platform_ioremap_resource()
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: linux-edac@vger.kernel.org, Frank Li <Frank.Li@nxp.com>, 
+	Borislav Petkov <bp@alien8.de>, Tony Luck <tony.luck@intel.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, York Sun <york.sun@nxp.com>, 
+	"open list:EDAC-FSL_DDR" <imx@lists.linux.dev>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jul 27, 2026 at 12:25:48PM +0000, Hongyan Xia wrote:
-> From: Hongyan Xia <hongyan.xia@transsion.com>
-> 
-> Static inline should be enough to actually inline functions for most
-> compilers, but my Clang-19 somehow thinks it's better to outline them.
-> These tiny helpers then live in normal .text sections instead of
-> .noinstr sections, violating noinstr.
-> 
-> Mark them __always_inline so the compiler can never outline them.
-> 
-> Signed-off-by: Hongyan Xia <hongyan.xia@transsion.com>
-> ---
->  arch/arm64/include/asm/esr.h       | 2 +-
->  arch/arm64/include/asm/percpu.h    | 2 +-
->  arch/arm64/include/asm/preempt.h   | 4 ++--
->  arch/arm64/include/asm/ptrace.h    | 4 ++--
->  arch/arm64/kernel/debug-monitors.c | 2 +-
->  include/linux/kprobes.h            | 8 ++++----
->  6 files changed, 11 insertions(+), 11 deletions(-)
-
-I think this should be split into separate patches. In particular, the
-preempt count helpers are used in mane other places than debug
-exceptions, and if those are used in noinstr code today, we need to
-backport those as fixes.
-
-Mark.
-
-> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-> index f816f5d77f1a..a75bfdb7e5fe 100644
-> --- a/arch/arm64/include/asm/esr.h
-> +++ b/arch/arm64/include/asm/esr.h
-> @@ -437,7 +437,7 @@
->  #ifndef __ASSEMBLER__
->  #include <asm/types.h>
->  
-> -static inline unsigned long esr_brk_comment(unsigned long esr)
-> +static __always_inline unsigned long esr_brk_comment(unsigned long esr)
->  {
->  	return esr & ESR_ELx_BRK64_ISS_COMMENT_MASK;
->  }
-> diff --git a/arch/arm64/include/asm/percpu.h b/arch/arm64/include/asm/percpu.h
-> index b57b2bb00967..d4cae47fde8c 100644
-> --- a/arch/arm64/include/asm/percpu.h
-> +++ b/arch/arm64/include/asm/percpu.h
-> @@ -29,7 +29,7 @@ static inline unsigned long __hyp_my_cpu_offset(void)
->  	return read_sysreg(tpidr_el2);
->  }
->  
-> -static inline unsigned long __kern_my_cpu_offset(void)
-> +static __always_inline unsigned long __kern_my_cpu_offset(void)
->  {
->  	unsigned long off;
->  
-> diff --git a/arch/arm64/include/asm/preempt.h b/arch/arm64/include/asm/preempt.h
-> index 932ea4b62042..326f221c3f56 100644
-> --- a/arch/arm64/include/asm/preempt.h
-> +++ b/arch/arm64/include/asm/preempt.h
-> @@ -41,14 +41,14 @@ static inline bool test_preempt_need_resched(void)
->  	return !current_thread_info()->preempt.need_resched;
->  }
->  
-> -static inline void __preempt_count_add(int val)
-> +static __always_inline void __preempt_count_add(int val)
->  {
->  	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
->  	pc += val;
->  	WRITE_ONCE(current_thread_info()->preempt.count, pc);
->  }
->  
-> -static inline void __preempt_count_sub(int val)
-> +static __always_inline void __preempt_count_sub(int val)
->  {
->  	u32 pc = READ_ONCE(current_thread_info()->preempt.count);
->  	pc -= val;
-> diff --git a/arch/arm64/include/asm/ptrace.h b/arch/arm64/include/asm/ptrace.h
-> index 39582511ad72..460726224299 100644
-> --- a/arch/arm64/include/asm/ptrace.h
-> +++ b/arch/arm64/include/asm/ptrace.h
-> @@ -336,11 +336,11 @@ static inline unsigned long regs_get_kernel_argument(struct pt_regs *regs,
->  struct task_struct;
->  int valid_user_regs(struct user_pt_regs *regs, struct task_struct *task);
->  
-> -static inline unsigned long instruction_pointer(struct pt_regs *regs)
-> +static __always_inline unsigned long instruction_pointer(struct pt_regs *regs)
->  {
->  	return regs->pc;
->  }
-> -static inline void instruction_pointer_set(struct pt_regs *regs,
-> +static __always_inline void instruction_pointer_set(struct pt_regs *regs,
->  		unsigned long val)
->  {
->  	regs->pc = val;
-> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
-> index a970ab6327cd..66cb8151f5df 100644
-> --- a/arch/arm64/kernel/debug-monitors.c
-> +++ b/arch/arm64/kernel/debug-monitors.c
-> @@ -146,7 +146,7 @@ postcore_initcall(debug_monitors_init);
->  /*
->   * Single step API and exception handling.
->   */
-> -static void set_user_regs_spsr_ss(struct user_pt_regs *regs)
-> +static __always_inline void set_user_regs_spsr_ss(struct user_pt_regs *regs)
->  {
->  	regs->pstate |= DBG_SPSR_SS;
->  }
-> diff --git a/include/linux/kprobes.h b/include/linux/kprobes.h
-> index 8c4f3bb24429..5880445ed0f0 100644
-> --- a/include/linux/kprobes.h
-> +++ b/include/linux/kprobes.h
-> @@ -384,17 +384,17 @@ static inline void kprobe_ftrace_kill(void) {}
->  struct kprobe *get_kprobe(void *addr);
->  
->  /* kprobe_running() will just return the current_kprobe on this CPU */
-> -static inline struct kprobe *kprobe_running(void)
-> +static __always_inline struct kprobe *kprobe_running(void)
->  {
->  	return __this_cpu_read(current_kprobe);
->  }
->  
-> -static inline void reset_current_kprobe(void)
-> +static __always_inline void reset_current_kprobe(void)
->  {
->  	__this_cpu_write(current_kprobe, NULL);
->  }
->  
-> -static inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
-> +static __always_inline struct kprobe_ctlblk *get_kprobe_ctlblk(void)
->  {
->  	return this_cpu_ptr(&kprobe_ctlblk);
->  }
-> @@ -449,7 +449,7 @@ static inline struct kprobe *get_kprobe(void *addr)
->  {
->  	return NULL;
->  }
-> -static inline struct kprobe *kprobe_running(void)
-> +static __always_inline struct kprobe *kprobe_running(void)
->  {
->  	return NULL;
->  }
-> -- 
-> 2.47.3
-> 
+On Fri, Jul 31, 2026 at 8:05=E2=80=AFAM Frank Li <Frank.li@oss.nxp.com> wro=
+te:
+>
+> On Thu, Jul 30, 2026 at 06:21:28PM -0700, Rosen Penev wrote:
+> > Replace the open-coded of_address_to_resource() plus devm_request_mem_r=
+egion()
+> > and devm_ioremap() sequence with devm_platform_ioremap_resource(), whic=
+h folds
+> > the resource lookup, region reservation and mapping into one step and r=
+eturns
+> > an ERR_PTR checked with IS_ERR()/PTR_ERR().
+> >
+> > Behaviorally equivalent with respect to region reservation: the driver
+> > already reserved the region, so the non-overlapping reg requirement was
+> > already satisfied. Drop the now-unused linux/of_address.h include.
+> >
+> > Remove devres stuff. Not needed. devm is already used.
+> >
+> > Fix a mistaken return code of -ENOMEM when PTR_ERR should be used.
+> >
+> > Assisted-by: opencode:hy3-free
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+>
+> Need change log here.
+>
+> You missed my review-by and tested-by tags. If you delete it by some reas=
+on
+> like big changes, you should said here explicit.
+I changed some stuff yeah. I had them added but removed just in case.
+>
+> Frank
+>
+> >  drivers/edac/fsl_ddr_edac.c | 39 +++++++------------------------------
+> >  1 file changed, 7 insertions(+), 32 deletions(-)
+> >
+> > diff --git a/drivers/edac/fsl_ddr_edac.c b/drivers/edac/fsl_ddr_edac.c
+> > index 2a545e5812e7..3745eec67335 100644
+> > --- a/drivers/edac/fsl_ddr_edac.c
+> > +++ b/drivers/edac/fsl_ddr_edac.c
+> > @@ -22,7 +22,6 @@
+> >  #include <linux/gfp.h>
+> >
+> >  #include <linux/of.h>
+> > -#include <linux/of_address.h>
+> >  #include "edac_module.h"
+> >  #include "fsl_ddr_edac.h"
+> >
+> > @@ -495,13 +494,14 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >       struct mem_ctl_info *mci;
+> >       struct edac_mc_layer layers[2];
+> >       struct fsl_mc_pdata *pdata;
+> > -     struct resource r;
+> > +     void __iomem *mc_vbase;
+> >       u32 ecc_en_mask;
+> >       u32 sdram_ctl;
+> >       int res;
+> >
+> > -     if (!devres_open_group(&op->dev, fsl_mc_err_probe, GFP_KERNEL))
+> > -             return -ENOMEM;
+> > +     mc_vbase =3D devm_platform_ioremap_resource(op, 0);
+> > +     if (IS_ERR(mc_vbase))
+> > +             return PTR_ERR(mc_vbase);
+> >
+> >       layers[0].type =3D EDAC_MC_LAYER_CHIP_SELECT;
+> >       layers[0].size =3D 4;
+> > @@ -511,10 +511,8 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >       layers[1].is_virt_csrow =3D false;
+> >       mci =3D edac_mc_alloc(edac_mc_idx, ARRAY_SIZE(layers), layers,
+> >                           sizeof(*pdata));
+> > -     if (!mci) {
+> > -             devres_release_group(&op->dev, fsl_mc_err_probe);
+> > +     if (!mci)
+> >               return -ENOMEM;
+> > -     }
+> >
+> >       pdata =3D mci->pvt_info;
+> >       pdata->name =3D "fsl_mc_err";
+> > @@ -531,33 +529,12 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >        * Default is big endian.
+> >        */
+> >       pdata->little_endian =3D of_property_read_bool(op->dev.of_node, "=
+little-endian");
+> > -
+> > -     res =3D of_address_to_resource(op->dev.of_node, 0, &r);
+> > -     if (res) {
+> > -             pr_err("%s: Unable to get resource for MC err regs\n",
+> > -                    __func__);
+> > -             goto err;
+> > -     }
+> > -
+> > -     if (!devm_request_mem_region(&op->dev, r.start, resource_size(&r)=
+,
+> > -                                  pdata->name)) {
+> > -             pr_err("%s: Error while requesting mem region\n",
+> > -                    __func__);
+> > -             res =3D -EBUSY;
+> > -             goto err;
+> > -     }
+> > -
+> > -     pdata->mc_vbase =3D devm_ioremap(&op->dev, r.start, resource_size=
+(&r));
+> > -     if (!pdata->mc_vbase) {
+> > -             pr_err("%s: Unable to setup MC err regs\n", __func__);
+> > -             res =3D -ENOMEM;
+> > -             goto err;
+> > -     }
+> > +     pdata->mc_vbase =3D mc_vbase;
+> >
+> >       if (pdata->flag =3D=3D TYPE_IMX9) {
+> >               pdata->inject_vbase =3D devm_platform_ioremap_resource_by=
+name(op, "inject");
+> >               if (IS_ERR(pdata->inject_vbase)) {
+> > -                     res =3D -ENOMEM;
+> > +                     res =3D PTR_ERR(pdata->inject_vbase);
+> >                       goto err;
+> >               }
+> >       }
+> > @@ -637,7 +614,6 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >                      pdata->irq);
+> >       }
+> >
+> > -     devres_remove_group(&op->dev, fsl_mc_err_probe);
+> >       edac_dbg(3, "success\n");
+> >       pr_info(EDAC_MOD_STR " MC err registered\n");
+> >
+> > @@ -646,7 +622,6 @@ int fsl_mc_err_probe(struct platform_device *op)
+> >  err2:
+> >       edac_mc_del_mc(&op->dev);
+> >  err:
+> > -     devres_release_group(&op->dev, fsl_mc_err_probe);
+> >       edac_mc_free(mci);
+> >       return res;
+> >  }
+> > --
+> > 2.55.0
+> >
+> >
