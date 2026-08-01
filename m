@@ -1,110 +1,133 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 180B1334C3D;
-	Sat,  1 Aug 2026 11:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193332D9EFB
+	for <llvm@lists.linux.dev>; Sat,  1 Aug 2026 11:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785584457; cv=none; b=XIGsvTD8BL1eZV7J/Wd7jr855lFSNrvvW01w34ECgpZqmgfvhb+PTAVBX3V2uCcxhcM9orDiLpInJcSMuLJJmTJ1b7Ns5Qb+O8dcPL3GM58a9eqTGjQlmKjGlGBzIKyU/uNWQmD8jtXSPP9AaNNzhBn5zS+W2Oih1gym8c8tABU=
+	t=1785584963; cv=none; b=czt3Ivxv8cmrl69RshL3BmOcRUWSbxgEZB08HDNJykhXZ3m2Kv8OGR7PgDls4P8Y0GiF0PVJByGJKuRhuw7DKOrkz7HWaIOVhuheireKVgOzBSS+3pll2V3p301XiFP2LqFeVCVgpn+6FSnKm0kY0jAErUEafnCSGY4+EeZ3Rok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785584457; c=relaxed/simple;
-	bh=AA9FQCSt4p0BHZOR/V4hAOOh6rmg/5ju1gxJfMHHjiA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=rBvUiw4ZPQk6d4zBs4IEX7aHcOspPvEhXW5mJtzTknOgFFoEIjdztUQkSJ0u802XgHm4OK1i6g6D+v1KxBBS9bi/ilR5JAdpnnXbDdqXMx1e0JWPx2crPQT4u4HvfVe56fraEhXj4P0oMV1jmbix7EiAphcIFqHP16n42YWQnQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VBt77f4Q; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785584963; c=relaxed/simple;
+	bh=4yyAcVknUicAHnNFBh0eMnF/hJea/MMAc1JgVYj7fY8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KO1dnQOfMmt6ScMvgh34yLfictUhnpqVjzo2nJ3zSf3cjDzz53ImVD/NPJoslLzzSSJP6aXPUhn/6uAiv0kBBk2ScIFP1vquOjPtU3tUpMB1b7+n2oGcSUWWm9tPTmmTzb0sO/sSg0o1Baz0iPaY46WlGNUtOP2302BoMbSt9HA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cse.iitm.ac.in; spf=pass smtp.mailfrom=cse.iitm.ac.in; dkim=pass (2048-bit key) header.d=cse-iitm-ac-in.20251104.gappssmtp.com header.i=@cse-iitm-ac-in.20251104.gappssmtp.com header.b=Jr0vwBGg; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cse.iitm.ac.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cse.iitm.ac.in
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VBt77f4Q"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785584456; x=1817120456;
-  h=date:from:to:cc:subject:message-id;
-  bh=AA9FQCSt4p0BHZOR/V4hAOOh6rmg/5ju1gxJfMHHjiA=;
-  b=VBt77f4Q0tsgZe2Cfreb7JwaLHrU+3HyTsXXVVWMPU/xU+ArSN93NbD7
-   W6vEUtCPa2GOTUM3MKpo1xnrwp1YRMQqq/xJjYnBT5KqOwLo/CJc858Kh
-   9dWrnfnev+aIbWnKwluoZVJ3hB8lpTNuY1v8YqIyxmQGKmHhf4G6Kftak
-   fG8RxhuFri3W/xH2pVO9zARHyEACNDCyXgneaoW3IUIMoltB1L3AfhMFF
-   X8ioiPXAa85NXol4tqmum+Gk92PVPjOgQZAV4SEOXC+4BlJ1CGkRhbggs
-   annCqUobuRZ6ngdbyLkUPOhvUec0QsTSdAtoAyO/AkvdcFLYH1QmY6Wu3
-   Q==;
-X-CSE-ConnectionGUID: PpMfjWcORYOpHoFklYtGjQ==
-X-CSE-MsgGUID: Zoypy3JrRxi7BHRX4j5N7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11861"; a="97711914"
-X-IronPort-AV: E=Sophos;i="6.25,198,1779174000"; 
-   d="scan'208";a="97711914"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Aug 2026 04:40:55 -0700
-X-CSE-ConnectionGUID: G/6YLXYQR6G7R3DW2TcQrA==
-X-CSE-MsgGUID: o8u4TBmvSmi+b8ZXQ4lwdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,198,1779174000"; 
-   d="scan'208";a="256891916"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 01 Aug 2026 04:40:53 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wq85C-000000003Ff-0XQm;
-	Sat, 01 Aug 2026 11:40:50 +0000
-Date: Sat, 01 Aug 2026 19:39:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>
-Subject: ld.lld: error: undefined symbol:
- __kcfi_typeid_aria_aesni_avx_encrypt_16way
-Message-ID: <202608011933.kBOt88Q2-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=cse-iitm-ac-in.20251104.gappssmtp.com header.i=@cse-iitm-ac-in.20251104.gappssmtp.com header.b="Jr0vwBGg"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2caced6038eso18657965ad.0
+        for <llvm@lists.linux.dev>; Sat, 01 Aug 2026 04:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cse-iitm-ac-in.20251104.gappssmtp.com; s=20251104; t=1785584960; x=1786189760; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Y/htim8H+8x9oNbHl26vDUAIesN+LBlNBvkdejEDGrc=;
+        b=Jr0vwBGgAy0hXzHBkMxJqKNrGUEu741yVOi0uoxu56gL4j4ssNGsIDChQSuDhNmrlH
+         Y090aSNmEhvEE5J5cDOM/v+LVv6lhYuYaUcgYREMP0qN9vz4M/9gi80ce0JN0K52D3uB
+         YlIfpLhmHT2UDHo6WN2AvKSi0kTh5qbJddQe15wjSOJ/khqEEX+1wJp2NTsNCc0jzGhS
+         MAOsKCI6+7trGrHEJJHvFsHwBC9ADojzWiE2n3QuHiGLwtlYa9aidmxwIQlz0YjeOiUy
+         UOZ8I3tpxITlck6joU2l1ii9FieRPs9NgA9dzWt/1mB445qL1UbR2QD6Rn0OviHssnS4
+         mWEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785584960; x=1786189760;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Y/htim8H+8x9oNbHl26vDUAIesN+LBlNBvkdejEDGrc=;
+        b=IV3Nv1CAu4O1TloROSv8/yl6t1ws+18gA5VCG1B4Sc0IU7tmfK/istDo3dzXX++v7M
+         GwX0IrFq9GB529mfz7vkSgrS1cDy738p/ufojzIEeI35fwQWbVHjijuyGA2/Jy2ftuRZ
+         mO2yvl8fGG6JXRhgxWs6QJPr90QB7E0yazUb3s09kDcsi+tJuMYOQWQwxGf2L6TdYAXl
+         edLz5w4SD3NdRS5TvEpC8PLZt6BGlIcF/yO+UTnDaes5vqZ3l1rfXA/D+QUIvrRD46b4
+         BYcC4iNmuZ/IvHrsTGvLHyICU2hY3VqQNuXStwF54LnmeFLETVGI+KGaUnjuivtc/5Wf
+         /npQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr1MhLIH0Bhq0zWPvttnJEqopZjJgXi79TZL/0H3j97mzruRWMDFNhb8CZ/DPOQ89cOuGqJ@lists.linux.dev
+X-Gm-Message-State: AOJu0YzHF4fyRjmCbBIcwaFUWfBbTEt9w69tm0f8mrHt58ajNF9WrtNk
+	xPFEtddYlbHcuW2qTqVLtlROAZcwG3zuggQ/L22SKWe4YHvU4KL9E4+9AskzWUSbF84=
+X-Gm-Gg: AR+sD10suG3svVNMDIDDSE1pay7nulDmn7JsTKeJAUeJsjloz+EA00KGH/eW0dDzR/Q
+	jjJRBa/JpQv6aT0bLvhIqxqiHGolcqctMomcSkad37+6SsQ0eEcyeMNrPn5I+u5xkNkKl/sPV7O
+	2fK3FUBg+H/EpJTkd84Kf5hS3v8HLvigRy1Mnmesok5EJMRVKpa0N0DdPEEje7RHsbded1WzrVD
+	LrC9r1f4zlslaFM52nMHnpwpYfZEIh9OpUjtkflGPUugoGa4tHr+1y/6wFgN7vz5+tLmgMr/bbT
+	msWCWZRQw4Dbu5QHpd2HgVHYm3QqHR/FH9Z5Gyj+6GqGRA3SpIqK/dOWu7f8TXKi2Ijqh/1MP3c
+	9bD9yqUPnHceLdgRaIU6U21RERUTx+8yr8B1Q4+3Dij+vuJR83sjty8IMq/MnfBR29lf+71SBpp
+	/jyG5yGZt6gxq/FmE+7/tiKfcZ6NtzGk42Opv61buxnDVyx1vfKNv/d2qrChN/TS8SIk4uN6MLj
+	DVbe6jRY04rJYiZngctJcm1FD0JkTjHKDoIbxG/wwEzZAX6gclaubx3CHeQWxagXIOuzfCUfPeP
+	KgwWLb8k3ROWU8M=
+X-Received: by 2002:a17:903:350f:b0:2cf:461a:3863 with SMTP id d9443c01a7336-2d047e6fe24mr51267725ad.22.1785584960370;
+        Sat, 01 Aug 2026 04:49:20 -0700 (PDT)
+Received: from Metius.iitm.ac.in ([103.158.43.43])
+        by smtp.googlemail.com with ESMTPSA id 5a478bee46e88-3153e06f8dbsm16967624eec.22.2026.08.01.04.49.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 01 Aug 2026 04:49:19 -0700 (PDT)
+From: Abdun Nihaal <nihaal@cse.iitm.ac.in>
+To: jjohnson@kernel.org
+Cc: Abdun Nihaal <nihaal@cse.iitm.ac.in>,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	linux-wireless@vger.kernel.org,
+	ath11k@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	baochen.qiang@oss.qualcomm.com,
+	stable@vger.kernel.org
+Subject: [PATCH v2] wifi: ath11k: Fix possible memory leak in ath11k_dp_srng_setup()
+Date: Sat,  1 Aug 2026 17:19:09 +0530
+Message-ID: <20260801114911.91483-1-nihaal@cse.iitm.ac.in>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Kees,
+In ath11k_dp_srng_setup(), the memory allocated for
+ring->vaddr_unaligned is not freed in the error paths that follow.
+Fix that by calling ath11k_dp_srng_cleanup() in those error paths.
 
-FYI, the error/warning still remains.
+Compile tested only. Issue found using a prototype static analysis tool
+built on the LLVM compiler infrastructure.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   8ba098e6b6ff0db8edf28528d1552be261af30d4
-commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-date:   10 months ago
-config: x86_64-randconfig-011-20260731 (https://download.01.org/0day-ci/archive/20260801/202608011933.kBOt88Q2-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260801/202608011933.kBOt88Q2-lkp@intel.com/reproduce)
+Fixes: d5c65159f289 ("ath11k: driver for Qualcomm IEEE 802.11ax devices")
+Cc: stable@vger.kernel.org
+Assisted-by: Claude:claude-sonnet-4-6
+Reviewed-by: Baochen Qiang <baochen.qiang@oss.qualcomm.com>
+Signed-off-by: Abdun Nihaal <nihaal@cse.iitm.ac.in>
+---
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: 23ef9d439769 ("kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608011933.kBOt88Q2-lkp@intel.com/
+v1->v2:
+- Moved the information about compile testing, and how the issue was
+  detected to the commit message, as suggested by Baochen Qiang.
+- Add the release function in the switch default case as well, as
+  pointed out by Jeff Johnson. Also add Assisted-by tag.
 
-All errors (new ones prefixed by >>):
+v1 link: https://patchwork.kernel.org/project/linux-wireless/patch/20260727105532.118164-1-nihaal@cse.iitm.ac.in/
 
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_encrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:970 (arch/x86/crypto/aria-aesni-avx-asm_64.S:970)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_encrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_decrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:995 (arch/x86/crypto/aria-aesni-avx-asm_64.S:995)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_decrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_ctr_crypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1096 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1096)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_ctr_crypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_encrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1266 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1266)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_encrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_decrypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1291 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1291)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_decrypt_16way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx_gfni_ctr_crypt_16way
-   >>> referenced by aria-aesni-avx-asm_64.S:1316 (arch/x86/crypto/aria-aesni-avx-asm_64.S:1316)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx_gfni_ctr_crypt_16way)
+ drivers/net/wireless/ath/ath11k/dp.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/drivers/net/wireless/ath/ath11k/dp.c b/drivers/net/wireless/ath/ath11k/dp.c
+index f389b97acbdd..be65d73b904b 100644
+--- a/drivers/net/wireless/ath/ath11k/dp.c
++++ b/drivers/net/wireless/ath/ath11k/dp.c
+@@ -313,6 +313,7 @@ int ath11k_dp_srng_setup(struct ath11k_base *ab, struct dp_srng *ring,
+ 	case HAL_RXDMA_DIR_BUF:
+ 		break;
+ 	default:
++		ath11k_dp_srng_cleanup(ab, ring);
+ 		ath11k_warn(ab, "Not a valid ring type in dp :%d\n", type);
+ 		return -EINVAL;
+ 	}
+@@ -324,6 +325,7 @@ int ath11k_dp_srng_setup(struct ath11k_base *ab, struct dp_srng *ring,
+ 
+ 	ret = ath11k_hal_srng_setup(ab, type, ring_num, mac_id, &params);
+ 	if (ret < 0) {
++		ath11k_dp_srng_cleanup(ab, ring);
+ 		ath11k_warn(ab, "failed to setup srng: %d ring_id %d\n",
+ 			    ret, ring_num);
+ 		return ret;
+-- 
+2.43.0
+
