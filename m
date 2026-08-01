@@ -1,154 +1,96 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2986357D1E
-	for <llvm@lists.linux.dev>; Sat,  1 Aug 2026 05:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFDAF2EEE67
+	for <llvm@lists.linux.dev>; Sat,  1 Aug 2026 07:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785563739; cv=none; b=EzbBs5218jUU2bKndlps5oWU2UYnnLdVWwaDWN1T8L4f+FDk/8HUqg9GPX65U7DrIvS+dMohXun9b7+WAcrvt8aT6fQrdmlzY1UmrZ8UphRicbjaAkYUgO+Cg8yfwlwPCx1vgLoTwFYZYnkL1zJbSMXjSNOlt7DvAIfdI6AIal0=
+	t=1785570132; cv=none; b=fOZaK5KSriYKaiH3QNe/pRamTzyAHcqUsf9+kl6ohG3wzGGA1ngJsjV604EsfcdST/tKxKzhrJMMuGVX3gBCX7VJTjl9UQvnOLcsrYnYbYLWejl75GCJVPdSjQQVsQbRKx0YxjXWkiO90lvWUz6WIik5Mvo3sQUPTwvB9Zkmx6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785563739; c=relaxed/simple;
-	bh=ZHdedNPcudEcVol+83qSYMha4eWY9xZ3jg45Y9HOidY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CBGY9z/fexErcItCBItH2vqBPE/Okqc/3DyP0kMbaxxSHQNrS495fsgTvHCwrlRThtJ5D5km5h0+D5dlQCYnuSRLa4USyo68S2xliLJHBUhavfH6Ds5hxKamg1mLTGIK3zxscrQldrN3ZiN9vWhNNkdGrJvd5v9Nf1336EmJscA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cse.iitm.ac.in; spf=pass smtp.mailfrom=cse.iitm.ac.in; dkim=pass (2048-bit key) header.d=cse-iitm-ac-in.20251104.gappssmtp.com header.i=@cse-iitm-ac-in.20251104.gappssmtp.com header.b=oZaMH4f1; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cse.iitm.ac.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cse.iitm.ac.in
+	s=arc-20240116; t=1785570132; c=relaxed/simple;
+	bh=JYG1PG7selSbAn7fR2Y+hdSlJPpjs8qqAMBVwKsHfUw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=KwhSHcf9uV0RgwS3PzGvDuHzYaGZ9ev17sIbAKKXqdKTiFke29S9pVbSNqbNAcBUsSbCiCMCshYq2jo3DmiQ/33D9oOdW0htqedgbJy5+S5jEXUJ26Efd13j8TO21llSZCkTwApvxArvj0ChPtV+jfLvwWwQXpwqZo1lyATCqpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Yc/5BG53; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cse-iitm-ac-in.20251104.gappssmtp.com header.i=@cse-iitm-ac-in.20251104.gappssmtp.com header.b="oZaMH4f1"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so1621819a91.0
-        for <llvm@lists.linux.dev>; Fri, 31 Jul 2026 22:55:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cse-iitm-ac-in.20251104.gappssmtp.com; s=20251104; t=1785563735; x=1786168535; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=d0YoODerQIzEOVN20KJQiVnY06JcnNCgCt2bly7t1Fo=;
-        b=oZaMH4f1H0RmKvHdO5SZwgSwHvpajrX8eRWAqNzY/dFSOkZdEHO0u06V3iwnRpmUYO
-         DNat82gOerlRMenGClNHng/U+YpXJyEbIWcO0w9LMz2Nnqyb2nWDQuLnhgbZvsCM3JnX
-         Er86Hf78INk/KKxNHPLB0HbrefnrD3V8Ijq/rjIVpTGS7oXzHIA0CFztIB10971BcbDF
-         rBSPGC+Xwz0UvuMfwubonbN7/WQYhXIIfX2m1FswbjY0xMq+qio1Tx3s8jozyPnMrMqJ
-         OcVhgiLGRcWuq45mrjoje4+LB0T0LXHlOFFu/APkoGSStfkuZUX2+Wa5iIujxqpHB7dA
-         +FsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785563735; x=1786168535;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=d0YoODerQIzEOVN20KJQiVnY06JcnNCgCt2bly7t1Fo=;
-        b=OQhvnh7XprcccZFy3e9+vCwB/D+2+Vd+G5K3afXGdsOxFrsp7iCWQ9xRJeoWLFvL6w
-         jomcEXZ3xn2aSvaRyzqxz8FCMuW9TnSDMaa7hU5tpcDLjzthUWfCtc0beRgtD6RDiq9a
-         N7tvMYBFsL3BYbwfzkHfi6yNY08tSrjmlyksaAhuSukIFyVg8wmUY1INQ0FHGuPdPt6N
-         LzvnQLOyKeuMGFBgK6UhHfDf2poyU1ZjDGYAGuZBn5KDzceGss3DqxAWJ/IdZvX9GjFO
-         U6e4TzzkKbeTKxK0kf21CwXtgR3VwgTy3VgeTIU3aKVSVg2R2oXibJJ4/jmfsgLB3mnK
-         EIQg==
-X-Forwarded-Encrypted: i=1; AHgh+RrAtcEen3aiGOWugoCBrMex8pzEyJRRqfz0X4ByYGie9XMCrnOeOTUzzza4fp0YzL+9aE1C@lists.linux.dev
-X-Gm-Message-State: AOJu0YzlwFBhU5+QeM6pYDPbrUpI29w05ceSZpC4Lvm+mNJkzRTALTV7
-	ppJ6HwNTbqbONnAhLlX1mxuzosI/ZXEpa7Iypj9tGEX/L24Mb8XEE236Z8ZB0I3X5Ts=
-X-Gm-Gg: AR+sD10xfRPwpxRzOOwZ2N1pn3/5QxNwxxO0YTxmMqn2bvfOz/XB6jdp9K+f7Oif38I
-	W6tOt04or6osPDWPqX2EvUa/913c0Z3jPz5JAIVqzRjDr7HnCsL9hvjE1oCPhbPGfwWEbu82dmx
-	ST2fH9qMboiFardGWhUj/3Goy27u7j2bmu17SMArSLz3XlFIYfsiYWQiv64erZ7ZtkVBBaA0td4
-	k/6mczno6i7qKjG9m4wkt4fa0IYcRYkIh3t47dfWya3NMzlCiuGIIPMjL5JyYVlhiTt5xD2Oe3e
-	O4/sDvZIjCqqEaMuT3PngCt/KsNvEI1unZlR90jPrBc6Af4LPW8v8gdsMNVVGqZMH05NiaIEOMW
-	IFFdlQKDndV9vhA8kTG0MnstbXJXwMwPj2+v2mdhNX7JhK3LHtNsHMCArw6EZfXRPHXrMDipV3f
-	QMoK1MKSUTtMODQOZwfMKd9fsweNV/NbJCFvTGZTm5Ym/qby3crDmX6eE2iwAb3VKW2CAg4dHlL
-	iDhIV5+Jd7wOdBA9s3z1dcjID2c/FSWDtMj1w9yOQllOaQFS4eYGpKbo1JYSovnIk3c0D6BwQzQ
-	s61XxXVFi4ew2cU=
-X-Received: by 2002:a05:6a21:9995:b0:3c3:b4e8:5565 with SMTP id adf61e73a8af0-3c92a8f301emr2512911637.61.1785563735027;
-        Fri, 31 Jul 2026 22:55:35 -0700 (PDT)
-Received: from Metius.iitm.ac.in ([103.158.43.43])
-        by smtp.googlemail.com with ESMTPSA id a92af1059eb24-13fab050d8csm16502537c88.0.2026.07.31.22.55.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jul 2026 22:55:34 -0700 (PDT)
-From: Abdun Nihaal <nihaal@cse.iitm.ac.in>
-To: Steen.Hegelund@microchip.com
-Cc: Abdun Nihaal <nihaal@cse.iitm.ac.in>,
-	daniel.machon@microchip.com,
-	UNGLinuxDriver@microchip.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	joe@dama.to,
-	horatiu.vultur@microchip.com,
-	stable@vger.kernel.org
-Subject: [PATCH v3 net] net: microchip: vcap api: Fix possible memory leak in vcap_decode_rule()
-Date: Sat,  1 Aug 2026 11:25:05 +0530
-Message-ID: <20260801055507.47534-1-nihaal@cse.iitm.ac.in>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Yc/5BG53"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785570129;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=H6k79NgEB8rF52Msnkd8utk5z9mCgtlh6bGGJsv9x2s=;
+	b=Yc/5BG53yPu1bNfnSt66b/c4Ysq+PTwbPnQcu7188bqPNY10Lmd4PjG1SRVyvbKs+uaNmo
+	MgOi06d8jThKvxXd7UdtLeF215V0ynHFYfk48BPC/y0nZ08u/Jy/fFqBGUthQP1gV/bNLD
+	8C4MILdJGjqIl5OZcc5iVwQOXMSRtkY=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-620-GSZh8XFYMqyNtVcsPB2GCw-1; Sat,
+ 01 Aug 2026 03:42:08 -0400
+X-MC-Unique: GSZh8XFYMqyNtVcsPB2GCw-1
+X-Mimecast-MFC-AGG-ID: GSZh8XFYMqyNtVcsPB2GCw_1785570127
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 57910180049F
+	for <llvm@lists.linux.dev>; Sat,  1 Aug 2026 07:42:07 +0000 (UTC)
+Received: from [172.20.35.218] (unknown [10.30.44.80])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 0A4B5180044F;
+	Sat,  1 Aug 2026 07:42:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.2.0-rc5,
+ upstream-mainline, 02dc699f)
+Date: Sat, 01 Aug 2026 07:42:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <70303.126080103420800223@us-mta-620.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: rpRSubsMapy93BoMboOuuXvxFJ1Exf2Te8Ohkp1rnxU_1785570127
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-The memory allocated for struct vcap_rule_internal, keyfields and
-actionfields inside vcap_dup_rule() are not freed in some of the error
-paths in vcap_decode_rule(). Fix that by calling vcap_free_rule().
+Hi, we tested your kernel and here are the results:
 
-Compile tested only. Issue found using a prototype static analysis tool
-built on top of the LLVM compiler infrastructure.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-Fixes: 610c32b2ce66 ("net: microchip: vcap: Add vcap_get_rule")
-Cc: stable@vger.kernel.org
-Reviewed-by: Joe Damato <joe@dama.to>
-Signed-off-by: Abdun Nihaal <nihaal@cse.iitm.ac.in>
----
+Tested-by: CKI Project <cki-project@redhat.com>
 
-v2->v3:
-- Rename the error label to "err_free_rule" to denote the first action
-  being undone, as suggested by Jakub Kicinski
-- Move the information about compile tested only, and how the issue was
-  found to the commit message, as suggested by Jakub Kicinski.
+Kernel information:
+    Commit message: Merge tag 'kbuild-fixes-7.2-1' of git://git.kernel.org/=
+pub/scm/linux/kernel/git/kbuild/linux
 
-v1->v2:
-- Convert the error labels from "err" to "out_err" to avoid confusion
-  with the err variable, as suggested by Joe Damato.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2723406636
 
-Link to v1: https://patchwork.kernel.org/project/netdevbpf/patch/20260727125757.134611-1-nihaal@cse.iitm.ac.in/
-Link to v2: https://patchwork.kernel.org/project/netdevbpf/patch/20260728114253.196398-1-nihaal@cse.iitm.ac.in/
 
- drivers/net/ethernet/microchip/vcap/vcap_api.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-diff --git a/drivers/net/ethernet/microchip/vcap/vcap_api.c b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-index ff86cde11a32..788c0728d763 100644
---- a/drivers/net/ethernet/microchip/vcap/vcap_api.c
-+++ b/drivers/net/ethernet/microchip/vcap/vcap_api.c
-@@ -2427,18 +2427,21 @@ struct vcap_rule *vcap_decode_rule(struct vcap_rule_internal *elem)
- 
- 	err = vcap_read_rule(ri);
- 	if (err)
--		return ERR_PTR(err);
-+		goto err_free_rule;
- 
- 	err = vcap_decode_keyset(ri);
- 	if (err)
--		return ERR_PTR(err);
-+		goto err_free_rule;
- 
- 	err = vcap_decode_actionset(ri);
- 	if (err)
--		return ERR_PTR(err);
-+		goto err_free_rule;
- 
- out:
- 	return &ri->data;
-+err_free_rule:
-+	vcap_free_rule(&ri->data);
-+	return ERR_PTR(err);
- }
- 
- struct vcap_rule *vcap_get_rule(struct vcap_control *vctrl, u32 id)
--- 
-2.43.0
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
