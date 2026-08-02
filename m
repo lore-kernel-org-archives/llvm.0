@@ -1,87 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32466390C9F;
-	Sun,  2 Aug 2026 13:10:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8861C2F7F1B
+	for <llvm@lists.linux.dev>; Sun,  2 Aug 2026 17:43:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785676218; cv=none; b=K4OebugGlzAcsixyiDeQvM2HlAD0RK39NrNdvQoAxPp/KnFcYwYYVhtNI0QHJ3rDHCXlpGbnVMjcSrHLwYqzukxgp6YPVrkeDJsLTM4U7dj1zmXFwIj36EVvx4qWjeJWEmT7aqqYo4UgLwIPFU/pt/Twkw11nRVLdJOCqNjmeUA=
+	t=1785692628; cv=none; b=UJvRJt0VSoAsREgj5qVbM5SSaUgq/2Y/RoGm4zMfR8750PlXMQBAAnTgkKtLed6Xe2roTQfGcOakZllm+SpzC/UKEHHxuY+/FJfvGBXu8wuFMfxWZg4veV2QXNytGyuS7DF0qd3Lj6vcQG2glKVc6yy6FSxI+EibTa3LO2hlKMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785676218; c=relaxed/simple;
-	bh=dOmWWZU4fycx5LEu6cAES1j5A+llF3/UCUS+TWvYGS4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Jqkuj0vXm11PZTgTYvaqiSx+JvgNxTrAKat+E3n6L4zHN7wWu0w/vq9MCkHSgo5ZIGgKUzPyyV89UJMStubUGFMAKyqc+Ectv/JsTKPTeI4ePoSFX6KvB4gaM5RaFKesFQJGg6bpp1dII8U8MUbi3zx/HyXlgZ3iay7Or6+GetI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=afj0bou9; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="afj0bou9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785676217; x=1817212217;
-  h=date:from:to:cc:subject:message-id;
-  bh=dOmWWZU4fycx5LEu6cAES1j5A+llF3/UCUS+TWvYGS4=;
-  b=afj0bou9LKHgNLy4qkn86BgOz+hyX7rdXY/YbxeobE/RkD91v2z6MnUX
-   PMED+tIUywCQpc84DRM+3UeNApg66OjT4TSEhyVSvmj2HbfrfW7jDgF/g
-   UujWDakBbPk5R+o9/9a9t4QZkdZNJwAKzBc66fIOo2Mn63eRFQlN2JO0P
-   541DHG2fkvzhvVGmThUC8+50lsocExdvB7w371ki699fcwT7GB+dAj3Bk
-   QW9wdAZx70Pu1bG24VnON99q7sZ66p+6BqppC58XJ+OrmOqu0ZG26shdY
-   mPC5RU0J354XUym5t6mATqVhGFnDXHWws93aePhAJwGWunJ7sFTqS6bRx
-   Q==;
-X-CSE-ConnectionGUID: vza+ofh2TiKRRdAWuF1EsA==
-X-CSE-MsgGUID: hkhj+w5CTqKTKduAOkQuow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11863"; a="97393500"
-X-IronPort-AV: E=Sophos;i="6.25,200,1779174000"; 
-   d="scan'208";a="97393500"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2026 06:10:16 -0700
-X-CSE-ConnectionGUID: dsjBPrdbRaqwZsnH4rHQ5w==
-X-CSE-MsgGUID: ZYfqTI6FTw6KNJvvpVypKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,200,1779174000"; 
-   d="scan'208";a="259760427"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
-  by orviesa010.jf.intel.com with ESMTP; 02 Aug 2026 06:10:14 -0700
-Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wqVxD-000000003fy-0cgl;
-	Sun, 02 Aug 2026 13:10:11 +0000
-Date: Sun, 02 Aug 2026 15:09:29 +0200
-From: kernel test robot <lkp@intel.com>
-To: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>, Jared White <jaredwhite@microsoft.com>
-Subject: ld.lld: error: undefined symbol: __start_bss_decrypted_gap
-Message-ID: <202608021528.lNFgGeHY-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1785692628; c=relaxed/simple;
+	bh=2PdofMD4taq71C6oaKIJKrYG+dAb9Plu331zoDvQ0os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HaCCC0po3CEJ55VMPcJ3fjH4vqp4VUuJGk5SmOsfMb9XZVYIr9kZbG4stS3jmburWeSJZA/kV8vJ01XOwEBG/IGuie1pvhQlwWuIu4UvxEWz02162S2NuTYQeJwjYbwMcvc2yYim4A7N0P/vwrYG8SisP6UI/Cm33jdt02u8F1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maskray.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maskray.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso26991935ad.1
+        for <llvm@lists.linux.dev>; Sun, 02 Aug 2026 10:43:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785692627; x=1786297427;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=BFKIp+dilVhwH1i5aZzLKKk+gBZw8/UsY/+UeYQbT7Y=;
+        b=N66Kxk0tDVOHV0gGqrv5tVMyhD1nQRmd6GK7q5cm4lYIS4NcENBMy4zCMdNoDYqzi9
+         86TEEUrLeoxQ/Et5i6u5Xtx7LopWkbq8bFa2gLder6cyMq4DWwc/D8PpVV7QlSYhiBTX
+         NLXdrgqKF+ISX7WOLUNHrCFiRz1n2I5htKF5ubNh+lRY76IxMNBGMk2Vc8KDQ7cmlw6a
+         2CJvxzhkbGe/ISrPL0e+p0mOmDBfRmp+dKS+EwE/rHSr3dHJBq9LLbNKJh4CN6xoF1QP
+         Vf5unCC9muCh5WH4o+w6Wk3xNESZWs9yVn2DCrU4SGS4o8dhwvHVu5BK8O8HMd6TOluM
+         oaNA==
+X-Forwarded-Encrypted: i=1; AHgh+Rpu3Tlq8aKYo1Si52MK3RprVPwRYp6b/FYxTyz47OhktoS1qMztTLyX0lFdRspxfNAVRKo/@lists.linux.dev
+X-Gm-Message-State: AOJu0YyN7cblq2ohi92pG8LeXgHDxg/dJuxsOtDOHO9APqhO3dSOcevB
+	kwZqgbBY9udurb+myw04hPo1K3O8TwzZJE5pYrZjwQ9eR9hiCY2woUs3
+X-Gm-Gg: AR+sD13++g8A3YEH8+gSuOyNLdBdTPeObXnYym5j3UCeMK/p0cVh9QoGmIWYrbiZi29
+	KRLL6YLS6pgjd52pP9R/adWxMi64rLAfO4Rxu6A2J0ujUtyLHN+a+LRkktZXyNkqDY1jO51Ow4P
+	9qZys7+nDpMRR5muXBouUIhYkW4co1ZrsWW/t/EN3kYy7eR4ba6D9xVSBU5eRIDecKF/9RqmuxF
+	z8Y8i9HAVEyjrMkSn6nTklucr+mvfYnbh8NhkFBAoT6OGnSYh8U1OkdikXJFaTcXiuRw9oXgfn/
+	5+H/GrMkB7GvWF1UHaMmZc+XlVubINGB47nW7jHsjqdeCSsVgOODnCAWNX28IAvXve/MCJbS1z2
+	d7xJo1XoaH1XAZ62s9dYghkfW//9lkRwQzwcIXvPo2Hu52GUTzdXy2pijEusTSfMPVtkvb92R3b
+	KrqWmn2c2naLcFe2NapUbw+HxGrA+PuLFH2csxKoAfeof0lw30m93sBvI072HlBSf7l2xBtmGlc
+	geVpbgLPUG8IklOiiUE0JTvjgxCZ9uxHJvPzyFTiInbOFka
+X-Received: by 2002:a17:903:390b:b0:2cf:bfbb:61e2 with SMTP id d9443c01a7336-2d0524723b8mr69480925ad.39.1785692626770;
+        Sun, 02 Aug 2026 10:43:46 -0700 (PDT)
+Received: from localhost (37-72-172-174.static.hvvc.us. [37.72.172.174])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3153e06f88fsm28231366eec.20.2026.08.02.10.43.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Aug 2026 10:43:46 -0700 (PDT)
+From: Fangrui Song <i@maskray.me>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: K Prateek Nayak <kprateek.nayak@amd.com>,
+	Guo Ren <guoren@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Charlie Jenkins <thecharlesjenkins@gmail.com>,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Fangrui Song <i@maskray.me>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] riscv/runtime-const: Disable linker relaxation for RUNTIME_MAGIC
+Date: Sun,  2 Aug 2026 10:43:42 -0700
+Message-ID: <20260802174342.597092-1-i@maskray.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Hamza-Mahfooz/x86-mm-64-free-the-gap-between-BSS_MAIN-and-BSS_DECRYPTED/20260731-173801
-head:   ddb58c4e7a281dab36ea61d09c54c5564f46265b
-commit: ddb58c4e7a281dab36ea61d09c54c5564f46265b x86/mm/64: free the gap between BSS_MAIN and BSS_DECRYPTED
-date:   2 days ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260802/202608021528.lNFgGeHY-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260802/202608021528.lNFgGeHY-lkp@intel.com/reproduce)
+Commit ee10b1028129 ("riscv/runtime-const: Replace open-coded
+placeholder with RUNTIME_MAGIC") switched the lui + addi[w] placeholder
+from hand-encoded immediates to %hi()/%lo() of RUNTIME_MAGIC.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608021528.lNFgGeHY-lkp@intel.com/
+GNU Assembler folds %hi()/%lo() of an absolute expression at assembly
+time. LLVM's integrated assembler since 21.1 defers it to the linker
+instead, which range checks it: on riscv64 R_RISCV_HI20 must fit a
+signed 20-bit field, and RUNTIME_MAGIC (0x89ABCDEF) is a positive 64-bit
+value rather than a sign-extended 32-bit one, so it does not:
 
-All errors (new ones prefixed by >>):
+    ld.lld: error: relocation R_RISCV_HI20 out of range: 563901 is not in
+    [-524288, 524287]
 
->> ld.lld: error: undefined symbol: __start_bss_decrypted_gap
-   >>> referenced by init_64.c:0 (arch/x86/mm/init_64.c:0)
-   >>>               vmlinux.o:(mark_rodata_ro)
---
->> ld.lld: error: undefined symbol: __start_bss_decrypted
-   >>> referenced by init_64.c:0 (arch/x86/mm/init_64.c:0)
-   >>>               vmlinux.o:(mark_rodata_ro)
+The sequence is patched at runtime and its instruction offsets are
+recorded via ".long 1b - .", so the linker must not touch it in the
+first place. Add ".option norelax", as is already done for
+ALTERNATIVE() and static keys; the integrated assembler then resolves
+%hi()/%lo() itself and emits no relocation, restoring the exact
+encoding the open-coded placeholder produced.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Fixes: ee10b1028129 ("riscv/runtime-const: Replace open-coded placeholder with RUNTIME_MAGIC")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2179
+Signed-off-by: Fangrui Song <i@maskray.me>
+---
+Applies to tip/locking/core; the RISC-V tree (riscv/linux.git) does not
+carry ee10b1028129.
+
+ arch/riscv/include/asm/runtime-const.h | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/riscv/include/asm/runtime-const.h b/arch/riscv/include/asm/runtime-const.h
+index a472ebbf0971..ce2008bb5227 100644
+--- a/arch/riscv/include/asm/runtime-const.h
++++ b/arch/riscv/include/asm/runtime-const.h
+@@ -23,6 +23,7 @@
+ 	typeof(sym) __ret;						\
+ 	asm_inline(".option push\n\t"					\
+ 		".option norvc\n\t"					\
++		".option norelax\n\t"					\
+ 		"1:\t"							\
+ 		"lui	%[__ret], %%hi(" RUNTIME_MAGIC ")\n\t"		\
+ 		"addi	%[__ret],%[__ret], %%lo(" RUNTIME_MAGIC ")\n\t"	\
+@@ -47,6 +48,7 @@
+ #define RISCV_RUNTIME_CONST_64_PREAMBLE				\
+ 	".option push\n\t"					\
+ 	".option norvc\n\t"					\
++	".option norelax\n\t"					\
+ 	"1:\t"							\
+ 	"lui	%[__ret], %%hi(" RUNTIME_MAGIC ")\n\t"		\
+ 	"lui	%[__tmp], %%hi(" RUNTIME_MAGIC ")\n\t"		\
+
+base-commit: 5e601ab3615c86be7c4068ce992f94654693a032
+-- 
+2.43.0
+
