@@ -1,134 +1,98 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548C942EEDA;
-	Mon,  3 Aug 2026 18:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66F7E3A641F;
+	Mon,  3 Aug 2026 19:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785781381; cv=none; b=FMZWapJb4+Wy+ZQOT2HwrSto4L/Wpl+MBdIhWdNKQwGS0XbS+uKGkVbv7Cx7AcMTGE7YsqdiraBgm3fUIHRScp9kfCMmZ7219QqtTeyqOcNEa2XHmi0UMbft/IB6rO8MMh7SoEvDsIE3TzKAjKrUzvauE1Goo5GD7ziG9zRqNUs=
+	t=1785786702; cv=none; b=lIi6R0mOO5XcHg00d/N+QY9QFSgVdVQRuQzixHP8AP0y+utjIx1RzH+cLSk7HvqFDhVyHwSniELHGL5B6YUki5Zhhkg9QmhttHHbUALmhL7qn4hfBW8UrT3ZUnRGe/0YWYAGtYk3ZnYexnzAUxliqQUYIM0Bcgx3PG+lCbuFc8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785781381; c=relaxed/simple;
-	bh=QgQIzuXIMtFauEuo/gKRRtQ3UOZuxeRRJTqv9Kg24b0=;
+	s=arc-20240116; t=1785786702; c=relaxed/simple;
+	bh=hFi6ilDKNCNjSmyPE2/Q6fdC/sHjcnNd1GyPPpYk68o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jM2Ae95dFBD7BemITlYa6/fNF/k4O2Ax5O0UaYqJ6JVo4M8E7yNaBPG/OJRg0vF8i9sqjYqDo+waUSI8nSvC7cylgpBAD4njKkE8SAtSHnYwwtKO8ZTlaOMlEx0BCsKo/jFV8uORd4c2Y0hGf3bDwrpfHkNU5S5nzOlmwsCahw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7Zee/Mx; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=DZ2zsJkO5vP/RHXvGoA+AwcmkDfIXu0yVazbEbkn3lEku/R2NpJ/DxR+fcoq4UP6/gTsMyYAurWlpF2MGYEDakvDWNHd541BXfzLCM2R5l8ZIqvluISQbFiODGhueuH7cDNYbxtCwmAeRaAiYqmaeA6NPpJecUw4eNNDS2jIrN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NW20t8/X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7Zee/Mx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 946B11F000E9;
-	Mon,  3 Aug 2026 18:22:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NW20t8/X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EEA1F000E9;
+	Mon,  3 Aug 2026 19:51:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785781379;
-	bh=MpH62FMFtWUxRfc3axL/EWkSaCRGMx2miOZKjiP1hxo=;
+	s=k20260515; t=1785786700;
+	bh=xc5E/wVZX3TK6VxbuQ//ooelqNq/7M+GTZ2+r/EG2Lw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=k7Zee/MxHzLWUTss9GKG+pbzKLIwtX8fAkHQ7bqeOrhMLjo9PR3khRQJ/tXXr+UHC
-	 2z6O8JtxCh8EkUK62MyK10oQbaoVWi+Jduul4P4nzBS1osrbduvjWm22FwsJZxnNnh
-	 +gSL1ucabzOLZTU6e18UG2d/Lq0oxKebJN1/znoVMczAMHmbJF0TSiYNixS2fz4Qdd
-	 AVhm859dRTDKksUgxx9qa9FwaCceL6qUQa41jb8/gFT+4rYqFDy4jmcMcGTqGYf7YR
-	 1wGiO3E/pXEjDeYy3eB7Iw8a86yY05o+FfCQfADdm5Jps3aOjn/edbNir5I1rKqnoZ
-	 i7LN/twwZtpLQ==
-Date: Mon, 3 Aug 2026 11:22:55 -0700
+	b=NW20t8/XfWsXKJNse2ACmovLKV2lzsSs6X96JwDv1iIFyFijyeUk4MVRmLzDB72ZM
+	 qDQZIrCm0AhWQz/Zkj/OL86iW2rzOYRS3ijSPd3n0LvJEVa0FOTW1N79nIIyVQDLPT
+	 5WfC+27ynIbuuxOpe/SJAGjPOnbgZ5dsr7frxEUzhDzyLze1jweIKdiZqZf1kCBoV7
+	 kbDB/3HyBR9pa6j3i7xLvEgBsejdNhdQbhX3huZuaYc1DF6iZfUFT3hPV1VtLado4N
+	 wLiob7aFYSamo1jF2PRRs9Q9MUGYzT0n23rpPJkj+XUTT0VKrKNCSK+TdHr+ec50ya
+	 e3MOK5mjLbXrg==
+Date: Mon, 3 Aug 2026 12:51:35 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-To: Maninder Singh <maninder1.s@samsung.com>
-Cc: "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-	"nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>,
-	"morbo@google.com" <morbo@google.com>,
-	"justinstitt@google.com" <justinstitt@google.com>,
-	Onkarnath <onkarnath.1@samsung.com>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-	Rohit Thapliyal <r.thapliyal@samsung.com>, ndesaulniers@google.com,
-	ardb@kernel.org
-Subject: Re: [PATCH 1/1] arm: backtrace-clang: fix wrong sp usage for
- unwinding
-Message-ID: <20260803182255.GC1067866@ax162>
-References: <CGME20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
- <20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
+To: Matt Turner <mattst88@gmail.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org
+Subject: Re: [PATCH 0/2] alpha: enable building with clang
+Message-ID: <20260803195135.GA1083357@ax162>
+References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
+In-Reply-To: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
 
-Hi Maninder,
+Hi Matt,
 
-On Wed, Jul 29, 2026 at 09:11:01AM +0530, Maninder Singh wrote:
-> Ping! Any comments?
+On Mon, Aug 03, 2026 at 01:08:40PM -0400, Matt Turner wrote:
+> Two small patches to let the alpha kernel build with clang.
 
-I am not that familiar with this code but maybe Nick (whose address I
-have now updated to point to a better one) or Ard could help take a
-look? Original patch is at
+Nice!
 
-  https://lore.kernel.org/20260624054916.1571701-1-maninder1.s@samsung.com/
-
-but I have left it inline as well.
-
-> > show_stack() can be called for any task, however c_backtrace always unwinds
-> > frames based on the "sp" register. This results in printing the backtrace of
-> > the current task instead of the target task.
-> > 
-> > Try with normal TC:
-> > ==================
-> >        for_each_process(p) {
-> >                sched_show_task(p);
-> >        }
-> > 
-> > [7.433271] task:kthreadd        state:S stack:0     pid:2     tgid:2     ppid:0      task_flags:0x208040 flags:0x00000000
-> > [7.433633] Call trace:
-> > [7.433640] [<80113418>] (dump_backtrace) from [<80113510>] (show_stack+0x14/0x18)
-> > ..
-> > [7.433676] [<8016749c>] (sched_show_task) from [<803cb324>] (meminfo_proc_show+0x6c/0x930)
-> > [7.434019]  r5:8158e300 r4:8b4882d0
-> > [7.434024] [<803cb324>] (meminfo_proc_show) from [<80365788>] (seq_read_iter+0x148/0x4bc)
-> > [7.434045] [<80365788>] (seq_read_iter) from [<803c044c>] (proc_reg_read_iter+0xb8/0xc4)
-> > [7.434060] [<803c044c>] (proc_reg_read_iter) from [<80377104>] (copy_splice_read+0x228/0x308)
-> > 
-> > It should unwind frame based on passed "fp".
-> > (CONFIG_UNWINDER_FRAME_POINTER=y)
-> > 
-> > With fix:
-> > =========
-> > [13.933732] task:kthreadd        state:S stack:0     pid:2     tgid:2     ppid:0      task_flags:0x208040 flags:0x00000000
-> > [13.934165] Call trace:
-> > [13.934604] [<80afa1a8>] (schedule) from [<8015426c>] (kthreadd+0x124/0x208)
-> > [13.934654]  r10:8100bbf0 r4:8116f440
-> > [13.934664] [<8015426c>] (kthreadd) from [<8010010c>] (ret_from_fork+0x14/0x28)
-> > [13.934691] Exception stack(0xf081df9c to 0xf081dfe4)
-> > 
-> > Additionally, the extra manipulation of "sp" register appears unnecessary in the "current"
-> > task also since the "fp" register is already provided.
-> > 
-> > Signed-off-by: Onkarnath 
-> > Signed-off-by: Maninder Singh 
-> > ---
-> >  arch/arm/lib/backtrace-clang.S | 4 ----
-> >  1 file changed, 4 deletions(-)
-> > 
-> > diff --git a/arch/arm/lib/backtrace-clang.S b/arch/arm/lib/backtrace-clang.S
-> > index 290c52a60fc6..993410a6afd1 100644
-> > --- a/arch/arm/lib/backtrace-clang.S
-> > +++ b/arch/arm/lib/backtrace-clang.S
-> > @@ -105,10 +105,6 @@ ENDPROC(c_backtrace)
-> >  		moveq	mask, #0xfc000003
-> >  		movne	mask, #0		@ mask for 32-bit
-> >  
-> > -/*
-> > - * Switches the current frame to be the frame for dump_stack.
-> > - */
-> > -		add	frame, sp, #24		@ switch to false frame
-> >  for_each_frame:	tst	frame, mask		@ Check for address exceptions
-> >  		bne	no_frame
-> >  
-> > -- 
-> > 2.34.1
+> The first registers the clang target triple and stops passing -Wa,-mev6
+> when the compiler is not gcc.  That flag exists to keep gas from emulating
+> instructions it believes the target lacks; it is a gas-only option and
+> clang's integrated assembler does not emulate instructions, so it is not
+> needed there.
 > 
+> The second fixes two uses of local register-asm variables that clang does
+> not honor.  clang treats `register unsigned long x __asm__("$N")` as the
+> named register only where the variable appears as an inline-asm operand,
+> so reading one to get the live $gp or $sp yields an undefined value.
+> trap_init() passed that to PAL_wrkgp and load_PCB() stored it into the
+> PCB for swpctx, either of which wedges an early boot.
 > 
+> Note that the alpha backend is not in upstream LLVM.  It lives in
 > 
+>   https://github.com/alphalinux-org/llvm-project
+> 
+> and is a work in progress, so the scripts/Makefile.clang entry has no
+> effect with an upstream clang today.  I am sending this now because the
+> second patch is a real bug in its own right -- the register-asm reads are
+> only guaranteed to work by gcc's implementation, not by anything either
+> compiler documents -- but I understand if the kbuild side would rather
+> wait for the backend to land upstream.
+
+Yeah, I am not sure how I feel taking the target triple part of the
+first patch. On the one hand, I want it to be easy for you to test
+against upstream Linux but on the other, I do not want people to read
+this Makefile and assume that ARCH=alpha will work with an upstream
+clang.
+
+We could add a comment that the backend is currently out of tree but
+that would go stale once it is actually upstream and it will be floating
+around for forever. Maybe a better compromise is taking arch/alpha
+changes now then landing the scripts/Makefile.clang change when you
+actually start upstreaming the backend, as being able to use an upstream
+version of clang should be relatively imminent at that point.
 
 -- 
 Cheers,
