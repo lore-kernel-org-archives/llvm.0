@@ -1,67 +1,67 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A7341A506
-	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 17:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B33441D228
+	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 17:08:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785776928; cv=none; b=W92dU2TM4CpyonKzqpyUzGEeSzKGG/whFEbq+SKgifT3YDi0UZSWQgKy4fe2Sexj6vRpUrnZ8qV1s+e/2kdM2maV43mttUgq9oygqyReOrWjSfN04qiJtXwn9Kh0xyDNaRImxLiYllMIxUjrXKhgZEVp9cjqZy5y7S9iDxJNIhg=
+	t=1785776931; cv=none; b=OpyiJ3/uT5F0ZHuYZmyiNX4G5qpaXzH+QMvylzm5giQ/zmnTPOmN+QMIF6bd4J72N1lcnR34HqP8Ry5J2N2NVdv7NJqSV9iWN1Xxk7EGpV90EYoGikbZ0jlEGlUgqOI0iSFVc6C00dZn4Jy+oHND9Ltznd4HkJWjc3aivgXEz+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785776928; c=relaxed/simple;
-	bh=Qrbmd/gCZNU62r1uQY3MotPz1q+A9zHKQVoWcbXVOqI=;
+	s=arc-20240116; t=1785776931; c=relaxed/simple;
+	bh=6GCvx4EVOSNKyzp+tXGGIXMLeA/q5fZSG5xq+Mpfmmc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j0pwWNnkCMQ8xTpGMxTSh5P6aRN1odg+4yQ6HW4ULM1C0AscxnJucEYWtbjOhkupWLZTHyvaK3snNS9nTsiE5fhFUuSOH9f3QZHbKOlSCZYN2JfxKv+R2P5D3C5zjSeoENK8Lf0XLiA0c51TjK+N77hfqvuBbGy8zOINh0sIjOA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IzZCl6+d; arc=none smtp.client-ip=209.85.128.178
+	 In-Reply-To:To:Cc; b=H/RwtABSafIjeljRGOu5waelfyRzaJII3gC2MRSgb78nu34bhKxJDcFRo9aS1U5HzCSehLw/PX2aPYdzanaJH5/5JlreigTvXtrjTh8KCZ8Z/JM+2LejNji+Ooc64lTW3SR9/Mm1wui5P4+fNnjKNZdVaRZUv8IcHr0OIDqdsOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZMlqD43; arc=none smtp.client-ip=74.125.224.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IzZCl6+d"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-81fc442789cso51932277b3.3
-        for <llvm@lists.linux.dev>; Mon, 03 Aug 2026 10:08:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZMlqD43"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-668c1b780e5so5538660d50.2
+        for <llvm@lists.linux.dev>; Mon, 03 Aug 2026 10:08:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785776926; x=1786381726; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1785776928; x=1786381728; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=sJzW7hnofVRsOBFScVAMkX7aHP57H8tmiAZvV6aeuF0=;
-        b=IzZCl6+dm4bZKD9IpvnEPjCU78kDsnnqz46wAeDorwEmnuUlxH/jyeyh2K6k7LrwQw
-         b/eKw3OS2G50k3RQREdMOtVpA4NeVE5b4+Yux7PHzJszGiI19n/Dp2L2iSL9aXnptcq0
-         XD7Zl5n5L2bvwulSBpKJk1FJvkmKWMjGys0nsyAxJn7D6FCD318P1NQTF+qtUfF8ZZfE
-         9v1/aWTHrCcdzB9k61Rtu+3CQXBWfrtntA+h73tLp2wV/+52VBxR55HPJ3l/L6+lBq2T
-         j8BsjybTWHCtHMZRqVqxnFjwWwI9GXdrGu8oAYLnWR7P+Ce1d2g7iN2Ccw3nHNxtFex0
-         8gXw==
+        bh=lVIXFzy7/iqHFG79NcAPMMydKMInrcpKO4eP5Ii82bc=;
+        b=IZMlqD43fOTQV7zMet2xkKyTYJeduo2ZKV2Y8h99WiXIEAUDrgPD56niY1jqpFh0RV
+         Uk5PZUDxOS2B1j7iChPaNAVf6WoYd7gURQ6KOtFpU7D0KC2plUQRTaNvaGSIxY+dGyyZ
+         cfwWb0JwEJIqCNiTL4vntUXsZwPlYDQSbNo/G4P6pcTK4at0U19JB/nkQvYbBjzQ65yr
+         00BLImq58X10YvwPQEBr3i5G5e/uonukkHxNAJdlgnODn/zAJ+KEqgx5+P5JfQ1fheOe
+         fNo2loozHt8eaz1+G7RtKpq7MB0C2AayVE3ydDyVT0BhaM1axjiF58h/OBXapU26AsZV
+         /HGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785776926; x=1786381726;
+        d=1e100.net; s=20251104; t=1785776928; x=1786381728;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=sJzW7hnofVRsOBFScVAMkX7aHP57H8tmiAZvV6aeuF0=;
-        b=SanDmkRfy3hJubJjN4hDpZH/oumE5I3Z9CKENRWsjSTwLyhHtJjrFUJ3sfjkncL//G
-         xZGcHCZAcv72WIUdSt1BgpEboyodhrQqd22/hDci2mSfQF6+lIyCuIsq0fUKSHv1kZJO
-         ppET1lBMMK/5cCd+xgZrrJzycFQssRGp35deBCUlbvoXanAio9v9HXiZLnzU4gYFAxkO
-         Tb99Qo2AyuMuN0LsTpKDS+536OcVo1JBFD+fnQC9u5fHM6WxCjYcJDFB/z1VuV3hS3sc
-         huT9p9lQn0Kt2OFYFpWP4pNkNduH9FzundT/ktK0VWh3xbYA0htNZdW6MACxSFtgIAs0
-         VQYQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqGDtDgN3ihBLnqiR/Yzr9ZvoTDaHCbb+/dUQCShpkh+RKF3NvYo12lHVHOKMiIgpSHv/GW@lists.linux.dev
-X-Gm-Message-State: AOJu0Yya1pqqxSiQMBjGLOxaHnX/IZgMayRGmVtU4EQOSRBOVYTgr7UO
-	QQr58aymR3E3824OpofHfuNzSymuGCTDs3slgCz3oY5Lrxz/04hNRXRQ83WVZOuq4Xc=
-X-Gm-Gg: AR+sD10pxiqQkLqZ40lXUjfj6GwQxL7xUyJ+AvsZv1zVjsFo77aDM5HifnK3kGiZvGL
-	qrNVUOaSaeakNT+fYhl4Y3EADGAa1jQXKXqWr++qkZl5+VJYhRaoApDjNt6hHFzcx0mN7rPCzXS
-	OEct8mJvYP0LSn+8zyEqlfqJLHCY0CRU7t8TiBlIEm2vIYqzRokwoAkPACbl5OSvYMaMyCEBxcp
-	ylqI2yyaaVkwOSQohjgIHEHwo82FinhLzGbLieabIl+1h6tcrq5Py90lTUMlD5YTz/WItaUIEIn
-	boRcRYCxRzl2qWE9Q6YeysVAFn9Hzf9G9PGhpsBd08+2xsq1H+VL91uxyrlUBA+7AzXzI378WOu
-	z/CRW3rD/kxl7mdL+GemOK6PZYoLt2yqh63BzQT0gNk/wJEAoRGTKYw2L3v5SSa1mDS7Wr4nzEm
-	DBHwRS9HYQgRfYP+CPzq7PPqdxrhrBlkRFsJouNYINmnXg6MUKbKYjHZF+GqSw
-X-Received: by 2002:a05:690c:6081:b0:81f:2403:9e70 with SMTP id 00721157ae682-81fd4b4af48mr139827077b3.19.1785776925809;
-        Mon, 03 Aug 2026 10:08:45 -0700 (PDT)
+        bh=lVIXFzy7/iqHFG79NcAPMMydKMInrcpKO4eP5Ii82bc=;
+        b=Gt+RQmkQcB5FxCtbRuLJVOVOK+5VXLt3laUVBlxloAHtrGfRE3osQtwWxonwWFhOc2
+         WD+Ilv7tOtWd3T7d55qKzyk1u8M6gCJED75nSCIbcAnZb2CghVc9oh4IUpHQj9neNtES
+         6yFZtdbgxDu/pAjq+LDLt7IDJ3eAwPwdZVi004J1WQr595rRR78QOiOPQ/YXFy2CL4n1
+         VsCIS8q061NjiBHdtuLPnxPDW8EDUAmkqKAKr1URUyBT/xbshs0wi8jzq/TfL/97+nyW
+         gpQ1AlotLF7b6m2P4YxWSwQkl7tLNRP6t+OfP8NNHStMlmx0/nfB4uKE6hxCfcI0vJEO
+         CrXw==
+X-Forwarded-Encrypted: i=1; AHgh+RpJpsLQLghkSC2bloZmkyg/nXO5QIh4w0jJpJ1h0J8I3iloar6m01jM5+35cUb1xf9OPEpK@lists.linux.dev
+X-Gm-Message-State: AOJu0YxNvEYZwfvwHIYaW6sYVFBXiY8fxhzx2Kr2IT1dE/e952h9yZ+a
+	14sUij82uwRB4nnH4hLq8wJmVA9NoQzwn3d/tiHidVtxM38K4NlWaPx2
+X-Gm-Gg: AR+sD11nb3/Sj0T059zNUAYXZ6d6SkPjpE567HwjIJ8qE6BhSE+lDwVUEksL9Z6waaT
+	n0xC6jGxnLlYI0DauWpgkQGfNYUREQYLpSPzwr7Z4ftpDoWEZMhF/SMLPgQI+JMfusfB7Kv5YtB
+	7Fafj3jJpbGuTmVQVOgsz+j6ZLMaEShFnIsgpn7hwiVQ78hO1ZMN5ocEGjjnteYZ86hSFtwdp8J
+	wCrkqCGuESJ6TYjtemarqrF+ueGdyOu1hZwSwnEGkIQuToTrD8sQaaaEWKgKDrMJJrAwytwdpIA
+	nvavTeZUs7KclCCE9WlbyNSAQsLlAIJ9GkQmf+l0MR/eNZPtnx0/tptrFWb4XS7clxs7dQs3JwJ
+	5K9pe3fOdwwGJdOesaP7OuhInBg269IoeEDiR7hZegxbM2B6vLlLfhAMsivjqSK3jfyqdWRzfHn
+	HtIfftE8sQ7AvKadjnQ5Ps6cbsa9iSH3pHynKobFGmQELSSLnguIoFEPVGGLK/
+X-Received: by 2002:a05:690e:412:b0:667:95f9:bcd7 with SMTP id 956f58d0204a3-6694f22a9d8mr10196257d50.49.1785776927829;
+        Mon, 03 Aug 2026 10:08:47 -0700 (PDT)
 Received: from localhost ([2600:1702:7a90:6f9f:8bc4:8aec:108d:7a04])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-81fccf2cae7sm58991847b3.2.2026.08.03.10.08.44
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66948cff660sm5919696d50.3.2026.08.03.10.08.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 10:08:44 -0700 (PDT)
+        Mon, 03 Aug 2026 10:08:46 -0700 (PDT)
 From: Matt Turner <mattst88@gmail.com>
-Date: Mon, 03 Aug 2026 13:08:41 -0400
-Subject: [PATCH 1/2] alpha: enable building with clang
+Date: Mon, 03 Aug 2026 13:08:42 -0400
+Subject: [PATCH 2/2] alpha: read $gp and $sp explicitly for clang
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260803-alpha-clang-v1-1-1c4ba5ba7a64@gmail.com>
+Message-Id: <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com>
 References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
 In-Reply-To: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
 To: Richard Henderson <richard.henderson@linaro.org>, 
@@ -82,70 +82,64 @@ To: Richard Henderson <richard.henderson@linaro.org>,
 Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
  llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2059; i=mattst88@gmail.com;
- h=from:subject:message-id; bh=Qrbmd/gCZNU62r1uQY3MotPz1q+A9zHKQVoWcbXVOqI=;
- b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLIKTkuu6PPRZIy51x96/X9GXXfd2znlU/aZKLQkChXzc
- B9zzFrY8ZGFQYyLYaaYIkvcekWWWW07lvqclv4FM4eVCWSItEgDAxCwMPDlJuaVGukY6ZlqG+oZ
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1672; i=mattst88@gmail.com;
+ h=from:subject:message-id; bh=6GCvx4EVOSNKyzp+tXGGIXMLeA/q5fZSG5xq+Mpfmmc=;
+ b=owGbwMvMwCW25rVmCc8sv+mMp9WSGLIKTkt67tDONuewvFWbu1Za5LmoqqLj5D9b13DGKfyO+
+ KSq6d7b8ZGFQYyLYaaYIkvcekWWWW07lvqclv4FM4eVCWSItEgDAxCwMPDlJuaVGukY6ZlqG+oZ
  Ahk6RvEQOT0Gjczi4tLUIt20giKHvPySxJLM/LxivfyC1LyC9AK9tMy0koyM/KLiVKARenmpJaa
- ujm5GhgYmlo4WZk4WjqYmzs5Ohk5ujo7Ork5GluYmBs6WjiauluYMXJwCMNfYr2Jk+C8svOPN2t
- 7wRraza+7dM7J6Wb2/wvS0r3jnnVU7QiIa1zMyzNsQlhUdOkU04/SaLevnVV10vuDx/+uGPy77d
- 3kbdfFs5wIA
+ ujm5GhgYmlo4WZk4WjqYmzs5Ohk5ujo7Ork5GluYmBs6WjiauluYMXJwCMNeYSTIybOP2U+cLms
+ Www/t5Scqqmx+2393s3DbZfl8e+8UFR/7XOjAyXC5vWcgXfshV58LzPHHJ7mclLo94f3HmeW1tk
+ GD8/e0dEwA=
 X-Developer-Key: i=mattst88@gmail.com; a=openpgp;
  fpr=3BB639E56F861FA2E86505690FDD682D974CA72A
 
-Register the clang target triple for alpha, and pass -Wa,-mev6 only when
-building with gcc.  That flag exists to stop gas emulating instructions
-the assembler thinks the target lacks; it is a gas-only option, and
-clang's integrated assembler does not emulate instructions in the first
-place, so nothing is needed there.
+clang honors a local `register unsigned long x __asm__("$N")` variable
+only where it appears as an inline-asm operand; merely reading it does
+not produce the contents of that register.  So trap_init() passed an
+undefined global pointer to PAL_wrkgp, and load_PCB() stored an undefined
+stack pointer into the PCB that swpctx then loaded.  Either one wedges an
+early boot.
 
-With this, LLVM=1 (and LLVM_IAS=1) builds work.  Note that the alpha
-backend is not in upstream LLVM yet; it lives in
-
-  https://github.com/alphalinux-org/llvm-project
-
-and is a work in progress.
+Read the registers explicitly instead: an inline mov for $gp in
+trap_init(), and the file-scope current_stack_pointer for $sp in
+load_PCB().  A file-scope register-asm variable is the form clang does
+support.
 
 Signed-off-by: Matt Turner <mattst88@gmail.com>
 ---
- arch/alpha/Makefile    | 8 +++++++-
- scripts/Makefile.clang | 1 +
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ arch/alpha/kernel/traps.c | 4 +++-
+ arch/alpha/mm/init.c      | 3 +--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/alpha/Makefile b/arch/alpha/Makefile
-index 35445ff2e489..54283705911f 100644
---- a/arch/alpha/Makefile
-+++ b/arch/alpha/Makefile
-@@ -27,10 +27,16 @@ cpuflags-$(CONFIG_ALPHA_GENERIC)	:= -mcpu=ev56 -mtune=ev6
- cflags-y				+= $(cpuflags-y)
- 
- 
-+KBUILD_CFLAGS += $(cflags-y)
+diff --git a/arch/alpha/kernel/traps.c b/arch/alpha/kernel/traps.c
+index 7631129ac914..5b4f1ae2b74b 100644
+--- a/arch/alpha/kernel/traps.c
++++ b/arch/alpha/kernel/traps.c
+@@ -925,7 +925,9 @@ void
+ trap_init(void)
+ {
+ 	/* Tell PAL-code what global pointer we want in the kernel.  */
+-	register unsigned long gptr __asm__("$29");
++	unsigned long gptr;
 +
- # For TSUNAMI, we must have the assembler not emulate our instructions.
- # The same is true for IRONGATE, POLARIS, PYXIS.
- # BWX is most important, but we don't really want any emulation ever.
--KBUILD_CFLAGS += $(cflags-y) -Wa,-mev6
-+# Only gas emulates instructions the target does not implement, and only gas
-+# understands -mev6; clang's integrated assembler never emulates.
-+ifdef CONFIG_CC_IS_GCC
-+KBUILD_CFLAGS += -Wa,-mev6
-+endif
++	__asm__ volatile("mov $29, %0" : "=r"(gptr));
+ 	wrkgp(gptr);
  
- libs-y				+= arch/alpha/lib/
+ 	wrent(entArith, 1);
+diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
+index 9531cbc761c0..f4d65a60c869 100644
+--- a/arch/alpha/mm/init.c
++++ b/arch/alpha/mm/init.c
+@@ -63,8 +63,7 @@ pgd_alloc(struct mm_struct *mm)
+ static inline unsigned long
+ load_PCB(struct pcb_struct *pcb)
+ {
+-	register unsigned long sp __asm__("$30");
+-	pcb->ksp = sp;
++	pcb->ksp = (unsigned long)current_stack_pointer;
+ 	return __reload_thread(pcb);
+ }
  
-diff --git a/scripts/Makefile.clang b/scripts/Makefile.clang
-index b67636b28c35..2434cf90ad7e 100644
---- a/scripts/Makefile.clang
-+++ b/scripts/Makefile.clang
-@@ -1,6 +1,7 @@
- # Individual arch/{arch}/Makefiles should use -EL/-EB to set intended
- # endianness and -m32/-m64 to set word size based on Kconfigs instead of
- # relying on the target triple.
-+CLANG_TARGET_FLAGS_alpha	:= alpha-linux-gnu
- CLANG_TARGET_FLAGS_arm		:= arm-linux-gnueabi
- CLANG_TARGET_FLAGS_arm64	:= aarch64-linux-gnu
- CLANG_TARGET_FLAGS_hexagon	:= hexagon-linux-musl
 
 -- 
 2.54.0
