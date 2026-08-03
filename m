@@ -1,172 +1,107 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB58D38E8A6
-	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 21:16:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785791767; cv=pass; b=GxYUDZa8kW0WZmzYt+motP9zbeE5uB+00Ry5IgN37TrPC9EWN/ulagSKocbsWbjyEU/pgQCDHrW6wPxiL9DFCrB7Z3nsYSVqTlizz2tm6gzKAa+EJmBYwGbG0XF69tJ6EzTrhoddAAHBXKHXvEVbjzmG+4ZpBIcdyJ8Qjf/3qJ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785791767; c=relaxed/simple;
-	bh=y5qiPvD/on6DO4GW0krQNBl6dSDpG8n+mCfX4z92gGM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WZmhyy9xPwsfFIO5Ka+79UIgEUALXhOMZ4J3n4FYz+F+pCFDOW00HIc/Kitw5vXqWwUVnTzbG2NzGKg/v7uKkdMFz8wcaECExXp6vXBKYPnqD4C1mgyb6YCUVtkS6o/RSeKdFrqtK0mT9vaCMIwSGFVGMSdZeLtVBaaqAt2xLyA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KrsUhKA/; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2264F3537FE
+	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 23:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785798731; cv=none; b=sQmDxIatk4DxCRZ2Z6wR94n7lXOo6IVQ0CX8XshU3qyoF2+dk5wwLnX1jNwnhyfmdB1P6tOzT8yKi/SAnkTlnwlcg6BOpdh7p/6cCgwo4Hdw26xZRpzkJjskkd9YOgtFiWeK+wmBBdP2xbm29AiPNDS7NxG1F3l84wHt/N7dlhI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785798731; c=relaxed/simple;
+	bh=uxHnAV0cvWyxkbpLN/2m9eB7aqC0V6nNJe7B38UkZoo=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Y4u3v1JhIwunAeAvUVCRcRw8Y+McBkdYD+TLxxQ/A/UjxP1CEOyuWfK6ijDkVLjQsUs/geY+x5Kd5lE8Nt1675C6Fur8IE9zVt8WyOHaH5Z5l40DN8/1NMTsGYsMduuMCdjNkPxeSyNInk/8fziRIfqNyCu/fepu2YDUXlvrCfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EUw0G3VG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KrsUhKA/"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6a0a4aa99bdso4604467a12.1
-        for <llvm@lists.linux.dev>; Mon, 03 Aug 2026 14:16:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785791763; cv=none;
-        d=google.com; s=arc-20260327;
-        b=cuzyhzNlnlj3UQGhjJnYaj8ctK2MMV88Isykz0oLYjhn8/u3cdDhkdQWIPSQ7srhxS
-         Wc23id2J72WBM2+bmRYAx1jLC6dV8u31hhoOkPSwhBg62PmZfq8IQ5LtlPdD3otR+QEo
-         lTDtTcJS1vNWBj+Q/RLNJfK3cqH1VyTJma57cwv4/yArpZBnwvUU6FBXY/bqpgiq+oIH
-         tNFuWDbIK8UUwvV7rE9Lg5C2nYNQIy5sLb1r3s5O720qd+y3jlam09jy9IYnnuAttyCa
-         hbCUNSEE1jyNQX2bdWHazLEXloNROg3mAIVbBWiGfCv89KG73am3fS0NFM1nanZQrbkm
-         ZOAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ONA6u0gWcMYpm9YSgR6BXB8HOfOJ6IJqSr2+VzPiqIU=;
-        fh=qxXGtliCdDo27JEwVITOuqVLDD9+VNteWVic7M3om5o=;
-        b=pxtFSE1tq33RBeOs781P6JrfIL+UJAuJMiFd1BtsaCbZpc7Jnp98zWxmu6fvyiDUCy
-         rXcu7Q+dxtF88EEFmAf2Jp5RQYi2qTTloe6jYAuce2ia/RYSc2XKR7ek2FKygAVWybOq
-         l4ozXg9mYbcjE28dX8xNiCh2vBbNMjV5Qxs+MJ9h3+CfABcLu1VgNNMUkWcCInF/tGQw
-         hfFLm3VJg4yPPbTkA8+2OAGZUh/H5s7R7ofBWHzpFcBMJkGjpiTE2gnq+f3XrcOGOZ96
-         pgXUSyFUs0d7jtjelRgIl9Uf35FaOIi7GRoDNg1W025kLYTYnaQ0n5oHoyhK1tdQtAnH
-         YK/Q==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785791763; x=1786396563; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=ONA6u0gWcMYpm9YSgR6BXB8HOfOJ6IJqSr2+VzPiqIU=;
-        b=KrsUhKA/stzXo6miyRqEZPSruSsQyrIuyZoKwxGpy4RKVR0DdImie8KFeR4HoFkdsl
-         tqrb4AAdS43ANuC7T0YevYkdpJ1gzgl846jyLnxL68X7VlOLzd67h8VdzxunZ/pCGMP0
-         BEtpzBbtq9EvM9AvVNqSPwo6VRQZA3KxRpLCnTz7rupFCcOIYmYhdvDyTyO/K5Un79Z1
-         kW+YLEg9abnB7aR3VWeTNZXs9xoP7NTtYxX30ijbSWx6gcH/VO78HUGUR/+bdcboHsNZ
-         QissYCb9M+nnhN25PtnnRsm97wURB4pWwI8yPJGdMB9dqGNyEOoPlJEToALrT9ut6ITj
-         AJlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785791763; x=1786396563;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ONA6u0gWcMYpm9YSgR6BXB8HOfOJ6IJqSr2+VzPiqIU=;
-        b=cArm9TXnUwx6SkL8j+wE7ikRRCRf7JdCgSSvxI/U9A4fAgzeCnVKYDTaRwsadqidIK
-         NRYwn/b6eBMECvPKfndzA2s0B4uN8gAbNKxxFxcsoy3QkYobfNvCaCP0LYMMcW6qRThX
-         Ow74ojz5NKnADT2I03aWgOPsZrkfE3OWa7+JP8La/EPYtXtvCt+6edeXVQf7qXVhQEzz
-         jbAS+G9Oe/D0H9kIFZm5hxzAr4HhqZpVVVY0UymgQzuZUrAreeE7ttVJLV4HFWpu5OCZ
-         CUgME41i3tvC3sLfKBamAOEjhexFRJLHeCDWsX4J7NYSfnUMcLQcuZgVUT5QM6wjnUWs
-         S+mA==
-X-Forwarded-Encrypted: i=1; AHgh+RoHp//E3HMtTKiA2C8em/RMKPrOEZIgqr3pXcipOFpkqWr2erbr7zrhKj8AX8xXmKkbkdpK@lists.linux.dev
-X-Gm-Message-State: AOJu0YwyqFACQId42GVu9eUSvbTLgUCOpMONA4nLWD75T1lhLw7JnjPr
-	s766bfZxvCCgEK1xZQ4qiHVLzGzTHhEetrHsBcMERmgWuxedNKGyDraxWiVoL+iFTh01IYT/P+B
-	zYDXY8EqHWGOhnQpVSoJYgSo3V9v58w4=
-X-Gm-Gg: AR+sD13vscu5IbPJL5NNUEDGKAp0TTvCehk8aE6kOnV5jDr8susTict6S4qHolYrkjr
-	/y5FTLPiDggfgicbfGmwBL0tYLBbDfjqhZANcfvr1+SCTd+/YU6qHYPJVtdlGcXp8AJdN+HyC/L
-	ahFrJr4ogn2Ub7fRe7eu7myy2BHaIiO/qvTs55kmURSZsVtvnm1zVK8RSIkh2FVZMEJijCK3izT
-	mofutKCgDQwrDqDp1YNwHCzpkTCnEvV/C36gjTiNU++wSDIuaKbU+dhs8Cr5C5zHVe4djAF5ZDH
-	Cvu1Ka5uZKPvsVC+95y7Wc7QYxtgOsqxHbgl1z3fuOzPt/liVbSe2a/BF12i5K82Q9Bck46P/WF
-	LmXuMSiZ9yIOjM2V59RqbfwV+yrsY9EI=
-X-Received: by 2002:a05:6402:3241:b0:6a0:8885:e6ea with SMTP id
- 4fb4d7f45d1cf-6a0a7c60fafmr7359384a12.6.1785791763033; Mon, 03 Aug 2026
- 14:16:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EUw0G3VG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785798728;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Da1m39eUYK507qCRnYL9/bXk1TvFo0I1waBcDsZqDw8=;
+	b=EUw0G3VGUE3d/0sWh6wl5HWnNeDHReQgJEGM3LfGBZDiEdocP1T2tOOP9qlrDsQP9H2afK
+	NDit7QA6qUIdz4S6wbOUa03B5/cqBotW7qAuvJfC5yYoPIMuki9rGwFiCuuQaoloNMX8m/
+	3R9qdHP2k8SdkIJ1XDe/CATtvOP3dy8=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-526-VyOQdCfWOeupHAIA3NBq-g-1; Mon,
+ 03 Aug 2026 19:12:07 -0400
+X-MC-Unique: VyOQdCfWOeupHAIA3NBq-g-1
+X-Mimecast-MFC-AGG-ID: VyOQdCfWOeupHAIA3NBq-g_1785798726
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 84D28180044D
+	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 23:12:06 +0000 (UTC)
+Received: from [172.20.35.218] (unknown [10.30.44.80])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 244B6180044F;
+	Mon,  3 Aug 2026 23:12:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS: Test report for master (7.2.0-rc6,
+ upstream-mainline, 848acc8f)
+Date: Mon, 03 Aug 2026 23:12:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com> <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com>
-In-Reply-To: <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Mon, 3 Aug 2026 23:15:51 +0200
-X-Gm-Features: AUfX_mynwyTXbGl2r5A9Ln_10BtSjIBSkDIfhjkE2mzRhJnUG3o0f9IhUJu7p4s
-Message-ID: <CA+=Fv5R0tdFeEKWgSVTjfXbs=guZmR8zy8FGbqUZNSKiyB24aA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] alpha: read $gp and $sp explicitly for clang
-To: Matt Turner <mattst88@gmail.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Message-Id: <14689.126080319120700308@us-mta-526.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: xgo9LygT9z70_7HkrBpRRGFPrx1gMFPuk3bkygKFK8E_1785798726
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Matt,
+Hi, we tested your kernel and here are the results:
 
-On Mon, Aug 3, 2026 at 7:08=E2=80=AFPM Matt Turner <mattst88@gmail.com> wro=
-te:
->
-> clang honors a local `register unsigned long x __asm__("$N")` variable
-> only where it appears as an inline-asm operand; merely reading it does
-> not produce the contents of that register.  So trap_init() passed an
-> undefined global pointer to PAL_wrkgp, and load_PCB() stored an undefined
-> stack pointer into the PCB that swpctx then loaded.  Either one wedges an
-> early boot.
->
-> Read the registers explicitly instead: an inline mov for $gp in
-> trap_init(), and the file-scope current_stack_pointer for $sp in
-> load_PCB().  A file-scope register-asm variable is the form clang does
-> support.
->
-> Signed-off-by: Matt Turner <mattst88@gmail.com>
-> ---
->  arch/alpha/kernel/traps.c | 4 +++-
->  arch/alpha/mm/init.c      | 3 +--
->  2 files changed, 4 insertions(+), 3 deletions(-)
->
-> diff --git a/arch/alpha/kernel/traps.c b/arch/alpha/kernel/traps.c
-> index 7631129ac914..5b4f1ae2b74b 100644
-> --- a/arch/alpha/kernel/traps.c
-> +++ b/arch/alpha/kernel/traps.c
-> @@ -925,7 +925,9 @@ void
->  trap_init(void)
->  {
->         /* Tell PAL-code what global pointer we want in the kernel.  */
-> -       register unsigned long gptr __asm__("$29");
-> +       unsigned long gptr;
-> +
-> +       __asm__ volatile("mov $29, %0" : "=3Dr"(gptr));
->         wrkgp(gptr);
->
->         wrent(entArith, 1);
-> diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
-> index 9531cbc761c0..f4d65a60c869 100644
-> --- a/arch/alpha/mm/init.c
-> +++ b/arch/alpha/mm/init.c
-> @@ -63,8 +63,7 @@ pgd_alloc(struct mm_struct *mm)
->  static inline unsigned long
->  load_PCB(struct pcb_struct *pcb)
->  {
-> -       register unsigned long sp __asm__("$30");
-> -       pcb->ksp =3D sp;
-> +       pcb->ksp =3D (unsigned long)current_stack_pointer;
->         return __reload_thread(pcb);
->  }
->
->
-> --
-> 2.54.0
->
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-This looks good to me. The explicit $gp read and use of
-current_stack_pointer avoid relying on the unsupported local
-register-asm behavior.
+Tested-by: CKI Project <cki-project@redhat.com>
 
-I also built and booted the patched kernel successfully with GCC on an
-AlphaStation DS10.
+Kernel information:
+    Commit message: Merge tag 'fsverity-for-linus' of git://git.kernel.org/=
+pub/scm/fs/fsverity/linux
 
-Reviewed-by: Magnus Lindholm linmag7@gmail.com
-Tested-by: Magnus Lindholm linmag7@gmail.com
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2728358730
 
-I am happy to take this through the Alpha tree.
+One or more kernel tests failed:
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
 
-Thanks,
-Magnus
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
