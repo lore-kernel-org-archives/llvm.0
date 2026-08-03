@@ -1,113 +1,185 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D13A12BEFEF
-	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 04:22:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8FAB672
+	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 04:55:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785730934; cv=none; b=AF0SxHB/1SWqTq7eMdE8e1ou98tCLli78U+3oe6Tq9+nF6HclvpE7Beu+Si17vPt1Swuoj2AEqcG21G0cvT/+u48bh5GZZDu7IN0J8zAUIlfdhjYO9a/LOjriUC2OiMpXBApQhunMUpLIOtb9WuU2FbJ7gXe6VT2RfHiZcocM4c=
+	t=1785732938; cv=none; b=OE4wSSWu5LO2ODx7KVd8K6mTFdNPfCwAOJb6pzyISmsM0sG1SVdjAoX/kJiw/j/KSlyan0JvYNzwPlX/kULgP7nxhbkf+J/fJaSReh94A+ZZKAvf8u5HLrKSvro9qrBcw3WP4BsMrZFw36M37HGNFjBSuXFJrMrSNC8U/9Ymbj0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785730934; c=relaxed/simple;
-	bh=6uAurlfp4OG//p7kpB6jxIjG/3m8q7yUmQ1GRonrIqQ=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GITgudNEq1ahsd3Gp/VXW88QAmqRT4IEPnYdSRRL8rvrUeaVWsk0j9I/agaI1fN+qpLoWy3q5kcDkj2nqOQ0ouZ30B46cQTg59mUs0d0Nn4vU/aRo3zPEpMeNmz0Z7eaxjumVHFdhSUur3ithBCVf+DdZ9BVFEPAQYk12axtD2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J0cPjBGa; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785732938; c=relaxed/simple;
+	bh=fRJj015EwMjGldfpjrYNn5WsphdExP9SmZFsg+szH3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AMQiBszORGtNkPbGWvYl4JS9xAzANtiPpxUDcibpBKf9aloBQuZlvOkhIt+mW/Q1pP57tCKWl6gCXeLKrJ/v7aKiqjH92c5dJRKZKMN94uM5PKkajza17XYjBfFNSKUd24z2ucbEhtltmWmVfYssvixwM7o0ESt226YxKWhrjb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qHlVhtJt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dGBQYC5d; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QF6K++kc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DF+YIjls; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J0cPjBGa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785730930;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=G6gBruJCFo8dMT4tFf4Nx/Px6CviAETtAuPuGrPDEh0=;
-	b=J0cPjBGaBQJRG1HM/tW5mFydwOWaekLkGTsoLEXJ8vdNQXZ4aczi29IHPRQjdFgZpZ9Lpb
-	RJqbLVovnB1rKsQWeMiG6QhNwX6jox5gry3VfkC2px1ITUrFydjDXRWJYbFoUKE9VrqICW
-	IcQ1TfXiuIc+KXhOKdHWAJ0cU3kEjlY=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-558-_lNcyNTZNCanqPGij2iG-A-1; Mon,
- 03 Aug 2026 00:22:09 -0400
-X-MC-Unique: _lNcyNTZNCanqPGij2iG-A-1
-X-Mimecast-MFC-AGG-ID: _lNcyNTZNCanqPGij2iG-A_1785730928
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qHlVhtJt";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dGBQYC5d";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QF6K++kc";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DF+YIjls"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 4D54F1956096
-	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 04:22:08 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BE9131956086;
-	Mon,  3 Aug 2026 04:22:07 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc6,
- upstream-mainline, 075b7484)
-Date: Mon, 03 Aug 2026 04:22:07 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 09E2D7EE96;
+	Mon,  3 Aug 2026 04:55:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1785732924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
+	b=qHlVhtJt1i6irEG2tm1eAtGfS/UDVSPhpplsJVni2OfaolXcfX3fmkyE9bjn/K7mXwNMaC
+	hy4/jKVYit8YaPPVj6Y7HGNeVZNRI0wOMxXDPZW2pvY9tHmY8ujoK0O6rG7dzrLCZ1Gjy5
+	ZCCB+e1h5dgpANpxyfEVPS3/pAVJbpM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1785732924;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
+	b=dGBQYC5dvy8R9qfKXSYLkAtuitEcFr1e/VfzB3S6P4n6p98wwkGfT6FVdwviV2I9JkUEim
+	mhIw/CBICqnY+MCA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1785732920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
+	b=QF6K++kcUBc4kdPJlyunEQlF72aucwsB/5oHl6fGGpn6Y4/GQPOz9zjgot2vO8Uimpf0Sy
+	+oR0Ia5qPMRu+DJyjLd6EmmXBVnqWtWKIEo9cSERpl2xamQBN70wzeOAXGiDezYQl1kQZz
+	4wd+/2lndktrbYNeYqzNrHQvmCZUgaQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1785732920;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
+	b=DF+YIjlssn6ttnTEVtJvrW6pQ3PDQsV55YN8HOVvg0N9kZDXN16+iurz0ZOEcAwEWo2wSo
+	s1gf1tN+5Yu3hwAw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4BFE9779A1;
+	Mon,  3 Aug 2026 04:55:18 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ruCVATYfcGrFEAAAD6G6ig
+	(envelope-from <ddiss@suse.de>); Mon, 03 Aug 2026 04:55:18 +0000
+Date: Mon, 3 Aug 2026 14:55:12 +1000
+From: David Disseldorp <ddiss@suse.de>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Christian Brauner
+ <brauner@kernel.org>
+Subject: Re: [linux-next:master 11199/11507] init/initramfs_test.c:580:15:
+ error: call to undeclared function '__override_init_fs'; ISO C99 and later
+ do not support implicit function declarations
+Message-ID: <20260803145512.6b2e6c18.ddiss@suse.de>
+In-Reply-To: <202608010904.q5YsN4ye-lkp@intel.com>
+References: <202608010904.q5YsN4ye-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
-Message-Id: <98170.126080300220901283@us-mta-558.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: MKojJh_1NzNPEZFcBpjCNmeIxq_gA6-Sm7SDTgm5suY_1785730928
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -3.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	URIBL_BLOCKED(0.00)[intel.com:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,intel.com:email]
 
-Hi, we tested your kernel and here are the results:
+Thanks for the report.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+The vfs-7.3.misc commit da46f0e1053c9 ("initramfs_test: use test
+init/exit hooks to override init fs") is bogus: it is supposed to be
+applied / squashed atop Christian's ("kunit: use scoped_with_init_fs()
+in tests that resolve paths") change, which includes fs_struct.h .
 
+Christian's vfs-7.3.kthread branch has a correctly squashed version as:
+b4343aebd3a4d ("initramfs_test: use test init/exit hooks to override
+init fs").
 
-Kernel information:
-    Commit message: Linux 7.2-rc6
+@Christian: could you pleasee fix or drop the bogus da46f0e1053c9
+vfs-7.3.misc commit?
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2725714664
+Cheers, David
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2725714664_x86_64_kernel_kcidb_tool_21783136_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+On Sat, 01 Aug 2026 10:26:10 +0800, kernel test robot wrote:
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   415606a7be939835db9b0d6b711887586646346d
+> commit: da46f0e1053c98355c2d7803ff1cc46617ca81bf [11199/11507] initramfs_test: use test init/exit hooks to override init fs
+> config: arm64-randconfig-001-20260801 (https://download.01.org/0day-ci/archive/20260801/202608010904.q5YsN4ye-lkp@intel.com/config)
+> compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260801/202608010904.q5YsN4ye-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202608010904.q5YsN4ye-lkp@intel.com/
+> 
+> Note: the linux-next/master HEAD 415606a7be939835db9b0d6b711887586646346d builds fine.
+>       It may have been fixed somewhere.
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> init/initramfs_test.c:580:15: error: call to undeclared function '__override_init_fs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]  
+>      580 |         test->priv = __override_init_fs();
+>          |                      ^
+> >> init/initramfs_test.c:580:13: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]  
+>      580 |         test->priv = __override_init_fs();
+>          |                    ^ ~~~~~~~~~~~~~~~~~~~~
+> >> init/initramfs_test.c:586:2: error: call to undeclared function '__revert_init_fs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]  
+>      586 |         __revert_init_fs(test->priv);
+>          |         ^
+>    3 errors generated.
+> 
+> 
+> vim +/__override_init_fs +580 init/initramfs_test.c
+> 
+>    576	
+>    577	/* Tests run in a nullfs kthread; always use the init fs for path resolution. */
+>    578	static int __init initramfs_test_init(struct kunit *test)
+>    579	{
+>  > 580		test->priv = __override_init_fs();  
+>    581		return 0;
+>    582	}
+>    583	
+>    584	static void __init initramfs_test_exit(struct kunit *test)
+>    585	{
+>  > 586		__revert_init_fs(test->priv);  
+>    587	}
+>    588	
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
