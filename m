@@ -1,135 +1,126 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41BE401A38;
-	Mon,  3 Aug 2026 11:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914F0402B8F;
+	Mon,  3 Aug 2026 11:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785756743; cv=none; b=inOTQwu+0Cbq64EHRmnHB/IRx/1PEvTRFrKROnVnVPOUiqL4PAL/ms8okA+5RU94K8Lp4l1ybSQt8Fti9iD9yZ8Mb0j1eJDPHwfmMTLZURwaYQ84z0tQOSDVCsx2ZTeixlta3SkX8Aes/MJIpqD1/w2lxPxZytLa3JQngikGm1Y=
+	t=1785756769; cv=none; b=Pw12BFgVZrvzZuiL5oP/Nb80GHGmdHcXtZEA24WznNmvjXN8FVCNuVMOm50G4l0+WJK9krEVvv0AOCCLGnXbJ9XUJ+oelcUZQIE41Vu6sLge0oKo9+s6bq38FcC5iX12ZLnyqGGXwORwmgWO2mVKw7VLIPOexo7tkEN/ch4d3+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785756743; c=relaxed/simple;
-	bh=cwnNEFwBgSf0j3qHZHUIxmgsg6LjKcjbotuwnnZFla8=;
+	s=arc-20240116; t=1785756769; c=relaxed/simple;
+	bh=7dJkzTSAYtMDVSnOKiOnH/AAnYTPW2oyhipn86ghbCM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZYOm9El4u+7y7OwC0WL9p4T6+niUtfenFHpeU8sOYGepgcD6VkxlT/GTLU5sDAivzF35szxsQPgUgm1l7p3w8+wtB5j6CMa1jm+H0eOtLXAl0B5Oc3Lwc4856xsSOdxJmpoOKNFJOZwbiCsIp2B6VdRoSZP+gLI9ihiOcFfMNCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tRADKcL8; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=rYkz1RQqinq4yVCV3TABOPCaFJnsgaCHcuCUCNrQgSbOUqQ21bbirOhfcKbCv1wBUuBFMADKydiVQ6/N3HcQOArmiNWCz2+FxDHviDsLJj1kC6NHCUE95VXaY9kXoK0/R73lZ6F8XCcOJ9SmLeVOsDFKO9Xf7zMqE1PJIy4qb1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VswI6hpq; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tRADKcL8"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 672Llgu4167209;
-	Mon, 3 Aug 2026 11:32:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=LtVbvSuBXjK37EiKWKtzc+M2G/g6wv
-	6sTQsbFc+thKs=; b=tRADKcL89WwYouQwSfue3HAeGc+0KFFQlt8ttudQJ+gwoT
-	Qk7MSLzXiWlmh1JiNPxuP53kmvYpaPewVkyzY8VamjBxFMLwupB10QFt9v2MTrHv
-	CHPJ+WGDi6OWnq4bjVXGT1+S9mTdkNY4sTPfps7cxU5u8PmGdm16AVl1qjbQkse7
-	tjciNktTy3DsYn901k18qJRYc4SsmksSyAoD+lB9GUYgITv2snvzcAAPioz4wg3I
-	M/vB5aulu8XLkkGizzMMBJPOt21athk9FPMPN0ClrKNQD6kzAqCqJMoyfnP9kZ5h
-	GpXcWEk3QkXuvWOVU3DhGh+oh5a0bVo1aC1YmiYw==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs77g0a04-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Aug 2026 11:32:03 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 673BQKpY021651;
-	Mon, 3 Aug 2026 11:32:02 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsv4jw4m1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Aug 2026 11:32:02 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 673BVtoB29688218
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 3 Aug 2026 11:31:55 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 984292004B;
-	Mon,  3 Aug 2026 11:31:55 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F36DF20043;
-	Mon,  3 Aug 2026 11:31:54 +0000 (GMT)
-Received: from localhost (unknown [9.87.133.185])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon,  3 Aug 2026 11:31:54 +0000 (GMT)
-Date: Mon, 3 Aug 2026 13:31:53 +0200
-From: Vasily Gorbik <gor@linux.ibm.com>
-To: Heiko Carstens <hca@linux.ibm.com>
-Cc: Stefan Schulze Frielinghaus <stefansf@linux.ibm.com>,
-        Juergen Christ <jchrist@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Dominik Steenken <dost@de.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Maxim Khmelevskii <max@linux.ibm.com>,
-        Jens Remus <jremus@linux.ibm.com>,
-        Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>, llvm@lists.linux.dev,
-        bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] s390: Add kCFI support
-Message-ID: <ttj6yp5@ub.hpns>
-References: <20260727140514.116501-1-hca@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VswI6hpq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785756768; x=1817292768;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=7dJkzTSAYtMDVSnOKiOnH/AAnYTPW2oyhipn86ghbCM=;
+  b=VswI6hpqn6kYfRW6Z7dqFToHtUqc3DwwIu+bMu7iPAUzN5JcpInosAHh
+   J7vc0YQrrSRlcMEE4JR9ZS9XoPC52gtwJsaLTTyp89Mu1CEkF5VnJWaef
+   dENgXrq6jby2fuxxgGjhviqdnhUrPIDKmufu9GGr4NkltR0Snb/ap+IFh
+   hLabbVdDyySsiv58pHnUzqiwby32EV+oOnrnC7+Lq7QC3YPGlBjvVtH3l
+   jnMlmsUNmr2JQjn1VzSTnGeD4bKtNnkN6RrdH30hPUxGFjkJ20NM4rc4A
+   Xo5pg7WKg5hjgJiiRCG1iGhyeIz51vuD+b6LnKgxUnjjsfHxpS25aFw0v
+   w==;
+X-CSE-ConnectionGUID: 8SgGBm+8ThCov8fjo2NQ0g==
+X-CSE-MsgGUID: rfuM56npQJWvZN9pm4LqtA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11863"; a="86492157"
+X-IronPort-AV: E=Sophos;i="6.25,202,1779174000"; 
+   d="scan'208";a="86492157"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2026 04:32:48 -0700
+X-CSE-ConnectionGUID: IrRHCxPsTdqC5t4+tEVGyw==
+X-CSE-MsgGUID: WjBVBty+SNmXUYocg4MKhg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,202,1779174000"; 
+   d="scan'208";a="261788270"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 03 Aug 2026 04:32:46 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wqquQ-000000006of-3C1A;
+	Mon, 03 Aug 2026 11:32:42 +0000
+Date: Mon, 3 Aug 2026 19:32:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?=D3scar_Meg=EDa_L=F3pez?= <megia.oscar@gmail.com>,
+	Christian Koenig <christian.koenig@amd.com>,
+	Huang Rui <ray.huang@amd.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	=?iso-8859-1?Q?=D3scar_Meg=EDa_L=F3pez?= <megia.oscar@gmail.com>,
+	Matthew Auld <matthew.auld@intel.com>,
+	Matthew Brost <matthew.brost@intel.com>,
+	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+	linux-kernel-mentees@lists.linux.dev
+Subject: Re: [PATCH v3] Memory leak error in qxl unbind
+Message-ID: <202608031807.sRyvtAVm-lkp@intel.com>
+References: <20260727114155.69204-1-megia.oscar@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260727140514.116501-1-hca@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODAzMDEwMSBTYWx0ZWRfX0+RsWmMmZc0a
- 2S2u6hy+sk+he+w/r57W/ARqowhb+DKzOWwkPqc9m1G9bcqmHINHoFezNX5Gf64cjOHUtRtwJKJ
- 4IudQuLn0EDhuRGErtVZ7FIPogS+pQWeiOuUNzGRRUQf2PwWkQCseRk5JPiSpmNv0cly1ldHQrp
- aLEOucUiRpC2eMD82+WPANPAVmjHTMYSNK6tSZUumltY7M7cGfRpEsTKiP6o+W1PTo56nKuzBCY
- w4KsCtbx8SpSJ9M4N5iiauxZTBUxV7ni9/uv1N85ptHKLpXtdHP0nIHUtvZrhnJz/qVO64zu+6x
- geuc8EA19GWqmVy2vsLiYv0ghDuNX7sjvh10L/DgnEGSYvfrRLGEZ8yvV8cgW67fhorcWawZ4Dj
- SrNh8gySljOkPT2yIgGyAZOwW7qB5tBQr1BNlODiTNsiAt920/Lc2qgx/5JdEr0bTSTexABAfaO
- zyfU/d35u9GDjtzJ76A==
-X-Authority-Analysis: v=2.4 cv=WIFPmHsR c=1 sm=1 tr=0 ts=6a707c33 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=iaD2VS8y51Av8r_WQYEA:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: S5Yxxw9XBRsJyYqAAF0aNjAGA9Youc-a
-X-Proofpoint-ORIG-GUID: dqxDAyJQK-Pp7rMXWZvQv9Ftv1oBawp7
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODAzMDEwMSBTYWx0ZWRfX+ICqe7BwLuwU
- vX60jDd02PqQOIEUMy2opcpdiQp+g3Ax/Itv+CvTtgb7TaeA+CPOo+pHvtOtI6C8OWrmOjUK/0P
- R9N75l7zUB8UyYZlclPMSy9P6Mx78wE=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-02_06,2026-07-30_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- suspectscore=0 clxscore=1011 impostorscore=0 bulkscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608030101
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260727114155.69204-1-megia.oscar@gmail.com>
 
-On Mon, Jul 27, 2026 at 04:05:07PM +0200, Heiko Carstens wrote:
-> Heiko Carstens (6):
->   s390/tools: Pass symbol name to do_relocs()
->   s390/tools/relocs: Ignore __kcfi_typeid_ relocations
->   s390: Add ftrace_stub_graph
->   s390/diag: Generate CFI type information for assembly functions
->   s390/bpf: Add kCFI support
->   s390/Kconfig: Select ARCH_SUPPORTS_CFI
-> 
->  arch/s390/Kconfig               |   2 +
->  arch/s390/include/asm/cfi.h     |   7 ++
->  arch/s390/kernel/mcount.S       |   9 +-
->  arch/s390/kernel/text_amode31.S |  13 +--
->  arch/s390/net/bpf_jit_comp.c    |  28 +++++-
->  arch/s390/tools/relocs.c        | 158 +++++++++++++++++++++++++++++++-
->  6 files changed, 203 insertions(+), 14 deletions(-)
->  create mode 100644 arch/s390/include/asm/cfi.h
+Hi Óscar,
 
-Applied, thank you!
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on linus/master v7.2-rc5 next-20260731]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/scar-Meg-a-L-pez/Memory-leak-error-in-qxl-unbind/20260803-140059
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260727114155.69204-1-megia.oscar%40gmail.com
+patch subject: [PATCH v3] Memory leak error in qxl unbind
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260803/202608031807.sRyvtAVm-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project bacfe2950f8218268fcc0a8765644ea0c15f0360)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260803/202608031807.sRyvtAVm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608031807.sRyvtAVm-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/ttm/ttm_pool.c:1510:9: error: use of undeclared identifier 'backup_fault_inject'
+    1510 |     if (backup_fault_inject.dname) {
+         |         ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/ttm/ttm_pool.c:1511:14: error: use of undeclared identifier 'backup_fault_inject'
+    1511 |         dput(backup_fault_inject.dname);
+         |              ^~~~~~~~~~~~~~~~~~~
+   drivers/gpu/drm/ttm/ttm_pool.c:1512:9: error: use of undeclared identifier 'backup_fault_inject'
+    1512 |         backup_fault_inject.dname = NULL;
+         |         ^~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +/backup_fault_inject +1510 drivers/gpu/drm/ttm/ttm_pool.c
+
+  1502	
+  1503	/**
+  1504	 * ttm_pool_mgr_fini - Finalize globals
+  1505	 *
+  1506	 * Cleanup the global pools and unregister the MM shrinker.
+  1507	 */
+  1508	void ttm_pool_mgr_fini(void)
+  1509	{
+> 1510	    if (backup_fault_inject.dname) {
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
