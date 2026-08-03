@@ -1,106 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5945430569F;
-	Mon,  3 Aug 2026 17:14:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548C942EEDA;
+	Mon,  3 Aug 2026 18:22:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785777261; cv=none; b=V3tbleW9ScneSCl5UVjUl6UZEhw+VXsz7/LJsNNt+bO813lWf9w7is6kCA2HdHc/pYUpmvHzlG1R2EiE3FcZJrUCyRr+fG0KGwLO4A5Dl4XyU7wzPzvzu9xK6/SpaictDUnV5b2cY6/Y55638qIuwrEseDCMYKFNONiteBjUNpE=
+	t=1785781381; cv=none; b=FMZWapJb4+Wy+ZQOT2HwrSto4L/Wpl+MBdIhWdNKQwGS0XbS+uKGkVbv7Cx7AcMTGE7YsqdiraBgm3fUIHRScp9kfCMmZ7219QqtTeyqOcNEa2XHmi0UMbft/IB6rO8MMh7SoEvDsIE3TzKAjKrUzvauE1Goo5GD7ziG9zRqNUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785777261; c=relaxed/simple;
-	bh=jGRz6kdHaHp2LNgVgSF7lUbV2OC6XWABGW1rWxCQqik=;
+	s=arc-20240116; t=1785781381; c=relaxed/simple;
+	bh=QgQIzuXIMtFauEuo/gKRRtQ3UOZuxeRRJTqv9Kg24b0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e9yhsBhMBzaYFO5whkei05WY27gQFkXrplgdZBdR7B/OG+Vf3DfLpJbqITGaLtDulkSgHYBfVXxhlk9wfwfguozw3q0nmw202eUO6FgZ0hrIYt8jozpd0KuMy4x3z3boyOJFkKnkRiw0qAlb8zLofLWuQ1w/dv7aiR3GD9sOkPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NC5n/bFv; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jM2Ae95dFBD7BemITlYa6/fNF/k4O2Ax5O0UaYqJ6JVo4M8E7yNaBPG/OJRg0vF8i9sqjYqDo+waUSI8nSvC7cylgpBAD4njKkE8SAtSHnYwwtKO8ZTlaOMlEx0BCsKo/jFV8uORd4c2Y0hGf3bDwrpfHkNU5S5nzOlmwsCahw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k7Zee/Mx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NC5n/bFv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785777260; x=1817313260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jGRz6kdHaHp2LNgVgSF7lUbV2OC6XWABGW1rWxCQqik=;
-  b=NC5n/bFvVHmTzlWYY9UNHpPd9eprQzLdZeG5nVpsIkzD90i5Avr1J5A8
-   cw+asXRS2jjc2SIGGABmgd0gSfpY1Y6alTraM1T4dPg0e/8Wncw6wvOmp
-   aLCX62gvqaII0MHePf9Rm5t0DaPMZC7pJ6ozoYs1qs9+1McjwOnplGG+C
-   d33H7JJLDpeaNov+qMK8o/kG6YLF63YpnjE4oM3BM8qv3CngfPd+yqeV6
-   GUeHwJprc9jpwOIRvpFk1kwE+ETmyRh7z2XMTiR5M3kezVh2xEotx1KjM
-   YNeGbFIYTDoEgbTPJviswiobVL7uxb0nxVyyFKKnANT2whPQBdtsTva45
-   Q==;
-X-CSE-ConnectionGUID: J1BC2jRmTQ+L6IiWLqQeKA==
-X-CSE-MsgGUID: M74BUqKzSmuFOCW6zqsrag==
-X-IronPort-AV: E=McAfee;i="6800,10657,11864"; a="90131967"
-X-IronPort-AV: E=Sophos;i="6.25,202,1779174000"; 
-   d="scan'208";a="90131967"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2026 10:14:19 -0700
-X-CSE-ConnectionGUID: vVDKQ1kRSNWmA0Y7HHg1LQ==
-X-CSE-MsgGUID: Im4KLYwuTgmg1ciDt1Lu8A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,202,1779174000"; 
-   d="scan'208";a="260681372"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 03 Aug 2026 10:14:18 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wqwEw-000000007RV-3jLH;
-	Mon, 03 Aug 2026 17:14:14 +0000
-Date: Tue, 4 Aug 2026 01:13:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jiale Yao <yaojiale02@163.com>, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Miao Li <limiao@kylinos.cn>,
-	Nguyen Dinh Dang Duong <dangduong31205@gmail.com>,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jiale Yao <yaojiale02@163.com>
-Subject: Re: [PATCH] HID: huawei/rapoo: reject non-USB transports before
- to_usb_interface()
-Message-ID: <202608040101.4jtONal7-lkp@intel.com>
-References: <20260728064302.3853953-1-yaojiale02@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k7Zee/Mx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 946B11F000E9;
+	Mon,  3 Aug 2026 18:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785781379;
+	bh=MpH62FMFtWUxRfc3axL/EWkSaCRGMx2miOZKjiP1hxo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=k7Zee/MxHzLWUTss9GKG+pbzKLIwtX8fAkHQ7bqeOrhMLjo9PR3khRQJ/tXXr+UHC
+	 2z6O8JtxCh8EkUK62MyK10oQbaoVWi+Jduul4P4nzBS1osrbduvjWm22FwsJZxnNnh
+	 +gSL1ucabzOLZTU6e18UG2d/Lq0oxKebJN1/znoVMczAMHmbJF0TSiYNixS2fz4Qdd
+	 AVhm859dRTDKksUgxx9qa9FwaCceL6qUQa41jb8/gFT+4rYqFDy4jmcMcGTqGYf7YR
+	 1wGiO3E/pXEjDeYy3eB7Iw8a86yY05o+FfCQfADdm5Jps3aOjn/edbNir5I1rKqnoZ
+	 i7LN/twwZtpLQ==
+Date: Mon, 3 Aug 2026 11:22:55 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Maninder Singh <maninder1.s@samsung.com>
+Cc: "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+	"nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>,
+	"morbo@google.com" <morbo@google.com>,
+	"justinstitt@google.com" <justinstitt@google.com>,
+	Onkarnath <onkarnath.1@samsung.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	Rohit Thapliyal <r.thapliyal@samsung.com>, ndesaulniers@google.com,
+	ardb@kernel.org
+Subject: Re: [PATCH 1/1] arm: backtrace-clang: fix wrong sp usage for
+ unwinding
+Message-ID: <20260803182255.GC1067866@ax162>
+References: <CGME20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
+ <20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20260728064302.3853953-1-yaojiale02@163.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260729034101epcms5p4ac85b52aef78052cbc03d5913a7300b5@epcms5p4>
 
-Hi Jiale,
+Hi Maninder,
 
-kernel test robot noticed the following build errors:
+On Wed, Jul 29, 2026 at 09:11:01AM +0530, Maninder Singh wrote:
+> Ping! Any comments?
 
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v7.2-rc6 next-20260731]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I am not that familiar with this code but maybe Nick (whose address I
+have now updated to point to a better one) or Ard could help take a
+look? Original patch is at
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiale-Yao/HID-huawei-rapoo-reject-non-USB-transports-before-to_usb_interface/20260803-165822
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20260728064302.3853953-1-yaojiale02%40163.com
-patch subject: [PATCH] HID: huawei/rapoo: reject non-USB transports before to_usb_interface()
-config: hexagon-randconfig-001-20260803 (https://download.01.org/0day-ci/archive/20260804/202608040101.4jtONal7-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260804/202608040101.4jtONal7-lkp@intel.com/reproduce)
+  https://lore.kernel.org/20260624054916.1571701-1-maninder1.s@samsung.com/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608040101.4jtONal7-lkp@intel.com/
+but I have left it inline as well.
 
-All errors (new ones prefixed by >>):
+> > show_stack() can be called for any task, however c_backtrace always unwinds
+> > frames based on the "sp" register. This results in printing the backtrace of
+> > the current task instead of the target task.
+> > 
+> > Try with normal TC:
+> > ==================
+> >        for_each_process(p) {
+> >                sched_show_task(p);
+> >        }
+> > 
+> > [7.433271] task:kthreadd        state:S stack:0     pid:2     tgid:2     ppid:0      task_flags:0x208040 flags:0x00000000
+> > [7.433633] Call trace:
+> > [7.433640] [<80113418>] (dump_backtrace) from [<80113510>] (show_stack+0x14/0x18)
+> > ..
+> > [7.433676] [<8016749c>] (sched_show_task) from [<803cb324>] (meminfo_proc_show+0x6c/0x930)
+> > [7.434019]  r5:8158e300 r4:8b4882d0
+> > [7.434024] [<803cb324>] (meminfo_proc_show) from [<80365788>] (seq_read_iter+0x148/0x4bc)
+> > [7.434045] [<80365788>] (seq_read_iter) from [<803c044c>] (proc_reg_read_iter+0xb8/0xc4)
+> > [7.434060] [<803c044c>] (proc_reg_read_iter) from [<80377104>] (copy_splice_read+0x228/0x308)
+> > 
+> > It should unwind frame based on passed "fp".
+> > (CONFIG_UNWINDER_FRAME_POINTER=y)
+> > 
+> > With fix:
+> > =========
+> > [13.933732] task:kthreadd        state:S stack:0     pid:2     tgid:2     ppid:0      task_flags:0x208040 flags:0x00000000
+> > [13.934165] Call trace:
+> > [13.934604] [<80afa1a8>] (schedule) from [<8015426c>] (kthreadd+0x124/0x208)
+> > [13.934654]  r10:8100bbf0 r4:8116f440
+> > [13.934664] [<8015426c>] (kthreadd) from [<8010010c>] (ret_from_fork+0x14/0x28)
+> > [13.934691] Exception stack(0xf081df9c to 0xf081dfe4)
+> > 
+> > Additionally, the extra manipulation of "sp" register appears unnecessary in the "current"
+> > task also since the "fp" register is already provided.
+> > 
+> > Signed-off-by: Onkarnath 
+> > Signed-off-by: Maninder Singh 
+> > ---
+> >  arch/arm/lib/backtrace-clang.S | 4 ----
+> >  1 file changed, 4 deletions(-)
+> > 
+> > diff --git a/arch/arm/lib/backtrace-clang.S b/arch/arm/lib/backtrace-clang.S
+> > index 290c52a60fc6..993410a6afd1 100644
+> > --- a/arch/arm/lib/backtrace-clang.S
+> > +++ b/arch/arm/lib/backtrace-clang.S
+> > @@ -105,10 +105,6 @@ ENDPROC(c_backtrace)
+> >  		moveq	mask, #0xfc000003
+> >  		movne	mask, #0		@ mask for 32-bit
+> >  
+> > -/*
+> > - * Switches the current frame to be the frame for dump_stack.
+> > - */
+> > -		add	frame, sp, #24		@ switch to false frame
+> >  for_each_frame:	tst	frame, mask		@ Check for address exceptions
+> >  		bne	no_frame
+> >  
+> > -- 
+> > 2.34.1
+> 
+> 
+> 
 
->> ld.lld: error: undefined symbol: hid_is_usb
-   >>> referenced by hid-rapoo.c:39 (drivers/hid/hid-rapoo.c:39)
-   >>>               drivers/hid/hid-rapoo.o:(rapoo_probe) in archive vmlinux.a
-   >>> referenced by hid-rapoo.c:39 (drivers/hid/hid-rapoo.c:39)
-   >>>               drivers/hid/hid-rapoo.o:(rapoo_probe) in archive vmlinux.a
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
