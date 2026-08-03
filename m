@@ -1,185 +1,148 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8FAB672
-	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 04:55:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A5D39A80E
+	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 06:57:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785732938; cv=none; b=OE4wSSWu5LO2ODx7KVd8K6mTFdNPfCwAOJb6pzyISmsM0sG1SVdjAoX/kJiw/j/KSlyan0JvYNzwPlX/kULgP7nxhbkf+J/fJaSReh94A+ZZKAvf8u5HLrKSvro9qrBcw3WP4BsMrZFw36M37HGNFjBSuXFJrMrSNC8U/9Ymbj0=
+	t=1785740280; cv=none; b=oNajybZTuvzonKO9NUyhjzA7sUP1PDBWO+WRcu91cAL6DDiRydamgAWjbl83gn675OlQ18siM9wFuJPc28ARogTsDICmEd4CMmDRHCk/lhcxGxYM+WtdV76l2XZYBrCnxy30t9AOJTE2Xx3i8EmJ/ujM6K7FW0Vd0lc8zg4wqPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785732938; c=relaxed/simple;
-	bh=fRJj015EwMjGldfpjrYNn5WsphdExP9SmZFsg+szH3w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AMQiBszORGtNkPbGWvYl4JS9xAzANtiPpxUDcibpBKf9aloBQuZlvOkhIt+mW/Q1pP57tCKWl6gCXeLKrJ/v7aKiqjH92c5dJRKZKMN94uM5PKkajza17XYjBfFNSKUd24z2ucbEhtltmWmVfYssvixwM7o0ESt226YxKWhrjb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=qHlVhtJt; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=dGBQYC5d; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=QF6K++kc; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DF+YIjls; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1785740280; c=relaxed/simple;
+	bh=A/mabjbnxVXmOXx5tM39bsZ0XGYPYtQ4eM8QH5hpi9Q=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p0P5s3QohTZtC3sAlOEIYifdqTM0Qqbc8/oD2hNQV1IiIBSxvuVTzRT/rkaG9q07ccFNl19lVp7DFtBC9RiqV9smsLDvsjo0LNc2ckeljyjEap51aUBUHssjHa7/epDM7ogtXcQzyNKe0kPwHgEUZdGl4GWbSoepED71dkG4FuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fN58jN80; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="qHlVhtJt";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="dGBQYC5d";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="QF6K++kc";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DF+YIjls"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 09E2D7EE96;
-	Mon,  3 Aug 2026 04:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785732924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
-	b=qHlVhtJt1i6irEG2tm1eAtGfS/UDVSPhpplsJVni2OfaolXcfX3fmkyE9bjn/K7mXwNMaC
-	hy4/jKVYit8YaPPVj6Y7HGNeVZNRI0wOMxXDPZW2pvY9tHmY8ujoK0O6rG7dzrLCZ1Gjy5
-	ZCCB+e1h5dgpANpxyfEVPS3/pAVJbpM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785732924;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
-	b=dGBQYC5dvy8R9qfKXSYLkAtuitEcFr1e/VfzB3S6P4n6p98wwkGfT6FVdwviV2I9JkUEim
-	mhIw/CBICqnY+MCA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1785732920; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
-	b=QF6K++kcUBc4kdPJlyunEQlF72aucwsB/5oHl6fGGpn6Y4/GQPOz9zjgot2vO8Uimpf0Sy
-	+oR0Ia5qPMRu+DJyjLd6EmmXBVnqWtWKIEo9cSERpl2xamQBN70wzeOAXGiDezYQl1kQZz
-	4wd+/2lndktrbYNeYqzNrHQvmCZUgaQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1785732920;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JL687k9UJ80Ji/EnHGuBbxZo/4lxjPoihzqXv/O2HDA=;
-	b=DF+YIjlssn6ttnTEVtJvrW6pQ3PDQsV55YN8HOVvg0N9kZDXN16+iurz0ZOEcAwEWo2wSo
-	s1gf1tN+5Yu3hwAw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4BFE9779A1;
-	Mon,  3 Aug 2026 04:55:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id ruCVATYfcGrFEAAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Mon, 03 Aug 2026 04:55:18 +0000
-Date: Mon, 3 Aug 2026 14:55:12 +1000
-From: David Disseldorp <ddiss@suse.de>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, Christian Brauner
- <brauner@kernel.org>
-Subject: Re: [linux-next:master 11199/11507] init/initramfs_test.c:580:15:
- error: call to undeclared function '__override_init_fs'; ISO C99 and later
- do not support implicit function declarations
-Message-ID: <20260803145512.6b2e6c18.ddiss@suse.de>
-In-Reply-To: <202608010904.q5YsN4ye-lkp@intel.com>
-References: <202608010904.q5YsN4ye-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fN58jN80"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 672Llkk0167346;
+	Mon, 3 Aug 2026 06:57:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=1R3n+I
+	oCM1ZOHUYIV5Qef7lSPk282K7E+G3fJSsnbZE=; b=fN58jN80xax3qT4brUZ1ua
+	BSCFnW8fjd/iapsRkoC7EIb+lOPWEgJi7+4RMFK52msVCTzTWzyN1XoAnVxh+tar
+	k1SPdlyE5OznYaTy0gChXFNBYo61osoGchmiK0IbhermOKmBR+ST7wJWcB6GbY/h
+	yb0OVbyGQS8/S3hPed68vsfLNL1hExiWaMYJgzEc2iCbFUC5/jzTQihre9IZfXm8
+	ASd3XC7Fr96Y3/8XXkuC7Bp+2FtjJ/DsofNoVgdGqFQ1ZihMBr0y0P08kqvnvSlX
+	O/7tvJFS5KAfVao8IZz/kuxb5FBJRKxN4XtZBgCQkhhPDOpb8f70Xb5/j3mpCfDw
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs77fy5ht-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Aug 2026 06:57:25 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6736uFNo001010;
+	Mon, 3 Aug 2026 06:57:24 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsvmh430d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Aug 2026 06:57:24 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 6736vMOu38666544
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 3 Aug 2026 06:57:22 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 631762004D;
+	Mon,  3 Aug 2026 06:57:22 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BDCF120040;
+	Mon,  3 Aug 2026 06:57:14 +0000 (GMT)
+Received: from Linuxdev.j9d-in.ibm.com (unknown [9.123.86.85])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon,  3 Aug 2026 06:57:14 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org,
+        peterz@infradead.org, jpoimboe@kernel.org, jbaron@akamai.com,
+        aliceryhl@google.com, rostedt@goodmis.org, ardb@kernel.org,
+        ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
+        bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
+        tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com,
+        tamird@kernel.org, acourbot@nvidia.com, work@onurozkan.dev,
+        nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
+        justinstitt@google.com, fujita.tomonori@gmail.com,
+        joelagnelf@nvidia.com, gregkh@linuxfoundation.org,
+        prafulrai522@gmail.com, nsc@kernel.org, japo@linux.ibm.com,
+        lina+kernel@asahilina.net, j@jannau.net, airlied@gmail.com,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+        "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
+Date: Mon,  3 Aug 2026 12:27:13 +0530
+Message-ID: <178574013457.29744.6211258618175255546.b4-ty@linux.ibm.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260708082454.1254320-1-mkchauras@gmail.com>
+References: <20260708082454.1254320-1-mkchauras@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -3.30
-X-Spam-Level: 
-X-Spam-Flag: NO
-X-Spamd-Result: default: False [-3.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	URIBL_BLOCKED(0.00)[intel.com:email,suse.de:mid,imap1.dmz-prg2.suse.org:helo];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,intel.com:email]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODAzMDA1OCBTYWx0ZWRfXzixZXzybs/2o
+ hUANJj1w7Lz32jxnD2KmcjMwry6QVvpb/HPQpbr8B8OCd07J7Md+RSrl/eYt9RPKRtMnk+jvA32
+ VCNlXc15NxW159YoV1qGzXMoQBxmITYfyUTxA/QtZPCAy/Yl94v7YcOx6QoFgh5XyZJOHlg9G7i
+ CIRifyqGI6nXoJOJ6XWODSN9ZLsQdi2xDrxCE0vJpQqv6Kmdff5gcdsH6ZcGZOev46g9MiL+KCp
+ YM5eIjoqLAKc3wOD9TvGDtZ8gPhiAj++6H5izS7JyKVvnFXkX2DHSZg99PVzuYphlkMq/m6/6A6
+ 87MsnjxK6KHPO0v116U+worintGA4ZJxX9/O6E7eRAMlAUi++vx4lb5c/W7hkLOEbfgkPLLJOSB
+ 0FFuYSRElSGqFVzUWkgf5FWosMV1CZywP6K1r/IX5D2uUoYy7IHaSS+t3MoKvqcDGy5mOcnV0PI
+ 9r5c6SKauJ4ZPuerorg==
+X-Authority-Analysis: v=2.4 cv=WIFPmHsR c=1 sm=1 tr=0 ts=6a703bd6 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8
+ a=8O71z6kVuDHv7qOZaOcA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 0z1FItzTZBVV0JDu10ANRIm4pigg_8Gl
+X-Proofpoint-ORIG-GUID: TGfsrqQzsgVAuxm8WyNEIEWnR2AAlIak
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODAzMDA1OCBTYWx0ZWRfX0nf5gkRq3noj
+ 37ycwIHjzcvJeumGGfqXbg9nyPRbv4SaKmxC2tx8NJGExr6ugyHF7WD9V+vRx7bMf03b8drO2df
+ CHNEiRqVgpbGJqA5pzV2KuF4L1UZLe0=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-02_06,2026-07-30_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ suspectscore=0 clxscore=1011 impostorscore=0 bulkscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608030058
 
-Thanks for the report.
+On Wed, 08 Jul 2026 13:54:47 +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
+> Enable experimental rust support for ppc64le and ppc32be. The patch for
+> ppc32 has been provided by Link Mauve[1] and ppc64le support[2] has been
+> merged over it. ppc32 needs some toolchain fixes mentioned in the patch
+> `rust: Add PowerPC support` and the discussion for that is done here[1].
+> 
+> This has been tested on
+> - powernv9 hardware
+> - pseries P11 hardware
+> - pseries(9, 10) qemu
+> - powernv(9, 10) qemu
+> - rustdoc on x86 and powerpc64le
+> - rusttest on x86 and powerpc64le
+> 
+> [...]
 
-The vfs-7.3.misc commit da46f0e1053c9 ("initramfs_test: use test
-init/exit hooks to override init fs") is bogus: it is supposed to be
-applied / squashed atop Christian's ("kunit: use scoped_with_init_fs()
-in tests that resolve paths") change, which includes fs_struct.h .
+Applied to powerpc/next.
 
-Christian's vfs-7.3.kthread branch has a correctly squashed version as:
-b4343aebd3a4d ("initramfs_test: use test init/exit hooks to override
-init fs").
+[1/7] rust: Fix "multiple candidates for rmeta dependency core" error
+      https://git.kernel.org/powerpc/c/00cdfd072c709c608606461d7d44d4613119bfa9
+[2/7] dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER is disabled
+      https://git.kernel.org/powerpc/c/be809b60cbb61aab96179f44ac3670242ae72996
+[3/7] powerpc/jump_label: adjust inline asm to be consistent
+      https://git.kernel.org/powerpc/c/13244c0a40139fe66c4c5c5655f4d732a6002957
+[4/7] rust/powerpc: Set min rustc version for powerpc
+      https://git.kernel.org/powerpc/c/e299147cdc8e19c6421a6b7863dc82a35b09d967
+[5/7] rust: Make __udivdi3() and __umoddi3() panic
+      https://git.kernel.org/powerpc/c/c93c194e4ee71a734986fd99a8b1ec9fbb7a9b8b
+[6/7] rust: Add PowerPC support
+      https://git.kernel.org/powerpc/c/73b741adb264967093ef4eb59905618a7e0d0de0
+[7/7] powerpc: Enable Rust for ppc64le
+      https://git.kernel.org/powerpc/c/bc87cbdb952e9223616b839d64bdb4723aa2ed1d
 
-@Christian: could you pleasee fix or drop the bogus da46f0e1053c9
-vfs-7.3.misc commit?
-
-Cheers, David
-
-On Sat, 01 Aug 2026 10:26:10 +0800, kernel test robot wrote:
-
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   415606a7be939835db9b0d6b711887586646346d
-> commit: da46f0e1053c98355c2d7803ff1cc46617ca81bf [11199/11507] initramfs_test: use test init/exit hooks to override init fs
-> config: arm64-randconfig-001-20260801 (https://download.01.org/0day-ci/archive/20260801/202608010904.q5YsN4ye-lkp@intel.com/config)
-> compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260801/202608010904.q5YsN4ye-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202608010904.q5YsN4ye-lkp@intel.com/
-> 
-> Note: the linux-next/master HEAD 415606a7be939835db9b0d6b711887586646346d builds fine.
->       It may have been fixed somewhere.
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> init/initramfs_test.c:580:15: error: call to undeclared function '__override_init_fs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]  
->      580 |         test->priv = __override_init_fs();
->          |                      ^
-> >> init/initramfs_test.c:580:13: error: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]  
->      580 |         test->priv = __override_init_fs();
->          |                    ^ ~~~~~~~~~~~~~~~~~~~~
-> >> init/initramfs_test.c:586:2: error: call to undeclared function '__revert_init_fs'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]  
->      586 |         __revert_init_fs(test->priv);
->          |         ^
->    3 errors generated.
-> 
-> 
-> vim +/__override_init_fs +580 init/initramfs_test.c
-> 
->    576	
->    577	/* Tests run in a nullfs kthread; always use the init fs for path resolution. */
->    578	static int __init initramfs_test_init(struct kunit *test)
->    579	{
->  > 580		test->priv = __override_init_fs();  
->    581		return 0;
->    582	}
->    583	
->    584	static void __init initramfs_test_exit(struct kunit *test)
->    585	{
->  > 586		__revert_init_fs(test->priv);  
->    587	}
->    588	
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
-
+cheers
