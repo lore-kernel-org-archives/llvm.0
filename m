@@ -1,95 +1,95 @@
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19CD3AB27F
-	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 20:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB58D38E8A6
+	for <llvm@lists.linux.dev>; Mon,  3 Aug 2026 21:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785790630; cv=pass; b=lCdGbq5d4WsQRoH85LxwLpv64o5ve/FrJWprd6hVBVUFBeBsig19vcX/Fq9VcbyiA28UqBNXD7Yqm9QWa9cr9iUMHz5O0snC4Fzs7jAOZtPogPhARM9ue5n1EnG/zzWsBZbC52fZbUgsYjrwJYqsLRCDRAxMTF5+VQp+aj6K128=
+	t=1785791767; cv=pass; b=GxYUDZa8kW0WZmzYt+motP9zbeE5uB+00Ry5IgN37TrPC9EWN/ulagSKocbsWbjyEU/pgQCDHrW6wPxiL9DFCrB7Z3nsYSVqTlizz2tm6gzKAa+EJmBYwGbG0XF69tJ6EzTrhoddAAHBXKHXvEVbjzmG+4ZpBIcdyJ8Qjf/3qJ0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785790630; c=relaxed/simple;
-	bh=WPvWk5jQOFsRIWCA6Ydfa4nFq0ilXTV7ToIHXjwOqHg=;
+	s=arc-20240116; t=1785791767; c=relaxed/simple;
+	bh=y5qiPvD/on6DO4GW0krQNBl6dSDpG8n+mCfX4z92gGM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PIsVRxq6QPrjLr/n7chB95zn26Amo0+7fKNV3mr6JO4Zaw4SLPmGeQ0w9woqTDhURgBnRuRDGMmv4fiP5yaQJvhaHksYx9Z+pkg06+aihhVOexLQPUGtZ9Z5Tip30pyt60J0Fi7Ste9wckMP4y4PVF4UAUmFvw2M9WoiDLM4i6E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sMFzacgk; arc=pass smtp.client-ip=209.85.208.47
+	 To:Cc:Content-Type; b=WZmhyy9xPwsfFIO5Ka+79UIgEUALXhOMZ4J3n4FYz+F+pCFDOW00HIc/Kitw5vXqWwUVnTzbG2NzGKg/v7uKkdMFz8wcaECExXp6vXBKYPnqD4C1mgyb6YCUVtkS6o/RSeKdFrqtK0mT9vaCMIwSGFVGMSdZeLtVBaaqAt2xLyA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KrsUhKA/; arc=pass smtp.client-ip=209.85.208.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sMFzacgk"
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6a0a4aa99bdso4581217a12.1
-        for <llvm@lists.linux.dev>; Mon, 03 Aug 2026 13:57:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785790627; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KrsUhKA/"
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6a0a4aa99bdso4604467a12.1
+        for <llvm@lists.linux.dev>; Mon, 03 Aug 2026 14:16:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785791763; cv=none;
         d=google.com; s=arc-20260327;
-        b=bspkg+4exK1Hlmk6QFF8yZm8cr9MBfFzD177hw4zbfmDZAHlbQyfB5TEYmVHAaJET8
-         Or/m4D1R+C07wStSHyov7Ok8kWprf7cn47Fk4wu0V16kxxgKfZ8pM/Uwzc8Lc0W2XFGs
-         ogvB5o976+dqFAF923IWfYcmUdSbcxRGrBREZ6EeLabKZkRCtOWktGLumABBAwNOooLj
-         pL4SwjSXRKjZgxQhrqjzBEae3GqXf4WONVwLNa/viHU2XSbdunlbuJgn+5eyiRfQYKxc
-         VH11uX8Ru5zdw1tDeCUssvarGInpP/KF34fJ0dveBRTl4cpat1bnMIozgx1dAvVfEHOY
-         rk3A==
+        b=cuzyhzNlnlj3UQGhjJnYaj8ctK2MMV88Isykz0oLYjhn8/u3cdDhkdQWIPSQ7srhxS
+         Wc23id2J72WBM2+bmRYAx1jLC6dV8u31hhoOkPSwhBg62PmZfq8IQ5LtlPdD3otR+QEo
+         lTDtTcJS1vNWBj+Q/RLNJfK3cqH1VyTJma57cwv4/yArpZBnwvUU6FBXY/bqpgiq+oIH
+         tNFuWDbIK8UUwvV7rE9Lg5C2nYNQIy5sLb1r3s5O720qd+y3jlam09jy9IYnnuAttyCa
+         hbCUNSEE1jyNQX2bdWHazLEXloNROg3mAIVbBWiGfCv89KG73am3fS0NFM1nanZQrbkm
+         ZOAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9fxx0B02wBdJaS2C/b2hy+gR8nRXboJM13XF37xgcRs=;
-        fh=mUpqBkrMpAN/8nfO9smmzB+0jhG9Amzl8MhQcZygeEs=;
-        b=TmlXGQrxpEzRmDqjBhFykiBFDLbWdDzyZjDB34atl7ZGfz6p+tVihmrx8GS5u1sKeB
-         YaKNEOsZHc89oIZY18DfotS/oeRQZNdvO3AtGRSMyR9UVi5Jpmbb3z5n26pBJwPO2qI8
-         jAwEz+DqwUy8vjLURxRgf0dW2XzLAwdYyUsLD8dgsWP+OmapWVoMzM7Ge48pxIkGLM4O
-         dGI6WK4qFfWkcEVsb4EdZ3p4IRkcgWbzwFKbAEHLoYj6+Hi/LPavS6hAdgKzE9L501/9
-         /XJrnanK6zqApsMxOUOYg5xHnfyyrIjZdXwjwVF6QfCOEnkMf9tBhUjCK6nS0wDM9zrl
-         1qog==;
+        bh=ONA6u0gWcMYpm9YSgR6BXB8HOfOJ6IJqSr2+VzPiqIU=;
+        fh=qxXGtliCdDo27JEwVITOuqVLDD9+VNteWVic7M3om5o=;
+        b=pxtFSE1tq33RBeOs781P6JrfIL+UJAuJMiFd1BtsaCbZpc7Jnp98zWxmu6fvyiDUCy
+         rXcu7Q+dxtF88EEFmAf2Jp5RQYi2qTTloe6jYAuce2ia/RYSc2XKR7ek2FKygAVWybOq
+         l4ozXg9mYbcjE28dX8xNiCh2vBbNMjV5Qxs+MJ9h3+CfABcLu1VgNNMUkWcCInF/tGQw
+         hfFLm3VJg4yPPbTkA8+2OAGZUh/H5s7R7ofBWHzpFcBMJkGjpiTE2gnq+f3XrcOGOZ96
+         pgXUSyFUs0d7jtjelRgIl9Uf35FaOIi7GRoDNg1W025kLYTYnaQ0n5oHoyhK1tdQtAnH
+         YK/Q==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785790627; x=1786395427; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1785791763; x=1786396563; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=9fxx0B02wBdJaS2C/b2hy+gR8nRXboJM13XF37xgcRs=;
-        b=sMFzacgkT6A4QE2LSp7bFgXIdS3ktAPObQ4ib2iJMG6e3ylBcBNVVAHHDZqRA2jmuL
-         IAbhEb28LQaEREP0aQDywIBirUMFi3SjcRf/2W6zfmzXrRNtCiqmDIuF3KqzQ5fO6A4J
-         NgBPhN65SwkrJZXlibVgOLbipkxMzSRdlAAB2YH5xrl51Jv3Y+mzy3jMIGPSpwOp+lxM
-         WgKHVKZaY384AYVQcincj/zaj0iTH331FYj6S5byAAtbhR0KpJBZbDYhCD99s+HgiZyd
-         13xuVyRHv9c0xziWdSYE438qM26hTHK4V3J+HAgiG93AO2Jto4pcJpq4PuZF//owzalr
-         9/fA==
+        bh=ONA6u0gWcMYpm9YSgR6BXB8HOfOJ6IJqSr2+VzPiqIU=;
+        b=KrsUhKA/stzXo6miyRqEZPSruSsQyrIuyZoKwxGpy4RKVR0DdImie8KFeR4HoFkdsl
+         tqrb4AAdS43ANuC7T0YevYkdpJ1gzgl846jyLnxL68X7VlOLzd67h8VdzxunZ/pCGMP0
+         BEtpzBbtq9EvM9AvVNqSPwo6VRQZA3KxRpLCnTz7rupFCcOIYmYhdvDyTyO/K5Un79Z1
+         kW+YLEg9abnB7aR3VWeTNZXs9xoP7NTtYxX30ijbSWx6gcH/VO78HUGUR/+bdcboHsNZ
+         QissYCb9M+nnhN25PtnnRsm97wURB4pWwI8yPJGdMB9dqGNyEOoPlJEToALrT9ut6ITj
+         AJlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785790627; x=1786395427;
+        d=1e100.net; s=20251104; t=1785791763; x=1786396563;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=9fxx0B02wBdJaS2C/b2hy+gR8nRXboJM13XF37xgcRs=;
-        b=B5n6LXnrr8ReHUda5Z3L86E9sZvUyU5H5kEXYh9BI5c6SJ10+SnlZEFqTC+JDD8lX+
-         ou1AWi9CBv7pBD5Kza/y8WcY27zuSj+6C9vdSeGGfq4quKHkVzE15H/UGKBZPVVE1Ylc
-         0E5haKHr5NretF/FH7x7maxEkavcBGqZvAAUiyyHpBbbAKcP8jogM3jOeS1v/JqpUl17
-         qhQ8YCzHABbBBSLdTNzZTMzzf28HJlQB1CvLo4vPqBYkHxUdM1LuhR3Q8XvDSUzqWle/
-         M1hFFM0tchqIxbd/RWjJe37lMwFj7msClPWdc2Zv9yt74U2VjfNsJhWG27XXF2bx4p0G
-         //fw==
-X-Forwarded-Encrypted: i=1; AHgh+RowjP5StNuhtA09ysggagBEQCLx8mRpunRm1M3SAZQ12dAc4zUBpYxKo0L9WfKU7V46CynM@lists.linux.dev
-X-Gm-Message-State: AOJu0YyclHKU2Tqazzj5u+0Kgyw6me5wZoqmmxtCc5eq11QDlAaD11vX
-	AKyV3XPTRhszn/Hjafig5aRlxkJxMePu9v/eStF9wPEjZ3buLqQEVXaOiFUDiicLKzEZwHzrdkc
-	C8ivm8DesQfnHZRGcxYpA3cqRgfzLwHs=
-X-Gm-Gg: AR+sD125v4y+amgeAi654SmO7eedqwGOcGXKtGyc/eLhWRRYimzkXu+dyqu4UxwvKkV
-	5Q5nzx18kkUpaqhzTA7My+NZ4BqeBjP6QCjrU8YTVrotWp6qSH7WFz4xQN/d1N2ZrMHTf96TZcg
-	HztsgdplWBW1n457Dci5yB8n535m64cNGVvRCjgCy6mOc3pYNzfiik6GrfgsqyJhABo+1Jnj/r2
-	/sGIKbjVTmttB/YmqUszzyvJjIGBCV5F0v6Q5mroTOqTilXC6e6OybQ6iYO+dWtKgVIdF9T1Wun
-	cNY2Dt87+iN4pGQR0mJ2VkyC1MbSac0lZz+X738KBkVwKLMvNj3GfT+WF5jKuq5hWVD1nP7UM10
-	vk3k9FKEjEiWtCpvlFDZwqICe8/IW3vs=
-X-Received: by 2002:a05:6402:538e:b0:698:6620:d988 with SMTP id
- 4fb4d7f45d1cf-6a0a7ca9786mr9097514a12.15.1785790626968; Mon, 03 Aug 2026
- 13:57:06 -0700 (PDT)
+        bh=ONA6u0gWcMYpm9YSgR6BXB8HOfOJ6IJqSr2+VzPiqIU=;
+        b=cArm9TXnUwx6SkL8j+wE7ikRRCRf7JdCgSSvxI/U9A4fAgzeCnVKYDTaRwsadqidIK
+         NRYwn/b6eBMECvPKfndzA2s0B4uN8gAbNKxxFxcsoy3QkYobfNvCaCP0LYMMcW6qRThX
+         Ow74ojz5NKnADT2I03aWgOPsZrkfE3OWa7+JP8La/EPYtXtvCt+6edeXVQf7qXVhQEzz
+         jbAS+G9Oe/D0H9kIFZm5hxzAr4HhqZpVVVY0UymgQzuZUrAreeE7ttVJLV4HFWpu5OCZ
+         CUgME41i3tvC3sLfKBamAOEjhexFRJLHeCDWsX4J7NYSfnUMcLQcuZgVUT5QM6wjnUWs
+         S+mA==
+X-Forwarded-Encrypted: i=1; AHgh+RoHp//E3HMtTKiA2C8em/RMKPrOEZIgqr3pXcipOFpkqWr2erbr7zrhKj8AX8xXmKkbkdpK@lists.linux.dev
+X-Gm-Message-State: AOJu0YwyqFACQId42GVu9eUSvbTLgUCOpMONA4nLWD75T1lhLw7JnjPr
+	s766bfZxvCCgEK1xZQ4qiHVLzGzTHhEetrHsBcMERmgWuxedNKGyDraxWiVoL+iFTh01IYT/P+B
+	zYDXY8EqHWGOhnQpVSoJYgSo3V9v58w4=
+X-Gm-Gg: AR+sD13vscu5IbPJL5NNUEDGKAp0TTvCehk8aE6kOnV5jDr8susTict6S4qHolYrkjr
+	/y5FTLPiDggfgicbfGmwBL0tYLBbDfjqhZANcfvr1+SCTd+/YU6qHYPJVtdlGcXp8AJdN+HyC/L
+	ahFrJr4ogn2Ub7fRe7eu7myy2BHaIiO/qvTs55kmURSZsVtvnm1zVK8RSIkh2FVZMEJijCK3izT
+	mofutKCgDQwrDqDp1YNwHCzpkTCnEvV/C36gjTiNU++wSDIuaKbU+dhs8Cr5C5zHVe4djAF5ZDH
+	Cvu1Ka5uZKPvsVC+95y7Wc7QYxtgOsqxHbgl1z3fuOzPt/liVbSe2a/BF12i5K82Q9Bck46P/WF
+	LmXuMSiZ9yIOjM2V59RqbfwV+yrsY9EI=
+X-Received: by 2002:a05:6402:3241:b0:6a0:8885:e6ea with SMTP id
+ 4fb4d7f45d1cf-6a0a7c60fafmr7359384a12.6.1785791763033; Mon, 03 Aug 2026
+ 14:16:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com> <20260803-alpha-clang-v1-1-1c4ba5ba7a64@gmail.com>
-In-Reply-To: <20260803-alpha-clang-v1-1-1c4ba5ba7a64@gmail.com>
+References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com> <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com>
+In-Reply-To: <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com>
 From: Magnus Lindholm <linmag7@gmail.com>
-Date: Mon, 3 Aug 2026 22:56:54 +0200
-X-Gm-Features: AUfX_mzrOfpDet5WZmR5E0-xCU3tYZzg7dOpIC85BfviGV_cxmbzrWshM8wU5MY
-Message-ID: <CA+=Fv5SBitGj+c08Ymy3_JdeErKrRS_s5_RYgABjMraQUFg=Ww@mail.gmail.com>
-Subject: Re: [PATCH 1/2] alpha: enable building with clang
+Date: Mon, 3 Aug 2026 23:15:51 +0200
+X-Gm-Features: AUfX_mynwyTXbGl2r5A9Ln_10BtSjIBSkDIfhjkE2mzRhJnUG3o0f9IhUJu7p4s
+Message-ID: <CA+=Fv5R0tdFeEKWgSVTjfXbs=guZmR8zy8FGbqUZNSKiyB24aA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] alpha: read $gp and $sp explicitly for clang
 To: Matt Turner <mattst88@gmail.com>
 Cc: Richard Henderson <richard.henderson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
@@ -99,76 +99,74 @@ Cc: Richard Henderson <richard.henderson@linaro.org>, Nathan Chancellor <nathan@
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Hi Matt,
+
 On Mon, Aug 3, 2026 at 7:08=E2=80=AFPM Matt Turner <mattst88@gmail.com> wro=
 te:
 >
-> Register the clang target triple for alpha, and pass -Wa,-mev6 only when
-> building with gcc.  That flag exists to stop gas emulating instructions
-> the assembler thinks the target lacks; it is a gas-only option, and
-> clang's integrated assembler does not emulate instructions in the first
-> place, so nothing is needed there.
+> clang honors a local `register unsigned long x __asm__("$N")` variable
+> only where it appears as an inline-asm operand; merely reading it does
+> not produce the contents of that register.  So trap_init() passed an
+> undefined global pointer to PAL_wrkgp, and load_PCB() stored an undefined
+> stack pointer into the PCB that swpctx then loaded.  Either one wedges an
+> early boot.
 >
-> With this, LLVM=3D1 (and LLVM_IAS=3D1) builds work.  Note that the alpha
-> backend is not in upstream LLVM yet; it lives in
->
->   https://github.com/alphalinux-org/llvm-project
->
-> and is a work in progress.
+> Read the registers explicitly instead: an inline mov for $gp in
+> trap_init(), and the file-scope current_stack_pointer for $sp in
+> load_PCB().  A file-scope register-asm variable is the form clang does
+> support.
 >
 > Signed-off-by: Matt Turner <mattst88@gmail.com>
 > ---
->  arch/alpha/Makefile    | 8 +++++++-
->  scripts/Makefile.clang | 1 +
->  2 files changed, 8 insertions(+), 1 deletion(-)
+>  arch/alpha/kernel/traps.c | 4 +++-
+>  arch/alpha/mm/init.c      | 3 +--
+>  2 files changed, 4 insertions(+), 3 deletions(-)
 >
-> diff --git a/arch/alpha/Makefile b/arch/alpha/Makefile
-> index 35445ff2e489..54283705911f 100644
-> --- a/arch/alpha/Makefile
-> +++ b/arch/alpha/Makefile
-> @@ -27,10 +27,16 @@ cpuflags-$(CONFIG_ALPHA_GENERIC)    :=3D -mcpu=3Dev56=
- -mtune=3Dev6
->  cflags-y                               +=3D $(cpuflags-y)
->
->
-> +KBUILD_CFLAGS +=3D $(cflags-y)
+> diff --git a/arch/alpha/kernel/traps.c b/arch/alpha/kernel/traps.c
+> index 7631129ac914..5b4f1ae2b74b 100644
+> --- a/arch/alpha/kernel/traps.c
+> +++ b/arch/alpha/kernel/traps.c
+> @@ -925,7 +925,9 @@ void
+>  trap_init(void)
+>  {
+>         /* Tell PAL-code what global pointer we want in the kernel.  */
+> -       register unsigned long gptr __asm__("$29");
+> +       unsigned long gptr;
 > +
->  # For TSUNAMI, we must have the assembler not emulate our instructions.
->  # The same is true for IRONGATE, POLARIS, PYXIS.
->  # BWX is most important, but we don't really want any emulation ever.
-> -KBUILD_CFLAGS +=3D $(cflags-y) -Wa,-mev6
-> +# Only gas emulates instructions the target does not implement, and only=
- gas
-> +# understands -mev6; clang's integrated assembler never emulates.
-> +ifdef CONFIG_CC_IS_GCC
-> +KBUILD_CFLAGS +=3D -Wa,-mev6
-> +endif
+> +       __asm__ volatile("mov $29, %0" : "=3Dr"(gptr));
+>         wrkgp(gptr);
 >
->  libs-y                         +=3D arch/alpha/lib/
+>         wrent(entArith, 1);
+> diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
+> index 9531cbc761c0..f4d65a60c869 100644
+> --- a/arch/alpha/mm/init.c
+> +++ b/arch/alpha/mm/init.c
+> @@ -63,8 +63,7 @@ pgd_alloc(struct mm_struct *mm)
+>  static inline unsigned long
+>  load_PCB(struct pcb_struct *pcb)
+>  {
+> -       register unsigned long sp __asm__("$30");
+> -       pcb->ksp =3D sp;
+> +       pcb->ksp =3D (unsigned long)current_stack_pointer;
+>         return __reload_thread(pcb);
+>  }
+>
+>
+> --
+> 2.54.0
 >
 
-Hi Matt,
+This looks good to me. The explicit $gp read and use of
+current_stack_pointer avoid relying on the unsupported local
+register-asm behavior.
 
-I agree with Nathan's suggestion to leave the
-CLANG_TARGET_FLAGS_alpha entry out for now and add it separately when
-the Alpha backend is being upstreamed to LLVM.
+I also built and booted the patched kernel successfully with GCC on an
+AlphaStation DS10.
 
-Could you send a v2 containing just the arch/alpha/Makefile change?
+Reviewed-by: Magnus Lindholm linmag7@gmail.com
+Tested-by: Magnus Lindholm linmag7@gmail.com
 
-Since -Wa,-mev6 is an assembler-specific option, I think maybe the conditio=
-n
-should also test the assembler rather than the compiler?
-
-ifdef CONFIG_AS_IS_GNU
-KBUILD_CFLAGS +=3D -Wa,-mev6
-endif
-
-That preserves the option for both GCC and clang builds using GNU as,
-including clang with LLVM_IAS=3D0, while omitting it for LLVM's integrated
-assembler.
-
-The revised Alpha Makefile patch can then go through the Alpha tree,
-while the scripts/Makefile.clang change can wait until the backend is
-available upstream.
+I am happy to take this through the Alpha tree.
 
 Thanks,
 Magnus
