@@ -1,146 +1,101 @@
-Received: from linkmauve.fr (82-65-109-163.subs.proxad.net [82.65.109.163])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 569B748CD55
-	for <llvm@lists.linux.dev>; Tue,  4 Aug 2026 20:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.65.109.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1727C2F3C10;
+	Tue,  4 Aug 2026 22:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785875972; cv=none; b=g3mZD5FtzzQkKetRNcLEXP0Ofgno9nx74R93IMdYcQ9CNJbhYMoe0fcLjtv85oI1OJUv2YMMP6u1CxOUJ2Tfob8CQwY1IfjZWwJcd4/+EyhqlnY6/qCxWHMUN1Kt6tdajtBHN5rO7imjazh+5vSTrjGoBLnPd6NS//sb6GkEvY0=
+	t=1785881323; cv=none; b=pQ0biT0bFxcs9HnRXlEp05PfMxCOBtQsT7J1oexxzM81aPZVf1giagPVP4nHDHg1vQQHHYOvC9tivyJcrzOchQ8cUUdNeysTEhEkX/2ZuB4LqHy4Xd5uJgiKUHoFY/+PhOIztmvrsk4LUVJvActwgKP2aMpRV/iZiD+a2gzvnVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785875972; c=relaxed/simple;
-	bh=+iXtdqVBDKfKGI9ndmWNaa/mQFFDZVYCB6wBmPvwBhs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P6D4MRjTz5yJeKgvnDQxokk7cg4YPBFCL/OSy8GYGqMb7tRg0tz7Bu6gVR1wR/kbQw4ISJvmFBmA4dc9pmOnmaqoiGwMj49dOTSz2JuLGwCWn+mIJxC06OL6yeWLZXqKcCF/oKfKQmdw0kIHGROGcM8XF+BIeQt1U9qNClshVnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr; spf=pass smtp.mailfrom=linkmauve.fr; arc=none smtp.client-ip=82.65.109.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linkmauve.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linkmauve.fr
-Received: by linkmauve.fr (Postfix, from userid 1000)
-	id 5E9B870A0AA0; Tue, 04 Aug 2026 22:39:27 +0200 (CEST)
-Date: Tue, 4 Aug 2026 22:39:27 +0200
-From: Link Mauve <linkmauve@linkmauve.fr>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Link Mauve <linkmauve@linkmauve.fr>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>, mpe@ellerman.id.au,
-	npiggin@gmail.com, chleroy@kernel.org, peterz@infradead.org,
-	jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com,
-	rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org,
-	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com,
-	lossin@kernel.org, a.hindborg@kernel.org, tmgross@umich.edu,
-	dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org,
-	acourbot@nvidia.com, work@onurozkan.dev, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com, fujita.tomonori@gmail.com,
-	joelagnelf@nvidia.com, gregkh@linuxfoundation.org,
-	prafulrai522@gmail.com, nsc@kernel.org, japo@linux.ibm.com,
-	lina+kernel@asahilina.net, j@jannau.net, airlied@gmail.com,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
-	"Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
-Message-ID: <anJN_3eAlTqxqfnI@desktop>
-References: <20260708082454.1254320-1-mkchauras@gmail.com>
- <178574013457.29744.6211258618175255546.b4-ty@linux.ibm.com>
- <anG67Q6Y59kDqh-c@desktop>
- <20260804202217.GA1109939@ax162>
+	s=arc-20240116; t=1785881323; c=relaxed/simple;
+	bh=LqeVkJSOrqZJnu0UaNmyGJcLXdWISZY51Q6Cz9gkw7M=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Fe06LXUpVb0+xJ12KnTo1M9Oat7XWL2c20PTGfdYpWsl/V7pGhxFlvWrNtyxVVB3XSC4m32anXH+MEMv6oAEXM2LeNsR3PncnJnwtu4uzpi/n0lnxhCqXozaD+1ZpBmk4cydtOUFv4NhRCVty8LHJ9l2sbWYALhalsortdjVPH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jfVwymRh; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jfVwymRh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785881321; x=1817417321;
+  h=date:from:to:cc:subject:message-id;
+  bh=LqeVkJSOrqZJnu0UaNmyGJcLXdWISZY51Q6Cz9gkw7M=;
+  b=jfVwymRhoiKE6OowOHhWN8wljuuQdNn9P/Nyd+s9PS1RL7fsANfryYbm
+   h/iF0ytG8GUzm2TGFXxX+Js44WhwMQjVHH3j9xfYAl3+lkI2SEfwZ1xkC
+   Ifsn9Z6vxVlKos26CmH0Ml8oASCsELe+CF1QGBxSPToNhqWTJZ8qDIBFf
+   nm4WpbrIQeZNlF+pF/07xffGpkk+BAXKLsbHtb2lCpQed6hkRnbLEKJAu
+   JN7TuAsWzqrJzx8pA3BVQeejlPlPtUJZaxji0XbT1xQ3+bBoPBGrRPDkZ
+   Mze7qpNPjk9XCINCs6I/AsdoRLRDKCzI42SqTA0e7BtENXMHIoJ/Bdwuo
+   w==;
+X-CSE-ConnectionGUID: rt9U+rnpQweJbkG6iKaklA==
+X-CSE-MsgGUID: W5HEOhhcR3eF51Ls3XYwmA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11865"; a="88971399"
+X-IronPort-AV: E=Sophos;i="6.25,205,1779174000"; 
+   d="scan'208";a="88971399"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2026 15:08:40 -0700
+X-CSE-ConnectionGUID: PbxcCeQMRQGOgTjV2fiPEA==
+X-CSE-MsgGUID: NwbPL0cMRN24tqmu9gbXxQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,205,1779174000"; 
+   d="scan'208";a="260365779"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 04 Aug 2026 15:08:38 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wrNJM-00000000ArN-0EO0;
+	Tue, 04 Aug 2026 22:08:36 +0000
+Date: Wed, 05 Aug 2026 06:07:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Link Mauve <linkmauve@linkmauve.fr>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+Subject: [linux-next:master 10012/12727] clang diag:
+ arch/powerpc/include/uapi/asm/ioctl.h:5:9: warning: '_IOC_SIZEBITS' macro
+ redefined
+Message-ID: <202608050618.9dekfjtF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260804202217.GA1109939@ax162>
-Jabber-ID: linkmauve@linkmauve.fr
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   0f6da28aab51b16762ed82e8fdeaa5042da45b08
+commit: 73b741adb264967093ef4eb59905618a7e0d0de0 [10012/12727] rust: Add PowerPC support
+config: powerpc-randconfig-001-20260805 (https://download.01.org/0day-ci/archive/20260805/202608050618.9dekfjtF-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260805/202608050618.9dekfjtF-lkp@intel.com/reproduce)
 
-On Tue, Aug 04, 2026 at 01:22:17PM -0700, Nathan Chancellor wrote:
-> On Tue, Aug 04, 2026 at 12:11:57PM +0200, Link Mauve wrote:
-> > Hi,
-> > 
-[…]
-> > 
-> > I just tested those again in linux-next, with the Wii support series on
-> > top, but now the kernel fails to build due to ARCH_WARN_ASM and
-> > ARCH_WARN_REACHABLE not being defined on PowerPC:
-> 
-> I also see the following warnings (in addition to that error):
-> 
->   warning: unknown and unstable feature specified for `-Ctarget-feature`: `mma`
->     |
->     = note: it is still passed through to the codegen backend, but use of this feature might be unsound and the behavior of this feature can change in the future
->     = help: consider filing a feature request
-> 
->   warning: unstable feature specified for `-Ctarget-feature`: `vsx`
->     |
->     = note: this feature is not stably supported; its behavior can change in the future
-> 
->   warning: unknown and unstable feature specified for `-Ctarget-feature`: `hard-float`
->     |
->     = note: it is still passed through to the codegen backend, but use of this feature might be unsound and the behavior of this feature can change in the future
->     = help: consider filing a feature request
-> 
->   warning: unstable feature specified for `-Ctarget-feature`: `altivec`
->     |
->     = note: this feature is not stably supported; its behavior can change in the future
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608050618.9dekfjtF-lkp@intel.com/
 
-Those four are explicitly disabled in arch/powerpc/Makefile, but only
-for CONFIG_PPC64, not for CONFIG_PPC…  Maybe they should, I’ve only
-tested 32-bit on the Wii which has no altivec or vsx, but has hard
-floats, and I’m not sure about mma.
+All warnings (new ones prefixed by >>):
 
-Could you test this patch on your platform?  I’ll submit it properly if
-it does fix those four warnings:
-```
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index 9385db478c59..8fba9310acfa 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -63,10 +63,10 @@ endif
+   clang: error: unsupported option '-fsanitize=thread' for target 'powerpc-unknown-linux-gnu'
+   make[3]: *** [rust/Makefile:721: rust/helpers/helpers.o] Error 1 shuffle=4010687375
+>> clang diag: arch/powerpc/include/uapi/asm/ioctl.h:5:9: warning: '_IOC_SIZEBITS' macro redefined [-Wmacro-redefined]
+>> clang diag: arch/powerpc/include/uapi/asm/ioctl.h:6:9: warning: '_IOC_DIRBITS' macro redefined [-Wmacro-redefined]
+>> clang diag: arch/powerpc/include/uapi/asm/ioctl.h:8:9: warning: '_IOC_NONE' macro redefined [-Wmacro-redefined]
+>> clang diag: arch/powerpc/include/uapi/asm/ioctl.h:10:9: warning: '_IOC_WRITE' macro redefined [-Wmacro-redefined]
+   make[3]: Target 'rust/' not remade because of errors.
+   make[2]: *** [Makefile:1416: prepare] Error 2 shuffle=4010687375
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=4010687375
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=4010687375
+   make: Target 'prepare' not remade because of errors.
 
- ifdef CONFIG_PPC64
- KBUILD_RUSTFLAGS       += --target=powerpc64le-unknown-linux-gnu
--KBUILD_RUSTFLAGS       += -Ctarget-feature=-mma,-vsx,-hard-float,-altivec
- else
- KBUILD_RUSTFLAGS       += --target=powerpc-unknown-linux-gnu
- endif
-+KBUILD_RUSTFLAGS       += -Ctarget-feature=-mma,-vsx,-hard-float,-altivec
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for HOTPLUG_CPU
+   Depends on [n]: SMP [=y] && (PPC_PSERIES [=n] || PPC_PMAC [=n] || PPC_POWERNV [=n] || FSL_SOC_BOOKE [=n])
+   Selected by [y]:
+   - PM_SLEEP_SMP [=y] && SMP [=y] && (ARCH_SUSPEND_POSSIBLE [=y] || ARCH_HIBERNATION_POSSIBLE [=y]) && PM_SLEEP [=y]
 
- ifdef CONFIG_CPU_LITTLE_ENDIAN
- KBUILD_CPPFLAGS        += -mlittle-endian
-```
-
-> 
->   clang diag: arch/powerpc/include/uapi/asm/ioctl.h:5:9: warning: '_IOC_SIZEBITS' macro redefined [-Wmacro-redefined]
->   clang diag: arch/powerpc/include/uapi/asm/ioctl.h:6:9: warning: '_IOC_DIRBITS' macro redefined [-Wmacro-redefined]
->   clang diag: arch/powerpc/include/uapi/asm/ioctl.h:8:9: warning: '_IOC_NONE' macro redefined [-Wmacro-redefined]
->   clang diag: arch/powerpc/include/uapi/asm/ioctl.h:10:9: warning: '_IOC_WRITE' macro redefined [-Wmacro-redefined]
->   warning: 4 warnings emitted
-
-I have no idea about those.
-
-> 
-> when building this series in next-20260804 with rustc 1.97.1. I am not
-> sure where the clang diagnostic warnings come from. I assume the target
-> feature warnings are expected but it would be good to get those
-> addressed sooner rather than later. I see '-hard-float' has an issue
-> open
-> 
->   https://github.com/rust-lang/rust/issues/117347
-
-In the kernel we want to disallow all floats, unless there is a very
-specific and cibled usecase.  This issue is about enabling them.
-
-And no, warnings are never expected, you just tested on a platform
-neither of us tested until now. :)
-
-> 
-> but I don't think I see issues open for the other ones.
-> 
-> -- 
-> Cheers,
-> Nathan
-
--- 
-Link Mauve
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
