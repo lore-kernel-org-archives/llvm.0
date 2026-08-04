@@ -1,237 +1,238 @@
-Received: from flow-b1-smtp.messagingengine.com (flow-b1-smtp.messagingengine.com [202.12.124.136])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6A543B6EA
-	for <llvm@lists.linux.dev>; Tue,  4 Aug 2026 13:40:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92B0F43B3C2;
+	Tue,  4 Aug 2026 15:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785850853; cv=none; b=jYei98HwfvcQOyFYOV0DGmlwwS/Yd3hRH+Kum3n15tJiaJoNjdRZdpKQpMF+6TH2++UOMiYCMHPTxz98CctbybhZiMuDmshjzfshSh1zoCfY7x8ohyPrKDNv0D4Wszrm8IXeM8FoOrM8vyu6sAsBnlG5vkoDjnCNeORtexnBEnM=
+	t=1785856525; cv=none; b=VJ6Jl5rOcCQwwBggk9jx734cY0eEypKbvYgnzUcxX3MkgTY6EsKkz3fmTfBoE0iEcpMtCduHdHeUmnb+V8d4gBj66W13oxRItgjE0TS433oIC/xKb6/gnCoZyBOLBLr3hrHGRguXRk10t8SLxiXApEH8IO8sUcE3GbghcQr4dyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785850853; c=relaxed/simple;
-	bh=Ei0nC6o3VFk5Hi+P363oPEanjTU1vQlPyAM5kCKHQKk=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=QoqJheHFmKxiC2gpQ2Va3THtQ2BfEDEkply9EXwZNY8u5e1ikoNWLyCDgyvLyCtxmRZTpbs/su83xyUkF56/1TuzN0lKv2VlAUp0L2T0K333dKItjmpBwyrJ4q9tT3RKfypdSUzbcVWmn4160PNcEsaaRC7KFHamdY+uFeHqCA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=LYHS1ghz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YPq5TFZj; arc=none smtp.client-ip=202.12.124.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
+	s=arc-20240116; t=1785856525; c=relaxed/simple;
+	bh=A/SB9+SkUwlu0PuygB3qnHlMKSJj6xBAELZXkICPPeE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NzFEG64Z3YwvuUK8EcJneeCLsABwYjfK2DbME8OqLamoYQb3SoaoS4k1muHtFR1/FOh2V8gHkEh9mZ0Jjbf7tw3TBhKKDM8pdzSf5o/hRBD5vwEhQ4cc6BmESf+o91Qb2ApOcZmFuODlOEHo+ii2ZdFSqPmG+BuK6R1V21Et6K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bDF/q7Li; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="LYHS1ghz";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YPq5TFZj"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 61EAD130019F;
-	Tue,  4 Aug 2026 09:40:49 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Tue, 04 Aug 2026 09:40:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1785850849;
-	 x=1785854449; bh=NIbc0K2StO7BcCgQ5CKrDLLWWeUMON+1oM/RNYmggp8=; b=
-	LYHS1ghzBp8q3k0NzkeFLfi77/qqwwkZ7C4ZezdZomIolet9puj/xEnPW9MZHQzi
-	+RpcuXqy+2xzNH8uAEAkywgDQzo2BFlAwtHGf5ZnNEe+h7XTon0gKu4A8bTCRzXG
-	CU0/Gq++TB03tfS+FR7HJSJ8TzlNgLfIT5gOzcCVLDWkLUD4p54BH3fxtw0i/IE5
-	JPY5f2SuKQ5KlAtCEe4VAhpTBmKv9K0dCrHwZHIFbedbo3SBAIdC/L0BSYKyq1Hd
-	YbAdlBUH88oEFLWhr7SMwByAZF+Pi7EviuvIB9vqq69hSWNgUH4Yvo/ZXj9qrFFz
-	AQnbY53s3Kq7jgldvUzUfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1785850849; x=
-	1785854449; bh=NIbc0K2StO7BcCgQ5CKrDLLWWeUMON+1oM/RNYmggp8=; b=Y
-	Pq5TFZj399J+/fLTUjxUcneICGMajyBW0R7N8h24FScGXVNRIJBdQL/lzuAitDTN
-	yu587S8eZYRUpGFu0eXzyG2quYRPEpUVt7aGSMLJ3Kk+qxuSebmXOlXI6l8Aw3pf
-	Hl5We2Wd1BqKT0zRCNWL79WRKCqPnNCCh8EEosuPZvrA7PtK6DreZ9Wjfepo6OcX
-	y/KtPXWvYjLqd5nUmeXYZD5+aQgL49xMvw/SkhokAJAsyMFAy6pASlONl42aqWUy
-	0GAxAaPjoudGRlzNktqHx+5LYKTqTiSrMO6FdCiDQmrmwExQec2U3tjaEp1gl8q3
-	1zBWgrXIB1rQ87IbzgKnA==
-X-ME-Sender: <xms:3-txaojAtWWjriFj4-SxDhzATZ62i6BasVkL1NsTSbmG-2k5kJQ6Ew>
-    <xme:3-txasKSMEtqzXXiy8JOPG4QlNriudVQqBRM5m0jBHWz96QB6uTNpBff1f2rMf19E
-    hYCfx-L12qHlbBt8LUw7g_78I6q9QXX4Kl4njP98WiwMFeYFX6hkAVa>
-X-ME-Received: <xmr:3-txamdvDsEeM0hTOjDjsiUO6GcM3mVgrBjXU2bJd26bQRjFd7YcSlhenDB0kEYG-DxQXs7E1ePse1Llz2nNBiDi>
-X-ME-Proxy-Cause: dmFkZTGtXecbawDpvriCKcFN9iS+RrBAxu/yPKAHhyfKjKEgzYVc5Wk4JyGyKuPVxauwbe
-    ybv/17EzmXYiLoMh+Z6pE86f9SJQ1Ro4F5EBeuMbK98dOy36dVepIBMUsp2fuDCYWYciVz
-    9jLhxokDTufHUzIbkLxz1pO1o2/rYqNr5muHUDAfo1Gz6Gp4barEZW9/RBlpwGwIU4KfAb
-    0hJW5nDGhYyfTQYuh4PSXfZMll7AV1kFHYcKEBYhGVLZISyRfKFRVQB5qtLWlcnPnu0jEs
-    Lkl/OpxOX5cUR+ZXHMNAbj9dfo8YdZBqdnw0YFDQAJ5xB6ZjJN9dmb7X77ARCnjTtdiJnm
-    tU4sGrCBtsikDbGbMgMv9u7M+5VEdJY9gEUyK5st9U69y66U5NDWbksVtLQ7q7Z+CcHuJY
-    pM3Jp49maRpeOLVyKfj8DVj25bv+pi2aWFlmF6le+LtUlVv0IqYNxKE2k7opuqhVmmwPKj
-    PYsQyrVGVaKM6o/1RN7d34mruJcOGLN0sedia9uyrDWnNA3/wTcVFkqx6FEXQcVs3fu+sn
-    GC+WVbFFM8GR9KzongTjMCQXqh9EEDnXH+T9wG0DBcMgvmvj1Y+mMRqjC/Wl/03lqyuytP
-    PFKwqkkeOelgPqNi/JXkm5fW4EjqzbDAnGf+XadvyfseMVetIJBYmfMGhogA
-X-ME-Proxy: <xmx:3-txakPpwnI2Dp4yleLxd7JH4RfHtO6VLo6aan9lWl3ZODT2KefR7g>
-    <xmx:3-txaoK4A_KvEEEPF8QnVnMfSw6orurPTp7P37bO5C-XSZBLNj8jaw>
-    <xmx:3-txaj2pNcz568qAv2-nqk7gpGSd83qwOMt5leao2dluheMqoCg60Q>
-    <xmx:3-txasV6Xc0c4DlwWD_csKRnmDNzGwc3cCZqEgOXJj7Cx0yNl2SfrQ>
-    <xmx:4OtxanWAlXJ8KrV4c0xAHFPr0IQYul3sAd7ZEJgUCB2Qdy-ZspDz_mQw>
-Feedback-ID: i51fe4b43:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 4 Aug 2026 09:40:39 -0400 (EDT)
-Date: Tue, 04 Aug 2026 22:40:35 +0900 (JST)
-Message-Id: <20260804.224035.269658578200153488.tomo@flapping.org>
-To: linkmauve@linkmauve.fr
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
- jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
- ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
- tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com,
- tamird@kernel.org, acourbot@nvidia.com, work@onurozkan.dev,
- nathan@kernel.org, ndesaulniers@google.com, morbo@google.com,
- justinstitt@google.com, fujita.tomonori@gmail.com, joelagnelf@nvidia.com,
- gregkh@linuxfoundation.org, prafulrai522@gmail.com, nsc@kernel.org,
- japo@linux.ibm.com, lina+kernel@asahilina.net, j@jannau.net,
- airlied@gmail.com, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev, mkchauras@gmail.com
-Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
-From: FUJITA Tomonori <tomo@flapping.org>
-In-Reply-To: <anG67Q6Y59kDqh-c@desktop>
-References: <20260708082454.1254320-1-mkchauras@gmail.com>
-	<178574013457.29744.6211258618175255546.b4-ty@linux.ibm.com>
-	<anG67Q6Y59kDqh-c@desktop>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bDF/q7Li"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785856522; x=1817392522;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=A/SB9+SkUwlu0PuygB3qnHlMKSJj6xBAELZXkICPPeE=;
+  b=bDF/q7LiVQn06XHStRh5MEQFgis/8JjouAPBrANpT4WXkQqcrV2dniRQ
+   U6CLRyrw35SzZVBti1nYt/qX0VefLo4gL05YiJdnk901QH1Rdeb8zserG
+   JPHE9Su1Gb5Pm9/u8Vwdkm9EAXG2scBqUR+Q1y/G6ZB3KJqozqQj4MAYl
+   7/CTQAF71FaIE8cbzjWgpSpZswbkwfxZ1R/Un/MsWc5rMBHxolRd034Xi
+   Bjw23SsJmyKE/gjgxNTVNsw//60KvfcjzF7q/qtDZoYLBO+YaVm/pO/i1
+   9pTAvcaUS1Yv2NBfrXDVY229ut+sZeCjwN779fvIAiPiepbK9PnPn1GOz
+   g==;
+X-CSE-ConnectionGUID: steRWVhoSmqsBbHs0f99+Q==
+X-CSE-MsgGUID: tTq6znrwTiW8INnebvB8JQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11864"; a="86441911"
+X-IronPort-AV: E=Sophos;i="6.25,204,1779174000"; 
+   d="scan'208";a="86441911"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Aug 2026 08:15:12 -0700
+X-CSE-ConnectionGUID: uI3sO+zpRoWATYd6rEdJZQ==
+X-CSE-MsgGUID: ERFGBHCtRz++rj2B3nceyQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,204,1779174000"; 
+   d="scan'208";a="265359662"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 04 Aug 2026 08:15:10 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wrGrD-00000000A5Z-3mMy;
+	Tue, 04 Aug 2026 15:15:07 +0000
+Date: Tue, 4 Aug 2026 23:14:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: yaolu@kylinos.cn, jani.nikula@linux.intel.com, rodrigo.vivi@intel.com,
+	joonas.lahtinen@linux.intel.com, tursulin@ursulin.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, Lu Yao <yaolu@kylinos.cn>
+Subject: Re: [PATCH] drm/i915/display: fix error handling in
+ intel_display_driver_probe_noirq
+Message-ID: <202608042218.AEuG8i7A-lkp@intel.com>
+References: <20260630031652.67747-1-yaolu@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260630031652.67747-1-yaolu@kylinos.cn>
 
-On Tue, 4 Aug 2026 12:11:57 +0200
-Link Mauve <linkmauve@linkmauve.fr> wrote:
+Hi,
 
-> Hi,
-> 
-> On Mon, Aug 03, 2026 at 12:27:13PM +0530, Madhavan Srinivasan wrote:
->> On Wed, 08 Jul 2026 13:54:47 +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
->> > Enable experimental rust support for ppc64le and ppc32be. The patch for
->> > ppc32 has been provided by Link Mauve[1] and ppc64le support[2] has been
->> > merged over it. ppc32 needs some toolchain fixes mentioned in the patch
->> > `rust: Add PowerPC support` and the discussion for that is done here[1].
->> > 
->> > This has been tested on
->> > - powernv9 hardware
->> > - pseries P11 hardware
->> > - pseries(9, 10) qemu
->> > - powernv(9, 10) qemu
->> > - rustdoc on x86 and powerpc64le
->> > - rusttest on x86 and powerpc64le
->> > 
->> > [...]
->> 
->> Applied to powerpc/next.
->> 
->> [1/7] rust: Fix "multiple candidates for rmeta dependency core" error
->>       https://git.kernel.org/powerpc/c/00cdfd072c709c608606461d7d44d4613119bfa9
->> [2/7] dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER is disabled
->>       https://git.kernel.org/powerpc/c/be809b60cbb61aab96179f44ac3670242ae72996
->> [3/7] powerpc/jump_label: adjust inline asm to be consistent
->>       https://git.kernel.org/powerpc/c/13244c0a40139fe66c4c5c5655f4d732a6002957
->> [4/7] rust/powerpc: Set min rustc version for powerpc
->>       https://git.kernel.org/powerpc/c/e299147cdc8e19c6421a6b7863dc82a35b09d967
->> [5/7] rust: Make __udivdi3() and __umoddi3() panic
->>       https://git.kernel.org/powerpc/c/c93c194e4ee71a734986fd99a8b1ec9fbb7a9b8b
->> [6/7] rust: Add PowerPC support
->>       https://git.kernel.org/powerpc/c/73b741adb264967093ef4eb59905618a7e0d0de0
->> [7/7] powerpc: Enable Rust for ppc64le
->>       https://git.kernel.org/powerpc/c/bc87cbdb952e9223616b839d64bdb4723aa2ed1d
->> 
->> cheers
->> 
-> 
-> I just tested those again in linux-next, with the Wii support series on
-> top, but now the kernel fails to build due to ARCH_WARN_ASM and
-> ARCH_WARN_REACHABLE not being defined on PowerPC:
-> ```
-> error: no rules expected `ARCH_WARN_ASM`
->    --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_warn_asm.rs:1:28
->     |
->   1 | ::kernel::concat_literals!(ARCH_WARN_ASM("{file}", "{line}", "{flags}", "{size}"))
->     |                            ^^^^^^^^^^^^^ no rules expected this token in macro call
->     |
->    ::: ../rust/kernel/lib.rs:279:1
->     |
-> 279 | macro_rules! concat_literals {
->     | ---------------------------- when calling this macro
->     |
->     = note: while trying to match sequence start
-> 
-> error: no rules expected `ARCH_WARN_REACHABLE`
->    --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_reachable_asm.rs:1:28
->     |
->   1 | ::kernel::concat_literals!(ARCH_WARN_REACHABLE)
->     |                            ^^^^^^^^^^^^^^^^^^^ no rules expected this token in macro call
->     |
->    ::: ../rust/kernel/lib.rs:279:1
->     |
-> 279 | macro_rules! concat_literals {
->     | ---------------------------- when calling this macro
->     |
->     = note: while trying to match sequence start
-> 
-> error: aborting due to 2 previous errors
-> ```
-> 
-> This is in addition to the bindings::kvfree_call_rcu() call, but that
-> one is already being handled in a different thread.
+kernel test robot noticed the following build warnings:
 
-Looks like powerpc needs something like the followings:
+[auto build test WARNING on drm-i915/for-linux-next]
+[also build test WARNING on drm-i915/for-linux-next-fixes linus/master v7.2-rc6 next-20260803]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
-index 0db48977c70c..8aba39e0cf26 100644
---- a/arch/powerpc/include/asm/bug.h
-+++ b/arch/powerpc/include/asm/bug.h
-@@ -32,34 +32,38 @@
- #endif /* verbose */
- 
- #else /* !__ASSEMBLER__ */
--/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3 to be FILE, LINE, flags and
--   sizeof(struct bug_entry), respectively */
- #ifdef CONFIG_DEBUG_BUGVERBOSE
--#define _EMIT_BUG_ENTRY				\
-+#define _EMIT_BUG_ENTRY(file, line, flags)	\
- 	".section __bug_table,\"aw\"\n"		\
- 	"2:	.4byte 1b - .\n"		\
--	"	.4byte %0 - .\n"		\
--	"	.short %1, %2\n"		\
--	".org 2b+%3\n"				\
--	".previous\n"
-+	"	.4byte " file " - .\n"		\
-+	"	.short " line ", " flags "\n"
- #else
--#define _EMIT_BUG_ENTRY				\
-+#define _EMIT_BUG_ENTRY(file, line, flags)	\
- 	".section __bug_table,\"aw\"\n"		\
- 	"2:	.4byte 1b - .\n"		\
--	"	.short %2\n"			\
--	".org 2b+%3\n"				\
--	".previous\n"
-+	"	.short " flags "\n"
- #endif
- 
- #define BUG_ENTRY(cond_str, insn, flags, ...)		\
- 	__asm__ __volatile__(				\
- 		"1:	" insn "\n"			\
--		_EMIT_BUG_ENTRY				\
-+		_EMIT_BUG_ENTRY("%0", "%1", "%2")	\
-+		".org 2b+%3\n"				\
-+		".previous\n"				\
- 		: : "i" (WARN_CONDITION_STR(cond_str) __FILE__), "i" (__LINE__),	\
- 		  "i" (flags),				\
- 		  "i" (sizeof(struct bug_entry)),	\
- 		  ##__VA_ARGS__)
- 
-+#define ARCH_WARN_ASM(file, line, flags, size)		\
-+		"1:	twi 31, 0, 0\n"			\
-+		_EMIT_BUG_ENTRY(file, line, flags)	\
-+		".org 2b+" size "\n"			\
-+		".previous\n"
-+
-+#define ARCH_WARN_REACHABLE
-+
- /*
-  * BUG_ON() and WARN_ON() do their best to cooperate with compile-time
-  * optimisations. However depending on the complexity of the condition
+url:    https://github.com/intel-lab-lkp/linux/commits/yaolu-kylinos-cn/drm-i915-display-fix-error-handling-in-intel_display_driver_probe_noirq/20260804-144429
+base:   https://gitlab.freedesktop.org/drm/i915/kernel.git for-linux-next
+patch link:    https://lore.kernel.org/r/20260630031652.67747-1-yaolu%40kylinos.cn
+patch subject: [PATCH] drm/i915/display: fix error handling in intel_display_driver_probe_noirq
+config: i386-randconfig-006-20260804 (https://download.01.org/0day-ci/archive/20260804/202608042218.AEuG8i7A-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260804/202608042218.AEuG8i7A-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608042218.AEuG8i7A-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/gpu/drm/i915/display/intel_display_driver.c:309:1: warning: unused label 'cleanup_wq_unordered' [-Wunused-label]
+     309 | cleanup_wq_unordered:
+         | ^~~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +/cleanup_wq_unordered +309 drivers/gpu/drm/i915/display/intel_display_driver.c
+
+62bb6b4920ce9d Jani Nikula         2023-04-14  201  
+40053823baadce Jani Nikula         2023-04-14  202  /* part #1: call before irq install */
+f5d38d4fa88441 Jani Nikula         2024-12-04  203  int intel_display_driver_probe_noirq(struct intel_display *display)
+40053823baadce Jani Nikula         2023-04-14  204  {
+40053823baadce Jani Nikula         2023-04-14  205  	int ret;
+40053823baadce Jani Nikula         2023-04-14  206  
+ff8c73b7bfb547 Jani Nikula         2026-06-15  207  	intel_opregion_setup(display);
+ff8c73b7bfb547 Jani Nikula         2026-06-15  208  
+ff8c73b7bfb547 Jani Nikula         2026-06-15  209  	/*
+ff8c73b7bfb547 Jani Nikula         2026-06-15  210  	 * Fill the dram structure to get the system dram info. This will be
+ff8c73b7bfb547 Jani Nikula         2026-06-15  211  	 * used for memory latency calculation.
+ff8c73b7bfb547 Jani Nikula         2026-06-15  212  	 */
+ff8c73b7bfb547 Jani Nikula         2026-06-15  213  	ret = intel_dram_detect(display);
+ff8c73b7bfb547 Jani Nikula         2026-06-15  214  	if (ret)
+ff8c73b7bfb547 Jani Nikula         2026-06-15  215  		goto cleanup_opregion;
+ff8c73b7bfb547 Jani Nikula         2026-06-15  216  
+ff8c73b7bfb547 Jani Nikula         2026-06-15  217  	intel_bw_init_hw(display);
+ff8c73b7bfb547 Jani Nikula         2026-06-15  218  
+f5d38d4fa88441 Jani Nikula         2024-12-04  219  	if (HAS_DISPLAY(display)) {
+f5d38d4fa88441 Jani Nikula         2024-12-04  220  		ret = drm_vblank_init(display->drm,
+f5d38d4fa88441 Jani Nikula         2024-12-04  221  				      INTEL_NUM_PIPES(display));
+40053823baadce Jani Nikula         2023-04-14  222  		if (ret)
+ff8c73b7bfb547 Jani Nikula         2026-06-15  223  			goto cleanup_opregion;
+40053823baadce Jani Nikula         2023-04-14  224  	}
+40053823baadce Jani Nikula         2023-04-14  225  
+9aec6f76a28cd6 Jani Nikula         2024-08-09  226  	intel_bios_init(display);
+40053823baadce Jani Nikula         2023-04-14  227  
+39e4d3c2f89ab8 Jouni Högander      2025-04-14  228  	intel_psr_dc5_dc6_wa_init(display);
+39e4d3c2f89ab8 Jouni Högander      2025-04-14  229  
+40053823baadce Jani Nikula         2023-04-14  230  	/* FIXME: completely on the wrong abstraction layer */
+ad5190d6f35db6 Jani Nikula         2026-05-26  231  	ret = intel_display_power_init(display);
+40053823baadce Jani Nikula         2023-04-14  232  	if (ret < 0)
+70ea362b84449b Ville Syrjälä       2025-12-08  233  		goto cleanup_bios;
+40053823baadce Jani Nikula         2023-04-14  234  
+445fc685498bbb Jani Nikula         2024-12-31  235  	intel_pmdemand_init_early(display);
+4c4cc7ac207f56 Mika Kahola         2023-06-06  236  
+771394b4fb6d7d Jani Nikula         2026-05-26  237  	intel_display_power_init_hw(display);
+40053823baadce Jani Nikula         2023-04-14  238  
+f5d38d4fa88441 Jani Nikula         2024-12-04  239  	if (!HAS_DISPLAY(display))
+40053823baadce Jani Nikula         2023-04-14  240  		return 0;
+40053823baadce Jani Nikula         2023-04-14  241  
+41837232b83874 Lu Yao              2026-06-30  242  	intel_dmc_init(display);
+41837232b83874 Lu Yao              2026-06-30  243  
+ed23224b3f5e5e Jani Nikula         2025-05-16  244  	display->hotplug.dp_wq = alloc_ordered_workqueue("intel-dp", 0);
+ed23224b3f5e5e Jani Nikula         2025-05-16  245  	if (!display->hotplug.dp_wq) {
+ed23224b3f5e5e Jani Nikula         2025-05-16  246  		ret = -ENOMEM;
+70ea362b84449b Ville Syrjälä       2025-12-08  247  		goto cleanup_pw_domain_dmc;
+ed23224b3f5e5e Jani Nikula         2025-05-16  248  	}
+ed23224b3f5e5e Jani Nikula         2025-05-16  249  
+f5d38d4fa88441 Jani Nikula         2024-12-04  250  	display->wq.modeset = alloc_ordered_workqueue("i915_modeset", 0);
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  251  	if (!display->wq.modeset) {
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  252  		ret = -ENOMEM;
+ed23224b3f5e5e Jani Nikula         2025-05-16  253  		goto cleanup_wq_dp;
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  254  	}
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  255  
+f5d38d4fa88441 Jani Nikula         2024-12-04  256  	display->wq.flip = alloc_workqueue("i915_flip", WQ_HIGHPRI |
+40053823baadce Jani Nikula         2023-04-14  257  						WQ_UNBOUND, WQ_UNBOUND_MAX_ACTIVE);
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  258  	if (!display->wq.flip) {
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  259  		ret = -ENOMEM;
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  260  		goto cleanup_wq_modeset;
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  261  	}
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  262  
+c15d0056fb74d6 Marco Crivellari    2025-11-04  263  	display->wq.cleanup = alloc_workqueue("i915_cleanup", WQ_HIGHPRI | WQ_PERCPU, 0);
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  264  	if (!display->wq.cleanup) {
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  265  		ret = -ENOMEM;
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  266  		goto cleanup_wq_flip;
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  267  	}
+40053823baadce Jani Nikula         2023-04-14  268  
+c15d0056fb74d6 Marco Crivellari    2025-11-04  269  	display->wq.unordered = alloc_workqueue("display_unordered", WQ_PERCPU, 0);
+7c377900772d8f Luca Coelho         2025-06-20  270  	if (!display->wq.unordered) {
+7c377900772d8f Luca Coelho         2025-06-20  271  		ret = -ENOMEM;
+7c377900772d8f Luca Coelho         2025-06-20  272  		goto cleanup_wq_cleanup;
+7c377900772d8f Luca Coelho         2025-06-20  273  	}
+7c377900772d8f Luca Coelho         2025-06-20  274  
+f5d38d4fa88441 Jani Nikula         2024-12-04  275  	intel_mode_config_init(display);
+40053823baadce Jani Nikula         2023-04-14  276  
+d34927acff9150 Ville Syrjälä       2024-09-06  277  	ret = intel_cdclk_init(display);
+40053823baadce Jani Nikula         2023-04-14  278  	if (ret)
+41837232b83874 Lu Yao              2026-06-30  279  		goto cleanup_mode_config;
+40053823baadce Jani Nikula         2023-04-14  280  
+9d476ce24f72fc Ville Syrjälä       2024-10-24  281  	ret = intel_color_init(display);
+40053823baadce Jani Nikula         2023-04-14  282  	if (ret)
+41837232b83874 Lu Yao              2026-06-30  283  		goto cleanup_mode_config;
+40053823baadce Jani Nikula         2023-04-14  284  
+6fe8f9c1388b53 Jani Nikula         2025-04-08  285  	ret = intel_dbuf_init(display);
+40053823baadce Jani Nikula         2023-04-14  286  	if (ret)
+41837232b83874 Lu Yao              2026-06-30  287  		goto cleanup_mode_config;
+40053823baadce Jani Nikula         2023-04-14  288  
+ac930bab1c8985 Ville Syrjälä       2025-10-13  289  	ret = intel_dbuf_bw_init(display);
+ac930bab1c8985 Ville Syrjälä       2025-10-13  290  	if (ret)
+41837232b83874 Lu Yao              2026-06-30  291  		goto cleanup_mode_config;
+ac930bab1c8985 Ville Syrjälä       2025-10-13  292  
+d706998b6da687 Gustavo Sousa       2025-03-11  293  	ret = intel_bw_init(display);
+40053823baadce Jani Nikula         2023-04-14  294  	if (ret)
+41837232b83874 Lu Yao              2026-06-30  295  		goto cleanup_mode_config;
+40053823baadce Jani Nikula         2023-04-14  296  
+445fc685498bbb Jani Nikula         2024-12-31  297  	ret = intel_pmdemand_init(display);
+4c4cc7ac207f56 Mika Kahola         2023-06-06  298  	if (ret)
+41837232b83874 Lu Yao              2026-06-30  299  		goto cleanup_mode_config;
+4c4cc7ac207f56 Mika Kahola         2023-06-06  300  
+409c23ae6735cf Jani Nikula         2024-04-17  301  	intel_init_quirks(display);
+40053823baadce Jani Nikula         2023-04-14  302  
+fd5a9b950ea8ba Ville Syrjälä       2024-07-05  303  	intel_fbc_init(display);
+40053823baadce Jani Nikula         2023-04-14  304  
+40053823baadce Jani Nikula         2023-04-14  305  	return 0;
+40053823baadce Jani Nikula         2023-04-14  306  
+41837232b83874 Lu Yao              2026-06-30  307  cleanup_mode_config:
+41837232b83874 Lu Yao              2026-06-30  308  	intel_mode_config_cleanup(display);
+7c377900772d8f Luca Coelho         2025-06-20 @309  cleanup_wq_unordered:
+7c377900772d8f Luca Coelho         2025-06-20  310  	destroy_workqueue(display->wq.unordered);
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  311  cleanup_wq_cleanup:
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  312  	destroy_workqueue(display->wq.cleanup);
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  313  cleanup_wq_flip:
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  314  	destroy_workqueue(display->wq.flip);
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  315  cleanup_wq_modeset:
+dcab7a228f4ea9 Haoxiang Li         2025-05-16  316  	destroy_workqueue(display->wq.modeset);
+ed23224b3f5e5e Jani Nikula         2025-05-16  317  cleanup_wq_dp:
+ed23224b3f5e5e Jani Nikula         2025-05-16  318  	destroy_workqueue(display->hotplug.dp_wq);
+70ea362b84449b Ville Syrjälä       2025-12-08  319  cleanup_pw_domain_dmc:
+5c30cfa295ccbf Ville Syrjälä       2024-09-06  320  	intel_dmc_fini(display);
+ad5190d6f35db6 Jani Nikula         2026-05-26  321  	intel_display_power_driver_remove(display);
+40053823baadce Jani Nikula         2023-04-14  322  cleanup_bios:
+9aec6f76a28cd6 Jani Nikula         2024-08-09  323  	intel_bios_driver_remove(display);
+ff8c73b7bfb547 Jani Nikula         2026-06-15  324  cleanup_opregion:
+ff8c73b7bfb547 Jani Nikula         2026-06-15  325  	intel_opregion_cleanup(display);
+40053823baadce Jani Nikula         2023-04-14  326  
+40053823baadce Jani Nikula         2023-04-14  327  	return ret;
+40053823baadce Jani Nikula         2023-04-14  328  }
+5e2e6b595d9d4c Juha-Pekka Heikkila 2025-12-16  329  ALLOW_ERROR_INJECTION(intel_display_driver_probe_noirq, ERRNO);
+40053823baadce Jani Nikula         2023-04-14  330  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
