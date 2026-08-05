@@ -1,64 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6699C483815;
-	Wed,  5 Aug 2026 16:55:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE2B3A9DAE;
+	Wed,  5 Aug 2026 18:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785948918; cv=none; b=kb3gUhVvKwwCM52cQNMccaW0nyEOqp8rRHeQ6Zn+oi9gBNUXFDyIUmVCrFESvtI0+sLUnsFzK5kOO/wXZ6u9fezgUBZtqvkTqPKlwa9uZZHVpq/pNVzKpPSVAW9K54B98nz8CMoOxOpCFMGu8kBk/1K3W5n2Q5Y17H//Vj32idc=
+	t=1785954610; cv=none; b=jmmHvFBEv+GaTw+m3L5y5GXpU9fq7gbmiZJbWcfzPO6/QrMosL6C18+FEOzzNF7YBB+pUH+hZrmXQfUX0ilCVtl6sIkzHeCJ7aUcoP8PI6OED/UuoNQl4o5G6nrHuqReSZdwIJ0Zkh2HxB7nandie2vMuulSpzqIlPsCdUxF7zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785948918; c=relaxed/simple;
-	bh=uNzqO44Fhh1InmcxRUWdvCvljt6LWpXyHHLfS09W548=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WTaGUKaiswA1Wq209OMKR9rWcH66HuyzMJHZ7BC6vbdjcO9rATkdsC9t1vUz7cmDPo8Q1OfqxwuW3KZbOe9EGKtKi9CiUWwF1VIdroaVBqqRq3f+kHLLKMkJjlBJFsNLb7+DajSOk9Csqmjj8w7vTKfZHHBL74nRw1aQFtbp4l0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KTdE3aYc; arc=none smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1785954610; c=relaxed/simple;
+	bh=fLlKhlYSSrhddHFlukq7lBIthEK4wWuu/Zuxuv6qRcY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=IxyUvIjgqhS54GdhJ/WiihqiBfFweoFxEdq5a19e8dzlgr5oLzE6Omqi+blKu/vSJ5w8Myh7JHtp2vE7KNX45EgFgaJ3IxhOT7G3a9fVjMDheAzipBlZiZwP0OmqlBTj94+6OYZMrz8ru90LUQRhly0YQHInuClsGsV5cUGuG7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=e7Ch5G8V; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KTdE3aYc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e7Ch5G8V"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785948916; x=1817484916;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uNzqO44Fhh1InmcxRUWdvCvljt6LWpXyHHLfS09W548=;
-  b=KTdE3aYcnWZKW+GNXleCZM7rkobZ+lt9ScvVMBZZWF1YzttOFvdITdCp
-   I042rgCuNDDReRoj6YVQ8RAml+yfIvhhMZGpDcqE8CEbaMLrfP6dHH2p5
-   ZyChHUgP44KSm+YwCZkwcrylalbvwk1qUjzG3H/4qLbCIQXmyme3xZfVQ
-   g2JdKoN11S3Elw6X+mbL7tvZvB4urM2p8CrV3AOho7Ga9W0mBjR6JbxH8
-   vChdqT5EHrzpc+PbnOpj7450E1AgeP5Ex5TWyjc6p7U8Umacirpba6y+Q
-   it4qxdadRkZapaOu2xBOev706azC/MltK+35QMurMkB5DNmDFRjwoD36Q
-   w==;
-X-CSE-ConnectionGUID: U/kkabCMRpmvNs6CnzheNw==
-X-CSE-MsgGUID: BrfbtLQQRwmBy52CI8yn7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="97125973"
+  t=1785954608; x=1817490608;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fLlKhlYSSrhddHFlukq7lBIthEK4wWuu/Zuxuv6qRcY=;
+  b=e7Ch5G8Vtwz9qcJ1CHEXOFUwsiYxf+QcZAP6d5+htxOZ8+XGQ2d+Tnsk
+   anEK4FxdxMxreHCq59b1p0rwKNHu9lyGmO5bRi5emaGiQAZKnSFCIpl7A
+   FX3TIollyWEnkM2CzRGGoC8hVx3K/M3pv08zQzYX89qUqPotJhwW2bgM/
+   Ul3/a/nwxcLxbruqghmW7lpXtcvkGLHJlDcRYPKjwn4ZzOb7GxFokssdR
+   uDoWZrBqfUbJYx+NNADzMRWK2a55Cr+Xx2NfjWLY3dz6dvYhvZqy8uNvY
+   2CNF/7d2jbEx+wniCxofYf1ajoYnwYSQsnmq3YfnFMvr+/vzyzzabq5OZ
+   Q==;
+X-CSE-ConnectionGUID: 8bO3aMRURoSRLmriTgbPBA==
+X-CSE-MsgGUID: hpOsRF5AQe28KVzkrNlS4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="86653655"
 X-IronPort-AV: E=Sophos;i="6.25,206,1779174000"; 
-   d="scan'208";a="97125973"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 09:55:15 -0700
-X-CSE-ConnectionGUID: U15s6pn5QJ6IxBebqAaObQ==
-X-CSE-MsgGUID: 3w5YAeD6T56mt40D5iOPGA==
+   d="scan'208";a="86653655"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 11:30:04 -0700
+X-CSE-ConnectionGUID: Ou4W+r/SSryh/aXMkJv69w==
+X-CSE-MsgGUID: Po5rcsV+R523EMDcJCNYKw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,206,1779174000"; 
-   d="scan'208";a="286518989"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Aug 2026 09:41:21 -0700
-Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+   d="scan'208";a="267014821"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 05 Aug 2026 11:30:02 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wregB-000000004QI-2duv;
-	Wed, 05 Aug 2026 16:41:19 +0000
-Date: Wed, 5 Aug 2026 18:40:31 +0200
+	id 1wrgNM-00000000DCF-0R37;
+	Wed, 05 Aug 2026 18:30:00 +0000
+Date: Thu, 06 Aug 2026 02:29:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Lucas Poupeau <lucasp.linux@gmail.com>, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, horms@kernel.org,
-	kuniyu@google.com, sdf@fomichev.me, brauner@kernel.org,
-	krikku@gmail.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lucas Poupeau <lucasp.linux@gmail.com>
-Subject: Re: [PATCH] net: sysfs: cleanup coding style
-Message-ID: <202608051816.a53s4Y2e-lkp@intel.com>
-References: <20260628185824.231250-1-lucasp.linux@gmail.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/compat-32bit-time-ifdef 1/2] ld.lld:
+ error: undefined symbol: put_old_timespec32
+Message-ID: <202608060240.p4XnAQhr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,91 +60,28 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260628185824.231250-1-lucasp.linux@gmail.com>
 
-Hi Lucas,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main brauner-vfs/vfs.all linus/master v7.2-rc6 next-20260805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Poupeau/net-sysfs-cleanup-coding-style/20260805-152318
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20260628185824.231250-1-lucasp.linux%40gmail.com
-patch subject: [PATCH] net: sysfs: cleanup coding style
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260805/202608051816.a53s4Y2e-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260805/202608051816.a53s4Y2e-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/compat-32bit-time-ifdef
+head:   7663b4d0ace6aad2eb71ebff8fef8c4bb0469903
+commit: dc9f3c20e466c6e813f3cf09ffd5d276db7c3fd4 [1/2] ifdef
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260806/202608060240.p4XnAQhr-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project bacfe2950f8218268fcc0a8765644ea0c15f0360)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608060240.p4XnAQhr-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608051816.a53s4Y2e-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608060240.p4XnAQhr-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> net/core/net-sysfs.c:622:8: error: use of undeclared identifier 'netdev_group_show'
-     622 | static DEVICE_ATTR_RW(netdev_group);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:246:45: note: expanded from macro 'DEVICE_ATTR_RW'
-     246 |         struct device_attribute dev_attr_##_name = __DEVICE_ATTR_RW(_name)
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:204:2: note: expanded from macro '__DEVICE_ATTR_RW'
-     204 |         __DEVICE_ATTR_RW_MODE(_name, 0644)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:201:30: note: expanded from macro '__DEVICE_ATTR_RW_MODE'
-     201 |         __DEVICE_ATTR(_name, _mode, _name##_show, _name##_store)
-         |                                     ^~~~~~~~~~~~
-   <scratch space>:22:1: note: expanded from here
-      22 | netdev_group_show
-         | ^~~~~~~~~~~~~~~~~
->> net/core/net-sysfs.c:622:8: error: use of undeclared identifier 'netdev_group_store'; did you mean 'netdev_lock_store'?
-     622 | static DEVICE_ATTR_RW(netdev_group);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:246:45: note: expanded from macro 'DEVICE_ATTR_RW'
-     246 |         struct device_attribute dev_attr_##_name = __DEVICE_ATTR_RW(_name)
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:204:2: note: expanded from macro '__DEVICE_ATTR_RW'
-     204 |         __DEVICE_ATTR_RW_MODE(_name, 0644)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:201:44: note: expanded from macro '__DEVICE_ATTR_RW_MODE'
-     201 |         __DEVICE_ATTR(_name, _mode, _name##_show, _name##_store)
-         |                                                   ^~~~~~~~~~~~~
-   <scratch space>:23:1: note: expanded from here
-      23 | netdev_group_store
-         | ^~~~~~~~~~~~~~~~~~
-   net/core/net-sysfs.c:189:1: note: 'netdev_lock_store' declared here
-     189 | netdev_lock_store(struct device *dev, struct device_attribute *attr,
-         | ^
-   net/core/net-sysfs.c:622:8: error: use of undeclared identifier 'netdev_group_store'
-     622 | static DEVICE_ATTR_RW(netdev_group);
-         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:246:45: note: expanded from macro 'DEVICE_ATTR_RW'
-     246 |         struct device_attribute dev_attr_##_name = __DEVICE_ATTR_RW(_name)
-         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:204:2: note: expanded from macro '__DEVICE_ATTR_RW'
-     204 |         __DEVICE_ATTR_RW_MODE(_name, 0644)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device.h:201:44: note: expanded from macro '__DEVICE_ATTR_RW_MODE'
-     201 |         __DEVICE_ATTR(_name, _mode, _name##_show, _name##_store)
-         |                                                   ^~~~~~~~~~~~~
-   <scratch space>:23:1: note: expanded from here
-      23 | netdev_group_store
-         | ^~~~~~~~~~~~~~~~~~
-   3 errors generated.
-
-
-vim +/netdev_group_show +622 net/core/net-sysfs.c
-
-   620	
-   621	NETDEVICE_SHOW(group, fmt_dec);
- > 622	static DEVICE_ATTR_RW(netdev_group);
-   623	
+>> ld.lld: error: undefined symbol: get_old_timespec32
+   >>> referenced by socket.c
+   >>>               net/socket.o:(__sys_recvmmsg) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: put_old_timespec32
+   >>> referenced by socket.c
+   >>>               net/socket.o:(__sys_recvmmsg) in archive vmlinux.a
 
 --
 0-DAY CI Kernel Test Service
