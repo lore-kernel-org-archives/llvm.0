@@ -1,65 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D278042BC56;
-	Wed,  5 Aug 2026 22:29:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1C542A789;
+	Wed,  5 Aug 2026 22:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785968951; cv=none; b=aVsuItkzAonRlp30wiDze9RDSnVxoerGbUJ5285pTEXXqUiX1W+om+5xcKSTf1IckRe23gytAeyCy7jJObfii/5J+BtLLP6FH4rIDu9gZXz0tk4aU9/gGXR1Wh/cyjg1DO7k/GzrOYDBFj1csdoFBB1yUZMDhS49tdYqYF7QLv4=
+	t=1785969889; cv=none; b=qV0nOdeVhOlDAucwGExUjYbh/MBfK2ii8rICjFVv1h8/udWTsXi0/tXyQlqmy1mrRGEHFA85k8zDEhgUQwViNcpdYoY2217raZ5uKhUFgUqNuthoeHtirv1yRueWGKCtX9cMg/Q2twjxf2E6QWylxO20pWxLo5ajMQX1/oGqeHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785968951; c=relaxed/simple;
-	bh=p+tGgJjfDf+QExfIl3EY8iwwECUib4YEAIdONJSPpjE=;
+	s=arc-20240116; t=1785969889; c=relaxed/simple;
+	bh=OYmHsyMIoZ8e1Utz+0y7ood/VOLz41ZkgVg9yefQFUc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U7GGz/i6EM58VqzsWuxCNKTHKn0C0YEQURmQGXWDMWQT4YFYi37L4jaUprBmxU2ElJ7Lm/HyMumpmpAfKnKXhcTxnupSCjdBzWNyXu+6GH/u198HtfaR2Ef4WgXGM1KI9jznMWVJEMeyn9xWduTYl8WSk1/Nr5GKH2Z2Tbjg2VI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WL5bsVtS; arc=none smtp.client-ip=198.175.65.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=m3HLKcNc6dUVg8tdXVN4eELQn6PEJD9sk92I30M+aGTCNC6P8WA+7Rh93YbioqZF3mfONe7Cjj/HkBf5f4e9wLfWV2ggKAzAmwsGbj1gAHaB/4CgXJkl3RDoq/pinroU0Gh5HqvuRRh9PW9UcYvk8xANSKSr0rrKWrBpXq+lkNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CKtkKFdu; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WL5bsVtS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CKtkKFdu"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785968948; x=1817504948;
+  t=1785969887; x=1817505887;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=p+tGgJjfDf+QExfIl3EY8iwwECUib4YEAIdONJSPpjE=;
-  b=WL5bsVtSl9bSxKln+O3ibQPXA/BzqK04A195qTZ1C6ulLESGi4+xH8kl
-   GLSR49qXm9iSWlXcVdbJkqKNPBZw0KBVXb+zlaYSRKXUCeSdfIf+goj8v
-   UyGBifFVYmKAHKi38YTDdBu3UYqk4lAl6GgSk/dxk64JCY7PLaW1EWe7L
-   a+0Ax7sE+IBk35HCx3s0KEjQ2Pvc+SfIfLwVqukWMvGAQaQez4Tdwxa9W
-   V4Jiidv3R50plI650G8VeKSVgu2REfhJQ3CUSLje9YLIh38qIrE7LUl4A
-   jWyV+alJJ+T/SE/7GpjlFjg0gJJ14mThxDczWEhTLWJWaYs274JOsV8jc
-   w==;
-X-CSE-ConnectionGUID: oKqQXysyRleRzv6oRj5i5w==
-X-CSE-MsgGUID: pZzS3L2jSVGi0fC/8R3DWg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="97713326"
+  bh=OYmHsyMIoZ8e1Utz+0y7ood/VOLz41ZkgVg9yefQFUc=;
+  b=CKtkKFdukZ47wpH5CllEdUPaCXqlkqraEvZGZSn55+TdLzbf5WWpYv1n
+   ZGXdyCbYEIDeKtsliB7kHJadDISi53gStVsBlyU3rFrPaFoNyHvd+Rmf9
+   4YNiKqkFQD2aosbJyG1Yu1kUWW3OGTw7hpLuLp8JnOR7bKsoWXUJYonUE
+   B4HnQYxSgfIF0xKeaX4k9zfJdAclX+Li7fS/Wa978x+Cd4vcBC/UWzx6a
+   xJrisFF9YrpVuYCs4QaTQMICzF3LSGZd/q0Xp01yJsF7kXpJuinpe2Jt6
+   jGneCYIfMuAY3tvlBUPGS/3LsUgqonUCq3uqM9YUXCtVvCWVCJzQeJkkW
+   Q==;
+X-CSE-ConnectionGUID: SMg9AKmjR42tJSPKoc90OA==
+X-CSE-MsgGUID: aQAqzICwRo6nGcPJxjh7+A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="90440218"
 X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="97713326"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:29:06 -0700
-X-CSE-ConnectionGUID: NmwiC6myTPu6zWOTTx11KQ==
-X-CSE-MsgGUID: BJGd6Ak0Rjqat4sLydi/YQ==
+   d="scan'208";a="90440218"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:44:46 -0700
+X-CSE-ConnectionGUID: +5wbzIy0T0WCAvP8AkWrHQ==
+X-CSE-MsgGUID: 6Kgzx6X8SUOhBmHwjfn2PQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="261989405"
+   d="scan'208";a="260154829"
 Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 05 Aug 2026 15:29:03 -0700
+  by orviesa006.jf.intel.com with ESMTP; 05 Aug 2026 15:44:44 -0700
 Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wrk6e-00000000Dan-209A;
-	Wed, 05 Aug 2026 22:29:00 +0000
-Date: Thu, 6 Aug 2026 06:28:56 +0800
+	id 1wrkLo-00000000Dbh-48K7;
+	Wed, 05 Aug 2026 22:44:40 +0000
+Date: Thu, 6 Aug 2026 06:44:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kyle Switch <kyle.switch@motor-comm.com>, Frank.Sae@motor-comm.com,
-	andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com
+To: Shenghao Ding <shenghao-ding@ti.com>, broonie@kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	jianmin.wang@motor-comm.com, ming.xu@motor-comm.com,
-	xiaolin.xu@motor-comm.com, jie.han@motor-comm.com
-Subject: Re: [PATCH] net: phy: Add driver for Motorcomm Quad 2.5GbE phy
-Message-ID: <202608060635.338Kkf6r-lkp@intel.com>
-References: <20260714111203.3852126-1-kyle.switch@motor-comm.com>
+	andriy.shevchenko@linux.intel.com, tiwai@suse.de,
+	13916275206@139.com, krzk@kernel.org, alsa-devel@alsa-project.org,
+	baojun.xu@ti.com, riyo@ti.com, Shenghao Ding <shenghao-ding@ti.com>
+Subject: Re: [PATCH v1] ASoC: tas2781: Add calibration kcontrols for TAS2573
+Message-ID: <202608060659.Lp45DCOl-lkp@intel.com>
+References: <20260717073927.181-1-shenghao-ding@ti.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,156 +65,234 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260714111203.3852126-1-kyle.switch@motor-comm.com>
+In-Reply-To: <20260717073927.181-1-shenghao-ding@ti.com>
 
-Hi Kyle,
+Hi Shenghao,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on net/main]
-[also build test WARNING on linus/master v7.2-rc6 next-20260805]
-[cannot apply to net-next/main]
+[auto build test ERROR on v7.2-rc4]
+[also build test ERROR on linus/master next-20260805]
+[cannot apply to broonie-sound/for-next tiwai-sound/for-next tiwai-sound/for-linus v7.2-rc6 v7.2-rc5]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Switch/net-phy-Add-driver-for-Motorcomm-Quad-2-5GbE-phy/20260805-175843
-base:   net/main
-patch link:    https://lore.kernel.org/r/20260714111203.3852126-1-kyle.switch%40motor-comm.com
-patch subject: [PATCH] net: phy: Add driver for Motorcomm Quad 2.5GbE phy
-config: powerpc64-randconfig-002-20260806 (https://download.01.org/0day-ci/archive/20260806/202608060635.338Kkf6r-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608060635.338Kkf6r-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-calibration-kcontrols-for-TAS2573/20260805-132520
+base:   v7.2-rc4
+patch link:    https://lore.kernel.org/r/20260717073927.181-1-shenghao-ding%40ti.com
+patch subject: [PATCH v1] ASoC: tas2781: Add calibration kcontrols for TAS2573
+config: s390-randconfig-002-20260806 (https://download.01.org/0day-ci/archive/20260806/202608060659.Lp45DCOl-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project bacfe2950f8218268fcc0a8765644ea0c15f0360)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608060659.Lp45DCOl-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608060635.338Kkf6r-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608060659.Lp45DCOl-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/phy/motorcomm.c:3336:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    3336 |                 if (reg_space == YT8824_RSSR_UTP_SPACE) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:3353:44: note: uninitialized use occurs here
-    3353 |         return phy_restore_page(phydev, old_page, ret);
-         |                                                   ^~~
-   drivers/net/phy/motorcomm.c:3336:3: note: remove the 'if' if its condition is always true
-    3336 |                 if (reg_space == YT8824_RSSR_UTP_SPACE) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:3335:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-    3335 |         if (old_page >= 0) {
-         |             ^~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:3353:44: note: uninitialized use occurs here
-    3353 |         return phy_restore_page(phydev, old_page, ret);
-         |                                                   ^~~
-   drivers/net/phy/motorcomm.c:3335:2: note: remove the 'if' if its condition is always true
-    3335 |         if (old_page >= 0) {
-         |         ^~~~~~~~~~~~~~~~~~
->> drivers/net/phy/motorcomm.c:3332:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    3332 |         if (old_page < 0)
-         |             ^~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:3353:44: note: uninitialized use occurs here
-    3353 |         return phy_restore_page(phydev, old_page, ret);
-         |                                                   ^~~
-   drivers/net/phy/motorcomm.c:3332:2: note: remove the 'if' if its condition is always false
-    3332 |         if (old_page < 0)
-         |         ^~~~~~~~~~~~~~~~~
-    3333 |                 goto err_restore_page;
-         |                 ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:3329:9: note: initialize the variable 'ret' to silence this warning
-    3329 |         int ret;
-         |                ^
-         |                 = 0
->> drivers/net/phy/motorcomm.c:3341:8: warning: variable 'port' is uninitialized when used here [-Wuninitialized]
-    3341 |                         if (port == 0 || port == 2) {
-         |                             ^~~~
-   drivers/net/phy/motorcomm.c:3328:10: note: initialize the variable 'port' to silence this warning
-    3328 |         int port;
+>> sound/soc/codecs/tas2781-i2c.c:1774:3: error: cannot jump from this goto statement to its label
+    1774 |                 goto exit;
          |                 ^
-         |                  = 0
-   drivers/net/phy/motorcomm.c:4464:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    4464 |         if (old_page < 0)
-         |             ^~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:4477:44: note: uninitialized use occurs here
-    4477 |         return phy_restore_page(phydev, old_page, ret);
-         |                                                   ^~~
-   drivers/net/phy/motorcomm.c:4464:2: note: remove the 'if' if its condition is always false
-    4464 |         if (old_page < 0)
-         |         ^~~~~~~~~~~~~~~~~
-    4465 |                 goto err_restore_page;
-         |                 ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:4460:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    4460 |         if (old_page < 0)
-         |             ^~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:4477:44: note: uninitialized use occurs here
-    4477 |         return phy_restore_page(phydev, old_page, ret);
-         |                                                   ^~~
-   drivers/net/phy/motorcomm.c:4460:2: note: remove the 'if' if its condition is always false
-    4460 |         if (old_page < 0)
-         |         ^~~~~~~~~~~~~~~~~
-    4461 |                 goto err_restore_page;
-         |                 ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:4457:9: note: initialize the variable 'ret' to silence this warning
-    4457 |         int ret;
-         |                ^
-         |                 = 0
-   drivers/net/phy/motorcomm.c:4641:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-    4641 |         if (old_page < 0)
-         |             ^~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:4660:44: note: uninitialized use occurs here
-    4660 |         return phy_restore_page(phydev, old_page, ret);
-         |                                                   ^~~
-   drivers/net/phy/motorcomm.c:4641:2: note: remove the 'if' if its condition is always false
-    4641 |         if (old_page < 0)
-         |         ^~~~~~~~~~~~~~~~~
-    4642 |                 goto err_restore_page;
-         |                 ~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/phy/motorcomm.c:4638:9: note: initialize the variable 'ret' to silence this warning
-    4638 |         int ret;
-         |                ^
-         |                 = 0
-   7 warnings generated.
+   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1779 |         guard(mutex)(&priv->codec_lock);
+         |         ^
+   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
+     303 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:102:1: note: expanded from here
+     102 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:108:1: note: expanded from here
+     108 | __UNIQUE_ID_unlock_565
+         | ^
+   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:96:1: note: expanded from here
+      96 | __UNIQUE_ID_guard_564
+         | ^
+   sound/soc/codecs/tas2781-i2c.c:1763:3: error: cannot jump from this goto statement to its label
+    1763 |                 goto exit;
+         |                 ^
+   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1779 |         guard(mutex)(&priv->codec_lock);
+         |         ^
+   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
+     303 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:102:1: note: expanded from here
+     102 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:108:1: note: expanded from here
+     108 | __UNIQUE_ID_unlock_565
+         | ^
+   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |                      ^
+   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
+     165 |         __PASTE(__UNIQUE_ID_,                                   \
+         |         ^
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:96:1: note: expanded from here
+      96 | __UNIQUE_ID_guard_564
+         | ^
+   sound/soc/codecs/tas2781-i2c.c:1757:3: error: cannot jump from this goto statement to its label
+    1757 |                 goto exit;
+         |                 ^
+   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
+    1779 |         guard(mutex)(&priv->codec_lock);
+         |         ^
+   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
+     423 |         CLASS(_name, __UNIQUE_ID(guard))
+         |         ^
+   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
+     303 |                 class_##_name##_constructor
+         |                 ^
+   <scratch space>:102:1: note: expanded from here
+     102 | class_mutex_constructor
+         | ^
+   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
+      16 | #define __PASTE(a, b) ___PASTE(a, b)
+         |                       ^
 
 
-vim +3336 drivers/net/phy/motorcomm.c
+vim +1774 sound/soc/codecs/tas2781-i2c.c
 
-  3320	
-  3321	/**
-  3322	 * disable YT8824 template test mode.
-  3323	 */
-  3324	static int yt8824_soft_reset_step4_paged(struct phy_device *phydev,
-  3325						 int reg_space)
-  3326	{
-  3327		int old_page;
-  3328		int port;
-  3329		int ret;
-  3330	
-  3331		old_page = phy_select_page(phydev, reg_space);
-> 3332		if (old_page < 0)
-  3333			goto err_restore_page;
-  3334	
-  3335		if (old_page >= 0) {
-> 3336			if (reg_space == YT8824_RSSR_UTP_SPACE) {
-  3337				/* normal mode */
-  3338				ret = ytphy_write_mmd(phydev, 0x1, 0x0084, 0x0000);
-  3339				if (ret < 0)
-  3340					goto err_restore_page;
-> 3341				if (port == 0 || port == 2) {
-  3342					/* read the calibration val of band after power on,
-  3343					 * * only for recording.
-  3344					 */
-  3345					ret = ytphy_read_ext(phydev, 0x043e);
-  3346					if (ret < 0)
-  3347						goto err_restore_page;
-  3348				}
-  3349			}
-  3350		}
-  3351	
-  3352	err_restore_page:
-  3353		return phy_restore_page(phydev, old_page, ret);
-  3354	}
-  3355	
+d75d38dc460452c Shenghao Ding  2025-05-07  1715  
+d75d38dc460452c Shenghao Ding  2025-05-07  1716  static ssize_t acoustic_ctl_write(struct file *file,
+d75d38dc460452c Shenghao Ding  2025-05-07  1717  	const char __user *from, size_t count, loff_t *ppos)
+d75d38dc460452c Shenghao Ding  2025-05-07  1718  {
+d75d38dc460452c Shenghao Ding  2025-05-07  1719  	struct snd_soc_component *comp = file->private_data;
+d75d38dc460452c Shenghao Ding  2025-05-07  1720  	struct tasdevice_priv *priv = snd_soc_component_get_drvdata(comp);
+d75d38dc460452c Shenghao Ding  2025-05-07  1721  	struct acoustic_data *p = &priv->acou_data;
+d75d38dc460452c Shenghao Ding  2025-05-07  1722  	unsigned int max_pkg_len = sizeof(*p);
+d75d38dc460452c Shenghao Ding  2025-05-07  1723  	unsigned char *src;
+d75d38dc460452c Shenghao Ding  2025-05-07  1724  	int j, len, reg, val;
+d75d38dc460452c Shenghao Ding  2025-05-07  1725  	unsigned short chn;
+d75d38dc460452c Shenghao Ding  2025-05-07  1726  	int ret = -1;
+d75d38dc460452c Shenghao Ding  2025-05-07  1727  
+d75d38dc460452c Shenghao Ding  2025-05-07  1728  	if (count > sizeof(*p)) {
+d75d38dc460452c Shenghao Ding  2025-05-07  1729  		dev_err(priv->dev, "count(%u) is larger than max(%u).\n",
+d75d38dc460452c Shenghao Ding  2025-05-07  1730  			(unsigned int)count, max_pkg_len);
+d75d38dc460452c Shenghao Ding  2025-05-07  1731  		return ret;
+d75d38dc460452c Shenghao Ding  2025-05-07  1732  	}
+d75d38dc460452c Shenghao Ding  2025-05-07  1733  
+d75d38dc460452c Shenghao Ding  2025-05-07  1734  	src = memdup_user(from, count);
+d75d38dc460452c Shenghao Ding  2025-05-07  1735  	if (IS_ERR(src))
+d75d38dc460452c Shenghao Ding  2025-05-07  1736  		return PTR_ERR(src);
+d75d38dc460452c Shenghao Ding  2025-05-07  1737  
+d75d38dc460452c Shenghao Ding  2025-05-07  1738  	if (src[0] > max_pkg_len && src[0] != count) {
+b11f2a9745401d9 Colin Ian King 2025-08-08  1739  		dev_err(priv->dev, "pkg(%u), max(%u), count(%u) mismatch.\n",
+d75d38dc460452c Shenghao Ding  2025-05-07  1740  			src[0], max_pkg_len, (unsigned int)count);
+d75d38dc460452c Shenghao Ding  2025-05-07  1741  		ret = 0;
+d75d38dc460452c Shenghao Ding  2025-05-07  1742  		goto exit;
+d75d38dc460452c Shenghao Ding  2025-05-07  1743  	}
+d75d38dc460452c Shenghao Ding  2025-05-07  1744  
+d75d38dc460452c Shenghao Ding  2025-05-07  1745  	switch (src[1]) {
+d75d38dc460452c Shenghao Ding  2025-05-07  1746  	case 'r':
+d75d38dc460452c Shenghao Ding  2025-05-07  1747  		/* length of data to read */
+d75d38dc460452c Shenghao Ding  2025-05-07  1748  		len = src[6];
+d75d38dc460452c Shenghao Ding  2025-05-07  1749  		break;
+d75d38dc460452c Shenghao Ding  2025-05-07  1750  	case 'w':
+d75d38dc460452c Shenghao Ding  2025-05-07  1751  		/* Skip 6 bytes for package type and register address */
+d75d38dc460452c Shenghao Ding  2025-05-07  1752  		len = src[0] - 6;
+d75d38dc460452c Shenghao Ding  2025-05-07  1753  		break;
+d75d38dc460452c Shenghao Ding  2025-05-07  1754  	default:
+d75d38dc460452c Shenghao Ding  2025-05-07  1755  		dev_err(priv->dev, "%s Wrong code %02x.\n", __func__, src[1]);
+d75d38dc460452c Shenghao Ding  2025-05-07  1756  		ret = 0;
+d75d38dc460452c Shenghao Ding  2025-05-07  1757  		goto exit;
+d75d38dc460452c Shenghao Ding  2025-05-07  1758  	}
+d75d38dc460452c Shenghao Ding  2025-05-07  1759  
+d75d38dc460452c Shenghao Ding  2025-05-07  1760  	if (len < 1) {
+d75d38dc460452c Shenghao Ding  2025-05-07  1761  		dev_err(priv->dev, "pkg fmt invalid %02x.\n", len);
+d75d38dc460452c Shenghao Ding  2025-05-07  1762  		ret = 0;
+d75d38dc460452c Shenghao Ding  2025-05-07  1763  		goto exit;
+d75d38dc460452c Shenghao Ding  2025-05-07  1764  	}
+d75d38dc460452c Shenghao Ding  2025-05-07  1765  
+d75d38dc460452c Shenghao Ding  2025-05-07  1766  	for (j = 0; j < priv->ndev; j++)
+d75d38dc460452c Shenghao Ding  2025-05-07  1767  		if (src[2] == priv->tasdevice[j].dev_addr) {
+d75d38dc460452c Shenghao Ding  2025-05-07  1768  			chn = j;
+d75d38dc460452c Shenghao Ding  2025-05-07  1769  			break;
+d75d38dc460452c Shenghao Ding  2025-05-07  1770  		}
+d75d38dc460452c Shenghao Ding  2025-05-07  1771  	if (j >= priv->ndev) {
+d75d38dc460452c Shenghao Ding  2025-05-07  1772  		dev_err(priv->dev, "no such device 0x%02x.\n", src[2]);
+d75d38dc460452c Shenghao Ding  2025-05-07  1773  		ret = 0;
+d75d38dc460452c Shenghao Ding  2025-05-07 @1774  		goto exit;
+d75d38dc460452c Shenghao Ding  2025-05-07  1775  	}
+d75d38dc460452c Shenghao Ding  2025-05-07  1776  
+d75d38dc460452c Shenghao Ding  2025-05-07  1777  	reg = TASDEVICE_REG(src[3], src[4], src[5]);
+d75d38dc460452c Shenghao Ding  2025-05-07  1778  
+d75d38dc460452c Shenghao Ding  2025-05-07  1779  	guard(mutex)(&priv->codec_lock);
+d75d38dc460452c Shenghao Ding  2025-05-07  1780  
+d75d38dc460452c Shenghao Ding  2025-05-07  1781  	if (src[1] == 'w') {
+d75d38dc460452c Shenghao Ding  2025-05-07  1782  		if (len > 1)
+d75d38dc460452c Shenghao Ding  2025-05-07  1783  			ret = tasdevice_dev_bulk_write(priv, chn, reg,
+d75d38dc460452c Shenghao Ding  2025-05-07  1784  				 &src[6], len);
+d75d38dc460452c Shenghao Ding  2025-05-07  1785  		else
+d75d38dc460452c Shenghao Ding  2025-05-07  1786  			ret = tasdevice_dev_write(priv, chn, reg, src[6]);
+d75d38dc460452c Shenghao Ding  2025-05-07  1787  	} else {
+d75d38dc460452c Shenghao Ding  2025-05-07  1788  		struct acoustic_data *p = &priv->acou_data;
+d75d38dc460452c Shenghao Ding  2025-05-07  1789  
+d75d38dc460452c Shenghao Ding  2025-05-07  1790  		memcpy(p, src, 6);
+d75d38dc460452c Shenghao Ding  2025-05-07  1791  		if (len > 1) {
+d75d38dc460452c Shenghao Ding  2025-05-07  1792  			ret = tasdevice_dev_bulk_read(priv, chn, reg,
+d75d38dc460452c Shenghao Ding  2025-05-07  1793  				p->data, len);
+d75d38dc460452c Shenghao Ding  2025-05-07  1794  		} else {
+d75d38dc460452c Shenghao Ding  2025-05-07  1795  			ret = tasdevice_dev_read(priv, chn, reg, &val);
+d75d38dc460452c Shenghao Ding  2025-05-07  1796  			p->data[0] = val;
+d75d38dc460452c Shenghao Ding  2025-05-07  1797  		}
+d75d38dc460452c Shenghao Ding  2025-05-07  1798  		p->len = len + 6;
+d75d38dc460452c Shenghao Ding  2025-05-07  1799  	}
+d75d38dc460452c Shenghao Ding  2025-05-07  1800  
+d75d38dc460452c Shenghao Ding  2025-05-07  1801  	if (ret)
+d75d38dc460452c Shenghao Ding  2025-05-07  1802  		dev_err(priv->dev, "i2c communication error.\n");
+d75d38dc460452c Shenghao Ding  2025-05-07  1803  	else
+d75d38dc460452c Shenghao Ding  2025-05-07  1804  		ret = count;
+d75d38dc460452c Shenghao Ding  2025-05-07  1805  exit:
+d75d38dc460452c Shenghao Ding  2025-05-07  1806  	kfree(src);
+d75d38dc460452c Shenghao Ding  2025-05-07  1807  	return ret;
+d75d38dc460452c Shenghao Ding  2025-05-07  1808  }
+d75d38dc460452c Shenghao Ding  2025-05-07  1809  
 
 --
 0-DAY CI Kernel Test Service
