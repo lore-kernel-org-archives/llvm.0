@@ -1,82 +1,114 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4F718DB26;
-	Wed,  5 Aug 2026 01:00:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834641A683D
+	for <llvm@lists.linux.dev>; Wed,  5 Aug 2026 01:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785891650; cv=none; b=TOHaGLtkPBlQ5rel0wxuJrbZCsQJgBka+6zHdC+o3EuK3TpNi4Ng9BFa/9XDr56VuvnIXtN7vFeSLAqtyXgdf90bS+VYEWJmn49UqMb8kK7zDY8WmbCxR09qhIrXFzOdS+Sp98gGuMhYqSWeQy37kikwSkFOOihAPrN6ZYoo6lE=
+	t=1785891733; cv=none; b=KUOh9HDLgbP/jA55hEXlIPOjNITRWWWAwpSihSVv1V8bdqQgfzXw4LKiFH/hbOmtfQzzV7YgqHi2dEF4K97hun8Dfv03X8pF9BgFqkIz9Q+bdmA+uUAgULUL03aRU3NHUxQVWKxPL6uroxCSSWXyxK1gPbznq6wO/6ni4zOF1t8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785891650; c=relaxed/simple;
-	bh=M5iUuIAEkOe83cYPkVI4Kkb/3iUes9/pw7bKHsb19vM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lmm9pPweMHM4QnCjapyI9qEiVuexQszs8zftRk+MQlFys2lRS6lRrI72KQLd9qRqld17xz/uGvueKtO5kMZ5JxsRkJvOpcRjHL0eGlvZrq/PND2BpzuFPmeVn6FzqP4gIBZZg8IhGX0Qr6ViN8EBRx1HR3KQa4LCjum3wIMUz14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RF85tYGh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785891733; c=relaxed/simple;
+	bh=9kliJxu/sn175bjIdvQpJVlKU3s9LKePdi6ZpSlwW08=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=SACRWn/aXi2qMD774Wf9koOW3/P1PrAsrhAu7q+t0yH/qkv0k611wGcrnye7J13yg4JwMIMC5q6BUToNnxYH4Rgp71LHoa1/Htuhuu40Z2XPlFliWGQoJbvS1uyED95P7LQLQQErWOfjj50cS+9VUFtbo0uM5PGPXpE8ct25n/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ilRSruzy; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RF85tYGh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C92EE1F00A3A;
-	Wed,  5 Aug 2026 01:00:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785891648;
-	bh=wDoFFK8k5YTxmRnKscMNyLZY+muzZHuYjeYkOMRXrgw=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=RF85tYGhiHjm4uKEo6TkqefkpcwefKhKJq9/2Jlh8vaqy6UKnmGfglB6gY4WtX+RB
-	 g3uMxUym+TA80Pcie3lZ6/FjKqvM134zsd5ySqspot8vYK3oVDvkuBDe4F1MSjY1tP
-	 tMPfXZf/mLT6faoINwrYE9u3oeQ9vMaeKNi+Mf7xTdgwzWxcVDu0D9LfPQB8B7kzk+
-	 68TLfFuLW+eZN+heFN1zkWLtcThdT2/mT8CRfzjstHj2yfiRw0AQ0PhCK96/2NhUaw
-	 sCIgFltDMj64gGpqSTbyDwmm1oLoM2rC4m4979s7z3U5e68pfEagOi/MMH6AGxI9hP
-	 K6Y0lPpuZgGSw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5691F3926663;
-	Wed,  5 Aug 2026 01:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ilRSruzy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1785891731;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=N5iPsCv6q94kctpHCzzOxOqNuIwjkrcp6ac7ksRW4nc=;
+	b=ilRSruzyUXWdwGUKWb8NjpJIv8hw1u+5jem4MRwCfM03F6siLXvIJ/zMnBAgLRXSQZbpn+
+	hZRErOpS6yU760Ue/5w96DoBPz46q7kcT/QwoyedN+rlTqHKo9UWI2SbAzjjTrMrXyYhxW
+	I2VbsMq4vk4lh941MQ8NAwjYd+G8sU4=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-641-Qj2MNU88NPqmR_3RwL_J2Q-1; Tue,
+ 04 Aug 2026 21:02:10 -0400
+X-MC-Unique: Qj2MNU88NPqmR_3RwL_J2Q-1
+X-Mimecast-MFC-AGG-ID: Qj2MNU88NPqmR_3RwL_J2Q_1785891729
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2F4A81800350
+	for <llvm@lists.linux.dev>; Wed,  5 Aug 2026 01:02:09 +0000 (UTC)
+Received: from [172.20.35.218] (unknown [10.30.44.80])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 85B49300019F;
+	Wed,  5 Aug 2026 01:02:08 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc6,
+ upstream-mainline, c21bb419)
+Date: Wed, 05 Aug 2026 01:02:08 -0000
+To: llvm@lists.linux.dev, fs-test@redhat.com
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net: airoha: fix ARRAY_SIZE() division by zero
- on
- UP builds
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178589160888.3856351.13210051056800049801.git-patchwork-notify@kernel.org>
-Date: Wed, 05 Aug 2026 01:00:08 +0000
-References: <20260731-airoha-spinlock-array-fix-v1-1-863a7e239a5f@kernel.org>
-In-Reply-To: <20260731-airoha-spinlock-array-fix-v1-1-863a7e239a5f@kernel.org>
-To: Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- horms@kernel.org, aleksander.lobakin@intel.com,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- netdev@vger.kernel.org, llvm@lists.linux.dev, ojeda@kernel.org, lkp@intel.com
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <57078.126080421021002210@us-mta-641.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: cM0qxJKmM6B6HpRfPV3ovvAP-6cjPdS56xty3ZgWZrc_1785891729
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi, we tested your kernel and here are the results:
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+    Overall result: FAILED
+             Merge: OK
+           Compile: OK
+              Test: FAILED
 
-On Fri, 31 Jul 2026 17:47:38 +0200 you wrote:
-> airoha_alloc_gdm_device() initializes the txq_lock[] array iterating
-> over ARRAY_SIZE(dev->txq_lock). ARRAY_SIZE() expands to
-> sizeof(dev->txq_lock) / sizeof((dev->txq_lock)[0]), but on UP builds
-> (CONFIG_SMP unset, CONFIG_DEBUG_SPINLOCK unset) arch_spinlock_t is an
-> empty struct, so sizeof(spinlock_t) is zero and the expression is a
-> compile-time division by zero (undefined behavior), reported by clang
-> as "division by zero is undefined [-Wdivision-by-zero]".
-> 
-> [...]
 
-Here is the summary with links:
-  - [net-next] net: airoha: fix ARRAY_SIZE() division by zero on UP builds
-    https://git.kernel.org/netdev/net-next/c/c509971352a6
+Kernel information:
+    Commit message: Merge tag 'for_linus' of git://git.kernel.org/pub/scm/l=
+inux/kernel/git/mst/vhost
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2732106202
 
+One or more kernel tests failed:
+    Unrecognized or new issues:
+        xfstests - btrfs
+              x86_64
+                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
+redhat:2732106202_x86_64_kernel_kcidb_tool_21796703_9
+                   Non-passing ran subtests:
+                       =E2=9D=8C FAIL generic/301
+
+    We also see the following known issues which are not related to your ch=
+anges:
+        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
+d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
+u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
+            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
+            Affected tests:
+                xfstests - nfsv4.2 [x86_64]
+
+
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
