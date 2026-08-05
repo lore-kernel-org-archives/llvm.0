@@ -1,62 +1,62 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1C542A789;
-	Wed,  5 Aug 2026 22:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A22B4657C6;
+	Wed,  5 Aug 2026 23:10:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785969889; cv=none; b=qV0nOdeVhOlDAucwGExUjYbh/MBfK2ii8rICjFVv1h8/udWTsXi0/tXyQlqmy1mrRGEHFA85k8zDEhgUQwViNcpdYoY2217raZ5uKhUFgUqNuthoeHtirv1yRueWGKCtX9cMg/Q2twjxf2E6QWylxO20pWxLo5ajMQX1/oGqeHg=
+	t=1785971462; cv=none; b=P09WjevL7FUna1hDwu40aZ8MrbrcsGRO8+mFlzo9qTzGgi/LjmatLoVtUc+gcX+NuUmhsL2POC0vIn6g3TisOIaWOeKW/eP3mX79V5b1yfsa4LRnzGDGHOAh/WcTFziJrwh1DbRvnqohMBhxrvljIaSo7rTAmM2Mr1+OFJQ1Q5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785969889; c=relaxed/simple;
-	bh=OYmHsyMIoZ8e1Utz+0y7ood/VOLz41ZkgVg9yefQFUc=;
+	s=arc-20240116; t=1785971462; c=relaxed/simple;
+	bh=uYzNSLJGSdyb5yvUy/AY7ZteAKWQVS6i1sP1EiovRh0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m3HLKcNc6dUVg8tdXVN4eELQn6PEJD9sk92I30M+aGTCNC6P8WA+7Rh93YbioqZF3mfONe7Cjj/HkBf5f4e9wLfWV2ggKAzAmwsGbj1gAHaB/4CgXJkl3RDoq/pinroU0Gh5HqvuRRh9PW9UcYvk8xANSKSr0rrKWrBpXq+lkNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CKtkKFdu; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xgb849XTlPLJfIhHZv9UcjH4rLrv8yKYp+xAJjZAUDPp84JdXrpdGKYutbPeBuuXJPpPFScbKT3ZqlVpRTaMeCdO+1kFGA0upAhinDLwEs2qvzTiGEaB9XVxcBhb4LNxZqKW77ALeVCkoHs6l/GmOolAuTkyq7+vTJJnZXdJQ30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VHY2PSw1; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CKtkKFdu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VHY2PSw1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785969887; x=1817505887;
+  t=1785971457; x=1817507457;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OYmHsyMIoZ8e1Utz+0y7ood/VOLz41ZkgVg9yefQFUc=;
-  b=CKtkKFdukZ47wpH5CllEdUPaCXqlkqraEvZGZSn55+TdLzbf5WWpYv1n
-   ZGXdyCbYEIDeKtsliB7kHJadDISi53gStVsBlyU3rFrPaFoNyHvd+Rmf9
-   4YNiKqkFQD2aosbJyG1Yu1kUWW3OGTw7hpLuLp8JnOR7bKsoWXUJYonUE
-   B4HnQYxSgfIF0xKeaX4k9zfJdAclX+Li7fS/Wa978x+Cd4vcBC/UWzx6a
-   xJrisFF9YrpVuYCs4QaTQMICzF3LSGZd/q0Xp01yJsF7kXpJuinpe2Jt6
-   jGneCYIfMuAY3tvlBUPGS/3LsUgqonUCq3uqM9YUXCtVvCWVCJzQeJkkW
-   Q==;
-X-CSE-ConnectionGUID: SMg9AKmjR42tJSPKoc90OA==
-X-CSE-MsgGUID: aQAqzICwRo6nGcPJxjh7+A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="90440218"
+  bh=uYzNSLJGSdyb5yvUy/AY7ZteAKWQVS6i1sP1EiovRh0=;
+  b=VHY2PSw1mJCHY2ff+ZcRFyjcCVSSvqwn/VvWee091Yn2nkfuHcoO2lv5
+   iHt4X0aTLUVav0Mpv5RoOm+V5i7rfP/yw+FyCl7iOAb4csLGgSKTzLJSw
+   15N3oHO1eOrE38Lkuxf3kX2Y5efQdY29VFm1xFlpHHmdU9uxGZXIB4QKp
+   4XEtlKg9Vh07Y/blh1nahar4fQ7ec5h3YMh69lHWq0dW4uvNeUJEnp174
+   RAx4ZZ0p/Oif4ixfPlhreOwrb1HgVphxlSeW0+/kXh9kRqk1ZBVt9lFnr
+   Ft0YBI776Nog1WXHIJA4bxdS7ltFupRu4Cq99kph8E2ae7m0i89rSeB+3
+   w==;
+X-CSE-ConnectionGUID: fbku7WojSjmVD6p9l5NGkQ==
+X-CSE-MsgGUID: Gqac7gKlSUiFwIIqmk0Vuw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="90376921"
 X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="90440218"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:44:46 -0700
-X-CSE-ConnectionGUID: +5wbzIy0T0WCAvP8AkWrHQ==
-X-CSE-MsgGUID: 6Kgzx6X8SUOhBmHwjfn2PQ==
+   d="scan'208";a="90376921"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 16:10:55 -0700
+X-CSE-ConnectionGUID: eyE7IjR7TS2Tn3OodI3uww==
+X-CSE-MsgGUID: p8Z6mGeETRytpSFJssjV1Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="260154829"
 Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 05 Aug 2026 15:44:44 -0700
+  by fmviesa003.fm.intel.com with ESMTP; 05 Aug 2026 16:10:52 -0700
 Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wrkLo-00000000Dbh-48K7;
-	Wed, 05 Aug 2026 22:44:40 +0000
-Date: Thu, 6 Aug 2026 06:44:27 +0800
+	id 1wrkl7-00000000Ddh-29rN;
+	Wed, 05 Aug 2026 23:10:49 +0000
+Date: Thu, 6 Aug 2026 07:10:29 +0800
 From: kernel test robot <lkp@intel.com>
-To: Shenghao Ding <shenghao-ding@ti.com>, broonie@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andriy.shevchenko@linux.intel.com, tiwai@suse.de,
-	13916275206@139.com, krzk@kernel.org, alsa-devel@alsa-project.org,
-	baojun.xu@ti.com, riyo@ti.com, Shenghao Ding <shenghao-ding@ti.com>
-Subject: Re: [PATCH v1] ASoC: tas2781: Add calibration kcontrols for TAS2573
-Message-ID: <202608060659.Lp45DCOl-lkp@intel.com>
-References: <20260717073927.181-1-shenghao-ding@ti.com>
+To: Lucas Poupeau <lucasp.linux@gmail.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, horms@kernel.org,
+	kuniyu@google.com, sdf@fomichev.me, brauner@kernel.org,
+	krikku@gmail.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lucas Poupeau <lucasp.linux@gmail.com>
+Subject: Re: [PATCH] net: sysfs: cleanup coding style
+Message-ID: <202608060631.yZqGaOTZ-lkp@intel.com>
+References: <20260628185824.231250-1-lucasp.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,234 +65,90 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260717073927.181-1-shenghao-ding@ti.com>
+In-Reply-To: <20260628185824.231250-1-lucasp.linux@gmail.com>
 
-Hi Shenghao,
+Hi Lucas,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on v7.2-rc4]
-[also build test ERROR on linus/master next-20260805]
-[cannot apply to broonie-sound/for-next tiwai-sound/for-next tiwai-sound/for-linus v7.2-rc6 v7.2-rc5]
+[auto build test ERROR on net-next/main]
+[also build test ERROR on net/main brauner-vfs/vfs.all linus/master v7.2-rc6 next-20260805]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shenghao-Ding/ASoC-tas2781-Add-calibration-kcontrols-for-TAS2573/20260805-132520
-base:   v7.2-rc4
-patch link:    https://lore.kernel.org/r/20260717073927.181-1-shenghao-ding%40ti.com
-patch subject: [PATCH v1] ASoC: tas2781: Add calibration kcontrols for TAS2573
-config: s390-randconfig-002-20260806 (https://download.01.org/0day-ci/archive/20260806/202608060659.Lp45DCOl-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project bacfe2950f8218268fcc0a8765644ea0c15f0360)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608060659.Lp45DCOl-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Poupeau/net-sysfs-cleanup-coding-style/20260805-152318
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20260628185824.231250-1-lucasp.linux%40gmail.com
+patch subject: [PATCH] net: sysfs: cleanup coding style
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260806/202608060631.yZqGaOTZ-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608060631.yZqGaOTZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608060659.Lp45DCOl-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608060631.yZqGaOTZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> sound/soc/codecs/tas2781-i2c.c:1774:3: error: cannot jump from this goto statement to its label
-    1774 |                 goto exit;
-         |                 ^
-   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1779 |         guard(mutex)(&priv->codec_lock);
-         |         ^
-   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
-     303 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:102:1: note: expanded from here
-     102 | class_mutex_constructor
+>> net/core/net-sysfs.c:622:8: error: use of undeclared identifier 'netdev_group_show'
+     622 | static DEVICE_ATTR_RW(netdev_group);
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:246:45: note: expanded from macro 'DEVICE_ATTR_RW'
+     246 |         struct device_attribute dev_attr_##_name = __DEVICE_ATTR_RW(_name)
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:204:2: note: expanded from macro '__DEVICE_ATTR_RW'
+     204 |         __DEVICE_ATTR_RW_MODE(_name, 0644)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:201:30: note: expanded from macro '__DEVICE_ATTR_RW_MODE'
+     201 |         __DEVICE_ATTR(_name, _mode, _name##_show, _name##_store)
+         |                                     ^~~~~~~~~~~~
+   <scratch space>:22:1: note: expanded from here
+      22 | netdev_group_show
+         | ^~~~~~~~~~~~~~~~~
+>> net/core/net-sysfs.c:622:8: error: use of undeclared identifier 'netdev_group_store'; did you mean 'netdev_lock_store'?
+     622 | static DEVICE_ATTR_RW(netdev_group);
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:246:45: note: expanded from macro 'DEVICE_ATTR_RW'
+     246 |         struct device_attribute dev_attr_##_name = __DEVICE_ATTR_RW(_name)
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:204:2: note: expanded from macro '__DEVICE_ATTR_RW'
+     204 |         __DEVICE_ATTR_RW_MODE(_name, 0644)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:201:44: note: expanded from macro '__DEVICE_ATTR_RW_MODE'
+     201 |         __DEVICE_ATTR(_name, _mode, _name##_show, _name##_store)
+         |                                                   ^~~~~~~~~~~~~
+   <scratch space>:23:1: note: expanded from here
+      23 | netdev_group_store
+         | ^~~~~~~~~~~~~~~~~~
+   net/core/net-sysfs.c:189:1: note: 'netdev_lock_store' declared here
+     189 | netdev_lock_store(struct device *dev, struct device_attribute *attr,
          | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:108:1: note: expanded from here
-     108 | __UNIQUE_ID_unlock_565
-         | ^
-   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:96:1: note: expanded from here
-      96 | __UNIQUE_ID_guard_564
-         | ^
-   sound/soc/codecs/tas2781-i2c.c:1763:3: error: cannot jump from this goto statement to its label
-    1763 |                 goto exit;
-         |                 ^
-   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1779 |         guard(mutex)(&priv->codec_lock);
-         |         ^
-   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
-     303 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:102:1: note: expanded from here
-     102 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:108:1: note: expanded from here
-     108 | __UNIQUE_ID_unlock_565
-         | ^
-   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:96:1: note: expanded from here
-      96 | __UNIQUE_ID_guard_564
-         | ^
-   sound/soc/codecs/tas2781-i2c.c:1757:3: error: cannot jump from this goto statement to its label
-    1757 |                 goto exit;
-         |                 ^
-   sound/soc/codecs/tas2781-i2c.c:1779:2: note: jump bypasses initialization of variable with __attribute__((cleanup))
-    1779 |         guard(mutex)(&priv->codec_lock);
-         |         ^
-   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
-     303 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:102:1: note: expanded from here
-     102 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
+   net/core/net-sysfs.c:622:8: error: use of undeclared identifier 'netdev_group_store'
+     622 | static DEVICE_ATTR_RW(netdev_group);
+         |        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:246:45: note: expanded from macro 'DEVICE_ATTR_RW'
+     246 |         struct device_attribute dev_attr_##_name = __DEVICE_ATTR_RW(_name)
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:204:2: note: expanded from macro '__DEVICE_ATTR_RW'
+     204 |         __DEVICE_ATTR_RW_MODE(_name, 0644)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device.h:201:44: note: expanded from macro '__DEVICE_ATTR_RW_MODE'
+     201 |         __DEVICE_ATTR(_name, _mode, _name##_show, _name##_store)
+         |                                                   ^~~~~~~~~~~~~
+   <scratch space>:23:1: note: expanded from here
+      23 | netdev_group_store
+         | ^~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
 
-vim +1774 sound/soc/codecs/tas2781-i2c.c
+vim +/netdev_group_show +622 net/core/net-sysfs.c
 
-d75d38dc460452c Shenghao Ding  2025-05-07  1715  
-d75d38dc460452c Shenghao Ding  2025-05-07  1716  static ssize_t acoustic_ctl_write(struct file *file,
-d75d38dc460452c Shenghao Ding  2025-05-07  1717  	const char __user *from, size_t count, loff_t *ppos)
-d75d38dc460452c Shenghao Ding  2025-05-07  1718  {
-d75d38dc460452c Shenghao Ding  2025-05-07  1719  	struct snd_soc_component *comp = file->private_data;
-d75d38dc460452c Shenghao Ding  2025-05-07  1720  	struct tasdevice_priv *priv = snd_soc_component_get_drvdata(comp);
-d75d38dc460452c Shenghao Ding  2025-05-07  1721  	struct acoustic_data *p = &priv->acou_data;
-d75d38dc460452c Shenghao Ding  2025-05-07  1722  	unsigned int max_pkg_len = sizeof(*p);
-d75d38dc460452c Shenghao Ding  2025-05-07  1723  	unsigned char *src;
-d75d38dc460452c Shenghao Ding  2025-05-07  1724  	int j, len, reg, val;
-d75d38dc460452c Shenghao Ding  2025-05-07  1725  	unsigned short chn;
-d75d38dc460452c Shenghao Ding  2025-05-07  1726  	int ret = -1;
-d75d38dc460452c Shenghao Ding  2025-05-07  1727  
-d75d38dc460452c Shenghao Ding  2025-05-07  1728  	if (count > sizeof(*p)) {
-d75d38dc460452c Shenghao Ding  2025-05-07  1729  		dev_err(priv->dev, "count(%u) is larger than max(%u).\n",
-d75d38dc460452c Shenghao Ding  2025-05-07  1730  			(unsigned int)count, max_pkg_len);
-d75d38dc460452c Shenghao Ding  2025-05-07  1731  		return ret;
-d75d38dc460452c Shenghao Ding  2025-05-07  1732  	}
-d75d38dc460452c Shenghao Ding  2025-05-07  1733  
-d75d38dc460452c Shenghao Ding  2025-05-07  1734  	src = memdup_user(from, count);
-d75d38dc460452c Shenghao Ding  2025-05-07  1735  	if (IS_ERR(src))
-d75d38dc460452c Shenghao Ding  2025-05-07  1736  		return PTR_ERR(src);
-d75d38dc460452c Shenghao Ding  2025-05-07  1737  
-d75d38dc460452c Shenghao Ding  2025-05-07  1738  	if (src[0] > max_pkg_len && src[0] != count) {
-b11f2a9745401d9 Colin Ian King 2025-08-08  1739  		dev_err(priv->dev, "pkg(%u), max(%u), count(%u) mismatch.\n",
-d75d38dc460452c Shenghao Ding  2025-05-07  1740  			src[0], max_pkg_len, (unsigned int)count);
-d75d38dc460452c Shenghao Ding  2025-05-07  1741  		ret = 0;
-d75d38dc460452c Shenghao Ding  2025-05-07  1742  		goto exit;
-d75d38dc460452c Shenghao Ding  2025-05-07  1743  	}
-d75d38dc460452c Shenghao Ding  2025-05-07  1744  
-d75d38dc460452c Shenghao Ding  2025-05-07  1745  	switch (src[1]) {
-d75d38dc460452c Shenghao Ding  2025-05-07  1746  	case 'r':
-d75d38dc460452c Shenghao Ding  2025-05-07  1747  		/* length of data to read */
-d75d38dc460452c Shenghao Ding  2025-05-07  1748  		len = src[6];
-d75d38dc460452c Shenghao Ding  2025-05-07  1749  		break;
-d75d38dc460452c Shenghao Ding  2025-05-07  1750  	case 'w':
-d75d38dc460452c Shenghao Ding  2025-05-07  1751  		/* Skip 6 bytes for package type and register address */
-d75d38dc460452c Shenghao Ding  2025-05-07  1752  		len = src[0] - 6;
-d75d38dc460452c Shenghao Ding  2025-05-07  1753  		break;
-d75d38dc460452c Shenghao Ding  2025-05-07  1754  	default:
-d75d38dc460452c Shenghao Ding  2025-05-07  1755  		dev_err(priv->dev, "%s Wrong code %02x.\n", __func__, src[1]);
-d75d38dc460452c Shenghao Ding  2025-05-07  1756  		ret = 0;
-d75d38dc460452c Shenghao Ding  2025-05-07  1757  		goto exit;
-d75d38dc460452c Shenghao Ding  2025-05-07  1758  	}
-d75d38dc460452c Shenghao Ding  2025-05-07  1759  
-d75d38dc460452c Shenghao Ding  2025-05-07  1760  	if (len < 1) {
-d75d38dc460452c Shenghao Ding  2025-05-07  1761  		dev_err(priv->dev, "pkg fmt invalid %02x.\n", len);
-d75d38dc460452c Shenghao Ding  2025-05-07  1762  		ret = 0;
-d75d38dc460452c Shenghao Ding  2025-05-07  1763  		goto exit;
-d75d38dc460452c Shenghao Ding  2025-05-07  1764  	}
-d75d38dc460452c Shenghao Ding  2025-05-07  1765  
-d75d38dc460452c Shenghao Ding  2025-05-07  1766  	for (j = 0; j < priv->ndev; j++)
-d75d38dc460452c Shenghao Ding  2025-05-07  1767  		if (src[2] == priv->tasdevice[j].dev_addr) {
-d75d38dc460452c Shenghao Ding  2025-05-07  1768  			chn = j;
-d75d38dc460452c Shenghao Ding  2025-05-07  1769  			break;
-d75d38dc460452c Shenghao Ding  2025-05-07  1770  		}
-d75d38dc460452c Shenghao Ding  2025-05-07  1771  	if (j >= priv->ndev) {
-d75d38dc460452c Shenghao Ding  2025-05-07  1772  		dev_err(priv->dev, "no such device 0x%02x.\n", src[2]);
-d75d38dc460452c Shenghao Ding  2025-05-07  1773  		ret = 0;
-d75d38dc460452c Shenghao Ding  2025-05-07 @1774  		goto exit;
-d75d38dc460452c Shenghao Ding  2025-05-07  1775  	}
-d75d38dc460452c Shenghao Ding  2025-05-07  1776  
-d75d38dc460452c Shenghao Ding  2025-05-07  1777  	reg = TASDEVICE_REG(src[3], src[4], src[5]);
-d75d38dc460452c Shenghao Ding  2025-05-07  1778  
-d75d38dc460452c Shenghao Ding  2025-05-07  1779  	guard(mutex)(&priv->codec_lock);
-d75d38dc460452c Shenghao Ding  2025-05-07  1780  
-d75d38dc460452c Shenghao Ding  2025-05-07  1781  	if (src[1] == 'w') {
-d75d38dc460452c Shenghao Ding  2025-05-07  1782  		if (len > 1)
-d75d38dc460452c Shenghao Ding  2025-05-07  1783  			ret = tasdevice_dev_bulk_write(priv, chn, reg,
-d75d38dc460452c Shenghao Ding  2025-05-07  1784  				 &src[6], len);
-d75d38dc460452c Shenghao Ding  2025-05-07  1785  		else
-d75d38dc460452c Shenghao Ding  2025-05-07  1786  			ret = tasdevice_dev_write(priv, chn, reg, src[6]);
-d75d38dc460452c Shenghao Ding  2025-05-07  1787  	} else {
-d75d38dc460452c Shenghao Ding  2025-05-07  1788  		struct acoustic_data *p = &priv->acou_data;
-d75d38dc460452c Shenghao Ding  2025-05-07  1789  
-d75d38dc460452c Shenghao Ding  2025-05-07  1790  		memcpy(p, src, 6);
-d75d38dc460452c Shenghao Ding  2025-05-07  1791  		if (len > 1) {
-d75d38dc460452c Shenghao Ding  2025-05-07  1792  			ret = tasdevice_dev_bulk_read(priv, chn, reg,
-d75d38dc460452c Shenghao Ding  2025-05-07  1793  				p->data, len);
-d75d38dc460452c Shenghao Ding  2025-05-07  1794  		} else {
-d75d38dc460452c Shenghao Ding  2025-05-07  1795  			ret = tasdevice_dev_read(priv, chn, reg, &val);
-d75d38dc460452c Shenghao Ding  2025-05-07  1796  			p->data[0] = val;
-d75d38dc460452c Shenghao Ding  2025-05-07  1797  		}
-d75d38dc460452c Shenghao Ding  2025-05-07  1798  		p->len = len + 6;
-d75d38dc460452c Shenghao Ding  2025-05-07  1799  	}
-d75d38dc460452c Shenghao Ding  2025-05-07  1800  
-d75d38dc460452c Shenghao Ding  2025-05-07  1801  	if (ret)
-d75d38dc460452c Shenghao Ding  2025-05-07  1802  		dev_err(priv->dev, "i2c communication error.\n");
-d75d38dc460452c Shenghao Ding  2025-05-07  1803  	else
-d75d38dc460452c Shenghao Ding  2025-05-07  1804  		ret = count;
-d75d38dc460452c Shenghao Ding  2025-05-07  1805  exit:
-d75d38dc460452c Shenghao Ding  2025-05-07  1806  	kfree(src);
-d75d38dc460452c Shenghao Ding  2025-05-07  1807  	return ret;
-d75d38dc460452c Shenghao Ding  2025-05-07  1808  }
-d75d38dc460452c Shenghao Ding  2025-05-07  1809  
+   620	
+   621	NETDEVICE_SHOW(group, fmt_dec);
+ > 622	static DEVICE_ATTR_RW(netdev_group);
+   623	
 
 --
 0-DAY CI Kernel Test Service
