@@ -1,191 +1,224 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0549A3EEADE
-	for <llvm@lists.linux.dev>; Wed,  5 Aug 2026 21:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785965252; cv=pass; b=UMUctoX4zf42kJJNHC4qsPLU9etU3EB3NjhGrakrgsTDZgq7tmRL1+3Mb8QW8UcWEy2AzKakw9U1KAytGNIhQ3vi5l5iq/q7PC7mBxwXJAYqN2YrAAoB4Eme+Yr3FSZVgi4SCVUuKTfS1dZpQWIagahI2L5TUwtttAphPmBGZgg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785965252; c=relaxed/simple;
-	bh=CRFBAY+HVM5zLw5Wlht8AEmJgsCvF8cPSHZXyZDpiFA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HXHH6RuYk/q0jn3EtiWAEDcFvKjlOJfEOu95m38wKW6OO0fFsd5imhEI98tu1kC/IVr/Mo0ge3l5TOzYmw+kGbUkNpYu4/HxvHKmEZpItTpOmRDzMYnqvz5P2zHnPAFSm5dXbQxBdK3c8v1V4ea+E1z7Vl6ffCOrf3pJK2XTfrg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BPa4ORhe; arc=pass smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D278042BC56;
+	Wed,  5 Aug 2026 22:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785968951; cv=none; b=aVsuItkzAonRlp30wiDze9RDSnVxoerGbUJ5285pTEXXqUiX1W+om+5xcKSTf1IckRe23gytAeyCy7jJObfii/5J+BtLLP6FH4rIDu9gZXz0tk4aU9/gGXR1Wh/cyjg1DO7k/GzrOYDBFj1csdoFBB1yUZMDhS49tdYqYF7QLv4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785968951; c=relaxed/simple;
+	bh=p+tGgJjfDf+QExfIl3EY8iwwECUib4YEAIdONJSPpjE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U7GGz/i6EM58VqzsWuxCNKTHKn0C0YEQURmQGXWDMWQT4YFYi37L4jaUprBmxU2ElJ7Lm/HyMumpmpAfKnKXhcTxnupSCjdBzWNyXu+6GH/u198HtfaR2Ef4WgXGM1KI9jznMWVJEMeyn9xWduTYl8WSk1/Nr5GKH2Z2Tbjg2VI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WL5bsVtS; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BPa4ORhe"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c15d111ca99so167340966b.0
-        for <llvm@lists.linux.dev>; Wed, 05 Aug 2026 14:27:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785965249; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UWGaU01T6kAcYhvtPHevs/K8aAINr8FPCG57P2y93tOe5ptGwQtS5kgtsEO+82PIJg
-         X1hDdDkwX13Q9UufU2i3b/cpIuSBltZJOuxGAyNbzF9S0f9nU2N24AAi8dNoe65Aoxfj
-         vWN7gdQDTnSnT+ggYElXP1J9Y364iaC9OjoBanrG6992HdlFs9L4xxKnQ8YyDWvN6Vc2
-         nyhA/pCO3hB+n7MybgehBGdU826iC8hZpj4qwzbUd2oOaPKwT/OLeo3q6c6IRsADKT04
-         s8KWk/RfFz/MUTBMu3waeuN0ed5NGnmbn2h2ElVMBlG1L8Gc3JqvRoN0yh3/E3cW39+x
-         IWbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GOdQ3KJo0a8j9UIgNBxKoFYFjfq0XRlteuFhE33+c6E=;
-        fh=AKYEMEsGD57PSpTvBZI7XMTmLlS/6osVj4zxmf3XHDg=;
-        b=Ujwv+sFRliURUwpJqH6a1wx0XuN2DdopKOPAZDpLxFKbcXKhQnZQtTsJbEbbfkx3U7
-         wSf8Hvx5yXFHpk8EFRakSfKCyhHGin2aD9VfeOqQL/jXWhGi8ArBkoZNJ69gm4opq1qr
-         8zUY7y1RfgsVmxNB+ehKu1QOpKg/fU8JcHhsThonG5D/HkHwDS2cZhhKBpnVih/j7t72
-         yQhynsqL1lTIWHSxNNjUMRtK9kW7LZuBuYWMsAED3wDqVr3EJS/MNWQrl22D7nESQGad
-         4/5Q4gh7qc8oPWXWu2zGNxoCiW+SMHi9oH1nWsm8WKfaC80VQWBRUKnGeTnd4TadgF9f
-         +XQQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785965249; x=1786570049; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GOdQ3KJo0a8j9UIgNBxKoFYFjfq0XRlteuFhE33+c6E=;
-        b=BPa4ORhe4xgHERnOrqc4qtbk2eSSw+LU1t+vWRJMyMKdmnZCXs51C3TUo6oHPLNIzj
-         Zv3uawYUxLEtXOsRvDYakMI9I81kywAEwOHPNnQEN2YWf5Xq3CjVd/s8P74Ex/3MwG/f
-         UbyQ6OXcxThhFFvZPWtSI8C3WUYbKds5dS3PqxGn1zaH9MAWBo5wMNNFz03FzHNwiLy/
-         sL6YyeVjgH7F0jDIQKNctNhXpLOGWMgMoe0VMMvW2Z5EzS5JYuo2IlN4UxhB279gVXSX
-         xXfVJRAhie+4dyEmEoSiyxA8hRhR+byLUad+BLP93tM1dTodOsXR8j4ByeBDrLPXmyZm
-         XItQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785965249; x=1786570049;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GOdQ3KJo0a8j9UIgNBxKoFYFjfq0XRlteuFhE33+c6E=;
-        b=mTt5/2EKmB0p/pB2rh05QnCxnPAUXrRdikpkG1XERCf7MsZH36vNdzGcbaxHReSWtL
-         MpO5a8ERXntop1uGkXyy/0K7mAjVKh3H6646TTUA3DAesFVUcOI3N7L2YbyIKQvQhw2j
-         LtakbeH1h5RJaRZu3pUEPWFMQHDGTjpy++k2S4hsLTN+0f8VkWjCjYK/lPvLsNPML2Ig
-         m0eAG0qse4IktIptjFw24QPGTlrDcad4kh27KG+cdkoIvKtF8lTPQAX2UvB+HxMs2i6j
-         ZQDdwo5AIUt5wLnB4h9AaEPO1YUcI1vxkoJyu5Js7z1sNf7zA5a/d8FVbag/DYLlsTeL
-         f3Ag==
-X-Forwarded-Encrypted: i=1; AHgh+Ro6Fw4cjO4xt0UyldHubmh74G3mwNR9MbV/TW3eRXsrRSKdWIOwIJSic/AB8cdl7SPDljHA@lists.linux.dev
-X-Gm-Message-State: AOJu0YyUvJ8gbifviYRsTqEL1fjrapuMq1pItmwFxGdE/Ui1/D0nnibi
-	kpbYsoy3iiFYo6zfXqIq6VZMdCUxeZeUsHq4ZNCstf7R1SxFQA9qI2H5PcKkTHo0Q3dMg/MjRmT
-	iSbPjcSVx0nt6bJnhfJF7plbCKqbCUhI=
-X-Gm-Gg: AR+sD13mj+rjvpv+vuKvsvNBWxXceDxBnaUjFfJdtS9L9AoTxnG3XAIlL43NT6388on
-	iHbaGp1XawABDjxOodt1uEuWVVM7TTMhyGzYZSWh8zmQHL3fRbQcXQ7jrJcyRDKmYdIK50AMNHt
-	UGKWi6/yFJXMOcwpbRSTIT0+h2h+zjMX1cweXU5+1TR58z9JfImpe4nbM9V8qy7kOAISADc8vmj
-	fVHJKnwUFSNWM2thoQVq+FaNkkbjufT1Pnc8yYstGfpyO0CezbE8MnqD2qolRK50anQSHFiyLC3
-	7YN3fq2NdM3rjiE4VqJPZget5cfDSkaJRMcVmZW7AxQ2O9ka0A4IOtOy2H6FuPzA5JhQJKdblkO
-	XetK4g0k+Y/Tr2Br2qI9IWVd22c7xEFn3OzMUkaI1sw==
-X-Received: by 2002:a17:906:ee8b:b0:c16:2f5d:6153 with SMTP id
- a640c23a62f3a-c2039c4a94emr567212566b.20.1785965249055; Wed, 05 Aug 2026
- 14:27:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WL5bsVtS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785968948; x=1817504948;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=p+tGgJjfDf+QExfIl3EY8iwwECUib4YEAIdONJSPpjE=;
+  b=WL5bsVtSl9bSxKln+O3ibQPXA/BzqK04A195qTZ1C6ulLESGi4+xH8kl
+   GLSR49qXm9iSWlXcVdbJkqKNPBZw0KBVXb+zlaYSRKXUCeSdfIf+goj8v
+   UyGBifFVYmKAHKi38YTDdBu3UYqk4lAl6GgSk/dxk64JCY7PLaW1EWe7L
+   a+0Ax7sE+IBk35HCx3s0KEjQ2Pvc+SfIfLwVqukWMvGAQaQez4Tdwxa9W
+   V4Jiidv3R50plI650G8VeKSVgu2REfhJQ3CUSLje9YLIh38qIrE7LUl4A
+   jWyV+alJJ+T/SE/7GpjlFjg0gJJ14mThxDczWEhTLWJWaYs274JOsV8jc
+   w==;
+X-CSE-ConnectionGUID: oKqQXysyRleRzv6oRj5i5w==
+X-CSE-MsgGUID: pZzS3L2jSVGi0fC/8R3DWg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="97713326"
+X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
+   d="scan'208";a="97713326"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:29:06 -0700
+X-CSE-ConnectionGUID: NmwiC6myTPu6zWOTTx11KQ==
+X-CSE-MsgGUID: BJGd6Ak0Rjqat4sLydi/YQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
+   d="scan'208";a="261989405"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 05 Aug 2026 15:29:03 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wrk6e-00000000Dan-209A;
+	Wed, 05 Aug 2026 22:29:00 +0000
+Date: Thu, 6 Aug 2026 06:28:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kyle Switch <kyle.switch@motor-comm.com>, Frank.Sae@motor-comm.com,
+	andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	jianmin.wang@motor-comm.com, ming.xu@motor-comm.com,
+	xiaolin.xu@motor-comm.com, jie.han@motor-comm.com
+Subject: Re: [PATCH] net: phy: Add driver for Motorcomm Quad 2.5GbE phy
+Message-ID: <202608060635.338Kkf6r-lkp@intel.com>
+References: <20260714111203.3852126-1-kyle.switch@motor-comm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com> <20260805185557.3283233-1-mattst88@gmail.com>
-In-Reply-To: <20260805185557.3283233-1-mattst88@gmail.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Wed, 5 Aug 2026 23:27:17 +0200
-X-Gm-Features: AUfX_mwhW36EMELKBgfQ1098UaTRK9ltJYMKUq2mejLmJKQ4TTnz3ZPoJGmZ6UM
-Message-ID: <CA+=Fv5T-+awQU1R5cKXdEwUdtCTTw4T29DomYEFBTNakBKjOAw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] alpha: pass -Wa,-mev6 only when using GNU as
-To: Matt Turner <mattst88@gmail.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260714111203.3852126-1-kyle.switch@motor-comm.com>
 
-Hi Matt,
+Hi Kyle,
 
-On Wed, Aug 5, 2026 at 8:56=E2=80=AFPM Matt Turner <mattst88@gmail.com> wro=
-te:
->
-> That flag exists to stop gas emulating instructions the assembler thinks
-> the target lacks.  It is a gas-only option, and LLVM's integrated
-> assembler does not emulate instructions in the first place, so nothing
-> is needed there.
->
-> Condition it on CONFIG_AS_IS_GNU rather than the compiler, so it is
-> still passed for clang builds using GNU as (LLVM_IAS=3D0) and omitted onl=
-y
-> for the integrated assembler.
->
-> Signed-off-by: Matt Turner <mattst88@gmail.com>
-> ---
-> Only this patch changed; patch 2/2 ("alpha: read $gp and $sp explicitly
-> for clang") is unchanged from v1 and is not resent.
->
-> Changes in v2:
-> - Drop the scripts/Makefile.clang CLANG_TARGET_FLAGS_alpha entry.  It
->   will be sent separately when the alpha backend is upstreamed to LLVM.
-> - Condition -Wa,-mev6 on CONFIG_AS_IS_GNU rather than CONFIG_CC_IS_GCC,
->   so it is still passed for clang builds using GNU as (LLVM_IAS=3D0).
-> - Reword the subject and commit message for the reduced scope.
-> - Link to v1: https://lore.kernel.org/r/20260803-alpha-clang-v1-0-1c4ba5b=
-a7a64@gmail.com
->
->  arch/alpha/Makefile | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/alpha/Makefile b/arch/alpha/Makefile
-> index 35445ff2e489..7074602dca94 100644
-> --- a/arch/alpha/Makefile
-> +++ b/arch/alpha/Makefile
-> @@ -27,10 +27,16 @@ cpuflags-$(CONFIG_ALPHA_GENERIC)    :=3D -mcpu=3Dev56=
- -mtune=3Dev6
->  cflags-y                               +=3D $(cpuflags-y)
->
->
-> +KBUILD_CFLAGS +=3D $(cflags-y)
-> +
->  # For TSUNAMI, we must have the assembler not emulate our instructions.
->  # The same is true for IRONGATE, POLARIS, PYXIS.
->  # BWX is most important, but we don't really want any emulation ever.
-> -KBUILD_CFLAGS +=3D $(cflags-y) -Wa,-mev6
-> +# Only gas emulates instructions the target does not implement, and only=
- gas
-> +# understands -mev6.  LLVM's integrated assembler never emulates.
-> +ifdef CONFIG_AS_IS_GNU
-> +KBUILD_CFLAGS +=3D -Wa,-mev6
-> +endif
->
->  libs-y                         +=3D arch/alpha/lib/
->>
->  arch/alpha/Makefile | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/alpha/Makefile b/arch/alpha/Makefile
-> index 35445ff2e489..7074602dca94 100644
-> --- a/arch/alpha/Makefile
-> +++ b/arch/alpha/Makefile
-> @@ -27,10 +27,16 @@ cpuflags-$(CONFIG_ALPHA_GENERIC)    :=3D -mcpu=3Dev56=
- -mtune=3Dev6
->  cflags-y                               +=3D $(cpuflags-y)
->
->
-> +KBUILD_CFLAGS +=3D $(cflags-y)
-> +
->  # For TSUNAMI, we must have the assembler not emulate our instructions.
->  # The same is true for IRONGATE, POLARIS, PYXIS.
->  # BWX is most important, but we don't really want any emulation ever.
-> -KBUILD_CFLAGS +=3D $(cflags-y) -Wa,-mev6
-> +# Only gas emulates instructions the target does not implement, and only=
- gas
-> +# understands -mev6.  LLVM's integrated assembler never emulates.
-> +ifdef CONFIG_AS_IS_GNU
-> +KBUILD_CFLAGS +=3D -Wa,-mev6
-> +endif
->
->  libs-y                         +=3D arch/alpha/lib/
->
+kernel test robot noticed the following build warnings:
 
-Thanks for the update. This looks good to me.
+[auto build test WARNING on net/main]
+[also build test WARNING on linus/master v7.2-rc6 next-20260805]
+[cannot apply to net-next/main]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Magnus Lindholm linmag7@gmail.com
+url:    https://github.com/intel-lab-lkp/linux/commits/Kyle-Switch/net-phy-Add-driver-for-Motorcomm-Quad-2-5GbE-phy/20260805-175843
+base:   net/main
+patch link:    https://lore.kernel.org/r/20260714111203.3852126-1-kyle.switch%40motor-comm.com
+patch subject: [PATCH] net: phy: Add driver for Motorcomm Quad 2.5GbE phy
+config: powerpc64-randconfig-002-20260806 (https://download.01.org/0day-ci/archive/20260806/202608060635.338Kkf6r-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608060635.338Kkf6r-lkp@intel.com/reproduce)
 
-Thanks,
-Magnus
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608060635.338Kkf6r-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/net/phy/motorcomm.c:3336:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    3336 |                 if (reg_space == YT8824_RSSR_UTP_SPACE) {
+         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:3353:44: note: uninitialized use occurs here
+    3353 |         return phy_restore_page(phydev, old_page, ret);
+         |                                                   ^~~
+   drivers/net/phy/motorcomm.c:3336:3: note: remove the 'if' if its condition is always true
+    3336 |                 if (reg_space == YT8824_RSSR_UTP_SPACE) {
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:3335:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+    3335 |         if (old_page >= 0) {
+         |             ^~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:3353:44: note: uninitialized use occurs here
+    3353 |         return phy_restore_page(phydev, old_page, ret);
+         |                                                   ^~~
+   drivers/net/phy/motorcomm.c:3335:2: note: remove the 'if' if its condition is always true
+    3335 |         if (old_page >= 0) {
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/net/phy/motorcomm.c:3332:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    3332 |         if (old_page < 0)
+         |             ^~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:3353:44: note: uninitialized use occurs here
+    3353 |         return phy_restore_page(phydev, old_page, ret);
+         |                                                   ^~~
+   drivers/net/phy/motorcomm.c:3332:2: note: remove the 'if' if its condition is always false
+    3332 |         if (old_page < 0)
+         |         ^~~~~~~~~~~~~~~~~
+    3333 |                 goto err_restore_page;
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:3329:9: note: initialize the variable 'ret' to silence this warning
+    3329 |         int ret;
+         |                ^
+         |                 = 0
+>> drivers/net/phy/motorcomm.c:3341:8: warning: variable 'port' is uninitialized when used here [-Wuninitialized]
+    3341 |                         if (port == 0 || port == 2) {
+         |                             ^~~~
+   drivers/net/phy/motorcomm.c:3328:10: note: initialize the variable 'port' to silence this warning
+    3328 |         int port;
+         |                 ^
+         |                  = 0
+   drivers/net/phy/motorcomm.c:4464:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    4464 |         if (old_page < 0)
+         |             ^~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:4477:44: note: uninitialized use occurs here
+    4477 |         return phy_restore_page(phydev, old_page, ret);
+         |                                                   ^~~
+   drivers/net/phy/motorcomm.c:4464:2: note: remove the 'if' if its condition is always false
+    4464 |         if (old_page < 0)
+         |         ^~~~~~~~~~~~~~~~~
+    4465 |                 goto err_restore_page;
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:4460:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    4460 |         if (old_page < 0)
+         |             ^~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:4477:44: note: uninitialized use occurs here
+    4477 |         return phy_restore_page(phydev, old_page, ret);
+         |                                                   ^~~
+   drivers/net/phy/motorcomm.c:4460:2: note: remove the 'if' if its condition is always false
+    4460 |         if (old_page < 0)
+         |         ^~~~~~~~~~~~~~~~~
+    4461 |                 goto err_restore_page;
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:4457:9: note: initialize the variable 'ret' to silence this warning
+    4457 |         int ret;
+         |                ^
+         |                 = 0
+   drivers/net/phy/motorcomm.c:4641:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    4641 |         if (old_page < 0)
+         |             ^~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:4660:44: note: uninitialized use occurs here
+    4660 |         return phy_restore_page(phydev, old_page, ret);
+         |                                                   ^~~
+   drivers/net/phy/motorcomm.c:4641:2: note: remove the 'if' if its condition is always false
+    4641 |         if (old_page < 0)
+         |         ^~~~~~~~~~~~~~~~~
+    4642 |                 goto err_restore_page;
+         |                 ~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/phy/motorcomm.c:4638:9: note: initialize the variable 'ret' to silence this warning
+    4638 |         int ret;
+         |                ^
+         |                 = 0
+   7 warnings generated.
+
+
+vim +3336 drivers/net/phy/motorcomm.c
+
+  3320	
+  3321	/**
+  3322	 * disable YT8824 template test mode.
+  3323	 */
+  3324	static int yt8824_soft_reset_step4_paged(struct phy_device *phydev,
+  3325						 int reg_space)
+  3326	{
+  3327		int old_page;
+  3328		int port;
+  3329		int ret;
+  3330	
+  3331		old_page = phy_select_page(phydev, reg_space);
+> 3332		if (old_page < 0)
+  3333			goto err_restore_page;
+  3334	
+  3335		if (old_page >= 0) {
+> 3336			if (reg_space == YT8824_RSSR_UTP_SPACE) {
+  3337				/* normal mode */
+  3338				ret = ytphy_write_mmd(phydev, 0x1, 0x0084, 0x0000);
+  3339				if (ret < 0)
+  3340					goto err_restore_page;
+> 3341				if (port == 0 || port == 2) {
+  3342					/* read the calibration val of band after power on,
+  3343					 * * only for recording.
+  3344					 */
+  3345					ret = ytphy_read_ext(phydev, 0x043e);
+  3346					if (ret < 0)
+  3347						goto err_restore_page;
+  3348				}
+  3349			}
+  3350		}
+  3351	
+  3352	err_restore_page:
+  3353		return phy_restore_page(phydev, old_page, ret);
+  3354	}
+  3355	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
