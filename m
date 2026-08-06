@@ -1,316 +1,144 @@
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640DC3D9031
-	for <llvm@lists.linux.dev>; Thu,  6 Aug 2026 07:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F1583DEAD6;
+	Thu,  6 Aug 2026 09:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786002821; cv=none; b=Nd6L2xh5n6FKE2Us6SuWhZTfTcbEBDp8Ii6yQgdzS7XWbPa4tBTXtvRENif0s3rccRvBxZJIAIq+9fuMD7x1UTGVqLF4AQL19ot1hfO26azlmkx4I+cYpnHvu6E95M0ZF5/o6Ay/8avgvnjznR2Zg+ga801Nv7GxksD33fQFGhs=
+	t=1786009430; cv=none; b=pYJdePeDqvotW39QpdFRCqVbGqSWGEdE5H71IMWvJ7XsjaYk4qnDtokJtSM4Rg/rrzCYLGmx9IX3UU1xE9KSBh4bp+9E3ZswRMHS2+081EfhoNl1RI5NoqI6Vt4zs/Y/WrBDqF+1sLNp5gL4ljd7DBxdbxRhRon4RaDe93GwxfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786002821; c=relaxed/simple;
-	bh=APdQA7u0s7we4Bg32aytKO5SGFPihzNgTXaoExnRMTY=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ZkPhH+3rTh4LbK9DRYDlvGFXZRF8p6CLZxxN+0i0718OyLBWm9bKQ4Fhf19eTCURrnoCM0Np3eqZQYd082LtfbTjRxiDOPj9al7ZqS9c6/Ib76YQkszTCe3zqJqfcCgy/7PjKjoEWEMtsiUv6bqGALccLn7SbYsRn1FRPWejBzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=egPJEGkj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZWijIyTZ; arc=none smtp.client-ip=103.168.172.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
+	s=arc-20240116; t=1786009430; c=relaxed/simple;
+	bh=3SCLHniwEHSpN7NIHiRPlSJ2z4j9Jt/Ih8EqNhGjvfI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ssjQ/7iT0PgKy4ipnMFRW8R8rFuuMK5mnHkQrAtJESUF3yqHQaxT7DhgtO2OqF8ZrxnLkWdDmJkECOQUn0/ch6AuuShUDrZpF4bQY6kHAJS/565jdHsdsr3VvLcmkN+R6IzNOrOZVPZ1V+pLolgBiw7wl9mFQqLdOr+h7MaqDqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=acOjvEoE; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="egPJEGkj";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZWijIyTZ"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailflow.phl.internal (Postfix) with ESMTP id 63DA6138020C;
-	Thu,  6 Aug 2026 03:53:38 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Thu, 06 Aug 2026 03:53:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1786002818;
-	 x=1786006418; bh=LD9ImqlIwH6oeN7pmBkN0TXKzq62mCPW1c400six0EM=; b=
-	egPJEGkjiHQFhksFyQs6njKum2R6mjsKp77i7wKapRMZytD/ZMCUf6skygPzuCOP
-	+islbK1gtxlkCIKS1mZg/6zOJ/zebc+DTvbH46mCB5YJouplVK503uRqq7W15I/o
-	3TgO48JjjlnSaL0YcH3UoKNGRkmzLcgsbYDPbBjfmF3WeJIw/rw80wvazrsz+/xt
-	391na+sZX7WxAZbeMVMhRnRvtrYYlaS0D7OwFckvyIv9wUAoENYDq5bCm9u8zkN5
-	yFhvIWjhHXh0imufYp/Ou/xYEKENAl9Y2L4lnioa9/u74xxtsvMocdSw6yBs84aB
-	h9ZpKmCJYt68sgE6nXGuhA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786002818; x=
-	1786006418; bh=LD9ImqlIwH6oeN7pmBkN0TXKzq62mCPW1c400six0EM=; b=Z
-	WijIyTZVqCgYF8yEJsG9No+5i1j/eLJ4jHZnEiVZUztXSOYRW2kpLiPpXctlzrvd
-	QjG9lS1udZ0s4VwyJATEGHIBpwQ4mKEokFZi1POoTAmESpd/wCo3QvyLOmOXu30G
-	S3VwfLAy42HT4otDBGdCh3X1sNbrdsmjC8diS/7Un0/yOcAVQQF6xGzp4hyUcy0P
-	MO+gPOU/YN+Q5kYAo2yzwJTHhUvW23qiduRIL0hBmulv6qMpYAuGFqou/OLY5csf
-	4+14uuM71HYvnsDayhIGyhIFkrAoyAcKOQgNVtWRtU4SfkjReU238fTBr+9pZLRu
-	zbzv0mRvDGOKV/lPWHp8w==
-X-ME-Sender: <xms:gD10atsuyjsKUGFggi9pHLdlrO9l2L-0Xw54vpyijCZgrUKv_iHXFw>
-    <xme:gD10ariDFCROd4tfT0-1IOZLsUSGolX0CkJcm4k8MdJ76gYxKX9HonMn-mV0YgGXg
-    aqRBIW0S4wsA85c4J55d0lyti7662mELieircjuYxos5GagAo8_PPwb>
-X-ME-Received: <xmr:gD10atyq2bOYKHFLYZ0HNTKNtS7Y7QbfYmuS7F1kTqEkJfQclF0Pk7FT0CZqjxbJ42w0JQOjPZH-qAfd-uQ3H2iU>
-X-ME-Proxy-Cause: dmFkZTFbzfkfUcr/Inba17tKt3JJ3fMrX1N2IUQX31//l4d7tbGDIvsDLekSwrzIspHZhe
-    o+VTNd8j7u+Iie4/vsjYzHSLs0OWqSktFzQQhv8+NgGQIag2veIThRlj6+GB4jPUZxbvRv
-    7OcvW9OzYxQuUr1i11mPCdpCcP7JRmOC0AJubMcCqZzfBmd1SK+vQp2JnmKLkWhMihSU6c
-    fuDLRKKIqB0TdhjglBxB6X+eg2BrSYejmwu+bPOgNY8XxzIAOT7HNAjxMRX3DU+DWoXY+3
-    iqGQXmHWNriOrJNH10CsO0qMQAf0vVKqv3pavtuHNTRXYCSn7ZXnVkmSYj7XLAxVtRClJ5
-    uMxrtDYXoXwt9dN3I6Zq2DXu0tisA4QU9oyBVOhL/MGaUvPN7ENRu1ubiEqgWezdnSFkGd
-    R+WSh6dUTjILfP/1fC8AHH9gAYn1ifQx8fttklkGOY9PvdOInMy9A2QWtcBTVoKuq4ZJ87
-    jGRPUzoTJn3s/Z85CJAyst7sBa7zZyubtPJDRIXnzVy4moi33ZTVd73Yow/k2k93qDJoPn
-    ujLeIUX8ykSirlln1YstkTapUdKLSL+ZlQz92GTjCPH3yT2ke++BySC86l/RQ8xt9yHtpq
-    HuQ5KAsbuce3wRDzwJuS1P1E6hwRg/AlR2acSfHVRXzCEhfs1zUl4PXcH5Jg
-X-ME-Proxy: <xmx:gD10ah4JLuOZHllR0vjlTCUtzn-Mc5_uuX65vuzFNNPm_EyBpFehJg>
-    <xmx:gD10avdsAz76rOQyAp-33iSXydJPZZ1b0Zgq1DMJi_-_OwSSQaVdcA>
-    <xmx:gD10appd7HS1t5mf-1wS6rEoYY6l6WqnOPKEdonqQWVh2-JLyYqbiA>
-    <xmx:gD10aj1L7da9tdvfPV6TtI5ekFlRIJ2Z_J0Ytzk0_II-t1ZwjfeLag>
-    <xmx:gT10agEzz7xbZ8Ik0es4bQ2PmLSZWo8Vxh-Sz_rMo4P0HwUZ3ojOOAA8>
-Feedback-ID: i51fe4b43:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 6 Aug 2026 03:53:28 -0400 (EDT)
-Date: Thu, 06 Aug 2026 16:53:26 +0900 (JST)
-Message-Id: <20260806.165326.1361973663671179487.tomo@flapping.org>
-To: chleroy@kernel.org
-Cc: tomo@flapping.org, linkmauve@linkmauve.fr, maddy@linux.ibm.com,
- mpe@ellerman.id.au, npiggin@gmail.com, peterz@infradead.org,
- jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com,
- rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org,
- gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
- a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org,
- daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com,
- work@onurozkan.dev, nathan@kernel.org, ndesaulniers@google.com,
- morbo@google.com, justinstitt@google.com, fujita.tomonori@gmail.com,
- joelagnelf@nvidia.com, gregkh@linuxfoundation.org, prafulrai522@gmail.com,
- nsc@kernel.org, japo@linux.ibm.com, lina+kernel@asahilina.net,
- j@jannau.net, airlied@gmail.com, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
- llvm@lists.linux.dev, mkchauras@gmail.com
-Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
-From: FUJITA Tomonori <tomo@flapping.org>
-In-Reply-To: <d347de18-10ee-41e9-a672-b08f70bc88e4@kernel.org>
-References: <anG67Q6Y59kDqh-c@desktop>
-	<20260804.224035.269658578200153488.tomo@flapping.org>
-	<d347de18-10ee-41e9-a672-b08f70bc88e4@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="acOjvEoE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786009428; x=1817545428;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=3SCLHniwEHSpN7NIHiRPlSJ2z4j9Jt/Ih8EqNhGjvfI=;
+  b=acOjvEoEcmtxtFI6HNUz+ykwWXw02ka1dKyatQiUnDH1IycKhco1iQ6j
+   V4COoCQNZb7+Zube8q1vpvB2V6ch/lpFoUHr6zRUXTo+wC34em/h9RNRk
+   XTuLsmt6hzmTgueVkidGEuuoYaw3EKaQQq9G5soZZ36VW0dMEgjl8HKbM
+   CSJqUMHBzNRn5WfLA3IogIHgSNBVGU2KXRcBDFqf7Xi2X35eZs5E7Q9lG
+   v+BBqEwKcc9hcWLCsxx3RD+C/ye8/scU7bg7gtusJ72DImvhA8gA92beZ
+   jXSgUuAACwNJPT0eiR/m7+gZopcTMTh1mbqW/2E7VUZ/ZPOxH+UPN4/S5
+   g==;
+X-CSE-ConnectionGUID: 0vd4H5K4RtKysH3Ymoo3XQ==
+X-CSE-MsgGUID: UQENSHHLT2ONQsZKD2N9gQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="86626318"
+X-IronPort-AV: E=Sophos;i="6.25,208,1779174000"; 
+   d="scan'208";a="86626318"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2026 02:43:46 -0700
+X-CSE-ConnectionGUID: UjnGBqrTQbeZsMirezjhDw==
+X-CSE-MsgGUID: gABfhUh8SFeBpw7OEiE9Cw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,208,1779174000"; 
+   d="scan'208";a="267203890"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 06 Aug 2026 02:43:43 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wrudZ-000000004bm-0935;
+	Thu, 06 Aug 2026 09:43:41 +0000
+Date: Thu, 6 Aug 2026 11:43:33 +0200
+From: kernel test robot <lkp@intel.com>
+To: Tigran Mkrtchyan <tigran.mkrtchyan@desy.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH] [RFC] nfs4: inject process namespace into COMPOUND tag
+Message-ID: <202608061151.ZYrYBoPN-lkp@intel.com>
+References: <20260626151029.1516839-1-tigran.mkrtchyan@desy.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-8859-1
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260626151029.1516839-1-tigran.mkrtchyan@desy.de>
 
-On Wed, 5 Aug 2026 14:56:41 +0200
-"Christophe Leroy (CS GROUP)" <chleroy@kernel.org> wrote:
+Hi Tigran,
 
-> =
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-> =
+[auto build test ERROR on trondmy-nfs/linux-next]
+[also build test ERROR on linus/master v7.2-rc6 next-20260805]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Le 04/08/2026 =E0 15:40, FUJITA Tomonori a =E9crit=A0:
->> [Vous ne recevez pas souvent de courriers de
->> tomo@flapping.org. D?couvrez pourquoi ceci est important ?
->> https://aka.ms/LearnAboutSenderIdentification ]
->> On Tue, 4 Aug 2026 12:11:57 +0200
->> Link Mauve <linkmauve@linkmauve.fr> wrote:
->> =
+url:    https://github.com/intel-lab-lkp/linux/commits/Tigran-Mkrtchyan/nfs4-inject-process-namespace-into-COMPOUND-tag/20260806-105541
+base:   git://git.linux-nfs.org/projects/trondmy/linux-nfs.git linux-next
+patch link:    https://lore.kernel.org/r/20260626151029.1516839-1-tigran.mkrtchyan%40desy.de
+patch subject: [PATCH] [RFC] nfs4: inject process namespace into COMPOUND tag
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260806/202608061151.ZYrYBoPN-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608061151.ZYrYBoPN-lkp@intel.com/reproduce)
 
->>> Hi,
->>>
->>> On Mon, Aug 03, 2026 at 12:27:13PM +0530, Madhavan Srinivasan wrote=
-:
->>>> On Wed, 08 Jul 2026 13:54:47 +0530, Mukesh Kumar Chaurasiya (IBM)
->>>> wrote:
->>>>> Enable experimental rust support for ppc64le and ppc32be. The pat=
-ch
->>>>> for
->>>>> ppc32 has been provided by Link Mauve[1] and ppc64le support[2] h=
-as
->>>>> been
->>>>> merged over it. ppc32 needs some toolchain fixes mentioned in the=
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608061151.ZYrYBoPN-lkp@intel.com/
 
->>>>> patch
->>>>> `rust: Add PowerPC support` and the discussion for that is done
->>>>> here[1].
->>>>>
->>>>> This has been tested on
->>>>> - powernv9 hardware
->>>>> - pseries P11 hardware
->>>>> - pseries(9, 10) qemu
->>>>> - powernv(9, 10) qemu
->>>>> - rustdoc on x86 and powerpc64le
->>>>> - rusttest on x86 and powerpc64le
->>>>>
->>>>> [...]
->>>>
->>>> Applied to powerpc/next.
->>>>
->>>> [1/7] rust: Fix "multiple candidates for rmeta dependency core" er=
-ror
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2F00cdfd072c709c608606461d7d44d46=
-13119bfa9&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617198585%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3D4qQe1qS37TGv6%2Bf9H56kWVqMYSAHsWiDx5oz8WHZ8%2Bg%3D&reserved=3D=
-0
->>>> [2/7] dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER=
- is
->>>> disabled
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fbe809b60cbb61aab96179f44ac36702=
-42ae72996&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617235654%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3Dcw2l64D3ah%2FM3pxFmvMpUnNmcqcSvN3RFoDiYAIR76g%3D&reserved=3D0=
+All errors (new ones prefixed by >>):
 
->>>> [3/7] powerpc/jump_label: adjust inline asm to be consistent
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2F13244c0a40139fe66c4c5c5655f4d73=
-2a6002957&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617259593%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3DxNvcH9k5RA5ktJupn90VdDuwx4YBvezuDcapqKlYfjs%3D&reserved=3D0
->>>> [4/7] rust/powerpc: Set min rustc version for powerpc
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fe299147cdc8e19c6421a6b7863dc82a=
-35b09d967&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617280683%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3DuNZA7AulROQGv%2B2l4M%2FqC5W4ncWktRoSRRp8eaF%2FcCY%3D&reserved=
-=3D0
->>>> [5/7] rust: Make __udivdi3() and __umoddi3() panic
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fc93c194e4ee71a734986fd99a8b1ec9=
-fbb7a9b8b&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617303292%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3DznZPWXM7k5FpRlekIyUN1bHzmMyk1YESR56WsiwBuMA%3D&reserved=3D0
->>>> [6/7] rust: Add PowerPC support
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2F73b741adb264967093ef4eb59905618=
-a7e0d0de0&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617326590%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3DaFHGhd7RX%2Ft5%2BMjqt6pBmIKPKAKmFEQndKP1F%2F8HSxk%3D&reserved=
-=3D0
->>>> [7/7] powerpc: Enable Rust for ppc64le
->>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
-%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fbc87cbdb952e9223616b839d64bdb47=
-23aa2ed1d&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
-41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
-4476617346994%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
-jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
-C&sdata=3DITEFv9C1CSUVLqJNe5Y8sStUE3KoOVYVzSzbP0qis74%3D&reserved=3D0
->>>>
->>>> cheers
->>>>
->>>
->>> I just tested those again in linux-next, with the Wii support serie=
-s
->>> on
->>> top, but now the kernel fails to build due to ARCH_WARN_ASM and
->>> ARCH_WARN_REACHABLE not being defined on PowerPC:
->>> ```
->>> error: no rules expected `ARCH_WARN_ASM`
->>>     --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_wa=
-rn_asm.rs:1:28
->>>      |
->>>    1 | ::kernel::concat_literals!(ARCH_WARN_ASM("{file}", "{line}",=
+>> fs/nfs/nfs4xdr.c:1039:7: error: use of undeclared identifier 'taks'
+    1039 |                 if (taks->tk_ns_inum != 0) {
+         |                     ^~~~
+   fs/nfs/nfs4xdr.c:1042:60: error: use of undeclared identifier 'taks'
+    1042 |                         hdr->taglen = snprintf(ns_tag, sizeof(ns_tag), "ns:%u", taks->tk_ns_inum);
+         |                                                                                 ^~~~
+   2 errors generated.
 
->>>    "{flags}", "{size}"))
->>>      |                            ^^^^^^^^^^^^^ no rules expected t=
-his token in macro call
->>>      |
->>>     ::: ../rust/kernel/lib.rs:279:1
->>>      |
->>> 279 | macro_rules! concat_literals {
->>>      | ---------------------------- when calling this macro
->>>      |
->>>      =3D note: while trying to match sequence start
->>>
->>> error: no rules expected `ARCH_WARN_REACHABLE`
->>>     --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_re=
-achable_asm.rs:1:28
->>>      |
->>>    1 | ::kernel::concat_literals!(ARCH_WARN_REACHABLE)
->>>      |                            ^^^^^^^^^^^^^^^^^^^ no rules expe=
-cted this token in macro call
->>>      |
->>>     ::: ../rust/kernel/lib.rs:279:1
->>>      |
->>> 279 | macro_rules! concat_literals {
->>>      | ---------------------------- when calling this macro
->>>      |
->>>      =3D note: while trying to match sequence start
->>>
->>> error: aborting due to 2 previous errors
->>> ```
->>>
->>> This is in addition to the bindings::kvfree_call_rcu() call, but th=
-at
->>> one is already being handled in a different thread.
->> Looks like powerpc needs something like the followings:
->> diff --git a/arch/powerpc/include/asm/bug.h
->> b/arch/powerpc/include/asm/bug.h
->> index 0db48977c70c..8aba39e0cf26 100644
->> --- a/arch/powerpc/include/asm/bug.h
->> +++ b/arch/powerpc/include/asm/bug.h
->> @@ -32,34 +32,38 @@
->>   #endif /* verbose */
->>   #else /* !__ASSEMBLER__ */
->> -/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3 to be FILE, LINE, flags=
 
->> -and
->> -   sizeof(struct bug_entry), respectively */
->>   #ifdef CONFIG_DEBUG_BUGVERBOSE
->> -#define _EMIT_BUG_ENTRY                                \
->> +#define _EMIT_BUG_ENTRY(file, line, flags)     \
->>          ".section __bug_table,\"aw\"\n"         \
->>          "2:     .4byte 1b - .\n"                \
->> -       "       .4byte %0 - .\n"                \
->> -       "       .short %1, %2\n"                \
->> -       ".org 2b+%3\n"                          \
->> -       ".previous\n"
->> +       "       .4byte " file " - .\n"          \
->> +       "       .short " line ", " flags "\n"
->>   #else
->> -#define _EMIT_BUG_ENTRY                                \
->> +#define _EMIT_BUG_ENTRY(file, line, flags)     \
->>          ".section __bug_table,\"aw\"\n"         \
->>          "2:     .4byte 1b - .\n"                \
->> -       "       .short %2\n"                    \
->> -       ".org 2b+%3\n"                          \
->> -       ".previous\n"
->> +       "       .short " flags "\n"
->>   #endif
->>   #define BUG_ENTRY(cond_str, insn, flags, ...)          \
->>          __asm__ __volatile__(                           \
->>                  "1:     " insn "\n"                     \
->> -               _EMIT_BUG_ENTRY                         \
->> +               _EMIT_BUG_ENTRY("%0", "%1", "%2")       \
->> +               ".org 2b+%3\n"                          \
->> +               ".previous\n"                           \
->>                  : : "i" (WARN_CONDITION_STR(cond_str) __FILE__), "i=
-" (__LINE__), \
->>                    "i" (flags),                          \
->>                    "i" (sizeof(struct bug_entry)),       \
->>                    ##__VA_ARGS__)
->> +#define ARCH_WARN_ASM(file, line, flags, size)         \
->> +               "1:     twi 31, 0, 0\n"                 \
->> +               _EMIT_BUG_ENTRY(file, line, flags)      \
->> +               ".org 2b+" size "\n"                    \
->> +               ".previous\n"
-> =
+vim +/taks +1039 fs/nfs/nfs4xdr.c
 
-> Will this build ? Isn't ARCH_WARN_ASM() for use in ASM .S files ?
+  1027	
+  1028	static void encode_compound_hdr(struct xdr_stream *xdr,
+  1029					struct rpc_rqst *req,
+  1030					struct compound_hdr *hdr)
+  1031	{
+  1032		__be32 *p;
+  1033	
+  1034		/* Inject namespace info into compound tag if not already set */
+  1035		if (hdr->taglen == 0 && req->rq_task != NULL) {
+  1036			/* Use namespace info captured at task creation time */
+  1037			struct rpc_task *task = req->rq_task;
+  1038	
+> 1039			if (taks->tk_ns_inum != 0) {
+  1040				char ns_tag[NFS4_MAXTAGLEN + 1];
+  1041	
+  1042				hdr->taglen = snprintf(ns_tag, sizeof(ns_tag), "ns:%u", taks->tk_ns_inum);
+  1043				if (hdr->taglen > NFS4_MAXTAGLEN) {
+  1044					hdr->taglen = NFS4_MAXTAGLEN;
+  1045					ns_tag[NFS4_MAXTAGLEN] = '\0';
+  1046				}
+  1047				hdr->tag = ns_tag;
+  1048			}
+  1049		}
+  1050	
+  1051		/* initialize running count of expected bytes in reply.
+  1052		 * NOTE: the replied tag SHOULD be the same is the one sent,
+  1053		 * but this is not required as a MUST for the server to do so. */
+  1054		hdr->replen = 3 + hdr->taglen;
+  1055	
+  1056		WARN_ON_ONCE(hdr->taglen > NFS4_MAXTAGLEN);
+  1057		encode_string(xdr, hdr->taglen, hdr->tag);
+  1058		p = reserve_space(xdr, 8);
+  1059		*p++ = cpu_to_be32(hdr->minorversion);
+  1060		hdr->nops_p = p;
+  1061		*p = cpu_to_be32(hdr->nops);
+  1062	}
+  1063	
 
-No. It's used by Rust code; the C preprocessor uses ARCH_WARN_ASM() to
-generate the code for Rust inline assembly.
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
