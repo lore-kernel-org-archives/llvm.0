@@ -1,157 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23224372EFA;
-	Thu,  6 Aug 2026 17:40:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6642BDC2A
+	for <llvm@lists.linux.dev>; Thu,  6 Aug 2026 18:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786038059; cv=none; b=SY15D+Ve2btwkfU7ggsWmYFvQVbTeMkMUK7fyKVqjzliwscMO/taDK7moXQPl3gmfWjC+Dalr19Foj/wSNW1J/X5ZWrB+oa466BuVcew4mzR1d992mUiwX5Fjda/TqxFBhbXRPMnhhjdFeZDyoSuUllufKblNGvbecJFP1Rm1tA=
+	t=1786040710; cv=none; b=r5vVj/bXak+Nis3EmN46Ou/X/nlz0wSfXRw9Cxns+lIQv98xLPHAfPPl1Z6GFJy92A8wQau2EzSpUAVmtDLW46P3sKy9fnLNSDxxfKTKttZHmu1F0QuCAkJKdzUQOf0GoycoQkfJTcXwzJC3VIEyyoDYU5aHPkytL7mE31vqljQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786038059; c=relaxed/simple;
-	bh=jR6UAf+W3pRyagiBnBIthX9L1RTvVK8tgmNzQD67mJU=;
+	s=arc-20240116; t=1786040710; c=relaxed/simple;
+	bh=OAnGXhoMWN0VX4aRXp3qSN6EwUoruIJ70j69kxghWfM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GnxA61I61T8q3hiKRA2zTWkPq4jZoCjbelZ06oazTGLVBlSRkHxB7DOC5PTDTSBV4C07/yjbMVAfafT7IVI9tjJC9x1WbOGmFfE/HdV9bz/C7nzmeb70h0UZXyb0uethVduKy1Fq3pnyjBYrx4m9rz9gyvQy9RXBX8d5JH4yV30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lWpTxuxP; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=GreeK/jo8q5119S9SnG68FUldJ02FnQ0wBGw7bVS+n4zn3oSCVjxFQstCZK3X42pULMdjaTLwqwhctElVknGIoF9ARq0aWy7kftMoPpA2r18apnL0fQxitk0Q/OrqnvBUVwWK2bWi1WgMcxUCWOno7PhT1sHB5cKB/zsc3wTP38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VidZnLnF; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lWpTxuxP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786038058; x=1817574058;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=jR6UAf+W3pRyagiBnBIthX9L1RTvVK8tgmNzQD67mJU=;
-  b=lWpTxuxPDWz8JQzO9DOn/GoslLZ7c1UN3NkPUIy08mh9OA2HKcWIcxuy
-   ihbPUl7o8B8tjcSghoWzuPTmAZH4cZfv/ra1ox4CtUy71ep0ZUEyzJbNJ
-   Ed0cFP4tDWbTzm+7pFJfZK0+LWTm0k93ApptxeFJRDmpeNdtLKpwGPZfd
-   BcodF6DnuNYkysOLHvssREQN1nEPz1eUI0zOb3u1IkN/cc/I04ncO8Cjo
-   5nV9l5B1oifh1XR181yst5Hguru/xgQAiBIvIjZOjZYwkHYjJE3bFzPAy
-   uc8RnMtnlJ+CKjQW1u4HLwdyPWb6XgynmYpFQxlsh6OMYTlkpzGZjTWdm
-   g==;
-X-CSE-ConnectionGUID: 6LjKdj7kR/++lQbyiQ35uw==
-X-CSE-MsgGUID: HGjLAP0jQAyJhJw/jeuFFg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11867"; a="98151987"
-X-IronPort-AV: E=Sophos;i="6.25,208,1779174000"; 
-   d="scan'208";a="98151987"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2026 10:40:57 -0700
-X-CSE-ConnectionGUID: 7DB5m3cyQx2LtjOXhuPo6g==
-X-CSE-MsgGUID: 1SUtF5e8QmWqOPxccB+TSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,208,1779174000"; 
-   d="scan'208";a="300373251"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 06 Aug 2026 10:40:51 -0700
-Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1ws25I-000000004f4-1D7z;
-	Thu, 06 Aug 2026 17:40:48 +0000
-Date: Thu, 6 Aug 2026 19:40:10 +0200
-From: kernel test robot <lkp@intel.com>
-To: Markus Elfring <Markus.Elfring@web.de>, acpica-devel@lists.linux.dev,
-	bpf@vger.kernel.org, coresight@lists.linaro.org,
-	kvm@vger.kernel.org, linux-acpi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	mptcp@lists.linux.dev, netdev@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, virtualization@lists.linux.dev,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Alex Mastro <amastro@fb.com>, Alex Williamson <alex@shazbot.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andi Kleen <ak@linux.intel.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VidZnLnF"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so1873284a91.0
+        for <llvm@lists.linux.dev>; Thu, 06 Aug 2026 11:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786040708; x=1786645508; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eRxIpMxQf2eH73MswyccHSNChNNfT/J5n/NCnkKxEHE=;
+        b=VidZnLnFrbxlqpZD1gGqU8QPPGNglGM7Z3d4wamTD9N9lEVNJ4ZdvTk85xXbKj+m9X
+         C3GUJx9wEbD1A18sHNxKcsRNU5DRRiSmma04EsAcXBxyFNdSKI0/h7el4ctizQMevkqJ
+         4eAAn5iRdbep1wJFCceY3lnHI72qYJLhDotToJ84/DmJ6NhNwFjkCfrO+QqgJGpDiWqZ
+         bSE1aP7LtkfCpVy47KB8aT7URJAUcvLU0RyCCr9S/2/VhwPCCZ7ZMVW8KiRskEgrqey3
+         Oe4rEoZ2UQuFFJJYFNz60ygyCLcov48bClNyHv9F4unDDzvajp4nERnUfHD6uwJqB3kR
+         D+Nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786040708; x=1786645508;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eRxIpMxQf2eH73MswyccHSNChNNfT/J5n/NCnkKxEHE=;
+        b=RX4A2QPXvORhMVbL3q1CcJo6fHVDIZku1puYzzeayzGlWKso14i4U98VzrkMR82FAR
+         EDDOUZ9PjjdnOUclzHTgs2XHaFs9BXhJYQJp+lbyUGgrChxCUpCq7Xi3th/V1Qoah2/m
+         7Qpnq9xH2Vu2dkHOEC7bU+lxGHIKeiZqyCfUneFJjwTaEICdxnbYICsOj/7m6P6MeYKW
+         uw2tzXtv7Lc2Alz7YYZplyj68Wij5xDeJgq/qbAEQL6iEoDVzcvNN/BhLvJ/CUU7yzYr
+         y+EIJVRLJIK5o+CXhdDjroPj0cMQf0CEMjc4cDW723Q0QXtl9CDsiFw594S/S9xocqsm
+         LBBQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpFv8+uPfEHDRzLwA3X8r4I7vEBuheUQ0skkNa3xembldV4+WAtDGfunEBXvuXWTTjZ6BQz@lists.linux.dev
+X-Gm-Message-State: AOJu0YwsaXHRvQtk2/w6TpteKyvRi4RGbvHLcyzuSBzqRG2rBntqj0uT
+	S4560lxCS87ynCxYFiBBwhfs1wW1V/v2/aMN6IikTVUusGDjUNRfNLBX
+X-Gm-Gg: AR+sD11zcFbzYxpWSRXMf7wM/voq7RtV4TJfAvEYUiBLDqdR07hK/MbjosLXcQnS0uh
+	wPRqMj5DtZXAp5KhnlQ6G64wQUn/ouKwxbWZrxm4ENk+y9J/rUn3Mx3vjy8WOmDx3LIbUZ/44pu
+	Lv8jAEljKXwDZH9TxjFG5ELz9JanrNazTNBka54SSnJUTDqdTRCEMSp5XDJr3pt1uuuneeQA9ek
+	pN9L03WYWJcTUDTT15ImQ5KMlKcfKsloZx1qR372XY6obiDX5dKGjACm7qqaI9+jTCb2bS0QHK1
+	lPc//5NGrfUEX4gUJ4J29NCEFYEFBBsACzswXsO9bjSnJ1c1d2kCww9UpRpk2JR0xmO+dy4sh6p
+	U8a4ZxYFEF6vUbbPw7i1MSzmjuU2K/3DSHyRs6ZZPeTLGGbt/5wO9Q/rm6EUu/h/nUjxwHNRfE/
+	y+bicpQfewYGmEx4si1dye30qkxfjfAFEol36KA9ZCAQ+D+x+DFy4FiE5+/2dspTwYKVkTdroHN
+	Nx5SocN
+X-Received: by 2002:a17:90b:3889:b0:381:973e:fa08 with SMTP id 98e67ed59e1d1-3903c5cfba2mr14353244a91.18.1786040708017;
+        Thu, 06 Aug 2026 11:25:08 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:6e::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315867bc261sm29668669eec.28.2026.08.06.11.25.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 11:25:07 -0700 (PDT)
+Date: Thu, 6 Aug 2026 11:25:04 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: JP Kobryn <jp.kobryn@linux.dev>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Ankur Arora <ankur.a.arora@oracle.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Bartosz Golaszewski <brgl@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH] tools: Use fputc() calls in some functions
-Message-ID: <202608061909.wj199SHx-lkp@intel.com>
-References: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
+ correctness test for flush
+Message-ID: <anTRgIZe5wgAsdCU@devvm16600.scu0.facebook.com>
+References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+ <20260721174833.1232771-3-ziyang.meme@gmail.com>
+ <f83b6c93-b32e-434a-94b7-68628a2e8527@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <48f2d61f-d468-49b7-881e-f00777db073f@web.de>
+In-Reply-To: <f83b6c93-b32e-434a-94b7-68628a2e8527@linux.dev>
 
-Hi Markus,
+On Wed, Jul 22, 2026 at 11:42:58AM -0700, JP Kobryn wrote:
+>On 7/21/26 10:48 AM, Ziyang Men wrote:
+>>Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
+>>return values that agree with what userspace reads from cgroupfs, across
+>>a whole cgroup subtree that has been charged on many CPUs.
+>>
+>>It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
+>>calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
+>>only asserts each value is greater than zero, so it never checks that a
+>>value is actually correct.  This test compares the kfunc values against
+>>what userspace reads from memory.stat, and checks every node in the
+>>cgroup tree.
+>>
+>Can you extend the existing test instead of adding a new one?
 
-kernel test robot noticed the following build errors:
+Hi JP,
 
-[auto build test ERROR on perf-tools-next/perf-tools-next]
-[also build test ERROR on tip/perf/core perf-tools/perf-tools linus/master v7.2-rc6 next-20260806]
-[cannot apply to acme/perf/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Good suggestion. Actually extending the exisiting one was the plan in the v1.
+However, existing selftests with similar purpose is the cgroup_iter_memcg, which
+is in the bpf/. After discussed with the bpf reviewer in v1, we think this
+selftest may suit better in the cgroup/ rather than the bpf/, since 1) it tests
+the cgroup functionalities (bpf is a tool), and 2) together with the selftest,
+this patch serials also ships a common Makefile lib.bpf.mk for easily compiling
+selftests for other subsystems using bpf. Currently there is no other selftests
+in cgroup/ relies on BPF and we think it is good to put this selftest here as
+the first consumer.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Markus-Elfring/tools-Use-fputc-calls-in-some-functions/20260806-165154
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git perf-tools-next
-patch link:    https://lore.kernel.org/r/48f2d61f-d468-49b7-881e-f00777db073f%40web.de
-patch subject: [PATCH] tools: Use fputc() calls in some functions
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260806/202608061909.wj199SHx-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608061909.wj199SHx-lkp@intel.com/reproduce)
+We appreciate any possible suggestions. Thanks very much!
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608061909.wj199SHx-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> builtin-check.c:300:8: error: incompatible pointer to integer conversion passing 'FILE *' (aka 'struct _IO_FILE *') to parameter of type 'int' [-Wint-conversion]
-     300 |         fputc(stderr, '\n');
-         |               ^~~~~~
-   /usr/include/stdio.h:155:16: note: expanded from macro 'stderr'
-     155 | #define stderr stderr
-         |                ^~~~~~
-   /usr/include/stdio.h:611:23: note: passing argument to parameter '__c' here
-     611 | extern int fputc (int __c, FILE *__stream) __nonnull ((2));
-         |                       ^
->> builtin-check.c:300:16: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'FILE *' (aka 'struct _IO_FILE *') [-Wint-conversion]
-     300 |         fputc(stderr, '\n');
-         |                       ^~~~
-   /usr/include/stdio.h:611:34: note: passing argument to parameter '__stream' here
-     611 | extern int fputc (int __c, FILE *__stream) __nonnull ((2));
-         |                                  ^
-   2 errors generated.
-   make[5]: *** [tools/build/Makefile.build:95: tools/objtool/builtin-check.o] Error 1
->> disas.c:540:9: error: incompatible pointer to integer conversion passing 'FILE *' (aka 'struct _IO_FILE *') to parameter of type 'int' [-Wint-conversion]
-     540 |                 fputc(stream, '\n');
-         |                       ^~~~~~
-   /usr/include/stdio.h:611:23: note: passing argument to parameter '__c' here
-     611 | extern int fputc (int __c, FILE *__stream) __nonnull ((2));
-         |                       ^
->> disas.c:540:17: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'FILE *' (aka 'struct _IO_FILE *') [-Wint-conversion]
-     540 |                 fputc(stream, '\n');
-         |                               ^~~~
-   /usr/include/stdio.h:611:34: note: passing argument to parameter '__stream' here
-     611 | extern int fputc (int __c, FILE *__stream) __nonnull ((2));
-         |                                  ^
-   2 errors generated.
-   make[5]: *** [tools/build/Makefile.build:95: tools/objtool/disas.o] Error 1
-   make[5]: Target '__build' not remade because of errors.
-   make[4]: *** [Makefile:123: tools/objtool/objtool-in.o] Error 2
-   make[4]: Target 'all' not remade because of errors.
-   make[3]: *** [Makefile:74: objtool] Error 2
-   make[2]: *** [Makefile:1587: tools/objtool] Error 2
-   make[2]: Target 'prepare' not remade because of errors.
-   make[1]: *** [Makefile:248: __sub-make] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:248: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best,
+Ziyang
