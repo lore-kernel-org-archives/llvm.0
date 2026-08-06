@@ -1,198 +1,316 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FCE3DA7E4;
-	Thu,  6 Aug 2026 07:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640DC3D9031
+	for <llvm@lists.linux.dev>; Thu,  6 Aug 2026 07:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786002728; cv=none; b=tjgl/tJCj3qIUuJuuHstVqYTXAoaalyxA8DEnkxeTHrG7NVLwADYyGzZ1lCj7rePwB9fiu57OoKtqpXo3aRVFYVnlXZp+W0FNVf5I/RkkaqPuU3LlN+Xm+CluD8LDhicp3/xr/hN00isRv4y3A9o/DA3YxNfYunLwucUc3UQbaA=
+	t=1786002821; cv=none; b=Nd6L2xh5n6FKE2Us6SuWhZTfTcbEBDp8Ii6yQgdzS7XWbPa4tBTXtvRENif0s3rccRvBxZJIAIq+9fuMD7x1UTGVqLF4AQL19ot1hfO26azlmkx4I+cYpnHvu6E95M0ZF5/o6Ay/8avgvnjznR2Zg+ga801Nv7GxksD33fQFGhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786002728; c=relaxed/simple;
-	bh=aZw7AUj8rA5JvLl+q6kjkeavV0M1eky8oZcfZ58/lEg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H+Rne673QRF9T5p5znbL21ls7uQA4py/rm/LH4qnszSgfrQf2wAqfi1IYLhG+d9YqvhMk+PqzvhvjYL56Hr2ezfhJodNYCpNtNPIsTTA8gdQ4dpU2mevcD9o40esazXz32homBrUc9g38vYH/gW1WqCPgPKDl19pzVYHbdyW5pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkjC39Eb; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1786002821; c=relaxed/simple;
+	bh=APdQA7u0s7we4Bg32aytKO5SGFPihzNgTXaoExnRMTY=;
+	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=ZkPhH+3rTh4LbK9DRYDlvGFXZRF8p6CLZxxN+0i0718OyLBWm9bKQ4Fhf19eTCURrnoCM0Np3eqZQYd082LtfbTjRxiDOPj9al7ZqS9c6/Ib76YQkszTCe3zqJqfcCgy/7PjKjoEWEMtsiUv6bqGALccLn7SbYsRn1FRPWejBzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=egPJEGkj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ZWijIyTZ; arc=none smtp.client-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkjC39Eb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786002726; x=1817538726;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aZw7AUj8rA5JvLl+q6kjkeavV0M1eky8oZcfZ58/lEg=;
-  b=jkjC39EbNVqtp2B32YD2PBq5fIu+fDyYinFR+03YvGqNzUVlcbU8PS84
-   wV6OODOMqnwLfdF29AK2DQcqBz0mSiZokXX/sIyc59fupTwVvIv4jnYuf
-   SE8XiX2pAwNCmP8al6hPLJXgu2yv25R0xn0TboDEPqRGdVh9tE/x/eXVn
-   jbupKEUn04RGD1K8M0kZy4RYdY1unQ7yg/piKuZiOcTS2o9DbuY9JZYdi
-   xjWwtdvCbBnWU4mzfKIHSsWamCQfyQ9H5QPvQfJazswDk8YSmzx/nNKtS
-   e2G6e3lTGlAosTpd6LqOkgvONq3z2uF+EDCgYU2IX7p72miCunrxs74Bz
-   A==;
-X-CSE-ConnectionGUID: bVkxsmb8SlyL7TpYe90qfA==
-X-CSE-MsgGUID: MIofXF+LR0CLfvlwCA938Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="109379233"
-X-IronPort-AV: E=Sophos;i="6.25,208,1779174000"; 
-   d="scan'208";a="109379233"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2026 00:52:05 -0700
-X-CSE-ConnectionGUID: WgTlih8ZTVCrqXp2bOyk/w==
-X-CSE-MsgGUID: dIxJS6KuTdqA+Ub7fhjQUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,208,1779174000"; 
-   d="scan'208";a="267173805"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 06 Aug 2026 00:52:03 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wrstU-00000000EZ3-2MhK;
-	Thu, 06 Aug 2026 07:52:00 +0000
-Date: Thu, 6 Aug 2026 15:51:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: WenTao Liang <vulab@iscas.ac.cn>, James Bottomley <jejb@linux.ibm.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	linux-scsi@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-	WenTao Liang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH] fix: scsi: srp_reconnect_rport: unbalanced
-   scsi_block_targets/scsi_target_unblock
-Message-ID: <202608061517.9mRANAFw-lkp@intel.com>
-References: <20260626161402.55116-1-vulab@iscas.ac.cn>
+	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="egPJEGkj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ZWijIyTZ"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailflow.phl.internal (Postfix) with ESMTP id 63DA6138020C;
+	Thu,  6 Aug 2026 03:53:38 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Thu, 06 Aug 2026 03:53:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1786002818;
+	 x=1786006418; bh=LD9ImqlIwH6oeN7pmBkN0TXKzq62mCPW1c400six0EM=; b=
+	egPJEGkjiHQFhksFyQs6njKum2R6mjsKp77i7wKapRMZytD/ZMCUf6skygPzuCOP
+	+islbK1gtxlkCIKS1mZg/6zOJ/zebc+DTvbH46mCB5YJouplVK503uRqq7W15I/o
+	3TgO48JjjlnSaL0YcH3UoKNGRkmzLcgsbYDPbBjfmF3WeJIw/rw80wvazrsz+/xt
+	391na+sZX7WxAZbeMVMhRnRvtrYYlaS0D7OwFckvyIv9wUAoENYDq5bCm9u8zkN5
+	yFhvIWjhHXh0imufYp/Ou/xYEKENAl9Y2L4lnioa9/u74xxtsvMocdSw6yBs84aB
+	h9ZpKmCJYt68sgE6nXGuhA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786002818; x=
+	1786006418; bh=LD9ImqlIwH6oeN7pmBkN0TXKzq62mCPW1c400six0EM=; b=Z
+	WijIyTZVqCgYF8yEJsG9No+5i1j/eLJ4jHZnEiVZUztXSOYRW2kpLiPpXctlzrvd
+	QjG9lS1udZ0s4VwyJATEGHIBpwQ4mKEokFZi1POoTAmESpd/wCo3QvyLOmOXu30G
+	S3VwfLAy42HT4otDBGdCh3X1sNbrdsmjC8diS/7Un0/yOcAVQQF6xGzp4hyUcy0P
+	MO+gPOU/YN+Q5kYAo2yzwJTHhUvW23qiduRIL0hBmulv6qMpYAuGFqou/OLY5csf
+	4+14uuM71HYvnsDayhIGyhIFkrAoyAcKOQgNVtWRtU4SfkjReU238fTBr+9pZLRu
+	zbzv0mRvDGOKV/lPWHp8w==
+X-ME-Sender: <xms:gD10atsuyjsKUGFggi9pHLdlrO9l2L-0Xw54vpyijCZgrUKv_iHXFw>
+    <xme:gD10ariDFCROd4tfT0-1IOZLsUSGolX0CkJcm4k8MdJ76gYxKX9HonMn-mV0YgGXg
+    aqRBIW0S4wsA85c4J55d0lyti7662mELieircjuYxos5GagAo8_PPwb>
+X-ME-Received: <xmr:gD10atyq2bOYKHFLYZ0HNTKNtS7Y7QbfYmuS7F1kTqEkJfQclF0Pk7FT0CZqjxbJ42w0JQOjPZH-qAfd-uQ3H2iU>
+X-ME-Proxy-Cause: dmFkZTFbzfkfUcr/Inba17tKt3JJ3fMrX1N2IUQX31//l4d7tbGDIvsDLekSwrzIspHZhe
+    o+VTNd8j7u+Iie4/vsjYzHSLs0OWqSktFzQQhv8+NgGQIag2veIThRlj6+GB4jPUZxbvRv
+    7OcvW9OzYxQuUr1i11mPCdpCcP7JRmOC0AJubMcCqZzfBmd1SK+vQp2JnmKLkWhMihSU6c
+    fuDLRKKIqB0TdhjglBxB6X+eg2BrSYejmwu+bPOgNY8XxzIAOT7HNAjxMRX3DU+DWoXY+3
+    iqGQXmHWNriOrJNH10CsO0qMQAf0vVKqv3pavtuHNTRXYCSn7ZXnVkmSYj7XLAxVtRClJ5
+    uMxrtDYXoXwt9dN3I6Zq2DXu0tisA4QU9oyBVOhL/MGaUvPN7ENRu1ubiEqgWezdnSFkGd
+    R+WSh6dUTjILfP/1fC8AHH9gAYn1ifQx8fttklkGOY9PvdOInMy9A2QWtcBTVoKuq4ZJ87
+    jGRPUzoTJn3s/Z85CJAyst7sBa7zZyubtPJDRIXnzVy4moi33ZTVd73Yow/k2k93qDJoPn
+    ujLeIUX8ykSirlln1YstkTapUdKLSL+ZlQz92GTjCPH3yT2ke++BySC86l/RQ8xt9yHtpq
+    HuQ5KAsbuce3wRDzwJuS1P1E6hwRg/AlR2acSfHVRXzCEhfs1zUl4PXcH5Jg
+X-ME-Proxy: <xmx:gD10ah4JLuOZHllR0vjlTCUtzn-Mc5_uuX65vuzFNNPm_EyBpFehJg>
+    <xmx:gD10avdsAz76rOQyAp-33iSXydJPZZ1b0Zgq1DMJi_-_OwSSQaVdcA>
+    <xmx:gD10appd7HS1t5mf-1wS6rEoYY6l6WqnOPKEdonqQWVh2-JLyYqbiA>
+    <xmx:gD10aj1L7da9tdvfPV6TtI5ekFlRIJ2Z_J0Ytzk0_II-t1ZwjfeLag>
+    <xmx:gT10agEzz7xbZ8Ik0es4bQ2PmLSZWo8Vxh-Sz_rMo4P0HwUZ3ojOOAA8>
+Feedback-ID: i51fe4b43:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 6 Aug 2026 03:53:28 -0400 (EDT)
+Date: Thu, 06 Aug 2026 16:53:26 +0900 (JST)
+Message-Id: <20260806.165326.1361973663671179487.tomo@flapping.org>
+To: chleroy@kernel.org
+Cc: tomo@flapping.org, linkmauve@linkmauve.fr, maddy@linux.ibm.com,
+ mpe@ellerman.id.au, npiggin@gmail.com, peterz@infradead.org,
+ jpoimboe@kernel.org, jbaron@akamai.com, aliceryhl@google.com,
+ rostedt@goodmis.org, ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org,
+ gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+ a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org,
+ daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com,
+ work@onurozkan.dev, nathan@kernel.org, ndesaulniers@google.com,
+ morbo@google.com, justinstitt@google.com, fujita.tomonori@gmail.com,
+ joelagnelf@nvidia.com, gregkh@linuxfoundation.org, prafulrai522@gmail.com,
+ nsc@kernel.org, japo@linux.ibm.com, lina+kernel@asahilina.net,
+ j@jannau.net, airlied@gmail.com, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev, mkchauras@gmail.com
+Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
+From: FUJITA Tomonori <tomo@flapping.org>
+In-Reply-To: <d347de18-10ee-41e9-a672-b08f70bc88e4@kernel.org>
+References: <anG67Q6Y59kDqh-c@desktop>
+	<20260804.224035.269658578200153488.tomo@flapping.org>
+	<d347de18-10ee-41e9-a672-b08f70bc88e4@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260626161402.55116-1-vulab@iscas.ac.cn>
+Mime-Version: 1.0
+Content-Type: Text/Plain; charset=iso-8859-1
+Content-Transfer-Encoding: quoted-printable
 
-Hi WenTao,
+On Wed, 5 Aug 2026 14:56:41 +0200
+"Christophe Leroy (CS GROUP)" <chleroy@kernel.org> wrote:
 
-kernel test robot noticed the following build warnings:
+> =
 
-[auto build test WARNING on jejb-scsi/for-next]
-[also build test WARNING on mkp-scsi/for-next linus/master v7.2-rc6 next-20260805]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> =
 
-url:    https://github.com/intel-lab-lkp/linux/commits/WenTao-Liang/fix-scsi-srp_reconnect_rport-unbalanced-scsi_block_targets-scsi_target_unblock/20260805-214818
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20260626161402.55116-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] fix: scsi: srp_reconnect_rport: unbalanced   scsi_block_targets/scsi_target_unblock
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260806/202608061517.9mRANAFw-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260806/202608061517.9mRANAFw-lkp@intel.com/reproduce)
+> Le 04/08/2026 =E0 15:40, FUJITA Tomonori a =E9crit=A0:
+>> [Vous ne recevez pas souvent de courriers de
+>> tomo@flapping.org. D?couvrez pourquoi ceci est important ?
+>> https://aka.ms/LearnAboutSenderIdentification ]
+>> On Tue, 4 Aug 2026 12:11:57 +0200
+>> Link Mauve <linkmauve@linkmauve.fr> wrote:
+>> =
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608061517.9mRANAFw-lkp@intel.com/
+>>> Hi,
+>>>
+>>> On Mon, Aug 03, 2026 at 12:27:13PM +0530, Madhavan Srinivasan wrote=
+:
+>>>> On Wed, 08 Jul 2026 13:54:47 +0530, Mukesh Kumar Chaurasiya (IBM)
+>>>> wrote:
+>>>>> Enable experimental rust support for ppc64le and ppc32be. The pat=
+ch
+>>>>> for
+>>>>> ppc32 has been provided by Link Mauve[1] and ppc64le support[2] h=
+as
+>>>>> been
+>>>>> merged over it. ppc32 needs some toolchain fixes mentioned in the=
 
-All warnings (new ones prefixed by >>):
+>>>>> patch
+>>>>> `rust: Add PowerPC support` and the discussion for that is done
+>>>>> here[1].
+>>>>>
+>>>>> This has been tested on
+>>>>> - powernv9 hardware
+>>>>> - pseries P11 hardware
+>>>>> - pseries(9, 10) qemu
+>>>>> - powernv(9, 10) qemu
+>>>>> - rustdoc on x86 and powerpc64le
+>>>>> - rusttest on x86 and powerpc64le
+>>>>>
+>>>>> [...]
+>>>>
+>>>> Applied to powerpc/next.
+>>>>
+>>>> [1/7] rust: Fix "multiple candidates for rmeta dependency core" er=
+ror
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2F00cdfd072c709c608606461d7d44d46=
+13119bfa9&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617198585%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3D4qQe1qS37TGv6%2Bf9H56kWVqMYSAHsWiDx5oz8WHZ8%2Bg%3D&reserved=3D=
+0
+>>>> [2/7] dma-resv: Fix undefined symbol when CONFIG_DMA_SHARED_BUFFER=
+ is
+>>>> disabled
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fbe809b60cbb61aab96179f44ac36702=
+42ae72996&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617235654%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3Dcw2l64D3ah%2FM3pxFmvMpUnNmcqcSvN3RFoDiYAIR76g%3D&reserved=3D0=
 
->> drivers/scsi/scsi_transport_srp.c:553:3: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     553 |                 blocked = true;
-         |                 ^
-   drivers/scsi/scsi_transport_srp.c:545:2: note: previous statement is here
-     545 |         if (rport->state != SRP_RPORT_FAIL_FAST && rport->state != SRP_RPORT_LOST)
-         |         ^
-   1 warning generated.
+>>>> [3/7] powerpc/jump_label: adjust inline asm to be consistent
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2F13244c0a40139fe66c4c5c5655f4d73=
+2a6002957&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617259593%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3DxNvcH9k5RA5ktJupn90VdDuwx4YBvezuDcapqKlYfjs%3D&reserved=3D0
+>>>> [4/7] rust/powerpc: Set min rustc version for powerpc
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fe299147cdc8e19c6421a6b7863dc82a=
+35b09d967&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617280683%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3DuNZA7AulROQGv%2B2l4M%2FqC5W4ncWktRoSRRp8eaF%2FcCY%3D&reserved=
+=3D0
+>>>> [5/7] rust: Make __udivdi3() and __umoddi3() panic
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fc93c194e4ee71a734986fd99a8b1ec9=
+fbb7a9b8b&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617303292%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3DznZPWXM7k5FpRlekIyUN1bHzmMyk1YESR56WsiwBuMA%3D&reserved=3D0
+>>>> [6/7] rust: Add PowerPC support
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2F73b741adb264967093ef4eb59905618=
+a7e0d0de0&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617326590%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3DaFHGhd7RX%2Ft5%2BMjqt6pBmIKPKAKmFEQndKP1F%2F8HSxk%3D&reserved=
+=3D0
+>>>> [7/7] powerpc: Enable Rust for ppc64le
+>>>>        https://eur01.safelinks.protection.outlook.com/?url=3Dhttps=
+%3A%2F%2Fgit.kernel.org%2Fpowerpc%2Fc%2Fbc87cbdb952e9223616b839d64bdb47=
+23aa2ed1d&data=3D05%7C02%7Cchristophe.leroy%40csgroup.eu%7C34e4deafcc1d=
+41c1738a08def22e01b0%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C63921=
+4476617346994%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwL=
+jAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7=
+C&sdata=3DITEFv9C1CSUVLqJNe5Y8sStUE3KoOVYVzSzbP0qis74%3D&reserved=3D0
+>>>>
+>>>> cheers
+>>>>
+>>>
+>>> I just tested those again in linux-next, with the Wii support serie=
+s
+>>> on
+>>> top, but now the kernel fails to build due to ARCH_WARN_ASM and
+>>> ARCH_WARN_REACHABLE not being defined on PowerPC:
+>>> ```
+>>> error: no rules expected `ARCH_WARN_ASM`
+>>>     --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_wa=
+rn_asm.rs:1:28
+>>>      |
+>>>    1 | ::kernel::concat_literals!(ARCH_WARN_ASM("{file}", "{line}",=
 
+>>>    "{flags}", "{size}"))
+>>>      |                            ^^^^^^^^^^^^^ no rules expected t=
+his token in macro call
+>>>      |
+>>>     ::: ../rust/kernel/lib.rs:279:1
+>>>      |
+>>> 279 | macro_rules! concat_literals {
+>>>      | ---------------------------- when calling this macro
+>>>      |
+>>>      =3D note: while trying to match sequence start
+>>>
+>>> error: no rules expected `ARCH_WARN_REACHABLE`
+>>>     --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_re=
+achable_asm.rs:1:28
+>>>      |
+>>>    1 | ::kernel::concat_literals!(ARCH_WARN_REACHABLE)
+>>>      |                            ^^^^^^^^^^^^^^^^^^^ no rules expe=
+cted this token in macro call
+>>>      |
+>>>     ::: ../rust/kernel/lib.rs:279:1
+>>>      |
+>>> 279 | macro_rules! concat_literals {
+>>>      | ---------------------------- when calling this macro
+>>>      |
+>>>      =3D note: while trying to match sequence start
+>>>
+>>> error: aborting due to 2 previous errors
+>>> ```
+>>>
+>>> This is in addition to the bindings::kvfree_call_rcu() call, but th=
+at
+>>> one is already being handled in a different thread.
+>> Looks like powerpc needs something like the followings:
+>> diff --git a/arch/powerpc/include/asm/bug.h
+>> b/arch/powerpc/include/asm/bug.h
+>> index 0db48977c70c..8aba39e0cf26 100644
+>> --- a/arch/powerpc/include/asm/bug.h
+>> +++ b/arch/powerpc/include/asm/bug.h
+>> @@ -32,34 +32,38 @@
+>>   #endif /* verbose */
+>>   #else /* !__ASSEMBLER__ */
+>> -/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3 to be FILE, LINE, flags=
 
-vim +/if +553 drivers/scsi/scsi_transport_srp.c
+>> -and
+>> -   sizeof(struct bug_entry), respectively */
+>>   #ifdef CONFIG_DEBUG_BUGVERBOSE
+>> -#define _EMIT_BUG_ENTRY                                \
+>> +#define _EMIT_BUG_ENTRY(file, line, flags)     \
+>>          ".section __bug_table,\"aw\"\n"         \
+>>          "2:     .4byte 1b - .\n"                \
+>> -       "       .4byte %0 - .\n"                \
+>> -       "       .short %1, %2\n"                \
+>> -       ".org 2b+%3\n"                          \
+>> -       ".previous\n"
+>> +       "       .4byte " file " - .\n"          \
+>> +       "       .short " line ", " flags "\n"
+>>   #else
+>> -#define _EMIT_BUG_ENTRY                                \
+>> +#define _EMIT_BUG_ENTRY(file, line, flags)     \
+>>          ".section __bug_table,\"aw\"\n"         \
+>>          "2:     .4byte 1b - .\n"                \
+>> -       "       .short %2\n"                    \
+>> -       ".org 2b+%3\n"                          \
+>> -       ".previous\n"
+>> +       "       .short " flags "\n"
+>>   #endif
+>>   #define BUG_ENTRY(cond_str, insn, flags, ...)          \
+>>          __asm__ __volatile__(                           \
+>>                  "1:     " insn "\n"                     \
+>> -               _EMIT_BUG_ENTRY                         \
+>> +               _EMIT_BUG_ENTRY("%0", "%1", "%2")       \
+>> +               ".org 2b+%3\n"                          \
+>> +               ".previous\n"                           \
+>>                  : : "i" (WARN_CONDITION_STR(cond_str) __FILE__), "i=
+" (__LINE__), \
+>>                    "i" (flags),                          \
+>>                    "i" (sizeof(struct bug_entry)),       \
+>>                    ##__VA_ARGS__)
+>> +#define ARCH_WARN_ASM(file, line, flags, size)         \
+>> +               "1:     twi 31, 0, 0\n"                 \
+>> +               _EMIT_BUG_ENTRY(file, line, flags)      \
+>> +               ".org 2b+" size "\n"                    \
+>> +               ".previous\n"
+> =
 
-   509	
-   510	/**
-   511	 * srp_reconnect_rport() - reconnect to an SRP target port
-   512	 * @rport: SRP target port.
-   513	 *
-   514	 * Blocks SCSI command queueing before invoking reconnect() such that
-   515	 * queuecommand() won't be invoked concurrently with reconnect() from outside
-   516	 * the SCSI EH. This is important since a reconnect() implementation may
-   517	 * reallocate resources needed by queuecommand().
-   518	 *
-   519	 * Notes:
-   520	 * - This function neither waits until outstanding requests have finished nor
-   521	 *   tries to abort these. It is the responsibility of the reconnect()
-   522	 *   function to finish outstanding commands before reconnecting to the target
-   523	 *   port.
-   524	 * - It is the responsibility of the caller to ensure that the resources
-   525	 *   reallocated by the reconnect() function won't be used while this function
-   526	 *   is in progress. One possible strategy is to invoke this function from
-   527	 *   the context of the SCSI EH thread only. Another possible strategy is to
-   528	 *   lock the rport mutex inside each SCSI LLD callback that can be invoked by
-   529	 *   the SCSI EH (the scsi_host_template.eh_*() functions and also the
-   530	 *   scsi_host_template.queuecommand() function).
-   531	 */
-   532	int srp_reconnect_rport(struct srp_rport *rport)
-   533	{
-   534		struct Scsi_Host *shost = rport_to_shost(rport);
-   535		struct srp_internal *i = to_srp_internal(shost->transportt);
-   536		struct scsi_device *sdev;
-   537		int res;
-   538		bool blocked = false;
-   539	
-   540		pr_debug("SCSI host %s\n", dev_name(&shost->shost_gendev));
-   541	
-   542		res = mutex_lock_interruptible(&rport->mutex);
-   543		if (res)
-   544			goto out;
-   545		if (rport->state != SRP_RPORT_FAIL_FAST && rport->state != SRP_RPORT_LOST)
-   546			/*
-   547			 * sdev state must be SDEV_TRANSPORT_OFFLINE, transition
-   548			 * to SDEV_BLOCK is illegal. Calling scsi_target_unblock()
-   549			 * later is ok though, scsi_internal_device_unblock_nowait()
-   550			 * treats SDEV_TRANSPORT_OFFLINE like SDEV_BLOCK.
-   551			 */
-   552			scsi_block_targets(shost, &shost->shost_gendev);
- > 553			blocked = true;
-   554		res = rport->state != SRP_RPORT_LOST ? i->f->reconnect(rport) : -ENODEV;
-   555		pr_debug("%s (state %d): transport.reconnect() returned %d\n",
-   556			 dev_name(&shost->shost_gendev), rport->state, res);
-   557		if (res == 0) {
-   558			cancel_delayed_work(&rport->fast_io_fail_work);
-   559			cancel_delayed_work(&rport->dev_loss_work);
-   560	
-   561			rport->failed_reconnects = 0;
-   562			srp_rport_set_state(rport, SRP_RPORT_RUNNING);
-   563			if (blocked)
-   564				scsi_target_unblock(&shost->shost_gendev, SDEV_RUNNING);
-   565			/*
-   566			 * If the SCSI error handler has offlined one or more devices,
-   567			 * invoking scsi_target_unblock() won't change the state of
-   568			 * these devices into running so do that explicitly.
-   569			 */
-   570			shost_for_each_device(sdev, shost) {
-   571				mutex_lock(&sdev->state_mutex);
-   572				if (sdev->sdev_state == SDEV_OFFLINE)
-   573					sdev->sdev_state = SDEV_RUNNING;
-   574				mutex_unlock(&sdev->state_mutex);
-   575			}
-   576		} else if (rport->state == SRP_RPORT_RUNNING) {
-   577			/*
-   578			 * srp_reconnect_rport() has been invoked with fast_io_fail
-   579			 * and dev_loss off. Mark the port as failed and start the TL
-   580			 * failure timers if these had not yet been started.
-   581			 */
-   582			__rport_fail_io_fast(rport);
-   583			__srp_start_tl_fail_timers(rport);
-   584		} else if (rport->state != SRP_RPORT_BLOCKED) {
-   585			if (blocked)
-   586				scsi_target_unblock(&shost->shost_gendev,
-   587					    SDEV_TRANSPORT_OFFLINE);
-   588		}
-   589		mutex_unlock(&rport->mutex);
-   590	
-   591	out:
-   592		return res;
-   593	}
-   594	EXPORT_SYMBOL(srp_reconnect_rport);
-   595	
+> Will this build ? Isn't ARCH_WARN_ASM() for use in ASM .S files ?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+No. It's used by Rust code; the C preprocessor uses ARCH_WARN_ASM() to
+generate the code for Rust inline assembly.
+
