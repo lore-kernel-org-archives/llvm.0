@@ -1,239 +1,646 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53AF642252A;
-	Thu,  6 Aug 2026 22:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95C93E3C49
+	for <llvm@lists.linux.dev>; Thu,  6 Aug 2026 22:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786053934; cv=none; b=NuRlvfZHAHNosQs63pgMgbynwBKzR6SjAS5eZfZxOP5f8N63TJEAaR5+ZJF8f7jEXFw29l2BJOFqrDMu7/H+h7vuKZz3vj6oy2x0gYL7qNdw5nDo1pZd+GYMKr+Ps1eNG9aMlFlwC1L2Md0gHTZEYxG3nLcnhU9CjasFIWDo5Yo=
+	t=1786054730; cv=none; b=ThvNJXvr1ZAV+c2tsjSolDxdYNEy2f/wFDfy/mMTIGIJMKSdpeFA3Ph/5iIRuN0pb0Ej0YKBZVI5BiljW2EFwS2vP0YAyuqXRd046MkYgojvVEEFhVMPBq5PsiQK4t4Tyd7/iH5qxCEGbA37yunncqLYlFRKJMcBAeGJIMD6fiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786053934; c=relaxed/simple;
-	bh=bJw4Ku5cT349kSAyLM4pLoNNW6UE90NwS5FqD5AcEmQ=;
+	s=arc-20240116; t=1786054730; c=relaxed/simple;
+	bh=Q6UiM+NSh59x28X4+l0krHjo7gLiDykvSP65z6Gt3io=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CI2Vc2otH4S1dWcrKJO93FiL/IVyLylYgh3bjj7VLfJWz14KcsZJxusotrnNDIDwmGsEL8L23VAfe+7JXH+hMWix76HPsh4Qq6Ub+z6ABGXX2QL9KFEnqOiszDJxuXh2ebXtgwnA3y/+ludhbo8HuPJe4YXapOBHocjFGuOGDXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZeWaj2PE; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=n57MkGwnlZNSW8BRI2iFN0Kqdu+ickIxVoRhYfGAeY7cEqzbPHEsRYUpK9xDQiQV+v/YgLxPFBGXjEn5UhxT9YWxeO/1QGarj0k8EVHlb7vZDaOpHWjnoAvPZEMbAy5oFC430nk0zBbkiJBZDAnUuwusS9Q4MW1956Wkt2bbbms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qm75WvGI; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZeWaj2PE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786053934; x=1817589934;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=bJw4Ku5cT349kSAyLM4pLoNNW6UE90NwS5FqD5AcEmQ=;
-  b=ZeWaj2PEjy4TGEvf3PdrxhgxL27hbge1RVJPJckcB10mmZvUMyb5D1Qq
-   YvBzNx/enHBfJcirwWmp/JtLJHboQrDB/EV6+OUvh8iVMjJDDj6F7CmiH
-   2o+TjqmWladF7SJAVQXVZz/KIkKOA4HBEygT5W8tgQTKEyYnPxyuLcRJz
-   HukqW73RmFmREOKfreaGVsrGY1uigFxDXyVBc15yA+xrFe+iyjSm/1DF3
-   2ht1KfuDP1T35ys7sEiKy9oaapZTu96cIel5wpnMcRV4OSER2r0MJcruy
-   6w5G4VSIdilgg2zvu4DcC6E/gwh9aLGq6l4HJK+MaXHnA6jFaDmyx/iGQ
-   A==;
-X-CSE-ConnectionGUID: pWD1epETTuSl4ROB3lqk+Q==
-X-CSE-MsgGUID: G2AC0oIUTuW7wJffW1lcUg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11867"; a="109454898"
-X-IronPort-AV: E=Sophos;i="6.25,209,1779174000"; 
-   d="scan'208";a="109454898"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Aug 2026 15:05:31 -0700
-X-CSE-ConnectionGUID: gi7On4IzTE2PHaDLv0gCqA==
-X-CSE-MsgGUID: +ppkvRn3Tg+MIbcM72pDFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,209,1779174000"; 
-   d="scan'208";a="262285123"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 06 Aug 2026 15:05:30 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1ws6DP-00000000GN7-0ege;
-	Thu, 06 Aug 2026 22:05:27 +0000
-Date: Fri, 7 Aug 2026 06:04:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: luoqing <l1138897701@163.com>, mptcp@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, pabeni@redhat.com,
-	matttbe@kernel.org, davem@davemloft.net
-Subject: Re: [PATCH] mptcp: pm: Fix address ID overflow when all IDs are
- exhausted
-Message-ID: <202608070615.6V9gQGfK-lkp@intel.com>
-References: <20260714080356.805839-1-l1138897701@163.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qm75WvGI"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cea3004256so34760885ad.0
+        for <llvm@lists.linux.dev>; Thu, 06 Aug 2026 15:18:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786054727; x=1786659527; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Ymry1hvBnXf9k9HJyCKIW/LGlgOgsWSR1QFJjFRqgWs=;
+        b=Qm75WvGI8zmorzRPHBviFQT1LPCwohj+DO1Nf1PFqEMSwRJkQO1/BdPUbfGvCt740e
+         c1OXQwktrE9eanw3+zJspuAc+yBZEVJ9c3rRjiUhtkVTbOLV3IN6Yd3C+X5jQnfIEAa0
+         qGbKtv335x/fW8H3NOh/p9D4ZyzKLnxo7OfDqr9TjTUjnYis3A3EfLv8iMQXgr8QYpgG
+         Nw5Agj6WvNvAY6YBiUxRWhlIegIRnUnCrJSq09AXP/zljHUMOkdiTPCtMyNXH8G/h1i/
+         Vw8JNJj6q2Ooxzs8EsI/xXKyV+murseEhYTQ7MSE7Na2ulOubaTmch1xEp8ZzR3arVb4
+         Ox1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786054727; x=1786659527;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=Ymry1hvBnXf9k9HJyCKIW/LGlgOgsWSR1QFJjFRqgWs=;
+        b=LHGFcMiVxFpu3AOp9+IwXqJ6qAIv8ieiy8F2VXKoQHSdIoNM+hFPHLOjnJ1xt/RtKc
+         ylgTbVbgoVuXIHHxfQF62ImRa4K9W76C0ttimwCcuFKclJTq7DSgnGkM+Qd+RACAGTJe
+         MCYMOiESS3SE5BlZpAMMdO1kNzOQXABlRnGRU9FFcnojrLWguzoaRc/o8W4jKgYW2SjQ
+         Z36rKUg+tJyXZIie010pZX9+m99610Wd7LsHHmZeLofr/zLp+VX2LjG1mLbfWdueNUWK
+         fzwPGKwUXTz1ewzz2fN/cJju99xmzrmpZXPpgUyoxDtwC9efsV/rX/EiAFe0FvqSkQPc
+         3a6w==
+X-Forwarded-Encrypted: i=1; AHgh+Rp6yCSVRXAwZ/lKqWTkigX+5EsWnhw8Mp5tf8Pxx3aN/U8xcQ4K23x6N8J4Zabwn3SHJkJK@lists.linux.dev
+X-Gm-Message-State: AOJu0YxLz8QDKRqmTusx84kKIjUw7HssxfLN/oYSRksY0Xq+YVhnG6vj
+	WU2qT5t+JjrHHLHmyoMu9IKttN7n1SwZXg7CrICDcR4UVzW2C33mbyav
+X-Gm-Gg: AR+sD10IGBgUM/0hysPDaNGbHrjRagzI7VlwCTf72C65oHFl+93JHzWL+zJPNcUKS0l
+	YLcXOMbHlf+cV6JT6mpjvvKutBwLlngF0sNqE5xO0cW0GOeTfs/3qlyZn4zMIYZbRd2vu0ZGdZO
+	BOj2G04sqgUNBNsRJMlf6uVIrjegqk6eS3AkmEzrwB8kylaEctAm3oIHGBiNE/dHBUwXSMBD/Jq
+	gLhBBCY0iIs4B5cN2Iitj8zK3wd0Bi9BBEyfjmNz71xat3hkct+QuWBz+XW45N6GAY0gnsfvuB2
+	V14pX052ChZCASlVR7PqSHcGrbk2sDekNPibPiJXsHlk91JtK8vId0NRl7GIL+INQ742DXXdnRM
+	lnjdc2n/DVJX5CIMM2pPMRr/OyWVR0EEyrQXC8A3/bu7Ovh2uA0iAFVBjBc6KbMZwoiLr80AB+X
+	8TWkW5Jspu5dKIQvcrhxe8SPGJI4epL5SpWkXaN5QODlvjOnBnYMNlY0qGwQ00wpBM9L/0qc0kU
+	icVedA0
+X-Received: by 2002:a17:903:18d:b0:2cc:9179:32e with SMTP id d9443c01a7336-2d0ca759b87mr189529035ad.10.1786054726985;
+        Thu, 06 Aug 2026 15:18:46 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:42::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bcadc59dsm585515eec.25.2026.08.06.15.18.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 15:18:46 -0700 (PDT)
+Date: Thu, 6 Aug 2026 15:18:43 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
+ correctness test for flush
+Message-ID: <anUIQ1oWjUSQhZ4C@devvm16600.scu0.facebook.com>
+References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+ <20260721174833.1232771-3-ziyang.meme@gmail.com>
+ <amCBeD8sGVdi1Nm4@localhost.localdomain>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20260714080356.805839-1-l1138897701@163.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <amCBeD8sGVdi1Nm4@localhost.localdomain>
 
-Hi luoqing,
+On Wed, Jul 22, 2026 at 11:43:49AM +0200, Michal Koutný wrote:
+>Hello Ziyang.
+>
+>On Tue, Jul 21, 2026 at 10:48:31AM -0700, Ziyang Men <ziyang.meme@gmail.com> wrote:
+>> Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
+>> return values that agree with what userspace reads from cgroupfs, across
+>> a whole cgroup subtree that has been charged on many CPUs.
+>>
+>> It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
+>> calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
+>> only asserts each value is greater than zero, so it never checks that a
+>> value is actually correct.  This test compares the kfunc values against
+>> what userspace reads from memory.stat, and checks every node in the
+>> cgroup tree.
+>>
+>> Moreover, cgroup_iter_memcg does not exercise the rstat flush
+>> (mem_cgroup_flush_stats()).  This test does: it launches a process on
+>> each leaf that charges and holds memory across multiple CPUs (so the
+>> leaf's rstat is dirty on K per-cpu trees), then confirms the flush works
+>> for both the BPF and the file path by checking two properties:
+>>
+>>   1. after the flush, each leaf's anon is at least what the process
+>>      charged there;
+>>
+>>   2. after the flush, the sum of the leaves' charged memory equals the
+>>      amount at the root.
+>>
+>> The BPF reader and the file reader run in two separate rounds.  Each
+>> round builds the same cgroup tree from scratch and charges the same
+>> amount of memory, so both rounds start from the same state and the
+>> numbers are comparable.  In detail:
+>>
+>>   - round 1 (BPF) builds the subtree, forks one child per leaf that
+>>     charges the leaf across K CPUs and then blocks holding the charge,
+>>     walks the tree with a SEC("iter.s/cgroup") program that flushes the
+>>     subtree at the root and reads each cgroup via the memcg kfuncs
+>>     (bpf_get_mem_cgroup, bpf_mem_cgroup_flush_stats,
+>>     bpf_mem_cgroup_page_state, bpf_mem_cgroup_vm_events,
+>>     bpf_put_mem_cgroup) into a hash map;
+>>
+>>   - round 2 (cgroupfs) builds and charges an identical tree the same way,
+>>     then reads every cgroup's memory.stat / memory.current from
+>>     userspace.
+>>
+>> The subtests differ in how many CPUs each leaf is charged on (a single
+>> CPU or across K CPUs), and run on two cgroup tree sizes.  The charging
+>> children pin CPUs and there is one per leaf, so the test is registered
+>> serial.
+>>
+>> The traditional path reads memory.stat / memory.current through a new
+>> read_cgroup_file() helper added to cgroup_helpers (the read counterpart
+>> of write_cgroup_file).  When the memcg kfuncs are unavailable
+>> (CONFIG_MEMCG=n) the test skips cleanly; the base selftest config now
+>> selects CONFIG_MEMCG=y.
+>>
+>> Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
+>> Assisted-by: Claude:claude-opus-4-8
+>> Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
 
-kernel test robot noticed the following build warnings:
+Hi Michal,
 
-[auto build test WARNING on mptcp/export]
-[also build test WARNING on mptcp/export-net linus/master v7.2-rc6 next-20260806]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for your detailed review! We appreciated for your time.
+>
+>On one hand, this migth be useful to ensure somewhat stable behavior of
+>the reported stats, OTOH, it's exposing quite some implementation
+>details (flushing, per-cpu charging).
+>I'd say that flushing for BPF progs should work (which is what
+>cgroup_iter_memcg() should test IIUC) and yield some precision effect,
+Yes the test in cgroup_iter_memcg involves using the flushing. Our concern is
+how it ensures the state after the flush is correct. Existing approach in
+cgroup_iter_memcg only checks whether the read value is non-zero, rather than
+compare it with the actualy ones, e.g.,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/luoqing/mptcp-pm-Fix-address-ID-overflow-when-all-IDs-are-exhausted/20260806-155815
-base:   https://github.com/multipath-tcp/mptcp_net-next.git export
-patch link:    https://lore.kernel.org/r/20260714080356.805839-1-l1138897701%40163.com
-patch subject: [PATCH] mptcp: pm: Fix address ID overflow when all IDs are exhausted
-config: um-randconfig-002-20260807 (https://download.01.org/0day-ci/archive/20260807/202608070615.6V9gQGfK-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260807/202608070615.6V9gQGfK-lkp@intel.com/reproduce)
+	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
+	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
+	
+This ensures the flush does happen and take effect, but it does not check the
+flush take effect as expected. And this is why we want to compare with the file
+reading: it is a stronger evidance for the correctness of the flush function.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608070615.6V9gQGfK-lkp@intel.com/
+Besides, another check missed from the cgroup_iter_memcg is that it contains no
+accumulation tests for a cgroup subtree. Currently it only creates one children
+cgroup and puts the reading task in it. The flush never have a chance to
+merge-up the deltas in the leaves.
 
-All warnings (new ones prefixed by >>):
+Another missing parts for the cgroup_iter_memcg is that it charges the memory
+and then reads the stats on the same cpu, which means a (possible broken) flush
+that processed only that CPU would pass the weak non-zero test. The new tests
+strengthen the check by pin each child to multiple CPUs. This increase the code
+length but greatly improves the test coverage.
 
-   In file included from net/mptcp/pm_kernel.c:9:
-   In file included from include/net/netns/generic.h:11:
-   In file included from include/net/net_namespace.h:44:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> net/mptcp/pm_kernel.c:798:3: warning: label followed by a declaration is a C23 extension [-Wc23-extensions]
-     798 |                 unsigned int id = find_next_zero_bit(pernet->id_bitmap,
-         |                 ^
-   2 warnings generated.
+We understand that kernel perfers short, dedicated codes and this is our
+target as well. Please do let us know if you have any suggestions for test
+design. Thanks!
 
+>however, the comparison with memory.stat may be source of false
+>positives due to noise.
+>Also, this is supposed to measure convergence in some "static" situation
+>but in reality the things are moving (memcg charges/uncharges) in
+>various pace so some differences would still occur (IMO such deviations
+>are OK, perhaps the test should spell out its preconditions and limitations).
+Yes. In the v1 serials of this patch, we actually design another selftests which
+simulates the real-world dynamic workloads, by making the leaf process keep
+churn memory, and measure the results correspondingly. However this approach
+incurs three problems:
 
-vim +798 net/mptcp/pm_kernel.c
+	1) We have to manually wait the state become "steady", but it is hard to
+	   quantilize the steady state for processes keep churning, so as for
+	   real-world workloads.
+	2) The error margin would be further increased in the highly dynamic worklaods,
+	   and the confidence area for compare number narrows more;
+	3) The code would be more complicated than this one.
 
-   734	
-   735	static int mptcp_pm_nl_append_new_local_addr(struct pm_nl_pernet *pernet,
-   736						     struct mptcp_pm_addr_entry *entry,
-   737						     bool replace)
-   738	{
-   739		struct mptcp_pm_addr_entry *cur, *del_entry = NULL;
-   740		int ret = -EINVAL;
-   741		u8 addr_max;
-   742	
-   743		spin_lock_bh(&pernet->lock);
-   744		/* to keep the code simple, don't do IDR-like allocation for address ID,
-   745		 * just bail when we exceed limits
-   746		 */
-   747		if (pernet->next_id == MPTCP_PM_MAX_ADDR_ID)
-   748			pernet->next_id = 1;
-   749		if (pernet->endpoints == MPTCP_PM_MAX_ADDR_ID) {
-   750			ret = -ERANGE;
-   751			goto out;
-   752		}
-   753		if (test_bit(entry->addr.id, pernet->id_bitmap)) {
-   754			ret = -EBUSY;
-   755			goto out;
-   756		}
-   757	
-   758		/* do not insert duplicate address, differentiate on port only
-   759		 * singled addresses
-   760		 */
-   761		if (!address_use_port(entry))
-   762			entry->addr.port = 0;
-   763		list_for_each_entry(cur, &pernet->endp_list, list) {
-   764			if (mptcp_addresses_equal(&cur->addr, &entry->addr,
-   765						  cur->addr.port || entry->addr.port)) {
-   766				/* allow replacing the exiting endpoint only if such
-   767				 * endpoint is an implicit one and the user-space
-   768				 * did not provide an endpoint id
-   769				 */
-   770				if (!(cur->flags & MPTCP_PM_ADDR_FLAG_IMPLICIT)) {
-   771					ret = -EEXIST;
-   772					goto out;
-   773				}
-   774				if (entry->addr.id)
-   775					goto out;
-   776	
-   777				/* allow callers that only need to look up the local
-   778				 * addr's id to skip replacement. This allows them to
-   779				 * avoid calling synchronize_rcu in the packet recv
-   780				 * path.
-   781				 */
-   782				if (!replace) {
-   783					kfree(entry);
-   784					ret = cur->addr.id;
-   785					goto out;
-   786				}
-   787	
-   788				pernet->endpoints--;
-   789				entry->addr.id = cur->addr.id;
-   790				list_del_rcu(&cur->list);
-   791				del_entry = cur;
-   792				break;
-   793			}
-   794		}
-   795	
-   796		if (!entry->addr.id) {
-   797	find_next:
- > 798			unsigned int id = find_next_zero_bit(pernet->id_bitmap,
-   799							     MPTCP_PM_MAX_ADDR_ID + 1,
-   800							     pernet->next_id);
-   801			if (id > MPTCP_PM_MAX_ADDR_ID) {
-   802				ret = -ENOSPC;
-   803				goto out;
-   804			}
-   805			entry->addr.id = id;
-   806			if (!entry->addr.id && pernet->next_id != 1) {
-   807				pernet->next_id = 1;
-   808				goto find_next;
-   809			}
-   810		}
-   811	
-   812		if (!entry->addr.id)
-   813			goto out;
-   814	
-   815		__set_bit(entry->addr.id, pernet->id_bitmap);
-   816		if (entry->addr.id > pernet->next_id)
-   817			pernet->next_id = entry->addr.id;
-   818	
-   819		if (entry->flags & MPTCP_PM_ADDR_FLAG_SIGNAL) {
-   820			addr_max = pernet->endp_signal_max;
-   821			WRITE_ONCE(pernet->endp_signal_max, addr_max + 1);
-   822		}
-   823		if (entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW) {
-   824			addr_max = pernet->endp_subflow_max;
-   825			WRITE_ONCE(pernet->endp_subflow_max, addr_max + 1);
-   826		}
-   827		if (entry->flags & MPTCP_PM_ADDR_FLAG_LAMINAR) {
-   828			addr_max = pernet->endp_laminar_max;
-   829			WRITE_ONCE(pernet->endp_laminar_max, addr_max + 1);
-   830		}
-   831		if (entry->flags & MPTCP_PM_ADDR_FLAG_FULLMESH) {
-   832			addr_max = pernet->endp_fullmesh_max;
-   833			WRITE_ONCE(pernet->endp_fullmesh_max, addr_max + 1);
-   834		}
-   835	
-   836		pernet->endpoints++;
-   837		if (!entry->addr.port)
-   838			list_add_tail_rcu(&entry->list, &pernet->endp_list);
-   839		else
-   840			list_add_rcu(&entry->list, &pernet->endp_list);
-   841		ret = entry->addr.id;
-   842	
-   843	out:
-   844		spin_unlock_bh(&pernet->lock);
-   845	
-   846		/* just replaced an existing entry, free it */
-   847		if (del_entry) {
-   848			synchronize_rcu();
-   849			__mptcp_pm_release_addr_entry(del_entry);
-   850		}
-   851		return ret;
-   852	}
-   853	
+So the current design is a compromise of the dynamic workloads and fault tolerance.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>As for the implementation in general -- it'd need some tighter
+>connection with existing cgroup selftests (e.g. use integer types like
+>cgroup selftest, utilization/adaptation of existing helpers to reduce
+>copies of same/similar code).
+Keep the same style as other selftests in important for long-term maintaince. 
+We totally agree with it and will cross check it in the next version.
+>
+>
+>> --- a/tools/testing/selftests/cgroup/Makefile
+>> +++ b/tools/testing/selftests/cgroup/Makefile
+>> @@ -14,14 +14,29 @@ TEST_GEN_PROGS += test_freezer
+>>  TEST_GEN_PROGS += test_hugetlb_memcg
+>>  TEST_GEN_PROGS += test_kill
+>>  TEST_GEN_PROGS += test_kmem
+>> +TEST_GEN_PROGS += test_memcg_stat_cross_cpu
+>>  TEST_GEN_PROGS += test_memcontrol
+>
+>Yeah, this is perhaps so much different from test_memcontrol that it
+>deserves a separate prog, OTOH it'd be good to share some common
+>cg/memcg functions across the two (some notes below).
+Good suggestion, we will take more common cgroup functions functions in
+the next version.
+
+>
+>
+>> +unsigned long long cg_get_id(const char *cgroup)
+>
+>This duplicates get_cgroup_id_from_path() from
+>tools/testing/selftests/bpf/cgroup_helpers.c
+I see. Will replace it.
+
+>
+>> +/* ---- allowed CPU set --------------------------------------------------- */
+>> +
+>> +static int *cpu_list; /* ids of the CPUs this process may run on */
+>
+>I think it'd be simpler to just use cpu_set_t and the standard helper
+>macros/functions for this.
+Make sense. I will do it. 
+
+>
+>> +/* Recursively create children of @path. @path must already exist and be recorded. */
+>> +static int build_children(const char *path, int fanout, int depth)
+>> +{
+>> +	char child[PATH_MAX];
+>> +	int i;
+>> +
+>> +	if (depth == 0)
+>> +		return 0;
+>> +
+>> +	/* Enable memory on this interior node so its children get a memcg. */
+>> +	if (cg_write(path, "cgroup.subtree_control", "+memory"))
+>> +		return -1;
+>> +
+>> +	for (i = 0; i < fanout; i++) {
+>> +		snprintf(child, sizeof(child), "%s/c%d", path, i);
+>> +		if (add_node(child, depth == 1, NULL))
+>> +			return -1;
+>
+>is_leaf := depth == 1
+>doesn't look correct (I see below the test builds hierarchies with
+>depth > 1)
+>Ah, it's non-conventional meaning of "leaf", I'd suggest a subtree or
+>partition or similar (IIUC the purpose).
+Yes this misunderstanding mostly comes from the variable naming, we will fix it
+in the next version.
+>
+>
+>> +		if (build_children(child, fanout, depth - 1))
+>> +			return -1;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +static size_t tree_capacity(int fanout, int depth)
+>> +{
+>> +	size_t total = 1, level = 1;
+>> +	int d;
+>> +
+>> +	for (d = 0; d < depth; d++) {
+>> +		level *= fanout;
+>> +		total += level;
+>> +	}
+>> +	return total;
+>> +}
+>> +
+>> +/* The tree is arranged in the DFS order within an array */
+>> +static int build_tree(int fanout, int depth, int *root_fd)
+>> +{
+>> +	n_nodes = 0;
+>> +	n_leaves = 0;
+>> +	nodes = calloc(tree_capacity(fanout, depth), sizeof(*nodes));
+>> +	if (!nodes)
+>> +		return -1;
+>> +
+>> +	if (add_node(subtree_root, depth == 0, root_fd))
+>> +		return -1;
+>> +	return build_children(subtree_root, fanout, depth);
+>> +}
+>> +
+>> +/* ---- cross-CPU charge (one pinning child per leaf) --------------------- */
+>> +
+>> +static pid_t *charger_pids;
+>> +static int n_chargers;
+>> +/* parent pid, for the children's PR_SET_PDEATHSIG race check */
+>> +static pid_t test_pid;
+>> +static int charge_ready[2] = { -1, -1 };	/* child -> parent "ready" barrier */
+>> +static int charge_ctrl[2] = { -1, -1 };	/* parent -> child "exit" (close to signal) */
+>> +
+>> +/*
+>> + * One charging child, dedicated to a single leaf and spread over K CPUs.  It
+>> + * joins its leaf, maps a resident anon region, then faults the region in K
+>> + * slices, each on a different CPU, so this leaf's rstat ends up dirty on K
+>> + * per-cpu trees.  The region stays mapped, so the charge persists while the
+>> + * parent reads.  After signalling readiness the child blocks (holding the
+>> + * charge) until the parent closes the control pipe.  Never returns.
+>> + *
+>> + * @base is this child's starting index into cpu_list; its K CPUs are
+>> + * (base + 0..K-1) mod n_cpu.
+>> + */
+>> +static void charger_child(const struct cg_node *leaf, int base, int k,
+>> +			  size_t resident_bytes)
+>> +{
+>
+>It'd be nicer if this shared alloc_* functions from test_memcontrol.c
+>(module adjustoment to cater both users).
+Will do. Thanks.
+>
+>> +static int file_read_node(const char *path, struct file_snap *o)
+>> +{
+>> +	char buf[8192];
+>> +
+>> +	memset(o, 0, sizeof(*o));
+>> +
+>> +	if (cg_read(path, "memory.stat", buf, sizeof(buf)))
+>> +		return -1;
+>> +	parse_stat(buf, o);
+>
+>We have cg_read_key_long() for such extractions.
+Great. Will use.
+>
+>> +
+>> +/* ---- correctness comparison -------------------------------------------- */
+>> +
+>> +static bool close_enough(__u64 a, __u64 b, __u64 tol)
+>> +{
+>> +	return (a > b ? a - b : b - a) <= tol;
+>> +}
+>
+>See
+>tools/testing/selftests/cgroup/lib/include/cgroup_util.h:values_close()
+Oh I see, thanks!
+>
+>
+>> +
+>> +/* Dump one node's bpf-vs-file stats; called when a mismatch is detected. */
+>> +static void dump_node(int i, const struct memcg_stat_snapshot *b,
+>> +		      const struct file_snap *f)
+>> +{
+>> +	ksft_print_msg("node %d bpf : anon=%llu file=%llu shmem=%llu fmapped=%llu pgfault=%llu\n",
+>> +		       i, b->anon, b->file, b->shmem, b->file_mapped, b->pgfault);
+>> +	ksft_print_msg("node %d file: anon=%llu file=%llu shmem=%llu fmapped=%llu pgfault=%llu\n",
+>> +		       i, f->anon, f->file, f->shmem, f->file_mapped, f->pgfault);
+>> +}
+>> +
+>> +/*
+>> + * Compare the BPF kfunc snapshots (round 1) against the memory.stat values
+>> + * (round 2), node by node.  The two rounds are independent, equivalently
+>> + * charged trees, so the flushed stats are compared within a small tolerance
+>> + * that absorbs per-round overhead (i.e., a charging child's own stack pages).
+>> + * A wrong unit, enum or field in the kfunc path would miss by far more.
+>> + *
+>> + * Two per-round checks verify the flush itself: each leaf was charged
+>> + * resident_bytes of anon spread over K CPUs, so its flushed anon must be at
+>> + * least that; and the root's recursive anon must equal the sum of the leaves'
+>> + * anon (rstat propagated the charge up the tree).
+>> + *
+>> + * Returns 0 if every check passes, -1 otherwise.
+>> + */
+>> +static int check_correctness(const struct memcg_stat_snapshot *bpf,
+>> +			     const struct file_snap *file, const bool *is_leaf,
+>> +			     int n, size_t resident_bytes)
+>> +{
+>> +	__u64 stat_tol = 64 * page_size;
+>> +	__u64 pgf_tol = 1024;
+>
+>These are central values of the test.  It's necessary to explain the
+>choice of them.
+I think it would be good set per_leaf tolerance rather than a total tolerance
+since the errors merges up at root, may be we can try:
+
+	stat_tol = leaves_below(node) * CHARGER_SLACK_PAGES * page_size;
+	pgf_tol  = leaves_below(node) * CHARGER_SLACK_FAULTS;
+
+>
+>
+>> +	__u64 broot = 0, bsum = 0, froot = 0, fsum = 0;
+>> +	int i, mism = 0, flush_bad = 0;
+>> +
+>> +	for (i = 0; i < n; i++) {
+>> +		const struct memcg_stat_snapshot *b = &bpf[i];
+>> +		const struct file_snap *f = &file[i];
+>> +		__u64 bcur = b->usage_pages * page_size;
+>> +
+>> +		/* kfunc path (round 1) compared with memory.stat path (round 2) */
+>> +		if (!close_enough(b->anon, f->anon, stat_tol) ||
+>> +		    !close_enough(b->file, f->file, stat_tol) ||
+>> +		    !close_enough(b->shmem, f->shmem, stat_tol) ||
+>> +		    !close_enough(b->file_mapped, f->file_mapped, stat_tol) ||
+>> +		    !close_enough(b->pgfault, f->pgfault, pgf_tol)) {
+>> +			mism++;
+>> +			dump_node(i, b, f);
+>> +		}
+>> +
+>> +		/* memory.current is live (no flush) and must bound the flushed anon */
+>> +		if (b->anon == 0 || b->anon > bcur) {
+>> +			flush_bad++;
+>> +			ksft_print_msg("node %d: anon=%llu exceeds current=%llu\n",
+>> +				       i, b->anon, bcur);
+>> +		}
+>> +
+>> +		/* each leaf's flush must have gathered the full cross-CPU charge */
+>> +		if (is_leaf[i]) {
+>> +			if (b->anon < resident_bytes || f->anon < resident_bytes) {
+>> +				flush_bad++;
+>> +				ksft_print_msg("node %d: short flush bpf=%llu file=%llu\n",
+>> +					       i, b->anon, f->anon);
+>> +			}
+>> +			bsum += b->anon;
+>> +			fsum += f->anon;
+>> +		}
+>> +		if (i == 0) { /* nodes[0] == subtree_root */
+>> +			broot = b->anon;
+>> +			froot = f->anon;
+>> +		}
+>> +	}
+>> +
+>> +	if (mism) {
+>> +		ksft_print_msg("bpf (round 1) disagrees with memory.stat (round 2)\n");
+>> +		return -1;
+>> +	}
+>> +	if (flush_bad) {
+>> +		ksft_print_msg("flush did not aggregate the cross-cpu charge\n");
+>> +		return -1;
+>> +	}
+>> +	if (broot != bsum || froot != fsum) {
+>> +		ksft_print_msg("root anon != sum of leaf anon: bpf %llu/%llu file %llu/%llu\n",
+>> +			       broot, bsum, froot, fsum);
+>> +		return -1;
+>> +	}
+>> +	if (bsum == 0) {
+>> +		ksft_print_msg("tree carries no anon\n");
+>> +		return -1;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>> +/* ---- one case ---------------------------------------------------------- */
+>> +
+>> +struct testcase {
+>> +	const char *name;
+>> +	int fanout;
+>> +	int depth;
+>> +	int cpus_per_leaf; /* K: CPUs each leaf is charged on; 0 = all CPUs */
+>> +	size_t resident_bytes; /* anon charged per leaf */
+>> +};
+>> +
+>> +/*
+>> + * Remove the subtree in reverse creation order.  Nodes are recorded in DFS
+>> + * order (a parent precedes all its descendants), so iterating backwards
+>> + * removes every child before its parent.
+>> + */
+>> +static void destroy_tree(void)
+>> +{
+>> +	int i;
+>> +
+>> +	if (!nodes)
+>> +		return;
+>> +	for (i = n_nodes - 1; i >= 0; i--)
+>> +		cg_destroy(nodes[i].path);
+>> +	free(nodes);
+>> +	nodes = NULL;
+>> +}
+>> +
+>> +/*
+>> + * Round 1: build and charge a fresh tree, walk it with the BPF iterator (which
+>> + * flushes and reads each cgroup via the memcg kfuncs), and capture one snapshot
+>> + * per node into @snap.  @is_leaf records the tree shape so the later comparison
+>> + * can run after the tree is gone.  Returns the node count, or -1 on failure.
+>> + * The tree is always torn down before returning.
+>> + */
+>> +static int capture_bpf_round(const struct testcase *tc,
+>> +			     struct memcg_stat_snapshot *snap, bool *is_leaf)
+>> +{
+>> +	struct memcg_stat_cross_cpu *skel = NULL;
+>> +	struct bpf_link *link = NULL;
+>> +	int root_fd = -1, ret = -1, i, mfd;
+>> +
+>> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
+>> +		ksft_print_msg("build tree (bpf) failed\n");
+>> +		goto out;
+>> +	}
+>> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
+>> +		goto out;
+>> +
+>> +	skel = memcg_stat_cross_cpu__open();
+>> +	if (!skel) {
+>> +		ksft_print_msg("skel open failed\n");
+>> +		goto out;
+>> +	}
+>> +	if (bpf_map__set_max_entries(skel->maps.results, n_nodes + 8)) {
+>> +		ksft_print_msg("set max_entries failed\n");
+>> +		goto out;
+>> +	}
+>> +	if (memcg_stat_cross_cpu__load(skel)) {
+>> +		ksft_print_msg("skel load failed\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
+>> +	union bpf_iter_link_info linfo = {};
+>> +
+>> +	linfo.cgroup.cgroup_fd = root_fd;
+>> +	linfo.cgroup.order = BPF_CGROUP_ITER_DESCENDANTS_PRE;
+>> +	opts.link_info = &linfo;
+>> +	opts.link_info_len = sizeof(linfo);
+>> +
+>> +	link = bpf_program__attach_iter(skel->progs.cgroup_memcg_stat_cross_cpu,
+>> +					&opts);
+>> +	if (!link) {
+>> +		ksft_print_msg("attach iter failed\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	/* bpf walk through the cgroup tree and fetch result */
+>> +	if (bpf_walk_once(link)) {
+>> +		ksft_print_msg("bpf walk failed\n");
+>> +		goto out;
+>> +	}
+>> +
+>> +	mfd = bpf_map__fd(skel->maps.results);
+>> +	for (i = 0; i < n_nodes; i++) {
+>> +		/* Save the position for the leaf, used for later correctness check */
+>> +		is_leaf[i] = nodes[i].is_leaf;
+>> +		if (bpf_map_lookup_elem(mfd, &nodes[i].id, &snap[i])) {
+>> +			ksft_print_msg("map lookup failed for node %d\n", i);
+>> +			goto out;
+>> +		}
+>> +	}
+>> +	ret = n_nodes;
+>> +out:
+>> +	bpf_link__destroy(link);
+>> +	memcg_stat_cross_cpu__destroy(skel);
+>> +	if (root_fd >= 0)
+>> +		close(root_fd);
+>> +	stop_chargers();
+>> +	destroy_tree();
+>> +	return ret;
+>> +}
+>> +
+>> +/*
+>> + * Round 2: build and charge an identical fresh tree, then read every cgroup via
+>> + * memory.stat / memory.current.  The tree is reset after bpf read, so each
+>> + * read does a real rstat flush.  Returns the node count, or -1 on failure.
+>> + * The tree is always clear before returning.
+>> + */
+>> +static int capture_file_round(const struct testcase *tc, struct file_snap *snap)
+>> +{
+>> +	int root_fd = -1, ret = -1, i;
+>> +
+>> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
+>> +		ksft_print_msg("build tree (file) failed\n");
+>> +		goto out;
+>> +	}
+>> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
+>> +		goto out;
+>> +
+>> +	for (i = 0; i < n_nodes; i++)
+>> +		if (file_read_node(nodes[i].path, &snap[i])) {
+>> +			ksft_print_msg("file read failed for node %d\n", i);
+>> +			goto out;
+>> +		}
+>> +	ret = n_nodes;
+>> +out:
+>> +	if (root_fd >= 0)
+>> +		close(root_fd);
+>> +	stop_chargers();
+>> +	destroy_tree();
+>> +	return ret;
+>> +}
+>> +
+>> +static int run_case(const struct testcase *tc)
+>> +{
+>> +	struct memcg_stat_snapshot *bpf = NULL;
+>> +	struct file_snap *file = NULL;
+>> +	bool *is_leaf = NULL;
+>> +	size_t cap = tree_capacity(tc->fanout, tc->depth);
+>> +	int nb, nf, ret = KSFT_FAIL;
+>> +
+>> +	bpf = calloc(cap, sizeof(*bpf));
+>> +	file = calloc(cap, sizeof(*file));
+>> +	is_leaf = calloc(cap, sizeof(*is_leaf));
+>
+>(This caught my eye, it looks like those could be better members of
+>struct cg_node. But I'm not 100% leaned to it.)
+Good catch, I will move them to the cg_node in next.
+>
+>> +	/* round 2: file reader flushes and reads a fresh, equivalent tree */
+>
+>Hm, I think that's quite a strong assumption that the 2nd tree would be
+>equivalent (wrt memcg state). Could you back it up with some arguments
+>if you want to rely on it?
+Yes. I just measure it and it seems the anon is identical but the pg_fault is
+not. So maybe the two tree design is not necessary. I think maybe we can remove
+two trees in the next version, but just perform one time flush and read from
+both bpf and file. This can remove the noise and provide more accurate results.
+What do you think?
+
+>
+>
+>
+>Thanks for an interesting comparer,
+>Michal
+
+Thanks for your review agian and detailed feedback!
+
+Best,
+Ziyang
+
