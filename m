@@ -1,63 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886053264FB;
-	Sat,  8 Aug 2026 21:06:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E062D837C;
+	Sat,  8 Aug 2026 22:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786223215; cv=none; b=K11vmvqwDNS8bSOGLnwdrAfFS3YUIulGRAVT5BEiM3jvOycCz+mlsmY8EB5rBNo/e4u+KkknjruUR5Mfay3IJV7kKQ5VMe/ni+n/UDoP4D6pMrMRdzw5j/m2wiRmzNjzRoxuQT+sxB1pf1QFvxBML4pR3Z9cNqO77lMneQpCzMQ=
+	t=1786227622; cv=none; b=nluFE1vnqsWX8Hf/GDfxojHOeRnnqLgdLB77WgoqQXOOoQzW9wcavPEsQJb3a2WrRDF2hgXrxQcy5QLQhNjx38ZkNoZs/WWoUAlSDIJ2gsJwJcX9rc9iTKRE1yiss9P9zKbHZ7TImiFVfEpkjj6zc9/kWZNwZz68tX+/7Sp4+sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786223215; c=relaxed/simple;
-	bh=OMM+S3OHPCR7Z+UOUf7fjBeKF7slD0BC7jQ4egU5bPw=;
+	s=arc-20240116; t=1786227622; c=relaxed/simple;
+	bh=ShKimpRPkyn5dp6RpZlNmH6gSFr5rOw/auN6UnVXT3Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=itxHDfcLk2Ae1SxioeaJe1d4JjTVGon0h7dMeq3WQxEuRbArhGtpyB9D/y94iS2yuI1dU68iYUIvR+GHU41Jt0FFgqGg9qWA8No2nmCZ9lWVzkK0qfFW2LZysUP5ZjDye9vqk2wSeLIAU7O89C3DE/5uti1GJvliryJa8eXwR2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MubiluKs; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=gibDNfAa4hEJckoI2hUH9nso4ihvytyrC1+/G+8r/4AFFXf9etQ/28BhI3Ow/7xpkWBRI+VSwYJsn8S2F0OVPAovaLEm+z0QiaEnqTvZ+IBE0J/xTOAwVCW47J5S0bu3fRb8fQmMU9XMNp46wMA9k+4a5QFkLUvxQrO7GZzhFT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=G7zELRmF; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MubiluKs"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="G7zELRmF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786223214; x=1817759214;
+  t=1786227619; x=1817763619;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=OMM+S3OHPCR7Z+UOUf7fjBeKF7slD0BC7jQ4egU5bPw=;
-  b=MubiluKs0QgwQNJ5yMoUXvcarCr1feHEQ5B/g4R1D65owYZ3F96QR2+F
-   f1czBgEWgj0IZoYqVeHX2OcyBJKk7rtUip2t98w/gzMwTN8p3CTvElF5F
-   eYEemXxrN/+64w9+u4Ehr1g67TtPWhr5xy8xtMJ9GQcMnN+agVFERuQum
-   Vk/Bk0tRzNdIztDzwL8+Pb/VPq6Qo7M5rVmugdkyV7yLXfX1sl7pETglC
-   S34Bg79crxFT2G1Vm3Ib28JczfyxMVmEQlSc5NzJQPm+E4gV8cgUYN+yj
-   q/LYjaG8sX27+W7fDuje/+DWfpDSOEEPVol2pxIHzcaoDRxFXfbNSdXYk
-   Q==;
-X-CSE-ConnectionGUID: LuI6v86qRT6kUD0UpUCmaw==
-X-CSE-MsgGUID: 6L27ETouQeWfIbASf3CQ3Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11869"; a="97445340"
+  bh=ShKimpRPkyn5dp6RpZlNmH6gSFr5rOw/auN6UnVXT3Y=;
+  b=G7zELRmFQkv09HCTCoIY61pW7ZEFM9oNd0xl7woQo8ffv5DuQYfRnxoM
+   0Y0M+lxFXOD47VbVoSeV4efJKMLZSiMW/jWh/0CsTMPv2yj3UfhRKtdQE
+   IWiw0Hh6fW0rbiWFgWR9xg9h+93KabVWBm5LmSuyURKhJQaVzr5G+mNFe
+   y3wgDj02ZmEL/CzZFy2bX3MYJCXT4YERaPIJaWEWlaVhB2wiscLBIwiS4
+   chjwsWn85z3zLIZe5jfb0AedzZyaheMprXCU4/AlbN9f8ILZARskQ/2pf
+   ZI1Ql1ITuEvIJXkhBgN+U92iH5eY6cO0yVsQqNNqEYVB2UcfYxfXhbDIh
+   w==;
+X-CSE-ConnectionGUID: I6LMs6nbTlKn5lI1QmQ0EQ==
+X-CSE-MsgGUID: 9qlpPGtsREGuUeeHH3WoOw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11869"; a="86903811"
 X-IronPort-AV: E=Sophos;i="6.25,212,1779174000"; 
-   d="scan'208";a="97445340"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2026 14:06:53 -0700
-X-CSE-ConnectionGUID: 3aMzCevsSYyqDQEVfZN9Nw==
-X-CSE-MsgGUID: al7TM1AMRaGcA7pHMQsLwQ==
+   d="scan'208";a="86903811"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2026 15:20:18 -0700
+X-CSE-ConnectionGUID: zw4HOGf+Qve+KuM4A2rF+Q==
+X-CSE-MsgGUID: MEkLvKlgRPa6dg6g3zGnEQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,212,1779174000"; 
-   d="scan'208";a="263308042"
+   d="scan'208";a="266545170"
 Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Aug 2026 14:06:50 -0700
+  by orviesa004.jf.intel.com with ESMTP; 08 Aug 2026 15:20:17 -0700
 Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wsoFk-00000000Km1-0bcy;
-	Sat, 08 Aug 2026 21:06:48 +0000
-Date: Sun, 9 Aug 2026 05:05:53 +0800
+	id 1wspOo-00000000Ksn-3t5T;
+	Sat, 08 Aug 2026 22:20:14 +0000
+Date: Sun, 9 Aug 2026 06:19:33 +0800
 From: kernel test robot <lkp@intel.com>
-To: Wentao Liang <vulab@iscas.ac.cn>, marcel@holtmann.org,
-	luiz.dentz@gmail.com
+To: Sun YangKai <sunk67188@gmail.com>, linux-btrfs@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>, stable@vger.kernel.org
-Subject: Re: [PATCH] btmrvl: Fix hdev dangling pointer and error code in
- register_hdev
-Message-ID: <202608090403.IZoIz1yQ-lkp@intel.com>
-References: <20260625160607.81615-1-vulab@iscas.ac.cn>
+	Sun YangKai <sunyangkai@fnnas.com>
+Subject: Re: [PATCH] btrfs: check if root is readonly when setting posix acl
+Message-ID: <202608090528.DQ0KtccR-lkp@intel.com>
+References: <20260709071529.4033-1-sunk67188@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,89 +63,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260625160607.81615-1-vulab@iscas.ac.cn>
+In-Reply-To: <20260709071529.4033-1-sunk67188@gmail.com>
 
-Hi Wentao,
+Hi Sun,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on bluetooth-next/master]
-[also build test WARNING on bluetooth/master linus/master v7.2-rc6 next-20260807]
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.2-rc6]
+[cannot apply to kdave/for-next next-20260807]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Wentao-Liang/btmrvl-Fix-hdev-dangling-pointer-and-error-code-in-register_hdev/20260808-022129
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20260625160607.81615-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] btmrvl: Fix hdev dangling pointer and error code in register_hdev
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260809/202608090403.IZoIz1yQ-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260809/202608090403.IZoIz1yQ-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sun-YangKai/btrfs-check-if-root-is-readonly-when-setting-posix-acl/20260807-183739
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260709071529.4033-1-sunk67188%40gmail.com
+patch subject: [PATCH] btrfs: check if root is readonly when setting posix acl
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260809/202608090528.DQ0KtccR-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260809/202608090528.DQ0KtccR-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608090403.IZoIz1yQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608090528.DQ0KtccR-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/bluetooth/btmrvl_main.c:685:6: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     685 |         if (!hdev) {
-         |             ^~~~~
-   drivers/bluetooth/btmrvl_main.c:726:9: note: uninitialized use occurs here
-     726 |         return ret;
-         |                ^~~
-   drivers/bluetooth/btmrvl_main.c:685:2: note: remove the 'if' if its condition is always false
-     685 |         if (!hdev) {
-         |         ^~~~~~~~~~~~
-     686 |                 BT_ERR("Can not allocate HCI device");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     687 |                 goto err_hdev;
-         |                 ~~~~~~~~~~~~~~
-     688 |         }
-         |         ~
-   drivers/bluetooth/btmrvl_main.c:682:9: note: initialize the variable 'ret' to silence this warning
-     682 |         int ret;
-         |                ^
-         |                 = 0
-   1 warning generated.
+>> fs/btrfs/acl.c:110:26: error: call to undeclared function 'BTRFS_I'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     110 |         if (btrfs_root_readonly(BTRFS_I(inode)->root))
+         |                                 ^
+>> fs/btrfs/acl.c:110:42: error: member reference type 'int' is not a pointer
+     110 |         if (btrfs_root_readonly(BTRFS_I(inode)->root))
+         |                                 ~~~~~~~~~~~~~~  ^
+   2 errors generated.
 
 
-vim +685 drivers/bluetooth/btmrvl_main.c
+vim +/BTRFS_I +110 fs/btrfs/acl.c
 
-132ff4e5fa8dfb Bing Zhao              2009-06-02  677  
-64061607eab7cb Bing Zhao              2010-03-03  678  int btmrvl_register_hdev(struct btmrvl_private *priv)
-132ff4e5fa8dfb Bing Zhao              2009-06-02  679  {
-132ff4e5fa8dfb Bing Zhao              2009-06-02  680  	struct hci_dev *hdev = NULL;
-70a7808b50b119 Abhishek Pandit-Subedi 2020-06-10  681  	struct btmrvl_sdio_card *card = priv->btmrvl_dev.card;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  682  	int ret;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  683  
-132ff4e5fa8dfb Bing Zhao              2009-06-02  684  	hdev = hci_alloc_dev();
-132ff4e5fa8dfb Bing Zhao              2009-06-02 @685  	if (!hdev) {
-132ff4e5fa8dfb Bing Zhao              2009-06-02  686  		BT_ERR("Can not allocate HCI device");
-132ff4e5fa8dfb Bing Zhao              2009-06-02  687  		goto err_hdev;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  688  	}
-132ff4e5fa8dfb Bing Zhao              2009-06-02  689  
-132ff4e5fa8dfb Bing Zhao              2009-06-02  690  	priv->btmrvl_dev.hcidev = hdev;
-155961e8001719 David Rheinsberg       2012-02-09  691  	hci_set_drvdata(hdev, priv);
-132ff4e5fa8dfb Bing Zhao              2009-06-02  692  
-c13854cef47510 Marcel Holtmann        2010-02-08  693  	hdev->bus   = HCI_SDIO;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  694  	hdev->open  = btmrvl_open;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  695  	hdev->close = btmrvl_close;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  696  	hdev->flush = btmrvl_flush;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  697  	hdev->send  = btmrvl_send_frame;
-4b245722cabc6e Amitkumar Karwar       2013-10-01  698  	hdev->setup = btmrvl_setup;
-27b869f59d5d98 Amitkumar Karwar       2014-07-18  699  	hdev->set_bdaddr = btmrvl_set_bdaddr;
-4539ca67fe8ede Luiz Augusto von Dentz 2021-10-01  700  	hdev->wakeup = btmrvl_wakeup;
-70a7808b50b119 Abhishek Pandit-Subedi 2020-06-10  701  	SET_HCIDEV_DEV(hdev, &card->func->dev);
-64061607eab7cb Bing Zhao              2010-03-03  702  
-132ff4e5fa8dfb Bing Zhao              2009-06-02  703  	ret = hci_register_dev(hdev);
-132ff4e5fa8dfb Bing Zhao              2009-06-02  704  	if (ret < 0) {
-132ff4e5fa8dfb Bing Zhao              2009-06-02  705  		BT_ERR("Can not register HCI device");
-b10393b3962ee8 Wentao Liang           2026-06-26  706  		goto err_hci_register_dev_free;
-132ff4e5fa8dfb Bing Zhao              2009-06-02  707  	}
-132ff4e5fa8dfb Bing Zhao              2009-06-02  708  
+   102	
+   103	int btrfs_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+   104			  struct posix_acl *acl, int type)
+   105	{
+   106		int ret;
+   107		struct inode *inode = d_inode(dentry);
+   108		umode_t old_mode = inode->i_mode;
+   109	
+ > 110		if (btrfs_root_readonly(BTRFS_I(inode)->root))
 
 --
 0-DAY CI Kernel Test Service
