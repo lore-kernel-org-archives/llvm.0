@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475433D300D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C58F3D3334
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786191876; cv=none; b=h/UFuvTqV9RHRTXnpAKzznE27G1CsN82Pqc0Ltw9o5+LBNnMo5eXuODP92iGiWRHW7xOj4YnBD5pfUCqzgkm8NDPXrgRyMVOlM7MGCW+0H40yKfy4hp/YTJJEr3B9f9LNcl35XfLHPzo4TykB7xKLObp3/L5HD7xytKVkcp+e7A=
+	t=1786191876; cv=none; b=Bn4FI3ieA5jkul/2a6L49Td7SSIDVewcO8O6hm5LOeaLmsvN9PKMP5eUE9ZNK9evulKPx0Fb5AV5nw9bX/ehPfXz3xpQk/eWN5wk/ljGxof7NzA3VO7Xd0+BG1xpFcjLmRxUJqBmDtw5YpAcZ6SLUFPBFgO6w/7DLufDA3bk7ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786191876; c=relaxed/simple;
-	bh=5YeuKHpEOaBE6ODOFH8aCpiibLr97M6y7BQzxMRaeXg=;
+	bh=3IXt5lzOugwDrVmzWldpoURS7haQ8iXpNtrj1nacML8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MICUMRUO/AjVYmofr3WVyisfgbmVOFZO9IzReKJEHjnqCn+iClpY2bSRtW66eWD3OXdH11Q8/oM+FhSu4vL1CQbovcf1GJprxxmUg2dk+V5mch9BCL0JLaCIeV0rD7SSJYa/1duH+sH5yk9mnDKEtctdnW3MVgbjgz95jEZXiPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=V4/euppdZgCD9yh4s30bPScGPhREgCmHOBxrCm1AQgKbjoR3pw61YVOxlj7g4g9S4f7LRvmi5/ZtARomvHZx1c8nsev3tSba5iABrIw9Xxq1YuUYQGSNlxM9viryQMa1L5iANQEScA6Xm6bqTt3MpQCx9ggfdqV4/oQbAX1l/io=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvD4FrDzKHNJM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvD0D7rzKHNGm
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:08 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id B1C944058F
+	by mail.maildlp.com (Postfix) with ESMTP id 26CC8409A7
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:19 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S25;
-	Sat, 08 Aug 2026 20:24:19 +0800 (CST)
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S20;
+	Sat, 08 Aug 2026 20:24:18 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 23/23] perf annotate-arm64: Support 'mrs' instruction to track 'current' pointer
-Date: Sat,  8 Aug 2026 12:24:00 +0000
-Message-Id: <20260808122400.2961238-24-wutengda@huaweicloud.com>
+Subject: [PATCH v4 18/23] perf annotate-arm64: Support stack variable tracking
+Date: Sat,  8 Aug 2026 12:23:55 +0000
+Message-Id: <20260808122400.2961238-19-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
@@ -57,201 +57,279 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S25
-X-Coremail-Antispam: 1UD129KBjvJXoW3JrW3KFykCr4xKw1DKryxAFb_yoWxJw4fpa
-	yDC34DGrs7Jw4aganxJFWUZryfK393Ww15Kr90ywsayF47Kr1xK3WktFW2kay5Jr95uw17
-	Jr4DKrs8Ww42vF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S20
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xry3ArWfKFWrWFWDWr17Jrb_yoW3uw4xpF
+	WDGa4rWrs7Jr4SgFsxJr4UJr93Ww4kKw1jkryDuws2yFy7tF1rKayvyayavFW5Gr97Zw15
+	Jw1DCr4DXw47taDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
 	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6x
-	kF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF
-	04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-	18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vI
-	r41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr1j6r
-	xdMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY
-	6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
+	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state() for arm64 to handle the 'mrs' instruction,
-enabling the tracking of the 'current' task pointer in the kernel.
+Extend update_insn_state() for arm64 to track data types stored on the
+stack. This allows 'perf annotate' to maintain type information for
+local variables that are spilled to or loaded from stack slots.
 
-On arm64, the kernel uses the 'sp_el0' system register to store the
-address of the currently executing 'struct task_struct'. This is
-typically accessed via the 'get_current()' inline function, resulting
-in the instruction 'mrs xN, sp_el0'.
+The implementation handles:
 
-To resolve the data type of the target register, first verify the
-access is to 'sp_el0' within a kernel DSO. Then, locate the
-'get_current()' inline function's DWARF Die at the current PC and
-extract its return type (which is 'struct task_struct *').
+1. Stack Loads (LDR): Identify when a register is loaded from a stack
+   slot and update the register's type state based on the tracked
+   stack content or compound member types.
 
-Introduce 'task_struct_cache' to cache the DWARF offset of task_struct
-alongside its corresponding dbg handle. This is particularly important
-because the compiler-generated stack canary check code (which loads from
-'current->stack_canary') often exists in code sections or leaf functions
-where the local Compilation Unit (CU) lacks a full 'struct task_struct'
-definition. Caching the offset allows 'perf annotate' to consistently
-resolve task-related fields across the entire kernel binary.
+2. Stack Stores (STR): Update or create new stack state entries when
+   a tracked register type is stored to the stack.
 
-A real-world example is shown below:
+Similar to loads, stores also support saving one or two registers
+(in the case of 'stp'). Therefore, propagate_store_reg_state() is
+introduced. The overall offset calculation follows the same logic as
+the load implementation:
 
-  ffff8000800deee8 <kthread_blkcg>:
-  ffff8000800deef0:  mrs  x0, sp_el0    // x0 = current
-* ffff8000800deef4:  ldr  w1, [x0, #44]
+  src->reg1: reg_offset = get_reg_index_offset()
+  src->reg2: reg_offset = get_reg_index_offset() + reg_size(src->reg1)
 
-Before this commit, the type flow starts with no information:
+With these changes, the instruction tracker can now follow data types
+as they move between registers and memory, specifically for function
+local variables and compiler-spilled values on arm64.
 
-  chk [c] reg0 offset=0x2c ok=0 kind=0 cfa : no type information
-  final result: no type information
-
-After this commit, the tracker identifies the 'current' pointer
-from the system register:
-
-  mrs [8] sp_el0 -> reg0 type='struct task_struct*'
-  chk [c] reg0 offset=0x2c ok=1 kind=1 (struct task_struct*) : Good!
-  found by insn track: 0x2c(reg0) type-offset=0x2c
-  final result: type='struct task_struct'
-
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 97 ++++++++++++++++++-
- 1 file changed, 95 insertions(+), 2 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 161 ++++++++++++++++--
+ 1 file changed, 148 insertions(+), 13 deletions(-)
 
 diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index b01fa6cf865f..9d1f315dcb28 100644
+index ed0f0ef2877d..6e09e9707256 100644
 --- a/tools/perf/util/annotate-arch/annotate-arm64.c
 +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -15,6 +15,7 @@
- #include "../dso.h"
- #include "../map.h"
- #include "../symbol.h"
-+#include "../strbuf.h"
+@@ -407,6 +407,7 @@ static void adjust_reg_index_state(struct type_state *state,
+  * to the source struct's field offset.
+  */
+ static int propagate_load_reg_state(struct type_state *state,
++				    struct data_loc_info *dloc,
+ 				    struct disasm_line *dl, int dreg,
+ 				    struct annotated_op_loc *src,
+ 				    int reg_offset, const char *insn_name)
+@@ -416,6 +417,8 @@ static int propagate_load_reg_state(struct type_state *state,
+ 	Dwarf_Die type_die;
+ 	u32 insn_offset = dl->al.offset;
+ 	int sreg = src->reg1;
++	int fbreg = dloc->fbreg;
++	int fboff = 0;
  
- struct arch_arm64 {
- 	struct arch arch;
-@@ -889,6 +890,96 @@ static void update_adrp_insn_state(struct type_state *state,
- 		     insn_offset, tsr->imm_value, dreg);
+ 	if (!has_reg_type(state, dreg))
+ 		return -1;
+@@ -423,7 +426,52 @@ static int propagate_load_reg_state(struct type_state *state,
+ 	tsr = &state->regs[dreg];
+ 	tsr->copied_from = -1;
+ 
++	if (dloc->fb_cfa) {
++		u64 ip = dloc->ms->sym->start + dl->al.offset;
++		u64 pc = map__rip_2objdump(dloc->ms->map, ip);
++
++		if (die_get_cfa(dloc->di->dbg, pc, &fbreg, &fboff) < 0)
++			fbreg = -1;
++	}
++
+ retry:
++	/* Check stack variables with offset */
++	if (sreg == fbreg || sreg == state->stack_reg) {
++		struct type_state_stack *stack;
++		int offset = sreg == fbreg ? reg_offset - fboff : reg_offset;
++
++		stack = find_stack_state(state, offset);
++		if (stack == NULL) {
++			return -1;
++		} else if (!stack->compound) {
++			tsr->type = stack->type;
++			tsr->kind = stack->kind;
++			tsr->offset = stack->ptr_offset;
++			tsr->imm_value = stack->imm_value;
++			tsr->ok = true;
++		} else if (die_get_member_type(&stack->type,
++					       offset - stack->offset,
++					       &type_die)) {
++			tsr->type = type_die;
++			tsr->kind = TSR_KIND_TYPE;
++			tsr->offset = 0;
++			tsr->imm_value = 0;
++			tsr->ok = true;
++		} else {
++			return -1;
++		}
++
++		if (sreg == fbreg) {
++			pr_debug_dtp("%s [%x] -%#x(stack) -> reg%d",
++				     insn_name, insn_offset, -offset, dreg);
++		} else {
++			pr_debug_dtp("%s [%x] %#x(reg%d) -> reg%d",
++				     insn_name, insn_offset, offset, sreg, dreg);
++		}
++		pr_debug_type_name(&tsr->type, tsr->kind);
++		return 0;
++	}
++
+ 	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok)
+ 		return -1;
+ 
+@@ -460,6 +508,7 @@ static int propagate_load_reg_state(struct type_state *state,
  }
  
-+static struct {
-+	Dwarf_Off dieoff;
-+	Dwarf *dbg;
-+} task_struct_cache;
-+
-+static void update_mrs_insn_state(struct type_state *state,
-+				  struct data_loc_info *dloc, Dwarf_Die *cu_die,
-+				  struct disasm_line *dl,
-+				  struct annotated_op_loc *dst)
+ static void update_load_insn_state(struct type_state *state,
++				   struct data_loc_info *dloc,
+ 				   struct disasm_line *dl,
+ 				   struct annotated_op_loc *src,
+ 				   struct annotated_op_loc *dst)
+@@ -472,7 +521,7 @@ static void update_load_insn_state(struct type_state *state,
+ 		goto out_err_adjust;
+ 
+ 	/* Handle the first destination register */
+-	if (propagate_load_reg_state(state, dl, dst->reg1, src,
++	if (propagate_load_reg_state(state, dloc, dl, dst->reg1, src,
+ 				     reg_offset, insn_name))
+ 		goto out_err_adjust;
+ 
+@@ -481,7 +530,7 @@ static void update_load_insn_state(struct type_state *state,
+ 		int reg_size = arm64__reg_size(dl->ops.target.raw);
+ 
+ 		if (reg_size < 0 ||
+-		    propagate_load_reg_state(state, dl, dst->reg2, src,
++		    propagate_load_reg_state(state, dloc, dl, dst->reg2, src,
+ 					     reg_offset + reg_size, insn_name))
+ 			goto out_err_adjust;
+ 	}
+@@ -498,6 +547,100 @@ static void update_load_insn_state(struct type_state *state,
+ 	goto out_adjust;
+ }
+ 
++/*
++ * For store insns: propagate type from @sreg to the memory location
++ * referenced by @dreg, applying @reg_offset to the destination memory offset.
++ */
++static int propagate_store_reg_state(struct type_state *state,
++				     struct data_loc_info *dloc,
++				     struct disasm_line *dl, int sreg, int dreg,
++				     int reg_offset, const char *insn_name)
 +{
 +	struct type_state_reg *tsr;
-+	Dwarf_Die type_die;
 +	u32 insn_offset = dl->al.offset;
-+	int dreg = dst->reg1;
-+	Dwarf_Die func_die;
-+	Dwarf_Attribute attr;
-+	u64 ip, pc;
++	int fbreg = dloc->fbreg;
++	int fboff = 0;
 +
-+	if (!has_reg_type(state, dreg))
-+		return;
++	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok)
++		return -1;
 +
-+	tsr = &state->regs[dreg];
-+	tsr->copied_from = -1;
++	if (dloc->fb_cfa) {
++		u64 ip = dloc->ms->sym->start + dl->al.offset;
++		u64 pc = map__rip_2objdump(dloc->ms->map, ip);
 +
-+	/* Handle case difference: LLVM (SP_EL0) vs objdump (sp_el0) */
-+	if (!dso__kernel(map__dso(dloc->ms->map)) ||
-+	    strcasecmp(dl->ops.source.raw, "sp_el0")) {
-+		invalidate_reg_state(tsr);
-+		return;
++		if (die_get_cfa(dloc->di->dbg, pc, &fbreg, &fboff) < 0)
++			fbreg = -1;
 +	}
 +
-+	ip = dloc->ms->sym->start + dl->al.offset;
-+	pc = map__rip_2objdump(dloc->ms->map, ip);
++	/* Check stack variables with offset */
++	if (dreg == fbreg || dreg == state->stack_reg) {
++		struct type_state_stack *stack;
++		int offset = dreg == fbreg ? reg_offset - fboff : reg_offset;
 +
++		tsr = &state->regs[sreg];
++
++		stack = find_stack_state(state, offset);
++		if (stack) {
++			if (!stack->compound)
++				set_stack_state(stack, offset, tsr->kind, &tsr->type,
++						tsr->offset, tsr->imm_value);
++			/*
++			 * If it's a compound type, it means attempting to
++			 * write to a member value of the compound type without
++			 * changing the compound type itself, so do nothing.
++			 */
++		} else {
++			findnew_stack_state(state, offset, tsr->kind, &tsr->type,
++					    tsr->offset, tsr->imm_value);
++		}
++
++		if (dreg == fbreg) {
++			pr_debug_dtp("%s [%x] reg%d -> -%#x(stack)",
++				     insn_name, insn_offset, sreg, -offset);
++		} else {
++			pr_debug_dtp("%s [%x] reg%d -> %#x(reg%d)",
++				     insn_name, insn_offset, sreg, offset, dreg);
++		}
++		if (tsr->offset != 0) {
++			pr_debug_dtp(" reg%d offset %#x ->",
++				     sreg, tsr->offset);
++		}
++		pr_debug_type_name(&tsr->type, tsr->kind);
++	}
 +	/*
-+	 * Invalidate cached DIE offset if the debug info handle changed
-+	 * (e.g. switching between vmlinux and a kernel module).
++	 * Ignore other transfers since it'd set a value in a struct
++	 * and won't change the type.
 +	 */
-+	if (task_struct_cache.dbg != dloc->di->dbg) {
-+		task_struct_cache.dieoff = 0;
-+		task_struct_cache.dbg = dloc->di->dbg;
++
++	return 0;
++}
++
++static void update_store_insn_state(struct type_state *state,
++				    struct data_loc_info *dloc,
++				    struct disasm_line *dl,
++				    struct annotated_op_loc *src,
++				    struct annotated_op_loc *dst)
++{
++	int reg_offset = get_reg_index_offset(dst);
++	const char *insn_name = src->multi_regs ? "stp" : "str";
++
++	/* Handle the first source register */
++	propagate_store_reg_state(state, dloc, dl, src->reg1, dst->reg1,
++				  reg_offset, insn_name);
++
++	/* Handle the second source register (stp only) */
++	if (src->multi_regs) {
++		int reg_size = arm64__reg_size(dl->ops.source.raw);
++
++		if (reg_size >= 0)
++			propagate_store_reg_state(state, dloc, dl, src->reg2,
++						  dst->reg1, reg_offset + reg_size,
++						  insn_name);
 +	}
 +
-+	if (!task_struct_cache.dieoff ||
-+	    !dwarf_offdie(dloc->di->dbg, task_struct_cache.dieoff, &type_die)) {
-+		struct strbuf sb;
-+		char *type_name;
-+		/*
-+		 * Find the inline function 'get_current()' Dwarf_Die
-+		 * and obtain its return value data type, which should
-+		 * be 'struct task_struct*'.
-+		 */
-+		if (!die_find_inlinefunc(cu_die, pc, &func_die) ||
-+		    !die_compare_name(&func_die, "get_current") ||
-+		    !dwarf_attr_integrate(&func_die, DW_AT_type, &attr) ||
-+		    !dwarf_formref_die(&attr, &type_die)) {
-+			invalidate_reg_state(tsr);
-+			return;
-+		}
-+
-+		strbuf_init(&sb, 32);
-+		die_get_typename_from_type(&type_die, &sb);
-+		type_name = strbuf_detach(&sb, NULL);
-+
-+		if (!type_name || strcmp(type_name, "struct task_struct*")) {
-+			invalidate_reg_state(tsr);
-+			free(type_name);
-+			return;
-+		}
-+
-+		/*
-+		 * Cache the 'struct task_struct*' die offset globally.
-+		 * This allows us to resolve stack canary accesses even
-+		 * in CUs that lack a full task_struct definition (e.g.,
-+		 * compiler-generated entry/exit code).
-+		 */
-+		task_struct_cache.dieoff = dwarf_dieoffset(&type_die);
-+		free(type_name);
-+	}
-+
-+	tsr->type = type_die;
-+	tsr->kind = TSR_KIND_TYPE;
-+	tsr->offset = 0;
-+	tsr->imm_value = 0;
-+	tsr->ok = true;
-+
-+	pr_debug_dtp("mrs [%x] sp_el0 -> reg%d", insn_offset, dreg);
-+	pr_debug_type_name(&type_die, tsr->kind);
++	adjust_reg_index_state(state, dst, insn_name, dl->al.offset);
 +}
 +
  static void update_insn_state_arm64(struct type_state *state,
  				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
  				    struct disasm_line *dl)
-@@ -951,7 +1042,7 @@ static void update_insn_state_arm64(struct type_state *state,
- 	 * prevent stale type info from propagating to subsequent instructions.
- 	 */
- 	if (has_reg_type(state, dst->reg1) &&
--	    strcmp(dl->ins.name, "adrp") &&
-+	    strcmp(dl->ins.name, "mrs") && strcmp(dl->ins.name, "adrp") &&
- 	    strcmp(dl->ins.name, "add") && strcmp(dl->ins.name, "mov") &&
- 	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
- 		pr_debug_dtp("%s [%x] invalidate reg%d",
-@@ -965,7 +1056,9 @@ static void update_insn_state_arm64(struct type_state *state,
- 		return;
- 	}
+@@ -574,18 +717,10 @@ static void update_insn_state_arm64(struct type_state *state,
  
--	if (!strcmp(dl->ins.name, "adrp"))
-+	if (!strcmp(dl->ins.name, "mrs"))
-+		update_mrs_insn_state(state, dloc, cu_die, dl, dst);
-+	else if (!strcmp(dl->ins.name, "adrp"))
- 		update_adrp_insn_state(state, dl, dst);
- 	else if (!strcmp(dl->ins.name, "add"))
- 		update_add_insn_state(state, dl, src, dst);
+ 	/* Memory to register transfers */
+ 	if (!strncmp(dl->ins.name, "ld", 2))
+-		update_load_insn_state(state, dl, src, dst);
++		update_load_insn_state(state, dloc, dl, src, dst);
+ 	/* Register to memory transfers */
+-	else if (!strncmp(dl->ins.name, "st", 2)) {
+-		/*
+-		 * Ignore transfers since it'd set a value in a struct
+-		 * and won't change the type.
+-		 *
+-		 * Needs to update the pre-index and post-index addressing
+-		 * modes for the destination register.
+-		 */
+-		adjust_reg_index_state(state, dst, "str", insn_offset);
+-	}
++	else if (!strncmp(dl->ins.name, "st", 2))
++		update_store_insn_state(state, dloc, dl, src, dst);
+ }
+ #endif
+ 
 -- 
 2.34.1
 
