@@ -1,75 +1,55 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2533F9F5B
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868AE412C0D
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:44:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786192782; cv=none; b=b5tEjpT45/5sBreRgyi8/zu3T0EbaqPMRldLErRXUvBUixP0PqDLXy2VLT5/4OdyUyisk8fci/rMOBagQ2gsjL/QMzJC6ZMdxrci3O13OfrzQmP4Ayej+6ro6Q2+4D4BaFRSKGI07QLD6nI8jVmej06J/VFhgLW8x/ILpTw8Lds=
+	t=1786193076; cv=none; b=m3nSnAiA+9UdTCQ2G7t30LE+FeAbLizRNcjpQREoTR5TPeq/KMSZGiOZwgtzwmfhWegbwwj9JtqgtAELtStOus8HxZrLYctvJKRvwTJV5bV494MpdsmIlk5Ru68x+z82nr1uH0RbUZcyhH1D+715uO+HF7oXO3H/YHyVzjAGYLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786192782; c=relaxed/simple;
-	bh=85srkDPeZbBLcEV4biJz4+YbelRQVTtBPqaA0MiBB1Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RELZDns3h4/0lvzjbHqdfGxi6u/4UE2/gmkLouXmkjEgm5tVEejv8TIiVu4qj5TW5uRyzyxQIkJlJ6OhKGEDgIGEBK78nBgEdm0YMWTsfSk849AdcpLQAhagj5liRmacZZA1AwuUe/4fLm/w3TFCa3S7r6NDsTgq0KA7bA7Y/DU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fj6mV0Lu; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fj6mV0Lu"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47fde295992so292177f8f.0
-        for <llvm@lists.linux.dev>; Sat, 08 Aug 2026 05:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786192765; x=1786797565; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=hILZct8Q31WMh1Hewr5Ii+nB0Cbikr9Irq+ZzUZUa1E=;
-        b=fj6mV0LuY+uUcD5hae0TnuPdCEM6mPC2PTYuCjcowXir/UH5+1k16aavn+NVggxqn0
-         iEPlxXwLYqV5nm1NDqFdovCqypmCuTV8I/IA9CiIE5YP1LlyuzkiLCoTpfehp2mc5EZS
-         f6GQe2JNKEj/K6KTyDgBN44T+Gpnhpbn50tkehEdqCKNEKvLdbMBHbPIrC20b/p+7oFB
-         5Lk0dxQYTD5utw81o92y3FFVDhH5GmD0byYOZzzTiMhOEwXGOz/WWOWTCsiIp4Y6JcUk
-         aABVzOTCWThM8KJxH9FhW0pGz2kGmope3UnzC4QYjJdV7wxe5Pyeg90JfX2TGR0OiLhX
-         OKTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786192765; x=1786797565;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=hILZct8Q31WMh1Hewr5Ii+nB0Cbikr9Irq+ZzUZUa1E=;
-        b=CyupuuYv271LMdS+8AVJEZgLaMTGu1ouE+uswMTHFw1YGKOI85OdgqY0NNZ9Dj5RkF
-         Q8ND1+SZB+r45WWsiSCsUlgecrsnC6YF2ck3ofHR/fnlNSJ9eOw4MsOxh5ZbMJG5/wT9
-         iptRHF5rmviWJA27AzNe2G9VjQBrHJm2zJYyN1Cgo1ujhL7dIPohaLdgUy75gQfU+BKD
-         xwaru0dc/vedGDJFIRC7BDQPsnFtKq8RDBCqNAxGFd20jfVJY+m/8Dj8NhkRrEQoaxc4
-         NfEMkFp/dVbT7SGzcfF9EvwFU34wHGsXnbvCWmAwro/fK924074qiytKOu8hFUlxutVJ
-         raGQ==
-X-Forwarded-Encrypted: i=1; AHgh+RorCx6gSBv07spnGw9/Ocr7vOCW7YtUXKn791DrQ45bP9MSgvNQlvay/MbSPVGH29icRHZQ@lists.linux.dev
-X-Gm-Message-State: AOJu0Yyw0HsxKdYnLDvd+KkNYxtKRSs8P/0f8yPUNZ4wc9YezAPGVi2h
-	RtOTxuF1/wS9CEhPpELTW5Cy9YVovLOyd45k7Ft0nWgDVF1HRbBE5ICO
-X-Gm-Gg: AR+sD10supdqteO6S6B1JIakaQFGH+Nk/BQ9F0UTgHA5U3I0cNJr1bJo8eJ+3NeMCq4
-	bz67Myr1JIcxkxb1emaVotHYaQMr35YQSo0oEJRnyKBwrb6Qbt09Jb+iUheszzCJVAYLzb58wUU
-	EtsNoexPrT0ldWXY/3VYutZBTybmlxlJ9/nITYWyc+OfjKwi51sn0j+KsFF/p/tKXpFSMOaofsp
-	wsCJUtuYn0tvN9rtUbm4s8ojJF/8mCkKlUhPBpVNVS/+WCpAGimqlaipK0pa14j09koXzK2rBrf
-	RzBu5StCTXy14hsxPRjOJL+s13OH1d33dtpltV9BfHVmYJZ0lMKD9fLanrUC95fIYkngnP21HUZ
-	QdClyIc7FphsLCUo4YtEHx0tDfpsBmllueq25rMP90lLuJ1gzFjGfw+lk76eeurYKjoOe/XlhTK
-	/SLU3T0BCqLrE9+Y2ArEZ9YyE81+xjsL9jbwWxi9c+ghRj8+xZDF2cTpgk8jye3OB8Eqvp4sgXU
-	SFD0ti2ijrcujegrg2JXEksb9e/SBEmkF3EXuVcR5q2EfNCPyAtHaJFBuJMlNeelfoHFgICf/u2
-	YoTcvgvD/MnwXWXLF8lY
-X-Received: by 2002:a05:6000:609:b0:47f:853c:ad7b with SMTP id ffacd0b85a97d-48131962d3emr6810412f8f.9.1786192765075;
-        Sat, 08 Aug 2026 05:39:25 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-077-007-004-134.77.7.pool.telefonica.de. [77.7.4.134])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-480021e8c5asm16200335f8f.18.2026.08.08.05.39.24
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 08 Aug 2026 05:39:24 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Christian Brauner <brauner@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Jan Kara <jack@suse.cz>,
-	linux-fsdevel@vger.kernel.org,
+	s=arc-20240116; t=1786193076; c=relaxed/simple;
+	bh=DIWPjGhgFL2oNitibJUYkj4dRBVK4sRIVlI7HhAotbg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=GDgsSJC3ZwLesUemy0BQFOlLq1nQCnj42E1ZlAvwrwGohSfQVgNipj1eEdnVDUBr+vH4/xklSUsllDVCOpoxk5JB7A7k4HbdZvnvCDO6Zf+KQSttdvQps0uLKVgbyR+CRkpaNvlxdhV3z9XHC71YmqJno/RPfr3zbqTE+5ZDRFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvB3s8CzKHNCB
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:06 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id A60AC4056B
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:17 +0800 (CST)
+Received: from huawei.com (unknown [10.67.174.45])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S6;
+	Sat, 08 Aug 2026 20:24:17 +0800 (CST)
+From: Tengda Wu <wutengda@huaweicloud.com>
+To: Namhyung Kim <namhyung@kernel.org>,
+	james.clark@linaro.org,
+	xueshuai@linux.alibaba.com,
+	Li Huafei <lihuafei1@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>,
+	linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] super: fix dying superblock warning messages
-Date: Sat,  8 Aug 2026 14:38:02 +0200
-Message-Id: <20260808123802.73687-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	llvm@lists.linux.dev,
+	Tengda Wu <wutengda@huaweicloud.com>
+Subject: [PATCH v4 04/23] perf annotate-arm64: Handle load and store instructions
+Date: Sat,  8 Aug 2026 12:23:41 +0000
+Message-Id: <20260808122400.2961238-5-wutengda@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,46 +57,201 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rXr1xXFyxGF4DKr17Wrg_yoW7uF18pa
+	s2k345tr42qr4rW3Z3JF4kXw1fGa18Jw43KryxJwn3C3yY9ry8tFn5Kw12kF45Gr95uw4a
+	qFn0yry0vF98A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
+	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-WARN_ON_ONCE() takes a condition, not a message. The string literals
-are always true, so the warnings still trigger but the messages are
-never printed.
+Add ldst_ops to handle load and store instructions in order to parse
+the data types and offsets associated with PMU events for memory access
+instructions. There are many variants of load and store instructions in
+arm64, making it difficult to match all of these instruction names
+completely. Therefore, only the instruction prefixes are matched. The
+prefix 'ld|st' covers most of the memory access instructions, 'cas|swp'
+matches atomic instructions, and 'prf' matches memory prefetch
+instructions.
 
-Use WARN_ONCE(1, ...) instead to print the messages and keep the
-once-only behavior.
-
-Found with a Coccinelle script. Clang's -Wstring-conversion also flags
-such calls but is not enabled in kernel builds.
-
-Fixes: f0cd988016f6 ("fs: massage locking helpers")
-Assisted-by: Claude:claude-fable-5 coccinelle
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- fs/super.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 119 ++++++++++++++++++
+ 1 file changed, 119 insertions(+)
 
-diff --git a/fs/super.c b/fs/super.c
-index a8fd61136aaf..56efcf1c31da 100644
---- a/fs/super.c
-+++ b/fs/super.c
-@@ -2012,7 +2012,7 @@ int freeze_super(struct super_block *sb, enum freeze_holder who, const void *fre
- 	int ret;
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index 5e824fd617ee..32752a3bc756 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -14,6 +14,7 @@ struct arch_arm64 {
+ 	struct arch arch;
+ 	regex_t call_insn;
+ 	regex_t jump_insn;
++	regex_t ldst_insn; /* load and store instruction */
+ };
  
- 	if (!super_lock_excl(sb)) {
--		WARN_ON_ONCE("Dying superblock while freezing!");
-+		WARN_ONCE(1, "Dying superblock while freezing!");
- 		return -EINVAL;
- 	}
- 	atomic_inc(&sb->s_active);
-@@ -2176,7 +2176,7 @@ int thaw_super(struct super_block *sb, enum freeze_holder who,
- 	       const void *freeze_owner)
+ static bool arm64__is_reg(const char *op)
+@@ -163,6 +164,108 @@ static const struct ins_ops arm64_mov_ops = {
+ 	.scnprintf = arm64_mov__scnprintf,
+ };
+ 
++static bool arm64__insn_is_source_on_left(struct disasm_line *dl)
++{
++	/*
++	 * Store instructions invert the standard syntax by placing the source
++	 * register before the destination memory address.
++	 */
++	return !strncmp(dl->ins.name, "st", 2);
++}
++
++/*
++ * This function is used to parse arm64 load/store instructions into
++ * instruction operands.
++ *
++ * Typical instructions and their parsing logic:
++ *
++ * 1. Immediate offset:
++ *    ldr   x2, [x0]                -> target="x2", source="[x0]"
++ *    ldr   x2, [x0, #24]           -> target="x2", source="[x0, #24]"
++ *    ldp   x19, x20, [sp, #16]     -> target="x19, x20", source="[sp, #16]"
++ *
++ * 2. Pre-index addressing:
++ *    stp   x29, x30, [sp, #-64]!   -> target="[sp, #-64]!", source="x29, x30"
++ *
++ * 3. Post-index addressing:
++ *    str   x1, [x0], #8            -> target="[x0], #8", source="x1"
++ *    ldr   w1, [x21], #4           -> target="w1", source="[x21], #4"
++ *    ldp   x29, x30, [sp], #32     -> target="x29, x30", source="[sp], #32"
++ *
++ * 4. Register offset / extension:
++ *    ldr   x0, [x1, w0, sxtw #3]   -> target="x0", source="[x1, w0, sxtw #3]"
++ *    ldr   x0, [x1, x0, lsl #3]    -> target="x0", source="[x1, x0, lsl #3]"
++ *
++ * 5. Atomic operations:
++ *    cas   w3, w1, [x0]            -> target="w3, w1", source="[x0]"
++ *    swp   x3, x0, [x2]            -> target="x3, x0", source="[x2]"
++ *
++ * 6. Prefetch memory:
++ *    prfm  pstl1strm, [x4]         -> target="pstl1strm", source="[x4]"
++ *
++ * 7. PC-relative loads (No bracket found):
++ *    ldr   x0, ffff800080f40c68 <__kvm_nvhe_$d>  -> Fallback to default parser
++ *
++ * Parsing strategy:
++ * Use the '[' bracket as the boundary to split the operands into left
++ * and right sides. For non-store instructions, the left side is the
++ * target and the right side is the source. For store instructions, the
++ * roles are reversed.
++ */
++static int arm64_ldst__parse(const struct arch *arch,
++			     struct ins_operands *ops,
++			     struct map_symbol *ms,
++			     struct disasm_line *dl)
++{
++	char *s, *left, *right;
++
++	right = s = strchr(ops->raw, arch->objdump.memory_ref_char);
++	if (!s) {
++		/* Fallback to default parser for PC-relative loads. */
++		return arm64_mov__parse(arch, ops, ms, dl);
++	}
++
++	while (s > ops->raw && *s != ',')
++		--s;
++
++	if (s == ops->raw)
++		return -1;
++
++	*s = '\0';
++	left = strdup(ops->raw);
++
++	*s = ',';
++	if (!left)
++		return -1;
++
++	right = rstrip_space_and_comment(right, arch->objdump.comment_char);
++	if (!right) {
++		zfree(&left);
++		return -1;
++	}
++
++	if (arm64__insn_is_source_on_left(dl)) {
++		ops->source.raw = left;
++		ops->source.mem_ref = false;
++		ops->target.raw = right;
++		ops->target.mem_ref = true;
++	} else {
++		ops->source.raw = right;
++		ops->source.mem_ref = true;
++		ops->target.raw = left;
++		ops->target.mem_ref = false;
++	}
++
++	ops->source.multi_regs = arm64__check_multi_regs(arch, ops->source.raw);
++	ops->target.multi_regs = arm64__check_multi_regs(arch, ops->target.raw);
++
++	return 0;
++}
++
++static struct ins_ops arm64_ldst_ops = {
++	.parse	   = arm64_ldst__parse,
++};
++
+ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
  {
- 	if (!super_lock_excl(sb)) {
--		WARN_ON_ONCE("Dying superblock while thawing!");
-+		WARN_ONCE(1, "Dying superblock while thawing!");
- 		return -EINVAL;
- 	}
- 	return thaw_super_locked(sb, who, freeze_owner);
+ 	struct arch_arm64 *arm = container_of(arch, struct arch_arm64, arch);
+@@ -173,6 +276,8 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
+ 		ops = &jump_ops;
+ 	else if (!regexec(&arm->call_insn, name, 2, match, 0))
+ 		ops = &call_ops;
++	else if (!regexec(&arm->ldst_insn, name, 2, match, 0))
++		ops = &arm64_ldst_ops;
+ 	else if (!strcmp(name, "ret"))
+ 		ops = &ret_ops;
+ 	else
+@@ -197,6 +302,8 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	arch->id = *id;
+ 	arch->objdump.comment_char	  = '/';
+ 	arch->objdump.skip_functions_char = '+';
++	arch->objdump.memory_ref_char	  = '[';
++	arch->objdump.imm_char		  = '#';
+ 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
+ 
+ 	/* bl, blr */
+@@ -210,8 +317,20 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	if (err)
+ 		goto out_free_call;
+ 
++	/*
++	 * The ARM64 architecture has many variants of load/store instructions.
++	 * It is quite challenging to match all of them completely. Here, we
++	 * only match the prefixes of these instructions.
++	 */
++	err = regcomp(&arm->ldst_insn, "^(ld|st|cas|prf|swp)",
++		      REG_EXTENDED);
++	if (err)
++		goto out_free_jump;
++
+ 	return arch;
+ 
++out_free_jump:
++	regfree(&arm->jump_insn);
+ out_free_call:
+ 	regfree(&arm->call_insn);
+ out_free_arm:
 -- 
-2.39.5 (Apple Git-154)
+2.34.1
 
