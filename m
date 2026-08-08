@@ -1,169 +1,115 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4636C412C16
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:44:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C206411F85
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:52:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786193077; cv=none; b=aYKVIc0VXP5SpLWoak6lBEW4Kntm+lnJYjEdEYhRZzwwi8MvvFBUtvNLWA36iuFirQC+Aisu7/gz+F0vGx4ed1Fnv7RKfDv7jL+C4PA+qjtYFidcRGGncFUEBCvFArAW3mdPK4GNND3tTIKr4SB/FE7EdkrBi6OnhJLSGZMIHHw=
+	t=1786193538; cv=none; b=WLSK4wp9gMppKWR2qwQn5prinfwV3fClh1uMO2zzBKEU03iGC8jClKabeXpqawSYS/Fqf5WMPKD02QtqzDHE70t1qDniEheFXzHqE84Tk++r33lnZ2tYV/qlmD3x0UgDS9vt41ZkWpTWTokenqSfHh3mKE9bcQcTUt+pzpQ9jjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786193077; c=relaxed/simple;
-	bh=UPiUQgX3q0791H0AcDHImRuVLupx4M60p6QkrChycjk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LRUt3i/EYH/pdPX48nQBdqfavVmd33MPhCpSZsnYg2AxtsBXUrs3uIWP+9G5LSxzA1aGtt911gGZ3Po0CrDxpU6bgNEDJz0KT77u+8bCsciAsx613UosJFiSE5H2Zrq5+LIcdNX8V446OwUEEdLk7+LLv4rS5PmoTkoUVJIwhEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvC1D1fzKHNDk
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:07 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 4C68040570
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:18 +0800 (CST)
-Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S12;
-	Sat, 08 Aug 2026 20:24:18 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Namhyung Kim <namhyung@kernel.org>,
-	james.clark@linaro.org,
-	xueshuai@linux.alibaba.com,
-	Li Huafei <lihuafei1@huawei.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	leo.yan@linux.dev,
-	Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 10/23] perf arm-spe: Set default synthesized event period to 1
-Date: Sat,  8 Aug 2026 12:23:47 +0000
-Message-Id: <20260808122400.2961238-11-wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
-References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+	s=arc-20240116; t=1786193538; c=relaxed/simple;
+	bh=QcC8uqHydjEwddPKayXYjErq0AHWrnVdoChVDPNWM0c=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=qvU5KvgW2f4loqTgYAAZFWn+Lg/WiFZMU9OVLnU1MZzjxdSIOVjkyWcFtgarGmEwG4g10iENBQJyKewDGHIcATzGXS5VKAe9+vCAT1xq1X2O4SctAWuAqRsFhZutHtJXP5bdO+UnOjAqwwQvaOOMoyw/zb8h8PBWFQgyQY90thw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=P/KWa1Od; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="P/KWa1Od"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786193533;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=CujDoG10SFcgYa1uSJGVQJigOXjYog6c+JR6l05ET3E=;
+	b=P/KWa1Od54uVjuvZU8vf743oxJ0StSHlywbxcOBonhsR7QNV+1/QJo6xD4Rurd7PrXaoWm
+	5O4x6PTyBDOPTe3Emt+HvTE4gTvn9BnOxuEIlALxyTbM4n7XBI8KZ/tHAPgkguixpJFipK
+	qp+fAoFVU3MhJNYK94TFhxA5V4Ixfeg=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-270-A7wJpEy_Olq_sRTblUs0EQ-1; Sat,
+ 08 Aug 2026 08:52:07 -0400
+X-MC-Unique: A7wJpEy_Olq_sRTblUs0EQ-1
+X-Mimecast-MFC-AGG-ID: A7wJpEy_Olq_sRTblUs0EQ_1786193526
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 29980195608B
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:52:06 +0000 (UTC)
+Received: from [172.20.35.218] (unknown [10.30.44.80])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id BFE023000239;
+	Sat,  8 Aug 2026 12:52:05 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 60 of 66): Test report for master
+ (7.2.0-rc6, upstream-mainline, a59f57e2)
+Date: Sat, 08 Aug 2026 12:52:05 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S12
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7CFyxXFWkWw1kJryftFb_yoW5uw43pr
-	nFgFyfJr4kJry8KwnrAr4UuFy3twsYvF1fGryxGrWUAw1UKry8tr17try5Cr4UWr1Fyr17
-	XFyqgr1UGr1Utr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
-	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Message-Id: <23881.126080808520700187@us-mta-270.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: sX1FxO3fZvn2qRXQyxumnmvwAKUcc25wEFStfMwnhKg_1786193526
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-When using --itrace=M for data type profiling on arm64, the 'Percent'
-values in perf annotate output are all zero:
+Hi, we tested your kernel and here are the results:
 
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Percent     offset       size  field
-    0.00          0       0x10  struct mmu_gather_batch  {
-    0.00          0        0x8      struct mmu_gather_batch*    next;
-    0.00        0x8        0x4      unsigned int        nr;
-    0.00        0xc        0x4      unsigned int        max;
-    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-However, adding the -n option (show-nr-samples) reveals non-zero sample counts:
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Samples     offset       size  field
-      15          0       0x10  struct mmu_gather_batch  {
-      13          0        0x8      struct mmu_gather_batch*    next;
-       2        0x8        0x4      unsigned int        nr;
-       0        0xc        0x4      unsigned int        max;
-       0       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
+Kernel information:
+    Commit message: Merge tag 'watchdog-for-v7.2-rc7' of git://git.kernel.o=
+rg/pub/scm/linux/kernel/git/groeck/linux-staging
 
-The root cause is that when --itrace is used with non-i/y options
-(e.g., --itrace=M), the period remains zero after parsing. During
-subsequent propagation, the final percentage calculation results
-in zero:
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2742417356
 
-   arm_spe_prep_sample()
-      sample->period = spe->synth_opts.period;
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, x86_64]
+    /distribution/command [aarch64, x86_64]
+    /test/misc/machineinfo [aarch64, x86_64]
+    Boot test [aarch64, x86_64]
+    CKI/restraint [aarch64, x86_64]
+    Reboot test [aarch64, x86_64]
+    SELinux Custom Module Setup [aarch64, x86_64]
+    selinux-policy: serge-testsuite [aarch64, x86_64]
+    Storage - blktests - throtl [aarch64, x86_64]
+    Storage - blktests - ublk [aarch64, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, x86_64]
+    stress: stress-ng - memory [aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
 
-   __hists__add_entry()
-      he.stat.period = sample->period;
 
-   annotated_data_type__update_samples()
-      h->period += period;
-      h->addr[offset].period += period;
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
 
-   print_annotated_data_value()
-      double percent = h->period ? (100.0 * period / h->period) : 0;
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
 
-Fix this by defaulting the period to 1 in the ARM SPE auxtrace info
-processing path if it is not explicitly specified. This ensures that
-downstream tool components can correctly accumulate periods and compute
-event percentages for all synthesized SPE events.
-
-With this fix applied, the result is as follows:
-
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Percent     offset       size  field
-  100.00          0       0x10  struct mmu_gather_batch  {
-   86.67          0        0x8      struct mmu_gather_batch*    next;
-   13.33        0x8        0x4      unsigned int        nr;
-    0.00        0xc        0x4      unsigned int        max;
-    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
-
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
----
- tools/perf/util/arm-spe.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-index 1721882423f6..0f656398f2a8 100644
---- a/tools/perf/util/arm-spe.c
-+++ b/tools/perf/util/arm-spe.c
-@@ -2043,6 +2043,17 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
- 		err = -EINVAL;
- 		goto err_free_queues;
- 	}
-+
-+	/*
-+	 * When --itrace is used with non-i/y options (e.g., --itrace=M),
-+	 * the period remains 0 because the parser does not apply a default
-+	 * for those paths. However, synthesized SPE events such as memory
-+	 * accesses, TLB walks, and cache misses still require a valid
-+	 * sample->period to correctly accumulate periods and compute event
-+	 * percentages. Set it to 1 to ensure proper accounting.
-+	 */
-+	spe->synth_opts.period = spe->synth_opts.period ?: 1;
-+
- 	if (spe->synth_opts.period > 1)
- 		ui__warning("Arm SPE has a hardware-based sampling period.\n\n"
- 			    "--itrace periods > 1i downsample by an interval of n SPE samples rather than n instructions.\n");
--- 
-2.34.1
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
