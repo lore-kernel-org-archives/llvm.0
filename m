@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5511D414A17
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:44:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6FB415F25
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786193076; cv=none; b=fFXDrwaPUABTfpZd7YxcNCMdZKY2hhgjexis5oxLGCEFCIP5O7E+28tVaNnyOs55Eo2KspZX9EYvMtmIL0KLAcV292zsLth/j+K2fpOKNjFYm0iOCf8GES/KQ7AO7siO8p10MBMhLPmgtbeuvwrhCW5+huaJKzeJyWVkBOHdEN4=
+	t=1786193076; cv=none; b=kFKZIFrsstheVRdaH+SjuPB/4U0UgruyaKgH41gxJ7iYgvx0YnvA18DEBbVOn7kJv+0r/HbSVpALiTi06tq6esYkrkEvqukn66L+7r226GxxfKe7YXrXDlkkpOOFshoBrN5oKmP8UYFmRj4X5h+O59QIqtrO8LBj17Oct4J3e/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786193076; c=relaxed/simple;
-	bh=fgjFC7OTBNn6kbehtQ5xn7LKorTtVxFcSxZLVls5MdA=;
+	bh=zgfSk2lLxyj4JKe4KxNn+D6SHc58gazangOP8YM6bMg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tiSijlveE5R4Oi0QGQunWQuLLw88cFdKZCCR/a1TLf8TV7L0XQiY2dYVIYUYHaeKBVjC0rZIDBnHjXVvhB8mUJuPQ9nq6GbEQO0l6v4qEdwHNbgPEQUhn9tvuRAM1cSWrZiUtSMyoO4me8jkwiZvAOFBKl4/fcv+TascxQooLGI=
+	 MIME-Version; b=HiwP/xmPTh2datg2HpmejPqwzYXV5FsvIjp4bqAxpGSyClnmE9vvlW1mI4I+VbqFD7Yh29xWtHP66exGdcGW/UzSAmeP4mKuvCJoyXOLRcxk1l0ime72tJk+1h7pk9Zz4XwbRqcEkV6a9Yw/ZBVUZUestMRca5YZJlPUWFB0CLs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvB2LXjzKHNC2
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvB73GbzKHND9
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:06 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 7012140593
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:17 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 1F38F4095C
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:18 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S4;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S10;
 	Sat, 08 Aug 2026 20:24:17 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 02/23] perf llvm: Fix arm64 adrp instruction disassembly mismatch with objdump
-Date: Sat,  8 Aug 2026 12:23:39 +0000
-Message-Id: <20260808122400.2961238-3-wutengda@huaweicloud.com>
+Subject: [PATCH v4 08/23] perf annotate-arm64: Implement extract_op_location() callback
+Date: Sat,  8 Aug 2026 12:23:45 +0000
+Message-Id: <20260808122400.2961238-9-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
@@ -57,123 +57,166 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWryxGr4xuw48Zr4xCFykKrg_yoW5ZF4fpr
-	ZFka95Jry5Ar1fZ39IkF47WFn0yrZ2gF45K3y3ArWvkr4ftFyxC34xGry29F1DXryqq3y5
-	ArZIvFyUGF4kArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
-	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
-	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
-	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I
-	0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k2
-	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
-	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
-	IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMI
-	IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
-	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRQL00DUUUU
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S10
+X-Coremail-Antispam: 1UD129KBjvJXoWxAr4rXw1rur4fAry5XF43ZFb_yoWruFWDpw
+	4jk345tr17tr4aq3WfZrs7WFy3Cw4fGF1Y9rWxC39xArs7ZFn2qa1IkF1a9Fy5JrZxC34j
+	vF4DtFW8XryUGaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
+	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The operands of 'adrp' instructions parsed by libllvm are currently
-represented as raw immediates rather than the "address <symbol+offset>"
-format used by objdump. This inconsistency causes arm64_mov__parse()
-to fail when parsing these instructions during post-processing.
+Implement the extract_op_location() callback for the arm64 architecture
+to handle its specific assembly syntax and addressing modes.
 
-Example of the mismatch:
-  Current: adrp  x18, 8014
-  Fix:     adrp  x18, ffff800081f5f000 <this_cpu_vector>
+The extractor handles:
+1. Standalone immediate operands (e.g., #0x10).
+2. Memory references with diverse addressing modes:
+   - Signed offset: [base{, #imm|reg}]
+   - Pre-index: [base, #imm]!
+   - Post-index: [base], #imm|reg
+3. Multi-register operands and primary/secondary register extraction.
 
-Fix this by manually extracting the target address from the raw adrp
-instruction via symbol_lookup_callback(). The address is then converted
-to a specific symbol during symbol__disassemble_llvm() and formatted
-to match objdump's output, ensuring compatibility with existing
-parsers.
+With this callback in place, 'perf annotate' can now resolve memory
+locations and register types on arm64, marking the initial enablement
+of data type profiling for this architecture.
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/llvm.c | 50 ++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 46 insertions(+), 4 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 67 +++++++++++++++++++
+ tools/perf/util/annotate.h                    | 10 +++
+ 2 files changed, 77 insertions(+)
 
-diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
-index a0deb742a733..6b53b283205a 100644
---- a/tools/perf/util/llvm.c
-+++ b/tools/perf/util/llvm.c
-@@ -9,8 +9,10 @@
- #include "symbol.h"
- #include <errno.h>
- #include <fcntl.h>
-+#include <string.h>
- #include <unistd.h>
- #include <linux/zalloc.h>
-+#include <linux/bitops.h>
- 
- #ifdef HAVE_LIBLLVM_SUPPORT
- #include "llvm-c-helpers.h"
-@@ -108,6 +110,16 @@ symbol_lookup_callback(void *disinfo, uint64_t value,
- 		storage->branch_addr = value;
- 	else if (*ref_type == LLVMDisassembler_ReferenceType_In_PCrel_Load)
- 		storage->pcrel_load_addr = value;
-+	else if (*ref_type == LLVMDisassembler_ReferenceType_In_ARM64_ADRP) {
-+		uint64_t adrp_imm;
-+
-+		/* immhi (bits 23:5) and immlo (bits 30:29) */
-+		adrp_imm = ((value & 0x00ffffe0) >> 3) | ((value >> 29) & 0x3);
-+		adrp_imm = sign_extend64(adrp_imm, 20);
-+
-+		/* Calculate the target page address */
-+		storage->pcrel_load_addr = (address & ~0xfffULL) + (adrp_imm << 12);
-+	}
- 	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
- 	return NULL;
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index 32752a3bc756..6b4f1228afa9 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -287,6 +287,72 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
+ 	return ops;
  }
-@@ -230,10 +242,40 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
- 		if (storage.pcrel_load_addr != 0) {
- 			char *name = llvm_name_for_data(dso, filename,
- 							storage.pcrel_load_addr);
--			disasm_len += scnprintf(disasm_buf + disasm_len,
--						sizeof(disasm_buf) - disasm_len,
--						"  # %#"PRIx64,
--						storage.pcrel_load_addr);
+ 
++static int extract_op_location_arm64(const struct arch *arch,
++				     struct disasm_line *dl __maybe_unused,
++				     const char *op_str, int op_idx __maybe_unused,
++				     struct annotated_op_loc *op_loc)
++{
++	const char *s = op_str;
++	char *p = NULL;
 +
-+			if (arch__is_arm64(args->arch)) {
-+				/*
-+				 * For arm64, replace the immediate operand with
-+				 * the resolved address to match objdump's output.
-+				 *
-+				 * Example conversion:
-+				 *   From: adrp  x18, 8014
-+				 *   To:   adrp  x18, ffff800081f5f000
-+				 */
-+				char *s = strchr(disasm_buf, ',');
++	if (op_str == NULL)
++		return 0;
 +
-+				if (s == NULL)
-+					goto err;
++	/* Handle standalone immediate operands (e.g., #0x10) */
++	if (*s == arch->objdump.imm_char) {
++		op_loc->offset = strtol(s + 1, &p, 0);
++		if (p && p != s + 1)
++			op_loc->imm = true;
++		return 0;
++	}
 +
-+				s++;
-+				*s = '\0';
-+				disasm_len = strlen(disasm_buf);
-+				disasm_len += scnprintf(disasm_buf + disasm_len,
-+							sizeof(disasm_buf) - disasm_len,
-+							" %"PRIx64,
-+							storage.pcrel_load_addr);
-+			} else {
-+				/*
-+				 * For other archs, append the resolved address
-+				 * as an inline comment.
-+				 */
-+				disasm_len += scnprintf(disasm_buf + disasm_len,
-+							sizeof(disasm_buf) - disasm_len,
-+							"  # %#"PRIx64,
-+							storage.pcrel_load_addr);
-+			}
++	/*
++	 * Handle memory references, identify arm64 specific addressing modes.
++	 * Reference: Arm Architecture Reference Manual
++	 *            (DDI 0487), Chapter C1.3.3: Load/store addressing modes.
++	 */
++	if (*s == arch->objdump.memory_ref_char) {
++		op_loc->mem_ref = true;
 +
-+			/* Append the resolved symbol name if available */
- 			if (name) {
- 				disasm_len += scnprintf(disasm_buf + disasm_len,
- 							sizeof(disasm_buf) -
++		p = strchr(s, ']');
++		if (p == NULL)
++			return -1;
++
++		/* Pre-index: [base, #imm]! */
++		if (p[1] == '!')
++			op_loc->addr_mode = PERF_ADDR_MODE_PRE_INDEX;
++		/* Post-index: [base], #imm|reg */
++		else if (p[1] == ',' &&
++			 (strchr(p + 1, arch->objdump.imm_char) ||
++			  arm64__is_reg(skip_spaces(p + 2))))
++			op_loc->addr_mode = PERF_ADDR_MODE_POST_INDEX;
++		/* Signed offset: [base{, #imm|reg}] */
++		else
++			op_loc->addr_mode = PERF_ADDR_MODE_SIGNED_OFFSET;
++
++		s++;
++	}
++
++	/* Extract the primary register */
++	op_loc->reg1 = arch__dwarf_regnum(arch, s);
++	if (op_loc->reg1 == -1)
++		return -1;
++
++	/* Move to the next symbol of the operand, if any */
++	s = strchr(s, ',');
++	if (s == NULL)
++		return 0;
++	s = skip_spaces(s + 1);
++
++	/* Extract secondary register or immediate offset */
++	if (op_loc->multi_regs)
++		op_loc->reg2 = arch__dwarf_regnum(arch, s);
++	else if (*s == arch->objdump.imm_char)
++		op_loc->offset = strtol(s + 1, &p, 0);
++
++	return 0;
++}
++
+ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 				   const char *cpuid __maybe_unused)
+ {
+@@ -305,6 +371,7 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	arch->objdump.memory_ref_char	  = '[';
+ 	arch->objdump.imm_char		  = '#';
+ 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
++	arch->extract_op_location	  = extract_op_location_arm64;
+ 
+ 	/* bl, blr */
+ 	err = regcomp(&arm->call_insn, "^blr?$", REG_EXTENDED);
+diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+index 11b6e4780c02..a44c933f55f5 100644
+--- a/tools/perf/util/annotate.h
++++ b/tools/perf/util/annotate.h
+@@ -494,12 +494,21 @@ int annotate_check_args(void);
+ 
+ int arch__dwarf_regnum(const struct arch *arch, const char *str);
+ 
++enum annotated_addr_mode {
++	PERF_ADDR_MODE_NONE = 0,
++
++	PERF_ADDR_MODE_SIGNED_OFFSET,
++	PERF_ADDR_MODE_PRE_INDEX,
++	PERF_ADDR_MODE_POST_INDEX,
++};
++
+ /**
+  * struct annotated_op_loc - Location info of instruction operand
+  * @reg1: First register in the operand
+  * @reg2: Second register in the operand
+  * @offset: Memory access offset in the operand
+  * @segment: Segment selector register
++ * @addr_mode: Addressing mode, only valid if @mem_ref is true
+  * @mem_ref: Whether the operand accesses memory
+  * @multi_regs: Whether the second register is used
+  * @imm: Whether the operand is an immediate value (in offset)
+@@ -509,6 +518,7 @@ struct annotated_op_loc {
+ 	int reg2;
+ 	int offset;
+ 	u8 segment;
++	u8 addr_mode;
+ 	bool mem_ref;
+ 	bool multi_regs;
+ 	bool imm;
 -- 
 2.34.1
 
