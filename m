@@ -1,115 +1,170 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914E43C3C14
-	for <llvm@lists.linux.dev>; Fri,  7 Aug 2026 23:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D33730FF1D;
+	Sat,  8 Aug 2026 00:59:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786145537; cv=none; b=e+t5KVWrQ+YFjUhHCHbxleZuVKLqEGesuXEAMkHJskZzPV1hNon1DAEKjuvvkVBTLtlSoaqzV4iTIL59v6krpn70+neITTkdY0n1JsKDKkbejxv6WiAGSpGQA3WhzikK47JRkyM/oANrTjsJ5krFT97djAiY4ciymYaYZrOYESk=
+	t=1786150748; cv=none; b=f7bdt5ovSI+5M42EdMASWUtwSk2dG/7RDpRWapv83l9tkfQ08JvzBKinJ7mpQgOq77rI1Cwq9UDTkH2ey8X4DySXCWSj0V13IvheUF3vJPsapoRp/9vAYSBpC2zZJs+Koq2RUzXdYpgh9ScImMx8x8R4g6bBsgnEW3GBnc/kmeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786145537; c=relaxed/simple;
-	bh=l+K+apsAuCcnzaahWfZ79HVQoFKwIzbK/UzUtJip6mU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=L/lvHijqkrdym68KSqUmOav3KdT4AOOG04Z5QnjXmj/OfolltMjCFNl4EaNCQZuFMdIJTeG5Q46YXJ9UB0LFyl5lKVoXwqMjnFPIpJdu2t1SRK7sQv7wXzpZaUVDWmW5cAxdfzeMrtAcwBiP2gKh4ADCQiW5/d4/dkuyMcnrr/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Gdmk2YQ9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786150748; c=relaxed/simple;
+	bh=tDsgwi2+k+THwubQx+A8h/nHxkN0MXsHSi+73LAr1l8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DGGsMlGBSNcJF1o6qXfBKcWWa2J5o5Yzgy0eGHeivxc5QBw4YFxCJzSOPUeIAhV2OzmsgZgmyKx4tk7fak+scIOnPtTWJFyA6AQYaq+Xz8nT+hkRx+nYCmktRbc+vAVJEIbKdzgnkwc7yqWY2PW0qg10fekOX1GVWBgRDY1FiuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i1JK75kZ; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Gdmk2YQ9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786145534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=t/wjCEAjVSsb2g4HI2sL+wH0Ro+/plM57z2NB+VXLIQ=;
-	b=Gdmk2YQ95+XLRc8e2IU6MFVGNhM4L4YEE/seqG4CoQrqvxk1o6N+FuF72RogdIZUX/+mDs
-	KlO8suZrb4FRQqGi0jTQqdMa27DWKWlsE1JfR8wfVQgWuYJgbQ+T8hHdNK0loaHxh8fpyd
-	GnwvzoDHTMWHAf2kFihSdSRhvp75C2k=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-615-3GDNcjWnNfCWMfweqKTXMg-1; Fri,
- 07 Aug 2026 19:32:07 -0400
-X-MC-Unique: 3GDNcjWnNfCWMfweqKTXMg-1
-X-Mimecast-MFC-AGG-ID: 3GDNcjWnNfCWMfweqKTXMg_1786145526
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 46DA31956096
-	for <llvm@lists.linux.dev>; Fri,  7 Aug 2026 23:32:06 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DB2CA19560AB;
-	Fri,  7 Aug 2026 23:32:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 60 of 66): Test report for master
- (7.2.0-rc6, upstream-mainline, 364465ab)
-Date: Fri, 07 Aug 2026 23:32:05 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i1JK75kZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786150746; x=1817686746;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=tDsgwi2+k+THwubQx+A8h/nHxkN0MXsHSi+73LAr1l8=;
+  b=i1JK75kZZb1AkK/SfAoBWJ8WI6UHWxztA8t0US2fwP4XSpc3nbwa88g0
+   PI4fYw+K6iG23SHah/C19OlqS4WZY0zDpxaOmiy449uEA7UVokuPA1qwJ
+   SHpvL3JwE14f8NxKSbykrUtP8XFEtUFO5q8MAXpd83LMN8QvwvLmHpXdi
+   PmN98qc6DuKXQkWXR88MM24/u6azBi0Hs0ZGCUNkP3kWR1PZ9oiqH0WAX
+   gwawIcQ7jFWxvSUjPWC2/tZXf+pvKWMAQyNvVam9OFAUQIWxib31j2LDl
+   AZUbwK4NypPd20MnNbUu8YnS0gHWIMgjZjJqSrHHjmkdRtt0UW+5zSHdZ
+   g==;
+X-CSE-ConnectionGUID: CvEA40/zRW+AjR/5rhMzrw==
+X-CSE-MsgGUID: UD59hgCcQKiP0vRnWm5ffw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="86841941"
+X-IronPort-AV: E=Sophos;i="6.25,211,1779174000"; 
+   d="scan'208";a="86841941"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 17:59:04 -0700
+X-CSE-ConnectionGUID: oVI4r9TbROqmryREAQmPiQ==
+X-CSE-MsgGUID: 1u6Sx5aARbCQUu/2v1uMnQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,211,1779174000"; 
+   d="scan'208";a="256310033"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 07 Aug 2026 17:59:00 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wsVOr-00000000Jab-02ue;
+	Sat, 08 Aug 2026 00:58:57 +0000
+Date: Sat, 8 Aug 2026 08:58:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: WenTao Liang <vulab@iscas.ac.cn>, Zack Rusin <zack.rusin@broadcom.com>,
+	dri-devel@lists.freedesktop.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	bcm-kernel-feedback-list@broadcom.com,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Thomas Hellstrom <thellstrom@vmware.com>, stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org, WenTao Liang <vulab@iscas.ac.cn>
+Subject: Re: [PATCH] fix: drm/vmwgfx: vmw_user_shader_alloc: fix base object
+ refcount leak on ttm_base_object_init failure
+Message-ID: <202608080849.rqxWdd9U-lkp@intel.com>
+References: <20260626150142.49732-1-vulab@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <14357.126080719320700181@us-mta-615.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: eJShZFILScegAFqLSFT2oy8p6Y04YrqgI7tI0bOaaF0_1786145526
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260626150142.49732-1-vulab@iscas.ac.cn>
 
-Hi, we tested your kernel and here are the results:
+Hi WenTao,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on drm-misc/drm-misc-next]
+[also build test ERROR on daeinki-drm-exynos/exynos-drm-next drm/drm-next drm-i915/for-linux-next drm-i915/for-linux-next-fixes drm-tip/drm-tip linus/master v7.2-rc6 next-20260807]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'v7.2-rc6-smb3-server-fixes' of git://git.sam=
-ba.org/ksmbd
+url:    https://github.com/intel-lab-lkp/linux/commits/WenTao-Liang/fix-drm-vmwgfx-vmw_user_shader_alloc-fix-base-object-refcount-leak-on-ttm_base_object_init-failure/20260807-080356
+base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
+patch link:    https://lore.kernel.org/r/20260626150142.49732-1-vulab%40iscas.ac.cn
+patch subject: [PATCH] fix: drm/vmwgfx: vmw_user_shader_alloc: fix base object refcount leak on ttm_base_object_init failure
+config: arm64-randconfig-002-20260807 (https://download.01.org/0day-ci/archive/20260808/202608080849.rqxWdd9U-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260808/202608080849.rqxWdd9U-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2739356600
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608080849.rqxWdd9U-lkp@intel.com/
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, x86_64]
-    /distribution/command [aarch64, x86_64]
-    /test/misc/machineinfo [aarch64, x86_64]
-    Boot test [aarch64, x86_64]
-    CKI/restraint [aarch64, x86_64]
-    Reboot test [aarch64, x86_64]
-    SELinux Custom Module Setup [aarch64, x86_64]
-    selinux-policy: serge-testsuite [aarch64, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
+All errors (new ones prefixed by >>):
+
+>> drivers/gpu/drm/vmwgfx/vmwgfx_shader.c:727:25: error: incompatible pointer types passing 'struct ttm_base_object *' to parameter of type 'struct ttm_base_object **' [-Wincompatible-pointer-types]
+     727 |                 ttm_base_object_unref(&ushader->base);
+         |                                       ^~~~~~~~~~~~~~
+   drivers/gpu/drm/vmwgfx/ttm_object.h:192:60: note: passing argument to parameter 'p_base' here
+     192 | extern void ttm_base_object_unref(struct ttm_base_object **p_base);
+         |                                                            ^
+   1 error generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +727 drivers/gpu/drm/vmwgfx/vmwgfx_shader.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   684	
+   685	static int vmw_user_shader_alloc(struct vmw_private *dev_priv,
+   686					 struct vmw_bo *buffer,
+   687					 size_t shader_size,
+   688					 size_t offset,
+   689					 SVGA3dShaderType shader_type,
+   690					 uint8_t num_input_sig,
+   691					 uint8_t num_output_sig,
+   692					 struct ttm_object_file *tfile,
+   693					 u32 *handle)
+   694	{
+   695		struct vmw_user_shader *ushader;
+   696		struct vmw_resource *res, *tmp;
+   697		int ret;
+   698	
+   699		ushader = kzalloc_obj(*ushader);
+   700		if (unlikely(!ushader)) {
+   701			ret = -ENOMEM;
+   702			goto out;
+   703		}
+   704	
+   705		res = &ushader->shader.res;
+   706		ushader->base.shareable = false;
+   707		ushader->base.tfile = NULL;
+   708	
+   709		/*
+   710		 * From here on, the destructor takes over resource freeing.
+   711		 */
+   712	
+   713		ret = vmw_gb_shader_init(dev_priv, res, shader_size,
+   714					 offset, shader_type, num_input_sig,
+   715					 num_output_sig, buffer,
+   716					 vmw_user_shader_free);
+   717		if (unlikely(ret != 0))
+   718			goto out;
+   719	
+   720		tmp = vmw_resource_reference(res);
+   721		ret = ttm_base_object_init(tfile, &ushader->base, false,
+   722					   VMW_RES_SHADER,
+   723					   &vmw_user_shader_base_release);
+   724	
+   725		if (unlikely(ret != 0)) {
+   726			vmw_resource_unreference(&tmp);
+ > 727			ttm_base_object_unref(&ushader->base);
+   728			goto out_err;
+   729		}
+   730	
+   731		if (handle)
+   732			*handle = ushader->base.handle;
+   733	out_err:
+   734		vmw_resource_unreference(&res);
+   735	out:
+   736		return ret;
+   737	}
+   738	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
