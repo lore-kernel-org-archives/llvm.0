@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814633D566E
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4DD3D3323
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786191878; cv=none; b=plB6q6tCPfEMoKEVIxNv18ZqE0kVZBfQen9z6BzPZ4mqkCMRjestfeQIzQWSRO07pvGq4H5m9G9eSbXBp0mSkUSslNlkHzqym4HF1jatx70DhuTyo4z+Ttf9TGFiu5XV0Z/iL2YGkGeSUG7XTyrInC7+dkDZmZoxmH2X35jm/OA=
+	t=1786191880; cv=none; b=XQhWhrgyqja5aImax25RsAeXNN/PQGyNaOyBj4/WiSXc0ajaUI09KuY+Cr7RLHr2bVixrHHr32r/gZ+0BeoyYRRHK+PrOM/9qrtlcvs/R4CbP9TXDrbVJMIpKLViBHK6sgrYwOev5Fb8e9W7EV6q8+4r2WDYs5Ls5Td+/h5IaYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786191878; c=relaxed/simple;
-	bh=uTqKpFd5ac5nw5tkzre5QVhienCAJgAdr+wqaZdg/8I=;
+	s=arc-20240116; t=1786191880; c=relaxed/simple;
+	bh=fvEiQhcf68hrq+UHayyjKFSE6SAxMUZohxznGKtt4PY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Mev9MSX8GUKdavrG6p1RdJDSI30QDZyMrwsJN86hVwq4CQkX6xXdRDcocIb2LtvfVQgiKNUyl66nAVQyB7mPMX45vpMhQz2Eg0RwuGtTZn6JaefR46ILvl5TVarkKWjmgeyj+rthHRmDoC2Du3OM8WogZCraWVW8OP5obCRXCVU=
+	 MIME-Version; b=oxVYTLxp/HG8cu4h8yAXkLkG6ZIoDLSRt9s2+ej0O3igfNuQZFhMiFHgloVKyNVXBIJOF6j44lq6dlcQwO+5Ctc0lFdC9OwRHHrUrqV3DsDiNuOZjZEb6x6kpgWI4GIzDvVm5Z8kDpkTVkBpypbycS0VINybuSsYaqbD2kFzLqY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hHKtJ0FvyzYQvfr
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:23:20 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hHKtK0LJCzYQvl8
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:23:21 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 37B2D4058D
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:18 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 3D3894056F
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:19 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S11;
-	Sat, 08 Aug 2026 20:24:17 +0800 (CST)
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S21;
+	Sat, 08 Aug 2026 20:24:18 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 09/23] perf annotate: Deduplicate overlapping ARM SPE events for data type profiling
-Date: Sat,  8 Aug 2026 12:23:46 +0000
-Message-Id: <20260808122400.2961238-10-wutengda@huaweicloud.com>
+Subject: [PATCH v4 19/23] perf annotate-arm64: Support 'mov' instruction tracking
+Date: Sat,  8 Aug 2026 12:23:56 +0000
+Message-Id: <20260808122400.2961238-20-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
@@ -57,14 +57,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S11
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr4fWrWxGr4xtFW5Aw47Jwb_yoWrtrW3pr
-	sI9w15KwnYqr4rKrn3ZF4UXryS93yfXFZ8GwnFya15A3y3ur95tFyxtr15tFZxXwn8Z34a
-	vws0ga98G34rZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S21
+X-Coremail-Antispam: 1UD129KBjvJXoWxXryDZw1DKw48WF47Kw1fCrg_yoWrKrW3pa
+	4DC345G39Fqr42gFsIqFWUXr9a9w4xKr1jkryqvwnIyFy3tr1rKayktFWavF45Xry8Zw13
+	Gw4DKrZ8Xw42kF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
 	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
 	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
 	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
@@ -72,127 +72,143 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGr4fWrWxGr4xtFW5Aw47Jwb_yoWrtrW3pr
 	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
 	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
 	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
 	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-When data type profiling is enabled on ARM SPE, multiple overlapping
-events (e.g., l1d-miss, tlb-access) are synthesized for a single sampled
-instruction, as shown below:
+Extend update_insn_state() for arm64 to support register-to-register and
+immediate-to-register 'mov' instructions.
 
-  Available samples
-  0 arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=30/
-  0 dummy:u
-  84K l1d-miss
-  95K l1d-access
-  77K llc-miss
-  58K llc-access
-  9K tlb-miss
-  108K tlb-access
-  0 branch
-  13K remote-access
-  108K memory
-  108K instructions
+For register-to-register 'mov' (e.g., mov dreg, sreg), propagate data type
+information from the source register to the destination register.
 
-While 'perf report' provides an interactive menu for users to select a
-specific event to prevent duplicate counting, 'perf annotate' lacks such
-a mechanism. Consequently, it counts all instructions across these
-overlapping events, which inflates the profile and distorts the data
-type statistics.
+For immediate-to-register 'mov' (e.g., mov dreg, #imm), store the immediate
+value in the destination register's imm_value field and set its kind to
+TSR_KIND_CONST, allowing subsequent instructions to resolve it as a
+constant.
 
-Although using the '--itrace' option can work around this issue (e.g.:
-perf annotate --data-type --stdio --itrace=i1i), it is inconvenient for
-users to specify this explicitly every time.
+A real-world example is shown below:
 
-To address this, introduce itrace_synth_opts.dont_overlap. Set this to true
-when data type profiling is enabled and the user has not explicitly
-specified an itrace option. Then, during arm_spe_process_auxtrace_info(),
-adjust the synthesized event options based on the dont_overlap value to
-only enable instruction event synthesis, thereby achieving automatic
-deduplication.
+  ffff8000803eebf8 <get_vma_policy>:
+  ffff8000803eec20:  mov  x21, x0          // x0 (struct vm_area_struct*) -> x21
+  ffff8000803eec28:  ldr  x2, [x0, #112]
+  ffff8000803eec2c:  cbz  x2, ffff8000803eec94 <get_vma_policy+0x9c>
+* ffff8000803eec94:  ldr  x0, [x21, #152]
+
+Before this commit, the type of x21 was unknown, causing the subsequent
+inference to fail:
+
+  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
+  chk [9c] reg21 offset=0x98 ok=0 kind=0 cfa : no type information
+  final result: no type information
+
+After this commit, the type of x21 is correctly inferred as 'vm_area_struct':
+
+  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
+  mov [28] reg0 -> reg21 type='struct vm_area_struct*' size=0x8
+  chk [9c] reg21 offset=0x98 ok=1 kind=1 (struct vm_area_struct*) : Good!
+  found by insn track: 0x98(reg21) type-offset=0x98
+  final result:  type='struct vm_area_struct' size=0xb0
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/builtin-annotate.c |  8 ++++++++
- tools/perf/util/arm-spe.c     | 17 +++++++++++++++++
- tools/perf/util/auxtrace.h    |  2 ++
- 3 files changed, 27 insertions(+)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 53 ++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
-index 69cb72b2082a..616f54bf4868 100644
---- a/tools/perf/builtin-annotate.c
-+++ b/tools/perf/builtin-annotate.c
-@@ -873,6 +873,14 @@ int cmd_annotate(int argc, const char **argv)
- 	annotate.session = perf_session__new(&data, &annotate.tool);
- 	if (IS_ERR(annotate.session))
- 		return PTR_ERR(annotate.session);
-+	/*
-+	 * Hardware tracing (e.g.: ARM SPE) may generate overlapping events
-+	 * per instruction. When data type profiling is enabled, enable
-+	 * dont_overlap to deduplicate them to avoid skewed stats, but only
-+	 * if user hasn't specified itrace options (respect user override).
-+	 */
-+	if (annotate.data_type && !itrace_synth_opts.set)
-+		itrace_synth_opts.dont_overlap = true;
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index 6e09e9707256..7b780bad8c07 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/compiler.h>
+ #include <errno.h>
++#include <inttypes.h>
+ #include <stdlib.h>
+ #include <string.h>
+ #include <linux/ctype.h>
+@@ -484,6 +485,7 @@ static int propagate_load_reg_state(struct type_state *state,
+ 		tsr->type = type_die;
+ 		tsr->kind = TSR_KIND_TYPE;
+ 		tsr->offset = 0;
++		tsr->imm_value = 0;
+ 		tsr->ok = true;
  
- 	annotate.session->itrace_synth_opts = &itrace_synth_opts;
+ 		if (src->multi_regs) {
+@@ -641,6 +643,51 @@ static void update_store_insn_state(struct type_state *state,
+ 	adjust_reg_index_state(state, dst, insn_name, dl->al.offset);
+ }
  
-diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-index 401aab529309..1721882423f6 100644
---- a/tools/perf/util/arm-spe.c
-+++ b/tools/perf/util/arm-spe.c
-@@ -2033,6 +2033,9 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
- 		/* Default nanoseconds period not supported */
- 		spe->synth_opts.period_type = PERF_ITRACE_PERIOD_INSTRUCTIONS;
- 		spe->synth_opts.period = 1;
++static void update_mov_insn_state(struct type_state *state,
++				  struct disasm_line *dl,
++				  struct annotated_op_loc *src,
++				  struct annotated_op_loc *dst)
++{
++	struct type_state_reg *tsr;
++	u32 insn_offset = dl->al.offset;
++	int sreg = src->reg1;
++	int dreg = dst->reg1;
 +
-+		if (session->itrace_synth_opts)
-+			spe->synth_opts.dont_overlap = session->itrace_synth_opts->dont_overlap;
- 	}
- 
- 	if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS) {
-@@ -2044,6 +2047,20 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
- 		ui__warning("Arm SPE has a hardware-based sampling period.\n\n"
- 			    "--itrace periods > 1i downsample by an interval of n SPE samples rather than n instructions.\n");
- 
-+	if (spe->synth_opts.dont_overlap) {
-+		/*
-+		 * The 'instructions' event is the most comprehensive,
-+		 * synthesize it exclusively.
-+		 */
-+		spe->synth_opts.flc = false;
-+		spe->synth_opts.llc = false;
-+		spe->synth_opts.tlb = false;
-+		spe->synth_opts.branches = false;
-+		spe->synth_opts.remote_access = false;
-+		spe->synth_opts.mem = false;
-+		spe->synth_opts.instructions = true;
++	if (!has_reg_type(state, dreg))
++		return;
++
++	tsr = &state->regs[dreg];
++	tsr->copied_from = -1;
++
++	if (src->imm) {
++		tsr->kind = TSR_KIND_CONST;
++		tsr->imm_value = src->offset;
++		tsr->offset = 0;
++		tsr->ok = true;
++
++		pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
++			     insn_offset, tsr->imm_value, dreg);
++		return;
 +	}
 +
- 	err = arm_spe_synth_events(spe, session);
- 	if (err)
- 		goto err_free_queues;
-diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
-index 6947f3f284c0..ebb4e9e8e574 100644
---- a/tools/perf/util/auxtrace.h
-+++ b/tools/perf/util/auxtrace.h
-@@ -80,6 +80,7 @@ enum itrace_period_type {
-  * @intr_events: whether to synthesize interrupt events
-  * @errors: whether to synthesize decoder error events
-  * @dont_decode: whether to skip decoding entirely
-+ * @dont_overlap: whether to deduplicate overlapping events
-  * @log: write a decoding log
-  * @calls: limit branch samples to calls (can be combined with @returns)
-  * @returns: limit branch samples to returns (can be combined with @calls)
-@@ -128,6 +129,7 @@ struct itrace_synth_opts {
- 	bool			intr_events;
- 	bool			errors;
- 	bool			dont_decode;
-+	bool			dont_overlap;
- 	bool			log;
- 	bool			calls;
- 	bool			returns;
++	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
++		invalidate_reg_state(tsr);
++		return;
++	}
++
++	tsr->type = state->regs[sreg].type;
++	tsr->kind = state->regs[sreg].kind;
++	tsr->imm_value = state->regs[sreg].imm_value;
++	tsr->offset = state->regs[sreg].offset;
++	tsr->ok = state->regs[sreg].ok;
++
++	if (tsr->kind == TSR_KIND_TYPE || tsr->kind == TSR_KIND_POINTER)
++		tsr->copied_from = sreg;
++
++	pr_debug_dtp("mov [%x] reg%d -> reg%d", insn_offset, sreg, dreg);
++	pr_debug_type_name(&tsr->type, tsr->kind);
++}
++
+ static void update_insn_state_arm64(struct type_state *state,
+ 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				    struct disasm_line *dl)
+@@ -703,6 +750,7 @@ static void update_insn_state_arm64(struct type_state *state,
+ 	 * prevent stale type info from propagating to subsequent instructions.
+ 	 */
+ 	if (has_reg_type(state, dst->reg1) &&
++	    strcmp(dl->ins.name, "mov") &&
+ 	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
+ 		pr_debug_dtp("%s [%x] invalidate reg%d",
+ 			     dl->ins.name, insn_offset, dst->reg1);
+@@ -715,8 +763,11 @@ static void update_insn_state_arm64(struct type_state *state,
+ 		return;
+ 	}
+ 
++	/* Register to register or imm value to register transfers */
++	if (!strcmp(dl->ins.name, "mov"))
++		update_mov_insn_state(state, dl, src, dst);
+ 	/* Memory to register transfers */
+-	if (!strncmp(dl->ins.name, "ld", 2))
++	else if (!strncmp(dl->ins.name, "ld", 2))
+ 		update_load_insn_state(state, dloc, dl, src, dst);
+ 	/* Register to memory transfers */
+ 	else if (!strncmp(dl->ins.name, "st", 2))
 -- 
 2.34.1
 
