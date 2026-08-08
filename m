@@ -1,115 +1,136 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C65375F9E
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 10:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EB5375F9E;
+	Sat,  8 Aug 2026 10:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786186342; cv=none; b=NGCNQkdtf1eKnpVymJpa76Ojyrp+6bH+Gi7ebVEOrZUUBFbr1v92QKboEDBss0trKsmtdprBNbezOdN8e1JngnecLa5z027wGDcUEVkXYDKYVjby2IwcFW7ATt6FSNv8haC9K8Gcanlepm3lMpHr2cns5Uaifqzjlonb/dJiOqc=
+	t=1786186627; cv=none; b=Nb66InL7TxqKipX/DJk60WkSgnkp0VUTDN5jEZ+FRsxxLC4+kmvrS+ZyBG9Q+s0dufgEDVAB8rkt7+1mHxyoT0kwkwqA6RybvaDSIcMt2xkQRb5QIvqovqzISXIncKDQEfiD01bzdwa8teP8N/EehTF3Tr0+sa2fFdQaL6xUzhs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786186342; c=relaxed/simple;
-	bh=PK/fbbMcoAssPRw/bIP6ce+NtAoZ6QjJZq0t2wzz8W0=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=GGA0bznTfX6AQVt2/FHFkU8kXHZKDZ8XoegR7RTCQMYF7pv7/Ye/L1cwbT0ZzyIfKaJbDpCBnRzYs8BSFpwYl/1EEcc0GskYv9lqqxg0leiuXiiEyfy2EVb7WpKncCYq3FIMI4FOfO/MBQauBV36t7WOXsqY15tjis36fdjKqyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=d1wb9hJX; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786186627; c=relaxed/simple;
+	bh=G+LHWtW2IvYmsKvwY0Ba5W48GZ3FuzAjCoGAVG4w8/M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h6HQTJfkS/8RApRz216079FitOEPpDAYsbUptvE3vs0sqHHr8Hsb/uleK3IcoAoW9Vr3tC7YbJjvNo8uVf5Cfns3EnYJ9WoIu8Acooc2P0RkEaa2RGI0dkSx+OKmWkhPZNgp/0zqooOGEGV5P54GUCcQRIg955PSZLhfGKil5gE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IbowAiEs; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="d1wb9hJX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786186340;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uUyGvpYg+wqGDAIbJy2qFIdLO8HzxKTTUs/4CtGegL4=;
-	b=d1wb9hJXtbOtyvEUWdN/FvFqqgUJedD1piAYfScCILPCbmPVVWYVyTaV/7T17xPN4ItGaI
-	j+r50s3s26b6MWN9MYVt4VPAUj/o0ztGyv9vzp/tVeWl/p8gP5Cig82lkUWR3gQEP4U/eV
-	ruGMA/GouPynii5/Ar9EUKc0u97xGqI=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-399-xnK6jPQIOSawuuqlvQH7YQ-1; Sat,
- 08 Aug 2026 06:52:18 -0400
-X-MC-Unique: xnK6jPQIOSawuuqlvQH7YQ-1
-X-Mimecast-MFC-AGG-ID: xnK6jPQIOSawuuqlvQH7YQ_1786186337
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B4DC8195608E
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 10:52:17 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2C1EE30001A2;
-	Sat,  8 Aug 2026 10:52:17 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 60 of 66): Test report for master
- (7.2.0-rc6, upstream-mainline, 3f008280)
-Date: Sat, 08 Aug 2026 10:52:16 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IbowAiEs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786186625; x=1817722625;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G+LHWtW2IvYmsKvwY0Ba5W48GZ3FuzAjCoGAVG4w8/M=;
+  b=IbowAiEsPgNUAgB2j1ysUCPbTM7POmXwhMYVkJ2V1TynA9J1P63RuNKn
+   adeZfOzgDIyIc/sD9VMCMl5VsnWrddf+afmxoqfpkNah1IlxaMVSDeqYE
+   lQxSAmIYjdKcUD+gK9T98GNVTHmDmfnvck/4qKtXrgJv+ZRGi+NHgKmqV
+   UntJNt5i6W/tBSvXR1R9EoEt5k2Jhln1IUcieYqYY7bMXvgrt2tGh4mPN
+   QkR5OUOtIi4n2TAqNTfwm3cLI+DY/uE/N5VI4mEbMLfjKmIWNkJhVrrnK
+   vNU3P8iYJH5vBuCd73SbOgOms7/76ndIWA8Qa6ej6wen26y/Tmp5VH00X
+   A==;
+X-CSE-ConnectionGUID: LYcFvUNvTZG6Je6eWrmevA==
+X-CSE-MsgGUID: sjaYDk2aS3+JyOV5d3Fzdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="89304504"
+X-IronPort-AV: E=Sophos;i="6.25,211,1779174000"; 
+   d="scan'208";a="89304504"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2026 03:57:04 -0700
+X-CSE-ConnectionGUID: o6RY8TtSS9eRWT39MMgEqw==
+X-CSE-MsgGUID: cSCpax2BS3ipmQvSJyTiNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,211,1779174000"; 
+   d="scan'208";a="259296903"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 08 Aug 2026 03:57:02 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wsejc-00000000K6D-06DC;
+	Sat, 08 Aug 2026 10:57:00 +0000
+Date: Sat, 8 Aug 2026 18:56:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mayur Kumar <kmayur809@gmail.com>, Ulf Hansson <ulfh@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mayur Kumar <kmayur809@gmail.com>
+Subject: Re: [PATCH] mmc: core: add MMC_QUIRK_BROKEN_WRITE_ZEROES for ESMT
+ eMMC
+Message-ID: <202608081816.H4q7m1Wl-lkp@intel.com>
+References: <20260725185129.43397-1-kmayur809@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-Message-Id: <06455.126080806521800321@us-mta-399.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: MecHBehV4nWRjnobIK1-evEXkBbbwZZtEzyitqevND4_1786186337
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260725185129.43397-1-kmayur809@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+Hi Mayur,
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+kernel test robot noticed the following build errors:
 
-Tested-by: CKI Project <cki-project@redhat.com>
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.2-rc6 next-20260807]
+[cannot apply to ulf-hansson-mmc-mirror/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'pinctrl-v7.2-3' of git://git.kernel.org/pub/=
-scm/linux/kernel/git/linusw/linux-pinctrl
+url:    https://github.com/intel-lab-lkp/linux/commits/Mayur-Kumar/mmc-core-add-MMC_QUIRK_BROKEN_WRITE_ZEROES-for-ESMT-eMMC/20260807-212705
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260725185129.43397-1-kmayur809%40gmail.com
+patch subject: [PATCH] mmc: core: add MMC_QUIRK_BROKEN_WRITE_ZEROES for ESMT eMMC
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260808/202608081816.H4q7m1Wl-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260808/202608081816.H4q7m1Wl-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2742002683
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608081816.H4q7m1Wl-lkp@intel.com/
 
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, x86_64]
-    /distribution/command [aarch64, x86_64]
-    /test/misc/machineinfo [aarch64, x86_64]
-    Boot test [aarch64, x86_64]
-    CKI/restraint [aarch64, x86_64]
-    Reboot test [aarch64, x86_64]
-    SELinux Custom Module Setup [aarch64, x86_64]
-    selinux-policy: serge-testsuite [aarch64, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
+All errors (new ones prefixed by >>):
+
+>> drivers/mmc/core/queue.c:195:23: error: use of undeclared identifier 'MMC_QUIRK_BROKEN_WRITE_ZEROS'
+     195 |             !(card->quirks & MMC_QUIRK_BROKEN_WRITE_ZEROS))
+         |                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+vim +/MMC_QUIRK_BROKEN_WRITE_ZEROS +195 drivers/mmc/core/queue.c
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
+   176	
+   177	static void mmc_queue_setup_discard(struct mmc_card *card,
+   178			struct queue_limits *lim)
+   179	{
+   180		unsigned max_discard;
+   181	
+   182		max_discard = mmc_calc_max_discard(card);
+   183		if (!max_discard)
+   184			return;
+   185	
+   186		lim->max_hw_discard_sectors = max_discard;
+   187		if (mmc_card_can_secure_erase_trim(card)) {
+   188			if (mmc_card_fixed_secure_erase_trim_time(card))
+   189				lim->max_secure_erase_sectors = UINT_MAX >> card->erase_shift;
+   190			else
+   191				lim->max_secure_erase_sectors = max_discard;
+   192		}
+   193	
+   194		if (mmc_card_can_trim(card) && card->erased_byte == 0 &&
+ > 195		    !(card->quirks & MMC_QUIRK_BROKEN_WRITE_ZEROS))
+   196			lim->max_write_zeroes_sectors = max_discard;
+   197	
+   198		/* granularity must not be greater than max. discard */
+   199		if (card->pref_erase > max_discard)
+   200			lim->discard_granularity = SECTOR_SIZE;
+   201		else
+   202			lim->discard_granularity = card->pref_erase << 9;
+   203	}
+   204	
 
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
