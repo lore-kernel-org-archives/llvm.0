@@ -1,75 +1,55 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D8524886A
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636B33CF054
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786191665; cv=none; b=GU8iUmsf2NYGAKDBL/iH+umyGQ3f393FLHWpzflo6rPRSBCgh44Shdq4toCVdOCuprVQ73dkoyPvTkek8p8f1JCWMfHg/Azm5M8oQUudesgePoUi9uGrj/Whj2XMNwWtUn8ojIKMHVbWONk9kzUHK2YoL6n9N/OGa8AcHRh2qzg=
+	t=1786191870; cv=none; b=hz+qgK//PkodXJ7bgTzs2++jAfwCijCDMJqJzieSPa32KUC5gXQAS/swShAhmcQU0Q0s+6S1WtJHr49WhYx5J7wzoslqOzNbKdAeZ+0IsPGYshKDV4cU4XBiQcwAgqtbNr/4plq8TH866xtLz0qFbY0y7NRDl/8Je1JQVtl6DgM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786191665; c=relaxed/simple;
-	bh=WcSZxId+S34IwFArlRF3UDh/7T6p4oXgwuErWrRWT8Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pbNVTkiDA1VUOMcz84ZHIT246NrnNl8GN76UOVMQ8ui6opedq9Nba3Ec/lumQLqtXD3g2KMAFuHqyLaQgJTsHUERqZmqEeEjCaB4VrK6bg35wpCJ/ydOE4cfTN+VaHGzymifMjc1WqWK+5CTUZCMFR8ZtF5P0mlo4T80cN959Rs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SvOXuqiP; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SvOXuqiP"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-49802c418b5so3872935e9.1
-        for <llvm@lists.linux.dev>; Sat, 08 Aug 2026 05:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786191662; x=1786796462; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Le9aTN9I4Hkl8j6KgLggOKWGuXynZHIQztDuT7nEfQs=;
-        b=SvOXuqiPmOFQzydyoANJtiQcJpBVw30qhQkh28p8cEaGy+SnvjDIj3Idc3hyKiNDVS
-         dJu//waWdCL06wpHsnY7ioPTGc/zcDFuWMUMoXQ8MatbEwShdWDyj8cQykddsAzA6C5W
-         AlJC2qk4jjH6wFntF9knBHcjqi3F/iZUvaykRMobQHs09RkQ97UAHZkUHs2HljrLAM21
-         6CATRLwSEjusMcFCeIe1RgXRWYuqpJui3EhloeqNCQmggPLP5P0xtdKrCNN/a9+GfVaP
-         GjpWHE1mHyl6lCK8taoGzUlv8RfL79cVXUdUX/I7PAbF+zuz7/Q+xG0Eo800q/eO5/Ee
-         iR0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786191662; x=1786796462;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Le9aTN9I4Hkl8j6KgLggOKWGuXynZHIQztDuT7nEfQs=;
-        b=FF9HkwVIAsimTz1KOalZMmPLQ+WaevLHD6H0VeqnI1gPy3PIlBru94BIUBiWDc5kd5
-         Txt4Nsfw2WRwOWWRRYYq5U4rEer3Nf7g0CmmmbHJg5ch98Pc1PlwqKwVdwoJVhaNOMEf
-         BA9XXb8Eqwv/yi9Cc0zmoUViygYFm4/IHDEzoM4Hw853TrgHLPPgSR0aI2bc/BOJRfVD
-         3rbu1MNW/0AFhCj5L3mXNLR8h6ekJ6lvPyxUdcJivg3cqc6bNhDCWlgIwTWlN1imN6CP
-         GT/sekLuqRE8GjL66zWM/L6R+2sdJE0bjgJmUIHgXyZnLMzhKTcUPQREfg2NP3hiswz/
-         zyOA==
-X-Forwarded-Encrypted: i=1; AHgh+RrXG9Obd/BQCIoQpB6N5zidoOiWPg66p5ShgO8058+MTBUyK3rbOqngIMEtBeNpGYtwwJZV@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz9RucfEZ2NUNVA5o5mIu0zauWTALUZcAoFgHmGNqcbqRjYccWa
-	hBVMvoVpwmfphb3R3K6bz5U0oCBAQ4hZDkWz+idalqeES/NLir6dTUnU
-X-Gm-Gg: AR+sD137UpmMK2pmq00BU78JDgLQPbXdi7ZzCw9RC+dxAk7efHE09D0NfjZhI5QeRWi
-	ET/qZKJjx3aJLYErKWw2w3FjXQ2m4/ag4ISe0dr2wtlrCJ3Reb6AEilhamMdQI3KdDpTyzZjlUd
-	qfogxOKRwA1WqUZaN1P8onYgh2+BshvDlmHlsoFos3qLlU+LyTPYOjCff+SQ6iHzbbSvnxYP+7N
-	YLWQWplrq7dUgScsZc73pp7fQFOEZnM7AMW6gcscGMZU1xnO92hdIwwg3zic0a2GlLojPLHKpJT
-	500JorRgtHt27LcnAsYOLmnyrKtlPEBDS8FA4DHXPckYIqOaTLJn4h7LdYJsSMn1pRFfjQ64sKp
-	ZCATCD6OcZmCbCesy6W10MrsfrTtt7eFGWqrK3VtVOnogRkDH7p7ER1D8ktXjVxMxp9nM3AM8y9
-	rv/O4HbwjXFDV5qbUAd3Jrd89Koguh4vj0i8+O9DWQDTIY/gW7WoKpBRF+13foHMSk/BeHsy2yO
-	vnoCBcW57sf30iip9/sE9kJJGoVUrryRwrvQxIdZXWoDw5GpmH8oRSSV3f2sYZJ1soKRNIPUTtM
-	EhM5kajx32NNiiW50JHl
-X-Received: by 2002:a05:600c:c8a:b0:493:eed4:7210 with SMTP id 5b1f17b1804b1-49961992a4amr87924775e9.11.1786191661566;
-        Sat, 08 Aug 2026 05:21:01 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-077-007-004-134.77.7.pool.telefonica.de. [77.7.4.134])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499542851d6sm249365395e9.12.2026.08.08.05.21.00
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 08 Aug 2026 05:21:01 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Dan Williams <djbw@kernel.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Davidlohr Bueso <dave@stgolabs.net>,
+	s=arc-20240116; t=1786191870; c=relaxed/simple;
+	bh=gqunXJZJNSQd7/jBHTsC8Dd4mUBRbsmMmUIBrBXki7s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=W+xa30/ZFbYy+LbGa46atTXhsQtpG3QEovK/lZnxb3p2mK3c6ArqYiWfO2PynNrJeeUCdwDf6inRMDSgz+mnvbk8r0+vtnBlioxBFSVOE4tMATVZnShi/gkKUOnan9cztpP3tJrwOOUdQcf5ohCNQy0rcuQEioHZ/V+IEHEtK1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hHKtH4xJyzYQv2D
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:23:19 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id D6BAC408E5
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:17 +0800 (CST)
+Received: from huawei.com (unknown [10.67.174.45])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S8;
+	Sat, 08 Aug 2026 20:24:17 +0800 (CST)
+From: Tengda Wu <wutengda@huaweicloud.com>
+To: Namhyung Kim <namhyung@kernel.org>,
+	james.clark@linaro.org,
+	xueshuai@linux.alibaba.com,
+	Li Huafei <lihuafei1@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev,
+	Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Zecheng Li <zli94@ncsu.edu>,
+	linux-perf-users@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] memregion: fix cache invalidation warning message
-Date: Sat,  8 Aug 2026 14:19:43 +0200
-Message-Id: <20260808121943.72939-1-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	llvm@lists.linux.dev,
+	Tengda Wu <wutengda@huaweicloud.com>
+Subject: [PATCH v4 06/23] perf annotate: Adapt arch__dwarf_regnum() for arm64
+Date: Sat,  8 Aug 2026 12:23:43 +0000
+Message-Id: <20260808122400.2961238-7-wutengda@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -77,37 +57,104 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S8
+X-Coremail-Antispam: 1UD129KBjvJXoWxArWxCFWrWFW3KryUGrWxZwb_yoW5GFW5pw
+	srCw13Jr18Gr4Fqw43JF4fWFW3Gr1fZF15urs5twn7AFs7uryrJan3tF1Y9ay3Jrs7Jr1j
+	vr4qgr1kXF1fCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
+	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
+	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
+	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
+	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
+	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-WARN_ON_ONCE() takes a condition, not a message. The string literal is
-always true, so the warning still triggers but the message is never
-printed.
+Currently, arch__dwarf_regnum() assumes that all architectures use a
+register prefix character (e.g., '%' for x86) defined by
+arch->objdump.register_char, and uses it to match register names in
+objdump output. However, this assumption does not hold for arm64,
+where assembly syntax uses bare register names like 'x0', 'w1'
+without any prefix.
 
-Use WARN_ONCE(1, ...) instead to print the message and keep the
-once-only behavior.
+As a result, arm64 builds may fail to correctly recognize register
+names from objdump disassembly, leading to incomplete or incorrect
+annotation output.
 
-Found with a Coccinelle script. Clang's -Wstring-conversion also flags
-such calls but is not enabled in kernel builds.
+To address this:
 
-Fixes: 1156b4418db0 ("memregion: Add cpu_cache_invalidate_memregion() interface")
-Assisted-by: Claude:claude-fable-5 coccinelle
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+- Make the register prefix check optional, allowing architectures
+  without a prefix character to be parsed correctly.
+
+- Extend the delimiter set in strpbrk() to include the closing square
+  bracket ']'. In arm64 assembly, memory operands often use bracketed
+  syntax such as '[x1, #16]' or '[x2]'. Adding ']' ensures clean
+  extraction of register names like 'x2' without trailing characters.
+
+- Remove the 'static' qualifier from arch__dwarf_regnum() so that it
+  can be reused by other architecture-specific profiling components
+  in future changes.
+
+Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- include/linux/memregion.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/perf/util/annotate.c | 14 ++++++++------
+ tools/perf/util/annotate.h |  2 ++
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
-diff --git a/include/linux/memregion.h b/include/linux/memregion.h
-index a55f62cc5266..50a6d2ed432e 100644
---- a/include/linux/memregion.h
-+++ b/include/linux/memregion.h
-@@ -58,7 +58,7 @@ static inline bool cpu_cache_has_invalidate_memregion(void)
- 
- static inline int cpu_cache_invalidate_memregion(phys_addr_t start, size_t len)
- {
--	WARN_ON_ONCE("CPU cache invalidation required");
-+	WARN_ONCE(1, "CPU cache invalidation required");
- 	return -ENXIO;
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index df70e95a8470..9d8b4d6b859b 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -2472,21 +2472,23 @@ int annotate_check_args(void)
+ 	return 0;
  }
- #endif
+ 
+-static int arch__dwarf_regnum(const struct arch *arch, const char *str)
++int arch__dwarf_regnum(const struct arch *arch, const char *str)
+ {
+-	const char *p;
++	const char *p = str;
+ 	char *regname, *q;
+ 	int reg;
+ 
+-	p = strchr(str, arch->objdump.register_char);
+-	if (p == NULL)
+-		return -1;
++	if (arch->objdump.register_char) {
++		p = strchr(str, arch->objdump.register_char);
++		if (p == NULL)
++			return -1;
++	}
+ 
+ 	regname = strdup(p);
+ 	if (regname == NULL)
+ 		return -1;
+ 
+-	q = strpbrk(regname, ",) ");
++	q = strpbrk(regname, ",)] ");
+ 	if (q)
+ 		*q = '\0';
+ 
+diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+index fa08d09b80f7..11b6e4780c02 100644
+--- a/tools/perf/util/annotate.h
++++ b/tools/perf/util/annotate.h
+@@ -492,6 +492,8 @@ int annotate_parse_percent_type(const struct option *opt, const char *_str,
+ 
+ int annotate_check_args(void);
+ 
++int arch__dwarf_regnum(const struct arch *arch, const char *str);
++
+ /**
+  * struct annotated_op_loc - Location info of instruction operand
+  * @reg1: First register in the operand
 -- 
-2.39.5 (Apple Git-154)
+2.34.1
 
