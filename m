@@ -1,148 +1,115 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6471C395D98
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 03:22:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5BAC18DB1F
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 05:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786159332; cv=none; b=JqnBYD4hgdwkfZKO+S8D7VYYVDDH69xvuloKImfo+Ym0VBScnHGXx0b28CSxr9FtQbw3kCnFk/uzGRhQvh1XwrY/3v4NZCuDkrivFqAu8PMo2ogYNpl/MYmoT/9kxqs0KzKuq6mXWuJgYs4t/t1ksolVUtzXvuiuXLJq80fwxwc=
+	t=1786165335; cv=none; b=g9Li5GI0t8bvN9KdbMEh4gYgK2Bb8fm50dD0AQG7O3bTiXn9AMvsRgrOdIv4AitkjRCMIc/fxIGG74qUpuwjDYUJcYuo2SEg5mUt6k+wH+PdB0Dy9Q9l4bAtwjjYbu7eTfvcLEL8nrc9fIFQXTHn+duAKhHmbL4CLdHVAkORpss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786159332; c=relaxed/simple;
-	bh=XY92FPm8CgMtwV9v50zUyh6AXSZ6A9wydtKKZtxj/oU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WFWeAU2G+UKyCAjRrvl5AkvxOVakV1d2oY3LIaH80uzqNwKrHZCWGktI9rBQJoFo3EeEWHVtZdtNs6/iseyBS3+noHvVJDo0fjmidJS8k7YzHjA3SD7X7hlakmYp0KCCkbig6mM+x44ygJceT4ECPxjuK8QkGO+Qk4pO6+Fy0l4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VypHY0vT; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786165335; c=relaxed/simple;
+	bh=H3T+kqK0iVeeGgyVF1Mt88SGxcX7wijknJJCeyUietw=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=g8HW1QsTM9gGKnjAt16okafp7FBHdU65OH76Qk80Nb1GPbaO6QgBqqXOq769H56n+IHdMEc06iSPFjHRA+1Z/qUJ68bww9Dpevl7+cui45Vlz9LOPe6sdjcxLlYrc2g+J5AixAhOEjvcUgM8g6JzZxCBUy3NSPoyEA21PfsCvAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e6lJYg56; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VypHY0vT"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e58034d05so134950a91.2
-        for <llvm@lists.linux.dev>; Fri, 07 Aug 2026 20:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786159320; x=1786764120; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=mNXfsscFcsBx7GiXXV8Ydg8/2MbO5H0rQoaglQZ91nI=;
-        b=VypHY0vTnP32f6d2PQE3/7u3EMwDec/AAxzProcOUaqfCw3kjmCUpeceASBupfFUtY
-         64fP8vLIkJ5tJ1owCFQIXcGAr2hLJ9fgL0j1UG0j9SlFkTeyINwwwy7+v9z3ppkLkgcZ
-         wPRAVaYlTDVmb5HHMX1uIERl0KnvLYoh5eQ5BwKWs7ZPOrhSVHHp9JKCJOrPgS2lQn2e
-         p//ZFh8uU4WyYbDy40kucVOa0GhYh4aE4N6GZ1zE3Jjbq/nkMdiUjxGaqAdbos5ZWNW7
-         9NNIpqy7fgWYgbjvlFSSMsNKzsO+YR89j6o0vD/9e/spAUZ3CU+MoAfw4Cl49GD44X/0
-         kNHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786159320; x=1786764120;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=mNXfsscFcsBx7GiXXV8Ydg8/2MbO5H0rQoaglQZ91nI=;
-        b=NJch2Hmn/FJFouJnP1A75txx8DR2Mebfsc1T9zFOK38hWg8ksTW6aQ9U4RhqSgJKFe
-         jAFypm0RMTp7X56Qt/QK4b2XKOyf3YLy0KYODBYKmgIXA4UH+Y5ClTPHmHVip+8NZD9L
-         oY9t3SrKB2wEfCipe/ElRMMTU4WI21LkJ6JVxzRC/R1PQdf3x3qHBoml4HjfdNGP28qN
-         FNp3zsbzTIoABW5B1PKbVjWU/rt6kb/IZleS740FXe53IYlsrjqQWK4a+l3ArOn6EdPP
-         Bn1sRaifjcZq0FwEww755HYuPgGczQl7ajOzxHhYGkXKMhrttFq/wj/qiR6giemfWifW
-         X63Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpuUA1WK6GQe97VfSWLAiq1/LtFNOf7Zu0xgC+1FpJqNqxz0s7bqyAiUcQhepUZg2tkkKrm@lists.linux.dev
-X-Gm-Message-State: AOJu0YyyypMUaVvwg1LNDNlc6xtHDkp9ubvkkuQy7VvMXbjh2c+rbKfH
-	D7yp/J47Btho0RkEtYrDOfZ8U7bAQR7jVRaEpDISLgn9Q78WCpzuO1aJ
-X-Gm-Gg: AR+sD12auNPz89uSCM/e+Vwb+hIHifk3N+7j8Kj+lwbsNzW42BBf2hXMI4TehsdvJKv
-	HJ3ffKIHPqVwAcY7o2UfYH3PBzZkslPwHSioXEFHCPg78vNPMT5bVhhy0y/vLom0pDc+PD3fXR+
-	DFIS65U1cK6FNObCgJ0FTRIRGhh6ByDwwqCMHNAbeLz0G6dMBfrIXvbAo/Qva66cRDLFLW4f4Vk
-	UKY+4e9wOPUAdpaCdwY72e/KjbmBaNA/x4gwJRri3zoaU/pwLI1pPzlaoTqGbxlzxwDnVtcOyUp
-	EvjHsjIzeZH9v1ngT/4bALz6JF6dlucfWOGgQiwW9HsJAk5x06g5gkxRi6f+786CLgueqqyVl/j
-	KouBpAtPeM2PTarlbUqEkbOxgkKIWG4jiDY1eLcjq746amr3fLCbh1EsWbslPPddmJjyhw80BgX
-	V+LzeafmYv4PnpgPUhjAuZ9NxaNR7zRL+YklamkPss5/WqVt9mNmwa0DvflbSfN1zL+ZZ8pOCRN
-	Yu9NQzy4GTC+ulztKwokdaIW5vdGMJzmYFVEIkprA==
-X-Received: by 2002:a17:90b:264c:b0:36d:9e0b:3801 with SMTP id 98e67ed59e1d1-3903c59936cmr29436120a91.8.1786159319550;
-        Fri, 07 Aug 2026 20:21:59 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com.com ([106.51.166.106])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315beb8844fsm13817468eec.16.2026.08.07.20.21.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 20:21:58 -0700 (PDT)
-From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-To: ojeda@kernel.org,
-	boqun@kernel.org,
-	gary@garyguo.net,
-	bjorn3_gh@protonmail.com,
-	lossin@kernel.org,
-	a.hindborg@kernel.org,
-	aliceryhl@google.com,
-	tmgross@umich.edu,
-	dakr@kernel.org,
-	daniel.almeida@collabora.com,
-	tamird@kernel.org,
-	acourbot@nvidia.com,
-	work@onurozkan.dev,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	wedsonaf@gmail.com,
-	mattgilbride@google.com,
-	boris.brezillon@collabora.com,
-	robh@kernel.org,
-	rust-for-linux@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Cc: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] rust: uapi: replace direct asm-generic/ioctl.h include with linux/ioctl.h
-Date: Sat,  8 Aug 2026 08:51:43 +0530
-Message-ID: <20260808032143.2767112-1-mkchauras@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e6lJYg56"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786165332;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=dc5KbohqXwNWBgvOvgHz2Zyq8LInugli5at5LGL39XI=;
+	b=e6lJYg56JTIGWehXCAnAkrTmY3HVqmhVJbZ90JBF/4crIO1t+NPTKh2BhkkWG5cDNJQNMF
+	5tLMs5Nkf5OZB/CwrbtMq0g7ElMIyy+cjU/ucbrqDr2eGvveb31UBjryXOhPvkzzEF5nqb
+	kDNhzG2Ud9V5kRweNB+deOZ+5p96VaA=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-332-lbCx6NNlNuSPABZbyTjsaQ-1; Sat,
+ 08 Aug 2026 01:02:07 -0400
+X-MC-Unique: lbCx6NNlNuSPABZbyTjsaQ-1
+X-Mimecast-MFC-AGG-ID: lbCx6NNlNuSPABZbyTjsaQ_1786165327
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CC25C19560B4
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 05:02:06 +0000 (UTC)
+Received: from [172.20.35.218] (unknown [10.30.44.80])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 682B51800347;
+	Sat,  8 Aug 2026 05:02:06 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 60 of 66): Test report for master
+ (7.2.0-rc6, upstream-mainline, 7cbe91a4)
+Date: Sat, 08 Aug 2026 05:02:06 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+Message-Id: <07774.126080801020800105@us-mta-332.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: QOiBkg2fJc_DwKVuPayIns2221a_kTG89dg41W0cF2Y_1786165327
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-rust/uapi/uapi_helper.h was directly including <uapi/asm-generic/ioctl.h>
-instead of the proper <uapi/linux/ioctl.h>.
+Hi, we tested your kernel and here are the results:
 
-On powerpc, <uapi/linux/ioctl.h> pulls in <uapi/asm/ioctl.h> first, which
-defines _IOC_SIZEBITS, _IOC_DIRBITS, _IOC_NONE, and _IOC_WRITE with the
-arch-specific values, before falling through to <asm-generic/ioctl.h>.
-By bypassing that chain and including <asm-generic/ioctl.h> directly,
-the arch-specific overrides never ran first, so when other headers in
-the compilation later brought in the full arch-aware chain, Clang saw
-those four macros being defined a second time and emitted:
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-  uapi/asm-generic/ioctl.h: warning: '_IOC_SIZEBITS' macro redefined
-  uapi/asm-generic/ioctl.h: warning: '_IOC_DIRBITS' macro redefined
-  uapi/asm-generic/ioctl.h: warning: '_IOC_NONE' macro redefined
-  uapi/asm-generic/ioctl.h: warning: '_IOC_WRITE' macro redefined
+Tested-by: CKI Project <cki-project@redhat.com>
 
-Fix this by replacing the direct include of <uapi/asm-generic/ioctl.h>
-with <uapi/linux/ioctl.h>, which is the correct arch-aware entry point
-and already maintains the intended include order.
+Kernel information:
+    Commit message: Merge tag 'thermal-7.2-rc7' of git://git.kernel.org/pub=
+/scm/linux/kernel/git/rafael/linux-pm
 
-Applies on linux-next.
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2741312633
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202608050618.9dekfjtF-lkp@intel.com/
-Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
----
- rust/uapi/uapi_helper.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, x86_64]
+    /distribution/command [aarch64, x86_64]
+    /test/misc/machineinfo [aarch64, x86_64]
+    Boot test [aarch64, x86_64]
+    CKI/restraint [aarch64, x86_64]
+    Reboot test [aarch64, x86_64]
+    SELinux Custom Module Setup [aarch64, x86_64]
+    selinux-policy: serge-testsuite [aarch64, x86_64]
+    Storage - blktests - throtl [aarch64, x86_64]
+    Storage - blktests - ublk [aarch64, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, x86_64]
+    stress: stress-ng - memory [aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
 
-diff --git a/rust/uapi/uapi_helper.h b/rust/uapi/uapi_helper.h
-index 86c7b6b284b0..489748ef642c 100644
---- a/rust/uapi/uapi_helper.h
-+++ b/rust/uapi/uapi_helper.h
-@@ -6,12 +6,12 @@
-  * Sorted alphabetically.
-  */
- 
--#include <uapi/asm-generic/ioctl.h>
- #include <uapi/drm/drm.h>
- #include <uapi/drm/nova_drm.h>
- #include <uapi/drm/panthor_drm.h>
- #include <uapi/linux/android/binder.h>
- #include <uapi/linux/android/binder_netlink.h>
-+#include <uapi/linux/ioctl.h>
- #include <uapi/linux/mdio.h>
- #include <uapi/linux/mii.h>
- #include <uapi/linux/ethtool.h>
--- 
-2.55.0
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
 
