@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 296973D0935
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4764F3D3012
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786191873; cv=none; b=pp+SPkf5tz/k0Q7O0+dEDcZuboXhdQIoS5J0u94awgqFhWDWlfF2AxG5gNQCkC8V0GqIaaN+IRAZEfa+XxknJvFeBvSoLtrzYxMm+qwHQjjY9Z1kwGa8GZXuKo/85fWhhfuCiI0z2bet/vNJ4rIqXdpZPISHWfoiqciB0b15/J8=
+	t=1786191874; cv=none; b=B22ZWFQanOWKWDX6KcbojjCDFQVDhLhPf3lp94auFPfUzAOHN7XTHUvlHURUTHLiYjroAAR6m9J8AjOm7YDhnMScFsza3+HyBIvKdbIrkUT/mK84aN3d77WPclAWCHGQTSjFeND5w/lp3BobLlewM4uhtlJ6B1nx9txyzEFM/kY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786191873; c=relaxed/simple;
-	bh=YTDFVZLR0D3uojyu93nDplOkwkwLG56jTNIDoYJPz9c=;
+	s=arc-20240116; t=1786191874; c=relaxed/simple;
+	bh=E/dWYwsnCpo4sXEk2G3euEFSCkC8TrJCvORiO7qB5oo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=g8R3Mpw9mo57aNdW9SVOqgR2w/BtyKjRw4Rhr+i2NXb+dVKEGpJsq8NRzyxHxJ7gAQAisSfGVxpMWxl9HV0rvu+Ux9qOEea0ZTjw+K2xuYg0g7hqYJeqMnXBSqFf0A0wtP/uCvyvSXiseVWR6M9k50izHHf7sPy+p0Pq6mAKHMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=Z3ct8PFYq86avljlYDJi7Bpdz3cpIlp5hKITOH+mYyTp/0hnJ6aVXgW86bZnxGJHWFSHm/fWT7RZGQIfZBog0qQonzmYUzRBJirdO/tVXkKO0RA4FO3zAvyFJ6p59eNOdetpp632tCKI2uIChjrRjxGgnS64E87KU3z5ZLtqpsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvC28kxzKHNDV
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvC5RY7zKHNDp
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:07 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 68D7B4057D
+	by mail.maildlp.com (Postfix) with ESMTP id DCD9A4056D
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:18 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S13;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S18;
 	Sat, 08 Aug 2026 20:24:18 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 11/23] perf annotate-data: Extract invalidate_reg_state() as a common helper
-Date: Sat,  8 Aug 2026 12:23:48 +0000
-Message-Id: <20260808122400.2961238-12-wutengda@huaweicloud.com>
+Subject: [PATCH v4 16/23] perf annotate-data: Expand type_state_reg imm_value to u64
+Date: Sat,  8 Aug 2026 12:23:53 +0000
+Message-Id: <20260808122400.2961238-17-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
@@ -57,14 +57,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S13
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17Kr4UJwb_yoW5Gw17p3
-	yDC347Gw43Gr4FgwnxJFW3XFWF9r1fXa4Fk3sYywn7ZF4Iyrn3JF92qFy5tFW7Xr93Gw12
-	yw1qgr4DJ3yxGaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S18
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kry7KFW8ur4xuw1xZF1DZFb_yoW8XrW5p3
+	90kry7Jwn8Wrs0gwn3tFW5XrWfury3Z3WfGw15twn3AF4fJr93Jryxtr45tFW8W3srAw1U
+	A3Z5Kr4Dta97GaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
 	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
 	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
 	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
@@ -77,72 +77,44 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17Kr4UJwb_yoW5Gw17p3
 	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The invalidate_reg_state() function is currently static and only used
-within the x86 data type profiling implementation. To prepare for adding
-arm64 instruction tracking support, extract it as a common helper that
-can be shared across architectures.
+The imm_value in struct type_state_reg is defined as u32, which limits
+the size of values it can pass.
 
-No functional change intended.
+Promote imm_value from u32 to u64 and adjust the print format specifier
+in pr_debug_dtp() accordingly.
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-arch/annotate-x86.c | 9 ---------
- tools/perf/util/annotate-data.c              | 9 +++++++++
- tools/perf/util/annotate-data.h              | 1 +
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ tools/perf/util/annotate-arch/annotate-x86.c | 2 +-
+ tools/perf/util/annotate-data.h              | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-index 6044a68966f1..ee4e3e7f3209 100644
+index ee4e3e7f3209..eec3d8ce00b8 100644
 --- a/tools/perf/util/annotate-arch/annotate-x86.c
 +++ b/tools/perf/util/annotate-arch/annotate-x86.c
-@@ -207,15 +207,6 @@ static int x86__cpuid_parse(struct arch *arch, const char *cpuid)
- }
+@@ -540,7 +540,7 @@ static void update_insn_state_x86(struct type_state *state,
+ 			tsr->offset = 0;
+ 			tsr->ok = true;
  
- #ifdef HAVE_LIBDW_SUPPORT
--static void invalidate_reg_state(struct type_state_reg *reg)
--{
--	reg->kind = TSR_KIND_INVALID;
--	reg->ok = false;
--	reg->lifetime_active = false;
--	reg->lifetime_end = 0;
--	reg->copied_from = -1;
--}
--
- static void update_insn_state_x86(struct type_state *state,
- 				  struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				  struct disasm_line *dl)
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 4e4c58764082..104b80d471f1 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -638,6 +638,15 @@ struct type_state_stack *findnew_stack_state(struct type_state *state,
- 	return stack;
- }
- 
-+void invalidate_reg_state(struct type_state_reg *reg)
-+{
-+	reg->kind = TSR_KIND_INVALID;
-+	reg->ok = false;
-+	reg->lifetime_active = false;
-+	reg->lifetime_end = 0;
-+	reg->copied_from = -1;
-+}
-+
- /* Maintain a cache for quick global variable lookup */
- struct global_var_entry {
- 	struct rb_node node;
+-			pr_debug_dtp("mov [%x] imm=%#x -> reg%d\n",
++			pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
+ 				     insn_offset, tsr->imm_value, dst->reg1);
+ 			return;
+ 		}
 diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index c26130744260..453e13bbe3e2 100644
+index 453e13bbe3e2..91b83e94c51b 100644
 --- a/tools/perf/util/annotate-data.h
 +++ b/tools/perf/util/annotate-data.h
-@@ -258,6 +258,7 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- 				Dwarf_Die *type_die, int ptr_offset);
- struct type_state_stack *find_stack_state(struct type_state *state,
- 						int offset);
-+void invalidate_reg_state(struct type_state_reg *reg);
- bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
- 				u64 ip, u64 var_addr, int *var_offset,
- 				Dwarf_Die *type_die);
+@@ -173,7 +173,7 @@ extern struct annotated_data_stat ann_data_stat;
+  */
+ struct type_state_reg {
+ 	Dwarf_Die type;
+-	u32 imm_value;
++	u64 imm_value;
+ 	/*
+ 	 * The offset within the struct that the register points to.
+ 	 * A value of 0 means the register points to the beginning.
 -- 
 2.34.1
 
