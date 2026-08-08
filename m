@@ -1,55 +1,73 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4DD3D3323
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:24:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCD563FE671
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:37:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786191880; cv=none; b=XQhWhrgyqja5aImax25RsAeXNN/PQGyNaOyBj4/WiSXc0ajaUI09KuY+Cr7RLHr2bVixrHHr32r/gZ+0BeoyYRRHK+PrOM/9qrtlcvs/R4CbP9TXDrbVJMIpKLViBHK6sgrYwOev5Fb8e9W7EV6q8+4r2WDYs5Ls5Td+/h5IaYQ=
+	t=1786192664; cv=none; b=OAJVfUI9RD+z7DVQtQcHcOYqOdRJ4N+WzxjzlDcCB7DP8lmF+9zJreQuR0e8c/8aj+PUQJULf0qURwwgt3VB08EncWpz2xecQ8BF8stiQxP21TmZiJu0NhesaJRSJqKQWuNox+bquWpN/3sPP6iCO2xJw992Iop2CUC8nMOuwRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786191880; c=relaxed/simple;
-	bh=fvEiQhcf68hrq+UHayyjKFSE6SAxMUZohxznGKtt4PY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=oxVYTLxp/HG8cu4h8yAXkLkG6ZIoDLSRt9s2+ej0O3igfNuQZFhMiFHgloVKyNVXBIJOF6j44lq6dlcQwO+5Ctc0lFdC9OwRHHrUrqV3DsDiNuOZjZEb6x6kpgWI4GIzDvVm5Z8kDpkTVkBpypbycS0VINybuSsYaqbD2kFzLqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hHKtK0LJCzYQvl8
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:23:21 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 3D3894056F
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:19 +0800 (CST)
-Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S21;
-	Sat, 08 Aug 2026 20:24:18 +0800 (CST)
-From: Tengda Wu <wutengda@huaweicloud.com>
-To: Namhyung Kim <namhyung@kernel.org>,
-	james.clark@linaro.org,
-	xueshuai@linux.alibaba.com,
-	Li Huafei <lihuafei1@huawei.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	leo.yan@linux.dev,
-	Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>,
-	linux-perf-users@vger.kernel.org,
+	s=arc-20240116; t=1786192664; c=relaxed/simple;
+	bh=RqRHYXtn8FisZ01HMrvTbRfRn3mNCwRVEkgXUAePc10=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KAcL3Fi45ReteHxlLb69l0zHXTrnAwVV3e9Qtl7kUneChWUlwHfmuv7XtgReP/V5XoCqyGIjc2E7ibMnLsZmaGetk4j2LZRgL31Sq6cNIRe7GSeUm3PFpWyBTKuWUQQAAJZQirGg6ysY0ZMf90pAk59lII6IZwlilu2LVKj002U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EGxObPU2; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EGxObPU2"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-496b7622a83so3096175e9.2
+        for <llvm@lists.linux.dev>; Sat, 08 Aug 2026 05:37:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786192655; x=1786797455; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vIZDIewqCLitlr4qDMX+fEccbng/+DjCUrRt/C3FKec=;
+        b=EGxObPU22rlUnBbPDg9Xg5DDrjGORa0yIPS70y6G4qBvmcT+aBer9P+/SIUlgDAeco
+         eLrusK3WcyqlIWvfBNMoacRUoWe5wZenwWc+e6ZsaGvVDANfg1pENGvwx7MQbEQQyaI0
+         QsGn0T3v8TY0tv8OFgyV8TZsZ4Wb2fuxadWfFp2SGV8ExJiLMGyPcKPaKjPgiLIoM3QO
+         6S/B6kUSrrlxtPWmRq4+0FipEsL5MiPvqauJ4rCqZU/EURlJHfesBhCLEeVewTtBpWEa
+         Deztp8Szlfkog4Usz2ux3YBMGbjuKbzyn+cuI+AOmEQudDg9THXKfZ+KY6m9/geYR40Z
+         X+eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786192655; x=1786797455;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vIZDIewqCLitlr4qDMX+fEccbng/+DjCUrRt/C3FKec=;
+        b=BW4mwocOapvUEXWZItn6g8MTbVNf1lZOrCrC6O+x2fkbiaHuuYOH5/42+FbWad0zUP
+         DuemT98QeeNKdRgT3hF+HayKjWkMjiKJtkWPFpd2mfBA+HjiRFwL98jn8PdykSMYnf41
+         bJ7UeDONop5ILj4QNDrdsjn7a9VN2GDuuE0+Dl98Gn7a9Xbepz33Tl+pteyF4bP3LhF1
+         6kSguA1qnQldJ3R3VUSMJiLxODlX7PfKZB695b6aMLYQMkIrOURDAAFT4H6wo0IRTBK6
+         BS1MlozM8e0bxegpVLuvD5byx5uaE0fVEprK7C2xjtqq6CmSfyU7B3hv+gyxEaBeJHEa
+         lPrw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3qjUnNzGRuOJFCKoSdpnuHLEMSrSYtWrCp9cCHV/iXAb4MDNjnQ+qsbdPftWUBy5n3LTG@lists.linux.dev
+X-Gm-Message-State: AOJu0YwFFg09I+WSX8bEBkre3faSQmOY689hnRan5IX9Od/cA+CO8wb4
+	DFILf7rEoUEBHTGDSVQQc5rNB4yVvBVFhkaF7l7XBVfYK0G3Nmi+0ZkI
+X-Gm-Gg: AR+sD11NS18JvSQjJGQnNiiFkt5n7aWiroLrBpELGlB6RDVAbzy/KtBHTzCHX4G+PYk
+	+PiXzuZMOneGxxL9mftMNhbQ4yPfyDqeLfrC4A83Eg1EiUKta1kNWK566e/PWBaDmGpnGMJ7MTG
+	PM4gUOIwN81Za/8h+x98IPZnr7f+mCoTeSw6GaB3d1pvQPasnC00tydrOdANLrkzrzFRYWizISm
+	UNLrP22yxE2U3nRuJ2R9BoOVilGcVRsFnKX9+thRiyX8LUcCQUMhOzdlyeXuvI7+zf2sFKFiU5c
+	6STAkcJX4myug/Jthakie+texVYIgu3czTMQtBR0PPZ4mo81foeF19Hsonspt7uEdQYLIBEl9kR
+	iDPXMIcX75+tHv0Jv/ZOeMeTyhFliwxgXmacYNtBT1KGbNBfmUOjozMF5jHO6zVfHhl2iL4tiEa
+	DmBcXjrmZI0cuBRWI2950tPfCTZXzdukIBa//pjJwcB64Ur2OfERHgWMyUJ4fF2jy7/TOpJOY9u
+	2+p39EI4L8olKg9eu/+3TJvLK3OJS84vzJCSO9pl65EHCnjN2MfjHRr3xotWTTaYdGSxFj3TG8W
+	qw0SJOd/qb5MCDImKb4u
+X-Received: by 2002:a05:600c:83cf:b0:499:621a:b934 with SMTP id 5b1f17b1804b1-499621ab9f0mr79508745e9.17.1786192655175;
+        Sat, 08 Aug 2026 05:37:35 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-077-007-004-134.77.7.pool.telefonica.de. [77.7.4.134])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995e9f0230sm118673445e9.6.2026.08.08.05.37.34
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 08 Aug 2026 05:37:34 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Wei Yang <richard.weiyang@gmail.com>,
 	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 19/23] perf annotate-arm64: Support 'mov' instruction tracking
-Date: Sat,  8 Aug 2026 12:23:56 +0000
-Message-Id: <20260808122400.2961238-20-wutengda@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
-References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+	llvm@lists.linux.dev
+Subject: [PATCH] lib/interval_tree: fix allocation warning messages
+Date: Sat,  8 Aug 2026 14:36:08 +0200
+Message-Id: <20260808123608.73613-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,158 +75,44 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S21
-X-Coremail-Antispam: 1UD129KBjvJXoWxXryDZw1DKw48WF47Kw1fCrg_yoWrKrW3pa
-	4DC345G39Fqr42gFsIqFWUXr9a9w4xKr1jkryqvwnIyFy3tr1rKayktFWavF45Xry8Zw13
-	Gw4DKrZ8Xw42kF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
-	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state() for arm64 to support register-to-register and
-immediate-to-register 'mov' instructions.
+WARN_ON_ONCE() takes a condition, not a message. The string literals
+are always true, so the warnings still trigger but the messages are
+never printed.
 
-For register-to-register 'mov' (e.g., mov dreg, sreg), propagate data type
-information from the source register to the destination register.
+Use WARN_ONCE(1, ...) instead to print the messages and keep the
+once-only behavior.
 
-For immediate-to-register 'mov' (e.g., mov dreg, #imm), store the immediate
-value in the destination register's imm_value field and set its kind to
-TSR_KIND_CONST, allowing subsequent instructions to resolve it as a
-constant.
+Found with a Coccinelle script. Clang's -Wstring-conversion also flags
+such calls but is not enabled in kernel builds.
 
-A real-world example is shown below:
-
-  ffff8000803eebf8 <get_vma_policy>:
-  ffff8000803eec20:  mov  x21, x0          // x0 (struct vm_area_struct*) -> x21
-  ffff8000803eec28:  ldr  x2, [x0, #112]
-  ffff8000803eec2c:  cbz  x2, ffff8000803eec94 <get_vma_policy+0x9c>
-* ffff8000803eec94:  ldr  x0, [x21, #152]
-
-Before this commit, the type of x21 was unknown, causing the subsequent
-inference to fail:
-
-  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
-  chk [9c] reg21 offset=0x98 ok=0 kind=0 cfa : no type information
-  final result: no type information
-
-After this commit, the type of x21 is correctly inferred as 'vm_area_struct':
-
-  var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
-  mov [28] reg0 -> reg21 type='struct vm_area_struct*' size=0x8
-  chk [9c] reg21 offset=0x98 ok=1 kind=1 (struct vm_area_struct*) : Good!
-  found by insn track: 0x98(reg21) type-offset=0x98
-  final result:  type='struct vm_area_struct' size=0xb0
-
-Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+Fixes: 82114e45131f ("lib/interval_tree: add test case for interval_tree_iter_xxx() helpers")
+Assisted-by: Claude:claude-fable-5 coccinelle
+Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 53 ++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ lib/interval_tree_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 6e09e9707256..7b780bad8c07 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/compiler.h>
- #include <errno.h>
-+#include <inttypes.h>
- #include <stdlib.h>
- #include <string.h>
- #include <linux/ctype.h>
-@@ -484,6 +485,7 @@ static int propagate_load_reg_state(struct type_state *state,
- 		tsr->type = type_die;
- 		tsr->kind = TSR_KIND_TYPE;
- 		tsr->offset = 0;
-+		tsr->imm_value = 0;
- 		tsr->ok = true;
+diff --git a/lib/interval_tree_test.c b/lib/interval_tree_test.c
+index eba2d3e28980..b0b07270ce7c 100644
+--- a/lib/interval_tree_test.c
++++ b/lib/interval_tree_test.c
+@@ -140,13 +140,13 @@ static int intersection_range_check(void)
  
- 		if (src->multi_regs) {
-@@ -641,6 +643,51 @@ static void update_store_insn_state(struct type_state *state,
- 	adjust_reg_index_state(state, dst, insn_name, dl->al.offset);
- }
- 
-+static void update_mov_insn_state(struct type_state *state,
-+				  struct disasm_line *dl,
-+				  struct annotated_op_loc *src,
-+				  struct annotated_op_loc *dst)
-+{
-+	struct type_state_reg *tsr;
-+	u32 insn_offset = dl->al.offset;
-+	int sreg = src->reg1;
-+	int dreg = dst->reg1;
-+
-+	if (!has_reg_type(state, dreg))
-+		return;
-+
-+	tsr = &state->regs[dreg];
-+	tsr->copied_from = -1;
-+
-+	if (src->imm) {
-+		tsr->kind = TSR_KIND_CONST;
-+		tsr->imm_value = src->offset;
-+		tsr->offset = 0;
-+		tsr->ok = true;
-+
-+		pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
-+			     insn_offset, tsr->imm_value, dreg);
-+		return;
-+	}
-+
-+	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
-+		invalidate_reg_state(tsr);
-+		return;
-+	}
-+
-+	tsr->type = state->regs[sreg].type;
-+	tsr->kind = state->regs[sreg].kind;
-+	tsr->imm_value = state->regs[sreg].imm_value;
-+	tsr->offset = state->regs[sreg].offset;
-+	tsr->ok = state->regs[sreg].ok;
-+
-+	if (tsr->kind == TSR_KIND_TYPE || tsr->kind == TSR_KIND_POINTER)
-+		tsr->copied_from = sreg;
-+
-+	pr_debug_dtp("mov [%x] reg%d -> reg%d", insn_offset, sreg, dreg);
-+	pr_debug_type_name(&tsr->type, tsr->kind);
-+}
-+
- static void update_insn_state_arm64(struct type_state *state,
- 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				    struct disasm_line *dl)
-@@ -703,6 +750,7 @@ static void update_insn_state_arm64(struct type_state *state,
- 	 * prevent stale type info from propagating to subsequent instructions.
- 	 */
- 	if (has_reg_type(state, dst->reg1) &&
-+	    strcmp(dl->ins.name, "mov") &&
- 	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
- 		pr_debug_dtp("%s [%x] invalidate reg%d",
- 			     dl->ins.name, insn_offset, dst->reg1);
-@@ -715,8 +763,11 @@ static void update_insn_state_arm64(struct type_state *state,
- 		return;
+ 	intxn1 = bitmap_alloc(nnodes, GFP_KERNEL);
+ 	if (!intxn1) {
+-		WARN_ON_ONCE("Failed to allocate intxn1\n");
++		WARN_ONCE(1, "Failed to allocate intxn1\n");
+ 		return -ENOMEM;
  	}
  
-+	/* Register to register or imm value to register transfers */
-+	if (!strcmp(dl->ins.name, "mov"))
-+		update_mov_insn_state(state, dl, src, dst);
- 	/* Memory to register transfers */
--	if (!strncmp(dl->ins.name, "ld", 2))
-+	else if (!strncmp(dl->ins.name, "ld", 2))
- 		update_load_insn_state(state, dloc, dl, src, dst);
- 	/* Register to memory transfers */
- 	else if (!strncmp(dl->ins.name, "st", 2))
+ 	intxn2 = bitmap_alloc(nnodes, GFP_KERNEL);
+ 	if (!intxn2) {
+-		WARN_ON_ONCE("Failed to allocate intxn2\n");
++		WARN_ONCE(1, "Failed to allocate intxn2\n");
+ 		bitmap_free(intxn1);
+ 		return -ENOMEM;
+ 	}
 -- 
-2.34.1
+2.39.5 (Apple Git-154)
 
