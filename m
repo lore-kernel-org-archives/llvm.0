@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868AE412C0D
-	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:44:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5511D414A17
+	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 12:44:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786193076; cv=none; b=m3nSnAiA+9UdTCQ2G7t30LE+FeAbLizRNcjpQREoTR5TPeq/KMSZGiOZwgtzwmfhWegbwwj9JtqgtAELtStOus8HxZrLYctvJKRvwTJV5bV494MpdsmIlk5Ru68x+z82nr1uH0RbUZcyhH1D+715uO+HF7oXO3H/YHyVzjAGYLg=
+	t=1786193076; cv=none; b=fFXDrwaPUABTfpZd7YxcNCMdZKY2hhgjexis5oxLGCEFCIP5O7E+28tVaNnyOs55Eo2KspZX9EYvMtmIL0KLAcV292zsLth/j+K2fpOKNjFYm0iOCf8GES/KQ7AO7siO8p10MBMhLPmgtbeuvwrhCW5+huaJKzeJyWVkBOHdEN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786193076; c=relaxed/simple;
-	bh=DIWPjGhgFL2oNitibJUYkj4dRBVK4sRIVlI7HhAotbg=;
+	bh=fgjFC7OTBNn6kbehtQ5xn7LKorTtVxFcSxZLVls5MdA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=GDgsSJC3ZwLesUemy0BQFOlLq1nQCnj42E1ZlAvwrwGohSfQVgNipj1eEdnVDUBr+vH4/xklSUsllDVCOpoxk5JB7A7k4HbdZvnvCDO6Zf+KQSttdvQps0uLKVgbyR+CRkpaNvlxdhV3z9XHC71YmqJno/RPfr3zbqTE+5ZDRFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=tiSijlveE5R4Oi0QGQunWQuLLw88cFdKZCCR/a1TLf8TV7L0XQiY2dYVIYUYHaeKBVjC0rZIDBnHjXVvhB8mUJuPQ9nq6GbEQO0l6v4qEdwHNbgPEQUhn9tvuRAM1cSWrZiUtSMyoO4me8jkwiZvAOFBKl4/fcv+TascxQooLGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvB3s8CzKHNCB
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hHKvB2LXjzKHNC2
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:06 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id A60AC4056B
+	by mail.maildlp.com (Postfix) with ESMTP id 7012140593
 	for <llvm@lists.linux.dev>; Sat,  8 Aug 2026 20:24:17 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S6;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgB34YjkH3dqbrhMBg--.41805S4;
 	Sat, 08 Aug 2026 20:24:17 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v4 04/23] perf annotate-arm64: Handle load and store instructions
-Date: Sat,  8 Aug 2026 12:23:41 +0000
-Message-Id: <20260808122400.2961238-5-wutengda@huaweicloud.com>
+Subject: [PATCH v4 02/23] perf llvm: Fix arm64 adrp instruction disassembly mismatch with objdump
+Date: Sat,  8 Aug 2026 12:23:39 +0000
+Message-Id: <20260808122400.2961238-3-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260808122400.2961238-1-wutengda@huaweicloud.com>
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
@@ -57,201 +57,123 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rXr1xXFyxGF4DKr17Wrg_yoW7uF18pa
-	s2k345tr42qr4rW3Z3JF4kXw1fGa18Jw43KryxJwn3C3yY9ry8tFn5Kw12kF45Gr95uw4a
-	qFn0yry0vF98A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
-	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YV
-	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
-	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
-	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
-	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
+X-CM-TRANSID:Syh0CgB34YjkH3dqbrhMBg--.41805S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxWryxGr4xuw48Zr4xCFykKrg_yoW5ZF4fpr
+	ZFka95Jry5Ar1fZ39IkF47WFn0yrZ2gF45K3y3ArWvkr4ftFyxC34xGry29F1DXryqq3y5
+	ArZIvFyUGF4kArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUXw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v2
+	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMc
+	Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+	Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I
+	0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k2
+	0xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI
+	8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41l
+	IxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMI
+	IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+	87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRQL00DUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Add ldst_ops to handle load and store instructions in order to parse
-the data types and offsets associated with PMU events for memory access
-instructions. There are many variants of load and store instructions in
-arm64, making it difficult to match all of these instruction names
-completely. Therefore, only the instruction prefixes are matched. The
-prefix 'ld|st' covers most of the memory access instructions, 'cas|swp'
-matches atomic instructions, and 'prf' matches memory prefetch
-instructions.
+The operands of 'adrp' instructions parsed by libllvm are currently
+represented as raw immediates rather than the "address <symbol+offset>"
+format used by objdump. This inconsistency causes arm64_mov__parse()
+to fail when parsing these instructions during post-processing.
 
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+Example of the mismatch:
+  Current: adrp  x18, 8014
+  Fix:     adrp  x18, ffff800081f5f000 <this_cpu_vector>
+
+Fix this by manually extracting the target address from the raw adrp
+instruction via symbol_lookup_callback(). The address is then converted
+to a specific symbol during symbol__disassemble_llvm() and formatted
+to match objdump's output, ensuring compatibility with existing
+parsers.
+
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 119 ++++++++++++++++++
- 1 file changed, 119 insertions(+)
+ tools/perf/util/llvm.c | 50 ++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 46 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 5e824fd617ee..32752a3bc756 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -14,6 +14,7 @@ struct arch_arm64 {
- 	struct arch arch;
- 	regex_t call_insn;
- 	regex_t jump_insn;
-+	regex_t ldst_insn; /* load and store instruction */
- };
+diff --git a/tools/perf/util/llvm.c b/tools/perf/util/llvm.c
+index a0deb742a733..6b53b283205a 100644
+--- a/tools/perf/util/llvm.c
++++ b/tools/perf/util/llvm.c
+@@ -9,8 +9,10 @@
+ #include "symbol.h"
+ #include <errno.h>
+ #include <fcntl.h>
++#include <string.h>
+ #include <unistd.h>
+ #include <linux/zalloc.h>
++#include <linux/bitops.h>
  
- static bool arm64__is_reg(const char *op)
-@@ -163,6 +164,108 @@ static const struct ins_ops arm64_mov_ops = {
- 	.scnprintf = arm64_mov__scnprintf,
- };
- 
-+static bool arm64__insn_is_source_on_left(struct disasm_line *dl)
-+{
-+	/*
-+	 * Store instructions invert the standard syntax by placing the source
-+	 * register before the destination memory address.
-+	 */
-+	return !strncmp(dl->ins.name, "st", 2);
-+}
+ #ifdef HAVE_LIBLLVM_SUPPORT
+ #include "llvm-c-helpers.h"
+@@ -108,6 +110,16 @@ symbol_lookup_callback(void *disinfo, uint64_t value,
+ 		storage->branch_addr = value;
+ 	else if (*ref_type == LLVMDisassembler_ReferenceType_In_PCrel_Load)
+ 		storage->pcrel_load_addr = value;
++	else if (*ref_type == LLVMDisassembler_ReferenceType_In_ARM64_ADRP) {
++		uint64_t adrp_imm;
 +
-+/*
-+ * This function is used to parse arm64 load/store instructions into
-+ * instruction operands.
-+ *
-+ * Typical instructions and their parsing logic:
-+ *
-+ * 1. Immediate offset:
-+ *    ldr   x2, [x0]                -> target="x2", source="[x0]"
-+ *    ldr   x2, [x0, #24]           -> target="x2", source="[x0, #24]"
-+ *    ldp   x19, x20, [sp, #16]     -> target="x19, x20", source="[sp, #16]"
-+ *
-+ * 2. Pre-index addressing:
-+ *    stp   x29, x30, [sp, #-64]!   -> target="[sp, #-64]!", source="x29, x30"
-+ *
-+ * 3. Post-index addressing:
-+ *    str   x1, [x0], #8            -> target="[x0], #8", source="x1"
-+ *    ldr   w1, [x21], #4           -> target="w1", source="[x21], #4"
-+ *    ldp   x29, x30, [sp], #32     -> target="x29, x30", source="[sp], #32"
-+ *
-+ * 4. Register offset / extension:
-+ *    ldr   x0, [x1, w0, sxtw #3]   -> target="x0", source="[x1, w0, sxtw #3]"
-+ *    ldr   x0, [x1, x0, lsl #3]    -> target="x0", source="[x1, x0, lsl #3]"
-+ *
-+ * 5. Atomic operations:
-+ *    cas   w3, w1, [x0]            -> target="w3, w1", source="[x0]"
-+ *    swp   x3, x0, [x2]            -> target="x3, x0", source="[x2]"
-+ *
-+ * 6. Prefetch memory:
-+ *    prfm  pstl1strm, [x4]         -> target="pstl1strm", source="[x4]"
-+ *
-+ * 7. PC-relative loads (No bracket found):
-+ *    ldr   x0, ffff800080f40c68 <__kvm_nvhe_$d>  -> Fallback to default parser
-+ *
-+ * Parsing strategy:
-+ * Use the '[' bracket as the boundary to split the operands into left
-+ * and right sides. For non-store instructions, the left side is the
-+ * target and the right side is the source. For store instructions, the
-+ * roles are reversed.
-+ */
-+static int arm64_ldst__parse(const struct arch *arch,
-+			     struct ins_operands *ops,
-+			     struct map_symbol *ms,
-+			     struct disasm_line *dl)
-+{
-+	char *s, *left, *right;
++		/* immhi (bits 23:5) and immlo (bits 30:29) */
++		adrp_imm = ((value & 0x00ffffe0) >> 3) | ((value >> 29) & 0x3);
++		adrp_imm = sign_extend64(adrp_imm, 20);
 +
-+	right = s = strchr(ops->raw, arch->objdump.memory_ref_char);
-+	if (!s) {
-+		/* Fallback to default parser for PC-relative loads. */
-+		return arm64_mov__parse(arch, ops, ms, dl);
++		/* Calculate the target page address */
++		storage->pcrel_load_addr = (address & ~0xfffULL) + (adrp_imm << 12);
 +	}
+ 	*ref_type = LLVMDisassembler_ReferenceType_InOut_None;
+ 	return NULL;
+ }
+@@ -230,10 +242,40 @@ int symbol__disassemble_llvm(const char *filename, struct symbol *sym,
+ 		if (storage.pcrel_load_addr != 0) {
+ 			char *name = llvm_name_for_data(dso, filename,
+ 							storage.pcrel_load_addr);
+-			disasm_len += scnprintf(disasm_buf + disasm_len,
+-						sizeof(disasm_buf) - disasm_len,
+-						"  # %#"PRIx64,
+-						storage.pcrel_load_addr);
 +
-+	while (s > ops->raw && *s != ',')
-+		--s;
++			if (arch__is_arm64(args->arch)) {
++				/*
++				 * For arm64, replace the immediate operand with
++				 * the resolved address to match objdump's output.
++				 *
++				 * Example conversion:
++				 *   From: adrp  x18, 8014
++				 *   To:   adrp  x18, ffff800081f5f000
++				 */
++				char *s = strchr(disasm_buf, ',');
 +
-+	if (s == ops->raw)
-+		return -1;
++				if (s == NULL)
++					goto err;
 +
-+	*s = '\0';
-+	left = strdup(ops->raw);
++				s++;
++				*s = '\0';
++				disasm_len = strlen(disasm_buf);
++				disasm_len += scnprintf(disasm_buf + disasm_len,
++							sizeof(disasm_buf) - disasm_len,
++							" %"PRIx64,
++							storage.pcrel_load_addr);
++			} else {
++				/*
++				 * For other archs, append the resolved address
++				 * as an inline comment.
++				 */
++				disasm_len += scnprintf(disasm_buf + disasm_len,
++							sizeof(disasm_buf) - disasm_len,
++							"  # %#"PRIx64,
++							storage.pcrel_load_addr);
++			}
 +
-+	*s = ',';
-+	if (!left)
-+		return -1;
-+
-+	right = rstrip_space_and_comment(right, arch->objdump.comment_char);
-+	if (!right) {
-+		zfree(&left);
-+		return -1;
-+	}
-+
-+	if (arm64__insn_is_source_on_left(dl)) {
-+		ops->source.raw = left;
-+		ops->source.mem_ref = false;
-+		ops->target.raw = right;
-+		ops->target.mem_ref = true;
-+	} else {
-+		ops->source.raw = right;
-+		ops->source.mem_ref = true;
-+		ops->target.raw = left;
-+		ops->target.mem_ref = false;
-+	}
-+
-+	ops->source.multi_regs = arm64__check_multi_regs(arch, ops->source.raw);
-+	ops->target.multi_regs = arm64__check_multi_regs(arch, ops->target.raw);
-+
-+	return 0;
-+}
-+
-+static struct ins_ops arm64_ldst_ops = {
-+	.parse	   = arm64_ldst__parse,
-+};
-+
- static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
- {
- 	struct arch_arm64 *arm = container_of(arch, struct arch_arm64, arch);
-@@ -173,6 +276,8 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
- 		ops = &jump_ops;
- 	else if (!regexec(&arm->call_insn, name, 2, match, 0))
- 		ops = &call_ops;
-+	else if (!regexec(&arm->ldst_insn, name, 2, match, 0))
-+		ops = &arm64_ldst_ops;
- 	else if (!strcmp(name, "ret"))
- 		ops = &ret_ops;
- 	else
-@@ -197,6 +302,8 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	arch->id = *id;
- 	arch->objdump.comment_char	  = '/';
- 	arch->objdump.skip_functions_char = '+';
-+	arch->objdump.memory_ref_char	  = '[';
-+	arch->objdump.imm_char		  = '#';
- 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
- 
- 	/* bl, blr */
-@@ -210,8 +317,20 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	if (err)
- 		goto out_free_call;
- 
-+	/*
-+	 * The ARM64 architecture has many variants of load/store instructions.
-+	 * It is quite challenging to match all of them completely. Here, we
-+	 * only match the prefixes of these instructions.
-+	 */
-+	err = regcomp(&arm->ldst_insn, "^(ld|st|cas|prf|swp)",
-+		      REG_EXTENDED);
-+	if (err)
-+		goto out_free_jump;
-+
- 	return arch;
- 
-+out_free_jump:
-+	regfree(&arm->jump_insn);
- out_free_call:
- 	regfree(&arm->call_insn);
- out_free_arm:
++			/* Append the resolved symbol name if available */
+ 			if (name) {
+ 				disasm_len += scnprintf(disasm_buf + disasm_len,
+ 							sizeof(disasm_buf) -
 -- 
 2.34.1
 
