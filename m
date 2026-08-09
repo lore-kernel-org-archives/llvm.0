@@ -1,115 +1,89 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3F6C7262E
-	for <llvm@lists.linux.dev>; Sun,  9 Aug 2026 17:03:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F1BB26F2BF;
+	Sun,  9 Aug 2026 17:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786294989; cv=none; b=GjApi9z1Ctvi/Lqr81jzMxJGHxUwxiKoANziRzfoLkigNAro+rq4l424/R6aFQHp8jlNTKXSWxrHV1ewwgVZZGKXnCQjf+bO4UEI0bZqILCNZhABGGaKhuOF3QTlIF44+1cNiYbIuHlM1MEvqVWSWpts8Es3GPHzrDhyjJJ83Ew=
+	t=1786296367; cv=none; b=CjQSAVaJKLLHpycoYimC6DIpUQnJVzqkHuziNBqoblXRmnOvOBcOVXvjMSIND1bl0QhuVGFCZUjqd0aphh9eeIFu6B3wTrJm2M9nMjRaQY0NLHwjYDmIwxk72OOri0QzdDytSJNkkuueVc9VIOnfQ2lCXvDE4/RqrEC8acrJEr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786294989; c=relaxed/simple;
-	bh=pxX97Le3a4SmIBF0XW6UlAQoB+Mmh19T877hiL1XPBU=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=e3Xvw3LOqmgFqkXT8mUxTGw7UGZ04Gu1AbR/nmFSdVstWArfBT4e4AZiXJpUMfjSXurSKW65yGxMtZfJOvJYZ866zHaeDUqb9FlhmAHOy4ZpiO5JlYSc1tmaxGX1JPeZc85l1JEyCckogmH75PkQphOhiFACvN+1puf3VrdYEqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=H3aSpE28; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786296367; c=relaxed/simple;
+	bh=6UrDoWCemHZaHTA5t+2EbSF//z0gX4NZCttaryizV5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fK6+n09CZa1Cps06QkZEeH5Oe3ePDy9/iOnDT1SUa4fzRkoHFOXvxq91WcH9cvMCzqMJNeGHDgVWPtG/V5sO5jls1YTCqteItmNnLvGr/Of61usO1PMr/D1EbN7q5yn+g6eOrA4oQg3b2VwG1Ls0w/s3XTYevt2sY39yTbWxbvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=voAcElwK; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="H3aSpE28"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786294986;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=T4jcH8C5zv8Ga1Rb17OCiuRTUDaXllCRUjJJNNz6MQc=;
-	b=H3aSpE28X3EUYTd9In7oMNSexcyQwDyURcB8B2TImOTmNzUjrzwQW40MvMYEYMW8feGFt+
-	z12HtQwiuvEMt8gOPB5BiPk7iwX5KbsCD6pN+kqqBTpFhfgvMShGl32YqlMQo0+S9YTt6P
-	OuwktO4jGZ7xZL1xeyUVtnZpp1SEcls=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-558--eOmCPgCO-Gra0SYU1WY8A-1; Sun,
- 09 Aug 2026 13:03:05 -0400
-X-MC-Unique: -eOmCPgCO-Gra0SYU1WY8A-1
-X-Mimecast-MFC-AGG-ID: -eOmCPgCO-Gra0SYU1WY8A_1786294984
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 779AE1956041
-	for <llvm@lists.linux.dev>; Sun,  9 Aug 2026 17:03:04 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 135C019560AB;
-	Sun,  9 Aug 2026 17:03:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4pyF?= PASS (MISSED 60 of 66): Test report for master
- (7.2.0-rc6, upstream-mainline, b643e495)
-Date: Sun, 09 Aug 2026 17:03:03 -0000
-To: llvm@lists.linux.dev
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="voAcElwK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=ry9fk0XG9JYbqeFPh0yNld54SQt3A83a8vQYvm01BjY=; b=voAcElwKJGsW/1k0o6ZQjOjwA9
+	AMbOZ2HQBU3A0RvorYkukinZR6ZouFHHTdmG8KGPGhEEN3r8qJQRl96TthwUiGUgzBjetNnHIY2Au
+	HW3Wn2WZC8EXW2fv/AJLKQKJ50eoNV6mMfIgg/0JmkTa5VPk4PhweO3gtL6NeEHGxVfc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1wt7HW-00Gpot-Ip; Sun, 09 Aug 2026 19:25:54 +0200
+Date: Sun, 9 Aug 2026 19:25:54 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net-next v11 02/12] net: phylink: introduce internal
+ phylink PCS handling
+Message-ID: <72c39d88-f901-48e0-ac3d-c7aca6e98dd5@lunn.ch>
+References: <20260807131301.192060-1-ansuelsmth@gmail.com>
+ <20260807131301.192060-3-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <51681.126080913030500383@us-mta-558.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 9kGaShi_kiNlQrdL4u4a73ljUMJgf3G12kBeaA1Sydw_1786294984
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260807131301.192060-3-ansuelsmth@gmail.com>
 
-Hi, we tested your kernel and here are the results:
+> +++ b/drivers/net/phy/phylink.c
+> @@ -60,6 +60,9 @@ struct phylink {
+>  	/* The link configuration settings */
+>  	struct phylink_link_state link_config;
+>  
+> +	/* List of available PCS */
+> +	struct list_head pcs_list;
+> +
+>  	/* What interface are supported by the current link.
+>  	 * Can change on removal or addition of new PCS.
+>  	 */
+> @@ -154,6 +157,8 @@ static const phy_interface_t phylink_sfp_interface_preference[] = {
+>  
+>  static DECLARE_PHY_INTERFACE_MASK(phylink_sfp_interfaces);
+>  
+> +static void phylink_run_resolve(struct phylink *pl);
 
-    Overall result: PASSED
-             Merge: OK
-           Compile: OK
-              Test: OK
+forward definitions are not liked. Please add a patch which moves it
+earlier.
 
-Tested-by: CKI Project <cki-project@redhat.com>
-
-Kernel information:
-    Commit message: Merge tag 's390-7.2-7' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/s390/linux
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2745341657
-
-Tests that were not ran because of internal issues:
-    /distribution/check-install [aarch64, x86_64]
-    /distribution/command [aarch64, x86_64]
-    /test/misc/machineinfo [aarch64, x86_64]
-    Boot test [aarch64, x86_64]
-    CKI/restraint [aarch64, x86_64]
-    Reboot test [aarch64, x86_64]
-    SELinux Custom Module Setup [aarch64, x86_64]
-    selinux-policy: serge-testsuite [aarch64, x86_64]
-    Storage - blktests - throtl [aarch64, x86_64]
-    Storage - blktests - ublk [aarch64, x86_64]
-    stress: stress-ng - cpu-cache [aarch64, x86_64]
-    stress: stress-ng - memory [aarch64, x86_64]
-    xfstests - btrfs [aarch64, x86_64]
-    xfstests - cifsv3.11 [x86_64]
-    xfstests - ext4 [aarch64, x86_64]
-    xfstests - nfsv4.2 [x86_64]
-    xfstests - xfs [aarch64, x86_64]
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+	Andrew
