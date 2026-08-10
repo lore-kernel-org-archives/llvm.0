@@ -1,103 +1,181 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A293A453B
-	for <llvm@lists.linux.dev>; Mon, 10 Aug 2026 09:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD10C3B634E;
+	Mon, 10 Aug 2026 09:58:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786354920; cv=none; b=I7aJMSFCeo0QhTzz8YFR1y+hgjg1QfCvKURZd3lSrvjW/qlDC3GHVe19ZXVmujZKdKR5OeZwsO2Qz1oC/menJqRAtS/4sUwW0NweRfR23T+FT07IdxPyakmyW1LjmCKiAEG2AArjMI1KxJOPdkPtCuzg+pyt3nxKIq3MxBcAUuo=
+	t=1786355893; cv=none; b=RamCXZH9hLaH3esUdU2WVSP7py8hpZHtHEpxPe6BZQwG0twb+Hh/cCEMbR/AZUAyAYfxKKz/tkipouytJlhKfvA6mSfGceYLxHrb0jIzXACrW2GCI5cf3r0n8ml3aEcVZwvOWGwOAxk9PzX6tRJs0yfYDGFB4crC+ZOSL5JtSOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786354920; c=relaxed/simple;
-	bh=lAlJ21024iVEAiB1omuqDYIS76cnSpFr0AtgmGJNB4k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=bp5GsY1wdHMnUhBrwFR3w7/d7DG19FqVUxl72w/Jx5rzudawLn0z9s4d6KQYts1nRcICof2eHjYJgT3/NZxJGJKoBwUqW5pIPFMEWgt5MgjCy0hxKSA7Rp9wqXoR+xx2HJKT2rV29YhXjhAT7IPlLU0SR+HzLuNgLgDj5RSn6HM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=ble4axPc; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1786355893; c=relaxed/simple;
+	bh=OIBLn+vI6UtjzTR690g/0/DqXLgizFSN5e6xNFRiIQY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R/dmjmbzf/WZmLRBZqaYXteR9Nmtfis98foUwqbYwreXDkf+vxq1FklG+oV4bP9v6p7XC9qvNxH35wwnm3OVUy2TrgQ7XXdD2vLqE+htmSaVkmhkyRNxwUYz9ZXzy11EfW4wUuguamz+rRfrE7bLWkhB2tohcQCG6RboS9jWGdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LR0REGSF; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="ble4axPc"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260810094154euoutp026efa85bdc4a0978765e42bacd22cf088~KaFSXg1GA1630116301euoutp02G
-	for <llvm@lists.linux.dev>; Mon, 10 Aug 2026 09:41:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260810094154euoutp026efa85bdc4a0978765e42bacd22cf088~KaFSXg1GA1630116301euoutp02G
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1786354914;
-	bh=AmOptGmSSwb48Q3nQS4iFyaNRaAar+3mAWyPKqr/PZc=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=ble4axPczDpJRsTJenkxPmIfVecz+JLi0iHpAR4YcF2TnitaLf9xU89sxJ2AwaBgZ
-	 /JMG0I5RUxNOgAqqlbGedKylHLO58WWFx6CUtasFjhL8YGvVKF90lp9KTw8buQj1wm
-	 QuYm6V7Vke4seybUzDddIxlxx2jCaqqmquQ/kQvs=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20260810094154eucas1p14114a0cb677a4b4da96242f50cae88c0~KaFR42qow0110201102eucas1p1u;
-	Mon, 10 Aug 2026 09:41:54 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20260810094153eusmtip22c92126836a048d2e2c83409f520ae1c~KaFQzzhe_0770707707eusmtip2n;
-	Mon, 10 Aug 2026 09:41:53 +0000 (GMT)
-Message-ID: <7418f71a-cf53-4641-bdf3-e967e776b0a8@samsung.com>
-Date: Mon, 10 Aug 2026 11:41:52 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LR0REGSF"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786355888; x=1817891888;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OIBLn+vI6UtjzTR690g/0/DqXLgizFSN5e6xNFRiIQY=;
+  b=LR0REGSFrTp2iCWnzRmDPOYYi09SU6/rm7EaZp0oNWTo8OJ8II/eEzHL
+   Yv4iR/TPf+E4JUFfHnliflVWlmoIlIo2vXyLr2CTIWXDEj3c8SE0uOBxI
+   B8F2th3p6qk4K0NePsOB4HFTbQWqrYl4XK++vMgdv6Td/gSMv3AOvv722
+   BkxlSYWTboO3N6yoROJ0j5+kSdXxdVQ4qWu1CPqYWvyX0ntlY76DfIQIA
+   GCVflQ+V7V/w1YOFGphHKBITdNOT80jtysEY2f4rmuYQTk3zDp9L4Nklc
+   JwWoL+nQQOnYG+CoiN5Ep11urjpuHj+FY4pDB0msTscDMT0rAxoMaI4R0
+   A==;
+X-CSE-ConnectionGUID: TpVT6/G3T0Gjt/RWCSKPWg==
+X-CSE-MsgGUID: Zk4bHihpSPWcdwDWH2vG5w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11870"; a="86941074"
+X-IronPort-AV: E=Sophos;i="6.25,215,1779174000"; 
+   d="scan'208";a="86941074"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2026 02:58:01 -0700
+X-CSE-ConnectionGUID: 1s6lpu4bQyymJDs4F82TDA==
+X-CSE-MsgGUID: PFzlndWpT9OR6jAyiitIZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,215,1779174000"; 
+   d="scan'208";a="261708904"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 10 Aug 2026 02:57:58 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wtMlX-00000000N6k-1EnS;
+	Mon, 10 Aug 2026 09:57:55 +0000
+Date: Mon, 10 Aug 2026 17:57:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jose Ignacio Tornos Martinez <jtornosm@redhat.com>, bhelgaas@google.com,
+	alex@shazbot.org, mani@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	jjohnson@kernel.org, linux-pci@vger.kernel.org,
+	linux-wireless@vger.kernel.org, ath11k@lists.infradead.org,
+	ath12k@lists.infradead.org, mhi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>
+Subject: Re: [PATCH v11] PCI: Add device-specific reset for Qualcomm devices
+Message-ID: <202608101710.4bALXXJf-lkp@intel.com>
+References: <20260626055023.197470-1-jtornosm@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] pwm: th1520: use vertical import style
-To: Guru Das Srinagesh <linux@gurudas.dev>, Link Mauve
-	<linkmauve@linkmauve.fr>, Drew Fustini <fustini@kernel.org>, Guo Ren
-	<guoren@kernel.org>, Fu Wei <wefu@redhat.com>,
-	=?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, Miguel Ojeda
-	<ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
-	<gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
-	<bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
-	Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
-	Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, Daniel
-	Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
-	<tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: linux-riscv@lists.infradead.org, linux-pwm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <20260721-pwm-rust-vert-imp-v2-1-9f91547f5e07@gurudas.dev>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20260810094154eucas1p14114a0cb677a4b4da96242f50cae88c0
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20260721074943eucas1p20eaf6768a8a3db90d29a9d45746554ab
-X-EPHeader: CA
-X-CMS-RootMailID: 20260721074943eucas1p20eaf6768a8a3db90d29a9d45746554ab
-References: <CGME20260721074943eucas1p20eaf6768a8a3db90d29a9d45746554ab@eucas1p2.samsung.com>
-	<20260721-pwm-rust-vert-imp-v2-1-9f91547f5e07@gurudas.dev>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260626055023.197470-1-jtornosm@redhat.com>
 
-Hi,
+Hi Jose,
 
-On 7/21/26 09:49, Guru Das Srinagesh wrote:
-> Convert `use` imports to vertical layout for better readability and
-> maintainability.
-> 
-> Signed-off-by: Guru Das Srinagesh <linux@gurudas.dev>
-> ---
-> Came across a recent commit bc58905eb07 ("samples: rust_misc_device: use
-> vertical import style") and found a few more locations that could
-> benefit from this cleanup. No functional changes.
-> 
-> Separating out patches per-subsystem as per the review feedback in [0].
-> 
-> Tested via:
-> 
->     $ make LLVM=1 rustfmtcheck || echo "fail"
->     $
-> 
-> [0]: https://lore.kernel.org/lkml/20260628-b4-rust-vertical-imports-v1-0-98bc71d4810b@gurudas.dev/
-> ---
+kernel test robot noticed the following build warnings:
 
-Looks good to me,
+[auto build test WARNING on pci/next]
+[also build test WARNING on pci/for-linus linus/master v7.2-rc6 next-20260807]
+[cannot apply to linux-review/Jose-Ignacio-Tornos-Martinez/Add-device-specific-reset-for-Qualcomm-devices/20260804-001013]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Michal Wilczynski <m.wilczynski@samsung.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Jose-Ignacio-Tornos-Martinez/PCI-Add-device-specific-reset-for-Qualcomm-devices/20260810-131417
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
+patch link:    https://lore.kernel.org/r/20260626055023.197470-1-jtornosm%40redhat.com
+patch subject: [PATCH v11] PCI: Add device-specific reset for Qualcomm devices
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260810/202608101710.4bALXXJf-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260810/202608101710.4bALXXJf-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608101710.4bALXXJf-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/pci/quirks.c:4278:11: warning: result of comparison of constant 18446744073709551615 with expression of type 'u32' (aka 'unsigned int') is always true [-Wtautological-constant-out-of-range-compare]
+    4278 |                 if (val != PCI_ERROR_RESPONSE) {
+         |                     ~~~ ^  ~~~~~~~~~~~~~~~~~~
+   1 warning generated.
+
+
+vim +4278 drivers/pci/quirks.c
+
+  4234	
+  4235	/*
+  4236	 * Qualcomm WiFi device-specific reset using SoC global reset via BAR0
+  4237	 * registers.
+  4238	 */
+  4239	static int reset_qualcomm_wifi(struct pci_dev *pdev, bool probe)
+  4240	{
+  4241		bool link_recovered = false;
+  4242		unsigned long timeout;
+  4243		void __iomem *bar;
+  4244		u32 val;
+  4245		u16 cmd;
+  4246	
+  4247		if (probe)
+  4248			return 0;
+  4249	
+  4250		if (pdev->current_state != PCI_D0)
+  4251			return -EINVAL;
+  4252	
+  4253		pci_read_config_word(pdev, PCI_COMMAND, &cmd);
+  4254		pci_write_config_word(pdev, PCI_COMMAND, cmd | PCI_COMMAND_MEMORY);
+  4255	
+  4256		bar = pci_iomap(pdev, 0, 0);
+  4257		if (!bar) {
+  4258			pci_write_config_word(pdev, PCI_COMMAND, cmd);
+  4259			return -ENODEV;
+  4260		}
+  4261	
+  4262		val = ioread32(bar + QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET);
+  4263		val |= QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET_V;
+  4264		iowrite32(val, bar + QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET);
+  4265		ioread32(bar + QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET);
+  4266	
+  4267		msleep(10);
+  4268	
+  4269		val &= ~QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET_V;
+  4270		iowrite32(val, bar + QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET);
+  4271		ioread32(bar + QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET);
+  4272	
+  4273		msleep(10);
+  4274	
+  4275		timeout = jiffies + msecs_to_jiffies(5000);
+  4276		while (time_before(jiffies, timeout)) {
+  4277			val = ioread32(bar + QUALCOMM_WIFI_PCIE_SOC_GLOBAL_RESET);
+> 4278			if (val != PCI_ERROR_RESPONSE) {
+  4279				link_recovered = true;
+  4280				break;
+  4281			}
+  4282			msleep(20);
+  4283		}
+  4284	
+  4285		if (!link_recovered) {
+  4286			pci_err(pdev, "PCIe link failed to recover after reset\n");
+  4287			goto out_restore;
+  4288		}
+  4289	
+  4290		/* After SOC_GLOBAL_RESET, MHISTATUS may still have SYSERR bit set
+  4291		 * and thus need to set MHICTRL_RESET to clear SYSERR.
+  4292		 */
+  4293		iowrite32(QUALCOMM_WIFI_MHICTRL_RESET_MASK, bar + QUALCOMM_WIFI_MHICTRL);
+  4294		ioread32(bar + QUALCOMM_WIFI_MHICTRL);
+  4295	
+  4296		msleep(10);
+  4297	
+  4298	out_restore:
+  4299		pci_iounmap(pdev, bar);
+  4300		pci_write_config_word(pdev, PCI_COMMAND, cmd);
+  4301	
+  4302		return link_recovered ? 0 : -ETIMEDOUT;
+  4303	}
+  4304	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
