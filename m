@@ -1,98 +1,114 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4B3224AF9;
-	Sun,  9 Aug 2026 21:02:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBFE220F2A
+	for <llvm@lists.linux.dev>; Mon, 10 Aug 2026 03:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786309345; cv=none; b=ua/x3Pk2mPVLSAUtS9k6jxDu3Ue3aRLqwLCtTNgXWZtrT2KQjJuwQTj0nejR0UTvLKc592CBnqnm68QO2QJPxMpKTizJXEFlViTsHzzFkPW9BnZU7O+xGoQQH4Nr5UdDXqNKKdl6/6zntLESEpnHIeJ9gDfSvOd8PcdqSqIjyhU=
+	t=1786333334; cv=none; b=poEXrtUW1R/uwPFCKVPhIyKo6ZGkpszG/2yDrTbes4wvJqc1oCxUpjcWgxVvmnrI8yGbLJu1EE7K2EvTnjPtg1DqrZIvw7wjrAdssOdxWahZtib/tsA5eREfPcRB28MUlfceaBtc2bxoPsKREB2VFfS77wzPwGOJEILMY3kEwIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786309345; c=relaxed/simple;
-	bh=Rce1TvmlkPo/B5ypetHUedDSJUtRlnN7DaKwxQH3Lv4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=fZznSOdimDfpKEpDO8gwq2frlZ8XBggb28gqIM4JRGHtAousOosIvSykh33FCVeTZXIzV7ftuhrZeUeztKCoqsapsj4QenHL0O2oDQlMOwrrFmfqPKrVzlY1wE/Agqvn2NLWNu3ZEyL9vnv6UyxoVCpO0X4rkf4pfrHbBoMWC5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QuRQ8MVV; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1786333334; c=relaxed/simple;
+	bh=NHaeVGz3qakp7yean8oOeLaL8LDaA0YI/uF1H5nV06k=;
+	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=OgxnIzn3NxJZ3ZW7Rjv8ZvBl9nVYLmxJ/9rxEiwUQLdj79U1qdnEWjDEUKI4LgxIKzaw1LHET5Z1g99TXCW/+qBmRqWagvSiOJkCiEgwNL8E9opbitvFIT30+n+VCRVSnnJSlCkptFfMpdJuS1PGJjs1wrn4VUkFp2tcWiCFrnA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MZbImutg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QuRQ8MVV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786309344; x=1817845344;
-  h=date:from:to:cc:subject:message-id;
-  bh=Rce1TvmlkPo/B5ypetHUedDSJUtRlnN7DaKwxQH3Lv4=;
-  b=QuRQ8MVV2XJhvjPpQUzJlOrd51C4oX15h5YIuLDBCuM2zC+/Jx6zBeOI
-   GyyJsajgQNnnE+Q0SWYYzBDYTQZ7S1Oe0ymnTwprO4sk/iMz5jVjPWkO+
-   kAKHpZYVFpMesPEZN/QPDKn2imbocBwhjQB8hYMekNNgeQ6WJv6kBulFX
-   FqCNM4n7expURlcvzkavlrosFgG332Iy+qKLmaGi0/aE23JR4pTk01Si3
-   37ZjLF3TMQxJ4UM0t20Vl/QSpwp1gIQb4mEHnpCWhvOLPoPqQjGbGou8l
-   OPVEt/9AIP145ToB1sljGu4tCWzilCPWWgwS8clS9S0INGK8bQLAhsmQh
-   Q==;
-X-CSE-ConnectionGUID: rTz7KKMeR365sr60kZjrHg==
-X-CSE-MsgGUID: lIRQ+W/3SASgRdAf0rHf2g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11870"; a="98341200"
-X-IronPort-AV: E=Sophos;i="6.25,214,1779174000"; 
-   d="scan'208";a="98341200"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2026 14:02:23 -0700
-X-CSE-ConnectionGUID: E2xLYPGxRKGVHH5GAqJ5Xw==
-X-CSE-MsgGUID: OCwZic7qSYiuhKKmARe26A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,214,1779174000"; 
-   d="scan'208";a="259551194"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 09 Aug 2026 14:02:21 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wtAew-00000000MNU-49dW;
-	Sun, 09 Aug 2026 21:02:18 +0000
-Date: Mon, 10 Aug 2026 05:02:08 +0800
-From: kernel test robot <lkp@intel.com>
-To: Kees Cook <kees@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
- Nathan Chancellor <nathan@kernel.org>
-Subject: ld.lld: error: undefined symbol:
- __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
-Message-ID: <202608100432.yIX7TckM-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MZbImutg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786333331;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=sgmIhAq44+z5WyHjc2lEaHtPxzCLMY8zaAYLa7TBtQk=;
+	b=MZbImutgbDyY95h5aZm2sFjaRDxHMwGhTrf8vnFce6YpIGdzeVqt+xpqiSa6/qJcWVfPlt
+	LgJY5qedGHbHP6CUctGSmBu3W6GLP4kL8TCr8Y6S7skvgCoC9pXNLF52y/uOn2+nriZv+R
+	/zdapQO0o+JD5X1wZ+cmAR5gTC3DJik=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-255-iA_OxUt4NqeL8RfzzMBKiw-1; Sun,
+ 09 Aug 2026 23:42:09 -0400
+X-MC-Unique: iA_OxUt4NqeL8RfzzMBKiw-1
+X-Mimecast-MFC-AGG-ID: iA_OxUt4NqeL8RfzzMBKiw_1786333328
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6E56319560BB
+	for <llvm@lists.linux.dev>; Mon, 10 Aug 2026 03:42:08 +0000 (UTC)
+Received: from [172.20.35.218] (unknown [10.30.44.80])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E9D4E19560AB;
+	Mon, 10 Aug 2026 03:42:07 +0000 (UTC)
+From: cki-project@redhat.com
+Subject: =?utf-8?b?4pyF?= PASS (MISSED 60 of 66): Test report for master
+ (7.2.0-rc7, upstream-mainline, db2ddb87)
+Date: Mon, 10 Aug 2026 03:42:07 -0000
+To: llvm@lists.linux.dev
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <13795.126080923420900251@us-mta-255.us.mimecast.lan>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 32D08dbRXyjThcV2GWMSbWMiS_IM2IKk0XvdndyHKdI_1786333328
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Kees,
+Hi, we tested your kernel and here are the results:
 
-FYI, the error/warning still remains.
+    Overall result: PASSED
+             Merge: OK
+           Compile: OK
+              Test: OK
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   06cf61899d6498b33e4b7c87d99d5bd471ccc375
-commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
-date:   11 months ago
-config: x86_64-randconfig-011-20260809 (https://download.01.org/0day-ci/archive/20260810/202608100432.yIX7TckM-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260810/202608100432.yIX7TckM-lkp@intel.com/reproduce)
+Tested-by: CKI Project <cki-project@redhat.com>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: 23ef9d439769 ("kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608100432.yIX7TckM-lkp@intel.com/
+Kernel information:
+    Commit message: Linux 7.2-rc7
 
-All errors (new ones prefixed by >>):
+You can find all the details about the test run at
+    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2745758202
 
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
-   >>> referenced by aria-aesni-avx2-asm_64.S:1345 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1345)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_encrypt_32way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_decrypt_32way
-   >>> referenced by aria-aesni-avx2-asm_64.S:1370 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1370)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_decrypt_32way)
---
->> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_ctr_crypt_32way
-   >>> referenced by aria-aesni-avx2-asm_64.S:1395 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1395)
-   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_ctr_crypt_32way)
+Tests that were not ran because of internal issues:
+    /distribution/check-install [aarch64, x86_64]
+    /distribution/command [aarch64, x86_64]
+    /test/misc/machineinfo [aarch64, x86_64]
+    Boot test [aarch64, x86_64]
+    CKI/restraint [aarch64, x86_64]
+    Reboot test [aarch64, x86_64]
+    SELinux Custom Module Setup [aarch64, x86_64]
+    selinux-policy: serge-testsuite [aarch64, x86_64]
+    Storage - blktests - throtl [aarch64, x86_64]
+    Storage - blktests - ublk [aarch64, x86_64]
+    stress: stress-ng - cpu-cache [aarch64, x86_64]
+    stress: stress-ng - memory [aarch64, x86_64]
+    xfstests - btrfs [aarch64, x86_64]
+    xfstests - cifsv3.11 [x86_64]
+    xfstests - ext4 [aarch64, x86_64]
+    xfstests - nfsv4.2 [x86_64]
+    xfstests - xfs [aarch64, x86_64]
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+If you find a failure unrelated to your changes, please ask the test mainta=
+iner to review it.
+This will prevent the failures from being incorrectly reported in the futur=
+e.
+
+Please reply to this email if you have any questions about the tests that w=
+e
+ran or if you have any suggestions on how to make future tests more effecti=
+ve.
+
+        ,-.   ,-.
+       ( C ) ( K )  Continuous
+        `-',-.`-'   Kernel
+          ( I )     Integration
+           `-'
+___________________________________________________________________________=
+___
+
