@@ -1,32 +1,32 @@
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19912415F16
-	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 08:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.118
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 493C9414DCD
+	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 08:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786435813; cv=none; b=f9/Yob2t9rC1DUQWvtWgy6HfJiSCbO44Y0w/cMQg++64GzvXO7t/fxqa1RfDyAHqjD3/YuHk+HO8xatd/xTn195fX9l/YlUh2X0W5Q99f8GKXAKLtMI3Nj8KHDDAx+ZlvYfxUHIom1DdSWsGqBspfYA3WfzFeo+k4eCjkpgd6/M=
+	t=1786436176; cv=none; b=kjlGPkKdn/JkvS0efynZTw2Vh1f6pD5T61itz/cslyFAF/3I7GuLsZZLcH3wDDQScAGjB9Xq8PwHmiWAro9zIqH2hwJGkoDcNc9VPXDecIvvmJZ9OJSkEfnt61nODD+OMBudukWN+Hei18ucEjSEnUMKyCj4RtHr43fABfqyFrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786435813; c=relaxed/simple;
-	bh=gVthLqExaptrCH8/8pHTojmPlrbu/fSpte/UF3wy/ek=;
+	s=arc-20240116; t=1786436176; c=relaxed/simple;
+	bh=RgtUv4fH7brGCg7Om6rrPQZs2AUg+s2gH/HI8v02yJM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GfdNOe9LErfzj/kH+geJsGXjq9LfCCVoyUGdlvgIXyx2Ialw6abzOAqbPFD4C+7+CXPwTijlARwk2DJKBwVJd1xowVJOTatQeGYJagmAtogkfDZ9QS9SBf4QO4Px6OhgGZiI+EHJTooYHlnhZ/EO8qsRAUaCKwYXRzn46xksD10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=aZkU7l2N; arc=none smtp.client-ip=115.124.30.118
+	 In-Reply-To:Content-Type; b=vCz2PNUgRsANnhD6jn8IF36qDKifIrbvYGWJyg0YEIxwVp1B/yUmVZwxlCj8iOu6OB6GlIZMRHk9nEXZQQgkq1v8RLEK1uR+eD2nGTlBA1D+NqlxBT7f6q74Vqxu0lvAAvF5ybanXnv6mY0iTVzbwR2BDVv7oB+MUmEHuc9nBkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=pC1JI9Ay; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="aZkU7l2N"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="pC1JI9Ay"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1786435805; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=ULRyzUzSMuZOhpoovZ69zlkbe3+TVMTW91xLI1cZab8=;
-	b=aZkU7l2NdD6S2wZSzQzS1JkmPJUe2sKSM57EaF4cMkWpth6zaJSVWfiCIPZz+EgeidL0we1HmvDViOtAnrc+agDdtb+xNuRQBwYpLuckKtPaMkRS8O3CQVvESnBx5tc92ozQoXBjoSRAAoJJpnObs28X/KCktHyVzr1Lyoj6gr4=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R471e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0X8nd1Ff_1786435801;
-Received: from 30.246.162.187(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X8nd1Ff_1786435801 cluster:ay36)
+	t=1786436165; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=eP3m0HTYV+unjAOWZeJIknn2a8XQLBdPGdXKRx+SfjI=;
+	b=pC1JI9AyWTa6w7LvocLqbi1BkqBsYC8a21g16F2rE+2QQdlztf3ODIxwKPvaq8kqr8rGrviBoOU8oW8LLzpAfjEEtd+7DC3RlQuIOMmvMQwvy8JoHWY1ydg7VWaLKzv1sf2dpk3A8kOuk5HJfwFc1UWeoZWZE6+8APbb9Ol1IlQ=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0X8ndp3v_1786436162;
+Received: from 30.246.162.187(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X8ndp3v_1786436162 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Tue, 11 Aug 2026 16:10:03 +0800
-Message-ID: <861296f2-a17e-483a-8b46-74ba777958d5@linux.alibaba.com>
-Date: Tue, 11 Aug 2026 16:10:01 +0800
+          Tue, 11 Aug 2026 16:16:03 +0800
+Message-ID: <8bdc13c7-5277-4489-a5d1-9cae14f88beb@linux.alibaba.com>
+Date: Tue, 11 Aug 2026 16:16:01 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,8 +34,8 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 16/23] perf annotate-data: Expand type_state_reg
- imm_value to u64
+Subject: Re: [PATCH v4 17/23] perf annotate-data: Track imm_value for stack
+ variables
 To: Tengda Wu <wutengda@huaweicloud.com>, Namhyung Kim <namhyung@kernel.org>,
  james.clark@linaro.org, Li Huafei <lihuafei1@huawei.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
@@ -49,66 +49,152 @@ Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
  linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
- <20260808122400.2961238-17-wutengda@huaweicloud.com>
+ <20260808122400.2961238-18-wutengda@huaweicloud.com>
 From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20260808122400.2961238-17-wutengda@huaweicloud.com>
+In-Reply-To: <20260808122400.2961238-18-wutengda@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 8/8/26 8:23 PM, Tengda Wu wrote:
-> The imm_value in struct type_state_reg is defined as u32, which limits
-> the size of values it can pass.
+> Currently, imm_value are tracked in registers but dropped when values
+
+Nit: s/imm_value are tracked/imm_value is tracked/ in the changelog.
+
+> are saved to or loaded from stack variables during type profiling.
+> If a register of type TSR_KIND_CONST is stored to the stack, its value
+> will be lost.
 > 
-> Promote imm_value from u32 to u64 and adjust the print format specifier
-> in pr_debug_dtp() accordingly.
+> Add an imm_value field to struct type_state_stack and update
+> set_stack_state() and findnew_stack_state() to accept and preserve the
+> immediate value when updating stack state.
 > 
 > Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 > ---
->   tools/perf/util/annotate-arch/annotate-x86.c | 2 +-
->   tools/perf/util/annotate-data.h              | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
+>   tools/perf/util/annotate-arch/annotate-x86.c |  8 ++++++--
+>   tools/perf/util/annotate-data.c              | 13 +++++++------
+>   tools/perf/util/annotate-data.h              |  5 +++--
+>   3 files changed, 16 insertions(+), 10 deletions(-)
 > 
 > diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-> index ee4e3e7f3209..eec3d8ce00b8 100644
+> index eec3d8ce00b8..995117525e7d 100644
 > --- a/tools/perf/util/annotate-arch/annotate-x86.c
 > +++ b/tools/perf/util/annotate-arch/annotate-x86.c
-> @@ -540,7 +540,7 @@ static void update_insn_state_x86(struct type_state *state,
->   			tsr->offset = 0;
->   			tsr->ok = true;
+> @@ -591,6 +591,7 @@ static void update_insn_state_x86(struct type_state *state,
+>   				tsr->type = stack->type;
+>   				tsr->kind = stack->kind;
+>   				tsr->offset = stack->ptr_offset;
+> +				tsr->imm_value = stack->imm_value;
+>   				tsr->ok = true;
+>   			} else if (die_get_member_type(&stack->type,
+>   						       offset - stack->offset,
+> @@ -598,6 +599,7 @@ static void update_insn_state_x86(struct type_state *state,
+>   				tsr->type = type_die;
+>   				tsr->kind = TSR_KIND_TYPE;
+>   				tsr->offset = 0;
+> +				tsr->imm_value = 0;
+>   				tsr->ok = true;
+>   			} else {
+>   				invalidate_reg_state(tsr);
+> @@ -773,10 +775,12 @@ static void update_insn_state_x86(struct type_state *state,
+>   				 */
+>   				if (!stack->compound)
+>   					set_stack_state(stack, offset, tsr->kind,
+> -							&tsr->type, tsr->offset);
+> +							&tsr->type, tsr->offset,
+> +							tsr->imm_value);
+>   			} else {
+>   				findnew_stack_state(state, offset, tsr->kind,
+> -						    &tsr->type, tsr->offset);
+> +						    &tsr->type, tsr->offset,
+> +						    tsr->imm_value);
+>   			}
 >   
-> -			pr_debug_dtp("mov [%x] imm=%#x -> reg%d\n",
-> +			pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
->   				     insn_offset, tsr->imm_value, dst->reg1);
->   			return;
->   		}
+>   			if (dst->reg1 == fbreg) {
+> diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+> index c51b20a7af9b..9dcdc3c7e688 100644
+> --- a/tools/perf/util/annotate-data.c
+> +++ b/tools/perf/util/annotate-data.c
+> @@ -590,7 +590,7 @@ struct type_state_stack *find_stack_state(struct type_state *state,
+>   }
+>   
+>   void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+> -			    Dwarf_Die *type_die, int ptr_offset)
+> +			    Dwarf_Die *type_die, int ptr_offset, u64 imm_value)
+>   {
+>   	int tag;
+>   	Dwarf_Word size;
+> @@ -607,8 +607,9 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+>   	stack->offset = offset;
+>   	stack->ptr_offset = ptr_offset;
+>   	stack->kind = kind;
+> +	stack->imm_value = imm_value;
+>   
+> -	if (kind == TSR_KIND_POINTER) {
+> +	if (kind == TSR_KIND_POINTER || kind == TSR_KIND_CONST) {
+>   		stack->compound = false;
+>   		return;
+>   	}
+> @@ -629,18 +630,18 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+>   struct type_state_stack *findnew_stack_state(struct type_state *state,
+>   						    int offset, u8 kind,
+>   						    Dwarf_Die *type_die,
+> -						    int ptr_offset)
+> +						    int ptr_offset, u64 imm_value)
+>   {
+>   	struct type_state_stack *stack = find_stack_state(state, offset);
+>   
+>   	if (stack) {
+> -		set_stack_state(stack, offset, kind, type_die, ptr_offset);
+> +		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
+>   		return stack;
+>   	}
+>   
+>   	stack = malloc(sizeof(*stack));
+>   	if (stack) {
+> -		set_stack_state(stack, offset, kind, type_die, ptr_offset);
+> +		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
+>   		list_add(&stack->list, &state->stack_vars);
+>   	}
+>   	return stack;
+> @@ -935,7 +936,7 @@ static void update_var_state(struct type_state *state, struct data_loc_info *dlo
+>   				continue;
+>   
+>   			findnew_stack_state(state, offset, TSR_KIND_TYPE,
+> -					    &mem_die, /*ptr_offset=*/0);
+> +					    &mem_die, /*ptr_offset=*/0, /*imm_value=*/0);
+>   
+>   			if (var->reg == state->stack_reg) {
+>   				pr_debug_dtp("var [%"PRIx64"] %#x(reg%d)",
 > diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-> index 453e13bbe3e2..91b83e94c51b 100644
+> index 91b83e94c51b..06fc4dbfb35c 100644
 > --- a/tools/perf/util/annotate-data.h
 > +++ b/tools/perf/util/annotate-data.h
-> @@ -173,7 +173,7 @@ extern struct annotated_data_stat ann_data_stat;
->    */
->   struct type_state_reg {
->   	Dwarf_Die type;
-> -	u32 imm_value;
+> @@ -199,6 +199,7 @@ struct type_state_stack {
+>   	int size;
+>   	bool compound;
+>   	u8 kind;
 > +	u64 imm_value;
->   	/*
-One subtlety this introduces: annotated_op_loc.offset is an int, and
-immediates are parsed into it via strtol(), so assignments like
-tsr->imm_value = src->offset now sign-extend instead of preserving
-the 32-bit bit pattern. mov $0xdeadbeef used to track 0xdeadbeef,
-now it tracks 0xffffffffdeadbeef, while the register actually holds
-the zero-extended value. (Canonical kernel addresses happen to
-sign-extend back to the right value, which masks this in the common
-case.)
+>   };
+>   
+>   /*
+> @@ -253,9 +254,9 @@ bool has_reg_type(struct type_state *state, int reg);
+>   struct type_state_stack *findnew_stack_state(struct type_state *state,
+>   						int offset, u8 kind,
+>   						Dwarf_Die *type_die,
+> -						int ptr_offset);
+> +						int ptr_offset, u64 imm_value);
+>   void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+> -				Dwarf_Die *type_die, int ptr_offset);
+> +				Dwarf_Die *type_die, int ptr_offset, u64 imm_value);
+>   struct type_state_stack *find_stack_state(struct type_state *state,
+>   						int offset);
+>   void invalidate_reg_state(struct type_state_reg *reg);
 
-Relatedly, this widening doesn't actually help 64-bit immediates on
-the strtol() path - movabs is still truncated to int at parse time.
-The real consumers that need u64 are the arm64 adrp and stack paths,
-which feed imm_value from ops.source.addr / stack state directly, so
-the change is justified. But maybe worth spelling that out, and
-considering a follow-up that parses immediates with strtoull() into a
-dedicated u64 field instead of overloading the signed offset field.
 
-Thanks,
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+
+Thanks.
+Shuai
+
