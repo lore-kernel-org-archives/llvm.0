@@ -1,32 +1,32 @@
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1F941A792
-	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 08:37:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB94341D64E
+	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 08:45:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786437480; cv=none; b=P2gnWlYNk/e/43ZSQlBB4/IVLzsm2KVMcwtEUfL4ALAVomNmhbMztHncwv2naM9NA/znkhKI4zjpwTCuXMqi5Ixet7dvrSTFW9JktW5PaQyHuLWBhROl4MdijMHjQ7+qk9dCF+6GKkGb5R5hsaSfoLWwMNdKim3aVSMM1qI8chs=
+	t=1786437916; cv=none; b=jJyra9CkrbMBTGOXggjn8PtcXIB0ZckxcfP/QcoOmc7gnkhsKJoH1tm4J5bSG8xRgB2oCaiiSjr0EW2XhoYJbQ1oXeN9Z7I/IRDf+vSGP9kG2dsc68csNU9AAJY+LfAqlMmCEYsCP3c66RAeUZLuOliuRDS1gE6nH/6dNJhiNO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786437480; c=relaxed/simple;
-	bh=edbAn165VORt52kLjmZY2kdDpedIqjtWTWhK68jHnxY=;
+	s=arc-20240116; t=1786437916; c=relaxed/simple;
+	bh=XHAy90IfX5N9WQAuZQhOnzdqFKIxEoblW4+ZRxeshkg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KEv+XA7lVBWbnK6BwAg5jHKX/J97cFpDaZNwr+6qcuySwsT4bf+YWhgZW3YtKnSvPGo2VzNGnBu44j89mBRQxuPXnu+ozB9exd7ItV5y84YGGJiHA4zDmupAutqzeKyUFr8UDTVjFzOpSbkiHKcnzK/+Us3+9TtEKiXbAFSL1U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=SihtIbnD; arc=none smtp.client-ip=115.124.30.111
+	 In-Reply-To:Content-Type; b=kftrR2PwzvOwT/fN91TGDcqg7LoHaJWYqhxAlwTMLFVRhVj4zQOgW8c06dsGFR/iOq5PE+YTnboWBA3l5Cy6Nmr96DMsMSOUi4pYB0nBVdBWLctA3L7k8J4e6kSvciCM1/nDqc4euw3SgT3YDspFkAHSu3EuPJTWKgS78XTUgFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=CqQLEFUF; arc=none smtp.client-ip=115.124.30.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="SihtIbnD"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="CqQLEFUF"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1786437473; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=EYwayPwW3BAHajuYrGUPKQBCmkAknyyoHjvcu0yw+Y0=;
-	b=SihtIbnDa0jkpN/VLYPuLluOBGtUJizmL6RurUyOp0ejL/F0pz3jLH2p1IA9bVAgfhATN9FRC7moc0DBBY04o7bVGWN9Ckwwzt7EiGKkat8YggWzoqw6LAvSFsBN33lUoavfcdhiOE3A8plTAyXqvFRn/v47AqhSP93Hah83ODs=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R861e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0X8nqWIz_1786437470;
-Received: from 30.246.162.187(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X8nqWIz_1786437470 cluster:ay36)
+	t=1786437910; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=kPZQc8ApE1iI5YePnhnnz/tryvTLMAYB9P9vn7r+k5s=;
+	b=CqQLEFUFLZEmNvVzWdrH3eSO+P3wadOA8N3rtUDflUuIkoP4KDAGnghplYs9CtMo23iXHGj3bhzJOXX4A2OjWEtKtxgUMKGQ7TEsfF4Zp5X/RNCy4uiCgcXqt7WVHRo5GEsLWcUnvDN7n93MSlrEtIGsynMbPGlfwz0xn7Qukr4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0X8nwuPr_1786437907;
+Received: from 30.246.162.187(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X8nwuPr_1786437907 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Tue, 11 Aug 2026 16:37:51 +0800
-Message-ID: <960b490f-42da-4a9e-8734-62f9c3773b2d@linux.alibaba.com>
-Date: Tue, 11 Aug 2026 16:37:49 +0800
+          Tue, 11 Aug 2026 16:45:08 +0800
+Message-ID: <89e66d40-5f9f-4147-beda-00623797cd04@linux.alibaba.com>
+Date: Tue, 11 Aug 2026 16:45:07 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -34,7 +34,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 19/23] perf annotate-arm64: Support 'mov' instruction
+Subject: Re: [PATCH v4 20/23] perf annotate-arm64: Support 'add' instruction
  tracking
 To: Tengda Wu <wutengda@huaweicloud.com>, Namhyung Kim <namhyung@kernel.org>,
  james.clark@linaro.org, Li Huafei <lihuafei1@huawei.com>
@@ -49,87 +49,71 @@ Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
  linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev
 References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
- <20260808122400.2961238-20-wutengda@huaweicloud.com>
+ <20260808122400.2961238-21-wutengda@huaweicloud.com>
 From: Shuai Xue <xueshuai@linux.alibaba.com>
-In-Reply-To: <20260808122400.2961238-20-wutengda@huaweicloud.com>
+In-Reply-To: <20260808122400.2961238-21-wutengda@huaweicloud.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
 On 8/8/26 8:23 PM, Tengda Wu wrote:
-> Extend update_insn_state() for arm64 to support register-to-register and
-> immediate-to-register 'mov' instructions.
+> Extend update_insn_state() for arm64 to track 'add' instructions for
+> structure member address calculation, which commonly appear as:
 > 
-> For register-to-register 'mov' (e.g., mov dreg, sreg), propagate data type
-> information from the source register to the destination register.
+>    add  dreg, base, #offset
+>    add  dreg, base, reg2     (reg2 holds a constant)
 > 
-> For immediate-to-register 'mov' (e.g., mov dreg, #imm), store the immediate
-> value in the destination register's imm_value field and set its kind to
-> TSR_KIND_CONST, allowing subsequent instructions to resolve it as a
-> constant.
+> Unlike x86, the arm64 'add' instruction has an extra base register among
+> its source operands. Therefore, in terms of propagating the data type,
+> it is essentially performing a 'mov', except that before the 'mov', it
+> first needs to be updated by adding the offset or reg2.
 > 
 > A real-world example is shown below:
 > 
->    ffff8000803eebf8 <get_vma_policy>:
->    ffff8000803eec20:  mov  x21, x0          // x0 (struct vm_area_struct*) -> x21
->    ffff8000803eec28:  ldr  x2, [x0, #112]
->    ffff8000803eec2c:  cbz  x2, ffff8000803eec94 <get_vma_policy+0x9c>
-> * ffff8000803eec94:  ldr  x0, [x21, #152]
+>    ffff80008001c9a8 <flush_ptrace_hw_breakpoint>:
+>    ffff80008001c9c4:  add  x19, x0, #0xeb8   // x0 (task_struct*) + 0xeb8 -> x19
+> * ffff80008001c9d0:  ldr  x0, [x19]
 > 
-> Before this commit, the type of x21 was unknown, causing the subsequent
-> inference to fail:
+> Before this commit, the type flow broke at the 'add' instruction,
+> leaving the subsequent load with no type information:
 > 
->    var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
->    chk [9c] reg21 offset=0x98 ok=0 kind=0 cfa : no type information
+>    chk [28] reg19 offset=0 ok=0 kind=0 cfa : no type information
 >    final result: no type information
 > 
-> After this commit, the type of x21 is correctly inferred as 'vm_area_struct':
+> After this commit, the tracker correctly follows the member address
+> calculation:
 > 
->    var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
->    mov [28] reg0 -> reg21 type='struct vm_area_struct*' size=0x8
->    chk [9c] reg21 offset=0x98 ok=1 kind=1 (struct vm_area_struct*) : Good!
->    found by insn track: 0x98(reg21) type-offset=0x98
->    final result:  type='struct vm_area_struct' size=0xb0
+>    var [0] reg0 offset 0 type='struct task_struct*'
+>    add [1c] address of 0xeb8(reg0) -> reg19 type='struct task_struct*'
+>    chk [28] reg19 offset=0 ok=1 kind=1 (struct task_struct*) : Good!
+>    found by insn track: 0(reg19) type-offset=0xeb8
+>    final result: type='struct task_struct'
 > 
 > Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 > ---
->   .../perf/util/annotate-arch/annotate-arm64.c  | 53 ++++++++++++++++++-
->   1 file changed, 52 insertions(+), 1 deletion(-)
+>   .../perf/util/annotate-arch/annotate-arm64.c  | 87 ++++++++++++++++++-
+>   1 file changed, 85 insertions(+), 2 deletions(-)
 > 
 > diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-> index 6e09e9707256..7b780bad8c07 100644
+> index 7b780bad8c07..eaeb4433fc3a 100644
 > --- a/tools/perf/util/annotate-arch/annotate-arm64.c
 > +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-> @@ -1,6 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0
->   #include <linux/compiler.h>
->   #include <errno.h>
-> +#include <inttypes.h>
->   #include <stdlib.h>
->   #include <string.h>
->   #include <linux/ctype.h>
-> @@ -484,6 +485,7 @@ static int propagate_load_reg_state(struct type_state *state,
->   		tsr->type = type_die;
->   		tsr->kind = TSR_KIND_TYPE;
->   		tsr->offset = 0;
-> +		tsr->imm_value = 0;
->   		tsr->ok = true;
->   
->   		if (src->multi_regs) {
-> @@ -641,6 +643,51 @@ static void update_store_insn_state(struct type_state *state,
->   	adjust_reg_index_state(state, dst, insn_name, dl->al.offset);
+> @@ -688,6 +688,87 @@ static void update_mov_insn_state(struct type_state *state,
+>   	pr_debug_type_name(&tsr->type, tsr->kind);
 >   }
 >   
-> +static void update_mov_insn_state(struct type_state *state,
+> +static void update_add_insn_state(struct type_state *state,
 > +				  struct disasm_line *dl,
 > +				  struct annotated_op_loc *src,
 > +				  struct annotated_op_loc *dst)
 > +{
 > +	struct type_state_reg *tsr;
+> +	struct type_state_reg src_tsr;
 > +	u32 insn_offset = dl->al.offset;
 > +	int sreg = src->reg1;
 > +	int dreg = dst->reg1;
+> +	u64 imm_value;
 > +
 > +	if (!has_reg_type(state, dreg))
 > +		return;
@@ -137,79 +121,71 @@ On 8/8/26 8:23 PM, Tengda Wu wrote:
 > +	tsr = &state->regs[dreg];
 > +	tsr->copied_from = -1;
 > +
-> +	if (src->imm) {
-> +		tsr->kind = TSR_KIND_CONST;
-> +		tsr->imm_value = src->offset;
-> +		tsr->offset = 0;
-> +		tsr->ok = true;
-
-This overwrites only part of the register state: if the destination
-previously held a variable with an active DWARF lifetime, the stale
-lifetime_active/lifetime_end survive, and the call-invalidation
-exemption then protects a plain constant across calls. Same gap as
-the return-type block discussed earlier - clearing the register state
-(invalidate_reg_state()) before filling it in would cover both.
-
-
-> +
-> +		pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
-> +			     insn_offset, tsr->imm_value, dreg);
-> +		return;
-> +	}
-> +
+> +retry:
 > +	if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
 > +		invalidate_reg_state(tsr);
 > +		return;
 > +	}
 > +
-> +	tsr->type = state->regs[sreg].type;
-> +	tsr->kind = state->regs[sreg].kind;
-> +	tsr->imm_value = state->regs[sreg].imm_value;
-> +	tsr->offset = state->regs[sreg].offset;
-> +	tsr->ok = state->regs[sreg].ok;
-
-onversely, the register-to-register path drops the lifetime fields
-that the x86 handler explicitly copies. Not copying is arguably more
-correct - the DWARF location range describes the variable living in
-the source register - but it also means a value moved into a
-callee-saved register gets invalidated by the first call, losing the
-tracking. Is the omission intentional? If so, a comment would help;
-either way the two archs should probably converge on one behaviour.
-
+> +	src_tsr = state->regs[sreg];
 > +
-> +	if (tsr->kind == TSR_KIND_TYPE || tsr->kind == TSR_KIND_POINTER)
-> +		tsr->copied_from = sreg;
+> +	/*
+> +	 * Handle 'add' instructions of the form:
+> +	 *   add  dreg, base, #offset     (immediate offset)
+> +	 *   add  dreg, base, reg2        (reg2 holds a constant)
+> +	 *
+> +	 * For case 2, retrieve the constant value from reg2
+> +	 * and use it as the offset.
+> +	 */
+> +	imm_value = src->offset;
+> +	if (src->multi_regs) {
+> +		int reg2 = (sreg == src->reg1) ? src->reg2 : src->reg1;
 > +
-> +	pr_debug_dtp("mov [%x] reg%d -> reg%d", insn_offset, sreg, dreg);
-> +	pr_debug_type_name(&tsr->type, tsr->kind);
-> +}
+> +		if (!has_reg_type(state, reg2) || !state->regs[reg2].ok) {
+> +			/* Unable to resolve type for dst, bail out */
+> +			invalidate_reg_state(tsr);
+> +			return;
+> +		}
+> +		if (state->regs[reg2].kind == TSR_KIND_CONST)
+> +			imm_value = state->regs[reg2].imm_value;
+
+First, when reg2 is valid but not TSR_KIND_CONST - say a pointer
+freshly loaded from memory - the addend is unknown at analysis time,
+yet imm_value silently stays 0 and propagation continues, tracking
+the destination as base + 0. Note the asymmetry: no state at all
+invalidates, but state that doesn't yield a value pretends the
+addend is zero. Unknown addend should invalidate as well:
+
+         if (state->regs[reg2].kind != TSR_KIND_CONST) {
+             invalidate_reg_state(tsr);
+             return;
+         }
+
+Second, the shifted/extended forms still break even with a constant
+reg2: extract_op_location_arm64() drops the "lsl #3" (or uxtw/sxtw)
+modifier, so add x0, x1, x2, lsl #3 contributes the unshifted value
+and maps later accesses to the wrong field. Maybe flag such operands
+during extraction (or fail the reg2 extraction) so the handler can
+skip them.
+
+> +	}
 > +
->   static void update_insn_state_arm64(struct type_state *state,
->   				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
->   				    struct disasm_line *dl)
-> @@ -703,6 +750,7 @@ static void update_insn_state_arm64(struct type_state *state,
->   	 * prevent stale type info from propagating to subsequent instructions.
->   	 */
->   	if (has_reg_type(state, dst->reg1) &&
-> +	    strcmp(dl->ins.name, "mov") &&
->   	    strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
+> +	if (src_tsr.kind == TSR_KIND_CONST) {
+> +		tsr->kind = src_tsr.kind;
+> +		tsr->imm_value = src_tsr.imm_value + imm_value;
+> +		tsr->offset = 0;
+> +		tsr->ok = src_tsr.ok;
+> +
+> +		pr_debug_dtp("add [%x] imm %#"PRIx64"(reg%d) -> reg%d\n",
+> +			     insn_offset, imm_value, sreg, dreg);
 
-Comparison and test instructions get killed by this: for cmp x5, x6
-the first operand ends up as the target (reg1 = x5), and since cmp
-matches none of the exemptions above, a read-only register is
-invalidated. Same for cmn and tst, and for the tested register of
-cbz/cbnz/tbz/tbnz. Since comparisons sit between the tracked load and
-the sampled access in almost every hot path, this silently drops a
-lot of type resolution.
-
-The x86 side avoids this by using a whitelist of instructions that
-actually clobber pointer registers; here an exemption for the
-read-only compares/tests would do:
-
-     if (has_reg_type(state, dst->reg1) && !dst->mem_ref &&
-         strcmp(dl->ins.name, "mov") && strcmp(dl->ins.name, "cmp") &&
-         strcmp(dl->ins.name, "cmn") && strcmp(dl->ins.name, "tst") &&
-         ...)
+And since add is commutative, this early return drops the pointer
+side for add rd, const_reg, ptr_reg: sreg starts as reg1, hits the
+CONST case and returns before the goto retry at the bottom ever gets
+a chance to evaluate the pointer register. The result should be the
+pointer with the constant applied as an offset, not a plain constant.
+Maybe check the other register for a pointer type before falling into
+the CONST case (or move the CONST handling after the retry).
 
 Thanks,
 Shuai
