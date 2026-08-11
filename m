@@ -1,66 +1,66 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5393F388E69
-	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 21:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11F7C47CA7D
+	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 21:14:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786482557; cv=none; b=rSTxwjXdGM5yFb03bNAQOcYjbZ/n4CPQiK87H5IcOs1tpWdvcDBmDc/OqEPgaDKF3WGl8RSNwX+xSRHrMu7dlRHPaJXfR47uK1WcdVp4Hj8D86CsyXC4ZhjFrjBCv8RIx5m3murHzX4CMjqLxsWKrQPhvfsJzDMrfygQisW+V/E=
+	t=1786482889; cv=none; b=Lmr1UwoBRGbOAtYLuzCL2g1+0leE7H/tZJZojI3npSJOpv92+hNHMb7w9xS4Hev8RNNhBzotN/0fX6tN5rR5FFOYQ0gDw1KIj4imVo7tVn9gcoy9sOB6ewxXmhOeyaT17i+BQBnHsb3stpCrjSWdBqTNdLLptHj3P43sVRcwvm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786482557; c=relaxed/simple;
-	bh=FwNARzcbMbLf7kTkzLZos3PP0XC44XFJ9Kq/f19ElGA=;
+	s=arc-20240116; t=1786482889; c=relaxed/simple;
+	bh=vELLWw0jcQS3izlB2sdDvaRC3WcKac/J6CTcP0dIWC0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DI6zeQvtXtRaXPBG2dbmSNTq7Kw+E+d8RfqwxcprTEqtQs3FaO/A9ww6ejdXrLF9n3/bQd2XMKKfFhuXTt7ygcvizXLYPLfK9urMVkhkEU5XSVhX5cihhkEJX8vdmbdYKbbeK9FGa/+jolz9eNa5jOppniihZN1X8g3+eHS9Pbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QWYN2LlA; arc=none smtp.client-ip=209.85.210.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=WUvPcrSqOw4PhPZ6l78qxRSZOWsVnLyGVqU4QdPhvlVABITAvpaSWt7PW0GBGo0VFR6gBu4uVzMOLMM7sLrPE/gVb4kByBjdW/5/j6xQJR/wth0YqmhII97JWRSoKLODBwNZ/oq0A/1jqA69W6I8IsCxGObW1wrFNghFNzq5rU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qEKf9R0f; arc=none smtp.client-ip=209.85.210.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QWYN2LlA"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84faf0fa17eso345088b3a.2
-        for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 14:09:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qEKf9R0f"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8486672f03cso407198b3a.0
+        for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 14:14:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786482554; x=1787087354; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1786482886; x=1787087686; darn=lists.linux.dev;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=FCfe6U3NJnWWh5FIk3E/yNJv391SUeQXzwUsI84caIo=;
-        b=QWYN2LlAahl+r8hhO/e4leBoXWmyoEOmGVby4mGiyOtBR7u0UiEkcjjsEg2wFVXZE3
-         3iqlt43wT0nOPUbFL8/2wTOjTTrCb+xmaF9ZqN/cEabm7vQ9Bz86nE6ziMbu9Vuf1PRN
-         GjPmSffWg2evCFcWvODHcFNneYJJ1k2Hmv91otD6Y+bJNf//jBF5oKjHmCHp52Ox57Fy
-         f9PISxVFoA/tzleERrlGTgov9VT1Wo5TOWsBYJtJvFT4q0+JSZ4uwmAv2MCm86YTgbHC
-         RuIpPCbpJfuRJe3hzDBwvxOiyNYwQpYPw2QTPX56AibgkrVKsecxh/Q0xD2S1X3Nx0XU
-         a5uQ==
+        bh=bsIA9G0uzM6tK8/PrMCXpabodZWsD0MRjRT85WaMGF4=;
+        b=qEKf9R0fj7X8E7X8DFC8+ttJ0biixLCYBGROPKt8FbAwI0hYqhL5aDmmhyxWbj9wtG
+         ObJT8AaSVLVkfKkcEfSD8sHkp1R0TlnWH7WJCv3i2iBtCv1rm2zYcxRqfa7TLWqscxrd
+         LztV0rKpav3kYYmvQ+DjGk4Xf5PmkWOJRK3QMKfyhpJAbilQnfh8e/JshGiZVbv/Cmgy
+         mA1l3OgVlGTkyK55ZzhSJpVVeUBXLJqGqyc6ZUgVA86ck7qVK4nccqpBjfvAyfe7bvpT
+         fX8kE1C5Erp0M+ANkQyS7JHCpbJWuPCztzeoex9Mk0e/Y6YvbFvWbqpkh7atZWSaXGTp
+         neDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786482554; x=1787087354;
+        d=1e100.net; s=20251104; t=1786482886; x=1787087686;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FCfe6U3NJnWWh5FIk3E/yNJv391SUeQXzwUsI84caIo=;
-        b=o9srSvwbDTst5bLx8RmS6E9tHz6Sr9mN3Wzzh4m4+Gc+Pxlg6dNuFe6MuB8K/0tHH5
-         ixAFmYM6ZlVcrQQd8n+OhylZPmhGW7z6EnVc7Mevk4KkIEWsJu/ZHBct8zVckes/29T9
-         BJJ7HPv6vFo0d4xdY9F3Z2AO1Amwh9/WdN4/jszsDE2jk5xwO39BYpx75DVrGKtj5S31
-         CFSPt74ippxWCtLei9YfYg7XyR7sS1EOW+Uvh5Z4JAwjXb97+UmfuY+5azuR2SSN0h+6
-         5GdTFiMslXE8q4VWGI94nJBfpOXH8FAq9Qu7d9cosbR3x4wHsP3GcpnVzIWhjoO2b9YU
-         C2wA==
-X-Forwarded-Encrypted: i=1; AHgh+RrIGq5iNrZAOAPN4/0CDRR7Idi/Tius1sGCy3WwWkehkupXF67gSzluCK6E6TpBt32+9v4h@lists.linux.dev
-X-Gm-Message-State: AOJu0YwA+nN/1LQMn9AWDQFACKXgsaYiBKOOa0oqsOxihkSArqWiYs7m
-	hs+ce3jOtmUaq+Ifi+DJGgH8X/h8wKxWWCkBt4cmazfuZTFwLrUjkavztsPXQwkiPw==
-X-Gm-Gg: AR+sD13t7f8tn0kHeT9nFQ/3T0yoZIsUJw+44+VIHPmj6qj59SUc77ylVk6DqmT8VWA
-	dIUe3mhybPnsjunYDTQ5CPcjBlrdkUXWxk6dGK7yCi4O6FEojeSR+UHikraPM/7HtRHxwdnyxjO
-	s6yxlV3X5joGTFU0dIiiVmvg3OYSA/XHRaW/H6RTEjjbdOthM2NauanDq2xonR22u8RpD4wOP5E
-	raH7v9BkBU6ccuQ5H3AF+icSEOsjLdUiFPIApN1YTDeEcHwBN93Mpwx4eebsYNrYdzA3AyQ4zGW
-	jyxDYKYftQwTCqPdFBnLL1DKQD4pRILto1UuBiRa4eZdgxyCPA9CIL+nHbizNUAQwqWK3O4uf9/
-	2jCB6LHNLZgodVjSKkTzdJf9c5prb+Z13qeKPpMe2tlpDHkXScsZ94hTMdnuy9FlBlPucqrqVbq
-	aTYJj4AZX+VHQmBv+IsKhXnr+/If2w/KBuKk6x3Q/0SXeT8obv3IJXrhVmHCVDYRgoTImsHBEg+
-	v1Ej7hrSKDJUlKK4qgxnXRSy3uBOA==
-X-Received: by 2002:a05:6a00:4217:b0:84f:3f5e:f072 with SMTP id d2e1a72fcca58-84fb53ff444mr185899b3a.10.1786482553078;
-        Tue, 11 Aug 2026 14:09:13 -0700 (PDT)
+        bh=bsIA9G0uzM6tK8/PrMCXpabodZWsD0MRjRT85WaMGF4=;
+        b=UIahSDPRKfYpsWoUXINosgvw1aFb08mVCJ+VB4MIuaMSC6Xf8wXIRET2buZZoXtgEP
+         Gn88o4AjOCChdAjyT96Y1UN5x13WqvZegSbox9utl6Sltc3edxiwc6kDgb/5Vl1IUkTH
+         u0wsYzhD5ZCLOBsonu19alI9ZlrOEdS4Yu+V0tpufRu7QIXY9FD4sIDx7le4wErFFJVJ
+         hCyTt2siLzyUZMOUULTNp1nLAE34yOzoPuaE+Gd4Wy3bppNHmCpl20Av/09yVzP8Y74+
+         bNAeZ34P3bh6KPVanYDFUZgtLYY3Ts5YFfbHndqPZfkaP+38O0X9MCxI9i41j7fOx07B
+         h2mQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoPpe2/xrdqL3RvVlhGdIG9UUGyTVkyDU0rcv6GqXieS03faI58ZelzV99qNrWcD+CqwNEv@lists.linux.dev
+X-Gm-Message-State: AOJu0Yw4lGLkvvo1H3pb5Io5SGRZKdf4CXrAKGUD9EeQEmS5d35cZE6L
+	Ca4YftDK0lIWLB+Pq2AQHoOpEJC4C0ZnwUbuvSQay0sxEP0IXpxUSlu/vZ9Jb+FfKg==
+X-Gm-Gg: AR+sD10R51YsW73LVaSd946EdACx6aCw5wg6bba6CEiyfghb5qlmSWdp831AVAd0le2
+	XkjvHYCE4pl4cTAwJCNJaOJJCCOa3wS+ZeTRSVeuOoMFmR7aSVnIAY2TxlIY6Zo0kdlAC8xk9ul
+	Q4Gnv0qMHioP2MWzcpEoNlZY4u4srDdCmPIwzUcMwy3Ja8iBW983y6F/L6zc92lRWIy8ynUpPN9
+	Ets8e+uAYuyI/Igu56lVaPfM9K/lyjJdcEikIUFqmx1f/00AucXbTRCh3D4w8MwVJ6bCs7dxOgz
+	htmdAAneq89AYPC9QWYFzVrZFXbu4AkUpN28F/IIuHGqlU+hmTb5U5E67Y4FNmEqi6Q9yafJd48
+	NeLZO0m49IsHuLif4TPAr9FKC36trGPAQte5VusuYP5pAAs+AoSyqdSzGnk7EJyOPMJU92wj9WR
+	jBb2zUG3aRcE1arPZ5AxoFQcBHhebNjmGObNHeWBodNv1AmSrN97C/QOgoMiFq8hmt09DGe3h02
+	bb8/w8Pzo+3ea7kHO5FVGNFAQE46Q==
+X-Received: by 2002:a05:6a00:1d98:b0:848:4c0c:9482 with SMTP id d2e1a72fcca58-84fb5596c31mr161407b3a.35.1786482885795;
+        Tue, 11 Aug 2026 14:14:45 -0700 (PDT)
 Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84fb1f6b2e2sm237294b3a.55.2026.08.11.14.09.12
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84fb1f2645bsm237399b3a.50.2026.08.11.14.14.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 14:09:12 -0700 (PDT)
-Date: Tue, 11 Aug 2026 21:09:09 +0000
+        Tue, 11 Aug 2026 14:14:45 -0700 (PDT)
+Date: Tue, 11 Aug 2026 21:14:42 +0000
 From: David Matlack <dmatlack@google.com>
 To: Jason Gunthorpe <jgg@nvidia.com>
 Cc: Alex Williamson <alex@shazbot.org>,
@@ -72,11 +72,10 @@ Cc: Alex Williamson <alex@shazbot.org>,
 	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
 	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
 	Tariq Toukan <tariqt@nvidia.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v3 07/11] vfio: selftests: Allow drivers to specify
- required region size
-Message-ID: <anuPdf84cFtZbeE1@google.com>
+Subject: Re: [PATCH v3 06/11] selftests: Fix arm64 IO barriers to match kernel
+Message-ID: <anuQwhVv5UhjS_ER@google.com>
 References: <0-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
- <7-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
+ <6-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -85,119 +84,28 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
+In-Reply-To: <6-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
 
 On 2026-07-16 02:03 PM, Jason Gunthorpe wrote:
-> Add a region_size field to struct vfio_pci_driver_ops so drivers can
-> declare how much DMA-mapped region they need. The mlx5 driver will need
-> ~18MB for firmware pages. Existing drivers pass in the sizeof their state
-> struct. The core code will round up and minimize it to SZ_2M so as not to
-> change any test behavior.
-
-Please update this last sentence to match the patch.
-
+> The tools/include readl/writel MMIO accessors on arm64 use
+> inner-shareable barriers (dmb ish) while the kernel uses
+> outer-shareable (dmb osh).  Fix them to match.
+> 
+> Add __io_bw() and __io_ar() definitions matching the kernel's
+> arch/arm64/include/asm/io.h, including the dummy control dependency
+> in __io_ar() that orders MMIO reads against all subsequent
+> instructions.
 > 
 > Assisted-by: Claude:claude-opus-4.6
 > Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+
+With the changes to tools/testing/selftests/lib.mk removed,
+
+Reviewed-by: David Matlack <dmatlack@google.com>
+
 > ---
->  tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c         | 1 +
->  tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c       | 1 +
->  .../selftests/vfio/lib/include/libvfio/vfio_pci_driver.h   | 6 ++++++
->  tools/testing/selftests/vfio/lib/vfio_pci_driver.c         | 7 +++++++
->  tools/testing/selftests/vfio/vfio_pci_driver_test.c        | 3 ++-
->  5 files changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> index 19d9630b24c23f..40b8541b588eee 100644
-> --- a/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> +++ b/tools/testing/selftests/vfio/lib/drivers/dsa/dsa.c
-> @@ -418,6 +418,7 @@ static void dsa_send_msi(struct vfio_pci_device *device)
->  
->  const struct vfio_pci_driver_ops dsa_ops = {
->  	.name = "dsa",
-> +	.region_size = sizeof(struct dsa_state),
->  	.probe = dsa_probe,
->  	.init = dsa_init,
->  	.remove = dsa_remove,
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-> index a871b935542bad..c9b28365c5eb6b 100644
-> --- a/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-> +++ b/tools/testing/selftests/vfio/lib/drivers/ioat/ioat.c
-> @@ -226,6 +226,7 @@ static void ioat_send_msi(struct vfio_pci_device *device)
->  
->  const struct vfio_pci_driver_ops ioat_ops = {
->  	.name = "ioat",
-> +	.region_size = sizeof(struct ioat_state),
-
-When you rebase on top of vfio/next please also make these changes to
-the NV Falcon and IGB drivers that have recently landed.
-
->  	.probe = ioat_probe,
->  	.init = ioat_init,
->  	.remove = ioat_remove,
-> diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-> index e5ada209b1d102..547369c5cff95a 100644
-> --- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-> +++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_driver.h
-> @@ -9,6 +9,12 @@ struct vfio_pci_device;
->  struct vfio_pci_driver_ops {
->  	const char *name;
->  
-> +	/*
-> +	 * Size of the driver's state structure overlaid on
-> +	 * device->driver.region.vaddr
-> +	 */
-> +	u64 region_size;
-> +
->  	/**
->  	 * @probe() - Check if the driver supports the given device.
->  	 *
-> diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-> index 6827f4a6febe99..e13bbb7ee423dc 100644
-> --- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-> +++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
-> @@ -1,5 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  #include "kselftest.h"
-> +#include <linux/sizes.h>
-> +#include <linux/log2.h>
->  #include <libvfio.h>
->  
->  #ifdef __x86_64__
-> @@ -28,6 +30,11 @@ void vfio_pci_driver_probe(struct vfio_pci_device *device)
->  			continue;
->  
->  		device->driver.ops = ops;
-> +
-> +		VFIO_ASSERT_NE(ops->region_size, 0);
-> +		device->driver.region.size =
-> +			max_t(u64, roundup_pow_of_two(ops->region_size),
-> +			      getpagesize());
-
-Blegh this is because the IOVA allocator insists on a power-of-2 size as
-you pointed out [1]. Can you add a comment here to document that? Or
-better yet, move the rounding up into iova_allocator_alloc() so the
-callers don't have to deal with it like this.
-
-[1] https://lore.kernel.org/all/20260529173753.GB128816@nvidia.com/
-
->  	}
->  }
->  
-> diff --git a/tools/testing/selftests/vfio/vfio_pci_driver_test.c b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-> index afa0480ddd9b2a..f68239da574f5a 100644
-> --- a/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-> +++ b/tools/testing/selftests/vfio/vfio_pci_driver_test.c
-> @@ -80,7 +80,8 @@ FIXTURE_SETUP(vfio_pci_driver_test)
->  	driver = &self->device->driver;
->  
->  	region_setup(self->iommu, self->iova_allocator, &self->memcpy_region, SZ_1G);
-> -	region_setup(self->iommu, self->iova_allocator, &driver->region, SZ_2M);
-> +	region_setup(self->iommu, self->iova_allocator, &driver->region,
-> +		     driver->region.size);
->  
->  	/* Any IOVA that doesn't overlap memcpy_region and driver->region. */
->  	self->unmapped_iova = iova_allocator_alloc(self->iova_allocator, SZ_1G);
-> -- 
-> 2.43.0
-> 
+>  tools/arch/arm64/include/asm/io.h | 20 ++++++++++++++++++++
+>  tools/include/asm/io.h            |  2 ++
+>  tools/testing/selftests/lib.mk    |  5 +++++
+>  3 files changed, 27 insertions(+)
+>  create mode 100644 tools/arch/arm64/include/asm/io.h
