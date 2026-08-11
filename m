@@ -1,92 +1,131 @@
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4482E36AB54
-	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 03:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1F3394462
+	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 03:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786418488; cv=none; b=BarfAG8X6bE8HUwfxSljU+0XM8VBuDrmx910WK0Y7Trc76LY/tN1gshqk1JsbYOawvJgL+ZLyMR1jxRE0zVg5PVEpjn549c6jtLMEvX8WzSVr1myFHRd/Oa94uxZzaMpCqBCkkjCgviWwydX5+17K3GDdIMfAgOVFF+uER06NBA=
+	t=1786418730; cv=none; b=Y5b9Z4o/ViKw3smppKvIamGYUIVe/4ZkqbYXidlheWuQnMw6ISBc/nLpfJvWAw/3S28L5XrKAD45AkMdfJmU4n7JqXnNZCXb1zxhCTyxmTLHuKtUs+DQtGYNWk/hCvixygMtw8bWRn7KK1hnS2b1YmT3m0zQa/uVSnvJlFSP3p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786418488; c=relaxed/simple;
-	bh=A67nTvL3S0f5pXXi3bamCM1SiNXYu2ZVAm2b/1+zW94=;
-	h=Mime-Version:Subject:From:To:CC:In-Reply-To:Message-ID:Date:
-	 Content-Type:References; b=Hc+HqpbOxFg3PychJzBUx2wzDBZB9RoVhq64Ffqz5LuEvP8mMk7bjUsNljmVk33s1FDDM6LgC6oYP0XtURQRLEg3ucQtL6x3KznpSBgt7tBEuo3qhS7tOZRSFaqMTubhilf5Z0KV8tJ+2kdOaH+7lKxFUVPeDZA+7qFspVPT6Jk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=POPJ0LWf; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1786418730; c=relaxed/simple;
+	bh=9y76cQD391WO8DvvOjTCpBOH37O/MNrEfgM9DmhmTgU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XYrpgBAZHwWsmDiFzfdTSnioqfLNj+o0C+qELgoQF/x5GVPvRKeGa56MehBEOrq/kxUyZ4CrN5E8XnBIfi+9drOuODC/4IRmJ0T7cMnRTiZDZ+ZnbCOG3EqJ6I5/nSOQc6mS4Dog7lCXGt4WPNz80xAhwY+EmrUmLEFPthnItP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=QYnArfTu; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="POPJ0LWf"
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20260811032122epoutp029b0349289640ed43ed9953e74d243208~KoiUjEjsg2286222862epoutp02E
-	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 03:21:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20260811032122epoutp029b0349289640ed43ed9953e74d243208~KoiUjEjsg2286222862epoutp02E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1786418482;
-	bh=A67nTvL3S0f5pXXi3bamCM1SiNXYu2ZVAm2b/1+zW94=;
-	h=Subject:Reply-To:From:To:CC:In-Reply-To:Date:References:From;
-	b=POPJ0LWf/7/dGa9Brfj1tco+n1PE/NmCGYPNKaHW8zqgKcBOveuMF8jsipUewb42P
-	 wtfdLXUJLvwjAlEE3rToh4tAPEXQUPYPQYkEu+iCTKO7PNThcBB6UgGG3/AmA5xutE
-	 z/eFsyzoJeiPWNPfob6cqKUQ+rECvJENg6n2ax/Q=
-Received: from epsnrtp02.localdomain (unknown [182.195.42.154]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTPS id
-	20260811032122epcas5p2f7b76e4134904673c8632b7f12dc1d71~KoiUGHP6A1041910419epcas5p2f;
-	Tue, 11 Aug 2026 03:21:22 +0000 (GMT)
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40]) by
-	epsnrtp02.localdomain (Postfix) with ESMTP id 4hJxjZ0XRLz2SSKg; Tue, 11 Aug
-	2026 03:21:22 +0000 (GMT)
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="QYnArfTu"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1786418719; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=4XgK3imMB3NoBFeFmcCzz78TwjTfNSTHshu8BTdmpeA=;
+	b=QYnArfTuIzGxpVyqizkD6TZV8OjZ5t4ak+Xib6UuhRvmB34/iuQpDbltueFE7sCdbi+CpZYS0jGcetSaX0yYqzqJM1UwhpP09ScrXUQ3OzioT9h7RdqNWk88WNrSudIy2qGCVqusXUAXIjq5kg4weR8NB9LMXSwWJPRrdWidMyg=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=xueshuai@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0X8mliJT_1786418717;
+Received: from 30.246.162.187(mailfrom:xueshuai@linux.alibaba.com fp:SMTPD_---0X8mliJT_1786418717 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 11 Aug 2026 11:25:18 +0800
+Message-ID: <19df2aa0-4c8d-424d-a833-0c17d35a9502@linux.alibaba.com>
+Date: Tue, 11 Aug 2026 11:25:16 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Subject: RE: [PATCH v2] arm: backtrace-clang: fix wrong sp usage for
- unwinding
-Reply-To: maninder1.s@samsung.com
-Sender: Maninder Singh <maninder1.s@samsung.com>
-From: Maninder Singh <maninder1.s@samsung.com>
-To: Nick Desaulniers <ndesaulniers@google.com>
-CC: "ardb@kernel.org" <ardb@kernel.org>, "linux@armlinux.org.uk"
-	<linux@armlinux.org.uk>, "nathan@kernel.org" <nathan@kernel.org>,
-	"nick.desaulniers+lkml@gmail.com" <nick.desaulniers+lkml@gmail.com>,
-	"morbo@google.com" <morbo@google.com>, "justinstitt@google.com"
-	<justinstitt@google.com>, Onkarnath <onkarnath.1@samsung.com>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "llvm@lists.linux.dev"
-	<llvm@lists.linux.dev>, Rohit Thapliyal <r.thapliyal@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <CAKwvOdk=ydGGmeDnoYYNLhe0pSmDZ1FgSoB2W_985avY07Ga7g@mail.gmail.com>
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20260811032121epcms5p6e9ed3e8970f4b4aaf1f17aa8ae91f0b0@epcms5p6>
-Date: Tue, 11 Aug 2026 08:51:21 +0530
-X-CMS-MailID: 20260811032121epcms5p6e9ed3e8970f4b4aaf1f17aa8ae91f0b0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-X-CMS-RootMailID: 20260805045522epcas5p39659721ef26a447b71e860c2990a60c0
-References: <CAKwvOdk=ydGGmeDnoYYNLhe0pSmDZ1FgSoB2W_985avY07Ga7g@mail.gmail.com>
-	<20260805045514.1599433-1-maninder1.s@samsung.com>
-	<CGME20260805045522epcas5p39659721ef26a447b71e860c2990a60c0@epcms5p6>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 01/23] perf capstone: Fix arm64 jump/adrp disassembly
+ mismatch with objdump
+To: Tengda Wu <wutengda@huaweicloud.com>, Namhyung Kim <namhyung@kernel.org>,
+ james.clark@linaro.org, Li Huafei <lihuafei1@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+ <20260808122400.2961238-2-wutengda@huaweicloud.com>
+ <1b7e48ec-66a0-4727-b533-ff87f54df057@linux.alibaba.com>
+ <244d8775-5318-4678-a392-b1416acc78af@huaweicloud.com>
+From: Shuai Xue <xueshuai@linux.alibaba.com>
+In-Reply-To: <244d8775-5318-4678-a392-b1416acc78af@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Nick,
 
-> Suggested-by:=C2=A0=20Ard=20Biesheuvel=20<ardb=40kernel.org>=0D=0A>=20Rev=
-iewed-by:=20Nick=20Desaulniers=20<ndesaulniers=40google.com>=0D=0A>=20=0D=
-=0A>=20Thanks=20for=20reporting=20the=20issue=20and=20sending=20a=20patch.=
-=20Thanks=20for=20Ard=20for=0D=0A>=20suggesting=20a=20better=20fix.=0D=0A>=
-=20I=20assume=20you=20all=20know=20how=20to=20submit=20patches=20to=0D=0A>=
-=20https://www.arm.linux.org.uk/developer/patches/=0D=0A>=20=0D=0A=0D=0A=0D=
-=0AThanks=20for=20reviewing=20the=20patch,=20Actually=20I=20was=20not=20awa=
-re=20that=20ARM=20patches=0D=0Ahas=20to=20go=20through=20this=20way.=0D=0AM=
-aybe=20that=20is=20the=20reason=20my=20last=202=20bugfixes=20are=20also=20i=
-gnored=20from=20ARM=20side=20:)=0D=0Ahttps://lkml.org/lkml/2026/4/27/265=0D=
-=0A=0D=0ASo=20I=20was=20checking=20the=20way=20and=20created=20account=20th=
-ere=20to=20submit=20the=20patch.=0D=0AI=20will=20post=20the=20patch=20to=20=
-suggested=20site=20today=20for=20further=20checking.=0D=0Ahttps://www.arm.l=
-inux.org.uk/developer/patches/=0D=0A=0D=0A=0D=0AThanks=20Again,=0D=0AManind=
-er=20Singh=0D=0A
+
+On 8/11/26 10:27 AM, Tengda Wu wrote:
+> Hi Shuai, thank you for your time.
+> 
+> On 2026/8/10 21:08, Shuai Xue wrote:
+>>
+>>
+>> On 8/8/26 8:23 PM, Tengda Wu wrote:
+>>> The jump and adrp instructions parsed by libcapstone currently lack
+>>> symbolic representation and use a '#' prefix for addresses. This
+>>> format is inconsistent with objdump's output, which causes subsequent
+>>> parsing in jump__parse() and arm64_mov__parse() to fail.
+>>>
+>>> Example mismatch:
+>>>     Current: b #0xffff8000800114c8
+>>>     Fix:     b ffff8000800114c8 <el0t_64_sync+0x108>
+>>>
+>>>     Current: adrp x18, #0xffff800081f5f000
+>>>     Fix:     adrp x18, ffff800081f5f000 <this_cpu_vector>
+>>>
+>>> Fix this by implementing extended formatting for these arm64
+>>> instructions during symbol__disassemble_capstone(). This ensures
+>>> the output matches objdump's expected style, including the raw
+>>> address and the associated <symbol+offset> suffix.
+>>>
+>>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>>> ---
+>>>    tools/perf/util/capstone.c | 136 +++++++++++++++++++++++++++++++++----
+>>>    tools/perf/util/disasm.c   |   5 ++
+>>>    tools/perf/util/disasm.h   |   1 +
+>>>    3 files changed, 130 insertions(+), 12 deletions(-)
+>>>
+>>> diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
+>>> index 74213daf8786..fb8a2bc5558f 100644
+>>> --- a/tools/perf/util/capstone.c
+>>> +++ b/tools/perf/util/capstone.c
+>>> @@ -3,6 +3,7 @@
+>>>      #include <errno.h>
+>>>    #include <inttypes.h>
+>>> +#include <stdlib.h>
+>>>    #include <string.h>
+>>>      #include <dlfcn.h>
+>>> @@ -31,6 +32,10 @@
+>>>    #define CS_MODE_RISCVC   4
+>>>    #endif
+>>>    +#if CS_VERSION_MAJOR < 4
+>>> +#define ARM64_GRP_BRANCH_RELATIVE  7
+>>
+>> Please add a comment explaining where '7' comes from
+>> (CS_GRP_BRANCH_RELATIVE in capstone v3), otherwise it reads like an
+>> arbitrary magic number.
+>>
+> 
+> Um, this was done following Namhyung's approach. That said, adding a
+> comment would certainly make this definition clearer -- will add it.
+> 
+> Also, I couldn't find CS_GRP_BRANCH_RELATIVE in v3. From what I can see,
+> it was originally introduced in v4, together with ARM64_GRP_BRANCH_RELATIVE
+> (see https://github.com/capstone-engine/capstone/commit/a09a81813c83).
+> So the comment might look something like this:
+> 
+>    #define ARM64_GRP_BRANCH_RELATIVE  7  /* = CS_GRP_BRANCH_RELATIVE */
+> 
+> Is this acceptable?
+> 
+
+LGTM.
+
+Thanks.
+Shuai
+
