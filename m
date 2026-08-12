@@ -1,160 +1,302 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C473BE178;
-	Wed, 12 Aug 2026 08:30:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B70348C6E
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 08:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786523414; cv=none; b=L7MlCV7C07ImlXSYsnhzuiDNcwl+9DKG9V/ubuf5vZmX4VmgRP8WzldhO3NVUl4McYwj9f4ahTXGNymJw+FzNAMFxXGUDCqenMhaeAWrWDI0sf0x8gQnUv8voDFH1JP8ufd8OgO0/rh3c3wZev1FX7iv1GWtbRMJnDItZIOMe0o=
+	t=1786524844; cv=none; b=H/28wRAfTOwa3kut+5qjEPFbfAJggeP6LS0N0qz3MwOx1DLC0jGsW2vASJH3ajGd1VCFyCpKeweGsxnWf82C2kOICZl2K5F4rgSY3PAxdtAdXVdc5d3UX+4qmRSBq5uuOp1+LSM5UJMwu4a8q50MqdASWDvycPPqA4zSrPgQue8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786523414; c=relaxed/simple;
-	bh=grROCCp/NlSZhIChKu/T+K573rFhmjdvZT5uMTe+e3A=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=UWTyB4UIGWuqgvcjALq1wPYqzCWtbLd4SdRKB5X25PjhL8rcawTLVGu2KrZAieO3zUP6vkZ0h8z8LGLjUwwr58j4nQjwFBpbLQ0f9O+LdWfKJnNS/sMICnjP9oUxKPUkUn2GKS24sIGEk6+9ln73hB/OBPhXN3lBiFWWrPufCJw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hE9m/Oud; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hE9m/Oud"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786523412; x=1818059412;
-  h=date:from:to:cc:subject:message-id;
-  bh=grROCCp/NlSZhIChKu/T+K573rFhmjdvZT5uMTe+e3A=;
-  b=hE9m/OudNZanSwhW0WAM2ohhyRWbWnatCyfGvXjesRj7FU0rVZp5hBtS
-   Y6cy1b9RNp2g3vkQB2C93lwVfE2Ilako//uJWjRLmumNUqz2A8Zwcu8qL
-   haD+xNArv/w83YhJAImXeF05OrEx3Op/iF5vbYcLr/qd0TIXjEo4JhXhV
-   tgnbaHZOK4KXKpSBlJEv/IrdNNw/JIhxr7+R4IAOKWbzUzZ8dblqLKP0y
-   WmCZCYJRhivd4rq/eEdPTj/aSh6Ym31V7E8AhBn+1110h3zzTfqfkOWAK
-   3rHkOkYwzmr5IYXAHqbU0+bhbKxJUqo0yoRZalYyb7WnL9rLHbKT/mAF0
-   g==;
-X-CSE-ConnectionGUID: atg6BK4NTWm18pbqSL7ftw==
-X-CSE-MsgGUID: 7cySLFwiQ+GD6Hv4Tsb9Zw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11872"; a="98582547"
-X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
-   d="scan'208";a="98582547"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 01:30:12 -0700
-X-CSE-ConnectionGUID: B6SYgmSXRtCnkgOGvIVo2Q==
-X-CSE-MsgGUID: lKm+h/wGQG+7TNYrCzz/3Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
-   d="scan'208";a="267072037"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 12 Aug 2026 01:30:10 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wu4Lf-00000000Q6w-1DjN;
-	Wed, 12 Aug 2026 08:30:07 +0000
-Date: Wed, 12 Aug 2026 16:29:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jaegeuk Kim <jaegeuk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-f2fs-devel@lists.sourceforge.net, Chao Yu <chao@kernel.org>
-Subject: [jaegeuk-f2fs:dev-test 30/30] fs/f2fs/inode.c:1065:6: error:
- call to undeclared function 'current_is_kswapd'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202608121654.riTjCLm7-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1786524844; c=relaxed/simple;
+	bh=SnZMtgxQ2/eaYkqVMvq8Rmm2soWXt7LKDLLcCfKtXZ8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZUriat6RmMtkeQ+gZ0+5GmogjL2CVn/WsJ8MhIaxxCMP7janyzuuidOOledvpqVfB1GgnT/NfThIit6o2M1mOALyyUw2IjZuQf6ODXjbEf8Vqcu16JWNTO38g5nQI+YXJ7OIu/WokQlqmckPccG8edy06z0Y0ckJi4uxB7dKzzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hKj2h4PsWzYQv6v
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 16:53:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 5AE7940CF5
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 16:53:53 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgB3VhufNHxqnQ0wCA--.36665S2;
+	Wed, 12 Aug 2026 16:53:53 +0800 (CST)
+Message-ID: <c089bc29-5b83-4723-a28b-d45c229d5ba1@huaweicloud.com>
+Date: Wed, 12 Aug 2026 16:53:51 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 09/23] perf annotate: Deduplicate overlapping ARM SPE
+ events for data type profiling
+To: Adrian Hunter <adrian.hunter@intel.com>,
+ Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
+ xueshuai@linux.alibaba.com, Li Huafei <lihuafei1@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+ <20260808122400.2961238-10-wutengda@huaweicloud.com>
+ <20083f61-9724-445c-ad45-d77f9e8d2266@intel.com>
+ <1910f712-8ea6-4916-82ac-0c1c2eac653c@huaweicloud.com>
+ <b9a642f7-f8a9-425b-98ad-b779f9501db8@intel.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <b9a642f7-f8a9-425b-98ad-b779f9501db8@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:gCh0CgB3VhufNHxqnQ0wCA--.36665S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFW8Zr13JryDAw43ZFWrXwb_yoWfJr4xpr
+	y3uFn8Ka1kXr4rKrnFva15Xr1Sk3yfJFW3Wr12kr45Awn09F9aqFy7tr1YkF93Xrn8Z342
+	vr4q93y3W345ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUkEb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
+	j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
+	kEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AK
+	xVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j
+	6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jIks
+	gUUUUU=
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
-head:   7451b3cd93b30f714efc83f6571abf8c50541839
-commit: 7451b3cd93b30f714efc83f6571abf8c50541839 [30/30] f2fs: call __add_ino_entry out of the eviction path
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260812/202608121654.riTjCLm7-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260812/202608121654.riTjCLm7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608121654.riTjCLm7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/f2fs/inode.c:1065:6: error: call to undeclared function 'current_is_kswapd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1065 |         if (current_is_kswapd()) {
-         |             ^
-   1 error generated.
 
 
-vim +/current_is_kswapd +1065 fs/f2fs/inode.c
+On 2026/8/12 14:07, Adrian Hunter wrote:
+> On 12/08/2026 05:28, Tengda Wu wrote:
+>>
+>>
+>> On 2026/8/10 14:57, Adrian Hunter wrote:
+>>> On 08/08/2026 15:23, Tengda Wu wrote:
+>>>> When data type profiling is enabled on ARM SPE, multiple overlapping
+>>>> events (e.g., l1d-miss, tlb-access) are synthesized for a single sampled
+>>>> instruction, as shown below:
+>>>>
+>>>>   Available samples
+>>>>   0 arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=30/
+>>>>   0 dummy:u
+>>>>   84K l1d-miss
+>>>>   95K l1d-access
+>>>>   77K llc-miss
+>>>>   58K llc-access
+>>>>   9K tlb-miss
+>>>>   108K tlb-access
+>>>>   0 branch
+>>>>   13K remote-access
+>>>>   108K memory
+>>>>   108K instructions
+>>>>
+>>>> While 'perf report' provides an interactive menu for users to select a
+>>>> specific event to prevent duplicate counting, 'perf annotate' lacks such
+>>>> a mechanism. Consequently, it counts all instructions across these
+>>>> overlapping events, which inflates the profile and distorts the data
+>>>> type statistics.
+>>>>
+>>>> Although using the '--itrace' option can work around this issue (e.g.:
+>>>> perf annotate --data-type --stdio --itrace=i1i), it is inconvenient for
+>>>> users to specify this explicitly every time.
+>>>>
+>>>> To address this, introduce itrace_synth_opts.dont_overlap. Set this to true
+>>>> when data type profiling is enabled and the user has not explicitly
+>>>> specified an itrace option. Then, during arm_spe_process_auxtrace_info(),
+>>>> adjust the synthesized event options based on the dont_overlap value to
+>>>> only enable instruction event synthesis, thereby achieving automatic
+>>>> deduplication.
+>>>>
+>>>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>>>> ---
+>>>>  tools/perf/builtin-annotate.c |  8 ++++++++
+>>>>  tools/perf/util/arm-spe.c     | 17 +++++++++++++++++
+>>>>  tools/perf/util/auxtrace.h    |  2 ++
+>>>>  3 files changed, 27 insertions(+)
+>>>>
+>>>> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+>>>> index 69cb72b2082a..616f54bf4868 100644
+>>>> --- a/tools/perf/builtin-annotate.c
+>>>> +++ b/tools/perf/builtin-annotate.c
+>>>> @@ -873,6 +873,14 @@ int cmd_annotate(int argc, const char **argv)
+>>>>  	annotate.session = perf_session__new(&data, &annotate.tool);
+>>>>  	if (IS_ERR(annotate.session))
+>>>>  		return PTR_ERR(annotate.session);
+>>>> +	/*
+>>>> +	 * Hardware tracing (e.g.: ARM SPE) may generate overlapping events
+>>>> +	 * per instruction. When data type profiling is enabled, enable
+>>>> +	 * dont_overlap to deduplicate them to avoid skewed stats, but only
+>>>> +	 * if user hasn't specified itrace options (respect user override).
+>>>> +	 */
+>>>> +	if (annotate.data_type && !itrace_synth_opts.set)
+>>>> +		itrace_synth_opts.dont_overlap = true;
+>>>>  
+>>>>  	annotate.session->itrace_synth_opts = &itrace_synth_opts;
+>>>>  
+>>>> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+>>>> index 401aab529309..1721882423f6 100644
+>>>> --- a/tools/perf/util/arm-spe.c
+>>>> +++ b/tools/perf/util/arm-spe.c
+>>>> @@ -2033,6 +2033,9 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>>>>  		/* Default nanoseconds period not supported */
+>>>>  		spe->synth_opts.period_type = PERF_ITRACE_PERIOD_INSTRUCTIONS;
+>>>>  		spe->synth_opts.period = 1;
+>>>> +
+>>>> +		if (session->itrace_synth_opts)
+>>>> +			spe->synth_opts.dont_overlap = session->itrace_synth_opts->dont_overlap;
+>>>>  	}
+>>>>  
+>>>>  	if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS) {
+>>>> @@ -2044,6 +2047,20 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>>>>  		ui__warning("Arm SPE has a hardware-based sampling period.\n\n"
+>>>>  			    "--itrace periods > 1i downsample by an interval of n SPE samples rather than n instructions.\n");
+>>>>  
+>>>> +	if (spe->synth_opts.dont_overlap) {
+>>>> +		/*
+>>>> +		 * The 'instructions' event is the most comprehensive,
+>>>> +		 * synthesize it exclusively.
+>>>> +		 */
+>>>> +		spe->synth_opts.flc = false;
+>>>> +		spe->synth_opts.llc = false;
+>>>> +		spe->synth_opts.tlb = false;
+>>>> +		spe->synth_opts.branches = false;
+>>>> +		spe->synth_opts.remote_access = false;
+>>>> +		spe->synth_opts.mem = false;
+>>>> +		spe->synth_opts.instructions = true;
+>>>> +	}
+>>>> +
+>>>>  	err = arm_spe_synth_events(spe, session);
+>>>>  	if (err)
+>>>>  		goto err_free_queues;
+>>>> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+>>>> index 6947f3f284c0..ebb4e9e8e574 100644
+>>>> --- a/tools/perf/util/auxtrace.h
+>>>> +++ b/tools/perf/util/auxtrace.h
+>>>> @@ -80,6 +80,7 @@ enum itrace_period_type {
+>>>>   * @intr_events: whether to synthesize interrupt events
+>>>>   * @errors: whether to synthesize decoder error events
+>>>>   * @dont_decode: whether to skip decoding entirely
+>>>> + * @dont_overlap: whether to deduplicate overlapping events
+>>>
+>>> This doesn't seem to match what you are actually doing, which
+>>> seems to be to choose particular default itrace options for
+>>> 'perf annotate --data-type'
+>>>
+>>> I wonder if this should really be handled by
+>>> itrace_synth_opts__set_default()?
+>>>
+>>
+>> Placing this in itrace_synth_opts__set_default() may not be appropriate.
+> 
+> Your current approach introduces the concepts of
+> "dont_overlap" and "deduplicate" but doesn't actually
+> map them to specific functionality.  They are a mismatch
+> with what you are actually doing.
+> 
 
-  1019	
-  1020	static void f2fs_post_evict_inode(struct inode *inode)
-  1021	{
-  1022		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-  1023		struct f2fs_inode_info *fi = F2FS_I(inode);
-  1024		nid_t xnid = fi->i_xattr_nid;
-  1025		unsigned int record_bits = 0;
-  1026	
-  1027		dquot_drop(inode);
-  1028	
-  1029		stat_dec_inline_xattr(inode);
-  1030		stat_dec_inline_dir(inode);
-  1031		stat_dec_inline_inode(inode);
-  1032		stat_dec_compr_inode(inode);
-  1033		stat_sub_compr_blocks(inode,
-  1034				atomic_read(&fi->i_compr_blocks));
-  1035	
-  1036		if (likely(!f2fs_cp_error(sbi) &&
-  1037					!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
-  1038			f2fs_bug_on(sbi, is_inode_flag_set(inode, FI_DIRTY_INODE));
-  1039	
-  1040		/*
-  1041		 * anyway, it needs to remove the inode from sbi->inode_list[DIRTY_META]
-  1042		 * list to avoid UAF in f2fs_sync_inode_meta() during checkpoint.
-  1043		 */
-  1044		f2fs_inode_synced(inode);
-  1045	
-  1046		/* for the case f2fs_new_inode() was failed, .i_ino is zero, skip it */
-  1047		if (inode->i_ino)
-  1048			invalidate_mapping_pages(NODE_MAPPING(sbi), inode->i_ino,
-  1049								inode->i_ino);
-  1050		if (xnid)
-  1051			invalidate_mapping_pages(NODE_MAPPING(sbi), xnid, xnid);
-  1052	
-  1053		if (!inode->i_nlink)
-  1054			goto skip_record;
-  1055	
-  1056		if (is_inode_flag_set(inode, FI_APPEND_WRITE))
-  1057			record_bits = BIT(APPEND_INO);
-  1058		if (is_inode_flag_set(inode, FI_UPDATE_WRITE))
-  1059			record_bits = BIT(UPDATE_INO);
-  1060	
-  1061		if (!record_bits)
-  1062			goto skip_record;
-  1063	
-  1064		/* Let's do this in workqueue out of the direct reclaim path. */
-> 1065		if (current_is_kswapd()) {
-  1066			f2fs_record_inode_state(sbi, inode->i_ino, record_bits);
-  1067		} else {
-  1068			struct evict_inode_work *ew =
-  1069				mempool_alloc(evict_inode_work_pool, GFP_NOFS);
-  1070	
-  1071			ew->sbi = sbi;
-  1072			ew->ino = inode->i_ino;
-  1073			ew->add_ino_entry_bits = record_bits;
-  1074			INIT_WORK(&ew->work, f2fs_evict_inode_work);
-  1075			queue_work(sbi->evict_wq, &ew->work);
-  1076		}
-  1077	skip_record:
-  1078		if (is_inode_flag_set(inode, FI_FREE_NID)) {
-  1079			f2fs_alloc_nid_failed(sbi, inode->i_ino);
-  1080			clear_inode_flag(inode, FI_FREE_NID);
-  1081		} else {
-  1082			/*
-  1083			 * If xattr nid is corrupted, we can reach out error condition,
-  1084			 * err & !f2fs_exist_written_data(sbi, inode->i_ino, ORPHAN_INO)).
-  1085			 * In that case, f2fs_check_nid_range() is enough to give a clue.
-  1086			 */
-  1087		}
-  1088	}
-  1089	
+Agreed.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>>
+>> The current approach is designed to constrain the following conditions:
+>>
+>> 1. Using perf annotate
+>> 2. With --data-type specified
+>> 3. Based on ARM SPE
+>> 4. Without --itrace explicitly specified
+>>
+>> When these conditions are all met, we want to enable --itrace=i1i by default,
+>> effectively making this option built-in.
+>>
+>> If we were to place the --itrace=i1i configuration inside
+>> itrace_synth_opts__set_default(), conditions 1, 2, and 3 would not be
+>> reachable from that context, as there's no way to propagate that information
+>> into the function.
+> 
+> itrace_synth_opts__set_default() is only called when 4 is true.
+> 
+> WRT 1 and 2, you are planning to pass information via synth_opts,
+> anyway, so it is the same in that regard.
+> 
+
+Agreed.
+
+>>                    Configuring it directly there would take effect globally,
+>> impacting other commands such as perf report and perf script.
+> 
+> Not if they did not pass the new information, same as your current
+> approach.
+> 
+
+Agreed.
+
+>>
+>> Therefore, the current approach passes the dont_overlap information through
+>> itrace (satisfying conditions 1, 2, and 4), and then configures --itrace=i1i
+>> inside the ARM SPE driver (satisfying condition 3).
+> 
+> Why wouldn't that default be ok for other auxtrace implementations?
+> 
+
+To be honest, I wasn't entirely sure about the potential impact of making
+'--itrace=i1i' the default for 'perf annotate --data-type' across all
+architectures, so I took the most conservative approach and restricted it
+to ARM SPE.
+
+However, if another architecture's auxtrace backend also synthesizes multiple
+events from a single instruction, it would in principle need --itrace=i1i as
+well. I also tested this on an Intel environment for comparison, enabling
+--itrace=i1i or not yielded the exact same sample count, so making it the
+default should be safe:
+
+  perf annotate --data-type --stdio --type-stat
+     total 880, ok 711 (80.8%), bad 169 (19.2%)
+
+  perf annotate --data-type --stdio --type-stat --itrace=i1i
+     total 880, ok 711 (80.8%), bad 169 (19.2%)
+
+So I agree with your point, I'll move this configuration directly into
+itrace_synth_opts__set_default().
+
+> In any case, the problem is with the mismatch between the naming,
+> definition, and framing of "dont_overlap" and how it is actually used.
+> 
+> Perhaps instead:
+> 
+> 	default_single_event_per_ip
+> 
+> and explain the annotate data-type use-case in its kernel-doc
+> description.
+> 
+
+Yes, default_single_event_per_ip is indeed much more accurate and clear.
+I'll fix it.
+
+Thanks,
+Tengda
+
+>>>
+>>>>   * @log: write a decoding log
+>>>>   * @calls: limit branch samples to calls (can be combined with @returns)
+>>>>   * @returns: limit branch samples to returns (can be combined with @calls)
+>>>> @@ -128,6 +129,7 @@ struct itrace_synth_opts {
+>>>>  	bool			intr_events;
+>>>>  	bool			errors;
+>>>>  	bool			dont_decode;
+>>>> +	bool			dont_overlap;
+>>>>  	bool			log;
+>>>>  	bool			calls;
+>>>>  	bool			returns;
+>>
+> 
+
