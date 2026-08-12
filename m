@@ -1,169 +1,92 @@
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC28432E80
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 12:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66070315785;
+	Wed, 12 Aug 2026 13:07:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786537759; cv=none; b=R9M96QQNJRAnMAURHrkGqjLkuqVWH+rVehWVqKe/+3DBR5UcWfcieeaegm6rrQiR+n49ca2W6CaLMObbobGaTPEHpJ6coXeoDmWYu64c8O8yLdi/M+tFmakSLEPLMA0NgGDdsW2KXwUD57AoXexmmfEDxmvzs7V5EYmM1IXHCgo=
+	t=1786540066; cv=none; b=uHOi+PQsBp+tl09y35qGiPxGVr7ckErLKzULfZ+wBKgeKjVeW1UaWQJvUDBj97YtPDojBrWlTumzYjCymlV2qmDJIMU+Z/s1OYH8UFcwZrAGMlk916dXFmq8j/vMaDVc/MwEGzwnqQFE9K3MoGc2cUlCwyAqO/8mbdWKd4ngQqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786537759; c=relaxed/simple;
-	bh=n7/U2S5maCV5Vf0nRUZmSQD2Viw34RFeOIx8Uc/E1OE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mzsgfG5dtqxJ71WdzgS/6AcUxQERXLiRSESil5+QqwTkHd1h9A9QxRAE5tcPdA+aD8Q+7e0327PWOpsQoDgJQKlyNt3x0KnhBYzZfuV1L/Fv1EoCdc97kUafxTsupVHo5cS9Oott5jy/8c10GbyrWiJ7nWURGCOsJ7qSppo5COs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=NOvrL42b; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=m7KBV7J4; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+	s=arc-20240116; t=1786540066; c=relaxed/simple;
+	bh=8jV1of6OCDvTJ6rGcL7peMibBQ1Al1d3woY3yewAqpw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=B8PPqYyHhzGtlhKzFskl0rbUht28xHXuoNDiBpQs/EDLAll2LQoGop2rO4fa9vLWdSJVFyXwqLan9J1hNEdW6+dJOjhqRSNhawV7Hmck/xWRaMRdzS4tMxwGMle3+w/ZWo3ZX3SMrU8kv4e21tvIGxBmT4iAh07qEDbTdSrCEW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qgauwko1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="NOvrL42b";
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="m7KBV7J4"
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4hKnqB2vRkzMl1C;
-	Wed, 12 Aug 2026 14:29:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1786537750;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XAedvff3QSP0EFBuHSwE45YjQw2aBi3g60mPut/5Tvg=;
-	b=NOvrL42bTrvNtirUZqZXJJe0oxh+HkO97xPHfsjTUHL8JqZBVxzgD2LQRocNonWE3GOzRh
-	YmEir3CHUq2nALTC+T/P6J8zLiAXANTwsDn7JcyDOLB0nyXLb1sKfLKabmYAtKQUhldwNa
-	AVBa0ZLKBL2DuMBL0H1KWqS2m4Gun3+9nDeMSrRJ4M+Adc9SpiBnmu8v+zfOCjbesoYRua
-	ouMd53bGJDmlbXMga/wugDYK4b99bI71ST+/OEji13BBl0P5rbt09iTpDyEnWrtpKsEI6X
-	+fcOK8btV6w+FZodEq5hZFi4ljxuR028caHe+jYHlgZWuALFtjDa/jG6tq8Zcg==
-Authentication-Results: outgoing_mbo_mout;
-	dkim=pass header.d=mailbox.org header.s=mail20150812 header.b=m7KBV7J4;
-	spf=pass (outgoing_mbo_mout: domain of manuelebnerli@mailbox.org designates 2001:67c:2050:b231:465::2 as permitted sender) smtp.mailfrom=manuelebnerli@mailbox.org
-From: Manuel Ebner <manuelebnerli@mailbox.org>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1786537748;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XAedvff3QSP0EFBuHSwE45YjQw2aBi3g60mPut/5Tvg=;
-	b=m7KBV7J44czUqNWhFxfajalxd7ZpTRle9D842Yn7z3mjbHKXLLMSTEq8LNBxKwRIET8ZwC
-	JiqZBBKyk5xsvsiPzKQT57Ukp62rXq1Xm8yupRiOgRflDwNKJL+rA6ZyziVn7Ov1GdptIq
-	Q0n88N5/zQKj88KaJy3Xv1dyyc+xeVSQs8Pq9ZyjfuCNn2BaIMi08s7X1Ba6keTcH3HG/7
-	QB3vC4cQTfAHuF65YxzSBfwV82u5ehiHnqi99fpHGeqchVTADJuEPHY1qkfAgOoreFOXfe
-	WAGYmG4UhKIAZS2SEzIFd6sL9+R8isZyjzi/VMA5D8BCN+C6Y+K5jNYBQLUPIg==
-To: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Manuel Ebner <manuelebnerli@mailbox.org>,
-	workflows@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 5/5] Docs: software-requirements.rst replace optional tag with footnotes
-Date: Wed, 12 Aug 2026 14:24:22 +0200
-Message-ID: <20260812122426.1636227-2-manuelebnerli@mailbox.org>
-In-Reply-To: <20260812120805.1631430-3-manuelebnerli@mailbox.org>
-References: <20260812120805.1631430-3-manuelebnerli@mailbox.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qgauwko1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA661F000E9;
+	Wed, 12 Aug 2026 13:07:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786540065;
+	bh=8jV1of6OCDvTJ6rGcL7peMibBQ1Al1d3woY3yewAqpw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Qgauwko14ZtBrifbiwU9EwbyU0grV9F1ss/R1zJHsldlPk8OsU6boSme+VoUnc+Or
+	 xeZM9QeMcQnvEla96TVtZe3Pe88tM1zylVbzKyaG9+9Ard7GWhqy+A24VUZEXnFYUh
+	 PSddH9/c9jxBB9P6uivSBc44c1gnxZyYlbJsEJdpW8oDpsrpxs0JGnGNMXre3tNMLu
+	 CefhhsaQq+xRDYewC6KU2ter39StP2sKMvIcWD3Qk7qL7oKK1HHFZtMNcaHJ4/Cw6w
+	 2hTFeOHkNw3WufPeoBRxe3T9HH90sPyvooLXxA/zVgg4AqloIGQReJxqOZri3TrqOX
+	 jf5Oz4rkg+FaQ==
+Content-Type: multipart/mixed; boundary="===============0397126666267180240=="
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: 9a6552926477983df8a
-X-MBO-RS-META: 9wstznwmdimpop4iii1fw88jbufmkobd
-X-Rspamd-Queue-Id: 4hKnqB2vRkzMl1C
+Message-Id: <1eab9fe487b6cba29d405e83619885945bf1143b42cc556aaf282abd0c5ad46a@mail.kernel.org>
+In-Reply-To: <20260812121603.1633270-2-manuelebnerli@mailbox.org>
+References: <20260812121603.1633270-2-manuelebnerli@mailbox.org>
+Subject: Re: [PATCH 1/5] Docs: changes.rst: rename file and references and  add links
+From: bot+bpf-ci@kernel.org
+To: manuelebnerli@mailbox.org,corbet@lwn.net,skhan@linuxfoundation.org,federico.vaga@vaga.pv.it,akiyks@gmail.com,danielmaraboo@gmail.com,carlos.bilbao@kernel.org,avadhut.naik@amd.com,alexs@kernel.org,si.yanteng@linux.dev,dzm91@hust.edu.cn,2023002089@link.tyut.edu.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ojeda@kernel.org,boqun@kernel.org,gary@garyguo.net,bjorn3_gh@protonmail.com,lossin@kernel.org,a.hindborg@kernel.org,aliceryhl@google.com,tmgross@umich.edu,dakr@kernel.org,daniel.almeida@collabora.com,tamird@kernel.org,acourbot@nvidia.com,work@onurozkan.dev,nathan@kernel.org,nick.desaulniers+lkml@gmail.com,morbo@google.com,justinstitt@google.com
+Cc: manuelebnerli@mailbox.org,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org,workflows@vger.kernel.org,bpf@vger.kernel.org,rust-for-linux@vger.kernel.org,llvm@lists.linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 12 Aug 2026 13:07:42 +0000 (UTC)
 
-The optional tag isn't obvious nor defined. Therefore replace with footnotes
-like the one of Sphinx.
+--===============0397126666267180240==
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: base64
 
-Signed-off-by: Manuel Ebner <manuelebnerli@mailbox.org>
----
- .../process/software-requirements.rst         | 22 ++++++++++++-------
- 1 file changed, 14 insertions(+), 8 deletions(-)
+PiBUaGUgY3VycmVudCBuYW1lIGRvZXMgbm90IHJlZmxlY3QgdGhlIGNvbnRlbnQgb2YgdGhlIGZp
+bGUsIHRoZSBuZXcgbmFtZQo+IGRvZXMgc28uIFdpdGggdGhlIGxpbmtzIGxlZ2FjeSByZWZlcmVu
+Y2VzIHNob3VsZCBjb250aW51ZSB0byB3b3JrLgo+Cj4gQ2hhbmdlIG5hbWUgdG8gc29mdHdhcmUt
+cmVxdWlyZW1lbnRzLnJzdAo+IENoYW5nZSBuYW1lcyBpbiBEb2MvdHJhbnNsYXRpb25zLyoKPiBB
+ZGQgbGluayBEb2MvcHJvY2Vzcy9jaGFuZ2VzLnJzdCB0byBzb2Z0d2FyZS12ZXJzaW9uLnJzdC4K
+PiBBZGQgbGluayBEb2MvQ2hhbmdlcyB0byBzb2Z0d2FyZS12ZXJzaW9uLnJzdC4KPiBBZGQgbGlu
+a3MgaW4gRG9jL3RyYW5zbGF0aW9ucy8qCj4gQ2hhbmdlIGNoYW5nZXMucnN0IHRvIHNvZnR3YXJl
+LXZlcnNpb24ucnN0IGluQ2hhbmdlIGNoYW5nZXMucnN0IHRvIHNvZnR3YXJlLXZlcnNpb24ucnN0
+IGluCgpUaGUgY29tbWl0IG1lc3NhZ2UgdXNlcyB0aGUgd3JvbmcgZmlsZW5hbWUgaW4gc2V2ZXJh
+bCBwbGFjZXMuIFRoZSBwYXRjaApyZW5hbWVzIHRoZSBkb2N1bWVudCB0byAic29mdHdhcmUtcmVx
+dWlyZW1lbnRzLnJzdCIsIGJ1dCB0aGUgbWVzc2FnZSBzYXlzCiJzb2Z0d2FyZS12ZXJzaW9uLnJz
+dCIgaGVyZToKCiAgQWRkIGxpbmsgRG9jL3Byb2Nlc3MvY2hhbmdlcy5yc3QgdG8gc29mdHdhcmUt
+dmVyc2lvbi5yc3QuCiAgQWRkIGxpbmsgRG9jL0NoYW5nZXMgdG8gc29mdHdhcmUtdmVyc2lvbi5y
+c3QuCgpTaG91bGQgdGhlc2Ugc2F5ICJzb2Z0d2FyZS1yZXF1aXJlbWVudHMucnN0IiBpbnN0ZWFk
+PwoKVGhlIG1lc3NhZ2UgYWxzbyBoYXMgYSBkdXBsaWNhdGVkIGxpbmUgZnJhZ21lbnQ6CgogIENo
+YW5nZSBjaGFuZ2VzLnJzdCB0byBzb2Z0d2FyZS12ZXJzaW9uLnJzdCBpbkNoYW5nZSBjaGFuZ2Vz
+LnJzdCB0bwogIHNvZnR3YXJlLXZlcnNpb24ucnN0IGluCgpXYXMgdGhpcyBhIGNvcHktcGFzdGUg
+ZXJyb3I/CgpbIC4uLiBdCgo+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9u
+cy96aF9UVy9hZG1pbi1ndWlkZS9SRUFETUUucnN0IGIvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlv
+bnMvemhfVFcvYWRtaW4tZ3VpZGUvUkVBRE1FLnJzdAo+IGluZGV4IDRiNzAxY2MyODYwZTYuLmJh
+MThhMDE2MzlkMmEgMTAwNjQ0Cj4gLS0tIGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhf
+VFcvYWRtaW4tZ3VpZGUvUkVBRE1FLnJzdAo+ICsrKyBiL0RvY3VtZW50YXRpb24vdHJhbnNsYXRp
+b25zL3poX1RXL2FkbWluLWd1aWRlL1JFQURNRS5yc3QKClsgLi4uIF0KCj4gQEAgLTEwNyw3ICsx
+MDcsNyBAQAo+Cj4gICAgIOe3qOitr+WSjOmBi+ihjDYueOWFp+aguOmcgOimgeWQhOeorui7n+S7
+tuWMheeahOacgOaWsOeJiOacrOOAguiri+WPg+iAgwo+IC0gICA6cmVmOmBEb2N1bWVudGF0aW9u
+L3Byb2Nlc3MvY2hhbmdlcy5yc3QgPGNoYW5nZXM+YAo+ICsgICA6cmVmOmBEb2N1bWVudGF0aW9u
+L3Byb2Nlc3Mvc29mdHdhcmUtcmVxdWlyZW1lbnRzLnJzdCA8c29mdHdhcmUtcmVxdWlyZW1lbnRz
+LnJzdD5gCj4gICAgIOS+huS6huino+acgOS9jueJiOacrOimgeaxguS7peWPiuWmguS9leWNh+e0
+mui7n+S7tuWMheOAguiri+azqOaEj++8jOS9v+eUqOmBjuiIiueJiOacrOeahOmAmeS6m+WMheWP
+r+iDveacgwoKRG9lcyB0aGUgbGFiZWwgbmVlZCB0aGUgLnJzdCBleHRlbnNpb24/IFNwaGlueCA6
+cmVmOiBsYWJlbHMgYXJlIGlkZW50aWZpZXJzLApub3QgZmlsZW5hbWVzLiBMaW5lIDU4IGFuZCBs
+aW5lIDIzMSBpbiB0aGlzIHNhbWUgZmlsZSB1c2UgPHNvZnR3YXJlLXJlcXVpcmVtZW50cz4Kd2l0
+aG91dCB0aGUgZXh0ZW5zaW9uLCBhbmQgdGhlIGNvcnJlc3BvbmRpbmcgemhfQ04gZmlsZSBhbHNv
+IHVzZXMKPHNvZnR3YXJlLXJlcXVpcmVtZW50cz4uIFRoaXMgcHJvZHVjZXMgInVuZGVmaW5lZCBs
+YWJlbDogc29mdHdhcmUtcmVxdWlyZW1lbnRzLnJzdCIKZHVyaW5nIHRoZSBidWlsZC4KClRoZSBz
+YW1lIC5yc3QtaW4tbGFiZWwgaXNzdWUgYXBwZWFycyBpbgpEb2N1bWVudGF0aW9uL3RyYW5zbGF0
+aW9ucy9qYV9KUC9wcm9jZXNzL2hvd3RvLnJzdDoxMDguCgoKLS0tCkFJIHJldmlld2VkIHlvdXIg
+cGF0Y2guIFBsZWFzZSBmaXggdGhlIGJ1ZyBvciBlbWFpbCByZXBseSB3aHkgaXQncyBub3QgYSBi
+dWcuClNlZTogaHR0cHM6Ly9naXRodWIuY29tL2tlcm5lbC1wYXRjaGVzL3ZtdGVzdC9ibG9iL21h
+c3Rlci9jaS9jbGF1ZGUvUkVBRE1FLm1kCgpDSSBydW4gc3VtbWFyeTogaHR0cHM6Ly9naXRodWIu
+Y29tL2tlcm5lbC1wYXRjaGVzL2JwZi9hY3Rpb25zL3J1bnMvMzE1OTcyMzExNDg=
 
-diff --git a/Documentation/process/software-requirements.rst b/Documentation/process/software-requirements.rst
-index 5fdfcf6a0c01..a31e0ae20498 100644
---- a/Documentation/process/software-requirements.rst
-+++ b/Documentation/process/software-requirements.rst
-@@ -33,20 +33,20 @@ you probably do not need to concern yourself with pcmciautils.
- ====================== ===============  ========================================
- bash                   4.2              bash --version
- bc                     1.06.95          bc --version
--bindgen (optional)     0.71.1           bindgen --version
-+bindgen [#f1]_         0.71.1           bindgen --version
- binutils               2.30             ld -v
- bison                  2.0              bison --version
- btrfs-progs            0.18             btrfs --version
--Clang/LLVM (optional)  17.0.1           clang --version
-+Clang/LLVM [#f2]_      17.0.1           clang --version
- e2fsprogs              1.41.4           e2fsck -V
- flex                   2.5.35           flex --version
- gdb                    7.2              gdb --version
--GNU awk (optional)     5.1.0            gawk --version
-+GNU awk [#f3]_         5.1.0            gawk --version
- GNU C                  8.1              gcc --version
- GNU make               4.0              make --version
- GNU tar                1.28             tar --version
- GRUB                   0.93             grub --version || grub-install --version
--gtags (optional)       6.6.5            gtags --version
-+gtags [#f4]_           6.6.5            gtags --version
- ip-route2              6.14.0           ip -V
- iptables               1.4.2            iptables -V
- jfsutils               1.1.3            fsck.jfs -V
-@@ -54,7 +54,7 @@ kmod                   13               kmod -V
- liblzma                5.8.1            lzma -V
- lzop                   1.04             lzop -V
- mcelog                 0.6              mcelog --version
--mkimage (optional)     2017.01          mkimage --version
-+mkimage [#f5]_         2017.01          mkimage --version
- nfs-utils              1.0.5            showmount --version
- openssl & libcrypto    1.0.0            openssl version
- pahole                 1.26             pahole --version
-@@ -63,8 +63,8 @@ PPP                    2.4.0            pppd --version
- procps                 3.2.0            ps --version
- Python                 3.9.x            python3 --version
- quota-tools            3.09             quota -V
--Rust (optional)        1.85.0           rustc --version
--Sphinx\ [#f1]_         3.4.3            sphinx-build --version
-+Rust [#f6]_            1.85.0           rustc --version
-+Sphinx\ [#f7]_         3.4.3            sphinx-build --version
- squashfs-tools         4.0              mksquashfs -version
- udev                   081              udevadm --version
- util-linux             2.10o            mount --version
-@@ -72,7 +72,13 @@ xfsprogs               2.6.0            xfs_db -V
- xz                     5.8.1            xz -V
- ====================== ===============  ========================================
- 
--.. [#f1] Sphinx is needed only to build the Kernel documentation
-+.. [#f1] bindgen is needed to generate Rust bindings
-+.. [#f2] Clang/LLVM is an alternative to GNU C (gcc)
-+.. [#f3] awk is needed with CONFIG_BUILTIN_MODULE_RANGES set
-+.. [#f4] gtags is there to generate tag files through ``make gtags``
-+.. [#f5] mkimage is used when building a Flat Image Tree (FIT)
-+.. [#f6] Rust is only required when enabled
-+.. [#f7] Sphinx is needed only to build the Kernel documentation
- 
- Kernel compilation
- ******************
--- 
-2.54.0
-
+--===============0397126666267180240==--
