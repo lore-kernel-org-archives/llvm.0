@@ -1,78 +1,132 @@
-Received: from mta0.migadu.com (out-17.mta0.migadu.com [91.218.175.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F9E440A2D
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 13:14:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E2644C67C
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 13:15:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786540475; cv=none; b=YpMxA6uaVvIRHJDSpgfRyE6RGkU0mBoH/sKT92szz8kZiw1Qbj4aZqNKZPwRq2L7es39XKmCJ3basm9fuPqM/haQ3xHdT6WgI2e3Mu+FayrpASmd11SBw+U2Z95g2/Xyetz1EyuTtHEJH8n8nhouruU1mBQUYlaXG3NwcOxZJFc=
+	t=1786540530; cv=none; b=P9mMV6cWPRhtlB6Up/+4qOKiZJm4pTWZgoJBJJhaSeSFjhhqYgJjbXSrNgR2F5xZu2j3SJ1OC5K2QrbGa85wiYZIW4fszjTbzvrC04HH8la8aLAtrJldk2ubkDFe1apv22SCV3Qs78QpV7CSHTdgaMXW4Vd/ztVZZOQKB490C4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786540475; c=relaxed/simple;
-	bh=7NbnZ3oa/RtGinQgKVF9pKDMVERXfqX9/LOk9QyatAs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J3KMnYmBnrDxFvlorQpXUO2dIuMrBiH2cxCcKgv9j6KHKyTBTDNbiUAYhhR0pQsnUtXsgYtdhkaMOz7dbXpLe86QEh6j0RW+4y+FnClv86sV33DVSLgdPRCkg3YbzXy+HcuFICnMHIgiciMp8jinzUPcy3TnK/2kbCMQI0C7rPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JxzODKxl; arc=none smtp.client-ip=91.218.175.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786540530; c=relaxed/simple;
+	bh=nmHxmY7iTPhC2SO4r0Cu7D2E52TxGJ2ANn9r911bmEc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=atLNDMrA9xFswHyAHmLfQjBAqUaiJkRbQE6RJTY4sHSIadCI5CKVdK9zGAdzGGjYj5DaqfOauhP2ZYZ2oMveLRBdGLZc9k11AA/UqeZaW6sgz0JlDL+YoSGLhHaLEcJO0eNAXUxpec2xyFnjjhLyeJFBzyl5fnrpxoCl0lQ5j+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=YjuSXfVF; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JxzODKxl"
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=7NbnZ3oa/RtGinQgKVF9pKDMVERXfqX9/LOk9QyatAs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786540471; v=1; x=1787145271;
- b=JxzODKxljgM9jI5XGu4jQTRMrXavpNnvMnx3HqoguuMG/a1HhEIxFNUMGIyOmr5gJfzsA/o5
- Vr8zXF4C7nvnenuo1PYS3kFhmxvYzeYnohcL0iuc+hLPzsZm/X5+gAsFyU2YSDQYkfbPQ7ePbPw
- gy+nJuWzIJnAiZb7X4IOGGPI=
-X-Envelope-To: llvm@lists.linux.dev
-Received: from linux.dev (54.71.19.239)
-	by smtp.migadu.com with ESMTPS id ee06e5b49e57f9a5;
-	Wed, 12 Aug 2026 13:13:26 +0000
-Date: Wed, 12 Aug 2026 13:13:12 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Sami Tolvanen <samitolvanen@google.com>, 
-	Leon Hwang <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, bpf@vger.kernel.org, 
-	Florent Revest <revest@chromium.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huawei.com>
-Subject: Re: [PATCH 0/2] arm64: ftrace: support DIRECT_CALLS without CALL_OPS
-Message-ID: <anxxPkqbVgnikp6R@linux.dev>
-References: <20260609-arm64-ftrace-direct-calls-v1-0-4a46f266697f@linux.dev>
- <amjnf5gz0xP5PTSB@J2N7QTR9R3>
- <amn7cBQ-cqs2XlKV@linux.dev>
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="YjuSXfVF"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CE493408CC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1786540528; bh=JAXHudu46Eg+mqqdpRoOfueFzUFbPVJGGm+AfV0sLmA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=YjuSXfVFdNZsDUovgWNOnXrDWs1wY3mzRO64lCEOdBzQ4UsRfQncNKg6MQeD84dbH
+	 bLkHsiYHrxg688yhBdaz2B2Q68XFUbt6CEC++v0IkcHtNVTga+yEe8MqsyaF4Doazg
+	 AN6p2zh75ODIyTnguYSzN3Gphf2DObIsT6Eic8uYtSAfC0aPl0+O7aJrbUa9e6uYsW
+	 dcILL/QzRmjIQwFrG1O3taxFeWv03VqKb3B/DUAOVCvasWelTiEfbB4qdrPoAAkdv9
+	 rKaxWgR9X9gvKFI3he7IpfLgwKRk3QMn9Vw8YH9rQ3/9MCHkQLGxQ0KwrW5ieAi53E
+	 ir/C+ZzHhlVQQ==
+Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id CE493408CC;
+	Wed, 12 Aug 2026 13:15:27 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Manuel Ebner <manuelebnerli@mailbox.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Federico Vaga <federico.vaga@vaga.pv.it>,
+ Akira Yokosawa <akiyks@gmail.com>, Daniel Pereira
+ <danielmaraboo@gmail.com>, Carlos Bilbao <carlos.bilbao@kernel.org>,
+ Avadhut Naik <avadhut.naik@amd.com>, Alex Shi <alexs@kernel.org>, Yanteng
+ Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, Hu Haowen
+ <2023002089@link.tyut.edu.cn>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+ <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Miguel Ojeda
+ <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
+ <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
+ <bjorn3_gh@protonmail.com>, Benno
+ Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>, Daniel Almeida
+ <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>,
+ Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?Q?=C3=96zkan?=
+ <work@onurozkan.dev>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>
+Cc: Manuel Ebner <manuelebnerli@mailbox.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, workflows@vger.kernel.org,
+ bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 1/5] Docs: changes.rst: rename file and references and
+  add links
+In-Reply-To: <20260812121603.1633270-2-manuelebnerli@mailbox.org>
+References: <20260812120805.1631430-3-manuelebnerli@mailbox.org>
+ <20260812121603.1633270-2-manuelebnerli@mailbox.org>
+Date: Wed, 12 Aug 2026 07:15:26 -0600
+Message-ID: <87o6f7jx8x.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amn7cBQ-cqs2XlKV@linux.dev>
+Content-Type: text/plain
 
-On Wed, Jul 29, 2026 at 02:02:52PM +0000, Jose Fernandez (Anthropic) wrote:
-> One idea I would like your opinion on is an in-range
-> allocation preference for BPF trampolines, since execmem seems to
-> have the shape for it on arm64 already.
-[...]
+Manuel Ebner <manuelebnerli@mailbox.org> writes:
 
-Hi Mark,
+> The current name does not reflect the content of the file, the new name
+> does so. With the links legacy references should continue to work.
+>
+> Change name to software-requirements.rst
+> Change names in Doc/translations/*
+> Add link Doc/process/changes.rst to software-version.rst.
+> Add link Doc/Changes to software-version.rst.
+> Add links in Doc/translations/*
+> Change changes.rst to software-version.rst inChange changes.rst to software-version.rst in
+>  Documentation/*
+>  README
+>  samples/bpf/README.rst
+>  scripts/min-tool-version.sh
+>  scripts/ver_linux
+>
+> Signed-off-by: Manuel Ebner <manuelebnerli@mailbox.org>
+> ---
+>  Documentation/Changes                         |   2 +-
+>  Documentation/admin-guide/README.rst          |   6 +-
+>  Documentation/doc-guide/sphinx.rst            |   2 +-
+>  Documentation/filesystems/locks.rst           |   2 +-
+>  Documentation/process/changes.rst             | 576 +----------------
+>  Documentation/process/howto.rst               |   2 +-
+>  .../process/software-requirements.rst         | 575 +++++++++++++++++
+>  .../translations/it_IT/process/changes.rst    | 554 +----------------
+>  .../translations/it_IT/process/howto.rst      |   2 +-
+>  .../it_IT/process/software-requirements.rst   | 553 +++++++++++++++++
+>  .../translations/ja_JP/process/howto.rst      |   2 +-
+>  .../translations/ko_KR/process/howto.rst      |   2 +-
+>  .../translations/pt_BR/process/changes.rst    | 577 +-----------------
+>  .../pt_BR/process/software-requirements.rst   | 576 +++++++++++++++++
+>  .../translations/sp_SP/process/howto.rst      |   2 +-
+>  .../translations/zh_CN/admin-guide/README.rst |   6 +-
+>  .../translations/zh_CN/process/howto.rst      |   2 +-
+>  .../translations/zh_TW/admin-guide/README.rst |   6 +-
+>  .../translations/zh_TW/process/howto.rst      |   2 +-
+>  README                                        |   2 +-
+>  samples/bpf/README.rst                        |   2 +-
+>  scripts/min-tool-version.sh                   |   2 +-
+>  scripts/ver_linux                             |   2 +-
+>  23 files changed, 1730 insertions(+), 1727 deletions(-)
+>  mode change 100644 => 120000 Documentation/process/changes.rst
+>  create mode 100644 Documentation/process/software-requirements.rst
+>  mode change 100644 => 120000 Documentation/translations/it_IT/process/changes.rst
+>  create mode 100644 Documentation/translations/it_IT/process/software-requirements.rst
+>  mode change 100644 => 120000 Documentation/translations/pt_BR/process/changes.rst
+>  create mode 100644 Documentation/translations/pt_BR/process/software-requirements.rst
 
-Quick update on this, also for the others on the thread waiting on
-the perf side. After some internal discussion we decided to try
-adding CALL_OPS support on kCFI kernels directly, instead of the
-in-range allocation above. The section argument Sami added to
--fpatchable-function-entry in clang 21 turns out to be enough to do
-it with kernel changes only. We have it working as a local series and
-I plan to send it as an RFC in the next couple of weeks. Mentioning
-it now in case you are already looking at this or have thoughts
-before then.
+That is a *lot* of churn just because you don't like the name of the
+file.  The naming is not perfect - it is the result of decades of
+history - but I think we're better to live with it.
 
-Thanks,
-Jose
+jon
