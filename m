@@ -1,266 +1,174 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6C6633E35C
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 06:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC92C3876B0
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 07:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786515349; cv=none; b=XK+7EYkM1HO7u2+0WfB+YQqzQGTzFfgyQ2EzeRWbWKG+/ZF+oAX4fG25kN2+iiCRgHSBlPMbjDzW1J6GMht3JYonxm6gvKtmd90Cfd6eL91jqKsocoomf4XQVpn0r+wf9af2t9etU9hRWEmegZhG4DUWkc3vbJqLTFF4FmGpuDc=
+	t=1786518240; cv=none; b=rvI7qaCTrfksqG9mRj2bcKCKJ2FJPhRZNHHGDQSxM78eYPBhF2hTliPrulRWvkidvdLfqalXWGfYgMqjL9p9jAvelB1qFIT7zgYhejEKPvjthOYBOTYFenLnBiOoTTWBE5GbmuO57qyVkpEx5lZOnukbRtv37PpXNFh3oQxcfIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786515349; c=relaxed/simple;
-	bh=0Ce85bV5lT5lMzieQ5ba5sEhxcRoCubiNNv0bA4qfXk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YFRKNDgiv1EYfxNGUpO43/V812dOMEC0jFNp1X8QmLAzJKQr/JMi/huFwBL95VCcGn9kx+6gx/RrD8f26v3iHIk2B1S3G5Z6HsvDxs96XnJrcQPaM2f/xM3yDb1nF37T0c0EktiJEoWHLxf50KOGcFNmkkga6RxgCe5gopwT9QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3bd2dc94961511f1aa26b74ffac11d73-20260812
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:102c2356-60fb-4d33-8beb-edca2ad902b1,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:c4e4363d59d2d4125f9f078fc1ff61bd,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3bd2dc94961511f1aa26b74ffac11d73-20260812
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1487058221; Wed, 12 Aug 2026 14:15:36 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Wed, 12 Aug 2026 06:15:32 +0000
-Subject: [bpf-next PATCH 1/2] bpf, riscv: Add BPF stack arguments support
- for RV64 JIT
+	s=arc-20240116; t=1786518240; c=relaxed/simple;
+	bh=GCkBXddSbeHCDvY1GzromperE2nmzYP3jL1SLw1+JJI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hwqCi03mN49bfxgWAGleInTAmsQ9fUEvQUjjRHnHf3Gt80j2bL+HItb1O1S3b6dw5jkWCqmFr88V6wpg56YR7tFMHTIQkItw+cupmWu1PcXsv7cEjRPO+7PX+rkungxnng5lhLGXoDgx5xjvUu0dyrK5ic0lI7Jtusb2BOQioLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WnaiYBCq; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WnaiYBCq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786518238;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GMSQFwJ3Pn8MGM6lOdOzrV1KHdix97IWR2KeUG/GEeU=;
+	b=WnaiYBCqWswdwd+LZVI7TIFAtZ7ATaM3x/Irb4PylwG7xEdqJC/x4a7D4RUYx9ys/cDg42
+	g5sq7fQ7FV74fMAJBDNcKYTrDrrWTX+qyVSCLvwtl9i6G+gVNDo8MkSLc32kJ4eqSOwBtf
+	/tPJ4VQcOG6ro33pVvlhWSHnwhLaeDY=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-681-cxgo8GhENMOnFrsKsxFphQ-1; Wed, 12 Aug 2026 03:03:51 -0400
+X-MC-Unique: cxgo8GhENMOnFrsKsxFphQ-1
+X-Mimecast-MFC-AGG-ID: cxgo8GhENMOnFrsKsxFphQ_1786518230
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-496c06ba017so4626495e9.0
+        for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 00:03:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786518230; x=1787123030;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GMSQFwJ3Pn8MGM6lOdOzrV1KHdix97IWR2KeUG/GEeU=;
+        b=odvYTaO85Y++wz6VkOT4Da7AJdrDI899TyUhsmqiZY5wDA/Wl+iUjLNBtlzLaehVTn
+         53MzhPH0Ty8BxaX36axg0ZvJdU3tqgUeAL2MQPGfCk/asUFNZZgfWjDeMqdblqBKR82y
+         xTgEE17KV8LQ/BEWtZ2fXAizdzBcJxNFjQqd49moijSqKfeJY3EDe79RsU6jLjKhfxH9
+         IIf3lzU08ZMi1FtHPI8XqZDxOXs2ojRy7RcELFE4tCZQUd7V1YeZGJkXpW4P21gFJfL2
+         uOQXu/VjDu4lr2UHImS1Hs6LJzh2/krv8mpcge5ftwUBtegGsNLfrR14AQ7CDdSPvZfC
+         Vlgg==
+X-Forwarded-Encrypted: i=1; AHgh+RrK4Oy/+O3+/TQzpqDxfEMQVxLe546YFlzokDuacRfFL3JH7T5sBQfzhiTLyCiUwfnAZ4bs@lists.linux.dev
+X-Gm-Message-State: AOJu0YwLMiuWwOHYn0oCNlHC5kklwafVoFdLrufsZBpmau6jbEJJfFJn
+	B/TUExAI0Si89ZdmWhIQDCxHHqE2LdRFmewxqGMfM6KUx0UPCPZ0BNO9uOex/BSJEECBwk04A6t
+	b/1t4ERF6vZFW9OpRHrMxXMauSyn0R6YZRZ/XeuEhrkKSuLmrfF3KCQ==
+X-Gm-Gg: AR+sD12c8izRLfmtKAFPsi1ASl0xLq/DSlbyB1Qb2092Q7cLt4lH/GOfW1qFtY4dnQM
+	gykK2S8rdsolEqmP/LwFcNjTiE+uspF+nfZ2ECtK7OhNs5gkbPwUeJaZNza/HUjgyTz4CpRDxMc
+	XtZ3r4e8HJ4W+x19MpbOPv9CAmyjux8l9Pg4EQw8l2536yRgE39iNUkcY7uYDXpvihmTpyXjAcy
+	Y/3S1C3vYil+AhD4t/Zb1+OI9o17omNKAJekwG7ihczUVUKLTkOaHxFOdLLkuXP3qbBUQLDcfgq
+	DUEH2TD+AhJuaEZAuI5fsH35mgi9zgpiRIkIXB26YetRw6BQWwYCHSp5Ad18r4FC9uwvIvlw9Vr
+	Ml6xA1/JOrULno20sPFoyaeqQ01ieK8wWKVU=
+X-Received: by 2002:a05:600c:138b:b0:495:5d6d:9cc1 with SMTP id 5b1f17b1804b1-4997c30b80fmr29456885e9.0.1786518229789;
+        Wed, 12 Aug 2026 00:03:49 -0700 (PDT)
+X-Received: by 2002:a05:600c:138b:b0:495:5d6d:9cc1 with SMTP id 5b1f17b1804b1-4997c30b80fmr29455945e9.0.1786518229435;
+        Wed, 12 Aug 2026 00:03:49 -0700 (PDT)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4997ada79a3sm46337885e9.1.2026.08.12.00.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Aug 2026 00:03:48 -0700 (PDT)
+Message-ID: <02ce6b65-7670-4dac-ac9c-8875867d6ad3@redhat.com>
+Date: Wed, 12 Aug 2026 09:03:47 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] selftests: add shared lib.bpf.mk to build BPF
+ progs and skeletons
+To: Ziyang Men <ziyang.meme@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Jiri Kosina <jikos@kernel.org>,
+ Benjamin Tissoires <bentiss@kernel.org>, David Vernet <void@manifault.com>,
+ Eduard Zingerman <eddyz87@gmail.com>, Andrea Righi <arighi@nvidia.com>,
+ Changwoo Min <changwoo@igalia.com>, Michal Hocko <mhocko@kernel.org>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>, JP Kobryn
+ <inwardvessel@gmail.com>, Mykola Lysenko <mykolal@meta.com>,
+ Nathan Chancellor <nathan@kernel.org>, linux-kselftest@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-input@vger.kernel.org,
+ sched-ext@lists.linux.dev, linux-mm@kvack.org, kernel-team@meta.com,
+ bpf@vger.kernel.org, llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+ <20260721174833.1232771-2-ziyang.meme@gmail.com>
+ <f2a0db3b-ac66-4b29-9dff-a691d9464123@redhat.com>
+ <anTlFSsr5FqQt+o8@devvm16600.scu0.facebook.com>
+From: Viktor Malik <vmalik@redhat.com>
+In-Reply-To: <anTlFSsr5FqQt+o8@devvm16600.scu0.facebook.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: Iwmze9NdX3RwO_qXS9Z_aaZnlkkldG1tvMzsFKs-88w_1786518230
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260812-bpf-riscv-stack-args-v1-1-67b246806e59@kylinos.cn>
-References: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
-In-Reply-To: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
 
-Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
-and kfuncs can receive more than 5 arguments via the stack
-(BPF_REG_PARAMS / r11).
+On 8/6/26 21:48, Ziyang Men wrote:
+> On Wed, Jul 22, 2026 at 08:50:06AM +0200, Viktor Malik wrote:
 
-For BPF-to-BPF calls the caller writes outgoing arguments at the
-bottom of its frame (SP-relative). The callee reads them with
-FP-relative loads. Its FP is set to the caller SP in the prologue,
-so the offsets match.
+[...]
 
-The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
-SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
-area into A5-A7 and copy any remaining arguments down so argument 9
-lands at SP+0.
+> Hi Viktor, 
+> 
+> Thanks for your suggestions!
+>>
+>> Looking at the same line in tools/testing/selftests/bpf/Makefile:
+>>
+>>            EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
+>>
+>> is there a reason why this is not respected and -O0 and -fPIC are
+>> hard-coded?
+> Yes it is true that there is no good reason. I will fix it in the next version.
+> 
+>> What if someone wants to build selftests (including libbpf)
+>> with -O2 and some additional flags?
+> I will add a flag such as OPT_FLAGS ?= $(if $(RELEASE),-O2,O0), which follows
+> the pattern in the bpf/Makefile:37. So if we run 
+> $ make -> -g -O0 -fPIC (taget libbpf) and -g -O0 (host bpftool)
+> $ make RELEASE=1 -> -g -O2 -fPIC (taget libbpf) and -g -O2 (host bpftool)
+> 
+>> Is that possible with the new
+>> lib.bpf.mk? It would be nice if it used at least EXTRA_CFLAGS or
+>> USERCFLAGS defined in lib.mk.
+> Good idea. I will add the EXTRA_CFLAGS for target libbpf, host libbpf and host
+> bpgtool. Such that: 
+> $ make OPT_FLAGS=-O2 EXTRA_CFLAGS=-DFOO -> -g -O2 -fPIC -DFOO (for target
+> libbpf) and -g -O2 -DFOO (for host bpftool)
 
-A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
-live before a call, TCC is backed up on the stack, and A7 is unused
-by the JIT.
+I'm wondering if we could use USERCFLAGS (and USERLDFLAGS) instead.
+These seem to be the preferred way for all selftests, per
+tools/testing/selftests/lib.mk:
 
-Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
-iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
-corrupts callee-saved registers.
+    # Enables to extend CFLAGS and LDFLAGS from command line, e.g.
+    # make USERCFLAGS=-Werror USERLDFLAGS=-static
+    CFLAGS += $(USERCFLAGS)
+    LDFLAGS += $(USERLDFLAGS)
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/bpf_jit.h        |  1 +
- arch/riscv/net/bpf_jit_comp64.c | 75 +++++++++++++++++++++++++++++++++++++++--
- arch/riscv/net/bpf_jit_core.c   |  4 +++
- 3 files changed, 77 insertions(+), 3 deletions(-)
+At the time I was adding the extra flags to libbpf/bpftool sub-makes, I
+wasn't aware of USER*FLAGS so I used EXTRA_*FLAGS instead. But now, when
+someone wants to build multiple selftest collections with extra flags,
+they need to define both. For instance, building with PIE requires:
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 419b9d795f2a..9eb4e149505d 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -82,6 +82,7 @@ struct rv_jit_context {
- 	unsigned long flags;
- 	int stack_size;
- 	int tcc_offset;
-+	u16 stack_arg_size;
- 	u64 arena_vm_start;
- 	u64 user_vm_start;
- };
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 6b9972b07c1b..b3f4bf9e1e7f 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1815,18 +1815,39 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 			const struct btf_func_model *fm;
--			int idx;
-+			int idx, nargs;
- 
- 			fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
- 			if (!fm)
- 				return -EINVAL;
- 
--			for (idx = 0; idx < fm->nr_args; idx++) {
-+			nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
-+			for (idx = 0; idx < nargs; idx++) {
- 				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
- 
- 				if (fm->arg_size[idx] == sizeof(int))
- 					emit_sextw(reg, reg, ctx);
- 			}
-+
-+			/* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
-+			if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
-+				int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
-+				int n_reg = min_t(int, n_stack,
-+						  RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
-+
-+				for (idx = 0; idx < n_reg; idx++) {
-+					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-+
-+					emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
-+					if (sz == sizeof(int))
-+						emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
-+				}
-+
-+				for (idx = 0; idx < n_stack - n_reg; idx++) {
-+					emit_ld(RV_REG_T1, (n_reg + idx) * 8, RV_REG_SP, ctx);
-+					emit_sd(RV_REG_SP, idx * 8, RV_REG_T1, ctx);
-+				}
-+			}
- 		}
- 
- 		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-@@ -1891,6 +1912,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_W:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+		if (insn->src_reg == BPF_REG_PARAMS) {
-+			int idx = off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
-+				emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
-+			}
-+			if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
-+				return 1;
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-@@ -1938,6 +1974,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ST | BPF_MEM | BPF_H:
- 	case BPF_ST | BPF_MEM | BPF_W:
- 	case BPF_ST | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			emit_imm(RV_REG_T1, imm, ctx);
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T2, idx * 8, ctx);
-+				emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
-+				emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
-@@ -1960,6 +2010,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_STX | BPF_MEM | BPF_H:
- 	case BPF_STX | BPF_MEM | BPF_W:
- 	case BPF_STX | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
-+				emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
-@@ -2036,6 +2099,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 
- 	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
- 	stack_adjust += bpf_stack_adjust;
-+	stack_adjust += ctx->stack_arg_size;
- 
- 	store_offset = stack_adjust - 8;
- 
-@@ -2093,7 +2157,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
- 
- 	if (bpf_stack_adjust)
--		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
-+		emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + bpf_stack_adjust, ctx);
- 
- 	ctx->stack_size = stack_adjust;
- 
-@@ -2171,3 +2235,8 @@ bool bpf_jit_supports_timed_may_goto(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_stack_args(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index cbfcd287ea16..844a0f3e0fa9 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
- 	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
- 	ctx->prog = prog;
-+
-+	ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
-+				       sizeof(u64), STACK_ALIGN);
-+
- 	ctx->offset = kvzalloc_objs(int, prog->len);
- 	if (!ctx->offset)
- 		goto out_offset;
+    make -C tools/testing/selftests TARGETS="bpf ..." \
+        USERCFLAGS=-fpie EXTRA_CFLAGS=-fpie \
+        USERLDFLAGS=-pie EXTRA_LDFLAGS=-pie \
 
--- 
-2.53.0
+Switching to USER*FLAGS for bpf selftests would simplify things a bit.
+
+Viktor
+
+> 
+>>
+>> Same questions would apply to other rules for libbpf and bpftool below.
+> I would check it them as as well in next version.
+> 
+>> Thanks!
+>> Viktor
+>>
+>>
+> Thanks for your time and reviewing. Please let me know your concerns. Thanks!
+> 
+> Best,
+> Ziyang
 
