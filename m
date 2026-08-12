@@ -1,164 +1,147 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD67630E0C0;
-	Wed, 12 Aug 2026 20:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327ED36E47E
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 20:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786567655; cv=none; b=j49oqcFymWKCtseDIPacdja9AkDaGlQjuuoybsgdBTI1BVsI4SHbUzbw8piX9ov/XSVOXrXdK7D1qRMjeQdNbo0TlsoYabQJs9eJrG/njajhnMTXH2TgmiQFojJqL20L3VEXsksQwNVD0fD66hioWH8lRdeSN7SYsmmSdD6JTPI=
+	t=1786568031; cv=none; b=tCV1Nod+0K8tt4M/FDjqMYmgvPdbc9mFBZN5J2n/PZOvWiA02sOe78I+nHI8jgIBDFbpzKu6QJ2Ebqa722WEQh0vsixf48aYvwzepwJvWVXN2ybg5NVlMNB7cgus4bpeuSBjEokmD0zCDBefINjS2qtWMD14gIg1gJZN3EzriBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786567655; c=relaxed/simple;
-	bh=w024XBgg1ZjZTH0vd9AYmyiNtdRYrahWGr88BWoZsA0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K/X0sESNgvqaoHHYXgfz6hxfsa3mwqx41ZEpv8VxCXukpQlc5hdT/9x9cj7dlN5e5rQgAKgJF2DhI4px7LmmK0nIDgm/Hy6qrW2k4fFOewYmi9wITMrGonQKR0z/7/NK88YSzV5VMaeopJpnFRQKcgbhiJNGDWFyxwijw/Cawc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mm1cuohF; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1786568031; c=relaxed/simple;
+	bh=M9QGDM1KqLTdFla2wm974yLTeHfJqV3ygrQdvB7+s24=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R4uskLHbF7CSzDsnIXPWMn2VF3gqTJXZNcmZj+BlerWOyBl/H4CmseevDF+3TtS/AH9R8dL336ZAbNUXWsrKX78TgyFytioarCjUdq1W/8+znWFDxFbrHfgCs5wRyb+yRYO74/TS6qLV9DGqJ0yRUQYMtn9RaukrzpM0psyN2oA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=iXIlaaTT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=EmOk8re1; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mm1cuohF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786567654; x=1818103654;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w024XBgg1ZjZTH0vd9AYmyiNtdRYrahWGr88BWoZsA0=;
-  b=mm1cuohFQUH2JFcRTVCUr/hWfNV3lTVoIWn6lXlk8Ar1Z/xZFjrmQ/kD
-   muHkt+Ldpz6UBE7y+NAWm2XL0f8q+5zg8ECSf0UNC28dSZcOgNktMAkDk
-   hYfIxvrRWvLIGtR3VomiC7Y/ifnCLV2hBo45JFkzlAYpe4Zoc20jqYkvT
-   P3VvXYKWOUFQyVfeQjvbsAwYbwZ6ca+6NGFgn/fwmqZO1DXYHIKgVslLh
-   O5XRiZvkqbihKzQpJWFiMkxZtA2zA8MphZ5I0WUafM6jbxLxmCHks3KTG
-   IGF7rRLYuiIhQ7XYi9cnWPCyxu4Cijs4g3ThlOUzND8u1wiVuYu7H7FK8
-   g==;
-X-CSE-ConnectionGUID: JNBS6BT7Qc6SynPsbWUxJQ==
-X-CSE-MsgGUID: WX0GSC1IQgWjo0liiYGEFQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="87015549"
-X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
-   d="scan'208";a="87015549"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 13:47:33 -0700
-X-CSE-ConnectionGUID: Iiifp7rBQgiDvA2CY6xE8w==
-X-CSE-MsgGUID: BJvATKfzTDe9unPHUxHYcg==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 12 Aug 2026 13:47:29 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wuFrD-00000000ReQ-0iLw;
-	Wed, 12 Aug 2026 20:47:27 +0000
-Date: Thu, 13 Aug 2026 04:46:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pavitra Jha <jhapavitra98@gmail.com>, alexander.deucher@amd.com,
-	christian.koenig@amd.com, airlied@gmail.com, simona@ffwll.ch
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	Pavitra Jha <jhapavitra98@gmail.com>
-Subject: Re: [PATCH v2] drm/amdgpu/discovery: validate table offset before IP
- discovery header cast
-Message-ID: <202608130435.5Msck82Q-lkp@intel.com>
-References: <20260708061835.111986-1-jhapavitra98@gmail.com>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="iXIlaaTT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="EmOk8re1"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 5E16F1400085;
+	Wed, 12 Aug 2026 16:53:48 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 12 Aug 2026 16:53:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1786568028;
+	 x=1786654428; bh=bQ9m7Q7dmHdZ5MJcHJrqRP+h3SPxy4zVB57uYgvnnQw=; b=
+	iXIlaaTTHz9geRMm9yPtmjEpLOGhWFK7FtrvyHomxrbIUuRgJ4PENuojr191/O4y
+	JDsud07p74Lka820811M19E8YueeTFjzTCIj8nNiI0XRaL7rAiTKJypM+5r0yEi/
+	kkYbKn7m58/DbleeIr77/MqNQl497nAM9Dj2+pmqPUcr3KZOHGqImpbXPyucCYN9
+	oHTtHJHEa72rN53pNpZv4tW2+FjBKjMxssZ2ZgEZay1PLc40X6CYg2szTZgxtnol
+	95ynZzMiKWmZcE3ULic3YGS1nL9DrjtQFbx/uEJ78oP5iW31iMO+RG3GMoQI0MvJ
+	altqU+l3UZbBNrGDGd1sIQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786568028; x=
+	1786654428; bh=bQ9m7Q7dmHdZ5MJcHJrqRP+h3SPxy4zVB57uYgvnnQw=; b=E
+	mOk8re1lXgcCjB9P3MPrwC4y3qfaFf9tmdFuDcuFQOM8Kgsr1B3Id7PN4Ayy0UP5
+	Iazs6wbJ3u3lqx+gj9Dh2PSkDvs0GSxCZ01l/T4booubT+LDGJIs6tNUFxGJMBqJ
+	hZBgeT0inOr3/pOK/GTRqbhPRXmmp9Fnhp+gkCaBQnNtWlAqhMCpZnbal1HwRhxP
+	HsVtIdkgLfkw5k56pYaCf6ZSdFFaWzXnIZwl4f7DyjxsCQ0uIkw1tiof3LSVBT89
+	gz+owz/hF/NenBR6w/PPdXkMVY7HVWZg663VQRc6DLVc8Dp2pU13I+sPmeUirWaQ
+	L+qjtgaZgnu3E6lOblmdA==
+X-ME-Sender: <xms:XN18aoq0NY1bztjQMSF_TY9ZRkXo3ppSqyg6q-72erXp21OZt9Khdw>
+    <xme:XN18akM6_S46itdwCbeO5vp5dY8PZ0E3_CkuxfS-7fLQsJxqQs5frA7j7xRRdIpc0
+    rQSoSIDBMplF3-HUfh92YRl2J9F1_earaecCoEkBanmnMGf3hjqP5Q>
+X-ME-Received: <xmr:XN18amyIP2hQjXQ04hiBqa6iPJGPkQfOnG6L1LE35tuHlYPo8E5Q7Htbbdnq_Q>
+X-ME-Proxy-Cause: dmFkZTEIeVv7ilRNPS5NobhNyyujXSUBm8WRveEFl9t0zXAVuv8YKhZumruJPojImqbrg8
+    qonzMOK7WiVnb0QkxJrQqYbTolkroKjAeLvbuNLa5AwxfRXQFu2WQoizdZKbAMejq+ybRZ
+    TTeEWFX6RQH+nWL8X20u/cqFC3YNuKrErb1QXUIvrtY2eWAnAtRhV6JqGeq8axYy4/Fwsa
+    cVjChW3ycxBJ8l9QCRtI1SJrazY8hWznvJplLl2BMByhysuDZ80mJims4jXSz5NO6kS153
+    d3jiOAty8k0URgPNwxkzVKCig7cRQmzoQzWYn56BTEEYkpPGzP/49PmQ0/AiP2w7QL3cZR
+    yWPamyoBYSY1N3+E/Ouxuio+98wnzobhPCDSNwPdL+aFUpCH7OiAVBtpvHZbuLJeYpyF3x
+    OfSXd/UxPpYlbghKenhq/FS+9uoOfYgWkE1l+DMqOj2cRaWqN6qjf9z4vtB8VClTYJv6YH
+    GFgyPFOmUMbNykvCsgxWfPRs3SOgr4I98SXJBRyNLnQUtZDbOjdCCe4UVYlq5st6J7ykLF
+    qc67+D+fMqoFMkKtIewtjWiihu5Bd3Kt/A5un5JhK1d/Nx7LW+ldgro1aLFCMljntuu9Ot
+    QfoblQkrIX/PeuIf2fB8oEYG1A2LKDWNribIowULsWUBxWMHrhmxhu9OA9lA
+X-ME-Proxy: <xmx:XN18agxctMLOwm5M_bKKReoWdZ33D62xOb_DnqE_2LvXRRcj5iGQHg>
+    <xmx:XN18avIUiqo6B4q8Spy685vCuuFxEtSxUMT7QUcZJCsx79vqoHQvwQ>
+    <xmx:XN18asiiGqgExuLljob-gdYCiP-Zh4CWmc1xNnIvSImuiFLX87wtkQ>
+    <xmx:XN18agM99tEEjPkH3PzU2SQsuX-PnqUBMRFHoGoSc6lJprqFUTmhgQ>
+    <xmx:XN18am7Xi4DnDplbuWKKCPUHGSB6x8mRHUHCCvVR8J8E8a2ZuIOm10WQ>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 12 Aug 2026 16:53:46 -0400 (EDT)
+Date: Wed, 12 Aug 2026 14:53:45 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: David Matlack <dmatlack@google.com>
+Cc: Kees Cook <kees@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, llvm@lists.linux.dev, Andy Lutomirski
+ <luto@amacapital.net>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
+ <mic@digikod.net>, Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Shuah Khan <shuah@kernel.org>, Will
+ Drewry <wad@chromium.org>, Kuniyuki Iwashima <kuniyu@google.com>, Aaron
+ Lewis <aaronlewis@google.com>, alex@shazbot.org
+Subject: Re: [PATCH v3] selftests: harness: Mark test fixture objects
+ __maybe_unused
+Message-ID: <20260812145345.6d987e91@shazbot.org>
+In-Reply-To: <CALzav=eV_VBDqwko0Qp3kALK0fW5Ad_SHOdn+Gune8Nps0Opyg@mail.gmail.com>
+References: <20260706183154.2660394-1-dmatlack@google.com>
+	<CALzav=f3KaNQd2NgCTxU=VSXWujV+qjyQuNJp_hy1-U36RMPpg@mail.gmail.com>
+	<202607150902.F17F8DE5@keescook>
+	<CALzav=eV_VBDqwko0Qp3kALK0fW5Ad_SHOdn+Gune8Nps0Opyg@mail.gmail.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260708061835.111986-1-jhapavitra98@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Pavitra,
+On Tue, 11 Aug 2026 13:21:37 -0700
+David Matlack <dmatlack@google.com> wrote:
 
-kernel test robot noticed the following build errors:
+> On Wed, Jul 15, 2026 at 9:03=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+> >
+> > On Tue, Jul 14, 2026 at 09:24:36AM -0700, David Matlack wrote: =20
+> > > On Mon, Jul 6, 2026 at 11:32=E2=80=AFAM David Matlack <dmatlack@googl=
+e.com> wrote: =20
+> > > >
+> > > > Mark _##fixture_name##_##test_name##_object __maybe_unused since it=
+ may
+> > > > not ever be read. This pointer is only read in XFAIL_ADD(), which t=
+ests
+> > > > are not required to use.
+> > > >
+> > > > clang made a change to -Wunused-but-set-variable (split out into it=
+s own
+> > > > subwarning, -Wunused-but-set-global) that causes this warning to be
+> > > > emitted for various selftests and can be upgraded to an error in
+> > > > selftest that set -Werror.
+> > > >
+> > > > VFIO selftests have been broken since commit ff556bd98348 ("vfio:
+> > > > selftests: Add -Wall and -Werror to the Makefile"), and the net
+> > > > selftests builds have been noisy due to -Wall.
+> > > >
+> > > > Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between fo=
+rked processes")
+> > > > Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > Reported-by: Aaron Lewis <aaronlewis@google.com>
+> > > > Reviewed-by: Alex Williamson <alex@shazbot.org>
+> > > > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > Signed-off-by: David Matlack <dmatlack@google.com> =20
+> > >
+> > > Kees and Shuah, is it ok if Alex takes this through the VFIO tree? [1]
+> > > This fixes a bug exposed by recent VFIO selftests commit ff556bd98348
+> > > ("vfio: selftests: Add -Wall and -Werror to the Makefile").
+> > >
+> > > [1] https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@s=
+hazbot.org/ =20
+> >
+> > Yeah, please do. This has ample review. :) =20
+>=20
+> Thanks. Alex, can you pick this one up for 7.2 if there's still time,
+> or for 7.3 otherwise?
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v7.2-rc7 next-20260811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks for the reminder, applied to vfio next branch for v7.3.  Thanks,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavitra-Jha/drm-amdgpu-discovery-validate-table-offset-before-IP-discovery-header-cast/20260812-100224
-base:   https://gitlab.freedesktop.org/drm/misc/kernel.git drm-misc-next
-patch link:    https://lore.kernel.org/r/20260708061835.111986-1-jhapavitra98%40gmail.com
-patch subject: [PATCH v2] drm/amdgpu/discovery: validate table offset before IP discovery header cast
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260813/202608130435.5Msck82Q-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260813/202608130435.5Msck82Q-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608130435.5Msck82Q-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:534:25: error: member reference type 'struct table_info' is not a pointer; did you mean to use '.'?
-     534 |         if (le16_to_cpu((*info)->offset) >= adev->discovery.size) {
-         |                         ~~~~~~~^~
-         |                                .
-   include/linux/byteorder/generic.h:91:21: note: expanded from macro 'le16_to_cpu'
-      91 | #define le16_to_cpu __le16_to_cpu
-         |                     ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
-   drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:536:23: error: member reference type 'struct table_info' is not a pointer; did you mean to use '.'?
-     536 |                         le16_to_cpu((*info)->offset), table_id);
-         |                                     ~~~~~~~^~
-         |                                            .
-   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
-     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-      37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-         |                                                   ^
->> drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c:536:34: error: use of undeclared identifier 'table_id'
-     536 |                         le16_to_cpu((*info)->offset), table_id);
-         |                                                       ^~~~~~~~
-   3 errors generated.
-
-
-vim +534 drivers/gpu/drm/amd/amdgpu/amdgpu_discovery.c
-
-   508	
-   509	static int amdgpu_discovery_verify_npsinfo(struct amdgpu_device *adev,
-   510						   struct table_info *info)
-   511	{
-   512		uint8_t *discovery_bin = adev->discovery.bin;
-   513		uint16_t checksum;
-   514		uint16_t offset;
-   515	
-   516		offset = le16_to_cpu(info->offset);
-   517		checksum = le16_to_cpu(info->checksum);
-   518	
-   519		struct nps_info_header *nhdr =
-   520			(struct nps_info_header *)(discovery_bin + offset);
-   521	
-   522		if (le32_to_cpu(nhdr->table_id) != NPS_INFO_TABLE_ID) {
-   523			dev_dbg(adev->dev, "invalid ip discovery nps info table id\n");
-   524			return -EINVAL;
-   525		}
-   526	
-   527		if (!amdgpu_discovery_verify_checksum(adev, discovery_bin + offset,
-   528						      le32_to_cpu(nhdr->size_bytes),
-   529						      checksum)) {
-   530			dev_dbg(adev->dev, "invalid nps info data table checksum\n");
-   531			return -EINVAL;
-   532		}
-   533	
- > 534		if (le16_to_cpu((*info)->offset) >= adev->discovery.size) {
-   535			dev_err(adev->dev, "invalid table offset %u for table_id %u\n",
- > 536				le16_to_cpu((*info)->offset), table_id);
-   537			return -EINVAL;
-   538		}
-   539	
-   540		return 0;
-   541	}
-   542	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Alex
