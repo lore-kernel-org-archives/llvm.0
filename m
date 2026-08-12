@@ -1,115 +1,160 @@
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904BF3438A9
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 08:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786523298; cv=pass; b=fKxt+VhdZ+Bp8gn3DoxvD7vrYOh2RYtyc0cWS6GsHJRErbp5+hPhZRw5Rc09VZ4VWk9YwCRh/+yfcdhK7+FsNTJdTfYu1PAYcGWMKCSQmmXA1oUMsA496kSnywjiUTCOd6cXgsixamrxXKYFUez2P7VQHBY9kY5aIRwog6yRCEI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786523298; c=relaxed/simple;
-	bh=KAD9ksCybhc8clv14bTiCcv/CYLxdm47VVR2R99SEPc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ejhIi9j4A2BAmRaZJ1botOBr6x8+LyRad6yafYWxf8PCccdA4WiHZ3KKtkZ8iGY0noBVPl1A8XrIEAkr/+vk0nKISqoP0u+ZCk7s/47yp/bl3f4j1Pble8VofxEiqDekokR3f0MpBe7fwbWKQ7dZwNM66arxnn31aiSQxeSl6M8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIuG7kL+; arc=pass smtp.client-ip=209.85.218.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C473BE178;
+	Wed, 12 Aug 2026 08:30:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786523414; cv=none; b=L7MlCV7C07ImlXSYsnhzuiDNcwl+9DKG9V/ubuf5vZmX4VmgRP8WzldhO3NVUl4McYwj9f4ahTXGNymJw+FzNAMFxXGUDCqenMhaeAWrWDI0sf0x8gQnUv8voDFH1JP8ufd8OgO0/rh3c3wZev1FX7iv1GWtbRMJnDItZIOMe0o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786523414; c=relaxed/simple;
+	bh=grROCCp/NlSZhIChKu/T+K573rFhmjdvZT5uMTe+e3A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=UWTyB4UIGWuqgvcjALq1wPYqzCWtbLd4SdRKB5X25PjhL8rcawTLVGu2KrZAieO3zUP6vkZ0h8z8LGLjUwwr58j4nQjwFBpbLQ0f9O+LdWfKJnNS/sMICnjP9oUxKPUkUn2GKS24sIGEk6+9ln73hB/OBPhXN3lBiFWWrPufCJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hE9m/Oud; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIuG7kL+"
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c2055573c8cso104793666b.3
-        for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 01:28:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786523295; cv=none;
-        d=google.com; s=arc-20260327;
-        b=VgmYnRnqkZGXgGcNV1++TqAvp5x5J4STJlHwCnhHWlRSrGSEn1OF2O5q7r0BodVWsk
-         cHP3NlRF69E54gIRT4vg2jq2yMF7oadbdsBMnL3SfVNFdFrjN7LGejGX7FkYNh3qzpDt
-         ukFcdhpUBFiVU5oSR7FwWskBkjQJ+y5F/k1HIaUoHNQSzMbdra+6uHEUMZxSbv3+k6Qt
-         GqYpR3lXBEkCmeAoBdOOo7Zn8oWw4uwnghpn6WOua9lEmR4fWAIhhzkaYqQ3uM15e20x
-         +kajFf+t8NqYNF31OhqNQII/ncn67ymTtBaHEQA02VHjQQTAhcITZM5fDiNCZrodktGb
-         fvJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=gePGGlYpZfXvdIs3VK1gl2M+9nY8+WmTeiFl+AMl4iU=;
-        fh=pfSvQONTJwlFKYoNwhS7UHKx/Y7De+mb2SxdN2MgeZg=;
-        b=h5ew9aEKyQBUaB4+83bfDLmTRcR86GUnuL8m/oebdOfjn7MfBp613DIPogSgSrjfgx
-         h0aAwwF1SgkeDCWuh2xOS/O6bZk8UN0FKmcn6Nnp2lC3GdMRyEVIK7Ab0rvwekMLuckw
-         qIjwtwfO4AQd+FbBCKdyBToOONNW4o92LeGkxqD19fmjsHTLiKif6xQtoOh/65eCsA4i
-         HPZ0gfxFrElywGub7qzwAiiLrIFWPdVL5NkXHp2a33GsFgNfzTTn6wBW/vBiN/9b0vTj
-         e1y6zJf4TOQiA7Xbpu4FQUBwso9fppva0hu/vDl3jGbGJLoDVMRe89ZVM1aAGXal8xI9
-         YiSA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786523295; x=1787128095; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=gePGGlYpZfXvdIs3VK1gl2M+9nY8+WmTeiFl+AMl4iU=;
-        b=PIuG7kL+xaSY6R3mbxweXAMW9z82Ni3ZpvpNX2wTWfqkmjQFl/1lSc6xobBAXJedWB
-         qJsveT83ORSdVd15fhnTQAAFsEeNg3vBsrbax9eFM+2ZB5HDHG3WK3tu6m33MzzBGveO
-         2BN0DKH5rSaJBYi38u3EVcvO3UT6L5Q2JJk2n9M3gu7Uuu8cKmTuewkWtELuIBtXIJvS
-         z3iVQGMb1r9hKtUc9iUp/vnxXPW7Bh6mi/u/fWLwyZLFp1RXwN1FuCuL3kLvxB5Gi3Wx
-         C6z+u7DfKS6QwSTKKvLQEqSHygZoM8TmIhLbGKIX+F/fFPZhyh5Cxgb815KVb5tMX1g/
-         FsDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786523295; x=1787128095;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gePGGlYpZfXvdIs3VK1gl2M+9nY8+WmTeiFl+AMl4iU=;
-        b=j6XGHNEv8jLPCU9OT06JqD6EkOHOeDncw7rAQag2rD1dj0f0DYOcvP0OFC6PzP1FwW
-         6dEaDKnEiWrE0Q4/ITbj/sdCVSzlwDNeo/O2WtxJcSB79LPcxuLsTZjr+oa2ogdmKKrb
-         E8lF+FDzygEqbHEBHWAiDrr44Cd6GoagFoXOc0k5F6+ut8FtBpjD9V7x49Va5z1SC+pI
-         YyIz76iWTv/DX0480sPDj1EhdDMywHkHkUAnfb8NQlUQWu2/SOsS8S3et1y+udNqSEq1
-         BeU7h92zTm7M4cCQAiA4y1TDbN+kCCHm5iFXEVQe4rkQqkn6JSUa7797bvueaPUVrSsY
-         nB7A==
-X-Forwarded-Encrypted: i=1; AHgh+RrEnKDfClSf01IEfPfDdu/V0bug+y0lScEKVvcqwGFqGNXwRrWYpLxNsXnmw9k8u6Hs8pNn@lists.linux.dev
-X-Gm-Message-State: AOJu0YwRTLf5M6oU9wURbWzKpMv99CpjpGZo+EkShLNQoaIn7+E3vtHT
-	XE3vAiPJA3qUTmb3B4tVkgP1Iyc8VPaJHIzhf6YkvYfd1GqUOBO/ICuKRKPm6/O40p8eaK/Hvao
-	s1u+fwXfgq2XiwO8k9LBKL3eDqh5hI5s=
-X-Gm-Gg: AR+sD118UANb5N+6wyDKMQNDxHbNz8k7KHfRwm0EYo7jonIj2g7MnClPg7oEfsen4Gl
-	JhgaXCwOFBPA7U3lAebqfwFT4KIKCB4gCjsT9AFKzaVjnav/VeJrozfzZh8cqrYg0HSQvrUnPp1
-	oo+6jP0MeuJuulHaaDzL0uFcMlVlxXJZ2/tSQ/Qqq1DCPD4DgbSFYG79rQJey7znuhH1GHbjOr7
-	alzRDZMKLBxNe8HSqEeaOgLyKU8YFXQ024X3nMKRET3ScLRJiNbUwZx2Q+/rsE7bNznuaNDqLk8
-	95kttlkYodRmgy1uIsmGfwnLpjRxbU2rBFVqfBfbMJDCM1nhJ1rXuMr8amKoLvyX7B65lrKYHTM
-	nr+Nebq+oxF4rNYtGOJP4Qx36+Yi+Pw==
-X-Received: by 2002:a17:907:7251:b0:c20:eea4:267c with SMTP id
- a640c23a62f3a-c20f305ee93mr132768966b.30.1786523294569; Wed, 12 Aug 2026
- 01:28:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hE9m/Oud"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786523412; x=1818059412;
+  h=date:from:to:cc:subject:message-id;
+  bh=grROCCp/NlSZhIChKu/T+K573rFhmjdvZT5uMTe+e3A=;
+  b=hE9m/OudNZanSwhW0WAM2ohhyRWbWnatCyfGvXjesRj7FU0rVZp5hBtS
+   Y6cy1b9RNp2g3vkQB2C93lwVfE2Ilako//uJWjRLmumNUqz2A8Zwcu8qL
+   haD+xNArv/w83YhJAImXeF05OrEx3Op/iF5vbYcLr/qd0TIXjEo4JhXhV
+   tgnbaHZOK4KXKpSBlJEv/IrdNNw/JIhxr7+R4IAOKWbzUzZ8dblqLKP0y
+   WmCZCYJRhivd4rq/eEdPTj/aSh6Ym31V7E8AhBn+1110h3zzTfqfkOWAK
+   3rHkOkYwzmr5IYXAHqbU0+bhbKxJUqo0yoRZalYyb7WnL9rLHbKT/mAF0
+   g==;
+X-CSE-ConnectionGUID: atg6BK4NTWm18pbqSL7ftw==
+X-CSE-MsgGUID: 7cySLFwiQ+GD6Hv4Tsb9Zw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11872"; a="98582547"
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="98582547"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 01:30:12 -0700
+X-CSE-ConnectionGUID: B6SYgmSXRtCnkgOGvIVo2Q==
+X-CSE-MsgGUID: lKm+h/wGQG+7TNYrCzz/3Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="267072037"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 12 Aug 2026 01:30:10 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wu4Lf-00000000Q6w-1DjN;
+	Wed, 12 Aug 2026 08:30:07 +0000
+Date: Wed, 12 Aug 2026 16:29:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jaegeuk Kim <jaegeuk@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-f2fs-devel@lists.sourceforge.net, Chao Yu <chao@kernel.org>
+Subject: [jaegeuk-f2fs:dev-test 30/30] fs/f2fs/inode.c:1065:6: error:
+ call to undeclared function 'current_is_kswapd'; ISO C99 and later do not
+ support implicit function declarations
+Message-ID: <202608121654.riTjCLm7-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
- <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com> <CA+=Fv5R0tdFeEKWgSVTjfXbs=guZmR8zy8FGbqUZNSKiyB24aA@mail.gmail.com>
- <alpine.DEB.2.21.2608110653370.48788@angie.orcam.me.uk> <CA+=Fv5SvjHgf7_5aXp_xBpE42FmM1XTXLrEkzjdQ60NRHKkwpw@mail.gmail.com>
- <alpine.DEB.2.21.2608112254100.48788@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2608112254100.48788@angie.orcam.me.uk>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Wed, 12 Aug 2026 10:28:03 +0200
-X-Gm-Features: AUfX_mxFGFTXsloghSaGbl7nrZA4hTgYyp3DHtv9-CHPmf-xGOOB1T8KYXQqRBU
-Message-ID: <CA+=Fv5TKNW776xCe6XJ6LsvnsYF1r+QxUrsnG2Z2o5JRJP4NsQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] alpha: read $gp and $sp explicitly for clang
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Magnus Lindholm <lindholm@kernel.org>, Matt Turner <mattst88@gmail.com>, 
-	Richard Henderson <richard.henderson@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 11, 2026 at 11:56=E2=80=AFPM Maciej W. Rozycki <macro@orcam.me.=
-uk> wrote:
->
->  FAOD it's also the space in `"=3Dr" (gptr)'.
->
->   Maciej
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jaegeuk/f2fs.git dev-test
+head:   7451b3cd93b30f714efc83f6571abf8c50541839
+commit: 7451b3cd93b30f714efc83f6571abf8c50541839 [30/30] f2fs: call __add_ino_entry out of the eviction path
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260812/202608121654.riTjCLm7-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260812/202608121654.riTjCLm7-lkp@intel.com/reproduce)
 
-Done!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608121654.riTjCLm7-lkp@intel.com/
 
-Magnus
+All errors (new ones prefixed by >>):
+
+>> fs/f2fs/inode.c:1065:6: error: call to undeclared function 'current_is_kswapd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1065 |         if (current_is_kswapd()) {
+         |             ^
+   1 error generated.
+
+
+vim +/current_is_kswapd +1065 fs/f2fs/inode.c
+
+  1019	
+  1020	static void f2fs_post_evict_inode(struct inode *inode)
+  1021	{
+  1022		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+  1023		struct f2fs_inode_info *fi = F2FS_I(inode);
+  1024		nid_t xnid = fi->i_xattr_nid;
+  1025		unsigned int record_bits = 0;
+  1026	
+  1027		dquot_drop(inode);
+  1028	
+  1029		stat_dec_inline_xattr(inode);
+  1030		stat_dec_inline_dir(inode);
+  1031		stat_dec_inline_inode(inode);
+  1032		stat_dec_compr_inode(inode);
+  1033		stat_sub_compr_blocks(inode,
+  1034				atomic_read(&fi->i_compr_blocks));
+  1035	
+  1036		if (likely(!f2fs_cp_error(sbi) &&
+  1037					!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
+  1038			f2fs_bug_on(sbi, is_inode_flag_set(inode, FI_DIRTY_INODE));
+  1039	
+  1040		/*
+  1041		 * anyway, it needs to remove the inode from sbi->inode_list[DIRTY_META]
+  1042		 * list to avoid UAF in f2fs_sync_inode_meta() during checkpoint.
+  1043		 */
+  1044		f2fs_inode_synced(inode);
+  1045	
+  1046		/* for the case f2fs_new_inode() was failed, .i_ino is zero, skip it */
+  1047		if (inode->i_ino)
+  1048			invalidate_mapping_pages(NODE_MAPPING(sbi), inode->i_ino,
+  1049								inode->i_ino);
+  1050		if (xnid)
+  1051			invalidate_mapping_pages(NODE_MAPPING(sbi), xnid, xnid);
+  1052	
+  1053		if (!inode->i_nlink)
+  1054			goto skip_record;
+  1055	
+  1056		if (is_inode_flag_set(inode, FI_APPEND_WRITE))
+  1057			record_bits = BIT(APPEND_INO);
+  1058		if (is_inode_flag_set(inode, FI_UPDATE_WRITE))
+  1059			record_bits = BIT(UPDATE_INO);
+  1060	
+  1061		if (!record_bits)
+  1062			goto skip_record;
+  1063	
+  1064		/* Let's do this in workqueue out of the direct reclaim path. */
+> 1065		if (current_is_kswapd()) {
+  1066			f2fs_record_inode_state(sbi, inode->i_ino, record_bits);
+  1067		} else {
+  1068			struct evict_inode_work *ew =
+  1069				mempool_alloc(evict_inode_work_pool, GFP_NOFS);
+  1070	
+  1071			ew->sbi = sbi;
+  1072			ew->ino = inode->i_ino;
+  1073			ew->add_ino_entry_bits = record_bits;
+  1074			INIT_WORK(&ew->work, f2fs_evict_inode_work);
+  1075			queue_work(sbi->evict_wq, &ew->work);
+  1076		}
+  1077	skip_record:
+  1078		if (is_inode_flag_set(inode, FI_FREE_NID)) {
+  1079			f2fs_alloc_nid_failed(sbi, inode->i_ino);
+  1080			clear_inode_flag(inode, FI_FREE_NID);
+  1081		} else {
+  1082			/*
+  1083			 * If xattr nid is corrupted, we can reach out error condition,
+  1084			 * err & !f2fs_exist_written_data(sbi, inode->i_ino, ORPHAN_INO)).
+  1085			 * In that case, f2fs_check_nid_range() is enough to give a clue.
+  1086			 */
+  1087		}
+  1088	}
+  1089	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
