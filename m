@@ -1,132 +1,56 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6E2644C67C
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 13:15:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E99401486;
+	Wed, 12 Aug 2026 16:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786540530; cv=none; b=P9mMV6cWPRhtlB6Up/+4qOKiZJm4pTWZgoJBJJhaSeSFjhhqYgJjbXSrNgR2F5xZu2j3SJ1OC5K2QrbGa85wiYZIW4fszjTbzvrC04HH8la8aLAtrJldk2ubkDFe1apv22SCV3Qs78QpV7CSHTdgaMXW4Vd/ztVZZOQKB490C4o=
+	t=1786552067; cv=none; b=tG8RZvQ/bDGYDlO28nzg82KRjmyiqs7In7na2wTW4NBqWeds8e8tD3xkJGwBHlgqwzsRYoKfSsjRECYwi5c4/lFUWrq1YxK6//iZrFPYIcni35kPbY6HIAIXlFZmzDE28Gl7oFlw2bhKjjIOYEsc38PztwLFtkXhfxPXndHoXJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786540530; c=relaxed/simple;
-	bh=nmHxmY7iTPhC2SO4r0Cu7D2E52TxGJ2ANn9r911bmEc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=atLNDMrA9xFswHyAHmLfQjBAqUaiJkRbQE6RJTY4sHSIadCI5CKVdK9zGAdzGGjYj5DaqfOauhP2ZYZ2oMveLRBdGLZc9k11AA/UqeZaW6sgz0JlDL+YoSGLhHaLEcJO0eNAXUxpec2xyFnjjhLyeJFBzyl5fnrpxoCl0lQ5j+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=YjuSXfVF; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1786552067; c=relaxed/simple;
+	bh=VZbGKQEtfNwzZ1LJgUQTQ00fFOReMvE9NSz3KwRlAJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BGg16rj9u+J0LabU++Y8hnnc2LRoc41eMdRdvXs362+0Q3g3JIxSzgtJKz5cdPKbpZ63bANvxw01lGzAR8k0ckWUv6EkZnbg41uFZPcRk+L16iSZWqo+tIZibYq0Hemx8gzobeC+CtJI4fMvSwrcjHLAssRYEooDCQC36dV9cfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMIhXyOs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="YjuSXfVF"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CE493408CC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1786540528; bh=JAXHudu46Eg+mqqdpRoOfueFzUFbPVJGGm+AfV0sLmA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=YjuSXfVFdNZsDUovgWNOnXrDWs1wY3mzRO64lCEOdBzQ4UsRfQncNKg6MQeD84dbH
-	 bLkHsiYHrxg688yhBdaz2B2Q68XFUbt6CEC++v0IkcHtNVTga+yEe8MqsyaF4Doazg
-	 AN6p2zh75ODIyTnguYSzN3Gphf2DObIsT6Eic8uYtSAfC0aPl0+O7aJrbUa9e6uYsW
-	 dcILL/QzRmjIQwFrG1O3taxFeWv03VqKb3B/DUAOVCvasWelTiEfbB4qdrPoAAkdv9
-	 rKaxWgR9X9gvKFI3he7IpfLgwKRk3QMn9Vw8YH9rQ3/9MCHkQLGxQ0KwrW5ieAi53E
-	 ir/C+ZzHhlVQQ==
-Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id CE493408CC;
-	Wed, 12 Aug 2026 13:15:27 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Manuel Ebner <manuelebnerli@mailbox.org>, Shuah Khan
- <skhan@linuxfoundation.org>, Federico Vaga <federico.vaga@vaga.pv.it>,
- Akira Yokosawa <akiyks@gmail.com>, Daniel Pereira
- <danielmaraboo@gmail.com>, Carlos Bilbao <carlos.bilbao@kernel.org>,
- Avadhut Naik <avadhut.naik@amd.com>, Alex Shi <alexs@kernel.org>, Yanteng
- Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, Hu Haowen
- <2023002089@link.tyut.edu.cn>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi
- <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
- <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Miguel Ojeda
- <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo
- <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno
- Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Daniel Almeida
- <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>,
- Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?Q?=C3=96zkan?=
- <work@onurozkan.dev>,
- Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>
-Cc: Manuel Ebner <manuelebnerli@mailbox.org>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, workflows@vger.kernel.org,
- bpf@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH 1/5] Docs: changes.rst: rename file and references and
-  add links
-In-Reply-To: <20260812121603.1633270-2-manuelebnerli@mailbox.org>
-References: <20260812120805.1631430-3-manuelebnerli@mailbox.org>
- <20260812121603.1633270-2-manuelebnerli@mailbox.org>
-Date: Wed, 12 Aug 2026 07:15:26 -0600
-Message-ID: <87o6f7jx8x.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMIhXyOs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EFE91F000E9;
+	Wed, 12 Aug 2026 16:27:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786552066;
+	bh=VZbGKQEtfNwzZ1LJgUQTQ00fFOReMvE9NSz3KwRlAJw=;
+	h=Date:From:To:Cc:Subject;
+	b=iMIhXyOs1HhQi0hBbI3HN9zsj56N5knSMhteAiyQZ4vVJZ07ga1/8J9UPee15X/pk
+	 Nre4UAJUIqwBvTmP8ChAi4AHPa+NkDF52+SQqIyi7EPxo/i/F6ZV5czOSWRUin1OEr
+	 iIDoek/LeDKkG/KvYIUeQ/7plJTquWmq/wprAvRMWAX+bX/0i4cvS8kvFGe6MePzhR
+	 7vsYDMhyRpeCCmo+ESVcgCjbw8ESnvjdTeWujZfy2Vr+Mm4sXL/x5l6qJ+w5ATv4Mj
+	 xvuGtjr73vxv3YgfCXRPEcXClgjuMNtHLS4kll2Lqqd6s2GGOthMhO2yu0vIGXHJzn
+	 CEESOmMA8Eobg==
+Date: Wed, 12 Aug 2026 09:27:42 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 23.1.0-rc3 uploaded
+Message-ID: <20260812162742.GA101585@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Manuel Ebner <manuelebnerli@mailbox.org> writes:
+Hi all,
 
-> The current name does not reflect the content of the file, the new name
-> does so. With the links legacy references should continue to work.
->
-> Change name to software-requirements.rst
-> Change names in Doc/translations/*
-> Add link Doc/process/changes.rst to software-version.rst.
-> Add link Doc/Changes to software-version.rst.
-> Add links in Doc/translations/*
-> Change changes.rst to software-version.rst inChange changes.rst to software-version.rst in
->  Documentation/*
->  README
->  samples/bpf/README.rst
->  scripts/min-tool-version.sh
->  scripts/ver_linux
->
-> Signed-off-by: Manuel Ebner <manuelebnerli@mailbox.org>
-> ---
->  Documentation/Changes                         |   2 +-
->  Documentation/admin-guide/README.rst          |   6 +-
->  Documentation/doc-guide/sphinx.rst            |   2 +-
->  Documentation/filesystems/locks.rst           |   2 +-
->  Documentation/process/changes.rst             | 576 +----------------
->  Documentation/process/howto.rst               |   2 +-
->  .../process/software-requirements.rst         | 575 +++++++++++++++++
->  .../translations/it_IT/process/changes.rst    | 554 +----------------
->  .../translations/it_IT/process/howto.rst      |   2 +-
->  .../it_IT/process/software-requirements.rst   | 553 +++++++++++++++++
->  .../translations/ja_JP/process/howto.rst      |   2 +-
->  .../translations/ko_KR/process/howto.rst      |   2 +-
->  .../translations/pt_BR/process/changes.rst    | 577 +-----------------
->  .../pt_BR/process/software-requirements.rst   | 576 +++++++++++++++++
->  .../translations/sp_SP/process/howto.rst      |   2 +-
->  .../translations/zh_CN/admin-guide/README.rst |   6 +-
->  .../translations/zh_CN/process/howto.rst      |   2 +-
->  .../translations/zh_TW/admin-guide/README.rst |   6 +-
->  .../translations/zh_TW/process/howto.rst      |   2 +-
->  README                                        |   2 +-
->  samples/bpf/README.rst                        |   2 +-
->  scripts/min-tool-version.sh                   |   2 +-
->  scripts/ver_linux                             |   2 +-
->  23 files changed, 1730 insertions(+), 1727 deletions(-)
->  mode change 100644 => 120000 Documentation/process/changes.rst
->  create mode 100644 Documentation/process/software-requirements.rst
->  mode change 100644 => 120000 Documentation/translations/it_IT/process/changes.rst
->  create mode 100644 Documentation/translations/it_IT/process/software-requirements.rst
->  mode change 100644 => 120000 Documentation/translations/pt_BR/process/changes.rst
->  create mode 100644 Documentation/translations/pt_BR/process/software-requirements.rst
+I have built and uploaded LLVM 23.1.0-rc3 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-That is a *lot* of churn just because you don't like the name of the
-file.  The naming is not perfect - it is the result of decades of
-history - but I think we're better to live with it.
+This is a prerelease version of LLVM, similar to how the Linux kernel
+release candidates work. If there are any issues found, please let us
+know via email or https://github.com/ClangBuiltLinux/linux/issues/new,
+so that we have an opportunity to get them fixed in main and backported
+to the 23.x branch before 23.1.0 is officially released.
 
-jon
+Cheers,
+Nathan
