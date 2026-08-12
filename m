@@ -1,77 +1,231 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC56C2E8E09;
-	Wed, 12 Aug 2026 00:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215CC188596
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 02:28:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786493869; cv=none; b=XCAQO7Im2flH/mIepoe/E95fCT9ZKgbtPwn7szwp79JJyHbVfnvAf0aFgsS9a9hMfHkoaS0GOFZLOuAP//y9of4XnAHJTxs+ll7f/7p//pmGlJfjWdD6vP9J1z20HiBw/shnv4Ki6DrdgjcSqJ5cVy5kxfBB/k5rixvXHLe72r8=
+	t=1786501706; cv=none; b=go9Xr4O/2q67Yka8PXGVVaDFOHeZjdr2dKrRQZ0EuMs99MolMZjuFQf77BJDs70mCiDiCdsiYMh2AlLQ9HLswT5XVSuRasTbKahqinDyELa6v6hFuiq0o50wfCoj+XCYmYqOlltlJ41tMbRnVgLyfb+v4dYX5Z+bsgHYrqjXkL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786493869; c=relaxed/simple;
-	bh=ha1cQzHmeAmgOC+MpY19CCwpCTIA2rRwWnQl2ETVZNY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iGMY5rBJeiR3nAKVrUd1KGMnXhPh+4BU95mGM+plIzHmgdJOn5HTjWj/I+0vKXmwcQYv/5ktfhzuXHIG4L51qGy9kwHBAKKMBfzFI1rGPrl9duKpUNM0w9tNgTIJ8wWCew8UKbVpnyfS7l/3dn64mAutrRljPNfLFoOYpJOJHRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eM0nOym2; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eM0nOym2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11791F00A3A;
-	Wed, 12 Aug 2026 00:17:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786493868;
-	bh=glKqfK+8vzTCcTVl+aipxjInjbAI8DgcIFu3nly0kUY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=eM0nOym2AGLDqOZx4l707CB6YZfsavdmW4jozp1YGS6OTk9ElQ+5pMP3jZdH25VN9
-	 h4SilSashnxag0aWqDrMETcxkHsUhK83w6jubzXHtiBquUKc1XowcYtE8Czk4Q5wVS
-	 l3kGCRBF1DcRfad+neGD/cpPRDKdVAS/9nt7dW+ehAWVzu4kwOKQImVGZJCrQDK5Ku
-	 +nL3kbap8HBJQU4gyrOb2p7sYQTnIwpC0PbaaWdaVQX6yzD/K0wdSjGZYPgtUO/OF5
-	 hFKTAK5J1NYf9lBnglBI7NU1+yyeA8u3+9J0j2QRj/vLC3OnVFm+YYSD1GWnd5apMW
-	 Jg9jUpLStmBmA==
-Date: Tue, 11 Aug 2026 17:17:48 -0700
-From: Kees Cook <kees@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2 2/3] slab: check for ZERO_SIZE_PTR by exact match
-Message-ID: <202608111716.0FA9DB17@keescook>
-References: <20260811141240.62519-1-kmehltretter@gmail.com>
- <20260811141240.62519-3-kmehltretter@gmail.com>
+	s=arc-20240116; t=1786501706; c=relaxed/simple;
+	bh=9R8pdrhIoX/TmxU982cTgn3RQLGnVbi8FdvSfuCwUIM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lWiXPBWnL66u5NC5mp/ntOdQ4xzSsu9TZQW33CCLJBRIn7sOYktIiPPvfniS9d8UyEEmW8tnS0XsVQW6965JYOnjIb1Z+UBjrJ7dJNnUw/kSVXmA46FGq+NUpxJfMA3T1Z05M2wbkfqjaV5oPZ/bR3TOu7aaCxftTFAHwfqHN44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hKXTn2sHMzYQv2l
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 10:28:13 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id AB06340561
+	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 10:28:17 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgAnkYg_2ntqD_MHCA--.39355S2;
+	Wed, 12 Aug 2026 10:28:17 +0800 (CST)
+Message-ID: <1910f712-8ea6-4916-82ac-0c1c2eac653c@huaweicloud.com>
+Date: Wed, 12 Aug 2026 10:28:15 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260811141240.62519-3-kmehltretter@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 09/23] perf annotate: Deduplicate overlapping ARM SPE
+ events for data type profiling
+To: Adrian Hunter <adrian.hunter@intel.com>,
+ Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
+ xueshuai@linux.alibaba.com, Li Huafei <lihuafei1@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+ <20260808122400.2961238-10-wutengda@huaweicloud.com>
+ <20083f61-9724-445c-ad45-d77f9e8d2266@intel.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <20083f61-9724-445c-ad45-d77f9e8d2266@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgAnkYg_2ntqD_MHCA--.39355S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxKrW8trW7Jr15Gr4rJw4UCFg_yoWxGrWkpr
+	4a9Fn8Kwn5Xr40kw1ava15Xr1F93yfXFW3GwnFka15Awn8ur95tFyxtr15KFZxXrn8Z34S
+	vws093s8Wa45ZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvYb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8C
+	rVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4
+	IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kK
+	e7AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
+	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
+	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
+	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
+	jIksgUUUUU=
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On Tue, Aug 11, 2026 at 04:12:39PM +0200, Karl Mehltretter wrote:
-> ZERO_OR_NULL_PTR() returns true for every value less than or equal to
-> ZERO_SIZE_PTR. With the sentinel raised to ARCH_KMALLOC_MINALIGN, up
-> to 128 on some architectures, the helper matches additional values
-> that are neither NULL nor the sentinel.
+
+
+On 2026/8/10 14:57, Adrian Hunter wrote:
+> On 08/08/2026 15:23, Tengda Wu wrote:
+>> When data type profiling is enabled on ARM SPE, multiple overlapping
+>> events (e.g., l1d-miss, tlb-access) are synthesized for a single sampled
+>> instruction, as shown below:
+>>
+>>   Available samples
+>>   0 arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=30/
+>>   0 dummy:u
+>>   84K l1d-miss
+>>   95K l1d-access
+>>   77K llc-miss
+>>   58K llc-access
+>>   9K tlb-miss
+>>   108K tlb-access
+>>   0 branch
+>>   13K remote-access
+>>   108K memory
+>>   108K instructions
+>>
+>> While 'perf report' provides an interactive menu for users to select a
+>> specific event to prevent duplicate counting, 'perf annotate' lacks such
+>> a mechanism. Consequently, it counts all instructions across these
+>> overlapping events, which inflates the profile and distorts the data
+>> type statistics.
+>>
+>> Although using the '--itrace' option can work around this issue (e.g.:
+>> perf annotate --data-type --stdio --itrace=i1i), it is inconvenient for
+>> users to specify this explicitly every time.
+>>
+>> To address this, introduce itrace_synth_opts.dont_overlap. Set this to true
+>> when data type profiling is enabled and the user has not explicitly
+>> specified an itrace option. Then, during arm_spe_process_auxtrace_info(),
+>> adjust the synthesized event options based on the dont_overlap value to
+>> only enable instruction event synthesis, thereby achieving automatic
+>> deduplication.
+>>
+>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>> ---
+>>  tools/perf/builtin-annotate.c |  8 ++++++++
+>>  tools/perf/util/arm-spe.c     | 17 +++++++++++++++++
+>>  tools/perf/util/auxtrace.h    |  2 ++
+>>  3 files changed, 27 insertions(+)
+>>
+>> diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+>> index 69cb72b2082a..616f54bf4868 100644
+>> --- a/tools/perf/builtin-annotate.c
+>> +++ b/tools/perf/builtin-annotate.c
+>> @@ -873,6 +873,14 @@ int cmd_annotate(int argc, const char **argv)
+>>  	annotate.session = perf_session__new(&data, &annotate.tool);
+>>  	if (IS_ERR(annotate.session))
+>>  		return PTR_ERR(annotate.session);
+>> +	/*
+>> +	 * Hardware tracing (e.g.: ARM SPE) may generate overlapping events
+>> +	 * per instruction. When data type profiling is enabled, enable
+>> +	 * dont_overlap to deduplicate them to avoid skewed stats, but only
+>> +	 * if user hasn't specified itrace options (respect user override).
+>> +	 */
+>> +	if (annotate.data_type && !itrace_synth_opts.set)
+>> +		itrace_synth_opts.dont_overlap = true;
+>>  
+>>  	annotate.session->itrace_synth_opts = &itrace_synth_opts;
+>>  
+>> diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+>> index 401aab529309..1721882423f6 100644
+>> --- a/tools/perf/util/arm-spe.c
+>> +++ b/tools/perf/util/arm-spe.c
+>> @@ -2033,6 +2033,9 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>>  		/* Default nanoseconds period not supported */
+>>  		spe->synth_opts.period_type = PERF_ITRACE_PERIOD_INSTRUCTIONS;
+>>  		spe->synth_opts.period = 1;
+>> +
+>> +		if (session->itrace_synth_opts)
+>> +			spe->synth_opts.dont_overlap = session->itrace_synth_opts->dont_overlap;
+>>  	}
+>>  
+>>  	if (spe->synth_opts.period_type != PERF_ITRACE_PERIOD_INSTRUCTIONS) {
+>> @@ -2044,6 +2047,20 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+>>  		ui__warning("Arm SPE has a hardware-based sampling period.\n\n"
+>>  			    "--itrace periods > 1i downsample by an interval of n SPE samples rather than n instructions.\n");
+>>  
+>> +	if (spe->synth_opts.dont_overlap) {
+>> +		/*
+>> +		 * The 'instructions' event is the most comprehensive,
+>> +		 * synthesize it exclusively.
+>> +		 */
+>> +		spe->synth_opts.flc = false;
+>> +		spe->synth_opts.llc = false;
+>> +		spe->synth_opts.tlb = false;
+>> +		spe->synth_opts.branches = false;
+>> +		spe->synth_opts.remote_access = false;
+>> +		spe->synth_opts.mem = false;
+>> +		spe->synth_opts.instructions = true;
+>> +	}
+>> +
+>>  	err = arm_spe_synth_events(spe, session);
+>>  	if (err)
+>>  		goto err_free_queues;
+>> diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+>> index 6947f3f284c0..ebb4e9e8e574 100644
+>> --- a/tools/perf/util/auxtrace.h
+>> +++ b/tools/perf/util/auxtrace.h
+>> @@ -80,6 +80,7 @@ enum itrace_period_type {
+>>   * @intr_events: whether to synthesize interrupt events
+>>   * @errors: whether to synthesize decoder error events
+>>   * @dont_decode: whether to skip decoding entirely
+>> + * @dont_overlap: whether to deduplicate overlapping events
 > 
-> Compare explicitly against NULL and ZERO_SIZE_PTR. Store the argument
-> in an unsigned long temporary to support both pointer and integer
-> address arguments while evaluating it only once.
+> This doesn't seem to match what you are actually doing, which
+> seems to be to choose particular default itrace options for
+> 'perf annotate --data-type'
+> 
+> I wonder if this should really be handled by
+> itrace_synth_opts__set_default()?
+> 
 
-Can we move ZERO_SIZE_PTR to cover the ERR_PTR range too? See this issue:
-https://github.com/KSPP/linux/issues/93
+Placing this in itrace_synth_opts__set_default() may not be appropriate.
 
-> This also changes check_bogus_address() in hardened usercopy: nonzero
-> addresses below ZERO_SIZE_PTR no longer cause its null-address abort.
+The current approach is designed to constrain the following conditions:
 
-And then check_bogus_address would also catch ERR_PTR.
+1. Using perf annotate
+2. With --data-type specified
+3. Based on ARM SPE
+4. Without --itrace explicitly specified
 
--Kees
+When these conditions are all met, we want to enable --itrace=i1i by default,
+effectively making this option built-in.
 
--- 
-Kees Cook
+If we were to place the --itrace=i1i configuration inside
+itrace_synth_opts__set_default(), conditions 1, 2, and 3 would not be
+reachable from that context, as there's no way to propagate that information
+into the function. Configuring it directly there would take effect globally,
+impacting other commands such as perf report and perf script.
+
+Therefore, the current approach passes the dont_overlap information through
+itrace (satisfying conditions 1, 2, and 4), and then configures --itrace=i1i
+inside the ARM SPE driver (satisfying condition 3).
+
+Thanks,
+Tengda
+
+> 
+>>   * @log: write a decoding log
+>>   * @calls: limit branch samples to calls (can be combined with @returns)
+>>   * @returns: limit branch samples to returns (can be combined with @calls)
+>> @@ -128,6 +129,7 @@ struct itrace_synth_opts {
+>>  	bool			intr_events;
+>>  	bool			errors;
+>>  	bool			dont_decode;
+>> +	bool			dont_overlap;
+>>  	bool			log;
+>>  	bool			calls;
+>>  	bool			returns;
+
