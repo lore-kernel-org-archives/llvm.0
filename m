@@ -1,114 +1,118 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FABE450401
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 17:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1B2473C73;
+	Wed, 12 Aug 2026 17:57:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786557194; cv=none; b=YpunPJFLKrvS4Ik2FmNeQivloSSHhul42M+uLkkWrdEPj9Iy2RrzIs8Hq4OHXzMfIbikMAwPcZ/CQmpQUhOrdIwsqN8tNjWRhwF1hqOSetw+l07gxgbmWPVg+FNOkexf4mfmeseIqO+VGT3ITq7V2wMQCGt2M9zoZJMO87VOjHo=
+	t=1786557467; cv=none; b=hOD6kQV2d9w62TEdJ7tPGFOaImPrcpiBGlBq3oq6qwWYLEXjCIpyg3NeEU6G2QcTt9kNTCQ994/etRwuK9cNUsZtXore3HSuj1Tzndc1NnAExSG8O3+rANF7YvlLrqefEcmCEuhyFcO4sH7iuoK0YLLFJP48AJHkGPG2p6Llqp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786557194; c=relaxed/simple;
-	bh=sEgDxX6QLG0cJYb28s8FQDXMGhTr5GNi57Zm+LgnGFk=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=Se3OY1+KdK9JrrQIm6iNk4R0cjHAQDj0ToMGENCrZ1F4UxMC9oJfw41tweMk9fm93PjZeuTyTvmlzgxgTXIoqWRiFDF+v7/MVSGo1dwogzZDmo78upY9g4V+4kFONbSTty3fquTuAoFD+ZtT8iXoEbmXXhEQN6WYCCtRY8uNUtw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U93MouV8; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786557467; c=relaxed/simple;
+	bh=TpiuBnZF48jsQnaonYk+XOy+Z33iCdKm5m1COS60WQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NhHREeC9wiUWK4VvkMwi15oWobieuq+qTLRO20nLKZ92n6hJkL1dpsw/kvCYAZrAcunjebO//arygDglTe1CKkkG/Fz+jBs0J9X3I8XE1x1VMhKd2Z1Q7zryk8UL+U8s0d1eU02pF3wU6be31QwAU9X4joJlgeRFa6Vj9AxJmhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AaCdWRFV; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U93MouV8"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786557192;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=RJaHbXRYLKPbaNjX6oCuev/mTWI7JKMYQrd4Id1G9GQ=;
-	b=U93MouV8d68uicPv/hVIgDFRqyWxSmcMsX65V7t5MHV6rgAnODPQNyeaqpiAnfC5Ku3M6g
-	TdiR1qe/9k+to7NRjUtIjZUylgb2zDFnmtIEfqBY1k1xo4C6kpwOTkNOXSauytk5UM6p9I
-	6DbDKAmYv9mQMmeCRaXxvL5z197oFm8=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-504-2KhrrXqNOOGH_8UYErZ2Ww-1; Wed,
- 12 Aug 2026 13:53:05 -0400
-X-MC-Unique: 2KhrrXqNOOGH_8UYErZ2Ww-1
-X-Mimecast-MFC-AGG-ID: 2KhrrXqNOOGH_8UYErZ2Ww_1786557184
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3765718009C7
-	for <llvm@lists.linux.dev>; Wed, 12 Aug 2026 17:53:04 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8762C1956049;
-	Wed, 12 Aug 2026 17:53:03 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc7,
- upstream-mainline, f5bbbfec)
-Date: Wed, 12 Aug 2026 17:53:03 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AaCdWRFV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786557466; x=1818093466;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=TpiuBnZF48jsQnaonYk+XOy+Z33iCdKm5m1COS60WQ0=;
+  b=AaCdWRFVE2iczCTVRVa8Q36IOs/21/X1Mu/2s1OHyJaECFfKWY4FFEe4
+   IgXW0+All1tamApqaIezggynrosIu0tlwdNImIEQunCG/R3VfKQ9zQUFJ
+   nQHL6SwQBH/oTQDKPidVgnmHjvfoXLNVw8SS8/qx1Gm2ET/zZbqvrbCzm
+   ybUv1WTlsLo1BNHXUpjsZPYZjIerVj67Cq/2+ZjDavdxo0qakYzdN8kdu
+   wEsVT6pMmlVCuWfPe5MKvm+fifbUwNsJAcMcc5TCUZBuU3oxGxnKPauNT
+   noVDvHNcbD6PXqYwL5ssfEyOop3iZFyx6ZiIxNgjYwSJFLZVJQHOj1mUb
+   A==;
+X-CSE-ConnectionGUID: oGTIZD2iTfKKZMS7fTy8Sg==
+X-CSE-MsgGUID: 5kjO9UD7SgimSoy4UBzw0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="87198069"
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="87198069"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 10:57:45 -0700
+X-CSE-ConnectionGUID: zF+zFhqPRHW9lv1SHh52tA==
+X-CSE-MsgGUID: I7SM75XMQj2/MPnxJ527kA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="288486910"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 12 Aug 2026 10:57:38 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wuDCo-00000000RHS-24h7;
+	Wed, 12 Aug 2026 17:57:34 +0000
+Date: Thu, 13 Aug 2026 01:57:22 +0800
+From: kernel test robot <lkp@intel.com>
+To: Trevor Chan <trev@trevrosa.dev>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, dakr@kernel.org, ojeda@kernel.org,
+	a.hindborg@kernel.org, paul@paul-moore.com, airlied@gmail.com,
+	simona@ffwll.ch, aliceryhl@google.com, viro@zeniv.linux.org.uk,
+	brauner@kernel.org, igor.korotin@linux.dev, boqun@kernel.org,
+	gary@garyguo.net, axboe@kernel.dk, daniel.almeida@collabora.com,
+	shankari.ak0208@gmail.com, lyude@redhat.com, j@jananu.net,
+	akpm@linux-foundation.org, acourbot@nvidia.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	david.m.ertman@intel.com, iweiny@kernel.org, leon@kernel.org,
+	bjorn3_gh@protonmail.com, lossin@kernel.org, tmgross@umich.edu,
+	tamird@kernel.org, work@onurozkan.dev, sergeh@kernel.org
+Subject: Re: [PATCH v5] rust: aref: make `AlwaysRefCounted::inc_ref` an
+ associated function
+Message-ID: <202608130155.R5DtGsVt-lkp@intel.com>
+References: <20260628092853.16550-1-trev@trevrosa.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-Message-Id: <38817.126081213530500459@us-mta-504.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: _t3VMt3ntWa4cBgtEnJ_jjvnNyZLEDPBbWd8c2TlPGc_1786557184
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260628092853.16550-1-trev@trevrosa.dev>
 
-Hi, we tested your kernel and here are the results:
+Hi Trevor,
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on driver-core/driver-core-linus]
+[also build test ERROR on rust/rust-next akpm-mm/mm-everything linus/master v7.2-rc7]
+[cannot apply to driver-core/driver-core-testing driver-core/driver-core-next drm/drm-next next-20260811]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Kernel information:
-    Commit message: Merge tag 'probes-fixes-v7.2-rc7' of git://git.kernel.o=
-rg/pub/scm/linux/kernel/git/trace/linux-trace
+url:    https://github.com/intel-lab-lkp/linux/commits/Trevor-Chan/rust-aref-make-AlwaysRefCounted-inc_ref-an-associated-function/20260812-112718
+base:   driver-core/driver-core-linus
+patch link:    https://lore.kernel.org/r/20260628092853.16550-1-trev%40trevrosa.dev
+patch subject: [PATCH v5] rust: aref: make `AlwaysRefCounted::inc_ref` an associated function
+config: x86_64-randconfig-016-20260812 (https://download.01.org/0day-ci/archive/20260813/202608130155.R5DtGsVt-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260813/202608130155.R5DtGsVt-lkp@intel.com/reproduce)
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2751281701
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608130155.R5DtGsVt-lkp@intel.com/
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2751281701_x86_64_kernel_kcidb_tool_21850912_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+All errors (new ones prefixed by >>):
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+>> error[E0185]: method `inc_ref` has a `&self` declaration in the impl, but not in the trait
+   --> rust/kernel/opp.rs:1046:5
+   |
+   1046 |     fn inc_ref(&self) {
+   |     ^^^^^^^^^^^^^^^^^ `&self` used in impl
+   |
+   ::: rust/kernel/sync/aref.rs:50:5
+   |
+   50 |     fn inc_ref(obj: &Self);
+   |     ----------------------- trait method declared without `&self`
 
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
