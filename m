@@ -1,64 +1,77 @@
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E6B38B7DC
-	for <llvm@lists.linux.dev>; Tue, 11 Aug 2026 21:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC56C2E8E09;
+	Wed, 12 Aug 2026 00:17:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786485404; cv=none; b=OQms+h/b1Vm+hTFv6LQW0FV3k+mrFfjFYTYY5t9kgnkGTSaAapGIRWEMTqETJnNxch3AZ3OEWh33OaD72eizPInuO6BrfPI1+qMVxh7X80zxRmxWvGECABBU91P1FzZ0VJzuGotWp7vwZnohUsGuVBombt3aGGebKA4DmehCwvw=
+	t=1786493869; cv=none; b=XCAQO7Im2flH/mIepoe/E95fCT9ZKgbtPwn7szwp79JJyHbVfnvAf0aFgsS9a9hMfHkoaS0GOFZLOuAP//y9of4XnAHJTxs+ll7f/7p//pmGlJfjWdD6vP9J1z20HiBw/shnv4Ki6DrdgjcSqJ5cVy5kxfBB/k5rixvXHLe72r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786485404; c=relaxed/simple;
-	bh=DFh4pT7sRpZIacXDi7lJU5sEpNXuQ6gNgK0k8Tv8/+A=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ePvDOQfzzL62wdp748De15uiYAYeW40vTZ2F4te+F7ufBdQLLaH7Aqo4CqU0Kbln/D/DEyoSFOoCWYXhgCiIvhthXvVbsH/H7iFdwJ7vaKQl76ZABeiZL9E1vDI1M2MLq5FE1b6/jBIymNgbhg0PhJ0a2sCYmOrT8clcGZeijDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 2C93892009C; Tue, 11 Aug 2026 23:56:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 25DD692009B;
-	Tue, 11 Aug 2026 22:56:40 +0100 (BST)
-Date: Tue, 11 Aug 2026 22:56:40 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Magnus Lindholm <linmag7@gmail.com>
-cc: Magnus Lindholm <lindholm@kernel.org>, Matt Turner <mattst88@gmail.com>, 
-    Richard Henderson <richard.henderson@linaro.org>, 
-    Nathan Chancellor <nathan@kernel.org>, 
-    Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-    Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-    linux-kbuild@vger.kernel.org
-Subject: Re: [PATCH 2/2] alpha: read $gp and $sp explicitly for clang
-In-Reply-To: <CA+=Fv5SvjHgf7_5aXp_xBpE42FmM1XTXLrEkzjdQ60NRHKkwpw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2608112254100.48788@angie.orcam.me.uk>
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com> <20260803-alpha-clang-v1-2-1c4ba5ba7a64@gmail.com> <CA+=Fv5R0tdFeEKWgSVTjfXbs=guZmR8zy8FGbqUZNSKiyB24aA@mail.gmail.com> <alpine.DEB.2.21.2608110653370.48788@angie.orcam.me.uk>
- <CA+=Fv5SvjHgf7_5aXp_xBpE42FmM1XTXLrEkzjdQ60NRHKkwpw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1786493869; c=relaxed/simple;
+	bh=ha1cQzHmeAmgOC+MpY19CCwpCTIA2rRwWnQl2ETVZNY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iGMY5rBJeiR3nAKVrUd1KGMnXhPh+4BU95mGM+plIzHmgdJOn5HTjWj/I+0vKXmwcQYv/5ktfhzuXHIG4L51qGy9kwHBAKKMBfzFI1rGPrl9duKpUNM0w9tNgTIJ8wWCew8UKbVpnyfS7l/3dn64mAutrRljPNfLFoOYpJOJHRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eM0nOym2; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eM0nOym2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11791F00A3A;
+	Wed, 12 Aug 2026 00:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786493868;
+	bh=glKqfK+8vzTCcTVl+aipxjInjbAI8DgcIFu3nly0kUY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=eM0nOym2AGLDqOZx4l707CB6YZfsavdmW4jozp1YGS6OTk9ElQ+5pMP3jZdH25VN9
+	 h4SilSashnxag0aWqDrMETcxkHsUhK83w6jubzXHtiBquUKc1XowcYtE8Czk4Q5wVS
+	 l3kGCRBF1DcRfad+neGD/cpPRDKdVAS/9nt7dW+ehAWVzu4kwOKQImVGZJCrQDK5Ku
+	 +nL3kbap8HBJQU4gyrOb2p7sYQTnIwpC0PbaaWdaVQX6yzD/K0wdSjGZYPgtUO/OF5
+	 hFKTAK5J1NYf9lBnglBI7NU1+yyeA8u3+9J0j2QRj/vLC3OnVFm+YYSD1GWnd5apMW
+	 Jg9jUpLStmBmA==
+Date: Tue, 11 Aug 2026 17:17:48 -0700
+From: Kees Cook <kees@kernel.org>
+To: Karl Mehltretter <kmehltretter@gmail.com>
+Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2 2/3] slab: check for ZERO_SIZE_PTR by exact match
+Message-ID: <202608111716.0FA9DB17@keescook>
+References: <20260811141240.62519-1-kmehltretter@gmail.com>
+ <20260811141240.62519-3-kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260811141240.62519-3-kmehltretter@gmail.com>
 
-On Tue, 11 Aug 2026, Magnus Lindholm wrote:
+On Tue, Aug 11, 2026 at 04:12:39PM +0200, Karl Mehltretter wrote:
+> ZERO_OR_NULL_PTR() returns true for every value less than or equal to
+> ZERO_SIZE_PTR. With the sentinel raised to ARCH_KMALLOC_MINALIGN, up
+> to 128 on some architectures, the helper matches additional values
+> that are neither NULL nor the sentinel.
+> 
+> Compare explicitly against NULL and ZERO_SIZE_PTR. Store the argument
+> in an unsigned long temporary to support both pointer and integer
+> address arguments while evaluating it only once.
 
-> >  Also I think our coding style would rather see the asm written as:
-> >
-> >         __asm__ __volatile__("mov $29, %0" : "=r" (gptr));
-> 
-> Given Maciej's comment on the inline asm style, do you want to send a v2
-> of this patch, or are you happy for me to fold the
-> 
-> __asm__ volatile(...)
-> 
-> to
-> 
-> __asm__ __volatile__(...)
-> 
-> style change in when I apply it to the Alpha tree?
+Can we move ZERO_SIZE_PTR to cover the ERR_PTR range too? See this issue:
+https://github.com/KSPP/linux/issues/93
 
- FAOD it's also the space in `"=r" (gptr)'.
+> This also changes check_bogus_address() in hardened usercopy: nonzero
+> addresses below ZERO_SIZE_PTR no longer cause its null-address abort.
 
-  Maciej
+And then check_bogus_address would also catch ERR_PTR.
+
+-Kees
+
+-- 
+Kees Cook
