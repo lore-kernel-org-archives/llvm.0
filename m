@@ -1,119 +1,168 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4102EEE80
-	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 04:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DDA5397923
+	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 05:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786596191; cv=none; b=XMQduz6gvpdR7xK/BD9hDw7bmlerHVffmr6Ud7cswdY75jxAjiIyQdUumn8jezgarQalZvGM3rWZklnhActakny0biz1o4vEuEnCmGjzS7dWQyVB7ymBcuLiJkjwvg7DutOq8+JbhVUwIP6Kyah3wjSXzIz97jhZED1v1tyl7fM=
+	t=1786598225; cv=none; b=ZunSjLf2k3GmRGLvopjZ8X+2y/SU8eCcY1kndWRBOXWPacZtmSQrk3xVpnjRhRIFjIs4rHShWXQ96w3tilem+EQA+e9BYFXXItinEMhm/lv1Xmy4/VQJLP3eFifAasVKVW/9E9QaT2QF6Js7jMT79HUW3s3jwNl/LnQHHjeibzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786596191; c=relaxed/simple;
-	bh=ChGLA2JuHEq/2RUXOAMLIBohgll2r4M/Hvkmq7kfWIY=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=RS2qoTzZ9AluFGNxUO0cZAagm+BuxZYwW6bAuEqQnmhyHEnwhHVJK8sdqAZwE/TZzaajkSKD2AlysNUp6Pt4Y4QVY2hqeN+wlE3er3AuIYPh0dKO51yvi7Lf0avjJxaBzRA9MrJydlwfx/gVtIpVyHD0gAClWL5UUSVd2JUYP8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QWMSsQI7; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786598225; c=relaxed/simple;
+	bh=XWFZK/e/7CsX4iMIsxwBsCGV+o44AZdAJ4gnsWag03o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dNv81pf/LxA4aPLFiD55J6FKR17PpcWgBTocW1NXJgB9LSXHXMGr5em3xTzbR0Pre2VdQsq5mlVejdwqnvuK8HPKvQvFzEXQZeC0D45GOHbzc3HYXddean8Zxe9OGPRUNmD8M5rRGErkgW6hnRJulnVSO9raAl9KpVxdIYLDSjo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gGqHBHIi; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QWMSsQI7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786596189;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gGqHBHIi"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786598214;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding;
-	bh=pEd2UycXHcGJNSx9LFwGpoUd7sVu4slElgcty/1TkVc=;
-	b=QWMSsQI7O7i6fzMlcRhPnVmQrIkYRXNeAvZtGGP0qqjL0ICAOEMkyPDDSqxg0+I+c4TCq2
-	RLya4aSx7t2LJTquzC/qE//YEtMNNBWB3BzGncGEXRFJBXnAs/0rZp6UVGW9uJFmODjU80
-	/CbzSwxdIVhNVhk4Wod94Bx2W/QbrfI=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-121-digxgTluPI6S0H4oaDQSQg-1; Thu,
- 13 Aug 2026 00:43:07 -0400
-X-MC-Unique: digxgTluPI6S0H4oaDQSQg-1
-X-Mimecast-MFC-AGG-ID: digxgTluPI6S0H4oaDQSQg_1786596186
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2C1811956040
-	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 04:43:06 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 75A95180049F;
-	Thu, 13 Aug 2026 04:43:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc7,
- upstream-mainline, 3d6d8176)
-Date: Thu, 13 Aug 2026 04:43:05 -0000
-To: fs-test@redhat.com, llvm@lists.linux.dev
+	bh=EYcOFy8k9Qk2cCl/jWteAJqGPNJg4JpMyMzEqhTo0Is=;
+	b=gGqHBHIiKtMTOnIZQKKSlzGdfXL1nLGq1LypkigyAHxq6CRyoECql3nmpHnNLke/PIDUez
+	cZCnt3Zv2makSGMZowpH2FUZzPO3vr6pSPPGmyjr4Xn2ktZ7ckhObLyc2rt7pm1UD8rac+
+	E2mvjZy4vcGKUA+ub4h2kA7jz+RjtDE=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	memxor@gmail.com
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Taegu Ha <hataegu0826@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next v1] selftests/bpf: Fix insn count expectations in chained global subprogs test
+Date: Thu, 13 Aug 2026 13:16:29 +0800
+Message-ID: <20260813051635.121670-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
-Message-Id: <52389.126081300430700329@us-mta-121.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AeRt3RNCjX3s9HhIlqg9CFFyeEuT1hPxcks-U_e0s-Q_1786596186
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi, we tested your kernel and here are the results:
+The test asserts exact per-subprog insns_self/insns_total values and the
+aggregate processed count, but these depend on compiler codegen. The
+expected values match -mcpu=v3 output; under -mcpu=v4 clang emits a
+sign-extending load in global_good() instead of a load plus two shifts,
+so the subprog is verified in 3 insns instead of 5 and the test fails on
+the cpuv4 flavor.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+Rewrite the involved subprogs as naked functions with hand-written
+instruction sequences using only v1 instructions, so the verified insn
+counts no longer depend on cpu version or compiler codegen.
 
+Fixes: c2e6c7de8830 ("bpf: Show more useful info in stack depth stats")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ .../bpf/progs/verifier_global_subprogs.c      | 56 +++++++++++++++----
+ 1 file changed, 45 insertions(+), 11 deletions(-)
 
-Kernel information:
-    Commit message: Merge tag 'scsi-fixes' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/jejb/scsi
-
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2754783269
-
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-             aarch64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2754783269_aarch64_kernel_kcidb_tool_21861226_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2754783269_x86_64_kernel_kcidb_tool_21861222_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
-
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
-
-
-
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
-
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index 7b65eea97ebc..3352dc177ec1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -25,9 +25,22 @@ __noinline long global_bad(void)
+ 	return arr[unkn_idx]; /* BOOM */
+ }
+ 
+-__noinline long global_good(void)
++/* Insn counts asserted in chained_global_func_calls_success() depend on
++ * the exact instruction sequences of this function and its callers, so
++ * they are written in inline asm to be independent of compiler codegen.
++ */
++__naked __noinline long global_good(void)
+ {
+-	return arr[0];
++	/* return (long)arr[0]; 5 insns (ld_imm64 counts as one) */
++	asm volatile (
++		"r1 = %[arr] ll;"
++		"r0 = *(u32 *)(r1 + 0);"
++		"r0 <<= 32;"
++		"r0 s>>= 32;"
++		"exit;"
++		:
++		: __imm_addr(arr)
++		: __clobber_all);
+ }
+ 
+ __noinline long global_calls_bad(void)
+@@ -35,9 +48,13 @@ __noinline long global_calls_bad(void)
+ 	return global_good() + global_bad() /* does BOOM indirectly */;
+ }
+ 
+-__noinline long global_calls_good_only(void)
++__naked __noinline long global_calls_good_only(void)
+ {
+-	return global_good();
++	/* return global_good(); 2 insns */
++	asm volatile (
++		"call global_good;"
++		"exit;"
++		::: __clobber_all);
+ }
+ 
+ __noinline long global_dead(void)
+@@ -56,13 +73,30 @@ __msg("subprog 0 (chained_global_func_calls_success) main insns_self 7 insns_tot
+ __msg("subprog {{[0-9]+}} (global_calls_good_only) global insns_self 2 insns_total 2 stack")
+ __msg("subprog {{[0-9]+}} (global_good) global insns_self 5 insns_total 5 stack")
+ __msg("processed 14 insns")
+-int chained_global_func_calls_success(void)
+-{
+-	int sum = 0;
+-
+-	if (call_dead_subprog)
+-		sum += global_dead();
+-	return global_calls_good_only() + sum;
++__naked int chained_global_func_calls_success(void)
++{
++	/* int sum = 0;
++	 * if (call_dead_subprog)
++	 *	sum += global_dead();
++	 * return global_calls_good_only() + sum;
++	 *
++	 * call_dead_subprog is known false, so 7 insns are processed:
++	 * the branch to l0 is always taken and global_dead() is dead code.
++	 */
++	asm volatile (
++		"r6 = 0;"
++		"r1 = %[call_dead_subprog] ll;"
++		"r1 = *(u8 *)(r1 + 0);"
++		"if r1 == 0 goto l0_%=;"
++		"call global_dead;"
++		"r6 = r0;"
++	"l0_%=:"
++		"call global_calls_good_only;"
++		"r0 += r6;"
++		"exit;"
++		:
++		: __imm_addr(call_dead_subprog)
++		: __clobber_all);
+ }
+ 
+ SEC("?raw_tp")
+-- 
+2.43.0
 
