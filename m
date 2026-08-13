@@ -1,120 +1,89 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA72366DA5
-	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 11:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746513E3159
+	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 13:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786620947; cv=none; b=VRsj4ZN8lOsnTXkLGP761DtLq+lYMXZPPwDiCpvaPbsKnr6qrUYB/50bChV/x1tSUc5H3x6rOuLcxn8BTer1By6N6RJs6/shPQbryVe1MsR5pNoWgfahgYEmONgj6iNhNRzc9O8X+pkynj3BS22x288rfpjCLnsKD+aKg5yWN+A=
+	t=1786626963; cv=none; b=E0t32zKpD6tSCJybWAp2S/xC+qAlpY3iNl7h7n4C7dQ9vpMUlMrv8DkwxlWDuVAR+JfGg/fC0bRdVAbTDV/ycM23kzfOMxP+xUZkjT1N7J0xvG/4o4WofCam6mUizFFN20zhyZCbPXPjbE5tldpt9O2G/jvoobUvrDZ9QV7Tsnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786620947; c=relaxed/simple;
-	bh=5Tvx6RpoaacNlQMdAJr4JipUiAyB1qM7luaNfU2qjdI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dbo/gQM2w/efY1umdhuuXzFXV0Q424VupJ8u1mpkxRBlAiycYQmUq4argZv2R50pbx6TKhYboeL5w4dHKCwzIBCXc/oJv7Wm2fpaoZuA4Nn6oJXBnMFgLrgHk6ABlZN6KrKq62OrCXO6Ko4vEEzb0LjbJ7rHUNpTkSdhTwoUDyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1a63a56a970b11f1aa26b74ffac11d73-20260813
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:34152572-762d-4210-a9b3-dafca5525e8a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:13b49416b906cdcebb694eea30640219,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|136|865|898,TC:nil,Conte
-	nt:0|15|50,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC
-	:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 1a63a56a970b11f1aa26b74ffac11d73-20260813
-X-User: jiangfeng@kylinos.cn
-Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 193053877; Thu, 13 Aug 2026 19:35:36 +0800
-Message-ID: <8e9a0272-b503-4ac6-9af3-8e5683f6b8b5@kylinos.cn>
-Date: Thu, 13 Aug 2026 19:35:33 +0800
+	s=arc-20240116; t=1786626963; c=relaxed/simple;
+	bh=JuVUoKayiiL7qIdW39da2OcshqPAHX5dg6xMBzLZVqs=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=kgR45N8unlkOVK/CJ+P6sphhYgneZYKn2AM/PvG1m1pxiURr9oMZMduP6aYgBXysfFZ/5EKiq0yzc5ubFIbXXS7JJbrGZG6JeHFzWfXzlRW/TRFl53JsUaPkV98F2f2QRcX6jivMNy0omt1rGlopDr0xpQRTQSLSm55C8CTf644=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=gz59xaAc; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="gz59xaAc"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net CE883408EE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1786626955; bh=CJOUmOrM8iHXXIY7dV6uC8aAvdcDOoC5XB9mKJMan54=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=gz59xaAcRdVhw6JA+IdG6B1Lu1eFLylxKVmFbhY8bh12+/zIO/+/J7nFYCXWNYUWI
+	 dOOeQA+plFt5cSuCVQW+kR4Yk+JUlDV9xw4/jrRPpZ0C620V/sR5MnTKy7+t+jIaN/
+	 buZu01a03a0B7vV01EbqvmdoE2JA2kyWl2qjrQhc4WuUh/PEmHGrwIkLDG9Yepy7Ae
+	 C5csBRmGb3GU0OpWXdvP721Uo5xZU4v7D2E2m88DApUBMSwu8vQB/QMfR8AUv1iUYl
+	 udqrWewaJsnXGuJsmNum6qdSJ5kWrRzHXmu2M+aVHJ76bEnTXhro+fxmR/ylHZ7oa5
+	 RM5Vn8ZNxov4w==
+Received: from localhost (unknown [IPv6:2601:280:4600:814::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id CE883408EE;
+	Thu, 13 Aug 2026 13:15:54 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Manuel Ebner <manuelebnerli@mailbox.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng
+ <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy
+ Baron
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Andreas
+ Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein
+ <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, Onur
+ =?utf-8?Q?=C3=96zkan?=
+ <work@onurozkan.dev>, Nathan Chancellor <nathan@kernel.org>, Nick
+ Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: Manuel Ebner <manuelebnerli@mailbox.org>, workflows@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 5/5] Docs: software-requirements.rst replace optional
+ tag with footnotes
+In-Reply-To: <20260812122426.1636227-2-manuelebnerli@mailbox.org>
+References: <20260812120805.1631430-3-manuelebnerli@mailbox.org>
+ <20260812122426.1636227-2-manuelebnerli@mailbox.org>
+Date: Thu, 13 Aug 2026 07:15:54 -0600
+Message-ID: <87tsoyi2k5.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
- pulehui@huawei.com, puranjay@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, shuah@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, martin.lau@kernel.org, clm@meta.com
-References: <20260813-bpf-riscv-stack-args-v2-1-efea8f9b3fe1@kylinos.cn>
- <b9781ebbc70ad4c748f4c08d94bbe6994b4e0fde867a8bf252b5d0f08a985dee@mail.kernel.org>
-Content-Language: en-US
-From: Feng Jiang <jiangfeng@kylinos.cn>
-In-Reply-To: <b9781ebbc70ad4c748f4c08d94bbe6994b4e0fde867a8bf252b5d0f08a985dee@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 2026/8/13 16:25, bot+bpf-ci@kernel.org wrote:
->>     bpf, riscv: Add BPF stack arguments support for RV64 JIT
->>
->>     Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
->>     and kfuncs can receive more than 5 arguments via the stack
->>     (BPF_REG_PARAMS / r11).
->>
->>     For BPF-to-BPF calls the caller writes outgoing arguments at the
->>     bottom of its frame (SP-relative). The callee reads them with
->>     FP-relative loads. Its FP is set to the caller SP in the prologue,
->>     so the offsets match.
->>
->>     The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
->>     SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
->>     area into A5-A7 and copy any remaining arguments down so argument 9
->>     lands at SP+0.
->>
->>     A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
->>     live before a call, TCC is backed up on the stack, and A7 is unused
->>     by the JIT.
->>
->>     Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
->>     iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
->>     corrupts callee-saved registers.
->>
->>     Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
-> 
-> This looks like a bug fix for stack argument support. The commit message
-> describes how the sign-extension loop was limited to prevent corruption
-> of callee-saved registers S1-S5 when idx >= 5. This fixes an issue
-> introduced by commit 443574b03387 ("riscv, bpf: Fix kfunc parameters
-> incompatibility between bpf and riscv abi"), which added the
-> sign-extension loop without limiting it to MAX_BPF_FUNC_REG_ARGS.
-> 
-> Should this include:
-> 
->   Fixes: 443574b03387 ("riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi")
-> 
+Manuel Ebner <manuelebnerli@mailbox.org> writes:
 
-No Fixes: tag. When 443574b03387 added the loop, the verifier still
-unconditionally rejected kfuncs with more than 5 args, so fm->nr_args
-was always <= 5 and the loop never touched S1-S5. The corruption is
-only reachable once this series enables stack arguments, so bounding
-the loop is part of the feature, not a fix for a triggerable bug.
-
-> 
+> The optional tag isn't obvious nor defined. Therefore replace with footnotes
+> like the one of Sphinx.
+>
+> Signed-off-by: Manuel Ebner <manuelebnerli@mailbox.org>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/3167782391
--- 
-With Best Regards,
-Feng Jiang
+>  .../process/software-requirements.rst         | 22 ++++++++++++-------
+>  1 file changed, 14 insertions(+), 8 deletions(-)
 
+Explaining the optionals seems like a fine idea.  I'm a bit less
+convinced about the mess of footnotes.
+
+Especially since many of the entries that are *not* marked as optional
+really are.  You only need e2fsprogs if you're using ext4.  gdb only if
+you're wanting to run a debugger.  jfsutils seems truly optional, etc.
+Even GCC is optional if you're using Clang.
+
+I'm not sure what would be best...perhaps replace the --version field
+(which people can figure out) with an explanation of when each
+dependency would be needed?
+
+jon
