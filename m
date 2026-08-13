@@ -1,210 +1,103 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74AC73E171F
-	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 07:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D72536728F
+	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 07:53:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786605560; cv=none; b=SPhtCQcdrAotZlbg9TYrChnBOubBKQhQXtP3ZJxbCmw/7xdNopdahZ2tIdoVHH6TapYclSqsvJkTiLd5oqmcq4+0hp33zzVxBWJDEv1BiS+XPQrhN+Kj6bSXmExTQ3w1iEstg9yqu9nZRO5tKTfDgsoWyuX7SHM5pqLKHRdlB28=
+	t=1786607607; cv=none; b=MWriWk8NDkGDhMc+kqZkkCm/X+6G8tYK3r6aRQKHHYovP09uE7sZ0LiQ8agqTUcQhMAQPIQyslyXghJUR7cUACui6o9UfoJieuaj0ttjLvKkPhaEykouldcdULrQVRiXFFlWzIPOqH1nGsTW1YhAr0qgg7lmBAXyQ1n92/2gwHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786605560; c=relaxed/simple;
-	bh=KWz+L9i/5ad8zP6uJONMdmHEOgaQtA4jtYt5bvetSqA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dxXJJyy343+AZN1NePZvjFYnBSseA5aojvya1+3wXlrV3a78VyN96d4wiO+mHpcM+0GsJ8+8fGGkAJ8Dsg/GJ8EMOu+/pPxKtH1VwglskdYEebA+hZTwzold0aF9ZNZYGTJ3lVsQtIj6673e4SY/xxub2ZKTnM6Pu1IJAeiipdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 447f0eb296e711f1aa26b74ffac11d73-20260813
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:95322ea6-7878-4845-8c38-0209cc6e8cdb,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:59b30b4614b8c76a0be7e304c058fcd7,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|850|865|898,TC:nil,Content:0|1
-	5|50,EDM:-3,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI
-	:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 447f0eb296e711f1aa26b74ffac11d73-20260813
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1220298982; Thu, 13 Aug 2026 15:19:05 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Thu, 13 Aug 2026 07:18:43 +0000
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Enable stack argument tests
- for RV64
+	s=arc-20240116; t=1786607607; c=relaxed/simple;
+	bh=kSs42p5+JAB41qqa8oV9gI7CfpDfzHzHMtsTL8IgUI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=f1+oo3fpcvWXTNGxu3l4iF8GaIdqQbklMR/bjiW262dGo71/2oHen3aGS34nZj+RS+2ocrz739MdKYd5dgAYoyP6TS4SVSoQSYyJ3OWY79jVhn+a636nccD2lbLCMbW6On3HmCxA9xN2HNC258eLsZ6XtL/EHUjMqPKCd8c8RYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GmMGvhaC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GmMGvhaC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786607605;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Y6pxUhHWKW2XA72SzK1YWEsEcU5+kupBKwLLr8AET8E=;
+	b=GmMGvhaCwov5DWIs4dTMKIPSiD0Ql4Rx2RpmyoXYO+Zle1xWHnwdqd4jmVRYvXRaK7HL+V
+	6YFZImNBakkETy9GROdBVOnsPiT76TGVPox8rpLvvtnM1fZLtMHOIJ7a5+P1MJiKgHoZ4P
+	83hW6uXUDTmS0QNfsQ8+6TOTwO1XvAU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-9-QZAkCEzDNv2G84GlJwbu8g-1; Thu,
+ 13 Aug 2026 03:53:14 -0400
+X-MC-Unique: QZAkCEzDNv2G84GlJwbu8g-1
+X-Mimecast-MFC-AGG-ID: QZAkCEzDNv2G84GlJwbu8g_1786607592
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DD0861955BD0;
+	Thu, 13 Aug 2026 07:53:11 +0000 (UTC)
+Received: from thuth-p1g4.redhat.corp (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 92CD91977033;
+	Thu, 13 Aug 2026 07:53:06 +0000 (UTC)
+From: Thomas Huth <thuth@redhat.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Deepak Gupta <debug@rivosinc.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] kselftest/riscv: Replace __ASSEMBLY__ with __ASSEMBLER__
+Date: Thu, 13 Aug 2026 09:53:04 +0200
+Message-ID: <20260813075304.75988-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
-References: <20260813-bpf-riscv-stack-args-v2-0-efea8f9b3fe1@kylinos.cn>
-In-Reply-To: <20260813-bpf-riscv-stack-args-v2-0-efea8f9b3fe1@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+X-Mimecast-MFC-PROC-ID: nmVWXzgOlSwTN9hHYDPsQ3_R8M3ImgqeNKMHJuUTXEM_1786607592
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-Enable the stack argument selftests for RV64. The riscv guard is
-restricted to __riscv_xlen == 64 since stack arguments are only
-supported by the RV64 JIT.
+From: Thomas Huth <thuth@redhat.com>
 
-Keep the __BPF_FEATURE_STACK_ARGUMENT gate, defined by clang with
-BPF stack argument support [1].
+While the GCC and Clang compilers already define __ASSEMBLER__
+automatically when compiling assembly code, __ASSEMBLY__ is a
+macro that only gets defined by the Makefiles in the kernel.
+This can be very confusing when switching between userspace
+and kernelspace coding, or when dealing with uapi headers that
+rather should use __ASSEMBLER__ instead. So let's standardize now
+on the __ASSEMBLER__ macro that is provided by the compilers.
 
-[1] https://github.com/llvm/llvm-project/pull/189060
-
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+Signed-off-by: Thomas Huth <thuth@redhat.com>
 ---
- tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c      | 3 ++-
- tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c | 3 ++-
- tools/testing/selftests/bpf/progs/exceptions.c                    | 5 +++--
- tools/testing/selftests/bpf/progs/stack_arg.c                     | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg_kfunc.c               | 3 ++-
- tools/testing/selftests/bpf/progs/stack_arg_precision.c           | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_stack_arg.c            | 3 ++-
- tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c      | 3 ++-
- 8 files changed, 17 insertions(+), 9 deletions(-)
+ tools/testing/selftests/riscv/cfi/cfi_rv_test.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-index 8d38aafe66a2..ab12397a9b52 100644
---- a/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/btf__stack_arg_precision.c
-@@ -4,7 +4,8 @@
- #include <bpf/bpf_helpers.h>
- #include "../test_kmods/bpf_testmod_kfunc.h"
+diff --git a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+index 1c8043f2b778b..184df6903d01c 100644
+--- a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
++++ b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+@@ -56,7 +56,7 @@
  
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
+ #define CSR_SSP 0x011
  
- long subprog_call_mem_kfunc(long a, long b, long c, long d, long e, long size)
-diff --git a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-index 99bc115f8380..a980a3a399d3 100644
---- a/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/btf__verifier_stack_arg_order.c
-@@ -3,7 +3,8 @@
- #include <vmlinux.h>
- #include <bpf/bpf_helpers.h>
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- int subprog_bad_order_6args(int a, int b, int c, int d, int e, int f)
-diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-index c8d716fbd419..bae20f0f247e 100644
---- a/tools/testing/selftests/bpf/progs/exceptions.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions.c
-@@ -379,8 +379,9 @@ int exception_bad_assert_range_with(struct __sk_buff *ctx)
- 	return 1;
- }
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
--	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
-+	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- const volatile bool has_stack_arg = true;
- 
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg.c b/tools/testing/selftests/bpf/progs/stack_arg.c
-index 944e3bb603e7..3e9ed37c57bb 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg.c
-@@ -21,7 +21,8 @@ struct {
- 
- int timer_result;
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- const volatile bool has_stack_arg = true;
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-index 345f2da2e361..b6b1a8aa7f44 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_kfunc.c
-@@ -6,7 +6,8 @@
- #include "bpf_kfuncs.h"
- #include "../test_kmods/bpf_testmod_kfunc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- const volatile bool has_stack_arg = true;
-diff --git a/tools/testing/selftests/bpf/progs/stack_arg_precision.c b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-index bee2eeec021d..6eebafe7f2f8 100644
---- a/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-+++ b/tools/testing/selftests/bpf/progs/stack_arg_precision.c
-@@ -6,7 +6,8 @@
- #include "../test_kmods/bpf_testmod_kfunc.h"
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- /* Force kfunc extern BTF generation for inline asm call below.
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index 7e0ce5db28a0..e8cd296fe763 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -12,7 +12,8 @@ struct {
- 	__type(value, long long);
- } map_hash_8b SEC(".maps");
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- __noinline __used
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-index c9fe4857da3f..562e8319ffc2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg_order.c
-@@ -5,7 +5,8 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
--#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) && \
-+#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
-+	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
- 	defined(__BPF_FEATURE_STACK_ARGUMENT)
- 
- __noinline __used __naked
-
+-#ifdef __ASSEMBLY__
++#ifdef __ASSEMBLER__
+ #define __ASM_STR(x)    x
+ #else
+ #define __ASM_STR(x)    #x
 -- 
-2.53.0
+2.55.0
 
