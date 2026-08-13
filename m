@@ -1,103 +1,119 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D72536728F
-	for <llvm@lists.linux.dev>; Thu, 13 Aug 2026 07:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFEC375F69;
+	Thu, 13 Aug 2026 08:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786607607; cv=none; b=MWriWk8NDkGDhMc+kqZkkCm/X+6G8tYK3r6aRQKHHYovP09uE7sZ0LiQ8agqTUcQhMAQPIQyslyXghJUR7cUACui6o9UfoJieuaj0ttjLvKkPhaEykouldcdULrQVRiXFFlWzIPOqH1nGsTW1YhAr0qgg7lmBAXyQ1n92/2gwHU=
+	t=1786608715; cv=none; b=Gk9yx0HUjMjhdTsEeP5uX1lI5eaKbLh9M3hvABX2mYGYJ0pejpa7crMLem8UQfc5vd+kT+MASVvBbFz9L95S4MQnHtlNqpL4J4ehHHKjKsk21vw98HIOQzm7CuJQgizIez3HDsz9G1IzihHCcOnaNG+T4EKkZWpW9CLvcAlK9l4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786607607; c=relaxed/simple;
-	bh=kSs42p5+JAB41qqa8oV9gI7CfpDfzHzHMtsTL8IgUI8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:content-type; b=f1+oo3fpcvWXTNGxu3l4iF8GaIdqQbklMR/bjiW262dGo71/2oHen3aGS34nZj+RS+2ocrz739MdKYd5dgAYoyP6TS4SVSoQSYyJ3OWY79jVhn+a636nccD2lbLCMbW6On3HmCxA9xN2HNC258eLsZ6XtL/EHUjMqPKCd8c8RYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GmMGvhaC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786608715; c=relaxed/simple;
+	bh=qttu4fYmUDRy3FTNeF98wM3nW+uEUBnjwzf+ufmYzfc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uOrQU/JxpCQVCpXhBSUHRE6nZ7PETK5divD3qSrTZyti/LbxSDCxExpb58uSfzH1mn2ZsYZj90CQS0JwWZ6NTdoLaIIg+iwAPzIIQ7FQ7dMF4a9WrLnn2JA3u9/o5FDamg2sZvH81ZSS7+xAQKW1MAWb7b6DwefEakzrzvT3/dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kl1S1oS2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GmMGvhaC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786607605;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Y6pxUhHWKW2XA72SzK1YWEsEcU5+kupBKwLLr8AET8E=;
-	b=GmMGvhaCwov5DWIs4dTMKIPSiD0Ql4Rx2RpmyoXYO+Zle1xWHnwdqd4jmVRYvXRaK7HL+V
-	6YFZImNBakkETy9GROdBVOnsPiT76TGVPox8rpLvvtnM1fZLtMHOIJ7a5+P1MJiKgHoZ4P
-	83hW6uXUDTmS0QNfsQ8+6TOTwO1XvAU=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-9-QZAkCEzDNv2G84GlJwbu8g-1; Thu,
- 13 Aug 2026 03:53:14 -0400
-X-MC-Unique: QZAkCEzDNv2G84GlJwbu8g-1
-X-Mimecast-MFC-AGG-ID: QZAkCEzDNv2G84GlJwbu8g_1786607592
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DD0861955BD0;
-	Thu, 13 Aug 2026 07:53:11 +0000 (UTC)
-Received: from thuth-p1g4.redhat.corp (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 92CD91977033;
-	Thu, 13 Aug 2026 07:53:06 +0000 (UTC)
-From: Thomas Huth <thuth@redhat.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Nathan Chancellor <nathan@kernel.org>
-Cc: Deepak Gupta <debug@rivosinc.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH] kselftest/riscv: Replace __ASSEMBLY__ with __ASSEMBLER__
-Date: Thu, 13 Aug 2026 09:53:04 +0200
-Message-ID: <20260813075304.75988-1-thuth@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kl1S1oS2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03161F000E9;
+	Thu, 13 Aug 2026 08:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786608701;
+	bh=oi6YfmylgiaRy6lZ9IbknTEinfCK3Vqt0CBXZSOgL1o=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kl1S1oS26DfJC0qlVQi5CkPWT3JiLVwo5SRTC3qlChKX0AJZT2yiN70mfw6bIa4IQ
+	 LXkPo2d96kO7zbiPPiVMdT9SR5iENs/SQqaFEqn5KmDoWtU8rXJx8AFq4fKBojnKN2
+	 nQEd8QX0eDrJ9QYSa7GCjQhTvE2WMx6r40VIlLW8JaV8Mp/0u0YupODNX+wJOYBHVs
+	 d3HJR4A5QjssDhqAzkA17r0ayG9Da3zc4/zupPDoK/zxJOSlvDuhZuCJj4FItSAzZ2
+	 X5yUtOl5do5VeWiCrG8JdSUAzRDRNqR32g9cfLaXSakYypL2fLM3LacRP59by0s0xy
+	 saBAtFnYGp7Ng==
+Content-Type: multipart/mixed; boundary="===============9171113939442554113=="
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
-X-Mimecast-MFC-PROC-ID: nmVWXzgOlSwTN9hHYDPsQ3_R8M3ImgqeNKMHJuUTXEM_1786607592
-X-Mimecast-Originator: redhat.com
-Content-Transfer-Encoding: 8bit
-content-type: text/plain; charset="US-ASCII"; x-default=true
+Message-Id: <1dfa8001d720a33be0d34916414f80a04349057cd35e62ba71a8d0ef8528db69@mail.kernel.org>
+In-Reply-To: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
+References: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Enable stack argument tests for RV64
+From: bot+bpf-ci@kernel.org
+To: jiangfeng@kylinos.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,shuah@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,jiangfeng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 08:11:39 +0000 (UTC)
 
-From: Thomas Huth <thuth@redhat.com>
+--===============9171113939442554113==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-While the GCC and Clang compilers already define __ASSEMBLER__
-automatically when compiling assembly code, __ASSEMBLY__ is a
-macro that only gets defined by the Makefiles in the kernel.
-This can be very confusing when switching between userspace
-and kernelspace coding, or when dealing with uapi headers that
-rather should use __ASSEMBLER__ instead. So let's standardize now
-on the __ASSEMBLER__ macro that is provided by the compilers.
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
+> index c8d716fbd4191..bae20f0f247eb 100644
+> --- a/tools/testing/selftests/bpf/progs/exceptions.c
+> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
+> @@ -379,8 +379,9 @@ int exception_bad_assert_range_with(struct __sk_buff *ctx)
+>  	return 1;
+>  }
+>
+> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
+> -	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
+> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+> +	defined(__BPF_FEATURE_STACK_ARGUMENT)
+>
+>  const volatile bool has_stack_arg = true;
 
-Signed-off-by: Thomas Huth <thuth@redhat.com>
+Can the code following this guard actually run on RV64?
+
+The block enabled by this guard contains four bpf_throw()-based programs
+(exception_throw_stack_arg, exception_throw_after_stack_arg,
+exception_throw_subprog_stack_arg, exception_throw_subprog_after_stack_arg)
+plus the has_stack_arg flag. bpf_throw is only accepted by the verifier
+when the target JIT supports exceptions:
+
+kernel/bpf/verifier.c
+    if (!bpf_jit_supports_exceptions()) {
+
+RISC-V implements neither bpf_jit_supports_exceptions() nor
+arch_bpf_stack_walk() (only arch/x86, arm64, s390 and powerpc do), so both
+fall back to the __weak definitions in kernel/bpf/core.c:
+
+    bool __weak bpf_jit_supports_exceptions(void) { return false; }
+    void __weak arch_bpf_stack_walk(...) { }
+
+Consequently exceptions.bpf.o cannot be loaded at all on RV64 - the rest
+of exceptions.c is full of bpf_throw() outside this guard - and the test
+is already excluded from RV64 runs:
+
+tools/testing/selftests/bpf/DENYLIST.riscv64
+    # riscv64 deny list for BPF CI and local vmtest
+    exceptions                     # JIT does not support exceptions
+
+prog_tests/exceptions.c only consumes has_stack_arg after
+exceptions__load() succeeds:
+
+    ret = exceptions__load(skel);
+    if (!ASSERT_OK(ret, "exceptions__load"))
+            goto done;
+    ...
+    if (skel->rodata->has_stack_arg) {
+            RUN_SUCCESS(exception_throw_stack_arg, 56);
+
+so on RV64 the flag is never read. The hunk therefore changes nothing
+observable on riscv64 and cannot have been validated there, which
+conflicts with the commit subject 'Enable the stack argument selftests for
+RV64'. The other seven hunks are genuinely effective; only this one is
+not.
+
+Either drop the exceptions.c hunk from this patch (and add it when the
+RV64 JIT gains arch_bpf_stack_walk()/bpf_jit_supports_exceptions()), or
+state in the changelog that it is deliberately pre-enabled for a future
+RV64 exception implementation and remains untested for now.
+
+
 ---
- tools/testing/selftests/riscv/cfi/cfi_rv_test.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
-index 1c8043f2b778b..184df6903d01c 100644
---- a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
-+++ b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
-@@ -56,7 +56,7 @@
- 
- #define CSR_SSP 0x011
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #define __ASM_STR(x)    x
- #else
- #define __ASM_STR(x)    #x
--- 
-2.55.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31677823910
+--===============9171113939442554113==--
