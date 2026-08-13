@@ -1,196 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93749357D1E;
-	Thu, 13 Aug 2026 15:59:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9D0C26A1A4;
+	Thu, 13 Aug 2026 19:50:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786636762; cv=none; b=e4ab7va8G+UUgfKeHXmK4rij6A+MbKoDz2vBf8tDgjv+m4UK/cmrZNOBl30e95vJ+ppmZzJg9lI5JepiqJsmoeCGSu0joSR17CSaoXwg2tMf2ZO0Gy+GEXtCOKCe/H0SggEVfl0Uk2WzpPP+TycBnTfjyN8igOGSeYnfKfIiGLA=
+	t=1786650621; cv=none; b=K+THVlYhlPCNTDPQrPVKs8SSaD/24Lm7sUZriyP99BU7RuE7t7sGJbzvsCq8LV86lGHfbfRcAJOJnM0tO11Mt8eDPQLqjD+qZq1hV5N60N9i8CX2YHRYxkwTKNOj+UfH/vmrrCVZm6oCDHZN1aEglnmofHk9PUw/2imHXfPaBvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786636762; c=relaxed/simple;
-	bh=9gz5Z3SQ6MEtvM65fkX+GLxCnu2XpPlMA7Lw9VbuyGw=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=r/DrckzoLr2w+Br6y1pedfIYIqHwtMPP7dSWmmBuYDdmHFfhlH5VMUlFpyQ2akDZUe6cGdz1OWIzEjrTQCVAi+D5II+hwlCZeA+WpS9SyrOUh//EqJjNKYscX/xBD897O3vDohHmJJlUoz4oaRYfJ4X0LkWr6CykMsq4jmApP1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=loRIf+WM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786650621; c=relaxed/simple;
+	bh=KRZyTJ8mF5URIGRc8Ri7yfCL4VSPBiavk5S0ueHepl8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OWt3E0RawwPhCSnKcpU3sZRI0on2mOL+5wjZsoVJcNzkfaWzXnhb6ZH+49vOftSBu1YDts7y38pUF36tXcHrKS9OxzuX3IUNFaL89tKmERjCgXrSphZox4wUzVzhuvcxSefZAEcQHyXc7ARRTtDVgcQCm6hn2JbvVC6hcDkk9xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=Ido9lFMm; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="loRIf+WM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD41C1F000E9;
-	Thu, 13 Aug 2026 15:59:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786636761;
-	bh=fIfzvbF9lQOS0Q5Mk0PjItDgkSYXNspy5rDBjNN6W9k=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=loRIf+WM5aGb+iZmBh4a4ZGJh0XZzoZiI4pi2FvbRyZ6bABBtjcnpLF5ex387T6VW
-	 97SM3IAr2cfhNhGLc19jJpHk73j2lrfIvsLe1Rk7hdjOKNy7aAAPN4pDH2+5xfJrOv
-	 dAMQcjXpSKaezNIcQsDsLBqF2u39DnxgeD4HWzEMAH0QbWXk1vfpQmw33ToTZnaqd4
-	 /V+9nObkCtU/RwiMUYHnFh7nritvnSAgd7tDT0KU7jL9svqwYo2x88cZymvkNZhUEu
-	 9GQi08VlhucwLAu8sPkD/ZaYtujC0So/e0LK3hMoBxUlbD1FB9oXwCcTq4+z7y0Gpz
-	 yVcMtMsV4E+QQ==
-Date: Fri, 14 Aug 2026 00:59:16 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Hongyan Xia <hongyan.xia@transsion.com>
-Cc: Mark Rutland <mark.rutland@arm.com>, Will Deacon <will@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Jiazi
- Li <jiazi.li@transsion.com>, Pu Hu <hupu@transsion.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "llvm@lists.linux.dev"
- <llvm@lists.linux.dev>
-Subject: Re: [RFC PATCH v2 2/4] arm64/debug: Make the Kprobe functions
- noinstr
-Message-Id: <20260814005916.78060337f26a550bb792e1f7@kernel.org>
-In-Reply-To: <f9ec50138a7022b8d83bf3ce8e55534202e17e55.1786603168.git.hongyan.xia@transsion.com>
-References: <cover.1786603168.git.hongyan.xia@transsion.com>
-	<f9ec50138a7022b8d83bf3ce8e55534202e17e55.1786603168.git.hongyan.xia@transsion.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="Ido9lFMm"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=jbErwCXZpsAeSyNrGlJjSOg+/lKCvzA5UZLc9zYpicU=; b=Ido9lFMmWpkhuP8sQYbP06mPcA
+	aOp5ieHuyOAjkdm87YqwsJhZ9EfRldvuIdcAQqsNlMDjsDSUBnzNnQpdQOZS+5d/epLk3QHQybjWP
+	jNMlcwtGWtLbBaJkWRWbZPM3ky+ALiQiOAbmkgT+Yu0ofAW2EirNFUEo3BHSi+QtNgXf4r2wT6oul
+	hkGp7LMJXFA3wmLPrrwFMVyDxCTRZCeuF9ytdud5kjkDsib+T/57oyCZ+Eb4YcWS1RumV5VikeNDa
+	cpTu1Go5ZHq2XLm623DiHU9SwcIUnuVblW/xxjrLaHdQLEC6MvaFcCGIj80PKCrIBhYefEdtZJkVk
+	6slTJ2OQ==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wubRH-0001js-0d;
+	Thu, 13 Aug 2026 21:50:07 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wubRG-000LUW-1K;
+	Thu, 13 Aug 2026 21:50:05 +0200
+Message-ID: <04493cfc-98a6-418b-8d8a-8f85688aca1b@iogearbox.net>
+Date: Thu, 13 Aug 2026 21:50:05 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v1] selftests/bpf: Fix insn count expectations in
+ chained global subprogs test
+To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org,
+ memxor@gmail.com
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Mykyta Yatsenko <yatsenko@meta.com>, Taegu Ha <hataegu0826@gmail.com>,
+ Amery Hung <ameryhung@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260813051635.121670-1-jiayuan.chen@linux.dev>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260813051635.121670-1-jiayuan.chen@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28091/Thu Aug 13 08:25:54 2026)
 
-On Thu, 13 Aug 2026 06:49:42 +0000
-Hongyan Xia <hongyan.xia@transsion.com> wrote:
-
-> From: Hongyan Xia <hongyan.xia@transsion.com>
+On 8/13/26 7:16 AM, Jiayuan Chen wrote:
+> The test asserts exact per-subprog insns_self/insns_total values and the
+> aggregate processed count, but these depend on compiler codegen. The
+> expected values match -mcpu=v3 output; under -mcpu=v4 clang emits a
+> sign-extending load in global_good() instead of a load plus two shifts,
+> so the subprog is verified in 3 insns instead of 5 and the test fails on
+> the cpuv4 flavor.
 > 
-> The Kprobe debug exception path must be run with extra care. NOKPROBE
-> isn't sufficient, as other instrumentation like ftrace still opens a can
-> of worms that is very complex to deal with.
+> Rewrite the involved subprogs as naked functions with hand-written
+> instruction sequences using only v1 instructions, so the verified insn
+> counts no longer depend on cpu version or compiler codegen.
 > 
-> Mark the three main Kprobe entry points noinstr, as well as the debug
-> exception paths that lead to and exit from these entry points. Note that
-> noinstr attribute is stronger and can safely replace NOKPROBE and
-> __kprobe modifiers.
-> 
-> Also mark esr_brk_comment() __always_inline, as clang does not
-> reliably inline plain static inline functions into noinline (noinstr)
-> callers such as call_el1_break_hook().
-> 
+> Fixes: c2e6c7de8830 ("bpf: Show more useful info in stack depth stats")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+$subj should have been bpf-next to route to BPF CI.
+Anyway, it was fixed in the tree via:
 
-Looks good to me.
+   9786d424a36b ("selftests/bpf: Fix chained_global_func_calls_success() for cpu v4for-next")
 
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thank you,
-
-> Signed-off-by: Hongyan Xia <hongyan.xia@transsion.com>
-> ---
->  arch/arm64/include/asm/esr.h       | 2 +-
->  arch/arm64/include/asm/kprobes.h   | 9 +++------
->  arch/arm64/kernel/debug-monitors.c | 6 ++----
->  arch/arm64/kernel/probes/kprobes.c | 6 +++---
->  4 files changed, 9 insertions(+), 14 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/esr.h b/arch/arm64/include/asm/esr.h
-> index f816f5d77f1a..a75bfdb7e5fe 100644
-> --- a/arch/arm64/include/asm/esr.h
-> +++ b/arch/arm64/include/asm/esr.h
-> @@ -437,7 +437,7 @@
->  #ifndef __ASSEMBLER__
->  #include <asm/types.h>
->  
-> -static inline unsigned long esr_brk_comment(unsigned long esr)
-> +static __always_inline unsigned long esr_brk_comment(unsigned long esr)
->  {
->  	return esr & ESR_ELx_BRK64_ISS_COMMENT_MASK;
->  }
-> diff --git a/arch/arm64/include/asm/kprobes.h b/arch/arm64/include/asm/kprobes.h
-> index 35ce2c94040e..a694f7d34f45 100644
-> --- a/arch/arm64/include/asm/kprobes.h
-> +++ b/arch/arm64/include/asm/kprobes.h
-> @@ -48,11 +48,8 @@ void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
->  
->  #endif /* CONFIG_KPROBES */
->  
-> -int __kprobes kprobe_brk_handler(struct pt_regs *regs,
-> -				 unsigned long esr);
-> -int __kprobes kprobe_ss_brk_handler(struct pt_regs *regs,
-> -				 unsigned long esr);
-> -int __kprobes kretprobe_brk_handler(struct pt_regs *regs,
-> -				 unsigned long esr);
-> +int noinstr kprobe_brk_handler(struct pt_regs *regs, unsigned long esr);
-> +int noinstr kprobe_ss_brk_handler(struct pt_regs *regs, unsigned long esr);
-> +int noinstr kretprobe_brk_handler(struct pt_regs *regs, unsigned long esr);
->  
->  #endif /* _ARM_KPROBES_H */
-> diff --git a/arch/arm64/kernel/debug-monitors.c b/arch/arm64/kernel/debug-monitors.c
-> index 29307642f4c9..5cf4fb8ddf83 100644
-> --- a/arch/arm64/kernel/debug-monitors.c
-> +++ b/arch/arm64/kernel/debug-monitors.c
-> @@ -207,7 +207,7 @@ void do_el1_softstep(unsigned long esr, struct pt_regs *regs)
->  }
->  NOKPROBE_SYMBOL(do_el1_softstep);
->  
-> -static int call_el1_break_hook(struct pt_regs *regs, unsigned long esr)
-> +static int noinstr call_el1_break_hook(struct pt_regs *regs, unsigned long esr)
->  {
->  	if (esr_brk_comment(esr) == BUG_BRK_IMM)
->  		return bug_brk_handler(regs, esr);
-> @@ -245,7 +245,6 @@ static int call_el1_break_hook(struct pt_regs *regs, unsigned long esr)
->  
->  	return DBG_HOOK_ERROR;
->  }
-> -NOKPROBE_SYMBOL(call_el1_break_hook);
->  
->  /*
->   * We have already unmasked interrupts and enabled preemption
-> @@ -261,14 +260,13 @@ void do_el0_brk64(unsigned long esr, struct pt_regs *regs)
->  	send_user_sigtrap(TRAP_BRKPT);
->  }
->  
-> -void do_el1_brk64(unsigned long esr, struct pt_regs *regs)
-> +void noinstr do_el1_brk64(unsigned long esr, struct pt_regs *regs)
->  {
->  	if (call_el1_break_hook(regs, esr) == DBG_HOOK_HANDLED)
->  		return;
->  
->  	die("Oops - BRK", regs, esr);
->  }
-> -NOKPROBE_SYMBOL(do_el1_brk64);
->  
->  #ifdef CONFIG_COMPAT
->  void do_bkpt32(unsigned long esr, struct pt_regs *regs)
-> diff --git a/arch/arm64/kernel/probes/kprobes.c b/arch/arm64/kernel/probes/kprobes.c
-> index 4e0efad5caf2..0e66abf9958e 100644
-> --- a/arch/arm64/kernel/probes/kprobes.c
-> +++ b/arch/arm64/kernel/probes/kprobes.c
-> @@ -350,7 +350,7 @@ int __kprobes kprobe_fault_handler(struct pt_regs *regs, unsigned int fsr)
->  	return 0;
->  }
->  
-> -int __kprobes
-> +int noinstr
->  kprobe_brk_handler(struct pt_regs *regs, unsigned long esr)
->  {
->  	struct kprobe *p, *cur_kprobe;
-> @@ -394,7 +394,7 @@ kprobe_brk_handler(struct pt_regs *regs, unsigned long esr)
->  	return DBG_HOOK_HANDLED;
->  }
->  
-> -int __kprobes
-> +int noinstr
->  kprobe_ss_brk_handler(struct pt_regs *regs, unsigned long esr)
->  {
->  	struct kprobe_ctlblk *kcb = get_kprobe_ctlblk();
-> @@ -413,7 +413,7 @@ kprobe_ss_brk_handler(struct pt_regs *regs, unsigned long esr)
->  	return DBG_HOOK_ERROR;
->  }
->  
-> -int __kprobes
-> +int noinstr
->  kretprobe_brk_handler(struct pt_regs *regs, unsigned long esr)
->  {
->  	if (regs->pc != (unsigned long)__kretprobe_trampoline)
-> -- 
-> 2.47.3
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thanks,
+Daniel
