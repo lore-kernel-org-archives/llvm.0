@@ -1,113 +1,163 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF4B1A9B24
-	for <llvm@lists.linux.dev>; Fri, 14 Aug 2026 03:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A101F3B8A;
+	Fri, 14 Aug 2026 03:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786676531; cv=none; b=f/3INUWHmejuCGhHsOqq2nCuAmizSxTUmUWEnV6+CvqewncXYfzSaf16p3L4omVHTXBznkgBiuLRigRQBCB3kraxMCGVCFX2HU4OySorKNYZ6wnHXQXQp8GEZzcgu/hFfFhsjF0sU9JdlHMi0iJ6IkmqFQmYA7WBUYiPxyuxr2Q=
+	t=1786677185; cv=none; b=ed9jIJ3owEr13y7U6GBCPbCgMyQBm2GaCBqfTjUpUzzBZl1msGjqal/TDsAwnmr2+uw6EtwnhSlIkwpTHsEKHfl5Rx3tbFWy/O7xofYXeWQIR/uD8BGIrVJanYb97HZaBrb2reOSp+dU9nQHZKnkE7L/MwyZVeebU+sHyH9iwBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786676531; c=relaxed/simple;
-	bh=lZwju8L8HCzB/yipDg3+TzKahFs32O64k7GBxntp7Eo=;
-	h=From:Subject:Date:To:MIME-Version:Message-Id:Content-Type; b=CIH8rmF7EDVWXsuoroA1+pvVHf4s/AdSR+mT7DxDEMfqiAS4ozN+Frxdi4W3kxY5D57OYWqzOFrXFBVmqs+/ZQraLOvOnzUa/d2qJNXkFBqMClaDnq4knwcpIzuqr8T5uzDqOS0bvQwEGO1fo2HSHMtSmIdosDR27lo5WbOrtcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T/I/YChb; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786677185; c=relaxed/simple;
+	bh=d3ptSvmswCLpNbskdAJb2art6bCO2dkEZ4BpRXjgdEw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Jkb2liDw4yNQ9CV/PQov4WBFByNbVHINBui6ycFERh9xDcM1bp987h/pOnmoLr/s76gN6xN6ojluj+sG+JEFg7vV2Ss77QHnniXUtKyFwNOP3VWS6sYQakTPoQt9YDhHashK0MC7I7BAz3l6gB3pAKKEWSwx6UBgiHrmVgl52uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBJ0OJ9X; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T/I/YChb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786676529;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=2d+6ue7e1L9knHbJcLiDhwL0ESBiUaQhJB5yXRiqDvs=;
-	b=T/I/YChbi3mAckXy8VRcHcyqC5j0XG2SSizZcXvwOm+7O7ES07oGuXK26/IxHfmUBA0LKt
-	cg7ccUbguFXyFsKfa/1ifHhodXe25jrhX3klbMJPoZrg8kd3qRp2v+8FFKmZAkg1K/CTl4
-	pmp/22+YBNOItaNcqb2T2ALqjVSzSEI=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-530-xiN4MjxWPO6uY0qbNdX88w-1; Thu,
- 13 Aug 2026 23:02:07 -0400
-X-MC-Unique: xiN4MjxWPO6uY0qbNdX88w-1
-X-Mimecast-MFC-AGG-ID: xiN4MjxWPO6uY0qbNdX88w_1786676526
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 7E0D118001E3
-	for <llvm@lists.linux.dev>; Fri, 14 Aug 2026 03:02:06 +0000 (UTC)
-Received: from [172.20.35.218] (unknown [10.30.44.80])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id D99A0423;
-	Fri, 14 Aug 2026 03:02:05 +0000 (UTC)
-From: cki-project@redhat.com
-Subject: =?utf-8?b?4p2M?= FAIL: Test report for master (7.2.0-rc7,
- upstream-mainline, 3aa1dcaa)
-Date: Fri, 14 Aug 2026 03:02:05 -0000
-To: llvm@lists.linux.dev, fs-test@redhat.com
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBJ0OJ9X"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED131F000E9;
+	Fri, 14 Aug 2026 03:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786677183;
+	bh=BIOSwc1xpJnji8+UduFcZ8xM4GL3ivYKfnxeDdc6zK0=;
+	h=From:Date:Subject:To:Cc;
+	b=IBJ0OJ9XviiBIZaMSV64pzz+c5ElwbHPeAd6w2fXrJPwD1jsEhG47458+BdQX3oIq
+	 8Pny9ytVbch2A9ylb52CgE+xLo1T+Q7MRp08uFwb6zeyAPAvsRShkv4IPOnvZy5nek
+	 bmduvLXgUBjP/bAm81UJjoNUi/J4bSVui1n5WozItKHFYjYulpxxNqbFAacyEoqgl4
+	 APR+QDBLOptdfm9sowerPS5FTqPWL0OjQauDH5txBKsTF0D4v7dZXUbc8FO8wR9iYE
+	 Sc1zNedSYQJvcXM1L7xdiaW6+ZL83urzTz+xdeGd0NwSRqOs2RLxaLhPtD0l/dr0GI
+	 JZw96UPBjVYHw==
+From: Nathan Chancellor <nathan@kernel.org>
+Date: Thu, 13 Aug 2026 20:12:55 -0700
+Subject: [PATCH v2] arch_numa: Avoid false positive fortify warning in
+ setup_node_to_cpumask_map()
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
-Message-Id: <82627.126081323020700237@us-mta-530.us.mimecast.lan>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: Qh-kpBXKvtbrY_xhQizfCNH1abrOzJT63cu8BW2KnDE_1786676526
-X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260813-arch_numa-avoid-fortify-warning-v2-1-093ad97a78df@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42OWw6CMBBFt2L67RhaEMEv92GIqWUK46M1U6gSw
+ t4F3ICfJzm5544iIBMGcdyMgjFSIO9mUNuNMK12DQLVMwuVqDwppATNpr24/qlBR081WM8d2QH
+ emh25BvJc2+KQJWkmlZhXXoyWPmvhXP049Ncbmm6ZXYyWQud5WC9EuXj/16IECfvSYIp5UdpUn
+ +7IDh87z42opmn6AhVO8nThAAAA
+X-Change-ID: 20260811-arch_numa-avoid-fortify-warning-66af87403412
+To: Mike Rapoport <rppt@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4672; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=d3ptSvmswCLpNbskdAJb2art6bCO2dkEZ4BpRXjgdEw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFl17bsqJ8+qTY/P3haXNFlTdZuWioBElqTcleKu6w9bg
+ g8Vrm3vKGVhEONikBVTZKl+rHrc0HDOWcYbpybBzGFlAhnCwMUpABNxUGZkWLyC5au4cotgzeG6
+ 6sKKvH2vty1lLk+9fvCYRP7VBhHteYwMJ515tHqmOUyTcnnJtN1b5EnOO+dab8u3sbH2v9hyOmL
+ 4AQ==
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-Hi, we tested your kernel and here are the results:
+When building ARCH=riscv using clang with CONFIG_FORTIFY_SOURCE and
+CONFIG_UBSAN_BOUNDS enabled, CONFIG_NR_CPUS > 64, and the default value
+of 2 for CONFIG_NODES_SHIFT, there is a compiletime warning from the
+fortify routines.
 
-    Overall result: FAILED
-             Merge: OK
-           Compile: OK
-              Test: FAILED
+  In file included from mm/arch_numa.c:11:
+  In file included from include/linux/acpi.h:14:
+  In file included from include/linux/resource_ext.h:11:
+  In file included from include/linux/slab.h:17:
+  In file included from include/linux/gfp.h:7:
+  In file included from include/linux/mmzone.h:8:
+  In file included from include/linux/spinlock.h:60:
+  In file included from include/linux/interrupt_rc.h:17:
+  In file included from include/linux/smp.h:13:
+  In file included from include/linux/cpumask.h:11:
+  In file included from include/linux/bitmap.h:13:
+  In file included from include/linux/string.h:383:
+  include/linux/fortify-string.h:430:4: warning: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribue-warning]
+    430 |                         __write_overflow_field(p_size_field, size);
+        |                         ^
+  include/linux/fortify-string.h:430:4: note: called by function 'fortify_memset_chk(unsigned long, unsigned long, unsigned long)'
+  include/linux/bitmap.h:248:3: note: inlined by function 'setup_node_to_cpumask_map'
+    248 |                 memset(dst, 0, len);
+        |                 ^
+  include/linux/fortify-string.h:462:25: note: expanded from macro 'memset'
+    462 | #define memset(p, c, s) __fortify_memset_chk(p, c, s,                   \
+        |                         ^
+  include/linux/fortify-string.h:453:2: note: expanded from macro '__fortify_memset_chk'
+    453 |         fortify_memset_chk(__fortify_size, p_size, p_size_field),       \
+        |         ^
+  include/linux/fortify-string.h:430:4: note: use '-gline-directives-only' (implied by '-g1') or higher for more accurate inlining chain locations
+    430 |                         __write_overflow_field(p_size_field, size);
+        |                         ^
+  1 warning generated.
 
+In this configuration, MAX_NUMNODES is 4. clang unrolls the for loop in
+setup_node_to_cpumask_map() past this, which triggers the fortify check
+when accessing node_to_cpumask_map on the theoretical fifth loop
+iteration because it would be an out of bounds write.
 
-Kernel information:
-    Commit message: Revert "wifi: mt76: Disable napi when removing device"
+Make it clear to clang that nr_node_ids is bounded by MAX_NUMNODES due
+to the logic in setup_nr_node_ids() by early returning in
+setup_node_to_cpumask_map() should that condition be violated.
 
-You can find all the details about the test run at
-    https://datawarehouse.cki-project.org/kcidb/checkouts/redhat:2758318277
+Cc: stable@vger.kernel.org # all applicable
+Closes: https://github.com/ClangBuiltLinux/linux/issues/2174
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+This is based on mm-unstable due to the move of arch_numa.c from mm/ to
+drivers/base/ living there. I have CC'd stable because this warning
+appears in my testing back to at least 6.1 but I see no reason why it
+should not apply to all trees. No fixes tag since this is a layered
+problem that just happens to appear under certain conditions.
 
-One or more kernel tests failed:
-    Unrecognized or new issues:
-        xfstests - btrfs
-              x86_64
-                   Logs: https://datawarehouse.cki-project.org/kcidb/tests/=
-redhat:2758318277_x86_64_kernel_kcidb_tool_21869770_9
-                   Non-passing ran subtests:
-                       =E2=9D=8C FAIL generic/301
+Another alternative would be using the __assume macro to say something
+like
 
-    We also see the following known issues which are not related to your ch=
-anges:
-        Issue: avc:  denied  { name_bind } for  pid=3D897864 comm=3D"rpcbin=
-d" src=3D63924 scontext=3Dsystem_u:system_r:rpcbind_t:s0 tcontext=3Dsystem_=
-u:object_r:unreserved_port_t:s0 tclass=3Dudp_socket permissive=3D1
-            URL: https://bugzilla.redhat.com/show_bug.cgi?id=3D1758147
-            Affected tests:
-                xfstests - nfsv4.2 [x86_64]
+  __assume(nr_node_ids <= MAX_NUMNODES);
 
+but that seems a little more fragile than an outright check.
+---
+Changes in v2:
+- Add missing newline to print message (Andrew + sashiko)
+- Print MAX_NUMNODES using '%u' specifier to match nr_node_ids
+- Link to v1: https://patch.msgid.link/20260811-arch_numa-avoid-fortify-warning-v1-1-59ce3e689f3a@kernel.org
+---
+ mm/arch_numa.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
+diff --git a/mm/arch_numa.c b/mm/arch_numa.c
+index 442ea239bba7..459fa60a5621 100644
+--- a/mm/arch_numa.c
++++ b/mm/arch_numa.c
+@@ -105,6 +105,18 @@ static void __init setup_node_to_cpumask_map(void)
+ 	if (nr_node_ids == MAX_NUMNODES)
+ 		setup_nr_node_ids();
+ 
++	/*
++	 * This check should never be true but it makes it clear to compilers
++	 * that node_to_cpumask_map is bound by nr_node_ids, avoiding false
++	 * positive fortify warnings when accessing node_to_cpumask_map in the
++	 * for loop below.
++	 */
++	if (unlikely(nr_node_ids > MAX_NUMNODES)) {
++		pr_err("nr_node_ids (%u) is larger than MAX_NUMNODES (%u)\n",
++		       nr_node_ids, MAX_NUMNODES);
++		return;
++	}
++
+ 	/* allocate and clear the mapping */
+ 	for (node = 0; node < nr_node_ids; node++) {
+ 		alloc_bootmem_cpumask_var(&node_to_cpumask_map[node]);
 
-If you find a failure unrelated to your changes, please ask the test mainta=
-iner to review it.
-This will prevent the failures from being incorrectly reported in the futur=
-e.
+---
+base-commit: 47870fb9b0e3bd20b45e3a069b4c766f3dcb721a
+change-id: 20260811-arch_numa-avoid-fortify-warning-66af87403412
 
-Please reply to this email if you have any questions about the tests that w=
-e
-ran or if you have any suggestions on how to make future tests more effecti=
-ve.
-
-        ,-.   ,-.
-       ( C ) ( K )  Continuous
-        `-',-.`-'   Kernel
-          ( I )     Integration
-           `-'
-___________________________________________________________________________=
-___
+Best regards,
+--  
+Cheers,
+Nathan
 
