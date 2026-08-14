@@ -1,375 +1,299 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1675A490BE3;
-	Fri, 14 Aug 2026 17:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC1641C84DC;
+	Fri, 14 Aug 2026 18:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786728074; cv=none; b=bX87uBwNsadNmZ0bp5F06jW5QnIKokHrbUb08JEHqE9gXWxM+VQ+sh790CmfGoxiZDVATq8W8R49dNYocO3XMKoU7wvvBvHO+cEcc8HL7sX6CRGvM4/Q2jBtszwvsZRsEoHKbuXczSuFNgRoDEiUlmbDEqIBHpnL+1rbO9SmtmE=
+	t=1786731224; cv=none; b=qQmqPaOju32pOYhYJp8XPRyNI7e5MoW0jfSC5uJ+S+a8fU+Q1LflliUoG3gNThEFr8WhmcNgE/UgEqB/QXsvA5Oa7Ess3fwKBiafIfRf8Y94ZkM0jYDCRByM3WkoTTpIlVJZSuGoFMVUGThToaOtSNj793CZAwzDKoD2AT58/OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786728074; c=relaxed/simple;
-	bh=vMpgoOz+p2ujp7Er4C/MiQeSNTJxo4gZojuIIbKJndk=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sviiRB95cqlPD3n7BP4sniXuMQn1LIyYmNeBorvOKRA3usDEeTLusBkW+xBzD7QHMon0wdqaCeU01x7kGYp9aflvgHnTIFhKf4LMDH30a3QGz8EUb5zUqrs2cP3/j1wWmaLyjDnK6PJ6zocIrAB7wbmhRCtHU1QycFSt7cGmZM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtgY7SnU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786731224; c=relaxed/simple;
+	bh=pIwnLyo2G3spr5zMLaAOws/ieU6g02A2pDx6m/vca7I=;
+	h=Date:From:Cc:Subject:Message-ID; b=BL7qH8kopA80OYCI+eC6eAFJv8MvfKtO9KvWKpizwTPQIudM5KS/KQIoFX/ggErk06S2DyQcStyyIlhUAptVT4vNUJv57dp6kl4IuU+bComhmkq8LHOPUyqzoQ9+9j36lcYpCl3MB6Ua8v98rNHm/SAFjqA5okIwfCG6o5f3c4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DX3B68AV; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtgY7SnU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 756A61F00A3A;
-	Fri, 14 Aug 2026 17:21:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786728073;
-	bh=BRL/PSO1BC0vvlDljyLXfI9OVmFFb4IneOZPFgBEPj8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=gtgY7SnUZh0xl3EBMF0kIXyX21CWe9oYi8qA4wg9vGLe21bsaqy7Dy98bmfH4z/TF
-	 G2S0FzURzQsIovd6I5gLbqZbHuw9V3P8+6og2bofp5MTNeJz6k1Sp+vGTL9SX4e/OJ
-	 wrx8J00UBCamLm+toy8zCmMG0OMWZrBB9+o+NgdAtGndUqxXY6Q7wjwob9n5kxf7AK
-	 3IEdsN3PDJlfGHXQEk7M/qFDaRwW9KHEn2A8/CN59GNaHRb3VarIzswPmDvqEZ0A6r
-	 4qLoSAYiGF8TJXaQzNjrEov+EUlZALlqOCZ5yIkCGRn5+W6O5SKe58KL7eZ69eNqs6
-	 wvZ4f7KlVgsIg==
-Content-Type: multipart/mixed; boundary="===============7566751797017694167=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DX3B68AV"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786731222; x=1818267222;
+  h=date:from:cc:subject:message-id;
+  bh=pIwnLyo2G3spr5zMLaAOws/ieU6g02A2pDx6m/vca7I=;
+  b=DX3B68AVquOX+4efUx2fNmZSoqv6qeVBDnkpM+2q2JPMDBYkgt8eKsFy
+   kGEASgE90JRJBVUTgRkLmJQvVmXXYp30IEMC+xi/JhJnLisnk5rAyfJJ0
+   3uxj5TKk2IaDuIL3LDYEqtHJjn1vRuPZhrBVemx/59Ack5Gd/fGK3uW+G
+   Ie4pEf5UjtvVOkINEcpzDzKRlBp7sf/UG2iNp3X68HvufKq5+DA8eoFp3
+   2BJTWc4B7e8rsFYfp/pHeT+HoQXsCPO6Lz4dns3KFstlvmZEXDk8VlOyc
+   UMJzPZaPBcHSYCtdfp/78vHQ0IiD8WWYfnbEkGEdGrT0EO2/WQLJJZ5Xf
+   w==;
+X-CSE-ConnectionGUID: ymJB47bSTRO2SppBFCrXsQ==
+X-CSE-MsgGUID: 5+8X48quRX+b0z7vg1Xdow==
+X-IronPort-AV: E=McAfee;i="6800,10657,11875"; a="91125570"
+X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
+   d="scan'208";a="91125570"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2026 11:13:37 -0700
+X-CSE-ConnectionGUID: mRVg55j1T1KO0pWSNA1dPA==
+X-CSE-MsgGUID: f8PFjkJrTl6BzDf2z8sLQw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
+   d="scan'208";a="264904710"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 14 Aug 2026 11:13:34 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wuwPL-00000000ZnK-3he4;
+	Fri, 14 Aug 2026 18:13:31 +0000
+Date: Sat, 15 Aug 2026 02:13:22 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
+Subject: [android-common:android16-6.12-kminext 0/1] Unable to
+ generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17:
+ error: field has incomplete type 'struct rq_list'
+Message-ID: <202608150247.lbHOeCjE-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Message-Id: <cb7504a8500fe771ca5abeb9eeedb194e4cf5d4859a031caa27e2ddeeba6964c@mail.kernel.org>
-In-Reply-To: <20260814075054.507089-3-ziyang.meme@gmail.com>
-References: <20260814075054.507089-3-ziyang.meme@gmail.com>
-Subject: Re: [PATCH v3 2/4] selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
-From: bot+bpf-ci@kernel.org
-To: ziyang.meme@gmail.com,shuah@kernel.org,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,jikos@kernel.org,bentiss@kernel.org,void@manifault.com,eddyz87@gmail.com
-Cc: vmalik@redhat.com,arighi@nvidia.com,changwoo@igalia.com,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,inwardvessel@gmail.com,mykolal@meta.com,nathan@kernel.org,ziyang.meme@gmail.com,kernel-team@meta.com,linux-kselftest@vger.kernel.org,cgroups@vger.kernel.org,linux-input@vger.kernel.org,sched-ext@lists.linux.dev,linux-mm@kvack.org,bpf@vger.kernel.org,llvm@lists.linux.dev,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 14 Aug 2026 17:21:11 +0000 (UTC)
 
---===============7566751797017694167==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+TO: cros-kernel-buildreports@googlegroups.com
 
-> diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selftests/cgroup/config
-> index 39f979690dd3..356b6a533d88 100644
-> --- a/tools/testing/selftests/cgroup/config
-> +++ b/tools/testing/selftests/cgroup/config
-> @@ -4,3 +4,8 @@ CONFIG_CGROUP_FREEZER=y
->  CONFIG_CGROUP_SCHED=y
->  CONFIG_MEMCG=y
->  CONFIG_PAGE_COUNTER=y
-> +CONFIG_BPF=y
-> +CONFIG_BPF_SYSCALL=y
-> +CONFIG_DEBUG_INFO=y
-> +CONFIG_DEBUG_INFO_BTF=y
-> +CONFIG_DEBUG_INFO_DWARF4=y
+Hi Christoph,
 
-A subsystem pattern flags this as potentially concerning: CONFIG_BPF_EVENTS=y
-is missing. The new program is SEC("iter.s/cgroup"), which is
-BPF_PROG_TYPE_TRACING, and that program type is only registered inside
-'#ifdef CONFIG_BPF_EVENTS' in include/linux/bpf_types.h:38. Without it
-find_prog_type() returns -EINVAL and the skeleton load fails at runtime
-even though the build succeeded.
+FYI, the error/warning still remains.
 
-CONFIG_BPF_EVENTS is 'default y' but has 'depends on (KPROBE_EVENTS ||
-UPROBE_EVENTS) && PERF_EVENTS' (kernel/trace/Kconfig:853), so a kselftest
-kernel configured only from the merged fragments can easily end up without
-it. tools/testing/selftests/bpf/config:5 sets CONFIG_BPF_EVENTS=y
-explicitly for exactly this reason.
+tree:   https://android.googlesource.com/kernel/common android16-6.12-kminext
+head:   56f164d7f06bd11dfa205c568ed165eff6a03fe4
+commit: 24f685a927c5a41df01d66069493bee40a5fb60e [0/1] UPSTREAM: block: add a rq_list type
+config: x86_64-randconfig-005-20260815 (https://download.01.org/0day-ci/archive/20260815/202608150247.lbHOeCjE-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260815/202608150247.lbHOeCjE-lkp@intel.com/reproduce)
 
-Note also that CONFIG_DEBUG_INFO is not promptable (it is selected by the
-DEBUG_INFO_* choice), so that line is a no-op.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608150247.lbHOeCjE-lkp@intel.com/
 
-> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-> index e01584c2189a..01927511c059 100644
-> --- a/tools/testing/selftests/cgroup/Makefile
-> +++ b/tools/testing/selftests/cgroup/Makefile
+All errors (new ones prefixed by >>):
 
-[ ... ]
+   |                              ~~^
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   1699 |         struct rq_list req_list;
+   |                ^
+   In file included from rust/helpers/helpers.c:11:
+   In file included from rust/helpers/blk.c:3:
+   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
+   271 |                 rl->head = rl->head->rq_next;
+   |                 ~~^
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   1699 |         struct rq_list req_list;
+   |                ^
+   In file included from rust/helpers/helpers.c:11:
+   In file included from rust/helpers/blk.c:3:
+   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
+   271 |                 rl->head = rl->head->rq_next;
+   |                            ~~^
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   1699 |         struct rq_list req_list;
+   |                ^
+   In file included from rust/helpers/helpers.c:11:
+   In file included from rust/helpers/blk.c:3:
+   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
+   272 |                 if (!rl->head)
+   |                      ~~^
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   1699 |         struct rq_list req_list;
+   |                ^
+   In file included from rust/helpers/helpers.c:11:
+   In file included from rust/helpers/blk.c:3:
+   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
+   273 |                         rl->tail = NULL;
+   |                         ~~^
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   1699 |         struct rq_list req_list;
+   |                ^
+   In file included from rust/helpers/helpers.c:11:
+   In file included from rust/helpers/blk.c:3:
+   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
+   282 |         return rl->head;
+   |                ~~^
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   1699 |         struct rq_list req_list;
+   |                ^
+   In file included from rust/helpers/helpers.c:21:
+   In file included from rust/helpers/mman.c:3:
+   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
+   159 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
+   |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
+   137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+   |                     ^ ~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:160:9: warning: division by zero is undefined [-Wdivision-by-zero]
+   160 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
+   |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
+   137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
+   |                     ^ ~~~~~~~~~~~~~~~~~
+   3 warnings and 18 errors generated.
+   make[3]: *** [rust/Makefile:431: rust/helpers/helpers.o] Error 1 shuffle=1338912689
+   include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+>> Unable to generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
+   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
+   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
+--
+   make[3]: *** [rust/Makefile:332: rust/bindings/bindings_helpers_generated.rs] Error 1 shuffle=1338912689
+   make[3]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
+   include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
+   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
+   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
+>> Unable to generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
+   include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
+   include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
+   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
 
-> @@ -33,3 +75,13 @@ $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
->  $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
->  $(OUTPUT)/test_pids: $(LIBCGROUP_O)
->  $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
-> +
-> +ifneq ($(HAVE_BPF),)
-> +# Links cgroup_util and the skeleton against the libbpf lib.bpf.mk built.  The
-> +# uapi include is private to this binary: the other tests here must keep
-> +# resolving <linux/*.h> against the system headers.
-> +$(OUTPUT)/test_memcg_stat_cross_cpu: private CFLAGS += -I$(top_srcdir)/tools/include/uapi
-> +$(OUTPUT)/test_memcg_stat_cross_cpu: test_memcg_stat_cross_cpu.c \
-> +					$(BPF_SKELS) $(LIBCGROUP_O) $(BPFOBJ)
-> +	$(call bpf_link,$@,$< $(LIBCGROUP_O))
-> +endif
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for SND_PCM_IEC958
+   Depends on [n]: SOUND [=m] && SND [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_SOC_CONFIGS [=y]
+   WARNING: unmet direct dependencies detected for SND_COMPRESS_ACCEL
+   Depends on [n]: SOUND [=m] && SND [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_CONFIGS [=y]
+   WARNING: unmet direct dependencies detected for SND_JACK
+   Depends on [n]: SOUND [=m] && SND [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_CONFIGS [=y]
+   WARNING: unmet direct dependencies detected for SND_VMASTER
+   Depends on [n]: SOUND [=m] && SND [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_CONFIGS [=y]
+   WARNING: unmet direct dependencies detected for CAN_RX_OFFLOAD
+   Depends on [n]: NETDEVICES [=y] && CAN_DEV [=n] && CAN_NETLINK [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_MCP251XFD_CONFIGS [=y]
+   WARNING: unmet direct dependencies detected for SND_JACK_INPUT_DEV
+   Depends on [n]: SOUND [=m] && SND [=n] && SND_JACK [=y]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_CONFIGS [=y]
+   WARNING: unmet direct dependencies detected for SND_INTEL_NHLT
+   Depends on [n]: SOUND [=m] && SND [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_CONFIGS [=y] && ACPI [=y]
+   WARNING: unmet direct dependencies detected for SND_PCM_ELD
+   Depends on [n]: SOUND [=m] && SND [=n]
+   Selected by [y]:
+   - GKI_HIDDEN_SND_CONFIGS [=y]
 
-A subsystem pattern flags this as potentially concerning:
-memcg_stat_cross_cpu.h is not listed as a prerequisite of the userspace
-binary, and BPF_EXTRA_HDRS (documented by the new
-tools/testing/selftests/lib.bpf.mk as 'more headers needed by the BPF
-objects') is left unset, so the BPF object does not depend on it either.
-
-That header defines struct memcg_stat_snapshot, which is the wire format
-shared between the BPF program and the test binary. Editing it therefore
-rebuilds neither side, and an incremental build can silently produce a
-binary whose struct layout disagrees with the loaded skeleton.
-
-The sibling conversion commit ef5ceab9d440 (selftests/hid) does set
-BPF_EXTRA_HDRS for its shared header, so the mechanism was available.
-LOCAL_HDRS would cover the C side.
-
-> diff --git a/tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c b/tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-> new file mode 100644
-> index 000000000000..3c2acd49c16b
-> --- /dev/null
-> +++ b/tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-
-[ ... ]
-
-> +/*
-> + * Flush once at the subtree root, then read each cgroup through the kfuncs.
-> + * iter.s because the flush kfunc may sleep.
-> + */
-> +SEC("iter.s/cgroup")
-> +int cgroup_memcg_stat_cross_cpu(struct bpf_iter__cgroup *ctx)
-> +{
-> +	struct cgroup *cgrp = ctx->cgroup;
-> +	struct memcg_stat_snapshot snap = {};
-> +	struct cgroup_subsys_state *css;
-> +	struct mem_cgroup *memcg;
-> +	int idx_anon, idx_file, idx_shmem, idx_fmapped, idx_pgfault;
-> +	__u64 cg_id;
-> +
-> +	/* The walk ends with a NULL element; return 0 so it runs to the end. */
-> +	if (!cgrp)
-> +		return 0;
-
-A subsystem pattern flags this as potentially concerning: the comment
-misstates the mechanism and will mislead the next reader. The NULL element
-is the epilogue: cgroup_iter_seq_stop() invokes
-__cgroup_iter_seq_show(seq, NULL, true) only after cgroup_unlock() and
-only once the walk has already finished, and it sets p->visited_all = true
-immediately afterwards.
-
-__cgroup_iter_seq_show() converts a non-zero return into p->terminate =
-true, but nothing reads p->terminate after that point, so returning 0
-rather than non-zero for the NULL element has no effect on how far the
-walk gets. The pre-existing comparable program
-tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c returns 1 for the
-NULL element. The code is functionally correct; only the stated rationale
-is wrong.
-
-> diff --git a/tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c b/tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-> new file mode 100644
-> index 000000000000..9946c41c7a90
-> --- /dev/null
-> +++ b/tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-
-[ ... ]
-
-> +static size_t leaf_charge(size_t want, int k)
-> +{
-> +	long online = sysconf(_SC_NPROCESSORS_ONLN);
-> +	size_t floor;
-> +
-> +	floor = (size_t)FLUSH_MARGIN * MEMCG_CHARGE_BATCH * online *
-> +		page_size / n_leaves;
-> +	if (want < floor)
-> +		want = floor;
-> +	if (want < (size_t)k * page_size)
-> +		want = (size_t)k * page_size;
-> +
-> +	return (want + page_size - 1) / page_size * page_size;
-> +}
-
-Does this handle the sysconf(_SC_NPROCESSORS_ONLN) failure case correctly?
-The return value is not checked, and the expression it feeds is unsigned.
-Because of the leading (size_t) cast, online is converted to size_t, so a
--1 return makes floor ~= (2^64 - 1048576)/n_leaves instead of a small byte
-count.
-
-want is then clamped up to that value and returned, and start_chargers()
-passes it to charge_leaf(), where malloc(ca->bytes) fails, the charger
-exits, and the test reports the misleading "%s never reached its charge"
-failure. The same file already guards the analogous call: main() does
-'page_size = sysconf(_SC_PAGESIZE); if (page_size <= 0) page_size =
-BUF_SIZE;' (lines 947-949), and this is the only unchecked sysconf() in
-the whole cgroup selftest directory.
-
-> +static int start_chargers(int k, size_t bytes)
-> +{
-> +	struct charge_args ca = { .bytes = bytes, .k = k };
-> +	long prev, cur;
-> +	int i, retries;
-> +
-> +	for (i = 0; i < n_nodes; i++) {
-> +		if (!nodes[i].is_leaf)
-> +			continue;
-> +		if (cg_run_nowait(nodes[i].path, charge_leaf, &ca) < 0) {
-> +			ksft_print_msg("cannot start a charger on %s\n",
-> +				       nodes[i].path);
-> +			return -1;
-> +		}
-> +		ca.base += k;
-> +	}
-
-Can the per-leaf charge sizing in leaf_charge() cause memory pressure? The
-per-leaf charge is raised to at least k * page_size, and run_case() sets k
-= n_cpu for the 'cross_cpu' cases, so the total anon the test pins is
-n_leaves * n_cpu * page_size with no ceiling. For the two large-tree cases
-(fanout 10, depth 3) n_leaves is 1000, which is 1000 * n_cpu * 4K: 256 MB
-on a 64-CPU host, 1 GB at 256 CPUs, 4 GB at 1024 CPUs, held simultaneously
-by 1000 live processes.
-
-The file's own header comment states the requirement this violates: "The
-comparison is exact, which needs the subtree quiesced ... Global reclaim
-would move the numbers and the test would report a mismatch", and
-check_tree() runs with STAT_TOLERANCE_PCT 0, so any reclaim during the run
-turns into a hard KSFT_FAIL rather than a skip. Nothing in the test
-compares the computed footprint against MemAvailable or caps it.
-
-The same sizing also feeds the charge-completion deadline in
-start_chargers(): CHARGE_WAIT_RETRIES (100) * DEFAULT_WAIT_INTERVAL_US/10
-(10 ms) gives each leaf only ~1 s to both reach bytes and read the same
-memory.current twice in a row, while up to 1000 chargers are concurrently
-performing k sched_setaffinity() migrations each.
-
-> +	for (i = 0; i < n_nodes; i++) {
-> +		if (!nodes[i].is_leaf)
-> +			continue;
-> +		/*
-> +		 * Wait for the charge to both cover the region and stop
-> +		 * moving.
-> +		 */
-> +		prev = -1;
-> +		for (retries = CHARGE_WAIT_RETRIES; retries; retries--) {
-> +			cur = cg_read_long(nodes[i].path, "memory.current");
-> +			if (cur >= (long)bytes && cur == prev)
-> +				break;
-> +			prev = cur;
-> +			usleep(DEFAULT_WAIT_INTERVAL_US / 10);
-> +		}
-> +		if (!retries) {
-> +			ksft_print_msg("%s never reached its charge\n",
-> +				       nodes[i].path);
-> +			return -1;
-> +		}
-> +	}
-> +	return 0;
-> +}
-
-A subsystem pattern flags this as potentially concerning: start_chargers()
-open-codes a retry/poll loop over a cgroup control file instead of using
-(or extending) the cgroup selftest library's polling helpers.
-
-lib/include/cgroup_util.h already exports cg_read_key_long_poll(cgroup,
-control, key, expected, retries, wait_interval_us),
-cg_wait_for()/cg_prepare_for_wait() and cg_wait_for_proc_count(), and this
-loop also silently treats cg_read_long()'s -1 error return as "not charged
-yet" and burns a retry on it, which the shared helper does not do (it
-returns the error).
-
-The existing helper is not a drop-in substitute: cg_read_key_long_poll()
-polls a memory.stat key for exact equality against expected and returns on
-the first read error, whereas this loop needs 'memory.current >= bytes AND
-unchanged across two reads' on a different file. So the semantics genuinely
-differ and a bespoke loop is defensible; the guide's underlying point still
-applies in that this series already extends the shared library
-(cg_get_id/cg_touch_pages/cg_alloc_anon), so a 'wait until >= X and stable'
-helper could live there too and pick up the missing error handling for
-free.
-
-> +/*
-> + * Collect what the kfuncs report.  The program flushes at the first cgroup it
-> + * sees, the subtree root in DESCENDANTS_PRE order.
-> + */
-> +static int read_bpf(int root_fd)
-> +{
-> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-> +	struct memcg_stat_cross_cpu *skel = NULL;
-> +	union bpf_iter_link_info linfo = {};
-> +	struct bpf_link *link = NULL;
-> +	int ret = -1, i, mfd, fd;
-> +	char buf[4096];
-> +	ssize_t r;
-> +
-> +	skel = memcg_stat_cross_cpu__open();
-> +	if (!skel) {
-> +		ksft_print_msg("skel open failed\n");
-> +		return -1;
-> +	}
-> +	if (bpf_map__set_max_entries(skel->maps.results, n_nodes + 8)) {
-> +		ksft_print_msg("set max_entries failed\n");
-> +		goto out;
-> +	}
-> +	if (memcg_stat_cross_cpu__load(skel)) {
-> +		ksft_print_msg("skel load failed\n");
-> +		goto out;
-> +	}
-> +
-> +	linfo.cgroup.cgroup_fd = root_fd;
-> +	linfo.cgroup.order = BPF_CGROUP_ITER_DESCENDANTS_PRE;
-> +	opts.link_info = &linfo;
-> +	opts.link_info_len = sizeof(linfo);
-> +
-> +	link = bpf_program__attach_iter(skel->progs.cgroup_memcg_stat_cross_cpu,
-> +					&opts);
-> +	if (!link) {
-> +		ksft_print_msg("attach iter failed\n");
-> +		goto out;
-> +	}
-> +
-> +	fd = bpf_iter_create(bpf_link__fd(link));
-> +	if (fd < 0) {
-> +		ksft_print_msg("bpf_iter_create failed\n");
-> +		goto out;
-> +	}
-> +	while ((r = read(fd, buf, sizeof(buf))) > 0)
-> +		;
-> +	close(fd);
-> +	if (r) {
-> +		ksft_print_msg("bpf walk failed\n");
-> +		goto out;
-> +	}
-
-A subsystem pattern flags this as potentially concerning: every BPF
-capability shortfall in read_bpf() is reported as a test FAILURE rather
-than a SKIP.
-
-The feature gate is narrow. memcg_kfuncs_available() (line 907) probes
-exactly one symbol:
-
-  ok = btf__find_by_name_kind(btf, "bpf_get_mem_cgroup", BTF_KIND_FUNC) > 0;
-
-but memcg_stat_cross_cpu.bpf.c additionally requires bpf_put_mem_cgroup,
-bpf_mem_cgroup_flush_stats, bpf_mem_cgroup_page_state and
-bpf_mem_cgroup_vm_events, plus kernel support for a sleepable cgroup
-iterator (SEC("iter.s/cgroup")). On a kernel that exports
-bpf_get_mem_cgroup but not the rest of the set (a partial backport, or a
-future kernel that renames/retires one of them),
-memcg_stat_cross_cpu__load() fails with a capability-absent errno (-ENOENT
-for an unresolvable __ksym kfunc, -EOPNOTSUPP/-EINVAL for an unsupported
-sleepable iter). The same applies to bpf_program__attach_iter() and
-bpf_iter_create(), which also fail with -EOPNOTSUPP/-EPERM when the
-capability or privilege is absent.
-
-All three paths take 'goto out' and return -1. run_case() initialises 'ret
-= KSFT_FAIL' and only ever upgrades it to KSFT_PASS, so it has no
-KSFT_SKIP or ksft_test_result_skip() path at all. The result is a hard
-"not ok" in the TAP output for a machine that simply lacks the
-prerequisite. The diagnostics also make this indistinguishable from a
-genuine failure: none of the four messages ("skel load failed", "attach
-iter failed", "bpf_iter_create failed", "bpf walk failed") carry errno or
-strerror(errno), so a CI operator cannot tell a missing-capability
-environment from a real flush regression.
-
-> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-> index 0ebf796f3cff..15ba46879504 100644
-> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
-> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31820214629
---===============7566751797017694167==--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
