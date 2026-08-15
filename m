@@ -1,137 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02ED419305;
-	Sat, 15 Aug 2026 12:52:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB372D77E6;
+	Sat, 15 Aug 2026 19:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786798338; cv=none; b=uOf6zDUy5koL9SCXmWkrXSVvYWlAVVpNPw4u3fUMrWcqyFHz7izb4uEuZH7ZGXFA4b8SSMuzz1+eCeq8+uGgqunGZlNah75tq4y5+OxI6Y3/VS2DXtGXH7dqC1AGnq7Z9M+WvfLTfIAVnHoPkcBIGqXUsCWAikNix8IhKb6UBuU=
+	t=1786822934; cv=none; b=FmYD0W7uwQ4lmA1hOlnpm2VshswFtX2Onc4M6KvqzwB5nI/mvgL43Ja6VEgm6mzSvOheOnHjlElvizKWBWjZ0kOsH4PfhmZbdbwZ7VJAHoxi0PWRFihGZU22t/3xulvdG80R0PP1rdr4O4k7/nZncIe8lrJfUL0fIpBx7lxuBWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786798338; c=relaxed/simple;
-	bh=Umy4SAEo6uAoGiafMqH/85OiBfhesCYOE6/0DYL77NA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G4MGsWlmUiJLwU9oFP64HW50BpCc3TaVkyQNC/rOgrwJSz38vkfBhHrwum3p+OnygRCtvFbby3UnFek3u5PV39vrmnKl/USJ0ozAxUCX6FpwDpLwDwPE8qPTUj5Vcvhi05FPr39FKGGHolwwMU9PqD53PK44f9ajqml2C40V3PI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ex7HRrY0; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1786822934; c=relaxed/simple;
+	bh=FwYVoP/09leCO0hIOwAJYeqyf0gOUUkfhS0A8HX2bnc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=H8JnIUhGVPTupzKhaAAzldHWCs7+N/QSqs/An5Seg7v4665edW8tTflUjgIXszOw4+FB4nP1lnbcHFbfFv9NtpqyBReFBiUvGE8QFvbihWoRBJqfpnTRla2SX6eWNhax4EbOLnuRQrvQkHNuHKU0s9FGeMxtCqqadyeQS1DG8GY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WGRTtDDm; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ex7HRrY0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WGRTtDDm"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786798336; x=1818334336;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Umy4SAEo6uAoGiafMqH/85OiBfhesCYOE6/0DYL77NA=;
-  b=Ex7HRrY0fl9nSE5da93WYZ1i0wqoZECYeDp0ietU41l8bkFKis0tkQH+
-   kI9J4BAFT2jc+8B+n0HyxkF1f56tplpG4lU0ObJcWDOiLpyK8235jsaLh
-   EKyNXqIt0rmJtn6tAwoUqMTQ7G5X5fjbftLZtXDWNQFPegOLg/PH/5Odb
-   iZ7jfJ9dlerhrB5snruuUCKXrpPLw49JKR/cpfx2x3iVo4C9Y4vMxVVUU
-   iXWU5NxTp14WByxpyXUifYbUYZjF/dU7UASeHupYfy9z6tmf860IYGJeQ
-   4j3dm8bNHg545lZeu5ok8IxGF6EJf8xy9bxT2W6ZL68l9mD7pUvkAV9ur
-   w==;
-X-CSE-ConnectionGUID: u3vNw3YzR0axpAZJcfiTww==
-X-CSE-MsgGUID: Bk6eYujcQ/+si9rkHWbnyA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11875"; a="91023692"
+  t=1786822932; x=1818358932;
+  h=date:from:to:cc:subject:message-id;
+  bh=FwYVoP/09leCO0hIOwAJYeqyf0gOUUkfhS0A8HX2bnc=;
+  b=WGRTtDDmc1AKo/c8PARWnd2MgEBN/WU+iFpTswfVM47bA1j1UFo8DRZ3
+   A5sqchydn7sexuKqNgEHDr046cMraEvpOAU2EucxO8IwHzIl5JKNnVlj5
+   sJrGbSTSdaxT9y0GumWpL2ZSz46I8ZezaFjHnDgUgsKJpOpyiTGFmrtms
+   Yk/d69kuOhtGBsLzVGaIZ9H55iCTH9JT/PKZCB2OeYeHIxPo/w9YE7tpH
+   hqy0aSmt+XnyLS8X1hc43sseP7RjiSl4wSgVlDtzgzHPTg4lxqpIGXJeh
+   e6N0FTFo2UdHhD+vEupkonwZfL79zsjEd3ke0+QJNgzfWmyFUpFa7nK7J
+   g==;
+X-CSE-ConnectionGUID: Dy5XtymSSfG9IwmJJiUXtw==
+X-CSE-MsgGUID: +Gq6DdWrTq6zc58Vj8rCMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="104742896"
 X-IronPort-AV: E=Sophos;i="6.25,225,1779174000"; 
-   d="scan'208";a="91023692"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 05:52:15 -0700
-X-CSE-ConnectionGUID: qgYPuavERiqmzOgHBS5DTA==
-X-CSE-MsgGUID: 5SFEft+rQ2uPG02kkBDAnw==
+   d="scan'208";a="104742896"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 12:42:11 -0700
+X-CSE-ConnectionGUID: 5YJPer3NT0qHsMqithKPXg==
+X-CSE-MsgGUID: ln7oeZNyTpmaQn7rjHz+bQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,225,1779174000"; 
-   d="scan'208";a="268323227"
+   d="scan'208";a="288002194"
 Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 15 Aug 2026 05:52:12 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 15 Aug 2026 12:42:09 -0700
 Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wvDru-00000000c1y-1d3n;
-	Sat, 15 Aug 2026 12:52:10 +0000
-Date: Sat, 15 Aug 2026 20:51:37 +0800
+	id 1wvKGc-00000000cS6-2ajv;
+	Sat, 15 Aug 2026 19:42:06 +0000
+Date: Sun, 16 Aug 2026 03:41:31 +0800
 From: kernel test robot <lkp@intel.com>
-To: jipinghuang <jipihuan@qti.qualcomm.com>, rafael@kernel.org,
-	daniel.lezcano@kernel.org
+To: Arnd Bergmann <arnd@arndb.de>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rui.zhang@intel.com, lukasz.luba@arm.com, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jipinghuang <jipihuan@qti.qualcomm.com>
-Subject: Re: [PATCH] Fixed a bug related to thermal framework boundary
- conditions: trip points do not need to be updated when polling is active,
- whereas they must be update to re-enable the irq when polling is inactive
-Message-ID: <202608152020.udg9HfCU-lkp@intel.com>
-References: <20260728024856.1596951-1-jipihuan@qti.qualcomm.com>
+ linux-arm-kernel@lists.infradead.org, arm@kernel.org
+Subject: [soc:board-remove 40/217] arch/arm/kernel/process.c:379:5:
+ warning: no previous prototype for function 'arch_setup_additional_pages'
+Message-ID: <202608160341.2pHIQyJL-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260728024856.1596951-1-jipihuan@qti.qualcomm.com>
 
-Hi jipinghuang,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rafael-pm/thermal]
-[also build test ERROR on linus/master v7.2-rc7 next-20260813]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/jipinghuang/Fixed-a-bug-related-to-thermal-framework-boundary-conditions-trip-points-do-not-need-to-be-updated-when-polling-is-activ/20260814-212058
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
-patch link:    https://lore.kernel.org/r/20260728024856.1596951-1-jipihuan%40qti.qualcomm.com
-patch subject: [PATCH] Fixed a bug related to thermal framework boundary conditions: trip points do not need to be updated when polling is active, whereas they must be update to re-enable the irq when polling is inactive
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260815/202608152020.udg9HfCU-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260815/202608152020.udg9HfCU-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git board-remove
+head:   057394422bc04420585b2790b230d8a1f350ace8
+commit: 99feea9e164dc7bec620cd48078d1c6ec0bdadc4 [40/217] ARM: remove remaining nommu support
+config: arm-orion5x_defconfig (https://download.01.org/0day-ci/archive/20260816/202608160341.2pHIQyJL-lkp@intel.com/config)
+compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608160341.2pHIQyJL-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608152020.udg9HfCU-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608160341.2pHIQyJL-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/thermal/thermal_trip.c:64:83: error: use of undeclared identifier 'trip_temp'
-      64 |         if (tz->prev_low_trip == low && tz->prev_high_trip == high && tz->temperature >= trip_temp)
-         |                                                                                          ^~~~~~~~~
-   1 error generated.
+>> arch/arm/kernel/process.c:379:5: warning: no previous prototype for function 'arch_setup_additional_pages' [-Wmissing-prototypes]
+     379 | int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+         |     ^
+   arch/arm/kernel/process.c:379:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     379 | int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+         | ^
+         | static 
+   1 warning generated.
 
 
-vim +/trip_temp +64 drivers/thermal/thermal_trip.c
+vim +/arch_setup_additional_pages +379 arch/arm/kernel/process.c
 
-    53	
-    54	void thermal_zone_set_trips(struct thermal_zone_device *tz, int low, int high)
-    55	{
-    56		int ret;
-    57	
-    58		lockdep_assert_held(&tz->lock);
-    59	
-    60		if (!tz->ops.set_trips)
-    61			return;
-    62	
-    63		/* No need to change trip points */
-  > 64		if (tz->prev_low_trip == low && tz->prev_high_trip == high && tz->temperature >= trip_temp)
-    65			return;
-    66	
-    67		tz->prev_low_trip = low;
-    68		tz->prev_high_trip = high;
-    69	
-    70		dev_dbg(&tz->device,
-    71			"new temperature boundaries: %d < x < %d\n", low, high);
-    72	
-    73		/*
-    74		 * Set a temperature window. When this window is left the driver
-    75		 * must inform the thermal core via thermal_zone_device_update.
-    76		 */
-    77		ret = tz->ops.set_trips(tz, low, high);
-    78		if (ret)
-    79			dev_err(&tz->device, "Failed to set trips: %d\n", ret);
-    80	}
-    81	
+02e0409a65560d Nathan Lynch 2014-09-22  378  
+48be69a026b2c1 Russell King 2013-07-24 @379  int arch_setup_additional_pages(struct linux_binprm *bprm, int uses_interp)
+
+:::::: The code at line 379 was first introduced by commit
+:::::: 48be69a026b2c17350a5ef18a1959a919f60be7d ARM: move signal handlers into a vdso-like page
+
+:::::: TO: Russell King <rmk+kernel@arm.linux.org.uk>
+:::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
 
 --
 0-DAY CI Kernel Test Service
