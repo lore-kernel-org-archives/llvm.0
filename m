@@ -1,62 +1,65 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFD433E36A;
-	Sun, 16 Aug 2026 00:36:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0925477E;
+	Sun, 16 Aug 2026 02:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786840576; cv=none; b=Szdm3rlIJCciuAQCxXk96bm2kzjoz3o20/sxh+5gjdJT7eHO0gfO3GYBEa8Vd9dxPPeh9QawQjWpxE4ynCN2xQzCfuFxWGRh3/moN9M9XL1O77PegDwsHshOmYDBrNZutkVb+CCxwN0EDQe2TY2X50BkpqtZtd17pRJgFJM7mMw=
+	t=1786846829; cv=none; b=jzjdDRFj4mBs2n5bKfT71p0PeKQgVpBdPoWMxVIwGf+QiDRz3QqCh0yyJsLHUAYoQ0khFyyjPOU+AHe2wqmHkGDRVNwb6QsuaeUbM4E3QLXb7aS0jwnxU2nyHrEuLWYMd57/FpE+Y8OgEIBSMI8nzjqLuueoilfUWbznv/tRsM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786840576; c=relaxed/simple;
-	bh=sLIRpgbeDqAtJvUvGCPYtBqldhnsPq1B8sRmOTCvQQ0=;
+	s=arc-20240116; t=1786846829; c=relaxed/simple;
+	bh=KJTG9L+tk857BpYI7xBnnnkPB2xo4z0xes4+gjxkJQs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O+AAiCKCHhdytj5sC1AWHdEnqzp9H4FxxojOjF4ISMkdZtngVIwbS39tOGSdH2QeSewoo0lcPNUdokau8z7TEhGsfRSy0kXa78DkorFaR2mmQzUOeG0CQn98nNAECYAlq6fNeW1+beNwS1dk9srMWeO7H/0L8PNfByHUq0XN+2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NAx4R6pN; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZADrnVuSLE3fGATTpnEDq1hslgDrxIB5YAeQzZRWRns+Ab9I/DfhLztl2M6B439HsR4p5qOLMWCDIrTu7lB5C0VEHC+phj/be5zogRHIJjtTyh2ydY28MqYEeHXhxb67BNHcjPviYV09JXPSDe/BTVeTgRAo7AnzIiTZlAOkORo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OqBtbPG2; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NAx4R6pN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OqBtbPG2"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786840574; x=1818376574;
+  t=1786846827; x=1818382827;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=sLIRpgbeDqAtJvUvGCPYtBqldhnsPq1B8sRmOTCvQQ0=;
-  b=NAx4R6pN018/2NVIxWIG/bmF+g8h9waAXPBhb4LjLS4W6Tg3sm/3y++1
-   tDd6J5he+MaCiDzN3uoEv1LLQJOC3rXPq5vzf2eeFmvL/5l8NZmmYF8jf
-   xNpLbIXQwDMW36h5u7dpZj8YHcJpP9giyHzPtY9Lj9aUsnN+iyKp6oL/X
-   cv2wBekxoGV6CYWVW8w32JMLV6fpCOXSOPvz1VgXpD7V2e5iduE+fgpz4
-   odE+dmRqe5z36C+deQvqfWhMiFok1zkb8D6u0yQ8iVQbcc5KLn6k2unpJ
-   tzbn8/OXO8JuxxD0EzZCsQdwdOvNKlxx/HN5t9MDIR0L5a6jLQBT2gBwD
-   Q==;
-X-CSE-ConnectionGUID: cqWMYvW2SB6KDIXUlVw5AA==
-X-CSE-MsgGUID: Pyw8VIp+TtGORaiuoT/wXQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="112911325"
+  bh=KJTG9L+tk857BpYI7xBnnnkPB2xo4z0xes4+gjxkJQs=;
+  b=OqBtbPG2rDlefOjZxtjq5g82o9RDhI9ilA5lBDnaBrEk8f8KY/GMBdrJ
+   bJszSBUAr7auHf4V0P2Tn5RwsvmFNz3HQr9uqWqKZ24vIws7Qey/RfFNE
+   cSGnWPB/Ubkf9mObxUk9OfX0Q97I+ppTrAif+QACT4IbDwKgmkEbASe4v
+   wMl03A4ueNRQt5I2CjN/iWPc4hK9r/wbYSFSqeD18PIbSgU2VkcgPRmQP
+   zdURHf4AshhbZGZc+xihwAHFwNeoFHFxNGJq8ljZnDKXjoKu58Lt4eX8F
+   nVZ348hr616DLzkktAm8qyjCJ5QI9uLhEQ9RajhTYj+GeijtqfbMs+8XS
+   w==;
+X-CSE-ConnectionGUID: XcAmn8zhR/ipD5JNOVYSoQ==
+X-CSE-MsgGUID: ltTvHG2ASLScd3clU3zA0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="98884986"
 X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
-   d="scan'208";a="112911325"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 17:36:13 -0700
-X-CSE-ConnectionGUID: asGnTZ1zQOWgblt09WcbZQ==
-X-CSE-MsgGUID: ZQxrs+FRSwWUbK+0WihHdQ==
+   d="scan'208";a="98884986"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 19:20:27 -0700
+X-CSE-ConnectionGUID: Iq57Tr41ROCieqfncajFHA==
+X-CSE-MsgGUID: sXEnOhsGSsalsajF1PEG0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
-   d="scan'208";a="269751916"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
-  by fmviesa005.fm.intel.com with ESMTP; 15 Aug 2026 17:36:11 -0700
-Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+   d="scan'208";a="262800964"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa006.jf.intel.com with ESMTP; 15 Aug 2026 19:20:24 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wvOrA-000000006WL-2DF1;
-	Sun, 16 Aug 2026 00:36:08 +0000
-Date: Sun, 16 Aug 2026 02:35:51 +0200
+	id 1wvQU1-00000000cfq-34EJ;
+	Sun, 16 Aug 2026 02:20:21 +0000
+Date: Sun, 16 Aug 2026 10:19:52 +0800
 From: kernel test robot <lkp@intel.com>
-To: zhang.enpei@zte.com.cn, chessman@tux.org
+To: jiale yao <19888972804@163.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ethernet: tlan: Convert to use jiffies macro
-Message-ID: <202608160257.LKzb3DiV-lkp@intel.com>
-References: <20250827155455583-PdvmDYA9SD3J37_XRza5@zte.com.cn>
+	Marcel Holtmann <marcel@holtmann.org>, Tim Bird <tim.bird@sony.com>,
+	Muhammad Bilal <meatuni001@gmail.com>, Kees Cook <kees@kernel.org>,
+	Michael Bommarito <michael.bommarito@gmail.com>,
+	linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: Re:Re: [PATCH v2] Bluetooth: HIDP: add missing length check for
+ incoming frames
+Message-ID: <202608161044.9x6CmhDO-lkp@intel.com>
+References: <220b6be5.d3f.19f78e165aa.Coremail.19888972804@163.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,132 +68,82 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250827155455583-PdvmDYA9SD3J37_XRza5@zte.com.cn>
+In-Reply-To: <220b6be5.d3f.19f78e165aa.Coremail.19888972804@163.com>
 
-Hi,
+Hi jiale,
 
 kernel test robot noticed the following build warnings:
 
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v7.2-rc7 next-20260721]
+[auto build test WARNING on kees/for-next/pstore]
+[also build test WARNING on kees/for-next/kspp]
+[cannot apply to bluetooth-next/master bluetooth/master linus/master v7.2-rc7 next-20260814]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhang-enpei-zte-com-cn/ethernet-tlan-Convert-to-use-jiffies-macro/20260813-185229
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250827155455583-PdvmDYA9SD3J37_XRza5%40zte.com.cn
-patch subject: [PATCH v3] ethernet: tlan: Convert to use jiffies macro
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260816/202608160257.LKzb3DiV-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608160257.LKzb3DiV-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/jiale-yao/Re-Re-PATCH-v2-Bluetooth-HIDP-add-missing-length-check-for-incoming-frames/20260814-100503
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
+patch link:    https://lore.kernel.org/r/220b6be5.d3f.19f78e165aa.Coremail.19888972804%40163.com
+patch subject: Re:Re: [PATCH v2] Bluetooth: HIDP: add missing length check for incoming frames
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260816/202608161044.9x6CmhDO-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 844a18e753e822736c9805ab779144b647a2c186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608161044.9x6CmhDO-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608160257.LKzb3DiV-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608161044.9x6CmhDO-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/ethernet/ti/tlan.c:1833:8: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (priv->timer_set_at + (250 / 10)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    1833 |                         if (time_is_before_eq_jiffies(priv->timer_set_at + TLAN_TIMER_ACT_DELAY)) {
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/jiffies.h:288:38: note: expanded from macro 'time_is_before_eq_jiffies'
-     288 | #define time_is_before_eq_jiffies(a) time_after_eq(jiffies, a)
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/jiffies.h:145:3: note: expanded from macro 'time_after_eq'
-     145 |          typecheck(unsigned long, b) && \
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/ti/tlan.c:2057:7: warning: variable 'def_tx' set but not used [-Wunused-but-set-variable]
-    2057 |         u32             def_tx, crc, code;
-         |                         ^
-   2 warnings generated.
+>> net/bluetooth/hidp/core.c:612:48: warning: format specifies type 'unsigned int' but the argument has type 'unsigned char *' [-Wformat]
+     612 |                 BT_DBG("Unsupported protocol header 0x%02x", hdr);
+         |                                                       ~~~~   ^~~
+         |                                                       %2s
+   include/net/bluetooth/bluetooth.h:287:47: note: expanded from macro 'BT_DBG'
+     287 | #define BT_DBG(fmt, ...)        pr_debug(fmt "\n", ##__VA_ARGS__)
+         |                                          ~~~         ^~~~~~~~~~~
+   include/linux/printk.h:641:38: note: expanded from macro 'pr_debug'
+     641 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |                                     ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:134:18: note: expanded from macro 'no_printk'
+     134 |                 _printk(fmt, ##__VA_ARGS__);            \
+         |                         ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
-vim +1833 drivers/net/ethernet/ti/tlan.c
+vim +612 net/bluetooth/hidp/core.c
 
-  1771	
-  1772	
-  1773	/***************************************************************
-  1774	 *	tlan_timer
-  1775	 *
-  1776	 *	Returns:
-  1777	 *		Nothing
-  1778	 *	Parms:
-  1779	 *		data	A value given to add timer when
-  1780	 *			add_timer was called.
-  1781	 *
-  1782	 *	This function handles timed functionality for the
-  1783	 *	TLAN driver.  The two current timer uses are for
-  1784	 *	delaying for autonegotionation and driving the ACT LED.
-  1785	 *	-	Autonegotiation requires being allowed about
-  1786	 *		2 1/2 seconds before attempting to transmit a
-  1787	 *		packet.  It would be a very bad thing to hang
-  1788	 *		the kernel this long, so the driver doesn't
-  1789	 *		allow transmission 'til after this time, for
-  1790	 *		certain PHYs.  It would be much nicer if all
-  1791	 *		PHYs were interrupt-capable like the internal
-  1792	 *		PHY.
-  1793	 *	-	The ACT LED, which shows adapter activity, is
-  1794	 *		driven by the driver, and so must be left on
-  1795	 *		for a short period to power up the LED so it
-  1796	 *		can be seen.  This delay can be changed by
-  1797	 *		changing the TLAN_TIMER_ACT_DELAY in tlan.h,
-  1798	 *		if desired.  100 ms  produces a slightly
-  1799	 *		sluggish response.
-  1800	 *
-  1801	 **************************************************************/
-  1802	
-  1803	static void tlan_timer(struct timer_list *t)
-  1804	{
-  1805		struct tlan_priv	*priv = timer_container_of(priv, t, timer);
-  1806		struct net_device	*dev = priv->dev;
-  1807		unsigned long	flags = 0;
-  1808	
-  1809		priv->timer.function = NULL;
-  1810	
-  1811		switch (priv->timer_type) {
-  1812		case TLAN_TIMER_PHY_PDOWN:
-  1813			tlan_phy_power_down(dev);
-  1814			break;
-  1815		case TLAN_TIMER_PHY_PUP:
-  1816			tlan_phy_power_up(dev);
-  1817			break;
-  1818		case TLAN_TIMER_PHY_RESET:
-  1819			tlan_phy_reset(dev);
-  1820			break;
-  1821		case TLAN_TIMER_PHY_START_LINK:
-  1822			tlan_phy_start_link(dev);
-  1823			break;
-  1824		case TLAN_TIMER_PHY_FINISH_AN:
-  1825			tlan_phy_finish_auto_neg(dev);
-  1826			break;
-  1827		case TLAN_TIMER_FINISH_RESET:
-  1828			tlan_finish_reset(dev);
-  1829			break;
-  1830		case TLAN_TIMER_ACTIVITY:
-  1831			spin_lock_irqsave(&priv->lock, flags);
-  1832			if (priv->timer.function == NULL) {
-> 1833				if (time_is_before_eq_jiffies(priv->timer_set_at + TLAN_TIMER_ACT_DELAY)) {
-  1834					tlan_dio_write8(dev->base_addr,
-  1835							TLAN_LED_REG, TLAN_LED_LINK);
-  1836				} else  {
-  1837					priv->timer.expires = priv->timer_set_at
-  1838						+ TLAN_TIMER_ACT_DELAY;
-  1839					spin_unlock_irqrestore(&priv->lock, flags);
-  1840					add_timer(&priv->timer);
-  1841					break;
-  1842				}
-  1843			}
-  1844			spin_unlock_irqrestore(&priv->lock, flags);
-  1845			break;
-  1846		default:
-  1847			break;
-  1848		}
-  1849	
+^1da177e4c3f41 Linus Torvalds   2005-04-16  588  
+91f5cca3d1b434 Andrew Morton    2008-02-05  589  static void hidp_recv_intr_frame(struct hidp_session *session,
+91f5cca3d1b434 Andrew Morton    2008-02-05  590  				struct sk_buff *skb)
+^1da177e4c3f41 Linus Torvalds   2005-04-16  591  {
+afd2c613d3369f jiale yao        2026-07-19  592  	unsigned char *hdr;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  593  
+093dabb4f1aff9 Kai Ye           2021-06-03  594  	BT_DBG("session %p skb %p len %u", session, skb, skb->len);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  595  
+afd2c613d3369f jiale yao        2026-07-19  596  	hdr = skb_pull_data(skb, 1);
+afd2c613d3369f jiale yao        2026-07-19  597  	if (!hdr)
+afd2c613d3369f jiale yao        2026-07-19  598  		return;
+^1da177e4c3f41 Linus Torvalds   2005-04-16  599  
+afd2c613d3369f jiale yao        2026-07-19  600  	if (*hdr == (HIDP_TRANS_DATA | HIDP_DATA_RTYPE_INPUT)) {
+^1da177e4c3f41 Linus Torvalds   2005-04-16  601  		hidp_set_timer(session);
+e1aaadd4d8162a Marcel Holtmann  2007-02-17  602  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  603  		if (session->input)
+^1da177e4c3f41 Linus Torvalds   2005-04-16  604  			hidp_input_report(session, skb);
+e1aaadd4d8162a Marcel Holtmann  2007-02-17  605  
+e1aaadd4d8162a Marcel Holtmann  2007-02-17  606  		if (session->hid) {
+a4b1b5877b514b David Rheinsberg 2013-12-19  607  			hidp_process_report(session, HID_INPUT_REPORT,
+a4b1b5877b514b David Rheinsberg 2013-12-19  608  					    skb->data, skb->len, 1);
+e1aaadd4d8162a Marcel Holtmann  2007-02-17  609  			BT_DBG("report len %d", skb->len);
+e1aaadd4d8162a Marcel Holtmann  2007-02-17  610  		}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  611  	} else {
+^1da177e4c3f41 Linus Torvalds   2005-04-16 @612  		BT_DBG("Unsupported protocol header 0x%02x", hdr);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  613  	}
+^1da177e4c3f41 Linus Torvalds   2005-04-16  614  
+^1da177e4c3f41 Linus Torvalds   2005-04-16  615  	kfree_skb(skb);
+^1da177e4c3f41 Linus Torvalds   2005-04-16  616  }
+^1da177e4c3f41 Linus Torvalds   2005-04-16  617  
 
 --
 0-DAY CI Kernel Test Service
