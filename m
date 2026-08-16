@@ -1,196 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6052933EB10;
-	Sun, 16 Aug 2026 03:57:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEF01448E0;
+	Sun, 16 Aug 2026 04:40:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786852632; cv=none; b=qRpNtybW8QX0nHS63ZXxqNu0kPO1GH1xL8CGPxC0Nbw9ZUIpoJnn4yMvaSzaE+5cyPX8toX5h2G6NST0tcmP0BU8GEIqRPN7fiHNvGTlLVr4XXTTWb2eikcU6U21Lop+QXnCWE5iSDUTccpT1hkunE+OeDCsuxjDekxpoxMAwy8=
+	t=1786855218; cv=none; b=qWR7ycb74DAzdjqrd5H263xLz4mOn4Je80mgH+XHGwhlI26dLxkuh5IDdyCylVzVE1ibkuelzFBnveyGJzAIJBxFugfc8Avaf9X/oUIdmPl/9LvFTiha80coAYwAY4XkFEbbNp17HOFxBCSsyEH8oJFYfpDbJZUa/aJsj1AH4pg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786852632; c=relaxed/simple;
-	bh=UQHRxft1KsS/aFZvHFWgo+Psihj9kavT5p7UuMJyZyY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I6IkTqVwysepmfW5ebAGC169lJ/kqImg1I0SXCvjbpQ9eTpUpFQiOSepd3NZzIXaUXyRF5x0MvGa0DYDy093/oPHR04tjmceE5RpSWbgvj+Y7FKy4cNtcjQEJMXk1P6147Q/dPMMcA8T9k1Qs4/TDW51c5jZg6NEVnmWJPjdI4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C22MmoWI; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1786855218; c=relaxed/simple;
+	bh=Gaj3HdmsBXybgNPXWiyExgG/oD1Vtcok5wosNTTlDqc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=qH+NpHcGJfhm9PhAkDqbKBOElXzO4GQ0YyFxBoFbHsCnyIHqu2n6cqqpVkMNRSMLEFH10UnyZH2/ahOJKFexDkdeRTZcotRx7rlVs6qHaG5urAmlmQ4nG74zXeXse+k/IQqOmKtb0gwmi7hfSl+Wa0qFcRCweDRdO44D1zCgrjY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QWr4VJnv; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C22MmoWI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QWr4VJnv"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786852629; x=1818388629;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UQHRxft1KsS/aFZvHFWgo+Psihj9kavT5p7UuMJyZyY=;
-  b=C22MmoWI1piNQhbOcPLfE8WQ3baNprxZcVBO3qjEjfPNEknc7w2CMwCg
-   a+A87sSrOzQvicDO/JUlNBLSh2GyB+nOabaHoiJP8ggvv5AMacp/rByX7
-   anWtHlnCrhsBNnnG/Gvh36YFjIPbluxAXvw3PuY42neDRxWdW7bqfoPq3
-   iM5ttPNnbY67CySoyzEZC2zIIo3y37qaUYCgmIx+Zrt9EWt+6A2b4VinI
-   jozDobDs03mrl3dzRw1UZa5S49j42dtPs/QFgyMBlQII/iedG91k23cIT
-   YOBuP6QnsYbs8EC+6vOZsweEsCdd6mzhqtAe0dNRS80IfUiAetoRQH7ch
-   w==;
-X-CSE-ConnectionGUID: 8ZnONnoJSL6+VHFxUCZKKA==
-X-CSE-MsgGUID: TNid09RSSROOePaR2zxRqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="112914618"
+  t=1786855217; x=1818391217;
+  h=date:from:to:cc:subject:message-id;
+  bh=Gaj3HdmsBXybgNPXWiyExgG/oD1Vtcok5wosNTTlDqc=;
+  b=QWr4VJnvbKQdCTK83Qb+q91AN1rn/hxNLzxO+sIRjulN7okYLJSLvFs5
+   ZfD0OMl3DIX/Wl8BJYZtaq4hTtn/CgCKZbWChhY/vAvi6rrUGU2KRt73f
+   wn2ThWMhESARF8l5Z0xRcmJMDCzdG54BeS2Y7svECtYJShg3nyFsxU7eV
+   RMXmNPD2StohAdnUt6Mz2PBdzb9oSnGnhEubsP4d0R2YfTj8aWegzYCBP
+   JH7D+2x1bUYwu+ZPPGii/b42Gh58BjecYwP4lI0UjBdWK61dvvATnF4Zq
+   1CJXxo7B6rk+u6yYmalXXKs9CQ9mBiO+CwWO9LPBdhTutbuCua+6zU03e
+   A==;
+X-CSE-ConnectionGUID: dnG1zfjYSaC1smg0B1BozA==
+X-CSE-MsgGUID: 643MKEfdRd2wVXZnp4aDdQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="110157546"
 X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
-   d="scan'208";a="112914618"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 20:57:08 -0700
-X-CSE-ConnectionGUID: 7Yz3BHHaQBuWeYFy04JM/g==
-X-CSE-MsgGUID: seXVRYuMS3OoIX1W8HK3MQ==
+   d="scan'208";a="110157546"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 21:40:16 -0700
+X-CSE-ConnectionGUID: bRLLdj37Sy+FGRmvaCelag==
+X-CSE-MsgGUID: 2o4LzO8ZQkuV09DKMegOkw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
-   d="scan'208";a="268441462"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 15 Aug 2026 20:57:06 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 15 Aug 2026 21:40:15 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wvRza-00000000cjG-2hxX;
-	Sun, 16 Aug 2026 03:57:02 +0000
-Date: Sun, 16 Aug 2026 11:56:35 +0800
+	id 1wvSfN-000000006Y5-0Asb;
+	Sun, 16 Aug 2026 04:40:13 +0000
+Date: Sun, 16 Aug 2026 06:39:52 +0200
 From: kernel test robot <lkp@intel.com>
-To: zhang.enpei@zte.com.cn, chessman@tux.org
+To: Martin KaFai Lau <martin.lau@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] ethernet: tlan: Convert to use jiffies macro
-Message-ID: <202608161140.4HTNVNNa-lkp@intel.com>
-References: <20250827155455583-PdvmDYA9SD3J37_XRza5@zte.com.cn>
+ 0day robot <lkp@intel.com>, Amery Hung <ameryhung@gmail.com>
+Subject: kernel/bpf/cgroup.c:412:9: error: call to undeclared
+ function 'bpf_struct_ops_id'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202608160659.fOw8zOgX-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827155455583-PdvmDYA9SD3J37_XRza5@zte.com.cn>
 
-Hi,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on net-next/main]
-[also build test WARNING on net/main linus/master v7.2-rc7 next-20260814]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/zhang-enpei-zte-com-cn/ethernet-tlan-Convert-to-use-jiffies-macro/20260813-185229
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20250827155455583-PdvmDYA9SD3J37_XRza5%40zte.com.cn
-patch subject: [PATCH v3] ethernet: tlan: Convert to use jiffies macro
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260816/202608161140.4HTNVNNa-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608161140.4HTNVNNa-lkp@intel.com/reproduce)
+tree:   https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Remove-__rcu-tagging-in-st_link-map/20260813-181925
+head:   770f00a7e2903fc692a7fbf06430c2f04d192b6f
+commit: 66846cc6e671612661560603b60b552003b460d7 bpf: Add infrastructure to support attaching struct_ops to cgroups
+date:   3 days ago
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260816/202608160659.fOw8zOgX-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608160659.fOw8zOgX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608161140.4HTNVNNa-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608160659.fOw8zOgX-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/net/ethernet/ti/tlan.c:1833:8: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (priv->timer_set_at + (250 / 10)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
-    1833 |                         if (time_is_before_eq_jiffies(priv->timer_set_at + TLAN_TIMER_ACT_DELAY)) {
-         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/jiffies.h:288:38: note: expanded from macro 'time_is_before_eq_jiffies'
-     288 | #define time_is_before_eq_jiffies(a) time_after_eq(jiffies, a)
-         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/jiffies.h:145:3: note: expanded from macro 'time_after_eq'
-     145 |          typecheck(unsigned long, b) && \
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
-      12 |         (void)(&__dummy == &__dummy2); \
-         |                ~~~~~~~~ ^  ~~~~~~~~~
-   drivers/net/ethernet/ti/tlan.c:2057:7: warning: variable 'def_tx' set but not used [-Wunused-but-set-variable]
-    2057 |         u32             def_tx, crc, code;
-         |                         ^
-   2 warnings generated.
+>> kernel/bpf/cgroup.c:412:9: error: call to undeclared function 'bpf_struct_ops_id'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     412 |                         id = bpf_struct_ops_id(item->kdata);
+         |                              ^
+   kernel/bpf/cgroup.c:412:9: note: did you mean 'bpf_struct_ops_find'?
+   include/linux/btf.h:540:49: note: 'bpf_struct_ops_find' declared here
+     540 | static inline const struct bpf_struct_ops_desc *bpf_struct_ops_find(struct btf *btf, u32 type_id)
+         |                                                 ^
+   1 error generated.
 
 
-vim +1833 drivers/net/ethernet/ti/tlan.c
+vim +/bpf_struct_ops_id +412 kernel/bpf/cgroup.c
 
-  1771	
-  1772	
-  1773	/***************************************************************
-  1774	 *	tlan_timer
-  1775	 *
-  1776	 *	Returns:
-  1777	 *		Nothing
-  1778	 *	Parms:
-  1779	 *		data	A value given to add timer when
-  1780	 *			add_timer was called.
-  1781	 *
-  1782	 *	This function handles timed functionality for the
-  1783	 *	TLAN driver.  The two current timer uses are for
-  1784	 *	delaying for autonegotionation and driving the ACT LED.
-  1785	 *	-	Autonegotiation requires being allowed about
-  1786	 *		2 1/2 seconds before attempting to transmit a
-  1787	 *		packet.  It would be a very bad thing to hang
-  1788	 *		the kernel this long, so the driver doesn't
-  1789	 *		allow transmission 'til after this time, for
-  1790	 *		certain PHYs.  It would be much nicer if all
-  1791	 *		PHYs were interrupt-capable like the internal
-  1792	 *		PHY.
-  1793	 *	-	The ACT LED, which shows adapter activity, is
-  1794	 *		driven by the driver, and so must be left on
-  1795	 *		for a short period to power up the LED so it
-  1796	 *		can be seen.  This delay can be changed by
-  1797	 *		changing the TLAN_TIMER_ACT_DELAY in tlan.h,
-  1798	 *		if desired.  100 ms  produces a slightly
-  1799	 *		sluggish response.
-  1800	 *
-  1801	 **************************************************************/
-  1802	
-  1803	static void tlan_timer(struct timer_list *t)
-  1804	{
-  1805		struct tlan_priv	*priv = timer_container_of(priv, t, timer);
-  1806		struct net_device	*dev = priv->dev;
-  1807		unsigned long	flags = 0;
-  1808	
-  1809		priv->timer.function = NULL;
-  1810	
-  1811		switch (priv->timer_type) {
-  1812		case TLAN_TIMER_PHY_PDOWN:
-  1813			tlan_phy_power_down(dev);
-  1814			break;
-  1815		case TLAN_TIMER_PHY_PUP:
-  1816			tlan_phy_power_up(dev);
-  1817			break;
-  1818		case TLAN_TIMER_PHY_RESET:
-  1819			tlan_phy_reset(dev);
-  1820			break;
-  1821		case TLAN_TIMER_PHY_START_LINK:
-  1822			tlan_phy_start_link(dev);
-  1823			break;
-  1824		case TLAN_TIMER_PHY_FINISH_AN:
-  1825			tlan_phy_finish_auto_neg(dev);
-  1826			break;
-  1827		case TLAN_TIMER_FINISH_RESET:
-  1828			tlan_finish_reset(dev);
-  1829			break;
-  1830		case TLAN_TIMER_ACTIVITY:
-  1831			spin_lock_irqsave(&priv->lock, flags);
-  1832			if (priv->timer.function == NULL) {
-> 1833				if (time_is_before_eq_jiffies(priv->timer_set_at + TLAN_TIMER_ACT_DELAY)) {
-  1834					tlan_dio_write8(dev->base_addr,
-  1835							TLAN_LED_REG, TLAN_LED_LINK);
-  1836				} else  {
-  1837					priv->timer.expires = priv->timer_set_at
-  1838						+ TLAN_TIMER_ACT_DELAY;
-  1839					spin_unlock_irqrestore(&priv->lock, flags);
-  1840					add_timer(&priv->timer);
-  1841					break;
-  1842				}
-  1843			}
-  1844			spin_unlock_irqrestore(&priv->lock, flags);
-  1845			break;
-  1846		default:
-  1847			break;
-  1848		}
-  1849	
+   398	
+   399	static int bpf_cgroup_array_copy_to_user(struct bpf_prog_array *array,
+   400						 __u32 __user *prog_ids, int cnt,
+   401						 enum cgroup_bpf_attach_type atype)
+   402	{
+   403		struct bpf_prog_array_item *item;
+   404		int i = 0;
+   405		u32 id;
+   406	
+   407		for (item = array->items; item->prog && i < cnt; item++) {
+   408			if (item->prog == bpf_cgroup_array_dummy(atype))
+   409				continue;
+   410	
+   411			if (cgroup_bpf_is_struct_ops_atype(atype))
+ > 412				id = bpf_struct_ops_id(item->kdata);
+   413			else
+   414				id = item->prog->aux->id;
+   415	
+   416			if (copy_to_user(prog_ids + i, &id, sizeof(id)))
+   417				return -EFAULT;
+   418			i++;
+   419		}
+   420		return item->prog ? -ENOSPC : 0;
+   421	}
+   422	
 
 --
 0-DAY CI Kernel Test Service
