@@ -1,104 +1,79 @@
-Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162033403FF
-	for <llvm@lists.linux.dev>; Sun, 16 Aug 2026 09:47:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786873663; cv=pass; b=Wa8gWHvdcYiWjNOlvZIWD4KbESZqFUmT6Q62pKWdV63WhBvikl7fnkaRJI4dq0djzyg+nzp1y1yUTwE+u92e6HoOrC4qrSnII6cF9gmecaQYYSefT78eAc8UjiUeo1comtW+CaPMIATcL/HMtpXg8c79CAD4CQQVTarCO22gY2s=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786873663; c=relaxed/simple;
-	bh=IMBEqojgtSGGfWQ1YY5F4aDFG5jNzpe1yUwnd83batQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ADi7elL77P/lYPYUHwsgDENHccCY+RgQARPXbj+efaumNMPwlmJsq3sdYG+KYuRAvz5PgKpwo2l0cwDkc6dVebVuFg94uIMbMthD2jS4kDcXA2UhRh2jFGb991+eDc5BK7G2CjycVAybmKZMGgXkc05xA4kgI49TrUOJ0OwwuAA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=RN0yJT41; arc=pass smtp.client-ip=195.140.195.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A8127AC45;
+	Sun, 16 Aug 2026 09:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786874348; cv=none; b=RQmBRlMBXSg+nNM+vvaZKqd9N6bHX2pakusife3cjWIOxec5OYFL614N7Xly7y0PqSIYFAG3Xyzw8XZiE6HPTiOW69PiZheVoQbBNobZyZolSWFnq08Y/MbSiIVvYnlqlDckH6TE5DiTfgNehne9yqbhuxbaT5IjW+ZACn8DWFo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786874348; c=relaxed/simple;
+	bh=I4oA4rC4p6+EW7yylqHhE+dpZlePPOKqfevq51PblRY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cFQCm/qvN6ih3BbgZNiDYY2fXFz+sgD/isbi/ZbNVu/X7gUxHv6jJr2eWbFUqukCqTgD8nRHCGY+6ancjHoadMSpNFbEnKn5mX6F9fjTHbtQ/oR49KRNa2vwIRVLaEiljGQApYPzLNIwFVfhCo6JT6i5qU2MJXKgw1q2i5JGt2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y8Kj/UNg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="RN0yJT41"
-Received: from monolith.lan (unknown [IPv6:2a03:1b20:1:f410::de01])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pav)
-	by meesny.iki.fi (Postfix) with ESMTPSA id 4hNB2t63K2zyvS;
-	Sun, 16 Aug 2026 12:47:34 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-	t=1786873656;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O1jzoDhFHsiTovmnJvEXc3cuqy67His4RWmvtvi9XpA=;
-	b=RN0yJT41X7qRq6Fu1KNj2ULRNW59X2mF8FQqnXx1kETxLHRbmX4iJUm6CRtkocTl6urYVh
-	k+VyMOCHR0nE1wks+9NSuAkQIGAt5Hupa7/Tp5wP3v+97c5rRltnQFay1GHoHA/QlqB4zo
-	bpxEV7GIx5ov3d1B1ksimmwxPg+8AXw=
-ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=meesny; cv=none; t=1786873656;
-	b=A+MFhi9P0uFcO4vaWnWQ7xz4qeRcgQDCPxWVKCYHC08w7CzSlOR3XJwNAp2rCCe78x1fX1
-	VElZ4oQgV6nMBP6Wgn5DWFTNu3nOyN64YhAn/CDmUzqpWDRRh4Ty5cXex+WeTbqjDWz0Yg
-	y5k0qLvkF3PrvGy7BIpiM6NinwcBsIo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-	s=meesny; t=1786873656;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=O1jzoDhFHsiTovmnJvEXc3cuqy67His4RWmvtvi9XpA=;
-	b=Ludp5NdxSd4BSuUyI/KmiqpFoDVC6KeT1xlvUqEZ4Of4iD/GiEOENMumkdowAdQcO0wFno
-	AK8gffNgspJuWS6LJh+2qGOnfFmJpcG5eklIQ0nXCFUnM2gbdXA+ge8sop0U6RvQ/J67PA
-	W5fIyCB9nwTt0/A2/9Fh0N9qslxOUF0=
-ARC-Authentication-Results: i=1;
-	ORIGINATING;
-	auth=pass smtp.auth=pav smtp.mailfrom=pav@iki.fi
-From: Pauli Virtanen <pav@iki.fi>
-To: linux-bluetooth@vger.kernel.org
-Cc: Pauli Virtanen <pav@iki.fi>,
-	marcel@holtmann.org,
-	luiz.dentz@gmail.com,
-	elver@google.com,
-	bvanassche@acm.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH RESEND v2 3/3] Bluetooth: enable context analysis for headers
-Date: Sun, 16 Aug 2026 12:47:05 +0300
-Message-ID: <91a565de2025cd2dff9b94bf6b79ab0dbf79a50c.1786871620.git.pav@iki.fi>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <35f8d2856ef35e1c6314101ee60b16af39d88e78.1786871620.git.pav@iki.fi>
-References: <35f8d2856ef35e1c6314101ee60b16af39d88e78.1786871620.git.pav@iki.fi>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y8Kj/UNg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C6D31F000E9;
+	Sun, 16 Aug 2026 09:59:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786874347;
+	bh=NTYJAsVDkO7YIxBVl0sfyICvDw21eBl55uq6tMu+icE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Y8Kj/UNgRL/skfMARhgY4keWAMhwtZeZa9GTiEpwT7TsDVKb52rE3IlBql5jX7br+
+	 crgRNKTt/d/EEr6h+SMDtPodg09wi6BcmELkdZ8pF0AVnc5JDXHqIdk2PTBPt1nGfH
+	 PID7IZlTaKnSQkSuz4Anro+841WvPyI7+Kd5T/+NLUQgQwG9tpVhgbgfyZatvtJhw8
+	 qitPPHYaSRfs2arUlT3nj1wFT3uH0+n9pERnI8GGdpfCsFuwKFezDJxBUIRU8I7M+B
+	 /tLBDWhjnUjZ11fe6oZ9gHXuRFWY5ABu1b2kq+T6MangVqAIMg/qw4Rz7845h+RKvU
+	 QwxpsqNjYyKgg==
+Date: Sun, 16 Aug 2026 12:59:00 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] arch_numa: Avoid false positive fortify warning in
+ setup_node_to_cpumask_map()
+Message-ID: <aoGJ5KL9cMl1E7iV@kernel.org>
+References: <20260813-arch_numa-avoid-fortify-warning-v2-1-093ad97a78df@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260813-arch_numa-avoid-fortify-warning-v2-1-093ad97a78df@kernel.org>
 
-Remove context analysis suppression for include/net/bluetooth/*, now
-that previous commits have resolved the warnings.
+On Thu, Aug 13, 2026 at 08:12:55PM -0700, Nathan Chancellor wrote:
+> When building ARCH=riscv using clang with CONFIG_FORTIFY_SOURCE and
+> CONFIG_UBSAN_BOUNDS enabled, CONFIG_NR_CPUS > 64, and the default value
+> of 2 for CONFIG_NODES_SHIFT, there is a compiletime warning from the
+> fortify routines.
+> 
+> In this configuration, MAX_NUMNODES is 4. clang unrolls the for loop in
+> setup_node_to_cpumask_map() past this, which triggers the fortify check
+> when accessing node_to_cpumask_map on the theoretical fifth loop
+> iteration because it would be an out of bounds write.
+> 
+> Make it clear to clang that nr_node_ids is bounded by MAX_NUMNODES due
+> to the logic in setup_nr_node_ids() by early returning in
+> setup_node_to_cpumask_map() should that condition be violated.
+> 
+> Cc: stable@vger.kernel.org # all applicable
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2174
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-Signed-off-by: Pauli Virtanen <pav@iki.fi>
----
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Notes:
-    resend:
-    - no changes
-    
-    v2:
-    - no change
+> ---
+>  mm/arch_numa.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 
- scripts/context-analysis-suppression.txt | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/scripts/context-analysis-suppression.txt b/scripts/context-analysis-suppression.txt
-index 1c51b6153f08..d4476d9ed10a 100644
---- a/scripts/context-analysis-suppression.txt
-+++ b/scripts/context-analysis-suppression.txt
-@@ -32,3 +32,4 @@ src:*include/linux/seqlock*.h=emit
- src:*include/linux/spinlock*.h=emit
- src:*include/linux/srcu*.h=emit
- src:*include/linux/ww_mutex.h=emit
-+src:*include/net/bluetooth/*=emit
 -- 
-2.55.0
-
+Sincerely yours,
+Mike.
