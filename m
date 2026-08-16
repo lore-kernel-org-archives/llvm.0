@@ -1,107 +1,196 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 051B217AE11;
-	Sat, 15 Aug 2026 21:10:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFD433E36A;
+	Sun, 16 Aug 2026 00:36:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786828232; cv=none; b=lNEGFflzvWxgiiVVegY9jm4d5W4ZaPDjz0Rx79v3oOM98UyBXPPplXxPocU3VlUKiGkwK9k8CayYipaP9Lcs2CTQv9DpNsBnChDD+06bDlhoSgokMb6NQtBLS0GY/2CBICziapOwXsYONr3dnMlMcT7fScQSVTZPKfvYZf+jzKE=
+	t=1786840576; cv=none; b=Szdm3rlIJCciuAQCxXk96bm2kzjoz3o20/sxh+5gjdJT7eHO0gfO3GYBEa8Vd9dxPPeh9QawQjWpxE4ynCN2xQzCfuFxWGRh3/moN9M9XL1O77PegDwsHshOmYDBrNZutkVb+CCxwN0EDQe2TY2X50BkpqtZtd17pRJgFJM7mMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786828232; c=relaxed/simple;
-	bh=q/NH2kcqOVjARhPUyFshnYbT24Ye3Z0dzOFrbQVMGSw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BXjdKbZwahaS59jW5Do5pyU+JdOEEn9k4iNhVoA55BetW/J8ozTxhTGAp0iKmPMpEBhSZ59ztzJSnuXc+6/4MQf+yjDlyLJKwgGd1GlfNQv6VSLB3FHBOQv+jaLF6cIRowGm/GbC+0yFlbnBLc0WZ/gCyumjdpIcaBeGUKGcgts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HPlRJs6R; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1786840576; c=relaxed/simple;
+	bh=sLIRpgbeDqAtJvUvGCPYtBqldhnsPq1B8sRmOTCvQQ0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O+AAiCKCHhdytj5sC1AWHdEnqzp9H4FxxojOjF4ISMkdZtngVIwbS39tOGSdH2QeSewoo0lcPNUdokau8z7TEhGsfRSy0kXa78DkorFaR2mmQzUOeG0CQn98nNAECYAlq6fNeW1+beNwS1dk9srMWeO7H/0L8PNfByHUq0XN+2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NAx4R6pN; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HPlRJs6R"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NAx4R6pN"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786828230; x=1818364230;
-  h=date:from:to:cc:subject:message-id;
-  bh=q/NH2kcqOVjARhPUyFshnYbT24Ye3Z0dzOFrbQVMGSw=;
-  b=HPlRJs6RtmMb5rKvKaYTZufG53Cgd/E7H/2UKCnJfhiv3Ay2tuDx0rLo
-   gEEQ+aHr5f8JaeluVwB+OhrSasRhykfa26zV/P2K7uxsJO0BPieByhuXy
-   eOllHRrRcKa7JZh+fkWVgpdySxto0SEIV3PRbqydpQMwR4vRuOU+1RsJt
-   GxWG/5FVGjfSB+5b8lXQUkp15JGZdagCoofvs5V5rZNfG4uQUicyzxNCL
-   TxHRAv5Q6VuMCQ41IrLW+mrWoiW37sR6mhZ25C92y2TZxTVjLKUjuzK9s
-   Af1WJrecuXziBn4LBbHPEMkuJ96V1mpYH6BAX/AQf66ra31BKLXZUL4af
-   A==;
-X-CSE-ConnectionGUID: 9QSteZoxQOaj8iDO0eO5IA==
-X-CSE-MsgGUID: irguPy9oTCeL/2o5yz7EQA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="104898563"
-X-IronPort-AV: E=Sophos;i="6.25,225,1779174000"; 
-   d="scan'208";a="104898563"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 14:10:30 -0700
-X-CSE-ConnectionGUID: UFbQObKFSgmW7KprTfdbEw==
-X-CSE-MsgGUID: avTLc3UKQuCtp/S6vLmVKg==
+  t=1786840574; x=1818376574;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sLIRpgbeDqAtJvUvGCPYtBqldhnsPq1B8sRmOTCvQQ0=;
+  b=NAx4R6pN018/2NVIxWIG/bmF+g8h9waAXPBhb4LjLS4W6Tg3sm/3y++1
+   tDd6J5he+MaCiDzN3uoEv1LLQJOC3rXPq5vzf2eeFmvL/5l8NZmmYF8jf
+   xNpLbIXQwDMW36h5u7dpZj8YHcJpP9giyHzPtY9Lj9aUsnN+iyKp6oL/X
+   cv2wBekxoGV6CYWVW8w32JMLV6fpCOXSOPvz1VgXpD7V2e5iduE+fgpz4
+   odE+dmRqe5z36C+deQvqfWhMiFok1zkb8D6u0yQ8iVQbcc5KLn6k2unpJ
+   tzbn8/OXO8JuxxD0EzZCsQdwdOvNKlxx/HN5t9MDIR0L5a6jLQBT2gBwD
+   Q==;
+X-CSE-ConnectionGUID: cqWMYvW2SB6KDIXUlVw5AA==
+X-CSE-MsgGUID: Pyw8VIp+TtGORaiuoT/wXQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="112911325"
+X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
+   d="scan'208";a="112911325"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 17:36:13 -0700
+X-CSE-ConnectionGUID: asGnTZ1zQOWgblt09WcbZQ==
+X-CSE-MsgGUID: ZQxrs+FRSwWUbK+0WihHdQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,225,1779174000"; 
-   d="scan'208";a="260756595"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 15 Aug 2026 14:10:27 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
+   d="scan'208";a="269751916"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by fmviesa005.fm.intel.com with ESMTP; 15 Aug 2026 17:36:11 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wvLe5-00000000cUe-1AHP;
-	Sat, 15 Aug 2026 21:10:25 +0000
-Date: Sun, 16 Aug 2026 05:10:00 +0800
+	id 1wvOrA-000000006WL-2DF1;
+	Sun, 16 Aug 2026 00:36:08 +0000
+Date: Sun, 16 Aug 2026 02:35:51 +0200
 From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
+To: zhang.enpei@zte.com.cn, chessman@tux.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, arm@kernel.org
-Subject: [soc:board-remove 24/217]
- arch/arm/mach-orion5x/common.c:18:10: fatal error: 'plat/time.h' file not
- found
-Message-ID: <202608160508.L84PCmp5-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] ethernet: tlan: Convert to use jiffies macro
+Message-ID: <202608160257.LKzb3DiV-lkp@intel.com>
+References: <20250827155455583-PdvmDYA9SD3J37_XRza5@zte.com.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250827155455583-PdvmDYA9SD3J37_XRza5@zte.com.cn>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git board-remove
-head:   057394422bc04420585b2790b230d8a1f350ace8
-commit: 061991b5690f233fb8a0248fa1ccb1172443e5c5 [24/217] ARM: orion/dove/mv78xx0: remove all board files
-config: arm-orion5x_defconfig (https://download.01.org/0day-ci/archive/20260816/202608160508.L84PCmp5-lkp@intel.com/config)
-compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608160508.L84PCmp5-lkp@intel.com/reproduce)
+Hi,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on net-next/main]
+[also build test WARNING on net/main linus/master v7.2-rc7 next-20260721]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/zhang-enpei-zte-com-cn/ethernet-tlan-Convert-to-use-jiffies-macro/20260813-185229
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20250827155455583-PdvmDYA9SD3J37_XRza5%40zte.com.cn
+patch subject: [PATCH v3] ethernet: tlan: Convert to use jiffies macro
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260816/202608160257.LKzb3DiV-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608160257.LKzb3DiV-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608160508.L84PCmp5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608160257.LKzb3DiV-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> arch/arm/mach-orion5x/common.c:18:10: fatal error: 'plat/time.h' file not found
-      18 | #include <plat/time.h>
-         |          ^~~~~~~~~~~~~
-   1 error generated.
---
->> arch/arm/mach-orion5x/board-dt.c:21:10: fatal error: 'plat/time.h' file not found
-      21 | #include <plat/time.h>
-         |          ^~~~~~~~~~~~~
-   1 error generated.
---
->> arch/arm/plat-orion/pcie.c:16:10: fatal error: 'plat/addr-map.h' file not found
-      16 | #include <plat/addr-map.h>
-         |          ^~~~~~~~~~~~~~~~~
-   1 error generated.
+>> drivers/net/ethernet/ti/tlan.c:1833:8: warning: comparison of distinct pointer types ('unsigned long *' and 'typeof (priv->timer_set_at + (250 / 10)) *' (aka 'unsigned int *')) [-Wcompare-distinct-pointer-types]
+    1833 |                         if (time_is_before_eq_jiffies(priv->timer_set_at + TLAN_TIMER_ACT_DELAY)) {
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/jiffies.h:288:38: note: expanded from macro 'time_is_before_eq_jiffies'
+     288 | #define time_is_before_eq_jiffies(a) time_after_eq(jiffies, a)
+         |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/jiffies.h:145:3: note: expanded from macro 'time_after_eq'
+     145 |          typecheck(unsigned long, b) && \
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/typecheck.h:12:18: note: expanded from macro 'typecheck'
+      12 |         (void)(&__dummy == &__dummy2); \
+         |                ~~~~~~~~ ^  ~~~~~~~~~
+   drivers/net/ethernet/ti/tlan.c:2057:7: warning: variable 'def_tx' set but not used [-Wunused-but-set-variable]
+    2057 |         u32             def_tx, crc, code;
+         |                         ^
+   2 warnings generated.
 
 
-vim +18 arch/arm/mach-orion5x/common.c
+vim +1833 drivers/net/ethernet/ti/tlan.c
 
-6f088f1d215be5 Lennert Buytenhek 2008-08-09 @18  #include <plat/time.h>
-28a2b45054f2e3 Andrew Lunn       2011-05-15  19  #include <plat/common.h>
-c22c2c6008d69f Arnd Bergmann     2015-12-02  20  
-
-:::::: The code at line 18 was first introduced by commit
-:::::: 6f088f1d215be5250582b974f83f0e3aa6ad3a28 [ARM] Move include/asm-arm/plat-orion to arch/arm/plat-orion/include/plat
-
-:::::: TO: Lennert Buytenhek <buytenh@wantstofly.org>
-:::::: CC: Lennert Buytenhek <buytenh@marvell.com>
+  1771	
+  1772	
+  1773	/***************************************************************
+  1774	 *	tlan_timer
+  1775	 *
+  1776	 *	Returns:
+  1777	 *		Nothing
+  1778	 *	Parms:
+  1779	 *		data	A value given to add timer when
+  1780	 *			add_timer was called.
+  1781	 *
+  1782	 *	This function handles timed functionality for the
+  1783	 *	TLAN driver.  The two current timer uses are for
+  1784	 *	delaying for autonegotionation and driving the ACT LED.
+  1785	 *	-	Autonegotiation requires being allowed about
+  1786	 *		2 1/2 seconds before attempting to transmit a
+  1787	 *		packet.  It would be a very bad thing to hang
+  1788	 *		the kernel this long, so the driver doesn't
+  1789	 *		allow transmission 'til after this time, for
+  1790	 *		certain PHYs.  It would be much nicer if all
+  1791	 *		PHYs were interrupt-capable like the internal
+  1792	 *		PHY.
+  1793	 *	-	The ACT LED, which shows adapter activity, is
+  1794	 *		driven by the driver, and so must be left on
+  1795	 *		for a short period to power up the LED so it
+  1796	 *		can be seen.  This delay can be changed by
+  1797	 *		changing the TLAN_TIMER_ACT_DELAY in tlan.h,
+  1798	 *		if desired.  100 ms  produces a slightly
+  1799	 *		sluggish response.
+  1800	 *
+  1801	 **************************************************************/
+  1802	
+  1803	static void tlan_timer(struct timer_list *t)
+  1804	{
+  1805		struct tlan_priv	*priv = timer_container_of(priv, t, timer);
+  1806		struct net_device	*dev = priv->dev;
+  1807		unsigned long	flags = 0;
+  1808	
+  1809		priv->timer.function = NULL;
+  1810	
+  1811		switch (priv->timer_type) {
+  1812		case TLAN_TIMER_PHY_PDOWN:
+  1813			tlan_phy_power_down(dev);
+  1814			break;
+  1815		case TLAN_TIMER_PHY_PUP:
+  1816			tlan_phy_power_up(dev);
+  1817			break;
+  1818		case TLAN_TIMER_PHY_RESET:
+  1819			tlan_phy_reset(dev);
+  1820			break;
+  1821		case TLAN_TIMER_PHY_START_LINK:
+  1822			tlan_phy_start_link(dev);
+  1823			break;
+  1824		case TLAN_TIMER_PHY_FINISH_AN:
+  1825			tlan_phy_finish_auto_neg(dev);
+  1826			break;
+  1827		case TLAN_TIMER_FINISH_RESET:
+  1828			tlan_finish_reset(dev);
+  1829			break;
+  1830		case TLAN_TIMER_ACTIVITY:
+  1831			spin_lock_irqsave(&priv->lock, flags);
+  1832			if (priv->timer.function == NULL) {
+> 1833				if (time_is_before_eq_jiffies(priv->timer_set_at + TLAN_TIMER_ACT_DELAY)) {
+  1834					tlan_dio_write8(dev->base_addr,
+  1835							TLAN_LED_REG, TLAN_LED_LINK);
+  1836				} else  {
+  1837					priv->timer.expires = priv->timer_set_at
+  1838						+ TLAN_TIMER_ACT_DELAY;
+  1839					spin_unlock_irqrestore(&priv->lock, flags);
+  1840					add_timer(&priv->timer);
+  1841					break;
+  1842				}
+  1843			}
+  1844			spin_unlock_irqrestore(&priv->lock, flags);
+  1845			break;
+  1846		default:
+  1847			break;
+  1848		}
+  1849	
 
 --
 0-DAY CI Kernel Test Service
