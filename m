@@ -1,126 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792082C2363;
-	Sun, 16 Aug 2026 05:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786857442; cv=none; b=Wl6hOwXWr209IjyvAtUfajLMEQ91xXEzQmPHt6wqPESOE5zJhHCcBqU2Hba7uo2YmNE+OzM3mgTUmNuYnhy5g9KMFl0TfPgGaq6epfjZJ4Vdkwn1cjeQf5k8dd3suLH8kX8AK2gQJQB2tzT/ypu7WcYGubjw0Zntm8nEIFHTjhI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786857442; c=relaxed/simple;
-	bh=VfXD0eRxgae+TtU/Q7eMx8k52VXZwPzo9TG9IGvTy3U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PBZYQEKCIg+wkHnytsCBsfHRxfcHwDG3U8is4neoew+F1rf1ePfT8SGQ1MqFeUjiKKu6+O12ZtBrQCbx483Ecw8y6d2n9i7iIzXyCMKuVH1EMlCbrsnfN1GKGaacNyMn/CmXZ6y1ixVVL6aokaKjDaI2LCaZ8llXXORUigEMw+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=APxwxssp; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6FBD3264DA
+	for <llvm@lists.linux.dev>; Sun, 16 Aug 2026 09:47:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.140.195.201
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786873653; cv=pass; b=iBcGxma9PIOoVWz7uIwR/AB36fGpfbOz7AC/3+A5lIdUDi4vTmdQ978njVVJWREl7KVMt5npCwtqmzmr46qNjB6v0K82TQCcdmC4qphh/i1G7F3FwTnHuvsdL/Jvi4yXcbayRbJUPbuBp05b0W5++kNDI/Ief5RBdu4FAR30hN0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786873653; c=relaxed/simple;
+	bh=6ejippPszx/Z1b+UVWUgh/v7H/P233/XVnyftkvOh8c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XgiuqCvLpSHwzcB4Ivi2MP+XitFCj/7rA2nWL19gJbD/968LC3ACCPBVlBw42V6moPDC+xYPJXyhjPATwEDhZC2FJeY//HcbT06vlKFOyryA/WAGoc9yZ2ulZrrlkcfo3turRkzbRIDq6GPT+L7/7HXJuLp0nHSqjdZgO4bXk8g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b=VJKJynEJ; arc=pass smtp.client-ip=195.140.195.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="APxwxssp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786857439; x=1818393439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VfXD0eRxgae+TtU/Q7eMx8k52VXZwPzo9TG9IGvTy3U=;
-  b=APxwxssptHj9fX2BboNKByUub6ub0CLpRuA34ThLV2pkaXaDKo0eILCx
-   l69mEC99tBAuFjqDlW5V1ROuEvsXtyXeyH8e2QZ6m+4tH3v3RrgakYw9y
-   IzTVmSGlBTg3EeakRoXr7zOnZnshKiVvW7h51AZyurKF9xTNh2/93aUly
-   xOnRi7tBkFtXagEr6Y/DpBIGpWWwEBF0w/tYQ8kzzKXEPzEHWTBs4hCxc
-   fhZbih7yQBkasMblfoyPqkgarwfRyCrmc7r9SQoTPznwSVRjjqnNSNzbz
-   irVHC+u4FLFFELckqjfXNiEIE6AIXM0pi8WoSTxpEYgxmEHkvQhHJlBld
-   A==;
-X-CSE-ConnectionGUID: 7pa4r8vMTKy6q5BpocufOA==
-X-CSE-MsgGUID: IgEi+S+rTM6yj+F+paeLiw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11876"; a="87391589"
-X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
-   d="scan'208";a="87391589"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2026 22:17:19 -0700
-X-CSE-ConnectionGUID: d7JKQlxAQDyjYniT/djYJQ==
-X-CSE-MsgGUID: R8KTK66LR/WwXsy1M8Y0vg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,226,1779174000"; 
-   d="scan'208";a="288079862"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Aug 2026 22:17:17 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wvTFC-00000000ckO-1K5y;
-	Sun, 16 Aug 2026 05:17:14 +0000
-Date: Sun, 16 Aug 2026 13:16:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: WenTao Liang <vulab@iscas.ac.cn>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	linux-pci@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof Wilczynski <kw@linux.com>,
-	Bjorn Helgaas <helgaas@kernel.org>, stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org, WenTao Liang <vulab@iscas.ac.cn>
-Subject: Re: [PATCH] fix: PCI: dra7xx: dra7xx_pcie_probe: fix missing
- device_link_del on phy   error paths
-Message-ID: <202608161318.LcyznJeH-lkp@intel.com>
-References: <20260626154809.53770-1-vulab@iscas.ac.cn>
+	dkim=pass (1024-bit key) header.d=iki.fi header.i=@iki.fi header.b="VJKJynEJ"
+Received: from monolith.lan (unknown [IPv6:2a03:1b20:1:f410::de01])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pav)
+	by meesny.iki.fi (Postfix) with ESMTPSA id 4hNB2g0G1nzyRf;
+	Sun, 16 Aug 2026 12:47:22 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+	t=1786873644;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NkzqQX0iLQpTbk3r389OtilBENhriAoEnLJdOuLjgLc=;
+	b=VJKJynEJSeMkr8ZfQ8tOVpTmO7VH3OIFST50yr7IUWyG7b2wi5yE/ot4b960HZx2pSOAkK
+	vzn+JdCuoOZHilkWSiicl+cxepZNkAOOAXM2mTwTOlxkC1Yd44sQQ0i/fe+gWZYqQ7aiUQ
+	qoxu3FGBxxfh7/6EjXCMEHH1cqP0+L4=
+ARC-Seal: i=1; a=rsa-sha256; d=iki.fi; s=meesny; cv=none; t=1786873644;
+	b=gVzl300FN1vgP4zxvXl7zsh1O9RrfO3TWSDjB1Z6t9PVde595YOo1FFFrat6YkQfUXFgGg
+	K3pkSZCUBiyNy5FVR3ZOhWVB4Hp+GD29dRaXsAIDva/jK2nHIa3Qmy41+U+JX67q1aqghn
+	y8DtYqADFYPmxYY9Yw99MCA2cJ3t9WM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=meesny; t=1786873644;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=NkzqQX0iLQpTbk3r389OtilBENhriAoEnLJdOuLjgLc=;
+	b=hRNtE4rLUIXAhHAVLpFkdc973PUAtXOrukkZbSRQhSd2mB+CpaZJkIUnmcEXPbInxMEJO8
+	Ec4Bf7piv6OdgUx3b2HkrKvli75nMgenw+Oo9ST1+9Engwyyewv6X1LU0uYxtTt2/eShxI
+	kxAei3RUMbHC+bvWT2NPrbU7BA4obrc=
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=pav smtp.mailfrom=pav@iki.fi
+From: Pauli Virtanen <pav@iki.fi>
+To: linux-bluetooth@vger.kernel.org
+Cc: Pauli Virtanen <pav@iki.fi>,
+	marcel@holtmann.org,
+	luiz.dentz@gmail.com,
+	elver@google.com,
+	bvanassche@acm.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH RESEND v2 1/3] Bluetooth: L2CAP: avoid maybe-return-locked in l2cap_get_chan_by_scid/dcid
+Date: Sun, 16 Aug 2026 12:47:03 +0300
+Message-ID: <35f8d2856ef35e1c6314101ee60b16af39d88e78.1786871620.git.pav@iki.fi>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260626154809.53770-1-vulab@iscas.ac.cn>
+Content-Transfer-Encoding: 8bit
 
-Hi WenTao,
+Replace the maybe-return-locked pattern in l2cap_get_chan_by_scid/dcid()
+by doing locking in the caller after NULL check. This allows adding
+context analysis annotations for the locking.
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+Signed-off-by: Pauli Virtanen <pav@iki.fi>
+---
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus linus/master v7.2-rc7 next-20260814]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Notes:
+    resend:
+    - no changes
+    
+    v2:
+    - split code changes and adding annotations to separate patches
+    - remove self-evident comment
 
-url:    https://github.com/intel-lab-lkp/linux/commits/WenTao-Liang/fix-PCI-dra7xx-dra7xx_pcie_probe-fix-missing-device_link_del-on-phy-error-paths/20260815-023710
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20260626154809.53770-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] fix: PCI: dra7xx: dra7xx_pcie_probe: fix missing device_link_del on phy   error paths
-config: arm64-randconfig-001-20260816 (https://download.01.org/0day-ci/archive/20260816/202608161318.LcyznJeH-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 844a18e753e822736c9805ab779144b647a2c186)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260816/202608161318.LcyznJeH-lkp@intel.com/reproduce)
+ net/bluetooth/l2cap_core.c | 28 ++++++++++++++++------------
+ 1 file changed, 16 insertions(+), 12 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608161318.LcyznJeH-lkp@intel.com/
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index ee459dd411f5..df41ef952500 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -109,7 +109,7 @@ static struct l2cap_chan *__l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ }
+ 
+ /* Find channel with given SCID.
+- * Returns a reference locked channel.
++ * Returns a reference.
+  */
+ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ 						 u16 cid)
+@@ -117,18 +117,14 @@ static struct l2cap_chan *l2cap_get_chan_by_scid(struct l2cap_conn *conn,
+ 	struct l2cap_chan *c;
+ 
+ 	c = __l2cap_get_chan_by_scid(conn, cid);
+-	if (c) {
+-		/* Only lock if chan reference is not 0 */
++	if (c)
+ 		c = l2cap_chan_hold_unless_zero(c);
+-		if (c)
+-			l2cap_chan_lock(c);
+-	}
+ 
+ 	return c;
+ }
+ 
+ /* Find channel with given DCID.
+- * Returns a reference locked channel.
++ * Returns a reference.
+  */
+ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+ 						 u16 cid)
+@@ -136,12 +132,8 @@ static struct l2cap_chan *l2cap_get_chan_by_dcid(struct l2cap_conn *conn,
+ 	struct l2cap_chan *c;
+ 
+ 	c = __l2cap_get_chan_by_dcid(conn, cid);
+-	if (c) {
+-		/* Only lock if chan reference is not 0 */
++	if (c)
+ 		c = l2cap_chan_hold_unless_zero(c);
+-		if (c)
+-			l2cap_chan_lock(c);
+-	}
+ 
+ 	return c;
+ }
+@@ -4368,6 +4360,8 @@ static inline int l2cap_config_req(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	if (chan->state != BT_CONFIG && chan->state != BT_CONNECT2 &&
+ 	    chan->state != BT_CONNECTED) {
+ 		cmd_reject_invalid_cid(conn, cmd->ident, chan->scid,
+@@ -4479,6 +4473,8 @@ static inline int l2cap_config_rsp(struct l2cap_conn *conn,
+ 	if (!chan)
+ 		return 0;
+ 
++	l2cap_chan_lock(chan);
++
+ 	switch (result) {
+ 	case L2CAP_CONF_SUCCESS:
+ 		l2cap_conf_rfc_get(chan, rsp->data, len);
+@@ -4585,6 +4581,8 @@ static inline int l2cap_disconnect_req(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	rsp.dcid = cpu_to_le16(chan->scid);
+ 	rsp.scid = cpu_to_le16(chan->dcid);
+ 	l2cap_send_cmd(conn, cmd->ident, L2CAP_DISCONN_RSP, sizeof(rsp), &rsp);
+@@ -4622,6 +4620,8 @@ static inline int l2cap_disconnect_rsp(struct l2cap_conn *conn,
+ 		return 0;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	if (chan->state != BT_DISCONN) {
+ 		l2cap_chan_unlock(chan);
+ 		l2cap_chan_put(chan);
+@@ -5124,6 +5124,8 @@ static inline int l2cap_le_credits(struct l2cap_conn *conn,
+ 	if (!chan)
+ 		return -EBADSLT;
+ 
++	l2cap_chan_lock(chan);
++
+ 	max_credits = LE_FLOWCTL_MAX_CREDITS - chan->tx_credits;
+ 	if (credits > max_credits) {
+ 		BT_ERR("LE credits overflow");
+@@ -6983,6 +6985,8 @@ static void l2cap_data_channel(struct l2cap_conn *conn, u16 cid,
+ 		return;
+ 	}
+ 
++	l2cap_chan_lock(chan);
++
+ 	BT_DBG("chan %p, len %d", chan, skb->len);
+ 
+ 	/* If we receive data on a fixed channel before the info req/rsp
+-- 
+2.55.0
 
-All errors (new ones prefixed by >>):
-
->> drivers/pci/controller/dwc/pci-dra7xx.c:918:8: error: use of undeclared label 'err_link'
-     918 |                 goto err_link;
-         |                      ^
-   1 error generated.
-
-
-vim +/err_link +918 drivers/pci/controller/dwc/pci-dra7xx.c
-
-   908	
-   909	static int dra7xx_pcie_resume_noirq(struct device *dev)
-   910	{
-   911		struct dra7xx_pcie *dra7xx = dev_get_drvdata(dev);
-   912		int ret;
-   913	
-   914		ret = dra7xx_pcie_enable_phy(dra7xx);
-   915		if (ret) {
-   916			dev_err(dev, "failed to enable phy\n");
-   917			dra7xx_pcie_disable_phy(dra7xx);
- > 918			goto err_link;
-   919		}
-   920	
-   921		return 0;
-   922	}
-   923	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
