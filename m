@@ -1,44 +1,59 @@
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1BFF3B42F0;
-	Mon, 17 Aug 2026 07:01:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.214.250.239
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786950079; cv=none; b=t8Mgg/sMKPwpg1oB/CTACKk+4jCnpH2A7KQXUeZZZReDB4h2hkHzdpHo0qyW8zE7BVenfwTY74rDYrLZVVor4EExVgJfBmLECNnkPS/KrGiVtit2U97xUdlENXbT56fhOOzvkOqbydGL++7aQ7e9DKwlUQeYaoaEVbt1KUZh0oA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786950079; c=relaxed/simple;
-	bh=dqaHMnWvKu7zw1fa/cy9Y6aO3pgK3zqhwjOIgODNyZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WgAk4Q50Ryy+0NOl+oglrfsnJ0wJ77K6ldJylGjJzYQd2bT80IvuvaBNYi0yJy6+7C9xgJp/LFy6qn5FXshdFGnGgJN+N5Iob4pathpURwJQrJH5rjH+im8rsm9hXRB2d+j9v+pelY42gTUR5lbC+mmL7puqzWsIzmPw5+NHyio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org; spf=pass smtp.mailfrom=8bytes.org; arc=none smtp.client-ip=85.214.250.239
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=8bytes.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=8bytes.org
-Received: from 8bytes.org (p4ffe1d30.dip0.t-ipconnect.de [79.254.29.48])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by mail.8bytes.org (Postfix) with ESMTPSA id 4962B206465;
-	Mon, 17 Aug 2026 09:01:11 +0200 (CEST)
-Date: Mon, 17 Aug 2026 09:01:10 +0200
-From: "Joerg Roedel (AMD)" <joro@8bytes.org>
-To: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, Bharath Kumar <quic_bkumar@quicinc.com>, 
-	Chenna Kesava Raju <quic_chennak@quicinc.com>, srinivas.kandagatla@oss.qualcomm.com, 
-	dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev, 
-	iommu@lists.linux.dev, linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 05/15] iommu: Add QDA compute context bank bus to
- iommu_buses
-Message-ID: <aoKxmtgbjmVBTwBS@8bytes.org>
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD4D4B0497;
+	Mon, 17 Aug 2026 12:12:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786968754; cv=none; b=TXmcWItV5Wn0/33cMQNwWM2I8MZuErBmhqtw/DQlSn0GQ5VjVURQALFx/cF++iiW3YWQGPAsiQVJCT6bNbojzXGZ2QTDHB43IxgYZjXKmyovzdUz49RIavpHg2bcOuYvlXivla3PdfseyWBq8BBHHschhTsIzhDgXVLY4h82QCM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786968754; c=relaxed/simple;
+	bh=tHKaGYnJ+I4ccwx0KNvEv8cR6awfYaf34iY//rourtk=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hQEWLhpMrOve41XqIbTomkecQOIeel+LLuBPvS72+JsqI1WOnaiO1dviC1P0eTXQIUGzyJP9VZ8uAVPqeUJlGEPItiqE/9nCPf8bDIXSqK55Le2JlVdWe2qopJD/4l6bYf5LqXPxP/F6D/g9KUFU7U6FqiOjMIMdTGKlRhkpV+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MKEq8sMb; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MKEq8sMb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786968753; x=1818504753;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tHKaGYnJ+I4ccwx0KNvEv8cR6awfYaf34iY//rourtk=;
+  b=MKEq8sMbllsIbYnnFfmLD3A+jGJjXAbBmT8C67lhaZqROIhsDbDfIddV
+   4+MZTLybGK/hiFdu9vdUd2eti5Zykw35yHjRC5bXYJnH4XGmt3GYirc1s
+   1EWjEC5XnoIc/1zvuh28m991rFkdqQj5UUZi7QEDO56VnPN8iWLFltyxD
+   TND7Bl7WpjhSMyZxKw6VciERNwUZWDeB1eNSE90UcytM/p5y80t/k/qe3
+   vmAQbeakSUslwH7O60O+nW8bDycd+iwod9vFUg4fcxEAvxhPSu5zklq8a
+   V9mX2YWHH4/kdVp9IqzrYWpm+vAxf0c5GoZKncV311ucnuZ6+iXfC+s2d
+   Q==;
+X-CSE-ConnectionGUID: 1LquUv3DS8GXdHXf53a8jA==
+X-CSE-MsgGUID: M+j4ABjgR4KqcROth+yjlw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11877"; a="110225258"
+X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
+   d="scan'208";a="110225258"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 05:12:32 -0700
+X-CSE-ConnectionGUID: w8r8Pi79QOaVeV5PqeIKdw==
+X-CSE-MsgGUID: pLTOD4E8Rh+sHd5xWHVw6Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
+   d="scan'208";a="263552277"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 17 Aug 2026 05:12:31 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wvwCa-00000000dSM-2UnN;
+	Mon, 17 Aug 2026 12:12:28 +0000
+Date: Mon, 17 Aug 2026 20:12:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stefandoesinger-zx297520:dlink 43/122] ERROR: modpost:
+ "rtl8192cu_fops" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko]
+ undefined!
+Message-ID: <202608172010.SFZY7u2N-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -46,26 +61,23 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
 
-On Mon, Aug 17, 2026 at 10:17:40AM +0530, Ekansh Gupta wrote:
-> Register the QDA compute context bank bus (qda-compute-cb) with the
-> IOMMU subsystem by adding it to the iommu_buses[] array.
-> 
-> The QDA driver creates synthetic devices on this bus to represent
-> IOMMU context banks (CBs). Each CB device needs its own IOMMU domain
-> so that the DSP memory manager can enforce per-session address space
-> isolation. Without this registration, the IOMMU subsystem does not
-> probe CB devices for IOMMU groups and of_dma_configure() in the bus
-> dma_configure callback has no IOMMU domain to attach to.
-> 
-> Assisted-by: Claude:claude-sonnet-5
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-> ---
->  drivers/iommu/iommu.c | 4 ++++
->  1 file changed, 4 insertions(+)
+tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
+head:   91070be10a4c365f2be28f4351676bc072798b93
+commit: d4275763763a12b44dbeb442ff773a8b7c38a34e [43/122] Try to add the wifi card in the dlink device.
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260817/202608172010.SFZY7u2N-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 844a18e753e822736c9805ab779144b647a2c186)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260817/202608172010.SFZY7u2N-lkp@intel.com/reproduce)
 
-Acked-by: Joerg Roedel <joerg.roedel@amd.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608172010.SFZY7u2N-lkp@intel.com/
 
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "rtl8192cu_fops" [drivers/net/wireless/realtek/rtl8xxxu/rtl8xxxu.ko] undefined!
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
