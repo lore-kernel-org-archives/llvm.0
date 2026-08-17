@@ -1,104 +1,93 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B032EEE73;
-	Mon, 17 Aug 2026 15:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786980510; cv=none; b=Dv97Mg9EYO28TLBJXvhavaIzQsqi1z42uYhXbBM5OIz6sBsujwSyxdPEdNQiI8z5efpFsNtNwI4UNeteUWz3hGJZEYzQtWc5f3N5AVayrHWJH7oEAFtxd+TCi6s18XMM1MLydlPxUMKGSmKVmXk085G/KWayk+Fbu/RhZTZPagU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786980510; c=relaxed/simple;
-	bh=jzOH9XhHbTON03DtevCw+iYmjxG0j2LjTarGKKKIkk4=;
-	h=Date:From:Cc:Subject:Message-ID; b=gLVl1+KjCMXeEBWfwZWr+9HyO22fwER1E0lqhEr3LcCSQS7wVwzTQYk/LrEu6SNGx0l8jurA3bf+L/YdsHnMUxN1WBg88uFPc6DXek2SZvRn2l3ZYXcK2tVag8Bgsw7yNriOaSkN3FYDkmYg95dDcgf4t9D0Jt7/8aCz5v92GUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=beRWWAnr; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ECB233D4E4;
+	Mon, 17 Aug 2026 17:45:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786988744; cv=pass; b=aBK4EPXRmUWEFFM3oN5mubp795LbrTv1zkIwcnO6tlRk0KO1BFe4mmcEppaeqJ+VhgCJraZ1sJYtH4yT5J/dpKBznoI+g06ECLFyc47yJgRvN0DsWd1ZP1URDp8de5UEKHmwYO7k/bgt8d1cOQTk0pbBDC/6gmAoQkwtXhWh5AM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786988744; c=relaxed/simple;
+	bh=fcVjRaOh4uZVmU2qn27MI5GgKvqFd87cyenClV5K7ls=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GJhIyjdidO29M0TE/mqQaxo24ZY6DgrZEhkhNquapdYv0Phfd4gRLjYloiIedq2kgyas7T8SpmVzMiSxNXM6vKvtJaiRlgqV1DCejoSPcdPTfjOKnp7Gq0B36BQT3gdvWKDKurCyyBRYdDdHO5qORTNNFURNrTBW+IlrXjZ4ngc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=BXKxUt9l; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="beRWWAnr"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786980508; x=1818516508;
-  h=date:from:cc:subject:message-id;
-  bh=jzOH9XhHbTON03DtevCw+iYmjxG0j2LjTarGKKKIkk4=;
-  b=beRWWAnr8Qr21Ul3bOcpJfxvQmVvqpEUNYvxMyLEpqFgorKDDtURVmJR
-   yKihQW2ZqYrtvcLGM/ki5e8vxdzgOghKJ9bZguCXflzidqPncLSrsUenH
-   ENHEYcjHrcljFlmLIZvHihrANCID4IWybyQmBNgAkSsyizIsOK6kSziy8
-   eei5og4OUk7c0EsySDOWyxP1oc2CczIwZ9Kv3MhlOvLO+iFQdbOrVXHGk
-   H3068mv2vSDlUb+7DiJT0Ix6GgYOGsDG7xziPjA537YGj4zN5cDoOyoK3
-   GiGwGN/ICt8jGSSJBSxN6FqBuRriHJDKANQYxgYrlRzdPtDHe9UfsU5NG
-   w==;
-X-CSE-ConnectionGUID: PbyCHNEqSNWPzmeFEJ0mfA==
-X-CSE-MsgGUID: LJ4uuXIZTA+MEvS+itdAng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11877"; a="98046167"
-X-IronPort-AV: E=Sophos;i="6.25,229,1779174000"; 
-   d="scan'208";a="98046167"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 08:28:28 -0700
-X-CSE-ConnectionGUID: 1X0pq5DLRFKJJBohkCvw9A==
-X-CSE-MsgGUID: Vx5PSLBJTxy2IXWgjAT0kA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,229,1779174000"; 
-   d="scan'208";a="270145225"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 17 Aug 2026 08:28:23 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wvzG7-00000000dYU-1oa9;
-	Mon, 17 Aug 2026 15:28:19 +0000
-Date: Mon, 17 Aug 2026 23:27:40 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [dakr:nova/irq 17/33] rust/helpers/pci.c:37:9: error: call
- to undeclared function 'pci_irq_type'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202608172313.aWAREqgm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="BXKxUt9l"
+ARC-Seal: i=1; a=rsa-sha256; t=1786988726; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=kiiysDlY08xI+13vcEh0ELmwguZBCTuNeVGPce9UiqyLB76PuRf07HvYi/d4/2PN5o4NpplgKQo0YVtFQ11eizPV08cB+v0quRb1KZl+XxvvHGWMVfUC9pZHx/UYVJTwOsSCvAVkiyq9iRPXl49fK41apZHAtTXr3Bn0uucaaig=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1786988726; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=2l4J+dUreXi4HDK22EG6FGwZCpdoMeAtRZ6lNLT7i3I=; 
+	b=H4tiFwR3ASxQn2Gdcaih/4GUcWqkEmyOEd6XejZhLogNRAHTMorKi7H8SXbaIrUZqHwTZKYKhU45jDSGv2Gg8HA4Sp+60jKKmUgpPUXDc2uVyOMoKSoui8omb7n8LJ2dhCUNAP5SWfIWKQysmSMtGZwF3ZyNhNfn7/c9pq4feOg=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=yoavmoshe.com;
+	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
+	dmarc=pass header.from=<linux@yoavmoshe.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1786988726;
+	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=2l4J+dUreXi4HDK22EG6FGwZCpdoMeAtRZ6lNLT7i3I=;
+	b=BXKxUt9lwRV7o128/E8vX7B+EQ0nrVmUojBnSWIhgLmAB3dyK6N10NHmXkABYFlj
+	3Y6GjpB4qhm3pDG/2q4uh+GYtrwPL46eVCey6cCNaMUqUW63QedMF/iO+orK1SVL0GF
+	YGSBfL1VlXumA9k2+I1+R1Mhc1eLtif16ysG8RkM=
+Received: by mx.zohomail.com with SMTPS id 1786988722655882.7718161276589;
+	Mon, 17 Aug 2026 10:45:22 -0700 (PDT)
+Message-ID: <2056b473-4175-4383-926d-d15b566f0dd5@yoavmoshe.com>
+Date: Mon, 17 Aug 2026 19:45:18 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
+To: Sascha Hauer <s.hauer@pengutronix.de>, Frank Li <Frank.Li@nxp.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+ Russell King <linux@armlinux.org.uk>,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, Sami Tolvanen
+ <samitolvanen@google.com>, llvm@lists.linux.dev, stable@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260718111340.159896-1-linux@yoavmoshe.com>
+ <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
+ <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com>
+ <20260721180950.GA3684684@ax162>
+ <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com>
+ <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
+ <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com>
+ <CABCJKud+GsBVv+XMTsi_4QAaTHo7jXD2Hyvi9wqKd7x3i2xyAg@mail.gmail.com>
+ <415ffa24-a30b-43b2-aa6a-a1cde3bd4ef0@yoavmoshe.com>
+ <CABCJKud9B8vB-J8f0HLHw6EgEKVWzy+Q1PrNxpO_6yCGtEyi8A@mail.gmail.com>
+ <12a46993-82a5-4109-87fa-61b8fcf764aa@yoavmoshe.com>
+ <CABCJKufoQ0fX797M01t7CkTgMEwNCELY1=ptZsxr=jWOR-KAyA@mail.gmail.com>
+ <CAKwvOdnaOy-nyZ=8oLw4N-_hA9JZVdP2BhR8cweCAOhsy4VG6w@mail.gmail.com>
+ <91cb0f21-e78a-4931-b123-937c6a01592c@yoavmoshe.com>
+Content-Language: en-GB, sv-SE
+From: Yo'av Moshe <linux@yoavmoshe.com>
+In-Reply-To: <91cb0f21-e78a-4931-b123-937c6a01592c@yoavmoshe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-TO: Danilo Krummrich <dakr@kernel.org>
+On 2026-07-26 5:36 PM, Yo'av Moshe wrote:
+> Yes, I tried that as well and it unfortunately didn't work.
+> 
+> I tested Nathan's change along with explicitly copying the 4-byte
+> prefix from before imx6_suspend into OCRAM right before calling fncpy().
+> However, when checking the compiled binary, "&imx6_suspend - 4" just
+> contained padding rather than the hash, so the copied 4-byte value
+> didn't match what the call site expected.
+Hi Sascha, Frank,
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git nova/irq
-head:   63c0231684920d3d7e0141796b199ba5de8f2ecc
-commit: b511b9e0001c87ee7f7e478b1e7064a6b08536bc [17/33] rust: pci: expose the allocated interrupt type
-config: um-randconfig-001-20260817 (https://download.01.org/0day-ci/archive/20260817/202608172313.aWAREqgm-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 844a18e753e822736c9805ab779144b647a2c186)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260817/202608172313.aWAREqgm-lkp@intel.com/reproduce)
+Gentle ping on this patch. Is there anything else needed from my end?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608172313.aWAREqgm-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from rust/helpers/helpers.c:77:
->> rust/helpers/pci.c:37:9: error: call to undeclared function 'pci_irq_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-   37 |         return pci_irq_type(pdev);
-   |                ^
-   rust/helpers/pci.c:37:9: note: did you mean 'pci_pcie_type'?
-   include/linux/pci.h:2703:19: note: 'pci_pcie_type' declared here
-   2703 | static inline int pci_pcie_type(const struct pci_dev *dev)
-   |                   ^
-   1 error generated.
-   make[3]: *** [rust/Makefile:701: rust/helpers/helpers.o] Error 1 shuffle=2223888588
->> rust/helpers/pci.c:37:9: error: call to undeclared function 'pci_irq_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->> Unable to generate bindings: clang diagnosed error: rust/helpers/pci.c:37:9: error: call to undeclared function 'pci_irq_type'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-
-
-vim +/pci_irq_type +37 rust/helpers/pci.c
-
-    34	
-    35	__rust_helper unsigned int rust_helper_pci_irq_type(struct pci_dev *pdev)
-    36	{
-  > 37		return pci_irq_type(pdev);
-    38	}
-    39	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best regards,
+Yo'av
