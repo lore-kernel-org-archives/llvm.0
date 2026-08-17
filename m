@@ -1,140 +1,153 @@
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA1D43DAAD4
-	for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 21:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B08E3EA947
+	for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 22:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787003920; cv=pass; b=arGxjTR/mPubSlylsmj09tnI4O1+jl/fJ2AZQC+bWzQnjRjQ6223nVxgz+vS17c6XxB1lvfuUZxa81oQsHieaTMvUL+XzR5egXWfxKk47l/8/Nzpsnkz/hl7lRJXQLGeUMmBIdSz57brnJJKF0z1tbSIYPAcoCEQCuwVkFFd5pY=
+	t=1787007254; cv=pass; b=dnqpWpBNjN4zg4kEgUpAYz3BeL6269QQHaHh2/iIl9T9WGLLoKTN7zcyP7KyHdBdQ7CmGAp63L9Zcob0S7hPBffqcD6VJtmLe6/CxD4c2pZmPSVBIVQ2rVdui5BA1AQBXcR1l5V2FkDxG59LzOe7qO9uys8jio5ModT9M4kWjG4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787003920; c=relaxed/simple;
-	bh=CEdKirEq2+Q+UOHNlHEHrgKgh5UZWOj3QauTHmy16Wk=;
+	s=arc-20240116; t=1787007254; c=relaxed/simple;
+	bh=iJ1GSAg/wc98Z92pYDWBr9C6hm164sk6lWEx3mFGpic=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VTluMuNAaOnvP0EvL1cIYkpSbZvccaS5hfjrGiGu5ui+rR4kNQrF6hFD49gwJR30Ng2VquU1ZrhFyNGS2EFlzWZcLvHvobsM6KvgK0yN4totgEvC77HX/pkZA5RvgpZP0SV2Npjrow1HlsocXEO1ySBv0DVmjr9no5M8CRQEDTc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tDAvT9tp; arc=pass smtp.client-ip=209.85.218.50
+	 To:Cc:Content-Type; b=Y2R1pmjO/pMu7LlcNulVBOQd6NWEqY6kcc4jHcCVfw23ts5NUNBQ6LeJp8/vi8EJtv944GJKeKCpslKgAbUK8P5iNqXkthHfQWB3rsi9tKniFLFfz6jYqFa2kidojc7fRjmRKqGGUZ0GlZBoGBfKUp5eTgKgCmhSBCA/1MFRzIY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O/JotXX5; arc=pass smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tDAvT9tp"
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-c20ce3c118aso65985566b.0
-        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 14:58:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787003912; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O/JotXX5"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-c197eaaab00so745408466b.0
+        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 15:54:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787007251; cv=none;
         d=google.com; s=arc-20260327;
-        b=e9Ygh1rV3R4k3m3vcI7jNufqB4RmBHOpU91FHK5Uvz/FKiVl8A8oKc/1OQPUED5LcX
-         hWL93/xrtwKLG9ao+PonugDLgtYL2VkVrZeYabsQo/kQgq5VmCkryN8izWbpV7S2VniE
-         hBHL+7c7UVueRKh3SjsGVksudg0HdgYj7hNprFPsiMX/HjIempvkDrCKsbIPPyCF08WJ
-         BPr10NlmgfG7r/AP8lXz9/z0C7UNXf8PqEh6NVgMJH+wB12Rs5KRvzqHTrtxzt8Ow0cn
-         qq6cVPSeLyv06dWpY5UethyNAhfQx+0UlehFmA6H/KSvBbpz+5djUD7sV5o+C8IVwg+O
-         A4JA==
+        b=UEROS6NdYqMDZ2jF6XD3AZW2UawnlFoGqh8i05r7dS7WL1/x0W+600cKjj0oNkgmGQ
+         KIk1K2dG8YQ1tZ7OyF/W65r0hS1aHxqij2lHxY2rRHtmRWVHvl6PyKXhELzJxNPA4VgB
+         qucgvXzLSQyS/6ktSZoEjMpsm/2eWKmurTvG4EhZoPDzgwxty69lgEgBnMyzz6yjhHSi
+         MsekGLbvJKeaLo+YPg314NqtcCT6C0TAupyNsuMG+OclVn9dV37QYXLPV8jAixMPL2ZK
+         VyWXLTofzD6OF0Oi1EdQXZDlV8j9GwxhKV88tKlw/da+5dcbMrC7cHLOSthxHueR7r4y
+         pOnQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=okaAU3zYOn1hyhzNcOWFnCkDHyrXnj6mHvmxdNYRJ3k=;
-        fh=BtxSyZoGiRs0ScwtqlMvRNVmynKGaSAFB9mQiLXqzrc=;
-        b=Q9YYdJo+4qqMDmb/0+u1NEbCsnj4/79kqN6We1h36Pcu6u5OYU6HvQ2OCM9EDa3JWd
-         jkMmXJx1yrxH00tT8KgUwastVpdhF4C62XMglbAbHcdfNUE+5gyv/i9eyAH7JMrfWuIs
-         11cEd8Vl4OQQ4dqW8xDNVwFlp7k01tfKOUFUtJ1yH9m4MqXSHiiHmPxSc/8qUvnGo9RQ
-         u/KRY7Cmxksm5ovtusTzLXMbaDlTJoZnge+yQZSSpIlZ3I4ED652L7YBiKmGzoVefFfz
-         oUjgovX1U/JxcJWeo81K5VoXoUiIM72Oddmz3v6Sl7uSQK5pWl863oJx62kvXtDGC4ib
-         YN5w==;
+        bh=u5dhNWMYyRmUyG6+pD3T6b5XVM3Qf6OaAA8jv9AvKJU=;
+        fh=7LnF2dBckpQlQNCQylobHoWw5WoOkBnerr1AUnSGddg=;
+        b=LrslTjICXujVHk9fw+6UUkuPBw4lS0tnJdSGR6wgROTpAg6pE0xxSnTiwqfIhy1qU6
+         hy+/pf/9m9MHyi5hlVLzTgK5X8HVq0PwnqtS123sRtJK1ln8Chqyy410W1VwxVsrVNt4
+         ek6kPYdulitrQUfk9MD84K+sOV8HB212g2i6n9bX29hbxApy5YFwNXM+LlMP6FnaL5dO
+         Y3juoD9UfYrMhnHHWLQpvyLhC0H4phE5XV6+fn1VQjdDtr2Sn4D6r0BrXEH3bDBHkYlW
+         4GOD3c4aLE5rkcAI7uVjhkfrbgvLBJSt7kBDl3YYUGXH7kXmuxq2dN7/5wvu6Tn5ALpd
+         xOuQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787003912; x=1787608712; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1787007251; x=1787612051; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=okaAU3zYOn1hyhzNcOWFnCkDHyrXnj6mHvmxdNYRJ3k=;
-        b=tDAvT9tpd5zyEdd17zJ8ylht2zphVHSs/vbGj0vnrQJHh9XlGYGOakZvcxYLur7t6T
-         /f5KPQmm2mS7FdrNu+zXHoDVR6uePc1WAPanBMCV+gTSj94rLviCCl+YtnR22272UHSS
-         2+cEzhPt5b2eteb6VgK7q8Mipikpheawld8hw+0oFqcrUhta4/qfXE0mQBSQ9mHM9dPy
-         IW+e3hKONRi/VQ2h30VutUhy9jgZqbSQM8qVdzXUHZWKoX1JlmycBy53MUMA9sU/UD64
-         Qs+rOL88q4MYGV6fuqktIckrJn+fEeURwv7Phzab/i0YoEmyFLEKdJbcVHDgANUI4H5q
-         bUeg==
+        bh=u5dhNWMYyRmUyG6+pD3T6b5XVM3Qf6OaAA8jv9AvKJU=;
+        b=O/JotXX5rQtyUXzuAUzVe88ztzd5waVqFJ8t2kkn3vpJ6eRKZgVv+IrN3UkfMSeAj1
+         k4NYI6MuybK9AoIk2pSHbpPrW9CGlo36HmB7rIHIeVTgPeyHMzA9TMZM2aUOP5HlDo99
+         YOgcVfFkNBk8qKNLCZm+2qh3ShzIeRaPr/+oqNb3MFW5pnkp63nRtnBWSiNHzhSS6fJM
+         CXVPMG0TVvhZGVNBlz/7LuGQlRwadwyESXED5QLqoUPKh3kSlrcaE3UrGbM0inr08phe
+         2EgdWBoWLsHh7f+LxjT+4kz4IcDD7XIwrP3jzONl0GnDG/JbwvtJQjKwoETsuGfLLuSE
+         4QEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787003912; x=1787608712;
+        d=1e100.net; s=20251104; t=1787007251; x=1787612051;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=okaAU3zYOn1hyhzNcOWFnCkDHyrXnj6mHvmxdNYRJ3k=;
-        b=VjQdNXTDC8I8KwQLKDtpJZVznm0HCuZUnPF6ShX0rq+sr5SHYK4DD7kVRSy4xPhgCu
-         bOKEjCjhd0hdYNaaro5jeO9hQa9Qgkv12kLCSu+Bts6u44jdyqSB5p5W7Db9j9rGZ6ye
-         BpzahizjyUeC//rOcQzQBoO+sO/M32jD+Ie3+ih0TOqh/cJ0izey29sav0exCTnPzMcK
-         ARSKTNJRXNIFmJuIHJIyfJ2nKasVIsEuuJKYlqcLPCkkBj8aGmS+r+zXIJwvicWBB2kx
-         t4GpHaYhK4hbJ9OUydB9ikdZy1Ozg10ZQ0dTMhl4yrC6Zzu/lz+N5LE/e8iNnr/uchHs
-         TGAQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq4izkW4tEoK3BCtxZIixx0MIKdYihyewmts0BhWGNQsdawISILXgG1El0eLTE5HbjZlTfV@lists.linux.dev
-X-Gm-Message-State: AOJu0Yx0emfWZczsBKFc3GJ7HLe2Wm01lPdh2eUY5fDvv2IFzKK8FNwa
-	lN5guhAnYsc2FlLYOg4m/yg2M9Y5AdyJ0vQwImr97ITwi8YbyyOJR1zqyuPWnacm13iOZ6RcHHF
-	vdlr38marApX6C3u5Vd05Pv+JTBfuNeLmm9bavwl+
-X-Gm-Gg: AR+sD11VzVLvB2/74VsM4bRJ6eeXv6B9Ou4skQRPpw6b9kBsKchmsnX0A+l9e1aXak1
-	CBACv+wuhPaAcONdYxSwGMbHICjAG2aMJ+usfbECnm22hf4BgD+j4bnhZguj820CFV++qkTTo4+
-	qcqPeFbq0B6vKXRHlZaH4VjK5GSbG+U4b3I2GKh5ACxoU/keITbXHduKvzxNz+g1NgMjMuO1IdA
-	ZWJZqyPfYBZ7oDrDfvAUP5pT35P0twvw+1bNHOfKz1yhUWrQVI4Sum+VlUPrFlpdZJNtGhSFf28
-	wU/cQblBjKxT4/gfxpdEJ+xOEi/4JIzhfAF03A1GTlnqzgLiMVXA/xH0r59bbHcKkP8jR0jDGYx
-	GuxZzu9IInsVChlZ6gNwQHawEuBKR4NYbz7s0ILe+oJRu3kBuIJJ6nkG2
-X-Received: by 2002:a17:907:9446:b0:c0d:7c31:26a9 with SMTP id
- a640c23a62f3a-c218d9ba953mr40425566b.2.1787003911741; Mon, 17 Aug 2026
- 14:58:31 -0700 (PDT)
+        bh=u5dhNWMYyRmUyG6+pD3T6b5XVM3Qf6OaAA8jv9AvKJU=;
+        b=PRM2odgLADQOnywQHHDw9/knujhu6KjMuboX6fDQFEpDPhuk6tvUn+W6SJBQ15sMUM
+         /IN8X6AmBBXSAOooJbRvPzj9pxbwaeVdh/qhkc5fW8HNvbkLzn+sgIS4JMMrrVhs5ew6
+         yeplCnYeiwMXVsMFWAT+wI6Oi0LeXswW2CUBtsLxKBfnrKU1l9e+tya447InAPoJgowc
+         SkpwM1/GzNSTeBu3kve3MvOSP5/3fwlTicgnMyG+fNtZN7XjyiEzUS5xjV8DX6SZwgGH
+         a4GerfvI5n9Q7lEsV+b0et1WDBSMNA/ahiHD3SFRZHtU8hcuRLpAm44KhNZl9bbCC2rL
+         2k6g==
+X-Forwarded-Encrypted: i=1; AHgh+RrJORvX+BN0sGtjvwNa60h+uz5TOFu/25Z6x0pWmFK7r27GzENzR0rszwbp4xNgduYZREHx@lists.linux.dev
+X-Gm-Message-State: AOJu0YzeXw4BF66E+Zo+XIN9uHndO9lcMh5R6hTNzCbeayTWFLkUZ/Q/
+	Jx650mdVBgIO9W5hqbjyVEyICRTaYm2SK+zeWIgbK1GKoNkvCVl2uzsOpby0LH9L1L6Wrj/4vs4
+	k83D9ARkLZTMTcZ5XapLJFJkGGfX1kJd4Nkck8Ze9
+X-Gm-Gg: AR+sD13sPKJNkOFw1tIoizv5EYYKR8ViIxfO8pqEoPBRHPplNaQ9RXVh3p2drmwAlyE
+	FhCw5yyrYOZJzgzMSraP3vT2EHR1npo36lp6PNqJrCwcd+7kYrsUpZVeB+GB1+COjWnIaNfp8GH
+	HF73gWE07XfrKJ5TXZOt+uQNBv8MwkC+dsOnUW5VLlBVzBZWGRuE1vwrfYRZb3QIrv84RraI5kA
+	yICzzhxkRhqWsyg1DZQVKpjg3lMNt8i8R3Wl2DXtuhh5CGKKPtWUkTNty+XuZ4R+1B+CwT/ITR8
+	mZ1b/4IuhxX5cvfZjC2IH2gLzbDkZ9LKnx1hBvYueYOKQG8YON3/PuEXd01rKnMVvLf1p76ZqS1
+	W31vCIRHotGwr4jtUUiv5JBucGI/pwrHkMsVbBh1H1NNvaYoXMU1ivARM
+X-Received: by 2002:a17:907:d08c:b0:c21:180c:d82d with SMTP id
+ a640c23a62f3a-c212a1858femr1259170866b.20.1787007250883; Mon, 17 Aug 2026
+ 15:54:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260718111340.159896-1-linux@yoavmoshe.com> <CABCJKudqGL+BFFcz3qsuoJB6S_OAt-vs2yqePC_=oy+JzmPpVw@mail.gmail.com>
- <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com> <20260721180950.GA3684684@ax162>
- <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com> <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
- <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com> <CABCJKud+GsBVv+XMTsi_4QAaTHo7jXD2Hyvi9wqKd7x3i2xyAg@mail.gmail.com>
- <415ffa24-a30b-43b2-aa6a-a1cde3bd4ef0@yoavmoshe.com> <CABCJKud9B8vB-J8f0HLHw6EgEKVWzy+Q1PrNxpO_6yCGtEyi8A@mail.gmail.com>
- <12a46993-82a5-4109-87fa-61b8fcf764aa@yoavmoshe.com> <CABCJKufoQ0fX797M01t7CkTgMEwNCELY1=ptZsxr=jWOR-KAyA@mail.gmail.com>
- <CAKwvOdnaOy-nyZ=8oLw4N-_hA9JZVdP2BhR8cweCAOhsy4VG6w@mail.gmail.com> <91cb0f21-e78a-4931-b123-937c6a01592c@yoavmoshe.com>
-In-Reply-To: <91cb0f21-e78a-4931-b123-937c6a01592c@yoavmoshe.com>
+References: <20260813075304.75988-1-thuth@redhat.com>
+In-Reply-To: <20260813075304.75988-1-thuth@redhat.com>
 From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Mon, 17 Aug 2026 14:58:19 -0700
-X-Gm-Features: AcwNN1VNo3n6QqxpiSk3WE0KBl-3YmOc0Qs-sAl-zs64L7Q39Eb5f5vg2HrwQ5Q
-Message-ID: <CAKwvOdk-JmqjhZWBiLjXTxKhEV+T3BAB6An+3Ara8oybmhAMpA@mail.gmail.com>
-Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
-To: "Yo'av Moshe" <linux@yoavmoshe.com>
-Cc: Sami Tolvanen <samitolvanen@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Frank Li <Frank.Li@nxp.com>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Russell King <linux@armlinux.org.uk>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev, 
-	stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Mon, 17 Aug 2026 15:53:59 -0700
+X-Gm-Features: AcwNN1XLIBynaITswGLdvzxuB2Uj3-hZ60VtqOVVnBmJvH47W0N_DNVtiARsPdg
+Message-ID: <CAKwvOd=B2o5bdup0YRoKdN0J3GrZh+4M6VLamDAmit0k53o=0A@mail.gmail.com>
+Subject: Re: [PATCH] kselftest/riscv: Replace __ASSEMBLY__ with __ASSEMBLER__
+To: Thomas Huth <thuth@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Nathan Chancellor <nathan@kernel.org>, Deepak Gupta <debug@rivosinc.com>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Jul 26, 2026 at 8:37=E2=80=AFAM Yo'av Moshe <linux@yoavmoshe.com> w=
-rote:
+On Thu, Aug 13, 2026 at 12:53=E2=80=AFAM Thomas Huth <thuth@redhat.com> wro=
+te:
 >
-> On 2026-07-24 10:49 PM, Nick Desaulniers wrote:
-> > Yeah, Yo'av did you test further modifications that explicitly copy
-> > the hash prefix? I assumed Nathan's change _plus some additional tweak
-> > to copy not just imx6_suspend to OCRAM which I assume the code already
-> > does, but I would imagine you need another change to copy
-> > __kcfi_typeid_imx6_suspend into OCRAM just before the function.  Was
-> > that tested?
-> Yes, I tried that as well and it unfortunately didn't work.
+> From: Thomas Huth <thuth@redhat.com>
 >
-> I tested Nathan's change along with explicitly copying the 4-byte
-> prefix from before imx6_suspend into OCRAM right before calling fncpy().
+> While the GCC and Clang compilers already define __ASSEMBLER__
+> automatically when compiling assembly code, __ASSEMBLY__ is a
+> macro that only gets defined by the Makefiles in the kernel.
 
-Can you share that diff? I would have expected that to work. Perhaps a
-minor mistake in your implementation?
+Thank you for the patch.
 
-> However, when checking the compiled binary, "&imx6_suspend - 4" just
-> contained padding rather than the hash, so the copied 4-byte value
-> didn't match what the call site expected.
+Correct!
+$ clang -dM -E -x assembler-with-cpp - < /dev/null | grep ASS
+#define __ASSEMBLER__ 1
+...
 
-How did you verify this? Can you share the command line invocations and out=
-put?
+> This can be very confusing when switching between userspace
+> and kernelspace coding, or when dealing with uapi headers that
+> rather should use __ASSEMBLER__ instead. So let's standardize now
+> on the __ASSEMBLER__ macro that is provided by the compilers.
+
+Yes, thanks for cleaning up this legacy cruft. Godspeed on fixing the
+rest of the kernel.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
 >
-> Yo'av
-
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>  tools/testing/selftests/riscv/cfi/cfi_rv_test.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h b/tools/test=
+ing/selftests/riscv/cfi/cfi_rv_test.h
+> index 1c8043f2b778b..184df6903d01c 100644
+> --- a/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+> +++ b/tools/testing/selftests/riscv/cfi/cfi_rv_test.h
+> @@ -56,7 +56,7 @@
+>
+>  #define CSR_SSP 0x011
+>
+> -#ifdef __ASSEMBLY__
+> +#ifdef __ASSEMBLER__
+>  #define __ASM_STR(x)    x
+>  #else
+>  #define __ASM_STR(x)    #x
+> --
+> 2.55.0
+>
 
 
 --=20
