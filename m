@@ -1,101 +1,170 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74E681F63D9;
-	Mon, 17 Aug 2026 19:05:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7961D3F12C6;
+	Mon, 17 Aug 2026 19:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786993506; cv=none; b=s3eiBp4rokDQirjb9C6FwZaHoSdYxmyEVxE4LopUrPZ/yKq1//lNPqKovDdIxD3frkAd0PnC2Q4UZYK5MtC2Nqt1LDGH/yliZzGuVD44l3/zPfd86pfqG9jfyOhVtWRTr2IBPJCtKGajNizMihPk/ir28uUY/MBIS7ZI0FOAZzY=
+	t=1786995501; cv=none; b=hAqLSYLD5Cj4euWNXJC/T0eon7N97ECQIlLZMa2NPweKEFnXF86lZVacX/zqde6Bi0m346ZcYAT3d0OSiQekUrjfr2EMtiuYWG/xfjKxlStu/g+mVFrS8FzlafreFpC4ydOY2PLzfKBWZ8W+u4Gx0dFSFEw8iUW6zpSvf/ArwKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786993506; c=relaxed/simple;
-	bh=lUUmBqqkyEdjdH52ETtXEdeeJGgD/7QohYQfKSe/Bro=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Ka8UdbMAvRVsZAWAuTT/61s2x/Jnrdsam2gifltOo4pf8UeGnDKJr8agjcCmLmKM2qFS37aKYDO7Vl3njixMX8niARcVyerDFezQ8bL9zfHR0oMnSw/k/d/AkreiJLHs0jR56xmgE91CdY9R55kDrCf7j0gIQXSF00a/nbeeBu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAkeKTUY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786995501; c=relaxed/simple;
+	bh=+Eeq9VePN9mOHo3XkDie2uS+Li2hmmiLQ0E++jowb6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fcncOqBLy9SksWaoprRLzxMEWx785n+MWCmka20Hgx0ad5jZANOYo0zEQzJPJv7eRblnv7hXcAj04JLg4ZQoMVCEhrDTQaXpIL8njcbwpkwvt/XNAhFelz2rULR4l/2MVUvC2CKblBaxjiqOkDJB6u3KbpG3GaXUPMO1WAxqHi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vv5RJUiu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAkeKTUY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A52D91F000E9;
-	Mon, 17 Aug 2026 19:05:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vv5RJUiu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32211F000E9;
+	Mon, 17 Aug 2026 19:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786993505;
-	bh=ML1B2/r+psY08wn0C4kBVmdPYnKuWxTUSYfY6GsO7Ls=;
-	h=From:Date:Subject:To:Cc;
-	b=AAkeKTUYakkpnGyOQ+HioxNGW3rW7dLbJrjulLpPZzlCO2om5UMh3lmBHhlxYYhdh
-	 /PE+P1z9DHDY+C+OU77wpKTfPjMoxgihfoXJuX3LV7S40bQTmM1b1F1XbXWq3uxUnm
-	 hBzWsDK1xiAxVgAJHgPbTlOTRHVhGN4hjn/dC9DBsgLDmqDpx0nhUWwENwsBR2fktW
-	 tej/uwJL92NQQe/Ij4QyJljQuSGG/EHR2HrJSQPV5LQtWIcFhrjGhzythZj0weAU47
-	 QAlr+a5LdikqDyED2ffnuvuBYKWSHvWUVwJLdkYW3MRAMm6eODXTLBmfQ3c6JQTVj1
-	 /j+61+xg8T0dw==
+	s=k20260515; t=1786995500;
+	bh=cD3mmvYKpha8dr0drJhM5eVX4f+kSXFZpxrYv6xr2MI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Vv5RJUiurDKE+42m3+I7fooZ17angkcbBiMDqDM8ibSdc48S/D8pELAOlGV3auY2a
+	 swGTKPUkuoYVei0oUYXOZ11RnUu6pf3lLUOkqe1BEVQHs9dNtxABN4RU6Vhv3eGMmw
+	 VCbcM7xtWGKmpl0LKqSoknM29gzUvw9jFSbJGl35sgzARcjrfCmRz9OjWIUexJ+5w5
+	 Hv1af/O5CSR+i2PSv0+6bneQJtmAVf8fpjiA1w6rmOYQUwEQLf8Ala7pJsX353LX42
+	 +QoBl0WJ7uzZMkvhY+A+gdFfAzpqdZYMs+Zo0sbBk4f/ufpbCCrqxvGkJOXu574Rqc
+	 dT1EoMcyHeR9A==
+Date: Mon, 17 Aug 2026 12:38:10 -0700
 From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 17 Aug 2026 12:04:55 -0700
-Subject: [PATCH] scsi: ibmvfc: Fix use of uninitialized rport in
- ibmvfc_do_work()
+To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+Cc: FUJITA Tomonori <tomo@flapping.org>, linkmauve@linkmauve.fr,
+	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
+	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
+	ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org,
+	daniel.almeida@collabora.com, tamird@kernel.org,
+	acourbot@nvidia.com, work@onurozkan.dev, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, fujita.tomonori@gmail.com,
+	joelagnelf@nvidia.com, gregkh@linuxfoundation.org,
+	prafulrai522@gmail.com, nsc@kernel.org, japo@linux.ibm.com,
+	lina+kernel@asahilina.net, j@jannau.net, airlied@gmail.com,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
+Message-ID: <20260817193810.GA4060679@ax162>
+References: <20260708082454.1254320-1-mkchauras@gmail.com>
+ <178574013457.29744.6211258618175255546.b4-ty@linux.ibm.com>
+ <anG67Q6Y59kDqh-c@desktop>
+ <20260804.224035.269658578200153488.tomo@flapping.org>
+ <anMsbbRNiihKB-z7@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260817-ibmvscsi-rport-wuninitialized-v1-1-0fdfb27a5f01@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ6CMBAF0KuQWTtJSwI1XsW4oO2o32ghnYJGw
- t2tunybt5JKhigdmpWyLFCMqcLuGgrXIV2EEaupNW1v9tYx/GPRoOA8jbnwc05IKBjueEtk472
- TLprO9ZbqMWU54/X7j6e/dfY3CeWb0rZ9ADuGQOGBAAAA
-X-Change-ID: 20260817-ibmvscsi-rport-wuninitialized-0bb7e5d05761
-To: Tyrel Datwyler <tyreld@linux.ibm.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1841; i=nathan@kernel.org;
- h=from:subject:message-id; bh=lUUmBqqkyEdjdH52ETtXEdeeJGgD/7QohYQfKSe/Bro=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnN0TF2DWbHf7glL5PhvbvTSmaPItfRr1/9WuXkV++2l
- IiaHWrTUcrCIMbFICumyFL9WPW4oeGcs4w3Tk2CmcPKBDKEgYtTACbS183wz0rrbvj62OJcmfdG
- qpzyfGrbjRbaPpzPIRv1OGXtmonRRYwMT3QjEwO1PeqqLpRLVO/39hC/OnfO736t+RbMkw7+vir
- ADAA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <anMsbbRNiihKB-z7@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
 
-After commit 696d1cc2aaa2 ("scsi: ibmvfc: process NVMe/FC rports in work
-thread"), clang warns (or errors with CONFIG_WERROR=y / W=e):
+Hi Mukesh,
 
-  drivers/scsi/ibmvscsi/ibmvfc-core.c:6154:15: error: variable 'rport' is uninitialized when used here [-Werror,-Wuninitialized]
-   6154 |                         } else if (rport && tgt->action == IBMVFC_TGT_ACTION_DEL_AND_LOGOUT_RPORT) {
-        |                                    ^~~~~
+On Wed, Aug 05, 2026 at 05:59:14PM +0530, Mukesh Kumar Chaurasiya wrote:
+> On Tue, Aug 04, 2026 at 10:40:35PM +0900, FUJITA Tomonori wrote:
+> > On Tue, 4 Aug 2026 12:11:57 +0200
+> > Link Mauve <linkmauve@linkmauve.fr> wrote:
+> > > I just tested those again in linux-next, with the Wii support series on
+> > > top, but now the kernel fails to build due to ARCH_WARN_ASM and
+> > > ARCH_WARN_REACHABLE not being defined on PowerPC:
+> > > ```
+> > > error: no rules expected `ARCH_WARN_ASM`
+> > >    --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_warn_asm.rs:1:28
+> > >     |
+> > >   1 | ::kernel::concat_literals!(ARCH_WARN_ASM("{file}", "{line}", "{flags}", "{size}"))
+> > >     |                            ^^^^^^^^^^^^^ no rules expected this token in macro call
+> > >     |
+> > >    ::: ../rust/kernel/lib.rs:279:1
+> > >     |
+> > > 279 | macro_rules! concat_literals {
+> > >     | ---------------------------- when calling this macro
+> > >     |
+> > >     = note: while trying to match sequence start
+> > > 
+> > > error: no rules expected `ARCH_WARN_REACHABLE`
+> > >    --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_reachable_asm.rs:1:28
+> > >     |
+> > >   1 | ::kernel::concat_literals!(ARCH_WARN_REACHABLE)
+> > >     |                            ^^^^^^^^^^^^^^^^^^^ no rules expected this token in macro call
+> > >     |
+> > >    ::: ../rust/kernel/lib.rs:279:1
+> > >     |
+> > > 279 | macro_rules! concat_literals {
+> > >     | ---------------------------- when calling this macro
+> > >     |
+> > >     = note: while trying to match sequence start
+> > > 
+> > > error: aborting due to 2 previous errors
+> > > ```
+> > 
+> > Looks like powerpc needs something like the followings:
+> > 
+> > diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
+> > index 0db48977c70c..8aba39e0cf26 100644
+> > --- a/arch/powerpc/include/asm/bug.h
+> > +++ b/arch/powerpc/include/asm/bug.h
+> > @@ -32,34 +32,38 @@
+> >  #endif /* verbose */
+> >  
+> >  #else /* !__ASSEMBLER__ */
+> > -/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3 to be FILE, LINE, flags and
+> > -   sizeof(struct bug_entry), respectively */
+> >  #ifdef CONFIG_DEBUG_BUGVERBOSE
+> > -#define _EMIT_BUG_ENTRY				\
+> > +#define _EMIT_BUG_ENTRY(file, line, flags)	\
+> >  	".section __bug_table,\"aw\"\n"		\
+> >  	"2:	.4byte 1b - .\n"		\
+> > -	"	.4byte %0 - .\n"		\
+> > -	"	.short %1, %2\n"		\
+> > -	".org 2b+%3\n"				\
+> > -	".previous\n"
+> > +	"	.4byte " file " - .\n"		\
+> > +	"	.short " line ", " flags "\n"
+> >  #else
+> > -#define _EMIT_BUG_ENTRY				\
+> > +#define _EMIT_BUG_ENTRY(file, line, flags)	\
+> >  	".section __bug_table,\"aw\"\n"		\
+> >  	"2:	.4byte 1b - .\n"		\
+> > -	"	.short %2\n"			\
+> > -	".org 2b+%3\n"				\
+> > -	".previous\n"
+> > +	"	.short " flags "\n"
+> >  #endif
+> >  
+> >  #define BUG_ENTRY(cond_str, insn, flags, ...)		\
+> >  	__asm__ __volatile__(				\
+> >  		"1:	" insn "\n"			\
+> > -		_EMIT_BUG_ENTRY				\
+> > +		_EMIT_BUG_ENTRY("%0", "%1", "%2")	\
+> > +		".org 2b+%3\n"				\
+> > +		".previous\n"				\
+> >  		: : "i" (WARN_CONDITION_STR(cond_str) __FILE__), "i" (__LINE__),	\
+> >  		  "i" (flags),				\
+> >  		  "i" (sizeof(struct bug_entry)),	\
+> >  		  ##__VA_ARGS__)
+> >  
+> > +#define ARCH_WARN_ASM(file, line, flags, size)		\
+> > +		"1:	twi 31, 0, 0\n"			\
+> > +		_EMIT_BUG_ENTRY(file, line, flags)	\
+> > +		".org 2b+" size "\n"			\
+> > +		".previous\n"
+> > +
+> > +#define ARCH_WARN_REACHABLE
+> > +
+> >  /*
+> >   * BUG_ON() and WARN_ON() do their best to cooperate with compile-time
+> >   * optimisations. However depending on the complexity of the condition
+> 
+> Yeah, This makes sense.
+> 
+> I'll work on this and send out a fix soon.
 
-The check for rport is unnecessary in this block, it was accidentally
-included from copying and pasting. Remove it to clear up the warning.
+Did a fix for this ever materialize? I am still seeing the errors that
+Link posted above in next-20260817.
 
-Fixes: 696d1cc2aaa2 ("scsi: ibmvfc: process NVMe/FC rports in work thread")
-Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-Link: https://lore.kernel.org/6ccbe8c5-beb6-483f-bfa4-c2d3819ad5f2@linux.ibm.com/
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/scsi/ibmvscsi/ibmvfc-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/ibmvscsi/ibmvfc-core.c b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-index 93b9f699c2e5..b3bc3ce872d6 100644
---- a/drivers/scsi/ibmvscsi/ibmvfc-core.c
-+++ b/drivers/scsi/ibmvscsi/ibmvfc-core.c
-@@ -6151,7 +6151,7 @@ static void ibmvfc_do_work(struct ibmvfc_host *vhost)
- 				timer_delete_sync(&tgt->timer);
- 				kref_put(&tgt->kref, ibmvfc_release_tgt);
- 				return;
--			} else if (rport && tgt->action == IBMVFC_TGT_ACTION_DEL_AND_LOGOUT_RPORT) {
-+			} else if (tgt->action == IBMVFC_TGT_ACTION_DEL_AND_LOGOUT_RPORT) {
- 				tgt_dbg(tgt, "Deleting NVMe rport with outstanding I/O\n");
- 				nvme_rport = tgt->nvme_remote_port;
- 				ibmvfc_set_tgt_action(tgt, IBMVFC_TGT_ACTION_LOGOUT_DELETED_RPORT);
-
----
-base-commit: 30733f28c0347d237ffb5333fdfab7a9a2d4ed34
-change-id: 20260817-ibmvscsi-rport-wuninitialized-0bb7e5d05761
-
-Best regards,
---  
+-- 
 Cheers,
 Nathan
-
