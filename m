@@ -1,170 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7961D3F12C6;
-	Mon, 17 Aug 2026 19:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EC14519A6;
+	Mon, 17 Aug 2026 19:46:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786995501; cv=none; b=hAqLSYLD5Cj4euWNXJC/T0eon7N97ECQIlLZMa2NPweKEFnXF86lZVacX/zqde6Bi0m346ZcYAT3d0OSiQekUrjfr2EMtiuYWG/xfjKxlStu/g+mVFrS8FzlafreFpC4ydOY2PLzfKBWZ8W+u4Gx0dFSFEw8iUW6zpSvf/ArwKI=
+	t=1786996014; cv=none; b=C25bes/B4b8UZ7h6KLY04xBPe4oASMLRmIf0mYyn5XkoaUwEFfPpKy3ha0wBh9Vi199PNRmLLFRYFcriqEhubL7CL8gGJl4e1ziLjdPbki2ODFdRGNOwZjAH6niaUesI9gg1PUxFR8BMQsQfYi3693icszwR30pJ8jAJfir83xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786995501; c=relaxed/simple;
-	bh=+Eeq9VePN9mOHo3XkDie2uS+Li2hmmiLQ0E++jowb6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fcncOqBLy9SksWaoprRLzxMEWx785n+MWCmka20Hgx0ad5jZANOYo0zEQzJPJv7eRblnv7hXcAj04JLg4ZQoMVCEhrDTQaXpIL8njcbwpkwvt/XNAhFelz2rULR4l/2MVUvC2CKblBaxjiqOkDJB6u3KbpG3GaXUPMO1WAxqHi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vv5RJUiu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786996014; c=relaxed/simple;
+	bh=4CRMSdf7Lpqq6C/a37gCgEtrEr/WfAafu+gUxWM/vC8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=D1WGeUlGhJksIPk4rxAQ4W9wZycxP+cjAkXYvEh5vmZcNCWjmD50ugTKeaiASjKWTV+LfJyI6vcpD3vLtj6hldhi6PqjucHm6JxV1SkWpnD2Zg9TmWY2Z0SuitDyHhTRbqGF6JjVtpFyWumfT0JdGf5EvVmN8aPrL2e1ee+Blbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oOSTYVlp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vv5RJUiu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32211F000E9;
-	Mon, 17 Aug 2026 19:38:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oOSTYVlp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F99B1F00A3A;
+	Mon, 17 Aug 2026 19:46:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786995500;
-	bh=cD3mmvYKpha8dr0drJhM5eVX4f+kSXFZpxrYv6xr2MI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Vv5RJUiurDKE+42m3+I7fooZ17angkcbBiMDqDM8ibSdc48S/D8pELAOlGV3auY2a
-	 swGTKPUkuoYVei0oUYXOZ11RnUu6pf3lLUOkqe1BEVQHs9dNtxABN4RU6Vhv3eGMmw
-	 VCbcM7xtWGKmpl0LKqSoknM29gzUvw9jFSbJGl35sgzARcjrfCmRz9OjWIUexJ+5w5
-	 Hv1af/O5CSR+i2PSv0+6bneQJtmAVf8fpjiA1w6rmOYQUwEQLf8Ala7pJsX353LX42
-	 +QoBl0WJ7uzZMkvhY+A+gdFfAzpqdZYMs+Zo0sbBk4f/ufpbCCrqxvGkJOXu574Rqc
-	 dT1EoMcyHeR9A==
-Date: Mon, 17 Aug 2026 12:38:10 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-Cc: FUJITA Tomonori <tomo@flapping.org>, linkmauve@linkmauve.fr,
-	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-	chleroy@kernel.org, peterz@infradead.org, jpoimboe@kernel.org,
-	jbaron@akamai.com, aliceryhl@google.com, rostedt@goodmis.org,
-	ardb@kernel.org, ojeda@kernel.org, boqun@kernel.org,
-	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
-	a.hindborg@kernel.org, tmgross@umich.edu, dakr@kernel.org,
-	daniel.almeida@collabora.com, tamird@kernel.org,
-	acourbot@nvidia.com, work@onurozkan.dev, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com, fujita.tomonori@gmail.com,
-	joelagnelf@nvidia.com, gregkh@linuxfoundation.org,
-	prafulrai522@gmail.com, nsc@kernel.org, japo@linux.ibm.com,
-	lina+kernel@asahilina.net, j@jannau.net, airlied@gmail.com,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH V17 0/7] Rust Support for powerpc
-Message-ID: <20260817193810.GA4060679@ax162>
-References: <20260708082454.1254320-1-mkchauras@gmail.com>
- <178574013457.29744.6211258618175255546.b4-ty@linux.ibm.com>
- <anG67Q6Y59kDqh-c@desktop>
- <20260804.224035.269658578200153488.tomo@flapping.org>
- <anMsbbRNiihKB-z7@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+	s=k20260515; t=1786996011;
+	bh=61TtIMsIEaRN2psi8pMxXtUA4/qPQ0s0iCcpkXjAxZI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=oOSTYVlp4GNTa0vFQgvPMdbe3xz6kQfrl06TRv9LHRvMVqfZf4jLeIjTT8bnDQDQ9
+	 AvmHWzzZ3ynkt9+gAlfJ6JuQ3fToTLNy7Zg470DOOJE2HV8Wbk5DE8A3zBT5hncu/M
+	 zcKa/BvHuk12hU4FAXHuLWgPPnxzT1yOCT9yTb87zwPmpokqDdW8IwhCoViujLhYcP
+	 4tp2J38jr3Buiii6vifnWyjNhE/3rqezrRfhIASsX98C22oL1LmXZeWfIB9o4HpuVN
+	 r7S5TOXIy2eWRV2UM0/zG4L8OTyRI3M8EPCWkDyYXwfH69En/H2JBzVcsvMLAMEBPS
+	 ckGb4jpYRALVQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D09563926262;
+	Mon, 17 Aug 2026 19:46:04 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <anMsbbRNiihKB-z7@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH RESEND v2 1/3] Bluetooth: L2CAP: avoid maybe-return-locked
+ in
+ l2cap_get_chan_by_scid/dcid
+From: patchwork-bot+bluetooth@kernel.org
+Message-Id: 
+ <178699596338.1691257.6779779933672558121.git-patchwork-notify@kernel.org>
+Date: Mon, 17 Aug 2026 19:46:03 +0000
+References: 
+ <35f8d2856ef35e1c6314101ee60b16af39d88e78.1786871620.git.pav@iki.fi>
+In-Reply-To: 
+ <35f8d2856ef35e1c6314101ee60b16af39d88e78.1786871620.git.pav@iki.fi>
+To: Pauli Virtanen <pav@iki.fi>
+Cc: linux-bluetooth@vger.kernel.org, marcel@holtmann.org,
+ luiz.dentz@gmail.com, elver@google.com, bvanassche@acm.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 
-Hi Mukesh,
+Hello:
 
-On Wed, Aug 05, 2026 at 05:59:14PM +0530, Mukesh Kumar Chaurasiya wrote:
-> On Tue, Aug 04, 2026 at 10:40:35PM +0900, FUJITA Tomonori wrote:
-> > On Tue, 4 Aug 2026 12:11:57 +0200
-> > Link Mauve <linkmauve@linkmauve.fr> wrote:
-> > > I just tested those again in linux-next, with the Wii support series on
-> > > top, but now the kernel fails to build due to ARCH_WARN_ASM and
-> > > ARCH_WARN_REACHABLE not being defined on PowerPC:
-> > > ```
-> > > error: no rules expected `ARCH_WARN_ASM`
-> > >    --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_warn_asm.rs:1:28
-> > >     |
-> > >   1 | ::kernel::concat_literals!(ARCH_WARN_ASM("{file}", "{line}", "{flags}", "{size}"))
-> > >     |                            ^^^^^^^^^^^^^ no rules expected this token in macro call
-> > >     |
-> > >    ::: ../rust/kernel/lib.rs:279:1
-> > >     |
-> > > 279 | macro_rules! concat_literals {
-> > >     | ---------------------------- when calling this macro
-> > >     |
-> > >     = note: while trying to match sequence start
-> > > 
-> > > error: no rules expected `ARCH_WARN_REACHABLE`
-> > >    --> /home/linkmauve/dev/linux/wii/rust/kernel/generated_arch_reachable_asm.rs:1:28
-> > >     |
-> > >   1 | ::kernel::concat_literals!(ARCH_WARN_REACHABLE)
-> > >     |                            ^^^^^^^^^^^^^^^^^^^ no rules expected this token in macro call
-> > >     |
-> > >    ::: ../rust/kernel/lib.rs:279:1
-> > >     |
-> > > 279 | macro_rules! concat_literals {
-> > >     | ---------------------------- when calling this macro
-> > >     |
-> > >     = note: while trying to match sequence start
-> > > 
-> > > error: aborting due to 2 previous errors
-> > > ```
-> > 
-> > Looks like powerpc needs something like the followings:
-> > 
-> > diff --git a/arch/powerpc/include/asm/bug.h b/arch/powerpc/include/asm/bug.h
-> > index 0db48977c70c..8aba39e0cf26 100644
-> > --- a/arch/powerpc/include/asm/bug.h
-> > +++ b/arch/powerpc/include/asm/bug.h
-> > @@ -32,34 +32,38 @@
-> >  #endif /* verbose */
-> >  
-> >  #else /* !__ASSEMBLER__ */
-> > -/* _EMIT_BUG_ENTRY expects args %0,%1,%2,%3 to be FILE, LINE, flags and
-> > -   sizeof(struct bug_entry), respectively */
-> >  #ifdef CONFIG_DEBUG_BUGVERBOSE
-> > -#define _EMIT_BUG_ENTRY				\
-> > +#define _EMIT_BUG_ENTRY(file, line, flags)	\
-> >  	".section __bug_table,\"aw\"\n"		\
-> >  	"2:	.4byte 1b - .\n"		\
-> > -	"	.4byte %0 - .\n"		\
-> > -	"	.short %1, %2\n"		\
-> > -	".org 2b+%3\n"				\
-> > -	".previous\n"
-> > +	"	.4byte " file " - .\n"		\
-> > +	"	.short " line ", " flags "\n"
-> >  #else
-> > -#define _EMIT_BUG_ENTRY				\
-> > +#define _EMIT_BUG_ENTRY(file, line, flags)	\
-> >  	".section __bug_table,\"aw\"\n"		\
-> >  	"2:	.4byte 1b - .\n"		\
-> > -	"	.short %2\n"			\
-> > -	".org 2b+%3\n"				\
-> > -	".previous\n"
-> > +	"	.short " flags "\n"
-> >  #endif
-> >  
-> >  #define BUG_ENTRY(cond_str, insn, flags, ...)		\
-> >  	__asm__ __volatile__(				\
-> >  		"1:	" insn "\n"			\
-> > -		_EMIT_BUG_ENTRY				\
-> > +		_EMIT_BUG_ENTRY("%0", "%1", "%2")	\
-> > +		".org 2b+%3\n"				\
-> > +		".previous\n"				\
-> >  		: : "i" (WARN_CONDITION_STR(cond_str) __FILE__), "i" (__LINE__),	\
-> >  		  "i" (flags),				\
-> >  		  "i" (sizeof(struct bug_entry)),	\
-> >  		  ##__VA_ARGS__)
-> >  
-> > +#define ARCH_WARN_ASM(file, line, flags, size)		\
-> > +		"1:	twi 31, 0, 0\n"			\
-> > +		_EMIT_BUG_ENTRY(file, line, flags)	\
-> > +		".org 2b+" size "\n"			\
-> > +		".previous\n"
-> > +
-> > +#define ARCH_WARN_REACHABLE
-> > +
-> >  /*
-> >   * BUG_ON() and WARN_ON() do their best to cooperate with compile-time
-> >   * optimisations. However depending on the complexity of the condition
+This series was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+
+On Sun, 16 Aug 2026 12:47:03 +0300 you wrote:
+> Replace the maybe-return-locked pattern in l2cap_get_chan_by_scid/dcid()
+> by doing locking in the caller after NULL check. This allows adding
+> context analysis annotations for the locking.
 > 
-> Yeah, This makes sense.
+> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> Signed-off-by: Pauli Virtanen <pav@iki.fi>
 > 
-> I'll work on this and send out a fix soon.
+> [...]
 
-Did a fix for this ever materialize? I am still seeing the errors that
-Link posted above in next-20260817.
+Here is the summary with links:
+  - [RESEND,v2,1/3] Bluetooth: L2CAP: avoid maybe-return-locked in l2cap_get_chan_by_scid/dcid
+    https://git.kernel.org/bluetooth/bluetooth-next/c/a7b612da9059
+  - [RESEND,v2,2/3] Bluetooth: L2CAP: add locking annotations for l2cap_chan_lock/unlock
+    https://git.kernel.org/bluetooth/bluetooth-next/c/a3dd57c49564
+  - [RESEND,v2,3/3] Bluetooth: enable context analysis for headers
+    https://git.kernel.org/bluetooth/bluetooth-next/c/c519ffc1e2c6
 
+You are awesome, thank you!
 -- 
-Cheers,
-Nathan
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
