@@ -1,114 +1,67 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B812539A057
-	for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 05:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0259732B131;
+	Mon, 17 Aug 2026 05:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786945489; cv=none; b=lkPg92YJduA4hKdinQDciyOVrTfzfxj0626Q3kSccaj38XLok/sQ6oouGyf+HU7KjfVDTH6CKN3rL9VSTznxqTcCyyhBG5l5y1V09bR+bup5duAYqKtBp1zb5LhjeeiIRR5HGeDhJZDHC4CmC8hSKUhpZjgGIFSxHzYGdWQ3HAo=
+	t=1786945845; cv=none; b=ktKciM3kl4TMnwjdiSZg+d5lD3pzv3wDZlXvuoEhRaoGghxdPVRfdXyYdHyLisJyKnql6b7qbQV7kqWjw1YhpuCXllQzMsIEeah9FB/PS8OBnD0gsXFwAOeOLVkE+CwtK8IiVzZpM9obixkRA1bNNfGyeFQRNFuXM919+UQVt9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786945489; c=relaxed/simple;
-	bh=BOsWlzsNjRjW+LGvfzEBsGi7iZHKZ6oJ+OnpFU+/UbQ=;
+	s=arc-20240116; t=1786945845; c=relaxed/simple;
+	bh=Z6xGjeg51aVSBgLKu3+DxbP17VeZxtjDRxxQWkPCdHk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W4sQYLLpoMe//W04x7IeyTNE8GlusASPqDf2Jc7WzbXrQNmVUEHW6QNAr8dQburnRp1y6Ux23GW1U3IQO/TkMI1wX+gQDQac6dMojRJVQTHbznMC2ivMtoXlkru1LcM+Rj4w2gZ3l64pdW9iJdeJQPmTDMXfW1PPKhynUhK4X+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=ZB+O1Wf5; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=NIJsPLV1; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=k7pIcgXUG/qKN5zOtpDtxM5I6hT66j3QcDTT1592yoBRy9uCFaQDdmGR0ua0xRhMFYhG406vNnXE5+6yHszr4oXkSKMf47fEEaeEh5x1GrhfhmSFbTrk+5/hnvOKeR9CbQ8auheU/EFtjT3796DTB7yrCfVZqOy1flzQ/tf9+JA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LZuFO2nt; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="ZB+O1Wf5";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="NIJsPLV1"
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67GLCYHQ662995
-	for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 05:44:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=DxIV54bZW0mbknxQlawpAwW+
-	cPAeEoPsp3aYvzyr9hY=; b=ZB+O1Wf53eu36mBtTwPud49KO9hQowP2gfnqPgwE
-	2shvJmDSi8qJt95K4SnQn+tyaY45tCdf4ZJzHSb/H62tfWwBX/py+yXLoG1Aq1ze
-	vrGICIKVmH2QZGLg3CXfySNST6xBwDI1l4E+6lOz8Uq6kjDJ1I8iZzMwp7E/CtSl
-	notJcVzkiYG0MEc1Dmjezk/FlFAmf47khwLJA9xeJLp1hnS+cPQ94KNNCiY9c0oC
-	U7U/GsExkWKnkQvDcRF0aZqXTv7GfOkm4wgsmUtmSp9zk9IUmdQY4Z61fR9b+4+N
-	TYENKCzlYJXUcJ6Ub0KcwZ0FD3fYl+H++JFzkgr4z3sLKw==
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g2ghnwbb7-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 05:44:46 +0000 (GMT)
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-51a8db414c7so43483201cf.0
-        for <llvm@lists.linux.dev>; Sun, 16 Aug 2026 22:44:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1786945486; x=1787550286; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=DxIV54bZW0mbknxQlawpAwW+cPAeEoPsp3aYvzyr9hY=;
-        b=NIJsPLV1GUXMrSbTtU7grRZpldUVxIFx2a/VgwZ2hpY48k6EC/giDtD9yYiSEUeaGm
-         ARI3aOLnyScGdXPmTci951W3DfvD8mbYZWA8+qCOq4TPazTW25/ekclPRaWEGIcXcfBs
-         DWlOgTSYPP+YD9RBnJjmRpZv16TfO6qeUhy9abqDalFrhYWZQR4+KLd/fdFXSW0WUG96
-         UjQkILM8ZIPnalcOETBjW/3S84CqBg/d9QEo+SqaiLCbDFTPX4sEcJdPGGNYG4BN9HJh
-         pM+g9+NxSuqeGgwUv21drH3ib7ZvyJ9DnFqWxoI2gJPNbcemC4ackTkZmuQRaPj6GHmf
-         Om9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786945486; x=1787550286;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DxIV54bZW0mbknxQlawpAwW+cPAeEoPsp3aYvzyr9hY=;
-        b=g9PeKH9WohrRLx+R2Xvy8KRJZVQqi1ycfINkjKvfBW2Fj7mMncj1WQJhVjgMpvdAOs
-         rbgQpw6nDVbXaOy8FEAajHvMF4utT9gYojQfX32+BZCUvVXV9LAtj51OBwpV9rwSFza1
-         0YieBaD66JTdXhs5IijdH9ZthoM0XdV5Q3b4VZcU8sqhw2ZV2lkQA7oT9wr6aTGpk5/E
-         X3sTFTmzwXgC6gwTGj810UnB2tqBv+68Lbv3/BKJKw38xKrz7I/kqTt+wNTzR6jtt5yi
-         q61yQfOtA+KFzDfB9UvQqYGuz8zxk4tynleoxbQ8DhU1Yq0isLaJZXeaxGuIoKlAalKd
-         1Gjg==
-X-Forwarded-Encrypted: i=1; AHgh+RomjSSQkWKRT/wYghQAz/0ZgslU2++azMenwdYCLSpu4kSU5ZTuogcUJnTBP4KCm9FkI6ab@lists.linux.dev
-X-Gm-Message-State: AOJu0YzGTfyu07Nyx4lh4fvRzrIHF2FZ6SdPEErv+peZm587JBFjNud6
-	M9mZ61aTXg4eaEQ/QABnfmYvYX3/ri/Re3B1BwT8p166ffznfkIE0475kOCR0NM2C/kKBFjwt5U
-	UsudEfzZVcpXakxCcTd1V/CoQB64hqo8h+ETj79RUUDloA4M7/yJf4dCG
-X-Gm-Gg: AR+sD12MVAutVE6azLgAsb+1iETGCmKl3drca1LEN3vvKzBxPNns/sjh5ltpNWzB4cd
-	gQFkF8hoDKtVGkIXH/ak68OxTr9sung6pWzFlvA6uV0eCgdcSPG5i8VVBYi38UWCShmZ4a/TDlD
-	Vgjx3JOzX2+xT/ptUyk2mM4kwuoNjIijs8Y5XgbTs6lKyTrH+56NGAuEZjT83MaFnGoeF4BJMld
-	5cNlCfcbkWDYC2+tzoub8Rl732jwmNOWfP5EYqJrVomz/yendUhZN2xBMp4bJVqwhesXbZRyBZx
-	USfAw9wEyO904QeZLVwV6Typewf7JspuVt7vRGePo5FbYuXtQp4t9uXCbfzAsmW06XqMvwHXLiR
-	WGF5yAKEp5iPWQ1J0ih17wVLEFF9FIeUPXrU0+4V0Do7yaJS6jEi6uz6TAYu3wftJqsrK/URtY9
-	oiBijDLf7P/9Ue
-X-Received: by 2002:a05:622a:8451:20b0:52d:882e:4986 with SMTP id d75a77b69052e-52d882e4c7emr139157071cf.4.1786945485907;
-        Sun, 16 Aug 2026 22:44:45 -0700 (PDT)
-X-Received: by 2002:a05:622a:8451:20b0:52d:882e:4986 with SMTP id d75a77b69052e-52d882e4c7emr139156871cf.4.1786945485468;
-        Sun, 16 Aug 2026 22:44:45 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b46cffea7bsm89313e87.50.2026.08.16.22.44.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Aug 2026 22:44:43 -0700 (PDT)
-Date: Mon, 17 Aug 2026 08:44:39 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Bharath Kumar <quic_bkumar@quicinc.com>,
-        Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        iommu@lists.linux.dev, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 15/15] accel/qda: Add remote memory unmap from DSP
- address space
-Message-ID: <6k6ogbosxx4z5bh7uriu4fnj24ycuakylq6g2gnuwsbckl2zww@e66jgj5xo52o>
-References: <20260817-qda-v2-v2-0-757ab8ed2f64@oss.qualcomm.com>
- <20260817-qda-v2-v2-15-757ab8ed2f64@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LZuFO2nt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786945843; x=1818481843;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Z6xGjeg51aVSBgLKu3+DxbP17VeZxtjDRxxQWkPCdHk=;
+  b=LZuFO2ntj2aO8iR/n7apCidOkTGGnDe5msKHymU2R0YSu+57XlQ2E9yN
+   GOkjAoOUK7r41XhLbXj8ariOI0pEDqwoFW/UeKjqICFQWEbGvmy6MgoUD
+   09MaD0Gli/SKiqytjYkovXOhXUrjk+tpNtq8O5HJU9/P2MFysVrife48e
+   ZDJde9HeVZiPzzpz3cundiCjYz6bpluYCG8a/G4VD6IIlxkCw93AFG/bi
+   qqG+NqGTUWJU5/87E6sMCwJzPFo5zHaYZoqRJTR1sQYJxYXgUT4qUsYEe
+   Sut+an3zIXAoj995bSRsJwV1353xUHwLExl6QuI5tUvceN3/icOiJRG+u
+   g==;
+X-CSE-ConnectionGUID: OxJDY158TRW0lPr1GFJVNw==
+X-CSE-MsgGUID: A2gn6ffeSM6lETbHNaHuzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11877"; a="112957398"
+X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
+   d="scan'208";a="112957398"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2026 22:50:32 -0700
+X-CSE-ConnectionGUID: IZkimFl8Tfe9ag03ddeZ7Q==
+X-CSE-MsgGUID: 2ZrNMPsVT5eOBkwuY8cMwQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
+   d="scan'208";a="268664355"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 16 Aug 2026 22:50:30 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wvqEt-00000000dK6-27ij;
+	Mon, 17 Aug 2026 05:50:27 +0000
+Date: Mon, 17 Aug 2026 13:50:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	Elliot Berman <quic_eberman@quicinc.com>,
+	Andrew Halaney <ahalaney@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mukesh Ojha <mukesh.ojha@oss.qualcomm.com>
+Subject: Re: [PATCH] firmware: qcom: scm: Fix resource cleanup on probe
+ failure
+Message-ID: <202608171329.vdD9aiQC-lkp@intel.com>
+References: <20260625093644.3918184-1-mukesh.ojha@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -117,74 +70,52 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260817-qda-v2-v2-15-757ab8ed2f64@oss.qualcomm.com>
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE3MDA0MCBTYWx0ZWRfX/br/yYaWGs4o
- yk2ftcUfV0S2bcZflhIugBfWfG4UpfT5LgkePUfyVwaAexw3ihn5OLObLDDifJtYWHBtzZF4Oq6
- wKVtqqEN+uXadZIOEIuAvzfaGcUtgddppy3KhPL7GtnDwvq5j97PYE6wm488QNfp8BoU4uh3S3X
- Hoi4bRezzRIdd6l4EHtPXbgzJwnIomQ6HbAp6qVoAwKeYn56ypxWj4i6v342gjtFf8dg6hnfopO
- 5TLxKsWn78+g/mHCCdJkbAdEPlLahcDiDPr5UEvc3yGeJ44KP2UexBse3YFbvX2DIQWBJt9awtz
- RK28jYhxU1OX3R+/t5Pl3yXYlHI26RN2w0NfOU8cU4BDE9vo2y1TNb80AEYrW6J8E7rbktonXBL
- PimbiV4JbABpdGGlA05ZZqpNlYXBZYca+ADwsSBKbequsxp6PyvYfxxvuukBya9YDj+eATndygZ
- S53Dpyy7m0xxl5wKhDg==
-X-Proofpoint-ORIG-GUID: 26K96meIWl3t9gfRn8echf9hiVepxizb
-X-Authority-Analysis: v=2.4 cv=QN5YgALL c=1 sm=1 tr=0 ts=6a829fce cx=c_pps
- a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22 a=EUspDBNiAAAA:8
- a=Fyn7aR8NovT3rRngz-oA:9 a=CjuIK1q_8ugA:10 a=a_PwQJl-kcHnX1M80qC6:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE3MDA0MCBTYWx0ZWRfX1itE5/uB0/pC
- e1kNpR0dLBSpo9W5v6F0GOYLGn9EXQsQjQ+VGE8SEfylSWOLa8HeVYicBqSnciHRjPqv7SJqXQ7
- VUVcITDkVFiQCIEfiNKhxpJgQTa17b8=
-X-Proofpoint-GUID: 26K96meIWl3t9gfRn8echf9hiVepxizb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-16_06,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1011 priorityscore=1501 malwarescore=0 bulkscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608170040
+In-Reply-To: <20260625093644.3918184-1-mukesh.ojha@oss.qualcomm.com>
 
-On Mon, Aug 17, 2026 at 10:38:45AM +0530, Ekansh Gupta wrote:
-> Add DRM_IOCTL_QDA_REMOTE_MUNMAP, which removes a mapping previously
-> established with DRM_IOCTL_QDA_REMOTE_MAP from the DSP address space of
-> the calling process.
-> 
-> Mirroring the map path, the DSP exposes two unmap operations, both
-> reachable through this IOCTL and selected by the request field of
-> struct drm_qda_mem_unmap:
-> 
->   QDA_REQUEST_MUNMAP unmaps a region by the DSP address that the
->   corresponding map call returned. It uses the vaddrout and size fields.
-> 
->   QDA_REQUEST_MEM_UNMAP unmaps a region by buffer identity, using the
->   GEM handle, the DSP virtual address and the size.
+Hi Mukesh,
 
-Why do we need two different operations? Can you just pass the GEM
-handle to the IOCTL?
+kernel test robot noticed the following build errors:
 
-Also, what happens if the buffer is still in use on the DSP side? Will
-the DSP crash? Will the whole board crash?
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.2-rc7]
+[cannot apply to next-20260814]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Mukesh-Ojha/firmware-qcom-scm-Fix-resource-cleanup-on-probe-failure/20260815-220308
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260625093644.3918184-1-mukesh.ojha%40oss.qualcomm.com
+patch subject: [PATCH] firmware: qcom: scm: Fix resource cleanup on probe failure
+config: arm64-randconfig-003-20260817 (https://download.01.org/0day-ci/archive/20260817/202608171329.vdD9aiQC-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260817/202608171329.vdD9aiQC-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608171329.vdD9aiQC-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/firmware/qcom/qcom_tzmem.c:523:2: error: use of undeclared identifier 'qcom_tzmem_using_shm_bridge'
+     523 |         qcom_tzmem_using_shm_bridge = false;
+         |         ^
+   1 error generated.
 
 
-> 
-> Each request type has its own argument builder in qda_fastrpc.c,
-> documented with the packed argument layout the DSP expects. Unknown
-> request types are rejected with -EINVAL.
-> 
-> Assisted-by: Claude:claude-sonnet-5
-> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-> ---
->  drivers/accel/qda/qda_drv.c     |   1 +
->  drivers/accel/qda/qda_fastrpc.c | 119 ++++++++++++++++++++++++++++++++++++++++
->  drivers/accel/qda/qda_fastrpc.h |  34 ++++++++++++
->  drivers/accel/qda/qda_ioctl.c   |  22 ++++++++
->  drivers/accel/qda/qda_ioctl.h   |   1 +
->  include/uapi/drm/qda_accel.h    |  39 ++++++++++++-
->  6 files changed, 215 insertions(+), 1 deletion(-)
-> 
-> 
+vim +/qcom_tzmem_using_shm_bridge +523 drivers/firmware/qcom/qcom_tzmem.c
 
--- 
-With best wishes
-Dmitry
+   520	
+   521	void qcom_tzmem_disable(struct device *dev)
+   522	{
+ > 523		qcom_tzmem_using_shm_bridge = false;
+   524		qcom_tzmem_dev = NULL;
+   525	}
+   526	EXPORT_SYMBOL_GPL(qcom_tzmem_disable);
+   527	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
