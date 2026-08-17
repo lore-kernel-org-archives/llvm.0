@@ -1,63 +1,99 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F81E417D80;
-	Mon, 17 Aug 2026 12:46:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DEDC43CEC0
+	for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 13:44:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786970798; cv=none; b=XsUvIc47F9ifDWEP52j155U1ret96k/eTyhSo47/qCq4vKwqRVmO07bpQl2ckaGvfZRZNEtBILuhq+vy1q4L09x95+yYuz7MP5nKM82XCVwm/WqWHD7Pqb7o7D837OPfOl0KVYbo6w7tuFGo/k1ct0r58WkYPTkEBz6XD2F+R5U=
+	t=1786974267; cv=none; b=l90JZEZaXzYS+Ve1S3Rz1pPK3bGFrFkrFDmslPDeGl1RlXQ/YuhFAdtN9CmE+BNDth/NWHVsCHI/NxGrywW8TQIrlkpGNVxjiVQpNtc+R8mLyiuQxSYXf+jvOJnwiCHm7u2h4MaxsjcZD6bXqiTzBVM9j34NqdNXkpEoIIpzqow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786970798; c=relaxed/simple;
-	bh=wAFksMzOto0uzeyXgKXy5O0UUPPgjl24xnnjbVSqgwA=;
+	s=arc-20240116; t=1786974267; c=relaxed/simple;
+	bh=l1KmbxaSn1vlCmlCKqGoPg+3lItQFTLM7H5zRTTjdlg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hzOQadZkeco5Hk2EeOcgtCadWUrNqd00xzr0AQokyf6uIkTZe1gfdGshd9t2yllvswy+iSDZ40BL3Zs37eAhtjmQxozk8j3pqt3QQGJaLVPIAeTk0tyJo2bqZz1xW26w80IH8DsG4bNtIdlgeZP0bQz5oa1vDcDjDQvf3ShR45I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Krms+FKg; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=o5lK0Y36+uFluD7V9oOSnLPeQQhiYhlGJvXHLkb+fFCXkYGesuOROBVAETgnYoWRndebC/DLjZ1U6Ptd83neZpdPeRBc0Hm48LrL72VKIJRJ5jkDuqldaCmifRYS6gGwQKzu7aw5lGXXrYexLZZKh76LtRUQ85+QJEjhuXvbrJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=SZWY+Cyc; arc=none smtp.client-ip=209.85.219.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Krms+FKg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786970796; x=1818506796;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=wAFksMzOto0uzeyXgKXy5O0UUPPgjl24xnnjbVSqgwA=;
-  b=Krms+FKgX6d4bBIa0B1wEXCIt8w1q9WFrx/c6d0we4UpKmiURp4b17Bn
-   IO9wDxZJ8lFco97R0TtYrcvbeKDG5eNwrrvyqsBR/IECbbSBArUabSd3k
-   DDIo2PL5W+KAWdYOEjiWVm84iN/PzynEsas/tB9xgz+YE21ibFt9VvxsQ
-   PUSn054BWUvQROVPTS2PIto0hJRAXrgtMynrI0KhCf/kkfyqpYLUb/pIH
-   fm+3cbUGrWhW4Uk+PUF+Kz3vR0FpWdZB1kNA/hQuaPppwjSeaaEwhoHX5
-   eBcxgtNAu0onL7lXxo9PvdF2Pk0D5lkgukHf6My2/1rW1Bh6XUONjM2i1
-   w==;
-X-CSE-ConnectionGUID: E+8HNk0URSqqfabvVxiaHg==
-X-CSE-MsgGUID: 8a48oAzIQSWyE4hUh7FpXA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11877"; a="98598464"
-X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
-   d="scan'208";a="98598464"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 05:46:36 -0700
-X-CSE-ConnectionGUID: 8ZdX1opQRXSRTHpMhl1CHw==
-X-CSE-MsgGUID: niKDf76nSaO7V1qxyIkr3w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
-   d="scan'208";a="266888479"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 17 Aug 2026 05:46:33 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wvwjV-00000000dSs-3uy0;
-	Mon, 17 Aug 2026 12:46:29 +0000
-Date: Mon, 17 Aug 2026 20:46:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Priya Bala Govindasamy <pgovind2@uci.edu>, ojeda@kernel.org,
-	gary@garyguo.net, rust-for-linux@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	peterz@infradead.org, zhiyunq@cs.ucr.edu, ardalan@uci.edu,
-	pgovind2@uci.edu, dzueck@uci.edu, yuantan098@gmail.com
-Subject: Re: [PATCH v2 1/1] Make Guard::lock_ref unavailable if Lock is not
- Sync
-Message-ID: <202608172043.JxF675RT-lkp@intel.com>
-References: <878cfb22ab185874bc363e2b7910a6978af646ab.1782763889.git.pgovind2@uci.edu>
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="SZWY+Cyc"
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-8edda5d56a5so36088656d6.3
+        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 06:44:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1786974258; x=1787579058; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BS4TBmNsymnramXeNmNZhBmFeFZI0B72fRANMpt3ZzQ=;
+        b=SZWY+Cyc1v2CrpXeWczDzFqneCU9ygripk+vlqTLxvZe3EcyD3kuVMr5jRAGHPu3Pv
+         GVU5AWroO6V2dnyuS8hejsSQRc8pXSRh+2e3z4JwcGa4YP9rnyD+tXYiWtn1n/0x2IwE
+         xMeb45YPE73Io3RrnrXjeDgdJpODM8687UuX6GptMNO85aVwbp91weIunDRd2blWiJch
+         KTqTHaukSM3D/+g6H0fj1yLLoddF08NlinQ2wNN5ZO571IxEyimcXI9jVUOTI4SRwa7U
+         4Ot4jk78tw0bDMxE2toodvzm23X9qHE9mM/OEgwzq2uiIWuvtnRtVWGz112nfnCEIsiC
+         UPhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786974258; x=1787579058;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BS4TBmNsymnramXeNmNZhBmFeFZI0B72fRANMpt3ZzQ=;
+        b=TLjyXtZh66pI7ksYhKBE4ZjSYtqRgHMOZiDTi2qId6Cgt6IeeN/HHkfBmlusCVuxLV
+         J/ryCNVtqVOOOwcAS4ggpPQNhJbFpmNPIQMv8x3xSKLgM/DhjU6owZp+d2uap4h4rSl1
+         FGn4aUEGIQ/nAp4rYlGd6eGn1G5CsdTPHK+8xEd8ImZ2YXRIbz0FtBzcXJ/b1NI0xrI8
+         CZpZ7kYLRGSByrbKa6Okzs1jmK0cG7kau/y9NvVXleAPKUQEWW6djZp0N3rhYw06QIW8
+         UuaVJdeGDapWty+y7rNQNTdsRXYJuoMld9hyVi/WnOMNpIOdVLvSKKaw/zrcm2fqHavv
+         IYAg==
+X-Forwarded-Encrypted: i=1; AHgh+RpAL3dNvhcGHlnGxvKgE2UTqgPyRz+OZOcFBPXJIlqXfuTNK1jPHeTk1kguzjL4h/tnsfdt@lists.linux.dev
+X-Gm-Message-State: AOJu0YyquhF4SvKZiNYZee2PBgcJ0QljUOOEj15N1n1BTl+35Hjfavxl
+	KzRuw3UB6XXMXA900VP8ijHoQI1RsQfyrI1KzbLD08tVc/qN+Xb/3jz+DZZxRlkggLQ=
+X-Gm-Gg: AR+sD13uS9MjWM7rigtm6BY75qRR3A0zuWVKhmKbagTQb9zce/WKLYr7BnR1xrkHFuK
+	5Sn5h83lKVPPM1p4D4HzyJMJvU1P54pdn8+XG2uKVauA1po+B5c926bWV2+C8R93KRVVlKvTL2/
+	EOnziy4kgVx9opCcZqP47pYTR7hj0EwGTggxJzDg5bBaOZ1akNbB7dfo6bHZuADFIr+ykj0Dzog
+	X6ML6qxsoSIk5WlkUdCjFNefVmptwDPsiXdQ6CPpYchUsiMRZYuUd2g8Wlu2CbM+men630HLdJ3
+	yJ+V36220qMeA6GxK4j+5UZ5yg0UmujZroMZAgIuvOPMIrvN90lVvG9cYO0Z6PdVjfHHOp5iV+n
+	kmBdcItt0e4cmFW3I0u2qqy1mo59+Ikaneb3kfI8HQ80PCs6Z2dMQmFKEIGxecMSGScTUTE/Oxm
+	jiy5UpwXKtjdpFZqoJu0rNvOtFqrvC4ftiflZd+yr7lzaCH8yg
+X-Received: by 2002:a05:6214:2029:b0:8f3:e97:59c6 with SMTP id 6a1803df08f44-90a91dcd1eamr322787926d6.20.1786974258222;
+        Mon, 17 Aug 2026 06:44:18 -0700 (PDT)
+Received: from ziepe.ca ([142.166.156.215])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c45986ae7sm9166026d6.48.2026.08.17.06.44.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 06:44:17 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.97)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1wvxdQ-00000005wLX-438N;
+	Mon, 17 Aug 2026 10:44:16 -0300
+Date: Mon, 17 Aug 2026 10:44:16 -0300
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	"Joerg Roedel (AMD)" <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Bharath Kumar <quic_bkumar@quicinc.com>,
+	Chenna Kesava Raju <quic_chennak@quicinc.com>,
+	srinivas.kandagatla@oss.qualcomm.com,
+	dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+	iommu@lists.linux.dev, linux-media@vger.kernel.org,
+	linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 05/15] iommu: Add QDA compute context bank bus to
+ iommu_buses
+Message-ID: <20260817134416.GA1415075@ziepe.ca>
+References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
+ <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,54 +102,25 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <878cfb22ab185874bc363e2b7910a6978af646ab.1782763889.git.pgovind2@uci.edu>
+In-Reply-To: <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
 
-Hi Priya,
+On Mon, Aug 17, 2026 at 10:17:40AM +0530, Ekansh Gupta wrote:
+> Register the QDA compute context bank bus (qda-compute-cb) with the
+> IOMMU subsystem by adding it to the iommu_buses[] array.
+> 
+> The QDA driver creates synthetic devices on this bus to represent
+> IOMMU context banks (CBs). Each CB device needs its own IOMMU domain
+> so that the DSP memory manager can enforce per-session address space
+> isolation. Without this registration, the IOMMU subsystem does not
+> probe CB devices for IOMMU groups and of_dma_configure() in the bus
+> dma_configure callback has no IOMMU domain to attach to.
 
-kernel test robot noticed the following build errors:
+I didn't notice a clear explanation of the proposed DT schema for this
 
-[auto build test ERROR on tip/locking/core]
-[also build test ERROR on rust/rust-next linus/master v7.2-rc7 next-20260814]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+But it looks awfully similar to the other driver that was creating a
+kernel synthetic bus for actual real HW, that wasn't well liked.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Priya-Bala-Govindasamy/Make-Guard-lock_ref-unavailable-if-Lock-is-not-Sync/20260814-173656
-base:   tip/locking/core
-patch link:    https://lore.kernel.org/r/878cfb22ab185874bc363e2b7910a6978af646ab.1782763889.git.pgovind2%40uci.edu
-patch subject: [PATCH v2 1/1] Make Guard::lock_ref unavailable if Lock is not Sync
-config: arm64-randconfig-003-20260817 (https://download.01.org/0day-ci/archive/20260817/202608172043.JxF675RT-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260817/202608172043.JxF675RT-lkp@intel.com/reproduce)
+What is this for? Why can't you have a normal DT binding for the
+iommu with normal devices?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608172043.JxF675RT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> error[E0277]: `T` cannot be sent between threads safely
-   --> rust/doctests_kernel_generated.rs:20824:33
-   |
-   20824 |     assert!(core::ptr::eq(guard.lock_ref(), lock));
-   |                                 ^^^^^^^^ `T` cannot be sent between threads safely
-   |
-   = note: required for `Lock<T, B>` to implement `Sync`
-   note: required by a bound in `rust_doctest_kernel_alloc_allocator_rs_0::kernel::sync::lock::Guard::<'a, T, B>::lock_ref`
-   --> rust/kernel/sync/lock.rs:239:21
-   |
-   237 |     pub fn lock_ref(&self) -> &'a Lock<T, B>
-   |            -------- required by a bound in this associated function
-   238 |     where
-   239 |         Lock<T, B>: Sync,
-   |                     ^^^^ required by this bound in `Guard::<'a, T, B>::lock_ref`
-   help: consider restricting type parameter `T` with trait `Send`
-   |
-   20822 | fn assert_held<T: core::marker::Send, B: Backend>(guard: &Guard<'_, T, B>, lock: &Lock<T, B>) {
-   |                 ++++++++++++++++++++
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Jason
