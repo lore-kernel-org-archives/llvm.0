@@ -1,87 +1,87 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6040D3A5E71
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 05:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8AFD331EB1
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 05:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787029839; cv=none; b=LTthTbMpvBvEw0j3iui9sqwpk1QUawog2SYTV5p4t+KhftzzK/SeAZabZNOhCnRtrOBu8bMB8+oeYx0mfB+Zg68pJ20eHR1qvJQhyxP80Y2YSiM2rt07AziihXu+RqufPZ3slAohZFJiN/AohD2zGAM2X8Mw9m3wCFG6SUdan4Y=
+	t=1787032329; cv=none; b=EIvt5hlKJyHWzeST4Wrp/gNDqe0apT8GfQPrvv0nm/BxGQqyYcaAbHYTKyymwZmtnuqcIWK1aV0/de8ch7KluSEccvLFw5WCKIg76bE0Y7raBGHtYfslv+PdVNQr66I6qSRelQG7mYDcTdHDohwmj8SSlgKq6QIkceaOV37IQZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787029839; c=relaxed/simple;
-	bh=FeAbcPh2BNksaU1ol+KzsK0r4wOWdTJppcdaT2TRPqs=;
+	s=arc-20240116; t=1787032329; c=relaxed/simple;
+	bh=t7zqK2kfTIdM7DeJsFj7PjMFIgkgpjQMOw5BoqQOa/s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sSOGiS573mgBiqCzpkuAbDUQKsyEReqi80JRcB9umZtHvV0Ux9XfG2VP65NwrIa5PiRlHNLTyGNvDSr6ZM0CMbuAa10w0OGgjspeM5cNIkHc+3MGqUriTsmbXGcUuDaglZzu3t1zzsZgUnDsikeo2IrMrRXqOFP4A8zDgUu33y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KeBhHxQZ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=L1UJLIFV; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=MxV3bbr340l6XGO6D7CvSgLlQIacZbUFrzXLkI2TspWkW1chKDQRLd0C3ZbZan8Nzztr9BRcZS4/KKB3KV/RN52S8hfw+ECywq4mBN45Twu2KdM7qdoyIXFKbCQ8p1vxJPcrFhiclqCiEOVRy+/mT5GKfFgDcnViAwLYjIkU/V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DMcr0RWQ; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ffDPu5nc; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KeBhHxQZ";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="L1UJLIFV"
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67I4iN3u3566444
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 05:10:37 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DMcr0RWQ";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ffDPu5nc"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67I3ildc1172207
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 05:52:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	Rp3lIMjCbjVBjSLiXhtJRxpN1gXNwjBR1B2cE1UgyMk=; b=KeBhHxQZWxpTR36D
-	Psjvj/wq85jpkNoelRCr7GA7IQCCNbmQzbbatB7HF/+kMmEmIX47iSfKo78TrcSi
-	zRz5ZSG449nqvSpSoNWzt68dQQgrrECiYvvocNwe0bQUC3g/OuRn/tEfNoxb24oC
-	O9wbXTcyPL56yRHFNej8KVXdeaEMBbZEEIPNDfRrpfJcoG68OgijLhbpI6ejiKy9
-	0/VB2vb/qCwEl8lPPqalgpvM78u5K5Sp+CNMHTxsKImtrqVSh44YqH9H+pABffO5
-	hr6Tf/yxspMv8oPqYzuJdIWNp2SdtEDSQsiwbvkCPxvoGVfB+nOTF1tlZ9n7YP78
-	D4B/iQ==
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g48q0sx7p-1
+	9MGPW6/DK7pn6fKMqjuLg89wJJuJK8oCiXQggTwY6zk=; b=DMcr0RWQv+aJkxOq
+	gUbCjFe3NzYI3OjesOMkpzJTRXBjrRxwtH6VVpZBWH95TK5T4AdoohWTSaY/Pe+J
+	7tE2qg49EPqjakmV9X+lzItNlEm7Ty55bS8kqEOEnwYgmz+Q+l/A0UzCX8B3sPM9
+	sDLkI41D8h8nuCTY9rYTbpOgu6mrJUSjA2Qvflpzd0evQ7B++9d1DY/3qUvCF6bu
+	zrx997uDw6q4U81ym76aIR6FRJo8UnMBeBbxrACpSQDKGrchomzeg+g28RME5jk8
+	9ksRJuowsPPRozywktrveZAJuq887VPVTCAA2SLmyqcwqlWkg94kKRxXskHAGgDH
+	aayzoQ==
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g4frmrh34-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 05:10:37 +0000 (GMT)
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-8486c3411c8so5351801b3a.2
-        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 22:10:36 -0700 (PDT)
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 05:52:06 +0000 (GMT)
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8484ba00601so4413357b3a.1
+        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 22:52:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1787029836; x=1787634636; darn=lists.linux.dev;
+        d=oss.qualcomm.com; s=google; t=1787032326; x=1787637126; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Rp3lIMjCbjVBjSLiXhtJRxpN1gXNwjBR1B2cE1UgyMk=;
-        b=L1UJLIFVi38VYseot5c96Nh7KQVr3yr/lADqzD6WsFh+YZ5m9sF7m33BCCG2xf8CF9
-         XsZoIqKBDIHBJ2U9L6cB2HuK4YJQd/yp6mDTF9poBMmSEngoogW1lf4yBAEv9qZk++Q8
-         eSxoEx4tyMdOLQn2/xI9oYbCk/XhUVs3So4MYoOsdCu/Af2NpRcUlM2BlIsfLZZ6Bzyx
-         SyjKrzm626z4nHAEy0MPxev+po8iewnDudgBYKUdliP5HKJcI0eny7DPVr2Kw38Bqx02
-         yfXYtDpA2qEs4FWNYiHWg2DS8f63gyWQ2ZY8atGXnD13dA+rIFPgr+SJvC5OIFwXONU5
-         L84w==
+        bh=9MGPW6/DK7pn6fKMqjuLg89wJJuJK8oCiXQggTwY6zk=;
+        b=ffDPu5nc7CgndaIz1QcuvdN5+VOOA4MGtOGRuucHflcR7Hk3maD/BhbZyd1/5L42kQ
+         NzA2ks77FhbKvEphI4PesLgDHonYJxBKuutbmLFNApYavH3o6LXyGSizPuRRbYvHiSTy
+         I5liFJqXU6GI/i+V0DD0rcBJ1kt+T7t5G+6/oCv6d37M9p/LRGYUj34aZQthc16uAnEY
+         NFdiO34ncCQ7/PtJMNhInUhpa0WP+8xKL/ifBaYzQT8t2c4zcBo+YcZqhjf7adcOatV5
+         sH6UK7Ysi2YLWwP5jrbf/nWnbdhPzcPCc8X6HfsVONXWhrifbEdIjnw+o9ntOqDJaYME
+         ORQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787029836; x=1787634636;
+        d=1e100.net; s=20251104; t=1787032326; x=1787637126;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Rp3lIMjCbjVBjSLiXhtJRxpN1gXNwjBR1B2cE1UgyMk=;
-        b=ZZ/RuT5EYM1oAlvOmoMH1twLOlElhjFof0Q1w5Jj8YoXgwPACnOpdn+OxJ5EbUfAij
-         fOeYKh9pPTAaGe8MA0rHQ/jno8WaopEwHrpYGXYhq6Ke2tX/AVGJ+oPk1OVFiONUyawl
-         vajGcbltHHINXoPbtydYQtypYNd9rPR+Ybbq3o577+quWK0Zmv9qddQfbrtAxRugP7nO
-         86TUT+NtdFNfmkqr74Os9AiV/ESB/AvD42857fY9GwAcb2YTJqL73oRY03ATOhrQP/zK
-         AIxlz8GR/IqYXWwHswiXJwax6t3xeTk2jNbK9E3A4yfh+KlWyMsXEiYsBEdfYyiGJo0Z
-         B3Ig==
-X-Forwarded-Encrypted: i=1; AHgh+Ro5LeSxET+TXkkeMmbnJj9eylk3AZxB3tkeXAHWpcur40p4oGcbLzMS+f5h3e/wYF+/4U/t@lists.linux.dev
-X-Gm-Message-State: AOJu0YxqNPIPKor9196QC2CvThovEqOPUBBJ6McV9iSAWKht3ktf0Gwf
-	Wq+WdvSXe8eS3uXhr8R6hv/Ucxc/8XosBuv7XZfTFod+3xKNEcIbhsKUYp6HspDdvmGhPDhNA7h
-	cGCEcS5lk1Uy45acgvAQKI/OzP0gzGU6+oBI2Xr7HE968RVbSOb0Yor18
-X-Gm-Gg: AR+sD120CJO6utrThL82I5Evxrnd3m6HS6jAG/C1oYgtw5KiW9f7yM7yJ020trUv+gC
-	oEXCwhCl7Kl4PTDDn4WerdKuIvg3Sk6q5m9MSC31qWqJ5lgVbeEdX/wP38XbQCTwPydXaQW6jK3
-	mzFu9edy2AAsljMTxyUh1XbQM+do/ERpqqi2VC2lUDF4PTFxp/FQlXI3xqWG4iJVpkImsX6rwPa
-	k5OrYI/Q2dL+AVJNCIhU9hLearWdP21nNKnIma5F0JtjM9M1HkLJAJYHU8l9/X4T5QEXpvwdzgE
-	3dsM+pvO5oVtp26iIjjmwQEAlgke8RJmmXtjwTTdXLe0ZEnJKImi+rI3wteAGpes5Wg7F4960mu
-	6Ol/drmJoC/I0lrazCy6IwaZn7KSfDA==
-X-Received: by 2002:a05:6a00:188b:b0:845:e8b9:347 with SMTP id d2e1a72fcca58-84fddfe099cmr29499676b3a.13.1787029836096;
-        Mon, 17 Aug 2026 22:10:36 -0700 (PDT)
-X-Received: by 2002:a05:6a00:188b:b0:845:e8b9:347 with SMTP id d2e1a72fcca58-84fddfe099cmr29499576b3a.13.1787029835654;
-        Mon, 17 Aug 2026 22:10:35 -0700 (PDT)
+        bh=9MGPW6/DK7pn6fKMqjuLg89wJJuJK8oCiXQggTwY6zk=;
+        b=ryGgHLAn1JN1jW52OGhvFPPmOxoDj203OfHJ/trTrSpCBfuI2iN0pjbuT9/PFEqRMd
+         6lY8Oj17s1eTdepQOacPrHnwAEM12CuWSeslantvsEzVZJj48jQfu7Fk6wBXzINlzafh
+         2Ghgv0glKcm7TLyL3Qr5iwrj63RpkWnyH/p80z9v0KXJ5n67GDNH3Gt3jZK9e9aBJSzB
+         gmSgbzt9N6Skqp+zmybZmVH2E5Rj/m9eFHQqYAKDhqAVEtoNFM78wbNOa/1sYqu0FQXb
+         zrxqF0+0/t9JGkA9wju3Qon5LlMY9TjgIpm9Ly/r3Gkujwx1UnRQ+wasdajwKthqYMUs
+         37KA==
+X-Forwarded-Encrypted: i=1; AHgh+RqXpGIW1/0ukVlrVRvf/8oeOqOsGEaxJXfgK+atBnIYNsO6BCUMPe6F2yFfj5TpgjmYHH1Z@lists.linux.dev
+X-Gm-Message-State: AOJu0YzEal8/J9Sw4J17V3Zx4WAQnzULHaBthKwncDknJSs3KwkrVOq3
+	235Elnd/pmBFV6MeQ/fqgJk4UTDAyaw/vnqRt7CKpD0a50VkgLAVVw8HQci/LYU55ywQWgC8W5H
+	J4LjyDXb/HwUjFv5AzQbSC6vI+hjiSbDZSd8a2dz6tVAkC35qD0JlwRyc
+X-Gm-Gg: AR+sD107eo6rs22pJ34v8lStD/2/ai27FDxhKl4HNawv4t2rKmgvQxPfFB5NmlDN9yc
+	8XR7U3z0w4KsO959JhqW5CBM7Uot1I2vAbW3/BtfUERAYFxkJJ0OH0U3fypPwOIty9WxV/hltUQ
+	DrMAvhGykXdoPgIPgViiEDyRc1taMXwaAqo4Pt0EB+znAJFhvh/xjjC4DKKYd57L14C33s3k/So
+	fNZ8j5zgPoFPUE/K/ZLyPJh0yYT4/6iiqIGLq41SCALN2trsCtnk0vg0Spjufw3pE9L74L9armw
+	xhonOYISvXLOAuo2a0Coz6bVZpz2T77217l2ZBNAaDclaJ2wfxl7OeuIWdSZu2NVggEN9YZBEbq
+	dbTg3nrnLZxyRe121e7kTRwTQn0zngA==
+X-Received: by 2002:a05:6a00:4395:b0:845:31a6:d84d with SMTP id d2e1a72fcca58-84fde14ffecmr33705028b3a.7.1787032325956;
+        Mon, 17 Aug 2026 22:52:05 -0700 (PDT)
+X-Received: by 2002:a05:6a00:4395:b0:845:31a6:d84d with SMTP id d2e1a72fcca58-84fde14ffecmr33704931b3a.7.1787032325493;
+        Mon, 17 Aug 2026 22:52:05 -0700 (PDT)
 Received: from [10.219.56.166] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851b6ff2232sm1015652b3a.52.2026.08.17.22.10.26
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-851b4072c39sm1284034b3a.26.2026.08.17.22.51.57
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Aug 2026 22:10:35 -0700 (PDT)
-Message-ID: <89ec74da-15ed-4278-b651-5c753fa4f146@oss.qualcomm.com>
-Date: Tue, 18 Aug 2026 10:40:25 +0530
+        Mon, 17 Aug 2026 22:52:04 -0700 (PDT)
+Message-ID: <2d092339-a691-4539-8419-c9606ea35f68@oss.qualcomm.com>
+Date: Tue, 18 Aug 2026 11:21:55 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -89,9 +89,9 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 05/15] iommu: Add QDA compute context bank bus to
- iommu_buses
-To: Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 09/15] accel/qda: Add DMA-backed GEM objects and memory
+ manager integration
+To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
 Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Randy Dunlap
@@ -111,89 +111,123 @@ Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
         =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         Bharath Kumar <quic_bkumar@quicinc.com>,
         Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com,
-        dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
         dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
         iommu@lists.linux.dev, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
 References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
- <20260817134416.GA1415075@ziepe.ca>
+ <20260817-qda-v2-v2-9-69a02e9090d4@oss.qualcomm.com>
+ <g3dkltejtlzrrelv77kjteqbkny6vhedyuet7d6b2p7yfix3ys@sop7vjvpdvzb>
 Content-Language: en-US
 From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-In-Reply-To: <20260817134416.GA1415075@ziepe.ca>
+In-Reply-To: <g3dkltejtlzrrelv77kjteqbkny6vhedyuet7d6b2p7yfix3ys@sop7vjvpdvzb>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDAzNiBTYWx0ZWRfXzUOmz12s545b
- YtEuygPuRGAvcsWK0EwxjDMF0AeNo1/dBJq1m0HJsUePjRamOEZtSUqDxsy1MAKZWYFdY0f2PoW
- ymdP8jKar67jEJbHrlHGh9kMgls3bW0=
-X-Authority-Analysis: v=2.4 cv=VuITxe2n c=1 sm=1 tr=0 ts=6a83e94d cx=c_pps
- a=mDZGXZTwRPZaeRUbqKGCBw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDA0MiBTYWx0ZWRfX2Z9vchUeCAEZ
+ kRorY0C6c9lRfw3zkliIMf520JDS8HXXtiWpVgQGrvuAEsq+UKaKBUdPW0llIoC/yadyisEG4lV
+ N3/QtfsVXVs+zUlEoTNDT2R9695Qm73/hvSJAOhpAIHX79vIRUUeA0elEHiAMGa86pSY/AQ3aX/
+ L5QbIcRANvzUw33YBqN54H19ScUoN/aTLwrYbytCtY2tw6Q2sbKg/bF31cEAWRxJzJF8Dmr9bbL
+ 5ImFFaMrDX5+ONd3zgI7LEl83xgidrSdtg9g8uorRfnwqiqXnfei8PfuIEpteqGcFuYbTSaFSeX
+ SPOvBUEBhkNXjAuSxLcTxgcfNLkI7hUwHvQxvK0lA2IO6IGRq5qsb+HxTAwryMYm5zJAh4Lea5H
+ xgCHuvSU67fdoUsTuhAjGxymlPYmf+nv2WrpAHGevIc+tDMLdJ2Lcsw5UfbXx58LrFOTCARIRoo
+ RTOrAj+xy1G60ZF/HzA==
+X-Proofpoint-GUID: TTpwA8letXmYxqVzDjWA35Edg0TxX1mI
+X-Proofpoint-ORIG-GUID: TTpwA8letXmYxqVzDjWA35Edg0TxX1mI
+X-Authority-Analysis: v=2.4 cv=GtlyPE1C c=1 sm=1 tr=0 ts=6a83f306 cx=c_pps
+ a=WW5sKcV1LcKqjgzy2JUPuA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
  a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=gowsoOTTUOVcmtlkKump:22
- a=VwQbUJbxAAAA:8 a=UlZBYPnkdO8YS_jrOJUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=zc0IvFSfCIW2DFIPzwfm:22
-X-Proofpoint-GUID: IHsOthFhTumQeDLVfcZ0c8C9NOTRtlbN
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDAzNiBTYWx0ZWRfX6K2p9KiZcT1J
- +0dCwd4M+y1qvLDI5pUWWM11W7PMwyOK+cmcHAozYHs6tYQQGtIaA5KJd2ALhNFBUQGdbBov7xY
- 5GLsyDOmojGD//08FGTOn65CkP5TXkrPUp6rbpdXBTl2Ku/9LHVJ0Pk4ZZ2tMDeMTdeZLPbKOz7
- niKHVBmdbP6Ds5sZ5pfA3BiEn0kv2kAswtgYR77TzHaRqdajraHyGe+1LcrpViL73qUtZ7TOz68
- SinXxCGOk7riP7ZHKweIpGBTFasVzz19ijKG//01cGfRnAyzmE3v0GjQXsXWWrGNxC+xFTXsvKI
- 88N3lsTtwTn+ffmUckjxGF1tgLLTrMWJchu+V3/P9Fk2JcL0ZzmCSwgeF5j4eqy1Dzm7CU2XUaE
- ub5cRnA+SYDGSWZfWZUoqwbatPHq1DdpX0zcUotbszVoPGSiWb/8ScNIYUpaKc79AUi+FLM7u48
- aCTRADFSjm1xUAQxWfw==
-X-Proofpoint-ORIG-GUID: IHsOthFhTumQeDLVfcZ0c8C9NOTRtlbN
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=EUspDBNiAAAA:8 a=U_ymhupkC0DnaqHl0NQA:9 a=QEXdDO2ut3YA:10
+ a=OpyuDcXvxspvyRM73sMx:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDA0MiBTYWx0ZWRfX+BUA8HAW7Jwl
+ YAZtHC2D6lJgrVl5JpSgM7h8/sIfNM1CFby/RYo3B+lZIctq6utRYXlRirYwKx9G5VN9jxKUVi+
+ FSKV2QTVhoeekzf8OZNEQDbEEOZMyPQ=
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-08-17_04,2026-08-12_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 priorityscore=1501 clxscore=1015 spamscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ suspectscore=0 malwarescore=0 impostorscore=0 lowpriorityscore=0 phishscore=0
+ adultscore=0 bulkscore=0 clxscore=1015 spamscore=0 priorityscore=1501
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608180036
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608180042
 
-On 17-08-2026 19:14, Jason Gunthorpe wrote:
-> On Mon, Aug 17, 2026 at 10:17:40AM +0530, Ekansh Gupta wrote:
->> Register the QDA compute context bank bus (qda-compute-cb) with the
->> IOMMU subsystem by adding it to the iommu_buses[] array.
+On 18-08-2026 09:12, Dmitry Baryshkov wrote:
+> On Mon, Aug 17, 2026 at 10:17:44AM +0530, Ekansh Gupta wrote:
+>> Introduce DMA-coherent buffer management for the QDA driver, wiring
+>> together the GEM subsystem, the IOMMU memory manager, and a DMA
+>> allocation backend.
 >>
->> The QDA driver creates synthetic devices on this bus to represent
->> IOMMU context banks (CBs). Each CB device needs its own IOMMU domain
->> so that the DSP memory manager can enforce per-session address space
->> isolation. Without this registration, the IOMMU subsystem does not
->> probe CB devices for IOMMU groups and of_dma_configure() in the bus
->> dma_configure callback has no IOMMU domain to attach to.
+>> qda_gem.c / qda_gem.h
+>>   Implements the GEM object lifecycle for QDA buffers. Each buffer is
+>>   represented by a qda_gem_obj which embeds a drm_gem_object and
+>>   carries the kernel virtual address, DMA address, and a pointer to
+>>   the IOMMU device that performed the allocation. The .free callback
+>>   delegates to the memory manager, and the .mmap callback uses
+>>   dma_mmap_coherent() via the DMA backend.
+>>
+>> qda_memory_dma.c / qda_memory_dma.h
+>>   DMA coherent allocation backend. qda_dma_alloc() calls
+>>   dma_alloc_coherent() on the CB device and encodes the stream ID
+>>   (SID) in the upper 32 bits of the returned DMA address, following
+>>   the Qualcomm FastRPC convention for IOMMU address space tagging.
+>>   qda_dma_free() strips the SID prefix before calling
+>>   dma_free_coherent().
+>>
+>> qda_memory_manager.c
+>>   Adds process-to-device assignment: each DRM file (process) is
+>>   assigned one IOMMU context bank device for the lifetime of the
+>>   session. qda_memory_manager_assign_device() first checks whether
+>>   the process already has a device (reusing it with a refcount
+>>   increment), then falls back to claiming an unassigned device.
+>>   qda_memory_manager_alloc() and qda_memory_manager_free() delegate
+>>   to the DMA backend after resolving the correct CB device for the
+>>   calling process.
+>>
+>> qda_drv.c / qda_drv.h
+>>   qda_file_priv gains an assigned_iommu_dev pointer and a pid field.
+>>   The .postclose callback decrements the IOMMU device refcount and
+>>   clears the process assignment when the last reference is dropped.
 > 
-> I didn't notice a clear explanation of the proposed DT schema for this
-The context banks are described in DT as child nodes of the fastrpc
-RPMsg endpoint with compatible "qcom,fastrpc-compute-cb" and a `reg`
-property for the stream ID, this is the existing binding in
-Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml. QDA reuses
-this schema unchanged.
+> This provides a nice summary of the patch, which is pretty useless.
+I'll fix this for all patches.> Please teach your AI instead to describe
+the reasons and the design
+> decisions instead of just assessing what the code does. Why do you need
+> memory manager? Why can't you use existing GEM helpers?
+I'll add more details for this in commit message:
+The DSP requires each buffer's DMA address to carry the stream ID of the
+context bank that owns it (SID << 32 | IOVA). The memory manager tracks
+which CB is assigned to which process and ensures all allocations for a
+process go through that device.
+
+`drm_gem_dma_create()` and friends allocate from `dev`, the DRM device
+itself. QDA needs to allocate from one of N child CB devices (each with
+its own IOMMU domain), selected per-process. There's no existing GEM
+helper that takes a per-allocation device argument.
+
+//Ekansh
 > 
-> But it looks awfully similar to the other driver that was creating a
-> kernel synthetic bus for actual real HW, that wasn't well liked.
+>>
+>> Assisted-by: Claude:claude-sonnet-5
+>> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+>> ---
+>> Changes in v2:
+>> - Adapt to the dynamically-sized device array introduced in patch 07
+>>   (kcalloc'd from DT node count, replaces fixed QDA_IOMMU_DEVICES_MAX)
+>> - Protect register/unregister with the process_assignment_lock mutex so
+>>   the device-assignment and device-registration paths are serialised
+>> - No functional changes requested by reviewers on this patch
+>> ---
+>>  drivers/accel/qda/Makefile             |   2 +
+>>  drivers/accel/qda/qda_drv.c            |   4 +
+>>  drivers/accel/qda/qda_drv.h            |   4 +
+>>  drivers/accel/qda/qda_gem.c            | 134 ++++++++++++++++++
+>>  drivers/accel/qda/qda_gem.h            |  52 +++++++
+>>  drivers/accel/qda/qda_memory_dma.c     |  82 +++++++++++
+>>  drivers/accel/qda/qda_memory_dma.h     |  17 +++
+>>  drivers/accel/qda/qda_memory_manager.c | 239 ++++++++++++++++++++++++++++++++-
+>>  drivers/accel/qda/qda_memory_manager.h |  30 +++++
+>>  9 files changed, 559 insertions(+), 5 deletions(-)
+>>
 > 
-> What is this for? Why can't you have a normal DT binding for the
-> iommu with normal devices?
-The CB child nodes are not separate addressable hardware — they are SMMU
-stream-ID assignments described as sub-resources of the parent DSP
-interface. Using platform devices for them was explicitly rejected by
-Greg KH [1] and subsequently using a generic shared bus in drivers/base/
-was also rejected [2]. Greg's conclusion was that each driver needing
-this pattern should have its own custom bus type.
-
-That is exactly what QDA does: the qda-compute-cb bus is a per-driver
-bus type with a dma_configure callback, following the same pattern as
-the existing host1x_context_device_bus_type that has been in the
-iommu_buses[] array since 2021. The bus creates devices synchronously in
-probe, calls of_dma_configure() via its bus callback so the IOMMU
-subsystem probes them normally, and tears them down on remove.
-
-[1] https://lore.kernel.org/all/2025062434-reviving-grumble-1e53@gregkh/
-[2] https://lore.kernel.org/all/2026042442-luxurious-antonym-f20c@gregkh/
-
-//Ekansh>
-> Jason
 
