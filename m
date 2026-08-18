@@ -1,170 +1,174 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5F9391855
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 16:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787070292; cv=pass; b=PW4CDt+WWd4h/7hTjssr2UzhKC23P/Uq4GdCfErb/6JvW24VVmeXAs9j6IX+cjvDOzT8izZG7wuwLuZi4OEROWSaY6lXwqKDDknS4QrAxZVhIlcQOJv7VOqJqa8N7nrhtI5g7N8o/3Ew2l19cysUJyI338C/kDeo9QpWIUBVLWY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787070292; c=relaxed/simple;
-	bh=33DXvXlll0HyJTxrb78h3DqOrjFtADo0DfT3EHT2Gmo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dF92WHaW6RiM+LfLRzCSVaA+a2NRXC4ebFzPrGZFGPaf2PIJCwz1Xh2WVulPJVsA2JXK4Qv3U7krjTaWSD/715nZB83VOA0s6FRJRHOifGGRkiFUFOra/xJWBNHaZJHcJTnuxL/dOzRwJ12S4mAKveNqnVQqbg3Aobi+kOEcwJg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tyrogbb1; arc=pass smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A1E3290B9
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 18:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787076344; cv=none; b=hisOPPGysJs+iDJ8UMF3O0bBt4GkfLxHqxwIIE9wQVIVWsdlQn3lZZ1j9QgDcHhvDPf8IgsfxQtMMJtAxZR52zB/yhikf8hsPJbGJXgaQlGABmPWpVJA1SxTs4vE+dorgQBnsyUd9UFLjwLcZRfzkAsesykCcm1MeDX7O7mOBgs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787076344; c=relaxed/simple;
+	bh=zKaBMuQMJyevzeLK5JlQrNyEW0fTPMo6tlF8EDv/QtA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OdVMxrTZi5JnlMAjRZqmnP5OAKUNUm8E46GKDg++u71LtloTJnya9iFouYTDwiEK9loSmZVAW9P3bUQoiL5jv3ikEWWQurAPszjRv90DtUk2F0ZDx/5U0EiWODpHqj6jpDPUOWYQvHhPSZ7rNUdgmnGcrl012D2pDKPj4utqeaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kj2cl3WL; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tyrogbb1"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-47fd66a094eso1905053f8f.3
-        for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 09:24:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787070289; cv=none;
-        d=google.com; s=arc-20260327;
-        b=mURwu3LRnc6OElfCkY02BELdpbwtNITOziQNl3W8thrNOJzGSsJhOflcBzn0/ijubo
-         /VOEcJhWe/5oXFzri3ywtCnvHse96pP/sBO4YFYp0Ca4gvnpn36krDmAKP48K6N9AgA2
-         rt3pbLSc/JaqO6kwaQjrOuDByB8wd1zvhcGf2ui3QgZduPw2T3Z7K2jyxF/YYZBF4Qrw
-         h7BtTQbIdnPHAStqk2BPAJNxlpx1deav5Odhta4adYKGUtto8xHpuCcw9KZ42I6ZTM58
-         fuS5BYXajpZTq6Tb2Zm40Xaz0QPJj0f/1zwRNkegr9s9Zbd4FwHLuZ/Lx0JVbwdPUXsz
-         iIVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ig4ZJ5ec863N27eKcdbfitdKOwnVM6xhItPYCP368+k=;
-        fh=6c3LOGRrgZLQ7BA95AJbXMfWPdKu2d767nlaYjmpeGE=;
-        b=GmsQcWYnrU469BdeA6zSlSPh1OXBYnDrc6FDu2IFYQmLGsWJKy5WxqgB1/aaaDDWXA
-         2qrtyqwcR4yIgCT9R1Ji/GQjGDvZyKnHtu1lLqhi70pjvTJ0ikO6vvmuw/d7AGIE/cWi
-         gVqLiIMg/+BZBfso9ckCx0d5JdzA5yop/WaRwJ10cB5S/FHV9I/y7Ad15KcsXepAuwho
-         iOZz4X4MqB0+CpJwmk5+jWvhVI+yDDHmeVEzFEE821lXLCLuj+bW2MumbKD7JV2d5Ivy
-         tFPAUWxs30dGmfVVajZMruUMYH37xvE+S/Zf10iCkrO5NpCxN+wqHoknFW8+YQR0LzR/
-         Etog==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787070289; x=1787675089; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ig4ZJ5ec863N27eKcdbfitdKOwnVM6xhItPYCP368+k=;
-        b=tyrogbb1vj8rNppj912sRz9DO8YDE9cF6/Izgo4d3a940Lo4/YimghUs4k0Lhci3Yn
-         6VG/3OTn3QSaGaJebRcNhU0C5YEfGvwHFiZFofo1yjQn7Z5ls10/FmTshSDcqgh7DNgk
-         yODNxZbvkvi7KVeTOBkDVP1D4s1PaFzFvGnpCpBBBSgg3KYC9jBQEkOTklfhQr/7hMWj
-         3uUAECL4qWjIgYDrRqns7UM9hlKl7Rb6v+yhkFpnXg+quf/qPM4M34RIx5E0xgnpwmNk
-         tOsPl8/imNrnUSk0Vtqy11V1POUY7wkHhpnzrXgBocskDccla+K2GjknQu8/+7Nnwj1c
-         ev2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787070289; x=1787675089;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ig4ZJ5ec863N27eKcdbfitdKOwnVM6xhItPYCP368+k=;
-        b=EZ9sQf75zhOX9S6kvqMPMeCRcvmiWv0wdwnVcW6Ey7CPRincxYkBP//HzVwCwAj8Dq
-         OT036DHPkSX+QQ5+G5ZDcWlc56h6nAxKcSt+vzCGjO52CwY3ZUaISwBfvyHl2F/uXV0L
-         idpurN6PAvcHLoou6CpX4pTEIrj59ssGs+R5J6mKQPAeoaJoYPkJnmf8zaPfQBcCUuDE
-         Lll8DQLHUCpX/S365PmAURBCh6/Rmbs6K6PHSD7NtFobfzGrbxhNN+a9gACif8J0p0Sg
-         xy76SchHGHTWlzYCZqRU8eO9RbRPm0JTjNGWpsv7CIxErsrVcavUueI5AJ57MPKFE8g/
-         QJvQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro48rm82hyOJi30pgT8ZcAo4Pzr0sr5dJOdZdF4POsTSmIysndSOW3wyBf0z5KZB4AwTnRE@lists.linux.dev
-X-Gm-Message-State: AOJu0Yxr3G26zFuNkzKlDb06gJBsJNgJ+kT5daqqGlXoMPwK9QBG2hhA
-	+pzgnzgSEmjGqqZfJrMIinr/SspU7npzCc1or6foBg2Ycb5TnvfFOwuzHvur4I19DSwYg1IV0N5
-	v3XHNbaNXnnwWuO3e8iSs7Fek0nkahXPHKXviTrV/
-X-Gm-Gg: AR+sD138ON4/OPBWcgrUaHvyNAfIY+beWAZ2ZsQsRdjtcfLpHTz4xlc4w/K7HpOBDTa
-	9Kg5UmTGO8TNgZEqvrIwpgPxbqVUZpbSBUEKgoFLe41jPB63jBEQbtoH/LtC84t76/fHPBVOgdw
-	hHtyTmttaqM1Zx+mqZ4sld4Rdv1ul1UYb5QNfWtkuS79qa2BpFF4cpkyL4flfFLpPRY3ECBdfZZ
-	22Szciyu4Hn7T+6jrhVfUHNW1L3HxnXz1iZcIooZpQKuaejzR/v8JFAViLxzpkVzHaDf+Me/s5T
-	+56jYzesO4yB4JXp0qQg4xCGhMcGZi8xxuDnNnB4shLJtLdT75jcU4qKw8HiUFoQtLL0yyRA5rp
-	d2eL6KGiZT9Z46aDocV6xpcKzuN43BPcvZp00iQQF8QmF2EgUZdshfhAgQ3ToBtC5qg6M
-X-Received: by 2002:a05:6000:4919:b0:47f:e877:641b with SMTP id
- ffacd0b85a97d-482a8ff751dmr18513986f8f.11.1787070288729; Tue, 18 Aug 2026
- 09:24:48 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kj2cl3WL"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67IHVaBO4056033;
+	Tue, 18 Aug 2026 18:05:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=9+4u+b
+	ZZRZ+PeqvvOuqGx/3fkOYGzNVHoOh4cOl5rwU=; b=kj2cl3WLElWZQki5NrZjuL
+	Z4hhgRJVuNoXlt5F4QyKqwnzsdlWsVRkTu1kmz4QStbDD1u1m5jjSfbuJD3QH80Y
+	smBkVPG0GAiT3flvAYQYSJv9Rl+HJfCOX2l25UJJds6/bew3Qw2EkBWM0KcfYesc
+	iRrTLfxpmt/RnS4pWjA3TpHe6JGDawYKb6NL5OhB0MXv4MW7qYQXBZd/NMov1CJi
+	4oNeGYZdEtFz0gaUh7PYxVYykbCalfX/t/Jy59aebDfRlcCC7LRT1fVr53gV73yv
+	9CaA5aYeQ8t00lGmBNBX9kSvgyq6pRpQfDZPIm65e7/ohspPenX3a00JmjnxbBgQ
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4g2ehe9k94-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Aug 2026 18:05:18 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67IHuJe9000966;
+	Tue, 18 Aug 2026 18:05:18 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4g32eq4u0j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 18 Aug 2026 18:05:17 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67II5GAh38207760
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 18 Aug 2026 18:05:16 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1713F2004E;
+	Tue, 18 Aug 2026 18:05:16 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id CF8E22004F;
+	Tue, 18 Aug 2026 18:05:14 +0000 (GMT)
+Received: from [0.0.0.0] (unknown [9.87.142.99])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 18 Aug 2026 18:05:14 +0000 (GMT)
+Message-ID: <605d3468-4b2f-4bde-b5cb-07619462dd51@linux.ibm.com>
+Date: Tue, 18 Aug 2026 20:05:14 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
- <20260803195135.GA1083357@ax162> <CAKwvOdnLVh3uhBTcHVcag7gL+i8Cj3B0YUa2V+UdL1TQ3p=KvA@mail.gmail.com>
- <CAEdQ38HhVk0rmq5ZRHbQABgLix8hq49QjzxNDodk_++DmA5Thw@mail.gmail.com>
-In-Reply-To: <CAEdQ38HhVk0rmq5ZRHbQABgLix8hq49QjzxNDodk_++DmA5Thw@mail.gmail.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Tue, 18 Aug 2026 09:24:37 -0700
-X-Gm-Features: AcwNN1U2F_9yv474aYoKrxgqvJJ_fOFHnGq3BGDcA7pmQq1T0vy1kWNlSniCBGI
-Message-ID: <CAKwvOdn_Lt6trZSHg+BRTv6v6mC=X3hCWbNe3R7Fs6n1FcHuCA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] alpha: enable building with clang
-To: Matt Turner <mattst88@gmail.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Magnus Lindholm <linmag7@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Aug 17, 2026 at 8:28=E2=80=AFPM Matt Turner <mattst88@gmail.com> wr=
-ote:
->
-> On Mon, Aug 17, 2026 at 7:16=E2=80=AFPM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > >
-> > > On Mon, Aug 03, 2026 at 01:08:40PM -0400, Matt Turner wrote:
-> > > > Two small patches to let the alpha kernel build with clang.
-> > >
-> > I'm curious, since we've yet to have such a case of an out of tree
-> > llvm backend, what's your plan, if any, to upstream your backend in
-> > llvm-project proper? Perhaps as an experimental backend?  We have bugs
-> > filed in our issue track for m68k which is experimental (but upstream)
-> > in LLVM.
->
-> It builds a kernel that boots in qemu and on real hardware.
-
-Wild.  Where did you even get real hardware? I know very little about Alpha=
-.
-
->
-> As of two days ago, it's capable of building itself and the 373
-> packages of a Gentoo stage3 + a few other things. These include glibc
-> and other core components (in a qemu-backend container on a fast
-> multicore amd64 system).
-
-I haven't kept up with Adhemerval's work on building glibc with clang,
-but pretty wild to hear about glibc building with clang period, for
-alpha no less.
-
->
-> I would very much prefer to have the backend upstream, and I plan to
-> start a discussion on discourse.llvm.org this week. I think an
-> experimental backend is probably the limit of what makes sense for
-> Alpha?
-
-I agree. An RFC on discourse is the way to go. I'd use m68k as an example.
-
->
-> If you have advice on going about this, I would welcome it (privately
-> or in reply to this thread).
->
-> Current diffstat is
->
-> 461 files changed, 29735 insertions(+), 88 deletions(-)
-
-Only advice is that if any of that was AI generated, please do take
-the time to review LLVM's AI policy.  Reviewers have been getting
-crunched by low quality AI commits recently, and are a bit salty all
-around.
-
-https://llvm.org/docs/AIToolPolicy.html
-
->
-> of which {llvm,lld,clang}/test is
->
-> 266 files changed, 9871 insertions(+), 4 deletions(-)
->
-> Currently reviewing and cleaning up, so the numbers will change.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] x86/mm: fix objtool failure with KMSAN enabled
+To: Dmitry Voytik <voytikd@gmail.com>,
+        Alexander Potapenko
+ <glider@google.com>,
+        Borislav Petkov <bp@alien8.de>, Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Dmitry Vyukov <dvyukov@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ankur Arora <ankur.a.arora@oracle.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>, Marco Elver <elver@google.com>,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org, llvm@lists.linux.dev
+References: <20260701125151.352632-1-voytikd@gmail.com>
+Content-Language: en-US
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <20260701125151.352632-1-voytikd@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDEzMyBTYWx0ZWRfXykfSQBA7Lksw
+ W1dXri9x8UBF8W1c6VbZZlrXsRErJTWfLUbOX41paanvjh6j6ymjP4Dh4mafxLiOvxJXrBQDu0J
+ Y3kLSLZN4F9X6zeuMRGKBMzfcfkZsjeiJT7Mg1mvrNmreNc4BMY3gG73ReSV243MT+GwKvZaonc
+ wUBE5MqAxEeSE4ZpOHTVmLj+R1m+ZNZXJClb+qAbfyvTvNiNfUxeTBzNBGcRxmuMytAWGIMFDtH
+ Uf29UesSk3Izv9VLmMyNmzHRw7gYAaq8XpwTIfjeRwRHoPwflOwMTMIXinuEuOvinJFp7bm5ImB
+ CGbMb9E/+V/eeFnHidZ2loILu4d1gQ1UsroMd0ggsuHyZZ0JysSLsMPmYjqpbfjRndlk1Fz5TWk
+ X/MfT5KOniGhAp6tEvvM5Xywzrjhdf/1SNIZsiC2GyiLAz5GVXRh24hN/mPAg1z/b26XtXmqV+g
+ jNfGZ38mISJEPtqIZvg==
+X-Authority-Analysis: v=2.4 cv=DY8nbPtW c=1 sm=1 tr=0 ts=6a849edf cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8
+ a=pGLkceISAAAA:8 a=fGO4tVQLAAAA:8 a=VnNF1IyMAAAA:8 a=IzFO8XHbKeul4SU-JC8A:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: Rgl4_PeBW0ljUeOiw7MXuCe5_aW-h4AJ
+X-Proofpoint-GUID: 7ss18Xr76sCLSOddYB1MDNBU4H7p8GEM
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDEzMyBTYWx0ZWRfX8EIlgqIcWRdq
+ 4H/LwsfTGoLEQN3ZeKbxbkFSYWgLA+Gqt6/YU87myd5oX0+AL8FXpRbSsaF8sIMv1kOwO3BEr97
+ rcEbvVyMqIFXltMzvCalMwNdHMnF0MM=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-18_03,2026-08-18_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ bulkscore=0 clxscore=1011 spamscore=0 malwarescore=0 priorityscore=1501
+ impostorscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608180133
 
 
 
---=20
-Thanks,
-~Nick Desaulniers
+On 7/1/26 14:51, Dmitry Voytik wrote:
+> This patch fixes broken builds with defconfig + CONFIG_KMSAN +
+> CONFIG_DEBUG_INFO_*.
+> 
+> To reproduce the issue before the fix:
+>    make mrproper
+>    make LLVM=1 defconfig
+>    ./scripts/config -e CONFIG_KMSAN \
+>      -e CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+>    make LLVM=1 olddefconfig
+>    make LLVM=1 -j(nproc) vmlinux
+>    ...
+>      LD      vmlinux.o
+>    vmlinux.o: warning: objtool: folio_zero_user+0x801: undefined stack state
+>    vmlinux.o: error: objtool: folio_zero_user+0x801: unknown CFA base reg -1
+>    make[2]: *** [scripts/Makefile.vmlinux_o:76: vmlinux.o] Error 255
+> 
+> objtool in verbose mode shows how the frame pointer is omitted:
+>    make LLVM=1 OBJTOOL_VERBOSE=1 -j(nproc) vmlinux
+>    ...
+>    b15a2c:  folio_zero_user+0x7fc      xor    %eax,%eax
+>    b15a2e:  folio_zero_user+0x7fe      mov    %rcx,%rsp
+>    b15a31:  folio_zero_user+0x801      mov    %r14,%rdi
+>    b15a34:  folio_zero_user+0x804      mov    %rbx,%rcx
+>    b15a37:  folio_zero_user+0x807      call   0xb15a3c <__clear_pages_unrol
+> 
+> After the fix, the frame pointer is back:
+>    b15a37: 31 c0                       xor    %eax,%eax
+>    b15a39: 48 89 ec                    mov    %rbp,%rsp
+>    b15a3c: 4c 89 f7                    mov    %r14,%rdi
+>    b15a3f: 48 89 d9                    mov    %rbx,%rcx
+>    b15a42: e8 00 00 00 00              call   b15a47 <folio_zero_user+0x817>
+> 
+> It seems the issue was introduced by
+> commit 54a6b89a3db2 ("x86/mm: simplify clear_page_*")
+> 
+> The actual fix is to revert the change how ASM_CALL_CONSTRAINT is
+> positioned.
+> Additionally, reintroduce asm_inline to prevent potential compiler
+> rejection of inlining.
+> 
+> Link: https://lore.kernel.org/CAAX90H2_RPnZL_dFYN7cQF6yt-wAweKKSx2=6e2aZ0kv+Pm+NQ@mail.gmail.com
+> Signed-off-by: Dmitry Voytik <voytikd@gmail.com>
+> ---
+>   arch/x86/include/asm/page_64.h | 13 +++++++------
+>   1 file changed, 7 insertions(+), 6 deletions(-)
+
+FWIW I just bumped into this build issue; this patch helped and the
+resulting kernel booted.
+
+Config: https://pastebin.com/B6GedVDL
+
+
+Tested-by: Ilya Leoshkevich <iii@linux.ibm.com>
