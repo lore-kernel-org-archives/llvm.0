@@ -1,149 +1,199 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1605746EC62
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 13:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3358835028C;
+	Tue, 18 Aug 2026 15:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787058448; cv=none; b=TjDTfotSo5H24YqpNpkoddbMYe7NxyoDCiSWNkxbjbKfdbga+XtNCZmaBSmCvkgbmNDJAG3k6O0PwhLcraebT1GOHBD6lxxP9UtoIQHzNaaeLS8Y9GR78eqiDqllYK5pn7JZgcKRQgTPS8MamkqQl/ddRkpl7a4AedT1ybkmhN8=
+	t=1787068191; cv=none; b=h/WYedkZNQQuEIJATJjekiBCLg3p/5+eO2No95CRr7467122WIApQ7z5Y39wETgW+6v3Uk4LCm8u5DUAiJlLnHYmul3R++ttYkStj7ZiRxzmQJtQvJnTuSlaiLeSb2f1YhJ+pJuTeF2Nd3L5KuXRSvxdFH31cw+Htcr3xRqMt/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787058448; c=relaxed/simple;
-	bh=aU2VtRXj8vmLbAKszI/rzjIGfSjXrWM/1EcRNLc+2zY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sGPmHlAb5MhcNBYVo1EKxXJRb1N+CYKNjgUg+t0D1Yh3GHrIC/FzaQY0L8MeSz1vO8kuTho6daFeH/WcANudqUh8tbEhLugx4E3XmVGEST5YQLuVaInKX0KoFjbRUtxtvNcrxxDZtyHPJmtjCgpzRLn7NTEWPCUycW4SMaRUcr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=US+l9vk3; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
+	s=arc-20240116; t=1787068191; c=relaxed/simple;
+	bh=wbTPFX20obqfFsPEUtBnIEP5HBVoFZKD8ToGqH7rbp0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=a4aNZmpft058NYd618t/bS7S8eG+JPV6V23wY/dH0+1n/pdj2EpYnVxoR78Mk9WsthUdLzwH0YfLcEOF6OwGw7aJq5XM+wDi/AfWe4OkPDHafdnE7pKyOUzs7al0dgR1TCXKCa+RnvIot5+ZDW9W4foJwUeT46iAZHLpA/r7DvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mES3yF03; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="US+l9vk3"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-92e54f8c051so227911685a.3
-        for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 06:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1787058446; x=1787663246; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=k6wSKG5ykq4Q6C1KtG/SKHUImq95NPkNyQJpM3ppYMA=;
-        b=US+l9vk3HFTzG/7QOn8gBkUGmXS4OC1SiMpxA7FsOFKttoZIxwIeQafx4QROIJYvB9
-         Eiqhp8ukczm9tQIhnICLehoeTfTdFfOPzLoF1+MQ1Go0NAqcCY4OZwMpUyIKuYrAEget
-         /tWMm/Ved1S2+XntulFcMTArODnJaMQgDGjj+JzuRejFLIumKfuMRVr0LvNurMh61uA7
-         MNCqfxv/M5ZBkx55CuCZpPm0UHAIA532Wlx6z0+g0aooX4Au0hJrBDr4ONZDrUXcy4m2
-         7aV2EXmr7tWlcXboJIBs+5fSc/IwMPU2yaYtvu9qoHM+clzrqv4P44qc3M2v71YKNmbR
-         qrGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787058446; x=1787663246;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=k6wSKG5ykq4Q6C1KtG/SKHUImq95NPkNyQJpM3ppYMA=;
-        b=WOBA3V1P71SZlhbWIDTgsY42EqpHnEu8MKYf9oTP4LYZUHXg17+Fttveq+lSAIdTr0
-         9Y4O1T1+q4ID9/oh6Hl6qauzooXdHpXipAa36qJwm5BgGyj2EFI7JacSWtiTQpORMlVT
-         df5ukXQWuo56aYrjyHX+ansQ53CG06peBd92WH4VWxdhCLkWyU3VBbyieQb+JnZlaonh
-         p8/T9Q1Au+xxaRVraw+Mjh2UtB5kelO7H4az2P48LhwHEiMnASACVKkbGcPuPQy//Glt
-         JiDC4EKen6szOGQk/b3JTDkPKiSn82FgWcCZHfTm7sa79B6HUUxR+1GGL3CFvIAFyXxe
-         RHyg==
-X-Forwarded-Encrypted: i=1; AHgh+RrrFNSi+hF8G0Dh/V2yIDuFp59SEWrvR+AuY/OtzqVe78WMVrJoR/2XcfHpEF7JpKBr+Ubl@lists.linux.dev
-X-Gm-Message-State: AOJu0Yw89SLJDaqQgA9/3mHQR1fSoPgP8rLMGJexAaxsvNwNDAxCrqbo
-	BR+aE7IgeEM8uGXFHGtbC13F5tCCkDp0fJd6g8NrwyGXwMM/xWy4bFuFMEYW6vM9+5I=
-X-Gm-Gg: AR+sD13r9e2EHBLN4N7DW1y0TYLwSUVeHaZL9rZA8j7lF7ElNGVJvBW+J96hsJuy+YV
-	mlDkeVysGRDjsvqwW8+FLwmKRV89c4XwZuv7W9hVORHKq7na9JYPZxM+tVMujkUcei92hJRnNH3
-	eyVHdzXUzqKxs+MP7toBc1EY//R/CaNHyc5Ybvr/It/AcLjjhubLov1kezDFkMp+6VeWY7zhQ2v
-	EWQgN+j7yYa3BJ8Sn3jF6BS/qMKQIbtVJ66nt4pMhCNPYIJy112OBH8niSA6iVKDfPIj2aRYfnO
-	wM7U3MJtisxRQwy3YcQovGjT8VN33sluyRsWRg5h5gWZtxca/WP41fYJLmtzdGSSW2B254LYENH
-	tFCyl7A79HCaYFWEhpu+cSg/Lac47mLeTGw7eUhnOFz2N1Vs+WgeDA6Al9ceeB1/NXJokiRaWXd
-	1RsYxMz7NyOzC/lWaX/pxX4IqDzO463kWjoMKIg0Qh1REzy8NnNsJfC+T7TlwEVeZO6X5PbV1L+
-	wPnDbtvDnzgJwgYTBW1bukMs4TyW3jwVH+Sz+zv7qAvJQ==
-X-Received: by 2002:a05:620a:4624:b0:934:aa56:45df with SMTP id af79cd13be357-93704af041cmr767327285a.11.1787058445831;
-        Tue, 18 Aug 2026 06:07:25 -0700 (PDT)
-Received: from ziepe.ca (hlfxns010zw-159-2-239-150.pppoe-dynamic.high-speed.ns.bellaliant.net. [159.2.239.150])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9370342b3b4sm281378685a.44.2026.08.18.06.07.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 06:07:25 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1wwJXI-000000001zD-16ZT;
-	Tue, 18 Aug 2026 10:07:24 -0300
-Date: Tue, 18 Aug 2026 10:07:24 -0300
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	"Joerg Roedel (AMD)" <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Sumit Semwal <sumit.semwal@linaro.org>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Bharath Kumar <quic_bkumar@quicinc.com>,
-	Chenna Kesava Raju <quic_chennak@quicinc.com>,
-	srinivas.kandagatla@oss.qualcomm.com,
-	dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-	iommu@lists.linux.dev, linux-media@vger.kernel.org,
-	linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 05/15] iommu: Add QDA compute context bank bus to
- iommu_buses
-Message-ID: <20260818130724.GA5482@ziepe.ca>
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
- <20260817134416.GA1415075@ziepe.ca>
- <89ec74da-15ed-4278-b651-5c753fa4f146@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mES3yF03"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787068190; x=1818604190;
+  h=date:from:to:cc:subject:message-id;
+  bh=wbTPFX20obqfFsPEUtBnIEP5HBVoFZKD8ToGqH7rbp0=;
+  b=mES3yF03KPtuGL5YJMN1uT2ZMponmm1yBDQUxvfbF0aaFgMI2XY+cYYe
+   Rr52By0k7gdNL8u0ASJMgUFjs2etsvnj2lDmYbPwmWgkQrRHKUbd4sO/w
+   HpYPgjPIrYYa7Z6XrgiJt0Yu8kIAoDJzQ28b+PiNjn4rxkIwZ99BGtaYM
+   4NaDiLgUCBRGwp7F46nbvZgtWh2FYp4SBRi6oXTmULkSPUHhwv/Z4n8ri
+   ZNo3fmVG8rpQqVeqxKm6L7pwWHcJGKaFIbvCb7wZ1QqAQQtbnc5kDAQy+
+   A6ptprcsWiuhfu90IIK2Ito6aIFs1abjs7Ed86dXnFKqsV9AErL7TnMUU
+   Q==;
+X-CSE-ConnectionGUID: ULvj5qUXT5q28fTGx9Tnaw==
+X-CSE-MsgGUID: PW5wCewHTHW3dcS+UC+J+A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="110350922"
+X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
+   d="scan'208";a="110350922"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 08:49:49 -0700
+X-CSE-ConnectionGUID: 64jxqES5RAG1xp6lr4G3VQ==
+X-CSE-MsgGUID: yM1UHfsaRzqNNUCcx1jHgw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
+   d="scan'208";a="290064805"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 18 Aug 2026 08:49:48 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wwM4P-00000000eOM-1eJE;
+	Tue, 18 Aug 2026 15:49:45 +0000
+Date: Tue, 18 Aug 2026 23:49:31 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [kas:collapse/rfc-v1 26/76] include/linux/swapops.h:260:19:
+ error: use of undeclared identifier 'SWP_HWPOISON'; did you mean
+ 'FOLL_HWPOISON'?
+Message-ID: <202608182349.Ot06AoJF-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <89ec74da-15ed-4278-b651-5c753fa4f146@oss.qualcomm.com>
 
-On Tue, Aug 18, 2026 at 10:40:25AM +0530, Ekansh Gupta wrote:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git collapse/rfc-v1
+head:   efac4ce42bf9ea34a32d1563fe3370ee837a751f
+commit: 056b294111d8d94a963c8e885186a1a723a59808 [26/76] mm/collapse: sketch the new anonymous collapse engine
+config: i386-buildonly-randconfig-002-20260818 (https://download.01.org/0day-ci/archive/20260818/202608182349.Ot06AoJF-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260818/202608182349.Ot06AoJF-lkp@intel.com/reproduce)
 
-> The CB child nodes are not separate addressable hardware — they are SMMU
-> stream-ID assignments described as sub-resources of the parent DSP
-> interface. 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608182349.Ot06AoJF-lkp@intel.com/
 
-So this is exactly the same thing.
+All errors (new ones prefixed by >>):
 
-Read my remarks here:
-https://lore.kernel.org/linux-iommu/20260618151745.GD231643@ziepe.ca/
+   In file included from mm/collapse.c:8:
+   In file included from include/linux/leafops.h:11:
+   include/linux/swapops.h:88:21: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
+      88 |         ret.val = (type << SWP_TYPE_SHIFT) | (offset & SWP_OFFSET_MASK);
+         |                            ^~~~~~~~~~~~~~
+   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
+      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+         |                                              ^~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:88:49: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
+      88 |         ret.val = (type << SWP_TYPE_SHIFT) | (offset & SWP_OFFSET_MASK);
+         |                                                        ^~~~~~~~~~~~~~~
+   include/linux/swapops.h:28:34: note: expanded from macro 'SWP_OFFSET_MASK'
+      28 | #define SWP_OFFSET_MASK ((1UL << SWP_TYPE_SHIFT) - 1)
+         |                                  ^~~~~~~~~~~~~~
+   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
+      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+         |                                              ^~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:98:23: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
+      98 |         return (entry.val >> SWP_TYPE_SHIFT);
+         |                              ^~~~~~~~~~~~~~
+   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
+      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+         |                                              ^~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:107:21: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
+     107 |         return entry.val & SWP_OFFSET_MASK;
+         |                            ^~~~~~~~~~~~~~~
+   include/linux/swapops.h:28:34: note: expanded from macro 'SWP_OFFSET_MASK'
+      28 | #define SWP_OFFSET_MASK ((1UL << SWP_TYPE_SHIFT) - 1)
+         |                                  ^~~~~~~~~~~~~~
+   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
+      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+         |                                              ^~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:173:19: error: use of undeclared identifier 'SWP_MIGRATION_READ'; did you mean 'THP_MIGRATION_FAIL'?
+     173 |         return swp_entry(SWP_MIGRATION_READ, offset);
+         |                          ^~~~~~~~~~~~~~~~~~
+         |                          THP_MIGRATION_FAIL
+   include/linux/vm_event_item.h:62:3: note: 'THP_MIGRATION_FAIL' declared here
+      62 |                 THP_MIGRATION_FAIL,
+         |                 ^
+   In file included from mm/collapse.c:8:
+   In file included from include/linux/leafops.h:11:
+   include/linux/swapops.h:178:19: error: use of undeclared identifier 'SWP_MIGRATION_READ_EXCLUSIVE'
+     178 |         return swp_entry(SWP_MIGRATION_READ_EXCLUSIVE, offset);
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:183:19: error: use of undeclared identifier 'SWP_MIGRATION_WRITE'
+     183 |         return swp_entry(SWP_MIGRATION_WRITE, offset);
+         |                          ^~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:204:26: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
+     204 |                                  swp_offset(entry) | SWP_MIG_YOUNG);
+         |                                                      ^~~~~~~~~~~~~
+   include/linux/swapops.h:66:29: note: expanded from macro 'SWP_MIG_YOUNG'
+      66 | #define SWP_MIG_YOUNG                   BIT(SWP_MIG_YOUNG_BIT)
+         |                                             ^~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:62:29: note: expanded from macro 'SWP_MIG_YOUNG_BIT'
+      62 | #define SWP_MIG_YOUNG_BIT               (SWP_PFN_BITS)
+         |                                          ^~~~~~~~~~~~
+   include/linux/swapops.h:40:11: note: expanded from macro 'SWP_PFN_BITS'
+      40 |                                       SWP_TYPE_SHIFT)
+         |                                       ^~~~~~~~~~~~~~
+   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
+      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+         |                                              ^~~~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:212:26: error: use of undeclared identifier 'MAX_SWAPFILES_SHIFT'
+     212 |                                  swp_offset(entry) | SWP_MIG_DIRTY);
+         |                                                      ^~~~~~~~~~~~~
+   include/linux/swapops.h:67:29: note: expanded from macro 'SWP_MIG_DIRTY'
+      67 | #define SWP_MIG_DIRTY                   BIT(SWP_MIG_DIRTY_BIT)
+         |                                             ^~~~~~~~~~~~~~~~~
+   include/linux/swapops.h:63:29: note: expanded from macro 'SWP_MIG_DIRTY_BIT'
+      63 | #define SWP_MIG_DIRTY_BIT               (SWP_PFN_BITS + 1)
+         |                                          ^~~~~~~~~~~~
+   include/linux/swapops.h:40:11: note: expanded from macro 'SWP_PFN_BITS'
+      40 |                                       SWP_TYPE_SHIFT)
+         |                                       ^~~~~~~~~~~~~~
+   include/linux/swapops.h:27:45: note: expanded from macro 'SWP_TYPE_SHIFT'
+      27 | #define SWP_TYPE_SHIFT  (BITS_PER_XA_VALUE - MAX_SWAPFILES_SHIFT)
+         |                                              ^~~~~~~~~~~~~~~~~~~
+>> include/linux/swapops.h:260:19: error: use of undeclared identifier 'SWP_HWPOISON'; did you mean 'FOLL_HWPOISON'?
+     260 |         return swp_entry(SWP_HWPOISON, page_to_pfn(page));
+         |                          ^~~~~~~~~~~~
+         |                          FOLL_HWPOISON
+   include/linux/mm_types.h:1904:2: note: 'FOLL_HWPOISON' declared here
+    1904 |         FOLL_HWPOISON = 1 << 6,
+         |         ^
+   In file included from mm/collapse.c:8:
+   In file included from include/linux/leafops.h:11:
+   include/linux/swapops.h:265:28: error: use of undeclared identifier 'SWP_HWPOISON'; did you mean 'FOLL_HWPOISON'?
+     265 |         return swp_type(entry) == SWP_HWPOISON;
+         |                                   ^~~~~~~~~~~~
+         |                                   FOLL_HWPOISON
+   include/linux/mm_types.h:1904:2: note: 'FOLL_HWPOISON' declared here
+    1904 |         FOLL_HWPOISON = 1 << 6,
+         |         ^
+   In file included from mm/collapse.c:8:
+   In file included from include/linux/leafops.h:11:
+   include/linux/swapops.h:304:19: error: use of undeclared identifier 'SWP_PTE_MARKER'
+     304 |         return swp_entry(SWP_PTE_MARKER, marker);
+         |                          ^~~~~~~~~~~~~~
+   12 errors generated.
 
-The DT modeling for devices that have multiple stream-IDs is to list
-them all in iommus list.
 
-If you don't like that DT modeling then you need to start out by
-explaining why not very clearly.
+vim +260 include/linux/swapops.h
 
-There is undeniably a Linux gap where it forces all streams in the
-iommus property to share a translation. This is a *linux* problem in
-the iommu subsystem and DMA API. In an ideal world it should not be
-fixed by hacking up new busses or mangling the DT.
+07a57a338adb6e Oscar Salvador 2024-04-07  253  
+07a57a338adb6e Oscar Salvador 2024-04-07  254  /*
+07a57a338adb6e Oscar Salvador 2024-04-07  255   * Support for hardware poisoned pages
+07a57a338adb6e Oscar Salvador 2024-04-07  256   */
+07a57a338adb6e Oscar Salvador 2024-04-07  257  static inline swp_entry_t make_hwpoison_entry(struct page *page)
+07a57a338adb6e Oscar Salvador 2024-04-07  258  {
+07a57a338adb6e Oscar Salvador 2024-04-07  259  	BUG_ON(!PageLocked(page));
+07a57a338adb6e Oscar Salvador 2024-04-07 @260  	return swp_entry(SWP_HWPOISON, page_to_pfn(page));
+07a57a338adb6e Oscar Salvador 2024-04-07  261  }
+07a57a338adb6e Oscar Salvador 2024-04-07  262  
 
-But of the easy options I think hacking in new busses is the worst
-option and has already been basically NAK'd for the hamoa project so
-please don't use it here for a diferent qualcomm IP.
+:::::: The code at line 260 was first introduced by commit
+:::::: 07a57a338adb6ec9e766d6a6790f76527f45ceb5 mm,swapops: update check in is_pfn_swap_entry for hwpoison entries
 
-Given several qualcomm chips now have this same issue I strongly
-suggest qualcomm consider trying to fix the root cause and provide
-some way for a Linux driver to progmatically "unbundle" the multiple
-streams.
+:::::: TO: Oscar Salvador <osalvador@suse.de>
+:::::: CC: Andrew Morton <akpm@linux-foundation.org>
 
-It would be much easier if the HW properly supported actual sub
-streams as we do already have a programming model for PASID. Maybe
-some kind of driver thing to reconstruct the iommus so that each entry
-is exposed as a PASID in the API instead of an alias or something like
-that would be an easy direction.
-
-Jason
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
