@@ -1,351 +1,182 @@
-Received: from canpmsgout01.his.huawei.com (canpmsgout01.his.huawei.com [113.46.200.216])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07CF351C20
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 03:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06EF73839A8
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 03:49:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787024912; cv=none; b=N4B6oyLH9cfStpa08Tp+r85MyUbMrdXdtmaVtGIUVzyTtx902lomoCDSc44BSaqhn6/jGdkJRJ9zxO2w7VPrq4h4K4jU8klymTKkanPEyYmertKg1toIHXwl/qQuEortSslC+H3DTXjbOFriWrYcKo+MHQ6KoWagii7nDBj32/k=
+	t=1787024999; cv=none; b=kuyr3uMEMWtwDGVSV9LLA4lW55MpjzRQ1CgVb4Pej5beaNTbP0NqiWRVuEJoX9QJYG5pJPsWddveJ1UsD0KrRnBtmROVscu9/E0YhDX4c0+AgaBtPzjPIYnrwZbVzCGJagS+np2XxxlovmpfJT8PKDu1JQRaA+lmV9co+aTLkNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787024912; c=relaxed/simple;
-	bh=nGVJR4K+0/eBZEbSPUxqVDdiyQvpUJPE7zd1iBpyNhE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=FIq4u/pR2ADOxqMBMxZ87tIxxNDQYlyl26x/75t4Djm6Dczelrooawqn5aoPL7uRttv4WYyIwyoYSf6YuWljNcPs9TAoHJpCoD3A9/8lxJlONnxAAcYHTWXBJTuvVy+P704hyvk8fc+zrI17czzI/VDqKxgW2LDufTd5sdJH8DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=Cl9tDmfV; arc=none smtp.client-ip=113.46.200.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1787024999; c=relaxed/simple;
+	bh=q3ya2SblFC86iZpNdDmbejj6B4Zp4Ad+lutz+pAZX8s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OuDJIV/tnPGLkMRmnaylgiuWTiLCBWY/EVhEQ7dLmDtXX4aipQXPC93ozckDp1XJTc9e2qO75kaPp53jhgPpjW49w2ir0AKLPv4U4bWNDiajQoJa2MFyWwtfl25wXYZ2BwpFXAuxRk8qtiMsMZ/h0+UgmnxBW4r710IVRUfW+dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=VmoUky8+; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=YpzSHYuH; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="Cl9tDmfV"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=gyZ2bt7vvcnZF5teEbGIWz5c6PjKtc1OtAwhoXlFxiw=;
-	b=Cl9tDmfVcwp7b+wH3TyfROOyfNTv6Z8T0nM8kj0rzqlbKRwigk7did+Q+c3p9m5D1kn8DQb6K
-	gKq8rkngj0Y5W1I+i2G0R8lzcWOmTRBnMpLZSUiF6VEqgQ4EA6Q93Az+XikNRBC2JWBZo5ccL2q
-	u2qJwH8i1o7hsnYwS6pRPd0=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout01.his.huawei.com (SkyGuard) with ESMTPS id 4hPFls33w5z1T4Mc;
-	Tue, 18 Aug 2026 11:38:17 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0057A40537;
-	Tue, 18 Aug 2026 11:48:16 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Tue, 18 Aug
- 2026 11:48:14 +0800
-Message-ID: <1a0c0b5a-fc09-431f-b3a5-56593a6e76be@huawei.com>
-Date: Tue, 18 Aug 2026 11:48:14 +0800
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="VmoUky8+";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="YpzSHYuH"
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67HLkSUN3531939
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 03:49:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=qcppdkim1; bh=cSsOQKdmDY+6H5Rq7yKqDY43
+	lcWOkS/eE/giYEixucg=; b=VmoUky8+H+tjDDwaT3tM/4TVnvJkBfcAcpBpHare
+	Tf7ZwlFpTALetiJ+Fvm0LbqbSRc/dZGRFfa8pytEQjoefL37MLLuERLHkEkAUiZu
+	Sosalko1f1YAkl7/boT/E1TtemNYToayV0JhE4ZrXJdehbCVBfX38x66O6lpEn6Q
+	a0a4W8cNuILfixuWvnT0a+fTX3Vp8HRfQzW3s/hv0DlBr0Mm9piiL5Egb+ZdMJ2e
+	jiuRWF7y/EE5Gz97gPBHwxkVD4Rjycs+S+VeZcMpgB1WRsziKUe0s1XmcyloOdiQ
+	VP9hSUNqfVcT32jHu4iQNKS6CjrBKG0ukVV+i1sdfVUs4Q==
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g4615j9tq-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 03:49:57 +0000 (GMT)
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-51c01ff996dso58361261cf.2
+        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 20:49:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1787024996; x=1787629796; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=cSsOQKdmDY+6H5Rq7yKqDY43lcWOkS/eE/giYEixucg=;
+        b=YpzSHYuHzGwrZXZu8BY7zM0/j7U06Ou+BFaSF+UEO5KERoXb42khhjr3wvbS5KXzoQ
+         uEM+Wp7g7YI7+TQpyq34S4cKkBMCxbXGGWAjDgJn/cPIKDgrlBF4ZmGwjH9jE3Z/JG0Y
+         uk/amYiwu/JGCLDqqEfu1CIYUa/GRsVAklLnRlkTqtvOI/R7pvXnifDrwDvA25ju1Eu6
+         /a7JaXp5afo/5nn6gHOM62ixYXn9bfovEDYwHZ4QUFfNDQuscLtkmmRoHDXgszbuZiyu
+         FIjm6yHHJCo054fbRMFmE+xoYAEFNQM1XmwcnAAH+8Mr11ODRlyUyJTAjNco5UV6C/58
+         3vmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787024996; x=1787629796;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=cSsOQKdmDY+6H5Rq7yKqDY43lcWOkS/eE/giYEixucg=;
+        b=nFaWhXq989kZ/DeonfHFFQZL20ePGDHH7uDZIwZ/g2qxbdOwGsgA1J1Je7rNdUqRj1
+         3MF4NJM2GmfGtHm4ykGcW7vNa8UnegxG+iLX1DgqrnB1wm/fClI9shROjywUgpxc7zeL
+         wgKB/F50JkrRxOunT+iJ2aTtYx+jHuJO5xhyWRrEIRN2KrDgFVivHkLi5E0xvdHSBaod
+         UHqlAMxHKJXLghHcvRCICf++0lvBPEgLtncvC4Cs57wnCJmlrssWx4ZTUIcbZEKPJBEH
+         UUrjNBegz69dfCsYygUt+tLA/03EcOztDJkYzwoVPLbc8Up9H3vEyovJl6LCNN2ilXps
+         2bXg==
+X-Forwarded-Encrypted: i=1; AHgh+Roo4MEuAKnJuO2xgvoCOwf06m5zRmUNehWS2mzWyaddfPztGpF6hdDhGRKeU6EVhI427SGB@lists.linux.dev
+X-Gm-Message-State: AOJu0YyTPWKiksrl5Jn5RiyLuDVEphhZhgglX31egJTTkyYfig5j5ALu
+	sfF2gwJo+P+4itBfR9BpjqDWKdAFAhey5Rq3Y3gIft9w1/q4nn1Az9yafhLTpwLo2aUcChs/nIU
+	jiQAjT/4jYnIfkbbvZWDFcdDlhXesU6cOTdRPSgFwplq8nlAvMzdCZRto
+X-Gm-Gg: AR+sD13omzKWxKIU8aurbq/J/z8XdBP6cZUzf2OmrZQGPFnEhcxE8VOFeGlp82XH830
+	o2JODbENV0k+uofZC7qjeqyyH/rjQAjkX6GxfXybbra2HXFspu0hMxTQ308kqGPOKGwxmc1DdzU
+	EwV98VAOwKwxTv8Gdd1YwpBMAfWr655xbIOfnAEddfwCgjrnhs4u7e1hhutCOaJZ5+RRIhCvs/w
+	5lU5OssR4NfYDyfMP13gWUK7zSHwVX/FtXgKqzGRI6IB+paX0vlmA6LUpLxXhViCPbtL1g4mdfg
+	QBrK0m5hq/UFWbWlhcD92Ir0eJYwlZPccrcYr9XbBngYH+/8fMgNuDEkVj12PfOvnVYCqiImWOt
+	7q9/v6PurFrcYkejoW77BSafIWms2AM1m7CgJGWG+wvrpeIQXL13UEm2R+NWZXQKPMK0+yprHus
+	9Bi0BzrQgD4AiP
+X-Received: by 2002:ac8:7e91:0:b0:51b:f217:539f with SMTP id d75a77b69052e-52d85354a61mr315349571cf.17.1787024996079;
+        Mon, 17 Aug 2026 20:49:56 -0700 (PDT)
+X-Received: by 2002:ac8:7e91:0:b0:51b:f217:539f with SMTP id d75a77b69052e-52d85354a61mr315349131cf.17.1787024995589;
+        Mon, 17 Aug 2026 20:49:55 -0700 (PDT)
+Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b46cfa875bsm875722e87.32.2026.08.17.20.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 20:49:54 -0700 (PDT)
+Date: Tue, 18 Aug 2026 06:49:52 +0300
+From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+To: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Bharath Kumar <quic_bkumar@quicinc.com>,
+        Chenna Kesava Raju <quic_chennak@quicinc.com>,
+        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        iommu@lists.linux.dev, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+Subject: Re: [PATCH v2 10/15] accel/qda: Add GEM_CREATE and GEM_MMAP_OFFSET
+ IOCTLs
+Message-ID: <tjfcsz62is33iphcwtensnoiohhpfk2zh43qfe7ijd4b2324pk@v3piffq646ac>
+References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
+ <20260817-qda-v2-v2-10-69a02e9090d4@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
-Content-Language: en-US
-From: Pu Lehui <pulehui@huawei.com>
-To: Feng Jiang <jiangfeng@kylinos.cn>
-CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
-	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai
- Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
-	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Luke Nelson
-	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Puranjay Mohan
-	<puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
-	<alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor
-	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
- Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	<bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<llvm@lists.linux.dev>
-References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
- <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
- <729d2110-20b2-4e63-af44-99ca8cebdbfd@huawei.com>
-In-Reply-To: <729d2110-20b2-4e63-af44-99ca8cebdbfd@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260817-qda-v2-v2-10-69a02e9090d4@oss.qualcomm.com>
+X-Proofpoint-GUID: VZdImNdzL21V5qa2_Da3_MIaefRkGcb-
+X-Proofpoint-ORIG-GUID: VZdImNdzL21V5qa2_Da3_MIaefRkGcb-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDAyNSBTYWx0ZWRfXxqWSpAk2S/yK
+ yk4xyexPg104EjkX8my6RmgX2zXU0HpiR6aGNh/ky4DGWTczMmUnlPTJIOkn+samBXjlwRwkvKU
+ izDn+KwfM5w+gbkIZWsg06rAw6um9B+EHZhAPb5poCb6h0yoIJ27WT5tCcnHXhHRcYqyz+43MV5
+ bZbn4wozwAu2jwxwx2m/dcycAVHLNdd0SpiI5oF4wMxbYFKMj3GJgGBWr2ChSDLgw0mWjbOrlt2
+ OW0iqg1SSJNPXyEM8ZwhKhH4pmbM3fwlCmeXvcPz4/CRIYNbubwMiBxX1ChIZaCFTjShiUZswUl
+ Gfp+eo4+K02ElINIkH0BQV1YLspJij4XaCx092ntlUjs4BDJ5VGIVh/3eOL9ZeTXZR9ty3ua6yS
+ XXEZ+DcCjw+bfWZ97JaZCf/T9DmTAnJOK7p1YgRoIO6UneuuCA7og71LI7tbEclfIz4Tqrh3e0z
+ VTqnef51pHKiUgWQLow==
+X-Authority-Analysis: v=2.4 cv=Ruf16imK c=1 sm=1 tr=0 ts=6a83d665 cx=c_pps
+ a=mPf7EqFMSY9/WdsSgAYMbA==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22 a=EUspDBNiAAAA:8
+ a=eI_CTGzUyT5ilQvOjN4A:9 a=CjuIK1q_8ugA:10 a=dawVfQjAaf238kedN5IG:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDAyNSBTYWx0ZWRfXyBJw+boMvinN
+ mKNlcdJ7f0gVAqhGjA4HrTUF8njMcsyr4zF5XrZMKDf0Ed7XabupMVXlUTnLVCgIP24mb30WMhR
+ AfgM+YyudmKIEsKbZOvNJOasUsmLqQQ=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-17_04,2026-08-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 spamscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 adultscore=0 phishscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2608180025
 
+On Mon, Aug 17, 2026 at 10:17:45AM +0530, Ekansh Gupta wrote:
+> Expose two new DRM IOCTLs that allow user-space to allocate DMA-backed
+> GEM buffer objects and retrieve their mmap offsets.
+> 
+> DRM_IOCTL_QDA_GEM_CREATE (drm_qda_gem_create)
+>   Allocates a DMA-coherent GEM buffer of the requested size. The
+>   memory manager assigns an IOMMU context bank to the calling process
+>   on first use and performs the DMA allocation against that bank.
+>   Returns a GEM handle that identifies the buffer for subsequent
+>   operations.
+> 
+> DRM_IOCTL_QDA_GEM_MMAP_OFFSET (drm_qda_gem_mmap_offset)
+>   Returns the mmap offset for an existing GEM handle. The offset can
+>   be passed directly to mmap() to map the buffer into user-space.
+>   Imported DMA-BUF objects are rejected by drm_gem_dumb_map_offset().
+> 
+> DRIVER_GEM is added to driver_features now that GEM IOCTLs are
+> present.
+> 
+> Assisted-by: Claude:claude-sonnet-5
+> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+> ---
+>  drivers/accel/qda/qda_drv.c   |  4 +++-
+>  drivers/accel/qda/qda_ioctl.c | 50 +++++++++++++++++++++++++++++++++++++++++++
+>  drivers/accel/qda/qda_ioctl.h |  2 ++
+>  include/uapi/drm/qda_accel.h  | 36 +++++++++++++++++++++++++++++++
+>  4 files changed, 91 insertions(+), 1 deletion(-)
+> 
 
-On 2026/8/17 9:52, Pu Lehui wrote:
-> Hi Feng Jiang,
-> 
-> On 2026/8/14 9:29, Feng Jiang wrote:
->> Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
->> and kfuncs can receive more than 5 arguments via the stack
->> (BPF_REG_PARAMS / r11).
->>
->> For BPF-to-BPF calls the caller writes outgoing arguments at the
->> bottom of its frame (SP-relative). The callee reads them with
->> FP-relative loads. Its FP is set to the caller SP in the prologue,
->> so the offsets match.
->>
->> The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
->> SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
->> area into A5-A7 and copy any remaining arguments down so argument 9
->> lands at SP+0.
-> 
-> bpf2bpf calls pass extra arguments entirely on the stack, whereas kfuncs 
-> pass them via a mix of registers and the stack. This inconsistency not 
-> only wastes stack slots in kfunc scenarios but is also error-prone and 
-> easy to overlook during maintenance.
-> 
-> To make argument passing more straightforward and consistent, I think we 
-> can align it with the standard riscv calling convention: use a0-a7 for 
-> the first 8 arguments and pass any remaining arguments on the stack.
-> 
-> To support this, the current bpf-to-rv register mapping needs to be 
-> revised:
-> 
-> T0 -> BPF_REG_0 (ftrace use T0 too, but it might not be an issue / needs 
-> verification)
-> T6 -> TCC
-> T7 -> BPF_REG_AX (rarely used, so let's move to t7)
-> 
-> Note that this remapping affects multiple places and requires careful 
-> auditing.
+The patch LGTM. THe commit messages needs a rewrite
 
-Discussed offline with Feng Jiang; I will take over refactoring this 
-patch and post an updated version once it's ready.
-
-> 
->>
->> A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
->> live before a call, TCC is backed up on the stack, and A7 is unused
->> by the JIT.
-> 
-> 
-> 
->>
->> Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
->> iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
->> corrupts callee-saved registers.
->>
->> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
->> ---
->>   arch/riscv/net/bpf_jit.h        |  1 +
->>   arch/riscv/net/bpf_jit_comp64.c | 79 
->> +++++++++++++++++++++++++++++++++++++++--
->>   arch/riscv/net/bpf_jit_core.c   |  4 +++
->>   3 files changed, 81 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
->> index 419b9d795f2a..9eb4e149505d 100644
->> --- a/arch/riscv/net/bpf_jit.h
->> +++ b/arch/riscv/net/bpf_jit.h
->> @@ -82,6 +82,7 @@ struct rv_jit_context {
->>       unsigned long flags;
->>       int stack_size;
->>       int tcc_offset;
->> +    u16 stack_arg_size;
->>       u64 arena_vm_start;
->>       u64 user_vm_start;
->>   };
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
->> b/arch/riscv/net/bpf_jit_comp64.c
->> index 6b9972b07c1b..58cb3e5ff6b4 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -1815,18 +1815,43 @@ int bpf_jit_emit_insn(const struct bpf_insn 
->> *insn, struct rv_jit_context *ctx,
->>           if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
->>               const struct btf_func_model *fm;
->> -            int idx;
->> +            int idx, nargs;
->>               fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
->>               if (!fm)
->>                   return -EINVAL;
->> -            for (idx = 0; idx < fm->nr_args; idx++) {
->> +            nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
->> +            for (idx = 0; idx < nargs; idx++) {
->>                   u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
->>                   if (fm->arg_size[idx] == sizeof(int))
->>                       emit_sextw(reg, reg, ctx);
->>               }
->> +
->> +            /* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at 
->> SP+0 */
->> +            if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
->> +                int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
->> +                int n_reg = min_t(int, n_stack,
->> +                          RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
->> +
->> +                for (idx = 0; idx < n_reg; idx++) {
->> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
->> +
->> +                    emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
->> +                    if (sz == sizeof(int))
->> +                        emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, 
->> ctx);
->> +                }
->> +
->> +                for (idx = n_reg; idx < n_stack; idx++) {
->> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
->> +
->> +                    emit_ld(RV_REG_T1, idx * 8, RV_REG_SP, ctx);
->> +                    if (sz == sizeof(int))
->> +                        emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
->> +                    emit_sd(RV_REG_SP, (idx - n_reg) * 8, RV_REG_T1, 
->> ctx);
->> +                }
->> +            }
-> 
-> looks a bit complicated, how about the following after redefine regmap:
-> 
-> ```
-> for (idx = 0; idx < fm->nr_args; idx++) {
->    if (idx < RV_MAX_REG_ARGS) {
->      u8 reg = RV_REG_A0 + idx;
-> 
->      sign_extend(reg, reg, xxx)
->    } else {
->      load from stack to T1
->      sign_extend
->      retore from T1 to orig stack slot
->    }
-> }
-> ```
-> 
->>           }
->>           /* restore TCC to RV_REG_TCC before bpf2bpf call */
->> @@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn(const struct bpf_insn 
->> *insn, struct rv_jit_context *ctx,
->>       case BPF_LDX | BPF_MEM | BPF_H:
->>       case BPF_LDX | BPF_MEM | BPF_W:
->>       case BPF_LDX | BPF_MEM | BPF_DW:
->> +        if (insn->src_reg == BPF_REG_PARAMS) {
-> 
-> pls use is_stack_arg_ldx/st/stx instead.
-> 
->> +            int idx = off / 8 - 1;
->> +
->> +            if (is_12b_int(idx * 8)) {
->> +                emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), 
->> false, ctx);
->> +            } else {
->> +                emit_imm(RV_REG_T1, idx * 8, ctx);
->> +                emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
->> +                emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), 
->> false, ctx);
->> +            }
->> +            if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
->> +                return 1;
->> +            break;
-> 
-> This piece of code was refactored not long ago. Let's see if we can 
-> merge it into the logic below or fold it into emit_ldx—let's give it a try.
-> 
->> +        }
->> +        fallthrough;
->>       case BPF_LDX | BPF_PROBE_MEM | BPF_B:
->>       case BPF_LDX | BPF_PROBE_MEM | BPF_H:
->>       case BPF_LDX | BPF_PROBE_MEM | BPF_W:
->> @@ -1938,6 +1978,20 @@ int bpf_jit_emit_insn(const struct bpf_insn 
->> *insn, struct rv_jit_context *ctx,
->>       case BPF_ST | BPF_MEM | BPF_H:
->>       case BPF_ST | BPF_MEM | BPF_W:
->>       case BPF_ST | BPF_MEM | BPF_DW:
->> +        if (insn->dst_reg == BPF_REG_PARAMS) {
->> +            int idx = -off / 8 - 1;
->> +
->> +            emit_imm(RV_REG_T1, imm, ctx);
->> +            if (is_12b_int(idx * 8)) {
->> +                emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, 
->> BPF_SIZE(code), ctx);
->> +            } else {
->> +                emit_imm(RV_REG_T2, idx * 8, ctx);
->> +                emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
->> +                emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, 
->> BPF_SIZE(code), ctx);
->> +            }
->> +            break;
->> +        }
->> +        fallthrough;
-> 
-> ditto
-> 
->>       /* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
->>       case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
->>       case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
->> @@ -1960,6 +2014,19 @@ int bpf_jit_emit_insn(const struct bpf_insn 
->> *insn, struct rv_jit_context *ctx,
->>       case BPF_STX | BPF_MEM | BPF_H:
->>       case BPF_STX | BPF_MEM | BPF_W:
->>       case BPF_STX | BPF_MEM | BPF_DW:
->> +        if (insn->dst_reg == BPF_REG_PARAMS) {
->> +            int idx = -off / 8 - 1;
->> +
->> +            if (is_12b_int(idx * 8)) {
->> +                emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), 
->> ctx);
->> +            } else {
->> +                emit_imm(RV_REG_T1, idx * 8, ctx);
->> +                emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
->> +                emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
->> +            }
->> +            break;
->> +        }
->> +        fallthrough;
-> 
-> ditto
-> 
->>       /* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
->>       case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
->>       case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
->> @@ -2036,6 +2103,7 @@ void bpf_jit_build_prologue(struct 
->> rv_jit_context *ctx, bool is_subprog)
->>       stack_adjust = round_up(stack_adjust, STACK_ALIGN);
->>       stack_adjust += bpf_stack_adjust;
->> +    stack_adjust += ctx->stack_arg_size;
->>       store_offset = stack_adjust - 8;
->> @@ -2093,7 +2161,7 @@ void bpf_jit_build_prologue(struct 
->> rv_jit_context *ctx, bool is_subprog)
->>       emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
->>       if (bpf_stack_adjust)
->> -        emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
->> +        emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + 
->> bpf_stack_adjust, ctx);
->>       ctx->stack_size = stack_adjust;
->> @@ -2171,3 +2239,8 @@ bool bpf_jit_supports_timed_may_goto(void)
->>   {
->>       return true;
->>   }
->> +
->> +bool bpf_jit_supports_stack_args(void)
->> +{
->> +    return true;
->> +}
->> diff --git a/arch/riscv/net/bpf_jit_core.c 
->> b/arch/riscv/net/bpf_jit_core.c
->> index cbfcd287ea16..844a0f3e0fa9 100644
->> --- a/arch/riscv/net/bpf_jit_core.c
->> +++ b/arch/riscv/net/bpf_jit_core.c
->> @@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct 
->> bpf_verifier_env *env, struct bpf_pr
->>       ctx->arena_vm_start = 
->> bpf_arena_get_kern_vm_start(prog->aux->arena);
->>       ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
->>       ctx->prog = prog;
->> +
->> +    ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
->> +                       sizeof(u64), STACK_ALIGN);
-> 
-> It's not u64—since every stack slot is aligned to the pointer size 
-> (sizeof(long)), I think using 8 is fine.
-> 
->> +
->>       ctx->offset = kvzalloc_objs(int, prog->len);
->>       if (!ctx->offset)
->>           goto out_offset;
->>
-> 
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+-- 
+With best wishes
+Dmitry
