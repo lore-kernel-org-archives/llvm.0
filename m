@@ -1,298 +1,286 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69B0383980;
-	Tue, 18 Aug 2026 07:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45385440A00
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 08:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787036457; cv=none; b=QaOeg4vq+wXlhzboza/TVL986RZ0rbfUdPd7ql5nD9ncuh1v0pXZRQbbmzTinv/vjiZO2QOIyZqUN7Id9uVEejWBZK4kZ2Y0Y+t7lJ1A/NKzj48OvDGTdUazRS5ZVfddWF7RNymAQJshhRZZ50fwXQOW269+/kxGqLIfZv8OAhI=
+	t=1787043551; cv=none; b=BgSnDH/5xURDcH3EnFV0aIcLbaHw4Rhel7m6Bo0OZwXDy2VGcxq8UkUTeGoYWwd/vQYmEPFVPzWFHC0kEYurWFCtmfL0ZU99rNpRW8DozAGOnGpyiVXs25WtHgh8NlrJAoZUaCcQlBRtW7PsuJTvxfJmI0yWxnjPvt0A5FjmUJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787036457; c=relaxed/simple;
-	bh=Ilq7+57j7PhbL9oW0B5OqBDnoB8QEbpNuEjW+TFnan4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s9rYnE5nNXc1X20ov9foVMIgjAnfEScLMFwSv0zrjHPScwOD/bAzxlhhMvQibHCd8ogD3hyj1ZLr+F5XKIuUutKkltiFAWxA87fj846+Lywa07BQ+kdRsHA7hBQ8i7+X2khmlbXdBVUUt/dyrnElFzqLcXeFFJhZgnMPE+tZWiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zi/PhX7t; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zi/PhX7t"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787036456; x=1818572456;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ilq7+57j7PhbL9oW0B5OqBDnoB8QEbpNuEjW+TFnan4=;
-  b=Zi/PhX7tE7Cz9l+asNlk2Y3hORI2DasEn5BkH2mGyyLt53jBR6sZxmcN
-   COaTsfulGEZC+ItMNuTVXStzJBFCDx1qrMI+xIJdlDSe8Ds2uRthmwdHy
-   UBjBTn2W5tBaBdNnkwjEbfhUOU+l14lQwUiUkOvB3LdReJXIHXsxhC7yl
-   XRc/ICKlvuREPvWQR1cGUJVuQjazQM+d2OjWRCshJihzgS0rQ7xvr4Ln/
-   G+PJZYe+bQ39PQWQPGPCOXMpCePkRX/qjMDuRn43kmeYw+jFIyMI+H9eN
-   1n/wm0c5gh6ywiCOUMhXiOj4zu9IrDQRFi1524FSOH7pt29MSjyimIPhi
-   w==;
-X-CSE-ConnectionGUID: rTzMYyThTGKTsFhxfQsUYg==
-X-CSE-MsgGUID: 0Oh6GLFST66qff7x8HccVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="91201258"
-X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="91201258"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:00:55 -0700
-X-CSE-ConnectionGUID: 6cxLhSokT+2X4bgAaWCxpA==
-X-CSE-MsgGUID: 4WoSgp6pRlGFc+N0JZzBIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="265171788"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 18 Aug 2026 00:00:53 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wwDoY-00000000eAU-2hzi;
-	Tue, 18 Aug 2026 07:00:50 +0000
-Date: Tue, 18 Aug 2026 14:59:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-f2fs-devel@lists.sourceforge.net
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: Re: [PATCH] f2fs: call __add_ino_entry out of the eviction path
-Message-ID: <202608181459.m9UmVCUU-lkp@intel.com>
-References: <20260804002027.2196300-1-jaegeuk@kernel.org>
+	s=arc-20240116; t=1787043551; c=relaxed/simple;
+	bh=9ZXcpc5AMOQ2M5KgGoTzMH841o9B2VbYuzxmRYkb3xo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dDy3dSgCb7+ibO9myapwhzeOAwQE/X2Rrv24OhqVaG4K9JIOUuZ6/fC1VQZbu6hjiplrCIpPFbfDUAoVLIzcUt6IDJM0bDn0gefSRrBMFsNFJslVM7c02VFn+wzseMg6TYJzQLnzPzEKHrgTYyq3kz8Wb8Nmwuqrx76OOZ3g+Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hPNsj0fRXzYQv5v
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 16:58:49 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id 2749C40E49
+	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 16:59:04 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgDHAUHWHoRqb30BCw--.26985S2;
+	Tue, 18 Aug 2026 16:59:03 +0800 (CST)
+Message-ID: <d53b15a6-e735-45fc-b9cd-4815b7484f6f@huaweicloud.com>
+Date: Tue, 18 Aug 2026 16:59:02 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260804002027.2196300-1-jaegeuk@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 19/23] perf annotate-arm64: Support 'mov' instruction
+ tracking
+To: Shuai Xue <xueshuai@linux.alibaba.com>, Namhyung Kim
+ <namhyung@kernel.org>, james.clark@linaro.org,
+ Li Huafei <lihuafei1@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+ <20260808122400.2961238-20-wutengda@huaweicloud.com>
+ <960b490f-42da-4a9e-8734-62f9c3773b2d@linux.alibaba.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <960b490f-42da-4a9e-8734-62f9c3773b2d@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_Ch0CgDHAUHWHoRqb30BCw--.26985S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3Xr4DZrW8Cw4UJFWrCrWDCFg_yoWfur47pF
+	Z5C3yUGrW7Grs7WrnxtrWDJF95Cr1xt3WDCry0q3WayF43Kr1FgF42qrW29Fy5Jr4rAr17
+	Jr1jqr9rZw17A3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Hi Jaegeuk,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on v7.2-rc7]
-[also build test ERROR on linus/master]
-[cannot apply to jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev next-20260817]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jaegeuk-Kim/f2fs-call-__add_ino_entry-out-of-the-eviction-path/20260815-151820
-base:   v7.2-rc7
-patch link:    https://lore.kernel.org/r/20260804002027.2196300-1-jaegeuk%40kernel.org
-patch subject: [PATCH] f2fs: call __add_ino_entry out of the eviction path
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260818/202608181459.m9UmVCUU-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260818/202608181459.m9UmVCUU-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608181459.m9UmVCUU-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> fs/f2fs/inode.c:1051:6: error: call to undeclared function 'current_is_kswapd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1051 |         if (current_is_kswapd()) {
-         |             ^
-   1 error generated.
 
 
-vim +/current_is_kswapd +1051 fs/f2fs/inode.c
+On 2026/8/11 16:37, Shuai Xue wrote:
+> 
+> 
+> On 8/8/26 8:23 PM, Tengda Wu wrote:
+>> Extend update_insn_state() for arm64 to support register-to-register and
+>> immediate-to-register 'mov' instructions.
+>>
+>> For register-to-register 'mov' (e.g., mov dreg, sreg), propagate data type
+>> information from the source register to the destination register.
+>>
+>> For immediate-to-register 'mov' (e.g., mov dreg, #imm), store the immediate
+>> value in the destination register's imm_value field and set its kind to
+>> TSR_KIND_CONST, allowing subsequent instructions to resolve it as a
+>> constant.
+>>
+>> A real-world example is shown below:
+>>
+>>    ffff8000803eebf8 <get_vma_policy>:
+>>    ffff8000803eec20:  mov  x21, x0          // x0 (struct vm_area_struct*) -> x21
+>>    ffff8000803eec28:  ldr  x2, [x0, #112]
+>>    ffff8000803eec2c:  cbz  x2, ffff8000803eec94 <get_vma_policy+0x9c>
+>> * ffff8000803eec94:  ldr  x0, [x21, #152]
+>>
+>> Before this commit, the type of x21 was unknown, causing the subsequent
+>> inference to fail:
+>>
+>>    var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
+>>    chk [9c] reg21 offset=0x98 ok=0 kind=0 cfa : no type information
+>>    final result: no type information
+>>
+>> After this commit, the type of x21 is correctly inferred as 'vm_area_struct':
+>>
+>>    var [0] reg0 offset 0 type='struct vm_area_struct*' size=0x8
+>>    mov [28] reg0 -> reg21 type='struct vm_area_struct*' size=0x8
+>>    chk [9c] reg21 offset=0x98 ok=1 kind=1 (struct vm_area_struct*) : Good!
+>>    found by insn track: 0x98(reg21) type-offset=0x98
+>>    final result:  type='struct vm_area_struct' size=0xb0
+>>
+>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>> ---
+>>   .../perf/util/annotate-arch/annotate-arm64.c  | 53 ++++++++++++++++++-
+>>   1 file changed, 52 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+>> index 6e09e9707256..7b780bad8c07 100644
+>> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
+>> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+>> @@ -1,6 +1,7 @@
+>>   // SPDX-License-Identifier: GPL-2.0
+>>   #include <linux/compiler.h>
+>>   #include <errno.h>
+>> +#include <inttypes.h>
+>>   #include <stdlib.h>
+>>   #include <string.h>
+>>   #include <linux/ctype.h>
+>> @@ -484,6 +485,7 @@ static int propagate_load_reg_state(struct type_state *state,
+>>           tsr->type = type_die;
+>>           tsr->kind = TSR_KIND_TYPE;
+>>           tsr->offset = 0;
+>> +        tsr->imm_value = 0;
+>>           tsr->ok = true;
+>>             if (src->multi_regs) {
+>> @@ -641,6 +643,51 @@ static void update_store_insn_state(struct type_state *state,
+>>       adjust_reg_index_state(state, dst, insn_name, dl->al.offset);
+>>   }
+>>   +static void update_mov_insn_state(struct type_state *state,
+>> +                  struct disasm_line *dl,
+>> +                  struct annotated_op_loc *src,
+>> +                  struct annotated_op_loc *dst)
+>> +{
+>> +    struct type_state_reg *tsr;
+>> +    u32 insn_offset = dl->al.offset;
+>> +    int sreg = src->reg1;
+>> +    int dreg = dst->reg1;
+>> +
+>> +    if (!has_reg_type(state, dreg))
+>> +        return;
+>> +
+>> +    tsr = &state->regs[dreg];
+>> +    tsr->copied_from = -1;
+>> +
+>> +    if (src->imm) {
+>> +        tsr->kind = TSR_KIND_CONST;
+>> +        tsr->imm_value = src->offset;
+>> +        tsr->offset = 0;
+>> +        tsr->ok = true;
+> 
+> This overwrites only part of the register state: if the destination
+> previously held a variable with an active DWARF lifetime, the stale
+> lifetime_active/lifetime_end survive, and the call-invalidation
+> exemption then protects a plain constant across calls. Same gap as
+> the return-type block discussed earlier - clearing the register state
+> (invalidate_reg_state()) before filling it in would cover both.
+> 
 
-   887	
-   888	/*
-   889	 * Called at the last iput() if i_nlink is zero
-   890	 */
-   891	void f2fs_evict_inode(struct inode *inode)
-   892	{
-   893		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
-   894		struct f2fs_inode_info *fi = F2FS_I(inode);
-   895		nid_t xnid = fi->i_xattr_nid;
-   896		int err = 0;
-   897		bool freeze_protected = false;
-   898		unsigned int record_bits = 0;
-   899	
-   900		f2fs_abort_atomic_write(inode, true);
-   901	
-   902		if (fi->cow_inode && f2fs_is_cow_file(fi->cow_inode)) {
-   903			struct inode *cow_inode = fi->cow_inode;
-   904	
-   905			f2fs_down_write(&F2FS_I(cow_inode)->i_sem);
-   906			clear_inode_flag(cow_inode, FI_COW_FILE);
-   907			F2FS_I(cow_inode)->atomic_inode = NULL;
-   908			fi->cow_inode = NULL;
-   909			f2fs_up_write(&F2FS_I(cow_inode)->i_sem);
-   910	
-   911			iput(cow_inode);
-   912		}
-   913	
-   914		trace_f2fs_evict_inode(inode);
-   915		truncate_inode_pages_final(&inode->i_data);
-   916	
-   917		if ((inode->i_nlink || is_bad_inode(inode)) &&
-   918			test_opt(sbi, COMPRESS_CACHE) && f2fs_compressed_file(inode))
-   919			f2fs_invalidate_compress_pages(sbi, inode->i_ino);
-   920	
-   921		if (inode->i_ino == F2FS_NODE_INO(sbi) ||
-   922				inode->i_ino == F2FS_META_INO(sbi) ||
-   923				inode->i_ino == F2FS_COMPRESS_INO(sbi))
-   924			goto out_clear;
-   925	
-   926		f2fs_bug_on(sbi, get_dirty_pages(inode));
-   927		f2fs_remove_dirty_inode(inode);
-   928		f2fs_remove_donate_inode(inode);
-   929	
-   930		if (!IS_DEVICE_ALIASING(inode))
-   931			f2fs_destroy_extent_tree(inode);
-   932	
-   933		if (inode->i_nlink || is_bad_inode(inode))
-   934			goto no_delete;
-   935	
-   936		err = f2fs_dquot_initialize(inode);
-   937		if (err) {
-   938			err = 0;
-   939			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
-   940		}
-   941	
-   942		f2fs_remove_ino_entry(sbi, inode->i_ino, APPEND_INO);
-   943		f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
-   944		f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
-   945	
-   946		if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING)) {
-   947			sb_start_intwrite(inode->i_sb);
-   948			freeze_protected = true;
-   949		}
-   950		set_inode_flag(inode, FI_NO_ALLOC);
-   951		i_size_write(inode, 0);
-   952	retry:
-   953		if (F2FS_HAS_BLOCKS(inode))
-   954			err = f2fs_truncate(inode);
-   955	
-   956		if (time_to_inject(sbi, FAULT_EVICT_INODE))
-   957			err = -EIO;
-   958	
-   959		if (!err) {
-   960			struct f2fs_lock_context lc;
-   961	
-   962			f2fs_lock_op(sbi, &lc);
-   963			err = f2fs_remove_inode_page(inode);
-   964			f2fs_unlock_op(sbi, &lc);
-   965			if (err == -ENOENT) {
-   966				err = 0;
-   967	
-   968				/*
-   969				 * in fuzzed image, another node may has the same
-   970				 * block address as inode's, if it was truncated
-   971				 * previously, truncation of inode node will fail.
-   972				 */
-   973				if (is_inode_flag_set(inode, FI_DIRTY_INODE)) {
-   974					f2fs_warn(F2FS_I_SB(inode),
-   975						"f2fs_evict_inode: inconsistent node id, ino:%llu",
-   976						inode->i_ino);
-   977					f2fs_inode_synced(inode);
-   978					set_sbi_flag(sbi, SBI_NEED_FSCK);
-   979				}
-   980			}
-   981		}
-   982	
-   983		/* give more chances, if ENOMEM case */
-   984		if (err == -ENOMEM) {
-   985			err = 0;
-   986			goto retry;
-   987		}
-   988	
-   989		if (IS_DEVICE_ALIASING(inode))
-   990			f2fs_destroy_extent_tree(inode);
-   991	
-   992		if (err) {
-   993			f2fs_update_inode_page(inode);
-   994			if (dquot_initialize_needed(inode))
-   995				set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
-   996	
-   997			/*
-   998			 * If both f2fs_truncate() and f2fs_update_inode_page() failed
-   999			 * due to fuzzed corrupted inode, call f2fs_inode_synced() to
-  1000			 * avoid triggering later f2fs_bug_on().
-  1001			 */
-  1002			if (is_inode_flag_set(inode, FI_DIRTY_INODE)) {
-  1003				f2fs_warn(sbi,
-  1004					"f2fs_evict_inode: inode is dirty, ino:%llu",
-  1005					inode->i_ino);
-  1006				f2fs_inode_synced(inode);
-  1007				set_sbi_flag(sbi, SBI_NEED_FSCK);
-  1008			}
-  1009		}
-  1010		if (freeze_protected)
-  1011			sb_end_intwrite(inode->i_sb);
-  1012	no_delete:
-  1013		dquot_drop(inode);
-  1014	
-  1015		stat_dec_inline_xattr(inode);
-  1016		stat_dec_inline_dir(inode);
-  1017		stat_dec_inline_inode(inode);
-  1018		stat_dec_compr_inode(inode);
-  1019		stat_sub_compr_blocks(inode,
-  1020				atomic_read(&fi->i_compr_blocks));
-  1021	
-  1022		if (likely(!f2fs_cp_error(sbi) &&
-  1023					!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
-  1024			f2fs_bug_on(sbi, is_inode_flag_set(inode, FI_DIRTY_INODE));
-  1025	
-  1026		/*
-  1027		 * anyway, it needs to remove the inode from sbi->inode_list[DIRTY_META]
-  1028		 * list to avoid UAF in f2fs_sync_inode_meta() during checkpoint.
-  1029		 */
-  1030		f2fs_inode_synced(inode);
-  1031	
-  1032		/* for the case f2fs_new_inode() was failed, .i_ino is zero, skip it */
-  1033		if (inode->i_ino)
-  1034			invalidate_mapping_pages(NODE_MAPPING(sbi), inode->i_ino,
-  1035								inode->i_ino);
-  1036		if (xnid)
-  1037			invalidate_mapping_pages(NODE_MAPPING(sbi), xnid, xnid);
-  1038	
-  1039		if (!inode->i_nlink)
-  1040			goto skip_record;
-  1041	
-  1042		if (is_inode_flag_set(inode, FI_APPEND_WRITE))
-  1043			record_bits = BIT(APPEND_INO);
-  1044		if (is_inode_flag_set(inode, FI_UPDATE_WRITE))
-  1045			record_bits = BIT(UPDATE_INO);
-  1046	
-  1047		if (!record_bits)
-  1048			goto skip_record;
-  1049	
-  1050		/* Let's do this in workqueue out of the direct reclaim path. */
-> 1051		if (current_is_kswapd()) {
-  1052			f2fs_record_inode_state(sbi, inode->i_ino, record_bits);
-  1053		} else {
-  1054			struct evict_inode_work *ew =
-  1055				mempool_alloc(evict_inode_work_pool, GFP_NOFS);
-  1056	
-  1057			ew->sbi = sbi;
-  1058			ew->ino = inode->i_ino;
-  1059			ew->add_ino_entry_bits = record_bits;
-  1060			INIT_WORK(&ew->work, f2fs_evict_inode_work);
-  1061			queue_work(sbi->evict_wq, &ew->work);
-  1062		}
-  1063	skip_record:
-  1064		if (is_inode_flag_set(inode, FI_FREE_NID)) {
-  1065			f2fs_alloc_nid_failed(sbi, inode->i_ino);
-  1066			clear_inode_flag(inode, FI_FREE_NID);
-  1067		} else {
-  1068			/*
-  1069			 * If xattr nid is corrupted, we can reach out error condition,
-  1070			 * err & !f2fs_exist_written_data(sbi, inode->i_ino, ORPHAN_INO)).
-  1071			 * In that case, f2fs_check_nid_range() is enough to give a clue.
-  1072			 */
-  1073		}
-  1074	out_clear:
-  1075		fscrypt_put_encryption_info(inode);
-  1076		clear_inode(inode);
-  1077	}
-  1078	
+Agreed.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+>> +
+>> +        pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
+>> +                 insn_offset, tsr->imm_value, dreg);
+>> +        return;
+>> +    }
+>> +
+>> +    if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
+>> +        invalidate_reg_state(tsr);
+>> +        return;
+>> +    }
+>> +
+>> +    tsr->type = state->regs[sreg].type;
+>> +    tsr->kind = state->regs[sreg].kind;
+>> +    tsr->imm_value = state->regs[sreg].imm_value;
+>> +    tsr->offset = state->regs[sreg].offset;
+>> +    tsr->ok = state->regs[sreg].ok;
+> 
+> onversely, the register-to-register path drops the lifetime fields
+> that the x86 handler explicitly copies. Not copying is arguably more
+> correct - the DWARF location range describes the variable living in
+> the source register - but it also means a value moved into a
+> callee-saved register gets invalidated by the first call, losing the
+> tracking. Is the omission intentional? If so, a comment would help;
+> either way the two archs should probably converge on one behaviour.
+> 
+
+The lifetime field is only meaningful within the context of the DWARF
+information it was parsed from, and it specifically describes the source
+register itself. Therefore, it __cannot__ be blindly copied over to the
+destination register. Here is an example to illustrate this:
+
+find data type for 0(reg19) at flush_ptrace_hw_breakpoint+0x28
+CU for arch/arm64/kernel/ptrace.c (die:0x1026b9)
+frame base: cfa=1 fbreg=31
+scope: [1/1] (die:125362) [function] flush_ptrace_hw_breakpoint
+bb: [0 - 28]
+var [0] reg0 offset 0 type='struct task_struct*' size=0x8 (die:0x1042d6)
+mov [18] reg0 -> reg20 type='struct task_struct*' size=0x8 (die:0x1042d6)
+
+0x001253a6:   DW_TAG_variable
+                DW_AT_name	("t")
+                DW_AT_decl_file	("debian/build/build_arm64_none_arm64/arch/arm64/kernel/ptrace.c")
+                DW_AT_decl_line	(209)
+                DW_AT_decl_column	(24)
+                DW_AT_type	(0x001253d3 "thread_struct *")
+                DW_AT_location	(0x000237ff: 
+                   [0xffff80008001c9b0, 0xffff80008001c9d0): DW_OP_breg0 W0+3024, DW_OP_stack_value
+
+ffff80008001c9a8 <flush_ptrace_hw_breakpoint>:
+ffff80008001c9a8:       d503201f        nop
+ffff80008001c9ac:       d503201f        nop
+ffff80008001c9b0:       d503233f        paciasp  // lifetime_active
+ffff80008001c9b4:       a9bd7bfd        stp     x29, x30, [sp, #-48]!
+ffff80008001c9b8:       910003fd        mov     x29, sp
+ffff80008001c9bc:       a90153f3        stp     x19, x20, [sp, #16]
+ffff80008001c9c0:       aa0003f4        mov     x20, x0
+ffff80008001c9c4:       913ae013        add     x19, x0, #0xeb8
+ffff80008001c9c8:       f90013f5        str     x21, [sp, #32]
+ffff80008001c9cc:       913ce015        add     x21, x0, #0xf38
+ffff80008001c9d0:       f9400260        ldr     x0, [x19]  // lifetime_end
+ffff80008001c9d4:       b4000060        cbz     x0, ffff80008001c9e0 <flush_ptrace_hw_breakpoint+0x38>
+ffff80008001c9d8:       940bbd6c        bl      ffff80008030bf88 <unregister_hw_breakpoint>
+// x0's lifetime expires here and becomes invalid, but x20 is callee-saved
+// and should NOT be invalidated
+...
+ffff80008001c9ec:       913ee294        add     x20, x20, #0xfb8
+
+I agree with your point. I will add a comment here to explain the rationale.
+
+>> +
+>> +    if (tsr->kind == TSR_KIND_TYPE || tsr->kind == TSR_KIND_POINTER)
+>> +        tsr->copied_from = sreg;
+>> +
+>> +    pr_debug_dtp("mov [%x] reg%d -> reg%d", insn_offset, sreg, dreg);
+>> +    pr_debug_type_name(&tsr->type, tsr->kind);
+>> +}
+>> +
+>>   static void update_insn_state_arm64(struct type_state *state,
+>>                       struct data_loc_info *dloc, Dwarf_Die *cu_die,
+>>                       struct disasm_line *dl)
+>> @@ -703,6 +750,7 @@ static void update_insn_state_arm64(struct type_state *state,
+>>        * prevent stale type info from propagating to subsequent instructions.
+>>        */
+>>       if (has_reg_type(state, dst->reg1) &&
+>> +        strcmp(dl->ins.name, "mov") &&
+>>           strncmp(dl->ins.name, "ld", 2) && strncmp(dl->ins.name, "st", 2)) {
+> 
+> Comparison and test instructions get killed by this: for cmp x5, x6
+> the first operand ends up as the target (reg1 = x5), and since cmp
+> matches none of the exemptions above, a read-only register is
+> invalidated. Same for cmn and tst, and for the tested register of
+> cbz/cbnz/tbz/tbnz. Since comparisons sit between the tracked load and
+> the sampled access in almost every hot path, this silently drops a
+> lot of type resolution.
+> 
+> The x86 side avoids this by using a whitelist of instructions that
+> actually clobber pointer registers; here an exemption for the
+> read-only compares/tests would do:
+> 
+>     if (has_reg_type(state, dst->reg1) && !dst->mem_ref &&
+>         strcmp(dl->ins.name, "mov") && strcmp(dl->ins.name, "cmp") &&
+>         strcmp(dl->ins.name, "cmn") && strcmp(dl->ins.name, "tst") &&
+>         ...)
+> 
+
+Yes, I missed these instructions. I will add them.
+
+Thanks,
+Tengda
+
