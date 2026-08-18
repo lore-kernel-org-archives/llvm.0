@@ -1,252 +1,298 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC49F3368B0
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 06:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69B0383980;
+	Tue, 18 Aug 2026 07:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787034365; cv=none; b=hWjC7N2ZMbNOA34dY9hY9poSBHLqcdxiV5vzEoIlomBNBp+h1EMSfKazHbyHnMAKjxOKqugDzcsUSA+V0eZBZkeXfmlUFhZntkNWzNEU4Y6pccCkzTgZClZcHAfF4WkBPJGd/LT4+oCpkjWtCnp2jGDPunoj6ZFsm0tEoJQvKxs=
+	t=1787036457; cv=none; b=QaOeg4vq+wXlhzboza/TVL986RZ0rbfUdPd7ql5nD9ncuh1v0pXZRQbbmzTinv/vjiZO2QOIyZqUN7Id9uVEejWBZK4kZ2Y0Y+t7lJ1A/NKzj48OvDGTdUazRS5ZVfddWF7RNymAQJshhRZZ50fwXQOW269+/kxGqLIfZv8OAhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787034365; c=relaxed/simple;
-	bh=2mrRYBUZB6QXqcc/lWECjrJo8ItcqmQvUwDzXzT2cek=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p0WaHKkVvJWHH3inQUinupSYCR78P1/8ZGhlpStr+pJr05flZynUBPtT9Do4iB/GS77OxdaeZ9GTNfZgNmhMP6djR6q1iCqBis3/bEGTwYwctYxmfSX+OFiUFo7jlW6HceDoCEow5B9GNTHE3Pj/rhzkVqyyJiyXwZs/ep9pToA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=f2sYxbLV; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ZyQR6toH; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1787036457; c=relaxed/simple;
+	bh=Ilq7+57j7PhbL9oW0B5OqBDnoB8QEbpNuEjW+TFnan4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9rYnE5nNXc1X20ov9foVMIgjAnfEScLMFwSv0zrjHPScwOD/bAzxlhhMvQibHCd8ogD3hyj1ZLr+F5XKIuUutKkltiFAWxA87fj846+Lywa07BQ+kdRsHA7hBQ8i7+X2khmlbXdBVUUt/dyrnElFzqLcXeFFJhZgnMPE+tZWiM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zi/PhX7t; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="f2sYxbLV";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ZyQR6toH"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67I45mLW4187023
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 06:26:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	QpMSnfPhODIl1ejhgbQgYJBMEXQkyaJTdofbzdBjnW8=; b=f2sYxbLVVxHHE8ah
-	BLL2hEOs11e8uGfhMGoJwcmplrDhvwX33dAV0qiWRM2gDpjxJVPos/JU02gMW9FC
-	LXwzVEPGU7rJi5TIK5da9CVzvzkcJVuj6EHpmZzzxojPfowe4uWJw1vE56Kh38vH
-	PpjZDe3+yq0qUA2tUIqzPDgLNB+qvDT0CvDtc8kuiXB875zbfvrZ0HBTaer95ILn
-	iFiq1bXLOsrZHIspu9HOdT/hDYdagYLCnHuJc6s7BLHeQiteNQ8b7Dv4wzHpIzVF
-	NbRytfgkQu+PFQ5J28BanMviMap2OBU3khIdZ3UoRxyndp/8zj7rcQHuopvzHk/C
-	giU5Xw==
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g4g2p0js9-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 06:26:02 +0000 (GMT)
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38f97b3f853so6695271a91.3
-        for <llvm@lists.linux.dev>; Mon, 17 Aug 2026 23:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1787034361; x=1787639161; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=QpMSnfPhODIl1ejhgbQgYJBMEXQkyaJTdofbzdBjnW8=;
-        b=ZyQR6toHkf9IkUEx+WJlF9ssZATnoHMdoZ8CQI94qto939Dam4pEt3Zz3Y6pwBgeIp
-         rZiOr+4eq+hi5Kwjy8rrjSLBiWdtCwz8EYFPYiYlwonAntu04Vwh7fjZW/ivgWwnu1Cm
-         90M+u3IXifreXNhKYy6h3ZGabGi+vsjbk++Vl6EMduiX+K1pZWZ9+cqwuME2MiMZ4/nm
-         EyyFZTmACWk9R6JiD1oQ75BJ7+3WXhM9HAkn3+kx1sHykdQSzZzLraC84cyPnRww6sY3
-         Te7yq+PlerYj7CRNMK39Tcik+ji6j+wFbZG4s+qGhc3O1Xa7DP8meH9JJ96+krnsTSaC
-         bYzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787034361; x=1787639161;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=QpMSnfPhODIl1ejhgbQgYJBMEXQkyaJTdofbzdBjnW8=;
-        b=lHtbbb/9NB7DdkXDSEOvrGUWznrAqUF68TXeR3sJRm4ygk8FziKQO1VBeC2c3ad/UA
-         M5PROP3Ken/8BthTh3jmxgvfL9M+yWyw7w4eNX4jqUNGAtTjhN0lvQGxx5i9LGSWZpr2
-         0GoTEzXuKeu/Us6QtB6yJHfUocoMujSsnXXta4+wRTmwERPpSq9+oqV5561KcJPHkleF
-         Xp2xYWFvNC2QVJ9VvNq5MdDXNVb0CA/rOqj9sCkgW/xryQyX1iWPdn7ZSG6xRpxvo5qc
-         M83bhJEYNu9ZYgSTmOe/4f+C8rDA/PAtnG+eG5a/e7dNE5QyvkBn5SpIgWIMkX8rpGoh
-         rKHQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpivH8E9YBoltTR7Hc6xY4c9cp9HgQjDZDFoXkGdWed7mqYhE/IQ6OPOh0GNFR1MUMLXNu7@lists.linux.dev
-X-Gm-Message-State: AOJu0YxXgFoRW+3MrpjFopqAl3euLeCaNwOpN+THczQsYPBm2288JmM7
-	4Rxhap+Tfu8ZpSapVzJA0+k08F2Be8AFQ3SsCBesDwNSvtdYrXm0uTmZbT2HYHIZAIxMZN+v6is
-	vWaqjSCsGZS2gAmeIC8U0WWBp/Xn08pLyQbKdY7+BQzPls2GmJaFb8o8y
-X-Gm-Gg: AR+sD12nFfOxsabQHoIyXt3QRMKSsgefeyXPMaAW7/gBqJcPbXv9rWY75+men//R9hk
-	T6PbeXSrPZVfRuSOb3N7C8uRICpNw1UaYfMlNJ/ISJ5z409WcWgBxkFut+jQEjI+vST/SfXyuwp
-	5tG5kcVM4QPPnT4UGlTh1xuSeh06qHpZMx4GvogfqCFSRSvF19rWNxL9aHie0BaA61udVGjaeWe
-	4XWElappk63gu2m+Tvgq2iIW1Lu7xb9SBuK8s2ztCVAYtmDbf1QnppGmJbGAF/hm7m5bh2AMI+J
-	zUzoHUWwR27Fdf7172jT099r35RXrlbyHm1FtJDjPfqcIDjU53xOjcllre92Imgsby/lEVHSs2n
-	cGoAM8UV99N1Z1ja2t2AQhxnZPjJ1kA==
-X-Received: by 2002:a17:90b:48c1:b0:38e:2517:5d1f with SMTP id 98e67ed59e1d1-3933b792c20mr35951557a91.9.1787034361265;
-        Mon, 17 Aug 2026 23:26:01 -0700 (PDT)
-X-Received: by 2002:a17:90b:48c1:b0:38e:2517:5d1f with SMTP id 98e67ed59e1d1-3933b792c20mr35951459a91.9.1787034360780;
-        Mon, 17 Aug 2026 23:26:00 -0700 (PDT)
-Received: from [10.219.56.166] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531ff679fsm7486482a91.14.2026.08.17.23.25.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Aug 2026 23:26:00 -0700 (PDT)
-Message-ID: <c1da4243-36d1-4b65-a5da-f660ab8c63b3@oss.qualcomm.com>
-Date: Tue, 18 Aug 2026 11:55:50 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zi/PhX7t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787036456; x=1818572456;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ilq7+57j7PhbL9oW0B5OqBDnoB8QEbpNuEjW+TFnan4=;
+  b=Zi/PhX7tE7Cz9l+asNlk2Y3hORI2DasEn5BkH2mGyyLt53jBR6sZxmcN
+   COaTsfulGEZC+ItMNuTVXStzJBFCDx1qrMI+xIJdlDSe8Ds2uRthmwdHy
+   UBjBTn2W5tBaBdNnkwjEbfhUOU+l14lQwUiUkOvB3LdReJXIHXsxhC7yl
+   XRc/ICKlvuREPvWQR1cGUJVuQjazQM+d2OjWRCshJihzgS0rQ7xvr4Ln/
+   G+PJZYe+bQ39PQWQPGPCOXMpCePkRX/qjMDuRn43kmeYw+jFIyMI+H9eN
+   1n/wm0c5gh6ywiCOUMhXiOj4zu9IrDQRFi1524FSOH7pt29MSjyimIPhi
+   w==;
+X-CSE-ConnectionGUID: rTzMYyThTGKTsFhxfQsUYg==
+X-CSE-MsgGUID: 0Oh6GLFST66qff7x8HccVQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="91201258"
+X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
+   d="scan'208";a="91201258"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:00:55 -0700
+X-CSE-ConnectionGUID: 6cxLhSokT+2X4bgAaWCxpA==
+X-CSE-MsgGUID: 4WoSgp6pRlGFc+N0JZzBIA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
+   d="scan'208";a="265171788"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 18 Aug 2026 00:00:53 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wwDoY-00000000eAU-2hzi;
+	Tue, 18 Aug 2026 07:00:50 +0000
+Date: Tue, 18 Aug 2026 14:59:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Jaegeuk Kim <jaegeuk@kernel.org>
+Subject: Re: [PATCH] f2fs: call __add_ino_entry out of the eviction path
+Message-ID: <202608181459.m9UmVCUU-lkp@intel.com>
+References: <20260804002027.2196300-1-jaegeuk@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 11/15] accel/qda: Add PRIME DMA-BUF import support
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling
- <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Bharath Kumar <quic_bkumar@quicinc.com>,
-        Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        iommu@lists.linux.dev, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-11-69a02e9090d4@oss.qualcomm.com>
- <l7gt2mr3rrnzmkc46ntqw5e5sirdimavv5do4wmdf6jktryp7g@772ovv3qlgcv>
-Content-Language: en-US
-From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-In-Reply-To: <l7gt2mr3rrnzmkc46ntqw5e5sirdimavv5do4wmdf6jktryp7g@772ovv3qlgcv>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: n1emKFTTw5to-Vlk3mSZDPWssZavycte
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE4MDA0NiBTYWx0ZWRfX9p1Jfr3YKKRc
- sg+wZ3VL4IsxbgqWORL+fI1bVn3YPmLaufyIb402MOYJM0fLRiReZgGABjcYwvotJgDIFmzxCd7
- Xe5CJVaT4BTWD+x7yT7O0KYn9Hhbg6Q=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE4MDA0NiBTYWx0ZWRfX406CL/7Btpk9
- zl0/HXTweQn7A0z1oMPTJVED5aPEm0uNSKmhJ0++rJ/LCpaz2RtIkmBQxAmZ1VB2hNnohYhg7AC
- kKSQINmjoorU1fxTv0pHmo3JD2i974bIaG1gE9QekR6wX1O8YS7oCCvPmeZR8KUj1cP67qoX8YW
- WYq8gshKbe447yeLTF27I7ttMRw5wPlIC5GUN8tiWAhv7xi4TY5N+NXrNDe54cuyjq+JRXRj6hf
- l0heJdolAEFzO8QX8XjPWg8W+zdGGXdMdVa07CcnqriVaKsn+5eGyEMOVaj4iGXL4owwbvmpeVQ
- qKrrJlO6bE9KdPNq0LNUDk+ZpTTfKvg6XD7guadIk3uGlehyVKDWWNMaDVIIC+0m/L49+66z/l/
- nZRwRWNWG8dtpLDtQyGEP418WX0368DVtecv+kvnEIU4nWRcyvDA97zgD9Cc29II4HpONQMIIuU
- chTzNbuiPMMlbpBb6WA==
-X-Proofpoint-ORIG-GUID: n1emKFTTw5to-Vlk3mSZDPWssZavycte
-X-Authority-Analysis: v=2.4 cv=bfRbluPB c=1 sm=1 tr=0 ts=6a83fafa cx=c_pps
- a=UNFcQwm+pnOIJct1K4W+Mw==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
- a=EUspDBNiAAAA:8 a=BHqhARD1X7WWxJJUoOYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
- a=uKXjsCUrEbL0IQVhDsJ9:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-17_04,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 bulkscore=0 spamscore=0 adultscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2608180046
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260804002027.2196300-1-jaegeuk@kernel.org>
 
-On 18-08-2026 09:25, Dmitry Baryshkov wrote:
-> On Mon, Aug 17, 2026 at 10:17:46AM +0530, Ekansh Gupta wrote:
->> Allow user-space to import DMA-BUF file descriptors from other
->> subsystems (GPU, camera, video) into the QDA driver via the standard
->> DRM PRIME interface.
->>
->> qda_prime.c
->>   Implements qda_gem_prime_import(), which is set as the driver's
->>   .gem_prime_import callback. On import it:
->>   1. Short-circuits self-import: if the dma_buf was exported by this
->>      device and is not itself an import, the existing GEM object is
->>      returned with an incremented reference count.
->>   2. Attaches to the dma_buf and maps it with DMA_BIDIRECTIONAL via
->>      dma_buf_map_attachment_unlocked(), obtaining an sg_table whose
->>      DMA addresses are IOMMU virtual addresses in the CB device's
->>      address space.
->>   3. Calls qda_memory_manager_alloc() to record the mapping and encode
->>      the SID in the upper bits of the DMA address, matching the
->>      convention used for natively allocated buffers.
->>
->>   qda_prime_fd_to_handle() wraps drm_gem_prime_fd_to_handle() under
->>   qdev->import_lock, storing the calling file_priv in
-> 
-> Why do you need a separate lock?
-Will add details in commit message,
-The lock serialises the `fd_to_handle → gem_prime_import` call so that
-`current_import_file_priv` is valid for the duration of the import.
-Without it, two concurrent imports could race and each see the other's
-`file_priv`.
-> 
->>   qdev->current_import_file_priv so that qda_gem_prime_import() can
->>   retrieve it (the .gem_prime_import callback does not receive
->>   file_priv directly, but the context bank to attach to is per-process).
->>
->> qda_gem.c
->>   qda_gem_free_object() is extended to handle the imported-buffer
->>   teardown path: unmap the sg_table, detach from the dma_buf, and
->>   release the dma_buf reference.
->>   qda_gem_mmap_obj() rejects mmap requests on imported objects, which
->>   must be mapped through the exporter instead.
->>
->> qda_memory_manager.c
->>   The DSP is given a single base address per buffer, so only buffers
->>   that are mapped as one contiguous range can be described to it.
-> 
-> Is there no IOMMU in front of the DSP? Can we remap the buffer to a
-> linear are inside the DSP map?
-The DSP firmware's buffer descriptor format carries a single
-{base_address, size} pair per buffer and it does not support
-scatter-gather or multi-entry page tables on its side. This is a
-firmware interface constraint that we cannot change from the kernel. So
-imported buffers must present as one contiguous IOVA range, and
-non-contiguous ones are rejected.
+Hi Jaegeuk,
 
-Will add this information in commit message and during the check.>
->>   qda_memory_manager_map_imported() therefore walks the imported
->>   buffer's scatterlist and rejects any buffer whose entries are not
->>   contiguous; contiguous imports (for example from the CMA DMA-buf
->>   heap) are accepted. Whether an exporter or IOMMU coalesces a buffer
->>   into a single range is not guaranteed, so this is verified rather
->>   than assumed.
->>   qda_memory_manager_free() skips the DMA free path for imported
->>   buffers since the memory is owned by the exporter.
->>
->> Assisted-by: Claude:claude-sonnet-5
->> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
->> ---
->> Changes in v2:
->> - Do not assume the exporter or IOMMU maps an imported buffer as a
->>   single contiguous range; walk the scatterlist and cleanly reject
->>   non-contiguous imports instead (Christian König)
->> - Document that only contiguous imports (e.g. CMA DMA-buf heap) are
->>   supported
->> - Return -EBUSY rather than -ENODEV when no context bank is available
->> ---
->>  drivers/accel/qda/Makefile             |   1 +
->>  }
->>  
->> +static int qda_memory_manager_map_imported(struct qda_gem_obj *gem_obj,
->> +					   struct qda_iommu_device *iommu_dev)
->> +{
->> +	dma_addr_t dma_addr, expected_addr = 0;
->> +	struct scatterlist *sg, *s;
->> +	int i;
->> +
->> +	sg = gem_obj->sgt->sgl;
->> +
->> +	/*
->> +	 * Verify that the imported DMA-BUF is contiguous. While some platforms
-> 
-> Which "some platforms"?
-I'll rewrite the comment to be precise.>
->> +	 * or IOMMUs might map buffers as a single range, we must not silently
->> +	 * assume this is always the case. We loop through the scatterlist
->> +	 * entries and reject any that are non-contiguous.
->> +	 */
-> 
+kernel test robot noticed the following build errors:
 
+[auto build test ERROR on v7.2-rc7]
+[also build test ERROR on linus/master]
+[cannot apply to jaegeuk-f2fs/dev-test jaegeuk-f2fs/dev next-20260817]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jaegeuk-Kim/f2fs-call-__add_ino_entry-out-of-the-eviction-path/20260815-151820
+base:   v7.2-rc7
+patch link:    https://lore.kernel.org/r/20260804002027.2196300-1-jaegeuk%40kernel.org
+patch subject: [PATCH] f2fs: call __add_ino_entry out of the eviction path
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260818/202608181459.m9UmVCUU-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260818/202608181459.m9UmVCUU-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608181459.m9UmVCUU-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> fs/f2fs/inode.c:1051:6: error: call to undeclared function 'current_is_kswapd'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1051 |         if (current_is_kswapd()) {
+         |             ^
+   1 error generated.
+
+
+vim +/current_is_kswapd +1051 fs/f2fs/inode.c
+
+   887	
+   888	/*
+   889	 * Called at the last iput() if i_nlink is zero
+   890	 */
+   891	void f2fs_evict_inode(struct inode *inode)
+   892	{
+   893		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+   894		struct f2fs_inode_info *fi = F2FS_I(inode);
+   895		nid_t xnid = fi->i_xattr_nid;
+   896		int err = 0;
+   897		bool freeze_protected = false;
+   898		unsigned int record_bits = 0;
+   899	
+   900		f2fs_abort_atomic_write(inode, true);
+   901	
+   902		if (fi->cow_inode && f2fs_is_cow_file(fi->cow_inode)) {
+   903			struct inode *cow_inode = fi->cow_inode;
+   904	
+   905			f2fs_down_write(&F2FS_I(cow_inode)->i_sem);
+   906			clear_inode_flag(cow_inode, FI_COW_FILE);
+   907			F2FS_I(cow_inode)->atomic_inode = NULL;
+   908			fi->cow_inode = NULL;
+   909			f2fs_up_write(&F2FS_I(cow_inode)->i_sem);
+   910	
+   911			iput(cow_inode);
+   912		}
+   913	
+   914		trace_f2fs_evict_inode(inode);
+   915		truncate_inode_pages_final(&inode->i_data);
+   916	
+   917		if ((inode->i_nlink || is_bad_inode(inode)) &&
+   918			test_opt(sbi, COMPRESS_CACHE) && f2fs_compressed_file(inode))
+   919			f2fs_invalidate_compress_pages(sbi, inode->i_ino);
+   920	
+   921		if (inode->i_ino == F2FS_NODE_INO(sbi) ||
+   922				inode->i_ino == F2FS_META_INO(sbi) ||
+   923				inode->i_ino == F2FS_COMPRESS_INO(sbi))
+   924			goto out_clear;
+   925	
+   926		f2fs_bug_on(sbi, get_dirty_pages(inode));
+   927		f2fs_remove_dirty_inode(inode);
+   928		f2fs_remove_donate_inode(inode);
+   929	
+   930		if (!IS_DEVICE_ALIASING(inode))
+   931			f2fs_destroy_extent_tree(inode);
+   932	
+   933		if (inode->i_nlink || is_bad_inode(inode))
+   934			goto no_delete;
+   935	
+   936		err = f2fs_dquot_initialize(inode);
+   937		if (err) {
+   938			err = 0;
+   939			set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
+   940		}
+   941	
+   942		f2fs_remove_ino_entry(sbi, inode->i_ino, APPEND_INO);
+   943		f2fs_remove_ino_entry(sbi, inode->i_ino, UPDATE_INO);
+   944		f2fs_remove_ino_entry(sbi, inode->i_ino, FLUSH_INO);
+   945	
+   946		if (!is_sbi_flag_set(sbi, SBI_IS_FREEZING)) {
+   947			sb_start_intwrite(inode->i_sb);
+   948			freeze_protected = true;
+   949		}
+   950		set_inode_flag(inode, FI_NO_ALLOC);
+   951		i_size_write(inode, 0);
+   952	retry:
+   953		if (F2FS_HAS_BLOCKS(inode))
+   954			err = f2fs_truncate(inode);
+   955	
+   956		if (time_to_inject(sbi, FAULT_EVICT_INODE))
+   957			err = -EIO;
+   958	
+   959		if (!err) {
+   960			struct f2fs_lock_context lc;
+   961	
+   962			f2fs_lock_op(sbi, &lc);
+   963			err = f2fs_remove_inode_page(inode);
+   964			f2fs_unlock_op(sbi, &lc);
+   965			if (err == -ENOENT) {
+   966				err = 0;
+   967	
+   968				/*
+   969				 * in fuzzed image, another node may has the same
+   970				 * block address as inode's, if it was truncated
+   971				 * previously, truncation of inode node will fail.
+   972				 */
+   973				if (is_inode_flag_set(inode, FI_DIRTY_INODE)) {
+   974					f2fs_warn(F2FS_I_SB(inode),
+   975						"f2fs_evict_inode: inconsistent node id, ino:%llu",
+   976						inode->i_ino);
+   977					f2fs_inode_synced(inode);
+   978					set_sbi_flag(sbi, SBI_NEED_FSCK);
+   979				}
+   980			}
+   981		}
+   982	
+   983		/* give more chances, if ENOMEM case */
+   984		if (err == -ENOMEM) {
+   985			err = 0;
+   986			goto retry;
+   987		}
+   988	
+   989		if (IS_DEVICE_ALIASING(inode))
+   990			f2fs_destroy_extent_tree(inode);
+   991	
+   992		if (err) {
+   993			f2fs_update_inode_page(inode);
+   994			if (dquot_initialize_needed(inode))
+   995				set_sbi_flag(sbi, SBI_QUOTA_NEED_REPAIR);
+   996	
+   997			/*
+   998			 * If both f2fs_truncate() and f2fs_update_inode_page() failed
+   999			 * due to fuzzed corrupted inode, call f2fs_inode_synced() to
+  1000			 * avoid triggering later f2fs_bug_on().
+  1001			 */
+  1002			if (is_inode_flag_set(inode, FI_DIRTY_INODE)) {
+  1003				f2fs_warn(sbi,
+  1004					"f2fs_evict_inode: inode is dirty, ino:%llu",
+  1005					inode->i_ino);
+  1006				f2fs_inode_synced(inode);
+  1007				set_sbi_flag(sbi, SBI_NEED_FSCK);
+  1008			}
+  1009		}
+  1010		if (freeze_protected)
+  1011			sb_end_intwrite(inode->i_sb);
+  1012	no_delete:
+  1013		dquot_drop(inode);
+  1014	
+  1015		stat_dec_inline_xattr(inode);
+  1016		stat_dec_inline_dir(inode);
+  1017		stat_dec_inline_inode(inode);
+  1018		stat_dec_compr_inode(inode);
+  1019		stat_sub_compr_blocks(inode,
+  1020				atomic_read(&fi->i_compr_blocks));
+  1021	
+  1022		if (likely(!f2fs_cp_error(sbi) &&
+  1023					!is_sbi_flag_set(sbi, SBI_CP_DISABLED)))
+  1024			f2fs_bug_on(sbi, is_inode_flag_set(inode, FI_DIRTY_INODE));
+  1025	
+  1026		/*
+  1027		 * anyway, it needs to remove the inode from sbi->inode_list[DIRTY_META]
+  1028		 * list to avoid UAF in f2fs_sync_inode_meta() during checkpoint.
+  1029		 */
+  1030		f2fs_inode_synced(inode);
+  1031	
+  1032		/* for the case f2fs_new_inode() was failed, .i_ino is zero, skip it */
+  1033		if (inode->i_ino)
+  1034			invalidate_mapping_pages(NODE_MAPPING(sbi), inode->i_ino,
+  1035								inode->i_ino);
+  1036		if (xnid)
+  1037			invalidate_mapping_pages(NODE_MAPPING(sbi), xnid, xnid);
+  1038	
+  1039		if (!inode->i_nlink)
+  1040			goto skip_record;
+  1041	
+  1042		if (is_inode_flag_set(inode, FI_APPEND_WRITE))
+  1043			record_bits = BIT(APPEND_INO);
+  1044		if (is_inode_flag_set(inode, FI_UPDATE_WRITE))
+  1045			record_bits = BIT(UPDATE_INO);
+  1046	
+  1047		if (!record_bits)
+  1048			goto skip_record;
+  1049	
+  1050		/* Let's do this in workqueue out of the direct reclaim path. */
+> 1051		if (current_is_kswapd()) {
+  1052			f2fs_record_inode_state(sbi, inode->i_ino, record_bits);
+  1053		} else {
+  1054			struct evict_inode_work *ew =
+  1055				mempool_alloc(evict_inode_work_pool, GFP_NOFS);
+  1056	
+  1057			ew->sbi = sbi;
+  1058			ew->ino = inode->i_ino;
+  1059			ew->add_ino_entry_bits = record_bits;
+  1060			INIT_WORK(&ew->work, f2fs_evict_inode_work);
+  1061			queue_work(sbi->evict_wq, &ew->work);
+  1062		}
+  1063	skip_record:
+  1064		if (is_inode_flag_set(inode, FI_FREE_NID)) {
+  1065			f2fs_alloc_nid_failed(sbi, inode->i_ino);
+  1066			clear_inode_flag(inode, FI_FREE_NID);
+  1067		} else {
+  1068			/*
+  1069			 * If xattr nid is corrupted, we can reach out error condition,
+  1070			 * err & !f2fs_exist_written_data(sbi, inode->i_ino, ORPHAN_INO)).
+  1071			 * In that case, f2fs_check_nid_range() is enough to give a clue.
+  1072			 */
+  1073		}
+  1074	out_clear:
+  1075		fscrypt_put_encryption_info(inode);
+  1076		clear_inode(inode);
+  1077	}
+  1078	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
