@@ -1,87 +1,87 @@
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBD137F31C
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:17:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511503A451E
+	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:23:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787145482; cv=none; b=vE5XxolKuGZwHRzE5mb0lMVZpXmdbyWL0I01EWZecESXPPNnT2q/+HfHwDnyRBN6xJHU+IIFDr21+bk3lG90UqXIXZa0Occ6yAp8otzKC5inaq1oOHwY/P1u7L+3oGy3154gopP652u1OclbSmWgyBPeIuByMy604aARaCku/8k=
+	t=1787145826; cv=none; b=u6EXfMmadAXXRQJVYvPFdOEne6YBQHn/f/PtXGreLiVbOTfPQoVceKDsvbeolNgkxm5UBnze0e7obHKiBr6MeVvJgU43iJ2o+ve0cl3Db1nR/LqSOng9a8lxPtpEI51GfVPWCuD3pKF+9bn/mUQ3hCaIkyBcEjDPjSZRymiPDCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787145482; c=relaxed/simple;
-	bh=+dq/mMnDe9QFfq17yLaBK6nHu+80T6tyc8mfK+ZvPkA=;
+	s=arc-20240116; t=1787145826; c=relaxed/simple;
+	bh=8zEwHcSWYL+PfZ4t4xdDkAMyQ+XUHLz3oKHb9rAeYm0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iolBcQJeIuMD35EdXxYFVzF6fRZh5n494jrqwzkkPd+071tRn7uvnBYr6kH5CR9O7jFYGT3TVko6u8FkFsItdp9GdIuGGgLwl+iEkOueXgbXqiL4M7yzQH2RRQPUneEjHos9EM4ZS8ceMcbI/fBUD+j+djXyaG7lyZDOSXZQm6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dTR/FC8r; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=C501jhYs; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=o2JHwskBS3Y156ylLi/EAuj2FO4AtPFV3gZE3FYXXa/o4/Xge8p+u7PA9i9zzrOYViOwMEA9as4pNHAwY4wi8F3K9jLdH2001xb7n3ZWADAWnJL1hcD6a/g/o3i+HLMm35BecUjFH67MdNgsFIBsrF0nqkKIccas+3t6ExKY9q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=phx23G3q; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=P+xsEusr; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dTR/FC8r";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="C501jhYs"
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67JD08tg174197
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:17:56 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="phx23G3q";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="P+xsEusr"
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67JD0E6b693417
+	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:23:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	DHcojprWwMclTR96W1Kcp7mAYQX7rnuvUTwbQrssUdg=; b=dTR/FC8rtsTF0qmw
-	JN8frrhbf2bjGgTihPM4XakQB12zomE1VpKen0fOtSgG46aHEXyCWFOTuRZKS7Rs
-	ErV6+SGTMSgG3cxaldLhHs3QGPdbiyn9rNpTe7JjLbSzMfqopRCRG987PZcfAFP3
-	4RMg7P2JPaJrnnQ7ssoi1uBBUtLtsd+EBKmGH2JOp3iaFEp2xOORM+hyYlcjI+LN
-	uVpR0jSaAvc19aIOHICGZ4lUAbji2Hanp3LjYjHTNKhVcpF/n17pggSk2jnYp/4E
-	l5I7Lf5/9XTlCfsMkCZYDby3WDNf8pXxOLhPUtjSUGqljtRZ+UaznP0NSLi1KdVB
-	2EiJDg==
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g4yfjkfjw-1
+	esjYOP0cHWLWtJ/S0JzZjMyOobiP2YG5+HUVououevY=; b=phx23G3q36vzMkjD
+	VzSOvzfRbKIAW+NIz7GVj/qufa67rrbVOaMgGYh5Vrz/zqSJprH2dHldiPQRoFSW
+	sL/UvxndBrdBv4jcC+3gdRO+ib0m+i66VpURNp2yiEQa1txsI425LCh3WG5tyiXx
+	PKYaXmLaDUEUreD2ZIxm/RmYvnARoQYjAup3yKJ+rEan1pc6LEdDWR1e0VBgh94I
+	ecdJaJYTpYdiw0msc8AQo+ddKlmh16ekSYkFtzXqh7NANfW3C3VJxQbf4v5ClHej
+	epJIqB6zEwGILuMhCWFzoywy2kbxqPQ9xIX8ePXSmygwIguQuVx+ud+uZzDwD6DW
+	Qm6OzA==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g4yfmbcfq-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:17:56 +0000 (GMT)
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-ca6bd8a190cso1172800a12.0
-        for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 06:17:56 -0700 (PDT)
+	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:23:39 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-38e8e864ef0so2065060a91.0
+        for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 06:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1787145475; x=1787750275; darn=lists.linux.dev;
+        d=oss.qualcomm.com; s=google; t=1787145818; x=1787750618; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=DHcojprWwMclTR96W1Kcp7mAYQX7rnuvUTwbQrssUdg=;
-        b=C501jhYsdW3Rs7N93PuW5MtL6uPt4DW4v+O1L+JVxSVh4KO2ZMbSbBcqaPKjjYo0sx
-         pSBtK7omDf8+PGpQvrGeSc083rTfThP4AGknnl2TjC81DmTcZBwb7e+pJi6GlxBDxIuo
-         yP4UdnahgG65NwbOvFAqXNvsWpX4KSgponWNanmnSv1sZwSKKtc1XUldi1DyyAz72Yyy
-         0Wg+ZDWd7o8bN/EeYLUrHMWdatIOfnYUxZoQfut8M1Hn3i9F0QqbDCUu23kKl9lTl1Pu
-         Pz67YRT4MM6cbACL3EgkfMCVvX4PmbELqwDK1jmhf4T46PjB4EeXUsIaGDajp2mKKoIZ
-         3t0w==
+        bh=esjYOP0cHWLWtJ/S0JzZjMyOobiP2YG5+HUVououevY=;
+        b=P+xsEusrJJ1UsKsBd2o9ao0iKRaPo69DmsDLrtjHGoL1xZO++Tl5t78OlOmTWDPGdR
+         JL0i9/x7/oQPrADe8G69gwaATzxBL0ENZ8daNFlbB8JugKBztsixIRgpXGzE8Xt9oHdB
+         vAx3DGRUkGLiGxSYKCuIv8EXW+/8H0mkvW70uKLvVh1uMDbkHKRh/L2tsXgyYDAk3G3e
+         SKhBOffHj1PlzTcSd/uy5tbWS/QCM/ZjrHAC/La9IQCFRVLu3M7mSfkEi8LHYY7YimxY
+         GJty9PIwpf5hZ5axjumhy1JiG/eqyfHEcAj+RvPb0Il0KM1KMtvtRJkaluoIuaSREMRl
+         zq/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787145475; x=1787750275;
+        d=1e100.net; s=20251104; t=1787145818; x=1787750618;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=DHcojprWwMclTR96W1Kcp7mAYQX7rnuvUTwbQrssUdg=;
-        b=BIoTscwb3ZwRpUBR8DYfRnHHtHSmYOJL3b8XjMSoK6CqUQ7RqQz0EbYVq6389vRMBy
-         ZFDOl0+e7FYWqdbRBsyn/EtfML5THarkJfH6gZOGFkq8zb9ngySYPaOLtucZ/0iapj3I
-         wk393Hoq58JxnE/yVSDl0stztWVtHRPh1dycd4X37Ev5d5vkXrlYW2ZcEmSDokPrbYmm
-         7f0NAk8nbsD1uzIM9Md705Z8YNcGGxinn1Mb3B3IuuxVbZRdtENH2FnYgrCW8pXHsvhv
-         0QI4sRh4GQvrHrE06llvLErYzvcxzfh1uNZAP43gKP5BuOB+DXufkNfDe93p2xd/HGz0
-         g4nQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rperqf29TAWcnNEsHLT8Eu54sTQxmrY8/+53IviIR9ebC06ejXFOW12+nCnu5EzMFfRiadI@lists.linux.dev
-X-Gm-Message-State: AFuF++lzi5ji4P8T11MVFyWFBZTC7icgVYp7EFfZJ7c7K2MopcMba2L4
-	aq/DFI3wnvQthiLAD/okCrCGDYk7uqmIvNFneOowQ7sdxDuTVVPU/wc+zlVJPBQHbPUgubXK6dq
-	Z4TqjHL4tVsJUa0bXuFnSa/knH26MjL3ERUIm+0KE9MJHKhzT0/lS2gSM
-X-Gm-Gg: AR+sD12CE/MfMaJgOL1iXxw1gwPqEL/KccADO0EzlslDI/qAx4qFqVaQJb9OepEg+yp
-	3m0Hzbkye816TFv5B/GfHAuKgWfL2vwISzLtLm/2vthS0MLsKl4sKUJoAYMeL3AproNCIwmIPVe
-	k1rEHgvct1rCmHSz6HfKVekEg+TbthNAdV4WjMPdgCSFCgkUNF8VWEBP6ol9OULvRX7E0zArJll
-	ABdUanOUUT4eA7+l+czRCLk3ylf+hsKz2J48Ee1o7ov7JSeB2wv9Pjq58tt6UT11EBqrGHQu2CA
-	8+iI//67wQHp2KQ15TCazezWqladHdfKz1AqP2CcNOvrzXwnbPHrKUCpp+AndbYXArhXdf5CFkl
-	O+Sd3cjONvuvjdS4NKSMQxKz4YsNr8Q==
-X-Received: by 2002:a17:90b:57cc:b0:381:a766:efcc with SMTP id 98e67ed59e1d1-395810e93a0mr8967636a91.14.1787145475191;
-        Wed, 19 Aug 2026 06:17:55 -0700 (PDT)
-X-Received: by 2002:a17:90b:57cc:b0:381:a766:efcc with SMTP id 98e67ed59e1d1-395810e93a0mr8967481a91.14.1787145474636;
-        Wed, 19 Aug 2026 06:17:54 -0700 (PDT)
+        bh=esjYOP0cHWLWtJ/S0JzZjMyOobiP2YG5+HUVououevY=;
+        b=ZnMsOk521DdUEMdOmte0QRw6VTYUCdraNDJMr/9vg+4xGefqT/aIQL2uzf6fJpS/Gj
+         mMNbAKvJ+jMW3v/0YEpXzfKXg2Y7jxAHqxcHTBojCz8nTPL3AIxetNQHh6mutkAtWrKR
+         KxQW4x8D/sy8OPCd4apS/jNS8boKy+va/KGozjVEvU3gZVAXbumQbvzreQySh86JgzXX
+         scC8YZEtATuyZBUHJKVJPwf3Gt+klZQeD7NSMG/r8nlpUKezMQBSgEfORSQ76prV4zSk
+         Csp+xi+eEIdsXfGUzPkUT8ca9vBwOOtJRgSQ/4Qs4CBu1eCjz55d3JVoHsWlh4U9jR4t
+         XFuA==
+X-Forwarded-Encrypted: i=1; AHgh+RrC0SjHCdZlL19enOAbwDfs0C5q65oaBqTQjln2AdzAxhYDkezFXT86WBBNz6GImnuVXpqV@lists.linux.dev
+X-Gm-Message-State: AFuF++lVlyGYIKSKWrHSASG/Omu/FTeqeRyPOBqJDT7OYyEWKnaJBi8h
+	vHrv3WuiMk1PFxf63z0CCCPJtH93GuyuBIQcoQCcMOU3DncBULEW/s2LkWCmq+G8ZblQ4Fj/HOO
+	09n7FBxvyndpfqP41gU1vYD7/mdl+kWgHaF+20McG3p3xC1vzyOiCSdJM
+X-Gm-Gg: AR+sD12HmD14ASaXSN+UUPY5zvXsOj2OVMYLC8bU8BIl/YqPeZx7NLg9opC9QcGheVa
+	Z4d79L2MLFEoHmdNRP4OhsLouugXElzlF5tm8tCmO+GzOYGdJkUQD7S4DXOe2EfSvYYxI2Yj3tF
+	Yr4gNXXYa0+U5V1pABGBx6pi3IvPCC06Dwn99QMIGLRkuRbTOR9S/j7osKu/QgjWcyzikO8x4in
+	SJlSJyK/S1T9BKoXn/eAzSckb5WA8EyIO4yUYHQB2ROhEAKTv7nT/TgHh48zRpVGhyVAxRCnhN2
+	8tUoJVr5nLKDsGxpYLwpO11DxVYsw0+rX+zCKVqJvac5d73DRAWMwjHNal1IspK80yc2jIoIClz
+	F4MzSsaMJnotJSpAUBplC+MrgWuYRww==
+X-Received: by 2002:a17:90b:4d83:b0:38d:dfd1:7c1 with SMTP id 98e67ed59e1d1-39580a91ad5mr8388467a91.2.1787145817282;
+        Wed, 19 Aug 2026 06:23:37 -0700 (PDT)
+X-Received: by 2002:a17:90b:4d83:b0:38d:dfd1:7c1 with SMTP id 98e67ed59e1d1-39580a91ad5mr8388382a91.2.1787145816848;
+        Wed, 19 Aug 2026 06:23:36 -0700 (PDT)
 Received: from [10.219.56.166] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957f7c962csm2756751a91.0.2026.08.19.06.17.45
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957f9aaa12sm2843059a91.5.2026.08.19.06.23.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Aug 2026 06:17:54 -0700 (PDT)
-Message-ID: <3476b5c3-7983-4994-a901-3d7d8bd75255@oss.qualcomm.com>
-Date: Wed, 19 Aug 2026 18:47:44 +0530
+        Wed, 19 Aug 2026 06:23:36 -0700 (PDT)
+Message-ID: <cf502956-8c99-485b-bf25-9f89d81975ab@oss.qualcomm.com>
+Date: Wed, 19 Aug 2026 18:53:26 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -89,8 +89,7 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/15] accel/qda: Add initial QDA DRM accelerator
- driver
+Subject: Re: [PATCH v2 00/15] accel/qda: Qualcomm DSP Accelerator driver
 To: Krzysztof Kozlowski <krzk@kernel.org>, Oded Gabbay <ogabbay@kernel.org>,
         Jonathan Corbet <corbet@lwn.net>,
         Shuah Khan <skhan@linuxfoundation.org>,
@@ -117,132 +116,59 @@ Cc: Bharath Kumar <quic_bkumar@quicinc.com>,
         iommu@lists.linux.dev, linux-media@vger.kernel.org,
         linaro-mm-sig@lists.linaro.org
 References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-3-69a02e9090d4@oss.qualcomm.com>
- <81708487-89ce-4cd5-b39a-2989bdce6088@kernel.org>
+ <f009a2fe-5c30-405e-a942-696ea65fb2f3@kernel.org>
 Content-Language: en-US
 From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-In-Reply-To: <81708487-89ce-4cd5-b39a-2989bdce6088@kernel.org>
+In-Reply-To: <f009a2fe-5c30-405e-a942-696ea65fb2f3@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE5MDEwMyBTYWx0ZWRfX/osytzmH/cg8
- 06gjLxjz9r80xhgCa4k+3F0Qa+9ibvDXlfEPzMstAqZCw9PYNNbJFsA7m5aAGHYG6ksSyCA4SoQ
- 2OyS0+0E1ftyWTp5XMaz3y6cqo4pb4A8dfuMKrJs3R0T0W9uksNlFt2aFpXJZGUumkdEjPhcnnU
- gF9c4qA2rSznh2xvqf17P1eqODLknK1D8KDdP3ynwvNEKMGo5O/3rCABjUa5p7NK6TD/SUCpin1
- veVsh3k3H+YABSUfn2BZyYkgPRIqlclLQgiwUUKzQtzondyXYHGnjeQXEVqiEQD4gThgeTsW9OM
- 0b7jO/xoMXmmci1vzNonZ2n5IORBTb8qu3TshtoClGcXbHCgyLxWosK9QpcehAwStqF+Fm3FTur
- 6//k50PqtUyPwcLz6JOhgS5aGrvoGrf0LjyBYamR3wcMlAWHMD5fd4zQTkz0aaGu5vDzLoEqdSW
- U+M8ByNIb1FW6MaRQUw==
-X-Proofpoint-GUID: 0JmQxC9B8217wwYIVsGuvrA-u7hMvalC
-X-Proofpoint-ORIG-GUID: 0JmQxC9B8217wwYIVsGuvrA-u7hMvalC
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE5MDEwMyBTYWx0ZWRfX4M/36qEJKfAr
- 0Msws2woYQUU6SDI3ym4g1lPNQ+EMHotCA/eENyL/EvVCF10+eg0QSuuVikzhksLyStgrK/jjzb
- C4X+WiVgKFu3TPiQhHmn6UGZDZumk+0=
-X-Authority-Analysis: v=2.4 cv=Sb7HsPRu c=1 sm=1 tr=0 ts=6a85ad04 cx=c_pps
- a=Oh5Dbbf/trHjhBongsHeRQ==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+X-Proofpoint-ORIG-GUID: znJDDGmIt6A2bdGC4SEGQrSZETSNPc_i
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE5MDEwNCBTYWx0ZWRfXyjZyCCp4Cl3B
+ wO1WIr8Kii+7yA/FwBSMjp7oXilyn20AGFirruiVeDAU/UFas6xF2lrHQMsgVkUdWOxqzxyBQSy
+ H54jOtyuFGLyd6LWHOhu18KOSgJm9qk=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE5MDEwNCBTYWx0ZWRfX2KKVRK6VxdSO
+ oHjiO10yD7WPjgt76eqcyQUrD+7+RCu8q8JletW4m6Tj+jSUHIGfi3ptLgs8OFkYYXHcGjkKenj
+ HcrxE8Vp/7CPLHkUmF0nK6N9dyWbXWHHw2UlOadVdA9o/vBqQnCmWKbSTJAhaXWrmPQjzV5d9nm
+ o3qbwfNiF5C911lABq0BW7ZiazdwAasLgrjTjzmJDZ+eXofMLU0KW+r4eS0gsy09FDXrIPr0BfR
+ Ys4xDS1HpGX4khTYZz0O1FrZtk2jva2h9KGoLbeWviEMYLqdMZbk8o9d7Ld8V97I+514WiZx3+u
+ r0Nft7r/zcB+swXBLp0PM9lhVgxY0jIf7XcMwFEnp4inwX/Q3NFsbe6uoHmvbw/MSScxVgVCXOl
+ 9oIhycDZd3N0hZceg6uM8UBZx72bGRNTshRgLAZcHGxDI66a4Po6n1NxM0MPbR+lUyoVzRs1Vop
+ PQslR8tHeatpbK/pxBg==
+X-Authority-Analysis: v=2.4 cv=aNrAb79m c=1 sm=1 tr=0 ts=6a85ae5b cx=c_pps
+ a=vVfyC5vLCtgYJKYeQD43oA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
  a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=ZpdpYltYx_vBUK5n70dp:22
- a=D19gQVrFAAAA:8 a=EUspDBNiAAAA:8 a=fiCeWNywFvmbcpy1l9YA:9 a=QEXdDO2ut3YA:10
- a=_Vgx9l1VpLgwpw_dHYaR:22 a=W4TVW4IDbPiebHqcZpNg:22
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=3WHJM1ZQz_JShphwDgj5:22
+ a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=z9ogCWloIzyHX_id1hcA:9 a=QEXdDO2ut3YA:10
+ a=rl5im9kqc5Lf4LNbBjHf:22
+X-Proofpoint-GUID: znJDDGmIt6A2bdGC4SEGQrSZETSNPc_i
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-08-19_03,2026-08-19_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 bulkscore=0 impostorscore=0 adultscore=0
- suspectscore=0 clxscore=1015 lowpriorityscore=0 spamscore=0 phishscore=0
+ spamscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 bulkscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 phishscore=0 impostorscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608190103
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608190104
 
-On 19-08-2026 00:40, Krzysztof Kozlowski wrote:
+On 19-08-2026 00:48, Krzysztof Kozlowski wrote:
 > On 17/08/2026 06:47, Ekansh Gupta wrote:
->> Add the skeleton of the Qualcomm DSP Accelerator (QDA) driver, a DRM
->> accel driver for the Hexagon DSPs found on Qualcomm SoCs.
+>> This patch series introduces the Qualcomm DSP Accelerator (QDA) driver,
+>> a DRM-based accelerator driver for Qualcomm DSPs. The driver provides a
+>> standardized interface for offloading computational tasks to DSPs found
+>> on Qualcomm SoCs, supporting all DSP domains.
 >>
->> This patch registers a DRM accel device, exposing a /dev/accel/accelN
->> character device node, and binds it to the RPMsg channel used to reach
->> the DSP. Buffer management, IOMMU context banks and the FastRPC
->> protocol are added by later patches in this series.
+>> The QDA driver implements the FastRPC protocol over the DRM accel
+>> subsystem. It uses the same device-tree node structure as the existing
+>> fastrpc driver in drivers/misc/. The approach for binding the QDA driver
+>> to device-tree nodes while coexisting with the fastrpc driver is an open
+>> item described below.
 >>
->> qda_drv.c / qda_drv.h define the drm_driver ops table, the per-file
->> private state (qda_file_priv) and the main device structure (qda_dev),
->> which embeds drm_device so that it can be recovered with container_of().
->>
->> qda_rpmsg.c binds to the "qcom,fastrpc" compatible via
->> module_rpmsg_driver(), reads the DSP domain name from the "label"
->> device-tree property, and registers the DRM device.
->>
->> Assisted-by: Claude:claude-sonnet-5
->> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
->> ---
->> Changes in v2:
->> - Use module_rpmsg_driver() and drop the qda_rpmsg_register()/
->>   _unregister() wrappers, module_init()/module_exit() and
->>   qda_rpmsg.h entirely (Dmitry Baryshkov)
->> - Read the "label" property directly into qdev->dsp_name (Dmitry Baryshkov)
->> - Drop the probe/remove/init log messages (Dmitry Baryshkov)
->> - Return the result of qda_register_device() directly (Dmitry Baryshkov)
->> - Clarify the Kconfig help text (Dmitry Baryshkov)
->> ---
->>  drivers/accel/Kconfig         |  1 +
->>  drivers/accel/Makefile        |  1 +
->>  drivers/accel/qda/Kconfig     | 30 ++++++++++++++++
->>  drivers/accel/qda/Makefile    | 10 ++++++
->>  drivers/accel/qda/qda_drv.c   | 71 ++++++++++++++++++++++++++++++++++++++
->>  drivers/accel/qda/qda_drv.h   | 61 +++++++++++++++++++++++++++++++++
->>  drivers/accel/qda/qda_rpmsg.c | 79 +++++++++++++++++++++++++++++++++++++++++++
->>  7 files changed, 253 insertions(+)
->>
->> diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
->> index bdf48ccafcf2..74ac0f71bc9d 100644
->> --- a/drivers/accel/Kconfig
->> +++ b/drivers/accel/Kconfig
->> @@ -29,6 +29,7 @@ source "drivers/accel/ethosu/Kconfig"
->>  source "drivers/accel/habanalabs/Kconfig"
->>  source "drivers/accel/ivpu/Kconfig"
->>  source "drivers/accel/qaic/Kconfig"
->> +source "drivers/accel/qda/Kconfig"
->>  source "drivers/accel/rocket/Kconfig"
->>  
->>  endif
->> diff --git a/drivers/accel/Makefile b/drivers/accel/Makefile
->> index 1d3a7251b950..58c08dd5f389 100644
->> --- a/drivers/accel/Makefile
->> +++ b/drivers/accel/Makefile
->> @@ -5,4 +5,5 @@ obj-$(CONFIG_DRM_ACCEL_ARM_ETHOSU)	+= ethosu/
->>  obj-$(CONFIG_DRM_ACCEL_HABANALABS)	+= habanalabs/
->>  obj-$(CONFIG_DRM_ACCEL_IVPU)		+= ivpu/
->>  obj-$(CONFIG_DRM_ACCEL_QAIC)		+= qaic/
->> +obj-$(CONFIG_DRM_ACCEL_QDA)		+= qda/
->>  obj-$(CONFIG_DRM_ACCEL_ROCKET)		+= rocket/
->> \ No newline at end of file
+>> v1: https://lore.kernel.org/all/20260519-qda-series-v1-0-b2d984c297f8@oss.qualcomm.com/
+>> RFC: https://lore.kernel.org/dri-devel/20260224-qda-firstpost-v1-0-fe46a9c1a046@oss.qualcomm.com/T/
 > 
-> You have trivial patch errors.
-newline problem was already there, wasn't introduced as part of this
-patch series, so I wasn't sure to fix it here. I can fix this in v3.>
-> ...
-> 
->> +}
->> +
->> +static const struct of_device_id qda_rpmsg_id_table[] = {
->> +	{ .compatible = "qcom,fastrpc" },
->> +	{},
-> 
-> Device node with this compatible is already populated, so this looks
-> simply wrong or you are adding a duplicated driver.
-> 
-> That's a no-go, you are supposed to work with existing drivers and grow
-> them.
-I'll bring the discussion again here, there was a discussion to move the
-driver to accel subsystem if we want to support new features/uAPI
-changes. Please read [1],[2] threads. The intention is to replace
-fastrpc driver with QDA eventually.
-
-Do you suggest adding a different compatible, say "qcom,qda" for this
-driver?
-
-Let me know if you have a better suggestion to proceed here.
-
-[1] https://lkml.org/lkml/2024/6/24/479
-[2] https://lkml.org/lkml/2024/6/21/1252>
+> So this is a v3, not v2. Please start using b4 correctly, so versioning
+> will be kept instead of faking the numbers.
+I'll correct the versioning in the next post. Thank you for pointing this.
 > 
 > Best regards,
 > Krzysztof
