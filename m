@@ -1,207 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AE32DA74C;
-	Wed, 19 Aug 2026 12:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D881B346784
+	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:05:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787143380; cv=none; b=CZvE/7UFppRfNBlzJA4e0xYu//agQ2qrhz7YGZhdw+lg3S6aV1OiqmtuD+PARDW6NkA5ObwMHGcFG9qMhNMAJ1npWb1dmEqE8y0imkvasIHdvB+5/dPKwRJ5tKfYib/ZQP/Y8SDwhSpJNSHsPGGM4YGGug+Ig2ao5Br9hV/5VqA=
+	t=1787144736; cv=none; b=r1PiWaknD4YQPDzpdTcg/jky82hBoH7Dp9U0mCcTGZ/xFtcQ9YH1GUm8hYLbvc7N4JqUlzJNH13UAW9hAC5e/iK/k3zDwieYwtHU7JKe5HPLWWVBsqBxFv2N5jCnp3H64YkpTvUR0erBQUBoeeqGm7kAesfx0Tvu/ffDougkQ18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787143380; c=relaxed/simple;
-	bh=nLBTyh2p36IsSjNHVdGphBYCrOQnoXIGjVyEgE9f/5s=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=M/UCOhADvZMCqkvYiGlQ2FMwmC6taTb0pDRSxENluh0YLT9zyKd8oYTpAukYIv5lJPAeeXd82+nDaniAGC8W6keyEtaoaWkI5H4GmZykddpl6rpf+nSU1ZlIGduKpI7e7bd7n2+DecuSu+DG35PAVK3UnR0xYZzxdK77SuTsBnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rt29yuZY; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787144736; c=relaxed/simple;
+	bh=yeAn53QhD+ejLswrNzkwv8ur2hDkhwUdtZ0G7WwZFdk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cJPb+GR786hyGA02djVRMSqXWNF/i+UOV2VQOt+OfNOIU2466MRy7/vJFangcuk2xJGCdCANb8evFwy5wz3c/7WQtmnWYVd1QfZ7YpVtUY9G622LjKc6Lz9r+ZCRQV1sFfEVGrC+b6/8JRuTw1rTNrINsfmm2y53RmveyVNYh7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K2LMLWRM; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=TsSz1nNu; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rt29yuZY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787143378; x=1818679378;
-  h=date:from:to:cc:subject:message-id;
-  bh=nLBTyh2p36IsSjNHVdGphBYCrOQnoXIGjVyEgE9f/5s=;
-  b=Rt29yuZY7L2kxBwJrJfszmdLrW4upgDEYPFF/eiX4Efi2i0DGZmCCXSW
-   60kR5lEw5xVDRmceALu3/Oq7sd++YT+fGGkd06gWHF62ccj/DO+VXcUbM
-   0u3my8aSNsLa6UxYLulWFHNmgPiMipg2+4YO7MyNXZ7cy9kKH6FELyOmA
-   xZBUWdUbj14BknZ97dYPt5U1SEkO+IVEyV7tYj+Ftmi6b2vsymMiyH5Js
-   wJuq0LoRelqxjGsP7VsHirM6AVhZH5jLqI5R92/MMoMyB4N+RXTuoTb1e
-   KeXpc4Z2P9iaNn2fcA6SKqoDQi0uQNy8mUOZRJGfP1/+rnBObCtTTjRHG
-   w==;
-X-CSE-ConnectionGUID: yojX4EWsRXCYXtfxeBNd0Q==
-X-CSE-MsgGUID: wbZ8/SW8TLKJhHh7xzD8SA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="98322785"
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="98322785"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 05:42:57 -0700
-X-CSE-ConnectionGUID: xCcK85WtQn2wu/1nZ7QXFQ==
-X-CSE-MsgGUID: K+BAQ9jARl60DRxmFzmLWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="262913887"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 19 Aug 2026 05:42:54 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wwfd5-00000000fFS-3QOK;
-	Wed, 19 Aug 2026 12:42:51 +0000
-Date: Wed, 19 Aug 2026 20:42:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, Dmitry Baryshkov <lumag@kernel.org>,
- Neil Armstrong <neil.armstrong@linaro.org>
-Subject: drivers/gpu/drm/bridge/ssd2825.c:484:13: warning: stack
- frame size (20088) exceeds limit (8192) in 'ssd2825_bridge_atomic_pre_enable'
-Message-ID: <202608192010.zK7MQiyb-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K2LMLWRM";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="TsSz1nNu"
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67JD0eAJ3601109
+	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:05:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	LZ5DADcP5lyK3Hc2KgnGBzVe5cJ/nTw1zxLeW7QKY5o=; b=K2LMLWRMhSf9IfQR
+	DpB6P5ILQueozCgCu5JXWzSpQPKmbFV9bRj4KnArcWAgE1E5S/gbqv0Vgd98elSy
+	2Z7Qd9YrW2KiLmg3GAEsloT8Tny6ZBWrgy6GQZLMYy1EMqRXDc2c4syj+gfFTzQ1
+	gjIbgeLR8+sYoUBMBOO/vUs+IBWDVDvT8m77dmmY6dwtHAdVK/5/N6mfB3Wd8rKS
+	hkFKjswlekvfHUg/caahLolHW+47x2nNWMU9d3JilgNrSzCYD6KFkCTh69Hyi2bn
+	7hlk3jq+7XnFCejQyDo8khR9H/FVbuJIXfSbKO2tEO8qqugq4AIrZYvPWbYY+VLJ
+	jC5YWg==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g4yfm3acv-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 13:05:33 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2cccfa32670so17427375ad.2
+        for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 06:05:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1787144733; x=1787749533; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LZ5DADcP5lyK3Hc2KgnGBzVe5cJ/nTw1zxLeW7QKY5o=;
+        b=TsSz1nNubAEjc0/gjeYzz3LRSvsRlpIoOG2dbSSJrGx1ugi1QabMgvzLOK51U+TfkV
+         yJ/6FOU0JIw8hh1bPEWXd/wIGCJ4rbZAQMJqbbobn6u2TVkscqe0vORj5pHY3vwY+30m
+         26YNvInFkSQQMw3r+z4bvlTNpk92sOkNWaqfK5MAV/qb74itdfORHZjYsomiynZnyFAG
+         8lTvcw74hC25Y7YVSzG6gMGfMJ10F8qVKwA+AfuGhDtNnqdeuaOtH+o94LIdyMdYUvyH
+         +edIuUkGuSbzsTy+Ti1xfCVvC4OjPqEeZcKVZyNNPR/EL3y7/mQBIzaXDwnjYM+/2m9e
+         iwTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787144733; x=1787749533;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LZ5DADcP5lyK3Hc2KgnGBzVe5cJ/nTw1zxLeW7QKY5o=;
+        b=poy7lTX6kvZnOcrhBQ4TyBggtSjizSTpLwKP8AsgYUAyqtnXBBtL5Q/KR3XvABN8D+
+         8cduyQbf6EbOZeNPdZya9NJYVqRp4KKNYPukEY5GlDVGLvjORIMbk6u2TyPQ9/2sgrMB
+         eRsAGbAedkVGNOpb2k61Fgicx765mYPW1aSWhXqy4hhpYn36U5rRNrc/7Rmdg6uLWZqQ
+         bIYOseHBdkEw6vRT8ELIuZ116T3Rk/8Q5f5mzbwORAJ/WpX74ehpuxiFiJE6zgIdaLcJ
+         y9pSOYEIaU+MFXkHlZYOPD9VOyWpxRVQSh2U6GvsvV5PB9Iax833OjwHZ7d6UWuKXGWL
+         JisQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrGnl85GNJ9LaWOgjN406BJKpp9jGJez/cncMUgewq4QqnHyfpd9ggnI7bvUN3oM4NkzHTg@lists.linux.dev
+X-Gm-Message-State: AFuF++kcD5WkpaCzEM/5n96Xs8xwLcS5TJH1DjJIg89eROXb1vJ0htUm
+	Tal7kcevCd8HTIGk9KsEOfpNmsiVrOrRyE8q/sutXrfXte4seTsh/IZtCmnnfHJZtIl57SIb4cJ
+	T85kPPV9TifmcVoGbK4hJ8W3d6VR3FMugius6QnS0LuGYWq5aASvkqHl7
+X-Gm-Gg: AR+sD11syC4uIq0lkIeoSNWxmI5AtVPbMMC+l2bouZafvdw5SRRWb1nHc1XEdlOIZ0G
+	PKKK62Mjn+bQzLLrHEAV0VVLf8TY33St+KROrjwj/UqCExK6/LwH7c63yP7RzpzFIchRfCFX79M
+	/N9J31t4L+iZPGYkLyrSMJhaqgfWVvbffL37pf+Cvd+ZOHE/vx5eiRbVBa26qrVEnKlAb6TXRUy
+	gqdraouxgmVHEIYxzU4IFyFQ3Wa+FL5CbMn9WWuJf6NekhVFAuxR4oGMnvn6TBu+pmIq0uX2M8K
+	xJbVpRs9n1byD89XRllAv1InCq6GG+kMbm/XTQFnJArwowELVeqMYE27JBAqoOjr1SA/2ohD5Uz
+	ZadB3bDIGDQ2DMHChINfTcroCfbYsWQ==
+X-Received: by 2002:a17:902:fda6:b0:2cf:a108:7605 with SMTP id d9443c01a7336-2d60186263bmr89344845ad.11.1787144733034;
+        Wed, 19 Aug 2026 06:05:33 -0700 (PDT)
+X-Received: by 2002:a17:902:fda6:b0:2cf:a108:7605 with SMTP id d9443c01a7336-2d60186263bmr89343405ad.11.1787144732529;
+        Wed, 19 Aug 2026 06:05:32 -0700 (PDT)
+Received: from [10.219.56.166] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5c1e54330sm24796285ad.44.2026.08.19.06.05.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Aug 2026 06:05:31 -0700 (PDT)
+Message-ID: <e0a25f11-5c7c-406f-a223-da29bf6e1401@oss.qualcomm.com>
+Date: Wed, 19 Aug 2026 18:35:22 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/15] MAINTAINERS: Add entry for Qualcomm DSP
+ Accelerator (QDA) driver
+To: Krzysztof Kozlowski <krzk@kernel.org>, Oded Gabbay <ogabbay@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Bharath Kumar <quic_bkumar@quicinc.com>,
+        Chenna Kesava Raju <quic_chennak@quicinc.com>,
+        srinivas.kandagatla@oss.qualcomm.com,
+        dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        iommu@lists.linux.dev, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
+ <20260817-qda-v2-v2-1-69a02e9090d4@oss.qualcomm.com>
+ <cc43a545-20a1-4f15-a7b9-ca48842bffca@kernel.org>
+Content-Language: en-US
+From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+In-Reply-To: <cc43a545-20a1-4f15-a7b9-ca48842bffca@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: oiojxGc6EU8g0K8Sjs8_gzx6o6cEni2w
+X-Authority-Analysis: v=2.4 cv=bth8wkai c=1 sm=1 tr=0 ts=6a85aa1d cx=c_pps
+ a=JL+w9abYAAE89/QcEU+0QA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=DJpcGTmdVt4CTyJn9g5Z:22
+ a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8 a=XbA7GbUpZyLIT2ThUnsA:9
+ a=QEXdDO2ut3YA:10 a=324X-CrmTo6CU4MGRt3R:22 a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-ORIG-GUID: oiojxGc6EU8g0K8Sjs8_gzx6o6cEni2w
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE5MDEwMCBTYWx0ZWRfX9aYP2JUXzP+p
+ Cu2ekDAVOi2eS/se10mL4p0sZAnHatTZUcIswUTk48XRVW89WF1R/XCPmZaa8+VBsnhCUKpVz4Z
+ Rrs9W64PqlbemLVVEv4LAnYNThWrDXYpt7Ldcy+wevQDaAZkDZEImd9gD+XIhmIXRCX76hD/QAH
+ n3HEirlKdcHnQy1fvrYGDvQwRqW2fq5oAIJwtzQKeALftpEG6SisWnOBU49XxUxbaehP43rv6dV
+ fgd2A4u4SE0rrtkwaNvBX3zPZod6GgXBBclTXGva3WAIlqg40HFMQROE65eX436serBIjYGDWGx
+ /mZwaZ1doX408NpEhwN1RCPVcuwd3NSKu/fHUrncWQFW8EFcmVOYg2UfapLrlcm5EdtA4D4NNLd
+ 9G4wFJN99GnWrFMZFE1UwHhOZArClhcvzfw8jNEfgRCIK5XlW5p2YNzvNKv9E9OA+6gz06rDNJP
+ YVFmv/rst/nc2Vg+40A==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE5MDEwMCBTYWx0ZWRfX6XHBoeucud6x
+ Y1gkG09wXYU1C7rIbIvZXKrKOGpXx+jLsKfyNZXA1+icAkacJzWAZOKcf0vH92Czo17yUquvriC
+ FKQyklNBWNhULfXf5q6ty4dfUTTTI8k=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-19_03,2026-08-19_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 suspectscore=0 spamscore=0 phishscore=0
+ impostorscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ clxscore=1015 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2608190100
 
-Hi Svyatoslav,
+On 19-08-2026 00:52, Krzysztof Kozlowski wrote:
+> On 17/08/2026 06:47, Ekansh Gupta wrote:
+>> Add a MAINTAINERS entry for the Qualcomm DSP Accelerator (QDA) driver,
+>> covering the driver source under drivers/accel/qda, documentation under
+>> Documentation/accel/qda, and the UAPI header
+>> include/uapi/drm/qda_accel.h. The linux-arm-msm and dri-devel mailing
+>> lists are listed as the relevant review lists.
+>>
+>> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+>> ---
+>>  MAINTAINERS | 11 +++++++++++
+>>  1 file changed, 11 insertions(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 912837dd4640..75fa90c137c7 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -22388,6 +22388,17 @@ S:	Supported
+>>  F:	Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+>>  F:	drivers/crypto/qce/
+>>  
+>> +QUALCOMM DSP ACCELERATOR (QDA) DRIVER
+>> +M:	Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+>> +L:	linux-arm-msm@vger.kernel.org
+>> +L:	dri-devel@lists.freedesktop.org
+>> +S:	Supported
+>> +T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
+>> +F:	Documentation/accel/qda/
+> 
+> There is no such directory.
+the directory got added in a later patch, added this patch at the start
+following the comment here[1].
 
-FYI, the error/warning still remains.
+[1]
+https://lore.kernel.org/all/zideovhb7djvsbydqmdyxbgh6cte7xc5ouhm6gsreww6klqqae@o6w6wd4tic4r/>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   3a0dd7ba4f44cdc116d83712f61e7c1a95be3588
-commit: 55023abe6a2921a8916b623c24208e1971b88729 drm: bridge: Add support for Solomon SSD2825 RGB/DSI bridge
-date:   1 year, 1 month ago
-config: x86_64-randconfig-003-20260819 (https://download.01.org/0day-ci/archive/20260819/202608192010.zK7MQiyb-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260819/202608192010.zK7MQiyb-lkp@intel.com/reproduce)
+> Best regards,
+> Krzysztof
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Fixes: 55023abe6a29 ("drm: bridge: Add support for Solomon SSD2825 RGB/DSI bridge")
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608192010.zK7MQiyb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from <built-in>:3:
-   In file included from include/linux/compiler_types.h:171:
-   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
-      28 | #define __SANITIZE_ADDRESS__
-         |         ^
-   <built-in>:353:9: note: previous definition is here
-     353 | #define __SANITIZE_ADDRESS__ 1
-         |         ^
->> drivers/gpu/drm/bridge/ssd2825.c:484:13: warning: stack frame size (20088) exceeds limit (8192) in 'ssd2825_bridge_atomic_pre_enable' [-Wframe-larger-than]
-     484 | static void ssd2825_bridge_atomic_pre_enable(struct drm_bridge *bridge,
-         |             ^
-   2 warnings generated.
-
-
-vim +/ssd2825_bridge_atomic_pre_enable +484 drivers/gpu/drm/bridge/ssd2825.c
-
-   483	
- > 484	static void ssd2825_bridge_atomic_pre_enable(struct drm_bridge *bridge,
-   485						     struct drm_atomic_state *state)
-   486	{
-   487		struct ssd2825_priv *priv = bridge_to_ssd2825(bridge);
-   488		struct mipi_dsi_device *dsi_dev = priv->output.dev;
-   489		const struct drm_crtc_state *crtc_state;
-   490		const struct drm_display_mode *mode;
-   491		struct drm_connector *connector;
-   492		struct drm_crtc *crtc;
-   493		u32 input_bus_flags = bridge->timings->input_bus_flags;
-   494		u16 flags = 0, config;
-   495		u8 pixel_format;
-   496		int ret;
-   497	
-   498		/* Power Sequence */
-   499		ret = clk_prepare_enable(priv->tx_clk);
-   500		if (ret)
-   501			dev_err(priv->dev, "error enabling tx_clk (%d)\n", ret);
-   502	
-   503		ret = regulator_bulk_enable(ARRAY_SIZE(ssd2825_supplies), priv->supplies);
-   504		if (ret)
-   505			dev_err(priv->dev, "error enabling regulators (%d)\n", ret);
-   506	
-   507		usleep_range(1000, 2000);
-   508	
-   509		ssd2825_hw_reset(priv);
-   510	
-   511		/* Perform SW reset */
-   512		ssd2825_write_reg(priv, SSD2825_OPERATION_CTRL_REG, 0x0100);
-   513	
-   514		/* Set pixel format */
-   515		switch (dsi_dev->format) {
-   516		case MIPI_DSI_FMT_RGB565:
-   517			pixel_format = 0x00;
-   518			break;
-   519		case MIPI_DSI_FMT_RGB666_PACKED:
-   520			pixel_format = 0x01;
-   521			break;
-   522		case MIPI_DSI_FMT_RGB666:
-   523			pixel_format = 0x02;
-   524			break;
-   525		case MIPI_DSI_FMT_RGB888:
-   526		default:
-   527			pixel_format = 0x03;
-   528			break;
-   529		}
-   530	
-   531		connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
-   532		crtc = drm_atomic_get_new_connector_state(state, connector)->crtc;
-   533		crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
-   534		mode = &crtc_state->adjusted_mode;
-   535	
-   536		/* Set panel timings */
-   537		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_1,
-   538				  ((mode->vtotal - mode->vsync_end) << 8) |
-   539				  (mode->htotal - mode->hsync_end));
-   540		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_2,
-   541				  ((mode->vtotal - mode->vsync_start) << 8) |
-   542				  (mode->htotal - mode->hsync_start));
-   543		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_3,
-   544				  ((mode->vsync_start - mode->vdisplay) << 8) |
-   545				  (mode->hsync_start - mode->hdisplay));
-   546		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_4, mode->hdisplay);
-   547		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_5, mode->vdisplay);
-   548	
-   549		if (mode->flags & DRM_MODE_FLAG_PHSYNC)
-   550			flags |= SSD2825_HSYNC_HIGH;
-   551	
-   552		if (mode->flags & DRM_MODE_FLAG_PVSYNC)
-   553			flags |= SSD2825_VSYNC_HIGH;
-   554	
-   555		if (dsi_dev->mode_flags & MIPI_DSI_MODE_VIDEO)
-   556			flags |= SSD2825_NON_BURST_EV;
-   557	
-   558		if (input_bus_flags & DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE)
-   559			flags |= SSD2825_PCKL_HIGH;
-   560	
-   561		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_6, flags | pixel_format);
-   562		ssd2825_write_reg(priv, SSD2825_LANE_CONFIGURATION_REG, dsi_dev->lanes - 1);
-   563		ssd2825_write_reg(priv, SSD2825_TEST_REG, 0x0004);
-   564	
-   565		/* Call PLL configuration */
-   566		ssd2825_setup_pll(priv, mode);
-   567	
-   568		usleep_range(10000, 11000);
-   569	
-   570		config = SSD2825_CONF_REG_HS | SSD2825_CONF_REG_CKE | SSD2825_CONF_REG_DCS |
-   571			 SSD2825_CONF_REG_ECD | SSD2825_CONF_REG_EOT;
-   572	
-   573		if (dsi_dev->mode_flags & MIPI_DSI_MODE_LPM)
-   574			config &= ~SSD2825_CONF_REG_HS;
-   575	
-   576		if (dsi_dev->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
-   577			config &= ~SSD2825_CONF_REG_EOT;
-   578	
-   579		/* Initial DSI configuration register set */
-   580		ssd2825_write_reg(priv, SSD2825_CONFIGURATION_REG, config);
-   581		ssd2825_write_reg(priv, SSD2825_VC_CTRL_REG, 0);
-   582	
-   583		if (priv->output.panel)
-   584			drm_panel_enable(priv->output.panel);
-   585	}
-   586	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
