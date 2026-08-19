@@ -1,177 +1,115 @@
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A225367B90
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 01:06:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787101596; cv=pass; b=SQK16ZFTHftmr4dC+iCvxvtpCQAcnoPzEvXPrsJqefCNDY3B5jJ+1Zx8ho8k2JTyBvKToLj+KFkcEh5eCkrGGElnDlmeb7BFUC+hfmVKtOTFtxmypBNIGovwum09BVyk3K0fghH1CeUA+PA2unQXkRLgq83wm2Tju1PH5r/b1Wo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787101596; c=relaxed/simple;
-	bh=TbvLGp9aD+2RDPniO6Wahe9IFHIFUfO6pxWOXLfdioM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=n3Kn3+8ygZbDYZSlImJWFaRQpfB3Z06QbWRt6RNusg/fuGOU5UsYLuAKwe0Gw2NDWOkJQcW0r7H3+5O+KtYBWCls43Y1vTRAtDUF4yftzlcwMy2RDPAe3MCN9UGDSIpnNcXi6CugMFo1zckn5dlcwtWK3vS3okjT5rSspYnxu44=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SXntpRb3; arc=pass smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F59B38BF69;
+	Wed, 19 Aug 2026 01:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787101932; cv=none; b=GfDY5XiDDi4tAmIcxH58BsevplpocMABdgOwcKd/UBMtg0EwNxLBg2SgmCNaMWQUGt/UnhFnQI6JN9u3j/krDap4WCoWBEfeiUwo/RpjNHmnhH0PWs9um4a5cvM8jo0JIXn8JGxVA29MI0OG/90Y0iSDXfdViH3/dV1hSqw+bBk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787101932; c=relaxed/simple;
+	bh=0nKWSLzU2mejXrdPy3Hh1s0eX5r610iTw5Imr7vQeGA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ujDJSW0jtYWNXuee7Uc6qEDQzTzsN5nWCmIQuhv5o3uHux79LA+iccbvGB702icKJrdVAZ7iomauWjZU79WsowZTmBTWsWy/GNYeRaFv3mjab7POYkdxC3EFM1+vvpPDIoqkpdlgGY2/eKJNp7kK37sJm1HIGU979HUBjnQBuMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SJMP+n1D; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SXntpRb3"
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5b00d083818so1596836e87.1
-        for <llvm@lists.linux.dev>; Tue, 18 Aug 2026 18:06:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787101593; cv=none;
-        d=google.com; s=arc-20260327;
-        b=S2uXDAwzGKXsA76PMMjcbfT12/05NNpPOWOsWUwxCvezAqY4f7gxFFDOQEsVPQaGEV
-         zV6v64yUZAe7T6whlxd7Hf52468a3H/xUJap4Y/1IoJqDLsJINy0VPZv8Sc5g/DjPAJl
-         HQPRTEdEGARE6swhcN7fyU6E+Ql2Y8q6Gq7fRH8iABufJ8xi+cqTYb/26uE0WnpqWcZl
-         xwBPfnOBAvyKTxUbO1ZK1v8Zrk8JTJQFqhUnZ0nXFxkXLld1bLgHHHQOzoJ2x0R6iV1/
-         fQGlixzfjD+mz87EKJTyjbFO2Lp6ObAG3ucIwZekLT78dIYg8vnciB22RP2JU4y8B1Ng
-         TX9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Psv+vV5FJBws3mLEc3qiU+1KxE4djPJwTtEs0koRMRA=;
-        fh=rQhoWmEworqAEfxRf2Kjj3hb/UbUyoKYOau645rpn+o=;
-        b=sfjljf3GX0gZVHo8FAQZOhrmE0dxB2WVY4DZTgA6wae52cfxNidcklqfq+aOY2YWpC
-         j3aiQrJyKOYQ8AZ29cDSBO9rrDnr1Xt5mPQP7w/hIxlZ/3podzVN+oYEOtXrYCzTknn5
-         CA0iomE9OXSBj+nodNFnfUGvGflHKh8m8+vJCv3ZLkjErUQXKzn+aoSJ6LGqEk54qbZ3
-         MXxO1UOpAnAzYxSiBGWDeOg5CQKzdXeRU13yrbWvB/6HP7KdnpdJlHiJ6ZWloyjajOyW
-         LNcarbeQi+Odiq0quS5EVuCJo0hjqf+1Bc/xOOIdFk9hC7oEbbINYRxK6n/XxhbzZYLP
-         hzNw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787101593; x=1787706393; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Psv+vV5FJBws3mLEc3qiU+1KxE4djPJwTtEs0koRMRA=;
-        b=SXntpRb3zZ1acng8co7RZYpsBBVHHTnrGRYezf+rtFfMVQ6dplTzz+3yGcfHXcaDsh
-         vLmK4tJA3QBMLViyC72a7Ct/rhbKTon7x0p2V+ZObf7wcgedFjkyLt6N3Ad4WD/7TYu+
-         FT6o0ToB6bqyiLSaxxfSXbw6CtuxrjxRBGj3oOFbk9mhv41DAppatzUQdDl5g3khcISi
-         GlHViHqkL50SNhMT3ZpN+T7vz2aexT3LRR7oDOYZHHfZ/uW9kmiL8JywTZltWB9wWlL6
-         ZalstbmPuWu0LsBG8rAlF0aEsqQZLvJk7sryEZhILEsdOy/rzo9mZJS9GECChNjFi0Rc
-         6gUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787101593; x=1787706393;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Psv+vV5FJBws3mLEc3qiU+1KxE4djPJwTtEs0koRMRA=;
-        b=VsOMOOVDOWhbTHNK4gdTadOKBzH2srB4SGKo6EVROHgFEZ8F3cZFU1OWjY02tSrXnN
-         MCXpTw9sahd6S5fMecQVkOCiyHgc6T4d6G91phOgOVaLOj0B1bv+HLxnG4xN11rmXD9f
-         JD+Y1dIHjhheO2nCcE4bKMTWJ6jMijuYUyOxFii/U6Dm2SKMwxmLtLZTHi63ZDeiHcUy
-         +APpt7A2uVhyDYsc53OCukVy0/7v4FY1fqP34OmHCWItf7rivjbSanmuazPffgtKmG+A
-         Csie4AREmR17+Kl3AO+QngKtDfDCQputS/rz6XVvuG9SahviBMMn9YCi14a7X7IWdlWe
-         jk5g==
-X-Forwarded-Encrypted: i=1; AHgh+Rr2c7Iw7l2N3DTn3qgymhFgo2od07uGIBDFjqsFtHzoFghxoVj/YdYjHJi2uBNGS8vP7vB6@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz1Gt8U8fXb3tx+XNh00Zambz+GH30FvSdVOooPj2wlQ5NDePbu
-	eCliNUN8kDFHouY3tpMMxYv4yhBiB2M1Q2XJr43iivQRkJazvuQMZ75qHMLxznFVKKiPo1Tji4w
-	KOdNxlPIrXclUtnhXnPAX7/6mxHHUAAo=
-X-Gm-Gg: AR+sD104WD2QKTX+ybwb91Dbl/94nrwZ05uCg8Z8u9dXJ6+zH4mB7Kx9BuNLHJag+ho
-	HfXT/Mgc78uuZdDyZF8PZObJdqcnQYO2B7nMHsIgil7IG1aDmrsIUDxFMSysluE9sht38qdXqXq
-	7HYzhDP5irTGYHGCzAzjhozG96sQjPgBFUelBdGLn3x6aNW3DqnAp26BwSK50PxELKEYCAOBxlR
-	RBHy/4yhqR4XPs6h12q2kHcVs+wiNxIxm3x9WXSGGQe7Yl+veulQkSn5cM5NEj7UdEFYUJsLg5w
-	fEqRFwogHzPl8St1qkm/0Gu/S7zk+kJvqK64q4eoS2/XWiqBBT/fwk6YcGp8EEF/q497nXTLF3M
-	3biQ=
-X-Received: by 2002:a05:6512:224d:b0:5ae:b5d7:4b99 with SMTP id
- 2adb3069b0e04-5b4785e6216mr238239e87.0.1787101593147; Tue, 18 Aug 2026
- 18:06:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SJMP+n1D"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787101930; x=1818637930;
+  h=date:from:to:cc:subject:message-id;
+  bh=0nKWSLzU2mejXrdPy3Hh1s0eX5r610iTw5Imr7vQeGA=;
+  b=SJMP+n1DjXVQnjv2f0VN7DRYBc90jqVsQufrT8OBM8Ahdh0auRDEt3Pv
+   8TgzrzjHk76/TRavyyNi8M0rTmeEyO07AOyL7Lxg2AkEWQAw1pgy36Hhd
+   0TyHmAv01tLRLsUNEaNoTXb813FH0Ufu5mCeA2UoQZQGIvsqgzBznubtZ
+   BQycAMrvbXeYpexG2+V8Yzc1iIJZSrbII3H60SJin1sBkcKd75QQ0/ay7
+   YKlvdTiXQ3oCap+iUmk37U2qgUuWdtOjb8ugcBdS8LDkHzDSah3GO2OVS
+   RTZ6fsuCZB6ecvFzmNU5AzkDxzBwwKW8LuTXf2amGATkhI+eSRvhC2BiG
+   w==;
+X-CSE-ConnectionGUID: i38QF/q8S3i9SIVXlZvDSA==
+X-CSE-MsgGUID: jN8Sq6XiQp+cZR8TBL/gbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="87367265"
+X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
+   d="scan'208";a="87367265"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 18:12:10 -0700
+X-CSE-ConnectionGUID: NsfMHffqTwySFcSX9F6hGQ==
+X-CSE-MsgGUID: 1bijJAfQRCKt8vRim3IuGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
+   d="scan'208";a="259205411"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3cba2a188a06) ([10.211.93.152])
+  by fmviesa009.fm.intel.com with ESMTP; 18 Aug 2026 18:12:07 -0700
+Received: from kbuild by 3cba2a188a06 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wwUqb-000000007L3-1O11;
+	Wed, 19 Aug 2026 01:12:05 +0000
+Date: Wed, 19 Aug 2026 03:11:29 +0200
+From: kernel test robot <lkp@intel.com>
+To: Chao Yu <chao@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [chao:feature/cache 8/13] fs/f2fs/data.c:61:23: warning:
+ variable 'sbi' set but not used
+Message-ID: <202608190320.yN1NeKmO-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260803-alpha-clang-v1-0-1c4ba5ba7a64@gmail.com>
- <20260803195135.GA1083357@ax162> <CAKwvOdnLVh3uhBTcHVcag7gL+i8Cj3B0YUa2V+UdL1TQ3p=KvA@mail.gmail.com>
- <CAEdQ38HhVk0rmq5ZRHbQABgLix8hq49QjzxNDodk_++DmA5Thw@mail.gmail.com> <CAKwvOdn_Lt6trZSHg+BRTv6v6mC=X3hCWbNe3R7Fs6n1FcHuCA@mail.gmail.com>
-In-Reply-To: <CAKwvOdn_Lt6trZSHg+BRTv6v6mC=X3hCWbNe3R7Fs6n1FcHuCA@mail.gmail.com>
-From: Matt Turner <mattst88@gmail.com>
-Date: Tue, 18 Aug 2026 21:06:20 -0400
-X-Gm-Features: AcwNN1WcKtw5ENjFpgp0JrUF6Cd7Zxk1ebk8fb_me2vOSumdHXZLIX0XvC6ScbE
-Message-ID: <CAEdQ38GFCDQF84ZOvGBeRvsc1TLHsJ6eJ8wMxMpeJGHKUWGXvA@mail.gmail.com>
-Subject: Re: [PATCH 0/2] alpha: enable building with clang
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Magnus Lindholm <linmag7@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Nicolas Schier <nsc@kernel.org>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	Nathan Chancellor <nathan@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 18, 2026 at 12:24=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, Aug 17, 2026 at 8:28=E2=80=AFPM Matt Turner <mattst88@gmail.com> =
-wrote:
-> >
-> > On Mon, Aug 17, 2026 at 7:16=E2=80=AFPM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > >
-> > > > On Mon, Aug 03, 2026 at 01:08:40PM -0400, Matt Turner wrote:
-> > > > > Two small patches to let the alpha kernel build with clang.
-> > > >
-> > > I'm curious, since we've yet to have such a case of an out of tree
-> > > llvm backend, what's your plan, if any, to upstream your backend in
-> > > llvm-project proper? Perhaps as an experimental backend?  We have bug=
-s
-> > > filed in our issue track for m68k which is experimental (but upstream=
-)
-> > > in LLVM.
-> >
-> > It builds a kernel that boots in qemu and on real hardware.
->
-> Wild.  Where did you even get real hardware? I know very little about Alp=
-ha.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/chao/linux.git feature/cache
+head:   cc6a23d8c232f588f3a5415d1b10a19e1e4ce860
+commit: f93483387c4c8dd531a818f52e740c1049d00de1 [8/13] f2fs: cache: use node cache
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260819/202608190320.yN1NeKmO-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260819/202608190320.yN1NeKmO-lkp@intel.com/reproduce)
 
-Mostly eBay :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608190320.yN1NeKmO-lkp@intel.com/
 
-... along with most of my other pet computers (https://mattst88.com/compute=
-rs/)
+All warnings (new ones prefixed by >>):
 
-> >
-> > As of two days ago, it's capable of building itself and the 373
-> > packages of a Gentoo stage3 + a few other things. These include glibc
-> > and other core components (in a qemu-backend container on a fast
-> > multicore amd64 system).
->
-> I haven't kept up with Adhemerval's work on building glibc with clang,
-> but pretty wild to hear about glibc building with clang period, for
-> alpha no less.
+>> fs/f2fs/data.c:61:23: warning: variable 'sbi' set but not used [-Wunused-but-set-variable]
+      61 |         struct f2fs_sb_info *sbi;
+         |                              ^
+   1 warning generated.
 
-What a time to be alive!
 
-> >
-> > I would very much prefer to have the backend upstream, and I plan to
-> > start a discussion on discourse.llvm.org this week. I think an
-> > experimental backend is probably the limit of what makes sense for
-> > Alpha?
->
-> I agree. An RFC on discourse is the way to go. I'd use m68k as an example=
-.
+vim +/sbi +61 fs/f2fs/data.c
 
-Thank you. I'll find the m68k discussion and model mine on that
-(assuming they were successful).
+f543805fcd60f3 Chao Yu                 2019-12-04  56  
+d6966e7ed280ca Matthew Wilcox (Oracle  2025-07-08  57) bool f2fs_is_cp_guaranteed(const struct folio *folio)
+36951b38d13ac7 Chao Yu                 2016-11-16  58  {
+a824388d911927 Matthew Wilcox (Oracle  2025-07-08  59) 	struct address_space *mapping = folio->mapping;
+36951b38d13ac7 Chao Yu                 2016-11-16  60  	struct inode *inode;
+36951b38d13ac7 Chao Yu                 2016-11-16 @61  	struct f2fs_sb_info *sbi;
+36951b38d13ac7 Chao Yu                 2016-11-16  62  
+a824388d911927 Matthew Wilcox (Oracle  2025-07-08  63) 	if (fscrypt_is_bounce_folio(folio))
+a824388d911927 Matthew Wilcox (Oracle  2025-07-08  64) 		return folio_test_f2fs_gcing(fscrypt_pagecache_folio(folio));
+36951b38d13ac7 Chao Yu                 2016-11-16  65  
+36951b38d13ac7 Chao Yu                 2016-11-16  66  	inode = mapping->host;
+36951b38d13ac7 Chao Yu                 2016-11-16  67  	sbi = F2FS_I_SB(inode);
+36951b38d13ac7 Chao Yu                 2016-11-16  68  
+f93483387c4c8d Chao Yu                 2026-08-18  69  	if (S_ISDIR(inode->i_mode))
+b763f3bedc2da2 Chao Yu                 2021-04-28  70  		return true;
+b763f3bedc2da2 Chao Yu                 2021-04-28  71  
+3db1de0e582c35 Daeho Jeong             2022-04-28  72  	if ((S_ISREG(inode->i_mode) && IS_NOQUOTA(inode)) ||
+a824388d911927 Matthew Wilcox (Oracle  2025-07-08  73) 			folio_test_f2fs_gcing(folio))
+36951b38d13ac7 Chao Yu                 2016-11-16  74  		return true;
+36951b38d13ac7 Chao Yu                 2016-11-16  75  	return false;
+36951b38d13ac7 Chao Yu                 2016-11-16  76  }
+36951b38d13ac7 Chao Yu                 2016-11-16  77  
 
-> >
-> > If you have advice on going about this, I would welcome it (privately
-> > or in reply to this thread).
-> >
-> > Current diffstat is
-> >
-> > 461 files changed, 29735 insertions(+), 88 deletions(-)
->
-> Only advice is that if any of that was AI generated, please do take
-> the time to review LLVM's AI policy.  Reviewers have been getting
-> crunched by low quality AI commits recently, and are a bit salty all
-> around.
->
-> https://llvm.org/docs/AIToolPolicy.html
+:::::: The code at line 61 was first introduced by commit
+:::::: 36951b38d13ac7cce9fcf89e0e01c22ed0d05688 f2fs: don't wait writeback for datas during checkpoint
 
-Indeed, I have been, but my goal is to do enough self-review such that
-no one would be able to tell that an LLM was involved. I will of
-course disclose that LLMs were used.
+:::::: TO: Chao Yu <yuchao0@huawei.com>
+:::::: CC: Jaegeuk Kim <jaegeuk@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
