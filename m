@@ -1,269 +1,139 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7518392838
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 03:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727D93CEB8A;
+	Wed, 19 Aug 2026 06:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787108695; cv=none; b=q8z4aAHtizVYefdm7Qbw/2XqrFZDMyV2uk5go84YzLJlPGlYCOGYt+GwpE1/WcU6LyQ4ZFGjIyX66szbv6m0vP/hHEKbqISuVQhylq7MvC0YF6NDBAXH9WORigERftQsUwDNcovo63ImMXhh/jCaZo8NqFNeovQRNVp4+tAwCxI=
+	t=1787119816; cv=none; b=Fn3k7Fc2rao9QOasZ07sR2ifq4qZrqrbIByvkMoJJkrcIo5JMQABsUdzQFGAzzod2w13IwV+gQhLVBRpJ2dydYLncp3uiwKuzxC5Rl5nS8m5zzeM/+EAu/UJAwPvq/xoipCUpZ+7sxzde87+RKCbuu40gCpLv6R8RSUo9jXUVGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787108695; c=relaxed/simple;
-	bh=oFXt+KPb6+jAhaVlKCIH5PJmOEfJ9SVUxGJM/q2dNP4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TFJjmzpwkCs00clv/8w+Da08+DaxYZiquv6sA1XotKz+OxcZRSaLgtv01b2DQ4exTAD1UzVPOdX9f4fz48WQXcg1PUtnlXZt3aQscsMo5Lxlb12RWxOCOUis4bNon4qg6HTG35TTYJ+wKAFlM4tx9AMbmA0HMTukzcKBaG39mWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hPry14PqFzKHMSN
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 11:04:09 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 183B74056E
-	for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 11:04:38 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgDHtUREHYVqihVeCw--.32590S2;
-	Wed, 19 Aug 2026 11:04:37 +0800 (CST)
-Message-ID: <b5e4ef0d-cb11-45de-987a-226340b576ed@huaweicloud.com>
-Date: Wed, 19 Aug 2026 11:04:36 +0800
+	s=arc-20240116; t=1787119816; c=relaxed/simple;
+	bh=TmOHFK4T8w9GQlQdpithi5wUjMH32Z8usQrYLn2tblA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=rlnXCZ9i6ndbL9md+3Sq8pHfyKXe8jNFDOLxt+4BMu9ntXUScG7iD/ghBAr5XskzSBLu0WIPFtmQ+HnLGQefQ2pA42qSk9XmYn3cwoN+00xoxh/alWmNS9EBKH8nhb4VoKktMSMmTGojEE6PZy8CmRr2Q+ofd2FNPmglEZhyxSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lFlogX6k; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lFlogX6k"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787119815; x=1818655815;
+  h=date:from:to:cc:subject:message-id;
+  bh=TmOHFK4T8w9GQlQdpithi5wUjMH32Z8usQrYLn2tblA=;
+  b=lFlogX6k7SKoqG1nEwST0+ICeQp0EgcFUk9l8gVmjx4unI4BXoyQJ62S
+   RtaaEKZHNMvzUeQTs1OFN1sFf0DcrrK+ddAQn0cb6Utwjs0vcofNQDO5b
+   X+HWTvUggbeGHIfH1ITtkZMuPTRo15i2L/jABd0SZLyhkKA4Gc3wApsL7
+   pZNC+V6lWiB2T/KHFY+fCWqq1TCtmJET0hC7czInJCXYc35AVeG50i08C
+   Ki2d3gww0tRXAyQMuStqqAdb1xn3jZxZEupffsbT/KHz4yaV7ncvC+Qwf
+   BofqkMCK5B7NC5vk+dRx2H2l3sp1gMC7uD24gahQkDQWBxZoCZ0RtzjOB
+   w==;
+X-CSE-ConnectionGUID: GEOno6HSRNOlLkllxmA5mg==
+X-CSE-MsgGUID: sYP4I+jNSt+c5Jxjvs9oLw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="87538590"
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="87538590"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 23:09:38 -0700
+X-CSE-ConnectionGUID: taugNEcVT4egK7ZZU+ScvQ==
+X-CSE-MsgGUID: Wu+ZxQYCRIWFRdi0ILmXCQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="269719920"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 18 Aug 2026 23:09:35 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wwZUS-00000000evo-2uxt;
+	Wed, 19 Aug 2026 06:09:32 +0000
+Date: Wed, 19 Aug 2026 14:09:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, arm@kernel.org
+Subject: [soc:board-remove 137/200] drivers/mfd/max8925-i2c.c:175:28:
+ warning: variable 'tsc_irq' is uninitialized when used here
+Message-ID: <202608191428.rYgVrQ4k-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 20/23] perf annotate-arm64: Support 'add' instruction
- tracking
-To: Shuai Xue <xueshuai@linux.alibaba.com>, Namhyung Kim
- <namhyung@kernel.org>, james.clark@linaro.org,
- Li Huafei <lihuafei1@huawei.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Ian Rogers <irogers@google.com>, Kim Phillips <kim.phillips@arm.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
- <20260808122400.2961238-21-wutengda@huaweicloud.com>
- <89e66d40-5f9f-4147-beda-00623797cd04@linux.alibaba.com>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <89e66d40-5f9f-4147-beda-00623797cd04@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgDHtUREHYVqihVeCw--.32590S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxKFyfGF4xXw1Duw45JFy7Jrb_yoW3XFW8pr
-	4kGrWUGry7JrnYgr13tr4UJFyrCr1xJ3WDCryFq3WayF4avr10gF12qr9F9FW5Jr4rJr17
-	Jr1jqrsxZrnrGFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git board-remove
+head:   c12d647b0229f4d75a2973c9b4e79f9b53406426
+commit: cdd7cbf79d6c020c83a34985cae63f91f8f8a4c9 [137/200] mfd: max8925: remove platform data probing
+config: i386-randconfig-016-20260819 (https://download.01.org/0day-ci/archive/20260819/202608191428.rYgVrQ4k-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260819/202608191428.rYgVrQ4k-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608191428.rYgVrQ4k-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/mfd/max8925-i2c.c:175:28: warning: variable 'tsc_irq' is uninitialized when used here [-Wuninitialized]
+     175 |         max8925_device_init(chip, tsc_irq);
+         |                                   ^~~~~~~
+   drivers/mfd/max8925-i2c.c:138:13: note: initialize the variable 'tsc_irq' to silence this warning
+     138 |         int tsc_irq;
+         |                    ^
+         |                     = 0
+   1 warning generated.
 
 
+vim +/tsc_irq +175 drivers/mfd/max8925-i2c.c
 
-On 2026/8/11 16:45, Shuai Xue wrote:
-> 
-> 
-> On 8/8/26 8:23 PM, Tengda Wu wrote:
->> Extend update_insn_state() for arm64 to track 'add' instructions for
->> structure member address calculation, which commonly appear as:
->>
->>    add  dreg, base, #offset
->>    add  dreg, base, reg2     (reg2 holds a constant)
->>
->> Unlike x86, the arm64 'add' instruction has an extra base register among
->> its source operands. Therefore, in terms of propagating the data type,
->> it is essentially performing a 'mov', except that before the 'mov', it
->> first needs to be updated by adding the offset or reg2.
->>
->> A real-world example is shown below:
->>
->>    ffff80008001c9a8 <flush_ptrace_hw_breakpoint>:
->>    ffff80008001c9c4:  add  x19, x0, #0xeb8   // x0 (task_struct*) + 0xeb8 -> x19
->> * ffff80008001c9d0:  ldr  x0, [x19]
->>
->> Before this commit, the type flow broke at the 'add' instruction,
->> leaving the subsequent load with no type information:
->>
->>    chk [28] reg19 offset=0 ok=0 kind=0 cfa : no type information
->>    final result: no type information
->>
->> After this commit, the tracker correctly follows the member address
->> calculation:
->>
->>    var [0] reg0 offset 0 type='struct task_struct*'
->>    add [1c] address of 0xeb8(reg0) -> reg19 type='struct task_struct*'
->>    chk [28] reg19 offset=0 ok=1 kind=1 (struct task_struct*) : Good!
->>    found by insn track: 0(reg19) type-offset=0xeb8
->>    final result: type='struct task_struct'
->>
->> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
->> ---
->>   .../perf/util/annotate-arch/annotate-arm64.c  | 87 ++++++++++++++++++-
->>   1 file changed, 85 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
->> index 7b780bad8c07..eaeb4433fc3a 100644
->> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
->> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
->> @@ -688,6 +688,87 @@ static void update_mov_insn_state(struct type_state *state,
->>       pr_debug_type_name(&tsr->type, tsr->kind);
->>   }
->>   +static void update_add_insn_state(struct type_state *state,
->> +                  struct disasm_line *dl,
->> +                  struct annotated_op_loc *src,
->> +                  struct annotated_op_loc *dst)
->> +{
->> +    struct type_state_reg *tsr;
->> +    struct type_state_reg src_tsr;
->> +    u32 insn_offset = dl->al.offset;
->> +    int sreg = src->reg1;
->> +    int dreg = dst->reg1;
->> +    u64 imm_value;
->> +
->> +    if (!has_reg_type(state, dreg))
->> +        return;
->> +
->> +    tsr = &state->regs[dreg];
->> +    tsr->copied_from = -1;
->> +
->> +retry:
->> +    if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
->> +        invalidate_reg_state(tsr);
->> +        return;
->> +    }
->> +
->> +    src_tsr = state->regs[sreg];
->> +
->> +    /*
->> +     * Handle 'add' instructions of the form:
->> +     *   add  dreg, base, #offset     (immediate offset)
->> +     *   add  dreg, base, reg2        (reg2 holds a constant)
->> +     *
->> +     * For case 2, retrieve the constant value from reg2
->> +     * and use it as the offset.
->> +     */
->> +    imm_value = src->offset;
->> +    if (src->multi_regs) {
->> +        int reg2 = (sreg == src->reg1) ? src->reg2 : src->reg1;
->> +
->> +        if (!has_reg_type(state, reg2) || !state->regs[reg2].ok) {
->> +            /* Unable to resolve type for dst, bail out */
->> +            invalidate_reg_state(tsr);
->> +            return;
->> +        }
->> +        if (state->regs[reg2].kind == TSR_KIND_CONST)
->> +            imm_value = state->regs[reg2].imm_value;
-> 
-> First, when reg2 is valid but not TSR_KIND_CONST - say a pointer
-> freshly loaded from memory - the addend is unknown at analysis time,
-> yet imm_value silently stays 0 and propagation continues, tracking
-> the destination as base + 0. Note the asymmetry: no state at all
-> invalidates, but state that doesn't yield a value pretends the
-> addend is zero. Unknown addend should invalidate as well:
-> 
->         if (state->regs[reg2].kind != TSR_KIND_CONST) {
->             invalidate_reg_state(tsr);
->             return;
->         }
-> 
+   133	
+   134	static int max8925_probe(struct i2c_client *client)
+   135	{
+   136		struct max8925_chip *chip;
+   137		struct device_node *node = client->dev.of_node;
+   138		int tsc_irq;
+   139		int ret;
+   140	
+   141		chip = devm_kzalloc(&client->dev,
+   142				    sizeof(struct max8925_chip), GFP_KERNEL);
+   143		if (chip == NULL)
+   144			return -ENOMEM;
+   145	
+   146		/* parse DT to get platform data */
+   147		ret = of_property_read_u32(node, "maxim,tsc-irq", &chip->tsc_irq);
+   148		if (ret) {
+   149			dev_err(&client->dev, "Not found maxim,tsc-irq property\n");
+   150			return -EINVAL;
+   151		}
+   152	
+   153		chip->i2c = client;
+   154		chip->dev = &client->dev;
+   155		i2c_set_clientdata(client, chip);
+   156		mutex_init(&chip->io_lock);
+   157	
+   158		chip->rtc = i2c_new_dummy_device(chip->i2c->adapter, RTC_I2C_ADDR);
+   159		if (IS_ERR(chip->rtc)) {
+   160			dev_err(chip->dev, "Failed to allocate I2C device for RTC\n");
+   161			return PTR_ERR(chip->rtc);
+   162		}
+   163		i2c_set_clientdata(chip->rtc, chip);
+   164	
+   165		chip->adc = i2c_new_dummy_device(chip->i2c->adapter, ADC_I2C_ADDR);
+   166		if (IS_ERR(chip->adc)) {
+   167			dev_err(chip->dev, "Failed to allocate I2C device for ADC\n");
+   168			i2c_unregister_device(chip->rtc);
+   169			return PTR_ERR(chip->adc);
+   170		}
+   171		i2c_set_clientdata(chip->adc, chip);
+   172	
+   173		device_init_wakeup(&client->dev, 1);
+   174	
+ > 175		max8925_device_init(chip, tsc_irq);
+   176	
+   177		return 0;
+   178	}
+   179	
 
-It might not be a direct invalidation, but rather swapping reg1/reg2 and
-then retrying.
-
-> Second, the shifted/extended forms still break even with a constant
-> reg2: extract_op_location_arm64() drops the "lsl #3" (or uxtw/sxtw)
-> modifier, so add x0, x1, x2, lsl #3 contributes the unshifted value
-> and maps later accesses to the wrong field. Maybe flag such operands
-> during extraction (or fail the reg2 extraction) so the handler can
-> skip them.
->
-
-Okay, so it seems shifted/extended forms are unavoidable. We may need to
-introduce more fields into annotated_op_loc to record them, like this:
-
-diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
-index 138d9258281c..b00e0ad96023 100644
---- a/tools/perf/util/annotate.h
-+++ b/tools/perf/util/annotate.h
-@@ -501,6 +501,8 @@ int arch__dwarf_regnum(const struct arch *arch, const char *str);
-  * @offset: Memory access offset in the operand
-  * @segment: Segment selector register
-  * @addr_mode: Addressing mode, only valid if @mem_ref is true
-+ * @extend_type: ARM64 register extend specifier (enum annotated_ext_type)
-+ * @shift: ARM64 shift amount (e.g., 0 to 4)
-  * @mem_ref: Whether the operand accesses memory
-  * @multi_regs: Whether the second register is used
-  * @imm: Whether the operand is an immediate value (in offset)
-@@ -511,6 +513,8 @@ struct annotated_op_loc {
- 	int offset;
- 	u8 segment;
- 	u8 addr_mode;
-+	u8 extend_type;
-+	u8 shift;
- 	bool mem_ref;
- 	bool multi_regs;
- 	bool imm;
-@@ -542,6 +546,19 @@ enum annotated_addr_mode {
- 	PERF_ADDR_MODE_POST_INDEX,
- };
- 
-+enum annotated_ext_type {
-+	PERF_EXT_NONE = 0,
-+
-+	PERF_EXT_UXTB,
-+	PERF_EXT_SXTB,
-+	PERF_EXT_UXTH,
-+	PERF_EXT_SXTH,
-+	PERF_EXT_UXTW,
-+	PERF_EXT_SXTW,
-+	PERF_EXT_UXTX,  /* LSL is equivalent to UXTX */
-+	PERF_EXT_SXTX,
-+};
-+
- /**
-  * struct annotated_insn_loc - Location info of instruction
-  * @ops: Array of location info for source and target operands
-
-
->> +    }
->> +
->> +    if (src_tsr.kind == TSR_KIND_CONST) {
->> +        tsr->kind = src_tsr.kind;
->> +        tsr->imm_value = src_tsr.imm_value + imm_value;
->> +        tsr->offset = 0;
->> +        tsr->ok = src_tsr.ok;
->> +
->> +        pr_debug_dtp("add [%x] imm %#"PRIx64"(reg%d) -> reg%d\n",
->> +                 insn_offset, imm_value, sreg, dreg);
-> 
-> And since add is commutative, this early return drops the pointer
-> side for add rd, const_reg, ptr_reg: sreg starts as reg1, hits the
-> CONST case and returns before the goto retry at the bottom ever gets
-> a chance to evaluate the pointer register. The result should be the
-> pointer with the constant applied as an offset, not a plain constant.
-> Maybe check the other register for a pointer type before falling into
-> the CONST case (or move the CONST handling after the retry).
-> 
-
-Yeah, this issue is a side effect of the previous incomplete handling and
-will be fixed together.
-
-Thanks,
-Tengda
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
