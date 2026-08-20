@@ -1,378 +1,199 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2031F12F8;
-	Thu, 20 Aug 2026 00:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2D6339398
+	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 04:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787187133; cv=none; b=SqWVweKNE3l3td8R3mhMCGCOzqtsZvSYq3wMOE1MZB55KL3U001RTL+Zj3ucqoM40apaYIRdR2XHvqcPEbLFXhifjCIWGqdrawuF1sAZYohJRGAMJRCWeraCooKorsnEX2DE0byLuPpqkVMkmgST475NENhuUcuHZ2KCqRYlNOU=
+	t=1787199175; cv=none; b=OGS3Gnu+J0pkWyBRhHNAfR7wk0CPUdtMzML3vNKQZ4j3PvHkqPfL/FhNDMC8h0BEcR4GWJB5v5qIbQ3YWwx+mzIt7HoivbXOJBGCQJBGJiKvG2C2AEXziUyAR2ssj0haHh7YtDOiB4qiuKvF/hYBAno55merAflXPnWNjYYJ+Ro=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787187133; c=relaxed/simple;
-	bh=W1CJx4mpvTxeMRfM3r72nkrczXnLqwaeUwQq310Ggtw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XmCp+mNOfoRBC8hs9ossP8H71XawKXLHyX5e4G1ByOKIPXNARdKFFAiGuM2VuESZzQJ9SIz2gztJaes1vnb5F4CEhj5KaCYiTdrwKeO6w9Ps18+PN1eSIaG3Sl67JsUQMl0rDmqhvkxQAa+M0W8OtPw+cPpNGvOQomYkKpJGdIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WFPUFWBS; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787199175; c=relaxed/simple;
+	bh=gl53nmErgxNHnBhywqBf9y2uMEPF2VoEaOuh6BLQ358=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=byvWtNqNCvbHVWFmD4TNNc4C10SckvqkF+YH69P96SBT/gqd/lxGfzxhmp58/CWuilf486v41uGmqcu8PkvyvGZZPWRaDTvniWi99PkeyuwNjVyWbJnv3rl+KR4KG17DU/Dj8bWqUQMaHQ8mlCbuwvpcbkDb1+xNesaMFe7NX1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=cQgR9plk; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=IRq2h98Y; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WFPUFWBS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787187131; x=1818723131;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=W1CJx4mpvTxeMRfM3r72nkrczXnLqwaeUwQq310Ggtw=;
-  b=WFPUFWBSB0s954lwLe05UmI+9vFxQPCZyS1qxvxHwo5Uey0+W52JBll9
-   IHPM3+2GWdYdhcfpjnzvDAh8gpYKDFkMeCCDiHL7owG/+g3J6rQj8OIYV
-   WsyXuN3DTTN6igqyIO8O78MbX1pk4OEYxi5V1ZdWqNNUuAOUynCw7HtQb
-   2jmNkEcVurOZHTBSYKeIktxt3SFAIe9jZhQg1G0nMWg8KBhrrk5CAJIKg
-   0FfRaiPEYztoZzfICAbm8C71aPo9C6q4Z8tk/tAv+X58y7JQB8voGJgDt
-   xW8BmdnUNLTrZEjHqVqSs8aNe/bH4hjUK+Zos7kkeNMsTDdxTWjwaBI3r
-   Q==;
-X-CSE-ConnectionGUID: 111+0Ex/RXmB7dgZyHsU3w==
-X-CSE-MsgGUID: Jf7z5lxlTvynViOmuX56Hw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="91524251"
-X-IronPort-AV: E=Sophos;i="6.25,232,1779174000"; 
-   d="scan'208";a="91524251"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 17:52:11 -0700
-X-CSE-ConnectionGUID: kc4/KrlOQnycyhcFx5I9yg==
-X-CSE-MsgGUID: t9vMTmQCRfqG4FeO5dHIug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,232,1779174000"; 
-   d="scan'208";a="266370907"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 19 Aug 2026 17:52:07 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wwr0n-00000000hBR-126e;
-	Thu, 20 Aug 2026 00:52:05 +0000
-Date: Thu, 20 Aug 2026 08:51:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: dayou5941@163.com, akpm@linux-foundation.org, david@kernel.org,
-	ljs@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ziy@nvidia.com,
-	linux-mm@kvack.org, Li Youhong <liyouhong@kylinos.cn>,
-	Sashiko <sashiko-bot@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v3] mm/memory-failure: fix concurrent access issue in
- min_order_for_split()
-Message-ID: <202608200820.y1lwo7dj-lkp@intel.com>
-References: <20260805084224.2597547-1-dayou5941@163.com>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="cQgR9plk";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="IRq2h98Y"
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67JL7Whf2491880
+	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 04:12:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	/So9S1KEAt5OvNBUFCqjrX+Y7R9w32tufku2nOhCX44=; b=cQgR9plkA7XTyz/x
+	f5xmgIfOnuBZAITDNXw+tp/xBCL7i5h3742aucSTz67ITEQ5pVQ4x7GlZpopD2ue
+	rY6S3YtJIkGI9E/vThBosMqht2uFYyF837f3tVULItgVkoDUAR4R/YQldZsRAjg3
+	fNaOBmcvmBuf6ZuxwMGJ/QzhHI4ZGfz/CFL3VoPXESuTblDWtaU8xQZqY+MwjT7N
+	gkKkqZjnUPBQTz4IzGUHtUIou0iJ/Ri9cQnXU4Zfprgw0zQTIeKiQd2Wh7MtWuPy
+	jL9pNN24O70HUA93grBVhLfx8C/OrP2WvJllP7HItMIgTiQsRHL70lboMin87WeN
+	V8s10A==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g5e83u8pf-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 04:12:53 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cc640dfde3so20634315ad.1
+        for <llvm@lists.linux.dev>; Wed, 19 Aug 2026 21:12:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1787199173; x=1787803973; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=/So9S1KEAt5OvNBUFCqjrX+Y7R9w32tufku2nOhCX44=;
+        b=IRq2h98YcI6qAV+vibUTw7+SJ1YEyenJY+D2wDpJftsBbrO65tiESB0r09+l+6o6hW
+         doUGLAjUch2w54nVC73pQCem0ew8ULL3MPkTMXseWG2ZmzMExaXB/q+1ZVaw4fh9i/T9
+         8wIYRJdgZfhKO9Q6kQxQaTt5cDHRG96gEfquXmnWeh9VZz8VCvRhagtK62ObBrxj5RwD
+         WAQwEETO+GyGRHA/TS6NOf4gZU1/0AM71tUTzR3aYfnOzAH2TgfTChtfI8q2KQPLW3/d
+         2eVx+WbsB7LmGkvyFvtPGeITP7wwXyOSLtM2ahU6aD7AJxsGMpPmGwgQHD4J89Zhw/1k
+         isog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787199173; x=1787803973;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/So9S1KEAt5OvNBUFCqjrX+Y7R9w32tufku2nOhCX44=;
+        b=Q7OTqCEkUKbRaB/qTigrnn9c8Ylr/c+33HKxR2D0UIzBZ3nCtfYGsfdoXOMEx+2ivE
+         Sv+yFuqQVpN3PtO2cFjZhawFxrXJX62abt5FdqbwCIJBGmUquMgTK+phn8Uszt7tK3hX
+         DK79nAfsrtiM3c1ffRD684DjnOe0eqaCopXEvwu95TBNpzfxW/1RftwR8pSwA9W2zc6C
+         c/gVHsl55qe9c+rkq5mTUjZpl5ULpcriwcxJI7DY3EvJL0fC5mV6kQ8ZVpeZIw9P0z4W
+         ijpYsc5XkR5jsdNsHC6lIzZtiuoNyEGqwGC68D8h3HYzR9Hs4kiT8IvpxBOrYxvGRT7T
+         Ta2g==
+X-Forwarded-Encrypted: i=1; AHgh+Rqu6cghKOyXPNH2QU0w7WLaNswPyABAgl2t+5gF9vEiIQIpLXqVPBsUw1jqOHZZClutaUnE@lists.linux.dev
+X-Gm-Message-State: AFuF++m7zEDfFanpc1JLULSJEozBWIE5wIW6cUaoqr2Sh+FkDQutLnjo
+	RhE1UKFvkiZ0IG30Ihs2c7t0zvsFK04HPuI2Wixr8lxCZDpERzU5pIVwBzGmHN5OxX52Ps8VlfI
+	jv5TaQqvvjXp+Xxj+kLJavchO5Ii8E9H7mrRk8Jtl7yPx+oJoTcr7Cd7k
+X-Gm-Gg: AR+sD10ENzvwjjYfdX71uMCnkab5HMT8NwVfdYGiPbFjq/TSTwzmFgKnBPNRPhifKW7
+	ZYeEeuxVlFxfGnIHQ5enMgrmylKd5ufopwsVCazlzYBmnI0ofH22eJjydnJLuvWPFlGpNaA4Fqp
+	apkWd3syuZcisYcJTFzUfW8wIf2RPFTt3XJLPiyrItduR6Eox48vIMYOGh/fCuEs0l7yzSM2z0w
+	pWffGRM69g7BS8Gu0/aR81hF71Nr1alwZ6zUz9w493iBNeJZQmuB/7mauhq1t3QNaK66q4cSEDR
+	5VQlhEcHdvCBFqr0N4kRbTYtRsynMSe0yYXQoMtRHO5PbooOMMfOh1xYgvR4yzMf2axO1lU/zix
+	PeotwLyXCq106w5QXa+OU9UGzbACTtw==
+X-Received: by 2002:a17:90b:5385:b0:38e:c232:9d3f with SMTP id 98e67ed59e1d1-395812a872dmr18290511a91.5.1787199172833;
+        Wed, 19 Aug 2026 21:12:52 -0700 (PDT)
+X-Received: by 2002:a17:90b:5385:b0:38e:c232:9d3f with SMTP id 98e67ed59e1d1-395812a872dmr18290423a91.5.1787199172352;
+        Wed, 19 Aug 2026 21:12:52 -0700 (PDT)
+Received: from [10.219.56.166] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf15ff5dsm11842356eec.25.2026.08.19.21.12.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Aug 2026 21:12:51 -0700 (PDT)
+Message-ID: <4f11dfb3-9d92-450f-97e7-f04404c63250@oss.qualcomm.com>
+Date: Thu, 20 Aug 2026 09:42:41 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260805084224.2597547-1-dayou5941@163.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/15] MAINTAINERS: Add entry for Qualcomm DSP
+ Accelerator (QDA) driver
+To: Krzysztof Kozlowski <krzk@kernel.org>, Oded Gabbay <ogabbay@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc: Bharath Kumar <quic_bkumar@quicinc.com>,
+        Chenna Kesava Raju <quic_chennak@quicinc.com>,
+        srinivas.kandagatla@oss.qualcomm.com,
+        dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        iommu@lists.linux.dev, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
+ <20260817-qda-v2-v2-1-69a02e9090d4@oss.qualcomm.com>
+ <cc43a545-20a1-4f15-a7b9-ca48842bffca@kernel.org>
+ <e0a25f11-5c7c-406f-a223-da29bf6e1401@oss.qualcomm.com>
+ <f725955b-27aa-4b20-8a4b-84906782b921@kernel.org>
+Content-Language: en-US
+From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+In-Reply-To: <f725955b-27aa-4b20-8a4b-84906782b921@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODIwMDAyNyBTYWx0ZWRfX41qePbU2Y076
+ aASTpEZ7Wu1YyxaKgsKhEmi53yZVRzu+IN7vqNPiW9wGh+EEXJHv35NoXWIHHo9lRvv2ZsZiM/E
+ 0VnIIxngigO2hMJO24gkntFO3iDEw/w=
+X-Proofpoint-GUID: 8GYWZuLifrKtmPE2w1unOG4JRBYGL1Cb
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODIwMDAyNyBTYWx0ZWRfX6XHPhUnNGGg7
+ bp95qy5cMZ4szrcjj7F7pX32yaG0X2U3K2ag061us6a3dN6rWJLm6OpX+/jMyRWE8K+lT2jriz2
+ clnsHw1sW9g1WPuLgxqrskkPnKxHCflJ39lgCx88YxhtuIjwmNwxp7KENxZ1PeM5RBhek/5TIe6
+ UjK0/DAEND8IHPl10lSAAp9owXGfqnTkMPz6NgzO+au6X9Xx1eGCmSuv2TArU+3Yp78yOrOO8qs
+ Vwa3Jla7jn4q7KveusZ3mHtafXFGjd86RCVhnGlH8veDr1RXON/pm0xiJdUqff3EvzisR6L3OyS
+ LzAVu/2wjd6pyNyKuk61GxZBF6VRuMp6fHZKCDL6TSeqParprB2X60MQnE6BxlAWck7NXFUpsSi
+ mSwPcbIkbQosehYoqKUrlzrFzB69PqkRRreEgviH6MyzxqF8VLDfNDwvXq7RV7sRkq2dQN6RW4U
+ toPlsKD8mJNBHVwAymQ==
+X-Authority-Analysis: v=2.4 cv=cvmrVV4i c=1 sm=1 tr=0 ts=6a867ec5 cx=c_pps
+ a=IZJwPbhc+fLeJZngyXXI0A==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
+ a=e5mUnYsNAAAA:8 a=EUspDBNiAAAA:8 a=VwQbUJbxAAAA:8 a=4Unm9NrEEcootba8-QIA:9
+ a=QEXdDO2ut3YA:10 a=uG9DUKGECoFWVXl0Dc02:22 a=Vxmtnl_E_bksehYqCbjh:22
+X-Proofpoint-ORIG-GUID: 8GYWZuLifrKtmPE2w1unOG4JRBYGL1Cb
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-19_06,2026-08-19_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 phishscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 malwarescore=0 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608200027
 
-Hi,
+On 19-08-2026 19:46, Krzysztof Kozlowski wrote:
+> On 19/08/2026 15:05, Ekansh Gupta wrote:
+>> On 19-08-2026 00:52, Krzysztof Kozlowski wrote:
+>>> On 17/08/2026 06:47, Ekansh Gupta wrote:
+>>>> Add a MAINTAINERS entry for the Qualcomm DSP Accelerator (QDA) driver,
+>>>> covering the driver source under drivers/accel/qda, documentation under
+>>>> Documentation/accel/qda, and the UAPI header
+>>>> include/uapi/drm/qda_accel.h. The linux-arm-msm and dri-devel mailing
+>>>> lists are listed as the relevant review lists.
+>>>>
+>>>> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+>>>> ---
+>>>>  MAINTAINERS | 11 +++++++++++
+>>>>  1 file changed, 11 insertions(+)
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 912837dd4640..75fa90c137c7 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -22388,6 +22388,17 @@ S:	Supported
+>>>>  F:	Documentation/devicetree/bindings/crypto/qcom-qce.yaml
+>>>>  F:	drivers/crypto/qce/
+>>>>  
+>>>> +QUALCOMM DSP ACCELERATOR (QDA) DRIVER
+>>>> +M:	Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+>>>> +L:	linux-arm-msm@vger.kernel.org
+>>>> +L:	dri-devel@lists.freedesktop.org
+>>>> +S:	Supported
+>>>> +T:	git https://gitlab.freedesktop.org/drm/misc/kernel.git
+>>>> +F:	Documentation/accel/qda/
+>>>
+>>> There is no such directory.
+>> the directory got added in a later patch, added this patch at the start
+>> following the comment here[1].
+>>
+> 
+> This comment did not tell you to make it non-bisectable. This comment
+> asked you to add that parts in your first patch. Why did you move
+> patches instead of adding this into the first one?
+ah I misunderstood the comment, my bad. I'll fix this in next spin.>
+> Best regards,
+> Krzysztof
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/dayou5941-163-com/mm-memory-failure-fix-concurrent-access-issue-in-min_order_for_split/20260805-164224
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260805084224.2597547-1-dayou5941%40163.com
-patch subject: [PATCH v3] mm/memory-failure: fix concurrent access issue in min_order_for_split()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260820/202608200820.y1lwo7dj-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260820/202608200820.y1lwo7dj-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608200820.y1lwo7dj-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/memory-failure.c:2517:13: error: cannot assign to variable 'new_order' with const-qualified type 'const int'
-    2517 |                 new_order = min_order_for_split(folio);
-         |                 ~~~~~~~~~ ^
-   mm/memory-failure.c:2513:13: note: variable 'new_order' declared const here
-    2513 |                 const int new_order;
-         |                 ~~~~~~~~~~^~~~~~~~~
-   mm/memory-failure.c:2873:13: error: cannot assign to variable 'new_order' with const-qualified type 'const int'
-    2873 |                 new_order = min_order_for_split(folio);
-         |                 ~~~~~~~~~ ^
-   mm/memory-failure.c:2870:13: note: variable 'new_order' declared const here
-    2870 |                 const int new_order;
-         |                 ~~~~~~~~~~^~~~~~~~~
-   2 errors generated.
-
-
-vim +2517 mm/memory-failure.c
-
-  2360	
-  2361	/**
-  2362	 * memory_failure - Handle memory failure of a page.
-  2363	 * @pfn: Page Number of the corrupted page
-  2364	 * @flags: fine tune action taken
-  2365	 *
-  2366	 * This function is called by the low level machine check code
-  2367	 * of an architecture when it detects hardware memory corruption
-  2368	 * of a page. It tries its best to recover, which includes
-  2369	 * dropping pages, killing processes etc.
-  2370	 *
-  2371	 * The function is primarily of use for corruptions that
-  2372	 * happen outside the current execution context (e.g. when
-  2373	 * detected by a background scrubber)
-  2374	 *
-  2375	 * Must run in process context (e.g. a work queue) with interrupts
-  2376	 * enabled and no spinlocks held.
-  2377	 *
-  2378	 * Return:
-  2379	 *   0             - success,
-  2380	 *   -ENXIO        - memory not managed by the kernel
-  2381	 *   -EOPNOTSUPP   - hwpoison_filter() filtered the error event,
-  2382	 *   -EHWPOISON    - the page was already poisoned, potentially
-  2383	 *                   kill process,
-  2384	 *   other negative values - failure.
-  2385	 */
-  2386	int memory_failure(unsigned long pfn, int flags)
-  2387	{
-  2388		struct page *p;
-  2389		struct folio *folio;
-  2390		struct dev_pagemap *pgmap;
-  2391		int res = 0;
-  2392		unsigned long page_flags;
-  2393		bool retry = true;
-  2394	
-  2395		if (!sysctl_memory_failure_recovery)
-  2396			panic("Memory failure on page %lx", pfn);
-  2397	
-  2398		mutex_lock(&mf_mutex);
-  2399	
-  2400		if (!(flags & MF_SW_SIMULATED))
-  2401			hw_memory_failure = true;
-  2402	
-  2403		p = pfn_to_online_page(pfn);
-  2404		if (!p) {
-  2405			res = arch_memory_failure(pfn, flags);
-  2406			if (res == 0)
-  2407				goto unlock_mutex;
-  2408	
-  2409			if (!pfn_valid(pfn) && !arch_is_platform_page(PFN_PHYS(pfn))) {
-  2410				/*
-  2411				 * The PFN is not backed by struct page.
-  2412				 */
-  2413				res = memory_failure_pfn(pfn, flags);
-  2414				goto unlock_mutex;
-  2415			}
-  2416	
-  2417			if (pfn_valid(pfn)) {
-  2418				pgmap = get_dev_pagemap(pfn);
-  2419				put_ref_page(pfn, flags);
-  2420				if (pgmap) {
-  2421					res = memory_failure_dev_pagemap(pfn, flags,
-  2422									 pgmap);
-  2423					goto unlock_mutex;
-  2424				}
-  2425			}
-  2426			pr_err("%#lx: memory outside kernel control\n", pfn);
-  2427			res = -ENXIO;
-  2428			goto unlock_mutex;
-  2429		}
-  2430	
-  2431	try_again:
-  2432		res = try_memory_failure_hugetlb(pfn, flags);
-  2433		/*
-  2434		 * -ENOENT means the page we found is not hugetlb, so proceed with normal page handling
-  2435		 */
-  2436		if (res != -ENOENT)
-  2437			goto unlock_mutex;
-  2438	
-  2439		if (TestSetPageHWPoison(p)) {
-  2440			res = -EHWPOISON;
-  2441			if (flags & MF_ACTION_REQUIRED)
-  2442				res = kill_accessing_process(current, pfn, flags);
-  2443			if (flags & MF_COUNT_INCREASED)
-  2444				put_page(p);
-  2445			action_result(pfn, MF_MSG_ALREADY_POISONED, MF_FAILED);
-  2446			goto unlock_mutex;
-  2447		}
-  2448	
-  2449		/*
-  2450		 * We need/can do nothing about count=0 pages.
-  2451		 * 1) it's a free page, and therefore in safe hand:
-  2452		 *    check_new_page() will be the gate keeper.
-  2453		 * 2) it's part of a non-compound high order page.
-  2454		 *    Implies some kernel user: cannot stop them from
-  2455		 *    R/W the page; let's pray that the page has been
-  2456		 *    used and will be freed some time later.
-  2457		 * In fact it's dangerous to directly bump up page count from 0,
-  2458		 * that may make page_ref_freeze()/page_ref_unfreeze() mismatch.
-  2459		 */
-  2460		res = get_hwpoison_page(p, flags);
-  2461		switch (res) {
-  2462		case 0:
-  2463			if (is_free_buddy_page(p)) {
-  2464				if (take_page_off_buddy(p)) {
-  2465					page_ref_inc(p);
-  2466					res = MF_RECOVERED;
-  2467				} else {
-  2468					/* We lost the race, try again */
-  2469					if (retry) {
-  2470						ClearPageHWPoison(p);
-  2471						retry = false;
-  2472						goto try_again;
-  2473					}
-  2474					res = MF_FAILED;
-  2475				}
-  2476				res = action_result(pfn, MF_MSG_BUDDY, res);
-  2477			} else {
-  2478				res = action_result(pfn, MF_MSG_KERNEL_HIGH_ORDER, MF_IGNORED);
-  2479			}
-  2480			goto unlock_mutex;
-  2481		case 1:
-  2482			/* Got a refcount on a handlable page. */
-  2483			break;
-  2484		case -ENOTRECOVERABLE:
-  2485			/*
-  2486			 * Stable unhandlable kernel-owned page (PG_reserved,
-  2487			 * slab, page tables, large-kmalloc).
-  2488			 * No recovery possible.
-  2489			 */
-  2490			res = action_result(pfn, MF_MSG_KERNEL, MF_IGNORED);
-  2491			goto unlock_mutex;
-  2492		default:
-  2493			/* Transient lifecycle race with the page allocator. */
-  2494			res = action_result(pfn, MF_MSG_GET_HWPOISON, MF_IGNORED);
-  2495			goto unlock_mutex;
-  2496		}
-  2497	
-  2498		folio = page_folio(p);
-  2499	
-  2500		/* filter pages that are protected from hwpoison test by users */
-  2501		folio_lock(folio);
-  2502		if (hwpoison_filter(p)) {
-  2503			ClearPageHWPoison(p);
-  2504			folio_unlock(folio);
-  2505			folio_put(folio);
-  2506			res = -EOPNOTSUPP;
-  2507			goto unlock_mutex;
-  2508		}
-  2509	
-  2510		folio_unlock(folio);
-  2511	
-  2512		if (folio_test_large(folio)) {
-  2513			const int new_order;
-  2514			int err;
-  2515	
-  2516			folio_lock(folio);
-> 2517			new_order = min_order_for_split(folio);
-  2518			folio_unlock(folio);
-  2519	
-  2520			/*
-  2521			 * The flag must be set after the refcount is bumped
-  2522			 * otherwise it may race with THP split.
-  2523			 * And the flag can't be set in get_hwpoison_page() since
-  2524			 * it is called by soft offline too and it is just called
-  2525			 * for !MF_COUNT_INCREASED.  So here seems to be the best
-  2526			 * place.
-  2527			 *
-  2528			 * Don't need care about the above error handling paths for
-  2529			 * get_hwpoison_page() since they handle either free page
-  2530			 * or unhandlable page.  The refcount is bumped iff the
-  2531			 * page is a valid handlable page.
-  2532			 */
-  2533			folio_set_has_hwpoisoned(folio);
-  2534			err = try_to_split_thp_page(p, new_order, /* release= */ false);
-  2535			/*
-  2536			 * If splitting a folio to order-0 fails, kill the process.
-  2537			 * Split the folio regardless to minimize unusable pages.
-  2538			 * Because the memory failure code cannot handle large
-  2539			 * folios, this split is always treated as if it failed.
-  2540			 */
-  2541			if (err || new_order) {
-  2542				/* get folio again in case the original one is split */
-  2543				folio = page_folio(p);
-  2544				res = -EHWPOISON;
-  2545				kill_procs_now(p, pfn, flags, folio);
-  2546				put_page(p);
-  2547				action_result(pfn, MF_MSG_UNSPLIT_THP, MF_FAILED);
-  2548				goto unlock_mutex;
-  2549			}
-  2550			VM_BUG_ON_PAGE(!page_count(p), p);
-  2551			folio = page_folio(p);
-  2552		}
-  2553	
-  2554		/*
-  2555		 * We ignore non-LRU pages for good reasons.
-  2556		 * - PG_locked is only well defined for LRU pages and a few others
-  2557		 * - to avoid races with __SetPageLocked()
-  2558		 * - to avoid races with __SetPageSlab*() (and more non-atomic ops)
-  2559		 * The check (unnecessarily) ignores LRU pages being isolated and
-  2560		 * walked by the page reclaim code, however that's not a big loss.
-  2561		 */
-  2562		shake_folio(folio);
-  2563	
-  2564		folio_lock(folio);
-  2565	
-  2566		/*
-  2567		 * We're only intended to deal with the non-Compound page here.
-  2568		 * The page cannot become compound pages again as folio has been
-  2569		 * splited and extra refcnt is held.
-  2570		 */
-  2571		WARN_ON(folio_test_large(folio));
-  2572	
-  2573		/*
-  2574		 * We use page flags to determine what action should be taken, but
-  2575		 * the flags can be modified by the error containment action.  One
-  2576		 * example is an mlocked page, where PG_mlocked is cleared by
-  2577		 * folio_remove_rmap_*() in try_to_unmap_one(). So to determine page
-  2578		 * status correctly, we save a copy of the page flags at this time.
-  2579		 */
-  2580		page_flags = folio->flags.f;
-  2581	
-  2582		/*
-  2583		 * __munlock_folio() may clear a writeback folio's LRU flag without
-  2584		 * the folio lock. We need to wait for writeback completion for this
-  2585		 * folio or it may trigger a vfs BUG while evicting inode.
-  2586		 */
-  2587		if (!folio_test_lru(folio) && !folio_test_writeback(folio))
-  2588			goto identify_page_state;
-  2589	
-  2590		/*
-  2591		 * It's very difficult to mess with pages currently under IO
-  2592		 * and in many cases impossible, so we just avoid it here.
-  2593		 */
-  2594		folio_wait_writeback(folio);
-  2595	
-  2596		/*
-  2597		 * Now take care of user space mappings.
-  2598		 * Abort on fail: __filemap_remove_folio() assumes unmapped page.
-  2599		 */
-  2600		if (!hwpoison_user_mappings(folio, p, pfn, flags)) {
-  2601			res = action_result(pfn, MF_MSG_UNMAP_FAILED, MF_FAILED);
-  2602			goto unlock_page;
-  2603		}
-  2604	
-  2605		/*
-  2606		 * Torn down by someone else?
-  2607		 */
-  2608		if (folio_test_lru(folio) && !folio_test_swapcache(folio) &&
-  2609		    folio->mapping == NULL) {
-  2610			res = action_result(pfn, MF_MSG_TRUNCATED_LRU, MF_IGNORED);
-  2611			goto unlock_page;
-  2612		}
-  2613	
-  2614	identify_page_state:
-  2615		res = identify_page_state(pfn, p, page_flags);
-  2616		mutex_unlock(&mf_mutex);
-  2617		return res;
-  2618	unlock_page:
-  2619		folio_unlock(folio);
-  2620	unlock_mutex:
-  2621		mutex_unlock(&mf_mutex);
-  2622		return res;
-  2623	}
-  2624	EXPORT_SYMBOL_GPL(memory_failure);
-  2625	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
