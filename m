@@ -1,159 +1,201 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9425146D2DB;
-	Thu, 20 Aug 2026 13:31:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FAF243C06B;
+	Thu, 20 Aug 2026 13:36:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787232710; cv=none; b=i9edkzeG6efBfmg7nkI0Eg90wlg/PXAUNTj/RV2OtPi6z28VELdQqDV1S6LWCPy5pMyr94Po9DU8Q3pnigJwD67F6AV6ZIQceGwpKabUFtUb3L6MvQOaI3DOfYu/OdOlkIuDOj+l/hJ20310OfDVC6Pgjdq3quRq14GMLEarivA=
+	t=1787233018; cv=none; b=sltf8HVwN/ni2wnLT8aeVuaK3MredsCo4dkdDq156lvmvy2iRyhn8wKZQorNmTol5/CZH8OfhLpcVMPJWokbOny1ZGgkFdPbFHlz13rYK4brTuvxcn2y5SyFdBrUACRUsnwTXSIqZNu/cj/bSUxoVvHYB2+Db4Y9hCsxqsMgGNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787232710; c=relaxed/simple;
-	bh=IXH532W9nQe3iTd6yiQpJQVVtTqis60RHuj3w12JoIc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AlzUawnFmhvBE+wqrhtRmIpC5zcLFAGH6RF7qa/0mUx5LXxGSmpRr5MqB89PB+jsi/M17Ho4Efttvb3LExHIh2//95OhZucUFe0Y9ZsuBG9CWchrYqtpqYDEtgl68SIlKiC+CsxIUjWq7XqFF7GdBYZWYoqKm9Zeb56BZVKemWg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ulo0GSHk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787233018; c=relaxed/simple;
+	bh=ed0d73b1uaKSVdsHTyKzJtudjzuqa46UFmOWWW1XXLM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bjV+LWmfrH6EKpRGjD1ar2IZhfV5N0Bim6yBQdJjRt7ikak8Ah1QHhZXuGKNytYEtEZZdQZCY4TgBwZksZfOmZ8RQyCTE0vmy5YepezD0sXbUARFwfkZ3P41crstTVzSoG8sGSaluxwvgNeVHOeqed4wqizbTh+83GIerU1aEtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LA0XqWXG; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ulo0GSHk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399211F000E9;
-	Thu, 20 Aug 2026 13:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787232701;
-	bh=ulM9nrSrQt6FECJtLrk+YzsnAy0bZz7OONexKExTW14=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Ulo0GSHkUqjgMYyzSRC5s33m4+ChuX6N3cRQUDz9P5Wffg+Iblb6lihFpLGkv67AS
-	 wPbIZ6/tWXPw5QXGHSsD7WtmFK2SC3J7hdx5j55bwPeja13VWh/0Tbc2ewqrw4bZcl
-	 sZiVYJoWo4h3+i+ct+KBoOSF1/4jO4dvcu2Rt6ZYH8nLJM5aQiLwJHzTfYJSXO4zfU
-	 ++uJdip1oiG6Tdzd50fJSxxwsHrfG+r5w9IKwQirGlpwavYNkqsiw2+/5F/mibutjI
-	 zozqDP5tqAz0Wh5ISNmd8/wiNfulwUpVIytMFkp62/9KX6exuMBwfSsRowxRX2WEai
-	 fugb4xiUNOayQ==
-Message-ID: <59aa182d-1b4c-4bdc-a1d5-e76cc9c88ed9@kernel.org>
-Date: Thu, 20 Aug 2026 15:31:28 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LA0XqWXG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787233016; x=1818769016;
+  h=date:from:to:cc:subject:message-id;
+  bh=ed0d73b1uaKSVdsHTyKzJtudjzuqa46UFmOWWW1XXLM=;
+  b=LA0XqWXGiOrQX2wNTXrUNYzU44pPjUfXcbK84w8qLvKnzDnlqKLFCmPA
+   CVlQEDZU/4kF5PJWhtQB+DsyFyexXKyXoa3NytdEDiMtNdSD2Dd60OxWj
+   OWQTNHIA148Dh+wbmRFeodm6Q5ehT8gKD/9BVesjIenwl0jRxQK5fMXjq
+   0t0sf9mEGRvvpKHmIELEDa2+UoqSgsPpeOuyKuh09S9+rhSo7iWvqK7RF
+   89sFiB2JKGt+XiD7fSpGrQ+HPPzUEQer6bTrXBCVuLfkpGlClSKnR8SYJ
+   ImNnT3ILV9NTpBWdTixSxSL0GkCQYyLYUkDhfNcpgILAoLWyPcJerm307
+   w==;
+X-CSE-ConnectionGUID: YhMbXEAhQ7yq7uCSjWr9Rg==
+X-CSE-MsgGUID: Q1B6jrL6RuCQmgrbK7Xzgw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="91638391"
+X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
+   d="scan'208";a="91638391"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 06:36:55 -0700
+X-CSE-ConnectionGUID: qNkPgO+7TfOfIGeEm++EcA==
+X-CSE-MsgGUID: 7GOX6/HiRYSFlaM9M2qhQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
+   d="scan'208";a="271244709"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 20 Aug 2026 06:36:53 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wx2ws-00000000jCb-3ti8;
+	Thu, 20 Aug 2026 13:36:50 +0000
+Date: Thu, 20 Aug 2026 21:35:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ardb:arm64-combine-module-section-allocations 1/1]
+ kernel/module/main.c:2826:7: error: use of undeclared identifier
+ 'provider_type'; did you mean 'iov_iter_type'?
+Message-ID: <202608202148.PDyCZrlm-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/15] accel/qda: Add initial QDA DRM accelerator
- driver
-To: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
- Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap
- <rdunlap@infradead.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bharath Kumar <quic_bkumar@quicinc.com>,
- Chenna Kesava Raju <quic_chennak@quicinc.com>,
- srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev, iommu@lists.linux.dev,
- linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-3-69a02e9090d4@oss.qualcomm.com>
- <81708487-89ce-4cd5-b39a-2989bdce6088@kernel.org>
- <3476b5c3-7983-4994-a901-3d7d8bd75255@oss.qualcomm.com>
- <4ef74e14-8433-4619-ac97-62868c8799d1@kernel.org>
- <g5orcvzjbwww27vwcsxl3ehrek6lvznxptd7jutifoiuicjnm6@iqq2pus6omsl>
- <a642833b-f22a-4bea-8a20-0debc47e1895@kernel.org>
- <4xcyqqrqbvgxojfcmnpwbi2uqk5tvhts52l6sxetltcgb7mo75@lfsgfoq4npz3>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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
-In-Reply-To: <4xcyqqrqbvgxojfcmnpwbi2uqk5tvhts52l6sxetltcgb7mo75@lfsgfoq4npz3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 20/08/2026 12:07, Dmitry Baryshkov wrote:
-> On Thu, Aug 20, 2026 at 11:07:45AM +0200, Krzysztof Kozlowski wrote:
->>>>>>
->>>>>> Device node with this compatible is already populated, so this looks
->>>>>> simply wrong or you are adding a duplicated driver.
->>>>>>
->>>>>> That's a no-go, you are supposed to work with existing drivers and grow
->>>>>> them.
->>>>> I'll bring the discussion again here, there was a discussion to move the
->>>>> driver to accel subsystem if we want to support new features/uAPI
->>>>> changes. Please read [1],[2] threads. The intention is to replace
->>>>> fastrpc driver with QDA eventually.
->>>>
->>>> None of them address the problem. You want to grow fastrpc into user of
->>>> dmabuf? So you move it from misc to here.
->>>
->>> It's not as easy and nice, so I think in this case it's better to repeat
->>
->> I disagree. The existing fastrpc driver is not that complicated. It's
->> actually moderate amount of code, much less than Venus was (~7 times less).
->>
->> It easily can grow to support two interfaces and the only difficulty is
->> how to manage these two interfaces simultaneously or exclusively, e.g.
->> opening first one disables the second.
-> 
-> I see the point here.
-> 
-> Would it be acceptable if we add QDA support only on the new platforms
-> (e.g. via the SoC-specific compat), provide QDA for those platforms,
-> and, once it reaches complete API and feature parity, we remove the old
-> fastrpc driver, migrati old platforms.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-combine-module-section-allocations
+head:   eaa00409fb18efd5ba35159657893d158d91faa4
+commit: eaa00409fb18efd5ba35159657893d158d91faa4 [1/1] module: Permit module section allocations to be combined
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260820/202608202148.PDyCZrlm-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260820/202608202148.PDyCZrlm-lkp@intel.com/reproduce)
 
-The problem with this approach is that we have no guarantees that it
-will reach feature parity in respect of old interface, thus old driver
-might stay forever. If we agree for duplicated driver, contributors have
-no incentives to support old approach.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608202148.PDyCZrlm-lkp@intel.com/
 
-Much better is to refine the old driver, gradually adding new features
-while maintaining old stuff. This is the only way we can force
-contributors to actively work on minimizing duplicate parts.
+All errors (new ones prefixed by >>):
 
-Best regards,
-Krzysztof
+>> kernel/module/main.c:2826:7: error: use of undeclared identifier 'provider_type'; did you mean 'iov_iter_type'?
+    2826 |                 if (provider_type == MOD_INVALID)
+         |                     ^~~~~~~~~~~~~
+         |                     iov_iter_type
+   include/linux/uio.h:110:30: note: 'iov_iter_type' declared here
+     110 | static inline enum iter_type iov_iter_type(const struct iov_iter *i)
+         |                              ^
+   kernel/module/main.c:2826:21: warning: comparison between pointer and integer ('enum iter_type (*)(const struct iov_iter *)' and 'int') [-Wpointer-integer-compare]
+    2826 |                 if (provider_type == MOD_INVALID)
+         |                     ~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +2826 kernel/module/main.c
+
+  2800	
+  2801	static int move_module(struct module *mod, struct load_info *info)
+  2802	{
+  2803		int i, ret;
+  2804		enum mod_mem_type t = MOD_MEM_NUM_TYPES;
+  2805		bool codetag_section_found = false;
+  2806	
+  2807		for_each_mod_mem_type(type) {
+  2808			if (!mod->mem[type].size) {
+  2809				mod->mem[type].base = NULL;
+  2810				continue;
+  2811			}
+  2812	
+  2813			if (mod->mem[type].alloc_provider != MOD_INVALID)
+  2814				continue;
+  2815	
+  2816			ret = module_memory_alloc(mod, type);
+  2817			if (ret) {
+  2818				t = type;
+  2819				goto out_err;
+  2820			}
+  2821		}
+  2822	
+  2823		for_each_mod_mem_type(type) {
+  2824			auto p_type = mod->mem[type].alloc_provider;
+  2825	
+> 2826			if (provider_type == MOD_INVALID)
+  2827				continue;
+  2828	
+  2829			mod->mem[p_type].size -= mod->mem[type].size;
+  2830			mod->mem[type].base = mod->mem[p_type].base +
+  2831					      mod->mem[p_type].size;
+  2832	
+  2833			mod->mem[type].is_rox = mod->mem[p_type].is_rox;
+  2834		}
+  2835	
+  2836		/* Transfer each section which specifies SHF_ALLOC */
+  2837		pr_debug("Final section addresses for %s:\n", mod->name);
+  2838		for (i = 0; i < info->hdr->e_shnum; i++) {
+  2839			void *dest;
+  2840			Elf_Shdr *shdr = &info->sechdrs[i];
+  2841			const char *sname;
+  2842	
+  2843			if (!(shdr->sh_flags & SHF_ALLOC))
+  2844				continue;
+  2845	
+  2846			sname = info->secstrings + shdr->sh_name;
+  2847			/*
+  2848			 * Load codetag sections separately as they might still be used
+  2849			 * after module unload.
+  2850			 */
+  2851			if (codetag_needs_module_section(mod, sname, shdr->sh_size)) {
+  2852				dest = codetag_alloc_module_section(mod, sname, shdr->sh_size,
+  2853						arch_mod_section_prepend(mod, i), shdr->sh_addralign);
+  2854				if (WARN_ON(!dest)) {
+  2855					ret = -EINVAL;
+  2856					goto out_err;
+  2857				}
+  2858				if (IS_ERR(dest)) {
+  2859					ret = PTR_ERR(dest);
+  2860					goto out_err;
+  2861				}
+  2862				codetag_section_found = true;
+  2863			} else {
+  2864				enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
+  2865				unsigned long offset = shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK;
+  2866	
+  2867				dest = mod->mem[type].base + offset;
+  2868			}
+  2869	
+  2870			if (shdr->sh_type != SHT_NOBITS) {
+  2871				/*
+  2872				 * Our ELF checker already validated this, but let's
+  2873				 * be pedantic and make the goal clearer. We actually
+  2874				 * end up copying over all modifications made to the
+  2875				 * userspace copy of the entire struct module.
+  2876				 */
+  2877				if (i == info->index.mod &&
+  2878				   (WARN_ON_ONCE(shdr->sh_size != sizeof(struct module)))) {
+  2879					ret = -ENOEXEC;
+  2880					goto out_err;
+  2881				}
+  2882				memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
+  2883			}
+  2884			/*
+  2885			 * Update the userspace copy's ELF section address to point to
+  2886			 * our newly allocated memory as a pure convenience so that
+  2887			 * users of info can keep taking advantage and using the newly
+  2888			 * minted official memory area.
+  2889			 */
+  2890			shdr->sh_addr = (unsigned long)dest;
+  2891			pr_debug("\t0x%lx 0x%.8lx %s\n", (long)shdr->sh_addr,
+  2892				 (long)shdr->sh_size, info->secstrings + shdr->sh_name);
+  2893		}
+  2894	
+  2895		return 0;
+  2896	out_err:
+  2897		module_memory_restore_rox(mod);
+  2898		while (t--)
+  2899			module_memory_free(mod, t);
+  2900		if (codetag_section_found)
+  2901			codetag_free_module_sections(mod);
+  2902	
+  2903		return ret;
+  2904	}
+  2905	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
