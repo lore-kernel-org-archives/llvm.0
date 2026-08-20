@@ -1,201 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FAF243C06B;
-	Thu, 20 Aug 2026 13:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F48A331EA4;
+	Thu, 20 Aug 2026 13:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787233018; cv=none; b=sltf8HVwN/ni2wnLT8aeVuaK3MredsCo4dkdDq156lvmvy2iRyhn8wKZQorNmTol5/CZH8OfhLpcVMPJWokbOny1ZGgkFdPbFHlz13rYK4brTuvxcn2y5SyFdBrUACRUsnwTXSIqZNu/cj/bSUxoVvHYB2+Db4Y9hCsxqsMgGNk=
+	t=1787234272; cv=none; b=mkDPtGp1Vd2aFMxdMaLRC4+zwR4zoj87yyhLh1cm67jSN5qpo0m9zlUxMjEGsiz7jPNFFAOVCZa+15FN4qxaa2q9YjU3x/bUXxyreo0uZY9vdgGbg6aMNoKzajkyvsi22dGYRHUnGaHJ9n3ttXae9cHrSrdf5Z5/a33p0GBiUvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787233018; c=relaxed/simple;
-	bh=ed0d73b1uaKSVdsHTyKzJtudjzuqa46UFmOWWW1XXLM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bjV+LWmfrH6EKpRGjD1ar2IZhfV5N0Bim6yBQdJjRt7ikak8Ah1QHhZXuGKNytYEtEZZdQZCY4TgBwZksZfOmZ8RQyCTE0vmy5YepezD0sXbUARFwfkZ3P41crstTVzSoG8sGSaluxwvgNeVHOeqed4wqizbTh+83GIerU1aEtQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LA0XqWXG; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787234272; c=relaxed/simple;
+	bh=iVGtER76EzmyS10nHVwOMDdtU/MC7WnGS6Cm1iam6ko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z5r50GyFezE+cfj8oYycvE1kQop4JIeLptFYNgK0XhZ+pEhlRvTh0Mv19BDeXr3//NLIV3N7OAfCOK52ngLqcjdXvYpylY6njZ3fBUcQscUqsVgih0Gllp0FBRKoPBJpxq4ADRfpqrM8fROO8fPUOkVeh4z3OOG1dVGaIRdJicw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E9jU6otl; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LA0XqWXG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787233016; x=1818769016;
-  h=date:from:to:cc:subject:message-id;
-  bh=ed0d73b1uaKSVdsHTyKzJtudjzuqa46UFmOWWW1XXLM=;
-  b=LA0XqWXGiOrQX2wNTXrUNYzU44pPjUfXcbK84w8qLvKnzDnlqKLFCmPA
-   CVlQEDZU/4kF5PJWhtQB+DsyFyexXKyXoa3NytdEDiMtNdSD2Dd60OxWj
-   OWQTNHIA148Dh+wbmRFeodm6Q5ehT8gKD/9BVesjIenwl0jRxQK5fMXjq
-   0t0sf9mEGRvvpKHmIELEDa2+UoqSgsPpeOuyKuh09S9+rhSo7iWvqK7RF
-   89sFiB2JKGt+XiD7fSpGrQ+HPPzUEQer6bTrXBCVuLfkpGlClSKnR8SYJ
-   ImNnT3ILV9NTpBWdTixSxSL0GkCQYyLYUkDhfNcpgILAoLWyPcJerm307
-   w==;
-X-CSE-ConnectionGUID: YhMbXEAhQ7yq7uCSjWr9Rg==
-X-CSE-MsgGUID: Q1B6jrL6RuCQmgrbK7Xzgw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="91638391"
-X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
-   d="scan'208";a="91638391"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 06:36:55 -0700
-X-CSE-ConnectionGUID: qNkPgO+7TfOfIGeEm++EcA==
-X-CSE-MsgGUID: 7GOX6/HiRYSFlaM9M2qhQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
-   d="scan'208";a="271244709"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 20 Aug 2026 06:36:53 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wx2ws-00000000jCb-3ti8;
-	Thu, 20 Aug 2026 13:36:50 +0000
-Date: Thu, 20 Aug 2026 21:35:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:arm64-combine-module-section-allocations 1/1]
- kernel/module/main.c:2826:7: error: use of undeclared identifier
- 'provider_type'; did you mean 'iov_iter_type'?
-Message-ID: <202608202148.PDyCZrlm-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E9jU6otl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 518B11F000E9;
+	Thu, 20 Aug 2026 13:57:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787234271;
+	bh=m3DnabEhGjUWzQ3HU8pKJDqgpb9y/qdMXoHcrC/IV6M=;
+	h=From:To:Cc:Subject:Date:Reply-To;
+	b=E9jU6otloA3NZ6t45DsD1cMe/xarkd8XfXQCBKE6FG1vC51wwOPC3AMUdvC+BTew8
+	 aURsFQTeowDAs90CU9aCdinAL7+ciOrWa3OX3o0YaFMKZncyyhb81PqSD7Btemqj2a
+	 naMZTgjJ0aquG6ARfF40qRWZSguq9yjXMUI2f8K8wmcfBtfClOuzM77eydsFZtz81V
+	 tFS4OkJg11bfMHLSA7aKpGuzK2N43Qjby0d/CGiOJnw7eHOni4FHM6EGff4NjP70pr
+	 O2yumjOZCVRc5otGmrkEHQ2lYTh0CZATEHK34sZhvdbc4pSFErCRZW4RQSV0G9AZOY
+	 2zyBUcbonlyTg==
+From: Gary Guo <gary@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: kernel test robot <yi1.lai@intel.com>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] rust: cfi: disable function merging if CFI is enabled
+Date: Thu, 20 Aug 2026 14:57:32 +0100
+Message-ID: <20260820135733.37121-1-gary@kernel.org>
+X-Mailer: git-send-email 2.54.0
+Reply-To: Gary Guo <gary@garyguo.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git arm64-combine-module-section-allocations
-head:   eaa00409fb18efd5ba35159657893d158d91faa4
-commit: eaa00409fb18efd5ba35159657893d158d91faa4 [1/1] module: Permit module section allocations to be combined
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260820/202608202148.PDyCZrlm-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260820/202608202148.PDyCZrlm-lkp@intel.com/reproduce)
+From: Gary Guo <gary@garyguo.net>
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608202148.PDyCZrlm-lkp@intel.com/
+In Rust doc tests, there is a dummy `__module_firmware_test_init` function
+generated by the example in `module_firmware!`'s documentation, which just
+returns zero. Many other documentation generates function that produces
+zero. LKP test robot reports a `Flags::zeroed` instance; my local
+reproduction has a `Bounded::new::<0>`.
 
-All errors (new ones prefixed by >>):
+LLVM's MergeFunctionsPass incorrectly merge functions with the same KCFI
+type, causing `__module_firmware_test_init` being merged into one of the
+zero-returning function. As module init is invoked via indirect function
+call, KCFI is checked and this produces a KCFI failure.
 
->> kernel/module/main.c:2826:7: error: use of undeclared identifier 'provider_type'; did you mean 'iov_iter_type'?
-    2826 |                 if (provider_type == MOD_INVALID)
-         |                     ^~~~~~~~~~~~~
-         |                     iov_iter_type
-   include/linux/uio.h:110:30: note: 'iov_iter_type' declared here
-     110 | static inline enum iter_type iov_iter_type(const struct iov_iter *i)
-         |                              ^
-   kernel/module/main.c:2826:21: warning: comparison between pointer and integer ('enum iter_type (*)(const struct iov_iter *)' and 'int') [-Wpointer-integer-compare]
-    2826 |                 if (provider_type == MOD_INVALID)
-         |                     ~~~~~~~~~~~~~ ^  ~~~~~~~~~~~
-   1 warning and 1 error generated.
+I've reported this bug to upstream LLVM [1]; in the mean time, disable
+function merging if CFI is enabled. No separate treatment is needed for
+CONFIG_RUST_INLINE_HELPERS, as Clang does not enable function merging by
+default.
 
+Reported-by: kernel test robot <yi1.lai@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202608201017.100a4511-lkp@intel.com
+Link: https://github.com/llvm/llvm-project/issues/217629 [1]
+Signed-off-by: Gary Guo <gary@garyguo.net>
+---
+ Makefile | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-vim +2826 kernel/module/main.c
+diff --git a/Makefile b/Makefile
+index 4fee5ee9e9f4..0dd9a6eda739 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1118,7 +1118,8 @@ endif
+ ifdef CONFIG_RUST
+ 	# Always pass -Zsanitizer-cfi-normalize-integers as CONFIG_RUST selects
+ 	# CONFIG_CFI_ICALL_NORMALIZE_INTEGERS.
+-	RUSTC_FLAGS_CFI   := -Zsanitizer=kcfi -Zsanitizer-cfi-normalize-integers
++	# Disable function merging as LLVM incorrectly merge functions with the same KCFI type.
++	RUSTC_FLAGS_CFI   := -Zsanitizer=kcfi -Zsanitizer-cfi-normalize-integers -Zmerge-functions=disabled
+ 	KBUILD_RUSTFLAGS += $(RUSTC_FLAGS_CFI)
+ 	export RUSTC_FLAGS_CFI
+ endif
 
-  2800	
-  2801	static int move_module(struct module *mod, struct load_info *info)
-  2802	{
-  2803		int i, ret;
-  2804		enum mod_mem_type t = MOD_MEM_NUM_TYPES;
-  2805		bool codetag_section_found = false;
-  2806	
-  2807		for_each_mod_mem_type(type) {
-  2808			if (!mod->mem[type].size) {
-  2809				mod->mem[type].base = NULL;
-  2810				continue;
-  2811			}
-  2812	
-  2813			if (mod->mem[type].alloc_provider != MOD_INVALID)
-  2814				continue;
-  2815	
-  2816			ret = module_memory_alloc(mod, type);
-  2817			if (ret) {
-  2818				t = type;
-  2819				goto out_err;
-  2820			}
-  2821		}
-  2822	
-  2823		for_each_mod_mem_type(type) {
-  2824			auto p_type = mod->mem[type].alloc_provider;
-  2825	
-> 2826			if (provider_type == MOD_INVALID)
-  2827				continue;
-  2828	
-  2829			mod->mem[p_type].size -= mod->mem[type].size;
-  2830			mod->mem[type].base = mod->mem[p_type].base +
-  2831					      mod->mem[p_type].size;
-  2832	
-  2833			mod->mem[type].is_rox = mod->mem[p_type].is_rox;
-  2834		}
-  2835	
-  2836		/* Transfer each section which specifies SHF_ALLOC */
-  2837		pr_debug("Final section addresses for %s:\n", mod->name);
-  2838		for (i = 0; i < info->hdr->e_shnum; i++) {
-  2839			void *dest;
-  2840			Elf_Shdr *shdr = &info->sechdrs[i];
-  2841			const char *sname;
-  2842	
-  2843			if (!(shdr->sh_flags & SHF_ALLOC))
-  2844				continue;
-  2845	
-  2846			sname = info->secstrings + shdr->sh_name;
-  2847			/*
-  2848			 * Load codetag sections separately as they might still be used
-  2849			 * after module unload.
-  2850			 */
-  2851			if (codetag_needs_module_section(mod, sname, shdr->sh_size)) {
-  2852				dest = codetag_alloc_module_section(mod, sname, shdr->sh_size,
-  2853						arch_mod_section_prepend(mod, i), shdr->sh_addralign);
-  2854				if (WARN_ON(!dest)) {
-  2855					ret = -EINVAL;
-  2856					goto out_err;
-  2857				}
-  2858				if (IS_ERR(dest)) {
-  2859					ret = PTR_ERR(dest);
-  2860					goto out_err;
-  2861				}
-  2862				codetag_section_found = true;
-  2863			} else {
-  2864				enum mod_mem_type type = shdr->sh_entsize >> SH_ENTSIZE_TYPE_SHIFT;
-  2865				unsigned long offset = shdr->sh_entsize & SH_ENTSIZE_OFFSET_MASK;
-  2866	
-  2867				dest = mod->mem[type].base + offset;
-  2868			}
-  2869	
-  2870			if (shdr->sh_type != SHT_NOBITS) {
-  2871				/*
-  2872				 * Our ELF checker already validated this, but let's
-  2873				 * be pedantic and make the goal clearer. We actually
-  2874				 * end up copying over all modifications made to the
-  2875				 * userspace copy of the entire struct module.
-  2876				 */
-  2877				if (i == info->index.mod &&
-  2878				   (WARN_ON_ONCE(shdr->sh_size != sizeof(struct module)))) {
-  2879					ret = -ENOEXEC;
-  2880					goto out_err;
-  2881				}
-  2882				memcpy(dest, (void *)shdr->sh_addr, shdr->sh_size);
-  2883			}
-  2884			/*
-  2885			 * Update the userspace copy's ELF section address to point to
-  2886			 * our newly allocated memory as a pure convenience so that
-  2887			 * users of info can keep taking advantage and using the newly
-  2888			 * minted official memory area.
-  2889			 */
-  2890			shdr->sh_addr = (unsigned long)dest;
-  2891			pr_debug("\t0x%lx 0x%.8lx %s\n", (long)shdr->sh_addr,
-  2892				 (long)shdr->sh_size, info->secstrings + shdr->sh_name);
-  2893		}
-  2894	
-  2895		return 0;
-  2896	out_err:
-  2897		module_memory_restore_rox(mod);
-  2898		while (t--)
-  2899			module_memory_free(mod, t);
-  2900		if (codetag_section_found)
-  2901			codetag_free_module_sections(mod);
-  2902	
-  2903		return ret;
-  2904	}
-  2905	
+base-commit: e6664f2b33db9b6811eb4cec109f06cb2b4f458d
+-- 
+2.54.0
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
