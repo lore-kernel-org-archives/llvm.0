@@ -1,207 +1,282 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020142.outbound.protection.outlook.com [52.101.196.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D10D43C7A9
-	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 13:17:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787231841; cv=none; b=iNmCEqvNH4c7DSBdR+vxhuHrbdYz/QkF1pq/RAfsu3qwfrT2PL4KINdhR/6fansu6ojZHjFZX2GWktRuV0yxA7TG/3o+1cJsGVAWYwUO+tKf7WFXM1T3cje3Q2XDcivLwaQDSyJEmSCmEtfrk74ZLilUsc0nVVnX2QHfoFXehyE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787231841; c=relaxed/simple;
-	bh=1CnNo5c3+W4kz6Kt7wqmydjbAinEf2KlvzTzD+ptxmQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jtMpnADTln5/DDEzUiehMjjZpQwKNz4G8Vjs6bTgrKTTtCabYKV0NzOvrl3jugWOf3I2zeg1p5xPtP9fT2YAH+0RthLGxDvYdPYlDf0TIwLPzt/NODT+EBNPjhDmdd6c5z+5vx8NhoHEavNBxDDdskfyGpNMjivAWdtfUalEdeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gmoEhjUd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=ZNScMnIt; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FCB046AF31;
+	Thu, 20 Aug 2026 13:30:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.142
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787232655; cv=fail; b=iwN1M8rZESjiayu1zXG/jyr4fiDlXipqdIhRhhLb33HEvIiDRuzmvZPZSvzXI/prCfaV5xN8zpiZo3mvLbVi8jxVF7aSqBhY3J998ijgL4zU10ImRLZo8YpJ0daZf+O2I6BuBjS/iMJPGhM7tIcCUjEX1mikkKAYY0NaoKjEL54=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787232655; c=relaxed/simple;
+	bh=Hh7voN4rRzAhBQm/aqoOiM1CE8ZMJX93GV9f+GYXz4Q=;
+	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
+	 In-Reply-To:MIME-Version; b=tseT//MUpMJzkayWMP0HJYRDpoTX9qwbvNp7wEBthj9S1uOmGVmDDuZo1DGH8WnUX+3nZyPeW4c3SdzVY8yQt7iCoHpKw2QNenK/jcobqXymZPcfF5O9ByQsxhPhJHCfj0KwHeAFkRXen6dlcDsTcbB43yTQiCuRs1hS38c27II=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=Ey98SfjJ; arc=fail smtp.client-ip=52.101.196.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gmoEhjUd";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="ZNScMnIt"
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67KCt6RV3732028
-	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 13:17:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	FRn7XK+ROzWG2rvgcKJwV7AzQsMgAI1TASr45vyqJ98=; b=gmoEhjUdDJpy3Un7
-	/05JKM/eYIVdcr6EnZripaPAzrd+h18Y3/X4BYTI1o9xfVe3V9Tl9rUy2CfpyEVZ
-	yrTcp/V7k5Oy31pSO4x8XRACgLa7ATmqePbt+0E12TuFjTX+1JyH/nXayvJfsYYN
-	CEdwN4sv13gS3VDObVLzPhxRCSeyzH8FvRDuOD1Oc3/R5czay27AoE/19XJY+xz/
-	CVLEl/bbEVrodJd/I7qw87+Ut4tMpKsAMHeMdp7WD4TqUHgocIMV6yWiRsW/2/Gx
-	s0yBt/SS1Gg8oli0M66XIDC/mVKLNPqUeZPEDvIUd1gR64Elbgf0U9J6io6uPf4z
-	Xmpdog==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g5vn89ejn-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 13:17:18 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38f57e31b6eso2176643a91.1
-        for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 06:17:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1787231838; x=1787836638; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FRn7XK+ROzWG2rvgcKJwV7AzQsMgAI1TASr45vyqJ98=;
-        b=ZNScMnItYfsMmyxjI4dspCoW2UM+fc94wN8e1emiNv1Cu7zw9eXPSIhDlcxGpFZGTr
-         2Bd7aZNKOb9hb9S64qYSloWjwoYX140qntOTZcxHRgxt4Y7ebmLMO5x6moPWTZN3hWRj
-         peR70qc3yGpJ5m3AsMv00p3uz101ZmliIG+Qp4dray/dwEDYpg9vbaT8Qb5NjDrsY97S
-         EaC+QwaNytu2jaC8WIlioW4oAv9FmwDyFZ82nSOM4+HrxLZrhmKe8GQWiblcueHtUN6A
-         rieaCPT2pPlbT72zw4N4Zqa9wSwOMUsaRecM0ImBpDaoTXkTJylyx0jAoqVyRaqwhCzr
-         w8vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787231838; x=1787836638;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FRn7XK+ROzWG2rvgcKJwV7AzQsMgAI1TASr45vyqJ98=;
-        b=V5We5R3cPEC/Oko35It35q+BGUhWW1mfKtj3yPMADm2Wyrqn4w3AlmXm/1FLQqXsqK
-         E6y7KCX2B1k8YBWJcFIJVL3D501XSTh1h9+8pXQ/dMg20gP7l262MT5E7FVutQfD5xFk
-         qMXYWbRoD7L/osl18x1BGM2e3ZaBU3AKfoBWJc7i2bI8P+Ms0AEL+p/xIAnDl6mfMGdd
-         6WsKZO6OnssrfbAItW/WPJSouMaxPq502EIiVpVa/Z5rwwfbVLbO9ucg0vnR+CSAznLh
-         iS/gavfCrAjwVvQkG0/0NIWGFifzM6OsT0MO4ByiTq5sEmzkBmJHjDkgX5IEVJm+2Rjn
-         Pyag==
-X-Forwarded-Encrypted: i=1; AHgh+RpzVzRMy21ia3FwqvFaThzNoArAytnrXkunntHk2ULm7h/q4xrm+gDB3NkQug+p05ki66Gr@lists.linux.dev
-X-Gm-Message-State: AFuF++no6IEn8OJzSWY2mpuBqPvSIcKqHbs2wXBDwF3Uz+Csr36EAxEx
-	mf0JywkR/0LPE5IKJ27ZQ5d4DAchV4PDxNliMT8C8Nc4btyGdX/lbvfm9dfrFeiZ2aF4nWjGxAi
-	YmudqN/1FKAWKP0HLR1YfkdJWCuJ46ZrkfDSpycjC1EyFxOZ+AS0oLH8i
-X-Gm-Gg: AR+sD10+EwLGXyifQRzkkaWvM87sL5HQBJV7VJtG8l5k7EH8nf/F7c5OLq/556v/Ph1
-	0x7F++V+FsQLaKzAzaLyBJUM5MkxhiaY0El9jWiwWHOIMjBvNgIKhVMlout5ipah9SJicEUJiZg
-	rBcs5QowrrRSx4w2b/wH3SGwPRE8pgaNI9kiv/Hjzm8J9exbXR4lFCojfxVKpAa6ktuGIEf6yST
-	vRDjRpLA3ZuvixWi5S9dBNEjivYxxJrtP4HoLfSve8tL0RTTk+cOE84wTRABcJkZgZ2SryBWp2e
-	L5RPdzZBXeJMnsep0FTQNYMrKxJwj3deAMnU6vH+WTQjUa/Z+hLDZ7jGaOkA1ltH28tDYznKqSN
-	SAwrwH2XaCG1ZEBZUBWQseV3dAu5HrQ==
-X-Received: by 2002:a17:90b:5484:b0:37d:f983:7b5 with SMTP id 98e67ed59e1d1-3958110cfc4mr24511144a91.9.1787231837574;
-        Thu, 20 Aug 2026 06:17:17 -0700 (PDT)
-X-Received: by 2002:a17:90b:5484:b0:37d:f983:7b5 with SMTP id 98e67ed59e1d1-3958110cfc4mr24511026a91.9.1787231837065;
-        Thu, 20 Aug 2026 06:17:17 -0700 (PDT)
-Received: from [10.219.56.166] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1416ae143edsm32627819c88.10.2026.08.20.06.17.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Aug 2026 06:17:16 -0700 (PDT)
-Message-ID: <d39fe14b-1fd6-476e-9e5e-f4030c60b66c@oss.qualcomm.com>
-Date: Thu, 20 Aug 2026 18:47:05 +0530
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="Ey98SfjJ"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=isYQjXgw0zh747yLcGOV9WnAibjPPvcu/7eLYpG+4lo2jLg5dDvPX2Lm92pFa4RUoa+kAv93EupZN5JaL8fME15vdd5OExvebB6sn6w7bKDMNZrToIBoaTmWF/ijVm/ba+CYR51VXViV6WGtgGmm7XfST8bWtECq85Tgmcl8KPwm/ygGyBRkdHb4eifoNCHiEHPmskmWoB1HB8cPLcFiDYy/nFlAiQ4a55wdi66AThJC46AECkDle1AOQtoVJnSK7iayx9jMmTNy6EFUFU4/3P/ynWhhbJB9skE/zXGHZlK+7jMd0yltCgDY0habaqPfbBJKeGbNIdownSdtPYw/pA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/c6Uu2wOoceVT+Am5HItLLJbirojQOL8C99/blBI2Z0=;
+ b=jtX2JkrjC9mu1VFV9drDCQ4BLha5P3BJ6IfXgoXEdYTkLvqIM9lFgulz0hJip0PXGV4Pb0y05NX7FC4KNj2l3a+E8AZmMvmT54f16TnlfDoU6W2chf/74raiEYzrehlpLaLP3xQctevA5bdjNBEVz+XIZF4IUkOerBnXs/+dxP16XIHM026NGAE9LPMlF9zBq59DJgv95xUpt6pUKPibXX6FO21FjBMmoHT8Dgg8gcqi6vCHrbqdMM0eT61qG5hv2lyHm57vWqSfKSlrh7lyzBUj4skeBMo7m8I2xfv3u6KEPWb7FcJFx/15IdJeG9uQry4c1x+/ThORbue6fDanKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/c6Uu2wOoceVT+Am5HItLLJbirojQOL8C99/blBI2Z0=;
+ b=Ey98SfjJygBOm9M8NgZlQzw+zUoDbhYxS/o1vKV+Mxh9CJ16s6IGd8AIQPwsZcRo0bY0rhMkj7To+ZSni9dTa1meEEy0mgEDvIHNL2z4u2LL2XVmaFB1NYeiHZoSYZq9+s7xce089G+rV5ASZjG70XoFriZTlEgqfSKc3KHp7TA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
+ by CW1P265MB7785.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:1d9::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.10; Thu, 20 Aug
+ 2026 13:30:38 +0000
+Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::f60b:1537:68d7:4fc1%4]) with mapi id 15.21.0339.008; Thu, 20 Aug 2026
+ 13:30:38 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 20 Aug 2026 14:30:37 +0100
+Message-Id: <DKTT3F0QOW47.3PVSDZX88VFM0@garyguo.net>
+To: "kernel test robot" <yi1.lai@intel.com>, "Nathan Chancellor"
+ <nathan@kernel.org>
+Cc: <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
+ <linux-kernel@vger.kernel.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Yury
+ Norov" <ynorov@nvidia.com>, "Danilo Krummrich" <dakr@kernel.org>,
+ <rust-for-linux@vger.kernel.org>, "Alexandre Courbot"
+ <acourbot@nvidia.com>, "Nick Desaulniers" <ndesaulniers@google.com>, "Bill
+ Wendling" <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>,
+ <llvm@lists.linux.dev>
+Subject: Re: [linus:master] [rust]  b7b8b4ccda:
+ CFI_failure_at_do_one_initcall
+From: "Gary Guo" <gary@garyguo.net>
+X-Mailer: aerc 0.22.0
+References: <202608201017.100a4511-lkp@intel.com>
+In-Reply-To: <202608201017.100a4511-lkp@intel.com>
+X-ClientProxiedBy: LO4P123CA0123.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:192::20) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:4ab::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 05/15] iommu: Add QDA compute context bank bus to
- iommu_buses
-To: Jason Gunthorpe <jgg@ziepe.ca>, Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling
- <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Bharath Kumar <quic_bkumar@quicinc.com>,
-        Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com,
-        dmitry.baryshkov@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        iommu@lists.linux.dev, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-5-69a02e9090d4@oss.qualcomm.com>
- <20260817134416.GA1415075@ziepe.ca>
- <89ec74da-15ed-4278-b651-5c753fa4f146@oss.qualcomm.com>
- <20260818130724.GA5482@ziepe.ca>
-Content-Language: en-US
-From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-In-Reply-To: <20260818130724.GA5482@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODIwMDA5OSBTYWx0ZWRfXz8mdhup4Gwn8
- 21F/WyFDzHcj3apjpxn6x6L7J1IyQH/WeDCHso6hUxDwZaEklefS5YXMOcNSdA80q1gRZ1sp841
- Vpo/C3vggJ6ElN7UdBadsaO6KOj/9ds95dtfzI4nNvL3SvSjrTzwr24E8dv4+5IhOyqd/t6Ei7/
- SvQKJrmkaDw+Z/dEAHnJyHlIGBBFnlxQuqIJlLziBKZ8MIeyjH43UHAUgjrTBYl85NRTUNZYGlA
- 4/vc6LYuc3GRKcRxXcoNfVnljoLXPFKmmsgwLvgW5VsEi/hT9kWuR3hcpndWqtQMeLGvq1mI6Z4
- mW2R0PAsxl8g6ubB01+2Umhj/LxAvFmaB8Pz+mjiXBjK1l+Xk5gE5vTCcAwzMNEIFODtFf6+CDg
- dcMd1K8/iFb7fo2Tpop3SNAlkCxdLjq8lRRazXEYz/4HA6+vAPIsa+RV/oh8x/ruFrw8xwoWFqb
- EZpe24POSqIVjJXGXKQ==
-X-Authority-Analysis: v=2.4 cv=KpJ9H2WN c=1 sm=1 tr=0 ts=6a86fe5e cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=eoimf2acIAo5FJnRuUoq:22
- a=VwQbUJbxAAAA:8 a=9jRdOu3wAAAA:8 a=gAPlAFmufI-heuDFQeYA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=mQ_c8vxmzFEMiUWkPHU9:22 a=ZE6KLimJVUuLrTuGpvhn:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODIwMDA5OSBTYWx0ZWRfX10GgzlKuLX3w
- Gz2E/Qd9Jy/iEXQfScDdHE7gG78B9AEfBwq/cOUuVKUbSGVTa7cCHuJfr4tgYuiuOWvl6X0b3Oi
- e7mHBnYP/w+c0pzjNKWq8VXNeq+wX3M=
-X-Proofpoint-ORIG-GUID: XTiVbATGs0D6lkJIgZiV8LgwnaP7tVDr
-X-Proofpoint-GUID: XTiVbATGs0D6lkJIgZiV8LgwnaP7tVDr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-19_06,2026-08-19_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
- priorityscore=1501 impostorscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2608200099
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|CW1P265MB7785:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1d504e54-cafe-4719-086a-08defebf38e0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|23010399003|10070799003|1800799024|366016|6133799003|10067099003|56012099006|18002099003|22082099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	uvXeePhAukbjHiHpxgoWix6cdwizkx1ykpS+KFnXwkvPlDIRgB5u2wRL/bSWGYkE5Pj8JhdqCwMX/j+CW4jWqUjrFrmM8dpK8eh0/Q8mv0HoW6wr6TxGe0H+96mlrDJAnRmZ4Qgt24AHRfPjgWLzoQu0myqQt2E9EcN+w6JhJvhWoEyV7IR6UQ0eTGNT8iloB9Dc3kctanj8oTQbXViUV5Gp227ivtiU4SI/+4bMTYkmO/0ueENlukEJ6d5zO+hLe/b6HqcHvlmwcpFIWEs/o+9OWSPgr0kAzEBQjwoag9MOz1/DnCqdX0lLc06xJSBLQpxCJ+rQZQmvzy3hPg29A+b/rkQSJv7Q3BYTCepkw73W6lQkMI6oaW9Ld0N9KpfoEX3HAd+QY1zxvFkkimXOWiJNlStP7tuU8vd8EofYSQd5ZGyQrMmCYl9xOc7yCnDoy2r2AV0ihmqHI5cwwYU78dYIBg2Fi5Trh3gS7O2OBtyJpY2i2kVQzTG+A2MFVR46gWWCBmC/bpt21YWpeP2SER/462LvtyLxfWTaBnrSpQLSO8hKMn2hQ4+iF2snPciQmtM9/ZZ1x8NpeL3CyhZk9vnpQ8QpYmbBk6hL3MevGps=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(10070799003)(1800799024)(366016)(6133799003)(10067099003)(56012099006)(18002099003)(22082099003)(3023799007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?aXg3bVZ1MjZuZE04a0gvcGh4ZGZ5UmJoQWpmNUxRM1IzZVIvMEp3c01MdE1l?=
+ =?utf-8?B?cmV2YXM0UUhVeVVDUkZ6dXpyclBLNGEreEppTmtwOGxDeDZXNHlzTEF0cnhl?=
+ =?utf-8?B?eC9JVmRNSlplK3dzK3FibVNJc2ZWNlhNeFljeUlncjJrK1cwMnhvSWM3L0xz?=
+ =?utf-8?B?Ujg1ZE1qNEhZUDNLWTZtbExXNHlpd2V2S1lCbVdXTGdWUkZ4R0ZNMjJ2eCts?=
+ =?utf-8?B?NmhTcmhUZVdjNkZxM21yWHVKMnJXbzhKcHFyQzZLbVl4RU5kUlZUWSt6SU5T?=
+ =?utf-8?B?TkpzUU5zSGdOak5zZ2hWdk1idUFsQlk1RDRaeWlrek9QS3NIcU5jMGpGUDVN?=
+ =?utf-8?B?U0h6cURYZlFnTmRRTHJHd2cwRVNKUGZXTTZ3SExJbS80alVBU0NkaGZuUkRF?=
+ =?utf-8?B?V3doUStIT0dwK3owZ2F2RjRYeDNmYVpBMWNEaCsrbGdaMnR3MnBiYkNsQkhX?=
+ =?utf-8?B?d3lodVZSZDIwZDZQNlB3UU53UTRHLzlvNlRpWExIdVZWUTU5RUhLUDhzcS9o?=
+ =?utf-8?B?TDNCR0tFMHRlSVRHazR5RDZpWkI5QkdLdllIU2N5ak1KS2xuY0tMTWVhZ2Rz?=
+ =?utf-8?B?aFJDTDB4ZlN2azcvNWdUVndDU000bG9LVGlNS3R3ZVRZNUthcGNZZnArSE5k?=
+ =?utf-8?B?YlBsbTZEblI2enR1SlNFV3hOUVFKZTdKWkl1M0o4MHlnVEw0MHVNMmNpRDBX?=
+ =?utf-8?B?YlVyOStkMnIvUm9GZlVtZUxyRUVnYWtCaHl0VGtuMnhjK0ZNY2VZaWpSUVZS?=
+ =?utf-8?B?YVJBTmwzUEhNMy92ajJRdVY4MDhiZDI5RWRBMFdUSUhqem1yYkZsU0RKaE9x?=
+ =?utf-8?B?bkNsdU9mSDg2Nkdqa3NpVURzQUJZWi9Fam1SR3hDalRRMnZsWHprcG9FZUVq?=
+ =?utf-8?B?VUo2aHJ0UGNKWisrU0tnWktFcVMzV1RlQitHYjJ1VkhqUEE2RitrNHhGcnFP?=
+ =?utf-8?B?VDVCME96NVNTa2xweEJqZ2ZOeU5vWERiM2RaM1F6TmpDdWJtendIUVNtMWJF?=
+ =?utf-8?B?cHp4V2Nqa2NNUi9STkVUdXFwSWd5TS93eVpibVBnSkNFaytNSXUvOFptOE50?=
+ =?utf-8?B?ZDgvMGh1MGlWcTkvVUVxcWpoR3k2bVdaQUp6SW5LQm1rYU4zNU9makN6NE1T?=
+ =?utf-8?B?VTFXMm1DaDZ3Zm42cm1tUE8xSU02eTNOSE1nTXNOZDMvSHh6WGJjZUJqUXJI?=
+ =?utf-8?B?aFVORWJCZTRhb1I1MEpoN2JwMTF0aS92d2IxRjVuRm0wYTlsSXNKb0dveEk5?=
+ =?utf-8?B?NFhJQUxCdk1zbGFHd0pEN2Mva2lTQlhhMlBSRS8vVW9ld0dDU2hnYnpuUzBk?=
+ =?utf-8?B?ZzhQNWRwa0ZZK2E0ell4RDJ1ZWt4M3MxU1ByNjZYeDZxcUt2czFIbmtrcFhz?=
+ =?utf-8?B?VWVxRmdoZ3padktWQWhXNityaS8wWFhYTjFUWU5OZ2IrQWhLemNwMVVNdFFm?=
+ =?utf-8?B?dG1SQ2VpVzBKQzFheXc0MklHZ2V4anhMQ25NWk1ab2FIeDJzV2hVL0RzSXBF?=
+ =?utf-8?B?U1FxVHU3TFBOK3VzM0FUckJXdHh6VmxzZWVKcWZXYkZ1U3hhY1Z1bVExRzB6?=
+ =?utf-8?B?TGRJQkh1SmlaRTVZWFR6ckFkUEIvQ1IwZ3ZZSlk3dzUrcFBpOFpwWHBGOHZu?=
+ =?utf-8?B?aWNqT1NQelEzV1BCSHI3aWJ0c1JNYjU4Y2t1RHJvd2NtcXk2NlIxa0kxNnpE?=
+ =?utf-8?B?WXhJVTRoWWVsUDRER0Y5NFhYUUZNUHdBRXlrczMzZVZmdDFqK2dHZWVhQ3dj?=
+ =?utf-8?B?a0ZMRTBBeWsyeXNxSno1U2JSaVgxZG9NMGNuRlJJbHpIcVNPUU1lOGY1NFo2?=
+ =?utf-8?B?ZmRrTzJrWHZJZG5hR0kvNnkxODR5ZHJ3L1ZsajdiQVA0ZStOVGkzeFNpVlFU?=
+ =?utf-8?B?YXcxQVB5ZGRYV2ZJV0JncTNjK0tuekoxRHBNN3FaS2tYWnJDUGg3bkN0MFUx?=
+ =?utf-8?B?SWVWRHZnR3pteXQvSmJBT3drRWI4ZGk3RmtDVW50WHd0MTdZSkJSNnVDNFhk?=
+ =?utf-8?B?N2pXYUJzdS9BODhUT2lLbUJNSG81WnNpOUdsT1crNkYwUUV5WUt6OEVMbjFU?=
+ =?utf-8?B?Y2I5cVRBKzNLVHNqVnlGSjFNUXRMM25kL1pkeFhVZzY2K0JUQkJwWFhhRDJT?=
+ =?utf-8?B?TUJCR1ZDT016V3hJRnpMRXNXMkdrWlo3TnpvY21OTFNtYkk5SFdxYllqN1h0?=
+ =?utf-8?B?a2dRNk95OWZMY1NKQngrci94aDRrdUt4MDMxZ3NwMCs1RUsrZThvblJSSkR1?=
+ =?utf-8?B?T3Z5WG82c1FGeHMvcWxiblN4TjVJaDRRSTJCM08vVmRmRTROODkzTGRRSFFx?=
+ =?utf-8?B?c3ljK3MwQ1ZJSWkwRFN3R09Qb2pOS3lrSUo0a3JoOHB2MDZIck9EQT09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d504e54-cafe-4719-086a-08defebf38e0
+X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 13:30:38.1590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pmG1+KzeFiXwmyQpNM4igX0V808EUxbdcLadHmbJ9dttO9cv57wlGGZDe/D0EBKPNv8FhlvkU4bOpgl3bH7KEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CW1P265MB7785
 
-On 18-08-2026 18:37, Jason Gunthorpe wrote:
-> On Tue, Aug 18, 2026 at 10:40:25AM +0530, Ekansh Gupta wrote:
-> 
->> The CB child nodes are not separate addressable hardware — they are SMMU
->> stream-ID assignments described as sub-resources of the parent DSP
->> interface. 
-> 
-> So this is exactly the same thing.
-> 
-> Read my remarks here:
-> https://lore.kernel.org/linux-iommu/20260618151745.GD231643@ziepe.ca/
-> 
-> The DT modeling for devices that have multiple stream-IDs is to list
-> them all in iommus list.
-> 
-> If you don't like that DT modeling then you need to start out by
-> explaining why not very clearly.
-> 
-> There is undeniably a Linux gap where it forces all streams in the
-> iommus property to share a translation. This is a *linux* problem in
-> the iommu subsystem and DMA API. In an ideal world it should not be
-> fixed by hacking up new busses or mangling the DT.
-> 
-> But of the easy options I think hacking in new busses is the worst
-> option and has already been basically NAK'd for the hamoa project so
-> please don't use it here for a diferent qualcomm IP.
-> 
-> Given several qualcomm chips now have this same issue I strongly
-> suggest qualcomm consider trying to fix the root cause and provide
-> some way for a Linux driver to progmatically "unbundle" the multiple
-> streams.
-> 
-> It would be much easier if the HW properly supported actual sub
-> streams as we do already have a programming model for PASID. Maybe
-> some kind of driver thing to reconstruct the iommus so that each entry
-> is exposed as a PASID in the API instead of an alias or something like
-> that would be an easy direction.
-> 
-> Jason
-Hi Jason,
+(Cc Clang/LLVM folks)
 
-Thank you for the detailed analysis and the pointers to the VPU
-discussion. I understand your concern about proliferating custom buses
-for this class of problem.
+On Thu Aug 20, 2026 at 4:16 AM BST, kernel test robot wrote:
+>
+>
+> Hello,
+>
+> kernel test robot noticed "CFI_failure_at_do_one_initcall" on:
+>
+> commit: b7b8b4ccdad45a59aafa5cfc32a51fe1ee5cb680 ("rust: extract `bitfiel=
+d!` macro from `register!`") https://git.kernel.org/cgit/linux/kernel/git/t=
+orvalds/linux.git master
+>
+> [test still failed on linus/master 8d3ae59288f1e7d58d76558a6ee96d533bc501=
+9]
+>
+> in testcase: rcutorture
+> with following parameters:
+>
+>     runtime: 300s
+>     test: cpuhotplug
+>     torture_type: tasks-tracing
+>
+>
+>
+> config: x86_64-randconfig-015-20260715
+> compiler: clang-22
+> test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 3=
+2G
+>
+> (please refer to attached dmesg/kmsg for entire log/backtrace)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
+ion of the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <yi1.lai@intel.com>
+> | Closes: https://lore.kernel.org/oe-lkp/202608201017.100a4511-lkp@intel.=
+com
 
-I'm exploring an alternative approach that avoids the custom bus
-entirely and will try to address this in the next revision.
+The issue looks like that LLVM is trying to merge functions by creating ali=
+as
+with different KCFI types.
 
-//Ekansh
+See this minimized example: https://godbolt.org/z/PhhcGh4W5
+
+Note that a and b have different !kcfi_types annotation, but they're merged
+regardless.
+
+This causes the merge of `__module_firmware_test_init` with `Flags::zeroed`
+which ABI-wise are compatible as they all return just an integer, but have
+different KCFI signature.
+
+I think we need to disable function merging pass when KCFI is enabled, unti=
+l
+this has been fixed by LLVM. Clang disables this pass by default. We can al=
+so
+workaround the issue by disable the test that generates
+`__module_firmware_test_init` (perhaps we should do this regardless, it's
+strange that a module is produced from doc tests!)
+
+So that commit is just a trigger and isn't buggy itself; it only introduces=
+ a
+new function which happens to be mergeable with the empty
+__module_firmware_test_init.
+
+Best,
+Gary
+
+>
+>
+> [   16.811904][    T1] CFI failure at do_one_initcall+0x12e/0x478 (target=
+: _RINvCsdamrQDJyPhn_8pin_init6zeroedNtNvNvNvCsdPKRummocL6_25doctests_kerne=
+l_generated33rust_doctest_kernel_bitfield_rs_04main43__doctest_main_rust_ke=
+rnel_bitfield_rs_118_05FlagsEBE_+0x0/0x4; expected type: 0x6fbb3035)
+> [   16.820524][    T1] WARNING: at do_one_initcall+0x12e/0x478, CPU#0: sw=
+apper/0/1
+> [   16.823875][    T1] Modules linked in:
+> [   16.825674][    T1] CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 7=
+.1.0-rc4-00055-gb7b8b4ccdad4 #1 PREEMPT  79da7d58e576708b28b47c0dd4cca3fe34=
+a229fd
+> [   16.831720][    T1] Hardware name: QEMU Standard PC (i440FX + PIIX, 19=
+96), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+> [   16.836267][    T1] RIP: 0010:do_one_initcall+0x12e/0x478
+> [   16.838287][    T1] Code: d2 31 c9 e8 74 04 49 00 45 84 f6 75 0c 48 8d=
+ 3d 90 03 a1 0c 67 48 0f b9 3a 4c 8b 5c 24 08 41 ba cb cf 44 90 45 03 53 fc=
+ 74 02 <0f> 0b 2e e8 42 96 f8 06 41 89 c6 0f 1f 44 00 00 41 81 e5 ff ff ff
+> [   16.843506][    T1] RSP: 0018:ffffc9000001fb80 EFLAGS: 00010a13
+> [   16.845121][    T1] RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0=
+000000000000000
+> [   16.847279][    T1] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0=
+000000000000000
+> [   16.849427][    T1] RBP: ffffc9000001fe70 R08: 0000000000000000 R09: 0=
+000000b8a3be5a2
+> [   16.851619][    T1] R10: 000000006c292bb6 R11: ffffffff81407458 R12: f=
+fffffff8f899850
+> [   16.853771][    T1] R13: 0000000080000000 R14: 0000000000000001 R15: 1=
+ffffffff1edab41
+> [   16.855915][    T1] FS:  0000000000000000(0000) GS:0000000000000000(00=
+00) knlGS:0000000000000000
+> [   16.858307][    T1] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   16.860091][    T1] CR2: 00007fd1104620ac CR3: 000000000ba86000 CR4: 0=
+0000000000406b0
+> [   16.862236][    T1] Call Trace:
+> [   16.863144][    T1]  <TASK>
+> [   16.863961][    T1]  ? __cfi__RINvCsdamrQDJyPhn_8pin_init6zeroedNtNvNv=
+NvCsdPKRummocL6_25doctests_kernel_generated33rust_doctest_kernel_bitfield_r=
+s_04main43__doctest_main_rust_kernel_bitfield_rs_118_05FlagsEBE_+0x8/0x8
+> [   16.869044][    T1]  ? stack_depot_save_flags+0x40f/0xab8
+> [   16.870574][    T1]  ? irqentry_exit+0x1b8/0x638
+> [   16.871878][    T1]  ? trace_irq_disable+0x25/0x100
+> [   16.873243][    T1]  ? __cfi_ignore_unknown_bootoption+0x8/0x8
+> [   16.874861][    T1]  ? strlen+0x32/0x78
+> [   16.875952][    T1]  ? parameq+0x1a/0xf8
+> [   16.877070][    T1]  ? __cfi_ignore_unknown_bootoption+0x8/0x8
+> [   16.878666][    T1]  ? parse_args+0x17e/0x538
+> [   16.879902][    T1]  do_initcall_level+0x10e/0x1c0
+> [   16.881314][    T1]  do_initcalls+0x59/0xc0
+> [   16.882501][    T1]  kernel_init_freeable+0x11e/0x1c0
+> [   16.883889][    T1]  ? __cfi_kernel_init+0x8/0x8
+> [   16.885175][    T1]  kernel_init+0x16/0x138
+> [   16.886357][    T1]  ret_from_fork+0x266/0x5f8
+> [   16.887598][    T1]  ? __cfi_kernel_init+0x8/0x8
+> [   16.888884][    T1]  ret_from_fork_asm+0x11/0x20
+> [   16.890220][    T1]  </TASK>
+> [   16.891058][    T1] irq event stamp: 306141
+> [   16.892233][    T1] hardirqs last  enabled at (306157): [<ffffffff8174=
+9821>] __console_unlock+0x61/0xc0
+> [   16.894765][    T1] hardirqs last disabled at (306170): [<ffffffff8174=
+9806>] __console_unlock+0x46/0xc0
+> [   16.897303][    T1] softirqs last  enabled at (305714): [<ffffffff8161=
+8b94>] handle_softirqs+0x614/0x780
+> [   16.899859][    T1] softirqs last disabled at (305705): [<ffffffff8161=
+8ec5>] __irq_exit_rcu+0x45/0x140
+> [   16.902401][    T1] ---[ end trace 0000000000000000 ]---
+>
+>
+> The kernel config and materials to reproduce are available at:
+> https://download.01.org/0day-ci/archive/20260820/202608201017.100a4511-lk=
+p@intel.com
+>
+>
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
+
