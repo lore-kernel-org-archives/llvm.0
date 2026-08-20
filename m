@@ -1,120 +1,69 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C68318EDC
-	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 10:07:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7FCA4248C8;
+	Thu, 20 Aug 2026 11:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787220441; cv=none; b=JSH7g+5TYiEKh+Q93SlGapCw+YcPuJ0lDLoxbP/iNZrFP5ZfpnEiH7rPgfnhMLk221NB/IA1iFqjt6jSxhlBnTN2tcccmsj8x4xHcl36s7CrmG0NuN02JSYNSNDajvbKDumI8AQUrkITIKqyW5nrRY+irdxwZCWftvXSiX89zhQ=
+	t=1787225205; cv=none; b=BBYuvRbOash+FZEGxWOT1m21F8TYDbHF35LouorTp8AsdvEh1T1heAu5L6lP+Gs1GjepV+lLOOBzs8ABMWCxNbnhF2vIDVDfyBPE28muFH7I5rE2oB3UMgIJjHdhF2YHyFxcilpMaiwJsqIjY9B7R/8jY0i+Bt+imH9MdtW/qxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787220441; c=relaxed/simple;
-	bh=MVJm9aVbCpzmQBNjnuzpFUj3AwV5++J7vwOgdi2VWIg=;
+	s=arc-20240116; t=1787225205; c=relaxed/simple;
+	bh=RnEVAyO3fZbxn2usfvwOSgGAYa6AXEOJc0x8HTbo96s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ambmvNaj5fiW3gPFFrVjsoExyF57xZTyeubk9ITMmCQ438iX9CSO3DT+qu4l+rexlD+NbbDqpOH+qlrId32C84EcSMmanF4SjEWO4naV7NI24X2BL5gu2G74JYVWG0aC5hiPM38sReisdfxiAGbXagV6eP6+Aav2LcV32je9hrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iHJwVu+Z; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=jLdVx5cC; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dLhMUyxKqAhcMlJwZmioiG1/MmT+6SIPuUjpEWe1t9U1iHssuVszSou58aJyziWsAIUnUGqi+FfAXWOtVNVCU8RtIWEphclwGf9QGn9Wx+EpX4/KNmJQlargDeB7GGCCVmK5cEbsSSBCD3dTrtVo/OAv66xVfaecN1tko1W8msc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cseTX6em; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iHJwVu+Z";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="jLdVx5cC"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67K7LFvR2753074
-	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 10:07:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=z8C6/88Cs+/FbVbD4LERoO0X
-	qQDdvLPythJnwKlVaPE=; b=iHJwVu+Z5314Eps6OYQhkbLMkm5m2OY1FH/myogq
-	cy72fgfxVMqCPgcJ0rsRchLfUktZPj4CEnPcU+m02xHAjw7gx6HcQNkZD1GWD2ZW
-	RbtUc9F1u1JGkWt2wsI2HE2n0aQB+A23yh9wrE2ofTd3bG0s95nbIzF8WfkNHHyC
-	/gW2G/aGTqN7A4mpq0QBScRllqvv4M2l7smF5WPXZbo0HS6qWP281mvyCdJzdADM
-	Dq2dGN4UHWs8mVtrAQwCePpBLr8qjZAUBonXQL4BJdPD45roEtd//eEaNPtlCdWd
-	BnbKoO/IamJ8BT1O2WHo5hhaadEeM8QVyY1jj9BlvHx4nA==
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4g5w498mgc-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 10:07:17 +0000 (GMT)
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-92e538afe65so288075185a.3
-        for <llvm@lists.linux.dev>; Thu, 20 Aug 2026 03:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1787220437; x=1787825237; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=z8C6/88Cs+/FbVbD4LERoO0XqQDdvLPythJnwKlVaPE=;
-        b=jLdVx5cCw3QKBFaX+xiR5QpagRreHzja7pYflt8AzgzEsmEJEAw4q3GEK8+BE5by4l
-         J3/25GTc+33oH4j2J9tiGe/sE8DtQjndKTj6RWqD28Lsi2M0AWr3mRtrRCmguN4J0+yU
-         AqrlWVWzqK+kq3iW6bsU8tIZqFgQu8tdFXPxZPALPbWHK7cmSrhaRU/X5EKBQLd4rwcD
-         ymE9XNNFeZYBlX0KoHVHtIdQsrNZ2EDmYFJEG91orPcR7znnfvhgVBIeuMbtPEkHtHAZ
-         ApjHJzFmXl4i8QvMea63oAh5kWGvMhKzYWDDNfC/bdrAkcU+bTB9eE8ME4lU1YS34fv/
-         sNKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787220437; x=1787825237;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=z8C6/88Cs+/FbVbD4LERoO0XqQDdvLPythJnwKlVaPE=;
-        b=O6sZWQMnXGE0vItC4Lbyl+JtDqOJ/N7eq0JZKfKpohhWtRDPwXJdKwY1VYv0iXqc77
-         xySsW8AB0D+nAHaZyIO7lANyXnxE8olSXUoEXw3Ja99NxmeXEaAKCpGKwGXrBc66zL8W
-         8zX9GAeb7QWU7E5IvpkTSi66wokMoWpw4q1ADWo22BRJMVbDFF7vGv22PNTq94uMnHQM
-         UAGdYtqzIruxlJUldhM6yBijznGqrnITEqM5kzl87sY4fnrF2ByawddIXuKYpDXGyIRC
-         IxKYhMF3h1k8+illghvTSu52uOGzBD0Wpzqd77aAnNk3fSrS4TY4tMgby6NfZ/bTkqme
-         D+WQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr6VNm4teuxv13iCFpKFGgT9tnjmfNS/lEs1gmEV9x65nPheGxsnZwsiVXSOifjaaERh0eT@lists.linux.dev
-X-Gm-Message-State: AOJu0Yz0SpSnJ1JW2n3hxKj0t3BS+Dg3o3jvjyhKUP9AjrY/7Lo2r2QR
-	/CCGzxEzR/RJ4Tu9x0iQrxgppxxE+IMBbMCGzqgilIzZVCn+zUWT2DLZ4APyOlfevwoQaHxD/7S
-	vutVYex8C//rlfpo/J1ssXX2TKiFTdJGMi8i+KPXZaPZ5Gm8ioV8Ncjjh
-X-Gm-Gg: AR+sD13vKhps4rFFS6Re/pMX+RUfQszmYYNeVkt3GicS/ZrDeVaLBhzth7Kst610Fuw
-	EqQ5hCLG1Is4tHRQ+YKuszNef4V8gdXGPgvDlk91VTs/ltYMfOdP2ruFBQmir6AXF9iAfPdmpeQ
-	exFdfRKKujc1/gicHTXWegR9e5vq0/d2n2uXnkhNJCDiMWwxrUIABERYbbPcfa37dhUpaLDtU+p
-	y7BYLBJ3CnlkM0Hi1VrbXO7Yw/eGDHm0quBE5RQFWX/TIwZgszCNjDI4Dt2k4ELc1GL+pb3ats6
-	eJs0/oFUv3V2Hqge9+jYn4S4zGbdGKbXl6RgujblNuSccecqQeP/QHJ+pqXnbqrjEbWruap8EPc
-	YcJFNVffQa1d3f0+S+F1uEBxewGleBdOoBoV85OWA1daOMv9hnelusZMgzDVvqLLegunpKXTcrn
-	DAtYkpbA791dg3
-X-Received: by 2002:a05:620a:2602:b0:930:a12d:b158 with SMTP id af79cd13be357-9371e29fab7mr1125138485a.21.1787220436725;
-        Thu, 20 Aug 2026 03:07:16 -0700 (PDT)
-X-Received: by 2002:a05:620a:2602:b0:930:a12d:b158 with SMTP id af79cd13be357-9371e29fab7mr1125130885a.21.1787220436171;
-        Thu, 20 Aug 2026 03:07:16 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b4788f59acsm1173118e87.75.2026.08.20.03.07.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Aug 2026 03:07:14 -0700 (PDT)
-Date: Thu, 20 Aug 2026 13:07:12 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>,
-        Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Bharath Kumar <quic_bkumar@quicinc.com>,
-        Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        iommu@lists.linux.dev, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 03/15] accel/qda: Add initial QDA DRM accelerator
- driver
-Message-ID: <4xcyqqrqbvgxojfcmnpwbi2uqk5tvhts52l6sxetltcgb7mo75@lfsgfoq4npz3>
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-3-69a02e9090d4@oss.qualcomm.com>
- <81708487-89ce-4cd5-b39a-2989bdce6088@kernel.org>
- <3476b5c3-7983-4994-a901-3d7d8bd75255@oss.qualcomm.com>
- <4ef74e14-8433-4619-ac97-62868c8799d1@kernel.org>
- <g5orcvzjbwww27vwcsxl3ehrek6lvznxptd7jutifoiuicjnm6@iqq2pus6omsl>
- <a642833b-f22a-4bea-8a20-0debc47e1895@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cseTX6em"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787225203; x=1818761203;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RnEVAyO3fZbxn2usfvwOSgGAYa6AXEOJc0x8HTbo96s=;
+  b=cseTX6emByO+9faGfA0yOIxOM4tLkOlvmDzgfK1eJC4mdO7ln8jYgunS
+   BbSlAkG4LNHyL2gTvf+Z4vqHV8hBB4hopw6ae4lybuormopHQOFQ0wixl
+   GeeTWSpD5Qb1GTsbRviPI2mRUA/wkhJOAwkEqCYYze+nhWqY5BEkP9L6i
+   tmPOU0L7rgVrm2OBrD84bI7TdVx591LnTNbo1v/TpZntD5k7LErcZ59KO
+   1p9/MgCJ2Pb4aZEQ923b8k4PIk5DIE6R+LgOS7wd183uSJmORTH3DfjFe
+   3Fb3K6sHdzYNAouYKh0KVNHv+FQp9Dz2Ir9jrX1C0Hsolqo3shq7pN3j3
+   w==;
+X-CSE-ConnectionGUID: PcVzICmRQ/qONxttpie2UA==
+X-CSE-MsgGUID: tB+pAs63TRqgvQHpgzRgAQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="75289087"
+X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
+   d="scan'208";a="75289087"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 04:26:40 -0700
+X-CSE-ConnectionGUID: BRZJeUzHQna/IO9H0wSuXg==
+X-CSE-MsgGUID: m3u0VzXmTrO5nsAdAX0Rqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,233,1779174000"; 
+   d="scan'208";a="270226539"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 20 Aug 2026 04:26:38 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wx0up-00000000iol-2p44;
+	Thu, 20 Aug 2026 11:26:35 +0000
+Date: Thu, 20 Aug 2026 19:25:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Anubhav Shelat <ashelat@redhat.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Shivank Garg <shivankg@amd.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Fuad Tabba <tabba@google.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v3] tracefs: Add read-only eventfs filesystem at
+ /sys/kernel/events
+Message-ID: <202608201957.NHoAQjoy-lkp@intel.com>
+References: <20260810160708.3460a2fd@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -123,159 +72,78 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a642833b-f22a-4bea-8a20-0debc47e1895@kernel.org>
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODIwMDA3NCBTYWx0ZWRfXw7o9ysFHyyYM
- dmAAVs6ConiBHROr2QDnIJlk+46hb9VtBL+aiF1wXtitr83qV8aX1U8caL5SGnaXBZwb7XP9YLv
- EutVY2nK5jYQybXdm4CA7Vbz31AszIw=
-X-Authority-Analysis: v=2.4 cv=YP+vDxGx c=1 sm=1 tr=0 ts=6a86d1d6 cx=c_pps
- a=HLyN3IcIa5EE8TELMZ618Q==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=Sv0fKeRqtYgA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yOCtJkima9RkubShWh1s:22 a=EUspDBNiAAAA:8
- a=xc-yKiw0VIFfRBD-69AA:9 a=CjuIK1q_8ugA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
-X-Proofpoint-ORIG-GUID: H_CbjycNMnEdmJQmGr4iGgIZFNp91EI1
-X-Proofpoint-GUID: H_CbjycNMnEdmJQmGr4iGgIZFNp91EI1
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODIwMDA3NCBTYWx0ZWRfXwOlCwNPX6IpZ
- +TOmqHszWHq19dvXSOTIatw2Jnu6Eat072P7VIqWKQQ75iYA+F2QsoJd6W24yv5TRdrTW5wR6Ni
- oleVbYu18cuh6IFzFG1J256wZtno3AYNFB1xZJiTAae2HbGhO7wpFVMpaZWKkRpdn7Mgv0iE+51
- bCT4wKylQDcZcHfwwB+TBXW8EJk75fcSpb6MER37+wRYEQciCMzj6ei15gWGeQhutqvlHnltv3A
- zSBEy10uzEQQnr3XwXVV4X+Hi0bb4vf4lcz2VD4QCMYhNF1IdGGrvsN2g1+JTNop2167TEUSFFq
- drOqzefl/yHXi5k4BE7DDWJraqPy1mfz4wHlk7e95m0u7WOUbBwIG693VanlQuI97v1b4kPe4TJ
- f9m+m+K6qjjWJavwd8plC+YWKKwCIojAAuZwIkUqCoJlc5QikCA5ugGaVqAHsiLw3Ana5f27uwp
- 8J8RMusAX58eO7YjUrg==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-19_06,2026-08-19_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 suspectscore=0 bulkscore=0 adultscore=0 impostorscore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 clxscore=1015
- malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2608200074
+In-Reply-To: <20260810160708.3460a2fd@gandalf.local.home>
 
-On Thu, Aug 20, 2026 at 11:07:45AM +0200, Krzysztof Kozlowski wrote:
-> On 20/08/2026 10:52, Dmitry Baryshkov wrote:
-> > On Wed, Aug 19, 2026 at 04:18:51PM +0200, Krzysztof Kozlowski wrote:
-> >> On 19/08/2026 15:17, Ekansh Gupta wrote:
-> >>> On 19-08-2026 00:40, Krzysztof Kozlowski wrote:
-> >>>> On 17/08/2026 06:47, Ekansh Gupta wrote:
-> >>>>> Add the skeleton of the Qualcomm DSP Accelerator (QDA) driver, a DRM
-> >>>>> accel driver for the Hexagon DSPs found on Qualcomm SoCs.
-> >>>>>
-> >>>>> This patch registers a DRM accel device, exposing a /dev/accel/accelN
-> >>>>> character device node, and binds it to the RPMsg channel used to reach
-> >>>>> the DSP. Buffer management, IOMMU context banks and the FastRPC
-> >>>>> protocol are added by later patches in this series.
-> >>>>>
-> >>>>> qda_drv.c / qda_drv.h define the drm_driver ops table, the per-file
-> >>>>> private state (qda_file_priv) and the main device structure (qda_dev),
-> >>>>> which embeds drm_device so that it can be recovered with container_of().
-> >>>>>
-> >>>>> qda_rpmsg.c binds to the "qcom,fastrpc" compatible via
-> >>>>> module_rpmsg_driver(), reads the DSP domain name from the "label"
-> >>>>> device-tree property, and registers the DRM device.
-> >>>>>
-> >>>>> Assisted-by: Claude:claude-sonnet-5
-> >>>>> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-> >>>>> ---
-> >>>>> Changes in v2:
-> >>>>> - Use module_rpmsg_driver() and drop the qda_rpmsg_register()/
-> >>>>>   _unregister() wrappers, module_init()/module_exit() and
-> >>>>>   qda_rpmsg.h entirely (Dmitry Baryshkov)
-> >>>>> - Read the "label" property directly into qdev->dsp_name (Dmitry Baryshkov)
-> >>>>> - Drop the probe/remove/init log messages (Dmitry Baryshkov)
-> >>>>> - Return the result of qda_register_device() directly (Dmitry Baryshkov)
-> >>>>> - Clarify the Kconfig help text (Dmitry Baryshkov)
-> >>>>> ---
-> >>>>>  drivers/accel/Kconfig         |  1 +
-> >>>>>  drivers/accel/Makefile        |  1 +
-> >>>>>  drivers/accel/qda/Kconfig     | 30 ++++++++++++++++
-> >>>>>  drivers/accel/qda/Makefile    | 10 ++++++
-> >>>>>  drivers/accel/qda/qda_drv.c   | 71 ++++++++++++++++++++++++++++++++++++++
-> >>>>>  drivers/accel/qda/qda_drv.h   | 61 +++++++++++++++++++++++++++++++++
-> >>>>>  drivers/accel/qda/qda_rpmsg.c | 79 +++++++++++++++++++++++++++++++++++++++++++
-> >>>>>  7 files changed, 253 insertions(+)
-> >>>>>
-> >>>>> diff --git a/drivers/accel/Kconfig b/drivers/accel/Kconfig
-> >>>>> index bdf48ccafcf2..74ac0f71bc9d 100644
-> >>>>> --- a/drivers/accel/Kconfig
-> >>>>> +++ b/drivers/accel/Kconfig
-> >>>>> @@ -29,6 +29,7 @@ source "drivers/accel/ethosu/Kconfig"
-> >>>>>  source "drivers/accel/habanalabs/Kconfig"
-> >>>>>  source "drivers/accel/ivpu/Kconfig"
-> >>>>>  source "drivers/accel/qaic/Kconfig"
-> >>>>> +source "drivers/accel/qda/Kconfig"
-> >>>>>  source "drivers/accel/rocket/Kconfig"
-> >>>>>  
-> >>>>>  endif
-> >>>>> diff --git a/drivers/accel/Makefile b/drivers/accel/Makefile
-> >>>>> index 1d3a7251b950..58c08dd5f389 100644
-> >>>>> --- a/drivers/accel/Makefile
-> >>>>> +++ b/drivers/accel/Makefile
-> >>>>> @@ -5,4 +5,5 @@ obj-$(CONFIG_DRM_ACCEL_ARM_ETHOSU)	+= ethosu/
-> >>>>>  obj-$(CONFIG_DRM_ACCEL_HABANALABS)	+= habanalabs/
-> >>>>>  obj-$(CONFIG_DRM_ACCEL_IVPU)		+= ivpu/
-> >>>>>  obj-$(CONFIG_DRM_ACCEL_QAIC)		+= qaic/
-> >>>>> +obj-$(CONFIG_DRM_ACCEL_QDA)		+= qda/
-> >>>>>  obj-$(CONFIG_DRM_ACCEL_ROCKET)		+= rocket/
-> >>>>> \ No newline at end of file
-> >>>>
-> >>>> You have trivial patch errors.
-> >>> newline problem was already there, wasn't introduced as part of this
-> >>> patch series, so I wasn't sure to fix it here. I can fix this in v3.>
-> >>>> ...
-> >>>>
-> >>>>> +}
-> >>>>> +
-> >>>>> +static const struct of_device_id qda_rpmsg_id_table[] = {
-> >>>>> +	{ .compatible = "qcom,fastrpc" },
-> >>>>> +	{},
-> >>>>
-> >>>> Device node with this compatible is already populated, so this looks
-> >>>> simply wrong or you are adding a duplicated driver.
-> >>>>
-> >>>> That's a no-go, you are supposed to work with existing drivers and grow
-> >>>> them.
-> >>> I'll bring the discussion again here, there was a discussion to move the
-> >>> driver to accel subsystem if we want to support new features/uAPI
-> >>> changes. Please read [1],[2] threads. The intention is to replace
-> >>> fastrpc driver with QDA eventually.
-> >>
-> >> None of them address the problem. You want to grow fastrpc into user of
-> >> dmabuf? So you move it from misc to here.
-> > 
-> > It's not as easy and nice, so I think in this case it's better to repeat
-> 
-> I disagree. The existing fastrpc driver is not that complicated. It's
-> actually moderate amount of code, much less than Venus was (~7 times less).
-> 
-> It easily can grow to support two interfaces and the only difficulty is
-> how to manage these two interfaces simultaneously or exclusively, e.g.
-> opening first one disables the second.
+Hi Steven,
 
-I see the point here.
+kernel test robot noticed the following build errors:
 
-Would it be acceptable if we add QDA support only on the new platforms
-(e.g. via the SoC-specific compat), provide QDA for those platforms,
-and, once it reaches complete API and feature parity, we remove the old
-fastrpc driver, migrati old platforms.
+[auto build test ERROR on v7.2]
+[also build test ERROR on next-20260819]
+[cannot apply to trace/for-next linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> 
-> > what we did for the venus/iris migration or what happened already
-> > several times in the kernel history (for example the AIC7xxx SCSI host
-> > drivers were migrated by introducing the second driver and then removing
-> > the first one after the grace period). The backwards compatibility is a
-> > separate topic, but it will be addressed before the driver can be
-> 
-> Backwards compatibility should be one of the first things explained in
-> cover letter in one of the first paragraphs.
-> 
-> And if you make it backwards compatible, then just remove old driver,
-> because there is no point to keep it there.
+url:    https://github.com/intel-lab-lkp/linux/commits/Steven-Rostedt/tracefs-Add-read-only-eventfs-filesystem-at-sys-kernel-events/20260810-160708
+base:   v7.2
+patch link:    https://lore.kernel.org/r/20260810160708.3460a2fd%40gandalf.local.home
+patch subject: [PATCH v3] tracefs: Add read-only eventfs filesystem at /sys/kernel/events
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260820/202608201957.NHoAQjoy-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260820/202608201957.NHoAQjoy-lkp@intel.com/reproduce)
 
-That's the plan.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608201957.NHoAQjoy-lkp@intel.com/
 
-> Again, this should be one of
-> the first things explained in cover letter.
--- 
-With best wishes
-Dmitry
+All errors (new ones prefixed by >>):
+
+>> fs/tracefs/event_inode.c:38:16: error: use of undeclared identifier 'EVENTFS_SUPER_MAGIC'
+      38 |         sb->s_magic = EVENTFS_SUPER_MAGIC;
+         |                       ^~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +/EVENTFS_SUPER_MAGIC +38 fs/tracefs/event_inode.c
+
+    30	
+    31	static int eventfs_ro_fill_super(struct super_block *sb, struct fs_context *fc)
+    32	{
+    33		struct inode *inode;
+    34		struct dentry *root;
+    35	
+    36		sb->s_blocksize = PAGE_SIZE;
+    37		sb->s_blocksize_bits = PAGE_SHIFT;
+  > 38		sb->s_magic = EVENTFS_SUPER_MAGIC;
+    39		sb->s_op = &eventfs_ro_super_operations;
+    40		sb->s_time_gran = 1;
+    41		sb->s_flags |= SB_RDONLY;
+    42	
+    43		inode = new_inode(sb);
+    44		if (!inode)
+    45			return -ENOMEM;
+    46	
+    47		inode->i_ino = 1;
+    48		inode->i_mode = S_IFDIR | 0555;
+    49		simple_inode_init_ts(inode);
+    50		inode->i_op = &simple_dir_inode_operations;
+    51		inode->i_fop = &simple_dir_operations;
+    52		set_nlink(inode, 2);
+    53	
+    54		set_default_d_op(sb, &tracefs_dentry_operations);
+    55	
+    56		root = d_make_root(inode);
+    57		if (!root)
+    58			return -ENOMEM;
+    59	
+    60		sb->s_root = root;
+    61	
+    62		return 0;
+    63	}
+    64	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
