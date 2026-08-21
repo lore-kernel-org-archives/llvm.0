@@ -1,141 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 503214562A0;
-	Fri, 21 Aug 2026 09:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C158348033E
+	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 11:02:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787305363; cv=none; b=S6niD3JMJF1AxS1UE+xA9U2i+B2HS6W0Ii186qEmmTDag1sQGBtczDN49BV1s2Ea0aqff8GbHLNKib5Pd2kxw7ph7EBWSpPxtHt/MMAVHPl6h4n5RWHEN1yxVmJYADwZ5zsgBSDZmBkqWKdnNXcICKqmJJlauAhy7tJ2AYxsIoQ=
+	t=1787310167; cv=none; b=rzqwDUnOgw0FjDsc1Uj7hoz7t3a1DXkXxFE13Qi6ALCknZs5KoXF4SC0JT8EiznZ85L9eIhQ05vRFAhkn/6fi3/i6VyifcFw8yJi74IjpThmp11MOzxFheGRMS8ogcTQ4zLUn9QyIfoRoGsm/Mw/++jpB6NFnnxAg6cKWL22fuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787305363; c=relaxed/simple;
-	bh=JO5QFe2wQoESZjh0FkcnVu82NHIer0fa+ChwsfnRqos=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KxZq9ufEQWJL6DVULcH76EdMBMWFl+g+Pg4rLLscvGHJkFdW7cxUU9u01pLwanWasX5fOSv4vdXiSFU277MRaSC1izPL9NUS6IUCSva9OPn69Xmc3mIzvcnpbHy2SEZP5psk2jhgwLjKeW/DEqvShc3qj29hWoDVk1ZvCxyQoqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h8Ik3Pq5; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787310167; c=relaxed/simple;
+	bh=E6/B7FL0zi3araSBiTSbz62qcwkieMdNtUo8MRpBt/0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lQcSHmqoYWHsbSLW2FHG5/NMZx3UrnEXhVet3MfuaCIJHdMTPIDSta//1aqclCTEGrdqVunSoBejLzSnvP6YtwG0vnfd/5aceP/2xb3zbgbNVzI/g/Z5ZTlzXHhKlk4kfod9F/bclqQrnT7AAghITSOCu3t/LLbtUbSgYqAMBAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lGDts2ed; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h8Ik3Pq5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787305355; x=1818841355;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JO5QFe2wQoESZjh0FkcnVu82NHIer0fa+ChwsfnRqos=;
-  b=h8Ik3Pq5NxyhGq/XHCvLum5vanmGDFC0BY9gyhIbtunyG0Ivo+D+0NlC
-   c+uEl60kRjAkBa0zqQ3B1p7cggdFpSRqsf2Ygaz++NEPgMJBgcUJER3G9
-   34HbSmdfKoLqi68ZIwqUNlgvTTUPbUlo0eBEoNT1Bca79ouIsml/Hekyr
-   j+Eym8S5SBZR84zg5ftWkNxvpo/N0s+T4LpDdT/z7JKnu9giAX81Xec93
-   9Bw3SNz8Ga3kX8r29kvusky5tHuXkLDQQtQRR5xE/6tlcZCHIMDsLnTuM
-   oQCga19XLdY8LftVn2jwPo7ZyoM66Kv0SJm17+5e6PWUoPYqspwbj7qOv
-   g==;
-X-CSE-ConnectionGUID: 6v4a9dxEQpWCVGGLHNsb/g==
-X-CSE-MsgGUID: XF47kGOGSOimPeRAdCyU0A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11881"; a="87621433"
-X-IronPort-AV: E=Sophos;i="6.25,234,1779174000"; 
-   d="scan'208";a="87621433"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2026 02:42:29 -0700
-X-CSE-ConnectionGUID: 0YMZmJ6YR0WVtkjU/AjEAw==
-X-CSE-MsgGUID: rNMgWl/HSUy923rouI6tiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,234,1779174000"; 
-   d="scan'208";a="270113233"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 21 Aug 2026 02:42:25 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wxLlV-00000000phh-2ll1;
-	Fri, 21 Aug 2026 09:42:21 +0000
-Date: Fri, 21 Aug 2026 17:41:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yuqi Xu <xuyuqiabc@gmail.com>, Aaron Conole <aconole@redhat.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Ilya Maximets <i.maximets@ovn.org>,
-	Pravin B Shelar <pshelar@ovn.org>, Jakub Kicinski <kuba@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Yi-Hung Wei <yihung.wei@gmail.com>,
-	netdev@vger.kernel.org, dev@openvswitch.org,
-	linux-kernel@vger.kernel.org, Vega <vega@nebusec.ai>,
-	Nan Li <tonanli66@gmail.com>, Ren Wei <enjou1224z@gmail.com>
-Subject: Re: [PATCH net v8 1/1] openvswitch: Fix CT limit teardown
- use-after-free
-Message-ID: <202608211727.eYRZFh9r-lkp@intel.com>
-References: <d9687780533d0b257e01ab792c8206a69beb281e.1787129643.git.xuyuqiabc@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lGDts2ed"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4418E1F00ACF
+	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 11:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787310165;
+	bh=hvEejkL8RvMzR7A62NfyXUaxeFgOTDxP9QfX7tV3HFs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=lGDts2ed9MjUHNlGIx130NNg9Bsb0b+tJy4pfOo6/YmSTK18vixLpuc/aQPopcw4+
+	 0yyAmmt2gOP04c8OmTMobwtkqEoDgd5sJTKC3oihJRwKKQXw7ZMUK9CKv20Tmc0XyP
+	 pUTRYFvkgxn78PYLXi+/9mgne+zDB0yg72ZWKEnrrPidDB3tshomZxhoLfswra3p71
+	 3oPBmTMTgoPjwtIwW06PiJZQXi7E3v61jTJ5Iu21/clexoUGURtfRbiAANcWwJhX1a
+	 V/iWMQ1pCcrM7nmE5nrkBP0vyJp5UQXtjh1C1OuPks41wyIJ2OtoQBUo1tvG2Eh4lM
+	 jIupCe+1qohQA==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c167aa9500dso136062966b.3
+        for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 04:02:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+Rpqu3f/DQ4nWaVX4L/Kkb78/R+0fhSSwwv5ctfQKypL8ch9dqK1yvPE9M9TFT7cLfaY8ath@lists.linux.dev
+X-Gm-Message-State: AFuF++kT51tW7R30rh4WB5td50fErZIohnI9z+ftcdus44AEtja0M6Wg
+	sPyhLptyY04tD0ZtQWc42DOV7M2EdyFOrF7CZvLgA+zKBxwv6SjUY05NGofluecKusvl/DR2lHU
+	PF8EHE8VsKxkYeQchh4v+1xq0955J8yk=
+X-Received: by 2002:a17:907:98d:b0:c12:b2db:873d with SMTP id
+ a640c23a62f3a-c246a2ec634mr658427266b.5.1787310163800; Fri, 21 Aug 2026
+ 04:02:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d9687780533d0b257e01ab792c8206a69beb281e.1787129643.git.xuyuqiabc@gmail.com>
+References: <20260820-b4-disp-58f78a28-v2-0-1fb7a6cb1533@proton.me> <20260820-b4-disp-58f78a28-v2-1-1fb7a6cb1533@proton.me>
+In-Reply-To: <20260820-b4-disp-58f78a28-v2-1-1fb7a6cb1533@proton.me>
+From: Namjae Jeon <linkinjeon@kernel.org>
+Date: Fri, 21 Aug 2026 20:02:31 +0900
+X-Gmail-Original-Message-ID: <CAKYAXd_L597uCWw3VF-pGoiYAhuAEN5hfVgX0OEdyK+yZpKRgw@mail.gmail.com>
+X-Gm-Features: AcwNN1W2YXGitLnbU9HdeaZZB7fbkZ2JxO0HGUfWc8Qy18x9g7dpa04IBiEUxgY
+Message-ID: <CAKYAXd_L597uCWw3VF-pGoiYAhuAEN5hfVgX0OEdyK+yZpKRgw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] smb: client: let enum smb_eio_trace grow past 128 entries
+To: hexlabsecurity@proton.me
+Cc: Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	David Howells <dhowells@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Tom Talpey <tom@talpey.com>, 
+	llvm@lists.linux.dev, Bharath SM <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, samba-technical@lists.samba.org, 
+	Jeff Layton <jlayton@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yuqi,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 564973a259ec76f2dad0853420e7034cc43994c4]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yuqi-Xu/openvswitch-Fix-CT-limit-teardown-use-after-free/20260819-172433
-base:   564973a259ec76f2dad0853420e7034cc43994c4
-patch link:    https://lore.kernel.org/r/d9687780533d0b257e01ab792c8206a69beb281e.1787129643.git.xuyuqiabc%40gmail.com
-patch subject: [PATCH net v8 1/1] openvswitch: Fix CT limit teardown use-after-free
-config: i386-buildonly-randconfig-005-20260821 (https://download.01.org/0day-ci/archive/20260821/202608211727.eYRZFh9r-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260821/202608211727.eYRZFh9r-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608211727.eYRZFh9r-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/openvswitch/datapath.c:2777:36: error: no member named 'ct_exit_data' in 'struct ovs_net'
-    2777 |         ovs_ct_exit_finish(dnet, ovs_net->ct_exit_data);
-         |                                  ~~~~~~~  ^
-   1 error generated.
-
-
-vim +2777 net/openvswitch/datapath.c
-
-  2766	
-  2767	static void __net_exit ovs_exit_net(struct net *dnet)
-  2768	{
-  2769		struct ovs_net *ovs_net = net_generic(dnet, ovs_net_id);
-  2770		struct vport *vport, *vport_next;
-  2771		struct datapath *dp, *dp_next;
-  2772		struct net *net;
-  2773		LIST_HEAD(head);
-  2774	
-  2775		ovs_lock();
-  2776	
-> 2777		ovs_ct_exit_finish(dnet, ovs_net->ct_exit_data);
-  2778	
-  2779		list_for_each_entry_safe(dp, dp_next, &ovs_net->dps, list_node)
-  2780			__dp_destroy(dp);
-  2781	
-  2782		down_read(&net_rwsem);
-  2783		for_each_net(net)
-  2784			list_vports_from_net(net, dnet, &head);
-  2785		up_read(&net_rwsem);
-  2786	
-  2787		/* Detach all vports from given namespace. */
-  2788		list_for_each_entry_safe(vport, vport_next, &head, detach_list) {
-  2789			list_del(&vport->detach_list);
-  2790			ovs_dp_detach_port(vport);
-  2791		}
-  2792	
-  2793		ovs_unlock();
-  2794	
-  2795		cancel_delayed_work_sync(&ovs_net->masks_rebalance);
-  2796		cancel_work_sync(&ovs_net->dp_notify_work);
-  2797	}
-  2798	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On Fri, Aug 21, 2026 at 11:25=E2=80=AFAM Bryam Vargas via B4 Relay
+<devnull+hexlabsecurity.proton.me@kernel.org> wrote:
+>
+> From: Bryam Vargas <hexlabsecurity@proton.me>
+>
+> enum smb_eio_trace is __mode(byte) and the list has held exactly 128
+> entries since it was added, so the last sits at index 127 and a 129th has
+> no representable value.  clang gives the enum a signed underlying type an=
+d
+> converts the overflowing value to -128; x86_64 defconfig turns that into =
+a
+> build failure because it sets CONFIG_WERROR=3Dy, and where it does not, t=
+he
+> value stops matching the __print_symbolic() table and those events print =
+a
+> raw number.  gcc picks an unsigned underlying type and reports nothing.
+>
+> Drop the attribute.  On x86_64 the record does not grow: the field
+> precedes an unsigned long at offset 8 of struct trace_event_raw_smb3_eio,
+> so sizeof() stays 32 either way.
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202607290344.fvDmgRPA-lkp@i=
+ntel.com/
+> Fixes: f80ac7eda1cf ("cifs: Add a tracepoint to log EIO errors")
+> Cc: stable@kernel.org
+> Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
+> ---
+>  fs/smb/client/trace.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/fs/smb/client/trace.h b/fs/smb/client/trace.h
+> index 5b21ad3c15fb..0a91d3aaa079 100644
+> --- a/fs/smb/client/trace.h
+> +++ b/fs/smb/client/trace.h
+> @@ -213,7 +213,7 @@
+>  #define EM(a, b) a,
+>  #define E_(a, b) a
+>
+> -enum smb_eio_trace             { smb_eio_traces } __mode(byte);
+> +enum smb_eio_trace             { smb_eio_traces };
+Looks ok. But these patches should be squashed because 0001 patch is
+only required to make the new enum added by 0002 patch build
+correctly.
+Thanks.
