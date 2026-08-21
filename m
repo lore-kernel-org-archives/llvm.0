@@ -1,106 +1,243 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C158348033E
-	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 11:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FE52C21C5;
+	Fri, 21 Aug 2026 12:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787310167; cv=none; b=rzqwDUnOgw0FjDsc1Uj7hoz7t3a1DXkXxFE13Qi6ALCknZs5KoXF4SC0JT8EiznZ85L9eIhQ05vRFAhkn/6fi3/i6VyifcFw8yJi74IjpThmp11MOzxFheGRMS8ogcTQ4zLUn9QyIfoRoGsm/Mw/++jpB6NFnnxAg6cKWL22fuk=
+	t=1787314849; cv=none; b=rsdFpJftfG5H9Ix526ygzfNxVeuSfYdH7Y2MTiAfsrq5hmR0LgGDcDIeUt6XIrW5LeIXZIpWI9DJfh57PJX3QJl3my+i+AgVrwhrQ1iZLZw89gwWneEHjgmPNVJ7MnZ+UDxqIs6DzfBZl9n0EZLPDQnjPJf6WrPghx4OM0i2oyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787310167; c=relaxed/simple;
-	bh=E6/B7FL0zi3araSBiTSbz62qcwkieMdNtUo8MRpBt/0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lQcSHmqoYWHsbSLW2FHG5/NMZx3UrnEXhVet3MfuaCIJHdMTPIDSta//1aqclCTEGrdqVunSoBejLzSnvP6YtwG0vnfd/5aceP/2xb3zbgbNVzI/g/Z5ZTlzXHhKlk4kfod9F/bclqQrnT7AAghITSOCu3t/LLbtUbSgYqAMBAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lGDts2ed; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787314849; c=relaxed/simple;
+	bh=mA5+tCJIxGMdiTafRD3UeUkrQnVqiAw1oU1EajmmdaY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W4MljjP47cFxs+3voIH5kTxk8zreT6L6yKvD4Sa1il8sWzlaYqIC/Jry4KvpqVqgiqwEmMCMh2wPWEPmYILbRH5VKVl/DspWY1VrMYWumEBF7knvfexNIWQW82M8ir0KOgMSqKx+vGCENW9C6GiZMKaSFJyFcqSanfTJzIhZ+MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdxNnWm2; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lGDts2ed"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4418E1F00ACF
-	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 11:02:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787310165;
-	bh=hvEejkL8RvMzR7A62NfyXUaxeFgOTDxP9QfX7tV3HFs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=lGDts2ed9MjUHNlGIx130NNg9Bsb0b+tJy4pfOo6/YmSTK18vixLpuc/aQPopcw4+
-	 0yyAmmt2gOP04c8OmTMobwtkqEoDgd5sJTKC3oihJRwKKQXw7ZMUK9CKv20Tmc0XyP
-	 pUTRYFvkgxn78PYLXi+/9mgne+zDB0yg72ZWKEnrrPidDB3tshomZxhoLfswra3p71
-	 3oPBmTMTgoPjwtIwW06PiJZQXi7E3v61jTJ5Iu21/clexoUGURtfRbiAANcWwJhX1a
-	 V/iWMQ1pCcrM7nmE5nrkBP0vyJp5UQXtjh1C1OuPks41wyIJ2OtoQBUo1tvG2Eh4lM
-	 jIupCe+1qohQA==
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-c167aa9500dso136062966b.3
-        for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 04:02:45 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+Rpqu3f/DQ4nWaVX4L/Kkb78/R+0fhSSwwv5ctfQKypL8ch9dqK1yvPE9M9TFT7cLfaY8ath@lists.linux.dev
-X-Gm-Message-State: AFuF++kT51tW7R30rh4WB5td50fErZIohnI9z+ftcdus44AEtja0M6Wg
-	sPyhLptyY04tD0ZtQWc42DOV7M2EdyFOrF7CZvLgA+zKBxwv6SjUY05NGofluecKusvl/DR2lHU
-	PF8EHE8VsKxkYeQchh4v+1xq0955J8yk=
-X-Received: by 2002:a17:907:98d:b0:c12:b2db:873d with SMTP id
- a640c23a62f3a-c246a2ec634mr658427266b.5.1787310163800; Fri, 21 Aug 2026
- 04:02:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdxNnWm2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787314843; x=1818850843;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mA5+tCJIxGMdiTafRD3UeUkrQnVqiAw1oU1EajmmdaY=;
+  b=TdxNnWm2l/QnC+gEo67ynrMBHGpgwWBcHpsamMe04RwGe5fuGBIJ/LRt
+   tUry5GcNqG3rQEM03qPrLd7TMeMK+N52yOCUIGeAxrC9ur+WqLEDUvHVs
+   iAtCOnaT33njKEKJCi8bpO199M1NVmsDRHX73I8u3Nb1IC1xuN7RkR0YD
+   B//UOG7uEthhB1/B/QzSjPdNMjk1IFtHtQhTUZ+T2cO2Mk13KZ/YVKtNU
+   9ZnqY1yMP6V2lbBM+ZW+XvHitoJS60ps1C2RPRzahb2ECVmMYGhArLvBq
+   PK+/dEvOKAXrAgj6+GrN0Nnu39w8mVUoIT2sdkRqE1fd4mqgR3jqXUZD0
+   A==;
+X-CSE-ConnectionGUID: irYe1omeQhW09d0A0fX5pg==
+X-CSE-MsgGUID: uTBTJ85BSdu6nhfI2F/wQw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11881"; a="75398539"
+X-IronPort-AV: E=Sophos;i="6.25,235,1779174000"; 
+   d="scan'208";a="75398539"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2026 05:20:41 -0700
+X-CSE-ConnectionGUID: htcZrFUnSMGknKLgVRtM9Q==
+X-CSE-MsgGUID: lfDIRxXwRCCQOXnrNX1uig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,235,1779174000"; 
+   d="scan'208";a="262054778"
+Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 21 Aug 2026 05:20:38 -0700
+Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wxOEd-00000000ptj-225Q;
+	Fri, 21 Aug 2026 12:20:35 +0000
+Date: Fri, 21 Aug 2026 20:20:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Runyu Xiao <runyu.xiao@seu.edu.cn>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Nicholas Bellinger <nab@linux-iscsi.org>,
+	Lee Duncan <lduncan@suse.com>, linux-scsi@vger.kernel.org,
+	target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org, Runyu Xiao <runyu.xiao@seu.edu.cn>,
+	Jianhao Xu <jianhao.xu@seu.edu.cn>
+Subject: Re: [PATCH v2] scsi: target: pin db_root for metadata writes
+Message-ID: <202608212004.Xyev8OzS-lkp@intel.com>
+References: <20260818051442.1523210-1-runyu.xiao@seu.edu.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260820-b4-disp-58f78a28-v2-0-1fb7a6cb1533@proton.me> <20260820-b4-disp-58f78a28-v2-1-1fb7a6cb1533@proton.me>
-In-Reply-To: <20260820-b4-disp-58f78a28-v2-1-1fb7a6cb1533@proton.me>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Fri, 21 Aug 2026 20:02:31 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd_L597uCWw3VF-pGoiYAhuAEN5hfVgX0OEdyK+yZpKRgw@mail.gmail.com>
-X-Gm-Features: AcwNN1W2YXGitLnbU9HdeaZZB7fbkZ2JxO0HGUfWc8Qy18x9g7dpa04IBiEUxgY
-Message-ID: <CAKYAXd_L597uCWw3VF-pGoiYAhuAEN5hfVgX0OEdyK+yZpKRgw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] smb: client: let enum smb_eio_trace grow past 128 entries
-To: hexlabsecurity@proton.me
-Cc: Steve French <sfrench@samba.org>, Paulo Alcantara <pc@manguebit.org>, 
-	Shyam Prasad N <sprasad@microsoft.com>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	David Howells <dhowells@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Tom Talpey <tom@talpey.com>, 
-	llvm@lists.linux.dev, Bharath SM <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, samba-technical@lists.samba.org, 
-	Jeff Layton <jlayton@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260818051442.1523210-1-runyu.xiao@seu.edu.cn>
 
-On Fri, Aug 21, 2026 at 11:25=E2=80=AFAM Bryam Vargas via B4 Relay
-<devnull+hexlabsecurity.proton.me@kernel.org> wrote:
->
-> From: Bryam Vargas <hexlabsecurity@proton.me>
->
-> enum smb_eio_trace is __mode(byte) and the list has held exactly 128
-> entries since it was added, so the last sits at index 127 and a 129th has
-> no representable value.  clang gives the enum a signed underlying type an=
-d
-> converts the overflowing value to -128; x86_64 defconfig turns that into =
-a
-> build failure because it sets CONFIG_WERROR=3Dy, and where it does not, t=
-he
-> value stops matching the __print_symbolic() table and those events print =
-a
-> raw number.  gcc picks an unsigned underlying type and reports nothing.
->
-> Drop the attribute.  On x86_64 the record does not grow: the field
-> precedes an unsigned long at offset 8 of struct trace_event_raw_smb3_eio,
-> so sizeof() stays 32 either way.
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202607290344.fvDmgRPA-lkp@i=
-ntel.com/
-> Fixes: f80ac7eda1cf ("cifs: Add a tracepoint to log EIO errors")
-> Cc: stable@kernel.org
-> Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
-> ---
->  fs/smb/client/trace.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/fs/smb/client/trace.h b/fs/smb/client/trace.h
-> index 5b21ad3c15fb..0a91d3aaa079 100644
-> --- a/fs/smb/client/trace.h
-> +++ b/fs/smb/client/trace.h
-> @@ -213,7 +213,7 @@
->  #define EM(a, b) a,
->  #define E_(a, b) a
->
-> -enum smb_eio_trace             { smb_eio_traces } __mode(byte);
-> +enum smb_eio_trace             { smb_eio_traces };
-Looks ok. But these patches should be squashed because 0001 patch is
-only required to make the new enum added by 0002 patch build
-correctly.
-Thanks.
+Hi Runyu,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on mkp-scsi/for-next]
+[also build test ERROR on v7.2]
+[cannot apply to linus/master next-20260820]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Runyu-Xiao/scsi-target-pin-db_root-for-metadata-writes/20260818-131442
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20260818051442.1523210-1-runyu.xiao%40seu.edu.cn
+patch subject: [PATCH v2] scsi: target: pin db_root for metadata writes
+config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260821/202608212004.Xyev8OzS-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260821/202608212004.Xyev8OzS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608212004.Xyev8OzS-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/target/target_core_configfs.c:3757:2: warning: adding 'int' to a string does not append to the string [-Wstring-plus-int]
+    3757 |         strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
+     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
+      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
+         |                           ^
+   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
+      25 | #define __CONCAT(a, b) a ## b
+         |                        ^
+   <scratch space>:29:1: note: expanded from here
+      29 | __strscpy1
+         | ^
+   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
+      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                 ~~~~~^~~~~~~~~~~~~~~~~~~~~
+   drivers/target/target_core_configfs.c:3757:2: note: use array indexing to silence this warning
+   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
+     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ^
+   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
+      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
+         |                           ^
+   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
+      25 | #define __CONCAT(a, b) a ## b
+         |                        ^
+   <scratch space>:29:1: note: expanded from here
+      29 | __strscpy1
+         | ^
+   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
+      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                      ^
+>> drivers/target/target_core_configfs.c:3757:25: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
+    3757 |         strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
+         |                                ^~~~~~~~~~~
+   drivers/target/target_core_internal.h:169:22: note: expanded from macro 'DB_ROOT_LEN'
+     169 | #define DB_ROOT_LEN             4096
+         |                                 ^~~~
+   include/linux/string.h:70:43: note: passing argument to parameter here
+      70 | ssize_t sized_strscpy(char *, const char *, size_t);
+         |                                           ^
+>> drivers/target/target_core_configfs.c:3757:38: error: incompatible pointer to integer conversion passing 'char *' to parameter of type 'size_t' (aka 'unsigned long') [-Wint-conversion]
+    3757 |         strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
+   drivers/target/target_core_internal.h:171:27: note: expanded from macro 'DB_ROOT_PREFERRED'
+     171 | #define DB_ROOT_PREFERRED       "/etc/target"
+         |                                 ^
+   include/linux/string.h:111:60: note: expanded from macro 'strscpy'
+     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/string.h:80:26: note: expanded from macro '__strscpy1'
+      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/string.h:70:51: note: passing argument to parameter here
+      70 | ssize_t sized_strscpy(char *, const char *, size_t);
+         |                                                   ^
+   drivers/target/target_core_configfs.c:3760:3: warning: adding 'int' to a string does not append to the string [-Wstring-plus-int]
+    3760 |                 strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
+     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
+      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
+         |                           ^
+   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
+      25 | #define __CONCAT(a, b) a ## b
+         |                        ^
+   <scratch space>:30:1: note: expanded from here
+      30 | __strscpy1
+         | ^
+   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
+      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                 ~~~~~^~~~~~~~~~~~~~~~~~~~~
+   drivers/target/target_core_configfs.c:3760:3: note: use array indexing to silence this warning
+   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
+     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ^
+   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
+      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
+         |                           ^
+   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
+      25 | #define __CONCAT(a, b) a ## b
+         |                        ^
+   <scratch space>:30:1: note: expanded from here
+      30 | __strscpy1
+         | ^
+   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
+      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                      ^
+   drivers/target/target_core_configfs.c:3760:26: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
+    3760 |                 strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
+         |                                        ^~~~~~~~~~~
+   drivers/target/target_core_internal.h:169:22: note: expanded from macro 'DB_ROOT_LEN'
+     169 | #define DB_ROOT_LEN             4096
+         |                                 ^~~~
+   include/linux/string.h:70:43: note: passing argument to parameter here
+      70 | ssize_t sized_strscpy(char *, const char *, size_t);
+         |                                           ^
+   drivers/target/target_core_configfs.c:3760:39: error: incompatible pointer to integer conversion passing 'char *' to parameter of type 'size_t' (aka 'unsigned long') [-Wint-conversion]
+    3760 |                 strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
+         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+   drivers/target/target_core_internal.h:170:26: note: expanded from macro 'DB_ROOT_DEFAULT'
+     170 | #define DB_ROOT_DEFAULT         "/var/target"
+         |                                 ^
+   include/linux/string.h:111:60: note: expanded from macro 'strscpy'
+     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
+   include/linux/string.h:80:26: note: expanded from macro '__strscpy1'
+      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/string.h:70:51: note: passing argument to parameter here
+      70 | ssize_t sized_strscpy(char *, const char *, size_t);
+         |                                                   ^
+   2 warnings and 4 errors generated.
+
+
+vim +3757 drivers/target/target_core_configfs.c
+
+  3751	
+  3752	static void target_init_dbroot(void)
+  3753	{
+  3754		struct path path = {};
+  3755		int ret;
+  3756	
+> 3757		strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
+  3758		ret = target_validate_db_root(db_root_stage, &path);
+  3759		if (ret) {
+  3760			strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
+  3761			ret = target_validate_db_root(db_root_stage, &path);
+  3762			if (ret)
+  3763				return;
+  3764		}
+  3765	
+  3766		db_root_path = path;
+  3767		strscpy(db_root, db_root_stage);
+  3768		pr_debug("Target_Core_ConfigFS: db_root set to %s\n", db_root);
+  3769	}
+  3770	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
