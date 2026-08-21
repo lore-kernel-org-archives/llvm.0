@@ -1,76 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx1.manguebit.org (mx1.manguebit.org [143.255.12.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E5493546C4
-	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 15:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F303371068;
+	Fri, 21 Aug 2026 18:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=143.255.12.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787324650; cv=none; b=kjrkuCaNnamOPQiNwnoFC024k/0bAgNIG6QKE+YjQUsBmWXRZHsry7XmNqSj62+TdpOSDYx4XJRj0FwQvlRvXV4MEG6iEzXxoZ3FJUPL1G24PC1O2Q6VdFuY7XlMrkUDA1CjySt7vNl9GxxVxf5MI2H9o96QaQXexfurS+VDTvk=
+	t=1787336252; cv=none; b=Z20z3r69bgcchcJYH7dj9WZr1mcpFkxkmC6z+rQ+Dq9/Iv7BruLRLHzyAVXZjDKcHDV/dqFIpyanTQzZr8P+U5RwKUwbbILCqKhTsJDLnGI4/tiHC3V+fuFqaTHhsBCl1ZKvb7tmJXz5qQnrOl9Q58c3mrMTZ4unM7wIujctJeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787324650; c=relaxed/simple;
-	bh=nOATZQ7Fuztys+g7hbjmQZCO0+eOxUO9ERYOmNlPnb4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PjhhnWjZj1d8lI67Yy60OCuAEUePlUUQNlxxqlUJH8k9nimAzbKv9OxyjZJ2mh1OGLh3Dn0QkCxcvKVhPqdjtKboANgYzTXVJFu6hQDAAqz+J71GPhMFGZsWjxmenDWJ/Pb1PkGR/8eS7QAJE59dQPkrfsHJ7y3QNrFKbAv+nvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CJ962MOd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787336252; c=relaxed/simple;
+	bh=0LRGlfknpGfx9M40YuP2VpoznZQSLyhvSkSmBIhe0cU=;
+	h=Message-ID:From:To:Cc:Subject:In-Reply-To:References:Date:
+	 MIME-Version:Content-Type; b=VQHQviZAGs8Z19gB1lP6X0Cq1inNK3KCkWLxPBfY3U65uOmmN44eZ5hy2aLfN3hYXWx0j6VE7leslPADiVhOjbW9k7ivE/ZF0wcRjqy/0EXUn5bi1mGXfXVB643ykMz/o1vB0z58atq0BqZZt0BJWhHkr1zfH4AEHSsgmZyv9Is=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org; spf=pass smtp.mailfrom=manguebit.org; dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b=LRLF9SMd; arc=none smtp.client-ip=143.255.12.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=manguebit.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=manguebit.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CJ962MOd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A2141F00AC4
-	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 15:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787324649;
-	bh=wnEMR8Ookc7Xu0y7cdH3S8om7vgswlZbOn87ouUD76A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=CJ962MOdwJM9OCrT+xVHgXQG8AE9m5XXYgI0GMOvL27fj7dNzSyZZ3qX7ey3hmKwY
-	 erP1TcDAEHeD3IuAgKSKm1oWRtMXuVWvUPf7gSwEZnOdMf8B+0y+E21j3JtR08OhPS
-	 l+3lWxRuwzMTL1jWSDGFJ/Dp01zuKSM9eosY2FqGA5YLoHUWmDpkse9M+NWujAxCbE
-	 bBpa1R3i2Cq0sbJByk4MoV0JLSTu8V6BmzxUKFL/zA/s4yOjBRXKO0m5AcH/MzWkCy
-	 UoSPUgFltpQY0IDy70bNr2sy2JOsLCqdxG5KnxAeafU4obPkAXsSrsVWHr7xC/JVmS
-	 9Vl2ggCe4VU+Q==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a0a4a28cbdso2114055a12.3
-        for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 08:04:08 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RqoTsRc3OJ0oytj0bTDvaogpY88AqHRYZuG3L8NaD7gj+x+X+2MSYUT2bfxJ+jLtAbeqTjW@lists.linux.dev
-X-Gm-Message-State: AFuF++lfz7nGyrbt2F4aRp6lE7p6HFcMNyTE7IOuNsKELdV/5tmpwVH+
-	BpxfhoQAeeZTykXlImbMFbRh4UDQn3fdaXIQCHpPvkgh+nj1/2avJ261hshr+4XCKYnfzdB244e
-	fw+Dc1BJjGtQ1pOpa6Cv3a6Jsb15W+mY=
-X-Received: by 2002:a17:906:6a27:b0:c12:3059:4071 with SMTP id
- a640c23a62f3a-c246a604a33mr716104866b.15.1787324647709; Fri, 21 Aug 2026
- 08:04:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=manguebit.org header.i=@manguebit.org header.b="LRLF9SMd"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=manguebit.org; s=dkim; h=Content-Type:MIME-Version:Date:References:
+	In-Reply-To:Subject:Cc:To:From:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=eYL+HCcMJAbsyIKf88u7tjB4pIhnfAxZu6w+CoXAEL0=; b=LRLF9SMdQcNoKeQ2kstH7EZdWo
+	Acf9YVWVu/kg/WZ3WhU6zbOhySFJlUXUR/BvUWU30s0Kfl70iOVjP0f09D5V/AcIZ0N0SRLnebYIK
+	J1BvI8/xfG6IlkGaevz0ccaLUVcK2YA5GRiSjtpuDPEzCqHZA8/FZHTW2k6qa7JjMUnNzD1buBaYF
+	TkJxx9v8YmTA4GaZ2TFEa76n5+zTJ2E6OcPOU0FTXSm6nDVzaf4HSrsEn1QqGmH1ZJoPewcFXCS7v
+	gOIGi+1g+lBu5D4r5gZrblpUhAyb64T/ehv/V11mB7CNrq2jmKygb63GZ5sG+9UUhsTNhBKDx+1ly
+	QjfCsGkQ==;
+Received: from pc by mx1.manguebit.org with local (Exim 4.99.5)
+	id 1wxTny-00000000Pvh-319x;
+	Fri, 21 Aug 2026 15:17:26 -0300
+Message-ID: <6106bf0aa56b46d03696f37e30462f5b@manguebit.org>
+From: Paulo Alcantara <pc@manguebit.org>
+To: hexlabsecurity@proton.me, Steve French <sfrench@samba.org>
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, Tom Talpey
+ <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>, Bharath SM
+ <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org,
+ samba-technical@lists.samba.org, Nathan Chancellor <nathan@kernel.org>,
+ Shyam Prasad N <sprasad@microsoft.com>, Namjae Jeon
+ <linkinjeon@kernel.org>, David Howells <dhowells@redhat.com>
+Subject: Re: [PATCH v3] smb: client: reject a tree connect response whose
+ byte count is too small
+In-Reply-To: <20260821-b4-disp-5297959d-v3-1-2f92f9abccee@proton.me>
+References: <20260821-b4-disp-5297959d-v3-1-2f92f9abccee@proton.me>
+Date: Fri, 21 Aug 2026 15:17:26 -0300
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260821-b4-disp-5297959d-v3-1-2f92f9abccee@proton.me>
-In-Reply-To: <20260821-b4-disp-5297959d-v3-1-2f92f9abccee@proton.me>
-From: Namjae Jeon <linkinjeon@kernel.org>
-Date: Sat, 22 Aug 2026 00:03:55 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd8+HNjk-BXZVnv0_wwp+E-S5__gt_wKnCCmrkRv7eMPhA@mail.gmail.com>
-X-Gm-Features: AcwNN1UJxWWSBL2OdkhgK93qnEY6LqtCetp9LyRSmlWNhwwvZ2TCZtszmbpnq-Q
-Message-ID: <CAKYAXd8+HNjk-BXZVnv0_wwp+E-S5__gt_wKnCCmrkRv7eMPhA@mail.gmail.com>
-Subject: Re: [PATCH v3] smb: client: reject a tree connect response whose byte
- count is too small
-To: hexlabsecurity@proton.me
-Cc: Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>, Paulo Alcantara <pc@manguebit.org>, 
-	Bharath SM <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org, 
-	samba-technical@lists.samba.org, Nathan Chancellor <nathan@kernel.org>, 
-	Shyam Prasad N <sprasad@microsoft.com>, David Howells <dhowells@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Fri, Aug 21, 2026 at 9:36=E2=80=AFPM Bryam Vargas via B4 Relay
-<devnull+hexlabsecurity.proton.me@kernel.org> wrote:
->
+Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>
+writes:
+
 > From: Bryam Vargas <hexlabsecurity@proton.me>
 >
 > CIFSTCon() bounds its strnlen() over the byte area with the server's
 > ByteCount minus two, which for ByteCount 0 or 1 goes negative as an int
 > and converts to a huge size_t.  The later subtraction wraps the __u16
 > bytes_left, and that is what bounds cifs_strndup_from_utf16(): a bound of
-> up to 65535 against a ~16 KB cifs_req_poolp object runs off the end of th=
-e
+> up to 65535 against a ~16 KB cifs_req_poolp object runs off the end of the
 > slab object, and the bytes reach userspace through tcon->nativeFileSystem
 > in /proc/fs/cifs/DebugData.
 >
@@ -78,10 +69,6 @@ e
 > the least it can consume, and no conformant response carries fewer.  The
 > new trace point is the 129th smb_eio_trace entry, which __mode(byte)
 > cannot represent, so the attribute goes with it.
->
-> Fixes: cc20c031bb06 ("cifs: convert CIFSTCon to use new unicode helper fu=
-nctions")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
-Reviewed-by: Namjae Jeon <linkinjeon@kernel.org>
-Thanks.
+> ...
+
+Applied.
