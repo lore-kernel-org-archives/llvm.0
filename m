@@ -1,124 +1,193 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7A739E9AD
-	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 22:46:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9490433054
+	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 23:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787352392; cv=none; b=gTpgntCJe5PgrgaoYoracd0XTtPYmXRhgWPw77bnWogAuwxtaqPzFONUWJbVNVB95uyG3lhasdiZU+OylUF61ZDagLpmERW+nw5Nh9X2cTHH9L6IWwWtYhnSce1LCWlJ1+w7PXDtKjJW6QwnLln+tSLwoi8lelOfEW0OWYv3E9A=
+	t=1787355359; cv=none; b=sjaG0i32H9N1iA66/tWNgP/KNfwTDBGiUmMI27kZODn4jRNtZIlaXUCC/Lg+h+Jao9ZaAEL2DSIY0EHlRDOpjtGgsMTSNGfvlX7cu+RibW66A3HALNbvs38fLBumQ8NGRyuiZTwl0agglux1qP2p4YFGTjsZe8kHfKKbSGGBMzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787352392; c=relaxed/simple;
-	bh=56JEwv36N2jImwv77Sawypjq/venfK1iwiLw5CgY4pY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S5kpuY9LXFtpLnE01sgLUZGrUXZKn8OMCfXrqiSopx5hvCu3oxPe6vMSthwvZggjc9+ka0ZEO7qfSJBunG19nC66yuhnEb9mCaC2sbCqWhhjCbB2Wa5NXCNEWgi5148w12P2zEm0986A16+cma5MUMjjd0rff/+S69seo2sfEiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=U0GefJvU; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1787355359; c=relaxed/simple;
+	bh=asd0oGe+4nzxMKLWV335XwiZaTgrY2kiFB5C2LrFQuE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oJuCJtXjBTJW60gKTXEbxepf767CwPxS55bdKzGgdTL7nTbCaiRNX3Q4sFj4vMfoPpY8pi8cwdDuIlk4Ush3j1IwTWKjF1nx+vGZ8VfckpnPEodVkeZyNRWFiCfeF5ndGGoW9XEvVaT0TBDeJlAS/IQoQobBj/MLRE5vcUzptMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=SG6NcUV1; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="U0GefJvU"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67LIVVsR2314678;
-	Fri, 21 Aug 2026 22:46:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=0L75nX
-	lFEC8XRnTslyoIJQz0Efxfw9SzcspEKJMQRhU=; b=U0GefJvUK/s7GY720orkBk
-	cBu9cIUTDnc2yaBB4bfMqKX/EewB7l3Undgttt/LB0+3iOFhUsS624pSs4y7h9U4
-	36vv15suRBZ4RYQaqUSgvu9Se8UtsRkl301KzGBYxyuxULdeg3b8kQTsBm52dUQ6
-	HRLwFP48HKiQX+huTD4YN+1Vb5FqHvEORN3QmcXNsY5RmJXy2+DnzpVw83conLjo
-	fRVoOFEip+2FV/8NLBz7qD2SQBQYPVSPlmvpz4vhwbNWYQzolfjhjfKlAIJ8cLWf
-	pzAkbSQFjl0AHRLq2k1G2XJerYOT2xD2/7DtQnJZPesLo5zinXQkYuF30twGcxmQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4g4yu1vmfh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Aug 2026 22:46:27 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67LMfHmp026606;
-	Fri, 21 Aug 2026 22:46:26 GMT
-Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4g33ekqds4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Aug 2026 22:46:26 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67LMkP3t61997472
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Aug 2026 22:46:25 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C83965805D;
-	Fri, 21 Aug 2026 22:46:25 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 45D7958056;
-	Fri, 21 Aug 2026 22:46:25 +0000 (GMT)
-Received: from [9.61.9.186] (unknown [9.61.9.186])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 21 Aug 2026 22:46:25 +0000 (GMT)
-Message-ID: <7a8fbc90-3086-4026-a3ac-b683d4c38d28@linux.ibm.com>
-Date: Fri, 21 Aug 2026 15:46:24 -0700
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="SG6NcUV1"
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-8487214ad2bso2031228b3a.1
+        for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 16:35:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1787355355; x=1787960155; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=I2COMEyacsFGYmJ08hxh+ysp07Ov7pN7X0HAy5vh28A=;
+        b=SG6NcUV1wZ8xDZXAundgBgrQUXQBxB6NZ8F5CpGvSAgAYAOcflsBgenqaIrhq8pg/h
+         KJFp4FOpuTEm1Y9ggfajvbK75svV/UNVBSAcPqwFFGxyCXIBeUMA7Gc3UUHFTDYXZBUS
+         6wNH2siblAckRh/iIDrnMhtLb0+vBfL4MsyQRDHmuaV67tSIbo4cge1JpZjICNeb1kI7
+         No1Iver835qFTmQmJDzT1FZm/25gXPthrxsqjQQ51sETOVzzfyK5j6P85N96jtKNydiD
+         R60mlKVPWH8CLpup9R+oCmNtxRyJc4BjlfOpCenTRqglC0siANKPgo2iTON3cAPGn9Z5
+         DksA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787355355; x=1787960155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=I2COMEyacsFGYmJ08hxh+ysp07Ov7pN7X0HAy5vh28A=;
+        b=Lds0jCYPNGcQN3Ln5QMG8RDFxrE+4Tr424QDVe38Kd+2xnJCb/JCW50bQB5RsLy5Tl
+         zhHFZCsDurnpcLtBcsIebEFHbCEcqbNvdX7SHEfmJV9ZKnx3SZ8Lp5O+7l/ELfSnoxRY
+         rGhe3rhqI6YbmrGTpaXkn33qKaFRHp3fUNnpsS4roq87/tNs0N1MZinIqxYNfsEWTaPN
+         ekt2Lzadda78OtWbPpiXAkyvRzA67GW3jkc+LQ+cv6DaNufvaEVw1TG8OR7N+Ri23u10
+         VtOD5IxLfNziRjT+jCFVOhPCyLg1JNVrrquT+u1SoyI/ufeFABEwrFZvORwVrUmKTdXQ
+         gtgg==
+X-Forwarded-Encrypted: i=1; AHgh+RqWhc0x5HzoT7ZHqDsSgjSG483AIhgi+pcrJ6dgf6vj6uZtrq0ZRts16cIVsKtcbsIKzs7m@lists.linux.dev
+X-Gm-Message-State: AFuF++n4FmDV3WjOaMmm3SY1UZOcnT4CRz9OU0Hw1pVRqKhQQprpwaAS
+	1txl1Ggg+D+JD80z6MgQ99O330Db8KsS/HHwxsB36cSNdU/8EZSCBI+XZ+P6jSUKWHs=
+X-Gm-Gg: AR+sD13pq6Mt5YdrBE1jZjQiMO5C+Hr/mNnHCaOF6ALNH7+4j/fbbxxqFSGaED3/ZWU
+	B3DBoSDcxMf6F8y5S6bpreY/2wx2MkhtV3UVOC6WId8PhXIclBp0w/67tW09hIcxqLeUz8a6+4v
+	mgngZP2fKduKrmtNiNhrInHm0BB3JbPgRXsWqMe2tQkMMeDeifEoHbp32HVaiAPBgVbXho/Y4K7
+	qA4QZOJ05uXt1hTb6d62qG3HRkYb/qYGVsQ06mlfgdg5WIkXv1M/UvSSHe6jlTnxP3RsUiAuSwX
+	q8L8VhCCBO2r7hmLf5mD0FxTt+qz40lG6WJCnfz9cGeNfsNIjXsr95FzECajib3hQFgz5wNHFsY
+	Jv31hk48zmUJ+opMZAmW5HNa0iyqLilaV5ryZGOMJ964QbUEoppv5tcmnNIx/DFE3OAOaK7uxP+
+	CujAd3o7NnwxPIEI7sSsyeTJXbcBeB3siUxKQO/jTGcg==
+X-Received: by 2002:a05:6a00:a225:b0:847:8b11:5966 with SMTP id d2e1a72fcca58-851f9a8e890mr12978803b3a.1.1787355355122;
+        Fri, 21 Aug 2026 16:35:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:58::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc15523b579sm3637919a12.3.2026.08.21.16.35.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Aug 2026 16:35:54 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+	Colin Winegarden <colin.winegarden@broadcom.com>
+Cc: horms@kernel.org,
+	rukhsana.ansari@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	Joe Damato <joe@dama.to>,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net] bnxt_en: Bound SW TPA IDs to prevent crashes
+Date: Fri, 21 Aug 2026 16:35:48 -0700
+Message-ID: <20260821233549.3134699-1-joe@dama.to>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] scsi: ibmvfc: Fix use of uninitialized rport in
- ibmvfc_do_work()
-To: Nathan Chancellor <nathan@kernel.org>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260817-ibmvscsi-rport-wuninitialized-v1-1-0fdfb27a5f01@kernel.org>
-Content-Language: en-US
-From: Tyrel Datwyler <tyreld@linux.ibm.com>
-In-Reply-To: <20260817-ibmvscsi-rport-wuninitialized-v1-1-0fdfb27a5f01@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=LsCiDHdc c=1 sm=1 tr=0 ts=6a88d543 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=VxpQeIyN2eE5DkSZRDsA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: cLZl4OKhtRLSIq0VgK7kfEd2Xzjozdn5
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODIxMDE4MSBTYWx0ZWRfXxHi+D1JP9NXT
- Vkdx7rY/JEktYFfbV10IrR6BpXZTh9farFPfNEO+qAnIvfxuBIHUX/UbiDVTMcXemgzKtuh5kik
- 18XP5f6e3b82kEIrisBSHeA34wSUr/o=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODIxMDE4MSBTYWx0ZWRfX8Naul4E8hyTp
- HdmGA72P3g4ZoUQTPEBxG3pwiYPjb9jooy7g2aNf7aIMiqajPd41gRtmOuZkTcZIVoPoeKLY7wT
- FyNN2c0rDfV7Q9ayBE46SEUpAkQyotj8y9uFY0oQ9eYSxY++BXEzXa/mZAwc/5wH3UWBHhx++b1
- xE41+ZDC1wBWl6vPeBkmym0hGgXPLzCQhcBryhoIeL5E/0MsUQMIhaMuRmIz7IuJgUN+hqmU2Lx
- 0E5LEymxxmqPwHVkxJJnDmOoZPrNscNWCJcidebyz6hCh501tf7NVIhQZa32stm70jZ4vehsZU9
- ZTufiu6LRBh5oh0W+eqqM2F85/31MK8W0+s/uaVslE75OgykjFmLFXLqtrDTIExq+2jUKv0Vw3y
- MrYWQlq6PRdADG8mo44xT8XbX9nJY3e829upFW/WsO4cAFeXjtYxMejnIGx/3KOTFYo3BWxEFFM
- LGKwOYX8WnBwdT6XVcA==
-X-Proofpoint-ORIG-GUID: cLZl4OKhtRLSIq0VgK7kfEd2Xzjozdn5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-21_06,2026-08-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
- adultscore=0 suspectscore=0 impostorscore=0 clxscore=1011 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608210181
+Content-Transfer-Encoding: 8bit
 
-On 8/17/26 12:04 PM, Nathan Chancellor wrote:
-> After commit 696d1cc2aaa2 ("scsi: ibmvfc: process NVMe/FC rports in work
-> thread"), clang warns (or errors with CONFIG_WERROR=y / W=e):
-> 
->   drivers/scsi/ibmvscsi/ibmvfc-core.c:6154:15: error: variable 'rport' is uninitialized when used here [-Werror,-Wuninitialized]
->    6154 |                         } else if (rport && tgt->action == IBMVFC_TGT_ACTION_DEL_AND_LOGOUT_RPORT) {
->         |                                    ^~~~~
-> 
-> The check for rport is unnecessary in this block, it was accidentally
-> included from copying and pasting. Remove it to clear up the warning.
-> 
-> Fixes: 696d1cc2aaa2 ("scsi: ibmvfc: process NVMe/FC rports in work thread")
-> Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-> Link: https://lore.kernel.org/6ccbe8c5-beb6-483f-bfa4-c2d3819ad5f2@linux.ibm.com/
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> ---
+TPA IDs are generated by FW and can be up to 1024. bnxt_alloc_agg_idx is
+intended to wrap the FW ID to a value in the range of [0, 255] and
+generate a mapping between FW IDs and the wrapped software ID.
 
-Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+On a 57608 with firmware version 233, the firmware advertises 32
+concurrent TPAs. As of the commit under fixes, bp->max_tpa on this NIC
+is set to 32.
+
+If the software ID from bnxt_alloc_agg_idx is above 31, this results in
+an invalid address being loaded on this line:
+
+  tpa_info = &rxr->rx_tpa[agg_id];
+
+because rx_tpa is allocated with only bp->max_tpa (32) entries. Writes
+to tpa_info later in the code are out of bounds.
+
+This bug results in a crash at boot:
+
+Oops: general protection fault, kernel NULL pointer dereference 0x8: 0000 [#1] SMP NOPTI
+RIP: 0010:bnxt_rx_pkt+0xc0/0x1560
+RSP: 0018:ffffc900009b8c78 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000048 RCX: 0000000206682516
+RDX: ffffc900009b8db4 RSI: 0000000000000000 RDI: 01ffffff038fe1c0
+RBP: ffffc9006e687480 R08: ffffc9006e687000 R09: 0000000000003048
+R10: 0000000000000480 R11: ffff8881c6083900 R12: 0000000006682516
+R13: ffff8881c6095400 R14: 0000000000000016 R15: ffff8881c6b66680
+FS:  0000000000000000(0000) GS:ffff88fef3c77000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc8bda40584 CR3: 000000807c812001 CR4: 0000000008772ef0
+PKRU: 55555554
+Call Trace:
+ <IRQ>
+ ? __netif_receive_skb_list_core+0x1ca/0x250
+ __bnxt_poll_work+0x152/0x280
+ bnxt_poll_p5+0x1cd/0x480
+ __napi_poll+0x30/0x180
+ net_rx_action+0x20b/0x3b0
+ ? note_gp_changes+0x53/0xe0
+ ? tick_setup_sched_timer+0x180/0x180
+ ? __napi_schedule+0x9a/0xb0
+ ? bnxt_msix+0x24/0x30
+ handle_softirqs+0xdd/0x2c0
+ __irq_exit_rcu.llvm.3171231171502365008+0x47/0xf0
+ common_interrupt+0x85/0x90
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x22/0x40
+
+This stack trace is from a crash triggered when an out of bounds rx_tpa
+is dereferenced. The invalid write mentioned above is silent in this
+particular crash.
+
+Fix this by adjusting bnxt_alloc_agg_idx so that any SW index greater
+than or equal to bp->max_tpa goes through the collision logic and picks
+the first available bit. Adjust the collision logic to only provide bits
+within the range of [0, bp->max_tpa).
+
+Fixes: 54c28fab2fa5 ("bnxt_en: Set bp->max_tpa according to what the FW supports")
+Cc: stable@vger.kernel.org
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index d3cb25abb632..f348fb93047d 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1517,14 +1517,15 @@ static int bnxt_discard_rx(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	return 0;
+ }
+ 
+-static u16 bnxt_alloc_agg_idx(struct bnxt_rx_ring_info *rxr, u16 agg_id)
++static u16 bnxt_alloc_agg_idx(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
++			      u16 agg_id)
+ {
+ 	struct bnxt_tpa_idx_map *map = rxr->rx_tpa_idx_map;
+ 	u16 idx = agg_id & MAX_TPA_P5_MASK;
+ 
+-	if (test_bit(idx, map->agg_idx_bmap)) {
+-		idx = find_first_zero_bit(map->agg_idx_bmap, MAX_TPA_P5);
+-		if (idx >= MAX_TPA_P5)
++	if (idx >= bp->max_tpa || test_bit(idx, map->agg_idx_bmap)) {
++		idx = find_first_zero_bit(map->agg_idx_bmap, bp->max_tpa);
++		if (idx >= bp->max_tpa)
+ 			return INVALID_HW_RING_ID;
+ 	}
+ 	__set_bit(idx, map->agg_idx_bmap);
+@@ -1589,7 +1590,7 @@ static void bnxt_tpa_start(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
+ 
+ 	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
+ 		agg_id = TPA_START_AGG_ID_P5(tpa_start);
+-		agg_id = bnxt_alloc_agg_idx(rxr, agg_id);
++		agg_id = bnxt_alloc_agg_idx(bp, rxr, agg_id);
+ 		if (unlikely(agg_id == INVALID_HW_RING_ID)) {
+ 			netdev_warn(bp->dev, "Unable to allocate agg ID for ring %d, agg 0x%x\n",
+ 				    rxr->bnapi->index,
+
+base-commit: 4e15e89faac9f308baeb01f46c13a051814d2449
+-- 
+2.53.0-Meta
 
