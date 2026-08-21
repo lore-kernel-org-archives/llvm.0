@@ -1,243 +1,194 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FE52C21C5;
-	Fri, 21 Aug 2026 12:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B6E39FCE;
+	Fri, 21 Aug 2026 12:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787314849; cv=none; b=rsdFpJftfG5H9Ix526ygzfNxVeuSfYdH7Y2MTiAfsrq5hmR0LgGDcDIeUt6XIrW5LeIXZIpWI9DJfh57PJX3QJl3my+i+AgVrwhrQ1iZLZw89gwWneEHjgmPNVJ7MnZ+UDxqIs6DzfBZl9n0EZLPDQnjPJf6WrPghx4OM0i2oyw=
+	t=1787315777; cv=none; b=U/MnYKL5tQkndnIM0QK5vVzdU1LFSkvI6LwYdaT7CIxIHaCpnVg9VcMndXyprojePk2ApSa0KiulBxfFdCyTu3rm2I+mU8RaPUlZTfdPDJUdn9mm+t19FmDo3fUrc0StxbsLN4fUVMVSFrLa5/jd/jXzgaQyyz2AQInp1O2rzCg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787314849; c=relaxed/simple;
-	bh=mA5+tCJIxGMdiTafRD3UeUkrQnVqiAw1oU1EajmmdaY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W4MljjP47cFxs+3voIH5kTxk8zreT6L6yKvD4Sa1il8sWzlaYqIC/Jry4KvpqVqgiqwEmMCMh2wPWEPmYILbRH5VKVl/DspWY1VrMYWumEBF7knvfexNIWQW82M8ir0KOgMSqKx+vGCENW9C6GiZMKaSFJyFcqSanfTJzIhZ+MI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TdxNnWm2; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787315777; c=relaxed/simple;
+	bh=P7g9eFq2cPaljcrkFNCo1rGiOnDBths5gWMuRCDGMhU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=V+ZXuJ7+U76qhX4J3oyUKtUBapb10UOIvhsKp10/9BCDBWGzqZQpkAT4YBVKzQXiBVpW4+1zy8S1PUQgMVAQ8TRQU9mlCuQyQKoXyXWnBfbCCbbDnVaUMRHN6J7E1o5RhIZPSM3XvmkNyXZlqHesO7E1hwlftzqRRvptQr4/OfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=isB+s9cT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdxNnWm2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787314843; x=1818850843;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mA5+tCJIxGMdiTafRD3UeUkrQnVqiAw1oU1EajmmdaY=;
-  b=TdxNnWm2l/QnC+gEo67ynrMBHGpgwWBcHpsamMe04RwGe5fuGBIJ/LRt
-   tUry5GcNqG3rQEM03qPrLd7TMeMK+N52yOCUIGeAxrC9ur+WqLEDUvHVs
-   iAtCOnaT33njKEKJCi8bpO199M1NVmsDRHX73I8u3Nb1IC1xuN7RkR0YD
-   B//UOG7uEthhB1/B/QzSjPdNMjk1IFtHtQhTUZ+T2cO2Mk13KZ/YVKtNU
-   9ZnqY1yMP6V2lbBM+ZW+XvHitoJS60ps1C2RPRzahb2ECVmMYGhArLvBq
-   PK+/dEvOKAXrAgj6+GrN0Nnu39w8mVUoIT2sdkRqE1fd4mqgR3jqXUZD0
-   A==;
-X-CSE-ConnectionGUID: irYe1omeQhW09d0A0fX5pg==
-X-CSE-MsgGUID: uTBTJ85BSdu6nhfI2F/wQw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11881"; a="75398539"
-X-IronPort-AV: E=Sophos;i="6.25,235,1779174000"; 
-   d="scan'208";a="75398539"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2026 05:20:41 -0700
-X-CSE-ConnectionGUID: htcZrFUnSMGknKLgVRtM9Q==
-X-CSE-MsgGUID: lfDIRxXwRCCQOXnrNX1uig==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,235,1779174000"; 
-   d="scan'208";a="262054778"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 21 Aug 2026 05:20:38 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wxOEd-00000000ptj-225Q;
-	Fri, 21 Aug 2026 12:20:35 +0000
-Date: Fri, 21 Aug 2026 20:20:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Runyu Xiao <runyu.xiao@seu.edu.cn>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Nicholas Bellinger <nab@linux-iscsi.org>,
-	Lee Duncan <lduncan@suse.com>, linux-scsi@vger.kernel.org,
-	target-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Runyu Xiao <runyu.xiao@seu.edu.cn>,
-	Jianhao Xu <jianhao.xu@seu.edu.cn>
-Subject: Re: [PATCH v2] scsi: target: pin db_root for metadata writes
-Message-ID: <202608212004.Xyev8OzS-lkp@intel.com>
-References: <20260818051442.1523210-1-runyu.xiao@seu.edu.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="isB+s9cT"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 043E5C19425;
+	Fri, 21 Aug 2026 12:36:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1787315777;
+	bh=P7g9eFq2cPaljcrkFNCo1rGiOnDBths5gWMuRCDGMhU=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=isB+s9cTHSj8RQBD7G331qSU+86CpNIcsckYWjCb+KgBXLrH1MsLuszmLu4wV4COR
+	 x04Btn1DiAQTtP7lMeQF1lXV8Za2qIiauheGVWEJ4AIAMXnerCVFtoo8jQgjDOH7H1
+	 GJL+z+zMDy7u0MTEsuqTMRp1jidsmqe5YPanRTWGDRFpFNyeNRfIch49oa/gzVWpOw
+	 rfEJG//oUQi5ruJQ9SfhDSFZvGQS9caYDzGb3aLFiTMVuBna2Gt7RksOSwKPscMy5b
+	 2Jus5otXcdVlWJRuSAU2LCewUE1u7+0wyd/afZUMrKeWBvHC74PiL/FL2Wwi5P1e92
+	 y7AQEdWOZt10g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CF4ABC5DF87;
+	Fri, 21 Aug 2026 12:36:16 +0000 (UTC)
+From: Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>
+Date: Fri, 21 Aug 2026 07:36:16 -0500
+Subject: [PATCH v3] smb: client: reject a tree connect response whose byte
+ count is too small
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260818051442.1523210-1-runyu.xiao@seu.edu.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260821-b4-disp-5297959d-v3-1-2f92f9abccee@proton.me>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMQQ6CQAxA0auQrm0ChVHqVQwLZqZqWQCZIiEh3
+ J1Rl2/x/w4mScXgXuyQZFXTacyoLwWEdz++BDVmA5V0LVuq0DcY1WZ0xDd2HDFSYGZPLnADOZu
+ TPHX7LR/d3/bxg4Tl+4HjOAEz6Le/dAAAAA==
+X-Change-ID: 20260821-b4-disp-5297959d-d2c999b25c94
+To: Steve French <sfrench@samba.org>
+Cc: Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+ Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>, 
+ Paulo Alcantara <pc@manguebit.org>, Bharath SM <bharathsm@microsoft.com>, 
+ linux-cifs@vger.kernel.org, samba-technical@lists.samba.org, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Shyam Prasad N <sprasad@microsoft.com>, Namjae Jeon <linkinjeon@kernel.org>, 
+ David Howells <dhowells@redhat.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787315776; l=5552;
+ i=hexlabsecurity@proton.me; s=default; h=from:subject:message-id;
+ bh=qMp2eGIfdAo+bcIGMz77Vp4+Kci5+wsU3Q1GbqELbBU=;
+ b=qOELhIkMRoeI2pwEJydpD9ulO5fvo9/XTMPbyURhD//3w9xLChtQah1n+hXHdJIBta18TZaCh
+ diMxC7w9aLRDv+kGRnmLFZQSWDI0+iLJJnb/rw3hyqEaDate121hYh0
+X-Developer-Key: i=hexlabsecurity@proton.me; a=ed25519;
+ pk=xw1AhCtQdvuoQc+bOQIYy9o8G++cp4/VniI2G/tc3G8=
+X-Endpoint-Received: by B4 Relay for hexlabsecurity@proton.me/default with
+ auth_id=893
+X-Original-From: Bryam Vargas <hexlabsecurity@proton.me>
+Reply-To: hexlabsecurity@proton.me
 
-Hi Runyu,
+From: Bryam Vargas <hexlabsecurity@proton.me>
 
-kernel test robot noticed the following build errors:
+CIFSTCon() bounds its strnlen() over the byte area with the server's
+ByteCount minus two, which for ByteCount 0 or 1 goes negative as an int
+and converts to a huge size_t.  The later subtraction wraps the __u16
+bytes_left, and that is what bounds cifs_strndup_from_utf16(): a bound of
+up to 65535 against a ~16 KB cifs_req_poolp object runs off the end of the
+slab object, and the bytes reach userspace through tcon->nativeFileSystem
+in /proc/fs/cifs/DebugData.
 
-[auto build test ERROR on mkp-scsi/for-next]
-[also build test ERROR on v7.2]
-[cannot apply to linus/master next-20260820]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reject a byte area too small for what the parser consumes.  Two bytes is
+the least it can consume, and no conformant response carries fewer.  The
+new trace point is the 129th smb_eio_trace entry, which __mode(byte)
+cannot represent, so the attribute goes with it.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Runyu-Xiao/scsi-target-pin-db_root-for-metadata-writes/20260818-131442
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20260818051442.1523210-1-runyu.xiao%40seu.edu.cn
-patch subject: [PATCH v2] scsi: target: pin db_root for metadata writes
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260821/202608212004.Xyev8OzS-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260821/202608212004.Xyev8OzS-lkp@intel.com/reproduce)
+Fixes: cc20c031bb06 ("cifs: convert CIFSTCon to use new unicode helper functions")
+Cc: stable@vger.kernel.org
+Signed-off-by: Bryam Vargas <hexlabsecurity@proton.me>
+---
+v3: squashed into one patch. v2's 1/2 existed only so the new trace point
+    would build -- the enum holds exactly 128 entries today and __mode(byte)
+    houses them fine, so split off it fixed nothing and asked stable to
+    backport a no-op. Its Fixes: f80ac7eda1cf went with it, and the enum
+    change is one sentence of the body now. Cc: switched from
+    stable@kernel.org to stable@vger.kernel.org, which is the delivering
+    address for a public posting.
+v2: https://lore.kernel.org/all/20260820-b4-disp-58f78a28-v2-0-1fb7a6cb1533@proton.me/
+v1: https://lore.kernel.org/all/20260728-b4-disp-6b8e68d4-v1-1-e69277237297@proton.me/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608212004.Xyev8OzS-lkp@intel.com/
+Dropping __mode(byte) does not grow the record on x86_64: the field precedes
+an unsigned long at offset 8 of struct trace_event_raw_smb3_eio, so sizeof()
+stays 32 either way. Only clang notices the overflow -- it gives the enum a
+signed underlying type and converts the 129th value to -128, which
+CONFIG_WERROR=y turns into a build failure. gcc picks an unsigned underlying
+type and says nothing, so on gcc the symptom would instead be those events
+printing a raw number once the value stopped matching __print_symbolic().
+The kernel test robot reported it there:
+https://lore.kernel.org/oe-kbuild-all/202607290344.fvDmgRPA-lkp@intel.com/
 
-All error/warnings (new ones prefixed by >>):
+Found with KMSAN. The out-of-bounds half is visible to KASAN once bytes_left
+wraps, since the bound then exceeds the ~16 KB cifs_req_poolp object.
 
->> drivers/target/target_core_configfs.c:3757:2: warning: adding 'int' to a string does not append to the string [-Wstring-plus-int]
-    3757 |         strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
-     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:29:1: note: expanded from here
-      29 | __strscpy1
-         | ^
-   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
-      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                                 ~~~~~^~~~~~~~~~~~~~~~~~~~~
-   drivers/target/target_core_configfs.c:3757:2: note: use array indexing to silence this warning
-   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
-     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:29:1: note: expanded from here
-      29 | __strscpy1
-         | ^
-   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
-      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                                      ^
->> drivers/target/target_core_configfs.c:3757:25: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
-    3757 |         strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
-         |                                ^~~~~~~~~~~
-   drivers/target/target_core_internal.h:169:22: note: expanded from macro 'DB_ROOT_LEN'
-     169 | #define DB_ROOT_LEN             4096
-         |                                 ^~~~
-   include/linux/string.h:70:43: note: passing argument to parameter here
-      70 | ssize_t sized_strscpy(char *, const char *, size_t);
-         |                                           ^
->> drivers/target/target_core_configfs.c:3757:38: error: incompatible pointer to integer conversion passing 'char *' to parameter of type 'size_t' (aka 'unsigned long') [-Wint-conversion]
-    3757 |         strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~
-   drivers/target/target_core_internal.h:171:27: note: expanded from macro 'DB_ROOT_PREFERRED'
-     171 | #define DB_ROOT_PREFERRED       "/etc/target"
-         |                                 ^
-   include/linux/string.h:111:60: note: expanded from macro 'strscpy'
-     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/string.h:80:26: note: expanded from macro '__strscpy1'
-      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/string.h:70:51: note: passing argument to parameter here
-      70 | ssize_t sized_strscpy(char *, const char *, size_t);
-         |                                                   ^
-   drivers/target/target_core_configfs.c:3760:3: warning: adding 'int' to a string does not append to the string [-Wstring-plus-int]
-    3760 |                 strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
-     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:30:1: note: expanded from here
-      30 | __strscpy1
-         | ^
-   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
-      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                                 ~~~~~^~~~~~~~~~~~~~~~~~~~~
-   drivers/target/target_core_configfs.c:3760:3: note: use array indexing to silence this warning
-   include/linux/string.h:111:2: note: expanded from macro 'strscpy'
-     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ^
-   include/linux/args.h:26:27: note: expanded from macro 'CONCATENATE'
-      26 | #define CONCATENATE(a, b) __CONCAT(a, b)
-         |                           ^
-   include/linux/args.h:25:24: note: expanded from macro '__CONCAT'
-      25 | #define __CONCAT(a, b) a ## b
-         |                        ^
-   <scratch space>:30:1: note: expanded from here
-      30 | __strscpy1
-         | ^
-   include/linux/string.h:80:31: note: expanded from macro '__strscpy1'
-      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                                      ^
-   drivers/target/target_core_configfs.c:3760:26: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'const char *' [-Wint-conversion]
-    3760 |                 strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
-         |                                        ^~~~~~~~~~~
-   drivers/target/target_core_internal.h:169:22: note: expanded from macro 'DB_ROOT_LEN'
-     169 | #define DB_ROOT_LEN             4096
-         |                                 ^~~~
-   include/linux/string.h:70:43: note: passing argument to parameter here
-      70 | ssize_t sized_strscpy(char *, const char *, size_t);
-         |                                           ^
-   drivers/target/target_core_configfs.c:3760:39: error: incompatible pointer to integer conversion passing 'char *' to parameter of type 'size_t' (aka 'unsigned long') [-Wint-conversion]
-    3760 |                 strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
-   drivers/target/target_core_internal.h:170:26: note: expanded from macro 'DB_ROOT_DEFAULT'
-     170 | #define DB_ROOT_DEFAULT         "/var/target"
-         |                                 ^
-   include/linux/string.h:111:60: note: expanded from macro 'strscpy'
-     111 |         CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
-         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~
-   include/linux/string.h:80:26: note: expanded from macro '__strscpy1'
-      80 |         sized_strscpy(dst, src, size + __must_be_cstr(dst) + __must_be_cstr(src))
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/string.h:70:51: note: passing argument to parameter here
-      70 | ssize_t sized_strscpy(char *, const char *, size_t);
-         |                                                   ^
-   2 warnings and 4 errors generated.
+The server picks both ends of the walk. pByteArea() is buf + 35 + 2*WordCount
+and CIFSTCon() never checks WordCount, so from WordCount 111 the byte area
+starts past the 256 bytes header_assemble() clears. ByteCount 0 or 1 then
+removes the bound. checkSMB() is not what saves this: the parse runs on the
+request buffer, into which SendReceive() copies smbCalcSize() bytes, so an
+honest bytes_left is what keeps the walk inside the copy.
+
+Reproducer: a fake SMB1 server that answers negprot, completes
+SESSION_SETUP_ANDX and replies to TREE_CONNECT_ANDX with WordCount 128 and
+ByteCount 0.
+
+  BUG: KMSAN: uninit-value in cifs_utf16_bytes+0x37e/0x400 [cifs]
+   cifs_utf16_bytes+0x37e/0x400 [cifs]
+   cifs_strndup_from_utf16+0x5c/0x210 [cifs]
+   CIFSTCon+0x1102/0x1510 [cifs]
+   cifs_setup_ipc+0x3b9/0xcf0 [cifs]
+
+Stable trees older than v6.19 have neither smb_EIO2() nor the trace enum; the
+backport there is the same guard with a plain rc = -EIO.
+
+I did not add a WordCount check: once bytes_left is honest, the byte area is
+always inside what SendReceive() copied. The guard sits after the tid store,
+like the other failure paths here.
+---
+ fs/smb/client/cifssmb.c | 6 ++++++
+ fs/smb/client/trace.h   | 3 ++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/fs/smb/client/cifssmb.c b/fs/smb/client/cifssmb.c
+index 1f77512252e7..f5aad5f61dce 100644
+--- a/fs/smb/client/cifssmb.c
++++ b/fs/smb/client/cifssmb.c
+@@ -615,6 +615,11 @@ CIFSTCon(const unsigned int xid, struct cifs_ses *ses,
+ 		tcon->tid = smb_buffer_response->Tid;
+ 		bcc_ptr = pByteArea(smb_buffer_response);
+ 		bytes_left = get_bcc(smb_buffer_response);
++		if (bytes_left < 2) {
++			rc = smb_EIO2(smb_eio_trace_tcon_bcc_too_small,
++				      bytes_left, 2);
++			goto out;
++		}
+ 		length = strnlen(bcc_ptr, bytes_left - 2);
+ 		if (smb_buffer->Flags2 & SMBFLG2_UNICODE)
+ 			is_unicode = true;
+@@ -670,6 +675,7 @@ CIFSTCon(const unsigned int xid, struct cifs_ses *ses,
+ 			reset_cifs_unix_caps(xid, tcon, NULL, NULL);
+ 		}
+ 	}
++out:
+ 	cifs_buf_release(smb_buffer);
+ 	return rc;
+ }
+diff --git a/fs/smb/client/trace.h b/fs/smb/client/trace.h
+index 5b21ad3c15fb..12241abb8e2e 100644
+--- a/fs/smb/client/trace.h
++++ b/fs/smb/client/trace.h
+@@ -133,6 +133,7 @@
+ 	EM(smb_eio_trace_sym_slash,			"sym_slash") \
+ 	EM(smb_eio_trace_sym_target_len,		"sym_target_len") \
+ 	EM(smb_eio_trace_symlink_file_size,		"symlink_file_size") \
++	EM(smb_eio_trace_tcon_bcc_too_small,		"tcon_bcc_too_small") \
+ 	EM(smb_eio_trace_tdis_in_reconnect,		"tdis_in_reconnect") \
+ 	EM(smb_eio_trace_tx_chained_async,		"tx_chained_async") \
+ 	EM(smb_eio_trace_tx_compress_failed,		"tx_compress_failed") \
+@@ -213,7 +214,7 @@
+ #define EM(a, b) a,
+ #define E_(a, b) a
+ 
+-enum smb_eio_trace		{ smb_eio_traces } __mode(byte);
++enum smb_eio_trace		{ smb_eio_traces };
+ enum smb3_rw_credits_trace	{ smb3_rw_credits_traces } __mode(byte);
+ enum smb3_tcon_ref_trace	{ smb3_tcon_ref_traces } __mode(byte);
+ 
+
+---
+base-commit: c84d3e3130dfe1058cb27dc78e7ad8bd36f0545a
+change-id: 20260821-b4-disp-5297959d-d2c999b25c94
+
+Best regards,
+--  
+Bryam Vargas <hexlabsecurity@proton.me>
 
 
-vim +3757 drivers/target/target_core_configfs.c
-
-  3751	
-  3752	static void target_init_dbroot(void)
-  3753	{
-  3754		struct path path = {};
-  3755		int ret;
-  3756	
-> 3757		strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_PREFERRED);
-  3758		ret = target_validate_db_root(db_root_stage, &path);
-  3759		if (ret) {
-  3760			strscpy(db_root_stage, DB_ROOT_LEN, DB_ROOT_DEFAULT);
-  3761			ret = target_validate_db_root(db_root_stage, &path);
-  3762			if (ret)
-  3763				return;
-  3764		}
-  3765	
-  3766		db_root_path = path;
-  3767		strscpy(db_root, db_root_stage);
-  3768		pr_debug("Target_Core_ConfigFS: db_root set to %s\n", db_root);
-  3769	}
-  3770	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
