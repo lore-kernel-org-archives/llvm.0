@@ -1,255 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 897E83D73;
-	Fri, 21 Aug 2026 02:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06245286D4D;
+	Fri, 21 Aug 2026 02:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787278115; cv=none; b=JWyvKkVVBvyWM4e43MDt0aguxsRjufPDcFrUP2QfpMsjgAbFdWSsldqPUoStqIp1BGEle+2fRBW9sok1W49+AovTzO9EwfyBtjxYiNT8U6aNE6ail2ttFUZTxyHNo9QkEDVvTd0K1zlYq0Ul9PBIsbtgLpe+6OfdhLnAU9msc2U=
+	t=1787279121; cv=none; b=GoftUru0011ADvmqNTwr0ikkrgEe8npXIiBHcdTAA/3lj7RG1RJzfFjeprlxGMGh7NoKqZIcv+PLPuh+02x/LqFFuiOihWFCIo+LCavsP0dtQcrZRl1Kd1Yc3G94XHjz6dcDmhjJoEqgE1ZZyd2FZK/LMPdkHx9sAL96eoK+VPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787278115; c=relaxed/simple;
-	bh=EY8f7mMl7Jb3WM+8SCHqjQIb4VW/E4r1B9aqM9zr8z0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YqWaXPXfu2voPNqlbCF+ENmbWq+THzjRbcl/6w/o4qBBrmSNNz3R/J8QNVr7VGA6qkN/doWnz8adxnWMXd5fazfp9xN0QClQOBgBByIgPAytoRQ1pDgmMKFKLuyXJNuZczUXmwdUHAwY9r2l6/SenozT9OkfeqQJyqGxTcp2vz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XITcvujg; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787279121; c=relaxed/simple;
+	bh=uyR5KdriohoILzKQMgiDjFf+ySUexMpA9o8d0cXrK80=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jBaM7QtkrUUT0PsxKwWnJu8xrZQXaBWfcS1ieINuCIRUAsbxDdQefT7ggfhT4kciBCmFqnYg5bjTT1V9XR75hN2ZERi83yPbOvdJbjXySgX6EosOGujYi5treJGIBw+dGH2lCs8yZ9+6Uct1sz4zmNixvI06nTGIJ52UqRQ+d8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uaBZ9Fmj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XITcvujg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787278111; x=1818814111;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EY8f7mMl7Jb3WM+8SCHqjQIb4VW/E4r1B9aqM9zr8z0=;
-  b=XITcvujgSC3ifTfAPQuWev2yxbDS2ItJ9Jk5Bie4AsQM1Hxz/E3MILqW
-   +Ls/Dtto5XXHFlcZohw244V6IoU/mn1PsEJ2Wk7UTOcqsRPwqsvr2DaVA
-   8sv0DAFacZtXQKVwnOrdY/HeN5hegU2WNh7Xr1qb/b/XkCyCBtn9KOsdY
-   OfFsUXSLD2pRXO6dXITNxGX92sqFKiAMqtcGkjyQZ+IeTg3W+fiANEznK
-   ilyYKcB0sK3aM1YFzrUNaSYSLWWzZAC1lLz+f7cJfIPTuE+sWhjAtmOuc
-   DNtohtBM+F6y6mVxPfOecQyjPlGf4OlMBo1xfTKJLtS/LvyLauVNEAByM
-   Q==;
-X-CSE-ConnectionGUID: oRrQseirT8uP6t+/d5cGrw==
-X-CSE-MsgGUID: QTsdD3PnQredlOIbD7CMow==
-X-IronPort-AV: E=McAfee;i="6800,10657,11881"; a="87738904"
-X-IronPort-AV: E=Sophos;i="6.25,234,1779174000"; 
-   d="scan'208";a="87738904"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 19:08:31 -0700
-X-CSE-ConnectionGUID: ipCF3s3WRZudb1I0MtLmkQ==
-X-CSE-MsgGUID: tAXbIGWvRcy+oWvlyg0w9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,234,1779174000"; 
-   d="scan'208";a="264904581"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 20 Aug 2026 19:08:29 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wxEgE-00000000p1Z-2EDn;
-	Fri, 21 Aug 2026 02:08:26 +0000
-Date: Fri, 21 Aug 2026 10:08:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Marlin <dmarlin@redhat.com>, linux-bluetooth@vger.kernel.org,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	David Marlin <dmarlin@redhat.com>,
-	Bastien Nocera <hadess@hadess.net>
-Subject: Re: [PATCH] Bluetooth: hci-core: fix "declaration does not declare
- anything" error
-Message-ID: <202608211016.aKSwZC8Y-lkp@intel.com>
-References: <20260814051032.261320-1-dmarlin@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uaBZ9Fmj"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 917F0C2BCB3;
+	Fri, 21 Aug 2026 02:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1787279120;
+	bh=uyR5KdriohoILzKQMgiDjFf+ySUexMpA9o8d0cXrK80=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=uaBZ9FmjWfTtBINcLDWv1qUGQ8trAG+cEdF+XIEzLJYuc9QUsoSLyYe1EAVoPzioj
+	 HNVXxoVedYvoSf+yxd8bKYQRxQiE8dDsIaLJV6TVHW9QLx0+PUppPRUYf2kC4Ir82J
+	 4Wd2oX1bsYhdoYm+FhZriqFw26BUBsqBgIp19C/beEwpaulxB3vbsLzOGlzTIUienJ
+	 2rPKh+gfrHV3ImITCe8HjrzIOjk9bX0EO2PFukuVQ2kb/lNiBb886oYrhTGHMzjO60
+	 UQTwL+CrQxJjm8MkcAiavRk6+xpyh41yHd9j5eDj44A+jEavpIrSzG7OctlYCXTMRo
+	 4lx/5yfvOurNQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6A99DC5DF88;
+	Fri, 21 Aug 2026 02:25:20 +0000 (UTC)
+From: Bryam Vargas via B4 Relay <devnull+hexlabsecurity.proton.me@kernel.org>
+Subject: [PATCH v2 0/2] smb: client: reject a too-small tree connect byte
+ count
+Date: Thu, 20 Aug 2026 21:25:19 -0500
+Message-Id: <20260820-b4-disp-58f78a28-v2-0-1fb7a6cb1533@proton.me>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260814051032.261320-1-dmarlin@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMPQ6DMAxA4asgz1hKrVIirlIx5McpZgAUF4SEu
+ HtDGb/hvQOUs7BCVx2QeROVeSqguoIwuOnDKLEYyNDLWDLonxhFF2xsaq0jiyb61BI19OAAJVs
+ yJ9n/y3d/W1c/cvheHzjPH20tTJ50AAAA
+X-Change-ID: 20260820-b4-disp-58f78a28-0dbf722521ec
+To: Steve French <sfrench@samba.org>
+Cc: Paulo Alcantara <pc@manguebit.org>, Namjae Jeon <linkinjeon@kernel.org>, 
+ Shyam Prasad N <sprasad@microsoft.com>, 
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+ David Howells <dhowells@redhat.com>, Nathan Chancellor <nathan@kernel.org>, 
+ Tom Talpey <tom@talpey.com>, llvm@lists.linux.dev, 
+ Bharath SM <bharathsm@microsoft.com>, linux-cifs@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, samba-technical@lists.samba.org, 
+ Jeff Layton <jlayton@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787279119; l=3146;
+ i=hexlabsecurity@proton.me; s=default; h=from:subject:message-id;
+ bh=uyR5KdriohoILzKQMgiDjFf+ySUexMpA9o8d0cXrK80=;
+ b=lCadI1INMNwMzoFOMmYTqRwGsvzESPiKvK5DKfb6A77i8LAxdm4+w7vhTZTKOgo8Hcf6Y29bT
+ zL8E1g+qzADAlwKC0q1bQWft3D2W1HuucKK388Af4xwi8d3fPOhIoDQ
+X-Developer-Key: i=hexlabsecurity@proton.me; a=ed25519;
+ pk=xw1AhCtQdvuoQc+bOQIYy9o8G++cp4/VniI2G/tc3G8=
+X-Endpoint-Received: by B4 Relay for hexlabsecurity@proton.me/default with
+ auth_id=893
+X-Original-From: Bryam Vargas <hexlabsecurity@proton.me>
+Reply-To: hexlabsecurity@proton.me
 
-Hi David,
+v1 was a single patch. The kernel test robot then reported three
+-Wconstant-conversion diagnostics in the write path, which Namjae asked about;
+they are v1's doing. enum smb_eio_trace is __mode(byte) and its list was
+already at 128 entries, so v1's new entry pushed smb_eio_trace_write_too_far to
+index 128, which the type cannot hold. clang gives the enum a signed underlying
+type and turns that into an error wherever CONFIG_WERROR is set -- x86_64
+defconfig sets it -- so v1 alone does not build there. gcc gives the same enum
+an unsigned underlying type and says nothing, which is why the tree had not run
+into this.
 
-kernel test robot noticed the following build errors:
+1/2 gives the enum room, 2/2 is v1 unchanged. 1/2 has to land first: 2/2 is what
+adds the 129th entry, so on its own it does not build under clang. Stable trees
+older than v6.19 have neither smb_EIO2() nor the trace enum, so the backport
+there is 2/2's guard with a plain rc = -EIO.
 
-[auto build test ERROR on bluetooth-next/master]
-[also build test ERROR on bluetooth/master linus/master v7.2 next-20260819]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Build A/B at v7.2, W=1, CONFIG_CIFS=m, with gcc 14.2 and clang 19.1.7:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Marlin/Bluetooth-hci-core-fix-declaration-does-not-declare-anything-error/20260814-001012
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth-next.git master
-patch link:    https://lore.kernel.org/r/20260814051032.261320-1-dmarlin%40redhat.com
-patch subject: [PATCH] Bluetooth: hci-core: fix "declaration does not declare anything" error
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260821/202608211016.aKSwZC8Y-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260821/202608211016.aKSwZC8Y-lkp@intel.com/reproduce)
+  source state        gcc      clang
+  v7.2, unpatched     clean    clean
+  2/2 only            clean    3 errors, build fails
+  1/2 + 2/2           clean    clean
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608211016.aKSwZC8Y-lkp@intel.com/
+I dropped the attribute rather than widening it because on x86_64 the record
+does not grow either way. The field precedes an unsigned long at offset 8 of
+struct trace_event_raw_smb3_eio, so sizeof() is 32 with __mode(byte), with
+__mode(HI), and with a plain enum. A plain enum also avoids a spelling the tree
+does not use: all 68 __mode() uses in it are __mode(byte).
 
-All errors (new ones prefixed by >>):
+smb_eio_trace was the only one of those 68 with no room left. rxrpc_abort_reason
+has 127 entries.
 
->> net/bluetooth/hci_codec.c:151:17: error: operand of type 'struct hci_std_codecs_hdr' where arithmetic or pointer type is required
-     151 |         if (skb->len < flex_array_size(std_codecs, codec, std_codecs->num)
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:419:24: note: expanded from macro 'flex_array_size'
-     419 |         __builtin_choose_expr(__is_constexpr(count),                    \
-         |                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:323:47: note: expanded from macro '__is_constexpr'
-     323 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-         |                                                      ^~~
->> net/bluetooth/hci_codec.c:157:16: error: invalid operands to binary expression ('__u8' (aka 'unsigned char') and 'struct hci_std_codecs_hdr')
-     157 |         for (i = 0; i < std_codecs->num; i++) {
-         |                     ~ ^ ~~~~~~~~~~~~~~~
-   net/bluetooth/hci_codec.c:164:16: error: operand of type 'struct hci_std_codecs_hdr' where arithmetic or pointer type is required
-     164 |         skb_pull(skb, flex_array_size(std_codecs, codec, std_codecs->num)
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:419:24: note: expanded from macro 'flex_array_size'
-     419 |         __builtin_choose_expr(__is_constexpr(count),                    \
-         |                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:323:47: note: expanded from macro '__is_constexpr'
-     323 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-         |                                                      ^~~
->> net/bluetooth/hci_codec.c:220:17: error: operand of type 'struct hci_std_codecs_v2_hdr' where arithmetic or pointer type is required
-     220 |         if (skb->len < flex_array_size(std_codecs, codec, std_codecs->num)
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:419:24: note: expanded from macro 'flex_array_size'
-     419 |         __builtin_choose_expr(__is_constexpr(count),                    \
-         |                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:323:47: note: expanded from macro '__is_constexpr'
-     323 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-         |                                                      ^~~
->> net/bluetooth/hci_codec.c:226:16: error: invalid operands to binary expression ('__u8' (aka 'unsigned char') and 'struct hci_std_codecs_v2_hdr')
-     226 |         for (i = 0; i < std_codecs->num; i++) {
-         |                     ~ ^ ~~~~~~~~~~~~~~~
-   net/bluetooth/hci_codec.c:232:16: error: operand of type 'struct hci_std_codecs_v2_hdr' where arithmetic or pointer type is required
-     232 |         skb_pull(skb, flex_array_size(std_codecs, codec, std_codecs->num)
-         |                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/overflow.h:419:24: note: expanded from macro 'flex_array_size'
-     419 |         __builtin_choose_expr(__is_constexpr(count),                    \
-         |                               ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/compiler.h:323:47: note: expanded from macro '__is_constexpr'
-     323 |         (sizeof(int) == sizeof(*(8 ? ((void *)((long)(x) * 0l)) : (int *)8)))
-         |                                                      ^~~
-   6 errors generated.
+Two corrections to what v1's changelog said, both prose and not code. The
+initialised prefix is 256 bytes rather than the 67 I wrote: header_assemble()
+memsets 256 right after cifs_buf_get(), so the byte area only starts past it
+from WordCount 111. And the impact was understated -- once bytes_left wraps, the
+bound handed to cifs_strndup_from_utf16() reaches 65535 against a ~16 KB
+cifs_req_poolp object, so this is a slab out-of-bounds read and not only an
+uninitialised one.
+
+checkSMB() is also not what makes the guard sufficient, which is why 2/2 adds no
+WordCount check: the parse runs on the request buffer, into which SendReceive()
+copies smbCalcSize() bytes, so an honest bytes_left is what keeps the walk
+inside the copy. Reproducer is a fake SMB1 server that answers negprot,
+completes SESSION_SETUP_ANDX and replies to TREE_CONNECT_ANDX with WordCount 128
+and ByteCount 0; KMSAN and KASAN logs on request.
+
+Prior version:
+https://lore.kernel.org/all/20260728-b4-disp-6b8e68d4-v1-1-e69277237297@proton.me/
+
+---
+Bryam Vargas (2):
+      smb: client: let enum smb_eio_trace grow past 128 entries
+      smb: client: reject a tree connect response whose byte count is too small
+
+ fs/smb/client/cifssmb.c | 6 ++++++
+ fs/smb/client/trace.h   | 3 ++-
+ 2 files changed, 8 insertions(+), 1 deletion(-)
+---
+base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+change-id: 20260820-b4-disp-58f78a28-0dbf722521ec
+
+Best regards,
+--  
+Bryam Vargas <hexlabsecurity@proton.me>
 
 
-vim +151 net/bluetooth/hci_codec.c
-
-8961987f3f5fa2f Kiran K     2021-09-07  119  
-8961987f3f5fa2f Kiran K     2021-09-07  120  void hci_read_supported_codecs(struct hci_dev *hdev)
-8961987f3f5fa2f Kiran K     2021-09-07  121  {
-8961987f3f5fa2f Kiran K     2021-09-07  122  	struct sk_buff *skb;
-8961987f3f5fa2f Kiran K     2021-09-07  123  	struct hci_rp_read_local_supported_codecs *rp;
-8961987f3f5fa2f Kiran K     2021-09-07  124  	struct hci_std_codecs *std_codecs;
-8961987f3f5fa2f Kiran K     2021-09-07  125  	struct hci_vnd_codecs *vnd_codecs;
-8961987f3f5fa2f Kiran K     2021-09-07  126  	struct hci_op_read_local_codec_caps caps;
-8961987f3f5fa2f Kiran K     2021-09-07  127  	__u8 i;
-8961987f3f5fa2f Kiran K     2021-09-07  128  
-828cea2b71de501 Chethan T N 2022-11-22  129  	skb = __hci_cmd_sync_sk(hdev, HCI_OP_READ_LOCAL_CODECS, 0, NULL,
-828cea2b71de501 Chethan T N 2022-11-22  130  				0, HCI_CMD_TIMEOUT, NULL);
-8961987f3f5fa2f Kiran K     2021-09-07  131  
-8961987f3f5fa2f Kiran K     2021-09-07  132  	if (IS_ERR(skb)) {
-8961987f3f5fa2f Kiran K     2021-09-07  133  		bt_dev_err(hdev, "Failed to read local supported codecs (%ld)",
-8961987f3f5fa2f Kiran K     2021-09-07  134  			   PTR_ERR(skb));
-8961987f3f5fa2f Kiran K     2021-09-07  135  		return;
-8961987f3f5fa2f Kiran K     2021-09-07  136  	}
-8961987f3f5fa2f Kiran K     2021-09-07  137  
-8961987f3f5fa2f Kiran K     2021-09-07  138  	if (skb->len < sizeof(*rp))
-8961987f3f5fa2f Kiran K     2021-09-07  139  		goto error;
-8961987f3f5fa2f Kiran K     2021-09-07  140  
-8961987f3f5fa2f Kiran K     2021-09-07  141  	rp = (void *)skb->data;
-8961987f3f5fa2f Kiran K     2021-09-07  142  
-8961987f3f5fa2f Kiran K     2021-09-07  143  	if (rp->status)
-8961987f3f5fa2f Kiran K     2021-09-07  144  		goto error;
-8961987f3f5fa2f Kiran K     2021-09-07  145  
-8961987f3f5fa2f Kiran K     2021-09-07  146  	skb_pull(skb, sizeof(rp->status));
-8961987f3f5fa2f Kiran K     2021-09-07  147  
-8961987f3f5fa2f Kiran K     2021-09-07  148  	std_codecs = (void *)skb->data;
-8961987f3f5fa2f Kiran K     2021-09-07  149  
-8961987f3f5fa2f Kiran K     2021-09-07  150  	/* validate codecs length before accessing */
-8961987f3f5fa2f Kiran K     2021-09-07 @151  	if (skb->len < flex_array_size(std_codecs, codec, std_codecs->num)
-8961987f3f5fa2f Kiran K     2021-09-07  152  	    + sizeof(std_codecs->num))
-8961987f3f5fa2f Kiran K     2021-09-07  153  		goto error;
-8961987f3f5fa2f Kiran K     2021-09-07  154  
-8961987f3f5fa2f Kiran K     2021-09-07  155  	/* enumerate codec capabilities of standard codecs */
-8961987f3f5fa2f Kiran K     2021-09-07  156  	memset(&caps, 0, sizeof(caps));
-8961987f3f5fa2f Kiran K     2021-09-07 @157  	for (i = 0; i < std_codecs->num; i++) {
-8961987f3f5fa2f Kiran K     2021-09-07  158  		caps.id = std_codecs->codec[i];
-8961987f3f5fa2f Kiran K     2021-09-07  159  		caps.direction = 0x00;
-828cea2b71de501 Chethan T N 2022-11-22  160  		hci_read_codec_capabilities(hdev,
-828cea2b71de501 Chethan T N 2022-11-22  161  					    LOCAL_CODEC_ACL_MASK | LOCAL_CODEC_SCO_MASK, &caps);
-8961987f3f5fa2f Kiran K     2021-09-07  162  	}
-8961987f3f5fa2f Kiran K     2021-09-07  163  
-8961987f3f5fa2f Kiran K     2021-09-07  164  	skb_pull(skb, flex_array_size(std_codecs, codec, std_codecs->num)
-8961987f3f5fa2f Kiran K     2021-09-07  165  		 + sizeof(std_codecs->num));
-8961987f3f5fa2f Kiran K     2021-09-07  166  
-8961987f3f5fa2f Kiran K     2021-09-07  167  	vnd_codecs = (void *)skb->data;
-8961987f3f5fa2f Kiran K     2021-09-07  168  
-8961987f3f5fa2f Kiran K     2021-09-07  169  	/* validate vendor codecs length before accessing */
-8961987f3f5fa2f Kiran K     2021-09-07  170  	if (skb->len <
-8961987f3f5fa2f Kiran K     2021-09-07  171  	    flex_array_size(vnd_codecs, codec, vnd_codecs->num)
-8961987f3f5fa2f Kiran K     2021-09-07  172  	    + sizeof(vnd_codecs->num))
-8961987f3f5fa2f Kiran K     2021-09-07  173  		goto error;
-8961987f3f5fa2f Kiran K     2021-09-07  174  
-8961987f3f5fa2f Kiran K     2021-09-07  175  	/* enumerate vendor codec capabilities */
-8961987f3f5fa2f Kiran K     2021-09-07  176  	for (i = 0; i < vnd_codecs->num; i++) {
-8961987f3f5fa2f Kiran K     2021-09-07  177  		caps.id = 0xFF;
-8961987f3f5fa2f Kiran K     2021-09-07  178  		caps.cid = vnd_codecs->codec[i].cid;
-8961987f3f5fa2f Kiran K     2021-09-07  179  		caps.vid = vnd_codecs->codec[i].vid;
-8961987f3f5fa2f Kiran K     2021-09-07  180  		caps.direction = 0x00;
-828cea2b71de501 Chethan T N 2022-11-22  181  		hci_read_codec_capabilities(hdev,
-828cea2b71de501 Chethan T N 2022-11-22  182  					    LOCAL_CODEC_ACL_MASK | LOCAL_CODEC_SCO_MASK, &caps);
-8961987f3f5fa2f Kiran K     2021-09-07  183  	}
-8961987f3f5fa2f Kiran K     2021-09-07  184  
-8961987f3f5fa2f Kiran K     2021-09-07  185  error:
-8961987f3f5fa2f Kiran K     2021-09-07  186  	kfree_skb(skb);
-8961987f3f5fa2f Kiran K     2021-09-07  187  }
-9ae664028a9ea83 Kiran K     2021-09-07  188  
-9ae664028a9ea83 Kiran K     2021-09-07  189  void hci_read_supported_codecs_v2(struct hci_dev *hdev)
-9ae664028a9ea83 Kiran K     2021-09-07  190  {
-9ae664028a9ea83 Kiran K     2021-09-07  191  	struct sk_buff *skb;
-9ae664028a9ea83 Kiran K     2021-09-07  192  	struct hci_rp_read_local_supported_codecs_v2 *rp;
-9ae664028a9ea83 Kiran K     2021-09-07  193  	struct hci_std_codecs_v2 *std_codecs;
-9ae664028a9ea83 Kiran K     2021-09-07  194  	struct hci_vnd_codecs_v2 *vnd_codecs;
-9ae664028a9ea83 Kiran K     2021-09-07  195  	struct hci_op_read_local_codec_caps caps;
-9ae664028a9ea83 Kiran K     2021-09-07  196  	__u8 i;
-9ae664028a9ea83 Kiran K     2021-09-07  197  
-828cea2b71de501 Chethan T N 2022-11-22  198  	skb = __hci_cmd_sync_sk(hdev, HCI_OP_READ_LOCAL_CODECS_V2, 0, NULL,
-828cea2b71de501 Chethan T N 2022-11-22  199  				0, HCI_CMD_TIMEOUT, NULL);
-9ae664028a9ea83 Kiran K     2021-09-07  200  
-9ae664028a9ea83 Kiran K     2021-09-07  201  	if (IS_ERR(skb)) {
-9ae664028a9ea83 Kiran K     2021-09-07  202  		bt_dev_err(hdev, "Failed to read local supported codecs (%ld)",
-9ae664028a9ea83 Kiran K     2021-09-07  203  			   PTR_ERR(skb));
-9ae664028a9ea83 Kiran K     2021-09-07  204  		return;
-9ae664028a9ea83 Kiran K     2021-09-07  205  	}
-9ae664028a9ea83 Kiran K     2021-09-07  206  
-9ae664028a9ea83 Kiran K     2021-09-07  207  	if (skb->len < sizeof(*rp))
-9ae664028a9ea83 Kiran K     2021-09-07  208  		goto error;
-9ae664028a9ea83 Kiran K     2021-09-07  209  
-9ae664028a9ea83 Kiran K     2021-09-07  210  	rp = (void *)skb->data;
-9ae664028a9ea83 Kiran K     2021-09-07  211  
-9ae664028a9ea83 Kiran K     2021-09-07  212  	if (rp->status)
-9ae664028a9ea83 Kiran K     2021-09-07  213  		goto error;
-9ae664028a9ea83 Kiran K     2021-09-07  214  
-9ae664028a9ea83 Kiran K     2021-09-07  215  	skb_pull(skb, sizeof(rp->status));
-9ae664028a9ea83 Kiran K     2021-09-07  216  
-9ae664028a9ea83 Kiran K     2021-09-07  217  	std_codecs = (void *)skb->data;
-9ae664028a9ea83 Kiran K     2021-09-07  218  
-9ae664028a9ea83 Kiran K     2021-09-07  219  	/* check for payload data length before accessing */
-9ae664028a9ea83 Kiran K     2021-09-07 @220  	if (skb->len < flex_array_size(std_codecs, codec, std_codecs->num)
-9ae664028a9ea83 Kiran K     2021-09-07  221  	    + sizeof(std_codecs->num))
-9ae664028a9ea83 Kiran K     2021-09-07  222  		goto error;
-9ae664028a9ea83 Kiran K     2021-09-07  223  
-9ae664028a9ea83 Kiran K     2021-09-07  224  	memset(&caps, 0, sizeof(caps));
-9ae664028a9ea83 Kiran K     2021-09-07  225  
-9ae664028a9ea83 Kiran K     2021-09-07 @226  	for (i = 0; i < std_codecs->num; i++) {
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
