@@ -1,171 +1,124 @@
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9813AEF50
-	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 22:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7A739E9AD
+	for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 22:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787352363; cv=none; b=A6GiIYq7Q0c8Jl82utpbsDa9efuKGj9MNACM+DC+Ls1GcLIEHp7jT1RMIxsUMtM18vt/KEdSxgV9fvkTHx5hl7C6al2ZHIWngNxWAetvOsu9G10gXKISwGVgNVBDh6BctaPm95O9glMIRbHCzZoc22H4iYxqrPxCW+F4wICbqFI=
+	t=1787352392; cv=none; b=gTpgntCJe5PgrgaoYoracd0XTtPYmXRhgWPw77bnWogAuwxtaqPzFONUWJbVNVB95uyG3lhasdiZU+OylUF61ZDagLpmERW+nw5Nh9X2cTHH9L6IWwWtYhnSce1LCWlJ1+w7PXDtKjJW6QwnLln+tSLwoi8lelOfEW0OWYv3E9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787352363; c=relaxed/simple;
-	bh=OEJp5z39oCqCpxH9dM2BpNCfiPMMeGugZKo1K/SEU98=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=nNJcdGRCVfPSyQeWqP6J2wLePJRTbxMmd/rNcng6VUHtAyfuIg02xstK6PzdQU5HjDIZb35FOxr1bYHhZIOPtNpVJ2PbTCHr5TV06hpfw81KPLHzB5A4FiXbMo0FECl7Gsr7FPfqWgfMoI89JihnlikUAEOoH3+hT7glNIJcVH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=oMawYeUk; arc=none smtp.client-ip=209.85.216.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com
+	s=arc-20240116; t=1787352392; c=relaxed/simple;
+	bh=56JEwv36N2jImwv77Sawypjq/venfK1iwiLw5CgY4pY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S5kpuY9LXFtpLnE01sgLUZGrUXZKn8OMCfXrqiSopx5hvCu3oxPe6vMSthwvZggjc9+ka0ZEO7qfSJBunG19nC66yuhnEb9mCaC2sbCqWhhjCbB2Wa5NXCNEWgi5148w12P2zEm0986A16+cma5MUMjjd0rff/+S69seo2sfEiw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=U0GefJvU; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="oMawYeUk"
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38dbf293831so3294221a91.3
-        for <llvm@lists.linux.dev>; Fri, 21 Aug 2026 15:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787352361; x=1787957161; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=PoawpruQ26UxgXhGoUDM/P7VzQ79Tma0wyLntYv3M/I=;
-        b=oMawYeUk0DqhKLhBTdx1NxM0nv5a41wPCo5+jom8O8ffTKO4CxyQWpQfr2LKPeGDx7
-         1N79A/rXvbaGq097KUWkC18Ak4b0La7kcNzBrhmFTDV1jiv5W9/FNJxSHGJXBa4BEgj/
-         76rrjIt2jAH0zr9ZorbL4YgVCtO8wc9T1+kOy0RPQOgXdyEqqIXZA6OsyPPAX3unsRaX
-         s/7neIRBLTLbGSg6JQjx/K0QGDNzN2m6EHca/Qit9o4CVaisGcHum8pA02zmzRt7p1oL
-         eOdaXIP0ZTfI1fso4LmQw3ehWMeCXlKQzAlpzqhpSp9gDxfYcOuONJZtdiPnSoWS/84a
-         yA6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787352361; x=1787957161;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PoawpruQ26UxgXhGoUDM/P7VzQ79Tma0wyLntYv3M/I=;
-        b=gZSnSvtgnPJQnuifcdXF88lZVXlcTwr15II95IyM/qUsnVkkiXJLdStU3SitzzHo8t
-         X3ATDtJ03DAcKsdanaHEUJABZBGoaCrDQjmmgaTIUK/LXSB7M/+dLSJCbcknjX4qqzt7
-         D8IhkyLgbWJByt7RcUE1/2OnkUqM/DDzaHmIQBVSKAgPTeVvqVxFs30TPGehLBGAW5yb
-         IoX7iyplWvO766OcB8UF7GnYcejnIh3vcNVh9+rO988/vAmtwIfZ9CGe7E/XOLn5QuMu
-         JdG9vTwNMMiRsAxkxPwf0BZ0484sGe6joKubuR7KlmIcz6hBpLGiQLroiAsRwaUAb57m
-         yEvw==
-X-Forwarded-Encrypted: i=1; AHgh+RqyakzOAOKn3el9vFGBuBrE5G1T6zcYM4ZfgrjiSvMrbc8IvgaNAkjmP17q6IfxubuFfX16@lists.linux.dev
-X-Gm-Message-State: AFuF++lcQt2bEs0VwlT6dyi6XUj4p7PqEEGfLAO4fA2JKv3ipRdkg+eR
-	xMVsgjVnsjijYx1usHIw7DpkmuLP//NoKWK2gMr8aQY4N2W0j/2dfrEDGWoM8wkL5d9YnHlI9eM
-	jMEsUAAecWILcGKpcAG7DeB7/hCRjnw==
-X-Received: from dlbcm37.prod.google.com ([2002:a05:7022:68a5:b0:139:d9c7:3cf4])
- (user=ndesaulniers job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3812:b0:380:fead:448d with SMTP id 98e67ed59e1d1-395c3a09bfemr15847665a91.13.1787352360541;
- Fri, 21 Aug 2026 15:46:00 -0700 (PDT)
-Date: Fri, 21 Aug 2026 15:45:42 -0700
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="U0GefJvU"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67LIVVsR2314678;
+	Fri, 21 Aug 2026 22:46:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=0L75nX
+	lFEC8XRnTslyoIJQz0Efxfw9SzcspEKJMQRhU=; b=U0GefJvUK/s7GY720orkBk
+	cBu9cIUTDnc2yaBB4bfMqKX/EewB7l3Undgttt/LB0+3iOFhUsS624pSs4y7h9U4
+	36vv15suRBZ4RYQaqUSgvu9Se8UtsRkl301KzGBYxyuxULdeg3b8kQTsBm52dUQ6
+	HRLwFP48HKiQX+huTD4YN+1Vb5FqHvEORN3QmcXNsY5RmJXy2+DnzpVw83conLjo
+	fRVoOFEip+2FV/8NLBz7qD2SQBQYPVSPlmvpz4vhwbNWYQzolfjhjfKlAIJ8cLWf
+	pzAkbSQFjl0AHRLq2k1G2XJerYOT2xD2/7DtQnJZPesLo5zinXQkYuF30twGcxmQ
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4g4yu1vmfh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Aug 2026 22:46:27 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67LMfHmp026606;
+	Fri, 21 Aug 2026 22:46:26 GMT
+Received: from smtprelay03.dal12v.mail.ibm.com ([172.16.1.5])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4g33ekqds4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Aug 2026 22:46:26 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay03.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67LMkP3t61997472
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 21 Aug 2026 22:46:25 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C83965805D;
+	Fri, 21 Aug 2026 22:46:25 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 45D7958056;
+	Fri, 21 Aug 2026 22:46:25 +0000 (GMT)
+Received: from [9.61.9.186] (unknown [9.61.9.186])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 21 Aug 2026 22:46:25 +0000 (GMT)
+Message-ID: <7a8fbc90-3086-4026-a3ac-b683d4c38d28@linux.ibm.com>
+Date: Fri, 21 Aug 2026 15:46:24 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIABXViGoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDCyND3YKSosTk1PjSxIJMXRMzI2NTAwNjs+SkFCWgjoKi1LTMCrBp0bG 1tQCyeUaBXQAAAA==
-X-Change-Id: 20260821-ptrace_uapi-462350036cbd
-X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=O0COsmvrvggwIeEq7bAuRbULbXScoJmbNMYaRi6RFIw=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787352358; l=3055;
- i=ndesaulniers@google.com; s=20260611; h=from:subject:message-id;
- bh=OEJp5z39oCqCpxH9dM2BpNCfiPMMeGugZKo1K/SEU98=; b=nXfOMSQEPii8YVDQy8UrkSfJXgJBGvGNfX6ksH6fZLOSUyCwFn0P3gcNXWaQcup2Iz0vj26Ya
- yMecgjBxvjSACYXvNTyBVGj/Mgas2lC8pRpkXstr0/gtjcTYlKP9EOD
-X-Mailer: b4 0.14.3
-Message-ID: <20260821-ptrace_uapi-v1-1-3de8638a29f2@google.com>
-Subject: [PATCH] x86: uapi: ptrace: guard register offset macros with
- __ASSEMBLER__ or __FRAME_OFFSETS
-From: Nick Desaulniers <ndesaulniers@google.com>
-To: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Oleg Nesterov <oleg@redhat.com>, Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-um@lists.infradead.org, 
-	llvm@lists.linux.dev, Nick Desaulniers <ndesaulniers@google.com>
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] scsi: ibmvfc: Fix use of uninitialized rport in
+ ibmvfc_do_work()
+To: Nathan Chancellor <nathan@kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: linux-scsi@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260817-ibmvscsi-rport-wuninitialized-v1-1-0fdfb27a5f01@kernel.org>
+Content-Language: en-US
+From: Tyrel Datwyler <tyreld@linux.ibm.com>
+In-Reply-To: <20260817-ibmvscsi-rport-wuninitialized-v1-1-0fdfb27a5f01@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=LsCiDHdc c=1 sm=1 tr=0 ts=6a88d543 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=VxpQeIyN2eE5DkSZRDsA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: cLZl4OKhtRLSIq0VgK7kfEd2Xzjozdn5
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODIxMDE4MSBTYWx0ZWRfXxHi+D1JP9NXT
+ Vkdx7rY/JEktYFfbV10IrR6BpXZTh9farFPfNEO+qAnIvfxuBIHUX/UbiDVTMcXemgzKtuh5kik
+ 18XP5f6e3b82kEIrisBSHeA34wSUr/o=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODIxMDE4MSBTYWx0ZWRfX8Naul4E8hyTp
+ HdmGA72P3g4ZoUQTPEBxG3pwiYPjb9jooy7g2aNf7aIMiqajPd41gRtmOuZkTcZIVoPoeKLY7wT
+ FyNN2c0rDfV7Q9ayBE46SEUpAkQyotj8y9uFY0oQ9eYSxY++BXEzXa/mZAwc/5wH3UWBHhx++b1
+ xE41+ZDC1wBWl6vPeBkmym0hGgXPLzCQhcBryhoIeL5E/0MsUQMIhaMuRmIz7IuJgUN+hqmU2Lx
+ 0E5LEymxxmqPwHVkxJJnDmOoZPrNscNWCJcidebyz6hCh501tf7NVIhQZa32stm70jZ4vehsZU9
+ ZTufiu6LRBh5oh0W+eqqM2F85/31MK8W0+s/uaVslE75OgykjFmLFXLqtrDTIExq+2jUKv0Vw3y
+ MrYWQlq6PRdADG8mo44xT8XbX9nJY3e829upFW/WsO4cAFeXjtYxMejnIGx/3KOTFYo3BWxEFFM
+ LGKwOYX8WnBwdT6XVcA==
+X-Proofpoint-ORIG-GUID: cLZl4OKhtRLSIq0VgK7kfEd2Xzjozdn5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-21_06,2026-08-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 spamscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ adultscore=0 suspectscore=0 impostorscore=0 clxscore=1011 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608210181
 
-The register offset macros in <asm/ptrace-abi.h> are guarded by
-`defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)` for 64-bit, but
-were left unguarded for 32-bit. This causes havoc for userspace that
-happens to use identifiers colliding with these short macro names
-(e.g., EBX, ECX, EAX, DS, ES, FS, GS, CS, SS). Without this guard,
-userspace is forced to be super extra careful with include ordering to
-minimize the chance of collision.
+On 8/17/26 12:04 PM, Nathan Chancellor wrote:
+> After commit 696d1cc2aaa2 ("scsi: ibmvfc: process NVMe/FC rports in work
+> thread"), clang warns (or errors with CONFIG_WERROR=y / W=e):
+> 
+>   drivers/scsi/ibmvscsi/ibmvfc-core.c:6154:15: error: variable 'rport' is uninitialized when used here [-Werror,-Wuninitialized]
+>    6154 |                         } else if (rport && tgt->action == IBMVFC_TGT_ACTION_DEL_AND_LOGOUT_RPORT) {
+>         |                                    ^~~~~
+> 
+> The check for rport is unnecessary in this block, it was accidentally
+> included from copying and pasting. Remove it to clear up the warning.
+> 
+> Fixes: 696d1cc2aaa2 ("scsi: ibmvfc: process NVMe/FC rports in work thread")
+> Suggested-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+> Link: https://lore.kernel.org/6ccbe8c5-beb6-483f-bfa4-c2d3819ad5f2@linux.ibm.com/
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> ---
 
-Wrap both the 32-bit and 64-bit register definitions under
-`#if defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)`, and ensure
-User-Mode Linux (UML) defines `__FRAME_OFFSETS` for 32-bit as well.
-
-Assisted-by: Gemini
-Link: https://github.com/llvm/llvm-project/issues/217413
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
----
- arch/x86/include/uapi/asm/ptrace-abi.h | 4 ++--
- arch/x86/um/asm/ptrace.h               | 4 +---
- arch/x86/um/ptrace_32.c                | 1 +
- 3 files changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/include/uapi/asm/ptrace-abi.h b/arch/x86/include/uapi/asm/ptrace-abi.h
-index 5823584dea13..3656955c6faa 100644
---- a/arch/x86/include/uapi/asm/ptrace-abi.h
-+++ b/arch/x86/include/uapi/asm/ptrace-abi.h
-@@ -2,6 +2,7 @@
- #ifndef _ASM_X86_PTRACE_ABI_H
- #define _ASM_X86_PTRACE_ABI_H
- 
-+#if defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)
- #ifdef __i386__
- 
- #define EBX 0
-@@ -25,7 +26,6 @@
- 
- #else /* __i386__ */
- 
--#if defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)
- /*
-  * C ABI says these regs are callee-preserved. They aren't saved on kernel entry
-  * unless syscall needs a complete, fully filled "struct pt_regs".
-@@ -57,12 +57,12 @@
- #define EFLAGS 144
- #define RSP 152
- #define SS 160
--#endif /* __ASSEMBLER__ */
- 
- /* top of stack page */
- #define FRAME_SIZE 168
- 
- #endif /* !__i386__ */
-+#endif /* defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS) */
- 
- /* Arbitrarily choose the same ptrace numbers as used by the Sparc code. */
- #define PTRACE_GETREGS            12
-diff --git a/arch/x86/um/asm/ptrace.h b/arch/x86/um/asm/ptrace.h
-index 2641d28d115c..439c4151f6b7 100644
---- a/arch/x86/um/asm/ptrace.h
-+++ b/arch/x86/um/asm/ptrace.h
-@@ -13,9 +13,7 @@ enum {
- };
- 
- #include <linux/compiler.h>
--#ifndef CONFIG_X86_32
--#define __FRAME_OFFSETS /* Needed to get the R* macros */
--#endif
-+#define __FRAME_OFFSETS /* Needed to get the register macros */
- #include <asm/ptrace-generic.h>
- 
- #define user_mode(r) UPT_IS_USER(&(r)->regs)
-diff --git a/arch/x86/um/ptrace_32.c b/arch/x86/um/ptrace_32.c
-index 3af3cb821524..9e9155b0e918 100644
---- a/arch/x86/um/ptrace_32.c
-+++ b/arch/x86/um/ptrace_32.c
-@@ -7,6 +7,7 @@
- #include <linux/sched.h>
- #include <linux/uaccess.h>
- #include <linux/regset.h>
-+#define __FRAME_OFFSETS
- #include <asm/ptrace-abi.h>
- #include <registers.h>
- #include <skas.h>
-
----
-base-commit: 26260251022fbc2f248a3d747a9b2b961b18d2d8
-change-id: 20260821-ptrace_uapi-462350036cbd
-
-Best regards,
--- 
-Nick Desaulniers <ndesaulniers@google.com>
+Acked-by: Tyrel Datwyler <tyreld@linux.ibm.com>
 
