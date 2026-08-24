@@ -1,200 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBA526E71E;
-	Sun, 23 Aug 2026 13:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B7F230BE9
+	for <llvm@lists.linux.dev>; Mon, 24 Aug 2026 01:15:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787491425; cv=fail; b=oabQFoG5mb0bDJJnbfcgn0k4szXhSetGylTjgEgRtcI/2MF/wOW2C5hWILwOYjDWeeCNPtJDbJzMso70J/Yp2dJYbPSRh41avHFbczUBI0ZIlt/Hdtrn3gHt+2zCg64OVOlcPDXbbsTfuvxxTgbrzk2F/sVtWuFu994fYUZlxkg=
+	t=1787534126; cv=pass; b=jOp3q9U3VcOltfpW7y5gVXPZaSO3riavKgzr+iYkSNiNQL/PXsMXvLBXZDsAPUs5XI0ngjSH/QoHIVytJqLgGDhF3Puhgmsyp3/UJOTF6FfX6L86TJi2cG80xs4BTaw8toIXSFZXeh7WCYgha6heSHqsVJDw4uZmq5OsjpVPydQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787491425; c=relaxed/simple;
-	bh=buWeOnDAjAbcot4xR0dhWSyqZXplZoESgZ3Vtl6z50c=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EzklSeChaBOyYDlrbwIuF5I5Ixf/X7WdTYSLeeUWtOUlMYGdnrLyAjeqsWJLQLv9n+f5iJSi16dAoK6z+FV0+eBhCedcY8EXFgOpXQdDxkrmRBEff+E6hsE+nL0ypdo1D1cRIYChrEy8DXhbYRnOpq31na1cfn1Ghtdi/GUptpo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KkOeHvYd; arc=fail smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787534126; c=relaxed/simple;
+	bh=Wac+pf0DsXlahTayTTxHtjZ+4vjz4sfCHeWQqn9W9gY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XpFVZqysbTomzu5vETy6mPXYsROHA8oRmmGQE8C7m1QlOrnWdMKk/lnackA/orLGS/SvYMfFHOBRp/8cuCVotCygv+FtUSPYGSH+fk4BK0E2AjtGFFBQyXcilLDET18DkVKl5xcWIRVAaODcg+SKVvk7nHSfOV8YT/LhO9xxIZk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZiO6Kox8; arc=pass smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KkOeHvYd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787491423; x=1819027423;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   mime-version;
-  bh=buWeOnDAjAbcot4xR0dhWSyqZXplZoESgZ3Vtl6z50c=;
-  b=KkOeHvYd9ZiUEwx2PAVwMZzUbg1ADntLRNkTVgtHMIaBYILyUOqyHJeo
-   g0dMcd/tkZMUBs1QsIwkVqxaatSKn/O7iRtA8fqXicgOAvunqow0cyAQg
-   GKm1GmHQlT56ZlG06ctP+cxxkjt6sx4wVOEIo253xgLnZSB9ESWkS5EIa
-   kAcMkGBeGGzSLQKyoNwM5sH6Iw3uj6rzFYxsAwDW5HNrbeteu0GpwZ6/Y
-   mB118YFHu0AXH+1Hw611bpw/JjWHAACaPaRP181ZEFBRoFOUa2O3Nn9rd
-   Y9iAprH0wlanxGjmpRmh8k+pdPq81A9lvx+YN/xCmxNQm+p1YuGFjHhuL
-   g==;
-X-CSE-ConnectionGUID: 0Nf+OLkkS3SaDBQfqDt+Ow==
-X-CSE-MsgGUID: +n7YreyXQKCib0hVVXIG9w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11883"; a="88021295"
-X-IronPort-AV: E=Sophos;i="6.25,238,1779174000"; 
-   d="scan'208";a="88021295"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2026 06:23:43 -0700
-X-CSE-ConnectionGUID: CcAjTjA9RrqKKaR3mbnjjA==
-X-CSE-MsgGUID: Qk9kpoXUSsixD2i5dI4Jzg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,238,1779174000"; 
-   d="scan'208";a="266246370"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Aug 2026 06:23:43 -0700
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Sun, 23 Aug 2026 06:23:42 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Sun, 23 Aug 2026 06:23:42 -0700
-Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.26) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Sun, 23 Aug 2026 06:23:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Ef0+B6zz3fN3tJX3hbWZcLQY4bRPl6F2yVYGpWQSle2F8YC6dPZm3Va6fBgxVPsUzsIRv+c/pokOd/lkK94YDO4OAvCn4OOoGWIdi54HoJH7uqz2ImP3LLmUdOU0TLDEoYZG/ph9veGYdyXtn3WgauwT28a+vNPIfCBicppX08DCJ2HkoNjEABCv26yLwhrfD2/9M/2Bpi90LXPtIjmMEOFrYnSZAvkiNv8FYPotWZmQ25SJeA5Ulvb3q0LBIRttCwijU5reTvQiKIc9GnwzqseeoN4/OEdX/6z2szzdRQb8f4S592O9ylELbOf/qO943Pc84RETicJ3qaSNgMDwJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P750k92FDOPEiLyfEYlVAZYh/4kBDhf7cRJUBSouW3Q=;
- b=oZ2UBrrm/WUiFoO65V9uDDGLqYwzm2c2SIsgHQw4JoaViwify8B64qd+dgPIHziRW9AOVVErxo0NSMqgGO4J+6spg+XbE78v9Q+7tWMVL/WHmRtY1uq2H2Gf3pFrHEs+jT8XfOEXSEs2mhZTO31GlED+4UL7/YJtqgPKpqaAavDHHwPfw1MnZMBYtlH6oftRr6iTv3kBlwMwhOFXRXj24/QO4Jnbsx5OTRDuuKpgDEHSbowUaHUP7qZezWt9mdKMkp39K80wJTP2tOKCsSUrjSAK7qFT6dL267L5ewRQuBtpNsM7ExC0hor4R3QCj14gEzVZTsJqWWb4LCkQkPjQnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5214.namprd11.prod.outlook.com (2603:10b6:a03:2df::22)
- by CO1PR11MB4993.namprd11.prod.outlook.com (2603:10b6:303:6c::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Sun, 23 Aug
- 2026 13:23:40 +0000
-Received: from SJ0PR11MB5214.namprd11.prod.outlook.com
- ([fe80::5926:3836:4212:8640]) by SJ0PR11MB5214.namprd11.prod.outlook.com
- ([fe80::5926:3836:4212:8640%4]) with mapi id 15.21.0339.012; Sun, 23 Aug 2026
- 13:23:39 +0000
-Date: Sun, 23 Aug 2026 21:23:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Anthony Iliopoulos <ailiop@suse.com>, Andrew Morton
-	<akpm@linux-foundation.org>
-CC: <llvm@lists.linux.dev>, <oe-kbuild-all@lists.linux.dev>, "Linux Memory
- Management List" <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] kernel/profile: remove setup_profiling_timer
-Message-ID: <202608231532.dENn2OSP-lkp@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260821091744.91496-1-ailiop@suse.com>
-X-ClientProxiedBy: KU0P306CA0080.MYSP306.PROD.OUTLOOK.COM
- (2603:1096:d10:2b::16) To SJ0PR11MB5214.namprd11.prod.outlook.com
- (2603:10b6:a03:2df::22)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZiO6Kox8"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-cbe41618110so252143a12.2
+        for <llvm@lists.linux.dev>; Sun, 23 Aug 2026 18:15:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787534125; cv=none;
+        d=google.com; s=arc-20260327;
+        b=ZJYreqdf9F0V9mb7K278CJ/bkFVdVTM2uqvtFr6t8Jw7+V3rghhnzew1sII6BqnKEM
+         uBobc1Fq57EJhRwiX+25j3SbWxR9WLBmNTRiNQ/CxiRyH/mcsJlw6Hai010koGN53itT
+         OWtEASLakEkXpy9xqWTPTQME3qEFEP1GPauc8V9Qgcc8F02jE2fVaDID0Nz2iLU4C57W
+         SX/1+/3pAxhNxKRjV7A8C2Q5rif/HsAU+/1FOEX/9Hs0vo3dw4HeC9vClLsmUl8o4LZr
+         /b0mlIvl9We1zLJhV0mBBVW5ZAVKrZE2VKA9+vAW2wxon/MljJUI0SvmuSl0X4tZ3U10
+         EOZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vGMvIaOFIbBkf0XrXpqeWleC5i415rguPHvnUqjmn7c=;
+        fh=Oh3ArhwlqSJ4clNIriTGfZdsfPsLz8n99H1LZCA5GoI=;
+        b=IvN+ZNMh4ZqCaYE7paPAakEI/2BGMD6vj7Qw9z0qdLCkoYKfM2wGC0Ujh1vLQuRkjv
+         rNW1qfA6yOif/jZ0ogtouOQb5QKpVf8wIKnImF1XHannUK2Gx8rkg5K/MivIT9NLKWKR
+         O1z840bq0nhUtTitloeswNgujKqKqRHi2JIsIhfNPKPLZNzM3n9255sxuPRXMBuGQsQX
+         J68kY2K82e2PCVN7sX1f6wRaZbx8dKeU5QqSC0IdaMmcIE16nq9KxYBTtvcNXmo7IG8O
+         uiXmQYBKNqbMdhEVHQclEGwVptblx+vIvpcN5nQe+5iPHyobHk5+/4f/b2RF5gi3M8M5
+         cQSg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787534125; x=1788138925; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=vGMvIaOFIbBkf0XrXpqeWleC5i415rguPHvnUqjmn7c=;
+        b=ZiO6Kox8PH2Y6IixKSgaszPszfcszhkSVpEOFAevP9ZZrJgbaMfKqt2zzdr58Mr5NO
+         g2iLahuFqz7u/gUeeyHqdnQoHLn/Sn1HG7JTrH+pfLl+GhbnBMON6JvmB8i/qojWuCLJ
+         uk7hndyP+xCOSkO0sE93NlpL6PHFVAllDy+wEyhRblGNv/mUTkXQqgjg/0C7Jc52cLIi
+         T64pyO++k2b1n9qVxmKCqSb8tSniVkH4nH7oQtCrcA+R5/ObM4TkACUfXM5P+ba/VzNJ
+         /zqjPhUUXyCL+AWZ8LvUnjtI29kTEy5nFYWs6bURZ48i9WOFEOSAYJv1C2eqGYFcSc67
+         MGig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787534125; x=1788138925;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=vGMvIaOFIbBkf0XrXpqeWleC5i415rguPHvnUqjmn7c=;
+        b=mdQEg3CFVXlrZwnNQLO6c8MmFvX2i2SHn5cK71lofAXAc6kHKX61OnYtcYnhKxzjMM
+         tekA+apyJGY/zRL5HuYhLfkUVMjFgq4dh+lVGlF2QAc26Df0gQxRiWJuQiYa5g3FlKNX
+         GwUsaVUvXiGfiCh5EusiC1xFfDztAzIoGWWUIS7M0ynGdxN083ia7ZLFbxW6rfHP8I1C
+         qTk3uP8oKFrYI/0iKaw/eidQyL/9xlGKNPIba1pP9cjZB4N6Gj3ZneMlVNI8KHyYnJ/F
+         C9T7ZcrXcIt6GMn1G2doXMuJj04Yv9W9bFr6Ew1YpEilcxo7N+DUoaaCGJj6JokUfdKw
+         swPA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq7PQ2AFQhdeKdPANcXdz38WnzALACIA4Gvo93oawY8CysFrR+QbRQGONKES3gNJR4nvUWT@lists.linux.dev
+X-Gm-Message-State: AFuF++nnnibg4IjZBqpdprsD8S7MraDXpb5ZdNo1uQ8r0ZQ5UXFlzRKT
+	yc8l9N09ERVwu0NGHdM+firxo4GpkMbK5D66LKpVzI0iDI7I0S5eOsbAainGT7FV0mrQ2D29Gmz
+	KOdGKkvxnb3DWnJv5V3DyHcKEHuAhJl0=
+X-Gm-Gg: AR+sD10zc9R7CUIRW6VJjDIKnXYmP1QO0ohzSgUJS6tqNrFsI925Q9XMfhQC76JHL/N
+	fEm5uXTAr/q6wLrmXLkqjgnSZsDRJVzr/3IrBmIK+ZXowir0T4F49vHLmVjCAq5BMmXENlqrTzD
+	swUr/UWjCgds6SAB3eRnDQjRszNIL2e60c4SGxc+sUMqJgDnH9uChE9h9IQ8Y8teOY1z0XtT/5n
+	6FCckppUPjv7z8K25727q9zYKJLSwZZpLHdx3rex2T1kmsWCwRSNB2C+77JWd3hP7FgYZyWS0t1
+	OaefH/bVi6hFBVAyzios6vdMfWwvcjEm+8VBxr49+KGRs7m/nNSzA9UzFwL1dEdD/j3VwVSlKDQ
+	UxOuAjZA6OPcYp79horfVjooNVwDYkcvgMTbfxAVWTpWSm1KyKkFWgy/HAFfK
+X-Received: by 2002:a17:903:1447:b0:2ca:ecf6:9115 with SMTP id
+ d9443c01a7336-2d64b009f3fmr217086915ad.2.1787534124733; Sun, 23 Aug 2026
+ 18:15:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR11MB5214:EE_|CO1PR11MB4993:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0c1c01ac-6b12-4875-28ba-08df0119bea1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|23010399003|376014|1800799024|10067099003|22082099003|18002099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info: QAn7n54xw22G6PyN2GCVf5kJPE9IBpKebpdpQh5UnIuk+82tTUdnxsvhj1hs2g1QME0PdqOnY6gvtCRRmQ3KU0D8885n8IynWezpfhsXMCB3xK7Qi4FOZHABpI0jmZFYQp4OngLO8FFg+5Xkdsr7Y8ZYyl2eGWrIHV751WRH+SVhtDTdfaGVaHsQgTBvS+3qv2a/GLQCAptRj3mLcyY3y8MfwVNw0lDb+MAJiymd3lmfaCLFoanPzTIJQlY+kOEnlXtQxjUyCUvRhsdWBdwvfx9oMgkNHIWchMIW2Q1XgK3JhmUauRHn1/ac6uaNwqt254F4xG47VjOScBh2Lk/eVHUD2CTuUtZkl6LcBe8G3wuMPNZXA+cxAT557gG5japLvMo+N4hNbpWKYjjgaXUTnhKOZ7XrZG7sdmstWshKNM1dvUpOYhLTJs8hSLiLJcJWpyvSW31XLyEHAWNw/Zw1LYBti8+YM7RPotLnsDrYa2ygminOU/gzmcWtYLM7KYp9uOww0T7shO6JU7pFjO9zYjiUuLUK3P3ogaM9HbwyVi82hmejV1q2jhDISDASJ/VEdhV+2wkaxCqNSWgU13NFEPgflRYUv6BxxpeQHvPB5j97pmxY6sxC7ySBSkCLlAYT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5214.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(1800799024)(10067099003)(22082099003)(18002099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SPWtysDvARmFcdEhSrUGlmNapBJ9TK77dryGMlKsDpIQcrZum4oroFgnwNQT?=
- =?us-ascii?Q?ZjEzC9iej7hfwqYdxM+dHyMgetWH9CbnLldk4EeMlg3UpSYuLKd9AeXgVhs+?=
- =?us-ascii?Q?tGmJaD0YH8JLD/650tDaBDCHFd5TgZUCOvDpUQhwfIgpEWt5PhxJd8bZZSyz?=
- =?us-ascii?Q?+DUjN9yq+pHW3rfgUtm/ugrNyEzz2p0Pl3WSrCyi07s0uklNzYFjbSdrPwTt?=
- =?us-ascii?Q?ss5b9MWzFsMyVimnP9gMeCMPH8/BWJebvihHMf2gOtiGioq/zNec8OFs7+km?=
- =?us-ascii?Q?wEZcPD5kX4WYZKHfliOyEu9w/r9gLeXKD5pDAR9wk4IBH+KSTV+LEBQDyAJN?=
- =?us-ascii?Q?xkrbBWStti1jBx8+IDtvr/Z+g5cIulL2WVH84IsEREajqvnGtEMH/9ONwSm3?=
- =?us-ascii?Q?sfsa39Q6EgF8T+j7w4K/Zu8oUyuZZ5l+Y8U34HXZgUyAVCH1P7wqxpqxtCLX?=
- =?us-ascii?Q?4n2s4nRZ5MQuAY+/v6YEM+iu10JrsFd/coV4dsj8wjXLMDi9W7apSfV9szjr?=
- =?us-ascii?Q?yOhm5nGMcAevqxOswVRghGvsE58a9ZVkXRjGAvNMxQPOZ0wMmVIuIg54E6Gc?=
- =?us-ascii?Q?YcPaFkQmAf5R0IAstM3Q6Hqt2u70nn29A3MgasYeM6Ii2wfK1Pi7fDZsUxU6?=
- =?us-ascii?Q?x2kNH4bTEDT5wnq4lb0tJ/JYIIdKdnEQIQ8V6ijdY3RLe4Pdb+s6IUK+NvP7?=
- =?us-ascii?Q?1CWX+dTCgOeSG7d5nrLQcrTlHSbJ9Q4NTSct3unskimIwToPYQfsJNr5m9/q?=
- =?us-ascii?Q?BEYYkdH6LYW8og8XBJx8bBSSM2FckdTsjqc6yuYIT0pQZM6XNYjfC0uJAg1s?=
- =?us-ascii?Q?HuDYGFAnEUetxnjyG2poUA66HxAkHos084QSl5Mz2TBqyxbspjjgOov5RmRm?=
- =?us-ascii?Q?gTXbQ9TYjmrCPoDPCJW4+N/RQLl5fKfHEiqwmLqTEUdkfx0DHECz4ewDymZ+?=
- =?us-ascii?Q?gON/QiA6eMU7GGhMbOJCYNQSt/Vzw+Mx8BcT+soFrMKlgF1GULMciPi8t+K9?=
- =?us-ascii?Q?dSffi1K6D2WFM8DPxK6LayGwSs9BcZOqAm8InkS208Z/mPmQ48xi9hIgIrRn?=
- =?us-ascii?Q?vM9+paSDoJesyTXGi7UWkgmJMYRrt8j9P+cc59uGTDrRlP8YMiNopErNMr1J?=
- =?us-ascii?Q?bVQos9u7DX+Jot+7El78XCKrtgP+f8P5HcqYlA20SI6kKQRK/+KSrg0zz/BV?=
- =?us-ascii?Q?NIkTsRsTtgcFHbfLDa3Mep1HLY1UCx4W3ldkbGCCdn4OoRn8fKNtvVi+Sh5x?=
- =?us-ascii?Q?oh4ioEEaL1mBNrLohvUZWJg6R39/G8YcYDkdvnfO7wxo4aiKscG8zOGPvhl1?=
- =?us-ascii?Q?mmyFjpiqgaavpAm41B+/4KaYAUjVYzK/oWf738kL9YxDtdSF7xPb8jACjBPO?=
- =?us-ascii?Q?+rfnhkmP8WXYmvyEhtz9inUsOtx1DOxk57KYpsdrAVS7SD9OAeaBCey+Uoqy?=
- =?us-ascii?Q?ZN6VnZakOlSJBKnFbEY7ePyEchNMlADUPnOUOHFUrirl/K1vpjeCIgRTqypo?=
- =?us-ascii?Q?I1EKQ3icX3FdGSJzyjSj2PLvtnTLpk5L284r8rKh1oqeUQg7FAfo8GTwq7JK?=
- =?us-ascii?Q?KZ0mgQ45C4Ol+FOGnOdooQ9REOjz1OibnU2JhzLzCGDmnTA8mvFszhximSP+?=
- =?us-ascii?Q?C10yLjii0Q3aoyKBbeZAZZGEz/QHX6ltNi6/z0PeaAbunC4FtwqMeqa3YI12?=
- =?us-ascii?Q?Y5og/Nkx4ZxjrSNCwyKt590o0b5logNgiedEBd2G9YWBtU1m8XmQ6pOmklYh?=
- =?us-ascii?Q?XKsmbWqNuA=3D=3D?=
-X-Exchange-RoutingPolicyChecked: xQK1Bmc/gh+D2pt2IpkjYt24UxPG0B+a8ATP+Jc2hGHuwz/TeDs+7iKL/m6ZHCTctWdWUn5JXbQVw7Ikjpbe2WxEHUWInTQDhfhtZKgJyHZv4jjmYWjgAAkfvQ3HdN3NZ3JL9i0DpcQkK3K4vYWCXklETjXvOT4PCmShpeDa5ulddHSAsVtK/xBCIEcGvx4eK8dWDuTMpwSt4N2CUFn4Fr1Djf/Oj+/CZT7potnmxUjnIINh3blSoEYrAGHyesv1Jhgxqu1r1cIh7NZR7JieCEhcua1M6dIbqk1kJrh5/gX7+bfXC3jiIUYaedKRsAxaqNfBWzAUS/dT3C8eBljRzg==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0c1c01ac-6b12-4875-28ba-08df0119bea1
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5214.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2026 13:23:39.6794
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VnXvlPyh/47TjI2tInvfxKlFZZSRmvlUqCSiukMVnxmMI/lUh8ApCOQ6uo6hDhlQdKbpg9odnyQeRJLbLaw7GQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4993
-X-OriginatorOrg: intel.com
+References: <20260820135733.37121-1-gary@kernel.org>
+In-Reply-To: <20260820135733.37121-1-gary@kernel.org>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Mon, 24 Aug 2026 03:15:11 +0200
+X-Gm-Features: AcwNN1UtjcFt1AZ5tdG-mZdaQzytXvl_AMwSBSeb5Dd5Blo5Jox-8q4zsp724Yo
+Message-ID: <CANiq72=SL4A-UQbOxngRy8-6Q-qHKyGbqOTvqo=uJNyhr5nTzw@mail.gmail.com>
+Subject: Re: [PATCH] rust: cfi: disable function merging if CFI is enabled
+To: Gary Guo <gary@garyguo.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, kernel test robot <yi1.lai@intel.com>, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Anthony,
+On Thu, Aug 20, 2026 at 3:57=E2=80=AFPM Gary Guo <gary@kernel.org> wrote:
+>
+> From: Gary Guo <gary@garyguo.net>
+>
+> In Rust doc tests, there is a dummy `__module_firmware_test_init` functio=
+n
+> generated by the example in `module_firmware!`'s documentation, which jus=
+t
+> returns zero. Many other documentation generates function that produces
+> zero. LKP test robot reports a `Flags::zeroed` instance; my local
+> reproduction has a `Bounded::new::<0>`.
+>
+> LLVM's MergeFunctionsPass incorrectly merge functions with the same KCFI
+> type, causing `__module_firmware_test_init` being merged into one of the
+> zero-returning function. As module init is invoked via indirect function
+> call, KCFI is checked and this produces a KCFI failure.
+>
+> I've reported this bug to upstream LLVM [1]; in the mean time, disable
+> function merging if CFI is enabled. No separate treatment is needed for
+> CONFIG_RUST_INLINE_HELPERS, as Clang does not enable function merging by
+> default.
+>
+> Reported-by: kernel test robot <yi1.lai@intel.com>
+> Closes: https://lore.kernel.org/oe-lkp/202608201017.100a4511-lkp@intel.co=
+m
+> Link: https://github.com/llvm/llvm-project/issues/217629 [1]
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
-kernel test robot noticed the following build warnings:
+    [ LLVM already has a pending PR:
 
-[auto build test WARNING on akpm-mm/mm-everything]
-[also build test WARNING on linus/master v7.2 next-20260821]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+        https://github.com/llvm/llvm-project/pull/217665
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Anthony-Iliopoulos/kernel-profile-remove-setup_profiling_timer/20260821-111744
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260821091744.91496-1-ailiop%40suse.com
-patch subject: [PATCH] kernel/profile: remove setup_profiling_timer
-config: loongarch-randconfig-001-20260823 (https://download.01.org/0day-ci/archive/20260823/202608231532.dENn2OSP-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260823/202608231532.dENn2OSP-lkp@intel.com/reproduce)
+      which solves the issue. In addition, I asked upstream Rust if the
+      unstable `-Zmerge-functions=3Ddisabled` flag will remain around:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608231532.dENn2OSP-lkp@intel.com/
+        https://rust-lang.zulipchat.com/#narrow/channel/425075-rust-for-lin=
+ux/topic/.60-Zmerge-functions.3Ddisabled.60/
 
-All warnings (new ones prefixed by >>):
+      and it does indeed look like that will be the case. - Miguel ]
 
->> arch/loongarch/kernel/smp.c:720:5: warning: no previous prototype for function 'setup_profiling_timer' [-Wmissing-prototypes]
-     720 | int setup_profiling_timer(unsigned int multiplier)
-         |     ^
-   arch/loongarch/kernel/smp.c:720:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     720 | int setup_profiling_timer(unsigned int multiplier)
-         | ^
-         | static 
-   1 warning generated.
+    [ Fixed typos as discussed. Reworded slightly for other typos. - Miguel=
+ ]
 
+    Link: https://github.com/llvm/llvm-project/issues/217629 [2]
 
-vim +/setup_profiling_timer +720 arch/loongarch/kernel/smp.c
+    Cc: stable@vger.kernel.org
+    Fixes: ca627e636551 ("rust: cfi: add support for CFI_CLANG with Rust")
 
-46859ac8af52ae Huacai Chen 2022-05-31  718  
-c718a0bad75cce Bibo Mao    2023-09-20  719  #ifdef CONFIG_PROFILING
-46859ac8af52ae Huacai Chen 2022-05-31 @720  int setup_profiling_timer(unsigned int multiplier)
-46859ac8af52ae Huacai Chen 2022-05-31  721  {
-46859ac8af52ae Huacai Chen 2022-05-31  722  	return 0;
-46859ac8af52ae Huacai Chen 2022-05-31  723  }
-c718a0bad75cce Bibo Mao    2023-09-20  724  #endif
-46859ac8af52ae Huacai Chen 2022-05-31  725  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers,
+Miguel
