@@ -1,264 +1,179 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2AC3384CC2;
-	Mon, 24 Aug 2026 21:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2C139478D;
+	Mon, 24 Aug 2026 23:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787608704; cv=none; b=Jc3oZu0jmuvBgnWoURSWCyJKNZT3pmz2eyr0T3tDPEdGLTd0PWOHtsDtTJtwnX1MCVS/XLVXa6ld58d/uj+7gvwts4yd/wAhb2w5E+4olJPGUTREcD3/F9WAnh5qzUS2cgT4GvH32fPDljBbe+34SH+3TwWb0e/B0CrCYHPegYc=
+	t=1787612732; cv=none; b=M5HONSUakfpZbkAIO4S8oRrUgeJPS1nD9t/EWtphPqnNWrL8bxWnkAq+CsGpXGc5RZeIHjiCQmvTcW+Fr52StYNruzuCZU51w6x1XW7LMn94NnWlmMAt7u9BmYi77I/NYnl1jUAFEUNR0vcR6ySCxkWA+1mwZW3KN6NHZp4yXIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787608704; c=relaxed/simple;
-	bh=3+e1LEL1GTN37WIUSW3CYs28IERN7B+MvdsHKwkiuMk=;
+	s=arc-20240116; t=1787612732; c=relaxed/simple;
+	bh=RPMin46s/2o5TeU3lBd/qSu4yH3eLmz5bhC/SMiMKz0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ceOk154eRXDiL0Y3nVmtUKgD7v2sYO8zHr7ZHcI9CMK4afoKRTPcx61LyGnwek9/LyGQ+bZwnX87JJ82o6S69caqRkX9B8jp+4K5BTIP/KdkDTP0XSM0sb9kVkmUJJj1NfoRmBkFqudwtwgcRdUyFiwslaRPW7iRUW3QGkbhxkY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAF82jiu; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=o1MqPAgcBG8VOaJZ3yV4FQxdZim+0n4PQBW/xO0ObolUlktTKUoD0WOvCm2e+wxFqyMnNZfsDF4oumoyuUl/rOzAw9w+p2+gWQaaJC21z6uyGG50zkkMBqpCC+Aee0yHEbS4OnCoF0/9DBHpHJo9nF3D5mYVNfkUGIcH3p+ltB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HL31/Ko0; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAF82jiu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0959C1F000E9;
-	Mon, 24 Aug 2026 21:58:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787608698;
-	bh=ddc8LIwIoZ20tI8UJZNbO3PstIIFDU+UdXfxRxuiYdo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nAF82jiuU6rzNca3JQQfFz/IRBZMJ2fl/TI0G5EFvxt0aiNGYFyznMFR0M1MDpbEu
-	 huP6lP1sCImvrbGOzRmpwi3mYXl/P4psSQTAKiDx7hmW9+O3tdnWJnfZvfOisk7bd2
-	 gEwEPykxfKM5paJkdunrTvo4y7xompMPLEKVNC8QzypODIrYHrqbqZv+2srgpokKqd
-	 WFdXs9pMWDEQpWPBH1pUGsZXWU4AxGi7iFEVvjEczJSQVc5xgERCGrQA+cgyY9AL+r
-	 zOAWqha3LeYtYevzVgGUh8XVETovT0CYIvpt9IbsMZfPY/Z6aSRVy822JdpkqgiomC
-	 qeykYl1QBg9Yw==
-Date: Mon, 24 Aug 2026 14:58:16 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Tengda Wu <wutengda@huaweicloud.com>
-Cc: Shuai Xue <xueshuai@linux.alibaba.com>, james.clark@linaro.org,
-	Li Huafei <lihuafei1@huawei.com>,
-	Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
-	Ian Rogers <irogers@google.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 20/23] perf annotate-arm64: Support 'add' instruction
- tracking
-Message-ID: <aoy-eAVaW_TsdymE@google.com>
-References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
- <20260808122400.2961238-21-wutengda@huaweicloud.com>
- <89e66d40-5f9f-4147-beda-00623797cd04@linux.alibaba.com>
- <b5e4ef0d-cb11-45de-987a-226340b576ed@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HL31/Ko0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787612730; x=1819148730;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RPMin46s/2o5TeU3lBd/qSu4yH3eLmz5bhC/SMiMKz0=;
+  b=HL31/Ko0W9YsQb+CHQv32S41cSi/LaY3YrDkQVIL0gzMDW1dYwcUxOJn
+   BZQj/FKvvlmpuDF2N1Xe+HbnNIwP0g8mcdMmDQFx3EQLc/LzwAFDfobZx
+   WzkUb/NEMKbyjL3b3bvRJng4q+fJcF76Rs06QndYAKVjoARNc2fblSpZP
+   PPwOQd1lVj+8ddfh7n76cITmD6l5wwbDPxbCQ7jb78+gFEzWBn0zKPag/
+   Fj46koUBtp3VGQy8NnP+dY/m0cgekbiQKTii0ihu62EZWSidjVNigXbmm
+   uZn9r8dNW+EV/Lp4oenMxCoEWkWr5GWRYA5sQxE3WXLIfpUdXX5V/TiSZ
+   Q==;
+X-CSE-ConnectionGUID: I1Oxom3dRpiPO6F9tW5vuw==
+X-CSE-MsgGUID: 1FaEcOSeTK2zWaydEvZ5Mg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11885"; a="98412277"
+X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
+   d="scan'208";a="98412277"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 16:05:30 -0700
+X-CSE-ConnectionGUID: MqAOTc8tRiG515kiIfa8mQ==
+X-CSE-MsgGUID: uISPeVioS5KBuo2IMDJi2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
+   d="scan'208";a="271332667"
+Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 24 Aug 2026 16:05:28 -0700
+Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wydjE-000000004Pf-1JkK;
+	Mon, 24 Aug 2026 23:05:21 +0000
+Date: Tue, 25 Aug 2026 07:05:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Dhaval Shiroya <dhaval.shiroya@siliconsignals.io>,
+	alexandre.belloni@bootlin.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dhaval Shiroya <dhaval.shiroya@siliconsignals.io>,
+	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rtc: rv3028: configure backup switch mode from device
+ tree
+Message-ID: <202608250645.zcZhAAz1-lkp@intel.com>
+References: <20260822092911.318342-1-dhaval.shiroya@siliconsignals.io>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b5e4ef0d-cb11-45de-987a-226340b576ed@huaweicloud.com>
+In-Reply-To: <20260822092911.318342-1-dhaval.shiroya@siliconsignals.io>
 
-On Wed, Aug 19, 2026 at 11:04:36AM +0800, Tengda Wu wrote:
-> 
-> 
-> On 2026/8/11 16:45, Shuai Xue wrote:
-> > 
-> > 
-> > On 8/8/26 8:23 PM, Tengda Wu wrote:
-> >> Extend update_insn_state() for arm64 to track 'add' instructions for
-> >> structure member address calculation, which commonly appear as:
-> >>
-> >>    add  dreg, base, #offset
-> >>    add  dreg, base, reg2     (reg2 holds a constant)
-> >>
-> >> Unlike x86, the arm64 'add' instruction has an extra base register among
-> >> its source operands. Therefore, in terms of propagating the data type,
-> >> it is essentially performing a 'mov', except that before the 'mov', it
-> >> first needs to be updated by adding the offset or reg2.
-> >>
-> >> A real-world example is shown below:
-> >>
-> >>    ffff80008001c9a8 <flush_ptrace_hw_breakpoint>:
-> >>    ffff80008001c9c4:  add  x19, x0, #0xeb8   // x0 (task_struct*) + 0xeb8 -> x19
-> >> * ffff80008001c9d0:  ldr  x0, [x19]
-> >>
-> >> Before this commit, the type flow broke at the 'add' instruction,
-> >> leaving the subsequent load with no type information:
-> >>
-> >>    chk [28] reg19 offset=0 ok=0 kind=0 cfa : no type information
-> >>    final result: no type information
-> >>
-> >> After this commit, the tracker correctly follows the member address
-> >> calculation:
-> >>
-> >>    var [0] reg0 offset 0 type='struct task_struct*'
-> >>    add [1c] address of 0xeb8(reg0) -> reg19 type='struct task_struct*'
-> >>    chk [28] reg19 offset=0 ok=1 kind=1 (struct task_struct*) : Good!
-> >>    found by insn track: 0(reg19) type-offset=0xeb8
-> >>    final result: type='struct task_struct'
-> >>
-> >> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
-> >> ---
-> >>   .../perf/util/annotate-arch/annotate-arm64.c  | 87 ++++++++++++++++++-
-> >>   1 file changed, 85 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-> >> index 7b780bad8c07..eaeb4433fc3a 100644
-> >> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
-> >> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-> >> @@ -688,6 +688,87 @@ static void update_mov_insn_state(struct type_state *state,
-> >>       pr_debug_type_name(&tsr->type, tsr->kind);
-> >>   }
-> >>   +static void update_add_insn_state(struct type_state *state,
-> >> +                  struct disasm_line *dl,
-> >> +                  struct annotated_op_loc *src,
-> >> +                  struct annotated_op_loc *dst)
-> >> +{
-> >> +    struct type_state_reg *tsr;
-> >> +    struct type_state_reg src_tsr;
-> >> +    u32 insn_offset = dl->al.offset;
-> >> +    int sreg = src->reg1;
-> >> +    int dreg = dst->reg1;
-> >> +    u64 imm_value;
-> >> +
-> >> +    if (!has_reg_type(state, dreg))
-> >> +        return;
-> >> +
-> >> +    tsr = &state->regs[dreg];
-> >> +    tsr->copied_from = -1;
-> >> +
-> >> +retry:
-> >> +    if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
-> >> +        invalidate_reg_state(tsr);
-> >> +        return;
-> >> +    }
-> >> +
-> >> +    src_tsr = state->regs[sreg];
-> >> +
-> >> +    /*
-> >> +     * Handle 'add' instructions of the form:
-> >> +     *   add  dreg, base, #offset     (immediate offset)
-> >> +     *   add  dreg, base, reg2        (reg2 holds a constant)
-> >> +     *
-> >> +     * For case 2, retrieve the constant value from reg2
-> >> +     * and use it as the offset.
-> >> +     */
-> >> +    imm_value = src->offset;
-> >> +    if (src->multi_regs) {
-> >> +        int reg2 = (sreg == src->reg1) ? src->reg2 : src->reg1;
-> >> +
-> >> +        if (!has_reg_type(state, reg2) || !state->regs[reg2].ok) {
-> >> +            /* Unable to resolve type for dst, bail out */
-> >> +            invalidate_reg_state(tsr);
-> >> +            return;
-> >> +        }
-> >> +        if (state->regs[reg2].kind == TSR_KIND_CONST)
-> >> +            imm_value = state->regs[reg2].imm_value;
-> > 
-> > First, when reg2 is valid but not TSR_KIND_CONST - say a pointer
-> > freshly loaded from memory - the addend is unknown at analysis time,
-> > yet imm_value silently stays 0 and propagation continues, tracking
-> > the destination as base + 0. Note the asymmetry: no state at all
-> > invalidates, but state that doesn't yield a value pretends the
-> > addend is zero. Unknown addend should invalidate as well:
-> > 
-> >         if (state->regs[reg2].kind != TSR_KIND_CONST) {
-> >             invalidate_reg_state(tsr);
-> >             return;
-> >         }
-> > 
-> 
-> It might not be a direct invalidation, but rather swapping reg1/reg2 and
-> then retrying.
-> 
-> > Second, the shifted/extended forms still break even with a constant
-> > reg2: extract_op_location_arm64() drops the "lsl #3" (or uxtw/sxtw)
-> > modifier, so add x0, x1, x2, lsl #3 contributes the unshifted value
-> > and maps later accesses to the wrong field. Maybe flag such operands
-> > during extraction (or fail the reg2 extraction) so the handler can
-> > skip them.
-> >
-> 
-> Okay, so it seems shifted/extended forms are unavoidable. We may need to
-> introduce more fields into annotated_op_loc to record them, like this:
-> 
-> diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
-> index 138d9258281c..b00e0ad96023 100644
-> --- a/tools/perf/util/annotate.h
-> +++ b/tools/perf/util/annotate.h
-> @@ -501,6 +501,8 @@ int arch__dwarf_regnum(const struct arch *arch, const char *str);
->   * @offset: Memory access offset in the operand
->   * @segment: Segment selector register
->   * @addr_mode: Addressing mode, only valid if @mem_ref is true
-> + * @extend_type: ARM64 register extend specifier (enum annotated_ext_type)
-> + * @shift: ARM64 shift amount (e.g., 0 to 4)
->   * @mem_ref: Whether the operand accesses memory
->   * @multi_regs: Whether the second register is used
->   * @imm: Whether the operand is an immediate value (in offset)
-> @@ -511,6 +513,8 @@ struct annotated_op_loc {
->  	int offset;
->  	u8 segment;
->  	u8 addr_mode;
-> +	u8 extend_type;
-> +	u8 shift;
->  	bool mem_ref;
->  	bool multi_regs;
->  	bool imm;
-> @@ -542,6 +546,19 @@ enum annotated_addr_mode {
->  	PERF_ADDR_MODE_POST_INDEX,
->  };
->  
-> +enum annotated_ext_type {
-> +	PERF_EXT_NONE = 0,
-> +
-> +	PERF_EXT_UXTB,
-> +	PERF_EXT_SXTB,
-> +	PERF_EXT_UXTH,
-> +	PERF_EXT_SXTH,
-> +	PERF_EXT_UXTW,
-> +	PERF_EXT_SXTW,
-> +	PERF_EXT_UXTX,  /* LSL is equivalent to UXTX */
-> +	PERF_EXT_SXTX,
-> +};
-> +
+Hi Dhaval,
 
-Looks ok to me.  But more comments are needed for those who are not
-familiar with the arm64 ISA.
+kernel test robot noticed the following build warnings:
 
-Thanks,
-Namhyung
+[auto build test WARNING on abelloni/rtc-next]
+[also build test WARNING on linus/master v7.2 next-20260821]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Dhaval-Shiroya/rtc-rv3028-configure-backup-switch-mode-from-device-tree/20260822-145911
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
+patch link:    https://lore.kernel.org/r/20260822092911.318342-1-dhaval.shiroya%40siliconsignals.io
+patch subject: [PATCH] rtc: rv3028: configure backup switch mode from device tree
+config: arm64-randconfig-002-20260825 (https://download.01.org/0day-ci/archive/20260825/202608250645.zcZhAAz1-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260825/202608250645.zcZhAAz1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608250645.zcZhAAz1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/rtc/rtc-rv3028.c:908:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+     906 |                  "setting backup switch mode to %u (reg 0x37: 0x%02x -> 0x%02x)\n",
+         |                                                                           ~~~~
+         |                                                                           %02lx
+     907 |                  bsm_dt, val_old,
+     908 |                  (val_old & ~(RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE)) |
+         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     909 |                  bsm_bits | RV3028_BACKUP_FEDE);
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
+     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                  ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   1 warning generated.
 
 
->  /**
->   * struct annotated_insn_loc - Location info of instruction
->   * @ops: Array of location info for source and target operands
-> 
-> 
-> >> +    }
-> >> +
-> >> +    if (src_tsr.kind == TSR_KIND_CONST) {
-> >> +        tsr->kind = src_tsr.kind;
-> >> +        tsr->imm_value = src_tsr.imm_value + imm_value;
-> >> +        tsr->offset = 0;
-> >> +        tsr->ok = src_tsr.ok;
-> >> +
-> >> +        pr_debug_dtp("add [%x] imm %#"PRIx64"(reg%d) -> reg%d\n",
-> >> +                 insn_offset, imm_value, sreg, dreg);
-> > 
-> > And since add is commutative, this early return drops the pointer
-> > side for add rd, const_reg, ptr_reg: sreg starts as reg1, hits the
-> > CONST case and returns before the goto retry at the bottom ever gets
-> > a chance to evaluate the pointer register. The result should be the
-> > pointer with the constant applied as an offset, not a plain constant.
-> > Maybe check the other register for a pointer type before falling into
-> > the CONST case (or move the CONST handling after the retry).
-> > 
-> 
-> Yeah, this issue is a side effect of the previous incomplete handling and
-> will be fixed together.
-> 
-> Thanks,
-> Tengda
-> 
+vim +908 drivers/rtc/rtc-rv3028.c
+
+   857	
+   858	/*
+   859	 * Configure backup switchover mode from device tree.
+   860	 *   0 = disabled
+   861	 *   1 = DSM (Direct Switching Mode)  - switch when VDD < VBACKUP
+   862	 *   3 = LSM (Level Switching Mode)   - switch when VDD < 2.0V
+   863	 */
+   864	static int rv3028_set_bsm_from_dt(struct rv3028_data *rv3028,
+   865					  struct i2c_client *client)
+   866	{
+   867		u32 val_old, bsm_dt, bsm_bits;
+   868		int ret;
+   869	
+   870		if (device_property_read_u32(&client->dev, "backup-switch-mode",
+   871					     &bsm_dt))
+   872			return 0;
+   873	
+   874		/* Validate and convert DT value to register bits */
+   875		switch (bsm_dt) {
+   876		case 0:
+   877			bsm_bits = 0;
+   878			break;
+   879		case 1:
+   880			bsm_bits = FIELD_PREP(RV3028_BACKUP_BSM, RV3028_BACKUP_BSM_DSM);
+   881			break;
+   882		case 3:
+   883			bsm_bits = FIELD_PREP(RV3028_BACKUP_BSM, RV3028_BACKUP_BSM_LSM);
+   884			break;
+   885		default:
+   886			dev_warn(&client->dev,
+   887				 "invalid backup-switch-mode %u (use 0, 1, or 3)\n",
+   888				 bsm_dt);
+   889			return 0;
+   890		}
+   891	
+   892		/* Read current BACKUP register */
+   893		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
+   894		if (ret < 0)
+   895			return ret;
+   896	
+   897		/* Check if BSM and FEDE already match desired values */
+   898		if ((val_old & (RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE)) ==
+   899		    (bsm_bits | RV3028_BACKUP_FEDE)) {
+   900			dev_dbg(&client->dev,
+   901				"backup switch mode already set to %u\n", bsm_dt);
+   902			return 0;
+   903		}
+   904	
+   905		dev_info(&client->dev,
+   906			 "setting backup switch mode to %u (reg 0x37: 0x%02x -> 0x%02x)\n",
+   907			 bsm_dt, val_old,
+ > 908			 (val_old & ~(RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE)) |
+   909			 bsm_bits | RV3028_BACKUP_FEDE);
+   910	
+   911		/* Set BSM and always enable FEDE as recommended by datasheet */
+   912		return rv3028_update_cfg(rv3028, RV3028_BACKUP,
+   913					 RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE,
+   914					 bsm_bits | RV3028_BACKUP_FEDE);
+   915	}
+   916	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
