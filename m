@@ -1,298 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A2223876B3;
-	Mon, 24 Aug 2026 19:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D37A838B135
+	for <llvm@lists.linux.dev>; Mon, 24 Aug 2026 20:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787601006; cv=none; b=qwpWfuJ5SLdzDcn6hrtevZVN/hGQYT5hc+lmp6INoxSzindhLEieDV3M3xOEGhUJf9hl/cZU6uEvlXf1OmrmmdtgUW8ue5hMt3tqCZVjlKZQtwVzS3YDgNEJsOIZ0XB6BFdg4eyOVT6fwVOKIbqijVT4jGRTe0fX3PwJ7CorNCI=
+	t=1787602358; cv=none; b=nscEaQL2xkpo1Qi1ibO5+hmvRRZPeXei432JPZ3XTl0cr5oApjLB5kZX7g6R/zEgA0o+5kIGU8FTKKe8LzXkfnj3VTrvhlrsc/La+0MaK+bekrML8VIdfnXzeStQjERdgYEeiYzlGQBBXdKdcK4JmOsuNmQOqu+Gnc5rgX7PxoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787601006; c=relaxed/simple;
-	bh=ahlPqpkIPSw1IsjsmVM21wJnovl1SrnM6Dd9PQlIDbs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DcATdWvRqFX34IK4grdJRsIF1tLJ1TcTIMMEQY59a/LFkqftGoUlq82omvD+nak703o7VLFRXCqc+UcMRlnaB5Pf/py3NG/pxNtz95J8TzpeQbTPADqRMVKqSfzkxLynGM7ooxIrjQIiNbG2IirM0KxL1XGg6d1C/U4+CMlbeMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N60jQ1MX; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787602358; c=relaxed/simple;
+	bh=Vv3QUAx6lbwrzeWj5c/NSZu3wDm6a1Gd35SAKG4rXXw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ON7jaAoNWivlfG8Z+lbgIwIYsFwa+d1VBxVrOAGaebYKv5j2Mq1vfmrwgPRKR9RDBs08eqn5YOAv2RtJtYBpdnmcM5VrQy/9YVWsB2Dlc3dj455CUMFQgwtJ/I86+EmLTWXaQYh7PmVu5iJ0F2XJL6hNVHft/y2VdnWieYyQhq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nB+/bA4A; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N60jQ1MX"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787601004; x=1819137004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ahlPqpkIPSw1IsjsmVM21wJnovl1SrnM6Dd9PQlIDbs=;
-  b=N60jQ1MXvZOM7W1gWsIR1FOSzTkD6SAbHNCUg8ZP6eTy7CSH5wpclYjH
-   VeWZsA3Hs5VNUWlaulXHGzBEcNOKPg8WHPEr3mTSwHyJcoWUJHZhMTINW
-   0aCdIOFg6ZOZ5z7AaqukuJTCoABjRHz5GWRxGSRbD7leszTSS3xojA8mP
-   yLlTGw18+ZjWGWWXuhKwN7gyj/emZ8nncE+pstWY0dLam0NdM7qNblCOq
-   yKEPm8i+wxqG1EJ+qEEQvE4Z9xdNNi5daBBp2rOHdNPUQIUETie9yNxZN
-   ZH+TKIslUMSwNcxFsSflfhDK8eKvZGsW8E5PFaVkZCCIOovNrb7zHjEJg
-   A==;
-X-CSE-ConnectionGUID: JiT5yEthS5i+Pk3XRUeFQg==
-X-CSE-MsgGUID: PwU1aoKtSWGqOGpHeidybQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11885"; a="87921946"
-X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
-   d="scan'208";a="87921946"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 12:50:04 -0700
-X-CSE-ConnectionGUID: Dsag7avqSlurvZJXEL8gvQ==
-X-CSE-MsgGUID: Sv9RE7OFSz+avZGUJedHng==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
-   d="scan'208";a="270557835"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 24 Aug 2026 12:50:02 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wyag4-000000003wF-0sfl;
-	Mon, 24 Aug 2026 19:49:55 +0000
-Date: Tue, 25 Aug 2026 03:48:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Hang Nan <2122295973@qq.com>, linux-bluetooth@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	marcel@holtmann.org, luiz.dentz@gmail.com,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org, pav@iki.fi
-Subject: Re: [PATCH v3] Bluetooth: ISO: fix use-after-free of listener socket
- in iso_conn_ready
-Message-ID: <202608250307.IiUVBpTP-lkp@intel.com>
-References: <tencent_1E12CBD7417A4019FF058EFD19B1DB930006@qq.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nB+/bA4A"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5b45f1cd80eso731895e87.2
+        for <llvm@lists.linux.dev>; Mon, 24 Aug 2026 13:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787602355; x=1788207155; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=gg/nMr7TMApsjClnTTTaAGhH3lootDojyA2UMKFL1nw=;
+        b=nB+/bA4AvP+5bBn1MojdA1uFPqkT59Lsk7pvWgn47Vf8IJrNNwDwUQI3rCZ5vOhc6K
+         GnleftLNHbpu0WJCSDhJKrv9F6UCO0WmoW1882aEIpZcE/L7yQsDfBKnGLMWnb5i7OdK
+         q2psg0M4JOVoSl+yct5S3solxeLU9zwLs4HXwbk273xHNYt+bPJRgKkUSoMJ/MaWXb8H
+         6z5ek6ndyUoJNaY0r1gQ0sghxo3fsPfQSESdPAMLhvN/nysYhSpT9ExMQuKZYinWMaL5
+         D33FV52ewrAKUN3OrYEXLuuhYa+GEYuE7GYnWGjfbpjkbLqW7XcZpxzEPZ5kYKN5tDWL
+         qQGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787602355; x=1788207155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gg/nMr7TMApsjClnTTTaAGhH3lootDojyA2UMKFL1nw=;
+        b=hqXrjXbLGGGVOSDG/AYORRzlYAWLKjyanKpF4uscjRUk0iRtF8yR/BxJlKd58Jmtdl
+         a8BTMyBZv/c++fBj5DeVP7Hpa6Expg3lHeX4r7LVC3vbFqUG669rls+MobBbnQlusLh0
+         XYaTK0752jOtDNGH3raThhE9y0f0L+HDJRboanO5WwOIHBSzr85/QDgd82tp2UZEUw8N
+         FQHCXUPwDSnnBfDk1T9TMj1R9DAchsxwsWgnVk0zng6NN9YNucIY38qa2TWyftfVBZDQ
+         s4YHqgX7gMluaXOHTD0orTM4rXisGYUAXJPwGiPA+9ZOuau/0LkqCnaEZ6i5rrca5ob1
+         S9EQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrD1RfcrLTyClkxm6JU+q3N5Wscyf7m6nJzaHuhXh2X3Q9JJweWbz4JpEfGL3Jz+rkSiCID@lists.linux.dev
+X-Gm-Message-State: AFuF++m/VVNaEAz3azq9MDz48wCQ7qomhgXZNR+40qR1mwP2Gq+vucba
+	hEDr6ph2GivEEYi1e84TNmmcaD4fwZQCjHTRZAeugL6jURjjpZbc1wMZ
+X-Gm-Gg: AR+sD12/YsL2qms815QZ27nsGdqF7lt9cqMN4F19pbHiWHwn521S1u0/J11xMWq8vlu
+	RMUWDY1U7j24IscOXfmLvRsjOXax+hGwP44en+1avneJPnT+0+hwBtsPA9imXSL9Yh+S0bWRmLU
+	xkC8AYAH/TY5tNNinrMWGpMs+PqNgkFpDVAEaGruw7AaLlj/euorl1ppg5PjSur7S5JCCtV4zMu
+	lPRQD5aE385ntO2JM+11mYKo9kAmBuFlDflflV8zCyc2eEYFblQFdFjcDK3nZwsk1QwZEqb6J9X
+	bPd05hp3HtE62NVg1SniCUVANqO+sbA9yYyQQ1r7bqzrMtlgzZuwjiFkf144oxD4RDybKDiZ2VP
+	Bucax471f5aVNoZahGzH09e7Dld2L+0yFKnuYXLS7A97rBQbBcdCVIIMqRnCKtd9Mr+kqhPPtDW
+	23EhO1cFdTQkIwZiSycLF+AIQWWhKKN8Uf7PiM7vBz7TnLYsLp7bC7PLyxvTviaYM6gX03zovN7
+	LMWh3hz7Foo+h4+49PMqOLlb1MRydXs+XCouJSFK/J+YTGYM6od4QlEHX8h28Xl0kAIDD8GuON5
+	zcMI+Q==
+X-Received: by 2002:a05:6512:15a5:b0:5b0:1551:d85c with SMTP id 2adb3069b0e04-5b48b89e7edmr5887419e87.20.1787602354578;
+        Mon, 24 Aug 2026 13:12:34 -0700 (PDT)
+Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b48ce0cd9csm1923620e87.71.2026.08.24.13.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 13:12:33 -0700 (PDT)
+From: Rupesh Majhi <zoone.rupert@gmail.com>
+To: Andy Shevchenko <andy@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
+Cc: linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Rupesh Majhi <zoone.rupert@gmail.com>
+Subject: [PATCH v6 0/6] iio: pressure: dps310: FIFO and triggered buffer support
+Date: Mon, 24 Aug 2026 23:11:57 +0300
+Message-ID: <20260824201203.396651-1-zoone.rupert@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_1E12CBD7417A4019FF058EFD19B1DB930006@qq.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Hang,
+dps310 has no buffer support today. This series adds it, hardware FIFO
+when no external trigger is attached, FIFO left disabled in favor of the
+trigger when one is.
 
-kernel test robot noticed the following build errors:
+Patch 1 fixes CFG_REG bit definitions. It replaces the standalone fix I
+sent 27 July, which Jonathan asked to fold in here instead:
 
-[auto build test ERROR on bluetooth/master]
-[also build test ERROR on linus/master v7.2]
-[cannot apply to bluetooth-next/master next-20260821]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  Link: https://lore.kernel.org/linux-iio/20260728223009.0cb86996@jic23-huawei/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Hang-Nan/Bluetooth-ISO-fix-use-after-free-of-listener-socket-in-iso_conn_ready/20260818-193343
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth.git master
-patch link:    https://lore.kernel.org/r/tencent_1E12CBD7417A4019FF058EFD19B1DB930006%40qq.com
-patch subject: [PATCH v3] Bluetooth: ISO: fix use-after-free of listener socket in iso_conn_ready
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260825/202608250307.IiUVBpTP-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260825/202608250307.IiUVBpTP-lkp@intel.com/reproduce)
+FIFO_EN is needed by patch 5.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608250307.IiUVBpTP-lkp@intel.com/
+Patches 2 and 3 are precursors Jonathan asked for on v5, so the buffer
+patches carry only buffer work. Patch 4 adds the triggered buffer, patch
+5 the FIFO and selection between the two. Patch 6 turns on clang context
+analysis for this driver, so the lock markings are checked and not just
+documented. It is last, drop it if IIO would rather not opt in yet.
 
-All error/warnings (new ones prefixed by >>):
+Tested on an Infineon DPS310 wired to a BeagleBone Black. Lock markings
+clean under clang 23.1.0.
 
->> net/bluetooth/iso.c:2267:4: error: call to undeclared function 'release_sock_flagsock'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2267 |                         release_sock_flagsock(parent);
-         |                         ^
->> net/bluetooth/iso.c:2266:8: warning: left operand of comma operator has no effect [-Wunused-value]
-    2266 |                     (parent, SOCK_ZAPPED)) {
-         |                      ^~~~~~
-   1 warning and 1 error generated.
+Changes since v5:
+- split probe device pointer and read path rework into their own patches
+- __must_hold() markings instead of comments saying a lock is held, plus
+  a last patch opting the driver into the analysis that checks them
+- get_unaligned_be24() for the 24 bit results
+- scan is a structure now, not a byte buffer with memcpys
+- timestamp taken in the trigger handler, not iio_pollfunc_store_time,
+  which works with nested triggers too
+- plain mutex_lock() where the guard hurt readability
+- clamp() instead of clamp_t()
+- commit messages cut down, Assisted-by tags added
 
+Rupesh Majhi (6):
+  iio: pressure: dps310: fix CFG_REG bit definitions
+  iio: pressure: dps310: use a local device pointer in probe
+  iio: pressure: dps310: rework the raw read paths
+  iio: pressure: dps310: add triggered buffer support
+  iio: pressure: dps310: add hardware FIFO support
+  iio: pressure: dps310: check the lock markings with context analysis
 
-vim +/release_sock_flagsock +2267 net/bluetooth/iso.c
+ drivers/iio/pressure/Kconfig  |   2 +
+ drivers/iio/pressure/Makefile |   2 +
+ drivers/iio/pressure/dps310.c | 738 ++++++++++++++++++++++++++++++----
+ 3 files changed, 654 insertions(+), 88 deletions(-)
 
-  2156	
-  2157	static void iso_conn_ready(struct iso_conn *conn)
-  2158	{
-  2159		struct sock *parent = NULL;
-  2160		struct sock *sk;
-  2161		struct hci_ev_le_big_sync_established *ev = NULL;
-  2162		struct hci_ev_le_pa_sync_established *ev2 = NULL;
-  2163		struct hci_ev_le_per_adv_report *ev3 = NULL;
-  2164		struct hci_conn *hcon;
-  2165		struct hci_dev *hdev;
-  2166	
-  2167		BT_DBG("conn %p", conn);
-  2168	
-  2169		iso_conn_lock(conn);
-  2170		sk = iso_sock_hold(conn);
-  2171		iso_conn_unlock(conn);
-  2172	
-  2173		if (sk) {
-  2174			lock_sock(sk);
-  2175	
-  2176			/* conn->sk may have become NULL if racing with sk close, but
-  2177			 * due to held hdev->lock, it can't become different sk.
-  2178			 */
-  2179			if (!conn->sk) {
-  2180				release_sock(sk);
-  2181				sock_put(sk);
-  2182				return;
-  2183			}
-  2184	
-  2185			/* Attempt to update source address in case of BIS Sender if
-  2186			 * the advertisement is using a random address.
-  2187			 */
-  2188			if (conn->hcon->type == BIS_LINK &&
-  2189			    conn->hcon->role == HCI_ROLE_MASTER &&
-  2190			    !bacmp(&conn->hcon->dst, BDADDR_ANY)) {
-  2191				struct hci_conn *bis = conn->hcon;
-  2192				struct adv_info *adv;
-  2193	
-  2194				adv = hci_find_adv_instance(bis->hdev,
-  2195							    bis->iso_qos.bcast.bis);
-  2196				if (adv && bacmp(&adv->random_addr, BDADDR_ANY)) {
-  2197					iso_pi(sk)->src_type = BDADDR_LE_RANDOM;
-  2198					bacpy(&iso_pi(sk)->src, &adv->random_addr);
-  2199				}
-  2200			}
-  2201	
-  2202			iso_sock_ready(sk);
-  2203	
-  2204			release_sock(sk);
-  2205			sock_put(sk);
-  2206		} else {
-  2207			hcon = conn->hcon;
-  2208			if (!hcon)
-  2209				return;
-  2210	
-  2211			hdev = hcon->hdev;
-  2212	
-  2213			if (test_bit(HCI_CONN_BIG_SYNC, &hcon->flags)) {
-  2214				/* A BIS slave hcon is notified to the ISO layer
-  2215				 * after the Command Complete for the LE Setup
-  2216				 * ISO Data Path command is received. Get the
-  2217				 * parent socket that matches the hcon BIG handle.
-  2218				 */
-  2219				parent = iso_get_sock(hdev, &hcon->src, &hcon->dst,
-  2220						      BT_LISTEN, iso_match_big_hcon,
-  2221						      hcon);
-  2222			} else if (test_bit(HCI_CONN_BIG_SYNC_FAILED, &hcon->flags)) {
-  2223				ev = hci_recv_event_data(hcon->hdev,
-  2224							 HCI_EVT_LE_BIG_SYNC_ESTABLISHED);
-  2225	
-  2226				/* Get reference to PA sync parent socket, if it exists */
-  2227				parent = iso_get_sock(hdev, &hcon->src, &hcon->dst,
-  2228						      BT_LISTEN,
-  2229						      iso_match_pa_sync_flag,
-  2230						      NULL);
-  2231				if (!parent && ev)
-  2232					parent = iso_get_sock(hdev, &hcon->src,
-  2233							      &hcon->dst,
-  2234							      BT_LISTEN,
-  2235							      iso_match_big, ev);
-  2236			} else if (test_bit(HCI_CONN_PA_SYNC_FAILED, &hcon->flags)) {
-  2237				ev2 = hci_recv_event_data(hcon->hdev,
-  2238							  HCI_EV_LE_PA_SYNC_ESTABLISHED);
-  2239				if (ev2)
-  2240					parent = iso_get_sock(hdev, &hcon->src,
-  2241							      &hcon->dst,
-  2242							      BT_LISTEN,
-  2243							      iso_match_sid, ev2);
-  2244			} else if (test_bit(HCI_CONN_PA_SYNC, &hcon->flags)) {
-  2245				ev3 = hci_recv_event_data(hcon->hdev,
-  2246							  HCI_EV_LE_PER_ADV_REPORT);
-  2247				if (ev3)
-  2248					parent = iso_get_sock(hdev, &hcon->src,
-  2249							      &hcon->dst,
-  2250							      BT_LISTEN,
-  2251							      iso_match_sync_handle_pa_report,
-  2252							      ev3);
-  2253			}
-  2254	
-  2255			if (!parent)
-  2256				parent = iso_get_sock(hdev, &hcon->src, BDADDR_ANY,
-  2257						      BT_LISTEN, iso_match_dst, BDADDR_ANY);
-  2258	
-  2259			if (!parent)
-  2260				return;
-  2261	
-  2262			lock_sock(parent);
-  2263	
-  2264			/* The listener may have been closed concurrently. */
-  2265			if (parent->sk_state != BT_LISTEN ||
-> 2266			    (parent, SOCK_ZAPPED)) {
-> 2267				release_sock_flagsock(parent);
-  2268				sock_put(parent);
-  2269				return;
-  2270			}
-  2271	
-  2272			sk = iso_sock_alloc(sock_net(parent), NULL,
-  2273					    BTPROTO_ISO, GFP_ATOMIC, 0);
-  2274			if (!sk) {
-  2275				release_sock(parent);
-  2276				return;
-  2277			}
-  2278	
-  2279			iso_sock_init(sk, parent);
-  2280	
-  2281			bacpy(&iso_pi(sk)->src, &hcon->src);
-  2282	
-  2283			/* Convert from HCI to three-value type */
-  2284			if (hcon->src_type == ADDR_LE_DEV_PUBLIC)
-  2285				iso_pi(sk)->src_type = BDADDR_LE_PUBLIC;
-  2286			else
-  2287				iso_pi(sk)->src_type = BDADDR_LE_RANDOM;
-  2288	
-  2289			/* If hcon has no destination address (BDADDR_ANY) it means it
-  2290			 * was created by HCI_EV_LE_BIG_SYNC_ESTABILISHED or
-  2291			 * HCI_EV_LE_PA_SYNC_ESTABLISHED so we need to initialize using
-  2292			 * the parent socket destination address.
-  2293			 */
-  2294			if (!bacmp(&hcon->dst, BDADDR_ANY)) {
-  2295				bacpy(&hcon->dst, &iso_pi(parent)->dst);
-  2296				hcon->dst_type = le_addr_type(iso_pi(parent)->dst_type);
-  2297			}
-  2298	
-  2299			if (test_bit(HCI_CONN_PA_SYNC, &hcon->flags)) {
-  2300				iso_pi(sk)->qos = iso_pi(parent)->qos;
-  2301				hcon->iso_qos = iso_pi(sk)->qos;
-  2302				iso_pi(sk)->bc_sid = iso_pi(parent)->bc_sid;
-  2303				iso_pi(sk)->bc_num_bis = iso_pi(parent)->bc_num_bis;
-  2304				memcpy(iso_pi(sk)->bc_bis, iso_pi(parent)->bc_bis,
-  2305				       ISO_MAX_NUM_BIS);
-  2306				set_bit(BT_SK_PA_SYNC, &iso_pi(sk)->flags);
-  2307			}
-  2308	
-  2309			bacpy(&iso_pi(sk)->dst, &hcon->dst);
-  2310	
-  2311			/* Convert from HCI to three-value type */
-  2312			if (hcon->dst_type == ADDR_LE_DEV_PUBLIC)
-  2313				iso_pi(sk)->dst_type = BDADDR_LE_PUBLIC;
-  2314			else
-  2315				iso_pi(sk)->dst_type = BDADDR_LE_RANDOM;
-  2316	
-  2317			iso_pi(sk)->sync_handle = iso_pi(parent)->sync_handle;
-  2318			memcpy(iso_pi(sk)->base, iso_pi(parent)->base, iso_pi(parent)->base_len);
-  2319			iso_pi(sk)->base_len = iso_pi(parent)->base_len;
-  2320	
-  2321			hci_conn_hold(hcon);
-  2322			iso_chan_add(conn, sk, parent);
-  2323	
-  2324			if ((ev && ((struct hci_evt_le_big_sync_established *)ev)->status) ||
-  2325			    (ev2 && ev2->status)) {
-  2326				/* Trigger error signal on child socket */
-  2327				sk->sk_err = ECONNREFUSED;
-  2328				sk->sk_error_report(sk);
-  2329			}
-  2330	
-  2331			if (test_bit(BT_SK_DEFER_SETUP, &bt_sk(parent)->flags))
-  2332				sk->sk_state = BT_CONNECT2;
-  2333			else
-  2334				sk->sk_state = BT_CONNECTED;
-  2335	
-  2336			/* Wake up parent */
-  2337			parent->sk_data_ready(parent);
-  2338	
-  2339			release_sock(parent);
-  2340			sock_put(parent);
-  2341		}
-  2342	}
-  2343	
+-- 
+2.43.0
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
