@@ -1,222 +1,153 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6706C42BEAA
-	for <llvm@lists.linux.dev>; Tue, 25 Aug 2026 12:33:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 521443F7A9F
+	for <llvm@lists.linux.dev>; Tue, 25 Aug 2026 12:43:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787661204; cv=none; b=enHzceSr5h16eR4dA05Frgq8qCVaQ+P9JNZ9WH8jdpDjcj2mwk2oHiL0iPh+B8F2m2kToPS4wuQ3VBfz5d0fIp5Z2tB5uItV64rW9SwrLC+GEq6ddHdYKwAG/173gBFa1VUGvFqYVL7UdI78y3sy2pcbxWwuxneoazjIL3gwm3A=
+	t=1787661796; cv=none; b=JkJvR5jybqbuIy/sebKA2yhYouarpmPlaMW+WdXiALmU7CC2MIyYV3elws5iebL03ErgY1TFjWunujA2yczV2xXgWyBvfN3lt/CHbc8W4hPL6JSxgfCbHXI7f303msHMNbwddJmZGr14mLaHJWxtSAuGiBc7ydbgYATgdfyiV0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787661204; c=relaxed/simple;
-	bh=/hVJ/GngUFEIrJj1pneqvp6NsIAhEby7tVzeKhTVwaM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:Cc:
-	 In-Reply-To:Content-Type; b=G6sUoZDRaTRyK+BdWMeX4ks1wNaStlzk5q5UBQcWqh9QWPmgD6NNxEN3sFUU/uMH8s97jbU+7eLwoP90IkI1nLniWcABmnSvyi3hexOv1Y0UCNJgIVjRKokdVFdHAR/UudkegXTNWG9UoZcGd65dH1pN5ncL2sRjc2NFpzeQ4l0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kzalloc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47f5d5dbf80so318567f8f.2
-        for <llvm@lists.linux.dev>; Tue, 25 Aug 2026 05:33:19 -0700 (PDT)
+	s=arc-20240116; t=1787661796; c=relaxed/simple;
+	bh=qKVDN6780BM7FpRbqGfcw4sKV8utIJkRbQ4/Bz1H7P4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=p98PktM3ix3uuM/gfuwqTkE6w4hGNwSTr9W9IPK7Fsm2GQjKLXxpTiIcYkdHcmOkgchzpItDehY8JdNg/h3LGwmQxUXxT86tAUOJ99zcb8gyx3bIbDuUDBZKBnDmD6SxghUX1J5KUqoIDFpTpw3Bakio8kFmP9S2uOO8bv++Zss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b=SArALQ7d; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=baylibre.com header.i=@baylibre.com header.b="SArALQ7d"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c2074710751so852569966b.1
+        for <llvm@lists.linux.dev>; Tue, 25 Aug 2026 05:43:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre.com; s=google; t=1787661792; x=1788266592; darn=lists.linux.dev;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:mime-version:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=TFI3yyLn9l19QnGbVm2do/qnURFM3qOYJajHXsZKIRI=;
+        b=SArALQ7d0xNSAqZK3550ezN8Z5uheJAobFvTtMUw4VtZ1nCxLrLg+5kTlA+OlBoDVq
+         /NEGPrfuYM4SqUaM23r3fPhOCu1kJ25Zq0iXqRdrDWzBLKMXdBSPVRADZAj+DXqUzscr
+         WRf2+QDmz2quX5/9ERjonGAowwra7VTjoGeZT5wjLUhcmBdUr+SkZafCAterVacLHGUc
+         D/kJoVkoxDKfmOKM05qnTD8fWwl0OcC4xdFVbjidQhQ+wmmO4l4ui2XeZoUFWQl5fgmo
+         1SSXcCPc4rd2E+jwZlpNaNR2ZeKLFjcSLeHOp7ukCrZawK1fAFFZM4hHQqsAwJX0Yq73
+         vV+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787661197; x=1788265997;
-        h=content-transfer-encoding:content-type:in-reply-to:cc:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yH+6UZUFe1kcLgyiyl2NSfgn3mf+CtObHj9vjku3NFM=;
-        b=qakeAlL8Moqo67sQBhulGreEvD8GjR/JIcN3ykxqTmfB17Db2Otwo07CyM4gpJpAPG
-         NqMRRvSKSPQJ+WxYmOWswLkOwrAzz+hxUv3vBig3i5LEHkCvRazqFOneC1w0b9zGSO8H
-         ILWxSHlZlE3xLNzbbXCZWUlsuxv4ItLV4t8huN7Wv/zO4V/Bi/BRKU+voMTVe1+BFJR+
-         P+xyhT5/ztZbyOjuTnXTyNXy/gKZBFgew7T7jSsX2p2ii6wJoqa+KeIEGwA+enWiamaw
-         ifQoLldtZdbMtU5d5iolzhgD4kC3uPi6OLTvmHSeO/UjsdiAIFDF1SYifXr4VfLk3We8
-         nyIw==
-X-Forwarded-Encrypted: i=1; AHgh+RpAmrHteWmbQVgn0JLSrgk44LUXzCvJiQfuzSSm3sBXOqj65zATMGvMoEi+pNDxEO0ppjn2@lists.linux.dev
-X-Gm-Message-State: AFuF++lP3CI2/Y0XRoYlOU8nE+KvkgKd8Nw48wMX5KXmBuNDZdF1Z0ei
-	hRdViHgPe/rlQH4hz7e8mChAteU6L5SYw7w8+ayG04BXiJpHMw9GMp7A
-X-Gm-Gg: AR+sD11gO7IrNJ0eQ3HXreR+zinm6H59AOG65CYQXCdxiFL4g6qc4ZaWzubNQr0Abyk
-	HRNrnUr2KxWh6nroWiDOM57+V5L++JTzZzgO63NixsZkm8AKbyxLJ144RHXWQIzjfudomE+OVZM
-	g71ovKVXyxjVeTvUYDUC9jGEIFxiUyj1cYqGLlr0X4TxnslpPukiqqasxaZWaLrdH37D7vYnesS
-	bjsGSUlAxGWA9TNgN/PXR0rR6XbuRjld7KIEYRoAqJAFw9dZYowpLFJq2B85TGP28XazScHzg0N
-	BBSvaYDRRDW6VeG+DzxfcyOUnP/hVUqhUaFfzjQFdnxwh1vdcrnbRLVTbnfOnA+tIg8ENc6bPXE
-	jtorwuDKkc/rEQjxDVaO6mtu7hXF7aHc/OiPq84eqlwSXx6iAszH1iGhd14dCvDBqoMWmfhq8Le
-	OEFwJ5p4YtaM5y1F5mDDZeOINt8vfqKpfp+T9N6PCKZXSfAuYR3JcMy+OVaSnFM+DcTukmqMJyR
-	KXppJbfpQcV0RFvOOd5GmCmtF1z37M/mOle/K+LahNcmzCtIN56XmkWVc4bbO85t4Pj4y7bG4cC
-	1X77
-X-Received: by 2002:a05:600c:871b:b0:499:77de:78ba with SMTP id 5b1f17b1804b1-499b8458e54mr229842105e9.2.1787661197060;
-        Tue, 25 Aug 2026 05:33:17 -0700 (PDT)
-Received: from [10.147.179.235] ([192.176.1.78])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-482c9c0869bsm11778877f8f.25.2026.08.25.05.33.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2026 05:33:16 -0700 (PDT)
-Message-ID: <61f8b60e-3477-465c-b6e9-c5a76de210f3@kzalloc.com>
-Date: Tue, 25 Aug 2026 14:33:14 +0200
+        d=1e100.net; s=20251104; t=1787661792; x=1788266592;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-type:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TFI3yyLn9l19QnGbVm2do/qnURFM3qOYJajHXsZKIRI=;
+        b=cjBwkVVlse8WvZ5Oo2T2dX8dVsGWM1qf5QxrK3kLx+mZtX4isAB6RSbRNAnGphAstu
+         mpQH9TVtO45Q9y1jN1SoBA2ocxLamnYo++9U9BVdgVzRwSTcTFLUTevYTmiF2BuK/pFh
+         vqmIKE3w8g3hW1QuSz0c7s1Ukd8Xq0qwOZwbaHe7Ui1zHAnhHtH7RPrbp1PqCa31JMKh
+         LvIL+fu3zdMDPcLs3iQ1fD8GGKxi6UxhniPnarw7iY8mr3Nc4Ix8201p/AB5nJHUcPVO
+         sjuBjieWGF4ip3a4en9IRo1qC8ah0Tvr6rj/whXRy0BkjIV2BKdHGfLzKa0ZOW7Eg5ln
+         V1wA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq+QyfPkNzUY1D4GVTCq24WJK1aIIfBcL8fncOZyaObJczu7DMLxgS5BkC6vS/iubqjusIC@lists.linux.dev
+X-Gm-Message-State: AFuF++mkRk1tKjVZsksdbdFaFaadBb7HTJzBvigjV+GCu7bJJuDibBss
+	aVfApafo1cN0yo0hxUQyQVd9ZfK4TsbfrdBpj9l1oHWdpM4u/uLXMrCaP2oU6QoLqx8=
+X-Gm-Gg: AR+sD10sKktMONbQEPHXccPCSidAmRH1ZdxYO+jF0x4MiYpuMPZyMSsjNsidYxwqCMF
+	Eey2pR+jQG96Y99+xEVbeM2+OOlJ0iuCgGDIJmZ8punGP7eIaIlaK38RTi9sttkdZCgq2UP/57I
+	UTKdD6PNJwhPldOk3C3jtV3zTjfcqS5b/QXpjXND3pLsRzxETukn7KX6ALmBvEP3zel1EAXIpm4
+	qPYdl4yYzHAxdqRHlnpQ0W8Z2grmG5m83IEhZyUJ77C/TsWKX0uMavNwLKRzZ1GrDirCZml05DK
+	cDO1723YP+tfvAizyTAm+KRiWu+K92kEaswPBBHtKPmbyzUeAQQQo3zLCzPhywGejCRxi0NWJmc
+	m9h9w0ujXf3ccT+Qs/wzMY5NwoxurTH9z6i9JvGHl0ASn1hXgCLRAEXCGir9NDvsP+HZoQ952/4
+	k2m6OLLvMUwZ/vejIC8jj4iqxpunFZ/nsH4rHtAtw5x0Sr/Oheyv6huKuM
+X-Received: by 2002:a17:907:1c27:b0:c21:382e:9a38 with SMTP id a640c23a62f3a-c2491c2a110mr2907599166b.2.1787661792297;
+        Tue, 25 Aug 2026 05:43:12 -0700 (PDT)
+Received: from localhost ([2001:4090:a244:80d4:489b:7642:1b32:84d6])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f809bsm1943085966b.41.2026.08.25.05.43.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 05:43:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v19 28/40] dept: assign unique dept_key to each distinct
- dma fence caller
-To: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- "kernel_team @ skhynix . com" <kernel_team@skhynix.com>
-References: <20260706061928.66713-1-byungchul@sk.com>
- <20260706061928.66713-29-byungchul@sk.com>
-Content-Language: en-US
-From: Yunseong Kim <ysk@kzalloc.com>
-Cc: Nathan Chancellor <nathan@kernel.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>,
- Dave Airlie <airlied@redhat.com>, Marco Elver <elver@google.com>,
- Nick Desaulniers <ndesaulniers@google.com>, Yeoreum Yun
- <yeoreum.yun@arm.com>, Yeoreum Yun <ppbuk5246@gmail.com>,
- Byungchul Park <byungchul@sk.com>,
- Byungchul Park <max.byungchul.park@gmail.com>
-In-Reply-To: <20260706061928.66713-29-byungchul@sk.com>
+Mime-Version: 1.0
+Content-Type: multipart/signed;
+ boundary=14a369f1291804ff25a36242752313e74f8647a8095442ea6e38a796f654;
+ micalg=pgp-sha512; protocol="application/pgp-signature"
+Date: Tue, 25 Aug 2026 14:43:01 +0200
+Message-Id: <DKY17OVPN49B.3U7OKB7NIMLF2@baylibre.com>
+From: "Markus Schneider-Pargmann" <msp@baylibre.com>
+To: "Andrew Davis" <afd@ti.com>, "Markus Schneider-Pargmann (TI)"
+ <msp@baylibre.com>, "Nishanth Menon" <nm@ti.com>, "Vignesh Raghavendra"
+ <vigneshr@ti.com>, "Tero Kristo" <kristo@kernel.org>, "Rob Herring"
+ <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Conor
+ Dooley" <conor+dt@kernel.org>, "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <nick.desaulniers+lkml@gmail.com>, "Bill Wendling"
+ <morbo@google.com>, "Justin Stitt" <justinstitt@google.com>, "Judith
+ Mendez" <jm@ti.com>, "Daniel Schultz" <d.schultz@phytec.de>, "Siddharth
+ Vadapalli" <s-vadapalli@ti.com>, "Paresh Bhagat" <p-bhagat@ti.com>, "Bryan
+ Brattlof" <bb@ti.com>, "Jai Luthra" <jai.luthra@ideasonboard.com>, "Devarsh
+ Thakkar" <devarsht@ti.com>, "Beleswar Padhi" <b-padhi@ti.com>, "Francesco
+ Dolcini" <francesco.dolcini@toradex.com>, "Stefano Radaelli"
+ <stefano.radaelli21@gmail.com>
+Cc: "Vishal Mahaveer" <vishalm@ti.com>, "Kevin Hilman"
+ <khilman@baylibre.com>, "Sebin Francis" <sebin.francis@ti.com>, "Kendall
+ Willis" <k-willis@ti.com>, "Akashdeep Kaur" <a-kaur@ti.com>,
+ <linux-arm-kernel@lists.infradead.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>, "Hari Nagalla"
+ <hnagalla@ti.com>
+Subject: Re: [PATCH v7 07/11] arm64: dts: ti: k3-am62a-ti-ipc-firmware: Move
+ wkup reserved memory
+X-Mailer: aerc 0.21.0-146-gb5c16ebe1835
+References: <20260701-topic-am62a-ioddr-dt-v6-19-v7-0-e9db8b16821a@baylibre.com> <20260701-topic-am62a-ioddr-dt-v6-19-v7-7-e9db8b16821a@baylibre.com> <f9a23a59-4346-4408-92c6-11b9162f0efa@ti.com>
+In-Reply-To: <f9a23a59-4346-4408-92c6-11b9162f0efa@ti.com>
+
+--14a369f1291804ff25a36242752313e74f8647a8095442ea6e38a796f654
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Hi Nathan,
+Hi Andrew,
 
-After reading your thoughtful comments, I tested the Clang build issue
-related to "indirect goto" on a v7.2 kernel with DEPT enabled:
+On Thu Jul 9, 2026 at 9:33 PM CEST, Andrew Davis wrote:
+> On 7/1/26 7:39 AM, Markus Schneider-Pargmann (TI) wrote:
+>> Move the reserved memory regions used for wkup_r5fss0_core0 to the
+>> k3-am62a-ti-ipc-firmware.dtsi. These are all the same for the other
+>> boards as well, so we can combine them here similar to what is already
+>> done for the mcu_r5fss0_core0 memory regions.
+>
+> The reason we left this region here in the base DTSI is this region
+> is for the DM firmware and is required for the SoC to function.
+> The other firmware regions are all optional.
 
- $ clang -v
- Debian clang version 21.1.8 (10)
+I left this in the base dts before and Nishanth pointed out that it
+should be in the ipc-firmware.dtsi so it only needs to be changed in one
+place:
 
- $ vng --arch arm64 --build LLVM=1 --configitem CONFIG_DEPT=y \
-       --configitem CONFIG_DRM_XE=m --configitem CONFIG_ARCH_QCOM=y \
-       --configitem CONFIG_DRM_MSM=m
+  That was the entire purpose of splitting ipc-firmware.dtsi out -
+  if the default firmware carveouts have changed, do the change in
+  ipc-firmware.dtsi. That way some other firmware people will have could
+  potentially have their own dtsi files and handle things appropriately
+  there, even if they are using the same evm OR if they use the exact
+  ipc-firmware on different boards, that will appropriately introduce
+  the change there as well. BUT, do check first.
 
-Tested branch is here: https://github.com/yskzalloc/linux-dept/tree/dept19_v7.2
+https://lore.kernel.org/r/20260507155710.5zch4ghhzrj7hnlh@immovably
 
-Since the update to the dma_fence_wait() usage in the 7.2 rc, Clang has no
-longer reported the "indirect goto" issue.
+Maybe I am misunderstanding what you are suggesting. Also note that the
+memory-region list in wkup_r5fss0_core0 which references the memory
+regions defined in the base dts were always in the ipc-firmware.dtsi.
 
-Link: https://github.com/llvm/llvm-project/issues/138272#issuecomment-5404767476
-Link: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4e28aa8f7ee26d67a4addee6e3980f1cbf861b49
-Tested-by: Yunseong Kim <yunseong.kim@est.tech>
+Could you please help me understand how this is modeled so I can update
+the patches appropriately?
 
-On 06/07/2026 8:19 am, Byungchul Park wrote:
-> dma fence can be used at various points in the code and it's very hard
-> to distinguish dma fences between different usages.  Using a single
-> dept_key for all the dma fences could trigger false positive reports.
-> 
-> Assign unique dept_key to each distinct dma fence wait to avoid false
-> positive reports.
-> 
-> Signed-off-by: Byungchul Park <byungchul@sk.com>
-> ---
->  drivers/dma-buf/dma-fence.c | 18 ++++-----
->  include/linux/dma-fence.h   | 74 +++++++++++++++++++++++++++++--------
->  2 files changed, 68 insertions(+), 24 deletions(-)
-> 
-[snip...]
-> diff --git a/include/linux/dma-fence.h b/include/linux/dma-fence.h
-> index d4c92fd35092..3732849a30b7 100644
-> --- a/include/linux/dma-fence.h
-> +++ b/include/linux/dma-fence.h
-> @@ -370,8 +370,22 @@ bool dma_fence_check_and_signal_locked(struct dma_fence *fence);
->  void dma_fence_signal_locked(struct dma_fence *fence);
->  void dma_fence_signal_timestamp(struct dma_fence *fence, ktime_t timestamp);
->  void dma_fence_signal_timestamp_locked(struct dma_fence *fence, ktime_t timestamp);
-> -signed long dma_fence_default_wait(struct dma_fence *fence,
-> +signed long __dma_fence_default_wait(struct dma_fence *fence,
->  				   bool intr, signed long timeout);
-> +
-> +/*
-> + * Associate every caller with its own dept map.
-> + */
-> +#define dma_fence_default_wait(f, intr, t)				\
-> +({									\
-> +	signed long __ret;						\
-> +									\
-> +	sdt_might_sleep_start_timeout(NULL, t);				\
-> +	__ret = __dma_fence_default_wait(f, intr, t);			\
-> +	sdt_might_sleep_end();						\
-> +	__ret;								\
-> +})
-> +
->  int dma_fence_add_callback(struct dma_fence *fence,
->  			   struct dma_fence_cb *cb,
->  			   dma_fence_func_t func);
-> @@ -628,12 +642,37 @@ static inline ktime_t dma_fence_timestamp(struct dma_fence *fence)
->  	return fence->timestamp;
->  }
->  
-> -signed long dma_fence_wait_timeout(struct dma_fence *,
-> +signed long __dma_fence_wait_timeout(struct dma_fence *,
->  				   bool intr, signed long timeout);
-> -signed long dma_fence_wait_any_timeout(struct dma_fence **fences,
-> +signed long __dma_fence_wait_any_timeout(struct dma_fence **fences,
->  				       uint32_t count,
->  				       bool intr, signed long timeout,
->  				       uint32_t *idx);
-> +/*
-> + * Associate every caller with its own dept map.
-> + */
-> +#define dma_fence_wait_timeout(f, intr, t)				\
-> +({									\
-> +	signed long __ret;						\
-> +									\
-> +	sdt_might_sleep_start_timeout(NULL, t);				\
-> +	__ret = __dma_fence_wait_timeout(f, intr, t);			\
-> +	sdt_might_sleep_end();						\
-> +	__ret;								\
-> +})
-> +
-> +/*
-> + * Associate every caller with its own dept map.
-> + */
-> +#define dma_fence_wait_any_timeout(fpp, count, intr, t, idx)		\
-> +({									\
-> +	signed long __ret;						\
-> +									\
-> +	sdt_might_sleep_start_timeout(NULL, t);				\
-> +	__ret = __dma_fence_wait_any_timeout(fpp, count, intr, t, idx);	\
-> +	sdt_might_sleep_end();						\
-> +	__ret;								\
-> +})
->  
->  /**
->   * dma_fence_wait - sleep until the fence gets signaled
-> @@ -649,19 +688,24 @@ signed long dma_fence_wait_any_timeout(struct dma_fence **fences,
->   * fence might be freed before return, resulting in undefined behavior.
->   *
->   * See also dma_fence_wait_timeout() and dma_fence_wait_any_timeout().
-> + *
-> + * Associate every caller with its own dept map.
->   */
-> -static inline signed long dma_fence_wait(struct dma_fence *fence, bool intr)
-> -{
-> -	signed long ret;
-> -
-> -	/* Since dma_fence_wait_timeout cannot timeout with
-> -	 * MAX_SCHEDULE_TIMEOUT, only valid return values are
-> -	 * -ERESTARTSYS and MAX_SCHEDULE_TIMEOUT.
-> -	 */
-> -	ret = dma_fence_wait_timeout(fence, intr, MAX_SCHEDULE_TIMEOUT);
-> -
-> -	return ret < 0 ? ret : 0;
-> -}
-> +#define dma_fence_wait(f, intr)						\
-> +({									\
-> +	signed long __ret;						\
-> +									\
-> +	sdt_might_sleep_start_timeout(NULL, MAX_SCHEDULE_TIMEOUT);	\
-> +	__ret = __dma_fence_wait_timeout(f, intr, MAX_SCHEDULE_TIMEOUT);\
-> +	sdt_might_sleep_end();						\
-> +									\
-> +	/*								\
-> +	 * Since dma_fence_wait_timeout cannot timeout with		\
-> +	 * MAX_SCHEDULE_TIMEOUT, only valid return values are		\
-> +	 * -ERESTARTSYS and MAX_SCHEDULE_TIMEOUT.			\
-> +	 */								\
-> +	__ret < 0 ? __ret : 0;						\
-> +})
+Thanks!
 
-Thank you all! :)
+Best
+Markus
 
-Best regards,
-Yunseong
+--14a369f1291804ff25a36242752313e74f8647a8095442ea6e38a796f654
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iKMEABYKAEsWIQSJYVVm/x+5xmOiprOFwVZpkBVKUwUCao2N1RsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIRHG1zcEBiYXlsaWJyZS5jb20ACgkQhcFWaZAVSlMY
+0wD+MW1P+fXLHbnT0Q5q0xRZNdlX5mzZrZjflYaQeXlZQVkBALnL4EjrbB40bxbu
+e80zmZ+OmW/bF+SzGKpJy8SoyqYK
+=pVaV
+-----END PGP SIGNATURE-----
+
+--14a369f1291804ff25a36242752313e74f8647a8095442ea6e38a796f654--
