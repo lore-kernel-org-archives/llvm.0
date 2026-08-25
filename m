@@ -1,179 +1,278 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2C139478D;
-	Mon, 24 Aug 2026 23:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD823202C48
+	for <llvm@lists.linux.dev>; Tue, 25 Aug 2026 00:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787612732; cv=none; b=M5HONSUakfpZbkAIO4S8oRrUgeJPS1nD9t/EWtphPqnNWrL8bxWnkAq+CsGpXGc5RZeIHjiCQmvTcW+Fr52StYNruzuCZU51w6x1XW7LMn94NnWlmMAt7u9BmYi77I/NYnl1jUAFEUNR0vcR6ySCxkWA+1mwZW3KN6NHZp4yXIM=
+	t=1787617137; cv=none; b=cZaiOFJ3YLIkGKkPGvSM2lY3Zz4IDC/H/eMAJAsL2kTCKIiwK/9aSbKPChsyI+H58cNqbmaxd+vlWiThPpIofsCTsko/iEevKPzBecQYsieJX/jQDW7Lbxu9fSW/soD6ppnH6rxu95TCOu3vaMhVSk+mX4259eEMGZzcYAQIW3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787612732; c=relaxed/simple;
-	bh=RPMin46s/2o5TeU3lBd/qSu4yH3eLmz5bhC/SMiMKz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o1MqPAgcBG8VOaJZ3yV4FQxdZim+0n4PQBW/xO0ObolUlktTKUoD0WOvCm2e+wxFqyMnNZfsDF4oumoyuUl/rOzAw9w+p2+gWQaaJC21z6uyGG50zkkMBqpCC+Aee0yHEbS4OnCoF0/9DBHpHJo9nF3D5mYVNfkUGIcH3p+ltB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HL31/Ko0; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787617137; c=relaxed/simple;
+	bh=xGgE8fRb2F6SeuN2setpjtGggTxd2X5TU4Mo5JMO92Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nt1eJDTp7IIzQbpurKrHVZ16uAtxpaDRAQj9ZBBMhKIvPnRUWs+13Edoy91kYMUY4sKUtyxXhSa2qT52WNkgxzYiqu2gOmtn/5tGhxY2AZ393gt4jZIZa4tgjRODCOW5CcHy6aZCXxBJRSWIx/K9ty5DtqMvWaOsWzRtrbM+OOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=YVWsqbYa; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HL31/Ko0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787612730; x=1819148730;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RPMin46s/2o5TeU3lBd/qSu4yH3eLmz5bhC/SMiMKz0=;
-  b=HL31/Ko0W9YsQb+CHQv32S41cSi/LaY3YrDkQVIL0gzMDW1dYwcUxOJn
-   BZQj/FKvvlmpuDF2N1Xe+HbnNIwP0g8mcdMmDQFx3EQLc/LzwAFDfobZx
-   WzkUb/NEMKbyjL3b3bvRJng4q+fJcF76Rs06QndYAKVjoARNc2fblSpZP
-   PPwOQd1lVj+8ddfh7n76cITmD6l5wwbDPxbCQ7jb78+gFEzWBn0zKPag/
-   Fj46koUBtp3VGQy8NnP+dY/m0cgekbiQKTii0ihu62EZWSidjVNigXbmm
-   uZn9r8dNW+EV/Lp4oenMxCoEWkWr5GWRYA5sQxE3WXLIfpUdXX5V/TiSZ
-   Q==;
-X-CSE-ConnectionGUID: I1Oxom3dRpiPO6F9tW5vuw==
-X-CSE-MsgGUID: 1FaEcOSeTK2zWaydEvZ5Mg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11885"; a="98412277"
-X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
-   d="scan'208";a="98412277"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 16:05:30 -0700
-X-CSE-ConnectionGUID: MqAOTc8tRiG515kiIfa8mQ==
-X-CSE-MsgGUID: uISPeVioS5KBuo2IMDJi2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,241,1779174000"; 
-   d="scan'208";a="271332667"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 24 Aug 2026 16:05:28 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wydjE-000000004Pf-1JkK;
-	Mon, 24 Aug 2026 23:05:21 +0000
-Date: Tue, 25 Aug 2026 07:05:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Dhaval Shiroya <dhaval.shiroya@siliconsignals.io>,
-	alexandre.belloni@bootlin.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Dhaval Shiroya <dhaval.shiroya@siliconsignals.io>,
-	linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: rv3028: configure backup switch mode from device
- tree
-Message-ID: <202608250645.zcZhAAz1-lkp@intel.com>
-References: <20260822092911.318342-1-dhaval.shiroya@siliconsignals.io>
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="YVWsqbYa"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cbeea240819so2454392a12.1
+        for <llvm@lists.linux.dev>; Mon, 24 Aug 2026 17:18:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1787617134; x=1788221934; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=RarC5x4RvvpR7j/hUnvljw8BjrRQB7FIPxU5ozvxHYk=;
+        b=YVWsqbYamb/MdXIevXx0u4VDryDOWtseDk8N0WDb07UWOGmKTEmv2TIzb/+Dxp+wJh
+         C1D1MrTmQbtFOBF8LCl5mDGxYL4n3biTnmvNb/bjbBwzU8+Mhygyz12prU4udpguS/9r
+         u7Lnl6A/C82UYVA7wpzb9s5ECoVgHpzvp/l+PSA6pfop88BB/1O8Ktd67oJLcVMUy7oT
+         qxchsc5EpQjB5qHQyefGt0NeOhdJcLoAPj/gwRd/LYbDG649kkAWFQL15MnLDxj242QE
+         adAHI92eEuYdhJyGN2g5QinQxv8yFp1yFWNw+s5wZZiCLEds9foz1ZnlqmQ7ekz37mPg
+         CsFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787617134; x=1788221934;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=RarC5x4RvvpR7j/hUnvljw8BjrRQB7FIPxU5ozvxHYk=;
+        b=Gk6+h2YEwQZknZghr9TPj3cHvf/uRujoPvk9mRofm3CpHuvKZpofP8j9er/IxPUcPd
+         EbHWBB/hHUTINq9LBxFMo9HCZlSC4YwUfXJ7cVieEb7tNO9T3M6CUTkDiLMs3uzcaFMY
+         bKg5RK2UYBA2XSeBcSyqhGMP8b+3dvmTv4F2+R575cxcQB4hmtUqWjT5IZvV1pC90XVh
+         sjbpXJAKe+QGOKX6VvwCFYQ+04TyeXgrvnU3biCHwt/CMUPFW+glqRH2uccx9aITXLye
+         NllVFuH6HkbGjOkoCUu4BsLbuOmAIjj5ObzcvJlUUXniJGzZZt1wb8Poujueq7e0fn6x
+         tuxA==
+X-Forwarded-Encrypted: i=1; AHgh+Rp8yy5M1ZGw/yF4LLrsgRP0Rn2LGQgCQcO5N8xchUYjBxrKwLYj60OtDUMczkxMfBes6vSj@lists.linux.dev
+X-Gm-Message-State: AFuF++ltcflQCwnp5EacNupCBpF2son3ouM6fc6iOlPq9uSlDSwuRmBq
+	Uu10OrtOgfCQaLocqNnOLkoI31Px3N4cIMjGWEH73pCGjg69tt6k9MsTNvFEim2cpOo=
+X-Gm-Gg: AR+sD109N5sJWpqm3JhJ7JyV5CRzl6NlIsSNNNLMrb+z/2KNEj0fl94MDxJ5FkD1fSV
+	KabuB6m5dRPHuy6TAzShOQXV9juLROMIq74lye5Hef8dDiGThog28GYyl4CQ3MCxTzEPl+fCKHG
+	gfe4wzGSjWTzgZKrLJno6s4wtD1EOE3AmZmKkQ/viY2qhQ/qlcShuFKPkVNZCIpIfhIYaLVe1l0
+	o0I0jnNkUm1kM3NS3EGsZwsEeYMYpsN0IJFngCOprdVOka4YCd9abiz68Gz7g93x97WJLKyGd73
+	+U5SWcAgpd5PbzNAjAVXNaLX4rqY+bfTPbWL99jVXWmLKJ9JdcuulM1WNR7StXyHigrsC/lCkZm
+	WdoljwavC8uBraOonNDyjJ6mfSXJWSaQU5ePWIFI0gbOsJyAqz7n0tUqjdPNPRA/sacoeVNJVv3
+	W6LqZnU0m3pytqBNwm9tKgT6xWvs0Ll+0h4WlacQ==
+X-Received: by 2002:a17:90b:3902:b0:395:bbfe:fc6f with SMTP id 98e67ed59e1d1-395c333710emr50382365a91.3.1787617133932;
+        Mon, 24 Aug 2026 17:18:53 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3965547159asm31323a91.12.2026.08.24.17.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 17:18:53 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Colin Winegarden <colin.winegarden@broadcom.com>,
+	Rukhsana Ansari <rukhsana.ansari@broadcom.com>
+Cc: horms@kernel.org,
+	kalesh-anakkur.purayil@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com,
+	Joe Damato <joe@dama.to>,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net v2] bnxt_en: Bound SW TPA IDs to prevent crashes
+Date: Mon, 24 Aug 2026 17:18:40 -0700
+Message-ID: <20260825001842.2501798-1-joe@dama.to>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260822092911.318342-1-dhaval.shiroya@siliconsignals.io>
+Content-Transfer-Encoding: 8bit
 
-Hi Dhaval,
+TPA IDs are generated by FW and can be up to 1024. bnxt_alloc_agg_idx is
+intended to wrap the FW ID to a value in the range of [0, 255] and
+generate a mapping between FW IDs and the wrapped software ID.
 
-kernel test robot noticed the following build warnings:
+On a 57608 with firmware version 233, the firmware advertises 32
+concurrent TPAs. As of the commit under fixes, bp->max_tpa on this NIC
+is set to 32.
 
-[auto build test WARNING on abelloni/rtc-next]
-[also build test WARNING on linus/master v7.2 next-20260821]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If the software ID from bnxt_alloc_agg_idx is above 31, this results in
+an invalid address being loaded on this line:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dhaval-Shiroya/rtc-rv3028-configure-backup-switch-mode-from-device-tree/20260822-145911
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20260822092911.318342-1-dhaval.shiroya%40siliconsignals.io
-patch subject: [PATCH] rtc: rv3028: configure backup switch mode from device tree
-config: arm64-randconfig-002-20260825 (https://download.01.org/0day-ci/archive/20260825/202608250645.zcZhAAz1-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 935bfc708590c60147a79c7df145bb6e68b1d388)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260825/202608250645.zcZhAAz1-lkp@intel.com/reproduce)
+  tpa_info = &rxr->rx_tpa[agg_id];
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608250645.zcZhAAz1-lkp@intel.com/
+because rx_tpa is allocated with only bp->max_tpa (32) entries. Writes
+to tpa_info later in the code are out of bounds.
 
-All warnings (new ones prefixed by >>):
+This bug results in a crash at boot:
 
->> drivers/rtc/rtc-rv3028.c:908:4: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
-     906 |                  "setting backup switch mode to %u (reg 0x37: 0x%02x -> 0x%02x)\n",
-         |                                                                           ~~~~
-         |                                                                           %02lx
-     907 |                  bsm_dt, val_old,
-     908 |                  (val_old & ~(RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE)) |
-         |                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     909 |                  bsm_bits | RV3028_BACKUP_FEDE);
-         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                  ~~~     ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                              ~~~    ^~~~~~~~~~~
-   1 warning generated.
+Oops: general protection fault, kernel NULL pointer dereference 0x8: 0000 [#1] SMP NOPTI
+RIP: 0010:bnxt_rx_pkt+0xc0/0x1560
+RSP: 0018:ffffc900009b8c78 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000048 RCX: 0000000206682516
+RDX: ffffc900009b8db4 RSI: 0000000000000000 RDI: 01ffffff038fe1c0
+RBP: ffffc9006e687480 R08: ffffc9006e687000 R09: 0000000000003048
+R10: 0000000000000480 R11: ffff8881c6083900 R12: 0000000006682516
+R13: ffff8881c6095400 R14: 0000000000000016 R15: ffff8881c6b66680
+FS:  0000000000000000(0000) GS:ffff88fef3c77000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc8bda40584 CR3: 000000807c812001 CR4: 0000000008772ef0
+PKRU: 55555554
+Call Trace:
+ <IRQ>
+ ? __netif_receive_skb_list_core+0x1ca/0x250
+ __bnxt_poll_work+0x152/0x280
+ bnxt_poll_p5+0x1cd/0x480
+ __napi_poll+0x30/0x180
+ net_rx_action+0x20b/0x3b0
+ ? note_gp_changes+0x53/0xe0
+ ? tick_setup_sched_timer+0x180/0x180
+ ? __napi_schedule+0x9a/0xb0
+ ? bnxt_msix+0x24/0x30
+ handle_softirqs+0xdd/0x2c0
+ __irq_exit_rcu.llvm.3171231171502365008+0x47/0xf0
+ common_interrupt+0x85/0x90
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x22/0x40
 
+This stack trace is from a crash triggered when an out of bounds rx_tpa
+is dereferenced. The invalid write mentioned above is silent in this
+particular crash.
 
-vim +908 drivers/rtc/rtc-rv3028.c
+Fix this by allocating rx_tpa with bp->max_tpa rounded up to the next
+power of 2 (bp->max_tpa_roundup_size) entries and masking the FW TPA ID
+with that size, so the wrapped ID can never index past the end of the
+array.
 
-   857	
-   858	/*
-   859	 * Configure backup switchover mode from device tree.
-   860	 *   0 = disabled
-   861	 *   1 = DSM (Direct Switching Mode)  - switch when VDD < VBACKUP
-   862	 *   3 = LSM (Level Switching Mode)   - switch when VDD < 2.0V
-   863	 */
-   864	static int rv3028_set_bsm_from_dt(struct rv3028_data *rv3028,
-   865					  struct i2c_client *client)
-   866	{
-   867		u32 val_old, bsm_dt, bsm_bits;
-   868		int ret;
-   869	
-   870		if (device_property_read_u32(&client->dev, "backup-switch-mode",
-   871					     &bsm_dt))
-   872			return 0;
-   873	
-   874		/* Validate and convert DT value to register bits */
-   875		switch (bsm_dt) {
-   876		case 0:
-   877			bsm_bits = 0;
-   878			break;
-   879		case 1:
-   880			bsm_bits = FIELD_PREP(RV3028_BACKUP_BSM, RV3028_BACKUP_BSM_DSM);
-   881			break;
-   882		case 3:
-   883			bsm_bits = FIELD_PREP(RV3028_BACKUP_BSM, RV3028_BACKUP_BSM_LSM);
-   884			break;
-   885		default:
-   886			dev_warn(&client->dev,
-   887				 "invalid backup-switch-mode %u (use 0, 1, or 3)\n",
-   888				 bsm_dt);
-   889			return 0;
-   890		}
-   891	
-   892		/* Read current BACKUP register */
-   893		ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
-   894		if (ret < 0)
-   895			return ret;
-   896	
-   897		/* Check if BSM and FEDE already match desired values */
-   898		if ((val_old & (RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE)) ==
-   899		    (bsm_bits | RV3028_BACKUP_FEDE)) {
-   900			dev_dbg(&client->dev,
-   901				"backup switch mode already set to %u\n", bsm_dt);
-   902			return 0;
-   903		}
-   904	
-   905		dev_info(&client->dev,
-   906			 "setting backup switch mode to %u (reg 0x37: 0x%02x -> 0x%02x)\n",
-   907			 bsm_dt, val_old,
- > 908			 (val_old & ~(RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE)) |
-   909			 bsm_bits | RV3028_BACKUP_FEDE);
-   910	
-   911		/* Set BSM and always enable FEDE as recommended by datasheet */
-   912		return rv3028_update_cfg(rv3028, RV3028_BACKUP,
-   913					 RV3028_BACKUP_BSM | RV3028_BACKUP_FEDE,
-   914					 bsm_bits | RV3028_BACKUP_FEDE);
-   915	}
-   916	
+Fixes: 54c28fab2fa5 ("bnxt_en: Set bp->max_tpa according to what the FW supports")
+Reported-by: Raphael Cardoso Fernandes <raphaelcf@meta.com>
+Suggested-by: Michael Chan <michael.chan@broadcom.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+v2:
+  - Followed Michael's suggestion on the v1 to increase the size of the tpa
+    array so that wrapping indexes into the array is a simple mask.
+  - Add Suggested-by because the approach was suggested by Micahel.
+  - Add a Reported-by so that Raphael gets credit for reporting this bug.
+  - Boot tested on a machine with a 57608 and the crash did not reproduce.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+v1: https://lore.kernel.org/netdev/20260821233549.3134699-1-joe@dama.to/
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 25 ++++++++++++++---------
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h |  2 +-
+ 2 files changed, 16 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index 9c2cc50276a5..ba710704b192 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1517,14 +1517,16 @@ static int bnxt_discard_rx(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	return 0;
+ }
+ 
+-static u16 bnxt_alloc_agg_idx(struct bnxt_rx_ring_info *rxr, u16 agg_id)
++static u16 bnxt_alloc_agg_idx(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
++			      u16 agg_id)
+ {
+ 	struct bnxt_tpa_idx_map *map = rxr->rx_tpa_idx_map;
+-	u16 idx = agg_id & MAX_TPA_P5_MASK;
++	u16 idx = agg_id & (bp->max_tpa_roundup_size - 1);
+ 
+ 	if (test_bit(idx, map->agg_idx_bmap)) {
+-		idx = find_first_zero_bit(map->agg_idx_bmap, MAX_TPA_P5);
+-		if (idx >= MAX_TPA_P5)
++		idx = find_first_zero_bit(map->agg_idx_bmap,
++					  bp->max_tpa_roundup_size);
++		if (idx >= bp->max_tpa_roundup_size)
+ 			return INVALID_HW_RING_ID;
+ 	}
+ 	__set_bit(idx, map->agg_idx_bmap);
+@@ -1589,7 +1591,7 @@ static void bnxt_tpa_start(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
+ 
+ 	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
+ 		agg_id = TPA_START_AGG_ID_P5(tpa_start);
+-		agg_id = bnxt_alloc_agg_idx(rxr, agg_id);
++		agg_id = bnxt_alloc_agg_idx(bp, rxr, agg_id);
+ 		if (unlikely(agg_id == INVALID_HW_RING_ID)) {
+ 			netdev_warn(bp->dev, "Unable to allocate agg ID for ring %d, agg 0x%x\n",
+ 				    rxr->bnapi->index,
+@@ -3587,7 +3589,7 @@ static void bnxt_free_one_tpa_info_data(struct bnxt *bp,
+ {
+ 	int i;
+ 
+-	for (i = 0; i < bp->max_tpa; i++) {
++	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 		struct bnxt_tpa_info *tpa_info = &rxr->rx_tpa[i];
+ 		u8 *data = tpa_info->data;
+ 
+@@ -3784,7 +3786,7 @@ static void bnxt_free_one_tpa_info(struct bnxt *bp,
+ 	kfree(rxr->rx_tpa_idx_map);
+ 	rxr->rx_tpa_idx_map = NULL;
+ 	if (rxr->rx_tpa) {
+-		for (i = 0; i < bp->max_tpa; i++) {
++		for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 			kfree(rxr->rx_tpa[i].agg_arr);
+ 			rxr->rx_tpa[i].agg_arr = NULL;
+ 		}
+@@ -3810,13 +3812,14 @@ static int bnxt_alloc_one_tpa_info(struct bnxt *bp,
+ 	struct rx_agg_cmp *agg;
+ 	int i;
+ 
+-	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info, bp->max_tpa);
++	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info,
++				   bp->max_tpa_roundup_size);
+ 	if (!rxr->rx_tpa)
+ 		return -ENOMEM;
+ 
+ 	if (!(bp->flags & BNXT_FLAG_CHIP_P5_PLUS))
+ 		return 0;
+-	for (i = 0; i < bp->max_tpa; i++) {
++	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 		agg = kzalloc_objs(*agg, MAX_SKB_FRAGS);
+ 		if (!agg)
+ 			return -ENOMEM;
+@@ -3843,6 +3846,8 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
+ 			bp->max_tpa = MAX_TPA_P5;
+ 	}
+ 
++	bp->max_tpa_roundup_size = roundup_pow_of_two(bp->max_tpa);
++
+ 	for (i = 0; i < bp->rx_nr_rings; i++) {
+ 		struct bnxt_rx_ring_info *rxr = &bp->rx_ring[i];
+ 
+@@ -4554,7 +4559,7 @@ static int bnxt_alloc_one_tpa_info_data(struct bnxt *bp,
+ 	u8 *data;
+ 	int i;
+ 
+-	for (i = 0; i < bp->max_tpa; i++) {
++	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 		data = __bnxt_alloc_rx_frag(bp, &mapping, rxr,
+ 					    GFP_KERNEL);
+ 		if (!data)
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+index ab894f8addef..de46b42d7c98 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+@@ -789,7 +789,6 @@ struct nqe_cn {
+ 
+ #define MAX_TPA		64
+ #define MAX_TPA_P5	256
+-#define MAX_TPA_P5_MASK	(MAX_TPA_P5 - 1)
+ #define MAX_TPA_SEGS_P5	0x3f
+ 
+ #if (BNXT_PAGE_SHIFT == 16)
+@@ -2380,6 +2379,7 @@ struct bnxt {
+ 
+ 	u16			max_tpa_v2;
+ 	u16			max_tpa;
++	u16			max_tpa_roundup_size;
+ 	u32			rx_buf_size;
+ 	u32			rx_buf_use_size;	/* useable size */
+ 	u16			rx_offset;
+-- 
+2.53.0-Meta
+
