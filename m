@@ -1,103 +1,121 @@
-Received: from hedgehog.birch.relay.mailchannels.net (hedgehog.birch.relay.mailchannels.net [23.83.209.81])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBDE7274B4A
-	for <llvm@lists.linux.dev>; Wed, 26 Aug 2026 01:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.83.209.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690CE7082D;
+	Wed, 26 Aug 2026 02:15:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787708071; cv=none; b=OPLPO0By6Spe/EwZz957x5ZCCT7eXWqb2L0Ks6mIUr4Oxdu7th+0H7Dm9g4DgXNGRH8EDY3kMjEm/hI+4sXv7BpW7/1rDr1ap2fTRb4iYLQjYFNdtGUxuesf62pldtoCD2sM7z0PFiuax7MZcZjtAjt1DyvI3nyxMmdBFF2l+9c=
+	t=1787710536; cv=none; b=oXDlyaPftMrIHe0AxwuPokKXqx2n7Q0Puzvq34H8Z+VBvijqHHrXvKIgnqNuFO8qCJKoKhiKCG41t6VPwubklnUl7ifc4kwS2XhYwrMLdIr8hQ/NxbTMqj+OtdZVu+KW9MJhFu2ZIlGw1Km7bVkXaWJIyG/+TXge7HztG5E3dWE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787708071; c=relaxed/simple;
-	bh=8mvVAM5/C4VKX+uyn+Ue+KiWk4xHiIhC8s/6hAlyMMs=;
+	s=arc-20240116; t=1787710536; c=relaxed/simple;
+	bh=DPGdW8vUbSN9xgZTXkoLdBk/dMSWqFeEuNx7P5BVuuY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ibhA7VQimqca2Tn9zRn2j/zfU22dBbfWzTuraPPwJOEfLzApeCxeIkkW49UBZcRfwMveOXemJreRzeSJn9S5eybLQVRYb3mfKey1hXtrX3vHEXmwmEbWQWPDsJyKGEgHcl4PtMYFSssuLbHE2T+kM99o573vCNvXl2LCwb8XnxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=fail smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=j6is/86G; arc=none smtp.client-ip=23.83.209.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=stgolabs.net
+	 Content-Type:Content-Disposition:In-Reply-To; b=O0WMcAeg7W2D/msEpZZe8ZZgwcNjKwHdlfs8/OTDX0lOCtydKFcj9TfHtA3xIAxmNAJIwpbn3P+Qx1GAA/0FpXMyMFx2js8l2zL4S9M3PUjRkh54NttGvgIoS+1f8tAjDXfBNj7kx8vTYI2QcOO55/MH4+I0w6WITkrB3xlj0pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=brQzHqFr; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="j6is/86G"
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-	by relay.mailchannels.net (Postfix) with ESMTP id CF1D84E1377;
-	Wed, 26 Aug 2026 01:25:03 +0000 (UTC)
-Received: from pdx1-sub0-mail-a204.dreamhost.com (trex-green-7.trex.outbound.svc.cluster.local [100.96.17.28])
-	(Authenticated sender: dreamhost)
-	by relay.mailchannels.net (Postfix) with ESMTPA id 2F6304E1551;
-	Wed, 26 Aug 2026 01:25:03 +0000 (UTC)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Shoe-Trade: 329137dc4d059e0c_1787707503612_153827419
-X-MC-Loop-Signature: 1787707503612:1092170596
-X-MC-Ingress-Time: 1787707503612
-Received: from pdx1-sub0-mail-a204.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-	by 100.96.17.28 (trex/8.0.2);
-	Wed, 26 Aug 2026 01:25:03 +0000
-Received: from offworld (unknown [76.167.199.67])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dave@stgolabs.net)
-	by pdx1-sub0-mail-a204.dreamhost.com (Postfix) with ESMTPSA id 4hV6QN4m4Qz1V;
-	Tue, 25 Aug 2026 18:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-	s=dreamhost; t=1787707503;
-	bh=8mvVAM5/C4VKX+uyn+Ue+KiWk4xHiIhC8s/6hAlyMMs=;
-	h=Date:From:To:Cc:Subject:Content-Type;
-	b=j6is/86GlPmrZ409Z13BQVNYvcmsOqVE5NPB3rajquDkLuKgFEq0vQWaBy2ze21v2
-	 guCgQsPzj672ix7aiK7PSuDhiCMVjcjSMi5txQiqHwQLAfOf8Q+hShk7ufHCvwCnu6
-	 /OOITLkG4BMZPC1jlQGIAZRiaTZPHCF39n3GLKv+l55qryyNpe2zkTeOVzWiW9IfKV
-	 U4T5po5xCW5Xej0JU0qJ7HjxmAtVCs9RuJ5fB+qIkZXb2R7sB5qT4/LKDKeIHj1LOQ
-	 jU8YPXWFwRY8qmN6V26lMSe1iKhNLDNkTu+x6NyKkDURg3qwofhyDd7XtCE6LBvdVX
-	 DHlAkm+mFg8/w==
-Date: Tue, 25 Aug 2026 18:24:57 -0700
-From: Davidlohr Bueso <dave@stgolabs.net>
-To: Yunhui Cui <cuiyunhui@bytedance.com>
-Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org,
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
-	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
-	bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org,
-	thuth@redhat.com, ajones@ventanamicro.com,
-	ben.dooks@codethink.co.uk, rkrcmar@ventanamicro.com,
-	samuel.holland@sifive.com, zong.li@sifive.com,
-	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com,
-	seanwascoding@gmail.com, andybnac@gmail.com,
-	menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
-	wangruikang@iscas.ac.cn, atishp@rivosinc.com,
-	apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org,
-	nick.desaulniers+lkml@gmail.com, morbo@google.com,
-	justinstitt@google.com, qingfang.deng@siflower.com.cn,
-	linux-arch@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v8 3/3] riscv: store percpu offset into thread_info
-Message-ID: <20260826012457.ig3rfmji7vywf6kc@offworld>
-References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
- <20260703122832.15984-4-cuiyunhui@bytedance.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="brQzHqFr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787710532; x=1819246532;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DPGdW8vUbSN9xgZTXkoLdBk/dMSWqFeEuNx7P5BVuuY=;
+  b=brQzHqFrYpXKXdghHqAwvbBtKNs3IKqpWNaNmgXhs1roQbZDNMk1wRaC
+   w1yp+sYhVs5nW+1Jcas7SX2z1CJ5KGS8nW0/23Jqvu5NFXc2YSHb98NJm
+   JgxEC9yBp2JFSH2dnWASJr9vv5M6h9L2wQIaegRKrLUrhqKvC/quY3+at
+   azICkd+pEyXDIweNFUMD8zZralm0d+QIOqv7qOp3eKy0qyVioqOZDtBPE
+   2MJH1mpAWndz/pyrY6ah0R7+Qn0jBzzCvfejofHDFzL4IdLVGjnYPamAh
+   sSLDdUkcSP/oj36gFurXiB8mRqjnmxBXXLkKX5B5kP4Udjoie3EeavyWI
+   w==;
+X-CSE-ConnectionGUID: zJlYVyNnR3Gvp7AmI208bw==
+X-CSE-MsgGUID: ZxJnPPWKS9eUss4vdNTYCA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11886"; a="105562454"
+X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
+   d="scan'208";a="105562454"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 19:15:31 -0700
+X-CSE-ConnectionGUID: 7oGCUb9yQf+FXqydu6MHng==
+X-CSE-MsgGUID: 1ornRr8URzOgURAC+GjA8Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
+   d="scan'208";a="263153696"
+Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 25 Aug 2026 19:15:29 -0700
+Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1wz3Al-000000006rL-0HOq;
+	Wed, 26 Aug 2026 02:15:27 +0000
+Date: Wed, 26 Aug 2026 10:14:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Triet Hoang <triet.hoang.dev@gmail.com>,
+	Maxim Levitsky <maximlevitsky@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Alex Dubov <oakad@yahoo.com>, Ulf Hansson <ulfh@kernel.org>,
+	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Triet Hoang <triet.hoang.dev@gmail.com>
+Subject: Re: [PATCH] memstick: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+Message-ID: <202608260945.vNkJPYxr-lkp@intel.com>
+References: <20260825082718.244949-1-triet.hoang.dev@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260703122832.15984-4-cuiyunhui@bytedance.com>
-User-Agent: NeoMutt/20220429
+In-Reply-To: <20260825082718.244949-1-triet.hoang.dev@gmail.com>
 
-On Fri, 03 Jul 2026, Yunhui Cui wrote:
+Hi Triet,
 
->RISC-V percpu addressing currently derives the base offset from the CPU
->number and __per_cpu_offset[]. Cache the current CPU percpu offset in
->thread_info so percpu accesses can load it directly.
+kernel test robot noticed the following build errors:
 
-fyi on a sifive p550 I am seeing this_cpu_inc() cost dropping by ~15-20%
-an adhoc microbench measuring/grouping various calls.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.2 next-20260824]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Davidlohr
+url:    https://github.com/intel-lab-lkp/linux/commits/Triet-Hoang/memstick-Convert-to-DEFINE_SIMPLE_DEV_PM_OPS/20260825-152717
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260825082718.244949-1-triet.hoang.dev%40gmail.com
+patch subject: [PATCH] memstick: Convert to DEFINE_SIMPLE_DEV_PM_OPS()
+config: riscv-randconfig-002-20260826 (https://download.01.org/0day-ci/archive/20260826/202608260945.vNkJPYxr-lkp@intel.com/config)
+compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260826/202608260945.vNkJPYxr-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608260945.vNkJPYxr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/memstick/host/r592.c:854:2: error: call to undeclared function 'r592_clear_interrupts'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     854 |         r592_clear_interrupts(dev);
+         |         ^
+   drivers/memstick/host/r592.c:864:2: error: call to undeclared function 'r592_clear_interrupts'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     864 |         r592_clear_interrupts(dev);
+         |         ^
+   2 errors generated.
+
+
+vim +/r592_clear_interrupts +854 drivers/memstick/host/r592.c
+
+9263412501022fe Maxim Levitsky  2011-03-25  849  
+9263412501022fe Maxim Levitsky  2011-03-25  850  static int r592_suspend(struct device *core_dev)
+9263412501022fe Maxim Levitsky  2011-03-25  851  {
+deaa53989537c62 Chuhong Yuan    2019-07-23  852  	struct r592_device *dev = dev_get_drvdata(core_dev);
+9263412501022fe Maxim Levitsky  2011-03-25  853  
+9263412501022fe Maxim Levitsky  2011-03-25 @854  	r592_clear_interrupts(dev);
+9263412501022fe Maxim Levitsky  2011-03-25  855  	memstick_suspend_host(dev->host);
+8fa7292fee5c524 Thomas Gleixner 2025-04-05  856  	timer_delete_sync(&dev->detect_timer);
+9263412501022fe Maxim Levitsky  2011-03-25  857  	return 0;
+9263412501022fe Maxim Levitsky  2011-03-25  858  }
+9263412501022fe Maxim Levitsky  2011-03-25  859  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
