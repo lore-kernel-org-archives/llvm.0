@@ -1,177 +1,236 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from dog.elm.relay.mailchannels.net (dog.elm.relay.mailchannels.net [23.83.212.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEDA3B1B3;
-	Wed, 26 Aug 2026 00:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45162236FD
+	for <llvm@lists.linux.dev>; Wed, 26 Aug 2026 01:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=23.83.212.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787704001; cv=none; b=geRiHLrICULt94VYFde74E0lzJhB9w4TR0Us/ZuCEY3fzxkY8QTaKPTLHAIOSDn2iLUrb8EZ86rLYbj4vflB5/5/fvqmiIjrw4FdI5Lb/aT9Y75Ji/xKeWT86LsdHkpRM5dCaO9Debuuv+wmaJCOxAhAcW+bi/AZ8rYrwaZkJvw=
+	t=1787707947; cv=none; b=K8GfzKq8KmftCmWGTMc7uwO0Z8ys1PO10rShjU2cZSngtARzwTDNZSuiHsyDPN02d43ca5XGX9StkFQDduWkHv/WwAmIAPJ8ujmi5uytAxjmmR59/Kn+Ce5M4aY6qZln2G7i1LPNyllIUIDPEdIcDUvrJJtc064bY5L2vmFPydo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787704001; c=relaxed/simple;
-	bh=VmkZKO6G4uXvWJqeWlDh2L9nscTXtqv4u5I6weDsYdA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=n5JPOhWFMD23Ho1Kr4ujg1yVfcZ9AjNcZbhMpabFXPw1KCdavpynnY/xxn+Dt1/UJgcN6ngDhZ9RdlCv4b+0CFXY2S43pR4qBw7vPKq4uGOSxWx9CNqRGw+vzy2wswnBhcXps0RJ86zBfK4NlKf52sUJi8vVZI3r7A8o7C+GU/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MC6gqwG+; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787707947; c=relaxed/simple;
+	bh=EFmuGVPA/ZgsTxqWnscx8EraGCDS+TIqkuRmJNVonBc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G20lKo1hqW1zN/svZVnWXnSy65z6PWRZnRVpT2Zwc6NQwMdsv7lKIt3TScPDCh9o+GqmGM8QqNvKkMWhoedK0Ib68Ei4o6hv753Cs+1DOqbt0PqBwBf/ZDjOL3VXY31BKFJete3+xq/C+3Zb0aCjwlygXrKSC/G6rUM/B4CHJSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net; spf=fail smtp.mailfrom=stgolabs.net; dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b=qck9ykgG; arc=none smtp.client-ip=23.83.212.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=stgolabs.net
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=stgolabs.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MC6gqwG+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787703999; x=1819239999;
-  h=date:from:to:cc:subject:message-id;
-  bh=VmkZKO6G4uXvWJqeWlDh2L9nscTXtqv4u5I6weDsYdA=;
-  b=MC6gqwG+AMqkAGs8FuHdNmikGVaPkiklXODTrbvna33sjkaWlmAGdiMO
-   VJa5HdzHYJxJL9bIU02KA61B/kX5Oh1UeDeYoZUD74M7DT4TeYmLlNejz
-   vk4iZ2/H2fLkpCipYPsio/h1o3XCNqhZTh2l1aEMZ3LmmwXOTvSp4zZnt
-   RGZ6kr3NhBAukk+eBpF1B6JQ6cbwY0bH4b1AAhTZ4XhmyRoZbHrfmExcA
-   h4QO0O5Swd8b/7fmgJ2kXVnKt4Pt+yvrXMaiUgxj7ROIx7Dnqr6XCOGJK
-   aiEmu+wQWSWv9shji4x3kS3nCAIQQoYa52Wycckqw+t9e9Zq0shywQMSu
-   w==;
-X-CSE-ConnectionGUID: zyqpH3owTo+gHr/Sm1/jkQ==
-X-CSE-MsgGUID: HEtIGgVZSSmEd+tOIjEmNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11886"; a="99704139"
-X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
-   d="scan'208";a="99704139"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 17:26:38 -0700
-X-CSE-ConnectionGUID: jWvj5mVbTjKngKRa7MJgrw==
-X-CSE-MsgGUID: AJ2YnYwWSJKSXwmKMlO6IQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
-   d="scan'208";a="264815672"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 25 Aug 2026 17:26:37 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wz1TO-000000006e1-2DCe;
-	Wed, 26 Aug 2026 00:26:34 +0000
-Date: Wed, 26 Aug 2026 08:26:19 +0800
-From: kernel test robot <lkp@intel.com>
-To: Janne Grunau <j@jannau.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Hector Martin <marcan@marcan.st>
-Subject: [asahilinux:bits/020-dart 4/20]
- drivers/iommu/apple-dart.c:851:40: warning: shift count >= width of type
-Message-ID: <202608260806.OK7fHjwY-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=stgolabs.net header.i=@stgolabs.net header.b="qck9ykgG"
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 459984C0B62;
+	Wed, 26 Aug 2026 01:07:54 +0000 (UTC)
+Received: from pdx1-sub0-mail-a204.dreamhost.com (100-96-49-23.trex-nlb.outbound.svc.cluster.local [100.96.49.23])
+	(Authenticated sender: dreamhost)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 5A7254C0BBC;
+	Wed, 26 Aug 2026 01:07:53 +0000 (UTC)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Whispering-Illustrious: 4311d38559935212_1787706474061_3231139894
+X-MC-Loop-Signature: 1787706474061:2906846316
+X-MC-Ingress-Time: 1787706474060
+Received: from pdx1-sub0-mail-a204.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.96.49.23 (trex/8.0.2);
+	Wed, 26 Aug 2026 01:07:54 +0000
+Received: from offworld (unknown [76.167.199.67])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: dave@stgolabs.net)
+	by pdx1-sub0-mail-a204.dreamhost.com (Postfix) with ESMTPSA id 4hV62Z53fJz1V;
+	Tue, 25 Aug 2026 18:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+	s=dreamhost; t=1787706473;
+	bh=eMsnr23HP9lPV0KenSxGVhzn+g2nKrwYjINjwE+8ptg=;
+	h=Date:From:To:Cc:Subject:Content-Type;
+	b=qck9ykgGD0FDGfMzf8lMjKxEz2+IBhaxPzncYO2JYJfqf03CmHex1/UlCDMf3GXeu
+	 VBZ/D3+6NvU6kWUg4PUXEXnHXcMQpeEMv7muhjd1vcVORYpndgy/RedANS6aeWj1Hc
+	 f6rLBX+goLntJYBBIQzXf3HnBpXEJOQaxYeBYo6ekiNBFNBAoIisqODuQSYnzeRFg+
+	 mhM6EAjJlVen2M8PK8NxTfciUBwxLj2cYY8b3rUmn9mQfPjkBm3nQ10icYXGbTX07J
+	 60k8ivrsNekvlJSNVkIE9VYGeAwYthFwpzuSvo1KhoCHJa0vcB6dUkFNAI+3H6yElh
+	 LcL757Rqy4zxw==
+Date: Tue, 25 Aug 2026 18:07:48 -0700
+From: Davidlohr Bueso <dave@stgolabs.net>
+To: Yunhui Cui <cuiyunhui@bytedance.com>
+Cc: pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+	alex@ghiti.fr, dennis@kernel.org, tj@kernel.org, cl@gentwo.org,
+	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+	martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
+	bjorn@kernel.org, pulehui@huawei.com, puranjay@kernel.org,
+	thuth@redhat.com, ajones@ventanamicro.com,
+	ben.dooks@codethink.co.uk, rkrcmar@ventanamicro.com,
+	samuel.holland@sifive.com, zong.li@sifive.com,
+	conor.dooley@microchip.com, tglx@kernel.org, debug@rivosinc.com,
+	seanwascoding@gmail.com, andybnac@gmail.com,
+	menglong8.dong@gmail.com, cyrilbur@tenstorrent.com,
+	wangruikang@iscas.ac.cn, atishp@rivosinc.com,
+	apatel@ventanamicro.com, linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	bpf@vger.kernel.org, arnd@arndb.de, nathan@kernel.org,
+	nick.desaulniers+lkml@gmail.com, morbo@google.com,
+	justinstitt@google.com, qingfang.deng@siflower.com.cn,
+	linux-arch@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v8 2/3] riscv: introduce percpu.h into include/asm
+Message-ID: <20260826010748.zphu3wh2hlm4t4o2@offworld>
+References: <20260703122832.15984-1-cuiyunhui@bytedance.com>
+ <20260703122832.15984-3-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260703122832.15984-3-cuiyunhui@bytedance.com>
+User-Agent: NeoMutt/20220429
 
-tree:   https://github.com/AsahiLinux/linux bits/020-dart
-head:   45b2aa771c5241177bad6c3f1777bb34871aa5ef
-commit: 679ee8da9f5f0497de57348d1c60a8a856f411b2 [4/20] iommu: apple-dart: Support specifying the DMA aperture in the DT
-config: i386-buildonly-randconfig-001-20260826 (https://download.01.org/0day-ci/archive/20260826/202608260806.OK7fHjwY-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260826/202608260806.OK7fHjwY-lkp@intel.com/reproduce)
+On Fri, 03 Jul 2026, Yunhui Cui wrote:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608260806.OK7fHjwY-lkp@intel.com/
+>Add RISC-V specific this_cpu helpers so common percpu operations can use
+>short architecture sequences instead of the generic implementation.
+>Native-width operations use AMOs, while 8/16-bit operations use Zabha when
+>available and a local 32-bit LR/SC fallback otherwise.
 
-All warnings (new ones prefixed by >>):
+The subject and changelog could use some improvement. How about:
 
->> drivers/iommu/apple-dart.c:851:40: warning: shift count >= width of type [-Wshift-count-overflow]
-     851 |                 dma_min = ((dma_addr_t)args->args[1] << 32) | args->args[2];
-         |                                                      ^  ~~
-   drivers/iommu/apple-dart.c:852:48: warning: shift count >= width of type [-Wshift-count-overflow]
-     852 |                 dma_addr_t size = ((dma_addr_t)args->args[3] << 32) | args->args[4];
-         |                                                              ^  ~~
-   2 warnings generated.
+riscv: implement this_cpu operations
+
+riscv has no asm/percpu.h, so every this_cpu_*() read-modify-write
+takes the generic fallback, which disables local irqs.
+
+A single AMO is atomic with respect to interrupts on the local hart,
+so this can be replaced by one relaxed AMO under preemption disabled.
+Native-width operations use AMOs, while 8/16-bit operations use Zabha when
+available, or a local LR/SC sequence otherwise.
+
+Some comments below, but I ran this on my sifive p550, feel free to add my:
+
+Tested-by: Davidlohr Bueso <dave@stgolabs.net>
+
+>
+>Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+>---
+> arch/riscv/include/asm/percpu.h | 296 ++++++++++++++++++++++++++++++++
+> 1 file changed, 296 insertions(+)
+> create mode 100644 arch/riscv/include/asm/percpu.h
+>
+>diff --git a/arch/riscv/include/asm/percpu.h b/arch/riscv/include/asm/percpu.h
+>new file mode 100644
+>index 0000000000000..76b1b8c1fb953
+>--- /dev/null
+>+++ b/arch/riscv/include/asm/percpu.h
+>@@ -0,0 +1,296 @@
+>+/* SPDX-License-Identifier: GPL-2.0-or-later */
+>+
+>+#ifndef __ASM_PERCPU_H
+>+#define __ASM_PERCPU_H
+>+
+>+#include <linux/bits.h>
+>+#include <linux/preempt.h>
+>+
+>+#include <asm/alternative-macros.h>
+>+#include <asm/cmpxchg.h>
+>+#include <asm/cpufeature-macros.h>
+>+#include <asm/hwcap.h>
+>+
+>+#define PERCPU_RW_OPS(sz)						\
+>+static inline unsigned long __percpu_read_##sz(void *ptr)		\
+>+{									\
+>+	return READ_ONCE(*(u##sz *)ptr);				\
+>+}									\
+>+									\
+>+static inline void __percpu_write_##sz(void *ptr, unsigned long val)	\
+>+{									\
+>+	WRITE_ONCE(*(u##sz *)ptr, (u##sz)val);				\
+>+}
+>+
+>+PERCPU_RW_OPS(8)
+>+PERCPU_RW_OPS(16)
+>+PERCPU_RW_OPS(32)
+>+
+>+#ifdef CONFIG_64BIT
+>+PERCPU_RW_OPS(64)
+>+#endif
+>+
+>+#define __PERCPU_AMO_OP_CASE(sfx, name, sz, amo_insn)			\
+>+static inline void							\
+>+__percpu_##name##_amo_case_##sz(void *ptr, unsigned long val)		\
+>+{									\
+>+	asm volatile (							\
+>+		"amo" #amo_insn #sfx " zero, %[val], %[ptr]"		\
+
+So afaict that rd=zero could steer the AMO away from the hart, no? From the
+Zaamo chapter, it notes that complex implementations "might also implement
+AMOs at memory controllers, and can optimize away fetching the original value
+when the destination is x0". Similar for the others (PERCPU_8_16_OP).
+
+Maybe use a tmp register instead and force the old value from L1 ("near"):
+
+	u##sz tmp;
+	asm volatile (
+		"amo" #amo_insn #sfx " %[tmp], %[val], %[ptr]"
+		: [ptr] "+A" (*(u##sz *)ptr), [tmp] "=r" (tmp)
+		: [val] "r" ((u##sz)(val)));
 
 
-vim +851 drivers/iommu/apple-dart.c
+... which arm64 now does for its pcpu ops:
 
-   831	
-   832	static int apple_dart_of_xlate(struct device *dev,
-   833				       const struct of_phandle_args *args)
-   834	{
-   835		struct apple_dart_master_cfg *cfg = dev_iommu_priv_get(dev);
-   836		struct platform_device *iommu_pdev = of_find_device_by_node(args->np);
-   837		struct apple_dart *dart = platform_get_drvdata(iommu_pdev);
-   838		struct apple_dart *cfg_dart;
-   839		dma_addr_t dma_max = DMA_BIT_MASK(dart->ias);
-   840		dma_addr_t dma_min = 0;
-   841		int i, sid;
-   842	
-   843		put_device(&iommu_pdev->dev);
-   844	
-   845		if (args->args_count != 1 && args->args_count != 5)
-   846			return -EINVAL;
-   847	
-   848		sid = args->args[0];
-   849	
-   850		if (args->args_count == 5) {
- > 851			dma_min = ((dma_addr_t)args->args[1] << 32) | args->args[2];
-   852			dma_addr_t size = ((dma_addr_t)args->args[3] << 32) | args->args[4];
-   853			if (!(IS_ALIGNED(dma_min, dart->pgsize) || !IS_ALIGNED(size, dart->pgsize))) {
-   854				dev_err(dev, "Unaligned DMA window %pad..%pad for page size 0x%x\n",
-   855					&dma_min, &size, dart->pgsize);
-   856				return -EINVAL;
-   857			}
-   858			dma_max = dma_min + size - 1;
-   859			/*
-   860			 * Ensure that the DMA window does not exceed the dart's ias.
-   861			 */
-   862			if ((dma_min ^ dma_max) & ~DMA_BIT_MASK(dart->ias)) {
-   863				dev_err(dev, "Invalid DMA window for ias=%d\n",
-   864					dart->ias);
-   865				return -EINVAL;
-   866			}
-   867		}
-   868	
-   869		if (!cfg) {
-   870			cfg = kzalloc_obj(*cfg);
-   871			if (!cfg)
-   872				return -ENOMEM;
-   873			/* Will be ANDed with DART capabilities */
-   874			cfg->supports_bypass = true;
-   875			/* Will be merged with other DARTs to the to fully overlapping range. */
-   876			cfg->dma_min = dma_min;
-   877			cfg->dma_max = dma_max;
-   878		} else {
-   879			if (dma_min >= cfg->dma_max || cfg->dma_min >= dma_max) {
-   880				dev_err(dev, "non-overlapping DMA windows: %pad..%pad, "
-   881					"%pad..%pad\n", &dma_min, &dma_max,
-   882					&cfg->dma_min, &cfg->dma_max);
-   883				return -EINVAL;
-   884			}
-   885			cfg->dma_min = max(dma_min, cfg->dma_min);
-   886			cfg->dma_max = min(dma_max, cfg->dma_max);
-   887		}
-   888		dev_iommu_priv_set(dev, cfg);
-   889	
-   890		cfg_dart = cfg->stream_maps[0].dart;
-   891		if (cfg_dart) {
-   892			if (cfg_dart->pgsize != dart->pgsize)
-   893				return -EINVAL;
-   894			if (cfg_dart->ias != dart->ias)
-   895				return -EINVAL;
-   896		}
-   897	
-   898		cfg->supports_bypass &= dart->supports_bypass;
-   899	
-   900		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   901			if (cfg->stream_maps[i].dart == dart) {
-   902				set_bit(sid, cfg->stream_maps[i].sidmap);
-   903				return 0;
-   904			}
-   905		}
-   906		for (i = 0; i < MAX_DARTS_PER_DEVICE; ++i) {
-   907			if (!cfg->stream_maps[i].dart) {
-   908				cfg->stream_maps[i].dart = dart;
-   909				set_bit(sid, cfg->stream_maps[i].sidmap);
-   910				return 0;
-   911			}
-   912		}
-   913	
-   914		return -EINVAL;
-   915	}
-   916	
+	/*
+	 * Use value-returning atomics for CPU-local ops as they are
+	 * more likely to execute "near" to the CPU (e.g. in L1$).
+	 *
+	 * https://lore.kernel.org/r/e7d539ed-ced0-4b96-8ecd-048a5b803b85@paulmck-laptop
+	 */
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>+		: [ptr] "+A" (*(u##sz *)ptr)				\
+>+		: [val] "r" ((u##sz)(val))				\
+>+		: "memory");						\
+
+Should not need this clobber either - these don't imply barriers (but you also get
+them with the preemption disable/enable).
+
+>+}
+>+
+
+...
+
+>+#define this_cpu_cmpxchg_1(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+
+This triggers that cmpxchg variable shadowing issue you mentioned in patch 1 with
+that __cpu_fallback_try_cmpxchg also using '__old'.
+
+>+#define this_cpu_cmpxchg_2(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+>+#define this_cpu_cmpxchg_4(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+>+
+>+#ifdef CONFIG_64BIT
+>+#define this_cpu_cmpxchg_8(pcp, o, n)	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+>+
+>+#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
+>+#endif
+>+
+>+#ifdef system_has_cmpxchg128
+>+#define this_cpu_cmpxchg128(pcp, o, n)					\
+>+({									\
+>+	u128 ret__;							\
+>+	typeof(pcp) *ptr__;						\
+>+									\
+>+	preempt_disable_notrace();					\
+>+	ptr__ = raw_cpu_ptr(&(pcp));					\
+>+	if (system_has_cmpxchg128())					\
+>+		ret__ = cmpxchg128_local(ptr__, (o), (n));		\
+>+	else								\
+>+		ret__ = this_cpu_generic_cmpxchg(pcp, (o), (n));	\
+>+	preempt_enable_notrace();					\
+>+	ret__;								\
+>+})
+
+With those above this_cpu_cmpxchg() you could now enable HAVE_CMPXCHG_LOCAL.
+
+Thanks,
+Davidlohr
