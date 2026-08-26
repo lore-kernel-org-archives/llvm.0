@@ -1,64 +1,64 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91FA448B8A
-	for <llvm@lists.linux.dev>; Wed, 26 Aug 2026 16:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6AB282F17
+	for <llvm@lists.linux.dev>; Wed, 26 Aug 2026 16:31:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787761817; cv=none; b=M/FcuEN/6goxD3nff2LrTW13IvoTQwRVsWVMTPe9GN0zbAQYGbd4pX87GX3XvElcb+NAW87zUZyGgfPL/WB5J6uQ6MJVSpXwaes2eu6ELSkYatIFaApNdsCGXEwHvzjebjBUHBJDgEoW3d2MM2DnJ8Z/TpXFm1eS3fIqtabJzw4=
+	t=1787761874; cv=none; b=PAc2y55WDz2G1HQB72qydHbKoHkNSuRkNUPBV8a2iia8bkglrcjU3ReYW2vcvtNypB3ln3gTOO5PVn/iH5j7ZFk1uEQHL1xoHmi/X6oz7xfXgcrmuK45pLT7GZ1acaiwSfapUwi+OiiP4pkob16haKnZ9dt+lGiUmplyna4j2lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787761817; c=relaxed/simple;
-	bh=gwIfm3sCQyiILWZQ7xFw6yNp7td9RDcFDuU2pI//xdw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DpUa1buqVrovvE15v+i0PirEhkKrbgn5soKPwaeX/KNOgCUcJ2CLlG7dqn9GIbqf2LFaV3cKYZJdkfrGrovg5smNsf5t4B9Fk6iV/NNolovYSf3CdJsaLpKh0P2kGb+SzGwYsno6VKqj1ahZojCqjNS+N5235aPEHh015g7nmIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fireburn.co.uk; spf=none smtp.mailfrom=fireburn.co.uk; dkim=pass (2048-bit key) header.d=fireburn-co-uk.20251104.gappssmtp.com header.i=@fireburn-co-uk.20251104.gappssmtp.com header.b=qKDncTo6; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1787761874; c=relaxed/simple;
+	bh=js22L9kkegNeyF2N6EUzZPmTxGqw6C/kJ930hsuHuFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mbIu5XsY27uhNKM/iCvXezZ8VgSiu65IL0WEl6fNsnM3XklFWiO/UgCqUn5GyOOB5FU4K4DwG5f0wn4IN83WVfL0O+KKxlHAjhx82qEdTL5BVhQIWsYDYucDBEI+Drm/Dp9utM14rni2vnCmoYTUvbqIrD2gxTtxOtlOfRiTA0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fireburn.co.uk; spf=none smtp.mailfrom=fireburn.co.uk; dkim=pass (2048-bit key) header.d=fireburn-co-uk.20251104.gappssmtp.com header.i=@fireburn-co-uk.20251104.gappssmtp.com header.b=G8jceBUS; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fireburn.co.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=fireburn.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fireburn-co-uk.20251104.gappssmtp.com header.i=@fireburn-co-uk.20251104.gappssmtp.com header.b="qKDncTo6"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4955aa106b1so10801675e9.0
-        for <llvm@lists.linux.dev>; Wed, 26 Aug 2026 09:30:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=fireburn-co-uk.20251104.gappssmtp.com header.i=@fireburn-co-uk.20251104.gappssmtp.com header.b="G8jceBUS"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-499b57cf2f3so493285e9.0
+        for <llvm@lists.linux.dev>; Wed, 26 Aug 2026 09:31:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fireburn-co-uk.20251104.gappssmtp.com; s=20251104; t=1787761814; x=1788366614; darn=lists.linux.dev;
+        d=fireburn-co-uk.20251104.gappssmtp.com; s=20251104; t=1787761871; x=1788366671; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=G5JqemKnba64Z3g/kh1rqnazfKcGKeW7SjV07q49wE8=;
-        b=qKDncTo6DnL9LQ5Lp0jFkbT5YL07WCbFjO1jOpUoabydhRqlmSCjUhV+0/7Vuzfbbp
-         qIdjLehS/3eP4NcImU/2NW7RdBXXRbGpRG0eANV+Bj1Y0wu4im5i4PbzbKOr9HziNpWi
-         NRTj6vzIn7cLDUhx/EofoHe1meTdafXt36RnuG5gnX2vauQpfCFmX4mnjYjo3iBvVrQ7
-         uM/IIvBsyxTBmzbXZqGljC31xLblCCqpvU9ISnYH+S8rD6Fnp0Af/1WPCYS69RgCXeTg
-         fOJIlj4koZgyJkRT550GJnbW2LedsIr7/8apYkers9HKelc1wvEXAWOHrx9xX/xfR177
-         h7Kw==
+        bh=r1p4Ix1lIWqwmdxGTuB/bpTq19/XoCgreFlH2DPS6K4=;
+        b=G8jceBUS7un3MT2AnP7NQAu+/luJUh6sQlklIFBAyw+T/ez93lJ9sm/43xiAkLkyjJ
+         cGL0K5wbRhgxfd2OkVj+YXwvPp8PlGmMeafo3n1CR+Z//4wQrYsEKc0NIWlCZ3zvX2lR
+         wTDMSKCH2h1zy6KXnjEVYRaYoIxA78JeRuzBIN7cyzBudSiJ1QtunKReBeH2R0XXUPOE
+         vZfZIWeBNvJkUNWI86wDYTROqXOG8uEMWSZsyg8krAP0b9JyxO6gNTTVwL7obweziXaD
+         SxI7hIXs1178jw4yjx6iIMCGzFnZSNl9GZyjRZTaHoAOrRnYyXQe018aAsWwjdCNRnWM
+         wLXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787761814; x=1788366614;
+        d=1e100.net; s=20251104; t=1787761871; x=1788366671;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=G5JqemKnba64Z3g/kh1rqnazfKcGKeW7SjV07q49wE8=;
-        b=hVQN3cnTsSsQGpvDCxT5idUV1S2Sihvs7IaE3xv848wuhw23pwBxySglVujgdpd1fK
-         2nQUQFdwxo/DfK9fbJL8aR4Y4lItH+1GiImHmIEP2rYxIYMkE8VdDELsBeaC12pzqY3j
-         3sOBOFGEpI/d7aciVPHsEG9wn3iOD+ledoX2XV5hpEbxcbQK/eTmxkYeEeE/Ccjjd34+
-         pEcZH0u+Zf/xBYs56Vd8gxe3TactB13iSaWPF9C163sYooHGBWGELQOfTMSdnuG225vI
-         yjQNe+LWhNjeKNCl0q6WVfNCeq9mnxV60eyakpeJS7t64zKaTmcyauhvEkYjs6cP6Dmk
-         Sf1Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rr14u+5fet97SPo6ji3Qwy+qRWiAMyFlRIEd/93v4mjqwqBFdnGv5UpfXKxbI/K++MB/P2Z@lists.linux.dev
-X-Gm-Message-State: AFuF++kegfji109YYnCB+0J4BoLWpcGa6NHOi2/hEqO9AZpON3KAEWOw
-	ieQsyWRLBgDz5ozjqNI8DxzGqRdUc8gtvLEneFGqr8COfT83LaCvbN1BOLlD8h03sQ==
-X-Gm-Gg: AR+sD12dN5yDR52IJTQccE0+xxYecM2rSO6ogZm+zn9OFlCrsFifwM8IeaSA+02nDNo
-	3ViZHvloOVt26xPG+vP0HOAdAc5ztmxXKSwxivfxlzYn23F7P6soFVkhs28TUU4xnjOi6RyZv3x
-	Nl85prrdSDv6a78BPL/+YxExdtdR7BBoU33oGypMaJOpCjA+gazqjhCue7n7mcddSJqgbIWQULS
-	4KtSMGuh+925TkogpUn27TozAqJdgcYFMlLlRdOZWy5USM5acv9YZQ2N8WANM9bY63GQy1SaT7x
-	EArh6RL7NJnrbwbH2/kytlAKRrVsqqHEz2AR6DI86whrfkXRKuU/YauZRy1SRkP+eW9mcYWWBKN
-	vCxAMtbYa4dujGRKDou7W2pq26KmnCTgQQeD5rdOLgfl2eNjGSe2AIw/maqOgPn5vb15WkM1XTD
-	RALreNXBPtOZ7jjzrxx+OWV0pjpVF98K5lH/CECMIfb21RVniqE1NBakMTTIazMU8xZQ3a0PcTV
-	srbpvLct+9FFm6x9bEPnYj/t8F10CptRbrf
-X-Received: by 2002:a05:600c:c178:b0:499:621a:2ec2 with SMTP id 5b1f17b1804b1-499dc6efe07mr77963895e9.3.1787761814121;
-        Wed, 26 Aug 2026 09:30:14 -0700 (PDT)
+        bh=r1p4Ix1lIWqwmdxGTuB/bpTq19/XoCgreFlH2DPS6K4=;
+        b=XmCPXVHmJUlnb7KOIeYRSQLw19HfVSIst15u2OHbw09ksOgzUoJFnGXL24NFL4dE3r
+         B8Lv3/CYvrHKpDiNm9R3pv7d3wBdZJzOS/wp/ORTQ1wUuVtrOMV6JOoqXnR8SyheNmEI
+         fVwT11klA1rM5JzoMXz1Xmv1R3I+yThHmGELmy0pVqfctPlk8vfACw5LRTJQsWbBtDm5
+         PpUJnF8o3Rmvz/9eBs81PvFuSXQg9ynXqBsfRRqSVkbsdpOgRjoBynIT4IgkjvIAWFkq
+         yL+rr04VvfmDHiH6YIvtVOHSwIpEZuzFF2XRYUOxOubLg/Fv7cN6QT1Z8jNtytBxIz6Z
+         Njdg==
+X-Forwarded-Encrypted: i=1; AHgh+RpVXF2LA16d2Xr2QsDipfpR+Bo8AL3+LKzsp+GikzZhMpbJk9FpU68Y63Z76I9mXeQJDdH9@lists.linux.dev
+X-Gm-Message-State: AFuF++nqDCg2GXXiPclMNMGMHNycmR4j1kbt3D4bI1xeFwM+TR6nvcAp
+	MoKW5OMRR+ZHH75Z36MUVzt7UY+isjtv4nEMECRQyqfoH6uok0jOw3r/7MDwp6FnTg==
+X-Gm-Gg: AR+sD12WVZrVjYIkwGjDzBk9pdkSC3pfW/KnZ4ubnC7bzV8/jGXYRy5YDpiahQU9rHE
+	W/3wyRcL6Ab5SjK/cc+P6JGRbH0WGtVVt7VNfmqP88ACBX2eZk9Z2qZgEBP3pPGiz/0Ph7Wr/lG
+	xqyN63dqlToP3EkDPuDE51AmZIZeOWGc9Mn+pd/6Q5mP8dLBEIp4+bkctmVeNztCgQnt8oxW46Q
+	t4fQ9p6T5AdWaJxlftE43SXOJA2dlftxmayxNlOKPcSXvj1zHXbWVO/SF0ye4hERj6epXBsUVCN
+	pW+RSsMQMMFo701xKnLxkjkV0zpTw2yPl3+iDC7RmbfFLGQ5WR0ErrPLV2oGzB2fOD10HVOAccv
+	Qb0z85Nw2cnqVJiAF0FBQ38Dtw6Aq7h8remRpqtbgEmOrnsR3igC7u5p2YaxMWD+84Pag/UaMkO
+	qEGrIdX7p3ArnJgBWHp8NrqhuIHoNGvUhgzSUAeBI7E1qXv6Obgw6R+6WWTj7Y2kEjWl3BYOTiR
+	QFXbJNBFqiwUFjnPRx8xCgU9a5teFFI7QJA
+X-Received: by 2002:a05:600c:3151:b0:499:a5cb:b7c0 with SMTP id 5b1f17b1804b1-49b0deb14d0mr4628125e9.3.1787761870622;
+        Wed, 26 Aug 2026 09:31:10 -0700 (PDT)
 Received: from axion.fireburn.co.uk ([2a01:4b00:d309:1c00:caf1:6b20:8531:818c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499dc981bf3sm32323615e9.8.2026.08.26.09.30.11
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499dc9b83aesm31202705e9.12.2026.08.26.09.31.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2026 09:30:12 -0700 (PDT)
+        Wed, 26 Aug 2026 09:31:09 -0700 (PDT)
 From: Mike Lothian <mike@fireburn.co.uk>
-To: linux-crypto@vger.kernel.org
+To: linux-usb@vger.kernel.org
 Cc: Mike Lothian <mike@fireburn.co.uk>,
 	Miguel Ojeda <ojeda@kernel.org>,
 	Boqun Feng <boqun@kernel.org>,
@@ -79,9 +79,9 @@ Cc: Mike Lothian <mike@fireburn.co.uk>,
 	Justin Stitt <justinstitt@google.com>,
 	rust-for-linux@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v3 0/2] rust: crypto: AES, CMAC, SHA-256, HMAC and RSA bindings
-Date: Wed, 26 Aug 2026 17:29:47 +0100
-Message-ID: <20260826163004.3365-1-mike@fireburn.co.uk>
+Subject: [PATCH v3 0/5] rust: usb: host-side abstractions for a bulk-endpoint driver
+Date: Wed, 26 Aug 2026 17:30:36 +0100
+Message-ID: <20260826163101.4168-1-mike@fireburn.co.uk>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -91,36 +91,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Synchronous crypto bindings for a driver that has to authenticate a device
-before it is allowed to drive it
+Host-side USB abstractions for a driver whose device is a bulk-endpoint pipe
+rather than a class device
 
-The first patch covers AES-128, AES-CMAC, SHA-256 and HMAC over the existing
-synchronous crypto API. The second adds RSA through akcipher, which HDCP 2.2
-needs to verify a device certificate and wrap a session key
+  Revocable typed interface I/O, so an interface cannot be used after the core
+    has taken it back
+  Reusable URBs and persistent bulk queues, which is what keeps a video stream
+    in flight without allocating per transfer
+  The device descriptor fields a driver needs to identify hardware before it
+    decides to drive it, and a queue-readiness check
+  A device id constructor matching on vendor together with interface class,
+    subclass and protocol, for a composite device whose function is not
+    identified by the product id alone
+  Letting a driver keep its interface usable while unbinding, so teardown can
+    still talk to the device it is releasing
 
 Changes since v2:
 
-  The hand-rolled AES-CMAC is gone, along with its own dbl() subkey
-    derivation. It delegates to the in-tree aes_cmac library through
-    include/crypto/aes-cbc-macs.h, which is what Eric Biggers asked for
-  There is no private RSA primitive either. Modexp goes through
-    crypto_alloc_akcipher("rsa"), and OAEP padding and the HDCP key material
-    are held in a memory-wiping secret type
-  v2's separate CMAC fix is folded into the commit that introduces the CMAC,
-    so this is two patches rather than three
+  v2 10/11, "keep usb::Device private and gate ...", is dropped entirely.
+    Oliver Neukum was right that it was conceptually wrong: USB does device
+    level operations, and hiding that behind an interface is a layering
+    violation. Device stays public
+  as_bound() is gone from both the binding and the driver. Danilo Krummrich's
+    point stands: needing an unsafe as_bound() means the design or the
+    infrastructure is wrong, not that the escape hatch is needed
+  reset_configuration() is gone, and set_interface() now exists in two
+    correctly scoped forms, one on Interface<Bound> taking an altsetting and
+    one on Device taking interface plus altsetting
+  What replaces the concealment is lifecycle gating: an adapter-owned,
+    revocable I/O window that is valid across probe, suspend, reset, resume and
+    disconnect and invalid outside them. That is the interval in which I/O is
+    legal, which is narrower than "the interface is bound"
+  There is no private URB implementation. Colin Braun's URB RFC is carried
+    unchanged as the foundation and this builds on it
+  A topology walk and a device-removal notifier were written after v2 and are
+    not here. They existed for a second consumer that is not part of this
+    posting, so nothing in what is sent would call them
 
-Nothing here knows what HDCP is. The consumer is the DisplayLink driver at the
-end of the chain, whose control plane is sealed with AES-CTR and keyed by an
-HDCP 2.2 exchange
+Alan Stern's lifecycle point is what makes device access from an interface
+sound, and is worth restating because the whole shape depends on it: an
+unconfigured device has no interfaces, so an interface that exists implies a
+configured device
 
-v2: https://lore.kernel.org/r/20260703030056.2763-1-mike@fireburn.co.uk
+v2: https://lore.kernel.org/r/20260703030020.2694-1-mike@fireburn.co.uk
 
 The rest of the posting, which is one series per subsystem:
 
   rust-core, 9 patches, rust-for-linux and linux-kernel
   https://lore.kernel.org/r/20260826162851.2497-1-mike@fireburn.co.uk
-  rust-crypto, 2 patches, this one
-  rust-usb, 5 patches, to linux-usb and rust-for-linux, not sent yet
+  rust-crypto, 2 patches, linux-crypto and rust-for-linux
+  https://lore.kernel.org/r/20260826163004.3365-1-mike@fireburn.co.uk
+  rust-usb, 5 patches, this one
   rust-drm, 23 patches, to dri-devel and rust-for-linux, not sent yet
   rust-firmware, 1 patch, to linux-kernel and rust-for-linux, not sent yet
   drm-vino, 13 patches, to dri-devel, not sent yet
@@ -150,8 +171,10 @@ enable no part of Vino: a scheduler call site that stops compiling under the
 locking-guard series, and the Kms associated type Tyr needs once the KMS
 registration trait requires one
 
-It applies to the base above on its own, with no unmerged work under it, so it
-can be taken without waiting for anything else here
+It applies to the base above plus this, and nothing else:
+
+  Colin Braun, rust: usb: add usb request block abstractions
+  https://lore.kernel.org/r/20260712-urb-abstraction-v1-v1-0-9fa011634ead@gmail.com
 
 The reference branch also carries Boqun Feng's counted interrupt disabling
 series, which SpinLockIrq needs. One patch of it is already in tip locking/core
@@ -163,10 +186,14 @@ implementation and the tests. Every patch it contributed to carries an
 Assisted-by trailer. The Signed-off-by is mine: I have reviewed and tested what
 is here and I stand behind it
 
-Mike Lothian (2):
-  rust: crypto: add AES-128, AES-CMAC, SHA-256, and HMAC bindings
-  rust: crypto: add synchronous RSA akcipher support
+Mike Lothian (5):
+  rust: usb: add revocable typed interface I/O
+  rust: usb: add reusable URBs and persistent bulk queues
+  rust: usb: expose device descriptor fields and queue readiness
+  rust: usb: add a vendor-and-interface-info device id constructor
+  rust: usb: let a driver keep its interface usable while unbinding
 
- 9 files changed, 592 insertions(+), 6 deletions(-)
+ 3 files changed, 1553 insertions(+), 26 deletions(-)
 
 base-commit: 4c9ba407018e8deb06dbc643112bac8f40404f95
+prerequisite-message-id: <20260712-urb-abstraction-v1-v1-0-9fa011634ead@gmail.com>
