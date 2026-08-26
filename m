@@ -1,63 +1,63 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA08463B94;
-	Tue, 25 Aug 2026 22:11:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74FD1D435F;
+	Wed, 26 Aug 2026 00:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787695875; cv=none; b=KKjMQ8jXTQ9Eo7vkEkcjfzt99GebX0uc8Ftv+A1j+FZZa7PV9rzb+GHc3XgGwepo1i5UJ1gFSZxNg1qmfUTesujb5/p4VYx3r9qJnfQbqaHJLmkhbDP3ifrR9IDlM/0sLwApm86VOxsVW3WwySbK+GWmzMv9aZkNp0updzHxu7A=
+	t=1787704001; cv=none; b=sVqKIhrqvf4kqprL18e4kaRVSAkfEsIk4lDtcbP9oxi2Hl6U9uadgzKxPrEXeXCQyBb0gcmXbt8SCYfrsl3mwXcNXoWbHf6sNGG5JkyA17mjoEm3rvfmrCLyp8PJGaipOgNHzKaHJjWZ0IouYRrZZVZa+9XVG+fPsnE7NWS/spI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787695875; c=relaxed/simple;
-	bh=MoKpQAvgL/jtjrJivUZ7Cj0yMoVDx7MoG75fFAB+a+c=;
+	s=arc-20240116; t=1787704001; c=relaxed/simple;
+	bh=ShqDjoWcq+I6QJKftXtNyFZBp+J2PeVZrGP/36klpY8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YdfaDbiykjRkQCciD9xmJVQ6HWGKB/wzpQAPyaLF1huBs2At7oRMEmS+hkIZPL+GZYgnK42ZLKNXo17KmtLmFd5Jj5ePKiAHUxS8qF0dvZRAGtHjAKzKO3M8x1J7/KAIx7f1iEplMGMOu+nlEhjeJwgPBSF1TJnCd92h0mOTPqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MQa1hzKA; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=GGRmC6PxtFztqrre1sIiM59jQ5vyVuEx5D4yUzyf7PoHjRGGEvoOwkU8HKNhqxCf9HzwY5hkjP+8A1UHtmYdIf25pEu9CX3mPaAZjA99AZfsKyifFfriSI43vPJXopBmKuRy1n7gXPrH8kHZVuSfFP164kQsn7kd+glHWLB+tS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hmlPqTY8; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MQa1hzKA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hmlPqTY8"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787695865; x=1819231865;
+  t=1787704000; x=1819240000;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=MoKpQAvgL/jtjrJivUZ7Cj0yMoVDx7MoG75fFAB+a+c=;
-  b=MQa1hzKA2OFKJr1fRpETcgec6BO+bzFVzoR97E3sYSkZJLC0LY8uiKsK
-   Meke2YqG0etSjeQzOipUrPysjXV0G+PYo+3/iXf+7LSmDXsIXUDmQ2xsC
-   8AZqtlI9//NdkG2jcA2FGjPy6ALVKh/x5JLghG+5QDMV5ug+EvkayJkFZ
-   zhUEv+tu+QAgWt38sXrQ5x9sQEYWBGRVSiMmciBOr7T+itUllFUMYEPYm
-   Hd9CMi9L7J1WzaQ11MsaGz3p6afwyEJcuOxXtVRU+p5AUprtEQGwaJuHk
-   Hzs8ocKEthsmPuoYadjg17tIn5YnfTaH6+vGnXMaLFBQ+lfWbn6Xg9XW0
-   w==;
-X-CSE-ConnectionGUID: EJsmobunRLK0sCnQPYF7nA==
-X-CSE-MsgGUID: UUTl71lBTe2SqO0RuxACxg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11886"; a="87942355"
+  bh=ShqDjoWcq+I6QJKftXtNyFZBp+J2PeVZrGP/36klpY8=;
+  b=hmlPqTY8wlSMTQejeg8wJWM5TTFN4DmUftpCxmCT+3TS5ICD5HF1Onfm
+   f9IKIksYuwwreImqV+wU/NOtozuGuuF6Jo+Nq7SiW702PA1XmuGM697Zy
+   JlZ5Q+wjB+IEwGplHDShn6DUpcevgNQNIreAoZdarSQ5ZfJZFk5umHi/G
+   lvPe7OMH9GlPVD0tTVpOOpkOIAwfJFORhEa+bzRYkJvZQCaDQc403jxI+
+   /AKoa4rb99s+CLtL355gLFt9RHUdxC/aCcdVkHoaOgAXXkGcNaIfuIu2k
+   1Mp0A9Ebljrn+K1o1T/pnD6cX7YDlMv1x97LbSum9uVMUoXpK1+ehxKar
+   Q==;
+X-CSE-ConnectionGUID: o0K2AZrnT3SrkKbSXrM3+g==
+X-CSE-MsgGUID: APSsoMmuRR+eMks3pDmhjg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11886"; a="99704140"
 X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
-   d="scan'208";a="87942355"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 15:11:03 -0700
-X-CSE-ConnectionGUID: lqrxtMecQM6vrC891Az2dw==
-X-CSE-MsgGUID: /ap+vbZQQxyCWgQ6+KqHYw==
+   d="scan'208";a="99704140"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 17:26:39 -0700
+X-CSE-ConnectionGUID: ZKXGshlLQG6FRcNyJvTLWg==
+X-CSE-MsgGUID: eM+SggEGRpSxBfq3RV50iw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
-   d="scan'208";a="265599661"
+   d="scan'208";a="264815669"
 Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 25 Aug 2026 15:11:01 -0700
+  by fmviesa008.fm.intel.com with ESMTP; 25 Aug 2026 17:26:37 -0700
 Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wyzMB-000000006SZ-2Jon;
-	Tue, 25 Aug 2026 22:10:59 +0000
-Date: Wed, 26 Aug 2026 06:10:48 +0800
+	id 1wz1TO-000000006dz-28ka;
+	Wed, 26 Aug 2026 00:26:34 +0000
+Date: Wed, 26 Aug 2026 08:26:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: "A. Sverdlin" <alexander.sverdlin@siemens.com>,
-	linux-rtc@vger.kernel.org
+To: Bowen Yu <yubowen8@huawei.com>, linuxarm@huawei.com,
+	liudingyuan@h-partners.com, andi.shyti@kernel.org,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Alexander Sverdlin <alexander.sverdlin@siemens.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: pcf85063: disable the clkout output by default
-Message-ID: <202608260642.ydlr9qYE-lkp@intel.com>
-References: <20260824080801.709764-1-alexander.sverdlin@siemens.com>
+	zhanjie9@hisilicon.com, prime.zeng@hisilicon.com,
+	wanghuiqiang@huawei.com, xuwei5@huawei.com, yubowen8@huawei.com
+Subject: Re: [PATCH] i2c: hisi: Add I2C bus recovery support
+Message-ID: <202608260816.YagBXzlX-lkp@intel.com>
+References: <20260825033125.1893253-1-yubowen8@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -66,92 +66,72 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260824080801.709764-1-alexander.sverdlin@siemens.com>
+In-Reply-To: <20260825033125.1893253-1-yubowen8@huawei.com>
 
-Hi Sverdlin,
+Hi Bowen,
 
 kernel test robot noticed the following build errors:
 
-[auto build test ERROR on abelloni/rtc-next]
+[auto build test ERROR on andi-shyti/i2c/i2c-host]
 [also build test ERROR on linus/master v7.2 next-20260824]
 [If your patch is applied to the wrong git tree, kindly drop us a note.
 And when submitting patch, we suggest to use '--base' as documented in
 https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/A-Sverdlin/rtc-pcf85063-disable-the-clkout-output-by-default/20260824-100759
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git rtc-next
-patch link:    https://lore.kernel.org/r/20260824080801.709764-1-alexander.sverdlin%40siemens.com
-patch subject: [PATCH] rtc: pcf85063: disable the clkout output by default
-config: arm-randconfig-003-20260826 (https://download.01.org/0day-ci/archive/20260826/202608260642.ydlr9qYE-lkp@intel.com/config)
+url:    https://github.com/intel-lab-lkp/linux/commits/Bowen-Yu/i2c-hisi-Add-I2C-bus-recovery-support/20260825-113125
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/andi.shyti/linux.git i2c/i2c-host
+patch link:    https://lore.kernel.org/r/20260825033125.1893253-1-yubowen8%40huawei.com
+patch subject: [PATCH] i2c: hisi: Add I2C bus recovery support
+config: arm-randconfig-003-20260826 (https://download.01.org/0day-ci/archive/20260826/202608260816.YagBXzlX-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 771bdfdab2d66a4eb85b8ea7673cfa30152718b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260826/202608260642.ydlr9qYE-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260826/202608260816.YagBXzlX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608260642.ydlr9qYE-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608260816.YagBXzlX-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/rtc/rtc-pcf85063.c:527:2: error: use of undeclared identifier 'ret'
-     527 |         ret = regmap_update_bits(pcf85063->regmap, PCF85063_REG_CTRL2,
-         |         ^~~
-   drivers/rtc/rtc-pcf85063.c:529:6: error: use of undeclared identifier 'ret'
-     529 |         if (ret)
-         |             ^~~
-   drivers/rtc/rtc-pcf85063.c:530:10: error: use of undeclared identifier 'ret'
-     530 |                 return ret;
-         |                        ^~~
-   3 errors generated.
+>> drivers/i2c/busses/i2c-hisi.c:236:27: error: call to undeclared function 'acpi_has_method'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     236 |         if (ctlr->acpi_handle && acpi_has_method(ctlr->acpi_handle, "_RST")) {
+         |                                  ^
+   drivers/i2c/busses/i2c-hisi.c:236:27: note: did you mean 'acpi_has_watchdog'?
+   include/linux/acpi.h:1528:20: note: 'acpi_has_watchdog' declared here
+    1528 | static inline bool acpi_has_watchdog(void) { return false; }
+         |                    ^
+   1 error generated.
 
 
-vim +/ret +527 drivers/rtc/rtc-pcf85063.c
+vim +/acpi_has_method +236 drivers/i2c/busses/i2c-hisi.c
 
-   497	
-   498	static struct clk *pcf85063_clkout_register_clk(struct pcf85063 *pcf85063)
-   499	{
-   500		struct clk *clk;
-   501		struct clk_init_data init = {};
-   502		struct device_node *node = pcf85063->rtc->dev.parent->of_node;
-   503		struct device_node *fixed_clock;
-   504	
-   505		fixed_clock = of_get_child_by_name(node, "clock");
-   506		if (fixed_clock) {
-   507			/*
-   508			 * skip registering square wave clock when a fixed
-   509			 * clock has been registered. The fixed clock is
-   510			 * registered automatically when being referenced.
-   511			 */
-   512			of_node_put(fixed_clock);
-   513			return NULL;
-   514		}
-   515	
-   516		init.name = "pcf85063-clkout";
-   517		init.ops = &pcf85063_clkout_ops;
-   518		init.flags = 0;
-   519		init.parent_names = NULL;
-   520		init.num_parents = 0;
-   521		pcf85063->clkout_hw.init = &init;
-   522	
-   523		/* optional override of the clockname */
-   524		of_property_read_string(node, "clock-output-names", &init.name);
-   525	
-   526		/* power-on default is the 32768 Hz output on; gate it until claimed */
- > 527		ret = regmap_update_bits(pcf85063->regmap, PCF85063_REG_CTRL2,
-   528					 PCF85063_REG_CLKO_F_MASK, PCF85063_REG_CLKO_F_OFF);
-   529		if (ret)
-   530			return ret;
-   531	
-   532		/* register the clock */
-   533		clk = devm_clk_register(&pcf85063->rtc->dev, &pcf85063->clkout_hw);
-   534	
-   535		if (!IS_ERR(clk))
-   536			of_clk_add_provider(node, of_clk_src_simple_get, clk);
-   537	
-   538		return clk;
-   539	}
-   540	#endif
-   541	
+   221	
+   222	static void hisi_i2c_unprepare_recovery(struct i2c_adapter *adap)
+   223	{
+   224		struct hisi_i2c_controller *ctlr = i2c_get_adapdata(adap);
+   225		u32 reg;
+   226	
+   227		reg = readl(ctlr->sctrl_addr);
+   228		reg &= ~(HISI_I2C_CTRL_SCL_CFG_EN | HISI_I2C_CTRL_DAT_CFG_EN);
+   229		writel(reg, ctlr->sctrl_addr);
+   230	
+   231		/*
+   232		 * Invokes the specific ACPI method "_RST" for trigger a soft
+   233		 * reset of I2C controller in order to help on I2C controller recover from
+   234		 * the abnormal state after bus recovery process.
+   235		 */
+ > 236		if (ctlr->acpi_handle && acpi_has_method(ctlr->acpi_handle, "_RST")) {
+   237			acpi_status status;
+   238	
+   239			status = acpi_evaluate_object(ctlr->acpi_handle, "_RST", NULL, NULL);
+   240			if (ACPI_FAILURE(status))
+   241				dev_err(ctlr->dev, "_RST method failed: %s\n",
+   242					acpi_format_exception(status));
+   243		}
+   244	
+   245		hisi_i2c_configure_bus(ctlr);
+   246	}
+   247	
 
 --
 0-DAY CI Kernel Test Service
