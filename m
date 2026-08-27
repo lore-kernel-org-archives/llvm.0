@@ -1,228 +1,334 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DC03A2E36;
-	Thu, 27 Aug 2026 07:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFCC3E49CC
+	for <llvm@lists.linux.dev>; Thu, 27 Aug 2026 08:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787817219; cv=none; b=qn65z6KjXwyaLOckZ2f41x9XV2xpfSjSbJnwvAol+oAilWwQi/I1nZ5oNk7pSjVyBg3/Hd1Dv8pRj2bbc08Ug8cTgzNKFto7XvLsJaMy6DeZ12IKSOb9xMYMkFHB1KX5+y/ZuK/BK/6xxALOli+kda/YbV+ZQPbpPXE7ecTJpl4=
+	t=1787819525; cv=none; b=JV5zaRB2InoiiuwpaV/t8EQ4yBaZ+xDBlHrs29BKXQsXbfXEm6sVGOu5koQokQgk3EDYXbjFOWjgPfgtqspZFhDuDv1dzpBtouIpFKXQd6g+io7hnmxWgARwTT0/dctZhElVbF7HbVs94jUMDRdOwRRLTc+J7X37PQFoA4SsNS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787817219; c=relaxed/simple;
-	bh=6XpatlI+dHeGkIrqwIh4hcY27vGRLm+swVbrSIZwGK4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Iz4skPH2K5lHJr/q0yuSTztlG86HoPkqEVLzecsP9mf2XVsqxgLlkxvWwyBnGgvomlrxRATVNQIb5cDNcJ1g73PsAoCODzvtep45LcccXNS+MMfDqLF7DbUmZe4vd5s6kUzRulyRFt351qsXtZ9jdotXn3Y2CPKrjqFIUrWmIxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=efS/vxqK; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787819525; c=relaxed/simple;
+	bh=8ePSUhaQb8QnUXHlOG+I36CHMeCDYSesDAACGnE1aSE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:content-type; b=VjLN0b/GZYlDivpC+ygJdAynoUBL8Xr4Y0KafE3xFZsI2f28PhwZ0MYKNKdcNGk857emKvIjXZDouZWydYuNRWfUag7qqJ+adQVw3gQxgyBiTVl5krsK/e9s0RwEEe1HftS38nTMZ5OGFVJe0ZSqLIF5aGSN1Shnkfd3CvYiJxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E7swPrmL; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="efS/vxqK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787817217; x=1819353217;
-  h=date:from:to:cc:subject:message-id;
-  bh=6XpatlI+dHeGkIrqwIh4hcY27vGRLm+swVbrSIZwGK4=;
-  b=efS/vxqK4UHEjkvnrbfbd9b4y2/cVdc5Fl+PaHQGPxi9xacKcznsFP17
-   glsym7U8OPhiM4H2uHO4/iyQC8OORvHSDsvp0zI4F/Oi5m/kyGDIaaeLK
-   /Us1Y73vNqgQyu9UxkkigV6x4gOZknFtOu67BojhkEPMORpY2CuryDl67
-   zHuO3CX263KegMB9Poo10h3ZsLejY3pM5MlmpKLd7GMQj0OOs9tACgaJs
-   tHXVymOIqkGSquuuA/LzlpeKSpU2UN6nuLfRdjS0iY1/l+VTqQF5/vUvS
-   Nt+UMNNK6eV+1ICrNCLtqMh030qcCe57pS9w1leB5+Q3oBGS+bOzki4u7
-   Q==;
-X-CSE-ConnectionGUID: Q9aCpqjkRBCYiAcm4Tp8sw==
-X-CSE-MsgGUID: QLG4weI4TrCBeLXQQuRODw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11887"; a="88329629"
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="88329629"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 00:53:36 -0700
-X-CSE-ConnectionGUID: t6aheHulSg2UM3JETcEblw==
-X-CSE-MsgGUID: EJh4tLmcRty5c930XVQ5Qg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="264035018"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 27 Aug 2026 00:53:34 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wzUvU-0000000097J-0dFb;
-	Thu, 27 Aug 2026 07:53:32 +0000
-Date: Thu, 27 Aug 2026 15:52:49 +0800
-From: kernel test robot <lkp@intel.com>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- "David Hildenbrand (Arm)" <david@kernel.org>
-Subject: [davidhildenbrand:get_dummy 14/21]
- include/linux/pgtable.h:2351:6: error: call to undeclared function
- 'mm_pmd_folded'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202608271502.qJGgVpP0-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E7swPrmL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787819520;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Gq1pX0waFkvUy+2Abzjcz983OJaf9bd9P1XTs6fxpd4=;
+	b=E7swPrmLP9VUd5dIyks+RB7ABiTESoEV9PGwOdggQa3zA6ggCfMYaJZOG0avJBlaju42sT
+	sZovgKPgokIeaUpGzCGFORZ0/5tZQVLX3sCCJ9aB4Xo9UkKbDWk328FlHNSB0kaIGEGoUq
+	fQ/pzqkaRLLfOEmifP5g213CCvYwW+0=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-609-MurbVM_8Pk2eTPtGsKl6UA-1; Thu,
+ 27 Aug 2026 04:31:55 -0400
+X-MC-Unique: MurbVM_8Pk2eTPtGsKl6UA-1
+X-Mimecast-MFC-AGG-ID: MurbVM_8Pk2eTPtGsKl6UA_1787819512
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 02D2D1835AE2;
+	Thu, 27 Aug 2026 08:31:52 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.44.32.49])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 8D4171955F04;
+	Thu, 27 Aug 2026 08:31:45 +0000 (UTC)
+From: Paolo Abeni <pabeni@redhat.com>
+To: joe@dama.to
+Cc: netdev@vger.kernel.org,
+	michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	colin.winegarden@broadcom.com,
+	rukhsana.ansari@broadcom.com,
+	horms@kernel.org,
+	kalesh-anakkur.purayil@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH net v2] bnxt_en: Bound SW TPA IDs to prevent crashes
+Date: Thu, 27 Aug 2026 10:31:39 +0200
+Message-ID: <20260827083139.91346-1-pabeni@redhat.com>
+In-Reply-To: <20260825001842.2501798-1-joe@dama.to>
+References: <20260825001842.2501798-1-joe@dama.to>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+X-Mimecast-MFC-PROC-ID: NH_4C-0tr-8SgwbTjFOXKarN4c1AW8GEsf_jh_yypKg_1787819512
+X-Mimecast-Originator: redhat.com
+Content-Transfer-Encoding: 8bit
+content-type: text/plain; charset="US-ASCII"; x-default=true
 
-Hi Yeoreum,
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://netdev-ai.bots.linux.dev/sashiko/
+---
+bnxt_en: Bound SW TPA IDs to prevent crashes
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+The patch allocates rxr->rx_tpa with bp->max_tpa rounded up to the next
+power of two, stored in a new bp->max_tpa_roundup_size field, and masks the
+firmware TPA ID with that size in bnxt_alloc_agg_idx() instead of using
+MAX_TPA_P5_MASK.  All of the TPA info allocation and free loops now use the
+new field as their bound.
 
-tree:   https://github.com/davidhildenbrand/linux get_dummy
-head:   112a153a97494becabd764fe6257578ba908801f
-commit: db92928e80f5332bbfca9a70beaef62d46a0c9de [14/21] x86: mm: carve out the generic compile-time folded pgtable case in effective_prot()
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260827/202608271502.qJGgVpP0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260827/202608271502.qJGgVpP0-lkp@intel.com/reproduce)
+> diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> index 9c2cc50276a59..ba710704b1921 100644
+> --- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> +++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+> @@ -1517,14 +1517,16 @@ static int bnxt_discard_rx(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+>  	return 0;
+>  }
+>  
+> -static u16 bnxt_alloc_agg_idx(struct bnxt_rx_ring_info *rxr, u16 agg_id)
+> +static u16 bnxt_alloc_agg_idx(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
+> +			      u16 agg_id)
+>  {
+>  	struct bnxt_tpa_idx_map *map = rxr->rx_tpa_idx_map;
+> -	u16 idx = agg_id & MAX_TPA_P5_MASK;
+> +	u16 idx = agg_id & (bp->max_tpa_roundup_size - 1);
+>  
+>  	if (test_bit(idx, map->agg_idx_bmap)) {
+> -		idx = find_first_zero_bit(map->agg_idx_bmap, MAX_TPA_P5);
+> -		if (idx >= MAX_TPA_P5)
+> +		idx = find_first_zero_bit(map->agg_idx_bmap,
+> +					  bp->max_tpa_roundup_size);
+> +		if (idx >= bp->max_tpa_roundup_size)
+>  			return INVALID_HW_RING_ID;
+>  	}
+>  	__set_bit(idx, map->agg_idx_bmap);
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608271502.qJGgVpP0-lkp@intel.com/
+[Severity: Medium]
 
-All errors (new ones prefixed by >>):
+This isn't a bug introduced by this patch, but the value stored is now
+bounded while the index it is stored at is still the raw firmware ID, just
+below the last quoted line:
 
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:31:
->> include/linux/pgtable.h:2351:6: error: call to undeclared function 'mm_pmd_folded'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2351 |         if (mm_pmd_folded(mm))
-         |             ^
->> include/linux/pgtable.h:2353:6: error: call to undeclared function 'mm_pud_folded'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2353 |         if (mm_pud_folded(mm))
-         |             ^
->> include/linux/pgtable.h:2355:6: error: call to undeclared function 'mm_p4d_folded'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    2355 |         if (mm_p4d_folded(mm))
-         |             ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
+	map->agg_id_tbl[agg_id] = idx;
 
+agg_id comes from TPA_START_AGG_ID_P5(), whose descriptor field is 12 bits
+wide:
 
-vim +/mm_pmd_folded +2351 include/linux/pgtable.h
+	#define RX_TPA_START_CMP_AGG_ID_P5	(0x0fff << 16)
 
-  2331	
-  2332	/**
-  2333	 * mm_first_pgtable_level - return the first non-folded page-table level
-  2334	 * @mm: The mm structure.
-  2335	 *
-  2336	 * With runtime- or compile-time folded page tables, page-table walkers
-  2337	 * effectively skip the folded top-level page tables, treating them as
-  2338	 * always-present entries pointing to the next lower-level page table.
-  2339	 *
-  2340	 * Return the first page-table level in @mm that is not folded.
-  2341	 *
-  2342	 * Return: the first non-folded page-table level.
-  2343	 */
-  2344	static inline enum pgtable_level mm_first_pgtable_level(struct mm_struct *mm)
-  2345	{
-  2346		/*
-  2347		 * "PMD folded" actually means "PMD is folded into PUD", and
-  2348		 * pud_present() etc. are hard-coded to look like present page table
-  2349		 * levels, whereby pmd_present() etc. contain real logic.
-  2350		 */
-> 2351		if (mm_pmd_folded(mm))
-  2352			return PGTABLE_LEVEL_PMD;
-> 2353		if (mm_pud_folded(mm))
-  2354			return PGTABLE_LEVEL_PUD;
-> 2355		if (mm_p4d_folded(mm))
-  2356			return PGTABLE_LEVEL_P4D;
-  2357		return PGTABLE_LEVEL_PGD;
-  2358	}
-  2359	
+and the table it indexes is 1024 entries, immediately followed by the
+in-use bitmap:
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+struct bnxt_tpa_idx_map {
+	u16		agg_id_tbl[1024];
+	DECLARE_BITMAP(agg_idx_bmap, MAX_TPA_P5);
+};
+
+Can an ID of 1024 or above write past agg_id_tbl[] into agg_idx_bmap?
+
+The same raw ID is used for the read side in bnxt_lookup_agg_idx(), whose
+result is used unchecked by bnxt_tpa_end() and bnxt_tpa_agg():
+
+	agg_id = bnxt_lookup_agg_idx(rxr, agg_id);
+	tpa_info = &rxr->rx_tpa[agg_id];
+
+The commit message says "TPA IDs are generated by FW and can be up to
+1024", which matches the table size, and I could not find a capability
+field that would allow firmware to emit an ID above 1023, so this may not
+be reachable in practice.
+
+Would an agg_id &= ARRAY_SIZE(map->agg_id_tbl) - 1 in both helpers be worth
+adding while this function is being touched?
+
+[ ... ]
+
+> @@ -3784,7 +3786,7 @@ static void bnxt_free_one_tpa_info(struct bnxt *bp,
+>  	kfree(rxr->rx_tpa_idx_map);
+>  	rxr->rx_tpa_idx_map = NULL;
+>  	if (rxr->rx_tpa) {
+> -		for (i = 0; i < bp->max_tpa; i++) {
+> +		for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+>  			kfree(rxr->rx_tpa[i].agg_arr);
+>  			rxr->rx_tpa[i].agg_arr = NULL;
+>  		}
+> @@ -3810,13 +3812,14 @@ static int bnxt_alloc_one_tpa_info(struct bnxt *bp,
+>  	struct rx_agg_cmp *agg;
+>  	int i;
+>  
+> -	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info, bp->max_tpa);
+> +	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info,
+> +				   bp->max_tpa_roundup_size);
+>  	if (!rxr->rx_tpa)
+>  		return -ENOMEM;
+>  
+>  	if (!(bp->flags & BNXT_FLAG_CHIP_P5_PLUS))
+>  		return 0;
+> -	for (i = 0; i < bp->max_tpa; i++) {
+> +	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+>  		agg = kzalloc_objs(*agg, MAX_SKB_FRAGS);
+>  		if (!agg)
+>  			return -ENOMEM;
+
+[Severity: High]
+
+This is a pre-existing issue, but this loop now runs up to
+bp->max_tpa_roundup_size times (for example 33 becoming 64), so there are
+more chances for the 272 byte kzalloc_objs(*agg, MAX_SKB_FRAGS) to fail.
+
+On failure, bnxt_alloc_one_tpa_info() returns before rx_tpa_idx_map is
+replaced, and the caller for a queue restart goes to the cleanup path:
+
+	if (bp->flags & BNXT_FLAG_TPA) {
+		rc = bnxt_alloc_one_tpa_info(bp, clone);
+		if (rc)
+			goto err_free_tpa_info;
+	...
+err_free_tpa_info:
+	bnxt_free_one_tpa_info(bp, clone);
+
+clone is a shallow copy of the live ring made in bnxt_queue_mem_alloc():
+
+	memcpy(clone, rxr, sizeof(*rxr));
+	bnxt_init_rx_ring_struct(bp, clone);
+	bnxt_reset_rx_ring_struct(bp, clone);
+	...
+	clone->rx_agg_bmap = NULL;
+
+Only rx_agg_bmap is cleared there, and bnxt_reset_rx_ring_struct() does not
+touch rx_tpa or rx_tpa_idx_map.
+
+So does bnxt_free_one_tpa_info(bp, clone) free the running ring's map here?
+
+	kfree(rxr->rx_tpa_idx_map);
+	rxr->rx_tpa_idx_map = NULL;
+
+The live ring's own rx_tpa_idx_map field is not cleared by that, and the
+NAPI path writes through it on every TPA completion, in
+bnxt_alloc_agg_idx():
+
+	__set_bit(idx, map->agg_idx_bmap);
+	map->agg_id_tbl[agg_id] = idx;
+
+with a second kfree() of the same pointer when the source ring is torn down.
+Should clone->rx_tpa and clone->rx_tpa_idx_map be set to NULL alongside
+clone->rx_agg_bmap before allocating?
+
+> @@ -3843,6 +3846,8 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
+>  			bp->max_tpa = MAX_TPA_P5;
+>  	}
+>  
+> +	bp->max_tpa_roundup_size = roundup_pow_of_two(bp->max_tpa);
+> +
+>  	for (i = 0; i < bp->rx_nr_rings; i++) {
+>  		struct bnxt_rx_ring_info *rxr = &bp->rx_ring[i];
+>  
+
+[Severity: Medium]
+
+Can the early return earlier in bnxt_alloc_tpa_info() skip this assignment
+while bp->max_tpa is already set?
+
+	bp->max_tpa = MAX_TPA;
+	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
+		if (!bp->max_tpa_v2)
+			return 0;
+
+On a P5+ device whose firmware does not report max_aggs_supported,
+bp->max_tpa_v2 is 0, so bp->max_tpa_roundup_size keeps its zero value while
+bp->max_tpa is MAX_TPA.
+
+bnxt_alloc_one_tpa_info() is also reachable from bnxt_queue_mem_alloc(),
+which is gated only on the TPA flag and not on max_tpa_v2:
+
+	if (bp->flags & BNXT_FLAG_TPA) {
+		rc = bnxt_alloc_one_tpa_info(bp, clone);
+
+With a count of 0, does kzalloc_objs(struct bnxt_tpa_info, 0) return
+ZERO_SIZE_PTR and pass the following check?
+
+	if (!rxr->rx_tpa)
+		return -ENOMEM;
+
+And in bnxt_alloc_agg_idx(), does the new mask become a no-op when the field
+is 0?
+
+	u16 idx = agg_id & (bp->max_tpa_roundup_size - 1);
+
+That would leave idx as large as 4095 for the test_bit()/__set_bit() calls
+on the 256 bit agg_idx_bmap and for &rxr->rx_tpa[idx] in bnxt_tpa_start().
+
+BNXT_FLAG_TPA can be set in that state because bnxt_set_rx_skb_mode(), which
+bnxt_xdp_set() calls on XDP detach, adds NETIF_F_LRO to hw_features without
+a BNXT_SUPPORTS_TPA() check:
+
+		if (rx > 1) {
+			bp->flags &= ~BNXT_FLAG_NO_AGG_RINGS;
+			bp->dev->hw_features |= NETIF_F_LRO;
+		}
+
+Would setting bp->max_tpa_roundup_size next to every bp->max_tpa assignment
+keep the two in sync?
+
+> @@ -4554,7 +4559,7 @@ static int bnxt_alloc_one_tpa_info_data(struct bnxt *bp,
+>  	u8 *data;
+>  	int i;
+>  
+> -	for (i = 0; i < bp->max_tpa; i++) {
+> +	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+>  		data = __bnxt_alloc_rx_frag(bp, &mapping, rxr,
+>  					    GFP_KERNEL);
+>  		if (!data)
+
+[Severity: High]
+
+This is a pre-existing issue, but this loop now performs up to twice as many
+GFP_KERNEL allocations, and the queue restart caller ignores the -ENOMEM
+that follows the quoted check, in bnxt_queue_mem_alloc():
+
+	if (bp->flags & BNXT_FLAG_TPA)
+		bnxt_alloc_one_tpa_info_data(bp, clone);
+
+	return 0;
+
+The open path checks the same call, so is the missing check here
+intentional?
+
+If the first __bnxt_alloc_rx_frag() fails, the remaining rxr->rx_tpa[i]
+entries keep data == NULL and mapping == 0, and bnxt_queue_start() installs
+the array into the live ring:
+
+	rxr->rx_tpa = clone->rx_tpa;
+	rxr->rx_tpa_idx_map = clone->rx_tpa_idx_map;
+
+Does bnxt_tpa_start() then post a zero DMA address to the device and a NULL
+buffer into the software ring for such an entry?
+
+	prod_rx_buf->data = tpa_info->data;
+	prod_rx_buf->data_ptr = tpa_info->data_ptr;
+
+	mapping = tpa_info->mapping;
+	prod_rx_buf->mapping = mapping;
+	...
+	prod_bd->rx_bd_haddr = cpu_to_le64(mapping);
+
+When that descriptor completes, bnxt_rx_pkt() uses rx_buf->data without a
+NULL check.
+-- 
+This is an AI-generated review.
+
