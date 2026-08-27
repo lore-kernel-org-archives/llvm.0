@@ -1,158 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF4E730FF1D;
-	Thu, 27 Aug 2026 00:26:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C50E30566F;
+	Thu, 27 Aug 2026 05:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787790400; cv=none; b=BQyl8ZgNYk3GC+JvTn5tdQJETUM1E2a0Sgp5oltX2FpcqXUrV5oTq/41YVR6qynL+dWHfmzIaWOZb//ai4WYAztLk75IrXMuDMNLbe8OODPLaYZRs2LGuY9Bs2xaOTAibKGWNjfILfSLZ6LLJe9ErrE+k+vjXyMh9WiCqu2Bamo=
+	t=1787807995; cv=none; b=c9zuYNTshtwLZz6lSfjh1aymy2EGVGTIaQhiWypHlxXkNNii1gcie/qc4CzsHn2LUIoSp3VzIb7Pkm6uBIlMPuB2QC+me+WBc1oHXFUlqPgaP2L3RkROdLconS2PIKG7/GltczYTcbRaTvnDEoY2VEJNuq475GzyypDbThn/uG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787790400; c=relaxed/simple;
-	bh=RWl61psusYhg+K9N28p+tNmCy6tub0XUnozFzHC7HtY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=BW7ZwS6huURicpcTwjIQj1dbW832qJLhoy58lEGuS++pumxa22cD9v1/dgt7B922XcPgsQj5Dg7ruszacB8W8YIp6ZMPpoF3kaGlDcW7pqc8mGYYX5Wun56rIIPXCs+0/8PA+tV9ZT9+iWXoqItY6bsxoupObnD+E4zYGnxfR/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TO35JYKH; arc=none smtp.client-ip=192.198.163.9
+	s=arc-20240116; t=1787807995; c=relaxed/simple;
+	bh=Nn9mn6IsEQjm5FhYLgi3yi5xjYFT6SeAjwlJQ3ttRDI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=XZgadrlEiQ8YdflehHGDcDkN11pu8cGAr3G7XpBdHQnQ1JM1tVPXwvXzFsPjx2xEz+cw1i1N5gAEtjuLAaEUoZcYqnIT9HHiuWnx9+i0eK/GABWvGQ/sUSwXMSO6wN8NJtWLhQyl3KBJF0O4KO3q6IEJqdqrwP607p8ABjY8LT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SgsNzMIF; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TO35JYKH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SgsNzMIF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787790398; x=1819326398;
-  h=date:from:to:cc:subject:message-id;
-  bh=RWl61psusYhg+K9N28p+tNmCy6tub0XUnozFzHC7HtY=;
-  b=TO35JYKHpF5C0/pVJJGYSypICkf89j9fWpJhuRASufHduK90e6DNu3MK
-   /YDnox3gL0gvHaFsbE/XrPtR6zrk9KtFXRByxtCz8T+EByx/jXWLxqGFH
-   qZAtkzCupAsCKVORM9UA4LahwARTJsrWaOMzgtgJKodUEK8fgFqd5PtGn
-   N5xZdqrjTr3w2fUtzyLSZo5SfAiDru3q2bPki9Cs4lcPq6pdhk3eKj7q7
-   Xap/P/NnRVC//veJzW6dvYA2nsiDULE4CHBomGstmHOEhlHwX0xqG0mne
-   3ZntJYbRveH20PHEPfK05wg8H6mjb4o88z+KI1rgeklnBknhR6OOxClGo
+  t=1787807992; x=1819343992;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Nn9mn6IsEQjm5FhYLgi3yi5xjYFT6SeAjwlJQ3ttRDI=;
+  b=SgsNzMIFC8F9fJe9sRAK9WJPqV8gwx2NBkmnM+cSFm9STZqXzuAShspA
+   oCB7RESx4SLOQQ2FeQBfxMvHX0sbL4sP6ySl8ngmQayQABUoa0bZSYv+8
+   qbEHHN9xMWlY/bgyGziJ04+8Z9ImaFAmxr9HYhim7/CDkwZZ5QpxK05HQ
+   HrzJEdiUWDCK3J8FEuk3E6FFRFfWSANnAGK+C83ON5iLt8Z68YjUkTgdq
+   SHu0DcxAKbeX2azMeqNc9jcGVgEHAbJAOq3qmkx07roLPAcLO7fHNubXb
+   gWjtiCGD8OOP8fzSaMAoMM7kTNN5Xw6Rm7zBVLLugEbbShgyNJAPXj2ph
    g==;
-X-CSE-ConnectionGUID: 0VbRInWRQwKcnWsE31AOug==
-X-CSE-MsgGUID: v7xDarW9S+uFhuEBU1/MLA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11887"; a="98954697"
-X-IronPort-AV: E=Sophos;i="6.25,245,1779174000"; 
-   d="scan'208";a="98954697"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2026 17:26:36 -0700
-X-CSE-ConnectionGUID: sw9xYrhlTuO92a8SUfqEHw==
-X-CSE-MsgGUID: DmY5NhrBQI+ldSxsLsNuvw==
+X-CSE-ConnectionGUID: U5gx09F9SISNsVAy3Sfo9g==
+X-CSE-MsgGUID: ccin2ux4S0KfRV1eEpszYA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11887"; a="88326537"
+X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
+   d="scan'208";a="88326537"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2026 22:19:52 -0700
+X-CSE-ConnectionGUID: vQ1BgSkRTQ6h7dApYYWeLA==
+X-CSE-MsgGUID: R989jrn5SI+TV6FCvsqM9Q==
 X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
+   d="scan'208";a="291284412"
 Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 26 Aug 2026 17:26:34 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 26 Aug 2026 22:19:50 -0700
 Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1wzNwu-000000008hX-0FK4;
-	Thu, 27 Aug 2026 00:26:32 +0000
-Date: Thu, 27 Aug 2026 08:26:15 +0800
+	id 1wzSWg-000000008vR-1UDo;
+	Thu, 27 Aug 2026 05:19:46 +0000
+Date: Thu, 27 Aug 2026 13:19:05 +0800
 From: kernel test robot <lkp@intel.com>
-To: Sasha Finkelstein <k@chaosmail.tech>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>, Alyssa Milburn <amilburn@zall.org>
-Subject: [asahilinux:bits/260-spmi-typec 13/13]
- drivers/usb/typec/tipd/spmi.c:176:26: warning: cast to smaller integer type
- 'enum tipd_hw_variant' from 'const void *'
-Message-ID: <202608270849.G0CjUC7w-lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh?= (Schneider Electric)" <thomas.weissschuh@linutronix.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/auxclock-nanosleep 41/41]
+ kernel/time/timekeeping.c:185:36: warning: overflow in expression; result is
+ 568'041'472 with type 'long'
+Message-ID: <202608271347.XtVtsxLQ-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://github.com/AsahiLinux/linux bits/260-spmi-typec
-head:   41abbd4a14cc0f4c24128042de99a658a83e1dde
-commit: 41abbd4a14cc0f4c24128042de99a658a83e1dde [13/13] usb: typec: tipd: Add sn201202x support
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260827/202608270849.G0CjUC7w-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 771bdfdab2d66a4eb85b8ea7673cfa30152718b1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260827/202608270849.G0CjUC7w-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/auxclock-nanosleep
+head:   87c2db12ba44bf5bea44868e32bd8df048af5586
+commit: 87c2db12ba44bf5bea44868e32bd8df048af5586 [41/41] reciprocal
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260827/202608271347.XtVtsxLQ-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project a908adb93db53c0d630232a5bdab8817495c17eb)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260827/202608271347.XtVtsxLQ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608270849.G0CjUC7w-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608271347.XtVtsxLQ-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> drivers/usb/typec/tipd/spmi.c:176:26: warning: cast to smaller integer type 'enum tipd_hw_variant' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     176 |         data = tipd_hw_variants[(enum tipd_hw_variant)match->data];
-         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+>> kernel/time/timekeeping.c:185:36: warning: overflow in expression; result is 568'041'472 with type 'long' [-Winteger-overflow]
+     185 |         this_delta = clamp(this_delta, 0, TK_AUX_MONO_CONV_MAX_DELTA_NS);
+         |                      ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/timekeeping.c:148:45: note: expanded from macro 'TK_AUX_MONO_CONV_MAX_DELTA_NS'
+     148 | #define TK_AUX_MONO_CONV_MAX_DELTA_NS           (400 * NSEC_PER_SEC)
+         |                                                      ^
+   include/linux/minmax.h:206:59: note: expanded from macro 'clamp'
+     206 | #define clamp(val, lo, hi) __careful_clamp(auto, val, lo, hi)
+         |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   include/linux/minmax.h:195:30: note: expanded from macro '__careful_clamp'
+     195 |         __clamp_once(type, val, lo, hi, __UNIQUE_ID(v_), __UNIQUE_ID(l_), __UNIQUE_ID(h_))
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/minmax.h:187:14: note: expanded from macro '__clamp_once'
+     187 |         type uhi = (hi);                                                        \
+         |                     ^~
+   kernel/time/timekeeping.c:234:54: warning: overflow in expression; result is -647'710'720 with type 'long' [-Winteger-overflow]
+     234 |         return ktime_sub(mono_now, mono_conv->mono_base) >= TK_AUX_MONO_CONV_FORCE_UPDATE_DELTA_NS;
+         |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/timekeeping.c:149:53: note: expanded from macro 'TK_AUX_MONO_CONV_FORCE_UPDATE_DELTA_NS'
+     149 | #define TK_AUX_MONO_CONV_FORCE_UPDATE_DELTA_NS  (300 * NSEC_PER_SEC)
+         |                                                  ~~~~^~~~~~~~~~~~~~
+   kernel/time/timekeeping.c:2291:13: warning: variable 'suspend_timing_needed' set but not used [-Wunused-but-set-global]
+    2291 | static bool suspend_timing_needed;
+         |             ^
+   3 warnings generated.
 
 
-vim +176 drivers/usb/typec/tipd/spmi.c
+vim +185 kernel/time/timekeeping.c
 
-   163	
-   164	static int sn201202x_probe(struct spmi_device *device)
-   165	{
-   166		const struct of_device_id *match;
-   167		const struct tipd_data *data;
-   168		struct sn201202x *sn;
-   169		struct tps6598x *tps;
-   170		int irq_select, irq_sleep, irq_wake;
-   171		int ret;
-   172	
-   173		match = of_match_device(sn201202x_of_match, &device->dev);
-   174		if (!match)
-   175			return -EINVAL;
- > 176		data = tipd_hw_variants[(enum tipd_hw_variant)match->data];
-   177	
-   178		sn = devm_kzalloc(&device->dev, data->tps_struct_size, GFP_KERNEL);
-   179		if (!sn)
-   180			return -ENOMEM;
-   181		sn->sdev = device;
-   182		tps = &sn->cd.tps;
+   175	
+   176	static ktime_t ktime_mono_from_to_aux(ktime_t this_now, ktime_t this_base, ktime_t other_base,
+   177					      u32 conv_mult)
+   178	{
+   179		ktime_t this_delta, other_delta;
+   180	
+   181		/* Both operands are guaranteed to be positive, no over- or underflow is possible. */
+   182		this_delta = ktime_sub(this_now, this_base);
    183	
-   184		mutex_init(&tps->lock);
-   185		tps->dev = &device->dev;
-   186		tps->data = data;
-   187	
-   188		tps->irq = of_irq_get_byname(device->dev.of_node, "irq");
-   189		if (tps->irq < 0)
-   190			return tps->irq;
-   191		irq_select = of_irq_get_byname(device->dev.of_node, "select");
-   192		if (irq_select < 0)
-   193			return irq_select;
-   194		irq_sleep = of_irq_get_byname(device->dev.of_node, "sleep");
-   195		if (irq_sleep < 0)
-   196			return irq_sleep;
-   197		irq_wake = of_irq_get_byname(device->dev.of_node, "wake");
-   198		if (irq_wake < 0)
-   199			return irq_wake;
-   200	
-   201		init_completion(&sn->select_completion);
-   202		init_completion(&sn->sleep_completion);
-   203		init_completion(&sn->wake_completion);
-   204	
-   205		ret = devm_request_irq(&device->dev, irq_select, sn201202x_irq,
-   206				       0, NULL, &sn->select_completion);
-   207		if (ret)
-   208			return ret;
-   209		ret = devm_request_irq(&device->dev, irq_sleep, sn201202x_irq,
-   210				       0, NULL, &sn->sleep_completion);
-   211		if (ret)
-   212			return ret;
-   213		ret = devm_request_irq(&device->dev, irq_wake, sn201202x_irq,
-   214				       0, NULL, &sn->wake_completion);
-   215		if (ret)
-   216			return ret;
-   217	
-   218		spmi_device_set_drvdata(device, tps);
-   219		tps->regmap = devm_regmap_init_sn201202x(device, &tps6598x_regmap_config);
-   220		if (IS_ERR(tps->regmap))
-   221			return PTR_ERR(tps->regmap);
-   222	
-   223		ret = spmi_command_wakeup(device);
-   224		if (ret)
-   225			return ret;
-   226		if (!wait_for_completion_timeout(&sn->wake_completion, msecs_to_jiffies(100)))
-   227			return -ETIMEDOUT;
-   228	
-   229		ret = tipd_init(tps);
-   230		if (ret)
-   231			spmi_command_sleep(device);
-   232		return ret;
-   233	}
-   234	
+   184		/* Only values in this range can be converted without overflow. */
+ > 185		this_delta = clamp(this_delta, 0, TK_AUX_MONO_CONV_MAX_DELTA_NS);
+   186	
+   187		other_delta = (this_delta * conv_mult) >> TK_AUX_MONO_CONV_SHIFT;
+   188	
+   189		/*
+   190		 * Underflow is impossible, as other_base is always positive.
+   191		 * Overflow is impossible, as other_base will never become big enough.
+   192		 */
+   193		return ktime_add(other_base, other_delta);
+   194	}
+   195	
 
 --
 0-DAY CI Kernel Test Service
