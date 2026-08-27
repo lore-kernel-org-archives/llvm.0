@@ -1,306 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9830E3812C2;
-	Thu, 27 Aug 2026 16:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787849599; cv=none; b=lVL3SuVqG8Ed59LyyCEi5jOWxrQrpn5QWUUX3QPbSCjEbWRbUSLoK+HOZuycX0dKF+Mb1hKF2rGPF5Bd6bwIDwVtwhRDFGNUM/reE5jTxiaWdnsc0ABdagyIrVbuYBZoTw/yR+WXzF4kiCBDLfUM25ge3wrHSZ/cHejPQv+Aad4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787849599; c=relaxed/simple;
-	bh=rq9Ukvt/azRhpeKXUP8P66e33v3ttYflWfxRwCV9jkI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lf9/+qTzT+wBOwotr8IUaFbtoGSaIbRlX+o/wisORkgeTu4n6ulStbLdPo7x/eQUbxQqaAuRaBLF1Jn9o742neurQFrblm2afH9ahlCAQ8zV9hF/LDCjbLJ90AJByZlKlbTHePXfTvNnjbZNfGsKjN9oecTl+KBTvygdzutqSm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CnZ0uXg7; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA6035E1D9;
+	Thu, 27 Aug 2026 16:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787849755; cv=pass; b=rCFQ6RnAlcEGT4FqQgUFYPJZe5OihedCh7nyY8RxxP4AKI+P5qlzxjpsRuUMlPYHx/AG+eYdtyeKVXARPu6P0VI/ujnLeKp1YPhlcGgdHSZsXsyOJIrN76GonRQ7nUWHbgRv4keVHZHSl5Gr8DrWWpq5eEzgVI1S1XkRnT5sHuo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787849755; c=relaxed/simple;
+	bh=g085QIuW/RPpi7XOzVHapGAb7y2Bdr+tYpuspc8Gg0c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BHiYnNiWmWeHOVf3OlDFu6zdEWw7aXTuVV+R9x9j1N/+kNTVLRFAEjXIISYNCXGYrkVBNHWleE3XnBameIPjZ5OIj8A/vHfGdgvYc/0IsVgrAwFjC/Lor6ahVQIiSSc24MKhkLMWJ2wkk/ryJzB3l4J8CIuRfjIrVduLJY+GiO4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=gKMIzWU2; arc=pass smtp.client-ip=136.143.188.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CnZ0uXg7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787849597; x=1819385597;
-  h=date:from:to:cc:subject:message-id;
-  bh=rq9Ukvt/azRhpeKXUP8P66e33v3ttYflWfxRwCV9jkI=;
-  b=CnZ0uXg7JNfxuYFRgdkLKvaxtYu+q3izoUUdRcrXEkpa/MaIJt43ra19
-   JHw0xF0prjv3BTPE8z/FHTiGPaR7FQISLZqxIfcpWJUQeCJ4qvqFXD69d
-   ScnKCvbflaA+vcfFIVRivMrPqYSxnS8tiOkG6/C8Dyq4dGenvUpFb7dwi
-   Co9qEF6TZaCIrJTbG4WCpy3BY+VkpLm1j4SffTihgOoKfEqtohDZQxtUi
-   HCvipbI3BoirQ/zoP4YT8ZVgi7L5/yqhp25MrGyeR6iPNdWhRiCrKbuik
-   QdSBNcBxdITjjj/FpN2II/QAMXkl1fUw8McFoooyIDD4u+Djh8JGCyqlj
-   A==;
-X-CSE-ConnectionGUID: DpLQJiHxSyi8y4oyBNH2Kg==
-X-CSE-MsgGUID: 87zE8DAkQ0Gpc7hdzu3kfg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11888"; a="92169784"
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="92169784"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 09:53:16 -0700
-X-CSE-ConnectionGUID: f+/mGYyFSfCeAx2mvCkImw==
-X-CSE-MsgGUID: S1pffDG3T/m3vkeEt3190A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="292745808"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 27 Aug 2026 09:53:13 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wzdLj-000000009nl-139Y;
-	Thu, 27 Aug 2026 16:53:11 +0000
-Date: Fri, 28 Aug 2026 00:52:57 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sven Peter <sven@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/270-thunderbolt 19/19]
- drivers/thunderbolt/apple.c:701:27: error: call to undeclared function
- 'typec_thunderbolt_switch_get_drvdata'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202608280007.pYUKH8DA-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="gKMIzWU2"
+ARC-Seal: i=1; a=rsa-sha256; t=1787849735; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=WXMaM00TBSzjtx2SRRpFTDPC5kS6/EERPQ8V0QWwMnqgHBLc4YdDN6tEYOJv7AO1vcs/i/F3ZnEx+mlylgkOnswL4rLjOVcbgSx5igiNfryaxozBeEBKDfl9jmG4s/3HwymOWvzcrq1tIyiDQQSaH4J9gfTIzxE12exrFpUIuT8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1787849735; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=g085QIuW/RPpi7XOzVHapGAb7y2Bdr+tYpuspc8Gg0c=; 
+	b=JpXDmv/OMBvJJorvex7b/PsZvaW5VuzYaRv5oZnN0KYYk5qdW4PEsh7DOJQUtzw3KkQCX0bCdUf8+ywkqe3zaCrFxnP5o48gaTMZYnCuWo023nidVr4ZNGgZ4hH/rikSkpB0JVgz3wTPHm/FK+fF13wHiMlcp8YFonTkOmgxggY=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=yoavmoshe.com;
+	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
+	dmarc=pass header.from=<linux@yoavmoshe.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787849735;
+	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=g085QIuW/RPpi7XOzVHapGAb7y2Bdr+tYpuspc8Gg0c=;
+	b=gKMIzWU2Ms3HurNaOBG3rlIct4B6zJx3rifKMzpo6SidXA0RMSLyjcssVz9uiT5t
+	geAvVLeaZ0PzsiPRZaow9/6wtbobuFDC3bKP/uZp8XzvsDtqssw1zE5+oFLBlE0X/rq
+	jt8tVy34MVFQXQd839fKU/fYm1IzKop61/JtgEbM=
+Received: by mx.zohomail.com with SMTPS id 1787849730914735.4941175159562;
+	Thu, 27 Aug 2026 09:55:30 -0700 (PDT)
+Message-ID: <ca86be7a-7439-49cb-9deb-8d565ca0b1dd@yoavmoshe.com>
+Date: Thu, 27 Aug 2026 18:55:25 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] ARM: imx: Fix suspend/resume crash with Clang CFI
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Yo'av Moshe <linux@yoavmoshe.com>
+Cc: Sami Tolvanen <samitolvanen@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+ stable@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260718111340.159896-1-linux@yoavmoshe.com>
+ <3046e60d-509f-471f-bd15-3ce78c87500b@yoavmoshe.com>
+ <20260721180950.GA3684684@ax162>
+ <180001f5-bddd-4e58-8442-f7ef3c979500@yoavmoshe.com>
+ <CABCJKufhvTxmVm8y7xr4RWWKsoZk0h8UGBnem+F5fknnimaqPA@mail.gmail.com>
+ <7f273a08-b29c-4e15-b340-898b251efe57@yoavmoshe.com>
+ <CABCJKud+GsBVv+XMTsi_4QAaTHo7jXD2Hyvi9wqKd7x3i2xyAg@mail.gmail.com>
+ <415ffa24-a30b-43b2-aa6a-a1cde3bd4ef0@yoavmoshe.com>
+ <CABCJKud9B8vB-J8f0HLHw6EgEKVWzy+Q1PrNxpO_6yCGtEyi8A@mail.gmail.com>
+ <12a46993-82a5-4109-87fa-61b8fcf764aa@yoavmoshe.com>
+ <CABCJKufoQ0fX797M01t7CkTgMEwNCELY1=ptZsxr=jWOR-KAyA@mail.gmail.com>
+ <CAKwvOdnaOy-nyZ=8oLw4N-_hA9JZVdP2BhR8cweCAOhsy4VG6w@mail.gmail.com>
+ <91cb0f21-e78a-4931-b123-937c6a01592c@yoavmoshe.com>
+ <CAKwvOdk-JmqjhZWBiLjXTxKhEV+T3BAB6An+3Ara8oybmhAMpA@mail.gmail.com>
+ <da6bffba-6c44-4ee7-a1a8-842f9e6de408@yoavmoshe.com>
+ <CAKwvOdmT=Q+etTTJUna4ZAg1=eXwaT9cSDy=U0s15UT-3TOu1Q@mail.gmail.com>
+Content-Language: en-GB, sv-SE
+From: Yo'av Moshe <linux@yoavmoshe.com>
+In-Reply-To: <CAKwvOdmT=Q+etTTJUna4ZAg1=eXwaT9cSDy=U0s15UT-3TOu1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-tree:   https://github.com/AsahiLinux/linux bits/270-thunderbolt
-head:   bcb818cd40b22610c3356572de22d51ecc248dbe
-commit: bcb818cd40b22610c3356572de22d51ecc248dbe [19/19] thunderbolt: Add Apple Silicon support
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260828/202608280007.pYUKH8DA-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260828/202608280007.pYUKH8DA-lkp@intel.com/reproduce)
+On 2026-08-25 7:33 PM, Nick Desaulniers wrote:
+> I do think it's better, but probably still needs revision.
+All three suggestions worked great. cfi_type fits exactly in the
+struct's tail padding so I removed the ±8 arithmetic,
+cfi_get_func_hash() works as you suggested, and I've switched to
+SYM_TYPED_FUNC_START/SYM_FUNC_END. I only kept a small manual alignment
+pad before the macro, since it aligns the type hash but not the function
+entry itself — I'll include details in the v4 notes.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608280007.pYUKH8DA-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/thunderbolt/apple.c:699:22: warning: declaration of 'struct typec_thunderbolt_switch_data' will not be visible outside of this function [-Wvisibility]
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
->> drivers/thunderbolt/apple.c:701:27: error: call to undeclared function 'typec_thunderbolt_switch_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     701 |         struct apple_cio *acio = typec_thunderbolt_switch_get_drvdata(sw);
-         |                                  ^
-   drivers/thunderbolt/apple.c:701:27: note: did you mean 'typec_switch_get_drvdata'?
-   include/linux/usb/typec_mux.h:41:7: note: 'typec_switch_get_drvdata' declared here
-      41 | void *typec_switch_get_drvdata(struct typec_switch_dev *sw);
-         |       ^
->> drivers/thunderbolt/apple.c:701:20: error: incompatible integer to pointer conversion initializing 'struct apple_cio *' with an expression of type 'int' [-Wint-conversion]
-     701 |         struct apple_cio *acio = typec_thunderbolt_switch_get_drvdata(sw);
-         |                           ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/thunderbolt/apple.c:705:50: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     705 |         dev_dbg(acio->dev, "set cable state: %d\n", data->state);
-         |                                                     ~~~~^
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
-     285 |                            dev, fmt, ##__VA_ARGS__)
-         |                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
-   drivers/thunderbolt/apple.c:707:14: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     707 |         switch (data->state) {
-         |                 ~~~~^
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
->> drivers/thunderbolt/apple.c:708:7: error: use of undeclared identifier 'TYPEC_THUNDERBOLT_SWITCH_OFF'
-     708 |         case TYPEC_THUNDERBOLT_SWITCH_OFF:
-         |              ^
->> drivers/thunderbolt/apple.c:711:7: error: use of undeclared identifier 'TYPEC_THUNDERBOLT_SWITCH_TBT'
-     711 |         case TYPEC_THUNDERBOLT_SWITCH_TBT:
-         |              ^
-   drivers/thunderbolt/apple.c:714:11: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     714 |                 if (data->tbt.cable_mode & TBT_CABLE_ACTIVE_PASSIVE) {
-         |                     ~~~~^
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
-   drivers/thunderbolt/apple.c:716:14: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     716 |                         if (!(data->tbt.cable_mode & TBT_CABLE_LINK_TRAINING))
-         |                               ~~~~^
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
-   drivers/thunderbolt/apple.c:720:23: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     720 |                 if (TBT_ADAPTER(data->tbt.device_mode))
-         |                                 ~~~~^
-   include/linux/usb/typec_tbt.h:29:48: note: expanded from macro 'TBT_ADAPTER'
-      29 | #define TBT_ADAPTER(_vdo_)              FIELD_GET(BIT(16), _vdo_)
-         |                                                            ^~~~~
-   include/linux/bitfield.h:177:31: note: expanded from macro 'FIELD_GET'
-     177 |                 __BF_FIELD_CHECK_REG(_mask, _reg, "FIELD_GET: ");       \
-         |                                             ^~~~
-   include/linux/bitfield.h:80:24: note: expanded from macro '__BF_FIELD_CHECK_REG'
-      80 |                          __bf_cast_unsigned(reg, ~0ull),                \
-         |                                             ^~~
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
-     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
-     690 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
-     682 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
-   drivers/thunderbolt/apple.c:720:23: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     720 |                 if (TBT_ADAPTER(data->tbt.device_mode))
-         |                                 ~~~~^
-   include/linux/usb/typec_tbt.h:29:48: note: expanded from macro 'TBT_ADAPTER'
-      29 | #define TBT_ADAPTER(_vdo_)              FIELD_GET(BIT(16), _vdo_)
-         |                                                            ^~~~~
-   include/linux/bitfield.h:177:31: note: expanded from macro 'FIELD_GET'
-     177 |                 __BF_FIELD_CHECK_REG(_mask, _reg, "FIELD_GET: ");       \
-         |                                             ^~~~
-   include/linux/bitfield.h:80:24: note: expanded from macro '__BF_FIELD_CHECK_REG'
-      80 |                          __bf_cast_unsigned(reg, ~0ull),                \
-         |                                             ^~~
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
-     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
-     690 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
-     682 |                 if (!(condition))                                       \
-         |                       ^~~~~~~~~
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
-   drivers/thunderbolt/apple.c:720:23: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     720 |                 if (TBT_ADAPTER(data->tbt.device_mode))
-         |                                 ~~~~^
-   include/linux/usb/typec_tbt.h:29:48: note: expanded from macro 'TBT_ADAPTER'
-      29 | #define TBT_ADAPTER(_vdo_)              FIELD_GET(BIT(16), _vdo_)
-         |                                                            ^~~~~
-   include/linux/bitfield.h:178:22: note: expanded from macro 'FIELD_GET'
-     178 |                 __FIELD_GET(_mask, _reg, "FIELD_GET: ");                \
-         |                                    ^~~~
-   include/linux/bitfield.h:98:20: note: expanded from macro '__FIELD_GET'
-      98 |                 (typeof(mask))(((reg) & (mask)) >> __bf_shf(mask));     \
-         |                                  ^~~
-   drivers/thunderbolt/apple.c:699:22: note: forward declaration of 'struct typec_thunderbolt_switch_data'
-     699 |                                     const struct typec_thunderbolt_switch_data *data)
-         |                                                  ^
-   drivers/thunderbolt/apple.c:722:27: error: incomplete definition of type 'const struct typec_thunderbolt_switch_data'
-     722 |                 if (TBT_CABLE_SPEED(data->tbt.cable_mode) == TBT_CABLE_10_AND_20GBPS)
-         |                                     ~~~~^
-   include/linux/usb/typec_tbt.h:39:60: note: expanded from macro 'TBT_CABLE_SPEED'
-      39 | #define TBT_CABLE_SPEED(_vdo_)          FIELD_GET(GENMASK(18, 16), _vdo_)
-         |                                                                    ^~~~~
-   include/linux/bitfield.h:177:31: note: expanded from macro 'FIELD_GET'
-     177 |                 __BF_FIELD_CHECK_REG(_mask, _reg, "FIELD_GET: ");       \
-         |                                             ^~~~
-   include/linux/bitfield.h:80:24: note: expanded from macro '__BF_FIELD_CHECK_REG'
-      80 |                          __bf_cast_unsigned(reg, ~0ull),                \
-         |                                             ^~~
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
-     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                             ^~~~~~~~~
-   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
-     690 |         __compiletime_assert(condition, msg, prefix, suffix)
-         |                              ^~~~~~~~~
-   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
-     682 |                 if (!(condition))                                       \
-
-
-vim +/typec_thunderbolt_switch_get_drvdata +701 drivers/thunderbolt/apple.c
-
-   697	
-   698	static int apple_cio_tbt_switch_set(struct typec_thunderbolt_switch_dev *sw,
- > 699					    const struct typec_thunderbolt_switch_data *data)
-   700	{
- > 701		struct apple_cio *acio = typec_thunderbolt_switch_get_drvdata(sw);
-   702	
-   703		guard(mutex)(&acio->lock);
-   704	
- > 705		dev_dbg(acio->dev, "set cable state: %d\n", data->state);
-   706	
-   707		switch (data->state) {
- > 708		case TYPEC_THUNDERBOLT_SWITCH_OFF:
-   709			acio->target_cable_info = 0;
-   710			break;
- > 711		case TYPEC_THUNDERBOLT_SWITCH_TBT:
-   712			acio->target_cable_info = TB_VSE_CAP_APPLE_CABLE_INFO_PRESENT;
-   713			acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_TBT2_3;
-   714			if (data->tbt.cable_mode & TBT_CABLE_ACTIVE_PASSIVE) {
-   715				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_ACTIVE_CABLE;
-   716				if (!(data->tbt.cable_mode & TBT_CABLE_LINK_TRAINING))
-   717					acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_BIDIR_LSRX;
-   718			}
-   719			/* bit 16 of the Device Discover Mode VDO is 1 for a legacy TBT2 adapter */
-   720			if (TBT_ADAPTER(data->tbt.device_mode))
-   721				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_LEGACY_ADAPTER;
-   722			if (TBT_CABLE_SPEED(data->tbt.cable_mode) == TBT_CABLE_10_AND_20GBPS)
-   723				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_20_GBPS;
-   724			if (data->orientation == TYPEC_ORIENTATION_REVERSE)
-   725				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_ORIENTATION_REVERSE;
-   726			dev_dbg(acio->dev,
-   727				"TBT cable: cable_mode 0x%x, device_mode 0x%x, enter_vdo 0x%x, orientation %d -> cable info 0x%x\n",
-   728				data->tbt.cable_mode, data->tbt.device_mode,
-   729				data->tbt.enter_vdo, data->orientation,
-   730				acio->target_cable_info);
-   731			break;
-   732		case TYPEC_THUNDERBOLT_SWITCH_USB4:
-   733			acio->target_cable_info = TB_VSE_CAP_APPLE_CABLE_INFO_PRESENT;
-   734			if (FIELD_GET(EUDO_CABLE_TYPE_MASK, data->usb4.eudo) != EUDO_CABLE_TYPE_PASSIVE)
-   735				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_ACTIVE_CABLE;
-   736			if (FIELD_GET(EUDO_CABLE_SPEED_MASK, data->usb4.eudo) == EUDO_CABLE_SPEED_USB4_GEN3)
-   737				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_20_GBPS;
-   738			if (data->orientation == TYPEC_ORIENTATION_REVERSE)
-   739				acio->target_cable_info |= TB_VSE_CAP_APPLE_CABLE_INFO_ORIENTATION_REVERSE;
-   740			dev_dbg(acio->dev, "USB4 cable: eudo 0x%x, orientation %d -> cable info 0x%x\n",
-   741				data->usb4.eudo, data->orientation, acio->target_cable_info);
-   742			break;
-   743		}
-   744	
-   745		if (acio->target_cable_info == acio->current_cable_info)
-   746			return 0;
-   747	
-   748		/*
-   749		 * Transitions between different cables without a shutdown inbetween are invalid and can
-   750		 * only happen when there's a bug inside the Type-C PD driver. If we tried such a
-   751		 * transition, ACIO would crash and then trigger some watchdog that would reset the entire
-   752		 * SoC a few seconds later. Shutting down instead only makes the connected device not work
-   753		 * but we should be able to recover once the next cable is plugged in.
-   754		 */
-   755		if (acio->current_cable_info && acio->target_cable_info) {
-   756			dev_err(acio->dev,
-   757				"Invalid cable transition from 0x%x to 0x%x, shutting down instead\n",
-   758				acio->current_cable_info, acio->target_cable_info);
-   759			acio->target_cable_info = 0;
-   760		}
-   761	
-   762		/*
-   763		 * Bring up or power down the ACIO complex
-   764		 * current_cable_info will be updated in the start/stop functions
-   765		 */
-   766		if (acio->target_cable_info)
-   767			return apple_cio_start(acio);
-   768	
-   769		apple_cio_stop(acio);
-   770		return 0;
-   771	}
-   772	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yo'av
