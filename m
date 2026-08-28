@@ -1,386 +1,292 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 652843CC33F;
-	Fri, 28 Aug 2026 07:07:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94D33DC878
+	for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 07:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787900824; cv=none; b=ZhfQu5ljSYHBCJWmO/Tkg1lX0Vn76Nk7SE8WlwnVcvYNb8t/HJp6XlXjNMGpUn1GVSk+bWdRP0sgoCwriW8HrylbkZ2OjJX2JEbi/cKsoZucnjbt8fSSeB1U1YKxw4pBUio/8Dzcg11f5CFjRM3Mwft/EvD/irbIRjvU6fm7Jg8=
+	t=1787902899; cv=none; b=s4e+lEMGAr8ug1zlvbaNTu9reTFidOmhRyUspU3G4vCIUWmJMxs2IhIwud9KJR8pVWwu6XLADeIBKpAl1N4weP65b6a/1YOSEDNxQPGvgqz9VAeQAIcvqgbxrz1XoJgq0hJ4cEVzdAce9WV/euDYItvWjSuy0Xx14UB/CCniS/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787900824; c=relaxed/simple;
-	bh=BN/+G4zWK2RRQMtMrHrssXG5xrKCM18lgYGzEQApxZw=;
-	h=Date:From:Cc:Subject:Message-ID; b=J4xGa7hcnfiANjQ0cR1A3GGzR/lehS4iRNTr6P09pm1rMsLHj+hTqkxh8tDjaZvbNO2cCywjbrK6Y35v5rrBB2BUit786p+GOnR+GStJB1vV8s96fCDFgddOrbT4zG1emz1mzdcCqeTv7uFX6uLzuEGvEoEEXKpnEAmCQ8P7x50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jyBEtrL9; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jyBEtrL9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787900822; x=1819436822;
-  h=date:from:cc:subject:message-id;
-  bh=BN/+G4zWK2RRQMtMrHrssXG5xrKCM18lgYGzEQApxZw=;
-  b=jyBEtrL9U/KTO9yspaGuRrlKAfymnPsO3U48fQGJFqc2zpPpWC14qEs4
-   KLHbGvWLQGgzL6JZfuFz/ALwzfxKOyHqLpPM+1f/IUFESseRsWKwA8u3I
-   PNgIP93Sa277KD0cbagNcI6Qntifu3So0MmYgPZYa3drbTdasPutcQB5X
-   VgksS8m3lelucnhxgGB6Uc6Z6QFCSIuqN4K/B9c5E5S/49gMIBOEA3geS
-   x8nHBP+O/PhWk9MiqKkoNNn5A7U/yXDnkdcj7gir+7KFPgCbWFUMPpOO1
-   fzI6zpwqwNUpdHJAieUL1/lil4pWXXxq/o8DyUcG3xba7OhPvzLKJ48Xe
-   A==;
-X-CSE-ConnectionGUID: uagyHKFXSj+bw/ShJtkOkg==
-X-CSE-MsgGUID: zlXRC59sQn2ZaP83tAj1ng==
-X-IronPort-AV: E=McAfee;i="6800,10657,11888"; a="99757897"
-X-IronPort-AV: E=Sophos;i="6.25,248,1779174000"; 
-   d="scan'208";a="99757897"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2026 00:06:45 -0700
-X-CSE-ConnectionGUID: l9L4QjG3TguXji0Sk2dG0w==
-X-CSE-MsgGUID: 0YIa+yO2RrujIDJvxIGFBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,248,1779174000"; 
-   d="scan'208";a="291576984"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 28 Aug 2026 00:06:42 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wzqff-00000000AXx-3lIr;
-	Fri, 28 Aug 2026 07:06:39 +0000
-Date: Fri, 28 Aug 2026 15:06:09 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [android-common:android16-6.12 0/3]
- include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct
- rq_list'
-Message-ID: <202608281500.eLpSJP8L-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	s=arc-20240116; t=1787902899; c=relaxed/simple;
+	bh=GWwww3D6a51wjxzolgNq0EOLHOiBFoQ56yzw2+b35xQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mjfU5LW48HYrD/vHf1XqkJ8walRs1Zv3ftPvi+Rseeqk3VVPJ3ExQJZPGvoCuOjWqq6sGEksHl/kNn+OhcUUqf3+xBX+U62uhIMvGxWlVhmExLWjOBoEPclKWbtaYBWQ1BDpW+7LviKN6a9vUf17U4+h5LOzHFAgMYd1KNg8N1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hWVg456ZTzKHMWS
+	for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 15:40:48 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 32B6240AC1
+	for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 15:41:32 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgBXwIeqO5FqWfrvDw--.119S2;
+	Fri, 28 Aug 2026 15:41:31 +0800 (CST)
+Message-ID: <fc22d702-9c53-415d-b3f2-8606daa2d656@huaweicloud.com>
+Date: Fri, 28 Aug 2026 15:41:30 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-TO: cros-kernel-buildreports@googlegroups.com
-
-Hi Christoph,
-
-FYI, the error/warning still remains.
-
-tree:   https://android.googlesource.com/kernel/common android16-6.12
-head:   50e8de680435dfb61c1efbe10901c2cf9d97433a
-commit: 24f685a927c5a41df01d66069493bee40a5fb60e [0/3] UPSTREAM: block: add a rq_list type
-config: x86_64-randconfig-004-20260828 (https://download.01.org/0day-ci/archive/20260828/202608281500.eLpSJP8L-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260828/202608281500.eLpSJP8L-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608281500.eLpSJP8L-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   make[3]: *** [rust/Makefile:443: rust/core.o] Error 1 shuffle=540017786
-   In file included from <built-in>:3:
-   In file included from include/linux/compiler_types.h:171:
-   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
-   28 | #define __SANITIZE_ADDRESS__
-   |         ^
-   <built-in>:353:9: note: previous definition is here
-   353 | #define __SANITIZE_ADDRESS__ 1
-   |         ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   In file included from include/linux/blk-mq.h:5:
->> include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                        ^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
->> include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   239 |         return rl->head == NULL;
-   |                ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
->> include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   244 |         rl->head = NULL;
-   |         ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   245 |         rl->tail = NULL;
-   |         ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   251 |         if (rl->tail)
-   |             ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   252 |                 rl->tail->rq_next = rq;
-   |                 ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   254 |                 rl->head = rq;
-   |                 ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   255 |         rl->tail = rq;
-   |         ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   260 |         rq->rq_next = rl->head;
-   |                       ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   261 |         rl->head = rq;
-   |         ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   262 |         if (!rl->tail)
-   |              ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   263 |                 rl->tail = rq;
-   |                 ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   268 |         struct request *rq = rl->head;
-   |                              ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   271 |                 rl->head = rl->head->rq_next;
-   |                 ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   271 |                 rl->head = rl->head->rq_next;
-   |                            ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   272 |                 if (!rl->head)
-   |                      ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   273 |                         rl->tail = NULL;
-   |                         ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:11:
-   In file included from rust/helpers/blk.c:3:
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
-   282 |         return rl->head;
-   |                ~~^
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   1699 |         struct rq_list req_list;
-   |                ^
-   In file included from rust/helpers/helpers.c:21:
-   In file included from rust/helpers/mman.c:3:
-   include/linux/mman.h:159:9: warning: division by zero is undefined [-Wdivision-by-zero]
-   159 |                _calc_vm_trans(flags, MAP_SYNC,       VM_SYNC      ) |
-   |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
-   137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-   |                     ^ ~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:160:9: warning: division by zero is undefined [-Wdivision-by-zero]
-   160 |                _calc_vm_trans(flags, MAP_STACK,      VM_NOHUGEPAGE) |
-   |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/mman.h:137:21: note: expanded from macro '_calc_vm_trans'
-   137 |    : ((x) & (bit1)) / ((bit1) / (bit2))))
-   |                     ^ ~~~~~~~~~~~~~~~~~
-   3 warnings and 18 errors generated.
-   make[3]: *** [rust/Makefile:431: rust/helpers/helpers.o] Error 1 shuffle=540017786
->> include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
->> include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
->> include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
->> Unable to generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
->> include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
->> include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
---
-   make[3]: *** [rust/Makefile:332: rust/bindings/bindings_helpers_generated.rs] Error 1 shuffle=540017786
-   make[3]: *** Deleting file 'rust/bindings/bindings_helpers_generated.rs'
->> include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
->> include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
->> include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
-   include/linux/blkdev.h:1699:9: note: forward declaration of 'struct rq_list'
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
-   clang diag: include/linux/mman.h:137:21: warning: division by zero is undefined [-Wdivision-by-zero]
->> Unable to generate bindings: clang diagnosed error: include/linux/blkdev.h:1699:17: error: field has incomplete type 'struct rq_list'
->> include/linux/blk-mq.h:239:11: error: incomplete definition of type 'const struct rq_list'
->> include/linux/blk-mq.h:244:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:245:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:251:8: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:252:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:254:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:255:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:260:18: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:261:4: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:262:9: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:263:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:268:25: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:5: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:271:16: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:272:10: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:273:6: error: incomplete definition of type 'struct rq_list'
-   include/linux/blk-mq.h:282:11: error: incomplete definition of type 'struct rq_list'
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 20/23] perf annotate-arm64: Support 'add' instruction
+ tracking
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: Shuai Xue <xueshuai@linux.alibaba.com>, james.clark@linaro.org,
+ Li Huafei <lihuafei1@huawei.com>, Peter Zijlstra <peterz@infradead.org>,
+ leo.yan@linux.dev, Ian Rogers <irogers@google.com>,
+ Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260808122400.2961238-1-wutengda@huaweicloud.com>
+ <20260808122400.2961238-21-wutengda@huaweicloud.com>
+ <89e66d40-5f9f-4147-beda-00623797cd04@linux.alibaba.com>
+ <b5e4ef0d-cb11-45de-987a-226340b576ed@huaweicloud.com>
+ <aoy-eAVaW_TsdymE@google.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <aoy-eAVaW_TsdymE@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:Syh0CgBXwIeqO5FqWfrvDw--.119S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3GF4rtrWUKFyUGw18GF4DArb_yoW3Kry5pr
+	4kGFWUGrW3JrnYqr1agw4UJF9akr1xJ3WUur1rX3WayFs2yr12gF1jqryq9F18Jr4rJr1U
+	Jr1jqrnxZr1UArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
 
-vim +1699 include/linux/blkdev.h
 
-  1697	
-  1698	struct io_comp_batch {
-> 1699		struct rq_list req_list;
-  1700		bool need_ts;
-  1701		void (*complete)(struct io_comp_batch *);
-  1702	};
-  1703	
+On 2026/8/25 5:58, Namhyung Kim wrote:
+> On Wed, Aug 19, 2026 at 11:04:36AM +0800, Tengda Wu wrote:
+>>
+>>
+>> On 2026/8/11 16:45, Shuai Xue wrote:
+>>>
+>>>
+>>> On 8/8/26 8:23 PM, Tengda Wu wrote:
+>>>> Extend update_insn_state() for arm64 to track 'add' instructions for
+>>>> structure member address calculation, which commonly appear as:
+>>>>
+>>>>    add  dreg, base, #offset
+>>>>    add  dreg, base, reg2     (reg2 holds a constant)
+>>>>
+>>>> Unlike x86, the arm64 'add' instruction has an extra base register among
+>>>> its source operands. Therefore, in terms of propagating the data type,
+>>>> it is essentially performing a 'mov', except that before the 'mov', it
+>>>> first needs to be updated by adding the offset or reg2.
+>>>>
+>>>> A real-world example is shown below:
+>>>>
+>>>>    ffff80008001c9a8 <flush_ptrace_hw_breakpoint>:
+>>>>    ffff80008001c9c4:  add  x19, x0, #0xeb8   // x0 (task_struct*) + 0xeb8 -> x19
+>>>> * ffff80008001c9d0:  ldr  x0, [x19]
+>>>>
+>>>> Before this commit, the type flow broke at the 'add' instruction,
+>>>> leaving the subsequent load with no type information:
+>>>>
+>>>>    chk [28] reg19 offset=0 ok=0 kind=0 cfa : no type information
+>>>>    final result: no type information
+>>>>
+>>>> After this commit, the tracker correctly follows the member address
+>>>> calculation:
+>>>>
+>>>>    var [0] reg0 offset 0 type='struct task_struct*'
+>>>>    add [1c] address of 0xeb8(reg0) -> reg19 type='struct task_struct*'
+>>>>    chk [28] reg19 offset=0 ok=1 kind=1 (struct task_struct*) : Good!
+>>>>    found by insn track: 0(reg19) type-offset=0xeb8
+>>>>    final result: type='struct task_struct'
+>>>>
+>>>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>>>> ---
+>>>>   .../perf/util/annotate-arch/annotate-arm64.c  | 87 ++++++++++++++++++-
+>>>>   1 file changed, 85 insertions(+), 2 deletions(-)
+>>>>
+>>>> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+>>>> index 7b780bad8c07..eaeb4433fc3a 100644
+>>>> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
+>>>> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+>>>> @@ -688,6 +688,87 @@ static void update_mov_insn_state(struct type_state *state,
+>>>>       pr_debug_type_name(&tsr->type, tsr->kind);
+>>>>   }
+>>>>   +static void update_add_insn_state(struct type_state *state,
+>>>> +                  struct disasm_line *dl,
+>>>> +                  struct annotated_op_loc *src,
+>>>> +                  struct annotated_op_loc *dst)
+>>>> +{
+>>>> +    struct type_state_reg *tsr;
+>>>> +    struct type_state_reg src_tsr;
+>>>> +    u32 insn_offset = dl->al.offset;
+>>>> +    int sreg = src->reg1;
+>>>> +    int dreg = dst->reg1;
+>>>> +    u64 imm_value;
+>>>> +
+>>>> +    if (!has_reg_type(state, dreg))
+>>>> +        return;
+>>>> +
+>>>> +    tsr = &state->regs[dreg];
+>>>> +    tsr->copied_from = -1;
+>>>> +
+>>>> +retry:
+>>>> +    if (!has_reg_type(state, sreg) || !state->regs[sreg].ok) {
+>>>> +        invalidate_reg_state(tsr);
+>>>> +        return;
+>>>> +    }
+>>>> +
+>>>> +    src_tsr = state->regs[sreg];
+>>>> +
+>>>> +    /*
+>>>> +     * Handle 'add' instructions of the form:
+>>>> +     *   add  dreg, base, #offset     (immediate offset)
+>>>> +     *   add  dreg, base, reg2        (reg2 holds a constant)
+>>>> +     *
+>>>> +     * For case 2, retrieve the constant value from reg2
+>>>> +     * and use it as the offset.
+>>>> +     */
+>>>> +    imm_value = src->offset;
+>>>> +    if (src->multi_regs) {
+>>>> +        int reg2 = (sreg == src->reg1) ? src->reg2 : src->reg1;
+>>>> +
+>>>> +        if (!has_reg_type(state, reg2) || !state->regs[reg2].ok) {
+>>>> +            /* Unable to resolve type for dst, bail out */
+>>>> +            invalidate_reg_state(tsr);
+>>>> +            return;
+>>>> +        }
+>>>> +        if (state->regs[reg2].kind == TSR_KIND_CONST)
+>>>> +            imm_value = state->regs[reg2].imm_value;
+>>>
+>>> First, when reg2 is valid but not TSR_KIND_CONST - say a pointer
+>>> freshly loaded from memory - the addend is unknown at analysis time,
+>>> yet imm_value silently stays 0 and propagation continues, tracking
+>>> the destination as base + 0. Note the asymmetry: no state at all
+>>> invalidates, but state that doesn't yield a value pretends the
+>>> addend is zero. Unknown addend should invalidate as well:
+>>>
+>>>         if (state->regs[reg2].kind != TSR_KIND_CONST) {
+>>>             invalidate_reg_state(tsr);
+>>>             return;
+>>>         }
+>>>
+>>
+>> It might not be a direct invalidation, but rather swapping reg1/reg2 and
+>> then retrying.
+>>
+>>> Second, the shifted/extended forms still break even with a constant
+>>> reg2: extract_op_location_arm64() drops the "lsl #3" (or uxtw/sxtw)
+>>> modifier, so add x0, x1, x2, lsl #3 contributes the unshifted value
+>>> and maps later accesses to the wrong field. Maybe flag such operands
+>>> during extraction (or fail the reg2 extraction) so the handler can
+>>> skip them.
+>>>
+>>
+>> Okay, so it seems shifted/extended forms are unavoidable. We may need to
+>> introduce more fields into annotated_op_loc to record them, like this:
+>>
+>> diff --git a/tools/perf/util/annotate.h b/tools/perf/util/annotate.h
+>> index 138d9258281c..b00e0ad96023 100644
+>> --- a/tools/perf/util/annotate.h
+>> +++ b/tools/perf/util/annotate.h
+>> @@ -501,6 +501,8 @@ int arch__dwarf_regnum(const struct arch *arch, const char *str);
+>>   * @offset: Memory access offset in the operand
+>>   * @segment: Segment selector register
+>>   * @addr_mode: Addressing mode, only valid if @mem_ref is true
+>> + * @extend_type: ARM64 register extend specifier (enum annotated_ext_type)
+>> + * @shift: ARM64 shift amount (e.g., 0 to 4)
+>>   * @mem_ref: Whether the operand accesses memory
+>>   * @multi_regs: Whether the second register is used
+>>   * @imm: Whether the operand is an immediate value (in offset)
+>> @@ -511,6 +513,8 @@ struct annotated_op_loc {
+>>  	int offset;
+>>  	u8 segment;
+>>  	u8 addr_mode;
+>> +	u8 extend_type;
+>> +	u8 shift;
+>>  	bool mem_ref;
+>>  	bool multi_regs;
+>>  	bool imm;
+>> @@ -542,6 +546,19 @@ enum annotated_addr_mode {
+>>  	PERF_ADDR_MODE_POST_INDEX,
+>>  };
+>>  
+>> +enum annotated_ext_type {
+>> +	PERF_EXT_NONE = 0,
+>> +
+>> +	PERF_EXT_UXTB,
+>> +	PERF_EXT_SXTB,
+>> +	PERF_EXT_UXTH,
+>> +	PERF_EXT_SXTH,
+>> +	PERF_EXT_UXTW,
+>> +	PERF_EXT_SXTW,
+>> +	PERF_EXT_UXTX,  /* LSL is equivalent to UXTX */
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+This comment is inaccurate and will be removed.
+
+>> +	PERF_EXT_SXTX,
+>> +};
+>> +
+> 
+> Looks ok to me.  But more comments are needed for those who are not
+> familiar with the arm64 ISA.
+> 
+> Thanks,
+> Namhyung
+> 
+
+Got it. Will add more comments in v5.
+
+Thanks,
+Tengda
+
+> 
+>>  /**
+>>   * struct annotated_insn_loc - Location info of instruction
+>>   * @ops: Array of location info for source and target operands
+>>
+>>
+>>>> +    }
+>>>> +
+>>>> +    if (src_tsr.kind == TSR_KIND_CONST) {
+>>>> +        tsr->kind = src_tsr.kind;
+>>>> +        tsr->imm_value = src_tsr.imm_value + imm_value;
+>>>> +        tsr->offset = 0;
+>>>> +        tsr->ok = src_tsr.ok;
+>>>> +
+>>>> +        pr_debug_dtp("add [%x] imm %#"PRIx64"(reg%d) -> reg%d\n",
+>>>> +                 insn_offset, imm_value, sreg, dreg);
+>>>
+>>> And since add is commutative, this early return drops the pointer
+>>> side for add rd, const_reg, ptr_reg: sreg starts as reg1, hits the
+>>> CONST case and returns before the goto retry at the bottom ever gets
+>>> a chance to evaluate the pointer register. The result should be the
+>>> pointer with the constant applied as an offset, not a plain constant.
+>>> Maybe check the other register for a pointer type before falling into
+>>> the CONST case (or move the CONST handling after the retry).
+>>>
+>>
+>> Yeah, this issue is a side effect of the previous incomplete handling and
+>> will be fixed together.
+>>
+>> Thanks,
+>> Tengda
+>>
+
