@@ -1,231 +1,303 @@
-Received: from mail-qk1-f227.google.com (mail-qk1-f227.google.com [209.85.222.227])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D7222BE03C
-	for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 18:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420A5395D8E
+	for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 19:09:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787942916; cv=none; b=Y/gColYg0g/ILPUp73qLbugaIDQcw1dTW2dmOPCLYY8pJ0WNmHCJShPjKOXeZfHLzRwyr4YRGcjtcyjRjmbT36EsCkpYzeFZNTo2K0zI6LCHwVKcUi4HJYoewoe0fJEo9YmyBjSHbPmxCA/dRoZz4Ps3e5g2gd7WK9f7Ui9eXys=
+	t=1787944174; cv=none; b=YoSfk0QZOGNHJuM08HmD+FqZOf8GYjXME5BNua2uNLG07B6WOfXZ1gOqFlvSRi8np9WI3C6TTVKj3ll5Wd28bQLBp4VW0tPbZXXw9o3H0ke43WLk+xq2zpwPT366n4glT9i4/Dr4MJ42dzngB80aMrsYoh7Qgfe+i0JpAM6pNHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787942916; c=relaxed/simple;
-	bh=pqZV16Ap6Nr5H5RNGeeBW3ozFJ8asN8WYSShabIew/c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=t+BV/pXFDmTYzBRx3Y1+ZSKOrz88Puh2uHDIAnmsXlBV3Zukigk938J0caqqmoxwoQ7itZmla1XuC8YYOa0sFyOnQpGMs+hCzOoiMaEGnx1/31KGElylfDSlJy4uy2A2KGceQ8pPoW5mkG8KE276Pbu9W3hYnAZZ+Efkuw5L1to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=E7DCej3G; arc=none smtp.client-ip=209.85.222.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1787944174; c=relaxed/simple;
+	bh=DHabpYVWMUcN0lqRBbQnflmxJiSHhXw8v4pgMuAsD4E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OTI9+KWAbKqxl9CIupEplRl9mjj7CNv/uMFblWzilBbOCmPrNozaguDzLIVhz6VreE5n8dgFCNFBgDoU34RFeBJ47uTaMFujIDerSKAaKgItzfZB4LKMxhxBaOxMEAc7NoaciYVrW/Zg+Af5U2MVHvAP7SJo7LjEV5PDpOUuJkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=v1iH3+wH; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="E7DCej3G"
-Received: by mail-qk1-f227.google.com with SMTP id af79cd13be357-93900ed2925so105822085a.0
-        for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 11:48:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787942914; x=1788547714;
-        h=content-type:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=DUU4Ka07ZB+tBwX7A82KkoppEXicqFDcW9O91VkJ6cg=;
-        b=Jsbszdu4l/i20cvH6Ngersg8hyA+qhVRm+6HTqH8MiwpQnsQWA4FhV7YTasl4hP/tN
-         INbSx85tTcrLvNMSTOYjyhcWMyYJGXwaP6A5rbb7QEu2Qx2lSPaoPK/3RbYrBg6u36yW
-         PvlAUm4E9cbH+lamBppoE4ohX+/fYp31xsmhUA8nGjfjFydhzu95JW6DfLeRwZzTeFcv
-         WtGxdj7Abs5JBzRbiDqlGFb/b2tiZmIgVN0mJMoOvALR1DoAd7yU2TYxDCtu1nLmZGXv
-         zIBXZZiK1Xuxp8FuDNNPI7YyHMteXFrOpUFHsaDvpELs/M2vONLwCeV2AoS8ULNTuYg8
-         d0VQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoXEs4LNegRofLAJ91pLilr7bzYDo5+0/zoQBtqBZuDoNEvzHcsX4OjWClwlqaCujhQHSG/@lists.linux.dev
-X-Gm-Message-State: AFuF++ncUy9clMkY7ZbDJlp4ulVeoJ0nj58ZWueKP3/tv6hm9ORcedbX
-	PBDXVJxb41TnYPFt8S8IIsx8rRx2kci0B+bGTK9spXXbOGz+cipT3tjz/gFmbxA/77lHOL6FEmk
-	HqPwj28T6lLS8uxIt+YQdnI1bSYJdz7OBl79Jma+PSJSf+Q/wC/z5nBVfgSIjZWxbRul76vXQv3
-	CZTMU8bcwUQXcqM68kYDpHachhZO9q37UlZbcjgyxoe4Up2LK+Lj2W/XNzLON5c99PgLIbpFugq
-	KWUpFWJ
-X-Gm-Gg: AR+sD11t3/7yQCwGchNLNKEFcQJediamnZgxNajfXnP+FQjZBkNLiwH8kkwx6/g/9P5
-	dBnbxO4N51kA985pta9ftl3W5X+H6GCa/YP2hwQQ/Xam3l3nU1UwF300fzko4M+80bxrsShcBI6
-	dNvRt598XNRn8m0SBYfafKFLTyIARWU+Ok3h5JgKF/4BCmyaI3MKMDmutX1QC6vq78Kcb0cHy80
-	rsfTrC4mnfoCvTTb/WqTYN+zF2kJrIuoYVKoipdiv+oDHom6x0XPkJu1pxmzrRR2D2GPMf+5ZLO
-	X/GetG49hRDVq0crj0EI7+OMMn8i7dLWK9igk8ZQDLzClmWlmz+1vKfO36W5zrZywuhTk3HBB2d
-	RTIN5x69SVllnjmTkzeOtuWT8sSDFgsOHj7VWYtW3Hj2MBsIN44DaNFIhdnleFNBA/tm+Bda8mf
-	oXI3Zx4MU1EO1Jv7RpIPTMVoFMgMMP8IFlIko=
-X-Received: by 2002:a05:620a:6f8d:10b0:939:93f:3b41 with SMTP id af79cd13be357-93913792889mr867490185a.16.1787942913695;
-        Fri, 28 Aug 2026 11:48:33 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-20.dlp.protect.broadcom.com. [144.49.247.20])
-        by smtp-relay.gmail.com with ESMTPS id af79cd13be357-939175ce904sm27041285a.6.2026.08.28.11.48.33
-        for <llvm@lists.linux.dev>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 28 Aug 2026 11:48:33 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c25148e933eso92771866b.0
-        for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 11:48:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="v1iH3+wH"
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3964dfb5a69so1722946a91.1
+        for <llvm@lists.linux.dev>; Fri, 28 Aug 2026 12:09:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1787942912; x=1788547712; darn=lists.linux.dev;
-        h=content-type:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=DUU4Ka07ZB+tBwX7A82KkoppEXicqFDcW9O91VkJ6cg=;
-        b=E7DCej3GS26gJ40+Bt3jjmcyQu2Tijn1fQAPXQFFaMEF+6TfX0f4yD8uQIT7ZFMk+0
-         URJjYsDk72zCKS20OIS6aMsRZBlhHFGO3eMVUMOhSCC3H7F0m9h5rmsyu4345D3OYSI5
-         bL0/j63IL3oR2LCJcHi2jt2dkKn0NrvsnN118=
-X-Forwarded-Encrypted: i=1; AHgh+RoJpJ8OM58ENDoPssf5GnXLRa6IzwpRhqfV1ZVprfdhyJeW6CleeK8d74s5IfAGIhsTv22v@lists.linux.dev
-X-Received: by 2002:a17:907:c19:b0:c12:9b93:61fd with SMTP id a640c23a62f3a-c2556c2bea8mr613710866b.6.1787942912079;
-        Fri, 28 Aug 2026 11:48:32 -0700 (PDT)
-X-Received: by 2002:a17:907:c19:b0:c12:9b93:61fd with SMTP id
- a640c23a62f3a-c2556c2bea8mr613707266b.6.1787942911597; Fri, 28 Aug 2026
- 11:48:31 -0700 (PDT)
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1787944171; x=1788548971; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=+/lEFlCrK4GzQ7/ozFU2BwCF0kJaOjHy8A8aVuPPG8g=;
+        b=v1iH3+wHFuwe+B7hEL4GyBvq/iDiESATAxslmLz3vzpqWyfrsbXGDn+R0CJGDMq0AO
+         +8Hb/thSHbKurytr8sEaoqj/+VWTNpIKepdCq+wuHX3fyKPSJK0H1V1pWGaWkjRqWMQr
+         JJeMMMGLaH1tyjsxugc082w9xw6P8pdV/NsNoRLoyUY1wMicYt4gzjIYeC81W2/NJoJN
+         uB4Jz1LPE2Ncl4CEKpaAXNoEe8lKBZOHdrlt9PXc6c5CS0L9m9aB9QB5v80wyYAoRuKF
+         aBygs1c0pXFMh8iD5MXYWctFeodA5OJh+rEJDGcyjlrDnUbiA2S7nxDAAh05jXbnTS9h
+         uL9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787944171; x=1788548971;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=+/lEFlCrK4GzQ7/ozFU2BwCF0kJaOjHy8A8aVuPPG8g=;
+        b=d6/1A4UAzom6dVFnE6NvkJ+9Zrhc+ihNYG0sHGX5W2IKkbFBqUIuQPEgx20pgJPnth
+         s+8f+NBV+np5QMKnAMNW8IgymluvdgcRsfyBfaQoW8d7ap9aEUInnkXxQKt8A3RGzxmY
+         +MfEBnIqQLMzvK40xs1o74ZZo3854cTNjDR4AklcjAp1k6U66uLxRTgs1dctWzo9nbze
+         ifp3KA0DCNVd93e7toB5pBt/I7a2XfcHyMdNMTyrYjtEX/wZH+gLzQYhXw+9X7VGEahD
+         awrxxAdnLFPyDVrMfybrxEz7FhIb8KdsxGW/8y5MUNZF0YbzWbKRw9LZEelIRRMjyjmm
+         twMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwJT5kjBX4RJCUtzkbYpniF71Od2vJZuza4x8cMYpaPsolevwpks+dszV9jBaE6Caq2DMv7@lists.linux.dev
+X-Gm-Message-State: AFuF++m+HPGixmejk+i0G28jpCtcbVR/iHxdvfUrueDc0IGGMGVrWdeS
+	Hc5QPLIzdhhaRYzxGUqsIbzenOY4gAeUo3bQQ68QZXU0V5pg9uvK0Nn65j1w8QZbjyg=
+X-Gm-Gg: AYBFou05NfDRw0nO2Ojw6Noc/8+ZMTj5LuzxyDcps4gTHJlS9/OaB1ExTNwyqkI1xE5
+	jf2vY8mWOqobAqnO2I8FJGD5KkHUMGJEZcDt83agJmBCjdWX1DXH04TiO84fXWkgFVwMIi/HMQL
+	zrpArxgcXVFrfBMIr3/J+Q16x+t1nsvbtHHnm9thJ38Q7Ye1/8BhMkki5+1TJAnHoXFkdLTycpJ
+	zadj/RaLE98gU6JV84wDl44moOWv0EdxQDmj3lPcW1Z2GGpFb4FLwH7tkYQNhRBosR/6Qhmoq3q
+	pyEvxSurfa2BfolpR+WE9+YB3uB/3PpuFObQutOnp8f3BbQF8vTmtjSmaleIkUpSv5gaCvYYWW6
+	ypf/3LezIr6oJJVzE3+tThww20sf4GzpCKGNNzJX25tSMxNOkWd8CNW8RZskGQjfhCnf3jZownv
+	hyWePY50ejGm1ktEc70Zxm3XeXeuT++nQhNXZdLWt1y7flF2GuKU18
+X-Received: by 2002:a17:90a:c17:b0:398:a2ed:7b5c with SMTP id 98e67ed59e1d1-398a2ed7e86mr764024a91.24.1787944171359;
+        Fri, 28 Aug 2026 12:09:31 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:74::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396db196903sm3649871a91.0.2026.08.28.12.09.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2026 12:09:30 -0700 (PDT)
+From: Joe Damato <joe@dama.to>
+To: netdev@vger.kernel.org,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+	Rukhsana Ansari <rukhsana.ansari@broadcom.com>
+Cc: horms@kernel.org,
+	colin.winegarden@broadcom.com,
+	linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com,
+	Joe Damato <joe@dama.to>,
+	stable@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
+Date: Fri, 28 Aug 2026 12:08:59 -0700
+Message-ID: <20260828190900.1767611-1-joe@dama.to>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260827185700.2157164-1-joe@dama.to> <CACKFLikJiCdjej4ezF=U16Leef3oAjSZGQAyetRnF=nLRvUfZA@mail.gmail.com>
- <apDLEbEu1PLTGU+f@devvm20253.cco0.facebook.com> <CACKFLinQHs80MQbn8o8Fw3Qg=1DJ+7ZMevPkDzxnDr+mNX=SfQ@mail.gmail.com>
- <apD6fwM7beKVGz++@devvm20253.cco0.facebook.com>
-In-Reply-To: <apD6fwM7beKVGz++@devvm20253.cco0.facebook.com>
-From: Michael Chan <michael.chan@broadcom.com>
-Date: Fri, 28 Aug 2026 11:48:18 -0700
-X-Gm-Features: AcwNN1Wl_6g54xLcUPukSItqlIQfXtWutvlki53Ssxl6yZZ6R3MLge9n8f_kmB8
-Message-ID: <CACKFLi=BokNTb5Omc9q5_ojp0-9YG60bft+4eZLx6rOvfXvqkQ@mail.gmail.com>
-Subject: Re: [PATCH net v3] bnxt_en: Bound SW TPA IDs to prevent crashes
-To: Joe Damato <joe@dama.to>, Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org, 
-	Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Colin Winegarden <colin.winegarden@broadcom.com>, 
-	Rukhsana Ansari <rukhsana.ansari@broadcom.com>, 
-	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, horms@kernel.org, 
-	linux-kernel@vger.kernel.org, raphaelcf@meta.com, stable@vger.kernel.org, 
-	llvm@lists.linux.dev
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002b6bf9065a1fe6b3"
+Content-Transfer-Encoding: 8bit
 
---0000000000002b6bf9065a1fe6b3
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+TPA IDs are generated by FW and can be up to 1024. bnxt_alloc_agg_idx is
+intended to wrap the FW ID down to a software ID which is used to index
+rxr->rx_tpa, and to generate a mapping between FW IDs and the wrapped
+software ID.
 
-On Thu, Aug 27, 2026 at 8:03=E2=80=AFPM Joe Damato <joe@dama.to> wrote:
+On a 57608 with firmware version 233, the firmware advertises 32
+concurrent TPAs. As of the commit under fixes, bp->max_tpa on this NIC
+is set to 32.
 
-> @@ -3832,6 +3835,10 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
->
->         bp->max_tpa =3D MAX_TPA;
->         if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
-> +               /* TPA is not supported at all, so there is nothing to
-> +                * allocate. BNXT_SUPPORTS_TPA() is false in this case an=
-d
-> +                * neither LRO nor HW GRO can be enabled.
-> +                */
->                 if (!bp->max_tpa_v2)
->                         return 0;
->                 bp->max_tpa =3D min_t(u16, bp->max_tpa_v2, MAX_TPA_P5);
-> @@ -3839,6 +3846,7 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
->                 if (bp->max_tpa <=3D 32 && BNXT_CHIP_P5(bp) && !BNXT_NPAR=
-(bp))
->                         bp->max_tpa =3D MAX_TPA_P5;
->         }
-> +       bp->max_tpa_roundup_size =3D roundup_pow_of_two(bp->max_tpa);
->
-This looks good to me.  Thanks.
+If the software ID from bnxt_alloc_agg_idx is above 31, this results in
+an invalid address being loaded on this line:
 
---0000000000002b6bf9065a1fe6b3
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+  tpa_info = &rxr->rx_tpa[agg_id];
 
-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
-DPVtLUtep/P3evQuAtTQRaKedjamBcUpJ7qUhBuv/Z07LlLIlB/vfNSPWe1V+njTezc8m3VfvNEC
-qEpXasPSfDgfcuUhcPR+7++oUDaTt9iqGFOjwiURxx08pL6ogSuiT41O4Xu7msabnUE6RY0O0xR5
-5UGwbpC1QSmnBq7TAy8oQg/nNw4vowEh3S2lmjdHCOdR270Ygd7jet8WQKa5ia4ZK4QdkS8+5uLt
-rMMRyM3QurndiZZJBipjPvEWJR/+jod8867f3n0CAwEAAaOCAd0wggHZMA4GA1UdDwEB/wQEAwIF
-oDAMBgNVHRMBAf8EAjAAMIGTBggrBgEFBQcBAQSBhjCBgzBGBggrBgEFBQcwAoY6aHR0cDovL3Nl
-Y3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyNnNtaW1lY2EyMDIzLmNydDA5BggrBgEF
-BQcwAYYtaHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyNnNtaW1lY2EyMDIzMGUGA1Ud
-IAReMFwwCQYHZ4EMAQUDAzALBgkrBgEEAaAyASgwQgYKKwYBBAGgMgoDAjA0MDIGCCsGAQUFBwIB
-FiZodHRwczovL3d3dy5nbG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzBBBgNVHR8EOjA4MDagNKAy
-hjBodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjZzbWltZWNhMjAyMy5jcmwwJAYDVR0R
-BB0wG4EZbWljaGFlbC5jaGFuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBQAKTaeXHq6D68tUC3boCOFGLCgkjAdBgNVHQ4EFgQUJbO/Fi7RhZHYmATVQf6NlAH2
-qUcwDQYJKoZIhvcNAQELBQADggIBABcLQEF8mPE9o6GHJd52vmHFsKsf8vRmdMEouFxrW+GhXXzg
-2/AqqhXeeFZki82D6/5VAPkeVcgDeGZ43Bv89GHnjh/Vv0iCUGHgClZezpWdKCAXkn698xoh1+Wx
-K/c/SHMqGWfBSVm1ygKAWkmzJLF/rd4vUE0pjvZVBpNSVkjXgc80dTZcs7OvoFnt14UgvjuYe+Ia
-H/ux6819kbi0Tmmj5LwSZW8GXw3zcPmAyEYc0ZDCZk9QckL5yPzMlTAsy0Q+NMVpJ8onLj/mHgTk
-Ev8zt1OUE8MlXZj2+wgVY+az2T8rGmqRU2iOzRlJnc86qVwuwjL9AA9v4R13Yt8zYyA7jL0NiBNP
-WaOSajKBB5Z/4ZVtcvOMILD1+G+CVZX7GUWERT9NRXw/SyIEMU59lFbuvy4zxe3+RbOleCgp3pze
-q8HE2p9rkOJT3MkCNLxe+ij4RytIvPQXACsZeLdfTDUnjeXCDDJ9KugVhuqMelAZc4NissPz8FOn
-2NK++r5/QamlFqYRhsFxSBIvhkh2Q/hD3/zy4j17Yf/FUje5uyg03FblSBOk2WYpRpXEuCpyn5pb
-bYVIzfhQJgwGfO+L8BAeZIFjO1QL3s/zzn+RBlTl4wdDzh8L9eS+QEDhMcSsqb4fFRDbsoVuRjpx
-R5MunSUzk4GcmmM19m7oHhPGeKwIMYICVzCCAlMCAQEwYjBSMQswCQYDVQQGEwJCRTEZMBcGA1UE
-ChMQR2xvYmFsU2lnbiBudi1zYTEoMCYGA1UEAxMfR2xvYmFsU2lnbiBHQ0MgUjYgU01JTUUgQ0Eg
-MjAyMwIMZh03KTi4m/vsqWZxMA0GCWCGSAFlAwQCAQUAoIHHMC8GCSqGSIb3DQEJBDEiBCB4aybN
-YqMTJHPl27qaF7j2AABSTCRCRhakXOlEXxCHUTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwG
-CSqGSIb3DQEJBTEPFw0yNjA4MjgxODQ4MzJaMFwGCSqGSIb3DQEJDzFPME0wCwYJYIZIAWUDBAEq
-MAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEHMAsGCWCG
-SAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCGf4QFUYcDynAuV7czGIxC40kcryDgid72x0Ne3aYa
-TtuZom942ApepzZrxGan+OA6ho9C9aPTAadytUrRtao0VeodCUa/q5fk7OHGwwfsAoIEnHQAWEIM
-kavVvi4OQOr2mMkQ13hkP1C11c7x0hxvEKIA1bK0go67B4vR/45WAIUpcViB9F6d4MK3GwP4aEMC
-CSNAFCBKjQ7/RR36+J04COakh1aGRZZlIIALGlWLd2EImLuHbl1sLyj2XYNJxd9SanUaKVI9nDCg
-fTLNwlBjVWBBxK4ly7KFNtqHUdPhg8I2lMffc8dUTiqoKQL9wqMXNZUNm0ycAOy8APKUCXRh
---0000000000002b6bf9065a1fe6b3--
+because rx_tpa is allocated with only bp->max_tpa (32) entries. Writes
+to tpa_info later in the code are out of bounds.
+
+This bug results in a crash at boot:
+
+Oops: general protection fault, kernel NULL pointer dereference 0x8: 0000 [#1] SMP NOPTI
+RIP: 0010:bnxt_rx_pkt+0xc0/0x1560
+RSP: 0018:ffffc900009b8c78 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000048 RCX: 0000000206682516
+RDX: ffffc900009b8db4 RSI: 0000000000000000 RDI: 01ffffff038fe1c0
+RBP: ffffc9006e687480 R08: ffffc9006e687000 R09: 0000000000003048
+R10: 0000000000000480 R11: ffff8881c6083900 R12: 0000000006682516
+R13: ffff8881c6095400 R14: 0000000000000016 R15: ffff8881c6b66680
+FS:  0000000000000000(0000) GS:ffff88fef3c77000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fc8bda40584 CR3: 000000807c812001 CR4: 0000000008772ef0
+PKRU: 55555554
+Call Trace:
+ <IRQ>
+ ? __netif_receive_skb_list_core+0x1ca/0x250
+ __bnxt_poll_work+0x152/0x280
+ bnxt_poll_p5+0x1cd/0x480
+ __napi_poll+0x30/0x180
+ net_rx_action+0x20b/0x3b0
+ ? note_gp_changes+0x53/0xe0
+ ? tick_setup_sched_timer+0x180/0x180
+ ? __napi_schedule+0x9a/0xb0
+ ? bnxt_msix+0x24/0x30
+ handle_softirqs+0xdd/0x2c0
+ __irq_exit_rcu.llvm.3171231171502365008+0x47/0xf0
+ common_interrupt+0x85/0x90
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x22/0x40
+
+This stack trace is from a crash triggered when an out of bounds rx_tpa
+is dereferenced. The invalid write mentioned above is silent in this
+particular crash.
+
+Fix this by allocating rx_tpa with bp->max_tpa rounded up to the next
+power of 2 (bp->max_tpa_roundup_size) entries and masking the FW TPA ID
+with that size, so the wrapped ID can never index past the end of the
+array.
+
+Fixes: 54c28fab2fa5 ("bnxt_en: Set bp->max_tpa according to what the FW supports")
+Reported-by: Raphael Cardoso Fernandes <raphaelcf@meta.com>
+Suggested-by: Michael Chan <michael.chan@broadcom.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Joe Damato <joe@dama.to>
+---
+v4:
+  - Moved bp->max_tpa_roundup_size init out of the early return path and
+    documented that TPA is unsupported there, as suggested by Michael.
+
+v3: https://lore.kernel.org/netdev/20260827185700.2157164-1-joe@dama.to/
+  - Addressed an issue Sashiko pointed out, where max_tpa_roundup_size may be
+    left unset if bnxt_alloc_tpa_info returns early, which would lead to out
+    of bounds access.
+  - The other pre-existing issues Sashiko pointed out are unrelated to this
+    patch and would need different Fixes tags, so they are better served with
+    separate patches in the future.
+
+v2: https://lore.kernel.org/netdev/20260825001842.2501798-1-joe@dama.to/
+  - Followed Michael's suggestion on the v1 to increase the size of the tpa
+    array so that wrapping indexes into the array is a simple mask.
+  - Add Suggested-by because the approach was suggested by Michael.
+  - Add a Reported-by so that Raphael gets credit for reporting this bug.
+  - Boot tested on a machine with a 57608 and the crash did not reproduce.
+
+v1: https://lore.kernel.org/netdev/20260821233549.3134699-1-joe@dama.to/
+
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c | 28 +++++++++++++++--------
+ drivers/net/ethernet/broadcom/bnxt/bnxt.h |  2 +-
+ 2 files changed, 19 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index d59bcca73a2b..bee54cc86996 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -1514,14 +1514,16 @@ static int bnxt_discard_rx(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	return 0;
+ }
+ 
+-static u16 bnxt_alloc_agg_idx(struct bnxt_rx_ring_info *rxr, u16 agg_id)
++static u16 bnxt_alloc_agg_idx(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
++			      u16 agg_id)
+ {
+ 	struct bnxt_tpa_idx_map *map = rxr->rx_tpa_idx_map;
+-	u16 idx = agg_id & MAX_TPA_P5_MASK;
++	u16 idx = agg_id & (bp->max_tpa_roundup_size - 1);
+ 
+ 	if (test_bit(idx, map->agg_idx_bmap)) {
+-		idx = find_first_zero_bit(map->agg_idx_bmap, MAX_TPA_P5);
+-		if (idx >= MAX_TPA_P5)
++		idx = find_first_zero_bit(map->agg_idx_bmap,
++					  bp->max_tpa_roundup_size);
++		if (idx >= bp->max_tpa_roundup_size)
+ 			return INVALID_HW_RING_ID;
+ 	}
+ 	__set_bit(idx, map->agg_idx_bmap);
+@@ -1586,7 +1588,7 @@ static void bnxt_tpa_start(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
+ 
+ 	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
+ 		agg_id = TPA_START_AGG_ID_P5(tpa_start);
+-		agg_id = bnxt_alloc_agg_idx(rxr, agg_id);
++		agg_id = bnxt_alloc_agg_idx(bp, rxr, agg_id);
+ 		if (unlikely(agg_id == INVALID_HW_RING_ID)) {
+ 			netdev_warn(bp->dev, "Unable to allocate agg ID for ring %d, agg 0x%x\n",
+ 				    rxr->bnapi->index,
+@@ -3584,7 +3586,7 @@ static void bnxt_free_one_tpa_info_data(struct bnxt *bp,
+ {
+ 	int i;
+ 
+-	for (i = 0; i < bp->max_tpa; i++) {
++	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 		struct bnxt_tpa_info *tpa_info = &rxr->rx_tpa[i];
+ 		u8 *data = tpa_info->data;
+ 
+@@ -3781,7 +3783,7 @@ static void bnxt_free_one_tpa_info(struct bnxt *bp,
+ 	kfree(rxr->rx_tpa_idx_map);
+ 	rxr->rx_tpa_idx_map = NULL;
+ 	if (rxr->rx_tpa) {
+-		for (i = 0; i < bp->max_tpa; i++) {
++		for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 			kfree(rxr->rx_tpa[i].agg_arr);
+ 			rxr->rx_tpa[i].agg_arr = NULL;
+ 		}
+@@ -3807,13 +3809,14 @@ static int bnxt_alloc_one_tpa_info(struct bnxt *bp,
+ 	struct rx_agg_cmp *agg;
+ 	int i;
+ 
+-	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info, bp->max_tpa);
++	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info,
++				   bp->max_tpa_roundup_size);
+ 	if (!rxr->rx_tpa)
+ 		return -ENOMEM;
+ 
+ 	if (!(bp->flags & BNXT_FLAG_CHIP_P5_PLUS))
+ 		return 0;
+-	for (i = 0; i < bp->max_tpa; i++) {
++	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 		agg = kzalloc_objs(*agg, MAX_SKB_FRAGS);
+ 		if (!agg)
+ 			return -ENOMEM;
+@@ -3832,6 +3835,10 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
+ 
+ 	bp->max_tpa = MAX_TPA;
+ 	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
++		/* TPA is not supported at all, so there is nothing to
++		 * allocate. BNXT_SUPPORTS_TPA() is false in this case and
++		 * neither LRO nor HW GRO can be enabled.
++		 */
+ 		if (!bp->max_tpa_v2)
+ 			return 0;
+ 		bp->max_tpa = min_t(u16, bp->max_tpa_v2, MAX_TPA_P5);
+@@ -3839,6 +3846,7 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
+ 		if (bp->max_tpa <= 32 && BNXT_CHIP_P5(bp) && !BNXT_NPAR(bp))
+ 			bp->max_tpa = MAX_TPA_P5;
+ 	}
++	bp->max_tpa_roundup_size = roundup_pow_of_two(bp->max_tpa);
+ 
+ 	for (i = 0; i < bp->rx_nr_rings; i++) {
+ 		struct bnxt_rx_ring_info *rxr = &bp->rx_ring[i];
+@@ -4551,7 +4559,7 @@ static int bnxt_alloc_one_tpa_info_data(struct bnxt *bp,
+ 	u8 *data;
+ 	int i;
+ 
+-	for (i = 0; i < bp->max_tpa; i++) {
++	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
+ 		data = __bnxt_alloc_rx_frag(bp, &mapping, rxr,
+ 					    GFP_KERNEL);
+ 		if (!data)
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+index ab894f8addef..de46b42d7c98 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
+@@ -789,7 +789,6 @@ struct nqe_cn {
+ 
+ #define MAX_TPA		64
+ #define MAX_TPA_P5	256
+-#define MAX_TPA_P5_MASK	(MAX_TPA_P5 - 1)
+ #define MAX_TPA_SEGS_P5	0x3f
+ 
+ #if (BNXT_PAGE_SHIFT == 16)
+@@ -2380,6 +2379,7 @@ struct bnxt {
+ 
+ 	u16			max_tpa_v2;
+ 	u16			max_tpa;
++	u16			max_tpa_roundup_size;
+ 	u32			rx_buf_size;
+ 	u32			rx_buf_use_size;	/* useable size */
+ 	u16			rx_offset;
+
+base-commit: e2a6641e3bfde58f2284f9859c2b0fdcc6d1c0da
+-- 
+2.53.0-Meta
+
