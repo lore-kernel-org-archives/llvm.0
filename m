@@ -1,201 +1,263 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16D933ACA68;
-	Sun, 30 Aug 2026 15:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788104994; cv=none; b=Igr0D1MrZ6FXORQRpBOiBrfd6HYTaP7B4UKeG3gyafAYvbEUMQYvfGOM+2+zJaGVW4U99iVop4oDFVb3WmqJSdo3GGXguaa2q+sIYIjj7Y6Ft+4y+mgwnnEtrsdzaFvCPD49VvW546crLglcAiUZ1RjnxXLHBt9xuSzR24jipD4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788104994; c=relaxed/simple;
-	bh=sSVI3d2kgXfiHI85EhYn30qCsOL2DTaTAli6fyq/4iU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=s5SuXqeMGNsXhFnfcIIUAJrzViZm79CmJI6kbgDaFKP18zy1VA1lmf+tG88OfqesDCBjlLzmA13PLP0Wqr6ZtNpzugdwatfUXHL51+JMtMyp7TP4+uX2rIp8FoLl0RTnXcqrGM7ksNNt3ShIMS11bamYWzzIsm2RNue65TS2xhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dsej9iFv; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8323170808;
+	Sun, 30 Aug 2026 15:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788105087; cv=pass; b=Zy/YpmKIWOi9pmASwCfGJ8ifcFZoU4BURcBYXTnBYFf4RTqF99YgjRrw/jtN1xRtatRp9SkuuQ5R4r3ExMRCEC5hbWg9CCvbOatTweT+auXuMmXZoyiCXt1SvppRZD/MeEhiRKTBRw37/ZZrqoFjwHa2onkbFvtB6i/IVgH0BoM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788105087; c=relaxed/simple;
+	bh=myD5nT0mV1m39mAiqAVLQggFsA2w6w7gPQuIErWHkWw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=raXmOAEPexT8YyUjw7WSxR3chQmrpqb49xZ5cMXEGjiTwD3uENp3xqMPtauBwEh++cXl3kDK76yD3FHMKI6YsBAI4tyvAVpKXgIJg7Yxa3IknRQA3r0/kdIixShL/s259iDEe/BIVQ/ztINgZ/I+PyjyKHNIYS4GrM22i2WxKq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=VpLOBF0H; arc=pass smtp.client-ip=136.143.188.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dsej9iFv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788104992; x=1819640992;
-  h=date:from:to:cc:subject:message-id;
-  bh=sSVI3d2kgXfiHI85EhYn30qCsOL2DTaTAli6fyq/4iU=;
-  b=dsej9iFvbdoskEZY+EJTyTRBb7WjrhcVlxYpYtp90xb7rW/efbjFzO8I
-   3TAMkz0IKYWwvEIG6ilrxHRdSitnrKufCNx9c9Mu2v21wqJHl12efr2L9
-   u/B2SNiVlnbzA7gvFuEYa6/HYWqk5k60IUCwPV6KK5LC5gWNEaz9olvG1
-   7EfWMUI6dnMkBsWwZkE1ZFtvffjxUGgBQAXDt2cK5XH+VqtPLjC9wQPET
-   4+s4tAx7l5i+Cm9lO0wbrIGILzQqjYmr7m4n9Bf6u9DtNuSOy9qsKHkha
-   S7UWj6OtQCV5JuR2H3m/Ia+1szRFTl6Iy62w7pN4EU5JzxJpq/qpze3Vn
-   A==;
-X-CSE-ConnectionGUID: eQsPqhBRSfC1KRR/8vQwQg==
-X-CSE-MsgGUID: 2xGAfiqxSCKQJOu92hM9LQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11891"; a="88402353"
-X-IronPort-AV: E=Sophos;i="6.25,252,1779174000"; 
-   d="scan'208";a="88402353"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2026 08:49:51 -0700
-X-CSE-ConnectionGUID: es9ozYrKSOWRakWaRCCJHA==
-X-CSE-MsgGUID: tLKj2Sk+QsqLBp533tnNwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,252,1779174000"; 
-   d="scan'208";a="266778527"
-Received: from lkp-server01.sh.intel.com (HELO 3532383e6126) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 30 Aug 2026 08:49:50 -0700
-Received: from kbuild by 3532383e6126 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x0hn1-00000000E1c-1SsC;
-	Sun, 30 Aug 2026 15:49:47 +0000
-Date: Sun, 30 Aug 2026 23:49:39 +0800
-From: kernel test robot <lkp@intel.com>
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [tglx-devel:irqflags 13/20] include/linux/irqflags.h:205:2:
- error: call to undeclared function 'arch_safe_halt'; ISO C99 and later do not
- support implicit function declarations
-Message-ID: <202608302354.u0E8K78u-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="VpLOBF0H"
+ARC-Seal: i=1; a=rsa-sha256; t=1788105072; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=O3fz5ZmZ0tkgOiQsPKuaYKbPU+WqKIhDK0V3DbTbZqTFRbyuQCOPi1OqM4APBN61j1r1CIOWlad/pZjRx4Bm4kBwtmOOLWsr79MiDlWjKNBaNUZB11Gv9rZp+oRiJOl7WQ9r/WjTPrkwoeOf4CapeK0WKNxxhjjbnXDn/1clB5M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1788105072; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=pKdjrSSVrGvdDIKRSLZvow812lk5WfQrvfxQLIwcn68=; 
+	b=YaHf/BZ8lXMvhWfCCGZlCPrTv4Mu9BNIT4V6dJitoi4+OMW5VCIBGpXTeUlxjrKTtoM9LFHpyUl8Iv86mVaFsWDhHSQoe/zYXPrt/3HFoYQb3KpZoqEf0z0ADDNPh2kpFoRN818jk9w97ESK7xsph2xKQI7zDxsoG2JRbhUKHwA=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=yoavmoshe.com;
+	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
+	dmarc=pass header.from=<linux@yoavmoshe.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788105072;
+	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=pKdjrSSVrGvdDIKRSLZvow812lk5WfQrvfxQLIwcn68=;
+	b=VpLOBF0HRKzgQr03ypUu0Q4A+LBNy4b5w9KcYXrjhLDbCpARQJkmB0fJiqAwt3Y7
+	Dzq0q/G5OyGYHvIeZW/BxfL+MKGTvOUxxq9bBPG4Z038bG6sselv8RXplqu7LR0OZVT
+	+RCUqR0yOkK1gHhmhYjETXE7HoskB2JTh6fDCmww=
+Received: by mx.zohomail.com with SMTPS id 1788105070029960.294682886141;
+	Sun, 30 Aug 2026 08:51:10 -0700 (PDT)
+From: Yo'av Moshe <linux@yoavmoshe.com>
+To: Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Russell King <linux@armlinux.org.uk>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Yo'av Moshe <linux@yoavmoshe.com>
+Subject: [PATCH v5] ARM: imx: Fix suspend/resume crash with Clang CFI
+Date: Sun, 30 Aug 2026 17:51:00 +0200
+Message-ID: <20260830155100.1020620-1-linux@yoavmoshe.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260827194508.446733-1-linux@yoavmoshe.com>
+References: <20260827194508.446733-1-linux@yoavmoshe.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git irqflags
-head:   59394501f5a285ef270931207a67d2f129403151
-commit: 882d92b84f9618f000a4de66daeee48df6d81357 [13/20] irqflags: Cleanup wrappers
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260830/202608302354.u0E8K78u-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 52774473867e49b5891ab9381accf4e5a3ce0024)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260830/202608302354.u0E8K78u-lkp@intel.com/reproduce)
+The suspend code that runs from OCRAM is copied there with fncpy(),
+which does not copy the kCFI type hash preceding the function. With
+CONFIG_CFI=y the indirect call through imx6_suspend_in_ocram_fn
+therefore panics.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608302354.u0E8K78u-lkp@intel.com/
+Keep the call covered by CFI instead of exempting it:
 
-All errors (new ones prefixed by >>):
+- Add SYM_TYPED_FUNC_START_ALIGNED(), a variant of
+  SYM_TYPED_FUNC_START() that aligns the function entry rather than
+  the type hash preceding it, and use it to declare imx6_suspend():
+  fncpy() requires the entry point of the function it copies to be
+  8-byte aligned. The macro lives in arch/arm/include/asm/linkage.h
+  since the requirement comes from arm's fncpy().
 
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:14:
-   In file included from include/linux/resource_ext.h:11:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
-   In file included from include/linux/mmzone.h:8:
-   In file included from include/linux/spinlock.h:59:
->> include/linux/irqflags.h:205:2: error: call to undeclared function 'arch_safe_halt'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     205 |         arch_safe_halt();
-         |         ^
-   include/linux/irqflags.h:205:2: note: did you mean 'raw_safe_halt'?
-   include/linux/irqflags.h:203:29: note: 'raw_safe_halt' declared here
-     203 | static __always_inline void raw_safe_halt(void)
-         |                             ^
-     204 | {
-     205 |         arch_safe_halt();
-         |         ~~~~~~~~~~~~~~
-         |         raw_safe_halt
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
-   In file included from include/acpi/ghes.h:5:
-   In file included from include/acpi/apei.h:9:
-   In file included from include/linux/acpi.h:15:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/arm64/include/asm/elf.h:141:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:101:11: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-     101 |                 return (set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   include/uapi/asm-generic/signal.h:62:2: note: array 'sig' declared here
-      62 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm64/kernel/asm-offsets.c:11:
-   In file included from include/linux/arm_sdei.h:8:
+- Add a cfi_type member at the end of struct imx6_cpu_pm_info, which
+  directly precedes the OCRAM copy of the function. It fits in the
+  struct's tail padding, so no sizes or offsets change. Fill it using
+  cfi_get_func_hash(), putting the hash where the caller's CFI check
+  expects it: four bytes before the function entry.
 
+Also mark ccm_base, suspend_ocram_base and imx6_suspend_in_ocram_fn
+as __ro_after_init: they are only written during __init, and the
+function pointer in particular should not be writable afterwards.
 
-vim +/arch_safe_halt +205 include/linux/irqflags.h
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Yo'av Moshe <linux@yoavmoshe.com>
+---
+Tested on a Kobo Clara HD (i.MX6SLL) running postmarketOS
+(clang/LLVM, CONFIG_CFI=y): suspend and resume work.
 
-   202	
-   203	static __always_inline void raw_safe_halt(void)
-   204	{
- > 205		arch_safe_halt();
-   206	}
-   207	
+Note that with CONFIG_CFI=y this depends on commit 979c294509f9
+("cfi: Include uaccess.h for get_kernel_nofault()"), already in
+mainline, which stable backports would need as well.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changes in v5:
+- Drop the linux/uaccess.h include workaround, obsoleted by commit
+  979c294509f9 (Nick, Sami).
+- Include linux/build_bug.h and linux/stddef.h for static_assert()
+  and offsetofend() (Nick).
+- Replace the open-coded alignment pad with a new
+  SYM_TYPED_FUNC_START_ALIGNED() macro as sketched by Nick, placed in
+  arch/arm/include/asm/linkage.h as suggested by Sami.
+
+Changes in v4:
+- Drop the v3 __nocfi wrapper; keep the indirect call CFI-checked.
+- Store the hash in a cfi_type member in the struct's tail padding
+  instead of open-coded pointer arithmetic.
+- Use cfi_get_func_hash() instead of reading the hash manually.
+- Use SYM_TYPED_FUNC_START()/SYM_FUNC_END() instead of ENTRY()/
+  ENDPROC() with a hand-rolled __CFI_TYPE.
+
+ arch/arm/include/asm/linkage.h   | 29 +++++++++++++++++++++++++++++
+ arch/arm/mach-imx/pm-imx6.c      | 26 +++++++++++++++++++++++---
+ arch/arm/mach-imx/suspend-imx6.S |  6 ++++--
+ 3 files changed, 56 insertions(+), 5 deletions(-)
+
+diff --git a/arch/arm/include/asm/linkage.h b/arch/arm/include/asm/linkage.h
+index c467069..bba992f 100644
+--- a/arch/arm/include/asm/linkage.h
++++ b/arch/arm/include/asm/linkage.h
+@@ -9,4 +9,33 @@
+   .type name, %function; \
+   END(name)
+ 
++#ifdef __ASSEMBLY__
++
++/*
++ * Variants of SYM_TYPED_START/SYM_TYPED_FUNC_START that align the
++ * function entry itself instead of the kCFI type hash preceding it,
++ * for functions whose entry point must meet an alignment requirement,
++ * such as the 8-byte alignment fncpy() demands of its source.
++ */
++#ifdef CONFIG_CFI
++
++#define SYM_TYPED_START_ALIGNED(name, linkage, align)	\
++	linkage(name) ASM_NL				\
++	.balign align ASM_NL				\
++	.fill (align) - 4, 1, 0 ASM_NL			\
++	__CFI_TYPE(name) ASM_NL				\
++	name:
++
++#else /* CONFIG_CFI */
++
++#define SYM_TYPED_START_ALIGNED(name, linkage, align)	\
++	SYM_START(name, linkage, .balign align)
++
++#endif /* CONFIG_CFI */
++
++#define SYM_TYPED_FUNC_START_ALIGNED(name, align)	\
++	SYM_TYPED_START_ALIGNED(name, SYM_L_GLOBAL, align)
++
++#endif /* __ASSEMBLY__ */
++
+ #endif
+diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
+index a671ca4..3c73e2c 100644
+--- a/arch/arm/mach-imx/pm-imx6.c
++++ b/arch/arm/mach-imx/pm-imx6.c
+@@ -4,6 +4,8 @@
+  * Copyright 2011 Linaro Ltd.
+  */
+ 
++#include <linux/build_bug.h>
++#include <linux/cfi.h>
+ #include <linux/clk/imx.h>
+ #include <linux/delay.h>
+ #include <linux/init.h>
+@@ -18,6 +20,7 @@
+ #include <linux/of_platform.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
++#include <linux/stddef.h>
+ #include <linux/suspend.h>
+ #include <asm/cacheflush.h>
+ #include <asm/fncpy.h>
+@@ -61,9 +64,9 @@
+ #define MX6Q_SUSPEND_OCRAM_SIZE		0x1000
+ #define MX6_MAX_MMDC_IO_NUM		33
+ 
+-static void __iomem *ccm_base;
+-static void __iomem *suspend_ocram_base;
+-static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase);
++static void __iomem *ccm_base __ro_after_init;
++static void __iomem *suspend_ocram_base __ro_after_init;
++static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase) __ro_after_init;
+ 
+ /*
+  * suspend ocram space layout:
+@@ -229,8 +232,18 @@ struct imx6_cpu_pm_info {
+ 	struct imx6_pm_base l2_base;
+ 	u32 mmdc_io_num; /* Number of MMDC IOs which need saved/restored. */
+ 	u32 mmdc_io_val[MX6_MAX_MMDC_IO_NUM][2]; /* To save offset and value */
++	u32 cfi_type; /* kCFI type hash of imx6_suspend() */
+ } __aligned(8);
+ 
++/*
++ * The ocram copy of imx6_suspend() starts right after struct imx6_cpu_pm_info,
++ * and the CFI check on the indirect call reads the kCFI type hash from the
++ * four bytes preceding the function entry, so cfi_type must occupy the last
++ * four bytes of the struct, i.e. fit into its tail padding.
++ */
++static_assert(offsetofend(struct imx6_cpu_pm_info, cfi_type) ==
++	      sizeof(struct imx6_cpu_pm_info));
++
+ void imx6_set_int_mem_clk_lpm(bool enable)
+ {
+ 	u32 val = readl_relaxed(ccm_base + CGPR);
+@@ -568,6 +581,13 @@ static int __init imx6q_suspend_init(const struct imx6_pm_socdata *socdata)
+ 			mmdc_offset_array[i]);
+ 	}
+ 
++	/*
++	 * Mask out the Thumb bit, as cfi_get_func_hash() expects the
++	 * function's actual start address. Returns 0 if CONFIG_CFI=n.
++	 */
++	pm_info->cfi_type =
++		cfi_get_func_hash((void *)((uintptr_t)&imx6_suspend & ~1UL));
++
+ 	imx6_suspend_in_ocram_fn = fncpy(
+ 		suspend_ocram_base + sizeof(*pm_info),
+ 		&imx6_suspend,
+diff --git a/arch/arm/mach-imx/suspend-imx6.S b/arch/arm/mach-imx/suspend-imx6.S
+index 63ccc2d..95d5f72 100644
+--- a/arch/arm/mach-imx/suspend-imx6.S
++++ b/arch/arm/mach-imx/suspend-imx6.S
+@@ -3,6 +3,7 @@
+  * Copyright 2014 Freescale Semiconductor, Inc.
+  */
+ 
++#include <linux/cfi_types.h>
+ #include <linux/linkage.h>
+ #include <asm/assembler.h>
+ #include <asm/asm-offsets.h>
+@@ -148,7 +149,8 @@
+ 
+ 	.endm
+ 
+-ENTRY(imx6_suspend)
++/* fncpy() requires an 8-byte-aligned entry; see arch/arm/include/asm/fncpy.h */
++SYM_TYPED_FUNC_START_ALIGNED(imx6_suspend, 8)
+ 	ldr	r1, [r0, #PM_INFO_PBASE_OFFSET]
+ 	ldr	r2, [r0, #PM_INFO_RESUME_ADDR_OFFSET]
+ 	ldr	r3, [r0, #PM_INFO_DDR_TYPE_OFFSET]
+@@ -329,4 +331,4 @@ resume:
+ 	resume_mmdc
+ 
+ 	ret	lr
+-ENDPROC(imx6_suspend)
++SYM_FUNC_END(imx6_suspend)
+-- 
+2.55.0
+
