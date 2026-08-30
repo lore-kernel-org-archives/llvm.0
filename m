@@ -1,263 +1,91 @@
-Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
+Received: from sender4-op-o12.zoho.com (sender4-op-o12.zoho.com [136.143.188.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8323170808;
-	Sun, 30 Aug 2026 15:51:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1353BA22E;
+	Sun, 30 Aug 2026 16:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788105087; cv=pass; b=Zy/YpmKIWOi9pmASwCfGJ8ifcFZoU4BURcBYXTnBYFf4RTqF99YgjRrw/jtN1xRtatRp9SkuuQ5R4r3ExMRCEC5hbWg9CCvbOatTweT+auXuMmXZoyiCXt1SvppRZD/MeEhiRKTBRw37/ZZrqoFjwHa2onkbFvtB6i/IVgH0BoM=
+	t=1788107087; cv=pass; b=S6p98pbSI/gu2mFL8rcUZ8FcljOMp1RXAJ3y4BWb2ekFLMVSJnBnsa/dDL2F1D7W4HfMZlAV/l+OzCrYjWL5s7rESXmhvVlEiiKVNYvSjIANuUlecjShotQG9Fxz+EhNr8khdLbqtWO/iuFVqRI2RqOGV6Z5WucvA+T7gC1eMb8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788105087; c=relaxed/simple;
-	bh=myD5nT0mV1m39mAiqAVLQggFsA2w6w7gPQuIErWHkWw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=raXmOAEPexT8YyUjw7WSxR3chQmrpqb49xZ5cMXEGjiTwD3uENp3xqMPtauBwEh++cXl3kDK76yD3FHMKI6YsBAI4tyvAVpKXgIJg7Yxa3IknRQA3r0/kdIixShL/s259iDEe/BIVQ/ztINgZ/I+PyjyKHNIYS4GrM22i2WxKq4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=VpLOBF0H; arc=pass smtp.client-ip=136.143.188.11
+	s=arc-20240116; t=1788107087; c=relaxed/simple;
+	bh=GmBfcRy0uBNjSyTd3QM14EIKLu45BjfLWEcmRo1I9Ms=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=scBB095Jfl0BqPfrzXLXEhVQr9VnpyMqsA06wsSjOYqh1BN95UNib8bHmziWmkuXF1kbtR4b4p8hUrzlkp7MryinHP/h1+zwo3bwD82LmnIL6DYf1rXdsAKeT5JHmrOpkSPKEbwEsLIQnIMae0NopmVnv5rDU3rjwBIBO7gsN98=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com; spf=pass smtp.mailfrom=yoavmoshe.com; dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b=DeGxx07c; arc=pass smtp.client-ip=136.143.188.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yoavmoshe.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="VpLOBF0H"
-ARC-Seal: i=1; a=rsa-sha256; t=1788105072; cv=none; 
+	dkim=pass (1024-bit key) header.d=yoavmoshe.com header.i=linux@yoavmoshe.com header.b="DeGxx07c"
+ARC-Seal: i=1; a=rsa-sha256; t=1788107074; cv=none; 
 	d=zohomail.com; s=zohoarc; 
-	b=O3fz5ZmZ0tkgOiQsPKuaYKbPU+WqKIhDK0V3DbTbZqTFRbyuQCOPi1OqM4APBN61j1r1CIOWlad/pZjRx4Bm4kBwtmOOLWsr79MiDlWjKNBaNUZB11Gv9rZp+oRiJOl7WQ9r/WjTPrkwoeOf4CapeK0WKNxxhjjbnXDn/1clB5M=
+	b=XdGy/sr3rnNAf8bb96XvAwHAREUe3cxNcki7E02MDYhicdhOLJ282kjyglQU+XtaWx5TA06MqCm0wk7Q0B/d2OACuwrtYX2cfKlOiSYW9pL9vuP1peRUvK0dpoN34aYQocCRn9dlVG58C9u7MkgUbTiyOBHpI3Nl6NXJxKoozbI=
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1788105072; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=pKdjrSSVrGvdDIKRSLZvow812lk5WfQrvfxQLIwcn68=; 
-	b=YaHf/BZ8lXMvhWfCCGZlCPrTv4Mu9BNIT4V6dJitoi4+OMW5VCIBGpXTeUlxjrKTtoM9LFHpyUl8Iv86mVaFsWDhHSQoe/zYXPrt/3HFoYQb3KpZoqEf0z0ADDNPh2kpFoRN818jk9w97ESK7xsph2xKQI7zDxsoG2JRbhUKHwA=
+	t=1788107074; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=GmBfcRy0uBNjSyTd3QM14EIKLu45BjfLWEcmRo1I9Ms=; 
+	b=cjG7BqArSc+oKGncPM+El5jlT03vBF0aMBJG76ONkzviNZ3SramFZHixGtyGtn3WB42lUMyzNueS+mqXEaqBgq5/+5k/2D3ICbkN2HrgX8PeOCK+2aDt8W08potEuvX1myhZOMnymnLmtSGCvM/l+tqwL43601NJHGkqUUnnYKY=
 ARC-Authentication-Results: i=1; mx.zohomail.com;
 	dkim=pass  header.i=yoavmoshe.com;
 	spf=pass  smtp.mailfrom=linux@yoavmoshe.com;
 	dmarc=pass header.from=<linux@yoavmoshe.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788105072;
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788107074;
 	s=zoho; d=yoavmoshe.com; i=linux@yoavmoshe.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=pKdjrSSVrGvdDIKRSLZvow812lk5WfQrvfxQLIwcn68=;
-	b=VpLOBF0HRKzgQr03ypUu0Q4A+LBNy4b5w9KcYXrjhLDbCpARQJkmB0fJiqAwt3Y7
-	Dzq0q/G5OyGYHvIeZW/BxfL+MKGTvOUxxq9bBPG4Z038bG6sselv8RXplqu7LR0OZVT
-	+RCUqR0yOkK1gHhmhYjETXE7HoskB2JTh6fDCmww=
-Received: by mx.zohomail.com with SMTPS id 1788105070029960.294682886141;
-	Sun, 30 Aug 2026 08:51:10 -0700 (PDT)
-From: Yo'av Moshe <linux@yoavmoshe.com>
-To: Frank Li <Frank.Li@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Russell King <linux@armlinux.org.uk>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yo'av Moshe <linux@yoavmoshe.com>
-Subject: [PATCH v5] ARM: imx: Fix suspend/resume crash with Clang CFI
-Date: Sun, 30 Aug 2026 17:51:00 +0200
-Message-ID: <20260830155100.1020620-1-linux@yoavmoshe.com>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260827194508.446733-1-linux@yoavmoshe.com>
-References: <20260827194508.446733-1-linux@yoavmoshe.com>
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=GmBfcRy0uBNjSyTd3QM14EIKLu45BjfLWEcmRo1I9Ms=;
+	b=DeGxx07cvLm+imNF4WG1+C4HClXhhNxqAZhzUxJm29XeW/VnL+KUtXpFXAq+lb2P
+	YhkAfbUlBj5xvj30g56/9yaKf9TRPHd7vKY8VlA2E61PA1A26xArZAM6EfUgFPgj2wb
+	3C+vm/GzQAb6jackRPdpQpYV2fyZ7JSO6/uL+bKU=
+Received: by mx.zohomail.com with SMTPS id 178810707135525.803322459182027;
+	Sun, 30 Aug 2026 09:24:31 -0700 (PDT)
+Message-ID: <2bd0c842-d0cb-4ad7-b3a3-fed2000dea83@yoavmoshe.com>
+Date: Sun, 30 Aug 2026 18:24:27 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4] ARM: imx: Fix suspend/resume crash with Clang CFI
+To: Sami Tolvanen <samitolvanen@google.com>,
+ Nick Desaulniers <ndesaulniers@google.com>
+Cc: Yo'av Moshe <linux@yoavmoshe.com>, Frank Li <Frank.Li@nxp.com>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Russell King <linux@armlinux.org.uk>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ llvm@lists.linux.dev, stable@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260718111340.159896-1-linux@yoavmoshe.com>
+ <20260827194508.446733-1-linux@yoavmoshe.com>
+ <CAKwvOdkSZBbq=e916=efx8G-CTzZ5b31AhyUytO6eJjjkEdMow@mail.gmail.com>
+ <CABCJKuc0cWWdkA7zrCcuze4AE-qTSETuUi-eRewPnn_ivHEADQ@mail.gmail.com>
+ <CAKwvOdnA7Ej_uppSL7U2xwxyUQoDMvO+RArj4HCUSOziH0rCqA@mail.gmail.com>
+ <CABCJKuezb0HtOcMBsObczS=HBaRvMszagkOZGHyOVbXBqtJi5g@mail.gmail.com>
+Content-Language: en-GB, sv-SE
+From: Yo'av Moshe <linux@yoavmoshe.com>
+In-Reply-To: <CABCJKuezb0HtOcMBsObczS=HBaRvMszagkOZGHyOVbXBqtJi5g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-ZohoMailClient: External
 
-The suspend code that runs from OCRAM is copied there with fncpy(),
-which does not copy the kCFI type hash preceding the function. With
-CONFIG_CFI=y the indirect call through imx6_suspend_in_ocram_fn
-therefore panics.
+On 2026-08-28 10:50 PM, Sami Tolvanen wrote:
+> Looks reasonable, but this still feels ARM-specific to me. How about
+> adding the macro to arch/arm/include/asm/linkage.h unless you have
+> other users in mind?
+I've now sent a v5 with Nick's macro added to
+arch/arm/include/asm/linkage.h as you suggested, plus the other fixes
+Nick asked for:
 
-Keep the call covered by CFI instead of exempting it:
+https://lore.kernel.org/all/20260830155100.1020620-1-linux@yoavmoshe.com/
 
-- Add SYM_TYPED_FUNC_START_ALIGNED(), a variant of
-  SYM_TYPED_FUNC_START() that aligns the function entry rather than
-  the type hash preceding it, and use it to declare imx6_suspend():
-  fncpy() requires the entry point of the function it copies to be
-  8-byte aligned. The macro lives in arch/arm/include/asm/linkage.h
-  since the requirement comes from arm's fncpy().
+The sashiko-bot's comment on v5 indeed pointed out that imx5, at91 and
+omap1 might suffer from the same bug: their suspend routines are also
+fncpy()'d into SRAM without a type hash and called indirectly. They're
+all ARM, so asm/linkage.h still seems like the right place for the
+macro.
 
-- Add a cfi_type member at the end of struct imx6_cpu_pm_info, which
-  directly precedes the OCRAM copy of the function. It fits in the
-  struct's tail padding, so no sizes or offsets change. Fill it using
-  cfi_get_func_hash(), putting the hash where the caller's CFI check
-  expects it: four bytes before the function entry.
+Do you think these need to be fixed as part of this patch, or as
+follow-ups? I only have my one imx6 device (a Kobo Clara HD), so I'm not
+sure how to test the fixes for the others.
 
-Also mark ccm_base, suspend_ocram_base and imx6_suspend_in_ocram_fn
-as __ro_after_init: they are only written during __init, and the
-function pointer in particular should not be writable afterwards.
-
-Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Yo'av Moshe <linux@yoavmoshe.com>
----
-Tested on a Kobo Clara HD (i.MX6SLL) running postmarketOS
-(clang/LLVM, CONFIG_CFI=y): suspend and resume work.
-
-Note that with CONFIG_CFI=y this depends on commit 979c294509f9
-("cfi: Include uaccess.h for get_kernel_nofault()"), already in
-mainline, which stable backports would need as well.
-
-Changes in v5:
-- Drop the linux/uaccess.h include workaround, obsoleted by commit
-  979c294509f9 (Nick, Sami).
-- Include linux/build_bug.h and linux/stddef.h for static_assert()
-  and offsetofend() (Nick).
-- Replace the open-coded alignment pad with a new
-  SYM_TYPED_FUNC_START_ALIGNED() macro as sketched by Nick, placed in
-  arch/arm/include/asm/linkage.h as suggested by Sami.
-
-Changes in v4:
-- Drop the v3 __nocfi wrapper; keep the indirect call CFI-checked.
-- Store the hash in a cfi_type member in the struct's tail padding
-  instead of open-coded pointer arithmetic.
-- Use cfi_get_func_hash() instead of reading the hash manually.
-- Use SYM_TYPED_FUNC_START()/SYM_FUNC_END() instead of ENTRY()/
-  ENDPROC() with a hand-rolled __CFI_TYPE.
-
- arch/arm/include/asm/linkage.h   | 29 +++++++++++++++++++++++++++++
- arch/arm/mach-imx/pm-imx6.c      | 26 +++++++++++++++++++++++---
- arch/arm/mach-imx/suspend-imx6.S |  6 ++++--
- 3 files changed, 56 insertions(+), 5 deletions(-)
-
-diff --git a/arch/arm/include/asm/linkage.h b/arch/arm/include/asm/linkage.h
-index c467069..bba992f 100644
---- a/arch/arm/include/asm/linkage.h
-+++ b/arch/arm/include/asm/linkage.h
-@@ -9,4 +9,33 @@
-   .type name, %function; \
-   END(name)
- 
-+#ifdef __ASSEMBLY__
-+
-+/*
-+ * Variants of SYM_TYPED_START/SYM_TYPED_FUNC_START that align the
-+ * function entry itself instead of the kCFI type hash preceding it,
-+ * for functions whose entry point must meet an alignment requirement,
-+ * such as the 8-byte alignment fncpy() demands of its source.
-+ */
-+#ifdef CONFIG_CFI
-+
-+#define SYM_TYPED_START_ALIGNED(name, linkage, align)	\
-+	linkage(name) ASM_NL				\
-+	.balign align ASM_NL				\
-+	.fill (align) - 4, 1, 0 ASM_NL			\
-+	__CFI_TYPE(name) ASM_NL				\
-+	name:
-+
-+#else /* CONFIG_CFI */
-+
-+#define SYM_TYPED_START_ALIGNED(name, linkage, align)	\
-+	SYM_START(name, linkage, .balign align)
-+
-+#endif /* CONFIG_CFI */
-+
-+#define SYM_TYPED_FUNC_START_ALIGNED(name, align)	\
-+	SYM_TYPED_START_ALIGNED(name, SYM_L_GLOBAL, align)
-+
-+#endif /* __ASSEMBLY__ */
-+
- #endif
-diff --git a/arch/arm/mach-imx/pm-imx6.c b/arch/arm/mach-imx/pm-imx6.c
-index a671ca4..3c73e2c 100644
---- a/arch/arm/mach-imx/pm-imx6.c
-+++ b/arch/arm/mach-imx/pm-imx6.c
-@@ -4,6 +4,8 @@
-  * Copyright 2011 Linaro Ltd.
-  */
- 
-+#include <linux/build_bug.h>
-+#include <linux/cfi.h>
- #include <linux/clk/imx.h>
- #include <linux/delay.h>
- #include <linux/init.h>
-@@ -18,6 +20,7 @@
- #include <linux/of_platform.h>
- #include <linux/platform_device.h>
- #include <linux/regmap.h>
-+#include <linux/stddef.h>
- #include <linux/suspend.h>
- #include <asm/cacheflush.h>
- #include <asm/fncpy.h>
-@@ -61,9 +64,9 @@
- #define MX6Q_SUSPEND_OCRAM_SIZE		0x1000
- #define MX6_MAX_MMDC_IO_NUM		33
- 
--static void __iomem *ccm_base;
--static void __iomem *suspend_ocram_base;
--static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase);
-+static void __iomem *ccm_base __ro_after_init;
-+static void __iomem *suspend_ocram_base __ro_after_init;
-+static void (*imx6_suspend_in_ocram_fn)(void __iomem *ocram_vbase) __ro_after_init;
- 
- /*
-  * suspend ocram space layout:
-@@ -229,8 +232,18 @@ struct imx6_cpu_pm_info {
- 	struct imx6_pm_base l2_base;
- 	u32 mmdc_io_num; /* Number of MMDC IOs which need saved/restored. */
- 	u32 mmdc_io_val[MX6_MAX_MMDC_IO_NUM][2]; /* To save offset and value */
-+	u32 cfi_type; /* kCFI type hash of imx6_suspend() */
- } __aligned(8);
- 
-+/*
-+ * The ocram copy of imx6_suspend() starts right after struct imx6_cpu_pm_info,
-+ * and the CFI check on the indirect call reads the kCFI type hash from the
-+ * four bytes preceding the function entry, so cfi_type must occupy the last
-+ * four bytes of the struct, i.e. fit into its tail padding.
-+ */
-+static_assert(offsetofend(struct imx6_cpu_pm_info, cfi_type) ==
-+	      sizeof(struct imx6_cpu_pm_info));
-+
- void imx6_set_int_mem_clk_lpm(bool enable)
- {
- 	u32 val = readl_relaxed(ccm_base + CGPR);
-@@ -568,6 +581,13 @@ static int __init imx6q_suspend_init(const struct imx6_pm_socdata *socdata)
- 			mmdc_offset_array[i]);
- 	}
- 
-+	/*
-+	 * Mask out the Thumb bit, as cfi_get_func_hash() expects the
-+	 * function's actual start address. Returns 0 if CONFIG_CFI=n.
-+	 */
-+	pm_info->cfi_type =
-+		cfi_get_func_hash((void *)((uintptr_t)&imx6_suspend & ~1UL));
-+
- 	imx6_suspend_in_ocram_fn = fncpy(
- 		suspend_ocram_base + sizeof(*pm_info),
- 		&imx6_suspend,
-diff --git a/arch/arm/mach-imx/suspend-imx6.S b/arch/arm/mach-imx/suspend-imx6.S
-index 63ccc2d..95d5f72 100644
---- a/arch/arm/mach-imx/suspend-imx6.S
-+++ b/arch/arm/mach-imx/suspend-imx6.S
-@@ -3,6 +3,7 @@
-  * Copyright 2014 Freescale Semiconductor, Inc.
-  */
- 
-+#include <linux/cfi_types.h>
- #include <linux/linkage.h>
- #include <asm/assembler.h>
- #include <asm/asm-offsets.h>
-@@ -148,7 +149,8 @@
- 
- 	.endm
- 
--ENTRY(imx6_suspend)
-+/* fncpy() requires an 8-byte-aligned entry; see arch/arm/include/asm/fncpy.h */
-+SYM_TYPED_FUNC_START_ALIGNED(imx6_suspend, 8)
- 	ldr	r1, [r0, #PM_INFO_PBASE_OFFSET]
- 	ldr	r2, [r0, #PM_INFO_RESUME_ADDR_OFFSET]
- 	ldr	r3, [r0, #PM_INFO_DDR_TYPE_OFFSET]
-@@ -329,4 +331,4 @@ resume:
- 	resume_mmdc
- 
- 	ret	lr
--ENDPROC(imx6_suspend)
-+SYM_FUNC_END(imx6_suspend)
--- 
-2.55.0
-
+Yo'av
