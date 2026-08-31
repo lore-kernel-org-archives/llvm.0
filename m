@@ -1,88 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F47351C2A;
-	Mon, 31 Aug 2026 01:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD5EF3C1D62;
+	Mon, 31 Aug 2026 04:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788138903; cv=none; b=CUsB0buwwkf5MvISYha2Q9/n0iyv+z7y2CbrBYJYbofvxmmp/1Efm7s8YFShgrWPoyPESD7zQooNYJi7yCcxcG/nSydAgvNfNre5M913y84Wnx2Vlm+I9MPl2Qi5IvQKpPHuLZ2XGkFC3brNBPn+vSb75zj167ZwFfLjQKq9LMQ=
+	t=1788150147; cv=none; b=RKNEggTbT7FCA5/DFLumU2V2EMAjw73JhdgM0Qekj++h/BlV6aV9+KNFoztTW5pglD3nzoM6gtcin5yr0AmTin4PFQpTl/AZsK7E3gW5k6cqijY0NNhsViKa2XLn8/oeOCCA+jp+LrvbZbX4sMO6fftKKr0e4eMKFP+Cwi2CglA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788138903; c=relaxed/simple;
-	bh=/spp0J/X/Qn6SNBgMWqR1VpdKMx2QctH7d2bKRvY0xk=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=XG2R2M/8uxMemziA8orTnQ/6wjjAyG80jTGE0qzOI6r0Ivgw5hK+ZJqUymR1qD6eQrBimWNXwdeh1znEQl2S8kThf0ObQ6M3r4vWR+WeUogF1j8DJRZfvxEHe5qpV9RwSnPkZlxQxHi4XoQSncl7CbA5VS5VMH4KVcxMtYgZ++o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NszBREvh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788150147; c=relaxed/simple;
+	bh=wnKyq1n4yvhBG4cBtpiL2AdFKxXSvJDhhcy1WJsWZpA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=MxP9keq+nQz7UcGN+qmKCgrN9M0RVvBICRsQwww47Jz9RIp8WtZnZBIGzGVYsrfrPbSbOYkMhB1R/N0sEM3Axx7dEEKQ49tlgCANjvSszRptCSNvZN4LI+h8tqLC05A5jFDpkaJDysJ8VrDsWg0UVGO2s7E2ZDK4vV/Tjs/EmC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IDgO8let; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NszBREvh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF0C11F000E9;
-	Mon, 31 Aug 2026 01:14:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788138901;
-	bh=IhrsxaK1SnaziFGJt7Z2KpMwTqpqhw5qMI7DCQ4iWvo=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=NszBREvhZ4k0AnUauxLf4HlAkZ/9kUoLKee0oc4hOUi+lkNSpAiO/6o5+xDGht5S9
-	 pBp474iL6JDIVXGpWpwZVdYPqXIE4YG+s6YAHcQHuiR/XS8Lb+6418gAY3IElfGTOH
-	 +dL6xB8/dcY5DJDQxmyNcB5Zw3RJ1ADAeW06FKGWMPsWLOfpnzGms4BdnWNhWBiohK
-	 G8QntgRjLCyHivNHq7LJVck8yolad/TXYwO3ZfvBcSJiw3wKIDOUnqhkFEQXqxisba
-	 dH04SSMiR8RbO2H7AhbcbPojS8bpS9dlVV5ziSaIF+WhwHFm/n2kJe+LJK2OCL5eR6
-	 ADXlHg3DfPXgw==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IDgO8let"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788150144; x=1819686144;
+  h=date:from:to:cc:subject:message-id;
+  bh=wnKyq1n4yvhBG4cBtpiL2AdFKxXSvJDhhcy1WJsWZpA=;
+  b=IDgO8letHBjsE62N9JRg9ao+NiQuECEKtZ9pAhaV+5/XDzpDb5JglY4P
+   mJNur4SVbWPAA6YH+dro0otcmNnHALJUW2qkiIsNsWmkIU0pJxWs3KTw5
+   8tOJ2Rku4JHiVfv2qzPicOGVxYuN/TmYn32vXuhNjBjZaD1f9FYxd6q9C
+   S3UpqC3GmKMHfa6khA1FhJYB8L37+E9ged2fs2IpKUUstZteW1oSzqjgr
+   EfmbReMZ3ELTZrN2xT6noCMvTtOQi6by2OgH+lRCLrDeMmKpkMkEuomcH
+   yiZ3G7CJ9J8B+6bWnCjWARKbTXu5sce/BA8GFMYX0Dwf2TcT8Q3voa2nf
+   Q==;
+X-CSE-ConnectionGUID: vXFywN3dQVSte1/4qcxH7w==
+X-CSE-MsgGUID: UAfhUqpGTum8nbzv9u0KUg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11891"; a="99707764"
+X-IronPort-AV: E=Sophos;i="6.25,252,1779174000"; 
+   d="scan'208";a="99707764"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2026 21:22:20 -0700
+X-CSE-ConnectionGUID: Ayyyr93PTZ29YV0plV0z9w==
+X-CSE-MsgGUID: JsDP8x8ATzeyS+kFFkhWRw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,252,1779174000"; 
+   d="scan'208";a="264939056"
+Received: from igk-lkp-server01.igk.intel.com (HELO 32268bdb9915) ([10.211.93.152])
+  by fmviesa010.fm.intel.com with ESMTP; 30 Aug 2026 21:22:18 -0700
+Received: from kbuild by 32268bdb9915 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x0tXE-000000000OR-1vb2;
+	Mon, 31 Aug 2026 04:22:16 +0000
+Date: Mon, 31 Aug 2026 06:22:09 +0200
+From: kernel test robot <lkp@intel.com>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [groeck-staging:hwmon-next 18/32]
+ drivers/hwmon/hwmon.c:344:13: error: redefinition of 'is_hwmon_device'
+Message-ID: <202608310650.HNAE53Na-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v6 6/6] iio: pressure: dps310: check the lock markings
- with context analysis
-From: Jonathan Cameron <jic23@kernel.org>
-To: Rupesh Majhi <zoone.rupert@gmail.com>
-Cc: Andy Shevchenko <andy@kernel.org>, Bill Wendling <morbo@google.com>, 
- David Lechner <dlechner@baylibre.com>, Eddie James <eajames@linux.ibm.com>, 
- Joel Stanley <joel@jms.id.au>, Jonathan Cameron <jic23@kernel.org>, 
- Justin Stitt <justinstitt@google.com>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-iio@vger.kernel.org, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-In-Reply-To: <20260824201203.396651-7-zoone.rupert@gmail.com>
-References: <20260824201203.396651-1-zoone.rupert@gmail.com>
- <20260824201203.396651-7-zoone.rupert@gmail.com>
-Date: Mon, 31 Aug 2026 02:14:41 +0100
-Message-Id: <178813888151.2788519.7490126649907374080.b4-review@b4>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=622;
- i=jonathan.cameron@oss.qualcomm.com; h=from:subject:message-id;
- bh=/spp0J/X/Qn6SNBgMWqR1VpdKMx2QctH7d2bKRvY0xk=;
- b=owEBfwKA/ZANAwAKAVSFNJnE9BaIAcsmYgBqlNWQCDnGKO90eRVG+RXfakIOayDNkm+ukNBsR
- BVYb1xG1K2JAkUEAAEKAC8WIQRuKWazh4QGUpEmgbFUhTSZxPQWiAUCapTVkBEcamljMjNAa2Vy
- bmVsLm9yZwAKCRBUhTSZxPQWiCLEEACUTq7qlwiABhDG//4+VKtCLJaBqyP33XZAOrOGllQHSQ/
- nmVBCbLcLQ8en2jrMniytFxvLwFh6V2dWVo6ENnxmhtj78i4tEUmoDuT+bEX6EizeqN/x94C4FW
- aT+uIkWW5kbBEDDZSfVm8/h3urGys/C3JeWXFvLq3aWukkjTs6/Zzozj17aj0A+X++OuDo7f6tO
- jygQaYZ/1zXHqUK+g34J6f54YSYe0NycVdIr1RkriqGs7ltdWs7ltUqxCLRVFZ7iIFr4B9ClZAH
- +WDf2Mhk4fc8RwiI+h59Dlw28ghCVpvikWymvtFejLEwTkLzEjkVo4roVcscgkdaLZfQvdyu4cW
- Jxn7MT2ckPsuz9lrB70T7YgetldkKFIIFN8vPFK/whtUjfaEtRo7nFdWL8yJ7U/ExTx5EnvNOMO
- He3dUoqAqFbv3BZsdkG38A1JdWOJ3AQI5KskfHv6KOZSjxWFiNw0xZj6dJYPZ7LK0Ozr+UHxyLn
- I5DlHXORRAitX66S+ao0CGsuI6znziEIWNh1M1bsBR1EJ4gMmXQSOrwDPJhXpFE6LjxEn7LiZ5t
- 1EWvzWAHiPV6VJOR4VnY94iP2SC6+mPmyDYjBLIa2u4IqrjFqtdavVf1QunFf5jmyUBpdVM+55Q
- aQxVmEdFKYkt+vdlmW5JBTAUOfg8GGGwPU7N6oQ==
-X-Developer-Key: i=jonathan.cameron@oss.qualcomm.com; a=openpgp;
- fpr=6E2966B387840652912681B154853499C4F41688
 
-> __must_hold() markings added earlier in this series are only
-> documentation unless the file opts in, so switch the analysis on for
-> dps310.o.
-> 
-> Clean with clang 23.1.0 at W=1. It does run: dropping the lock around
-> dps310_fill_scan() fails the build rather than going quietly.
-> 
-> Assisted-by: Claude:claude-opus-5
-> Signed-off-by: Rupesh Majhi <zoone.rupert@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+head:   6d28113b5ea75542b72d9f73ab9aaf0d0a49a104
+commit: 40b20f8e6b53ea701f250fe2d3cac82e07c18468 [18/32] hwmon: Ensure that 'dev' passed to hwmon_notify_event() is a hwmon device
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260831/202608310650.HNAE53Na-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260831/202608310650.HNAE53Na-lkp@intel.com/reproduce)
 
-This does make me nervous, but I guess we need to test the water
-at somepoint.  Ideally I'd just flick it on for the whole IIO but
-it is notorious for false positives.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202608310650.HNAE53Na-lkp@intel.com/
 
--- 
-Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>
+All errors (new ones prefixed by >>):
+
+>> drivers/hwmon/hwmon.c:344:13: error: redefinition of 'is_hwmon_device'
+     344 | static bool is_hwmon_device(struct device *dev)
+         |             ^
+   drivers/hwmon/hwmon.c:321:13: note: previous definition is here
+     321 | static bool is_hwmon_device(struct device *dev)
+         |             ^
+   1 error generated.
+
+
+vim +/is_hwmon_device +344 drivers/hwmon/hwmon.c
+
+   327	
+   328	/*
+   329	 * PEC support
+   330	 *
+   331	 * The 'pec' attribute is attached to I2C client devices. It is only provided
+   332	 * if the i2c controller supports PEC.
+   333	 *
+   334	 * The mutex ensures that PEC configuration between i2c device and the hardware
+   335	 * is consistent. Use a single mutex because attribute writes are supposed to be
+   336	 * rare, and maintaining a separate mutex for each hardware monitoring device
+   337	 * would add substantial complexity to the driver for little if any gain.
+   338	 *
+   339	 * The hardware monitoring device is identified as child of the i2c client
+   340	 * device. This assumes that only a single hardware monitoring device is
+   341	 * attached to an i2c client device.
+   342	 */
+   343	
+ > 344	static bool is_hwmon_device(struct device *dev)
+   345	{
+   346		return is_hwmon_device(dev);
+   347	}
+   348	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
