@@ -1,84 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5071C324B33;
-	Sun, 30 Aug 2026 21:55:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1927DE571;
+	Mon, 31 Aug 2026 00:42:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788126954; cv=none; b=uJlb+DnN1QfV00DtlUTtfX+XtwbUHxsgAUcI0lNbSSImnOzTNVLPwwootr9fVs8hpshy/YAYSFa31+9jEU3wX8yfJEByrgx5ffrbWVYzthxrrkhdYLSinVB+8V5Eb3w1wJr5i3X3aTuK+p13rIbo2KAAoTBcsAbnySVBFeufQJg=
+	t=1788136921; cv=none; b=ZFKd5CANgxDWueE5Dg4cP3QoHDbJbfShZuKqOEFYVE7J0syC1538QgOCS0lroAsqZ6mfYNJEprmvaBIGSh6cD3W0rQwx6cBkoLci19YO/X4XxwgtIJ8aEHPhcXu48q6f+tsTPt/el4cHFFBGNFuhdLcc7qulHhgNITKKz5HMcno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788126954; c=relaxed/simple;
-	bh=yapKRDGzt3z/DyYa54mrH5TNTT3gsn47aDoLdgmB2EI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VODSYjxHOKBcV/9e/oAjiUivq/QNZpLvc/65q70iodW567JpqV7SrfABNZ07UKmbXhK2qPsvDwSBG7XSbV2gUnXLz6yy4HzOAL6X8F30d4AiNpmfyDVUPJtZpPoeP/wtidPZh7XN1kGW9QvktV0M1jWUAFzM1uiJhuYuG0erdQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OhgxnXje; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788136921; c=relaxed/simple;
+	bh=Va2nVMvF4tdrSfcTdmGWvv6ZdBLUhrd9nazicKWzj6o=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=stQKuwTSuqU2Jq6lw4AxKbR8Rql/BAco5zr2tvuuUrerCUPoBsHBMEW8CJcvbLqpFGzG1fi/f8oDjFNg2TWboIChy9NJiagAh15PhG5YYtDNmtOghYcO/f56B0hkRCJbWF9OsfGugF2Zcy9m2shfUYHBubLPgGK1MfaLu4JpD5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/ktwCnq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OhgxnXje"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3D41F000E9;
-	Sun, 30 Aug 2026 21:55:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/ktwCnq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86CF1F000E9;
+	Mon, 31 Aug 2026 00:41:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788126952;
-	bh=BGhGFlBUGOYhmG7/RCTZx4wzUQC/JjStZaaRuBTWVfU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=OhgxnXjeiU/YDlmQ3bnjtwtvlYh+FlBVmXvKFDA/EsceLHNOVAKod9jyi2wp4zNTQ
-	 Zu20cS9eqr/kyiUb9F6qelX0kOmTtM9XPiz6CyirI+cY4nGAJykCJNrb/tw+36oxIt
-	 QiS3rLJ1buumXts4AaVKc4Lvnb5AmBW7Re7ZzbK+UMQpmfe0xlx1nZMO5RWV7Ihxk0
-	 DlNm/tH0Y+Ot/IWG0G95YfTxQnh3Ac/8g1Uz5fS25LE6bdSD38ZGjbdihSQ6ypG1Xz
-	 QAX3slQ1yvmpQ+h+EpJjQKFkrIBUElnRwME/BUxGikhV6vKc1/sRjnPtRDCbBhh9On
-	 U5qqluBm3TG+w==
-From: William Breathitt Gray <wbg@kernel.org>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: William Breathitt Gray <wbg@kernel.org>,
-	linux-iio@vger.kernel.org,
-	Patrick Havelange <patrick.havelange@essensium.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] counter: ftm-quaddec: use devm_platform_ioremap_resource
-Date: Sun, 30 Aug 2026 17:55:42 -0400
-Message-ID: <20260830215543.1051817-1-wbg@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260714234350.892367-1-rosenp@gmail.com>
-References: <20260714234350.892367-1-rosenp@gmail.com>
+	s=k20260515; t=1788136919;
+	bh=OLOC2S+02tg6JAR36TaW4fxJhC3mIL2wPvhEoBNhqvY=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=M/ktwCnq1UxuL7TL4qCoxqGLHXcCfguwsMXygm3xLLRDvB0O2ds5zrFVQV4iGRHaz
+	 Nhln/XTw7IhmUqW9saowdouhuGxKcdhdeCOeMAJrSgbH2TzFbSOBaNa9NyBdn0bKo1
+	 NTJ+sFQn7y6dOhlfnI5D0VV0Ez0kIgPflVWW0+N5OTcr7WtB9EHggg/vtTSLpoHsGn
+	 A466N9LKXS1daiQEUKEePDQ38JbGje0ZiumCUA8oyRdf21lKbomd8cHhDGJenyH3v1
+	 /WWKM9mD51w/M/1aQRROT7LS7YBL3lrhKKGhY6BtHtN7g1IJcqli+tAbq1W2IJAtDS
+	 2n/5ZuJj99a4A==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1166; i=wbg@kernel.org; h=from:subject; bh=yapKRDGzt3z/DyYa54mrH5TNTT3gsn47aDoLdgmB2EI=; b=owGbwMvMwCW21SPs1D4hZW3G02pJDFlTli1mjq32t1db1adct6rjJvu1yhmzjX7ctL6ntOLOh dCtQhusOkpZGMS4GGTFFFl6zc/efXBJVePHi/nbYOawMoEMYeDiFICJ1D1k+Gdw4MvnLT7lzXl2 Qq4Xj2SYs56Ke5Qm+v560s5TicELxUMZGU5XT3jm5d//1jDo6uvPD9ubT3w9xpH124mNS0k8IO2 2OA8A
-X-Developer-Key: i=wbg@kernel.org; a=openpgp; fpr=8D37CDDDE0D22528F8E89FB6B54856CABE12232B
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v6 4/6] iio: pressure: dps310: add triggered buffer
+ support
+From: Jonathan Cameron <jic23@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Rupesh Majhi <zoone.rupert@gmail.com>, 
+ Andy Shevchenko <andy@kernel.org>, Bill Wendling <morbo@google.com>, 
+ David Lechner <dlechner@baylibre.com>, Eddie James <eajames@linux.ibm.com>, 
+ Joel Stanley <joel@jms.id.au>, Jonathan Cameron <jic23@kernel.org>, 
+ Justin Stitt <justinstitt@google.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, linux-iio@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <ao1bBFkLXIIgNl49@ashevche-desk.local>
+References: <20260824201203.396651-1-zoone.rupert@gmail.com>
+ <20260824201203.396651-5-zoone.rupert@gmail.com>
+ <ao1bBFkLXIIgNl49@ashevche-desk.local>
+Date: Mon, 31 Aug 2026 01:41:46 +0100
+Message-Id: <178813690647.2788519.5367342639957476343.b4-reply@b4>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1342;
+ i=jonathan.cameron@oss.qualcomm.com; h=from:subject:message-id;
+ bh=Va2nVMvF4tdrSfcTdmGWvv6ZdBLUhrd9nazicKWzj6o=;
+ b=owEBfwKA/ZANAwAKAVSFNJnE9BaIAcsmYgBqlM3KnrVra9pc7LX4upS85Jp9VQQ/zTrvwfBSy
+ L07L3nuKEaJAkUEAAEKAC8WIQRuKWazh4QGUpEmgbFUhTSZxPQWiAUCapTNyhEcamljMjNAa2Vy
+ bmVsLm9yZwAKCRBUhTSZxPQWiI/kD/0UyHuKncW8WGzqfXSq1YmGqgew/WEyW4OclcFSO/cez4Z
+ JX4m7jNf1XJviqh/MsQXqU70GQvZwuVY+C+4RGXcKOHFR17+PBjPdRKsqCOXLyyVMZlYyTElpmT
+ apOcNrpMGT9Qq3yATqbswE4eqwLTNyAY62mRt6oGZYtiV4Tl9F+tnY6hLUfLVuzorqSD1sP+lgf
+ Lm7xSSN5vJKdfa9vqD4kFuh9rBavL4aPlX4VkpMz50nkkfihdN5UUya2ezieTbgsVg4ulRiSH8N
+ auqviDH7cvwzokLRZRFWh+uCuwVRuPvNVdZQJeDUIysA84Qyapy5Osf9iAttVwTXZJYVbehOIiT
+ XjFEWPmilb+QXoGYLK2f3XamV3kOjtN6oLyJRDpOnVjJcs4AxLVCXIj2x+SYxxpECQj9P+EdiQh
+ 70hEFQSCUsTF021qHJH2sh/BAgqRYvNi+77dcZu+Ax1DSY1Om71L5WpG1v2PUAzgsdLBUD/ZRgK
+ e4rWjZteZTlgfxb1IwDGDveC5H8pnd8DAPFHKZoNbe9erUfBXYpl4PgR+GNA0hEm1iXcweyGRrL
+ Qxo4wridei15pFU0GVlAiioLSnoSYPXUXPTJbtqlaVHCbgVJ3aEI1OS3aYQFjvjHm9M9MNEIjmL
+ Dy6VX0tnw/4vwGOMdtwxrE+c4Prx+HC9RHlCnog==
+X-Developer-Key: i=jonathan.cameron@oss.qualcomm.com; a=openpgp;
+ fpr=6E2966B387840652912681B154853499C4F41688
 
-On Tue, Jul 14, 2026 at 04:43:50PM -0700, Rosen Penev wrote:
-> Replace the open-coded platform_get_resource() plus devm_ioremap()
-> sequence with devm_platform_ioremap_resource(), which fetches the
-> resource, requests the region and maps it in one call. Switch the error
-> check to IS_ERR()/PTR_ERR() and drop the now-unused struct resource
-> pointer.
+On 2026-08-25 12:06:12+03:00, Andy Shevchenko wrote:
+> On Mon, Aug 24, 2026 at 11:12:01PM +0300, Rupesh Majhi wrote:
 > 
-> The DT nodes (counter@29d0000 / counter@29e0000 in ls1021a.dtsi) each
-> have a single 0x10000 reg region, so the region reservation added by
-> devm_ioremap_resource() is exclusive and does not introduce overlap
-> failures.
+> > Add a triggered buffer in order to capture continuously on both channels
+> > instead of one sysfs read at a time.
+> > 
+> > Raw register value is not useful on its own, pressure has to go through
+> > the compensation polynomial and needs a temperature reading. Report raw
+> > in Pa with 1/1000 scale to keep full resolution in the buffer without
+> > changing what the existing processed attribute reports.
+> > 
+> > Raw and processed reads return -EBUSY while buffer is on, so does any
+> > reconfiguration.
 > 
-> Built for ARM (drivers/counter/ftm-quaddec.o) with LLVM=1.
+> ...
 > 
-> Assisted-by: opencode:hy3-free
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > +struct dps310_scan {
+> > +	s32 channels[2];
+> > +	aligned_s64 ts;
+> > +};
+> 
+> Wondering if using macro here would make sense...
+Hi Andy,
 
-Hi Rosen,
+Do you mean introducing a new one or using the buffer ones?  I'd
+rather keep explicit structures where possible.  They are much easier
+to reead as they make the data layout explicit, including the holes
+(as long as folk remember their c structure alignments!)
+- no holes here obviously!
 
-Patrick Havelange is stepping down from maintenance of this driver, so
-ftm-quaddec is currently considered to be in an Orphan status.[^1] If a
-new maintainer comes along in the future to maintain this driver, they
-will be able to assist the review of this patch.
+We only introduced the IIO_BUFFER macros to cover the cases we
+can't represent as a structure because the timestamp moves
+around as the number of channels enabled changes.  Necessary
+trick to reduce the size of the kfifos.
 
-Sincerely,
+Jonathan
 
-William Breathitt Gray
 
-[^1]: https://lore.kernel.org/all/20260830-orphan-counter-drivers-v1-2-3b10ab8b3876@kernel.org/
