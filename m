@@ -1,141 +1,189 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA39049CF43
-	for <llvm@lists.linux.dev>; Mon, 31 Aug 2026 16:33:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788193983; cv=pass; b=Lh35IG/TvSfUPPxu3s3zgSI91I5nEvGqnBZ0Hx/dCaBbMRDUb8SYRgWKajWV0H8xeqCPMtEoQzrDe1320kHX3JvlusC3R1XQu4DsRQ8JjGZSTY9meC2uBlymIXzdJ+pWoBhZIhzGEuWEQVGnY9Ok9b+UwQSKFPnqKEiBsUJgM3Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788193983; c=relaxed/simple;
-	bh=WAb2HioeKt8yQ4+e2mWpoQ1jc7oIFNQVMnrcZ1VNVk8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f/CAcnW9ceMApQDT2W3nBAdbr2c/zpiia6q74hO/VUBRRMLNts97W1e4u6LOVDVmH+bTmxfxUdE0fvCFdUNSOOHGx/NMvv8VZGgJP0ZKXoslVI246jhI/ZioYbW+F/FzTrz4s1A5WELxwVT558+kduyvpPCcyVreQQpXDQ+gI9I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MgxHD8Xw; arc=pass smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93223B5311
+	for <llvm@lists.linux.dev>; Mon, 31 Aug 2026 22:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788214740; cv=none; b=SkAvYLkGcT8mT/cBy7ndpYQyiTTf0HWgXjmbeIXecvrOsLf3miaoYOribJrsxgk4iXZcrX6PTDM5tFrxZVLPBOP4jJCxdNNVNXidTQgkrQ9H+bk/O308f1eEjIbRhmC5je9JTxAOc+ovV6hlXxpEbGXmV2qWslC7VaawbuTdiv0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788214740; c=relaxed/simple;
+	bh=WWEEZMNW23VgeiLrA0jkBRh+FqlaOZaIbG6KQNC9i3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UE56dh/ASyFp65oZ7XvtyIOixZb5zbIJbTMgOkAA8LXJI504C1rA3XF2i6E/Y9t+IQsK8kgg0lsu8E9B1Y4oAyDXa4EJm+5DE7+lPrwhUrg7ZpRtRIfJlvIbblEBVUqlrqCwdspwSLanUHCZF7x1cBpqX3L6E9CU1Ob0Fx/PW0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzI7fs58; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MgxHD8Xw"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d6fec3c1adso4472145ad.3
-        for <llvm@lists.linux.dev>; Mon, 31 Aug 2026 09:33:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788193981; cv=none;
-        d=google.com; s=arc-20260327;
-        b=qi7zzjatYiHY6dnux49ypIgI/K/D3sY/tU3lTCYaO+zfGOUhIC8UTYMw9C6Q3w8s01
-         W5dLF1XpNCYLMbg3nOQ6/WW91DKX9JzOsLEkGYD2HP2aypMONk5T+pCCJSsb0N1uulD/
-         Op92tjB9Bl74Q++UttSBPV5odKtA5LFLWI/rM3JXXp46QoSH803Qi4e/XpXw7Qb/ZK/o
-         VPsJxYxSFECRt5cr0H9lZbEYLcnFp3AYKejcFHA9MGQ+Ey2j6iNKylPaft+5b90V2ARC
-         97gFrzPGxZf7RP76kN5x1ZxvYU5VjDF3np2Yxnb//Fy/Pg6pGAl5JPUipkOZnjvgpiFe
-         UqPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=OJzwv1wFVi53NEXZo+hKmNYNH3NbrWf4sdQ3Ijd6Mi0=;
-        fh=3duOIBItP/B1kt+OSjt+1iTQPvZ1Aq+I/XRlAK9tL94=;
-        b=sr7IAIlpe2d7aanhCRVnnDwvaCKji/UUJd/LBOhzkx7HJaOg+ezdl8GUvOXFe1fztF
-         N1JA4nEgasn5GZCF8O5Epvfhh/duYCrW05qqDOOxoSt7iceheFdFNQtEKa4oo9LMmijf
-         +v2uTrGqAqQ0QM8NPYZ7VHoKODcpbBjDYZJP9Ijnx7NDTHaX/JVfu8N9RWf5Qvcjxhv6
-         /8P0BcujL5tMOEEmXM+s2FguBgYyQm7pqi72mLlTlELDBFv18+ndBDm5N3aT/GvX6Rrw
-         PYERG0jEhjSxY+XhkWxD0pAQQB/U9l4LEvt4Thzf214sJiELWu+6ObhUdQrIKtQOmbJj
-         Ixdw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzI7fs58"
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8534d507f59so4453934b3a.0
+        for <llvm@lists.linux.dev>; Mon, 31 Aug 2026 15:18:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788193981; x=1788798781; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1788214737; x=1788819537; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=OJzwv1wFVi53NEXZo+hKmNYNH3NbrWf4sdQ3Ijd6Mi0=;
-        b=MgxHD8XwogKIRn3OYcCmJU4L4zJkMqn1aB4vN61/heGdGV6m32vtBx0C0HMozsIM+H
-         w8HYpQQPXbOyAubrQ1lXHdc2g6nDPRfwDz39E18a/2LiLp7qQGd6vuivQXT5K4l9FKiG
-         9rvqx6ACRHWvFEBbis+T0370IODBtoVk95D4WqvoHMlucU/6uquHfW8En7rfVqWs9d6m
-         7K4qAlNirhhKmzniukZj/huU8fYrB80CzUfDjQzKpjd12qq0LexQu/gwQp4GsZzPuMQA
-         WUsScBi4+s/1cditf/TcZt7c7zMVYdXwk5m90L1fv0+KWWibkmC4GnTv0zJvA4sHmwq3
-         fj0Q==
+        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
+        b=KzI7fs58+oLUriXP+Y3asfqJuMtW2ZSgZ2rI5+apNm3XsyqLvbIgoDWpLbkIiosxr9
+         53+dxLoPAnl+UJ8xL0kJQ1LizvwgAAAtG8HVxUoFL88olH2/TdD6HzKVLT08DM8CZaDx
+         zYRsParmOV0kAlZIzFDReHQivuOTiJ/+2e2E1KME8XQ+omLCrEagSohyG28PZtZZjWDb
+         9wGSlyuy9P8SopbXyZfW/rUC5PihZ5Toe6G/ZZjw7JaVzhSrw8HWIGrrlw108Eq+9guF
+         Tjr2NShFpQ96DsOTd/H1fW+jqJ87fQDRPwF2Y0uJkpgxdhxc0FyNZkIvZIv2WarLwMaC
+         D+JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788193981; x=1788798781;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1788214737; x=1788819537;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OJzwv1wFVi53NEXZo+hKmNYNH3NbrWf4sdQ3Ijd6Mi0=;
-        b=K1yhgh8fvatjJBsSfqfNyByAhUJDFIROnJrs5IOmfEgsReXV82pwLaOzVkcuLoOXEU
-         key/9r9HZtD5cPA6cKGjoxd71FvZKTvf0oWVkXOEwhA8Kutnameqm7y4nJ6GasXp5TyB
-         ZmsDNFpq3sv6SE1EV+lHBxO5O+fvJB5q4Bo/3nAzqkczLtzXH4RgWBd9z/+UUiIIT0KF
-         uVAx9y6YfjB3f+KFaDM+KC/YBHUHZ4ZeuSiXZX0RgPaDRUxLXDoI7RAagUuMpRrOlBHF
-         0FKSrBSOPvwQhHxTBqf5vQOXMGAujYYF68MC0GVvGLln/4jcGG2IblEdbqx2aq+nnPHA
-         ZqtQ==
-X-Forwarded-Encrypted: i=1; AKwUvBydePXE1XM8sxpTmhH9sOPB83GB10A2SHAEms3Y8mmbK6cm/RR9N6vawc08RWRDXzelXylz@lists.linux.dev
-X-Gm-Message-State: AFuF++kpnJEdbo6KjvN6CLX8SAuGFIcy/mo+lgmME8O0L8PI+D7Fb/vi
-	Q/iuj48IX559wx2Gs0BqGetR2HE11GdTnN/rZrgMMNe2tBtPhpkxLpTPmIIflEJ5pGEKLZ3Cvki
-	wNEpBU3zwL5eTK9S1g0l8IXhWd675dbg=
-X-Gm-Gg: AYBFou1SQFWH4qQtATgy9a8z9L4XqCyy9umEbF4zRr9g5VoOs72SudPsi/W+6nS0mGR
-	N0uXGvHHqYBEKXoK8Z+tnOnz5fEJg5ARRdxyH+I+svMeIC53K6qETQabjek7yGDIAIvd9nTSHvS
-	u0xMW+BjrC13M29HHXZ1gxD/AkSZ/Pam2Q1r5cIK7OdvozVlwzsO8yHExH2gCoA0mGFhmNCMNrD
-	Mdqz0n0TR8rfS3FYzruIRi1FptgRRYjE8xgTngBc0jZhplX+E/xkZ6vPWuNyR/eewu0HkrcRuzi
-	TCu4CP1SAX3SXF6YqB6KJFXfr7hesimnAFA2wB25qpUS7SOU/Cl4KtRi4dCHij+PLmkS9qMhGxt
-	Dp3x3aJnHoassIjq9o060nYqDiY3lBfzRcH8WtHLZQj12KPjWO6ckm6+CqYqo
-X-Received: by 2002:a17:902:c94e:b0:2ca:de3:15eb with SMTP id
- d9443c01a7336-2d74ce5e476mr224272585ad.0.1788193980913; Mon, 31 Aug 2026
- 09:33:00 -0700 (PDT)
+        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
+        b=DP9zh867pBxoZTDP4Q2O32sxMoZANezkbgU+55qxbOma/9RCbctv4avnZ2EzbOC2bM
+         qESsx3S+IV6FfdBcBjj0KSTVbiRqZRQLwwRlpNnMRIO287y+FGlwBgs44XOw2FstY+nf
+         yJULt94baNEK3BL09fsvx1e5rudYxqzoKDlRhe9HmGX+D0QT521xIMJmwLpiN//hu8l1
+         k7XUnBjXqTZtJiXfe/iMLM1FTcQEXWccbq39q4WdZPYFJg2Me05g0Jkf4eGYdvi8B4U1
+         tAFFLsRQHSIdIT5sZUwYGtnmPYucibK5hNST2KTbcuD4FzdOjnVPiUo6PCaWPX5x4sJk
+         6yTQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr3cWtu+A8YowrR0QEp8WGrJvzhFTfwn2rlW2LtswKCXpu7HuVhQKFGJRI21q77POh1L8jA@lists.linux.dev
+X-Gm-Message-State: AFuF++nYfYNT3G8KZDcV1HprbK6i0qLx49Oduez/VvSOBG9OeDHRvbQt
+	OzMwh6qGHd1sp3O9b5GxXDxAMlRAB2pZUlHHpM+z4vJimwUO+aPAIb09
+X-Gm-Gg: AR+sD10HeKYw72y4nL0c9Rste9Zlek+fXYYilI/DqQEu8EtBy4JC275faJZIfbAopFo
+	d5tAtZw7/ruzQPbiHW+tNqcghLLJ1PHONpxuM1lKBLF2LBAufsFlfGaQkMkmaQc0WjFArm3wNeH
+	ZiWaX0Wd8YcKCDU83oEOKkzs5/SlXimhoC+dARULS7XNi01VnTF/l4UwJM8nCOr6gETlIRA2f8i
+	oaD/G7lpoZXnIM1e7Jy3TelqMvmOxG64Pow/qO6ZPnhUrJVkytgZXjNm3Wkz2eRIrpMNsJdOHgx
+	0+d3jaNATMr1uO97xTYTmiRgw5OTcXPvQkM+fBYzMIXej2uzO9xQuYDuzBSRukMsL+Dfoga1uaK
+	Zz5mqrybTgI7jYtKCasfw9Jp/fQ3pdUdRMpzAQN85mtnRBskz5Rz5r14ubQPGER6Pfc0FFd+27b
+	AbcnUMonAOAdaAr+TE8twrJ22AwY3/36NoLk0Bd/DhlAJ0eSikKVp0dF7nXniDrba6nmbs0zLMJ
+	JVsdd3D
+X-Received: by 2002:a05:6a20:2586:b0:3d3:b02a:7252 with SMTP id adf61e73a8af0-3d3b02a76a6mr29131323637.28.1788214736859;
+        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:44::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7be607sm33073832eec.10.2026.08.31.15.18.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
+Date: Mon, 31 Aug 2026 15:18:53 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: Viktor Malik <vmalik@redhat.com>, Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>, kernel-team@meta.com,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm@kvack.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] selftests: shared lib.bpf.mk for building BPF
+ progs and skeletons
+Message-ID: <apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
+References: <20260814075054.507089-1-ziyang.meme@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260831151605.638172-2-manuelebnerli@mailbox.org> <20260831152523.638881-1-manuelebnerli@mailbox.org>
-In-Reply-To: <20260831152523.638881-1-manuelebnerli@mailbox.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Mon, 31 Aug 2026 18:32:46 +0200
-X-Gm-Features: AcwNN1WxT2qUEpoESa1nnOxcvqd-4guXTylAIIzIEvrVEhydUWRkwim0NkJ623s
-Message-ID: <CANiq72=TYcLdj0t2DbboS31L4BNrSg-0bRmHZe4SDnbRLeoy9g@mail.gmail.com>
-Subject: Re: [PATCH] v2 Docs: changes.rst: introduce optional column
-To: Manuel Ebner <manuelebnerli@mailbox.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, 
-	Guillaume Tucker <gtucker@gtucker.io>, Nicolas Schier <nsc@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20260814075054.507089-1-ziyang.meme@gmail.com>
 
-On Mon, Aug 31, 2026 at 5:25=E2=80=AFPM Manuel Ebner <manuelebnerli@mailbox=
-.org> wrote:
+Hi Reviewers,
+
+Just want to follow-up on this patch series. Please let me know the possible
+issues and I will fix them.
+
+Thanks very much!
+
+Best,
+Ziyang
+
+On Fri, Aug 14, 2026 at 12:50:50AM -0700, Ziyang Men wrote:
+>This series re-factors the bpf-related toolchain for selftests, which
+>currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
+>into a single includable fragment, the tools/testing/selftests/lib.bpf.mk,
+>and wires up three consumers. We believe this will simplify the work for
+>configuring selftests with the bpf, for both the existing and future ones.
 >
-> +bindgen                0.71.1           generate Rust bindings
-
-Should this simply say `CONFIG_RUST=3Dy` too?
-
-> +Clang/LLVM             17.0.1           alternative to GNU C (gcc)
-
-Should we add an equivalent one to GNU C?
-
-> +gtags (optional)       6.6.5
-
-It seems the patch missed this one?
-
-> +Sphinx\ [#f1]_         3.4.3
-
-Should the footnote be moved into the new column?
-
-> xfsprogs               2.6.0
-
-Is this always required? There may be others that are actually optional too=
-.
-
-Cc'ing Guillaume and Nicolas -- we were discussing Python in this thread:
-
-  https://lore.kernel.org/all/apG3hwaPA8f7SJeI@levanger/
-
-Thanks!
-
-Cheers,
-Miguel
+>Patch 1 adds lib.bpf.mk mentioned above.
+>
+>Patch 2 adds a new selftest, selftests/cgroup/test_memcg_stat_cross_cpu,
+>which checks the cgroup flush happens correctly by comparing the bpf
+>read value matches the file reading. Existing test
+>bpf/cgroup_iter_memcg only ensures whether the number is non-zero, which
+>is trivial in some cases.
+>
+>Patches 3 and 4 replace the duplicated parts in selftests/{hid,
+>sched_ext} with the lib.bpf.mk
+>
+>===
+>Changes since v2:
+>For shared Makefile:
+>- The lib.bpf.mk now use the USERCFLAGS (and USERLDFLAGS) to extend the
+>  CFLAGS and LDFLAGS.
+>- OPT_FLAGS/RELEASE and EXTRA_CFLAGS now reach the libbpf and bpftool
+>  sub-makes as well.
+>- One rule per BPF source instead of a vpath, which is global and also
+>  applied to the caller's own %.c rules.
+>- HOSTCC/HOSTLD come from lib.mk instead of including Makefile.include,
+>  which also rewrote the caller's AR, LD and CFLAGS.
+>- A missing vmlinux is reported by the recipe rather than at parse time,
+>  so "make clean" still works without BTF.
+>
+>For cgroup selftest:
+>- Only one cgroup tree is created, one flush is performed, follows by
+>  bpf read and file read.
+>- More common cgroup functions e.g., cg_read_key_long() and
+>  value_close(), are used in the selftests.
+>- Use cpu_set_t rather than manually allocated cpu lists.
+>- Use test_memcontrol.c's anon allocator and moving it into cgroup_util.
+>- Other suggestion from the review.
+>
+>Others:
+>- Bot reviews are fixed.
+>
+>===
+>Changes since v1:
+>  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
+>    skeleton suffix, subskeletons, configurable output dirs) so it can
+>    serve hid and sched_ext, not just cgroup.
+>  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
+>    to the shared fragment.
+>
+>Ziyang Men (4):
+>  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
+>  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
+>  selftests/hid: build the BPF program via the shared lib.bpf.mk
+>  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
+>
+> tools/testing/selftests/cgroup/.gitignore     |   8 +
+> tools/testing/selftests/cgroup/Makefile       |  52 ++
+> tools/testing/selftests/cgroup/config         |   5 +
+> .../selftests/cgroup/lib/cgroup_util.c        |  83 +++
+> .../cgroup/lib/include/cgroup_util.h          |   3 +
+> .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 +++
+> .../selftests/cgroup/memcg_stat_cross_cpu.h   |  21 +
+> .../cgroup/test_memcg_stat_cross_cpu.c        | 596 ++++++++++++++++++
+> .../selftests/cgroup/test_memcontrol.c        |  29 +-
+> tools/testing/selftests/hid/.gitignore        |   1 +
+> tools/testing/selftests/hid/Makefile          | 180 +-----
+> tools/testing/selftests/lib.bpf.mk            | 296 +++++++++
+> tools/testing/selftests/sched_ext/Makefile    | 146 +----
+> 13 files changed, 1204 insertions(+), 302 deletions(-)
+> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
+> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
+> create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
+> create mode 100644 tools/testing/selftests/lib.bpf.mk
+>
+>-- 
+>2.53.0-Meta
+>
