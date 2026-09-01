@@ -1,189 +1,89 @@
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93223B5311
-	for <llvm@lists.linux.dev>; Mon, 31 Aug 2026 22:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79895B640;
+	Tue,  1 Sep 2026 00:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788214740; cv=none; b=SkAvYLkGcT8mT/cBy7ndpYQyiTTf0HWgXjmbeIXecvrOsLf3miaoYOribJrsxgk4iXZcrX6PTDM5tFrxZVLPBOP4jJCxdNNVNXidTQgkrQ9H+bk/O308f1eEjIbRhmC5je9JTxAOc+ovV6hlXxpEbGXmV2qWslC7VaawbuTdiv0=
+	t=1788221028; cv=none; b=UmG5Gy+gozgs6pMHKGoODCL+tiRAZxynD81OmPnbCJOaHKbcm6vqGpIw1ZvgWtddtPVIiDdVf7K9K1u4qyftbCSkgH8CLcW5007NPe53wEVUPZflQbW1hndM/jaTx1X3AcQriOPBgjHysVl8wHQt6tz3eYvo+zGmOiGULhC75NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788214740; c=relaxed/simple;
-	bh=WWEEZMNW23VgeiLrA0jkBRh+FqlaOZaIbG6KQNC9i3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UE56dh/ASyFp65oZ7XvtyIOixZb5zbIJbTMgOkAA8LXJI504C1rA3XF2i6E/Y9t+IQsK8kgg0lsu8E9B1Y4oAyDXa4EJm+5DE7+lPrwhUrg7ZpRtRIfJlvIbblEBVUqlrqCwdspwSLanUHCZF7x1cBpqX3L6E9CU1Ob0Fx/PW0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KzI7fs58; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788221028; c=relaxed/simple;
+	bh=+u+paPEl69EI8EJgLp/S44yzlA16FXZ/5JKDKEIBKDk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ui2kTnTaV/urF3JfAir4IiRHLMq2lPlZBENw4Dzd40JsLa2PySmIETyGKxUwuXe+s8P8ovaBWbu8f4X1DCHrSE6LxI5cYmEwH1lvjSBiiPGpExgnEU8yM5gIvcTRB4PNlQlRwmkWZTZq8ueuDSqknstBpyxVZTVCtrh9LhQm55s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AHjEQhnz; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KzI7fs58"
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-8534d507f59so4453934b3a.0
-        for <llvm@lists.linux.dev>; Mon, 31 Aug 2026 15:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788214737; x=1788819537; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
-        b=KzI7fs58+oLUriXP+Y3asfqJuMtW2ZSgZ2rI5+apNm3XsyqLvbIgoDWpLbkIiosxr9
-         53+dxLoPAnl+UJ8xL0kJQ1LizvwgAAAtG8HVxUoFL88olH2/TdD6HzKVLT08DM8CZaDx
-         zYRsParmOV0kAlZIzFDReHQivuOTiJ/+2e2E1KME8XQ+omLCrEagSohyG28PZtZZjWDb
-         9wGSlyuy9P8SopbXyZfW/rUC5PihZ5Toe6G/ZZjw7JaVzhSrw8HWIGrrlw108Eq+9guF
-         Tjr2NShFpQ96DsOTd/H1fW+jqJ87fQDRPwF2Y0uJkpgxdhxc0FyNZkIvZIv2WarLwMaC
-         D+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788214737; x=1788819537;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
-        b=DP9zh867pBxoZTDP4Q2O32sxMoZANezkbgU+55qxbOma/9RCbctv4avnZ2EzbOC2bM
-         qESsx3S+IV6FfdBcBjj0KSTVbiRqZRQLwwRlpNnMRIO287y+FGlwBgs44XOw2FstY+nf
-         yJULt94baNEK3BL09fsvx1e5rudYxqzoKDlRhe9HmGX+D0QT521xIMJmwLpiN//hu8l1
-         k7XUnBjXqTZtJiXfe/iMLM1FTcQEXWccbq39q4WdZPYFJg2Me05g0Jkf4eGYdvi8B4U1
-         tAFFLsRQHSIdIT5sZUwYGtnmPYucibK5hNST2KTbcuD4FzdOjnVPiUo6PCaWPX5x4sJk
-         6yTQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3cWtu+A8YowrR0QEp8WGrJvzhFTfwn2rlW2LtswKCXpu7HuVhQKFGJRI21q77POh1L8jA@lists.linux.dev
-X-Gm-Message-State: AFuF++nYfYNT3G8KZDcV1HprbK6i0qLx49Oduez/VvSOBG9OeDHRvbQt
-	OzMwh6qGHd1sp3O9b5GxXDxAMlRAB2pZUlHHpM+z4vJimwUO+aPAIb09
-X-Gm-Gg: AR+sD10HeKYw72y4nL0c9Rste9Zlek+fXYYilI/DqQEu8EtBy4JC275faJZIfbAopFo
-	d5tAtZw7/ruzQPbiHW+tNqcghLLJ1PHONpxuM1lKBLF2LBAufsFlfGaQkMkmaQc0WjFArm3wNeH
-	ZiWaX0Wd8YcKCDU83oEOKkzs5/SlXimhoC+dARULS7XNi01VnTF/l4UwJM8nCOr6gETlIRA2f8i
-	oaD/G7lpoZXnIM1e7Jy3TelqMvmOxG64Pow/qO6ZPnhUrJVkytgZXjNm3Wkz2eRIrpMNsJdOHgx
-	0+d3jaNATMr1uO97xTYTmiRgw5OTcXPvQkM+fBYzMIXej2uzO9xQuYDuzBSRukMsL+Dfoga1uaK
-	Zz5mqrybTgI7jYtKCasfw9Jp/fQ3pdUdRMpzAQN85mtnRBskz5Rz5r14ubQPGER6Pfc0FFd+27b
-	AbcnUMonAOAdaAr+TE8twrJ22AwY3/36NoLk0Bd/DhlAJ0eSikKVp0dF7nXniDrba6nmbs0zLMJ
-	JVsdd3D
-X-Received: by 2002:a05:6a20:2586:b0:3d3:b02a:7252 with SMTP id adf61e73a8af0-3d3b02a76a6mr29131323637.28.1788214736859;
-        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:44::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7be607sm33073832eec.10.2026.08.31.15.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
-Date: Mon, 31 Aug 2026 15:18:53 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Viktor Malik <vmalik@redhat.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>, kernel-team@meta.com,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm@kvack.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] selftests: shared lib.bpf.mk for building BPF
- progs and skeletons
-Message-ID: <apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
-References: <20260814075054.507089-1-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AHjEQhnz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788221025; x=1819757025;
+  h=date:from:to:cc:subject:message-id;
+  bh=+u+paPEl69EI8EJgLp/S44yzlA16FXZ/5JKDKEIBKDk=;
+  b=AHjEQhnzd/k49CrQUqwVlpPxnMyRVn+L0snt30zoxcw0D7TtyC54cKDS
+   KnSttrYUddm5vReCA1xnh7qhX8GbWmeQk4g3y0sC/pSYKhHDfHlXKw9l3
+   fofYsflQ4fDU98cSI/sWVrDa4u6C5CZUNBqWwVnQgfZ2GmtKIIyI0e2pX
+   FdH+xR8idnQrF3eVNAKBqRyI+yodRIkcC+M1VNriPZ1iLKfoh+Jp7z0O7
+   66/jZZB+qoHzRL9+vHFSgP1SyMgERyVUfUT1KyqehWUJtG8SIlEvcriC2
+   Ecwb5r9YRH6pfGB8S+je5xaEzPOkj68YELEDb1/ug91VtMkgPg3x3MPhj
+   A==;
+X-CSE-ConnectionGUID: lMHN91A6T4i9h02zFyOmjA==
+X-CSE-MsgGUID: HbDqn8XfSxSYBLPpnd1sMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11892"; a="114175916"
+X-IronPort-AV: E=Sophos;i="6.25,254,1779174000"; 
+   d="scan'208";a="114175916"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2026 17:03:45 -0700
+X-CSE-ConnectionGUID: kROgGcWsT2uMI3nzaAVQgw==
+X-CSE-MsgGUID: S26Q+SOWSpCg9MtIq3WUGA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,254,1779174000"; 
+   d="scan'208";a="273120702"
+Received: from lkp-server01.sh.intel.com (HELO 793b8a0addc2) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 31 Aug 2026 17:03:43 -0700
+Received: from kbuild by 793b8a0addc2 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x1ByW-0000000008W-2TFX;
+	Tue, 01 Sep 2026 00:03:40 +0000
+Date: Tue, 01 Sep 2026 08:02:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>
+Subject: vmlinux.o: warning: objtool: kernel_entry+0x118:
+ start_kernel() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+Message-ID: <202609010734.HlRB5VXA-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260814075054.507089-1-ziyang.meme@gmail.com>
 
-Hi Reviewers,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   cee9395acd8043be0644b25c34bfa86623f2b935
+commit: 1b2f4706c6a20ab6ac41533dd8032d54322076e3 LoongArch: Use UNWIND_HINT_END_OF_STACK for entry points
+date:   8 months ago
+config: loongarch-randconfig-002-20260829 (https://download.01.org/0day-ci/archive/20260901/202609010734.HlRB5VXA-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 52774473867e49b5891ab9381accf4e5a3ce0024)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260901/202609010734.HlRB5VXA-lkp@intel.com/reproduce)
 
-Just want to follow-up on this patch series. Please let me know the possible
-issues and I will fix them.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 1b2f4706c6a2 ("LoongArch: Use UNWIND_HINT_END_OF_STACK for entry points")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609010734.HlRB5VXA-lkp@intel.com/
 
-Thanks very much!
+All warnings (new ones prefixed by >>):
 
-Best,
-Ziyang
+>> vmlinux.o: warning: objtool: kernel_entry+0x118: start_kernel() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+>> vmlinux.o: warning: objtool: smpboot_entry+0xa4: start_secondary() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+   vmlinux.o: warning: objtool: kernel_kexec+0xb8: machine_kexec() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+   vmlinux.o: warning: objtool: wdt_interrupt+0x48: machine_restart() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+   vmlinux.o: warning: objtool: sama5d4_wdt_irq_handler+0x88: machine_restart() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+   vmlinux.o: warning: objtool: rzn1_wdt_irq+0x34: machine_restart() missing __noreturn in .c/.h or NORETURN() in noreturns.h
+   vmlinux.o: warning: objtool: eurwdt_interrupt+0x40: machine_restart() missing __noreturn in .c/.h or NORETURN() in noreturns.h
 
-On Fri, Aug 14, 2026 at 12:50:50AM -0700, Ziyang Men wrote:
->This series re-factors the bpf-related toolchain for selftests, which
->currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
->into a single includable fragment, the tools/testing/selftests/lib.bpf.mk,
->and wires up three consumers. We believe this will simplify the work for
->configuring selftests with the bpf, for both the existing and future ones.
->
->Patch 1 adds lib.bpf.mk mentioned above.
->
->Patch 2 adds a new selftest, selftests/cgroup/test_memcg_stat_cross_cpu,
->which checks the cgroup flush happens correctly by comparing the bpf
->read value matches the file reading. Existing test
->bpf/cgroup_iter_memcg only ensures whether the number is non-zero, which
->is trivial in some cases.
->
->Patches 3 and 4 replace the duplicated parts in selftests/{hid,
->sched_ext} with the lib.bpf.mk
->
->===
->Changes since v2:
->For shared Makefile:
->- The lib.bpf.mk now use the USERCFLAGS (and USERLDFLAGS) to extend the
->  CFLAGS and LDFLAGS.
->- OPT_FLAGS/RELEASE and EXTRA_CFLAGS now reach the libbpf and bpftool
->  sub-makes as well.
->- One rule per BPF source instead of a vpath, which is global and also
->  applied to the caller's own %.c rules.
->- HOSTCC/HOSTLD come from lib.mk instead of including Makefile.include,
->  which also rewrote the caller's AR, LD and CFLAGS.
->- A missing vmlinux is reported by the recipe rather than at parse time,
->  so "make clean" still works without BTF.
->
->For cgroup selftest:
->- Only one cgroup tree is created, one flush is performed, follows by
->  bpf read and file read.
->- More common cgroup functions e.g., cg_read_key_long() and
->  value_close(), are used in the selftests.
->- Use cpu_set_t rather than manually allocated cpu lists.
->- Use test_memcontrol.c's anon allocator and moving it into cgroup_util.
->- Other suggestion from the review.
->
->Others:
->- Bot reviews are fixed.
->
->===
->Changes since v1:
->  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
->    skeleton suffix, subskeletons, configurable output dirs) so it can
->    serve hid and sched_ext, not just cgroup.
->  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
->    to the shared fragment.
->
->Ziyang Men (4):
->  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
->  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
->  selftests/hid: build the BPF program via the shared lib.bpf.mk
->  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
->
-> tools/testing/selftests/cgroup/.gitignore     |   8 +
-> tools/testing/selftests/cgroup/Makefile       |  52 ++
-> tools/testing/selftests/cgroup/config         |   5 +
-> .../selftests/cgroup/lib/cgroup_util.c        |  83 +++
-> .../cgroup/lib/include/cgroup_util.h          |   3 +
-> .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 +++
-> .../selftests/cgroup/memcg_stat_cross_cpu.h   |  21 +
-> .../cgroup/test_memcg_stat_cross_cpu.c        | 596 ++++++++++++++++++
-> .../selftests/cgroup/test_memcontrol.c        |  29 +-
-> tools/testing/selftests/hid/.gitignore        |   1 +
-> tools/testing/selftests/hid/Makefile          | 180 +-----
-> tools/testing/selftests/lib.bpf.mk            | 296 +++++++++
-> tools/testing/selftests/sched_ext/Makefile    | 146 +----
-> 13 files changed, 1204 insertions(+), 302 deletions(-)
-> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
-> create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-> create mode 100644 tools/testing/selftests/lib.bpf.mk
->
->-- 
->2.53.0-Meta
->
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
