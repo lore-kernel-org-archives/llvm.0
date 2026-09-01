@@ -1,154 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4FEF377A9E;
-	Tue,  1 Sep 2026 12:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E80425CEE
+	for <llvm@lists.linux.dev>; Tue,  1 Sep 2026 15:03:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788265004; cv=none; b=b+NGlqVR+G9VNbAD5O215hArORPaIYFi5w86SaUVz6Q8D9nsg9QHLg2dfgqe98qpTkAkyEA7Lc05IuZDi3gC6cpJP7U4F81Hd8NxqsLtdB3ZmBV2pdsvGNNDEbjhPDySlXl+95BJuj1JI6GXQ/0nmYZjmJXGugI97lseoG8/9+4=
+	t=1788275038; cv=none; b=lOLwJ3TGkz5p+wUkWbWc1QTiIGCsJBV9DobA9lH6NVOQv712ZHw+b1P9DM6YtoLwcvCl8Gesyg9EWClyvd7XnG3ybbPIhfw8yZqv2UXcXtinn7l1iCQlU/MQgG6OgqeAm1I3pDPwg/jkfEfXkYe73EkeaDD6uNvI+UaIbWbBoQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788265004; c=relaxed/simple;
-	bh=VUNXO1mr+q/p6Sgm3i3DC61q/skWyiAp40iUHd63aFk=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Ga41WbknV8AJDOyOJ57XUOfiTE029+mgiprlvVglrpX8rcj2Jgd2y0tCzvJts68+h96X7gfwQqAZFTySJwN+e66xXD3AXeZ57f4BqRYKKpI60fWcsxkiche3/r9BERE/kFBHV9CMm1058PRG1bfmc3LEwUs/OpO+4blnFhu/0Yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SWSt4c6f; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788275038; c=relaxed/simple;
+	bh=EV0luyxrE4VBTkjaX8NMlEgGp6/Xt54MDGLWoiypEoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H97vVPGMhzDoBCjTdh7JF8Q8+WanzF15bd6+GQ39EdtQjlUJXfDMMIgCBesAbwjJS++8oORBAIwkLC675ncLGq7i0HdnO1Up+7RC/QRM8IGazP29Vq4sE3dIarz7WV+X+uTx0nLXsqFkod4aDM3y4R+x4EgHDK16jLaTXoUgMTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=yvP6Gaz2; arc=none smtp.client-ip=209.85.215.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SWSt4c6f"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788265002; x=1819801002;
-  h=date:from:to:cc:subject:message-id;
-  bh=VUNXO1mr+q/p6Sgm3i3DC61q/skWyiAp40iUHd63aFk=;
-  b=SWSt4c6fWDByoVx/PT2BsmxznFD8DWJ9ffSIF8CeQYsLeI1tZPQWBiiX
-   aHhtu4Nt0/ii6asfbLlFIPFDaITDbrBnE2sVfpAWRBW9p56wwrgn3iF+S
-   CMG2Ari+alH9xgU9Pvnl4/XI3B4o9cJEZ45CCERf70tFRSKeaAGbrcdS9
-   WTPkRiZRUpEEIYt0ZSgi7LiszlIxhY7GEKhMX+uuEUbcVnyLs/rudmYZC
-   KEkbJaT0mI4HpxIQlVyIG3g8hRLeROr1IIR6mh25/lrY6e2JkrWLQX9ys
-   zFTK7bcCfMdXOAsxKS/xwOb8qs73oNzEW30ZwqgIHaO5/HOLTemH2Xgvb
-   w==;
-X-CSE-ConnectionGUID: Mf6f9sWzSJGBCUwuyc7IBQ==
-X-CSE-MsgGUID: C1JIFrCFQHehVpVVneULUw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11892"; a="87829477"
-X-IronPort-AV: E=Sophos;i="6.25,255,1779174000"; 
-   d="scan'208";a="87829477"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 05:16:41 -0700
-X-CSE-ConnectionGUID: CTW9h89aTa6S6Ue/JTImcA==
-X-CSE-MsgGUID: x6w378BnQkGxN3Tr1L6C5A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,255,1779174000"; 
-   d="scan'208";a="262955838"
-Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Sep 2026 05:16:39 -0700
-Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x1NPo-000000000km-3rtx;
-	Tue, 01 Sep 2026 12:16:36 +0000
-Date: Tue, 01 Sep 2026 20:16:22 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jens Axboe <axboe@kernel.dk>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [axboe:io_uring-thread-handoff 10/13]
- io_uring/handoff.c:307:36: error: call to undeclared function
- 'task_stack_page'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202609012001.qCSj57tc-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="yvP6Gaz2"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc1b838f9b6so5681736a12.3
+        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 08:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788275036; x=1788879836; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nYjWdRobMhFwnScsH6QAuV5nfOH/dqs6pUr1givzmCo=;
+        b=yvP6Gaz2vmxjecN+Ma+fQ91r02FnVrDCpYbjwsELIUTxbWISak2SKQEClzJoG303ha
+         DBEBlGLMxQgb3yub7ytQZ8JP1F/RdRWIIGaf+cJVdgDWbjFDfQmAUQjPlqKEFS606T7/
+         qErHu0Gu34jm5APZI01fwoCfCaqbIbVxwuyVl06oVkFvx1ywekM9vU8bwqVR90LV2r13
+         th6UiqMoWD8ImMzeXHSdlTlt70qc/EtqQPCMOoroBqji6uDfWfqGBVWoBJxvLOd5pbw9
+         4360vtbjrPZT75WQxY1G62tA0vOV1hG83vppdrtOPMe/O1dXfGGCTAOqbAmwCyJkNJoD
+         pIJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788275036; x=1788879836;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=nYjWdRobMhFwnScsH6QAuV5nfOH/dqs6pUr1givzmCo=;
+        b=pT+BpBJf6IU6AKRaZm616BjDbN/vter28wmKlI8+yqH6mU1mXwG4A83ZZLeZFmxtsG
+         2PKYZyl2Maz7qixop3HvJgVXJAuO5nFkBWH6qLDzwa6ekav9EpnhANEj4/YK7sfGHeVk
+         +vMZUlf24C+nfilAn9hzyieilvtZt7abqBPHJdK9mw2aqjZhCLB1Z17EP6LRhiCPQM6f
+         Pbc/vSrBHXdu6e3m0JQXFd7WffvU/fA+7G5EJhwMfU/1tV8NWlWocTvc5q8N2PoFfFxb
+         NwBIn1reJ0ccNXFykEVOV5mUiKgdoB2unwBaU4IUgQ7yZ3gokHXbtM7xXGfbHW4YWcxS
+         2Dqw==
+X-Forwarded-Encrypted: i=1; AHgh+RpZGdVWY3NZLVP1kHyDj4J7tt1bZtalD/5diI2sCK1VqmU0Cbpd6w6nAQq+rTMofXrhCF8P@lists.linux.dev
+X-Gm-Message-State: AFuF++mVce/LVRC35yThpJ0TcA98YiP+JB8lO2gTA0CuhBHRP28oGFA8
+	FRdiI1A9Bi4inatYUCUGtjRkeJXJjrAmvg3VvDyeWrG6LPRe/0lNQH8h4oHwiGvHavw=
+X-Gm-Gg: AR+sD13fP0IarT/OTWcLwcsTkPfsXqEhJ3mMK8W3NbUm0avQIOu+5xXyTWJtj7LtkIu
+	gK0+MCytnP087HQzfqIH3BnPoIpr8HrmjloWGjpvNL1LwNlb8UsN4ImhIgPVdnqK/Is2uVlW9/6
+	NU0ARr7Lw07bO+p0R0zf40T7GSC5aldVOc3fxupHs2EyFrUkilZiDYGqUuL0ScRWUXKnZ5dc55/
+	uxK9dfxTs675EK+nh5pN+z4W6e9HDyz/MLm6cmrbB/49Rmpz7rh7OuY2Pmkn5i5EVNpyzYWV5Fo
+	HOcpJSUIywYUnmSR/uC3Flu55AwhFUoN09/VUSyDCaGqhczjZM8/c2E6gavW4q4QmNmXPlbcrYU
+	2xxNSB2iBrEjBLocrx/j/RUekDj236Pj9RtPfbZLlbQ+FNFCav5o7+mNnNau4UjLVdl/QxcpAZI
+	GQxs4mJhl9sUwgHGCdy6o4xNadreK4U8HhNJQeNZPPdrM=
+X-Received: by 2002:a05:6a21:a0a:b0:3d0:abdb:de03 with SMTP id adf61e73a8af0-3d7ad788edbmr15943018637.2.1788275035650;
+        Tue, 01 Sep 2026 08:03:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4c::])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc1f32f727bsm6432687a12.7.2026.09.01.08.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 08:03:54 -0700 (PDT)
+Date: Tue, 1 Sep 2026 08:03:54 -0700
+From: Joe Damato <joe@dama.to>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+	Rukhsana Ansari <rukhsana.ansari@broadcom.com>, horms@kernel.org,
+	colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
+Message-ID: <apbpWrfu3VQu+CUz@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+	Rukhsana Ansari <rukhsana.ansari@broadcom.com>, horms@kernel.org,
+	colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
+References: <20260828190900.1767611-1-joe@dama.to>
+ <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
+ <apa9qofhuatqGTra@devvm20253.cco0.facebook.com>
+ <b8b6db7b-353d-4d6a-b0b6-3b5e1be22008@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8b6db7b-353d-4d6a-b0b6-3b5e1be22008@redhat.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git io_uring-thread-handoff
-head:   e787853bf31af505ee20b5a64dd31bdaaca8bedd
-commit: d664aea9c73b2f39f16192756888e0c03aa1fa28 [10/13] io_uring: enable handing submitter identity to an io-wq worker
-config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260901/202609012001.qCSj57tc-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260901/202609012001.qCSj57tc-lkp@intel.com/reproduce)
+On Tue, Sep 01, 2026 at 02:10:04PM +0200, Paolo Abeni wrote:
+> On 9/1/26 1:57 PM, Joe Damato wrote:
+> > On Tue, Sep 01, 2026 at 10:16:54AM +0200, Paolo Abeni wrote:
+> >> On 8/28/26 9:08 PM, Joe Damato wrote:
+> >>>   - Moved bp->max_tpa_roundup_size init out of the early return path and
+> >>>     documented that TPA is unsupported there, as suggested by Michael.
+> >>
+> >> Clashiko quite convincingly elaborates that the above is not enough:
+> >>
+> >> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260828190900.1767611-1-joe%40dama.to
+> >>
+> >> Could you please have a look?
+> [...]
+> > 3.) "The new assignment sits after the max_tpa_v2 == 0 early return, so on a P5+
+> > device whose firmware reports max_aggs_supported == 0, does
+> > bp->max_tpa_roundup_size stay 0 while BNXT_FLAG_TPA is set? ..."
+> > 
+> > Michael commented in the v3 that this is a false positive, hence why I changed
+> > the code from what it was in the v3 to this.
+> 
+> This is the comment I referred to.
+>
+> AFAICS the problem is that the driver sets
+> 
+> 	bp->dev->hw_features |= NETIF_F_LRO;
+> 
+> regardless of the supported capabilities, and that seams to disagree
+> with Michael.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609012001.qCSj57tc-lkp@intel.com/
+OK, after re-reading this here's what I see: NETIF_F_LRO gets added with no
+capability check and bnxt_fix_features() won't strip it afterwards. I think
+the fix there is to add a BNXT_SUPPORTS_TPA() test, as a Fixes for
+f0aa6a37a3db ("eth: bnxt: always recalculate features after XDP clearing, fix
+null-deref").
 
-All errors (new ones prefixed by >>):
+I can send a separate patch for that, but it is unrelated to this patch which
+fixes a crash on boot for Thor2 devices.
 
->> io_uring/handoff.c:307:36: error: call to undeclared function 'task_stack_page'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     307 |         syscall_set_return_value(current, task_pt_regs(current),
-         |                                           ^
-   arch/x86/include/asm/processor.h:668:39: note: expanded from macro 'task_pt_regs'
-     668 |         unsigned long __ptr = (unsigned long)task_stack_page(task);     \
-         |                                              ^
-   1 error generated.
+Maybe you want me to spin a v5 that rewords the comment Michael asked me to
+add which is currently technically incorrect, but will be correct after the
+separate bug mentioned above is fixed?
 
+In other words respin this to make a v5 that changes the comment to:
 
-vim +/task_stack_page +307 io_uring/handoff.c
+  /* TPA is not supported at all, so there is nothing to
+   * allocate.
+   */
 
-   250	
-   251	/*
-   252	 * Runs on the task that got handed the submitter identity: finish taking
-   253	 * it over, then resume io_uring_enter() where io_submit_sqes() would have
-   254	 * returned and take the syscall result to userspace.
-   255	 */
-   256	static long io_handoff_resume(void)
-   257	{
-   258		struct io_uring_task *tctx = current->io_uring;
-   259		struct io_handoff *ho = &tctx->handoff;
-   260		struct task_struct *src = ho->src;
-   261		struct io_kiocb *req = ho->req;
-   262		struct io_ring_ctx *ctx = req->ctx;
-   263		struct io_submit_state *state = &ctx->submit_state;
-   264		bool bound = io_handoff_bound(req);
-   265		unsigned int consumed, left;
-   266		long ret;
-   267	
-   268		if (WARN_ON_ONCE(thread_handoff_finish(src)))
-   269			force_sig(SIGKILL);
-   270		io_wq_handoff_finished(src);
-   271		put_task_struct_many(src, ho->src_refs);
-   272		ho->src_refs = 0;
-   273		ho->src = NULL;
-   274		ho->req = NULL;
-   275	
-   276		/* we took a worker, top the spare pool back up */
-   277		io_wq_handoff_spare(tctx->io_wq, bound, true);
-   278	
-   279		/*
-   280		 * Finish the batch the blocked request was part of, then submit
-   281		 * what's left of the syscall. Another handoff continues from here,
-   282		 * the consumed count lives in the tctx.
-   283		 */
-   284		io_run_task_work();
-   285		mutex_lock(&ctx->uring_lock);
-   286		consumed = ctx->cached_sq_head - state->sq_head;
-   287		left = state->submit_nr - consumed;
-   288		ret = io_submit_sqes_end(ctx, state->submit_nr, left);
-   289		ho->consumed += ret;
-   290		if (ho->consumed < ho->to_submit) {
-   291			ret = io_submit_sqes(ctx, ho->to_submit - ho->consumed);
-   292			if (ret == -EIOCBQUEUED)
-   293				return ret;
-   294			if (ret > 0)
-   295				ho->consumed += ret;
-   296		}
-   297		ret = ho->consumed;
-   298		if (ret != ho->to_submit) {
-   299			mutex_unlock(&ctx->uring_lock);
-   300		} else {
-   301			ret = io_uring_enter_finish(ctx, ret, ho->min_complete,
-   302						    ho->flags, ho->argp, ho->argsz);
-   303		}
-   304		if (!(ho->flags & IORING_ENTER_REGISTERED_RING))
-   305			fput(ho->file);
-   306	
- > 307		syscall_set_return_value(current, task_pt_regs(current),
-   308					 ret < 0 ? ret : 0, ret);
-   309		return ret;
-   310	}
-   311	
+And then when a fixes for the above commit is proposed, the comment can be
+re-expanded?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Can you let me know what I am missing here?
