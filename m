@@ -1,118 +1,178 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C9D83C81B2;
-	Tue,  1 Sep 2026 01:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B90370AE2
+	for <llvm@lists.linux.dev>; Tue,  1 Sep 2026 08:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788227213; cv=none; b=InYkMMPi78jgW4xpSS3QIdin4df02OrgNJs/PZCL6++0RKXxPhOUFrwZUcZym3oP4TozqB57RYFO5VaSiieP6ljfZwpR0LCAB2n19XpnZJHT7z0kkEQfg9siMSrRgENd1va22ZQv3BYiF+XFWYMSmUcXAM+iu6qkxrepIupzgAk=
+	t=1788250624; cv=none; b=CVSqBNgVU1J36AG2xLIw4uuqkCzQOTdgQ0uBQsi4IiwvlFDk8AXTXNkR/PxtzbcSxu9Cf3+Q8RSWmjCmG3HWAdZDcRBI21zefrSvEp76Iz0l1mgEVz33ccJPUNKRqnOv1R3dVDS06XBzd51+46zlPli5YdqrEIrEqYR21lSwADU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788227213; c=relaxed/simple;
-	bh=9ZxkfOw4TOE1Obq8/2i/Q1JnSICiUGC/3m4Hm3cdZxU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kAsXNq3XomVl5H6Q4frIqvdpPAySqXw8vqX/RCYTIR/mB/Bly4D9TRJUNyW61c1wDsU6VBKRfu//VdUxbPCZ9yvBidBRy/PLrCyaOw908tc+XidBkkg/Y10ERjGLpqMhboi7s2Zab6wChv144mQWZWjFPYUWKOTQxqopDTN++rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QU3QSXFP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788250624; c=relaxed/simple;
+	bh=zGnQ84apf/mbpMHtA34xeCIz3kCTFXdRl9AvA3Jz38U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nhOaf99WiYI5jFOSL7JQ5xW/OyLxFI6Gdk++PUx5axCb8PcNCaP/5iHarB2hRurmu/HjkgbpfB7UBVX2kvYvwGphPWxpSi8TEjEIVefLCpCPi4uMkdDSv2ADQc428ysGuP1bZOfHbJyOCsC2xmklWaASj253FYZwgtfFXbo+gBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QuIMYZQU; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QU3QSXFP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B39551F000E9;
-	Tue,  1 Sep 2026 01:46:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788227198;
-	bh=tv/giztluJ3mJ3RD/dlXAJAOrQrL283c0fCKgwhPQNw=;
-	h=From:Date:Subject:To:Cc;
-	b=QU3QSXFP8x1XBB2jqxBwYMIYC6tpOLXpJIxKHzWmZF+v3OYf22PrEiVCgo92nFeXa
-	 JQaHAMGUP2etlCoyZrEjas5G/HZCLEnZDYnnm8XAy8Ph0urEGPjZAxfPKlz9Pu8P/9
-	 78gVz7MQ8b2ephK9Tbo8KCVQbnRmZhijkxIPDR8nhD/VuOmME1nrI0WIgRg98XK8NJ
-	 wQFgMmJ4BS1zLHnFzBHFt0nAhZRDOAhvrgalkbRDCnaK3ro5UgnzMp+HOTpJeKtiCL
-	 PxRiue+v22OwsenIxO1eMX0MFwFnPNxcKNK1nosXtdhkqelL67k+zXOiI130Z7MNrl
-	 d0f7wucaYad5A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 31 Aug 2026 18:46:31 -0700
-Subject: [PATCH] scripts/sorttable: Mark long_size as __maybe_unused
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QuIMYZQU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788250622;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=FaAfjcGylOA2zaTCnKXmz3u6FQBcwhDKCkrIkARVyTY=;
+	b=QuIMYZQUZbQmNea8ODuBGpdDcasKKCCdQk/DUd0uv866TBM4yT6dajomdaKDsNWjEva7k3
+	q/56wyNID0lhNWVYbRJOI16bb8KfKPovtgS4HBMi8Uxho1TLZas5DIaSeoUpBjFA+JLKa7
+	J42Z1dmjHuqZ87CTs5AvA0UL28OQBPc=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-424-xwURA-JXOhWaaZ7f4T2BHQ-1; Tue, 01 Sept 2026 04:16:59 -0400
+X-MC-Unique: xwURA-JXOhWaaZ7f4T2BHQ-1
+X-Mimecast-MFC-AGG-ID: xwURA-JXOhWaaZ7f4T2BHQ_1788250618
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-484362cb000so506315f8f.0
+        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 01:16:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788250618; x=1788855418;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FaAfjcGylOA2zaTCnKXmz3u6FQBcwhDKCkrIkARVyTY=;
+        b=KSdxDvJlt07gfcTpOKnQNkxxAv+IvZEq7laxVw/zT6g7CiPdMOee6nE9+x1LLyViU/
+         ep5XWNj8XxgTe/x5Oj7Kgoe3YzM+tzBbFMorWroiCZE7T6W6U/r9rh8Sfh7KG7/aBHmB
+         eG2CdAH6GqmiEk89qgrbPyfbIxQf007FQl2XYfEFIDCd8+6yuARzdQJinZ7pAAp9H3NU
+         vt0piGawklQlwghADV3kO37JNEP5DkWcFbuQ6lPsp06v34rs7cvL4Iu5pSzqGp8tFGrU
+         4L/zqvYCgcktdamqyAetHsmxxmZXCiKTnvgd4oU9xWFqEPw+kNk3V4SOsOSx+6JKcFWq
+         WDvA==
+X-Forwarded-Encrypted: i=1; AKwUvByK0rSbDkjUC1gFWTFUa+xatU6VC8jn4tzBcDbRGx6riz0rCGNrPNcGryHHqRJGXbL5bWwY@lists.linux.dev
+X-Gm-Message-State: AFuF++kVZFhPuL2X0qj3Rc9X1QyJu44Jxetm1f72+Dpj2j/58y/vBdYt
+	dr1u6LoF2J9M/8AVgL7bPPhTwHcB/PvAJsHeX8lJn7Brn2lb5W2PKXiKMQP/oFDVKpvRrP3y8De
+	OwRXKvH0sJoBn3VWGo5/z/nFrNVowsxt3btYB8zJk8zgdVzBDmQ6vLNk=
+X-Gm-Gg: AYBFou0pL61/rVD+kiJsI6FxEJ+XNqisDtF0kwJ3PdZEhfQc2veegp5uqQ0WceFDbdb
+	Efck7eeH7xz/17JgkzJ2igDQugHJgDvInLxySNzSSPdiNA563nCB4PJX0uY2xbiaPv1jcCo/Ix2
+	FqnSKQ7DH/aIEqR28cZH/NFRPaLYWQWenkack/GnJfT+PZW5kzYlzUcPwVSCOOteIgpaKDxjsog
+	A51zZVR+HeHqhJl08QVdqXz8FBdFuKa1RrRhBQJ92483el8FZan+oO3dHUTmWUVWmVxNorVQ4kZ
+	ERy5CL96r/X/DfR1WcmF2OTYroPvXuyJKXjuqSPSjrQNrIxruOmxbvUJYeU8NnD0uGX+HcLHkJF
+	l3HlBwvxVNXfC9zJQPruOu/tnSDHuyjpzetj7XHBFeG5zvI07tIlIp2vG+3J9fS4FgGZsaFYK1A
+	==
+X-Received: by 2002:a05:6000:41c2:b0:482:dd86:348 with SMTP id ffacd0b85a97d-48441fc951amr7390156f8f.4.1788250617520;
+        Tue, 01 Sep 2026 01:16:57 -0700 (PDT)
+X-Received: by 2002:a05:6000:41c2:b0:482:dd86:348 with SMTP id ffacd0b85a97d-48441fc951amr7390013f8f.4.1788250616845;
+        Tue, 01 Sep 2026 01:16:56 -0700 (PDT)
+Received: from [192.168.188.103] (ip245-45-231-195.pool-bba.aruba.it. [195.231.45.245])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48442d788ebsm3428937f8f.27.2026.09.01.01.16.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Sep 2026 01:16:56 -0700 (PDT)
+Message-ID: <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
+Date: Tue, 1 Sep 2026 10:16:54 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
+To: Joe Damato <joe@dama.to>, netdev@vger.kernel.org,
+ Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+ Rukhsana Ansari <rukhsana.ansari@broadcom.com>
+Cc: horms@kernel.org, colin.winegarden@broadcom.com,
+ linux-kernel@vger.kernel.org, raphaelcf@meta.com, stable@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20260828190900.1767611-1-joe@dama.to>
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20260828190900.1767611-1-joe@dama.to>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: t5cqtZ0F35EdbI0_cmADhhMQTRfcQvdDiUnDcuSRePY_1788250618
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260831-sorttable-long_size-unused-but-set-global-v1-1-8a96b88697e5@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXN0QoCIRBA0V9Z5rkBdWHb+pWIUHeyCdFwNKJl/
- z2rx/Ny7wpChUngOKxQ6MnCOXXo3QD+ZlMg5KUbjDKTmkeNkkut1kXCmFO4CL8JW2pCC7pWUah
- iiNnZiGYyXs370Wp7gN57FLry6/c6nf+W5u7k63cA2/YBchsEko0AAAA=
-X-Change-ID: 20260831-sorttable-long_size-unused-but-set-global-262c0873a1a9
-To: Steven Rostedt <rostedt@goodmis.org>, Nicolas Schier <nsc@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, stable@vger.kernel.org, 
- Nathan Chancellor <nathan@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2119; i=nathan@kernel.org;
- h=from:subject:message-id; bh=9ZxkfOw4TOE1Obq8/2i/Q1JnSICiUGC/3m4Hm3cdZxU=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnT9Cr/zv6ov/LiJsZC/iOTVGze1d6xCZ3R0fJHtDI6+
- Jx7nOy6jhIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRn3MZfmya8nb7sfn/RftC
- DjoIKPRviG9jnuDeOevD7ZWNK70kDBn+OzHdfSGpHXpedyl/Y9revT9Z+dUijPJyBMSWqfjslHr
- JAQA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-When building in a kernel tree prior to commit b055f4c431e3 ("sorttable:
-Move ELF parsing into scripts/elf-parse.[ch]") with clang-23 or newer,
-which implements a new warning under -Wunused-but-set-variable for
-static global variable, there is a warning from sorttable because
-long_size is unused when MCOUNT_SORT_ENABLED is not set:
+On 8/28/26 9:08 PM, Joe Damato wrote:
+> TPA IDs are generated by FW and can be up to 1024. bnxt_alloc_agg_idx is
+> intended to wrap the FW ID down to a software ID which is used to index
+> rxr->rx_tpa, and to generate a mapping between FW IDs and the wrapped
+> software ID.
+> 
+> On a 57608 with firmware version 233, the firmware advertises 32
+> concurrent TPAs. As of the commit under fixes, bp->max_tpa on this NIC
+> is set to 32.
+> 
+> If the software ID from bnxt_alloc_agg_idx is above 31, this results in
+> an invalid address being loaded on this line:
+> 
+>   tpa_info = &rxr->rx_tpa[agg_id];
+> 
+> because rx_tpa is allocated with only bp->max_tpa (32) entries. Writes
+> to tpa_info later in the code are out of bounds.
+> 
+> This bug results in a crash at boot:
+> 
+> Oops: general protection fault, kernel NULL pointer dereference 0x8: 0000 [#1] SMP NOPTI
+> RIP: 0010:bnxt_rx_pkt+0xc0/0x1560
+> RSP: 0018:ffffc900009b8c78 EFLAGS: 00010246
+> RAX: 0000000000000000 RBX: 0000000000000048 RCX: 0000000206682516
+> RDX: ffffc900009b8db4 RSI: 0000000000000000 RDI: 01ffffff038fe1c0
+> RBP: ffffc9006e687480 R08: ffffc9006e687000 R09: 0000000000003048
+> R10: 0000000000000480 R11: ffff8881c6083900 R12: 0000000006682516
+> R13: ffff8881c6095400 R14: 0000000000000016 R15: ffff8881c6b66680
+> FS:  0000000000000000(0000) GS:ffff88fef3c77000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fc8bda40584 CR3: 000000807c812001 CR4: 0000000008772ef0
+> PKRU: 55555554
+> Call Trace:
+>  <IRQ>
+>  ? __netif_receive_skb_list_core+0x1ca/0x250
+>  __bnxt_poll_work+0x152/0x280
+>  bnxt_poll_p5+0x1cd/0x480
+>  __napi_poll+0x30/0x180
+>  net_rx_action+0x20b/0x3b0
+>  ? note_gp_changes+0x53/0xe0
+>  ? tick_setup_sched_timer+0x180/0x180
+>  ? __napi_schedule+0x9a/0xb0
+>  ? bnxt_msix+0x24/0x30
+>  handle_softirqs+0xdd/0x2c0
+>  __irq_exit_rcu.llvm.3171231171502365008+0x47/0xf0
+>  common_interrupt+0x85/0x90
+>  </IRQ>
+>  <TASK>
+>  asm_common_interrupt+0x22/0x40
+> 
+> This stack trace is from a crash triggered when an out of bounds rx_tpa
+> is dereferenced. The invalid write mentioned above is silent in this
+> particular crash.
+> 
+> Fix this by allocating rx_tpa with bp->max_tpa rounded up to the next
+> power of 2 (bp->max_tpa_roundup_size) entries and masking the FW TPA ID
+> with that size, so the wrapped ID can never index past the end of the
+> array.
+> 
+> Fixes: 54c28fab2fa5 ("bnxt_en: Set bp->max_tpa according to what the FW supports")
+> Reported-by: Raphael Cardoso Fernandes <raphaelcf@meta.com>
+> Suggested-by: Michael Chan <michael.chan@broadcom.com>
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Joe Damato <joe@dama.to>
+> ---
+> v4:
+>   - Moved bp->max_tpa_roundup_size init out of the early return path and
+>     documented that TPA is unsupported there, as suggested by Michael.
 
-  scripts/sorttable.c:452:12: error: variable 'long_size' set but not used [-Werror,-Wunused-but-set-global]
-    452 | static int long_size;
-        |            ^
+Clashiko quite convincingly elaborates that the above is not enough:
 
-Mark long_size as __maybe_unused to avoid inserting more ugly #ifdef
-directives while insuring the warning does not reappear, as the
-aforementioned change does not alter the uses of long_size, so it
-appears to be coincidence that the warning disappears after this
-refactoring.
+https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260828190900.1767611-1-joe%40dama.to
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
-This is breaking our builds on stable:
+Could you please have a look?
 
-  https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/33143924291
-
-There was a previous patch sent for this issue
-
-  https://lore.kernel.org/20260603191708.27241-1-beakthoven@gmail.com/
-
-but it was marked as stable only. I think this should be taken via
-mainline and backported the normal way, as it appears to be coincidence
-that the warning is not present in mainline. It does not look like
-scripts/sorttable.c has a formal owner according to MAINTAINERS so this
-could either go through one of Steve's trees or the kbuild tree.
----
- scripts/sorttable.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/sorttable.c b/scripts/sorttable.c
-index d8dc2a1b7c31..d7b50581c732 100644
---- a/scripts/sorttable.c
-+++ b/scripts/sorttable.c
-@@ -116,7 +116,7 @@ static inline void *get_index(void *start, int entsize, int index)
- }
- 
- static int extable_ent_size;
--static int long_size;
-+static int long_size __maybe_unused;
- 
- #define ERRSTR_MAXSZ	256
- 
-
----
-base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-change-id: 20260831-sorttable-long_size-unused-but-set-global-262c0873a1a9
-
-Best regards,
---  
-Cheers,
-Nathan
+/P
 
