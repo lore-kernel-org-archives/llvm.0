@@ -1,148 +1,157 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BE7247A0C7
-	for <llvm@lists.linux.dev>; Tue,  1 Sep 2026 10:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788257015; cv=pass; b=Adb3T+mM630S0zvq4KNMQSHRD5d9u43XLOG8p+6FaEWGh8h23i5DgETpIkDHUPkbRsAYfdjMkA56b958H3RUf+cmW84fRjT/cMf45OfGYk0yhDQ1HsWVt7wN8q+KXC+YIRJagfj7+pd9WJ+cbdB+xQioy8kqalQ39qf16GcB86Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788257015; c=relaxed/simple;
-	bh=dtC2b9rE2+PvqyfvIQpFBFFgI4ZlT+seDQ76UBcyXhk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R1FeLG0ukfAtwQKbaDNKzj75K9mZqvEnqUldEjfCHuOArknWC1A3W8hfVxLzE5+JPlygcFtobeWOInaqq9RGATM9RxTpW1pZ9maCZAM48GU9rw1SE3sjwD3K6okfwVe+dwHesn9bx7YYX5U+b385DO+DdrOmr2/1cVm4peCEAbw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AT1rIb2E; arc=pass smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C287E2D7DDB
+	for <llvm@lists.linux.dev>; Tue,  1 Sep 2026 11:57:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788263854; cv=none; b=RF73jbQ0Ua+L0ZGpTKt/j9GOr8DIAcp4RLEV4IXtpwiURfuYnDoD7L8Lg5Q2WajUxisAl/CuRmpKT1dQQskMK4q8QB/e7SMlXhwJV2iLxmDQ55sR8cdLROVsVU5pUAElx6ytmmLj3ZIypjkC0gfdu/WnlI4lXCuDfkgA8Frd+vc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788263854; c=relaxed/simple;
+	bh=fYX0YsAcdzC3xGEnENhr8nj3ott/n5K1kE753y4IEY4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sUHFJn+zn7F3R01N7Y5pQF2W2qEjMoR3A9MLjck81u/0EbvNTes7Ef+rbfOxHACeC4Q1aGK8fK+7fzgklOPWG6HKrUkOvWTNNbhH/RgDT6uI2OT91hvNmwuUuJ63+E54eRuZxzIFskKP/mDlXAYavo2LPg5PsozI78fk8IWhork=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=Qj0tOsjM; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AT1rIb2E"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2d5862bc921so10386225ad.1
-        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 03:03:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788257012; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pxNc3GipjxRT9T2ftSPm/7UoB5kJ9nQBcl7L5id+eYcopWRbCQ6RDxyfYZ+S2BZmVK
-         wKKomRv3Cny/AdHOWwjI3r5ZmAu/IBNU8xphDUrkrVAOPdCJxccC78dSg/qfhLd94n/E
-         9DDD5uG0Yx0eKRXPrZ/IMXbYqCF1xNtkFUDeRjLWsOxpysxgWUNYDjMMS99pNnm5ok4K
-         rOKxWhpVTZMRdDATJOUSF2TNdif0imN0Bu59IIsfyHAeHGiP4xjDoca960BCsI0uXecP
-         eLOR+7xQ9oNcfwU+U2vlnwwbVVqDJSC0GuOZO7Mn1M9D2jK+Ka8WWfyz0QIrEBq8ravQ
-         MXjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bmZDR4ZqqsB4rIh7Kzatyaogr6ocdpUcdSx+7fuMEz4=;
-        fh=06z5SvDV23Cj/CsbSXbZWysHP19a6zoCToZ8VLtQGH4=;
-        b=jo+LRZMBJKlx3ukwYEBjm0uyIT4iv0JVuzEiCC/lTLHCIjkYm9333bP5pFPpCF9xiQ
-         3OBLKnUef3wi6S4EjXPMaQP19aeDp30ncfMVlpMWgyDMjYLzIOEG3mxpviqkyK59pI/0
-         k0nFC+uz3fZmVjLqT7LU2l6Fc6n9lDb5kmXgiFt1D4ojBqzFjjHB9aOgPtr9NsophFt1
-         Ca7EcAdbZAL6eVS1vOSHeX10dDuCP5O8XEognmPZIbD+luF1OUW7sQxE0lm1noRH/zYB
-         MGe/W/QXhhbN1UA5hnnak+d8CjaKYSO/uKK0r8TbD0pjzaYxMgoFlMSdq1lZmasjiXIs
-         Refg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="Qj0tOsjM"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d5cad1a6baso44463355ad.3
+        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 04:57:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788257012; x=1788861812; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bmZDR4ZqqsB4rIh7Kzatyaogr6ocdpUcdSx+7fuMEz4=;
-        b=AT1rIb2EvcgNczQvwbIp1zwHMs4QyMk70Govtk9KA9bWXA/cT1ZSdY3Xa9G/QR9Kux
-         Vd1GzjCcwyDpE1W+VpkI5dPY2SRIg5N1GpOSihycJzViziTvVrxaw8+UCnohdntVKXve
-         s8WG3OdoMWG9gHGgE/Q/ZguKqJt3tGYkThHyFRXeGxQRxYecMHa6sSnYPUWJlq9zqorQ
-         TW5IqCbJX6r+QSVhtyAPIfyNT6NdrnZH8VmjYNeq+LhrS5SbG6hv2k/S0l9k4p9Pcii4
-         0src/8/fA7skmFiktpg6KwU8BRIUphVANOwlL9gxCO9jo56ew44RVOFYfI/jz5du+EZX
-         taqw==
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788263852; x=1788868652; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vhTA2r8ETchpWXwEm0IQgD6dzKUlsK2Lh7nqwYCs0is=;
+        b=Qj0tOsjMVQRD5dGrEnEfUDGJYB0Y7bKiMEMPbvbhUy6cWu78v3dy2pna3LvLJBWA2h
+         BR9D6AB7+zz7kqiZWfJTXCvRFr/eprJe9+qOesrSRFBPQRJZ3pDjs9+hRyrmAaE9ODjN
+         zkWG0xabh0HZBPh6i2+2AFM/uv0OHUL3OmPqjbgADOmFbp0DNRr+lSzxhyiUX+EtQyNN
+         2GQMtR+LOuaRB3I8t8hWEIdNPqacPMPxXtnJTEsYTK0Ybea10JDNfi2WMrGdJzjJ2fi7
+         B7YRmPEv0HUeL04BeHBEo0aEjtKzzpbMdwyxf+2Tystxo/eV+ba43xqRmim4suUrOJds
+         4mGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788257012; x=1788861812;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bmZDR4ZqqsB4rIh7Kzatyaogr6ocdpUcdSx+7fuMEz4=;
-        b=SGD9w6Uo+ZIaDxbq98ilJmkf1xshFElv9kdD5ogtyrdvCKH4Xuqf8k5eku0eT7DHmI
-         6gDta3t522WC2Vv7b1SjGcIFafdmGpGzpScK6Fxg6TRbKVXR3PxK009w5kQvg4aXbajF
-         kNEQIPZFW4twgCd9ShKyL6xoT0hIbYWtb1xd7ynR81Lj3Erohxk/BPQU7hcgLNKuS7cK
-         Kw8Cp8lgoAMYMPLMJVJF5iUzcgsdQ9XFDE7T/r02YuNcXsXtulP1M6vMsUF/MfKwJ6iR
-         zMO4UD2dAMaPt8SYtWvOvOnK//N6SzX2aTnnNDYwcLJk/ayeooFym5gYeJO2Xe1JuFuA
-         5MTw==
-X-Forwarded-Encrypted: i=1; AKwUvBzVjXq9PBSNBhy1jx/MPpu2rgWMg1wL7Nahngebx0W2ogP5nptMikTFzSWHMWCHw1uOZWxx@lists.linux.dev
-X-Gm-Message-State: AFuF++kp6KXBt20Gmk0BgB57B7oSvLFV1zP6xcva/F+ZaljnDA3pQea/
-	7jxAGTACfmJ4Q0/31GQopmC3nMt53nMR2tmF3ZOlmmY4iPdtkAeqf0cs1thSHwnGaL8wXBxEzrp
-	ySa/EMVcQQNMwgclY+XgZsGovPDhfi+4=
-X-Gm-Gg: AR+sD11qP33clmQjl276BnoMaG8HR6ivj0281zDZ1B9Wb3FxbouGOI3YdMlebYxYnVt
-	FOO6WkyQHoTuMhe08xk20zcbgMoSbMPaO0IOCHQP+viUw51tbOAgls5t2bv9q+8+dYnLCqytQ3v
-	z6UOM9wI85j8Q28u6s1Ulf0nU7YKk6tdrUbcCG0TEADJSk7lOkbFXHkASaxxa33U+J4axlQFWSI
-	uZoxEPejW2EYCoM7i80EIKRXTYQe2KOzfnhs1nIGKR3vzTMLHBepZDf43/fCMJXPfmNdZpvTPHo
-	uFdDYwzEQ1p+dLklganxSOc7fmRy2/qIgqfmLn7Ka5HtB8uqChKCUWY3umbu/P8sDeWeMWWD9uj
-	B3v+XlUZBw94QSAORkklywgNzS8hyS7cceb097NxNTwcM05TRVMeJcSZaM3Uf
-X-Received: by 2002:a17:902:d2c7:b0:2c9:ed4a:c3a4 with SMTP id
- d9443c01a7336-2d74ce38075mr274123155ad.0.1788257012245; Tue, 01 Sep 2026
- 03:03:32 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788263852; x=1788868652;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=vhTA2r8ETchpWXwEm0IQgD6dzKUlsK2Lh7nqwYCs0is=;
+        b=ZnJQ2w7DTvp4LE3xy6HZkhWGyaT9JrbKUdgpYY9fxZezuqkTXxjri36CWfjYcNLm/X
+         u/g7vX8369PabHFsDWQSM1dVNkvCCyFxQNzzyWjzld4Hike6YQt/qJFtGZzWZ1EKvyb3
+         Wkd+60RMcnOgZVF0qM4xH+Dkk9Zbc0/jAWWgsia8lPsG2kTPptTIsemN6lP9JSus4oo2
+         I4ZcEzhWnQ6o+FOOlCB/CI/oW1z1fPzeF0lQLY35nEVRBRVOZ9bC/bjleY3LVZfbp5n1
+         7gdXwAbBHLWDfO6LFd1aTNEuxfG7RMLbHAwe2l1Lb8iYK7EvV60YqzhaQCVunPFU1LLf
+         F1Tg==
+X-Forwarded-Encrypted: i=1; AHgh+Rr0vj40mn57Gw9NOS1KQtA5uO/56w6FfX9dp5ZkFdntrjGoJr7meusa3UUNRcKjzi8xEeZl@lists.linux.dev
+X-Gm-Message-State: AFuF++mtivvN7RiTgNyGyllk42by/WIuRA6A+pyv7xR0buab2dXZUf1s
+	RRok/m0ScIl6B0ZSwQhGtP1iGiZqevWzLYZgNUn+z7KHKBdzYVDrophqZhZ98RlBvwo=
+X-Gm-Gg: AR+sD11sDNfROETVsPnaHiXrhaS7HA0rwI9626Pre7rcZ4zm8/C7LWhoL2sJGuHdxlo
+	vkgapT+h/HHS8AHGfvIEtiiCZrtvlU8FZBhv4NqvgOZAhPdJnTJBgBkw+gtB4VoAyD/KjpgWM76
+	mUmqzsEHtrIlIGZT/1e/0d7jfqJVVb23ra5zqkA3aIitinPd2uHmITGQbXwS/95vI4ZvVrpI1nk
+	zTow+ogrLQJpGzmLPKWiLWXWv10hyrpDDW0AY8z78rabwUVRPfQRt4FNJvzsqG2sExA9Y2Ro/5i
+	AjvPjVhylOlttPDf4XWIBHiU2Nmhr2ZtCJON3Hmm0NXHAxjOMkz75zZL0+6HPbvbQ36u0p+rHGW
+	oFyniljo8tr3phEp4rXIDA5y0kRkZi+8dtH7bOi6eaR39/KCVZ6XpIi79rhjd+4LG9T8anX7dsA
+	Bwc1GfzSbpXYmUdzl5lKIGkj94eysIupDJzHTQYRCRDA==
+X-Received: by 2002:a17:903:350c:b0:2d8:d4d3:da4d with SMTP id d9443c01a7336-2d94a90e6e6mr107425595ad.17.1788263851931;
+        Tue, 01 Sep 2026 04:57:31 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:4b::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d911a9651csm34613995ad.21.2026.09.01.04.57.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 04:57:31 -0700 (PDT)
+Date: Tue, 1 Sep 2026 04:57:30 -0700
+From: Joe Damato <joe@dama.to>
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+	Rukhsana Ansari <rukhsana.ansari@broadcom.com>, horms@kernel.org,
+	colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
+Message-ID: <apa9qofhuatqGTra@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+	Rukhsana Ansari <rukhsana.ansari@broadcom.com>, horms@kernel.org,
+	colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
+	raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
+References: <20260828190900.1767611-1-joe@dama.to>
+ <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260831151605.638172-2-manuelebnerli@mailbox.org>
-In-Reply-To: <20260831151605.638172-2-manuelebnerli@mailbox.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 1 Sep 2026 12:03:18 +0200
-X-Gm-Features: AcwNN1VbNKqeV_yey9Jhr55AwO_DusZQ-wcQLGmrDCepzJ3Tk4JUYrXX-Z1lHAo
-Message-ID: <CANiq72m0xHD1YTADnmQ-fqMPSNHrMGwfPBbT7V4crBgu7B_ecg@mail.gmail.com>
-Subject: Re: [PATCH 0/4 v2] Docs: changes.rst: rework
-To: Manuel Ebner <manuelebnerli@mailbox.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Federico Vaga <federico.vaga@vaga.pv.it>, Akira Yokosawa <akiyks@gmail.com>, 
-	Daniel Pereira <danielmaraboo@gmail.com>, Carlos Bilbao <carlos.bilbao@kernel.org>, 
-	Avadhut Naik <avadhut.naik@amd.com>, Alex Shi <alexs@kernel.org>, 
-	Yanteng Si <si.yanteng@linux.dev>, Dongliang Mu <dzm91@hust.edu.cn>, 
-	Hu Haowen <2023002089@link.tyut.edu.cn>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, workflows@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
 
-On Mon, Aug 31, 2026 at 5:17=E2=80=AFPM Manuel Ebner <manuelebnerli@mailbox=
-.org> wrote:
->
-> ->[v2]
-> Ditch the name change [PATCH 1/5 v1]
-> Add Acked-by: Randy Dunlap to [PATCH 1/4 v2], [PATCH 2/4 v2]
-> Add genisoimage, mtools and syslinux to list [PATCH 2/4 v2]
-> Ditch footnotes in favor of a column [PATCH 4/4 v2]
->
-> [v1]
->  https://lore.kernel.org/all/20260812120805.1631430-3-manuelebnerli@mailb=
-ox.org/
+On Tue, Sep 01, 2026 at 10:16:54AM +0200, Paolo Abeni wrote:
+> On 8/28/26 9:08 PM, Joe Damato wrote:
 
-In my usual go-through-the-ML exercise, I noticed that the subjects of
-these emails look a bit strange: one is missing the version, the
-version is at the end, and they seem to be out of order:
+[...]
 
-  https://lore.kernel.org/all/20260831151605.638172-2-manuelebnerli@mailbox=
-.org/
+> > ---
+> > v4:
+> >   - Moved bp->max_tpa_roundup_size init out of the early return path and
+> >     documented that TPA is unsupported there, as suggested by Michael.
+> 
+> Clashiko quite convincingly elaborates that the above is not enough:
+> 
+> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260828190900.1767611-1-joe%40dama.to
+> 
+> Could you please have a look?
 
-I would suggest using `-vN` in `git-format-patch` or `b4` to handle
-this instead.
+I looked. There are 4 separate things Clashiko reports, so in order from top
+to bottom:
 
-In addition, if the changes on a given version are local to each
-patch, you may add them per patch instead, after the `---` line, if
-that makes it easier to track.
+1.) "This isn't a bug introduced by this patch, but the line right below the last
+context line here still uses the raw firmware ID as a table index: ..."
 
-I hope that helps.
+This seems impossible. If FW emits an ID > 1024 that's a firmware bug and if
+we wanted to guard against that possiblity that would be a separate patch and
+a different Fixes.
 
-Cheers,
-Miguel
+2.) "This isn't a bug introduced by this patch, but the loop count here changes
+from bp->max_tpa to bp->max_tpa_roundup_size,  ...."
+
+I mentioned previously in my v3 that this is real, but is pre-existing and is
+a different Fixes unrelated to this change.
+
+3.) "The new assignment sits after the max_tpa_v2 == 0 early return, so on a P5+
+device whose firmware reports max_aggs_supported == 0, does
+bp->max_tpa_roundup_size stay 0 while BNXT_FLAG_TPA is set? ..."
+
+Michael commented in the v3 that this is a false positive, hence why I changed
+the code from what it was in the v3 to this.
+
+4.) "This isn't a bug introduced by this patch, but the loop bound grows here
+(for example 64 instead of 48 when max_tpa is not a power of two), so there
+are more mandatory allocations that can fail, and the failure is not
+propagated by two callers...."
+
+I mentioned previously in the v3 that this is real, but this is pre-existing
+and unrelated to this change. Fixing this would be a separate patch with a
+different Fixes.
+
+Michael: please feel free to confirm (or let me know if I'm wrong here), but I
+think this patch can be merged.
