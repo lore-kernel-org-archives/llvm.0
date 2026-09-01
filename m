@@ -1,73 +1,73 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E80425CEE
-	for <llvm@lists.linux.dev>; Tue,  1 Sep 2026 15:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185D6490BE6
+	for <llvm@lists.linux.dev>; Tue,  1 Sep 2026 17:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788275038; cv=none; b=lOLwJ3TGkz5p+wUkWbWc1QTiIGCsJBV9DobA9lH6NVOQv712ZHw+b1P9DM6YtoLwcvCl8Gesyg9EWClyvd7XnG3ybbPIhfw8yZqv2UXcXtinn7l1iCQlU/MQgG6OgqeAm1I3pDPwg/jkfEfXkYe73EkeaDD6uNvI+UaIbWbBoQA=
+	t=1788285557; cv=none; b=l5eSoUxoC5bKb9tt1tMSa/jrppbHb3MllRNprqwtEbUSumGghJ4r0adt/pIp83R1GGUKXNNOBww0eV3ZFvbABKxIfBfnGjBVwF0QEZ7CJpLzwHeGi6B65jniVFc0AItmNxIJLzTHisvNowP60vXuMXyexQw0yWRP6fAKpZAw6Uw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788275038; c=relaxed/simple;
-	bh=EV0luyxrE4VBTkjaX8NMlEgGp6/Xt54MDGLWoiypEoc=;
+	s=arc-20240116; t=1788285557; c=relaxed/simple;
+	bh=upOZfp7nr+JUKjA+9XgwYeougAECpv2MBCBLML5bTbA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H97vVPGMhzDoBCjTdh7JF8Q8+WanzF15bd6+GQ39EdtQjlUJXfDMMIgCBesAbwjJS++8oORBAIwkLC675ncLGq7i0HdnO1Up+7RC/QRM8IGazP29Vq4sE3dIarz7WV+X+uTx0nLXsqFkod4aDM3y4R+x4EgHDK16jLaTXoUgMTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=yvP6Gaz2; arc=none smtp.client-ip=209.85.215.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=SvI5efRbnmsCPHxjIAJU00fcBJXyH21UkIUa4RSmG9skTpY8knrz1KhKYkncbzOJlEKMQC3U/+pynvFhCuek/RV9Py5fprkltJHD9Kpygp6RP3BLcXocZWzQG3y4+qyJIlORe8La7s+tvAP6gCYTMprNYQSkA3XBt8ur/UJSVV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=nGUqRvlF; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="yvP6Gaz2"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cc1b838f9b6so5681736a12.3
-        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 08:03:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="nGUqRvlF"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38e041ea211so134110a91.0
+        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 10:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788275036; x=1788879836; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nYjWdRobMhFwnScsH6QAuV5nfOH/dqs6pUr1givzmCo=;
-        b=yvP6Gaz2vmxjecN+Ma+fQ91r02FnVrDCpYbjwsELIUTxbWISak2SKQEClzJoG303ha
-         DBEBlGLMxQgb3yub7ytQZ8JP1F/RdRWIIGaf+cJVdgDWbjFDfQmAUQjPlqKEFS606T7/
-         qErHu0Gu34jm5APZI01fwoCfCaqbIbVxwuyVl06oVkFvx1ywekM9vU8bwqVR90LV2r13
-         th6UiqMoWD8ImMzeXHSdlTlt70qc/EtqQPCMOoroBqji6uDfWfqGBVWoBJxvLOd5pbw9
-         4360vtbjrPZT75WQxY1G62tA0vOV1hG83vppdrtOPMe/O1dXfGGCTAOqbAmwCyJkNJoD
-         pIJQ==
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788285555; x=1788890355; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:mail-followup-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iQGQ/jT41D7XhkwOcvrUM6Q+rqlIuyJ98icVtqutpDY=;
+        b=nGUqRvlFOpxFntoseAUfXXIzkvUnibi1z9PhirdFmGbCSZNTjAHtmy9WA+blE/juzv
+         7CUsPUwkMw7R56jJ9TyOSxiolvvxigy3pcxuW5TH0zfN09kr/SexGTzGov4KAtXkhm/G
+         PlT/7cmUhjo8Ujj1GtXU9/rtwJOlii9DrfhzQuPiTxT4gDV5OUSWF7BoMMtlk+xqzoQb
+         MEwJ1PpkbhuT/LnH/g+vzpQInIgGtDozihjLM+E+8HrQzGynGzHKErjhXCKQZ5jXVQ3+
+         FejbiPEFwl3f/3zYX6xJ5NaRgCVV3PI9KvowO51O5B2qpivlFmUmTBvHR9vdee9inarB
+         x1Jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788275036; x=1788879836;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=nYjWdRobMhFwnScsH6QAuV5nfOH/dqs6pUr1givzmCo=;
-        b=pT+BpBJf6IU6AKRaZm616BjDbN/vter28wmKlI8+yqH6mU1mXwG4A83ZZLeZFmxtsG
-         2PKYZyl2Maz7qixop3HvJgVXJAuO5nFkBWH6qLDzwa6ekav9EpnhANEj4/YK7sfGHeVk
-         +vMZUlf24C+nfilAn9hzyieilvtZt7abqBPHJdK9mw2aqjZhCLB1Z17EP6LRhiCPQM6f
-         Pbc/vSrBHXdu6e3m0JQXFd7WffvU/fA+7G5EJhwMfU/1tV8NWlWocTvc5q8N2PoFfFxb
-         NwBIn1reJ0ccNXFykEVOV5mUiKgdoB2unwBaU4IUgQ7yZ3gokHXbtM7xXGfbHW4YWcxS
-         2Dqw==
-X-Forwarded-Encrypted: i=1; AHgh+RpZGdVWY3NZLVP1kHyDj4J7tt1bZtalD/5diI2sCK1VqmU0Cbpd6w6nAQq+rTMofXrhCF8P@lists.linux.dev
-X-Gm-Message-State: AFuF++mVce/LVRC35yThpJ0TcA98YiP+JB8lO2gTA0CuhBHRP28oGFA8
-	FRdiI1A9Bi4inatYUCUGtjRkeJXJjrAmvg3VvDyeWrG6LPRe/0lNQH8h4oHwiGvHavw=
-X-Gm-Gg: AR+sD13fP0IarT/OTWcLwcsTkPfsXqEhJ3mMK8W3NbUm0avQIOu+5xXyTWJtj7LtkIu
-	gK0+MCytnP087HQzfqIH3BnPoIpr8HrmjloWGjpvNL1LwNlb8UsN4ImhIgPVdnqK/Is2uVlW9/6
-	NU0ARr7Lw07bO+p0R0zf40T7GSC5aldVOc3fxupHs2EyFrUkilZiDYGqUuL0ScRWUXKnZ5dc55/
-	uxK9dfxTs675EK+nh5pN+z4W6e9HDyz/MLm6cmrbB/49Rmpz7rh7OuY2Pmkn5i5EVNpyzYWV5Fo
-	HOcpJSUIywYUnmSR/uC3Flu55AwhFUoN09/VUSyDCaGqhczjZM8/c2E6gavW4q4QmNmXPlbcrYU
-	2xxNSB2iBrEjBLocrx/j/RUekDj236Pj9RtPfbZLlbQ+FNFCav5o7+mNnNau4UjLVdl/QxcpAZI
-	GQxs4mJhl9sUwgHGCdy6o4xNadreK4U8HhNJQeNZPPdrM=
-X-Received: by 2002:a05:6a21:a0a:b0:3d0:abdb:de03 with SMTP id adf61e73a8af0-3d7ad788edbmr15943018637.2.1788275035650;
-        Tue, 01 Sep 2026 08:03:55 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4c::])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc1f32f727bsm6432687a12.7.2026.09.01.08.03.54
+        d=1e100.net; s=20251104; t=1788285555; x=1788890355;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:mail-followup-to:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=iQGQ/jT41D7XhkwOcvrUM6Q+rqlIuyJ98icVtqutpDY=;
+        b=RCngb9XJSZMbTHMv/KPFkfR7AqCaaqnNtL9yMaOZp4HQlUqi3K7Rm6lkb4XkAoaz8u
+         f/seMNy7AGkKw4r7RCdS/OehrVmbLA3jOqKiJDdv0F9O9vwbSKykv7T8zLExRGmmu+hu
+         7PaxbB/vQtyRT8y8UBp7dVcQFnUtOuR4COuBiuq2r+0r28HqZLOyjiEhf0Kcn9J2Q4N2
+         kz1rZIvnG4pFseYMvx3ykyaOFcKmCcqOi34TAGijzAvy9s3XLLCPX8ba1h0eKCzJg1k0
+         uFgSa5vHmIs8fjtMaG8osH6KbEIxRHa3pcm2IwcWmgwz5YWAFF9y2tk1SrSn34HepbYX
+         kTaw==
+X-Forwarded-Encrypted: i=1; AKwUvBxWYm4pqMHL8/92P4ncoyJ8o+Qvmw0rrbkE7jkuRdxm2wZpGgIgaz0SemTpQPglfd3YfgNe@lists.linux.dev
+X-Gm-Message-State: AFuF++kRDPWhVBUhQpI9e6OWXz1VC21Db7Bdf563/oPeu4rQEr6TyaJt
+	iq8PREN8Cri1rR4ywDMgLv/KDlpRBCAjOre9grIgYboyZtCbdjr+KM5TJeNOwM125eI=
+X-Gm-Gg: AYBFou0vfN4nI/PCB+bIhpTPLwiteQUB8lhpw38Cm4IPyvwuiqON0K0L2zR/uOfiiMj
+	kRC48E2MlcfWRgH42DSeCahmlBOx1upJxuhq2Ce6YFy2Dq/j+zrL5rRqOI8Nzu2rMoXNelBxxhH
+	AkvKjNKtnB4XdGMgGdwqQ7swDdvTV1qoN4UQm+EJU9+nNYaQxw/vNUpBRjZqJDYoWqOfXtN05/Y
+	w49O45NbjvjXZrMiJdq+Jb2+4e3MbJx59u1YUpcnn4tASPFK5OaULm+JKGqb67+wJsVjOXWy89B
+	gcLBgvTOUVmd/iOm3h6jeiCNkvBv/nmgx0fllFQOyVygc6IXfuHo4IsUlRTRFwtZ+s+3wtrzxUy
+	ZPaKbHbcWthUj5gYZcZT7QZfh+kITpCeEML8Lbzg3F/uu181/3yPiflq7n0jVGcX8F75F51NVda
+	wt2ssyfia38U3Pt3pmw31cybS/Xnf08Gh+zNIzk/YziQ==
+X-Received: by 2002:a17:90b:39a3:b0:38e:bbf1:de3f with SMTP id 98e67ed59e1d1-39907d659e6mr14262544a91.12.1788285555109;
+        Tue, 01 Sep 2026 10:59:15 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:71::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39ae3c1d85bsm768983a91.13.2026.09.01.10.59.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 08:03:54 -0700 (PDT)
-Date: Tue, 1 Sep 2026 08:03:54 -0700
+        Tue, 01 Sep 2026 10:59:14 -0700 (PDT)
+Date: Tue, 1 Sep 2026 10:59:13 -0700
 From: Joe Damato <joe@dama.to>
-To: Paolo Abeni <pabeni@redhat.com>
-Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+To: Michael Chan <michael.chan@broadcom.com>
+Cc: netdev@vger.kernel.org, Pavan Chebbi <pavan.chebbi@broadcom.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
@@ -77,14 +77,14 @@ Cc: netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
 	colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
 	raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
 Subject: Re: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
-Message-ID: <apbpWrfu3VQu+CUz@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, Michael Chan <michael.chan@broadcom.com>,
+Message-ID: <apcSccBgd3nwrjvt@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Michael Chan <michael.chan@broadcom.com>, netdev@vger.kernel.org,
 	Pavan Chebbi <pavan.chebbi@broadcom.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
@@ -94,68 +94,41 @@ Mail-Followup-To: Joe Damato <joe@dama.to>, Paolo Abeni <pabeni@redhat.com>,
 	colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
 	raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
 References: <20260828190900.1767611-1-joe@dama.to>
- <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
- <apa9qofhuatqGTra@devvm20253.cco0.facebook.com>
- <b8b6db7b-353d-4d6a-b0b6-3b5e1be22008@redhat.com>
+ <CACKFLiks4ueY4faqOiu9-Zk6odEdNL1Abyhg+giOE72iMe0Z7g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <b8b6db7b-353d-4d6a-b0b6-3b5e1be22008@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACKFLiks4ueY4faqOiu9-Zk6odEdNL1Abyhg+giOE72iMe0Z7g@mail.gmail.com>
 
-On Tue, Sep 01, 2026 at 02:10:04PM +0200, Paolo Abeni wrote:
-> On 9/1/26 1:57 PM, Joe Damato wrote:
-> > On Tue, Sep 01, 2026 at 10:16:54AM +0200, Paolo Abeni wrote:
-> >> On 8/28/26 9:08 PM, Joe Damato wrote:
-> >>>   - Moved bp->max_tpa_roundup_size init out of the early return path and
-> >>>     documented that TPA is unsupported there, as suggested by Michael.
-> >>
-> >> Clashiko quite convincingly elaborates that the above is not enough:
-> >>
-> >> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260828190900.1767611-1-joe%40dama.to
-> >>
-> >> Could you please have a look?
-> [...]
-> > 3.) "The new assignment sits after the max_tpa_v2 == 0 early return, so on a P5+
-> > device whose firmware reports max_aggs_supported == 0, does
-> > bp->max_tpa_roundup_size stay 0 while BNXT_FLAG_TPA is set? ..."
-> > 
-> > Michael commented in the v3 that this is a false positive, hence why I changed
-> > the code from what it was in the v3 to this.
-> 
-> This is the comment I referred to.
->
-> AFAICS the problem is that the driver sets
-> 
-> 	bp->dev->hw_features |= NETIF_F_LRO;
-> 
-> regardless of the supported capabilities, and that seams to disagree
-> with Michael.
+On Sat, Aug 29, 2026 at 12:20:26AM -0700, Michael Chan wrote:
+> On Fri, Aug 28, 2026 at 12:09 PM Joe Damato <joe@dama.to> wrote:
+> > v4:
+> >   - Moved bp->max_tpa_roundup_size init out of the early return path and
+> >     documented that TPA is unsupported there, as suggested by Michael.
+> >
+> Thanks.
+> Reviewed-by: Michael Chan <michael.chan@broadcom.com>
 
-OK, after re-reading this here's what I see: NETIF_F_LRO gets added with no
-capability check and bnxt_fix_features() won't strip it afterwards. I think
-the fix there is to add a BNXT_SUPPORTS_TPA() test, as a Fixes for
-f0aa6a37a3db ("eth: bnxt: always recalculate features after XDP clearing, fix
-null-deref").
+idk what you wanna do modulo paolo's comment on this thread.
 
-I can send a separate patch for that, but it is unrelated to this patch which
-fixes a crash on boot for Thor2 devices.
+i have a v5 locally that expands this to 5 patches which should address most
+of what sashiko is upset about:
 
-Maybe you want me to spin a v5 that rewords the comment Michael asked me to
-add which is currently technically incorrect, but will be correct after the
-separate bug mentioned above is fixed?
+  bnxt_en: Bound SW TPA IDs to prevent crashes
+  bnxt_en: Handle buffer allocation failure in bnxt_rx_ring_reset()
+  bnxt_en: Propagate TPA buffer allocation failures in bnxt_queue_mem_alloc()
+  bnxt_en: Don't free the live ring's TPA state on queue restart failure
+  bnxt_en: Only restore LRO if the device supports TPA
 
-In other words respin this to make a v5 that changes the comment to:
+but ofc, who knows what other stuff sashiko is gonna find if i submit this and
+how much furhter we'll push out fixing the original crash.
 
-  /* TPA is not supported at all, so there is nothing to
-   * allocate.
-   */
-
-And then when a fixes for the above commit is proposed, the comment can be
-re-expanded?
-
-Can you let me know what I am missing here?
+lmk if you wanna stick with the v4 you reviewed as-is (and i'll send the other
+4 patches as a series) or if you'd rather i submit the above 5 as the v5 and
+get them all in at once ?
