@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEAD4244667;
-	Wed,  2 Sep 2026 04:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC5133D4E2;
+	Wed,  2 Sep 2026 04:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788323170; cv=none; b=ryX+E3tylBABCX4sG093gYQ2E4lyFEX5jrqkd3XvION4i3ZtHDJZzA3dhnvrw4v43/ILEbrJHjAC8mPshrn6ZwCeUxXbq//+W54Tl1Q9qr9BlME5gz+ihd6F2ReaoHbeP//RPgwFl2fC6yUq8xLDaKybMJS12rzRqrOSDNvYMp8=
+	t=1788324970; cv=none; b=KBsLk1hluYtEHI0omczjrqE363R0L2WUfMeC1w/5NyEV18FNfKhu/BT6Kge4kD+PFfw1hn283bK3J5rnEnhp616JgaB4BxV6BTLfxmi5sTVRjgWYvzx1mKR5KLlYy57+frqNbsXgRAIiHTtxhgm+AB5DGDJ7sUrNGwUcgfMXyEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788323170; c=relaxed/simple;
-	bh=zP5ZhSowRPGpYmdA5e0K7FfoiqjOee59uTTP7+S95/E=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=oushKtuf7/jscbNGy/WfDpgjWvc9Cnh9IddcxxEQp25hwxykeaeAEsqL60OU1TCKUJNnwLoKFBUS0fjd0BZ0ECXa91lW/HNE98vQcyrad0U48Nvc/oFyhDgjFZpB54GlJsUCcrc+7VuTXuu6sS89ExMSgDgvVK8Pu4GQRH1KZY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LwAe4tXR; arc=none smtp.client-ip=198.175.65.14
+	s=arc-20240116; t=1788324970; c=relaxed/simple;
+	bh=RON1FVMyUgpyG+Se/itPQEfAd5JBmKz0sYokSRkzuhg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=qQLrX5kpjxyHFfHXeCExGmzIDLZzw7qlMqkjzVExI0F6msUsxqCPvWVlhq3ZQgF+JwNnswOiMKyD1IBGToFIcJm0p+afsKlo5lmNsbr04W3FZZBYgF+kFEsRfilXgrvth7jPSJ/O2FtOX3aSIQfUBNe1aLCnz2xL/QGtK4+P1tw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4bkgjb6; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LwAe4tXR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4bkgjb6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788323168; x=1819859168;
+  t=1788324969; x=1819860969;
   h=date:from:to:cc:subject:message-id;
-  bh=zP5ZhSowRPGpYmdA5e0K7FfoiqjOee59uTTP7+S95/E=;
-  b=LwAe4tXRMeG+Z1vYgRV8av5sBVg5f2aIvOBuWjck8RVWFf9ugzGb/5Rp
-   d6VjA8TnTxPkLiwFOkaPaXjBmiOXf+pFU/rjibLBc5qIxEzO56o5dm8Ic
-   MQL6+UUErdA74e45QbnKLQE1/niob5ISkKyf3/oY6bEAfMRIGTEspJT8V
-   oEPn0QjraAhY+VvTSfz0DB5Um+dsxVHw8BfiLU44EwA8IAzxjsRWYXrtG
-   5/acn0hNB3p/cbIZaZQ3/lUtq+H6mcO74bfecXRNodLwGUqktaapzZMkZ
-   yVygJuozXvDGGz9unAaDmcZO0zViJwmCK6zDjgcgorljdg0QB4EGyW081
-   Q==;
-X-CSE-ConnectionGUID: hRE+meeCRi2jgnJ4uqi8Xg==
-X-CSE-MsgGUID: NMSBsp1DS2iKnDTn6egI5A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="92640257"
+  bh=RON1FVMyUgpyG+Se/itPQEfAd5JBmKz0sYokSRkzuhg=;
+  b=Z4bkgjb6jRpMrnrQ3vinyJhsze6LT/43qNvO85b/Ta8HQioWsLmtp9CQ
+   TyPdPHYrJapidwpRaZYFIiy5Op5HADZ/rALKaEhaoXmNrrQI0FMqoVBxU
+   c/hZMdoj8w++y9WsGi/8GnqoNLRGgkGI68L+yXr8RsuV5K8av48O1ZDd1
+   kw9sdkxODqXBHeeZvCk1naz0BLYoMSoSda/tAoxKJERMnc8f33aUxXiXb
+   IPOEbebEstZjxtcizx9bFixGUx1dexLxqotzTUzyvma5kl+dozHugu1qc
+   nvoxc4sOWKCgPJj4KUc57DpF0BBUX0vVYl0oTTKJwyeSQHGFqhnLruBcI
+   w==;
+X-CSE-ConnectionGUID: mqWhrgOOScWzKdJxORsg4A==
+X-CSE-MsgGUID: nouizd9ZQ06Pmv6rlwvJaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="87909923"
 X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="92640257"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 21:26:07 -0700
-X-CSE-ConnectionGUID: yLrpXmBMRDaaprGAvCgVSQ==
-X-CSE-MsgGUID: GBynp4FiQMGyI9I6gbhz1g==
+   d="scan'208";a="87909923"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 21:56:08 -0700
+X-CSE-ConnectionGUID: Nifm+uPpTsiMXLuFYnP70g==
+X-CSE-MsgGUID: bCQ6sdxUQGmAESyjEyLm0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="263154834"
+   d="scan'208";a="294124872"
 Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
-  by fmviesa009.fm.intel.com with ESMTP; 01 Sep 2026 21:26:05 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 01 Sep 2026 21:56:06 -0700
 Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1x1cXy-000000001zC-1Mf9;
-	Wed, 02 Sep 2026 04:26:02 +0000
-Date: Wed, 02 Sep 2026 12:25:06 +0800
+	id 1x1d11-00000000206-1jaj;
+	Wed, 02 Sep 2026 04:56:03 +0000
+Date: Wed, 02 Sep 2026 12:55:47 +0800
 From: kernel test robot <lkp@intel.com>
-To: Asahi Lina <lina@asahilina.net>
+To: Danilo Krummrich <dakr@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/250-aop 38/79] error[E0425]: cannot find
- type `Registration` in module `soc`
-Message-ID: <202609021217.1vnDmN5r-lkp@intel.com>
+ Janne Grunau <j@jannau.net>, Alexandre Courbot <acourbot@nvidia.com>,
+ Lyude Paul <lyude@redhat.com>
+Subject: [asahilinux:pr/583 625/972] error[E0277]: the trait bound
+ `VMap<D, R, SIZE>: IoBackend` is not satisfied
+Message-ID: <202609021249.C0H9atEC-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,84 +61,128 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/AsahiLinux/linux bits/250-aop
-head:   e793b14f66e33b70363166d84886d82d462f1987
-commit: 12df0d4caf19584f993989efdfd00fc7d8f9b1cf [38/79] rust: soc: apple: rtkit: Add Apple RTKit abstraction
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260902/202609021217.1vnDmN5r-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+tree:   https://github.com/AsahiLinux/linux pr/583
+head:   cddf57e96d46510a9378b0fda93f6db65e4976a8
+commit: 7e2c3ece817a512b6b3facdc1f37969b14a88a49 [625/972] rust: drm/gem: remove DeviceContext from shmem::Object
+config: arm64-randconfig-002-20260831 (https://download.01.org/0day-ci/archive/20260902/202609021249.C0H9atEC-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 316b0edee400b3ef72ed0a082dae9bd337ac01a0)
 rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609021217.1vnDmN5r-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609021249.C0H9atEC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609021217.1vnDmN5r-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609021249.C0H9atEC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0425]: cannot find type `Registration` in module `soc`
-   --> samples/rust/rust_soc.rs:21:20
+>> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
+   --> rust/kernel/drm/gem/shmem.rs:522:58
    |
-   21 |     _dev_reg: soc::Registration,
-   |                    ^^^^^^^^^^^^ not found in `soc`
+   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
+   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   ...
+   551 | impl_vmap_io_capable!(u16);
+   | -------------------------- in this macro invocation
    |
-   help: consider importing one of these structs
+   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
+   --> rust/kernel/drm/gem/shmem.rs:431:1
    |
-   5 + use crate::soc::bus::Registration;
+   431 | pub struct VMap<D, R, const SIZE: usize = 0>
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `IoBackend`:
+   CoherentIoBackend
+   IoSysMapBackend
+   MmioBackend
+   RelaxedMmioBackend
+   SysMemBackend
+   note: required by a bound in `IoCapable`
+   --> rust/kernel/io.rs:272:25
    |
-   5 + use kernel::auxiliary::Registration;
-   |
-   5 + use kernel::cpufreq::Registration;
-   |
-   5 + use kernel::driver::Registration;
-   |
-   = and 5 other candidates
-   help: if you import `Registration`, refer to it directly
-   |
-   21 -     _dev_reg: soc::Registration,
-   21 +     _dev_reg: Registration,
-   |
+   272 | pub trait IoCapable<T>: IoBackend {
+   |                         ^^^^^^^^^ required by this bound in `IoCapable`
+   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
 --
->> error[E0422]: cannot find struct, variant or union type `Attributes` in module `soc`
-   --> samples/rust/rust_soc.rs:58:29
+>> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
+   --> rust/kernel/drm/gem/shmem.rs:522:58
    |
-   58 |             let attr = soc::Attributes {
-   |                             ^^^^^^^^^^ not found in `soc`
+   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
+   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   ...
+   552 | impl_vmap_io_capable!(u32);
+   | -------------------------- in this macro invocation
    |
-   help: consider importing one of these structs
+   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
+   --> rust/kernel/drm/gem/shmem.rs:431:1
    |
-   5 + use crate::soc::bus::Attributes;
+   431 | pub struct VMap<D, R, const SIZE: usize = 0>
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `IoBackend`:
+   CoherentIoBackend
+   IoSysMapBackend
+   MmioBackend
+   RelaxedMmioBackend
+   SysMemBackend
+   note: required by a bound in `IoCapable`
+   --> rust/kernel/io.rs:272:25
    |
-   5 + use kernel::soc::bus::Attributes;
-   |
-   help: if you import `Attributes`, refer to it directly
-   |
-   58 -             let attr = soc::Attributes {
-   58 +             let attr = Attributes {
-   |
+   272 | pub trait IoCapable<T>: IoBackend {
+   |                         ^^^^^^^^^ required by this bound in `IoCapable`
+   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
 --
->> error[E0433]: cannot find `Registration` in `soc`
-   --> samples/rust/rust_soc.rs:68:34
+>> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
+   --> rust/kernel/drm/gem/shmem.rs:522:58
    |
-   68 |                 _dev_reg <- soc::Registration::new(attr),
-   |                                  ^^^^^^^^^^^^ could not find `Registration` in `soc`
+   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
+   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   ...
+   554 | impl_vmap_io_capable!(u64);
+   | -------------------------- in this macro invocation
    |
-   help: consider importing one of these structs
+   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
+   --> rust/kernel/drm/gem/shmem.rs:431:1
    |
-   5 + use crate::soc::bus::Registration;
+   431 | pub struct VMap<D, R, const SIZE: usize = 0>
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `IoBackend`:
+   CoherentIoBackend
+   IoSysMapBackend
+   MmioBackend
+   RelaxedMmioBackend
+   SysMemBackend
+   note: required by a bound in `IoCapable`
+   --> rust/kernel/io.rs:272:25
    |
-   5 + use kernel::auxiliary::Registration;
+   272 | pub trait IoCapable<T>: IoBackend {
+   |                         ^^^^^^^^^ required by this bound in `IoCapable`
+   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
+--
+>> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
+   --> rust/kernel/drm/gem/shmem.rs:522:58
    |
-   5 + use kernel::cpufreq::Registration;
+   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
+   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
+   ...
+   550 | impl_vmap_io_capable!(u8);
+   | ------------------------- in this macro invocation
    |
-   5 + use kernel::driver::Registration;
+   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
+   --> rust/kernel/drm/gem/shmem.rs:431:1
    |
-   = and 5 other candidates
-   help: if you import `Registration`, refer to it directly
+   431 | pub struct VMap<D, R, const SIZE: usize = 0>
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   = help: the following other types implement trait `IoBackend`:
+   CoherentIoBackend
+   IoSysMapBackend
+   MmioBackend
+   RelaxedMmioBackend
+   SysMemBackend
+   note: required by a bound in `IoCapable`
+   --> rust/kernel/io.rs:272:25
    |
-   68 -                 _dev_reg <- soc::Registration::new(attr),
-   68 +                 _dev_reg <- Registration::new(attr),
-   |
+   272 | pub trait IoCapable<T>: IoBackend {
+   |                         ^^^^^^^^^ required by this bound in `IoCapable`
+   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
 
 --
 0-DAY CI Kernel Test Service
