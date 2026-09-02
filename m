@@ -1,310 +1,237 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-009ae801.pphosted.com (mx0b-009ae801.pphosted.com [208.56.12.6])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FF735E1AF
-	for <llvm@lists.linux.dev>; Wed,  2 Sep 2026 01:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788314253; cv=none; b=VecYxDfXs12JXULa77K3iy/AhqQfX48wBcsIToVA+6qm1H9FKBPU/rzTHYY6jv8JmK19ZRINIT3plB3em245J1Ob7d7EDf3AmXuWgMkVi/UZoicZXkXTa8+JghvlbJ8HPkGeYOfPvQfJUZ6h/TWPuVrxzQ1uCikHbr+mWCV8OnI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788314253; c=relaxed/simple;
-	bh=nNFtUFgC/p/K4K6LX995cICjDodLLrWxvJtEwtyVtZo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K9MIwQ0YaG1ktUsr8UBYd7k+fYSTQV97c9tOgtRpxRAr3EikDn43fFNWSmWHuNB749oBk4bMt+92EYVxKIGGiS6SftDG+l6l0HswQ/2RdkJEXcFm7a5jFC7eWPPKzJLMOskthPXgaCWWIurkDiTHQIi3MJ/QFtY6Vbn7yhCmnO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=jumxvPp0; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AFBC328267;
+	Wed,  2 Sep 2026 03:54:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.56.12.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788321246; cv=fail; b=UVAOOxhi3O1xTciUIRw/TgK+aynNK0DhJHNrRTZ20ZGZldVHCsYD8W6RjmRmqZZNChHU9qitHJ3ddbeWl/hSBO1mqhDogHBqYvRgpcbHbszIpsTpt4Zig8KXulU/GxzugA+rF+6T3SMiJlf/f2k2z1kTUqQzrSjtKSrLgbD6pKM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788321246; c=relaxed/simple;
+	bh=opiTLe5ZaJKTJhaPyo291qpVykXdzNa9wSFWT7UEcJM=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=K+T80XjNC/+VnHhUsj0f2QNrf+7exGfDzLsI+/WgzUCvCLeGT4o14DJrJp+bnaN5RScn5mGL58A2HY1nvAEC8kx5rYuCBHBy1fRdLTnjJIUdtC0jcnnK+C8NIZFJsPO108OFsjfX/hCGaeCrSVCT5mPxIESkfqB8zsuLVDH7VOY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=issi.com; spf=pass smtp.mailfrom=issi.com; dkim=pass (2048-bit key) header.d=issi.com header.i=@issi.com header.b=KaiY8hvW; dkim=pass (1024-bit key) header.d=issi.com header.i=@issi.com header.b=FAltUu7Q; arc=fail smtp.client-ip=208.56.12.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=issi.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=issi.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="jumxvPp0"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2d710632717so4397505ad.0
-        for <llvm@lists.linux.dev>; Tue, 01 Sep 2026 18:57:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788314243; x=1788919043; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=O2+yr/LF5kIYJw79OBD8uWpDfnVTI0CymWIi9oO6fGg=;
-        b=jumxvPp0k0CjYwy82QpNpgFoAGhm61HROE1gw/XH8lhLFpgbKSJVq/YGWze5YscvtU
-         rGuh0LD8asB97dqX0vbQ2Awoow1XxF2WSukMECioRdxpRPwH4rDJgo0BhlrJXZXy+BNO
-         tjTQXKuXAm7j31Op8nBHmpDgEUzLfVM+pya1zMbloa/tfXKfp7jY9C8L3tyWganFgsWF
-         XDBJNDDXHCDaFXcjPpjtZUBdqgjAqbJp46OWNHvkt6tmVu6xFvGuk2JPNxRe8j0FjRKZ
-         ADsu/v3WrxkMWgQiAmiJJA1oY9+bJymxxuOXnlTpnhDFyotVdOzFnW+AHO8Td11TmW10
-         1UGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788314243; x=1788919043;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=O2+yr/LF5kIYJw79OBD8uWpDfnVTI0CymWIi9oO6fGg=;
-        b=EL9aGdQ0BGKpFMJJ4dFzEjZD7vMq0JqWKA9B+osIGWqdKirMU0I4IHUg53QM75Na6G
-         hV++eX+Kn5AwXhQGMvnZU7+1AeOuDo8QsfaPn29ZJ+JIpqarcV5Y2FwaFvBWZI0786JK
-         lKxU2Is8RDh0453P6Q+4awUiOmnUF2NjHc+lOOwDhUMrCQAjlKsL0J+nedkzE9OkHxZK
-         6LXw1XyLyS9Ux+QiCXNywuP8oW2MRdLNJ9dBekb/UjrIoL17PgWPv3PoPJEztGpSzvYD
-         QqdLt4HDesdv7i6hRojAALFzgnc/MTr0mU4RqlSPuyUQoJ9HvW145NA7P0SeGRKvKTuq
-         2cnA==
-X-Forwarded-Encrypted: i=1; AHgh+Ron72aX4bjXpVJ7mn94wcFmq5yqxwdsFAGIVKw+//RTbth7NVLzHmYPi9DFOWqmY/EUh2PT@lists.linux.dev
-X-Gm-Message-State: AFuF++mQWpHsu7O4EoaCfs0RtVfBscU2ZxvHd8HN8zSn6OzJb1FWzjF0
-	qEYPSEU8GZmxtW6SDfO0jQh2LTTxpq3N8be7Rst6k72AkBvNxlspG/kOh+JgbI4t+g4=
-X-Gm-Gg: AR+sD11ACm2LSV5udUiwvMuDX+W9DDODj+RBB5/Zsit+5ie8rAzSGePZAyn45PCt5MO
-	Zs4C3dR8Vm8/WzDyLRxye0NlFFX2RUU3xiPIqjszrDxJ4lDxyOmd3gMBexPDghBndbx8uCeTHqK
-	2NKAIwqJSD1bl6zKFxntb4yrLU9wu+swe7ILSE7S4aCLYDMRFK+r1mP/g6Hr6G+I1HQ2FJZmbGd
-	APO45O2BaRb3g7cdrEMtL2xoUpjexCA8JVc3QkO4ZHJU6tbT2nQaAAu/j/qC2ZY5RbI0JSBjrhI
-	oBH98/hzLGwBby1sbPE++LJ6kMrVgbu6jTuWt9SmUTiLP/nsNs0WXEwObEfZfJVbCSLwkuICRhM
-	8fCRvVbWjDsZQcUwHc2Cvh4s51bpWLM0P+Rwr/YPwtk8kUtfO++A8Sjt0XMcEvBfjL4Bd+919ht
-	IEkIvQYmgZzcBuplvVhOpyLXsjpdMirOuEjWjQlQij
-X-Received: by 2002:a17:903:3910:b0:2d9:464f:d45f with SMTP id d9443c01a7336-2daec5dfb40mr22503425ad.5.1788314243448;
-        Tue, 01 Sep 2026 18:57:23 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:4::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd356dc8sm5221595ad.8.2026.09.01.18.57.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 18:57:22 -0700 (PDT)
-From: Joe Damato <joe@dama.to>
-To: netdev@vger.kernel.org,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Colin Winegarden <colin.winegarden@broadcom.com>,
-	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>
-Cc: horms@kernel.org,
-	rukhsana.ansari@broadcom.com,
-	linux-kernel@vger.kernel.org,
-	raphaelcf@meta.com,
-	Joe Damato <joe@dama.to>,
-	stable@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH net v5 6/6] bnxt_en: Bound SW TPA IDs to prevent crashes
-Date: Tue,  1 Sep 2026 18:56:49 -0700
-Message-ID: <20260902015652.2421609-7-joe@dama.to>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260902015652.2421609-1-joe@dama.to>
-References: <20260902015652.2421609-1-joe@dama.to>
+	dkim=pass (2048-bit key) header.d=issi.com header.i=@issi.com header.b="KaiY8hvW";
+	dkim=pass (1024-bit key) header.d=issi.com header.i=@issi.com header.b="FAltUu7Q"
+Received: from pps.filterd (m0495960.ppops.net [127.0.0.1])
+	by mx0b-009ae801.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 681MYSIF644600;
+	Wed, 2 Sep 2026 11:20:20 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=issi.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=11242025; bh=BwiJMa3SSVrXj750j0J8xmG
+	Ro32y4GPWSL2zKxXju7A=; b=KaiY8hvWyiTEfOisnbo38xREMDRje9bR8Pv1Eqk
+	/PBkHTU8h8a/UgD5NVRcS6644iS4hA5sPzb9ga8vRtbR1WawP9pVk/n0kjD3D2s4
+	xv/LJrQJiCpflKeYKLdCv9CSxN+qdhA8K2La5LjlKBfpTjYx8Wdtpb3SSmAI85/1
+	e02SRpghOnLwJoz6QaAd9WxgWMGqp8F/HTP2HLzxv8aP5F76JZY77q/XZw7t0mdL
+	4oTNOMEXfVao1N2hh3ukofMWMVQDQ5LtMX9T9LUK1RxBaFFprwAmJDA9g70tZnck
+	IrH9+WtvUkue+YWwsT/kP/t4pPVZvT7uACUWMsxd7uWwYbw==
+Received: from ch1pr05cu001.outbound.protection.outlook.com (mail-northcentralusazon11020072.outbound.protection.outlook.com [52.101.193.72])
+	by mx0b-009ae801.pphosted.com (PPS) with ESMTPS id 4gc38r2chc-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 02 Sep 2026 11:20:19 +0800 (WST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=jeDy/5QsY50oDja5n8e/t1+kU8VYjlUbJv600VBj2CG0OyoHpiPacbJjODvtYv8bUTic7MR7MIDDsR4o7PY8dGASuAbI/eePv0zp6lggRKZIPMZVmhTmse9ToH25KQKsq7uYwl2x1qlxBLW5AUBAlfIFWdOb6B7WLSnXNuKpWVR5oc2k/oKvY7fP3e0Z/9lUr6e6bfI4O1T6cxWk/5bT9NEm9Yx0Vwn4Cskpx0iDEcZ5WE5hlPrwpbe5whBZOZxamIPSJGlpogq93w0c+cfDBCDiJQmlWs0vRBE/GRGgy653v3xZoBP3hjmq7xKTVkI1EaoxIW7Gyd4FzL5w/XSluw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BwiJMa3SSVrXj750j0J8xmGRo32y4GPWSL2zKxXju7A=;
+ b=tNd9tq/dqVcltetH5o/H7q1NMz04yIEAfWv43gT2BouFwOLYBxBdIuQKZvluBxtHB32PFlwSSzvminLQUu9A52ilnKJ6JV2FnBFvQYkF85Ghu/kLKibB0op2TAi4jNnPxw/EOB9Ax3kG0ffbMUT6T0PiV/3b6mhoLLsoNm8lcgYiTIgCbURf9wTUh2FEFG3z2F2R1bmR9xtO1qZHwLoPdtvHIPFrG8zXDb3uoynzgNIcWjvJcDF0TTCBSYnc5IoXc3Nb8aIwhqt400sZVEA3xgavUaSCzEOrrMY34WLJfSIX4e+ComoYt0EFen0xxvnJlQVwXj3+NyvIIo8oBvl8Uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=issi.com; dmarc=pass action=none header.from=issi.com;
+ dkim=pass header.d=issi.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=issi.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BwiJMa3SSVrXj750j0J8xmGRo32y4GPWSL2zKxXju7A=;
+ b=FAltUu7QFNvPZHv4QbkUGdwd+PVt6QRsVD+aEZfdkW2qRQXILb+eD5NrRSU/j68ZR9X50TlSzlnwDjqfV3YkOs1Hx3XEKYqT2F4VVtGWwQSMywe0RPHnTUsIW+K7FCNRZOkYIV+yZEpGopFGgf6y5QvMaMyl9qLnld809tUk9bE=
+Received: from SN4PR19MB5424.namprd19.prod.outlook.com (2603:10b6:806:20f::17)
+ by SJ1PR19MB6235.namprd19.prod.outlook.com (2603:10b6:a03:45a::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Wed, 2 Sep
+ 2026 03:20:16 +0000
+Received: from SN4PR19MB5424.namprd19.prod.outlook.com
+ ([fe80::a330:824b:6f5:98bf]) by SN4PR19MB5424.namprd19.prod.outlook.com
+ ([fe80::a330:824b:6f5:98bf%4]) with mapi id 15.21.0360.008; Wed, 2 Sep 2026
+ 03:20:16 +0000
+From: Jeffrey Yu <jeyu@issi.com>
+To: "marek.vasut@gmail.com" <marek.vasut@gmail.com>,
+        "tudor.ambarus@microchip.com" <tudor.ambarus@microchip.com>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "computersforpeace@gmail.com"
+	<computersforpeace@gmail.com>,
+        "bbrezillon@kernel.org"
+	<bbrezillon@kernel.org>,
+        "richard@nod.at" <richard@nod.at>,
+        open list
+	<linux-kernel@vger.kernel.org>,
+        "linux-mtd@lists.infradead.org"
+	<linux-mtd@lists.infradead.org>
+Subject: [PATCH] ISSI Octal SPI-NOR device support. PATCH v2
+Thread-Topic: [PATCH] ISSI Octal SPI-NOR device support. PATCH v2
+Thread-Index: AQHdOomdWJvC+T51oEebcOUJVrt82Q==
+Date: Wed, 2 Sep 2026 03:20:15 +0000
+Message-ID:
+ <SN4PR19MB5424FD0059A9EE3C41FB7D79B6B72@SN4PR19MB5424.namprd19.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SN4PR19MB5424:EE_|SJ1PR19MB6235:EE_
+x-ms-office365-filtering-correlation-id: f1450c4e-caf8-4719-4f28-08df08a11bd8
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|376014|7416014|366016|23010399003|18002099003|56012099006|13003099007|38070700021|10067099003;
+x-microsoft-antispam-message-info:
+ pzfXMb7p8z5S7PBulOwCWZaT45WHqjBiyfWroPTFbHucbmWnrwCf96SukXVx4fvwywyoL0rGYqyAAmE6AxPdBfNqulLJSo1YRDqf8MFWHAZXCP+F6ddSNasaE95Ilfjg4IRI2wPQVzbmjN/78+SMsmmmWoQCqkeSRL/h3j17/C3zCf7MIogp3Bb4DCnHZnl7rnavlikPRD6BOuhCvMQM2ML93QGEe3UFr+yCnfYuulC5j/8g1wSMNg6oYGQQoWTKaP6hx70YNyuH+TlrESdDBKzzwA65NjI1X31bekUx37SZu/zoS1VtrlUwVMLbBEnXVXSq69PM7mp6+XIG5tFZl4UjJV3byLv1QBh6DsGhXyie4eLulsU0lpVPGrA5Rnywq14lfZPSXZhSOigAR4XqoDxOufXYvv1+FFNc11CXt36QOTwQqMxEa+hH8hcmNxeJZAwyGuFhodfxWi8TJ0S+K2OPswMvjGYp8+xV+3hwLWA12VSbpfvRcl6+uN7Wy7+GWH5it0Zx/7S6C5TSVWlflsBmjaO1F824qw6POxqeCgZp3b+anKm/uKBo0sGH4R1wPZ5N+DOUT45h7koR79igq1QdpVRkHFot66gu2nJ9LGDvzUQcyZ6cWGi1ShQftvTqRUhl/SBa6h+L6onbxA5go9lyvi3qNBI2LR8VsChPxLdaFsB9JslPG/eVLYy5jcmr
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR19MB5424.namprd19.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(23010399003)(18002099003)(56012099006)(13003099007)(38070700021)(10067099003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?HdcYBL/8npOd2z42r14UBUujwM5kBHNm44alumjMTk9o2+pEBzPceTja53?=
+ =?iso-8859-1?Q?HrxGjDH26D8d9kwN0iBQgyIORI1t0BWMMlNgPtB2NUIw8Sb8X447+/cfT1?=
+ =?iso-8859-1?Q?j/Rnk8OVzKgTSVqBq6FI70Yr89zPpstoLoMNSphuNgDCRl2Yugv6bGcqfi?=
+ =?iso-8859-1?Q?elIrBkQuK6Uqaki+ibvCwLLZFaVLVQkitdMcHq/nP3FxHvPBfAdaVadkUW?=
+ =?iso-8859-1?Q?ijo6m5fFIXk9i3wHbcD0Eq3t4Baz8Opw1ba6/sE0hfCD9Mnzz8UHOalgUA?=
+ =?iso-8859-1?Q?29TsIDJPu69l/f3szP8jBKOEJrkqpoBV/FyFOZFQcj/LW6q7ydiaauNPzB?=
+ =?iso-8859-1?Q?Fkbks4XFwPnuz68KZN9LhVFQ2BlBzTDikODweynT/P/4JftbMCkeYorMyf?=
+ =?iso-8859-1?Q?BeXAZNlk87R/Cxcmsg5NcdonJjXo5L2K0e0RBRV1hWpK3L9YeCksadoqIV?=
+ =?iso-8859-1?Q?iSfxitUwtcltlCnOQ/CmhiWq5htg5T+cZl3JKXHP9sifvEd3UJ0UsmauVd?=
+ =?iso-8859-1?Q?CaVVFoTiTNVnpnK39BEXWj7rJz8FoWd9LLxTrW5oAMOp0qx/x5F4YIsHvv?=
+ =?iso-8859-1?Q?IsNmH5/ZHj+mFrBX/3rWXyY5SPbOy8tivhJjgVIEv83Zh/Hw1nunX7gDY/?=
+ =?iso-8859-1?Q?5awwsTNJCQjWL2TnRLPAaJofGnXSiMsmTDIhDcrh47pcvWqx3xobacIomY?=
+ =?iso-8859-1?Q?y1z+wuPPGigc3EHcOTclM1uFSZ74U9FE+q/kADL7ywk264FLyQCbe3q7Zh?=
+ =?iso-8859-1?Q?JxaJ0mNv9NDb/OZheK1Ck9azgBK1zd9v3FY+ltzMLm+6JGxkCI1yBpeHK1?=
+ =?iso-8859-1?Q?1wl5/dZEErx1E4i5NkygCVqpSt1wjP/U/bBGBmRFB/0c1E+7vmEh5vS5Ir?=
+ =?iso-8859-1?Q?gWylCgwO5w/KxcHea0MLwRzGByZ1fW0H+PsuyqHq6EN1XbdpB855Q/H9Il?=
+ =?iso-8859-1?Q?hlgI3Mdgai4DnYXSu3ujO4Uyl5LVDamd4CHtLRoKX+aw4or2FSKTddXLjD?=
+ =?iso-8859-1?Q?tjfz/ItgOIvfa68OzYMbH7w6E+ncNr4OQiz/0OcUNSr7vsDwCTTnJokZMS?=
+ =?iso-8859-1?Q?9g8SSSgvPcDhxzwSKhhdV91FDauJEznP5l7MNQfrvXXhLlcIouD34IouwK?=
+ =?iso-8859-1?Q?mj6nWM2DIitmJ+b933fk4Ck7Y7DQttFJVHcUo4Lc5tPvyxRgZumaIuSOuG?=
+ =?iso-8859-1?Q?0EnIN231YdD7YFXbTPnyO7TEj29XuK7ZFkFSPVyP2PvqbjsIND123/RXG/?=
+ =?iso-8859-1?Q?z0F9Quz0rgHJ56KrVoLRi5XjRo9ohPMl2IlNnUoGWIxZpX2DNT6aGCCdz0?=
+ =?iso-8859-1?Q?JYq1TQkngxOs77aA9KqYdVruQ03HwW3Kt4Fz91xaC5LI5eG7piEIOsi4tT?=
+ =?iso-8859-1?Q?3vIi4oji45UDObirKqGt9HGtP6BxZv77ibGYZJ3ZtkUedj1uJ8XKkfV80U?=
+ =?iso-8859-1?Q?olMaCdcNPJmilQbterOH5LzP883jJSTgVQuHgoydKPzIcemWfT43ueA30r?=
+ =?iso-8859-1?Q?6o9lGKbQY/WpNaFmdMFyisERYGvLOFEvrcj4H7MvqCCZE9/6/u4zcCUTLL?=
+ =?iso-8859-1?Q?x6pwy127vQoEG4HmWo4coms5wj4kmZcZO7RO+6NoC/3AuPmz3H5lZNQUWn?=
+ =?iso-8859-1?Q?JvaMfgM9/FsY8aggSeqnQNCebXqjLrEGyz4zjgfDlNy7INSbnirdTTQPJF?=
+ =?iso-8859-1?Q?9QfAIfzdLlNFAuhyD2UcItCX6C0g85E9LPRJbLTwH5KT4n3pU7oUNjkIMb?=
+ =?iso-8859-1?Q?UDSNH9rxaVMdlY54Ox2Ptw1tc=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Exchange-RoutingPolicyChecked:
+	2idGhadkmu0AOR4Yl5Rdv/f4ryBR2kjoqEeF3NxgArs0LgGXPBcr2IhUn7C8MJ/z2em6tFku7gbd23yhWmsZYp0QIfuGF+YJOUXznSxKlH2t9BcQM9xCZzyHf43ZyYvpo9PU3RkHOV8+zkq1p1oCNmkOddu/fP+evmHlcoqJp9sFu2v1IRff92bospeUUYuBqO5EUd9Z5n3kQHruIWbVf3gIoR632QOjsoDZwX7+fA/+8KlLD/xDJCrEi8m+kXMBC8mSzY5sGHz769Sg8HcKuAFU6elbE4+uDfOtrvPlsUAO6u5jhAr4WErVa58RLvw0kfGVba6tVmtm/CvSF6y96A==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	3WOp76s9UNFUeTcNCwezd2DZfEu1J/SPP7XiTTMsGIy+AP0XoGuNDceuDNFeZ/MmmV1DRi880XemMAKLWOaoJ1h5OBUsRAUH09+RlL+RUg/ltJyM7FoIe3wzRIc2A54IXGpNV7aZ5MidhA/tZ0wUFXY/wZO/l9LdVRRYppy37jE9dEtpqzcbE44EWuLU1/KHntiLDLLuVEJIMNlDSwQOmKDAled1mr10qBAAok/kKV2/nuTMHSAItE2bpOt2wFhxD9wOxukr6CdGdK8Ky91AeJCwSaaImy6gYZwZGFbWgvjXiXJnzulEbX/kI7oovqDjBqM633Hy+qsc6LtvwGjQQEFnqC/IQnEWocQImc198CF04NFRnePPF2dWS8o/DlrhJNTDYmKcqQ60UXjbItDvaHp9/ZWbeR+TLwQ8X4fM1Q79aQSgeK8D+6uKEf8rIVOlNDkF+qWcStd3om3QGplPJ7fOt1xjkFmV+JBYiSA4HpUkZUkXamF1bEJ9do93yPhNc7aHql3gNDt8gplO/2tD2duHI8dOi5qA9r4EGcJM0HjOUxXqBOTCAUS1fsIz6ceC6XBxy1QfL9Q3JQYT4CMMZUYNBvWvRjMK9cA9el3go9eyeXodivACmgrlx45FMD4l
+X-OriginatorOrg: issi.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR19MB5424.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f1450c4e-caf8-4719-4f28-08df08a11bd8
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Sep 2026 03:20:15.9542
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 6af618fc-4f7d-45f1-a2f2-8c59a26d2c10
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nS76yd6uSTDsu02SgPVmof2W1L/sPokHEiRYvBSWCL3dEZ33YHs+OTcbKlrfRp+h
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR19MB6235
+X-Proofpoint-ORIG-GUID: YI69XSNKtoOhtAZQzgupYWYilkd6ZbFB
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAyMDAyNiBTYWx0ZWRfX3wPECm1P5yzV
+ yalewtW39PcWG3jfjECDogLwGl0W1aEbvsQp8aHtezWKPJQuqGO7kpaub9Iu+NeRLXirvPQ95m/
+ 6irhpobPespQEst1Fq7PzbMbsXB3/IY=
+X-Authority-Analysis: v=2.4 cv=QfhWeMbv c=1 sm=1 tr=0 ts=6a9795f3 cx=c_pps
+ a=Zdr5CJPvojCt9J1NFubJrA==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=VdqzKS8jKosA:10 a=ozMtBe7fU4EA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yOHNzV93IasTtWdH6Nhn:22 a=US3Q6AVWkkt9IXfmMOXc:22 a=DUnRZS7UAAAA:8
+ a=sKAcNKw0jNAmvty-Qg4A:9 a=wPNLvfGTeEIA:10 a=cDzw7mrAGmWHSR5u0tpu:22
+X-Proofpoint-GUID: YI69XSNKtoOhtAZQzgupYWYilkd6ZbFB
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAyMDAyNiBTYWx0ZWRfX2YlLzb16ELka
+ RXP2etodu2HUNeB/iBCPa8YeDcRmJXnR07Bebz0JZqwSEz5qvROoamJDFSYUaKT0akB2UMaOHD/
+ NWdG2AGKcCvd67iVevNXdPO9w0GP3VWMMyoO1KC+ge4mvawMV85A9CGXm+jR8wbBDv4w4bxqaHi
+ SDKbr5oiS8QHO9ihpPA7yximuzRqqwf94rqRzEkNzWD5Pjf9G5f+osu/2tLLWxpvXEavi+aYOVw
+ gzTq+277OnAzx6qF2YL3PK0qszgexJCTmJZOvyHNqg8sPxK8ySrV3uWTrSqsUWVStBnfzUvFDC/
+ K5Ei/5nY2qbmSuPvKtHci/6p765iPXqedePOO6XEd6k5oyd4y8S7Tnc/DKLJz+ZXQELrtsJ1FS/
+ xlbmIOVhKvRie8TN83Zihh7MyNZ5/ttjt3UzvDMUAFZpjAOscw/XoaPslMaruEibGz+80P8Ht8B
+ M18NfqhDxOPg62lJufA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-01_06,2026-09-01_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 malwarescore=0 phishscore=0 suspectscore=0
+ lowpriorityscore=0 clxscore=1011 bulkscore=0 adultscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609020026
 
-FW supports up to 1024 concurrent TPAs, so the FW TPA ID is in the range
-0..1023 (see commit ec4d8e7cf024 ("bnxt_en: Add TPA ID mapping logic for
-57500 chips.")). bnxt_alloc_agg_idx is intended to wrap the FW ID down to a
-software ID which is used to index rxr->rx_tpa, and to generate a mapping
-between FW IDs and the wrapped software ID.
-
-On a 57608 with firmware version 233, the firmware advertises 32
-concurrent TPAs. As of the commit under fixes, bp->max_tpa on this NIC
-is set to 32.
-
-If the software ID from bnxt_alloc_agg_idx is above 31, this results in
-an invalid address being loaded on this line:
-
-  tpa_info = &rxr->rx_tpa[agg_id];
-
-because rx_tpa is allocated with only bp->max_tpa (32) entries. Writes
-to tpa_info later in the code are out of bounds.
-
-This bug results in a crash at boot:
-
-Oops: general protection fault, kernel NULL pointer dereference 0x8: 0000 [#1] SMP NOPTI
-RIP: 0010:bnxt_rx_pkt+0xc0/0x1560
-RSP: 0018:ffffc900009b8c78 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: 0000000000000048 RCX: 0000000206682516
-RDX: ffffc900009b8db4 RSI: 0000000000000000 RDI: 01ffffff038fe1c0
-RBP: ffffc9006e687480 R08: ffffc9006e687000 R09: 0000000000003048
-R10: 0000000000000480 R11: ffff8881c6083900 R12: 0000000006682516
-R13: ffff8881c6095400 R14: 0000000000000016 R15: ffff8881c6b66680
-FS:  0000000000000000(0000) GS:ffff88fef3c77000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fc8bda40584 CR3: 000000807c812001 CR4: 0000000008772ef0
-PKRU: 55555554
-Call Trace:
- <IRQ>
- ? __netif_receive_skb_list_core+0x1ca/0x250
- __bnxt_poll_work+0x152/0x280
- bnxt_poll_p5+0x1cd/0x480
- __napi_poll+0x30/0x180
- net_rx_action+0x20b/0x3b0
- ? note_gp_changes+0x53/0xe0
- ? tick_setup_sched_timer+0x180/0x180
- ? __napi_schedule+0x9a/0xb0
- ? bnxt_msix+0x24/0x30
- handle_softirqs+0xdd/0x2c0
- __irq_exit_rcu.llvm.3171231171502365008+0x47/0xf0
- common_interrupt+0x85/0x90
- </IRQ>
- <TASK>
- asm_common_interrupt+0x22/0x40
-
-This stack trace is from a crash triggered when an out of bounds rx_tpa
-is dereferenced. The invalid write mentioned above is silent in this
-particular crash.
-
-Fix this by allocating rx_tpa with bp->max_tpa rounded up to the next
-power of 2 (bp->max_tpa_roundup_size) entries and masking the FW TPA ID
-with that size, so the wrapped ID can never index past the end of the
-array.
-
-Fixes: 54c28fab2fa5 ("bnxt_en: Set bp->max_tpa according to what the FW supports")
-Reported-by: Raphael Cardoso Fernandes <raphaelcf@meta.com>
-Suggested-by: Michael Chan <michael.chan@broadcom.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Joe Damato <joe@dama.to>
----
-v5:
-  - Updated the commit message to mention where the 0..1023 range comes from.
-  - Updated the comment in the code now that a previous commit in this series
-    addresses the LRO issue.
-
-v4: https://lore.kernel.org/all/20260828190900.1767611-1-joe@dama.to/
-  - Moved bp->max_tpa_roundup_size init out of the early return path and
-    documented that TPA is unsupported there, as suggested by Michael.
-
-v3: https://lore.kernel.org/netdev/20260827185700.2157164-1-joe@dama.to/
-  - Addressed an issue Sashiko pointed out, where max_tpa_roundup_size may be
-    left unset if bnxt_alloc_tpa_info returns early, which would lead to out
-    of bounds access.
-  - The other pre-existing issues Sashiko pointed out are unrelated to this
-    patch and would need different Fixes tags, so they are better served with
-    separate patches in the future.
-
-v2: https://lore.kernel.org/netdev/20260825001842.2501798-1-joe@dama.to/
-  - Followed Michael's suggestion on the v1 to increase the size of the tpa
-    array so that wrapping indexes into the array is a simple mask.
-  - Add Suggested-by because the approach was suggested by Michael.
-  - Add a Reported-by so that Raphael gets credit for reporting this bug.
-  - Boot tested on a machine with a 57608 and the crash did not reproduce.
-
-v1: https://lore.kernel.org/netdev/20260821233549.3134699-1-joe@dama.to/
-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c | 27 ++++++++++++++---------
- drivers/net/ethernet/broadcom/bnxt/bnxt.h |  2 +-
- 2 files changed, 18 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-index d2943de1b62a..b2ce5b4e5e6a 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
-@@ -1514,14 +1514,16 @@ static int bnxt_discard_rx(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
- 	return 0;
- }
- 
--static u16 bnxt_alloc_agg_idx(struct bnxt_rx_ring_info *rxr, u16 agg_id)
-+static u16 bnxt_alloc_agg_idx(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
-+			      u16 agg_id)
- {
- 	struct bnxt_tpa_idx_map *map = rxr->rx_tpa_idx_map;
--	u16 idx = agg_id & MAX_TPA_P5_MASK;
-+	u16 idx = agg_id & (bp->max_tpa_roundup_size - 1);
- 
- 	if (test_bit(idx, map->agg_idx_bmap)) {
--		idx = find_first_zero_bit(map->agg_idx_bmap, MAX_TPA_P5);
--		if (idx >= MAX_TPA_P5)
-+		idx = find_first_zero_bit(map->agg_idx_bmap,
-+					  bp->max_tpa_roundup_size);
-+		if (idx >= bp->max_tpa_roundup_size)
- 			return INVALID_HW_RING_ID;
- 	}
- 	__set_bit(idx, map->agg_idx_bmap);
-@@ -1586,7 +1588,7 @@ static void bnxt_tpa_start(struct bnxt *bp, struct bnxt_rx_ring_info *rxr,
- 
- 	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
- 		agg_id = TPA_START_AGG_ID_P5(tpa_start);
--		agg_id = bnxt_alloc_agg_idx(rxr, agg_id);
-+		agg_id = bnxt_alloc_agg_idx(bp, rxr, agg_id);
- 		if (unlikely(agg_id == INVALID_HW_RING_ID)) {
- 			netdev_warn(bp->dev, "Unable to allocate agg ID for ring %d, agg 0x%x\n",
- 				    rxr->bnapi->index,
-@@ -3584,7 +3586,7 @@ static void bnxt_free_one_tpa_info_data(struct bnxt *bp,
- {
- 	int i;
- 
--	for (i = 0; i < bp->max_tpa; i++) {
-+	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
- 		struct bnxt_tpa_info *tpa_info = &rxr->rx_tpa[i];
- 		u8 *data = tpa_info->data;
- 
-@@ -3781,7 +3783,7 @@ static void bnxt_free_one_tpa_info(struct bnxt *bp,
- 	kfree(rxr->rx_tpa_idx_map);
- 	rxr->rx_tpa_idx_map = NULL;
- 	if (rxr->rx_tpa) {
--		for (i = 0; i < bp->max_tpa; i++) {
-+		for (i = 0; i < bp->max_tpa_roundup_size; i++) {
- 			kfree(rxr->rx_tpa[i].agg_arr);
- 			rxr->rx_tpa[i].agg_arr = NULL;
- 		}
-@@ -3807,13 +3809,14 @@ static int bnxt_alloc_one_tpa_info(struct bnxt *bp,
- 	struct rx_agg_cmp *agg;
- 	int i;
- 
--	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info, bp->max_tpa);
-+	rxr->rx_tpa = kzalloc_objs(struct bnxt_tpa_info,
-+				   bp->max_tpa_roundup_size);
- 	if (!rxr->rx_tpa)
- 		return -ENOMEM;
- 
- 	if (!(bp->flags & BNXT_FLAG_CHIP_P5_PLUS))
- 		return 0;
--	for (i = 0; i < bp->max_tpa; i++) {
-+	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
- 		agg = kzalloc_objs(*agg, MAX_SKB_FRAGS);
- 		if (!agg)
- 			return -ENOMEM;
-@@ -3832,6 +3835,9 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
- 
- 	bp->max_tpa = MAX_TPA;
- 	if (bp->flags & BNXT_FLAG_CHIP_P5_PLUS) {
-+		/* TPA is not supported at all, so there is nothing to
-+		 * allocate.
-+		 */
- 		if (!bp->max_tpa_v2)
- 			return 0;
- 		bp->max_tpa = min_t(u16, bp->max_tpa_v2, MAX_TPA_P5);
-@@ -3839,6 +3845,7 @@ static int bnxt_alloc_tpa_info(struct bnxt *bp)
- 		if (bp->max_tpa <= 32 && BNXT_CHIP_P5(bp) && !BNXT_NPAR(bp))
- 			bp->max_tpa = MAX_TPA_P5;
- 	}
-+	bp->max_tpa_roundup_size = roundup_pow_of_two(bp->max_tpa);
- 
- 	for (i = 0; i < bp->rx_nr_rings; i++) {
- 		struct bnxt_rx_ring_info *rxr = &bp->rx_ring[i];
-@@ -4551,7 +4558,7 @@ static int bnxt_alloc_one_tpa_info_data(struct bnxt *bp,
- 	u8 *data;
- 	int i;
- 
--	for (i = 0; i < bp->max_tpa; i++) {
-+	for (i = 0; i < bp->max_tpa_roundup_size; i++) {
- 		data = __bnxt_alloc_rx_frag(bp, &mapping, rxr,
- 					    GFP_KERNEL);
- 		if (!data)
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.h b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-index ab894f8addef..de46b42d7c98 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.h
-@@ -789,7 +789,6 @@ struct nqe_cn {
- 
- #define MAX_TPA		64
- #define MAX_TPA_P5	256
--#define MAX_TPA_P5_MASK	(MAX_TPA_P5 - 1)
- #define MAX_TPA_SEGS_P5	0x3f
- 
- #if (BNXT_PAGE_SHIFT == 16)
-@@ -2380,6 +2379,7 @@ struct bnxt {
- 
- 	u16			max_tpa_v2;
- 	u16			max_tpa;
-+	u16			max_tpa_roundup_size;
- 	u32			rx_buf_size;
- 	u32			rx_buf_use_size;	/* useable size */
- 	u16			rx_offset;
--- 
-2.53.0-Meta
-
+This patch revision fixes issues reported by kernel test robot.=0A=
+Newly added devices include:=0A=
+  - IS25WX256  (JEDEC 0x9d5b19)=0A=
+    https://www.issi.com/WW/pdf/25LX-WX256-128.pdf=0A=
+  - IS25LX256  (JEDEC 0x9d5a19)=0A=
+    https://www.issi.com/WW/pdf/25LX-WX256-128.pdf=0A=
+  - IS25WX512M   (JEDEC 0x9d5b1a)=0A=
+    https://www.issi.com/WW/pdf/25LX-WX512M.pdf=0A=
+  - IS25LX512M   (JEDEC 0x9d5a1a)=0A=
+    https://www.issi.com/WW/pdf/25LX-WX512M.pdf=0A=
+  - IS25WX01G   (JEDEC 0x9d5b1b)=0A=
+    https://www.issi.com/WW/pdf/25LX-WX01G.pdf=0A=
+  - IS25LX01G   (JEDEC 0x9d5a1b)=0A=
+    https://www.issi.com/WW/pdf/25LX-WX01G.pdf=0A=
+=0A=
+Signed-off-by: Jeffrey Y <jeyu@issi.com>=0A=
+---=0A=
+ drivers/mtd/spi-nor/issi.c | 24 ++++++++++++++++++++++++=0A=
+ 1 file changed, 24 insertions(+)=0A=
+=0A=
+diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c=0A=
+index 18d9a00aa22e..08d83f0b5413 100644=0A=
+--- a/drivers/mtd/spi-nor/issi.c=0A=
++++ b/drivers/mtd/spi-nor/issi.c=0A=
+@@ -126,6 +126,30 @@ static const struct flash_info issi_nor_parts[] =3D {=
+=0A=
+ 		.flags =3D SPI_NOR_QUAD_PP,=0A=
+ 		.fixups =3D &is25lp256_fixups,=0A=
+ 		.fixup_flags =3D SPI_NOR_4B_OPCODES,=0A=
++	}, {=0A=
++		.id =3D SNOR_ID(0x9d, 0x5b, 0x19),=0A=
++		.name =3D "is25wx256",=0A=
++		.size =3D SZ_256M,=0A=
++	}, {=0A=
++		.id =3D SNOR_ID(0x9d, 0x5a, 0x19),=0A=
++		.name =3D "is25lx256",=0A=
++		.size =3D SZ_256M,=0A=
++	}, {=0A=
++		.id =3D SNOR_ID(0x9d, 0x5b, 0x1a),=0A=
++		.name =3D "is25wx512m",=0A=
++		.size =3D SZ_512M,=0A=
++	}, {=0A=
++		.id =3D SNOR_ID(0x9d, 0x5a, 0x1a),=0A=
++		.name =3D "is25lx512m",=0A=
++		.size =3D SZ_512M,=0A=
++	}, {=0A=
++		.id =3D SNOR_ID(0x9d, 0x5b, 0x1b),=0A=
++		.name =3D "is25wx01g",=0A=
++		.size =3D SZ_1G,=0A=
++	}, {=0A=
++		.id =3D SNOR_ID(0x9d, 0x5a, 0x1b),=0A=
++		.name =3D "is25lx01g",=0A=
++		.size =3D SZ_1G,=0A=
+ 	}=0A=
+ };=0A=
+ =0A=
+-- =0A=
+2.43.0=0A=
+=0A=
