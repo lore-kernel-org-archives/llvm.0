@@ -1,59 +1,58 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EC5133D4E2;
-	Wed,  2 Sep 2026 04:56:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13DBF353EE0;
+	Wed,  2 Sep 2026 04:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788324970; cv=none; b=KBsLk1hluYtEHI0omczjrqE363R0L2WUfMeC1w/5NyEV18FNfKhu/BT6Kge4kD+PFfw1hn283bK3J5rnEnhp616JgaB4BxV6BTLfxmi5sTVRjgWYvzx1mKR5KLlYy57+frqNbsXgRAIiHTtxhgm+AB5DGDJ7sUrNGwUcgfMXyEw=
+	t=1788324973; cv=none; b=Ayr6Khb7yQWTSzAG+o/1pgtlobkKC6FyNgGwfzg1y6ME04tNU+zQyCKLN+jPpvT/RjjoLNPGg8iS+AORLM5phBYYK/ZxJXD6l+YOk10LKRzMyK6L84JsD3LQlckaSsWOCEbyG5DXSk8vlKCo/9AQX1S53mpHO5F3l+jZB6m18bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788324970; c=relaxed/simple;
-	bh=RON1FVMyUgpyG+Se/itPQEfAd5JBmKz0sYokSRkzuhg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qQLrX5kpjxyHFfHXeCExGmzIDLZzw7qlMqkjzVExI0F6msUsxqCPvWVlhq3ZQgF+JwNnswOiMKyD1IBGToFIcJm0p+afsKlo5lmNsbr04W3FZZBYgF+kFEsRfilXgrvth7jPSJ/O2FtOX3aSIQfUBNe1aLCnz2xL/QGtK4+P1tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z4bkgjb6; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1788324973; c=relaxed/simple;
+	bh=jf92SOcjeY4XA1Wr57medPafuxi1ZcHXYjjRhHvWP7k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=IDIN0DA18w51Q9Yc1rAebKNMqQ3mVN8Dlu2CSBLxR1YGLXlxPA9WJ9NeL2+NxCEF041E2wFvhWiXYTxEg6B9WjCuY887714vVFIVSYN0gxu5v6W2dYOFgg1bVod82qDbwdLHWx2phuQX+oPzIIGzNtJHorjOlE0OvrPV4Ut6e7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZLwHvXZG; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z4bkgjb6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZLwHvXZG"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788324969; x=1819860969;
+  t=1788324971; x=1819860971;
   h=date:from:to:cc:subject:message-id;
-  bh=RON1FVMyUgpyG+Se/itPQEfAd5JBmKz0sYokSRkzuhg=;
-  b=Z4bkgjb6jRpMrnrQ3vinyJhsze6LT/43qNvO85b/Ta8HQioWsLmtp9CQ
-   TyPdPHYrJapidwpRaZYFIiy5Op5HADZ/rALKaEhaoXmNrrQI0FMqoVBxU
-   c/hZMdoj8w++y9WsGi/8GnqoNLRGgkGI68L+yXr8RsuV5K8av48O1ZDd1
-   kw9sdkxODqXBHeeZvCk1naz0BLYoMSoSda/tAoxKJERMnc8f33aUxXiXb
-   IPOEbebEstZjxtcizx9bFixGUx1dexLxqotzTUzyvma5kl+dozHugu1qc
-   nvoxc4sOWKCgPJj4KUc57DpF0BBUX0vVYl0oTTKJwyeSQHGFqhnLruBcI
+  bh=jf92SOcjeY4XA1Wr57medPafuxi1ZcHXYjjRhHvWP7k=;
+  b=ZLwHvXZGYbAIiTFCVFIXcc0RZStJmgsa2tdlKa3rblhyTiTIDJYPtz8A
+   0oSeXoAui5W9/xYKx+zhFG7u1OLviXo4eXZk62lQNFoD+gjom5gn3Fv+V
+   xZY4RhL+NZPnGvT/JkFPCyho5Q8T8IzF9CpMtLiOeUmigquys3z2qFk21
+   zX3/Y/PXsY7fPN6NeubdcqSlL0pFVZEKG5jiLCMMb1215VfaZhNIpBBLj
+   TttKo8MG9LVCidSEPHZ6wvNsyG/nU5A3TnZNpzy0Chu5nEWydtfNTPu3o
+   8ua+T6BizZItIulQuLcKTb+NaKx2xbaZEIf61yrp54jOJnYOX8UjTirsh
    w==;
-X-CSE-ConnectionGUID: mqWhrgOOScWzKdJxORsg4A==
-X-CSE-MsgGUID: nouizd9ZQ06Pmv6rlwvJaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="87909923"
+X-CSE-ConnectionGUID: GkLrWwE3Sa+4tSPijcCJbA==
+X-CSE-MsgGUID: ue5tJA+2STGY0r3kHuelZg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="87909921"
 X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="87909923"
+   d="scan'208";a="87909921"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
   by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 21:56:08 -0700
-X-CSE-ConnectionGUID: Nifm+uPpTsiMXLuFYnP70g==
-X-CSE-MsgGUID: bCQ6sdxUQGmAESyjEyLm0g==
+X-CSE-ConnectionGUID: C9LIlCWrQxG5167ohCuovQ==
+X-CSE-MsgGUID: dV70D0pVQxmwtKn6F94gqg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="294124872"
+   d="scan'208";a="294124870"
 Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
   by fmviesa001.fm.intel.com with ESMTP; 01 Sep 2026 21:56:06 -0700
 Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1x1d11-00000000206-1jaj;
+	id 1x1d11-00000000208-1tnu;
 	Wed, 02 Sep 2026 04:56:03 +0000
-Date: Wed, 02 Sep 2026 12:55:47 +0800
+Date: Wed, 02 Sep 2026 12:55:48 +0800
 From: kernel test robot <lkp@intel.com>
-To: Danilo Krummrich <dakr@kernel.org>
+To: Steffen Eiden <seiden@linux.ibm.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>, Alexandre Courbot <acourbot@nvidia.com>,
- Lyude Paul <lyude@redhat.com>
-Subject: [asahilinux:pr/583 625/972] error[E0277]: the trait bound
- `VMap<D, R, SIZE>: IoBackend` is not satisfied
-Message-ID: <202609021249.C0H9atEC-lkp@intel.com>
+ linux-s390@vger.kernel.org
+Subject: [kvms390:sae 36/43] <instantiation>:1:36: error: too many
+ positional arguments
+Message-ID: <202609021240.EJLfb3WZ-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,128 +60,567 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://github.com/AsahiLinux/linux pr/583
-head:   cddf57e96d46510a9378b0fda93f6db65e4976a8
-commit: 7e2c3ece817a512b6b3facdc1f37969b14a88a49 [625/972] rust: drm/gem: remove DeviceContext from shmem::Object
-config: arm64-randconfig-002-20260831 (https://download.01.org/0day-ci/archive/20260902/202609021249.C0H9atEC-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 316b0edee400b3ef72ed0a082dae9bd337ac01a0)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609021249.C0H9atEC-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kvms390/linux.git sae
+head:   e3cbc45b3834d68c7e45ba1562f45af312c99d81
+commit: abcde5421be2b45c53e0e9516108ff610fdadf80 [36/43] KVM: s390: arm64: Implement arm sysreg managing infrastructure
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260902/202609021240.EJLfb3WZ-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 678058af7da6a20593d8bb23076dc4773f9e55f1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609021240.EJLfb3WZ-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609021249.C0H9atEC-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609021240.EJLfb3WZ-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
-   --> rust/kernel/drm/gem/shmem.rs:522:58
-   |
-   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
-   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
-   ...
-   551 | impl_vmap_io_capable!(u16);
-   | -------------------------- in this macro invocation
-   |
-   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
-   --> rust/kernel/drm/gem/shmem.rs:431:1
-   |
-   431 | pub struct VMap<D, R, const SIZE: usize = 0>
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = help: the following other types implement trait `IoBackend`:
-   CoherentIoBackend
-   IoSysMapBackend
-   MmioBackend
-   RelaxedMmioBackend
-   SysMemBackend
-   note: required by a bound in `IoCapable`
-   --> rust/kernel/io.rs:272:25
-   |
-   272 | pub trait IoCapable<T>: IoBackend {
-   |                         ^^^^^^^^^ required by this bound in `IoCapable`
-   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
+         |                     ^~~~~~~~~~
+   <scratch space>:160:1: note: expanded from here
+     160 | set_id_aa64mmfr2_el1
+         | ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:582:2: note: previous initialization is here
+     582 |         ID_FILTERED(ID_AA64MMFR2_EL1, id_aa64mmfr2_el1,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     583 |                     ~(ID_AA64MMFR2_EL1_RES0 | ID_AA64MMFR2_EL1_EVT |
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     584 |                       ID_AA64MMFR2_EL1_FWB | ID_AA64MMFR2_EL1_IDS |
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     585 |                       ID_AA64MMFR2_EL1_NV | ID_AA64MMFR2_EL1_CCIDX)),
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:917:2: note: expanded from macro 'ID_FILTERED'
+     917 |         ID_DESC(sysreg),                                \
+         |         ^~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:890:2: note: expanded from macro 'ID_DESC'
+     890 |         ID_DESC_DEFAULT_CALLBACKS
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:884:14: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     884 |         .set_user = set_id_reg,                 \
+         |                     ^~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:590:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     590 |         ID_UNALLOCATED(7, 5),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:931:16: note: expanded from macro 'ID_UNALLOCATED'
+     931 |         .visibility = raz_visibility,                   \
+         |                       ^~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:590:2: note: previous initialization is here
+     590 |         ID_UNALLOCATED(7, 5),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:930:2: note: expanded from macro 'ID_UNALLOCATED'
+     930 |         ID_DESC_DEFAULT_CALLBACKS,                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:885:16: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     885 |         .visibility = id_visibility,            \
+         |                       ^~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:591:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     591 |         ID_UNALLOCATED(7, 6),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:931:16: note: expanded from macro 'ID_UNALLOCATED'
+     931 |         .visibility = raz_visibility,                   \
+         |                       ^~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:591:2: note: previous initialization is here
+     591 |         ID_UNALLOCATED(7, 6),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:930:2: note: expanded from macro 'ID_UNALLOCATED'
+     930 |         ID_DESC_DEFAULT_CALLBACKS,                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:885:16: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     885 |         .visibility = id_visibility,            \
+         |                       ^~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:592:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     592 |         ID_UNALLOCATED(7, 7),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:931:16: note: expanded from macro 'ID_UNALLOCATED'
+     931 |         .visibility = raz_visibility,                   \
+         |                       ^~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:592:2: note: previous initialization is here
+     592 |         ID_UNALLOCATED(7, 7),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:930:2: note: expanded from macro 'ID_UNALLOCATED'
+     930 |         ID_DESC_DEFAULT_CALLBACKS,                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:885:16: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     885 |         .visibility = id_visibility,            \
+         |                       ^~~~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:626:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     626 |         ID_FILTERED(CTR_EL0, ctr_el0,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     627 |                     CTR_EL0_DIC_MASK | CTR_EL0_IDC_MASK |
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     628 |                             CTR_EL0_DminLine_MASK | CTR_EL0_L1Ip_MASK |
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     629 |                             CTR_EL0_IminLine_MASK),
+         |                             ~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:918:14: note: expanded from macro 'ID_FILTERED'
+     918 |         .set_user = set_##name,                         \
+         |                     ^~~~~~~~~~
+   <scratch space>:204:1: note: expanded from here
+     204 | set_ctr_el0
+         | ^~~~~~~~~~~
+   arch/s390/kvm/arm64/sys_regs.c:626:2: note: previous initialization is here
+     626 |         ID_FILTERED(CTR_EL0, ctr_el0,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     627 |                     CTR_EL0_DIC_MASK | CTR_EL0_IDC_MASK |
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     628 |                             CTR_EL0_DminLine_MASK | CTR_EL0_L1Ip_MASK |
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     629 |                             CTR_EL0_IminLine_MASK),
+         |                             ~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:917:2: note: expanded from macro 'ID_FILTERED'
+     917 |         ID_DESC(sysreg),                                \
+         |         ^~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:890:2: note: expanded from macro 'ID_DESC'
+     890 |         ID_DESC_DEFAULT_CALLBACKS
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/s390/kvm/arm64/generated/sys_regs.inc:884:14: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     884 |         .set_user = set_id_reg,                 \
+         |                     ^~~~~~~~~~
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16255, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16255,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16110, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16110,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -32750, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-32750,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15616, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15616,0
+         |                 ^
+   <instantiation>:1:35: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -8573, 0,
+         |                                   ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-8573,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15728, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15728,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -14713, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-14713,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16109, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16109,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -32628, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-32628,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16240, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16240,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16256, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16256,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16120, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16120,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -14584, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-14584,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -14848, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-14848,0
+         |                 ^
+   <instantiation>:1:35: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -8574, 0,
+         |                                   ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-8574,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16119, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16119,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16103, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16103,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15736, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15736,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15735, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15735,0
+         |                 ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   47 warnings and 20 errors generated.
 --
->> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
-   --> rust/kernel/drm/gem/shmem.rs:522:58
-   |
-   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
-   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
-   ...
-   552 | impl_vmap_io_capable!(u32);
-   | -------------------------- in this macro invocation
-   |
-   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
-   --> rust/kernel/drm/gem/shmem.rs:431:1
-   |
-   431 | pub struct VMap<D, R, const SIZE: usize = 0>
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = help: the following other types implement trait `IoBackend`:
-   CoherentIoBackend
-   IoSysMapBackend
-   MmioBackend
-   RelaxedMmioBackend
-   SysMemBackend
-   note: required by a bound in `IoCapable`
-   --> rust/kernel/io.rs:272:25
-   |
-   272 | pub trait IoCapable<T>: IoBackend {
-   |                         ^^^^^^^^^ required by this bound in `IoCapable`
-   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
-   --> rust/kernel/drm/gem/shmem.rs:522:58
-   |
-   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
-   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
-   ...
-   554 | impl_vmap_io_capable!(u64);
-   | -------------------------- in this macro invocation
-   |
-   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
-   --> rust/kernel/drm/gem/shmem.rs:431:1
-   |
-   431 | pub struct VMap<D, R, const SIZE: usize = 0>
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = help: the following other types implement trait `IoBackend`:
-   CoherentIoBackend
-   IoSysMapBackend
-   MmioBackend
-   RelaxedMmioBackend
-   SysMemBackend
-   note: required by a bound in `IoCapable`
-   --> rust/kernel/io.rs:272:25
-   |
-   272 | pub trait IoCapable<T>: IoBackend {
-   |                         ^^^^^^^^^ required by this bound in `IoCapable`
-   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
---
->> error[E0277]: the trait bound `VMap<D, R, SIZE>: IoBackend` is not satisfied
-   --> rust/kernel/drm/gem/shmem.rs:522:58
-   |
-   522 |         impl<D, R, const SIZE: usize> IoCapable<$ty> for VMap<D, R, SIZE>
-   |                                                          ^^^^^^^^^^^^^^^^ unsatisfied trait bound
-   ...
-   550 | impl_vmap_io_capable!(u8);
-   | ------------------------- in this macro invocation
-   |
-   help: the trait `IoBackend` is not implemented for `VMap<D, R, SIZE>`
-   --> rust/kernel/drm/gem/shmem.rs:431:1
-   |
-   431 | pub struct VMap<D, R, const SIZE: usize = 0>
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   = help: the following other types implement trait `IoBackend`:
-   CoherentIoBackend
-   IoSysMapBackend
-   MmioBackend
-   RelaxedMmioBackend
-   SysMemBackend
-   note: required by a bound in `IoCapable`
-   --> rust/kernel/io.rs:272:25
-   |
-   272 | pub trait IoCapable<T>: IoBackend {
-   |                         ^^^^^^^^^ required by this bound in `IoCapable`
-   = note: this error originates in the macro `impl_vmap_io_capable` (in Nightly builds, run with -Z macro-backtrace for more info)
+         |                     ^~~~~~~~~~
+   <scratch space>:160:1: note: expanded from here
+     160 | set_id_aa64mmfr2_el1
+         | ^~~~~~~~~~~~~~~~~~~~
+   sys_regs.c:582:2: note: previous initialization is here
+     582 |         ID_FILTERED(ID_AA64MMFR2_EL1, id_aa64mmfr2_el1,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     583 |                     ~(ID_AA64MMFR2_EL1_RES0 | ID_AA64MMFR2_EL1_EVT |
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     584 |                       ID_AA64MMFR2_EL1_FWB | ID_AA64MMFR2_EL1_IDS |
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     585 |                       ID_AA64MMFR2_EL1_NV | ID_AA64MMFR2_EL1_CCIDX)),
+         |                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:917:2: note: expanded from macro 'ID_FILTERED'
+     917 |         ID_DESC(sysreg),                                \
+         |         ^~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:890:2: note: expanded from macro 'ID_DESC'
+     890 |         ID_DESC_DEFAULT_CALLBACKS
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:884:14: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     884 |         .set_user = set_id_reg,                 \
+         |                     ^~~~~~~~~~
+   sys_regs.c:590:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     590 |         ID_UNALLOCATED(7, 5),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:931:16: note: expanded from macro 'ID_UNALLOCATED'
+     931 |         .visibility = raz_visibility,                   \
+         |                       ^~~~~~~~~~~~~~
+   sys_regs.c:590:2: note: previous initialization is here
+     590 |         ID_UNALLOCATED(7, 5),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:930:2: note: expanded from macro 'ID_UNALLOCATED'
+     930 |         ID_DESC_DEFAULT_CALLBACKS,                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:885:16: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     885 |         .visibility = id_visibility,            \
+         |                       ^~~~~~~~~~~~~
+   sys_regs.c:591:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     591 |         ID_UNALLOCATED(7, 6),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:931:16: note: expanded from macro 'ID_UNALLOCATED'
+     931 |         .visibility = raz_visibility,                   \
+         |                       ^~~~~~~~~~~~~~
+   sys_regs.c:591:2: note: previous initialization is here
+     591 |         ID_UNALLOCATED(7, 6),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:930:2: note: expanded from macro 'ID_UNALLOCATED'
+     930 |         ID_DESC_DEFAULT_CALLBACKS,                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:885:16: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     885 |         .visibility = id_visibility,            \
+         |                       ^~~~~~~~~~~~~
+   sys_regs.c:592:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     592 |         ID_UNALLOCATED(7, 7),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:931:16: note: expanded from macro 'ID_UNALLOCATED'
+     931 |         .visibility = raz_visibility,                   \
+         |                       ^~~~~~~~~~~~~~
+   sys_regs.c:592:2: note: previous initialization is here
+     592 |         ID_UNALLOCATED(7, 7),
+         |         ^~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:930:2: note: expanded from macro 'ID_UNALLOCATED'
+     930 |         ID_DESC_DEFAULT_CALLBACKS,                      \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:885:16: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     885 |         .visibility = id_visibility,            \
+         |                       ^~~~~~~~~~~~~
+   sys_regs.c:626:2: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+     626 |         ID_FILTERED(CTR_EL0, ctr_el0,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     627 |                     CTR_EL0_DIC_MASK | CTR_EL0_IDC_MASK |
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     628 |                             CTR_EL0_DminLine_MASK | CTR_EL0_L1Ip_MASK |
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     629 |                             CTR_EL0_IminLine_MASK),
+         |                             ~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:918:14: note: expanded from macro 'ID_FILTERED'
+     918 |         .set_user = set_##name,                         \
+         |                     ^~~~~~~~~~
+   <scratch space>:204:1: note: expanded from here
+     204 | set_ctr_el0
+         | ^~~~~~~~~~~
+   sys_regs.c:626:2: note: previous initialization is here
+     626 |         ID_FILTERED(CTR_EL0, ctr_el0,
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     627 |                     CTR_EL0_DIC_MASK | CTR_EL0_IDC_MASK |
+         |                     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     628 |                             CTR_EL0_DminLine_MASK | CTR_EL0_L1Ip_MASK |
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     629 |                             CTR_EL0_IminLine_MASK),
+         |                             ~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:917:2: note: expanded from macro 'ID_FILTERED'
+     917 |         ID_DESC(sysreg),                                \
+         |         ^~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:890:2: note: expanded from macro 'ID_DESC'
+     890 |         ID_DESC_DEFAULT_CALLBACKS
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   ./generated/sys_regs.inc:884:14: note: expanded from macro 'ID_DESC_DEFAULT_CALLBACKS'
+     884 |         .set_user = set_id_reg,                 \
+         |                     ^~~~~~~~~~
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16255, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16255,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16110, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16110,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -32750, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-32750,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15616, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15616,0
+         |                 ^
+   <instantiation>:1:35: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -8573, 0,
+         |                                   ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-8573,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15728, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15728,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -14713, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-14713,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16109, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16109,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -32628, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-32628,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16240, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16240,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16256, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16256,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16120, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16120,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -14584, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-14584,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -14848, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-14848,0
+         |                 ^
+   <instantiation>:1:35: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -8574, 0,
+         |                                   ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-8574,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16119, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16119,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -16103, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-16103,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15736, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15736,0
+         |                 ^
+>> <instantiation>:1:36: error: too many positional arguments
+       1 | RIE_H 0xed9b, %r2, %r12, -15735, 0,
+         |                                    ^
+   arch/s390/include/asm/sae.h:74:3: note: while in macro instantiation
+      74 |                 "       EASR    %[r1],%[r3],%[i2],%[m4]\n"
+         |                 ^
+   <inline asm>:1:3: note: instantiated into assembly here
+       1 |                 EASR    %r2,%r12,-15735,0
+         |                 ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   47 warnings and 20 errors generated.
 
 --
 0-DAY CI Kernel Test Service
