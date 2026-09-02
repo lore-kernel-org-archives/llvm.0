@@ -1,102 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7688F37881E;
-	Wed,  2 Sep 2026 08:21:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68903409632;
+	Wed,  2 Sep 2026 09:05:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788337306; cv=none; b=c8Bv2ud569+SDQ9GERfYXwZmdJkn2UZinU/KcAKMkA9aGzS+fWe18mTJ08FeaXhMnuE30ErX0N/OHQ4f9fXcXA3hSM4MtEhFxjB+IGFh1jiTm8JXG+jHjUHmq/4+CU5HQ9JUBXZKXHzTKJ2Fng2fni6L2KVEPJMWZxiWbJ4g5h4=
+	t=1788339949; cv=none; b=V5iGBk4dctNly5HEDGOdu5RBFlaM5GGtzUazuY9u543TcDqP4cHJkve9HUKWIRwDXopk3mpLpxaH5N5WouhwCtJzPQEq861rBk5AFZO5h+Qhnu9UDdoR3heoz3rfJhpVXtyFB/3wWNQtzxdVYD73hZpMy3sCGcg7DOyMTNPbnkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788337306; c=relaxed/simple;
-	bh=ggCMOymjzta62KyOYmqN5sV9fnNSej/APcCJwAgLjdI=;
+	s=arc-20240116; t=1788339949; c=relaxed/simple;
+	bh=IRgqaVQfpdVTtZGwros05SmBtzySmvzQCq1CQDlR57E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sBByyOhJ+Aj+KtCvbrXhTBiYZ8ZLbVzMG1hZFDJX1SEb2IgEXyya9P+ttZOw89EZc1QA4UVmCGoq9OukBbD2NctwhbmHaGWpktgV1zzf7n5SXK22gfN4GGLvnqhGt25Qov82qY06djRe4BR01eLG77rR5wotTPC4AO3w5sswedE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKcAME0w; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=PW+LGxJ8w6COedqWvFfVmdjOXPH3jQ1U2QqmXfI3pY/rC8xmImGPzXhOMZ1TDAF+DdBRkJ6G1J2X0ZWsAn95W7kP8HaKCztpOhCqxVrkXuK9QMnM9uahYbw3MDkSKh/C84pzjruLOR2PKkzoyd1HbBtUGOEo3cEWZKpszclF0I0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DatNZzOu; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKcAME0w"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 686821F000E9;
-	Wed,  2 Sep 2026 08:21:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788337305;
-	bh=ggCMOymjzta62KyOYmqN5sV9fnNSej/APcCJwAgLjdI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=YKcAME0w0PsDZCSNyM82DjLCbJI/OTGXekMYRjvnh0HKzALlnf5nUht4kHbiGqOIh
-	 ERsDHDtVRCqDih85M+RgN2XW2ZnnLuH0EFxrmQnlOJR9fNhyxy2SIZ2P9LRwqL96N0
-	 7vK/UjhXhV4HW0pV0IMqJYy7tqUlSjtVet5ey1qioeJEJRRkxL0D/38nB/VUcBrq7X
-	 Ny6U4XigIt0GRqmxDmcLLcvGx9yVczNyiREQYKZSn1hfZd+mHQCrYxD7vqeAU1OY/h
-	 U+TL/CVvUlnFGd+5quq+CzinTDLS6tHrNwXkKspukdUhXiyRk2WG5MZHGhU56Tf5Mi
-	 /FyBF9hJWvWFg==
-Date: Wed, 2 Sep 2026 10:21:41 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Helen Koike <helen.fornazier@gmail.com>, 
-	Vignesh Raman <vignesh.raman@collabora.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] drm/ci: Add CI pipeline for drm-misc branches
-Message-ID: <apfchj1N41WQGlnU@houat>
-References: <20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DatNZzOu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788339948; x=1819875948;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IRgqaVQfpdVTtZGwros05SmBtzySmvzQCq1CQDlR57E=;
+  b=DatNZzOuFtJgtOo0VFxpAWPwHi1zuVfguuzv4Q4R3OwbSoMiR0R3Z7zB
+   7TJhmr2r8TG5KDtRcPvA7eJIYUHrqX1wcL6YryEhSPPcgcGPXY+Iri7/f
+   zmZdwUo5vQKKZmj/h+KCVLWYpFKaK1dl9qo+73nXZnLdZMzJaG6agRWX2
+   lscRgbJ7hjlXklz0RH5ow596PYUdueWns5m1YPmpo8G2nUTNL+D36tzB8
+   nYBDX56Ow52NFT9sGKJDIvG8NKEPJi/qJhncvNutR7ymTvqmhABFFzcdX
+   0jlZ1cUauxkz7elEFGKK7x7CvDSnBHvqQvKaRT2Q/xzw8CJRvtIn4Ds5o
+   A==;
+X-CSE-ConnectionGUID: czRMprfSREuMe3htcWpkwg==
+X-CSE-MsgGUID: uDC6v+axRf+DdO5RRz1M2g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="99388694"
+X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
+   d="scan'208";a="99388694"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2026 02:05:47 -0700
+X-CSE-ConnectionGUID: pufbLu4QTLihMWheY9csZw==
+X-CSE-MsgGUID: XFbqF93VS86Z+2MRRRXhoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
+   d="scan'208";a="266757516"
+Received: from igk-lkp-server01.igk.intel.com (HELO 05545efcfdd3) ([10.211.93.152])
+  by fmviesa008.fm.intel.com with ESMTP; 02 Sep 2026 02:05:44 -0700
+Received: from kbuild by 05545efcfdd3 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x1guc-0000000009r-1040;
+	Wed, 02 Sep 2026 09:05:42 +0000
+Date: Wed, 2 Sep 2026 11:05:15 +0200
+From: kernel test robot <lkp@intel.com>
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, cgroups@vger.kernel.org,
+	longman@redhat.com, ridong.chen@linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, tj@kernel.org,
+	hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>
+Subject: Re: [PATCH v2 6/6] selftests/cgroup: Add CPU release tests for
+ type-change validation failures
+Message-ID: <202609021151.JjV7JZjv-lkp@intel.com>
+References: <20260828095643.13395-7-guopeng.zhang@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="ti3nay26l7y5i6tt"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org>
+In-Reply-To: <20260828095643.13395-7-guopeng.zhang@linux.dev>
 
+Hi Guopeng,
 
---ti3nay26l7y5i6tt
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] drm/ci: Add CI pipeline for drm-misc branches
-MIME-Version: 1.0
+kernel test robot noticed the following build warnings:
 
-On Wed, Sep 02, 2026 at 10:17:09AM +0200, Maxime Ripard wrote:
-> The DRM CI infrastructure [1] builds upon Mesa's CI to run IGT tests
-> on hardware. Its focus is on functional testing on a selected number
-> of targets.
->=20
-> The concern for drm-misc is different: it merges a large number of
-> patches across many platforms, and build or unit test breakages happen
-> on a regular basis. Adding build and unit testing for drm-misc has
-> been on the back of our minds, and a first attempt was made last year.
-> The feedback was to rely more on the existing infrastructure.
->=20
-> Introduce a CI entry point for merge requests targeting drm-misc-next,
-> drm-misc-fixes, and drm-misc-next-fixes. It reuses kunit.yml and the
-> freedesktop ci-templates, while defining build templates inline to
-> avoid pulling in the Mesa pipeline.
->=20
-> A single Debian container with LLVM handles cross-compilation to all
-> three architectures. The pipeline compiles the kernel using defconfigs
-> from the drm/tip rerere-cache branch and runs the DRM KUnit tests.
->=20
-> Link: https://lore.kernel.org/all/20250319-greedy-sturgeon-from-avalon-ac=
-758f@houat/
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+[auto build test WARNING on 87d347a8c8545a9234d1dd215023064413284c34]
 
-A test run can be found here:
-https://gitlab.freedesktop.org/mripard/kernel/-/pipelines/1738579
+url:    https://github.com/intel-lab-lkp/linux/commits/Guopeng-Zhang/cgroup-cpuset-Respect-child-CPU-ownership-in-type-changes/20260828-175638
+base:   87d347a8c8545a9234d1dd215023064413284c34
+patch link:    https://lore.kernel.org/r/20260828095643.13395-7-guopeng.zhang%40linux.dev
+patch subject: [PATCH v2 6/6] selftests/cgroup: Add CPU release tests for type-change validation failures
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260902/202609021151.JjV7JZjv-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609021151.JjV7JZjv-lkp@intel.com/reproduce)
 
-Maxime
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609021151.JjV7JZjv-lkp@intel.com/
 
---ti3nay26l7y5i6tt
-Content-Type: application/pgp-signature; name="signature.asc"
+All warnings (new ones prefixed by >>):
 
------BEGIN PGP SIGNATURE-----
+>> Warning: kernel/cgroup/cpuset.c:2431 function parameter 'owned_cpus' not described in 'validate_partition'
+>> Warning: kernel/cgroup/cpuset.c:2431 function parameter 'owned_cpus' not described in 'validate_partition'
 
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCapfclAAKCRAnX84Zoj2+
-djAuAXkBJHNOgysY1OgeKxcwUqjXONoQ4pixDRE0gn0v/Sdi5bX83V5e8NQwHTLq
-8IP7QkgBfA0EDNDsRtzl7kB2BZ/ZyGkoMZrudoBydqjGbgGOrCb5q2sVXl89tVXz
-tdN2sAaRqg==
-=njPd
------END PGP SIGNATURE-----
-
---ti3nay26l7y5i6tt--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
