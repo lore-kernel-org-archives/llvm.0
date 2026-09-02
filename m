@@ -1,65 +1,66 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4A73AAF62;
-	Wed,  2 Sep 2026 11:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C75D49B20C;
+	Wed,  2 Sep 2026 13:06:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788347941; cv=none; b=uD7+WXpMgc1AkemdcmQvxmXxpImEDnY18Z9m781dEyAwuw52gvrKMk7GJlVV4bc4BzWeoDToDJzWiSczR5zb0zT6ecBdjfXh9/sxSMFNgzt7hQ0FYGrouGDbrYImJDnV3EJQjiZgmshqI4vG65BnGzHnxFoQ1cW1Zabr73h3VP8=
+	t=1788354381; cv=none; b=pcgJCY2r0DWH+1JYWT49VQ0FM+IW399IhRdtstRSsl6B0sSfI1DjKdKKWSrED33RxIyqZqrbADExES7B9X/I0c7bKnAdk9JwOCaNoa0bsTZCnxKdG1GZAC1Duz7KgZ5yUh0J1f3BIWnL8ZoXe7bmqt5AnEKPVmOk50pCjZdZ76E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788347941; c=relaxed/simple;
-	bh=YG86Tsd5NYoxHqXO1/4RjI2Hwk53MaPPEvTOL3eNPGI=;
+	s=arc-20240116; t=1788354381; c=relaxed/simple;
+	bh=+bxePfsNVSHSfzlBF3Gm2+qPdi9o4VeP/MfRydTR3BY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OLoIOxQum4vywXvHgdpHu4GydMi8U0RAiSbomCAyleBnABfCktSUyGj3nqwbkQFJ2XR4vWB6r/c3s2kBgQJ7isJgQix1QYc7iEumuiK0l8lqINjXuWyca8IZO67E1HNdgIA2+FoKtapMdDcM/WGlJV4WZqSjeeT9dGru2iFw/I8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kclkmO4Z; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=A8w/5r/k4MChaOGhsBngt4Xnj63Zq4Gv2IrnzvLfRJS1J1b9BpDkdOLXVWDthm4RzFdJ/P+zOi+ckdLZXW510i9yfAKdU6IINWuKECNSXcZjHJHlVe/wgRxM8uSwKKhJ6OxRUKZZycVZEd+Cbi53mk7FnqaR1Cex/skwGc90FKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gjcZz021; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kclkmO4Z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gjcZz021"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788347939; x=1819883939;
+  t=1788354380; x=1819890380;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=YG86Tsd5NYoxHqXO1/4RjI2Hwk53MaPPEvTOL3eNPGI=;
-  b=kclkmO4ZvrkCq3GAgh1ah6XOnJLUlcmgy3QYs/owomseziG5lFKgfUOu
-   X+f504/cwENY7B0c1/N7d5uizgVY6eOqii9voWzhputSZZeyA/aoFWe5G
-   qQ632tmmSTosCDhxwOkPDTf3zMSkGLFZy6zKGVGUXsDmjeqKBKHWqSxIJ
-   ya0LY298htHcvq+jd+DtEDnI+OJsh0KNzfK/SJ3+vWbCOBE+AnZyYRcrf
-   geAK7rl2PMlM/EKek3VHprqS9y9r2e2MSR9ROrSTQra2kO/B+ZrcN7qth
-   ZjyupWcnn8E/iCBGItjwrMOGsyxRf9k0ZBp+yNLM4lYRM5sSOE+7HVqXQ
-   g==;
-X-CSE-ConnectionGUID: RL6csouKT/iDzZsvAHrImQ==
-X-CSE-MsgGUID: TwwuSTAdTCqlsyXtVSAVTA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="87738081"
+  bh=+bxePfsNVSHSfzlBF3Gm2+qPdi9o4VeP/MfRydTR3BY=;
+  b=gjcZz02129cvi1Y8dqqiCSzbsr95oOci9FWLqCinj6SzzGKVeM8DfZJ3
+   LUrY0gDMd+gn4oV3oLSy5mCQv+MOSZA/vWl0DBNMwzR2WNugYYEt7UbOw
+   lWjtVmHqqq8YfKYPaENUv2Hb230HbxTWcIDDVHtwpZQYzG+iRA1s9bSIk
+   Yr6+hsjmqkYKpSMilU+LWWiQgcMO6o7SMN3iAxjcUiHG7bH41NZAeiIm8
+   /hnShgm78jBzApp6DPY9hqKLM/VnhwlIJSimO2er0vCQiLac7tJxlgCZS
+   taQLjQ956onKvllHfJB+2XwJiRiBMS5aEYWTQTnggZujbq9lxXxi77qI6
+   Q==;
+X-CSE-ConnectionGUID: uWKLvoAQTRmy/gDxtsfcKQ==
+X-CSE-MsgGUID: vOGmjWHlQNqhTVAHsOdrWg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="88687356"
 X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="87738081"
+   d="scan'208";a="88687356"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2026 04:18:58 -0700
-X-CSE-ConnectionGUID: BYFYmw2iQLyOKvLknLn45w==
-X-CSE-MsgGUID: XIK0qokdTzKqWtv/Tl3PxA==
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2026 06:06:20 -0700
+X-CSE-ConnectionGUID: lVYCjvFGRDWgAblnbTd9OQ==
+X-CSE-MsgGUID: sQ20yggwS6qFjAbH976YjQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="268078884"
+   d="scan'208";a="268098503"
 Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 02 Sep 2026 04:18:56 -0700
+  by orviesa010.jf.intel.com with ESMTP; 02 Sep 2026 06:06:17 -0700
 Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1x1izV-000000002UI-3sbM;
-	Wed, 02 Sep 2026 11:18:53 +0000
-Date: Wed, 2 Sep 2026 19:18:02 +0800
+	id 1x1kfO-000000002jG-30ZC;
+	Wed, 02 Sep 2026 13:06:14 +0000
+Date: Wed, 2 Sep 2026 21:06:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Qingfang Deng <qingfang.deng@linux.dev>,
-	Robin Murphy <robin.murphy@arm.com>,
-	"Joerg Roedel (AMD)" <joro@8bytes.org>,
-	Will Deacon <will@kernel.org>,
-	Marek Szyprowski <m.szyprowski@samsung.com>, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	Elad Nachman <enachman@marvell.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Qingfang Deng <qingfang.deng@linux.dev>
-Subject: Re: [PATCH] dma-mapping: use exact allocation for DMA pages
-Message-ID: <202609021920.kdbedjPR-lkp@intel.com>
-References: <20260901085348.53140-1-qingfang.deng@linux.dev>
+	Pengpeng Hou <pengpeng@iscas.ac.cn>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: prestera: avoid overreading a short firmware tail
+Message-ID: <202609022030.0pnwZKgS-lkp@intel.com>
+References: <20260830142404.37663-1-pengpeng@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -68,35 +69,67 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260901085348.53140-1-qingfang.deng@linux.dev>
+In-Reply-To: <20260830142404.37663-1-pengpeng@iscas.ac.cn>
 
-Hi Qingfang,
+Hi Pengpeng,
 
-kernel test robot noticed the following build warnings:
+kernel test robot noticed the following build errors:
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v7.3-rc1 next-20260901]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+[auto build test ERROR on 08dbfad3f5040f5bdb6c529da20d6d4e81fefd72]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qingfang-Deng/dma-mapping-use-exact-allocation-for-DMA-pages/20260901-165347
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260901085348.53140-1-qingfang.deng%40linux.dev
-patch subject: [PATCH] dma-mapping: use exact allocation for DMA pages
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260902/202609021920.kdbedjPR-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609021920.kdbedjPR-lkp@intel.com/reproduce)
+url:    https://github.com/intel-lab-lkp/linux/commits/Pengpeng-Hou/net-prestera-avoid-overreading-a-short-firmware-tail/20260830-222403
+base:   08dbfad3f5040f5bdb6c529da20d6d4e81fefd72
+patch link:    https://lore.kernel.org/r/20260830142404.37663-1-pengpeng%40iscas.ac.cn
+patch subject: [PATCH] net: prestera: avoid overreading a short firmware tail
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20260902/202609022030.0pnwZKgS-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260902/202609022030.0pnwZKgS-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609021920.kdbedjPR-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609022030.0pnwZKgS-lkp@intel.com/
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
+All errors (new ones prefixed by >>):
 
-WARNING: modpost: vmlinux: section mismatch in reference: __dma_direct_alloc_pages+0xdd (section: .text) -> alloc_pages_exact_nid_noprof (section: .init.text)
->> WARNING: modpost: vmlinux: section mismatch in reference: dma_common_alloc_pages+0x17 (section: .text) -> alloc_pages_exact_nid_noprof (section: .init.text)
+>> drivers/net/ethernet/marvell/prestera/prestera_pci.c:603:18: error: call to undeclared function 'get_unaligned'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     603 |                 writel_relaxed(get_unaligned((u32 *)(buf + i)),
+         |                                ^
+   1 error generated.
+
+
+vim +/get_unaligned +603 drivers/net/ethernet/marvell/prestera/prestera_pci.c
+
+   589	
+   590	static int prestera_ldr_send(struct prestera_fw *fw, const u8 *buf, size_t len)
+   591	{
+   592		size_t write_len = ALIGN(len, sizeof(u32));
+   593		size_t i;
+   594		int err;
+   595	
+   596		err = prestera_ldr_wait_buf(fw, write_len);
+   597		if (err) {
+   598			dev_err(fw->dev.dev, "failed wait for sending firmware\n");
+   599			return err;
+   600		}
+   601	
+   602		for (i = 0; i + sizeof(u32) <= len; i += sizeof(u32)) {
+ > 603			writel_relaxed(get_unaligned((u32 *)(buf + i)),
+   604				       prestera_ldr_wr_ptr(fw));
+   605			prestera_ldr_wr_idx_move(fw, 4);
+   606		}
+   607		if (i < len) {
+   608			u32 last = 0;
+   609	
+   610			memcpy(&last, buf + i, len - i);
+   611			writel_relaxed(last, prestera_ldr_wr_ptr(fw));
+   612			prestera_ldr_wr_idx_move(fw, 4);
+   613		}
+   614	
+   615		prestera_ldr_wr_idx_commit(fw);
+   616		return 0;
+   617	}
+   618	
 
 --
 0-DAY CI Kernel Test Service
