@@ -1,117 +1,79 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679514AC149
-	for <llvm@lists.linux.dev>; Wed,  2 Sep 2026 17:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 177354968E2;
+	Wed,  2 Sep 2026 18:38:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788370165; cv=none; b=nilcZqdPjrIO6mondRNYpbdFDZgrmTlBJ1jmPmB9MWJD+qAyM4Gkp8yyHvhW5NE6L/9zvJ+3q0B00hQwjS4H24/gtgtNjE9tpJeABQ19xa6cFbXXexrpgPF7S8gVI8muuSuX10XCxHw2egtJrasMt8n2USdnbxnGcVuChRBsuZA=
+	t=1788374338; cv=none; b=HS8APc8dlNqdd3dC7iEHHZC0PrkChAG7uELqRMZI3IGMgObtNm3jy3BYaigMP+0gLpRdzK8+XdDM8l17I1tFPBo1z3i1zTkuycGC5kjAHffjzci5C5Vzy2JR9jT8JMq2Po6W4N5vmX4V1mxZ4OFgVtcmFNdiAICxELyN+GhDFGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788370165; c=relaxed/simple;
-	bh=TZ+MXL1cgyfSCQwzd4B83Y1gcdTqXTzpnMsgTcK9A4c=;
+	s=arc-20240116; t=1788374338; c=relaxed/simple;
+	bh=o+O3FKFxIRxAIl49fg3LlmAdatoHNv7qC2SOtdMUhus=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 In-Reply-To:Content-Type:Content-Disposition; b=i6FkYzyPizvzCFCP82CAzumTKhESthNxPM7EzFBxDAYB/Ez7n0ENJ2hPDvPabW8vIeWz+LY5JvR+akFL465rjfyA+shzpCkOqgNcFNGJOAJze8qPKWwk5SIzmuyxKwwNYjHEFTAbWw+DLjIRz0m0LWSOeKb8KEAov11t8Uux2EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FCcl6/ne; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y5996BhUrTaeIeHVC33Mw6019R0MqZmsw3LeOuKffLaDQOACnI4HY5DuYNHoU9hZn8hXsesJqx71OWyBfABCHo0rx4g2ltuyIjvDJD+EWwYFA856GhDlN7sWqcWhMzppEVfv5CMRa5+Vm5TkaKuk9qO9toT2hzyCyk5Ud58fizY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hiXw6pLx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FCcl6/ne"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788370162;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TZ+MXL1cgyfSCQwzd4B83Y1gcdTqXTzpnMsgTcK9A4c=;
-	b=FCcl6/nex5yo/dVatACfuwRLPSj8DJEFmFUxFfYry95Z69OEArEHY/NiQEj3Tw66+whM1G
-	+zkC91Cw6Am0aVoluyhggu5gQ00G1xGZCpnaKItVAHKMTG9JgkW8cQMFEAR8mfqu8g/+Bw
-	vIK/9o4WcGFo3qeag/tMZc/bqRpDh64=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-437-aNLRFW2aOrGgUeZBTtXadg-1; Wed,
- 02 Sep 2026 13:29:19 -0400
-X-MC-Unique: aNLRFW2aOrGgUeZBTtXadg-1
-X-Mimecast-MFC-AGG-ID: aNLRFW2aOrGgUeZBTtXadg_1788370156
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DEC551834577;
-	Wed,  2 Sep 2026 17:29:15 +0000 (UTC)
-Received: from fedora (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id D531730002F4;
-	Wed,  2 Sep 2026 17:29:10 +0000 (UTC)
-Received: by fedora (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Wed,  2 Sep 2026 19:29:15 +0200 (CEST)
-Date: Wed, 2 Sep 2026 19:29:09 +0200
-From: Oleg Nesterov <oleg@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hiXw6pLx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4200D1F000E9;
+	Wed,  2 Sep 2026 18:38:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788374331;
+	bh=ZSS2ZyNCJhfDvdNZCG2wo1aIo6vAs4ArlqXzhHgn+3I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hiXw6pLxhNG9c+u9f+cZVoGUbPPqmElbFitCuj6yFGJoq5mvtU7Q27aoVgonJyH5b
+	 CMSYiUOzWVTXpm84DAi/2BqP8djFMTU8DUZ/+6Sp9btS0EP5vZ9cwUSQgQtvDLaaVm
+	 XyIMg8ZAa98HHTp5yrnVI/SkIU5e+cKF7SZPMDFCWsDgCiUs/kWaJEuvcMpQfSKHUF
+	 VO1s4bdr/xZiIKlAsErvaDdRwNT9B5ArnLPqIJKMnoPYdhP3i8Y5PJclPC1MGPafkm
+	 FeLW5u6QVJruyeZcA55CFGaCHBQjmbLuTzWlFqx72Ym3MwXkUQaTCx+zTLTRcdyemq
+	 bbBEBBeUGJxPQ==
+Date: Wed, 2 Sep 2026 11:38:45 -0700
+From: Nathan Chancellor <nathan@kernel.org>
 To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Elliott Hughes <enh@google.com>, linux-kernel@vger.kernel.org,
-	linux-um@lists.infradead.org, llvm@lists.linux.dev,
+Cc: Frank Li <Frank.li@oss.nxp.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Yo'av Moshe <linux@yoavmoshe.com>, Frank Li <Frank.Li@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Russell King <linux@armlinux.org.uk>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
 	Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Richard Weinberger <richard@nod.at>
-Subject: Re: [PATCH] x86: uapi: ptrace: guard register offset macros with
- __ASSEMBLER__ or __FRAME_OFFSETS
-Message-ID: <aphc5Xf0HU0SWcTI@redhat.com>
-References: <20260821-ptrace_uapi-v1-1-3de8638a29f2@google.com>
- <CAKwvOdkCGEYWnyJtWT=jArXkA47X==G0PU4UNV=s8htpA3Dg6g@mail.gmail.com>
+	Justin Stitt <justinstitt@google.com>, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] ARM: imx: Fix suspend/resume crash with Clang CFI
+Message-ID: <20260902183845.GA2669394@ax162>
+References: <20260827194508.446733-1-linux@yoavmoshe.com>
+ <CAKwvOdkSZBbq=e916=efx8G-CTzZ5b31AhyUytO6eJjjkEdMow@mail.gmail.com>
+ <CABCJKuc0cWWdkA7zrCcuze4AE-qTSETuUi-eRewPnn_ivHEADQ@mail.gmail.com>
+ <CAKwvOdnA7Ej_uppSL7U2xwxyUQoDMvO+RArj4HCUSOziH0rCqA@mail.gmail.com>
+ <CABCJKuezb0HtOcMBsObczS=HBaRvMszagkOZGHyOVbXBqtJi5g@mail.gmail.com>
+ <2bd0c842-d0cb-4ad7-b3a3-fed2000dea83@yoavmoshe.com>
+ <CABCJKudb5RegHcNPkXG5p1TcCFAe5_8+hqBP-2GyHVK19oB94g@mail.gmail.com>
+ <CAKwvOd=OLLO5AXiR54o0nU16e_pTDt_yiEPQ0GgnX8DRGJXYmw@mail.gmail.com>
+ <aphSYUS7xGJjj2gT@SMW015318>
+ <CAKwvOdmG92SPOuMJka6KqODqObB0F8YJ6NhpEj7eisv-ZK+GXQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-In-Reply-To: <CAKwvOdkCGEYWnyJtWT=jArXkA47X==G0PU4UNV=s8htpA3Dg6g@mail.gmail.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
-X-Mimecast-MFC-PROC-ID: yAC0e9k2KuPCpePPEyluRosSFi9OmQMaezXApIeR2Q0_1788370156
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdmG92SPOuMJka6KqODqObB0F8YJ6NhpEj7eisv-ZK+GXQ@mail.gmail.com>
 
-On 09/01, Nick Desaulniers wrote:
->
-> On Fri, Aug 21, 2026 at 3:46 PM Nick Desaulniers
-> <ndesaulniers@google.com> wrote:
-> >
-> > The register offset macros in <asm/ptrace-abi.h> are guarded by
-> > `defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)` for 64-bit, but
-> > were left unguarded for 32-bit. This causes havoc for userspace that
-> > happens to use identifiers colliding with these short macro names
-> > (e.g., EBX, ECX, EAX, DS, ES, FS, GS, CS, SS). Without this guard,
-> > userspace is forced to be super extra careful with include ordering to
-> > minimize the chance of collision.
-> >
-> > Wrap both the 32-bit and 64-bit register definitions under
-> > `#if defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)`, and ensure
-> > User-Mode Linux (UML) defines `__FRAME_OFFSETS` for 32-bit as well.
-> >
-> > Assisted-by: Gemini
-> > Link: https://github.com/llvm/llvm-project/issues/217413
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
->
-> + enh (who pulled this into android for testing)
->
-> Oleg, can I get an ack/nack here?
+On Wed, Sep 02, 2026 at 10:10:23AM -0700, Nick Desaulniers wrote:
+> It does depend on
+> https://lore.kernel.org/lkml/20260604-tracing-fix-cfi-h-build-error-v1-1-b27015390901@kernel.org/
+> though, so you might need to coordinate your PRs to Linus with Nathan.
+> Nathan, is https://lore.kernel.org/lkml/20260604-tracing-fix-cfi-h-build-error-v1-1-b27015390901@kernel.org/
+> going via kbuild tree or what?
 
-Oh... there is a little problem, I don't understand the usage of
-(magic to me) __FRAME_OFFSETS ;)
+That change is already in mainline as commit 979c294509f9 ("cfi: Include
+uaccess.h for get_kernel_nofault"), so there should be nothing for
+upstream maintainers to worry about. If this patch needs to go back to
+stable past 6.18, then that change will need to be included with it.
 
-> Or someone who knows better the
-> history of UAPI headers?
-
-Certainly not me....
-
-OK. I'll try to read this patch tomorrow with the clear head after sleep.
-
-Oleg.
-
+-- 
+Cheers,
+Nathan
