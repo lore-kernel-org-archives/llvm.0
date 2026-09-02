@@ -1,137 +1,121 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62E43BE659;
-	Wed,  2 Sep 2026 19:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078A83B5305
+	for <llvm@lists.linux.dev>; Wed,  2 Sep 2026 21:01:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788378550; cv=none; b=C3zaaZCGBnKZi5EIHH5GvnL0zoAkjx3uhfIw/znGinAgAv4caiH5ZUikKsZEg55dONsdNi1sfLVxMtcIW6uwgHzYqZCGBlz0dq3KVX18HrxjP/zo9wOcRFqQYAvcl9la7Zlsl9W0jasiwKQwz0RiAsN7u79WXqnATpjjFM1IzQc=
+	t=1788382921; cv=none; b=slK5IyhWVkFTT4n4sBaxqctCssOQMs8GvhDH36JJ3f1ktZSy0RgSdGnFsXrjxCYTTUjWkwq9IM85j0eQMtzXsjjE2K6kTxr0LEDyJY7NkakVxsi5vKD9c0YM38rNvdy2VG8gpvsj5QkPlnHOYmHAXllboYaeqcZ4roMeq5Y032Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788378550; c=relaxed/simple;
-	bh=PqONomyjOqjqkvONvcbxns6QfCa4tWnfoco/vQp0RX8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QLwNp5aw2jb3wSL+HR79T2taEJ0GkrgD4+HanEd3JsAU674m6gCYFUQWaSD8ilyiUKSNoNYZ8ApzmyaSlgfIJkqiqcWI9XcnfY1PTYTeN3d+C1bnfqxQ+AZIHuYdPF+4wQ/IzMKzCRlcmt5FFfgjPa9U6RzUCqAGyZbBn3x4sXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Cm21xca+; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788382921; c=relaxed/simple;
+	bh=gq4kjcf/C/dd4dpRmzn9Mq+VpkBb4cxOn+4FIo7f0E8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FUY8n3EDoLfQIR3VEUclDoy1BDwqJ7REUJpRx7pJ+8NM9jBlio2T9c0AZUZGkCfV/1/6pfeD0up2yVeQrqKVjAfAj5tPDMe9WNSO10p0GvKidLEPbfJ99jkDpK2WTp2eXz9WybfN6o5k8Arc4d5/2Gf61j1XQ1A0co9xFoxq1k8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AwaqJOSj; arc=none smtp.client-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ndesaulniers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Cm21xca+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788378545; x=1819914545;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=PqONomyjOqjqkvONvcbxns6QfCa4tWnfoco/vQp0RX8=;
-  b=Cm21xca+uxIOttN10H+u1QMWWgDbKRRv+LAFi4B8S3DQk28g1/IvmOSW
-   i/X5rzQhnqqhhwYFg6qD9sPJJRJyeUsRZSwNKELChnumw42vVainDCDm6
-   mgq9Ijsrf5He9BcRjDhaiL1aozdDZv9peMuT7U1BqwjJmBfIh58E7v/9D
-   VnU8bLpWWBDboyTKxRF+Z391bdM0pKq3R18SrcfrGdHXmgqTsAEZuALj8
-   Lrid6pQrjEKPDHLX5Xtedx8dz4NWJMfd/PM5aAodp5NKU8g1+1wEzMQ3G
-   w6L9/VRd9QkcDR89FhL7GhNFYNc66bTid0n3A1DHmK+zuCgGUs06CaFL5
-   Q==;
-X-CSE-ConnectionGUID: 8vaNaYA5TP+CFKd4IUlwzw==
-X-CSE-MsgGUID: nNAqwAYmT5O5iPQ5Wye4yA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11894"; a="111623246"
-X-IronPort-AV: E=Sophos;i="6.25,258,1779174000"; 
-   d="scan'208";a="111623246"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2026 12:48:56 -0700
-X-CSE-ConnectionGUID: ybu/weRnTVqAQJqu94/Pbw==
-X-CSE-MsgGUID: qazrVWkARIOUkQCDIRrzpQ==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 02 Sep 2026 12:48:54 -0700
-Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x1qx0-000000003GI-2haC;
-	Wed, 02 Sep 2026 19:48:50 +0000
-Date: Thu, 3 Sep 2026 03:48:02 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li Youhong <dayou5941@163.com>, Eugeniy.Paltsev@synopsys.com,
-	vkoul@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Frank.Li@kernel.org, dmaengine@vger.kernel.org,
-	Li Youhong <liyouhong@kylinos.cn>, Frank Li <Frank.Li@nxp.com>
-Subject: Re: [PATCH v3] dmaengine: dw-axi-dmac: convert to clk bulk APIs
-Message-ID: <202609030325.ALAaghFW-lkp@intel.com>
-References: <20260902013016.3381788-1-dayou5941@163.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AwaqJOSj"
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-398e1f7d1a5so2463139a91.0
+        for <llvm@lists.linux.dev>; Wed, 02 Sep 2026 14:01:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788382916; x=1788987716; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=I8LP+AgpfQU95pkQ4A0U0JkV/VZeB+yKww2C95uXxms=;
+        b=AwaqJOSjBPYFnX/FTFxzLUUseNCu7AjvbADuw1dlxKhGuYAuCpLMrR4eClsIWKbIf7
+         FUQxy7bCyH5Y6h5YNViqyNI7kq4Fnh+2ENrDkLptgk95PYKHxD1xL6birazsfm3Mr9S7
+         QUmH26sV1b6lJlBb2/GL5f9ZkdNFef8IaDdKcfvAgEArsRW7X0hq1qt9MFaiblaIkdW0
+         PzBfkH3IFF+9dc+igvEkU3nCOrPf6ORJ6XeLQ2f0gAsWJMcCEsHnOYh3gq/Oqm8Jh/NC
+         xKXOKHeUhetbVPL7bJ1KS/U3/phimHzYgiy5l+rlM26gAhXDetoBihQkybjUhoc0pTYN
+         +xbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788382916; x=1788987716;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=I8LP+AgpfQU95pkQ4A0U0JkV/VZeB+yKww2C95uXxms=;
+        b=FKKrfdN+cME4y9HJqrJGStBDwHafIDOO78pFaZcY0p9HxVYmXmcWzH7SAJK8yLbR9m
+         54TplaDUlzVVTn+2+Kis00H/y1i7ymZwoHfuDTmpVMn1n6PJQfxVaDV88L3NViNhepGD
+         JeMy0oK06yGtTSNBQogTIYnI4fnAB97vucfLl3VTomyrfZe+UjsYQJPsfbqGzTxdLpAV
+         n9kfHn9VNFW6dkjuVUtLvuH0f3UaCcmJf+A6vXwDR0+c+RZasXMMvDWV+M++DEm5wRFv
+         n63H7bSB8Xjs57Mhoro9+TZ3BjFQvc11YSwB5WvBzUrOxT1TVyLq1Nvh8o9KIBi+a0Pz
+         6eXA==
+X-Forwarded-Encrypted: i=1; AKwUvBzACNbyGcZ9aqUfQI3Y8Zn4O3mBU+YapHziJM+o6HX+N4+kTGOpWNXYBzIWx8sTg3CGEbld@lists.linux.dev
+X-Gm-Message-State: AFuF++nFE6nltICiMvE8JXdzr/37uqrAKoTMrENUQTAhxknz1UVM+ge4
+	ExgxKq7gdIwrxWJhQRj3Y424iKcTD3bbfbQep+wuChQsD0dXVMpCegfpHeZLm6rPdAIxHhZKjf9
+	lLiwhdu201t6DwuPVliqW/JtS9nrPgw==
+X-Received: from dlg33.prod.google.com ([2002:a05:7022:7a1:b0:13b:8289:9a55])
+ (user=ndesaulniers job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:4a8e:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-39aedf73060mr10160241a91.8.1788382916176;
+ Wed, 02 Sep 2026 14:01:56 -0700 (PDT)
+Date: Wed, 02 Sep 2026 14:01:53 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260902013016.3381788-1-dayou5941@163.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAMCOmGoC/x3MTQ5AMBBA4avIrDWposRVRKTawfhtWkQi7q6x/
+ BbvPeDREXqoogccXuRp3wKSOAI9qm1ARiYYBBeSl0IyPaKe/aH03C7LtbZ7N5lztSzjMk8xMYW SBkJtHfZ0/+e6ed8PJSl6GmkAAAA=
+X-Change-Id: 20260826-checkstack_llvm_objdump-40653e1d7a6d
+X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=O0COsmvrvggwIeEq7bAuRbULbXScoJmbNMYaRi6RFIw=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788382914; l=1872;
+ i=ndesaulniers@google.com; s=20260611; h=from:subject:message-id;
+ bh=gq4kjcf/C/dd4dpRmzn9Mq+VpkBb4cxOn+4FIo7f0E8=; b=EJh/KS2VLyFue0lj8LwiVxwj/XEC0g8ttHV+j4VKiPE2AWW1oeq3VQ3mETSpw0OAgRgjfZHZs
+ jZp5vWI0QPzAa+MnNVYC8CPcWGQbP5tiyluG2VQF1RdSy9sN8O1JfTc
+X-Mailer: b4 0.14.3
+Message-ID: <20260902-checkstack_llvm_objdump-v1-1-edb4eca5f163@google.com>
+Subject: [PATCH] scripts/checkstack.pl: support llvm-objdump disassembly for x86
+From: Nick Desaulniers <ndesaulniers@google.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	Nick Desaulniers <ndesaulniers@google.com>
+Content-Type: text/plain; charset="utf-8"
 
-Hi Li,
+When running `make LLVM=1 checkstack`, OBJDUMP is set to llvm-objdump.
+llvm-objdump outputs disassembly with instruction size suffixes (such as
+subq/addq/subl/addl), tabs/whitespace differences, spaces after commas,
+and trailing comments (e.g. `# imm = 0x...`).
 
-kernel test robot noticed the following build warnings:
+Because scripts/checkstack.pl used rigid regular expressions specifically
+tuned to GNU objdump format (e.g. requiring exactly four spaces, no
+suffix, and no space after comma), checkstack.pl failed to match any
+stack adjustment instructions and yielded no output when using
+llvm-objdump on x86.
 
-[auto build test WARNING on vkoul-dmaengine/next]
-[also build test WARNING on linus/master v7.3-rc1 next-20260902]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Update the regular expressions for x86 to match optional suffixes,
+variable whitespace, and trailing comments.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Youhong/dmaengine-dw-axi-dmac-convert-to-clk-bulk-APIs/20260902-093016
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git next
-patch link:    https://lore.kernel.org/r/20260902013016.3381788-1-dayou5941%40163.com
-patch subject: [PATCH v3] dmaengine: dw-axi-dmac: convert to clk bulk APIs
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260903/202609030325.ALAaghFW-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ed1626b9d0eaf7c406f44da5fb595ad94559f54b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260903/202609030325.ALAaghFW-lkp@intel.com/reproduce)
+Assisted-by: LLM Gemini
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+ scripts/checkstack.pl | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609030325.ALAaghFW-lkp@intel.com/
+diff --git a/scripts/checkstack.pl b/scripts/checkstack.pl
+index 14ce31f732ee..f8011e789a9b 100755
+--- a/scripts/checkstack.pl
++++ b/scripts/checkstack.pl
+@@ -66,8 +66,10 @@ my (@stack, $re, $dre, $sub, $x, $xs, $funcre, $min_stack);
+ 		#c0105234:       81 ec ac 05 00 00       sub    $0x5ac,%esp
+ 		# or
+ 		#    2f60:    48 81 ec e8 05 00 00       sub    $0x5e8,%rsp
+-		$re = qr/^.*[as][du][db]    \$(0x$x{1,8}),\%(e|r)sp$/o;
+-		$dre = qr/^.*[as][du][db]    (%.*),\%(e|r)sp$/o;
++		# or
++		#       0: 48 81 ec e8 05 00 00          subq   $0x5e8, %rsp
++		$re = qr/^.*[as][du][db][ql]?\s+\$(0x$x{1,8}),\s*\%(e|r)sp/o;
++		$dre = qr/^.*[as][du][db][ql]?\s+(%.*),\s*\%(e|r)sp/o;
+ 	} elsif ($arch eq 'm68k') {
+ 		#    2b6c:       4e56 fb70       linkw %fp,#-1168
+ 		#  1df770:       defc ffe4       addaw #-28,%sp
 
-All warnings (new ones prefixed by >>):
+---
+base-commit: 502d45774af09f1c681c754c4b7cdfb5d7f72fd9
+change-id: 20260826-checkstack_llvm_objdump-40653e1d7a6d
 
->> drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c:1638:2: warning: ignoring return value of function declared with 'warn_unused_result' attribute [-Wunused-result]
-    1638 |         clk_bulk_prepare_enable(DW_AXI_DMA_MAX_CLKS, chip->clks);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
+Best regards,
+-- 
+Nick Desaulniers <ndesaulniers@google.com>
 
-
-vim +/warn_unused_result +1638 drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c
-
-  1629	
-  1630	static void dw_remove(struct platform_device *pdev)
-  1631	{
-  1632		struct axi_dma_chip *chip = platform_get_drvdata(pdev);
-  1633		struct dw_axi_dma *dw = chip->dw;
-  1634		struct axi_dma_chan *chan, *_chan;
-  1635		u32 i;
-  1636	
-  1637		/* Enable clk before accessing to registers */
-> 1638		clk_bulk_prepare_enable(DW_AXI_DMA_MAX_CLKS, chip->clks);
-  1639		axi_dma_irq_disable(chip);
-  1640		for (i = 0; i < dw->hdata->nr_channels; i++) {
-  1641			axi_chan_disable(&chip->dw->chan[i]);
-  1642			axi_chan_irq_disable(&chip->dw->chan[i], DWAXIDMAC_IRQ_ALL);
-  1643		}
-  1644		axi_dma_disable(chip);
-  1645	
-  1646		pm_runtime_disable(chip->dev);
-  1647		axi_dma_suspend(chip);
-  1648	
-  1649		for (i = 0; i < DMAC_MAX_CHANNELS; i++)
-  1650			if (chip->irq[i] > 0)
-  1651				devm_free_irq(chip->dev, chip->irq[i], chip);
-  1652	
-  1653		of_dma_controller_free(chip->dev->of_node);
-  1654	
-  1655		list_for_each_entry_safe(chan, _chan, &dw->dma.channels,
-  1656					 vc.chan.device_node) {
-  1657			list_del(&chan->vc.chan.device_node);
-  1658			tasklet_kill(&chan->vc.task);
-  1659		}
-  1660	}
-  1661	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
