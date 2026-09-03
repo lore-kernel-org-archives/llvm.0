@@ -1,66 +1,66 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACBC50EBE9
-	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 20:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4D4379989
+	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 20:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788467860; cv=none; b=oh4nTUup7CNwHGP3gr1SUOqDFN5F1GHAgmy8xI6tKa1fohtl+God/rKchTGKB9Te7XuUZHsQQFYExxlYtGJNmyb9bu0phyDNS9PAai2fbSMGLyUD5aTWGt9VEIeJpo4OAA3Lfw0M5ERHHh9EO1vIvczUEDrUqvl4F9pW7Kk1MVk=
+	t=1788467867; cv=none; b=hsq2JTKKFGq+P80m6vi6T+DkiYTXu/JhRy1f/VuMhN4wMICHMkd05LzJEoV+YY1EgZD0ehshtS2b8ER/mTOqY9O7EFmHxbH6sLuHh6ScNBgu1bILK2raVCg9qZm8QFHnJZ0TjByfMaWk0wH+GggEfj5t/zk9gl7lztQXmcD9RRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788467860; c=relaxed/simple;
-	bh=eQHeON0BpQBd/tO8wP0/baPlZbNUwkPl8Dihm2uv+Ak=;
+	s=arc-20240116; t=1788467867; c=relaxed/simple;
+	bh=0mPWZrRtMVPeUI6XJyCqfL68axEeDCO9y1H3650V6jM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Ck5AbMVJJEu0+m/hmNIX01tBk5XUrJZSLCzu3Zb8frLdt70zIYSLLRN1VIiV/irTESKCWi9cDJFGvtASThq86MELWvLGSR3gwkiGih48+KBLWzBQq0LXoHcHwlPDvOAbQmBxRAc4KKOUj1suOOwic5r/I1M/S003+rIwKGl24zg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m+mmqn+a; arc=none smtp.client-ip=209.85.221.46
+	 MIME-Version; b=Rao0gZczEwQFPzoDiHZYhY10uGLswL5B8hYObY2qEKgWa+F5/3t5Yzydit0avTXY1l2A3pXLd7fhmw35+tmKWQyvoZPlZeAHaMXEshFvZJA/+P40XORcOVhJjjXqsUPvw3BBVsFMiyQaFBxJh3nTNLCgsxbEqXQ5FCJFsLWlMlA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtMUt9SR; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m+mmqn+a"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4843f205a5bso235014f8f.1
-        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 13:37:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtMUt9SR"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-484362f5c4aso340374f8f.3
+        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 13:37:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788467854; x=1789072654; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1788467851; x=1789072651; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=akOv2wAC7HX7aMxE6Q3m1WKBtSvSbn9vu4HmmhmzJNE=;
-        b=m+mmqn+ajkf6N/C2ni4R71z4fwn9zB/AJ2/XqvSChA7RgSSKKJFczGuPJAHErBl/5H
-         vL6mfkWBwu2pNn0fBV+TwIIaYhltqK5EK8V4g6D0TubWArkvGTNT9I+9SWHxCSXPimj8
-         3BYpk6GuAKZU9igCxmdLl6RAm/qqzuoPA90izTydD5vYyvSsPtMpgLz87BN70gsZlESn
-         e4iPQ64OZXkjAV1iLi78/VWjS3wrGZzCWdAt+07Mm0Rrl9gLyTq+IX0QIqmvlaWsuS5+
-         63yB2KNrHIwYa6/OPdrJRagx1O1qYdvshxP0GDIlu28CP0NaaKue2OHt2Sl3W5LFW10T
-         /ylg==
+        bh=TnjfNvCLnsTvxUWLkyT6RSPdRaY1HQsFa2V6exB/dnE=;
+        b=KtMUt9SRqVc1mfTu2spT23g56yFXiyuvMMDWK1S+s+y6AtljTg7Dxm20PVAYuuAVGd
+         efEcXHvphUzeUM0lujWM188rUVkKSIS5DbPeKQaTnH+2BtxHRMzUQOgmjiqcg20pnsDF
+         rL6TVv/b68R12juxUOA2jIPeuV6+5aQrumDBByQDkeRthOVhH9SzrvuFmue7+ozh6O2V
+         +gw3fALbCNjrwaWUqzgtPIEkyggiIJu+D7dvnjkFq0APpkJE5bPlE7DoEkRiWUtmlNWT
+         rYN3hbNpo4qKbF7KAM2e2nidQQCsVgU4OLt2ImeUZ5j1t3TbJPyd7u6tt6L+gN8T25e3
+         04Bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788467854; x=1789072654;
+        d=1e100.net; s=20251104; t=1788467851; x=1789072651;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=akOv2wAC7HX7aMxE6Q3m1WKBtSvSbn9vu4HmmhmzJNE=;
-        b=eo2NlpRfXz3/T+0ZWccrjY4ydbADVzzZx2EUuWAUByyB+1dotVREiqTzcrPirGcFFo
-         USfPwuYf/9vwjNUh//kmwvBCsAwIWLJcoSkn6MUZlQe4rwTx3maorzrqxfALZNBnXvEL
-         Y22KihkqZjayInpwvZNhY7ZwFXkJomTCjykrhg+j/hzspZNoWZGA31nKd9y4zosK68Tj
-         Cwtkopj5fzT3+FA4ELtDPG3Tz7XCgmoverLBtO3V//WFpDyKIztQ1Rm6h4vt5F0XjjG1
-         /ZyXCB9oar1aiNPCVfgI8SU0lx0Rh4kwXWI6S3xaPP5uAsAzSHSUF9Pz/w3c1dzKpY7w
-         WcOQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwKBl6GU0isFCS4TrmAgyR1Pbu8myxtqD2yUAo7wgtHkaOcIpy5+YBxHMIWFwDkNuuVvBTb@lists.linux.dev
-X-Gm-Message-State: AFuF++mD66goQftabKHeqC/pdqrnBk29zQH703bPmSlj1uRGzJd0zjpE
-	ni6lVWhkGdQqkzy6C5c876nL2J5m74t4cmxiYAnRTf8RErXiqkbT1i+Q
-X-Gm-Gg: AYBFou3PEARPyXCoHh9Ti4/TjwhmsqmI/frwIX5AUzwVDYWbr3Hn6l6BsCsAkQv3En8
-	7bL+61ha+3CjY7r4SG3v+SeY3a3KLiA2KCNWJzkDGTKPuV7oXLUByOiWAOBt8CTLCYMGW9u2hwk
-	rYCkCxKNuuWmSJrptu31XabZwp0maqAZFKw44quzlLSK49kjNR/IhLIUvS1G4N4zExqtN8jmoY7
-	0Rm/7hcpp6PQ642mArAPFjCXOAAPyu7LKJKusRp/e8/w8JymN7sn2JyFgUvZq4zJ/U9JuDAsJnO
-	vIXmgeSSGaB/91mExBiOEfBiFMfguNJnCGkRNxwjx9I4lEwbUitGSvfHFCtUt1OiQy/RN6aEH+J
-	WcUP9Xc9eyH8H3L9JcXArWwPApgiZQPx8LwAfXrLEQTslE/uPK9RXgzxU0bXCnlgFnYVan8nTan
-	Dl+MuyFEl8eWRBHaEMJVxhgJp51BqwC2dtmd+B9G/jv3Y4JIUd34lTOxw63JDrK6IR1cySMe5G9
-	pT5L8YWxs82LHPguOP82JRtJMNf+l1NJkSiFMUDhurt25YRVdJQfjQOmZKcUWIhJFZFtBzbGrku
-	xwKE9Sw0DF8k+YrjLZzPQNFE8y/5KTl5w05wc5UdGUzHOMxU0rK1W17LBCjEZGF1BwtEW5BPSH9
-	9VnzQ
-X-Received: by 2002:a05:6000:220a:b0:485:81a8:6f09 with SMTP id ffacd0b85a97d-485870982a4mr3472028f8f.9.1788467854295;
-        Thu, 03 Sep 2026 13:37:34 -0700 (PDT)
+        bh=TnjfNvCLnsTvxUWLkyT6RSPdRaY1HQsFa2V6exB/dnE=;
+        b=Oz9gz8eYx3vg1bH5xzxHkH4YD1ULvXBig2xaWiDCR8X/XD9+HU+HhNQau4dAyXM9Q3
+         FPXG+lvtT6Ne1mrZLRLJlghIVFHkxBzcX8xTckaPzDBdFwi9I1LpsFP7enFrukJOyhwE
+         IR9SpGtfXgAGOEtMT53mt3NoHZ9+rrs1wGgdb3P5fJIyJfh4WAVbJ0odkp++csOFv/wp
+         h5gYDyVqdarL3qNiotAjvP+kzCrMB7FUouY2OMubOl19odZ2jlHPgxytfP/fwoGdBgzV
+         YblRdadnb+GU//mJclEhDexYlJHtxlazMqhVD0le1BZQ6wLQSMKrqqwmZB/Z1BOyYF9W
+         JKZA==
+X-Forwarded-Encrypted: i=1; AKwUvBz0nSwWlHVUlXRzc8MAeODeF3MXgqFLYdB19eAArDO7/mAJu7qnqFogbbgGjuD7uY6kuYYA@lists.linux.dev
+X-Gm-Message-State: AFuF++m3MvRWGp7ehQhW9gOhD16uz3dfsqJYLbhYNs8GBPIApfy2qO+C
+	NfVMDiOt5/QW20nFPsuMzVfV+O8SI0Zk+KdUIuNm/hmq+M/ge1xfLavv
+X-Gm-Gg: AYBFou2E+YUz21XlhXDECQxiRisAYrmdWKSDjtzfOpazyEkuZha1wUPblztDNCCSsJY
+	p3Kz4rOR4A9f41AJ/khFke12Ld5PbKqKKgRXGXFnWLJtMXDh5hj4EMYCmw3oh/YhdO02RSDYZBq
+	VcyLYlMCMoAGGsyUHyYakcMNPYJIVvB6NSILQNMumqYwYX7pnK1B06h60UNAap+6ZDvCA1s/kal
+	tmlt9D944JDcPKsh3M7T0EN5gakMQb0x1dg2bQIAjr9m2sSd6J9H6AVP/D4xwO3C3EDOiCjZpdD
+	cJ2QP2CEdDFOmuj0aPNgRCcp7K1Da+PgWAEJK0B18zFW5rpIUNqotq4gkHdzgIAu05cM7i7dMoE
+	vdTBRwCzAaMruVx9TYKwAkXOSKrL63tOt7/8EbG2norFg4Kj1TVY+7tCeuO3fbVjHTkhaIafMUt
+	dmhez7epPUtTvg1iemhcvxkGaGfg17z2i1bo0dvBEgf6yh/Vp+/+AJtZ+/xDdQ9AZLxf2qNP+NP
+	Tz7vNKPLU3LZX2Tt1QHM+EFshmcCPN60tYiGUSJCQQviVveiCeK8NrYAi7bRAbeyrPI0XDcA3DA
+	7BRSwOJqwWSniEFUC+gi9pyVCJuWIDPbJ9E9yJmcskiedTU8qOVnrBBCZ+YTJ5eTrrSS2yhynoc
+	M4fIoKy+pmlfcxWes
+X-Received: by 2002:a05:6000:4b11:b0:485:8313:9f47 with SMTP id ffacd0b85a97d-48587055d09mr3572292f8f.10.1788467851379;
+        Thu, 03 Sep 2026 13:37:31 -0700 (PDT)
 Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-a979-9501-3df6-d7fa-8a5a-06c5.310.pool.telefonica.de. [2a02:3100:a979:9501:3df6:d7fa:8a5a:6c5])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48588394fa1sm1005070f8f.8.2026.09.03.13.37.33
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48588394fa1sm1005070f8f.8.2026.09.03.13.37.29
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Sep 2026 13:37:33 -0700 (PDT)
+        Thu, 03 Sep 2026 13:37:30 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Vlastimil Babka <vbabka@kernel.org>,
 	Harry Yoo <harry@kernel.org>,
@@ -86,9 +86,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH v3 4/5] slab: test zero-size allocations in slub_kunit
-Date: Thu,  3 Sep 2026 22:37:19 +0200
-Message-Id: <20260903203720.63689-5-kmehltretter@gmail.com>
+Subject: [PATCH v3 2/5] slab: check for ZERO_SIZE_PTR by exact match
+Date: Thu,  3 Sep 2026 22:37:17 +0200
+Message-Id: <20260903203720.63689-3-kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20260903203720.63689-1-kmehltretter@gmail.com>
 References: <20260903203720.63689-1-kmehltretter@gmail.com>
@@ -100,76 +100,49 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add KUnit coverage for the zero-size allocation contract, including
-ZERO_SIZE_PTR alignment and exact ZERO_OR_NULL_PTR() matching.
+ZERO_OR_NULL_PTR() returns true for every value less than or equal to
+ZERO_SIZE_PTR. With the sentinel raised to ARCH_KMALLOC_MINALIGN, up
+to 128 on some architectures, the helper matches additional values
+that are neither NULL nor the sentinel.
+
+Compare explicitly against NULL and ZERO_SIZE_PTR. Store the argument
+in an unsigned long temporary to support both pointer and integer
+address arguments while evaluating it only once.
+
+This also changes check_bogus_address() in hardened usercopy: nonzero
+addresses below ZERO_SIZE_PTR no longer cause its null-address abort.
+The rejected window was incidental to the sentinel value: address 17
+already passed the old check, including in s390's mapped lowcore, and a
+principled first-page bound would be a separate usercopy change.
+
+Apart from hardened usercopy, direct in-tree users apply the helper
+to allocation results or explicit sentinel values.
 
 Assisted-by: LLM
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- lib/tests/slub_kunit.c | 43 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+ include/linux/slab.h | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-index e3b63f0338d5..923d8646bca1 100644
---- a/lib/tests/slub_kunit.c
-+++ b/lib/tests/slub_kunit.c
-@@ -465,6 +465,48 @@ static void test_kmalloc_nolock_and_friends_kprobe(struct kunit *test)
- }
- #endif
+diff --git a/include/linux/slab.h b/include/linux/slab.h
+index 563dadc16d82..458c4229b1d7 100644
+--- a/include/linux/slab.h
++++ b/include/linux/slab.h
+@@ -273,8 +273,12 @@ enum _slab_flag_bits {
+ #define ZERO_SIZE_PTR ((void *)(ARCH_KMALLOC_MINALIGN > 16 ? \
+ 				ARCH_KMALLOC_MINALIGN : 16))
  
-+static void test_zero_size_alloc(struct kunit *test)
-+{
-+	unsigned long zsp = (unsigned long)ZERO_SIZE_PTR;
-+	void *p, *r;
-+
-+	KUNIT_EXPECT_EQ(test, zsp % ARCH_KMALLOC_MINALIGN, 0UL);
-+
-+	p = kmalloc(0, GFP_KERNEL);
-+	KUNIT_EXPECT_PTR_EQ(test, p, ZERO_SIZE_PTR);
-+	KUNIT_EXPECT_EQ(test, ksize(p), 0);
-+	kfree(p);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, kzalloc(0, GFP_KERNEL), ZERO_SIZE_PTR);
-+	KUNIT_EXPECT_PTR_EQ(test, kmalloc_array(0, 8, GFP_KERNEL), ZERO_SIZE_PTR);
-+	KUNIT_EXPECT_PTR_EQ(test, kcalloc(4, 0, GFP_KERNEL), ZERO_SIZE_PTR);
-+
-+	p = kvmalloc(0, GFP_KERNEL);
-+	KUNIT_EXPECT_PTR_EQ(test, p, ZERO_SIZE_PTR);
-+	kvfree(p);
-+
-+	p = krealloc(NULL, 0, GFP_KERNEL);
-+	KUNIT_EXPECT_PTR_EQ(test, p, ZERO_SIZE_PTR);
-+	r = krealloc(p, 64, GFP_KERNEL);
-+	KUNIT_EXPECT_FALSE(test, ZERO_OR_NULL_PTR(r));
-+	p = krealloc(r, 0, GFP_KERNEL);
-+	KUNIT_EXPECT_PTR_EQ(test, p, ZERO_SIZE_PTR);
-+	kfree(p);
-+
-+	/* Only NULL and the zero-size sentinel match. */
-+	KUNIT_EXPECT_TRUE(test, ZERO_OR_NULL_PTR(NULL));
-+	KUNIT_EXPECT_TRUE(test, ZERO_OR_NULL_PTR(ZERO_SIZE_PTR));
-+	KUNIT_EXPECT_FALSE(test, ZERO_OR_NULL_PTR((void *)1));
-+	KUNIT_EXPECT_FALSE(test, ZERO_OR_NULL_PTR((void *)(zsp - 1)));
-+	KUNIT_EXPECT_FALSE(test, ZERO_OR_NULL_PTR((void *)(zsp + 1)));
-+	KUNIT_EXPECT_FALSE(test, ZERO_OR_NULL_PTR((void *)(zsp * 2)));
-+
-+	/* freeing the sentinel must stay a no-op */
-+	kfree(ZERO_SIZE_PTR);
-+	kfree_sensitive(ZERO_SIZE_PTR);
-+	kvfree(ZERO_SIZE_PTR);
-+}
-+
- static int test_init(struct kunit *test)
- {
- 	slab_errors = 0;
-@@ -489,6 +531,7 @@ static struct kunit_case test_cases[] = {
- 	KUNIT_CASE(test_kfree_rcu_wq_destroy),
- 	KUNIT_CASE(test_leak_destroy),
- 	KUNIT_CASE(test_krealloc_redzone_zeroing),
-+	KUNIT_CASE(test_zero_size_alloc),
- #ifdef CONFIG_PERF_EVENTS
- 	KUNIT_CASE_SLOW(test_kmalloc_nolock_and_friends_perf),
- #endif
+-#define ZERO_OR_NULL_PTR(x) ((unsigned long)(x) <= \
+-				(unsigned long)ZERO_SIZE_PTR)
++#define ZERO_OR_NULL_PTR(x)						\
++({									\
++	unsigned long __zon_ptr = (unsigned long)(x);			\
++	__zon_ptr == 0 ||						\
++	__zon_ptr == (unsigned long)ZERO_SIZE_PTR;			\
++})
+ 
+ #include <linux/kasan.h>
+ 
 -- 
 2.53.0
 
