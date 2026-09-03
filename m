@@ -1,204 +1,155 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B2043C06F;
-	Thu,  3 Sep 2026 07:35:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0594078C3
+	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 09:36:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788420914; cv=none; b=aEIXq1FIuv2GgS4ZtOt4QJVxrie+XKwl7Ir4hDyrn8X9HA0Jh2qdzAIzZTSPuK1G3um0CTghbdTcgvUtIMFkJw8CWRNU1klbRZ8zWzgJ0Kjw9G6xurvWHf1HW9vtSGtVVCpOjYfgAwAFet9FiDBY0q5pptjB1PzbM0VzmfGS/wM=
+	t=1788428163; cv=none; b=BCtqD5B9QWola2LfeqOz26spvDZsV5yZtjlaEgq1R9dWa7EeSDyJNGg2I5FT8r0Focv9l7ieZh7zHYqCgxeN1GNnZoMaSXQ+UGQpUlxcvi0fbHDbmkbZcmhcDfSWq0/LhFlShHBCjqlpp4AMnwcwlITTM5kBbcOPFPh4X6ixUVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788420914; c=relaxed/simple;
-	bh=39Jx9KtDS8alLni2xt7CpfUzAqEr0FXk2RhxhmCdxPE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=QfETp5LLm5lx8qEufIGGNislFJ2jbGntUMXk7jNm6V7sVbuw42KlRJUCNX2OxgmWDSkgq9/FpZjXGtTB3hRFj7sCQQBTRZKRmyUdCjDrvSKSoTsnmL+jTpRsh00uZK1j4OSin6KZ39b6d5UqQCjFMSvVpodN1hQhUthHNOHQkIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BtqL1Dq1; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788428163; c=relaxed/simple;
+	bh=oPVsqXoZyPeTg36URmaN5Iw3DnLJlzjYxHnkAlYg7Uc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Gjiw+bVD7vCKuYGieAJ4D2+pVLeIuUCMQzuF207725+3b9NtNIlQwww5bUNvML8pHIbp+uB2TdQ65gcxCPBDP2o1+cICz1ES/NRcXwovfXzU0RUEulLTgHuktnDadSBhUBwlkk9Pq/DnKnL9UQrqAndTGf6pOxaY+PVl514dfCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PLkOi2Mp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BtqL1Dq1"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788420912; x=1819956912;
-  h=date:from:to:cc:subject:message-id;
-  bh=39Jx9KtDS8alLni2xt7CpfUzAqEr0FXk2RhxhmCdxPE=;
-  b=BtqL1Dq1UUIBssUrql1Ol/0533gthbUzkusAp5HX58bPQJIPMexEIoTy
-   LEKXcZ510oAFTL/wkiWnwSxmonz4k1WOxbYDDUbyAWSGzZQyBQrqq8Me0
-   W4QJTS6GsZhEazQfoZtHCYjf1ZZ3CqDbOK/+EOSeoPDpglyLVwURoich0
-   Q6I2xKSOmptCa+fBwy3+5PsFvOP2SAC011vL3v/zV4ptRjTa3heJJQ+kT
-   Bt+p52EsnV5Xjqhxpl+5Z23dx3O8NvDD003oCc8QMrNnmHaXQNHSnzSuO
-   7oBXni92gT/TF1IxorW12EWb0gFCygQfF01qRvJJUPTapOGFNTYl3hnw2
-   A==;
-X-CSE-ConnectionGUID: lIpHllgpR+2722a85vyaSA==
-X-CSE-MsgGUID: bOK3X8mrTTeWhTe6tHldWA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11894"; a="92711847"
-X-IronPort-AV: E=Sophos;i="6.25,258,1779174000"; 
-   d="scan'208";a="92711847"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2026 00:35:09 -0700
-X-CSE-ConnectionGUID: 49kDZtfySiiJC1KDq10zrQ==
-X-CSE-MsgGUID: l5cGXGY+SlStrJStJ6qeUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,258,1779174000"; 
-   d="scan'208";a="268308910"
-Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 03 Sep 2026 00:35:07 -0700
-Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x21yT-000000004JO-1LdR;
-	Thu, 03 Sep 2026 07:35:05 +0000
-Date: Thu, 03 Sep 2026 15:34:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: bui duc phuc <phucduc.bui@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-gpio@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Subject: [brgl:gpio/for-next 5/8] drivers/gpio/gpio-altera.c:224:11:
- warning: comparison between pointer and integer ('struct gpio_irq_chip *' and
- 'int')
-Message-ID: <202609031554.tpxA67sB-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PLkOi2Mp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1788428160;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UIVrwf02TP+O59kLnBOVNF6PWYsBEmmPNbrz+e5p2HQ=;
+	b=PLkOi2MplsqDOUDIt7pNf4JE3Pofp6e6YbLbn5ZhCqJO/lBWX/crAx4TZmmQCDbxA6xsqq
+	/nHovelAvRBjwmlTUEA6aDfUVlgL3GydKQcxyAQUwSOcrrl1X++DxVZOdGb5StE8qJkbci
+	POcEtiw5rymYys3Pyp5v9BFGt8/LJ2Y=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-35-XWfRrTY9OVaRhwiYzrty8A-1; Thu, 03 Sep 2026 05:35:59 -0400
+X-MC-Unique: XWfRrTY9OVaRhwiYzrty8A-1
+X-Mimecast-MFC-AGG-ID: XWfRrTY9OVaRhwiYzrty8A_1788428158
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-495529a93f9so20015345e9.3
+        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 02:35:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788428158; x=1789032958;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=UIVrwf02TP+O59kLnBOVNF6PWYsBEmmPNbrz+e5p2HQ=;
+        b=G1hgUgU0ZjRK+TaMQHRaERdTjHZ4/+1rLch/fIcFZ+f/NotsW4TbfmL8OpH9KsbQrE
+         LIgfrkycImuwXCCPiZxQ5vTN4+1DZ54fZStCs6MoRBqHGrvr0SDujIkwyVORKkfu1JjC
+         sH3mn4pzJDPocIDMebRLvyJji1eiAINjDPoF4rGlIvlReV4dTfv1zU6dUAB0YHAMw8O+
+         Rkb84GC3lcGPnpXyfbJ4NKz3kJxp1NtQv+I+/lnmCQo8zDKaHIzGpH3aeC/iR9RbzTFI
+         hk7zNkgPozAaV9NSfSyBXg+PVNEN2YWaivwhgngvixMF9pa08pUgxQGHRKCU+T5HE1gk
+         Q8HQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwLGZ8Fs/wKRUS2byQwU6/z709a2vyZACqnay0QEeM6rlUh4kZV4gaiNxZ4TvKBPyLAw/Tp@lists.linux.dev
+X-Gm-Message-State: AFuF++lw3NgyBuzCKxrEiqFRWvzRQvygGU5vzbTy/pNCMRdVUFsc2ZlM
+	4kGXP3O8JgVg6L8FjDsTaU6UrNkOErSN5SQYWpyvI/+bPCKy4s2wzyk5VUYNvCKFqN2+gAxtpKt
+	6/iLQffOpaZhitf8xNyW+F1aUXtMnCYoXJssBo1RB5WOygoYBiHkvE94=
+X-Gm-Gg: AYBFou0hKdX87fD0lCTb7xRQNFbVlrC3se/txzErQVFs26T6/LuJZQn/BUN/7bVbXoA
+	xlG/Ia+rh3iEZqZDbnARRmWpIbm2W8wEef+xZAi63FBtIoCs4R1oXHol8c90M890kmz12aWxxY9
+	N6OpjN8nrjF5hsCXKSUV+QdPHv7zK/IX0zuO+/PLdCaeBaAE2erR1eD5cne8Kqthvii8b54Rrdy
+	jo31vCaGfJq8ovQd7JuPsjEJZu/MtR4hLHFN9I9XLAzfjImapUEfs3Oc0I22NOqNHibTZWBemOz
+	74+TKN706UZS33MDoTua51f5o86LMya7Acs1JK+INi1gn1oScQwUrheUCdjjWbBwCK+BBx9jlIB
+	vk2FdrawraCNoL87Bxp10PygJ29PXQTmHHXKA3VxCRGtia+SlBpnQc5Hd8ioGkSfbLuzrjE8cxQ
+	==
+X-Received: by 2002:a05:600c:4693:b0:499:484a:81d0 with SMTP id 5b1f17b1804b1-49ce5817d63mr163904785e9.9.1788428158022;
+        Thu, 03 Sep 2026 02:35:58 -0700 (PDT)
+X-Received: by 2002:a05:600c:4693:b0:499:484a:81d0 with SMTP id 5b1f17b1804b1-49ce5817d63mr163904005e9.9.1788428157541;
+        Thu, 03 Sep 2026 02:35:57 -0700 (PDT)
+Received: from [192.168.188.218] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce55259ecsm81914915e9.2.2026.09.03.02.35.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2026 02:35:56 -0700 (PDT)
+Message-ID: <8f1c4df1-726e-4bcb-addc-b1fcf329013f@redhat.com>
+Date: Thu, 3 Sep 2026 11:35:55 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
+To: Joe Damato <joe@dama.to>, netdev@vger.kernel.org,
+ Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+ Rukhsana Ansari <rukhsana.ansari@broadcom.com>, horms@kernel.org,
+ colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
+ raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
+References: <20260828190900.1767611-1-joe@dama.to>
+ <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
+ <apa9qofhuatqGTra@devvm20253.cco0.facebook.com>
+ <b8b6db7b-353d-4d6a-b0b6-3b5e1be22008@redhat.com>
+ <apbpWrfu3VQu+CUz@devvm20253.cco0.facebook.com>
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <apbpWrfu3VQu+CUz@devvm20253.cco0.facebook.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-MFC-PROC-ID: 7QKG9__rv8SoMYgMQVStoDVMxGezyQpCiglfXlRirWs_1788428158
+X-Mimecast-Originator: redhat.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-head:   1900b5a41493e7050c68c1e62780d6fb9a209457
-commit: 6e6e585b603e4f679c2a33c8f0954ec88b52fd7a [5/8] gpio: altera: Handle errors from optional IRQ lookup
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260903/202609031554.tpxA67sB-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project ed1626b9d0eaf7c406f44da5fb595ad94559f54b)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260903/202609031554.tpxA67sB-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609031554.tpxA67sB-lkp@intel.com/
+sorry for the latency here.
 
-All warnings (new ones prefixed by >>):
+On 9/1/26 5:03 PM, Joe Damato wrote:
+> On Tue, Sep 01, 2026 at 02:10:04PM +0200, Paolo Abeni wrote:
+>> On 9/1/26 1:57 PM, Joe Damato wrote:
+>>> On Tue, Sep 01, 2026 at 10:16:54AM +0200, Paolo Abeni wrote:
+>>>> On 8/28/26 9:08 PM, Joe Damato wrote:
+>>>>>   - Moved bp->max_tpa_roundup_size init out of the early return path and
+>>>>>     documented that TPA is unsupported there, as suggested by Michael.
+>>>>
+>>>> Clashiko quite convincingly elaborates that the above is not enough:
+>>>>
+>>>> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260828190900.1767611-1-joe%40dama.to
+>>>>
+>>>> Could you please have a look?
+>> [...]
+>>> 3.) "The new assignment sits after the max_tpa_v2 == 0 early return, so on a P5+
+>>> device whose firmware reports max_aggs_supported == 0, does
+>>> bp->max_tpa_roundup_size stay 0 while BNXT_FLAG_TPA is set? ..."
+>>>
+>>> Michael commented in the v3 that this is a false positive, hence why I changed
+>>> the code from what it was in the v3 to this.
+>>
+>> This is the comment I referred to.
+>>
+>> AFAICS the problem is that the driver sets
+>>
+>> 	bp->dev->hw_features |= NETIF_F_LRO;
+>>
+>> regardless of the supported capabilities, and that seams to disagree
+>> with Michael.
+> 
+> OK, after re-reading this here's what I see: NETIF_F_LRO gets added with no
+> capability check and bnxt_fix_features() won't strip it afterwards. I think
+> the fix there is to add a BNXT_SUPPORTS_TPA() test, as a Fixes for
+> f0aa6a37a3db ("eth: bnxt: always recalculate features after XDP clearing, fix
+> null-deref").
+> 
+> I can send a separate patch for that, but it is unrelated to this patch which
+> fixes a crash on boot for Thor2 devices.
 
-   drivers/gpio/gpio-altera.c:224:7: error: use of undeclared identifier 'irq'; did you mean 'girq'?
-     224 |                 if (irq != -ENXIO)
-         |                     ^~~
-         |                     girq
-   drivers/gpio/gpio-altera.c:174:24: note: 'girq' declared here
-     174 |         struct gpio_irq_chip *girq;
-         |                               ^
->> drivers/gpio/gpio-altera.c:224:11: warning: comparison between pointer and integer ('struct gpio_irq_chip *' and 'int') [-Wpointer-integer-compare]
-     224 |                 if (irq != -ENXIO)
-         |                     ~~~ ^  ~~~~~~
-   drivers/gpio/gpio-altera.c:225:11: error: use of undeclared identifier 'irq'; did you mean 'girq'?
-     225 |                         return irq;
-         |                                ^~~
-         |                                girq
-   drivers/gpio/gpio-altera.c:174:24: note: 'girq' declared here
-     174 |         struct gpio_irq_chip *girq;
-         |                               ^
-   drivers/gpio/gpio-altera.c:225:11: error: incompatible pointer to integer conversion returning 'struct gpio_irq_chip *' from a function with result type 'int' [-Wint-conversion]
-     225 |                         return irq;
-         |                                ^~~
-   1 warning and 3 errors generated.
+With my limited knowledge of this driver, I thought the report being
+more strictly related to this patch, and the fix for them should land
+together.
 
+I'm fine with v5 approach.
 
-vim +224 drivers/gpio/gpio-altera.c
+/P
 
-   165	
-   166	static int altera_gpio_probe(struct platform_device *pdev)
-   167	{
-   168		struct gpio_generic_chip_config config;
-   169		struct device *dev = &pdev->dev;
-   170		int reg, ret;
-   171		struct altera_gpio_chip *altera_gc;
-   172		struct gpio_generic_chip *chip;
-   173		struct gpio_chip *gc;
-   174		struct gpio_irq_chip *girq;
-   175		int mapped_irq;
-   176	
-   177		altera_gc = devm_kzalloc(&pdev->dev, sizeof(*altera_gc), GFP_KERNEL);
-   178		if (!altera_gc)
-   179			return -ENOMEM;
-   180	
-   181		raw_spin_lock_init(&altera_gc->gpio_lock);
-   182	
-   183		altera_gc->regs = devm_platform_ioremap_resource(pdev, 0);
-   184		if (IS_ERR(altera_gc->regs))
-   185			return dev_err_probe(dev, PTR_ERR(altera_gc->regs),
-   186					     "failed to ioremap memory resource\n");
-   187	
-   188		chip = &altera_gc->chip;
-   189	
-   190		config = (struct gpio_generic_chip_config) {
-   191			.dev = dev,
-   192			.sz = 4,
-   193			.dat = altera_gc->regs + ALTERA_GPIO_DATA,
-   194			.set = altera_gc->regs + ALTERA_GPIO_DATA,
-   195			.dirout = altera_gc->regs + ALTERA_GPIO_DIR,
-   196		};
-   197	
-   198		ret = gpio_generic_chip_init(chip, &config);
-   199		if (ret)
-   200			return dev_err_probe(dev, ret, "unable to init generic GPIO\n");
-   201	
-   202		gc = &chip->gc;
-   203	
-   204		if (device_property_read_u32(dev, "altr,ngpio", &reg))
-   205			/* By default assume maximum ngpio */
-   206			gc->ngpio = ALTERA_GPIO_MAX_NGPIO;
-   207		else
-   208			gc->ngpio = reg;
-   209	
-   210		if (gc->ngpio > ALTERA_GPIO_MAX_NGPIO) {
-   211			dev_warn(&pdev->dev,
-   212				"ngpio is greater than %d, defaulting to %d\n",
-   213				ALTERA_GPIO_MAX_NGPIO, ALTERA_GPIO_MAX_NGPIO);
-   214			gc->ngpio = ALTERA_GPIO_MAX_NGPIO;
-   215		}
-   216	
-   217		gc->base = -1;
-   218		gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pfw", dev_fwnode(dev));
-   219		if (!gc->label)
-   220			return -ENOMEM;
-   221	
-   222		mapped_irq = platform_get_irq_optional(pdev, 0);
-   223		if (mapped_irq < 0) {
- > 224			if (irq != -ENXIO)
-   225				return irq;
-   226			goto skip_irq;
-   227		}
-   228	
-   229		if (device_property_read_u32(dev, "altr,interrupt-type", &reg)) {
-   230			dev_err(&pdev->dev,
-   231				"altr,interrupt-type value not set in device tree\n");
-   232			return -EINVAL;
-   233		}
-   234		altera_gc->interrupt_trigger = reg;
-   235	
-   236		girq = &gc->irq;
-   237		gpio_irq_chip_set_chip(girq, &altera_gpio_irq_chip);
-   238	
-   239		if (altera_gc->interrupt_trigger == IRQ_TYPE_LEVEL_HIGH)
-   240			girq->parent_handler = altera_gpio_irq_leveL_high_handler;
-   241		else
-   242			girq->parent_handler = altera_gpio_irq_edge_handler;
-   243		girq->num_parents = 1;
-   244		girq->parents = devm_kcalloc(&pdev->dev, 1, sizeof(*girq->parents),
-   245					     GFP_KERNEL);
-   246		if (!girq->parents)
-   247			return -ENOMEM;
-   248		girq->default_type = IRQ_TYPE_NONE;
-   249		girq->handler = handle_bad_irq;
-   250		girq->parents[0] = mapped_irq;
-   251	
-   252	skip_irq:
-   253		ret = devm_gpiochip_add_data(dev, gc, altera_gc);
-   254		if (ret) {
-   255			dev_err(&pdev->dev, "Failed adding memory mapped gpiochip\n");
-   256			return ret;
-   257		}
-   258	
-   259		return 0;
-   260	}
-   261	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
