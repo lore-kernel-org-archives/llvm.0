@@ -1,219 +1,109 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-qv1-f99.google.com (mail-qv1-f99.google.com [209.85.219.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 181954FECD2
-	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 20:37:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBB333F8B1
+	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 23:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788467867; cv=none; b=HUxWbXpw5lXcYjfNC8oz1s5k3fMHfLFTIM7FoBQu7//PbHoJhyArc34CwoM1Zeq84i6PvA6jEeJPcXjIPPXJPctAzqKNEJ31GhkfWZBVRCm1IY0+IlOGbSrgY3IHydlLji4mSBe3aDMBaWQKGcGYFgG7oERmFxSH7k9T8S+FU74=
+	t=1788478421; cv=none; b=DHyBNfjc7DKsJxuoQfx6ZFyC8A3bwWZ23qM3LRl2tTEopTpz1c6ktUJgvTsSJPcAr8mHmkCRX4yXlxFuQwXLqHKHhZ7oUhGxtPmwEO7yWISXBr0Tch6HiNgExgdFe+T+Epg89YWDlCsppGp+h1rJs1e/rbs/keKRs7+0Qst5y3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788467867; c=relaxed/simple;
-	bh=2UBlYQEyGWOQDtIcz85wPWpuQThTw5iKFdTHWIgVFSQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Do+ejlVm9mtEe61b60Gg6HqJuEwbgIRn3q9EBouY6WnrekdQMIM8Uaj/SGV41Kt7O2KAzFdR5SLNrINYJxXttZGPpIIT4c9HX4V1mKJJs4m8Tnz5/I8wifjPhoHPeximzIpCGfQ4dwUA+lcrCOPGt9sxP8wMMOkDzZLBRJYA1BU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UINMliz1; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788478421; c=relaxed/simple;
+	bh=/qWtFqHBkrtLXXAD1XpvUaW1zHKMs9ArEGyHDtyLBkA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Cs0gZApbQwipTZWdPIViOVlYUCUbmNXriPX5dgSK/pvB3mhW4a8xG1Dnwz+XZpEgswmRtAwO8ThFw8Hn9tA40QCxLvmUVQVt4I159IjWWlvNuJgNUX7KzI94etSZ7a4c31Ier7GHzvNbpAzQBsUHdk+M6ZB5alPQp8xfIWMGtwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=FnO8MgWY; arc=none smtp.client-ip=209.85.219.99
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UINMliz1"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-47f96c5b722so231262f8f.0
-        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 13:37:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788467856; x=1789072656; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JG5wHGxobGMru3PHPCCaPFK+av72ZMxaO+XhGsfKu1Y=;
-        b=UINMliz1fwR39Z6IZXzU2docYkmXwLBu3sLLkoBe4lZSre0TKTrxr4+6L8Hl9NYLOz
-         cDlzA1siQlQ4sfaz+xgZQmAS9J9Iu+z0PvE8Ok9AxQSLBb54AVcn3IrmmtdhLY1Qq4RW
-         8Fu+ukvQlRrPyGm5LOY4QiKPrm49BvyJvvp1wJRUIfa2UaVpYevpNECI3110LpQx0DUN
-         R4i/AVHtMTpWQUGR8RxSAO+9qTUgjN4oPrwoZcLnjh7wM5r8nFMq8W52ChYOmOIV6AKu
-         qilN2EkM0G8EI+4FMGVoXsWhkc2EkrUI1vPLnZya7Oahvx+GSyFSLFS4vrsR+/NycCRx
-         pGww==
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="FnO8MgWY"
+Received: by mail-qv1-f99.google.com with SMTP id 6a1803df08f44-90d7fa95a58so4581366d6.1
+        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 16:33:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788467856; x=1789072656;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JG5wHGxobGMru3PHPCCaPFK+av72ZMxaO+XhGsfKu1Y=;
-        b=Wdzp+lm4gPBQcAT4DsaYbx+uWE36NgTIhYl7sTTnnABy7nQDbGz1ODYSFBpLPpefpf
-         DVlUO+Q3mBgVQZgMAQVJwzi4xMwQnyB9TbvENQOau5fhcDOBZvv+F3V0wwTUbefzzHz5
-         WB2ydn7Ix69+qmsENcRqJGFfah6ryqYeHxixA6AZtOn3PQCb8+XsbzMWoiCc+QKgm46h
-         JaS9RA1vv95zPndhfGGpFlcyaMZF3w9SMnmAVjBqfeUH2B5suV0UbUMFXsg6qythAwZK
-         3YHJWWHF8g/TB607wq5Phbs3kwi5nPVp7N0UeC3i6d2KM2LuuPy1fdWoB1VblleQi82+
-         AeYg==
-X-Forwarded-Encrypted: i=1; AKwUvBwEhavZ912RlOQzM+Mu3YVLIv3A6JRcHzxKeAJ02xvhv+TdvNJMSeBfKn0VY7KZsbbKnDOB@lists.linux.dev
-X-Gm-Message-State: AFuF++lPfVDY1dxYp49ywFM1J30K3Kmr+xp4fxZhOIc9l83K9lRT9jW3
-	+dvHsS5I4viNazUWesGUYpVrVNv6CyFSxcFP8EHAYUGh4VUa3S8fuFwt
-X-Gm-Gg: AYBFou0FbGBSl5mpKcPGYbItTJYjWBSuMAhqLrA1FCDDNvN9Drck94yavGEMDBRkl4J
-	jZ13t+NSDET4rfTCe4zloseObndn4Yv59VG3Sp1JkDQBd9CM5S30Db26yiaBfe7sB2iPhluTyBn
-	1hjI/Dq5xymE5S31bvWQtsuMQwe9cbZb/CTXGlw4OBdVMQYuFWyhOcc4SWYIf5mWCfGT9sEGVVP
-	TQNyJ1HwO9cak/87Nf02EDnPJ0BxJ4TZHrodTieYYkIwazjCatVvyEBR5uzG4qLtqF5GcuSWURH
-	KGJRbkHEbab5DRwDLkChFchyACJCAvdRH3bDEgW41T217KNgCMZkQhzINty2vmtwDoO3EUAXOHO
-	uG7WsdiC9+unyq3xtd/qBHLzwzJZuRxKELC2c/mVCfZQ2P0SsTL8gAJQct9XWJPb7kP57ZEctwO
-	YI/s7sq0ZMpsmWJsD6Cir4CjpmKcHw8G7Wsg1dG8pvvXRyzXCKC4wzkWKEbpk92R35Aa4oVhlFo
-	xbKJzdOnhi+QpyhhaQAdE6gRMh1biL2olbhR0nyMNUxPWMAiU1B3bMpNInfLQP7dN4JXdvZOm95
-	POt+G0zK8iEqBCPLldmKty+tPxSJw0MulLeNCsoU7yl2wm0a+yGkCkeWIHD3ciGI4Aoou5v6tht
-	zh5W8
-X-Received: by 2002:a05:6000:4b0f:b0:484:3647:d977 with SMTP id ffacd0b85a97d-485872df445mr2610818f8f.27.1788467855677;
-        Thu, 03 Sep 2026 13:37:35 -0700 (PDT)
-Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-a979-9501-3df6-d7fa-8a5a-06c5.310.pool.telefonica.de. [2a02:3100:a979:9501:3df6:d7fa:8a5a:6c5])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48588394fa1sm1005070f8f.8.2026.09.03.13.37.34
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 03 Sep 2026 13:37:35 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Vlastimil Babka <vbabka@kernel.org>,
-	Harry Yoo <harry@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Hao Li <hao.li@linux.dev>,
-	Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-hardening@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v3 5/5] slab: test ERR_PTR handling in kfree and hardened usercopy
-Date: Thu,  3 Sep 2026 22:37:20 +0200
-Message-Id: <20260903203720.63689-6-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20260903203720.63689-1-kmehltretter@gmail.com>
-References: <20260903203720.63689-1-kmehltretter@gmail.com>
+        d=1e100.net; s=20251104; t=1788478419; x=1789083219;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=Qy1+fiy5vVG6Fgi2325/mnWQkrttmVDQVIUSqg+HoGM=;
+        b=QGq3fyiejBSqGxH1J5kuFbGzarf7fep9cO7FfyLV8oTJqEYWjGNkZHPt2yCRXNR7jp
+         qmuZYBfr83OOECxoQGDkgPpWVwBLq8kK5aqvAs63o/HU8jfE95dg7QrobzTcxv1dZDHh
+         yXJpiJdBWgR527ruVWBpzMEqoAvOwsowTRtWhRyP0iSnN21aWn0TQglGyMd1XQ0iEc69
+         R3FUXYHx4TaSOLKY2h9n1wVdwdy83zI9dpkJlhFh1+eleOBFhdwUf+Vd6x1edj49eNhc
+         aw8TcseW41YpQe9owoFjVRfJ6P3IcQe6c1o4EbUzJaeiJS1MtuEWr1wUJ94hUvkhBcA7
+         aMTA==
+X-Forwarded-Encrypted: i=1; AKwUvBwwofb045ujn28KcB75SU3DKhTkJioRBEem2J7GIal2kIZ1Mft954Wj2Lsn3pKjOQDBerN1@lists.linux.dev
+X-Gm-Message-State: AFuF++nJmCqgFGBAtFy6uY9Ma675z3fUY4jcqvCRFlMPPDg/7GIG2XHV
+	zScdSoI8oBn9cTyD8BY6iqdCrdoFWOYNLsX6K9CuYG55s6j1I7oAczKXZPV6j+YKR3qLJUu8HLp
+	GOuPvZem8nAeitsy4gykw9OGxj3tzwyjIuySflhhk/FVEOkAzUlSyh2LxDwf+2I6FbRDJkJbbnN
+	7aLwCWJnVUw8E/x/alrpLwybFRkgrzrQRd8AJjCnNu9ZrSqCv+3Fot5eeKsKJsHdhmdCZCOpg2G
+	1BnQ3aknay+kQ==
+X-Gm-Gg: AYBFou1J3CFNLlRSDhtOieMcelQyTpMQjrwnhp9hk4KqvHn+yfToyx6my7Nl3z8IRhd
+	UUhvZhWdgE2FRT70q3YNS/ed8+Y9qrIvVp0TNL7KKPcDHxc2Ez6HtqT3X5jE9MM1OWmdQpZt2+7
+	bqXsUo5jLnViip9WCVpgmDQw08TIwq+q6W1e9pdh72+sVY2NgSK0+c5d8a0PjUs4fA7zklbR3RB
+	RpAg5vy6qc5K9JKs/JqmBnE/p3tAPkwOSS6bKe3G+f8iGlHeoNdYheC1C0frQrkcZ2NRMB/njsM
+	ThTMGmkhdd4u0g58igemZToaLYG6zi0G5gXmisuN0y01rAEQt6IA7bNCBbMIN9PERdcnQzZ8P65
+	8Ap+zrmz8YkDnbS7qQp1X/pGHO7BjHgn9rdPwnxLeaWebWVEgKyqZEJf+YxSJsnTeB74jkWxJci
+	+nHymsv7/Xlw0RDTa1a39flvDfXyrN08x6Gghi+ixX
+X-Received: by 2002:a05:6214:4610:b0:90e:7fdb:8583 with SMTP id 6a1803df08f44-9103efb2f17mr37582026d6.8.1788478418890;
+        Thu, 03 Sep 2026 16:33:38 -0700 (PDT)
+Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-27.dlp.protect.broadcom.com. [144.49.247.27])
+        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-91040768000sm188996d6.27.2026.09.03.16.33.38
+        for <llvm@lists.linux.dev>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 03 Sep 2026 16:33:38 -0700 (PDT)
+X-Relaying-Domain: broadcom.com
+X-CFilter-Loop: Reflected
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2d6df0a1e18so6749735ad.1
+        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 16:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1788478418; x=1789083218; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Qy1+fiy5vVG6Fgi2325/mnWQkrttmVDQVIUSqg+HoGM=;
+        b=FnO8MgWYFFtRfa3LNy0dXu4c0afPuknQZYfQhTk6DJZIm/CcUMI/CRR0wVDaRi+Asr
+         iYsvHkNlf6c42lXarXRxgOr+Ca8kWgkg3kWzgtXYA+WZFxkgVPIT4kypi2HsG7YuLd5W
+         /sPa9332Ky6pbIrmgre8ITWk6pNU6lJTKN/bs=
+X-Forwarded-Encrypted: i=1; AKwUvBw3EycgsA+X8/j11o8kBbCZge7IQiJP0S1SOgy//gsGgkfpDPtZWsI2SE0iru+s+zRvt5ga@lists.linux.dev
+X-Received: by 2002:a17:90b:1343:b0:38e:9eb2:9d43 with SMTP id 98e67ed59e1d1-39b261b1bcfmr3210966a91.16.1788478417614;
+        Thu, 03 Sep 2026 16:33:37 -0700 (PDT)
+X-Received: by 2002:a17:90b:1343:b0:38e:9eb2:9d43 with SMTP id 98e67ed59e1d1-39b261b1bcfmr3210904a91.16.1788478417146;
+        Thu, 03 Sep 2026 16:33:37 -0700 (PDT)
+Received: from [10.211.247.235] ([192.19.50.250])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339885d29esm2238141eec.2.2026.09.03.16.33.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Sep 2026 16:33:36 -0700 (PDT)
+Message-ID: <b858b84b-a1ef-45b4-a7c1-35ba28490e35@broadcom.com>
+Date: Thu, 3 Sep 2026 16:33:42 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] x86/vmware: Fix i386 high-bandwidth hypercall
+ arguments
+To: Zack Rusin <zack.rusin@broadcom.com>, Borislav Petkov <bp@alien8.de>,
+ Ajay Kaher <ajay.kaher@broadcom.com>,
+ Alexey Makhalov <alexey.makhalov@broadcom.com>, x86@kernel.org
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, virtualization@lists.linux.dev,
+ bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org,
+ Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+References: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
+From: Maaz Mombasawala <maaz.mombasawala@broadcom.com>
+Content-Language: en-US
+In-Reply-To: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
 
-Add KUnit coverage that kfree() warns and returns for ERR_PTR values
-while remaining silent for NULL and ZERO_SIZE_PTR.
+LGTM!
 
-Add an LKDTM test that verifies hardened usercopy rejects an ERR_PTR
-before attempting the copy.
+Reviewed-by: Maaz Mombasawala <maaz.mombasawala@broadcom.com>
 
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
- drivers/misc/lkdtm/usercopy.c           | 27 +++++++++++++++++++++++++
- lib/tests/slub_kunit.c                  | 18 +++++++++++++++++
- tools/testing/selftests/lkdtm/tests.txt |  1 +
- 3 files changed, 46 insertions(+)
-
-diff --git a/drivers/misc/lkdtm/usercopy.c b/drivers/misc/lkdtm/usercopy.c
-index 67db57249a34..10751e48211f 100644
---- a/drivers/misc/lkdtm/usercopy.c
-+++ b/drivers/misc/lkdtm/usercopy.c
-@@ -4,6 +4,7 @@
-  * hardening.
-  */
- #include "lkdtm.h"
-+#include <linux/err.h>
- #include <linux/slab.h>
- #include <linux/highmem.h>
- #include <linux/vmalloc.h>
-@@ -273,6 +274,31 @@ static void do_usercopy_slab_whitelist(bool to_user)
- }
- 
- /* Callable tests. */
-+static void lkdtm_USERCOPY_ERR_PTR(void)
-+{
-+	unsigned long user_addr;
-+	size_t size = unconst + 1;
-+
-+	user_addr = vm_mmap(NULL, 0, PAGE_SIZE,
-+			    PROT_READ | PROT_WRITE,
-+			    MAP_ANONYMOUS | MAP_PRIVATE, 0);
-+	if (user_addr >= TASK_SIZE) {
-+		pr_warn("Failed to allocate user memory\n");
-+		return;
-+	}
-+
-+	pr_info("attempting bad one-byte copy_to_user() from ERR_PTR\n");
-+	if (copy_to_user((void __user *)user_addr, ERR_PTR(-EINVAL), size)) {
-+		pr_warn("copy_to_user failed, but lacked Oops\n");
-+		goto free_user;
-+	}
-+	pr_err("FAIL: ERR_PTR usercopy not detected!\n");
-+	pr_expected_config_param(CONFIG_HARDENED_USERCOPY, "hardened_usercopy");
-+
-+free_user:
-+	vm_munmap(user_addr, PAGE_SIZE);
-+}
-+
- static void lkdtm_USERCOPY_SLAB_SIZE_TO(void)
- {
- 	do_usercopy_slab_size(true);
-@@ -439,6 +465,7 @@ void __exit lkdtm_usercopy_exit(void)
- }
- 
- static struct crashtype crashtypes[] = {
-+	CRASHTYPE(USERCOPY_ERR_PTR),
- 	CRASHTYPE(USERCOPY_SLAB_SIZE_TO),
- 	CRASHTYPE(USERCOPY_SLAB_SIZE_FROM),
- 	CRASHTYPE(USERCOPY_SLAB_WHITELIST_TO),
-diff --git a/lib/tests/slub_kunit.c b/lib/tests/slub_kunit.c
-index 923d8646bca1..079563387007 100644
---- a/lib/tests/slub_kunit.c
-+++ b/lib/tests/slub_kunit.c
-@@ -507,6 +507,23 @@ static void test_zero_size_alloc(struct kunit *test)
- 	kvfree(ZERO_SIZE_PTR);
- }
- 
-+static void test_kfree_err_ptr(struct kunit *test)
-+{
-+	if (!IS_ENABLED(CONFIG_BUG))
-+		kunit_skip(test, "requires CONFIG_BUG");
-+
-+	kunit_warning_suppress(test) {
-+		kfree(NULL);
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 0);
-+
-+		kfree(ZERO_SIZE_PTR);
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 0);
-+
-+		kfree(ERR_PTR(-EINVAL));
-+		KUNIT_EXPECT_SUPPRESSED_WARNING_COUNT(test, 1);
-+	}
-+}
-+
- static int test_init(struct kunit *test)
- {
- 	slab_errors = 0;
-@@ -532,6 +549,7 @@ static struct kunit_case test_cases[] = {
- 	KUNIT_CASE(test_leak_destroy),
- 	KUNIT_CASE(test_krealloc_redzone_zeroing),
- 	KUNIT_CASE(test_zero_size_alloc),
-+	KUNIT_CASE(test_kfree_err_ptr),
- #ifdef CONFIG_PERF_EVENTS
- 	KUNIT_CASE_SLOW(test_kmalloc_nolock_and_friends_perf),
- #endif
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index bec57a02913a..d3e38c1c75cd 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -70,6 +70,7 @@ REFCOUNT_DEC_AND_TEST_SATURATED Saturation detected: still saturated
- REFCOUNT_SUB_AND_TEST_SATURATED Saturation detected: still saturated
- #REFCOUNT_TIMING timing only
- #ATOMIC_TIMING timing only
-+USERCOPY_ERR_PTR Kernel memory exposure attempt detected from ERR_PTR
- USERCOPY_SLAB_SIZE_TO
- USERCOPY_SLAB_SIZE_FROM
- USERCOPY_SLAB_WHITELIST_TO
 -- 
-2.53.0
-
+Maaz Mombasawala <maaz.mombasawala@broadcom.com>
