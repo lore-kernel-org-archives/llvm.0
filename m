@@ -1,73 +1,87 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E0594078C3
-	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 09:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6F144C64B
+	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 11:28:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788428163; cv=none; b=BCtqD5B9QWola2LfeqOz26spvDZsV5yZtjlaEgq1R9dWa7EeSDyJNGg2I5FT8r0Focv9l7ieZh7zHYqCgxeN1GNnZoMaSXQ+UGQpUlxcvi0fbHDbmkbZcmhcDfSWq0/LhFlShHBCjqlpp4AMnwcwlITTM5kBbcOPFPh4X6ixUVw=
+	t=1788434886; cv=none; b=YlPDlaQV/fr4Z+vywoj4KX0DUaDj1B3NDMxgaZf1UWIRTkgVwzgdtgSZcZKaR7372y5+eSVHgHhURCL010Dd7z4Umfq73I1XQ0e3/3ZNYCLxtkXxCYBBqRmoR5Ae51PtDt7YJsxg0Y42+VNkpnm39jyP5Kcp+C+hHh2UeCsziEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788428163; c=relaxed/simple;
-	bh=oPVsqXoZyPeTg36URmaN5Iw3DnLJlzjYxHnkAlYg7Uc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Gjiw+bVD7vCKuYGieAJ4D2+pVLeIuUCMQzuF207725+3b9NtNIlQwww5bUNvML8pHIbp+uB2TdQ65gcxCPBDP2o1+cICz1ES/NRcXwovfXzU0RUEulLTgHuktnDadSBhUBwlkk9Pq/DnKnL9UQrqAndTGf6pOxaY+PVl514dfCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PLkOi2Mp; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1788434886; c=relaxed/simple;
+	bh=Z45IKqKNmKHMoDxnTs1W9/1hhzkoL1sjpuMqPRPU54U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VSfAKn681RHX/bcUQooOk9ZPMExog+XyWih9vzmkXplZUYBvzgTH5+JJU8gbuzhO/dSj4FIZ0FFgKsl01iE5CyYLWARQVJP1LrLbi7j6Afmuj1eC9oBpfkUT9PedzNs9pJG3d6NAvpYmAZc/KPT9wfS1/pU9uhTMCjJQOdb4oyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=n5tsVqlu; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=hIRpQiRd; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PLkOi2Mp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1788428160;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UIVrwf02TP+O59kLnBOVNF6PWYsBEmmPNbrz+e5p2HQ=;
-	b=PLkOi2MplsqDOUDIt7pNf4JE3Pofp6e6YbLbn5ZhCqJO/lBWX/crAx4TZmmQCDbxA6xsqq
-	/nHovelAvRBjwmlTUEA6aDfUVlgL3GydKQcxyAQUwSOcrrl1X++DxVZOdGb5StE8qJkbci
-	POcEtiw5rymYys3Pyp5v9BFGt8/LJ2Y=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-35-XWfRrTY9OVaRhwiYzrty8A-1; Thu, 03 Sep 2026 05:35:59 -0400
-X-MC-Unique: XWfRrTY9OVaRhwiYzrty8A-1
-X-Mimecast-MFC-AGG-ID: XWfRrTY9OVaRhwiYzrty8A_1788428158
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-495529a93f9so20015345e9.3
-        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 02:35:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788428158; x=1789032958;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="n5tsVqlu";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="hIRpQiRd"
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 683AHFwu440393
+	for <llvm@lists.linux.dev>; Thu, 3 Sep 2026 11:27:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	LZoiINMgbp5hKUHJne2KrubQpmenpvQCezic7fpoj7E=; b=n5tsVqlu08K2ECY9
+	mJjVCzKlbOrlYE8NezbdYjdU9cm3Vxro63CbYswlKBQwE+PM0mYnHKEkC2H5pcNz
+	EkRveaEDet+OB3UOjT6DVvTQjp8tlJQBIBtvnGF+L0f05s6gBAciXoaQTRrDJ1oD
+	ArllJBbAuq0LqQHyCXvE0vA/Cy0r2xbNwNAr0vSZ9zmC//VLQq7nJ9XqO7/Eh/Mr
+	+M13hDqvW765GgZY0/Y/DL+LgvXaaP0Y96GTxpbktxnAYck7jz3PNeL6JahLg/fI
+	+AXapsbMbfZZ2dL1v6u31aVZV+EOnbPeHwZA+hNew0JxzNisjqZTc4w1nt+U3aU8
+	9FA0fw==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gf6p70bfx-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 11:27:59 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-9310484c005so44925185a.3
+        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 04:27:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1788434879; x=1789039679; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LZoiINMgbp5hKUHJne2KrubQpmenpvQCezic7fpoj7E=;
+        b=hIRpQiRd4IamcYokcpOMEPyq0deIJ/Qc6qKnuPao7tjAlVJqXEnKe2XfPG3dfUDVY/
+         GFxXofBCMXvW/lGhyg1LHs3ozTA1Rv8jzze7D+qCcVxQsxdbZVXi4TqXN3CLMnEFKUwR
+         xvlzKqNHmSWI+gO1aqJAfxQgRMObqaBzKb4ss2WqJZwdXCErewRqtjwoRxmZBaEr8Yf8
+         krpoS+j4gKqXP/eoKGZ7PmcYW62mvnYKF6crtB4C2YEmJexbJnp0dIMk/AlN8SnOcl19
+         8GOgxmt7mtjrvgvBN1qLYxL4O31M18ll0naR67VeZR5Wb/pAzKulVFBXtQpdfMxcuv/p
+         K4BQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788434879; x=1789039679;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=UIVrwf02TP+O59kLnBOVNF6PWYsBEmmPNbrz+e5p2HQ=;
-        b=G1hgUgU0ZjRK+TaMQHRaERdTjHZ4/+1rLch/fIcFZ+f/NotsW4TbfmL8OpH9KsbQrE
-         LIgfrkycImuwXCCPiZxQ5vTN4+1DZ54fZStCs6MoRBqHGrvr0SDujIkwyVORKkfu1JjC
-         sH3mn4pzJDPocIDMebRLvyJji1eiAINjDPoF4rGlIvlReV4dTfv1zU6dUAB0YHAMw8O+
-         Rkb84GC3lcGPnpXyfbJ4NKz3kJxp1NtQv+I+/lnmCQo8zDKaHIzGpH3aeC/iR9RbzTFI
-         hk7zNkgPozAaV9NSfSyBXg+PVNEN2YWaivwhgngvixMF9pa08pUgxQGHRKCU+T5HE1gk
-         Q8HQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwLGZ8Fs/wKRUS2byQwU6/z709a2vyZACqnay0QEeM6rlUh4kZV4gaiNxZ4TvKBPyLAw/Tp@lists.linux.dev
-X-Gm-Message-State: AFuF++lw3NgyBuzCKxrEiqFRWvzRQvygGU5vzbTy/pNCMRdVUFsc2ZlM
-	4kGXP3O8JgVg6L8FjDsTaU6UrNkOErSN5SQYWpyvI/+bPCKy4s2wzyk5VUYNvCKFqN2+gAxtpKt
-	6/iLQffOpaZhitf8xNyW+F1aUXtMnCYoXJssBo1RB5WOygoYBiHkvE94=
-X-Gm-Gg: AYBFou0hKdX87fD0lCTb7xRQNFbVlrC3se/txzErQVFs26T6/LuJZQn/BUN/7bVbXoA
-	xlG/Ia+rh3iEZqZDbnARRmWpIbm2W8wEef+xZAi63FBtIoCs4R1oXHol8c90M890kmz12aWxxY9
-	N6OpjN8nrjF5hsCXKSUV+QdPHv7zK/IX0zuO+/PLdCaeBaAE2erR1eD5cne8Kqthvii8b54Rrdy
-	jo31vCaGfJq8ovQd7JuPsjEJZu/MtR4hLHFN9I9XLAzfjImapUEfs3Oc0I22NOqNHibTZWBemOz
-	74+TKN706UZS33MDoTua51f5o86LMya7Acs1JK+INi1gn1oScQwUrheUCdjjWbBwCK+BBx9jlIB
-	vk2FdrawraCNoL87Bxp10PygJ29PXQTmHHXKA3VxCRGtia+SlBpnQc5Hd8ioGkSfbLuzrjE8cxQ
-	==
-X-Received: by 2002:a05:600c:4693:b0:499:484a:81d0 with SMTP id 5b1f17b1804b1-49ce5817d63mr163904785e9.9.1788428158022;
-        Thu, 03 Sep 2026 02:35:58 -0700 (PDT)
-X-Received: by 2002:a05:600c:4693:b0:499:484a:81d0 with SMTP id 5b1f17b1804b1-49ce5817d63mr163904005e9.9.1788428157541;
-        Thu, 03 Sep 2026 02:35:57 -0700 (PDT)
-Received: from [192.168.188.218] (ip232-47-231-195.pool-bba.aruba.it. [195.231.47.232])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49ce55259ecsm81914915e9.2.2026.09.03.02.35.55
+        bh=LZoiINMgbp5hKUHJne2KrubQpmenpvQCezic7fpoj7E=;
+        b=NoSvxWAteNXIB7dq6yMfEah90NBW4ShU8DVWFHDbrc3mwHRwoRO47+yk/7dLKdeycw
+         WT7bExEi7fw4KWCY3aKhjE7BXNFiju2ZP1C8uPGZFPlq+XxI8oKQwS7zkzuH1RlC/22s
+         tJGaC3Xhs1IHzJtxkYSWm6vcmtuv3HMOpdfFjasp45ngFxVuq2oC2ib0iCuaZHd+G7RY
+         ShNsZW10W79WDC/bRrcke6hDauPLAwj7QH1Vcp6DZmApevQ9rXPp4FKmKetYOLQj9eaG
+         ypqiMKaHlaH5KW3iXBT5c8h+lYdk6+PBw14bMYV366naj7V6gcCeEp2FmzACTozg/f0T
+         DnyA==
+X-Forwarded-Encrypted: i=1; AKwUvBxeF8ouJnjfoeTCVfLhjwWLBZBWiie1MqZVy9mkHW3AqFuGQ4QMkDXIhgDWFBb8OUtwr53g@lists.linux.dev
+X-Gm-Message-State: AFuF++nYVui7RdoCoCF8JSRLoHq5fff+cG0QBN4tg7j4Q2OpuBIoGCLS
+	wrrxAnm5jKs0UYsIcnGLSRAQ9B2JV6SCpfzNtbq7WXUorsQOn2aDUODdla6Y1336rfZeN3GdALU
+	HJdPDsOKoLZw6vo75/EsqBFF7o/flcTr457m/A2k0weOUtigdkMdSF+V1
+X-Gm-Gg: AYBFou3cE9Y7hLUVHlBAdmsXZVE9MiFmMx/Z20fQDMrYOYBQ4cxLFJScLPcViA4COP2
+	Bm4HROU+WjHA0aDJwF19uVT/rhZnWHl3m+34ZT/EHt/0w6mHr2Bmmo6iag7sM8/UAeGnuguRmux
+	bKL6gTjFalUeEHHFrZB0B2GZJhFHmDK7jDlYDpPK2secBkKJvy3/FbcTIT0p7aTYxnItn/acruQ
+	DhXww593oN8h51rueAppg03Q/KOe8v4TC8JGZwHmibDfKE0AaZXPtf03RwAKUGw+tNdESIFZCM5
+	Z2sQ+UCE+Ay4Nv5zFOHTaVnsiNjKpPWASVv/ut9F1KhRvOD9u2OMPcRyGOGl9MnCcX5tykcQFyj
+	rd9QCghS0yAWTobgmD8mTeA==
+X-Received: by 2002:a05:620a:270b:b0:939:4a24:4de4 with SMTP id af79cd13be357-9396107ce10mr867217885a.5.1788434878364;
+        Thu, 03 Sep 2026 04:27:58 -0700 (PDT)
+X-Received: by 2002:a05:620a:270b:b0:939:4a24:4de4 with SMTP id af79cd13be357-9396107ce10mr867212985a.5.1788434877711;
+        Thu, 03 Sep 2026 04:27:57 -0700 (PDT)
+Received: from [192.168.202.12] ([178.235.128.140])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c25f4244e45sm86239866b.60.2026.09.03.04.27.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 02:35:56 -0700 (PDT)
-Message-ID: <8f1c4df1-726e-4bcb-addc-b1fcf329013f@redhat.com>
-Date: Thu, 3 Sep 2026 11:35:55 +0200
+        Thu, 03 Sep 2026 04:27:56 -0700 (PDT)
+Message-ID: <de251a59-1ace-4b9c-beb2-99fe6f3cb842@oss.qualcomm.com>
+Date: Thu, 3 Sep 2026 13:27:53 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,81 +89,206 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4] bnxt_en: Bound SW TPA IDs to prevent crashes
-To: Joe Damato <joe@dama.to>, netdev@vger.kernel.org,
- Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
- Rukhsana Ansari <rukhsana.ansari@broadcom.com>, horms@kernel.org,
- colin.winegarden@broadcom.com, linux-kernel@vger.kernel.org,
- raphaelcf@meta.com, stable@vger.kernel.org, llvm@lists.linux.dev
-References: <20260828190900.1767611-1-joe@dama.to>
- <1c87458d-7d76-4da4-9981-51756cef391b@redhat.com>
- <apa9qofhuatqGTra@devvm20253.cco0.facebook.com>
- <b8b6db7b-353d-4d6a-b0b6-3b5e1be22008@redhat.com>
- <apbpWrfu3VQu+CUz@devvm20253.cco0.facebook.com>
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <apbpWrfu3VQu+CUz@devvm20253.cco0.facebook.com>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 7QKG9__rv8SoMYgMQVStoDVMxGezyQpCiglfXlRirWs_1788428158
-X-Mimecast-Originator: redhat.com
+Subject: Re: [PATCH v6] leds: rgb: leds-qcom-lpg: Fix LED color balancing in
+ HW pattern mode
+To: Fenglin Wu <fenglin.wu@oss.qualcomm.com>, linux-arm-msm@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Pavel Machek <pavel@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>,
+        Guru Das Srinagesh <linux@gurudas.dev>,
+        Nathan Chancellor
+ <nathan@kernel.org>,
+        Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+        Bill Wendling <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Cc: David Collins <david.collins@oss.qualcomm.com>,
+        Subbaraman Narayanamurthy <subbaraman.narayanamurthy@oss.qualcomm.com>,
+        Kamal Wadhwa <kamal.wadhwa@oss.qualcomm.com>, kernel@oss.qualcomm.com,
+        Pavel Machek <pavel@ucw.cz>, linux-leds@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+References: <20260716-lpg-rgb-color-balance-fix-v6-1-b49d51528f61@oss.qualcomm.com>
 Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20260716-lpg-rgb-color-balance-fix-v6-1-b49d51528f61@oss.qualcomm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: pShqBrCMlPRr46GyEFqms-LO2vXu7sGO
+X-Proofpoint-ORIG-GUID: pShqBrCMlPRr46GyEFqms-LO2vXu7sGO
+X-Authority-Analysis: v=2.4 cv=OZyoyBTY c=1 sm=1 tr=0 ts=6a9959bf cx=c_pps
+ a=hnmNkyzTK/kJ09Xio7VxxA==:117 a=PRfkaYvzSr8QmIIGAkY2Sg==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=_glEPmIy2e8OvE2BGh3C:22
+ a=EUspDBNiAAAA:8 a=rCHStms5JtS70C2hfqUA:9 a=QEXdDO2ut3YA:10
+ a=PEH46H7Ffwr30OY-TuGO:22
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTAzMDA5OSBTYWx0ZWRfXzp1boqtPQMSj
+ PlR/N31Q5uE+4P0RXNoa/EkN1e4AZC7TYEoHwCHfOOqE+Fp1PwzkBTUvH91w0n90cwAuOUeqfpQ
+ 0pBnPFI981cLMBBmKZX4T1qXLtI7sNA=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTAzMDA5OSBTYWx0ZWRfX3zSUXqVbgYVR
+ wcRpKxyv1gvmBco/DoZ7+HqWbtCSjC3hvqjq+l3As5cufyZBRC4G/brGA+zt96zlKA2tObYQOpY
+ CLrm5j2pEQuP2+5o/pBEPbbAigwCJdnrAsIy/IE7VAh2kZFIFuRvZhePg7wPeXaOGy/12HVJkfC
+ xYI2MNj1nVbeFOf51m9QYoYJCQ7SXWzlPw4VlLmk952i6yB5T2rzZRoHJITDuJF9xsGVgyqktxf
+ R4YuUMrhShTGvyQWHDTo3sHE5QcqfM67I+5pgdhfTNIkV/EydEkh/4TtHRrE67EM5p2F4zDn2/j
+ 2yQqM70Q+Zgth8CZQdeyWcgPTQu0xnkzBBIS2tdjYGIuqCDBRgqz/fBXhOzDotX1zS9zWv8A7bP
+ 3bM9wyEYqlaGhAOi9Y9s/Xh98RM851X05h4Vj6ZVd/0vQHL/nL1WUwfTDNT/hO1Pp2XUHa40V3b
+ fFG+GG4PDw5MvtRvasA==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-03_03,2026-09-03_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501 bulkscore=0
+ suspectscore=0 impostorscore=0 clxscore=1015 malwarescore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609030099
 
-Hi,
-
-sorry for the latency here.
-
-On 9/1/26 5:03 PM, Joe Damato wrote:
-> On Tue, Sep 01, 2026 at 02:10:04PM +0200, Paolo Abeni wrote:
->> On 9/1/26 1:57 PM, Joe Damato wrote:
->>> On Tue, Sep 01, 2026 at 10:16:54AM +0200, Paolo Abeni wrote:
->>>> On 8/28/26 9:08 PM, Joe Damato wrote:
->>>>>   - Moved bp->max_tpa_roundup_size init out of the early return path and
->>>>>     documented that TPA is unsupported there, as suggested by Michael.
->>>>
->>>> Clashiko quite convincingly elaborates that the above is not enough:
->>>>
->>>> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260828190900.1767611-1-joe%40dama.to
->>>>
->>>> Could you please have a look?
->> [...]
->>> 3.) "The new assignment sits after the max_tpa_v2 == 0 early return, so on a P5+
->>> device whose firmware reports max_aggs_supported == 0, does
->>> bp->max_tpa_roundup_size stay 0 while BNXT_FLAG_TPA is set? ..."
->>>
->>> Michael commented in the v3 that this is a false positive, hence why I changed
->>> the code from what it was in the v3 to this.
->>
->> This is the comment I referred to.
->>
->> AFAICS the problem is that the driver sets
->>
->> 	bp->dev->hw_features |= NETIF_F_LRO;
->>
->> regardless of the supported capabilities, and that seams to disagree
->> with Michael.
+On 7/17/26 6:41 AM, Fenglin Wu wrote:
+> Currently, when the LED is configured as a RGB LED or a multi-color
+> LED device, the same pattern is programmed for all LED channels
+> regardless of the sub-led intensities when triggered by HW pattern.
+> It results that the LED device is always working in a white-balanced
+> mode regardless of the intensity settings.
 > 
-> OK, after re-reading this here's what I see: NETIF_F_LRO gets added with no
-> capability check and bnxt_fix_features() won't strip it afterwards. I think
-> the fix there is to add a BNXT_SUPPORTS_TPA() test, as a Fixes for
-> f0aa6a37a3db ("eth: bnxt: always recalculate features after XDP clearing, fix
-> null-deref").
+> To fix this, scale the pattern data according to the sub-led intensity
+> and program the HW pattern separately for each LPG channel.
 > 
-> I can send a separate patch for that, but it is unrelated to this patch which
-> fixes a crash on boot for Thor2 devices.
+> Fixes: 24e2d05d1b68 ("leds: Add driver for Qualcomm LPG")
+> Fixes: 6ab1f766a80a ("leds: rgb: leds-qcom-lpg: Add support for PPG through single SDAM")
+> Fixes: 5e9ff626861a ("leds: rgb: leds-qcom-lpg: Include support for PPG with dedicated LUT SDAM")
+> Assisted-by: Claude:claude-4-6-sonnet
+> Signed-off-by: Fenglin Wu <fenglin.wu@oss.qualcomm.com>
+> ---
 
-With my limited knowledge of this driver, I thought the report being
-more strictly related to this patch, and the fix for them should land
-together.
+GPT came up with the following fixes/suggestions:
 
-I'm fine with v5 approach.
+1] This one makes sense at a glance:
 
-/P
+    leds: rgb: leds-qcom-lpg: Skip LUT allocation for off colors
+    
+    Multicolor hardware pattern setup programs a separate LUT range for every
+    component. A component with zero calculated brightness is disabled before
+    the pattern is applied, so its all-zero range is never used.
+    
+    Skip allocating it to preserve the shared LUT capacity.
+    
+    Fixes: 2882fa0dc1cf ("leds: rgb: leds-qcom-lpg: Fix LED color balancing in HW pattern mode")
 
+diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+index 24b1f570f524..e32388a16537 100644
+--- a/drivers/leds/rgb/leds-qcom-lpg.c
++++ b/drivers/leds/rgb/leds-qcom-lpg.c
+@@ -1219,6 +1219,13 @@ static int lpg_pattern_mc_set(struct led_classdev *cdev,
+                chan = led->channels[i];
+                scale = mc->subled_info[i].brightness;
+ 
++               /* An off component neither needs nor uses a LUT range. */
++               if (!scale) {
++                       chan->pattern_lo_idx = 0;
++                       chan->pattern_hi_idx = 0;
++                       continue;
++               }
++
+                for (j = 0; j < pattern.len; j++) {
+                        scaled[j].brightness = DIV_ROUND_CLOSEST(
+                                (u32)prep_data[j].brightness * scale, LED_FULL);
+
+
+2] This one.. I'm not convinced..
+
+    leds: rgb: leds-qcom-lpg: Reuse LUT patterns for equal colors
+    
+    Multicolor hardware patterns with equal nonzero component brightnesses
+    produce identical LUT data. Reuse their LUT range instead of allocating
+    and programming duplicate data.
+    
+    Free each shared range once when clearing a pattern or unwinding a failed
+    allocation.
+
+diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+index e32388a16537..1c4d550c1ed0 100644
+--- a/drivers/leds/rgb/leds-qcom-lpg.c
++++ b/drivers/leds/rgb/leds-qcom-lpg.c
+@@ -1175,6 +1175,34 @@ static int lpg_pattern_single_set(struct led_classdev *cdev,
+ 	return 0;
+ }
+ 
++static void lpg_pattern_free(struct lpg_led *led, unsigned int count)
++{
++	struct lpg_channel *chan;
++	unsigned int i, j;
++
++	for (i = 0; i < count; i++) {
++		chan = led->channels[i];
++		if (chan->pattern_lo_idx == chan->pattern_hi_idx)
++			continue;
++
++		for (j = 0; j < i; j++) {
++			if (chan->pattern_lo_idx == led->channels[j]->pattern_lo_idx &&
++			    chan->pattern_hi_idx == led->channels[j]->pattern_hi_idx)
++				break;
++		}
++
++		if (j == i)
++			lpg_lut_free(chan->lpg, chan->pattern_lo_idx,
++				     chan->pattern_hi_idx);
++	}
++
++	for (i = 0; i < count; i++) {
++		chan = led->channels[i];
++		chan->pattern_lo_idx = 0;
++		chan->pattern_hi_idx = 0;
++	}
++}
++
+ static int lpg_pattern_mc_set(struct led_classdev *cdev,
+ 			      struct led_pattern *led_pattern, u32 len,
+ 			      int repeat)
+@@ -1226,6 +1254,17 @@ static int lpg_pattern_mc_set(struct led_classdev *cdev,
+ 			continue;
+ 		}
+ 
++		for (j = 0; j < i; j++) {
++			if (scale == mc->subled_info[j].brightness) {
++				chan->pattern_lo_idx = led->channels[j]->pattern_lo_idx;
++				chan->pattern_hi_idx = led->channels[j]->pattern_hi_idx;
++				break;
++			}
++		}
++
++		if (j != i)
++			continue;
++
+ 		for (j = 0; j < pattern.len; j++) {
+ 			scaled[j].brightness = DIV_ROUND_CLOSEST(
+ 				(u32)prep_data[j].brightness * scale, LED_FULL);
+@@ -1238,14 +1277,7 @@ static int lpg_pattern_mc_set(struct led_classdev *cdev,
+ 			ret = lpg_lut_store_sdam(lpg, scaled, pattern.len, &lo_idx, &hi_idx);
+ 
+ 		if (ret < 0) {
+-			/* Free LUT slots already allocated for previous channels */
+-			while (i-- > 0) {
+-				chan = led->channels[i];
+-				lpg_lut_free(lpg, chan->pattern_lo_idx, chan->pattern_hi_idx);
+-				chan->pattern_lo_idx = 0;
+-				chan->pattern_hi_idx = 0;
+-			}
+-
++			lpg_pattern_free(led, i);
+ 			return ret;
+ 		}
+ 
+@@ -1271,13 +1303,12 @@ static int lpg_pattern_clear(struct lpg_led *led)
+ 
+ 	mutex_lock(&lpg->lock);
+ 
++	lpg_pattern_free(led, led->num_channels);
++
+ 	for (i = 0; i < led->num_channels; i++) {
+ 		chan = led->channels[i];
+-		lpg_lut_free(lpg, chan->pattern_lo_idx, chan->pattern_hi_idx);
+ 		lpg_sdam_configure_triggers(chan, 0);
+ 		lpg_clear_pbs_trigger(chan->lpg, chan->lut_mask);
+-		chan->pattern_lo_idx = 0;
+-		chan->pattern_hi_idx = 0;
+ 	}
+ 
+ 	mutex_unlock(&lpg->lock);
