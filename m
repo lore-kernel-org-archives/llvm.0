@@ -1,67 +1,98 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FCB26AC5;
-	Thu,  3 Sep 2026 00:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23872E7380;
+	Thu,  3 Sep 2026 02:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788396716; cv=none; b=PwEc158QFcxsQkvULasBMzTjuf4hbnjBzb3Lopy9HOE6Uv3vjOwHXKyi4wL84H71Xcfxns/+8YMG+2v/RTXs4a4TJB2W62uiPiyhDbsHBaeN7jR03jiRCEvFYA8WrkyuajqymtFMkI0+mz/mL3Ngnsbu7CA3iqX2CTIcxnqh4hY=
+	t=1788401185; cv=none; b=OcmVr/TwwhBptJkVu1Mlut8gwZGbzMefKZcd0Uga68Dni/PbYkNTFqeo3RYy3pTZoggOoe8IC5WxNqJrWJnxz0o6O4znBhGOFFvXlev3VdmzOUa2WH9UksGfE9LB3eTrRfqSHV3mh153lcLt8woAPVg76cRsytwauNoHNmZGlbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788396716; c=relaxed/simple;
-	bh=ZzTPwPM53Ym9c5Cc55FpAc9i30nt8Zcdfv6SWe9WJW8=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=hswzQfWU85N5SXQcUBYWXfIAn+p/ztfp4WsfjQYuuQgTGwn7ofntqmfClp48lJX3lwO/C+vkvN/KS3xY5HoRLhDc/aoSGFwHw42CSWdE04q6b6CFRXb7I80EB1jLKst+K8Zyvk0ROByAl6SRDTQftSI5k20BkF7kP03AVXCR+eA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=2hCete2Q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788401185; c=relaxed/simple;
+	bh=tedEEPcCReidk/8CfzxofH/Wfpdy/HPXNdiH8/ehg08=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=OmLuGii8fpS99ixcRyFp52KKqn4moe9mNHlZ17g3Zzm74zKr90lF+dqzxqPPwSfoMRI1zmW37g2jgBHb+YngaqqbYlh4TJ8r4KYTMjETDleTxhVVS6duEkTQU79pv+QNqdwAEMty9eSARDCuSBIh+m7tMNqhP7tho11bOdyVx9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z+iGoObJ; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="2hCete2Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A873E1F000E9;
-	Thu,  3 Sep 2026 00:51:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1788396714;
-	bh=fIKuesSizdElNkdJ/5ufIZdLWPZlgW2HJnI0fSJ3zoU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=2hCete2Q6pLv0cc7u6+gQ51yP6uQYBh4DutR9/MDozNJvLD0TwUpZggwpvyKA1B/i
-	 gdXS+CnzEDMpfjxCFzPgYRxwhnNO4Zn546wc+oGHWXhCMYAlx+rti/6VsTsnH+9rI/
-	 Nl+hFcpan/rnmyOQsUFpcz58CqdpN63w97tOAfyY=
-Date: Wed, 2 Sep 2026 17:51:54 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] scripts/checkstack.pl: support llvm-objdump disassembly
- for x86
-Message-Id: <20260902175154.14870f981733146727c67c20@linux-foundation.org>
-In-Reply-To: <20260902-checkstack_llvm_objdump-v1-1-edb4eca5f163@google.com>
-References: <20260902-checkstack_llvm_objdump-v1-1-edb4eca5f163@google.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z+iGoObJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788401184; x=1819937184;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=tedEEPcCReidk/8CfzxofH/Wfpdy/HPXNdiH8/ehg08=;
+  b=Z+iGoObJfukzKti57FGWCq3DrCgpUCDty9n9dLyvVPmC8lDhl3o8Z4SR
+   tjBE2Nw5rQPaf5HWfzpamoFs9VS19jBkLVs0t0ivZ8akTzYTm1Y6VPXcI
+   A7VybdPSTlLW/Zeb2sB3zfdj+EB5MyYrh8ruyqAPvrSN6RPxmp+0iTL/H
+   Rh+/PUQBhd3CzYeMFhfds8QamAPZGRrlH5crBwxyLYtdZkF8qQoEcV542
+   C4mRMWMUrn8Dm8wYRbfomIuvaHLn3uhpp0ABtDGlNpeyH4zSBOcbHkD8m
+   6P4r+rJVvdW55FOgFvPjIxG/yYwwp9WAJrnYQ+n8W/efd/qXLb26+dCfm
+   w==;
+X-CSE-ConnectionGUID: tYN2jzgJRMSoid2uOJwHBw==
+X-CSE-MsgGUID: feptGpAPT4+rgYOje8kATQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11894"; a="106237968"
+X-IronPort-AV: E=Sophos;i="6.25,258,1779174000"; 
+   d="scan'208";a="106237968"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2026 19:06:22 -0700
+X-CSE-ConnectionGUID: j9akTHVwThOOtwaHyYQSHQ==
+X-CSE-MsgGUID: CU/tUzPeRfqA8V3+/8WfWw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,258,1779174000"; 
+   d="scan'208";a="271538142"
+Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 02 Sep 2026 19:06:19 -0700
+Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x1wqH-000000003cb-1jil;
+	Thu, 03 Sep 2026 02:06:17 +0000
+Date: Thu, 03 Sep 2026 10:05:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stefandoesinger-zx297520:dlink 76/131]
+ drivers/spi/spi-zx.c:477:17: warning: implicit conversion from 'unsigned
+ long' to 'u32' (aka 'unsigned int') changes value from 18446744073709551614
+ to 4294967294
+Message-ID: <202609030957.sHim3B0q-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-On Wed, 02 Sep 2026 14:01:53 -0700 Nick Desaulniers <ndesaulniers@google.com> wrote:
+tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
+head:   4132307830800b020a6d29d27cb3fec3cb5fbb90
+commit: fce785fadfd6abf34e775c2793e49a37e1c426d5 [76/131] zx29 qspi driver
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260903/202609030957.sHim3B0q-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260903/202609030957.sHim3B0q-lkp@intel.com/reproduce)
 
-> When running `make LLVM=1 checkstack`, OBJDUMP is set to llvm-objdump.
-> llvm-objdump outputs disassembly with instruction size suffixes (such as
-> subq/addq/subl/addl), tabs/whitespace differences, spaces after commas,
-> and trailing comments (e.g. `# imm = 0x...`).
-> 
-> Because scripts/checkstack.pl used rigid regular expressions specifically
-> tuned to GNU objdump format (e.g. requiring exactly four spaces, no
-> suffix, and no space after comma), checkstack.pl failed to match any
-> stack adjustment instructions and yielded no output when using
-> llvm-objdump on x86.
-> 
-> Update the regular expressions for x86 to match optional suffixes,
-> variable whitespace, and trailing comments.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609030957.sHim3B0q-lkp@intel.com/
 
-OK, so checkstack is broken with LLVM.
+All warnings (new ones prefixed by >>):
 
-Users of checkstack/LLVM in earlier kernels won't like that, so
-should we backport this with cc:stable?
+>> drivers/spi/spi-zx.c:477:17: warning: implicit conversion from 'unsigned long' to 'u32' (aka 'unsigned int') changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
+     477 |         writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
+         |         ~~~~~~~~~~~~~~ ^~~~~~~~~~~
+   1 warning generated.
 
+
+vim +477 drivers/spi/spi-zx.c
+
+   473	
+   474	static void zx_qspi_remove(struct platform_device *pdev)
+   475	{
+   476		struct zx_qspi *qspi = platform_get_drvdata(pdev);
+ > 477		writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
+   478	}
+   479	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
