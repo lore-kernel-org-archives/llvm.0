@@ -1,154 +1,152 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7F83DC4A4;
-	Fri,  4 Sep 2026 22:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA58A25D53B;
+	Fri,  4 Sep 2026 23:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788559808; cv=none; b=Y2uK+wExxRZWKJ07+8j+Zbex9B948NfIle+TN39tz8MQ9/f99b5niFuicGp3mFdLWmIm5C5pTKXTtzQrTYJ7dqgUSQcQiOjGwteiCvckXhwEKBW3udCrFY3x5mzPGNBfG3YvjCxUKSc6VmpUm7a6QhyuKTIxV2Y0cnC4SjHZRbc=
+	t=1788563772; cv=none; b=FoW+Ry2t9Ostj4tR+54MRF0upVozD1F7PJtvAmPlZmBdCEhllSL5NXaEc0oShHo9He21VhyLHHcHeS6owH+BpqXGhWMTeETLMadeSvi6yVxmed9lYMpQ4KNvjL+/V/wKe9OuYYiGB7mXxNwkrG+XIxC4A1bCc44GHJQjgP3cv+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788559808; c=relaxed/simple;
-	bh=xrFcTPU7LdaBc+ex5en3r8tSpTx2+sxZOlvsV7U/qOo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xi0ijAbWilYQocrWHdGXaQGq/ClcJ0nhiOFZH9jzMO/Sa8/+aNiWlGlcNhIrzM+8jzPZxYAaNm0x/TlOXho977HSZNGHGY2J+vU4kNZw3nGMHGl2/eVL5gpExFVMGvkqhV5FDLjAWwHjGqNwDvmKQim2b0fhtuFfd1d/aGDnZgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d8tAuWCX; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1788563772; c=relaxed/simple;
+	bh=BUVPyOVcYGrtZnHBBtTmb+UKnHnpJPPtArTPx3Su3c8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=VNJMyTX7zhStDoMqgaDpOjotHvNpCPTcn5nk0d6en+gT1VgJVEw9TxI6cwNsrAlgcQkgb7Sqf+WNCfZIzZXVg317X+8Cq4fhjgdoRHkJNyAE3elWyBstfvStVtU3NlWLrd/rZ2q3/WlyMvJ2jRL4hpVNKxX3EzohWZzXB+ySqqU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bnt2EwF1; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d8tAuWCX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bnt2EwF1"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788559807; x=1820095807;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xrFcTPU7LdaBc+ex5en3r8tSpTx2+sxZOlvsV7U/qOo=;
-  b=d8tAuWCXn7wHWJuuDfhv8WIqjXQpCsdb3JhVn4dJ0ouDzKDFAU8wJugD
-   SDhTxj3UREHoUmvm5XbSMkdzVGyv1Rqk40jrKC2PyNZYXGSLDB6SjEiO8
-   OmuhtTvY4+xipJZvhj+1jdsM469C1wsvCDX5G7oPHPEHN0OMJVAKuFDmo
-   0ceBwUQYdjRP6RRVKTBQkNL5R9goHti1atEMe4fBFa+EQ8AG6jYujE4Ll
-   yMklQriaZtZviju/TwBouI0DdEpmKOu2m/ajG69vwD2l0Ojwhofk0D8+/
-   BIpReWQd9pp6bB8mT8NyVXd/Opltwg63/zv1pS0cqRo+FqHTSoJk4hFCI
+  t=1788563768; x=1820099768;
+  h=date:from:to:cc:subject:message-id;
+  bh=BUVPyOVcYGrtZnHBBtTmb+UKnHnpJPPtArTPx3Su3c8=;
+  b=bnt2EwF1rpp07e05bHAPIHNPCxQ+qiYoE7cB5VdDZTS9EvK8I2Ktp1G+
+   fFOZ5M45kXeW9qWM4rPkIw0o/Ro3fJ3GZaq/BKgspwcRA37NMvfCfadKE
+   eh/c2ImNgRZvMmv7rtBoNP34VO8DfQmlWrPcprQ3Fg102i2hpVHypfzPf
+   0GLvoDgUQ44BnyEEPdIJQMPQ5CYf9DbLZUuNdO1xtFpGBEyIKhhW9BrvX
+   ILZqF4ntWl3Vmp+B2VNvwKkj51UxjmKRyjj+uKGAIM+QRNbXzAo62cvFr
+   gJZBtM2WR4D4ifSZ3Jbeh38OYV7aZN5tcklNoszplOFC4VmsHsfOeJ0/a
    g==;
-X-CSE-ConnectionGUID: xK8qKXNrTXWPQEHi4Dp71Q==
-X-CSE-MsgGUID: rVntkP6hTQSNVYIJwFQY6g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11896"; a="106434739"
+X-CSE-ConnectionGUID: KXwiuGyxRDiUb/xtUMtkiQ==
+X-CSE-MsgGUID: obQ/kKrZT7yxuNMkcRlhbQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11896"; a="106438201"
 X-IronPort-AV: E=Sophos;i="6.25,262,1779174000"; 
-   d="scan'208";a="106434739"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2026 15:10:06 -0700
-X-CSE-ConnectionGUID: iQUx5CfTS+KOh2u6wkvTvw==
-X-CSE-MsgGUID: jZRCj0nvRi+L7traavRZPQ==
+   d="scan'208";a="106438201"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2026 16:16:07 -0700
+X-CSE-ConnectionGUID: +8syMdS2RbeukuLQxJO24g==
+X-CSE-MsgGUID: QeEfs6ldQEmsDv23X5o74Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,262,1779174000"; 
-   d="scan'208";a="266896801"
+   d="scan'208";a="273949235"
 Received: from lkp-server01.sh.intel.com (HELO bfac249b2189) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 04 Sep 2026 15:10:04 -0700
+  by orviesa004.jf.intel.com with ESMTP; 04 Sep 2026 16:16:07 -0700
 Received: from kbuild by bfac249b2189 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1x2c6j-00000000AD8-3tIz;
-	Fri, 04 Sep 2026 22:10:01 +0000
-Date: Sat, 5 Sep 2026 06:09:49 +0800
+	id 1x2d8e-00000000AF4-3ZN1;
+	Fri, 04 Sep 2026 23:16:04 +0000
+Date: Sat, 05 Sep 2026 07:15:17 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bitterblue Smith <rtl8821cerfe2@gmail.com>,
-	"linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Ping-Ke Shih <pkshih@realtek.com>, i.mafifi17@gmail.com
-Subject: Re: [PATCH rtw-next] wifi: rtw88: usb: Download the reserved page
- synchronously
-Message-ID: <202609050523.VXiKq456-lkp@intel.com>
-References: <fd7bbc79-03f9-4932-ada8-f555392d4485@gmail.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dhowells-fs:ceph-iter 51/87] net/ceph/databuf.c:63:23:
+ warning: variable 'part' is uninitialized when used within its own
+ initialization
+Message-ID: <202609050739.6wZ5nx0p-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fd7bbc79-03f9-4932-ada8-f555392d4485@gmail.com>
 
-Hi Bitterblue,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v7.3-rc1 next-20260903]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Bitterblue-Smith/wifi-rtw88-usb-Download-the-reserved-page-synchronously/20260904-002447
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-patch link:    https://lore.kernel.org/r/fd7bbc79-03f9-4932-ada8-f555392d4485%40gmail.com
-patch subject: [PATCH rtw-next] wifi: rtw88: usb: Download the reserved page synchronously
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260905/202609050523.VXiKq456-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   376ad9d4942bf11500931178bbeb965348f01057
+commit: af8c3f8a557313c0292b31d7dc1183647bf12100 [51/87] libceph: Add a new data container type, ceph_databuf
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260905/202609050739.6wZ5nx0p-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 0edd1b088cc36b4faee80358c925a91e16006258)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260905/202609050523.VXiKq456-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260905/202609050739.6wZ5nx0p-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609050523.VXiKq456-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609050739.6wZ5nx0p-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/net/wireless/realtek/rtw88/usb.c:623:41: error: incompatible pointer types passing 'struct rtw_tx_desc *' to parameter of type 'struct sk_buff *' [-Wincompatible-pointer-types]
-     623 |         rtw_tx_fill_tx_desc(rtwdev, &pkt_info, pkt_desc);
-         |                                                ^~~~~~~~
-   drivers/net/wireless/realtek/rtw88/tx.h:99:55: note: passing argument to parameter 'skb' here
-      99 |                          struct rtw_tx_pkt_info *pkt_info, struct sk_buff *skb);
-         |                                                                            ^
->> drivers/net/wireless/realtek/rtw88/usb.c:624:49: error: incompatible pointer types passing 'struct rtw_tx_desc *' to parameter of type 'u8 *' (aka 'unsigned char *') [-Wincompatible-pointer-types]
-     624 |         rtw_tx_fill_txdesc_checksum(rtwdev, &pkt_info, pkt_desc);
-         |                                                        ^~~~~~~~
-   drivers/net/wireless/realtek/rtw88/tx.h:136:17: note: passing argument to parameter 'txdesc' here
-     136 |                                                u8 *txdesc)
-         |                                                    ^
-   2 errors generated.
+>> net/ceph/databuf.c:63:23: warning: variable 'part' is uninitialized when used within its own initialization [-Wuninitialized]
+      63 |                         size_t part = umin(part, enc->space);
+         |                                ~~~~        ^~~~
+   include/linux/minmax.h:121:22: note: expanded from macro 'umin'
+     121 |         __careful_cmp(min, (x) + 0u + 0ul + 0ull, (y) + 0u + 0ul + 0ull)
+         |                             ^
+   include/linux/minmax.h:98:25: note: expanded from macro '__careful_cmp'
+      98 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                ^
+   include/linux/minmax.h:92:13: note: expanded from macro '__careful_cmp_once'
+      92 |         auto ux = (x); auto uy = (y);                   \
+         |                    ^
+   1 warning generated.
 
 
-vim +623 drivers/net/wireless/realtek/rtw88/usb.c
+vim +/part +63 net/ceph/databuf.c
 
-   600	
-   601	static int rtw_usb_write_data_rsvd_page(struct rtw_dev *rtwdev, u8 *buf,
-   602						u32 size)
-   603	{
-   604		const struct rtw_chip_info *chip = rtwdev->chip;
-   605		struct rtw_tx_pkt_info pkt_info = {0};
-   606		struct rtw_tx_desc *pkt_desc;
-   607		struct sk_buff *skb;
-   608		int ret;
-   609	
-   610		pkt_info.tx_pkt_size = size;
-   611		pkt_info.qsel = TX_DESC_QSEL_BEACON;
-   612		pkt_info.offset = chip->tx_pkt_desc_sz;
-   613		pkt_info.ls = true;
-   614	
-   615		skb = dev_alloc_skb(chip->tx_pkt_desc_sz + size);
-   616		if (!skb)
-   617			return -ENOMEM;
-   618	
-   619		skb_reserve(skb, chip->tx_pkt_desc_sz);
-   620		skb_put_data(skb, buf, size);
-   621		pkt_desc = skb_push(skb, chip->tx_pkt_desc_sz);
-   622		memset(pkt_desc, 0, chip->tx_pkt_desc_sz);
- > 623		rtw_tx_fill_tx_desc(rtwdev, &pkt_info, pkt_desc);
- > 624		rtw_tx_fill_txdesc_checksum(rtwdev, &pkt_info, pkt_desc);
-   625	
-   626		/* Download the beacon/reserved page synchronously so that the caller's
-   627		 * subsequent BCN_VALID poll observes the completed transfer instead of
-   628		 * racing the async TX path.
-   629		 */
-   630		ret = rtw_usb_write_port_sync(rtwdev, pkt_info.qsel, skb);
-   631		if (ret)
-   632			rtw_err(rtwdev, "failed to download rsvd page over USB, ret=%d\n",
-   633				ret);
-   634	
-   635		dev_kfree_skb_any(skb);
-   636	
-   637		return ret;
-   638	}
-   639	
+    44	
+    45	/**
+    46	 * ceph_bvecq_append - Append some data onto a buffer
+    47	 * @enc: The encoding context
+    48	 * @data: The data to append
+    49	 * @len: The length of the data
+    50	 *
+    51	 * Add some data onto the end of the encoding buffer's occupied region.  This
+    52	 * will expand the maximum size of the buffer if necessary.
+    53	 *
+    54	 * If ENOMEM is encountered, enc->nomem is set to true and all future appends
+    55	 * will do nothing.
+    56	 */
+    57	void ceph_bvecq_append(struct ceph_encode *enc, const void *data, size_t len)
+    58	{
+    59		for (;;) {
+    60			struct bvecq *bq;
+    61	
+    62			if (likely(len <= enc->space)) {
+  > 63				size_t part = umin(part, enc->space);
+    64	
+    65				memcpy(enc->p, data, len);
+    66				enc->p += len;
+    67				enc->space -= len;
+    68				enc->len += len;
+    69	
+    70				if (part >= len)
+    71					return;
+    72				data += part;
+    73				len -= part;
+    74			}
+    75	
+    76			if (enc->p)
+    77				kunmap_local(enc->p);
+    78	
+    79			if (unlikely(enc->nomem))
+    80				return;
+    81			if (ceph_bvecq_reserve(enc, len) < 0) {
+    82				enc->p = NULL;
+    83				enc->nomem = true;
+    84				return;
+    85			}
+    86	
+    87			enc->slot++;
+    88			bq = enc->bq;
+    89			if (enc->slot >= bq->nr_slots) {
+    90				bq = bq->next;
+    91				enc->bq = bq;
+    92				enc->slot = 0;
+    93			}
+    94			enc->space = bq->bv[enc->slot].bv_len;
+    95			enc->p = kmap_local_bvecq(enc->bq, 0);
+    96		}
+    97	}
+    98	EXPORT_SYMBOL(ceph_bvecq_append);
+    99	
 
 --
 0-DAY CI Kernel Test Service
