@@ -1,109 +1,120 @@
-Received: from mail-qv1-f99.google.com (mail-qv1-f99.google.com [209.85.219.99])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBB333F8B1
-	for <llvm@lists.linux.dev>; Thu,  3 Sep 2026 23:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16147156F45
+	for <llvm@lists.linux.dev>; Fri,  4 Sep 2026 00:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788478421; cv=none; b=DHyBNfjc7DKsJxuoQfx6ZFyC8A3bwWZ23qM3LRl2tTEopTpz1c6ktUJgvTsSJPcAr8mHmkCRX4yXlxFuQwXLqHKHhZ7oUhGxtPmwEO7yWISXBr0Tch6HiNgExgdFe+T+Epg89YWDlCsppGp+h1rJs1e/rbs/keKRs7+0Qst5y3k=
+	t=1788480519; cv=none; b=nnM4BhEJPnS/A1sqMaRm6cymRHmJWv9AuwGzoXToPY+vQ8BNEcXLuEPO4t1aPme+M76oe7oaRmiChY13SAcRqAK/dycdK5tDp2nIE090NXgYq52jrpSIv8yOONB8mw2p6ez0xu/274PjcscqkBx8ZgHu0BepCIV10hqYXhxAF4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788478421; c=relaxed/simple;
-	bh=/qWtFqHBkrtLXXAD1XpvUaW1zHKMs9ArEGyHDtyLBkA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Cs0gZApbQwipTZWdPIViOVlYUCUbmNXriPX5dgSK/pvB3mhW4a8xG1Dnwz+XZpEgswmRtAwO8ThFw8Hn9tA40QCxLvmUVQVt4I159IjWWlvNuJgNUX7KzI94etSZ7a4c31Ier7GHzvNbpAzQBsUHdk+M6ZB5alPQp8xfIWMGtwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=FnO8MgWY; arc=none smtp.client-ip=209.85.219.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+	s=arc-20240116; t=1788480519; c=relaxed/simple;
+	bh=b0mz6z83zVCtUhJLb/Mp9OvJFzgVV9/P0wSg48iDAPI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FEPrlQOSZVtcnOogQzbKFLGBV08fVPPecHBs6Yjq+BhqHPNAk0OyajlBblFnXAtsVAwHQ3hVQBKK3GVLzNWqnO0oueaC3M+BTfoRl600K1i35+IEKLHMR+TKoHxcfyF+xKymJjKKiZH+ynNQQJcC/t+/T6Wm2ZsNU0WOJHgTmOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UYRcpji8; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="FnO8MgWY"
-Received: by mail-qv1-f99.google.com with SMTP id 6a1803df08f44-90d7fa95a58so4581366d6.1
-        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 16:33:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788478419; x=1789083219;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:dkim-signature:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=Qy1+fiy5vVG6Fgi2325/mnWQkrttmVDQVIUSqg+HoGM=;
-        b=QGq3fyiejBSqGxH1J5kuFbGzarf7fep9cO7FfyLV8oTJqEYWjGNkZHPt2yCRXNR7jp
-         qmuZYBfr83OOECxoQGDkgPpWVwBLq8kK5aqvAs63o/HU8jfE95dg7QrobzTcxv1dZDHh
-         yXJpiJdBWgR527ruVWBpzMEqoAvOwsowTRtWhRyP0iSnN21aWn0TQglGyMd1XQ0iEc69
-         R3FUXYHx4TaSOLKY2h9n1wVdwdy83zI9dpkJlhFh1+eleOBFhdwUf+Vd6x1edj49eNhc
-         aw8TcseW41YpQe9owoFjVRfJ6P3IcQe6c1o4EbUzJaeiJS1MtuEWr1wUJ94hUvkhBcA7
-         aMTA==
-X-Forwarded-Encrypted: i=1; AKwUvBwwofb045ujn28KcB75SU3DKhTkJioRBEem2J7GIal2kIZ1Mft954Wj2Lsn3pKjOQDBerN1@lists.linux.dev
-X-Gm-Message-State: AFuF++nJmCqgFGBAtFy6uY9Ma675z3fUY4jcqvCRFlMPPDg/7GIG2XHV
-	zScdSoI8oBn9cTyD8BY6iqdCrdoFWOYNLsX6K9CuYG55s6j1I7oAczKXZPV6j+YKR3qLJUu8HLp
-	GOuPvZem8nAeitsy4gykw9OGxj3tzwyjIuySflhhk/FVEOkAzUlSyh2LxDwf+2I6FbRDJkJbbnN
-	7aLwCWJnVUw8E/x/alrpLwybFRkgrzrQRd8AJjCnNu9ZrSqCv+3Fot5eeKsKJsHdhmdCZCOpg2G
-	1BnQ3aknay+kQ==
-X-Gm-Gg: AYBFou1J3CFNLlRSDhtOieMcelQyTpMQjrwnhp9hk4KqvHn+yfToyx6my7Nl3z8IRhd
-	UUhvZhWdgE2FRT70q3YNS/ed8+Y9qrIvVp0TNL7KKPcDHxc2Ez6HtqT3X5jE9MM1OWmdQpZt2+7
-	bqXsUo5jLnViip9WCVpgmDQw08TIwq+q6W1e9pdh72+sVY2NgSK0+c5d8a0PjUs4fA7zklbR3RB
-	RpAg5vy6qc5K9JKs/JqmBnE/p3tAPkwOSS6bKe3G+f8iGlHeoNdYheC1C0frQrkcZ2NRMB/njsM
-	ThTMGmkhdd4u0g58igemZToaLYG6zi0G5gXmisuN0y01rAEQt6IA7bNCBbMIN9PERdcnQzZ8P65
-	8Ap+zrmz8YkDnbS7qQp1X/pGHO7BjHgn9rdPwnxLeaWebWVEgKyqZEJf+YxSJsnTeB74jkWxJci
-	+nHymsv7/Xlw0RDTa1a39flvDfXyrN08x6Gghi+ixX
-X-Received: by 2002:a05:6214:4610:b0:90e:7fdb:8583 with SMTP id 6a1803df08f44-9103efb2f17mr37582026d6.8.1788478418890;
-        Thu, 03 Sep 2026 16:33:38 -0700 (PDT)
-Received: from smtp-us-east1-p01-i01-si01.dlp.protect.broadcom.com (address-144-49-247-27.dlp.protect.broadcom.com. [144.49.247.27])
-        by smtp-relay.gmail.com with ESMTPS id 6a1803df08f44-91040768000sm188996d6.27.2026.09.03.16.33.38
-        for <llvm@lists.linux.dev>
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 03 Sep 2026 16:33:38 -0700 (PDT)
-X-Relaying-Domain: broadcom.com
-X-CFilter-Loop: Reflected
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2d6df0a1e18so6749735ad.1
-        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 16:33:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UYRcpji8"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cace91f112so4076935ad.0
+        for <llvm@lists.linux.dev>; Thu, 03 Sep 2026 17:08:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1788478418; x=1789083218; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Qy1+fiy5vVG6Fgi2325/mnWQkrttmVDQVIUSqg+HoGM=;
-        b=FnO8MgWYFFtRfa3LNy0dXu4c0afPuknQZYfQhTk6DJZIm/CcUMI/CRR0wVDaRi+Asr
-         iYsvHkNlf6c42lXarXRxgOr+Ca8kWgkg3kWzgtXYA+WZFxkgVPIT4kypi2HsG7YuLd5W
-         /sPa9332Ky6pbIrmgre8ITWk6pNU6lJTKN/bs=
-X-Forwarded-Encrypted: i=1; AKwUvBw3EycgsA+X8/j11o8kBbCZge7IQiJP0S1SOgy//gsGgkfpDPtZWsI2SE0iru+s+zRvt5ga@lists.linux.dev
-X-Received: by 2002:a17:90b:1343:b0:38e:9eb2:9d43 with SMTP id 98e67ed59e1d1-39b261b1bcfmr3210966a91.16.1788478417614;
-        Thu, 03 Sep 2026 16:33:37 -0700 (PDT)
-X-Received: by 2002:a17:90b:1343:b0:38e:9eb2:9d43 with SMTP id 98e67ed59e1d1-39b261b1bcfmr3210904a91.16.1788478417146;
-        Thu, 03 Sep 2026 16:33:37 -0700 (PDT)
-Received: from [10.211.247.235] ([192.19.50.250])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339885d29esm2238141eec.2.2026.09.03.16.33.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Sep 2026 16:33:36 -0700 (PDT)
-Message-ID: <b858b84b-a1ef-45b4-a7c1-35ba28490e35@broadcom.com>
-Date: Thu, 3 Sep 2026 16:33:42 -0700
+        d=gmail.com; s=20251104; t=1788480516; x=1789085316; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GljiUmm1um383ek6AFMz0AxdrrGuN7oQsO/t/B0oBUA=;
+        b=UYRcpji85hC78oKmaY5sPoA4VND92RVbMdlRtUIVE18k2X8IUY+gMlT6A0NBUHOVip
+         MhK2ZpTqgVbESaZezDXcmBig6+T1ddSm34OfFQKoRr5UDTbxNIcaGDOlpnam8Ihdtm+3
+         aVVZgsUyE+5Jxl/lp6l4zKKeZudR+UA6YRDXZ7NurI0lXPULuzs6eOrwxt8dV76EQZ3M
+         l1o7m13vnpSNrbkOU9mK41D20dwHQTj9q7ouLVhtn0uynsit04vf0PkLmiMJLHz7zmoE
+         DnOKzyQadTIOwmdnbvAxD96hym2eu+eMJy1UGT3eMLSG9F19uVI9mYfLr+OKGmudpFoX
+         /o2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788480516; x=1789085316;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=GljiUmm1um383ek6AFMz0AxdrrGuN7oQsO/t/B0oBUA=;
+        b=PQzF80HLsxzG1qUKn7FloMJYRgv9NTb5iQM5Lwi4tGCYKqQfVgWDjo0n023kxKqOFI
+         3lQR3DCmdoeUsw6WQ4HHv7DDiZAP705+AiCbZvJw8EjhD/1jyNNInzbgYblqzckVUsv5
+         KyhVYO0YB+qgoQDNAwE2J2IPr8iyzOSpjskA5vx+NV0kQeMpZrRMJ4R91/dTfi5+3nyT
+         +0cOHPKiZb6ivfXOPYOO6v3ZDjFdjSwfiUbwe4VOFHftneC2JXJS+1q9Zk3vWWDuhiOI
+         m4HoVXQBgzV0GqBFzv0RUxixC3wtj6++URFquO4oDhzmvpqiUG9FqGEYpipYzLY9R0AX
+         0K1Q==
+X-Forwarded-Encrypted: i=1; AKwUvBxfo5R+ZgRpQEvSaDZfm0pcpLkl8h3o4eYvCSYqEbKvBn76UEIGL/xOqCudlVLDXDUNZO1v@lists.linux.dev
+X-Gm-Message-State: AFuF++mOZeTw1DqCynnGsgZyuK3x7QSMKyl2ie1AalLxssBWyVVNAvbf
+	e0gBiMKU4dTitSszcD6+At2oImCBa59cV2Ptaf9xTU8W1B+Xiw0fwcWf
+X-Gm-Gg: AYBFou1QhnQ8skwzY/iQYkx+AKtNEbgEF89U9bKoZnmy8yEZ2+HWkSC11R6/bt2onqn
+	UbO00R25RlNtbJajmv4cANp71mcFAJ7WrP5QLFfRVibwMGJma46z9p1M8w19jyfVTDKe1KSZ8sG
+	HH5Bv/SWHFJuCDMwvKxeTsFuMcOwHSblQnjBj4qWMKp0b6uG5U7+tbVpzmy02F1pj6dO2OIsy1F
+	2dBS3CsTAeb9CyG41vll2AB4ewoVCtlt9nd3QqIl3wrI6J8WCDV2RN/SfUk4qjagpsM+iSMPjNw
+	/+3yJb1YDaT5mINkla7JvcvyzCtzTpzEWvdoRphBnEXvgCBBUJ3eyH5dNyYY5aVWbM5zGE9gfHV
+	xlFHrXV6cxypKoKnOW7vI0l9AWDd3zN8dNVTMTc8n8XXTGymEhTcHCCkeZMIxxHp8ogwuPF3m95
+	xT7nPfRu0FRP9VlxjydRa7SIGvEkQ3Ri/hVBqRhtk4K5UdLudQBoTyhAmGAmDPoROL6038d8mUg
+	rX3soGoP1gG2Voik4tJ3VIujfyaRlz0RzlruG2TFV1N6pEZl//ACzzk1Djqc+mfx5FAB5/t29iQ
+	8/fnj0LC6yOZpV9Vw/rhkD9F64XjIG6LJ8Gt8QrX5/8LFkfWUg==
+X-Received: by 2002:a17:90b:1dc3:b0:398:d6f4:c61a with SMTP id 98e67ed59e1d1-39b26207ee4mr3446839a91.17.1788480516137;
+        Thu, 03 Sep 2026 17:08:36 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e35])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39ae8f1448esm4136507a91.4.2026.09.03.17.08.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 17:08:35 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: x86@kernel.org
+Cc: Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] x86: checksum_32: allow memory/immediate operands in csum_ipv6_magic
+Date: Thu,  3 Sep 2026 17:08:33 -0700
+Message-ID: <20260904000833.2058186-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] x86/vmware: Fix i386 high-bandwidth hypercall
- arguments
-To: Zack Rusin <zack.rusin@broadcom.com>, Borislav Petkov <bp@alien8.de>,
- Ajay Kaher <ajay.kaher@broadcom.com>,
- Alexey Makhalov <alexey.makhalov@broadcom.com>, x86@kernel.org
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
- <hpa@zytor.com>, virtualization@lists.linux.dev,
- bcm-kernel-feedback-list@broadcom.com, linux-kernel@vger.kernel.org,
- Peter Zijlstra <peterz@infradead.org>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-References: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
-From: Maaz Mombasawala <maaz.mombasawala@broadcom.com>
-Content-Language: en-US
-In-Reply-To: <4ab10678a8f50053934b62b56af81f881c1d3798.1788414669.git.zack.rusin@broadcom.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-DetectorID-Processed: b00c1d49-9d2e-4205-b15f-d015386d3d5e
+Content-Transfer-Encoding: 8bit
 
-LGTM!
+Building nf_synproxy_core.c for i386 with LLVM/Clang fails with
+"inline assembly requires more registers than available". The
+csum_ipv6_magic() inline asm demands five registers at once: an
+early-clobber output for sum plus four "r" inputs (saddr, daddr,
+htonl(len), htonl(proto)). i386 only has six GPRs, so under register
+pressure at inlined call sites Clang cannot satisfy the constraints.
 
-Reviewed-by: Maaz Mombasawala <maaz.mombasawala@broadcom.com>
+Relax the register-only "r" constraints on the len and proto operands
+to "g" (register, memory, or immediate). Since the asm uses adcl,
+which accepts memory and immediate sources for these operands, the
+generated checksum is unchanged; the compiler can now fold the constants
+to immediates/memory and only three hard registers are needed.
 
+Assisted-by: opencode:big-pickle
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ arch/x86/include/asm/checksum_32.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/include/asm/checksum_32.h b/arch/x86/include/asm/checksum_32.h
+index 17da95387997..f74873a5e351 100644
+--- a/arch/x86/include/asm/checksum_32.h
++++ b/arch/x86/include/asm/checksum_32.h
+@@ -159,7 +159,7 @@ static inline __sum16 csum_ipv6_magic(const struct in6_addr *saddr,
+ 	    "adcl $0, %0	;\n"
+ 	    : "=&r" (sum)
+ 	    : "r" (saddr), "r" (daddr),
+-	      "r" (htonl(len)), "r" (htonl(proto)), "0" (sum)
++	      "g" (htonl(len)), "g" (htonl(proto)), "0" (sum)
+ 	    : "memory");
+ 
+ 	return csum_fold(sum);
 -- 
-Maaz Mombasawala <maaz.mombasawala@broadcom.com>
+2.55.0
+
