@@ -1,150 +1,365 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09E3636195E;
-	Sat,  5 Sep 2026 04:43:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCE33F0A8C
+	for <llvm@lists.linux.dev>; Sat,  5 Sep 2026 07:05:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788583435; cv=none; b=dtWio+FNoiqCe7ilEY6MTmmg0iA7nW5Ri3tIesDv6/YLAWbuz39bDo8n9DCyurQM0xgpqbLYyvtNplxrr0t+18TFFnO+qfvMRB/ovnOfAG5O0t2Yhd34dbeugk6ip+RT/M9BsUu+vX9dUuNPSEBmIomH6FA5jku2ZS8IMmvBUVE=
+	t=1788591950; cv=none; b=L6FT/zHtZPV/DkdiFKBybE59LXaG0grphpz4aaSmt/dD+VszwkL6FO7C3V1ufQCvE7OeEjhmdSWNkRe9eD0V8jCh8wq94E2eTTj5Eh9cZzeXMDXrcniFVwvgvKWg20Tuqbe7o/B0D2V/JaKvSBNiWroeiiGtJrw2VZJcZVquwcE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788583435; c=relaxed/simple;
-	bh=rmCyqMKJ879cFYs/h+M4B17LJGufh30sJW5cs3g/VPU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CUyGnRGLj28f6VLXclLTc4/OwbAG5Z4z3lyxFTlyXF4otPLKi3fVLxdPaaRcNpw7tcqalbe0E6Pg7zfHUMadu/s2Va/QXvpQG77lCcG1etdOftjpDtXY7wS8gXRXxDjvBhPbLoJBCY+xt5595wze/VRZ+iGg6Z0DXgCur3iCVWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KMNDwQrQ; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788591950; c=relaxed/simple;
+	bh=k0I8rn8o0DL2nh2+hT6O42cxuqwP+1q/3AxR8XjKGik=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=kE1WM7qNfUDzSu1y+cCW4RNmi2xpqKOKUSp1kXaFWC+mqfZLPz1xgNbC/yFiUWogpig3bc75l46cU1zk0F7+7HnQ1gZNztDON9lW3Ch7kZ/3O74b7wjhlM79H0hKwxF80ZLoyHStvNXSCEyJmEXTJK2ssggbyJXM25uvKGg/y/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=ryT8JIyF; arc=none smtp.client-ip=113.46.200.221
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KMNDwQrQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788583434; x=1820119434;
-  h=date:from:to:cc:subject:message-id;
-  bh=rmCyqMKJ879cFYs/h+M4B17LJGufh30sJW5cs3g/VPU=;
-  b=KMNDwQrQ8WD7w7RQ3z1TU+6FTyQMIq7uYncJrtU9xC16FmwqqVjocTMk
-   sUMzuVUILMlXHIstC8+eQ4CGgJE7j8IRUDFQpgFmk/ELQ7YLvdGCE82BD
-   2IXjxOYqHnMTIVjPcRVdTDTk+BrOiMQDSDQLivJl6++yqCFQJXuofEvTP
-   E8hB+5hogqEmglO/kGxEc0SCkbc94CmSNa3EiSLDu4H3y+hMmj5+uFc3N
-   jjHdAnaJqTtqxPoBXE6Wrxig4zAnBo6tSM0w+8I0YTQCZJPBWef1eG6Gc
-   ASd128H4J/EG1drYGLDqZDN2Ejl7UmIwQ6JE7gepBjI1l2fC/4Z1iTdb/
-   Q==;
-X-CSE-ConnectionGUID: tEGlyW02QWS6LVSOHFE4Lw==
-X-CSE-MsgGUID: fAWnn3LyTM+PXmrlg6Npxw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11896"; a="88928904"
-X-IronPort-AV: E=Sophos;i="6.25,263,1779174000"; 
-   d="scan'208";a="88928904"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2026 21:43:53 -0700
-X-CSE-ConnectionGUID: sser5l21TsyyyLqJkD4nFw==
-X-CSE-MsgGUID: mFMFXa/rQ9CaFEReqxtF5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,263,1779174000"; 
-   d="scan'208";a="268903893"
-Received: from lkp-server01.sh.intel.com (HELO 73f3364bc37e) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 04 Sep 2026 21:43:51 -0700
-Received: from kbuild by 73f3364bc37e with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x2iFo-0000000001v-3ZiL;
-	Sat, 05 Sep 2026 04:43:48 +0000
-Date: Sat, 05 Sep 2026 12:43:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:ceph-iter 87/87]
- net/ceph/messenger_v2.c:3224:29: error: no member named 'out_enc_pages' in
- 'struct ceph_connection_v2_info'
-Message-ID: <202609051259.dQVMG4oz-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="ryT8JIyF"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=Q6dEH3g2T1S8eynI8/V88r65/Z7Y/FIPLqfHq+ZF0Fo=;
+	b=ryT8JIyFIKuaD+ztJXNQHiHq8cvmPQZGfbk7emTFJvEBpUr30jO5i8aZzXfMg67i1P26J7jVg
+	qRolOZPPOoqaVmyf/SWAiEUQtJTTJa+PonzazfuF/b4zj1avaVVurm9l/HvrNl1quL8yVFpQ1bf
+	wzAejj2wvXauKEeDvXfa//8=
+Received: from mail.maildlp.com (unknown [172.19.163.104])
+	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4hcPG36cd8zRhR0;
+	Sat,  5 Sep 2026 14:54:35 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 896644058F;
+	Sat,  5 Sep 2026 15:05:25 +0800 (CST)
+Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
+ (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Sat, 5 Sep
+ 2026 15:05:24 +0800
+Message-ID: <482278aa-67e3-41f0-9b12-528efe6e1940@huawei.com>
+Date: Sat, 5 Sep 2026 15:05:24 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
-head:   376ad9d4942bf11500931178bbeb965348f01057
-commit: 376ad9d4942bf11500931178bbeb965348f01057 [87/87] ceph: Don't use data_pages
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260905/202609051259.dQVMG4oz-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 0edd1b088cc36b4faee80358c925a91e16006258)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260905/202609051259.dQVMG4oz-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609051259.dQVMG4oz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/ceph/messenger_v2.c:3224:29: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3224 |         bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
-         |                            ~~~~~~~ ^
->> net/ceph/messenger_v2.c:3232:32: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
-    3232 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
-         |                                              ^~~~~~~~~~~~~~~~~~~~
-   net/ceph/messenger_v2.c:3270:14: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3270 |         if (con->v2.out_enc_pages) {
-         |             ~~~~~~~ ^
-   net/ceph/messenger_v2.c:3272:36: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3272 |                 ceph_release_page_vector(con->v2.out_enc_pages,
-         |                                          ~~~~~~~ ^
-   net/ceph/messenger_v2.c:3274:11: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3274 |                 con->v2.out_enc_pages = NULL;
-         |                 ~~~~~~~ ^
-   net/ceph/messenger_v2.c:3310:7: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
-    3310 |         case OUT_S_QUEUE_ENC_PAGE:
-         |              ^~~~~~~~~~~~~~~~~~~~
-   net/ceph/messenger_v2.c:3634:32: error: use of undeclared identifier 'OUT_S_QUEUE_ENC_PAGE'
-    3634 |                 WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE &&
-         |                                              ^~~~~~~~~~~~~~~~~~~~
-   net/ceph/messenger_v2.c:3802:14: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3802 |         if (con->v2.out_enc_pages) {
-         |             ~~~~~~~ ^
-   net/ceph/messenger_v2.c:3804:36: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3804 |                 ceph_release_page_vector(con->v2.out_enc_pages,
-         |                                          ~~~~~~~ ^
-   net/ceph/messenger_v2.c:3806:11: error: no member named 'out_enc_pages' in 'struct ceph_connection_v2_info'
-    3806 |                 con->v2.out_enc_pages = NULL;
-         |                 ~~~~~~~ ^
-   10 errors generated.
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments
+ support for RV64 JIT
+Content-Language: en-US
+From: Pu Lehui <pulehui@huawei.com>
+To: Feng Jiang <jiangfeng@kylinos.cn>
+CC: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+	<eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
+	<emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, Luke Nelson
+	<luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>,
+	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>, Puranjay Mohan
+	<puranjay@kernel.org>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
+	<palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
+	<alex@ghiti.fr>, Shuah Khan <shuah@kernel.org>, Nathan Chancellor
+	<nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	<bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<llvm@lists.linux.dev>
+References: <20260814-bpf-riscv-stack-args-v3-0-2160de56fea3@kylinos.cn>
+ <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
+ <729d2110-20b2-4e63-af44-99ca8cebdbfd@huawei.com>
+ <1a0c0b5a-fc09-431f-b3a5-56593a6e76be@huawei.com>
+In-Reply-To: <1a0c0b5a-fc09-431f-b3a5-56593a6e76be@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
 
-vim +3224 net/ceph/messenger_v2.c
+On 2026/8/18 11:48, Pu Lehui wrote:
+> 
+> On 2026/8/17 9:52, Pu Lehui wrote:
+>> Hi Feng Jiang,
+>>
+>> On 2026/8/14 9:29, Feng Jiang wrote:
+>>> Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
+>>> and kfuncs can receive more than 5 arguments via the stack
+>>> (BPF_REG_PARAMS / r11).
+>>>
+>>> For BPF-to-BPF calls the caller writes outgoing arguments at the
+>>> bottom of its frame (SP-relative). The callee reads them with
+>>> FP-relative loads. Its FP is set to the caller SP in the prologue,
+>>> so the offsets match.
+>>>
+>>> The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
+>>> SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
+>>> area into A5-A7 and copy any remaining arguments down so argument 9
+>>> lands at SP+0.
+>>
+>> bpf2bpf calls pass extra arguments entirely on the stack, whereas 
+>> kfuncs pass them via a mix of registers and the stack. This 
+>> inconsistency not only wastes stack slots in kfunc scenarios but is 
+>> also error-prone and easy to overlook during maintenance.
+>>
+>> To make argument passing more straightforward and consistent, I think 
+>> we can align it with the standard riscv calling convention: use a0-a7 
+>> for the first 8 arguments and pass any remaining arguments on the stack.
+>>
+>> To support this, the current bpf-to-rv register mapping needs to be 
+>> revised:
+>>
+>> T0 -> BPF_REG_0 (ftrace use T0 too, but it might not be an issue / 
+>> needs verification)
+>> T6 -> TCC
+>> T7 -> BPF_REG_AX (rarely used, so let's move to t7)
+>>
+>> Note that this remapping affects multiple places and requires careful 
+>> auditing.
+> 
+> Discussed offline with Feng Jiang; I will take over refactoring this 
+> patch and post an updated version once it's ready.
 
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3215  
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3216  static void queue_enc_page(struct ceph_connection *con)
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3217  {
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3218  	struct bio_vec bv;
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3219  
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3220  	dout("%s con %p i %d resid %d\n", __func__, con, con->v2.out_enc_i,
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3221  	     con->v2.out_enc_resid);
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3222  	WARN_ON(!con->v2.out_enc_resid);
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3223  
-1eb9cd15004fa9 Christoph Hellwig 2023-02-03 @3224  	bvec_set_page(&bv, con->v2.out_enc_pages[con->v2.out_enc_i],
-1eb9cd15004fa9 Christoph Hellwig 2023-02-03  3225  		      min(con->v2.out_enc_resid, (int)PAGE_SIZE), 0);
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3226  
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3227  	set_out_bvec(con, &bv, false);
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3228  	con->v2.out_enc_i++;
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3229  	con->v2.out_enc_resid -= bv.bv_len;
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3230  
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3231  	if (con->v2.out_enc_resid) {
-cd1a677cad9940 Ilya Dryomov      2020-11-19 @3232  		WARN_ON(con->v2.out_state != OUT_S_QUEUE_ENC_PAGE);
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3233  		return;
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3234  	}
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3235  
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3236  	/*
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3237  	 * We've queued the last piece of ciphertext (ending with
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3238  	 * epilogue) + auth tag.  Once it's written, we are done.
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3239  	 */
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3240  	WARN_ON(con->v2.out_enc_i != con->v2.out_enc_page_cnt);
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3241  	con->v2.out_state = OUT_S_FINISH_MESSAGE;
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3242  }
-cd1a677cad9940 Ilya Dryomov      2020-11-19  3243  
+Hi Jiang,
 
-:::::: The code at line 3224 was first introduced by commit
-:::::: 1eb9cd15004fa91b6d1911af9fbaff299d8e9e45 libceph: use bvec_set_page to initialize bvecs
+Sorry for the late.
 
-:::::: TO: Christoph Hellwig <hch@lst.de>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
+I just send a new series, hope you have time to review and test.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+https://lore.kernel.org/bpf/20260905070409.4141522-1-pulehui@huaweicloud.com/
+
+> 
+>>
+>>>
+>>> A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
+>>> live before a call, TCC is backed up on the stack, and A7 is unused
+>>> by the JIT.
+>>
+>>
+>>
+>>>
+>>> Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
+>>> iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
+>>> corrupts callee-saved registers.
+>>>
+>>> Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+>>> ---
+>>>   arch/riscv/net/bpf_jit.h        |  1 +
+>>>   arch/riscv/net/bpf_jit_comp64.c | 79 
+>>> +++++++++++++++++++++++++++++++++++++++--
+>>>   arch/riscv/net/bpf_jit_core.c   |  4 +++
+>>>   3 files changed, 81 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
+>>> index 419b9d795f2a..9eb4e149505d 100644
+>>> --- a/arch/riscv/net/bpf_jit.h
+>>> +++ b/arch/riscv/net/bpf_jit.h
+>>> @@ -82,6 +82,7 @@ struct rv_jit_context {
+>>>       unsigned long flags;
+>>>       int stack_size;
+>>>       int tcc_offset;
+>>> +    u16 stack_arg_size;
+>>>       u64 arena_vm_start;
+>>>       u64 user_vm_start;
+>>>   };
+>>> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
+>>> b/arch/riscv/net/bpf_jit_comp64.c
+>>> index 6b9972b07c1b..58cb3e5ff6b4 100644
+>>> --- a/arch/riscv/net/bpf_jit_comp64.c
+>>> +++ b/arch/riscv/net/bpf_jit_comp64.c
+>>> @@ -1815,18 +1815,43 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>           if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
+>>>               const struct btf_func_model *fm;
+>>> -            int idx;
+>>> +            int idx, nargs;
+>>>               fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
+>>>               if (!fm)
+>>>                   return -EINVAL;
+>>> -            for (idx = 0; idx < fm->nr_args; idx++) {
+>>> +            nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
+>>> +            for (idx = 0; idx < nargs; idx++) {
+>>>                   u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
+>>>                   if (fm->arg_size[idx] == sizeof(int))
+>>>                       emit_sextw(reg, reg, ctx);
+>>>               }
+>>> +
+>>> +            /* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ 
+>>> at SP+0 */
+>>> +            if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
+>>> +                int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
+>>> +                int n_reg = min_t(int, n_stack,
+>>> +                          RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
+>>> +
+>>> +                for (idx = 0; idx < n_reg; idx++) {
+>>> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
+>>> +
+>>> +                    emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
+>>> +                    if (sz == sizeof(int))
+>>> +                        emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, 
+>>> ctx);
+>>> +                }
+>>> +
+>>> +                for (idx = n_reg; idx < n_stack; idx++) {
+>>> +                    int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
+>>> +
+>>> +                    emit_ld(RV_REG_T1, idx * 8, RV_REG_SP, ctx);
+>>> +                    if (sz == sizeof(int))
+>>> +                        emit_sextw(RV_REG_T1, RV_REG_T1, ctx);
+>>> +                    emit_sd(RV_REG_SP, (idx - n_reg) * 8, RV_REG_T1, 
+>>> ctx);
+>>> +                }
+>>> +            }
+>>
+>> looks a bit complicated, how about the following after redefine regmap:
+>>
+>> ```
+>> for (idx = 0; idx < fm->nr_args; idx++) {
+>>    if (idx < RV_MAX_REG_ARGS) {
+>>      u8 reg = RV_REG_A0 + idx;
+>>
+>>      sign_extend(reg, reg, xxx)
+>>    } else {
+>>      load from stack to T1
+>>      sign_extend
+>>      retore from T1 to orig stack slot
+>>    }
+>> }
+>> ```
+>>
+>>>           }
+>>>           /* restore TCC to RV_REG_TCC before bpf2bpf call */
+>>> @@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>       case BPF_LDX | BPF_MEM | BPF_H:
+>>>       case BPF_LDX | BPF_MEM | BPF_W:
+>>>       case BPF_LDX | BPF_MEM | BPF_DW:
+>>> +        if (insn->src_reg == BPF_REG_PARAMS) {
+>>
+>> pls use is_stack_arg_ldx/st/stx instead.
+>>
+>>> +            int idx = off / 8 - 1;
+>>> +
+>>> +            if (is_12b_int(idx * 8)) {
+>>> +                emit_ldx_insn(rd, idx * 8, RV_REG_FP, 
+>>> BPF_SIZE(code), false, ctx);
+>>> +            } else {
+>>> +                emit_imm(RV_REG_T1, idx * 8, ctx);
+>>> +                emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
+>>> +                emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), 
+>>> false, ctx);
+>>> +            }
+>>> +            if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
+>>> +                return 1;
+>>> +            break;
+>>
+>> This piece of code was refactored not long ago. Let's see if we can 
+>> merge it into the logic below or fold it into emit_ldx—let's give it a 
+>> try.
+>>
+>>> +        }
+>>> +        fallthrough;
+>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_B:
+>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_H:
+>>>       case BPF_LDX | BPF_PROBE_MEM | BPF_W:
+>>> @@ -1938,6 +1978,20 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>       case BPF_ST | BPF_MEM | BPF_H:
+>>>       case BPF_ST | BPF_MEM | BPF_W:
+>>>       case BPF_ST | BPF_MEM | BPF_DW:
+>>> +        if (insn->dst_reg == BPF_REG_PARAMS) {
+>>> +            int idx = -off / 8 - 1;
+>>> +
+>>> +            emit_imm(RV_REG_T1, imm, ctx);
+>>> +            if (is_12b_int(idx * 8)) {
+>>> +                emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, 
+>>> BPF_SIZE(code), ctx);
+>>> +            } else {
+>>> +                emit_imm(RV_REG_T2, idx * 8, ctx);
+>>> +                emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
+>>> +                emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, 
+>>> BPF_SIZE(code), ctx);
+>>> +            }
+>>> +            break;
+>>> +        }
+>>> +        fallthrough;
+>>
+>> ditto
+>>
+>>>       /* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
+>>>       case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
+>>>       case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
+>>> @@ -1960,6 +2014,19 @@ int bpf_jit_emit_insn(const struct bpf_insn 
+>>> *insn, struct rv_jit_context *ctx,
+>>>       case BPF_STX | BPF_MEM | BPF_H:
+>>>       case BPF_STX | BPF_MEM | BPF_W:
+>>>       case BPF_STX | BPF_MEM | BPF_DW:
+>>> +        if (insn->dst_reg == BPF_REG_PARAMS) {
+>>> +            int idx = -off / 8 - 1;
+>>> +
+>>> +            if (is_12b_int(idx * 8)) {
+>>> +                emit_stx_insn(RV_REG_SP, idx * 8, rs, 
+>>> BPF_SIZE(code), ctx);
+>>> +            } else {
+>>> +                emit_imm(RV_REG_T1, idx * 8, ctx);
+>>> +                emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
+>>> +                emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
+>>> +            }
+>>> +            break;
+>>> +        }
+>>> +        fallthrough;
+>>
+>> ditto
+>>
+>>>       /* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
+>>>       case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
+>>>       case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
+>>> @@ -2036,6 +2103,7 @@ void bpf_jit_build_prologue(struct 
+>>> rv_jit_context *ctx, bool is_subprog)
+>>>       stack_adjust = round_up(stack_adjust, STACK_ALIGN);
+>>>       stack_adjust += bpf_stack_adjust;
+>>> +    stack_adjust += ctx->stack_arg_size;
+>>>       store_offset = stack_adjust - 8;
+>>> @@ -2093,7 +2161,7 @@ void bpf_jit_build_prologue(struct 
+>>> rv_jit_context *ctx, bool is_subprog)
+>>>       emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
+>>>       if (bpf_stack_adjust)
+>>> -        emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
+>>> +        emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + 
+>>> bpf_stack_adjust, ctx);
+>>>       ctx->stack_size = stack_adjust;
+>>> @@ -2171,3 +2239,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+>>>   {
+>>>       return true;
+>>>   }
+>>> +
+>>> +bool bpf_jit_supports_stack_args(void)
+>>> +{
+>>> +    return true;
+>>> +}
+>>> diff --git a/arch/riscv/net/bpf_jit_core.c 
+>>> b/arch/riscv/net/bpf_jit_core.c
+>>> index cbfcd287ea16..844a0f3e0fa9 100644
+>>> --- a/arch/riscv/net/bpf_jit_core.c
+>>> +++ b/arch/riscv/net/bpf_jit_core.c
+>>> @@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+>>> bpf_verifier_env *env, struct bpf_pr
+>>>       ctx->arena_vm_start = 
+>>> bpf_arena_get_kern_vm_start(prog->aux->arena);
+>>>       ctx->user_vm_start = 
+>>> bpf_arena_get_user_vm_start(prog->aux->arena);
+>>>       ctx->prog = prog;
+>>> +
+>>> +    ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
+>>> +                       sizeof(u64), STACK_ALIGN);
+>>
+>> It's not u64—since every stack slot is aligned to the pointer size 
+>> (sizeof(long)), I think using 8 is fine.
+>>
+>>> +
+>>>       ctx->offset = kvzalloc_objs(int, prog->len);
+>>>       if (!ctx->offset)
+>>>           goto out_offset;
+>>>
+>>
+>> _______________________________________________
+>> linux-riscv mailing list
+>> linux-riscv@lists.infradead.org
+>> http://lists.infradead.org/mailman/listinfo/linux-riscv
