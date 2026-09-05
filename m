@@ -1,138 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF54533ADAF;
-	Sat,  5 Sep 2026 18:55:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432B1377ABF;
+	Sat,  5 Sep 2026 21:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788634561; cv=none; b=QR/on3LLDzCWLxYdntT/QtwO5rcKyLceZJYQLRfO5XmO61Zv9TVyYRQPnvttF6fGogRf/gdc0WNnL2lHEYlbV2ScEmwZ44siWtyozEiJa2TYTelKfiyrWL3qujFG7ghx77R6pNvK5AuhThCHRBnFt32fkY7UM7MGuxH/dYNg6sw=
+	t=1788643328; cv=none; b=p4m8ifnCOooO4WcHqyPNXtDiF49EeHkz2L57NWCpoweK9XlGi3oGnDOWVUmd7ZenocxbUiPpQuhf3dbjdWG+yHF4Aspcfc5s5GSW3LN9nnOBHMHeKY647eionoRC+gL4hyedNYTEWouv2LC/Z9R4rz7HF45NlgU6IDp0B9pfd5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788634561; c=relaxed/simple;
-	bh=Bg0GDYRC8gosaIgPFG7QOwtAyEgvc/oRU/CSL9I9B7g=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Eoc0X94rO4K2/iAReg390TQJTFESB7OyTvc5j04O8KYYaN027WPCj2i+0T3xoBKGZRk+xB5ng7g0lItZBHYllp0czhj9F26kn70acWxTT1L2Y7/pJqjmx9XnoXTF3XNIMZfsZw8nlLdNRrQpucuUt0MG80Ma37Ry27GkHf8nOhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oECu+sMx; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1788643328; c=relaxed/simple;
+	bh=mLmlJvqUwLopDXz9zrmzSQ2cRga7h33hTayA8pdKtHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ra6kpbRFjAVH5RJPbJun1w2GVAjQnAmFDrbRGUGeiszd6XZivvkZVvOOnFkz1okED3QtUwCnJrmZPnbUX+TXD3ApGYttC2m0ZzF3f/V9MRdYq18R86drw50PRiNCWEqjhmDebkRgSKidlPbeDAulVRMM48duSv8EjHnS6BwrRGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoI8ONvE; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oECu+sMx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoI8ONvE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788634558; x=1820170558;
-  h=date:from:to:cc:subject:message-id;
-  bh=Bg0GDYRC8gosaIgPFG7QOwtAyEgvc/oRU/CSL9I9B7g=;
-  b=oECu+sMxeku1Bo+RVnN6hkPK6gPCbOntVgdFMHK9uk0Xf8CtLaL7Pc4V
-   jybVmrg5Xw2wIp59wCslM1G2OYVIhs8hlR81iEzIPCg8du+C+xAUa5kkl
-   /sEjKagSZANgCVDUD9yIcZzWFsnRuHUlWFQJ6aqm7RHjGDKXm6wQSawXY
-   0UVYwLXIvunFBfpLTpVf3b/UFdc2lF2Kej23Jwm/Z5C+cep4gBd645Mky
-   RKedZ9//TDjATiqtOaEn8fxsGFrxOIyYoiTJH7ZKOLWKdj1P1hVk7/DOj
-   +YbPdyAIawoLQhm7MvltgNO3VIX41l/7/Ve+KQEK9GIA+AYrUD14KEOcw
-   w==;
-X-CSE-ConnectionGUID: k+snkjagRTee9Q/6k1AopA==
-X-CSE-MsgGUID: VmCQCrA8Qruk+y07voVb3A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11897"; a="106470071"
+  t=1788643325; x=1820179325;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mLmlJvqUwLopDXz9zrmzSQ2cRga7h33hTayA8pdKtHc=;
+  b=ZoI8ONvE99Qt+bx1wcLBEwx0LUbc418Z3slenm7E5T007Thqd7rwBS0l
+   haaFsIG6Njs+nSH5J5yrEd687q9br445LCyq6fcBrfVwIPIpRJd7xLnFV
+   kJNPv3YJiuj04gugOBAvf+TGHABfV1QA6Y5ZNYMtwbuHuIM+fN3HRg4Ye
+   Usfbcwa9scJpgFAxSAxb+77/vAuwZMtbRSbvCu5Ajf0eSVnmcfeLRsWGB
+   jvnoqUZirDU3f/aP1KdONJIdpbvYMjRRZj2/75XUxlI0ed8H8aAlmBU/g
+   IDIFl6vXf3Ae92CBjS1HpsLQWgC1kLN9XrfIJw2gNIkdC6KlsIhPPxuq9
+   g==;
+X-CSE-ConnectionGUID: JjBXdNbVSAebCZPvxqVPJw==
+X-CSE-MsgGUID: TrivahjCQ1yqxNIWWg+aNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11897"; a="100625368"
 X-IronPort-AV: E=Sophos;i="6.25,264,1779174000"; 
-   d="scan'208";a="106470071"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2026 11:55:58 -0700
-X-CSE-ConnectionGUID: VX9CB+itR3y9ukffT2pvkA==
-X-CSE-MsgGUID: jnUFOyi6TfKl1FbG06ocLA==
+   d="scan'208";a="100625368"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2026 14:22:04 -0700
+X-CSE-ConnectionGUID: uzkxX0XpS8ChnlJZWnyLEA==
+X-CSE-MsgGUID: lE3ZbeXrSaWCFu0K3f2taQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,264,1779174000"; 
-   d="scan'208";a="269819251"
+   d="scan'208";a="269037291"
 Received: from lkp-server01.sh.intel.com (HELO 73f3364bc37e) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 05 Sep 2026 11:55:56 -0700
+  by orviesa010.jf.intel.com with ESMTP; 05 Sep 2026 14:22:04 -0700
 Received: from kbuild by 73f3364bc37e with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1x2vYP-000000000zb-4Bxt;
-	Sat, 05 Sep 2026 18:55:54 +0000
-Date: Sun, 06 Sep 2026 02:55:53 +0800
+	id 1x2xpp-0000000016p-3D2j;
+	Sat, 05 Sep 2026 21:22:01 +0000
+Date: Sun, 6 Sep 2026 05:21:07 +0800
 From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
+To: Bo Zhang <zhangbo0325@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:efi-libstub-guid-conversion 4/4]
- drivers/firmware/efi/libstub/printk.c:104:12: error: 'const u8 *' (aka 'const
- unsigned char *') and 'const char *' are not pointers to compatible types
-Message-ID: <202609060200.riINTkvQ-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+Subject: Re: [RFC PATCH] mm: vmscan: avoid anon scanning for GFP_NOIO with
+ low swapcache
+Message-ID: <202609060532.n2Xnaxg0-lkp@intel.com>
+References: <20260903040131.4016290-1-zhangbo56@xiaomi.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260903040131.4016290-1-zhangbo56@xiaomi.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-libstub-guid-conversion
-head:   5701341f80f05258b56124f47fdde4e10ca3e2aa
-commit: 5701341f80f05258b56124f47fdde4e10ca3e2aa [4/4] efi/libstub: Factor out utf8-to-utf16 conversion from efi_puts()
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260906/202609060200.riINTkvQ-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260906/202609060200.riINTkvQ-lkp@intel.com/reproduce)
+Hi Bo,
+
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Zhang/mm-vmscan-avoid-anon-scanning-for-GFP_NOIO-with-low-swapcache/20260903-120131
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20260903040131.4016290-1-zhangbo56%40xiaomi.com
+patch subject: [RFC PATCH] mm: vmscan: avoid anon scanning for GFP_NOIO with low swapcache
+config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260906/202609060532.n2Xnaxg0-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260906/202609060532.n2Xnaxg0-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609060200.riINTkvQ-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609060532.n2Xnaxg0-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/firmware/efi/libstub/printk.c:81:43: error: unknown type name 'efi_char_16_t'; did you mean 'efi_char16_t'?
-      81 | size_t efi_utf8_to_utf16(const char *str, efi_char_16_t *buf, size_t lim)
-         |                                           ^~~~~~~~~~~~~
-         |                                           efi_char16_t
-   include/linux/efi.h:50:13: note: 'efi_char16_t' declared here
-      50 | typedef u16 efi_char16_t;               /* UNICODE character */
-         |             ^
->> drivers/firmware/efi/libstub/printk.c:104:12: error: 'const u8 *' (aka 'const unsigned char *') and 'const char *' are not pointers to compatible types
-     104 |         return s8 - str;
-         |                ~~ ^ ~~~
-   drivers/firmware/efi/libstub/printk.c:81:8: warning: no previous prototype for function 'efi_utf8_to_utf16' [-Wmissing-prototypes]
-      81 | size_t efi_utf8_to_utf16(const char *str, efi_char_16_t *buf, size_t lim)
-         |        ^
-   drivers/firmware/efi/libstub/printk.c:81:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-      81 | size_t efi_utf8_to_utf16(const char *str, efi_char_16_t *buf, size_t lim)
-         | ^
-         | static 
-   1 warning and 2 errors generated.
+>> mm/vmscan.c:396:40: error: use of undeclared identifier 'NR_SWAPCACHE'
+     396 |         swapcache = lruvec_page_state(lruvec, NR_SWAPCACHE);
+         |                                               ^
+   1 error generated.
 
 
-vim +104 drivers/firmware/efi/libstub/printk.c
+vim +/NR_SWAPCACHE +396 mm/vmscan.c
 
-    70	
-    71	/**
-    72	 * efi_str_to_utf16 - Convert a UTF-8 string to UTF-16
-    73	 * @str:	UTF-8 encoded string
-    74	 * @buf:	The buffer to store the converted UTF-16
-    75	 * @lim:	The size of the buffer in UTF-16 characters
-    76	 *
-    77	 * Converts as many UTF-8 characters as will fit into the buffer,
-    78	 * and terminates it with a NULL wchar. Returns the number of bytes
-    79	 * consumed from the input string.
-    80	 */
-    81	size_t efi_utf8_to_utf16(const char *str, efi_char_16_t *buf, size_t lim)
-    82	{
-    83		const u8 *s8 = (const u8 *)str;
-    84		size_t pos = 0;
-    85		u32 c32;
-    86	
-    87		while (*s8 && pos + 2 < lim) {
-    88			if (*s8 == '\n')
-    89				buf[pos++] = L'\r';
-    90			c32 = utf8_to_utf32(&s8);
-    91			if (c32 < 0x10000) {
-    92				/* Characters in plane 0 use a single word. */
-    93				buf[pos++] = c32;
-    94			} else {
-    95				/*
-    96				 * Characters in other planes encode into a surrogate
-    97				 * pair.
-    98				 */
-    99				buf[pos++] = (0xd800 - (0x10000 >> 10)) + (c32 >> 10);
-   100				buf[pos++] = 0xdc00 + (c32 & 0x3ff);
-   101			}
-   102		}
-   103		buf[pos] = L'\0';
- > 104		return s8 - str;
-   105	}
-   106	
+   384	
+   385	static inline bool reclaimable_anon_is_low(struct mem_cgroup *memcg,
+   386			int nid, struct scan_control *sc)
+   387	{
+   388		struct lruvec *lruvec = get_lruvec(memcg, nid);
+   389		unsigned long anon_pages, swapcache;
+   390	
+   391		if (!sc || (sc->gfp_mask & __GFP_IO))
+   392			return false;
+   393	
+   394		anon_pages = lruvec_page_state(lruvec, NR_INACTIVE_ANON) +
+   395			     lruvec_page_state(lruvec, NR_ACTIVE_ANON);
+ > 396		swapcache = lruvec_page_state(lruvec, NR_SWAPCACHE);
+   397	
+   398		return swapcache < min(anon_pages >> 6, SWAP_CLUSTER_MAX);
+   399	}
+   400	
 
 --
 0-DAY CI Kernel Test Service
