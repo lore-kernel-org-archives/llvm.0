@@ -1,118 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432B1377ABF;
-	Sat,  5 Sep 2026 21:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1053D35AC10
+	for <llvm@lists.linux.dev>; Sun,  6 Sep 2026 10:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788643328; cv=none; b=p4m8ifnCOooO4WcHqyPNXtDiF49EeHkz2L57NWCpoweK9XlGi3oGnDOWVUmd7ZenocxbUiPpQuhf3dbjdWG+yHF4Aspcfc5s5GSW3LN9nnOBHMHeKY647eionoRC+gL4hyedNYTEWouv2LC/Z9R4rz7HF45NlgU6IDp0B9pfd5s=
+	t=1788688979; cv=none; b=UqclQcgfcBIjU4Em1pEmxakKjV6V1BWnjahh1yFot52n5hRssrEdg0QUPF1evuAjC1ieztfTCsaRgfnwxNIKDmpCJwVVV22gqK8p9F1Wiare+qllq+WclsH9YODh49fhuh16ZuTD6RmLKwiI4xh/FYm+eoFC+SwHxsn0SUl1WFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788643328; c=relaxed/simple;
-	bh=mLmlJvqUwLopDXz9zrmzSQ2cRga7h33hTayA8pdKtHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ra6kpbRFjAVH5RJPbJun1w2GVAjQnAmFDrbRGUGeiszd6XZivvkZVvOOnFkz1okED3QtUwCnJrmZPnbUX+TXD3ApGYttC2m0ZzF3f/V9MRdYq18R86drw50PRiNCWEqjhmDebkRgSKidlPbeDAulVRMM48duSv8EjHnS6BwrRGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZoI8ONvE; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788688979; c=relaxed/simple;
+	bh=IC1uCXmtgjcrdcBjucQzryI874h8wBozNrYWy3lJKGY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OmBp+rHoYitZXOoqCeyfx/Levljj+YDDRVX+r7ayGm8FTuymY2Cv8BCamRakU7igAS8ULoylDaX/Dm6dS8GL7TgaTvq5pZHPx5YIpTw3DdrjXFPekK0dGZ9r80ELpy0R1YYHDAp3i9HyDkCJQEV/Ty3XgtGpUlY80gBqs3uRLsM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HwNEt/pi; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZoI8ONvE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788643325; x=1820179325;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=mLmlJvqUwLopDXz9zrmzSQ2cRga7h33hTayA8pdKtHc=;
-  b=ZoI8ONvE99Qt+bx1wcLBEwx0LUbc418Z3slenm7E5T007Thqd7rwBS0l
-   haaFsIG6Njs+nSH5J5yrEd687q9br445LCyq6fcBrfVwIPIpRJd7xLnFV
-   kJNPv3YJiuj04gugOBAvf+TGHABfV1QA6Y5ZNYMtwbuHuIM+fN3HRg4Ye
-   Usfbcwa9scJpgFAxSAxb+77/vAuwZMtbRSbvCu5Ajf0eSVnmcfeLRsWGB
-   jvnoqUZirDU3f/aP1KdONJIdpbvYMjRRZj2/75XUxlI0ed8H8aAlmBU/g
-   IDIFl6vXf3Ae92CBjS1HpsLQWgC1kLN9XrfIJw2gNIkdC6KlsIhPPxuq9
-   g==;
-X-CSE-ConnectionGUID: JjBXdNbVSAebCZPvxqVPJw==
-X-CSE-MsgGUID: TrivahjCQ1yqxNIWWg+aNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11897"; a="100625368"
-X-IronPort-AV: E=Sophos;i="6.25,264,1779174000"; 
-   d="scan'208";a="100625368"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2026 14:22:04 -0700
-X-CSE-ConnectionGUID: uzkxX0XpS8ChnlJZWnyLEA==
-X-CSE-MsgGUID: lE3ZbeXrSaWCFu0K3f2taQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,264,1779174000"; 
-   d="scan'208";a="269037291"
-Received: from lkp-server01.sh.intel.com (HELO 73f3364bc37e) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 05 Sep 2026 14:22:04 -0700
-Received: from kbuild by 73f3364bc37e with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x2xpp-0000000016p-3D2j;
-	Sat, 05 Sep 2026 21:22:01 +0000
-Date: Sun, 6 Sep 2026 05:21:07 +0800
-From: kernel test robot <lkp@intel.com>
-To: Bo Zhang <zhangbo0325@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] mm: vmscan: avoid anon scanning for GFP_NOIO with
- low swapcache
-Message-ID: <202609060532.n2Xnaxg0-lkp@intel.com>
-References: <20260903040131.4016290-1-zhangbo56@xiaomi.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HwNEt/pi"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5b28c91fba5so3103729e87.1
+        for <llvm@lists.linux.dev>; Sun, 06 Sep 2026 03:02:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788688976; x=1789293776; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OiR9dFdTiyluo58cBb+DtMhNZ/Aaatk8gf6hWN59PoI=;
+        b=HwNEt/piyRQAumj8agTrMauaYvgLdMz5RgiRcgQlPr2p1+jFcsrYH8L70PuQ3EH+jx
+         TOrlr4sbEg4aRZ+kAXUzVVzjVxvFrLdoj6aiu565bU6dd2yoE02BEjH5gNsLg4YdwE6z
+         CrB0I6FUClPhO79ZX4933possvAAeE3ojRS71aR0TM0Ws6036eAWsXxVjMWhpC3/5BHi
+         2ZDBVujLXuC/DayCyrWukU4O5KhNfzpU0qij+BQdG14Er6iWVl2uh5ktgnrwp63MZ0fC
+         fpmOeP0fpqHx2rcDASvojFcocgBZ1jBau9etIiGSY/WLmrWbKBJott8rF0SUMaOeCbj2
+         c11w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788688976; x=1789293776;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OiR9dFdTiyluo58cBb+DtMhNZ/Aaatk8gf6hWN59PoI=;
+        b=XBX6tKGDMEfNB7w18mQoXzNeq39bFPtIXKT8r7Lk7UOaEP9qed/QjnDxs/KV0pNhOL
+         l0vFKpGz+bmGfBwNO1+xdIAEXN+DRtU70JRCD6pQPF+o2vfexS1V+pv9LhHbJ9LePPiJ
+         bTEDFV1finVBaS2wdraQP0vHFe7+MR0HKpIGQEaXFiu5IzoJWoz1g042JNXIOspsn09h
+         i+XLL+f5TJAKE5Sh8/vAT3OIH87aDwKtnDLXAey5GmY5KBhKShvKtNAND35PB3Z8dgy6
+         XvRCRdfRbdVuSa9phpnxIWgTyzdtg3lULiuS8vu0mGElwOFWYcqDZBnIfNJp40+KTviM
+         yaXw==
+X-Forwarded-Encrypted: i=1; AKwUvBwaKMjiuyuSTq5iRsyPWb81ebqmONOmnk+up0+ySzfCuI77w4dBk7jyoJZLwg5dM51XV+H4@lists.linux.dev
+X-Gm-Message-State: AFuF++mna62SgQQ2t3KHMg9mUCMBRi2nwF5oQzK7YV5bikrhKi8jVtcI
+	Y3lOeX+PcYwPdwwrhktXmeMUg6NT1xkgao8KIqZT0Xk5OVG115fIczOQ
+X-Gm-Gg: AYBFou1UtShQs9NZGn7Q/bmH4/qUYlBcfPLjx3FYYskeip4qA5++FiaL5Mt7ES9f7u7
+	Bz+jXtjFxbW/Nh34YF4m8coM0mlUAvg3uNvNfBk5AXjSFCKJrD1LSCO5LDoBLkTpy8/vgTr0oiO
+	UxPjua+eCJwkZo32OqUzZzRx1TU02dKAMuFXD+JTu3e/6XN9lbLrL1dvb5MVUFMKXqlKFrLdzge
+	T9/Py9PZthkfj/695rROnCEarxdXDxHHgwgRvlGxyepAzefoFW9Ll6ZhK/yDgtRwB1n890yxAy1
+	a5YdonX3tFxF/Q48/wRqZ+zLAowCNNk1KMykSW31NIJEYp6R6Xw5dq+uYGlrwp3b+ZMEs0WVGdd
+	SeW48QEQoaNn6Z8D9ngoDz931nkRSLstj+aJkWniyRvFfHC2YKbh7kq3xdouTBdMc4cVhZmrCGc
+	Khf075HcP8j3HkFOm+gPmAnQIOkHiZUnxCEZR2j7iCl2vA7bRE2T/Zysu4m4L+BbMXIIsFXYhFv
+	KvwKHMDyyJ9CZXN2Z33utEUBt8VpvLsCyxDKdxCESxYwKu63/K+PNw+Ns0=
+X-Received: by 2002:a05:6512:104f:b0:5b4:a798:2630 with SMTP id 2adb3069b0e04-5b60e6a536bmr3218881e87.3.1788688975659;
+        Sun, 06 Sep 2026 03:02:55 -0700 (PDT)
+Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b616700006sm1548665e87.57.2026.09.06.03.02.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Sep 2026 03:02:54 -0700 (PDT)
+From: Rupesh Majhi <zoone.rupert@gmail.com>
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: Andy Shevchenko <andy@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 5/6] iio: pressure: dps310: add hardware FIFO support
+Date: Sun,  6 Sep 2026 12:45:04 +0300
+Message-ID: <20260906094622.433243-1-zoone.rupert@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <178813888151.2788519.16547013180884814648.b4-review@b4>
+References: <20260824201203.396651-6-zoone.rupert@gmail.com> <178813888151.2788519.16547013180884814648.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260903040131.4016290-1-zhangbo56@xiaomi.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Bo,
+On Mon, 31 Aug 2026 02:14:41 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
+> Dropping data rather defeats the point of the fifo.  Can we avoid it
+> by holding them locally until we will definitely have seen a useable
+> temperature?
 
-[auto build test ERROR on akpm-mm/mm-everything]
+The temperature is dropped too. dps310_fifo_drain() sets fifo_temp_valid
+only in its second pass but returns at "if (!scans)" first, and FIFO reads
+are destructive, so a batch that pushes nothing loses the temperature it
+read. With pressure enabled, only a batch holding one ahead of a pressure
+entry gets through.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bo-Zhang/mm-vmscan-avoid-anon-scanning-for-GFP_NOIO-with-low-swapcache/20260903-120131
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20260903040131.4016290-1-zhangbo56%40xiaomi.com
-patch subject: [RFC PATCH] mm: vmscan: avoid anon scanning for GFP_NOIO with low swapcache
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20260906/202609060532.n2Xnaxg0-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260906/202609060532.n2Xnaxg0-lkp@intel.com/reproduce)
+DPS310 on a BeagleBone Black, pressure only, 32 Hz and 1 Hz, 3 s per trial:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609060532.n2Xnaxg0-lkp@intel.com/
+  watermark 1  (31 ms drain):   4 of 6 enables produced nothing
+  watermark 32 (484 ms drain):  0 of 6
 
-All errors (new ones prefixed by >>):
+Other runs gave 3 of 8 and 3 of 6. Silent, nothing in dmesg.
 
->> mm/vmscan.c:396:40: error: use of undeclared identifier 'NR_SWAPCACHE'
-     396 |         swapcache = lruvec_page_state(lruvec, NR_SWAPCACHE);
-         |                                               ^
-   1 error generated.
+Seeding instead of holding, one temperature read in postenable, fixes it:
+0 of 16. But TMP_RDY is cleared on read, so after a sysfs read the seed
+waits for the next conversion. Buffer enable took:
 
+  temp 1 Hz:   661, 781, 802 ms
+  temp 32 Hz:  148, 151, 151 ms   (period is 31 ms, so this is the floor)
 
-vim +/NR_SWAPCACHE +396 mm/vmscan.c
+Timeout is 1000000/rate, and on timeout dps310_ready() reinits, putting
+PRS_CFG and TMP_CFG back to defaults. Not something I want in a buffer
+enable.
 
-   384	
-   385	static inline bool reclaimable_anon_is_low(struct mem_cgroup *memcg,
-   386			int nid, struct scan_control *sc)
-   387	{
-   388		struct lruvec *lruvec = get_lruvec(memcg, nid);
-   389		unsigned long anon_pages, swapcache;
-   390	
-   391		if (!sc || (sc->gfp_mask & __GFP_IO))
-   392			return false;
-   393	
-   394		anon_pages = lruvec_page_state(lruvec, NR_INACTIVE_ANON) +
-   395			     lruvec_page_state(lruvec, NR_ACTIVE_ANON);
- > 396		swapcache = lruvec_page_state(lruvec, NR_SWAPCACHE);
-   397	
-   398		return swapcache < min(anon_pages >> 6, SWAP_CLUSTER_MAX);
-   399	}
-   400	
+Hold across batches as you suggested, since a 31 ms batch usually has no
+temperature in it at all, or a non-blocking dps310_refresh_temp_locked()
+seed plus a validity flag?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> For initial patch just reject starting the buffer if timestamps are
+> set to be captured.
+
+No sanctioned way that I can find. buffer->scan_timestamp is private and
+kept out of the scan mask: active_scan_mask reads 2 with in_timestamp_en
+set, and validate_scan_mask() sees the same. indio_dev->scan_timestamp is
+reachable and iio_enable_buffers() sets it before postenable:
+
+	if (ACCESS_PRIVATE(iio, scan_timestamp))
+		return -EINVAL;
+
+but it is __private, used only there and in
+iio_push_to_buffers_with_timestamp(). That, a helper, or drop the soft
+timestamp channel for now? Triggered-path timestamps are real, so I would
+rather keep those.
+
+Rupesh
