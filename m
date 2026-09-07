@@ -1,105 +1,236 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F79A3E6DE8
-	for <llvm@lists.linux.dev>; Mon,  7 Sep 2026 20:52:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF52282F15;
+	Mon,  7 Sep 2026 21:37:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788814379; cv=none; b=WFeBz5cgwdvntScc/6EOE02OP1gm9LepHFQOFQZfh1ojCC2NJCYj6NOt/riq+OrMjHxxc7n3QquGd+PTW0zcCmMg3SPJoDMNqNJdM5C5jVYBpfDlXw5z8Pnp4O3QTOJJyUK42SJmj94d9LYAs4sM00s7Dt9uraa9JDOjNjIEvNk=
+	t=1788817064; cv=none; b=VQqLkGf4ZiuiiyX50C2DZJ5AcPK5xHU07hHIJa4Oy701TnMUlQ+pSDdxP8LY/pacs82lRHT03GlNLI57gjZenZjbwJ5F/QR/iaBrqAvU+fEb+OAoN+QNum533IFshHoVsYjTrZAbkaU64w+1o+03NqwRGyu4i0cnm7WRU3c4ZlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788814379; c=relaxed/simple;
-	bh=HSRA27bv0CSjidcVERjNYFlK+wUZ6/j+WxBFA3lQiNg=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=gndhys4Oe2bhgDu3P8ufFj9Wgbg6DQ/6l21ELnyDh7RpO/wEhARPKKi4ufDQTnu4gmp7pi88lr72DEK3BXtdkQUsbZ+9FZ3sFj6sib0azm8RiSpUmANU+OGOqAfxAAu1AEWIE6/JM8HyAjWG+TTkwDd57sSaKKpSb1RuwqiS8fo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cEv6KBn/; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788817064; c=relaxed/simple;
+	bh=NzfdWemez+N6A+/fohc8Gu5ViOBIcVvfo0ttR/7uPX4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YxYbOE7LTKt7W2jx+VFDzLn1P9Vxv/sAgj5VR3LAIadg63wB7GndCXLfjQPKuBcaMBU3m+dRtZsonGWHbrWVXR8uf5dEzfAEBTQMDBwyElgVm/glw2/JQ9gaQp2c6fPED97BJN74DbNicPUu/LHW1+myuxyKKtHc2RM6DqDCer8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QzrT8MEn; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cEv6KBn/"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-49cca4ffdcfso32353045e9.0
-        for <llvm@lists.linux.dev>; Mon, 07 Sep 2026 13:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788814375; x=1789419175; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eQjT79f/PL7EerkiFGV6aTGjf3ylMrdZfagr1i24BYY=;
-        b=cEv6KBn/Nax4WfReLOilrlMPR1rnoARLS1TGbZBDoeU8v2CeVdDjucdOmAaMTMU+fJ
-         UWz3a5RTrFVHrRD4xyl3ZjNLp7bmMLLr6YGhiX14DS23qlwrTs/McGiyh1GA0rZlni/r
-         agvivM59I1iloSN37alcmZbNhrqyLpfNWHoA+lDM9fqHAo5ujVLS5c6zzuCi4XvT1V+H
-         pLZU7CqoQmKqU1AHGQxPX9MU7LccsjcVF0QiXcnidtPB6RJMS24Ig9lbrF/wjgJ5npzC
-         mLocBoa6p+Twv1oo8B7VBECcembFhCPWh/qIs5fV7Im3aQzqNNSWpu+HNEHl7LrMzdDb
-         pdJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788814375; x=1789419175;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:subject:from:user-agent:mime-version:date
-         :message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=eQjT79f/PL7EerkiFGV6aTGjf3ylMrdZfagr1i24BYY=;
-        b=LScVLExILUbuZD+IQslhHnJQshwAU1PYmebsltGUXw1HK3G168X984xvmKR5c2Cycn
-         8ECPfiui3OLSOlK6CA2IJYa3GaYjcmB/kiHg1CAvUc7iCWMFQcLLRhalh+sPmSFFAuu5
-         R50JBi780XZ4cu2XQSl/axOASCEpGeMKidVoJj6z89JkTeFOXgEHMxighT319VLhNvVN
-         KqAu2TxmGV+0kc6PhokgKbzI/HI10GdxYuGhUvFm1snHZpvUUnYB6W3sAYM1Eb8+qWZ0
-         v8zN7SzrVI1KENZMdpWS3FIpU1WUKyWBEWJSVezDElraGTmOaOcr/LFdU5q614PXTy44
-         CUuQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwfQmxrN9EWV/y7GwsN4giMhe38xoDhbjqtJPIbj1TKKPqg0iI7VtHbYypvL+dN+/Zd1VVk@lists.linux.dev
-X-Gm-Message-State: AFuF++mj7LP8H/otaMibIKSugM8y1FBhZuN2iFzI2PuHIj0okZW8eLxZ
-	IqMKljno1MW0xaMjWrxUXwkuKUa/0v4anr28M/5e34V/1mnmW4VZsQJe
-X-Gm-Gg: AYBFou2YlGgw2u5s8dfxIwS2uhoFtayNedGvOaKVUzrz9WBfM5uNnvQyU+NDwkIHm17
-	vSKOVj3L453qyt92jni/uAeye+218H6MYLJ1FTsgrat6BP5Z4Jo6WqgeYSlAI/6KfJZ5pHV7RmS
-	1jzI4I6CidnMdqFm8JtiFn4ykJJm0tEfHwCr5IwyEEnxqVDqI0qICvDJXte4TOihVKd2gZvGenA
-	iCvK1jfKww56+TFkt0fCfxveseuMfolTqYoEslNqqVcsDfJaxJM6nfG1ud8MUokIWLRVpdxjZVf
-	8T8p47CEiDCQ5AvftrIGTqUf+ziapPsaBeY2b0Lnu5QRlxAlcEO/KAdVv1YbWdQS+ENdS2zrWFy
-	psqazMoPUl+6ooemwwyoAzfMzUW1uH/tc6NxqUXYzTzgzlC+Y6rBBuWZ/MSpOs89uy+HI9Hukr1
-	XqS91c6o9i/SA5rslh0A1tfvvQNVK1NcPXS1Q21W6yiWWQ7rv3sxlBRBayVob5RZU2rLGEb9I/R
-	xJyFvpghTZlfMKCUmEBGVyK+3SB8liA00Z+Va6BK7wFlFZeauJE9SPL
-X-Received: by 2002:a05:600c:34d0:b0:49c:fc6e:a3d3 with SMTP id 5b1f17b1804b1-49cfc6ea71amr202238935e9.18.1788814375238;
-        Mon, 07 Sep 2026 13:52:55 -0700 (PDT)
-Received: from [10.128.10.232] (195-23-151-163.net.novis.pt. [195.23.151.163])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cee5d476esm462304515e9.1.2026.09.07.13.52.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Sep 2026 13:52:54 -0700 (PDT)
-Sender: Julian Braha <julian.braha@gmail.com>
-Message-ID: <7d625678-18e4-4231-b5ad-d840a37cf029@gmail.com>
-Date: Mon, 7 Sep 2026 21:52:53 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QzrT8MEn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788817062; x=1820353062;
+  h=date:from:to:cc:subject:message-id;
+  bh=NzfdWemez+N6A+/fohc8Gu5ViOBIcVvfo0ttR/7uPX4=;
+  b=QzrT8MEntRZbXp/vxdm+5bU8kjAWyRFb05q2KdZW4DNw4K0H6wBpY6JH
+   O524vlw7PbWB5s7+9x5+GaSXdPoe3kPwuRH/KJc79vIDkN7s7XrTiVau/
+   WdSwRsLdBbcs52K96Tz/bhaINdftOLu5aUmU7gtItsPBp2SdOMODFRN18
+   EWQ0iG4YLDE0uwHNGjvTirKbtXY/3QP2/RGuD7bgki7Kz07zavjBMqxI4
+   JypyO2APigHcLlu9LFShX3mYr1pGcZOssEOUHL6zPcGlKxtWzjIkCllr9
+   5pawrKygBc9NnUMUmi1wMVzAPcnFn4KwW3n6U8jVh8XyOodg3tI2LEoJa
+   g==;
+X-CSE-ConnectionGUID: QhZatV8zQ0+vXh4TvGdu3g==
+X-CSE-MsgGUID: OgORPv5cT2GhcA4XClPF0A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11899"; a="89342024"
+X-IronPort-AV: E=Sophos;i="6.25,268,1779174000"; 
+   d="scan'208";a="89342024"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2026 14:37:42 -0700
+X-CSE-ConnectionGUID: 1xLdSV2XRdCFKB+AQgfljw==
+X-CSE-MsgGUID: LTkqG/n6ReKMleBebIbVrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,268,1779174000"; 
+   d="scan'208";a="267122463"
+Received: from lkp-server01.sh.intel.com (HELO dff15f1b2031) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 07 Sep 2026 14:37:40 -0700
+Received: from kbuild by dff15f1b2031 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x3h21-000000001L5-3hyV;
+	Mon, 07 Sep 2026 21:37:37 +0000
+Date: Tue, 08 Sep 2026 05:36:47 +0800
+From: kernel test robot <lkp@intel.com>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [morimoto:sound-cleanup-2026-09-04 261/343]
+ sound/soc/codecs/nau8360.c:362:28: error: call to undeclared function
+ 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit
+ function declarations
+Message-ID: <202609080533.rGIMS07j-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Julian Braha <julianbraha@gmail.com>
-Subject: Re: [PATCH v2] docs: kconfig: fix shell function syntax in caveats
-To: Erkan Erdem <hexvalid@gmail.com>, Nathan Chancellor <nathan@kernel.org>,
- Nicolas Schier <nsc@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>,
- llvm@lists.linux.dev
-References: <20260907103739.23212-1-hexvalid@gmail.com>
-Content-Language: en-US
-In-Reply-To: <20260907103739.23212-1-hexvalid@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 9/7/26 11:37, Erkan Erdem wrote:
-> Kconfig separates a function name from its arguments with a comma, but
-> the caveats section uses Make-style whitespace in its shell calls.
-> These expressions expand as undefined variables rather than invoking
-> the shell function, so the supposedly working CC_HAS_ENDIAN_FLAG
-> example fails to parse.
-> 
-> Add the missing commas to the shell calls in this section. Keep the
-> Make examples unchanged.
-> 
-> Fixes: 316d55d55f49 ("Documentation: kconfig: document a new Kconfig macro language")
-> Assisted-by: LLM
-> Signed-off-by: Erkan Erdem <hexvalid@gmail.com>
-> ---
-Reviewed-by: Julian Braha <julianbraha@gmail.com>
+tree:   https://github.com/morimoto/linux sound-cleanup-2026-09-04
+head:   dfa282dfe99643be782149d948208f3d514ebb99
+commit: 2ec5bcc4a0d57a7db5c121ab6e10d602373d1f0e [261/343] ASoC: soc-component: remove snd_soc_component_{set/get}_drvdata()
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260908/202609080533.rGIMS07j-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 419c22c908c97dac45d161ce56fa01b99ec7debf)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260908/202609080533.rGIMS07j-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609080533.rGIMS07j-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> sound/soc/codecs/nau8360.c:362:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     362 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+>> sound/soc/codecs/nau8360.c:362:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     362 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:409:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     409 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:409:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     409 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:452:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     452 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:452:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     452 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:688:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     688 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:688:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     688 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:712:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     712 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:712:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     712 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:826:43: error: incomplete definition of type 'struct snd_soc_dai'
+     826 |         struct snd_soc_component *component = dai->component;
+         |                                               ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/codecs/nau8360.c:827:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     827 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:827:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     827 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:855:43: error: incomplete definition of type 'struct snd_soc_dai'
+     855 |         struct snd_soc_component *component = dai->component;
+         |                                               ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/codecs/nau8360.c:856:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     856 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:856:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     856 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360.c:871:43: error: incomplete definition of type 'struct snd_soc_dai'
+     871 |         struct snd_soc_component *component = dai->component;
+         |                                               ~~~^
+   include/sound/soc.h:419:8: note: forward declaration of 'struct snd_soc_dai'
+     419 | struct snd_soc_dai;
+         |        ^
+   sound/soc/codecs/nau8360.c:872:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     872 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                                   ^
+   sound/soc/codecs/nau8360.c:872:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     872 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(component);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   20 errors generated.
+--
+>> sound/soc/codecs/nau8360-dsp.c:117:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     117 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+>> sound/soc/codecs/nau8360-dsp.c:117:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     117 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:266:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     266 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:266:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     266 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:296:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     296 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:296:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     296 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:336:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     336 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:336:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     336 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:534:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     534 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:534:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     534 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:562:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     562 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:562:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     562 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:601:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     601 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:601:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     601 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/nau8360-dsp.c:615:28: error: call to undeclared function 'snd_soc_component_get_drvdata'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     615 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                                   ^
+   sound/soc/codecs/nau8360-dsp.c:615:18: error: incompatible integer to pointer conversion initializing 'struct nau8360 *' with an expression of type 'int' [-Wint-conversion]
+     615 |         struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+         |                         ^         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   16 errors generated.
+
+
+vim +/snd_soc_component_get_drvdata +362 sound/soc/codecs/nau8360.c
+
+be88847a8bb1a1 Neo Chang 2026-08-25  357  
+be88847a8bb1a1 Neo Chang 2026-08-25  358  static int nau8360_anc_put(struct snd_kcontrol *kcontrol,
+be88847a8bb1a1 Neo Chang 2026-08-25  359  	struct snd_ctl_elem_value *ucontrol)
+be88847a8bb1a1 Neo Chang 2026-08-25  360  {
+be88847a8bb1a1 Neo Chang 2026-08-25  361  	struct snd_soc_component *cp = snd_kcontrol_chip(kcontrol);
+be88847a8bb1a1 Neo Chang 2026-08-25 @362  	struct nau8360 *nau8360 = snd_soc_component_get_drvdata(cp);
+be88847a8bb1a1 Neo Chang 2026-08-25  363  	int ret, value = NAU8360_PEQ_BAND_8;
+be88847a8bb1a1 Neo Chang 2026-08-25  364  
+be88847a8bb1a1 Neo Chang 2026-08-25  365  	mutex_lock(&nau8360->lock);
+be88847a8bb1a1 Neo Chang 2026-08-25  366  
+be88847a8bb1a1 Neo Chang 2026-08-25  367  	ret = snd_soc_put_volsw(kcontrol, ucontrol);
+be88847a8bb1a1 Neo Chang 2026-08-25  368  	/* update anc flag if return value 1 and register value changed */
+be88847a8bb1a1 Neo Chang 2026-08-25  369  	if (ret != 1)
+be88847a8bb1a1 Neo Chang 2026-08-25  370  		goto unlock;
+be88847a8bb1a1 Neo Chang 2026-08-25  371  
+be88847a8bb1a1 Neo Chang 2026-08-25  372  	nau8360->anc_enable = ucontrol->value.integer.value[0];
+be88847a8bb1a1 Neo Chang 2026-08-25  373  	if (nau8360_dsp_active(cp))
+be88847a8bb1a1 Neo Chang 2026-08-25  374  		value = nau8360->anc_enable ? NAU8360_PEQ_BAND_15 : NAU8360_PEQ_BAND_12;
+be88847a8bb1a1 Neo Chang 2026-08-25  375  	regmap_update_bits(nau8360->regmap, NAU8360_R9D_PEQ_CTL, NAU8360_PEQ_BAND_MASK,
+be88847a8bb1a1 Neo Chang 2026-08-25  376  		value << NAU8360_PEQ_BAND_SFT);
+be88847a8bb1a1 Neo Chang 2026-08-25  377  
+be88847a8bb1a1 Neo Chang 2026-08-25  378  unlock:
+be88847a8bb1a1 Neo Chang 2026-08-25  379  	mutex_unlock(&nau8360->lock);
+be88847a8bb1a1 Neo Chang 2026-08-25  380  
+be88847a8bb1a1 Neo Chang 2026-08-25  381  	return ret;
+be88847a8bb1a1 Neo Chang 2026-08-25  382  }
+be88847a8bb1a1 Neo Chang 2026-08-25  383  
+
+:::::: The code at line 362 was first introduced by commit
+:::::: be88847a8bb1a14194cf50116f8909d127861318 ASoC: codecs: nau8360: Add support for NAU83G60 amplifier
+
+:::::: TO: Neo Chang <YLCHANG2@nuvoton.com>
+:::::: CC: Mark Brown <broonie@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
