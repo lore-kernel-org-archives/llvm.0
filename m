@@ -1,78 +1,75 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F69735893
-	for <llvm@lists.linux.dev>; Mon,  7 Sep 2026 00:49:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFF0219644B
+	for <llvm@lists.linux.dev>; Mon,  7 Sep 2026 00:57:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788742154; cv=none; b=eII9+uL0oVatvtwFythGbiRxcsf+DgOXI8cP5/bjLLnjWLBytzT00L+9Uz25fVyV65FjQCbqHvRbB+pvwA/61QZQOZ8eRal7iINyR7+8ieMQL5BQmFIJaQCi91ciBFL5DJyghUrakvcHhKs3F22A4VxhCQ1rZnS6j6m/fZVrM94=
+	t=1788742674; cv=none; b=dWF9ZBaA7C78/tB/9ScQKpTFiEdlt+TcfOLS9ojGVamsoxJlrLjdJ558VJ8+R5CfwF2zi6IQT1jUkqszeTg9zFEIuejKAbJm8BVbnhL6PwfX4tvv0ApqnxIZJ+eHe6lNB5BmlI//kaUTP0HasXUbqIWnliuT7ZMniaV0LrCLn4k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788742154; c=relaxed/simple;
-	bh=hlcsJhUrLyBo5++wlhrrLrw8VUbuI1LW8vlmxLrWUg8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=h3jCCeOB8FlMf6jSzTzQqOvu7kcgMFJUDEDMmU3O4QQqPhDCRci09K1eNBQbXkbRFfs0n2Soi3yZyKnb0TInpHnv4hV6mXZvDjhlNrVs9STtrhbLgRU74JWUvWpG4Iwm1dZnyNyPp36KTVMqWcoWE3zUz6Nsr7sy/l1vJ0gC9xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IJfgmuYR; arc=none smtp.client-ip=209.85.215.177
+	s=arc-20240116; t=1788742674; c=relaxed/simple;
+	bh=AZjom2PB7UknyQo7QhwjHMw2wFDh4BjnRhyJ255BnGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rLFnrD+V56M7lgwDuKEhRLIrWuSG6UWeWtgVtMtGkKSLBGD2RYBU+vUR0EYKPzdGCwxtWSrbrE1Ybkt/jwdm+YtfwF6nyzdtd5Cd1Dp1YX4E6Fg8beKPv9mkyFknlAqACKywEHY1VbSEqSCPRwnARJsSbnHEvj54ky9ZAfaizmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EoP9GBii; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IJfgmuYR"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cc1cf287ef8so2598612a12.3
-        for <llvm@lists.linux.dev>; Sun, 06 Sep 2026 17:49:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EoP9GBii"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38e041ea211so2207069a91.0
+        for <llvm@lists.linux.dev>; Sun, 06 Sep 2026 17:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788742152; x=1789346952; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1788742672; x=1789347472; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=K2XV7N8oiIfPwNA3+WEAPB+6Qv6pN5TtTgVk3F9R8Ps=;
-        b=IJfgmuYR8XjIp9icqVQ9y6wBfS/uxsiofDOy05ckPleDa0z4WFB0hjqoyGAWH/Jnwh
-         ej9iu3zsNFW0CUgCuPtx2ayDqoBMp/wbOQW2w9YWuhH7dLsBeslZM3QrKUOY+mAzXbTh
-         pyioAoHDdlQSHcQFnrAIXPdhuczN4YMaTlQkMI3CTS9iKSp1Ba2oj4WMIqzqZ6L0faLi
-         CVpwrvfCmsj88qysE3LJ31sYOU6NZ6DqndKtRYtSGqCbmQyHuoRBlwqsRWEjMrf0liJA
-         GZCuCXb9T2NFGXz54KYuZ0M3BxnsgUHKTXocJ2Pwfi4wpcRt3cBkOPTw6b3lzZQGGRLr
-         eKpw==
+        bh=9KBRkywu7hyFM0XGKbQfON7bqnqwREZTWQJYpAcPCSE=;
+        b=EoP9GBiiJBDgDE69BJXJRUhEzl1x9dwfFdd91XQQU8q2e4ai4EYetVfHaMQOXJ66lL
+         fJooVnURE+huzN+VvksNyZuzr36RAqQwTDlbfmHJnd+HzMAk9icDmTyRY7PsJ1KqC+Y1
+         vwVWSWr6kqttUxQbzshEdEXak01Lw7/YHVuHeOIjsaUOPrD7jx2YWXrcUgjKwk4G3Jfe
+         RpYt9DRWo0OQCCQjEvpWVQFaGI8ZWCVeWwgp1h+q9J9dU6uzrTVxv33Ub5voib9eB2Yz
+         ZqmvZyMCiyPCEcZiFj1jctlzoOKCEZJmzEGaUkFniQgHT5C+YLGbXI7pApKE+kVz5dtU
+         VAsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788742152; x=1789346952;
+        d=1e100.net; s=20251104; t=1788742672; x=1789347472;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=K2XV7N8oiIfPwNA3+WEAPB+6Qv6pN5TtTgVk3F9R8Ps=;
-        b=Zac7ogtPuERLz3d/afp5NxER3RDfmDPxVcmsWt+ufGUrR29bOrCVggnEN4d006whB4
-         TL93b/i6w96ZV39hU9JOrZgPObnRoVxWdC8dY1XvcjU63CCTLDgBYs3/UKiFMu4Qdlps
-         8eNtE0KZA/6Crht2SW/f65ySihVWYgAO8vD+jlM7b+yIVuEnmixw87S9qzi5fJyJeJYD
-         g9udO5q+TqtgUFuAPxVJ9jlRJCtMDwOwqF63S4fnzyXUdPBslQkMP6Kv+JIS/1OvYrEw
-         9wLJJajo1BQS5HT85Iz4tyARaGvayo8NIHaI91FrScuvT0gca0E+0ZW+QqFmsbPJqKeP
-         3arQ==
-X-Forwarded-Encrypted: i=1; AKwUvBy5xkrpCb+uzeUXsFEEShGJ/9sXaNePcP9tH7yA+lcx4DcrpFp+6HBqkKNqTOrBgEPemyom@lists.linux.dev
-X-Gm-Message-State: AFuF++lU3PU69ErZmhJF1A9TxxPSskz6Gv4HpNMDL6oMbXiomT6NvwAe
-	y+XvG20dRNJt7aIIu6krr+2almqy9X2q0GwPEUVAl2sQDiD0zSJGCpnO
-X-Gm-Gg: AYBFou3TnyEdAfppIunNPRq/uHxd1B7ylC+C0z2kWXGHilO9+UD4Fn9PZWIRj94BWcR
-	C92R7aJt+ekAhjjOjXXlTvFNJPAIcPj8v/3qFO5x/XRK1CKrJfGnxPcKejqEChxMOYvg+NBDhlx
-	ldJjgDNuV6UX+lxB83sATkVfVdlwiKOgFlsbSDnWWa6RrGIQ2RNgq4kUmALt3dfva8Ybo3Nyino
-	ZfcStJuhU6p+CftBjJiF9rFK+UkSIDdyAdgjwhRDIh3xLVx5I0qJixhlEDgzsfgnJoYNBqgpwog
-	kg3EV5EvHb85P0Iqd8k1ICC7791WiWnyT+jdsTu7b15X8kKaxyC2hRRwbVf3y7Nni3GguyESHoJ
-	0kD/9Wtl+rwuy/e3J74D2FM8j0VsXgKHUeh+NcNeW+bHniCTCKnwC4eUU0F5z2ofw05jHBGSxDU
-	Rr7jR6AmOii/pTIr2OkJG1GvxWz0aiUDVUQEx5ArYZkc9MYgF74mS4mvRx4hXgNUQxFLhu6CPn/
-	8hhUpH27RNbFEXILWjbc+ZUGEgjpAQ1ciQYtq+j5RsA2OwsfmNWZF1s1+QP1r6/NI0Vzp1l08Ky
-	rRaXgSINQRDvGTxgU+IaxZn16SEkwuGY763iCLw=
-X-Received: by 2002:a05:6a21:138c:b0:3d3:afd9:6040 with SMTP id adf61e73a8af0-3da3a1f77f2mr31242218637.27.1788742152360;
-        Sun, 06 Sep 2026 17:49:12 -0700 (PDT)
+        bh=9KBRkywu7hyFM0XGKbQfON7bqnqwREZTWQJYpAcPCSE=;
+        b=pOpMRkj3+aqz3U96MSaIXKMmaiiQ+X3GZdWonNdM0jbOz972tvEqAvoG/gCLeRn4MP
+         Up1tH6A+LdKAn8611Oe0QsvvLytxjYeltOOMyR9w0dHqUkZwOyVeFn9/5pffJWI9wfMT
+         y2rteuh2pxD63mhN9PkW22JRBgyoI1iS7yNS80EVVIiHYoNwukyV3bQQtg89xr1nexdE
+         1GP4GzMc0TBwQhF096px2aQcrm5TKwIJ5FZTMFK0cUGijUIN9Y/JTgdgX7KN1CmHkIDs
+         2Cn7Fj7HGtvQ2VlR7hkOWjYI+0nxifCew0C/1qOEtQVrBTeurwxXSwFNESDMes/9Sb/0
+         bKfQ==
+X-Forwarded-Encrypted: i=1; AKwUvBybGZ4JGh/zcoiVgLCwopeUY07TVrvV0/19fcHS//Sc7u0+3v+6ea6KgU+vZCcmXQBsJC0f@lists.linux.dev
+X-Gm-Message-State: AFuF++mfkRVBh+p1css8ZJNdrqRbUEp/yZ5wi0TMRfWyobkb9YsjMsRM
+	kUXB2IWcW7b9bbHardaWrUxLd6T6dUERwI9S7wCZkzGaup1RCU5kyaRz
+X-Gm-Gg: AYBFou3yx20ZrOyN3IQLMIJKuLB9uYJObtdM+RSGCTO1rppMeDaty7z3kWyIRu1S0j3
+	TCmQnwjIFOQh+HbJQh6nPBBaSdWwGnotWOh92MEQF9ZpY4R5o/Gs2uFTHvm4qI2AwRh8BkdpOya
+	bL43g85iMa4dsQekeDKHiZZdf+6iVrdEjNTJc30TLttylLxQkMJPQlue17aFnuP4xDmBTtVmwsw
+	/8b2kV2gJ19SmjUprX8/eVxHeBgkJEbTMeV0ntkptpNr9jIHiNMSpJMYWrQrsMVJJV2GrpiaU5g
+	3m2rTLOpdrvjGkjMCtkSayao2kl8DMM5oMuo/yesgglap1gF/I9xMaWp+58zoK5Y9hFvlQxsqrh
+	uRHqyMxuyOrzvrlIytDQML3kORgdJexD+c8prvA60RnWkBZzoeXk8tjbMb9JfdRoSTkQ7SaGG+5
+	4Mrm78NIcWK7f+oR2iZHjz8pyQGiIT/7sN03gKutaLQxkTFpd1kq/97MfdAY0/d+TRAbas+4BL6
+	EVPEQRCeIT2L7KljUyQPWDwmkKTGtueJSwTXi5/f3H7XrCesk08Drs+LIGrNbhNuAh2WrLzHKs2
+	DObLNQAyWYqrWpKOjXJFU18Bv84ELGg5bTzgcA==
+X-Received: by 2002:a17:90a:149:b0:39b:2b10:d05c with SMTP id 98e67ed59e1d1-39b2b115ba1mr20193005a91.5.1788742672057;
+        Sun, 06 Sep 2026 17:57:52 -0700 (PDT)
 Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-333c9db92b1sm22771048eec.9.2026.09.06.17.49.10
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b2612ba2bsm16853496a91.14.2026.09.06.17.57.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 06 Sep 2026 17:49:11 -0700 (PDT)
+        Sun, 06 Sep 2026 17:57:51 -0700 (PDT)
 From: Rosen Penev <rosenp@gmail.com>
-To: linux-mtd@lists.infradead.org
-Cc: Robert Jarzmik <robert.jarzmik@free.fr>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
+To: linux-spi@vger.kernel.org
+Cc: Mark Brown <broonie@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org (open list),
 	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] mtd: docg3: use devm_platform_ioremap_resource()
-Date: Sun,  6 Sep 2026 17:49:10 -0700
-Message-ID: <20260907004910.226013-1-rosenp@gmail.com>
+Subject: [PATCH] spi: orion: yield to scheduler in transfer wait loop
+Date: Sun,  6 Sep 2026 17:57:50 -0700
+Message-ID: <20260907005750.230103-1-rosenp@gmail.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -82,57 +79,48 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Replace the open-coded platform_get_resource(IORESOURCE_MEM, 0) plus
-devm_ioremap() sequence with devm_platform_ioremap_resource(), which folds
-the resource lookup, region reservation and mapping into one step and
-returns an ERR_PTR checked with IS_ERR()/PTR_ERR().
+orion_spi_wait_till_ready() busy-waits in a tight udelay(1) loop, up to
+2000 iterations, and is called per byte from the polled, byte-at-a-time
+transfer path. On SoCs such as the Armada 388 (e.g. SolidRun Helios4),
+which also run SATA over the shared internal MBus fabric, this stalls
+the CPU for the whole transfer and delays servicing of SATA interrupts.
+Under sustained activity this can cause SATA timeouts and link resets
+(sometimes renegotiating down to SATA II, 3 Gbps).
 
-The canonical docg3 register window is DOC_IOSPACE_SIZE (0x2000), which is
-the size any platform provides for this device, so mapping the full
-resource is equivalent to the previous fixed-size devm_ioremap().
+Add cond_resched() to the wait loop so the scheduler can run pending
+IRQs between polls. This is a no-op at runtime unless the kernel is
+built with CONFIG_PREEMPT enabled, where it lets other peripheral
+interrupts be serviced during SPI transfers.
 
-Built for ARM (multi_v7_defconfig + CONFIG_MTD_DOCG3) with LLVM=1;
-drivers/mtd/devices/docg3.o compiles cleanly.
+Built with LLVM=1 ARCH=powerpc; passes checkpatch --strict.
 
-Assisted-by: opencode:hy3-free
+Assisted-by: opencode:big-pickle
 Signed-off-by: Rosen Penev <rosenp@gmail.com>
 ---
- drivers/mtd/devices/docg3.c | 16 +++-------------
- 1 file changed, 3 insertions(+), 13 deletions(-)
+ drivers/spi/spi-orion.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/mtd/devices/docg3.c b/drivers/mtd/devices/docg3.c
-index 603fd0efc2ea..bbdf3bfb0e70 100644
---- a/drivers/mtd/devices/docg3.c
-+++ b/drivers/mtd/devices/docg3.c
-@@ -1971,25 +1971,15 @@ static int __init docg3_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct mtd_info *mtd;
--	struct resource *ress;
- 	void __iomem *base;
- 	int ret, floor;
- 	struct docg3_cascade *cascade;
+diff --git a/drivers/spi/spi-orion.c b/drivers/spi/spi-orion.c
+index 26a9f268b2d3..b8882229c054 100644
+--- a/drivers/spi/spi-orion.c
++++ b/drivers/spi/spi-orion.c
+@@ -370,7 +370,16 @@ static inline int orion_spi_wait_till_ready(struct orion_spi *orion_spi)
+ 		if (readl(spi_reg(orion_spi, ORION_SPI_INT_CAUSE_REG)))
+ 			return 1;
  
--	ret = -ENXIO;
--	ress = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	if (!ress) {
--		dev_err(dev, "No I/O memory resource defined\n");
--		return ret;
--	}
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
++		/*
++		 * This is a polled, byte-at-a-time transfer loop. Each
++		 * iteration busy-waits in a tight udelay() loop, which can
++		 * starve other time-sensitive peripherals (e.g. SATA) of CPU
++		 * time and interfere with them if they run on this SoC.
++		 * Yield to the scheduler between polls so pending IRQs can
++		 * be serviced.
++		 */
+ 		udelay(1);
++		cond_resched();
+ 	}
  
- 	ret = -ENOMEM;
--	base = devm_ioremap(dev, ress->start, DOC_IOSPACE_SIZE);
--	if (!base) {
--		dev_err(dev, "devm_ioremap dev failed\n");
--		return ret;
--	}
--
- 	cascade = devm_kcalloc(dev, DOC_MAX_NBFLOORS, sizeof(*cascade),
- 			       GFP_KERNEL);
- 	if (!cascade)
+ 	return -1;
 -- 
 2.55.0
 
