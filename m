@@ -1,115 +1,44 @@
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C79B3976A4
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 23:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F8B3B3BFE;
+	Tue,  8 Sep 2026 23:37:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788909396; cv=none; b=oJiXMxjneVl+hdovL+mxy7ri0FQr4DO+YaavZQWyAcaY5vNR45ES9LOZRVF+wixPFGc2DdM4kwpi+kaCOHLmVKrH0Z8X+ju+GbDsi0W9OzbwBBLpXLRDEKHOoXwRgSIo1xv2GMW7EaWPypQHHHUDVahRePyS9y8WYY9cZU5fEa8=
+	t=1788910627; cv=none; b=Xj/W3m0ZQBUGto48ickVTUwWWyLS/XghjymZW5NCpDLT6TtyWNaxShYXILWXSSOetfZvkZaSR2U7IhsHXoEIxkqlfdg1JUfAazDyfnTe1pDB9n9o986kEaV/6teZLOW9pOpoM8+L/dAvzXdjruAArSqddIUREJQ/uHzXKsRaAUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788909396; c=relaxed/simple;
-	bh=7gH0DdCcJ8z5QZeIJ8H1KTKklRXXtiA1S6fS/5PxSBY=;
+	s=arc-20240116; t=1788910627; c=relaxed/simple;
+	bh=PmI5JYqDAr6kqZUNDONtc9Bkd3a2Pp+lpXvkLMJQeKc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n8KD0g1R84fkeqV2AWQ77Mvw4IChyvKy68CqcIedcaAF7r3erT34Al3E06JZSzix5w1uySahguWDP7ShzPTcHX72jyFlkzx8evD6JQWFWkTf/71/wdHxDDwXEEOxTD2STGu/4czIE55euOKzAWaD7R9yrYKhQLKRALsWZvfHIgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=QnRZI6nv; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=hr5e9Yu6; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=o93vmKjP4EN27u5n7BPb2xhFa7j6TlboVIllD1XsPf5OScfflUyM5DS+O3Ffnrm7pVqc3hzz7LM+PsYOXzt8ZBAV6gD0pmZcaRu56wX+/NtSgJ6ZzOrI3ZctABXJTyebNa2AXlos3sapmWLIJZJh1nYz10ncKhZex7PyStb2tIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oN2w7uZ4; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="QnRZI6nv";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="hr5e9Yu6"
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 688Mfwil3653907
-	for <llvm@lists.linux.dev>; Tue, 8 Sep 2026 23:16:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=5OpX0FvQVUkIQJtPqzVnZ/Nb
-	Tsx2FqQIdJRRkVKt+og=; b=QnRZI6nvjSo5DsAESsy6xbYDktBxBT2IRdqnBI7X
-	FCnj5oDNDyM/LJZns946y4evuRXzVWe+iXP+dgtfASwlaoTnsB7Uo4HOfjB4ja0M
-	E2dSXKXzXj9whr/narRp2sCBn1GB++SBVDyRZ9kqlI2caj2uPtBUF+QNlTn3yxpU
-	Mf/C/q0alRXIhMWsvH61poIu8Nq49W3EL0SQJbgdcZO/x8K57LklWwR5luwaSAw8
-	KFdAFI78cw8Wws1d0Bk0EDNWh1lh7fwRxzXV0U8TFhyB8/2UMHXnh52+53/+EU0r
-	muLhvJwdgjvL4solreMgpjZiq6ZleDqwQKJkeW6ExeorDw==
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com [209.85.222.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gjppp1dyr-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 23:16:32 +0000 (GMT)
-Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-97ca6578487so3788785241.3
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 16:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1788909392; x=1789514192; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=5OpX0FvQVUkIQJtPqzVnZ/NbTsx2FqQIdJRRkVKt+og=;
-        b=hr5e9Yu6MPrRiuesoB65IZ2bLivQL+CkHzBiemRS5a7BffibLRE7IduMeko4tpz0yh
-         /mAQDnC6FKbIyU8BzCE0qYJhr1hw4rSXrMNAJROCrZ5HgN9EXdXPyyeJPbeaPH5Gv19Q
-         2UqVZpxuVzZLkGM5d3v31tbNUGijnXZaJaXM5YTe0DOPz9tO0StOH5LkHGR7cKM1JCMP
-         9TBbTi8yvIh6K4tJSsbv86MafczhSRzoW/K3sMjV1ZWDvuYNNex+beKL6wUP5loCjw6G
-         1VMqSFcOk7Bjn9aLkQfeImUsvaHVaIOqt/Bp0+raaEVnIDkV9EXaNkE060Fu0FnCqGrL
-         cdDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788909392; x=1789514192;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5OpX0FvQVUkIQJtPqzVnZ/NbTsx2FqQIdJRRkVKt+og=;
-        b=eLZLcoHA1gydN5d3/rcys2qLnOUtdtglbbrrLOtoufDnbab6Qk4pIdu7wJ++5mf55K
-         lDXAc2Qk0yA4EPI0JRL4YENKQnBiB8KIE/McUN9jSU3adbnDi+lSoT7H018turboyHqR
-         RPDKqQ9h+VzIFGxbc4PIiYi7V7i8KlKd9CJMsTHHHxwhwfe+CkaGLDftnt+zXwH9p5TF
-         77CB3Cdyz0t7T68KUoWyv4jLLUX/U73vb5zriTzAsmDpVMem63AYWiXcsxIyVnb0bCL5
-         ZnRcHEBT3WO2TKSVDEzdeg4EpHOUW/32a1/kFc7Zni+THG2IlhWzLci/01qoc26v+W1O
-         CdiA==
-X-Forwarded-Encrypted: i=1; AKwUvBy57xW4mg0wMEqK9ZLtGDrUN5CbT4nJM2fl1rO2TgtVFeADBFNZwNyQgRK6oSLUTjNoMHmO@lists.linux.dev
-X-Gm-Message-State: AFuF++m1kbicdlMJthyO83G1Cc2pU0GZgqbvRqw1/KTLNBhk5/9vEpIu
-	8QfP9FMigFOHxH1AzB8EJS1gMYX4M4p1OFqCdB2naYPIpk/b+RpkA+cS0XdcF3eFFYNyLLiAsOQ
-	wwEnX1403dEsMpbAbz3EltoCYKJtWbteqzanro5tCmEruogx2R1PH0uN4
-X-Gm-Gg: AYBFou04L7WJkKWlhZstIncc45+WlT/BP82CpPMQMJRcE2UM32FMjDdYALt9Fl2lzHm
-	sFD1RWnkVImzHH9xq+F0gLj4weq/vDPWk8FMzMaFNpuyPp5J64Jd6itA73l4QDuvxaFUPkVUfFj
-	PYXVlVVDmu+bRLWgFh0+5+e0+EOAxahkyYvLtBMpHXRKgK1rExJFH0pmtnh69xpdEO/+smK5Zb9
-	Gyv9PfEsv1450VdRocOlYoGegz/1M7OjzoFU77KvHy6TWqNCwdFH8J7XUWNUwhDoykvL01iFs6P
-	spVQ5uwQtNUY+OtB9/WZECJi6C63xxYqqu8J2KTf+vIuqeRNhiK6VbI/VE51XaG3npQDJfnVwkI
-	gN9tdqErizd6Lh5yRaxLfJrepNk+Y7EZbKzCVjw2OoREvDY49/COrqlgIQ0qnw3pkM6haSV/cpR
-	DXsNv0akfj9L1Y
-X-Received: by 2002:a05:6102:5126:b0:785:5a17:739b with SMTP id ada2fe7eead31-78a4a4944femr15114659137.0.1788909391528;
-        Tue, 08 Sep 2026 16:16:31 -0700 (PDT)
-X-Received: by 2002:a05:6102:5126:b0:785:5a17:739b with SMTP id ada2fe7eead31-78a4a4944femr15114434137.0.1788909386306;
-        Tue, 08 Sep 2026 16:16:26 -0700 (PDT)
-Received: from umbar.lan (2001-14ba-a073-af00-264b-feff-fe8b-be8a.rev.dnainternet.fi. [2001:14ba:a073:af00:264b:feff:fe8b:be8a])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a3705ed75dsm39469231fa.40.2026.09.08.16.16.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 16:16:25 -0700 (PDT)
-Date: Wed, 9 Sep 2026 02:16:23 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Bharath Kumar <quic_bkumar@quicinc.com>,
-        Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        iommu@lists.linux.dev, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-Subject: Re: [PATCH v2 12/15] accel/qda: Add FastRPC invocation support
-Message-ID: <ja2usiwasnu2x7lgx2xjsk57mew2nj7szn6ruqo6v7d2cpjcqe@xjpmxfkhxqkn>
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-12-69a02e9090d4@oss.qualcomm.com>
- <hbrtbfpmcodd3nkaytihzki56232bws7ubbcth7ewwckwi5y6t@ft4ej4fr7duz>
- <3f644c83-ffd6-452d-aa81-1c13aaa397ac@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oN2w7uZ4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D06201F00A3A;
+	Tue,  8 Sep 2026 23:37:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788910625;
+	bh=NIND0ZuAk7r7GYUUeAEPwFBj/DONkZ4qN7mVygC9p7k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oN2w7uZ4bZ9BL+HKcS8ScXRPFPke59x+bPP21lyXGXJgpoCJlkSUYGVvBg61tPu9z
+	 /RSjkJNaOd5JMApP2UHiF5OgeiLu/zBTKzA9JEqJq2+B2iTo9/An4bIBtcckJ6PBqS
+	 aCEzbTXofkCOfM5tfIInbL+/8xEmQBohzfXM4YHiVc6lpk7S9s+CKrDyKRZQskyO8M
+	 7xJ+7pwDaWDe4qCCZGzDPtLx1Qk0DlH92TuIJTFLmtC1YjF6Mvujr9dDcND9qPUIi/
+	 GrdfH0nvhsaMTXQAkZulIhvVfWOcDumNOXV3yR0yvr31trK4g6ZyhPEoC5ofNK3IaX
+	 7EKbSn3HAHVhQ==
+Date: Tue, 8 Sep 2026 16:37:01 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <n.schier@fritz.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] scripts/sorttable: Mark long_size as __maybe_unused
+Message-ID: <20260908233701.GA2981326@ax162>
+References: <20260831-sorttable-long_size-unused-but-set-global-v1-1-8a96b88697e5@kernel.org>
+ <20260904-dancing-cobalt-ibex-8a039c@l-nschier-aarch64>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -118,379 +47,54 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <3f644c83-ffd6-452d-aa81-1c13aaa397ac@oss.qualcomm.com>
-X-Proofpoint-GUID: zsFmWa2Oyad5_sms3OsJBsTMeM9pJ_TZ
-X-Proofpoint-ORIG-GUID: zsFmWa2Oyad5_sms3OsJBsTMeM9pJ_TZ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA4MDI1NSBTYWx0ZWRfX/Wx6GWL6Lrgd
- SX3LhO+WMRPzeRxBlz43I568XEQUybZxe2x9fGbCSqEIFeDfloZ2cSvcJrDKID4dgEhrW0r1vIM
- KrzFh69AuP05rZIhN5AYBqiYhU7B2nTyqe3etlsvaKupPZxma5gW2IERpEqWaX3C9dKsmYUvM8k
- yFQlkqzyLm61CjG4bLyoIAeEJBy+3CFviZo8YAD9RNjVksRmAO4VhuI41vkYsqj+n6DY7gvGoUy
- mTtHKKmWregsEPFfd9wkmI8psuaL5jPjTjvR6Zbacdl7rBOj8/ECIW7RgHw4d9JXiDlw+HKCALA
- 7DzawoFfZpyjKJsWcimTTFMYTsSis3oDdafalMEVf+qVd+6faDIdz+C3/byOv7lSvCKkziZe2S6
- bOVisUl8DVYOYGoBKYtF3UEBcyYUN2cqFwv8NiHwnASdLQg9kJbLgECoFSEC0YfU8B/2ZZ4KaZ9
- dqXxf5S+svtbRSSPxow==
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA4MDI1NSBTYWx0ZWRfX2U95zpjkhOpL
- ptHNpENeeDKc5tzUC3lXjdbQBy9kxC796ykSG8JHt2jVrkXRZi+L7WoQrazFvXNUBD7PV1TuQMm
- /PV3BucxkHgF7G0RGBtz+bKapSAVu7M=
-X-Authority-Analysis: v=2.4 cv=DcInbPtW c=1 sm=1 tr=0 ts=6aa09750 cx=c_pps
- a=UbhLPJ621ZpgOD2l3yZY1w==:117 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=YMgV9FUhrdKAYTUUvYB2:22 a=EUspDBNiAAAA:8
- a=NJr1yQlnZ1qXxQj-jTwA:9 a=CjuIK1q_8ugA:10 a=TOPH6uDL9cOC6tEoww4z:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-08_03,2026-09-08_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 bulkscore=0 suspectscore=0 phishscore=0 clxscore=1015
- lowpriorityscore=0 adultscore=0 spamscore=0 malwarescore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609080255
+In-Reply-To: <20260904-dancing-cobalt-ibex-8a039c@l-nschier-aarch64>
 
-On Thu, Aug 20, 2026 at 02:05:01PM +0530, Ekansh Gupta wrote:
-> On 18-08-2026 09:49, Dmitry Baryshkov wrote:
-> > On Mon, Aug 17, 2026 at 10:17:47AM +0530, Ekansh Gupta wrote:
-> >> Implement the FastRPC remote procedure call path, allowing user-space to
-> >> invoke methods on the DSP via DRM_IOCTL_QDA_REMOTE_INVOKE.
-> >>
-> >> qda_fastrpc.c / qda_fastrpc.h
-> >>   Implements the FastRPC protocol layer: argument marshalling
-> >>   (qda_fastrpc_invoke_pack), response unmarshalling
-> >>   (qda_fastrpc_invoke_unpack), and invocation context lifecycle
-> >>   management. Each invocation allocates a qda_fastrpc_invoke_ctx which
-> >>   tracks buffer descriptors, GEM objects, and the completion used to
-> >>   synchronise with the DSP response.
-> >>
-> >>   Buffer arguments are identified by GEM handles. Userspace imports any
-> >>   DMA-BUF fd to a GEM handle with DRM_IOCTL_PRIME_FD_TO_HANDLE before
-> >>   invoking; the driver never accepts DMA-BUF fds directly. Each argument
-> >>   is described by its GEM handle, the user virtual address of the data
-> >>   and its length, from which the driver derives the offset within the
-> >>   buffer and the page-aligned range to describe to the DSP. Packing
-> >>   several arguments into one buffer, and any overlap handling, is left
-> >>   to user space.
-> >>
-> >> qda_rpmsg.c
-> >>   Implements qda_rpmsg_send_msg() which sends the wire-format
-> >>   fastrpc_msg (embedded as the first member of qda_msg) directly via
-> >>   rpmsg_send(), and qda_rpmsg_wait_for_rsp() which blocks on the context
-> >>   completion. The RPMsg callback dispatches responses to waiting
-> >>   contexts via the ctx_xa XArray.
-> >>
-> >> qda_ioctl.c
-> >>   qda_ioctl_invoke() drives the full invocation lifecycle: it builds the
-> >>   invocation context from the user-supplied arguments, packs the
-> >>   arguments into the message buffer, sends the message to the DSP, waits
-> >>   for the response, unpacks the output arguments back to user space and
-> >>   releases the context.
-> >>
-> >> include/uapi/drm/qda_accel.h
-> >>   Adds DRM_IOCTL_QDA_REMOTE_INVOKE with struct drm_qda_invoke_args and
-> >>   the per-argument descriptor struct drm_qda_fastrpc_invoke_args.
-> >>
-> >> Assisted-by: Claude:claude-sonnet-5
-> >> Signed-off-by: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-> >> ---
-> >> Changes in v2:
-> >> - Drop the DMA-BUF fd argument path. Buffer arguments are now identified
-> >>   by GEM handles only; user space is responsible for importing fds to
-> >>   GEM handles before invoking (Dmitry Baryshkov)
-> >> - Leave argument packing and overlap handling to user space rather than
-> >>   supporting several buffer-passing formats in the driver
-> >>   (Dmitry Baryshkov)
-> >> ---
-> >>  drivers/accel/qda/Makefile      |   1 +
-> >>  drivers/accel/qda/qda_drv.c     |   8 +
-> >>  drivers/accel/qda/qda_drv.h     |   8 +
-> >>  drivers/accel/qda/qda_fastrpc.c | 434 ++++++++++++++++++++++++++++++++++++++++
-> >>  drivers/accel/qda/qda_fastrpc.h | 242 ++++++++++++++++++++++
-> >>  drivers/accel/qda/qda_ioctl.c   |  83 ++++++++
-> >>  drivers/accel/qda/qda_ioctl.h   |   1 +
-> >>  drivers/accel/qda/qda_rpmsg.c   |  91 ++++++++-
-> >>  drivers/accel/qda/qda_rpmsg.h   |  26 +++
-> >>  include/uapi/drm/qda_accel.h    |  42 ++++
-> >>  10 files changed, 934 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/accel/qda/Makefile b/drivers/accel/qda/Makefile
-> >> index fb092e56d7f3..2d10420cd1ec 100644
-> >> --- a/drivers/accel/qda/Makefile
-> >> +++ b/drivers/accel/qda/Makefile
-> >> @@ -8,6 +8,7 @@ obj-$(CONFIG_DRM_ACCEL_QDA)	:= qda.o
-> >>  qda-y := \
-> >>  	qda_cb.o \
-> >>  	qda_drv.o \
-> >> +	qda_fastrpc.o \
-> >>  	qda_gem.o \
-> >>  	qda_ioctl.o \
-> >>  	qda_memory_dma.o \
-> >> diff --git a/drivers/accel/qda/qda_drv.c b/drivers/accel/qda/qda_drv.c
-> >> index a68a07d0ae56..f925bbcfa6e9 100644
-> >> --- a/drivers/accel/qda/qda_drv.c
-> >> +++ b/drivers/accel/qda/qda_drv.c
-> >> @@ -25,6 +25,8 @@ static int qda_open(struct drm_device *dev, struct drm_file *file)
-> >>  
-> >>  	qda_file_priv->pid = current->pid;
-> >>  	qda_file_priv->qda_dev = qda_dev_from_drm(dev);
-> >> +	qda_file_priv->remote_session_id =
-> >> +		atomic_inc_return(&qda_file_priv->qda_dev->remote_session_id_counter);
+On Fri, Sep 04, 2026 at 09:34:10PM +0200, Nicolas Schier wrote:
+> On Mon, Aug 31, 2026 at 06:46:31PM -0700, Nathan Chancellor wrote:
+> > When building in a kernel tree prior to commit b055f4c431e3 ("sorttable:
+> > Move ELF parsing into scripts/elf-parse.[ch]") with clang-23 or newer,
+> > which implements a new warning under -Wunused-but-set-variable for
+> > static global variable, there is a warning from sorttable because
+> > long_size is unused when MCOUNT_SORT_ENABLED is not set:
 > > 
-> > What happens on the wraparound? What if some of those sessions are still
-> > alive?
-> collision would require 2^31 opens without close, is this reachable?
-> Should I add a comment here? Or some how address this?>
-
-Just address it in the driver, disallowing such collisions. If there is
-a way for the counter to wrap, it will wrap once.
-
-> >>  	file->driver_priv = qda_file_priv;
-> >>  
-> >>  	return 0;
+> >   scripts/sorttable.c:452:12: error: variable 'long_size' set but not used [-Werror,-Wunused-but-set-global]
+> >     452 | static int long_size;
+> >         |            ^
 > > 
-> > [...]
-
-> >> +
-> >> +/**
-> >> + * struct fastrpc_remote_buf - Remote buffer descriptor
-> >> + */
-> >> +struct fastrpc_remote_buf {
-> >> +	/** @pv: Buffer pointer (user virtual address) */
-> >> +	u64 pv;
+> > Mark long_size as __maybe_unused to avoid inserting more ugly #ifdef
+> > directives while insuring the warning does not reappear, as the
+> > aforementioned change does not alter the uses of long_size, so it
+> > appears to be coincidence that the warning disappears after this
+> > refactoring.
 > > 
-> > pv would mean physical something. Also, where do you validate the user's
-> > address? Where do we check that it's ok to access the buffer, that it's
-> > not a garbage?
-> this is inherited from fastrpc(same is also used on DSP firmware) but I
-> can rename it to something more meaningful like addr/va. This `pv` is
-> used for offset calculation which eventually gives address of the page
-> carrying the buffer. I can add checks when this calculation is done to
-> ensure the pv is in proper range of the buffer passed by user.>
-
-Don't inherit bad names. Don't use 'user virtual address' unless you
-really mean __user. In the latter case the address must go through
-access_ok() checks.
-
-> >> +	/** @len: Length of the buffer in bytes */
-> >> +	u64 len;
-> >> +};
-> >> +
-> >> +/**
-> >> + * union fastrpc_remote_arg - Remote argument (buffer or DMA handle)
-> >> + */
-> >> +union fastrpc_remote_arg {
-> >> +	/** @buf: Inline buffer descriptor */
-> >> +	struct fastrpc_remote_buf buf;
-> >> +	/** @dma: DMA-BUF handle descriptor */
-> >> +	struct fastrpc_remote_dmahandle dma;
-> >> +};
-> >> +
-> >> +/**
-> >> + * struct fastrpc_phy_page - Physical page descriptor
-> >> + */
-> >> +struct fastrpc_phy_page {
-> >> +	/** @addr: Physical (IOMMU) address of the page */
-> >> +	u64 addr;
-> >> +	/** @size: Size of the contiguous region in bytes */
-> >> +	u64 size;
-> >> +};
-> >> +
-> >> +/**
-> >> + * struct fastrpc_invoke_buf - Invoke buffer descriptor
-> >> + */
-> >> +struct fastrpc_invoke_buf {
-> >> +	/** @num: Number of contiguous physical regions */
-> >> +	u32 num;
-> >> +	/** @pgidx: Index into the physical page array */
-> >> +	u32 pgidx;
-> >> +};
-> >> +
-> >> +/**
-> >> + * struct fastrpc_msg - FastRPC wire message for remote invocations
-> >> + *
-> >> + * Sent to the remote processor via RPMsg. This is the exact layout
-> >> + * the DSP expects; do not reorder or add fields without DSP firmware
-> >> + * coordination.
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > ---
+> > This is breaking our builds on stable:
 > > 
-> > __packed?
-> I'll check more on this.>
-> >> + */
-> >> +struct fastrpc_msg {
-> >> +	/** @remote_session_id: Session identifier on the remote processor */
-> >> +	int remote_session_id;
+> >   https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/33143924291
 > > 
-> > Is it int or u32?
-> This is again from fastrpc where it's a mix of int and s32. I'll keep it
-> the to actual s32 here in QDA.>
-
-Thanks. Also please stop using fastrpc_ prefix in the QDA driver.
-
-> >> +	/** @tid: Thread ID of the invoking thread */
-> >> +	int tid;
-> >> +	/** @ctx: Context identifier for matching request/response */
-> >> +	u64 ctx;
-> >> +	/** @handle: Handle of the remote method to invoke */
-> >> +	u32 handle;
-> >> +	/** @sc: Scalars value encoding in/out buffer counts */
-> >> +	u32 sc;
-> >> +	/** @addr: Physical address of the message payload buffer */
-> >> +	u64 addr;
-> >> +	/** @size: Size of the message payload in bytes */
-> >> +	u64 size;
-> >> +};
-> >> +
-> >> +/**
-> >> + * struct qda_fastrpc_invoke_ctx - Remote procedure call invocation context
-> >> + *
-> >> + * Maintains all state for a single remote procedure call, including buffer
-> >> + * management, synchronisation, and result handling.
-> >> + */
-> >> +struct qda_fastrpc_invoke_ctx {
-> >> +	/** @node: List node for linking contexts in a queue */
-> >> +	struct list_head node;
-> >> +	/** @qdev: Device owning the XArray this context is registered in */
-> >> +	struct qda_dev *qdev;
-> >> +	/** @ctxid: Unique context identifier (XArray key shifted left by 4) */
+> > There was a previous patch sent for this issue
 > > 
-> > Why is it shifted by 4? Why not by 3?
-> I'll add the PD encoding comment here.>
-
-So, why?
-
-> >> +	u64 ctxid;
-> >> +	/** @inbufs: Number of input buffers */
-> >> +	int inbufs;
-> >> +	/** @nscalars: Total number of scalar arguments */
-> >> +	int nscalars;
-> >> +	/** @nbufs: Total number of buffer arguments (inbufs + outbufs) */
-> >> +	int nbufs;
-> >> +	/** @pid: Process ID of the calling process */
-> >> +	int pid;
-> >> +	/** @retval: Status code reported by the DSP for this invocation */
-> >> +	int retval;
-> >> +	/** @remote_session_id: Session identifier on the remote processor */
-> >> +	int remote_session_id;
+> >   https://lore.kernel.org/20260603191708.27241-1-beakthoven@gmail.com/
 > > 
-> > is pid linked to remote_session_id?
-> not really, remote_session_id is more of session specific, so in case of
-> multi-session(same PID having multiple sessions) should have different
-> remote_session_id.>
-
-Then drop the pid, please. You already have a session here.
-
-> >> +	/** @pd: Protection domain identifier encoded into the context ID */
+> > but it was marked as stable only. I think this should be taken via
+> > mainline and backported the normal way, as it appears to be coincidence
+> > that the warning is not present in mainline. It does not look like
+> > scripts/sorttable.c has a formal owner according to MAINTAINERS so this
+> > could either go through one of Steve's trees or the kbuild tree.
+> > ---
+> >  scripts/sorttable.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
 > > 
-> > If it's already encoded, why do you need it here?c
-> it's stores so the packing step can use it, I'll document more on this.
-> Or if I can have both msg->fastrpc.ctx and ctxid same, I'll check that
-> also>
-> >> +	int pd;
-> >> +	/** @type: Invocation type (e.g. FASTRPC_RMID_INVOKE_DYNAMIC) */
-> >> +	u32 type;
-> > 
-> > What other types can exist?
-> I'll add all the types in document or just add FASTRPC_RMID_* and point
-> to qda_fastrpc.h for more details.>
-
-Do we really need to support those in the first iteration? I think you
-should have heart it several times: get the minimal sensible driver in.
-You can add all the features afterwards.
-
-> >> +	/** @sc: Scalars value encoding in/out buffer counts */
-> >> +	u32 sc;
-> > 
-> > Remove it and calculate from in/outbufs above?
-> The source of sc is the auto-generated stub file which passes this to
-> remote_handle_invoke() based on the method requested by the user. This
-> as is as it is passed to DSP where this is used in auto-generated skel.
 > 
-> I think the other way around(in/outbufs from sc) would make more sense.>
-
-ok
-
-> >> +	/** @handle: Handle of the remote method being invoked */
-> >> +	u32 handle;
-> >> +	/** @metalen: Length of the FastRPC metadata header in bytes */
-> >> +	size_t metalen;
-> >> +	/** @pkt_size: Total payload size in bytes */
-> >> +	u64 pkt_size;
-> >> +	/** @aligned_pkt_size: Page-aligned payload size for GEM allocation */
-> > 
-> > ???
-> I'll check and remove this.>
-> >> +	u64 aligned_pkt_size;
-> >> +	/** @list: Array of invoke buffer descriptors */
-> >> +	struct fastrpc_invoke_buf *list;
-> >> +	/** @pages: Array of physical page descriptors for all arguments */
-> >> +	struct fastrpc_phy_page *pages;
-> >> +	/** @input_pages: Array of physical page descriptors for input buffers */
-> >> +	struct fastrpc_phy_page *input_pages;
-> >> +	/** @work: Completion used to synchronise with the DSP response */
-> >> +	struct completion work;
-> >> +	/** @msg: Pointer to the QDA message structure for this invocation */
-> >> +	struct qda_msg *msg;
-> >> +	/** @rpra: Array of remote procedure arguments */
-> >> +	union fastrpc_remote_arg *rpra;
-> >> +	/** @gem_objs: Array of GEM objects imported for argument buffers */
-> >> +	struct drm_gem_object **gem_objs;
-> >> +	/** @args: Invoke argument descriptors */
-> >> +	struct drm_qda_fastrpc_invoke_args *args;
-> >> +	/** @refcount: Reference counter for context lifetime management */
-> > 
-> > What for?
-> just to ensure that the context is not freed in case the
-> wait_for_completion() is interrupted.>
-
-If it's not _interruptible, it can't be interrupted. Or there should be
-a better description of the reasons.
-
-> >> +	struct kref refcount;
-> >> +	/** @msg_gem_obj: GEM object backing the message payload buffer */
-> >> +	struct qda_gem_obj *msg_gem_obj;
-> >> +	/** @file_priv: DRM file private data */
-> >> +	struct drm_file *file_priv;
-> >> +	/**
-> >> +	 * @req: Request buffer for the internal init/map/unmap calls.  Points
-> >> +	 * into a kernel-owned GEM mapping tracked by @gem_objs, so it must
-> >> +	 * never be freed directly.
-> >> +	 */
-> >> +	void *req;
-> > 
-> > Why do you need separate pointers here? Can't you be getting them from
-> > msm_gem_obj?
-> These are typed pointers into different offsets of the kernel GEM
-> mapping. I could compute them each time from `msg_gem_obj->virt +
-> offset`, but caching them avoids repetitive casting. Let me see if
-> removing this looks cleaner.>
-
-Calculate them when necessary. If you use them in a few places, they
-don't need to be cached.
-
-> >> +	/** @rsp: Response buffer, same lifetime rules as @req */
-> >> +	void *rsp;
-> >> +	/** @inbuf: Process-create input buffer, same lifetime rules as @req */
-> >> +	void *inbuf;
-> >> +};
-> >> +
-> >> @@ -84,6 +88,44 @@ struct drm_qda_gem_mmap_offset {
-> >>  	__u32 pad;
-> >>  };
-> >>  
-> >> +/**
-> >> + * struct drm_qda_fastrpc_invoke_args - FastRPC invocation argument descriptor
-> >> + * @ptr: Pointer to argument data (user virtual address)
-> > 
-> > Why do you need it? Is handle + length not enough? If you want, specify
-> > offset inside the GEM BO.
-> The user VA (`ptr`) is needed because userspace mmaps the GEM BO and
-> then passes pointers into it to the DSP. The kernel derives the offset
-> within the BO from the VMA (via `calculate_vma_offset()`).
+> Thanks!
 > 
-> I can check if just passing handle + offset + length works here but that
-> might require some userspace change.
+> Tested-by: Nicolas Schier <n.schier@fritz.com>
 
-You are going to have a different userspace. It must pass only
-handle+offset+length triplets. All the rest must go to the compatibility
-layers.
-
+Thanks. Given how trivial this is and since it needs to go to stable,
+could you take this via kbuild-fixes?
 
 -- 
-With best wishes
-Dmitry
+Cheers,
+Nathan
