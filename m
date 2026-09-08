@@ -1,141 +1,281 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3492C3911AD;
-	Tue,  8 Sep 2026 07:37:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C001F39EB5B
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 07:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788853068; cv=none; b=RJiXd1SoTNWDpVIg2E7o0q1+PYSEfkzIjaiklzvdesyIEEJQbEmz+W2lEmhCi5H2+SfsNPwcpmOYsvRk3oJnIRZiY+12Sak87IyPuCS9F4EkYzdt1Y7StbUiFppB2gzmAY279pXTxBpQMFEGE/d9UVZYWgVWwp0v8mQ00DVdha8=
+	t=1788853547; cv=none; b=WHhDdEFIbBwHmS81yf+jUgVbSKJN70VvCkj34ydKi1k5pyRM0bsoPj9DIW6zXvtinB+Gwl3K7zqFtXKw5ryknZCwuWz7cRI7DbrG/WOYB4SypqwG71+KdjoInmJeEljOSD8C6r2I2Eno4qpoO7kbNhsFSQW7fdxH4WGg2PE7bxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788853068; c=relaxed/simple;
-	bh=ZwH/nHQww+E+pAX3LZn0JyEZ+Oi3mONaiQzNpCAvNT8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i1GFbE2JAAH/Qp7UWf3pdOoRO4yquZhE9xtiqR3WcCOaJvPgDgv4l8eNVVdqNEBtP56qKFOOp7PuFKVuotOBNmfNZmE87HmpEKZGrola2D5r49cV65t/95tb9Gz8UbLd87oN4rNatUg3r3o7Xzz4nQa2doCbQviMUR1sZtRVmgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=irAwsshP; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1788853547; c=relaxed/simple;
+	bh=MYJ8QuS9dJHlh3zGd4Jjmjuv7oAWC7r/tOj6ovNMei0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JowBQlOoBJbYqlgx+loAEiUnrmQp9Ihx+FiYN2j1p13vYmKmRKjiQHzt49QgHlB9ZHbmg+gNfOjjo1N4RKq+brF51QHye1fdmLVVt+DMs2gj2GBPBPEesT9h156kRaEucyzThXPYngnLzMSDxSOSk25gdG9VANuuDL6BahSpteI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=meyDObDd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=PvTMbXqF; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="irAwsshP"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=dMspgRwQUUIexqKss7dqowtOmwD0tLbRBkFb+1ouQnY=; b=irAwsshPXpU7Uf/rfFaj3uWs6G
-	difPdlK64/emyFJJjlL7wNOeoAd6Y+U30iaYxFlQNgUaXhJ5XP9GQvgT7SeejFL749VvbdmXzNQmr
-	ysoKC7HRo3DXe9AyxTg6XU4ih3jJvnovv2Ujltj+xakHIL0+9ST9dekY+kWUCq6mECTuqGA167fg+
-	YqFWds1pqUcKbMJUd2jIJjqcUYt3toc+D0q3aR2UwfeZbWbAc5JAxTcsD0VD8CvN28YZRwquKZu0g
-	pKwTeSbCwX4MUVnlh4QxgKngIIgLaxab029w2jsxL2wYaE+8OY428gXbHH21x+RnEEnFMu/t4r9jb
-	gZmtLwfw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1x3qOD-0000000H407-3KtV;
-	Tue, 08 Sep 2026 07:37:10 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id E0348300400; Tue, 08 Sep 2026 09:37:07 +0200 (CEST)
-Date: Tue, 8 Sep 2026 09:37:07 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-mm@kvack.org,
-	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Jan Stancek <jstancek@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v5 12/24] vdso: Add the vdsocheck tool
-Message-ID: <20260908073707.GV4120091@noisy.programming.kicks-ass.net>
-References: <20260908-vdso-absolute-reloc-v5-0-3a93791af1cf@linutronix.de>
- <20260908-vdso-absolute-reloc-v5-12-3a93791af1cf@linutronix.de>
- <20260908071911.GU4120091@noisy.programming.kicks-ass.net>
- <20260908093302-1a1cf0c7-8103-48b1-9f6a-abd5c5c16523@linutronix.de>
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="meyDObDd";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="PvTMbXqF"
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6886LqJM2154179
+	for <llvm@lists.linux.dev>; Tue, 8 Sep 2026 07:45:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	vjCdleB62PQ5+3oSfJm6THWjJHXQHO2Cei/sEBlVgJo=; b=meyDObDdxg1onozh
+	BTIfrgJw9Bf20bmpFLWeHyZoqdWL8TX8jZKczZ2pE6krABotoKHevESc6wzTBOzl
+	OAwYrON/e3Pl7RsZxRn/C14fZyu4VRBSt3xnJLQHdwXsh88S9DC5l9GiZmPVa8hA
+	eT3Vm7Xv/6RxHAs66hv7XBakFwk2uRVloSq8Bl9hzR6PEnOgqphhTOHN2EUHNvJq
+	MqXXrISTRFOLQnXj5HCjf2dsYwA1yuMoVHaaoTwJGFlGxGn9AsLUQL4zxmYGCj/X
+	DkfS9JacTTbaF9b8B28tcXEN5zSj37ztLWzdNQWA+CbGZVik/3TZUBGHipETto+C
+	bV2gbQ==
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gj1rwjaj4-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 07:45:44 +0000 (GMT)
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-39906175917so4623731a91.2
+        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 00:45:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=oss.qualcomm.com; s=google; t=1788853543; x=1789458343; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=vjCdleB62PQ5+3oSfJm6THWjJHXQHO2Cei/sEBlVgJo=;
+        b=PvTMbXqFY/Fe8oFFtu/aXMkNMIz4hpeTG6JSvJptltZNbjCHOCfMQ5AKgMSOvNnBf1
+         p3hN+WwLPW+oV6zGwyNzTwF/K7MzhhNMe7N1v3EZkqllmcRAXmszjSgEq51/VV87EJz0
+         cXI0Pp3zBd69m21bb/baH0yr3t735S0t+VqcnJCYAFFi9jSOsoSzkcF20rTFwxr8PAVG
+         V19V9NXF4sYIWHz17Nw4x7GDUGnFCrCQK+O3HWwwfLxS6sdqTnos1gxjzzXdV0Esv0dj
+         dZNqzXU4wEPatWSOFYypGKBnS/0LKkfPQAwYF8T3vdeVbAsFWO1Wcif5ELZROP5aXjQ9
+         baKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788853543; x=1789458343;
+        h=content-transfer-encoding:content-type:in-reply-to:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=vjCdleB62PQ5+3oSfJm6THWjJHXQHO2Cei/sEBlVgJo=;
+        b=rVTmvkpmUuKZyUyZ/V3VekPSJNT0MDkkakbWWpJrwkyKR38nk6sp29ucs7lHR4+H3K
+         OI7OdmnJ4ZbNU8s2xwU3heP8ann+xg1NgjYjUfJcPFzwCQVfQYRvCLH9aBH++FkJpS5U
+         YXXvVsOKRwmWtVmLm4w14/nGbwOUiepiVTUjsQBDxAEqe1b/kCfw0wcukW+kshPH2TgX
+         sD9UyjjezwYhFJFxumfNY3P41wBm7ArOlPCDcLReaHsJ4S+1M/DPKnCZO0F2XS9+Ixmm
+         FIsvDGLQrRHL7lVws0n91MpHuviyh41XxYlZh+cJc9nttB2obvBvUo8Hs9zHYJOOY684
+         rxqw==
+X-Forwarded-Encrypted: i=1; AKwUvBxpGtPIlwOXuQYqHhiagUjq9J9iW7GQ3ERNlzPb39Wwxg2TxjuBYreb88CL3OLuC1qdS+d2@lists.linux.dev
+X-Gm-Message-State: AFuF++k3rJE+RKdTO30EqawdzIIUFY493+YxvhI56Tm4TwV0Y5Ovqazm
+	1yUk0JYISxgkxuD8uyklmD0CygQzm7eDwwDqeBhoQG1G9nL+2qR5grclKY/7WS6jhyGuYgEeofT
+	xN4aix34UFtEJXsj059XjDrXV1mLC+m8j7meKW3MrLWS9vqmqxaI80JuJ
+X-Gm-Gg: AYBFou2ixZiXCAZVIZnuGwoYyx2Lcd2paUpL69ilAZpctnSgp82wuz0Bup0NIt7fXqA
+	jyT/plLI9c6MC44tTKVEBt0eGcMtFKtFby2l9BkNsvoF5HSTCVzdM0qnIPB441KoKrheGH1u97O
+	Z4oVFm9Ji/aNjLox9D48Xyel8Pl8fQQFYjs+OqKQiK7BqIg4b/Z/1ZWhGjZ1Nmw6ue66AdYt8R8
+	RPC8WYFqjWKiUtidUcDXKHShbo3pNE4dhNpKbsjB+DlPvnBFNvBpqDKQmvlza+B1TS4LRmqaCaW
+	Q6NTzd9QIXpTtZge+EzEK+FnAINxWy8epLhIP1+wxv+j9iy3zrdz9xw9oSm9MAqXfbLw5vHwkIR
+	Y6bu/oCW7CM2mEtJ1R48dBywOQBO+Eg==
+X-Received: by 2002:a17:90b:1e03:b0:398:b17b:3bd2 with SMTP id 98e67ed59e1d1-39b260dda6emr38832027a91.4.1788853543414;
+        Tue, 08 Sep 2026 00:45:43 -0700 (PDT)
+X-Received: by 2002:a17:90b:1e03:b0:398:b17b:3bd2 with SMTP id 98e67ed59e1d1-39b260dda6emr38831975a91.4.1788853542891;
+        Tue, 08 Sep 2026 00:45:42 -0700 (PDT)
+Received: from [10.219.57.226] ([202.46.23.19])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-336c2571039sm14719241eec.25.2026.09.08.00.45.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Sep 2026 00:45:42 -0700 (PDT)
+Message-ID: <a3b73723-9522-40da-806a-643093b1b227@oss.qualcomm.com>
+Date: Tue, 8 Sep 2026 13:15:32 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260908093302-1a1cf0c7-8103-48b1-9f6a-abd5c5c16523@linutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 03/15] accel/qda: Add initial QDA DRM accelerator
+ driver
+From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap
+ <rdunlap@infradead.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>,
+        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Bharath Kumar <quic_bkumar@quicinc.com>,
+        Chenna Kesava Raju <quic_chennak@quicinc.com>,
+        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
+        iommu@lists.linux.dev, linux-media@vger.kernel.org,
+        linaro-mm-sig@lists.linaro.org
+References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
+ <20260817-qda-v2-v2-3-69a02e9090d4@oss.qualcomm.com>
+ <81708487-89ce-4cd5-b39a-2989bdce6088@kernel.org>
+ <3476b5c3-7983-4994-a901-3d7d8bd75255@oss.qualcomm.com>
+ <4ef74e14-8433-4619-ac97-62868c8799d1@kernel.org>
+ <g5orcvzjbwww27vwcsxl3ehrek6lvznxptd7jutifoiuicjnm6@iqq2pus6omsl>
+ <a642833b-f22a-4bea-8a20-0debc47e1895@kernel.org>
+ <4xcyqqrqbvgxojfcmnpwbi2uqk5tvhts52l6sxetltcgb7mo75@lfsgfoq4npz3>
+ <59aa182d-1b4c-4bdc-a1d5-e76cc9c88ed9@kernel.org>
+ <c806d7c5-98f8-4b0b-9d00-969e1917a8e4@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <c806d7c5-98f8-4b0b-9d00-969e1917a8e4@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=Ga8nWwXL c=1 sm=1 tr=0 ts=6a9fbd28 cx=c_pps
+ a=0uOsjrqzRL749jD1oC5vDA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
+ a=wP88gyHQT0P6k6tIFBAA:9 a=QEXdDO2ut3YA:10 a=mQ_c8vxmzFEMiUWkPHU9:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA4MDA3OCBTYWx0ZWRfX1XyFxSGPrXMF
+ CsBDt3bfhiK14ievPiqdmuKBQ9E3orW9z870071rebtYd3TPYEP+FygE1qBzT8bFNgAQnh+R7kr
+ 0Dtw1dR2BoX9WhTrhjKGxhtiaO6xtKGdGgw80ffBlwAfWoH14cdiQePsumtiRlxMg7A8cEJMPm7
+ iIT5Xp5/8sBx000rSxt3qMPN4yTkOMjdx/x4aK4Byq92I1ZXD4YwSleRDuY2W8eztTrKb01JhAM
+ T/Gs+PoM33zU26P+0CGYo3FuVh5jQ5BIkLSKmT971EtruMATXDVJzH+tSoqcCQfTXlQjuB0XjsD
+ JHh65I5/i/Gvn7gNDtEZkl/5kfjZc1LYE2LFMHXw99gP6vpB2sRxu1QwL1kuaAQhdKsV1sTMaR5
+ q/3ZMfe1hqHrflyE3gjBX5VCj468Fuk23djPQuLKTtSOup7q9CAwqS00YfjAcHeJHHisBxItDhQ
+ py5sEAVmW2CJyE/vVZw==
+X-Proofpoint-ORIG-GUID: z-lYmK0lz4HiSE85x_Mor1yAoBYbAxgH
+X-Proofpoint-GUID: z-lYmK0lz4HiSE85x_Mor1yAoBYbAxgH
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA4MDA3OCBTYWx0ZWRfX/zT/HBGz/EGb
+ S++oBs5y9vgwACo1hHFvV8Yx5iFrphMooZ98Fog5MPSJb2PySdu5O3lXqNSI59UadD7b3F8CnPQ
+ Zf93bi63x6kNWTkl9fAYPWUo8LewJvg=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-08_01,2026-09-07_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 phishscore=0 suspectscore=0 clxscore=1015 impostorscore=0
+ bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609080078
 
-On Tue, Sep 08, 2026 at 09:35:46AM +0200, Thomas Weiﬂschuh wrote:
-> On Tue, Sep 08, 2026 at 09:19:11AM +0200, Peter Zijlstra wrote:
-> > On Tue, Sep 08, 2026 at 08:33:46AM +0200, Thomas Weiﬂschuh wrote:
-> > > All vDSO code needs to be completely position independent. Symbol
-> > > references are marked as hidden so the compiler emits PC-relative
-> > > relocations. However there are cases where the compiler may still
-> > > emit absolute relocations, as they are valid in regular PIC DSO code.
-> > > These would be resolved by the linker and will break at runtime.
-> > > This has been observed on arm64, see commit 0c314cda9325 ("arm64: vdso:
-> > > Work around invalid absolute relocations from GCC")
-> > > 
-> > > Introduce a tool to check for absolute relocations during the build,
-> > > as the current inline-shell logic is not expressive enough.
-> > > The check is done on the object files as the relocations will not exist
-> > > anymore in the final DSO. As there is no extension point for the
-> > > compilation of each object file, perform the validation in vdso_check.
-> > > 
-> > > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > > ---
-> > >  Makefile                    |  19 ++
-> > >  lib/vdso/Kconfig            |   5 +
-> > >  lib/vdso/Makefile           |   2 +
-> > >  lib/vdso/Makefile.include   |  14 ++
-> > >  lib/vdso/check/.gitignore   |   3 +
-> > >  lib/vdso/check/Makefile     |  34 +++
-> > >  lib/vdso/check/elf.rs       | 498 ++++++++++++++++++++++++++++++++++++++++++++
-> > >  lib/vdso/check/vdsocheck.rs | 154 ++++++++++++++
-> > >  8 files changed, 729 insertions(+)
-> > 
-> > Urgh, does this mean I have to have rust installed just to build a
-> > kernel now?
+On 31-08-2026 20:28, Ekansh Gupta wrote:
+> On 20-08-2026 19:01, Krzysztof Kozlowski wrote:
+>> On 20/08/2026 12:07, Dmitry Baryshkov wrote:
+>>> On Thu, Aug 20, 2026 at 11:07:45AM +0200, Krzysztof Kozlowski wrote:
+>>>>>>>>
+>>>>>>>> Device node with this compatible is already populated, so this looks
+>>>>>>>> simply wrong or you are adding a duplicated driver.
+>>>>>>>>
+>>>>>>>> That's a no-go, you are supposed to work with existing drivers and grow
+>>>>>>>> them.
+>>>>>>> I'll bring the discussion again here, there was a discussion to move the
+>>>>>>> driver to accel subsystem if we want to support new features/uAPI
+>>>>>>> changes. Please read [1],[2] threads. The intention is to replace
+>>>>>>> fastrpc driver with QDA eventually.
+>>>>>>
+>>>>>> None of them address the problem. You want to grow fastrpc into user of
+>>>>>> dmabuf? So you move it from misc to here.
+>>>>>
+>>>>> It's not as easy and nice, so I think in this case it's better to repeat
+>>>>
+>>>> I disagree. The existing fastrpc driver is not that complicated. It's
+>>>> actually moderate amount of code, much less than Venus was (~7 times less).
+>>>>
+>>>> It easily can grow to support two interfaces and the only difficulty is
+>>>> how to manage these two interfaces simultaneously or exclusively, e.g.
+>>>> opening first one disables the second.
+>>>
+>>> I see the point here.
+>>>
+>>> Would it be acceptable if we add QDA support only on the new platforms
+>>> (e.g. via the SoC-specific compat), provide QDA for those platforms,
+>>> and, once it reaches complete API and feature parity, we remove the old
+>>> fastrpc driver, migrati old platforms.
+>>
+>> The problem with this approach is that we have no guarantees that it
+>> will reach feature parity in respect of old interface, thus old driver
+>> might stay forever. If we agree for duplicated driver, contributors have
+>> no incentives to support old approach.
+> That's a fair concern. Let me lay out the sequence we have in mind and
+> then the concrete reasons parity is not optional for us.
 > 
-> No.
+> The plan is staged. QDA is enabled first on new platforms, where there
+> is no existing userspace to migrate and the new UAPI can be exercised
+> properly. In parallel we close the remaining feature gaps against
+> fastrpc. Once parity is reached we migrate the older platforms onto QDA
+> and remove drivers/misc/fastrpc.c. The end state is one driver, not two.
 > 
-> If you don't have rust installed the build will instead use the existing shell
-> script for a less thorough check. We only need one build machine at some point
-> to have rust installed to report issues and this check to be useful.
+> On why parity will actually happen: the DSP firmware is not changing.
+> Both drivers implement the same base protocol against the same firmware
+> image, so the feature set is defined by that firmware interface, not by
+> what we feel like implementing. For QDA to support a feature at all it
+> has to implement the same protocol operations fastrpc already does.
+> Parity is a property of the interface rather than of contributor enthusiasm.
+> 
+> Other than the base protocol, there are some features(daemons,
+> capability, session sharing) that exist in fastrpc for performance etc.
+> but are not yet part of QDA. We want to implement them properly rather
+> than port them across as they stand.
+> 
+> The remaining question is how fastrpc can actually be removed once
+> parity exists, without breaking existing userspace. That needs a
+> compatibility path, and it is a deliverable we are committed to rather
+> than an afterthought. For that, we need to settle is whether that path
+> is a userspace shim in the library, an in-kernel translation layer
+> exposing the legacy device nodes, or a hybrid. We evaluated an in-kernel
+> shim during v1 and hit constraints around constructing per-client
+> drm_file contexts from outside the DRM core, so the approach is still
+> open. I'll come back with a concrete proposal, and it will land before
+> fastrpc is removed rather than after.
+> 
+>>
+>> Much better is to refine the old driver, gradually adding new features
+>> while maintaining old stuff. This is the only way we can force
+>> contributors to actively work on minimizing duplicate parts.
+>>
+> I believe you are suggesting we bring the new features we are developing
+> with DRM core utilities into the fastrpc driver. I don't think the two
+> interfaces can share one driver, though, and it isn't a question of code
+> size.
+> 
+> fastrpc is a miscdevice: it accepts raw DMA-BUF fds as arguments and
+> tracks buffers in its own per-file lists, with the fd itself being the
+> buffer identity visible to the DSP. QDA is a drm_driver whose buffers
+> are GEM objects in a per-drm_file handle namespace, with PRIME used for
+> import and the GEM handle being the identity. These are two different
+> buffer ownership models, and neither can be expressed on the other's
+> file type.
+> 
+> Supporting both from one driver therefore means carrying both models
+> simultaneously: two IOCTL surfaces, two buffer lifetimes, two teardown
+> paths, and a memory manager that has to serve both. That is two drivers
+> sharing a directory rather than one driver with two interfaces, and I
+> think it would be harder to review, and harder to eventually untangle,
+> than a separate driver with a stated removal plan.
+> 
+> There is also a positive reason for being in the accel subsystem rather
+> than misc. We can build on existing DRM infrastructure instead of
+> reimplementing it: GEM for buffer management, the device and file
+> lifecycle, and the debug infrastructure. It also positions us for work
+> we have planned around scheduling, drm_gpuvm, etc. Over time this should
+> mean less driver-specific code, not more.
+> 
+> I'll restructure the cover letter so the staged rollout, the
+> compatibility path and the eventual removal of drivers/misc/fastrpc.c
+> are stated properly.
+> 
+> If after this you still want to add or change anything, please let me know.
+> 
+> Thanks,
+> Ekansh> Best regards,
 
-Ah, *phew*. Thanks!
+Gentle ping on this thread. Wanted to check if there's any update on the
+compatible string and coexistence question above, since it's currently
+blocking respin.
+
+Thanks,
+Ekansh
+
+>> Krzysztof
+> 
+
