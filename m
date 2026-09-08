@@ -1,133 +1,125 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 361A6371860;
-	Tue,  8 Sep 2026 08:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665424B0CB4;
+	Tue,  8 Sep 2026 08:57:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788855027; cv=none; b=Ba7PSRGczVcaUZoxgd3ZQnI1AOj2wijxGvJKkvv+c4HnW00/DWtQokZHJEJOJPvNDU2WQ3wPvncZCWc5QcBaUDBa3vtl8gx13JZhhxVoHXDL8prNH2fmXS3zC9XLFQTP0FJJdhdQrJdlw3iiXEh0tBDoltFZNtnOEeLQBJWezZg=
+	t=1788857852; cv=none; b=c3ydSHzKeomlRzuuRRnWlfK0lrJlhvvIcDMw4JURMraLK0BUuVXhDszxCxl+E6SpiR2kXYXhkvQQ2CIBnd8nQ7THhTATXCaLuYYurw5LgQo4no1DnIpNZZOxoScH84e+CUERa3eeKJ6NOI/KG8Fucerffp25ZZru47rep2v1RDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788855027; c=relaxed/simple;
-	bh=DcT+4RZsm15hQyCKxoRnRYKGrvLWi0uj14D8lJpw3aU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qX3O6qKgQaTk2eGMkAQ4zPYNkqVwVcisQIHj2eEF/o4Jlxdrqgu175weP10upU8YpEQOWMj9WeRnsL4vh/BsJCR7kHvSe6LgNljD5biyKYD41yqi7Wkb/oxvknbfwFiuEX0RYhOK0QhLxdBXGTaUd8ELORhWas9aX7192E/QAHg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ddzS7cnU; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1788857852; c=relaxed/simple;
+	bh=AbUW8cML5zO57Sb8jF0d98D12k6Bi/vuzBggBha5Vx0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QwKIfP8FXjofDDlxxgz6KHBsmuJCnncoMgvjP9NN1b/SlC+bIYZ2TNIUIrqiciH+f7e0EEvRx+SDLagQCAehn3sl+jD82jWzOCAWdXONyvtJEUmAAgemydlk9EEgQJnT2BhLn/YQkGDolRSf2jUXLyBdKTJwAf3wN/PcU4cT+VY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RMlWBWtH; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ddzS7cnU"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788855025; x=1820391025;
-  h=date:from:to:cc:subject:message-id;
-  bh=DcT+4RZsm15hQyCKxoRnRYKGrvLWi0uj14D8lJpw3aU=;
-  b=ddzS7cnUFMtwqNfYwJq2QmsSnrRfDBq1of1gSG/8Z6z7aeA79r9/kfjx
-   ubDkXWfDPb+zxmp/uGZzEtnax0slg6pp4Ud2pKElzvmFDuUdsPV5FKqa/
-   YAILXuzvgUGARb18Lm0QZm4bKUpoBDWIip5shjOuHDmgr/nqUVSZnmybe
-   G53hDgXi7WIHW+zlRUBYZzI2m9NbH2LVqptBrRRVai5ZLTE6B4Q3XyJ2T
-   Wl0xUWlNSNylVglu412aP6gP+E1pqkMlRplwZq9z9+aZZb1DcoGxwN3vS
-   8BRVN51YjwPCpUtWnc3VOVE1Wx9KAN9ilAD3Rcm9wQxHQE1LHYCaB8C9c
-   w==;
-X-CSE-ConnectionGUID: VzENwuWgQB2I5GNRVdqzRg==
-X-CSE-MsgGUID: 0xD68kIPT7qzo9/DQn63BQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11899"; a="92950332"
-X-IronPort-AV: E=Sophos;i="6.25,268,1779174000"; 
-   d="scan'208";a="92950332"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2026 01:10:24 -0700
-X-CSE-ConnectionGUID: YUxZ63t9S5Oqcmmjh1yNNw==
-X-CSE-MsgGUID: 8F5/s4+tQ2Oj+pUv4xixtQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,268,1779174000"; 
-   d="scan'208";a="270408504"
-Received: from lkp-server01.sh.intel.com (HELO dff15f1b2031) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 08 Sep 2026 01:10:23 -0700
-Received: from kbuild by dff15f1b2031 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x3quJ-000000001s3-23EL;
-	Tue, 08 Sep 2026 08:10:19 +0000
-Date: Tue, 08 Sep 2026 16:09:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [pinchartl:rcar/x5h/vsp 1/1]
- drivers/media/platform/renesas/rcar-fcp.c:263:14: warning: cast to smaller
- integer type 'enum rcar_fcp_type' from 'const void *'
-Message-ID: <202609081526.zHnaqSx0-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RMlWBWtH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20D6F1F00A3A;
+	Tue,  8 Sep 2026 08:57:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788857835;
+	bh=BOR2t3VtcjszZ4q3H4RF8INxqX7I/2OnFWmBk3yYh2U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=RMlWBWtHsUr314SSes2RbgrXEdhowxsDExyywV6MWPiyRlQ2MiRcnzJrKxwP2Uq5y
+	 FxFi3d8oyrDb4Ns+a5YQol0nE9UlpMARb5Srs2FLa3c8UgJq9bIRFnwje3hSYKfvsy
+	 4lejU8BQqLNJPlkLkj5fUKy1asSopqBNr8Z/GdXh3YL25ZL/xotJOBdRT8X+1frbzz
+	 5wc8MC7jxG0TFbXkBqhY75SKcdrJ0GvpwyMgIKA6vQKX0ndFDZCBRqE2+uKYcWsIZK
+	 O423o/0XnOMDsJENmzRb5yAhovNWoPRl28a6i0Ifx5k/RVsnRdBM2JH4gLApjYzNXL
+	 e95ar8gZlvOGw==
+Message-ID: <06996199-5255-41d0-ba6a-ebeca57f61da@kernel.org>
+Date: Tue, 8 Sep 2026 10:56:58 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 11/24] tools headers UAPI: Sync ELF headers with the
+ kernel sources
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Andy Lutomirski <luto@kernel.org>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>,
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Nicolas Schier <nsc@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
+ linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@redhat.com>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>
+References: <20260908-vdso-absolute-reloc-v5-0-3a93791af1cf@linutronix.de>
+ <20260908-vdso-absolute-reloc-v5-11-3a93791af1cf@linutronix.de>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20260908-vdso-absolute-reloc-v5-11-3a93791af1cf@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pinchartl/linux.git rcar/x5h/vsp
-head:   a92cff87bfdad91d6a30df052c342a23849c1f40
-commit: a92cff87bfdad91d6a30df052c342a23849c1f40 [1/1] v4l: rcar-fcp: Check device revision at probe time
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260908/202609081526.zHnaqSx0-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2362eeb5f75560740146975e9eabe84c6bd25a0d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260908/202609081526.zHnaqSx0-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609081526.zHnaqSx0-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/renesas/rcar-fcp.c:263:14: warning: cast to smaller integer type 'enum rcar_fcp_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-     263 |         fcp->type = (enum rcar_fcp_type)device_get_match_data(&pdev->dev);
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning generated.
 
 
-vim +263 drivers/media/platform/renesas/rcar-fcp.c
+Le 08/09/2026 à 08:33, Thomas Weißschuh a écrit :
+> Pick up changes from the UAPI ELF header files.
+> This picks up general changes to elf.h, elf-em.h which was forgotten
+> previously and the new elf-r.h.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> 
+> ---
+> Cc: Arnaldo Carvalho de Melo <acme@redhat.com>
+> ---
+>   tools/include/uapi/linux/elf-em.h |  71 ++++
+>   tools/include/uapi/linux/elf-r.h  | 696 ++++++++++++++++++++++++++++++++++++++
+>   tools/include/uapi/linux/elf.h    | 112 +++++-
+>   3 files changed, 868 insertions(+), 11 deletions(-)
+> 
 
-   252	
-   253	static int rcar_fcp_probe(struct platform_device *pdev)
-   254	{
-   255		struct rcar_fcp_device *fcp;
-   256		int ret;
-   257	
-   258		fcp = devm_kzalloc(&pdev->dev, sizeof(*fcp), GFP_KERNEL);
-   259		if (fcp == NULL)
-   260			return -ENOMEM;
-   261	
-   262		fcp->dev = &pdev->dev;
- > 263		fcp->type = (enum rcar_fcp_type)device_get_match_data(&pdev->dev);
-   264	
-   265		fcp->base = devm_platform_ioremap_resource(pdev, 0);
-   266		if (IS_ERR(fcp->base))
-   267			return PTR_ERR(fcp->base);
-   268	
-   269		dma_set_max_seg_size(fcp->dev, UINT_MAX);
-   270	
-   271		pm_runtime_enable(&pdev->dev);
-   272		ret = pm_runtime_get_sync(&pdev->dev);
-   273		if (ret < 0)
-   274			goto error_pm_disable;
-   275	
-   276		ret = rcar_fcp_setup(fcp);
-   277		if (ret < 0)
-   278			goto error_pm_put;
-   279	
-   280		pm_runtime_put(&pdev->dev);
-   281	
-   282		mutex_lock(&fcp_lock);
-   283		list_add_tail(&fcp->list, &fcp_devices);
-   284		mutex_unlock(&fcp_lock);
-   285	
-   286		platform_set_drvdata(pdev, fcp);
-   287	
-   288		return 0;
-   289	
-   290	error_pm_put:
-   291		pm_runtime_put(&pdev->dev);
-   292	error_pm_disable:
-   293		pm_runtime_disable(&pdev->dev);
-   294		return ret;
-   295	}
-   296	
+> diff --git a/tools/include/uapi/linux/elf.h b/tools/include/uapi/linux/elf.h
+> index 5834b83d7f9a..88bdcbb526c1 100644
+> --- a/tools/include/uapi/linux/elf.h
+> +++ b/tools/include/uapi/linux/elf.h
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> @@ -312,7 +323,7 @@ typedef struct elf64_phdr {
+>   #define SHN_ABS		0xfff1
+>   #define SHN_COMMON	0xfff2
+>   #define SHN_HIRESERVE	0xffff
+> -
+> +
+
+Getting the following warning when applying this series with 'b4 shazam'.
+
+/home/chleroy/linux-powerpc/.git/rebase-apply/patch:846: trailing 
+whitespace.
+
+Seems to come from here.
+
+>   typedef struct elf32_shdr {
+>     Elf32_Word	sh_name;
+>     Elf32_Word	sh_type;
