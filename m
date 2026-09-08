@@ -1,28 +1,28 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0F85505E8
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F962550DA0
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872750; cv=none; b=J/MmU/e+zHeFMZKCckvY0jXh61B17XGvYVuLBU3duLXdYAJS4NaUY9ye3Zy7lPc1oOnoi8ttRtg904n3PDyQNp7vOHqjStrmrN5KWLgW0lIhSvrqip1stAL6i+UQm18vtt8isjo/t5mM4YQk4W8+GnS9vDa4GtAWDqy4yycYyW8=
+	t=1788872750; cv=none; b=LkO9VeL1vOOazfoJX+vP60fXjepc7unfpkgYoXpKRBOp4ins58SzZCyDfiPxqcM1aN+oOMrX4a3E08EdKkqpz63D39ZMGDN5b09OM9aLi4R1W+oFDYpRS8IbuP6BymG9qCv8NDOdqLzMnqy1/N2i/i0mfKrdQ8msawovcVNN1rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788872750; c=relaxed/simple;
-	bh=0iGqBogiDsUD9IX6n18y1qeHWvrszSQw6b6wW562DRI=;
+	bh=082KIMFqE+/uvlHTdBvoMV9qFKfen+dk73/eqLUYMKs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=La6RhCS64xKEbKeYNkShiml1wKP5H7YAdR0bhf1aTouXevFiCFP002CLRyLa2dClJqOTiTPm8o1HDY9gYKneGFrVZs5HJC8faWfZkTML127DYksP5etv68uY2umyYwPVkgk+VZ0GME1FjT+mdoKtMWM5K6YOpCs6In346y/ror0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=SzChI1iuiaUp/OhNMpV2iq0/0xDzpO81Wh8uKlib/6ak0S6zUrRpZGLZeNisB3VEiy17X3vx4HrDezOocnY6y6Dv8KkDO07u+29MocKR44RUt9vUIX00vnVWX7hZ8vmn1nl6VjdGEC9D5c+lsRcNbmDeEcMww4fzbzr+wEIQJhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPLt04MFzKHN8H
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPKv0jw0zYQw28
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:04:51 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 596BD4056D
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:43 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 998294057B
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:42 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S15;
-	Tue, 08 Sep 2026 21:05:43 +0800 (CST)
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S7;
+	Tue, 08 Sep 2026 21:05:42 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 13/26] perf annotate-arm64: Enable instruction tracking support
-Date: Tue,  8 Sep 2026 13:05:16 +0000
-Message-Id: <8ff5cfde0aad3d585b34f177fd87e8ec57ba4fa1.1788872630.git.wutengda@huaweicloud.com>
+Subject: [PATCH v5 05/26] perf annotate: Normalize arch__dwarf_regnum() error return values
+Date: Tue,  8 Sep 2026 13:05:08 +0000
+Message-Id: <07d3cce3cb8561c07d7c77deac81eb9ab0540ccb.1788872630.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1788872630.git.wutengda@huaweicloud.com>
 References: <cover.1788872630.git.wutengda@huaweicloud.com>
@@ -57,201 +57,53 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S15
-X-Coremail-Antispam: 1UD129KBjvJXoW3WFy7Wr48tF1UAF4rCry8Krg_yoW7Kw17pa
-	yDC345KF4UJr42gwnxJF4UXry3G3yfW34Y9r9Ygw4SyFsFyryrtFs5KFWayF4rGrZ3Cw4Y
-	q3WqyFWDXw4UCaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4
-	xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8
-	JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20V
-	AGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26rWY6Fy7MxkF7I0Ew4C2
-	6cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Cr1j6rxdMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa
-	7xRxnoUUUUUUU==
+X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S7
+X-Coremail-Antispam: 1UD129KBjvdXoWrKw1rAr1kKw4xtFWDCFWkXrb_yoWfuFg_u3
+	WxtF1Utr18JrZ7tasFkFyrCryxJFy5ZrWxGry7Ga47ZFyfGr17tFWqyrn5G3yrGayUtrnI
+	yw1kXrWxZr429jkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbpxYFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r126s
+	0DM28IrcIa0xkI8VCY1x0267AKxVW5JVCq3wA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
+	Y2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
+	v26F4UJVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2
+	IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I64
+	8v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Wrv_ZF1lc7CjxVAKzI0E
+	Y4vE52x082I5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWxJr0_GcWlIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvj
+	4E73dUUUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Enable basic instruction tracking for arm64 by implementing three
-essential functions in the find_data_type_block() call path:
+arch__dwarf_regnum() returns inconsistent error values: early path
+returns -1 while the main lookup returns -ENOENT/-EINVAL from
+get_dwarf_regnum(). Callers only check for -1, so genuine failures
+can slip through.
 
-  find_data_type_block
-    -> arch_supports_insn_tracking  (1)
-    -> find_data_type_insn
-         -> init_type_state         (2)
-         -> update_var_state
-         -> update_insn_state       (3)
+Normalize all failures to -1 to match the callers' expectation.
 
-Changes:
-
-* arch_supports_insn_tracking(): add arm64 to the list of supported
-  architectures, allowing find_data_type_block() to proceed with data
-  type analysis.
-
-* init_type_state(): correctly identify ret_reg, stack_reg, and
-  caller-saved registers for arm64 during type state initialization.
-
-* update_insn_state(): add the update_insn_state_arm64() callback with
-  conservative register invalidation for call instructions and those with
-  destination register(s), preventing stale type propagation. Full
-  instruction-level analysis support will be added incrementally in
-  later patches.
-
-With these changes, arm64 gains support for basic variable type
-inference during instruction tracking.
-
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 78 +++++++++++++++++++
- tools/perf/util/annotate-data.c               | 11 ++-
- 2 files changed, 88 insertions(+), 1 deletion(-)
+ tools/perf/util/annotate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index d8a5904359b1..8fda4d4d6888 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -9,6 +9,10 @@
- #include <regex.h>
- #include "../annotate.h"
- #include "../disasm.h"
-+#include "../annotate-data.h"
-+#include "../debug.h"
-+#include "../map.h"
-+#include "../symbol.h"
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index df70e95a8470..f3d17d153b67 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -2492,7 +2492,7 @@ static int arch__dwarf_regnum(const struct arch *arch, const char *str)
  
- struct arch_arm64 {
- 	struct arch arch;
-@@ -442,6 +446,77 @@ static void extract_op_location_arm64(const struct arch *arch,
- 	}
+ 	reg = get_dwarf_regnum(regname, arch->id.e_machine, arch->id.e_flags);
+ 	free(regname);
+-	return reg;
++	return reg < 0 ? -1 : reg;
  }
  
-+#ifdef HAVE_LIBDW_SUPPORT
-+static bool is_readonly_branch_or_cmp(const char *name)
-+{
-+	return !strncmp(name, "cb", 2) || !strncmp(name, "tb", 2) ||
-+	       !strcmp(name, "tst") || !strcmp(name, "teq") ||
-+	       !strcmp(name, "cmp") || !strcmp(name, "cmn") ||
-+	       !strcmp(name, "ccmp") || !strcmp(name, "ccmn");
-+}
-+
-+static void update_insn_state_arm64(struct type_state *state,
-+				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
-+				    struct disasm_line *dl)
-+{
-+	struct annotated_insn_loc loc;
-+	struct annotated_op_loc *dst = &loc.ops[INSN_OP_TARGET];
-+	u32 insn_offset = dl->al.offset;
-+
-+	/* Skip read-only instructions that do not affect register type state */
-+	if (is_readonly_branch_or_cmp(dl->ins.name))
-+		return;
-+
-+	if (annotate_get_insn_location(dloc->arch, dl, &loc) < 0)
-+		return;
-+
-+	/*
-+	 * Invalidate caller-saved registers on function calls per ARM64 AAPCS64
-+	 * ABI, unless DWARF location info indicates the register remains valid
-+	 * beyond the call address.
-+	 */
-+	if (ins__is_call(&dl->ins)) {
-+		struct symbol *func = dl->ops.target.sym;
-+		const char *call_name;
-+		u64 call_addr;
-+
-+		call_name = func ? func->name : dl->ops.target.name;
-+		pr_debug_dtp("call [%x] %s\n", insn_offset, call_name ?: "<unknown>");
-+
-+		/* Invalidate caller-saved registers after call */
-+		call_addr = map__rip_2objdump(dloc->ms->map,
-+					      dloc->ms->sym->start + dl->al.offset);
-+		for (unsigned int i = 0; i < ARRAY_SIZE(state->regs); i++) {
-+			struct type_state_reg *reg = &state->regs[i];
-+
-+			if (!reg->caller_saved)
-+				continue;
-+			/* Keep register valid within DWARF location lifetime */
-+			if (reg->lifetime_active && call_addr < reg->lifetime_end)
-+				continue;
-+			invalidate_reg_state(reg);
-+		}
-+		return;
-+	}
-+
-+	/*
-+	 * Invalidate destination register(s) for unsupported instructions to
-+	 * prevent stale type info from propagating to subsequent instructions.
-+	 */
-+	if (has_reg_type(state, dst->reg1) && !dst->mem_ref) {
-+		pr_debug_dtp("%s [%x] invalidate reg%d",
-+			     dl->ins.name, insn_offset, dst->reg1);
-+		invalidate_reg_state(&state->regs[dst->reg1]);
-+		if (dst->multi_regs && has_reg_type(state, dst->reg2)) {
-+			pr_debug_dtp(" and reg%d", dst->reg2);
-+			invalidate_reg_state(&state->regs[dst->reg2]);
-+		}
-+		pr_debug_dtp("\n");
-+		return;
-+	}
-+}
-+#endif
-+
- const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 				   const char *cpuid __maybe_unused)
- {
-@@ -461,6 +536,9 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	arch->objdump.imm_char		  = '#';
- 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
- 	arch->extract_op_location	  = extract_op_location_arm64;
-+#ifdef HAVE_LIBDW_SUPPORT
-+	arch->update_insn_state		  = update_insn_state_arm64;
-+#endif
- 
- 	/* bl, blr */
- 	err = regcomp(&arm->call_insn, "^blr?$", REG_EXTENDED);
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 104b80d471f1..c51b20a7af9b 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -28,6 +28,7 @@
- 
- /* register number of the stack pointer */
- #define X86_REG_SP 7
-+#define ARM64_REG_SP 31
- 
- static void delete_var_types(struct die_var_type *var_types);
- 
-@@ -178,6 +179,13 @@ static void init_type_state(struct type_state *state, const struct arch *arch)
- 		state->regs[11].caller_saved = true;
- 		state->ret_reg = 0;
- 		state->stack_reg = X86_REG_SP;
-+	} else if (arch__is_arm64(arch)) {
-+		int i;
-+
-+		for (i = 0; i < 18; i++)
-+			state->regs[i].caller_saved = true;
-+		state->ret_reg = 0;
-+		state->stack_reg = ARM64_REG_SP;
- 	}
- }
- 
-@@ -1437,7 +1445,8 @@ static enum type_match_result find_data_type_insn(struct data_loc_info *dloc,
- 
- static int arch_supports_insn_tracking(struct data_loc_info *dloc)
- {
--	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)))
-+	if (arch__is_x86(dloc->arch) || arch__is_powerpc(dloc->arch) ||
-+	    arch__is_arm64(dloc->arch))
- 		return 1;
- 	return 0;
- }
+ /*
 -- 
 2.34.1
 
