@@ -1,372 +1,268 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384EA3101B2
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C9429D291;
+	Tue,  8 Sep 2026 13:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788873521; cv=none; b=Oz0KRjlqPavZAjOK3Ao9IgJfIRBxaSNBs32f3zhnhXU6bpRCzhgWD9QdzkKmfftpWwM1clqtYjKUa8EQfC38BpgUNfUM9O8iNUTwAj9oexfJ6CqljW1byTaT4+JX1WmW5U4SqBPQpFfmAinr+hCgNdtcNZiq8gawMjI93F81vh8=
+	t=1788875274; cv=none; b=kH+dkSxBtrv8wV+3JHCz9SGgYweyrE60ILE2RW/SbZGqaWMu/+R1MFqzfl7142BI50WraWwh/vJPcQCzJVrVcPSYTN5nYd4mabaT2pbvjrrsrOzBlJJ50ceOgkmDz+Z9Ew5i22K1lNLBNveCTIplFxNpuQYRAeQstWXr9DBih/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788873521; c=relaxed/simple;
-	bh=tGHY1QBk0OSPW95QoRHpUd6xw1XUX5jJ2qvl29rYmFQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ql4yOr0OgeCQ7O2cQfkyAy5RoqCQTJvUDepcjZRH9cL6bFHJoMlw5P705g4U2VL5hcA/LH50qesicgzfEtZ9b68pnX2vwZx0zMoibfAYh2iX8XbFswcBY1Wdcv5UG4kL6zV71yWTs2b+r2DvzX8ptdiYhq5pHDYxxDUq9kEpXo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPcQ4XzSzYQvBV
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:17:26 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 2B9A240573
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:18:18 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgD3a7kWC6BqAiHXBA--.64266S2;
-	Tue, 08 Sep 2026 21:18:15 +0800 (CST)
-Message-ID: <bffc3c9a-b46e-4146-ab79-e0884207023e@huaweicloud.com>
-Date: Tue, 8 Sep 2026 21:18:14 +0800
+	s=arc-20240116; t=1788875274; c=relaxed/simple;
+	bh=umxaBqsDA3JnWARdBFTAGtf9h+4Tv4St6sBufuGQWeo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KwEUc7u3BUj9JZJRby4osw4LVFJ5BmP+J0Fl6v/m2+ZlwbsypRTaI94hQwzQJmOa8pNTe3nJaLcBcWFWzAFkno60eNv5nxarkL4z/+12LxKuro1inTakjscc7dWhpA1HwaNo7hqqz6347/22z3hEsAOr+ACe7aYtgdyx7xTVCWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lv4jBtLw; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lv4jBtLw"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788875266; x=1820411266;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=umxaBqsDA3JnWARdBFTAGtf9h+4Tv4St6sBufuGQWeo=;
+  b=lv4jBtLwpv2b6aUaumeIuf6lrnWnXq8dAed+q7S34JoKuQuPY/jTaMsN
+   6kNTb4SqUIQxBeaPLLRQ3Pn/Jnax3hLYENuGZu+nntODwhyE+BJzXlL8u
+   MYjrcNj3zMN1zUcon2vocfk6mCWJRTZvEX2FZsWNIYd+i0qFy5gD65y+B
+   km2XmV3XbTv9elEc/PFIQGJhcnxVAIU2gckH8W+E64lSG3OXgY/n9QTpB
+   y5Y2vF0UTOPhQR7Nukpk2PxwG69ooB2sxYL7SgHgDtnj8dtWb7jvL4d1n
+   QmyWtf7E2MhFPcf84S7rIQhoiXhlDIvw5zSR/d5tdkBkvgQMAFa67Colx
+   w==;
+X-CSE-ConnectionGUID: N6qvYO3eTUOUHkq/h1vqyg==
+X-CSE-MsgGUID: 2vcCBeG7RY+7h2/96hc9TQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11899"; a="89480920"
+X-IronPort-AV: E=Sophos;i="6.25,269,1779174000"; 
+   d="scan'208";a="89480920"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2026 06:47:39 -0700
+X-CSE-ConnectionGUID: +rz1lQxKSkuGWkqWsW1o9w==
+X-CSE-MsgGUID: QjcnlhOBSceTotNGF2XZ2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,269,1779174000"; 
+   d="scan'208";a="270983342"
+Received: from lkp-server01.sh.intel.com (HELO dc5b8f51e05b) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 08 Sep 2026 06:47:37 -0700
+Received: from kbuild by dc5b8f51e05b with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x3wAg-000000000AB-3ITx;
+	Tue, 08 Sep 2026 13:47:34 +0000
+Date: Tue, 8 Sep 2026 21:46:54 +0800
+From: kernel test robot <lkp@intel.com>
+To: Johannes Berg <johannes@sipsolutions.net>,
+	linux-wireless@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Johannes Berg <johannes.berg@intel.com>,
+	syzbot+b4aa2b672b18f1d4dc5f@syzkaller.appspotmail.com
+Subject: Re: [PATCH wireless] wifi: mac80211_hwsim: don't hand frames to
+ mac80211 while stopping
+Message-ID: <202609082134.nNCnnJQL-lkp@intel.com>
+References: <20260904170140.5f69a10d606b.I4a7921d00643f69e439c7a3b221d104f66a3dcdc@changeid>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 00/26] perf arm64: Support data type profiling
-To: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
- xueshuai@linux.alibaba.com, Adrian Hunter <adrian.hunter@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
- Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260908130122.633500-1-wutengda@huaweicloud.com>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <20260908130122.633500-1-wutengda@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:_Ch0CgD3a7kWC6BqAiHXBA--.64266S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3tw1DGr48WFWUCr4fur1Dtrb_yoW8GF13Jo
-	WSvFZ5ur18Jr1rJayvvryrAFy7Zws7urn3Jr45Wwn8ua1UJa1agw1IkwnrW3Wfur4YqF4D
-	Aw1ktw17tFyUG3Z3n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUY27kC6x804xWl14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVWxJr0_GcWlIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26rxl6s0DYxBIdaVFxhVjvjDU0xZFpf9x07
-	jIksgUUUUU=
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260904170140.5f69a10d606b.I4a7921d00643f69e439c7a3b221d104f66a3dcdc@changeid>
 
-Hi,
+Hi Johannes,
 
-Please ignore this email. It is incomplete (missing the last 3 patches).
-I've resent the complete series here:
+kernel test robot noticed the following build warnings:
 
-https://lore.kernel.org/all/cover.1788872630.git.wutengda@huaweicloud.com/#r
+[auto build test WARNING on wireless-next/main]
+[also build test WARNING on wireless/main linus/master v7.3-rc2 next-20260907]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sorry for the noise.
+url:    https://github.com/intel-lab-lkp/linux/commits/Johannes-Berg/wifi-mac80211_hwsim-don-t-hand-frames-to-mac80211-while-stopping/20260904-170135
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
+patch link:    https://lore.kernel.org/r/20260904170140.5f69a10d606b.I4a7921d00643f69e439c7a3b221d104f66a3dcdc%40changeid
+patch subject: [PATCH wireless] wifi: mac80211_hwsim: don't hand frames to mac80211 while stopping
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20260908/202609082134.nNCnnJQL-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260908/202609082134.nNCnnJQL-lkp@intel.com/reproduce)
 
-Thanks,
-Tengda
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609082134.nNCnnJQL-lkp@intel.com/
 
-On 2026/9/8 21:00, Tengda Wu wrote:
-> This patch series implements data type profiling support for arm64,
-> enabling 'perf annotate --data-type' to resolve memory locations and
-> variable types on arm64 platforms.
-> 
-> The main changes since v4 include:
-> v4: https://lore.kernel.org/all/20260808122400.2961238-1-wutengda@huaweicloud.com/
-> 
-> * Enhanced Arm64 Instruction Decoding: Added support for parsing extension
->   type (e.g., UXTW, SXTW) and shift amount in arm64 instructions, enabling
->   proper identification of SIB-style indexed addressing modes.
-> 
-> * Unified Base Register Offset Handling: Introduced arch_get_reg_offset() to
->   centralize offset extraction across various addressing modes, including
->   post-index addressing, single-register addressing, SIB-style indexed
->   addressing as well as cases where the base register is a constant type.
-> 
-> * Refined Instruction Tracking Policy: Adjusted instruction filtering logic.
->   All branch and jump instructions that do not modify registers are now
->   skipped. Special load/store instructions are also ignored (currently not
->   supported for tracking).
-> 
-> * Naming Cleanup: Renamed dont_overlap to default_single_event_per_ip and
->   integrated it into itrace_synth_opts__set_default() per Adrian Hunter's
->   suggestion.
-> 
-> Patch organization
-> ==================
-> 
-> The series is organized as follows:
-> 
-> 1. Fix disassembly mismatches (Patches 01-02)
->    Current perf annotate supports three disassembly backends: llvm,
->    capstone, and objdump. On arm64, inconsistencies between the output
->    of these backends (specifically llvm/capstone vs. objdump) often
->    prevent the tracker from correctly identifying registers and offsets.
->    These patches resolve these mismatches, ensuring consistent instruction
->    parsing across all supported backends.
-> 
-> 2. Infrastructure for arm64 operand parsing (Patches 03-09)
->    These patches establish the necessary infrastructure for arm64-specific
->    operand handling. This includes implementing new callbacks and data
->    structures to manage arm64's unique addressing modes and register sets.
->    This foundation is essential for the subsequent type-tracking logic.
-> 
-> 3. ARM SPE event handling (Patches 10-11)
->    Patch 09 automatically deduplicates overlapping ARM SPE events (e.g.,
->    l1d-miss, tlb-access) in 'perf annotate' by retaining only the
->    "instructions" event when data type profiling is enabled. Patch 10
->    defaults  the synthesized event period to 1 for ARM SPE to fix zero
->    'Percent' values in annotate output.
-> 
-> 5. Core instruction tracking (Patches 12-26)
->    These patches implement the core logic for type tracking on arm64,
->    covering several key types of instructions, including:
->    * Memory Access: ldr/str variants (including stack-based access).
->    * Arithmetic & Data Processing: mov, add, and adrp.
->    * Special Access: System register access (mrs) and per-cpu variable
->      tracking.
-> 
-> The implementation draws inspiration from the existing x86 logic while
-> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
-> perf annotate can successfully resolve memory locations and register types,
-> providing basic support for data type profiling on arm64 platforms.
-> 
-> Example Result
-> ==============
-> 
-> # perf mem record -a -K -- sleep 1
-> # perf annotate --data-type --stdio --type-stat
-> Annotate data type stats:
-> total 1138, ok 842 (74.0%), bad 296 (26.0%)
-> -----------------------------------------------------------
->          6 : no_sym
->         42 : no_var
->        240 : no_typeinfo
->          8 : bad_offset
->        203 : insn_track
-> 
-> Annotate type: 'struct page' in [kernel.kallsyms] (66948 samples):
-> ============================================================================
->  Percent     offset       size  field
->   100.00          0       0x40  struct page      {
->     9.01          0        0x8      long unsigned int   flags;
->    57.99        0x8       0x28      union        {
->    57.99        0x8       0x28          struct   {
->    33.00        0x8       0x10              union        {
->    33.00        0x8       0x10                  struct list_head        lru {
->    33.00        0x8        0x8                      struct list_head*   next;
->     0.00       0x10        0x8                      struct list_head*   prev;
->                                                 };
->    33.00        0x8       0x10                  struct   {
->    33.00        0x8        0x8                      void*       __filler;
->     0.00       0x10        0x4                      unsigned int        mlock_count;
->    ...
-> 
-> Each patch's type profiling results are as follows:
-> 
-> Patch | Feature                    | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
-> ------+----------------------------+--------+--------+-------------+------------+------------+------
-> 0011  | base (default spe period)  | 6      | 493    | -           | -          | -          | 56.2%
-> 0013  | enable insn tracking       | 6      | 42     | 437         | 2          | 12         | 57.2%
-> 0016  | support 'load' insn        | 6      | 42     | 398         | 1          | 52         | 60.7%
-> 0017  | support 'store' insn       | 6      | 42     | 398         | 1          | 52         | 60.7%
-> 0021  | support stack variable     | 6      | 42     | 391         | 1          | 59         | 61.3%
-> 0022  | support 'mov' insn         | 6      | 42     | 372         | 3          | 76         | 62.8%
-> 0023  | support 'add' insn         | 6      | 42     | 323         | 7          | 121        | 66.8%
-> 0024  | support 'adrp' insn        | 6      | 42     | 243         | 8          | 200        | 73.7%
-> 0025  | support per-cpu variable   | 6      | 42     | 243         | 8          | 200        | 73.7%
-> 0026  | support 'mrs' insn         | 6      | 42     | 240         | 8          | 203        | 74.0%
-> 
-> Limitations
-> ===========
-> 
-> * SIMD/FP & SVE Vector Support:
->   Data type profiling currently focuses on General-Purpose (GP) register
->   operations. Vector/SIMD registers (v0-v31, d0-d31, q0-q31) and Scalable
->   Vector Extension (SVE/SME) instructions are not tracked yet.
-> 
-> * Compiler Prologue/Epilogue Code:
->   As shown by the previous test results, approximately 14% of the failed
->   type profiling results originate from compiler-generated prologue or
->   epilogue code (e.g., ldp  x19, x20, [sp, #16]). These instructions manage
->   callee-saved registers across function boundaries, propagating type
->   context through these operations requires inter-procedural (cross-function)
->   instruction analysis, which is currently unsupported by the local backward
->   instruction tracker.
-> 
-> Testing
-> =======
-> 
-> Tested on arm64 (all passed):
-> 
->   # perf test -v "perf data type profiling tests"
->   81: perf data type profiling tests                                                                  : Ok
-> 
->   === Test Summary ===
->   Passed main tests : 1
->   Passed subtests   : 0
->   Skipped tests     : 0
->   Failed tests      : 0
-> 
-> Tested on x86. The profiling results show no change before/after applying
-> this patch series:
-> 
->   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
->   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
-> 
-> Changelog
-> =========
-> v4 -> v5:
->   - v4: https://lore.kernel.org/all/20260808122400.2961238-1-wutengda@huaweicloud.com/
->   - Introduce arch_get_reg_offset() to uniformly handle reg offset.
->   - Add support for parsing extension type and shift amount in arm64 instructions.
->   - Refine which instructions to track or skip. (Shuai Xue)
->   - Rename dont_overlap to default_single_event_per_ip and use it in
->     itrace_synth_opts__set_default(). (Adrian Hunter)
->   - Introduce delete_stack_state() to clean up obsolete stack state. (Shuai Xue)
->   - Normalize arch__dwarf_regnum() error return values. (Shuai Xue)
->   - Drop canary support due to unresolved bugs.
->   - Fix various minor issues, such as name memory leaks and header includes.
-> v3 -> v4:
->   - v3: https://lore.kernel.org/all/20260701035355.752944-1-wutengda@huaweicloud.com/
->   - Fix Capstone compilation failure.
->   - Stop adding new pcrel_adrp_addr in LLVM; reuse pcrel_load_addr instead.
->   - Fix parsing issue in arm64_mov__parse.
->   - Add PC-relative load instruction parsing logic to arm64_ldst__parse,
->     and introduce rstrip_space_and_comment to strip comments.
->   - Remove wzr/xzr register parsing (not planning to handle this yet).
->   - Add post-index addressing mode parsing for the '[base], reg' format.
->   - Update built-in implementation of --itrace=i1i to deduplicate early
->     during arm_spe_process_auxtrace_info.
->   - Restrict the "default period to 1" behavior to ARM SPE, instead of
->     applying it to all architectures.
->   - Add register type tracking for function call instructions.
->   - Add dual-register type tracking for load pair and store pair instructions.
->   - Correct stack variable offset calculations.
->   - Add type invalidation upon retry failure.
->   - Reuse imm_value instead of introducing addr for 'adrp' instruction tracking.
->   - Fix potential stale type resolution errors caused by TSR_KIND_GLOBAL_ADDR
->     and TSR_KIND_CONST during stack passing.
->   - Fix a strbuf memory leak during 'mrs' instruction tracking.
->   - Fix stale dieoff issue when debug info changes.
->   - Simplify add type propagation: only propagate offset/imm updates, leave
->     type parsing to chk.
-> v2 -> v3:
->   - v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
->   - Instead of always parsing the left operand as src and the right operand as
->     dst, set them based on the actual instruction definition. (Namhyung Kim)
->   - Fix refcount leak in print_capstone_detail().
->   - Remove useless '<' check when parsing 'addr <symbol>' in arm64_mov__parse().
->   - Add example comments in arm64_ldst__parse().
->   - Split arch__dwarf_regnum() changes into a separate commit.
->   - Rename annotated_addr_mode enum: INSN_ADDR_* -> PERF_ADDR_MODE_*.
->   - Set caller-saved registers in init_type_state().
->   - For instructions with addressing mode, always goto adjust_reg_index_state()
->     at the end to update the src register state.
->   - Handle TSR_KIND_CONST registers for 'mov' and 'add' instructions.
->   - Invalidate dst register for all other unsupported instructions.
->   - Verify type DIE is task_struct pointer before caching globally.
->   - Enable --itrace=i1i by default for ARM SPE data type profiling in 'perf annotate'
->     to avoid overlapping event counting for the same instruction. (James Clark)
->   - Fix global variable type resolving error in check_matching_type(). (James Clark)
->   - Address review comments from sashiko [1]:
->     - Fix unconditional call to arch->extract_op_location()
->     - Handle multi_regs correctly
->     - Fix invalid register state in error path
->     - Other misc fixes
-> v1 -> v2:
->   - v1: https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->   - Fix inconsistencies in arm64 instruction output across llvm, capstone,
->     and objdump disassembly backends.
->   - Support arm64-specific addressing modes and operand formats. (Leo Yan)
->   - Extend instruction tracking to support mov and add instructions,
->     along with per-cpu and stack variables.
->   - Include real-world examples in commit messages to demonstrate
->     practical effects. (Namhyung Kim)
->   - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
-> 
-> Please let me know if you have any feedback.
-> 
-> Thanks,
-> Tengda
-> 
-> [1] https://sashiko.dev/#/patchset/20260403094800.1418825-1-wutengda%40huaweicloud.com
-> [2] https://developer.arm.com/documentation/102374/0103
-> [3] https://github.com/flynd/asmsheets/releases/tag/v8
-> 
-> 
-> Tengda Wu (26):
->   perf capstone: Symbolize address operands to match objdump on arm64
->   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
->     objdump
->   perf annotate-arm64: Generalize arm64_mov__parse to support more
->     instructions
->   perf annotate-arm64: Handle load and store instructions
->   perf annotate: Normalize arch__dwarf_regnum() error return values
->   perf annotate: Introduce extract_op_location callback for
->     arch-specific parsing
->   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
->   perf annotate: Adapt arch__dwarf_regnum() for arm64
->   perf annotate-arm64: Implement extract_op_location() callback
->   perf annotate: Default to --itrace=i1i for data type profiling
->   perf arm-spe: Set default synthesized event period to 1
->   perf annotate-data: Extract invalidate_reg_state() as a common helper
->   perf annotate-arm64: Enable instruction tracking support
->   perf annotate-data: Add arch_get_reg_offset helper
->   perf annotate-arm64: Track return type after call instructions
->   perf annotate-arm64: Support load instruction tracking
->   perf annotate-arm64: Support store instruction tracking
->   perf annotate-data: Expand type_state_reg imm_value to u64
->   perf annotate-data: Track imm_value for stack variables
->   perf annotate-x86: Delete stale stack state on store of untracked
->     register
->   perf annotate-arm64: Support stack variable tracking
->   perf annotate-arm64: Support 'mov' instruction tracking
->   perf annotate-arm64: Support 'add' instruction tracking
->   perf annotate-arm64: Support 'adrp' instruction to track global
->     variables
->   perf annotate-arm64: Support per-cpu variable access tracking
->   perf annotate-arm64: Support 'mrs' instruction to track 'current'
->     pointer
-> 
->  tools/perf/builtin-annotate.c                 |    8 +
->  .../perf/util/annotate-arch/annotate-arm64.c  | 1194 ++++++++++++++++-
->  .../util/annotate-arch/annotate-powerpc.c     |    9 +
->  tools/perf/util/annotate-arch/annotate-x86.c  |  117 +-
->  tools/perf/util/annotate-data.c               |  192 ++-
->  tools/perf/util/annotate-data.h               |   14 +-
->  tools/perf/util/annotate.c                    |  108 +-
->  tools/perf/util/annotate.h                    |   63 +
->  tools/perf/util/arm-spe.c                     |   16 +-
->  tools/perf/util/auxtrace.c                    |   12 +-
->  tools/perf/util/auxtrace.h                    |    7 +-
->  tools/perf/util/capstone.c                    |  185 ++-
->  tools/perf/util/cs-etm.c                      |    2 +-
->  tools/perf/util/disasm.c                      |    5 +
->  tools/perf/util/disasm.h                      |    5 +
->  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |   22 +
->  tools/perf/util/dwarf-regs.c                  |    2 +-
->  tools/perf/util/include/dwarf-regs.h          |    1 +
->  tools/perf/util/intel-bts.c                   |    2 +-
->  tools/perf/util/intel-pt.c                    |    3 +-
->  tools/perf/util/llvm.c                        |   52 +-
->  21 files changed, 1799 insertions(+), 220 deletions(-)
-> 
-> 
-> base-commit: af5f12805e5cefa4fe68d6127c7e1fb78cd5535c
+All warnings (new ones prefixed by >>):
 
+>> drivers/net/wireless/virtual/mac80211_hwsim_main.c:6517:6: warning: variable 'data2' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    6517 |         if (skb == NULL)
+         |             ^~~~~~~~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6607:16: note: uninitialized use occurs here
+    6607 |         mutex_unlock(&data2->mutex);
+         |                       ^~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6517:2: note: remove the 'if' if its condition is always false
+    6517 |         if (skb == NULL)
+         |         ^~~~~~~~~~~~~~~~
+    6518 |                 goto err;
+         |                 ~~~~~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6511:6: warning: variable 'data2' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+    6511 |         if (frame_data_len < sizeof(struct ieee80211_hdr_3addr) ||
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6512 |             frame_data_len > IEEE80211_MAX_DATA_LEN)
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6607:16: note: uninitialized use occurs here
+    6607 |         mutex_unlock(&data2->mutex);
+         |                       ^~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6511:2: note: remove the 'if' if its condition is always false
+    6511 |         if (frame_data_len < sizeof(struct ieee80211_hdr_3addr) ||
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6512 |             frame_data_len > IEEE80211_MAX_DATA_LEN)
+         |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    6513 |                 goto err;
+         |                 ~~~~~~~~
+>> drivers/net/wireless/virtual/mac80211_hwsim_main.c:6511:6: warning: variable 'data2' is used uninitialized whenever '||' condition is true [-Wsometimes-uninitialized]
+    6511 |         if (frame_data_len < sizeof(struct ieee80211_hdr_3addr) ||
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6607:16: note: uninitialized use occurs here
+    6607 |         mutex_unlock(&data2->mutex);
+         |                       ^~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6511:6: note: remove the '||' if its condition is always false
+    6511 |         if (frame_data_len < sizeof(struct ieee80211_hdr_3addr) ||
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/virtual/mac80211_hwsim_main.c:6492:35: note: initialize the variable 'data2' to silence this warning
+    6492 |         struct mac80211_hwsim_data *data2;
+         |                                          ^
+         |                                           = NULL
+   3 warnings generated.
+
+
+vim +6517 drivers/net/wireless/virtual/mac80211_hwsim_main.c
+
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6488  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6489  static int hwsim_cloned_frame_received_nl(struct sk_buff *skb_2,
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6490  					  struct genl_info *info)
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6491  {
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6492  	struct mac80211_hwsim_data *data2;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6493  	struct ieee80211_rx_status rx_status;
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6494  	struct ieee80211_hdr *hdr;
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6495  	const u8 *dst;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6496  	int frame_data_len;
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6497  	void *frame_data;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6498  	struct sk_buff *skb = NULL;
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6499  	struct ieee80211_channel *channel = NULL;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6500  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6501  	if (!info->attrs[HWSIM_ATTR_ADDR_RECEIVER] ||
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6502  	    !info->attrs[HWSIM_ATTR_FRAME] ||
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6503  	    !info->attrs[HWSIM_ATTR_RX_RATE] ||
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6504  	    !info->attrs[HWSIM_ATTR_SIGNAL])
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6505  		goto out;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6506  
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6507  	dst = (void *)nla_data(info->attrs[HWSIM_ATTR_ADDR_RECEIVER]);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6508  	frame_data_len = nla_len(info->attrs[HWSIM_ATTR_FRAME]);
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6509  	frame_data = (void *)nla_data(info->attrs[HWSIM_ATTR_FRAME]);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6510  
+fba360a047d5eee drivers/net/wireless/virtual/mac80211_hwsim.c      Johannes Berg  2023-08-15 @6511  	if (frame_data_len < sizeof(struct ieee80211_hdr_3addr) ||
+fba360a047d5eee drivers/net/wireless/virtual/mac80211_hwsim.c      Johannes Berg  2023-08-15  6512  	    frame_data_len > IEEE80211_MAX_DATA_LEN)
+fba360a047d5eee drivers/net/wireless/virtual/mac80211_hwsim.c      Johannes Berg  2023-08-15  6513  		goto err;
+fba360a047d5eee drivers/net/wireless/virtual/mac80211_hwsim.c      Johannes Berg  2023-08-15  6514  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6515  	/* Allocate new skb here */
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6516  	skb = alloc_skb(frame_data_len, GFP_KERNEL);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01 @6517  	if (skb == NULL)
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6518  		goto err;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6519  
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6520  	/* Copy the data */
+59ae1d127ac0ae4 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2017-06-16  6521  	skb_put_data(skb, frame_data, frame_data_len);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6522  
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6523  	data2 = get_hwsim_data_ref_from_addr(dst);
+9ddd12af103f60f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2014-01-06  6524  	if (!data2)
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6525  		goto out;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6526  
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6527  	if (data2->use_chanctx) {
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6528  		if (data2->tmp_chan)
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6529  			channel = data2->tmp_chan;
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6530  	} else {
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6531  		channel = data2->channel;
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6532  	}
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6533  
+5d44fe7c9808c56 drivers/net/wireless/mac80211_hwsim.c              Erel Geron     2020-03-05  6534  	if (!hwsim_virtio_enabled) {
+5d44fe7c9808c56 drivers/net/wireless/mac80211_hwsim.c              Erel Geron     2020-03-05  6535  		if (hwsim_net_get_netgroup(genl_info_net(info)) !=
+5d44fe7c9808c56 drivers/net/wireless/mac80211_hwsim.c              Erel Geron     2020-03-05  6536  		    data2->netgroup)
+f21e4d8ed16bb9c drivers/net/wireless/mac80211_hwsim.c              Martin Willi   2016-05-14  6537  			goto out;
+f21e4d8ed16bb9c drivers/net/wireless/mac80211_hwsim.c              Martin Willi   2016-05-14  6538  
+f21e4d8ed16bb9c drivers/net/wireless/mac80211_hwsim.c              Martin Willi   2016-05-14  6539  		if (info->snd_portid != data2->wmediumd)
+f21e4d8ed16bb9c drivers/net/wireless/mac80211_hwsim.c              Martin Willi   2016-05-14  6540  			goto out;
+5d44fe7c9808c56 drivers/net/wireless/mac80211_hwsim.c              Erel Geron     2020-03-05  6541  	}
+f21e4d8ed16bb9c drivers/net/wireless/mac80211_hwsim.c              Martin Willi   2016-05-14  6542  
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6543  	/*
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6544  	 * Serialise against mac80211_hwsim_stop() - mac80211 doesn't allow
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6545  	 * frames reported while the HW is down, hence the ->started check
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6546  	 * must be under mutex.
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6547  	 */
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6548  	mutex_lock(&data2->mutex);
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6549  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6550  	/* check if radio is configured properly */
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6551  
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6552  	if ((data2->idle && !data2->tmp_chan) || !data2->started)
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6553  		goto out_unlock;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6554  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6555  	/* A frame is received from user space */
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6556  	memset(&rx_status, 0, sizeof(rx_status));
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6557  	if (info->attrs[HWSIM_ATTR_FREQ]) {
+4f4b0f4eed556c9 drivers/net/wireless/virtual/mac80211_hwsim_main.c Benjamin Berg  2026-05-06  6558  		struct tx_iter_data iter_data = {
+4f4b0f4eed556c9 drivers/net/wireless/virtual/mac80211_hwsim_main.c Benjamin Berg  2026-05-06  6559  			.hw = data2->hw,
+4f4b0f4eed556c9 drivers/net/wireless/virtual/mac80211_hwsim_main.c Benjamin Berg  2026-05-06  6560  			.rx_status = &rx_status,
+4f4b0f4eed556c9 drivers/net/wireless/virtual/mac80211_hwsim_main.c Benjamin Berg  2026-05-06  6561  		};
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6562  
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6563  		/* throw away off-channel packets, but allow both the temporary
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6564  		 * ("hw" scan/remain-on-channel), regular channels and links,
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6565  		 * since the internal datapath also allows this
+4f86ed8f87c07b3 drivers/net/wireless/mac80211_hwsim.c              Ben Greear     2014-10-27  6566  		 */
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6567  		rx_status.freq = nla_get_u32(info->attrs[HWSIM_ATTR_FREQ]);
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6568  
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6569  		iter_data.channel = ieee80211_get_channel(data2->hw->wiphy,
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6570  							  rx_status.freq);
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6571  		if (!iter_data.channel)
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6572  			goto out_unlock;
+c087f9fcd0fb534 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-09-02  6573  		rx_status.band = iter_data.channel->band;
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6574  
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6575  		if (!hwsim_chans_compat(iter_data.channel, channel)) {
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6576  			ieee80211_iterate_active_interfaces_atomic(
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6577  				data2->hw, IEEE80211_IFACE_ITER_NORMAL,
+c204d9df02020e2 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-07-20  6578  				mac80211_hwsim_tx_iter, &iter_data);
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6579  			if (!iter_data.receive)
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6580  				goto out_unlock;
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6581  		}
+c087f9fcd0fb534 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-09-02  6582  	} else if (!channel) {
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6583  		goto out_unlock;
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6584  	} else {
+626c30f9e773543 drivers/net/wireless/mac80211_hwsim.c              Weilun Du      2021-05-06  6585  		rx_status.freq = channel->center_freq;
+c087f9fcd0fb534 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-09-02  6586  		rx_status.band = channel->band;
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6587  	}
+641cf2a5ba0345c drivers/net/wireless/mac80211_hwsim.c              Adam Welle     2015-12-01  6588  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6589  	rx_status.rate_idx = nla_get_u32(info->attrs[HWSIM_ATTR_RX_RATE]);
+1833b6f46d7e283 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-10-05  6590  	if (rx_status.rate_idx >= data2->hw->wiphy->bands[rx_status.band]->n_bitrates)
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6591  		goto out_unlock;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6592  	rx_status.signal = nla_get_u32(info->attrs[HWSIM_ATTR_SIGNAL]);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6593  
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6594  	hdr = (void *)skb->data;
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6595  
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6596  	if (ieee80211_is_beacon(hdr->frame_control) ||
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6597  	    ieee80211_is_probe_resp(hdr->frame_control))
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6598  		rx_status.boottime_ns = ktime_get_boottime_ns();
+05d610af3e71a78 drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2019-07-29  6599  
+b1622adaa55541f drivers/net/wireless/mac80211_hwsim.c              Johannes Berg  2022-09-02  6600  	mac80211_hwsim_rx(data2, &rx_status, skb);
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6601  	mutex_unlock(&data2->mutex);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6602  
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6603  	return 0;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6604  err:
+62b093b375e3c10 drivers/net/wireless/mac80211_hwsim.c              Lubomir Rintel 2017-09-18  6605  	pr_debug("mac80211_hwsim: error occurred in %s\n", __func__);
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6606  out_unlock:
+a3658dbd0b37b9d drivers/net/wireless/virtual/mac80211_hwsim_main.c Johannes Berg  2026-09-04  6607  	mutex_unlock(&data2->mutex);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6608  out:
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6609  	dev_kfree_skb(skb);
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6610  	return -EINVAL;
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6611  }
+7882513bacb176a drivers/net/wireless/mac80211_hwsim.c              Javier Lopez   2011-06-01  6612  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
