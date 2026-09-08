@@ -1,27 +1,27 @@
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F102558217
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7445505EF
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872750; cv=none; b=YIzAEAnhpUJm57LJZJcIQTFdRTH+Qd93QuTpeLjaimpOLJlxNARVyTVOVEJotC7e9yGRaaFFLTVP3ITXDUhSGHcLmxJiGa2RFkFE/Oe3aSCFRQ50iTuDNmIRL/YjgIqQB4NTlPlcd7xi5C8kWz2b4MDG+IwC+qhx/c1n1za2YII=
+	t=1788872751; cv=none; b=kScHgy4xUJguO2Tt+b3h1mA7VwFG56LKePFBpCttBPkbkB5iDDDeIuWUW5v8aCbqW3h5DRX+GlqmjFHe/dFQc92fSe1+RFPrSC6fHKGD2fbgxn8MoeKRbV7fxYFgnJaSnFJX69nfudeWrwZjGxbHPCNK+tofBOTWBiXWTzRzmfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872750; c=relaxed/simple;
-	bh=efqjTQ6fiQEz2JqGP5+95IdE1vOOyS2YwBR2iBhI5c0=;
+	s=arc-20240116; t=1788872751; c=relaxed/simple;
+	bh=V1/lLQAcdtn+hDCtPPbyRi2VQXlV/Q7PaQaL7rKvNq8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uUEwnIAL+4J92Or+jaLmJbeFt5WE2YZb3f3co48fz7vmM1ebcEBOnDp5zKUDkFQS7JN/AO5Mej6ziVkbkNwWNM3IC0M0coDpfhHHZWdlG6aLKdJ4g2mJVZXJPBebRYGHNfMBG+v2E1u6WD0decS43BR4twL2xrBcxXmVqkgmVDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+	 MIME-Version; b=jweKrpTXLt5yluEe/72rJEd1BBEm2es9Tlf7TAkoxvyYGpB6B+BIlF/tYBwdZCDqklg02KaJksSWzPkAQxjxQTgAxpnPEiZP8YxS1kYk6/F8YyIIQnxeMlSVcmOcE05rPlVLdbedrwd7j7b6OfeR+1ZANfKk/3ImcSCyt07nPKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPKv08b3zYQw1X
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:04:51 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPLs3T2NzKHN76
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:41 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 85D4140579
+	by mail.maildlp.com (Postfix) with ESMTP id CB9E44058F
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:42 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S6;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S9;
 	Tue, 08 Sep 2026 21:05:42 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 04/26] perf annotate-arm64: Handle load and store instructions
-Date: Tue,  8 Sep 2026 13:05:07 +0000
-Message-Id: <37f13e322f75aa96f9cb8b71f401c9911523f8c5.1788872630.git.wutengda@huaweicloud.com>
+Subject: [PATCH v5 07/26] perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
+Date: Tue,  8 Sep 2026 13:05:10 +0000
+Message-Id: <61714d93cd55cd461d5c37146713ddb9e1d04743.1788872630.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1788872630.git.wutengda@huaweicloud.com>
 References: <cover.1788872630.git.wutengda@huaweicloud.com>
@@ -57,14 +57,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rXr15Xr4xurW5Gry7GFg_yoWxXrWfpa
-	92k345tr42qr4rW3WftF4kZ34fGa18Ja4a9ry8Jwn3Ca1avryxtFn5Kr12kFs8Grykur43
-	XFn0vry0vF98A3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S9
+X-Coremail-Antispam: 1UD129KBjvJXoWxAFyxGrW7tFy3Xw1UCry7trb_yoW5Cw48pF
+	srC347Jw4UW3WakwnxAF1fWF1rJw48Zr1FyrW0yw47CrsruF1UZw1fKr1j9F45X3yDJw10
+	kayDKr18Gr4rJF7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
 	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
 	wI0_GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4
 	xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8
@@ -78,202 +78,86 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rXr15Xr4xurW5Gry7GFg_yoWxXrWfpa
 	7xRxnoUUUUUUU==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Add ldst_ops to handle load and store instructions in order to parse
-the data types and offsets associated with PMU events for memory access
-instructions. There are many variants of load and store instructions in
-arm64, making it difficult to match all of these instruction names
-completely. Therefore, only the instruction prefixes are matched. The
-prefix 'ld|st' covers most of the memory access instructions, 'cas|swp'
-matches atomic instructions, and 'prf' matches memory prefetch
-instructions.
+The current arm64 DWARF register lookup relies on 'aarch64_regstr_tbl',
+a static string table. While this works for kprobe-tracer where register
+names start with '%', it is insufficient for parsing register numbers
+directly from raw instructions (e.g., extracting '6' from 'x6' or 'w6')
+during annotation.
 
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+Since get_dwarf_regnum() is currently used only by 'perf annotate' and
+does not affect kprobe-tracer, replace the limited table-based lookup
+with a programmatic implementation in __get_dwarf_regnum_arm64(). This
+allows resolving arm64 register names (x0-x30, w0-w30, sp, etc.) directly
+into their corresponding DWARF register numbers.
+
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 140 ++++++++++++++++++
- 1 file changed, 140 insertions(+)
+ .../util/dwarf-regs-arch/dwarf-regs-arm64.c   | 22 +++++++++++++++++++
+ tools/perf/util/dwarf-regs.c                  |  2 +-
+ tools/perf/util/include/dwarf-regs.h          |  1 +
+ 3 files changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index 151184210691..a7595a954cfa 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -14,6 +14,7 @@ struct arch_arm64 {
- 	struct arch arch;
- 	regex_t call_insn;
- 	regex_t jump_insn;
-+	regex_t ldst_insn; /* load and store instruction */
- };
+diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
+index 593ca7d4fccc..720c863d1869 100644
+--- a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
++++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
+@@ -1,5 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <errno.h>
++#include <ctype.h>
++#include <stdlib.h>
++#include <string.h>
+ #include <dwarf-regs.h>
+ #include "../../../arch/arm64/include/uapi/asm/perf_regs.h"
  
- static bool arm64__is_reg(const char *op)
-@@ -170,6 +171,130 @@ static const struct ins_ops arm64_mov_ops = {
- 	.scnprintf = arm64_mov__scnprintf,
- };
+@@ -10,3 +13,22 @@ int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum)
  
-+static bool arm64__insn_is_target_on_right(const char *ins_name)
+ 	return perf_regnum;
+ }
++
++int __get_dwarf_regnum_arm64(const char *name)
 +{
-+	/*
-+	 * Store instructions write to the memory operand on the right,
-+	 * unlike standard syntax where the target is the left operand.
-+	 */
-+	return !strncmp(ins_name, "st", 2);
++	int reg;
++
++	if (!strcmp(name, "sp"))
++		return 31;
++
++	if (*name != 'x' && *name != 'w')
++		return -ENOENT;
++
++	name++;
++	if (!isdigit(*name))
++		return -ENOENT;
++
++	reg = strtol(name, NULL, 10);
++
++	return reg >= 0 && reg <= 30 ? reg : -ENOENT;
 +}
-+
-+/*
-+ * This function is used to parse arm64 load/store instructions into
-+ * instruction operands.
-+ *
-+ * Typical instructions and their parsing logic:
-+ *
-+ * 1. Immediate offset:
-+ *    ldr   x2, [x0]                -> target="x2", source="[x0]"
-+ *    ldr   x2, [x0, #24]           -> target="x2", source="[x0, #24]"
-+ *    ldp   x19, x20, [sp, #16]     -> target="x19, x20", source="[sp, #16]"
-+ *
-+ * 2. Pre-index addressing:
-+ *    stp   x29, x30, [sp, #-64]!   -> target="[sp, #-64]!", source="x29, x30"
-+ *
-+ * 3. Post-index addressing:
-+ *    str   x1, [x0], #8            -> target="[x0], #8", source="x1"
-+ *    ldr   w1, [x21], #4           -> target="w1", source="[x21], #4"
-+ *    ldp   x29, x30, [sp], #32     -> target="x29, x30", source="[sp], #32"
-+ *
-+ * 4. Register offset / extension:
-+ *    ldr   x0, [x1, w0, sxtw #3]   -> target="x0", source="[x1, w0, sxtw #3]"
-+ *    ldr   x0, [x1, x0, lsl #3]    -> target="x0", source="[x1, x0, lsl #3]"
-+ *
-+ * 5. Atomic operations:
-+ *    cas   w3, w1, [x0]            -> target="w3, w1", source="[x0]"
-+ *    swp   x3, x0, [x2]            -> target="x3, x0", source="[x2]"
-+ *
-+ * 6. Prefetch memory:
-+ *    prfm  pstl1strm, [x4]         -> target="pstl1strm", source="[x4]"
-+ *
-+ * 7. PC-relative loads (No bracket found):
-+ *    ldr   x0, ffff800080f40c68 <__kvm_nvhe_$d>  -> Fallback to default parser
-+ *
-+ * Parsing strategy:
-+ * Use the '[' bracket as the boundary to split the operands into left
-+ * and right sides. For non-store instructions, the left side is the
-+ * target and the right side is the source. For store instructions, the
-+ * roles are reversed.
-+ */
-+static int arm64_ldst__parse(const struct arch *arch, struct ins_operands *ops,
-+			     struct map_symbol *ms, struct disasm_line *dl)
-+{
-+	char *raw, *s, *left, *right;
-+	int ret = -1;
-+
-+	raw = rstrip_space_and_comment(ops->raw, arch->objdump.comment_char);
-+	if (!raw)
-+		return -1;
-+
-+	s = strchr(raw, arch->objdump.memory_ref_char);
-+	if (!s) {
-+		/* Fallback to default parser for PC-relative loads. */
-+		free(raw);
-+		return arm64_mov__parse(arch, ops, ms, dl);
-+	}
-+
-+	right = strdup(s);
-+	if (!right)
-+		goto out_free_raw;
-+
-+	while (s > raw && *s != ',')
-+		--s;
-+
-+	if (s == raw)
-+		goto out_free_right;
-+
-+	*s = '\0';
-+	left = strdup(raw);
-+	*s = ',';
-+	if (!left)
-+		goto out_free_right;
-+
-+	free(raw);
-+
-+	if (arm64__insn_is_target_on_right(dl->ins.name)) {
-+		ops->source.raw = left;
-+		ops->source.mem_ref = false;
-+
-+		ops->target.raw = right;
-+		ops->target.mem_ref = true;
-+	} else {
-+		ops->source.raw = right;
-+		ops->source.mem_ref = true;
-+
-+		ops->target.raw = left;
-+		ops->target.mem_ref = false;
-+	}
-+
-+	ops->source.multi_regs = arm64__check_multi_regs(arch, ops->source.raw);
-+	ops->target.multi_regs = arm64__check_multi_regs(arch, ops->target.raw);
-+
-+	return 0;
-+
-+out_free_right:
-+	free(right);
-+out_free_raw:
-+	free(raw);
-+	return ret;
-+}
-+
-+static int arm64_ldst__scnprintf(const struct ins *ins, char *bf, size_t size,
-+				 struct ins_operands *ops, int max_ins_name)
-+{
-+	if (arm64__insn_is_target_on_right(ins->name))
-+		return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name, ops->raw);
-+
-+	return scnprintf(bf, size, "%-*s %s, %s", max_ins_name, ins->name,
-+			 ops->target.raw, ops->source.name ?: ops->source.raw);
-+}
-+
-+static struct ins_ops arm64_ldst_ops = {
-+	.parse	   = arm64_ldst__parse,
-+	.scnprintf = arm64_ldst__scnprintf,
-+};
-+
- static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
- {
- 	struct arch_arm64 *arm = container_of(arch, struct arch_arm64, arch);
-@@ -180,6 +305,8 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
- 		ops = &jump_ops;
- 	else if (!regexec(&arm->call_insn, name, 2, match, 0))
- 		ops = &call_ops;
-+	else if (!regexec(&arm->ldst_insn, name, 2, match, 0))
-+		ops = &arm64_ldst_ops;
- 	else if (!strcmp(name, "ret"))
- 		ops = &ret_ops;
- 	else
-@@ -205,6 +332,7 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	arch->objdump.comment_char	  = '/';
- 	arch->objdump.skip_functions_char = '+';
- 	arch->objdump.memory_ref_char	  = '[';
-+	arch->objdump.imm_char		  = '#';
- 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
+diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
+index 797f455eba0d..bacf5c13c3bc 100644
+--- a/tools/perf/util/dwarf-regs.c
++++ b/tools/perf/util/dwarf-regs.c
+@@ -114,7 +114,7 @@ int get_dwarf_regnum(const char *name, unsigned int machine, unsigned int flags)
+ 		reg = _get_dwarf_regnum(arm_regstr_tbl, name);
+ 		break;
+ 	case EM_AARCH64:
+-		reg = _get_dwarf_regnum(aarch64_regstr_tbl, name);
++		reg = __get_dwarf_regnum_arm64(name);
+ 		break;
+ 	case EM_CSKY:
+ 		reg = __get_csky_regnum(name, flags);
+diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
+index 46a764cf322f..a25f038bbff2 100644
+--- a/tools/perf/util/include/dwarf-regs.h
++++ b/tools/perf/util/include/dwarf-regs.h
+@@ -105,6 +105,7 @@ int __get_dwarf_regnum_x86_64(const char *name);
+ int __get_dwarf_regnum_for_perf_regnum_i386(int perf_regnum);
+ int __get_dwarf_regnum_for_perf_regnum_x86_64(int perf_regnum);
  
- 	/* bl, blr */
-@@ -218,8 +346,20 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	if (err)
- 		goto out_free_call;
++int __get_dwarf_regnum_arm64(const char *name);
+ int __get_dwarf_regnum_for_perf_regnum_arm(int perf_regnum);
+ int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum);
  
-+	/*
-+	 * The ARM64 architecture has many variants of load/store instructions.
-+	 * It is quite challenging to match all of them completely. Here, we
-+	 * only match the prefixes of these instructions.
-+	 */
-+	err = regcomp(&arm->ldst_insn, "^(ld|st|cas|prf|swp)",
-+		      REG_EXTENDED);
-+	if (err)
-+		goto out_free_jump;
-+
- 	return arch;
- 
-+out_free_jump:
-+	regfree(&arm->jump_insn);
- out_free_call:
- 	regfree(&arm->call_insn);
- out_free_arm:
 -- 
 2.34.1
 
