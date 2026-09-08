@@ -1,27 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FD7559C99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B4B9559CA8
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872757; cv=none; b=VqgSgjpPf7jpWP21kScgTU3Mcv8dWBvuO2HHkjvHNthX4GFiiEjuJc8rZSkLmpRodcezcw9lXPwDeWNfbbMKQeLLjyJ4/zcN7MXPJaa4j9Abw1fK0zkDrvMM1q56SmClNh4elQv6FrPbXxuRieQNTutmUV2h+d+i87ubncE9liI=
+	t=1788872758; cv=none; b=WoQ0tGLN7/6ag2kVikAN408k4LJxoOtacys4//juxrZDywEUm8UCsXsrN8txbx1cVAaRf+Ioe3d2LFqoHCL3SHCiHDYIxAh+3ARZ+G+rlOjlmf/q4bC0hfLahlfkWVhtIH4q9/gL0CBnemov6BE513qom+jZcJSXVlmMFwJ3xtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872757; c=relaxed/simple;
-	bh=msO7gvzMCmQxp+5FSP1qIEkxjs1eIW94fah/aqxDUBM=;
+	s=arc-20240116; t=1788872758; c=relaxed/simple;
+	bh=wd+DkufeoDIg/aUt79AXXStJz/ZyyMUYtSQv9wF8JXM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JE3WQgv0K1GA6Z0kol8uvmrT6/d7B22fm15kgbiygXcW536ZM3bL9afYVKj+qWKPAA3vApelAdvspnsIk1tvXbR7A+5ZJ9xWTdJs/Ac1PKOZL3nYafOTz7ckiPed1qTBomLFh/iOocMNBZy253AMRagx8aUgmiN0kAkkJZGEqHg=
+	 MIME-Version; b=JtX/JFPrgoE6RIcDtCwkl1+IfQMNejoKGQpXUcScTBqUck3/JgtzD30YuTIYRzyP5qWbBdBARDfaNvJ8Lc+RmD3DT1umLQf+KTu4YojgwmOtA5we0pKE/lAgnxhvpeoRzh3H5JZ/O9KthtK+oOWq76j1E4lyZunoK2p34YaandE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPKv5SjHzYQw5B
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPKv4FCHzYQw5T
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:04:51 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 45F5D4057C
+	by mail.maildlp.com (Postfix) with ESMTP id 1AC7540573
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:43 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S14;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S12;
 	Tue, 08 Sep 2026 21:05:42 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 12/26] perf annotate-data: Extract invalidate_reg_state() as a common helper
-Date: Tue,  8 Sep 2026 13:05:15 +0000
-Message-Id: <62d5646f6a60e40bfa765d9cf93b5d6279b7f8a7.1788872630.git.wutengda@huaweicloud.com>
+Subject: [PATCH v5 10/26] perf annotate: Default to --itrace=i1i for data type profiling
+Date: Tue,  8 Sep 2026 13:05:13 +0000
+Message-Id: <a30bf174539765875129c06381932702934fd0c9.1788872630.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1788872630.git.wutengda@huaweicloud.com>
 References: <cover.1788872630.git.wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S14
-X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17Kr4UJwb_yoW5XrW5p3
-	yDC347Gw43Gr4FgwnxJFW3XFWF9r1fXa4Fk3sYyan2vFWIyrn3JF92qFy5tFW7Xr93Gw12
-	yw1qgr4DJayxKaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S12
+X-Coremail-Antispam: 1UD129KBjvJXoW3JFy5ZrykXF4kZw1kXr4Utwb_yoW3Zrykpr
+	nxCr9rKwnxXr4rKwnIyF4UZF1Yk34rXFyY9r1YkF4rA3yxur9rtFyxtr15tFW3Xw1DC3sI
+	vws09wn8Za1rZaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -78,73 +78,189 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17Kr4UJwb_yoW5XrW5p3
 	7xRxnoUUUUUUU==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The invalidate_reg_state() function is currently static and only used
-within the x86 data type profiling implementation. To prepare for adding
-arm64 instruction tracking support, extract it as a common helper that
-can be shared across architectures.
+ARM SPE-based sampling can synthesize multiple events on a single
+instruction, as shown below. This would affect data type profiling
+statistics:
 
-No functional change intended.
+  Available samples
+  0 arm_spe_0/ts_enable=1,pa_enable=1,load_filter=1,store_filter=1,min_latency=30/
+  0 dummy:u
+  84K l1d-miss
+  95K l1d-access
+  77K llc-miss
+  58K llc-access
+  9K tlb-miss
+  108K tlb-access
+  0 branch
+  13K remote-access
+  108K memory
+  108K instructions
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+While 'perf report' provides an interactive menu for users to select a
+specific event to prevent duplicate counting, 'perf annotate' lacks such
+a mechanism. Consequently, it counts all instructions across these
+overlapping events, which inflates the profile and distorts the data
+type statistics.
+
+Although using the '--itrace' option can work around this issue (e.g.:
+perf annotate --data-type --stdio --itrace=i1i), it is inconvenient for
+users to specify this explicitly every time.
+
+To address this, introduce itrace_synth_opts.default_single_event_per_ip.
+Set this field to true when data type profiling is enabled and the user
+has not explicitly specified an itrace option. In itrace_synth_opts__set_default(),
+use this flag to default to synthesizing at most one event per IP (equivalent
+to --itrace=i1i) to prevent duplicate sample counts.
+
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-arch/annotate-x86.c | 9 ---------
- tools/perf/util/annotate-data.c              | 9 +++++++++
- tools/perf/util/annotate-data.h              | 1 +
- 3 files changed, 10 insertions(+), 9 deletions(-)
+ tools/perf/builtin-annotate.c |  8 ++++++++
+ tools/perf/util/arm-spe.c     |  5 ++++-
+ tools/perf/util/auxtrace.c    | 12 ++++++++++--
+ tools/perf/util/auxtrace.h    |  7 ++++++-
+ tools/perf/util/cs-etm.c      |  2 +-
+ tools/perf/util/intel-bts.c   |  2 +-
+ tools/perf/util/intel-pt.c    |  3 ++-
+ 7 files changed, 32 insertions(+), 7 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-index 1acf31a2c759..aa381d25a63b 100644
---- a/tools/perf/util/annotate-arch/annotate-x86.c
-+++ b/tools/perf/util/annotate-arch/annotate-x86.c
-@@ -207,15 +207,6 @@ static int x86__cpuid_parse(struct arch *arch, const char *cpuid)
- }
+diff --git a/tools/perf/builtin-annotate.c b/tools/perf/builtin-annotate.c
+index 69cb72b2082a..d5b66893c47c 100644
+--- a/tools/perf/builtin-annotate.c
++++ b/tools/perf/builtin-annotate.c
+@@ -873,6 +873,14 @@ int cmd_annotate(int argc, const char **argv)
+ 	annotate.session = perf_session__new(&data, &annotate.tool);
+ 	if (IS_ERR(annotate.session))
+ 		return PTR_ERR(annotate.session);
++	/*
++	 * Hardware tracing (e.g., ARM SPE) may synthesize multiple events per
++	 * instruction. When data type profiling is enabled, default to synthesizing
++	 * at most one event (equivalent to --itrace=i1i) to prevent skewed
++	 * statistics.
++	 */
++	if (annotate.data_type && !itrace_synth_opts.set)
++		itrace_synth_opts.default_single_event_per_ip = true;
  
- #ifdef HAVE_LIBDW_SUPPORT
--static void invalidate_reg_state(struct type_state_reg *reg)
--{
--	reg->kind = TSR_KIND_INVALID;
--	reg->ok = false;
--	reg->lifetime_active = false;
--	reg->lifetime_end = 0;
--	reg->copied_from = -1;
--}
--
- static void update_insn_state_x86(struct type_state *state,
- 				  struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				  struct disasm_line *dl)
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 4e4c58764082..104b80d471f1 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -638,6 +638,15 @@ struct type_state_stack *findnew_stack_state(struct type_state *state,
- 	return stack;
- }
+ 	annotate.session->itrace_synth_opts = &itrace_synth_opts;
  
-+void invalidate_reg_state(struct type_state_reg *reg)
-+{
-+	reg->kind = TSR_KIND_INVALID;
-+	reg->ok = false;
-+	reg->lifetime_active = false;
-+	reg->lifetime_end = 0;
-+	reg->copied_from = -1;
-+}
+diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+index 401aab529309..ae7a5e9c3892 100644
+--- a/tools/perf/util/arm-spe.c
++++ b/tools/perf/util/arm-spe.c
+@@ -2029,7 +2029,10 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+ 	if (session->itrace_synth_opts && session->itrace_synth_opts->set) {
+ 		spe->synth_opts = *session->itrace_synth_opts;
+ 	} else {
+-		itrace_synth_opts__set_default(&spe->synth_opts, false);
++		struct itrace_synth_opts *opts = session->itrace_synth_opts;
++		bool single_event_per_ip = opts ? opts->default_single_event_per_ip : false;
 +
- /* Maintain a cache for quick global variable lookup */
- struct global_var_entry {
- 	struct rb_node node;
-diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index c26130744260..453e13bbe3e2 100644
---- a/tools/perf/util/annotate-data.h
-+++ b/tools/perf/util/annotate-data.h
-@@ -258,6 +258,7 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- 				Dwarf_Die *type_die, int ptr_offset);
- struct type_state_stack *find_stack_state(struct type_state *state,
- 						int offset);
-+void invalidate_reg_state(struct type_state_reg *reg);
- bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
- 				u64 ip, u64 var_addr, int *var_offset,
- 				Dwarf_Die *type_die);
++		itrace_synth_opts__set_default(&spe->synth_opts, false, single_event_per_ip);
+ 		/* Default nanoseconds period not supported */
+ 		spe->synth_opts.period_type = PERF_ITRACE_PERIOD_INSTRUCTIONS;
+ 		spe->synth_opts.period = 1;
+diff --git a/tools/perf/util/auxtrace.c b/tools/perf/util/auxtrace.c
+index aa749e1c3036..ed2113190785 100644
+--- a/tools/perf/util/auxtrace.c
++++ b/tools/perf/util/auxtrace.c
+@@ -1478,8 +1478,15 @@ s64 perf_event__process_auxtrace(const struct perf_tool *tool __maybe_unused,
+ #define PERF_ITRACE_MAX_LAST_BRANCH_SZ		1024
+ 
+ void itrace_synth_opts__set_default(struct itrace_synth_opts *synth_opts,
+-				    bool no_sample)
++				    bool no_sample, bool single_event_per_ip)
+ {
++	if (single_event_per_ip) {
++		synth_opts->instructions = true;
++		synth_opts->period_type = PERF_ITRACE_PERIOD_INSTRUCTIONS;
++		synth_opts->period = 1;
++		return;
++	}
++
+ 	synth_opts->branches = true;
+ 	synth_opts->transactions = true;
+ 	synth_opts->ptwrites = true;
+@@ -1582,7 +1589,8 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+ 
+ 	if (!str) {
+ 		itrace_synth_opts__set_default(synth_opts,
+-					       synth_opts->default_no_sample);
++					       synth_opts->default_no_sample,
++					       synth_opts->default_single_event_per_ip);
+ 		return 0;
+ 	}
+ 
+diff --git a/tools/perf/util/auxtrace.h b/tools/perf/util/auxtrace.h
+index 6947f3f284c0..5012bead1b92 100644
+--- a/tools/perf/util/auxtrace.h
++++ b/tools/perf/util/auxtrace.h
+@@ -65,6 +65,10 @@ enum itrace_period_type {
+  * struct itrace_synth_opts - AUX area tracing synthesis options.
+  * @set: indicates whether or not options have been set
+  * @default_no_sample: Default to no sampling.
++ * @default_single_event_per_ip: Default to synthesizing at most 1 event per IP
++ *                               (equivalent to --itrace=i1i). Used by commands
++ *                               like 'perf annotate --data-type' to avoid duplicate
++ *                               sample counts for a single instruction.
+  * @inject: indicates the event (not just the sample) must be fully synthesized
+  *          because 'perf inject' will write it out
+  * @instructions: whether to synthesize 'instructions' events
+@@ -117,6 +121,7 @@ enum itrace_period_type {
+ struct itrace_synth_opts {
+ 	bool			set;
+ 	bool			default_no_sample;
++	bool			default_single_event_per_ip;
+ 	bool			inject;
+ 	bool			instructions;
+ 	bool			cycles;
+@@ -622,7 +627,7 @@ int itrace_do_parse_synth_opts(struct itrace_synth_opts *synth_opts,
+ int itrace_parse_synth_opts(const struct option *opt, const char *str,
+ 			    int unset);
+ void itrace_synth_opts__set_default(struct itrace_synth_opts *synth_opts,
+-				    bool no_sample);
++				    bool no_sample, bool single_event_per_ip);
+ 
+ size_t perf_event__fprintf_auxtrace_error(union perf_event *event, FILE *fp);
+ void perf_session__auxtrace_error_inc(struct perf_session *session,
+diff --git a/tools/perf/util/cs-etm.c b/tools/perf/util/cs-etm.c
+index 114b3cd2da49..2d1ab34f7b6b 100644
+--- a/tools/perf/util/cs-etm.c
++++ b/tools/perf/util/cs-etm.c
+@@ -3626,7 +3626,7 @@ int cs_etm__process_auxtrace_info_full(union perf_event *event,
+ 		etm->synth_opts = *session->itrace_synth_opts;
+ 	} else {
+ 		itrace_synth_opts__set_default(&etm->synth_opts,
+-				session->itrace_synth_opts->default_no_sample);
++				session->itrace_synth_opts->default_no_sample, false);
+ 		etm->synth_opts.callchain = false;
+ 		etm->synth_opts.thread_stack = session->itrace_synth_opts->thread_stack;
+ 	}
+diff --git a/tools/perf/util/intel-bts.c b/tools/perf/util/intel-bts.c
+index 02df3e460489..4c9cca3acb6c 100644
+--- a/tools/perf/util/intel-bts.c
++++ b/tools/perf/util/intel-bts.c
+@@ -877,7 +877,7 @@ int intel_bts_process_auxtrace_info(union perf_event *event,
+ 		bts->synth_opts = *session->itrace_synth_opts;
+ 	} else {
+ 		itrace_synth_opts__set_default(&bts->synth_opts,
+-				session->itrace_synth_opts->default_no_sample);
++				session->itrace_synth_opts->default_no_sample, false);
+ 		bts->synth_opts.thread_stack =
+ 				session->itrace_synth_opts->thread_stack;
+ 	}
+diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
+index 9d6628169fd9..8c21c9f52d57 100644
+--- a/tools/perf/util/intel-pt.c
++++ b/tools/perf/util/intel-pt.c
+@@ -4463,7 +4463,8 @@ int intel_pt_process_auxtrace_info(union perf_event *event,
+ 	} else {
+ 		struct itrace_synth_opts *opts = session->itrace_synth_opts;
+ 
+-		itrace_synth_opts__set_default(&pt->synth_opts, opts->default_no_sample);
++		itrace_synth_opts__set_default(&pt->synth_opts,
++					opts->default_no_sample, false);
+ 		if (!opts->default_no_sample && !opts->inject) {
+ 			pt->synth_opts.branches = false;
+ 			pt->synth_opts.callchain = true;
 -- 
 2.34.1
 
