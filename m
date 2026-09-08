@@ -1,27 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF43559CBC
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5645616C9
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:06:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872765; cv=none; b=sDHLbAbyF3BcTBrzDFI3OevmOCT5jO7yXz4Eit8mA9qEdE9piWCLOSSq3xaLueAEsWC3hKRlNFEQPGl9IUCm8XgTJpRdtLBYM651FkpjyS8SvjTW8HqGAkNszBwU10zw9V2Lx5fyu6c9qez8fi1uwMOBZlDidtIzA//xUJ8JmFA=
+	t=1788872773; cv=none; b=hzZjHV7bhecNRy7aElA6jYcQ0rVqVXzxOwKh+CslPIt7dfp4stAK+3syviwYdJx6TRFQaJAly9em/by4y5FwDPLUvGGwEyGMpqHZWSyTFTQiXRCB9zB4Tt3Y3XcmZa4c4pfuBNnvkkRcVpRKEPQMEJruPmb6mI/+4O/Mv5mySco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872765; c=relaxed/simple;
-	bh=sjRLf1ZvmsodHnm3CvP0VHigBoL+XRcVKM3dKO7fQ58=;
+	s=arc-20240116; t=1788872773; c=relaxed/simple;
+	bh=rfqXh9MfNv1Ncha+ZWYP7+fbRIrP2iU9ew6IiMSJWss=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AM1uACZUXN0AxlFw5sKWAPPtmrvr3YTWPU3UNAwext4EBiRTzpxGKTauyYS4uBplwZwWcnzgEN9m6Lt1+taZOeVTkiqJ3Xz/pUZy/BLkFKSLIE1Nbn8pHO5RPTjNe4jPAjM3zKkVXtSUbFeFZiVNwKbK2zLJBWgZJ5fJ31bLHVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=YioNO68k7PhRNsdKoWjOtczBk3jvh6eaLGRHuHq9iRhv8HSvCdylibTjnySNY/cEvv6PBQSbvYegkfxm8CtOTRbke0EYSepoQKjiboZ/uPN1mUexNnsVTFigiucQEH9OZSrkm64prVWNg8PAoP2DFxR4Wql4Uy6LEoepEDDCyCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPLt0gkPzKHN8D
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:42 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPKw3HH2zYQwBW
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:04:52 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.75])
-	by mail.maildlp.com (Postfix) with ESMTP id 6C4F140570
+	by mail.maildlp.com (Postfix) with ESMTP id F0C7840574
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:43 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S16;
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S22;
 	Tue, 08 Sep 2026 21:05:43 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 14/26] perf annotate-data: Add arch_get_reg_offset helper
-Date: Tue,  8 Sep 2026 13:05:17 +0000
-Message-Id: <e2d2dc36b2d8f600b339cf66880b10e611dbf9ab.1788872630.git.wutengda@huaweicloud.com>
+Subject: [PATCH v5 20/26] perf annotate-x86: Delete stale stack state on store of untracked register
+Date: Tue,  8 Sep 2026 13:05:23 +0000
+Message-Id: <d8120878619b98f3956f8a63676dfbe2cee7a59f.1788872630.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1788872630.git.wutengda@huaweicloud.com>
 References: <cover.1788872630.git.wutengda@huaweicloud.com>
@@ -57,241 +57,116 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S16
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF1rZryUAryftry5tFyUtrb_yoW3XFyrpa
-	95GFyrGr43Xr43WrsrXrZ8Xr9Y9wsrGF9xCryq934ayryaqr18Ka1vyryYk3yUJrZYyr17
-	G3Z8tr47XwsrGaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHCb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S22
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4xGry8KFyxKrWUGF4xCrg_yoW5KrW7pr
+	yDC343Ww17Gr4SqFnxAFW5XF95Crs7X3WrC3s0qwn2vF1xJr1fG3s7tFWYyF47Xr92kw12
+	yw1DKr4DXa12gaDanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHlb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
 	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4
-	xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8
-	JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20V
-	AGYxC7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26rWY6Fy7MxkF7I0Ew4C2
-	6cxK6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c
-	02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_
-	WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Cr1j6rxdMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AK
-	xVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa
-	7xRxnoUUUUUUU==
+	AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2
+	IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4U
+	McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I64
+	8v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Wrv_ZF1lc7CjxVAKzI0E
+	Y4vE52x082I5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26F1j6w1UMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVWxJr0_GcWlIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
+	6F4j6r4UJwCI42IY6I8E87Iv6xkF7I0E14v26rxl6s0DYxBIdaVFxhVjvjDU0xZFpf9x0z
+	CjgJUUUUUU=
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Add a helper to compute the effective offset from a base register
-for instruction operands. Currently handles arm64 addressing modes
-including post-indexed, single-register, SIB-style indexed with
-shift/extension, and constant-offset register pairs.
+When a register without a tracked type is stored to a stack slot that
+previously held a valid type, the code currently performs an early return.
+This leaves the old type information intact in the stack state.
 
-Fallback to instruction's raw offset for other architectures.
+As a result, a stale type bug occurs:
+1. A tracked register is stored into a stack slot.
+2. The register becomes untracked/invalid (e.g., across a function call).
+3. The now-untracked register is stored into the same stack slot.
+4. Subsequent loads from that slot erroneously pick up the old stale type
+   because the stack entry was never invalidated.
+
+Fix this by introducing delete_stack_state() to search and free a stack
+entry for a given offset. When storing an untracked or invalid source
+register into a stack location, call delete_stack_state() to delete the
+stale entry before returning.
 
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-data.c | 106 +++++++++++++++++++++++++++-----
- tools/perf/util/annotate-data.h |   4 +-
- 2 files changed, 94 insertions(+), 16 deletions(-)
+ tools/perf/util/annotate-arch/annotate-x86.c | 17 +++++++++++++----
+ tools/perf/util/annotate-data.c              | 10 ++++++++++
+ tools/perf/util/annotate-data.h              |  1 +
+ 3 files changed, 24 insertions(+), 4 deletions(-)
 
+diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
+index 21729e153fa0..3a6ea7e978e0 100644
+--- a/tools/perf/util/annotate-arch/annotate-x86.c
++++ b/tools/perf/util/annotate-arch/annotate-x86.c
+@@ -753,15 +753,24 @@ static void update_insn_state_x86(struct type_state *state,
+ 	}
+ 	/* Case 3. register to memory transfers */
+ 	if (!src->mem_ref && dst->mem_ref) {
+-		if (!has_reg_type(state, src->reg1) ||
+-		    !state->regs[src->reg1].ok)
+-			return;
+-
+ 		/* Check stack variables with offset */
+ 		if (dst->reg1 == fbreg || dst->reg1 == state->stack_reg) {
+ 			struct type_state_stack *stack;
+ 			int offset = dst->offset - fboff;
+ 
++			if (!has_reg_type(state, src->reg1) ||
++			    !state->regs[src->reg1].ok) {
++				stack = find_stack_state(state, offset);
++				/*
++				 * Preserve compound states when only a member
++				 * is overwritten.
++				 */
++				if (stack && !stack->compound)
++					delete_stack_state(state, offset);
++
++				return;
++			}
++
+ 			tsr = &state->regs[src->reg1];
+ 
+ 			stack = find_stack_state(state, offset);
 diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index c51b20a7af9b..754c0efe2077 100644
+index 2150af5599fb..1936822c73f2 100644
 --- a/tools/perf/util/annotate-data.c
 +++ b/tools/perf/util/annotate-data.c
-@@ -1118,6 +1118,74 @@ static void setup_stack_canary(struct data_loc_info *dloc)
- 	}
+@@ -647,6 +647,16 @@ struct type_state_stack *findnew_stack_state(struct type_state *state,
+ 	return stack;
  }
  
-+int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc,
-+			int breg, struct type_state *state, bool apply_index,
-+			int *offset)
++void delete_stack_state(struct type_state *state, int offset)
 +{
-+	if (arch__is_arm64(arch)) {
-+		int reg2;
++	struct type_state_stack *stack = find_stack_state(state, offset);
 +
-+		/* Post-indexed addressing: offset is 0 when not applying index */
-+		if (op_loc->addr_mode == PERF_AAM_POST_INDEX && !apply_index) {
-+			*offset = 0;
-+			return 0;
-+		}
-+
-+		/* Single-register addressing: return the stored offset directly */
-+		if (!op_loc->multi_regs) {
-+			*offset = op_loc->offset;
-+			return 0;
-+		}
-+
-+		/*
-+		 * SIB (Scale-Index-Base) style indexed addressing, e.g.:
-+		 *   Array element load:  ldr  dst, [base, index, lsl #3]
-+		 *   Array element load:  ldr  dst, [base, index, uxtw #3]
-+		 *   Array address calc:  add  dst, base, index lsl #3
-+		 *
-+		 * The index reg only computes element offset without modifying
-+		 * the underlying data type; the dst type is inherited from base.
-+		 * Therefore, the base reg offset can be treated as 0.
-+		 */
-+		if (op_loc->extend_type || op_loc->shift_type) {
-+			/* Memory references use the breg as the address base. */
-+			if (op_loc->mem_ref) {
-+				*offset = 0;
-+				return 0;
-+			}
-+			/*
-+			 * Otherwise, require breg to be a known pointer type to
-+			 * avoid treating integer operations as address calculations.
-+			 */
-+			if (has_reg_type(state, breg) && state->regs[breg].ok &&
-+			    (state->regs[breg].kind == TSR_KIND_POINTER ||
-+			     (state->regs[breg].kind == TSR_KIND_TYPE &&
-+			      dwarf_tag(&state->regs[breg].type) == DW_TAG_pointer_type))) {
-+				*offset = 0;
-+				return 0;
-+			}
-+			return -1;
-+		}
-+
-+		/*
-+		 * For register-based addressing without shift/extension,
-+		 * reg2 may be a constant offset. Use its value as the offset
-+		 * from the base register.
-+		 */
-+		reg2 = op_loc->reg1 == breg ? op_loc->reg2 : op_loc->reg1;
-+		if (has_reg_type(state, reg2) && state->regs[reg2].ok &&
-+			state->regs[reg2].kind == TSR_KIND_CONST) {
-+			*offset = (s64)state->regs[reg2].imm_value;
-+			return 0;
-+		}
-+
-+		return -1;
++	if (stack) {
++		list_del(&stack->list);
++		free(stack);
 +	}
-+
-+	*offset = op_loc->offset;
-+	return 0;
 +}
 +
- /*
-  * It's at the target address, check if it has a matching type.
-  * It returns PERF_TMR_BAIL_OUT when it looks up per-cpu variables which
-@@ -1132,18 +1200,26 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 	Dwarf_Word size;
- 	u32 insn_offset = dl->al.offset;
- 	int reg = dloc->op->reg1;
--	int offset = dloc->op->offset;
-+	int offset;
- 	const char *offset_sign = "";
- 	bool retry = true;
- 
--	if (offset < 0) {
--		offset = -offset;
--		offset_sign = "-";
-+again:
-+	if (arch_get_reg_offset(dloc->arch, dloc->op, reg, state, false, &offset)) {
-+		/*
-+		 * Fall back to the instruction's offset. This prevents the
-+		 * register type of the instruction from being completely lost.
-+		 * Compared to dropping this type inference entirely, providing
-+		 * a rough type hint is likely more useful.
-+		 */
-+		offset = dloc->op->offset;
- 	}
- 
--again:
-+	if (offset < 0)
-+		offset_sign = "-";
-+
- 	pr_debug_dtp("chk [%x] reg%d offset=%s%#x ok=%d kind=%d ",
--		     insn_offset, reg, offset_sign, offset,
-+		     insn_offset, reg, offset_sign, abs(offset),
- 		     state->regs[reg].ok, state->regs[reg].kind);
- 
- 	if (!state->regs[reg].ok)
-@@ -1166,7 +1242,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		 */
- 		ptr_type = die_get_pointer_type(&state->regs[reg].type, &ptr_die);
- 		if (!ptr_type) {
--			if (dloc->op->offset < 0 && reg != state->stack_reg)
-+			if (offset < 0 && reg != state->stack_reg)
- 				goto check_kernel;
- 
- 			return PERF_TMR_NO_POINTER;
-@@ -1176,7 +1252,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		if (__die_get_real_type(ptr_type, type_die) == NULL)
- 			return PERF_TMR_NO_POINTER;
- 
--		dloc->type_offset = dloc->op->offset + state->regs[reg].offset;
-+		dloc->type_offset = offset + state->regs[reg].offset;
- 
- 		if (dwarf_tag(type_die) == DW_TAG_typedef)
- 			die_get_real_type(type_die, &sized_type);
-@@ -1205,7 +1281,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		 */
- 		*type_die = state->regs[reg].type;
- 
--		dloc->type_offset = dloc->op->offset + state->regs[reg].offset;
-+		dloc->type_offset = offset + state->regs[reg].offset;
- 
- 		/* Get the size of the actual type */
- 		if (dwarf_aggregate_size(type_die, &size) < 0 ||
-@@ -1224,7 +1300,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		 */
- 		*type_die = state->regs[reg].type;
- 
--		dloc->type_offset = dloc->op->offset;
-+		dloc->type_offset = offset;
- 
- 		/* Get the size of the actual type */
- 		if (dwarf_aggregate_size(type_die, &size) < 0 ||
-@@ -1248,7 +1324,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 	}
- 
- 	if (state->regs[reg].kind == TSR_KIND_PERCPU_BASE) {
--		u64 var_addr = dloc->op->offset;
-+		u64 var_addr = (s64) offset;
- 		int var_offset;
- 
- 		pr_debug_dtp("percpu var");
-@@ -1275,7 +1351,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 
- 	if (state->regs[reg].kind == TSR_KIND_CONST &&
- 	    dso__kernel(map__dso(dloc->ms->map))) {
--		if (dloc->op->offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
-+		if (offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
- 			goto check_kernel;
- 	}
- check_non_register:
-@@ -1362,7 +1438,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		    arch__is_x86(dloc->arch)) {
- 			pr_debug_dtp("this-cpu var");
- 
--			addr = dloc->op->offset;
-+			addr = (s64) offset;
- 
- 			if (get_global_var_type(cu_die, dloc, dloc->ip, addr,
- 						&offset, type_die)) {
-@@ -1373,8 +1449,8 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		}
- 
- 		/* Access to global variable like "-0x7dcf0500(,%rdx,8)" */
--		if (dloc->op->offset < 0 && reg != state->stack_reg) {
--			addr = (s64) dloc->op->offset;
-+		if (offset < 0 && reg != state->stack_reg) {
-+			addr = (s64) offset;
- 
- 			if (get_global_var_type(cu_die, dloc, dloc->ip, addr,
- 						&offset, type_die)) {
+ void invalidate_reg_state(struct type_state_reg *reg)
+ {
+ 	reg->kind = TSR_KIND_INVALID;
 diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index 453e13bbe3e2..e6ca47e25e04 100644
+index 36ca7819a6f0..02d5602c5e20 100644
 --- a/tools/perf/util/annotate-data.h
 +++ b/tools/perf/util/annotate-data.h
-@@ -265,7 +265,9 @@ bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
- bool get_global_var_info(struct data_loc_info *dloc, u64 addr,
- 				const char **var_name, int *var_offset);
- void pr_debug_type_name(Dwarf_Die *die, enum type_state_kind kind);
--
-+int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc,
-+			int breg, struct type_state *state, bool apply_index,
-+			int *offset);
- #else /* HAVE_LIBDW_SUPPORT */
- 
- static inline struct annotated_data_type *
+@@ -259,6 +259,7 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+ 				Dwarf_Die *type_die, int ptr_offset, u64 imm_value);
+ struct type_state_stack *find_stack_state(struct type_state *state,
+ 						int offset);
++void delete_stack_state(struct type_state *state, int offset);
+ void invalidate_reg_state(struct type_state_reg *reg);
+ bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
+ 				u64 ip, u64 var_addr, int *var_offset,
 -- 
 2.34.1
 
