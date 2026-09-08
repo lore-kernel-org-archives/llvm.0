@@ -1,144 +1,122 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC4F3CAA51
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788902000; cv=pass; b=eG/VRpbFX0gKu2g3ta4X+x+oqn+cdJ+jUIXaFUBkOUX0QHMJEz8v3LIF2aKK1zFgKJVUHJwfXA35enNNC6Si2RiGM9z8jwW/A8QmMjDBjh7zxdyDVqzZgmpxKotPWqWJFoSHm6U/Y2Z71/MogRqWttPLZu9T+K2lOGWjyjTigMo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788902000; c=relaxed/simple;
-	bh=ABcg7txfjreOEvrgYloSz7dmSAX99sKg32JTqnOhFhM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iG4oPeo+i/wdEa01HkpvOoMycK7a2yr+zEVBLETRc0XoEpEnLDRhsJhMgvmP8O1QdL6tpLYSKDaWBN04qcIZd2AKrbHokaMYwMvlL5K/rmjPd4EDqgyn+h6ak6kpxzP4L93roh61PEla1EvTJjKdqzFNeCElf3axe1LUJu3KXUo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVjv8VQ0; arc=pass smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B845B498904
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788903220; cv=none; b=SZuGINmWGxEW9ZXidfnmCvQ8dlxjIJM3535osiamUI1EMVDSky9fjdWKEp2VTPl9ZoQo8PRrIw8YdOSie/CFUzSIuZnc8prbEmFElmAfyPkP6kH1tKiO8GmfuX3pOKJxRvgpXxqM94rPgd6vIVWCaUrAGkh0ARoGi6yHbI6px5I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788903220; c=relaxed/simple;
+	bh=gQYMQIZ0a0qQpuJQGl9sxe6tSFIiwDa+pVKYc1H04vk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EVCsHJ+YMXhVdUgj2ub/9sHTqWe994+MS18/dtvpjYP4F0kfPC/zuPOIIH8thk6e1fOsRggAVNDREso6zpNQi2b4gemvqJfcdvy4V8qxMfBYRiTgEv5Q2yYY2kgocGf3l+ZoRaPUJd76eKpxOexlAoKbU2jfCmLjE1EW7LzSQVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JT9GmtMS; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVjv8VQ0"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-39666bed444so566550a91.1
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 14:13:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788901998; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ljN5TjB/T7FAzyozxPv6Ge9EsRVqBihuo4wJkmc+GSwZnFxfaRAk66l/0YdVn+j34+
-         loQZZsNK+tMZjVt2ZYFS6ys2K0SgiEQTylu0LU6+i5hvZxRNb5elB2W0sKbCM3nrfCDp
-         gUyFTExElCr3TKWmlMjjnvjU4UPqmFJJjyFXmzgbuaxnWjZ9Qt5aQa64vm7rvsrurbPR
-         xv1LuocaQSqWKXGhbV4AMMlBK7qZwWI3vzcV7p1DyIsYq478bAfXQKo5BGfT86yYptX4
-         +8YDDaIWUJsHTmj2GBqOSgKLDcwUalFWQF25rG5/3AruuN1e7f7zAXCuybQqiGd5d+jD
-         0cuA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0fhQV0gw/THBej21ZRoleMpcrYInoRUuBgF9MHF69Ek=;
-        fh=eA8BTC4FjvCnCwTtZ8KBDJ70X8L5COTDDEFfZIPqOnI=;
-        b=gf4C4vWm8T0l+DDIWQWAUklKKypovRH1tGqI3+qsQgkX3v0ERyNwCBPkfB1fZsXgmk
-         0aQrUX461fVnoKfTVE/voJkGdQ3cVDpq9DuEgh5gXNFTFT37SGSuNtOq9MpqQ4M053fK
-         vWjBYlJCM/hlO8vZO+rfuleDZ/HYy9Xfd2q4K4fycL8fTtrOI/V6p8lqNEMmPRAy1vaD
-         InH61chgwJmEsedwQZFroeqcTaBnjlGgTtzaaqUiRW7umq+o5fU9vz1C2c/q43w5CnFj
-         wonYa0bffras7SInjBc5EkIl2mtW1nYqGGgYxCnM8U2ADa/MiOsOoaFohne7wslVyQ+H
-         /bMg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JT9GmtMS"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-39b2ad862bdso5624175a91.2
+        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 14:33:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788901998; x=1789506798; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=0fhQV0gw/THBej21ZRoleMpcrYInoRUuBgF9MHF69Ek=;
-        b=UVjv8VQ0zqKCcRybd5ocTDOB15L0ly2fuXdZIkPkkBd65xRMZpBgqY6+cMY6xGwE/j
-         N29wpwF2VJijaeDJJ/kU8lTKwjcAvXPXFvIBksX21AiqWbwTLzGzeCJ29V8eEMRb4YJo
-         rTifenLmutXut9T13QnysRaYsm0Jsx5L3jlSo0oQOnURMc1xOyneWCYCV9eXxZRQ077w
-         8VrtJgCKcUAPna77qXGGA9K26Fp4QUvaG9dMJApF2ahKqQPJ5auIx0HuAkpXE3HcvX+J
-         IzfzFIxdeN+QxkFri9kcLq9GBReUiZ71uk7H+Tty7IFsBJmcvrEDUCscFy6TxUtn+ctz
-         Vl2g==
+        d=gmail.com; s=20251104; t=1788903218; x=1789508018; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=yHiWJUkqXIHHnljOBGvidp4XfKDa865c5NPgCl6nJgk=;
+        b=JT9GmtMSmDbC7myLdSmleGvFbiVJVTfytLgk44CIHMiOQv3rhvR+revDDhtnCLv3Wb
+         lqyrQWXsawjOc6KIsmecpeNzHMqo2EqUqBaQNoFHZccbKoW3Axs8ZaQGggDOKDcIp0N7
+         vKbKHG6/gIeY+/HIwmM9QKJr9BpBbILvHmxyyKmhhqFIO7f5aAPqeu0daByAa1a3ICc7
+         brA59fgyZ9G2C2ohvWw1Pl4ZT19m1aaiNIVmKuQ2pqzo7Mic+W1GzjKgQhkd7QPglNF2
+         aWY37ua4pxZ/MoYh6utiVtZU5CKFtPf2skR6zx6jz6T1OCV1N1OJ84LIajMIYvJ6VzmX
+         ARmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788901998; x=1789506798;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0fhQV0gw/THBej21ZRoleMpcrYInoRUuBgF9MHF69Ek=;
-        b=MwA+SXhcS7+PTiFDRft/NRXclF4D/nSALYX4A76dFkFrF3k2E202A4PfQWb/PrqKwN
-         Do83wycQ8ly/0mhLQmslM5yhWJU8b8FyAG/XP97ysQud6SvWZFdLI0o6RLuFm29jKj2U
-         7Hj5bK/ubU7BqMPFChvNUlDoPsw5Ksp2fUpUGdHkXyxmNUCuxTgew1Ey6ZlplQaDv/P2
-         wxbIN+1fAfV3b+7h7Rx0HXj6XN2jEGH7xtVOSjYnewpOjsTeyb75ER7hJGQXEEYnSN1t
-         D0O87KeOsqyb9ZynyrbSZXqbgCp3eZ99I1Qk1QLygUAJmtRKl1GfAZPjZuP0t2ksPxCY
-         PkvQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzxF6eghTaaGLk9U8kw9Vb8iuTj2fuz5qSI4tDhE9nWJpx2EJzHy1X5DPJCl8Eb9ldJ9pDN@lists.linux.dev
-X-Gm-Message-State: AFuF++lx/KasRdhoUoN3ng7XawbYJC1JSrVledzsFMiGr2x6kX+nJCcn
-	ZoD+Hwq3R9AQZFjC/2cExFFGjpjnpjFmXBLvlAl5Lt+UgYfygak4Hzg28FXGJkVwB2mXVoYrPm1
-	Tr/YILvAMvoItAhJ8welA/+BFtt16IWs=
-X-Gm-Gg: AYBFou3wFlvD0C/FwDH0iihblg320PcT03ikOM9RNMQDiLfcQV7zk0tDiMjEfjv7fxa
-	2YLDiWYQVrTFOAPPQTqGrZa0Go4v05VCRPcOTNjY/EKjbHRmqWHl5K2FPhUqkajckBjgFYd8+e7
-	Sxd+IDC3PStEeWP8z/QmL7nkXArjHkXrq1GPXfgJvRHNea/r1WpWpK8GNkOxFOwSZRHLKkV8zUT
-	vy4vySDGvGk6p+pVN1f2rjIaCDkjWHI3rss17OO5lVEALYUir8yl719CnDktU8SaFbUyReqkEIw
-	+byXDvUmPfrzuroSSAkXDXsvfK7mcUMcL2wy4Zy7I3ocIdMsTtu6oYnM4qDsBWpESwpi3SmVUdK
-	yDXycLyPxM5DHCMFFahQP9JZNDNDNY1rOiewsG44I1vY+nzdhXL9NVASruDtCNO5IRGNTOPPW6o
-	esRxuYMIyZV0aaTezKD6VJzNNZuWH5ayi17Qd4rpJ3CJGr9n51NMs=
-X-Received: by 2002:a17:90b:3882:b0:396:a47f:d38f with SMTP id
- 98e67ed59e1d1-39b268ce386mr30178901a91.3.1788901997757; Tue, 08 Sep 2026
- 14:13:17 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1788903218; x=1789508018;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=yHiWJUkqXIHHnljOBGvidp4XfKDa865c5NPgCl6nJgk=;
+        b=RXgyA6a2oiQByRHUIZxzQgGDVDy45qyglEZjpfHqPi38fEMmcu2FvKHCB03yR2xR0/
+         HO8t+HhkBxZnzB4VkYAcYlZ46TmR8+SiHMBUBXp+/ojwMZgIuqj2KahQdGCfhhSvxX+9
+         whQqSRT8rR//+0NPxcSgmku02mkvBqguf2LCxxv3y81AyqHQ8ZLfrXdceCfRDkYJfnOh
+         awzZ1OLBF3lTNHttKOBWoJFGPJow7mpZrJJLflcfUOnayNPsoD4O8dNi4GDPhiNKUyP1
+         SVSq+/C79zX7q1mPvZrGNjGscW84jhQrhBarPHZuIUrFV8APotFi2D9xWNrd8OcFnMvl
+         aYOw==
+X-Forwarded-Encrypted: i=1; AKwUvByt9bu/7MbhCZ8vFuPU5GfXZzVj4x49oLnwQsafscT0Ri6TSEvd1q7BgBFFd/HgUeL00feB@lists.linux.dev
+X-Gm-Message-State: AFuF++nZ3TXH65qoo6MIe/N4WV+tRmWqBwmhG5LkSqcC7V7Q3EusaPJo
+	jGD02R6VzSqgvPYpwr9Gg3Hg8pXblw0kc0gy4JE+RmmORgB9Icb3hY24Ml23Fw==
+X-Gm-Gg: AYBFou2CG5KpMwc4MHam0yvZurkgZesMdvns9h+rFWGg9C6n90/pkznWjUYaeTSdxha
+	Eomlz3vsHG9O8YcxpD7V0fo1Sj4r4JMavP74piEMyRBSPVRVaYc6Q65/E3Ych0Dvo99fOg/fh1u
+	X4v6XXFDwrIm9GEL0ip+K2XVynIWlcuMyGWKJaB93L/wzp8oP+o91mg/UFa42hMjxe4eROqlK8M
+	7o3G+GAJzPfUl74MX1oiOiWt95ZMITxl9zyMrxyNeQoMv09QX4GWhOAjyQ0RE94qxHOWYi7Cg6b
+	kdcl/jxxov0JcSMC0j+YqvBDzsPgQZaQzfv1xw1y9lnD+HTireGRvrpSdz3PunkgG5Wp+AfobMX
+	qvQJwllfz3WcrBIiWSokOpiC9lfUHYw7sFDdXgndBwtp1hD0DIMpTOCNRbQCnScsLXbBCOV+Mat
+	SOZ4poSpyfXWeZo4EVocDrqRMxThNcxOyuWWDyyqeb3w0m5J5sBzCuETeyfaYUh67Chc8wclYTO
+	TZIEW5PtRxkQ5zz4iNap10HGVhlrPu2G2LHWrp7OcAjKSqIFfX2i1rnPCm9/0jxdHbaxPwS90o0
+	B2KdMFXumuNZnDh49JKyBEY0fohgtxpQFeUx5Q==
+X-Received: by 2002:a17:90b:4c41:b0:398:9bd5:490e with SMTP id 98e67ed59e1d1-39b2623ac0fmr46132348a91.21.1788903217940;
+        Tue, 08 Sep 2026 14:33:37 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e34])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b25f8d2c5sm28700771a91.2.2026.09.08.14.33.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 08 Sep 2026 14:33:37 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: dmaengine@vger.kernel.org
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Frank Li <Frank.Li@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCHv2] dmaengine: bestcomm: ata: drop unused local variable 'inc'
+Date: Tue,  8 Sep 2026 14:33:34 -0700
+Message-ID: <20260908213334.593584-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org> <20260908-build-speedup-v1-20-5dc1ac01672d@kernel.org>
-In-Reply-To: <20260908-build-speedup-v1-20-5dc1ac01672d@kernel.org>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Tue, 8 Sep 2026 23:13:04 +0200
-X-Gm-Features: AcwNN1U58TdOwuasMFef5tH_3N3xyJMe8mAu14nPZtzZCuWKC0n_7MgG3XQZVuw
-Message-ID: <CANiq72m5C5tNKUWTYYerBt81KtqRLgr-S4c5XLUN1uY5n7mqiQ@mail.gmail.com>
-Subject: Re: [PATCH 20/23] kbuild: rust: parallelise rustc front end
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 8, 2026 at 10:59=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.o=
-rg> wrote:
->
-> A future -j/--jobs option is planned for
-> rustc:(rust-lang/compiler-team#1005), so check to see if this available a=
-nd
-> if so use it.
+bcom_ata_init() declared and assigned a struct bcom_ata_inc *inc that
+was never read, tripping clang -Wunused-but-set-variable:
 
-This is already implemented in nightly as far as I can tell. If it
-weren't, we shouldn't add it, even if planned.
+  drivers/dma/bestcomm/ata.c:58:23: error: variable 'inc' set but not
+  used [-Werror,-Wunused-but-set-variable]
+     58 |         struct bcom_ata_inc *inc;
+        |                              ^
 
-(By the way, could you please add Link tags for those URLs?)
+Drop the declaration and the bcom_task_inc() call that fed it.
 
-> +config RUSTC_HAS_JOBS
-> +       def_bool $(rustc-option,-j8)
-> +
-> +config RUSTC_HAS_ZTHREADS
-> +       def_bool $(rustc-option,-Zthreads=3D8)
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
+---
+ v2: use suggested title
+ drivers/dma/bestcomm/ata.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-We can simplify using `RUSTC_VERSION` for these like we do elsewhere.
+diff --git a/drivers/dma/bestcomm/ata.c b/drivers/dma/bestcomm/ata.c
+index 502a45d76adc..40126f3f189e 100644
+--- a/drivers/dma/bestcomm/ata.c
++++ b/drivers/dma/bestcomm/ata.c
+@@ -55,7 +55,6 @@ bcom_ata_init(int queue_len, int maxbufsize)
+ {
+ 	struct bcom_task *tsk;
+ 	struct bcom_ata_var *var;
+-	struct bcom_ata_inc *inc;
+ 
+ 	/* Prefetch breaks ATA DMA.  Turn it off for ATA DMA */
+ 	bcom_disable_prefetch();
+@@ -69,7 +68,6 @@ bcom_ata_init(int queue_len, int maxbufsize)
+ 	bcom_ata_reset_bd(tsk);
+ 
+ 	var = (struct bcom_ata_var *) bcom_task_var(tsk->tasknum);
+-	inc = (struct bcom_ata_inc *) bcom_task_inc(tsk->tasknum);
+ 
+ 	if (bcom_load_image(tsk->tasknum, bcom_ata_task)) {
+ 		bcom_task_free(tsk);
+-- 
+2.55.0
 
-Cheers,
-Miguel
