@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C555476E1
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:02:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C61549361
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872548; cv=none; b=nFaL3PImree9wqaS6WwPj3IDSKuHz4ExBM5RUNEzhhAdsNLp/INOesshjV7yTwJdD4TIVOLSHuokz8i15oE3Oagwl4Js70ffcexu08Mp/kQjNGbrs8ysurpnhaIL6G28yfyyO6KCvjkKcHYfbOCDj+F5/RoEhARngKJDJBWW/GY=
+	t=1788872554; cv=none; b=HCzeYIuH6g6gPwpTdyRjvw32zYWWw5fHz9U58CVdUfrmhGXAPU9F2fzkhAJLXj5pbrjhMczG5bujK3ti47SSntjC3cND4a4zkUtVkOOqWgBgj6ICPiE/0Eh7KtGaq/Bu477l1FEPfb+mk1JMKWClJHZnqywJswuz4QB+y4wZF9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872548; c=relaxed/simple;
-	bh=sjRLf1ZvmsodHnm3CvP0VHigBoL+XRcVKM3dKO7fQ58=;
+	s=arc-20240116; t=1788872554; c=relaxed/simple;
+	bh=0iGqBogiDsUD9IX6n18y1qeHWvrszSQw6b6wW562DRI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=pT3dv/CzHAxMSI37ZKW1EgMC7sWnPkFyQ6eLBI6h3qlC2uibhi0YX1O9qjr5Qle4lzQ1Q9nlarb9z1D/ab66KJrWnm092zW2xUOGsRVTnbTKxnq6Uoor1LhNcXVUjJ45sbTHWNsRZdiXZy4NEVBchw97U3m+cZG0hfQqMjX2zRw=
+	 MIME-Version; b=CRll6qNt4XOn9S63cY5aCiPM3fxJ27wvb9pS0kmoO8OARQd66paMW/jgxh9d4wYKOyqyJe85BtbybUKPI6gemhf7k0e+UODB556jXE4QSXi2p3oKQ1dqvhlmt3w40XtwtSeVRIqTFA2igXLDEtz/HscY/9SAo8+BKEofsZ4BDpY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPGT15x3zKHN6j
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPGT0XnRzKHN6v
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:01:53 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7672D4058D
+	by mail.maildlp.com (Postfix) with ESMTP id 6572840590
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:01:54 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAni5gpB6BqC9rlBA--.34632S16;
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAni5gpB6BqC9rlBA--.34632S15;
 	Tue, 08 Sep 2026 21:01:54 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 14/26] perf annotate-data: Add arch_get_reg_offset helper
-Date: Tue,  8 Sep 2026 13:01:10 +0000
-Message-Id: <20260908130122.633500-15-wutengda@huaweicloud.com>
+Subject: [PATCH v5 13/26] perf annotate-arm64: Enable instruction tracking support
+Date: Tue,  8 Sep 2026 13:01:09 +0000
+Message-Id: <20260908130122.633500-14-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260908130122.633500-1-wutengda@huaweicloud.com>
 References: <20260908130122.633500-1-wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAni5gpB6BqC9rlBA--.34632S16
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF1rZryUAryftry5tFyUtrb_yoW3XFyrpa
-	95GFyrGr43Xr43WrsrXrZ8Xr9Y9wsrGF9xCryq934ayryaqr18Ka1vyryYk3yUJrZYyr17
-	G3Z8tr47XwsrGaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgAni5gpB6BqC9rlBA--.34632S15
+X-Coremail-Antispam: 1UD129KBjvJXoW3WFy7Wr48tF1UAF4rCry8Krg_yoW7Kw17pa
+	yDC345KF4UJr42gwnxJF4UXry3G3yfW34Y9r9Ygw4SyFsFyryrtFs5KFWayF4rGrZ3Cw4Y
+	q3WqyFWDXw4UCaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUQm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
 	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
 	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
@@ -77,220 +77,180 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3AF1rZryUAryftry5tFyUtrb_yoW3XFyrpa
 	c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRGMKuUUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Add a helper to compute the effective offset from a base register
-for instruction operands. Currently handles arm64 addressing modes
-including post-indexed, single-register, SIB-style indexed with
-shift/extension, and constant-offset register pairs.
+Enable basic instruction tracking for arm64 by implementing three
+essential functions in the find_data_type_block() call path:
 
-Fallback to instruction's raw offset for other architectures.
+  find_data_type_block
+    -> arch_supports_insn_tracking  (1)
+    -> find_data_type_insn
+         -> init_type_state         (2)
+         -> update_var_state
+         -> update_insn_state       (3)
 
+Changes:
+
+* arch_supports_insn_tracking(): add arm64 to the list of supported
+  architectures, allowing find_data_type_block() to proceed with data
+  type analysis.
+
+* init_type_state(): correctly identify ret_reg, stack_reg, and
+  caller-saved registers for arm64 during type state initialization.
+
+* update_insn_state(): add the update_insn_state_arm64() callback with
+  conservative register invalidation for call instructions and those with
+  destination register(s), preventing stale type propagation. Full
+  instruction-level analysis support will be added incrementally in
+  later patches.
+
+With these changes, arm64 gains support for basic variable type
+inference during instruction tracking.
+
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-data.c | 106 +++++++++++++++++++++++++++-----
- tools/perf/util/annotate-data.h |   4 +-
- 2 files changed, 94 insertions(+), 16 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 78 +++++++++++++++++++
+ tools/perf/util/annotate-data.c               | 11 ++-
+ 2 files changed, 88 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index c51b20a7af9b..754c0efe2077 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -1118,6 +1118,74 @@ static void setup_stack_canary(struct data_loc_info *dloc)
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index d8a5904359b1..8fda4d4d6888 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -9,6 +9,10 @@
+ #include <regex.h>
+ #include "../annotate.h"
+ #include "../disasm.h"
++#include "../annotate-data.h"
++#include "../debug.h"
++#include "../map.h"
++#include "../symbol.h"
+ 
+ struct arch_arm64 {
+ 	struct arch arch;
+@@ -442,6 +446,77 @@ static void extract_op_location_arm64(const struct arch *arch,
  	}
  }
  
-+int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc,
-+			int breg, struct type_state *state, bool apply_index,
-+			int *offset)
++#ifdef HAVE_LIBDW_SUPPORT
++static bool is_readonly_branch_or_cmp(const char *name)
 +{
-+	if (arch__is_arm64(arch)) {
-+		int reg2;
-+
-+		/* Post-indexed addressing: offset is 0 when not applying index */
-+		if (op_loc->addr_mode == PERF_AAM_POST_INDEX && !apply_index) {
-+			*offset = 0;
-+			return 0;
-+		}
-+
-+		/* Single-register addressing: return the stored offset directly */
-+		if (!op_loc->multi_regs) {
-+			*offset = op_loc->offset;
-+			return 0;
-+		}
-+
-+		/*
-+		 * SIB (Scale-Index-Base) style indexed addressing, e.g.:
-+		 *   Array element load:  ldr  dst, [base, index, lsl #3]
-+		 *   Array element load:  ldr  dst, [base, index, uxtw #3]
-+		 *   Array address calc:  add  dst, base, index lsl #3
-+		 *
-+		 * The index reg only computes element offset without modifying
-+		 * the underlying data type; the dst type is inherited from base.
-+		 * Therefore, the base reg offset can be treated as 0.
-+		 */
-+		if (op_loc->extend_type || op_loc->shift_type) {
-+			/* Memory references use the breg as the address base. */
-+			if (op_loc->mem_ref) {
-+				*offset = 0;
-+				return 0;
-+			}
-+			/*
-+			 * Otherwise, require breg to be a known pointer type to
-+			 * avoid treating integer operations as address calculations.
-+			 */
-+			if (has_reg_type(state, breg) && state->regs[breg].ok &&
-+			    (state->regs[breg].kind == TSR_KIND_POINTER ||
-+			     (state->regs[breg].kind == TSR_KIND_TYPE &&
-+			      dwarf_tag(&state->regs[breg].type) == DW_TAG_pointer_type))) {
-+				*offset = 0;
-+				return 0;
-+			}
-+			return -1;
-+		}
-+
-+		/*
-+		 * For register-based addressing without shift/extension,
-+		 * reg2 may be a constant offset. Use its value as the offset
-+		 * from the base register.
-+		 */
-+		reg2 = op_loc->reg1 == breg ? op_loc->reg2 : op_loc->reg1;
-+		if (has_reg_type(state, reg2) && state->regs[reg2].ok &&
-+			state->regs[reg2].kind == TSR_KIND_CONST) {
-+			*offset = (s64)state->regs[reg2].imm_value;
-+			return 0;
-+		}
-+
-+		return -1;
-+	}
-+
-+	*offset = op_loc->offset;
-+	return 0;
++	return !strncmp(name, "cb", 2) || !strncmp(name, "tb", 2) ||
++	       !strcmp(name, "tst") || !strcmp(name, "teq") ||
++	       !strcmp(name, "cmp") || !strcmp(name, "cmn") ||
++	       !strcmp(name, "ccmp") || !strcmp(name, "ccmn");
 +}
 +
- /*
-  * It's at the target address, check if it has a matching type.
-  * It returns PERF_TMR_BAIL_OUT when it looks up per-cpu variables which
-@@ -1132,18 +1200,26 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 	Dwarf_Word size;
- 	u32 insn_offset = dl->al.offset;
- 	int reg = dloc->op->reg1;
--	int offset = dloc->op->offset;
-+	int offset;
- 	const char *offset_sign = "";
- 	bool retry = true;
- 
--	if (offset < 0) {
--		offset = -offset;
--		offset_sign = "-";
-+again:
-+	if (arch_get_reg_offset(dloc->arch, dloc->op, reg, state, false, &offset)) {
-+		/*
-+		 * Fall back to the instruction's offset. This prevents the
-+		 * register type of the instruction from being completely lost.
-+		 * Compared to dropping this type inference entirely, providing
-+		 * a rough type hint is likely more useful.
-+		 */
-+		offset = dloc->op->offset;
- 	}
- 
--again:
-+	if (offset < 0)
-+		offset_sign = "-";
++static void update_insn_state_arm64(struct type_state *state,
++				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
++				    struct disasm_line *dl)
++{
++	struct annotated_insn_loc loc;
++	struct annotated_op_loc *dst = &loc.ops[INSN_OP_TARGET];
++	u32 insn_offset = dl->al.offset;
 +
- 	pr_debug_dtp("chk [%x] reg%d offset=%s%#x ok=%d kind=%d ",
--		     insn_offset, reg, offset_sign, offset,
-+		     insn_offset, reg, offset_sign, abs(offset),
- 		     state->regs[reg].ok, state->regs[reg].kind);
++	/* Skip read-only instructions that do not affect register type state */
++	if (is_readonly_branch_or_cmp(dl->ins.name))
++		return;
++
++	if (annotate_get_insn_location(dloc->arch, dl, &loc) < 0)
++		return;
++
++	/*
++	 * Invalidate caller-saved registers on function calls per ARM64 AAPCS64
++	 * ABI, unless DWARF location info indicates the register remains valid
++	 * beyond the call address.
++	 */
++	if (ins__is_call(&dl->ins)) {
++		struct symbol *func = dl->ops.target.sym;
++		const char *call_name;
++		u64 call_addr;
++
++		call_name = func ? func->name : dl->ops.target.name;
++		pr_debug_dtp("call [%x] %s\n", insn_offset, call_name ?: "<unknown>");
++
++		/* Invalidate caller-saved registers after call */
++		call_addr = map__rip_2objdump(dloc->ms->map,
++					      dloc->ms->sym->start + dl->al.offset);
++		for (unsigned int i = 0; i < ARRAY_SIZE(state->regs); i++) {
++			struct type_state_reg *reg = &state->regs[i];
++
++			if (!reg->caller_saved)
++				continue;
++			/* Keep register valid within DWARF location lifetime */
++			if (reg->lifetime_active && call_addr < reg->lifetime_end)
++				continue;
++			invalidate_reg_state(reg);
++		}
++		return;
++	}
++
++	/*
++	 * Invalidate destination register(s) for unsupported instructions to
++	 * prevent stale type info from propagating to subsequent instructions.
++	 */
++	if (has_reg_type(state, dst->reg1) && !dst->mem_ref) {
++		pr_debug_dtp("%s [%x] invalidate reg%d",
++			     dl->ins.name, insn_offset, dst->reg1);
++		invalidate_reg_state(&state->regs[dst->reg1]);
++		if (dst->multi_regs && has_reg_type(state, dst->reg2)) {
++			pr_debug_dtp(" and reg%d", dst->reg2);
++			invalidate_reg_state(&state->regs[dst->reg2]);
++		}
++		pr_debug_dtp("\n");
++		return;
++	}
++}
++#endif
++
+ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 				   const char *cpuid __maybe_unused)
+ {
+@@ -461,6 +536,9 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	arch->objdump.imm_char		  = '#';
+ 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
+ 	arch->extract_op_location	  = extract_op_location_arm64;
++#ifdef HAVE_LIBDW_SUPPORT
++	arch->update_insn_state		  = update_insn_state_arm64;
++#endif
  
- 	if (!state->regs[reg].ok)
-@@ -1166,7 +1242,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		 */
- 		ptr_type = die_get_pointer_type(&state->regs[reg].type, &ptr_die);
- 		if (!ptr_type) {
--			if (dloc->op->offset < 0 && reg != state->stack_reg)
-+			if (offset < 0 && reg != state->stack_reg)
- 				goto check_kernel;
+ 	/* bl, blr */
+ 	err = regcomp(&arm->call_insn, "^blr?$", REG_EXTENDED);
+diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+index 104b80d471f1..c51b20a7af9b 100644
+--- a/tools/perf/util/annotate-data.c
++++ b/tools/perf/util/annotate-data.c
+@@ -28,6 +28,7 @@
  
- 			return PERF_TMR_NO_POINTER;
-@@ -1176,7 +1252,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		if (__die_get_real_type(ptr_type, type_die) == NULL)
- 			return PERF_TMR_NO_POINTER;
+ /* register number of the stack pointer */
+ #define X86_REG_SP 7
++#define ARM64_REG_SP 31
  
--		dloc->type_offset = dloc->op->offset + state->regs[reg].offset;
-+		dloc->type_offset = offset + state->regs[reg].offset;
+ static void delete_var_types(struct die_var_type *var_types);
  
- 		if (dwarf_tag(type_die) == DW_TAG_typedef)
- 			die_get_real_type(type_die, &sized_type);
-@@ -1205,7 +1281,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		 */
- 		*type_die = state->regs[reg].type;
- 
--		dloc->type_offset = dloc->op->offset + state->regs[reg].offset;
-+		dloc->type_offset = offset + state->regs[reg].offset;
- 
- 		/* Get the size of the actual type */
- 		if (dwarf_aggregate_size(type_die, &size) < 0 ||
-@@ -1224,7 +1300,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		 */
- 		*type_die = state->regs[reg].type;
- 
--		dloc->type_offset = dloc->op->offset;
-+		dloc->type_offset = offset;
- 
- 		/* Get the size of the actual type */
- 		if (dwarf_aggregate_size(type_die, &size) < 0 ||
-@@ -1248,7 +1324,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
+@@ -178,6 +179,13 @@ static void init_type_state(struct type_state *state, const struct arch *arch)
+ 		state->regs[11].caller_saved = true;
+ 		state->ret_reg = 0;
+ 		state->stack_reg = X86_REG_SP;
++	} else if (arch__is_arm64(arch)) {
++		int i;
++
++		for (i = 0; i < 18; i++)
++			state->regs[i].caller_saved = true;
++		state->ret_reg = 0;
++		state->stack_reg = ARM64_REG_SP;
  	}
+ }
  
- 	if (state->regs[reg].kind == TSR_KIND_PERCPU_BASE) {
--		u64 var_addr = dloc->op->offset;
-+		u64 var_addr = (s64) offset;
- 		int var_offset;
+@@ -1437,7 +1445,8 @@ static enum type_match_result find_data_type_insn(struct data_loc_info *dloc,
  
- 		pr_debug_dtp("percpu var");
-@@ -1275,7 +1351,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 
- 	if (state->regs[reg].kind == TSR_KIND_CONST &&
- 	    dso__kernel(map__dso(dloc->ms->map))) {
--		if (dloc->op->offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
-+		if (offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
- 			goto check_kernel;
- 	}
- check_non_register:
-@@ -1362,7 +1438,7 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		    arch__is_x86(dloc->arch)) {
- 			pr_debug_dtp("this-cpu var");
- 
--			addr = dloc->op->offset;
-+			addr = (s64) offset;
- 
- 			if (get_global_var_type(cu_die, dloc, dloc->ip, addr,
- 						&offset, type_die)) {
-@@ -1373,8 +1449,8 @@ static enum type_match_result check_matching_type(struct type_state *state,
- 		}
- 
- 		/* Access to global variable like "-0x7dcf0500(,%rdx,8)" */
--		if (dloc->op->offset < 0 && reg != state->stack_reg) {
--			addr = (s64) dloc->op->offset;
-+		if (offset < 0 && reg != state->stack_reg) {
-+			addr = (s64) offset;
- 
- 			if (get_global_var_type(cu_die, dloc, dloc->ip, addr,
- 						&offset, type_die)) {
-diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index 453e13bbe3e2..e6ca47e25e04 100644
---- a/tools/perf/util/annotate-data.h
-+++ b/tools/perf/util/annotate-data.h
-@@ -265,7 +265,9 @@ bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
- bool get_global_var_info(struct data_loc_info *dloc, u64 addr,
- 				const char **var_name, int *var_offset);
- void pr_debug_type_name(Dwarf_Die *die, enum type_state_kind kind);
--
-+int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc,
-+			int breg, struct type_state *state, bool apply_index,
-+			int *offset);
- #else /* HAVE_LIBDW_SUPPORT */
- 
- static inline struct annotated_data_type *
+ static int arch_supports_insn_tracking(struct data_loc_info *dloc)
+ {
+-	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)))
++	if (arch__is_x86(dloc->arch) || arch__is_powerpc(dloc->arch) ||
++	    arch__is_arm64(dloc->arch))
+ 		return 1;
+ 	return 0;
+ }
 -- 
 2.34.1
 
