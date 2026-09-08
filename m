@@ -1,94 +1,235 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from sender6-op-o11.zoho.com (sender6-op-o11.zoho.com [165.173.180.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA5C1A9F87;
-	Tue,  8 Sep 2026 04:59:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788843597; cv=none; b=Ai5Uh1b58oWxKMlEa+33aJ6SqTDqzg2AknnB6g4xRyHcERM+ka9oVDFrIWkLGBI//vPmTsBPRcNNx1CHTmDLvZsk6mtEcoOTY7vnOC1w5uimW9opUl26gNmnUrtkIwJMdx5qGW/cSSsimEEIp+IAtwD/cCZk8g+crMbXDhOieFg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788843597; c=relaxed/simple;
-	bh=8dKQ5/kRZcva5wntmhmFglx/2dK1VMmHhVcM0Nf17tA=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=NONlVFVElGteouTjjq2UddyQ0LNZP8rGqAEfO1GNL+UvzkOt7FZG28wiEdXYkno6WBcrR2VRYuzg7Cq16mNvdqfkp7zr1nO+z2iv6yZ6ZmZNFepHoxIg/taq2ZVfgBmZlUz8DrpCTZrNyqOq3rZSrUgtt78vl88n74b9suT2UiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CIIXwmIp; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 387FB37A494
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 05:55:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=165.173.180.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788846923; cv=pass; b=syggVJwGrHI+L4Tr3lOYzmDX4YzusE7i7kK+JxuMRVuqHxigxiLZA0/XGYrrVnZpPuhjjrJeRxamX0oQosEhIdpOzCCTyFBzdXbWYfBW3I+qOKvO0yIdabmrLzysOGBy+Z9/e0oXkeMA2jfEB7e2rCsNhhPgLLDTJKPaGE8ofH8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788846923; c=relaxed/simple;
+	bh=t4sWL7UJRiZukLaVT5fGKdxfcZ8n5SpEjG0xh0dS+e4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=L+Q5WTTiEnqlBqKvlOx3oIr8gAgjqYsYTj8Osp6SasCLj7RjluPfrKeJFzdmKWsRrV3u22ivJ4hkKbZ6EUjygsj60CHXw0QRtp5MOqqhavJJHm6FM9eyL0jNm4brooeC7xaUJaKMJ8aPfZ55jH2vibCis96/7YRYDqFRENJkLl4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=vignesh.raman@collabora.com header.b=Bw6/daUO; arc=pass smtp.client-ip=165.173.180.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CIIXwmIp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788843596; x=1820379596;
-  h=date:from:to:cc:subject:message-id;
-  bh=8dKQ5/kRZcva5wntmhmFglx/2dK1VMmHhVcM0Nf17tA=;
-  b=CIIXwmIp9KooQORuu9HCCwuLdkLAfuH4bUXstZ1E/TbV/eaRo+SeN+4C
-   j/c3FRArVUfcSy0VCOaAXu2iWXsuFE/OLHJRIWdDmRuRv4bBr4FYqkhBK
-   EehF2CcUcay+//SN9vg7HrsoebgxA2l4wYjRPTwEwyePYyWtgird5dJxk
-   rJ/u0RfMsfqhHV9YdizCK8RMD9gB6JRzsedM1HaFCVb+dqJRneK7hqybJ
-   605816OkIwe+6Jo6BOzXO8jkpSI/9NUV7Kb44SQnTLDbV/jS/stSNJs4j
-   zMdhZhU0tlVDrslFFEjmLeNfcVNAtjKHPRiq4d0bqrbyXLFp+bnj2nNIB
-   g==;
-X-CSE-ConnectionGUID: IcZSevJETiW4TMjLR9ADkQ==
-X-CSE-MsgGUID: Hzf1IMCvT1SQa9SSJ1+caA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11899"; a="93099717"
-X-IronPort-AV: E=Sophos;i="6.25,268,1779174000"; 
-   d="scan'208";a="93099717"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Sep 2026 21:59:55 -0700
-X-CSE-ConnectionGUID: 156CII+xS5eiXmUdBzXppg==
-X-CSE-MsgGUID: xZQ4ds5BR9WiWulahwG97A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,268,1779174000"; 
-   d="scan'208";a="266533288"
-Received: from lkp-server01.sh.intel.com (HELO dff15f1b2031) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 07 Sep 2026 21:59:54 -0700
-Received: from kbuild by dff15f1b2031 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x3nvz-000000001gN-1dEq;
-	Tue, 08 Sep 2026 04:59:51 +0000
-Date: Tue, 08 Sep 2026 12:58:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [ardb:efi-libstub-native-utf16 7/9]
- drivers/firmware/efi/libstub/vsprintf.c:251:5: warning: no previous prototype
- for function 'efi_vsnprintf'
-Message-ID: <202609081226.euFZ5X8V-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=vignesh.raman@collabora.com header.b="Bw6/daUO"
+ARC-Seal: i=1; a=rsa-sha256; t=1788846908; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=cUWkgscG8AHsvrcfFpG5VMmsMQomZokJ4Z2tfqrkCrr/K6HjKc8SQ0/ai+1Y66am7X8Q06+MDus+Y4XM5eC92LLTo0AH8vlKK34j0atW1nD3RpEZIA2HiJSTL/XNCA2i0YD9wo8tsO7JyabqIVLGcJrjAXotUpF6258EYS5NIV8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1788846908; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=6Lg+hZBGT7qrSYitLwz/FL+6Ch1zpGqQ0ojp5/EMqiU=; 
+	b=VFYkrqkR5K2Y76t6UI2UzNDvz0Sncz5cjAVHmRY4yn0ca/eSnGpXUBx23RNEQ1N83jlukS0oH1WUWKVYRbYYrlIt1YhdlJbvFQTynZEHbYCd8VX7Pp2w7YMsaDyBYAK3xqv+ko8pdytVM4p8uSX/S+6R27uUuhe9u1lAFwOj6Ls=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=vignesh.raman@collabora.com;
+	dmarc=pass header.from=<vignesh.raman@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788846908;
+	s=zohomail; d=collabora.com; i=vignesh.raman@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=6Lg+hZBGT7qrSYitLwz/FL+6Ch1zpGqQ0ojp5/EMqiU=;
+	b=Bw6/daUOQ5yHGfII7Si24GunSW/8R8ctachyJNhQcZ8ddBSdL01IpC2ay2WlhMay
+	RQf6dldbd1Xch5ziujy9ZyZF+7hzqeUc+l45fC88E19WtK+axr1uFeK/wRdPmNwCNrK
+	meOO8LS6fNNDn79ulj2VMgmMOaFohzoruRG/5cO8=
+Received: by mx.zohomail.com with SMTPS id 1788846906556533.9074319549773;
+	Mon, 7 Sep 2026 22:55:06 -0700 (PDT)
+Message-ID: <84bd2c70-360a-4c25-a73c-70eca291c99b@collabora.com>
+Date: Tue, 8 Sep 2026 11:25:00 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] drm/ci: Add CI pipeline for drm-misc branches
+To: Maxime Ripard <mripard@kernel.org>,
+ Helen Koike <helen.fornazier@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ llvm@lists.linux.dev
+References: <20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org>
+Content-Language: en-US
+From: Vignesh Raman <vignesh.raman@collabora.com>
+In-Reply-To: <20260902-drm-drm-misc-ci-v1-1-49d05e228eab@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git efi-libstub-native-utf16
-head:   c23f326a96b5293512720f389c597f967132c334
-commit: b556b4a52f0a9b57d906dbb3bd63cebe6159e3e7 [7/9] efi/libstub: Output UTF-16 directly from vsnprintf()
-config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260908/202609081226.euFZ5X8V-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 2362eeb5f75560740146975e9eabe84c6bd25a0d)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260908/202609081226.euFZ5X8V-lkp@intel.com/reproduce)
+Hi Maxime,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609081226.euFZ5X8V-lkp@intel.com/
+On 02/09/26 13:47, Maxime Ripard wrote:
+> The DRM CI infrastructure [1] builds upon Mesa's CI to run IGT tests
+> on hardware. Its focus is on functional testing on a selected number
+> of targets.
+> 
+> The concern for drm-misc is different: it merges a large number of
+> patches across many platforms, and build or unit test breakages happen
+> on a regular basis. Adding build and unit testing for drm-misc has
+> been on the back of our minds, and a first attempt was made last year.
+> The feedback was to rely more on the existing infrastructure.
+> 
+> Introduce a CI entry point for merge requests targeting drm-misc-next,
+> drm-misc-fixes, and drm-misc-next-fixes. It reuses kunit.yml and the
+> freedesktop ci-templates, while defining build templates inline to
+> avoid pulling in the Mesa pipeline.
+> 
+> A single Debian container with LLVM handles cross-compilation to all
+> three architectures. The pipeline compiles the kernel using defconfigs
+> from the drm/tip rerere-cache branch and runs the DRM KUnit tests.
 
-All warnings (new ones prefixed by >>):
+Thanks for the patch. We can reuse the check-patch and dtbs jobs as 
+well. This can be done as a separate patch.
 
->> drivers/firmware/efi/libstub/vsprintf.c:251:5: warning: no previous prototype for function 'efi_vsnprintf' [-Wmissing-prototypes]
-     251 | int efi_vsnprintf(efi_char16_t *buf, size_t size, const char *fmt, va_list ap,
-         |     ^
-   drivers/firmware/efi/libstub/vsprintf.c:251:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     251 | int efi_vsnprintf(efi_char16_t *buf, size_t size, const char *fmt, va_list ap,
-         | ^
-         | static 
-   1 warning generated.
+Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
 
+> 
+> Link: https://lore.kernel.org/all/20250319-greedy-sturgeon-from-avalon-ac758f@houat/
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> ---
+>   drivers/gpu/drm/ci/drm-misc-ci.yml | 123 +++++++++++++++++++++++++++++++++++++
+>   1 file changed, 123 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/ci/drm-misc-ci.yml b/drivers/gpu/drm/ci/drm-misc-ci.yml
+> new file mode 100644
+> index 000000000000..40c6d7ba1afb
+> --- /dev/null
+> +++ b/drivers/gpu/drm/ci/drm-misc-ci.yml
+> @@ -0,0 +1,123 @@
+> +# CI pipeline for drm-misc-next, drm-misc-fixes, and drm-misc-next-fixes.
+> +#
+> +# Runs on merge requests only. Compiles the kernel for arm, arm64, and
+> +# x86_64, and executes the DRM KUnit tests on each architecture.
+> +#
+> +# A single container image is built using freedesktop ci-templates with
+> +# the packages needed for kernel compilation and LLVM for
+> +# cross-compilation. QEMU is installed at runtime by the KUnit jobs.
+> +#
+> +# build.yml and the Mesa container/build pipelines are not included
+> +# here: they pull in hundreds of Mesa-specific jobs and templates that
+> +# would each need to be individually stubbed or disabled. The few
+> +# templates we need (.build:arm32, .build:arm64, .build:x86_64) are
+> +# simple enough to define inline.
+> +
+> +variables:
+> +  CI_TEMPLATES_COMMIT: &ci-templates-commit aec7a6ce7bb38902c70641526f6611e27141784a
+> +  # Project whose container registry stores the built images
+> +  FDO_UPSTREAM_REPO: mripard/kernel
+> +  KERNEL_BUILD_CONTAINER_TAG: "2026-09-02-01"
+> +  LLVM_VERSION: "19"
+> +
+> +default:
+> +  before_script: []
+> +
+> +include:
+> +  - project: 'freedesktop/ci-templates'
+> +    ref: *ci-templates-commit
+> +    file:
+> +      - '/templates/debian.yml'
+> +  - local: drivers/gpu/drm/ci/kunit.yml
+> +
+> +stages:
+> +  - container
+> +  - build
+> +  - kunit
+> +
+> +# --- Pipeline rules ---
+> +workflow:
+> +  rules:
+> +    - if: $CI_PIPELINE_SOURCE == "merge_request_event" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME =~ /^drm-misc-(next|fixes|next-fixes)$/
+> +      when: always
+> +
+> +# kunit.yml's jobs inherit .build-rules through the .build:* chain.
+> +# Pass everything through since the pipeline is already gated by
+> +# workflow:rules.
+> +.build-rules:
+> +  rules:
+> +    - when: on_success
+> +
+> +# --- Container build job ---
+> +# Single container with all build tools. LLVM handles cross-compilation
+> +# to arm and arm64, so no architecture-specific containers are needed.
+> +debian/kernel-build:
+> +  extends: .fdo.container-build@debian
+> +  stage: container
+> +  variables:
+> +    FDO_DISTRIBUTION_VERSION: trixie
+> +    FDO_DISTRIBUTION_TAG: "${KERNEL_BUILD_CONTAINER_TAG}"
+> +    FDO_DISTRIBUTION_PACKAGES: >-
+> +      bc bison ca-certificates cpio curl
+> +      clang-${LLVM_VERSION} flex gzip
+> +      lld-${LLVM_VERSION} llvm-${LLVM_VERSION}
+> +      libelf-dev libssl-dev
+> +      make perl pkg-config python3
+> +      xz-utils
+> +
+> +# --- Build templates ---
+> +.build-base:
+> +  image: "${CI_REGISTRY}/${FDO_UPSTREAM_REPO}/debian/trixie:${KERNEL_BUILD_CONTAINER_TAG}"
+> +  needs: ["debian/kernel-build"]
+> +
+> +.build:arm32:
+> +  extends: .build-base
+> +  variables:
+> +    KERNEL_ARCH: "arm"
+> +    DEFCONFIG_ARCH: "arm"
+> +
+> +.build:arm64:
+> +  extends: .build-base
+> +  variables:
+> +    KERNEL_ARCH: "arm64"
+> +    DEFCONFIG_ARCH: "arm64"
+> +
+> +.build:x86_64:
+> +  extends: .build-base
+> +  variables:
+> +    KERNEL_ARCH: "x86_64"
+> +    DEFCONFIG_ARCH: "x86"
+> +
+> +# --- Kernel-wide build jobs (LLVM) ---
+> +.kernel-build:
+> +  stage: build
+> +  timeout: 45m
+> +  variables:
+> +    GIT_DEPTH: 1
+> +    DEFCONFIG_URL: https://gitlab.freedesktop.org/drm/tip/-/raw/rerere-cache/drm-misc-${DEFCONFIG_ARCH}_defconfig
+> +  artifacts: {}
+> +  before_script:
+> +    - drivers/gpu/drm/ci/setup-llvm-links.sh
+> +    - curl -L --retry 4 -f --retry-all-errors --retry-delay 60 -o .config "${DEFCONFIG_URL}"
+> +
+> +kernel-build:arm32:
+> +  extends: [.build:arm32, .kernel-build]
+> +  script:
+> +    - make ARCH=arm LLVM=1 olddefconfig
+> +    - make ARCH=arm LLVM=1 -j$(nproc)
+> +
+> +kernel-build:arm64:
+> +  extends: [.build:arm64, .kernel-build]
+> +  script:
+> +    - make ARCH=arm64 LLVM=1 olddefconfig
+> +    - make ARCH=arm64 LLVM=1 -j$(nproc)
+> +
+> +kernel-build:x86_64:
+> +  extends: [.build:x86_64, .kernel-build]
+> +  script:
+> +    - make ARCH=x86 LLVM=1 olddefconfig
+> +    - make ARCH=x86 LLVM=1 -j$(nproc)
+> +
+> +# --- KUnit jobs ---
+> +# kunit:arm32, kunit:arm64, and kunit:x86_64 are defined in kunit.yml
+> +# and implicitly enabled here through the .build:* templates above.
+> 
+> ---
+> base-commit: 0116f19db5931348c937eafa1f76a9a19bf82c81
+> change-id: 20260902-drm-drm-misc-ci-ec6c69506609
+> 
+> Best regards,
 
-vim +/efi_vsnprintf +251 drivers/firmware/efi/libstub/vsprintf.c
-
-   250	
- > 251	int efi_vsnprintf(efi_char16_t *buf, size_t size, const char *fmt, va_list ap,
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
