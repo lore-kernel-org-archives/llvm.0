@@ -1,138 +1,91 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C78559CB6;
-	Tue,  8 Sep 2026 15:14:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19A0F355F49;
+	Tue,  8 Sep 2026 16:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788880452; cv=none; b=Y6jy85TV072wbIsSPKR1qqQf9Ju9RLARRhxx8tpOtDcEX+aDKk60hb6SnoSO2vU9OwWYp3zwVGy4fVD6GS/4uAU35ZTy+QDVtteiMUN+4if2aGC7bN7i2zPmkbTYCB/Tb261pthNtwNoYbzC1bbSe7pDf0r2WipXHBnJDVzZCTI=
+	t=1788884150; cv=none; b=tmqkMUr0FD7p0m3KonDvTZzsmCFBGluSJWwtqRLYMlNLL0eA2ElJneqAicJAkAEU9cIj7reGMbeexl2PI+s0VoEKBk3NYjZLcoEiVzvYkmg7zfbVRSejhPQzYb1IhUbyXxl61npheUKEQ9xIgNVw0stDUcJBMc9c1Znzpsg1SFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788880452; c=relaxed/simple;
-	bh=9VnbqKcFo0PdV/F50ouF++HgJygmdMQ5dTr+q9TdSv0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u7dgT8ZWdhIM0S5QRmJSyw7GtarbY8vTezoxE/b6ORQe9vvgFdTt654/PBpnZX9RlWFpCQtYhCBYoV3qNs+SKYMHwnb7cy5lSpogRFBrg2TZSR170QHnD+xDZWjXac7CyaPCa28kRpnJz5lY9BmWBnJN/xeyIwodcMldAYoe8oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=fAETnApx reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	s=arc-20240116; t=1788884150; c=relaxed/simple;
+	bh=rvVZYPYH7iKY+4YiJxF0YMxyOw1dv8LOBm6HtLVgRag=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=EeTz9fKM5ZqHZQ0yKorjaU4jqOT07Uyv6jvCNvvMJ5D86/LpKkJoZptXULm3SmEjkPKm5O058vcGd2mBt/xx00aPqHRGhiUv7bbC8Wj0H2OeVLnSW0PKC3Gz7nlq8lNc7T18ybSQc7jA865IhGD/jwclsLpL4DOG9uwok+eTH/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EnFDK4bj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="fAETnApx"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8807440E01F9;
-	Tue,  8 Sep 2026 15:13:53 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id APiSMwsJLR9v; Tue,  8 Sep 2026 15:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1788880423; bh=SihVXpN4VvNY3Mg5IOkHy8UfEsHqRfkcnelNTeVhEJY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fAETnApxBEtfPuqHFKCgIL29nHx0Z2YHgAygdIUM8hU/Mz33/kA4ZUBeN/gRjrvau
-	 vtDllihc6pYSe5SXQwgoqpNhfk4/08/8KMfUsCAU9thasCFYYPKC5Y/pV7Y6XU69vH
-	 LNwlFlG04npY9qQKxVsZcrZnpWC37yTWxuzhzHRm5KpwYfkHvzNEQeiGPcvB58aLNL
-	 CiYr2yyCrB3Kpf/DVc891YwOW/34b2QLG1yPFPyiPhCi535fKHZgiFGNQiM2V+7vT2
-	 gPcZgp3ofWVjQmcjoKAe195uX42B3clf9ibePNVbJKWUY1oARNBH9aqSnI0FgzmH5W
-	 h3dWuWkymclGp3MUg9haChNnjvPBl3Zfv+FDejA3/AFf/CVXHWsWO5KDUQ2zEgeqt/
-	 YAh14BnniVfR4yGoNbbKeldMZUsNF3icLMOF+CXHFJzyhU2PGxTQ2922hXMjHxMdeL
-	 Z7VOvQUlIKK4Twu3A1MK/eNhNVBp3Aq4OXXBOciVJLy8/PcJIx0toX/zZ4lcn1jfV9
-	 ErcQYDZ5WCkd1WmQQESUO71elKnVOkkPTWwEHl1ZBofjxaMBHmYZWTaJGuyt7QqChy
-	 44ZU/2M46IVY51m5w2KmjWEiICeA6W5JNXmeJ3Nh9U8UDaWIWWakyv4XQKa/cqNpso
-	 4+S63J9RdOKwhC2R/OGeJJio=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2B8AE40E016C;
-	Tue,  8 Sep 2026 15:12:41 +0000 (UTC)
-Date: Tue, 8 Sep 2026 08:12:38 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-mm@kvack.org,
-	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Jan Stancek <jstancek@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v5 02/24] x86/elf, um/x86/elf: Move relocation constants
- to UAPI
-Message-ID: <20260908151238.GBaqAl5iKb64meuPJl@fat_crate.local>
-References: <20260908-vdso-absolute-reloc-v5-0-3a93791af1cf@linutronix.de>
- <20260908-vdso-absolute-reloc-v5-2-3a93791af1cf@linutronix.de>
- <20260908135513.GAaqATwXHcQD7plnH-@fat_crate.local>
- <20260908161740-0d79e592-87a6-43c5-9174-84ce1904e639@linutronix.de>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EnFDK4bj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1D981F00A3A;
+	Tue,  8 Sep 2026 16:15:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788884148;
+	bh=2wuLOPQn3VUfQTPIEZYgXlZfyHe85AMIIidcauXH/uU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date;
+	b=EnFDK4bjGoQnF0tZW3+X4z90QC5uo5VTG+h78KHMq+6fNoEKf89q+3NzCJLCDsQtA
+	 0dYKKnyXMxBfMkB4EgL7RH/NsfTeyXAZlCc7BVZ4nlZyCRv67YfZEjxpb5cpTeFusO
+	 E4UDn5/ud+NJo1C6db9v1NZMAsM3k5LPVM9OC8vPZfIApiUS7/EY2nSh93Sz3qYvDN
+	 ZyQ7iwGjivw6YaOR6Eq+GtX6+Efk39OQhcZz5f0U0kHbZ9e2rG/ZWRomz5k15gGcjQ
+	 PhN2IvfMJ0ofz74PjeXEDsgaudgYdc0BqWZTOn3mQLCiUIfeUEWQsq7jcu3eB/rVrv
+	 BQuHqjZNmxQYg==
+From: Mark Brown <broonie@kernel.org>
+To: linux-spi@vger.kernel.org, Rosen Penev <rosenp@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+In-Reply-To: <20260907005750.230103-1-rosenp@gmail.com>
+References: <20260907005750.230103-1-rosenp@gmail.com>
+Subject: Re: [PATCH] spi: orion: yield to scheduler in transfer wait loop
+Message-Id: <178886895967.78527.1214841053052376485.b4-ty@b4>
+Date: Tue, 08 Sep 2026 13:02:39 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260908161740-0d79e592-87a6-43c5-9174-84ce1904e639@linutronix.de>
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1117; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=rvVZYPYH7iKY+4YiJxF0YMxyOw1dv8LOBm6HtLVgRag=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqoDSwFqh9zajyJ/g6tH8vjbeAQRruYNvIew7bA
+ HjXralD2V+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCaqA0sAAKCRAk1otyXVSH
+ 0HkMB/4ikbDVn/KOhy4iYBRU3jEsGFkZeEJ2TPTRDO03iYbyrkAlWCRxrqePtSOqLS+Ea1lHOUg
+ 22aseQsDd6Iifqq4R0EdQDWJyXeSu7i2/x8PnUbK1/SLTUn5T4KcyQtCXOEGbHT22idN4sy1Msf
+ EW7PdOpvoJTUQ3zplOSr25kCuFhwxdQJhnTIFP09AjMfnQ6hLIKfNo1ksZWcnNTfp7Vnf4X3xHb
+ gu6GOjVZCNAyjH3kF518HgWlIrbaQHx4I0qc3Qy/5JObMhmgOO6vpQEwSMZ37wSebFa4JH8EF2i
+ 05PR0ZUje0HDBuBDUlyT90gUVKlf6V9cLzr65QMJjG/BulVo
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Tue, Sep 08, 2026 at 04:26:00PM +0200, Thomas Wei=C3=9Fschuh wrote:
-> The existing, generic ELF definitions are there.
-> The ELF stuff in include/linux/ is highly specific to Linux.
+On Sun, 06 Sep 2026 17:57:50 -0700, Rosen Penev wrote:
+> spi: orion: yield to scheduler in transfer wait loop
 
-And putting them in UAPI casts them in stone. I wouldn't want to maintain=
- them
-forever if not necessary.
+Applied to
 
-> Also later in the patchset I want to expose the definitions to the
-> tools/ build. Exposing generic UAPI definitions to tools/ is a much
-> easier sell than include/linux/.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-7.4
 
-tools/ *copies* kernel headers on a "they're needed" basis. No need to pu=
-t
-anything in UAPI for that.
+Thanks!
 
-It's even written down: tools/include/uapi/README
+[1/1] spi: orion: yield to scheduler in transfer wait loop
+      https://git.kernel.org/broonie/spi/c/23ea08ca607c
 
---=20
-Regards/Gruss,
-    Boris.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
