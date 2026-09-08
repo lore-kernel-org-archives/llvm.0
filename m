@@ -1,281 +1,118 @@
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C001F39EB5B
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 07:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D43D284690;
+	Tue,  8 Sep 2026 08:01:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788853547; cv=none; b=WHhDdEFIbBwHmS81yf+jUgVbSKJN70VvCkj34ydKi1k5pyRM0bsoPj9DIW6zXvtinB+Gwl3K7zqFtXKw5ryknZCwuWz7cRI7DbrG/WOYB4SypqwG71+KdjoInmJeEljOSD8C6r2I2Eno4qpoO7kbNhsFSQW7fdxH4WGg2PE7bxw=
+	t=1788854471; cv=none; b=YbHbjR5onZUIsbZWqTIqrXEulI+MKukjqRzra0EC1CCD4naO43tBrwV8vdHMVkfmuR+34fzIomsaB/yncRgroD//5CukzgLoPRgH5yMm8VuyjSbdp5fX1Hy8lLTTkEt76zCGhPbyEdC68W5nk9JJBNif1qC5WHngHztdsgAmrUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788853547; c=relaxed/simple;
-	bh=MYJ8QuS9dJHlh3zGd4Jjmjuv7oAWC7r/tOj6ovNMei0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=JowBQlOoBJbYqlgx+loAEiUnrmQp9Ihx+FiYN2j1p13vYmKmRKjiQHzt49QgHlB9ZHbmg+gNfOjjo1N4RKq+brF51QHye1fdmLVVt+DMs2gj2GBPBPEesT9h156kRaEucyzThXPYngnLzMSDxSOSk25gdG9VANuuDL6BahSpteI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=meyDObDd; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=PvTMbXqF; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+	s=arc-20240116; t=1788854471; c=relaxed/simple;
+	bh=sNQV+csNbzSpw7hFzNuAyUkr/cSxHNTz/jEsDqAXAMg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=teZvdh9gQiopiSFa0OujhMpJaT4KTVuOs7xEakpOntlayVq6LyQCr6daiylSUQV9DkWpeHGHOVeNIVs/lEAnIV11bf1Qz6ofxybSBViLJ+bXoSO3n6oWHp48+myPPNMYqqvAOGok2gRDtWLPFGyggeH3cMrbPp1jgcLKqCJjzRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gLfm4yDe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="meyDObDd";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="PvTMbXqF"
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6886LqJM2154179
-	for <llvm@lists.linux.dev>; Tue, 8 Sep 2026 07:45:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	vjCdleB62PQ5+3oSfJm6THWjJHXQHO2Cei/sEBlVgJo=; b=meyDObDdxg1onozh
-	BTIfrgJw9Bf20bmpFLWeHyZoqdWL8TX8jZKczZ2pE6krABotoKHevESc6wzTBOzl
-	OAwYrON/e3Pl7RsZxRn/C14fZyu4VRBSt3xnJLQHdwXsh88S9DC5l9GiZmPVa8hA
-	eT3Vm7Xv/6RxHAs66hv7XBakFwk2uRVloSq8Bl9hzR6PEnOgqphhTOHN2EUHNvJq
-	MqXXrISTRFOLQnXj5HCjf2dsYwA1yuMoVHaaoTwJGFlGxGn9AsLUQL4zxmYGCj/X
-	DkfS9JacTTbaF9b8B28tcXEN5zSj37ztLWzdNQWA+CbGZVik/3TZUBGHipETto+C
-	bV2gbQ==
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4gj1rwjaj4-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 07:45:44 +0000 (GMT)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-39906175917so4623731a91.2
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 00:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1788853543; x=1789458343; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=vjCdleB62PQ5+3oSfJm6THWjJHXQHO2Cei/sEBlVgJo=;
-        b=PvTMbXqFY/Fe8oFFtu/aXMkNMIz4hpeTG6JSvJptltZNbjCHOCfMQ5AKgMSOvNnBf1
-         p3hN+WwLPW+oV6zGwyNzTwF/K7MzhhNMe7N1v3EZkqllmcRAXmszjSgEq51/VV87EJz0
-         cXI0Pp3zBd69m21bb/baH0yr3t735S0t+VqcnJCYAFFi9jSOsoSzkcF20rTFwxr8PAVG
-         V19V9NXF4sYIWHz17Nw4x7GDUGnFCrCQK+O3HWwwfLxS6sdqTnos1gxjzzXdV0Esv0dj
-         dZNqzXU4wEPatWSOFYypGKBnS/0LKkfPQAwYF8T3vdeVbAsFWO1Wcif5ELZROP5aXjQ9
-         baKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788853543; x=1789458343;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=vjCdleB62PQ5+3oSfJm6THWjJHXQHO2Cei/sEBlVgJo=;
-        b=rVTmvkpmUuKZyUyZ/V3VekPSJNT0MDkkakbWWpJrwkyKR38nk6sp29ucs7lHR4+H3K
-         OI7OdmnJ4ZbNU8s2xwU3heP8ann+xg1NgjYjUfJcPFzwCQVfQYRvCLH9aBH++FkJpS5U
-         YXXvVsOKRwmWtVmLm4w14/nGbwOUiepiVTUjsQBDxAEqe1b/kCfw0wcukW+kshPH2TgX
-         sD9UyjjezwYhFJFxumfNY3P41wBm7ArOlPCDcLReaHsJ4S+1M/DPKnCZO0F2XS9+Ixmm
-         FIsvDGLQrRHL7lVws0n91MpHuviyh41XxYlZh+cJc9nttB2obvBvUo8Hs9zHYJOOY684
-         rxqw==
-X-Forwarded-Encrypted: i=1; AKwUvBxpGtPIlwOXuQYqHhiagUjq9J9iW7GQ3ERNlzPb39Wwxg2TxjuBYreb88CL3OLuC1qdS+d2@lists.linux.dev
-X-Gm-Message-State: AFuF++k3rJE+RKdTO30EqawdzIIUFY493+YxvhI56Tm4TwV0Y5Ovqazm
-	1yUk0JYISxgkxuD8uyklmD0CygQzm7eDwwDqeBhoQG1G9nL+2qR5grclKY/7WS6jhyGuYgEeofT
-	xN4aix34UFtEJXsj059XjDrXV1mLC+m8j7meKW3MrLWS9vqmqxaI80JuJ
-X-Gm-Gg: AYBFou2ixZiXCAZVIZnuGwoYyx2Lcd2paUpL69ilAZpctnSgp82wuz0Bup0NIt7fXqA
-	jyT/plLI9c6MC44tTKVEBt0eGcMtFKtFby2l9BkNsvoF5HSTCVzdM0qnIPB441KoKrheGH1u97O
-	Z4oVFm9Ji/aNjLox9D48Xyel8Pl8fQQFYjs+OqKQiK7BqIg4b/Z/1ZWhGjZ1Nmw6ue66AdYt8R8
-	RPC8WYFqjWKiUtidUcDXKHShbo3pNE4dhNpKbsjB+DlPvnBFNvBpqDKQmvlza+B1TS4LRmqaCaW
-	Q6NTzd9QIXpTtZge+EzEK+FnAINxWy8epLhIP1+wxv+j9iy3zrdz9xw9oSm9MAqXfbLw5vHwkIR
-	Y6bu/oCW7CM2mEtJ1R48dBywOQBO+Eg==
-X-Received: by 2002:a17:90b:1e03:b0:398:b17b:3bd2 with SMTP id 98e67ed59e1d1-39b260dda6emr38832027a91.4.1788853543414;
-        Tue, 08 Sep 2026 00:45:43 -0700 (PDT)
-X-Received: by 2002:a17:90b:1e03:b0:398:b17b:3bd2 with SMTP id 98e67ed59e1d1-39b260dda6emr38831975a91.4.1788853542891;
-        Tue, 08 Sep 2026 00:45:42 -0700 (PDT)
-Received: from [10.219.57.226] ([202.46.23.19])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-336c2571039sm14719241eec.25.2026.09.08.00.45.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 08 Sep 2026 00:45:42 -0700 (PDT)
-Message-ID: <a3b73723-9522-40da-806a-643093b1b227@oss.qualcomm.com>
-Date: Tue, 8 Sep 2026 13:15:32 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gLfm4yDe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D92A31F00A3D;
+	Tue,  8 Sep 2026 08:01:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788854469;
+	bh=ZTAso+iJzQQ2v66QiG2+Q5PpjuVHDKzuLvEqX/PALh8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=gLfm4yDeY4OQvh7gcqebY00CK677SxIW9UFulHLTSp62kuqEEBllPGjSRJKnfx+2e
+	 cfV3DADe2pVBxlKxdQN5eQpoNMrXdYhUgsQ2gvGAIZZl4AIoxpREfGSjcdmyrMQULJ
+	 vgKf/IaxeN+RsStsrsDfeOsS3XtVN3Hf0IwELpp4nu/zZ1vY20KKCr3oZafvlpBtt/
+	 f8BM+W5na2ZVz7rIDeHv9CIw4fyN1DYOBCxrMqelh75dPrtSZU6suPcclrapeuopkE
+	 e855ma0iu7cT8RUoc5qBglxpMr/BXYEHoHw/7ewvIl00rsLOgBB4TzCqStOeLkB73q
+	 F5+RBAwuBD2AQ==
+Date: Tue, 8 Sep 2026 10:00:59 +0200
+From: Manivannan Sadhasivam <mani@kernel.org>
+To: Herman van Hazendonk <github.com@herrie.org>
+Cc: Vinod Koul <vkoul@kernel.org>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, konrad.dybcio@oss.qualcomm.com, 
+	dmitry.baryshkov@oss.qualcomm.com
+Subject: Re: [PATCH v3 0/2] phy: qcom: usb-hs: MSM8x60 vendor ULPI init
+Message-ID: <dlbizaj2j4cfxv64qgktc4s7hesgirk3yy5riqha2sef7jczgj@aetmxz6omq7x>
+References: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 03/15] accel/qda: Add initial QDA DRM accelerator
- driver
-From: Ekansh Gupta <ekansh.gupta@oss.qualcomm.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Cc: Oded Gabbay <ogabbay@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling
- <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>,
-        "Joerg Roedel (AMD)" <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Bharath Kumar <quic_bkumar@quicinc.com>,
-        Chenna Kesava Raju <quic_chennak@quicinc.com>,
-        srinivas.kandagatla@oss.qualcomm.com, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev,
-        iommu@lists.linux.dev, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org
-References: <20260817-qda-v2-v2-0-69a02e9090d4@oss.qualcomm.com>
- <20260817-qda-v2-v2-3-69a02e9090d4@oss.qualcomm.com>
- <81708487-89ce-4cd5-b39a-2989bdce6088@kernel.org>
- <3476b5c3-7983-4994-a901-3d7d8bd75255@oss.qualcomm.com>
- <4ef74e14-8433-4619-ac97-62868c8799d1@kernel.org>
- <g5orcvzjbwww27vwcsxl3ehrek6lvznxptd7jutifoiuicjnm6@iqq2pus6omsl>
- <a642833b-f22a-4bea-8a20-0debc47e1895@kernel.org>
- <4xcyqqrqbvgxojfcmnpwbi2uqk5tvhts52l6sxetltcgb7mo75@lfsgfoq4npz3>
- <59aa182d-1b4c-4bdc-a1d5-e76cc9c88ed9@kernel.org>
- <c806d7c5-98f8-4b0b-9d00-969e1917a8e4@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <c806d7c5-98f8-4b0b-9d00-969e1917a8e4@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=Ga8nWwXL c=1 sm=1 tr=0 ts=6a9fbd28 cx=c_pps
- a=0uOsjrqzRL749jD1oC5vDA==:117 a=j4ogTh8yFefVWWEFDRgCtg==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=s4-Qcg_JpJYA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22 a=rJkE3RaqiGZ5pbrm-msn:22
- a=wP88gyHQT0P6k6tIFBAA:9 a=QEXdDO2ut3YA:10 a=mQ_c8vxmzFEMiUWkPHU9:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTA4MDA3OCBTYWx0ZWRfX1XyFxSGPrXMF
- CsBDt3bfhiK14ievPiqdmuKBQ9E3orW9z870071rebtYd3TPYEP+FygE1qBzT8bFNgAQnh+R7kr
- 0Dtw1dR2BoX9WhTrhjKGxhtiaO6xtKGdGgw80ffBlwAfWoH14cdiQePsumtiRlxMg7A8cEJMPm7
- iIT5Xp5/8sBx000rSxt3qMPN4yTkOMjdx/x4aK4Byq92I1ZXD4YwSleRDuY2W8eztTrKb01JhAM
- T/Gs+PoM33zU26P+0CGYo3FuVh5jQ5BIkLSKmT971EtruMATXDVJzH+tSoqcCQfTXlQjuB0XjsD
- JHh65I5/i/Gvn7gNDtEZkl/5kfjZc1LYE2LFMHXw99gP6vpB2sRxu1QwL1kuaAQhdKsV1sTMaR5
- q/3ZMfe1hqHrflyE3gjBX5VCj468Fuk23djPQuLKTtSOup7q9CAwqS00YfjAcHeJHHisBxItDhQ
- py5sEAVmW2CJyE/vVZw==
-X-Proofpoint-ORIG-GUID: z-lYmK0lz4HiSE85x_Mor1yAoBYbAxgH
-X-Proofpoint-GUID: z-lYmK0lz4HiSE85x_Mor1yAoBYbAxgH
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTA4MDA3OCBTYWx0ZWRfX/zT/HBGz/EGb
- S++oBs5y9vgwACo1hHFvV8Yx5iFrphMooZ98Fog5MPSJb2PySdu5O3lXqNSI59UadD7b3F8CnPQ
- Zf93bi63x6kNWTkl9fAYPWUo8LewJvg=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-08_01,2026-09-07_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 phishscore=0 suspectscore=0 clxscore=1015 impostorscore=0
- bulkscore=0 spamscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2609080078
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
 
-On 31-08-2026 20:28, Ekansh Gupta wrote:
-> On 20-08-2026 19:01, Krzysztof Kozlowski wrote:
->> On 20/08/2026 12:07, Dmitry Baryshkov wrote:
->>> On Thu, Aug 20, 2026 at 11:07:45AM +0200, Krzysztof Kozlowski wrote:
->>>>>>>>
->>>>>>>> Device node with this compatible is already populated, so this looks
->>>>>>>> simply wrong or you are adding a duplicated driver.
->>>>>>>>
->>>>>>>> That's a no-go, you are supposed to work with existing drivers and grow
->>>>>>>> them.
->>>>>>> I'll bring the discussion again here, there was a discussion to move the
->>>>>>> driver to accel subsystem if we want to support new features/uAPI
->>>>>>> changes. Please read [1],[2] threads. The intention is to replace
->>>>>>> fastrpc driver with QDA eventually.
->>>>>>
->>>>>> None of them address the problem. You want to grow fastrpc into user of
->>>>>> dmabuf? So you move it from misc to here.
->>>>>
->>>>> It's not as easy and nice, so I think in this case it's better to repeat
->>>>
->>>> I disagree. The existing fastrpc driver is not that complicated. It's
->>>> actually moderate amount of code, much less than Venus was (~7 times less).
->>>>
->>>> It easily can grow to support two interfaces and the only difficulty is
->>>> how to manage these two interfaces simultaneously or exclusively, e.g.
->>>> opening first one disables the second.
->>>
->>> I see the point here.
->>>
->>> Would it be acceptable if we add QDA support only on the new platforms
->>> (e.g. via the SoC-specific compat), provide QDA for those platforms,
->>> and, once it reaches complete API and feature parity, we remove the old
->>> fastrpc driver, migrati old platforms.
->>
->> The problem with this approach is that we have no guarantees that it
->> will reach feature parity in respect of old interface, thus old driver
->> might stay forever. If we agree for duplicated driver, contributors have
->> no incentives to support old approach.
-> That's a fair concern. Let me lay out the sequence we have in mind and
-> then the concrete reasons parity is not optional for us.
+On Tue, Jun 16, 2026 at 03:26:52PM +0200, Herman van Hazendonk wrote:
+> v3 (this round):
+>  - Re-introduce a much smaller DT binding patch following Konrad's
+>    "do we have values for MTP/QRD" question and Dmitry's
+>    "qcom,hsdrvslope (or similarly named) property in DT" suggestion.
+>  - Survey of every MSM8x60-class downstream tree I could reach --
+>    Qualcomm reference (SURF/FFA/Fluid/Dragon/Fusion via
+>    board-msm8x60.c on android.googlesource.com), Samsung Galaxy S2
+>    family (Q1 / Celox / Dali / generic 8x60 MTP), Sony MSM8660
+>    (sony-kernel-msm8660), HTC MSM8660 ports
+>    (shooter / holiday / pyramid / doubleshot / shooter_u / ruby) and
+>    HP TouchPad -- shows that pre-emphasis, CDR auto-reset and SE1
+>    gating values are *identical* across every reference board.
+>    Only the 4-bit HS driver slope in reg 0x32 [3:0] varies.
+>  - Patch 1/2 adds a single qcom,hs-drv-slope DT property (u32,
+>    range 0..15) gated to the qcom,usb-hs-phy-msm8660 compatible.
+>  - Patch 2/2 hardcodes the three platform-wide writes in the driver
+>    behind the same compatible match, consumes qcom,hs-drv-slope for
+>    the board-specific bits, and leaves the silicon default in place
+>    when the property is absent -- which matches Qualcomm's own MTP,
+>    Samsung and Sony reference behaviour.
+>  - The bit-level meaning we *do* have comes from Code Aurora's
+>    downstream arch/arm/mach-msm/include/mach/msm_hsusb_hw.h, which
+>    Samsung and HP both shipped byte-for-byte identical.
+>  - Per Dmitry's request, both commit messages call out explicitly
+>    that there is no public Qualcomm documentation describing how the
+>    4-bit slope value maps to an actual slew rate / V/ns / %.  The
+>    field is an opaque hardware control; boards must copy the value
+>    from their vendor / downstream kernel as a measured-per-layout
+>    knob, not a derived one.
 > 
-> The plan is staged. QDA is enabled first on new platforms, where there
-> is no existing userspace to migrate and the new UAPI can be exercised
-> properly. In parallel we close the remaining feature gaps against
-> fastrpc. Once parity is reached we migrate the older platforms onto QDA
-> and remove drivers/misc/fastrpc.c. The end state is one driver, not two.
+> v2:
+>  - Dropped the original qcom,vendor-init-seq DT property entirely
+>    and folded all the vendor-register programming into the driver
+>    behind the qcom,usb-hs-phy-msm8660 compatible.
+>  - HS driver slope was hardcoded in v2.  v3 promotes that one
+>    varying value to a DT property as Dmitry requested.
 > 
-> On why parity will actually happen: the DSP firmware is not changing.
-> Both drivers implement the same base protocol against the same firmware
-> image, so the feature set is defined by that firmware interface, not by
-> what we feel like implementing. For QDA to support a feature at all it
-> has to implement the same protocol operations fastrpc already does.
-> Parity is a property of the interface rather than of contributor enthusiasm.
+> Companion TouchPad DTS work (flipping the PHY compatible from
+> "qcom,usb-hs-phy-apq8064" to "qcom,usb-hs-phy-msm8660" and adding
+> qcom,hs-drv-slope = <5>) will be sent separately with the rest of
+> the apq8060-tenderloin DT series.
 > 
-> Other than the base protocol, there are some features(daemons,
-> capability, session sharing) that exist in fastrpc for performance etc.
-> but are not yet part of QDA. We want to implement them properly rather
-> than port them across as they stand.
+> On-device validation (HP TouchPad / APQ8060):
+>  - Booted with v3 + the upcoming DTS hookup.  PHY driver bound,
+>    msm_hsusb HS link came up at high-speed.  No regression vs the v2
+>    hardcoded build.
 > 
-> The remaining question is how fastrpc can actually be removed once
-> parity exists, without breaking existing userspace. That needs a
-> compatibility path, and it is a deliverable we are committed to rather
-> than an afterthought. For that, we need to settle is whether that path
-> is a userspace shim in the library, an in-kernel translation layer
-> exposing the legacy device nodes, or a hybrid. We evaluated an in-kernel
-> shim during v1 and hit constraints around constructing per-client
-> drm_file contexts from outside the DRM core, so the approach is still
-> open. I'll come back with a concrete proposal, and it will land before
-> fastrpc is removed rather than after.
+> Build / schema verification:
+>  - dt_binding_check DT_SCHEMA_FILES=.../qcom,usb-hs-phy.yaml: clean.
+>  - dtbs_check on qcom-apq8060-dragonboard.dtb and
+>    qcom-msm8960-cdp.dtb (the two existing in-tree usb-hs-phy
+>    consumers): clean.
+>  - drivers/phy/qualcomm/phy-qcom-usb-hs.o builds clean.
+>  - checkpatch.pl --strict: no warnings on either patch.
 > 
->>
->> Much better is to refine the old driver, gradually adding new features
->> while maintaining old stuff. This is the only way we can force
->> contributors to actively work on minimizing duplicate parts.
->>
-> I believe you are suggesting we bring the new features we are developing
-> with DRM core utilities into the fastrpc driver. I don't think the two
-> interfaces can share one driver, though, and it isn't a question of code
-> size.
-> 
-> fastrpc is a miscdevice: it accepts raw DMA-BUF fds as arguments and
-> tracks buffers in its own per-file lists, with the fd itself being the
-> buffer identity visible to the DSP. QDA is a drm_driver whose buffers
-> are GEM objects in a per-drm_file handle namespace, with PRIME used for
-> import and the GEM handle being the identity. These are two different
-> buffer ownership models, and neither can be expressed on the other's
-> file type.
-> 
-> Supporting both from one driver therefore means carrying both models
-> simultaneously: two IOCTL surfaces, two buffer lifetimes, two teardown
-> paths, and a memory manager that has to serve both. That is two drivers
-> sharing a directory rather than one driver with two interfaces, and I
-> think it would be harder to review, and harder to eventually untangle,
-> than a separate driver with a stated removal plan.
-> 
-> There is also a positive reason for being in the accel subsystem rather
-> than misc. We can build on existing DRM infrastructure instead of
-> reimplementing it: GEM for buffer management, the device and file
-> lifecycle, and the debug infrastructure. It also positions us for work
-> we have planned around scheduling, drm_gpuvm, etc. Over time this should
-> mean less driver-specific code, not more.
-> 
-> I'll restructure the cover letter so the staged rollout, the
-> compatibility path and the eventual removal of drivers/misc/fastrpc.c
-> are stated properly.
-> 
-> If after this you still want to add or change anything, please let me know.
-> 
-> Thanks,
-> Ekansh> Best regards,
+> Signed-off-by: Herman van Hazendonk <github.com@herrie.org>
 
-Gentle ping on this thread. Wanted to check if there's any update on the
-compatible string and coexistence question above, since it's currently
-blocking respin.
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 
-Thanks,
-Ekansh
+- Mani
 
->> Krzysztof
-> 
-
+-- 
+மணிவண்ணன் சதாசிவம்
