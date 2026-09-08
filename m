@@ -1,69 +1,68 @@
 Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8BC658FD21
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 16:55:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A7E58FD20
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 16:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788886514; cv=none; b=rgs2aHGO93Y5MOqp/yVgR7MpGSyZLIFXXm8Bi9ZJ/6Poz2zDBVRuAmmuaI6mVhUFbcnNpx2eTcGDlAShG8zRXbq6PLznaenkS15yNi41IawUc8pOmkrerLIAjxyiPZ5qfEA8ckAahMLTDkXGemhALo0BGksubR2rmiizjxa++ew=
+	t=1788886516; cv=none; b=jpaJyOhTtvpLzOXHSVVUzzC4OvVE5lGidvbdvTOZiIUL5oGDceIjSW4PRoDM0tFmh3S9ymzjwyZDdjul4ubp7kSfSyvoYC5srDlqKPWW2+SDObq0CelsgR72qyVBBqG8hzSbq+wEW7EjZOSNt6SuyzB2WfL/Bd0e+8YR56CW7EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788886514; c=relaxed/simple;
-	bh=swnHzCzPIsazYNrb6Gr29KC3lToHtlhY/NVfFI7DlP0=;
+	s=arc-20240116; t=1788886516; c=relaxed/simple;
+	bh=KM3J1uqaAuVEtjhIrPm3dpl77//Er2qflRT9ZFIQO/A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B2Gw8NWqaWWYwknFaKPpXwhf4hUxO/GF9s0/xVcVO+m74BYrapxvy+xl86zaSlJb7h/jUVgPAxNEChP/rrbpw8jTbO/Yf/0fdDF5mkCVNfrWpi6bu1m/NmGKkXmRDf/eOWhhWkyXGD77UtPF77zHpE/xAqz/1G4CE57MySpO1OU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HsmYxM8s; arc=none smtp.client-ip=74.125.225.140
+	 In-Reply-To:To:Cc; b=O/e/zpMJXsCmMcnBzVstlKfK6qlLEyOEWHBJjnOdZp3HBUYAJS81YUWNKUzTtBzOFi7qiP0JKvKalMSKlStDp/vYd4mYT4V0FSEjRk8AFkrHzPZ4iI1R+eMlz5gzvUi10ts+5cWeYkHOJ6FMN5SoPKTiokZw1II7FGWteiSZT4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eDz3JzDs; arc=none smtp.client-ip=74.125.225.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HsmYxM8s"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ccf3bc34cso140825e9.0
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 09:55:11 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eDz3JzDs"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cff3b3b92so96925e9.1
+        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 09:55:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788886510; x=1789491310; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1788886512; x=1789491312; darn=lists.linux.dev;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Nw8yIRTtoZrCknqrua36GQ/CxjoMx8x/uJ+stBHvubA=;
-        b=HsmYxM8srWG5e1zJfPE/ArD5+jEHn0YIYyRnk6bMSBvX247o09clSIa7U7dkEpk0Nf
-         TYWH/wU5af0rPnq7t5HbodfGHIpINCWTY8Ew3n0kl2NB4hSG5IiO1GCVXqCXZI+GrZ7r
-         si0zarVR+s0jc7brctDUjJZ5vZsZPGhvG7LSKwmxazJwFwHSwmkK3DAotpR5b0H60IIS
-         IelEaLIdYZDFp95Kv0uVxaNzSZsJk830KgR6VDW2psRKN77me6V8fszSN9+gvTbuDHjU
-         sAxbfcThyQX6/KbMax/GZrHk/y00bxRJrys3ZDUenS1OT0pTFDadlMMB7LETIx1HDg2Z
-         Z5hw==
+        bh=bFBHubYFY/k3KdYk9Gk7CjyW2NbP8onxJg8FRcfS+Jk=;
+        b=eDz3JzDsL6WkVt2ZMiM6QFaNROWXKaN2NJxo6pReKc2QUaCcfUSNCX8NZjmZBkZ6o7
+         kKEgDtXFO55kSFaTCrujfGlEzfXlI6Yj6YN/eH+5OnuaIRcKy5ECnRQjoa0L8+ICnTet
+         oDJuA7a5HbjzIc2W7uXatzGTs9TUm5E9ZeSiMwF5VsjP5xd4kQjUmYzV2HUuL1xGPBsQ
+         EobyolbLJkI35kdymzT5zE7GyFkfV6BOTfAeNWNnlXSIf08+u7br0eg1ZZ2/mttO8uoG
+         bhNtThnTnyDFnmNsBgcWiyIXDTqyqu61F2owMBvM3Fd0oixSLooDNYjDXI/U3Ut0XjnO
+         3WJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788886510; x=1789491310;
+        d=1e100.net; s=20251104; t=1788886512; x=1789491312;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Nw8yIRTtoZrCknqrua36GQ/CxjoMx8x/uJ+stBHvubA=;
-        b=SoA819NeUdHScfSJj0WdbXri1xGg8iLUE8+zbZ7BRycpzdZJLS1mqC8LVsuIAmh+7I
-         F6LqqPN/lXcs3nhbcqUcC1lVNkFR6fFsnsrhWLumMabBamZRlXbD8KZVWohDwVp0eK6e
-         SX8ptTJdUyyW2zvnkEflVKum4IYNhbivxnqeBn8FSK2oQTSWuonL/2gnLfg60zQL+koD
-         lvXCafoSAgUqwhjKiu+9e2c7TlnWaf2nr/+a1KiTQeGXx9Nkjtb1BInijyEo/S98+2oS
-         wSyvsC3gZVzZXnONN5dKIMc3ds6oPiev08xTNPPCxBQmJJOOSz+7QQr7YS2UbA8KfKE8
-         apWw==
-X-Forwarded-Encrypted: i=1; AKwUvBw2uODeeYWZ0lb3u2a+jTNUC6jCWmp1jZs2206Wh8isp3qqyDgfwz9vhr+GY6Fng+gz0/fO@lists.linux.dev
-X-Gm-Message-State: AFuF++nOc4HEfYw8/zcZ8bWkK7x6dEjJQOgNFKxsBv/C+vEGhmRzR/hd
-	Qm+pLznFT/Umm7Hy4VusiIcUsjnIazqaLh/Jp8lir8TmatxAqu+elUwu0EwIt+E7Og==
-X-Gm-Gg: AYBFou1cGOr9hjVkMFBXurtz60FCP/AV7xbAcHIKPpZbTipoMbmz5T8GVQ+M53wS6OV
-	UQNnvJgVoMAWFiiSZCyM7G0Ibn/txjluby6JtB4rAJSNAKhebqFNMXfIxxutDwcnK9rhUR8g6a1
-	HSeXlU/t9jmkIxpffLCLzFiTU2YK3qRH9RfCGTr49qylnu6lF3fzWDkz4O40gS3W2LZcBQgUHcU
-	+kIib4eWsmk23gSZ+dRZc5ZfKRd0E3968r5z6YLd56UyMlNn3Ebhk6VLQf1R0pM7UrFZWVy11Ty
-	YPPjeRWgJz4g21p3lQx4aO+FB7KTmBEEAyaecQvsfDP3VL07be+oAc5BFnOwlW4wDImYIzTqy62
-	k+QjM8Jn3EQriv5K5aIE/CCbtfRBPZCZ7doelChzM7/dtFDx2mmFuvJRXANUEH6tdKw88qJj8Dx
-	/JxYLc/ufSccxSYSIvZk1TnJ0jIoTOpstA75ngt/5Iwh8m9YrpaW3J19qxvghW2q8SOmkLCrUux
-	W3oRTAruk8E4sdtTdUdkZWf/ZeLlmYjIB6AaapRwOehAlG/
-X-Received: by 2002:a05:600c:3221:b0:499:c46c:adc7 with SMTP id 5b1f17b1804b1-49d1bcfc063mr550665e9.2.1788886509269;
-        Tue, 08 Sep 2026 09:55:09 -0700 (PDT)
+        bh=bFBHubYFY/k3KdYk9Gk7CjyW2NbP8onxJg8FRcfS+Jk=;
+        b=poudpOsCH+pq4JKUL9SiJh2vSfzpVDwjU5A6fXShWStwqOLLMxXb1+ncVndExiI1Eg
+         x3oa390qf9IVhJjmr4siUa8Fv7+afz5RPe5PGAoiNWAnREiUEVkr41qKpc8dsStg0qho
+         7PGmp02dAK2hNcEwpv+IxOKW0/v+HFslSIhTFwEpqaO6KNyW7gRmhS/6kn6cl4gK3SgA
+         NYonU2734ThXBbY5erzoj9vX4O1WWmrpwuRSJMXUA3qWhHv2kVgepr/Jri19kira2PjZ
+         aZ/5MxeSnbTa6JA1TbMQkMc0nE1sRftIQDUDbc6EMO6gHTuKYUQ67kdS+Nykcwac0DRK
+         NADg==
+X-Forwarded-Encrypted: i=1; AKwUvBxEOSE8NMYEFFxATnMENiw27bsjoAitm6La0stmdPtti7IPu35jGDgflt4m53Th2cNoUCxM@lists.linux.dev
+X-Gm-Message-State: AFuF++kJ4fMWN6dWskaF7+R6FqPuLnnA9HxRnV+/tnmJ6NZgFCV2lSEa
+	6BxjEq7F+PtFM8a/TiaWR7Rq4j/UV0AoQyQrwLY/1s22Exja+vQrMlGcLpQfjRG5WA==
+X-Gm-Gg: AYBFou1rGYhUYj1AyukHI8ErgfHcAjdU2r5i7YDI/+HvwiuT2tM87tnOjaFGa6iveai
+	JMZniOnXAslduzg/LUDnQHlh3tJqChBpxO+kCln+j8vQfURfM9XjhNr7cvN9awbiI6F4o7L+MpE
+	HDZVgxCOzl1DLPB8mJ2xL6aVLLxp3c0uTYCB0Dj67XLQlGaEK5tPhCdOvI7OwNTeH9ZJbr/Rlhl
+	FnAcG+atAKU0ehIKDgtpNUzXbF8si7TX52WlEILPRRbePQZfblsZSbPBKLsMUYho1L/9OOCllxa
+	DkJDEiX5GqLY8ZGVfRXQFMk5zKVxOMKF8nBpsNmtdW9k7WOzdvlLBI+jp5uPR+b1KdvT9Azi6A4
+	h8YEktCiNdJPGmCgUegUKJMm4dgFPwlOPkxkdUNYUmOYnRL2I7C5yOouyazDbNP0/lg5QOop1x+
+	CgidX228rHH95ydsdRXZlIKH/A/MhTp+4baUC2zRKI/Q4exz4XyABy1kbzbi5DbYaNQJynFERtW
+	bo57LjvWDh2ddjgEVsntEPuuX+1/f+7OycuHS+bZF6kugbz
+X-Received: by 2002:a05:600c:5919:b0:499:cfeb:4f17 with SMTP id 5b1f17b1804b1-49d1f6e6e8bmr41005e9.5.1788886511111;
+        Tue, 08 Sep 2026 09:55:11 -0700 (PDT)
 Received: from localhost ([2a00:79e0:288a:8:ac21:220d:3908:7e61])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cfd3f815bsm304098545e9.4.2026.09.08.09.55.08
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883be709sm37649438f8f.21.2026.09.08.09.55.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 09:55:08 -0700 (PDT)
+        Tue, 08 Sep 2026 09:55:10 -0700 (PDT)
 From: Jann Horn <jannh@google.com>
-Date: Tue, 08 Sep 2026 18:54:45 +0200
-Subject: [PATCH RFC v3 05/12] kasan: refactor write/is_write arguments to
- flags
+Date: Tue, 08 Sep 2026 18:54:46 +0200
+Subject: [PATCH RFC v3 06/12] kcov: introduce memory access tracing
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,7 +71,7 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260908-kcov-extrecord-v3-5-dcbc11593e88@google.com>
+Message-Id: <20260908-kcov-extrecord-v3-6-dcbc11593e88@google.com>
 References: <20260908-kcov-extrecord-v3-0-dcbc11593e88@google.com>
 In-Reply-To: <20260908-kcov-extrecord-v3-0-dcbc11593e88@google.com>
 To: Dmitry Vyukov <dvyukov@google.com>, 
@@ -84,423 +83,382 @@ Cc: Nathan Chancellor <nathan@kernel.org>,
  linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
  llvm@lists.linux.dev, Jann Horn <jannh@google.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788886494; l=15697;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788886494; l=14092;
  i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=swnHzCzPIsazYNrb6Gr29KC3lToHtlhY/NVfFI7DlP0=;
- b=xSzSXAvjgloPp+rdyeXvT+Khwp4gZ7hk1qn/SwJIRaO9bgCTg1ThG0i+7Wc6CCj4nbVGx9DCW
- PD+R63Jx4+VDiDlkxVhpY0o2eyGnufGo+9ITtw81h/TnsGTXLamz5CV
+ bh=KM3J1uqaAuVEtjhIrPm3dpl77//Er2qflRT9ZFIQO/A=;
+ b=Me1BYaxa3UcH4uDWhaWlZ/p3BX9q54yIRRaeL+npmLeJNRcwA2GBISemLGmz+DgO08c4fxxTI
+ WjJj57RshWJDTn4dreOozqBq5DmfNjwXiwIhFS4Vomjg5zHL+ph+9CI
 X-Developer-Key: i=jannh@google.com; a=ed25519;
  pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
 
-Refactor the "write"/"is_write" arguments of kasan_check_range() and
-kasan_report() into "flags" arguments that can contain the flag
-KASAN_TYPE_WRITE.
-This prepares for a following patch that introduces a second flag.
+This commit only introduces tracing of memory accesses that are
+instrumented at the source level with instrument_*(); a followup commit
+will additionally provide data based on ASAN compiler instrumentation.
 
-This should hopefully not change the machine code in hotpaths - both before
-and after this change, the argument is either 0 or 1 at the assembly level
-depending on whether the access is a write.
-Only kasan_report() should have to do a tiny bit of extra work to do a
-bittest.
+I am adding the instrumentation hook definitions directly in
+include/linux/instrumented.h instead of adding separate headers; this
+way the compiler won't have to read yet another header file for almost
+every compilation unit.
+
+To avoid instrumenting files that shouldn't be instrumented, reuse
+KASAN's __SANITIZE_ADDRESS__.
 
 Signed-off-by: Jann Horn <jannh@google.com>
 ---
- arch/arm64/kernel/traps.c |  2 +-
- arch/arm64/mm/fault.c     |  2 +-
- include/linux/kasan.h     |  6 ++++--
- mm/kasan/common.c         |  2 +-
- mm/kasan/generic.c        | 20 ++++++++++----------
- mm/kasan/kasan.h          |  6 +++---
- mm/kasan/report.c         |  3 ++-
- mm/kasan/report_generic.c |  8 ++++----
- mm/kasan/shadow.c         | 24 ++++++++++++------------
- mm/kasan/sw_tags.c        | 20 ++++++++++----------
- 10 files changed, 48 insertions(+), 45 deletions(-)
+ include/linux/instrumented.h | 30 +++++++++++++++++
+ include/linux/kcov.h         | 11 ++++++
+ include/uapi/linux/kcov.h    | 24 +++++++++++++
+ kernel/kcov.c                | 80 +++++++++++++++++++++++++++++++++++++++++---
+ lib/Kconfig.debug            | 11 ++++++
+ 5 files changed, 152 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 914282016069..9f31fe3f1660 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -1069,7 +1069,7 @@ int kasan_brk_handler(struct pt_regs *regs, unsigned long esr)
- 	void *addr = (void *)regs->regs[0];
- 	u64 pc = regs->pc;
- 
--	kasan_report(addr, size, write, pc);
-+	kasan_report(addr, size, write ? KASAN_TYPE_WRITE : 0, pc);
- 
- 	/*
- 	 * The instrumentation allows to control whether we can proceed after
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 0b52557652be..221e39869ae6 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -365,7 +365,7 @@ static void report_tag_fault(unsigned long addr, unsigned long esr,
- 	 * find out access size.
- 	 */
- 	bool is_write = !!(esr & ESR_ELx_WNR);
--	kasan_report((void *)addr, 0, is_write, regs->pc);
-+	kasan_report((void *)addr, 0, is_write ? KASAN_TYPE_WRITE : 0, regs->pc);
- }
- #else
- /* Tag faults aren't enabled without CONFIG_KASAN_HW_TAGS. */
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index bf233bde68c7..03c7ac79345d 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -33,6 +33,8 @@ typedef unsigned int __bitwise kasan_vmalloc_flags_t;
- #define KASAN_VMALLOC_PAGE_RANGE 0x1 /* Apply exsiting page range */
- #define KASAN_VMALLOC_TLB_FLUSH  0x2 /* TLB flush */
- 
-+#define KASAN_TYPE_WRITE 0x1
+diff --git a/include/linux/instrumented.h b/include/linux/instrumented.h
+index a1b4cf81adc2..940776dff616 100644
+--- a/include/linux/instrumented.h
++++ b/include/linux/instrumented.h
+@@ -13,6 +13,26 @@
+ #include <linux/kcsan-checks.h>
+ #include <linux/kmsan-checks.h>
+ #include <linux/types.h>
++#ifdef CONFIG_KCOV_MEMORY
++/* For build speed, only include this header in builds that actually need it. */
++#include <uapi/linux/kcov.h>
++#endif
 +
- #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
++#ifdef CONFIG_KCOV_MEMORY
++void _kcov_handle_memaccess(const volatile void *p, size_t size, unsigned int type);
++#else
++static __always_inline void _kcov_handle_memaccess(const volatile void *p,
++		size_t size, unsigned int type) {}
++/* Discard type argument to avoid depending on kcov header. */
++#define _kcov_handle_memaccess(p, size, type) _kcov_handle_memaccess((p), (size), 0)
++#endif
++
++#if defined(__SANITIZE_ADDRESS__) || !defined(CONFIG_KCOV_MEMORY)
++#define kcov_handle_memaccess _kcov_handle_memaccess
++#else
++static __always_inline void kcov_handle_memaccess(const volatile void *p,
++		size_t size, unsigned int type) {}
++#endif
  
- #include <linux/pgtable.h>
-@@ -526,11 +528,11 @@ static inline void *kasan_reset_tag(const void *addr)
-  * kasan_report - print a report about a bad memory access detected by KASAN
-  * @addr: address of the bad access
-  * @size: size of the bad access
-- * @is_write: whether the bad access is a write or a read
-+ * @flags: bitmask, can contain KASAN_TYPE_* flags
-  * @ip: instruction pointer for the accessibility check or the bad access itself
+ /**
+  * instrument_read - instrument regular read access
+@@ -24,6 +44,7 @@
   */
- bool kasan_report(const void *addr, size_t size,
--		bool is_write, unsigned long ip);
-+		unsigned int flags, unsigned long ip);
- 
- #else /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
- 
-diff --git a/mm/kasan/common.c b/mm/kasan/common.c
-index b7d05c2a6d93..1ab77ac9719c 100644
---- a/mm/kasan/common.c
-+++ b/mm/kasan/common.c
-@@ -571,7 +571,7 @@ void __kasan_mempool_unpoison_object(void *ptr, size_t size, unsigned long ip)
- bool __kasan_check_byte(const void *address, unsigned long ip)
+ static __always_inline void instrument_read(const volatile void *v, size_t size)
  {
- 	if (!kasan_byte_accessible(address)) {
--		kasan_report(address, 1, false, ip);
-+		kasan_report(address, 1, 0, ip);
- 		return false;
- 	}
- 	return true;
-diff --git a/mm/kasan/generic.c b/mm/kasan/generic.c
-index 2b8e73f5f6a7..9efd6fbbb7c3 100644
---- a/mm/kasan/generic.c
-+++ b/mm/kasan/generic.c
-@@ -173,7 +173,7 @@ static __always_inline bool memory_is_poisoned(const void *addr, size_t size)
++	kcov_handle_memaccess(v, size, 0);
+ 	kasan_check_read(v, size);
+ 	kcsan_check_read(v, size);
  }
- 
- static __always_inline bool check_region_inline(const void *addr,
--						size_t size, bool write,
-+						size_t size, unsigned int flags,
- 						unsigned long ret_ip)
- {
- 	if (!kasan_enabled())
-@@ -183,21 +183,21 @@ static __always_inline bool check_region_inline(const void *addr,
- 		return true;
- 
- 	if (unlikely(addr + size < addr))
--		return !kasan_report(addr, size, write, ret_ip);
-+		return !kasan_report(addr, size, flags, ret_ip);
- 
- 	if (unlikely(!addr_has_metadata(addr)))
--		return !kasan_report(addr, size, write, ret_ip);
-+		return !kasan_report(addr, size, flags, ret_ip);
- 
- 	if (likely(!memory_is_poisoned(addr, size)))
- 		return true;
- 
--	return !kasan_report(addr, size, write, ret_ip);
-+	return !kasan_report(addr, size, flags, ret_ip);
- }
- 
--bool kasan_check_range(const void *addr, size_t size, bool write,
-+bool kasan_check_range(const void *addr, size_t size, unsigned int flags,
- 					unsigned long ret_ip)
- {
--	return check_region_inline(addr, size, write, ret_ip);
-+	return check_region_inline(addr, size, flags, ret_ip);
- }
- 
- bool kasan_byte_accessible(const void *addr)
-@@ -252,7 +252,7 @@ EXPORT_SYMBOL(__asan_unregister_globals);
- #define DEFINE_ASAN_LOAD_STORE(size)					\
- 	void __asan_load##size(void *addr)				\
- 	{								\
--		check_region_inline(addr, size, false, _RET_IP_);	\
-+		check_region_inline(addr, size, 0, _RET_IP_);	\
- 	}								\
- 	EXPORT_SYMBOL(__asan_load##size);				\
- 	__alias(__asan_load##size)					\
-@@ -260,7 +260,7 @@ EXPORT_SYMBOL(__asan_unregister_globals);
- 	EXPORT_SYMBOL(__asan_load##size##_noabort);			\
- 	void __asan_store##size(void *addr)				\
- 	{								\
--		check_region_inline(addr, size, true, _RET_IP_);	\
-+		check_region_inline(addr, size, KASAN_TYPE_WRITE, _RET_IP_); \
- 	}								\
- 	EXPORT_SYMBOL(__asan_store##size);				\
- 	__alias(__asan_store##size)					\
-@@ -275,7 +275,7 @@ DEFINE_ASAN_LOAD_STORE(16);
- 
- void __asan_loadN(void *addr, ssize_t size)
- {
--	kasan_check_range(addr, size, false, _RET_IP_);
-+	kasan_check_range(addr, size, 0, _RET_IP_);
- }
- EXPORT_SYMBOL(__asan_loadN);
- 
-@@ -285,7 +285,7 @@ EXPORT_SYMBOL(__asan_loadN_noabort);
- 
- void __asan_storeN(void *addr, ssize_t size)
- {
--	kasan_check_range(addr, size, true, _RET_IP_);
-+	kasan_check_range(addr, size, KASAN_TYPE_WRITE, _RET_IP_);
- }
- EXPORT_SYMBOL(__asan_storeN);
- 
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index fc9169a54766..c833bd44e3cc 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -339,11 +339,11 @@ static __always_inline bool addr_has_metadata(const void *addr)
-  * kasan_check_range - Check memory region, and report if invalid access.
-  * @addr: the accessed address
-  * @size: the accessed size
-- * @write: true if access is a write access
-+ * @flags: bitmask, can contain KASAN_TYPE_* flags
-  * @ret_ip: return address
-  * @return: true if access was valid, false if invalid
+@@ -38,6 +59,7 @@ static __always_inline void instrument_read(const volatile void *v, size_t size)
   */
--bool kasan_check_range(const void *addr, size_t size, bool write,
-+bool kasan_check_range(const void *addr, size_t size, unsigned int flags,
- 				unsigned long ret_ip);
+ static __always_inline void instrument_write(const volatile void *v, size_t size)
+ {
++	kcov_handle_memaccess(v, size, MEMORY_ACCESS_RECORD_WRITE);
+ 	kasan_check_write(v, size);
+ 	kcsan_check_write(v, size);
+ }
+@@ -52,6 +74,7 @@ static __always_inline void instrument_write(const volatile void *v, size_t size
+  */
+ static __always_inline void instrument_read_write(const volatile void *v, size_t size)
+ {
++	kcov_handle_memaccess(v, size, MEMORY_ACCESS_RECORD_RMW);
+ 	kasan_check_write(v, size);
+ 	kcsan_check_read_write(v, size);
+ }
+@@ -79,6 +102,7 @@ static __always_inline void instrument_atomic_check_alignment(const volatile voi
+  */
+ static __always_inline void instrument_atomic_read(const volatile void *v, size_t size)
+ {
++	kcov_handle_memaccess(v, size, MEMORY_ACCESS_RECORD_ATOMIC);
+ 	kasan_check_read(v, size);
+ 	kcsan_check_atomic_read(v, size);
+ 	instrument_atomic_check_alignment(v, size);
+@@ -94,6 +118,7 @@ static __always_inline void instrument_atomic_read(const volatile void *v, size_
+  */
+ static __always_inline void instrument_atomic_write(const volatile void *v, size_t size)
+ {
++	kcov_handle_memaccess(v, size, MEMORY_ACCESS_RECORD_WRITE|MEMORY_ACCESS_RECORD_ATOMIC);
+ 	kasan_check_write(v, size);
+ 	kcsan_check_atomic_write(v, size);
+ 	instrument_atomic_check_alignment(v, size);
+@@ -109,6 +134,7 @@ static __always_inline void instrument_atomic_write(const volatile void *v, size
+  */
+ static __always_inline void instrument_atomic_read_write(const volatile void *v, size_t size)
+ {
++	kcov_handle_memaccess(v, size, MEMORY_ACCESS_RECORD_RMW|MEMORY_ACCESS_RECORD_ATOMIC);
+ 	kasan_check_write(v, size);
+ 	kcsan_check_atomic_read_write(v, size);
+ 	instrument_atomic_check_alignment(v, size);
+@@ -126,6 +152,7 @@ static __always_inline void instrument_atomic_read_write(const volatile void *v,
+ static __always_inline void
+ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+ {
++	kcov_handle_memaccess(from, n, 0);
+ 	kasan_check_read(from, n);
+ 	kcsan_check_read(from, n);
+ 	kmsan_copy_to_user(to, from, n, 0);
+@@ -143,6 +170,7 @@ instrument_copy_to_user(void __user *to, const void *from, unsigned long n)
+ static __always_inline void
+ instrument_copy_from_user_before(const void *to, const void __user *from, unsigned long n)
+ {
++	kcov_handle_memaccess(to, n, MEMORY_ACCESS_RECORD_WRITE);
+ 	kasan_check_write(to, n);
+ 	kcsan_check_write(to, n);
+ }
+@@ -176,6 +204,8 @@ instrument_copy_from_user_after(const void *to, const void __user *from,
+ static __always_inline void instrument_memcpy_before(void *to, const void *from,
+ 						     unsigned long n)
+ {
++	kcov_handle_memaccess(from, n, 0);
++	kcov_handle_memaccess(to, n, MEMORY_ACCESS_RECORD_WRITE);
+ 	kasan_check_write(to, n);
+ 	kasan_check_read(from, n);
+ 	kcsan_check_write(to, n);
+diff --git a/include/linux/kcov.h b/include/linux/kcov.h
+index 357f4de8790a..e4b818df189e 100644
+--- a/include/linux/kcov.h
++++ b/include/linux/kcov.h
+@@ -23,6 +23,7 @@ enum kcov_mode {
+ 	KCOV_MODE_TRACE_CMP = 3,
+ };
  
- #else /* CONFIG_KASAN_GENERIC || CONFIG_KASAN_SW_TAGS */
-@@ -379,7 +379,7 @@ static inline void kasan_print_aux_stacks(struct kmem_cache *cache, const void *
++#define KCOV_ENABLE_MEMORY (1 << 28)
+ /*
+  * Modifier for KCOV_MODE_TRACE_PC to record function entry/exit marked with
+  * metadata bits.
+@@ -31,6 +32,7 @@ enum kcov_mode {
+ #define KCOV_IN_CTXSW	(1 << 30)
+ 
+ #define KCOV_MODE_TRACE_PC_EXT (KCOV_MODE_TRACE_PC | KCOV_EXT_FORMAT)
++#define KCOV_MODE_TRACE_PC_AND_MEM (KCOV_MODE_TRACE_PC_EXT | KCOV_ENABLE_MEMORY)
+ 
+ void kcov_task_init(struct task_struct *t);
+ void kcov_task_exit(struct task_struct *t);
+@@ -109,4 +111,13 @@ static inline void kcov_remote_start_usb_softirq(u64 id) {}
+ static inline void kcov_remote_stop_softirq(void) {}
+ 
+ #endif /* CONFIG_KCOV */
++
++#ifdef CONFIG_KCOV_MEMORY
++void __kcov_handle_memaccess(const volatile void *p, size_t size, unsigned int type,
++		unsigned long ret_ip);
++#else /* CONFIG_KCOV_MEMORY */
++static inline void __kcov_handle_memaccess(const volatile void *p, size_t size,
++		unsigned int type, unsigned long ret_ip) {}
++#endif /* CONFIG_KCOV_MEMORY */
++
+ #endif /* _LINUX_KCOV_H */
+diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
+index 75c582784055..7d7147e7b427 100644
+--- a/include/uapi/linux/kcov.h
++++ b/include/uapi/linux/kcov.h
+@@ -22,6 +22,7 @@ struct kcov_remote_arg {
+ #define KCOV_ENABLE			_IO('c', 100)
+ #define KCOV_DISABLE			_IO('c', 101)
+ #define KCOV_REMOTE_ENABLE		_IOW('c', 102, struct kcov_remote_arg)
++#define KCOV_GET_MEMORY_RECORD_SIZE	_IO('c', 103)
+ 
+ enum {
+ 	/*
+@@ -41,6 +42,8 @@ enum {
+ 	 * (KCOV_RECORDFLAG_*).
+ 	 */
+ 	KCOV_TRACE_PC_EXT = 2,
++	/* Extended PC coverage mode with tracing of memory accesses. */
++	KCOV_TRACE_MEMORY_ACCESS = 3,
+ };
+ 
+ #define KCOV_RECORD_IP_MASK         0x00ffffffffffffff
+@@ -50,6 +53,7 @@ enum {
+ #define KCOV_RECORDFLAG_TYPE_EXIT   0x1000000000000000
+ /* Summarized entry/exit events that occurred in an untraced region. */
+ #define KCOV_RECORDFLAG_TYPE_EESUM  0x2000000000000000
++#define KCOV_RECORDFLAG_TYPE_MEMORY 0x3000000000000000
+ 
+ /*
+  * The format for the types of collected comparisons.
+@@ -74,4 +78,24 @@ static inline __u64 kcov_remote_handle(__u64 subsys, __u64 inst)
+ 	return subsys | inst;
+ }
+ 
++/*
++ * Data format for memory access tracing mode.
++ * This is an extensible struct (it can be extended by appending elements);
++ * userspace can query the struct size used by the running kernel with
++ * KCOV_GET_MEMORY_ACCESS_RECORD_SIZE.
++ */
++#define MEMORY_ACCESS_RECORD_TYPE_MASK 0xf
++#define MEMORY_ACCESS_RECORD_TYPE_ACCESS 0x0
++/* flags for MEMORY_ACCESS_RECORD_TYPE_ACCESS */
++#define MEMORY_ACCESS_RECORD_WRITE 0x10
++#define MEMORY_ACCESS_RECORD_RMW 0x20
++#define MEMORY_ACCESS_RECORD_ATOMIC 0x40
++struct memory_access_record {
++	__aligned_u64 ip_address_and_kcov_flags;
++	__aligned_u64 data_address;
++	__u32 size;
++	__u32 flags; /* MEMORY_ACCESS_RECORD_* */
++	__aligned_u64 time;
++} __attribute__((aligned(8)));
++
+ #endif /* _LINUX_KCOV_IOCTLS_H */
+diff --git a/kernel/kcov.c b/kernel/kcov.c
+index 712f0f744ec5..83e05aa61728 100644
+--- a/kernel/kcov.c
++++ b/kernel/kcov.c
+@@ -235,7 +235,8 @@ void notrace __sanitizer_cov_trace_pc(void)
+ {
+ 	struct task_struct *cur = current;
+ 
+-	if ((READ_ONCE(cur->kcov_mode) & ~KCOV_EXT_FORMAT) != KCOV_MODE_TRACE_PC)
++	if ((READ_ONCE(cur->kcov_mode) & ~(KCOV_ENABLE_MEMORY|KCOV_EXT_FORMAT))
++	    != KCOV_MODE_TRACE_PC)
+ 		return;
+ 	/*
+ 	 * No bitops are needed here for setting the record type because
+@@ -258,7 +259,7 @@ void notrace __sanitizer_cov_trace_pc_entry(void)
+ 	 * This hook replaces __sanitizer_cov_trace_pc() for the function entry
+ 	 * basic block; it should still emit a record even in classic kcov mode.
+ 	 */
+-	if ((kcov_mode & ~(KCOV_EXT_FORMAT|KCOV_IN_CTXSW)) != KCOV_MODE_TRACE_PC)
++	if ((kcov_mode & ~(KCOV_ENABLE_MEMORY|KCOV_EXT_FORMAT|KCOV_IN_CTXSW)) != KCOV_MODE_TRACE_PC)
+ 		return;
+ 	if (kcov_mode & KCOV_IN_CTXSW) {
+ 		cur->kcov->suppressed_stack_delta++;
+@@ -281,7 +282,7 @@ void notrace __sanitizer_cov_trace_pc_exit(void)
+ 	 * So unlike __sanitizer_cov_trace_pc_entry(), this PC should only be
+ 	 * reported in extended mode, where function exit events are recorded.
+ 	 */
+-	if ((kcov_mode & ~KCOV_IN_CTXSW) != KCOV_MODE_TRACE_PC_EXT)
++	if ((kcov_mode & ~(KCOV_ENABLE_MEMORY|KCOV_IN_CTXSW)) != KCOV_MODE_TRACE_PC_EXT)
+ 		return;
+ 	if (kcov_mode & KCOV_IN_CTXSW) {
+ 		struct kcov *kcov = cur->kcov;
+@@ -663,6 +664,8 @@ static int kcov_get_mode(unsigned long arg)
  #endif
- 
- bool kasan_report(const void *addr, size_t size,
--		bool is_write, unsigned long ip);
-+		unsigned int flags, unsigned long ip);
- void kasan_report_invalid_free(void *object, unsigned long ip, enum kasan_report_type type);
- 
- struct slab *kasan_addr_to_slab(const void *addr);
-diff --git a/mm/kasan/report.c b/mm/kasan/report.c
-index e804b1e1f886..cfe00ebb98ec 100644
---- a/mm/kasan/report.c
-+++ b/mm/kasan/report.c
-@@ -568,13 +568,14 @@ void kasan_report_invalid_free(void *ptr, unsigned long ip, enum kasan_report_ty
-  * user_access_save/restore(): kasan_report_invalid_free() cannot be called
-  * from a UACCESS region, and kasan_report_async() is not used on x86.
-  */
--bool kasan_report(const void *addr, size_t size, bool is_write,
-+bool kasan_report(const void *addr, size_t size, unsigned int flags,
- 			unsigned long ip)
- {
- 	bool ret = true;
- 	unsigned long ua_flags = user_access_save();
- 	unsigned long irq_flags;
- 	struct kasan_report_info info;
-+	bool is_write = (flags & KASAN_TYPE_WRITE);
- 
- 	if (unlikely(report_suppressed_sw()) || unlikely(!report_enabled())) {
- 		ret = false;
-diff --git a/mm/kasan/report_generic.c b/mm/kasan/report_generic.c
-index f5b8e37b3805..445183e2f4d3 100644
---- a/mm/kasan/report_generic.c
-+++ b/mm/kasan/report_generic.c
-@@ -364,14 +364,14 @@ void kasan_print_address_stack_frame(const void *addr)
- #define DEFINE_ASAN_REPORT_LOAD(size)                     \
- void __asan_report_load##size##_noabort(void *addr) \
- {                                                         \
--	kasan_report(addr, size, false, _RET_IP_);	  \
-+	kasan_report(addr, size, 0, _RET_IP_);	  \
- }                                                         \
- EXPORT_SYMBOL(__asan_report_load##size##_noabort)
- 
- #define DEFINE_ASAN_REPORT_STORE(size)                     \
- void __asan_report_store##size##_noabort(void *addr) \
- {                                                          \
--	kasan_report(addr, size, true, _RET_IP_);	   \
-+	kasan_report(addr, size, KASAN_TYPE_WRITE, _RET_IP_);	   \
- }                                                          \
- EXPORT_SYMBOL(__asan_report_store##size##_noabort)
- 
-@@ -388,12 +388,12 @@ DEFINE_ASAN_REPORT_STORE(16);
- 
- void __asan_report_load_n_noabort(void *addr, ssize_t size)
- {
--	kasan_report(addr, size, false, _RET_IP_);
-+	kasan_report(addr, size, 0, _RET_IP_);
+ 	else if (arg == KCOV_TRACE_PC_EXT)
+ 		return IS_ENABLED(CONFIG_KCOV_EXT_RECORDS) ? KCOV_MODE_TRACE_PC_EXT : -ENOTSUPP;
++	else if (arg == KCOV_TRACE_MEMORY_ACCESS)
++		return IS_ENABLED(CONFIG_KCOV_MEMORY) ? KCOV_MODE_TRACE_PC_AND_MEM : -ENOTSUPP;
+ 	else
+ 		return -EINVAL;
  }
- EXPORT_SYMBOL(__asan_report_load_n_noabort);
- 
- void __asan_report_store_n_noabort(void *addr, ssize_t size)
- {
--	kasan_report(addr, size, true, _RET_IP_);
-+	kasan_report(addr, size, KASAN_TYPE_WRITE, _RET_IP_);
- }
- EXPORT_SYMBOL(__asan_report_store_n_noabort);
-diff --git a/mm/kasan/shadow.c b/mm/kasan/shadow.c
-index d286e0a04543..a24f1225dd88 100644
---- a/mm/kasan/shadow.c
-+++ b/mm/kasan/shadow.c
-@@ -28,13 +28,13 @@
- 
- bool __kasan_check_read(const volatile void *p, unsigned int size)
- {
--	return kasan_check_range((void *)p, size, false, _RET_IP_);
-+	return kasan_check_range((void *)p, size, 0, _RET_IP_);
- }
- EXPORT_SYMBOL(__kasan_check_read);
- 
- bool __kasan_check_write(const volatile void *p, unsigned int size)
- {
--	return kasan_check_range((void *)p, size, true, _RET_IP_);
-+	return kasan_check_range((void *)p, size, KASAN_TYPE_WRITE, _RET_IP_);
- }
- EXPORT_SYMBOL(__kasan_check_write);
- 
-@@ -50,7 +50,7 @@ EXPORT_SYMBOL(__kasan_check_write);
- #undef memset
- void *memset(void *addr, int c, size_t len)
- {
--	if (!kasan_check_range(addr, len, true, _RET_IP_))
-+	if (!kasan_check_range(addr, len, KASAN_TYPE_WRITE, _RET_IP_))
- 		return NULL;
- 
- 	return __memset(addr, c, len);
-@@ -60,8 +60,8 @@ void *memset(void *addr, int c, size_t len)
- #undef memmove
- void *memmove(void *dest, const void *src, size_t len)
- {
--	if (!kasan_check_range(src, len, false, _RET_IP_) ||
--	    !kasan_check_range(dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, 0, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, KASAN_TYPE_WRITE, _RET_IP_))
- 		return NULL;
- 
- 	return __memmove(dest, src, len);
-@@ -71,8 +71,8 @@ void *memmove(void *dest, const void *src, size_t len)
- #undef memcpy
- void *memcpy(void *dest, const void *src, size_t len)
- {
--	if (!kasan_check_range(src, len, false, _RET_IP_) ||
--	    !kasan_check_range(dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, 0, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, KASAN_TYPE_WRITE, _RET_IP_))
- 		return NULL;
- 
- 	return __memcpy(dest, src, len);
-@@ -81,7 +81,7 @@ void *memcpy(void *dest, const void *src, size_t len)
- 
- void *__asan_memset(void *addr, int c, ssize_t len)
- {
--	if (!kasan_check_range(addr, len, true, _RET_IP_))
-+	if (!kasan_check_range(addr, len, KASAN_TYPE_WRITE, _RET_IP_))
- 		return NULL;
- 
- 	return __memset(addr, c, len);
-@@ -91,8 +91,8 @@ EXPORT_SYMBOL(__asan_memset);
- #ifdef __HAVE_ARCH_MEMMOVE
- void *__asan_memmove(void *dest, const void *src, ssize_t len)
- {
--	if (!kasan_check_range(src, len, false, _RET_IP_) ||
--	    !kasan_check_range(dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, 0, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, KASAN_TYPE_WRITE, _RET_IP_))
- 		return NULL;
- 
- 	return __memmove(dest, src, len);
-@@ -102,8 +102,8 @@ EXPORT_SYMBOL(__asan_memmove);
- 
- void *__asan_memcpy(void *dest, const void *src, ssize_t len)
- {
--	if (!kasan_check_range(src, len, false, _RET_IP_) ||
--	    !kasan_check_range(dest, len, true, _RET_IP_))
-+	if (!kasan_check_range(src, len, 0, _RET_IP_) ||
-+	    !kasan_check_range(dest, len, KASAN_TYPE_WRITE, _RET_IP_))
- 		return NULL;
- 
- 	return __memcpy(dest, src, len);
-diff --git a/mm/kasan/sw_tags.c b/mm/kasan/sw_tags.c
-index c75741a74602..af77b642ede7 100644
---- a/mm/kasan/sw_tags.c
-+++ b/mm/kasan/sw_tags.c
-@@ -72,7 +72,7 @@ u8 kasan_random_tag(void)
- 	return (u8)(state % (KASAN_TAG_MAX + 1));
- }
- 
--bool kasan_check_range(const void *addr, size_t size, bool write,
-+bool kasan_check_range(const void *addr, size_t size, unsigned int flags,
- 			unsigned long ret_ip)
- {
- 	u8 tag;
-@@ -83,7 +83,7 @@ bool kasan_check_range(const void *addr, size_t size, bool write,
- 		return true;
- 
- 	if (unlikely(addr + size < addr))
--		return !kasan_report(addr, size, write, ret_ip);
-+		return !kasan_report(addr, size, flags, ret_ip);
- 
- 	tag = get_tag((const void *)addr);
- 
-@@ -109,12 +109,12 @@ bool kasan_check_range(const void *addr, size_t size, bool write,
- 
- 	untagged_addr = kasan_reset_tag((const void *)addr);
- 	if (unlikely(!addr_has_metadata(untagged_addr)))
--		return !kasan_report(addr, size, write, ret_ip);
-+		return !kasan_report(addr, size, flags, ret_ip);
- 	shadow_first = kasan_mem_to_shadow(untagged_addr);
- 	shadow_last = kasan_mem_to_shadow(untagged_addr + size - 1);
- 	for (shadow = shadow_first; shadow <= shadow_last; shadow++) {
- 		if (*shadow != tag) {
--			return !kasan_report(addr, size, write, ret_ip);
-+			return !kasan_report(addr, size, flags, ret_ip);
- 		}
+@@ -803,6 +806,10 @@ static int kcov_ioctl_locked(struct kcov *kcov, unsigned int cmd,
+ 		/* Put either in kcov_task_exit() or in KCOV_DISABLE. */
+ 		kcov_get(kcov);
+ 		return 0;
++	case KCOV_GET_MEMORY_RECORD_SIZE:
++		if (!IS_ENABLED(CONFIG_KCOV_MEMORY))
++			return -ENOTSUPP;
++		return sizeof(struct memory_access_record);
+ 	default:
+ 		return -ENOTTY;
  	}
+@@ -1171,7 +1178,8 @@ void kcov_remote_stop(void)
+ 	 * and kcov_remote_stop(), hence the sequence check.
+ 	 */
+ 	if (sequence == kcov->sequence && kcov->remote)
+-		kcov_move_area(kcov->mode & ~KCOV_EXT_FORMAT, kcov->area, kcov->size, area);
++		kcov_move_area(kcov->mode & ~(KCOV_ENABLE_MEMORY|KCOV_EXT_FORMAT),
++			       kcov->area, kcov->size, area);
+ 	spin_unlock(&kcov->lock);
  
-@@ -137,12 +137,12 @@ bool kasan_byte_accessible(const void *addr)
- #define DEFINE_HWASAN_LOAD_STORE(size)					\
- 	void __hwasan_load##size##_noabort(void *addr)			\
- 	{								\
--		kasan_check_range(addr, size, false, _RET_IP_);		\
-+		kasan_check_range(addr, size, 0, _RET_IP_);		\
- 	}								\
- 	EXPORT_SYMBOL(__hwasan_load##size##_noabort);			\
- 	void __hwasan_store##size##_noabort(void *addr)			\
- 	{								\
--		kasan_check_range(addr, size, true, _RET_IP_);		\
-+		kasan_check_range(addr, size, KASAN_TYPE_WRITE, _RET_IP_); \
- 	}								\
- 	EXPORT_SYMBOL(__hwasan_store##size##_noabort)
- 
-@@ -154,13 +154,13 @@ DEFINE_HWASAN_LOAD_STORE(16);
- 
- void __hwasan_loadN_noabort(void *addr, ssize_t size)
- {
--	kasan_check_range(addr, size, false, _RET_IP_);
-+	kasan_check_range(addr, size, 0, _RET_IP_);
+ 	spin_lock(&kcov_remote_lock);
+@@ -1194,6 +1202,70 @@ struct kcov_common_handle_id kcov_common_handle(void)
  }
- EXPORT_SYMBOL(__hwasan_loadN_noabort);
+ EXPORT_SYMBOL(kcov_common_handle);
  
- void __hwasan_storeN_noabort(void *addr, ssize_t size)
++#ifdef CONFIG_KCOV_MEMORY
++static notrace bool kcov_get_memaccess_record(struct task_struct *t,
++					      struct memory_access_record **recordp)
++{
++	u64 *area = (u64 *)t->kcov_area;
++	/* The buffer was allocated for t->kcov_size unsigned longs. */
++	u64 max_pos = t->kcov_size * sizeof(unsigned long);
++	u64 count = READ_ONCE(area[0]);
++	u64 start_pos = sizeof(unsigned long) + count * sizeof(unsigned long);
++	u64 end_pos = start_pos + sizeof(struct memory_access_record);
++
++	if (unlikely(end_pos > max_pos))
++		return false;
++
++	/* See comment in kcov_add_pc_record(). */
++	WRITE_ONCE(area[0], count + sizeof(struct memory_access_record)/sizeof(unsigned long));
++	barrier();
++	*recordp = (void *)area + start_pos;
++	return true;
++}
++
++/*
++ * Memory ordering doesn't matter a lot here because timestamps aren't
++ * collected atomically with memory accesses anyway.
++ * The important things are that the clock access has to be uaccess-safe,
++ * notrace, and have high granularity.
++ */
++static notrace __always_inline u64 kcov_get_time(void)
++{
++#ifdef CONFIG_X86
++	return rdtsc_ordered();
++#else
++	return 0;
++#endif
++}
++
++void notrace __kcov_handle_memaccess(const volatile void *p, size_t size, unsigned int type,
++		unsigned long ret_ip)
++{
++	struct task_struct *t = current;
++	struct memory_access_record *record;
++	unsigned int kcov_mode = READ_ONCE(t->kcov_mode);
++
++	if (kcov_mode != KCOV_MODE_TRACE_PC_AND_MEM || !check_kcov_context(t))
++		return;
++	if (!kcov_get_memaccess_record(t, &record))
++		return;
++	*record = (struct memory_access_record) {
++		.ip_address_and_kcov_flags =
++			(ret_ip & KCOV_RECORD_IP_MASK) | KCOV_RECORDFLAG_TYPE_MEMORY,
++		.data_address = (u64)p,
++		.size = size,
++		.flags = type,
++		.time = kcov_get_time()
++	};
++}
++
++void notrace _kcov_handle_memaccess(const volatile void *p, size_t size, unsigned int type)
++{
++	__kcov_handle_memaccess(p, size, type, _RET_IP_);
++}
++EXPORT_SYMBOL(_kcov_handle_memaccess);
++#endif /* CONFIG_KCOV_MEMORY */
++
+ #ifdef CONFIG_KCOV_SELFTEST
+ static void __init selftest(void)
  {
--	kasan_check_range(addr, size, true, _RET_IP_);
-+	kasan_check_range(addr, size, KASAN_TYPE_WRITE, _RET_IP_);
- }
- EXPORT_SYMBOL(__hwasan_storeN_noabort);
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 6ddf58692b09..5de427ccc42d 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2217,6 +2217,17 @@ config KCOV_ENABLE_COMPARISONS
+ 	  These operands can be used by fuzzing engines to improve the quality
+ 	  of fuzzing coverage.
  
-@@ -173,6 +173,6 @@ EXPORT_SYMBOL(__hwasan_tag_memory);
- void kasan_tag_mismatch(void *addr, unsigned long access_info,
- 			unsigned long ret_ip)
- {
--	kasan_report(addr, 1 << (access_info & 0xf), access_info & 0x10,
--		     ret_ip);
-+	kasan_report(addr, 1 << (access_info & 0xf),
-+		(access_info & 0x10) ? KASAN_TYPE_WRITE : 0, ret_ip);
- }
++config KCOV_MEMORY
++	bool "Enable memory access trace collection by KCOV"
++	depends on KCOV
++	depends on KCOV_EXT_RECORDS
++	help
++	  Provide a KCOV mode which records memory access operations and allows
++	  userspace to inject execution delays to impose constraints on the
++	  order in which multithreaded execution happens.
++
++	  This is mainly useful for testing race condition bugs.
++
+ config KCOV_INSTRUMENT_ALL
+ 	bool "Instrument all code by default"
+ 	depends on KCOV
 
 -- 
 2.55.0.979.g7e5102b832-goog
