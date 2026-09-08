@@ -1,28 +1,28 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C61549361
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:02:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB415505F6
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:05:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872554; cv=none; b=HCzeYIuH6g6gPwpTdyRjvw32zYWWw5fHz9U58CVdUfrmhGXAPU9F2fzkhAJLXj5pbrjhMczG5bujK3ti47SSntjC3cND4a4zkUtVkOOqWgBgj6ICPiE/0Eh7KtGaq/Bu477l1FEPfb+mk1JMKWClJHZnqywJswuz4QB+y4wZF9M=
+	t=1788872748; cv=none; b=r3PykYsCD6DsqD0+2/8xmD8p2eYe1KoUthPKkWc72Us/Jp5PvNOiUc67LimrLMzxLhYVsQ93eS8RumMJ0PDqoEU/a/rcNKdfVg7QtGm0R1bXr/UxE0oHLd4/USxrDgzWRY+kUNhmEMoVzLDmnhcH5gWvii2BwBVD1Gi+qsH00nI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872554; c=relaxed/simple;
-	bh=0iGqBogiDsUD9IX6n18y1qeHWvrszSQw6b6wW562DRI=;
+	s=arc-20240116; t=1788872748; c=relaxed/simple;
+	bh=hFcovPbpIMEDyB5q02fyXL/9S359lyav1KWVv5tT4/Q=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CRll6qNt4XOn9S63cY5aCiPM3fxJ27wvb9pS0kmoO8OARQd66paMW/jgxh9d4wYKOyqyJe85BtbybUKPI6gemhf7k0e+UODB556jXE4QSXi2p3oKQ1dqvhlmt3w40XtwtSeVRIqTFA2igXLDEtz/HscY/9SAo8+BKEofsZ4BDpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=coXCNEozqhioQleJc9HfgG3g3cs26pMrXB+QweB7/nxQ1uFF0+SfTVfyqvSXdnYfQgLN+4pc3Y/JSJz1Jnf4+CaUGS7CzaMz7R8nfRX4XULRXLX2j5MWfeMPywNx5TB5Pg7QmpMO2fsXgFnALEciEXq6lC1MMB6clLYDxCF7sKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPGT0XnRzKHN6v
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:01:53 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 6572840590
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:01:54 +0800 (CST)
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hfPLs0hDDzKHN62
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:41 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id 6E3D54056F
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:05:42 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAni5gpB6BqC9rlBA--.34632S15;
-	Tue, 08 Sep 2026 21:01:54 +0800 (CST)
+	by APP2 (Coremail) with UTF8SMTPA id Syh0CgDHLUoeCKBqX3XjBA--.22748S5;
+	Tue, 08 Sep 2026 21:05:42 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,12 +44,12 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 13/26] perf annotate-arm64: Enable instruction tracking support
-Date: Tue,  8 Sep 2026 13:01:09 +0000
-Message-Id: <20260908130122.633500-14-wutengda@huaweicloud.com>
+Subject: [PATCH v5 03/26] perf annotate-arm64: Generalize arm64_mov__parse to support more instructions
+Date: Tue,  8 Sep 2026 13:05:06 +0000
+Message-Id: <872f51108191d20f65fc12f17c796863a36166da.1788872630.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260908130122.633500-1-wutengda@huaweicloud.com>
-References: <20260908130122.633500-1-wutengda@huaweicloud.com>
+In-Reply-To: <cover.1788872630.git.wutengda@huaweicloud.com>
+References: <cover.1788872630.git.wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,200 +57,256 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAni5gpB6BqC9rlBA--.34632S15
-X-Coremail-Antispam: 1UD129KBjvJXoW3WFy7Wr48tF1UAF4rCry8Krg_yoW7Kw17pa
-	yDC345KF4UJr42gwnxJF4UXry3G3yfW34Y9r9Ygw4SyFsFyryrtFs5KFWayF4rGrZ3Cw4Y
-	q3WqyFWDXw4UCaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-	4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-	3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-	IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-	M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
-	kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcV
-	CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRGMKuUUUUU
+X-CM-TRANSID:Syh0CgDHLUoeCKBqX3XjBA--.22748S5
+X-Coremail-Antispam: 1UD129KBjvJXoWxtr1xurWfZFyfCw1kXw48Crg_yoWxJryDpa
+	n2kw1rtr48Wr1Fgws3Jrs2vrn3Ww4fK34a9a48tas3Awsa9ryrKan3KF1akF4rGryxurWU
+	tFnYvryrJr4DJaUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUHmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
+	A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+	w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+	WxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64
+	kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYx
+	C7M4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26rWY6Fy7MxkF7I0Ew4C26cxK
+	6c8Ij28IcwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+	0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wryl
+	IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7JwCI42IY6xIIjxv20xvEc7CjxV
+	AFwI0_Cr1j6rxdMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWx
+	JVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa7sRQ
+	2-bUUUUUU==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Enable basic instruction tracking for arm64 by implementing three
-essential functions in the find_data_type_block() call path:
+As the default parser for arm64 instructions, arm64_mov__parse()
+currently only supports parsing instructions with the 'addr <symbol>'
+suffix. Other instructions are not supported, causing a lack of
+source and target information for most regular instructions.
 
-  find_data_type_block
-    -> arch_supports_insn_tracking  (1)
-    -> find_data_type_insn
-         -> init_type_state         (2)
-         -> update_var_state
-         -> update_insn_state       (3)
+Generalize arm64_mov__parse to extend its parsing capabilities:
+1. Parse 'ops->target.raw' and 'ops->source.raw' by default.
+2. Utilize arm64__check_multi_regs() to identify if source and
+   target contain multiple registers.
+3. Maintain backward compatibility for instructions containing the
+   'addr <symbol>' suffix.
 
-Changes:
-
-* arch_supports_insn_tracking(): add arm64 to the list of supported
-  architectures, allowing find_data_type_block() to proceed with data
-  type analysis.
-
-* init_type_state(): correctly identify ret_reg, stack_reg, and
-  caller-saved registers for arm64 during type state initialization.
-
-* update_insn_state(): add the update_insn_state_arm64() callback with
-  conservative register invalidation for call instructions and those with
-  destination register(s), preventing stale type propagation. Full
-  instruction-level analysis support will be added incrementally in
-  later patches.
-
-With these changes, arm64 gains support for basic variable type
-inference during instruction tracking.
-
-Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 78 +++++++++++++++++++
- tools/perf/util/annotate-data.c               | 11 ++-
- 2 files changed, 88 insertions(+), 1 deletion(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 166 ++++++++++++++----
+ 1 file changed, 134 insertions(+), 32 deletions(-)
 
 diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index d8a5904359b1..8fda4d4d6888 100644
+index 33080fdca125..151184210691 100644
 --- a/tools/perf/util/annotate-arch/annotate-arm64.c
 +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -9,6 +9,10 @@
+@@ -3,6 +3,8 @@
+ #include <errno.h>
+ #include <stdlib.h>
+ #include <string.h>
++#include <linux/ctype.h>
++#include <linux/string.h>
+ #include <linux/zalloc.h>
  #include <regex.h>
  #include "../annotate.h"
- #include "../disasm.h"
-+#include "../annotate-data.h"
-+#include "../debug.h"
-+#include "../map.h"
-+#include "../symbol.h"
+@@ -14,59 +16,158 @@ struct arch_arm64 {
+ 	regex_t jump_insn;
+ };
  
- struct arch_arm64 {
- 	struct arch arch;
-@@ -442,6 +446,77 @@ static void extract_op_location_arm64(const struct arch *arch,
- 	}
+-static int arm64_mov__parse(const struct arch *arch __maybe_unused,
++static bool arm64__is_reg(const char *op)
++{
++	if (!op || !*op)
++		return false;
++
++	/*
++	 * General-purpose registers: x0-x30, w0-w30.
++	 * Check for 'x' or 'w' prefix followed by a numeric index.
++	 */
++	if ((op[0] == 'x' || op[0] == 'w') && isdigit(op[1]))
++		return true;
++
++	/* Special-purpose registers: sp, wzr, xzr. */
++	if (!strncmp(op, "sp", 2) || !strncmp(op, "xzr", 3) ||
++	    !strncmp(op, "wzr", 3))
++		return true;
++
++	/* TODO: Support more registers. */
++	return false;
++}
++
++static bool arm64__check_multi_regs(const struct arch *arch, const char *op)
++{
++	const char *p = op;
++	int reg_count = 0;
++
++	while (p && *p) {
++		p = skip_spaces(p);
++		if (*p == arch->objdump.memory_ref_char)
++			p++;
++
++		if (arm64__is_reg(p))
++			reg_count++;
++
++		if (reg_count >= 2)
++			return true;
++
++		/* Move to next operand after comma */
++		p = strchr(p, ',');
++		if (p)
++			p++;
++	}
++
++	return false;
++}
++
++/*
++ * Duplicate @insn, stripping the comment and trailing whitespace.
++ * Returns a newly allocated string which the caller must free(),
++ * or NULL on allocation failure or if @insn is NULL.
++ */
++static char *rstrip_space_and_comment(const char *insn, char comment_char)
++{
++	const char *end, *comment;
++	size_t len;
++	char *result;
++
++	if (insn == NULL)
++		return NULL;
++
++	comment = strchr(insn, comment_char);
++	if (comment != NULL)
++		end = comment;
++	else
++		end = insn + strlen(insn);
++
++	while (end > insn && isspace(end[-1]))
++		--end;
++
++	len = end - insn;
++	result = malloc(len + 1);
++	if (result == NULL)
++		return NULL;
++
++	memcpy(result, insn, len);
++	result[len] = '\0';
++
++	return result;
++}
++
++static int arm64_mov__parse(const struct arch *arch,
+ 			    struct ins_operands *ops,
+ 			    struct map_symbol *ms __maybe_unused,
+ 			    struct disasm_line *dl __maybe_unused)
+ {
+-	char *s = strchr(ops->raw, ','), *target, *endptr;
++	char *s = strchr(ops->raw, ','), *source, *endptr;
+ 
+ 	if (s == NULL)
+ 		return -1;
+ 
++	/* Parse target */
+ 	*s = '\0';
+-	ops->source.raw = strdup(ops->raw);
++	ops->target.raw = strdup(ops->raw);
+ 	*s = ',';
+ 
+-	if (ops->source.raw == NULL)
+-		return -1;
+-
+-	target = ++s;
+-	ops->target.raw = strdup(target);
+ 	if (ops->target.raw == NULL)
+-		goto out_free_source;
++		return -1;
+ 
+-	ops->target.addr = strtoull(target, &endptr, 16);
+-	if (endptr == target)
+-		goto out_free_target;
++	ops->target.multi_regs = arm64__check_multi_regs(arch, ops->target.raw);
+ 
+-	s = strchr(endptr, '<');
+-	if (s == NULL)
+-		goto out_free_target;
+-	endptr = strchr(s + 1, '>');
+-	if (endptr == NULL)
+-		goto out_free_target;
+-
+-	*endptr = '\0';
+-	*s = ' ';
+-	ops->target.name = strdup(s);
+-	*s = '<';
+-	*endptr = '>';
+-	if (ops->target.name == NULL)
+-		goto out_free_target;
++	/* Parse source, stripping comment if present */
++	source = skip_spaces(++s);
++	ops->source.raw = rstrip_space_and_comment(source, arch->objdump.comment_char);
++	if (ops->source.raw == NULL) {
++		zfree(&ops->target.raw);
++		return -1;
++	}
++
++	ops->source.multi_regs = arm64__check_multi_regs(arch, ops->source.raw);
++
++	/*
++	 * Parse 'addr <symbol>' from source (if any).
++	 *
++	 * A raw hex string may be a scalar immediate, not an address.
++	 * Only validate 'source.addr' if accompanied by a '<symbol>' tag,
++	 * otherwise reset it to 0 to avoid false positive address tracking.
++	 */
++	ops->source.addr = strtoull(ops->source.raw, &endptr, 16);
++	if (endptr != ops->source.raw) {
++		s = strchr(endptr, '<');
++		if (s == NULL) {
++			ops->source.addr = 0;
++			return 0;
++		}
++		endptr = strrchr(s + 1, '>');
++		if (endptr == NULL) {
++			ops->source.addr = 0;
++			return 0;
++		}
++
++		*endptr = '\0';
++		ops->source.name = strdup(s + 1);
++		*endptr = '>';
++		if (ops->source.name == NULL) {
++			ops->source.addr = 0;
++			return 0;
++		}
++	}
+ 
+ 	return 0;
++}
+ 
+-out_free_target:
+-	zfree(&ops->target.raw);
+-out_free_source:
+-	zfree(&ops->source.raw);
+-	return -1;
++static int arm64_mov__scnprintf(const struct ins *ins, char *bf, size_t size,
++				struct ins_operands *ops, int max_ins_name)
++{
++	return scnprintf(bf, size, "%-*s %s, %s", max_ins_name, ins->name,
++			 ops->target.raw, ops->source.name ?: ops->source.raw);
  }
  
-+#ifdef HAVE_LIBDW_SUPPORT
-+static bool is_readonly_branch_or_cmp(const char *name)
-+{
-+	return !strncmp(name, "cb", 2) || !strncmp(name, "tb", 2) ||
-+	       !strcmp(name, "tst") || !strcmp(name, "teq") ||
-+	       !strcmp(name, "cmp") || !strcmp(name, "cmn") ||
-+	       !strcmp(name, "ccmp") || !strcmp(name, "ccmn");
-+}
-+
-+static void update_insn_state_arm64(struct type_state *state,
-+				    struct data_loc_info *dloc, Dwarf_Die *cu_die __maybe_unused,
-+				    struct disasm_line *dl)
-+{
-+	struct annotated_insn_loc loc;
-+	struct annotated_op_loc *dst = &loc.ops[INSN_OP_TARGET];
-+	u32 insn_offset = dl->al.offset;
-+
-+	/* Skip read-only instructions that do not affect register type state */
-+	if (is_readonly_branch_or_cmp(dl->ins.name))
-+		return;
-+
-+	if (annotate_get_insn_location(dloc->arch, dl, &loc) < 0)
-+		return;
-+
-+	/*
-+	 * Invalidate caller-saved registers on function calls per ARM64 AAPCS64
-+	 * ABI, unless DWARF location info indicates the register remains valid
-+	 * beyond the call address.
-+	 */
-+	if (ins__is_call(&dl->ins)) {
-+		struct symbol *func = dl->ops.target.sym;
-+		const char *call_name;
-+		u64 call_addr;
-+
-+		call_name = func ? func->name : dl->ops.target.name;
-+		pr_debug_dtp("call [%x] %s\n", insn_offset, call_name ?: "<unknown>");
-+
-+		/* Invalidate caller-saved registers after call */
-+		call_addr = map__rip_2objdump(dloc->ms->map,
-+					      dloc->ms->sym->start + dl->al.offset);
-+		for (unsigned int i = 0; i < ARRAY_SIZE(state->regs); i++) {
-+			struct type_state_reg *reg = &state->regs[i];
-+
-+			if (!reg->caller_saved)
-+				continue;
-+			/* Keep register valid within DWARF location lifetime */
-+			if (reg->lifetime_active && call_addr < reg->lifetime_end)
-+				continue;
-+			invalidate_reg_state(reg);
-+		}
-+		return;
-+	}
-+
-+	/*
-+	 * Invalidate destination register(s) for unsupported instructions to
-+	 * prevent stale type info from propagating to subsequent instructions.
-+	 */
-+	if (has_reg_type(state, dst->reg1) && !dst->mem_ref) {
-+		pr_debug_dtp("%s [%x] invalidate reg%d",
-+			     dl->ins.name, insn_offset, dst->reg1);
-+		invalidate_reg_state(&state->regs[dst->reg1]);
-+		if (dst->multi_regs && has_reg_type(state, dst->reg2)) {
-+			pr_debug_dtp(" and reg%d", dst->reg2);
-+			invalidate_reg_state(&state->regs[dst->reg2]);
-+		}
-+		pr_debug_dtp("\n");
-+		return;
-+	}
-+}
-+#endif
-+
- const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 				   const char *cpuid __maybe_unused)
- {
-@@ -461,6 +536,9 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
- 	arch->objdump.imm_char		  = '#';
+ static const struct ins_ops arm64_mov_ops = {
+ 	.parse	   = arm64_mov__parse,
+-	.scnprintf = mov__scnprintf,
++	.scnprintf = arm64_mov__scnprintf,
+ };
+ 
+ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
+@@ -103,6 +204,7 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	arch->id = *id;
+ 	arch->objdump.comment_char	  = '/';
+ 	arch->objdump.skip_functions_char = '+';
++	arch->objdump.memory_ref_char	  = '[';
  	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
- 	arch->extract_op_location	  = extract_op_location_arm64;
-+#ifdef HAVE_LIBDW_SUPPORT
-+	arch->update_insn_state		  = update_insn_state_arm64;
-+#endif
  
  	/* bl, blr */
- 	err = regcomp(&arm->call_insn, "^blr?$", REG_EXTENDED);
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 104b80d471f1..c51b20a7af9b 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -28,6 +28,7 @@
- 
- /* register number of the stack pointer */
- #define X86_REG_SP 7
-+#define ARM64_REG_SP 31
- 
- static void delete_var_types(struct die_var_type *var_types);
- 
-@@ -178,6 +179,13 @@ static void init_type_state(struct type_state *state, const struct arch *arch)
- 		state->regs[11].caller_saved = true;
- 		state->ret_reg = 0;
- 		state->stack_reg = X86_REG_SP;
-+	} else if (arch__is_arm64(arch)) {
-+		int i;
-+
-+		for (i = 0; i < 18; i++)
-+			state->regs[i].caller_saved = true;
-+		state->ret_reg = 0;
-+		state->stack_reg = ARM64_REG_SP;
- 	}
- }
- 
-@@ -1437,7 +1445,8 @@ static enum type_match_result find_data_type_insn(struct data_loc_info *dloc,
- 
- static int arch_supports_insn_tracking(struct data_loc_info *dloc)
- {
--	if ((arch__is_x86(dloc->arch)) || (arch__is_powerpc(dloc->arch)))
-+	if (arch__is_x86(dloc->arch) || arch__is_powerpc(dloc->arch) ||
-+	    arch__is_arm64(dloc->arch))
- 		return 1;
- 	return 0;
- }
 -- 
 2.34.1
 
