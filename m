@@ -1,122 +1,150 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B845B498904
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC67748F038;
+	Tue,  8 Sep 2026 22:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788903220; cv=none; b=SZuGINmWGxEW9ZXidfnmCvQ8dlxjIJM3535osiamUI1EMVDSky9fjdWKEp2VTPl9ZoQo8PRrIw8YdOSie/CFUzSIuZnc8prbEmFElmAfyPkP6kH1tKiO8GmfuX3pOKJxRvgpXxqM94rPgd6vIVWCaUrAGkh0ARoGi6yHbI6px5I=
+	t=1788905576; cv=none; b=bnDYsI2QYgSIcVnRSDfgze+woZmhRi9jsCMeywm0opUmP1fWfqwBWCqTGvOn6pTDrLUI5xLd3CHaMOXUDFvITuCF8QsvJm2t/L19/Uq6B2VIDX2qWTm2h0gB27z7+mcMkdg8H7IfdNQD4ea0rCNbVKSxjsi5ZNGOVqBHxuMHFjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788903220; c=relaxed/simple;
-	bh=gQYMQIZ0a0qQpuJQGl9sxe6tSFIiwDa+pVKYc1H04vk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EVCsHJ+YMXhVdUgj2ub/9sHTqWe994+MS18/dtvpjYP4F0kfPC/zuPOIIH8thk6e1fOsRggAVNDREso6zpNQi2b4gemvqJfcdvy4V8qxMfBYRiTgEv5Q2yYY2kgocGf3l+ZoRaPUJd76eKpxOexlAoKbU2jfCmLjE1EW7LzSQVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JT9GmtMS; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788905576; c=relaxed/simple;
+	bh=DQDQWf+0PMJTYb19qDJ4t6StKQrcra+sNmxHw+c85pM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=CkfVhm0Rk2A8ev4yBO5OhXzqoM1u53NYUhgn4VbpkZqOy0Xw2I9GSpg3TvjxJK8RyMQEPuGpuWdkv3jAK4CvbOBxBDQF6zNuAgquTIxGee7rYaH7Qqcdzk0I3weeoYf+D3VelXE+6xoAoAS4voH7hdrQ/yj32fmOPwPpGuKjLqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gcZ/5tpJ; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JT9GmtMS"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-39b2ad862bdso5624175a91.2
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 14:33:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788903218; x=1789508018; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yHiWJUkqXIHHnljOBGvidp4XfKDa865c5NPgCl6nJgk=;
-        b=JT9GmtMSmDbC7myLdSmleGvFbiVJVTfytLgk44CIHMiOQv3rhvR+revDDhtnCLv3Wb
-         lqyrQWXsawjOc6KIsmecpeNzHMqo2EqUqBaQNoFHZccbKoW3Axs8ZaQGggDOKDcIp0N7
-         vKbKHG6/gIeY+/HIwmM9QKJr9BpBbILvHmxyyKmhhqFIO7f5aAPqeu0daByAa1a3ICc7
-         brA59fgyZ9G2C2ohvWw1Pl4ZT19m1aaiNIVmKuQ2pqzo7Mic+W1GzjKgQhkd7QPglNF2
-         aWY37ua4pxZ/MoYh6utiVtZU5CKFtPf2skR6zx6jz6T1OCV1N1OJ84LIajMIYvJ6VzmX
-         ARmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788903218; x=1789508018;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=yHiWJUkqXIHHnljOBGvidp4XfKDa865c5NPgCl6nJgk=;
-        b=RXgyA6a2oiQByRHUIZxzQgGDVDy45qyglEZjpfHqPi38fEMmcu2FvKHCB03yR2xR0/
-         HO8t+HhkBxZnzB4VkYAcYlZ46TmR8+SiHMBUBXp+/ojwMZgIuqj2KahQdGCfhhSvxX+9
-         whQqSRT8rR//+0NPxcSgmku02mkvBqguf2LCxxv3y81AyqHQ8ZLfrXdceCfRDkYJfnOh
-         awzZ1OLBF3lTNHttKOBWoJFGPJow7mpZrJJLflcfUOnayNPsoD4O8dNi4GDPhiNKUyP1
-         SVSq+/C79zX7q1mPvZrGNjGscW84jhQrhBarPHZuIUrFV8APotFi2D9xWNrd8OcFnMvl
-         aYOw==
-X-Forwarded-Encrypted: i=1; AKwUvByt9bu/7MbhCZ8vFuPU5GfXZzVj4x49oLnwQsafscT0Ri6TSEvd1q7BgBFFd/HgUeL00feB@lists.linux.dev
-X-Gm-Message-State: AFuF++nZ3TXH65qoo6MIe/N4WV+tRmWqBwmhG5LkSqcC7V7Q3EusaPJo
-	jGD02R6VzSqgvPYpwr9Gg3Hg8pXblw0kc0gy4JE+RmmORgB9Icb3hY24Ml23Fw==
-X-Gm-Gg: AYBFou2CG5KpMwc4MHam0yvZurkgZesMdvns9h+rFWGg9C6n90/pkznWjUYaeTSdxha
-	Eomlz3vsHG9O8YcxpD7V0fo1Sj4r4JMavP74piEMyRBSPVRVaYc6Q65/E3Ych0Dvo99fOg/fh1u
-	X4v6XXFDwrIm9GEL0ip+K2XVynIWlcuMyGWKJaB93L/wzp8oP+o91mg/UFa42hMjxe4eROqlK8M
-	7o3G+GAJzPfUl74MX1oiOiWt95ZMITxl9zyMrxyNeQoMv09QX4GWhOAjyQ0RE94qxHOWYi7Cg6b
-	kdcl/jxxov0JcSMC0j+YqvBDzsPgQZaQzfv1xw1y9lnD+HTireGRvrpSdz3PunkgG5Wp+AfobMX
-	qvQJwllfz3WcrBIiWSokOpiC9lfUHYw7sFDdXgndBwtp1hD0DIMpTOCNRbQCnScsLXbBCOV+Mat
-	SOZ4poSpyfXWeZo4EVocDrqRMxThNcxOyuWWDyyqeb3w0m5J5sBzCuETeyfaYUh67Chc8wclYTO
-	TZIEW5PtRxkQ5zz4iNap10HGVhlrPu2G2LHWrp7OcAjKSqIFfX2i1rnPCm9/0jxdHbaxPwS90o0
-	B2KdMFXumuNZnDh49JKyBEY0fohgtxpQFeUx5Q==
-X-Received: by 2002:a17:90b:4c41:b0:398:9bd5:490e with SMTP id 98e67ed59e1d1-39b2623ac0fmr46132348a91.21.1788903217940;
-        Tue, 08 Sep 2026 14:33:37 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b25f8d2c5sm28700771a91.2.2026.09.08.14.33.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 14:33:37 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: dmaengine@vger.kernel.org
-Cc: Vinod Koul <vkoul@kernel.org>,
-	Frank Li <Frank.Li@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCHv2] dmaengine: bestcomm: ata: drop unused local variable 'inc'
-Date: Tue,  8 Sep 2026 14:33:34 -0700
-Message-ID: <20260908213334.593584-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gcZ/5tpJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1788905570; x=1820441570;
+  h=date:from:to:cc:subject:message-id;
+  bh=DQDQWf+0PMJTYb19qDJ4t6StKQrcra+sNmxHw+c85pM=;
+  b=gcZ/5tpJZFi7absyLD09E8i8DP/a4gMaxGDdWYkyLrrN8tdAYEScUaTI
+   EwfLl3h3X4kiZAqRbn3Eh7YPA+QbQszQEzTyHjLErMMnbZ/kVFBOxDWIw
+   i8X7mCOCHg23zJmoicocYk6iBvnw1bkxVGwLazoWh09D5ViARDfQGykBr
+   nhsKI+hiKaD2AobOM+6+tUEBWwh0s64xm5XfCT1HocXZushuo1gRqkbxZ
+   9co2PmFyIgSaRVcItjBa7CgQK2rpjpn8zouFcThKaLUXcRugvGe6/Ct9n
+   kDhydNoBnMhpQjb7lflczHMiJAfj2TH1ywlI6NDrsxrD41ex4kICl9dz4
+   w==;
+X-CSE-ConnectionGUID: 5s0z+bQgQ6iB47eMyj6Dgg==
+X-CSE-MsgGUID: owJBtCYiRieUnk/4r3N9ZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="89526630"
+X-IronPort-AV: E=Sophos;i="6.25,269,1779174000"; 
+   d="scan'208";a="89526630"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2026 15:12:49 -0700
+X-CSE-ConnectionGUID: o4QQOF7/SQ6DTNyYnutpLA==
+X-CSE-MsgGUID: RKsOoelmTRiHVApflctXEQ==
+X-ExtLoop1: 1
+Received: from igk-lkp-server01.igk.intel.com (HELO cc074f2a4298) ([10.211.93.152])
+  by fmviesa003.fm.intel.com with ESMTP; 08 Sep 2026 15:12:48 -0700
+Received: from kbuild by cc074f2a4298 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x443a-000000000sY-06G0;
+	Tue, 08 Sep 2026 22:12:46 +0000
+Date: Wed, 09 Sep 2026 00:11:49 +0200
+From: kernel test robot <lkp@intel.com>
+To: David Howells <dhowells@redhat.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Paulo Alcantara <pc@manguebit.org>
+Subject: [dhowells-fs:netfs-next-1 6/8]
+ fs/netfs/buffered_read.c:245:26: error: use of undeclared identifier
+ 'NETFS_RREQ_USE_PGPRIV2'
+Message-ID: <202609090040.XYKriffI-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-bcom_ata_init() declared and assigned a struct bcom_ata_inc *inc that
-was never read, tripping clang -Wunused-but-set-variable:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-next-1
+head:   bf6f26c5281fa05cf8c97025dcb2f7f87143138a
+commit: 9266aba94da4bdfc7ff858c8191ef647e3067c15 [6/8] netfs: Make deprecated PG_private_2 support opt-in
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260909/202609090040.XYKriffI-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260909/202609090040.XYKriffI-lkp@intel.com/reproduce)
 
-  drivers/dma/bestcomm/ata.c:58:23: error: variable 'inc' set but not
-  used [-Werror,-Wunused-but-set-variable]
-     58 |         struct bcom_ata_inc *inc;
-        |                              ^
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609090040.XYKriffI-lkp@intel.com/
 
-Drop the declaration and the bcom_task_inc() call that fed it.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
----
- v2: use suggested title
- drivers/dma/bestcomm/ata.c | 2 --
- 1 file changed, 2 deletions(-)
+>> fs/netfs/buffered_read.c:245:26: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
+     245 |                         if (unlikely(test_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags))) {
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~
+>> fs/netfs/buffered_read.c:245:26: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
+     245 |                         if (unlikely(test_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags))) {
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~
+>> fs/netfs/buffered_read.c:245:26: error: use of undeclared identifier 'NETFS_RREQ_USE_PGPRIV2'
+     245 |                         if (unlikely(test_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags))) {
+         |                                               ^~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
 
-diff --git a/drivers/dma/bestcomm/ata.c b/drivers/dma/bestcomm/ata.c
-index 502a45d76adc..40126f3f189e 100644
---- a/drivers/dma/bestcomm/ata.c
-+++ b/drivers/dma/bestcomm/ata.c
-@@ -55,7 +55,6 @@ bcom_ata_init(int queue_len, int maxbufsize)
- {
- 	struct bcom_task *tsk;
- 	struct bcom_ata_var *var;
--	struct bcom_ata_inc *inc;
- 
- 	/* Prefetch breaks ATA DMA.  Turn it off for ATA DMA */
- 	bcom_disable_prefetch();
-@@ -69,7 +68,6 @@ bcom_ata_init(int queue_len, int maxbufsize)
- 	bcom_ata_reset_bd(tsk);
- 
- 	var = (struct bcom_ata_var *) bcom_task_var(tsk->tasknum);
--	inc = (struct bcom_ata_inc *) bcom_task_inc(tsk->tasknum);
- 
- 	if (bcom_load_image(tsk->tasknum, bcom_ata_task)) {
- 		bcom_task_free(tsk);
--- 
-2.55.0
 
+vim +/NETFS_RREQ_USE_PGPRIV2 +245 fs/netfs/buffered_read.c
+
+e2d46f2ec33253 David Howells 2024-12-16  213  
+533203c4183123 David Howells 2026-08-27  214  /*
+533203c4183123 David Howells 2026-08-27  215   * Mark folios that we want to copy to the cache.  For filesystems that use
+533203c4183123 David Howells 2026-08-27  216   * netfslib fully, we set folio->private to NETFS_FOLIO_COPY_TO_CACHE;
+533203c4183123 David Howells 2026-08-27  217   * otherwise we set the deprecated PG_private_2.
+533203c4183123 David Howells 2026-08-27  218   */
+533203c4183123 David Howells 2026-08-27  219  static void netfs_mark_copy_to_cache(struct netfs_io_request *rreq,
+533203c4183123 David Howells 2026-08-27  220  				     struct folio_queue **fq,
+533203c4183123 David Howells 2026-08-27  221  				     unsigned int *offset,
+533203c4183123 David Howells 2026-08-27  222  				     int *slot,
+533203c4183123 David Howells 2026-08-27  223  				     size_t len,
+533203c4183123 David Howells 2026-08-27  224  				     bool copy)
+533203c4183123 David Howells 2026-08-27  225  {
+533203c4183123 David Howells 2026-08-27  226  	while (len > 0) {
+533203c4183123 David Howells 2026-08-27  227  		struct folio *folio;
+533203c4183123 David Howells 2026-08-27  228  		size_t fsize, overlap;
+533203c4183123 David Howells 2026-08-27  229  
+533203c4183123 David Howells 2026-08-27  230  		if (!*fq)
+533203c4183123 David Howells 2026-08-27  231  			break;
+533203c4183123 David Howells 2026-08-27  232  		if (*slot >= folioq_count(*fq)) {
+533203c4183123 David Howells 2026-08-27  233  			*fq = (*fq)->next;
+533203c4183123 David Howells 2026-08-27  234  			*slot = 0;
+533203c4183123 David Howells 2026-08-27  235  			*offset = 0;
+533203c4183123 David Howells 2026-08-27  236  			continue;
+533203c4183123 David Howells 2026-08-27  237  		}
+533203c4183123 David Howells 2026-08-27  238  
+533203c4183123 David Howells 2026-08-27  239  		/* Determine how much the subreq overlaps the folio, if at all. */
+533203c4183123 David Howells 2026-08-27  240  		fsize = folioq_folio_size(*fq, *slot);
+533203c4183123 David Howells 2026-08-27  241  		overlap = min(len, fsize - *offset);
+533203c4183123 David Howells 2026-08-27  242  
+533203c4183123 David Howells 2026-08-27  243  		if (overlap > 0 && copy) {
+533203c4183123 David Howells 2026-08-27  244  			folio = folioq_folio(*fq, *slot);
+533203c4183123 David Howells 2026-08-27 @245  			if (unlikely(test_bit(NETFS_RREQ_USE_PGPRIV2, &rreq->flags))) {
+533203c4183123 David Howells 2026-08-27  246  				if (!folio_test_private_2(folio))
+533203c4183123 David Howells 2026-08-27  247  					folio_start_private_2(folio);
+533203c4183123 David Howells 2026-08-27  248  			} else {
+533203c4183123 David Howells 2026-08-27  249  				if (!folio_get_private(folio))
+533203c4183123 David Howells 2026-08-27  250  					folio_attach_private(folio, NETFS_FOLIO_COPY_TO_CACHE);
+533203c4183123 David Howells 2026-08-27  251  			}
+533203c4183123 David Howells 2026-08-27  252  			trace_netfs_folio(folio, netfs_folio_trace_mark_copy);
+533203c4183123 David Howells 2026-08-27  253  		}
+533203c4183123 David Howells 2026-08-27  254  
+533203c4183123 David Howells 2026-08-27  255  		len -= overlap;
+533203c4183123 David Howells 2026-08-27  256  		*offset += overlap;
+533203c4183123 David Howells 2026-08-27  257  		if (*offset >= fsize) {
+533203c4183123 David Howells 2026-08-27  258  			*slot += 1;
+533203c4183123 David Howells 2026-08-27  259  			*offset = 0;
+533203c4183123 David Howells 2026-08-27  260  		}
+533203c4183123 David Howells 2026-08-27  261  	}
+533203c4183123 David Howells 2026-08-27  262  }
+533203c4183123 David Howells 2026-08-27  263  
+
+:::::: The code at line 245 was first introduced by commit
+:::::: 533203c4183123dad8ffecd694e7573a0ccd0da0 netfs: Mark folios with COPY_TO_CACHE whilst issuing subreqs
+
+:::::: TO: David Howells <dhowells@redhat.com>
+:::::: CC: Christian Brauner <brauner@kernel.org>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
