@@ -1,184 +1,176 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E6CC58F09E
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 16:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788886526; cv=none; b=UdTq1uYOol2w3efpgoWLLNICQO4wzIQ+z6F5QNlfdoCgkLA1AK3KSyQ2rMBcGVZ+DTOxM+3lg+oDFIa/SfMQ2LBWE/1U2frgPZyhr0GsLrmCEg7GOnj3+jWTMOldHnFJ3I/BQY0ej7vO9x91b/VTv1AO0ifNZeFgrlCvqmSPNIw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788886526; c=relaxed/simple;
-	bh=YCFdNceXAmFoeYaaoZilFisOt8nfet1SAE5gqKxRIb8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kDOu2PZr3sPH+fGVOTasMGEggfmCYOO+79sTlgwZ58/LW4ZsfYjo04t+bamwZF8Cd6/NAs+4ZpPsrATSsLxyavG8kmUrnN6eYc9LMigchJVHKUJNezRdHtyK9QJdQ8pAkb4iM2/FCk0Q9BpE6xuVThoBBV75+cX8oJ5NMJBXBbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jR6useM2; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A8B583ACF
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 17:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788887131; cv=pass; b=FE8PEPHmUsA4mdjhVik8ZdpfhTsVL72D8IhZX7fKrtEw9aQ29lt3Gu7mQTwRMgjBiNODyKAF+jsOS/3SDEmH1g7wQRpwQlrxskkJAmYNfH7RjXNNMKI2tAxBH7iX9znH/yXFHlq7y7nr0Mg0bczQuQbGd/8KElkWMKhbxb2J0Gw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788887131; c=relaxed/simple;
+	bh=ZUsNUDfHNSayvs0cLcpq7eFB/vP8mG73JqyT3D6YigY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=b41uPhlOwbs7T5X3tGLBFdb3eoUKZS0kSwtSiQK3P78bmSOjIFPQtkyQKPqX7sOhgLqKfDbuxlWX8O8tpEVIv2EfrOVE3b3evd92zAHxlTxads2qqW2O3AXJUQYk/GKBT2zKh7iHEi2KkzONQgZeQO1ua+BW8cbRjiEYLulWZok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VcP3ZH11; arc=pass smtp.client-ip=74.125.227.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jR6useM2"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cff3b3b92so96995e9.1
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 09:55:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VcP3ZH11"
+Received: by mail-pj2-f12.google.com with SMTP id d9443c01a7336-2db425c9050so254885ad.0
+        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 10:05:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788887129; cv=none;
+        d=google.com; s=arc-20260327;
+        b=JSy3ZwxbVPXvFp5KVXOsvcgI4n+eXK23Q8UIt1avk64QNRXgKDjW+trxHCqAdbSswt
+         8iI9RX/YIj9xz3iurYp8aldS0Eyi/BhyR34XaGTIKxi0++XfG3X3R6a+V42gEwwQ2q+C
+         bKFJ9JHfho/eFbNsvR0lbFRGi31427qNVtehEsdC7bqEi+mMCuqVTNfPVUbKbCxh+yVU
+         Mf4YhrViXln56bs+G6yH8Mjko2I2+tli9ka8TNjCg29Umyon7jenfQ4RXVpPeP/EYzKw
+         s1Gb9BkcJqt3Y8EHiIKCkTYBxalOTJXsP/EcJHO9EWUuNcRITHjaRUrEcv+eFpkhSrqR
+         771A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=t2BEbL6oK2TNdrl07S1eqJBu8muYQ4YhMI1yhqy/NuU=;
+        fh=rZPqpv72IUdLSkPcqn+wPGzTdPbbHvgUFKen6wpE13k=;
+        b=Qt8y1/C7ZyFFi/QpFdQYYPDx007q6cq+KQSduPkU01tJC5gt2vh2wSfGD2Og1oI0oC
+         eSpRm+vT+aHrdaKI5hyleQeD/GhjwAAOhqFS3/oRecXvQ8W5CDdFMhovE70Czib4nWqi
+         x62CsmWCY7549H7EW/Uqix79hS+Z1Sydo6RfH9NZHja7uCF6H+oBga7mwBLZZ4MPX6bW
+         ex3dtpRfoTzHLgpPUHWzVDm8vrk4MAS9bdsV80HgcnCEy5A2OB0N8et3LREt9uiOtsKM
+         eJCRcDxF/VGS/rwHx9xSbJ2ohB2/kECpxyujZjA1GkLG+vhRKlxG34bU39oXXoju4jjD
+         O2Fw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788886522; x=1789491322; darn=lists.linux.dev;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=70pm1sR81UgF7K4xKYYgzlq1/hkKMl0juN2wWiFyYyI=;
-        b=jR6useM2dcqG+LcpzA2aSTPOZGTsgo17+pm5iyeNbw99sOXaAtjzGhI0US7rA9JFYM
-         NdjOw5TPHvFA7UWN8Yi/yrnUS0mAp9ESzn0WpaQc9Fbgh9/RVctJ9Gw7Ks23UDTbWOmE
-         ErHHsADP/0YOiMMA+WqZezjWiGbAarS71LsF3egMD9eoelKktNk1WRYzyChJB/raEXS+
-         AHjyWFjxLPhwf41PZYK6bEi+hK+u3/K00Z0Ykw6vnL9dftNCNwPd9QRAH0jTxM85ycDC
-         k4LkJKkM5yfmaQO74vfGpcglou1bRxabOh7qCU7SNqeo1I5HRkU0uAtRlSVx5q8DIAjm
-         13uw==
+        d=google.com; s=20251104; t=1788887129; x=1789491929; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=t2BEbL6oK2TNdrl07S1eqJBu8muYQ4YhMI1yhqy/NuU=;
+        b=VcP3ZH11dhdIoMyagWbPOTGxicRrjmM5Mu56x7iTMzcIY2YhzqLWEwpsJ0QZ1pXL5a
+         jAlSPoPelQOEtkFqoko97YRGUDsP7EDeXo6yqhVMduDldn94cK0lMLtOOKwk0c9UAD3f
+         Z0gpLxQjWbO8pVBoGK7Mx7bIQW/2BI526YnYp8mdiF7gbQkgLnCvOhs06gzkM4hjP9gw
+         53hC7LqGySFijzuRDSKAdO6EOAKD4XKT8lAO81eA8FMFCj9l+va2c93pRdTsy+kHccQF
+         sBhd2AgIpEY6WdAXfFlCa3OzQ+vm2G1EUHBiUvBwMTUbK/q+SKvscVcbytuANJUFWzTq
+         GxJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788886522; x=1789491322;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:x-gm-gg
+        d=1e100.net; s=20251104; t=1788887129; x=1789491929;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=70pm1sR81UgF7K4xKYYgzlq1/hkKMl0juN2wWiFyYyI=;
-        b=R0Tpc92AZwFOe/hjS0uLtFLwN5UFPTU3HZ+6PcRLBcx5yge8pDhVvqwvCwyUT5VHev
-         Hm5Pmy1PZ0NXyzU3/uBJ46LVbD3DNSyctgMK70pNUefbBC93dRxjJhMJa6j99VYPIqAz
-         pzCDD6AC69+v/Lx2UqYHPpVHMCzwaRReEYAVImjRVJqOxrogliBjc2qY35895oU3zMtY
-         AhHP7ZzOEcBGt9jRFdJwbLvB9C7RJB90MkSH8NgJPB0Ge+Hz7Xb7SlEJkATUcmNZ9WRZ
-         yAmhIOeMpA2aykgs5U702YSmyTw/dVnG+Kg4/z/ULZLCZkwJL31RScImru/+MXoVis4J
-         rS3Q==
-X-Forwarded-Encrypted: i=1; AKwUvBzbX1rLR7vHka75V59fdgSCsHyrsIINiau1Cdnvg/9+RlaOkOU4bvAsthgnDElgQiylyQqh@lists.linux.dev
-X-Gm-Message-State: AFuF++nE2ooH6WEIr+ZE1fwiWotcOKujySWohZVgiumImoVB+yx29Bpw
-	LLCWRqe64YP4Q08Fla6MVap7CRaiohNom2Nvs7A1a0Urp9m1OcZ1y3uhZjFh+iY45A==
-X-Gm-Gg: AYBFou0J1SHCpyU0B3lZ7oXu0KwujEGStfk+YdbUzTG+hJfGMFu7EmbOKUkJ1hVOPAP
-	SsD36vtFeaPdwrApEz2Px0xwLCWk3oxSWPRme0EpZUrV1aXoHegk/abBKzOlads1Gr9gEbVp8WV
-	iUrKmhfDU8r3WvzfVPGEd+9FyQbmLU+0/SfmRQW09bGGiM1Ffloyp7f/sY8Mm+WCpLYMgzDODxL
-	8EqbMdb1hnPONVUNSXcH15g2+gcmer+lJV6oR6meXKkjpaewOn56h01m9PQIgfUMBttmC5etG2Y
-	ag6JPur8uxCFZjaFCKfbvA06fhoRbPGGqQDb0oX/z+JJFWptsyKMp+H3v/JoGW7gmJBVC+RgCV9
-	+zF6oxuTbAoXwFi6E85jgXxDpZiaOULnu7BJ7x+AywoHfzeZsl117T1p4sLEsVmsEd0SCUwMQMw
-	hBKu65gX8uapziGLB330lIG+fqtHT/665qIcrgt0fzEqNiJiZAIUJRRpIaqVna3SOrMwBS2/2qO
-	+HL7apseDPXipToyYj2VinmNySlBz8NWFLg7emVV9DTAr2g
-X-Received: by 2002:a05:600c:c088:b0:49c:fee1:5095 with SMTP id 5b1f17b1804b1-49d05a2110amr2862085e9.16.1788886522045;
-        Tue, 08 Sep 2026 09:55:22 -0700 (PDT)
-Received: from localhost ([2a00:79e0:288a:8:ac21:220d:3908:7e61])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-485883c6ba4sm42193292f8f.25.2026.09.08.09.55.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Sep 2026 09:55:21 -0700 (PDT)
-From: Jann Horn <jannh@google.com>
-Date: Tue, 08 Sep 2026 18:54:52 +0200
-Subject: [PATCH RFC v3 12/12] Documentation/kcov: add documentation for
- EXT_RECORDS and KCOV_MEMORY
+        bh=t2BEbL6oK2TNdrl07S1eqJBu8muYQ4YhMI1yhqy/NuU=;
+        b=mu1rrY8O82UCc606ltJzmbZQ5uptzzkCgL9rnaz5POiR33LNxcX5z3TBdVao9CSsLS
+         vlT2GbECxifbbiMi3PLeyVqCFr1TKIq72dc3J00sHTDZx6kmwG4FAm7n7vDn3UgPIfzQ
+         zRYCFk6nLpKgqw+mxJRzJrHhiacGmteEATFUX5wwV1FbyJM9oTZ+6lOriHgTLUdN9Nd1
+         Am6JWPgsHnba4oMwyr4CIlKY/gMj325lTfjYaKMu3B6WcrxQKpxKVVRB3iHI0A1SJExL
+         b15hlng6SInTCyy8XW30oFMiEpU/j8f1PY49SptHSxbvm0g07mSpe+ZnqcwcgFgguGWb
+         0dVQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxjRHRqyu2tIh32tgdaQ3aMQVLyadodE3Wt1rw2D7SBa2q2aBunwl1QjB0bGoGZ01Ljpjq5@lists.linux.dev
+X-Gm-Message-State: AFuF++nj9bWexI/RDnaf3RgBlRVOn+s1kpuCtqDrwc8gJvwLDvS4LcQ2
+	9gvY4Kp4nn9dtNAYRxMw4Sa1P968oviRWybc8oYRNfVEUfhl+4CX01KebcN1OzK8n4T9b2GYQFn
+	u6ANXmlLEpvM/xOnv7dVePOmn+uPby4wXY7sKUNyW
+X-Gm-Gg: AYBFou2LvWkb7qTPHffA1Opbgl0/nU4bxEKvjtVjCylYJ15I3a2mq94+RXZCXBuWLi+
+	okGnNtlT4rBb57f/6rtVOcKAuZFljocHz9VlNPsIGfycGq2N8J0Ca0gNU9mOYEEJhUuX0FAuvBv
+	ZBvBq9FGTy2noFIaZFp8DehRA+KQ1OLcHPCxk2NawwhBiYo5F4xbIurOGm4RbWAxI+j4ApoToQE
+	GYUVgxP0jg8ALsv+haNEoH7NqORH0HJBXbW2MNaVpkT18f7l7Z198Gh6+wbpuGbGtbzcLnv0fnN
+	gRMmBohZSdWoO+wjjGFsH5UOJZS5s7qmOrB4omxov7qE/QyKKtFS7LNTqfiGvBWE73lzGdVLChN
+	Y/fNR8s6wCzvkOoIZ5cjkPIqticM3vbA=
+X-Received: by 2002:a17:903:26cc:b0:2d5:db3d:1a43 with SMTP id
+ d9443c01a7336-2db28e87ca5mr17559255ad.16.1788887128208; Tue, 08 Sep 2026
+ 10:05:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260908-kcov-extrecord-v3-12-dcbc11593e88@google.com>
-References: <20260908-kcov-extrecord-v3-0-dcbc11593e88@google.com>
-In-Reply-To: <20260908-kcov-extrecord-v3-0-dcbc11593e88@google.com>
-To: Dmitry Vyukov <dvyukov@google.com>, 
- Andrey Konovalov <andreyknvl@gmail.com>, 
- Alexander Potapenko <glider@google.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
- llvm@lists.linux.dev, Jann Horn <jannh@google.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788886494; l=3853;
- i=jannh@google.com; s=20240730; h=from:subject:message-id;
- bh=YCFdNceXAmFoeYaaoZilFisOt8nfet1SAE5gqKxRIb8=;
- b=aSllr6z4j5ZxQFN1J4mtvDyw4zIh2DzHMu0rf2hZN2Vk9RDxRq5UJb5pLt39tiRv6TbjlJMFn
- p1/1QLFNZ2ACxGm/+aK3WHNWaEbF1RiMPvLuwTx3hkv8nAjV+J0f3xl
-X-Developer-Key: i=jannh@google.com; a=ed25519;
- pk=AljNtGOzXeF6khBXDJVVvwSEkVDGnnZZYqfWhP1V+C8=
+References: <20260908-kcov-extrecord-v3-0-dcbc11593e88@google.com> <20260908-kcov-extrecord-v3-8-dcbc11593e88@google.com>
+In-Reply-To: <20260908-kcov-extrecord-v3-8-dcbc11593e88@google.com>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 8 Sep 2026 19:04:50 +0200
+X-Gm-Features: AcwNN1VvbLJASh_Ky3VRZJSD9T0ID1T_I_eVvcK3XtYNZ85Q5pJtmiWgBBKhAmI
+Message-ID: <CAG48ez1ueO-rc+TKQZJoFuf0ingYR=E7s_exEDvOyE=CsDp7Ew@mail.gmail.com>
+Subject: Re: [PATCH RFC v3 08/12] kcov: log freeing of SLUB objects and pages
+To: Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Alexander Potapenko <glider@google.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Brendan Jackman <brendan.jackman@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, 
+	Harry Yoo <harry@kernel.org>, Hao Li <hao.li@linux.dev>, Christoph Lameter <cl@gentwo.org>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Document the new KCOV features CONFIG_KCOV_EXT_RECORDS and
-CONFIG_KCOV_MEMORY.
+On Tue, Sep 8, 2026 at 6:55=E2=80=AFPM Jann Horn <jannh@google.com> wrote:
+> To help with using CONFIG_KCOV_MEMORY for detecting use-after-free issues=
+,
+> log when memory (SLUB objects or page allocations) is being freed.
+>
+> This should happen after KASAN has already marked the memory as freed;
+> this will become important if we allow driving delay injection off this
+> in the future.
 
-Signed-off-by: Jann Horn <jannh@google.com>
----
- Documentation/dev-tools/kcov.rst | 70 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+Oops, I should include the page allocator and SLUB people on this one
+patch in the series, since I'm adding a hook in their code.
 
-diff --git a/Documentation/dev-tools/kcov.rst b/Documentation/dev-tools/kcov.rst
-index 1a739290c8ec..41eef656ed90 100644
---- a/Documentation/dev-tools/kcov.rst
-+++ b/Documentation/dev-tools/kcov.rst
-@@ -383,3 +383,73 @@ local tasks spawned by the process and the global task that handles USB bus #1:
- 		perror("close"), exit(1);
- 	return 0;
-     }
-+
-+Extended trace format
-+---------------------
-+
-+If the kernel is built with ``CONFIG_KCOV_EXT_RECORDS=y`` (which requires LLVM
-+>=23.1.0), the ``KCOV_TRACE_PC_EXT`` mode can be used instead of
-+``KCOV_TRACE_PC``.
-+
-+``KCOV_TRACE_PC_EXT`` uses the top byte of recorded PCs to store a record type.
-+The function entry block is recorded with type ``KCOV_RECORDFLAG_TYPE_ENTRY``,
-+and an additional record with ``KCOV_RECORDFLAG_TYPE_EXIT`` is generated on
-+function exit.
-+
-+``KCOV_RECORDFLAG_TYPE_ENTRY`` records are immediately followed by the PC from
-+which the call occurred.
-+
-+After code sections which have to temporarily stop emitting KCOV trace events,
-+a ``KCOV_RECORDFLAG_TYPE_EESUM`` record summarizes the entry/exit events that
-+happened.
-+
-+Together, these record types allow keeping track of the current stack trace.
-+
-+Memory access tracing
-+---------------------
-+
-+If the kernel is built with ``CONFIG_KCOV_MEMORY=y`` (which depends on
-+``CONFIG_KCOV_EXT_RECORDS=y``), the ``KCOV_TRACE_MEMORY_ACCESS`` mode can be
-+used to produce a trace similar to ``KCOV_TRACE_PC_EXT``, but with additional
-+``KCOV_RECORDFLAG_TYPE_MEMORY`` records that are emitted for every memory
-+access.
-+
-+In such a trace, when a record with type ``KCOV_RECORDFLAG_TYPE_MEMORY`` is
-+encountered, the trace element is a ``struct memory_access_record`` with a
-+size returned by the ioctl ``KCOV_GET_MEMORY_RECORD_SIZE``.
-+
-+Delay injection
-+---------------
-+
-+If the kernel is built with ``CONFIG_KCOV_MEMORY=y``, userspace can configure
-+soft ordering constraints (like "this load on thread A should happen before that
-+write happens on thread B") through the ioctl ``KCOV_SET_DI``, with an argument
-+pointing to a ``struct kcov_set_di_arg``.
-+The kernel will attempt to fulfill these ordering constraints by spin-waiting,
-+with a configurable timeout ``spin_limit`` after which the kernel gives up on
-+forcing the specified ordering.
-+
-+For each thread, userspace supplies an array of ``struct kcov_di_stack``
-+elements, each of which describes an action to take at a specific call stack
-+ending at an instrumented memory access.
-+An action is one of:
-+
-+ - ``DI_STACK_WAKE_PRE``: "set synchronization bit N before this memory access"
-+ - ``DI_STACK_WAKE_POST``: "set synchronization bit N after this memory access"
-+ - ``DI_STACK_WAIT``: "spin-wait for synchronization bit N"
-+
-+These are normally paired between two threads: One thread sets synchronization
-+bit N after the access at call stack A, another thread spin-waits for
-+synchronization bit N before the access at call stack B, and this establishes an
-+A-happens-before-B ordering.
-+
-+Since this involves multiple threads (and therefore multiple KCOV instances),
-+the member ``sync_bits_fd`` in ``struct kcov_set_di_arg`` informs the kernel
-+which KCOV instance holds the shared synchronization bits (where -1 means the
-+current instance).
-+
-+Userspace can also directly interact with these synchronization bits using:
-+
-+ - ``KCOV_RESET_DI_FLAGS`` for zeroing all bits
-+ - ``KCOV_WAKE_DI_FLAG`` for setting a specific bit
-+ - ``KCOV_SPINWAIT_DI_FLAG`` for spin-waiting on a specific bit
-
--- 
-2.55.0.979.g7e5102b832-goog
-
+> Signed-off-by: Jann Horn <jannh@google.com>
+> ---
+>  include/uapi/linux/kcov.h | 1 +
+>  mm/kasan/common.c         | 2 ++
+>  mm/page_alloc.c           | 3 +++
+>  3 files changed, 6 insertions(+)
+>
+> diff --git a/include/uapi/linux/kcov.h b/include/uapi/linux/kcov.h
+> index 7d7147e7b427..76822d1c119a 100644
+> --- a/include/uapi/linux/kcov.h
+> +++ b/include/uapi/linux/kcov.h
+> @@ -90,6 +90,7 @@ static inline __u64 kcov_remote_handle(__u64 subsys, __=
+u64 inst)
+>  #define MEMORY_ACCESS_RECORD_WRITE 0x10
+>  #define MEMORY_ACCESS_RECORD_RMW 0x20
+>  #define MEMORY_ACCESS_RECORD_ATOMIC 0x40
+> +#define MEMORY_ACCESS_RECORD_FREE 0x80
+>  struct memory_access_record {
+>         __aligned_u64 ip_address_and_kcov_flags;
+>         __aligned_u64 data_address;
+> diff --git a/mm/kasan/common.c b/mm/kasan/common.c
+> index 1ab77ac9719c..3a648eaad024 100644
+> --- a/mm/kasan/common.c
+> +++ b/mm/kasan/common.c
+> @@ -283,6 +283,8 @@ bool __kasan_slab_free(struct kmem_cache *cache, void=
+ *object, bool init,
+>                 return false;
+>
+>         poison_slab_object(cache, object, init);
+> +       _kcov_handle_memaccess(object, cache->object_size,
+> +                                   MEMORY_ACCESS_RECORD_WRITE|MEMORY_ACC=
+ESS_RECORD_FREE);
+>
+>         if (no_quarantine)
+>                 return false;
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 083cbcb5bdde..910d14925b84 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -1446,6 +1446,9 @@ static __always_inline bool __free_pages_prepare(st=
+ruct page *page,
+>         if (init)
+>                 clear_highpages_kasan_tagged(page, 1 << order);
+>
+> +       _kcov_handle_memaccess(page_address(page), (1 << order)*PAGE_SIZE=
+,
+> +                                   MEMORY_ACCESS_RECORD_WRITE|MEMORY_ACC=
+ESS_RECORD_FREE);
+> +
+>         /*
+>          * arch_free_page() can make the page's contents inaccessible.  s=
+390
+>          * does this.  So nothing which can access the page's contents sh=
+ould
+>
+> --
+> 2.55.0.979.g7e5102b832-goog
+>
