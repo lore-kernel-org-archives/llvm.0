@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4EE854854B
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4255476E1
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 13:01:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788872526; cv=none; b=Z1uZ751B173lVCwbYNotRdmT04jhg712FZCgCZeSZJAkKmWx/hG3OxSGF3BmZkbJpLraS/9mduFLTUiYJ56oVwPGt3EMgn2xQo9BEIkK/nu/MH7BGsMuHapVrrDd9fkQSILgdqsEv3+aLgc/AXQWg3AjBBXXNbync3J/W96YfEE=
+	t=1788872528; cv=none; b=FghgtwzgMunOCw8fsEig7taBVwzUS6X6Nxw1MhliCJt0R+31rgtV4ZKD2HwkJX8nsEiCtc8M0cahoMVM1/kHrx7MDNvee3m/IuhVx4X18ZdkWhqlbyscVB9KIhz+Y51hOHKPEW9RtuHXbZwhaI0C+OOyFH8hJGjOFqXK5FtTssY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788872526; c=relaxed/simple;
-	bh=jWCyyfZ9I3VCtLkKmk044coxRXktwvjMCKi5KK2n5aI=;
+	s=arc-20240116; t=1788872528; c=relaxed/simple;
+	bh=efqjTQ6fiQEz2JqGP5+95IdE1vOOyS2YwBR2iBhI5c0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=E+b0GDar0sCsPLjNuNMD6t4D7dLZpq2q+xF4fJ+ELM2F0OxbzngDdDVurqEmRfcUguQYf4xeylXs3BoZ71HJh5rid5utLyT8CetkDjhGWQSH/btr/znmEa4x9/+IamvyVHQFC6Lx0XVreyGMGAPeYzRKW8XDzwJXVx8EDL08TmA=
+	 MIME-Version; b=iGbA5u9QWXG5PCQkYhAszty1LE9UKEgYzuaNAr2wZ0JsgQULOLg2zFAVdiuIqaRI40zBYFmK7m+fN6n/EBO+xi9K7oRGukbHZAMRGY3mRJFGuzIRo6RC/6oDgpjhpGmLeowj4LfJUogmKLEFn68FjHJhdNE7gL2CrjDCNuuny70=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPFT4dTQzYQvRS
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hfPFT6hZdzYQvQr
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:01:01 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 2A3BC40578
+	by mail.maildlp.com (Postfix) with ESMTP id 7135840576
 	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 21:01:53 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAni5gpB6BqC9rlBA--.34632S3;
-	Tue, 08 Sep 2026 21:01:52 +0800 (CST)
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAni5gpB6BqC9rlBA--.34632S6;
+	Tue, 08 Sep 2026 21:01:53 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v5 01/26] perf capstone: Symbolize address operands to match objdump on arm64
-Date: Tue,  8 Sep 2026 13:00:57 +0000
-Message-Id: <20260908130122.633500-2-wutengda@huaweicloud.com>
+Subject: [PATCH v5 04/26] perf annotate-arm64: Handle load and store instructions
+Date: Tue,  8 Sep 2026 13:01:00 +0000
+Message-Id: <20260908130122.633500-5-wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260908130122.633500-1-wutengda@huaweicloud.com>
 References: <20260908130122.633500-1-wutengda@huaweicloud.com>
@@ -57,334 +57,222 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAni5gpB6BqC9rlBA--.34632S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxtw15AF13JFWDKFW5Gr1rZwb_yoWfWFW7pa
-	1kC345Xrs5JF1fWws5Ja1kX343K393XF1Yk3y7C3ySkrnIgrn3JayxKFya9Fy5GrykGw47
-	tFs0yr45Wrs3Jr7anT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUQ214x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr4l82xGYIkIc2
-	x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0
-	Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM2
-	8EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AI
-	xVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20x
-	vE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xv
-	r2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2IY04
-	v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28IcwCF04k20xvY0x0EwIxG
-	rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
-	vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IY
-	x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26c
-	xKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRXdb1UUUUU
+X-CM-TRANSID:gCh0CgAni5gpB6BqC9rlBA--.34632S6
+X-Coremail-Antispam: 1UD129KBjvJXoW3XF4rXr15Xr4xurW5Gry7GFg_yoWxXrWfpa
+	92k345tr42qr4rW3WftF4kZ34fGa18Ja4a9ry8Jwn3Ca1avryxtFn5Kr12kFs8Grykur43
+	XFn0vry0vF98A3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUQm14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
+	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
+	z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
+	4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
+	3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
+	IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
+	M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2
+	kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl42xK82IYc2Ij
+	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+	2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1lIxAIcV
+	CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
+	c7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRGMKuUUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Capstone currently outputs address-bearing instructions with a raw hex
-value prefixed by '#', without symbolic resolution. This differs from
-objdump output and leads to parse failures in jump__parse() and
-arm64_mov__parse() on arm64.
+Add ldst_ops to handle load and store instructions in order to parse
+the data types and offsets associated with PMU events for memory access
+instructions. There are many variants of load and store instructions in
+arm64, making it difficult to match all of these instruction names
+completely. Therefore, only the instruction prefixes are matched. The
+prefix 'ld|st' covers most of the memory access instructions, 'cas|swp'
+matches atomic instructions, and 'prf' matches memory prefetch
+instructions.
 
-Example of the mismatch:
-  Current: b #0xffff8000800114c8
-  Objdump: b ffff8000800114c8 <el0t_64_sync+0x108>
-
-  Current: adrp x18, #0xffff800081f5f000
-  Objdump: adrp x18, ffff800081f5f000 <this_cpu_vector>
-
-Fix this by extending symbol__disassemble_capstone() to:
-- Enable CS_OPT_DETAIL for arm64 to access instruction group info.
-- Detect instructions with address operands requiring symbolization
-  (jump/call/branch/adr/adrp) via opcode or Capstone group ID.
-- Resolve target addresses to symbols via resolve_symbol_from_addr().
-- Format output to match objdump's style (strip '#' prefix, add
-  symbol and offset).
-
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/capstone.c | 185 +++++++++++++++++++++++++++++--------
- tools/perf/util/disasm.c   |   5 +
- tools/perf/util/disasm.h   |   1 +
- 3 files changed, 153 insertions(+), 38 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 140 ++++++++++++++++++
+ 1 file changed, 140 insertions(+)
 
-diff --git a/tools/perf/util/capstone.c b/tools/perf/util/capstone.c
-index 74213daf8786..7f82c33e3464 100644
---- a/tools/perf/util/capstone.c
-+++ b/tools/perf/util/capstone.c
-@@ -3,6 +3,7 @@
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index 151184210691..a7595a954cfa 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -14,6 +14,7 @@ struct arch_arm64 {
+ 	struct arch arch;
+ 	regex_t call_insn;
+ 	regex_t jump_insn;
++	regex_t ldst_insn; /* load and store instruction */
+ };
  
- #include <errno.h>
- #include <inttypes.h>
-+#include <stdlib.h>
- #include <string.h>
+ static bool arm64__is_reg(const char *op)
+@@ -170,6 +171,130 @@ static const struct ins_ops arm64_mov_ops = {
+ 	.scnprintf = arm64_mov__scnprintf,
+ };
  
- #include <dlfcn.h>
-@@ -31,6 +32,10 @@
- #define CS_MODE_RISCVC   4
- #endif
- 
-+#if CS_VERSION_MAJOR < 4
-+#define ARM64_GRP_BRANCH_RELATIVE  7  /* = CS_GRP_BRANCH_RELATIVE */
-+#endif
-+
- #ifdef LIBCAPSTONE_DLOPEN
- static void *perf_cs_dll_handle(void)
- {
-@@ -225,6 +230,12 @@ static int capstone_init(uint16_t e_machine, csh *cs_handle, bool is64, bool is_
- 		 * on x86 by investigating instruction details.
- 		 */
- 		perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
-+	} else if (arch == CS_ARCH_ARM64) {
-+		/*
-+		 * Same as x86: arm64 needs instruction details to resolve
-+		 * symbolic addresses.
-+		 */
-+		perf_cs_option(*cs_handle, CS_OPT_DETAIL, CS_OPT_ON);
- 	}
- 
- 	return 0;
-@@ -292,16 +303,44 @@ ssize_t capstone__fprintf_insn_asm(struct machine *machine, struct thread *threa
- 	return printed;
- }
- 
-+static int resolve_symbol_from_addr(struct map *map, u64 addr,
-+				    const char **sym_name, u64 *sym_offset)
++static bool arm64__insn_is_target_on_right(const char *ins_name)
 +{
-+	struct map *found_map = NULL;
-+	struct symbol *sym;
-+	u64 al_addr;
-+	u64 ip = map__objdump_2mem(map, addr);
++	/*
++	 * Store instructions write to the memory operand on the right,
++	 * unlike standard syntax where the target is the left operand.
++	 */
++	return !strncmp(ins_name, "st", 2);
++}
 +
-+	if (dso__kernel(map__dso(map))) {
-+		/*
-+		 * The kernel maps can be split into sections, let's
-+		 * find the map first and then search the symbol.
-+		 */
-+		found_map = maps__find(map__kmaps(map), ip);
-+		if (found_map == NULL)
-+			return -1;
-+		map = found_map;
-+	}
++/*
++ * This function is used to parse arm64 load/store instructions into
++ * instruction operands.
++ *
++ * Typical instructions and their parsing logic:
++ *
++ * 1. Immediate offset:
++ *    ldr   x2, [x0]                -> target="x2", source="[x0]"
++ *    ldr   x2, [x0, #24]           -> target="x2", source="[x0, #24]"
++ *    ldp   x19, x20, [sp, #16]     -> target="x19, x20", source="[sp, #16]"
++ *
++ * 2. Pre-index addressing:
++ *    stp   x29, x30, [sp, #-64]!   -> target="[sp, #-64]!", source="x29, x30"
++ *
++ * 3. Post-index addressing:
++ *    str   x1, [x0], #8            -> target="[x0], #8", source="x1"
++ *    ldr   w1, [x21], #4           -> target="w1", source="[x21], #4"
++ *    ldp   x29, x30, [sp], #32     -> target="x29, x30", source="[sp], #32"
++ *
++ * 4. Register offset / extension:
++ *    ldr   x0, [x1, w0, sxtw #3]   -> target="x0", source="[x1, w0, sxtw #3]"
++ *    ldr   x0, [x1, x0, lsl #3]    -> target="x0", source="[x1, x0, lsl #3]"
++ *
++ * 5. Atomic operations:
++ *    cas   w3, w1, [x0]            -> target="w3, w1", source="[x0]"
++ *    swp   x3, x0, [x2]            -> target="x3, x0", source="[x2]"
++ *
++ * 6. Prefetch memory:
++ *    prfm  pstl1strm, [x4]         -> target="pstl1strm", source="[x4]"
++ *
++ * 7. PC-relative loads (No bracket found):
++ *    ldr   x0, ffff800080f40c68 <__kvm_nvhe_$d>  -> Fallback to default parser
++ *
++ * Parsing strategy:
++ * Use the '[' bracket as the boundary to split the operands into left
++ * and right sides. For non-store instructions, the left side is the
++ * target and the right side is the source. For store instructions, the
++ * roles are reversed.
++ */
++static int arm64_ldst__parse(const struct arch *arch, struct ins_operands *ops,
++			     struct map_symbol *ms, struct disasm_line *dl)
++{
++	char *raw, *s, *left, *right;
++	int ret = -1;
 +
-+	/* convert it to map-relative address for search */
-+	al_addr = map__map_ip(map, ip);
-+
-+	sym = map__find_symbol(map, al_addr);
-+	map__put(found_map);
-+
-+	if (sym == NULL)
++	raw = rstrip_space_and_comment(ops->raw, arch->objdump.comment_char);
++	if (!raw)
 +		return -1;
 +
-+	*sym_name = sym->name;
-+	*sym_offset = al_addr - sym->start;
++	s = strchr(raw, arch->objdump.memory_ref_char);
++	if (!s) {
++		/* Fallback to default parser for PC-relative loads. */
++		free(raw);
++		return arm64_mov__parse(arch, ops, ms, dl);
++	}
++
++	right = strdup(s);
++	if (!right)
++		goto out_free_raw;
++
++	while (s > raw && *s != ',')
++		--s;
++
++	if (s == raw)
++		goto out_free_right;
++
++	*s = '\0';
++	left = strdup(raw);
++	*s = ',';
++	if (!left)
++		goto out_free_right;
++
++	free(raw);
++
++	if (arm64__insn_is_target_on_right(dl->ins.name)) {
++		ops->source.raw = left;
++		ops->source.mem_ref = false;
++
++		ops->target.raw = right;
++		ops->target.mem_ref = true;
++	} else {
++		ops->source.raw = right;
++		ops->source.mem_ref = true;
++
++		ops->target.raw = left;
++		ops->target.mem_ref = false;
++	}
++
++	ops->source.multi_regs = arm64__check_multi_regs(arch, ops->source.raw);
++	ops->target.multi_regs = arm64__check_multi_regs(arch, ops->target.raw);
++
 +	return 0;
++
++out_free_right:
++	free(right);
++out_free_raw:
++	free(raw);
++	return ret;
 +}
 +
- static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
- 				  struct annotate_args *args, u64 addr)
++static int arm64_ldst__scnprintf(const struct ins *ins, char *bf, size_t size,
++				 struct ins_operands *ops, int max_ins_name)
++{
++	if (arm64__insn_is_target_on_right(ins->name))
++		return scnprintf(bf, size, "%-*s %s", max_ins_name, ins->name, ops->raw);
++
++	return scnprintf(bf, size, "%-*s %s, %s", max_ins_name, ins->name,
++			 ops->target.raw, ops->source.name ?: ops->source.raw);
++}
++
++static struct ins_ops arm64_ldst_ops = {
++	.parse	   = arm64_ldst__parse,
++	.scnprintf = arm64_ldst__scnprintf,
++};
++
+ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
  {
- 	int i;
- 	struct map *map = args->ms->map;
--	struct symbol *sym;
--
--	/* TODO: support more architectures */
--	if (!arch__is_x86(args->arch))
--		return;
+ 	struct arch_arm64 *arm = container_of(arch, struct arch_arm64, arch);
+@@ -180,6 +305,8 @@ static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch,
+ 		ops = &jump_ops;
+ 	else if (!regexec(&arm->call_insn, name, 2, match, 0))
+ 		ops = &call_ops;
++	else if (!regexec(&arm->ldst_insn, name, 2, match, 0))
++		ops = &arm64_ldst_ops;
+ 	else if (!strcmp(name, "ret"))
+ 		ops = &ret_ops;
+ 	else
+@@ -205,6 +332,7 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	arch->objdump.comment_char	  = '/';
+ 	arch->objdump.skip_functions_char = '+';
+ 	arch->objdump.memory_ref_char	  = '[';
++	arch->objdump.imm_char		  = '#';
+ 	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
  
- 	if (insn->detail == NULL)
- 		return;
-@@ -309,7 +348,8 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
- 	for (i = 0; i < insn->detail->x86.op_count; i++) {
- 		struct cs_x86_op *op = &insn->detail->x86.operands[i];
- 		u64 orig_addr;
--		struct map *found_map = NULL;
-+		const char *sym_name = NULL;
-+		u64 sym_offset;
+ 	/* bl, blr */
+@@ -218,8 +346,20 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+ 	if (err)
+ 		goto out_free_call;
  
- 		if (op->type != X86_OP_MEM)
- 			continue;
-@@ -320,40 +360,114 @@ static void print_capstone_detail(struct cs_insn *insn, char *buf, size_t len,
- 
- 		/* get the target address */
- 		orig_addr = addr + insn->size + op->mem.disp;
--		addr = map__objdump_2mem(map, orig_addr);
--
--		if (dso__kernel(map__dso(map))) {
--			/*
--			 * The kernel maps can be split into sections, let's
--			 * find the map first and then search the symbol.
--			 */
--			found_map = maps__find(map__kmaps(map), addr);
--			if (found_map == NULL)
--				continue;
--			map = found_map;
--		}
--
--		/* convert it to map-relative address for search */
--		addr = map__map_ip(map, addr);
--
--		sym = map__find_symbol(map, addr);
--		if (sym == NULL) {
--			map__put(found_map);
-+		if (resolve_symbol_from_addr(map, orig_addr, &sym_name, &sym_offset))
- 			continue;
--		}
- 
--		if (addr == sym->start) {
-+		if (sym_offset == 0) {
- 			scnprintf(buf, len, "\t# %"PRIx64" <%s>",
--				  orig_addr, sym->name);
-+				  orig_addr, sym_name);
- 		} else {
- 			scnprintf(buf, len, "\t# %"PRIx64" <%s+%#"PRIx64">",
--				  orig_addr, sym->name, addr - sym->start);
-+				  orig_addr, sym_name, sym_offset);
- 		}
--		map__put(found_map);
- 		break;
- 	}
- }
- 
-+static int print_default_format(struct cs_insn *insn, char *buf, size_t len)
-+{
-+	return scnprintf(buf, len, "       %-7s %s",
-+			 insn->mnemonic, insn->op_str);
-+}
-+
-+static void format_capstone_insn_x86(struct cs_insn *insn, char *buf,
-+				     size_t len, struct annotate_args *args,
-+				     u64 addr)
-+{
-+	int printed;
-+
-+	printed = print_default_format(insn, buf, len);
-+	buf += printed;
-+	len -= printed;
-+
-+	print_capstone_detail(insn, buf, len, args, addr);
-+}
-+
-+static bool needs_symbolic_address(struct cs_insn *insn)
-+{
-+	int i;
-+
-+	if (insn->id == ARM64_INS_ADR || insn->id == ARM64_INS_ADRP)
-+		return true;
-+
-+	if (insn->detail == NULL)
-+		return false;
-+
-+	for (i = 0; i < insn->detail->groups_count; i++) {
-+		if (insn->detail->groups[i] == ARM64_GRP_JUMP ||
-+		    insn->detail->groups[i] == ARM64_GRP_CALL ||
-+		    insn->detail->groups[i] == ARM64_GRP_BRANCH_RELATIVE)
-+			return true;
-+	}
-+
-+	return false;
-+}
-+
-+static void format_capstone_insn_arm64(struct cs_insn *insn, char *buf,
-+				       size_t len, struct annotate_args *args)
-+{
-+	struct map *map = args->ms->map;
-+	char *last_imm, *endptr;
-+	u64 addr;
-+
-+	print_default_format(insn, buf, len);
 +	/*
-+	 * Adjust instructions to keep the existing behavior with objdump.
-+	 *
-+	 * Example conversion:
-+	 * From: b #0xffff8000800114c8
-+	 * To:   b ffff8000800114c8 <el0t_64_sync+0x108>
++	 * The ARM64 architecture has many variants of load/store instructions.
++	 * It is quite challenging to match all of them completely. Here, we
++	 * only match the prefixes of these instructions.
 +	 */
-+	if (needs_symbolic_address(insn)) {
-+		const char *sym_name = NULL;
-+		u64 sym_offset;
++	err = regcomp(&arm->ldst_insn, "^(ld|st|cas|prf|swp)",
++		      REG_EXTENDED);
++	if (err)
++		goto out_free_jump;
 +
-+		/* Extract last immediate value as address */
-+		last_imm = strrchr(buf, '#');
-+		if (!last_imm)
-+			return;
-+
-+		addr = strtoull(last_imm + 1, &endptr, 16);
-+		if (endptr == last_imm + 1)
-+			return;
-+
-+		if (resolve_symbol_from_addr(map, addr, &sym_name, &sym_offset))
-+			return;
-+
-+		/* Symbolize the resolved address */
-+		len = len - (last_imm - buf);
-+		if (sym_offset == 0) {
-+			scnprintf(last_imm, len, "%"PRIx64" <%s>",
-+				  addr, sym_name);
-+		} else {
-+			scnprintf(last_imm, len, "%"PRIx64" <%s+%#"PRIx64">",
-+				  addr, sym_name, sym_offset);
-+		}
-+	}
-+}
-+
-+static void format_capstone_insn(struct cs_insn *insn, char *buf, size_t len,
-+				 struct annotate_args *args, u64 addr)
-+{
-+	/* TODO: support more architectures */
-+	if (arch__is_x86(args->arch))
-+		format_capstone_insn_x86(insn, buf, len, args, addr);
-+	else if (arch__is_arm64(args->arch))
-+		format_capstone_insn_arm64(insn, buf, len, args);
-+	else
-+		print_default_format(insn, buf, len);
-+}
-+
- struct find_file_offset_data {
- 	u64 ip;
- 	u64 offset;
-@@ -446,14 +560,9 @@ int symbol__disassemble_capstone(const char *filename, struct symbol *sym,
+ 	return arch;
  
- 	free_count = count = perf_cs_disasm(handle, buf, buf_len, start, buf_len, &insn);
- 	for (i = 0, offset = 0; i < count; i++) {
--		int printed;
--
--		printed = scnprintf(disasm_buf, sizeof(disasm_buf),
--				    "       %-7s %s",
--				    insn[i].mnemonic, insn[i].op_str);
--		print_capstone_detail(&insn[i], disasm_buf + printed,
--				      sizeof(disasm_buf) - printed, args,
--				      start + offset);
-+		format_capstone_insn(&insn[i], disasm_buf,
-+				     sizeof(disasm_buf), args,
-+				     start + offset);
- 
- 		args->offset = offset;
- 		args->line = disasm_buf;
-diff --git a/tools/perf/util/disasm.c b/tools/perf/util/disasm.c
-index 6cfdbabbb8c7..0ba38f70fe1a 100644
---- a/tools/perf/util/disasm.c
-+++ b/tools/perf/util/disasm.c
-@@ -203,6 +203,11 @@ bool arch__is_powerpc(const struct arch *arch)
- 	return arch->id.e_machine == EM_PPC || arch->id.e_machine == EM_PPC64;
- }
- 
-+bool arch__is_arm64(const struct arch *arch)
-+{
-+	return arch->id.e_machine == EM_AARCH64;
-+}
-+
- static void ins_ops__delete(struct ins_operands *ops)
- {
- 	if (ops == NULL)
-diff --git a/tools/perf/util/disasm.h b/tools/perf/util/disasm.h
-index 25756e3f47e4..06c664fd4fc2 100644
---- a/tools/perf/util/disasm.h
-+++ b/tools/perf/util/disasm.h
-@@ -111,6 +111,7 @@ struct annotate_args {
- const struct arch *arch__find(uint16_t e_machine, uint32_t e_flags, const char *cpuid);
- bool arch__is_x86(const struct arch *arch);
- bool arch__is_powerpc(const struct arch *arch);
-+bool arch__is_arm64(const struct arch *arch);
- 
- extern const struct ins_ops call_ops;
- extern const struct ins_ops dec_ops;
++out_free_jump:
++	regfree(&arm->jump_insn);
+ out_free_call:
+ 	regfree(&arm->call_insn);
+ out_free_arm:
 -- 
 2.34.1
 
