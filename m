@@ -1,96 +1,95 @@
 Received: from mail-qk2-f12.google.com (mail-qk2-f12.google.com [74.125.230.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3A3584952
-	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 17:57:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9D359B692
+	for <llvm@lists.linux.dev>; Tue,  8 Sep 2026 18:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.204
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788890248; cv=pass; b=J8uRJ+3qWmx3VTdNnmTJDHZRC45ALSio+NbbtUnC/MbrryDMCE4El61k0evIjYFKZdaS2T24dUeOh1zl2OGt70dASnmQ6gyfTIOg2YaB/kc3+p+DnV7f7LtexbGJmsMTjKN43C4cGeqiqmBq20Xq8YNx3khIML+hpdh7+YOzox4=
+	t=1788890926; cv=pass; b=M/U9HclHGFBrGTZWis0UsJ2mUkiQMftr7VLOmx86EWxfO3KINIVldEZiEUNthbUUpIuk+f5Xb+IsF0MZNqN3f2E/NRv3Flmgch/ma9WK53LffG09O7hmJ+/D3YHyUQ/4S/dLQStTLUJj9sJ0frxNbQh+EorcU9ElmdBRZXGb880=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788890248; c=relaxed/simple;
-	bh=IJsyfPGLpm8UMa/BqkR66GRSRbIqbVXIutmTDpcavo8=;
+	s=arc-20240116; t=1788890926; c=relaxed/simple;
+	bh=z6uNhq7h7RLEB1t0y5S59Hj6nrmwj5oAdNgHqjEJ8MY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ma2Twuu9vjRXdd9HuwnL5fz+7ETU+hkwZ34bmqs8Y2FTTEeoR7w8UkiriVS7pHy/uW4qr+8PWbm5kagaJSKIXW9HLrajf230Dm2IPDFofZqFhyL2n2gFvtd8wwU58W6GmBpF7UhQ7U1P59C9PH1i2PNbck9jOtI/FbmVXv7nIsA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BaI4Bd41; arc=pass smtp.client-ip=74.125.230.204
+	 To:Cc:Content-Type; b=pnIuebXaRCW/EyStNZY/XuxDBlklujN3flAs82SS2Qg80P3p32Y7ePHANfHF6r2CCOCJBBvizUmXm2QW8K8IUXM8WufwrFGZsvzKsEOOtwSRPHuTFRuffhHsacEuNV4MItzGvusnlUQK4y13EubYpE+5/YZhWhEzfm5qhXlTpA4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sCX3umH5; arc=pass smtp.client-ip=74.125.230.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BaI4Bd41"
-Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-53012819c04so638201cf.0
-        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 10:57:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788890245; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sCX3umH5"
+Received: by mail-qk2-f12.google.com with SMTP id d75a77b69052e-5306706e89dso781921cf.1
+        for <llvm@lists.linux.dev>; Tue, 08 Sep 2026 11:08:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1788890923; cv=none;
         d=google.com; s=arc-20260327;
-        b=fZ6xodYvcVGoxg3KRqxwLzv5pYWmzGc9gLSJCOmIYodufOBj7lT2jpiviHtb7XMGRe
-         zU6qGdKIVtoKW5WfVjNXGU6XpIhAbOCDdji++6g30viDuwaqojLy3tb8H6vorP+wjeAm
-         ECNOVWyxp4B01jbm1+2RPH2iR0cGW5QkA///XRvv99jQg2mEarNuoBtZtKm7umiXw0Cq
-         7dBNttzHAS24ibpTqcvj34xCb4daWhRHr/e0Kx7OodDuo4jHBDfA+0xCC3RwI07pmYdU
-         ABekbjepiHdalw7f7FIWi3u7s5iOSNdLgrXjzt3LCdy7ahzJuJuqjfpkfzQk7LcSbVAu
-         ivWg==
+        b=Cre4K2cOM4Fo4TmcV55C/BlINpAvZ9WXZ0yZug6B8mbYPfRH93c4+F+FYGAziFO6uA
+         uk5iy1V+tIbCSfgAiBanurSuQqaTpYqlvsNQzw4vM0JLxWfZ5S01ghUxnCDzqsAcBaqv
+         60xawu3oKvmRR2eGMYjbYQkjl99rO5c32O4ElK8ErIqU4sMyNbdvstEKWCZ3NWG0IOmH
+         vy5j7ljwC8cfNDVhXDw1szR+D7RDgDnLlJjck3S6Gn8V+ImjLIZBt1t2os6jHyGNRSC9
+         V8mHhNLsiRLfIncuBxvY7uxzaDQpQErIzM5hQi5T4ExqkvbIwMw1GUwr0/EfgKqHksi8
+         MVKQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=GB2pUu7GQQ4fx2+eTrSMAv2WzH1ekSifjwCfsPepe6g=;
-        fh=JDp5meU+ZIqTLu9toEevHJWQIveANuACb54lyWhbnMo=;
-        b=R5mnUolBZ+F5RBiMiHO6/P+Kd5Kqp0hy5D4n3E4MmqidZ8kUUDfICqc2NPzuG0f0jq
-         y+VFFFXTFg/u0Y2/uSnwzNS4i7cdAex/pjfykY4pAbyBcIxtWljeuXfdjFT/D2pLz7ux
-         5a0Qkrf1sukb7Fx/tlYTXWJ16TFHxf+lLidbE2kT/AGnzE8i5zC/V/Lax7wnBAY2eX0r
-         T4tyKi/phzH2cigRJqKwXkrjM2v63howpZf4tJbsQ6uVSUdgzpvgAh+6+XfPbU5050Iq
-         gNoSsP+nc8iXtTpchWc/iSxipZi0feti9/Xixlp/03Ap0ZfZSjaYq0XskG4mw8VOOmHy
-         hDNw==;
+        bh=v56+UIFhP0Dq/iJfc/yfofNPasIIeHeXBkQoDrcfwzc=;
+        fh=8Iro6ZRhB/l0RfxA7jSqIYeHDiZeeyN3e79y5bbCy+c=;
+        b=fA6G1eGhM2319AQNOdYJokp4oUbb7qGVlPaXkR5UV/L3H+tGRidhOhiD6Tblapif00
+         oQhcr17Gb6sy9OVkFPundez2jejZgYYNZmnbh6wnFzKav+DYp3LSWYwbiMpMaDLHNMRv
+         wWcptOaq6yPxKDRQnV0Gd8hNCTCku3MXgIaaY/2lc1hlYcr7CFt1XPdeoAP9/7wRbJH/
+         j8WmGS+mmJ/8GYSN/TCbJ9jo+4OixVSGsO04Qj5wCgAzKZHvCRaqJ1NTuNqRk4rOesWB
+         5ffjozXk7HdtnGqvg16iZB9QFlU+G9TVggVsWFfF7OH8IQKeyHUtWnX7cHlt74DIEBJW
+         GR4w==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788890245; x=1789495045; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1788890923; x=1789495723; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=GB2pUu7GQQ4fx2+eTrSMAv2WzH1ekSifjwCfsPepe6g=;
-        b=BaI4Bd41aG7lZ3dwGLccSkksTMotp0UykKgp6FVKA4OucTpcBllnqvu0zZzQQTeWnn
-         93Ku8kko0NlHzf8chGRLZp3bKOsNFcAcmnNgLfoEp6su+EAMBR0XV6Y2rGpNs/zHdB6Z
-         Vrvv8pzNjZi1ka39qEdbHxO3sJIrxsVBIFKDdAx+7jXsqUlC598/CiCeVRFx4y4WAH9C
-         8dQ4lVhUw0T6MZhI/hWP5H9opyzFcHireOuwljDLoMldL+XB6CbFchrQR+eH5x7meKW0
-         IRQ1wEEUmrGo23XebLyq4qTYO+RC7YMxVxHVQcu2HBUAxlcvAjW5PI8oBI4GV4Wlr4ZJ
-         Lq/w==
+        bh=v56+UIFhP0Dq/iJfc/yfofNPasIIeHeXBkQoDrcfwzc=;
+        b=sCX3umH5nRwlAr2Q1A0N94s55E82P5pPBlYgXxdZqlz3DurqRTQ33DRa17VJ68Qb4E
+         fPNbIb/RXAcUwQMc31bqtWlY5vh8iuuA4jpAV0fxwHwVZVf63XoUtvXS0pMFxJKeqK4h
+         G8n6AWTZMIKmp5Sdj3WSYBRFnhUeAUE1HKx/VLy1jfDGRCCANWwzZE0OWKIDorcJdVu5
+         aF67ehjiY/Q8zDHJmLX0lBXSppZkSTcHYzKyilRQFnL4O53NWpSfZWZ1CH+5PfBBFBDw
+         m4exuh2+c319UYSbgWAPcxC+eLCK6RmUgfxps7Jwu6Z0/Xmj/BR5PBVReLO+abqyRy96
+         OtEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788890245; x=1789495045;
+        d=1e100.net; s=20251104; t=1788890923; x=1789495723;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GB2pUu7GQQ4fx2+eTrSMAv2WzH1ekSifjwCfsPepe6g=;
-        b=WJkU2/gxjgRYTSO+tS3PLa0a3q3bmiBSjpq5eWR9eEsaqGU8OLAcoeBdcLTPU/33bc
-         CORnlM1wQ/M/D9WJxBoY5+yC/KC/Nnug1W45PXS9otdcEEqkiflktk57uFo0vYVUIems
-         Avav7QwCdlSS+DzLfgpv7D3zp5U+moE3YZFM0SUPbi/SVlkYPnX6uijBX71TbJJ1Klyo
-         hUpI9JqUrfy0bFneUiLiCAyjby6Ggpyg+ZamoorXs7enqzToJYGyBg2n1wTRbZ5PfzY6
-         +LiD6D9XlNm/JOz9FFiP0qlx9NU1mYduI6i/+MmJfaxaozwitzSHeNhaJkOfhKqCNqAa
-         CzSg==
-X-Forwarded-Encrypted: i=1; AKwUvBxmf7bslHa4TuFG7RQdL7QHIYwCdhn+Ber+dxQgDuKI5EBteKqL80BFAF/CZ/GgPsbK0Bnb@lists.linux.dev
-X-Gm-Message-State: AFuF++nVuUlNNtCoTEFOfvh6CQDEbPwjfEGR+NLsKCZPcNroBqq4x0fa
-	IpA54PHumx3dJ89MFWPOrsf8Kq17BK61pVVynVqk+uOaibKXw71NAtLyMUk+dDjWdd7+fGb2k5R
-	PnuzyeqwRjYNGTVkjPx3d78zFf8sAHzq9Kyd3khuh
-X-Gm-Gg: AYBFou3GAu2zzzVC8/S8VdSEMfo5k8qikBY4ZaMjhHnbOw5dNRA7jm3jY+caRHBKXN7
-	V9oeYySMYvurAZhz+5sMmC+wGLuqGdDiZNQLx1D3/2LKrtsPONgJsq8taDktjh8G6zqO7YMLXnz
-	I6T5dVtnKIwV7OgQCiDHYn7FYBBxQbyKvkXu0poDxuOfVPBeZcFwhx7/hoXN//el2PldqjY9T5Y
-	yuy02dZPA7kM6UmWLlpDW2FXm7Cpqj1ZRKt7nXKRb+dAEJRsgx00KiqFEvdvYwZJrpXTZPswefF
-	ISOr1HuwOii7e7xG4L+TzLANUfNnGlcFaCYVDVuYwam12a/LtQsxjvo9rbibSaO7K0c8KRHKdw=
+        bh=v56+UIFhP0Dq/iJfc/yfofNPasIIeHeXBkQoDrcfwzc=;
+        b=bD/ww7wdqsitjGwMZDTeeZCIpf2Yz1kq0I8zfPxx0SdfdmVVO4VqdwdkWvs4STyBeL
+         lxn6cVNMQw7JTYZmfuBzAa0bo8KEwleA5R7i59aEb40LHlDL5BN0CgTuh6UMYe9GToO2
+         iZDwW8rAqI0OkradS3josCrQ77GqudnATiruOq7Qd+zlzEKiPGMV/SkHvf+Te6KdSihP
+         UqDenbEdLQnmfji/aJihdkTLMR3xBdALZjI7zVpKzF+9GFIaWcT0sqO2lRhHVyfL5sTR
+         DqFNPgThuwdoOPZUrG35vCdRTKKtM6vhvbNuI9BMYuKvbeFzI4XcHDYP+3Ce3+CJs1wA
+         iHLg==
+X-Forwarded-Encrypted: i=1; AKwUvBw8JKhYdPtH3XSJXB6UdjFjdUjwHmTQqHOuobx8ki3pzKIRkhKTmVogs1T1BCnQlpKDRcro@lists.linux.dev
+X-Gm-Message-State: AFuF++kR5tiOp22S+lH0zuEHSE3V0EpWkNkSg77CLvgj9HSSLAHXQ86Z
+	oznF7kzUAZryxShtTSxSPcoAbCf9Wrolit9PSgPf9e1sF6Owwrt8yICNsM4XKuc/DH80vyVhxqV
+	AWiu4EwEDoXVk82f3Rq2qG1nEmxrUVizkky8jnZzc
+X-Gm-Gg: AYBFou3HkxRtYZejj9SwXv0YW7c29Y+wt9r+YOd6m2roupjrC7Pmr2EXndXk3dLMVPt
+	yFieVC30UyiR5IUQWfBDfpXsXhGYmk4WZ0LvHdle2e2AjqwpXxY7kykj6dlduysdzB7lO8w5xCU
+	UfWuqXBRLfvTvSMpwVxMyC+s33E7wUeDlLla/OKD9hjriyEkqxPMTSPjt9AuQD87TfAZX4zhzcw
+	jZIF7OXUNHRO/AkmIc7T1PkDryxXqAWB07rHtFRhuYflZWYeMv6dPaykmUI5IBv+vb1iYktupgS
+	yWbsSMYUCBorMcqO8QCIL7ivnRjC1WmMj76iw6OZ/+wyOy0b4owpmWpyfOxdC26XDplTIQqJUaw
 	=
-X-Received: by 2002:ac8:5d48:0:b0:530:4cc8:b0b8 with SMTP id
- d75a77b69052e-530a46fdc0dmr598661cf.0.1788890243316; Tue, 08 Sep 2026
- 10:57:23 -0700 (PDT)
+X-Received: by 2002:a05:622a:4185:b0:517:64f6:3365 with SMTP id
+ d75a77b69052e-530a4871371mr675561cf.4.1788890922686; Tue, 08 Sep 2026
+ 11:08:42 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1788872630.git.wutengda@huaweicloud.com> <07d3cce3cb8561c07d7c77deac81eb9ab0540ccb.1788872630.git.wutengda@huaweicloud.com>
-In-Reply-To: <07d3cce3cb8561c07d7c77deac81eb9ab0540ccb.1788872630.git.wutengda@huaweicloud.com>
+References: <20260908130122.633500-1-wutengda@huaweicloud.com> <20260908130122.633500-8-wutengda@huaweicloud.com>
+In-Reply-To: <20260908130122.633500-8-wutengda@huaweicloud.com>
 From: Ian Rogers <irogers@google.com>
-Date: Tue, 8 Sep 2026 10:57:11 -0700
-X-Gm-Features: AcwNN1VTgg87NRXDwKCaLCVHhILMhGw-jUsmsmeNaMp7Cz6AWjeluRRn2LoZeEU
-Message-ID: <CAP-5=fWj19r_NcMS8DPeD7SQ7-Ak9_rRn=EOaBLUmxvPyHTSPg@mail.gmail.com>
-Subject: Re: [PATCH v5 05/26] perf annotate: Normalize arch__dwarf_regnum()
- error return values
+Date: Tue, 8 Sep 2026 11:08:31 -0700
+X-Gm-Features: AcwNN1VTV6_LLWyJv25dfFMSu7d8R8mTo5r822djiUuUpu_caviCx94Qd19XsIY
+Message-ID: <CAP-5=fUAtw6-waqmF4RJFGZ__J=DSzbNLNsOfWekj378_PnrdQ@mail.gmail.com>
+Subject: Re: [PATCH v5 07/26] perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
 To: Tengda Wu <wutengda@huaweicloud.com>
 Cc: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org, xueshuai@linux.alibaba.com, 
 	Adrian Hunter <adrian.hunter@intel.com>, Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev, 
@@ -103,45 +102,114 @@ Cc: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org, xueshuai@linux.a
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 8, 2026 at 6:05=E2=80=AFAM Tengda Wu <wutengda@huaweicloud.com>=
+On Tue, Sep 8, 2026 at 6:01=E2=80=AFAM Tengda Wu <wutengda@huaweicloud.com>=
  wrote:
 >
-> arch__dwarf_regnum() returns inconsistent error values: early path
-> returns -1 while the main lookup returns -ENOENT/-EINVAL from
-> get_dwarf_regnum(). Callers only check for -1, so genuine failures
-> can slip through.
+> The current arm64 DWARF register lookup relies on 'aarch64_regstr_tbl',
+> a static string table. While this works for kprobe-tracer where register
+> names start with '%', it is insufficient for parsing register numbers
+> directly from raw instructions (e.g., extracting '6' from 'x6' or 'w6')
+> during annotation.
 >
-> Normalize all failures to -1 to match the callers' expectation.
+> Since get_dwarf_regnum() is currently used only by 'perf annotate' and
+> does not affect kprobe-tracer, replace the limited table-based lookup
+> with a programmatic implementation in __get_dwarf_regnum_arm64(). This
+> allows resolving arm64 register names (x0-x30, w0-w30, sp, etc.) directly
+> into their corresponding DWARF register numbers.
+>
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+> ---
+>  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   | 22 +++++++++++++++++++
+>  tools/perf/util/dwarf-regs.c                  |  2 +-
+>  tools/perf/util/include/dwarf-regs.h          |  1 +
+>  3 files changed, 24 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c b/tools/p=
+erf/util/dwarf-regs-arch/dwarf-regs-arm64.c
+> index 593ca7d4fccc..720c863d1869 100644
+> --- a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
+> +++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
+> @@ -1,5 +1,8 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  #include <errno.h>
+> +#include <ctype.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+>  #include <dwarf-regs.h>
+>  #include "../../../arch/arm64/include/uapi/asm/perf_regs.h"
+>
+> @@ -10,3 +13,22 @@ int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_=
+regnum)
+>
+>         return perf_regnum;
+>  }
+> +
+> +int __get_dwarf_regnum_arm64(const char *name)
+> +{
+> +       int reg;
+> +
+> +       if (!strcmp(name, "sp"))
+> +               return 31;
+> +
+> +       if (*name !=3D 'x' && *name !=3D 'w')
+> +               return -ENOENT;
+> +
+> +       name++;
+> +       if (!isdigit(*name))
+> +               return -ENOENT;
+> +
+> +       reg =3D strtol(name, NULL, 10);
 
-This sounds like a bug in the callers but this function is local to
-annotate.c and is just a convenience so:
-
-Reviewed-by: Ian Rogers <irogers@google.com>
+Nit: perhaps this can be a little faster and ensure correct string terminat=
+ion?
+```
+if (!isdigit(name[0])) {
+    return -ENOENT;
+} else if (isdigit(name[1]) && name[2] =3D=3D '\0') {
+     reg =3D (name[1] - ' 0') * 10 + name[2] - '0';
+} else if (name[1] =3D=3D '\0) {
+   reg =3D name[1] - '0';
+} else {
+   return -ENOENT;
+}
+```
+Everything else looks good to me.
 
 Thanks,
 Ian
 
-> Suggested-by: Shuai Xue <xueshuai@linux.alibaba.com>
-> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
-> ---
->  tools/perf/util/annotate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+> +       reg =3D strtol(name, NULL, 10);
+> +
+> +       return reg >=3D 0 && reg <=3D 30 ? reg : -ENOENT;
+> +}
+> diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
+> index 797f455eba0d..bacf5c13c3bc 100644
+> --- a/tools/perf/util/dwarf-regs.c
+> +++ b/tools/perf/util/dwarf-regs.c
+> @@ -114,7 +114,7 @@ int get_dwarf_regnum(const char *name, unsigned int m=
+achine, unsigned int flags)
+>                 reg =3D _get_dwarf_regnum(arm_regstr_tbl, name);
+>                 break;
+>         case EM_AARCH64:
+> -               reg =3D _get_dwarf_regnum(aarch64_regstr_tbl, name);
+> +               reg =3D __get_dwarf_regnum_arm64(name);
+>                 break;
+>         case EM_CSKY:
+>                 reg =3D __get_csky_regnum(name, flags);
+> diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/inclu=
+de/dwarf-regs.h
+> index 46a764cf322f..a25f038bbff2 100644
+> --- a/tools/perf/util/include/dwarf-regs.h
+> +++ b/tools/perf/util/include/dwarf-regs.h
+> @@ -105,6 +105,7 @@ int __get_dwarf_regnum_x86_64(const char *name);
+>  int __get_dwarf_regnum_for_perf_regnum_i386(int perf_regnum);
+>  int __get_dwarf_regnum_for_perf_regnum_x86_64(int perf_regnum);
 >
-> diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
-> index df70e95a8470..f3d17d153b67 100644
-> --- a/tools/perf/util/annotate.c
-> +++ b/tools/perf/util/annotate.c
-> @@ -2492,7 +2492,7 @@ static int arch__dwarf_regnum(const struct arch *ar=
-ch, const char *str)
+> +int __get_dwarf_regnum_arm64(const char *name);
+>  int __get_dwarf_regnum_for_perf_regnum_arm(int perf_regnum);
+>  int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum);
 >
->         reg =3D get_dwarf_regnum(regname, arch->id.e_machine, arch->id.e_=
-flags);
->         free(regname);
-> -       return reg;
-> +       return reg < 0 ? -1 : reg;
->  }
->
->  /*
 > --
 > 2.34.1
 >
