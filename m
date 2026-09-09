@@ -1,156 +1,149 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-op-o11.zoho.com (sender4-op-o11.zoho.com [136.143.188.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F3E033A014
-	for <llvm@lists.linux.dev>; Wed,  9 Sep 2026 15:44:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788968652; cv=none; b=tNFLaga/yqWSfdDx5LfTvR+PUA+EyPEWp6lKmMhO1rNRra6cK4Dtdt/glNJFatKUEqK/l3nTyeJvD6pGt6LFBlV1u/+KEZDBSGcXfnwyndB/y58QvvHKQ6yvpCaVtWP5BHsWtSVydCPcZTKKMQZ5j7F+098Uawow034FR/jAjXU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788968652; c=relaxed/simple;
-	bh=tlXMq73KJhLbqOa3sBQb6U+eAptv38yQqOaGm+TCraA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o+Lml+t+JgpDXUcP8AM5I6IGp+iqo3Mm+/xPfTSv3X8TOf8m+bSTwpZ8LphYfz18FVOsCZot34a//hQPalpJECp1yMJRY3SEEWejLoXuE7fQ9u4dmikyuNyrrWjj1earw88ncE3NVF7bHS+diPL9LDN+QGuTu4dqsmYQnBP8iws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XvyPkywX; arc=none smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5805581FC;
+	Wed,  9 Sep 2026 15:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788968820; cv=pass; b=XOl4q3RmnTlxty5OgEG2J9F/xwcTZ3eExfNMd9KYVl1C+LJS8wDQtvkW23JCjp6oqm6CmLyAqpqLu24E1dDtnwUPDqCI/Z0vQrs5EC7TjPU1pzDQvNFycUluxUTtB7fYGfjSVZzsZWm2a4SxJ0EBCUd+9zXALYfd2a865Lpvt3E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788968820; c=relaxed/simple;
+	bh=6yQif5n5XRyay83f1ZHCtKwqfS7yhNH4nuo418vK98k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FOybMFGw+7SFdQs24/3KbFBhFoXJ+clQcpxDWuNfRR1p80VnI5BMehZzFI5ECeYivfpplCVNGZFuBLGkUNMKvx6rAjQCSrXjtD6Dyh7DM14vwwubIvDV20qVIVok0t95B6zVgZroj7SEA6y3MglKAG5SnBdfOf3GByuh+1Yxeh8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=RrRxL6K+; arc=pass smtp.client-ip=136.143.188.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XvyPkywX"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f16f12so1197167e87.1
-        for <llvm@lists.linux.dev>; Wed, 09 Sep 2026 08:44:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1788968648; x=1789573448; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=B7MDRo1IEz0/ztB5k2AgA6IiU/moC5VF/pQ54TqLA70=;
-        b=XvyPkywX8K/rkqHcDLMoN0Wl3QkJQo1sXCLdUGea8Nw89ovCiQZPO03mR7VD88AK+s
-         MDeTK7v8NGeV4dehhQSaBlBHg/CCivcxjJI5oYM2hby4cT0XJFLqQ1vpV0cdP6zZXn9G
-         w0mIe1yH+RVqKDpX3xwxx1QulCxrQIithbC3U=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788968648; x=1789573448;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=B7MDRo1IEz0/ztB5k2AgA6IiU/moC5VF/pQ54TqLA70=;
-        b=r0c79OQCibn67Ag3arhCh0lemsgysV7lfpjS9uPlMO2sgNFg2trAXBTYru5bADGvNw
-         aUPHMa2Sh7tenVkwi5nazA8rgsDVnZHKYzbOoefhgOMCph8lS1v9b8yEY+Yb4SpBG0NC
-         FwqBvU9IZXQE4koJV5E+ZN+5JRsJ9i3+nr8+BE1wC4dg9ri8NZr1b8RUOOnq4sKIbSog
-         2cCze4sydCPAbwgnf0hi1iOvGm0bPjGsAqHAqJSCESpWjfJRWYtiDkDIuIFho0G6wkWO
-         62bFjJMomCcfOyppQv8LOLCExQkGYEKsFUsfH+z5HVvMZK23nSa7p6gTaRhmT713jq0D
-         ol2g==
-X-Forwarded-Encrypted: i=1; AKwUvBwvKwSksXUxp73mj4JVcoVQAaMkKRLC1OS2E1K37crJIxl5oGAZS3vRSFyymbJ9I0hVu9Xl@lists.linux.dev
-X-Gm-Message-State: AFuF++n56cF61znhYycV1S3NY9z1uVKQsw1rgKAUer7F6Kiqytadia72
-	hU9eWQxPwAC0CqY/nct/ItLxm6pE+o3fLR/ZL++AxIlXkSmTEpf7hzvAujm9rPCDPbmMph0+Mkv
-	dhEAnVNUdN6H8
-X-Gm-Gg: AYBFou0kAV4w/rM5D19fnPlUKTmiQeYxb+etES9E1WnuiBbt1v8Z7pL/KlfrsoQF6XW
-	ojhY/DUiWaklBPAygFsPOYl/UePf3o4fzYHSbypTxqXuvVahBHuE2/L2SXNHy3q5t2T6Sowg2s3
-	FFklWiM4nvtkn0C74sHVTOsxu+Aw3WG9pxBu0B7GyoL0OF8J3GkjPINtLlTal/9i6URA2d3OJJj
-	yVBx8LP3lVSzU2r9fCA5xD3X3PnOqoZYNNKqSWHuIAPR5Sauh8CF4/2EOFsIxvNsOQAQXy4qn+I
-	Wh6n8QpTwj/Y2m0Hj3+Vi6t3C0Xsi0j8omsGJoCvZkEGUMGY8v/zFlDAZFCjPY5EKhEIPpf9yDW
-	zscD5KnP//NK8MAniUMH6/wmhyFffA0Tb1jJuHRz4GKEmAopTziD+ovjZYXm+/NRr9TzVbXRvMH
-	TBlrXXteP3hOD6krC8pjKJB7ER6udsWPhhyIUP2FICRrys9kwA3fdmrTc8KpvuRGxKBvWxkRkHH
-	d8OffeQFTcdwz1vvUCqtfVAbZg2blaB0kBwhNCmHYQqXgEuz7txbGx4Qat/
-X-Received: by 2002:a17:906:9f8c:b0:c25:58e:83ff with SMTP id a640c23a62f3a-c292af1f9c8mr478950866b.10.1788968249221;
-        Wed, 09 Sep 2026 08:37:29 -0700 (PDT)
-Received: from mail-ed2-f12.google.com (mail-ed2-f12.google.com. [74.125.228.76])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c260d55b306sm795338766b.36.2026.09.09.08.37.27
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 09 Sep 2026 08:37:27 -0700 (PDT)
-Received: by mail-ed2-f12.google.com with SMTP id 4fb4d7f45d1cf-6a60591ae52so1920425a12.0
-        for <llvm@lists.linux.dev>; Wed, 09 Sep 2026 08:37:27 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBysfKryCLHjjlMtgMRWrwKUK5pOUchHA+xaF/+1WyAfoTVJ0ouz8a6OReqBn+jBcOqcUbwN@lists.linux.dev
-X-Received: by 2002:a05:6402:3817:b0:6a6:58e:f84b with SMTP id
- 4fb4d7f45d1cf-6a98dfd77b1mr5256449a12.9.1788968246832; Wed, 09 Sep 2026
- 08:37:26 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="RrRxL6K+"
+ARC-Seal: i=1; a=rsa-sha256; t=1788968791; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=bIP7FxCUP7PHjxh/nM4jKTnSi4O3I6PRlfBOfFxAVACnPdkG1o4ROdKc9mHAKRk9dawZAajHbag1i0Dtm5oZk73POFNeyTsIoMQdqnIex15/DdocxTTJLcvNzHv+8W2Brfrmzqd5aG+ycRGI3Kd6X4Q83AZV8i/HAccJDK0A7uQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1788968791; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=+2jg2ESPMMGY2dLnVmlBMJSk4zf6hyXqLuJROhsLZFs=; 
+	b=fHK0xZYkJa0EQ8iscGhXs3nCz+azjAIWs6h68cT2ql692DXJDd4uXiAI5yoxp5+3TWpg0puF6aimsbN7lur+FafMxu8awciKl9BP+tkdlvpc/mFm22kHkLG3ENAuLoHnilj1qqzm/Fi5AAKKvOLxax8bDHgaJF7386Ys1Wsq9ck=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788968791;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=+2jg2ESPMMGY2dLnVmlBMJSk4zf6hyXqLuJROhsLZFs=;
+	b=RrRxL6K+fJgetX/zevzIf8shNUQZ64sHRap9E0npkCTqOSQIKdGw7QGQsmmT/nEh
+	MDEWBwP3A3JSNrYY6AU5UVrxINL1kX0CeJRhDr083WK6iOkhdTlz+KNgeB67XQeShiX
+	D9sDnGwGS2S6atyJx9cWGAcEY8UQgBcy05nf5uW0=
+Received: by mx.zohomail.com with SMTPS id 1788968790593167.81978655910598;
+	Wed, 9 Sep 2026 08:46:30 -0700 (PDT)
+Received: by venus (Postfix, from userid 1000)
+	id 24C93183377; Wed, 09 Sep 2026 17:46:21 +0200 (CEST)
+Date: Wed, 9 Sep 2026 17:46:21 +0200
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Arnd Bergmann <arnd@arndb.de>, Daniel Thompson <danielt@kernel.org>, 
+	Jingoo Han <jingoohan1@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Linus Walleij <linusw@kernel.org>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@kernel.org>, 
+	Michael Hennerich <michael.hennerich@analog.com>, Support Opensource <support.opensource@diasemi.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org, 
+	linux-doc@vger.kernel.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com, linux-watchdog@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 06/14] mfd: remove unused da903x driver
+Message-ID: <aqF_GZq1C4Tv1JB9@venus>
+References: <20260909132153.1596191-1-arnd@kernel.org>
+ <20260909132153.1596191-7-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
-In-Reply-To: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Wed, 9 Sep 2026 08:37:10 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wieaheq8rXSps3xRZpNNMQMEj9BH5gU+Dh4q_ZgokO51Q@mail.gmail.com>
-X-Gm-Features: AcwNN1XKEJS_S8eITIntw19v_mcHyut1QfPlZfjowWaI1qZq5Mivgkqwhzm7f_s
-Message-ID: <CAHk-=wieaheq8rXSps3xRZpNNMQMEj9BH5gU+Dh4q_ZgokO51Q@mail.gmail.com>
-Subject: Re: [PATCH 00/23] kbuild: significantly speed up kernel builds
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jrej5ylckfdda26t"
+Content-Disposition: inline
+In-Reply-To: <20260909132153.1596191-7-arnd@kernel.org>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-0.2.13.1.5.4/288.959.6
+X-ZohoMailClient: External
 
-On Tue, 8 Sept 2026 at 13:55, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
->
-> A typical kernel build consists of a frustratingly large amount of time
 
-.. you're preaching to the choir.
+--jrej5ylckfdda26t
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 06/14] mfd: remove unused da903x driver
+MIME-Version: 1.0
 
->                 == allmodconfig FULL build ==
->
->                         before    after     delta
->                       ----------------------------------
-> Threadripper, gcc       345.3s   275.2s    -70.1s (-20%)
+Hi,
 
-Well, that's certainly very encouraging. We should do this. I sent out
-some emails as just reactions to individual patches, but I have no
-numbers to back any of those emails up, and I never actually applied
-this series to my tree - they were all based on reading the patches
-themselves.
+On Wed, Sep 09, 2026 at 03:21:43PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> This driver was used on a handful of ARM/PXA boards until those
+> got removed a few years ago. Without devicetree support, there is
+> no way to use them upstream.
+>=20
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  MAINTAINERS                           |   1 -
+>  drivers/input/touchscreen/Kconfig     |  13 -
+>  drivers/input/touchscreen/Makefile    |   1 -
+>  drivers/input/touchscreen/da9034-ts.c | 365 ----------------
+>  drivers/leds/Kconfig                  |   8 -
+>  drivers/leds/Makefile                 |   1 -
+>  drivers/leds/leds-da903x.c            | 145 -------
+>  drivers/mfd/Kconfig                   |  11 -
+>  drivers/mfd/Makefile                  |   2 -
+>  drivers/mfd/da903x.c                  | 565 -------------------------
+>  drivers/power/supply/Kconfig          |   7 -
+>  drivers/power/supply/Makefile         |   1 -
+>  drivers/power/supply/da9030_battery.c | 581 --------------------------
+>  drivers/regulator/Kconfig             |   8 -
+>  drivers/regulator/Makefile            |   1 -
+>  drivers/regulator/da903x-regulator.c  | 495 ----------------------
+>  drivers/video/backlight/Kconfig       |   7 -
+>  drivers/video/backlight/Makefile      |   1 -
+>  drivers/video/backlight/da903x_bl.c   | 160 -------
+>  19 files changed, 2373 deletions(-)
+>  delete mode 100644 drivers/input/touchscreen/da9034-ts.c
+>  delete mode 100644 drivers/leds/leds-da903x.c
+>  delete mode 100644 drivers/mfd/da903x.c
+>  delete mode 100644 drivers/power/supply/da9030_battery.c
+>  delete mode 100644 drivers/regulator/da903x-regulator.c
+>  delete mode 100644 drivers/video/backlight/da903x_bl.c
 
-That said:
+Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-> An LLM was used to first determine where the bottlenecks were then to
-> figure out how to improve them.
->
-> It generated a lot of code, much of it hideous.
+-- Sebastian
 
-This made me scared to look at the patches originally, and I held off
-in fear that the patches would be horrible and this build time
-improvement would be hugely controversial garbage code.
+--jrej5ylckfdda26t
+Content-Type: application/pgp-signature; name="signature.asc"
 
-But:
+-----BEGIN PGP SIGNATURE-----
 
-> I extensively audited and rewrote a lot of it, and heavily edited commit
-> messages, the cover letter and comments.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmqhf0gACgkQ2O7X88g7
++ppaAhAAjamgA9v7fn8KcrThl75UZh6bOUT/5XiVqaq9zEwVJoY2fygDVmYao95K
+QhI39+RMyWRuGdnDCBrpw0eVA53PbFPc1VTm+Iw4FWehLC1skbbSwDpPLFSIZaLe
+DJlLr11UbevMyqcmNKw8yeRolbQfUbAA4leflpjAbhhEvAzotNSeIxLY3yFHNXoV
+hJsWKIRE4cFFb5bsx3qTlJFQMop9WidRYq3vdPeoGVCUW2zjROm5drG9e8Hb2dvd
+I1KgIIFgyn2WJYDlD3u0eLwYZk/YabwYv3PUfxRXIXRS3+JMzwA3ubQyoMit/SHv
+MMH4/sJdjtgUjUcnWKA9Ktle3BQgYFr80H6HHHaBoFQveCC2B/98B85Ev0wwi9Xa
+60t+RHmELFKX9TnD6o797ZxnsXxErlDhjl+UZhEKQpsQjKwBQHnV1RzX3QLFWYkv
+i16c5MyNzgDusXB4zpTBiAy/kVNKUysPwY13R8BBvr2NsQcBf9uYDTRHr/g+3Xd4
+wquTx7yb8tYLUn6cJr9jXHrSseS5TpMUu+8scdSVZBC9KSuaeRYigm5dLM0X6Zj5
+vmXaD9vlAGtPL7fv+zomhwt4Ufe51v2YGxWa8IQSEsyOG1eUO6zdfFIiajXpgBTR
+mZ6OWJdhnZ9sRSQVANNafU85fqkka6x1/ZAQvqaKPBGVE7bXzhc=
+=3btz
+-----END PGP SIGNATURE-----
 
-None of the patches look at all horrible to me. You clearly excised
-the hideous parts. All of my reactions were of the type "this could
-probably be taken _further_" rather than me throwing my hands up in
-disgust.
-
-So the Rust parallelism thing clearly isn't ready based on feedback
-from that quarter, but the rest looked safe and innocuous. I'm all for
-merging this, although it should obviously go in through the right
-channels. Mostly the kbuild tree, although some of it clearly would be
-other cases - the objtool change in particular is fairly substantial
-and needsobjtool people to approve. It didn't look all that
-contentious, but still..
-
-Anyway, I'd love for this all to go in. Build times are a pet peeve of mine.
-
-              Linus
+--jrej5ylckfdda26t--
