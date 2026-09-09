@@ -1,60 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5FC569F04;
-	Wed,  9 Sep 2026 16:30:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D8BC3783BB
+	for <llvm@lists.linux.dev>; Wed,  9 Sep 2026 17:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788971435; cv=none; b=LCj1cz5pEydsngfoVNIH2iAbTHMy4GcLGUAG3Pdwsg6MamIJW671n/mobnZXFH5sK4ex9ZVel1tRRawLkjy2fT4DA574yvXbi564cPcMDifL+zwhD6x7sIppRttbHblmNQXq8+XjWnngEfWKhL4OM4gKl5jeJycQ5uBMPr0/qOk=
+	t=1788974823; cv=none; b=ImPh2yolz57mqZY4PzztuyIR0EbfUP4hikLa/SV4FSKlObpEqQpqfFaFdq5ACg+6ndmD05KSfbhuBfWisUqveOn+qNauaP5RtSycF48GRvpbgpXLbpiC7HzaVeTxl+1RT0N1SbxlSC01uoW7QLJfc+m2ti+OTgOAf8N9TsHFZ6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788971435; c=relaxed/simple;
-	bh=wWzKtrFidTzm1N7slbL3klzIb0Qo2W2SWXnk1Ha8gms=;
+	s=arc-20240116; t=1788974823; c=relaxed/simple;
+	bh=SUxP5gT1ZaOy4mmgP6chw0Cr8VRY83cgnbGtN/GeIrM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sPRggIgSGkWPOos/H5UBqeByDwT2NbXy8bfqZ1pTRA36y5Tus4ZP9y4BWmOkesmxYIvgLBbHzui0u2RU8osJBIn0tZj/sbjWQqkgkg8B4FIe918ZUagq2MJhqx2Bm+JHGgG6+Pdng5Hipi3K5eCEJkD077D1Xr0k8C/Cf0A3fUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcYf5Ku6; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Juba0PEXZLUnv5bkxUONe2kx0MkAELpdJM4IJ6oA4Ev5GeJdzMl39vhC5tJ7Qktne4uw8wdBnNE+rZObQrIfWrZFZW+kMl9M27PAV8HW66VIDTA4EGjuCpuEssc4D2Wb+anS8tHuazrpTkfGsKMWUSd+azwpmLFh2ynnACbgodo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hBew0+6L; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcYf5Ku6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AFE61F000FF;
-	Wed,  9 Sep 2026 16:30:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788971434;
-	bh=Kz7rWeqwh7ufJDv87BxiJfD/gwwv4aMAp/7XS3gBPEo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=dcYf5Ku63ij8aECQoJafs4Ipg1pK9oXj9HMZSoM3ml9RYUs9bgWbI892r15HKD+aq
-	 TO6FjMT8mTQhfp+iMomWORtQlAM3jIsyaPwYZSaHoJn7R/JGCghwy4f2f0niwav6ni
-	 eBJdRLPFcGRmhIBelQgMN8TiQon3ZGk+0ZjUxsPj6ZoUq1f644nJlygEq9jKwgJozp
-	 ivMzm6l0Cf1qm0bdrELXOXxe7OHf/vwZsgJpnbZUDSpqIhRXP81TW35ZC+juNo5mm5
-	 w8CyZDKbmN2fe9Tm4ZiwdQMSYdgzFqNx03fbVBS+oujn39g8U1gp6xIrrIUpTbPfjZ
-	 fo6l8mjP/fXXQ==
-Date: Wed, 9 Sep 2026 17:30:19 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 00/23] kbuild: significantly speed up kernel builds
-Message-ID: <aqGG1iSwF7SyY7d6@gremlin>
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
- <CAHk-=wieaheq8rXSps3xRZpNNMQMEj9BH5gU+Dh4q_ZgokO51Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hBew0+6L"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-869ac301739so106726b3a.1
+        for <llvm@lists.linux.dev>; Wed, 09 Sep 2026 10:27:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788974821; x=1789579621; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BxkJmMQiuFGLIVhYvP7iekSRoJyyqxrT2LFSLJP0a4Q=;
+        b=hBew0+6LcALPWkoU9pPOcHLf/roFs+pcahVIuR2QMygL40EusUeizzo8jneADVPA2u
+         IUMEqTsV4wTLHUmigXT8qlkpXr3g94O1fkhl0LfagqrteAXWGc0FXy4Ywzax+/vaXw/3
+         zmc22PhK0LlbTHOkKVFGxwZNB6kIXzYgTsZfehVpxTL0jPL/DjJarBq+PEsu+II4ze8H
+         fcN737xFw4Ihq+Hb8iGntniyjb/4Q4IhPHQ0VyQ+/nj1cK5ie0DOqskRWBn24T3dj2sJ
+         y71mvySTIdsZF6n5zIfuVsW00kuCxaIpXb0rY+s+O+CtR4TbZzLyTcBa01HGZU1bjtjo
+         X/ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788974821; x=1789579621;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=BxkJmMQiuFGLIVhYvP7iekSRoJyyqxrT2LFSLJP0a4Q=;
+        b=fo3LbUDSnZCcDiaK2DhiP2OmMnH505TE71mbF9Neus8ynNnOxvYW3jCJ/zELQGrU1j
+         Z1DDi91J+0jbkS8/jezg3VpqPm5pJsXvawAJ5lUTGO21x/rCyAIFS4xxVBuXc7EW+CP4
+         J+Uca+vLVSyvXVWoOjHlXf/xoqrqGwI94jpbAbkJ67lAGwh4vWmfY+dT4fxcgJ2U4m2W
+         O59e6d7r/9Tt8D++NubY9pAgXfFAva82br+zbTYKUaiDzeQ75yvx1HRyECq/JJTO8LT2
+         hnLu8NSHwZuiIC+7UOfPz1TzfDXosCTKN0XZz+Tll8RwXyIQTNOej4PByn63OZaU2lcM
+         kKYw==
+X-Forwarded-Encrypted: i=1; AKwUvBzCZk5IaPjvWDjGv+PJ9PMzLDTctMebmsFG1dTijIGiMZg63LUPCNisHaUvy5Mek7BPw6y6@lists.linux.dev
+X-Gm-Message-State: AFuF++lGA0i39q+qEP+uZjHbAVVi/FDxKPhJc4d5zk6iwXN1KQVof8Qq
+	BDT5h22B0p+S3XNkIhAb8HJ0AghjiDzQH7bNml5pgHt6PfvaItLcDNUx
+X-Gm-Gg: AYBFou1wuNje2OxZlWfe6jU2qXdpXE4zSgZMzaJ3g5fW+hOzuvRes51Z1jGu+Xe7+w9
+	1l6gCuJ7ECS8S/HCxEeYOMXY9alW1dL49WrVRIbvJyiBQ9nygzJi2l2wvQo7psnTnhJHLJNJ2Xm
+	PEOQXf8mqS/pq0JuCmICYGv2PHMC3RQNkI8GD09OtxLgUmJu4pRgk5VbSWpM1ON2f0RJvLAGFEP
+	i/WIeTAXxqZjOKzZ3316dST93Yp6mKIruqOVnkRT5KWLbv4/84QfuCnbQQz/MybOQdbkecqait0
+	T6Tu4WQYOl1VZZtDkHEM4egr+eIqPHcyFJ+R5buN9CjNE5D8vHMlKURdFoiNEh823FkzBKnjj9v
+	SbqHMhCm5rtOpt4k148sDV5PjDCKOMkW3imPM7yU/do7JiFB1utrD5Q6nxjvAh3wXGb3muYZr4O
+	OIAAieWo76JFrJebP32hMZnvRPUf0lYEGljjnQUCv+8bwOxc7HQhNjBy1ZteIuBQY2ku7QOoEe8
+	08RdklWixSEoUFS7eZ++p3bQZBjUXG4/hjRLb0u3cNMR7jOxcqK
+X-Received: by 2002:a05:6a21:9d84:b0:3d3:af85:eb98 with SMTP id adf61e73a8af0-3da3a16a579mr57975715637.26.1788974820346;
+        Wed, 09 Sep 2026 10:27:00 -0700 (PDT)
+Received: from google.com ([2a00:79e0:2ebe:8:2d43:5153:5c50:643e])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3339a534df1sm52422943eec.7.2026.09.09.10.26.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Sep 2026 10:26:59 -0700 (PDT)
+Date: Wed, 9 Sep 2026 10:26:55 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	Arnd Bergmann <arnd@arndb.de>, Daniel Thompson <danielt@kernel.org>, 
+	Jingoo Han <jingoohan1@gmail.com>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Guenter Roeck <linux@roeck-us.net>, Linus Walleij <linusw@kernel.org>, 
+	Bartosz Golaszewski <brgl@kernel.org>, Jonathan Cameron <jic23@kernel.org>, 
+	Pavel Machek <pavel@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
+	Support Opensource <support.opensource@diasemi.com>, Sebastian Reichel <sre@kernel.org>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org, 
+	linux-doc@vger.kernel.org, linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com, linux-watchdog@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-fbdev@vger.kernel.org, linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 00/14] mfd: unused driver purge
+Message-ID: <aqGWjAuGXq_JHvxk@google.com>
+References: <20260909132153.1596191-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -63,90 +91,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wieaheq8rXSps3xRZpNNMQMEj9BH5gU+Dh4q_ZgokO51Q@mail.gmail.com>
+In-Reply-To: <20260909132153.1596191-1-arnd@kernel.org>
 
-On Wed, Sep 09, 2026 at 08:37:10AM -0700, Linus Torvalds wrote:
-> On Tue, 8 Sept 2026 at 13:55, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
-> >
-> > A typical kernel build consists of a frustratingly large amount of time
->
-> .. you're preaching to the choir.
+On Wed, Sep 09, 2026 at 03:21:37PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> As part of my cleanup of old platforms, I had a look at all drivers that
+> may have become unused because the last platform_data or DT definition
+> was removed, or because of unmet Kconfig dependencies.
+> 
+> These are all the mfd drivers I found. The first ten in the list
+> actually turned out to have been unusable long before my series, and
+> I have added explanations on how I determined this in each patch. The
+> last four patches are still in use in linux-7.3 but become unused after
+> my series [1] that I hope to get merged for 7.4.
+> 
+> Somewhat unorthodox, I took a shortcut here and remove both the mfd drivers
+> and the corresponding subsystem drivers (gpio, hwmon, iio, input, led,
+> media, power, regulator, rtc, video, watchdog, asoc) in a combined patch,
+> to simplify the interdependencies: removing just the mfd driver would
+> leave unselectable or broken drivers in other subsystems.  I also have
+> additional patches for each of the other subsystems, currently a total
+> of 300 patches, many of which still need better testing or proper
+> changelog texts.
+> 
+> Please let me know if you all think this approach is ok, or if I should
+> explode this further and turn these 14 patches into 70 individual ones
+> by splitting them per subsystem.
 
-:) Yeah, it's something that's annoyed me for a long time too.
+Sounds good to me, especially if Lee makes an immutable branch from this
+pull so we can all pull it in...
 
->
-> >                 == allmodconfig FULL build ==
-> >
-> >                         before    after     delta
-> >                       ----------------------------------
-> > Threadripper, gcc       345.3s   275.2s    -70.1s (-20%)
->
-> Well, that's certainly very encouraging. We should do this. I sent out
-> some emails as just reactions to individual patches, but I have no
-> numbers to back any of those emails up, and I never actually applied
-> this series to my tree - they were all based on reading the patches
-> themselves.
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com> # for input
 
-Thanks, will have a read through those!
+Thanks.
 
-I do recommend trying them locally ;)
-
-It makes a surprising difference to defconfig even. (Though you need pigz
-installed for the full effect)
-
->
-> That said:
->
-> > An LLM was used to first determine where the bottlenecks were then to
-> > figure out how to improve them.
-> >
-> > It generated a lot of code, much of it hideous.
->
-> This made me scared to look at the patches originally, and I held off
-> in fear that the patches would be horrible and this build time
-> improvement would be hugely controversial garbage code.
->
-> But:
->
-> > I extensively audited and rewrote a lot of it, and heavily edited commit
-> > messages, the cover letter and comments.
->
-> None of the patches look at all horrible to me. You clearly excised
-> the hideous parts. All of my reactions were of the type "this could
-> probably be taken _further_" rather than me throwing my hands up in
-> disgust.
-
-Thanks! :)
-
-I made sure to audit everything it came up with patch-by-patch, got it to
-rework the horrors then rewrote large chunks of what it came up with.
-
->
-> So the Rust parallelism thing clearly isn't ready based on feedback
-> from that quarter, but the rest looked safe and innocuous. I'm all for
-
-Sure, happy to drop anything like that.
-
-Though based on what Miguel said it _might_ be ok perhaps with a nightly
-gate on it? Will see what he/Bjorn say.
-
-> merging this, although it should obviously go in through the right
-> channels. Mostly the kbuild tree, although some of it clearly would be
-> other cases - the objtool change in particular is fairly substantial
-> and needsobjtool people to approve. It didn't look all that
-> contentious, but still..
-
-Agreed, it definitely needs some eyes on it, especially the trickier bits.
-
->
-> Anyway, I'd love for this all to go in. Build times are a pet peeve of mine.
-
-Yeah, it'd be nice to see this benefit everyone!
-
-Am happy to iterate on it as needed to get it upstream.
-
->
->               Linus
-
---
-Cheers, Lorenzo
+-- 
+Dmitry
