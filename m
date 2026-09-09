@@ -1,70 +1,37 @@
-Received: from mta1.migadu.com (out-119.mta1.migadu.com [95.215.58.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D4792EDD58
-	for <llvm@lists.linux.dev>; Wed,  9 Sep 2026 02:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D623A23C4F3;
+	Wed,  9 Sep 2026 03:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788920816; cv=none; b=iKxQ3HVI+ZR/PiGsgs+R5m/xsp7CTDkfUdzhOpr2Twobkc36RlQrg4qJ4kEBGS2JkhPYGVCWzcoMNNlROqrgg+wJIUMmNpg90isBa3zXD0o1xMkksETY/rQ1XdVq3MltGiickfbZOz2Tbxzj4eKc13ZGnfqmjwvKdwyKnaY6BHo=
+	t=1788925716; cv=none; b=SbL3td5aKIgYfOjblPkwR+0a6C0zWlAE6eVw1qXjsoiJV5I/8Sz5xIAM34DxNivkSqgNVQfcqzYr8cDz9+UM6KrzOwMtmeAvM2w0DfFlddSVY4cPNJIz1WsaM1CDlxbhI9/G2L3gsU7fp6aRkeBGSvaYvypvmI6GfbcRVBMwseg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788920816; c=relaxed/simple;
-	bh=hhi3c8zU+U+EE/Oqa9R3g7YzwauRmJN/Xy5b4xnh/b4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Phc4HaeSgOrdrGHqOOb3hxA5SSjJuw2JKXs99+IKtL3VjX/y346QCAJXMvwmbyQc5jIINM+m3s0Uuhb2BaOe7fbD+Wx96AzVt8nBv1kSyBB8nUrNHC73rpTmAdab8In8RKKptwltaj9F+RmHV27rMewPN24MI2EkLeS1anhXKU8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AfNlsM7o; arc=none smtp.client-ip=95.215.58.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788925716; c=relaxed/simple;
+	bh=jMl79+f9NqfwnhyA4IrjV3KtrtzX06Ynl3cdO0eBOuA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=g0nFNNIRwVCdY/Pk6/TD6HjDi5Zy96Q7pIC/md4QRAJop4+esI26h2LzDbvQHfY15Jeu39MjlwqYVGd3cYjeFNL0vNn4mbj+RsfzAt5GBLn5X7SyzUe4qSchyb791UTwCs4OXbZXt7Ha8Zs3uOiUf1ayKwmeEfKFDn4LVbMahKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gyOkiPuW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AfNlsM7o"
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=hhi3c8zU+U+EE/Oqa9R3g7YzwauRmJN/Xy5b4xnh/b4=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788920812; v=1; x=1789525612;
- b=AfNlsM7o97Br2/sCy3LyFv1cglqrdHrc/mwfcaIcqTIcOatLtpd3zaOEr6eM0C7axcNcxvBm
- +7vOidl348F6u5exW8gV3var8GPZBMJEG6emqdXty5JT/TUT9NgM4adB8xs3szxpTkwa9sNvn+d
- I6NbUW9SyoJK4BTEtjt54v0M=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 23bb6d8fa3f5e24a;
-	Wed, 09 Sep 2026 02:26:51 +0000
-X-Mizu-Trace-ID: 23bb6d8fa3f5e24a
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 9 Sep 2026 02:26:36 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	bpf@vger.kernel.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Subject: Re: [PATCH RFC 8/8] arm64: ftrace: Allow CALL_OPS on kCFI kernels
- built with Rust
-Message-ID: <aqDCSBRtnH4wVQDu@linux.dev>
-References: <20260904-b4-arm64-callops-kcfi-v1-0-ce6687739b0c@linux.dev>
- <20260904-b4-arm64-callops-kcfi-v1-8-ce6687739b0c@linux.dev>
- <CANiq72=xOrSXBBdmrKYfX1=qgF37LRAMzMJd4GJkXaYHMVe9yQ@mail.gmail.com>
- <ap3Z-YDtzmdtMiMk@linux.dev>
- <CANiq72mVXNmqh-RdOunFLBKRwMgYHFBqJOP7NbXrd8WHPb3sAw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gyOkiPuW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5A871F00A3A;
+	Wed,  9 Sep 2026 03:48:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788925715;
+	bh=jMl79+f9NqfwnhyA4IrjV3KtrtzX06Ynl3cdO0eBOuA=;
+	h=Date:From:To:Cc:Subject;
+	b=gyOkiPuWin+P8khKQvWgYanACMdGIQ8uer9rgZ13azjZUhe5c+5cGVFPMMczsgwfK
+	 5qRvXimC1s8gf3nHbA45VsDltbU9/yK6fVLzRUD54+Vf/fBfnyAgM1kGfWUleLQ5k/
+	 wVBI3u4Xr7LgVvMYqb8AOSRw6tIkPKGSkA8qbKjfHB4sNYFlJVWeZRiPVNl766o9y9
+	 Hd45t9K4uZfs0TGeWqS+C0/N5yPtulzjS7QCjHDNy7rlygc2ZJ674XdsbMvSpRGq+F
+	 9HoU79mO5OSC/76ravO7wboPKKtvNMxYGqIGNjvFdxIkgT8jrjkYpQORzvtcicyONx
+	 M4mgwhD53j4xw==
+Date: Tue, 8 Sep 2026 20:48:32 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: ojeda@kernel.org
+Subject: Prebuilt LLVM 23.1.1 uploaded
+Message-ID: <20260909034832.GA748182@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -73,13 +40,16 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiq72mVXNmqh-RdOunFLBKRwMgYHFBqJOP7NbXrd8WHPb3sAw@mail.gmail.com>
 
-On Mon, 7 Sep 2026 21:33:03 +0200, Miguel Ojeda wrote:
-> i.e. I guess I would have expected something like "...: its libclang
-> may not support the section argument (Clang >= 21) and the removal of
-> the flag does not change the ABI" or similar.
+Hi all,
 
-I will use that in v2, thanks!
+I have built and uploaded LLVM 23.1.1 to
+https://mirrors.edge.kernel.org/pub/tools/llvm/.
 
-- Jose
+If there are any issues found, please let us know via email or
+https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+opportunity to get them fixed in main and backported before the 23.x
+series is no longer supported.
+
+Cheers,
+Nathan
