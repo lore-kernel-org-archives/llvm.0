@@ -1,109 +1,51 @@
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B277D57F736;
-	Wed,  9 Sep 2026 14:50:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DEDB30D3F1;
+	Wed,  9 Sep 2026 14:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788965450; cv=none; b=Wsr9/tfq+3g3L8o3EX+vtfCa23OIHQ/aGUp2leHTw31dtlB4oIku6sphiUiaEhdToy7DFgcaNaj7g7BV77cMWljulGCrDGPb56Hwe4A+rdSODKZnKAcS/IKLRlykKWuKCd2VQoxUbkvvpV/IOvkuqCtM6wIIiI57fw1eIOeFS/Y=
+	t=1788965564; cv=none; b=P2olnhzf924FOXlBe0ztsuGNdnIUZye71rFbYa2CKk3Go5Wl5dPgJri3Toky/ZOC2q4tHU+Kf1xISn1BphsidwvQHyTOWj8eJO6SPiGys/MRfHSpu+n7UOqxHfVhdQwSVUgOzRB+oyM4Y1rZSJ8hxNyy1rcOFoCY7HhFkkqaMyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788965450; c=relaxed/simple;
-	bh=t6FVs61JioooI1FKzSdD8k2cGUyImh2GzcX9te2ZX9w=;
+	s=arc-20240116; t=1788965564; c=relaxed/simple;
+	bh=DkcbBCEeBjItlrEFmgH2ykYdrnaurag5bbzAMpCmNLM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KxZnljQzF8z8m0lLKzKVgGZhjUNXWqOKLCofKyWsGvuflu6S0q/woIevR/DiOwUc9Jg6LybYWLWOhOEoT9cFpkBaxbF1cZ48ifTayBOCr3KHU6ybhL1nkrajEgjD2l2IcYQtUNhFsUZvn49iq/0MD0QF04/O8y6qRHoHUcnlZyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=bEJ/8Uz5 reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+	 Content-Type:Content-Disposition:In-Reply-To; b=G7Wf31NhvN/6tSZ9Evpzz0S+OBysPR9x6f//F+SxFBgVM+XFujODBBZgmMWrQ/p5p+pmDyF1GPUwtUOqLwHu8yYpDHJLLRyaxlYvVKDjlpsEUq2W72vqnsBVjuzok9Bdd+eHwd3QMGwnEwD0E20HBM69v7Sxv/0SiKpRUoqkWc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNMxlvFM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="bEJ/8Uz5"
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id A382C40E02C2;
-	Wed,  9 Sep 2026 14:50:44 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-	reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id 9Q1sj3DJqz9o; Wed,  9 Sep 2026 14:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1788965436; bh=mhGQ4FEjJypHCScKuxG2hVB2Cr7EilB+iYsfNtWHQqM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bEJ/8Uz5UTuL3M3aJaZ+2GA6fHLcktGtyqNCvODV6vja9c5ofeLAw9r5500Ldr25H
-	 Qb1xaJZtybSTYQEAFER7kNXSbt0/1P3vev75HfTrRPKQqXMq8vzzF9d2raqW7yK4Jp
-	 bgsBr5p7kVDTB9kpcsKXnfA2oZFXqMgcW2v064dS00SqLJQ4fh+FTTqMfbeE6ylt6W
-	 xeBJaGn3HYw68e4HreCBSdk1xrJVqweEaR0hTlsp9ViWUcauqO5nf8umq0Nui9YTkV
-	 GKJQEUzDD6o8zodTcnqrpM4CPq6NuYAB1O13ttqJjGS36Z2uCbR6KyqXxKlafFr7b1
-	 7ctU5lA269NQ8wM09FSxrsRFiMlY4SvpNIR6FjrwsJi2GrkgzDphwoLgFgtc6VBlX6
-	 sZEWd8ZjXFr7d4kNRkfTSiYGwhdgPhGoqgJg8tB+bIw14Mw3cuHC0Q9xIa6xFUY5jp
-	 VWgJEsz5szwqtlotZDwBq7NU64xcPZ4oXFJ2qKu7h8QPHqSvB8mLBIMN7DQzBr9yKh
-	 3B1hlQLHULtH82PyIzJVS+TDy4H+TQutkiZUSuErREjAkJcHO33xV54eAiErgaiPkg
-	 dq6isTjw+AUWrupRkPovwFJvsVt6Naubw0PkaGCiRjPqR2r5eGwo9f4RLg22qsPqFP
-	 0lcuEVktIzws0Z/idTv4tvxk=
-Received: from stx.tnic (unknown [IPv6:2600:1700:38ca:c00::42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D243A40E01E1;
-	Wed,  9 Sep 2026 14:49:33 +0000 (UTC)
-Date: Wed, 9 Sep 2026 07:49:30 -0700
-From: Borislav Petkov <bp@alien8.de>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNMxlvFM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC0C1F00A3A;
+	Wed,  9 Sep 2026 14:52:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788965562;
+	bh=9fuZ0PCsn/VJJZGyAkfrVmhfxC95j9+FcuBO33Q5GlM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=oNMxlvFMh3nkWfdqpO07nnImsjxS6npgBEForPIuUT6MqTzrlrZXMVtAuDsgUev+A
+	 vR7xa5HZKk46AzPFNrNiek4FrAfUlctY2WFuEYZsnu7HlJ3qq1BWF1QlOYHP9RkgBX
+	 mO5SytYL608S8RYxXJ+Rm+aTbiJgWSxZ/fgklGrPuGYgbY474V8caKQgDIDptfOzg7
+	 nGeEwUZ4IOn6BbgsdnSrOgwpPhmT+WuBrkzLnvPN5VeRV/1ik7fsx5IM4qg4iSepG2
+	 6BTnGEgkCHum8VHh6wtmCGRaXJ+jf0EWSj9Xav0LzO9Vt7oEuMgWzZdUBq/lsCfcaX
+	 Z+ui0mJa2TL7w==
+Date: Wed, 9 Sep 2026 10:52:40 -0400
+From: Namhyung Kim <namhyung@kernel.org>
+To: Tengda Wu <wutengda@huaweicloud.com>
+Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+	Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
 	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Christophe Leroy <chleroy@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-mm@kvack.org,
-	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	Jan Stancek <jstancek@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@redhat.com>,
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v5 02/24] x86/elf, um/x86/elf: Move relocation constants
- to UAPI
-Message-ID: <20260909144930.GAaqFx-mjH3-u6jLjw@fat_crate.local>
-References: <20260908-vdso-absolute-reloc-v5-0-3a93791af1cf@linutronix.de>
- <20260908-vdso-absolute-reloc-v5-2-3a93791af1cf@linutronix.de>
- <20260908135513.GAaqATwXHcQD7plnH-@fat_crate.local>
- <20260908161740-0d79e592-87a6-43c5-9174-84ce1904e639@linutronix.de>
- <20260908151238.GBaqAl5iKb64meuPJl@fat_crate.local>
- <20260909075156-06ff671c-ab7b-47d8-aaa3-588b570888bc@linutronix.de>
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 03/26] perf annotate-arm64: Generalize
+ arm64_mov__parse to support more instructions
+Message-ID: <aqFyuD_waCJpfaTv@google.com>
+References: <cover.1788872630.git.wutengda@huaweicloud.com>
+ <872f51108191d20f65fc12f17c796863a36166da.1788872630.git.wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -112,66 +54,244 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260909075156-06ff671c-ab7b-47d8-aaa3-588b570888bc@linutronix.de>
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <872f51108191d20f65fc12f17c796863a36166da.1788872630.git.wutengda@huaweicloud.com>
 
-On Wed, Sep 09, 2026 at 07:59:51AM +0200, Thomas Wei=C3=9Fschuh wrote:
-> These names and numbers are defined by the architectures' ELF specifica=
-tions.
-> They are already cast in stone. For example see Table 4.9 of [0].
-> Changing them would break compilers, linkers, loaders and more or less =
-every
-> existing ELF binary.
+On Tue, Sep 08, 2026 at 01:05:06PM +0000, Tengda Wu wrote:
+> As the default parser for arm64 instructions, arm64_mov__parse()
+> currently only supports parsing instructions with the 'addr <symbol>'
+> suffix. Other instructions are not supported, causing a lack of
+> source and target information for most regular instructions.
+> 
+> Generalize arm64_mov__parse to extend its parsing capabilities:
+> 1. Parse 'ops->target.raw' and 'ops->source.raw' by default.
+> 2. Utilize arm64__check_multi_regs() to identify if source and
+>    target contain multiple registers.
+> 3. Maintain backward compatibility for instructions containing the
+>    'addr <symbol>' suffix.
+> 
+> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 
-So?
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
 
-Your goal is to provide them to tools/. You want to provide them to
-*everything*. See the discrepance here?
+Thanks,
+Namhyung
 
-> That is the documentation for the tools UAPI headers.
-
-Did you even read that file?
-
-"Why we want a copy of kernel headers in tools?
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-
-There used to be no copies, with tools/ code using kernel headers
-directly. From time to time tools/perf/ broke due to legitimate kernel
-hacking. At some point Linus complained about such direct usage. Then we
-adopted the current model.
-
-The way these headers are used in perf are not restricted to just
-including them to compile something.
-..."
-
-Just read the damn thing before you reply.
-
-> Also we already have other, closely related, ELF constants in the UAPI,
-> see {,tools/}include/uapi/linux/elf{,-em}.h.
-
-Srsly?!?
-
-You moved them there:
-
-commit 626fd35278295fbb21f2da331cd8028e9738d965
-Author: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
-Date:   Wed Feb 26 12:44:46 2025 +0100
-
-    tools/include: Add uapi/linux/elf.h
-   =20
-    It will be used by the vDSO selftests.
-
-
-Looking at the rest, it looks like some elf bits got exported, you added =
-some
-more and that ship has sailed. I still think us providing headers is
-completely unnecessary and it will come to cause conflicts eventually but=
- hey,
-not my problem.
-
---=20
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+> ---
+>  .../perf/util/annotate-arch/annotate-arm64.c  | 166 ++++++++++++++----
+>  1 file changed, 134 insertions(+), 32 deletions(-)
+> 
+> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+> index 33080fdca125..151184210691 100644
+> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
+> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+> @@ -3,6 +3,8 @@
+>  #include <errno.h>
+>  #include <stdlib.h>
+>  #include <string.h>
+> +#include <linux/ctype.h>
+> +#include <linux/string.h>
+>  #include <linux/zalloc.h>
+>  #include <regex.h>
+>  #include "../annotate.h"
+> @@ -14,59 +16,158 @@ struct arch_arm64 {
+>  	regex_t jump_insn;
+>  };
+>  
+> -static int arm64_mov__parse(const struct arch *arch __maybe_unused,
+> +static bool arm64__is_reg(const char *op)
+> +{
+> +	if (!op || !*op)
+> +		return false;
+> +
+> +	/*
+> +	 * General-purpose registers: x0-x30, w0-w30.
+> +	 * Check for 'x' or 'w' prefix followed by a numeric index.
+> +	 */
+> +	if ((op[0] == 'x' || op[0] == 'w') && isdigit(op[1]))
+> +		return true;
+> +
+> +	/* Special-purpose registers: sp, wzr, xzr. */
+> +	if (!strncmp(op, "sp", 2) || !strncmp(op, "xzr", 3) ||
+> +	    !strncmp(op, "wzr", 3))
+> +		return true;
+> +
+> +	/* TODO: Support more registers. */
+> +	return false;
+> +}
+> +
+> +static bool arm64__check_multi_regs(const struct arch *arch, const char *op)
+> +{
+> +	const char *p = op;
+> +	int reg_count = 0;
+> +
+> +	while (p && *p) {
+> +		p = skip_spaces(p);
+> +		if (*p == arch->objdump.memory_ref_char)
+> +			p++;
+> +
+> +		if (arm64__is_reg(p))
+> +			reg_count++;
+> +
+> +		if (reg_count >= 2)
+> +			return true;
+> +
+> +		/* Move to next operand after comma */
+> +		p = strchr(p, ',');
+> +		if (p)
+> +			p++;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/*
+> + * Duplicate @insn, stripping the comment and trailing whitespace.
+> + * Returns a newly allocated string which the caller must free(),
+> + * or NULL on allocation failure or if @insn is NULL.
+> + */
+> +static char *rstrip_space_and_comment(const char *insn, char comment_char)
+> +{
+> +	const char *end, *comment;
+> +	size_t len;
+> +	char *result;
+> +
+> +	if (insn == NULL)
+> +		return NULL;
+> +
+> +	comment = strchr(insn, comment_char);
+> +	if (comment != NULL)
+> +		end = comment;
+> +	else
+> +		end = insn + strlen(insn);
+> +
+> +	while (end > insn && isspace(end[-1]))
+> +		--end;
+> +
+> +	len = end - insn;
+> +	result = malloc(len + 1);
+> +	if (result == NULL)
+> +		return NULL;
+> +
+> +	memcpy(result, insn, len);
+> +	result[len] = '\0';
+> +
+> +	return result;
+> +}
+> +
+> +static int arm64_mov__parse(const struct arch *arch,
+>  			    struct ins_operands *ops,
+>  			    struct map_symbol *ms __maybe_unused,
+>  			    struct disasm_line *dl __maybe_unused)
+>  {
+> -	char *s = strchr(ops->raw, ','), *target, *endptr;
+> +	char *s = strchr(ops->raw, ','), *source, *endptr;
+>  
+>  	if (s == NULL)
+>  		return -1;
+>  
+> +	/* Parse target */
+>  	*s = '\0';
+> -	ops->source.raw = strdup(ops->raw);
+> +	ops->target.raw = strdup(ops->raw);
+>  	*s = ',';
+>  
+> -	if (ops->source.raw == NULL)
+> -		return -1;
+> -
+> -	target = ++s;
+> -	ops->target.raw = strdup(target);
+>  	if (ops->target.raw == NULL)
+> -		goto out_free_source;
+> +		return -1;
+>  
+> -	ops->target.addr = strtoull(target, &endptr, 16);
+> -	if (endptr == target)
+> -		goto out_free_target;
+> +	ops->target.multi_regs = arm64__check_multi_regs(arch, ops->target.raw);
+>  
+> -	s = strchr(endptr, '<');
+> -	if (s == NULL)
+> -		goto out_free_target;
+> -	endptr = strchr(s + 1, '>');
+> -	if (endptr == NULL)
+> -		goto out_free_target;
+> -
+> -	*endptr = '\0';
+> -	*s = ' ';
+> -	ops->target.name = strdup(s);
+> -	*s = '<';
+> -	*endptr = '>';
+> -	if (ops->target.name == NULL)
+> -		goto out_free_target;
+> +	/* Parse source, stripping comment if present */
+> +	source = skip_spaces(++s);
+> +	ops->source.raw = rstrip_space_and_comment(source, arch->objdump.comment_char);
+> +	if (ops->source.raw == NULL) {
+> +		zfree(&ops->target.raw);
+> +		return -1;
+> +	}
+> +
+> +	ops->source.multi_regs = arm64__check_multi_regs(arch, ops->source.raw);
+> +
+> +	/*
+> +	 * Parse 'addr <symbol>' from source (if any).
+> +	 *
+> +	 * A raw hex string may be a scalar immediate, not an address.
+> +	 * Only validate 'source.addr' if accompanied by a '<symbol>' tag,
+> +	 * otherwise reset it to 0 to avoid false positive address tracking.
+> +	 */
+> +	ops->source.addr = strtoull(ops->source.raw, &endptr, 16);
+> +	if (endptr != ops->source.raw) {
+> +		s = strchr(endptr, '<');
+> +		if (s == NULL) {
+> +			ops->source.addr = 0;
+> +			return 0;
+> +		}
+> +		endptr = strrchr(s + 1, '>');
+> +		if (endptr == NULL) {
+> +			ops->source.addr = 0;
+> +			return 0;
+> +		}
+> +
+> +		*endptr = '\0';
+> +		ops->source.name = strdup(s + 1);
+> +		*endptr = '>';
+> +		if (ops->source.name == NULL) {
+> +			ops->source.addr = 0;
+> +			return 0;
+> +		}
+> +	}
+>  
+>  	return 0;
+> +}
+>  
+> -out_free_target:
+> -	zfree(&ops->target.raw);
+> -out_free_source:
+> -	zfree(&ops->source.raw);
+> -	return -1;
+> +static int arm64_mov__scnprintf(const struct ins *ins, char *bf, size_t size,
+> +				struct ins_operands *ops, int max_ins_name)
+> +{
+> +	return scnprintf(bf, size, "%-*s %s, %s", max_ins_name, ins->name,
+> +			 ops->target.raw, ops->source.name ?: ops->source.raw);
+>  }
+>  
+>  static const struct ins_ops arm64_mov_ops = {
+>  	.parse	   = arm64_mov__parse,
+> -	.scnprintf = mov__scnprintf,
+> +	.scnprintf = arm64_mov__scnprintf,
+>  };
+>  
+>  static const struct ins_ops *arm64__associate_instruction_ops(struct arch *arch, const char *name)
+> @@ -103,6 +204,7 @@ const struct arch *arch__new_arm64(const struct e_machine_and_e_flags *id,
+>  	arch->id = *id;
+>  	arch->objdump.comment_char	  = '/';
+>  	arch->objdump.skip_functions_char = '+';
+> +	arch->objdump.memory_ref_char	  = '[';
+>  	arch->associate_instruction_ops   = arm64__associate_instruction_ops;
+>  
+>  	/* bl, blr */
+> -- 
+> 2.34.1
+> 
