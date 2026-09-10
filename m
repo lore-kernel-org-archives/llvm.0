@@ -1,154 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE96C3A75BD;
-	Thu, 10 Sep 2026 04:20:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0BF36998C;
+	Thu, 10 Sep 2026 05:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789014061; cv=none; b=cl1UeyYBtESnwOmMvM3NEDRklqeyEAYUA5RUFSTjA1ZpQZkFc8QoHturLxsClRlOrBrEzUxao/IN0N9aVl0rQ1Fp+5TmgdfM3aDDxKBBtnJ0M0Yeyeppy57kHdFHhUoAg1ehVuoLe/Mww2a8mtJEQ68VXmE5btPpanWV+BCl9C8=
+	t=1789018481; cv=none; b=LXFm/E3sWRkrf0kjxv9aBatlsf426STiXOPLYwKpgjmm1LHcMnHzH2VpDAjowElIyxrSfDDXTbdQ/a3A6swD4+o7ztZbTcyGfgBmxZWGN56ZfxxxGli83eoDmlaCijR7Br1jJmhwOEFIsYiLYDbYHAm2jISK8M22mkXzomCOQR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789014061; c=relaxed/simple;
-	bh=Q9fpS3QOis8VywAZ/qxPoy8tzjaMXYquN4IKUkvKQhc=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=fp5vCt3A/ZdoijE6m7BdwVwvTQ0HI+LP04ncpoAVPj8UTyykYoo0uU8Qin7upshKzJUrL5vwKjfBWVsNaZi/MvrIaenhccRxUsNGVNtXX/zU6zUVyU8jXr7lX0HkVTUTQn/mBD0FzU373gC8izCl2y87M2JwS7cpMaQkRIFcv2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LOau81+D; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789018481; c=relaxed/simple;
+	bh=Rowyx8vfNMu8I5WZOtghB/vCnSBqyv8xE3TmNv5Dk5U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=tTl6u39SfxHBd4ULe8alXoAML5rRbh7fvIwSDG5IeEWmF95CmZqzDNHghmMEf4vkugkkVv5SZzhRJ63PKWZYFuKuX2adCEj7iBu46mOuVLZ+vyzSw6y38C2rio37PP/ClfhTzVoyyUqwQ4PIgB9iRf1Y4E8ESbEHUEKU8alDw6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mLfkpYXX; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LOau81+D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E21F11F00899;
-	Thu, 10 Sep 2026 04:20:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789014059;
-	bh=cMnHIsMT3Av8PvHpH9hpF6YHkNFuphcbfvagp11LhEI=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=LOau81+Dv/xKL32e2arFIbHaGoSgQpb+AI2gkMiaJCJaeihtQd5swFCINh0NS/fXY
-	 27Kt0zTV6Qx+rt+tNM7e3LiacUYitVE3VbDUYt4fK3CxkqLOWV8xMZnj9b0EZaaydq
-	 x0ITEU+kRT6oChGTaf5tWJyEVskqbznIU/K9ReMlsMJoT3+t8D3HQePN+NPTwG2FxI
-	 UlvQCa33hH+CiLDyMyotExom0wtrjvND/SnFBGLN8IV1HUDxDHY5+PXIS4qVzJlL8i
-	 oScYkSwU5i3KJoGevo7zXbKO++vOgA/m63IBuYnGKTZQPikQrdB4KNGx3nNtljAEQZ
-	 HAum+WwKel+ig==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mLfkpYXX"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789018478; x=1820554478;
+  h=date:from:to:cc:subject:message-id;
+  bh=Rowyx8vfNMu8I5WZOtghB/vCnSBqyv8xE3TmNv5Dk5U=;
+  b=mLfkpYXXjSP8xAayDZHWGebGQo8HoP7+fIL6kbBHHO6lJFgR1NihA4HA
+   I8MP5JeM2qlbsSBTU8jfxl+gQ9Fvzc4prU3mN+kDZyaydRb+yc8qyH3+3
+   rTUOxswJSCHZVCl8x4phZlv6dCVz94SxDy5kR6FiJzdrk3eT17s6tIeik
+   npkfxtbue0i6DlPXXBhUXD9T3B4//2vwjxfWCwN9X3FEMmdsQIVAVDe0s
+   cEO7t9saCt9ZdKoc9RBo9sDgVasLVD9gJ20lm+oE3Z3+u885wDzvazhCY
+   eDwfb033VgTSMbGMSKE8iNZaNg59AOpkx1NjTgmwly/brlNv6Ntcp0ME3
+   Q==;
+X-CSE-ConnectionGUID: aWknCEw5SVO4J039LHs4ag==
+X-CSE-MsgGUID: Tj0IBa++SIyZE2lRBycPLQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="106972396"
+X-IronPort-AV: E=Sophos;i="6.25,271,1779174000"; 
+   d="scan'208";a="106972396"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 22:34:38 -0700
+X-CSE-ConnectionGUID: VCBLggcUTraoYguH2dZ7MQ==
+X-CSE-MsgGUID: ZWdiz6kNS0yPk/gz9piwgA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,271,1779174000"; 
+   d="scan'208";a="268969624"
+Received: from lkp-server01.sh.intel.com (HELO a3e91e2cf319) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 09 Sep 2026 22:34:36 -0700
+Received: from kbuild by a3e91e2cf319 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x4XQf-000000001QC-1BZo;
+	Thu, 10 Sep 2026 05:34:33 +0000
+Date: Thu, 10 Sep 2026 13:33:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-renesas-soc@vger.kernel.org,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [geert-renesas-drivers:renesas-clk-for-v7.4 16/16]
+ drivers/clk/renesas/r9a09g077-cpg.c:966:35: error: use of undeclared
+ identifier '__free_kfree'; did you mean '__free_pages'?
+Message-ID: <202609101334.xgbNoC4e-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH 23/23] kbuild: use pigz for gzip compression if
- available
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Ard Biesheuvel <ardb@kernel.org>, 
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org, 
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20260908-build-speedup-v1-23-5dc1ac01672d@kernel.org>
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
- <20260908-build-speedup-v1-23-5dc1ac01672d@kernel.org>
-Date: Wed, 09 Sep 2026 21:19:12 -0700
-Message-Id: <178901395293.3971858.15429964442902485180.b4-review@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2892; i=nathan@kernel.org;
- h=from:subject:message-id; bh=Q9fpS3QOis8VywAZ/qxPoy8tzjaMXYquN4IKUkvKQhc=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFmL9I9/nfxO72ppzjS5mYt/nszesc/yM3fFVJtNm524b
- /7wEcje1VHKwiDGxSArpshS/Vj1uKHhnLOMN05NgpnDygQyhIGLUwAmEsnAyPDvwIes2Wk3VQ7X
- VDzfe5qnb6OioMqiD+w2Ts4O2huWrlBj+Gf3oltEibvv7B0LRkems/f6hV3mWe7U3JB5ZYXFtSs
- /DzEAAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-> The gzip step of a kernel build is very lengthily, especially for larger
-> builds such as allmodconfig.
-> 
-> gzip itself cannot be run in parallel, however an alternative tool exists
-> that can, providing the same feature set as gzip itself - pigz - which
-> works as a drop-in replacement.
-> 
-> On a 128-core Threadripper, gzip -9 of a 36 MiB x86-64 vmlinux.bin takes
-> 1.6s, and with pigz it takes 0.09s, so the performance increase is
-> significant.
-> 
-> It is already possible to specify the KGZIP environmental variable to make
-> use of pigz, however it seems sensible to make use of pigz if it is
-> available.
-> 
-> Therefore default to using pigz if it is available on the system upon which
-> the kernel is being built, otherwise fall back to gzip.
-> 
-> The output is byte-for-byte identical between pigz/gzip invocations, but
-> gzip and pigz do not produce the same stream as one another.
-> 
-> Therefore, for reproducible builds, the same set of tools should be used.
-> 
-> This seems to already be an implicit requirement in any case, but update
-> the reproducible build documentation to make this clear.
-> 
-> Also update the kbuild documentation to reflect the change.
-> 
-> Every x86 build ends with the compression of vmlinux.bin, 36MB for
-> defconfig and over 200MB for allmodconfig, no-op builds are unchanged.
-> 
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
-> 
->                                          before   after     delta
->                                          -------------------------------
->   x86 defconfig, touch mm/vma.c, gcc        7.4s     5.4s     -2.0s (-27%)
->   x86 defconfig, touch mm/vma.c, clang      6.6s     4.9s     -1.7s (-26%)
->   x86 defconfig, clean, gcc                26.2s    24.4s     -1.8s (-7%)
->   x86 defconfig, clean, clang              25.8s    24.3s     -1.5s (-6%)
->   x86 allmodconfig, touch mm/vma.c, gcc    23.7s    15.3s     -8.4s (-35%)
->   x86 allmodconfig, touch mm/vma.c, clang  22.1s    15.2s     -6.9s (-31%)
->   x86 allmodconfig, clean, gcc            291.4s   275.2s     -16.2s (-6%)
->   x86 allmodconfig, clean, clang          278.3s   265.7s     -12.6s (-5%)
-> 
-> Link: https://zlib.net/pigz/
-> Assisted-by: LLM
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-...
-> diff --git a/Makefile b/Makefile
-> index a0d29dee81d7..efa6a2d77e6b 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -561,7 +561,7 @@ PERL		= perl
->  PYTHON3		= python3
->  CHECK		= sparse
->  BASH		= bash
-> -KGZIP		= gzip
-> +KGZIP		:= $(if $(shell command -v pigz 2>/dev/null),pigz,gzip)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-clk-for-v7.4
+head:   810b8b6c4e02c40991c29491cec09ebdaf5ec6d0
+commit: 810b8b6c4e02c40991c29491cec09ebdaf5ec6d0 [16/16] clk: renesas: r9a09g077: Register SYSC regmap
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260910/202609101334.xgbNoC4e-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c1872e7fd3307679a2da53f9d83de0ccf234b4ad)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609101334.xgbNoC4e-lkp@intel.com/reproduce)
 
-This should be '?=', right? Sashiko also notes a concern around parallel
-module installation with gzip module compression since there is no
-thread limitation, which could bring a little risk to doing this by
-default? Might not be that big of a deal though?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609101334.xgbNoC4e-lkp@intel.com/
 
--- 
-Cheers,
-Nathan
+All errors (new ones prefixed by >>):
 
+>> drivers/clk/renesas/r9a09g077-cpg.c:966:35: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
+     966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+         |                                          ^~~~~~~~~~~~~
+   include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+     213 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^~~~~~~~~~~~~~
+   <scratch space>:3:1: note: expanded from here
+       3 | __free_kfree
+         | ^~~~~~~~~~~~
+   include/linux/gfp.h:342:13: note: '__free_pages' declared here
+     342 | extern void __free_pages(struct page *page, unsigned int order);
+         |             ^
+>> drivers/clk/renesas/r9a09g077-cpg.c:966:35: error: 'cleanup' function '__free_pages' must take 1 parameter
+     966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+         |                                          ^
+   include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+     213 | #define __free(_name)   __cleanup(__free_##_name)
+         |                                   ^
+   <scratch space>:3:1: note: expanded from here
+       3 | __free_kfree
+         | ^
+>> drivers/clk/renesas/r9a09g077-cpg.c:966:51: error: call to undeclared function 'kzalloc_obj'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+         |                                                          ^
+>> drivers/clk/renesas/r9a09g077-cpg.c:966:24: error: incompatible integer to pointer conversion initializing 'struct regmap_config *' with an expression of type 'int' [-Wint-conversion]
+     966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+         |                               ^                          ~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
+
+
+vim +966 drivers/clk/renesas/r9a09g077-cpg.c
+
+   963	
+   964	static int r9a09g077_post_init(struct device *dev, struct cpg_mssr_pub *pub)
+   965	{
+ > 966		struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+   967		struct r9a09g077_sysc_reg *sysc_reg;
+   968		struct regmap *regmap;
+   969		struct resource res;
+   970		int ret;
+   971	
+   972		/*
+   973		 * Return early if the SYSC sizes are not as expected, for backwards
+   974		 * compatibility with older device trees that only expose the 64 KiB
+   975		 * CPG register window.
+   976		 */
+   977		ret = of_address_to_resource(dev->of_node, 0, &res);
+   978		if (ret)
+   979			return ret;
+   980		if (resource_size(&res) != RZT2H_CPG_REG_SIZE)
+   981			return 0;
+   982	
+   983		ret = of_address_to_resource(dev->of_node, 1, &res);
+   984		if (ret)
+   985			return ret;
+   986		if (resource_size(&res) != RZT2H_CPG_REG_SIZE)
+   987			return 0;
+   988	
+   989		if (!regmap_cfg)
+   990			return -ENOMEM;
+   991	
+   992		sysc_reg = devm_kzalloc(dev, sizeof(*sysc_reg), GFP_KERNEL);
+   993		if (!sysc_reg)
+   994			return -ENOMEM;
+   995	
+   996		/* Only allow access in the SYSC regions */
+   997		sysc_reg->base[0] = pub->base0 + RZT2H_SYSC_OFFSET;
+   998		sysc_reg->base[1] = pub->base1 + RZT2H_SYSC_OFFSET;
+   999	
+  1000		regmap_cfg->name = "rzt2h_sysc";
+  1001		regmap_cfg->reg_bits = 32;
+  1002		regmap_cfg->reg_stride = 4;
+  1003		regmap_cfg->val_bits = 32;
+  1004		regmap_cfg->fast_io = true;
+  1005		regmap_cfg->max_register = RZT2H_SYSC_SIZE - 1;
+  1006		regmap_cfg->readable_reg = r9a09g077_writeable_readable_sysc;
+  1007		regmap_cfg->writeable_reg = r9a09g077_writeable_readable_sysc;
+  1008	
+  1009		regmap = devm_regmap_init(dev, &r9a09g077_sys_regmap_bus, sysc_reg, regmap_cfg);
+  1010		if (IS_ERR(regmap))
+  1011			return PTR_ERR(regmap);
+  1012	
+  1013		return of_syscon_register_regmap(dev->of_node, regmap);
+  1014	}
+  1015	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
