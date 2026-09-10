@@ -1,212 +1,137 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C75E3E00A3
-	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 09:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044F737BE7A
+	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 10:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789032550; cv=none; b=eUFpN5r2PrjHVpoQ9D9cBX8FEkhwy7qiskrFzHBDC/b0/yc6+TmVlAEqhEsdeTxbSF50/igy1lECMzqOpmXtYED++VWGwT7gxIupE97d45ZFaJMKFhjkDFh0upd81AM8mPWX8XfDamUEhYkB+6g+SUg444l5VwcOosF+/yT/tLA=
+	t=1789035273; cv=none; b=o3XSqD6nubST2Sbgcb4edn1Nxc8c/5aKbZDoxHzzn3TUTDKQNbw8ZFlw4eXKO42zM9uGQKm1fUSQS9fmiNcJdsGl/etduPWomgDx9eveJmzrPHiyOm+ZgQEtmKBAAKLZuZX4X+w8eBV8+jmGkzESyfDEMj2SrIYnRd84JtI43lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789032550; c=relaxed/simple;
-	bh=YmZhILYI1Ap/QhHEbws/tgVKUcLX7+iRsfdsJ1tAFSs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hbMmciJ+pEPUPjQGlbgq2ykHuJi8IhvmanFJGDzn5LclsXnrs/5BJ+XV88mFMt1R673ekuqUt1TVjI/yeosp0g3HK7UYIusAYlfU7I5v4DyKhXIV6dWbGA3Sn1wL0J4ME3Ek39OB7BKQ4RnL9/yfBIxNrBiMKU2At/jifdFRRiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juxANAUC; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1789035273; c=relaxed/simple;
+	bh=Rw5xn6MDUzprJXALhd12R93b+y4cMokXqUcGPM/Ln7Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r6a1lzFduM3x83ONugRWJa+YtWJ9FGO3U2zfsmfNZvhd9w65+fQMfhK5au4fAB/eDQWX+EbYEitNlS2dBNSBybOFC5sOfh2mL3vP9ijPuBXs9rcwsxCiTLYz1B1ISX0FTDLJ+pNj+vuye4k2nxMAjug62sFUuyazEsDpmfBfXrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juxANAUC"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49b0d78a801so67379405e9.2
-        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 02:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789032546; x=1789637346; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=xKhavT2ReA2W483I2xKkmSEJ1FM7bdVhooTyy/B0hnc=;
-        b=juxANAUCe9vfgms4nuYcZOGArNnkiAQf5mdVXS4o/+OVB228lr4dAFBtCJwy1KduG0
-         evqcWtS0v4ctIVLg5DzD5RJ/S11lHSzyL5VR6f5wNhjpVJpkX7vslXyY9nUueVyhZSH7
-         MdExTw1Y8zybGkrRdkyiZAkgubl3KYd+q+dbpjYZ5Z+IUI3zJf2cG56npH6vEDpiHMVH
-         T4X3IfeQpH9fiTszGDHUFf5jJtXSRKhO8Ncz3VQm3pkqOKSWIsjdxBuSwZoiL+N6CpXX
-         4y9LuN+FplIdaGEu2SprLoIkZIJCmGAYK41PG6TEGbASwy1ZniReffKoXW/Uj0aWtPZp
-         0oVw==
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5c83364233eso1033397e0c.0
+        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 03:14:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789032546; x=1789637346;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xKhavT2ReA2W483I2xKkmSEJ1FM7bdVhooTyy/B0hnc=;
-        b=pCB2rO+k7Z9GkqTDiJg8H0KBbSkMOckkP3GyB8+jyf+1fZ0thXkYfiTGBYPuylTGU4
-         3TILQ2Gm4sPgc/17b2ZQOFcrA4VTXT/vc9YTtTBr1QyLW+ZyXX6TvutzocOb80D4OGBc
-         pVMpv7Z6QIeorOR9oGm2RXSahjh6uUG4ABaYtiv5vV6fWeTKmTXRH3QK6m6FMNe6kqdN
-         3d+4P2l5dP1z6EbtrUV2jo5c8CrD8VwUvjIgTHvOIzwg9w1PGeLo3BxJjM9qWNOAMS5e
-         SS1ju096a6tpUihpBGHzBksbOmasvdsERWlPSu+Y26SZwdRS+Ui43ytVcDYNTy+mpIe9
-         jpZw==
-X-Forwarded-Encrypted: i=1; AKwUvBwxRn5LyzwzNPfsDhXu6kH927GWLYciaH7cJHkpPoEEvw1/FTlZ4ZM1fad+yVMVy9wrOBV7@lists.linux.dev
-X-Gm-Message-State: AFuF++l9nCOdrZ4ZZUf2oJhXnaX96/S/+2HD7huVOfI0taz+fKYXh4Ma
-	mNznlEiVhqBQruZjev0OLb27Q/fgiClFPMHMHuEVKz3ggIfYcrh9rJe8
-X-Gm-Gg: AYBFou2nRYC7t+f05KL1bRJu8k2nyIdgQHtb6Lde1014tXclQpK/OiSSSiuoiOM2RDb
-	Gf64fbhvyCr+CuxWngmdXs+sBf1Ak6DYCUG5LmD3/i1SvPsXHph7MxX8kLENEoKMs67YJ8UuNil
-	Vs5fkyS41QBZGXJcomvO0lVO1cRseRcvSSUwgIuT1CWXMuzFSDP0LqcUi1rgv8x72/D/6DRNH9w
-	fEPyvZ5LLI5rujbj4FDHaHq1YxXBPGcHIBFVLvdEdelmzqe+YQKYzqtMpqQXbbNb/RKTBWMsNsz
-	DDHTqzl9tDlsD/Tn0PpxmZAQXR+csR2Y/3NsdTBOH2MWrvrPIzAn8DIn2XxqvMLJmmgw6Sel/F+
-	5c7JQ1yFlWo+NM6E3mSOAuOAR2KgY8Q2hZvlzi2XANkoiCs8S7NIRm/JsG8Lq3NmXJS1Gkj5arA
-	RE9WaXfDWpcFdmv/8LLlrqQ4TI8zIxGwks87McjU1JWL8zF4frx/WmMhKyVWv5pS2pI1YSQ1jlt
-	irQ/LKFIID6mcjAwXR52xgl3lzJTz1TUTO6
-X-Received: by 2002:a05:600c:138b:b0:49e:2a61:a17b with SMTP id 5b1f17b1804b1-49e2a61a41emr9166915e9.5.1789032546119;
-        Thu, 10 Sep 2026 02:29:06 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d20fc23fcsm106027125e9.3.2026.09.10.02.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 02:29:05 -0700 (PDT)
-Date: Thu, 10 Sep 2026 10:29:03 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor
- <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Alexey
- Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
- <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
- <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun
- Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?UTF-8?B?QmrDtnJu?=
- Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
- Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
- Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet
- <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 04/23] kallsyms: output binary data to speed output and
- kallsyms assembly
-Message-ID: <20260910102903.1b211f6b@pumpkin>
-In-Reply-To: <20260908-build-speedup-v1-4-5dc1ac01672d@kernel.org>
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
-	<20260908-build-speedup-v1-4-5dc1ac01672d@kernel.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        d=1e100.net; s=20251104; t=1789035270; x=1789640070;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=R5pyFaModjtGkctdZvggQo6mIBpUFRdaaBsGlklIYms=;
+        b=HDL+dAZdJrC7kpHw6EVZLLx0MCD4Smknme9ARsmA6fy6Z9TiWbeCixy/yvGB36W/cQ
+         trRk2IkSFVrpg6kBFa0Mruwqyc2okL3QPM4GZ91BsDZwigYPI17wAtDja0uFG8orM+Mk
+         Obg1QFWhTq9Q5RHTbKC0hQXtKk/Lu27+BLpF73jn+LpvEU/7N4LLXl+nMyDUgsujVLAj
+         1ck730Y7Cwhs6YZQwYD1NIBxzOsnmCjWzShekvdWF7WOTQT+UMt9g7boimtx7y6lYPO1
+         +b8yvV7amKIMrwqJD370f1s05/2Q1leanyQzbGWGdGYjNhiNgn6kvl9hOgU6MJNJDlNV
+         XUZw==
+X-Forwarded-Encrypted: i=1; AKwUvBwSTGqo6LPUTG97mfWnn42Ff3JRphyHKjtsIEV6DG1+kKthPZCcuro32eQlTqvky5oglF4r@lists.linux.dev
+X-Gm-Message-State: AFuF++ktfHx8Ijw9kv2C8R6WvG9s7c35IKwM5JokC4gsizuJl6M9sM8E
+	g2/eVGqAFbakyvqZuAkMkd50wiSY/fgKhg96xjW2U0IFrv8/oWPIdKx2rO2gCsZ+1Xs=
+X-Gm-Gg: AYBFou1LBKxgkIJIl/qZfeN5JvuTmBMXbKmTlOsHkvl2mNhsFki9G5pTJEY9Q5rgKOV
+	Sagrj2gSOwjsrgULgwoId6vfrMTJJi65hI95H3FeLJ3zf1FQk/c+EeMscivgS8fOL1wPcCpcLep
+	zV+e9fUxC/t7t1S77o5qTBg5M7zHxU1PI5TiU9ZHcbbps0voRp+IXJpblBePMHFPHI6+FMEAL2R
+	j+68RoUq1uM7p90QHBoPU1qXHETQHqd+Yq6saXZvBCrmQFJPPg7ogO1w7XhbnGj8C2VUrJq4Z26
+	E0UIeKpkWVkdHm+nQKSD8U1oCH3kfUcT0XnRW24SgCTzIMQbFtQNmCyanHDNzpe+8SL/1JceHg6
+	HUyqyyeg2cvUqUQ6EOZt5OWCwG8U4DgSGoeMmCKXU8dnUpFeCgqDLJiS0KhEb4pNU5OwUn+FYKx
+	8aX3WDO1qSJrEAUMvzwXU+cWYpgjD+rb5HGlMJvyT6Cz827Khjvk0LhF36v5i/najZXmvPwCnt5
+	bM+VZoW4e7+EYaRX0arXK7MdRDtxiHRtJKF
+X-Received: by 2002:a05:6122:8b11:b0:5c7:a844:493 with SMTP id 71dfb90a1353d-5c7ed2f89e5mr26662422e0c.0.1789035269714;
+        Thu, 10 Sep 2026 03:14:29 -0700 (PDT)
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com. [209.85.217.46])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c7ec3b2cb1sm14555317e0c.16.2026.09.10.03.14.29
+        for <llvm@lists.linux.dev>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Sep 2026 03:14:29 -0700 (PDT)
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-784a1696a21so4514191137.2
+        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 03:14:29 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBwhzDwTJa9dbVxvUBw1PsEKoUglHpdBs6ApIXukDyRbNmN/9xstFcaYpMBAd39Qu04rnuBF@lists.linux.dev
+X-Received: by 2002:a05:6102:6b03:b0:77b:ae7:1bba with SMTP id
+ ada2fe7eead31-78a4a72eac3mr22223768137.3.1789035268749; Thu, 10 Sep 2026
+ 03:14:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <202609101334.xgbNoC4e-lkp@intel.com>
+In-Reply-To: <202609101334.xgbNoC4e-lkp@intel.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 10 Sep 2026 12:14:17 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVBFCKA5gjQeXuTrOYbaY_sZg-Gnz-fgOCSKhF3cV8jhg@mail.gmail.com>
+X-Gm-Features: AcwNN1WahnoAKM5bWAzumRTegPpUxaUzjYyd7D5gHP2WgaVBSlpot3X8X8LLi68
+Message-ID: <CAMuHMdVBFCKA5gjQeXuTrOYbaY_sZg-Gnz-fgOCSKhF3cV8jhg@mail.gmail.com>
+Subject: Re: [geert-renesas-drivers:renesas-clk-for-v7.4 16/16]
+ drivers/clk/renesas/r9a09g077-cpg.c:966:35: error: use of undeclared
+ identifier '__free_kfree'; did you mean '__free_pages'?
+To: kernel test robot <lkp@intel.com>
+Cc: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, llvm@lists.linux.dev, 
+	oe-kbuild-all@lists.linux.dev, linux-renesas-soc@vger.kernel.org, 
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 08 Sep 2026 21:55:04 +0100
-"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+Hi Kernel Test Robot,
 
-> kallsyms generates an assembly file that consists mostly of .byte entries
-> containing compressed names, token strings and name-sorted sequence
-> numbers.
-> 
-> For an x86-64 build with 158k symbols that is a 37 MiB .S file which takes
-> 0.57s to assemble each of the two to three times it is built over a kernel
-> build.
-> 
-> Each time it is generated it also takes kallsyms a similar amount of time
-> to output it.
-> 
-> Avoid this overhead by instead outputting this data as binary and importing
-> it into the assembly using the .incbin directive.
-> 
-> Tables that are wider than a byte remain part of the assembly to ensure
-> endianness and relative relocations are performed correctly.
-> 
-> With this change, the output assembly file shrinks from 37 MiB to 9.8 MiB,
-> with a 2.6 MiB binary data file alongside it, and the object remains
-> identical.
-> 
-> The generated binary file is deleted correctly on build clean along with
-> all other ephemeral data.
-> 
-> On an x86-64 system with CONFIG_KALLSYMS_ALL set:
-> 
->                        before   after    delta
->   scripts/kallsyms     0.24s    0.18s    0.06s
->   assemble             0.57s    0.16s    0.41s
-> 
-> Per kallsyms invocation/assembly, for a total of 0.47s time saving upon
-> invocation.
-> 
-> An incremental build on the same system was reduced from 11.15s to 9.65s,
-> indicating a total of 1.5 seconds saved over the build.
-> 
-> The kallsyms runs and their assembly are on the serial tail of every build
-> that links vmlinux, no-op builds are unchanged.
-> 
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
-> 
->                                          before   after     delta
->                                          -------------------------------
->   x86 defconfig, touch mm/vma.c, gcc       10.8s     9.9s    -0.92s (-8%)
->   x86 defconfig, touch mm/vma.c, clang     10.7s     9.5s     -1.2s (-11%)
->   x86 defconfig, clean, gcc                29.5s    28.7s    -0.81s (-3%)
->   x86 defconfig, clean, clang              29.7s    28.6s     -1.1s (-4%)
->   x86 allmodconfig, touch mm/vma.c, gcc    45.3s    44.0s     -1.3s (-3%)
->   x86 allmodconfig, touch mm/vma.c, clang  42.9s    40.2s     -2.7s (-6%)
-> 
-> Assisted-by: LLM
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  scripts/kallsyms.c      | 97 ++++++++++++++++++++++++++++++++++++++-----------
->  scripts/link-vmlinux.sh |  2 +-
->  2 files changed, 77 insertions(+), 22 deletions(-)
-> 
-> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-> index 350d118c3b9e..61c5eb537ed4 100644
-> --- a/scripts/kallsyms.c
-> +++ b/scripts/kallsyms.c
-> @@ -5,7 +5,10 @@
->   * This software may be used and distributed according to the terms
->   * of the GNU General Public License, incorporated herein by reference.
->   *
-> - * Usage: kallsyms [--all-symbols] in.map > out.S
-> + * Usage: kallsyms [--all-symbols] [--pc-relative] in.map out.bin > out.S
-> + *
-> + *      The byte tables go to out.bin and are pulled into out.S with .incbin;
-> + *  wider tables stay assembler source for endianness and relocations.
->   *
->   *      Table compression uses all the unused char codes on the symbols and
->   *  maps these to the most used substrings (tokens). For instance, it might
-> @@ -102,7 +105,7 @@ static void sym_arr_free(struct sym_arr *arr)
->  
->  static void usage(void)
->  {
-> -	fprintf(stderr, "Usage: kallsyms [--all-symbols] in.map > out.S\n");
-> +	fprintf(stderr, "Usage: kallsyms [--all-symbols] [--pc-relative] in.map out.bin > out.S\n");
->  	exit(1);
->  }
->  
-> @@ -319,6 +322,40 @@ static void output_label(const char *label)
->  	printf("%s:\n", label);
->  }
->  
-> +static void write_bin(FILE *file, const void *data, size_t len)
-> +{
-> +	if (fwrite(data, 1, len, file) == len)
-> +		return;
-> +
-> +	perror("kallsyms: write");
-> +	exit(EXIT_FAILURE);
-> +}
+On Thu, 10 Sept 2026 at 07:34, kernel test robot <lkp@intel.com> wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/geert/renesas-drivers.git renesas-clk-for-v7.4
+> head:   810b8b6c4e02c40991c29491cec09ebdaf5ec6d0
+> commit: 810b8b6c4e02c40991c29491cec09ebdaf5ec6d0 [16/16] clk: renesas: r9a09g077: Register SYSC regmap
+> config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20260910/202609101334.xgbNoC4e-lkp@intel.com/config)
+> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c1872e7fd3307679a2da53f9d83de0ccf234b4ad)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609101334.xgbNoC4e-lkp@intel.com/reproduce)
+>
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202609101334.xgbNoC4e-lkp@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+> >> drivers/clk/renesas/r9a09g077-cpg.c:966:35: error: use of undeclared identifier '__free_kfree'; did you mean '__free_pages'?
+>      966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+>          |                                          ^~~~~~~~~~~~~
+>    include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+>      213 | #define __free(_name)   __cleanup(__free_##_name)
+>          |                                   ^~~~~~~~~~~~~~
+>    <scratch space>:3:1: note: expanded from here
+>        3 | __free_kfree
+>          | ^~~~~~~~~~~~
+>    include/linux/gfp.h:342:13: note: '__free_pages' declared here
+>      342 | extern void __free_pages(struct page *page, unsigned int order);
+>          |             ^
+> >> drivers/clk/renesas/r9a09g077-cpg.c:966:35: error: 'cleanup' function '__free_pages' must take 1 parameter
+>      966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+>          |                                          ^
+>    include/linux/cleanup.h:213:33: note: expanded from macro '__free'
+>      213 | #define __free(_name)   __cleanup(__free_##_name)
+>          |                                   ^
+>    <scratch space>:3:1: note: expanded from here
+>        3 | __free_kfree
+>          | ^
+> >> drivers/clk/renesas/r9a09g077-cpg.c:966:51: error: call to undeclared function 'kzalloc_obj'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>      966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+>          |                                                          ^
+> >> drivers/clk/renesas/r9a09g077-cpg.c:966:24: error: incompatible integer to pointer conversion initializing 'struct regmap_config *' with an expression of type 'int' [-Wint-conversion]
+>      966 |         struct regmap_config *regmap_cfg __free(kfree) = kzalloc_obj(*regmap_cfg);
+>          |                               ^                          ~~~~~~~~~~~~~~~~~~~~~~~~
+>    4 errors generated.
 
-It is pretty pointless checking the return value from fwrite().
-Most of the time it is just doing a memcpy().
-Instead call fflush() and the ferror() prior to the fclose().
-(Or just rely on fclose() giving you that error status.)
+Thanks, will amend with:
 
-David
++#include <linux/cleanup.h>
++#include <linux/slab.h>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
