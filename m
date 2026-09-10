@@ -1,186 +1,103 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34EE159651F
-	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 19:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFEE38D3FD
+	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 21:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789068724; cv=none; b=VNTXE4XM2S3IbfGHj/dOk6z51QTkHjE92zLOi3VqZ1Qwzwv2sr2bYm+sRE68hJBz/wH0438XXvqpWY3xhQh684w+WtL7nq6tbFuyNllsiE1isyN+KyQe0Ua1zKkWCefS/sqvo39YrFSUcpOWAJ0zhWnO6DycaSRjjjC/WdDcIrQ=
+	t=1789076358; cv=none; b=gh9OiWvc8cqfN3Zc8PrejMBNx+D6zS9m73fp8ZiDycR8adaYyouiphAkiJtnjmu9ClZIlbcIRG9QOTYdzta03S4QNS1ONBOdEjVcHRy6OrTqQJjKMaKhVce+avE7d0Ih4tNg2bmZVg1AfC8c2APMWD1afflWIlTNn41Ms2fG4As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789068724; c=relaxed/simple;
-	bh=RVscuzOwWBLYOqPI0VAq65UPbl5BzTBhY3MPWSu7TYU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PR+MqI4cmB5iDNb8asUOYFEUkDxi8ldWovNNBFWh3ry+cvWR5NzEYZVEWD6ASe+ccLIH6It3Nhb71u7Zl6LSsJSYjTAUV/p2nnCVbsHcb2bnyeuNb85q/Algzl/9EyD8vqqq5NWHv5jRdCkSEh6u3Q4l/y1+Id8mtP14tuc+Yv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oCiZy6YE; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789076358; c=relaxed/simple;
+	bh=VZ7i9g/d+H47coYO3Xc9M1wiqaAKR5dvjmJyK4FiQPk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=Mc4fseOFrFJqosE4V0wOdHdfFfSILrm0ZKl2LjyluADaDonAeCXKNrh2GapXeq7OvmAdF0JGiRDx7Q0VIZgdg11yM/QvqvwA+Hz99TNkqiqVf8yzAxvIAy4OV70IGocJMu/QUotxFivaRQN4/2XExyBhGly/SNcYzCYTFjAKOJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U4f2Wxdi; arc=none smtp.client-ip=209.85.216.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oCiZy6YE"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-8692a856865so68487b3a.2
-        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 12:31:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U4f2Wxdi"
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38ecc48b3c2so299322a91.1
+        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 14:39:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789068712; x=1789673512; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gEdV5Xs8ER2iH6ECRgXfLV1Fk4a++1FtqWHfmbg9CiM=;
-        b=oCiZy6YEIl1WEWJuqkfwE7hhjYzdKdJn1U97rxirHWQ8papKz52RYwLA6HickcAdxP
-         uN6ZHUwyPC7XrDUaTOVTFWK/E0opi1+3BOQrKtisMRK52bs2/pCWIxOYpPGzHzuh8usZ
-         pfwz1IF8vw5Ab9DnTf30CZorR43D3BVP2foVCVjnUW6NWWhBspQXYpg5iZDAZ884gYEO
-         bLMy/rNyuahb66WOj26fI4iU9qy5OCOyu7sS5Qk3wyYNsXhpDXJTyynEztyCX8D+0/y+
-         BkyOKM0111ukn0A+wRkLRr/GenoDPMt9xgg+iU0KSu0OJ5iQcfSnZhPGQaibXQpSU189
-         jN+A==
+        d=google.com; s=20251104; t=1789076355; x=1789681155; darn=lists.linux.dev;
+        h=content-type:to:from:subject:message-id:mime-version:date:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=6fbf9eOsE32d1ZOxCGBZBdmKD77pEwD9k19mpGO+TR8=;
+        b=U4f2WxdiW3oa5EWalSYa4AWn/+g15Wy7aTP6cMr38c8wsH/YxAtyYnUk74/OFSr3sg
+         Z163TUqJmdDG9AR6v8B4WzmkD/b+AkosXXfiAInxyjhGxqBbIaRpb0i/wU3AU7ExMsYJ
+         ZXRgXfRhLdg+x6mfN6wKYTiaWtKK0WaV3CDCEBcTs0jQU59fcA+SxFnJU0FK8vL/77Pa
+         iQ/LiDyiM7/Pu8AdlGf2rCpjOyFXG1tLgscRS5gpXwJSE79lP2e9mqPc9cp+39z8GrI9
+         d7DaGjiK5p4fm7xYUaZfloM+Gf/BwuRf6Bc+spqGkgTbz/1vNGrymdhAJCtxxx7H6GK8
+         0CSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789068712; x=1789673512;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=gEdV5Xs8ER2iH6ECRgXfLV1Fk4a++1FtqWHfmbg9CiM=;
-        b=tDNml2CHTK/deinNLiNNAlzr4qhHma5SkTV7NDykmhi5iBdnKf/MuAqJsvwcFbRuQ2
-         DlpiuKCBAwjbENwvlDig3kGGOT9aGQQ9WvFZughHamoTbeXkQnoEhS/ACDdiYDvuiWLy
-         NiCv3Gtv+tOdHFSdC1nAByvOs40cT+2gx0QfWIWYyvfbLLNOYXTPm5GJGvES/AXJHBw/
-         WnT0JCPbdA7ypbxIv9OR+Ge5IZjneWlcr0X1Zrm5VYTnRgckFIG0oH7Bb+X78NxS1nME
-         MiJIyySWXew/ZLsblQn6JqDB2UOjlF8/zdHf5HX4zt5lYlk4AkHArGJaRRKbmIdTr+Au
-         043A==
-X-Forwarded-Encrypted: i=1; AKwUvBzVUWXuWZYxv8CMvtY4M9E6cBfJ4ADTvLc7FO8OmdzfEqbzvB23izBnB3EmwIEkOa0ioyYh@lists.linux.dev
-X-Gm-Message-State: AFuF++myGYvkbg70rvb280rxjt3eEyYTMIEFmqnQ3OCnBAC+lFwzDvFQ
-	HjMJFDLtg008pUpF4345vixCTTRe05tpxQGuZF4Z/JJOz9S/Z3Y28dON
-X-Gm-Gg: AYBFou3fTtSRQLM2tacHerXK5x3qzU9B0r2XTXGwZFi1AEQcp/ooFBhfR9yOPLRapOH
-	JkQ7MHx1l1Xqedvuggi/x/H8SnUg12eQuBD82PzRSp9f8rjYViKlAdhtUaUR//hCopzSFc7gKXD
-	Mmtp6KCN8oEnhQHcx7zWTCw1uBSGWpyDx+utxoMVNYE015+AxDO+PB+HLNt4kY/x2AMTWoBjWZq
-	7ndYzffp3y+Si59JQSmDHOViEJ4sHWRMyDM7Jvm7rcEYCA8YlG2EuEO1CD7Kjb8zd/2s8yKeuSh
-	oq3stTL4R0a5J0jG9XyOjiFQAAhWA5kS3kQWymbtboymgaYrR1jtge6VeUaWJ8LZvsjUfwCEL1a
-	3UbByaooiIm6eXANl2oyG5Hiuk3fEMa0PIZSq3OK0NuRXyjzHbCwO1ReA8537yP/0Q4IS6KFCyQ
-	jys1KQBLAN/IMi8weJvJlm1FSNIlAN/Y2CZ8jmtl8AzYGjIa6/PFjpEJj6jlEFhadyWVGmNlt6g
-	jhaT1YVF3S2n/x8zHD91B9NvxCCcDEB86tN7wAiyEj13uhw
-X-Received: by 2002:a05:6a00:ba8d:b0:857:72ba:ff0f with SMTP id d2e1a72fcca58-86b34efaaebmr529838b3a.23.1789068712105;
-        Thu, 10 Sep 2026 12:31:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-86b2a5c052csm79353b3a.58.2026.09.10.12.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Sep 2026 12:31:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5fd98fc-2cfb-434a-8a81-3bf589049670@roeck-us.net>
-Date: Thu, 10 Sep 2026 12:31:49 -0700
+        d=1e100.net; s=20251104; t=1789076355; x=1789681155;
+        h=content-type:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6fbf9eOsE32d1ZOxCGBZBdmKD77pEwD9k19mpGO+TR8=;
+        b=G9rILn8Y9fAqYq85FYPw+mSEOGq2whcaG7LK5EzvhjCUd6ku513SMUOgmwTLXYSS53
+         6BS9C5VU9CRWikTCUmGGBcR2aYRJiLcNbsO09YAz7YF9B7XRL3TV0af5r50+fFJmNhu4
+         jgLs45YAV6IwJikTnHUrkq0my3lhQhDEMEP7NpQj+qyjpVL5dms4lFEiWiX8OOtdZPNC
+         QOtQQzxerbDZE/oGp2RRY1yvbzmn22768h5nqqvOVgYOj7h5dcTKL4i/ASdYok828wDQ
+         YmfEE4ek5o16SlAJZjW7V7Uqc6PJecY0drY21pJWWVRgLlOJ6oEyI9NYEo5F8cuTgcXh
+         yIng==
+X-Forwarded-Encrypted: i=1; AKwUvBzqFz9SEeYLvcnN57WdhoIj0cC0d/tGlQH6L8hygwc6eUevsmrzrHIQ3gg061jTLojorUXA@lists.linux.dev
+X-Gm-Message-State: AFuF++n+EZxGg98TweMQ5KO/Vp78Qdl9Zv/KB9wDR5bkJe/53fuw19tI
+	lqbZkUhIahMP3WkLeuashZyiJhMIOBLeacxx4JXA+mbYcb6plDjwbPhxWGcdhB1sUjYVfRi9CNI
+	Hh3NMFysavQ==
+X-Received: from dlbbq8.prod.google.com ([2002:a05:7022:6708:b0:143:65eb:f1ec])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c8b:b0:398:9c00:29ee
+ with SMTP id 98e67ed59e1d1-39d9c38fa48mr1037351a91.22.1789076355117; Thu, 10
+ Sep 2026 14:39:15 -0700 (PDT)
+Date: Thu, 10 Sep 2026 14:39:07 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
-To: Arnd Bergmann <arnd@arndb.de>, Svyatoslav Ryhel <clamor95@gmail.com>,
- Arnd Bergmann <arnd@kernel.org>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Bartosz Golaszewski <brgl@kernel.org>, Mark Brown <broonie@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Daniel Thompson <danielt@kernel.org>,
- Helge Deller <deller@gmx.de>, devicetree@vger.kernel.org,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- dri-devel@lists.freedesktop.org, Jonathan Cameron <jic23@kernel.org>,
- Jingoo Han <jingoohan1@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
- Linus Walleij <linusw@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, linux-fbdev@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, llvm@lists.linux.dev,
- Mauro Carvalho Chehab <mchehab@kernel.org>, mfd@lists.linux.dev,
- Michael Hennerich <michael.hennerich@analog.com>,
- patches@opensource.cirrus.com, Pavel Machek <pavel@kernel.org>,
- Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Support Opensource <support.opensource@diasemi.com>
-References: <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
- <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
- <7a92a79e-e22a-4e34-9f11-4086b88f62cc@roeck-us.net>
- <e33b42dc-1561-4819-b028-b13af9e7115b@app.fastmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- xsFNBE6H1WcBEACu6jIcw5kZ5dGeJ7E7B2uweQR/4FGxH10/H1O1+ApmcQ9i87XdZQiB9cpN
- RYHA7RCEK2dh6dDccykQk3bC90xXMPg+O3R+C/SkwcnUak1UZaeK/SwQbq/t0tkMzYDRxfJ7
- nyFiKxUehbNF3r9qlJgPqONwX5vJy4/GvDHdddSCxV41P/ejsZ8PykxyJs98UWhF54tGRWFl
- 7i1xvaDB9lN5WTLRKSO7wICuLiSz5WZHXMkyF4d+/O5ll7yz/o/JxK5vO/sduYDIlFTvBZDh
- gzaEtNf5tQjsjG4io8E0Yq0ViobLkS2RTNZT8ICq/Jmvl0SpbHRvYwa2DhNsK0YjHFQBB0FX
- IdhdUEzNefcNcYvqigJpdICoP2e4yJSyflHFO4dr0OrdnGLe1Zi/8Xo/2+M1dSSEt196rXaC
- kwu2KgIgmkRBb3cp2vIBBIIowU8W3qC1+w+RdMUrZxKGWJ3juwcgveJlzMpMZNyM1jobSXZ0
- VHGMNJ3MwXlrEFPXaYJgibcg6brM6wGfX/LBvc/haWw4yO24lT5eitm4UBdIy9pKkKmHHh7s
- jfZJkB5fWKVdoCv/omy6UyH6ykLOPFugl+hVL2Prf8xrXuZe1CMS7ID9Lc8FaL1ROIN/W8Vk
- BIsJMaWOhks//7d92Uf3EArDlDShwR2+D+AMon8NULuLBHiEUQARAQABzTJHdWVudGVyIFJv
- ZWNrIChMaW51eCBhY2NvdW50KSA8bGludXhAcm9lY2stdXMubmV0PsLBgQQTAQIAKwIbAwYL
- CQgHAwIGFQgCCQoLBBYCAwECHgECF4ACGQEFAmgrMyQFCSbODQkACgkQyx8mb86fmYGcWRAA
- oRwrk7V8fULqnGGpBIjp7pvR187Yzx+lhMGUHuM5H56TFEqeVwCMLWB2x1YRolYbY4MEFlQg
- VUFcfeW0OknSr1s6wtrtQm0gdkolM8OcCL9ptTHOg1mmXa4YpW8QJiL0AVtbpE9BroeWGl9v
- 2TGILPm9mVp+GmMQgkNeCS7Jonq5f5pDUGumAMguWzMFEg+Imt9wr2YA7aGen7KPSqJeQPpj
- onPKhu7O/KJKkuC50ylxizHzmGx+IUSmOZxN950pZUFvVZH9CwhAAl+NYUtcF5ry/uSYG2U7
- DCvpzqOryJRemKN63qt1bjF6cltsXwxjKOw6CvdjJYA3n6xCWLuJ6yk6CAy1Ukh545NhgBAs
- rGGVkl6TUBi0ixL3EF3RWLa9IMDcHN32r7OBhw6vbul8HqyTFZWY2ksTvlTl+qG3zV6AJuzT
- WdXmbcKN+TdhO5XlxVlbZoCm7ViBj1+PvIFQZCnLAhqSd/DJlhaq8fFXx1dCUPgQDcD+wo65
- qulV/NijfU8bzFfEPgYP/3LP+BSAyFs33y/mdP8kbMxSCjnLEhimQMrSSo/To1Gxp5C97fw5
- 3m1CaMILGKCmfI1B8iA8zd8ib7t1Rg0qCwcAnvsM36SkrID32GfFbv873bNskJCHAISK3Xkz
- qo7IYZmjk/IJGbsiGzxUhvicwkgKE9r7a1rOwU0ETofVZwEQALlLbQeBDTDbwQYrj0gbx3bq
- 7kpKABxN2MqeuqGr02DpS9883d/t7ontxasXoEz2GTioevvRmllJlPQERVxM8gQoNg22twF7
- pB/zsrIjxkE9heE4wYfN1AyzT+AxgYN6f8hVQ7Nrc9XgZZe+8IkuW/Nf64KzNJXnSH4u6nJM
- J2+Dt274YoFcXR1nG76Q259mKwzbCukKbd6piL+VsT/qBrLhZe9Ivbjq5WMdkQKnP7gYKCAi
- pNVJC4enWfivZsYupMd9qn7Uv/oCZDYoBTdMSBUblaLMwlcjnPpOYK5rfHvC4opxl+P/Vzyz
- 6WC2TLkPtKvYvXmdsI6rnEI4Uucg0Au/Ulg7aqqKhzGPIbVaL+U0Wk82nz6hz+WP2ggTrY1w
- ZlPlRt8WM9w6WfLf2j+PuGklj37m+KvaOEfLsF1v464dSpy1tQVHhhp8LFTxh/6RWkRIR2uF
- I4v3Xu/k5D0LhaZHpQ4C+xKsQxpTGuYh2tnRaRL14YMW1dlI3HfeB2gj7Yc8XdHh9vkpPyuT
- nY/ZsFbnvBtiw7GchKKri2gDhRb2QNNDyBnQn5mRFw7CyuFclAksOdV/sdpQnYlYcRQWOUGY
- HhQ5eqTRZjm9z+qQe/T0HQpmiPTqQcIaG/edgKVTUjITfA7AJMKLQHgp04Vylb+G6jocnQQX
- JqvvP09whbqrABEBAAHCwWUEGAECAA8CGwwFAmgrMyQFCSbODQkACgkQyx8mb86fmYHlgg/9
- H5JeDmB4jsreE9Bn621wZk7NMzxy9STxiVKSh8Mq4pb+IDu1RU2iLyetCY1TiJlcxnE362kj
- njrfAdqyPteHM+LU59NtEbGwrfcXdQoh4XdMuPA5ADetPLma3YiRa3VsVkLwpnR7ilgwQw6u
- dycEaOxQ7LUXCs0JaGVVP25Z2hMkHBwx6BlW6EZLNgzGI2rswSZ7SKcsBd1IRHVf0miwIFYy
- j/UEfAFNW+tbtKPNn3xZTLs3quQN7GdYLh+J0XxITpBZaFOpwEKV+VS36pSLnNl0T5wm0E/y
- scPJ0OVY7ly5Vm1nnoH4licaU5Y1nSkFR/j2douI5P7Cj687WuNMC6CcFd6j72kRfxklOqXw
- zvy+2NEcXyziiLXp84130yxAKXfluax9sZhhrhKT6VrD45S6N3HxJpXQ/RY/EX35neH2/F7B
- RgSloce2+zWfpELyS1qRkCUTt1tlGV2p+y2BPfXzrHn2vxvbhEn1QpQ6t+85FKN8YEhJEygJ
- F0WaMvQMNrk9UAUziVcUkLU52NS9SXqpVg8vgrO0JKx97IXFPcNh0DWsSj/0Y8HO/RDkGXYn
- FDMj7fZSPKyPQPmEHg+W/KzxSSfdgWIHF2QaQ0b2q1wOSec4Rti52ohmNSY+KNIW/zODhugJ
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <e33b42dc-1561-4819-b028-b13af9e7115b@app.fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.55.0.1007.g17ff1f9808-goog
+Message-ID: <20260910213907.3206529-1-irogers@google.com>
+Subject: [PATCH v1] tools build: Fix timerfd feature detection with clang
+From: Ian Rogers <irogers@google.com>
+To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On 9/10/26 12:15, Arnd Bergmann wrote:
-> On Thu, Sep 10, 2026, at 20:38, Guenter Roeck wrote:
->>>
->> ...
->>> drivers/hwmon/ds620.c
->>> drivers/hwmon/f75375s.c
->>> drivers/hwmon/max1111.c
->>> drivers/hwmon/max197.c
->>
->> I missed the rationale for removing those, but then I don't really
->> mind either. I guess we'll hear if someone still uses any of those
->> drivers/chips.
-> 
-> None of these have devicetree support, and they are not usable
-> with any of the remaining board files.
-> 
->  From what I found:
-> 
-> - da620 apparently never had any users upstream, though it does
->    not require platform data and is theoretically usable with
->    an external dtb
-> - f75375s was only used on iop32x (long gone)
-> - max197 was used on x86/elan/ts5500, which is still in the
->    tree but cannot be enabled anymore because it is a 486 class SoC.
->    I have sent a separate patch to remove that platform
-> - max1111 was used on spitz, which is on its way out for 7.4.
-> 
+Clang's uninitialized-const-pointer warning causes a feature test to
+fail when building perf with clang. This disables support for 'perf
+kvm stat live'. Add default initialization to new_value as a
+workaround.
 
-As I said, I don't have any issues with removing them. Note though
-that the ds620 driver (like many other hwmon drivers) does not require
-devicetree or platform data to work just fine.
+  test-timerfd.c:15:30: error: variable 'new_value' is uninitialized when passed
+			       as a const pointer argument here
+			       [-Werror,-Wuninitialized-const-pointer]
+     15 |         if (timerfd_settime(fd, 0, &new_value, NULL) != 0)
+        |                                     ^~~~~~~~~
+  1 error generated.
 
-Thanks,
-Guenter
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/build/feature/test-timerfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/build/feature/test-timerfd.c b/tools/build/feature/test-timerfd.c
+index 9c72c697a9df..f88e8cc63ef3 100644
+--- a/tools/build/feature/test-timerfd.c
++++ b/tools/build/feature/test-timerfd.c
+@@ -6,7 +6,7 @@
+ 
+ int main(void)
+ {
+-	struct itimerspec new_value;
++	struct itimerspec new_value = {};
+ 
+ 	int fd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK);
+ 	if (fd < 0)
+-- 
+2.55.0.1007.g17ff1f9808-goog
 
