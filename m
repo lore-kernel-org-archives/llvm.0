@@ -1,213 +1,207 @@
-Received: from mail.avm.de (mail.avm.de [212.42.244.94])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD0204B0CA8
-	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 15:48:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C07324BE42F;
+	Thu, 10 Sep 2026 16:14:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789055340; cv=none; b=ar/XgCrIs43slMtb34uZO9rGrZuaJy7OVqe253/NXShT6MMgprpV7+v2sRK1oNmYcoFexAOxwsW5UEYUVDug5rMc4vSxvBUKLn+zhZN9BLWVD8wCSmikFk1HRehv72e4b4fyuVC8y6AVF/70s5q5VmaCg8uYYyWc0eCGj9nVMp4=
+	t=1789056886; cv=none; b=NNFo0bWWPfklFtf4adpumtu6ltPLUwYkOlcnTBemLA26Rsgf2iwqvteddamSKtYkwHAZD/1XEKP+dXIlalSkP8s6XRN3v59gPdpF7eSeWYiZRDfbBYXUNvm935ciQbffoL4zoIWeyZ569pknY9kxb45YSgR/2TpR87QAil4IBg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789055340; c=relaxed/simple;
-	bh=uuZUs8CyGKyoIbJX7p5GwQ6gTH4+NO01yolE0a/TQxk=;
+	s=arc-20240116; t=1789056886; c=relaxed/simple;
+	bh=OfmapbnUVYlkRpvxl3+h0Ozo1zASVL/urlvzXYKq28g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UqiwDh5L/TxqsVCOKw1ObAOBV7pPHA4a39KGGWgvEBJoYpyyiGjucyCeWyCbfkMsTkc8oWXqlCuUIHPf+DM1Vx1N5jHfWwpGraZUiFxXnDnfFiuA13jstaMnkKxbo1Sp58DpCAjQLd4DmGFgBN5ZkSfZwICua+5kLT9dx4P7lJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=kw5yKkpR; arc=none smtp.client-ip=212.42.244.94
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=VT0HIOC/fJ8Qh0Tvw8crUB/eqv70guEjC/3PdZWqIHIoAzW1vQR7wV2dLZMeJdR+3TBlo6iIe63kJmrl7oK10O+l7Y7qmVZEOlBb94tSg8VMct2KmPiFZ+J082xQ8UwfmyGBE53x1C0ymmKINy/if0YgkMM9xwvLrDGkyLTvBc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYANjSJW; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="kw5yKkpR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
-	t=1789055335; bh=uuZUs8CyGKyoIbJX7p5GwQ6gTH4+NO01yolE0a/TQxk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kw5yKkpRe/Y1tmb9JymSosqjJQjw2qgzZ9KZZqyOmhAQAxTz5HEFZqrYiX3oICPQf
-	 ckaNlryfcAgmbWmlTplxNOFmSwApoY77UM024WyrBpNuKJop80mERVjlCKBEsV9h7C
-	 U5HBWhhLjMM6uGRzezT0msAoFEspWJUThjDU6syaNqM3YlOIMpkIA4pPasaGQMpeVt
-	 DczFspQ1hYXtkffJ+qQHHDqf1EuOrSJn4XAkOwXtyaoUeBU83fAAIFx8iLVtR2o5OB
-	 2Bci4tkbqtQ5t/TTxOYveG5IbW5M45rNI+QR0L4wqde5mduY4arbUKWhFjFdZ3inb1
-	 SJ8Nm0uv2d06g==
-Received: from [2001:bf0:244:244::78] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
-	(envelope-from <n.schier@fritz.com>)
-	id 6aa2d167-6dc7-7f0000032729-7f000001b250-1
-	for <multiple-recipients>; Thu, 10 Sep 2026 17:48:55 +0200
-Received: from mail-auth.fritz.com (unknown [IPv6:2001:bf0:244:244::78])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Thu, 10 Sep 2026 17:48:55 +0200 (CEST)
-Date: Thu, 10 Sep 2026 17:48:53 +0200
-From: Nicolas Schier <n.schier@fritz.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexey Gladkov <legion@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
-	Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 16/23] kbuild: batch module finalisation
-Message-ID: <20260910-nondescript-fierce-wapiti-de1cea@l-nschier-aarch64>
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
- <20260908-build-speedup-v1-16-5dc1ac01672d@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYANjSJW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A481F000FF;
+	Thu, 10 Sep 2026 16:14:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789056884;
+	bh=Fw6B6BDnI+WMh9QnXCNgKcYYIXhI7HChtVbbG3XvG40=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=iYANjSJWvsIrS6/lDhk29hhu/M9crvAt6CXkDvDIH7RBC3TNPipToZuBK6rlKyhmC
+	 fFC/S2xUxbxQ3sM1BYMOP98+dzmblqHMcJKumwHJTpTTCL2olq17fj28VCWNVYyHI9
+	 XDHoQweqogC8m/d/TBeytuhJV5eCxaolIf33kaSnBGUyOz3UdxnHM1BTr43TXVPxa9
+	 L4JhOR/nwEREaVCTtt1DnZw4t+2+7pAmVwgufbFQieTT+CvxLzGGK+yTwQPsFtGNLc
+	 Nr5YlP2CiUvUuoP39owVrDvjEexA1gn9zNqNaHH13piWd/SLqBECwplvxxtdpMMilZ
+	 HkhPKzclPu55w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id E5D83CE1580; Thu, 10 Sep 2026 09:14:43 -0700 (PDT)
+Date: Thu, 10 Sep 2026 09:14:43 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:dev.2026.09.03a 43/55]
+ drivers/usb/mtu3/./mtu3_trace.h:239:27: error: cannot take the address of an
+ rvalue of type 'dma_addr_t' (aka 'unsigned long long')
+Message-ID: <2b62ec47-849f-4432-9cc2-08bd86e135a2@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202609101926.cc5w6bhk-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="4KfRRQPTJ7GRTheh"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260908-build-speedup-v1-16-5dc1ac01672d@kernel.org>
-Organization: FRITZ! Technology GmbH
-x-ms-reactions: disallow
-X-purgate-ID: 149429::1789055335-064A40BC-80480D36/0/0
-X-purgate-type: clean
-X-purgate-size: 4263
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
-X-pfmilter: host: postfix-mx-03  mail-id: 2B66AA0198  external: no
+In-Reply-To: <202609101926.cc5w6bhk-lkp@intel.com>
 
+On Thu, Sep 10, 2026 at 10:03:48PM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2026.09.03a
+> head:   6c5c244f4b239bc4d284e58a2f79a143648557cb
+> commit: afda2321e6e93a5bcc28bfb4717fbc3a1768446c [43/55] EXP drivers/usb/mtu3: Work around mtu3_log_ep double-indirection issue
+> config: riscv-allyesconfig (https://download.01.org/0day-ci/archive/20260910/202609101926.cc5w6bhk-lkp@intel.com/config)
+> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project c1872e7fd3307679a2da53f9d83de0ccf234b4ad)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609101926.cc5w6bhk-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202609101926.cc5w6bhk-lkp@intel.com/
 
---4KfRRQPTJ7GRTheh
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Good catch, but this has been reverted to the previous form.
 
-On Tue, Sep 08, 2026 at 09:55:16PM +0100, Lorenzo Stoakes (ARM) wrote:
-> Module finalisation on allmodconfig builds consists of a large number of
-> very short-lived jobs, and the make job dispatcher cannot possibly dispat=
-ch
-> jobs fast enough.
->=20
-> For allmodconfig x86-64 this can be on the order of ~22,000 jobs of a few
-> milliseconds in duration each.
->=20
-> However per-job cost grows with the variables the instance holds, here the
-> savedcmd_* of every .mod.o and .ko read back from the .cmd files, since it
-> walks them all to build each child's environment.
->=20
-> This makes module finalisation very inefficient when large numbers of
-> modules are being built.
->=20
-> Fix this by splitting modules.order into chunks of 128 at a time, run in
-> parallel.
->=20
-> Each instance holds only its own modules' variables and the top-level one
-> reads no per-module .cmd files at all, the same rules serve both levels,
-> and an instance is told its chunk with modfinal-first=3D<index>.
->=20
-> "make modules" with every *.mod.o and *.ko deleted goes from 28.9s to 15.=
-9s
-> with clang 22. No-op "make modules" goes from 5.6s to 4.8s, as checking t=
-he
-> 22,000 targets is spread over the chunks too.
->=20
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
->=20
->                                          before   after     delta
->                                          -------------------------------
->   x86 allmodconfig, no-op make, gcc         1.9s     1.2s    -0.74s (-39%)
->   x86 allmodconfig, no-op make, clang       2.4s     1.6s    -0.77s (-32%)
->   x86 allmodconfig, clean, gcc            304.5s   291.4s     -13.1s (-4%)
->   x86 allmodconfig, clean, clang          301.7s   297.0s     -4.7s (-2%)
->=20
-> Assisted-by: LLM
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  scripts/Makefile.modfinal | 26 +++++++++++++++++++++++++-
->  scripts/mod/sumversion.c  |  4 ++--
->  2 files changed, 27 insertions(+), 3 deletions(-)
->=20
-> diff --git a/scripts/Makefile.modfinal b/scripts/Makefile.modfinal
-> index 75e9effdf02c..858fa798090b 100644
-> --- a/scripts/Makefile.modfinal
-> +++ b/scripts/Makefile.modfinal
+Nevertheless, thank you for your testing efforts!
 
-[...]
-> diff --git a/scripts/mod/sumversion.c b/scripts/mod/sumversion.c
-> index 2cbadd3cd97d..5501d6aa0bea 100644
-> --- a/scripts/mod/sumversion.c
-> +++ b/scripts/mod/sumversion.c
-> @@ -249,7 +249,7 @@ static int parse_comment(const char *file, unsigned l=
-ong len)
->  /* FIXME: Handle .s files differently (eg. # starts comments) --RR */
->  static bool stop_char[256];
-> =20
-> -static void init_stop_chars(void)
-> +static void sumversion_init(void)
->  {
->  	static bool done;
->  	int chr;
-> @@ -274,7 +274,7 @@ static int parse_file(const char *fname, struct md4_c=
-tx *md)
->  	len =3D strlen(file);
->  	if (!len)
->  		goto out_file;
-> -	init_stop_chars();
-> +	sumversion_init();
->  	buf =3D xmalloc(len); /* File output buffer. */
-> =20
->  	for (i =3D 0; i < len; i++) {
->=20
-> --=20
-> 2.55.0
->=20
+							Thanx, Paul
 
-(I have only skimmed through, not yet reviewed this patch.)
-
-The change in sumversion.c seems to be wrong here.
-
---=20
-Nicolas
-
---4KfRRQPTJ7GRTheh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmqi0WIACgkQiMa8nIia
-bbg5EQ/+NGRAk8Ctc+X1OAU6pfHnSz6kq0kRgbNGW5OX2SXnhplNS7CMXxqLkUbZ
-SQAY69x1eLH/K0A4j5Memv4kYSDGoAEawgiydt9wSZuQDi1eDhGnDC1T9q74bds3
-uDrrnCbLogaoGnhXm4g7WcWVmdx+6rKgupL8kFDt4XQbrPVh2lsE5R5KfWvGWyH8
-w/btnaniJv5lTR37xXrMWBXfPqxJY/uhiXW2Tov+iqO/sAdeIhGXWEgc5SPwx3qB
-T0rZdFYTfeJ3BCXJF7x96X19HqORTftMzE4rOQtAwBebquwVV86tVUhPlKub/VpJ
-I2KhiqAspQ+QME+xDGib76j3Z0HD/lm9ARByIO5hbBYHkBmXsOhTXdIDY5gTYm2e
-I52eUWyf2CVwty/1aKNHQnDxo+N45dX9srD7ZbC3OUVSJqLG8oHOKoNGcsUmvVeO
-egN83lroNk0UqyLlvugHgIMi01bNORXUn68pMrzto85iBXlaV0/6zAwpZSNe8fY5
-ofrc7hzoQLkNNJJORkOXjdCdVAuAN+pCcTHLdQ84dMOviKCd4fLEDlpcV6b3kjFe
-Jbu0Sqx0Cy41+Fwh7jmxXTRWhWCWnzpL3GFV65F4wdZtV2ajgaqsOPQfTpnz0yu5
-5iDFJMVpe9pqv7hLuXGIlIYpxmQpm0gEeLqvZE72mDwn5IM2qyM=
-=oTTk
------END PGP SIGNATURE-----
-
---4KfRRQPTJ7GRTheh--
+> Note: the paulmck-rcu/dev.2026.09.03a HEAD 6c5c244f4b239bc4d284e58a2f79a143648557cb builds fine.
+>       It only hurts bisectability.
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    In file included from drivers/usb/mtu3/mtu3_trace.c:12:
+>    In file included from drivers/usb/mtu3/mtu3_trace.h:279:
+>    In file included from include/trace/define_trace.h:132:
+>    In file included from include/trace/trace_events.h:489:
+>    drivers/usb/mtu3/./mtu3_trace.h:239:41: error: member reference type 'struct mtu3_gpd_ring' is not a pointer; did you mean to use '.'?
+>      239 |                 __entry->gpd_ring_dma = &mep->gpd_ring->dma;
+>          |                                          ~~~~~~~~~~~~~^~
+>          |                                                       .
+>    include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+>      133 | #define TP_fast_assign(args...) args
+>          |                                 ^~~~
+>    include/trace/trace_events.h:456:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+>      456 |                       PARAMS(assign), PARAMS(print))                    \
+>          |                              ^~~~~~
+>    include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+>      161 | #define PARAMS(args...) args
+>          |                         ^~~~
+>    include/trace/trace_events.h:448:4: note: expanded from macro '\
+>    __DECLARE_EVENT_CLASS'
+>      448 |         { assign; }                                                     \
+>          |           ^~~~~~
+>    In file included from drivers/usb/mtu3/mtu3_trace.c:12:
+>    In file included from drivers/usb/mtu3/mtu3_trace.h:279:
+>    In file included from include/trace/define_trace.h:132:
+>    In file included from include/trace/trace_events.h:489:
+> >> drivers/usb/mtu3/./mtu3_trace.h:239:27: error: cannot take the address of an rvalue of type 'dma_addr_t' (aka 'unsigned long long')
+>      239 |                 __entry->gpd_ring_dma = &mep->gpd_ring->dma;
+>          |                                         ^~~~~~~~~~~~~~~~~~~
+>    include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+>      133 | #define TP_fast_assign(args...) args
+>          |                                 ^~~~
+>    include/trace/trace_events.h:456:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+>      456 |                       PARAMS(assign), PARAMS(print))                    \
+>          |                              ^~~~~~
+>    include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+>      161 | #define PARAMS(args...) args
+>          |                         ^~~~
+>    include/trace/trace_events.h:448:4: note: expanded from macro '\
+>    __DECLARE_EVENT_CLASS'
+>      448 |         { assign; }                                                     \
+>          |           ^~~~~~
+>    In file included from drivers/usb/mtu3/mtu3_trace.c:12:
+>    In file included from drivers/usb/mtu3/mtu3_trace.h:279:
+>    In file included from include/trace/define_trace.h:133:
+>    In file included from include/trace/perf.h:110:
+>    drivers/usb/mtu3/./mtu3_trace.h:239:41: error: member reference type 'struct mtu3_gpd_ring' is not a pointer; did you mean to use '.'?
+>      239 |                 __entry->gpd_ring_dma = &mep->gpd_ring->dma;
+>          |                                          ~~~~~~~~~~~~~^~
+>          |                                                       .
+>    include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+>      133 | #define TP_fast_assign(args...) args
+>          |                                 ^~~~
+>    include/trace/perf.h:67:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+>       67 |                       PARAMS(assign), PARAMS(print))                    \
+>          |                              ^~~~~~
+>    include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+>      161 | #define PARAMS(args...) args
+>          |                         ^~~~
+>    include/trace/perf.h:51:4: note: expanded from macro '\
+>    __DECLARE_EVENT_CLASS'
+>       51 |         { assign; }                                                     \
+>          |           ^~~~~~
+>    In file included from drivers/usb/mtu3/mtu3_trace.c:12:
+>    In file included from drivers/usb/mtu3/mtu3_trace.h:279:
+>    In file included from include/trace/define_trace.h:133:
+>    In file included from include/trace/perf.h:110:
+> >> drivers/usb/mtu3/./mtu3_trace.h:239:27: error: cannot take the address of an rvalue of type 'dma_addr_t' (aka 'unsigned long long')
+>      239 |                 __entry->gpd_ring_dma = &mep->gpd_ring->dma;
+>          |                                         ^~~~~~~~~~~~~~~~~~~
+>    include/trace/stages/stage6_event_callback.h:133:33: note: expanded from macro 'TP_fast_assign'
+>      133 | #define TP_fast_assign(args...) args
+>          |                                 ^~~~
+>    include/trace/perf.h:67:16: note: expanded from macro 'DECLARE_EVENT_CLASS'
+>       67 |                       PARAMS(assign), PARAMS(print))                    \
+>          |                              ^~~~~~
+>    include/linux/tracepoint.h:161:25: note: expanded from macro 'PARAMS'
+>      161 | #define PARAMS(args...) args
+>          |                         ^~~~
+>    include/trace/perf.h:51:4: note: expanded from macro '\
+>    __DECLARE_EVENT_CLASS'
+>       51 |         { assign; }                                                     \
+>          |           ^~~~~~
+>    4 errors generated.
+> 
+> 
+> vim +239 drivers/usb/mtu3/./mtu3_trace.h
+> 
+>    213	
+>    214	DECLARE_EVENT_CLASS(mtu3_log_ep,
+>    215		TP_PROTO(struct mtu3_ep *mep),
+>    216		TP_ARGS(mep),
+>    217		TP_STRUCT__entry(
+>    218			__string(name, mep->name)
+>    219			__field(unsigned int, type)
+>    220			__field(unsigned int, slot)
+>    221			__field(unsigned int, maxp)
+>    222			__field(unsigned int, mult)
+>    223			__field(unsigned int, maxburst)
+>    224			__field(unsigned int, flags)
+>    225			__field(unsigned int, direction)
+>    226			__field(struct mtu3_gpd_ring *, gpd_ring)
+>    227			__field(dma_addr_t *, gpd_ring_dma)
+>    228		),
+>    229		TP_fast_assign(
+>    230			__assign_str(name);
+>    231			__entry->type = mep->type;
+>    232			__entry->slot = mep->slot;
+>    233			__entry->maxp = mep->ep.maxpacket;
+>    234			__entry->mult = mep->ep.mult;
+>    235			__entry->maxburst = mep->ep.maxburst;
+>    236			__entry->flags = mep->flags;
+>    237			__entry->direction = mep->is_in;
+>    238			__entry->gpd_ring = &mep->gpd_ring;
+>  > 239			__entry->gpd_ring_dma = &mep->gpd_ring->dma;
+>    240		),
+>    241		TP_printk("%s: type %s maxp %d slot %d mult %d burst %d ring %p/%pad flags %c:%c%c%c:%c",
+>    242			__get_str(name), usb_ep_type_string(__entry->type),
+>    243			__entry->maxp, __entry->slot,
+>    244			__entry->mult, __entry->maxburst,
+>    245			__entry->gpd_ring, __entry->gpd_ring_dma,
+>    246			__entry->flags & MTU3_EP_ENABLED ? 'E' : 'e',
+>    247			__entry->flags & MTU3_EP_STALL ? 'S' : 's',
+>    248			__entry->flags & MTU3_EP_WEDGE ? 'W' : 'w',
+>    249			__entry->flags & MTU3_EP_BUSY ? 'B' : 'b',
+>    250			__entry->direction ? '<' : '>'
+>    251		)
+>    252	);
+>    253	
+> 
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
