@@ -1,142 +1,167 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.94])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A89C486647;
-	Thu, 10 Sep 2026 14:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EE3342515
+	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 15:42:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.94
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789051334; cv=none; b=d8KthSHlziWzr4FgbAXpKe6vfLFS4d6FUbcypSE1zHiGzvXKLyxSDSBDImoS3dIxO/n4yvHG2lI9FCeIrvWPADTJg9LQrDGt5nOnbemcYEGlXeDtVmsksPzb9Ppure5n65QTat8oApN/2a3mGaohv+TBi2YDkyyXZrt+SX7Ko1M=
+	t=1789054966; cv=none; b=qiaaPr0b1fd+WQa09ArxEa7hfNACGvrRRuNlYW1frWl2bm+9AGwKv4HbN7n5lKmjgejxNHoYjpF2isf0irILtkUOdXHVQT6Jh8JxFK1qSsVaVbWoPrKmbR2a5D2F0Ie72M3U0VcpxBQgaVk4YqHTdU/5zr9ZYoRt1fvij1s5eBw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789051334; c=relaxed/simple;
-	bh=c5vdxtg/iwsq5TyrZd4Qk+Gsxwt2E0kpnD7sMv3V/p0=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ogJOkqx+MAfikIVpDdiZHMyLQcFbvKOU6oF9o1/rIWtcJoYqL4yfSPTcVDNbZ8dwIjb2//qiq5X1XCN6DbkAqLS0ApY36D0ZGMisrNpEyg5k7JRtrDVQG5UPN3KXAdqXNIHByT6Ey1GDjG7Y7QaaFTU3S7041igjfF9uKc+RGRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jw5SUSt3; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789054966; c=relaxed/simple;
+	bh=LK8bkV1Vz0floem0tDs4fowSkN+VH/bI8JorqlPfxFI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HwCl6iSVmvio7Sjn/qasIZUVUEeZlw49NC1mY3xyQqXY/y1SceiNdi92dRANyBNP12XmbxPb4JiHCU8b6/cH25xLMWT3zhBkY9ZjFLEdNtH71oLtZ2qSsJla9YXJJ44FpbNHR/KZBFAuwMKePl2V8nCUMtMsMbXk517AsXzWgEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=m2t/gCBQ; arc=none smtp.client-ip=212.42.244.94
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jw5SUSt3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789051333; x=1820587333;
-  h=date:from:to:cc:subject:message-id;
-  bh=c5vdxtg/iwsq5TyrZd4Qk+Gsxwt2E0kpnD7sMv3V/p0=;
-  b=Jw5SUSt3kUbIFgg9qt0R03SOoiaB1GTOEjtCihxTWJd12djbJyJHV0oG
-   uNNg6JsMWs32Z8IvYG2AzeYylFQu8fZPBHb3734qfdACgKKgdshtznM7x
-   Bu9xQe09eljQWVTQhBfol/9Fh0bWDJwdbjo0nkY/rB909fzDkVLkLNI3q
-   9jRuQ9KQt2RZj+Z/zX8OPmOPP1mMoqAvoAc8N56n4N2mwCz/Mu6pm6SBH
-   Mz0ZvwbHrQKjJbhQs5q5OmX2ncDm63vLuy6rjRvf/QO5owYQyRp5VmLo4
-   pz0+Ucrr0oXCcPLkXZiOchwnBZZlNTidaKIFDkBXMIsePiVUdAXPZ1gHi
-   Q==;
-X-CSE-ConnectionGUID: 5ldG8ZjaStS/s+rpVuxcGg==
-X-CSE-MsgGUID: z79oELETRxip3+UGXjJ+PA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11901"; a="77061432"
-X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="77061432"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 07:42:12 -0700
-X-CSE-ConnectionGUID: xseAEMBoTzOZR0tSVC2N/Q==
-X-CSE-MsgGUID: a0uferJTRuqXO2PUI3YQwA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="309908247"
-Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 10 Sep 2026 07:42:10 -0700
-Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x4fyA-0000000007h-1YJv;
-	Thu, 10 Sep 2026 14:41:48 +0000
-Date: Thu, 10 Sep 2026 22:26:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: sofus <sofus.c@icloud.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/240-isp 88/89]
- drivers/media/platform/apple/avd/avd-drv.c:155:5: error: call to undeclared
- function 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202609102230.0CiPrrA3-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="m2t/gCBQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
+	t=1789054956; bh=LK8bkV1Vz0floem0tDs4fowSkN+VH/bI8JorqlPfxFI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=m2t/gCBQ5Ji+klRB77okzADkIBpOjucABpFdn1joI6CGFroNQ2dok89iTW7zlsgDJ
+	 OhupApf9LKIRvcGE2XGbdgRc1L/Cyu778E8qiCt5Mx3N/HSwPKfTDWrLuQBULuYETh
+	 DEpZTMKIWNIB95kcOEYyM+KTdXBA1kly0af9dVc2J1yCQpvugpbSIq04iHmdW/EGZ3
+	 Y4A/qaU5/ks6TeFtBhGFS/mS3OdzSq+oJRGgjHfaRsaS82LquTqTSeUDZk3Yd/dQog
+	 lg48YsTm0IrzSWtTPbK8Ble4vH9U4bTyk8isOlH6ribTe1cTR6+aKHV2VGyYR9cK7K
+	 zTVgF+ct8Jfhw==
+Received: from [212.42.244.78] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
+	(envelope-from <n.schier@fritz.com>)
+	id 6aa2cfec-6dc7-7f0000032729-7f000001a7b2-1
+	for <multiple-recipients>; Thu, 10 Sep 2026 17:42:36 +0200
+Received: from mail-auth.fritz.com (unknown [212.42.244.78])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Thu, 10 Sep 2026 17:42:36 +0200 (CEST)
+Date: Thu, 10 Sep 2026 17:42:35 +0200
+From: Nicolas Schier <n.schier@fritz.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Alexey Gladkov <legion@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+	Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 12/23] kbuild: avoid re-running compiler and linker probes
+Message-ID: <20260910-translucent-sweet-sidewinder-7acacb@l-nschier-aarch64>
+References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
+ <20260908-build-speedup-v1-12-5dc1ac01672d@kernel.org>
+ <178901395292.3971858.13236774094648272066.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-
-tree:   https://github.com/AsahiLinux/linux bits/240-isp
-head:   e31aa85e339c10dbf872c0759d5a6c35954af0cc
-commit: 0765a0974a15233ed105e144fec796291dacb32d [88/89] media: apple: avd: add a dedicated "submit" step
-config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260910/202609102230.0CiPrrA3-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609102230.0CiPrrA3-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609102230.0CiPrrA3-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/platform/apple/avd/avd-drv.c:155:5: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     155 |                                 AVD_OP_EXEC_REV3_VP9_MASK :
-         |                                 ^
-   drivers/media/platform/apple/avd/avd-inst.h:16:35: note: expanded from macro 'AVD_OP_EXEC_REV3_VP9_MASK'
-      16 | #define AVD_OP_EXEC_REV3_VP9_MASK       FIELD_PREP(GENMASK(23, 12), 0xfff)
-         |                                         ^
-   1 error generated.
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="6NJv2EjhorC/TYUZ"
+Content-Disposition: inline
+In-Reply-To: <178901395292.3971858.13236774094648272066.b4-review@b4>
+Organization: FRITZ! Technology GmbH
+x-ms-reactions: disallow
+X-purgate-ID: 149429::1789054956-F1CDF0BC-4895A414/0/0
+X-purgate-type: clean
+X-purgate-size: 2705
+X-Notice: Whitelisted
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
+X-pfmilter: host: postfix-mx-03  mail-id: 9AB3CA045E  external: no
 
 
-vim +/FIELD_PREP +155 drivers/media/platform/apple/avd/avd-drv.c
+--6NJv2EjhorC/TYUZ
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-   145	
-   146	int avd_submit_job(struct avd_ctx *ctx)
-   147	{
-   148		struct avd_dev *avd = ctx->dev;
-   149		struct avd_job *sub = &ctx->job;
-   150		struct avd_segment *seg;
-   151		int i, idx = 0, vp = 0;
-   152		void __iomem *reg;
-   153		u32 exec_mask = sub->codec == AVD_CODEC_VP9 &&
-   154						avd->variant->revision == 3 ?
- > 155					AVD_OP_EXEC_REV3_VP9_MASK :
-   156					0;
-   157		u32 exec_rev_flag =
-   158			AVD_OP_EXEC_FLAG_START_REV4(avd->variant->revision == 4) |
-   159			AVD_OP_EXEC_FLAG_START_REV3(avd->variant->revision == 3);
-   160	
-   161		ctx->fifo_idx = 0;
-   162		for (i = 0; i < sub->codec; i++)
-   163			vp += avd->variant->vp_slots[i];
-   164	
-   165		schedule_delayed_work(&ctx->watchdog_work, msecs_to_jiffies(2000));
-   166		avd->variant->configure_stream(avd, ctx->inst.addr, ctx->fifo_idx, vp);
-   167		reg = avd->ctrl + avd->variant->vp_slot_offset + vp * 4;
-   168	
-   169		/* the first segment is always the header (needs special handling) */
-   170	
-   171		writel(AVD_OP_EXEC | exec_mask | exec_rev_flag |
-   172			       AVD_OP_EXEC_FIFO_IDX(ctx->fifo_idx),
-   173		       reg);
-   174		seg = &sub->segments[idx++];
-   175		for (i = 0; i < seg->num; i++)
-   176			writel(seg->instructions[i], reg);
-   177		for (; idx <= sub->num; idx++) {
-   178			seg = &sub->segments[idx];
-   179			for (i = 0; i < seg->num; i++)
-   180				writel(seg->instructions[i], reg);
-   181			if (avd_wait_submission_queue(ctx, vp))
-   182				break;
-   183			writel(AVD_OP_EXEC | exec_mask |
-   184				       AVD_OP_EXEC_FLAG_END(idx == sub->num),
-   185			       reg);
-   186		}
-   187	
-   188		kfree(sub->segments);
-   189		sub->segments = NULL;
-   190		return 0;
-   191	}
-   192	
+On Wed, Sep 09, 2026 at 09:19:12PM -0700, Nathan Chancellor wrote:
+> > diff --git a/init/Kconfig b/init/Kconfig
+> > index 8583d9f06c52..3c92c87254a3 100644
+> > --- a/init/Kconfig
+> > +++ b/init/Kconfig
+> > @@ -144,6 +144,44 @@ config CC_HAS_ASSUME
+> >  config CC_HAS_NO_PROFILE_FN_ATTR
+> >  	def_bool $(success,echo '__attribute__((no_profile_instrument_functio=
+n)) int x();' | $(CC) -x c - -c -o /dev/null -Werror)
+> > =20
+> > +config CC_HAS_ZERO_INIT_PADDING_BITS
+> > +	def_bool $(cc-option,-fzero-init-padding-bits=3Dall)
+> > +
+> > +config CC_HAS_NO_STACK_CLASH_PROTECTION
+> > +	def_bool $(cc-option,-fno-stack-clash-protection)
+> > +
+> > +config CC_HAS_NO_ADDRSIG
+> > +	def_bool $(cc-option,-fno-addrsig)
+>=20
+> I am generally in favor of this proposal since I think these checks
+> should be cached by Kconfig where possible to clear up running them
+> twice. That said, I wonder if we should pick a better dumping ground for
+> these checks other than init/Kconfig. Maybe init/Kconfig.tools or
+> scripts/Kconfig.tools or something?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Yes, skimming through the patch, I thought about that, too.  Moving more=20
+cc option checks to Kconfig will make building out-of-tree kmods with a=20
+different compiler more dangerous.  Maybe we will have to make the=20
+warning in Makefile's prepare (external kmods) target a bit louder.
+
+> I also worry about backsliding and growing cc-option checks. Should we
+> update the documentation to state that it is preferrable for these
+> checks to live in Kconfig so that they can be properly cached?
+
+Sounds good, yes.
+
+--=20
+Nicolas
+
+--6NJv2EjhorC/TYUZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEDv+Fiet06YHnC6RpiMa8nIiabbgFAmqiz+cACgkQiMa8nIia
+bbgNERAAgCLMWkWnCF5POqjQiZGkZbm/i9SwwH2BVVg0H8Bf+O6WGCZ4YiM0NOu7
+6d9EZV95NkDD36Y3vCEaq1/GclFeUn2ET6HEprS7tQsmYbcofxLYoQuMV/5Si/18
+jJBz3eksIZYRAnSFGG6K1+Hq3u63l3cV5TmRaquZg76LwJkTjCNsFmfT2wxHP40y
+LmkyOsw9NiHo2Bm75Bz8ds7EVqHU/wPxCAWBuiw6ervOrw4RR7PURz61DaBGIuOc
+9B/HnhACn44debha9z9dUTsDIsPsK2sftFLfgJvD8c1V8vj6D1uhX7Fx/hXRElRA
+srsyf2q67EuQ8hKIU8sch6rKkD9slQJd0/w2XNQsONffnO9RghF+Qu8dzo9mUusZ
+l1vYg30SglV5c7m1FlgCvvmvJSppryu6zZw4FgzOUTfcxt6l+VXTm9jaigCWPXbT
+KAYgvQqNVVgkIAg2WDqyiVTeWQxrxo9ctf3m/6srxI4/AkuGZV/XU2m1QiQJxQ5/
+rdm3WGYjD/gVrLPBr6oIoPWDSgP7C4U4kSuZGq1jWAhPeqaa691z+Z5WbRVoVDO/
+SEc1cIdDE88/z8QwIEsgmaXaVhnaCiW66Npfh9zP1J+/pQV3kvU4kf9CIEQ6QMDf
+MPfl1Si0rJA9thzauvNi6Mu6JsUi9FPz7+Oen1Y22eMfv2st6Sc=
+=TUj9
+-----END PGP SIGNATURE-----
+
+--6NJv2EjhorC/TYUZ--
