@@ -1,160 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FF348EC81;
-	Thu, 10 Sep 2026 14:41:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A89C486647;
+	Thu, 10 Sep 2026 14:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789051292; cv=none; b=pCHvFfU7G2G3VIlKWyFYRoJm3kwUb2CxlWYp65nFgCexGtwvrCC5XCtXO0ZxEGIIu43WtFWuFzXsm9EVtlN8MPnhR5hiMnrBwmflwLR4k1I1Ok2hcPXJjnNA9d5er+1JB6JJpL/fkx9DJSmS/Bc1PNMkJ2rnrVEidj2k8jVwPYI=
+	t=1789051334; cv=none; b=d8KthSHlziWzr4FgbAXpKe6vfLFS4d6FUbcypSE1zHiGzvXKLyxSDSBDImoS3dIxO/n4yvHG2lI9FCeIrvWPADTJg9LQrDGt5nOnbemcYEGlXeDtVmsksPzb9Ppure5n65QTat8oApN/2a3mGaohv+TBi2YDkyyXZrt+SX7Ko1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789051292; c=relaxed/simple;
-	bh=XhCBkvqoMM39WPHjPYto/5lKDTBSRqUhy/eqexVLdXc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nh3rh8IHgsSfzj5r+eMdi3xlpBzCCGHIuHkE7E/Zi1JaNn7V35IdbEUkQ/Pz2EKMIDAouR9uJgBUlCZIJpU+qsUeS0B8TBYqLvC1coK6sm/0rQgSpVqf5eHqni+XlKcpH8KnsABjWWnJoXSciSiVVMWLTbigXxduzzDCl55po3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YpoWFeAW; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1789051334; c=relaxed/simple;
+	bh=c5vdxtg/iwsq5TyrZd4Qk+Gsxwt2E0kpnD7sMv3V/p0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ogJOkqx+MAfikIVpDdiZHMyLQcFbvKOU6oF9o1/rIWtcJoYqL4yfSPTcVDNbZ8dwIjb2//qiq5X1XCN6DbkAqLS0ApY36D0ZGMisrNpEyg5k7JRtrDVQG5UPN3KXAdqXNIHByT6Ey1GDjG7Y7QaaFTU3S7041igjfF9uKc+RGRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jw5SUSt3; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YpoWFeAW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jw5SUSt3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789051290; x=1820587290;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XhCBkvqoMM39WPHjPYto/5lKDTBSRqUhy/eqexVLdXc=;
-  b=YpoWFeAWs9/GtRTJicHXfhwev51nyXCCs53oAmPDIa9DrTb2ZcuTVCCS
-   iL964DaPj5YFaR85nLCsos+WqoaSCOpgIy6YkS2k/uLQ3BO0prFWVDY53
-   /Ym8wrm67e2khU+HmFz4VIBSYRo73mxzSBILPfy7q7NsgaZ8Kepsj6lya
-   /pDEexRGMv56VRh1rjzaeOZQWXoDJB2g90c6Ni+KzKopT5fJUEc9+ywXq
-   uwLOfc2DP/2MMKQZPgUV9yrnJUMMr2UEMV/RiFLc+KamYEGg27Liu9Gxx
-   CGWb0WDiwKkVIWD4sAhlW9ci8frUi1NeNVe2WfpRiBWMGmNWpVRLtSm+b
+  t=1789051333; x=1820587333;
+  h=date:from:to:cc:subject:message-id;
+  bh=c5vdxtg/iwsq5TyrZd4Qk+Gsxwt2E0kpnD7sMv3V/p0=;
+  b=Jw5SUSt3kUbIFgg9qt0R03SOoiaB1GTOEjtCihxTWJd12djbJyJHV0oG
+   uNNg6JsMWs32Z8IvYG2AzeYylFQu8fZPBHb3734qfdACgKKgdshtznM7x
+   Bu9xQe09eljQWVTQhBfol/9Fh0bWDJwdbjo0nkY/rB909fzDkVLkLNI3q
+   9jRuQ9KQt2RZj+Z/zX8OPmOPP1mMoqAvoAc8N56n4N2mwCz/Mu6pm6SBH
+   Mz0ZvwbHrQKjJbhQs5q5OmX2ncDm63vLuy6rjRvf/QO5owYQyRp5VmLo4
+   pz0+Ucrr0oXCcPLkXZiOchwnBZZlNTidaKIFDkBXMIsePiVUdAXPZ1gHi
    Q==;
-X-CSE-ConnectionGUID: LQ4o8gLzSCanH7vP+hhh9w==
-X-CSE-MsgGUID: 5iVC/NurR2eXLIhP1gR9Qg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11901"; a="101021536"
+X-CSE-ConnectionGUID: 5ldG8ZjaStS/s+rpVuxcGg==
+X-CSE-MsgGUID: z79oELETRxip3+UGXjJ+PA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11901"; a="77061432"
 X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="101021536"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 07:41:29 -0700
-X-CSE-ConnectionGUID: wPSlGokYQsuYOgEp9xRQwg==
-X-CSE-MsgGUID: pmxlIlzBTxCFVac71nW3RA==
+   d="scan'208";a="77061432"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 07:42:12 -0700
+X-CSE-ConnectionGUID: xseAEMBoTzOZR0tSVC2N/Q==
+X-CSE-MsgGUID: a0uferJTRuqXO2PUI3YQwA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,95,1787036400"; 
-   d="scan'208";a="267381710"
+   d="scan'208";a="309908247"
 Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
-  by fmviesa006.fm.intel.com with ESMTP; 10 Sep 2026 07:41:26 -0700
+  by orviesa001.jf.intel.com with ESMTP; 10 Sep 2026 07:42:10 -0700
 Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1x4fxf-0000000007Z-2G9Z;
-	Thu, 10 Sep 2026 14:41:15 +0000
-Date: Thu, 10 Sep 2026 22:34:21 +0800
+	id 1x4fyA-0000000007h-1YJv;
+	Thu, 10 Sep 2026 14:41:48 +0000
+Date: Thu, 10 Sep 2026 22:26:27 +0800
 From: kernel test robot <lkp@intel.com>
-To: Kunwu Chan <kunwu.chan@gmail.com>, jiangshanlai@gmail.com,
-	paulmck@kernel.org, josh@joshtriplett.org, rostedt@goodmis.org,
-	mathieu.desnoyers@efficios.com
+To: sofus <sofus.c@icloud.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Kunwu Chan <kunwu.chan@gmail.com>
-Subject: Re: [PATCH] srcutree: Skip torture to-big transition for atomic SRCU
-Message-ID: <202609102247.8X7GUWSj-lkp@intel.com>
-References: <20260910041427.3579817-1-kunwu.chan@gmail.com>
+ Janne Grunau <j@jannau.net>
+Subject: [asahilinux:bits/240-isp 88/89]
+ drivers/media/platform/apple/avd/avd-drv.c:155:5: error: call to undeclared
+ function 'FIELD_PREP'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202609102230.0CiPrrA3-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260910041427.3579817-1-kunwu.chan@gmail.com>
 
-Hi Kunwu,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on rcu/rcu/dev]
-[also build test ERROR on linus/master v7.3-rc2 next-20260909]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Kunwu-Chan/srcutree-Skip-torture-to-big-transition-for-atomic-SRCU/20260910-121427
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rcu/linux.git rcu/dev
-patch link:    https://lore.kernel.org/r/20260910041427.3579817-1-kunwu.chan%40gmail.com
-patch subject: [PATCH] srcutree: Skip torture to-big transition for atomic SRCU
-config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260910/202609102247.8X7GUWSj-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project d3db069999553568848400c84cbf815c03f5470f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609102247.8X7GUWSj-lkp@intel.com/reproduce)
+tree:   https://github.com/AsahiLinux/linux bits/240-isp
+head:   e31aa85e339c10dbf872c0759d5a6c35954af0cc
+commit: 0765a0974a15233ed105e144fec796291dacb32d [88/89] media: apple: avd: add a dedicated "submit" step
+config: x86_64-allmodconfig (https://download.01.org/0day-ci/archive/20260910/202609102230.0CiPrrA3-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609102230.0CiPrrA3-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609102247.8X7GUWSj-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609102230.0CiPrrA3-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> kernel/rcu/srcutree.c:2080:61: error: use of undeclared identifier 'SRCU_READ_FLAVOR_ATOMIC'
-    2080 |         if (SRCU_SIZING_IS_TORTURE() && ssp->srcu_reader_flavor != SRCU_READ_FLAVOR_ATOMIC)
-         |                                                                    ^~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/media/platform/apple/avd/avd-drv.c:155:5: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     155 |                                 AVD_OP_EXEC_REV3_VP9_MASK :
+         |                                 ^
+   drivers/media/platform/apple/avd/avd-inst.h:16:35: note: expanded from macro 'AVD_OP_EXEC_REV3_VP9_MASK'
+      16 | #define AVD_OP_EXEC_REV3_VP9_MASK       FIELD_PREP(GENMASK(23, 12), 0xfff)
+         |                                         ^
    1 error generated.
 
 
-vim +/SRCU_READ_FLAVOR_ATOMIC +2080 kernel/rcu/srcutree.c
+vim +/FIELD_PREP +155 drivers/media/platform/apple/avd/avd-drv.c
 
-  2031	
-  2032	void srcu_torture_stats_print(struct srcu_struct *ssp, char *tt, char *tf)
-  2033	{
-  2034		int cpu;
-  2035		int idx;
-  2036		unsigned long s0 = 0, s1 = 0;
-  2037		int ss_state = READ_ONCE(ssp->srcu_sup->srcu_size_state);
-  2038		int ss_state_idx = ss_state;
-  2039	
-  2040		idx = ssp->srcu_ctrp - &ssp->sda->srcu_ctrs[0];
-  2041		if (ss_state < 0 || ss_state >= ARRAY_SIZE(srcu_size_state_name))
-  2042			ss_state_idx = ARRAY_SIZE(srcu_size_state_name) - 1;
-  2043		pr_alert("%s%s Tree SRCU g%ld state %d (%s)",
-  2044			 tt, tf, rcu_seq_current(&ssp->srcu_sup->srcu_gp_seq), ss_state,
-  2045			 srcu_size_state_name[ss_state_idx]);
-  2046		if (!ssp->sda) {
-  2047			// Called after cleanup_srcu_struct(), perhaps.
-  2048			pr_cont(" No per-CPU srcu_data structures (->sda == NULL).\n");
-  2049		} else {
-  2050			pr_cont(" per-CPU(idx=%d):", idx);
-  2051			for_each_possible_cpu(cpu) {
-  2052				unsigned long l0, l1;
-  2053				unsigned long u0, u1;
-  2054				long c0, c1;
-  2055				struct srcu_data *sdp;
-  2056	
-  2057				sdp = per_cpu_ptr(ssp->sda, cpu);
-  2058				u0 = data_race(atomic_long_read(&sdp->srcu_ctrs[!idx].srcu_unlocks));
-  2059				u1 = data_race(atomic_long_read(&sdp->srcu_ctrs[idx].srcu_unlocks));
-  2060	
-  2061				/*
-  2062				 * Make sure that a lock is always counted if the corresponding
-  2063				 * unlock is counted.
-  2064				 */
-  2065				smp_rmb();
-  2066	
-  2067				l0 = data_race(atomic_long_read(&sdp->srcu_ctrs[!idx].srcu_locks));
-  2068				l1 = data_race(atomic_long_read(&sdp->srcu_ctrs[idx].srcu_locks));
-  2069	
-  2070				c0 = l0 - u0;
-  2071				c1 = l1 - u1;
-  2072				pr_cont(" %d(%ld,%ld %c)",
-  2073					cpu, c0, c1,
-  2074					"C."[rcu_segcblist_empty(&sdp->srcu_cblist)]);
-  2075				s0 += c0;
-  2076				s1 += c1;
-  2077			}
-  2078			pr_cont(" T(%ld,%ld)\n", s0, s1);
-  2079		}
-> 2080		if (SRCU_SIZING_IS_TORTURE() && ssp->srcu_reader_flavor != SRCU_READ_FLAVOR_ATOMIC)
-  2081			srcu_transition_to_big(ssp);
-  2082	}
-  2083	EXPORT_SYMBOL_GPL(srcu_torture_stats_print);
-  2084	
+   145	
+   146	int avd_submit_job(struct avd_ctx *ctx)
+   147	{
+   148		struct avd_dev *avd = ctx->dev;
+   149		struct avd_job *sub = &ctx->job;
+   150		struct avd_segment *seg;
+   151		int i, idx = 0, vp = 0;
+   152		void __iomem *reg;
+   153		u32 exec_mask = sub->codec == AVD_CODEC_VP9 &&
+   154						avd->variant->revision == 3 ?
+ > 155					AVD_OP_EXEC_REV3_VP9_MASK :
+   156					0;
+   157		u32 exec_rev_flag =
+   158			AVD_OP_EXEC_FLAG_START_REV4(avd->variant->revision == 4) |
+   159			AVD_OP_EXEC_FLAG_START_REV3(avd->variant->revision == 3);
+   160	
+   161		ctx->fifo_idx = 0;
+   162		for (i = 0; i < sub->codec; i++)
+   163			vp += avd->variant->vp_slots[i];
+   164	
+   165		schedule_delayed_work(&ctx->watchdog_work, msecs_to_jiffies(2000));
+   166		avd->variant->configure_stream(avd, ctx->inst.addr, ctx->fifo_idx, vp);
+   167		reg = avd->ctrl + avd->variant->vp_slot_offset + vp * 4;
+   168	
+   169		/* the first segment is always the header (needs special handling) */
+   170	
+   171		writel(AVD_OP_EXEC | exec_mask | exec_rev_flag |
+   172			       AVD_OP_EXEC_FIFO_IDX(ctx->fifo_idx),
+   173		       reg);
+   174		seg = &sub->segments[idx++];
+   175		for (i = 0; i < seg->num; i++)
+   176			writel(seg->instructions[i], reg);
+   177		for (; idx <= sub->num; idx++) {
+   178			seg = &sub->segments[idx];
+   179			for (i = 0; i < seg->num; i++)
+   180				writel(seg->instructions[i], reg);
+   181			if (avd_wait_submission_queue(ctx, vp))
+   182				break;
+   183			writel(AVD_OP_EXEC | exec_mask |
+   184				       AVD_OP_EXEC_FLAG_END(idx == sub->num),
+   185			       reg);
+   186		}
+   187	
+   188		kfree(sub->segments);
+   189		sub->segments = NULL;
+   190		return 0;
+   191	}
+   192	
 
 --
 0-DAY CI Kernel Test Service
