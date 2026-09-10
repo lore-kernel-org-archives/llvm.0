@@ -1,166 +1,212 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AA2B3AA1A8;
-	Thu, 10 Sep 2026 08:33:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C75E3E00A3
+	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 09:29:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789029192; cv=none; b=g9YEK8PFuWiayArAknVFsET+yuRWfURNlk9jmPOeTu76akvj+NslZiRqrzio1qNkfAtjGE2s0wNZ2xxx9WNornpHcun5dNDDHliwzMyKtmXePPeUVjacPNUyYpKY0loSxjhrfGYvlZAz1anRmXQ6bP8mkbDoh2lWTkOWJ/mVvnE=
+	t=1789032550; cv=none; b=eUFpN5r2PrjHVpoQ9D9cBX8FEkhwy7qiskrFzHBDC/b0/yc6+TmVlAEqhEsdeTxbSF50/igy1lECMzqOpmXtYED++VWGwT7gxIupE97d45ZFaJMKFhjkDFh0upd81AM8mPWX8XfDamUEhYkB+6g+SUg444l5VwcOosF+/yT/tLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789029192; c=relaxed/simple;
-	bh=cT3gEwCENyvltQvdtkD7ViWmkEsUqe2m+2Mwtbh6C6I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GRVwPosHJ3WmZtoa+81A46+/0KGJk6FAQKO1hKClvLlqx7vnQZtPJ25ep34CImNROoKtGJpUI1k11A0R5jDJPg41mXHMrtZDDIGmccxZn1Pd+MoYEWEE9rDgp0rYlS1L3mJ+bF6KOw3dsoOCv5sRTkVns0L5xsGK2WJpPcOBK64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nq0t+a13; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5bolpWR6; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1789032550; c=relaxed/simple;
+	bh=YmZhILYI1Ap/QhHEbws/tgVKUcLX7+iRsfdsJ1tAFSs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=hbMmciJ+pEPUPjQGlbgq2ykHuJi8IhvmanFJGDzn5LclsXnrs/5BJ+XV88mFMt1R673ekuqUt1TVjI/yeosp0g3HK7UYIusAYlfU7I5v4DyKhXIV6dWbGA3Sn1wL0J4ME3Ek39OB7BKQ4RnL9/yfBIxNrBiMKU2At/jifdFRRiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=juxANAUC; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nq0t+a13";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5bolpWR6"
-Date: Thu, 10 Sep 2026 10:33:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1789029186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PgYnxH7H+tx7By2AM1sGAFXZm+b1KJf3JRXo/DozlYY=;
-	b=nq0t+a13NaTSuYF4CeenzbMGkxy4JvQOZ0gqaRRD4cV9bqclklB2nkc3jSKVIovWerzMBz
-	LqWRF9Z/Wq6H9Z9U5z8AE+VQpRnpoU7JLulnrl5INZdb1CMxTMPnV05lqmLTS9b7bcJFm5
-	+Jtv/C4gZ+T4oI66pMCTl5u5+NHtvOkMZSIlvstSVWgfAMfF9Uop+cNAY9pJ1wnhDHX3xt
-	0EaSx9l4i8NZrU/FDddnLlVafk+g+pAz5r8kkTP/k3bKjkb7OYFvZ0hMvCNLC7AHSIlTma
-	Sl6zOqwKm4Xb6YskdZMSeNDBr8w0HvolM2Ie/L+Q4FlwBs5LfCMZSPSM6ejB+A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1789029186;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PgYnxH7H+tx7By2AM1sGAFXZm+b1KJf3JRXo/DozlYY=;
-	b=5bolpWR6VEOPOQDk4aOdzzFsCMnIuSs3+o1Bx7da9a/VgRkSmhJ5Iff3Ie4w9HH2UtpfSb
-	Me4QoEKEhv6cUqDA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andy Lutomirski <luto@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Christophe Leroy <chleroy@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Nicolas Schier <nsc@kernel.org>, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-mm@kvack.org, 
-	linux-um@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
-	linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	Jan Stancek <jstancek@redhat.com>, Arnaldo Carvalho de Melo <acme@redhat.com>, 
-	Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v5 02/24] x86/elf, um/x86/elf: Move relocation constants
- to UAPI
-Message-ID: <20260910095003-d751da0d-37d1-4b14-9941-e3c388c94733@linutronix.de>
-References: <20260908-vdso-absolute-reloc-v5-0-3a93791af1cf@linutronix.de>
- <20260908-vdso-absolute-reloc-v5-2-3a93791af1cf@linutronix.de>
- <20260908135513.GAaqATwXHcQD7plnH-@fat_crate.local>
- <20260908161740-0d79e592-87a6-43c5-9174-84ce1904e639@linutronix.de>
- <20260908151238.GBaqAl5iKb64meuPJl@fat_crate.local>
- <20260909075156-06ff671c-ab7b-47d8-aaa3-588b570888bc@linutronix.de>
- <20260909144930.GAaqFx-mjH3-u6jLjw@fat_crate.local>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="juxANAUC"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-49b0d78a801so67379405e9.2
+        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 02:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789032546; x=1789637346; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xKhavT2ReA2W483I2xKkmSEJ1FM7bdVhooTyy/B0hnc=;
+        b=juxANAUCe9vfgms4nuYcZOGArNnkiAQf5mdVXS4o/+OVB228lr4dAFBtCJwy1KduG0
+         evqcWtS0v4ctIVLg5DzD5RJ/S11lHSzyL5VR6f5wNhjpVJpkX7vslXyY9nUueVyhZSH7
+         MdExTw1Y8zybGkrRdkyiZAkgubl3KYd+q+dbpjYZ5Z+IUI3zJf2cG56npH6vEDpiHMVH
+         T4X3IfeQpH9fiTszGDHUFf5jJtXSRKhO8Ncz3VQm3pkqOKSWIsjdxBuSwZoiL+N6CpXX
+         4y9LuN+FplIdaGEu2SprLoIkZIJCmGAYK41PG6TEGbASwy1ZniReffKoXW/Uj0aWtPZp
+         0oVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789032546; x=1789637346;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xKhavT2ReA2W483I2xKkmSEJ1FM7bdVhooTyy/B0hnc=;
+        b=pCB2rO+k7Z9GkqTDiJg8H0KBbSkMOckkP3GyB8+jyf+1fZ0thXkYfiTGBYPuylTGU4
+         3TILQ2Gm4sPgc/17b2ZQOFcrA4VTXT/vc9YTtTBr1QyLW+ZyXX6TvutzocOb80D4OGBc
+         pVMpv7Z6QIeorOR9oGm2RXSahjh6uUG4ABaYtiv5vV6fWeTKmTXRH3QK6m6FMNe6kqdN
+         3d+4P2l5dP1z6EbtrUV2jo5c8CrD8VwUvjIgTHvOIzwg9w1PGeLo3BxJjM9qWNOAMS5e
+         SS1ju096a6tpUihpBGHzBksbOmasvdsERWlPSu+Y26SZwdRS+Ui43ytVcDYNTy+mpIe9
+         jpZw==
+X-Forwarded-Encrypted: i=1; AKwUvBwxRn5LyzwzNPfsDhXu6kH927GWLYciaH7cJHkpPoEEvw1/FTlZ4ZM1fad+yVMVy9wrOBV7@lists.linux.dev
+X-Gm-Message-State: AFuF++l9nCOdrZ4ZZUf2oJhXnaX96/S/+2HD7huVOfI0taz+fKYXh4Ma
+	mNznlEiVhqBQruZjev0OLb27Q/fgiClFPMHMHuEVKz3ggIfYcrh9rJe8
+X-Gm-Gg: AYBFou2nRYC7t+f05KL1bRJu8k2nyIdgQHtb6Lde1014tXclQpK/OiSSSiuoiOM2RDb
+	Gf64fbhvyCr+CuxWngmdXs+sBf1Ak6DYCUG5LmD3/i1SvPsXHph7MxX8kLENEoKMs67YJ8UuNil
+	Vs5fkyS41QBZGXJcomvO0lVO1cRseRcvSSUwgIuT1CWXMuzFSDP0LqcUi1rgv8x72/D/6DRNH9w
+	fEPyvZ5LLI5rujbj4FDHaHq1YxXBPGcHIBFVLvdEdelmzqe+YQKYzqtMpqQXbbNb/RKTBWMsNsz
+	DDHTqzl9tDlsD/Tn0PpxmZAQXR+csR2Y/3NsdTBOH2MWrvrPIzAn8DIn2XxqvMLJmmgw6Sel/F+
+	5c7JQ1yFlWo+NM6E3mSOAuOAR2KgY8Q2hZvlzi2XANkoiCs8S7NIRm/JsG8Lq3NmXJS1Gkj5arA
+	RE9WaXfDWpcFdmv/8LLlrqQ4TI8zIxGwks87McjU1JWL8zF4frx/WmMhKyVWv5pS2pI1YSQ1jlt
+	irQ/LKFIID6mcjAwXR52xgl3lzJTz1TUTO6
+X-Received: by 2002:a05:600c:138b:b0:49e:2a61:a17b with SMTP id 5b1f17b1804b1-49e2a61a41emr9166915e9.5.1789032546119;
+        Thu, 10 Sep 2026 02:29:06 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d20fc23fcsm106027125e9.3.2026.09.10.02.29.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Sep 2026 02:29:05 -0700 (PDT)
+Date: Thu, 10 Sep 2026 10:29:03 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, Nick Desaulniers
+ <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+ <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, Alexey
+ Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
+ <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti
+ <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun
+ Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?UTF-8?B?QmrDtnJu?=
+ Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
+ Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet
+ <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 04/23] kallsyms: output binary data to speed output and
+ kallsyms assembly
+Message-ID: <20260910102903.1b211f6b@pumpkin>
+In-Reply-To: <20260908-build-speedup-v1-4-5dc1ac01672d@kernel.org>
+References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
+	<20260908-build-speedup-v1-4-5dc1ac01672d@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260909144930.GAaqFx-mjH3-u6jLjw@fat_crate.local>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 09, 2026 at 07:49:30AM -0700, Borislav Petkov wrote:
-> On Wed, Sep 09, 2026 at 07:59:51AM +0200, Thomas Weiﬂschuh wrote:
-> > These names and numbers are defined by the architectures' ELF specifications.
-> > They are already cast in stone. For example see Table 4.9 of [0].
-> > Changing them would break compilers, linkers, loaders and more or less every
-> > existing ELF binary.
+On Tue, 08 Sep 2026 21:55:04 +0100
+"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+
+> kallsyms generates an assembly file that consists mostly of .byte entries
+> containing compressed names, token strings and name-sorted sequence
+> numbers.
 > 
-> So?
-
-This was a direct response to your "And putting them in UAPI casts them in
-stone". With the idea that we can't possibly cast them more into stone
-than they already are.
-
-> Your goal is to provide them to tools/. You want to provide them to
-> *everything*. See the discrepance here?
-
-My goal is to make my tool work. For that I can just as well add ad-hoc
-relocation constants definitions in my own code. Just as everybody else
-has done, in what seems like a well-honed tradition.
-Unifying the constant definitions was a preparatory cleanup step I put
-in my series.
-
-Some architectures (like x86) define the relocation constants in internal
-kernel headers, but others do so in their UAPI headers, so we can't have it
-in include/linux/.
-As the UAPI is the common superset, and given that we already have quite some
-ELF definitions in the UAPI I this is where I put the relocation constants.
-We can add a tools/-specific header which is not shared with include/linux/
-but then we still have duplication with the regular kernel code.
-
-As a coincidence, these definitions in the UAPI would also be useful
-for nolibc static PIE support, but that is more of a weird curiousity
-and not something I want to bring up as reason here.
-
-(...)
-
-> > Also we already have other, closely related, ELF constants in the UAPI,
-> > see {,tools/}include/uapi/linux/elf{,-em}.h.
->
-> Srsly?!?
+> For an x86-64 build with 158k symbols that is a 37 MiB .S file which takes
+> 0.57s to assemble each of the two to three times it is built over a kernel
+> build.
 > 
-> You moved them there:
+> Each time it is generated it also takes kallsyms a similar amount of time
+> to output it.
 > 
-> commit 626fd35278295fbb21f2da331cd8028e9738d965
-> Author: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> Date:   Wed Feb 26 12:44:46 2025 +0100
+> Avoid this overhead by instead outputting this data as binary and importing
+> it into the assembly using the .incbin directive.
 > 
->     tools/include: Add uapi/linux/elf.h
->     
->     It will be used by the vDSO selftests.
+> Tables that are wider than a byte remain part of the assembly to ensure
+> endianness and relative relocations are performed correctly.
+> 
+> With this change, the output assembly file shrinks from 37 MiB to 9.8 MiB,
+> with a 2.6 MiB binary data file alongside it, and the object remains
+> identical.
+> 
+> The generated binary file is deleted correctly on build clean along with
+> all other ephemeral data.
+> 
+> On an x86-64 system with CONFIG_KALLSYMS_ALL set:
+> 
+>                        before   after    delta
+>   scripts/kallsyms     0.24s    0.18s    0.06s
+>   assemble             0.57s    0.16s    0.41s
+> 
+> Per kallsyms invocation/assembly, for a total of 0.47s time saving upon
+> invocation.
+> 
+> An incremental build on the same system was reduced from 11.15s to 9.65s,
+> indicating a total of 1.5 seconds saved over the build.
+> 
+> The kallsyms runs and their assembly are on the serial tail of every build
+> that links vmlinux, no-op builds are unchanged.
+> 
+> Whole build, 128-thread Threadripper 9980X, best of N runs:
+> 
+>                                          before   after     delta
+>                                          -------------------------------
+>   x86 defconfig, touch mm/vma.c, gcc       10.8s     9.9s    -0.92s (-8%)
+>   x86 defconfig, touch mm/vma.c, clang     10.7s     9.5s     -1.2s (-11%)
+>   x86 defconfig, clean, gcc                29.5s    28.7s    -0.81s (-3%)
+>   x86 defconfig, clean, clang              29.7s    28.6s     -1.1s (-4%)
+>   x86 allmodconfig, touch mm/vma.c, gcc    45.3s    44.0s     -1.3s (-3%)
+>   x86 allmodconfig, touch mm/vma.c, clang  42.9s    40.2s     -2.7s (-6%)
+> 
+> Assisted-by: LLM
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> ---
+>  scripts/kallsyms.c      | 97 ++++++++++++++++++++++++++++++++++++++-----------
+>  scripts/link-vmlinux.sh |  2 +-
+>  2 files changed, 77 insertions(+), 22 deletions(-)
+> 
+> diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+> index 350d118c3b9e..61c5eb537ed4 100644
+> --- a/scripts/kallsyms.c
+> +++ b/scripts/kallsyms.c
+> @@ -5,7 +5,10 @@
+>   * This software may be used and distributed according to the terms
+>   * of the GNU General Public License, incorporated herein by reference.
+>   *
+> - * Usage: kallsyms [--all-symbols] in.map > out.S
+> + * Usage: kallsyms [--all-symbols] [--pc-relative] in.map out.bin > out.S
+> + *
+> + *      The byte tables go to out.bin and are pulled into out.S with .incbin;
+> + *  wider tables stay assembler source for endianness and relocations.
+>   *
+>   *      Table compression uses all the unused char codes on the symbols and
+>   *  maps these to the most used substrings (tokens). For instance, it might
+> @@ -102,7 +105,7 @@ static void sym_arr_free(struct sym_arr *arr)
+>  
+>  static void usage(void)
+>  {
+> -	fprintf(stderr, "Usage: kallsyms [--all-symbols] in.map > out.S\n");
+> +	fprintf(stderr, "Usage: kallsyms [--all-symbols] [--pc-relative] in.map out.bin > out.S\n");
+>  	exit(1);
+>  }
+>  
+> @@ -319,6 +322,40 @@ static void output_label(const char *label)
+>  	printf("%s:\n", label);
+>  }
+>  
+> +static void write_bin(FILE *file, const void *data, size_t len)
+> +{
+> +	if (fwrite(data, 1, len, file) == len)
+> +		return;
+> +
+> +	perror("kallsyms: write");
+> +	exit(EXIT_FAILURE);
+> +}
 
-I think we are talking past each other. To me the act of "exposing
-something to UAPI" is adding it to include/uapi/ (or the arch/ variants).
-That is an actual change worthy of discussion, which I am happy to have.
-Copying headers (UAPI or not) to tools/include/ is a rote administrative task.
+It is pretty pointless checking the return value from fwrite().
+Most of the time it is just doing a memcpy().
+Instead call fflush() and the ferror() prior to the fclose().
+(Or just rely on fclose() giving you that error status.)
 
-The commit above is the latter.
-elf.h has been part of the UAPI for as long as the UAPI exists.
-
-> Looking at the rest, it looks like some elf bits got exported, you added some
-> more and that ship has sailed.
-
-"some elf bits got exported" undersells it a bit. There are 14 years of dozens
-of people adding constants to include/uapi/linux/elf.h. So far it doesn't seem
-to have been a problem.
-
-> I still think us providing headers is completely unnecessary and it will come
-> to cause conflicts eventually but hey, not my problem.
-
-As there is pushback, I'll just drop all of the header changes.
-Maybe somebody else wants to deal with it at some point. Not my problem either.
-
-
-Thomas
+David
