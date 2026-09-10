@@ -1,103 +1,267 @@
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CFEE38D3FD
-	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 21:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A4D249B5BD;
+	Thu, 10 Sep 2026 21:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789076358; cv=none; b=gh9OiWvc8cqfN3Zc8PrejMBNx+D6zS9m73fp8ZiDycR8adaYyouiphAkiJtnjmu9ClZIlbcIRG9QOTYdzta03S4QNS1ONBOdEjVcHRy6OrTqQJjKMaKhVce+avE7d0Ih4tNg2bmZVg1AfC8c2APMWD1afflWIlTNn41Ms2fG4As=
+	t=1789077465; cv=none; b=YHnLiwrvOp2Ohmg/9sT9h2/2PdiBVO2EEJNtJR85L+8UMMMr0dUUNvMeVJJ8y6RIwyg3Ra+XXOd4o2XZYgMWMo4sLcK1/3d1K7011yUkxGF6UYcpdZ8hycV4Zd2w9zbua+El8aAyT/DbhSdaYPbNnQrxQZnzIuwmpN6ovRYNh+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789076358; c=relaxed/simple;
-	bh=VZ7i9g/d+H47coYO3Xc9M1wiqaAKR5dvjmJyK4FiQPk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=Mc4fseOFrFJqosE4V0wOdHdfFfSILrm0ZKl2LjyluADaDonAeCXKNrh2GapXeq7OvmAdF0JGiRDx7Q0VIZgdg11yM/QvqvwA+Hz99TNkqiqVf8yzAxvIAy4OV70IGocJMu/QUotxFivaRQN4/2XExyBhGly/SNcYzCYTFjAKOJk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U4f2Wxdi; arc=none smtp.client-ip=209.85.216.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1789077465; c=relaxed/simple;
+	bh=5+OGmdkwiux2fe0Ev3Tqt1z2YmOXlu3wh6Yjazi64d8=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Vs7KPUp/0ucQoFQ62yNu/U/kvnrMmDLUiyQt7uTmRMwUoNQnwYQQNB1bPtlbJ1UZL/O7nwr2TKJ7YEptWyiwJZU+ei0wcDARZR2AWsPUyOZvHs6DN7xwXb+x//lCTCPb2RMHWvKVT0VuMsI3SL4B9aWgte1ybOL+QM0q74BcGtg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=O6rvjaIb; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U4f2Wxdi"
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38ecc48b3c2so299322a91.1
-        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 14:39:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789076355; x=1789681155; darn=lists.linux.dev;
-        h=content-type:to:from:subject:message-id:mime-version:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=6fbf9eOsE32d1ZOxCGBZBdmKD77pEwD9k19mpGO+TR8=;
-        b=U4f2WxdiW3oa5EWalSYa4AWn/+g15Wy7aTP6cMr38c8wsH/YxAtyYnUk74/OFSr3sg
-         Z163TUqJmdDG9AR6v8B4WzmkD/b+AkosXXfiAInxyjhGxqBbIaRpb0i/wU3AU7ExMsYJ
-         ZXRgXfRhLdg+x6mfN6wKYTiaWtKK0WaV3CDCEBcTs0jQU59fcA+SxFnJU0FK8vL/77Pa
-         iQ/LiDyiM7/Pu8AdlGf2rCpjOyFXG1tLgscRS5gpXwJSE79lP2e9mqPc9cp+39z8GrI9
-         d7DaGjiK5p4fm7xYUaZfloM+Gf/BwuRf6Bc+spqGkgTbz/1vNGrymdhAJCtxxx7H6GK8
-         0CSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789076355; x=1789681155;
-        h=content-type:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6fbf9eOsE32d1ZOxCGBZBdmKD77pEwD9k19mpGO+TR8=;
-        b=G9rILn8Y9fAqYq85FYPw+mSEOGq2whcaG7LK5EzvhjCUd6ku513SMUOgmwTLXYSS53
-         6BS9C5VU9CRWikTCUmGGBcR2aYRJiLcNbsO09YAz7YF9B7XRL3TV0af5r50+fFJmNhu4
-         jgLs45YAV6IwJikTnHUrkq0my3lhQhDEMEP7NpQj+qyjpVL5dms4lFEiWiX8OOtdZPNC
-         QOtQQzxerbDZE/oGp2RRY1yvbzmn22768h5nqqvOVgYOj7h5dcTKL4i/ASdYok828wDQ
-         YmfEE4ek5o16SlAJZjW7V7Uqc6PJecY0drY21pJWWVRgLlOJ6oEyI9NYEo5F8cuTgcXh
-         yIng==
-X-Forwarded-Encrypted: i=1; AKwUvBzqFz9SEeYLvcnN57WdhoIj0cC0d/tGlQH6L8hygwc6eUevsmrzrHIQ3gg061jTLojorUXA@lists.linux.dev
-X-Gm-Message-State: AFuF++n+EZxGg98TweMQ5KO/Vp78Qdl9Zv/KB9wDR5bkJe/53fuw19tI
-	lqbZkUhIahMP3WkLeuashZyiJhMIOBLeacxx4JXA+mbYcb6plDjwbPhxWGcdhB1sUjYVfRi9CNI
-	Hh3NMFysavQ==
-X-Received: from dlbbq8.prod.google.com ([2002:a05:7022:6708:b0:143:65eb:f1ec])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c8b:b0:398:9c00:29ee
- with SMTP id 98e67ed59e1d1-39d9c38fa48mr1037351a91.22.1789076355117; Thu, 10
- Sep 2026 14:39:15 -0700 (PDT)
-Date: Thu, 10 Sep 2026 14:39:07 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="O6rvjaIb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789077463; x=1820613463;
+  h=date:from:to:cc:subject:message-id;
+  bh=5+OGmdkwiux2fe0Ev3Tqt1z2YmOXlu3wh6Yjazi64d8=;
+  b=O6rvjaIbc4lTU9fmrRI6rV/6RmYEOFgoRdC2I/cMwPnIhMCWNNd1Pn60
+   k/bxWOLVYQ/kQdhGDxMqLXjXl/T2eKLID7JWNCSp/Jw1F9JFOqo82EZe2
+   qEJK6zZXlVkuhZzqX5bMCGyFyTp3f/+6V3Nf521ejv2521XnnxXU/689q
+   W9E1K8lJQUsJd5lKwbtM/9mjtW//vGpjg27M1X304pzfz/HT/dyTjVkEm
+   FzdD+3AXOnzlSPScMGnp9nHSGVX2MgNgNRYULqpTvmcvCD5XB1633SssT
+   xsuR9R3iUQlVQkWYtLytDFmoH+A/1qyUdhYyHC3WF97Hth9P5M3Y3sci5
+   g==;
+X-CSE-ConnectionGUID: Mt2ScGhkR8mvI1tznaB+aw==
+X-CSE-MsgGUID: zLxQUCWfQ4yN/g9CvOUjaA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11901"; a="92052048"
+X-IronPort-AV: E=Sophos;i="6.27,96,1787036400"; 
+   d="scan'208";a="92052048"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 14:57:43 -0700
+X-CSE-ConnectionGUID: tgBE3+rdRLm/YbdMWooqXA==
+X-CSE-MsgGUID: JWUcLddaSByWognaPjvy/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,96,1787036400"; 
+   d="scan'208";a="270382084"
+Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 10 Sep 2026 14:57:40 -0700
+Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x4mlu-000000000ZB-2EwG;
+	Thu, 10 Sep 2026 21:57:31 +0000
+Date: Fri, 11 Sep 2026 05:45:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Barry Song (Xiaomi)" <baohua@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, barry.song@csr.com
+Subject: [baohua:dev/kairui_scanbalance 9/9] mm/vmscan.c:1954:42:
+ error: no member named 'lrugen' in 'struct lruvec'
+Message-ID: <202609110517.nWCAXYeN-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.1007.g17ff1f9808-goog
-Message-ID: <20260910213907.3206529-1-irogers@google.com>
-Subject: [PATCH v1] tools build: Fix timerfd feature detection with clang
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-Clang's uninitialized-const-pointer warning causes a feature test to
-fail when building perf with clang. This disables support for 'perf
-kvm stat live'. Add default initialization to new_value as a
-workaround.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/baohua/linux.git dev/kairui_scanbalance
+head:   c96aacd4045a7a4c8d292e6c9ba6d169cdc0b570
+commit: c96aacd4045a7a4c8d292e6c9ba6d169cdc0b570 [9/9] mm/mglru: avoid placing rejected folios below populated gen
+config: hexagon-allnoconfig (https://download.01.org/0day-ci/archive/20260911/202609110517.nWCAXYeN-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project d3db069999553568848400c84cbf815c03f5470f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260911/202609110517.nWCAXYeN-lkp@intel.com/reproduce)
 
-  test-timerfd.c:15:30: error: variable 'new_value' is uninitialized when passed
-			       as a const pointer argument here
-			       [-Werror,-Wuninitialized-const-pointer]
-     15 |         if (timerfd_settime(fd, 0, &new_value, NULL) != 0)
-        |                                     ^~~~~~~~~
-  1 error generated.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609110517.nWCAXYeN-lkp@intel.com/
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/build/feature/test-timerfd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
-diff --git a/tools/build/feature/test-timerfd.c b/tools/build/feature/test-timerfd.c
-index 9c72c697a9df..f88e8cc63ef3 100644
---- a/tools/build/feature/test-timerfd.c
-+++ b/tools/build/feature/test-timerfd.c
-@@ -6,7 +6,7 @@
- 
- int main(void)
- {
--	struct itimerspec new_value;
-+	struct itimerspec new_value = {};
- 
- 	int fd = timerfd_create(CLOCK_MONOTONIC, TFD_NONBLOCK);
- 	if (fd < 0)
--- 
-2.55.0.1007.g17ff1f9808-goog
+>> mm/vmscan.c:1954:42: error: no member named 'lrugen' in 'struct lruvec'
+    1954 |         struct lru_gen_folio *lrugen = &lruvec->lrugen;
+         |                                         ~~~~~~  ^
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:663:10: note: expanded from macro '__native_word'
+     663 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                 ^
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:663:39: note: expanded from macro '__native_word'
+     663 |         (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
+         |                                              ^
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:664:10: note: expanded from macro '__native_word'
+     664 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                 ^
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:35: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                          ^
+   include/linux/compiler_types.h:664:38: note: expanded from macro '__native_word'
+     664 |          sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
+         |                                             ^
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:49:33: note: expanded from macro 'READ_ONCE'
+      49 |         compiletime_assert_rwonce_type(x);                              \
+         |                                        ^
+   include/asm-generic/rwonce.h:36:48: note: expanded from macro 'compiletime_assert_rwonce_type'
+      36 |         compiletime_assert(__native_word(t) || sizeof(t) == sizeof(long long),  \
+         |                                                       ^
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:65: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                  ^
+   include/linux/compiler_types.h:635:53: note: expanded from macro '__unqual_scalar_typeof'
+     635 | #define __unqual_scalar_typeof(x) __typeof_unqual__(x)
+         |                                                     ^
+   mm/vmscan.c:1955:46: error: no member named 'lrugen' in 'struct lruvec'
+    1955 |         unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+         |                                           ~~~~~~~~  ^
+   include/asm-generic/rwonce.h:50:14: note: expanded from macro 'READ_ONCE'
+      50 |         __READ_ONCE(x);                                                 \
+         |                     ^
+   include/asm-generic/rwonce.h:44:72: note: expanded from macro '__READ_ONCE'
+      44 | #define __READ_ONCE(x)  (*(const volatile __unqual_scalar_typeof(x) *)&(x))
+         |                                                                         ^
+>> mm/vmscan.c:1957:46: error: incomplete definition of type 'struct lru_gen_folio'
+    1957 |         if (folio_test_unevictable(folio) || !lrugen->enabled)
+         |                                               ~~~~~~^
+   mm/vmscan.c:1954:9: note: forward declaration of 'struct lru_gen_folio'
+    1954 |         struct lru_gen_folio *lrugen = &lruvec->lrugen;
+         |                ^
+>> mm/vmscan.c:1960:8: error: call to undeclared function 'lru_gen_folio_seq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1960 |         seq = lru_gen_folio_seq(lruvec, folio, false);
+         |               ^
+>> mm/vmscan.c:1962:8: error: call to undeclared function 'lru_gen_from_seq'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1962 |         gen = lru_gen_from_seq(seq);
+         |               ^
+>> mm/vmscan.c:1967:2: error: call to undeclared function 'lru_gen_update_size'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1967 |         lru_gen_update_size(lruvec, folio, -1, gen);
+         |         ^
+   mm/vmscan.c:1968:31: error: incomplete definition of type 'struct lru_gen_folio'
+    1968 |         list_add(&folio->lru, &lrugen->folios[gen][type][zone]);
+         |                                ~~~~~~^
+   mm/vmscan.c:1954:9: note: forward declaration of 'struct lru_gen_folio'
+    1954 |         struct lru_gen_folio *lrugen = &lruvec->lrugen;
+         |                ^
+   13 errors generated.
 
+
+vim +1954 mm/vmscan.c
+
+  1938	
+  1939	/*
+  1940	 * Even though we have called folio_set_active() for rejected folios
+  1941	 * in evict_folios(), they may still be demoted or placed in the last
+  1942	 * populated generation since we can now scan all generations.
+  1943	 * Make sure these folios are neither demoted nor placed in the last
+  1944	 * populated generation, unless it is also the youngest generation
+  1945	 */
+  1946	static inline bool lru_gen_add_rejected_folio(struct lruvec *lruvec, struct folio *folio,
+  1947			unsigned long scanned_seq)
+  1948	{
+  1949		unsigned long seq;
+  1950		unsigned long flags;
+  1951		int gen;
+  1952		int type = folio_is_file_lru(folio);
+  1953		int zone = folio_zonenum(folio);
+> 1954		struct lru_gen_folio *lrugen = &lruvec->lrugen;
+  1955		unsigned long max_seq = READ_ONCE((lruvec)->lrugen.max_seq);
+  1956	
+> 1957		if (folio_test_unevictable(folio) || !lrugen->enabled)
+  1958			return false;
+  1959	
+> 1960		seq = lru_gen_folio_seq(lruvec, folio, false);
+  1961		seq = max(seq, min(scanned_seq + 1, max_seq));
+> 1962		gen = lru_gen_from_seq(seq);
+  1963		flags = (gen + 1UL) << LRU_GEN_PGOFF;
+  1964		/* see the comment on MIN_NR_GENS about PG_active */
+  1965		set_mask_bits(folio_flags(folio, 0), LRU_GEN_MASK | BIT(PG_active), flags);
+  1966	
+> 1967		lru_gen_update_size(lruvec, folio, -1, gen);
+  1968		list_add(&folio->lru, &lrugen->folios[gen][type][zone]);
+  1969	
+  1970		return true;
+  1971	}
+  1972	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
