@@ -1,166 +1,131 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE86D4FC8E7;
-	Wed,  9 Sep 2026 23:48:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B9635C69C;
+	Thu, 10 Sep 2026 02:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788997723; cv=none; b=hWkMM/wkG8vrCNGCram2tR8GrspyOyY2wKqjTvdrxBouBCW9sJsdb04R6SDExD4sEQmhu5sAIrY/SNDgGB9mzca3YqO5NlvwSMODJTOtuxE7Cqw9fxX/1IZgolbuiFY3cW1t86jI7M36S7eslJeNW1MPvwoza2OJuFvDUTeEuG8=
+	t=1789007804; cv=none; b=tGjzFoVRvo3cMujYOH9kB3m4w/GJfRGqsgvsgfmjxGuV7OA0Xmt6RU0abTKUu0UI0RewLW58YIADfIKl4BZMnhgA70ARZpTFF2zjFwdoDdRIZZmBwJmXtQx9Ih0PQDbDK2f0gY2sf8vzd73v7MGPjRKON/OVwEJ9piqFNacM5Lo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788997723; c=relaxed/simple;
-	bh=p5metIfVY3CtI+2oTzxtSM1WtBNXuJaHNZRuFvzc/1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dD2UPJGp9CX91RnFEi93Y2P2W5+hfLzE8bVZIRMnaDQEbCGxikipSZ39bEy0rl9T9IIY6dHN4bpV2G9zP+pIJDg3cf3R+0ucM01tUnf9D0/7TLbPFeotlgUW9c7HlWLp9i52xlh+uArbkYqK8VWbAHg7Axs1pO3TNUbxhn9Zmfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SO+P7ctG; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789007804; c=relaxed/simple;
+	bh=L5dHdGjlvlX2f/AoTLnYtCBU0xmv9u3kpziAmc32dpA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tcbWticNI6T4gcr5camyL+V9R81k4xV4khE0chz0xhbM/75DNq3jZct66jRCVgzjiaUlMvgUj/ac1M49u6jXV91ZY7qvAtmEVxANd2CMIAyWkSOxUaRFrwkYivElmpTiFKcJ8IgIWNB48O8lCfWzRb5fh/OVaqGvkNgkWVHc6NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VQzLNX0h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SO+P7ctG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788997722; x=1820533722;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=p5metIfVY3CtI+2oTzxtSM1WtBNXuJaHNZRuFvzc/1A=;
-  b=SO+P7ctGmZKQno/8tZU+M6hlk3QC3syPNBz3XVoPD+/KGUIeZKp0qw7R
-   0bX8mos9m+3dghwdyW3HgLxRiupJqczh/Hh5fH93LTrv97dsoZOHh1VB5
-   TjUAX2r56/5XT/0fgNqLsMUiheB+xa6gcdo/hoE3DNiavRDNj71nsgzmQ
-   56RV+bFGF8fNKutj4EkFtP+d7yD8+rscN1zASTYJ8GruvWDe3mqEbqrAy
-   6XS+WgQEodoZX5j3LFB+C90KePLcH9ds401FKZOffafGlXrsNWmmtrp6e
-   b+TCv/j5mjpRXZuYx43GyuFncPKac+SkQst5j1qdibPTX+5LCjVw7zAx8
-   A==;
-X-CSE-ConnectionGUID: tn77jOTIS3ezl6QOokMxng==
-X-CSE-MsgGUID: kfhH4Ns4QiGWbNPAlpUZDw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11900"; a="112210651"
-X-IronPort-AV: E=Sophos;i="6.25,271,1779174000"; 
-   d="scan'208";a="112210651"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2026 16:48:41 -0700
-X-CSE-ConnectionGUID: xMUZWJzRTSuN4OtwBVjgTA==
-X-CSE-MsgGUID: CZmEZki4Rxm7Mj6cn0lD6g==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO a3e91e2cf319) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 09 Sep 2026 16:48:38 -0700
-Received: from kbuild by a3e91e2cf319 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x4S1s-0000000015I-0n14;
-	Wed, 09 Sep 2026 23:48:36 +0000
-Date: Thu, 10 Sep 2026 07:48:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Oleg Keri <okerixx@gmail.com>,
-	"Derek J. Clark" <derekjohn.clark@gmail.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: lenovo: suppress phantom radio control input on
- Yoga Slim 7x Gen 11
-Message-ID: <202609100719.bu2saXPQ-lkp@intel.com>
-References: <20260908091907.5653-1-okerixx@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VQzLNX0h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FED1F000FF;
+	Thu, 10 Sep 2026 02:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789007802;
+	bh=02pFdLLcej4d8nB4rChWendWJX6dzc4stMzQZXHTcGY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=VQzLNX0h2qQjLQ7zMiivtXhCMel2ETnNSmKvNkd1P9GYbIukIjBHc73fymib9a+dt
+	 V+Y8SiwmPMuJjrP6yLiC4Gt00P8SvtVsvIrsIsFVzIVbSJUXdQYNwBf2IsAR6IuMlo
+	 h9ljJhDodQFfA28ioswll9eY+0nPu86PGsdy49XX+KUFq7XUNzi5Fa4QvmWX2GWx3P
+	 lx0ZN9Wo4ucmAN7VDPg5u6iggHRYcQ/yqrC6HKjrFgF0F6n8UpS3EWcYO9pmA0n88F
+	 IbrQ7mZQ4rLp0UtdSH8uXfEA+adSt/IYwP2XvXzwHYloXVWL1EioX+aZDt8UuJYzwy
+	 R5+4geI6TP3GA==
+Date: Thu, 10 Sep 2026 03:36:36 +0100
+From: Jonathan Cameron <jic23@kernel.org>
+To: Rupesh Majhi <zoone.rupert@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>, Bill Wendling <morbo@google.com>,
+ David Lechner <dlechner@baylibre.com>, Eddie James <eajames@linux.ibm.com>,
+ Joel Stanley <joel@jms.id.au>, Justin Stitt <justinstitt@google.com>,
+ Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+ <nick.desaulniers+lkml@gmail.com>, Nuno =?UTF-8?B?U8Oh?=
+ <nuno.sa@analog.com>, linux-iio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 5/6] iio: pressure: dps310: add hardware FIFO support
+Message-ID: <20260910033636.3a2ed151@jic23-hlaptop>
+In-Reply-To: <20260906094622.433243-1-zoone.rupert@gmail.com>
+References: <20260824201203.396651-6-zoone.rupert@gmail.com>
+	<178813888151.2788519.16547013180884814648.b4-review@b4>
+	<20260906094622.433243-1-zoone.rupert@gmail.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260908091907.5653-1-okerixx@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Oleg,
+On Sun,  6 Sep 2026 12:45:04 +0300
+Rupesh Majhi <zoone.rupert@gmail.com> wrote:
 
-kernel test robot noticed the following build errors:
+> On Mon, 31 Aug 2026 02:14:41 +0100
+> Jonathan Cameron <jic23@kernel.org> wrote:
+> 
+> > Dropping data rather defeats the point of the fifo.  Can we avoid it
+> > by holding them locally until we will definitely have seen a useable
+> > temperature?  
+> 
+> The temperature is dropped too. dps310_fifo_drain() sets fifo_temp_valid
+> only in its second pass but returns at "if (!scans)" first, and FIFO reads
+> are destructive, so a batch that pushes nothing loses the temperature it
+> read. With pressure enabled, only a batch holding one ahead of a pressure
+> entry gets through.
+> 
+> DPS310 on a BeagleBone Black, pressure only, 32 Hz and 1 Hz, 3 s per trial:
+> 
+>   watermark 1  (31 ms drain):   4 of 6 enables produced nothing
+>   watermark 32 (484 ms drain):  0 of 6
+> 
+> Other runs gave 3 of 8 and 3 of 6. Silent, nothing in dmesg.
 
-[auto build test ERROR on 5e036ce12de91c6fd674dad33b169c6150be2a7a]
+Maybe we just set the minimum allowed watermark to something that
+in practice always has a temperature (or almost does)? It's kind
+of true that a watermark below that doesn't work because we end
+up dropping data.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Oleg-Keri/HID-lenovo-suppress-phantom-radio-control-input-on-Yoga-Slim-7x-Gen-11/20260908-111907
-base:   5e036ce12de91c6fd674dad33b169c6150be2a7a
-patch link:    https://lore.kernel.org/r/20260908091907.5653-1-okerixx%40gmail.com
-patch subject: [PATCH] HID: lenovo: suppress phantom radio control input on Yoga Slim 7x Gen 11
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260910/202609100719.bu2saXPQ-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project d1c0cc5e760f9cbb68e2acec80a476c4b8b898b7)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260910/202609100719.bu2saXPQ-lkp@intel.com/reproduce)
+> 
+> Seeding instead of holding, one temperature read in postenable, fixes it:
+> 0 of 16. But TMP_RDY is cleared on read, so after a sysfs read the seed
+> waits for the next conversion. Buffer enable took:
+> 
+>   temp 1 Hz:   661, 781, 802 ms
+>   temp 32 Hz:  148, 151, 151 ms   (period is 31 ms, so this is the floor)
+> 
+> Timeout is 1000000/rate, and on timeout dps310_ready() reinits, putting
+> PRS_CFG and TMP_CFG back to defaults. Not something I want in a buffer
+> enable.
+> 
+> Hold across batches as you suggested, since a 31 ms batch usually has no
+> temperature in it at all, or a non-blocking dps310_refresh_temp_locked()
+> seed plus a validity flag?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609100719.bu2saXPQ-lkp@intel.com/
+Validity flag in the data we push to userspace?  That never works because
+we don't have a universal encoding for one.
 
-All errors (new ones prefixed by >>):
+> 
+> > For initial patch just reject starting the buffer if timestamps are
+> > set to be captured.  
+> 
+> No sanctioned way that I can find. buffer->scan_timestamp is private and
+> kept out of the scan mask: active_scan_mask reads 2 with in_timestamp_en
+> set, and validate_scan_mask() sees the same. indio_dev->scan_timestamp is
+> reachable and iio_enable_buffers() sets it before postenable:
+> 
+> 	if (ACCESS_PRIVATE(iio, scan_timestamp))
+> 		return -EINVAL;
+> 
+> but it is __private, used only there and in
+> iio_push_to_buffers_with_timestamp(). That, a helper, or drop the soft
+> timestamp channel for now? Triggered-path timestamps are real, so I would
+> rather keep those.
 
->> drivers/hid/hid-lenovo.c:523:7: error: use of undeclared identifier 'I2C_DEVICE_ID_ITE_LENOVO_YOGA_SLIM_7X_G11_KEYBOARD'
-     523 |         case I2C_DEVICE_ID_ITE_LENOVO_YOGA_SLIM_7X_G11_KEYBOARD:
-         |              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/hid/hid-lenovo.c:1584:27: error: use of undeclared identifier 'I2C_DEVICE_ID_ITE_LENOVO_YOGA_SLIM_7X_G11_KEYBOARD'
-    1584 |                      USB_VENDOR_ID_ITE, I2C_DEVICE_ID_ITE_LENOVO_YOGA_SLIM_7X_G11_KEYBOARD) },
-         |                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/hid-lenovo.c:1588:1: error: definition of variable with array type needs an explicit size or an initializer
-    1588 | MODULE_DEVICE_TABLE(hid, lenovo_devices);
-         | ^
-   include/linux/module.h:256:21: note: expanded from macro 'MODULE_DEVICE_TABLE'
-     256 | static typeof(name) __mod_device_table(type, name)                      \
-         |                     ^
-   include/linux/module.h:247:2: note: expanded from macro '__mod_device_table'
-     247 |         __PASTE(__mod_device_table__,   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:15:1: note: expanded from here
-      15 | __mod_device_table__kmod_hid_lenovo__hid__lenovo_devices
-         | ^
-   3 errors generated.
+Given we have a user I'm fine with having a read only accessor function.
+We can't drop anything already supported upstream as it would be an ABI
+regression and we only do those when fixing bugs.
 
+So just add a little helper that has the ACCESS_PRIVATE magic hidden away
+in it. That stuff is really there to stop writes and ensure we have
+an interface that lets us mess around with the internal storage without
+changing lots of driver code.
 
-vim +/I2C_DEVICE_ID_ITE_LENOVO_YOGA_SLIM_7X_G11_KEYBOARD +523 drivers/hid/hid-lenovo.c
+Jonathan
+> 
+> Rupesh
 
-   488	
-   489	static int lenovo_input_mapping(struct hid_device *hdev,
-   490			struct hid_input *hi, struct hid_field *field,
-   491			struct hid_usage *usage, unsigned long **bit, int *max)
-   492	{
-   493		switch (hdev->product) {
-   494		case USB_DEVICE_ID_LENOVO_TPKBD:
-   495			return lenovo_input_mapping_tpkbd(hdev, hi, field,
-   496								usage, bit, max);
-   497		case USB_DEVICE_ID_LENOVO_CUSBKBD:
-   498		case USB_DEVICE_ID_LENOVO_CBTKBD:
-   499			return lenovo_input_mapping_cptkbd(hdev, hi, field,
-   500								usage, bit, max);
-   501		case USB_DEVICE_ID_LENOVO_TPIIUSBKBD:
-   502		case USB_DEVICE_ID_LENOVO_TPIIBTKBD:
-   503			return lenovo_input_mapping_tpIIkbd(hdev, hi, field,
-   504								usage, bit, max);
-   505		case USB_DEVICE_ID_IBM_SCROLLPOINT_III:
-   506		case USB_DEVICE_ID_IBM_SCROLLPOINT_PRO:
-   507		case USB_DEVICE_ID_IBM_SCROLLPOINT_OPTICAL:
-   508		case USB_DEVICE_ID_IBM_SCROLLPOINT_800DPI_OPTICAL:
-   509		case USB_DEVICE_ID_IBM_SCROLLPOINT_800DPI_OPTICAL_PRO:
-   510		case USB_DEVICE_ID_LENOVO_SCROLLPOINT_OPTICAL:
-   511			return lenovo_input_mapping_scrollpoint(hdev, hi, field,
-   512								usage, bit, max);
-   513		case USB_DEVICE_ID_LENOVO_TP10UBKBD:
-   514			return lenovo_input_mapping_tp10_ultrabook_kbd(hdev, hi, field,
-   515								       usage, bit, max);
-   516		case USB_DEVICE_ID_LENOVO_X12_TAB:
-   517		case USB_DEVICE_ID_LENOVO_X12_TAB2:
-   518		case USB_DEVICE_ID_LENOVO_X13_TAB:
-   519		case USB_DEVICE_ID_LENOVO_X1_TAB:
-   520		case USB_DEVICE_ID_LENOVO_X1_TAB2:
-   521		case USB_DEVICE_ID_LENOVO_X1_TAB3:
-   522			return lenovo_input_mapping_x1_tab_kbd(hdev, hi, field, usage, bit, max);
- > 523		case I2C_DEVICE_ID_ITE_LENOVO_YOGA_SLIM_7X_G11_KEYBOARD:
-   524			return lenovo_input_mapping_yoga7x_g11_kbd(hdev, hi, field, usage, bit, max);
-   525		default:
-   526			return 0;
-   527		}
-   528	}
-   529	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
