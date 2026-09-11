@@ -1,34 +1,34 @@
 Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8039B3B1EC7
-	for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 05:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE123338939
+	for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 05:24:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789103832; cv=none; b=edBmlrznXHARrO8qIBXmtulY71xvvgbZ0iZlaUJ6cIyh/98ranzl1BYraLn6PPaN3MHhWC4C2VxFn0H23VDBKnHcHD1EeePuln3uSBgXj3hmDQrWKwTONTAArJ8trhftp4ZCj70uc4kYWwemX3z4QLf+KehSlZouS4nvP/PmOvg=
+	t=1789104281; cv=none; b=R9cPZ20rSQygV2dPDNzwUyn3NvJaSh1IgnvNepsMCAqLu/Pr4wPFSMOXaqWSx2uMHhEmS3D8EI7L8oiAM5jgXQ/6H6nIn4oW+XCrtAJ6g9saPVPl+P8gAofOt+t0sGdSf/b+aocy4rYLiZI5KI3mDSy/acvLWLINst7bSOvD0cg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789103832; c=relaxed/simple;
-	bh=f8fIikIW10N69E8p5c+jkrXr6gtyImvzXshpKnZCeWk=;
+	s=arc-20240116; t=1789104281; c=relaxed/simple;
+	bh=K/lFXyXnlzmVr7ZpusjKtGIQx986K//AXPUXiJed/Ro=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m4O10vK3PKy5niC695kNyAXQJ3UEP2mMGzxJ8OSaW3bzPd2ggtCJ4BEzsJHtUplSW0Q6KDKW/Tnso2JQhoIp/RUrbATSe4383SAKcjOlzyPWkDknSU50U2iYItsubOdiKrnIUr3AbipeJdtfMEgL9dUXSHd2KJy6Vf7je2s+y1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=KXTKyW7v; arc=none smtp.client-ip=217.194.8.81
+	 Content-Type:Content-Disposition:In-Reply-To; b=EaTPZsMhYvw75V6TJUqGbPhlxUDB++cXSrKPPIxrPKLVd13KrlP+XpbOqNppUsayw7DGDHWxGVffjDZi+aCjjnd/qlE6V1LgCdAkAe10wcBFxAjcrYsUEXQ13bRq1wFZIMe6wMKi6/mZZVmaGxKmngWn/JS9ZVAk8I/w0T8W+IU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=JbPSjiN/; arc=none smtp.client-ip=217.194.8.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="KXTKyW7v"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="JbPSjiN/"
 Received: from francesco-nb (unknown [185.12.129.179])
-	by mail11.truemail.it (Postfix) with ESMTPA id C948022A64;
-	Fri, 11 Sep 2026 07:16:33 +0200 (CEST)
+	by mail11.truemail.it (Postfix) with ESMTPA id 65D9822A64;
+	Fri, 11 Sep 2026 07:24:31 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1789103820;
-	bh=6cHk0+hnAX9Svvvs+mCcXDWD9wHRA7o3iDSgCfFA1pw=; h=From:To:Subject;
-	b=KXTKyW7vyrweoTFKVl3jbpQv2colBXTi8jZtGIQa6s8uV/fgX49ruW8jObGT6YbHn
-	 TcBSMohJtTp3biq8c400SoWs8ubmZRA1h3gaQjJ6sKlHefSWCZ1f31aJYVGvvsHC3q
-	 EhdcsSTRQx1uxqGMIls6GOyE/Ggwkge3R62zwFVwtbaanhMfVgLT4TfQKKlbSMmKmq
-	 4OQXmK4BsOO+E3sq/81k0Mj7aMWMzI37vsj/zFxi9dOsvNkDAw/ubgmdzdLtcY5QJN
-	 2B+PoMgWU7z+/aOxu0/Cs2XidbbDWzOhwS/nBbhVheqpYntdBjNpWVSAbKjppgfhIG
-	 UX5R8QNggIHQA==
-Date: Fri, 11 Sep 2026 07:16:08 +0200
+	s=default; t=1789104277;
+	bh=HD7CwDSBdI7ApvW9myNSUssqtq9jDio3I05Sz3qKMAk=; h=From:To:Subject;
+	b=JbPSjiN/w4LO9ADIbdIKV/vFf+H2SWOFS8oSWFQKzh0kkEmEYcB13lBle3Kq7WHAo
+	 WJyVffgJeIcbtVWFM+wZIobEHtAbTcg/S8HA2TI3INwZwmVfSy5lW3CzMUC/NHgima
+	 2UpgOO7EcyxRxRlHThqRfxuUGRZXVAZGTPNu45AhJaFILlEemwYWMvsKXLKHTxzEN9
+	 Xhl4VaMtisNJTMuLbZPBSv9dodVRnOtylbZSVL/luVqHgE4BHjECsF8DiCD3QsOnpf
+	 4ZCAr3TWcncmfn/oMCF4ojhGFOPbtBgCMtkimt3OXaHdqwB8+w9v0Algi1A0PpFMNH
+	 Axg//UkbZ0wUg==
+Date: Fri, 11 Sep 2026 07:24:28 +0200
 From: Francesco Dolcini <francesco@dolcini.it>
 To: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
 Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
@@ -54,11 +54,11 @@ Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
 	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
 	Hari Nagalla <hnagalla@ti.com>
-Subject: Re: [PATCH v8 4/9] arm64: dts: ti: k3-am62p-verdin: Fix wkup R5F
- memory region size
-Message-ID: <20260911051608.GA5377@francesco-nb>
+Subject: Re: [PATCH v8 9/9] arm64: dts: ti: Add wkup R5F nodes to pre-ram
+ bootphase
+Message-ID: <20260911052428.GB5377@francesco-nb>
 References: <20260903-topic-am62a-ioddr-dt-v6-19-v8-0-74c650dfdea6@baylibre.com>
- <20260903-topic-am62a-ioddr-dt-v6-19-v8-4-74c650dfdea6@baylibre.com>
+ <20260903-topic-am62a-ioddr-dt-v6-19-v8-9-74c650dfdea6@baylibre.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,24 +67,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260903-topic-am62a-ioddr-dt-v6-19-v8-4-74c650dfdea6@baylibre.com>
+In-Reply-To: <20260903-topic-am62a-ioddr-dt-v6-19-v8-9-74c650dfdea6@baylibre.com>
 
-On Thu, Sep 03, 2026 at 02:39:25PM +0200, Markus Schneider-Pargmann (TI) wrote:
-> The wkup_r5fss0_core0_memory_region was reserved with
-> 0x01e00000 but the MCU SDK linker for the wkup R5F firmware on
-> AM62P defines the DM code/data DDR footprint differently:
+Hello Markus
+
+On Thu, Sep 03, 2026 at 02:39:30PM +0200, Markus Schneider-Pargmann (TI) wrote:
+> For IO+DDR the wkup_r5fss0_core0 and the
+> wkup_r5fss0_core0_lpm_metadata_region need to be accessed before RAM
+> setup is done. These are used to read the lpm metadata region in
+> which data is stored to resume. This needs to be done before RAM is
+> in use to avoid overwriting data.
 > 
->     /* DDR for DM R5F code/data [ size 27 MiB + 396 KB ] */
->     DDR                         : ORIGIN = 0x9CAA5000 LENGTH = 0x1B63000
+> Add the bootph-pre-ram flag to the wkup_r5fss0_core0 node in both
+> ipc-firmware dtsi files and to the lpm metadata region nodes of the
+> AM62A and AM62P boards.
 > 
-> which results in an end at 0x9e608000. For this memory region which
-> starts at 0x9c900000 this means a length of:
+> The board level bootph-pre-ram flag of k3-am62d2-evm.dts becomes
+> redundant with the dtsi-wide flag and is dropped.
 > 
->     0x9e608000 - 0x9c900000 = 0x1d08000
-> 
-> Link: https://github.com/TexasInstruments/mcupsdk-core-k3/blob/k3_main/examples/drivers/ipc/ipc_rpmsg_echo_linux/am62px-sk/wkup-r5fss0-0_freertos/ti-arm-clang/linker.cmd
-> Fixes: 87f95ea316ac ("arm64: dts: ti: Add Toradex Verdin AM62P")
 > Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
+...
 
-Acked-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi b/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi
+> index 45ab9d947b3a..8976c0424cd1 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62p-verdin.dtsi
+> @@ -184,6 +184,7 @@ wkup_r5fss0_core0_lpm_metadata_region: memory@9ca08000 {
+>  			compatible = "shared-dma-pool";
+>  			reg = <0x00 0x9ca08000 0x00 0x1000>;
+>  			no-map;
+> +			bootph-pre-ram;
+>  		};
+
+verdin-am62p has the various bootph tags only in the U-Boot dtsi
+(k3-am62p5-verdin-wifi-dev-u-boot.dtsi) as of now, I am not convinced it
+is a good idea to just add this single one here.
+
+Francesco
 
