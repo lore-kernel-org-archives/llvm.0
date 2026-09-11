@@ -1,125 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5FB247A87C;
-	Fri, 11 Sep 2026 17:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 882B94AA1C2
+	for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 17:33:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789146635; cv=none; b=nwmcAO6W+vBjFye9ZaILx+XVS7IgvcH5Qlc0QgyKvVEVn5OwF/Gff3gjQZwwsXQgSBmX058qj/fCvANhzzP+vptZ7AT3UqO4j3tBXeIwuyoDr6TACPLHDWvCfHmfQrsYnrfLyF+76aJCE6CaoQyzdMvqLOPmqoHd3WV6IdRvnhs=
+	t=1789148022; cv=none; b=l25OoDwlONJVeqsJylTUWXdsWB3qDQ7eDdlalnYRs+3YJIt43+t79aWqnfMcmqwkynQCJYCyK6TpEvwlPcuHWL2uCgE71l8V0PsREuDWbm+Qx0ySY326elBMiv12nNjD97SKXSPZosDH9/Aek9Mz/2JTH2dBXczJcCyNnZarIzA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789146635; c=relaxed/simple;
-	bh=3k91Zqt2eqYWySUfIna8DwbrYNJWFGI0znm7i+mw/X0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YBbSDTnpCkNae047Lb2rpQl6v3HkYj2kx68Qf6oGp7jW/H2YIlkpMlNBIx+JUigJd11a2oT859RJyHowQ4GdiuM1RUzDR4oPwKuXOSwh2+d7coDGcPFiCYO8IoZDmrUZuMqZO9vTtys7UyyAu7BYf3f0qv6EOnPWGGrhrFre43k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PG3Y16fr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789148022; c=relaxed/simple;
+	bh=76bsxwDnANEo0kLB2mrhhQlwm4C2VGFZMyLQwWFFfs0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ihDoIeLXKT7tZzbccHQiRaEJWkIT21Tauf8mChPFSjLLSxutKK6s2FoCcqKtDboIf6zbLD8Cx+IrSdK9I5t0XkiUYZTtq7IMgHqnjyUfE2PGwNdDcRdDYWu6Qfw16TWpo4GAie4VDThqZos3ECWioz+WEQoFNFhlTRw3NQSGVk8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SkB5mUJG; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PG3Y16fr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 827101F000FF;
-	Fri, 11 Sep 2026 17:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789146633;
-	bh=1HTCELUy493iSlQt63EmEKqrhXk7rrP66xQ3dVMR4vs=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=PG3Y16frB0L1z/XkJuGi3P7DH/JdYjk+I1KNwpiYOkhby2s0LUsdQkLWb8ukoyzKG
-	 mnaDISAZvOFCmojimAswTU8YS3K/VFrnPVIii4P4yqJMkekNjUJHaGyIL2TcAXzQS1
-	 AemxLwhNnU80FWe5uGbRDafuMFTPH6peK5iICEbHar8GvU0sHe//GhEriofk5SX8tK
-	 UzkcIx/KvsoR+gZGO1/mh0tx7WfvOwk68NpFxAQla0b2kY+FRk6zt0Px+DeofQ1HIC
-	 ApudwQ+yITQ4wRxJ0f0PvUs0dUVdJTpWUoXDjeli0kKAVsdppC9Md2TQlq/bHMSL/I
-	 SM2u9uTVPdDFw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id 47442CE1902; Fri, 11 Sep 2026 10:10:33 -0700 (PDT)
-Date: Fri, 11 Sep 2026 10:10:33 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [paulmckrcu:dev.2026.09.09a 42/56]
- kernel/rcu/tree_stall.h:332:48: warning: comparison between pointer and
- integer ('int' and 'struct task_struct *')
-Message-ID: <33878fc2-3ccb-452f-8c94-e64f588a2160@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <202609120047.u7Af769s-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SkB5mUJG"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49cd5462b69so959815e9.1
+        for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 10:33:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789148015; x=1789752815; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=oHkfE3imp4BQyC9rRB22q5PBnbDLbNtc6L6K0uF99Ik=;
+        b=SkB5mUJGzmrVEE0x2n00Llybi1gIxbmFLaL/LB7KhIuMuZwfXup0/aNOe2xdi02r2Z
+         J3Ty9K+Ns7z181twTO8Hok2MU5CVDqiRRZA+48mPbPFgPlBQ+lr/V62pY6mGOTOg9xfM
+         XxcMdd+lRHepMxBZXWVQiylL3ovQ6LTTls1eXO5150RcOwijX34b/FK790IxrQR7YiYI
+         p3JrZY2EnUXTgCrZGfyOlDAMXHXVBaDH0NONO5ZWvL8HipbRM29N/jCVv/f1QE7+8SKS
+         sRqyR3V+GFwa5iRhjP47PfqUKPRcQ2bBkkZlPVirRKqtlrMEnHkbXDdf55CX2GMY1g3R
+         fdJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789148015; x=1789752815;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=oHkfE3imp4BQyC9rRB22q5PBnbDLbNtc6L6K0uF99Ik=;
+        b=AVVMa0jNL8+6+M7IyA4h6jzTz46mLrSrMq5r4WCM2jYbduq2v67a4B46nifziCK/99
+         r0IVQSoJz5TWwdv3Lw04HWT7tqwyQ1qJNk6jrmbkPH5QOSew5Xnh/pHDr0IWaPjZgEds
+         MLP7bUKEnE5bJs8/aV6zdvEtNqTZ8tpV26QzmEPMldsXRb0RssB/RMMhCyDrJUA+Oqlb
+         oY06wNF29Om9Rjats0KxKksWPqP5Zh4GC4VYxN2A0O+K788lIiWt+6F2LOu+e6mFqbX7
+         C+y485t57fDcVz1rkbHHD+aAq+i6y3c6gCI+CVeiCFOB6m6wH5ue4QAvAP2NDEhY4dOU
+         HoQw==
+X-Forwarded-Encrypted: i=1; AKwUvBzSPBPfgchfmiyr+SB4EnNR2Ywp1sOf7jvhby5m3exEO1Sdv2y05kyccMEVVJ/TzI4oA24Y@lists.linux.dev
+X-Gm-Message-State: AFuF++m7Olw6J2GUofrITTlYgodJpGoVqH5idCNYhSfxFO+fQRaV2l/h
+	iJk6RY2vB6m10/3ueQcQTFJdsHMotJr2rps+b0mTlFGXp468dSGHB5Px
+X-Gm-Gg: AYBFou3EPdmYdOdLAUpA6WoCpZ6fkMbTfUkgLk1tZbCMcIaIMo74i11lmaTZrEAe1ka
+	qFB7AvlI90UEpZON952uil3S6/6/P9gMfipREIBOee+a5Y+bC2QNMAoELCl35Ak6rPJhJCea1LQ
+	mel4DGj5e0czgPxTGhgDqILMRkOGJMY6qvtCYtUqkQJTDXF3sDMZ2gKipG0i3VYu4LPSHT8m68B
+	/KP3BbDNR3lcVrVQmLgSUBMbW0EA9md+eNZvr5kf6CUOTSOHi+k/uDy92OvLW4GMmv+0mJQRuj6
+	WCiLWeRWJX+Ab+2VuKUrhVDg6pwNyowvBqJN4NRuDgrEU/usQvdgpasK5vXKTokMBVKz49dcAX/
+	fuFniFPSeeuRWVEHaRGVEoLYHXYIqMt4Kdcz+0zy0mT2zOECpYQrsUbcHPyaKaR8lktZ13eJttf
+	TpuVxEQK3JTThnJ98Zeyth9rAi1FS+PA5dCK0W/XVKmPaWJMfBoNlZvQb21i+hhtJFY5IzPNcz1
+	eYUT5byynylebW8St41sraBAZ3qy/CtpKwn
+X-Received: by 2002:a05:600c:4e0c:b0:49c:ed94:cdd8 with SMTP id 5b1f17b1804b1-49e6198734emr158528945e9.6.1789148015226;
+        Fri, 11 Sep 2026 10:33:35 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e6576122bsm80821885e9.2.2026.09.11.10.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Sep 2026 10:33:34 -0700 (PDT)
+Date: Fri, 11 Sep 2026 18:33:33 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Nicolas Schier <n.schier@fritz.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, "Lorenzo Stoakes (ARM)"
+ <ljs@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, Nick
+ Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, Masahiro Yamada
+ <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer
+ Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
+ Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Peter
+ Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun
+ Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?UTF-8?B?QmrDtnJu?=
+ Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
+ <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
+ <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
+ Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet
+ <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 12/23] kbuild: avoid re-running compiler and linker
+ probes
+Message-ID: <20260911183333.1df0f2e2@pumpkin>
+In-Reply-To: <20260910-translucent-sweet-sidewinder-7acacb@l-nschier-aarch64>
+References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
+	<20260908-build-speedup-v1-12-5dc1ac01672d@kernel.org>
+	<178901395292.3971858.13236774094648272066.b4-review@b4>
+	<20260910-translucent-sweet-sidewinder-7acacb@l-nschier-aarch64>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202609120047.u7Af769s-lkp@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sat, Sep 12, 2026 at 12:28:38AM +0800, kernel test robot wrote:
-> tree:   https://github.com/paulmckrcu/linux dev.2026.09.09a
-> head:   d61d9b5dd56c6cf72b70bb5fb52b213ead9f7765
-> commit: e33488c41be623f7c7ef5b8763e20c45f1364d1c [42/56] rcu: Add running and boosted indications to RCU task stall dump
-> config: powerpc-tqm8xx_defconfig (https://download.01.org/0day-ci/archive/20260912/202609120047.u7Af769s-lkp@intel.com/config)
-> compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260912/202609120047.u7Af769s-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202609120047.u7Af769s-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    In file included from kernel/rcu/tree.c:5112:
->    kernel/rcu/tree_stall.h:332:8: error: call to undeclared function 'rt_mutex_owner'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
->      332 |                         if (rt_mutex_owner(&rnp->boost_mtx.rtmutex) == t)
->          |                             ^
-> >> kernel/rcu/tree_stall.h:332:48: warning: comparison between pointer and integer ('int' and 'struct task_struct *') [-Wpointer-integer-compare]
->      332 |                         if (rt_mutex_owner(&rnp->boost_mtx.rtmutex) == t)
->          |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~
->    In file included from kernel/rcu/tree.c:5115:
->    In file included from kernel/rcu/tree_plugin.h:14:
->    kernel/rcu/../locking/rtmutex_common.h:231:35: error: conflicting types for 'rt_mutex_owner'
->      231 | static inline struct task_struct *rt_mutex_owner(struct rt_mutex_base *lock)
->          |                                   ^
->    kernel/rcu/tree_stall.h:332:8: note: previous implicit declaration is here
->      332 |                         if (rt_mutex_owner(&rnp->boost_mtx.rtmutex) == t)
->          |                             ^
->    1 warning and 2 errors generated.
+On Thu, 10 Sep 2026 17:42:35 +0200
+Nicolas Schier <n.schier@fritz.com> wrote:
 
-Good catch, updating this patch with attribution to #include rtmutex.h.
+...
+> Yes, skimming through the patch, I thought about that, too.  Moving more 
+> cc option checks to Kconfig will make building out-of-tree kmods with a 
+> different compiler more dangerous.  Maybe we will have to make the 
+> warning in Makefile's prepare (external kmods) target a bit louder.
 
-Thank you for your testing efforts!
+One problem is that distributions have a nasty habit of shipping kernels
+that are compiled with a different compiler version to they actually
+ship as a compiler.
+In some cases the versions are clearly the same - but the version
+strings differ.
 
-							Thanx, Paul
-
-> vim +332 kernel/rcu/tree_stall.h
-> 
->    311	
->    312	/*
->    313	 * Report out the state of a not-running task that is stalling the
->    314	 * current RCU grace period.
->    315	 */
->    316	static int check_slow_task(struct task_struct *t, void *arg)
->    317	{
->    318		struct rcu_node *rnp;
->    319		struct rcu_stall_chk_rdr *rscrp = arg;
->    320	
->    321		if (task_curr(t))
->    322			return -EBUSY; // It is running, so decline to inspect it.
->    323		rscrp->nesting = t->rcu_read_lock_nesting;
->    324		rscrp->rs = t->rcu_read_unlock_special;
->    325		rscrp->on_blkd_list = !list_empty(&t->rcu_node_entry);
->    326		rscrp->rcu_rdr_running = task_curr(t);
->    327		rscrp->rcu_rdr_boosted = 0;
->    328		if (rscrp->on_blkd_list) {
->    329			rnp = READ_ONCE(t->rcu_blocked_node);
->    330			raw_spin_lock_rcu_node(rnp); /* irqs already disabled. */
->    331			if (rnp == READ_ONCE(t->rcu_blocked_node)) {
->  > 332				if (rt_mutex_owner(&rnp->boost_mtx.rtmutex) == t)
->    333					rscrp->rcu_rdr_boosted = 1;
->    334			} else {
->    335				rscrp->rcu_rdr_boosted = 2;
->    336			}
->    337			raw_spin_unlock_rcu_node(rnp); /* irqs remain disabled. */
->    338		}
->    339		return 0;
->    340	}
->    341	
-> 
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+David
