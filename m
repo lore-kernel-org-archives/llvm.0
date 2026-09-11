@@ -1,163 +1,160 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464B3457E69
-	for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 11:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789127860; cv=none; b=cGhKvzeheAc2vch+JjGwmA/ijdNa7u4aLUxPBp17bJlY6I4qJVnGiwKLYYHdCJto8gPzdFDMIk/T2WLOybBM6QQ3g8qqQaKqRKKwpFKRjA+CRMSzKYMgBChWj6svopqK6OJHIB6vCcFYl9cRgufSL2A1boLibVvD/YQK6mvWrBg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789127860; c=relaxed/simple;
-	bh=1lRC8ZGjaJk1CFMMkFB+zwt0ch81ggJd9O2XFlK/4VY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=V3T6JyUhl1123WWWhhVSYVIwWzUYvDjbEoVoeRqzPjFQLHcnRRePqixi9nqaIH3SW73NNH6+MlBbd/hpcUPlh/suTX8jUTWGJVdLgBg0zeN/jAsMyIZ0wwCzD7gjvtSG9A2fzX0TF64TanTymD+kQbmvxmSWry00YYQd2S3GObA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=dUAqQKqO; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35595438466
+	for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 12:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.227.140
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789128021; cv=pass; b=XSWvlYiKEZeRk3kguEBoKU+aEvrcBvmXG+vYNuhmzp5lW9tvZGh7r9vU0TVwKv2hG9X1vj7qsKU2g5gduw4zrbfLR5uPheWNcbqCPU97Fj/xxluF11gwmb51DyJrBKDLQC4fLm0sTFF7ud3xkgd6l70T1c1ALG62XM69L2E1sfs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789128021; c=relaxed/simple;
+	bh=3SyHymAnrjlvPO2mb9pb0A4ZCmnI2yTAOAi1u/9obmE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KhGvEyJX6ovYBb9gfOKLLu2rqCN0XO8eU68M0D30W/CqugONZrwxJkCwRqaOaUYk3PklzkVrxxSEBVgqdql8D8m0Mx5CgxEicdvnRMc/J8cvcUm8RCLMc7yAI0uDuLuS+8ExVGWsuuQFoeSFEzcGChkMp5WoRQpAceYKExViSDs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=srphzZSQ; arc=pass smtp.client-ip=74.125.227.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="dUAqQKqO"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-49a97714f5dso7558765e9.0
-        for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 04:57:38 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="srphzZSQ"
+Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-398beb616f5so265778a91.1
+        for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 05:00:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1789128018; cv=none;
+        d=google.com; s=arc-20260327;
+        b=NqTXIoukZfk1FFnkPG6S7h0h/g9QHy4yx+Dc6K2pgETZhg5W+dYfhm9JtOSpeaJ/w0
+         T0Qniq5flfvBdDnHCD12seyaX2ePpEPnSd/5OatgstIkj+GEM3GGooR9GVaFR9VUb4w1
+         wQ64LNMbuaP3bw0cgeioB2DoDRs/98BXhKeJtpCFAHHqOo6YQmeUsvithl/JS5pkRkVU
+         YTwJnliOteJBHRXU1plsqGE6SvGIql8wJ77DfOiPG3R5vqoJMpZklgsRNijwi1ncWDSG
+         Fap1jKz8wJsG6JcIhiEGxDdeX8FbHmaC0lK3ekGqVhQ50XauNqUhLbTIEX/2zd/cuV2H
+         h19Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=jU9kvyfbvdodjOEWNhAyWrD9R6/DXaJ1BcW1aCO08yw=;
+        fh=VCfzNkzKYrBzfMjm7/gC3OWlq4cBwFG49dvFHwK3n4o=;
+        b=Fbm4lx3rKseQbgrYmG2GejowlJwQ9k0n1LZe50a2TTc/+HvunIhvS9CQw0OLzrQYag
+         gfuMxWVorh6dWF8HhflvxOSeEp+bJicsXFT+otiVP8HxiHdLPBgXNx8NmS5gHxdKy4ni
+         go4+ycbY+UnHZpM4eZPUfv09/S5iCFsp5Wjoef8gPSRVH/3ZFItqRlB3hcNnK7MoJ8eC
+         Ho46BCSSJvReHewMffowFS/48oFxAhqCUUB1NeFTXWN/mgDS3uEU+okkpzthc3wDKrub
+         E4yobWRu/LPpFmxuo3rL7Yem1P0Nv811mA0Ytbd5WjfHh9x0B/bSkY2Lv9H2G8oFYgsn
+         hLFg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1789127856; x=1789732656; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wr7n2cO3L1gr9+vq7aPZsfQwfFiNJgEahYqoxuJotBY=;
-        b=dUAqQKqOVyGgapLoqXc6fHZzo0B8s38bInmc9XE7Sx1R84VkhdaJ4HJtHd0aHcrQwJ
-         YG0muJeqxZvluQctpkQX9VVTM8yFlNmFk9/njKKdjNrEy+Pi8w1bWtj0+YKWinEyXPmv
-         Ti8VIp6Ha017NYWeW80A1x9QRiQV6Fi4NoJm9xSmz7+ilQkjD7XCwjAo0JL1LLibKYwP
-         TJlT4287SRxKGIs6ds6tozadfjweiY+M3S5xS4eZS5T+mDShZ1Vvm6DqOuiPeXxV/C9V
-         kfN7Ujhj1FpvOwOARtQX0JfmWaz3u/Ui7zTYr9754kxfSMofYTQIv5jmXSJMohRw1JZw
-         Zfsg==
+        d=gmail.com; s=20251104; t=1789128018; x=1789732818; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=jU9kvyfbvdodjOEWNhAyWrD9R6/DXaJ1BcW1aCO08yw=;
+        b=srphzZSQNZk458U//++tvH6BzqxuknyhrGHVuHACWt6wIkL69FCL4HrQIbeLe/BYJt
+         /2GIYpN2pOXe3ZuYKkz2+vbmuWSxWHynH0iYfSOVGyfM/ceKssQaM2EO7JHNS4q8UFbc
+         oJgFFocw0+3kwSHs7tmb9R1hM5yVhnS9w2ZbehT98sqrPtLZ5qZ3xAzcB5H6GZZ+Lp9y
+         dmu9Qrx2PZugsgu2Zw91wJYZAtKRpbO7k3cyIpE7oYYvNUKnzvMgBPtS+dpxiVFqhqMx
+         U08PNRTx5m/pHYBSvYyZQfPltk3gk72sfR8MgRz7JcxtE02FuJMErPnyadXHAR81AiXR
+         rQRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789127856; x=1789732656;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=wr7n2cO3L1gr9+vq7aPZsfQwfFiNJgEahYqoxuJotBY=;
-        b=IYU6J0cJ8ORHgvnox8wRAmah6dVUnE6v/J1LeCne0Qg8yOtIMpXiyVNzgnS5s7K4cD
-         Ij7BiI5MivsOWyX3+0YN2fF2VPX/rzPP/yZXGZo6U4FH+7nA3XH+8aL6EELi3F+3jasq
-         20AxN6jXMpOSoS8+eQuLvBKFnZLTr6glO3nLOGz/crL7CxKGF2FTM6z+NmbH0XQAEMuN
-         v3yMZ9XF24EMab9uhIgEg5h5yQNgtFHqrL+WAgVz79LN3X6Ft+giFKX5p/CsiZhJ2kv1
-         0Gy43GT/EpvZjPA7Mr7dBGH59WSkhVDUs16Jpg3ed2fyasiGlsbUYdGub4AYYuX4r7zf
-         +Glw==
-X-Forwarded-Encrypted: i=1; AKwUvBzcy+A+hUJIVfn8+uJND20F96yHXYXmRJ0XviOUpi5IxIExR+sF6RJT+kCAgyiBA9aDtuBC@lists.linux.dev
-X-Gm-Message-State: AFuF++nODXofbdD283f5IVjkDYq/8NMwGF0/XSBRZUhBk8QPbXAh/8FE
-	KyZWecKx7rB6aV2lrrm5WH9rzGEWp8o6Grj6RYGpAoLatnkZFNYOcNil6W2p7mDdf3w=
-X-Gm-Gg: AYBFou2P3SJ3W2Z4Vdv7ZlH3iq48jetx7Qb3kxuX0d9vLHhkVe9ajNL0Q8BiKIo26q8
-	AMApH2B1SszyZIqr7JG0rczarUY0rErvEqUU9l9MF9OvAet9e7HCv3uIZ5fqnzcHN96DMJ+CTCs
-	SKStROoYw/Y0KOHdotcmBCT82DSqYhXJ8XSpZETf+RbkBgLJ1RrmBSMviGzcMesJ99NwsTYwdPQ
-	A/Pl7e4j25aAeAhd+/QQ9s7BgKo9T5yXHsV08hwZxWQPP7yDx3BW72EDoVe8rwOwtr1Qz6RMkVx
-	nahTSWxCnKWmR64j/XuzBxfZ/L5P7gIBh+fLflWM9ZtutpC6MiTSHJUXag3J/eKXjVDIvnC2DNh
-	wfRzPUqijNJaYoFR1Cu29yPyP2UdaYm4UKFQgx1Unf4k5nxkUcrDq6/IUQyy0VK3bHE6XLfdosj
-	HR/M4ZtcFgPK5GtS3mWhbHKQT+vLUR3KBBMUde/Y3ird6IR2RrmbvxRPd8xW8T47lVkGoAtyfA3
-	pQD34pYf9Trx2Y/SkOb1VGwk2gQ2CSzaV3+
-X-Received: by 2002:a05:600d:8496:20b0:499:8aff:59b6 with SMTP id 5b1f17b1804b1-49e6199234amr30006585e9.14.1789127856324;
-        Fri, 11 Sep 2026 04:57:36 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49d26c300e2sm164777985e9.8.2026.09.11.04.57.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Sep 2026 04:57:35 -0700 (PDT)
-Message-ID: <f24ddba6-b7fa-434a-8a2c-9f04af6969e6@suse.com>
-Date: Fri, 11 Sep 2026 13:57:34 +0200
+        d=1e100.net; s=20251104; t=1789128018; x=1789732818;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=jU9kvyfbvdodjOEWNhAyWrD9R6/DXaJ1BcW1aCO08yw=;
+        b=OqWau5jbOEktgm2jkXesXYb9U3uuMRuVlcpzNWS2Q36BX1V4XFowzm1a7wbi51rE5G
+         /OfUneIK116Go8KOXQKnKEy+hhXOe6uGSHvQcf3yj9t+q7u/9cv5qIgQpjmPBFHtIJey
+         5Wh9NPlObM6CtUkSIs5+f6T0V7ZUtGC+LY2f3pPqNVblO/KawTZu+tcT2VXz+/+UVKMh
+         sCb0rIPLXE9RUilcNmk9LclwEwgVAJsvqYV/WdbGaZRMPunYSlUUk1Nb5OHWOZhDGQ2C
+         IhEUq0EaOea/1qB4MEvTgvLbzlEu6Swbc+0G08Y8mB9vtvFhvcJ8NdR39eV2jKlYA2On
+         Wcgg==
+X-Forwarded-Encrypted: i=1; AKwUvBysFYribpyyjBWt3YOn+jiHIEwDbuTYh/sjIssNp1ERWsO4rk8bw30cH2KS/LG4R8pKxWya@lists.linux.dev
+X-Gm-Message-State: AFuF++nNIqR3A7kvs6R4HF3P7baMTXFznj3qiwfBDKIkmh9UtoI9hXe/
+	BKustHYVfShKJ/8fwVM9nM8mmbScVc4r6FrNnBtJGJd2S9cOfKPYTKvaIzpYwl9JYKQxlYI85Pj
+	Dm6jsezUB2vuYly2FCzT+gHk9+FXsoIg=
+X-Gm-Gg: AYBFou2NQSEcwtqoEhx4cK1d+VTlVrd7TiFciH6EndWL3/zCYQAd+GlPM5WCC/2eKiF
+	G3c2rC7w6owbs9xH9oOwvGO1l0b822tz5swm1kPq8VfAJzyxuw6J5z9w2Q3o/C1andPxUNCvTdd
+	MUxOUWsDEx3O91guECdg1ulhlXgkCcHmSP6bYGcxlbWzWavbbczU0ZQ89jbzREDIk+/ZdJl1M5F
+	OiCWVTlHTeJG5x67X3d+GPxuig3DKARBaaxWDQg1zhC/ot1/as1DZhZx0m8tygXBBUqZd0ZlhFS
+	cJf6WoLvDlQjKQzTZ8m9mlHOa0UAxWSrKSAEASGzmenckidIWxQUHqtKhATo8Bq93u3QxkLsAP2
+	BMvGH9my68zrDkRojxCYdZfEkHg61zSDZcRLxqrP/lqRKmN9Qe4TEnTb7l5M+BWsLTM8=
+X-Received: by 2002:a17:90b:5108:b0:38f:657:6823 with SMTP id
+ 98e67ed59e1d1-39d97f392d3mr3889515a91.8.1789128018117; Fri, 11 Sep 2026
+ 05:00:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 13/23] modpost: hash module source per-file, not per-byte
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Ard Biesheuvel <ardb@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
- <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
- <20260908-build-speedup-v1-13-5dc1ac01672d@kernel.org>
- <434a7a10-d83e-4402-be91-816bbbc15bb7@suse.com> <aqPYvKR_eRsFlEd-@gremlin>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <aqPYvKR_eRsFlEd-@gremlin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20260903-topic-am62a-ioddr-dt-v6-19-v8-0-74c650dfdea6@baylibre.com>
+ <20260903-topic-am62a-ioddr-dt-v6-19-v8-6-74c650dfdea6@baylibre.com>
+In-Reply-To: <20260903-topic-am62a-ioddr-dt-v6-19-v8-6-74c650dfdea6@baylibre.com>
+From: Stefano Radaelli <stefano.radaelli21@gmail.com>
+Date: Fri, 11 Sep 2026 09:00:01 -0300
+X-Gm-Features: AcwNN1UryKTs1Lw-KY6R7BmulMcgHb-91PJOnn7PiBP850ZNAVItrIcXBzp-x6o
+Message-ID: <CAK+owog22cPgYj9muDUJXcTx+k9eBmPz1jfi8D9cx3H-xo1mKQ@mail.gmail.com>
+Subject: Re: [PATCH v8 6/9] arm64: dts: ti: var-som-am62p: Fix wkup R5F memory
+ region size
+To: "Markus Schneider-Pargmann (TI)" <msp@baylibre.com>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Judith Mendez <jm@ti.com>, 
+	Daniel Schultz <d.schultz@phytec.de>, Andrew Davis <afd@ti.com>, 
+	Siddharth Vadapalli <s-vadapalli@ti.com>, Paresh Bhagat <p-bhagat@ti.com>, Bryan Brattlof <bb@ti.com>, 
+	Jai Luthra <jai.luthra@ideasonboard.com>, Devarsh Thakkar <devarsht@ti.com>, 
+	Beleswar Padhi <b-padhi@ti.com>, Francesco Dolcini <francesco.dolcini@toradex.com>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Vishal Mahaveer <vishalm@ti.com>, 
+	Kevin Hilman <khilman@baylibre.com>, Sebin Francis <sebin.francis@ti.com>, 
+	Kendall Willis <k-willis@ti.com>, Akashdeep Kaur <a-kaur@ti.com>, linux-arm-kernel@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Hari Nagalla <hnagalla@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/11/26 12:41 PM, Lorenzo Stoakes (ARM) wrote:
-> On Thu, Sep 10, 2026 at 02:52:50PM +0200, Petr Pavlu wrote:
->> On 9/8/26 10:55 PM, Lorenzo Stoakes (ARM) wrote:
->>> modpost spends a long time md4 hashing module source at a per-byte
->>> granularity.
->>>
->>> Fix this by doing this hashing per-file instead by accumulating a per-file
->>> buffer in parse_file().
->>>
->>> All 11,189 .mod.c files and Module.symvers were confirmed to be identical
->>> with this change applied.
->>>
->>> This is especially impactful for allmodconfig incremental builds (where
->>> CONFIG_MODULE_SRCVERSION_ALL is set).
->>>
->>> Whole build, 128-thread Threadripper 9980X, best of N runs:
->>>
->>>                                          before   after     delta
->>>                                          -------------------------------
->>>   x86 allmodconfig, touch mm/vma.c, gcc    40.6s    38.2s     -2.4s (-6%)
->>>   x86 allmodconfig, touch mm/vma.c, clang  36.2s    35.0s     -1.2s (-3%)
->>>
->>> Assisted-by: LLM
->>> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
->>> ---
->>>  scripts/mod/sumversion.c | 56 +++++++++++++++++++++++++++++++++++++-----------
->>>  1 file changed, 44 insertions(+), 12 deletions(-)
->>
->> Support for the module srcversion is being removed in "module: remove
->> MODULE_VERSION() and srcversion" [1] and scripts/mod/sumversion.c should
->> be gone completely.
-> 
-> Hmm, that series doesn't remove the script though, is that planned as a follow up?
+On Thu, Sep 3, 2026 at 9:40=E2=80=AFAM Markus Schneider-Pargmann (TI)
+<msp@baylibre.com> wrote:
+>
+> The wkup_r5fss0_core0_memory_region was reserved with
+> 0x01e00000 but the MCU SDK linker for the wkup R5F firmware on
+> AM62P defines the DM code/data DDR footprint differently:
+>
+>     /* DDR for DM R5F code/data [ size 27 MiB + 396 KB ] */
+>     DDR                         : ORIGIN =3D 0x9CAA5000 LENGTH =3D 0x1B63=
+000
+>
+> which results in an end at 0x9e608000. For this memory region which
+> starts at 0x9c900000 this means a length of:
+>
+>     0x9e608000 - 0x9c900000 =3D 0x1d08000
+>
+> Link: https://github.com/TexasInstruments/mcupsdk-core-k3/blob/k3_main/ex=
+amples/drivers/ipc/ipc_rpmsg_echo_linux/am62px-sk/wkup-r5fss0-0_freertos/ti=
+-arm-clang/linker.cmd
+> Fixes: 571562e76458 ("arm64: dts: ti: Add support for Variscite VAR-SOM-A=
+M62P")
+> Signed-off-by: Markus Schneider-Pargmann (TI) <msp@baylibre.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-am62p5-var-som.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62p5-var-som.dtsi b/arch/arm64/b=
+oot/dts/ti/k3-am62p5-var-som.dtsi
+> index 8a8dec80cb30..3d1a2c5bc464 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62p5-var-som.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62p5-var-som.dtsi
+> @@ -71,7 +71,7 @@ wkup_r5fss0_core0_dma_memory_region: r5f-dma-memory@9c8=
+00000 {
+>
+>                 wkup_r5fss0_core0_memory_region: r5f-memory@9c900000 {
+>                         compatible =3D "shared-dma-pool";
+> -                       reg =3D <0x00 0x9c900000 0x00 0x01e00000>;
+> +                       reg =3D <0x00 0x9c900000 0x00 0x01d08000>;
+>                         no-map;
+>                 };
+>
+>
+> --
+> 2.55.0
+>
 
-My reply to that series [1] notes that it should also remove
-scripts/mod/sumversion.c. It should be done in the next version.
+Reviewed-by: Stefano Radaelli <stefano.r@variscite.com>
 
-> 
-> I guess I can drop this patch from the series then :) Also patch 17 I think?
-
-I agree. The module srcversion is no longer needed since build IDs are
-nowadays the standard mechanism for providing effectively the same
-functionality. While I'm not sure when the mentioned removal will land,
-reviewing and polishing this patch and patch 17 would IMO be wasteful at
-this point.
-
-[1] https://lore.kernel.org/linux-modules/4e321525-708c-4964-9937-d94ea27e8d85@suse.com/
-
--- 
-Thanks,
-Petr
+Thanks!
