@@ -1,332 +1,199 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3634396B9D
-	for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 23:33:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0122D2222CC;
+	Fri, 11 Sep 2026 00:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789083222; cv=none; b=qngr8CVe/pzUDFAC7e8PEeib+BwBu5kfenq5q0d6QROM53xTURAN6twACrcAP6nGcjvlgMF4mTqDQXfvr7B9tylMEIENgTiAXH8o+EB25vgODYalPaSNeFcCXe1YuSku7O2qDV1Fe8IP0wclBcABYAIJCgwLyN6Lhy5Tz0lnv70=
+	t=1789087127; cv=none; b=LHt6YY6rUJVkeIKACbedmV0M90jhDiXpExp0y6ZLGie9ZG8n3VulXww1XaUg+/t95x3k5y6Z85OSsiTf9G/6Mm2IEzc9iOMSbysQc+1ykT3aEcO4wG63WiBhRdd1QHHiR6ZaD6v2GEYavlQ9TlJfdqNbqcO5TTsdNAaRJDQ7pr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789083222; c=relaxed/simple;
-	bh=txHUBulABd3m0OF7Y53+6fpuw2qvy7g4Ft1wH9BXuaY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DZGESiKEQ5CHWfrqSk1mQRovsDotkDz1qLLA7wC+r5okj4sfqDK8IFQhvXHjN84VvFEMiTtGo/rxL+7NLa4Hbytn3nhhSywRAAAUWfVpYD90fSykQKWw8SZcztLd41uYB/mAfdZUWw2uhUzDZr7Cw/idt4S2ngOn51AVoBccmvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H59Yt6mJ; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789087127; c=relaxed/simple;
+	bh=NeXt/VQR55oQWvrZNtGzLa5p1Y9eazGeFFKk5W/tI6k=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=hX0WUq1LwUhCc7WajTUJQaL+szqBpU/07+ZCmVKSF79/NkiRTUD+84ykPeru9PkZq8P2fQM81ZyJYUu/ZYm2OToZs2mBNi2L1Zir+FVhwZbexdNWrnaCNsGBIYsoknQYh/nPZKI98kvx88H5dG6Dj5h0Tm8PRGvIouK4T5Mznbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CXVFN8ez; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H59Yt6mJ"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3856d6fbcb3so287723a91.2
-        for <llvm@lists.linux.dev>; Thu, 10 Sep 2026 16:33:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789083217; x=1789688017; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=uKqFigUfUBeSnFW0KPe67v5MSiJ+XREL1Pj3ehWoLGc=;
-        b=H59Yt6mJCA0lCKL6Vl3L7nsM9NqGztaMRbVkssf/LMAo4kPbtpBhTOAs9lGO/GflDT
-         a6Z6d1Hhe0TaG1PmKjqydXv3dK+i+Frbld5SLhJQJqhf1atRI8KkoQMUiDrOLoC6sL6V
-         G98oe2TMaWI29GX42iGvXpULDUSPpgTLR4DhvQZ5M/hcvqkUCelH6J2sLSiPAoIfT78P
-         F84lPiduNjxO+1ihGfTC8nh1rIOn73eo3tGkwus3PONFAyfb8D+ntFFQh2FvioYp+Mk/
-         qHTXrPX2S0XkySK5+ZVXdQn0VuIYLY8dxL7s3XPjuL0wUCJxZsQ1uaevNtuJTDx1XmBi
-         n20Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789083217; x=1789688017;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uKqFigUfUBeSnFW0KPe67v5MSiJ+XREL1Pj3ehWoLGc=;
-        b=nUvD6UQgbWkylScHde8+I19uViTy+hFcetY5bvsuyjiZqL49QwOMPE7TTPJdQYXd6F
-         zLGgZSTwh0UsZB9OOMA/7nY+PHLSYb4vWRwZKQJ16l193mxcrWe9R7v0KKPoapaYI1IS
-         UdY3O/cDH50BUCNJBbwh44DHETpqPbMPooWqXRlCtsole3uAkmDh/Dku9HGyRgqKDVut
-         pI60sxq9WXkcs1NgZjjlCr8Z8720F1DZ9dkCp57yB2lLwphTKEMW9+HlFAvvmSpUQ9LD
-         jCgeKXubugPkIQ+WiihoIKoBD2clje15ru3KFzaY3NBa/K242FXJnOMIGdahASFuR3Dj
-         CZ6g==
-X-Forwarded-Encrypted: i=1; AKwUvBxHBlNmyNOng6zN+SKvJXJDX2LdgOnIQNW1bLr5RZEJQ1p9BzOxmJ//yJcdQ2RgO/ZHAyz6@lists.linux.dev
-X-Gm-Message-State: AFuF++knpdQKMBX6KpZuWR599ODymFdXqUnQovVEqUWyxbZX4bL4142/
-	elEpRk8JQ3r3NJyzvncJik4xkwGnwaMjp/l9pi7SVS2s/EuXlxZXOy9f
-X-Gm-Gg: AYBFou0Ke4mtF8F9ENNubFZS3CB+GG9BNu5CkIBE+YOv8jhCbk571jP5MPqICFFSeP1
-	DT6jMnyJ7lNUYbffwr/mYYoJAic2JQHPZBi5HDC7yCXhbbXXMfMBuUCiyZJhq+iHLs0zhWpubC2
-	vgAE2dqU8VwK+YVUBKNxiLOK/WA3d8rhEZqP5qkb+7yIuwMRKGurGCIJwK5vKRkRN4XIHdzjWhK
-	A4alJwfTkxJUkCfG3sO0e5ugAscd0wpl/IaWF04m6emichDj8bs9ndoYupeeTveuAUZzBTBkUpk
-	BW0N738hnY/5kr62MiNNzMtwH0Ym53NtlhseETUgx+26an1u6uroVCdy6bv8oi4oNkb9u5YoUpQ
-	FSGsut46DY6SmE/ww9J8Txd/dKy2vqYHFlXz4Bo14KPgyeIGdFY867xN8R512tyM7UGbgQvzUS7
-	Htt5Jtbq3P1OQUm37w9ID3la6Emz/uqDU32znav89ZHXqA9euTJVq86P8Ln3QNoUrY2LfUzpvFi
-	HhB
-X-Received: by 2002:a17:90b:4cce:b0:38e:7168:281 with SMTP id 98e67ed59e1d1-39d9bec4d91mr1889561a91.10.1789083217212;
-        Thu, 10 Sep 2026 16:33:37 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:43::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14365b97994sm2817540c88.12.2026.09.10.16.33.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Sep 2026 16:33:36 -0700 (PDT)
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Viktor Malik <vmalik@redhat.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Ziyang Men <ziyang.meme@gmail.com>,
-	kernel-team@meta.com,
-	linux-kselftest@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-mm@kvack.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 4/4] selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
-Date: Thu, 10 Sep 2026 16:33:03 -0700
-Message-ID: <20260910233303.1063501-5-ziyang.meme@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260910233303.1063501-1-ziyang.meme@gmail.com>
-References: <20260910233303.1063501-1-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CXVFN8ez"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789087126; x=1820623126;
+  h=date:from:to:cc:subject:message-id;
+  bh=NeXt/VQR55oQWvrZNtGzLa5p1Y9eazGeFFKk5W/tI6k=;
+  b=CXVFN8ezeueFctGQSlETywHYDs5tPzPyFsIZcXobuQbVBeri7rF5qRe8
+   yw7Z2SrLHhensYyFHX+M3Lr3q6MwbQE6QANJli0Ly+/Xgpi19WrL9hZm0
+   1pIqpZNUUo4nVILnT8+3KA4l42joejqbzXtPC0YAqzMLoeMCMDW0NlzUW
+   ha73LbfsD9HeK5ZTXwCajz5cpfFmYYg4ayOVPOBOXtijFyyLMr3rlhZ/y
+   y7BddLmyomQVStZTTq53B0sVsorO2pLGJENxWcxSq9jWnMgitlwSZLLUY
+   EqZi/S2Hol+RXZavQheX4gVRo6wSoM6CAvjlDZgepvBn4T1LeykfNQI1D
+   w==;
+X-CSE-ConnectionGUID: unNnhBr2TUezf7vbtTJVwQ==
+X-CSE-MsgGUID: +iLRlCWyQAKnCKyikXE5bA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11901"; a="89482939"
+X-IronPort-AV: E=Sophos;i="6.27,96,1787036400"; 
+   d="scan'208";a="89482939"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2026 17:38:46 -0700
+X-CSE-ConnectionGUID: bu7mjKC3Q1Gz6iUNBsHMsg==
+X-CSE-MsgGUID: M6AjY437SZiM4AWYaVGBtg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,96,1787036400"; 
+   d="scan'208";a="273720633"
+Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
+  by fmviesa004.fm.intel.com with ESMTP; 10 Sep 2026 17:38:40 -0700
+Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x4pGu-000000000iQ-2XxP;
+	Fri, 11 Sep 2026 00:37:58 +0000
+Date: Fri, 11 Sep 2026 08:37:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Muchun Song <songmuchun@bytedance.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ David Hildenbrand <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>,
+ mm-commits@vger.kernel.org
+Subject: [akpm-mm:mm-new /391]
+ arch/powerpc/mm/book3s64/radix_pgtable.c:1274:46: error: call to undeclared
+ function 'device_zone'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202609110857.T3uVHRo8-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-sched_ext carries its own ~130 lines of libbpf + bpftool + vmlinux.h +
-BPF-object + skeleton build machinery.  Replace it with an include of the
-shared tools/testing/selftests/lib.bpf.mk, making sched_ext the third
-in-tree consumer of that fragment, after selftests/cgroup and
-selftests/hid.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-new
+head:   1f78f28a2945f9e856b4ea8428ac41a6788e4b67
+commit: 88ef4ca76f70778f2f51c9e749dc9bcc607a2424 [/391] powerpc/mm: switch device DAX to shared tail vmemmap pages
+config: powerpc64-randconfig-002-20260911 (https://download.01.org/0day-ci/archive/20260911/202609110857.T3uVHRo8-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 96295a1412f9afbee9d4a3c2701e83f5a529a9cc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260911/202609110857.T3uVHRo8-lkp@intel.com/reproduce)
 
-All generated skeletons and subskeletons keep the same public API, and
-the runner is built and linked the same way.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609110857.T3uVHRo8-lkp@intel.com/
 
-Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
-Suggested-by: Mykola Lysenko <mykolal@meta.com>
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
----
- tools/testing/selftests/sched_ext/Makefile | 149 ++++-----------------
- 1 file changed, 26 insertions(+), 123 deletions(-)
+Note: the akpm-mm/mm-new HEAD 1f78f28a2945f9e856b4ea8428ac41a6788e4b67 builds fine.
+      It only hurts bisectability.
 
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index 5d2dffca0e91..856fe7dea685 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -14,48 +14,29 @@ CURDIR := $(abspath .)
- REPOROOT := $(abspath ../../../..)
- TOOLSDIR := $(REPOROOT)/tools
- LIBDIR := $(TOOLSDIR)/lib
--BPFDIR := $(LIBDIR)/bpf
- TOOLSINCDIR := $(TOOLSDIR)/include
--BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
--APIDIR := $(TOOLSINCDIR)/uapi
- GENDIR := $(REPOROOT)/include/generated
- GENHDR := $(GENDIR)/autoconf.h
--SCXTOOLSDIR := $(TOOLSDIR)/sched_ext
- SCXTOOLSINCDIR := $(TOOLSDIR)/sched_ext/include
- 
--OUTPUT_DIR := $(OUTPUT)/build
--OBJ_DIR := $(OUTPUT_DIR)/obj
--INCLUDE_DIR := $(OUTPUT_DIR)/include
--BPFOBJ_DIR := $(OBJ_DIR)/libbpf
--SCXOBJ_DIR := $(OBJ_DIR)/sched_ext
--BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
--LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/libbpf.a
--
--DEFAULT_BPFTOOL := $(OUTPUT_DIR)/host/sbin/bpftool
--HOST_OBJ_DIR := $(OBJ_DIR)/host/bpftool
--HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/host/libbpf/
--HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/host/
--HOST_DESTDIR := $(OUTPUT_DIR)/host/
--
--VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
--		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
--		     ../../../../vmlinux					\
--		     /sys/kernel/btf/vmlinux					\
--		     /boot/vmlinux-$(shell uname -r)
--VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
--ifeq ($(VMLINUX_BTF),)
--$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
--endif
-+# Build scheduler skeletons and subskeletons with the shared BPF rules.
-+BPF_SRCS        := $(wildcard *.bpf.c)
-+BPF_SKEL_EXT    := .bpf.skel.h
-+BPF_GEN_SUBSKEL := 1
-+# Preserve the existing build/ layout.
-+BPF_OBJ_DIR  := $(OUTPUT)/build/obj/sched_ext
-+BPF_SKEL_DIR := $(OUTPUT)/build/include
-+SCXOBJ_DIR   := $(BPF_OBJ_DIR)
- 
--BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+include ../lib.bpf.mk
- 
- ifneq ($(wildcard $(GENHDR)),)
-   GENFLAGS := -DHAVE_GENHDR
- endif
- 
- CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
--	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
--	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include -I$(SCXTOOLSINCDIR)
-+	  -I$(GENDIR) -I$(LIBDIR) -I$(TOOLSINCDIR) -I$(APIDIR)			\
-+	  -I$(CURDIR)/include -I$(SCXTOOLSINCDIR)
- 
- # Silence some warnings when compiled with clang
- ifneq ($(LLVM),)
-@@ -64,102 +45,26 @@ endif
- 
- LDFLAGS = -lelf -lz -lpthread -lzstd
- 
--IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null |				\
--			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
--
--# Get Clang's default includes on this system, as opposed to those seen by
--# '-target bpf'. This fixes "missing" files on some architectures/distros,
--# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
--#
--# Use '-idirafter': Don't interfere with include mechanics except where the
--# build would have failed anyways.
--define get_sys_includes
--$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
--	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
--$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
--endef
--
--ifneq ($(CROSS_COMPILE),)
--CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
--endif
--
--CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
--
--BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
--	     $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)		\
-+# Preserve the scheduler-specific flags; the shared recipe adds target flags.
-+BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)				\
- 	     -I$(CURDIR)/include -I$(CURDIR)/include/bpf-compat			\
- 	     -I$(INCLUDE_DIR) -I$(APIDIR) -I$(SCXTOOLSINCDIR)			\
- 	     -I$(REPOROOT)/include						\
--	     $(CLANG_SYS_INCLUDES) 						\
-+	     $(CLANG_SYS_INCLUDES)						\
- 	     -Wall -Wno-compare-distinct-pointer-types				\
- 	     -Wno-incompatible-function-pointer-types				\
- 	     -Wno-microsoft-anon-tag						\
- 	     -fms-extensions							\
--	     -O2 -mcpu=v3
--
--# sort removes libbpf duplicates when not cross-building
--MAKE_DIRS := $(sort $(OBJ_DIR)/libbpf $(OBJ_DIR)/libbpf				\
--	       $(OBJ_DIR)/bpftool $(OBJ_DIR)/resolve_btfids			\
--	       $(HOST_OBJ_DIR) $(INCLUDE_DIR) $(SCXOBJ_DIR))
--
--$(MAKE_DIRS):
--	$(call msg,MKDIR,,$@)
--	$(Q)mkdir -p $@
--
--$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
--	   $(APIDIR)/linux/bpf.h						\
--	   | $(OBJ_DIR)/libbpf
--	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(OBJ_DIR)/libbpf/	\
--		    ARCH=$(ARCH) CC="$(CC)" CROSS_COMPILE=$(CROSS_COMPILE)	\
--		    EXTRA_CFLAGS='-g -O0 -fPIC'					\
--		    DESTDIR=$(OUTPUT_DIR) prefix= all install_headers
--
--$(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
--		    $(LIBBPF_OUTPUT) | $(HOST_OBJ_DIR)
--	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
--		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)		\
--		    EXTRA_CFLAGS='-g -O0'					\
--		    OUTPUT=$(HOST_OBJ_DIR)/					\
--		    LIBBPF_OUTPUT=$(HOST_LIBBPF_OUTPUT)				\
--		    LIBBPF_DESTDIR=$(HOST_LIBBPF_DESTDIR)			\
--		    prefix= DESTDIR=$(HOST_DESTDIR) install-bin
--
--$(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
--ifeq ($(VMLINUX_H),)
--	$(call msg,GEN,,$@)
--	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
--else
--	$(call msg,CP,,$@)
--	$(Q)cp "$(VMLINUX_H)" $@
--endif
--
--$(SCXOBJ_DIR)/%.bpf.o: %.bpf.c $(INCLUDE_DIR)/vmlinux.h	| $(BPFOBJ) $(SCXOBJ_DIR)
--	$(call msg,CLNG-BPF,,$(notdir $@))
--	$(Q)$(CLANG) $(BPF_CFLAGS) -target bpf -c $< -o $@
-+	     $(BPF_EXTRA_CFLAGS)
- 
--$(INCLUDE_DIR)/%.bpf.skel.h: $(SCXOBJ_DIR)/%.bpf.o $(INCLUDE_DIR)/vmlinux.h $(BPFTOOL) | $(INCLUDE_DIR)
--	$(eval sched=$(notdir $@))
--	$(call msg,GEN-SKEL,,$(sched))
--	$(Q)$(BPFTOOL) gen object $(<:.o=.linked1.o) $<
--	$(Q)$(BPFTOOL) gen object $(<:.o=.linked2.o) $(<:.o=.linked1.o)
--	$(Q)$(BPFTOOL) gen object $(<:.o=.linked3.o) $(<:.o=.linked2.o)
--	$(Q)diff $(<:.o=.linked2.o) $(<:.o=.linked3.o)
--	$(Q)$(BPFTOOL) gen skeleton $(<:.o=.linked3.o) name $(subst .bpf.skel.h,,$(sched)) > $@
--	$(Q)$(BPFTOOL) gen subskeleton $(<:.o=.linked3.o) name $(subst .bpf.skel.h,,$(sched)) > $(@:.skel.h=.subskel.h)
-+EXTRA_CLEAN += $(OUTPUT)/build
- 
- ################
- # C schedulers #
- ################
- 
--override define CLEAN
--	rm -rf $(OUTPUT_DIR)
--	rm -f $(TEST_GEN_PROGS)
--endef
--
--# Every testcase takes all of the BPF progs are dependencies by default. This
--# allows testcases to load any BPF scheduler, which is useful for testcases
--# that don't need their own prog to run their test.
--all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
-+# Build every scheduler before each test.
-+all_test_bpfprogs := $(BPF_SKELS)
- 
- auto-test-targets :=			\
- 	create_dsq			\
-@@ -195,24 +100,22 @@ auto-test-targets :=			\
- testcase-targets := $(addsuffix .o,$(addprefix $(SCXOBJ_DIR)/,$(auto-test-targets)))
- 
- $(SCXOBJ_DIR)/runner.o: runner.c | $(SCXOBJ_DIR) $(BPFOBJ)
--	$(CC) $(CFLAGS) -c $< -o $@
-+	$(call msg,CC,,$@)
-+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
- 
- # Create all of the test targets object files, whose testcase objects will be
- # registered into the runner in ELF constructors.
--#
--# Note that we must do double expansion here in order to support conditionally
--# compiling BPF object files only if one is present, as the wildcard Make
--# function doesn't support using implicit rules otherwise.
- $(testcase-targets): $(SCXOBJ_DIR)/%.o: %.c $(SCXOBJ_DIR)/runner.o $(all_test_bpfprogs) | $(SCXOBJ_DIR)
--	$(eval test=$(patsubst %.o,%.c,$(notdir $@)))
--	$(CC) $(CFLAGS) -c $< -o $@
-+	$(call msg,CC,,$@)
-+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
- 
- $(SCXOBJ_DIR)/util.o: util.c | $(SCXOBJ_DIR)
--	$(CC) $(CFLAGS) -c $< -o $@
-+	$(call msg,CC,,$@)
-+	$(Q)$(CC) $(CFLAGS) -c $< -o $@
- 
- $(OUTPUT)/runner: $(SCXOBJ_DIR)/runner.o $(SCXOBJ_DIR)/util.o $(BPFOBJ) $(testcase-targets)
--	@echo "$(testcase-targets)"
--	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-+	$(call msg,BINARY,,$@)
-+	$(Q)$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
- 
- .DEFAULT_GOAL := all
- 
--- 
-2.53.0-Meta
+All errors (new ones prefixed by >>):
 
+>> arch/powerpc/mm/book3s64/radix_pgtable.c:1274:46: error: call to undeclared function 'device_zone'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1274 |         tail_page = vmemmap_shared_tail_page(order, device_zone(node));
+         |                                                     ^
+   arch/powerpc/mm/book3s64/radix_pgtable.c:1274:46: note: did you mean 'device_move'?
+   include/linux/device.h:1209:5: note: 'device_move' declared here
+    1209 | int device_move(struct device *dev, struct device *new_parent,
+         |     ^
+>> arch/powerpc/mm/book3s64/radix_pgtable.c:1274:46: error: incompatible integer to pointer conversion passing 'int' to parameter of type 'struct zone *' [-Wint-conversion]
+    1274 |         tail_page = vmemmap_shared_tail_page(order, device_zone(node));
+         |                                                     ^~~~~~~~~~~~~~~~~
+   include/linux/vmemmap-optimization.h:89:72: note: passing argument to parameter 'zone' here
+      89 | struct page *vmemmap_shared_tail_page(unsigned int order, struct zone *zone);
+         |                                                                        ^
+   2 errors generated.
+
+
+vim +/device_zone +1274 arch/powerpc/mm/book3s64/radix_pgtable.c
+
+  1253	
+  1254	int __meminit vmemmap_populate_compound_pages(unsigned long start_pfn,
+  1255						      unsigned long start,
+  1256						      unsigned long end, int node,
+  1257						      struct dev_pagemap *pgmap)
+  1258	{
+  1259		/*
+  1260		 * we want to map things as base page size mapping so that
+  1261		 * we can save space in vmemmap. We could have huge mapping
+  1262		 * covering out both edges.
+  1263		 */
+  1264		unsigned long addr;
+  1265		unsigned long next;
+  1266		pgd_t *pgd;
+  1267		p4d_t *p4d;
+  1268		pud_t *pud;
+  1269		pmd_t *pmd;
+  1270		pte_t *pte;
+  1271		struct page *tail_page;
+  1272		unsigned int order = pfn_to_section_order(start_pfn);
+  1273	
+> 1274		tail_page = vmemmap_shared_tail_page(order, device_zone(node));
+  1275		if (!tail_page)
+  1276			return -ENOMEM;
+  1277	
+  1278		for (addr = start; addr < end; addr = next) {
+  1279	
+  1280			pgd = pgd_offset_k(addr);
+  1281			p4d = p4d_offset(pgd, addr);
+  1282			pud = vmemmap_pud_alloc(p4d, node, addr);
+  1283			if (!pud)
+  1284				return -ENOMEM;
+  1285			pmd = vmemmap_pmd_alloc(pud, node, addr);
+  1286			if (!pmd)
+  1287				return -ENOMEM;
+  1288	
+  1289			if (pmd_leaf(READ_ONCE(*pmd))) {
+  1290				/* existing huge mapping. Skip the range */
+  1291				next = pmd_addr_end(addr, end);
+  1292				continue;
+  1293			}
+  1294			pte = vmemmap_pte_alloc(pmd, node, addr);
+  1295			if (!pte)
+  1296				return -ENOMEM;
+  1297			if (!pte_none(*pte)) {
+  1298				/*
+  1299				 * This could be because we already have a compound
+  1300				 * page whose VMEMMAP_RESERVE_NR pages were mapped and
+  1301				 * this request fall in those pages.
+  1302				 */
+  1303				next = addr + PAGE_SIZE;
+  1304				continue;
+  1305			} else {
+  1306				unsigned long nr_pages = 1UL << order;
+  1307				unsigned long addr_pfn = page_to_pfn((struct page *)addr);
+  1308				unsigned long pfn_offset = addr_pfn - ALIGN_DOWN(addr_pfn, nr_pages);
+  1309	
+  1310				/*
+  1311				 * if the address is aligned to huge page size it is the
+  1312				 * head mapping.
+  1313				 */
+  1314				if (pfn_offset == 0) {
+  1315					/* Populate the head page vmemmap page */
+  1316					pte = radix__vmemmap_pte_populate(pmd, addr, node, NULL, NULL);
+  1317					if (!pte)
+  1318						return -ENOMEM;
+  1319					vmemmap_verify(pte, node, addr, addr + PAGE_SIZE);
+  1320	
+  1321					/*
+  1322					 * Populate the tail pages vmemmap page
+  1323					 * It can fall in different pmd, hence
+  1324					 * vmemmap_populate_address()
+  1325					 */
+  1326					pte = radix__vmemmap_populate_address(addr + PAGE_SIZE, node, NULL, NULL);
+  1327					if (!pte)
+  1328						return -ENOMEM;
+  1329	
+  1330					next = addr + 2 * PAGE_SIZE;
+  1331					continue;
+  1332				}
+  1333	
+  1334				pte = radix__vmemmap_pte_populate(pmd, addr, node, NULL, tail_page);
+  1335				if (!pte)
+  1336					return -ENOMEM;
+  1337				vmemmap_verify(pte, node, addr, addr + PAGE_SIZE);
+  1338	
+  1339				next = addr + PAGE_SIZE;
+  1340				continue;
+  1341			}
+  1342		}
+  1343		return 0;
+  1344	}
+  1345	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
