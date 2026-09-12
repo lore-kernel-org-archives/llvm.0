@@ -1,105 +1,96 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395EE386C21
-	for <llvm@lists.linux.dev>; Sat, 12 Sep 2026 09:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0C994BEE54;
+	Sat, 12 Sep 2026 09:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789204802; cv=none; b=GxSE9eTdQKmwGf95Co/ACFhKexOXbZ75ga28yahRpXSJf0+inKH2etH11iCu77T70GPLzzT/WnepIrD9BZ0IlzxK+ZZ2j2lWi/GGhXu/85f4pTqEBq6UAMP9kjfsM0yikM8ERIgZ31ssxGI27F66xx9M5akmVkt+ll0bMk9H60o=
+	t=1789206033; cv=none; b=Lfp5mvShhXVtxkxjn0Qmr2TW5eIiBq4hBYiLS+4ODlmYXvUnco7wluW4gsbtEdzNd+A801+hOuBGVwpvGcX/WHBdt3ZZQwgxcfV1BjnUbug8nzdeAsPI/ogIk0x+bTCukQNULpx40DrtR0tp99OvGgbxJ32mrL4+X/Puuo94G4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789204802; c=relaxed/simple;
-	bh=6n2c6h4Hymm7Jn+sRJG1iAeOOVXTKyFCMG6SxCx6KGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D/RbeTCqp3wPFttVycHVnsgXZDF6iMrRatRsjiEeIl2aOj0ENHEw+iPxYJ/SHbcLV16rbg0lIJgk63QCoKnznBpoT3SZoheymXeadYwD2/7CCXH3cuwvRxvscgloYVPFscJo/3CQQpr30D/RkxQ/vLAWGXzt3Lg28Kuz9GUA+7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lx7m9oGh; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789206033; c=relaxed/simple;
+	bh=DereGst38L4X0y5rbTpXMm7D80X1DjjJJkXtTsGkFZA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ivg86qgpDQozBeapYEnGehbDgWNW0p6aO8pHPFO4H5dy/F01ZGSj+RVhoZVirAHZZ2fNOvnYflfp+ww9Dk+xo/Of40BVf32amJJrvS0Cg87WYnLkh6SNKGAF6fYra9z87eIcsySFRKab4oseNNo+kcZoFn2kuLIT/3ibOKACpYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IsNxE3sU; arc=none smtp.client-ip=192.198.163.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lx7m9oGh"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-486955ae01eso1597971f8f.0
-        for <llvm@lists.linux.dev>; Sat, 12 Sep 2026 02:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789204799; x=1789809599; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=fdb87G5D2V+5j6YZ5rMK+AXQbXwNqx6jG61RGWA1bkQ=;
-        b=Lx7m9oGhSXoTPQBcbtcpgajVvjYSqZ3ztgEvMwWOnvVxSldrqUW09wz0SpAYbik/Uv
-         UHgTaRHki8R+JqCYavGk0wDUr1Kq/SQFM8e/bDOKaSVNQgdhChOWe8qHp3Lk/KWAM0OG
-         mGo2RlUeeByaZ9m2XVJlecPi/fAx9bMHQUiOO+QqWo8gH0mgm8RW5eL86Fau+Y3oYxFc
-         NhoYo2yb1sHdMHalO1UtCAZkOtV/dRkFrEBqW60jBzBazo+/Zbk6AhpCddo3hHMxpkQo
-         FUOBKUOkiBTSWbslvjncMx6k9Bw1C22UA9esMRUXKTYr/VMvIOtSFzgM7V+0rO3R3dZB
-         eRRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789204799; x=1789809599;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fdb87G5D2V+5j6YZ5rMK+AXQbXwNqx6jG61RGWA1bkQ=;
-        b=Kf+FewVmksqcY7dVV5t+/uUAOdaBxsNZ53qcRVUdLld9E62y9fsrXJjPC6DgSYuGIu
-         wOjSBMzX0RthuZrebDuH0kefQNHCX3eGzppzAfGrRPivbbn9t5yVtBZrfcqWgRhKn3uW
-         SWB1UVGp3EBUHO4hF5en7T7Rjtf4L4+9FtzmGHhZsbjG3RtTM2g2omcEX6wGE49kBSp7
-         +x4UuUTGKTLyn6MLVmqQzK0CWjI6fgVS1pcmsV5jCDMONmAf6aIkZJ1b4liBrMtcTGwn
-         D44y2IGi4N9c4BMqkaseXKft8tGBU7h4wqJTJ5LKyN8Lfhx7IL8WYUaJW160rlGmAQji
-         FnnA==
-X-Forwarded-Encrypted: i=1; AKwUvBxNcxLfY0ahlYjgpu3p/eY/1s+Ww5SfQx//6yZJqO6GwBJlT02EMM0zkuwM+28yOZOevhNs@lists.linux.dev
-X-Gm-Message-State: AFuF++nYHhGRdAqrnVAfzxfKdqfKYXIg8FGxZv+CD1tZf7uAsgEClkox
-	DQJW2nu0xwUJbBmw2SDk4t46xYQlDfqzv+gRu+QhW3YvrcUxeOFLSn7x
-X-Gm-Gg: AYBFou1GaPl4nimhgLMLmBElQHWbgr8jz7Kikv51nlzzDxs4ncnWJAcXPOcWt3qc7kR
-	jjkmW+7WuX3T6E4IlR4smLkLnYOzDL5CYYSP/txMFSRY4UKsMXE1RRuRfXHwxKx8g5EwGpP61f0
-	Q/DDt9w94bS26iS7N42Lhn9sP6nZtw/X2JfZIelVF+yiS9zsALOl0t3gRvhPxv0XCNjZ/sgXa0B
-	QRHn5JO+vrnUaqm1ygGguHRTaz1sxPeZpGp93PMx4S0LQDMyN/HW+PuwkUEqukp4bFAubT8MEIc
-	+ZUR7TLEFK6I/hlMu+Nayf8pOL3u/lRjBiRu/1Uc8zMgRV/1IpiAsdpRslzeiJn2fRyn8SzxG0J
-	We7B8gVxHbMHB8+Fh82TQXHhgg+4IqPwrdWe8aylUdNslMvD/pg3oR0NVcll3d7CLMfOjT1rpFN
-	F1ErXazysDy1svMSY07ZhJQOzby+Fns90eTFWytE3oeNnwyr/gYmuvcF+o4JBkELHetQjqp9qd7
-	0V6en9r+KUldPsTK6vOpl+p2howjdrn1cZ3FMSiTq/Od/VTWTOasgLCRykqrRYOjQGen9J0nN37
-	vHgkpQNrJfxaEX7pPA6GfAGbxh+ND5JrGuvGqb1jMgH3uR/mx0qYhzk9+RmDupJEKvCW2N/zOe0
-	=
-X-Received: by 2002:a05:6000:186f:b0:482:e451:6810 with SMTP id ffacd0b85a97d-486eb2e2901mr9420469f8f.1.1789204798879;
-        Sat, 12 Sep 2026 02:19:58 -0700 (PDT)
-Received: from unknown748F3CBA5068 (dynamic-2a02-3100-b260-f201-9983-e8c4-aff5-7a36.310.pool.telefonica.de. [2a02:3100:b260:f201:9983:e8c4:aff5:7a36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb360409sm10716573f8f.36.2026.09.12.02.19.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 12 Sep 2026 02:19:58 -0700 (PDT)
-Date: Sat, 12 Sep 2026 11:19:57 +0200
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Dan Williams <djbw@kernel.org>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>, 
-	Jonathan Cameron <jic23@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] memregion: fix cache invalidation warning message
-Message-ID: <aqUY5Zho3sKFP_84@gmail.com>
-References: <20260808121943.72939-1-kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IsNxE3sU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789206032; x=1820742032;
+  h=date:from:to:cc:subject:message-id;
+  bh=DereGst38L4X0y5rbTpXMm7D80X1DjjJJkXtTsGkFZA=;
+  b=IsNxE3sUC9REVE3WweWkJqN6Up1/QS25Lj2gR91/BTlp4qmPXK3TrDjp
+   Z9U83zQLdJu25RcyHT+pDusSbvPGEhsTSMXk3E6xW1pxQ4ES10f8QAlbQ
+   p6bzhjT3DIRUqDmENbo3o1WqttPmkCziKt6npTkH+ls2LBModCcbcCrQX
+   KMIEb37QFQHhIF+5TG6wS9NNkXc03oknBo8b8WgTi7ZjNnig5VSC/lAE9
+   rZDt/Ru+whGOs/rBFxrt59UzKkHxKgj5+lJ/+nS3Nb0TDLiUh1FOR6ymh
+   5BkezUGuZowm+bgXhMFX0lzruWj4mcz45g+eh4TY+2SRDQPmiZhGiHPbd
+   Q==;
+X-CSE-ConnectionGUID: CMB8qbqDSyyABEmfrEQ5Bg==
+X-CSE-MsgGUID: ifRRDbmETgagrk1YtpYtUQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11902"; a="162824"
+X-IronPort-AV: E=Sophos;i="6.27,99,1787036400"; 
+   d="scan'208";a="162824"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa114.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2026 02:40:31 -0700
+X-CSE-ConnectionGUID: WZRj34ouTcSfCEKDo05PzA==
+X-CSE-MsgGUID: 0giQH9VLS5GOrcdSRnwq/Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,99,1787036400"; 
+   d="scan'208";a="275681717"
+Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
+  by orviesa003.jf.intel.com with ESMTP; 12 Sep 2026 02:40:29 -0700
+Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x5KDj-000000002p5-1ZG2;
+	Sat, 12 Sep 2026 09:40:27 +0000
+Date: Sat, 12 Sep 2026 17:40:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Chen-Yu Tsai" <wenst@chromium.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [wens:mtk-wip 33/66] error[E0425]: cannot find function
+ `regulator_enable` in crate `bindings`
+Message-ID: <202609121759.ulrbax7l-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260808121943.72939-1-kmehltretter@gmail.com>
 
-On Sat, Aug 08, 2026 at 02:19:43PM +0100, Karl Mehltretter wrote:
-> WARN_ON_ONCE() takes a condition, not a message. The string literal is
-> always true, so the warning still triggers but the message is never
-> printed.
-> 
-> Use WARN_ONCE(1, ...) instead to print the message and keep the
-> once-only behavior.
-> 
-> Found with a Coccinelle script. Clang's -Wstring-conversion also flags
-> such calls but is not enabled in kernel builds.
-> 
-> Fixes: 1156b4418db0 ("memregion: Add cpu_cache_invalidate_memregion() interface")
-> Assisted-by: Claude:claude-fable-5 coccinelle
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/wens/linux.git mtk-wip
+head:   ac7b6280e922fd6f4053c6350fd5cd77ca1c73ef
+commit: 44b8c36a829c619a9c7bff439ca250b289c06ee6 [33/66] regulator: core: Add "enable and wait" functions
+config: s390-randconfig-002-20260912 (https://download.01.org/0day-ci/archive/20260912/202609121759.ulrbax7l-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260912/202609121759.ulrbax7l-lkp@intel.com/reproduce)
 
-Friendly ping on this patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609121759.ulrbax7l-lkp@intel.com/
 
-Updating Jonathan's Cc address to jic23@kernel.org, as the original
-submission bounced at his old Huawei address.
+All errors (new ones prefixed by >>):
 
-Thanks,
-Karl
+>> error[E0425]: cannot find function `regulator_enable` in crate `bindings`
+   --> rust/kernel/regulator.rs:288:38
+   |
+   288 |         to_result(unsafe { bindings::regulator_enable(self.inner) })
+   |                                      ^^^^^^^^^^^^^^^^
+   |
+   ::: rust/bindings/bindings_generated.rs:117342:5
+   |
+   117342 |     pub fn regulator_disable(regulator: *mut regulator) -> ffi::c_int;
+   |     ------------------------------------------------------------------ similarly named function `regulator_disable` defined here
+   |
+   help: a function with a similar name exists
+   |
+   288 -         to_result(unsafe { bindings::regulator_enable(self.inner) })
+   288 +         to_result(unsafe { bindings::regulator_disable(self.inner) })
+   |
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
