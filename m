@@ -1,148 +1,105 @@
-Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753FE30DD22;
-	Sat, 12 Sep 2026 08:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 395EE386C21
+	for <llvm@lists.linux.dev>; Sat, 12 Sep 2026 09:20:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789200429; cv=none; b=lfF2SRH+PEVJMN8DLp6e/0ZPUVjVGQxYKbRZHLpZhS+8d49YDwuhPu3p6yqE/ABCOR8jNwm24HgrrAPwUxs/h22tFH/eHPwpcGZcsEAgdjQjOP+rLFOhrL489tYxRX1i80m2DTYWbx3oF9vsk1dAU/w4qr0RrzuQRzzIIOKX4BI=
+	t=1789204802; cv=none; b=GxSE9eTdQKmwGf95Co/ACFhKexOXbZ75ga28yahRpXSJf0+inKH2etH11iCu77T70GPLzzT/WnepIrD9BZ0IlzxK+ZZ2j2lWi/GGhXu/85f4pTqEBq6UAMP9kjfsM0yikM8ERIgZ31ssxGI27F66xx9M5akmVkt+ll0bMk9H60o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789200429; c=relaxed/simple;
-	bh=AN84vRXniBYk4yPYM0B8PUW9uuzmgLtIuPt928IPrcM=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=XXwxybsjiqCvuAFFf/ytYxg8zErKgtV7U4POV+irYctFeLWFDFqhhCNOe1VuKxdXs71hv/t+ezlbiEh2l9Q7KqD+B6u8ER3BVCaR9R/6MLhIw81LSVr5D49qBM5O+P7mZcT7RiIVpMw+DSl+NACavLhmGEa99lm3GArU63TVVV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Lrt/fM48; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lxb01r0k; arc=none smtp.client-ip=103.168.172.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1789204802; c=relaxed/simple;
+	bh=6n2c6h4Hymm7Jn+sRJG1iAeOOVXTKyFCMG6SxCx6KGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D/RbeTCqp3wPFttVycHVnsgXZDF6iMrRatRsjiEeIl2aOj0ENHEw+iPxYJ/SHbcLV16rbg0lIJgk63QCoKnznBpoT3SZoheymXeadYwD2/7CCXH3cuwvRxvscgloYVPFscJo/3CQQpr30D/RkxQ/vLAWGXzt3Lg28Kuz9GUA+7I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lx7m9oGh; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Lrt/fM48";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lxb01r0k"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.phl.internal (Postfix) with ESMTP id 0C6721380082;
-	Sat, 12 Sep 2026 04:07:02 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Sat, 12 Sep 2026 04:07:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1789200422;
-	 x=1789207622; bh=f3qwWyqi3bNUqorYQGcKxNjQwJcXGV0fC7D1AqFX08M=; b=
-	Lrt/fM48uvxyR5iY147Dg1TLUxzhC6V9WeE9G4Nf2xS4+pkFwVgvQlPsZgX1ObsY
-	hxNwAbimSrgLpG19RfvyiSqHjWyUKu/DrU6GHqrd1Ny3X/qxb2V7PLMrwMTGxJ5J
-	hxhHSDw6DzkOfUQoTLd/xCPLr0ZkyiUbbdsArhbOLbeDBOETI9bYaulAFEdBhhYB
-	8yV92Rxc4ba4CNFpTlX1DQ8hmsjEd2RUFxoF2+d6ai2JCK/3mEz0yCBKDLCy0kT7
-	MblYeZafK+CpuQ2/h4Xvl/E08vAxOSUkiRJzXlUswU1dssfWm8A/JrDq84M4L8cU
-	2hzmROIQ1QhHapZ/aclkGQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789200422; x=
-	1789207622; bh=f3qwWyqi3bNUqorYQGcKxNjQwJcXGV0fC7D1AqFX08M=; b=l
-	xb01r0kwHfIHCGkG23JDkVT0OR6WYaawzrtFN7BXJBAVCJeq1Uh+/e7Gg8JYmtXF
-	1LCmYWrVh+aXxK5P/aKoegaKad7yStYYhFa5ivwWliqhk6EY7BLZYTcIbQ4z6YAP
-	OgbD33qflDx3/fBJ5dTlkLlHBZs9X0dE/P17DVw8jlpi5mFAJYYwLaUHyVeXRB3f
-	CdBLMEWG4iHPdsLf2rroVuXg2vYAKidKUSvaUd82yVymPftKPUW6ojD1IN5haV6W
-	RHa8fD3MVF0wRBMz5082rQG2m7E0jTrMHkEZvxZ3XxwrNqgA6EB6PgmjTdxzlq1x
-	xsRPvrz6z+1EwtsZYC6DQ==
-X-ME-Sender: <xms:GwilaiM9DoEGXPS-5POglj3Fs3UX9dKSgEcrGATNpDMJPGNSuR9zRA>
-    <xme:GwilarxN0E-D3ujq0LTikzEohK71z4qj5L4kuPdseBnDwMgcrWtIyG72C2_JeVM5A
-    FBrlFgdq3_j6q1S6Y1dTCO0Qo2bNHyHI3LXOfX-aFV8Bj-yyr6y6g>
-X-ME-Proxy-Cause: dmFkZTEnMfHZeL1bdmK0cMv43Ykw4Ux5EmKrIdL01M3dqOuqJ2lE5s/Zf8fR7tEIJo0kPv
-    zWtV+y0PrEAHOjaSKsxSLCyqEt7BsSvRONex+NaaPtPqORZ63NRy+Js06kSKO6B4kHMOw6
-    X66YzjTgLq7T2dVQ/Wy+z0mQ4yQi6eeqwM+Ha0y0Pecb27IXKwT7AyfrUjOgPW/ax0pbxm
-    431ZmN3/a8b+CFj03gZG/0GqmMDdPzw9zIGPXhsnXYuTl1E61xnGM14GRGmIYVt0/4ruFj
-    bJzQHDqH1XLMGaU36Dad0/cx0LiIfSRIILMzpeOL+9wHlFYdYe8pNXSPkjqQSck9kl74XP
-    aCzd84oPX17C7TH8ROIK4AlY8as07h/xF1/mi69Tj3lPRbQOBi9KqgToWBN9+IbxAFo0Bl
-    O91jo3tZhjZHGmsdRT5I8CZPH49W4wppnyIMbWnJORO8mrIahMZ6pRtbPa974ykxYGKMc0
-    xa2sGvHlvvuBThI5t8oyZDRmkUDZCxhbR0R3u3jVuF2XW3z+rnrLNhMoF4j2qzzk8B1zZz
-    lJPY/WsxQGZwEdKj8dXZcU/q8nWTM5JBnCaWjr2cJoG1Wha/0dH3WyaH3eGu7Az0Ec7QPm
-    5/9iLK7Gy3Htywzk5qwWNhjRQMpdbPa/lgeqDfBz1ZWNbrYIda+j3gvZ7Xqg
-X-ME-Proxy: <xmx:IAilakYs_TJapqNKc7Bl7_t1LCTdqWksnA1ncYoY1SxGbgOkM5mR3g>
-    <xmx:IAilamUNZ9SPghoBE-fNuCRW3yvOkVXSEolaLNroFm67Oxs_i5V_HA>
-    <xmx:IAilakGOzLYoRVy5sbiYSRPFTKbqOoOKrzwo-FEclMQe4BRLcwxJkQ>
-    <xmx:IAilajCG69PBf_6_2kGV2BfXz2ckOvpTnN8WdA2x9XjMv6PH7RVuBQ>
-    <xmx:JgilasFp5Sb1z50QC1Sew28jzpy_7_aNbHZVZSIJDSN67XqZa69ERdel>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 549A532A007E; Sat, 12 Sep 2026 04:06:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lx7m9oGh"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-486955ae01eso1597971f8f.0
+        for <llvm@lists.linux.dev>; Sat, 12 Sep 2026 02:20:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789204799; x=1789809599; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=fdb87G5D2V+5j6YZ5rMK+AXQbXwNqx6jG61RGWA1bkQ=;
+        b=Lx7m9oGhSXoTPQBcbtcpgajVvjYSqZ3ztgEvMwWOnvVxSldrqUW09wz0SpAYbik/Uv
+         UHgTaRHki8R+JqCYavGk0wDUr1Kq/SQFM8e/bDOKaSVNQgdhChOWe8qHp3Lk/KWAM0OG
+         mGo2RlUeeByaZ9m2XVJlecPi/fAx9bMHQUiOO+QqWo8gH0mgm8RW5eL86Fau+Y3oYxFc
+         NhoYo2yb1sHdMHalO1UtCAZkOtV/dRkFrEBqW60jBzBazo+/Zbk6AhpCddo3hHMxpkQo
+         FUOBKUOkiBTSWbslvjncMx6k9Bw1C22UA9esMRUXKTYr/VMvIOtSFzgM7V+0rO3R3dZB
+         eRRA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1789204799; x=1789809599;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fdb87G5D2V+5j6YZ5rMK+AXQbXwNqx6jG61RGWA1bkQ=;
+        b=Kf+FewVmksqcY7dVV5t+/uUAOdaBxsNZ53qcRVUdLld9E62y9fsrXJjPC6DgSYuGIu
+         wOjSBMzX0RthuZrebDuH0kefQNHCX3eGzppzAfGrRPivbbn9t5yVtBZrfcqWgRhKn3uW
+         SWB1UVGp3EBUHO4hF5en7T7Rjtf4L4+9FtzmGHhZsbjG3RtTM2g2omcEX6wGE49kBSp7
+         +x4UuUTGKTLyn6MLVmqQzK0CWjI6fgVS1pcmsV5jCDMONmAf6aIkZJ1b4liBrMtcTGwn
+         D44y2IGi4N9c4BMqkaseXKft8tGBU7h4wqJTJ5LKyN8Lfhx7IL8WYUaJW160rlGmAQji
+         FnnA==
+X-Forwarded-Encrypted: i=1; AKwUvBxNcxLfY0ahlYjgpu3p/eY/1s+Ww5SfQx//6yZJqO6GwBJlT02EMM0zkuwM+28yOZOevhNs@lists.linux.dev
+X-Gm-Message-State: AFuF++nYHhGRdAqrnVAfzxfKdqfKYXIg8FGxZv+CD1tZf7uAsgEClkox
+	DQJW2nu0xwUJbBmw2SDk4t46xYQlDfqzv+gRu+QhW3YvrcUxeOFLSn7x
+X-Gm-Gg: AYBFou1GaPl4nimhgLMLmBElQHWbgr8jz7Kikv51nlzzDxs4ncnWJAcXPOcWt3qc7kR
+	jjkmW+7WuX3T6E4IlR4smLkLnYOzDL5CYYSP/txMFSRY4UKsMXE1RRuRfXHwxKx8g5EwGpP61f0
+	Q/DDt9w94bS26iS7N42Lhn9sP6nZtw/X2JfZIelVF+yiS9zsALOl0t3gRvhPxv0XCNjZ/sgXa0B
+	QRHn5JO+vrnUaqm1ygGguHRTaz1sxPeZpGp93PMx4S0LQDMyN/HW+PuwkUEqukp4bFAubT8MEIc
+	+ZUR7TLEFK6I/hlMu+Nayf8pOL3u/lRjBiRu/1Uc8zMgRV/1IpiAsdpRslzeiJn2fRyn8SzxG0J
+	We7B8gVxHbMHB8+Fh82TQXHhgg+4IqPwrdWe8aylUdNslMvD/pg3oR0NVcll3d7CLMfOjT1rpFN
+	F1ErXazysDy1svMSY07ZhJQOzby+Fns90eTFWytE3oeNnwyr/gYmuvcF+o4JBkELHetQjqp9qd7
+	0V6en9r+KUldPsTK6vOpl+p2howjdrn1cZ3FMSiTq/Od/VTWTOasgLCRykqrRYOjQGen9J0nN37
+	vHgkpQNrJfxaEX7pPA6GfAGbxh+ND5JrGuvGqb1jMgH3uR/mx0qYhzk9+RmDupJEKvCW2N/zOe0
+	=
+X-Received: by 2002:a05:6000:186f:b0:482:e451:6810 with SMTP id ffacd0b85a97d-486eb2e2901mr9420469f8f.1.1789204798879;
+        Sat, 12 Sep 2026 02:19:58 -0700 (PDT)
+Received: from unknown748F3CBA5068 (dynamic-2a02-3100-b260-f201-9983-e8c4-aff5-7a36.310.pool.telefonica.de. [2a02:3100:b260:f201:9983:e8c4:aff5:7a36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb360409sm10716573f8f.36.2026.09.12.02.19.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 12 Sep 2026 02:19:58 -0700 (PDT)
+Date: Sat, 12 Sep 2026 11:19:57 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Dan Williams <djbw@kernel.org>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>, 
+	Jonathan Cameron <jic23@kernel.org>, Davidlohr Bueso <dave@stgolabs.net>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] memregion: fix cache invalidation warning message
+Message-ID: <aqUY5Zho3sKFP_84@gmail.com>
+References: <20260808121943.72939-1-kmehltretter@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AK-jVwBtQCQR
-Date: Sat, 12 Sep 2026 10:05:45 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Svyatoslav Ryhel" <clamor95@gmail.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Bartosz Golaszewski" <brgl@kernel.org>,
- "Mark Brown" <broonie@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Daniel Thompson" <danielt@kernel.org>, "Helge Deller" <deller@gmx.de>,
- devicetree@vger.kernel.org,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- dri-devel@lists.freedesktop.org, "Jonathan Cameron" <jic23@kernel.org>,
- "Jingoo Han" <jingoohan1@gmail.com>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Lee Jones" <lee@kernel.org>,
- "Liam Girdwood" <lgirdwood@gmail.com>,
- "Linus Walleij" <linusw@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-fbdev@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
- "Guenter Roeck" <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- mfd@lists.linux.dev, "Michael Hennerich" <michael.hennerich@analog.com>,
- patches@opensource.cirrus.com, "Pavel Machek" <pavel@kernel.org>,
- "Rob Herring" <robh@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Support Opensource" <support.opensource@diasemi.com>
-Message-Id: <937fb2c0-e910-4ab6-8599-ff5ea67fd9c3@app.fastmail.com>
-In-Reply-To: 
- <CAPVz0n0pBxP2J=5DN+k+ut0HRnTmsU64orXwxa19G0+WAxN-zg@mail.gmail.com>
-References: 
- <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
- <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
- <CAPVz0n0pBxP2J=5DN+k+ut0HRnTmsU64orXwxa19G0+WAxN-zg@mail.gmail.com>
-Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260808121943.72939-1-kmehltretter@gmail.com>
 
-On Sat, Sep 12, 2026, at 08:42, Svyatoslav Ryhel wrote:
-> =D1=87=D1=82, 10 =D0=B2=D0=B5=D1=80. 2026=E2=80=AF=D1=80. =D0=BE 21:15=
- Arnd Bergmann <arnd@arndb.de> =D0=BF=D0=B8=D1=88=D0=B5:
+On Sat, Aug 08, 2026 at 02:19:43PM +0100, Karl Mehltretter wrote:
+> WARN_ON_ONCE() takes a condition, not a message. The string literal is
+> always true, so the warning still triggers but the message is never
+> printed.
+> 
+> Use WARN_ONCE(1, ...) instead to print the message and keep the
+> once-only behavior.
+> 
+> Found with a Coccinelle script. Clang's -Wstring-conversion also flags
+> such calls but is not enabled in kernel builds.
+> 
+> Fixes: 1156b4418db0 ("memregion: Add cpu_cache_invalidate_memregion() interface")
+> Assisted-by: Claude:claude-fable-5 coccinelle
+> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 
->> drivers/leds/leds-lm3530.c
->> drivers/leds/leds-lm3532.c
->
-> LM3532 has full OF support and is functional, it just does not have
-> device tree users yet. I have a device using it - Motorola Atrix 4G
-> (Tegra 2 based).
->
-> Here is commit removing LM3532
-> https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=
-=3D46a6457870825d8b782d350fdc7e27c540734d41
-> Here are my patches bringing up Motorola Atrix 4G support
-> https://lore.kernel.org/lkml/20260721100245.444623-3-clamor95@gmail.co=
-m/
+Friendly ping on this patch.
 
-Ah, perfect: this is actually one of two drivers that I independently
-noticed as a false positive while writing the commit logs, and I
-dropped the changes in the update I pushed the branch yesterday.
+Updating Jonathan's Cc address to jic23@kernel.org, as the original
+submission bounced at his old Huawei address.
 
-In fact, I saw that there are three other upstream dts files using
-this driver. In general, I assumed that anything with a DT binding
-has users, with the exception of the devices inside of a removed
-SoC and a few PMIC chips that were tightly linked to a removed SoC
-from the same manufacturer.
-
-Thanks a lot for checking the list!
-
-      Arnd
+Thanks,
+Karl
