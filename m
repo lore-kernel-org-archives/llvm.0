@@ -1,169 +1,178 @@
-Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F3DD415F36
-	for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 21:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD443314D1A;
+	Sat, 12 Sep 2026 01:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789160469; cv=none; b=S/D8xOZJP3IBlSOU9+HnIhHTxq904/LAWUc+0eXkt1MoHgpBzY2zrCkGI+3Ohb7M3Jrr2U1dLXReVIUPnD9CXj1rlLgWA+x8j65rJgaRfKrlO+S/1+y/ta7hHb55fNqX1wc9KKEeSpiZBy47cTyXEl14Cjek1qWzwyVj0Xot5pk=
+	t=1789176302; cv=none; b=blF1HtqXpZJGo+XDMG2hEogBi4zD0MPI2v9B25cpRIMTvkHswoBqdAOKybtrdq7j9PjYf8rVkTC8/ti3zdusGlUxb3x3KncKI16biA3MNVE66h+pzh8BmIZoWA/7HjKqRdIELboVDwiU95FAu5Eb7gK5+wTuMksAph83zKhNuo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789160469; c=relaxed/simple;
-	bh=/W6FCmv5ibQNEpHI4GROMvUWyoZn8nstXtz7Y5px5C8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZjVVoOQmtTmunJPqbI1BfYRyixJzaiZyTy1igFEZjq7LjRPbx51qU7YHxaRvvUAQ1A1h2mjDKgJpG8KF6FJWQILZwdbaF4BMzkh+QryJfledwBVBED6k83its0N3oND9fj1SekuC2qPwgOjxjgoPeIVgREl/BRDED5RhKl+F9o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KvSPi8IB; arc=none smtp.client-ip=74.125.225.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789176302; c=relaxed/simple;
+	bh=kWyKl8nspQAtl9ZLH0jHzigC1FX5K2ydejkIwl5FZXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gCbIiIiVPpmcjn/JqJMg+XAv11Afwd4+cJauX7KS4xjn0lPwAGMYXPw3bZR6Kbe7Rfs/0shSRSJHCocI0gloa5opJY2IyNVOq3EniGOr1Cf2jbceeZXrt2caKLAnCwK7vo4Y+4iKNw5vQtvBb/2SBP7NpX6zDfWiFR6iDTOwNno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HrWgHuUx; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KvSPi8IB"
-Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-482f6351832so133604f8f.3
-        for <llvm@lists.linux.dev>; Fri, 11 Sep 2026 14:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789160465; x=1789765265; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=W18BjSa6bE823jCNrSo5QAggwLMczPlVTE3fEsKx2B8=;
-        b=KvSPi8IBe2vgS5z7F/3iTF3DhQY6teukVRJ7vYCPqy+VA9edRHq+DWWLCkeB4jxU43
-         G53eulpFueXkVMEAr8jQ5xJj7Td/0kI4MUm6ZNe3/aoMD8CsdA3gY3acipTvex7HGBAu
-         QHyg1Nt77jQah0C+T/2N7nNo4xqJSDj57bzuFtfBTzdHwqVIXFcX5qxXqXaP1tnwbt0G
-         z2pnpv6McWa1+zTTLoAf19x0hB0mIPaFNP10H2qwUDZli1IBGWqoxmxQgaeOab3+Jq5P
-         ymFb4xYv3jV+MctSdUCQ94C9CSXbTSJQIp7DKRj87+RKC97MTvScwmjYZf77wdwZyMNo
-         g/Tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1789160465; x=1789765265;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=W18BjSa6bE823jCNrSo5QAggwLMczPlVTE3fEsKx2B8=;
-        b=iNuGt+Qz9WWW3iDYnbDGz4tpNePjKfOu8mcBX8XJDW+aZ61kkFgUe1lPzaGZbFyUN/
-         THnNWzi83voj+mJv0519yoLp9TQ1LhkzZwScUzT9sSW2rzBvssjO6HNQgnpcyQaaTdoq
-         xlLP51392p8zwokI7SkQGcdbUnTpj4rhI5qtcmTZKpdiNGl9OuqKdnyH+lv6IxkRIqjA
-         Tz7fIwmfYYPaF4MujHKWtLegRT+m6J/NBk+Ln1RXPxGtbIvgcK/fzO2ZCeu3fX/8VrW1
-         w1y7XLKuAZ3WJADBfPn3ChMh5yTmfKJZpiW2xtk7JJGobdgNhriIdGFrxHTZqOuZ816P
-         92OQ==
-X-Forwarded-Encrypted: i=1; AKwUvByMEDHMRngKqvINzfj3WbGhMsv8olm12CNBvQGQqP9kxDl554tdcAIMf6nkbsoRdNTiJRm+@lists.linux.dev
-X-Gm-Message-State: AFuF++lSN3wOdQVCLRI14vkgK7200P2d0XCKYBAeWodw7LSNi0JuDH4G
-	Z1+Xe1e1m8qE18mrdfpGa8kfljudI/TxQwDrpZhcFhQowkuOs+4lHIk6
-X-Gm-Gg: AYBFou3rTYhaGajImLm7QW+9n/10f1y0p2Y8Zr5wBfPk7WM0XZOuwJmtZUaE0O4IKxT
-	GT5xZOXhgZPQOLHbP+2ceaj5l7GcD4R7pzp34om1IzCdgG55CcpbCFc18Mma78HyMIVl9DDYFmz
-	VMBXnbq0GjzN1pBChkqOEDxVXCbJZDCYbFDn12fplCH6tVtFYwITglVyQfPQJiOvivCWcWQ083Y
-	laYp4+RTHsF1ed29vK7TJ0SGeReq5j7bch4ltRJP09GhWxB8tgGSYwjfrGo7iNaggShKyaI3lP1
-	hF45kMK3xb+M4Y1X8VNSSPpIs9Nkyb8XCvQErhnSK+Iui7EskhsdriRe4YEunwkFuHnkSO8slw8
-	HOOQoeX1Cd7AqdLl1J12ZTBwivQeD5WdNguK5t0bY56JqRkebD9eguuMkJ7Luww6dRVR0APeOOn
-	j73vVTKjSvsor0mrcZBoO9QGvgIosh1uLGiRkStOr8SWAjOeMrWxtNZaUPHJ89DN1HFRIQM5vMo
-	NHK7kvOE+JY748dtduqGkbSHNdRjg/rNXKo
-X-Received: by 2002:a05:6000:646:b0:485:8ca8:caa with SMTP id ffacd0b85a97d-486eb34c229mr5448307f8f.52.1789160465448;
-        Fri, 11 Sep 2026 14:01:05 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-486eb359f38sm7798317f8f.30.2026.09.11.14.01.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Sep 2026 14:01:05 -0700 (PDT)
-Date: Fri, 11 Sep 2026 22:01:02 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Nicolas Schier <n.schier@fritz.com>, Nathan Chancellor
- <nathan@kernel.org>, Linus Torvalds <torvalds@linux-foundation.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Masahiro Yamada
- <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, Thomas Gleixner
- <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
- Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, Ilias Apalodimas
- <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun
- Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?UTF-8?B?QmrDtnJu?=
- Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
- Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
- Onur =?UTF-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet
- <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
-Subject: Re: [PATCH 12/23] kbuild: avoid re-running compiler and linker
- probes
-Message-ID: <20260911220102.1d3d696a@pumpkin>
-In-Reply-To: <aqRGYXKDzXZMXmmp@gremlin>
-References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
-	<20260908-build-speedup-v1-12-5dc1ac01672d@kernel.org>
-	<178901395292.3971858.13236774094648272066.b4-review@b4>
-	<20260910-translucent-sweet-sidewinder-7acacb@l-nschier-aarch64>
-	<20260911183333.1df0f2e2@pumpkin>
-	<20260911-invaluable-indigo-seal-e31aec@l-nschier-aarch64>
-	<aqRGYXKDzXZMXmmp@gremlin>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HrWgHuUx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789176294; x=1820712294;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kWyKl8nspQAtl9ZLH0jHzigC1FX5K2ydejkIwl5FZXM=;
+  b=HrWgHuUxrQ59/PRfViPgBhhPnv482BsXV+vpjybbDUgkORioElEOcq1g
+   q4vdCXHiUehNTJtriWnseAmT7Papr3hzKs8qhOXIQVygu+T2ZCPaHgAYP
+   KGy+/aMncIpzSkhAyXX2kjpZhnvLMh8GWS6Asr+ekZAO2hEDvtKQYQhKj
+   fAmZ9hD1K4JaL/3pS9++AZBMp3VNwJc3ETBY7DqNIaGKccK8XfAQazpbL
+   UFDt94v9A3RCoGn5jg2ydKIF/Y8CDwvTozvVhougsVHXNdeeUQpu21KRx
+   AkUW4UpyfnK69t9494b6oVa1/2shd+rydoxw8jPg4Uslmm/A23ZeWv5H+
+   g==;
+X-CSE-ConnectionGUID: Eg2gUt1LSRyyXkveGn3L9Q==
+X-CSE-MsgGUID: 2u3n6lRhSuu9U0+iilAVMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11902"; a="93337078"
+X-IronPort-AV: E=Sophos;i="6.27,98,1787036400"; 
+   d="scan'208";a="93337078"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2026 18:24:54 -0700
+X-CSE-ConnectionGUID: CQuzOJr2TEG9R/SXou2QCg==
+X-CSE-MsgGUID: L2n3kEUiSQ+y/WITewQn/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,98,1787036400"; 
+   d="scan'208";a="295565944"
+Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 11 Sep 2026 18:24:49 -0700
+Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x5CTe-000000002VD-0ZI9;
+	Sat, 12 Sep 2026 01:24:35 +0000
+Date: Sat, 12 Sep 2026 09:23:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Ingo Molnar <mingo@redhat.com>, Mike Rapoport <rppt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@kernel.org>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2] x86/mm/pat: use pr_warn() for early W^X warnings
+Message-ID: <202609120952.vcYnJp5p-lkp@intel.com>
+References: <20260911-fixes-verify-rwx-v2-1-e2cde39b6693@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260911-fixes-verify-rwx-v2-1-e2cde39b6693@kernel.org>
 
-On Fri, 11 Sep 2026 19:24:50 +0100
-"Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+Hi Mike,
 
-> On Fri, Sep 11, 2026 at 08:17:57PM +0200, Nicolas Schier wrote:
-> > On Fri, Sep 11, 2026 at 06:33:33PM +0100, David Laight wrote:  
-> > > On Thu, 10 Sep 2026 17:42:35 +0200
-> > > Nicolas Schier <n.schier@fritz.com> wrote:
-> > >
-> > > ...  
-> > > > Yes, skimming through the patch, I thought about that, too.  Moving more
-> > > > cc option checks to Kconfig will make building out-of-tree kmods with a
-> > > > different compiler more dangerous.  Maybe we will have to make the
-> > > > warning in Makefile's prepare (external kmods) target a bit louder.  
-> > >
-> > > One problem is that distributions have a nasty habit of shipping kernels
-> > > that are compiled with a different compiler version to they actually
-> > > ship as a compiler.
-> > > In some cases the versions are clearly the same - but the version
-> > > strings differ.  
-> >
-> > yeah, I guess you hit the mark.  
-> 
-> I mean this is a problem that already exists for any flags already specified in
-> Kconfig.
-> 
-> Out-of-tree modules are historically something that we don't go to great lengths
-> to support and haven't historically worried about breaking, either.
-> 
-> I'm sure distros can find ways around this if a problem were to arise. But I
-> don't think it's something to worry about all that much.
-> 
-> I expect a _lot_ of these, in any case, would only require the compilers to be
-> within a fair few major versions of one another anyway.
+kernel test robot noticed the following build errors:
 
-That is true at the moment when the version of the compiler being used
-is checked.
-For instance it doesn't matter if modules are compiled without 'asm goto
-with output'.
-But if you putting the options in Kconfig the compiler being used better
-not be older - or it might not support the options.
-It isn't too bad if the compile fails, but some are silent.
+[auto build test ERROR on ebaf7c9bbb1e16523d7036e7e1225ad2dfcc6482]
 
-IIRC it is Ubuntu that has different version strings for the same compiler
-version, and Oracle that ships kernels compiled with much newer compilers
-that they install by default.
+url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Rapoport-Microsoft/x86-mm-pat-use-pr_warn-for-early-W-X-warnings/20260911-142843
+base:   ebaf7c9bbb1e16523d7036e7e1225ad2dfcc6482
+patch link:    https://lore.kernel.org/r/20260911-fixes-verify-rwx-v2-1-e2cde39b6693%40kernel.org
+patch subject: [PATCH v2] x86/mm/pat: use pr_warn() for early W^X warnings
+config: x86_64-allnoconfig (https://download.01.org/0day-ci/archive/20260912/202609120952.vcYnJp5p-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260912/202609120952.vcYnJp5p-lkp@intel.com/reproduce)
 
-David
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609120952.vcYnJp5p-lkp@intel.com/
 
-> 
-> >
-> > --
-> > Nicolas  
-> 
-> --
-> Cheers, Lorenzo
+All errors (new ones prefixed by >>):
 
+>> arch/x86/mm/pat/set_memory.c:708:16: error: expected ')'
+     708 |                 pr_warn_once(1, "CPA detected W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
+         |                              ^
+   arch/x86/mm/pat/set_memory.c:708:3: note: to match this '('
+     708 |                 pr_warn_once(1, "CPA detected W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
+         |                 ^
+   include/linux/printk.h:669:2: note: expanded from macro 'pr_warn_once'
+     669 |         printk_once(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
+         |         ^
+   include/linux/printk.h:650:15: note: expanded from macro 'printk_once'
+     650 |         DO_ONCE_LITE(printk, fmt, ##__VA_ARGS__)
+         |                      ^
+   1 error generated.
+
+
+vim +708 arch/x86/mm/pat/set_memory.c
+
+   667	
+   668	/*
+   669	 * Validate strict W^X semantics.
+   670	 */
+   671	static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long start,
+   672					  unsigned long pfn, unsigned long npg,
+   673					  bool nx, bool rw)
+   674	{
+   675		unsigned long end;
+   676	
+   677		/*
+   678		 * 32-bit has some unfixable W+X issues, like EFI code
+   679		 * and writeable data being in the same page.  Disable
+   680		 * detection and enforcement there.
+   681		 */
+   682		if (IS_ENABLED(CONFIG_X86_32))
+   683			return new;
+   684	
+   685		/* Only verify when NX is supported: */
+   686		if (!(__supported_pte_mask & _PAGE_NX))
+   687			return new;
+   688	
+   689		if (!((pgprot_val(old) ^ pgprot_val(new)) & (_PAGE_RW | _PAGE_NX)))
+   690			return new;
+   691	
+   692		if ((pgprot_val(new) & (_PAGE_RW | _PAGE_NX)) != _PAGE_RW)
+   693			return new;
+   694	
+   695		/* Non-leaf translation entries can disable writing or execution. */
+   696		if (!rw || nx)
+   697			return new;
+   698	
+   699		end = start + npg * PAGE_SIZE - 1;
+   700	
+   701		/*
+   702		 * If the kernel text is still RWX, gently complain, this could be a
+   703		 * false positive.
+   704		 * Once debug_checkwx() becomes mandatory for CONFIG_STRICT_KERNEL_RWX,
+   705		 * the warning can be removed completely.
+   706		 */
+   707		if (!kernel_set_to_readonly) {
+ > 708			pr_warn_once(1, "CPA detected W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
+   709			  (unsigned long long)pgprot_val(old),
+   710			  (unsigned long long)pgprot_val(new),
+   711			  start, end, pfn);
+   712			return new;
+   713		}
+   714	
+   715		WARN_ONCE(1, "CPA detected W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
+   716			  (unsigned long long)pgprot_val(old),
+   717			  (unsigned long long)pgprot_val(new),
+   718			  start, end, pfn);
+   719	
+   720		/*
+   721		 * For now, allow all permission change attempts by returning the
+   722		 * attempted permissions.  This can 'return old' to actively
+   723		 * refuse the permission change at a later time.
+   724		 */
+   725		return new;
+   726	}
+   727	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
