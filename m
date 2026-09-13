@@ -1,286 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00B43C1D4F;
-	Sun, 13 Sep 2026 06:55:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F78388397;
+	Sun, 13 Sep 2026 08:07:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789282534; cv=none; b=HxD6r7EDuavjw8JQZFTKT4eAMrx6a5DduTs+iCUNQBDjyJlgXCyDyfFpsbSrbWuTql8Q+XPdGf+ZFrTy8NR3e0QNLSNt+GgTIGWwJfZsT/QM4rltcHY81BKtUt5fpDkI3n+Ew5TaCOhzEN6sXzYHELCv7Fu61i8/AEj+LET8C8s=
+	t=1789286864; cv=none; b=NJQEfU431gha2EzqQOsn9799ykeEaBRNAScwN7gYxiUHaCjdnrgBECiRH5htqTWmIo2tVgPK9y+xkdoMBjh1JK6Beqoc0aYUFppXqb/Qwkvy7u0bHYjG+WpU3yxqoFvs2xx4LMbIVNcwHXn7rC68MmBIJKe6fpVTsEzWsGpQmCI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789282534; c=relaxed/simple;
-	bh=SWJ50Samts+m7KaPf4XIxu1KYbP4c8FQ95Ihg3WUIDE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hUbrKC+XH/Fln9ARdPqBg1nMktFI47sm2J5Ciw2FmX5vwgxh6BdetY1X7JabCrkwfQkZ/A2RTyS6CXHmYYeI4+7IYa5kNPg9cH4TEWkE8j6FFPtyz6LPzQZbVFNwM6GZkM8m16UwlEoVhTByrngxZnY6Sd2kMHjCGCeMBuiKf98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S1GYpsNA; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789286864; c=relaxed/simple;
+	bh=eVgPp3zE4UWPlXdNcCX28jql8tS5c8wjEHtHsF9tTgI=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=nTd9VmqYj1OGBXfxjG+vY08novSua7sPWeemtRv1J6DRkravvmoL5aU8zRtoyW2fFpc6/rSRlBG9hJJsIqaq2V4gU7AUMSYtjsG/MwBUW+6BRKUVgpt+bC6PdjqxFSbE2cHuXYy2LbzBWWpj0P6saZque6XFCwwnRUtfZaBP6mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P194nyYD; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S1GYpsNA"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 313601F00893;
-	Sun, 13 Sep 2026 06:55:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789282532;
-	bh=wT6gN/IxgPOdTmMhpo1rniCpWE+wufTMXpH4Yd2onlI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=S1GYpsNAcUx0FM53lU9XD7zterbc/p52NIZV+fMTVTYJ6erepuX41g85L5n7PvkJJ
-	 8DyqyQIpmcHLylqfO6XWSo0DEA74+IpDKPoFtNYUtRB2pWX32grlDMgBXojD3u4IRA
-	 gRyjRQo1pb8uRFp4YpNOf1t41jIGgXTqlRrEqjT/OXqf1ggIqCgLWhKi941OwoGx35
-	 DFO0DSBsqJJL6qE9ZmvHNqdpd4Jp5KJ0wFJRbWNE0xbxnJ861QQSROnV/Z28ij51aB
-	 FNQN15OXDwCd1LRcPVcXgP3w52Grw6b/cwXBW5KAkci5pkWdZe4ltunpTvsVf82b6P
-	 11r3CWL8qVYeQ==
-From: Yu Kuai <yukuai@kernel.org>
-To: Jens Axboe <axboe@kernel.dk>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Coly Li <colyli@fygo.io>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	Alasdair Kergon <agk@redhat.com>,
-	Mike Snitzer <snitzer@kernel.org>,
-	Mikulas Patocka <mpatocka@redhat.com>,
-	Benjamin Marzinski <bmarzins@redhat.com>,
-	Song Liu <song@kernel.org>,
-	Li Nan <magiclinan@didiglobal.com>,
-	Xiao Ni <xiao@kernel.org>,
-	Andreas Gruenbacher <agruenba@redhat.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Chris Li <chrisl@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Baoquan He <baoquan.he@linux.dev>,
-	Barry Song <baohua@kernel.org>,
-	Youngjun Park <youngjun.park@lge.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>
-Cc: Yu Kuai <yukuai@fygo.io>,
-	Christoph Hellwig <hch@lst.de>,
-	Nilay Shroff <nilay@linux.ibm.com>,
-	Tao Cui <cuitao@kylinos.cn>,
-	linux-block@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-bcache@vger.kernel.org,
-	dm-devel@lists.linux.dev,
-	linux-raid@vger.kernel.org,
-	gfs2@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 3/3] blk-cgroup: move async bio punt state to blkcg
-Date: Sun, 13 Sep 2026 14:54:40 +0800
-Message-ID: <326e4904402440323532168095f2eb0c6f697836.1789237877.git.yukuai@fygo.io>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cover.1789237876.git.yukuai@fygo.io>
-References: <cover.1789237876.git.yukuai@fygo.io>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P194nyYD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789286859; x=1820822859;
+  h=date:from:to:cc:subject:message-id;
+  bh=eVgPp3zE4UWPlXdNcCX28jql8tS5c8wjEHtHsF9tTgI=;
+  b=P194nyYDrnH4tunxlWIj4fXg1LJkMj9NDZJFo+v6DspKvQMRfZjw0xmo
+   fHsHQBqjHGroBmmyqwB0hgUVQUwiuDoVkpkje7WsrPhd3qmpQqyHY4Q7I
+   hKS9gbb4N5TUXL+jgQBMsDHLyuunqBlBp10sgF4qantrZL0JiLwsV+LSY
+   GitY6yizXSkEGmbkUVyWtM3VfP9x86lTxPuTJJjaLof9gpSZrHwuvq6v2
+   V3Y/kpQGXEY5cM+mn7XvReA1UdDW9qOvZZTpEGqvpCymcxuJgJ9/argHU
+   ZfrhRwUSJuAvHBHoETRJkUMB0aHAHMYm1PvtD0uLEiaqS/MGKPNx6yZ8i
+   Q==;
+X-CSE-ConnectionGUID: pKSmB5kRQzOAGb9prtKuwA==
+X-CSE-MsgGUID: ig+74wBqTgiygQrMRCzcxw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11903"; a="115218769"
+X-IronPort-AV: E=Sophos;i="6.27,100,1787036400"; 
+   d="scan'208";a="115218769"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2026 01:07:33 -0700
+X-CSE-ConnectionGUID: zumOgaLVQAKYQ5Absee0og==
+X-CSE-MsgGUID: 5JHnEf3gQH20Crv8VCS/hg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,100,1787036400"; 
+   d="scan'208";a="277603326"
+Received: from lkp-server02.sh.intel.com (HELO 0a3643a6ed9d) ([10.239.97.151])
+  by fmviesa005.fm.intel.com with ESMTP; 13 Sep 2026 01:07:31 -0700
+Received: from kbuild by 0a3643a6ed9d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x5fFB-000000003kN-3kNp;
+	Sun, 13 Sep 2026 08:07:24 +0000
+Date: Sun, 13 Sep 2026 16:06:59 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org
+Subject: [sailus-media-tree:metadata 161/169]
+ drivers/media/pci/intel/ipu6/ipu6-fw-isys.c:664:6: warning: variable 'source'
+ set but not used
+Message-ID: <202609131638.i4iLw29I-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: Yu Kuai <yukuai@fygo.io>
+tree:   git://linuxtv.org/sailus/media_tree.git metadata
+head:   357c2e168b861a3df80c68a9c44de9c9c282ec46
+commit: 99f62d82955331605ec24226a734233f2d52c6e0 [161/169] media: ipu6: Bridge the gap between streams in V4L2 and IPU6 firmware
+config: i386-randconfig-012-20260913 (https://download.01.org/0day-ci/archive/20260913/202609131638.i4iLw29I-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260913/202609131638.i4iLw29I-lkp@intel.com/reproduce)
 
-blkcg_punt_bio_submit() currently queues punted bios on blkg->async_bios,
-so it has to call bio_blkg() to find or create a queue-local blkg.  Bios
-now carry and pin the blkcg css, so punted bio lifetime no longer needs to
-be anchored by a blkg.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609131638.i4iLw29I-lkp@intel.com/
 
-Keeping the punt state in blkg can instantiate a blkg even when no blkcg
-policy is enabled, just to bounce submission from a shared kthread.  Move
-async_bio_lock, async_bios and async_bio_work to struct blkcg, and queue
-punted bios on bio_blkcg() for non-root cgroups.  Root or unassociated bios
-are submitted directly.
+All warnings (new ones prefixed by >>):
 
-This preserves the priority-inversion avoidance while preventing
-blkcg_punt_bio_submit() from creating blkgs that are not needed by any
-policy.
+>> drivers/media/pci/intel/ipu6/ipu6-fw-isys.c:664:6: warning: variable 'source' set but not used [-Wunused-but-set-variable]
+     664 |         int source;
+         |             ^
+   1 warning generated.
 
-Signed-off-by: Yu Kuai <yukuai@fygo.io>
----
- block/blk-cgroup.c | 52 ++++++++++++++++++++++++++--------------------
- block/blk-cgroup.h | 14 ++++++-------
- 2 files changed, 35 insertions(+), 31 deletions(-)
 
-diff --git a/block/blk-cgroup.c b/block/blk-cgroup.c
-index 59ccfefe16a8..aa3cee107ebe 100644
---- a/block/blk-cgroup.c
-+++ b/block/blk-cgroup.c
-@@ -180,14 +180,10 @@ static void blkg_free(struct blkcg_gq *blkg)
- 
- static void __blkg_release(struct rcu_head *rcu)
- {
- 	struct blkcg_gq *blkg = container_of(rcu, struct blkcg_gq, rcu_head);
- 
--#ifdef CONFIG_BLK_CGROUP_PUNT_BIO
--	WARN_ON(!bio_list_empty(&blkg->async_bios));
--#endif
--
- 	blkg_free(blkg);
- }
- 
- /*
-  * A group is RCU protected, but having an rcu lock does not mean that one
-@@ -226,23 +222,23 @@ static void blkg_release(struct percpu_ref *ref)
- }
- 
- #ifdef CONFIG_BLK_CGROUP_PUNT_BIO
- static struct workqueue_struct *blkcg_punt_bio_wq;
- 
--static void blkg_async_bio_workfn(struct work_struct *work)
-+static void blkcg_async_bio_workfn(struct work_struct *work)
- {
--	struct blkcg_gq *blkg = container_of(work, struct blkcg_gq,
--					     async_bio_work);
-+	struct blkcg *blkcg = container_of(work, struct blkcg, async_bio_work);
- 	struct bio_list bios = BIO_EMPTY_LIST;
- 	struct bio *bio;
- 	struct blk_plug plug;
- 	bool need_plug = false;
- 
--	/* as long as there are pending bios, @blkg can't go away */
--	spin_lock(&blkg->async_bio_lock);
--	bio_list_merge_init(&bios, &blkg->async_bios);
--	spin_unlock(&blkg->async_bio_lock);
-+	/* as long as there are pending bios, @blkcg can't go away */
-+	{
-+		guard(spinlock)(&blkcg->async_bio_lock);
-+		bio_list_merge_init(&bios, &blkcg->async_bios);
-+	}
- 
- 	/* start plug only when bio_list contains at least 2 bios */
- 	if (bios.head && bios.head->bi_next) {
- 		need_plug = true;
- 		blk_start_plug(&plug);
-@@ -259,19 +255,20 @@ static void blkg_async_bio_workfn(struct work_struct *work)
-  * cgroup.  Use this helper instead of submit_bio to punt the actual issuing to
-  * a dedicated per-blkcg work item to avoid such priority inversions.
-  */
- void blkcg_punt_bio_submit(struct bio *bio)
- {
--	struct blkcg_gq *blkg = bio_blkg(bio);
-+	struct blkcg *blkcg = bio_blkcg(bio);
- 
--	if (blkg && blkg->parent) {
--		spin_lock(&blkg->async_bio_lock);
--		bio_list_add(&blkg->async_bios, bio);
--		spin_unlock(&blkg->async_bio_lock);
--		queue_work(blkcg_punt_bio_wq, &blkg->async_bio_work);
-+	if (blkcg && cgroup_parent(blkcg->css.cgroup)) {
-+		{
-+			guard(spinlock)(&blkcg->async_bio_lock);
-+			bio_list_add(&blkcg->async_bios, bio);
-+		}
-+		queue_work(blkcg_punt_bio_wq, &blkcg->async_bio_work);
- 	} else {
--		/* Never bounce if there is no non-root blkg to queue on. */
-+		/* Never bounce if there is no non-root blkcg to queue on. */
- 		submit_bio(bio);
- 	}
- }
- EXPORT_SYMBOL_GPL(blkcg_punt_bio_submit);
- 
-@@ -350,15 +347,10 @@ static struct blkcg_gq *blkg_alloc(struct blkcg *blkcg, struct gendisk *disk,
- 	blkg->q = disk->queue;
- 	INIT_LIST_HEAD(&blkg->q_node);
- 	blkg->blkcg = blkcg;
- 	blkg->blkcg_id = blkcg->css.id;
- 	blkg->iostat.blkg = blkg;
--#ifdef CONFIG_BLK_CGROUP_PUNT_BIO
--	spin_lock_init(&blkg->async_bio_lock);
--	bio_list_init(&blkg->async_bios);
--	INIT_WORK(&blkg->async_bio_work, blkg_async_bio_workfn);
--#endif
- 
- 	u64_stats_init(&blkg->iostat.sync);
- 	for_each_possible_cpu(cpu) {
- 		u64_stats_init(&per_cpu_ptr(blkg->iostat_cpu, cpu)->sync);
- 		per_cpu_ptr(blkg->iostat_cpu, cpu)->blkg = blkg;
-@@ -1399,10 +1391,16 @@ static void blkcg_css_free(struct cgroup_subsys_state *css)
- 		if (blkcg->cpd[i])
- 			blkcg_policy[i]->cpd_free_fn(blkcg->cpd[i]);
- 
- 	mutex_unlock(&blkcg_pol_mutex);
- 
-+#ifdef CONFIG_BLK_CGROUP_PUNT_BIO
-+	{
-+		guard(spinlock)(&blkcg->async_bio_lock);
-+		WARN_ON(!bio_list_empty(&blkcg->async_bios));
-+	}
-+#endif
- 	free_percpu(blkcg->lhead);
- 	kfree(blkcg);
- }
- 
- static struct cgroup_subsys_state *
-@@ -1447,10 +1445,18 @@ blkcg_css_alloc(struct cgroup_subsys_state *parent_css)
- 	}
- 
- 	spin_lock_init(&blkcg->lock);
- 	refcount_set(&blkcg->online_pin, 1);
- 	INIT_HLIST_HEAD(&blkcg->blkg_list);
-+#ifdef CONFIG_BLK_CGROUP_PUNT_BIO
-+	spin_lock_init(&blkcg->async_bio_lock);
-+	{
-+		guard(spinlock)(&blkcg->async_bio_lock);
-+		bio_list_init(&blkcg->async_bios);
-+	}
-+	INIT_WORK(&blkcg->async_bio_work, blkcg_async_bio_workfn);
-+#endif
- #ifdef CONFIG_CGROUP_WRITEBACK
- 	INIT_LIST_HEAD(&blkcg->cgwb_list);
- #endif
- 	list_add_tail(&blkcg->all_blkcgs_node, &all_blkcgs);
- 
-diff --git a/block/blk-cgroup.h b/block/blk-cgroup.h
-index f68ea21958f5..7d73085503d5 100644
---- a/block/blk-cgroup.h
-+++ b/block/blk-cgroup.h
-@@ -75,18 +75,11 @@ struct blkcg_gq {
- 
- 	struct blkg_iostat_set __percpu	*iostat_cpu;
- 	struct blkg_iostat_set		iostat;
- 
- 	struct blkg_policy_data		*pd[BLKCG_MAX_POLS];
--#ifdef CONFIG_BLK_CGROUP_PUNT_BIO
--	spinlock_t			async_bio_lock;
--	struct bio_list			async_bios;
--#endif
--	union {
--		struct work_struct	async_bio_work;
--		struct work_struct	free_work;
--	};
-+	struct work_struct		free_work;
- 
- 	atomic_t			use_delay;
- 	atomic64_t			delay_nsec;
- 	atomic64_t			delay_start;
- 	u64				last_delay;
-@@ -111,10 +104,15 @@ struct blkcg {
- 	/*
- 	 * List of updated percpu blkg_iostat_set's since the last flush.
- 	 */
- 	struct llist_head __percpu	*lhead;
- 
-+#ifdef CONFIG_BLK_CGROUP_PUNT_BIO
-+	spinlock_t			async_bio_lock; /* protects async_bios */
-+	struct bio_list			async_bios __guarded_by(&async_bio_lock);
-+	struct work_struct		async_bio_work;
-+#endif
- #ifdef CONFIG_BLK_CGROUP_FC_APPID
- 	char                            fc_app_id[FC_APPID_LEN];
- #endif
- #ifdef CONFIG_CGROUP_WRITEBACK
- 	struct list_head		cgwb_list;
--- 
-2.51.0
+vim +/source +664 drivers/media/pci/intel/ipu6/ipu6-fw-isys.c
 
+33f56ed128438d Antti Laakso 2026-08-27  658  
+33f56ed128438d Antti Laakso 2026-08-27  659  static void ipu6_isys_csi2_isr(struct ipu6_isys_csi2 *csi2)
+33f56ed128438d Antti Laakso 2026-08-27  660  {
+33f56ed128438d Antti Laakso 2026-08-27  661  	struct ipu6_isys_stream *stream;
+33f56ed128438d Antti Laakso 2026-08-27  662  	unsigned int i;
+33f56ed128438d Antti Laakso 2026-08-27  663  	u32 status;
+33f56ed128438d Antti Laakso 2026-08-27 @664  	int source;
+33f56ed128438d Antti Laakso 2026-08-27  665  
+33f56ed128438d Antti Laakso 2026-08-27  666  	ipu6_isys_register_errors(csi2);
+33f56ed128438d Antti Laakso 2026-08-27  667  
+33f56ed128438d Antti Laakso 2026-08-27  668  	status = readl(csi2->base + CSI_PORT_REG_BASE_IRQ_CSI_SYNC +
+33f56ed128438d Antti Laakso 2026-08-27  669  		       CSI_PORT_REG_BASE_IRQ_STATUS_OFFSET);
+33f56ed128438d Antti Laakso 2026-08-27  670  
+33f56ed128438d Antti Laakso 2026-08-27  671  	writel(status, csi2->base + CSI_PORT_REG_BASE_IRQ_CSI_SYNC +
+33f56ed128438d Antti Laakso 2026-08-27  672  	       CSI_PORT_REG_BASE_IRQ_CLEAR_OFFSET);
+33f56ed128438d Antti Laakso 2026-08-27  673  
+33f56ed128438d Antti Laakso 2026-08-27  674  	source = csi2->asd.source;
+33f56ed128438d Antti Laakso 2026-08-27  675  	for (i = 0; i < NR_OF_CSI2_VC; i++) {
+33f56ed128438d Antti Laakso 2026-08-27  676  		if (status & IPU_CSI_RX_IRQ_FS_VC(i)) {
+99f62d82955331 Sakari Ailus 2026-06-26  677  			stream = csi2->streams_by_vc[i];
+99f62d82955331 Sakari Ailus 2026-06-26  678  			if (stream)
+33f56ed128438d Antti Laakso 2026-08-27  679  				ipu6_isys_csi2_sof_event_by_stream(stream);
+33f56ed128438d Antti Laakso 2026-08-27  680  		}
+33f56ed128438d Antti Laakso 2026-08-27  681  
+33f56ed128438d Antti Laakso 2026-08-27  682  		if (status & IPU_CSI_RX_IRQ_FE_VC(i)) {
+99f62d82955331 Sakari Ailus 2026-06-26  683  			stream = csi2->streams_by_vc[i];
+99f62d82955331 Sakari Ailus 2026-06-26  684  			if (stream)
+33f56ed128438d Antti Laakso 2026-08-27  685  				ipu6_isys_csi2_eof_event_by_stream(stream);
+33f56ed128438d Antti Laakso 2026-08-27  686  		}
+33f56ed128438d Antti Laakso 2026-08-27  687  	}
+33f56ed128438d Antti Laakso 2026-08-27  688  }
+33f56ed128438d Antti Laakso 2026-08-27  689  
+
+:::::: The code at line 664 was first introduced by commit
+:::::: 33f56ed128438dd791b9114ad079ab188daa1c09 media: ipu6: Move isys isr handlers to fw file
+
+:::::: TO: Antti Laakso <antti.laakso@linux.intel.com>
+:::::: CC: Sakari Ailus <sakari.ailus@linux.intel.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
