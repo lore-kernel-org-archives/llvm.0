@@ -1,222 +1,174 @@
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9196B346E75;
-	Sun, 13 Sep 2026 08:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94EB04BEE21;
+	Sun, 13 Sep 2026 13:08:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789288442; cv=none; b=mi/w+u1U5tgXxTTUXo5UADoDVSmauzlgdvdlINuK6lYX7YFivM1iBmq44Xz9OU6NW8MdL9YDPL4sHDnaBRwi04owTFjbJTk1eT11cp0yHsoIDNSmGCxaeydyltXOSq+AoN6j6yqkwQFOLfr2biq6Uyex9HLGvww7dTHIqZf99V4=
+	t=1789304882; cv=none; b=gXVRolYiR+rrUV9sBvcaR+MKacyrH6KtzxozXonUtv8mpwfw1W9UEXWR2X+ufkUS9gF1LYnhdwAqdC8sN2EVae6WC9ZvsWUpVZR1jmUwceDQFgLqMx1cR4qxaB155O0YICX8qg0mY89EjwC1zjTL+3nE+qEmOrwPJUISmwPa9dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789288442; c=relaxed/simple;
-	bh=l21u1VfuTUk80ee1/KqRN/TTYww9xGQuE4vEMp/bBy0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=gXe7AdxiTcAi1Lblvu+dQubTAAhvLtEzDz5k3udGAxhmGpbj4i4zmTs9Mu5+uUgui9PYUCcAfkr8WSRvj0f5S0mBO1oOFsL4YlFhqOOXlS9bya9n9wytsV3NreIS9ho+Bp+H0gqxFkLgINZD2rDfUWJK8/k3shQ1XrLmtFd8Bv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hP4uSJGU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=nvm4EGrz; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1789304882; c=relaxed/simple;
+	bh=v6OfR1cWuZ/hF6yiJgr1kFYiReWwHr1+3a5jTj4dBRQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Wg2I0GxZwvthGTNwLD3zDY5es2LWBTgSZ2jSL+Q7Wu1tPHnk0En6o8qupsiLy3gpye0/1fAf5niNzTPrzRDREiQQZzKRlh6P/na90ywgXAfo03NNed3K2TLS3o++xccLLychL4BRmVx/mc9R9GxMH/EVaP4SBYdAlowpI6gJllk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fWHzwufV; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hP4uSJGU";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nvm4EGrz"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.stl.internal (Postfix) with ESMTP id 3F049130010C;
-	Sun, 13 Sep 2026 04:33:55 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Sun, 13 Sep 2026 04:33:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1789288434;
-	 x=1789295634; bh=FK/hgn5ztNrzJ8FzxNsGVH8sTakZzoGmnSB/QJ0ZjK4=; b=
-	hP4uSJGU4LPNyh7tNOFYiOwyUhoJjvn+rtx/gV1jNxsXli24Yj4H9OHWbSCUCOYp
-	1LmeKkR/FDUTxfeVUcR3PW6hzHXaeKbqkwhguEsHXcWXM+EqRDq6Mutivw7D6AP7
-	zxcO7/7iOjRUeRDtvmwTdGVJi91XV93oTtX2lrN8t5oAK8MveTvPjOJLHdwKGLDv
-	WDY18MwDH078GeQblDSx50OkW8RYXHIL1Py1DTJXQ6l5yXDv8UpvOCwggfr73muh
-	tjWCnmei/4Ederp7aq+6q9XhHyjG3orbvr7iO3P4pOWy80p3tGPWWzvPjFz6Xoj/
-	l/E+uRa80heywM28ZQPbng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789288434; x=
-	1789295634; bh=FK/hgn5ztNrzJ8FzxNsGVH8sTakZzoGmnSB/QJ0ZjK4=; b=n
-	vm4EGrz4F6jR5JXE4wigJ8Ry7JX5M0AcC921ZlsuVqc/YpoeL8SAT+tKWa33nB0T
-	ZjwnZB7JaKQBbZtda19Ii6izZqboxNE1agBJILSQAvcaL8wIdNQhGx6H6fTk7CiJ
-	9DNwc7XlhvV+mMoGxebUGze3s1kX5uyoEPunC4jlIgaJyiyTX4Sbb7UtBOpcgTkm
-	GA9daUeYKwy5LcIt5VDo8mzbeUuePrI+JBZLjzF/J2KeYkeu+nmvT4YELvXjrCdX
-	MgxF8P55rsqI0lTOj9w6JBgCin8AMz9HlCAbF/Hl/i9h5rN/siDdaojxzhTnkeU0
-	a5HBpRoQJPWwTY7SPsEjQ==
-X-ME-Sender: <xms:6V-mapGAWvvTCYmPsF0gHXxbEy2q1VIUbPN28RqMGUUZtzTOrnEvuA>
-    <xme:6V-mapLXRXStV_91mp4cNlBE7UDv4i1YnLRZiVf3ZoCTB1V3wH1kzPlEqS463DWcH
-    jBKPFdmoJWdTPPrTaq2cSmCN-or1svTLHlOTE8BeqZQDBbr6-RKxf_M>
-X-ME-Proxy-Cause: dmFkZTFlVhM1xA9XUYL3SefhQrC0hRhFkTaBBJIQ3su2kNz4MfZ3F028vj/UpSaZ9vtqdo
-    wovmypaSI/+/Azrkn02Yb8tOmVCj78ufH0HthXhTBRf6WeFoUXig393+d5/MfEq2pSRnyw
-    LvkfDeXAZA0b/j/z/1yiQhabfROQmtQB7KcVHYhL5U/1ONNfzRfrULV/TAUFjNOKXvZqHU
-    1d3D75czeqAluQHI4FwbSCqywRuOSl2dbfCEwiQwzFVuJIGYTmYp+6BhJS/cWlHc13mRMu
-    JCF4bc/fUM2PhFgmF6DfLis1vMU0ddqwu1kq89fIC1RtR0wlPT1taz0+6qP2fokAV623EC
-    7WvNLhWl3kVw2NxV4IcXin9Y98/yDUmwATW+ikygGBZJ6YYQmvcBkxJjwY6s1s0lBnkurW
-    dgFHyjPldyFsZBx8c3uSdH5l15d1REZen5gyrGPU1HE169zMMgo3KEmBEUmtacwkM75/YY
-    grwFCl6KM0Bz9faJrynux+UReF8cohlyDGeVV9rTC5y20vL4mU3p+bx1hfEaXHZ84F3XO2
-    v2UOS2mSdQ64QMhfWRfWITFHODS475vwD85qi+Wj3j/4MpFov5LCO3ZCpCX0NoG23iGgHA
-    cDtOhMrnZ/x93jpFr/xtrmhKYEtASmslgyDXrwp3akV21xiDzYSAeZt4Xing
-X-ME-Proxy: <xmx:7l-marCsxWSQh7GyHEJQeExs04vUHwGvSpX6l3ZVDsiTwMGzIFCPpg>
-    <xmx:7l-mamy6bQq8k5lrbzz61NVzb-U8lzuLCWChRPmqZFuL-W1-V1RBnA>
-    <xmx:7l-mapO3Ea7pdRgQSbEG743m78cgcMsUglEvHhQP6eVdBbbYwVXaDw>
-    <xmx:7l-matdXxH-1ltZbtCG0gBd_mR1zKSCO473ThhfLCbYY-V19IRKADw>
-    <xmx:8l-maj_96L_YD-vKCf9QRDIxzcji6jyg1fRDZfFt7ZuAErCOtrULUMr4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id DB07132A007E; Sun, 13 Sep 2026 04:33:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fWHzwufV"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68DAVpCb2995231;
+	Sun, 13 Sep 2026 13:07:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=zUit5i
+	h3a9kjbGO/rFlGJaDtgvCiUmUJgFLme1f3Lo8=; b=fWHzwufVj/J9rMJwnbjjIQ
+	GDpO1v3/3jvVIMS4uDLYLuILwVbcb78H0kuPVeSIElUA/v4IJmdcRw/EtrT/P8yo
+	AAKrWOpD3i2upRVEOLsFC0Xv9Xhs/kU8jU8LvFKEkAz9bu5OyML7hxYJQDBI4aKD
+	4o/l7V1DGh5fIhUUwUSRASqHzzy5SLPy2XHK3rI0nlR6N2SljsVDKtF3DISCoNcI
+	QjHKFL5XirMi8tKq+Z2sL241t5SQX1XMGvUP0PQHZjJC7pctqqzfhmflqTe/WI0m
+	FMnLgF2OmT06hohsQAtQwW9hLM4hiX1FvL87Jh6xOlQkt1j5W+awdJmPFQoX+3Lw
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmv5hcuxj-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Sun, 13 Sep 2026 13:07:14 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68DAZ6P2509113;
+	Sun, 13 Sep 2026 13:07:13 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gnhevsmuw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 13 Sep 2026 13:07:13 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68DD7Dk017629810
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 13 Sep 2026 13:07:13 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 23A3B58043;
+	Sun, 13 Sep 2026 13:07:13 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 308055805D;
+	Sun, 13 Sep 2026 13:07:00 +0000 (GMT)
+Received: from [9.61.162.129] (unknown [9.61.162.129])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Sun, 13 Sep 2026 13:06:59 +0000 (GMT)
+Message-ID: <7bc52e8c-403e-4323-be0a-04a2019c2aeb@linux.ibm.com>
+Date: Sun, 13 Sep 2026 18:36:58 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AK-jVwBtQCQR
-Date: Sun, 13 Sep 2026 10:33:04 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Jonathan Cameron" <jic23@kernel.org>
-Cc: "Svyatoslav Ryhel" <clamor95@gmail.com>,
- "Arnd Bergmann" <arnd@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Bartosz Golaszewski" <brgl@kernel.org>,
- "Mark Brown" <broonie@kernel.org>, "Conor Dooley" <conor+dt@kernel.org>,
- "Daniel Thompson" <danielt@kernel.org>, "Helge Deller" <deller@gmx.de>,
- devicetree@vger.kernel.org,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- dri-devel@lists.freedesktop.org, "Jingoo Han" <jingoohan1@gmail.com>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>, "Lee Jones" <lee@kernel.org>,
- "Liam Girdwood" <lgirdwood@gmail.com>,
- "Linus Walleij" <linusw@kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
- linux-fbdev@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-leds@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-watchdog@vger.kernel.org,
- "Guenter Roeck" <linux@roeck-us.net>, linuxppc-dev@lists.ozlabs.org,
- llvm@lists.linux.dev, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
- mfd@lists.linux.dev, "Michael Hennerich" <michael.hennerich@analog.com>,
- patches@opensource.cirrus.com, "Pavel Machek" <pavel@kernel.org>,
- "Rob Herring" <robh@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Support Opensource" <support.opensource@diasemi.com>
-Message-Id: <e53ae695-99ed-4f14-855b-b922a938438c@app.fastmail.com>
-In-Reply-To: <20260912232047.19c4cb10@jic23-hlaptop>
-References: 
- <CAPVz0n0ryOns2sCJE_jFana9MVzwEj1QZuPEa8FNhGbHXnMB+A@mail.gmail.com>
- <11652e5e-053e-45b0-98a0-0c1cb2aeedc4@app.fastmail.com>
- <20260912232047.19c4cb10@jic23-hlaptop>
-Subject: Re: [PATCH 08/14] mfd: remove unused aat2870 driver
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] blk-cgroup: store blkcg in bio instead of blkg
+To: Yu Kuai <yukuai@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap
+ <rdunlap@infradead.org>, Coly Li <colyli@fygo.io>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Alasdair Kergon
+ <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Benjamin Marzinski <bmarzins@redhat.com>, Song Liu <song@kernel.org>,
+        Li Nan <magiclinan@didiglobal.com>, Xiao Ni <xiao@kernel.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
+        Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
+        Baoquan He <baoquan.he@linux.dev>, Barry Song <baohua@kernel.org>,
+        Youngjun Park <youngjun.park@lge.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Cc: Yu Kuai <yukuai@fygo.io>, Christoph Hellwig <hch@lst.de>,
+        Tao Cui <cuitao@kylinos.cn>, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
+        dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
+        gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev
+References: <cover.1789237876.git.yukuai@fygo.io>
+ <ef547fdb7a6c8e39a25a1b9473c444f24a0f03be.1789237876.git.yukuai@fygo.io>
+Content-Language: en-US
+From: Nilay Shroff <nilay@linux.ibm.com>
+In-Reply-To: <ef547fdb7a6c8e39a25a1b9473c444f24a0f03be.1789237876.git.yukuai@fygo.io>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTEzMDE4NiBTYWx0ZWRfXxK218OGK9G+d
+ ieqx00sYrTS2O7U39P54JyrhIlLhTQXnA018MXuQk6idxb0GAC50it7KgBMF03xDZiOOHzNcjIv
+ P8WRJeCRCni3OcqRSMyqZtRZ9QCpIwxlH94d5Z0T227QL0pd62kFw2cdDC7XsP/nZu3ejskXkh2
+ 52h8wn/lgpqrbwqanFAgg5F2PZnJMXIktWqf7IT5f7mA2lrJtahGQAN2v7Tqo2XAlIhZu+qHful
+ OsH4FbpzXqKEjvpJ6tBEW8Zcb2hZ5Nn3SztZzam3jxsKy8Q/E4SQ/4uqmyzwgfG65vuzQ3EKKFX
+ xjm4w07PckyYVZTKjM+TigC7z8YDLgrVV072y81IQcbPVSpmeA4DGHDQNMmcW5Pf/YLpoDhkR/B
+ TelWS6kiZInnyPzDtckYJMPtZhLhIS2tkTIFWRTb0lMLov7pMO+zKGO7p9wMow5oL+mQB+flgoX
+ RgklE28Ct41OoDi8RIA==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTEzMDE4NiBTYWx0ZWRfX/MQqZbvS+Gzy
+ etUs/xCHf/qWmVvUT7R64IKGOhySjcnMIX0zucYle2D2rehC1E+xLUz8HfOu0bQBmdOxUniGENg
+ Lw1fGV23bSz08jBbq6NpoWRLg9SYSvo=
+X-Authority-Analysis: v=2.4 cv=Zsx4uN7G c=1 sm=1 tr=0 ts=6aa6a003 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=Y2IxJ9c9Rs8Kov3niI8_:22 a=VnNF1IyMAAAA:8
+ a=yt32EUx3BFOMUVNgjeUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: ZzmVE4qllAbHTRtWN128oiDfrMAK8Y9I
+X-Proofpoint-GUID: BDLNBh2GfEW--t6G2CC94m6fmLXTBin0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-13_04,2026-09-11_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 impostorscore=0 clxscore=1011 priorityscore=1501
+ lowpriorityscore=0 bulkscore=0 adultscore=0 phishscore=0 spamscore=0
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609130186
 
-On Sun, Sep 13, 2026, at 00:20, Jonathan Cameron wrote:
-> On Thu, 10 Sep 2026 20:14:15 +0200 "Arnd Bergmann" <arnd@arndb.de> wrote:
->> 
->> I tried to be careful about figuring out exactly which drivers are
->> unused, but I'm sure there are still a few false positive and false
->> negative ones in there. I've added the current list of driver files below,
->> let me know if you see something that shouldn't be there.
-> Hi Arnd
->
-> For I2C and SPI at least, there doesn't need to be explicit
-> device tree support as long as they have defaults when platform
-> data isn't there. Those two buses will happily bind based on
-> a dt-compatible and their i2c_device_id or spi_device_id tables
-> for example.
->
-> So unless they fail to probe (some might?) we don't have
-> a clear signal on whether they are in use via DT or not.
->
-> For vast majority of IIO drivers we don't have an upstream
-> DTS as there is no clear motivation for anyone to upstream
-> the dts for a random industrial control board or similar.
+On 9/13/26 12:24 PM, Yu Kuai wrote:
+> From: Yu Kuai<yukuai@fygo.io>
+> 
+> A bio currently stores and pins a queue-local blkg. This forces bio
+> association and remap paths to look up or create a blkg even when no
+> blkcg policy will use the bio, and ties the stored state to the current
+> block device.
+> 
+> Store and reference the queue-independent blkcg in the bio instead. Add
+> helpers that lazily look up or create the queue-local blkg when a policy
+> needs it, and pin the result until the bio changes devices or releases
+> its cgroup state.
+> 
+> Keep completion and accounting users lookup-only when they do not create
+> a blkg themselves. In particular, blk_cgroup_bio_start() only accounts a
+> bio when a policy path has already pinned BIO_BLKG_REF. This avoids
+> creating a blkg from the unconditional accounting hook when no policy is
+> enabled.
+> 
+> Protect every rhashtable lookup with an RCU read-side critical section.
+> Annotate the lookup helpers and recursive wrappers with
+> __must_hold_shared(RCU) so Clang can verify that contract.
+> 
+> Do not include BIO_BLKG_REF in device-mapper saved bio flags. Remapping
+> drops the associated reference, and restoring the bit later would claim
+> ownership without reacquiring the reference.
+> 
+> If blkg creation fails while walking down the hierarchy, use the closest
+> available ancestor and update the bio's blkcg association before
+> recording the blkg reference. This keeps later CSS ID hash lookups
+> matched with the pinned blkg.
+> 
+> Signed-off-by: Yu Kuai<yukuai@fygo.io>
+> Reviewed-by: Tao Cui<cuitao@kylinos.cn>
 
-Right, that was my general rule, if I had tried to remove
-all drivers that could plausibly probe with an external dtb
-but have no internal users, that would have easily doubled
-the 300 patches I already did.
+Looks good to me.
+Reviewed-by: Nilay Shroff <nilay@linux.ibm.com>
 
->> drivers/iio/adc/ad7266.c
-> No to dropping this.
->
->
->> drivers/iio/adc/ad7791.c
-> No to dropping this one.
->
->> drivers/iio/adc/ad7793.c
-> Maybe. Analog devices ack needed.
->
-> Production part but this one indeed fails to probe.  Analog
-> folk, do you want to fix this one up?
->
->> drivers/iio/adc/ad7887.c
-> No to dropping this.
->
-> Production part - should work fine with defaults in driver.
-> Could like the others drop the platform data handling.
-
-This was one patch that I wasn't sure about myself (all four
-drivers together) since it looks like even when they do probe
-from dtb, the feature set would be limited without a DT
-binding, and they have been in the tree for a rather long time
-without users.
-
-I've dropped the patch now. I looked at dropping the platform_data
-handling, but I think that only makes sense if we get a
-proper DT binding first.
-
->> drivers/iio/adc/lp8788_adc.c
-> Probably
->
-> Sub driver of an MFD.  I'm fine with that going if we know
-> the mfd is no longer in use.
-
-Ok, I posted that one as
-https://lore.kernel.org/all/20260909132153.1596191-8-arnd@kernel.org/
-
-and so far, everyone agreed on removing it.
-
->> drivers/iio/adc/lpc18xx_adc.c
->> drivers/iio/dac/lpc18xx_dac.c
-> Probably
->
-> Likewise these two.
-
-Right, this one of course should follow the removal of
-CONFIG_ARCH_LPC18XX in arch/arm/
-
->> drivers/iio/frequency/ad9523.c
-> Maybe. Analog Devices ack needed.
->
-> Fails to probe without platform data and marked not recomended
-> for new designs. If we get an Ack from Analog devices folk
-> I'm fine with this one going away.
-
-This matches what I wrote in 
-https://git.kernel.org/pub/scm/linux/kernel/git/soc/soc.git/commit/?id=20c1515b0caec2769c0916d087326f640bfb8aab
-
-I'll keep the patch in the series and we'll see what the
-maintainers think when I post it.
-
-Thanks a lot for taking a look!
-
-I wonder if some of the older Analog drivers were only ever used
-on Blackfin. My series still removes a few more drivers outside
-of iio list that had platform_data in arch/blackfin/ until we
-removed that in 2018. These all fail to probe without
-platform_data, which means they also wouldn't work with the
-downstream adsp-sc5xx/sc8xx port or any other upstream Arm
-platform:
-
-a4bdf847e0e1 backlight: remove unused adp8860/8870 drivers
-c71829e110e9 Input: touchscreen: remove unused ad7877 driver
-b4d4ca64500b Input: misc: remove unused ad714x driver
-978426a3fe1a usb: remove unused sl811 driver
-0860c9f297c3 mfd: remove unused adp5520 driver
-
-       Arnd
