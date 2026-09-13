@@ -1,119 +1,218 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B043B14B4;
-	Sun, 13 Sep 2026 06:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D911A23EAAF;
+	Sun, 13 Sep 2026 06:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789279976; cv=none; b=sGzqyRtg28BF+aM74jWojeOnw03ZIdEsPjuMW+bKOME5A88JRCMV2imcMLl+hDaywY9nhEOFiZBXHCCK6qRIgDJnIEPym37yRJPbGnkawDlFec4qO4mzqDbgCS15sH9/dda6nZhXrOMlyLZypzQhCGpdEZswHBYsC/PZzg6QMqg=
+	t=1789282498; cv=none; b=gdjs9N5BRsXM5zaXYlkuubvuWChHJYWqOnqelaNTS9Hk69ivXXqXtbFCGid/KBp2FvcAj+l6zldhVNEXNxSXTFmwqZ+LbfbiIZnxIJXDXqJq8bmq7NoxJLwyYsCx62KBTvGEgtt+xcfOMc/XuPEVpNUhKbtY+2qZmydUPpkj3Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789279976; c=relaxed/simple;
-	bh=hlRAfz052thwIwNAZA77TLcD4d+HAFAJUCMq+2ACYrU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W6FuRCmiKx6fzPUtasHdxmMV5loTIIQ17bgyFtJXO/9B53d4GxVijJllWQAQv4hH60uBy/l6hSKFkMDul5vbI+D7q5c4utY7DveUUa3CtTp5rg4wdebisLsihJcSGoiiPnUayi8da0mHBsz5rZndorQPaVaZRo4ixPp8TSbl4+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e6vlzCgQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789282498; c=relaxed/simple;
+	bh=Vo5IEUCq2PRN8I9M8ia8uTkWqKpp3QkJ/AanGqr7P10=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Fa1QloNPjrbYL8LObD5tEkUqipS4/ha8FU1K2Xldiv9Zn6cTcPdziT2GeUuEjMliCLSLb5zxaAaKoFfTfwYMFcPqbV3CfwEediST1sw8TMtS6kPGFjLR+mQiVT7awsRN9Mte+DqXBTAcxDheqZPui9qwY4a8Fik09cu+NP97Fmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L+v92v1A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e6vlzCgQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F5801F000FF;
-	Sun, 13 Sep 2026 06:12:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L+v92v1A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32EFF1F000FF;
+	Sun, 13 Sep 2026 06:54:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789279973;
-	bh=QSyp8ho+krENqcCqtD8mgyjv4BFYhN5HZH/k2CfA1Ng=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=e6vlzCgQxDcz90hMbxxtPxhE5h6HGH8zwsWBdGGRaKLvrFT+nIe8nz3ZvQRB+j7F2
-	 x6SOK8+qlefol7r0HAOcQWmBJEC6aIMfI8WXFk7+3Z3etJo5jO2wcsJgM1npW0I9AH
-	 lcpJCt5Gl+64CUja4L+jhQ9M/6vwlJafenyvM5Y8Ske2LFD8eCPZca6k+EGpMt5E+6
-	 P5r9ba03wrq81uEUp4+x2E3YEuNJOJsDcsWfov8CaNctjBKq0Cr+4V6LN+5xsvdfN4
-	 7Mm2vwZwLAPOEGMAnGhnzyb6xav268b2VIhPzWTkflt5UNbdOgPPyB5fWev6MdgSCF
-	 i0/nqVEdriAJQ==
-Date: Sun, 13 Sep 2026 11:42:48 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Herman van Hazendonk <github.com@herrie.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
+	s=k20260515; t=1789282496;
+	bh=W2MbFsUx54LJK7U3V6vP7eUNrI9U/R36OrB0aVm9oyE=;
+	h=From:To:Cc:Subject:Date;
+	b=L+v92v1A2R6bqo+k2ns+Apd0XuZhfJJRlDhcZRxfgYZBR6lBTySlcGwphZl9esPqc
+	 6OapuqhkUgrZB5XbpeiKFE4FWmpX3fDYqnAWZ+Z5cik38+LKv17eC95gI/dBBW2maI
+	 QBtXzwx4Css+3kO8rrA5dxC6eWTTYjMJfj2lSIDJyX9WPH8eOB6Ln0exJvX33oYTJO
+	 CHj1Orsj3SZQz9ZomQddwDmGJoNO6y1P+zQ5V26DW3JHaWShU5qKy+zKNWu1trppZH
+	 XR4Bt0VV/FOH6OlQ1i8WQIXtA16nKQJtDvrM9pq+m+RFhwSgcAcBzQIdBMkDJt9hP/
+	 ktPD12L2uaUcA==
+From: Yu Kuai <yukuai@kernel.org>
+To: Jens Axboe <axboe@kernel.dk>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Coly Li <colyli@fygo.io>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	Alasdair Kergon <agk@redhat.com>,
+	Mike Snitzer <snitzer@kernel.org>,
+	Mikulas Patocka <mpatocka@redhat.com>,
+	Benjamin Marzinski <bmarzins@redhat.com>,
+	Song Liu <song@kernel.org>,
+	Li Nan <magiclinan@didiglobal.com>,
+	Xiao Ni <xiao@kernel.org>,
+	Andreas Gruenbacher <agruenba@redhat.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Chris Li <chrisl@kernel.org>,
+	Kairui Song <kasong@tencent.com>,
+	Kemeng Shi <shikemeng@huaweicloud.com>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Baoquan He <baoquan.he@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Youngjun Park <youngjun.park@lge.com>,
 	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, konrad.dybcio@oss.qualcomm.com,
-	dmitry.baryshkov@oss.qualcomm.com
-Subject: Re: [PATCH v3 0/2] phy: qcom: usb-hs: MSM8x60 vendor ULPI init
-Message-ID: <aqY-4ExEFebqU0ZP@parshuram>
-References: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
+	Justin Stitt <justinstitt@google.com>
+Cc: Yu Kuai <yukuai@fygo.io>,
+	Christoph Hellwig <hch@lst.de>,
+	Nilay Shroff <nilay@linux.ibm.com>,
+	Tao Cui <cuitao@kylinos.cn>,
+	linux-block@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-bcache@vger.kernel.org,
+	dm-devel@lists.linux.dev,
+	linux-raid@vger.kernel.org,
+	gfs2@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v2 0/3] blk-cgroup: store blkcg in bio before blkcg_mutex conversion
+Date: Sun, 13 Sep 2026 14:54:37 +0800
+Message-ID: <cover.1789237876.git.yukuai@fygo.io>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260616-submit-phy-usb-hs-vendor-init-seq-v3-0-7d21fb1d1484@herrie.org>
+Content-Transfer-Encoding: 8bit
 
-On 16-06-26, 15:26, Herman van Hazendonk wrote:
-> v3 (this round):
->  - Re-introduce a much smaller DT binding patch following Konrad's
->    "do we have values for MTP/QRD" question and Dmitry's
->    "qcom,hsdrvslope (or similarly named) property in DT" suggestion.
->  - Survey of every MSM8x60-class downstream tree I could reach --
->    Qualcomm reference (SURF/FFA/Fluid/Dragon/Fusion via
->    board-msm8x60.c on android.googlesource.com), Samsung Galaxy S2
->    family (Q1 / Celox / Dali / generic 8x60 MTP), Sony MSM8660
->    (sony-kernel-msm8660), HTC MSM8660 ports
->    (shooter / holiday / pyramid / doubleshot / shooter_u / ruby) and
->    HP TouchPad -- shows that pre-emphasis, CDR auto-reset and SE1
->    gating values are *identical* across every reference board.
->    Only the 4-bit HS driver slope in reg 0x32 [3:0] varies.
->  - Patch 1/2 adds a single qcom,hs-drv-slope DT property (u32,
->    range 0..15) gated to the qcom,usb-hs-phy-msm8660 compatible.
->  - Patch 2/2 hardcodes the three platform-wide writes in the driver
->    behind the same compatible match, consumes qcom,hs-drv-slope for
->    the board-specific bits, and leaves the silicon default in place
->    when the property is absent -- which matches Qualcomm's own MTP,
->    Samsung and Sony reference behaviour.
->  - The bit-level meaning we *do* have comes from Code Aurora's
->    downstream arch/arm/mach-msm/include/mach/msm_hsusb_hw.h, which
->    Samsung and HP both shipped byte-for-byte identical.
->  - Per Dmitry's request, both commit messages call out explicitly
->    that there is no public Qualcomm documentation describing how the
->    4-bit slope value maps to an actual slew rate / V/ns / %.  The
->    field is an opaque hardware control; boards must copy the value
->    from their vendor / downstream kernel as a measured-per-layout
->    knob, not a derived one.
-> 
-> v2:
->  - Dropped the original qcom,vendor-init-seq DT property entirely
->    and folded all the vendor-register programming into the driver
->    behind the qcom,usb-hs-phy-msm8660 compatible.
->  - HS driver slope was hardcoded in v2.  v3 promotes that one
->    varying value to a DT property as Dmitry requested.
-> 
-> Companion TouchPad DTS work (flipping the PHY compatible from
-> "qcom,usb-hs-phy-apq8064" to "qcom,usb-hs-phy-msm8660" and adding
-> qcom,hs-drv-slope = <5>) will be sent separately with the rest of
-> the apq8060-tenderloin DT series.
-> 
-> On-device validation (HP TouchPad / APQ8060):
->  - Booted with v3 + the upcoming DTS hookup.  PHY driver bound,
->    msm_hsusb HS link came up at high-speed.  No regression vs the v2
->    hardcoded build.
-> 
-> Build / schema verification:
->  - dt_binding_check DT_SCHEMA_FILES=.../qcom,usb-hs-phy.yaml: clean.
->  - dtbs_check on qcom-apq8060-dragonboard.dtb and
->    qcom-msm8960-cdp.dtb (the two existing in-tree usb-hs-phy
->    consumers): clean.
->  - drivers/phy/qualcomm/phy-qcom-usb-hs.o builds clean.
->  - checkpatch.pl --strict: no warnings on either patch.
+From: Yu Kuai <yukuai@fygo.io>
 
-Hey, this fails to apply for me, can you please rebase on phy/next and
-send
+This is v2 of the preparatory series for the blkcg_mutex conversion
+proposed in the related series [1]. That conversion moves queue-local
+blkg topology synchronization from q->queue_lock to q->blkcg_mutex,
+which is awkward while bios directly store queue-local blkg references.
 
+Storing a blkg also ties a bio to one request_queue. A remapped bio must
+drop that reference and recreate the association for the new queue even
+when no blkcg policy needs it. Dying blkgs add another complication:
+they disappear from the per-blkcg lookup tree before all pinned bio
+references drain.
+
+Patch 1 makes request_queue the authoritative lookup owner. A
+queue-owned rhashtable keyed by the blkcg CSS ID keeps dying blkgs
+discoverable until their references drain, while q->blkg_list remains
+available for ordered walks.
+
+Patch 2 stores and pins the queue-independent blkcg CSS in each bio.
+Queue-local blkgs are created lazily by policy users, then pinned until
+the bio changes devices or releases its cgroup state. Completion and
+accounting paths which do not create a blkg remain lookup-only.
+
+Patch 3 moves async bio punt state from blkg to blkcg, so punting alone
+does not instantiate a queue-local blkg.
+
+Changes since v1:
+
+  - Rebase onto the latest block-7.3 branch.
+  - In patch 2, require every blkg rhashtable lookup to run inside an
+    explicit RCU read-side critical section. Annotate blkg_lookup_any(),
+    blkg_lookup(), and recursive wrappers with __must_hold_shared(RCU)
+    so Clang thread-safety analysis verifies the contract.
+  - In patch 2, exclude BIO_BLKG_REF from the flags saved by
+    dm_bio_record(), since restoring an ownership bit cannot recreate
+    the associated blkg reference.
+  - In patch 3, use scoped spinlock guards for async_bios and annotate
+    the list with __guarded_by().
+  - Add Nilay Shroff's Reviewed-by to patch 1.
+
+Changes since RFC v3:
+
+  - Drop the RFC prefix.
+  - Add Christoph Hellwig's Reviewed-by to patch 1.
+  - Add Tao Cui's Reviewed-by to patch 2.
+  - In patch 2, relax blkg_lookup_any()/blkg_lookup() to also allow
+    q->queue_lock as an alternative to the RCU read lock.
+
+Changes since RFC v2:
+
+  - Drop the old patch 1 and send it separately as a bugfix for 7.3 and
+    -stable, as suggested by Christoph Hellwig.
+  - Rebase onto the latest for-7.3/block branch.
+  - In the new patch 1, note that the remaining q->blkg_list walkers are
+    cgroupfs/sysfs slow paths and can move to rhashtable iteration after
+    the queue_lock-to-blkcg_mutex conversion.
+  - In the new patch 1, explain the list_empty case in blkg_release(), and
+    add an RCU lockdep assertion plus documentation that blkg_lookup_any()
+    does not acquire a reference.
+
+Changes since RFC v1:
+
+  - Add patch 1 to wait for every old blkg to leave q->blkg_list before a
+    shared request_queue is rebound, instead of treating root_blkg == NULL
+    as completion of asynchronous blkg teardown.
+  - Add patch 2 to replace the per-blkcg radix tree and lookup hint with a
+    request_queue rhashtable keyed by blkcg->css.id, as suggested by
+    Christoph Hellwig. Keep dying pinned blkgs in the hash until
+    blkg_release() so bio-owned references remain discoverable.
+  - Fold the v1 helper-only patch into patch 3, as suggested by Jan Kara and
+    Christoph Hellwig, and make bio_blkcg() naturally return NULL for an
+    unassociated bio.
+  - Rework patch 3 so blkg_lookup_create() acquires the bio-owned reference,
+    falls back to a live parent when creation or tryget fails, and updates
+    bi_blkcg when the returned blkg belongs to an ancestor.
+  - Make bio_blkg_lookup() lookup-only: it returns NULL unless BIO_BLKG_REF
+    is already set. Use bio_blkg() in the BFQ and IOCOST merge paths which
+    may need to create a blkg, while keeping blk_cgroup_bio_start() and
+    completion paths lookup-only.
+  - Move CSS online-reference handling into
+    bio_associate_blkcg_from_css(), including fallback to the root blkcg, so
+    bio_associate_blkcg() does not take a redundant reference.
+  - Keep the v1 async bio punt conversion as patch 4 and document that
+    async_bio_lock protects async_bios.
+
+Previous versions:
+  v1: https://lore.kernel.org/r/20260823133045.970199-1-yukuai@kernel.org
+  RFC v3: https://lore.kernel.org/r/20260818070641.756747-1-yukuai@kernel.org
+  RFC v2: https://lore.kernel.org/r/20260811064744.1139446-1-yukuai@kernel.org
+  RFC v1: https://lore.kernel.org/r/20260804065313.2092022-1-yukuai@kernel.org
+
+Related series:
+  [1] RFC v2 blk-cgroup: protect blkgs with blkcg_mutex
+      https://lore.kernel.org/r/20260724123037.3004560-1-yukuai@kernel.org
+
+Yu Kuai (3):
+  blk-cgroup: use a request_queue rhashtable for blkg lookup
+  blk-cgroup: store blkcg in bio instead of blkg
+  blk-cgroup: move async bio punt state to blkcg
+
+ Documentation/admin-guide/cgroup-v2.rst |   2 +-
+ block/bfq-cgroup.c                      |  18 +-
+ block/bfq-iosched.c                     |  19 +-
+ block/bio.c                             |  22 +-
+ block/blk-cgroup-fc-appid.c             |  10 +-
+ block/blk-cgroup-rwstat.h               |   2 +-
+ block/blk-cgroup.c                      | 358 ++++++++++++++----------
+ block/blk-cgroup.h                      |  93 ++++--
+ block/blk-core.c                        |   9 +-
+ block/blk-crypto-fallback.c             |   2 +-
+ block/blk-iocost.c                      |  12 +-
+ block/blk-iolatency.c                   |  11 +-
+ block/blk-ioprio.c                      |   2 +-
+ block/blk-throttle.c                    |   3 +-
+ block/blk-throttle.h                    |   2 +-
+ drivers/md/bcache/request.c             |   2 +-
+ drivers/md/dm-bio-record.h              |   3 +-
+ drivers/md/dm.c                         |   2 +-
+ drivers/md/md.c                         |   2 +-
+ fs/gfs2/lops.c                          |   3 +-
+ include/linux/bio.h                     |  26 +-
+ include/linux/blk_types.h               |   9 +-
+ include/linux/blkdev.h                  |   2 +
+ include/linux/writeback.h               |   2 +-
+ mm/page_io.c                            |  12 +-
+ 25 files changed, 391 insertions(+), 237 deletions(-)
+
+
+base-commit: fc34aff88b3bd22146745c75cff0abb3c067cf42
 -- 
-~Vinod
+2.51.0
