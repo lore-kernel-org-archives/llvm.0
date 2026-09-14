@@ -1,110 +1,139 @@
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A653E9C2B
-	for <llvm@lists.linux.dev>; Mon, 14 Sep 2026 08:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2420D3A453F;
+	Mon, 14 Sep 2026 08:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789373906; cv=none; b=o46Wdnu+qYg96mvx/KmkLfqBZehZl3Jy4ig1xCjxMw0OFjrKqvOEQ9RoyYefh2WqayLDyqrB4XkDURl3+p7QhMI/FyjrDlsH1B1jr2kSSWPjuh+QhcZCjGVxdh1k4zQOP8LgTpMndgIOCSWtQiLgRuBMYDHpgDtFP/0DMFnwm9o=
+	t=1789374523; cv=none; b=rYR6vXb/6pz/X0/Im+bA32RvDZthlXwkpbabuNUTI+uivnzlTL0YLWDQDt/jxU748C6zYsTgaQS8tDCOp5/2nSsydV40X4xiHu6n1aAxgTdXfNKMyILTHYJ5Yy8XjO3HDXaxT4TMJujjMsVDIN/X74fY+Et0nj/U508SIzNoq1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789373906; c=relaxed/simple;
-	bh=DWggKVY8dMTtllAFA52TbFspZ6he1PLAFTJ0dJKkSDk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tO+meYRuwiCbJzRYgmmjo7FpP36XrdQV3uSB9ouqMdpWYHB8sVggsXwsz4nZvWJGZNMgP17xaMaCm4ggaX3+alefbyjvYqZVc4gq3JG4Tu60KAFVxenFPcWWcPn5nIQf3i7BHOd3L04vP0iyoC7QzFDjkru+/u16u3tQ5/TUbPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=I25XpAC0; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+	s=arc-20240116; t=1789374523; c=relaxed/simple;
+	bh=OdWt54YJsb/qlkyiPo64srINfqjwa2VQ+1P8tHq0Ugk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n0QHzcnZlbWcNjDX2u+dLe6GeyarkOBo71G7D5aRlkyHy8mtVbD4kA8GQ1/uyQWc4+cVqGixycsC2XAoASLVqlUXzPQ4OeefF9XI9BX9creJGSaWUyBmyUDq4rcNVWjpKUgNW8j5jiPFpJ3u5HoN8iFSsVpnwy5qD5CHKgB5MPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aoWJ6ELu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="I25XpAC0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1789373902;
-	bh=DWggKVY8dMTtllAFA52TbFspZ6he1PLAFTJ0dJKkSDk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=I25XpAC06/I3GfHLgZt/v9IewDM52y/atTzc4iP6NsBkhEcubS81cw/KOMU9IzYZD
-	 TdzCWfEYrcLUNsM9x0IMC3EvudaVv9uQ7SsvVtaE+Bi1H8Xg+jCkuzV6bpb3G6M3PA
-	 cC5+Wr3zzOixAPGFCzH50qNxdIsS7uUxGVvm/BSN8fF/VesB3rD39ERE/YexmxsfIC
-	 MEby6kGFk+MdwrsaJ4PDtqqGYd4fMT88WQLGkozyvX9/CUnVmH6XdM9iP4Nd7or5h6
-	 0rUaA3jwfphEhZxr3gbtDE09jzGxMmO1+ZunKkHYyABuLAJTnq7PY5khliM1lo6IRD
-	 0Yvv0wu3jhV+g==
-Received: from [100.64.1.21] (unknown [100.64.1.21])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange x25519)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id F311717E020C;
-	Mon, 14 Sep 2026 10:18:21 +0200 (CEST)
-Message-ID: <e28acd6b-aac6-4e2e-8d0b-b9ed22820d73@collabora.com>
-Date: Mon, 14 Sep 2026 10:18:21 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aoWJ6ELu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00F601F000FF;
+	Mon, 14 Sep 2026 08:28:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789374521;
+	bh=L16BSpsljFr4PJF8fPayiEIvJaB3/Z4Qh/8Uz4DyO8s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=aoWJ6ELuaEiZQNG01VZzZjrcZE0nmTn2/Jo6aQv91PMqj4/aBro3rRP1obdfhdxwp
+	 Asj533f6tmz48f33ZEHKu+68fxqVIjxuHWzwSC1C6MDsImBreU1D2X8DdgOIf3pHK9
+	 Jw/Q57CrTfj34fttT6U4b2XIKAa5HBiLbPUXFJkeVPksZElzeIwLuBnq5KbjyU4sr7
+	 uj4zXRUSpKDjND5OHHmt2s6JODKemDw3fwr0OQd+w7E6ul76a3Nzut3mt+iz7AOn53
+	 aX/w/+PKqVcWSL87epRScWixMn/WgUkUtY1rAlqrhRWBGgGHMGBn8eOYOm4fnEawXN
+	 qKaioVvWp1Qxw==
+Date: Mon, 14 Sep 2026 09:28:29 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
+	Randy Dunlap <rdunlap@infradead.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>
+Subject: Re: [PATCH 11/23] kbuild: implement and use depcheck to check
+ dependency timestamps
+Message-ID: <aqesjZaXBQd-KkT6@gremlin>
+References: <20260908-build-speedup-v1-0-5dc1ac01672d@kernel.org>
+ <20260908-build-speedup-v1-11-5dc1ac01672d@kernel.org>
+ <CAHk-=wiA_UJbKiu8fOezKV=MfEcaFuzZiuk8Fto-Bc1KrA=43Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] phy: phy-mtk-dp: Fix pdata array members initialized as
- pointers
-To: Sasha Levin <sashal@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Chunfeng Yun <chunfeng.yun@mediatek.com>, Vinod Koul <vkoul@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
- Manivannan Sadhasivam <mani@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-phy@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <20260913172930.1150324-1-sashal@kernel.org>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20260913172930.1150324-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wiA_UJbKiu8fOezKV=MfEcaFuzZiuk8Fto-Bc1KrA=43Q@mail.gmail.com>
 
-On 9/13/26 19:29, Sasha Levin wrote:
-> Building arm/arm64/i386 allmodconfig with clang fails:
-> 
->    drivers/phy/mediatek/phy-mtk-dp.c:761:18: error: incompatible pointer
->    to integer conversion initializing 'u16' (aka 'unsigned short') with
->    an expression of type 'const u16[4]' [-Wint-conversion]
->    drivers/phy/mediatek/phy-mtk-dp.c:761:18: error: initializer element
->    is not a compile-time constant
->    drivers/phy/mediatek/phy-mtk-dp.c:761:18: error: suggest braces around
->    initialization of subobject [-Werror,-Wmissing-braces]
-> 
-> 14 errors in total, one set per offending member.
-> 
-> off_ana_lane, off_dig_lane and driving_params are declared as arrays in
-> struct mtk_dp_phy_pdata:
-> 
-> 	u16 off_ana_lane[MTK_DP_PHY_MAX_LANES];
-> 	u16 off_dig_lane[MTK_DP_PHY_MAX_LANES];
-> 	u32 driving_params[PHYD_DIG_NUM_DRV_PARA_REGS];
-> 
-> but the SoC data instances initialize them with compound literals. A
-> compound literal is an object, not an initializer list, so this is not
-> an array initializer: the member is initialized element-wise from a
-> scalar, the first element gets the address of the literal truncated to
-> u16/u32, and the remaining elements are zeroed. Hence the three
-> diagnostics above - the pointer-to-integer conversion, the address not
-> being a compile-time constant, and the missing braces.
-> 
-> Arrays are the right type here, since both members are indexed per lane
-> and driving_params is sized with ARRAY_SIZE(), so drop the casts and use
-> plain braced initializers.
-> 
-> Found by KernelCI builds of the linus-next tree.
-> 
-> Fixes: ae859204b519 ("phy: phy-mtk-dp: Migrate register offsets to SoC specific pdata")
-> Fixes: 7cf38eb0ab59 ("phy: phy-mtk-dp: Add support for digital and analog calibration")
-> Fixes: 6fe4d5beac72 ("phy: phy-mtk-dp: Add support for MT8196 eDP PHY")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Wed, Sep 09, 2026 at 08:26:42AM -0700, Linus Torvalds wrote:
+> On Tue, 8 Sept 2026 at 13:57, Lorenzo Stoakes (ARM) <ljs@kernel.org> wrote:
+> >
+> > Each object's .cmd file lists its header dependencies, which often
+> > consists of over a thousand dependencies.
+> >
+> > When little has changed in the tree, this is what make spends most of its
+> > time doing, spending over a second, single-threaded when parsing larger
+> > directory trees.
+>
+> Side note: from some kernel build profiles I did long ago, I have this
+> memory of it being made much worse by the fact that we use
+>
+>     "$(wildcard xyzzy)"
+>
+> for all our config header files in those .cmd.o files. That then
+> causes extra work for 'make' for all of this.
+>
+> And we do that 'wildcard' thing not because we want to actually match
+> a pattern, but because that was the only way to have 'make' not
+> complain about missing config headers.
+>
+> I'm not even sure the original reason for it is relevant any more -
+> this is all a very dim memory from years and years ago when I actually
+> tried to look at profiles of 'make' itself (normally when I do kernel
+> build profiles I only look at the what the kernel part of the build
+> is, not user mode).
+>
+> I just tried removing the 'wildcard' generation from
+> scripts/basic/fixdep.c and the kernel build didn't care about it at
+> all. The whole 'wildcard' trick goes all the way back to the original
+> commit that added that whole 'fixdep.c' phase.
+>
+> Maybe the whole thing is entirely stale now and should be removed. I
+> probably just didn't trigger the situation where those extra
+> 'wildcard' things matter. That whole thing is from a quarter century
+> ago, and nobody has dared look at that code since..
 
-Whoops, sorry.
+Yeah, unfortunately it seems that it's still required - without it make
+seems to treat a missing target with an empty rule as if it were updated,
+so without the wildcard every object that references an unset option
+results in a rebuild.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+>
+> Or maybe 'make' is better at those wildcards these days - or other
+> things have shifted.
+>
+> From those dim memories, make spent a lot of time doing filesystem
+> lookups (directory reading  and 'stat()' calls - the wildcard thing
+> triggered more getdents calls), but even more time just in string
+> handling.
 
+The depcheck commit ("kbuild: implement and use depcheck to check
+dependency timestamps") actually fixes the overhead issue :) it stops make
+seeing those dependency lists at all for stuff that's up to date so the
+parse cost just goes away.
+
+After that commit make only sees actually stale stuff.
+
+The obvious question here is 'does depcheck make the wildcard stuff
+unnecessary then?' - and sadly no, because there's still places where make
+includes .cmd files directly without using depcheck.
+
+But TL;DR is the overhead is gone.
+
+>
+>                Linus
+
+--
+Cheers, Lorenzo
