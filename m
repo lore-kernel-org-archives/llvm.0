@@ -1,143 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DA6337DEB5;
-	Mon, 14 Sep 2026 19:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C6F648F843;
+	Mon, 14 Sep 2026 19:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789415062; cv=none; b=FJ/89jlq8QuVwqsewigpzRc6lsFiY51+e/BStOxmiLbX6kAmUBb9jIwQzbQnpyaX/SZuAbqdjx/HN6Ol+XqREJXZ8CK5NYJya5BkPaXr4yfWuvYiFMIJdN0gv8DfTlvGG6XmW/UWytvb1DBm5qFdTpNJfCV/4aiO8Hlx7eqIXo4=
+	t=1789415140; cv=none; b=Rn/kS7DETgOnFyKHGpA6G7CSx0W9j7BX/4ztNaQQ8aEXsyJPUHHDBIv1r8ug1noG/7SEpHRhznI96V4jS3sQyOswkIMqtdUWgQQnW+B1vp1Jk+aHGnQMJk+yshVQaLv60vRHoE5PuE6cH4KROQ2BqAQP64SA/iR0wghMV6UaQSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789415062; c=relaxed/simple;
-	bh=ti730hswioEnORd+T1M71+ijIsAXicoqvmkG3id3SrY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n7Re57Vvhn1gH3IuNvTpkSKu1SQzkmP9PTucNCdjwuNF/D6ong0DGCEpjzFjibDpej/gTI2uZr9IIf5kaRno68adtWnj6/mJFFh7INxyP3tRrhBKA/m3DgTHJDDXCyowWi71I3bQyNnCCJSiIP94MqlEzR9I2CPvBKP9TMMdsSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MSVXXg/q; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789415140; c=relaxed/simple;
+	bh=QBg4dkQ5yFCSOOHH0lFuGTvb7s5rOAN5fM2quM9OlBU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=CfJuRrbnU1hgYvmg8ufYsuQYpxWGkO7vScxtTe2vkFlLiKgvOGnTt0/APmKZNRw98UVm0nflLBr4yT8VKptUZ0s0lLTGT/aXObhVvyxIR+KRCW2Y6KSU97a7ZRuBiBuHKoa45wvpswHQDAiPvNgdgXvv7zDnM09jLax96pwXWLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HzvW99Eh; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MSVXXg/q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 606951F000FF;
-	Mon, 14 Sep 2026 19:44:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789415057;
-	bh=dEVqT/wbNr31VyaEi+ztvayta7Xn2Rd4Y437aZNZCvc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=MSVXXg/qNgC9jq49BVmWZXFQh+9kpMKjQO+QRQUfSbv6WEMmHAyi1VR8/qhBIc5Mk
-	 FfzjtS+MXmB1xdh0Yyyh/Fjgp0ghmpwSXzQ0HEfDW+auxGwVSYmxpW4HB3r7VPvk5x
-	 ErOLy9eT8sBkMrdbsQGLv17beikH75L4sttmQL+HW5l2DD14MHccpS79cnl93N3Kgj
-	 YcoOTrNJBTL7kKo32pNKgOEHALdfPOmaxCkbBoOVpON2WHEvSq+bZqYcfQk2AIBKMG
-	 u5i84u03A14NXZUXVTa7uw2gHUp7GtggszhR53KXX6mdi43GlMuW9bZTSp2IMAiwQt
-	 MtZMVAIfFDB2g==
-Date: Mon, 14 Sep 2026 12:44:13 -0700
-From: Josh Poimboeuf <jpoimboe@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
-	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 15/21] objtool: cache relocations, do less work
-Message-ID: <aqhLhVMkNzf_4oJw@jpoimboe>
-References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
- <20260914-build-speedup-v2-15-39817ec5db23@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HzvW99Eh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789415139; x=1820951139;
+  h=date:from:to:cc:subject:message-id;
+  bh=QBg4dkQ5yFCSOOHH0lFuGTvb7s5rOAN5fM2quM9OlBU=;
+  b=HzvW99Ehhxgee2phfFbN0qHMDOysUzYRwePXbXZSQLsjZHBP914uhejM
+   mInmZB5OVENioUqgwhUIbr/WHIC6psvsmLwkKrZwN6i84UsuYQETt9j/1
+   mlrJxD92oc4wUUvZV/as/554mWmmX9cfnwObfTZ5jlQWNfXT2thYohHR2
+   RLh3ia8/NSOq+DnYtHONzZXGQ2+WPg7SUGsCY9CVKZn6MjJ9GEApRT8aW
+   ZbbvSog9ti1krTla73oSM6jAX7JZ9+UA1Tjcxa8LEebdST1HDXNrhR9CD
+   DSWzKtfbCoDLgGNQNCBaha/SIdbDJta3/m4twzVNBS8ZJjMwS2UGufeB8
+   w==;
+X-CSE-ConnectionGUID: Va2pg1Y0RVmViHN8P0zO1A==
+X-CSE-MsgGUID: 6UEOlvqPQUmf/mhq8lzm4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="100927065"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="100927065"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 12:45:38 -0700
+X-CSE-ConnectionGUID: njz3HylkRTSY/v9HFtBd1w==
+X-CSE-MsgGUID: hx9ll3S7TtyIsm+pVd/JSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="296224692"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Sep 2026 12:45:36 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x6CcQ-000000003Rz-0P7J;
+	Mon, 14 Sep 2026 19:45:34 +0000
+Date: Tue, 15 Sep 2026 03:45:30 +0800
+From: kernel test robot <lkp@intel.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dakr:poc/vgpu 41/44] error[E0425]: cannot find function
+ `pci_iov_vf_id` in crate `bindings`
+Message-ID: <202609150336.58q1V5kW-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260914-build-speedup-v2-15-39817ec5db23@kernel.org>
 
-On Mon, Sep 14, 2026 at 10:22:14AM +0100, Lorenzo Stoakes (ARM) wrote:
-> +static struct reloc *find_reloc_sorted(struct section *rsec,
->  				       unsigned long offset, unsigned int len)
->  {
-> -	struct reloc *reloc, *r = NULL;
-> -	struct section *rsec;
-> -	unsigned long o;
-> +	struct reloc *relocs = rsec->relocs;
-> +	const unsigned int nr_relocs = sec_num_entries(rsec);
-> +	const unsigned long cache_idx = reloc_cache_index(offset);
-> +	unsigned int reloc_idx, i;
->  
-> -	rsec = sec->rsec;
-> -	if (!rsec)
-> +	if (cache_idx >= reloc_cache_nr_windows(rsec))
-> +		return NULL;
-> +
-> +	reloc_idx = rsec->reloc_cache[cache_idx];
-> +
-> +	/*
-> +	 * Scan through all relocations covered by cache entry to find the
-> +	 * first at or after offset. Relocations are sorted by offset.
-> +	 */
-> +	for (i = reloc_idx; i < nr_relocs; i++) {
-> +		struct reloc *reloc = &relocs[i];
-> +		const unsigned long curr_offset = reloc_offset(reloc);
-> +
-> +		if (curr_offset >= offset)
-> +			break;
-> +
-> +		reloc_idx++;
-> +	}
-> +
-> +	/* Nothing found, or the first candidate lies beyond the range. */
-> +	if (reloc_idx >= nr_relocs ||
-> +	    reloc_offset(&relocs[reloc_idx]) >= offset + len)
->  		return NULL;
->  
-> +	/* If there are duplicate entries, return the last. */
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dakr/linux.git poc/vgpu
+head:   6292c1de7f0758dd31496a454b4034507f38bd40
+commit: efac2cec97eab36edd01a2fe79aea67a04bd8842 [41/44] POC: rust: pci: add PF registration data for VFs
+config: x86_64-randconfig-071-20260914 (https://download.01.org/0day-ci/archive/20260915/202609150336.58q1V5kW-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260915/202609150336.58q1V5kW-lkp@intel.com/reproduce)
 
-Hm, for consistency with the others, shouldn't this be returning the
-*first* match?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609150336.58q1V5kW-lkp@intel.com/
 
-> +/* If there are multiple matches, return the first one in the range. */
-> +struct reloc *find_reloc_by_dest_range(const struct elf *elf, struct section *sec,
-> +				       unsigned long offset, unsigned int len)
->  {
-> -	return !strncmp(sec->name, ".debug_", 7);
-> +	struct section *rsec = sec->rsec;
-> +
-> +	if (!rsec)
-> +		return NULL;
-> +
-> +	if (rsec->sorted)
-> +		return find_reloc_sorted(rsec, offset, len);
-> +
-> +	if (rsec->hashed)
-> +		return find_reloc_hash(elf, rsec, offset, len);
-> +
-> +	return find_reloc_linear(rsec, offset, len);
+All errors (new ones prefixed by >>):
 
-I'm not sure there's much benefit in having two fallbacks (hashed +
-linear) instead of one.  If the vast majority of reloc sections are
-sorted, then hopefully a single (linear) fallback would be fine,
-assuming no major performance regressions.  That would help contain the
-complexity.
+>> error[E0425]: cannot find function `pci_iov_vf_id` in crate `bindings`
+   --> rust/kernel/pci.rs:593:37
+   |
+   593 |         let id = unsafe { bindings::pci_iov_vf_id(self.as_raw()) };
+   |                                     ^^^^^^^^^^^^^ not found in `bindings`
+--
+>> error[E0425]: cannot find function `pci_enable_sriov` in crate `bindings`
+   --> rust/kernel/pci.rs:772:39
+   |
+   772 | ...                   bindings::pci_enable_sriov(pdev.as_raw(), nr_vfs.into())
+   |                                 ^^^^^^^^^^^^^^^^
+   |
+   ::: rust/bindings/bindings_generated.rs:124506:5
+   |
+   124506 |     pub fn pci_enable_rom(pdev: *mut pci_dev) -> ffi::c_int;
+   |     -------------------------------------------------------- similarly named function `pci_enable_rom` defined here
+   |
+   help: a function with a similar name exists
+   |
+   772 -                             bindings::pci_enable_sriov(pdev.as_raw(), nr_vfs.into())
+   772 +                             bindings::pci_enable_rom(pdev.as_raw(), nr_vfs.into())
+   |
+--
+>> error[E0425]: cannot find function `pci_disable_sriov` in crate `bindings`
+   --> rust/kernel/pci.rs:795:28
+   |
+   795 |         unsafe { bindings::pci_disable_sriov(self.pdev.as_raw()) };
+   |                            ^^^^^^^^^^^^^^^^^
+   |
+   ::: rust/bindings/bindings_generated.rs:124509:5
+   |
+   124509 |     pub fn pci_disable_rom(pdev: *mut pci_dev);
+   |     ------------------------------------------- similarly named function `pci_disable_rom` defined here
+   |
+   help: a function with a similar name exists
+   |
+   795 -         unsafe { bindings::pci_disable_sriov(self.pdev.as_raw()) };
+   795 +         unsafe { bindings::pci_disable_rom(self.pdev.as_raw()) };
+   |
 
-BTW, I found another initialization bug: klp-post-link.c uses
-elf_create_section() to create a reloc section, so it missing the
-initialization of rsec->hashed in elf_create_rela_section().  But that's
-moot if we just get rid of the hashing.
-
--- 
-Josh
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
