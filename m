@@ -1,159 +1,187 @@
-Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D1C463B9F
-	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 08:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8228F3EC837
+	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 09:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789462482; cv=none; b=gSgCI4rHVlYLvzPdGp9TlhB2Iql1KlMASpv/fEDF7wFcyakvDZLSqH/vAt0hvt73CJfvj6xwVZr87UWdX5Ir1tzwgdlSkKfXAqy+eHXNGHDGwFb1xj9n+Za9LmGDXjHPadP5SNisjgwAme7y94+LON2MNZms6wyK6jKM/csp0pU=
+	t=1789463114; cv=none; b=EM/U9zyR/yKn0jkRC/vyFnjsv7ZJMORVQAla6IBNBcC0WYxwUcqELyxdMgTpfTy0b9OGq5Rh8VR+BWq1v6snl6+j12w30B0ut5NC6QsqAT1lcAYsuNZVh/lWvpicywIAVoDD6RdaWVsi/yfp0GDpJe/nB9efV0Tz2CIxi9SSwpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789462482; c=relaxed/simple;
-	bh=TrFy84WFLihamQ2UtPEIp9cWrnbixhLsx/cx/JOsURw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Gwt4J9BJ21kueYZ6sw8cWxnQruGt+nMmD0NCOT9JiWGooP9zDApwclP9IhjwmMEwiL0geGEbIr2MUOYCwgsgPOItY2qj0on2lHENyGJ++QchgU/uUtSaMOgdRsGdp4ZdVnq4UR4jZtKfa819jIQQqCt7PlXVRnjP/T6JeVLkSkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Xody1oJN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Fr6fJyQZ; arc=none smtp.client-ip=103.168.172.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1789463114; c=relaxed/simple;
+	bh=wINWkLDSvaASvwcaEXuWAF3ftuB32SUM4N8LFPtrmBQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oPy/9gzege5DyQrQWneqc7xUHAel1Zez2c5akF4TA6E/aLqjxyC7MyeTF/xHWTc3kDQPqevL9fKwahCtJwpqaisXjUcFOhQWrEx33S/ejJxrD9i5S1vnaWhrBcbsnsmWDlWPh4KErWb/tuly+BXk6sn+YKlKhAyDgOCnE8o4W64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pZRGcgnE; arc=none smtp.client-ip=74.125.228.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Xody1oJN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fr6fJyQZ"
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailflow.phl.internal (Postfix) with ESMTP id 0CFA21380347;
-	Tue, 15 Sep 2026 04:54:35 -0400 (EDT)
-Received: from ams-imap-03 ([10.64.2.23])
-  by ams-compute-02.internal (MEProxy); Tue, 15 Sep 2026 04:54:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1789462475;
-	 x=1789469675; bh=l+Dca6AU7f0s7A11m75QKiePhth6dKEUN646ZUyOcxw=; b=
-	Xody1oJNWEMViAMOHPbGMbFFJWDXAlekhcwJV2SoNNjV3Itz044FXU72K/NOTqui
-	dGNVaAbLlZulA5UBbJ7XisJ4/Tvb8vxRSHZgr1rg86rZaW2N6A20pRXX6CjuJFzZ
-	qN4XhD+zqJj7G6GzdewHzc9Ub5bvOnhXRm5+AIgWAw6aKT926nad1Knuxbpc675A
-	AzTOl0hJn/NZF15+dJYlH0kXOE9oaDD1dkmsAcj8fBTRb96rHKlGhQLyQSuMNDH/
-	4VAddWv+NRh+YnPkx2GOowIODOGAueKi2AxYNKtoPrv0OBaFTazekFo9yS6tBLOp
-	1Q82whhHv8fjGkGI4JpxpA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789462475; x=
-	1789469675; bh=l+Dca6AU7f0s7A11m75QKiePhth6dKEUN646ZUyOcxw=; b=F
-	r6fJyQZ3B1K5YtWjMoTp/fRKQnkOGDNwUteDe4nSuymkyvq2WsfTel5mLEsiIniB
-	Q8Mg3SaUa+hsdJwDYad3RVOHqY6wVuGBbRMXj+q0YdMMGPUOsGRVwT87zBxsoxES
-	RO9e/Kk1iPvbMNYiJPlnyVnmhvk9iZJMC0Hl8RMrWAZ2w+CFpRVPeszShBh7jyY4
-	8pafu94pmoPvJ37O6z8ACe0BUJ66rCCYt+VIRpYGoi+zNkUwBU0gu7mu7AArH7H1
-	kfhRzCurvSNdhnOouyFcmOZ/aEYZowpWKOguKfCcIqTeATR2Y52GrsDRnY4YlRT8
-	4mvRCMtRoq3C+WpdMDmrA==
-X-ME-Sender: <xms:vgepagxIogvlk792euZsMnA2AD-07upm7o1gQScllFz15_5556isuA>
-    <xme:vgepavFIcm_1MvsAOmz2-JbwyBuNZNrMJpYsNzJOlp3FsY8ocFhn_i6RRbVtbI_xh
-    1ZW5w582V70b24GHPa0lC4s3Vi_hKlkZoAkL5CnvbECiIVQRZ2bC7IS>
-X-ME-Proxy-Cause: dmFkZTFl07Cd2pNoRIcz+Y9DRXa9I+CAUbyY73IeYUKFyinqRYJWqvWva9WPMlSrUtrXXQ
-    4Ce7uDNbLSoFWkhxcsl23fov82rHUN8DJQrUSxcE/UGH5WEDUUFVVGsxSlX9y1C16y1ikq
-    1Hzd/K8lu3qfyVrj+2Esn9a+9urCLgaUn1/Hd12DOGJvXPGzYSt8nJENaQptMkY/jEyE+u
-    S9faTEM6ZNXS1Rhf+11JTufpU/muQclYTOYI+iNfCTdQIpuxlsrqU2hRdRCR3my42gTIci
-    foRjjuFQi3I4plLW/2yjK9qsVn6rhO1nfI17QxL4uXxeeZVrN1VwQjZE4ge9q8fo1rM0X9
-    rhiOoth3vgfsKc6+FhKiMgmD69qMeWJU5dx0D71/c9CvyFGUfnl5G7No2fZi2vJmcmsWv/
-    +UST0qDeQsCHTDbJGGyedoSdHZ7/3mF5Q1wzNjHqpNnUUAF7MF/RhXwaQA8Qj3bpXpRWZk
-    WM2pUx2qPAmh1y6xmTh8nd0xCpzZHILt4JYJprl0AWZ62t80PI4UgOxCQLgGPoRTb8KlzB
-    7SSwnrEvKdcy0NSaAHG069l+OP4bVIt5jLLqs+Vt+azYtoLHe7W+0DYJTzaj831I7mO2gR
-    af3uM0A9HNtxo2qLYSmTeYYtjD/xXjNAVQ8rRDyPxRvaGwqUBq2NMVTlab5g
-X-ME-Proxy: <xmx:xAepagJ83hBWhUGi-qVtm002tZ6nTUV_OQ9QV71wb8cZ5sDkjqBMPA>
-    <xmx:xAeparBNN9LUMZgDPwhes7U75oqanecICHjUTVaE1k1UIFiw3-JoVg>
-    <xmx:xAepajlQfJFGq9Ujz61CsXpfe6X8ZyU-XYpSbmHIXAFjLrnSj5AGjA>
-    <xmx:xAepanETL89xwgdJrVvqYbWpq6B3LGj8dODqxwt8wrzrZnsIIpowVw>
-    <xmx:ywepaiFG3kexiM5eVna2DP0CZbgBhmkObpO3qC-5-C8A-WnmgHPjeTq->
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 268F432A0081; Tue, 15 Sep 2026 04:54:22 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pZRGcgnE"
+Received: by mail-pz2-f12.google.com with SMTP id 41be03b00d2f7-cc1cea34ef3so28196a12.0
+        for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 02:05:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789463111; x=1790067911; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5OftSuNw6O3AgitXo4CDVX+TOcz6GDkEK6rb5ipL/z0=;
+        b=pZRGcgnEF74oIcxzlxrBywjpNCdQAmB2o1iITGSnqvnNkAJ+/mWAnc+NmZP9yoF3ww
+         anrFvI8IFDZ2Xz2hmnVg6j2M7s1o43pHJJeR6s5YeQLZwZRKoWgYXzTJeJ0KFXySbr24
+         QDlx+Wt0uWt2v1u1VW3R/yjvRYd899ZzvlXzkBi2CDRDCZN+EYUaaQskgXvBMU2B7Bg4
+         /jfz9fFHx5Wg2aEKM7rQRM9jHJ5FfK8/6XCsBmv96/c15DhM7PCjaieN6GsPcG44SEJn
+         ddYf1RsdxTOh4NerPePQEgJoqUfVpxkUdwhzFAXIo08ncLD4LAmWYNpw11hkXmlxY9Wl
+         VCDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789463111; x=1790067911;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5OftSuNw6O3AgitXo4CDVX+TOcz6GDkEK6rb5ipL/z0=;
+        b=DBjtFnZya6aWBNRNeo75GQ2rnF9Nq6PlXPZoqJ0gVxsTUBCJ2KsGeNIuxtLWCY3EEA
+         OJDNZb4S+0wk/jECb5ihMyDsiWfpch6orr4PkN2T4nEdEzDb4lovOoaIYB0FMAOzfM0r
+         lx5t64ZmK+Prk2NX7iw9X+/ZIdmfSKUrDqrsLaXR/9UapZmUhfsN8SV7Ftxm4EVD1Qu6
+         CifHwhx7UJTcB+au1jgR26Dg59qv/018GEyrMYVDj84SbMJ55TtTPyP2+YMn7XeR8nb6
+         PK476v7aoPArDNmanYcC9h2DMYIYN4Fh4ymp1TW4fyuSeoAQtbz26nlzHuDFxylzo0WM
+         n0Ug==
+X-Forwarded-Encrypted: i=1; AKwUvBxk+qq0kurxTgPbE3sV/2ymWi5bpBFu90oro8SXZJSZu0U0VS6opGyngsbUj4DsWrNWmRvG@lists.linux.dev
+X-Gm-Message-State: AFuF++nd6rLt1PeN6hPO+F79qKrp72xKVGK4qavy9QOFb71dIZ4oTb6b
+	yDbCpa0rgkg2fv3Ong0x81BNVBB7xBxc1mmX9owlDMnzlO0jijLf8VXf
+X-Gm-Gg: AYBFou28GrzJytQRAC507FlL8Iwde7MbZ15hs4TYjJNkMz9XlrUKCExODVR7AZgdIk1
+	HekkTpA65zXwOb9D6WQr0bXAMW4zfzYfB03mergzmUypZCtWKpZx7sezZdqUkmsNafRVarGYUaZ
+	F35BKioTpTp7yi4ch9JDJtibcdGjBHRtXpUDgufeb6vkZaCAxHplGw6D157br7wz9mD6MN5rp+v
+	2VUQuMmR0YMgAtLmk24aRvf1ZkUDuUdq7DzPW7VkaCgv9lsQ2Rc6yQECcTLUMZ3zAV2H4AGiTrK
+	RVEXkhd8iCxz4ooQjjCQ+6qTdtg5TLcD3KfHuO2X26rzNa1QyN5pJZVY8Og4S3ESYu1bEFhWd7i
+	KYRNOOpZyUCNyW6U6a1Etjx3YvTfdDgvz2zJOcwmozAiXaEPbiFs+Zr+VMgr7ejqoo+D+o6f/ta
+	z8nGTReoJfOCBTozGy5bXy+hOYWHBEmLqnkdYyL4QAeD1yoP3/w8LwXAlftKsgJFg5sNQD0wcXS
+	kapdopu8JbJSs2QePvcw+sAKUAm0Jp+5tebNVDOjGg85PlAiH+6
+X-Received: by 2002:a05:6a21:920e:b0:3da:f21a:23ca with SMTP id adf61e73a8af0-3dd52a2a52bmr559662637.22.1789463111413;
+        Tue, 15 Sep 2026 02:05:11 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.bl1-in.ibm.com ([129.41.58.4])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc4c65a8120sm6495512a12.30.2026.09.15.02.05.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Sep 2026 02:05:10 -0700 (PDT)
+From: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+To: maddy@linux.ibm.com,
+	mpe@ellerman.id.au,
+	npiggin@gmail.com,
+	chleroy@kernel.org,
+	ojeda@kernel.org,
+	boqun@kernel.org,
+	gary@garyguo.net,
+	bjorn3_gh@protonmail.com,
+	lossin@kernel.org,
+	a.hindborg@kernel.org,
+	aliceryhl@google.com,
+	tmgross@umich.edu,
+	dakr@kernel.org,
+	daniel.almeida@collabora.com,
+	tamird@kernel.org,
+	acourbot@nvidia.com,
+	work@onurozkan.dev,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	mkchauras@gmail.com,
+	ynorov@nvidia.com,
+	david@davidgow.net,
+	joelagnelf@nvidia.com,
+	fujita.tomonori@gmail.com,
+	linkmauve@linkmauve.fr,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v5 0/2] powerpc: Add ARCH_WARN_ASM and KUnit tests for Rust WARN() support
+Date: Tue, 15 Sep 2026 14:34:51 +0530
+Message-ID: <20260915090453.1227034-1-mkchauras@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-ThreadId: AGrkui6Nx9zw
-Date: Tue, 15 Sep 2026 10:53:51 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Linus Torvalds" <torvalds@linux-foundation.org>,
- "Kees Cook" <kees@kernel.org>
-Cc: "Lorenzo Stoakes" <ljs@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nsc@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Bill Wendling" <morbo@google.com>,
- "Justin Stitt" <justinstitt@google.com>,
- "Masahiro Yamada" <masahiroy@kernel.org>,
- "Alexey Gladkov" <legion@kernel.org>,
- "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Paul Walmsley" <pjw@kernel.org>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
- "Ard Biesheuvel" <ardb@kernel.org>,
- "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
- "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
- "Gary Guo" <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- "Benno Lossin" <lossin@kernel.org>,
- "Andreas Hindborg" <a.hindborg@kernel.org>,
- "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
- "Danilo Krummrich" <dakr@kernel.org>,
- "Daniel Almeida" <daniel.almeida@collabora.com>,
- "Tamir Duberstein" <tamird@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>,
- =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- "Jonathan Corbet" <corbet@lwn.net>,
- "Randy Dunlap" <rdunlap@infradead.org>,
- "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- Linux-Arch <linux-arch@vger.kernel.org>,
- linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
- "Jens Axboe" <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Message-Id: <7646eb0c-7c4a-4ec2-9562-66a74c4d9858@app.fastmail.com>
-In-Reply-To: 
- <CAHk-=whB0X28MNAg71it=1SfFyV7rB+PK3qajpRyWoxXHW81fw@mail.gmail.com>
-References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
- <202609140833.88C0E16E50@keescook>
- <CAHk-=whB0X28MNAg71it=1SfFyV7rB+PK3qajpRyWoxXHW81fw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/21] kbuild: significantly speed up kernel builds
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Sep 14, 2026, at 17:53, Linus Torvalds wrote:
-> On Mon, 14 Sept 2026 at 08:41, Kees Cook <kees@kernel.org> wrote:
->>
->> One area I think might solved via an LLM is the 3-pass kallsyms stuff.
->> If we could get a deterministic kallsyms build in 1 pass, that would be
->> very nice. A lot of people have tried, but it has eluded upstreaming.
->
-> Even the three-pass one hasn't apparently always been entirely
-> deterministic. We've had random reports over the years of it failing
-> in some circumstances.
+powerpc currently has no ARCH_WARN_ASM or ARCH_WARN_REACHABLE definitions,
+which causes Rust kernel builds on powerpc to fail with a macro expansion
+error when the generic Rust WARN() infrastructure tries to call
+ARCH_WARN_ASM() through generated_arch_warn_asm.rs.S. Every other
+architecture that supports Rust (x86, arm64, s390, riscv) already provides
+these definitions. This series brings powerpc into line.
 
-This tends to break whenever a linker (rather than the compiler) starts
-creating a new type of symbols that show up in pass 2.
+Patch 1 refactors _EMIT_BUG_ENTRY in arch/powerpc/include/asm/bug.h.
+The old macro was a positional-operand template that hardcoded the 1b
+label reference and embedded .org/.previous directives, making it
+impossible to compose as a free string outside an asm operand context.
+The refactored version takes explicit (label, file, line, flags) arguments
+via string concatenation; .org/.previous are moved to each call site so
+BUG_ENTRY() can continue to pass sizeof(struct bug_entry) as an asm
+operand while ARCH_WARN_ASM supplies its own size string. With
+_EMIT_BUG_ENTRY composable as a plain string, adding ARCH_WARN_ASM and
+ARCH_WARN_REACHABLE is then straightforward.
 
-> Maybe we've fixed it all, or maybe the failures just go imperceptibly
-> rare. Regardless, it has definitely been fragile.
+Patch 2 adds five KUnit tests under CONFIG_RUST_BUG_POWERPC_KUNIT_TEST
+(depends on PPC && GENERIC_BUG, covering both ppc32 and ppc64) that
+verify the __bug_table entry emitted by ARCH_WARN_ASM is correctly
+formed. find_bug() is called with the exact virtual address of the twi
+instruction, captured at link time via a .dc.a relocation in a
+global_asm! block. .dc.a emits a pointer-width word (4 bytes on ppc32,
+8 bytes on ppc64); BUG_KUNIT_TRAP_ADDR is declared as usize on the Rust
+side so the same test code is correct on both. The five tests check that
+the entry is found, carries BUGFLAG_WARNING, records the right source
+file and a non-zero line number, and that the trap address lies in
+kernel text.
 
-The rate seems to be once every few years, looking at the list
-of exceptions added to scripts/kallsyms.c (now scripts/mksysmap):
+The global_asm! block is split into four cfg-gated variants covering all
+combinations of CONFIG_PPC64 x CONFIG_DEBUG_BUGVERBOSE. The split on
+CONFIG_DEBUG_BUGVERBOSE is necessary because when it is disabled,
+_EMIT_BUG_ENTRY drops the file and line fields from the bug table entry,
+leaving the {file} and {line} global_asm! operands unused — which is a
+hard compile error in Rust. The split on CONFIG_PPC64 is necessary
+because concat!() only accepts literals (not expressions), so .balign
+4 vs .balign 8 must be selected statically.
 
-efe6e3068067 ("kallsyms: fix nonconverging kallsyms table with lld")
-516d980f8541 ("scripts/kallsyms: skip ppc compiler stub *.long_branch.* / *.plt_branch.*")
-b9b74be163a2 ("ARM: 8555/1: kallsyms: ignore ARM mode switching veneers")
+Changelog:
+V4 -> V5:
+ - Fixed a build error with DEBUG_BUGVERBOSE=n
+ - Added a label for bug entry
+V4: https://lore.kernel.org/all/20260912065902.24017-1-mkchauras@gmail.com/
 
-I'm sure there are other instances on architectures that get less
-build coverage.
+V3 -> V4:
+ - Fix Label with appending b at end 
+ - Add KUnit test patch.
+ - Tested on ppc64le pseries:
+   pass:5 fail:0 skip:0.
+ - Tested on ppc32 QEMU mac99 G4:
+   pass:5 fail:0 skip:0.
+ - Tested on ppc64le QEMU pseries:
+   pass:5 fail:0 skip:0.
+V3: https://lore.kernel.org/all/20260910100801.2159785-2-mkchauras@gmail.com
 
-     Arnd
+V2 -> V3:
+ - Add label argument in _EMIT_BUG_ENTRY
+V2: https://lore.kernel.org/all/20260910071252.1950488-2-mkchauras@gmail.com
+
+V1 -> V2:
+- commit message now has error, fixes tag and closes tag
+V1: https://lore.kernel.org/all/20260819084825.969116-1-mkchauras@gmail.com
+
+Mukesh Kumar Chaurasiya (IBM) (2):
+  powerpc/bug: Add ARCH_WARN_ASM and refactor _EMIT_BUG_ENTRY for Rust
+    support
+  rust: kernel: Add KUnit tests for powerpc ARCH_WARN_ASM bug table
+    emission
+
+ arch/powerpc/include/asm/bug.h |  36 ++++---
+ rust/kernel/Kconfig.test       |  13 +++
+ rust/kernel/bug.rs             | 222 +++++++++++++++++++++++++++++++++
+ 3 files changed, 251 insertions(+), 16 deletions(-)
+
+-- 
+2.55.0
