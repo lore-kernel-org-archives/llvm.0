@@ -1,189 +1,264 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from CH1PR05CU001.outbound.protection.outlook.com (mail-northcentralusazon11010007.outbound.protection.outlook.com [52.101.193.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621AA27A47F;
-	Tue, 15 Sep 2026 01:44:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789436673; cv=none; b=r7R/EFL0sctcbfNaHlPEHp0BGBLoYnxM/s26O0V4GSwVh4VlEFFDUlrQCUd8OnUbAdAqQPbvme5hc/93ffjape/CF/kw1VzV3M81oyLq4goTgntRUX5p+8X2UHxiKvA/zd5PqiQawhu5KxQAqJUAjEflqWyy1Hf0ensK21rT30A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789436673; c=relaxed/simple;
-	bh=/pzDdZf/Sud0cF16hTuprFeHO4d7wO0i7IHquADjRKE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ETSrVgw8c/pO5z2a3p/XWUhodSMBlY3Ab35Ix0LC2cC75Psj1BnE6npfNyg3pYsagxPHHCiNF3N+khOUI4DgdQ2EUvE7wnZzQij7FNn9X8Nw4cB+49Gqkf7rN1PFwSyCwcr5Usg6Y6xHa0212lCGyiMmhtVmVk4kOrnz/6Y0c5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aHUDg338; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F159C3D1A8F;
+	Tue, 15 Sep 2026 03:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.193.7
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789441436; cv=fail; b=XZsZxCnPz3EATBY606U45BFzmMOrvSqDO9pWEzFIga5p5vgbSjM07c2FLr/fcLHs0p1wifaf1cIxY7hQYrS673PZzaX3+OCvlyiDY4vllHgAVs0HWAK+uXX5NjJOxVwrHrt3/ZlOh2sfqUnc671J32uctx1BzFo4LtcUg+4pPGk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789441436; c=relaxed/simple;
+	bh=zn/AHmsg9PAW3jlQHjpqYSUXdCB7Dy6q/9+rwNESDr8=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=uMkASkHt+aBOjDpOWz8U+IoiHwjuYS+kC1sscBINyeQJLLCW2twS5OOMVlxIO4IQdQQVSyJNB40HzPuvhEnzxiBXVTYn+gOKJ2f8ZrR41IgB3VU3ijMjIL8F1Tt8ab2Q26a8DC/SViPfw1KPF9DD8pjmnzPZNAC6yfieD0ZB2/A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=evemmQSk; arc=fail smtp.client-ip=52.101.193.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aHUDg338"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789436672; x=1820972672;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=/pzDdZf/Sud0cF16hTuprFeHO4d7wO0i7IHquADjRKE=;
-  b=aHUDg338Adv9AVdaQDnubEZN4uwQZ6qx3L6pxQhLUsBKB6sFBXHzuJQL
-   420/K3DuwdXkIdY4uj2ZVkKcYGX2RFcY7VWE+Pg9zNuXRg7KPVCToGvXa
-   7Pzpc/QOTLVqlMpyr5HHz934A11VfjOWJwk7L/XSspCmEpNcNithTB2L6
-   eCGfkVNAABUz4cTXT4pHskZaE18TvwDRrL3SE5Ar4Lx2foZ5F/0iXL4kW
-   ElcsvAVNTI3hC/j4IzWl4SZAqmFWjOnMPCabyrV8n0QuYRczEb52EpRwY
-   qFJshTXKnS0F1SkANLCLB4CHOFfVwMvB0JAGyyQEb/lBT0Y3uRkEOTTNI
-   Q==;
-X-CSE-ConnectionGUID: JILunqXRTW274kdJFMF8gQ==
-X-CSE-MsgGUID: bUFicJZoRRqqSj5uHN284g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="89636228"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="89636228"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 18:44:31 -0700
-X-CSE-ConnectionGUID: VwTe2nyPSDqlLCN+t8v4VA==
-X-CSE-MsgGUID: MiCS2eEORi6rBhnlQuco2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="1010027"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa011.fm.intel.com with ESMTP; 14 Sep 2026 18:44:29 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x6IDi-000000003pe-2Dcn;
-	Tue, 15 Sep 2026 01:44:26 +0000
-Date: Tue, 15 Sep 2026 09:44:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?Q?Rare=C8=99-Mihai?= Vladu <vladurares@gmail.com>,
-	gregkh@linuxfoundation.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-	=?utf-8?Q?Rare=C8=99-Mihai?= Vladu <vladurares@gmail.com>
-Subject: Re: [PATCH] staging: rtl8723bs: fix lines exceeding 100 columns in
- rtw_security.c
-Message-ID: <202609150940.PBljt2rP-lkp@intel.com>
-References: <20260914145256.996968-1-vladurares@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="evemmQSk"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HOyAOZ4LRZHRc1nJLULMavvcBjHqmr1vf/F5tHptty5bnCydBvtA3MYO4tDzps6qr7sdq1Q/2p+PGW6I99Lm9P+Mj2mWDLSBpA95Iu4fVrRFFM0KycAUu+Cb6lWDZ/xbD8AGhFoUB1JxGBFZgiPk8mT1kygU9M5t2QFh0lsL9ZyP7tcJq06keOc7ZmrBvfBiP3NqCl4a6ifmkNH9gB7Z0Qwsl3ntf2krb865TbzRWxQdko7fYPgWK3kgIbIWI2RYhKQ1XAvq9N8AcPmOt5VgXKsli7ADQmda8X+K8jkjVqZNVUgNEqgDK9WSQkNMwAacLzdM8fikMaacORswVsUtJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=I4ZEvj7XdFyu4ITXdKD6CVNsJQhdWY6NLtYLfY04LSY=;
+ b=mQu92cHKR2zpqcGFrtg02PnJZZskNAs+T2QlUApTA29vJ5f6qZDv3E8CfGIGwSshPlh4O7dEw5i9nJk2NqMU//j7/bkqspWUVEPRLMc0y5OkeBB5dydbk3l4wkQj2j8zagZYPeFxgZeUO0RA/WUA71nbfLNtwXhNbBzZsR4nJmK4HDsbrtIxWtpqSz2U9Glk23ETnx9BVmvIkTn+uEgDlgfR3bvQcDE1BihUsgjH0duc5b/Agdw0yfyLI1aisPGrzMrKtN9ztbqj/j1WM5IPY9zZwlFmADhnvyyvv8NcsLiBBbitBMI9kdKCtPpN223HKe7/mJOxd+ZB1HAdKGdW0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=I4ZEvj7XdFyu4ITXdKD6CVNsJQhdWY6NLtYLfY04LSY=;
+ b=evemmQSk4KBUwFfLPEJ5Je9sGvmgQLEY8xBg0Zd79NAC0z4ocBnRgVUYPB/NAwUWCklO9hEGiAytSHzOSRXDLXU1G3qqlm/DMlD3ow90J7AmdbN5bVzEKzv+VRL6Lw8Cb63FzbYldRdpQqKu7/VT1jWS9U//6B0G6aKGUgtQXhPa/0lIsQaHQEzArOAUR1oS2TuHneINqH+Xslf+ggn1NvyPOI243s1JbbDiYaSUXq96NryzNao2R1YJZC8PDek/dKO3vbUqVPUnBC2Sirmpsash317bQO0lkD1GFFHSpnEHEw8zsmDocWaSxNlvkX2EyKOmMYVoZ1SCW/T0jIDnAw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV3PR12MB9356.namprd12.prod.outlook.com (2603:10b6:408:20c::21)
+ by SJ2PR12MB9008.namprd12.prod.outlook.com (2603:10b6:a03:543::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Tue, 15 Sep
+ 2026 03:03:48 +0000
+Received: from LV3PR12MB9356.namprd12.prod.outlook.com
+ ([fe80::1c36:31b4:c420:6286]) by LV3PR12MB9356.namprd12.prod.outlook.com
+ ([fe80::1c36:31b4:c420:6286%5]) with mapi id 15.21.0406.007; Tue, 15 Sep 2026
+ 03:03:48 +0000
+From: Yury Norov <ynorov@nvidia.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Yury Norov <ynorov@nvidia.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun@kernel.org>,
+	Waiman Long <longman@redhat.com>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	Kees Cook <kees@kernel.org>,
+	Joel Granados <joel.granados@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	K Prateek Nayak <kprateek.nayak@amd.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Jann Horn <jannh@google.com>,
+	Pedro Falcato <pfalcato@suse.de>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	=?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	wireguard@lists.zx2c4.com,
+	netdev@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	rcu@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-rt-devel@lists.linux.dev,
+	llvm@lists.linux.dev,
+	Yury Norov <yury.norov@gmail.com>
+Subject: [PATCH 00/17] Treewide: enforce static storage for object initializers
+Date: Mon, 14 Sep 2026 23:03:18 -0400
+Message-ID: <20260915030336.1192299-1-ynorov@nvidia.com>
+X-Mailer: git-send-email 2.53.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BN1PR14CA0010.namprd14.prod.outlook.com
+ (2603:10b6:408:e3::15) To LV3PR12MB9356.namprd12.prod.outlook.com
+ (2603:10b6:408:20c::21)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260914145256.996968-1-vladurares@gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV3PR12MB9356:EE_|SJ2PR12MB9008:EE_
+X-MS-Office365-Filtering-Correlation-Id: c8f0ff5e-4258-48cc-51b0-08df12d5f279
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|23010399003|376014|7416014|1800799024|10067099003|56012099006|11063799006|6133799003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	mPNn7lejcn6Sbs4IW78jh6C06SxmN64y2bcWlPUAwf1QurHDEcQDHlpJrJB15ajZ2+BU3qB2P4X2hIa8NnnQBCkdmclNMAIsyy9dc1giuGXD+j1/FnoLgrYWOXZeKpU+1Ibr2bIMkfXkCvk7yhE55QxWrVuIFZKXgkRXDncMF/WtyrvB1Ig4a216xO9detUd/qB3aa+3mhnPiF1NKRfQ+JAVW6Un4CcnIgHrcki38uIxhUyJUxhVTZJwlsrZiCR+Rl5VrfPsYQfQUTphBIzeOIyezwvtZL6Sb77OzfCr/e05fo6ixdU5mAcWWsV2aTlyqlEfWQRSvIUpvLa2MXOiczuR4LJWrwcoTBXt7wMv4rdh0oDsWwDMEI5FRQVncrkM9s/pHuKv6IVp/uoPSz1d01MBtKNTBEIfaCM4ul/HRLKxFDzCh0uaORcHJ2c/uAcrTw4udeTOgPDErfhkHlCnBm+jlaYHGlbhv/Uiomhwgwq7IY+CDOQW30u9xM3aBdJ32RmlbpNLK0IYBCy1xpVH0Npr08rGis9VnD8+OWj0g/m1qRnW1dAZ86oVkVYJrk+Yb+K/LImqQ+BIkuVoZzv9IHzr5GfVyQpWzR+OlQjuMsDa7gMQ8Xi1a8l2izmXVyZ1s5tdw+4XsgyszTvRB6xciIs1St7M/AjPJuV/XNdX1Lc=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR12MB9356.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(376014)(7416014)(1800799024)(10067099003)(56012099006)(11063799006)(6133799003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?HwJ1fYGe7uXDwZ+JuHXwFv9yY1dx1/XIRgzCp/aqjzCI2Aefg+8knUYUFpZW?=
+ =?us-ascii?Q?h2VyAVoPCArznKy/6cXTvtJnmGxjs3duyJTgrZa2A9dYVwj93cA66jVFK/rm?=
+ =?us-ascii?Q?GOYmmrsMLd8B/UIShg88Pv5hPH43tkOaCUQoJyUyIbUjiRDgf/Vf3q8r0lbQ?=
+ =?us-ascii?Q?wZH38VBN+sxpW8wsKLUnx6hWLBG/ovfJKIgq21oIM7KdybFvXxUDslRMVkaN?=
+ =?us-ascii?Q?aqel38PT62Fl9SjfqsQLApNcrPRpoh3mYIIwz8eQYmTNZA41CnwRwl+n5vSi?=
+ =?us-ascii?Q?A/qZuRtaTn/tIH0iqtDi0Q49Eip/+RmGjC+1EPm2YXcxas3byk07i1R0ECCT?=
+ =?us-ascii?Q?9Dkf7/+1t7WTHnGeDcmyLAov+dAEKFY6lnUXGTCUUfI+qssb8gtHGIyZUywo?=
+ =?us-ascii?Q?bsdrf+Nfr+fHSzQ4UBRtoTuRn+aOB/c6sWIvJpvt1MEYDpQ9RAiOJ2zMSqh+?=
+ =?us-ascii?Q?fVjg6iln9SEpAuutE+ik+6kvTB4nQpusJpqRKImtq7n0qZ8gBFvi6drkraJQ?=
+ =?us-ascii?Q?7oGpOyKbFB45G3jYV2HbJGpSWWdI4T3Ce76ircDYrIivf7VN1ETw2/HVrXai?=
+ =?us-ascii?Q?V88a9wFCN30+gWTjZZuD8bOPzo1lE93XULgyOx5Qj/LpVk4tyg8VWt+ei9Bk?=
+ =?us-ascii?Q?0H5PN675rqdILgCWFuF0u8zyfrhP87h3mOTFGRSSrDf6bAHxfss5/YPbeLBX?=
+ =?us-ascii?Q?GmKBA7+dz9x7d0dFir+ZsVjsiRYdK6oMJtQUQBsQglZiH6LLmMr0ZClV6qFZ?=
+ =?us-ascii?Q?A5szXvlHeU3j5b98dpx1pY0t4hYq4oVv168n9IeWAYl6cwyj2Mw/sI6BDohF?=
+ =?us-ascii?Q?M7mpgqkE2hooIQM6wVGmctqKF+pks929QAwIMILQn7GQjs1H05/nJzHcIoa1?=
+ =?us-ascii?Q?9lcFp/5RKZm8JYpgXH9yq73PLKWxNH41UmQH9hZlR0bVuuaGoOkUkrFCwZlh?=
+ =?us-ascii?Q?YHRmaB9Sc4VcKsqc9iIohsUlnWS5xXikASRE9k+p834X0283nUz2etCem/Cu?=
+ =?us-ascii?Q?cLu2el5aht4nTs/VgMV7jIuNG+hCPinzaU82rUfCUfN2umVOs2ET7HyMiNoB?=
+ =?us-ascii?Q?nJzinW/3elNQ3/OZ0hsqywtGAbZeW9Mnj/chTFZXUPe2v9mvCQcAHMq52y28?=
+ =?us-ascii?Q?i7Ut/lBiy+OEFblWpvG7h5TQDZShuuOSMPMcsmjxNmEJ/fC2d2HNsYgIcurO?=
+ =?us-ascii?Q?mya7Zas3b71kIUWxqjZ2q8WCerz+2Lo7/i+sQiKSA8CKB4pgZhPerVjy2mn3?=
+ =?us-ascii?Q?o4s6fzYzA2oXPy1VA4PpwCnYN6RuOrj+0izW1lggLxCsXt+clx25BH1ya0st?=
+ =?us-ascii?Q?Ls2M2X+CwYPGeHF8fzfyryvMwqmdQrb4U6H/zBX3jaAKxM0TBCi3jpsruJqQ?=
+ =?us-ascii?Q?xXhqaLhcmEWv/ldQ1gxU+g6l8KBEXWI2iUx7WFJUn2W7O7FryFP0hCvEl/xf?=
+ =?us-ascii?Q?viyKpFkAhujsqDDtnk7fsTJcKaKbh8tsngLDuoXCX4RvPtYvQV14DvwnTjMj?=
+ =?us-ascii?Q?TjF2/dq0gOHInU/c1Sgb0YfePcrevI2XzIfnZNVA6OOFlv4Ys+R/f1KBw+aN?=
+ =?us-ascii?Q?HKnWHEkAN3swhbVgkUjG1wLtDb8Hp5sF4bEmSX0XFSA8N73ObaqdQyDAg6qy?=
+ =?us-ascii?Q?PVxAjUST7elBHJTWDF/wz7kF5NKoDQR2tRVNOPt/UD22eRKwD/UW3CUx0qTV?=
+ =?us-ascii?Q?cwOOUVrh++sNMfddTU98pNNNIOYHbVCGoEIio1sQv9ALg0gKSQ12mYlQ4XpY?=
+ =?us-ascii?Q?Z9pjVMa1Qg=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c8f0ff5e-4258-48cc-51b0-08df12d5f279
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR12MB9356.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 03:03:48.2413
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1Xt1b8oWq4hwqnRi+rV+SwJUEErefSNaOy0RVFSoNEKMX1X2tfCb2pn+OQXoRo7OLmAREb6l/8RFzSSBpjy6qQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9008
 
-Hi Rareș-Mihai,
+On top of [1].
 
-kernel test robot noticed the following build errors:
+Declaration macros that statically initialize embedded locks require static
+storage when lockdep is enabled. Automatic objects must use runtime
+initialization so lockdep receives a persistent class key.
 
-[auto build test ERROR on staging/staging-testing]
+For automatic local objects, lockdep cannot use the lock address as a persistent
+class key and reports "INFO: trying to register non-static key" before disabling
+itself.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rare-Mihai-Vladu/staging-rtl8723bs-fix-lines-exceeding-100-columns-in-rtw_security-c/20260914-145256
-base:   staging/staging-testing
-patch link:    https://lore.kernel.org/r/20260914145256.996968-1-vladurares%40gmail.com
-patch subject: [PATCH] staging: rtl8723bs: fix lines exceeding 100 columns in rtw_security.c
-config: hexagon-randconfig-002-20260915 (https://download.01.org/0day-ci/archive/20260915/202609150940.PBljt2rP-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 148ee2b266b73a49f1f31d0bd17d4818b91bee9f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260915/202609150940.PBljt2rP-lkp@intel.com/reproduce)
+Series [1] introduces an ASSERT_STATIC_STORAGE() macro to enforce static
+duration of an object, and applies it for DEFINE_IDA() and DEFINE_MTREE().
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609150940.PBljt2rP-lkp@intel.com/
+This series applies the same mechanism for the other structures of that
+sort found by Codex.
 
-All errors (new ones prefixed by >>):
-
->> drivers/staging/rtl8723bs/core/rtw_security.c:1337:7: error: redefinition of 'keyid' with a different type: 'int' vs 'u16' (aka 'unsigned short')
-    1337 |                 int keyid = padapter->securitypriv.dot11wBIPKeyid;
-         |                     ^
-   drivers/staging/rtl8723bs/core/rtw_security.c:1311:7: note: previous definition is here
-    1311 |                 u16 keyid = 0;
-         |                     ^
-   1 error generated.
-
-
-vim +1337 drivers/staging/rtl8723bs/core/rtw_security.c
-
-  1277	
-  1278	u32 rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
-  1279	{
-  1280		struct rx_pkt_attrib *pattrib = &((union recv_frame *)precvframe)->u.hdr.attrib;
-  1281		u8 *pframe;
-  1282		u8 *BIP_AAD, *p;
-  1283		u32 res = _FAIL;
-  1284		uint len, ori_len;
-  1285		struct ieee80211_hdr *pwlanhdr;
-  1286		u8 mic[16];
-  1287		struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-  1288		__le16 le_tmp;
-  1289		__le64 le_tmp64 = 0;
-  1290	
-  1291		ori_len = pattrib->pkt_len - WLAN_HDR_A3_LEN + BIP_AAD_SIZE;
-  1292		BIP_AAD = kzalloc(ori_len, GFP_KERNEL);
-  1293		if (!BIP_AAD)
-  1294			return _FAIL;
-  1295	
-  1296		/* PKT start */
-  1297		pframe = (unsigned char *)((union recv_frame *)precvframe)->u.hdr.rx_data;
-  1298		/* mapping to wlan header */
-  1299		pwlanhdr = (struct ieee80211_hdr *)pframe;
-  1300		/* save the frame body + MME */
-  1301		memcpy(BIP_AAD + BIP_AAD_SIZE,
-  1302		       pframe + WLAN_HDR_A3_LEN,
-  1303		       pattrib->pkt_len - WLAN_HDR_A3_LEN);
-  1304		/* find MME IE pointer */
-  1305		p = rtw_get_ie(BIP_AAD + BIP_AAD_SIZE,
-  1306			       WLAN_EID_MMIE,
-  1307			       &len,
-  1308			       pattrib->pkt_len - WLAN_HDR_A3_LEN);
-  1309		/* Baron */
-  1310		if (p) {
-  1311			u16 keyid = 0;
-  1312			u64 temp_ipn = 0;
-  1313			/* save packet number */
-  1314			memcpy(&le_tmp64, p + 4, 6);
-  1315			temp_ipn = le64_to_cpu(le_tmp64);
-  1316			/* BIP packet number should bigger than previous BIP packet */
-  1317			if (temp_ipn <= pmlmeext->mgnt_80211w_IPN_rx)
-  1318				goto BIP_exit;
-  1319	
-  1320			/* copy key index */
-  1321			memcpy(&le_tmp, p + 2, 2);
-  1322			keyid = le16_to_cpu(le_tmp);
-  1323			if (keyid != padapter->securitypriv.dot11wBIPKeyid)
-  1324				goto BIP_exit;
-  1325	
-  1326			/* clear the MIC field of MME to zero */
-  1327			memset(p + 2 + len - 8, 0, 8);
-  1328	
-  1329			/* conscruct AAD, copy frame control field */
-  1330			memcpy(BIP_AAD, &pwlanhdr->frame_control, 2);
-  1331			ClearRetry(BIP_AAD);
-  1332			ClearPwrMgt(BIP_AAD);
-  1333			ClearMData(BIP_AAD);
-  1334			/* conscruct AAD, copy address 1 to address 3 */
-  1335			memcpy(BIP_AAD + 2, &pwlanhdr->addrs, sizeof(pwlanhdr->addrs));
-  1336	
-> 1337			int keyid = padapter->securitypriv.dot11wBIPKeyid;
-  1338			u8 *bip_key = padapter->securitypriv.dot11wBIPKey[keyid].skey;
-  1339	
-  1340			if (omac1_aes_128(bip_key, BIP_AAD, ori_len, mic))
-  1341				goto BIP_exit;
-  1342	
-  1343			/* MIC field should be last 8 bytes of packet (packet without FCS) */
-  1344			if (!memcmp(mic, pframe + pattrib->pkt_len - 8, 8)) {
-  1345				pmlmeext->mgnt_80211w_IPN_rx = temp_ipn;
-  1346				res = _SUCCESS;
-  1347			} else {
-  1348			}
-  1349	
-  1350		} else {
-  1351			res = RTW_RX_HANDLED;
-  1352		}
-  1353	BIP_exit:
-  1354	
-  1355		kfree(BIP_AAD);
-  1356		return res;
-  1357	}
-  1358	
+Link: https://lore.kernel.org/all/20260911221444.1523311-1-ynorov@nvidia.com/ [1]
 
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+
+[1] also describes the preferred route(s) for the material. According to
+Andrew's (and mine) preferences, sending everything together in the hope
+that the relevant maintainers would ack the corresponding patches or
+simply take them in their trees.
+
+Yury Norov (17):
+  locking/mutex: assert static storage for DEFINE_MUTEX()
+  locking/rtmutex: assert static storage for DEFINE_RT_MUTEX()
+  locking/rwsem: assert static storage for semaphore definitions
+  locking/semaphore: assert static storage for DEFINE_SEMAPHORE()
+  locking/seqlock: assert static storage for DEFINE_SEQLOCK()
+  sched: assert static storage for wait queue and completion
+    declarations
+  xarray: assert static storage for DEFINE_XARRAY_FLAGS()
+  idr: enforce the static-storage contract of DEFINE_IDR()
+  radix-tree: require static storage for RADIX_TREE()
+  klist: assert static storage for DEFINE_KLIST()
+  workqueue: assert static storage for work declarations
+  timers: assert static storage for DEFINE_TIMER()
+  kthread: assert static storage for delayed work declarations
+  ratelimit: assert static storage for DEFINE_RATELIMIT_STATE()
+  notifier: assert static storage for locking notifier heads
+  rcu: assert static storage for RCU sync and SRCU definitions
+  sysctl: assert static storage for DEFINE_CTL_TABLE_POLL()
+
+ drivers/macintosh/ams/ams-pmu.c              |  4 +--
+ drivers/net/wireguard/selftest/allowedips.c  |  4 +--
+ include/linux/completion.h                   | 10 +++++--
+ include/linux/idr.h                          |  4 ++-
+ include/linux/klist.h                        |  4 ++-
+ include/linux/kthread.h                      |  4 ++-
+ include/linux/mutex.h                        |  7 +++--
+ include/linux/notifier.h                     | 13 ++++++---
+ include/linux/percpu-rwsem.h                 |  4 ++-
+ include/linux/radix-tree.h                   |  4 ++-
+ include/linux/ratelimit_types.h              |  4 ++-
+ include/linux/rcu_sync.h                     |  4 ++-
+ include/linux/rtmutex.h                      |  3 +-
+ include/linux/rwsem.h                        |  7 +++--
+ include/linux/semaphore.h                    |  4 ++-
+ include/linux/seqlock.h                      |  3 +-
+ include/linux/srcutiny.h                     |  4 ++-
+ include/linux/srcutree.h                     |  7 +++--
+ include/linux/swait.h                        |  6 ++--
+ include/linux/sysctl.h                       |  4 ++-
+ include/linux/timer.h                        |  4 ++-
+ include/linux/wait.h                         |  7 +++--
+ include/linux/workqueue.h                    | 10 +++++--
+ include/linux/xarray.h                       |  3 +-
+ tools/testing/memblock/linux/mutex.h         |  8 ++++--
+ tools/testing/radix-tree/benchmark.c         |  4 ++-
+ tools/testing/radix-tree/idr-test.c          | 29 ++++++++++++++------
+ tools/testing/radix-tree/iteration_check_2.c |  4 ++-
+ tools/testing/radix-tree/main.c              | 16 ++++++++---
+ tools/testing/radix-tree/regression3.c       |  4 ++-
+ tools/testing/radix-tree/tag_check.c         | 28 ++++++++++++++-----
+ tools/testing/vma/include/dup.h              |  5 +++-
+ tools/virtio/linux/compiler.h                |  9 ++++++
+ tools/virtio/linux/ratelimit.h               |  6 +++-
+ 34 files changed, 176 insertions(+), 65 deletions(-)
+
+-- 
+2.53.0
+
