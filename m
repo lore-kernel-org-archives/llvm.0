@@ -1,161 +1,165 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010065.outbound.protection.outlook.com [52.101.201.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CCC3D9DA1;
-	Tue, 15 Sep 2026 15:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789484655; cv=none; b=ejYAVnRuZvV3VX3j/nTTIUFN5Axl56rdGYZkeUsOZSe6a/tGlHLSy2hYGZHO7tVdneiHxw8yObUme8LvtMJHoeMNuJ13xvf05GbwUiRkvh318v9R7dCgR08zfbSOXPBW3IM7YJkOKcKr3yffXmdpm3Y/eS0hIoL/ErQLC5v+Tzk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789484655; c=relaxed/simple;
-	bh=IZYowYo0tr99LV5bF5s2Q786jBuUYkEw4pS9QMyuqbA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VHNp+NlDRMt/80ZGWAjRtlSbBcLMYoA74cEeUlx7ACrxZp7qVH9Dzfg5zm+ftYJd6fWMPI1YYCSAY/TfGCbGuKkv3BVIU7JGQKEj2xCT+uEBwyOuaEasO8XsDmy6QM/hA87bPNHJcq/salGMPkjoJKlpenKD1Ibu5Kssm2fsZZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CfUJfxGo; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E324E4ACC72
+	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 15:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789486456; cv=fail; b=jekU/OoRvZEQp+8fPNjAg5bBAEZZunWRjMSGF6PnSxy5t4f7f2GMTLdcK2bJAax7oB9Jy3NYgOwXMMdDPA04cMcx94KO92/TY0m7k7qHK0yt7Gmsi65yyUWnBjBzB/mtJMpG26diY2dk4vUCE9IYZQ2rVcLP7wU8y6WFfoPReCc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789486456; c=relaxed/simple;
+	bh=pSFa2wSFyr6cGMdSkXfO5hqp1weLD1nNW/UJUT1Apdk=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=R9lV61sLAiM+6g5Mz985egq53xP/5PkDSDyUOja9QjYQSwWA5SiAL9C/Ps8XD1Pizl//6wQIgBjQpzV7e/YRgJUx81EzKBPVYjSUrxiX5gl5kw5WvKcsiYtjFuG2dIh7OWri0t4RMbfz1gkV/gSmos3TWNbxbOXXl++hnw0H0dU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Uuv3Ptcy; arc=fail smtp.client-ip=52.101.201.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CfUJfxGo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 445A51F000FF;
-	Tue, 15 Sep 2026 15:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789484651;
-	bh=6WCAfz85+ZGgRMN8wAwQXLQh8ReFwgRJPZyO/JsNeYI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=CfUJfxGo8VPDYjL6tBgfl6L002bEGl1ULF2dCRDxLcUo+ron9vtXHUBT/L1UTJo8L
-	 U0iLglw63rY+yRq09BUmnCcoTd/5o8qIRnxuo2JlsFOAqKr9geNfwGfR1AickYadR1
-	 eZ+UJH8NBVkcyKnuFPyAHxFthRRJgRf2DHU7c2yHI6ZgtsWCDAM9+Dp/WgT7KnklKF
-	 xxwMgPPtPplf0k17pupUP4U4BTD5IWphakn+2wgwPt4Ob7KYYh4Fiufotq7wXJZle1
-	 XndOOWOAK6nwCgJYzumwG2wlhaFBpVgHKhfhm0X9wnZqdojf8v+Yk3NqQjtqoeQ/bI
-	 RWTqH0Scqd2sg==
-Date: Tue, 15 Sep 2026 16:04:00 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Kees Cook <kees@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 17/21] objtool: decode instructions and resolve branch
- targets in parallel
-Message-ID: <aqlau0-opF8yG-JU@gremlin>
-References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
- <20260914-build-speedup-v2-17-39817ec5db23@kernel.org>
- <202609141112.F8983EE9C@keescook>
- <aqkR9Xqu-0Tem1zm@gremlin>
- <20260915122959.2348bf90@pumpkin>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Uuv3Ptcy"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=w4QzM8KrRGUhBmoiYAz6u7om9ozIpPa+mbo60ZH0j0QgvxRaH4TnNAFwFKUWwS9VR7oYKhNeSJRxshMYz5QF3UdqrFlTiySj2Ruo6aICKz4HtHLKNG4E5L9ziAn1iUXfNSvGBpsigGnT8SU1o3Z01at336xPsOeGsH8GtQGnJDyjuixlls0m+Yu9EwxkzM/DnDgztPsVB4Knmo7lpCCv8HejWSDZ/w/ay7vvNiPoUNJ4CH18CCsU4iLhmakT3tOw62U5LtBh/msCVyt6eDjiZQ3cpczFFYWIUfx/UnGvHh1sXm+GifIK7koFtWrMddHV2lPzMt1AA8mp3gQ/03b8Yg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=L22Rf2VjM86i82rgt9wFexwhv1JjA4UKqgAukYL3zLM=;
+ b=wOh7jvj2Igr+BroZXWcnsl1lwrp0kJbEiFg2R31TcQjkWrvgijBazwhtaMvZE/1jLYRgr7IwL+B5Nk3hDAHwkgrtyk24QGlv5+vA0iNGqnbrK6R6e+ueZjhsQBuiz/bvheSZ/7n7Q9HDIlhql3li+zaY3gUbTMClXqKPnREo4InqDL/Eny0W8zbjpI8lTgel1RfLKjt6bJT8sYFoMAiK0hzpXiVJzRsJf2HRjd5SZLZjqowN/BIwKikdNTKiI6787nzMdGD3MJyvs2fc64HPS34aVhYhLIaWsnqh8cpVu3K80Nm36ibAvNPdR9xDdJuGrUGekbmYC5Nne5uXO1s7Ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=L22Rf2VjM86i82rgt9wFexwhv1JjA4UKqgAukYL3zLM=;
+ b=Uuv3PtcyIkpDOymqmUdPLyorhW6sxTFGLxRWWeEBg8tX2bTWb+cynItobe8DQemQagqm8mBanod3j5vjyL//auXmxisBs16/EoDUq9CMtlJQmsNYx703j/i7P0EtzPSygMtDU1wGWzlo9RKggKUoLp7TLRy0C1o8zRSR46ZtLJEnYCzjL2ju4Jnzu9l/wQRBCLdR0dh0CK8hDAW4pn72L3AQt0AURXG5hH9FxxBDMWRtBr97bqLfS0vje71IRT/3wsTE9HTAIEIZmkyHjpS6qFm1wwyGbnOndYfcPOMoBByTQb8LXaIHHe/EgKtMI7POXPLxir+r80FcmTP1TqSAUA==
+Received: from DS7P220CA0042.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:223::35) by
+ BY5PR12MB4163.namprd12.prod.outlook.com (2603:10b6:a03:202::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.428.9; Tue, 15 Sep
+ 2026 15:34:07 +0000
+Received: from BL02EPF00029927.namprd02.prod.outlook.com
+ (2603:10b6:8:223:cafe::5) by DS7P220CA0042.outlook.office365.com
+ (2603:10b6:8:223::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.428.9 via Frontend Transport; Tue, 15
+ Sep 2026 15:34:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BL02EPF00029927.mail.protection.outlook.com (10.167.249.52) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.428.7 via Frontend Transport; Tue, 15 Sep 2026 15:34:07 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49; Tue, 15 Sep
+ 2026 08:33:36 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Tue, 15 Sep
+ 2026 08:33:35 -0700
+Received: from [10.135.59.1] (10.127.8.10) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server id 15.2.2562.46 via Frontend Transport; Tue, 15
+ Sep 2026 08:33:32 -0700
+From: Edward Srouji <edwards@nvidia.com>
+Subject: [PATCH rdma-next 0/4] RDMA: Use unsigned comparison in CQ cleanup
+ loops
+Date: Tue, 15 Sep 2026 18:33:27 +0300
+Message-ID: <20260915-fix-cq-cleanup-v1-0-e991944cf898@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260915122959.2348bf90@pumpkin>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEdlqWoC/x2M0QpAMBRAf0X32S0bJn5FHtZ2cYthQ2r5d8vjq
+ XNOhECeKUCXRfB0c+DNJRB5BmbWbiJkmxhkIVXRihpHftAcaBbS7tpR1ULaqqwU2QZStHtKxj/
+ swdtVo6PnhOF9P/gbUTlrAAAA
+X-Change-ID: 20260915-fix-cq-cleanup-6512d4346ed7
+To: Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, "Nathan
+ Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+	Yishai Hadas <yishaih@nvidia.com>, Chengchang Tang
+	<tangchengchang@huawei.com>, Junxian Huang <huangjunxian6@hisilicon.com>
+CC: <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<llvm@lists.linux.dev>, Edward Srouji <edwards@nvidia.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1789486411; l=1825;
+ i=edwards@nvidia.com; s=20251029; h=from:subject:message-id;
+ bh=pSFa2wSFyr6cGMdSkXfO5hqp1weLD1nNW/UJUT1Apdk=;
+ b=WHpJZ+oxtZ6CY47Nj8rIJqAex48u5wU35cVk622+a3C3jskUljyt6MFHL608VGspjL7emYMfY
+ oJITh1lanqPABrcRRI5Vltbca+HrfJ/eQjAMCUQQN73IgK1gU9EDLqv
+X-Developer-Key: i=edwards@nvidia.com; a=ed25519;
+ pk=VME+d2WbMZT5AY+AolKh2XIdrnXWUwwzz/XLQ3jXgDM=
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF00029927:EE_|BY5PR12MB4163:EE_
+X-MS-Office365-Filtering-Correlation-Id: 38bc9f53-89d8-4692-2eaf-08df133ec7e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|23010399003|7416014|376014|82310400026|36860700016|10067099003|56012099006|5023799004|11063799006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	jIl/lN59JEqpzS5Ig3Y/1BP+Ohzw0R9Lav8YknQg1LnB0LsMwhBTqi6kZtxVi3lRrlbw4YbPFh2Ka44DtufQ/SujYvxjRVDsllw3fGMc5xZ94gyGIsONra4Fa9pORC7aEEgWFzxD8vPmKSSQ7CKlVTq+MB6Uu1M0iPjZYUi1Xjc3k7iLmFneEnNywJyncUUX3qqfRh4wQEoI+k4LrbUVLyd5Ov5j3MGX+WzRDH1btrgvOLvo/+NfdiYpXd5ZUuH8pWSkv5Y6L730+aHYh5usR8I5XVQ/oUDLUwD43i11WOjTquH8juKpE7SzDKAtBzKHQObyZFH3wJrLnkOyK/Zoa3yfG3K2ln1Rc2E1ca/6jHKUJQYYZ9Aam28S5kr64T5elZ0Q4FtDste58fc2mHTMwWZO5P10QjcskEXcHkfickzwqbAdNemaxV191tNSIt+vndJ4xvoQIsQRlUDXdaaf2aFp3YBDt5lPY+812g4hxP+phV4awM/Vs1YruOICoz5OZ1Y0wHlYCdZC079PKmIke1DZT6gmmEfRvbQtFCku5+5ElY9a4QvbytmhBo1/E1bclJz7Hzraxkspiy0dhRdSoYhyPK7EXcWuvE17elZUnkpTmaGxytf6DDvtERbnE2uvZdnvtAF8OGaaqFrTSiPm9jqISmFyLR8hfmPLCEKodZD0d3i9EB+/qI+OIwrDM+7tN6y2vxE3taLcpJfdSOyyBw==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(7416014)(376014)(82310400026)(36860700016)(10067099003)(56012099006)(5023799004)(11063799006)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	LtDZJstDUcjKvArvRsvcCGYGkh9VsU10mrF4P2OvKCt/uCUdAK5ykoIr3PHGkGOuYelq1y1c3xDpS/p2DNjHW34jWsKLHK24La0gZnq8Nz9RKrLEe/CXDuinEpa8WXCis7UMv3chvyTHbzDCbBTPFc8yKoNcVprwkkU68Hpa+vnHayMjNAiaZMEa5dScYKjWni0dzU5SO+DzXCuO/hxwJiKDvlO127iNTmB5dlebrz4S+cQjdGjPkXC4rYz7miUU0bL4Hh23B9s6nmCb9cmkrJ9pIQ1OyDSOjwLoWOQmDkPcmbCb8w+shqn+/+R3vB0qOqVzfSe7/pcK5HpCdi30v7BfxCttmmnqMl9mirAVbrJPKjX0gzpjdMW9N8MYbFDncwIGkLV0A7YrRjSb7N138npRu2wj4FWDAFN8xqCPAZWY9s8YVxBPp+QKMKACC5ct
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 15:34:07.0902
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 38bc9f53-89d8-4692-2eaf-08df133ec7e8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF00029927.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4163
 
-On Tue, Sep 15, 2026 at 12:29:59PM +0100, David Laight wrote:
-> On Tue, 15 Sep 2026 11:09:25 +0100
-> "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
->
-> > > > +static unsigned int decode_threads(unsigned long text_size)
-> > > > +{
-> > > > +	const long nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
-> > > > +
-> > > > +	if (text_size < DECODE_THREADED_MIN_TEXT || nr_cpus < 2)
-> > > > +		return 1;
->
-> The text_size check ought to be before the sysconf() call.
+mlx5, mlx4, mthca and hns all sweep the CQ backwards when cleaning
+completions for a QP that is being destroyed, using the same open-coded
+loop (mlx5 shown):
+	while ((int) --prod_index - (int) cq->mcq.cons_index >= 0)
+Both indexes are free running u32 counters, so the comparison has to be
+done modulo 2^32. Casting each operand to int and subtracting does not
+do that: the subtraction overflows once the two indexes straddle 2^31,
+which is undefined behaviour, and a compiler that assumes signed
+overflow cannot occur is free to fold the expression into a plain signed
+comparison that is not wraparound safe.
+This is not a fix. The kernel is built with -fno-strict-overflow, so
+gcc and clang both retain the subtraction, the generated code is
+unaffected, and there is no known user-visible impact.  The casts buy
+nothing, though, and the correctness of these loops should not rest on
+a build flag. The series drops the arithmetic instead:
+	while (prod_index != cq->mcq.cons_index) {
+		--prod_index;
+		...
+No functional change intended.
 
-This is bordering on a silly level of micro-optimisation :)
+Signed-off-by: Edward Srouji <edwards@nvidia.com>
+---
+Yishai Hadas (4):
+      RDMA/mlx5: Use unsigned comparison in the CQ cleanup loop
+      RDMA/mlx4: Use unsigned comparison in the CQ cleanup loop
+      RDMA/mthca: Use unsigned comparison in the CQ cleanup loop
+      RDMA/hns: Use unsigned comparison in the CQ cleanup loop
 
-This is ~us runtime, run once. We can live with it.
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 3 ++-
+ drivers/infiniband/hw/mlx4/cq.c            | 3 ++-
+ drivers/infiniband/hw/mlx5/cq.c            | 3 ++-
+ drivers/infiniband/hw/mthca/mthca_cq.c     | 3 ++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+---
+base-commit: 3e1de7f906ab162b23d6fe0eabccf687a98fa25f
+change-id: 20260915-fix-cq-cleanup-6512d4346ed7
 
->
-> > > > +
-> > > > +	return min_t(unsigned int, nr_cpus, DECODE_MAX_THREADS);
->
-> Why min_t() -  you might as well make nr_cpus 'unsigned int'.
+Best regards,
+-- 
+Edward Srouji <edwards@nvidia.com>
 
-Except... sysconf() returns a long and -1 on error. Isn't min_t()
-explicitly for cases like this?
-
->
-> > > > +}
-> > >
-> > > No, anything using _SC_NPROCESSORS_ONLN internally is wrong, whether its
-> > > pigz or objtool.
-> >
-> > Why? We shouldn't cap a 4 CPU box to 4 CPUs?
->
-> You almost certainly don't want to use more...
-> (Unless they end up waiting for disk)
-
-Yup on the former.
-
->
-> >
-> > The idea is that the empirically obtained 16 core limit should naturally be
-> > capped to the number of CPUs.
->
-> The 'empirical' limit is very likely to be system dependant.
-
-This same objection could be made against literally anything I do or do not
-do, it's a little silly.
-
-Every single cap like this is heuristic and limited. In any case - for
-smaller machines, the cap will be CPU count, on larger machines 16 CPUs is
-where there stops being an noticeable benefit.
-
-Other solutions are strictly worse, this is a sensible, practical
-engineering solution.
-
-> There might also be situations where you don't want the build to run as fast
-> as possible because the system is performing other workloads.
-
-Umm what? It's 2026, schedulers are pretty good now :)
-
-In any case with the changes here objtool doesn't dominate the runtime, so
-it'll have little impact. So run make j=1 to your heart's content :)
-
-> (Not to mention if you have had to add tracing to find a bug.)
-
-This is almost an argument against parallelism in general.
-
->
-> >
-> > I guess in a world where make hands jobs off this could be dropped, though,
-> > if the complexity there seems worthwhile.
->
-> You need to pull tokens out of the make pipe :-)
-
-Thanks, I understand what's required, as I said to Kees there's simply no
-benefit for the added complexity.
-
-Series like this can die by 1,000 cuts with all the nitpicks and what if's,
-let's focus on the _significant_ improvements introduced here and keep
-things in perspective please!
-
->
-> David
->
-
---
-Cheers, Lorenzo
