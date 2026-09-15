@@ -1,93 +1,102 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF754CE669;
-	Tue, 15 Sep 2026 19:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474BA35839C;
+	Tue, 15 Sep 2026 22:02:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789499279; cv=none; b=Dl6+s2xGtxD9DSOB4zfz1SGS3t9p3Qr+lx1ZLM8oENSGrjIcxpGq3IHLbzl6YETCZ4EwE3OIiInl/e/pk8vDQN7ge+nqZ9f+fRXMFQjv8ksBYs+CshsptZdqM1JJ9uVwgln7f0FBRFCafd7yWu1gRyICBiBt5FXslqgoC40/a1Y=
+	t=1789509731; cv=none; b=AN3bClEtWc5uIs/TVYEYN/c1wIPrgs8Kpm1XoBUp/L5Fypk/AQi+d3N4/MPPy3+hcllTH1AnMKGVHkcgnPKW7SvIJkJzOykILfU0S93LlPNrbkKa3us0xUsdm/rZLr6DgLTkQ4e2BuSe4buHc0HHzcKg2yawhyj3dS1q2G9AOgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789499279; c=relaxed/simple;
-	bh=Yqk68G/VssP+1UxLmQWua0XWRtSkXC7l/kMMbfJBwjY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=sizu3RQdagPOUkYFCzyLZuoomoNz7deAkGE+hBvLHh9PI7yXW2VUitYlRRNBDUd7hPbRMFZjJnK7Eq8Dr0eqpqNW687tCNnEL76MxhpCetA7F2y9SkjFf7e31OG+BLQJhuXS7Y5Tne00q2rds/Tq8BcyyXNRn5jt+pi9Deu2GRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SCRG/qGm; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789509731; c=relaxed/simple;
+	bh=GLZJu+ZNY9Xk/LATlKZ6lQE23AXTXhfnz25McRPlX8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E/f5zeZaDoxk+QXAU6IvOLzW62HZ3E+yHy0NGND6whjZyRoYl4kYa6NF/afBPBjTvisaAy3fAFLoAT3HrBY9EG+jsMrmyCzHva0yGPUUIbtn9Fhd2jF4mY2mcxPSJlj2E2scnJ3s3WlCnOiSPr5Gsnsx6lldaD+utqVzQTdZ9g0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NhjFqyCu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SCRG/qGm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789499278; x=1821035278;
-  h=date:from:to:cc:subject:message-id;
-  bh=Yqk68G/VssP+1UxLmQWua0XWRtSkXC7l/kMMbfJBwjY=;
-  b=SCRG/qGm1qqa/y94Qbc1RYRJzGIzDeh81Hjw+xGsxb3+0+zp4m0EiyRS
-   pRH3nTCY8k0OHQLcuYJ8I2CdZ5YY1/uIqQU4BUkn1vaW5RqKeZmqbg31P
-   jvUg/YFpejRh8MYpIwKUH/txxtoBQBVhxJlufB2dnx26t5xrvi2M/lMxZ
-   VJhbwfV1x7Y0riiBNxqaf9VUuv2imCIpFuj6UwfGvAx+wNxp7qc36lnds
-   p1v0mXs78JL1DSUnCcO4DBKZGq1NDQehE4y/D2/KFaX5BjMWBWYI6GjW3
-   PNzU89w9Q/ZK/m7x2c3KllziCqKZJmDZM/crKV5KCCEh4XUHUycEEApeg
-   w==;
-X-CSE-ConnectionGUID: 3jrr/z58TEiSK3Rb4eSIuw==
-X-CSE-MsgGUID: m2UNdg+mRY+ZBhGe3tZ9eQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="93574594"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="93574594"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 12:07:57 -0700
-X-CSE-ConnectionGUID: EKc1MNbRS7SdYyz2L3eQRA==
-X-CSE-MsgGUID: OzrY1cgHQEijDGElJC49ag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="273072000"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 15 Sep 2026 12:07:55 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x6YVU-000000004xl-1Q64;
-	Tue, 15 Sep 2026 19:07:52 +0000
-Date: Wed, 16 Sep 2026 03:07:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-kernel@vger.kernel.org, x86@kernel.org,
- Thomas Gleixner <tglx@kernel.org>,
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: [tip:irq/drivers 3/22] ld.lld: error: undefined symbol:
- qcom_scm_is_available
-Message-ID: <202609160249.tiuDbEzF-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NhjFqyCu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2071F000FF;
+	Tue, 15 Sep 2026 22:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789509730;
+	bh=MYpcvYi0IhmOHWDTtKoEKyqBM/oTdTRBAh47Pzw1eLM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=NhjFqyCuf8kyiZrL8wY656bZcNEMfDONA7ohqItUHpNPPG3RszZNsFe41LjXRURME
+	 +Brcrgy3eDk7P+9HGc7hlLmQLDyVCZxm/ZfOiNjxYdojZGbHPo6VC4dvsNy/jQhp7S
+	 4lRuGandHFa8e6bwRcRg8mt63DY7D/CByAtl8ts/+TTpqupT9obT+FWTWzs3EyXxLA
+	 1q0NUyi8fe0j3UcQbLwqsGtRg0rS8wPA2VTTT05j4pQ0qScvUD3mVhM615/f3tAGUb
+	 4uKhgbMFUacif9I6QmFR9+s5WA6WBmhGNWcj8przi9Qggqhx5QGvhJNwSESCb1R/WM
+	 GicpUqzdPobjw==
+Date: Tue, 15 Sep 2026 15:02:04 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <n.schier@fritz.com>
+Cc: Erkan Erdem <hexvalid@gmail.com>, Julian Braha <julianbraha@gmail.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] docs: kconfig: fix shell function syntax in caveats
+Message-ID: <20260915220204.GA1534234@ax162>
+References: <20260907103739.23212-1-hexvalid@gmail.com>
+ <20260915-pastel-industrious-rhino-8bddce@l-nschier-aarch64>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915-pastel-industrious-rhino-8bddce@l-nschier-aarch64>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git irq/drivers
-head:   0c65a1331928d0207c385f03fb5eba0cfecce0e6
-commit: 1b852de05f74cfc96c58caad9df4cc1fa2dc7689 [3/22] irqchip/qcom: Enable compile testing for QCOM_PDC and QCOM_MPM
-config: hexagon-randconfig-002-20260915 (https://download.01.org/0day-ci/archive/20260916/202609160249.tiuDbEzF-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 148ee2b266b73a49f1f31d0bd17d4818b91bee9f)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260916/202609160249.tiuDbEzF-lkp@intel.com/reproduce)
+On Tue, Sep 15, 2026 at 12:59:40PM +0200, Nicolas Schier wrote:
+> On Mon, Sep 07, 2026 at 01:37:37PM +0300, Erkan Erdem wrote:
+> > Kconfig separates a function name from its arguments with a comma, but
+> > the caveats section uses Make-style whitespace in its shell calls.
+> > These expressions expand as undefined variables rather than invoking
+> > the shell function, so the supposedly working CC_HAS_ENDIAN_FLAG
+> > example fails to parse.
+> > 
+> > Add the missing commas to the shell calls in this section. Keep the
+> > Make examples unchanged.
+> > 
+> > Fixes: 316d55d55f49 ("Documentation: kconfig: document a new Kconfig macro language")
+> > Assisted-by: LLM
+> > Signed-off-by: Erkan Erdem <hexvalid@gmail.com>
+> > ---
+> > 
+> > Changes in v2, addressing Julian Braha's review:
+> > - Remove whitespace after the comma in the three remaining shell calls.
+> > 
+> > v1: https://lore.kernel.org/all/20260905124045.42713-1-hexvalid@gmail.com/
+> > 
+> > The issue, patch and changelog were prepared with an AI coding assistant.
+> > The assistant also prepared the v2 revision and ran the checks below.
+> > 
+> > Validation:
+> > - Re-ran the documented working CC_HAS_ENDIAN_FLAG example using the
+> >   Kconfig conf tool built with Clang on macOS. With a test helper returning
+> >   y for either endian flag, the original example fails to parse; v2
+> >   executes both probes and sets CC_HAS_ENDIAN_FLAG=y for both endiannesses.
+> > - Rebuilt the changed page alone with Sphinx, treating warnings as errors.
+> > - The complete kernel documentation set and kernel were not built.
+> > 
+> >  Documentation/kbuild/kconfig-macro-language.rst | 8 ++++----
+> >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > 
+> 
+> Thanks!  I'll queue it for kbuild-fixes, but it might be defered to v7.4 
+> if no other build relevant fix will pop-up.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609160249.tiuDbEzF-lkp@intel.com/
+I am not opposed to this going via -fixes but given that it is just
+documentation examples and there do not appear to be any problematic
+instances in tree, I feel like this could very reasonably go through
+-next. 316d55d55f49 is from 4.18, so the examples have been wrong for a
+long time. With that, I would probably not classify it as urgent.
 
-All errors (new ones prefixed by >>):
-
->> ld.lld: error: undefined symbol: qcom_scm_is_available
-   >>> referenced by qcom-pdc.c:717 (drivers/irqchip/qcom-pdc.c:717)
-   >>>               drivers/irqchip/qcom-pdc.o:(qcom_pdc_probe) in archive vmlinux.a
-   >>> referenced by qcom-pdc.c:717 (drivers/irqchip/qcom-pdc.c:717)
-   >>>               drivers/irqchip/qcom-pdc.o:(qcom_pdc_probe) in archive vmlinux.a
---
->> ld.lld: error: undefined symbol: qcom_scm_io_writel
-   >>> referenced by qcom-pdc.c:722 (drivers/irqchip/qcom-pdc.c:722)
-   >>>               drivers/irqchip/qcom-pdc.o:(qcom_pdc_probe) in archive vmlinux.a
-   >>> referenced by qcom-pdc.c:722 (drivers/irqchip/qcom-pdc.c:722)
-   >>>               drivers/irqchip/qcom-pdc.o:(qcom_pdc_probe) in archive vmlinux.a
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
