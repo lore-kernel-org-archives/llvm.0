@@ -1,180 +1,127 @@
-Received: from BL0PR03CU003.outbound.protection.outlook.com (mail-eastusazon11012027.outbound.protection.outlook.com [52.101.53.27])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-2-16.ptr.blmpb.com (va-2-16.ptr.blmpb.com [209.127.231.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340A84AE8DA
-	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 15:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.53.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789486481; cv=fail; b=DXy690x+rUA0SKHrh8uLXCW3UN3OXLjAn6MN6A4g5tt8iEJpjVzapeDD5KUMw3GJAWQWL4ASukI1yAI/NYnzhLL9OnYYYJZ0Byib8JdKCApcj/s9lZbg63uqqyKSD/kOPMDZmfXYirRcw1V00HllapVl8nm3eJT3wS3lavALwcI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789486481; c=relaxed/simple;
-	bh=yzuaFzlCz2bujTNI7GiyMJzCfFKaFiZZntaHxFyiYCU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=suv1aOCZ4kmljgJq7b4o4iezlpvPgT1Yqx/EU1C7jXZU57feTKosk/X26QId6Tl7z/Wnuh2zqZtt+15vgp1yKQ1FrVmHb9VzaVFNoBQ72XCoa6LtQ2LxkHObEfFLIDGNPUEug9MHFdXJDl6ssZfgds0DWSV0M+ZCqSwa6HsNB0Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=H4j5+SV5; arc=fail smtp.client-ip=52.101.53.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AAC23FF1AC
+	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 15:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789487149; cv=none; b=Hp5buqmxfXmtXUdifgc4fAzbNT28X9BH6LOB1MapCSm5uz+mruVSHpUpxhSyWbTWGj6sVpVFEw7cntBrRxOuer1Mir5LR/w3RsP3vniIfbTo3Yn3HqIqRJYyCiwwxtIpeFiV3c8JCePlqPqjDwjwS/cmZBbLp3knv6liUrX6Be4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789487149; c=relaxed/simple;
+	bh=X0OA0zd3t2u7iXfF0yPqLYpX2BIJuMIZZ+1R/TrabeE=;
+	h=Cc:Message-Id:Content-Type:In-Reply-To:To:Subject:From:Date:
+	 Mime-Version:References; b=a75rWJL1bl5UdCXeAV4YZioVKkjge/WtA3WyOnkfpmB/aisn/7rYmdF0p7FW1wp8xOV2tF/8z5+e8UQ4EnGOc8oCOMo2gPprUTyOK8KdzEzmjxjOp3L6yJ2ViXaIABVbkGRgPGM/SMo52W1UcO4zMafW8rhQSmXaBZx5yoqP1pI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fygo.io; spf=pass smtp.mailfrom=fygo.io; dkim=pass (2048-bit key) header.d=fygo-io.20200929.dkim.larksuite.com header.i=@fygo-io.20200929.dkim.larksuite.com header.b=B6MVj59H; arc=none smtp.client-ip=209.127.231.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fygo.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fygo.io
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="H4j5+SV5"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Wbr2F2LScnRAHmAbEkHAzk7ALaRx1Su9lvVaYtrnaBrZzdkW9IqntS9bW89572tB5MUQuEM+TH1hZwwCfdsJsDP3AuGr6EjG0SZzcBvMf0ZdDpPNyuG36Q6kc32l5HLPz0CXt7/Pl8/wu4UYBt/UzyMEqE+pY1B7GumbYJXQxOR8lsGhnYpFJCi6uNmBo3eT1RqUEzRxEPTzSr4/uGOAZ4ceLCBMppS/egkyQ0C1w0bzMp2rTsyLuXviPYoPL6O1CyNArUUENTrcQ1ljYyiReeLODYeLlKR0Y9edzaUOFLti1/GntCymAHxeBHnDqdUuSj74PJxH7sRqagsfZ+CPkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ebxJl3IcxbKP86g2YDnmC+ja54BljOviM2l99UpkSkE=;
- b=JHvdTl2nU+b0qrsBjoBMAFCBf1LT6RwDH1ZtB6yp8SQO7rWU4vIiECdEqWG5r2qbXIrvqbMyivNWfWNU5zqMY3PPPU9rZxDwJMi8WDVCOCKs2OzoGUvLbEddiOs1KXfbegOilVYMG7/X6xmPwOhBBo5YKuubES1Dbqe7m89DXpvBOnwfjTaCpG9v34F86DBw+bb7iIZRYdENbyFznenExv7VUCTk3Nebnjfh8bCIIumH7aUI2dBmmOEtzOjWxg7LqpGJsuI8hMLqC4OTkTius51s+vI6tzuWjvmuC2HPaZRuVvUhpD3PXK7ZEiVQq+p1DkTHbM4eEbQlYwDO9NIWiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ebxJl3IcxbKP86g2YDnmC+ja54BljOviM2l99UpkSkE=;
- b=H4j5+SV5MyfE4gn+NMadSq9XzzL/hOTMAljDNfWv+baiQ2ukya4J/YLNS7CiT5uGGQrFc17dmTLc7PY6egVjmlqK0QwbhVWAF7tL7mrh4aNdUT4SKi1t2+mY5dURp/APerZEmNoJCkdkLf6LUDfTz47j1LhsHAHC63TprxgbCN7aNdmbujMH4n9H+SCVVs5SEJopYSdhQKcF9Xg+G9uV6p2mIh3IjRJBGsN9n/YNjbkdl0FmHNkg4UcBuXbqOF9kjrQEE7SwLfX63QRUjlWmYN6iFxplhzuUXaCxldbZlub7AhbVFokecdKO7UDz9PD/OUsAq8G+zPvGA31tD3gVvQ==
-Received: from PH7PR03CA0028.namprd03.prod.outlook.com (2603:10b6:510:339::18)
- by CH3PR12MB7643.namprd12.prod.outlook.com (2603:10b6:610:152::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.406.12; Tue, 15 Sep
- 2026 15:34:30 +0000
-Received: from MW1PEPF0001615A.namprd21.prod.outlook.com
- (2603:10b6:510:339:cafe::62) by PH7PR03CA0028.outlook.office365.com
- (2603:10b6:510:339::18) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.406.11 via Frontend Transport; Tue,
- 15 Sep 2026 15:34:27 +0000
-X-MS-Exchange-Authentication-Results: mx.microsoft.com 1; spf=pass (sender IP
- is 216.228.117.161) smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- MW1PEPF0001615A.mail.protection.outlook.com (10.167.249.85) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.428.0 via Frontend Transport; Tue, 15 Sep 2026 15:34:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.49; Tue, 15 Sep
- 2026 08:33:51 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Tue, 15 Sep
- 2026 08:33:50 -0700
-Received: from [10.135.59.1] (10.127.8.10) by mail.nvidia.com (10.129.68.7)
- with Microsoft SMTP Server id 15.2.2562.46 via Frontend Transport; Tue, 15
- Sep 2026 08:33:47 -0700
-From: Edward Srouji <edwards@nvidia.com>
-Date: Tue, 15 Sep 2026 18:33:31 +0300
-Subject: [PATCH rdma-next 4/4] RDMA/hns: Use unsigned comparison in the CQ
- cleanup loop
+	dkim=pass (2048-bit key) header.d=fygo-io.20200929.dkim.larksuite.com header.i=@fygo-io.20200929.dkim.larksuite.com header.b="B6MVj59H"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=s1; d=fygo-io.20200929.dkim.larksuite.com; t=1789487021;
+  h=from:subject:mime-version:from:date:message-id:subject:to:cc:
+ reply-to:content-type:mime-version:in-reply-to:message-id;
+ bh=d0n1MM6xxPsL/QERF+JcaetyUJsQd2U/h4AXxBLwz/w=;
+ b=B6MVj59HlXMtOl9z0UjxaykEi6EDlwYrZpg3+azeNsjmlpkldNvo5mobKCZZv1eXwr4mtv
+ 9A/Y4ZX3nMUA4AYjNaZVH/8Pnb14vPpnCo2BzLFHD7Cxcc70Za102PyiI4r8dbT3K3tpnS
+ aVdq9L21zpwR5njcl2hcfzQMed0pXoPyXHN5De7q+YIlOHcFB9KScaL9M4JfXfqooGxEuU
+ GBCRAKKS7IFjJcGpkXh58DsVFdz77mf3WnJF9pP3pEXR+16DL40JlhwyTzZ1wkrPT8a30D
+ 7NMFvR+/dPVMVkI0zF0rHfhZSi6maqm2jnlsqQosfannu5FM7qlEz/nT3+EPlg==
+Cc: "Jens Axboe" <axboe@kernel.dk>, "Josef Bacik" <josef@toxicpanda.com>, 
+	"Tejun Heo" <tj@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>, 
+	=?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	"Jonathan Corbet" <corbet@lwn.net>, 
+	"Shuah Khan" <skhan@linuxfoundation.org>, 
+	"Randy Dunlap" <rdunlap@infradead.org>, "Coly Li" <colyli@fygo.io>, 
+	"Kent Overstreet" <kent.overstreet@linux.dev>, 
+	"Alasdair Kergon" <agk@redhat.com>, "Mike Snitzer" <snitzer@kernel.org>, 
+	"Mikulas Patocka" <mpatocka@redhat.com>, 
+	"Benjamin Marzinski" <bmarzins@redhat.com>, "Song Liu" <song@kernel.org>, 
+	"Li Nan" <magiclinan@didiglobal.com>, "Xiao Ni" <xiao@kernel.org>, 
+	"Andreas Gruenbacher" <agruenba@redhat.com>, 
+	"Matthew Wilcox" <willy@infradead.org>, "Jan Kara" <jack@suse.cz>, 
+	"Andrew Morton" <akpm@linux-foundation.org>, 
+	"Chris Li" <chrisl@kernel.org>, "Kairui Song" <kasong@tencent.com>, 
+	"Kemeng Shi" <shikemeng@huaweicloud.com>, 
+	"Nhat Pham" <nphamcs@gmail.com>, "Baoquan He" <baoquan.he@linux.dev>, 
+	"Barry Song" <baohua@kernel.org>, 
+	"Youngjun Park" <youngjun.park@lge.com>, 
+	"Nathan Chancellor" <nathan@kernel.org>, 
+	"Nick Desaulniers" <ndesaulniers@google.com>, 
+	"Bill Wendling" <morbo@google.com>, 
+	"Justin Stitt" <justinstitt@google.com>, 
+	"Nilay Shroff" <nilay@linux.ibm.com>, "Tao Cui" <cuitao@kylinos.cn>, 
+	<linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>, 
+	<linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	<linux-bcache@vger.kernel.org>, <dm-devel@lists.linux.dev>, 
+	<linux-raid@vger.kernel.org>, <gfs2@lists.linux.dev>, 
+	<linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>, 
+	<llvm@lists.linux.dev>
+Message-Id: <06e3c977-461c-4469-80ec-b9f54aa51eea@fygo.io>
+User-Agent: Mozilla Thunderbird
+Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20260915064950.GA13417@lst.de>
+X-Original-From: yu kuai <yukuai@fygo.io>
+X-Lms-Return-Path: <lba+26aa967ad+5a30eb+lists.linux.dev+yukuai@fygo.io>
+Reply-To: yukuai@fygo.io
+To: "Christoph Hellwig" <hch@lst.de>, "Yu Kuai" <yukuai@kernel.org>, 
+	"yu kuai" <yukuai@fygo.io>
+Subject: Re: [PATCH v2 2/3] blk-cgroup: store blkcg in bio instead of blkg
+Received: from [192.168.1.104] ([39.182.0.142]) by smtp.larksuite.com with ESMTPS; Tue, 15 Sep 2026 15:43:40 +0000
+Content-Transfer-Encoding: quoted-printable
+From: "yu kuai" <yukuai@fygo.io>
+Date: Tue, 15 Sep 2026 23:43:32 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20260915-fix-cq-cleanup-v1-4-e991944cf898@nvidia.com>
-References: <20260915-fix-cq-cleanup-v1-0-e991944cf898@nvidia.com>
-In-Reply-To: <20260915-fix-cq-cleanup-v1-0-e991944cf898@nvidia.com>
-To: Leon Romanovsky <leon@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
-	Yishai Hadas <yishaih@nvidia.com>, Chengchang Tang
-	<tangchengchang@huawei.com>, Junxian Huang <huangjunxian6@hisilicon.com>
-CC: <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Edward Srouji <edwards@nvidia.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1789486411; l=2442;
- i=edwards@nvidia.com; s=20251029; h=from:subject:message-id;
- bh=pRR2rulT9LjWnfdtRj7ngr1KMqIalpQzFAN80D2qHTQ=;
- b=1BTb5LlVb1E1R8FatWn53LcW0VoDh/XBO0HTcPEY8w7wsteJgIwmMOuISY5VWvZchdZXxEaYv
- jyv2HyBjaBhBBLBq1hiz0ry+0mz1orWBZprxD8++vlV36tsbZJxsVKR
-X-Developer-Key: i=edwards@nvidia.com; a=ed25519;
- pk=VME+d2WbMZT5AY+AolKh2XIdrnXWUwwzz/XLQ3jXgDM=
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW1PEPF0001615A:EE_|CH3PR12MB7643:EE_
-X-MS-Office365-Filtering-Correlation-Id: d68ea436-c05b-421f-1ac7-08df133ed40c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|23010399003|7416014|376014|36860700016|82310400026|10067099003|18002099003|22082099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	CU7YzHu/eD03OWoFy6rd5vjTI+AFYbbPomk3P5r4jHddCUnWKwYS/zHX9d8dzAk2MDdUp5/b46E14msSWYW7CgT1OkvthqJHleVkI4fCMaDGj4/2JA4KYnyeiY0w05WwNKjKOJFbNDPpFcygxHyvqEFwOcWmMHw3tS7+UYd91caXsuJbW9UBnqCS2mu2HyKERi4PuTutjFHh0lyw1CBqbz6ZgqxYQSc/cXdXofsDaGCrvVkxu/WAMZfwx+4HLhMPSIG4fCsoNX4JJxn+LOBVDlW7d/yyH27FZFO+EWj/c2yPlnGbQplJ/eVNr84y+2nM3ZEnWi2pfkGwf9fm8PPRleAe+HfMmHy4W90iXd8x6vFS6GcVFf40Dx5SU11pc36XhT8uCkpdgu+rtBHS/W2Wrmj0J5CVhpebQeyAkS0i78SPU7sUSdlU7wLkyVbQKosV/X3UlXRGsn3UHZzcOZfpdmPxMYiB9Vu+wTSePS/7oVnrVTGymdObUsOzYr60qUS5FgBfBb0ijgb8vmZ9LIuo3yQj9tVKjXTLF7r8YO/isoN3IelVc24n7dLfPkKB2aXkHPefQ7ARwSoBxG+izmejs2VUbTNdb7Ynxbt7Vvh8dH/RdiIRpU0VL3w7ItF3bbhQRAfZ8GEIeyGkZu2fT0tp19isMEdnGdFSONaAAErzO6d9ZmtrdTCuoDqW/rjzdB9XjsSbtsHOjPSNeNWZBNY/zw==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(7416014)(376014)(36860700016)(82310400026)(10067099003)(18002099003)(22082099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	TCNjhlqfyre6CjOSnpHTsYTd3ompa67wKFl6W4z8B5zuhCrIuuWQDPifimGmBq6oSV+1RJZ7Tg8TTNEsT9HW1g6msy/gM+Y/o++vxSd9l/O5JKK4haeHA9Toz4zy7K5V0wZgH/2kBshjyLvTB2aLYFnnx/J6MvI/xc2x5F1aP1i9Hiztr9Iv4KdTdEYGdz3A6bk/58J5Wolo5iUtU08pCiYwuguY77le9DhTfVm4Yjt+sRW21XaWcGTj5KfbGFW6EAdUsajXRevDBr5YKz/YY1fRId3OYZwwlH7GJCUv/f4hWcAv/GWDmotNwlB8anqsCi5PcAkNKs4wpD/NRpf46LNi+0G+QWYNOHnolsmLIGPGcvFYN2hS7yilWM0MRG5d6qPwuaX6+ScZ26q67RDIEEb0GuImg6v+6nCTJ/4G0ASh8AitD0G6SAxsJtJX9xNl
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2026 15:34:27.6045
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d68ea436-c05b-421f-1ac7-08df133ed40c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MW1PEPF0001615A.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7643
+Mime-Version: 1.0
+References: <cover.1789237876.git.yukuai@fygo.io> <ef547fdb7a6c8e39a25a1b9473c444f24a0f03be.1789237876.git.yukuai@fygo.io> <20260915064950.GA13417@lst.de>
 
-From: Yishai Hadas <yishaih@nvidia.com>
+Hi,
 
-__hns_roce_v2_cq_clean() sweeps the CQ backwards from the producer
-index down to the consumer index:
+=E5=9C=A8 2026/9/15 14:49, Christoph Hellwig =E5=86=99=E9=81=93:
+> On Sun, Sep 13, 2026 at 02:54:39PM +0800, Yu Kuai wrote:
+>> @@ -6243,10 +6245,17 @@ static void bfq_insert_request(struct blk_mq_hw_=
+ctx *hctx, struct request *rq,
+>>   	bool idle_timer_disabled =3D false;
+>>   	blk_opf_t cmd_flags;
+>>   	LIST_HEAD(free);
+>>  =20
+>>   #ifdef CONFIG_BFQ_GROUP_IOSCHED
+>> +	/*
+>> +	 * Pin the blkg used to look up bfqg.  If this is the first IO for
+>> +	 * the blkcg on this queue, create the bfqg before holding bfqd->lock.
+>> +	 */
+>> +	if (rq->bio && !bio_flagged(rq->bio, BIO_BLKG_REF))
+>> +		bio_blkg(rq->bio);
+> Can rq->bio be NULL here?  flush or empty passthrough request should
+> never enter the scheuler.
+Yes, rq->bio should never be NULL.
+>
+>>   	if (!cgroup_subsys_on_dfl(io_cgrp_subsys) && rq->bio)
+>>   		bfqg_stats_update_legacy_io(q, rq);
+> But I guess given that the code below checks it, we should at least
+> be consistent, so I guess it is better to keep it for now.
+>
+>>  =20
+>>   static inline void dm_bio_record(struct dm_bio_details *bd, struct bio=
+ *bio)
+>>   {
+>>   	bd->bi_bdev =3D bio->bi_bdev;
+>> -	bd->bi_flags =3D bio->bi_flags;
+>> +	/* Restoring an ownership bit cannot recreate the associated reference=
+. */
+>> +	bd->bi_flags =3D bio->bi_flags & ~(1U << BIO_BLKG_REF);
+> I have a bit of a hard time parsing this, the line also is overly
+> long.
 
-  while ((int) --prod_index - (int) hr_cq->cons_index >= 0)
+This is an issue found by AI, if the new flag is recorded to bi_flags, and =
+the flag can be
+restored to new bio by dm_bio_restore() without actually acquire a blkg ref=
+erence. And I
+checked this is the only place to read/write bi_flags directly in driver.
 
-Both indexes are free running u32 counters, so the comparison has to
-be done modulo 2^32.  Casting each operand to int and subtracting
-does not do that: the subtraction overflows whenever the two indexes
-straddle 2^31, which is undefined behaviour, and a compiler that
-assumes signed overflow cannot occur is free to discard the
-subtraction and fold the expression into a plain signed comparison.
-That comparison is not wraparound safe.
-
-The kernel is built with -fno-strict-overflow, so gcc and clang both
-retain the subtraction today and the generated code is unaffected;
-there is no known user-visible impact from the current code.  Still,
-correctness here shouldn't depend on that build flag.
-
-Replace the loop with a plain unsigned equality check instead:
-
-  while (prod_index != hr_cq->cons_index) {
-          --prod_index;
-          ...
-
-The preceding forward scan starts prod_index at cons_index and advances
-it only while get_sw_cqe_v2() still reports a software owned entry, so
-the two indexes stay within one CQ's worth of entries.  Decrementing
-prod_index reaches cons_index in exactly that many iterations regardless
-of whether either counter has wrapped, because the loop no longer
-compares magnitudes at all.
-
-Signed-off-by: Yishai Hadas <yishaih@nvidia.com>
-Signed-off-by: Edward Srouji <edwards@nvidia.com>
----
- drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-index 1b2504301ebea4279eb0dcb2537c3574d0122d95..35be5b038f6861f1c330739f5c97817a4c3940a7 100644
---- a/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-+++ b/drivers/infiniband/hw/hns/hns_roce_hw_v2.c
-@@ -3828,7 +3828,8 @@ static void __hns_roce_v2_cq_clean(struct hns_roce_cq *hr_cq, u32 qpn,
- 	 * Now backwards through the CQ, removing CQ entries
- 	 * that match our QP by overwriting them with next entries.
- 	 */
--	while ((int) --prod_index - (int) hr_cq->cons_index >= 0) {
-+	while (prod_index != hr_cq->cons_index) {
-+		--prod_index;
- 		cqe = get_cqe_v2(hr_cq, prod_index & hr_cq->ib_cq.cqe);
- 		if (hr_reg_read(cqe, CQE_LCL_QPN) == qpn) {
- 			if (srq && hr_reg_read(cqe, CQE_S_R)) {
-
--- 
-2.49.0
-
+--=20
+Thanks,
+Kuai
