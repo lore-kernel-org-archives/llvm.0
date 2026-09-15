@@ -1,135 +1,110 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09270471CF2
-	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 09:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FECF479895;
+	Tue, 15 Sep 2026 09:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789464248; cv=none; b=JeyNZzFXgQx9FZdI2pmvYjwxWUYwee1b1Q7FmUfhyEaxjhZQmP8HPWaCL3Rect11pHhTntfTaZUsqXOKCRSTqGWN33w/ZCSnDRaI4jutXHjRD7i0oqHPP0/MGBcQi+UOM6wXLDYwvymUdUAZrL0VtN3T1312u+KXmcMIuAvorVs=
+	t=1789465428; cv=none; b=o1PYcXBh5XiCglKsUPVQzTDaGxjb83cdD+NwaEAykmbRjJTpDl+QnDETZK/p8p6fAkvcJGQgTUn7rMCA7GyWwLzZmRRtBqJWXHyi3ldZ4+5XkFS/9DVU/K3yOhEwAinzm45dSe//QdEeviZhmVHe0r2lbvj5k/5VIY2Wz1n1SCw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789464248; c=relaxed/simple;
-	bh=Xbm7hC2sIniT4/hXQr3ANkVc+vI1px3ZGag7Yl7bcss=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cIsDcaPM6HGcbVNJ/JqsUUTIbZ2iKW7j23nZ+575FNxYrajpyJf1gkvQKJqI9SeMFhGKQhzA2EAyXGw/BihkHHxNg0Yr5G9wjMhaVbdZ4Nee9GwWmobP7SSaQAbzrd+gpvMfFc5XYrQgNuO9tx4XRYB0+wqjhGoB20eATOn2Xao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wq4rGI3R; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789465428; c=relaxed/simple;
+	bh=MGpSjBR+ocgxGXPO4UimstJCvQ+U/X7vqAiYBYADG9w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IAzVF46s2VH0hwRlhajuwPVX1eb1IWMOyNMacRhb43lD+bY8vFbFQ9f6xxAKq5jrznDGuFlwBXRsqO7lkZIW+5SF9njeiwCcAMG1xP/21ureGBdcrDxQlu12SUsQTVs+t7eHD9eszldWJvyw+B1cXt5p/BjR1aTyJBE3jZm1VKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gMcSNCem; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wq4rGI3R"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912e2406so12226765e9.1
-        for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 02:24:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789464244; x=1790069044; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aLdhT2Q1x0+krLh05Drnda1oX9PUv34jY/LmETe5rwQ=;
-        b=Wq4rGI3RHukFzAELXl/QUQ5AojzFhOfq/eVC60oJzhVlZC/nzMHZpvUVe2Y1joW5F6
-         cg4DWMnrndqlEEw9tHD0nz/GcXWYW7nJ7jWqNi2jUXGVrKmldCu1vlRahRTEWMjnE6ym
-         Yx/8XupwDVG7Mw6zedIEyRzDL+WkkSN72aKoTZupAwv9E1dLkqo/+8ZL/ZYnNb7HoAhy
-         jxADNqzct7FiunPsRh2g7vcH2VxUN9rKp0X+4jSMnrDVrzGaSrR+tYLWfXeeL6Cfyinc
-         jI9/1zYmyjZX9Z8pAjspzg4Hg0CBLK9j43PViN/+iTw5yC3NY/jvZ16gqDsUsQ5xG6AM
-         21zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789464244; x=1790069044;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aLdhT2Q1x0+krLh05Drnda1oX9PUv34jY/LmETe5rwQ=;
-        b=QJI5LPHyZ1yVdtMlhHYN6GnQzQIiGDP4LVWc4FHNTZsgT99E/Xo4SbA681wcf02WYR
-         opWgJ3pRSc78ptTKWZcVlzyjaMh7hNXFyvTrcq4A9cQjXjiC9qejtxlATSbRtKeecd6O
-         KMWUPI+8kHPWB4QR+KUrUbr9SkutHz7vDyRnNCBRcyWm3KaL2JeFY+UUOSWT8TPPD6XS
-         VYVayBxZcKO1R8rZmz1h8CUXvHQJ4XJuK+3d9J5ba6QAjWSL6AI8LfIaeAFA09CVYRMv
-         cKz1eVawC2oEmKRUxcf/I6cNkH+rDlsEWOZy7mOtRzWm80EXaGuYN5UDEAW+TWLy+OOQ
-         xrrw==
-X-Forwarded-Encrypted: i=1; AKwUvBxE1Ckk0qN9zMwS921sNN8N/tkvpt0ygRvSTRfH4KhmZTVtcXXHiG1FqL+IZVfaWoZLqjzs@lists.linux.dev
-X-Gm-Message-State: AFuF++kLWrrnKEcSGmszh+JqEXwgzRyrLbluCtWkwAO2OHJpVkChXnar
-	NUNVRIv6c2KvQ91eRKQ5O1VpFS+YUIIcT1rs6ZAhL6MFBncjYG5SdFCt
-X-Gm-Gg: AYBFou1jIDPHTnE7eD44VY28fxEyK6DQwfYkf3stAO4qB1CgiMUdweau3F85h7H5Vb3
-	AK5tAx9vqyY2XkRX2t/r+kBNGWzInFoQT0JmmAPSAYH9ki42geVWsFDmhsYjgsjTqIWWu75BCBu
-	ot7CPPehX4F7Z8JthQ2KdOBbtqQH7cNAHwOv8bxFMoKcpwL/7L2ZvCl1SITutvfwHgr9nmjNTmK
-	K5cZ2XFo0pBWtNpjInrAIFBksQk7In88yRutq9THsR9kQVCdtPsMLVLqBHdi8GfXjeT96NOiQXJ
-	dVGlIPoR75N/r6GNYLH4/djD5sBUdg2fZbUBMWb6t0soCBLSn1aHgPKDhwOrg9DaThR71Jgg2Me
-	2PSMMLC1b19XMOw7LGK8/ZEVKV4TUSkaojYRVTZhwA8xE2dgJVcVs1Wa6NZ/PRIJNK2u0h+6joW
-	77n4iWNKCZKOFsCnKslwegDeOM8kr6BeSj82VNq2YGOoDy7EzVHy2fDFMKJG4ZtJp+JY5ZHPufv
-	lttNyyfPwAwVEDarYU3lw9BlTENZ1Dybe3d
-X-Received: by 2002:a05:600c:c162:b0:49e:65f2:db64 with SMTP id 5b1f17b1804b1-49e7d72b000mr36925425e9.5.1789464243970;
-        Tue, 15 Sep 2026 02:24:03 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49e7ef9228fsm49333445e9.15.2026.09.15.02.24.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Sep 2026 02:24:03 -0700 (PDT)
-Date: Tue, 15 Sep 2026 10:24:01 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Yury Norov <ynorov@nvidia.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Matthew Wilcox
- <willy@infradead.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng
- <boqun@kernel.org>, Waiman Long <longman@redhat.com>, Dennis Zhou
- <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
- <cl@gentwo.org>, "Paul E. McKenney" <paulmck@kernel.org>, Frederic
- Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
- Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang@linux.dev>, Onur =?UTF-8?B?w5Z6a2Fu?=
- <work@onurozkan.dev>, Kees Cook <kees@kernel.org>, Joel Granados
- <joel.granados@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Thomas Gleixner <tglx@kernel.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
- <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek
- Nayak <kprateek.nayak@amd.com>, Mike Rapoport <rppt@kernel.org>, "Liam R.
- Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Vlastimil
- Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato
- <pfalcato@suse.de>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang
- <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio
- =?UTF-8?B?UMOpcmV6?= <eperezma@redhat.com>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, rcu@vger.kernel.org,
- virtualization@lists.linux.dev, linux-rt-devel@lists.linux.dev,
- llvm@lists.linux.dev, Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH 00/17] Treewide: enforce static storage for object
- initializers
-Message-ID: <20260915102401.3c56aa95@pumpkin>
-In-Reply-To: <20260914231418.b15ec01f7225cf460f6e515a@linux-foundation.org>
-References: <20260915030336.1192299-1-ynorov@nvidia.com>
-	<20260914231418.b15ec01f7225cf460f6e515a@linux-foundation.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gMcSNCem"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789465425; x=1821001425;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MGpSjBR+ocgxGXPO4UimstJCvQ+U/X7vqAiYBYADG9w=;
+  b=gMcSNCem6Y769FfILEIZXC76SkkqFlC88kN1D6WqBGIhS+l0T3uJXcaP
+   35+00+Nw0VZdSMQVhIguIXNEfEchCk8y+mG0aL91cL5jKSvQX+6wBUeUO
+   VRzP3G2TYGMnsY3sI12vztADDz+lnVnFmArk1vTTtAw9h+B3GG9vpTpd1
+   LnHB7RoP++8Ef7re+8V33jCjgSF+8wryeOf/bNTpUXbhjhZKQ+Fa7Y4KX
+   DIST2LyVo+U++iQakAA6OJQq/KmOTpUvN6WX5Td7U9Nm5jlDnJAAk9yq0
+   TurOzfzsbAG4tJifcPKQ5ugNju11qN8Lk5iKpHcBUbKmLzr9LNFkTsp5X
+   A==;
+X-CSE-ConnectionGUID: 0fptOdldQA2G5QIe6ZC4/g==
+X-CSE-MsgGUID: aAuQFrGPRzSgWZtFmFSBsg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="100420448"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="100420448"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 02:43:44 -0700
+X-CSE-ConnectionGUID: zGi5iV8zTduuRkLcp9EdgA==
+X-CSE-MsgGUID: lSJnQGzQQNKBn/4HTzU+zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="272912812"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 15 Sep 2026 02:43:42 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x6PhT-000000004L7-0oTj;
+	Tue, 15 Sep 2026 09:43:39 +0000
+Date: Tue, 15 Sep 2026 17:42:41 +0800
+From: kernel test robot <lkp@intel.com>
+To: Priya Bala Govindasamy <pgovind2@uci.edu>, a.hindborg@kernel.org,
+	boqun@kernel.org, ojeda@kernel.org, rust-for-linux@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ardalan@uci.edu,
+	zhiyunq@cs.ucr.edu, dzueck@uci.edu, pgovind2@uci.edu
+Subject: Re: [PATCH 1/1] rust: block: Fix unsoundness in
+  `Operations::queue_rq`
+Message-ID: <202609151724.qbLBSoTM-lkp@intel.com>
+References: <f515b62bb05e7b6bf0bb06c8fdb362486fea25a8.1789420324.git.pgovind2@uci.edu>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f515b62bb05e7b6bf0bb06c8fdb362486fea25a8.1789420324.git.pgovind2@uci.edu>
 
-On Mon, 14 Sep 2026 23:14:18 -0700
-Andrew Morton <akpm@linux-foundation.org> wrote:
+Hi Priya,
 
-> On Mon, 14 Sep 2026 23:03:18 -0400 Yury Norov <ynorov@nvidia.com> wrote:
-> 
-> > Declaration macros that statically initialize embedded locks require static
-> > storage when lockdep is enabled. Automatic objects must use runtime
-> > initialization so lockdep receives a persistent class key.
-> > 
-> > For automatic local objects, lockdep cannot use the lock address as a persistent
-> > class key and reports "INFO: trying to register non-static key" before disabling
-> > itself.  
-> 
-> So why haven't we been buried in reports about this warning coming out?
-> 
+kernel test robot noticed the following build errors:
 
-Are there any code changes outside of testing?
+[auto build test ERROR on ah-configfs/configfs-next]
+[also build test ERROR on rust/rust-next linus/master v7.3-rc3 next-20260911]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-David
+url:    https://github.com/intel-lab-lkp/linux/commits/Priya-Bala-Govindasamy/rust-block-Fix-unsoundness-in-Operations-queue_rq/20260914-214701
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/a.hindborg/configfs.git configfs-next
+patch link:    https://lore.kernel.org/r/f515b62bb05e7b6bf0bb06c8fdb362486fea25a8.1789420324.git.pgovind2%40uci.edu
+patch subject: [PATCH 1/1] rust: block: Fix unsoundness in  `Operations::queue_rq`
+config: loongarch-randconfig-001-20260915 (https://download.01.org/0day-ci/archive/20260915/202609151724.qbLBSoTM-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 148ee2b266b73a49f1f31d0bd17d4818b91bee9f)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260915/202609151724.qbLBSoTM-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609151724.qbLBSoTM-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> error[E0200]: the trait `rust_doctest_kernel_alloc_allocator_rs_0::kernel::block::mq::Operations` requires an `unsafe impl` declaration
+   --> rust/doctests_kernel_generated.rs:4101:1
+   |
+   4101 | impl Operations for MyBlkDevice {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: the trait `rust_doctest_kernel_alloc_allocator_rs_0::kernel::block::mq::Operations` enforces invariants that the compiler can't check. Review the trait documentation and make sure this implementation upholds those invariants before adding the `unsafe` keyword
+   help: add `unsafe` to this trait implementation
+   |
+   4101 | unsafe impl Operations for MyBlkDevice {
+   | ++++++
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
