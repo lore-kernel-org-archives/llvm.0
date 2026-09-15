@@ -1,62 +1,64 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FECF479895;
-	Tue, 15 Sep 2026 09:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3245E412294;
+	Tue, 15 Sep 2026 10:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789465428; cv=none; b=o1PYcXBh5XiCglKsUPVQzTDaGxjb83cdD+NwaEAykmbRjJTpDl+QnDETZK/p8p6fAkvcJGQgTUn7rMCA7GyWwLzZmRRtBqJWXHyi3ldZ4+5XkFS/9DVU/K3yOhEwAinzm45dSe//QdEeviZhmVHe0r2lbvj5k/5VIY2Wz1n1SCw=
+	t=1789466981; cv=none; b=OEZbQzWfjPx5Em6125ARuMPBdibxw+Fqj7CJLwNwdP99V+VkQYwEosQSkEpAbcp2MpTSTe4mjlPbctdJfrIkdZZ5a/inU3j1xCeqUnr+Uqej0x2u0AuUc+5aW6L9NNHEWYLOCU5Na5HIGO59EM3JDPjnRid1jjhaK8GsrNBEkzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789465428; c=relaxed/simple;
-	bh=MGpSjBR+ocgxGXPO4UimstJCvQ+U/X7vqAiYBYADG9w=;
+	s=arc-20240116; t=1789466981; c=relaxed/simple;
+	bh=sU13gsIPUMKUUtL+qE3bab68IEWBsOM0qs/yA9Hs9x0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IAzVF46s2VH0hwRlhajuwPVX1eb1IWMOyNMacRhb43lD+bY8vFbFQ9f6xxAKq5jrznDGuFlwBXRsqO7lkZIW+5SF9njeiwCcAMG1xP/21ureGBdcrDxQlu12SUsQTVs+t7eHD9eszldWJvyw+B1cXt5p/BjR1aTyJBE3jZm1VKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gMcSNCem; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=cnIPh522vrTCUiO9Lo5JJIcyVSCnXTQQ2hkpSiDbW7lAKomqn7vpsVK4jUITRPbLNvbYy/d5m3UWN9kO+xApMS7X5d3r8jGxQzbgojtQ1sruvT1MI9LHrDhk+9MaNVviZy804pZnhrLwtTHTIrnWZq0qt0F8gItipxuEwPYdzng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B494kHSs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gMcSNCem"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789465425; x=1821001425;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MGpSjBR+ocgxGXPO4UimstJCvQ+U/X7vqAiYBYADG9w=;
-  b=gMcSNCem6Y769FfILEIZXC76SkkqFlC88kN1D6WqBGIhS+l0T3uJXcaP
-   35+00+Nw0VZdSMQVhIguIXNEfEchCk8y+mG0aL91cL5jKSvQX+6wBUeUO
-   VRzP3G2TYGMnsY3sI12vztADDz+lnVnFmArk1vTTtAw9h+B3GG9vpTpd1
-   LnHB7RoP++8Ef7re+8V33jCjgSF+8wryeOf/bNTpUXbhjhZKQ+Fa7Y4KX
-   DIST2LyVo+U++iQakAA6OJQq/KmOTpUvN6WX5Td7U9Nm5jlDnJAAk9yq0
-   TurOzfzsbAG4tJifcPKQ5ugNju11qN8Lk5iKpHcBUbKmLzr9LNFkTsp5X
-   A==;
-X-CSE-ConnectionGUID: 0fptOdldQA2G5QIe6ZC4/g==
-X-CSE-MsgGUID: aAuQFrGPRzSgWZtFmFSBsg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="100420448"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="100420448"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2026 02:43:44 -0700
-X-CSE-ConnectionGUID: zGi5iV8zTduuRkLcp9EdgA==
-X-CSE-MsgGUID: lSJnQGzQQNKBn/4HTzU+zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="272912812"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 15 Sep 2026 02:43:42 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x6PhT-000000004L7-0oTj;
-	Tue, 15 Sep 2026 09:43:39 +0000
-Date: Tue, 15 Sep 2026 17:42:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Priya Bala Govindasamy <pgovind2@uci.edu>, a.hindborg@kernel.org,
-	boqun@kernel.org, ojeda@kernel.org, rust-for-linux@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, ardalan@uci.edu,
-	zhiyunq@cs.ucr.edu, dzueck@uci.edu, pgovind2@uci.edu
-Subject: Re: [PATCH 1/1] rust: block: Fix unsoundness in
-  `Operations::queue_rq`
-Message-ID: <202609151724.qbLBSoTM-lkp@intel.com>
-References: <f515b62bb05e7b6bf0bb06c8fdb362486fea25a8.1789420324.git.pgovind2@uci.edu>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B494kHSs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 449E81F0089B;
+	Tue, 15 Sep 2026 10:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789466979;
+	bh=qEaRhFWvrYZ8Js/oY4HcGJ8ME90lEWxqY3aLTqH5KyM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=B494kHSs2gB2n5O4XU5l5u4V/Q/sS++B6kGyBZOR535KU1TWDZmwMMYCGp5O+FFLE
+	 xxT0t0QsTYnsS3G12slf9EspLZLdWzI+D1IKJNiA5Ok00xFOxdhbVZLW89Y2V4ayrC
+	 s6LOyYyFWPV1X0R6ewuA/oDLo2FfJdbws9raBUSysfLvEaus/W7wtlk2a0FesZFRN6
+	 kOBAVKiwCZY3+W0BAdIR/QQna09maOGiFxgH8LqpSIgkIglLfQPn0ntPnjejywJycD
+	 DaZ9+wwtk+XVvb6Ck559Q41rkc81kQE6wUEUTlTFiotHQyZSReT61+ZA3L/k3pLVDm
+	 1FxU7Bt0z8Jqg==
+Date: Tue, 15 Sep 2026 11:09:25 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
+	Randy Dunlap <rdunlap@infradead.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 17/21] objtool: decode instructions and resolve branch
+ targets in parallel
+Message-ID: <aqkR9Xqu-0Tem1zm@gremlin>
+References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
+ <20260914-build-speedup-v2-17-39817ec5db23@kernel.org>
+ <202609141112.F8983EE9C@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -65,46 +67,138 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f515b62bb05e7b6bf0bb06c8fdb362486fea25a8.1789420324.git.pgovind2@uci.edu>
+In-Reply-To: <202609141112.F8983EE9C@keescook>
 
-Hi Priya,
+On Mon, Sep 14, 2026 at 11:20:37AM -0700, Kees Cook wrote:
+> On Mon, Sep 14, 2026 at 10:22:16AM +0100, Lorenzo Stoakes (ARM) wrote:
+> > Threads are only created for objects with 8 MiB or more of text, meaning
+> > that runs involving smaller objects remain unaffected.
+> > [...]
+> > objtool on vmlinux.o is on the serial tail of every build that links
+> > vmlinux, no-op builds are unchanged.
+>
+> This isn't limited to vmlinux.o, though? With CONFIG_X86_KERNEL_IBT
+> (default y on x86_64), delay-objtool is set in scripts/Makefile.lib, and
+> objtool then runs on every multi-object module, in the middle of the
+> parallel part of the build. In an x86_64 allmodconfig build here,
+> amdgpu.o has 46.2 MiB of executable text and i915.o has 10.2 MiB, so
+> each of those objtool runs gets 16 threads on top of the -jN jobs that
+> are already running.
 
-kernel test robot noticed the following build errors:
+Ack, will fix in v3 to limit to only the --link run without --module, which
+is how vmlinux.o is processed, leaves modules as they are.
 
-[auto build test ERROR on ah-configfs/configfs-next]
-[also build test ERROR on rust/rust-next linus/master v7.3-rc3 next-20260911]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+>
+> Any parallelism added need to be handled by the make jobserver, not
+> hard-coded anyway.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Priya-Bala-Govindasamy/rust-block-Fix-unsoundness-in-Operations-queue_rq/20260914-214701
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/a.hindborg/configfs.git configfs-next
-patch link:    https://lore.kernel.org/r/f515b62bb05e7b6bf0bb06c8fdb362486fea25a8.1789420324.git.pgovind2%40uci.edu
-patch subject: [PATCH 1/1] rust: block: Fix unsoundness in  `Operations::queue_rq`
-config: loongarch-randconfig-001-20260915 (https://download.01.org/0day-ci/archive/20260915/202609151724.qbLBSoTM-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 148ee2b266b73a49f1f31d0bd17d4818b91bee9f)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260915/202609151724.qbLBSoTM-lkp@intel.com/reproduce)
+I'm not sure that really gains us anything - at the point of doing the
+vmlinux.o processing (which with the above change is all that is being done
+now) everything's idle so the jobserver would just hand over the same 16
+threads.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609151724.qbLBSoTM-lkp@intel.com/
+It'd need quite a bit of work to interact with it too with added complexity
++ some overhead so would have to check impact on perf here.
 
-All errors (new ones prefixed by >>):
+You did complain about added complexity also ;) if you insist I can try.
 
->> error[E0200]: the trait `rust_doctest_kernel_alloc_allocator_rs_0::kernel::block::mq::Operations` requires an `unsafe impl` declaration
-   --> rust/doctests_kernel_generated.rs:4101:1
-   |
-   4101 | impl Operations for MyBlkDevice {
-   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-   |
-   = note: the trait `rust_doctest_kernel_alloc_allocator_rs_0::kernel::block::mq::Operations` enforces invariants that the compiler can't check. Review the trait documentation and make sure this implementation upholds those invariants before adding the `unsafe` keyword
-   help: add `unsafe` to this trait implementation
-   |
-   4101 | unsafe impl Operations for MyBlkDevice {
-   | ++++++
+>
+> > [...]
+> > +/* Only an object this large, e.g. vmlinux.o, is decoded on several threads. */
+> > +#define DECODE_THREADED_MIN_TEXT	SZ_8M
+> > +/* Only decoding and the branch passes are threaded, so more gains nothing. */
+> > +#define DECODE_MAX_THREADS		16
+> > +#define DECODE_RANGES_PER_THREAD	4
+>
+> I just don't think a size-based approach is going to work. And any max
+> parallelism needs a rationale.
+
+A rationale was provided:
+
+	Threading is limited to decoding and the jump pass, so the gain
+	flattens out at 16 threads and any further threads were found to
+	only add overhead.
+
+	When performing an allmodconfig build, the clang invocation of
+	objtool when processing vmlinux.o took 5.93s on 1 thread, 4.56s on
+	8, 4.51s on 16 and 4.63s on 128.
+
+Let me know what you feel was missing there? These things inevitably have
+to be somewhat heuristic.
+
+The size threshold is about paying for too many threads for no real gain,
+and now (for v3) the code is limited to a --link operation only, that'll
+only really stop a tinyconfig vmlinux.o :)
+
+>
+> > +static unsigned int decode_threads(unsigned long text_size)
+> > +{
+> > +	const long nr_cpus = sysconf(_SC_NPROCESSORS_ONLN);
+> > +
+> > +	if (text_size < DECODE_THREADED_MIN_TEXT || nr_cpus < 2)
+> > +		return 1;
+> > +
+> > +	return min_t(unsigned int, nr_cpus, DECODE_MAX_THREADS);
+> > +}
+>
+> No, anything using _SC_NPROCESSORS_ONLN internally is wrong, whether its
+> pigz or objtool.
+
+Why? We shouldn't cap a 4 CPU box to 4 CPUs?
+
+The idea is that the empirically obtained 16 core limit should naturally be
+capped to the number of CPUs.
+
+I guess in a world where make hands jobs off this could be dropped, though,
+if the complexity there seems worthwhile.
+
+>
+> > [...]
+> > +static int add_jump_destinations(struct objtool_file *file)
+> > +{
+> > +	return run_insn_ranges(file, add_jump_destinations_range);
+> > +}
+>
+> I haven't examined this myself yet, but my LLM doesn't like this,
+> saying:
+>
+>   For an internal sibling call, add_jump_destination() calls
+>   add_call_dest(file, insn, dest_sym, true), and add_call_dest() calls
+>   annotate_call_site(), which for --hack-noinstr profiling calls, and for
+>   __fentry__ calls with --mcount --mnop, does set_reloc_type() and
+>   elf_write_insn() on file->elf. The per-range shadow gives each thread
+>   its own lists, but the struct elf is shared, and both helpers write to
+>   the section and mark it changed without any locking.
+>   add_call_destinations() is kept serial because "annotating a call site
+>   rewrites instructions the dead end walks read", so it looks like this
+>   path needs the same care: a lock, or deferring those writes until the
+>   threads have been joined. This is from reading the code; I haven't hit
+>   a failure. Was the thread sanitizer run mentioned in the cover letter
+>   done with those objtool options enabled?
+>
+> So, take it with a grain of salt. ;)
+
+I mean sashiko is hallucinating at a rate >50% on this series, so pinches
+of salt all round :) I do think frontier models with a good amount of
+checking + e.g. Chris Mason's review-prompts are helpful to rein in stuff.
+
+Anyway I had mine check it ;) and I also have a beefy threadripper sitting
+around for bounding reality on this stuff and it all came back clean:
+
+	Those writes go to the thread's own instruction bytes and its own
+	relocation, the only shared state touched is the section and elf
+	"changed" flags, which every writer sets to true, and the mcount
+	case for a sibling call is a warning path. The v2 sanitizer run
+	used the gcc allmodconfig options, which lack
+	--mcount/--mnop/--cfi/--fineibt, so I reran it on the clang
+	allmodconfig vmlinux.o with its full option set: zero reports, the
+	jump pass included.
+
+>
+> -Kees
+>
+> --
+> Kees Cook
 
 --
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Cheers, Lorenzo
