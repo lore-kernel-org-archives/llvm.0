@@ -1,135 +1,189 @@
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com [74.125.228.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3A24915B5
-	for <llvm@lists.linux.dev>; Mon, 14 Sep 2026 22:37:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621AA27A47F;
+	Tue, 15 Sep 2026 01:44:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789425471; cv=none; b=jboW6PK7tBC5Q6iBSZmgqrvyz8iZGiiM7KANSx2VacW5yun9krQZ1xIX0p8Tb8X4ennie26u3FR6rFAmS99lMJIK7m+DmWkZIF6sgC8BJ74oVKuKBjz2LT+bLV3ITQh45g0YZZivQLWFh2EF+QSGpr9k0rSW5cJr201qzkWVh2E=
+	t=1789436673; cv=none; b=r7R/EFL0sctcbfNaHlPEHp0BGBLoYnxM/s26O0V4GSwVh4VlEFFDUlrQCUd8OnUbAdAqQPbvme5hc/93ffjape/CF/kw1VzV3M81oyLq4goTgntRUX5p+8X2UHxiKvA/zd5PqiQawhu5KxQAqJUAjEflqWyy1Hf0ensK21rT30A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789425471; c=relaxed/simple;
-	bh=3pbB/cdA2n+mw9ojxn7xAJ0JjyYJsv3yomOKFEBUOog=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YLJc68cqyQ0M7fHzFITDOnC5xqd7E6LLIT1SZ4e/vFaz4m8gFwgd/X06OS3ezold+GU49RfxJEqFEXUmBnIlcZab8zkhUSM23oIF2dV+8yE9HCeoerFHubZ/0IP0g7J0KybJWuY17IQqkRf0y00TNxuaOe2mPnUESQY5LTh9eFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=P0Rr5gyL; arc=none smtp.client-ip=74.125.228.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1789436673; c=relaxed/simple;
+	bh=/pzDdZf/Sud0cF16hTuprFeHO4d7wO0i7IHquADjRKE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ETSrVgw8c/pO5z2a3p/XWUhodSMBlY3Ab35Ix0LC2cC75Psj1BnE6npfNyg3pYsagxPHHCiNF3N+khOUI4DgdQ2EUvE7wnZzQij7FNn9X8Nw4cB+49Gqkf7rN1PFwSyCwcr5Usg6Y6xHa0212lCGyiMmhtVmVk4kOrnz/6Y0c5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aHUDg338; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="P0Rr5gyL"
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254f70553dso453405366b.0
-        for <llvm@lists.linux.dev>; Mon, 14 Sep 2026 15:37:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1789425467; x=1790030267; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=doHeCbdvroV7mGBSmqv1XRXXxfYTXe+sNzLZzLwqdyM=;
-        b=P0Rr5gyLdF4kVYJOSjeWQw1UXsi43RKrmiSLS88CEdYwdaAe6dl2Iwx5tkV0rRAMRr
-         BzPSiTBbFpsXKmAhMP92f42+Or8D6wb1ZQ/CnKtcONnyQ6DYxCji1lGaxFBD44ZrI/t4
-         XhEn/rnLT9WXNs6KZr7/DKchr53foqt3fn+Ss=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789425467; x=1790030267;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=doHeCbdvroV7mGBSmqv1XRXXxfYTXe+sNzLZzLwqdyM=;
-        b=uXjYkbUitfUWYnIEqx9UETV8apdMjanzHNZ925EN3qiJBPb3J/HhLtlIi8BWaGxFAJ
-         adGATpCKF71qPFx0GxnvBYcLawnEYRbyvrkbHgl3WolijCe3UJzgTnfFncfQV7HvmEKy
-         dRtC4xw7zirg50F2k4qWyzOPxc+KtVUEpzA7zBzJe+HsyfigiC0o/Jfe7brJAwykRlKg
-         yUb7b3AnBMODUYYYqI0CTN42U2dm5btJDj0x0iDJJyx87RCbsM7L+72e3HfdZHPczTaa
-         Yr+7Z3nCoulZfMkwRh0FZp/bpjVJcmPHYfSHVrquO3ubVUKhk7d8YSN/ho7wihv4qYyb
-         CxUw==
-X-Forwarded-Encrypted: i=1; AKwUvBzcoA46eNwKdFMNEvmjOTs0eZNCaMhuxdy2hbAMQPF4U5++H6u0Nl9flVlBjCgjc+rPzi9m@lists.linux.dev
-X-Gm-Message-State: AFuF++kUX1lHU84aJeDNaH9GgTzXT4hRFIIWZwgE/AsjcTrU0ysTuc+w
-	UeGz8gcohX67p1e+TNGYgTcd0vtiiVMXxGrOCK0LOYgzA+ZX7mXTpilDZaC8QzakXjwm3x94lez
-	e6CfRWuC3SA==
-X-Gm-Gg: AYBFou14kXpDDipLs8yvPEmB0bs9rmjJA0Leef5RxvSzoGwcm74R+6oAIrP2YWobLoN
-	kjQZN6j+SxwsV7IZRqy0dr3SNT7T8H65NFrFNGqLCUqYI1XL7w+ax8nCHFnMI96dQM+N2VYexEx
-	AqffGiUHHBELvipoRT5Q/ufGe2CKfnYRPTc2R0AK4rKk89hvQQnnLLIJCkX0jVJx0/kVGuT1ehD
-	Dgt/d57tPul9L7GMdCZ95JYDlRpSNfSHnQgBeVM0RFF3TmFVce9w5MF94eKg1MjA1WxVKk2+QsQ
-	040Rh+XsRnlGpc7zoRHwrWUBI3DLFTJOzRfeoIkGblsoYUZZsaQDscQ3Un86Y3vYtg3A3/Nrhet
-	Sf+ZBvWAEOEJgsA/0xH6LdSvXZzP90Pz/vbodN1Wtj68GJ9LtMpjdJRcY6qtIfbvOwhh8siuPLz
-	Ej9JVIelptirGJI0fGjiM2qAJE82LSFHcNBsFV5uR757bH5MV3mvOSvD19aWNR0Uj5owuEA7h2l
-	mtIjsjmwke2lojwcMc7u6rCpX4HXVYYanJntwJKEOR8S3fdyg==
-X-Received: by 2002:a17:907:94d0:b0:c16:5cf0:3aff with SMTP id a640c23a62f3a-c29b8650376mr315187666b.18.1789425467343;
-        Mon, 14 Sep 2026 15:37:47 -0700 (PDT)
-Received: from mail-ej2-f12.google.com (mail-ej2-f12.google.com. [74.125.228.140])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2966147b46sm487589466b.60.2026.09.14.15.37.47
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Sep 2026 15:37:47 -0700 (PDT)
-Received: by mail-ej2-f12.google.com with SMTP id a640c23a62f3a-c254f70553dso453404766b.0
-        for <llvm@lists.linux.dev>; Mon, 14 Sep 2026 15:37:47 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzJJYq+Xi2+TZoJNKgSF55s+rSmwl2pyb8ipV2nAN6c9WFScVLfW9qDPxUtGt+EIHXEBe2W@lists.linux.dev
-X-Received: by 2002:a17:907:97c9:b0:c29:4415:2ebb with SMTP id
- a640c23a62f3a-c29b860109bmr315536666b.8.1789425035842; Mon, 14 Sep 2026
- 15:30:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aHUDg338"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789436672; x=1820972672;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=/pzDdZf/Sud0cF16hTuprFeHO4d7wO0i7IHquADjRKE=;
+  b=aHUDg338Adv9AVdaQDnubEZN4uwQZ6qx3L6pxQhLUsBKB6sFBXHzuJQL
+   420/K3DuwdXkIdY4uj2ZVkKcYGX2RFcY7VWE+Pg9zNuXRg7KPVCToGvXa
+   7Pzpc/QOTLVqlMpyr5HHz934A11VfjOWJwk7L/XSspCmEpNcNithTB2L6
+   eCGfkVNAABUz4cTXT4pHskZaE18TvwDRrL3SE5Ar4Lx2foZ5F/0iXL4kW
+   ElcsvAVNTI3hC/j4IzWl4SZAqmFWjOnMPCabyrV8n0QuYRczEb52EpRwY
+   qFJshTXKnS0F1SkANLCLB4CHOFfVwMvB0JAGyyQEb/lBT0Y3uRkEOTTNI
+   Q==;
+X-CSE-ConnectionGUID: JILunqXRTW274kdJFMF8gQ==
+X-CSE-MsgGUID: bUFicJZoRRqqSj5uHN284g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="89636228"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="89636228"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2026 18:44:31 -0700
+X-CSE-ConnectionGUID: VwTe2nyPSDqlLCN+t8v4VA==
+X-CSE-MsgGUID: MiCS2eEORi6rBhnlQuco2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="1010027"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa011.fm.intel.com with ESMTP; 14 Sep 2026 18:44:29 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x6IDi-000000003pe-2Dcn;
+	Tue, 15 Sep 2026 01:44:26 +0000
+Date: Tue, 15 Sep 2026 09:44:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?utf-8?Q?Rare=C8=99-Mihai?= Vladu <vladurares@gmail.com>,
+	gregkh@linuxfoundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+	=?utf-8?Q?Rare=C8=99-Mihai?= Vladu <vladurares@gmail.com>
+Subject: Re: [PATCH] staging: rtl8723bs: fix lines exceeding 100 columns in
+ rtw_security.c
+Message-ID: <202609150940.PBljt2rP-lkp@intel.com>
+References: <20260914145256.996968-1-vladurares@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
- <20260914-build-speedup-v2-15-39817ec5db23@kernel.org> <aqhLhVMkNzf_4oJw@jpoimboe>
- <CAHk-=wiB9MX7vBDQ+WHTUVfSYubLhR-PbABewscqTsxRhg-LbQ@mail.gmail.com> <aqhmhmgrnN3Mw8yG@jpoimboe>
-In-Reply-To: <aqhmhmgrnN3Mw8yG@jpoimboe>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Mon, 14 Sep 2026 15:30:19 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wj3BKkCYtmfs5sORF_+Oumv2Gc8D+YxkMp9W2-mvLS=Ug@mail.gmail.com>
-X-Gm-Features: AcwNN1UnWAKTndckmaJ94decAtfrWRGA6P58dk0oXtHcS9ajgGc6O7ZKSXjYJOY
-Message-ID: <CAHk-=wj3BKkCYtmfs5sORF_+Oumv2Gc8D+YxkMp9W2-mvLS=Ug@mail.gmail.com>
-Subject: Re: [PATCH v2 15/21] objtool: cache relocations, do less work
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, Kees Cook <kees@kernel.org>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, 
-	rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260914145256.996968-1-vladurares@gmail.com>
 
-On Mon, 14 Sept 2026 at 15:23, Josh Poimboeuf <jpoimboe@kernel.org> wrote:
->
-> There might be more efficient ways to structure the considerable amount
-> of data, like replacing "struct instruction" with "struct basic_block"
-> or so, but it's hard to know whether that would be a net positive.
+Hi Rareș-Mihai,
 
-Yeah, I was thinking that you'd only hash instructions as you find
-them if they are obvious "I need this instruction", and then try to
-hash them *again* if they are branch targets (and just have a "already
-hashed" flag).
+kernel test robot noticed the following build errors:
 
-That way random number instructions would not be on the hash - unless
-they become branch targets.
+[auto build test ERROR on staging/staging-testing]
 
-And you wouldn't ever really have to track any complicated decisions
-(like that whole "basic block" thing - I agree that it's painful,
-because the shape of a basic block will change over time as you find
-branch targets).
+url:    https://github.com/intel-lab-lkp/linux/commits/Rare-Mihai-Vladu/staging-rtl8723bs-fix-lines-exceeding-100-columns-in-rtw_security-c/20260914-145256
+base:   staging/staging-testing
+patch link:    https://lore.kernel.org/r/20260914145256.996968-1-vladurares%40gmail.com
+patch subject: [PATCH] staging: rtl8723bs: fix lines exceeding 100 columns in rtw_security.c
+config: hexagon-randconfig-002-20260915 (https://download.01.org/0day-ci/archive/20260915/202609150940.PBljt2rP-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 148ee2b266b73a49f1f31d0bd17d4818b91bee9f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260915/202609150940.PBljt2rP-lkp@intel.com/reproduce)
 
-But not a big deal. More an idle thought brought on by that other
-patch that changed the hash table size, and this discussion that was
-talking about the hashing - or not hashing - of sections.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609150940.PBljt2rP-lkp@intel.com/
 
-So more of a "if it is easy and straightforward" kind of thing.
+All errors (new ones prefixed by >>):
 
-             Linus
+>> drivers/staging/rtl8723bs/core/rtw_security.c:1337:7: error: redefinition of 'keyid' with a different type: 'int' vs 'u16' (aka 'unsigned short')
+    1337 |                 int keyid = padapter->securitypriv.dot11wBIPKeyid;
+         |                     ^
+   drivers/staging/rtl8723bs/core/rtw_security.c:1311:7: note: previous definition is here
+    1311 |                 u16 keyid = 0;
+         |                     ^
+   1 error generated.
+
+
+vim +1337 drivers/staging/rtl8723bs/core/rtw_security.c
+
+  1277	
+  1278	u32 rtw_BIP_verify(struct adapter *padapter, u8 *precvframe)
+  1279	{
+  1280		struct rx_pkt_attrib *pattrib = &((union recv_frame *)precvframe)->u.hdr.attrib;
+  1281		u8 *pframe;
+  1282		u8 *BIP_AAD, *p;
+  1283		u32 res = _FAIL;
+  1284		uint len, ori_len;
+  1285		struct ieee80211_hdr *pwlanhdr;
+  1286		u8 mic[16];
+  1287		struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+  1288		__le16 le_tmp;
+  1289		__le64 le_tmp64 = 0;
+  1290	
+  1291		ori_len = pattrib->pkt_len - WLAN_HDR_A3_LEN + BIP_AAD_SIZE;
+  1292		BIP_AAD = kzalloc(ori_len, GFP_KERNEL);
+  1293		if (!BIP_AAD)
+  1294			return _FAIL;
+  1295	
+  1296		/* PKT start */
+  1297		pframe = (unsigned char *)((union recv_frame *)precvframe)->u.hdr.rx_data;
+  1298		/* mapping to wlan header */
+  1299		pwlanhdr = (struct ieee80211_hdr *)pframe;
+  1300		/* save the frame body + MME */
+  1301		memcpy(BIP_AAD + BIP_AAD_SIZE,
+  1302		       pframe + WLAN_HDR_A3_LEN,
+  1303		       pattrib->pkt_len - WLAN_HDR_A3_LEN);
+  1304		/* find MME IE pointer */
+  1305		p = rtw_get_ie(BIP_AAD + BIP_AAD_SIZE,
+  1306			       WLAN_EID_MMIE,
+  1307			       &len,
+  1308			       pattrib->pkt_len - WLAN_HDR_A3_LEN);
+  1309		/* Baron */
+  1310		if (p) {
+  1311			u16 keyid = 0;
+  1312			u64 temp_ipn = 0;
+  1313			/* save packet number */
+  1314			memcpy(&le_tmp64, p + 4, 6);
+  1315			temp_ipn = le64_to_cpu(le_tmp64);
+  1316			/* BIP packet number should bigger than previous BIP packet */
+  1317			if (temp_ipn <= pmlmeext->mgnt_80211w_IPN_rx)
+  1318				goto BIP_exit;
+  1319	
+  1320			/* copy key index */
+  1321			memcpy(&le_tmp, p + 2, 2);
+  1322			keyid = le16_to_cpu(le_tmp);
+  1323			if (keyid != padapter->securitypriv.dot11wBIPKeyid)
+  1324				goto BIP_exit;
+  1325	
+  1326			/* clear the MIC field of MME to zero */
+  1327			memset(p + 2 + len - 8, 0, 8);
+  1328	
+  1329			/* conscruct AAD, copy frame control field */
+  1330			memcpy(BIP_AAD, &pwlanhdr->frame_control, 2);
+  1331			ClearRetry(BIP_AAD);
+  1332			ClearPwrMgt(BIP_AAD);
+  1333			ClearMData(BIP_AAD);
+  1334			/* conscruct AAD, copy address 1 to address 3 */
+  1335			memcpy(BIP_AAD + 2, &pwlanhdr->addrs, sizeof(pwlanhdr->addrs));
+  1336	
+> 1337			int keyid = padapter->securitypriv.dot11wBIPKeyid;
+  1338			u8 *bip_key = padapter->securitypriv.dot11wBIPKey[keyid].skey;
+  1339	
+  1340			if (omac1_aes_128(bip_key, BIP_AAD, ori_len, mic))
+  1341				goto BIP_exit;
+  1342	
+  1343			/* MIC field should be last 8 bytes of packet (packet without FCS) */
+  1344			if (!memcmp(mic, pframe + pattrib->pkt_len - 8, 8)) {
+  1345				pmlmeext->mgnt_80211w_IPN_rx = temp_ipn;
+  1346				res = _SUCCESS;
+  1347			} else {
+  1348			}
+  1349	
+  1350		} else {
+  1351			res = RTW_RX_HANDLED;
+  1352		}
+  1353	BIP_exit:
+  1354	
+  1355		kfree(BIP_AAD);
+  1356		return res;
+  1357	}
+  1358	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
