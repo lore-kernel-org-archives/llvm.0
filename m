@@ -1,170 +1,159 @@
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8793D415F08;
-	Tue, 15 Sep 2026 08:23:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D1C463B9F
+	for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 08:54:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789460626; cv=none; b=CZs53Rm+bRTHzC92uk11q/chWrDURkVR1Zm7IuWybJTnX0vOS2gLswt5RUkJt7eL61YNHVvKFh1IGy1r+asOhhRM3iHafG4Tu8mBR2J+l6cTy9ofEKsztmHgOuCs+jnHhXLzfUgz7RHifDqSUUWFfGi7EeXHVdXXwvyUxt/cKaI=
+	t=1789462482; cv=none; b=gSgCI4rHVlYLvzPdGp9TlhB2Iql1KlMASpv/fEDF7wFcyakvDZLSqH/vAt0hvt73CJfvj6xwVZr87UWdX5Ir1tzwgdlSkKfXAqy+eHXNGHDGwFb1xj9n+Za9LmGDXjHPadP5SNisjgwAme7y94+LON2MNZms6wyK6jKM/csp0pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789460626; c=relaxed/simple;
-	bh=Q6hjAE+9q8egGVVb02CPWb1wLjOusvGxKkXCzWLChHg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rvbQgqgSdi7M1vDQUiBK5BffDpNG9WcWHcRdD7eJKqsdCvMloM3T4K5xnTrWZbOTB9uCXk9lbXjcZ4qjEtgxO4uXDPx4VnmGQasv04ZKQQoh4qLz6YGv8cmz9n7TBdYzlriXcmdayQ0EgwWY6XQWDZZWM6LQwMW3NVqjj/vAlX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ipzJcm8I; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	s=arc-20240116; t=1789462482; c=relaxed/simple;
+	bh=TrFy84WFLihamQ2UtPEIp9cWrnbixhLsx/cx/JOsURw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Gwt4J9BJ21kueYZ6sw8cWxnQruGt+nMmD0NCOT9JiWGooP9zDApwclP9IhjwmMEwiL0geGEbIr2MUOYCwgsgPOItY2qj0on2lHENyGJ++QchgU/uUtSaMOgdRsGdp4ZdVnq4UR4jZtKfa819jIQQqCt7PlXVRnjP/T6JeVLkSkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Xody1oJN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Fr6fJyQZ; arc=none smtp.client-ip=103.168.172.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ipzJcm8I"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=GLQ264WxN6wDQzABD1f2vOcHnnY8r7L3wdbiMWb63xA=; b=ipzJcm8I1ST/GUt421dYmJnfyI
-	vMJ7fwLPm50oqJU0jqpXgWe24q407KlTdH7SXHQr7TDXrJ0cM1tEYBnW9xuMF681fSZbRWEhC0xLD
-	6pneXq40+9I4oviAF01pBkAh9+iexFHZvr8Q0AJ9eQUZ1IpxpzGhf4HDVrlwFQYzTx+rlpPRZqXIS
-	bi5aWaDAYx9YdPtSyaz9+cEy9G45/haDccskEkn/nT4u1JIUGIvbu/z3wOp8oYMS5UFYrgQZ3LkKc
-	D4oDDw5Avnj0AUqbEB+wgK/erFclXrfrCAUd2232oXhxiftApCzjDlcWbdLgQanaRy0SwbWde3WVp
-	73UWs78A==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.99.2 #2 (Red Hat Linux))
-	id 1x6ORT-00000006QWj-1Tpq;
-	Tue, 15 Sep 2026 08:23:05 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id F1FDF3012C6; Tue, 15 Sep 2026 10:23:00 +0200 (CEST)
-Date: Tue, 15 Sep 2026 10:23:00 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Yury Norov <ynorov@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-	Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Kees Cook <kees@kernel.org>,
-	Joel Granados <joel.granados@kernel.org>,
-	Anna-Maria Behnsen <anna-maria@linutronix.de>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	K Prateek Nayak <kprateek.nayak@amd.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Jason Wang <jasowangio@gmail.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	rcu@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-rt-devel@lists.linux.dev, llvm@lists.linux.dev,
-	Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH 01/17] locking/mutex: assert static storage for
- DEFINE_MUTEX()
-Message-ID: <20260915082300.GV4121339@noisy.programming.kicks-ass.net>
-References: <20260915030336.1192299-1-ynorov@nvidia.com>
- <20260915030336.1192299-2-ynorov@nvidia.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Xody1oJN";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Fr6fJyQZ"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.phl.internal (Postfix) with ESMTP id 0CFA21380347;
+	Tue, 15 Sep 2026 04:54:35 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Tue, 15 Sep 2026 04:54:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1789462475;
+	 x=1789469675; bh=l+Dca6AU7f0s7A11m75QKiePhth6dKEUN646ZUyOcxw=; b=
+	Xody1oJNWEMViAMOHPbGMbFFJWDXAlekhcwJV2SoNNjV3Itz044FXU72K/NOTqui
+	dGNVaAbLlZulA5UBbJ7XisJ4/Tvb8vxRSHZgr1rg86rZaW2N6A20pRXX6CjuJFzZ
+	qN4XhD+zqJj7G6GzdewHzc9Ub5bvOnhXRm5+AIgWAw6aKT926nad1Knuxbpc675A
+	AzTOl0hJn/NZF15+dJYlH0kXOE9oaDD1dkmsAcj8fBTRb96rHKlGhQLyQSuMNDH/
+	4VAddWv+NRh+YnPkx2GOowIODOGAueKi2AxYNKtoPrv0OBaFTazekFo9yS6tBLOp
+	1Q82whhHv8fjGkGI4JpxpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789462475; x=
+	1789469675; bh=l+Dca6AU7f0s7A11m75QKiePhth6dKEUN646ZUyOcxw=; b=F
+	r6fJyQZ3B1K5YtWjMoTp/fRKQnkOGDNwUteDe4nSuymkyvq2WsfTel5mLEsiIniB
+	Q8Mg3SaUa+hsdJwDYad3RVOHqY6wVuGBbRMXj+q0YdMMGPUOsGRVwT87zBxsoxES
+	RO9e/Kk1iPvbMNYiJPlnyVnmhvk9iZJMC0Hl8RMrWAZ2w+CFpRVPeszShBh7jyY4
+	8pafu94pmoPvJ37O6z8ACe0BUJ66rCCYt+VIRpYGoi+zNkUwBU0gu7mu7AArH7H1
+	kfhRzCurvSNdhnOouyFcmOZ/aEYZowpWKOguKfCcIqTeATR2Y52GrsDRnY4YlRT8
+	4mvRCMtRoq3C+WpdMDmrA==
+X-ME-Sender: <xms:vgepagxIogvlk792euZsMnA2AD-07upm7o1gQScllFz15_5556isuA>
+    <xme:vgepavFIcm_1MvsAOmz2-JbwyBuNZNrMJpYsNzJOlp3FsY8ocFhn_i6RRbVtbI_xh
+    1ZW5w582V70b24GHPa0lC4s3Vi_hKlkZoAkL5CnvbECiIVQRZ2bC7IS>
+X-ME-Proxy-Cause: dmFkZTFl07Cd2pNoRIcz+Y9DRXa9I+CAUbyY73IeYUKFyinqRYJWqvWva9WPMlSrUtrXXQ
+    4Ce7uDNbLSoFWkhxcsl23fov82rHUN8DJQrUSxcE/UGH5WEDUUFVVGsxSlX9y1C16y1ikq
+    1Hzd/K8lu3qfyVrj+2Esn9a+9urCLgaUn1/Hd12DOGJvXPGzYSt8nJENaQptMkY/jEyE+u
+    S9faTEM6ZNXS1Rhf+11JTufpU/muQclYTOYI+iNfCTdQIpuxlsrqU2hRdRCR3my42gTIci
+    foRjjuFQi3I4plLW/2yjK9qsVn6rhO1nfI17QxL4uXxeeZVrN1VwQjZE4ge9q8fo1rM0X9
+    rhiOoth3vgfsKc6+FhKiMgmD69qMeWJU5dx0D71/c9CvyFGUfnl5G7No2fZi2vJmcmsWv/
+    +UST0qDeQsCHTDbJGGyedoSdHZ7/3mF5Q1wzNjHqpNnUUAF7MF/RhXwaQA8Qj3bpXpRWZk
+    WM2pUx2qPAmh1y6xmTh8nd0xCpzZHILt4JYJprl0AWZ62t80PI4UgOxCQLgGPoRTb8KlzB
+    7SSwnrEvKdcy0NSaAHG069l+OP4bVIt5jLLqs+Vt+azYtoLHe7W+0DYJTzaj831I7mO2gR
+    af3uM0A9HNtxo2qLYSmTeYYtjD/xXjNAVQ8rRDyPxRvaGwqUBq2NMVTlab5g
+X-ME-Proxy: <xmx:xAepagJ83hBWhUGi-qVtm002tZ6nTUV_OQ9QV71wb8cZ5sDkjqBMPA>
+    <xmx:xAeparBNN9LUMZgDPwhes7U75oqanecICHjUTVaE1k1UIFiw3-JoVg>
+    <xmx:xAepajlQfJFGq9Ujz61CsXpfe6X8ZyU-XYpSbmHIXAFjLrnSj5AGjA>
+    <xmx:xAepanETL89xwgdJrVvqYbWpq6B3LGj8dODqxwt8wrzrZnsIIpowVw>
+    <xmx:ywepaiFG3kexiM5eVna2DP0CZbgBhmkObpO3qC-5-C8A-WnmgHPjeTq->
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 268F432A0081; Tue, 15 Sep 2026 04:54:22 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260915030336.1192299-2-ynorov@nvidia.com>
+X-ThreadId: AGrkui6Nx9zw
+Date: Tue, 15 Sep 2026 10:53:51 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Kees Cook" <kees@kernel.org>
+Cc: "Lorenzo Stoakes" <ljs@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Alexey Gladkov" <legion@kernel.org>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Paul Walmsley" <pjw@kernel.org>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
+ "Ard Biesheuvel" <ardb@kernel.org>,
+ "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
+ "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <lossin@kernel.org>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>,
+ "Daniel Almeida" <daniel.almeida@collabora.com>,
+ "Tamir Duberstein" <tamird@kernel.org>,
+ "Alexandre Courbot" <acourbot@nvidia.com>,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ "Jonathan Corbet" <corbet@lwn.net>,
+ "Randy Dunlap" <rdunlap@infradead.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+ "Jens Axboe" <axboe@kernel.dk>, linux-hardening@vger.kernel.org
+Message-Id: <7646eb0c-7c4a-4ec2-9562-66a74c4d9858@app.fastmail.com>
+In-Reply-To: 
+ <CAHk-=whB0X28MNAg71it=1SfFyV7rB+PK3qajpRyWoxXHW81fw@mail.gmail.com>
+References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
+ <202609140833.88C0E16E50@keescook>
+ <CAHk-=whB0X28MNAg71it=1SfFyV7rB+PK3qajpRyWoxXHW81fw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/21] kbuild: significantly speed up kernel builds
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 14, 2026 at 11:03:19PM -0400, Yury Norov wrote:
-> DEFINE_MUTEX() uses a static lock initializer whose lockdep class key
-> requires a persistent object address. Reject automatic local declarations
-> with ASSERT_STATIC_STORAGE(), in both the regular and PREEMPT_RT variants.
-> Align the VMA and memblock tools stubs with the kernel declaration.
-> 
-> The two automatic mutexes in the WireGuard allowedips selftests already
-> call mutex_init(). Replace their redundant static initializers with plain
-> struct mutex declarations.
-> 
-> Assisted-by: OpenAI Codex
-> Signed-off-by: Yury Norov <ynorov@nvidia.com>
-> ---
->  drivers/net/wireguard/selftest/allowedips.c | 4 ++--
->  include/linux/mutex.h                       | 7 +++++--
->  tools/testing/memblock/linux/mutex.h        | 8 ++++++--
->  tools/testing/vma/include/dup.h             | 5 ++++-
->  4 files changed, 17 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/net/wireguard/selftest/allowedips.c b/drivers/net/wireguard/selftest/allowedips.c
-> index 3e857e6fb627..ecb2908228e7 100644
-> --- a/drivers/net/wireguard/selftest/allowedips.c
-> +++ b/drivers/net/wireguard/selftest/allowedips.c
-> @@ -257,7 +257,7 @@ static __init bool randomized_test(void)
->  	u8 ip[16], mutate_mask[16], mutated[16];
->  	struct wg_peer **peers, *peer;
->  	struct horrible_allowedips h;
-> -	DEFINE_MUTEX(mutex);
-> +	struct mutex mutex;
->  	struct allowedips t;
->  	bool ret = false;
->  
-> @@ -499,7 +499,7 @@ bool __init wg_allowedips_selftest(void)
->  	struct allowedips_node *iter_node;
->  	bool success = false;
->  	struct allowedips t;
-> -	DEFINE_MUTEX(mutex);
-> +	struct mutex mutex;
->  	struct in6_addr ip;
->  	size_t i = 0, count = 0;
->  	__be64 part;
+On Mon, Sep 14, 2026, at 17:53, Linus Torvalds wrote:
+> On Mon, 14 Sept 2026 at 08:41, Kees Cook <kees@kernel.org> wrote:
+>>
+>> One area I think might solved via an LLM is the 3-pass kallsyms stuff.
+>> If we could get a deterministic kallsyms build in 1 pass, that would be
+>> very nice. A lot of people have tried, but it has eluded upstreaming.
+>
+> Even the three-pass one hasn't apparently always been entirely
+> deterministic. We've had random reports over the years of it failing
+> in some circumstances.
 
-This should probably be a separate patch.
+This tends to break whenever a linker (rather than the compiler) starts
+creating a new type of symbols that show up in pass 2.
 
-> diff --git a/include/linux/mutex.h b/include/linux/mutex.h
-> index 734048c02f4f..2f2d95f3097c 100644
-> --- a/include/linux/mutex.h
-> +++ b/include/linux/mutex.h
-> @@ -11,6 +11,7 @@
->  #ifndef __LINUX_MUTEX_H
->  #define __LINUX_MUTEX_H
->  
-> +#include <linux/compiler.h>
->  #include <asm/current.h>
->  #include <linux/list.h>
->  #include <linux/spinlock_types.h>
-> @@ -84,7 +85,8 @@ do {									\
->  		__DEP_MAP_MUTEX_INITIALIZER(lockname) }
->  
->  #define DEFINE_MUTEX(mutexname) \
-> -	struct mutex mutexname = __MUTEX_INITIALIZER(mutexname)
-> +	struct mutex mutexname = __MUTEX_INITIALIZER(mutexname);	\
-> +	ASSERT_STATIC_STORAGE(mutexname)
+> Maybe we've fixed it all, or maybe the failures just go imperceptibly
+> rare. Regardless, it has definitely been fragile.
 
-My tree no has ASSERT_STATIC_STORAGE. Please repost when that lands?
+The rate seems to be once every few years, looking at the list
+of exceptions added to scripts/kallsyms.c (now scripts/mksysmap):
+
+efe6e3068067 ("kallsyms: fix nonconverging kallsyms table with lld")
+516d980f8541 ("scripts/kallsyms: skip ppc compiler stub *.long_branch.* / *.plt_branch.*")
+b9b74be163a2 ("ARM: 8555/1: kallsyms: ignore ARM mode switching veneers")
+
+I'm sure there are other instances on architectures that get less
+build coverage.
+
+     Arnd
