@@ -1,230 +1,156 @@
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a5-smtp.messagingengine.com (flow-a5-smtp.messagingengine.com [103.168.172.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F713F1040
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 06:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3243A2E2E
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 06:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789539211; cv=none; b=uLDJhpc+wNqknhuR0UMA+IkryC5SuH95mpxuQqcz0gtOiokme+K5VBXPVrlZZgRgs0hYOmoq0TPzZxqIjaK7NbSfbE0yEWNm1LBHy4MmPxWf4xa6UeJPohraA8jHsq5clb0SxXKR4nIRWy1L4LoUqbJm6t0fQEQCRZFDX6+uYR8=
+	t=1789540756; cv=none; b=kTNqyBxvvRVaG8KC5HRE9sDETA/LLBUT2XnOq/m54XQnm9O64Tw8ALORnrGYXUqJEbez+3+7gGvEVNSw6LaqkpRfakmIJ1sjLhwPyCVy8nSkaOK0ivHhWmjlnJJI9cT8KB9HD6l+WMWeh0ZzylmAvlOvwYtPsWU2k14fmUSTCWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789539211; c=relaxed/simple;
-	bh=9dORH0oEqVFA847HKvzWRovoEjk2gC7h5N3Vm9y/hYo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=YfAYRf00BMj2ZhIpztXZt1fXeiaYyfzl6CAdze4Y4K4wtX2EtQNaPz6/+uy6DwZATg6OV8YdjSXbs/pga7p72cyujoS0TharLJCZjN36yO0r9+o1BAsxgfl0+vol0lgU6lu3kTU62TQ5fi4RyjJ3NgNbMJ98jBJwwnk49vX7RfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E/jyjj3W; arc=none smtp.client-ip=209.85.210.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
+	s=arc-20240116; t=1789540756; c=relaxed/simple;
+	bh=iU6G2m+wrmWgfgn/0yBm7PYayX0WyU1SDB3L2Fyqpfs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=OpCcmqmL1M91A6B1fZHcIYL8JVL/pNv14umM23S7yF1qd2NSk+GhNR7uhdE3QINRY9H/Xu5DOaqNQz6JmLSGYzaj3VwtwuQeqnv2SFsWzU6qK5ryfvtFrFSzsSEpURcjDH9bykX07Ln1vUPFf68cjnA0pzKmwp7PzIJveNM3U70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=hM+QMgL4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ggZJYzQ/; arc=none smtp.client-ip=103.168.172.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E/jyjj3W"
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8688139460bso5348837b3a.0
-        for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 23:13:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789539208; x=1790144008; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:to:from:subject:message-id
-         :references:mime-version:in-reply-to:date:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=TcdV1sgmtR2CtW3eQG4Xq1/J2URo6ZShBMv2CnVeVxw=;
-        b=E/jyjj3WNsRhJySSFIKZS/ZZQ08cIdVtIj9YkJ543F/LN6TgKbA0UdQg8QMcFc6V0I
-         DZ/xlSpKUWBrYha5TxhgezRBAuwdbV58y5uTxIOGVxaM74rPl8RLxgrGpqPzkg1OhdE5
-         o4lS/QrK3GAHujk2/m4xuNvc0Gw2Fkx4xsL141FyYEf9jjX0dKDTVZdbm0x0+r3SHksO
-         xgUsAViY1YoD+uXUI8zvUqXxSlONvt7ia2J8kO///2af2d/Nj6e+T/oDvSp1Oi4NfhuO
-         07v6YvmAr34YsZZrVAnC2qRkx6eS8X6wga0eE4XbVWeojwy8XslU2c/CxQlwTwOp4rEQ
-         F6Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789539208; x=1790144008;
-        h=content-transfer-encoding:content-type:to:from:subject:message-id
-         :references:mime-version:in-reply-to:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=TcdV1sgmtR2CtW3eQG4Xq1/J2URo6ZShBMv2CnVeVxw=;
-        b=vBTeSXdUvjBOL2fvWLxGFRP6nScYt9eJ+9QJU6uWcUE2kbkxPJKrAziweOxW97L6aW
-         veZCy5K05CnAEu38AOAdFzSFSIeNk+S2r7TzGzrw5D335lh0O0KTe1frXv+InnwvnWc5
-         zWQeAP5eX2VaKw/gZk3GPU43XUY+Oo8nIQl1e3s/5UEHtX+byOA/Iffd404XHAt5pPDK
-         Fg82WVLhUX6yBF4b4cCaMrS8MCBix8C9hewGhZZYC6qdQOMhHTxUX7oZwcOb5O6zVbpR
-         GEUb0HfN9JAUGu5luvp7VI0Gr7OwGdkBqFXSuuMtFICdCBPR4ZxHBTB5AnLQrgblq3uP
-         pdYg==
-X-Forwarded-Encrypted: i=1; AKwUvBxJShN1QCGSN5ej1DtLsfb9wyfjUxvQ7+L653CJztoDQDEVltThq/tOjWQ6wmJ1NwMv7J6E@lists.linux.dev
-X-Gm-Message-State: AFuF++lMo2GdTHDw2NbWKU8pgpkeIQDkQSR3NoOqp/6IA5fSUSHLQU4t
-	8Hc/NT2povKSmIWTbZZ+/puTtHV5k1jcj3vOgVET31mOJwZIyXytaPBxXmw04teTcUIwCdsLPVk
-	fQmrJ6ncI1w==
-X-Received: from dyau26.prod.google.com ([2002:a05:7300:601a:b0:335:65c3:a0a9])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:7703:b0:3cc:917f:f302
- with SMTP id adf61e73a8af0-3dd5f455cd6mr3886426637.9.1789539208331; Tue, 15
- Sep 2026 23:13:28 -0700 (PDT)
-Date: Tue, 15 Sep 2026 23:12:18 -0700
-In-Reply-To: <20260916061218.3061216-1-irogers@google.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="hM+QMgL4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ggZJYzQ/"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailflow.phl.internal (Postfix) with ESMTP id 0617A138019A;
+	Wed, 16 Sep 2026 02:39:06 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Wed, 16 Sep 2026 02:39:10 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1789540746;
+	 x=1789547946; bh=uVDBK2xNAXhHDNCHOU+SjarglqFyyWlJ3wc704FVprE=; b=
+	hM+QMgL4AS7CuAQEgPY/QESyH1qSIMZM/PiTjgz4TNQ7lYyddA3jppvmlI/5IRtp
+	aLcPPSNyOwZ4ONFBjLRiTqDIPlY3kJ+iV4FjtzA/Jf9ExeZkGWFtHMAC1apX2a0o
+	JxG9Sm/MY81KGVD79EG76UngndQxb50JJkMNvH391CRijk5PQKuEQLxqHqbhc7aw
+	U6a9xwdt0VNRDZLHdO5kGUU4Dy1ykntORbxgDQvM1R9XJSRtFEPXz+ydch/mp5pK
+	Vk4vumi5TLTNChz5cDYk6D26dHyiJTy5AwBer+/nPsYPOG3drXMIF0gaP31z2rze
+	xJV1PP23jlnY8LgHB/VqQw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789540746; x=
+	1789547946; bh=uVDBK2xNAXhHDNCHOU+SjarglqFyyWlJ3wc704FVprE=; b=g
+	gZJYzQ/CXO0ZSXUW9zkiwFdCtlScWZRoKQ59VDODFeKbchxdoJRfGVhNB6de1zAk
+	Igmrs/HG/KIktDBDX5I62AOCECbxn3CR2QbyoBLBAbC3cEeponmdReOksRDiSe9q
+	OTcPBrLridMkOw6nE1aScTu+vm9BOJTRg0cVXnmQ/RekVjvXfgGSAPeg0NIeMhBh
+	8KtzxT0E9acGFkTvcgiVBxN0jUAPfrmFFpZqFDVEjJF7sR9+PWmJHcS79+es9Hqe
+	Y+50DhmmirNy5aZpgXmGHT+b8LXtxiNGfE1XqVtVmARtuUlsPSt2BK2wlPS3A51z
+	fM8arZOK+hOXDQfEkKw+A==
+X-ME-Sender: <xms:fjmqatCOK7YHvubAqP1h1V4YHULodgdPceHZjBfh4g68lLmN8fzLew>
+    <xme:fjmqamWCKZY-7ZZOzLlSDByX0z0N7hwZzF8jDjvQMoCxsQZT4SzA52-0Sef4q-dTa
+    anOMFKCXiFZqd0YC2iWjXTsn2Wq8U_0tAkRYry5mfPZ2qM04ea2cRw>
+X-ME-Proxy-Cause: dmFkZTFiOvX0hSiRFkM2Qokbvc+IueVqJCGvgtt3OAIf0qT3xs2bOXFJbjdsyY8EBf6a3G
+    wBCuVkHp4QXzYkIot+hObLZCDrcnpZNKnpfFLgzQAVfSFunvh+182qDL/bjJdZsRhVnu9N
+    Rg8qcQzNoSLXgIKivflL/NB+ZAAB62DKqF6eukoIpU/rwKNOR5bsSXqO1BYRbMg1zYNqN4
+    oDPyOTYhMAJIKADNwdJOv6Ou9XDvSo8ddi0YiltF66PEiXc7a9FuDksrLfsfqL/XuqAsHP
+    Y9CbQ4YvBgsWEAs7PYbhaU0vN1Tvx0ewh8X5yu5fjf+KRn2neEB4wnaNF9X+YH4Sh8f2IZ
+    TMnCjUGn0ubvPi6ZhHHWHmRfG8Sb4PiHdpFOGZxXR/fGxogQNqik6N+b7W9Y66lFVF9kfA
+    ZfgNIGxbV0r4VtA8proereo7T+tN2tZ3l+eECqT0E2xOtfLCzH6Sy45Pkr7MIiczYxZRTL
+    ojXbeTO2DmADXmQu2KlswHGHk+E3MWyNQjGEYTIAL9pnYs19jLARyw5v7gwrdv3vVLVrn1
+    yf0WILLhluhmhnW+96OjgVLZMQZsTe+SCOMhGafvJe3m0q/F8vb96Rzj20Mx8LYjh9lnUU
+    YuFaw0rQJ8zgvbkLtbtjlx6b6GFIj5Ly0fkpKPiFmCaW0ccGDMIj4dDXXp+Q
+X-ME-Proxy: <xmx:hDmqaoO298rcphhD8Jjlgl5XgjXhF7eGmlnys2eFqqLKSzN_7i2qzw>
+    <xmx:hDmqatZ4pyaIgPMQWgMN7nnUJPUB3fmdsNJBMbsYR7ogu4OQHW5F6g>
+    <xmx:hDmqamY-k-QYn5GnKcOegE_9hlIoeCFp_BuLjgqP_RN42SFCrdZ-oQ>
+    <xmx:hDmqakTqA0lH3dlwfmObrHXkO03DNl8T3ILlter4bigIRFFkb_DrSw>
+    <xmx:ijmqauV7wtCCxTe3hDFR956AK3ZE8qxavmJ2ZnsMA1jGXU98OwpJDD18>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id EA77F32A0085; Wed, 16 Sep 2026 02:38:53 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-References: <20260916061218.3061216-1-irogers@google.com>
-X-Mailer: git-send-email 2.55.0.1032.g73a4cd73de-goog
-Message-ID: <20260916061218.3061216-10-irogers@google.com>
-Subject: [PATCH 9/9] perf test: Add build tests for clang and libbfd demangling
-From: Ian Rogers <irogers@google.com>
-To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Thomas Richter <tmricht@linux.ibm.com>, linux-perf-users@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-ThreadId: ArHA-gVR6p-N
+Date: Wed, 16 Sep 2026 08:38:33 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Kees Cook" <kees@kernel.org>, "Lorenzo Stoakes" <ljs@kernel.org>
+Cc: "Linus Torvalds" <torvalds@linux-foundation.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nicolas Schier" <nsc@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ "Masahiro Yamada" <masahiroy@kernel.org>,
+ "Alexey Gladkov" <legion@kernel.org>,
+ "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Paul Walmsley" <pjw@kernel.org>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Mark Rutland" <mark.rutland@arm.com>,
+ "Ard Biesheuvel" <ardb@kernel.org>,
+ "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+ "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
+ "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <lossin@kernel.org>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>,
+ "Daniel Almeida" <daniel.almeida@collabora.com>,
+ "Tamir Duberstein" <tamird@kernel.org>,
+ "Alexandre Courbot" <acourbot@nvidia.com>,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ "Jonathan Corbet" <corbet@lwn.net>,
+ "Randy Dunlap" <rdunlap@infradead.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+ Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org,
+ rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org,
+ "Jens Axboe" <axboe@kernel.dk>, linux-hardening@vger.kernel.org
+Message-Id: <081b2b60-e295-4cd7-b201-d996a88c5f28@app.fastmail.com>
+In-Reply-To: <202609151758.BA5732348@keescook>
+References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
+ <20260914-build-speedup-v2-21-39817ec5db23@kernel.org>
+ <202609151758.BA5732348@keescook>
+Subject: Re: [PATCH v2 21/21] kbuild: use pigz for gzip compression if available
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Three build configurations broke recently without the build test suite
-noticing, as none of them were covered:
+On Wed, Sep 16, 2026, at 03:06, Kees Cook wrote:
+> On Mon, Sep 14, 2026 at 10:22:20AM +0100, Lorenzo Stoakes (ARM) wrote:
+>
+> Makefile:
+>
+> KPGZIP	:= $(if $(shell command -v pigz 2>/dev/null),$(PYTHON3) 
+> $(abs_srctree)/scripts/jobserver-exec 
+> $(abs_srctree)/scripts/parallel-gzip,gzip)
+>
+> and the same scripts/parallel-gzip:
+>
+> 	#!/bin/sh
+> 	exec pigz -p ${PARALLELISM:-1} "$@"
+>
+> And then replace the /boot/ KGZIP uses with KPGZIP. Then we don't need
+> to change modules, config_data, new users, nor cmd_gzip, etc, which all
+> continue to use the regular KGZIP and the "use python" part for the
+> KPGZIP case becomes is a 1-time cost?
 
-  - "CC=3Dclang" on its own. CXX is only set to clang++ by "make LLVM=3D1",
-    so CXX stays as g++ and used to be passed clang's flags.
-  - "CC=3Dclang BUILD_NONDISTRO=3D1", where libbfd.c failed clang's
-    -Wthread-safety analysis.
-  - "BUILD_NONDISTRO=3D1 NO_DEMANGLE=3D1", the only combination that
-    compiles the libbfd demangling in symbol.c, which referred to
-    identifiers nothing declared.
+Nice, I like the idea and this this will work. I didn't know about
+scripts/jobserver-exec, but this does seem like a perfect fit.
 
-Add the three. The clang ones need clang installed, and the libbfd ones
-reuse the existing binutils check.
+I checked the other compression tools we support, and found that
+zstd is another one that has built-in support for parallel
+compression, so we probably want to have it there as well.
 
-Testing that perf was built isn't enough for the first one. Feature
-tests are allowed to fail, so a broken C++ compiler command line doesn't
-fail the build, it silently turns off every feature needing a C++
-compiler and the build still produces a working perf. Check that libLLVM
-is still built in, which is the C++ dependent feature perf can report
-on, so the test fails instead of quietly producing a perf with less in
-it than the default build has.
-
-Only make that check when libLLVM can be built in the first place. The
-llvm-perf feature test compiles and links against the llvm-devel/llvm-dev
-headers and libraries and needs version 13 or newer, so the presence of
-llvm-config on its own says nothing. Probe the same way the feature test
-does and fall back to only testing that perf was built when the probe
-fails, rather than turning a machine without the LLVM development files
-into a spurious failure.
-
-For the same reason the clang tests must not reuse a feature dump made
-with the default compiler, so exclude them from REUSE_FEATURES_DUMP.
-
-Signed-off-by: Ian Rogers <irogers@google.com>
-Assisted-by: Antigravity:gemini-3.1-pro
----
- tools/perf/tests/make | 47 +++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 45 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 608470ff9c10..8e55ff1aecbd 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -71,6 +71,9 @@ make_clean_all      :=3D clean all
- make_python_perf_so :=3D $(python_perf_so)
- make_debug          :=3D DEBUG=3D1
- make_nondistro      :=3D BUILD_NONDISTRO=3D1
-+make_nondistro_no_demangle :=3D BUILD_NONDISTRO=3D1 NO_DEMANGLE=3D1
-+make_clang          :=3D CC=3Dclang
-+make_clang_nondistro :=3D CC=3Dclang BUILD_NONDISTRO=3D1
- make_extra_tests    :=3D EXTRA_TESTS=3D1
- make_no_jevents     :=3D NO_JEVENTS=3D1
- make_jevents_all    :=3D JEVENTS_ARCH=3Dall
-@@ -128,6 +131,18 @@ make_minimal        +=3D NO_CAPSTONE=3D1
- # binutils 2_42 and newer have bfd_thread_init()
- new_libbfd :=3D $(shell echo '#include <bfd.h>' | $(CC) -E -x c - | grep b=
-fd_thread_init)
-=20
-+# Whether libLLVM can be built, which needs the llvm-devel/llvm-dev header=
-s and
-+# libraries of version 13 or newer, not just llvm-config. This mirrors the
-+# llvm-perf feature test in tools/build/feature/test-llvm-perf.cpp so that
-+# libLLVM is only asserted below when the default compiler can really buil=
-d it.
-+ifneq ($(call has,$(LLVM_CONFIG)),)
-+have_libllvm :=3D $(shell printf '#include <llvm/Support/ManagedStatic.h>\=
-n#include <llvm/Support/raw_ostream.h>\n#if LLVM_VERSION_MAJOR < 13\n#error=
- "llvm-devel/llvm-dev version 13 or greater is required"\n#endif\nint main(=
-){llvm::errs()<<"";llvm::llvm_shutdown();return 0;}\n' | \
-+	$(CXX) -x c++ -std=3Dgnu++17 -I$(shell $(LLVM_CONFIG) --includedir 2>/dev=
-/null) - -o /dev/null \
-+		-L$(shell $(LLVM_CONFIG) --libdir 2>/dev/null) \
-+		$(shell $(LLVM_CONFIG) --libs Core BPF 2>/dev/null) \
-+		$(shell $(LLVM_CONFIG) --system-libs 2>/dev/null) >/dev/null 2>&1 && ech=
-o y)
-+endif
-+
- # $(run) contains all available tests
- run :=3D make_pure
- # Targets 'clean all' can be run together only through top level
-@@ -143,6 +158,17 @@ run +=3D make_python_perf_so
- run +=3D make_debug
- ifneq ($(new_libbfd),)
- run +=3D make_nondistro
-+# Demangling with libbfd is only built when the C++ ABI's __cxa_demangle
-+# isn't available, so it needs a build of its own to be compiled at all.
-+run +=3D make_nondistro_no_demangle
-+endif
-+# CXX is only set to clang++ by LLVM=3D1, so a CC=3Dclang build has to cop=
-e with
-+# a C compiler and a C++ compiler that don't match.
-+ifneq ($(call has,clang),)
-+run +=3D make_clang
-+ifneq ($(new_libbfd),)
-+run +=3D make_clang_nondistro
-+endif
- endif
- run +=3D make_extra_tests
- run +=3D make_no_jevents
-@@ -278,6 +304,17 @@ test_make_install_pdf_O  :=3D $(test_ok)
- test_make_libbpf_dynamic :=3D   ldd $(PERF_O)/perf | grep -q libbpf
- test_make_libbpf_dynamic_O :=3D ldd $$TMP_O/perf | grep -q libbpf
-=20
-+# Feature tests are allowed to fail, so a broken C++ compiler command line
-+# doesn't fail the build, it just quietly turns off everything that needs =
-a
-+# C++ compiler. Check a feature that does, otherwise these tests would pas=
-s
-+# while producing a perf with less in it than the default build has.
-+ifneq ($(have_libllvm),)
-+test_make_clang               :=3D test -x $(PERF_O)/perf && $(PERF_O)/per=
-f check -q feature libLLVM
-+test_make_clang_O             :=3D test -x $$TMP_O/perf && $$TMP_O/perf ch=
-eck -q feature libLLVM
-+test_make_clang_nondistro     :=3D $(test_make_clang)
-+test_make_clang_nondistro_O   :=3D $(test_make_clang_O)
-+endif
-+
- test_make_python_perf_so_O    :=3D test -f $$TMP_O/python/perf.so
- test_make_perf_o_O            :=3D test -f $$TMP_O/perf.o
- test_make_util_map_o_O        :=3D test -f $$TMP_O/util/map.o
-@@ -407,8 +444,14 @@ $(FEATURES_DUMP_FILE_STATIC):
- 	echo "- $@: $$cmd" && echo $$cmd && \
- 	( eval $$cmd ) > /dev/null 2>&1
-=20
-+# The clang tests exist to run feature detection with a compiler other tha=
-n
-+# the default one, so they have to do their own and are left out of both t=
-he
-+# dependency and the 'FEATURES_DUMP=3D' append below.
-+no_features_dump :=3D make_clang make_clang_nondistro
-+no_features_dump +=3D $(addsuffix _O,$(no_features_dump))
-+
- # Add feature dump dependency for run/run_O targets
--$(foreach t,$(run) $(run_O),$(eval \
-+$(foreach t,$(filter-out $(no_features_dump),$(run) $(run_O)),$(eval \
- 	$(t): $(if $(findstring make_static,$(t)),\
- 		$(FEATURES_DUMP_FILE_STATIC),\
- 		$(FEATURES_DUMP_FILE))))
-@@ -416,7 +459,7 @@ $(foreach t,$(run) $(run_O),$(eval \
- # Append 'FEATURES_DUMP=3D' option to all test cases. For example:
- # make_no_libbpf: NO_LIBBPF=3D1  --> NO_LIBBPF=3D1 FEATURES_DUMP=3D/a/b/BU=
-ILD_TEST_FEATURE_DUMP
- # make_static: LDFLAGS=3D-static --> LDFLAGS=3D-static FEATURES_DUMP=3D/a/=
-b/BUILD_TEST_FEATURE_DUMP_STATIC
--$(foreach t,$(run),$(if $(findstring make_static,$(t)),\
-+$(foreach t,$(filter-out $(no_features_dump),$(run)),$(if $(findstring mak=
-e_static,$(t)),\
- 			$(eval $(t) :=3D $($(t)) FEATURES_DUMP=3D$(FEATURES_DUMP_FILE_STATIC)),=
-\
- 			$(eval $(t) :=3D $($(t)) FEATURES_DUMP=3D$(FEATURES_DUMP_FILE))))
- endif
---=20
-2.55.0.1032.g73a4cd73de-goog
-
+     Arnd
