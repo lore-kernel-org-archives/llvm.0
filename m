@@ -1,27 +1,27 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E1439B48D
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF0FB3AFB01
 	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 01:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789522223; cv=none; b=CBsx6LM5crtYNqOF7fN5/WR6hZZmaCe2Mf5eNg1mLIXFz6CptLiwQP0VsAV8Cx/xndd9Nx0CZiA1uEnt5B4dB0ZTHq2EF95TepZFJh92OBRiPfhEAH/jsl1ovRtV8ULijhrkbbOhGi8Neybd6aoFWPxYaYdV4ZSK3TXsaqKwmqw=
+	t=1789522224; cv=none; b=Ea4jVZSzM6pRypBJfiNR/DDOU/aAoEsK5VbvcyhnZokJ2LrMFi5/ZrFJQ9TOm5NWrXtbrSeicDyjkvlwem+t8Mq6SKLLDRuEJd8tTZ/KrpDtQ24S40obesx1ueKHP1ta1pC2vMMs5PX9Q6nthF5mZWyPfnX1nFfFG9t8L9ePAiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789522223; c=relaxed/simple;
-	bh=I8s3IRLIG6/0sh4VgQx4eFZKk5wCQhypjzz0IrTQSWc=;
+	s=arc-20240116; t=1789522224; c=relaxed/simple;
+	bh=WYqUr/mqKlO1HaSBmbRolJ9/ErEUm5dWB2ZH8l5XqpQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TXVKjkLhjFe5P5rB6V1TOWT904bIDTvmI/NiU2A2tG4qcigGE1Az76E5txkUJYUt7/ySRrjehqPO7v4cTayqLUN+litiV4laqSaItOM7V6Yin0thhYCjg2/Xyt9km3eMF4z7kVHz6ovheD6Xy3b9Nc44py1jE5keumWcK1FwL4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=chQ0dz4Y8rP5ML02/xwt49dxCbBGfewJQYz+9Iasqx30n8+Bm/DLGjktS0qOiBZc15zCK47aTg4o1WNqwOkrNrA006+R8n5rIhHtjptW1GXtyIp/R9LeKrkV3UOWurzpl9tvdgdiMl3k9hc7/HUPmw+KTsJyITAUROzTtrgliKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XJ2CXWzKHMTK
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:29:52 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XT6KBBzYQtpr
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:01 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id E57BE40595
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:05 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 056C24057B
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:06 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S13;
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S14;
 	Wed, 16 Sep 2026 09:30:05 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v6 11/26] perf arm-spe: Set default synthesized event period to 1
-Date: Wed, 16 Sep 2026 01:29:25 +0000
-Message-Id: <40acb41b77fcb4aef1efe720c651563043800ff3.1789521520.git.wutengda@huaweicloud.com>
+Subject: [PATCH v6 12/26] perf annotate-data: Extract invalidate_reg_state() as a common helper
+Date: Wed, 16 Sep 2026 01:29:26 +0000
+Message-Id: <a0278c0d5f01dc636823ffb4b5312a9ad7916d3e.1789521520.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1789521520.git.wutengda@huaweicloud.com>
 References: <cover.1789521520.git.wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S13
-X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7CFyxXFWkWw1kJryftFb_yoW5uw43pr
-	nFga4ftr1kJry8Kw17Ar4UuFy3tw4FvF1fGF1xGrWUAw1UKry8tr17try5Cr4UWr1Fyr12
-	qFyqgw1UGr1Utr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S14
+X-Coremail-Antispam: 1UD129KBjvJXoWxGr1rJry8CF1ktr17Kr4UJwb_yoW5XrW5p3
+	yDC347Gw43Gr4FgwnxJFW3XFyrur1fXa4Fk3sYy3Z2vFWIyrn3Jr92qFy5tFW7Xr93Gw12
+	yw1qgr4DJayxKaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUH2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -78,93 +78,73 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7CFyxXFWkWw1kJryftFb_yoW5uw43pr
 	U==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-When using --itrace=M for data type profiling on arm64, the 'Percent'
-values in perf annotate output are all zero:
+The invalidate_reg_state() function is currently static and only used
+within the x86 data type profiling implementation. To prepare for adding
+arm64 instruction tracking support, extract it as a common helper that
+can be shared across architectures.
 
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Percent     offset       size  field
-    0.00          0       0x10  struct mmu_gather_batch  {
-    0.00          0        0x8      struct mmu_gather_batch*    next;
-    0.00        0x8        0x4      unsigned int        nr;
-    0.00        0xc        0x4      unsigned int        max;
-    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
+No functional change intended.
 
-However, adding the -n option (show-nr-samples) reveals non-zero sample counts:
-
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Samples     offset       size  field
-      15          0       0x10  struct mmu_gather_batch  {
-      13          0        0x8      struct mmu_gather_batch*    next;
-       2        0x8        0x4      unsigned int        nr;
-       0        0xc        0x4      unsigned int        max;
-       0       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
-
-The root cause is that when --itrace is used with non-i/y options
-(e.g., --itrace=M), the period remains zero after parsing. During
-subsequent propagation, the final percentage calculation results
-in zero:
-
-   arm_spe_prep_sample()
-      sample->period = spe->synth_opts.period;
-
-   __hists__add_entry()
-      he.stat.period = sample->period;
-
-   annotated_data_type__update_samples()
-      h->period += period;
-      h->addr[offset].period += period;
-
-   print_annotated_data_value()
-      double percent = h->period ? (100.0 * period / h->period) : 0;
-
-Fix this by defaulting the period to 1 in the ARM SPE auxtrace info
-processing path if it is not explicitly specified. This ensures that
-downstream tool components can correctly accumulate periods and compute
-event percentages for all synthesized SPE events.
-
-With this fix applied, the result is as follows:
-
-Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
-============================================================================
- Percent     offset       size  field
-  100.00          0       0x10  struct mmu_gather_batch  {
-   86.67          0        0x8      struct mmu_gather_batch*    next;
-   13.33        0x8        0x4      unsigned int        nr;
-    0.00        0xc        0x4      unsigned int        max;
-    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
-                                };
-
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/arm-spe.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ tools/perf/util/annotate-arch/annotate-x86.c | 9 ---------
+ tools/perf/util/annotate-data.c              | 9 +++++++++
+ tools/perf/util/annotate-data.h              | 1 +
+ 3 files changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
-index ae7a5e9c3892..7805a1a98a89 100644
---- a/tools/perf/util/arm-spe.c
-+++ b/tools/perf/util/arm-spe.c
-@@ -2043,6 +2043,17 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
- 		err = -EINVAL;
- 		goto err_free_queues;
- 	}
+diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
+index 1acf31a2c759..aa381d25a63b 100644
+--- a/tools/perf/util/annotate-arch/annotate-x86.c
++++ b/tools/perf/util/annotate-arch/annotate-x86.c
+@@ -207,15 +207,6 @@ static int x86__cpuid_parse(struct arch *arch, const char *cpuid)
+ }
+ 
+ #ifdef HAVE_LIBDW_SUPPORT
+-static void invalidate_reg_state(struct type_state_reg *reg)
+-{
+-	reg->kind = TSR_KIND_INVALID;
+-	reg->ok = false;
+-	reg->lifetime_active = false;
+-	reg->lifetime_end = 0;
+-	reg->copied_from = -1;
+-}
+-
+ static void update_insn_state_x86(struct type_state *state,
+ 				  struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				  struct disasm_line *dl)
+diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+index aff60a630fd0..82003d2c240d 100644
+--- a/tools/perf/util/annotate-data.c
++++ b/tools/perf/util/annotate-data.c
+@@ -638,6 +638,15 @@ struct type_state_stack *findnew_stack_state(struct type_state *state,
+ 	return stack;
+ }
+ 
++void invalidate_reg_state(struct type_state_reg *reg)
++{
++	reg->kind = TSR_KIND_INVALID;
++	reg->ok = false;
++	reg->lifetime_active = false;
++	reg->lifetime_end = 0;
++	reg->copied_from = -1;
++}
 +
-+	/*
-+	 * When --itrace is used with non-i/y options (e.g., --itrace=M),
-+	 * the period remains 0 because the parser does not apply a default
-+	 * for those paths. However, synthesized SPE events such as memory
-+	 * accesses, TLB walks, and cache misses still require a valid
-+	 * sample->period to correctly accumulate periods and compute event
-+	 * percentages. Set it to 1 to ensure proper accounting.
-+	 */
-+	spe->synth_opts.period = spe->synth_opts.period ?: 1;
-+
- 	if (spe->synth_opts.period > 1)
- 		ui__warning("Arm SPE has a hardware-based sampling period.\n\n"
- 			    "--itrace periods > 1i downsample by an interval of n SPE samples rather than n instructions.\n");
+ /* Maintain a cache for quick global variable lookup */
+ struct global_var_entry {
+ 	struct rb_node node;
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index ca2096a9ee62..2af70e3cf73f 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -258,6 +258,7 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+ 				Dwarf_Die *type_die, int ptr_offset);
+ struct type_state_stack *find_stack_state(struct type_state *state,
+ 						int offset);
++void invalidate_reg_state(struct type_state_reg *reg);
+ bool get_global_var_type(Dwarf_Die *cu_die, struct data_loc_info *dloc,
+ 				u64 ip, u64 var_addr, int *var_offset,
+ 				Dwarf_Die *type_die);
 -- 
 2.34.1
 
