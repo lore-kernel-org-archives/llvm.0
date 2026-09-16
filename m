@@ -1,162 +1,127 @@
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi2-f10.google.com (mail-oi2-f10.google.com [74.125.231.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A6D501F4F
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 14:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B034FB9CC
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 14:08:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789567635; cv=none; b=PKGFIO3GtCDvGFvePalQPk9TWO/4opv5ZKGMfBNTWRJj6kWWKO1TA8XcdIWIhUJV0xiX0PmjxcRnpfLd0MAhHXE4a8HF2nHKTpMMJOM6ohLqq0jJ1HwYo311mEpCkOJmAqrR0xBpBCpa7qOqBLRlIyYoZaGDoty8f9o1nRJTIBs=
+	t=1789567710; cv=none; b=f63Td/4AzuarmSGekczcU5VzzMT1a72zrtXKoH8qR105xmnR6tkCbvSYN9YmgDXwy8Dpd1Dzid2iMEFL91oRX7fh4DTpIhNh/fRNOTHhrWzTsduAa2D6BhG+nVauIdxPWH/C6HwSpbvOvKmwgiyFYBp4vvt8jzJfHJ35qbcqo6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789567635; c=relaxed/simple;
-	bh=MGV0/UiveNiiGplXBn4NQhOcOJpFAI97dT32wObLO5Y=;
-	h=Date:Message-Id:To:Cc:Subject:From:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Fa5LlZNNkRTxB9nGqvVAQyAVcD/eTibNkkHusZCFhEbU3feh+Bdreq+nW2ToKi/1brwyjBrd0BAtkbYUrzrsFfiHB4ihC8nA/iTWARJvCAi2nbg0FJ1QJS9lJt903hNgW6CAYrQASj06bVUyZhdVv1WMscxxcaMej+NGs5nLiZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org; spf=pass smtp.mailfrom=flapping.org; dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b=deAxxL2q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=usEP3hhL; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=flapping.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flapping.org
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flapping.org header.i=@flapping.org header.b="deAxxL2q";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="usEP3hhL"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.phl.internal (Postfix) with ESMTP id 7F760EC00D8;
-	Wed, 16 Sep 2026 10:07:12 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Wed, 16 Sep 2026 10:07:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flapping.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1789567632;
-	 x=1789654032; bh=Be2o5M1d9xljHYCRtuNcdhNIc/2it5l8BznRP32aB+E=; b=
-	deAxxL2qOz3i3Nk280cG2SuqAGf0LERKkb+BKPxddkO2Uggd14mT0texUPBovaEQ
-	U9mx9skBudy7DVI5XFPEjTyPgiSnnY3sR3Dgvrv+O/16UiOhJpQbUmhbPwfxvaiO
-	Oo8i04bkxS0tZmGyjWNJu9Bcwo70WPSy1ft7ZIUoYMH8uk0L4LoPSdTu0aoGe2vT
-	Lf7CpUcdN1ceH8IqpBf9efrfO4dIN+Diz+X/7yX+ZNEJ/VFyZvUMjzyE7HZ+atjS
-	fGxoGE8k3Xdz6d0H9qxYVFk67YMdFy0QFZAFT9hpWLyg2iURMGbHhvG2swWodIrW
-	gSeGT8jxhQmJo+m5IjNkkA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1789567632; x=
-	1789654032; bh=Be2o5M1d9xljHYCRtuNcdhNIc/2it5l8BznRP32aB+E=; b=u
-	sEP3hhL2wPucrF8g4+DIgHERL4yiNo6RMR+5ANpjRjwcKSnlQ3R58oi1A8Wijzbh
-	Ted5NbSc2V2q7tpOYpaanPrrlGd68k0Y9e+rVTBpFozJl6r9Uqx5ky5uhS4C2RvU
-	ZNu8ggu04ssOSbPoKG5n0EzmPr8wvbdHcQCxfhUK9TaVtLPL5FJlhEQ8v0BryiIO
-	BlDytGlGtgF5TMO40x/a8WNJMBTdYRW9+UO60IyjEj4Fj/P/S9CCco4eL1wq6lXg
-	i2W4wwRkO7kjyQANlP0Z7Z2g8RMfEeGfeMUiQTruTI9GiaFAXte0R4sA+wOv3kDv
-	GVVnR/wmp/IXy9rjwK/kg==
-X-ME-Sender: <xms:jqKqaoYvkYmOg-UJ8gtDH_R0lw7h0d696x39Mb-7Rccp6FxNPpl1hg>
-    <xme:jqKqaipBCGaf_mmfFFtSl_0CdNJHhURYGZk1dNaV6O_B2pEre-0gVZ6Nj-lSD0mSm
-    1hZS9Zw2ah39vt68pOVLR8-3kN5SHricV5oniqmw8-oDieVE0PBRxAy>
-X-ME-Received: <xmr:jqKqavIPKJmgiv_-NDObdJrhZDHjGPG2qs4Yb5KxqLe2MhMfvE2nWxF4QNlO6MMR4R4qA_ki09qaAcSA5KlLseq3>
-X-ME-Proxy-Cause: dmFkZTE24MkS2sB+Rva6s7htY7NC2fdYq4QMZ8DzKsYXOVhrbIfPJcjFGqD8XD9xFUbpzK
-    T8v9MWKCaUPHHVWOdP0Ph3S9vCuzfzvk0UHCjo89hw+hw6yCwrmrMh2jlvplimDpg9mX5W
-    YhumFteGV+Z0jP5x0bAG7YSoLN5yg0xx9AhfBWUqkivBDuW0btCAIIIBjteGEFXAIH2CKq
-    3Xw31wPUpiXBNFegLxJKTpF8ooPmFeH/zfQPNCPE/Yf4R6lW7Xg2opzmbbNczjzmxaZtiG
-    e9if0bFXi+w0RveLM37dEX04I+oZmJ7BC5eGY934whHgua1iPsiYlsb2yu1pD7BcHl+FK8
-    utjsVakpuqQQ1RG/gYGD1xK4i0ykb5u26Z4udx1f4krPFu1gANlPh7NuZm4TWvxkFOUFOu
-    fpnbyfYjIcFoFu5thzd+Jb0sGTJoUqc4mcpwMeHSZMNRxKYuDcHaMv89MyAGNgY6sHT4Sw
-    qyXbRdqJLvhHyDb9CgVIVNWck0tpyr45fSXja/hGhvQXLvBC+9iaM2fNXLdVMh61RHhOsm
-    VTK4la9FOWe0yRop/SLJqUma9repZGnmq/JqZ70bv6cbSiFpGa3srvc8j2u5VstCXQNvas
-    ExDBOTIO2wiP+DNRmJXsFiTYl3RjyJ0E7U7O4Irjvs+6S4HOLmJSspbWI3vg
-X-ME-Proxy: <xmx:jqKqatZua1_v_2U74D2H352410OtvMkZOOHh_YB04rdXM_nF9yCfQQ>
-    <xmx:jqKqamoh3-SJPZp8WCuojHZxYa0aIPpJQMm8Uw9Iv3Eb17mkCzDDUA>
-    <xmx:jqKqagCV_cIiXEvUUKpEe4U4zmWLe76izJJea4qeCB-FLIJ863oOZA>
-    <xmx:jqKqakl3h2L8Fhaayd568-d0y1cvRztxIK7CK2FB1ZP2wMH0ZV5YeQ>
-    <xmx:kKKqahgpoohVyElPk3Kl7S5wiU-zRx3U0PwO4IVEUFMbPx0ga3aJWMbB>
-Feedback-ID: i51fe4b43:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 16 Sep 2026 10:07:02 -0400 (EDT)
-Date: Wed, 16 Sep 2026 23:06:58 +0900 (JST)
-Message-Id: <20260916.230658.2266384286281034372.tomo@flapping.org>
-To: mkchauras@gmail.com
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
- chleroy@kernel.org, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
- bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
- aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
- daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com,
- work@onurozkan.dev, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
- ynorov@nvidia.com, david@davidgow.net, joelagnelf@nvidia.com,
- fujita.tomonori@gmail.com, linkmauve@linkmauve.fr,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- rust-for-linux@vger.kernel.org, linux-riscv@lists.infradead.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH V5 2/2] rust: kernel: Add KUnit tests for powerpc
- ARCH_WARN_ASM bug table emission
-From: FUJITA Tomonori <tomo@flapping.org>
-In-Reply-To: <20260915090453.1227034-3-mkchauras@gmail.com>
-References: <20260915090453.1227034-1-mkchauras@gmail.com>
-	<20260915090453.1227034-3-mkchauras@gmail.com>
+	s=arc-20240116; t=1789567710; c=relaxed/simple;
+	bh=qn7QE2Vhw0BaRhEZiS9hTTSjPpHUeCBsathFgkcuJMg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=FNb0Lgj9/9gqZiNFVxIvzJp3mmJ1Xm1OtFikNnjxi/mjsoZEmt3T+gLVUyFIQI2lZOWSxDkHVff1+RZBYCUgC65fLJaJ2ucnMLpSdN1Z6Ze1wdVzV7YUIWzUYMUboulZjZlUsCBJocgmt/lu6AqDiZhetCYMKh2GkluDXOeFi6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=74.125.231.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oi2-f10.google.com with SMTP id 5614622812f47-4b94bb43008so924859b6e.0
+        for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 07:08:27 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789567707; x=1790172507;
+        h=content-type:to:from:subject:message-id:in-reply-to:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=htUCy0q7FG4YSd/XI01PpxHhl9O1HtPtmWa1pKHUGLE=;
+        b=AkpdsGBR/STNF5p3Kd0eZEr5XvjV/rQsSeWnbPlHNub3XElMJMMRiA1d9grMPb4Yy9
+         M6dfb437a2iDSnmGXdVhduVSBwUKOV4dMgJvyp5k2u5dkfCO3FXy0r2v7lGJZLF90vgf
+         DfCTOugdHbhcQfo1zS6Nf4VUxHq+Fppgb3HBVLP1f+ckO+d27S0tfS0P3VIxs+/Aehp4
+         gk4UEQw82perU1zM1vgcmzRyCwbgpAtBvkMgpKHt9J0o/bdy9i9iOaFQsdMaF2TKbaw1
+         PAnbl/WJ92m2OhxF2kjK/4uCyej4zUj6cLGa+qLQPe0rKzQ4EFLjIKlxKYlcO+K/9XRD
+         jwwA==
+X-Forwarded-Encrypted: i=1; AKwUvBx5uB8fq2dwFS8XK3zXxQVzcNiBatnUcbJZZl0pLyUTELgK3+JtjnMjcAZUYZqaURpowJGY@lists.linux.dev
+X-Gm-Message-State: AFuF++nd0xuki6G5mfnKaHoR/feGVi/Ny8zzbTzGBe4UcC2kSWbFtwVg
+	DZrA9B58nH+2OPFourHIlvDFNLqclm98hocpVP/Q5zKd+8v32pFGMd0DDG3JMoBWtQvKCo/yD1T
+	6acn57pZXUi3KAeLEYnD7sKFrOirXotJYthOGMCbLG44tIG26d1+h2X+V7g4=
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=iso-2022-jp
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+X-Received: by 2002:a05:6820:81c9:b0:6be:4eb3:e1c0 with SMTP id
+ 006d021491bc7-6c7d3fe744bmr2517440eaf.45.1789567706922; Wed, 16 Sep 2026
+ 07:08:26 -0700 (PDT)
+Date: Wed, 16 Sep 2026 07:08:26 -0700
+In-Reply-To: <6936812a.a70a0220.38f243.0090.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6aaaa2da.86093f18.33004f.0001.GAE@google.com>
+Subject: Re: [syzbot] [kvm?] BUG: sleeping function called from invalid
+ context in kvm_mmu_notifier_invalidate_range_start
+From: syzbot <syzbot+c3178b6b512446632bac@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, bigeasy@linutronix.de, dwmw2@infradead.org, 
+	dwmw@amazon.co.uk, kvm@vger.kernel.org, liam.howlett@oracle.com, 
+	liam@infradead.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-rt-devel@lists.linux.dev, ljs@kernel.org, lkp@intel.com, 
+	llvm@lists.linux.dev, lorenzo.stoakes@oracle.com, me@brighamcampbell.com, 
+	mhocko@suse.com, nogikh@google.com, oe-kbuild-all@lists.linux.dev, 
+	pbonzini@redhat.com, rientjes@google.com, rppt@kernel.org, seanjc@google.com, 
+	shaikhkamal2012@gmail.com, shakeel.butt@linux.dev, skhan@linuxfoundation.org, 
+	surenb@google.com, syzkaller-bugs@googlegroups.com, vbabka@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 15 Sep 2026 14:34:53 +0530
-"Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com> wrote:
+syzbot has found a reproducer for the following issue on:
 
-> Verify that the __bug_table entry emitted by ARCH_WARN_ASM has a correct
-> bug_addr displacement ― i.e. the '1b' label reference in _EMIT_BUG_ENTRY
-> resolves to the trap instruction ― by calling find_bug() with the exact
-> virtual address of the twi instruction, mirroring what the real powerpc
-> trap handler does.
-> 
-> The trap address is captured at link time via a .dc.a 1b relocation placed
-> in .data by the global_asm! block. global_asm! is used instead of asm!
-> because LLVM eliminates asm! blocks in dead branches; global_asm! is
-> file-scope and always emitted. BUG_KUNIT_TRAP_ADDR is defined as a .global
-> symbol directly on the .dc.a word so the linker relocation lands on it ―
-> a Rust static initialized to zero would end up in BSS where relocations are
-> not applied.
-> 
-> .dc.a emits a pointer-width word (4 bytes on ppc32, 8 bytes on ppc64),
-> so BUG_KUNIT_TRAP_ADDR is declared as usize on the Rust side, making the
-> tests correct on both ppc32 and ppc64. The global_asm! block is split into
-> two cfg-gated variants (CONFIG_PPC64 / !CONFIG_PPC64) to select the right
-> .balign since concat!() only accepts literals.
-> 
-> Five tests are included in the rust_kernel_bug_powerpc suite:
-> 
->   bug_entry_found         - find_bug() returns non-NULL for the trap address,
->                             proving the bug_addr displacement is correct
->   bug_entry_is_warning    - the emitted entry has BUGFLAG_WARNING set
->   bug_entry_file          - bug_get_file_line() returns the correct source
->                             file (requires CONFIG_DEBUG_BUGVERBOSE)
->   bug_entry_line          - the recorded line number is non-zero, confirming
->                             the {line} operand was substituted correctly
->                             (requires CONFIG_DEBUG_BUGVERBOSE)
->   bug_entry_addr_is_in_text - kernel_text_address() confirms the trap address
->                             lies in kernel text, not data or zero
-> 
-> The suite is named rust_kernel_bug_powerpc and the Kconfig option
-> CONFIG_RUST_BUG_POWERPC_KUNIT_TEST depends on PPC && GENERIC_BUG,
-> covering both ppc32 and ppc64.
-> 
-> Tested on ppc64le (ltcfujiaac-lp3, 7.3.0-rc1+): pass:5 fail:0 skip:0.
-> Tested on ppc32 Book3S (QEMU mac99 G4, chrp32_defconfig): pass:5 fail:0 skip:0.
-> Tested on ppc64le (QEMU pseries, pseries_le_defconfig): pass:5 fail:0 skip:0.
-> 
-> Signed-off-by: Mukesh Kumar Chaurasiya (IBM) <mkchauras@gmail.com>
-> ---
->  rust/kernel/Kconfig.test |  13 +++
->  rust/kernel/bug.rs       | 209 +++++++++++++++++++++++++++++++++++++++
->  2 files changed, 222 insertions(+)
+HEAD commit:    9b87fdc9af2f Merge tag 'sched_ext-for-7.3-rc3-fixes' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16f46bf9580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b454dc6b1b7acd30
+dashboard link: https://syzkaller.appspot.com/bug?extid=c3178b6b512446632bac
+compiler:       Debian clang version 22.1.8 (++20260613092233+e80beda6e255-1~exp1~20260613092250.77), Debian LLD 22.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12f23925580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f23925580000
 
-I think that testing warn_on!, in particular that the right address is
-put in the bug entry, is a good idea.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d9d20c79bd3c/disk-9b87fdc9.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2a6a8f176798/vmlinux-9b87fdc9.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/db8864d1c812/bzImage-9b87fdc9.xz
 
-I'd prefer such a test to work on every architecture. This one depends on
-details of powerpc's ARCH_WARN_ASM, such as the '1b' label. KUnit has a
-warning suppression API. A test can call warn_on! inside a suppression
-block and check that one warning was counted. The counter is only
-incremented after find_bug() found the entry, so a wrong address is caught
-too.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c3178b6b512446632bac@syzkaller.appspotmail.com
 
-I'll send a patch for that shortly.
+BUG: sleeping function called from invalid context at kernel/locking/spinlock_rt.c:48
+in_atomic(): 0, irqs_disabled(): 0, non_block: 1, pid: 38, name: oom_reaper
+preempt_count: 0, expected: 0
+RCU nest depth: 0, expected: 0
+locks held by oom_reaper/38: 4, last CPU#1:
+ #0: ffff8880370147b0 (&mm->mmap_lock){++++}-{4:4}, at: mmap_read_trylock include/linux/mmap_lock.h:619 [inline]
+ #0: ffff8880370147b0 (&mm->mmap_lock){++++}-{4:4}, at: oom_reap_task_mm mm/oom_kill.c:566 [inline]
+ #0: ffff8880370147b0 (&mm->mmap_lock){++++}-{4:4}, at: oom_reap_task mm/oom_kill.c:609 [inline]
+ #0: ffff8880370147b0 (&mm->mmap_lock){++++}-{4:4}, at: oom_reaper+0x2b4/0xc10 mm/oom_kill.c:650
+ #1: ffffffff8e30af80 (mmu_notifier_invalidate_range_start){+.+.}-{0:0}, at: mmu_notifier_invalidate_range_start_nonblock include/linux/mmu_notifier.h:495 [inline]
+ #1: ffffffff8e30af80 (mmu_notifier_invalidate_range_start){+.+.}-{0:0}, at: zap_vma_for_reaping+0x193/0x380 mm/memory.c:2266
+ #2: ffffffff8e30afd8 (srcu){.+.+}-{0:0}, at: srcu_lock_acquire include/linux/srcu.h:198 [inline]
+ #2: ffffffff8e30afd8 (srcu){.+.+}-{0:0}, at: srcu_read_lock include/linux/srcu.h:305 [inline]
+ #2: ffffffff8e30afd8 (srcu){.+.+}-{0:0}, at: mn_hlist_invalidate_range_start mm/mmu_notifier.c:515 [inline]
+ #2: ffffffff8e30afd8 (srcu){.+.+}-{0:0}, at: __mmu_notifier_invalidate_range_start+0x5c6/0xb80 mm/mmu_notifier.c:580
+ #3: ffff8880465ad560 (&kvm->mn_invalidate_lock){+.+.}-{3:3}, at: spin_lock include/linux/spinlock_rt.h:45 [inline]
+ #3: ffff8880465ad560 (&kvm->mn_invalidate_lock){+.+.}-{3:3}, at: kvm_mmu_notifier_invalidate_range_start+0x1b6/0xc10 virt/kvm/kvm_main.c:745
+CPU: 1 UID: 0 PID: 38 Comm: oom_reaper Not tainted syzkaller #0 PREEMPT_{RT,(full)} 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/24/2026
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ __might_resched+0x31b/0x470 kernel/sched/core.c:9257
+ __rt_spin_lock kernel/locking/spinlock_rt.c:48 [inline]
+ rt_spin_lock+0xc2/0x400 kernel/locking/spinlock_rt.c:57
+ spin_lock include/linux/spinlock_rt.h:45 [inline]
+ kvm_mmu_notifier_invalidate_range_start+0x1b6/0xc10 virt/kvm/kvm_main.c:745
+ mn_hlist_invalidate_range_start mm/mmu_notifier.c:525 [inline]
+ __mmu_notifier_invalidate_range_start+0x709/0xb80 mm/mmu_notifier.c:580
+ mmu_notifier_invalidate_range_start_nonblock include/linux/mmu_notifier.h:498 [inline]
+ zap_vma_for_reaping+0x1f7/0x380 mm/memory.c:2266
+ __oom_reap_task_mm mm/oom_kill.c:548 [inline]
+ oom_reap_task_mm mm/oom_kill.c:585 [inline]
+ oom_reap_task mm/oom_kill.c:609 [inline]
+ oom_reaper+0x519/0xc10 mm/oom_kill.c:650
+ kthread+0x38b/0x470 kernel/kthread.c:436
+ ret_from_fork+0x514/0xb70 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+ </TASK>
+oom_reaper: reaped process 8617 (syz.2.1028), now anon-rss:0kB, file-rss:72kB, shmem-rss:0kB
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
