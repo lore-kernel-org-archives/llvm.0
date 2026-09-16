@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025823AFD11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D71E03A8723
 	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 01:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789522226; cv=none; b=fP6X/l7cggZ+mwcOU4ZRQbGfwMdNTpugWRD2jWIM0vgvYeKyluIieSt+ZrS/tfrPD0tUZnFYto57+XUYfoXyy+0pMNKI0QjLgO5fE6F8olwvRTlfTDUA4ksoaUmR0VDEkm6wOfJglfH7HZgyOul4x73CyM2m8vbLkSDbHzpHlHc=
+	t=1789522226; cv=none; b=M2SqxnjtCz3LKx5Hbt8YEBflZiHXz5PX/ilGeooriFDQP0IQyrhA0DSvCfpxG9Z38AeIhlYAe6gQ57HiaamksYBZSQShdrqgfPvu2+CqLZiWbzOvcImzDVOG2QShVKfPmWaI0ktp/PnGCPwj0ytBJ8oBpf50O2k3TxsrQRNvKdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789522226; c=relaxed/simple;
-	bh=gu/irH4xHKyQrTYNpvzC0VdmiHz2BuMy+VGA/tohtYw=;
+	bh=Utqhbkv2WIOYhPGlzpt4T6nqgHcQgx159GQ/E5eyndA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RlpdR/x+l0oQPhH79H8czmXpH2NZsVUpwUm+MsMUNylxQ9mogtOsFv8UL0unSjaSbmXuw8T7tVznnzxdD7CB77tM3GgzaR6yOIbdNaGmjBMKeWyjLjkJKQbqlnIxOKsVw6kHzc9Zir7qactF3dT9K16qjRuU2K8fxfuo0XgGfzM=
+	 MIME-Version; b=cOAnbpsBcOvJIRk9oJVFag8LaoNLh5eokJ/P3nQBP6VvVRSLh3Vm67N1fp08uGA3KMrqp5jy5aAS8ruz7FzvAHZD0ChYIlBC+F5m4gedav7FpcOoiMS1AD/9KSbEGj5VEgreZV6mEbtg0SC3OEzRtB8VoAqa3Fh5Cq052IVVXcM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XK0CnszKHMT9
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:29:53 +0800 (CST)
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XJ6HN5zKHMTc
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:29:52 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id A5A3140570
+	by mail.maildlp.com (Postfix) with ESMTP id 8119B40561
 	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:06 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S21;
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S19;
 	Wed, 16 Sep 2026 09:30:06 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v6 19/26] perf annotate-data: Track imm_value for stack variables
-Date: Wed, 16 Sep 2026 01:29:33 +0000
-Message-Id: <8b29a11ea56bdc9973e3ab65d6f5ebdea0927bfa.1789521520.git.wutengda@huaweicloud.com>
+Subject: [PATCH v6 17/26] perf annotate-arm64: Support store instruction tracking
+Date: Wed, 16 Sep 2026 01:29:31 +0000
+Message-Id: <5f49abec1847e5e684ce4ae4462f06857cdbea89.1789521520.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1789521520.git.wutengda@huaweicloud.com>
 References: <cover.1789521520.git.wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S21
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF18uw17Jw1DGFyUGFW8Crg_yoW7JF4xpr
-	WDWFy7W3W7Wr4IqrsxJF4UXr93Gws2gF1Fk3s0qFnayFyxtr1fG3s7tFW5tF47Cryvyw17
-	Jwn0kr4DXw47KaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S19
+X-Coremail-Antispam: 1UD129KBjvJXoWxXryUtF13Jr17XFykCFyxAFb_yoW5JFWDpr
+	Z8Cw1YgF4Utr4I9an3XF4I9r9xua1fKws0kr9Fy397AF42yrn3trZ3Kay3tFW8JrZ3uw1Y
+	qF4qkr4DGayjyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUH2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -78,137 +78,66 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGF18uw17Jw1DGFyUGFW8Crg_yoW7JF4xpr
 	U==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Currently, imm_value is tracked in registers but dropped when values
-are saved to or loaded from stack variables during type profiling.
-If a register of type TSR_KIND_CONST is stored to the stack, its value
-will be lost.
+Extend update_insn_state_arm64() to handle standard store instructions
+(str, stur, stlr, stp). Exclusive stores (e.g., stxr, stxp) are omitted
+as they exhibit different operand semantics.
 
-Add an imm_value field to struct type_state_stack and update
-set_stack_state() and findnew_stack_state() to accept and preserve the
-immediate value when updating stack state.
+Unlike load instructions, a store instruction sets a value in the struct
+within the memory where the destination register resides, and does not
+alter its type. Therefore, no processing is required for the transfer.
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+The only point to note is that store instructions support pre-index and
+post-index addressing modes, so calling adjust_reg_index_state() is still
+necessary to handle their addressing.
+
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-arch/annotate-x86.c |  8 ++++++--
- tools/perf/util/annotate-data.c              | 13 +++++++------
- tools/perf/util/annotate-data.h              |  5 +++--
- 3 files changed, 16 insertions(+), 10 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-index f5e40cef08ab..21729e153fa0 100644
---- a/tools/perf/util/annotate-arch/annotate-x86.c
-+++ b/tools/perf/util/annotate-arch/annotate-x86.c
-@@ -591,6 +591,7 @@ static void update_insn_state_x86(struct type_state *state,
- 				tsr->type = stack->type;
- 				tsr->kind = stack->kind;
- 				tsr->offset = stack->ptr_offset;
-+				tsr->imm_value = stack->imm_value;
- 				tsr->ok = true;
- 			} else if (die_get_member_type(&stack->type,
- 						       offset - stack->offset,
-@@ -598,6 +599,7 @@ static void update_insn_state_x86(struct type_state *state,
- 				tsr->type = type_die;
- 				tsr->kind = TSR_KIND_TYPE;
- 				tsr->offset = 0;
-+				tsr->imm_value = 0;
- 				tsr->ok = true;
- 			} else {
- 				invalidate_reg_state(tsr);
-@@ -773,10 +775,12 @@ static void update_insn_state_x86(struct type_state *state,
- 				 */
- 				if (!stack->compound)
- 					set_stack_state(stack, offset, tsr->kind,
--							&tsr->type, tsr->offset);
-+							&tsr->type, tsr->offset,
-+							tsr->imm_value);
- 			} else {
- 				findnew_stack_state(state, offset, tsr->kind,
--						    &tsr->type, tsr->offset);
-+						    &tsr->type, tsr->offset,
-+						    tsr->imm_value);
- 			}
- 
- 			if (dst->reg1 == fbreg) {
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index d9f0bfd3f0a7..8bd9b6370277 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -594,7 +594,7 @@ struct type_state_stack *find_stack_state(struct type_state *state,
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index 11b2bdceaacb..a72c7703dd6b 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -659,6 +659,20 @@ static void update_load_insn_state(struct type_state *state,
+ 	adjust_reg_index_state(state, dloc, dl, src);
  }
  
- void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
--			    Dwarf_Die *type_die, int ptr_offset)
-+			    Dwarf_Die *type_die, int ptr_offset, u64 imm_value)
- {
- 	int tag;
- 	Dwarf_Word size;
-@@ -611,8 +611,9 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- 	stack->offset = offset;
- 	stack->ptr_offset = ptr_offset;
- 	stack->kind = kind;
-+	stack->imm_value = imm_value;
++/*
++ * Match standard store variants (str, stur, stlr, stp) that follow
++ * straightforward store semantics: source registers on the left (read-only)
++ * and memory target on the right. Excludes exclusive stores (stxr, stxp, etc.)
++ * which have status/result register side effects.
++ */
++static bool is_standard_store_insn(const char *name)
++{
++	return !strncmp(name, "str", 3)  ||  /* str, strb, strh */
++	       !strncmp(name, "stur", 4) ||  /* stur, sturb, sturh */
++	       !strncmp(name, "stlr", 4) ||  /* stlr, stlrb, stlrh */
++	       !strncmp(name, "stp", 3);     /* stp */
++}
++
+ static void update_insn_state_arm64(struct type_state *state,
+ 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				    struct disasm_line *dl)
+@@ -740,6 +754,17 @@ static void update_insn_state_arm64(struct type_state *state,
+ 	/* Memory to register transfers */
+ 	if (is_standard_load_insn(dl->ins.name))
+ 		update_load_insn_state(state, dloc, dl, src, dst);
++	/* Register to memory transfers */
++	else if (is_standard_store_insn(dl->ins.name)) {
++		/*
++		 * Ignore transfers since it'd set a value in a struct
++		 * and won't change the type.
++		 *
++		 * Needs to update the pre-index and post-index addressing
++		 * modes for the destination register.
++		 */
++		adjust_reg_index_state(state, dloc, dl, dst);
++	}
+ }
+ #endif
  
--	if (kind == TSR_KIND_POINTER) {
-+	if (kind == TSR_KIND_POINTER || kind == TSR_KIND_CONST) {
- 		stack->compound = false;
- 		return;
- 	}
-@@ -633,18 +634,18 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- struct type_state_stack *findnew_stack_state(struct type_state *state,
- 						    int offset, u8 kind,
- 						    Dwarf_Die *type_die,
--						    int ptr_offset)
-+						    int ptr_offset, u64 imm_value)
- {
- 	struct type_state_stack *stack = find_stack_state(state, offset);
- 
- 	if (stack) {
--		set_stack_state(stack, offset, kind, type_die, ptr_offset);
-+		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
- 		return stack;
- 	}
- 
- 	stack = malloc(sizeof(*stack));
- 	if (stack) {
--		set_stack_state(stack, offset, kind, type_die, ptr_offset);
-+		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
- 		list_add(&stack->list, &state->stack_vars);
- 	}
- 	return stack;
-@@ -939,7 +940,7 @@ static void update_var_state(struct type_state *state, struct data_loc_info *dlo
- 				continue;
- 
- 			findnew_stack_state(state, offset, TSR_KIND_TYPE,
--					    &mem_die, /*ptr_offset=*/0);
-+					    &mem_die, /*ptr_offset=*/0, /*imm_value=*/0);
- 
- 			if (var->reg == state->stack_reg) {
- 				pr_debug_dtp("var [%"PRIx64"] %#x(reg%d)",
-diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index 62efdcd8a79a..de92459e8502 100644
---- a/tools/perf/util/annotate-data.h
-+++ b/tools/perf/util/annotate-data.h
-@@ -199,6 +199,7 @@ struct type_state_stack {
- 	int size;
- 	bool compound;
- 	u8 kind;
-+	u64 imm_value;
- };
- 
- /*
-@@ -253,9 +254,9 @@ bool has_reg_type(struct type_state *state, int reg);
- struct type_state_stack *findnew_stack_state(struct type_state *state,
- 						int offset, u8 kind,
- 						Dwarf_Die *type_die,
--						int ptr_offset);
-+						int ptr_offset, u64 imm_value);
- void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
--				Dwarf_Die *type_die, int ptr_offset);
-+				Dwarf_Die *type_die, int ptr_offset, u64 imm_value);
- struct type_state_stack *find_stack_state(struct type_state *state,
- 						int offset);
- void invalidate_reg_state(struct type_state_reg *reg);
 -- 
 2.34.1
 
