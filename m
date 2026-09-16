@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-45.mta0.migadu.com [91.218.175.45])
+Received: from mta0.migadu.com (out-84.mta0.migadu.com [91.218.175.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C633F6C3B
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 19:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D40415B60
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 19:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789586421; cv=none; b=prHDrPzceT9t5vGZz02vCyQ9V8u7QFysJtn6Q9RTOzB731VPu4tRDVjOyBxvINX2SwS7PdJfq56B/TDcA716Napd69AuEmmEimh0HG4NP8pAarRyA3XZNMTxowpyY3n5CTukiRI8GCYWIv9QrClUcfhrsbGW3ElPIUIqrOwb5Yw=
+	t=1789586536; cv=none; b=RBWLPkX0ncbzS2gqgFBdNQrgzaJ1ERGBWWdLyEEd8SyWJCsJYKpZBeA59eCRrZ3vnHO0MU/SceCEIICZX1ZrnIasT2QjdK/C5Lpn8V+3ZVTLWcez37gFM9D8tPMZyMYQ3DYZUlNwHErR3BE9r4BRylnES3/KPPC1yQWc44Ew+Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789586421; c=relaxed/simple;
+	s=arc-20240116; t=1789586536; c=relaxed/simple;
 	bh=HSHq58jeCE+eWcX3YxLp68lXMyOW8zWkwqkyWzBmR1k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=un3oDFAz8NcbkhSO+xnjGt7zLledd7aovRJhU6J9UepBlLvNq8B18Dn966eHKvR6tScdwYI6JcCK2fM459DCiQhxlVHbdMG6gdm98fJbCS9WWa2n1Uw4yWWxbNVSyZ+w1eEfwaxVpS0hBWuwUFQrJk8NNjWgJhLsnKr6UL5AU18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Btp4KmeE; arc=none smtp.client-ip=91.218.175.45
+	 In-Reply-To:Content-Type; b=f8weCTwwGe2kiVM6U+dezXsDii3GPTUQwePJB1nhjyzyslyiGv4z41TCb1aQQ7Vxr3UXX3y4ap30Vn/LRx1qNr/zMxo8/N+cbplpGARibABareEr10TkGWOra7+10IjVacQ5bDTcbOVsNBhb/yWiMfYKpChpA8trnXqorloDnpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GXXcFXWe; arc=none smtp.client-ip=91.218.175.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Btp4KmeE"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GXXcFXWe"
 X-Envelope-To: llvm@lists.linux.dev
 DKIM-Signature: a=rsa-sha256; bh=HSHq58jeCE+eWcX3YxLp68lXMyOW8zWkwqkyWzBmR1k=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1789586414; v=1; x=1790191214;
- b=Btp4KmeEqzgbNb8NpGB8YjvPCzprYPSxDSsJV+3c+j30Uic8QlFN5Cpn/HhFwrRzKTFyHsZy
- D5aoPeD2GNCT870aPl2JXuWTtSoFKVvZuvPEtofwqAIcS2mi/Ms2llGsdUbuu6CEXhSPJwe7qLf
- tWZvYHLPvFdlt0nn3kGBWS3E=
+ t=1789586522; v=1; x=1790191322;
+ b=GXXcFXWelURSr8/BhKm7ReOXZuRz9erDEXlZadDo7fgujuVSDeP0LOxHlJR01IL8hsITPQVT
+ GVklW0aPIxtByfbWFhsfvuGZOwT3539xwP9y67sJmPzwosEh8nV9vqEVbcY3J5mHTQnqVPTlyy/
+ 2+lYYKexQ+dgpxd+gd8tca1o=
 X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id f6a5b7a9c2e752b6;
-	Wed, 16 Sep 2026 19:20:13 +0000
-X-Mizu-Trace-ID: f6a5b7a9c2e752b6
+Received: by smtp.migadu.com with ESMTPS id 87e3b1ee61cdc0c3;
+	Wed, 16 Sep 2026 19:22:02 +0000
+X-Mizu-Trace-ID: 87e3b1ee61cdc0c3
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <e426a91d-2364-4c30-a242-856c27db055a@linux.dev>
-Date: Wed, 16 Sep 2026 20:20:10 +0100
+Message-ID: <874fc50f-4764-433f-8a87-595bc70c4559@linux.dev>
+Date: Wed, 16 Sep 2026 20:22:01 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
