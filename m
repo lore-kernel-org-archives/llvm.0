@@ -1,303 +1,108 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-45.mta0.migadu.com [91.218.175.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8150495AD6;
-	Wed, 16 Sep 2026 19:08:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C633F6C3B
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 19:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789585707; cv=none; b=hcKG4cq31HIyN4Ttg5fw52XH5X4sBu/a0A5dId3JeyHO8svJmVllx8TpnN6WByHkTxGWPcSI1SpPZsR8niMvjdU/NtQQujGXuq3K37b4LOJsWA00yR1OqKtVNsrec9OUopd64mJr94ltEgPsWkBnh0CEx59ZfRnWgt29H+ubCz8=
+	t=1789586421; cv=none; b=prHDrPzceT9t5vGZz02vCyQ9V8u7QFysJtn6Q9RTOzB731VPu4tRDVjOyBxvINX2SwS7PdJfq56B/TDcA716Napd69AuEmmEimh0HG4NP8pAarRyA3XZNMTxowpyY3n5CTukiRI8GCYWIv9QrClUcfhrsbGW3ElPIUIqrOwb5Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789585707; c=relaxed/simple;
-	bh=ggdrD2+64rbkN0/PbRVpNh223xHooPMBOSfhrhR20ac=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aNUUJ2mTZAIXL1CzCJtMfOQ4SPnMv3jdlx7WIWgVWwkKQQ9JI6TdSgySSH1bTNCaB3fu8RadRps+S0s28BjXjlaJq5JlHGnB0gx98Ai7ph9fudoYxnw+Tbmyg8VY2Eodb/VcNK9Fd7pUhUoqC28wLTFxjbaWtoisMHhHyXNnwK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YHN5adG3; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789586421; c=relaxed/simple;
+	bh=HSHq58jeCE+eWcX3YxLp68lXMyOW8zWkwqkyWzBmR1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=un3oDFAz8NcbkhSO+xnjGt7zLledd7aovRJhU6J9UepBlLvNq8B18Dn966eHKvR6tScdwYI6JcCK2fM459DCiQhxlVHbdMG6gdm98fJbCS9WWa2n1Uw4yWWxbNVSyZ+w1eEfwaxVpS0hBWuwUFQrJk8NNjWgJhLsnKr6UL5AU18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Btp4KmeE; arc=none smtp.client-ip=91.218.175.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YHN5adG3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789585690; x=1821121690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ggdrD2+64rbkN0/PbRVpNh223xHooPMBOSfhrhR20ac=;
-  b=YHN5adG3QzBYYnd2Zz6Kc7CzMtkaF54qQJrR+RosomLVLP3uPk4ClvTC
-   uoHwkTQg1VnJGe2qsjorA0Qx1BX+a4Ih7S2sQWTLWIDTl57NgcRdrMEM2
-   8fWGe3Cd7wxJe2O+Tzlo/2Vyu3Y0WRrgvyMA20IXx4OjdSNsUX/B+JUrX
-   8wCLOz84KcW/J9Iv2LZ0GPT36a2afQV5VG0REVSwwOhB/UtcAfmllZ60L
-   J00uzW6qiHnto8+IuBLQYqj5b4jP87LqkBXbOpZcRN8dmJsfXHr0JHFH2
-   deS5psJ0SJAKqNX1UWMnSyRRA4EpR08B+bakROMvwHRE1ogj9x6D1W2O3
-   A==;
-X-CSE-ConnectionGUID: CV2Ar7tnTvCGP6wj8BgMCg==
-X-CSE-MsgGUID: W+jOLRJTR5iP3IWBx2wdFA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="100636765"
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="100636765"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Sep 2026 12:08:05 -0700
-X-CSE-ConnectionGUID: 92h/GqYsS+6HunwQ8Ki3Ng==
-X-CSE-MsgGUID: OyHAcUuyT7Cl3f5c/lrp7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
-   d="scan'208";a="270795430"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 16 Sep 2026 12:08:03 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x6uzA-000000006c9-0m3c;
-	Wed, 16 Sep 2026 19:08:00 +0000
-Date: Thu, 17 Sep 2026 03:07:47 +0800
-From: kernel test robot <lkp@intel.com>
-To: Guangshuo Li <lgs201920130244@gmail.com>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol@kernel.org>,
-	=?iso-8859-1?Q?St=E9phane?= Grosjean <s.grosjean@peak-system.fr>,
-	Kees Cook <kees@kernel.org>,
-	Wolfgang Grandegger <wg@grandegger.com>, linux-can@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] can: peak_pci: fix PCIeC cleanup on probe failure
-Message-ID: <202609170334.HGvXQS1L-lkp@intel.com>
-References: <20260915173157.2510375-1-lgs201920130244@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Btp4KmeE"
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=HSHq58jeCE+eWcX3YxLp68lXMyOW8zWkwqkyWzBmR1k=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1789586414; v=1; x=1790191214;
+ b=Btp4KmeEqzgbNb8NpGB8YjvPCzprYPSxDSsJV+3c+j30Uic8QlFN5Cpn/HhFwrRzKTFyHsZy
+ D5aoPeD2GNCT870aPl2JXuWTtSoFKVvZuvPEtofwqAIcS2mi/Ms2llGsdUbuu6CEXhSPJwe7qLf
+ tWZvYHLPvFdlt0nn3kGBWS3E=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by smtp.migadu.com with ESMTPS id f6a5b7a9c2e752b6;
+	Wed, 16 Sep 2026 19:20:13 +0000
+X-Mizu-Trace-ID: f6a5b7a9c2e752b6
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e426a91d-2364-4c30-a242-856c27db055a@linux.dev>
+Date: Wed, 16 Sep 2026 20:20:10 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260915173157.2510375-1-lgs201920130244@gmail.com>
-
-Hi Guangshuo,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on mkl-can-next/testing]
-[also build test WARNING on linus/master v7.3-rc3 next-20260914]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Guangshuo-Li/can-peak_pci-fix-PCIeC-cleanup-on-probe-failure/20260916-013157
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkl/linux-can-next.git testing
-patch link:    https://lore.kernel.org/r/20260915173157.2510375-1-lgs201920130244%40gmail.com
-patch subject: [PATCH] can: peak_pci: fix PCIeC cleanup on probe failure
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20260917/202609170334.HGvXQS1L-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260917/202609170334.HGvXQS1L-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609170334.HGvXQS1L-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/net/can/sja1000/peak_pci.c:702:2: warning: misleading indentation; statement is not part of the previous 'if' [-Wmisleading-indentation]
-     702 |         pci_set_drvdata(pdev, chan->prev_dev);
-         |         ^
-   drivers/net/can/sja1000/peak_pci.c:700:1: note: previous statement is here
-     700 | if (!chan->prev_dev && chan->pciec_card)
-         | ^
-   1 warning generated.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpf: local_storage: avoid redundant IRQ save on bucket
+ locks
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>, ast@kernel.org,
+ andrii@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, emil@etsalapatis.com, ihor.solodrai@linux.dev,
+ jolsa@kernel.org, justinstitt@google.com, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, martin.lau@linux.dev, morbo@google.com,
+ nathan@kernel.org, ndesaulniers@google.com, song@kernel.org,
+ yonghong.song@linux.dev, yatsenko@meta.com, kernel-team@meta.com,
+ Amery Hung <ameryhung@gmail.com>
+References: <20260916181001.201787-1-usama.arif@linux.dev>
+ <DLGY7IFP8MOG.YFISSWRDGKR3@gmail.com>
+Content-Language: en-US
+From: Usama Arif <usama.arif@linux.dev>
+In-Reply-To: <DLGY7IFP8MOG.YFISSWRDGKR3@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
 
-vim +/if +702 drivers/net/can/sja1000/peak_pci.c
 
-38034518c086fc Wolfgang Grandegger  2011-09-12  550  
-1dd06ae8db716e Greg Kroah-Hartman   2012-12-06  551  static int peak_pci_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
-38034518c086fc Wolfgang Grandegger  2011-09-12  552  {
-38034518c086fc Wolfgang Grandegger  2011-09-12  553  	struct sja1000_priv *priv;
-38034518c086fc Wolfgang Grandegger  2011-09-12  554  	struct peak_pci_chan *chan;
-0b5a958cf4df3a Stéphane Grosjean    2014-05-20  555  	struct net_device *dev, *prev_dev;
-38034518c086fc Wolfgang Grandegger  2011-09-12  556  	void __iomem *cfg_base, *reg_base;
-38034518c086fc Wolfgang Grandegger  2011-09-12  557  	u16 sub_sys_id, icr;
-38034518c086fc Wolfgang Grandegger  2011-09-12  558  	int i, err, channels;
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  559  	char fw_str[14] = "";
-38034518c086fc Wolfgang Grandegger  2011-09-12  560  
-38034518c086fc Wolfgang Grandegger  2011-09-12  561  	err = pci_enable_device(pdev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  562  	if (err)
-38034518c086fc Wolfgang Grandegger  2011-09-12  563  		return err;
-38034518c086fc Wolfgang Grandegger  2011-09-12  564  
-38034518c086fc Wolfgang Grandegger  2011-09-12  565  	err = pci_request_regions(pdev, DRV_NAME);
-38034518c086fc Wolfgang Grandegger  2011-09-12  566  	if (err)
-38034518c086fc Wolfgang Grandegger  2011-09-12  567  		goto failure_disable_pci;
-38034518c086fc Wolfgang Grandegger  2011-09-12  568  
-38034518c086fc Wolfgang Grandegger  2011-09-12  569  	err = pci_read_config_word(pdev, 0x2e, &sub_sys_id);
-38034518c086fc Wolfgang Grandegger  2011-09-12  570  	if (err)
-38034518c086fc Wolfgang Grandegger  2011-09-12  571  		goto failure_release_regions;
-38034518c086fc Wolfgang Grandegger  2011-09-12  572  
-38034518c086fc Wolfgang Grandegger  2011-09-12  573  	dev_dbg(&pdev->dev, "probing device %04x:%04x:%04x\n",
-38034518c086fc Wolfgang Grandegger  2011-09-12  574  		pdev->vendor, pdev->device, sub_sys_id);
-38034518c086fc Wolfgang Grandegger  2011-09-12  575  
-38034518c086fc Wolfgang Grandegger  2011-09-12  576  	err = pci_write_config_word(pdev, 0x44, 0);
-38034518c086fc Wolfgang Grandegger  2011-09-12  577  	if (err)
-38034518c086fc Wolfgang Grandegger  2011-09-12  578  		goto failure_release_regions;
-38034518c086fc Wolfgang Grandegger  2011-09-12  579  
-38034518c086fc Wolfgang Grandegger  2011-09-12  580  	if (sub_sys_id >= 12)
-38034518c086fc Wolfgang Grandegger  2011-09-12  581  		channels = 4;
-38034518c086fc Wolfgang Grandegger  2011-09-12  582  	else if (sub_sys_id >= 10)
-38034518c086fc Wolfgang Grandegger  2011-09-12  583  		channels = 3;
-38034518c086fc Wolfgang Grandegger  2011-09-12  584  	else if (sub_sys_id >= 4)
-38034518c086fc Wolfgang Grandegger  2011-09-12  585  		channels = 2;
-38034518c086fc Wolfgang Grandegger  2011-09-12  586  	else
-38034518c086fc Wolfgang Grandegger  2011-09-12  587  		channels = 1;
-38034518c086fc Wolfgang Grandegger  2011-09-12  588  
-38034518c086fc Wolfgang Grandegger  2011-09-12  589  	cfg_base = pci_iomap(pdev, 0, PEAK_PCI_CFG_SIZE);
-38034518c086fc Wolfgang Grandegger  2011-09-12  590  	if (!cfg_base) {
-38034518c086fc Wolfgang Grandegger  2011-09-12  591  		dev_err(&pdev->dev, "failed to map PCI resource #0\n");
-4a4bfdcd295728 Peter Senna Tschudin 2012-10-03  592  		err = -ENOMEM;
-38034518c086fc Wolfgang Grandegger  2011-09-12  593  		goto failure_release_regions;
-38034518c086fc Wolfgang Grandegger  2011-09-12  594  	}
-38034518c086fc Wolfgang Grandegger  2011-09-12  595  
-38034518c086fc Wolfgang Grandegger  2011-09-12  596  	reg_base = pci_iomap(pdev, 1, PEAK_PCI_CHAN_SIZE * channels);
-38034518c086fc Wolfgang Grandegger  2011-09-12  597  	if (!reg_base) {
-38034518c086fc Wolfgang Grandegger  2011-09-12  598  		dev_err(&pdev->dev, "failed to map PCI resource #1\n");
-4a4bfdcd295728 Peter Senna Tschudin 2012-10-03  599  		err = -ENOMEM;
-38034518c086fc Wolfgang Grandegger  2011-09-12  600  		goto failure_unmap_cfg_base;
-38034518c086fc Wolfgang Grandegger  2011-09-12  601  	}
-38034518c086fc Wolfgang Grandegger  2011-09-12  602  
-38034518c086fc Wolfgang Grandegger  2011-09-12  603  	/* Set GPIO control register */
-38034518c086fc Wolfgang Grandegger  2011-09-12  604  	writew(0x0005, cfg_base + PITA_GPIOICR + 2);
-38034518c086fc Wolfgang Grandegger  2011-09-12  605  	/* Enable all channels of this card */
-38034518c086fc Wolfgang Grandegger  2011-09-12  606  	writeb(0x00, cfg_base + PITA_GPIOICR);
-38034518c086fc Wolfgang Grandegger  2011-09-12  607  	/* Toggle reset */
-38034518c086fc Wolfgang Grandegger  2011-09-12  608  	writeb(0x05, cfg_base + PITA_MISC + 3);
-276b7361bb1be3 Jia-Ju Bai           2018-04-11  609  	usleep_range(5000, 6000);
-38034518c086fc Wolfgang Grandegger  2011-09-12  610  	/* Leave parport mux mode */
-38034518c086fc Wolfgang Grandegger  2011-09-12  611  	writeb(0x04, cfg_base + PITA_MISC + 3);
-38034518c086fc Wolfgang Grandegger  2011-09-12  612  
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  613  	/* FPGA equipped card if not 0 */
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  614  	if (readl(cfg_base + PEAK_VER_REG1)) {
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  615  		/* FPGA card: display version of the running firmware */
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  616  		u32 fw_ver = readl(cfg_base + PEAK_VER_REG2);
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  617  
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  618  		snprintf(fw_str, sizeof(fw_str), " FW v%u.%u.%u",
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  619  			 (fw_ver >> 12) & 0xf,
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  620  			 (fw_ver >> 8) & 0xf,
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  621  			 (fw_ver >> 4) & 0xf);
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  622  	}
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  623  
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  624  	/* Display commercial name (and, eventually, FW version) of the card */
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  625  	dev_info(&pdev->dev, "%ux CAN %s%s\n",
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  626  		 channels, (const char *)ent->driver_data, fw_str);
-805ff68c8e7f4d Stéphane Grosjean    2021-06-07  627  
-38034518c086fc Wolfgang Grandegger  2011-09-12  628  	icr = readw(cfg_base + PITA_ICR + 2);
-38034518c086fc Wolfgang Grandegger  2011-09-12  629  
-38034518c086fc Wolfgang Grandegger  2011-09-12  630  	for (i = 0; i < channels; i++) {
-38034518c086fc Wolfgang Grandegger  2011-09-12  631  		dev = alloc_sja1000dev(sizeof(struct peak_pci_chan));
-38034518c086fc Wolfgang Grandegger  2011-09-12  632  		if (!dev) {
-38034518c086fc Wolfgang Grandegger  2011-09-12  633  			err = -ENOMEM;
-38034518c086fc Wolfgang Grandegger  2011-09-12  634  			goto failure_remove_channels;
-38034518c086fc Wolfgang Grandegger  2011-09-12  635  		}
-38034518c086fc Wolfgang Grandegger  2011-09-12  636  
-38034518c086fc Wolfgang Grandegger  2011-09-12  637  		priv = netdev_priv(dev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  638  		chan = priv->priv;
-38034518c086fc Wolfgang Grandegger  2011-09-12  639  
-38034518c086fc Wolfgang Grandegger  2011-09-12  640  		chan->cfg_base = cfg_base;
-38034518c086fc Wolfgang Grandegger  2011-09-12  641  		priv->reg_base = reg_base + i * PEAK_PCI_CHAN_SIZE;
-38034518c086fc Wolfgang Grandegger  2011-09-12  642  
-38034518c086fc Wolfgang Grandegger  2011-09-12  643  		priv->read_reg = peak_pci_read_reg;
-38034518c086fc Wolfgang Grandegger  2011-09-12  644  		priv->write_reg = peak_pci_write_reg;
-38034518c086fc Wolfgang Grandegger  2011-09-12  645  		priv->post_irq = peak_pci_post_irq;
-38034518c086fc Wolfgang Grandegger  2011-09-12  646  
-38034518c086fc Wolfgang Grandegger  2011-09-12  647  		priv->can.clock.freq = PEAK_PCI_CAN_CLOCK;
-38034518c086fc Wolfgang Grandegger  2011-09-12  648  		priv->ocr = PEAK_PCI_OCR;
-38034518c086fc Wolfgang Grandegger  2011-09-12  649  		priv->cdr = PEAK_PCI_CDR;
-38034518c086fc Wolfgang Grandegger  2011-09-12  650  		/* Neither a slave nor a single device distributes the clock */
-38034518c086fc Wolfgang Grandegger  2011-09-12  651  		if (channels == 1 || i > 0)
-38034518c086fc Wolfgang Grandegger  2011-09-12  652  			priv->cdr |= CDR_CLK_OFF;
-38034518c086fc Wolfgang Grandegger  2011-09-12  653  
-38034518c086fc Wolfgang Grandegger  2011-09-12  654  		/* Setup interrupt handling */
-38034518c086fc Wolfgang Grandegger  2011-09-12  655  		priv->irq_flags = IRQF_SHARED;
-38034518c086fc Wolfgang Grandegger  2011-09-12  656  		dev->irq = pdev->irq;
-38034518c086fc Wolfgang Grandegger  2011-09-12  657  
-38034518c086fc Wolfgang Grandegger  2011-09-12  658  		chan->icr_mask = peak_pci_icr_masks[i];
-38034518c086fc Wolfgang Grandegger  2011-09-12  659  		icr |= chan->icr_mask;
-38034518c086fc Wolfgang Grandegger  2011-09-12  660  
-38034518c086fc Wolfgang Grandegger  2011-09-12  661  		SET_NETDEV_DEV(dev, &pdev->dev);
-3e66d0138c05d9 Christopher R. Baker 2014-03-08  662  		dev->dev_id = i;
-38034518c086fc Wolfgang Grandegger  2011-09-12  663  
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  664  		/* Create chain of SJA1000 devices */
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  665  		chan->prev_dev = pci_get_drvdata(pdev);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  666  		pci_set_drvdata(pdev, dev);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  667  
-9b69aff9fd1a66 Marc Kleine-Budde    2021-06-11  668  		/* PCAN-ExpressCard needs some additional i2c init.
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  669  		 * This must be done *before* register_sja1000dev() but
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  670  		 * *after* devices linkage
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  671  		 */
-4be0015c955a9a Oliver Hartkopp      2014-09-16  672  		if (pdev->device == PEAK_PCIEC_DEVICE_ID ||
-4be0015c955a9a Oliver Hartkopp      2014-09-16  673  		    pdev->device == PEAK_PCIEC34_DEVICE_ID) {
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  674  			err = peak_pciec_probe(pdev, dev);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  675  			if (err) {
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  676  				dev_err(&pdev->dev,
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  677  					"failed to probe device (err %d)\n",
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  678  					err);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  679  				goto failure_free_dev;
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  680  			}
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  681  		}
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  682  
-38034518c086fc Wolfgang Grandegger  2011-09-12  683  		err = register_sja1000dev(dev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  684  		if (err) {
-38034518c086fc Wolfgang Grandegger  2011-09-12  685  			dev_err(&pdev->dev, "failed to register device\n");
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  686  			goto failure_free_dev;
-38034518c086fc Wolfgang Grandegger  2011-09-12  687  		}
-38034518c086fc Wolfgang Grandegger  2011-09-12  688  
-38034518c086fc Wolfgang Grandegger  2011-09-12  689  		dev_info(&pdev->dev,
-38034518c086fc Wolfgang Grandegger  2011-09-12  690  			 "%s at reg_base=0x%p cfg_base=0x%p irq=%d\n",
-38034518c086fc Wolfgang Grandegger  2011-09-12  691  			 dev->name, priv->reg_base, chan->cfg_base, dev->irq);
-38034518c086fc Wolfgang Grandegger  2011-09-12  692  	}
-38034518c086fc Wolfgang Grandegger  2011-09-12  693  
-38034518c086fc Wolfgang Grandegger  2011-09-12  694  	/* Enable interrupts */
-38034518c086fc Wolfgang Grandegger  2011-09-12  695  	writew(icr, cfg_base + PITA_ICR + 2);
-38034518c086fc Wolfgang Grandegger  2011-09-12  696  
-38034518c086fc Wolfgang Grandegger  2011-09-12  697  	return 0;
-38034518c086fc Wolfgang Grandegger  2011-09-12  698  
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  699  failure_free_dev:
-d0c5c584fb3542 Guangshuo Li         2026-09-16  700  if (!chan->prev_dev && chan->pciec_card)
-d0c5c584fb3542 Guangshuo Li         2026-09-16  701  	peak_pciec_remove(chan->pciec_card);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02 @702  	pci_set_drvdata(pdev, chan->prev_dev);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  703  	free_sja1000dev(dev);
-e6d9c80b7ca150 Stéphane Grosjean    2012-03-02  704  
-38034518c086fc Wolfgang Grandegger  2011-09-12  705  failure_remove_channels:
-38034518c086fc Wolfgang Grandegger  2011-09-12  706  	/* Disable interrupts */
-38034518c086fc Wolfgang Grandegger  2011-09-12  707  	writew(0x0, cfg_base + PITA_ICR + 2);
-38034518c086fc Wolfgang Grandegger  2011-09-12  708  
-0b5a958cf4df3a Stéphane Grosjean    2014-05-20  709  	for (dev = pci_get_drvdata(pdev); dev; dev = prev_dev) {
-38034518c086fc Wolfgang Grandegger  2011-09-12  710  		priv = netdev_priv(dev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  711  		chan = priv->priv;
-0b5a958cf4df3a Stéphane Grosjean    2014-05-20  712  		prev_dev = chan->prev_dev;
-0b5a958cf4df3a Stéphane Grosjean    2014-05-20  713  
-d0c5c584fb3542 Guangshuo Li         2026-09-16  714  		/* do that only for first channel */
-d0c5c584fb3542 Guangshuo Li         2026-09-16  715  		if (!prev_dev && chan->pciec_card)
-d0c5c584fb3542 Guangshuo Li         2026-09-16  716  			peak_pciec_remove(chan->pciec_card);
-0b5a958cf4df3a Stéphane Grosjean    2014-05-20  717  		unregister_sja1000dev(dev);
-0b5a958cf4df3a Stéphane Grosjean    2014-05-20  718  		free_sja1000dev(dev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  719  	}
-38034518c086fc Wolfgang Grandegger  2011-09-12  720  
-38034518c086fc Wolfgang Grandegger  2011-09-12  721  	pci_iounmap(pdev, reg_base);
-38034518c086fc Wolfgang Grandegger  2011-09-12  722  
-38034518c086fc Wolfgang Grandegger  2011-09-12  723  failure_unmap_cfg_base:
-38034518c086fc Wolfgang Grandegger  2011-09-12  724  	pci_iounmap(pdev, cfg_base);
-38034518c086fc Wolfgang Grandegger  2011-09-12  725  
-38034518c086fc Wolfgang Grandegger  2011-09-12  726  failure_release_regions:
-38034518c086fc Wolfgang Grandegger  2011-09-12  727  	pci_release_regions(pdev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  728  
-38034518c086fc Wolfgang Grandegger  2011-09-12  729  failure_disable_pci:
-38034518c086fc Wolfgang Grandegger  2011-09-12  730  	pci_disable_device(pdev);
-38034518c086fc Wolfgang Grandegger  2011-09-12  731  
-5c2cb02edf79ad Stéphane Grosjean    2017-11-23  732  	/* pci_xxx_config_word() return positive PCIBIOS_xxx error codes while
-5c2cb02edf79ad Stéphane Grosjean    2017-11-23  733  	 * the probe() function must return a negative errno in case of failure
-9b69aff9fd1a66 Marc Kleine-Budde    2021-06-11  734  	 * (err is unchanged if negative)
-9b69aff9fd1a66 Marc Kleine-Budde    2021-06-11  735  	 */
-5c2cb02edf79ad Stéphane Grosjean    2017-11-23  736  	return pcibios_err_to_errno(err);
-38034518c086fc Wolfgang Grandegger  2011-09-12  737  }
-38034518c086fc Wolfgang Grandegger  2011-09-12  738  
+On 16/09/2026 19:22, Kumar Kartikeya Dwivedi wrote:
+> +Cc Amery
+> 
+> On Wed Sep 16, 2026 at 8:10 PM CEST, Usama Arif wrote:
+>> bpf_local_storage_update() takes the map bucket lock while holding
+>> local_storage->lock. bpf_selem_unlink_map() does the same; its only
+>> caller holds local_storage->lock. The outer lock is acquired with
+>> raw_res_spin_lock_irqsave(), so interrupts are already disabled at both
+>> sites.
+>>
+>> Using raw_res_spin_lock_irqsave() for the nested lock saves the already
+>> disabled IRQ state and issues another IRQ disable. The matching unlock
+>> tests that saved state before leaving interrupts disabled. On x86-64,
+>> this adds a pushfq/popq/cli sequence and a test/branch around an
+>> unreachable sti to each acquisition.
+>>
+>> Use raw_res_spin_lock() and raw_res_spin_unlock() instead. They retain
+>> preemption nesting, memory ordering and resilient-lock bookkeeping. The
+>> outer unlock remains responsible for restoring the caller's IRQ state.
+>>
+>> In the tested clang x86-64 build, this removes five executed instructions
+>> from each uncontended nested acquisition. It also shrinks
+>> bpf_local_storage_update() from 1732 to 1702 bytes and bpf_selem_unlink()
+>> from 1030 to 992 bytes. The affected paths are updates that add or replace
+>> an element in existing owner storage and successful unlinks.
+>>
+>> Document the owner-lock requirement of bpf_selem_unlink_map() and assert
+>> that interrupts are disabled.
+>>
+>> Signed-off-by: Usama Arif <usama.arif@linux.dev>
+>> ---
+> 
+> Makes sense. But did you observe any measurable improvement with this change?
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Meta fleet wide profile shows bpf_local_storage_update() as one of the more expensive
+bpf functions in the fleet. I saw it in production when profiling a hhvm workload as
+well.
+
+The main argument for the patch was reduced number of instructions executed in
+this expensive path that I see in disassembly (which is mentioned in the 2nd paragraph)
+and better code hygiene as it doesnt make sense to to save irq again. I would imagine
+this patch alone wont move the needle in application metrics, but would make this function
+cheaper (hopefully :)) fleetwide.
+
+
+> 
+>> [...]
+
