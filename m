@@ -1,54 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3294D6C21
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 16:49:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7A6563FA0
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 16:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789577406; cv=none; b=nx+TqUw7nNuYq3t+lT3kWXo+P6mQAVSBCYPOcrzIuuGXzEkpNLhFWCkMnBA4tJAmrZZwOoI24bl7H6tWmh7Smk/m0ux7+b4X6BygA0spUUcGrilGMn3AYwkzPboYaUl8bF38ld6CTvO1Qu7eri58IyGumlppCW8DWgd5fEhn7zk=
+	t=1789577427; cv=none; b=NCvokdtwMyEidlE6G7v7SQsnpPyesIWvhh6mi8+m++es6HfQElWE7KaNx6eutpzC8pnaLvh6JL/aZO/AITMA3rTfBeZqD15u+5h0w46UHuc2MolRhsb4tCXeiyHu6v29ni1/AvbVXF83LkfojZ5GzCf7YFg0sKnzvS7Pk0wukOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789577406; c=relaxed/simple;
-	bh=Ggb+PcHRJDo/Cz5nvBOFJMC2dQF5gLYbmIeM6Iqn8Mw=;
+	s=arc-20240116; t=1789577427; c=relaxed/simple;
+	bh=L7Nv3D+LAVl5eGsM7/8TZo2OXjqL6TT+3lXEOOWeVno=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AZwPjdmQaCVv+Tg59qlOYhyCVv4TVTy3BQHuDae5mQd94AN5U+2OUPDz/gtJJFB069nR6cppalNPJI1jislbMIzqF1YHu1EfFgWQKBrMKKNoNoLR9lERpKw0IECXWdZTzXYuUBkMOce5ACk9kxsW+PUJQBh5m1swJonGRfsX1LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HHEKiZSq; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=YM+0Mg1pXXnSeBosAieqmbCpz9dwamuY0K8M/zdt3P7liYFq0ppnFLyEFEHABUzLitqsz2qRBp+DVicx/AXvUy2UhPI+fbSdt5hMDJpCohAX3m30sm5aTP6feeUTGdFdpjV7AjVO18gIGUhWH3jX7r6TEK6Qh3GiFvvvTlcWDLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRfWJMYb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HHEKiZSq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE2961F008BC
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 16:49:51 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRfWJMYb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 514BF1F00922
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 16:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789577391;
-	bh=Ggb+PcHRJDo/Cz5nvBOFJMC2dQF5gLYbmIeM6Iqn8Mw=;
+	s=k20260515; t=1789577409;
+	bh=L7Nv3D+LAVl5eGsM7/8TZo2OXjqL6TT+3lXEOOWeVno=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=HHEKiZSqg7+GyH1kW7u2Hjh6n954PQBWjugWOQSucOvoJpAfVng+ngPvsQ9NcH4mi
-	 xtk7OuOd/JleKPjNisP2KjwOjHIlYAmHsKORnWbSLqnopk/P8kruswK9aha5jKrh2h
-	 T5+u99gibJ/LLILgQgGSpKR/8Olwo6hpZbKotqNrJYNTrMVnF8YOJ9y+Y6i4ALwW4H
-	 C6w1r6Db2dXNgKyLToIc40EzB8gYnT8NftrmIEs6OAPDomnrsefuQKe0nCSYGQfS55
-	 ndgO1nZRsZEjKDvPuli5DD2CV2kvHzdB3pu0VtMl2TRvS1qfTm7mjpI/uYPSwFuoyo
-	 g+RkIzLA2y8Fg==
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b5e4f16f15so1138910e87.3
-        for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:49:51 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzFJK0uDVIcC3RzQQhaZTWNlFM6ttCd8lC1266cOx7rB0fJrTileN6BrH1OuVjnKDLAKBDx@lists.linux.dev
-X-Gm-Message-State: AFuF++kDR2DSmyb+mgMuH39KHxGt1cgzG62Z/8oVrdYflMJ7XlNYoNm9
-	bGCv08eVActJ2zOdHxGiG0lNUWfR+UuKuMJdyGj/cqtqYnCy+T4igNKpIgDsj8Jr94O+r6hHkJD
-	Rp4ytzD3bXugJ7uAwY/NO+h9ZgECApvo=
-X-Received: by 2002:a05:6512:1595:b0:5b6:422:a61c with SMTP id
- 2adb3069b0e04-5b8b666eb43mr1907989e87.28.1789577390371; Wed, 16 Sep 2026
- 09:49:50 -0700 (PDT)
+	b=JRfWJMYb32Rm+IxTGvWpJpVsMLrjJ68BqhbJ1lGRrYsTjhE1OZfZj1qbzkB0veld6
+	 aydd8hcy346Zxb6783g1qefug17abCGHwEEP5EzN/vTF6tUlqT5ZPT9NonaNcBN6Mm
+	 iFHRI8HRf+oFvcyk19LmsMR/ieQvjycJb8CfLWsfTiXI1BT7/RcsPiDeyUeP4sl6Te
+	 lG7eTE1DFCyEJnR2F3YWWd+EREGj4zAlFNo6xxzQLZbMu98CG5M/4U6F5hTA659o1r
+	 atcvb2ngG2XHrNfqUI5igAlUejpBaeyRareRjXW7WalzRDlX5tkNV+y19q3/HKoiYf
+	 MIIkl+PwLwMGg==
+Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b76462aae9so904924e87.2
+        for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:50:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBxWNeWN32uMg3amHoI1SxHm7g8LuHSRxjGSAJ1OpzgkR1mnzDNUu+NuHCbKrtij9ALCTztC@lists.linux.dev
+X-Gm-Message-State: AFuF++nKvQyyul+KipbDEmreM3ywFGBkuB1ctFhAPVc+4Eem5+3/UE9W
+	+c5Nnj5M9G5DPheaWu/wT5B+77Yfgrc1VUzdlvccYMG0FNi3dLVQzYXmB7mRbqQuxDLd628eGZ7
+	P+fUec5BegNDQmhCj6ZLS1XAL747+Cyw=
+X-Received: by 2002:a05:6512:a91:b0:5b5:edd1:471f with SMTP id
+ 2adb3069b0e04-5b8b660ce5dmr1007964e87.11.1789577407936; Wed, 16 Sep 2026
+ 09:50:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260909132153.1596191-1-arnd@kernel.org> <20260909132153.1596191-3-arnd@kernel.org>
-In-Reply-To: <20260909132153.1596191-3-arnd@kernel.org>
+References: <20260909132153.1596191-1-arnd@kernel.org> <20260909132153.1596191-4-arnd@kernel.org>
+In-Reply-To: <20260909132153.1596191-4-arnd@kernel.org>
 From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 16 Sep 2026 18:49:37 +0200
-X-Gmail-Original-Message-ID: <CAD++jLnHa+1e0N8V0znwzeTZSX1Y5YDAa=cVKSYjeFpZM0o_OQ@mail.gmail.com>
-X-Gm-Features: AcwNN1Whb6PQ06lQN_GxsWNtotsS8LqxjoSrqgaYpOWlLWlGsW2D5EFYiCtujyY
-Message-ID: <CAD++jLnHa+1e0N8V0znwzeTZSX1Y5YDAa=cVKSYjeFpZM0o_OQ@mail.gmail.com>
-Subject: Re: [PATCH 02/14] mfd: remove unused rdc321x southbridge support
+Date: Wed, 16 Sep 2026 18:49:55 +0200
+X-Gmail-Original-Message-ID: <CAD++jLm-AwYYyJ9s2MTa7r_raesRar36Hugyf1R1Ny0zCqL5_A@mail.gmail.com>
+X-Gm-Features: AcwNN1UmqUhvwRMmw62XliPfw_HgO3-Fmrm9oMts4wPzbRxPuRqcz84S4okTZmg
+Message-ID: <CAD++jLm-AwYYyJ9s2MTa7r_raesRar36Hugyf1R1Ny0zCqL5_A@mail.gmail.com>
+Subject: Re: [PATCH 03/14] mfd: remove unused si476x driver
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, linux-kernel@vger.kernel.org, 
 	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>, 
@@ -78,13 +78,9 @@ e:
 
 > From: Arnd Bergmann <arnd@arndb.de>
 >
-> The rdc321x was a 486-class SoC developed by RDC. While RDC's later
-> products closely resemble the DM&P Vortex86 product line and are still
-> sold under both names, I checked the datasheets for those and found that
-> the GPIO and WDT blocks on them are incompatible with the rtc321x.
->
-> Remove this driver, as there is no way to run Linux any more on the
-> older chips after i486 support has been removed.
+> The si476x driver was added in linux-3.9 without devicetree
+> support, and has always failed the probe function in the
+> absence of a si476x_platform_data definition.
 >
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
