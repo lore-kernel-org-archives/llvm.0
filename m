@@ -1,95 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6641E4DAFA8
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 16:56:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 776BA4D9548;
+	Wed, 16 Sep 2026 17:35:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789577809; cv=none; b=NbDh6EZTpvWlh2nEd7CGawLu+2r5kAl4gEmoXL8Q3NI+DBhNSN3eYONjY+254IlY9Y81gG9AxkOQSaivADPYB63cRc7mxknqL4tx8uR6y0WG5uiG7syK40k0MtBlt1oirfzgUj/eRntwPoanN32qSjLnnkmg4Ym8vEgbTh5zsKc=
+	t=1789580159; cv=none; b=crwllaZ6UJhTdJt7SayoUP/bqRf3nPHdxKLko4sN+RXxZOadp42vnMVdsAE/6AjJ2MLtB9hn5cFnv+uAh8JIrEDlV+EW9tHcD07vQonLEZJ+g0cTAkWdOaSZrDnFhmJ9gpAlh2dOS+kyrPSYusCFpJep7xUzJiDyfcWvtgzBftI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789577809; c=relaxed/simple;
-	bh=fuqbMSXmKaVksZQ0mp9Ucbs7t4/StAc7bwI5H6qAaCU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gSk8B2tf/gG9EuzTeUXs7IKY0u/2NcqGEb0c+pdE6zry3mm7BqABdgostXhdPdMfXp2ZWdnVoqDop2/uFAywOonL/Y9cl/FLD1/NkEThZOWaRRrkOBrwcmBpgTM5HruZH8miaVEaINnSSSjQ97pCoi9E/uNR0rSxjeUC6MjQooU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cg/A8+VC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789580159; c=relaxed/simple;
+	bh=UzgvU2D3N1Tr0bxLinAWdJFu7EBcDYSy2p6JXSjXsqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sFRJV3HOKHf/hvNeTCD87TsbfD0KClYM4l5c1PX01If5AhedNaQYaw025bbd4euGOFuovVW14ycjpR+Au5/e29RYvtJj3MU1HsLhs2S41h1CBMMbAews42OeLOLTrDlPODqx/+HpbUcV0PAnafhHh1tPF9krLWvxk5wECcrkdjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jldI7fg0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cg/A8+VC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5DCA1F008AB
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 16:56:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jldI7fg0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3EBD1F000FF;
+	Wed, 16 Sep 2026 17:35:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789577791;
-	bh=fuqbMSXmKaVksZQ0mp9Ucbs7t4/StAc7bwI5H6qAaCU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=Cg/A8+VC9E080TzyvTpxu0YnPUmsHYmEPc7xtw8lOlwVWQFVXT213KsByPqqSIU2I
-	 YKezTVvqkqyFj8RCV6X6z796z+cgGL3/V6KKfDg+c71b1lvwwgWiG1EI1uwu/m3Th0
-	 3PiWWmOGjEHneUgz6Si80Fbz7NLf7VJpVq/lxnf4hkRztmLGONXApvwq5Bj6ihxbnh
-	 2DEb0f9/ARGDI62c/9rCPp7kYe7gh6X3Np4O26+gdKgWFKq9/xbV2rRVt1oCMkC32O
-	 lt6rPATnGQ4rlLkFzK27Q7Nts5BzFzoK5WLviocUhwMjzceCEZEyQbrc9KdJxu4ARU
-	 QjSSuos16jzVg==
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f15cfdso1222077e87.3
-        for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:56:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBwbG3RJ6dN8v3H3DSyJ+CjteYzFbxtuCjWLXRlqzymBzPBqt/nzRlMn9vsoQ5NSHVCjb1Un@lists.linux.dev
-X-Gm-Message-State: AFuF++nTY/++zPtTmnLaOf3v4ARwpotYh0XQgdSvtPU84bc2mNS5wHau
-	7NWSUDvWkSJAwEkA91Ri/kaR66ddmZCMe577tJm+8Dq6L1ShYs/W0m4XnsKb6SamMR35uNFfViD
-	d5uFwtGfWzblKnqgM7wS1JmIhRSVsbhk=
-X-Received: by 2002:a05:6512:3a96:b0:5b6:1a7c:59dc with SMTP id
- 2adb3069b0e04-5b8b66504bdmr1056044e87.54.1789577790547; Wed, 16 Sep 2026
- 09:56:30 -0700 (PDT)
+	s=k20260515; t=1789580150;
+	bh=lz/TQhxBzEP+HHtTRuAb4x/tXjOKPhiKUxO/kKdETtI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jldI7fg0Kx5LIGgnzSj+RmvhUaOG9wTr2+hHs9t4M+7lz6G6b5/xfQhFYdN8Nxv+w
+	 LOSaLjWq2tC4oSNQsaDaljrtbIQRaKxTZuYtXvWdhLwG+TLf90E3729/wGsHEYZa/X
+	 tXUTZ6a4rZ2IL9zAp7U5kOW9h2Vkojau7SJnkdFoKC2fHzwXssfgIRfyuFKYu35wyi
+	 CvXRVK5qlVb8ji2+oNaKub6lH3XykwA8yDacdHN1dU9ELS1ak79hQoOMtpE/gzie/J
+	 kkKeNHLwmNgo05L5zTFVCqTSZWpYnpFaz+uDjLGmnqZbqOE7WnA74/6tViQ8n1ks7u
+	 ET/b7tTREnMRg==
+Date: Wed, 16 Sep 2026 10:35:48 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Ian Rogers <irogers@google.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH 0/9] perf build: Fix builds with clang and BUILD_NONDISTRO
+Message-ID: <aqrTdAVfVkzltJct@google.com>
+References: <20260916061218.3061216-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260909132153.1596191-1-arnd@kernel.org> <20260909132153.1596191-12-arnd@kernel.org>
-In-Reply-To: <20260909132153.1596191-12-arnd@kernel.org>
-From: Linus Walleij <linusw@kernel.org>
-Date: Wed, 16 Sep 2026 18:56:17 +0200
-X-Gmail-Original-Message-ID: <CAD++jL=LM2agPEcCxjtQuCNx4q7zqutFA6oDb61kKEDAADR4Vw@mail.gmail.com>
-X-Gm-Features: AcwNN1Uahpnh6JEjJOB4HtYt7IIRQWlpnYcwXmBiixUkMQ8clPYYJyQ4xy80br8
-Message-ID: <CAD++jL=LM2agPEcCxjtQuCNx4q7zqutFA6oDb61kKEDAADR4Vw@mail.gmail.com>
-Subject: Re: [PATCH 11/14] mfd: remove unused wm8350 driver
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Lee Jones <lee@kernel.org>, mfd@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>, 
-	Daniel Thompson <danielt@kernel.org>, Jingoo Han <jingoohan1@gmail.com>, 
-	Mauro Carvalho Chehab <mchehab@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Guenter Roeck <linux@roeck-us.net>, Bartosz Golaszewski <brgl@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Pavel Machek <pavel@kernel.org>, Michael Hennerich <michael.hennerich@analog.com>, 
-	Support Opensource <support.opensource@diasemi.com>, Sebastian Reichel <sre@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Helge Deller <deller@gmx.de>, 
-	dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org, 
-	linux-media@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, patches@opensource.cirrus.com, 
-	linux-watchdog@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-fbdev@vger.kernel.org, 
-	linux-sound@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260916061218.3061216-1-irogers@google.com>
 
-On Wed, Sep 9, 2026 at 3:23=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
+On Tue, Sep 15, 2026 at 11:12:09PM -0700, Ian Rogers wrote:
+> Several perf build configurations are broken, and stayed broken because
+> the build test suite doesn't cover them.
+> 
+> Three of them fail outright:
+> 
+>   $ make CC=clang BUILD_NONDISTRO=1
+>   util/libbfd.c:56:1: error: mutex 'bfd_mutex' is still held at the end
+>   of function [-Werror,-Wthread-safety-analysis]
+> 
+>   $ make BUILD_NONDISTRO=1 NO_DEMANGLE=1
+>   util/symbol.c:2714: error: 'DMGL_PARAMS' undeclared
+> 
+>   $ make CC=clang-19
+>   *** Specify CROSS_COMPILE or add CLANG_TARGET_FLAGS for x86_64
+> 
+> A fourth is worse for being silent. "make CC=clang" appends clang's
+> --target= and -fintegrated-as to CXX, but CXX is only set to clang++ by
+> "make LLVM=1", so it is still g++ and rejects both. Feature tests are
+> allowed to fail, so nothing is reported: the build succeeds and just
+> quietly drops libllvm and C++ demangling support.
+> 
+>   $ make CC=clang && grep LIBLLVM .config-detected
+>   (nothing, whereas a gcc build reports CONFIG_LIBLLVM=y)
+> 
+> The patches are grouped as:
+> 
+>   1-2  Fix the two build failures, in libbfd.c and symbol.c.
+>   3-4  Include the headers that are used directly rather than relying
+>        on other headers to drag them in. No functional change.
+>   5-7  Fix the clang handling in Makefile.config: don't give clang's
+>        flags to a non-clang CXX, and use the CC that was asked for
+>        instead of hard coding "clang" when picking the target triple
+>        and when testing the compiler version.
+>   8    Remove three build test entries left behind by the removal of
+>        the options they tested. None of them define what to build, so
+>        each silently repeats "make_pure" and the suite spends six
+>        builds appearing to cover options that no longer exist.
+>   9    Add build tests for the configurations above, so they don't
+>        break again. As a build that loses a feature still succeeds,
+>        the clang tests also check that libLLVM is still built in.
+> 
+> Testing:
+> 
+>  - 13 build configurations (gcc, clang, versioned clang, LLVM=1,
+>    BUILD_NONDISTRO, NO_DEMANGLE, NO_LIBDW, NO_LIBELF, DEBUG, asan,
+>    refcount checking) pass, where two failed before the series.
+>  - Every patch builds on its own, so the series stays bisectable.
+>  - Each fix was confirmed by reintroducing the bug and checking that
+>    the test added in patch 9 fails:
+> 
+>      CXX flags given to g++     make_clang             fails on libLLVM
+>      libbfd thread safety       make_clang_nondistro   fails to compile
+>      symbol.c demangling        make_nondistro_no_demangle  likewise
+> 
+> Ian Rogers (9):
+>   perf libbfd: Fix the clang -Wthread-safety build failure
+>   perf symbol: Fix the build when demangling with libbfd
+>   perf libbfd: Include the headers that are used
+>   perf pmu: Include the headers that are used
+>   perf build: Only pass clang flags to CXX when CXX is clang
+>   perf build: Use the given CC rather than clang in clang builds
+>   perf build: Check the version of the compiler that is used
+>   perf build: Remove leftovers of removed build options
+>   perf test: Add build tests for clang and libbfd demangling
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> This driver was used on the i.MX31 ADS reference board from Freescale
-> and the smdk6410 reference board from Samsung. Both used platform_data
-> based driver probing and are now gone from the kernel.
->
-> Since probing with devicetree has never been supported by wm8350,
-> it is clear that nothing can use the driver on an upstream kernel,
-> and it is unlikely that anyone is still interested in a devicetree
-> conversion, so remove it.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Reviewed-by: Linus Walleij <linusw@kernel.org>
+Thanks,
+Namhyung
 
-Yours,
-Linus Walleij
+> 
+>  tools/perf/Makefile.config | 13 +++++++---
+>  tools/perf/Makefile.perf   |  3 ---
+>  tools/perf/tests/make      | 50 ++++++++++++++++++++++++++++++++++----
+>  tools/perf/util/Build      |  2 +-
+>  tools/perf/util/libbfd.c   | 41 ++++++++++++++++++++++++++-----
+>  tools/perf/util/libbfd.h   |  9 +++++++
+>  tools/perf/util/pmu.c      |  5 +++-
+>  tools/perf/util/symbol.c   | 18 +++++++++++---
+>  8 files changed, 119 insertions(+), 22 deletions(-)
+> 
+> 
+> base-commit: 91b0782fc9e9d2f0a40b5256146e014802fdbb36
+> -- 
+> 2.55.0.1032.g73a4cd73de-goog
+> 
