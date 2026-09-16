@@ -1,124 +1,141 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E396C3368B7;
-	Wed, 16 Sep 2026 01:06:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F8C395AE2
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 01:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789520767; cv=none; b=gMKVvJVL/A+Hg4AD5p1Gwwu9pLAJ62ZvCAqkYDdpluVVA62wBcu4anmzNWAUbwESKe56xNfZCmdvnIk7LSPCSuq6g916UqOjjnkMMjajP9oV17RNfkiq1RVlR2/E+CHcBdDhzykqOBL1QJ+Po4xZ+SBd1zr4CBKPhDUPKoRAFOE=
+	t=1789522218; cv=none; b=pBa35kg/3NbtG5XM2121g+gTWtScCe8UUGaSBwgwv/+kYYs363omE7RM1HcUmrg1HIMTgmoFlxLfrW4n1Zt4VxQJYnCG1GeIdK767NfKriX/LITRk9LI1Ttp+jm5i0Q9Q+RVljZSKYujE2Va9yOjoj6toYQ4tq7IsEh87E9MZlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789520767; c=relaxed/simple;
-	bh=Saf9w/qoU4P4L+eoRXMaLuF8LHIiH0+7eiiF2u0xKxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TvwtQm1Abl/QMqbTkfgfEypNPkHpdmDcXz1qLOqg1j/AKtV+0p/vAF43SjL8FivWgjiHuoaPZy+oxqyetk20p6me7mIoq1HTjPRXH1pXtNWCZMOVGC18Uo2mMS4PDRba+L7V7YNqxw+T0vqyFcG2XZ/y+gq2Z6uQwjWCzhlvy6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AH7a/Zx2; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AH7a/Zx2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75431F00898;
-	Wed, 16 Sep 2026 01:06:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789520765;
-	bh=XvgNiNkqBk6+kkXqTrzqW7sJYsvtakfLRPDEyhDg7Hw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=AH7a/Zx22fCnj33kUljdAwOHOUB6dl3lKvMgl39S8dfLFFpjmDAaW7aDoy2lCXff3
-	 Zo5MdcsT9MVBmf7RLpdu82PWxH+JojNmdB3QU8us1QpIAD7fzrNCMEQUBFDPoCmVVH
-	 v64SNvGRvvxsBLc8xfHi2oNua4PEqxDdKLcX3VVlpXjL4N84lDvzPXSLk1zwfUBqDC
-	 nmtEMH2BW2uTaL8N30L/XGO7Tufc7TIYAa1z299zYRAmx4fX0IqrXdw2LMtGQGZgiC
-	 EmB9ZWdwrChtSsjs57wQqaPMI5KKrLLVc4HWuYUtR+CTCpfaRt9iJx0l0wdcqoCnv+
-	 qCNr4m7E8ofTQ==
-Date: Tue, 15 Sep 2026 18:06:05 -0700
-From: Kees Cook <kees@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	s=arc-20240116; t=1789522218; c=relaxed/simple;
+	bh=mQOEnFNDPytHbQQT9IAXpz28luodl7krkuFVgcN+Mng=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jXShOtWTAwfuoszVeO71HozoRNznHsbSoSAeG7KXsACcTFwc7Z7uXsusBy5QEzuMgoFXlMl+JC2DB2AlIici48oxVpQqtz0djuzzdqLTOR3pVvcZRBW9qQk670+RYXu0rzRPoATRUtVdhvgBap/2kZn2U3XMkRXxVT7rqKmN5tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XT3PVLzYQtpl
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:01 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.128])
+	by mail.maildlp.com (Postfix) with ESMTP id 92D5040573
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:05 +0800 (CST)
+Received: from huawei.com (unknown [10.67.174.45])
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S10;
+	Wed, 16 Sep 2026 09:30:05 +0800 (CST)
+From: Tengda Wu <wutengda@huaweicloud.com>
+To: Namhyung Kim <namhyung@kernel.org>,
+	james.clark@linaro.org,
+	xueshuai@linux.alibaba.com,
+	Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	leo.yan@linux.dev,
+	Li Huafei <lihuafei1@huawei.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexey Gladkov <legion@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 21/21] kbuild: use pigz for gzip compression if
- available
-Message-ID: <202609151758.BA5732348@keescook>
-References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
- <20260914-build-speedup-v2-21-39817ec5db23@kernel.org>
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Zecheng Li <zli94@ncsu.edu>,
+	linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	Tengda Wu <wutengda@huaweicloud.com>
+Subject: [PATCH v6 08/26] perf annotate: Adapt arch__dwarf_regnum() for arm64
+Date: Wed, 16 Sep 2026 01:29:22 +0000
+Message-Id: <1f03970d9efc5195283158362873d1e445b4afe5.1789521520.git.wutengda@huaweicloud.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1789521520.git.wutengda@huaweicloud.com>
+References: <cover.1789521520.git.wutengda@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260914-build-speedup-v2-21-39817ec5db23@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S10
+X-Coremail-Antispam: 1UD129KBjvJXoW7ury3uw48Cr47ZF1DGF1Utrb_yoW8CF1fpw
+	4xC343Ar10kr4FqwsxXFs3WFy3G3WfAa13uF1ktwn7Can7WryrJw4SyF1F9a13Ars7Jr1Y
+	yr4qqw18WFnxCaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUH2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7Cj
+	xVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+	C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxc
+	IEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5
+	MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr
+	0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sRNg4S3UUUU
+	U==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On Mon, Sep 14, 2026 at 10:22:20AM +0100, Lorenzo Stoakes (ARM) wrote:
-> diff --git a/Makefile b/Makefile
-> index 790ef23c5e8a..38c0cdc9f591 100644
-> --- a/Makefile
-> +++ b/Makefile
-> @@ -561,7 +561,7 @@ PERL		= perl
->  PYTHON3		= python3
->  CHECK		= sparse
->  BASH		= bash
-> -KGZIP		= gzip
-> +KGZIP		:= $(if $(shell command -v pigz 2>/dev/null),pigz,gzip)
->  KBZIP2		= bzip2
->  KLZOP		= lzop
->  LZMA		= lzma
+Currently, arch__dwarf_regnum() assumes that all architectures use a
+register prefix character (e.g., '%' for x86) defined by
+arch->objdump.register_char, and uses it to match register names in
+objdump output. However, this assumption does not hold for arm64,
+where assembly syntax uses bare register names like 'x0', 'w1'
+without any prefix.
 
-I had another idea that I think solves both my concerns (limits
-to parallelism, new surprise users) and your concerns (complexity,
-single-threaded when needed)... how about:
+As a result, arm64 builds may fail to correctly recognize register
+names from objdump disassembly, leading to incomplete or incorrect
+annotation output.
 
-Makefile:
+To address this:
 
-KPGZIP	:= $(if $(shell command -v pigz 2>/dev/null),$(PYTHON3) $(abs_srctree)/scripts/jobserver-exec $(abs_srctree)/scripts/parallel-gzip,gzip)
+- Make the register prefix check optional, allowing architectures
+  without a prefix character to be parsed correctly.
 
-and the same scripts/parallel-gzip:
+- Extend the delimiter set in strpbrk() to include the closing square
+  bracket ']'. In arm64 assembly, memory operands often use bracketed
+  syntax such as '[x1, #16]' or '[x2]'. Adding ']' ensures clean
+  extraction of register names like 'x2' without trailing characters.
 
-	#!/bin/sh
-	exec pigz -p ${PARALLELISM:-1} "$@"
+Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+---
+ tools/perf/util/annotate.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-And then replace the /boot/ KGZIP uses with KPGZIP. Then we don't need
-to change modules, config_data, new users, nor cmd_gzip, etc, which all
-continue to use the regular KGZIP and the "use python" part for the
-KPGZIP case becomes is a 1-time cost?
-
--Kees
-
+diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+index d3482eba9283..86a4beec6528 100644
+--- a/tools/perf/util/annotate.c
++++ b/tools/perf/util/annotate.c
+@@ -2582,19 +2582,21 @@ int annotate_check_args(void)
+ 
+ int arch__dwarf_regnum(const struct arch *arch, const char *str)
+ {
+-	const char *p;
++	const char *p = str;
+ 	char *regname, *q;
+ 	int reg;
+ 
+-	p = strchr(str, arch->objdump.register_char);
+-	if (p == NULL)
+-		return -1;
++	if (arch->objdump.register_char) {
++		p = strchr(str, arch->objdump.register_char);
++		if (p == NULL)
++			return -1;
++	}
+ 
+ 	regname = strdup(p);
+ 	if (regname == NULL)
+ 		return -1;
+ 
+-	q = strpbrk(regname, ",) ");
++	q = strpbrk(regname, ",)] ");
+ 	if (q)
+ 		*q = '\0';
+ 
 -- 
-Kees Cook
+2.34.1
+
