@@ -1,180 +1,127 @@
-Received: from mail-pj2-f19.google.com (mail-pj2-f19.google.com [74.125.227.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71AE5309EF9
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 14:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2253331A66;
+	Wed, 16 Sep 2026 15:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789570015; cv=none; b=lGOyAvtOYQfm9Z4AhBrax8ihGFi6dm4GlHltoXQd37o7AuoPnlRWkCtwfI/fBdv6TeEhfx20BCKLmAyMbr+/LtVD187qG9di+XBmvgkbIzluVaVzNgDcni/BfyDxDSqLBtsnK+oGVClsqjrZPeFVD2KWgyEKjKwD1HMZ6zVWUL4=
+	t=1789571035; cv=none; b=M0ZuazFoJMn8P7jD4oqHcrLPZkp/eQfCsSqnnSNpxeSmF40Zv+xO149CQ0Fp67+OhoJyplI5LyYgQ82OIyBxQkAznqgbuhLzBHLzoXb44kiu4tu7CzrvXFmAmyUfsC50mf/4R7tyWpmKK5UX4/BZp3v06j/8FF79SFhhCThpY2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789570015; c=relaxed/simple;
-	bh=ry0gP9/nte5FvnTqKFpnVOsUj0CotpETxmQQImGcUyM=;
+	s=arc-20240116; t=1789571035; c=relaxed/simple;
+	bh=ivTw1Y0pX9s+p0MElR8MJ98H6wOFlQU6YGM/Qsoj8hI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bmhKRaq/1eZrFj0WPBnOOx6RpneYGTcFTVI6A8ZmWydMHyN+k7Mat6lCXMrM62IksVbDfPZB2zOq37hrn/NVHEKfNxXEoH9UtRD7FOI2LJVFWWoDi8um4rtQebKyqqpqScZnZg9G0WlJ5S6dokGZjpqXV1zd+g/Jy1M6rvdaBeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ku0b+fsp; arc=none smtp.client-ip=74.125.227.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=FgjWUzIG3H0MUgT18gxREKq66BC9qAg0U3jfoP9qQL3uyjiQULQzsL3ERxZ+Brbg3BJbrY8Vd0to23N3zZ7L2bYJUuaBrBD1+0ybgqpU4r/jlywuQy3fgIpx/dHdjN6HduJHO80B4FSdPwox0AShPVR8HnvLKPDO6BAETuwcpt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hNp9TR4h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ku0b+fsp"
-Received: by mail-pj2-f19.google.com with SMTP id d9443c01a7336-2db18fe433fso8544185ad.2
-        for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 07:46:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789570012; x=1790174812; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Leygo7+6aTim/GwiqbwE1kTpWGv4lEshT5ezDgEePDE=;
-        b=Ku0b+fspY3//zbO+fVbVcK1OnPNiI33zAv7ZjgKzsf0M80iQSBM6tNTN2P1h0HvKlR
-         /Bqk+7/pl35N6PQWG0XTLOJmDXcqmPWlmftJRGHBXX1fPr4ZYQxl5nH2aDsL+dZaQQUu
-         860HVsoQfvWnmvB8CMQKCqk5uUnFb4aOr1bxxO7q9goMalMVgeEU6LuGRUBjWX/Wh79Z
-         CBs/ry4Zaqk/hGzaj3Zu/iKs2By6PAxvbqWjJWlMnDQAhUbls29kBZ+9GfqxXbomV5wU
-         xr/6PoJPWb5w45yAtInS/FbHDspet0P/hKNEGQI/S7s2QWMKfuh5a73Vydtf4wc/Ut1n
-         KwRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789570012; x=1790174812;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Leygo7+6aTim/GwiqbwE1kTpWGv4lEshT5ezDgEePDE=;
-        b=0zOjSLiTdXlfVH0CyCJMHTP3L84ZVs/1/jvvW3+BjQ+ZDtMX3A1Hw3MVR+pD0+NnNU
-         8ws4s+JOYaY1LCZzX2FQGrj3Qm0W37G3O9B8gWtvDeJDjz1RxJ1zvcvyI6ZhLZR720V0
-         9FCLel6juCofv7uqOBe+pgydtz79BVJd6nvMrOkwLkimfMDsIXF5U3UjvTrQLdcvBY9X
-         tj30lsirVSHo9VlBYxV7qG/1XlXrL7MlYjlahWr/7rCkDZtCMVGFmUW9OyHqyTcSQN8N
-         m+7EOhsp+DUYU3E+guy/8e9mtdn9SHy/nhmUekIrt/AbGpm8mtDh0rtakt1tmD2pfI4L
-         7nAA==
-X-Forwarded-Encrypted: i=1; AKwUvBysdroju22qTZEFeZYJ7WNQejJ6ktgT+7VIsHij9XUzKavlsiKZCy80th2VnE5GdkIFl/ci@lists.linux.dev
-X-Gm-Message-State: AFuF++kbTFKDBxk3CkWHytXuASP4wH435JiNlE009VZURB/4L2HHxBLb
-	XyxjKSygLw4gzjMljiYWnuIGSLvqT1pAnVoxPFzps6XfnoRolDYqEFP1
-X-Gm-Gg: AYBFou10EdZp2shkLF/yjNPEGvWLJ9XqGuXFhSs+lGbqy+1jvvBfkNFbmK8jC1hbBX9
-	mRzoWjHmyMfnbYINOT0vFxLO8fzfePAbFyJhBO8A+h6nu9+GAaRPmwtgkcveEEJKEjNrkqLMWiT
-	pSIBd9Gk98fkhGZFCX40t+WkzDAq6jfN8epxX5aIGVnKb0HM80G1aSflIlesJOx/uBMkvbHGnD9
-	MNXhaLKzka2yvvbeKNvCkkFd6vgcyR+ASqiKVV21DjKKQ7x+8KA5F42wB/NG7nu6W2KNgby50qH
-	5uKI/7e4JCfWbcRHNAG328D91ScL5XVQ/34wptYQLc1D9kKbR9UFYTe81pc7qnSEow58Pps8tFX
-	YCbmD1GSPRqf/zbuVpRPs4frFk3pyqSLbp+ZOyWJHGEhEMLJIdEqjPoH8gsRymrQrEr0lsdrZLl
-	EVUaA5iNwAAevo27aELg7BefgxYTEEHNkQb0ZjFrNbe3IWRCguALvaAnpNsBK0DJjJXXuje43hU
-	7FYdsLq+UN075Oxxba0PGNRuk1qNdTpEopYL+D25JDvQg==
-X-Received: by 2002:a17:903:2f10:b0:2d8:d4d0:7930 with SMTP id d9443c01a7336-2dd8e7aa5afmr63174535ad.20.1789570012227;
-        Wed, 16 Sep 2026 07:46:52 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.165.23])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dd89d8fe00sm13298065ad.12.2026.09.16.07.46.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Sep 2026 07:46:51 -0700 (PDT)
-Date: Wed, 16 Sep 2026 20:16:39 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: David Gow <david@davidgow.net>
-Cc: maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
-	chleroy@kernel.org, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
-	tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org, 
-	acourbot@nvidia.com, work@onurozkan.dev, pjw@kernel.org, palmer@dabbelt.com, 
-	aou@eecs.berkeley.edu, alex@ghiti.fr, nathan@kernel.org, ndesaulniers@google.com, 
-	morbo@google.com, justinstitt@google.com, ynorov@nvidia.com, joelagnelf@nvidia.com, 
-	fujita.tomonori@gmail.com, linkmauve@linkmauve.fr, linuxppc-dev@lists.ozlabs.org, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	llvm@lists.linux.dev
-Subject: Re: [PATCH V5 2/2] rust: kernel: Add KUnit tests for powerpc
- ARCH_WARN_ASM bug table emission
-Message-ID: <aqqqKyquDoisxvZL@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260915090453.1227034-1-mkchauras@gmail.com>
- <20260915090453.1227034-3-mkchauras@gmail.com>
- <236f1c15-9532-405a-818d-9bf52349f25a@davidgow.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hNp9TR4h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9BFE1F00893;
+	Wed, 16 Sep 2026 15:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789571034;
+	bh=dOv2mUj4IfQe2urPrSpRQzq0891uSiUaHQT6Owxb4wg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=hNp9TR4hNEa31Lc0OIBbkJdyzLUfzEaSCShJwRUZAyIVBedJucVpionSLbHbhuA12
+	 A4LYcd84p8E1yUX+oNnZHXrq7AxrE66qITT8dSJ5yoVQlbjgAVXl4pn9Uv35wr8WDE
+	 X6oCqN9iRGTROffI+elLc579AyLZU5pXOTmYO2A5vo4/B68mYilbKrCFbOTZbDxokz
+	 rdwtI5djw+jX5yinhipJqexpdkRFsYN21LTdQ7uhn1fk7jnwEWNsUyMLAMYEmMM61E
+	 5H7OUlp5zB0ThL+tfxTTww/QqiALf9VJCzMFbYRE6ZjfI5X7IDi/CCJt8YPEk4V11i
+	 Rrp4tMEu4icXA==
+Date: Wed, 16 Sep 2026 16:03:39 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
+	Randy Dunlap <rdunlap@infradead.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 21/21] kbuild: use pigz for gzip compression if
+ available
+Message-ID: <aqqqZfa8Q4D5dBt5@gremlin>
+References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
+ <20260914-build-speedup-v2-21-39817ec5db23@kernel.org>
+ <202609151758.BA5732348@keescook>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <236f1c15-9532-405a-818d-9bf52349f25a@davidgow.net>
+In-Reply-To: <202609151758.BA5732348@keescook>
 
-[...]
-> This works for me under QEMU, but I have a couple of small suggestions.
-> 
-> 1. You should use the kernel CStr and kernel::ffi::c_* types, not the ones
-> from core. This properly matches the way the kernel uses -funsigned-char.
-> For any architectures where char is normally signed, this would fail to
-> build. Which brings me to…
-> 
-Thanks for pointing it out, i missed this.
-> 2. Why is this specific to powerpc? Shouldn't it be possible to do this in a
-> way that works across more architectures? (Indeed, the current
-> implementation happens to pass on x86_64 with the above fix, though more
-> would be needed for other architectures, and there's probably a better
-> solution overall which doesn't hardcode a special bug address.)
-> 
-> So this still seems like it's something worth having, but I'd much prefer it
-> to not be architecture-specific if we can avoid it.
-> 
-> Cheers,
-> -- David
-> 
-The dependency to support these on all archs as it is would be to probe
-the implementation and figure out which will again cause it to have some
-arch specific stuff. I couldn't find a clean way of having all that at
-the same place without a lot of #cfg's so i just made it powerpc
-specific.
+On Tue, Sep 15, 2026 at 06:06:05PM -0700, Kees Cook wrote:
+> On Mon, Sep 14, 2026 at 10:22:20AM +0100, Lorenzo Stoakes (ARM) wrote:
+> > diff --git a/Makefile b/Makefile
+> > index 790ef23c5e8a..38c0cdc9f591 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -561,7 +561,7 @@ PERL		= perl
+> >  PYTHON3		= python3
+> >  CHECK		= sparse
+> >  BASH		= bash
+> > -KGZIP		= gzip
+> > +KGZIP		:= $(if $(shell command -v pigz 2>/dev/null),pigz,gzip)
+> >  KBZIP2		= bzip2
+> >  KLZOP		= lzop
+> >  LZMA		= lzma
+>
+> I had another idea that I think solves both my concerns (limits
+> to parallelism, new surprise users) and your concerns (complexity,
+> single-threaded when needed)... how about:
+>
+> Makefile:
+>
+> KPGZIP	:= $(if $(shell command -v pigz 2>/dev/null),$(PYTHON3) $(abs_srctree)/scripts/jobserver-exec $(abs_srctree)/scripts/parallel-gzip,gzip)
 
-Tomonori sent out a patch with a single test that's arch agnostic, but
-for ppc I would still like to keep these if the maintainer agrees.
+That's nice :) Keeps things simple, separates out the jobserver-exec execution
+(which it turns out is no big deal also), and abstracts the idea of 'parallel
+gzip'.
 
-[...]
-> 
-> It'd be really nice to use the warn_flags!() macro here (or even all of
-> warn_on!() instead of hardcoding a separate implementation here. But even if
-> we can't (due, e.g., to the need for global_asm! vs asm!), it'd be nice if
-> this were more similar to the warn_flags!() implementation. Not only would
-> that reduce the likelihood of these deviating needlessly, but it'd better
-> support more architectures, too.
-> 
-> For example, the commented "{size}" would help on architectures where size
-> isn't needed.
-> 
-Let me try this.
-[...]
-> > +    /// With `CONFIG_DEBUG_BUGVERBOSE` the entry must record a non-null file
-> > +    /// pointer pointing back into this source file.
-> > +    #[test]
-> > +    #[cfg(CONFIG_DEBUG_BUGVERBOSE)]
-> > +    fn bug_entry_file() {
-> > +        use core::ffi::CStr;
-> 
-> Please don't use core::ffi::* in the kernel. The kernel provides its own
-> CStr and c_char implementations. Otherwise, this can lead to issues as the
-> kernel builds with -funsigned-char, but core::ffi will use the architecture
-> default.
-> 
-Sure.
+Let's do this.
 
-> > +
-> > +        assert!(trap_addr() != 0);
-> > +        let entry = unsafe { bindings::find_bug(trap_addr()) };
-> > +        assert!(!entry.is_null());
-> > +
-> > +        let mut file_ptr: *const core::ffi::c_char = core::ptr::null();
-> 
-> Again, core::ffi::c_char should be avoided in kernel code. Use
-> [kernel::]ffi:c_char
-> 
-Sure.
-[...]
-> > +    /// With `CONFIG_DEBUG_BUGVERBOSE` the recorded line number must be
-> > +    /// non-zero (a zero line would mean the asm operand was not substituted).
-> > +    #[test]
-> > +    #[cfg(CONFIG_DEBUG_BUGVERBOSE)]
-> > +    fn bug_entry_line() {
-> > +        assert!(trap_addr() != 0);
-> > +        let entry = unsafe { bindings::find_bug(trap_addr()) };
-> > +        assert!(!entry.is_null());
-> > +
-> > +        let mut file_ptr: *const core::ffi::c_char = core::ptr::null();
-> 
-> And again.
-> 
-Sure 
+>
+> and the same scripts/parallel-gzip:
+>
+> 	#!/bin/sh
+> 	exec pigz -p ${PARALLELISM:-1} "$@"
+>
+> And then replace the /boot/ KGZIP uses with KPGZIP. Then we don't need
+> to change modules, config_data, new users, nor cmd_gzip, etc, which all
+> continue to use the regular KGZIP and the "use python" part for the
+> KPGZIP case becomes is a 1-time cost?
 
-Regards,
-Mukesh
-[...]
+Yeah that's really nice.
+
+This is clearly the way forward, will do that in v3, thanks! :)
+
+[Oh and on precedent, it seems the arm64 FIT image builder,
+ scripts/make_fit.py, uses pigz already if available :>)]
+
+>
+> -Kees
+>
+> --
+> Kees Cook
+
+--
+Cheers, Lorenzo
