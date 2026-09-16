@@ -1,27 +1,27 @@
 Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2306A399D00
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 01:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E1439B48D
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 01:30:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789522221; cv=none; b=VZZG997r7OwkgByC6fdIINhoGYH9XExpH8ICcOoKBfugQqZUR8NJrkJwixYSwFzbKrNDWqtOTog8Weo14H6PBU+K3iRbiSulp8tpwztt2WqP6Zcbufm3ePcGtpxZC1i7700AaHX4QKlIA8O6C3F6c2JKB1G5dF7fEi4X2K/4GdU=
+	t=1789522223; cv=none; b=CBsx6LM5crtYNqOF7fN5/WR6hZZmaCe2Mf5eNg1mLIXFz6CptLiwQP0VsAV8Cx/xndd9Nx0CZiA1uEnt5B4dB0ZTHq2EF95TepZFJh92OBRiPfhEAH/jsl1ovRtV8ULijhrkbbOhGi8Neybd6aoFWPxYaYdV4ZSK3TXsaqKwmqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789522221; c=relaxed/simple;
-	bh=cTQCXfNsJnQxRRt5wUQR669eMPsgS6g+fsbp+0Iwjw8=;
+	s=arc-20240116; t=1789522223; c=relaxed/simple;
+	bh=I8s3IRLIG6/0sh4VgQx4eFZKk5wCQhypjzz0IrTQSWc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=hOTY9pyQ3tG9IFXpm6CVre/jxHLBqdi70nbRrply6YEkXFobmtC4ayteo77i1brsZbrBCtzlzBs/16E1pEJV4f2mj8g5jpyz9mdwbwiV/B2HV4o3EMbjKculODPwPKZMkOi9ERJRNTM9s37zamlVrhrd4OzaX/9wdGCHag+N4L4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+	 MIME-Version; b=TXVKjkLhjFe5P5rB6V1TOWT904bIDTvmI/NiU2A2tG4qcigGE1Az76E5txkUJYUt7/ySRrjehqPO7v4cTayqLUN+litiV4laqSaItOM7V6Yin0thhYCjg2/Xyt9km3eMF4z7kVHz6ovheD6Xy3b9Nc44py1jE5keumWcK1FwL4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XJ092HzKHMS8
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hl1XJ2CXWzKHMTK
 	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:29:52 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 8EC3B40594
+	by mail.maildlp.com (Postfix) with ESMTP id E57BE40595
 	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 09:30:05 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S9;
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgAn+CoH8alqUcjbAQ--.36458S13;
 	Wed, 16 Sep 2026 09:30:05 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v6 07/26] perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
-Date: Wed, 16 Sep 2026 01:29:21 +0000
-Message-Id: <3115e9c4253d6710aa995a2052e5b73da395726b.1789521520.git.wutengda@huaweicloud.com>
+Subject: [PATCH v6 11/26] perf arm-spe: Set default synthesized event period to 1
+Date: Wed, 16 Sep 2026 01:29:25 +0000
+Message-Id: <40acb41b77fcb4aef1efe720c651563043800ff3.1789521520.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1789521520.git.wutengda@huaweicloud.com>
 References: <cover.1789521520.git.wutengda@huaweicloud.com>
@@ -57,111 +57,114 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S9
-X-Coremail-Antispam: 1UD129KBjvJXoWxAFyrCFWDtw43ur18AFWUurg_yoW5urW8pF
-	sxC347Jr4UW3WYkwnxJF1IgF1rXw4rZr40yry0yw47CrsruF1UXw4ftr1Y9F45J3yDJw10
-	kayDKr18Gr1rJFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUHIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+X-CM-TRANSID:gCh0CgAn+CoH8alqUcjbAQ--.36458S13
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFy7CFyxXFWkWw1kJryftFb_yoW5uw43pr
+	nFga4ftr1kJry8Kw17Ar4UuFy3tw4FvF1fGF1xGrWUAw1UKry8tr17try5Cr4UWr1Fyr12
+	qFyqgw1UGr1Utr7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUH2b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
 	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
 	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7Cj
-	xVAFwI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F4
-	0Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC
-	6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI
-	8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS14v26r4a6rW5MxkF7I0Ew4C26cxK6c8Ij28I
-	cwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
-	1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij
-	64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr
-	1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-	IxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0piPkusUUU
-	UU=
+	xVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrV
+	C2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+	7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxc
+	IEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc7CjxVAKzI0EY4vE52x082I5
+	MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0E
+	wIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8Jr
+	0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
+	42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7sRNg4S3UUUU
+	U==
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-The current arm64 DWARF register lookup relies on 'aarch64_regstr_tbl',
-a static string table. While this works for kprobe-tracer where register
-names start with '%', it is insufficient for parsing register numbers
-directly from raw instructions (e.g., extracting '6' from 'x6' or 'w6')
-during annotation.
+When using --itrace=M for data type profiling on arm64, the 'Percent'
+values in perf annotate output are all zero:
 
-Since get_dwarf_regnum() is currently used only by 'perf annotate' and
-does not affect kprobe-tracer, replace the limited table-based lookup
-with a programmatic implementation in __get_dwarf_regnum_arm64(). This
-allows resolving arm64 register names (x0-x30, w0-w30, sp, etc.) directly
-into their corresponding DWARF register numbers.
+Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+============================================================================
+ Percent     offset       size  field
+    0.00          0       0x10  struct mmu_gather_batch  {
+    0.00          0        0x8      struct mmu_gather_batch*    next;
+    0.00        0x8        0x4      unsigned int        nr;
+    0.00        0xc        0x4      unsigned int        max;
+    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+                                };
 
-Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+However, adding the -n option (show-nr-samples) reveals non-zero sample counts:
+
+Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+============================================================================
+ Samples     offset       size  field
+      15          0       0x10  struct mmu_gather_batch  {
+      13          0        0x8      struct mmu_gather_batch*    next;
+       2        0x8        0x4      unsigned int        nr;
+       0        0xc        0x4      unsigned int        max;
+       0       0x10          0      struct encoded_page*[]      encoded_pages;
+                                };
+
+The root cause is that when --itrace is used with non-i/y options
+(e.g., --itrace=M), the period remains zero after parsing. During
+subsequent propagation, the final percentage calculation results
+in zero:
+
+   arm_spe_prep_sample()
+      sample->period = spe->synth_opts.period;
+
+   __hists__add_entry()
+      he.stat.period = sample->period;
+
+   annotated_data_type__update_samples()
+      h->period += period;
+      h->addr[offset].period += period;
+
+   print_annotated_data_value()
+      double percent = h->period ? (100.0 * period / h->period) : 0;
+
+Fix this by defaulting the period to 1 in the ARM SPE auxtrace info
+processing path if it is not explicitly specified. This ensures that
+downstream tool components can correctly accumulate periods and compute
+event percentages for all synthesized SPE events.
+
+With this fix applied, the result is as follows:
+
+Annotate type: 'struct mmu_gather_batch' in [kernel.kallsyms] (15 samples):
+============================================================================
+ Percent     offset       size  field
+  100.00          0       0x10  struct mmu_gather_batch  {
+   86.67          0        0x8      struct mmu_gather_batch*    next;
+   13.33        0x8        0x4      unsigned int        nr;
+    0.00        0xc        0x4      unsigned int        max;
+    0.00       0x10          0      struct encoded_page*[]      encoded_pages;
+                                };
+
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../util/dwarf-regs-arch/dwarf-regs-arm64.c   | 25 +++++++++++++++++++
- tools/perf/util/dwarf-regs.c                  |  2 +-
- tools/perf/util/include/dwarf-regs.h          |  1 +
- 3 files changed, 27 insertions(+), 1 deletion(-)
+ tools/perf/util/arm-spe.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
-index 593ca7d4fccc..425c8aa2e984 100644
---- a/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
-+++ b/tools/perf/util/dwarf-regs-arch/dwarf-regs-arm64.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <errno.h>
-+#include <ctype.h>
-+#include <string.h>
- #include <dwarf-regs.h>
- #include "../../../arch/arm64/include/uapi/asm/perf_regs.h"
- 
-@@ -10,3 +12,26 @@ int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum)
- 
- 	return perf_regnum;
- }
+diff --git a/tools/perf/util/arm-spe.c b/tools/perf/util/arm-spe.c
+index ae7a5e9c3892..7805a1a98a89 100644
+--- a/tools/perf/util/arm-spe.c
++++ b/tools/perf/util/arm-spe.c
+@@ -2043,6 +2043,17 @@ int arm_spe_process_auxtrace_info(union perf_event *event,
+ 		err = -EINVAL;
+ 		goto err_free_queues;
+ 	}
 +
-+int __get_dwarf_regnum_arm64(const char *name)
-+{
-+	int reg;
++	/*
++	 * When --itrace is used with non-i/y options (e.g., --itrace=M),
++	 * the period remains 0 because the parser does not apply a default
++	 * for those paths. However, synthesized SPE events such as memory
++	 * accesses, TLB walks, and cache misses still require a valid
++	 * sample->period to correctly accumulate periods and compute event
++	 * percentages. Set it to 1 to ensure proper accounting.
++	 */
++	spe->synth_opts.period = spe->synth_opts.period ?: 1;
 +
-+	if (!strcmp(name, "sp"))
-+		return 31;
-+
-+	if (*name != 'x' && *name != 'w')
-+		return -ENOENT;
-+
-+	name++;
-+	if (!isdigit(name[0]))
-+		return -ENOENT;
-+	else if (isdigit(name[1]) && name[2] == '\0')
-+		reg = (name[0] - '0') * 10 + name[1] - '0';
-+	else if (name[1] == '\0')
-+		reg = name[0] - '0';
-+	else
-+		return -ENOENT;
-+
-+	return reg >= 0 && reg <= 30 ? reg : -ENOENT;
-+}
-diff --git a/tools/perf/util/dwarf-regs.c b/tools/perf/util/dwarf-regs.c
-index 67f38342247e..09aca6304002 100644
---- a/tools/perf/util/dwarf-regs.c
-+++ b/tools/perf/util/dwarf-regs.c
-@@ -114,7 +114,7 @@ int get_dwarf_regnum(const char *name, unsigned int machine, unsigned int flags)
- 		reg = _get_dwarf_regnum(arm_regstr_tbl, name);
- 		break;
- 	case EM_AARCH64:
--		reg = _get_dwarf_regnum(aarch64_regstr_tbl, name);
-+		reg = __get_dwarf_regnum_arm64(name);
- 		break;
- 	case EM_CSKY:
- 		reg = __get_csky_regnum(name, flags);
-diff --git a/tools/perf/util/include/dwarf-regs.h b/tools/perf/util/include/dwarf-regs.h
-index 92cf0af93e9e..1da915c2683a 100644
---- a/tools/perf/util/include/dwarf-regs.h
-+++ b/tools/perf/util/include/dwarf-regs.h
-@@ -105,6 +105,7 @@ int __get_dwarf_regnum_x86_64(const char *name);
- int __get_dwarf_regnum_for_perf_regnum_i386(int perf_regnum);
- int __get_dwarf_regnum_for_perf_regnum_x86_64(int perf_regnum, int abi);
- 
-+int __get_dwarf_regnum_arm64(const char *name);
- int __get_dwarf_regnum_for_perf_regnum_arm(int perf_regnum);
- int __get_dwarf_regnum_for_perf_regnum_arm64(int perf_regnum);
- 
+ 	if (spe->synth_opts.period > 1)
+ 		ui__warning("Arm SPE has a hardware-based sampling period.\n\n"
+ 			    "--itrace periods > 1i downsample by an interval of n SPE samples rather than n instructions.\n");
 -- 
 2.34.1
 
