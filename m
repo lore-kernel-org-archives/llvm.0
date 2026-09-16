@@ -1,317 +1,457 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD72A4078D0
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 11:36:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3364A261D
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 13:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789558604; cv=none; b=RI400mW8zD/Rdm58859z/+EN9+m8DxIncMv4C+UobwSCjZCE0AfI5Tni2J3JxxSbY7/SfUS46y11bvXrxUlkywS9xCXX/XTJC3LDESGebg40YUV/ER/eNKcnflJE7Ghv5sNCgIwDH3pzdh5nzRzQMYCW6cyYNcJSjWZygGYkdfU=
+	t=1789566338; cv=none; b=py+Vn2nbQA9AKzzKHwkxrxmHqM6wMSJefXT39WtHWzBHI6Tpu1kFlufq7NmXCm47XoVe3v9/OtA2szTWPLEZE8Wnp9SwDCbhBWq9EQBK0teFoetVFa3Jxe/yxSBU7wCFO5ENeh3Osc1VYHCFUXlqCiH1qe3SwaS7MoF6QtqbyAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789558604; c=relaxed/simple;
-	bh=dlDYh7l6mEAamAjGZWKIHcXe5ju0oYI40ADbCBs4rP8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=e8eUJGtEW0FQ2iYyl7s9P1B65rsp1hN1bcpWt6L40sjpD5zQzs93VOmEF2c4Wt4BwtyBW5esxYhyW0ZIMdabyLtmn2mYHeLrjGfMS7wispQPqZeMZI/5rICj1axf71cpIT+fM9B63Dd9heTtx4HOONNXHwq0rlDeVylwTDml9Wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4hlGzw203gzKHMnS
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 19:36:12 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.252])
-	by mail.maildlp.com (Postfix) with ESMTP id 93C654058C
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 19:36:26 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBndms5f6pq_CwHAg--.33851S2;
-	Wed, 16 Sep 2026 19:36:26 +0800 (CST)
-Message-ID: <2cb96f76-17c7-43a4-bfad-17f51b0193db@huaweicloud.com>
-Date: Wed, 16 Sep 2026 19:36:25 +0800
+	s=arc-20240116; t=1789566338; c=relaxed/simple;
+	bh=/LNr26teQFtm4DiMGFdRchReCVIeUUwiVJkiIz5uEIA=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J8H0GKdvnhPwB5UrNifUuLDzlNudvN9U6LjEofub65bYn3zsnPONHQRK/AU3StOGAYaEiBT8Kkm8p6AituoAsuUWOQFa8b6UQH/TCdikbeDmf1GWL0LQTISoJUJJNGSCtklJGKzRfBbYfZCC4u8YcUQO36BQriWqKzCqsYdAolE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=airoha.com; spf=pass smtp.mailfrom=airoha.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=DlaEo+Lx; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=airoha.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=airoha.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="DlaEo+Lx"
+X-UUID: d7e5bad6b1d411f18dc8c9802ae25ab1-20260916
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:Subject:CC:To:From:Date; bh=Ur21vGZjFEaXGQGVl1ymEBShpak0h6eYuaOGDEy6bqw=;
+	b=DlaEo+LxkSG4pI352czj3D2m28avaKZ58wIprEDYkyEH1CGoyxFRH3be+/Pza1T4YwvCNJf7azAg4d4tGtTdNO5IQPwjnB3kSr8wAHIu7Y6AyixhfBv6RJ0Yh6DWOc932KgrfFjcRX7VmQ9kXTNVRuuQ0a5HbmifdqxRb3HiaLE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:a6b7b445-d3dd-457d-a99a-f431774d5348,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:7db8b62,CLOUDID:1c3fb217-e22c-471e-b84b-524d9ae72460,B
+	ulkID:nil,BulkQuantity:0,SF:80|81|82|83|102|136|836|865|888|898,TC:-5,Cont
+	ent:0|15|50|99,EDM:-3|-100,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:
+	-1,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: d7e5bad6b1d411f18dc8c9802ae25ab1-20260916
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
+	(envelope-from <zhengping.zhang@airoha.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 251038336; Wed, 16 Sep 2026 21:45:13 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.29; Wed, 16 Sep 2026 21:45:12 +0800
+Received: from mediatek.com (172.18.153.129) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.2562.29 via Frontend
+ Transport; Wed, 16 Sep 2026 21:45:12 +0800
+Date: Wed, 16 Sep 2026 21:45:12 +0800
+From: Zhengping Zhang <zhengping.zhang@airoha.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+CC: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Simon Horman
+	<horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan
+	<skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, Lorenzo
+ Bianconi <lorenzo@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>,
+	Russell King <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>,
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+	<justinstitt@google.com>, <netdev@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <llvm@lists.linux.dev>,
+	<yalei.zang@airoha.com>, <lei.dong@airoha.com>
+Subject: Re: [PATCH net-next v15 12/12] net: airoha: add phylink support
+Message-ID: <aqqdaMsN1NndJdSI@mediatek.com>
+References: <20260901083001.8044-1-ansuelsmth@gmail.com>
+ <20260901083001.8044-13-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 00/26] perf arm64: Support data type profiling
-To: Ian Rogers <irogers@google.com>
-Cc: Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
- xueshuai@linux.alibaba.com, Adrian Hunter <adrian.hunter@intel.com>,
- Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Kim Phillips <kim.phillips@arm.com>,
- Mark Rutland <mark.rutland@arm.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-References: <cover.1789521520.git.wutengda@huaweicloud.com>
- <CAP-5=fWUXwr3asB4HYdDdHCGV8wx+VMC8Xq-BRipU6175Roo7Q@mail.gmail.com>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <CAP-5=fWUXwr3asB4HYdDdHCGV8wx+VMC8Xq-BRipU6175Roo7Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_Ch0CgBndms5f6pq_CwHAg--.33851S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3ur17Jw4xAF1kGFyfKryDWrg_yoWkCF13pF
-	Z3CayfJF4UJrW8KwsrX39rur13ta1rJ3yUGr1rK34Skw1j9F1vyFs7tF1rZFyDCrWDCw1I
-	qr4qy3Z8ZF1jvFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I
-	0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AF
-	wI0_GFv_Wryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-	xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5
-	MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-	0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8
-	JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26F4UJVW0obIYCTnIWIevJa73UjIFyTuYvjxUxo
-	7KDUUUU
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20260901083001.8044-13-ansuelsmth@gmail.com>
+X-MTK: N
 
+Tested-by: Zhengping Zhang <zhengping.zhang@airoha.com>
 
+Tested on an AN7581 board with AN8831 USXGMII PHY at GDM2/4;
+the link came up at 10G.
 
-On 2026/9/16 12:17, Ian Rogers wrote:
-> On Tue, Sep 15, 2026 at 6:30 PM Tengda Wu <wutengda@huaweicloud.com> wrote:
->>
->> This patch series implements data type profiling support for arm64,
->> enabling 'perf annotate --data-type' to resolve memory locations and
->> variable types on arm64 platforms.
->>
->> The main changes since v5 include:
->> v5: https://lore.kernel.org/all/cover.1788872630.git.wutengda@huaweicloud.com/
->>
->> * __get_dwarf_regnum_arm64 optimization: compute directly based on character
->>   judgment, avoiding strtol calls. (Ian Rogers)
->>
->> * extract_op_location_arm64 issue fix: support parsing instructions such as
->>   'cmp x0, x1, lsl #3'.
->>
->> * Instruction tracking part, fixing issues pointed out by Sashiko, including:
->>   - adding TSR_KIND_POINTER handling for ldr.
->>   - premature returns in add and ldr causing percpu handling to be skipped.
->>   - adding a reg != -1 check for stack type propagation, etc.
->>
->> Patch organization
->> ==================
->>
->> The series is organized as follows:
->>
->> 1. Fix disassembly mismatches (Patches 01-02)
->>    Current perf annotate supports three disassembly backends: llvm,
->>    capstone, and objdump. On arm64, inconsistencies between the output
->>    of these backends (specifically llvm/capstone vs. objdump) often
->>    prevent the tracker from correctly identifying registers and offsets.
->>    These patches resolve these mismatches, ensuring consistent instruction
->>    parsing across all supported backends.
->>
->> 2. Infrastructure for arm64 operand parsing (Patches 03-09)
->>    These patches establish the necessary infrastructure for arm64-specific
->>    operand handling. This includes implementing new callbacks and data
->>    structures to manage arm64's unique addressing modes and register sets.
->>    This foundation is essential for the subsequent type-tracking logic.
->>
->> 3. ARM SPE event handling (Patches 10-11)
->>    Patch 10 automatically deduplicates overlapping ARM SPE events (e.g.,
->>    l1d-miss, tlb-access) in 'perf annotate' by retaining only the
->>    "instructions" event when data type profiling is enabled. Patch 11
->>    defaults  the synthesized event period to 1 for ARM SPE to fix zero
->>    'Percent' values in annotate output.
->>
->> 4. Core instruction tracking (Patches 12-26)
->>    These patches implement the core logic for type tracking on arm64,
->>    covering several key types of instructions, including:
->>    * Memory Access: ldr/str variants (including stack-based access).
->>    * Arithmetic & Data Processing: mov, add, and adrp.
->>    * Special Access: System register access (mrs) and per-cpu variable
->>      tracking.
->>
->> The implementation draws inspiration from the existing x86 logic while
->> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
->> perf annotate can successfully resolve memory locations and register types,
->> providing basic support for data type profiling on arm64 platforms.
->>
->> Example Result
->> ==============
->>
->> # perf mem record -a -K -- sleep 1
->> # perf annotate --data-type --stdio --type-stat
->> Annotate data type stats:
->> total 1138, ok 852 (74.9%), bad 286 (25.1%)
->> -----------------------------------------------------------
->>          6 : no_sym
->>         42 : no_var
->>        230 : no_typeinfo
->>          8 : bad_offset
->>        213 : insn_track
->>
->> Annotate type: 'struct page' in [kernel.kallsyms] (66948 samples):
->> ============================================================================
->>  Percent     offset       size  field
->>   100.00          0       0x40  struct page      {
->>     9.01          0        0x8      long unsigned int   flags;
->>    57.99        0x8       0x28      union        {
->>    57.99        0x8       0x28          struct   {
->>    33.00        0x8       0x10              union        {
->>    33.00        0x8       0x10                  struct list_head        lru {
->>    33.00        0x8        0x8                      struct list_head*   next;
->>     0.00       0x10        0x8                      struct list_head*   prev;
->>                                                 };
->>    33.00        0x8       0x10                  struct   {
->>    33.00        0x8        0x8                      void*       __filler;
->>     0.00       0x10        0x4                      unsigned int        mlock_count;
->>    ...
->>
->> Each patch's type profiling results are as follows:
->>
->> Patch | Feature                    | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
->> ------+----------------------------+--------+--------+-------------+------------+------------+------
->> 0011  | base (default spe period)  | 6      | 493    | -           | -          | -          | 56.2%
->> 0013  | enable insn tracking       | 6      | 42     | 437         | 2          | 12         | 57.2%
->> 0016  | support 'load' insn        | 6      | 42     | 398         | 1          | 52         | 60.7%
->> 0017  | support 'store' insn       | 6      | 42     | 398         | 1          | 52         | 60.7%
->> 0021  | support stack variable     | 6      | 42     | 391         | 1          | 59         | 61.3%
->> 0022  | support 'mov' insn         | 6      | 42     | 372         | 3          | 76         | 62.8%
->> 0023  | support 'add' insn         | 6      | 42     | 318         | 7          | 126        | 67.2%
->> 0024  | support 'adrp' insn        | 6      | 42     | 238         | 8          | 205        | 74.2%
->> 0025  | support per-cpu variable   | 6      | 42     | 233         | 8          | 210        | 74.6%
->> 0026  | support 'mrs' insn         | 6      | 42     | 230         | 8          | 213        | 74.9%
->>
->> Limitations
->> ===========
->>
->> * SIMD/FP & SVE Vector Support:
->>   Data type profiling currently focuses on General-Purpose (GP) register
->>   operations. Vector/SIMD registers (v0-v31, d0-d31, q0-q31) and Scalable
->>   Vector Extension (SVE/SME) instructions are not tracked yet.
->>
->> * Regular Instructions Only:
->>   Only regular instructions are currently supported. Instructions following
->>   special rules or non-standard patterns are not supported yet. For example,
->>   load/store tracking only matches standard variants (ldr/ldur/ldar/ldp and
->>   str/stur/stlr/stp) with straightforward semantics; exclusive loads/stores
->>   (ldxr, stxr, etc.) and acquire/exclusive combination variants are excluded.
->>
->> * Compiler Prologue/Epilogue Code:
->>   As shown by the previous test results, approximately 14% of the failed
->>   type profiling results originate from compiler-generated prologue or
->>   epilogue code (e.g., ldp  x19, x20, [sp, #16]). These instructions manage
->>   callee-saved registers across function boundaries, propagating type
->>   context through these operations requires inter-procedural (cross-function)
->>   instruction analysis, which is currently unsupported by the local backward
->>   instruction tracker.
->>
->> Testing
->> =======
->>
->> Tested on arm64 (all passed):
->>
->>   # perf test -v "perf data type profiling tests"
->>   81: perf data type profiling tests                                                                  : Ok
->>
->>   === Test Summary ===
->>   Passed main tests : 1
->>   Passed subtests   : 0
->>   Skipped tests     : 0
->>   Failed tests      : 0
->>
->> Tested on x86. The profiling results show no change before/after applying
->> this patch series:
->>
->>   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
->>   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
->>
->> Changelog
->> =========
->> v5 -> v6:
->>   - v5: https://lore.kernel.org/all/cover.1788872630.git.wutengda@huaweicloud.com/
->>   - Fix a potential UAF issue with capstone sym_name.
->>   - Optimize __get_dwarf_regnum_arm64 to compute directly based on character
->>     judgment, avoiding strtol calls. (Ian Rogers)
->>   - Fix an issue in extract_op_location_arm64 when parsing instructions such as
->>     'cmp x0, x1, lsl #3'.
->>   - Fix several minor issues in instruction tracking. (Sashiko)
->> v4 -> v5:
->>   - v4: https://lore.kernel.org/all/20260808122400.2961238-1-wutengda@huaweicloud.com/
->>   - Introduce arch_get_reg_offset() to uniformly handle reg offset.
->>   - Add support for parsing extension type and shift amount in arm64 instructions.
->>   - Refine which instructions to track or skip. (Shuai Xue)
->>   - Rename dont_overlap to default_single_event_per_ip and use it in
->>     itrace_synth_opts__set_default(). (Adrian Hunter)
->>   - Introduce delete_stack_state() to clean up obsolete stack state. (Shuai Xue)
->>   - Normalize arch__dwarf_regnum() error return values. (Shuai Xue)
->>   - Drop canary support due to unresolved bugs.
->>   - Fix various minor issues, such as name memory leaks and header includes.
->> v3 -> v4:
->>   - v3: https://lore.kernel.org/all/20260701035355.752944-1-wutengda@huaweicloud.com/
->>   - Fix Capstone compilation failure.
->>   - Stop adding new pcrel_adrp_addr in LLVM; reuse pcrel_load_addr instead.
->>   - Fix parsing issue in arm64_mov__parse.
->>   - Add PC-relative load instruction parsing logic to arm64_ldst__parse,
->>     and introduce rstrip_space_and_comment to strip comments.
->>   - Remove wzr/xzr register parsing (not planning to handle this yet).
->>   - Add post-index addressing mode parsing for the '[base], reg' format.
->>   - Update built-in implementation of --itrace=i1i to deduplicate early
->>     during arm_spe_process_auxtrace_info.
->>   - Restrict the "default period to 1" behavior to ARM SPE, instead of
->>     applying it to all architectures.
->>   - Add register type tracking for function call instructions.
->>   - Add dual-register type tracking for load pair and store pair instructions.
->>   - Correct stack variable offset calculations.
->>   - Add type invalidation upon retry failure.
->>   - Reuse imm_value instead of introducing addr for 'adrp' instruction tracking.
->>   - Fix potential stale type resolution errors caused by TSR_KIND_GLOBAL_ADDR
->>     and TSR_KIND_CONST during stack passing.
->>   - Fix a strbuf memory leak during 'mrs' instruction tracking.
->>   - Fix stale dieoff issue when debug info changes.
->>   - Simplify add type propagation: only propagate offset/imm updates, leave
->>     type parsing to chk.
->> v2 -> v3:
->>   - v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
->>   - Instead of always parsing the left operand as src and the right operand as
->>     dst, set them based on the actual instruction definition. (Namhyung Kim)
->>   - Fix refcount leak in print_capstone_detail().
->>   - Remove useless '<' check when parsing 'addr <symbol>' in arm64_mov__parse().
->>   - Add example comments in arm64_ldst__parse().
->>   - Split arch__dwarf_regnum() changes into a separate commit.
->>   - Rename annotated_addr_mode enum: INSN_ADDR_* -> PERF_ADDR_MODE_*.
->>   - Set caller-saved registers in init_type_state().
->>   - For instructions with addressing mode, always goto adjust_reg_index_state()
->>     at the end to update the src register state.
->>   - Handle TSR_KIND_CONST registers for 'mov' and 'add' instructions.
->>   - Invalidate dst register for all other unsupported instructions.
->>   - Verify type DIE is task_struct pointer before caching globally.
->>   - Enable --itrace=i1i by default for ARM SPE data type profiling in 'perf annotate'
->>     to avoid overlapping event counting for the same instruction. (James Clark)
->>   - Fix global variable type resolving error in check_matching_type(). (James Clark)
->>   - Address review comments from sashiko [1]:
->>     - Fix unconditional call to arch->extract_op_location()
->>     - Handle multi_regs correctly
->>     - Fix invalid register state in error path
->>     - Other misc fixes
->> v1 -> v2:
->>   - v1: https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->>   - Fix inconsistencies in arm64 instruction output across llvm, capstone,
->>     and objdump disassembly backends.
->>   - Support arm64-specific addressing modes and operand formats. (Leo Yan)
->>   - Extend instruction tracking to support mov and add instructions,
->>     along with per-cpu and stack variables.
->>   - Include real-world examples in commit messages to demonstrate
->>     practical effects. (Namhyung Kim)
->>   - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
->>
->> Please let me know if you have any feedback.
+On Tue, Sep 01, 2026 at 10:29:27AM +0200, Christian Marangi wrote:
+> Add phylink support for each GDM port. For GDM1 add the internal interface
+> mode as the only supported mode. For GDM2/3/4 add the required
+> configuration of the PCS to make the external PHY or attached SFP cage
+> work.
 > 
-> There's a sashiko finding on patch 21 that looks like it should be
-> addressed. For the series:
+> These needs to be defined in the GDM port node using the pcs-handle
+> property.
 > 
-> Reviewed-by: Ian Rogers <irogers@google.com>
+> Update and provide a .get/set_link_ksettings function that use phylink
+> for ethtool OPs now that we fully support phylink.
 > 
-
-Thanks Ian! Will address the patch 21 sashiko finding in next version.
-
-Thanks,
-Tengda
-
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+> ---
+>  drivers/net/ethernet/airoha/Kconfig       |   2 +
+>  drivers/net/ethernet/airoha/airoha_eth.c  | 199 +++++++++++++++++++++-
+>  drivers/net/ethernet/airoha/airoha_eth.h  |   5 +
+>  drivers/net/ethernet/airoha/airoha_regs.h |  12 ++
+>  4 files changed, 215 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/airoha/Kconfig b/drivers/net/ethernet/airoha/Kconfig
+> index 1f6640a15fc9..5c54a07d2a76 100644
+> --- a/drivers/net/ethernet/airoha/Kconfig
+> +++ b/drivers/net/ethernet/airoha/Kconfig
+> @@ -20,6 +20,8 @@ config NET_AIROHA
+>  	depends on NET_DSA || !NET_DSA
+>  	select NET_AIROHA_NPU
+>  	select PAGE_POOL
+> +	select PCS_AIROHA
+> +	select PHYLINK
+>  	help
+>  	  This driver supports the gigabit ethernet MACs in the
+>  	  Airoha SoC family.
+> diff --git a/drivers/net/ethernet/airoha/airoha_eth.c b/drivers/net/ethernet/airoha/airoha_eth.c
+> index 64619e9a704d..c3827bf9791b 100644
+> --- a/drivers/net/ethernet/airoha/airoha_eth.c
+> +++ b/drivers/net/ethernet/airoha/airoha_eth.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/of.h>
+>  #include <linux/of_net.h>
+>  #include <linux/of_reserved_mem.h>
+> +#include <linux/pcs/pcs.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/tcp.h>
+>  #include <linux/u64_stats_sync.h>
+> @@ -1915,10 +1916,18 @@ static int airoha_dev_open(struct net_device *netdev)
+>  	struct airoha_qdma *qdma;
+>  	int err;
+>  
+> +	err = phylink_of_phy_connect(dev->phylink, netdev->dev.of_node, 0);
+> +	if (err) {
+> +		netdev_err(netdev, "could not attach PHY: %d\n", err);
+> +		return err;
+> +	}
+> +
+> +	phylink_start(dev->phylink);
+> +
+>  	netif_tx_start_all_queues(netdev);
+>  	err = airoha_set_vip_for_gdm_port(dev, true);
+>  	if (err)
+> -		return err;
+> +		goto err_phy_stop;
+>  
+>  	qdma = airoha_qdma_deref(dev);
+>  	if (netdev_uses_dsa(netdev))
+> @@ -1938,6 +1947,13 @@ static int airoha_dev_open(struct net_device *netdev)
+>  				    pse_port);
+>  
+>  	return 0;
+> +
+> +err_phy_stop:
+> +	netif_tx_stop_all_queues(netdev);
+> +	phylink_stop(dev->phylink);
+> +	phylink_disconnect_phy(dev->phylink);
+> +
+> +	return err;
+>  }
+>  
+>  static int airoha_dev_stop(struct net_device *netdev)
+> @@ -1945,6 +1961,8 @@ static int airoha_dev_stop(struct net_device *netdev)
+>  	struct airoha_gdm_dev *dev = netdev_priv(netdev);
+>  	struct airoha_gdm_port *port = dev->port;
+>  
+> +	phylink_stop(dev->phylink);
+> +
+>  	netif_tx_disable(netdev);
+>  	airoha_set_vip_for_gdm_port(dev, false);
+>  
+> @@ -1954,6 +1972,9 @@ static int airoha_dev_stop(struct net_device *netdev)
+>  		airoha_set_gdm_port_fwd_cfg(dev->eth,
+>  					    REG_GDM_FWD_CFG(port->id),
+>  					    FE_PSE_PORT_DROP);
+> +
+> +	phylink_disconnect_phy(dev->phylink);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -2509,6 +2530,24 @@ airoha_ethtool_get_rmon_stats(struct net_device *netdev,
+>  	} while (u64_stats_fetch_retry(&dev->stats.syncp, start));
+>  }
+>  
+> +static int
+> +airoha_ethtool_get_link_ksettings(struct net_device *netdev,
+> +				  struct ethtool_link_ksettings *cmd)
+> +{
+> +	struct airoha_gdm_dev *dev = netdev_priv(netdev);
+> +
+> +	return phylink_ethtool_ksettings_get(dev->phylink, cmd);
+> +}
+> +
+> +static int
+> +airoha_ethtool_set_link_ksettings(struct net_device *netdev,
+> +				  const struct ethtool_link_ksettings *cmd)
+> +{
+> +	struct airoha_gdm_dev *dev = netdev_priv(netdev);
+> +
+> +	return phylink_ethtool_ksettings_set(dev->phylink, cmd);
+> +}
+> +
+>  static int airoha_qdma_set_chan_tx_sched(struct net_device *netdev,
+>  					 int channel, enum tx_sched_mode mode,
+>  					 const u16 *weights, u8 n_weights)
+> @@ -3353,7 +3392,8 @@ static const struct ethtool_ops airoha_ethtool_ops = {
+>  	.get_drvinfo		= airoha_ethtool_get_drvinfo,
+>  	.get_eth_mac_stats      = airoha_ethtool_get_mac_stats,
+>  	.get_rmon_stats		= airoha_ethtool_get_rmon_stats,
+> -	.get_link_ksettings	= phy_ethtool_get_link_ksettings,
+> +	.get_link_ksettings	= airoha_ethtool_get_link_ksettings,
+> +	.set_link_ksettings	= airoha_ethtool_set_link_ksettings,
+>  	.get_link		= ethtool_op_get_link,
+>  };
+>  
+> @@ -3409,6 +3449,155 @@ bool airoha_is_valid_gdm_dev(struct airoha_eth *eth,
+>  	return false;
+>  }
+>  
+> +/* Nothing to do in MAC, everything is handled in PCS */
+> +static void airoha_mac_config(struct phylink_config *config, unsigned int mode,
+> +			      const struct phylink_link_state *state)
+> +{
+> +}
+> +
+> +static void airoha_mac_link_up(struct phylink_config *config, struct phy_device *phy,
+> +			       unsigned int mode, phy_interface_t interface,
+> +			       int speed, int duplex, bool tx_pause, bool rx_pause)
+> +{
+> +	struct airoha_gdm_dev *dev = container_of(config, struct airoha_gdm_dev,
+> +						  phylink_config);
+> +	struct airoha_gdm_port *port = dev->port;
+> +	struct airoha_eth *eth = dev->eth;
+> +	u32 frag_size_tx, frag_size_rx;
+> +
+> +	/* TX/RX frag is configured only for GDM4 */
+> +	if (port->id != AIROHA_GDM4_IDX)
+> +		return;
+> +
+> +	switch (speed) {
+> +	case SPEED_10000:
+> +	case SPEED_5000:
+> +		frag_size_tx = 8;
+> +		frag_size_rx = 8;
+> +		break;
+> +	case SPEED_2500:
+> +		frag_size_tx = 2;
+> +		frag_size_rx = 1;
+> +		break;
+> +	default:
+> +		frag_size_tx = 1;
+> +		frag_size_rx = 0;
+> +		break;
+> +	}
+> +
+> +	mutex_lock(&port->link_lock);
+> +
+> +	/* Configure TX/RX frag based on speed */
+> +	if (dev->nbq == 1) {
+> +		airoha_fe_rmw(eth, REG_FE_GDM4_TMBI_FRAG,
+> +			      GDM4_SGMII1_TX_FRAG_SIZE_MASK,
+> +			      FIELD_PREP(GDM4_SGMII1_TX_FRAG_SIZE_MASK,
+> +					 frag_size_tx));
+> +
+> +		airoha_fe_rmw(eth, REG_FE_GDM4_RMBI_FRAG,
+> +			      GDM4_SGMII1_RX_FRAG_SIZE_MASK,
+> +			      FIELD_PREP(GDM4_SGMII1_RX_FRAG_SIZE_MASK,
+> +					 frag_size_rx));
+> +	} else {
+> +		airoha_fe_rmw(eth, REG_FE_GDM4_TMBI_FRAG,
+> +			      GDM4_SGMII0_TX_FRAG_SIZE_MASK,
+> +			      FIELD_PREP(GDM4_SGMII0_TX_FRAG_SIZE_MASK,
+> +					 frag_size_tx));
+> +
+> +		airoha_fe_rmw(eth, REG_FE_GDM4_RMBI_FRAG,
+> +			      GDM4_SGMII0_RX_FRAG_SIZE_MASK,
+> +			      FIELD_PREP(GDM4_SGMII0_RX_FRAG_SIZE_MASK,
+> +					 frag_size_rx));
+> +	}
+> +
+> +	mutex_unlock(&port->link_lock);
+> +}
+> +
+> +/* Nothing to do in MAC, everything is handled in PCS */
+> +static void airoha_mac_link_down(struct phylink_config *config, unsigned int mode,
+> +				 phy_interface_t interface)
+> +{
+> +}
+> +
+> +static const struct phylink_mac_ops airoha_phylink_ops = {
+> +	.mac_config = airoha_mac_config,
+> +	.mac_link_up = airoha_mac_link_up,
+> +	.mac_link_down = airoha_mac_link_down,
+> +};
+> +
+> +static int airoha_fill_available_pcs(struct phylink_config *config,
+> +				     struct phylink_pcs **available_pcs,
+> +				     unsigned int num_possible_pcs)
+> +{
+> +	struct device *dev = config->dev;
+> +
+> +	return fwnode_phylink_pcs_parse(dev_fwnode(dev), available_pcs,
+> +					num_possible_pcs);
+> +}
+> +
+> +static int airoha_setup_phylink(struct net_device *netdev)
+> +{
+> +	struct airoha_gdm_dev *dev = netdev_priv(netdev);
+> +	struct device_node *np = netdev->dev.of_node;
+> +	struct airoha_gdm_port *port = dev->port;
+> +	struct phylink_config *config;
+> +	phy_interface_t phy_mode;
+> +	struct phylink *phylink;
+> +	int err;
+> +
+> +	err = of_get_phy_mode(np, &phy_mode);
+> +	if (err) {
+> +		dev_err(&netdev->dev, "incorrect phy-mode\n");
+> +		return err;
+> +	}
+> +
+> +	config = &dev->phylink_config;
+> +	config->dev = &netdev->dev;
+> +	config->type = PHYLINK_NETDEV;
+> +
+> +	/*
+> +	 * GDM1 only supports internal for Embedded Switch
+> +	 * and doesn't require a PCS.
+> +	 */
+> +	if (port->id == AIROHA_GDM1_IDX) {
+> +		config->mac_capabilities = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
+> +					   MAC_10000FD;
+> +
+> +		__set_bit(PHY_INTERFACE_MODE_INTERNAL,
+> +			  config->supported_interfaces);
+> +	} else {
+> +		config->mac_capabilities = MAC_ASYM_PAUSE | MAC_SYM_PAUSE |
+> +					   MAC_10 | MAC_100 | MAC_1000 |
+> +					   MAC_2500FD | MAC_5000FD | MAC_10000FD;
+> +
+> +		config->num_possible_pcs = fwnode_phylink_pcs_count(dev_fwnode(config->dev));
+> +		config->fill_available_pcs = airoha_fill_available_pcs;
+> +
+> +		__set_bit(PHY_INTERFACE_MODE_SGMII,
+> +			  config->supported_interfaces);
+> +		__set_bit(PHY_INTERFACE_MODE_1000BASEX,
+> +			  config->supported_interfaces);
+> +		__set_bit(PHY_INTERFACE_MODE_2500BASEX,
+> +			  config->supported_interfaces);
+> +		__set_bit(PHY_INTERFACE_MODE_10GBASER,
+> +			  config->supported_interfaces);
+> +		__set_bit(PHY_INTERFACE_MODE_USXGMII,
+> +			  config->supported_interfaces);
+> +
+> +		phy_interface_copy(config->pcs_interfaces,
+> +				   config->supported_interfaces);
+> +	}
+> +
+> +	phylink = phylink_create(config, of_fwnode_handle(np),
+> +				 phy_mode, &airoha_phylink_ops);
+> +	if (IS_ERR(phylink))
+> +		return PTR_ERR(phylink);
+> +
+> +	dev->phylink = phylink;
+> +
+> +	return 0;
+> +}
+> +
+>  static int airoha_alloc_gdm_device(struct airoha_eth *eth,
+>  				   struct airoha_gdm_port *port,
+>  				   int nbq, struct device_node *np)
+> @@ -3474,7 +3663,7 @@ static int airoha_alloc_gdm_device(struct airoha_eth *eth,
+>  	dev->nbq = nbq;
+>  	port->devs[index] = dev;
+>  
+> -	return 0;
+> +	return airoha_setup_phylink(netdev);
+>  }
+>  
+>  static int airoha_alloc_gdm_port(struct airoha_eth *eth,
+> @@ -3510,6 +3699,7 @@ static int airoha_alloc_gdm_port(struct airoha_eth *eth,
+>  
+>  	port->id = id;
+>  	spin_lock_init(&port->stats_lock);
+> +	mutex_init(&port->link_lock);
+>  	eth->ports[p] = port;
+>  
+>  	err = airoha_metadata_dst_alloc(port);
+> @@ -3706,6 +3896,8 @@ static int airoha_probe(struct platform_device *pdev)
+>  			netdev = netdev_from_priv(dev);
+>  			if (netdev->reg_state == NETREG_REGISTERED)
+>  				unregister_netdev(netdev);
+> +			if (dev->phylink)
+> +				phylink_destroy(dev->phylink);
+>  			of_node_put(netdev->dev.of_node);
+>  		}
+>  		airoha_metadata_dst_free(port);
+> @@ -3744,6 +3936,7 @@ static void airoha_remove(struct platform_device *pdev)
+>  
+>  			netdev = netdev_from_priv(dev);
+>  			unregister_netdev(netdev);
+> +			phylink_destroy(dev->phylink);
+>  			of_node_put(netdev->dev.of_node);
+>  		}
+>  		airoha_metadata_dst_free(port);
+> diff --git a/drivers/net/ethernet/airoha/airoha_eth.h b/drivers/net/ethernet/airoha/airoha_eth.h
+> index fa9a8edce22f..83daec003257 100644
+> --- a/drivers/net/ethernet/airoha/airoha_eth.h
+> +++ b/drivers/net/ethernet/airoha/airoha_eth.h
+> @@ -595,6 +595,9 @@ struct airoha_gdm_dev {
+>  	 * QDMA migration.
+>  	 */
+>  	spinlock_t txq_lock[AIROHA_NUM_NETDEV_TX_RINGS];
+> +
+> +	struct phylink *phylink;
+> +	struct phylink_config phylink_config;
+>  };
+>  
+>  struct airoha_gdm_port {
+> @@ -604,6 +607,8 @@ struct airoha_gdm_port {
+>  
+>  	/* protect concurrent hw_stats accesses */
+>  	spinlock_t stats_lock;
+> +	/* protect concurrent GDM4 register access */
+> +	struct mutex link_lock;
+>  
+>  	struct metadata_dst *dsa_meta[AIROHA_MAX_DSA_PORTS];
+>  };
+> diff --git a/drivers/net/ethernet/airoha/airoha_regs.h b/drivers/net/ethernet/airoha/airoha_regs.h
+> index 442b48c9b991..4ea89057b560 100644
+> --- a/drivers/net/ethernet/airoha/airoha_regs.h
+> +++ b/drivers/net/ethernet/airoha/airoha_regs.h
+> @@ -357,6 +357,18 @@
+>  #define IP_FRAGMENT_PORT_MASK		GENMASK(8, 5)
+>  #define IP_FRAGMENT_NBQ_MASK		GENMASK(4, 0)
+>  
+> +#define REG_FE_GDM4_TMBI_FRAG		0x2028
+> +#define GDM4_SGMII1_TX_WEIGHT_MASK	GENMASK(31, 26)
+> +#define GDM4_SGMII1_TX_FRAG_SIZE_MASK	GENMASK(25, 16)
+> +#define GDM4_SGMII0_TX_WEIGHT_MASK	GENMASK(15, 10)
+> +#define GDM4_SGMII0_TX_FRAG_SIZE_MASK	GENMASK(9, 0)
+> +
+> +#define REG_FE_GDM4_RMBI_FRAG		0x202c
+> +#define GDM4_SGMII1_RX_WEIGHT_MASK	GENMASK(31, 26)
+> +#define GDM4_SGMII1_RX_FRAG_SIZE_MASK	GENMASK(25, 16)
+> +#define GDM4_SGMII0_RX_WEIGHT_MASK	GENMASK(15, 10)
+> +#define GDM4_SGMII0_RX_FRAG_SIZE_MASK	GENMASK(9, 0)
+> +
+>  #define REG_MC_VLAN_EN			0x2100
+>  #define MC_VLAN_EN_MASK			BIT(0)
+>  
+> -- 
+> 2.53.0
+> 
