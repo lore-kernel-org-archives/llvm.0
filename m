@@ -1,56 +1,56 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B893EA97B
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 06:13:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEF8EEEC0
+	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 06:13:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789539198; cv=none; b=Hcz/dAOpcNZ/YFimxtJWwmpb6NW1d/p8K5bqdM5LGV6Tj9w5as1QgPJlOrSLxw5By6zzCr2v1kdMhKe6zoszqkE+1dty5aY8+BbVIjTEQ/iDq0172q70mhNV6VZ7cPuqVPeqQlTR26OLDbdH+xENJgIBz74QAPJy6ypHzjintSg=
+	t=1789539200; cv=none; b=du7ix5dNmRaaKMCtgyeKcTyewKaMqsSfakD7dqW0ZhtHP4JA1usTfQgAS/kH6Jn1V94xqDVSJUMlJbXQpxaW2ymA+YR31o4rFXNdBZk8m1cy9SgBi4/cpD4vIuSOO+Q34aiB8Q7nAKgr3Uuqi5/mZD1FoFyMWcxf+FeUlGIUl0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789539198; c=relaxed/simple;
-	bh=aSRn2a84aJ5XKChOsQsFTIditSg7lvW/7uN1eZsfU6g=;
+	s=arc-20240116; t=1789539200; c=relaxed/simple;
+	bh=EkUSg3SW+p/sIj8byFhIiyPtAE+kzl5s7N8WhAJ4buA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Content-Type; b=p5Y1FFaza/9If8/vsIY41D9qdakKKNgruA1jcnw75DjQ3IGckEwUYJmip7B3j4QBzDd3QfI1TsCWIhcDdokJ1lui6BFkSUiGzNLjBq2ZNjQJttUO/eYHYBVPwyqhI4dm5SCpRqkweTVq2L3fpOstpi8eN487jl6duDIkZK2i++0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=t7AkeQTB; arc=none smtp.client-ip=209.85.215.200
+	 To:Content-Type; b=S0pGZ5BfBAlrApcodj5UNbKd1DjH02R1pMXjzuJGbDkDujBWjb9WEgIYs+N4dgALEXkKetO01FjDlj2XFFpbsIDh4sRXqCj4lw5M6Ma5PBEWrw8LnsiF++Q/KtiF2HrrkRASr/+qt9rAvTNiMIVFHeVE6Ub5CMrG10crT4INWxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sAyYX3XJ; arc=none smtp.client-ip=209.85.216.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="t7AkeQTB"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cc18ced1a5aso9712144a12.1
-        for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 23:13:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sAyYX3XJ"
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-39de4a68f7cso5049477a91.1
+        for <llvm@lists.linux.dev>; Tue, 15 Sep 2026 23:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789539196; x=1790143996; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1789539198; x=1790143998; darn=lists.linux.dev;
         h=content-type:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=VCHS0z59fUPYMY565s32kon+1X6H9/iNUQvbm+yc4VA=;
-        b=t7AkeQTBPOLS+yLaelT+dIK0hYbYH8WALaLDcy23/6cLDPl0lea/s5x+pjVRK2fcQc
-         yG1w4Y8Zz8KprFjr9/ssQE0qXIoyowwnJqqTM3DQgLisn+2LAAPMCo7GR2+y2XopXqRA
-         eEiCv2a72PDCJdc2SablQ2OKnTmyj612bsWQ2hLdSFYHnxTGYFVjG3VKEUGRqsRvhfGy
-         Fp13v2WIozE7ZnAugisM+RdGLgbsTxexOiyHWULdtWmGJl7LiWOsmza3tuvKsX9hwsHE
-         svhDTbwQurjswxws2BEPbbVx7g8bNxYcFy28QeXVJKtpQORyhDOOCcYspqJhI+dZktdD
-         XDcQ==
+        bh=SntUi1xPjgoMQfW2YYfU5u+fl62gD37oiHiuv4x3AKU=;
+        b=sAyYX3XJyu53egb2ma/XtyLvOOFScsUeWE1I4zpG1LmDYgfbTNmTetGHI1EFElZJ1Q
+         3xSYoQgxArt/Ndue0pgwRLw8/9qPD4g7YEZ3e05yvU4NHXfCD1dIYap2cAB/lC6NxzPK
+         E1FLPRMnZUwPOeOTJ7YgCiFTeMpCmDQtIb2Ti3lH7zrWEX5Es+DpO1ViLxfMxT/FgdUC
+         R/pm4Omni4sW2CFNIydctswl8G/+xxE4dFMiC6VH2ybODTlbrnfvW4QNKt1A9vvw74Zd
+         SV+H9Ggyc6Xxk6/iy2D75IIpnhN1zo6vzr1dxgZAVBAjiKWRZxdZXbUzn+g+iPU3NUtZ
+         MvoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789539196; x=1790143996;
+        d=1e100.net; s=20260707; t=1789539198; x=1790143998;
         h=content-type:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VCHS0z59fUPYMY565s32kon+1X6H9/iNUQvbm+yc4VA=;
-        b=UExdIbk1D9Q7KBrxfgp+vYyXP5DOU2UY9HcC6O/eIf+jndZQta2PTJWiRhNBngBM/8
-         n5eXfV4jcecm0MDSFA8eiOLM2AO9f0RyreyA77u5nNYv9tsTE+Z4q5wjlBg/K5dxpZK+
-         aHSDAP/WrpMcXP9+Nx1YmGNvjzFA67eqbRGHGxFGPUEMqrSc40ndoIxDkOOXA73e2evK
-         rdDL/psBYrqbVe9Hd+aUmVdoo8rGZeEtkI9E0ZgCGD0XJzavBBOBXR4AUJUPhfp74MG6
-         oL5bf+tTVlQf14yi83v9eYNuWohF9R77MxWAAXwQb9Y2e18UvrwaOVNx03WYlBS0ltMn
-         70EQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwQ6q02wiaSvsL4qgdkseen/payU1MtZ+czeancuiJjdP0hTp1lRi5v/R11RKaNUo3TUUD/@lists.linux.dev
-X-Gm-Message-State: AFuF++lOwN5k5P8DI+trw8B5S15MgvbiRXeWbCZ9UvOnoEFuHuJFNY8e
-	F8h8+u/pWSXBxRN4G0SOnD7t8zASQJBkfyJCghPnmNbEvc1l3NsQM8JDPHHMi8IzWW466HBSwLf
-	3NrAQnfG3jw==
-X-Received: from dlea16-n1.prod.google.com ([2002:a05:701b:4210:10b0:144:bbd4:62e0])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a11d:b0:3b3:216b:2743
- with SMTP id adf61e73a8af0-3dd5f4038f0mr3242885637.4.1789539195928; Tue, 15
- Sep 2026 23:13:15 -0700 (PDT)
-Date: Tue, 15 Sep 2026 23:12:11 -0700
+        bh=SntUi1xPjgoMQfW2YYfU5u+fl62gD37oiHiuv4x3AKU=;
+        b=RRoK5ElKU1uFd/r3TRB47i3lCU1uplwpf+OJCp/TlSac1OmFpjLh2ae9UdrX3M360C
+         R3g1MV9bmazgRQuPTAOoGdzp8No3p1mqIZvHSNUh18JGNVQaB+V58MbAiuoA+rLy4KNt
+         4oRWV6I2mT5nR8oz+25DA503/26yNiZQDmhWFD8SYInEsM4QlutmjW+Nx7H7Bk2VxUog
+         oYEdZyJpbvo3K7pRPC1DE6ypzBhLQNrtnRtYiWVo6gxWYoi9zLr7XzfwJ2DcJTbofdkJ
+         wZEm3n/TVPEy6congFUKJ4e/S9+ZPA1hicSkjpv+dcEjTnXlknkg1PXoPWdJwA/IJpGn
+         MUxg==
+X-Forwarded-Encrypted: i=1; AKwUvBwj/CbUwuiiXRnCOiHdC8ymb2j9KFvShdoVjt6dRx3AuJd7ib7MjtixkLIxzADRz/LJYOkw@lists.linux.dev
+X-Gm-Message-State: AFuF++moOkIejoONHJoRGCtNaPlfnirxw20zDAkBqkC9hQYWzZoMaoJx
+	dc3vFVNRuW3N4YAZ5hyiAlZXc2jMrwzo2YRH3Udx3s8BhsVzSPS8NsCjVhszRqCeqlEwSlh4LNA
+	x04mguCkAaA==
+X-Received: from dleb6-n1.prod.google.com ([2002:a05:701b:4246:10b0:144:bc91:18ab])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4d0e:b0:39d:f5b6:ca47
+ with SMTP id 98e67ed59e1d1-39e1e47abbbmr3117561a91.12.1789539197679; Tue, 15
+ Sep 2026 23:13:17 -0700 (PDT)
+Date: Tue, 15 Sep 2026 23:12:12 -0700
 In-Reply-To: <20260916061218.3061216-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20260916061218.3061216-1-irogers@google.com>
 X-Mailer: git-send-email 2.55.0.1032.g73a4cd73de-goog
-Message-ID: <20260916061218.3061216-3-irogers@google.com>
-Subject: [PATCH 2/9] perf symbol: Fix the build when demangling with libbfd
+Message-ID: <20260916061218.3061216-4-irogers@google.com>
+Subject: [PATCH 3/9] perf libbfd: Include the headers that are used
 From: Ian Rogers <irogers@google.com>
 To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
 	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
@@ -72,129 +72,64 @@ To: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-cxx_demangle_sym() calls bfd_demangle() with the DMGL_PARAMS and
-DMGL_ANSI flags, but nothing declares them. The
-"#define PACKAGE 'perf'", "#include <bfd.h>" and the DMGL_ definitions
-were left behind in symbol-elf.c when the demangling code moved to
-symbol.c, and libiberty's demangle.h that defines the flags isn't
-installed by every binutils package. The cplus_demangle() variant is
-missing a declaration for the same reason.
+libbfd.c uses errno, PATH_MAX, strdup(), strlen(), strcmp(), memcpy()
+and pthread_once() but relies on other headers to drag in <errno.h>,
+<limits.h>, <string.h> and <pthread.h>. The BPF disassembly code needs
+<inttypes.h> for PRIx64 and <stdint.h> for uintptr_t for the same
+reason.
 
-The code is only built when the C++ ABI's __cxa_demangle() is
-unavailable, so most builds never compile it:
+Include them directly and group the includes so that the system ones
+come before perf's own.
 
-  $ make BUILD_NONDISTRO=1 NO_DEMANGLE=1
-  util/symbol.c:2714: error: 'DMGL_PARAMS' undeclared
-  util/symbol.c:2714: error: 'DMGL_ANSI' undeclared
-  util/symbol.c:2716: error: implicit declaration of 'bfd_demangle'
+No functional change.
 
-Move the libbfd demangling into libbfd.c, which already includes bfd.h,
-and declare in symbol.c the libiberty interfaces the cplus_demangle()
-variant needs.
-
-Fixes: 4d9b5146f0d9 ("perf symbol: Move demangling code out of symbol-elf.c")
 Signed-off-by: Ian Rogers <irogers@google.com>
 Assisted-by: Antigravity:gemini-3.1-pro
 ---
- tools/perf/util/libbfd.c | 17 +++++++++++++++++
- tools/perf/util/libbfd.h |  9 +++++++++
- tools/perf/util/symbol.c | 18 +++++++++++++++---
- 3 files changed, 41 insertions(+), 3 deletions(-)
+ tools/perf/util/libbfd.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
 diff --git a/tools/perf/util/libbfd.c b/tools/perf/util/libbfd.c
-index 8ac6670a39aa..131bfedf48cd 100644
+index 131bfedf48cd..1b23a261a9ce 100644
 --- a/tools/perf/util/libbfd.c
 +++ b/tools/perf/util/libbfd.c
-@@ -72,6 +72,23 @@ static void ensure_bfd_init(void)
- 	pthread_once(&bfd_init_once, perf_bfd_init);
- }
- 
-+/*
-+ * Flags from libiberty's demangle.h. bfd.h declares bfd_demangle but not the
-+ * flags to pass to it, and demangle.h isn't installed by every binutils
-+ * package.
-+ */
-+#ifndef DMGL_PARAMS
-+#define DMGL_PARAMS	(1 << 0)	/* Include function arguments. */
-+#define DMGL_ANSI	(1 << 1)	/* Include const, volatile, etc. */
-+#endif
+@@ -1,5 +1,19 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include "libbfd.h"
 +
-+char *libbfd__demangle_sym(const char *str, bool params, bool modifiers)
-+{
-+	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
++#include <errno.h>
++#include <inttypes.h>
++#include <limits.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
 +
-+	return bfd_demangle(/*abfd=*/NULL, str, flags);
-+}
++#include <fcntl.h>
++#include <pthread.h>
 +
- static int bfd_error(const char *string)
- {
- 	const char *errmsg;
-diff --git a/tools/perf/util/libbfd.h b/tools/perf/util/libbfd.h
-index 953886f3d62f..14171db8b112 100644
---- a/tools/perf/util/libbfd.h
-+++ b/tools/perf/util/libbfd.h
-@@ -31,6 +31,8 @@ int libbfd_filename__read_debuglink(const char *filename, char *debuglink, size_
- 
- int symbol__disassemble_bpf_libbfd(struct symbol *sym, struct annotate_args *args);
- 
-+char *libbfd__demangle_sym(const char *str, bool params, bool modifiers);
++#include <tools/dis-asm-compat.h>
 +
- #else // !defined(HAVE_LIBBFD_SUPPORT)
  #include "annotate.h"
- 
-@@ -77,6 +79,13 @@ static inline int symbol__disassemble_bpf_libbfd(struct symbol *sym __always_unu
- 	return SYMBOL_ANNOTATE_ERRNO__NO_LIBOPCODES_FOR_BPF;
- }
- 
-+static inline char *libbfd__demangle_sym(const char *str __always_unused,
-+					 bool params __always_unused,
-+					 bool modifiers __always_unused)
-+{
-+	return NULL;
-+}
-+
- #endif // defined(HAVE_LIBBFD_SUPPORT)
- 
- #endif /* __PERF_LIBBFD_H */
-diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index 3587ad243159..3206929473a2 100644
---- a/tools/perf/util/symbol.c
-+++ b/tools/perf/util/symbol.c
-@@ -27,6 +27,7 @@
- #include "dso.h"
- #include "util.h" // lsdir()
- #include "event.h"
-+#include "libbfd.h"
- #include "machine.h"
- #include "map.h"
+ #include "bpf-event.h"
+ #include "bpf-utils.h"
+@@ -11,15 +25,13 @@
  #include "symbol.h"
-@@ -2707,13 +2708,24 @@ static bool want_demangle(bool is_kernel_sym)
-  * version.
-  */
- #ifndef HAVE_CXA_DEMANGLE_SUPPORT
-+#ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-+/*
-+ * Declarations from libiberty's demangle.h, the header isn't installed by
-+ * every binutils package.
-+ */
-+#ifndef DMGL_PARAMS
-+#define DMGL_PARAMS	(1 << 0)	/* Include function arguments. */
-+#define DMGL_ANSI	(1 << 1)	/* Include const, volatile, etc. */
-+#endif
+ #include "symbol_conf.h"
+ #include "util.h"
+-#include <tools/dis-asm-compat.h>
 +
-+char *cplus_demangle(const char *mangled, int options);
-+#endif
+ #ifdef HAVE_LIBBPF_SUPPORT
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
+ #include <bpf/libbpf.h>
+ #endif
+-#include <fcntl.h>
+-#include <stdio.h>
+-#include <stdlib.h>
 +
- char *cxx_demangle_sym(const char *str __maybe_unused, bool params __maybe_unused,
- 		       bool modifiers __maybe_unused)
- {
- #ifdef HAVE_LIBBFD_SUPPORT
--	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
--
--	return bfd_demangle(NULL, str, flags);
-+	return libbfd__demangle_sym(str, params, modifiers);
- #elif defined(HAVE_CPLUS_DEMANGLE_SUPPORT)
- 	int flags = (params ? DMGL_PARAMS : 0) | (modifiers ? DMGL_ANSI : 0);
+ #define PACKAGE "perf"
+ #include <bfd.h>
  
 -- 
 2.55.0.1032.g73a4cd73de-goog
