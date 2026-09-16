@@ -1,173 +1,117 @@
-Received: from mail-oi2-f13.google.com (mail-oi2-f13.google.com [74.125.231.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08804248DC
-	for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 19:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.231.205
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789586979; cv=pass; b=dchZD7lUTAoTNwCgbQWfJZ0BGYSjay9gVT7asUIEo5Eg2xUZcuYnf3+jb1FryaUbeDYBXgCFv0xnjZEA6IczyXY6KTJnulQQuBdLQgVfE4yAUPLao9qlgteyzWy4wsy4ZLQFOmy2C1iClK+kPIvqr59XGesHqrts0BiY4yNpWLE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789586979; c=relaxed/simple;
-	bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=etCQrZftHuv/nvG8GdmsYXYGtAHf9OPDNoZkt8LKuZsK28hZmHYK2OzDGiPC4p1E4USV2gA8KNvSacR/mJX4sM1TyJqZVXSWwnFlsTZMl5yKq/TGqSdrfenyxsOny22Vh6R/h3kHbSHknzP+enV+1TUaZb2sDSUSWciL/BvEBDk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VZbmpaXF; arc=pass smtp.client-ip=74.125.231.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C33C54399F8;
+	Wed, 16 Sep 2026 19:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789587381; cv=none; b=M4imxS86sG9nqmO6ohr4HFWOxI2r4xzef1tsNLy6pxfXbJ4mR2XvFVWV3L9Ip/OQAIcKSJC4358j/tCDrWAVXzF6IcmqCGE5rseBT8sictgTznTKtp6L65YmKZQ783CSV5UnjhQgld02/qpfWRzME+REpLxoZc2E8jF2R1JZQLI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789587381; c=relaxed/simple;
+	bh=Z+/v5ZvQxTAIhTm5UnkTj1pc64mja/Nm31YHHxX/MoI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rdpKcRd578ySICMIXGCUAqZ9T84/sWTAOBiTGEoZEwjOsHOqmxHYy9bc24RhCbxbmGJ6UCa3c6P3NQRBOnSQjfCy0uW0FTLPIf0DXmRwOWYFSDMaw861wBRM/AV6VeS38sM9izi0tj8KaKqLz8bS9FVqmqorb9dKumv3bFyIEEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OriqFoPi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VZbmpaXF"
-Received: by mail-oi2-f13.google.com with SMTP id 5614622812f47-4b37dcfe9b2so35598b6e.2
-        for <llvm@lists.linux.dev>; Wed, 16 Sep 2026 12:29:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789586958; cv=none;
-        d=google.com; s=arc-20260327;
-        b=S+hvpOmFi2G0H4CTmFwkVyBp/lynW24Aq2skBYkeZSopyx3Xais7PamSI30J2KWCB8
-         peeKS+2ZpSoV28Pfkh4kD1pBujeULejJVhyn5RjUKchndOtSbhe9yR02DTGSQrDQIiqq
-         Jn8DVehzvBpL7LiHtj3KYNgaHmbV9SmPiXVE7vEOntA3+pMe9t9VwYPqjS0yoPNbRfbF
-         MXAP7S9ltV5luIsx+8qzF+etibS4jJu8tdOD2y6EA8sU2SPTjuBPQXhl3Mj0zHILIirN
-         5iDabBHCLCYkmbYnjdHP41kSlKL9zB5Oyh69FVAHWa2GxTVJDCX3IGfi231/JyCa1Z4V
-         0iPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-        fh=V/VlYhyi8xaX0ma+w0tkvxlzY9YGeuSmwRB6tMlY2GE=;
-        b=gr9n1VIsevVyA746rOEfhk71E3xt6BQjrw1hve6P0kpOzuV1CxuoFm7/p/bxn4Y5xe
-         0nwvLlTKXBmO5W8lgO8rcGeRknO9tsvFvR0HpYmq52MLrJ7lxQ78FB4ouULa4OD9ZNFE
-         DUsfU79UGzZeXRY1j7JU1BJBAwsRzcnea+eryEQN2nzpHc5TQIbj0GNyBu2Hw9t8H9I0
-         mAuvuG39dA31cdXjJUoJrVMnvS6Q0a/E+xVdMK0G2D15ITD6xj+yHh/0r/TuUPt3+9Ic
-         m/J5kD/kjxzfeeEOeWhq/TjDJAXJCk2dXaqaYqPV0t0ANPm0KWdqPCO/bflvJncQcOE4
-         yG9g==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789586958; x=1790191758; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-        b=VZbmpaXFpbO/84U+FvtxSXC2pM0uq5F0fB0Fg16c3TEw9eCGijQlZrN/AudsfW3ZzT
-         UUZoEG26/q3BPAwwMid2NZeNDsG4VVPLFpogR7bhKyyIvh1zrvAyXkNSn9t7ZPczvbOY
-         yyQusogYbWkylp9zNHJZeV8XeApSlcDkjmruMUFtbQMzAx5RiLiDx3O9LbQZOhf35KDo
-         al/O9SMG773oYOGLFPpdbJ653e2CfUHvM3BGW0FtrT9GhvTaGUmDKRKXrlyjxMc3VFy5
-         5M6h5rQyk11kUKRnjcYNkCrJk7WbmxlvfEXnLRTM8wIt9+6t2xb1LWTUZ5sU6gWCm0Do
-         AuVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789586958; x=1790191758;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=X0bKO65h4md/AUwTLuBudve8hzWfGFXRoDF7mDTv/C4=;
-        b=Bbbj4xHhMsWd+OvyXDRqsIZc7eIrt/CFESdp/AfgTLlTLxBRRVFy6b1Uuc9BIjMBz3
-         MULDxzBRF0oGrJ003Om/PQ1WOrLP+dH2fgeENNRCwK0wi5zwLbNwX5eAWAj71Ckukj8Z
-         wfQJ0QYiVLEpwiy2xEQE6pDUyYhQ/MUeAs4x41PR3byD4TBTxELweDCGGHTgiyoFirZa
-         Wa81IEbaqtK0rd4LdYqtRbkn/u4rpa2eHfN3uXfKochdXqRVetLljUSeNTJj8+6UCBaL
-         shnCKja1qWwFRNLevrRaJpKEPFfBH3b2e/XQ35/8eBRrZQSKXvgskfgMOjgdJtYqEaAA
-         AXlg==
-X-Forwarded-Encrypted: i=1; AKwUvBwzXFA++uIkDwEwQoAPYQzB2DquRKvrF36IJmMd62C3AbV1EtKdpBzJKCV6CByq/8ecEp9O@lists.linux.dev
-X-Gm-Message-State: AFuF++n9J6Pv87e3RazmcAaalbUGUHJJYAZAB/1EAnyeAIP8NyCOxhQ5
-	zHTWbBPWhcMU57Rdo5wrc2sNqSUuPmzM2xSeO2SSHbkM+Ob3dRfEbVFEarQPEl1TPKsSFKLCmeI
-	twwRqoSox1nKRdSitSxOt4PDnxpCpDLs=
-X-Gm-Gg: AYBFou1qcmt5TC9QlO5cUIjrEIfXuiLivAld7FkanCbb/ZnwMzFNmnCPJh2VxgdDKpE
-	2FYP5IBbM1fG9i4AwbKeAUGf9awcwUCKzzomBkEvAQpzhfOQFFJPKlwLWy7kMKxE53PcwUQ7XG8
-	8Sjnq2/OPqzASGWV/0YmeMbNGpQFJJ+yXGRXAgPdCdFPrDaj9dG2NEdrVeKbnV/4wZ6Lpc01pl8
-	bNPqg82qQcbGkcIo+9TVS1Qj9Ya9pQFYEkhbONrF1xK4oCl6kdNf9hkisXLPjlcVRR16r8kfs/N
-	h433PYEP4HdNq8DDM/dDV4ZiB8VXiavjUEPA9gqay1KIR463y3Aaxok=
-X-Received: by 2002:a05:6808:c412:b0:4b2:8d9e:de11 with SMTP id
- 5614622812f47-4ca4dc219f6mr5873685b6e.19.1789586958406; Wed, 16 Sep 2026
- 12:29:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OriqFoPi"
+Received: by smtp.kernel.org (Postfix) with UTF8SMTPSA id D54D51F000FF;
+	Wed, 16 Sep 2026 19:36:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789587377;
+	bh=sEcF2cWTN4Jv3NbQK8dlJ8vphUjD9iBgPDLykWsl6B0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OriqFoPikw3LHat0jwRVwGEDdwcxBp3iWcpigdy2uvaFfYcMRgQM4sVLrWvg5/gbH
+	 b4d8ldp8PI+hd+yefLZlE+nA5bF3pVOmJQgUyscKScxcxBTe2GIqA6HykXTHGb05Pc
+	 euKV5A+i3pZk31axUJfOrDqP1YcFK+FOYnnONuKAVB2MwxZEx3MSbXdht1YCFHrEv9
+	 meoLaGDriNO60qSInyNcBCQB5XcZKaTvH5qKwZ+nDgCRSP6pwO5uN4weuL+cEiMcq2
+	 nR6gb3BgUyIK7fUf4Lz5tJEwSKstXqvMsGNSh/tEivwga9P9HH7lC1Q+/ZRbvJxXcg
+	 qtVZPxY9LURBw==
+Date: Wed, 16 Sep 2026 21:35:51 +0200
+From: Nicolas Schier <nsc@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Erkan Erdem <hexvalid@gmail.com>, Julian Braha <julianbraha@gmail.com>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] docs: kconfig: fix shell function syntax in caveats
+Message-ID: <aqrvl49cvt0ReUKa@levanger>
+Mail-Followup-To: Nicolas Schier <nsc@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Erkan Erdem <hexvalid@gmail.com>,
+	Julian Braha <julianbraha@gmail.com>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Randy Dunlap <rdunlap@infradead.org>, linux-doc@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>, llvm@lists.linux.dev
+References: <20260907103739.23212-1-hexvalid@gmail.com>
+ <20260915-pastel-industrious-rhino-8bddce@l-nschier-aarch64>
+ <20260915220204.GA1534234@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260916181001.201787-1-usama.arif@linux.dev> <DLGY7IFP8MOG.YFISSWRDGKR3@gmail.com>
- <874fc50f-4764-433f-8a87-595bc70c4559@linux.dev>
-In-Reply-To: <874fc50f-4764-433f-8a87-595bc70c4559@linux.dev>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Wed, 16 Sep 2026 12:29:07 -0700
-X-Gm-Features: AcwNN1WDst1cmT6BJveQWlz_V4KXaqctpiRs6Ar3jIL3hsk1lUSOIapHrHv5P-0
-Message-ID: <CAMB2axNZVQr=bEQXGErSEOFrMfjn11K_ZvYErLwXQ3tUW9qPiA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: local_storage: avoid redundant IRQ save on bucket locks
-To: Usama Arif <usama.arif@linux.dev>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, ast@kernel.org, andrii@kernel.org, 
-	bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	emil@etsalapatis.com, ihor.solodrai@linux.dev, jolsa@kernel.org, 
-	justinstitt@google.com, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	martin.lau@linux.dev, morbo@google.com, nathan@kernel.org, 
-	ndesaulniers@google.com, song@kernel.org, yonghong.song@linux.dev, 
-	yatsenko@meta.com, kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260915220204.GA1534234@ax162>
 
-On Wed, Sep 16, 2026 at 12:22=E2=80=AFPM Usama Arif <usama.arif@linux.dev> =
-wrote:
->
->
->
-> On 16/09/2026 19:22, Kumar Kartikeya Dwivedi wrote:
-> > +Cc Amery
-> >
-> > On Wed Sep 16, 2026 at 8:10 PM CEST, Usama Arif wrote:
-> >> bpf_local_storage_update() takes the map bucket lock while holding
-> >> local_storage->lock. bpf_selem_unlink_map() does the same; its only
-> >> caller holds local_storage->lock. The outer lock is acquired with
-> >> raw_res_spin_lock_irqsave(), so interrupts are already disabled at bot=
-h
-> >> sites.
-> >>
-> >> Using raw_res_spin_lock_irqsave() for the nested lock saves the alread=
-y
-> >> disabled IRQ state and issues another IRQ disable. The matching unlock
-> >> tests that saved state before leaving interrupts disabled. On x86-64,
-> >> this adds a pushfq/popq/cli sequence and a test/branch around an
-> >> unreachable sti to each acquisition.
-> >>
-> >> Use raw_res_spin_lock() and raw_res_spin_unlock() instead. They retain
-> >> preemption nesting, memory ordering and resilient-lock bookkeeping. Th=
-e
-> >> outer unlock remains responsible for restoring the caller's IRQ state.
-> >>
-> >> In the tested clang x86-64 build, this removes five executed instructi=
-ons
-> >> from each uncontended nested acquisition. It also shrinks
-> >> bpf_local_storage_update() from 1732 to 1702 bytes and bpf_selem_unlin=
-k()
-> >> from 1030 to 992 bytes. The affected paths are updates that add or rep=
-lace
-> >> an element in existing owner storage and successful unlinks.
-> >>
-> >> Document the owner-lock requirement of bpf_selem_unlink_map() and asse=
-rt
-> >> that interrupts are disabled.
-> >>
-> >> Signed-off-by: Usama Arif <usama.arif@linux.dev>
-> >> ---
-> >
-> > Makes sense. But did you observe any measurable improvement with this c=
-hange?
->
-> Meta fleet wide profile shows bpf_local_storage_update() as one of the mo=
-re expensive
-> bpf functions in the fleet. I saw it in production when profiling a hhvm =
-workload as
-> well.
->
-> The main argument for the patch was reduced number of instructions execut=
-ed in
-> this expensive path that I see in disassembly (which is mentioned in the =
-2nd paragraph)
-> and better code hygiene as it doesnt make sense to to save irq again. I w=
-ould imagine
-> this patch alone wont move the needle in application metrics, but would m=
-ake this function
-> cheaper (hopefully :)) fleetwide.
->
+On Tue, Sep 15, 2026 at 03:02:04PM -0700, Nathan Chancellor wrote:
+> On Tue, Sep 15, 2026 at 12:59:40PM +0200, Nicolas Schier wrote:
+> > On Mon, Sep 07, 2026 at 01:37:37PM +0300, Erkan Erdem wrote:
+> > > Kconfig separates a function name from its arguments with a comma, but
+> > > the caveats section uses Make-style whitespace in its shell calls.
+> > > These expressions expand as undefined variables rather than invoking
+> > > the shell function, so the supposedly working CC_HAS_ENDIAN_FLAG
+> > > example fails to parse.
+> > > 
+> > > Add the missing commas to the shell calls in this section. Keep the
+> > > Make examples unchanged.
+> > > 
+> > > Fixes: 316d55d55f49 ("Documentation: kconfig: document a new Kconfig macro language")
+> > > Assisted-by: LLM
+> > > Signed-off-by: Erkan Erdem <hexvalid@gmail.com>
+> > > ---
+> > > 
+> > > Changes in v2, addressing Julian Braha's review:
+> > > - Remove whitespace after the comma in the three remaining shell calls.
+> > > 
+> > > v1: https://lore.kernel.org/all/20260905124045.42713-1-hexvalid@gmail.com/
+> > > 
+> > > The issue, patch and changelog were prepared with an AI coding assistant.
+> > > The assistant also prepared the v2 revision and ran the checks below.
+> > > 
+> > > Validation:
+> > > - Re-ran the documented working CC_HAS_ENDIAN_FLAG example using the
+> > >   Kconfig conf tool built with Clang on macOS. With a test helper returning
+> > >   y for either endian flag, the original example fails to parse; v2
+> > >   executes both probes and sets CC_HAS_ENDIAN_FLAG=y for both endiannesses.
+> > > - Rebuilt the changed page alone with Sphinx, treating warnings as errors.
+> > > - The complete kernel documentation set and kernel were not built.
+> > > 
+> > >  Documentation/kbuild/kconfig-macro-language.rst | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > 
+> > Thanks!  I'll queue it for kbuild-fixes, but it might be defered to v7.4 
+> > if no other build relevant fix will pop-up.
+> 
+> I am not opposed to this going via -fixes but given that it is just
+> documentation examples and there do not appear to be any problematic
+> instances in tree, I feel like this could very reasonably go through
+> -next. 316d55d55f49 is from 4.18, so the examples have been wrong for a
+> long time. With that, I would probably not classify it as urgent.
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+Ack.  I remove the patch from kbuild-fixes-unstable again, thanks.
 
->
-> >
-> >> [...]
->
+
+-- 
+Nicolas
