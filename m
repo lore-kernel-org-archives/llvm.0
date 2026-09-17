@@ -1,166 +1,171 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D2934D0CF0
-	for <llvm@lists.linux.dev>; Thu, 17 Sep 2026 18:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789669267; cv=pass; b=G3rct3BZGHIs2K4Cqqh2l5WVTVxDAGf8G48kwtEY6yGZPiBOX2vWLaxdpL/iwHqjQ5C0P5OZCFd3+4UlGiesGmfu22z7KAlvwdu26enJrqC+Cz7yxDErQjfj/CNIlf6VFhJQkiLnQRbMok1eJz1fZO6oS/VaPZWIqJ1vYVeBaw0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789669267; c=relaxed/simple;
-	bh=MtIc2pB2Y3s8wxjv1B3d5i62dl3x9sVZ6Pg311mYCdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dS0Yarc5IuBhIlkn+vUwT3oPyo8OehG/6VsyjPXfqEXEdJR2vA2N4BGG0iICF2krLi/UCU/sThNyWEWM+W/+SDRl40Of42y3JU+Z9UvAykExXjY2DuNBaZUXq/W5cZ3TNhjR2TTtQvaSgIGC7jTAy30x3MXZ0Daa2VBPFMaJDjE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ifUR+9Ao; arc=pass smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6223DAAA5;
+	Thu, 17 Sep 2026 18:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1789670572; cv=none; b=ZciwI1B7kj/+FcCaghtSWWiZJcVWa8YGIJKP99F0OswIvoC1FmB5ayya13vukOcTioBjgwH/xdhg5L/zgScrMIdWy6OvjK1mE2ZSGje0cj5kRPME4KsBv77n4pOzBNvAseGFhqfmFiDP/89vWdC+NGYCVOy5htxnoQZ5UcylL2E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1789670572; c=relaxed/simple;
+	bh=//QxEsMx/pYZ431r9fzN1SDLLR1Ocaz/1SqtQ/FHGu8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BglY3YX6LshCQ/gLyh4CP3qjwrK8k0rYsnmNRc8esMkfjW6mQ5jOBnEGnziwE+HbZSgmEeVp6ISdsdtL6YbGSv4EVcbmwH9IbhRwHI3pbZq1rUFwCu6eYWSZycka3aSNxU7VOD68bVI/SMczIozz2QUwzfdJVLqhwm6ywMkHkAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeRYA7rh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ifUR+9Ao"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49e66390995so6539605e9.2
-        for <llvm@lists.linux.dev>; Thu, 17 Sep 2026 11:21:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1789669263; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Q+v2479AhdQ4CJ0hJ8NXq63ZD3gkk5jx7fsxg0DYXY+OVcaeWqap8zY/rW9H5bvEYl
-         tOI6ZrPsaEgT+JHu1CxUdbT4xqPZI97G3CuNACkFcS+8Z6ByOKrXKGiSyhsnBAKkbih9
-         2mrnw2FZiI5FaFWKzWKpLjQMVM/4fHfFtk/ouEtOB+5J9y4s4jceVlNOHYWAIHoRvO2h
-         ZiCyjoU/csLyapRPVB0t9sj4TsXFaVpXycvIqMWe4w0/RGwM0xxmD+kS6XiQQZgbfCcE
-         LLcK00bEJsdC+A6vTQLlaIYjksjmzh5o5Ih+q8TN8hkvJuYDIdrw9q8o7xp6ZpKTMNZp
-         kelg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zeUanOFQMGLva+Wv/HlVlWxsHp1h2Rik1mRUDrRwu58=;
-        fh=DuzO9vIeNbyH4KojlqHrwyGT6VQ4HoL7O3XtgYQPXQU=;
-        b=BiPmyXZn88Nfjjso8Q3gOpaEWauvnkC2zAw3M+OXx5NnO4YvP0HpEsNSKxy8Kr/k48
-         tl3HcEK6rcceUXNhd6shO4431BGewrxugKOVAo6CLFeORgNC1ypJ+z/qEJwujFtMiqmB
-         Hwb/7FcWcDCCXOzrexD9XaJ6zfOlZPigCNLefx/ADZXgJL6CSDaByqUCCJtDEhNj3+km
-         RqrNVZcNfBilt9Z5MSqDjuiQ4P8RnGX2Mk9SJmO7guLO65cJqRzP8/PgZNh5XnrLjlyp
-         PIaJUj0W1O9p0Fli4Tp7NckLRY26ivvHFZp+aeEunxGuU/PL13tVPJiDXpZzfV2X4BDr
-         J95A==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1789669263; x=1790274063; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=zeUanOFQMGLva+Wv/HlVlWxsHp1h2Rik1mRUDrRwu58=;
-        b=ifUR+9AoiOFVPAFwP44Uk1A8FoIA+syMOsXQsmP8TQeXPjJ39ZE/EGDkK4woa5w7yD
-         nFcRhfXw5pyLHXndzjnad7ZqgwkORg2vwaz9x6C35e7VLXZa4WBn3idMt8jXom6mWfll
-         WVpqb2AMbWPT3MochCVSk9FbMvON0FX3oAEIqN8VSUuqp96Qm8ik79YSAhRxNZRyNzDZ
-         u0/lCJMYT73tstuOe7c7tKi18EKU4IZQA6fM396FpjIz3Um2qqjG60xhr7AxZDsOfyKB
-         rDFr2esc1g+idt+V8P7sEUXYvrXgTx3e7XSEBRZt6tHmVR0BCGIaopiHaGAz3oXGrSyD
-         0LyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789669263; x=1790274063;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=zeUanOFQMGLva+Wv/HlVlWxsHp1h2Rik1mRUDrRwu58=;
-        b=pfSb4uqfXs25xPwE+74dJbx1Ag3951U2admQVfGi21PM31843/eZgYY99fQlr3rAx+
-         JkaZVOnENNlTW01rsevTPMRhdPGQP0BosMvuMN84SZTNhCg5CoSsKRZ/TeHMDeTU/QqA
-         4WB9HlQujZn9qOBk6aYJ0GEVzOSzVbdsSu3+XDFFi7jvnu/55e9kJDtvGbJ6b01alqXD
-         kD1WgO2NZnZGRsExZ3lwMzj3YXbVHSNYy4RC2CSQaJyGoxWuZbd6sDhEGvW2ymsqjecr
-         bXALxqUE1deSgvr1mqAzTOzCu9hPvzt79VZeJMx5Y0/rdPQVST0L8nyBckeC3O+r7Edk
-         O4RQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxrgWN2tdOCa2IgKsY/RdFzpr7nmN+ivX7qUkgaV72HB6yUc+sCo+m33Dr4uJ+rgkIAGWRN@lists.linux.dev
-X-Gm-Message-State: AFuF++nF3b1IgtSoHnxRhK3pl2c9CLqLKm/FnucELYdqAwjxl+DcTfef
-	mOZhbC5MConCgJYQhOOTEwlG4g6tQHiMOOGA23502DbWOfZ/mjYzTBNfYIbEgR/ziRo/rjiYuNR
-	YWijogtTIo6MUaNQzZFQjUk6ShIjH9cqhtnTAfIQa
-X-Gm-Gg: AYBFou3s7x0ekr3Xg/b/hQTCk/J6hZk9TXOyhaDrjHTo3Rups5S9uwDNzN9SC57M+bX
-	/GhRixIxTj5+zozVTTdFivLGF1YOiFmG9csRRe7G3sVioLR5x+HlT5OFSc2RiQbzxmNNqzJtg3B
-	ymnqr3pH85QNEns5e2ozodTxvCgK3im0qN/Ulgo2Boh51lmixGHLn5/P/I399WP7ZNE3EZw/vdC
-	2JEYg13q7nD5UUTf2CSKvgvFStE6umsyHk3rjeTtFsSl06Op84BpdbJeIkjYHva8OEMGrVC2hVr
-	R3y4P3ZHHeJgmTwTAh0H/ejPKMc1fjAyohOSGbQZOFpy/QRJirdq5z4538+Q98vbNwzKWMMRVJT
-	AQXxOpNWazewLJ4dH+IyApeQKuGv7Ih42ogHgFeyyI91CVIQOLwCZl5E/abQajtlwbeZHyw==
-X-Received: by 2002:a05:600c:4708:b0:49d:93c:d903 with SMTP id
- 5b1f17b1804b1-49eb7322de3mr97138325e9.20.1789669263065; Thu, 17 Sep 2026
- 11:21:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeRYA7rh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B9F1F00899;
+	Thu, 17 Sep 2026 18:42:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1789670570;
+	bh=G9OjC0DvXbYSXJMCvKYfaBrtdLJ3dmS1MuuNFWcE17Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=JeRYA7rh2zFrLoDrvkT3tOXHVvhkH6bjWJLZn/UYBnyI/ZxTQuMpD4weCvEGIZTcG
+	 owAKqMoYSujslwmt67lCRILKcm1QQujCJnXPf9/zFmbeLalGQAj9uGlImhcFU8hi4n
+	 K5fVxPWxyFUEls6aBpw9ShMjMfl0WOH2r8XGMGht2rzxe0kiJEE6YuSbCY/NjwgLsw
+	 VKkhwQcTAK+r8jPrWsADcjEs6fEvUkheY+IZbuY6sLFh7iES+AX9CDJ+9svfBn0z4N
+	 LehTASVD2b0Yx5mbf1rARYwQS+8jA7iPbWlZbnr+Ck6iM4NNpf/iX7gAOh6RGVhvN2
+	 0V/NpIFtEHFjw==
+Date: Thu, 17 Sep 2026 11:42:50 -0700
+From: Kees Cook <kees@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Alexey Gladkov <legion@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 09/20] kbuild: implement and use depcheck to check
+ dependency timestamps
+Message-ID: <202609171117.35BFDCC13@keescook>
+References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
+ <20260917-build-speedup-v3-9-9ecf4163ff36@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260821-ptrace_uapi-v1-1-3de8638a29f2@google.com>
- <CAKwvOdkCGEYWnyJtWT=jArXkA47X==G0PU4UNV=s8htpA3Dg6g@mail.gmail.com> <aphc5Xf0HU0SWcTI@redhat.com>
-In-Reply-To: <aphc5Xf0HU0SWcTI@redhat.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Thu, 17 Sep 2026 11:20:50 -0700
-X-Gm-Features: AcwNN1Wnnc2Ja2BVU5SbTKTHMtdnYNybRfE_8sC9RSapHxQS6CIO6M07Qcg-v4o
-Message-ID: <CAKwvOdkQ1OL8Uu+wBO-RtVr_sPTWJBYpM9PEDcec8CvLF64FdQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: uapi: ptrace: guard register offset macros with
- __ASSEMBLER__ or __FRAME_OFFSETS
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Elliott Hughes <enh@google.com>, linux-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, llvm@lists.linux.dev, 
-	Bill Wendling <morbo@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260917-build-speedup-v3-9-9ecf4163ff36@kernel.org>
 
-On Wed, Sep 2, 2026 at 10:29=E2=80=AFAM Oleg Nesterov <oleg@redhat.com> wro=
-te:
->
-> On 09/01, Nick Desaulniers wrote:
-> >
-> > On Fri, Aug 21, 2026 at 3:46=E2=80=AFPM Nick Desaulniers
-> > <ndesaulniers@google.com> wrote:
-> > >
-> > > The register offset macros in <asm/ptrace-abi.h> are guarded by
-> > > `defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)` for 64-bit, but
-> > > were left unguarded for 32-bit. This causes havoc for userspace that
-> > > happens to use identifiers colliding with these short macro names
-> > > (e.g., EBX, ECX, EAX, DS, ES, FS, GS, CS, SS). Without this guard,
-> > > userspace is forced to be super extra careful with include ordering t=
-o
-> > > minimize the chance of collision.
-> > >
-> > > Wrap both the 32-bit and 64-bit register definitions under
-> > > `#if defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)`, and ensure
-> > > User-Mode Linux (UML) defines `__FRAME_OFFSETS` for 32-bit as well.
-> > >
-> > > Assisted-by: Gemini
-> > > Link: https://github.com/llvm/llvm-project/issues/217413
-> > > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> >
-> > + enh (who pulled this into android for testing)
-> >
-> > Oleg, can I get an ack/nack here?
->
-> Oh... there is a little problem, I don't understand the usage of
-> (magic to me) __FRAME_OFFSETS ;)
+On Thu, Sep 17, 2026 at 05:06:19PM +0100, Lorenzo Stoakes (ARM) wrote:
+> This can be done faster in C, so implement scripts/basic/depcheck to do so.
+> 
+> It does as little work as possible, reading the .cmd files from a
+> directory's targets and running stat on each dependency only a single time.
 
-Yeah, my Assisted by tag is from asking Gemini to triple check my
-patch before posting, and it pointing out to me from a local review:
-"did you intend to break the arch/x86/um/ C uses of these macro
-defines?"  So I'm just matching an existing pattern in arch/x86/um/
-for 64b with the __FRAME_OFFSETS parts of this patch.
+Doesn't this run the risk of missing transitive deps?
 
-The patch started off as "why are the 64b macros behind the
-__ASSEMBLER__ preprocessor guards, but not the 32b ones?"  I went back
-through the pre-git history tree, and FWICT, those macros have always
-been guarded for 64b, since the introduction of x86_64 support itself.
-Dunno if anyone remembers anymore _why_ the 32b macro defines don't
-have that guard (chesterton's fence?), but to me, IMO, it looks like a
-mistake.
+C.cmd:	C.o depends on A.c and B.c and B.h
+B.cmd:	B.h depends on B.data and B.script
 
-Hence this patch.  PTAL
+depcheck looks at C.o and B.h's times and is happy so it drops C.cmd file,
+but then see B.script has changed compared to B.h, so it keeps B.cmd,
+and then the build runs and doesn't have the C.o dep list any more,
+and C.o goes unbuilt?
 
->
-> > Or someone who knows better the
-> > history of UAPI headers?
->
-> Certainly not me....
->
-> OK. I'll try to read this patch tomorrow with the clear head after sleep.
+Also, I don't think this handles if_changed commands at all? The kbuild
+rebuild condition is timestamps plus if_changed's command-line check.
 
-Thanks for taking a look.
---=20
-Thanks,
-~Nick Desaulniers
+> diff --git a/scripts/basic/depcheck.c b/scripts/basic/depcheck.c
+> new file mode 100644
+> index 000000000000..622101c33650
+> --- /dev/null
+> +++ b/scripts/basic/depcheck.c
+> @@ -0,0 +1,441 @@
+> [...]
+> +/* What fixdep writes, see above. */
+> +#define DEPS_PREFIX		"deps_"
+> +#define DEPS_RULE_PREFIX	"$(" DEPS_PREFIX
+> +#define RULE_SUFFIX		":"
+> +#define LINE_CONTINUATION	" \\"
+> +#define WILDCARD_OPEN		"$(wildcard "
+> +#define WILDCARD_CLOSE		")"
+> +#define CMD_SUFFIX		".cmd"
+> [...]
+> +static bool is_blank(char chr)
+> [...]
+> +static bool str_ends_with(const char *str, const char *suffix)
+> [...]
+> +static bool line_starts_with(const struct line *line, const char *prefix)
+> [...]
+> +static bool line_ends_with(const struct line *line, const char *suffix)
+> [...]
+> +static bool line_is_blank(const struct line *line)
+> [...]
+> +static bool line_is_continued(const struct line *line)
+> [...]
+> +static void line_strip_continuation(struct line *line)
+> [...]
+> +static void line_trim(struct line *line)
+> [...]
+> +static bool next_line(const char **pos, const char *end, struct line *line)
+
+There is a lot of sting handling in here. I know you're going for speed,
+but it just feels like a python script doing all this would be much more
+readable without wrecking speed compared to C much. Yes, C will win out,
+but the maintainability of this helper does not fill me with joy. :P
+
+> [...]
+> +static const struct dep *lookup_dep(const char *path)
+> +{
+> +	const unsigned int key = hash_str(path);
+> +	struct dep *dep;
+> +	struct stat st;
+> +
+> +	hash_for_each_possible(dep_table, dep, hnode, key) {
+> +		if (!strcmp(dep->path, path))
+> +			return dep;
+> +	}
+> +
+> +	dep = xmalloc(sizeof(*dep) + strlen(path) + 1);
+> +	strcpy(dep->path, path);
+> +	dep->exists = !stat(path, &st);
+> +	if (dep->exists)
+> +		dep->mtime = st.st_mtim;
+
+I realize you only check "mtime" after an "exists" check, but I bristle
+at leaving a time-stamp uninitialized. Can we just add an "else
+dep->mtime = 0" here?
+
+-Kees
+
+-- 
+Kees Cook
