@@ -1,124 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3D24D37B6;
-	Thu, 17 Sep 2026 14:33:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AC714A0F14;
+	Thu, 17 Sep 2026 15:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789655588; cv=none; b=n9kV0DMe6dm+uLPmxaSAUXOpyWhCZI9YRiqv1E2ANIa0UkS3wtvYX2BW1DJIw/LlX/dAmrvdE8/jfGw9bnAn3agXgSa8C8u7n/ubnHO4nLGuYC3ZE04bJfSXmr1TrjSRHoaUOnD7R6GQMjFXxYpoa8bnWm/MX9fTHIdDoyIGQx0=
+	t=1789660641; cv=none; b=Cxf4eZJPvm6PzzrYXTUfjmV7Os7+ByoPkgub3OBWrL6mJTHnU7r6KhxjB8VVqGPxCv66cfwd3lmOuYtHFfWCiKrkzMtAGbrlCS/zvcRzGtj+mn4dFFoxg5GMcX71jpo8lCMMxwKAezpnysLgdkmfaDXublU0NwOrza7o4TKc1QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789655588; c=relaxed/simple;
-	bh=/7b9Dge+Xpm43JDEKx4r2OMUe578e0wRvbBLaw5dZ98=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gBftSpmGs1LjPai13FEsalLQT5ITT+IS/JVUYCtdZ72t0H5it3r1GMEtkUHOpdaFnK964oKGOoeTdi3JuXEXo9fF6rJfQLUOcNYmQ5ri+H2QgLDnCEwcFwtggpT2EQYlrF4OUN86aFuWIakcBGoWesrbUiswJfOWbzR1yHjSvig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h4w3XnKm; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789660641; c=relaxed/simple;
+	bh=LPr+S5E9e/qlJZVwy9/yFtDfaVU/Syp4H9nUPeGH/UM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=mpBVLJW198NO99BFNbplvqnFT+dTz2MB+DEyoH4Jj+BZK/8TAQeYi+FmjU3YQ5FZWkfaZoeR7PVkX50M9nLUinWgNVMXaQnVBGTsTpuTn67eDl021Bj3YbVdtvdrdasIQcuhXIbPr85yVrOXfaEt+bulF9l19bpRqgxNnazEvDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J10X1sRl; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h4w3XnKm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F561F000FF;
-	Thu, 17 Sep 2026 14:32:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789655586;
-	bh=I2ExORUgMX+BoF88CQ1iPiIm+UZCCdszdxXlk48uD6I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=h4w3XnKm6CpCBPP6zxny3WxSdq5eHBOnoxot5LhCUHJeGcoeuU7IaQSIAvaInWz8g
-	 oHRzCzcN2u5rXZnA8BwBN5B5MY03vwci3WigqJqDc1kf6T86OrB4ddM/4HDTZZQWoV
-	 MP2s55Oe1E1FrVud9JJWXPXpFBCgyVUhIsI7VkIlePqbXJN52WONNSdUfXggIJ9j0N
-	 U5i9lY0iDsScv6yl2/amtlJJYtlYjnw9GuXokt+SVh3xhwljkgeUCImquvwQHO3LCD
-	 gu2VPG0CaGQHuN2mxx+azKf+oE90lG4FG0Nkd1LvBYZbZPRFv6nU4BhGP3iIyXfp05
-	 vN8bbHIolSSrQ==
-Date: Thu, 17 Sep 2026 15:32:50 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 21/21] kbuild: use pigz for gzip compression if
- available
-Message-ID: <aqv5_utZj5Ma76OD@gremlin>
-References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
- <20260914-build-speedup-v2-21-39817ec5db23@kernel.org>
- <202609151758.BA5732348@keescook>
- <081b2b60-e295-4cd7-b201-d996a88c5f28@app.fastmail.com>
- <202609160809.78E97DC34F@keescook>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J10X1sRl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789660639; x=1821196639;
+  h=date:from:to:cc:subject:message-id;
+  bh=LPr+S5E9e/qlJZVwy9/yFtDfaVU/Syp4H9nUPeGH/UM=;
+  b=J10X1sRlvHaU2vHNcEIbiqjjdExO68UWRlEBrt8enQ25C/ej2v/B/kP2
+   uc4V/S/3TI9k9srZWTPJQGS+BVvxQh/nqt+AQLMc/sBFleXfRNekd1ab/
+   fml87aMNrG4t/aAExghfO8LVBglWHdOmVj9JYLN5ekTInvWtIRnFk+pj3
+   JLJazHvW7ZzwVsts4AiFiy//dykS6h4NZWDp9wgrzj8V2RT7GHvF0AUVe
+   EH+vdR2F2Lb4O1rFFirZ4jvZgTz81TicfTWvFNvDnHH+yEW5fKzl7Yily
+   EKI2GpJB/u3N4jujnSXN23KVf18GHPArqdkTE/v/1ivXaT5zvLXGPNoLw
+   g==;
+X-CSE-ConnectionGUID: FRRuo1k3RqCIrZXfPeBpiQ==
+X-CSE-MsgGUID: SZrgDuN9QD6OVBYc7JuAMg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="89234451"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="89234451"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2026 08:57:18 -0700
+X-CSE-ConnectionGUID: h422lOm8TxmLIYnSXfifww==
+X-CSE-MsgGUID: 9spLevcmQcGy5N4qy21EaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="298957390"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 17 Sep 2026 08:57:14 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x7EU3-0000000086r-3Hqq;
+	Thu, 17 Sep 2026 15:57:11 +0000
+Date: Thu, 17 Sep 2026 23:57:07 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pengpeng Hou <pengpeng@iscas.ac.cn>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Mark Brown <broonie@kernel.org>
+Subject: [broonie-ci:for-7.4 5/19] sound/soc/codecs/es9356.c:1125:3:
+ warning: add explicit braces to avoid dangling else
+Message-ID: <202609172335.MVp6jjO5-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202609160809.78E97DC34F@keescook>
 
-On Wed, Sep 16, 2026 at 08:27:09AM -0700, Kees Cook wrote:
-> On Wed, Sep 16, 2026 at 08:38:33AM +0200, Arnd Bergmann wrote:
-> > On Wed, Sep 16, 2026, at 03:06, Kees Cook wrote:
-> > > On Mon, Sep 14, 2026 at 10:22:20AM +0100, Lorenzo Stoakes (ARM) wrote:
-> > >
-> > > Makefile:
-> > >
-> > > KPGZIP	:= $(if $(shell command -v pigz 2>/dev/null),$(PYTHON3)
-> > > $(abs_srctree)/scripts/jobserver-exec
-> > > $(abs_srctree)/scripts/parallel-gzip,gzip)
-> > >
-> > > and the same scripts/parallel-gzip:
-> > >
-> > > 	#!/bin/sh
-> > > 	exec pigz -p ${PARALLELISM:-1} "$@"
-> > >
-> > > And then replace the /boot/ KGZIP uses with KPGZIP. Then we don't need
-> > > to change modules, config_data, new users, nor cmd_gzip, etc, which all
-> > > continue to use the regular KGZIP and the "use python" part for the
-> > > KPGZIP case becomes is a 1-time cost?
-> >
-> > Nice, I like the idea and this this will work. I didn't know about
-> > scripts/jobserver-exec, but this does seem like a perfect fit.
-> >
-> > I checked the other compression tools we support, and found that
-> > zstd is another one that has built-in support for parallel
-> > compression, so we probably want to have it there as well.
->
-> Follow-up idea:
->
-> Having to make a dedicated wrapper script to use jobserver-exec is a bit
-> clunky, so maybe the ergonomics need to be improved there slightly?
-> Maybe we can add a simple template thingy to
-> tools/lib/python/jobserver.py's "run" to replace, say, '%PARALLELISM%'
-> automatically, then it becomes:
->
-> KPGZIP	:= $(if $(shell command -v pigz 2>/dev/null),$(PYTHON3) \
-> 		$(abs_srctree)/scripts/jobserver-exec \
-> 		pigz -p %PARALLELISM%
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git for-7.4
+head:   50a0a41c67978e9d89646038eb08c587635cb9be
+commit: 31a7178425356d459bf7397941a3fbeff1782122 [5/19] ASoC: es9356: Publish IRQ readiness after cache replay
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260917/202609172335.MVp6jjO5-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260917/202609172335.MVp6jjO5-lkp@intel.com/reproduce)
 
-Nice, that seems like a good little cleanup will fold that in, do some checks
-then send the v3 out soon :)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609172335.MVp6jjO5-lkp@intel.com/
 
->
-> -Kees
->
-> --
-> Kees Cook
+All warnings (new ones prefixed by >>):
+
+>> sound/soc/codecs/es9356.c:1125:3: warning: add explicit braces to avoid dangling else [-Wdangling-else]
+    1125 |                 scoped_guard(mutex, &es9356->disable_irq_lock)
+         |                 ^
+   include/linux/cleanup.h:451:2: note: expanded from macro 'scoped_guard'
+     451 |         __scoped_guard(_name, __UNIQUE_ID(label), args)
+         |         ^
+   include/linux/cleanup.h:448:5: note: expanded from macro '__scoped_guard'
+     448 |                 } else
+         |                   ^
+   1 warning generated.
+
+
+vim +1125 sound/soc/codecs/es9356.c
+
+  1103	
+  1104	static int es9356_sdca_dev_resume(struct device *dev)
+  1105	{
+  1106		struct sdw_slave *slave = dev_to_sdw_dev(dev);
+  1107		struct es9356_sdw_priv *es9356 = dev_get_drvdata(dev);
+  1108		int ret;
+  1109	
+  1110		ret = sdw_slave_wait_for_init(slave, es9356_PROBE_TIMEOUT);
+  1111		if (ret) {
+  1112			sdw_show_ping_status(slave->bus, true);
+  1113			return ret;
+  1114		}
+  1115	
+  1116		regcache_cache_only(es9356->regmap, false);
+  1117		ret = regcache_sync(es9356->regmap);
+  1118		if (ret) {
+  1119			regcache_cache_only(es9356->regmap, true);
+  1120			regcache_mark_dirty(es9356->regmap);
+  1121			return ret;
+  1122		}
+  1123	
+  1124		if (!slave->unattach_request)
+> 1125			scoped_guard(mutex, &es9356->disable_irq_lock)
+  1126				es9356->disable_irq = false;
+  1127		return 0;
+  1128	}
+  1129	
 
 --
-Cheers, Lorenzo
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
