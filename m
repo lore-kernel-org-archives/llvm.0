@@ -1,366 +1,149 @@
-Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75C952E063
-	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 21:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99A7B332621;
+	Fri, 18 Sep 2026 23:34:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789768417; cv=none; b=HqS+4mU9PoJFvk5G4Jgu6dj4ErJLVvXQasll42EAU0E7Z+zQ6NVXJiCAIavS1D22HZ6MUHtdFMn0QLSIuA3QExoqJXlzuPoyd9Q1rVeYAkBr8FH0h7ouVahlXR4m6w7yk1h7B/HzYjy1loHo673oQ+SO2Pbe6BfTC3Dx8tK8TKU=
+	t=1789774495; cv=none; b=Xviu7JwwURoo7ZL7eLDM2n9UAE04g+zM/C5VwW/VdgSQW1bI/vYQOrhPscEL5NdyyhhLoZfPyNgWrx+qVBlfYoXxKZViLlHRuIF+MyNmbFsFzSxz8HLo87igr/+PI3rhZVhQq9Lti+NrRCt7SMh8emM60lZ7DTLP3I3nM2Iyf0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789768417; c=relaxed/simple;
-	bh=uwZv/c7tQiEL+ej6aYvVHDvYLKpa83n1lVZNexSFEAI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RxNhr+PL2gxk4QfMOPal2qOvaOCn0yuxlkqbaPTox1rzLSjhfw+ZRXImFTX30vFIOYf0fhtbhJ7EuzURCDpyfuosfGZcHsArfivRGtKgpCAu0Bf/apXzY16Noit1SG8gd44rtfk0F4uZFp8RscSeRISF1JNcAxHTyvQvcGzS0Qw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=GcMcSt0y; arc=none smtp.client-ip=74.125.224.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
+	s=arc-20240116; t=1789774495; c=relaxed/simple;
+	bh=+CIDY4tHCBcNN6f3HQI80T/KHLCZoSJvg0NcmfaQzrk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nq3LKTLh+PY5PAo5tSRPaWswj9xz0qeYAaUHItUR4kQZjgUhIhJRZm8qSDoKo1P2PTgqsxQ4sVXiX2A97mMEcojuIlRacHhWn111jI+jr5QdayLTPYdfY1rkKtwUOi1VqK5MDu+Q1wxFOVczZkdYttei99dziGz1gSW2/uATYTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HbQbUXVZ; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="GcMcSt0y"
-Received: by mail-yx2-f13.google.com with SMTP id 956f58d0204a3-66e4aac929eso1236057d50.0
-        for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 14:53:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tenstorrent.com; s=google; t=1789768414; x=1790373214; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SICfyq893WKBo2pXS1GifsnKMH4aQWw4kYwqMwKqsmQ=;
-        b=GcMcSt0yuiW+fhlzZj0EMxnIH1daKFk8nKaiyiHHx7CrgrWkAg2kRmwZf+EVDT/fPf
-         N3ZezmyiPTgJbGA31zmwGIcY2YFi7oM0YS7PWo0xcgRGP0kQLoQbhegLBTFnq68ULeu3
-         DsoxU1cJMhYGiFaBtpSv7UdQmvengmFnRMuqN0VSPI+5jawQcQ2UNmbQZBGH7b8WtW/0
-         wQ9IGLw9Ku8Zi9Ebthjh4AHEEGzuQcWr0+7Lr69wqrQCUnCim5L7qVhMEFTJFvIzSyZI
-         lXpSaq32QnpByeHcrlbSCvokzlN3E0QslOyG7+Uu/W4l0wyBN4BlZ8IG0+gr7ufq8gTx
-         QEDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789768414; x=1790373214;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SICfyq893WKBo2pXS1GifsnKMH4aQWw4kYwqMwKqsmQ=;
-        b=ahI7Zs3htZWSM/FLbrTFKd+G+VQXdYIhpCJ2COPHM/Ods6UW5ImANznOcwhsSua9rl
-         Ni1dMv5iIMkhFbHCLQ6uEaPl8Gz6SF7F8mGlcCJjYrGHFSdbc0gddrTX3UR/Smw2IFg5
-         hWCWZIYAxCeHNEbDUvEyEbyAnD1xOrbZuVDB749x7xdkC/abqB3ZCF0Fej8Ref4QIJDo
-         0SDV8h5WG5vlFOz6HecAWTLcA0BzcVo8ctdMCQNk/4//xMgnBKGnLnt847NUSSTnoAd0
-         /DWn9LclIrjPJ5wg6q+X3TdpXKxi63AKMa06w6y4L+zt57hAUc4d+Yb8fdT7+wQuwvT/
-         aV/Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwNsIWP6N8p4ChlngOQBH8x4h4AEZGGI+6Hf4EuHgHEYq/64dOYsGgafo3wGATvuyjimvhU@lists.linux.dev
-X-Gm-Message-State: AFuF++kltn7r1AexQXSy1rUE9Y7vUlNdM3cfyBZqT+hs9Ss9x2b6TitZ
-	e4xVLHFQSbMQ7U5ShSajpvMCsyUgzedxeutva7amoCWhlrL+fuq0M0m9COCL703vKso=
-X-Gm-Gg: AYBFou24FUX/zFwoJukBGLaFZ3Ouf9D3IIJ09H69EqD38q3kqXvBzNU8nKvoL50IwA5
-	Z3VSSGl863xorKEhCCJSD8m/KlEcYdc9UFiXc3e0cYl1AgLVtIOp99bFv/SuWOOBeFNRhFAZ3fO
-	6YwBBFiNovZEnAQsZMAXlNn3038P916hQ4tdN7G4a8Lg9sM1dOMrgGJMk+t0pSRwGLOTYjZYIPE
-	qX5TeHhBm3jprbV3ZVYuXLs81EAnLa+a3Qv7VXFHhpfJs2S9YOGnV3cVH60Ypj0++3qN7m2l440
-	Qxgg1d6b+bUGsJc0XF2jRWAok7F5uwD+tjRtYX0OeAY3OdsH1UybyqE3OnNKx/jBjYrCleaFuIm
-	28HnwsIdzNBCoO7rKolMYtHIarC3ptERnNd9WlH/02bXy1objVhPmBSFyxEpGdJP1LRZsxvQrMn
-	UGDj6T9esLKpz9hPh6dF8GQRLoJ497l2MNam8yx25UFIRK6a1wMAuYMgQGH0B6heFdmBeB1VWh3
-	/aDvOB/GnYwRcfw+N0nyAD7ximtE6JTNkEU
-X-Received: by 2002:a05:690e:4548:20b0:670:fe0f:fe39 with SMTP id 956f58d0204a3-6717fdfd203mr887495d50.88.1789768414543;
-        Fri, 18 Sep 2026 14:53:34 -0700 (PDT)
-Received: from lima-default.tail89d63.ts.net ([12.55.13.134])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a45d8fb3csm4017757b3.13.2026.09.18.14.53.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 14:53:34 -0700 (PDT)
-From: Andy Chiu <tchiu@tenstorrent.com>
-To: Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	llvm@lists.linux.dev
-Cc: andybnac@gmail.com,
-	Andy Chiu <tchiu@tenstorrent.com>,
-	dfustini@oss.tenstorrent.com,
-	greentime.hu@sifive.com,
-	Sergey Matyukevich <geomatsi@gmail.com>,
-	Zong Li <zong.li@sifive.com>,
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Subject: [PATCH v6 3/8] selftest: riscv: test vectorized user copy
-Date: Fri, 18 Sep 2026 16:51:17 -0500
-Message-ID: <20260918215154.2481482-4-tchiu@tenstorrent.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260918215154.2481482-1-tchiu@tenstorrent.com>
-References: <20260918215154.2481482-1-tchiu@tenstorrent.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HbQbUXVZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789774494; x=1821310494;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+CIDY4tHCBcNN6f3HQI80T/KHLCZoSJvg0NcmfaQzrk=;
+  b=HbQbUXVZyYArbQBBPDWdHqt+ayc92aV5o6OpC/t4FpsknaH03IxJ9oYf
+   c1gShB+60cYgGAojx5zt5uPiO5lny4ahabNh1EK/AlxyWVs+qcqEdkjp2
+   MmekpxU9r78+zs/ce7CCxoPCQmWVwypdAymYigKfU3nvE2lrcmbccuJ7q
+   0bsGg6bizR6DgY3rz+d6V3Cu9+SaYVcOT84kvpmroTcSGVCXHwJsiAq9I
+   9edl7X6CsI01b9Rs0yZeLjQ2JW2xSwYxcv+1jDkosYYNSdMzSbJg4/P34
+   4tc47Xn4SnYuk2Z2xwh9ZKoCrSmH0/2GVVAAsmfSQ/oIDcYuo3qK/MB87
+   A==;
+X-CSE-ConnectionGUID: PwFzNEBDS+OZ2ObUp+mJZQ==
+X-CSE-MsgGUID: t6rYcfCETi2/y6YMClk79A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="89240467"
+X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
+   d="scan'208";a="89240467"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 16:34:53 -0700
+X-CSE-ConnectionGUID: 9nJ7BauOSNyLmg3WxQ3PeQ==
+X-CSE-MsgGUID: DOzcEQl8Q6CsGqwOAV14zQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
+   d="scan'208";a="271964200"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 18 Sep 2026 16:34:51 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x7i6O-00000000ASb-1mkJ;
+	Fri, 18 Sep 2026 23:34:44 +0000
+Date: Sat, 19 Sep 2026 07:34:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guo Zihao <guozh23@xiaopeng.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Hans Verkuil <hverkuil@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Liu Chao <liuc63@xiaopeng.com>
+Subject: Re: [PATCH] media: cobalt: bound the dv timings to the descriptor
+ buffers
+Message-ID: <202609190745.z2mFq2RW-lkp@intel.com>
+References: <20260918072526.2478529-1-guozh23@xiaopeng.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260918072526.2478529-1-guozh23@xiaopeng.com>
 
-Add a test that pushes a 1KiB pseudo-random stream through a pipe, so
-write() and read() copy it in and out of the kernel on the vectorized
-uaccess path, and compares the result against the original. Both buffers
-shift every iteration to sweep all relative alignments, and 16 processes
-per online CPU keep the vector unit contended. The compare is a byte at a
-time loop through volatile pointers rather than memcmp(), keeping it scalar
-and independent of the user vector state.
+Hi Guo,
 
-Assisted-by: Claude-Code:claude-opus-5
-Signed-off-by: Andy Chiu <tchiu@tenstorrent.com>
----
-Changelog v5:
- - new patch since v5
----
- tools/testing/selftests/riscv/vector/Makefile |   6 +-
- .../selftests/riscv/vector/v_uaccess_stress.c | 221 ++++++++++++++++++
- 2 files changed, 226 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/riscv/vector/v_uaccess_stress.c
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
-index 7e0017b3fb8b..0ed09b69dd8a 100644
---- a/tools/testing/selftests/riscv/vector/Makefile
-+++ b/tools/testing/selftests/riscv/vector/Makefile
-@@ -2,7 +2,8 @@
- # Copyright (C) 2021 ARM Limited
- # Originally tools/testing/arm64/abi/Makefile
- 
--TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace
-+TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace \
-+		  v_uaccess_stress
- TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc v_exec_initval_nolibc
- TEST_GEN_LIBS := v_helpers.c sys_hwprobe.c
- 
-@@ -36,4 +37,7 @@ $(OUTPUT)/vstate_ptrace: vstate_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_hel
- $(OUTPUT)/validate_v_ptrace: validate_v_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
- 	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
- 
-+$(OUTPUT)/v_uaccess_stress: v_uaccess_stress.c
-+	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
-+
- EXTRA_CLEAN += $(TEST_GEN_OBJ)
-diff --git a/tools/testing/selftests/riscv/vector/v_uaccess_stress.c b/tools/testing/selftests/riscv/vector/v_uaccess_stress.c
-new file mode 100644
-index 000000000000..d70e0387e246
---- /dev/null
-+++ b/tools/testing/selftests/riscv/vector/v_uaccess_stress.c
-@@ -0,0 +1,221 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Stress the kernel's user copy path from several processes at once.
-+ *
-+ * Each child pushes a 1KiB pseudo-random byte stream through a pipe: write()
-+ * copies it from user space into the kernel (copy_from_user()) and read()
-+ * copies it back out (copy_to_user()). The round trip is repeated 512 times
-+ * per child, and every iteration the buffers are shifted so that the copies
-+ * cover all of the source/destination alignment combinations.
-+ *
-+ * On RISC-V those copies may be serviced by kernel-mode vector routines, so
-+ * the payload is generated and verified with plain scalar loads and stores
-+ * only. The comparison goes through volatile pointers, which keeps both GCC
-+ * and clang from turning the loop into a vectorised compare and keeps the
-+ * check independent of the user vector state the kernel is supposed to
-+ * preserve. memcmp() is avoided for the same reason: the libc version is free
-+ * to use vector instructions.
-+ */
-+
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/wait.h>
-+
-+#include "kselftest_harness.h"
-+
-+#define ITERATIONS	32768
-+#define STREAM_SIZE	1024
-+#define MAX_SHIFT	16
-+#define BUF_SIZE	(STREAM_SIZE + MAX_SHIFT)
-+
-+#define CONCURRENCY	16
-+
-+/* xorshift64*, so the payload does not depend on any libc or kernel helper. */
-+static unsigned long prng_state;
-+
-+static unsigned long prng_next(void)
-+{
-+	prng_state ^= prng_state >> 12;
-+	prng_state ^= prng_state << 25;
-+	prng_state ^= prng_state >> 27;
-+
-+	return prng_state * 2685821657736338717UL;
-+}
-+
-+static void fill_random(unsigned char *buf, size_t len)
-+{
-+	size_t i;
-+
-+	for (i = 0; i < len; i++)
-+		buf[i] = (unsigned char)(prng_next() >> 24);
-+}
-+
-+/*
-+ * Scalar, byte at a time comparison. Returns the offset of the first
-+ * mismatching byte, or len when the two streams are identical.
-+ */
-+static size_t scalar_diff(const unsigned char *a, const unsigned char *b,
-+			  size_t len)
-+{
-+	const volatile unsigned char *va = a;
-+	const volatile unsigned char *vb = b;
-+	size_t i;
-+
-+	for (i = 0; i < len; i++) {
-+		if (va[i] != vb[i])
-+			break;
-+	}
-+
-+	return i;
-+}
-+
-+static ssize_t write_all(int fd, const unsigned char *buf, size_t len)
-+{
-+	size_t done = 0;
-+
-+	while (done < len) {
-+		ssize_t ret = write(fd, buf + done, len - done);
-+
-+		if (ret < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			return -1;
-+		}
-+		done += ret;
-+	}
-+
-+	return done;
-+}
-+
-+static ssize_t read_all(int fd, unsigned char *buf, size_t len)
-+{
-+	size_t done = 0;
-+
-+	while (done < len) {
-+		ssize_t ret = read(fd, buf + done, len - done);
-+
-+		if (ret < 0) {
-+			if (errno == EINTR)
-+				continue;
-+			return -1;
-+		}
-+		if (ret == 0)
-+			return -1;
-+		done += ret;
-+	}
-+
-+	return done;
-+}
-+
-+/* Runs in the child. Returns the exit status to hand back to the parent. */
-+static int child_loop(unsigned long seed)
-+{
-+	unsigned char src[BUF_SIZE], dst[BUF_SIZE];
-+	int pipefd[2];
-+	int i;
-+
-+	prng_state = seed;
-+
-+	if (pipe(pipefd)) {
-+		fprintf(stderr, "pid %d: pipe() failed: %s\n",
-+			getpid(), strerror(errno));
-+		return 1;
-+	}
-+
-+	for (i = 0; i < ITERATIONS; i++) {
-+		/*
-+		 * Walk the source and destination through every relative
-+		 * alignment, including the case where both are equally
-+		 * misaligned.
-+		 */
-+		unsigned char *in = src + (i % MAX_SHIFT);
-+		unsigned char *out = dst + ((i / MAX_SHIFT) % MAX_SHIFT);
-+		size_t off;
-+
-+		fill_random(in, STREAM_SIZE);
-+		memset(out, 0, STREAM_SIZE);
-+
-+		if (write_all(pipefd[1], in, STREAM_SIZE) < 0) {
-+			fprintf(stderr, "pid %d: iteration %d: write() failed: %s\n",
-+				getpid(), i, strerror(errno));
-+			return 1;
-+		}
-+
-+		if (read_all(pipefd[0], out, STREAM_SIZE) < 0) {
-+			fprintf(stderr, "pid %d: iteration %d: read() failed: %s\n",
-+				getpid(), i, strerror(errno));
-+			return 1;
-+		}
-+
-+		off = scalar_diff(in, out, STREAM_SIZE);
-+		if (off != STREAM_SIZE) {
-+			fprintf(stderr,
-+				"pid %d: iteration %d: mismatch at byte %zu of %d (in %p, out %p): expected 0x%02x, got 0x%02x\n",
-+				getpid(), i, off, STREAM_SIZE, in, out,
-+				in[off], out[off]);
-+			return 1;
-+		}
-+	}
-+
-+	close(pipefd[0]);
-+	close(pipefd[1]);
-+
-+	return 0;
-+}
-+
-+static int nr_children(void)
-+{
-+	long online = sysconf(_SC_NPROCESSORS_ONLN);
-+
-+	return online * CONCURRENCY;
-+}
-+
-+TEST(uaccess_round_trip)
-+{
-+	int nr = nr_children();
-+	int failures = 0;
-+	pid_t pids[nr];
-+	int i;
-+
-+	ksft_print_msg("%d children, %d iterations of %d bytes each\n",
-+		       nr, ITERATIONS, STREAM_SIZE);
-+
-+	for (i = 0; i < nr; i++) {
-+		pids[i] = fork();
-+		ASSERT_LE(0, pids[i]) {
-+			TH_LOG("fork() failed: %s", strerror(errno));
-+		}
-+
-+		if (pids[i] == 0) {
-+			/* A distinct, reproducible stream per child. */
-+			_exit(child_loop(0x9e3779b97f4a7c15UL + i));
-+		}
-+	}
-+
-+	for (i = 0; i < nr; i++) {
-+		int status;
-+
-+		if (waitpid(pids[i], &status, 0) < 0) {
-+			TH_LOG("waitpid(%d) failed: %s", pids[i],
-+			       strerror(errno));
-+			failures++;
-+			continue;
-+		}
-+
-+		if (WIFSIGNALED(status)) {
-+			TH_LOG("child %d killed by signal %d", pids[i],
-+			       WTERMSIG(status));
-+			failures++;
-+		} else if (!WIFEXITED(status) || WEXITSTATUS(status)) {
-+			TH_LOG("child %d failed", pids[i]);
-+			failures++;
-+		}
-+	}
-+
-+	ASSERT_EQ(0, failures);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.43.0
+[auto build test ERROR on linuxtv-media-pending/master]
+[also build test ERROR on media-tree/master sailus-media-tree/master linus/master v7.3-rc3 next-20260918]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Guo-Zihao/media-cobalt-bound-the-dv-timings-to-the-descriptor-buffers/20260918-152526
+base:   https://git.linuxtv.org/media-ci/media-pending.git master
+patch link:    https://lore.kernel.org/r/20260918072526.2478529-1-guozh23%40xiaopeng.com
+patch subject: [PATCH] media: cobalt: bound the dv timings to the descriptor buffers
+config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20260919/202609190745.z2mFq2RW-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 7252edd9aa82ef1c570ff6694ef7f4763a8a5d2f)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260919/202609190745.z2mFq2RW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609190745.z2mFq2RW-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/media/pci/cobalt/cobalt-v4l2.c:635:3: error: use of undeclared identifier 'cobalt'
+     635 |                 cobalt_info("timings %ux%u out of range\n",
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     636 |                             timings->bt.width, timings->bt.height);
+         |                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/pci/cobalt/cobalt-driver.h:160:45: note: expanded from macro 'cobalt_info'
+     160 | #define cobalt_info(fmt, arg...) v4l2_info(&cobalt->v4l2_dev, fmt, ## arg)
+         |                                             ^~~~~~
+   1 error generated.
+
+
+vim +/cobalt +635 drivers/media/pci/cobalt/cobalt-v4l2.c
+
+   615	
+   616	static int cobalt_s_dv_timings(struct file *file, void *priv,
+   617					    struct v4l2_dv_timings *timings)
+   618	{
+   619		struct cobalt_stream *s = video_drvdata(file);
+   620		int err;
+   621	
+   622		if (s->input == 1) {
+   623			*timings = cea1080p60;
+   624			return 0;
+   625		}
+   626	
+   627		if (v4l2_match_dv_timings(timings, &s->timings, 0, true))
+   628			return 0;
+   629	
+   630		if (vb2_is_busy(&s->q))
+   631			return -EBUSY;
+   632	
+   633		if (timings->bt.width > COBALT_MAX_WIDTH ||
+   634		    timings->bt.height > COBALT_MAX_HEIGHT) {
+ > 635			cobalt_info("timings %ux%u out of range\n",
+   636				    timings->bt.width, timings->bt.height);
+   637			return -EINVAL;
+   638		}
+   639	
+   640		err = v4l2_subdev_call(s->sd,
+   641				pad, s_dv_timings, 0, timings);
+   642		if (!err) {
+   643			s->timings = *timings;
+   644			s->width = timings->bt.width;
+   645			s->height = timings->bt.height;
+   646			s->stride = timings->bt.width * s->bpp;
+   647		}
+   648		return err;
+   649	}
+   650	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
