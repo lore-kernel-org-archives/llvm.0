@@ -1,157 +1,345 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417523644DE;
-	Fri, 18 Sep 2026 05:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3749199E89;
+	Fri, 18 Sep 2026 06:45:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.6
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789711150; cv=none; b=Y7+fEvFqQnvP562K1scob9gv3ZCRrX0kTT2qiRq9tA5dL7WyTIfwocPuUBCAnN0a+VopOWC6R6jCPVJuDS4P6OmtDd2IePmTHUaLs8xcGs6ZcHPRjVYY/vQDPegBitPk4BoWtd6kfVh4LXLCwvsq5684+nnOhO8nRH5ONc54u2o=
+	t=1789713957; cv=none; b=Snh5BdZpl3MYkJp4g9kM7mIf1jvpKUpsH2T64Wx+1XXtvwEkFBA8US+wvjhII/habZdgapMnVfT2oS7cFx9F9e/Vz8t3A8AXcUGxEBhueh4nn+nHlKySXm7jeyC8OgG4cMwpzWYDjGZHgdCBebVmfn+USzFE/l+nK0a1jdMmuY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789711150; c=relaxed/simple;
-	bh=mJTN91ugFwjKMz4I9/XHV1un1QzWKvooR+gPxPOhWZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DzCW6jH8+VVO3EwTIPhqLS0UlDIqZYWq0Dgmvzpp8ER7AgHRklJeXTnDAHS8xpAd/GZyAveMPUfuYrmUWnlnzZiw+mfgjOCb6LPydWXAur9aiyMIZYAxO5LX132XyOORst9o7D9HaSbXPECD6kqfkPhf/FKpDbiRWQqgyK6NRsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ncb7ucBQ; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1789713957; c=relaxed/simple;
+	bh=bnkRjgK6AWq+2fk/WCJjKtdBf2RZwg8jFydOPnbnmrI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qaffu5W7jm/Qn65da5SDHT4+1CDGPYrVt7c8UH/pkb6gL9AwTkpgZo17/cRarVe/lv2A0AEG1dpdKsnd8l17+6Q9KyF/xy6TyTR7HgbQW/TWY+jsYgTkJygdw0V8iNvpHB53zl8+wPRlcdqLOIzcYqKBRcrkjU0F8HjrCmDvyLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JlJGOwP4; arc=none smtp.client-ip=192.198.163.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ncb7ucBQ"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68I2VjZx043142;
-	Fri, 18 Sep 2026 05:52:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=OkKG5e
-	Hj/nYQoAmDG+rhMWoq3O/eAaBCq9IsR6KTnK0=; b=Ncb7ucBQiJs7MT8jp9Hogw
-	KABJEWlOfG/dfbLL7sZXrcFtqQHDCdSSDXBhPAMUuhs5npkTH7xSnz/q0jSWnr5c
-	ZCC+Z9ZhJ2KpZ454Fn/KC2n0Cp1UhVDSe8NFhDep6X9wG98D2tZxBsJtHEJV+45S
-	EjULYJaU5L4OoJZA/qL9KCw7HIyFbmDcr8Gxlufr7nBlme16tZiYsBgiSeN/5+3e
-	Nn0Z96JqJXvZkkqBRVQed78H4ZgW5hfnssCzeXUxadsAKb1Eb+ftmmjqeYG8wl3A
-	9m5u+yGoAqzpnXlfik8qPHri7xqtulz88Ch6zS0Mn2/FCTO1TiNWTPWug9fanXnA
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmx846f5r-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Fri, 18 Sep 2026 05:52:57 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68I2ZKuK918969;
-	Fri, 18 Sep 2026 05:52:56 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gr7genjra-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 18 Sep 2026 05:52:56 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68I5qCZX3015250
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 18 Sep 2026 05:52:12 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B0A5E5804E;
-	Fri, 18 Sep 2026 05:52:55 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 876455803F;
-	Fri, 18 Sep 2026 05:52:41 +0000 (GMT)
-Received: from [9.61.58.220] (unknown [9.61.58.220])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 18 Sep 2026 05:52:41 +0000 (GMT)
-Message-ID: <1742b0d0-fbdb-433b-b2c9-b47b5cfd7666@linux.ibm.com>
-Date: Fri, 18 Sep 2026 11:22:39 +0530
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JlJGOwP4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789713955; x=1821249955;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bnkRjgK6AWq+2fk/WCJjKtdBf2RZwg8jFydOPnbnmrI=;
+  b=JlJGOwP4YKlY7oO53zWOWPi7aQrcgBy/PeRMWW58YCz2+3sWMrypdpiD
+   FSHaR6ikI5SFHqDCztfAVIePcB5SAKrXVHRHP3Wc20VjttXiCFIT7ah8+
+   6/clnk1GGGUD4mh13nn1iVZjc1AYYgcoYwe8mwY8HTb2EfpYqjbEfDFP6
+   cm/y4rdXlYoFXeuZqvIYDLJhUuyFqVP6PCPEo0OJFOFRbujN0uPGpXiU/
+   XY8PXeYI5PC4irrzBn3SuF1l/uTKyRjrHwNi5fcpXA7jzxra8pj2GXgjb
+   UigKBkwUnq6HRb/DXaAd88UHQV8v5RjRuJ+mFWIwFU9ixdlsIRqqJDO4n
+   w==;
+X-CSE-ConnectionGUID: eoDDzzMLSWO2x+OG6WIz4g==
+X-CSE-MsgGUID: o+RSUyPpQpOufucH8vetrw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11905"; a="716077"
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="716077"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa116.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Sep 2026 23:45:54 -0700
+X-CSE-ConnectionGUID: YvSHXzgAQ7eVVxhDFFAbGg==
+X-CSE-MsgGUID: ruY997k+QyiUuW89mNEbKA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,103,1787036400"; 
+   d="scan'208";a="267987269"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 17 Sep 2026 23:45:50 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x7SM0-000000009Nz-0Dtc;
+	Fri, 18 Sep 2026 06:45:48 +0000
+Date: Fri, 18 Sep 2026 14:45:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Camacho Romero <michal.camacho.romero@linux.intel.com>,
+	Ning Sun <ning.sun@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Baolu Lu <baolu.lu@linux.intel.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Michal Camacho Romero <michal.camacho.romero@intel.com>,
+	x86@kernel.org, iommu@lists.linux.dev,
+	tboot-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+	Mateusz Mowka <mateusz.mowka@intel.com>,
+	Adam Pawlicki <adamx.pawlicki@intel.com>,
+	Pawel Randzio <pawel.randzio@intel.com>
+Subject: Re: [PATCH 1/1] x86/tboot: Add support for parsing DTPR table and
+ disabling TPRs
+Message-ID: <202609181428.YizH4EcD-lkp@intel.com>
+References: <20260917094133.765149-1-michal.camacho.romero@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/3] blk-cgroup: move async bio punt state to blkcg
-To: Yu Kuai <yukuai@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Josef Bacik <josef@toxicpanda.com>, Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Randy Dunlap
- <rdunlap@infradead.org>, Coly Li <colyli@fygo.io>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Alasdair Kergon
- <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
-        Mikulas Patocka <mpatocka@redhat.com>,
-        Benjamin Marzinski <bmarzins@redhat.com>, Song Liu <song@kernel.org>,
-        Li Nan <magiclinan@didiglobal.com>, Xiao Ni <xiao@kernel.org>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
-        Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
-        Baoquan He <baoquan.he@linux.dev>, Barry Song <baohua@kernel.org>,
-        Youngjun Park <youngjun.park@lge.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Bill Wendling
- <morbo@google.com>,
-        Justin Stitt <justinstitt@google.com>
-Cc: Yu Kuai <yukuai@fygo.io>, Christoph Hellwig <hch@lst.de>,
-        Tao Cui <cuitao@kylinos.cn>, linux-block@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
-        gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev
-References: <20260918041744.1526924-1-yukuai@kernel.org>
- <20260918041744.1526924-4-yukuai@kernel.org>
-Content-Language: en-US
-From: Nilay Shroff <nilay@linux.ibm.com>
-In-Reply-To: <20260918041744.1526924-4-yukuai@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDA3MiBTYWx0ZWRfX/teiT0wiHNSW
- JEvRLv8jYQnWWkxliGMH7Y5gxw8A38G2pBCriGrXSm3DN6Pr3l9Oia/Cs3vbs5x2dSUFWw1cfFz
- f6YEK9tOomOpksip3Jp/NjjN7rrYdt/gOI5v+6Y8AX7cViJK8cnyaAE3PjMik7w12aaXKvh6tPK
- tFBlkzqye1G3IuT9fAG8wstP9g6OAj+fQK4ugA5oL55w2miRU2d/M5YZzNY15Wjk04uncsH6aDp
- pnj11j8nfR0QxLHiscSmDcegPweYS/JObE2+bA7JB/xXyGgpQjesnbr/WvDVc+wx6dyVbrWXmva
- TRZBv+CiIDmwlROqGoPTmI8+6j49IF5vWsKy4421LSK4L8hh5RZqcbHHtqWWNbP4U/H4xAE0VIg
- qjhdgXfijXio3Cfv4RwZ0wphiapFt2dpjyauojKMPHivJdWmZuJs2lOfIk/cS3ryMpVrfiI0Gg9
- /PO92Nr18Ody/I9Qj1g==
-X-Proofpoint-ORIG-GUID: IQzOuQqhULLvUviFRAhVAHKgtdnFYey7
-X-Proofpoint-GUID: ZGCkVPtmRng54Q_CssYM4zmrTg3B8e93
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE4MDA3MiBTYWx0ZWRfX7hqucrhMwMz+
- TMaoTQdDqBi4VtgFdBweWtZanWLjNVsk/ptq6fmVuMGXmra8Z54mRVbadv0oTv0nx+NSQH+0ts1
- oIkWCJgjmb268QlqzkGvSbLj1oWUnos=
-X-Authority-Analysis: v=2.4 cv=cY9HPXDM c=1 sm=1 tr=0 ts=6aacd1ba cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
- a=N7Slw706a9Tpp8ivUyUA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-18_01,2026-09-16_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 bulkscore=0 clxscore=1015 suspectscore=0
- impostorscore=0 malwarescore=0 phishscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609180072
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260917094133.765149-1-michal.camacho.romero@linux.intel.com>
 
-On 9/18/26 9:47 AM, Yu Kuai wrote:
-> From: Yu Kuai<yukuai@fygo.io>
-> 
-> blkcg_punt_bio_submit() currently queues punted bios on blkg->async_bios,
-> so it has to call bio_blkg() to find or create a queue-local blkg.  Bios
-> now carry and pin the blkcg css, so punted bio lifetime no longer needs to
-> be anchored by a blkg.
-> 
-> Keeping the punt state in blkg can instantiate a blkg even when no blkcg
-> policy is enabled, just to bounce submission from a shared kthread.  Move
-> async_bio_lock, async_bios and async_bio_work to struct blkcg, and queue
-> punted bios on bio_blkcg() for non-root cgroups.  Root or unassociated bios
-> are submitted directly.
-> 
-> This preserves the priority-inversion avoidance while preventing
-> blkcg_punt_bio_submit() from creating blkgs that are not needed by any
-> policy.
-> 
-> Signed-off-by: Yu Kuai<yukuai@fygo.io>
+Hi Michal,
 
-Looks good to me.
-Reviewed-by: Nilay Shroff <nilay@linux.ibm.com>
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on tip/x86/core]
+[also build test ERROR on tip/master linus/master v7.3-rc3 next-20260916]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Camacho-Romero/x86-tboot-Add-support-for-parsing-DTPR-table-and-disabling-TPRs/20260917-114133
+base:   tip/x86/core
+patch link:    https://lore.kernel.org/r/20260917094133.765149-1-michal.camacho.romero%40linux.intel.com
+patch subject: [PATCH 1/1] x86/tboot: Add support for parsing DTPR table and disabling TPRs
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260918/202609181428.YizH4EcD-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260918/202609181428.YizH4EcD-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609181428.YizH4EcD-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   arch/x86/kernel/tboot.c:255:9: warning: unused variable 'j' [-Wunused-variable]
+     255 |         u32 i, j, ref_tpr_cnt;
+         |                ^
+>> arch/x86/kernel/tboot.c:583:8: error: redefinition of 'heap_ext_data_elt'
+     583 | struct heap_ext_data_elt {
+         |        ^
+   include/linux/tboot.h:68:8: note: previous definition is here
+      68 | struct heap_ext_data_elt {
+         |        ^
+>> arch/x86/kernel/tboot.c:758:15: warning: comparison of distinct pointer types ('struct heap_ext_data_elt *' and 'void *') [-Wcompare-distinct-pointer-types]
+     758 |         } while (elt <= sinit_mle_end);
+         |                  ~~~ ^  ~~~~~~~~~~~~~
+   arch/x86/kernel/tboot.c:760:10: warning: comparison of distinct pointer types ('struct heap_ext_data_elt *' and 'void *') [-Wcompare-distinct-pointer-types]
+     760 |         if (elt >= sinit_mle_end){
+         |             ~~~ ^  ~~~~~~~~~~~~~
+>> arch/x86/kernel/tboot.c:778:60: error: no member named 'data' in 'struct heap_ext_data_elt'
+     778 |         if (!tboot_check_dtpr_size((struct acpi_table_dtpr *)elt->data,
+         |                                                              ~~~  ^
+   arch/x86/kernel/tboot.c:784:40: error: no member named 'data' in 'struct heap_ext_data_elt'
+     784 |         return (struct acpi_table_dtpr *)elt->data;
+         |                                          ~~~  ^
+   arch/x86/kernel/tboot.c:800:6: warning: variable 'ref_tpr_cnt' set but not used [-Wunused-but-set-variable]
+     800 |         u32 ref_tpr_cnt;
+         |             ^
+   4 warnings and 3 errors generated.
+
+
+vim +/heap_ext_data_elt +583 arch/x86/kernel/tboot.c
+
+   582	
+ > 583	struct heap_ext_data_elt {
+   584		u32 type;
+   585		u32 size;
+   586		u8  data[];
+   587	} __packed;
+   588	
+   589	struct sinit_mle_data {
+   590		u32                      version;             /* currently 9 */
+   591		struct sha1_hash         bios_acm_id;
+   592		u32                      edx_senter_flags;
+   593		u64                      mseg_valid;
+   594		struct sha1_hash         sinit_hash;
+   595		struct sha1_hash         mle_hash;
+   596		struct sha1_hash         stm_hash;
+   597		struct sha1_hash         lcp_policy_hash;
+   598		u32                      lcp_policy_control;
+   599		u32                      rlp_wakeup_addr;
+   600		u32                      reserved;
+   601		u32                      num_mdrs;
+   602		u32                      mdrs_off;
+   603		u32                      num_vtd_dmars;
+   604		u32                      vtd_dmars_off;
+   605		u32                      proc_scrtm_status; /* version 8 or later only*/
+   606		struct heap_ext_data_elt ext_data_elts[];
+   607	} __packed;
+   608	
+   609	struct acpi_table_header *tboot_get_dmar_table(struct acpi_table_header *dmar_tbl)
+   610	{
+   611		void *heap_base, *heap_ptr, *config;
+   612	
+   613		if (!tboot_enabled())
+   614			return dmar_tbl;
+   615	
+   616		/*
+   617		 * ACPI tables may not be DMA protected by tboot, so use DMAR copy
+   618		 * SINIT saved in SinitMleData in TXT heap (which is DMA protected)
+   619		 */
+   620	
+   621		/* map config space in order to get heap addr */
+   622		config = ioremap(TXT_PUB_CONFIG_REGS_BASE, NR_TXT_CONFIG_PAGES *
+   623				 PAGE_SIZE);
+   624		if (!config)
+   625			return NULL;
+   626	
+   627		/* now map TXT heap */
+   628		heap_base = ioremap(*(u64 *)(config + TXTCR_HEAP_BASE),
+   629				    *(u64 *)(config + TXTCR_HEAP_SIZE));
+   630		iounmap(config);
+   631		if (!heap_base)
+   632			return NULL;
+   633	
+   634		/* walk heap to SinitMleData */
+   635		/* skip BiosData */
+   636		heap_ptr = heap_base + *(u64 *)heap_base;
+   637		/* skip OsMleData */
+   638		heap_ptr += *(u64 *)heap_ptr;
+   639		/* skip OsSinitData */
+   640		heap_ptr += *(u64 *)heap_ptr;
+   641		/* now points to SinitMleDataSize; set to SinitMleData */
+   642		heap_ptr += sizeof(u64);
+   643		/* get addr of DMAR table */
+   644		dmar_tbl = (struct acpi_table_header *)(heap_ptr +
+   645			   ((struct sinit_mle_data *)heap_ptr)->vtd_dmars_off -
+   646			   sizeof(u64));
+   647	
+   648		/* don't unmap heap because dmar.c needs access to this */
+   649	
+   650		return dmar_tbl;
+   651	}
+   652	
+   653	struct acpi_table_dtpr *tboot_get_dtpr_table(void **heap_base)
+   654	{
+   655		void *heap_ptr, *config, *sinit_mle_end;
+   656		struct sinit_mle_data *sinit_mle;
+   657		struct heap_ext_data_elt *elt;
+   658		u64 heap_end, heap_size, sinit_mle_size, heap_section_size;
+   659	
+   660		if (!heap_base)
+   661			return NULL;
+   662	
+   663		if (!tboot_enabled())
+   664			return NULL;
+   665		/*
+   666		 * ACPI tables may not be DMA protected by tboot, so use DMAR copy
+   667		 * SINIT saved in SinitMleData in TXT heap (which is DMA protected)
+   668		 */
+   669	
+   670		/* map config space in order to get heap addr */
+   671		config = ioremap(TXT_PUB_CONFIG_REGS_BASE, NR_TXT_CONFIG_PAGES *
+   672				 PAGE_SIZE);
+   673		if (!config)
+   674			return NULL;
+   675	
+   676		/* now map TXT heap */
+   677		*heap_base = ioremap(*(u64 *)(config + TXTCR_HEAP_BASE),
+   678				    *(u64 *)(config + TXTCR_HEAP_SIZE));
+   679		heap_size = *(u64 *)(config + TXTCR_HEAP_SIZE);
+   680		heap_end = (u64)*heap_base + heap_size;
+   681		iounmap(config);
+   682	
+   683		if (!(*heap_base))
+   684			return NULL;
+   685	
+   686		/* walk heap to SinitMleData */
+   687		/* skip BiosData */
+   688		/* get BiosData section size */
+   689		heap_section_size = *(u64 *) (*heap_base);
+   690		if (!tboot_check_txt_heap_section_bounds(heap_end, heap_base, *heap_base,
+   691		                                         heap_section_size, "BiosData")) {
+   692			return NULL;
+   693		}
+   694	
+   695		/* skip OsMleData */
+   696		heap_ptr = *heap_base + heap_section_size;
+   697		/* get OsMleData section size */
+   698		heap_section_size = *(u64 *)heap_ptr;
+   699		if (!tboot_check_txt_heap_section_bounds(heap_end, heap_base, heap_ptr,
+   700		                                         heap_section_size, "OsMleData")) {
+   701			return NULL;
+   702		}
+   703	
+   704		/* skip OsSinitData */
+   705		heap_ptr += heap_section_size;
+   706		/* get OsSinitData section size */
+   707		heap_section_size = *(u64 *)heap_ptr;
+   708		if (!tboot_check_txt_heap_section_bounds(heap_end, heap_base, heap_ptr,
+   709		                                         heap_section_size, "OsSinitData")) {
+   710			return NULL;
+   711		}
+   712	
+   713		/* jump to the SinitMleData */
+   714		heap_ptr += heap_section_size;
+   715		/* now points to SinitMleDataSize; set to SinitMleData */
+   716		sinit_mle_size = *(u64 *)heap_ptr;
+   717		if(!tboot_check_txt_heap_section_bounds(heap_end, heap_base, heap_ptr,
+   718		                                        sinit_mle_size, "SinitMleData")) {
+   719			return NULL;
+   720		}
+   721	
+   722		heap_ptr += sizeof(u64);
+   723		sinit_mle = (struct sinit_mle_data *)heap_ptr;
+   724		sinit_mle_end = (void *)sinit_mle + sinit_mle_size;
+   725		if (sizeof(struct sinit_mle_data) > sinit_mle_size) {
+   726			pr_err("SinitMleData size is smaller than expected.\n");
+   727			goto err;
+   728		}
+   729	
+   730		if (sinit_mle->version < 9) {
+   731			pr_err("Unsupported SinitMleData version: %u\n", sinit_mle->version);
+   732			goto err;
+   733		}
+   734	
+   735		heap_ptr += sizeof(struct sinit_mle_data);
+   736		if (heap_ptr > sinit_mle_end) {
+   737			pr_err("SinitMleData header out of bounds.\n");
+   738			goto err;
+   739		}
+   740	
+   741		elt = sinit_mle->ext_data_elts;
+   742		do {
+   743			if ((u8 *)elt + sizeof(*elt) > (u8 *)sinit_mle_end) {
+   744				pr_err("SinitMleData element header out of bounds.\n");
+   745				goto err;
+   746			}
+   747	
+   748			if (elt->size < sizeof(*elt)) {
+   749				pr_err("Invalid SinitMleData element size: %u\n", elt->size);
+   750				goto err;
+   751			}
+   752	
+   753			if (elt->type == HEAP_EXTDATA_TYPE_END || elt->type == HEAP_EXTDATA_TYPE_DTPR) {
+   754				break;
+   755			}
+   756	
+   757			elt = (void *)elt + elt->size;
+ > 758		} while (elt <= sinit_mle_end);
+   759	
+   760		if (elt >= sinit_mle_end){
+   761			pr_err("Reached the end of SinitMleData without finding DTPR nor END"
+   762			       " element.\n");
+   763			goto err;
+   764		}
+   765	
+   766		if (elt->type == HEAP_EXTDATA_TYPE_END) {
+   767			pr_err("DTPR element not found in SinitMleData\n");
+   768			iounmap(*heap_base);
+   769			*heap_base = NULL;
+   770			return NULL;
+   771		}
+   772	
+   773		if ((u8 *)elt + elt->size > (u8 *)sinit_mle_end) {
+   774			pr_err("DTPR Table exceeds SinitMleData bounds.\n");
+   775			goto err;
+   776		}
+   777	
+ > 778		if (!tboot_check_dtpr_size((struct acpi_table_dtpr *)elt->data,
+   779		                           elt->size - sizeof(*elt))) {
+   780			pr_err("Invalid DTPR Table size.\n");
+   781			goto err;
+   782		}
+   783	
+   784		return (struct acpi_table_dtpr *)elt->data;
+   785	
+   786	err:
+   787		iounmap(*heap_base);
+   788		*heap_base = NULL;
+   789		return NULL;
+   790	}
+   791	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
