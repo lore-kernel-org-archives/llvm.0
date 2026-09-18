@@ -1,65 +1,65 @@
-Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
+Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11794ED188
-	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 12:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939024AC143
+	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 12:25:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789734336; cv=none; b=e4RAaIKNcAvxp4s2NAJWlTPS/ba0aR93p54NtNyi7vJKKVNXiUOjwZo78CBawOdAtdzT9BJSeqZrizxyP8nKQX/B0brf90b1EeZ5yuymuUk91HGtt2WrnjqOntR8INZ9QNkfKdH5VqGJj3Qz06BMi82gVmQTBXZdRQ69cUjXJJ0=
+	t=1789734336; cv=none; b=aSWqOwCRbSo3ZxEM2AM80f1VxRpgrTlRa8BGMu8BaWMzJV2ZF8Kc4S1aZFzjdsaR3H+KzynB61IOMbtsOvkGO9sOBlbpzj+J3ACVdg+ky+4MqwXzLkruLKFMz8fmYX22dGWqbcQ4szugyANUCxXo4z+XRgEGrVkm7q8BacAKC2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1789734336; c=relaxed/simple;
-	bh=LqBSm3USoMc1NhaRdGxHYrJshaTcBLFmk+HruTyC934=;
+	bh=Yj4RwbCvi7B7lQgZjaL6AuMOkRGQNU1rLzNzZVSRhLU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NetdDWcSw+DeL8pNTkQW423JzwSN08iHdE21M3y+//RTTGKGEbxRYnIoy4KQvGr0vplTdTMtV2ZKNRfMs2P3DeQjKmaKuOGXRxVM/BzdySpf7MxTv7xwYWIuskM64cDxI2TcMSRsouqFu1hqPxbK2rm7YmR/UFKFRwvO/mGyMys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xz1UVWqK; arc=none smtp.client-ip=74.125.229.205
+	 MIME-Version; b=dX/m3I64RtBeJ4awYqw3R1HZMk8cPXoBdj1NrWPwLosUDmVHlFzvCBo0R+O3wsTHb7MVVTYWSYFDzV8B6/Qa8Wg3ejE5h9c2pQArLsq/IZlvRyv3ZkJWVCW7Jfjmss07slYxxH4CfX3XrT7UBRcAL8j+Hezvt6fkBjsMVpPRQWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jmDFmh6o; arc=none smtp.client-ip=74.125.229.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xz1UVWqK"
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5b76462aae9so482107e87.2
-        for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 05:25:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jmDFmh6o"
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f13d77so747793e87.0
+        for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 05:25:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789734325; x=1790339125; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1789734322; x=1790339122; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=tl5FK/P0IILzUPHeJ1tB9KQK9WXKF1I6DTxx+ou/T/Q=;
-        b=Xz1UVWqKEmQXRUkxlXG0WyHnlUlfr3V+kmP2n+cp/lZ2+AsT3YYfo4sJDtn9zm89tt
-         WU+Q64HDtdbb1XCPFzVduVms1PBxvIGY/FAhKOXvDXrnMjJfJrVjTRZDChqf+GONvgTO
-         82ybGLE8SsDSbuKxGLLB6Osf3GkRFJEZD+Z7DSW/+Z+BDZ9MZA58l4Xydd24cxWmyDyf
-         +wTmki6z7s03UzrbyY+jfTXyefWoWKyWYlGq5PS7SuNYhAIVR9jRbjkFkwz+6NQLOXP0
-         1YhQeRKDKfza3zLyvXzN+dFE2ff/5YTUwY+G0NZX7vdgdOyS5sP49FK3ZpnRaMnLMy5/
-         jPnw==
+        bh=bIjQv3Ni12nKKfUqhl2wfffLShu1iZGR3QKWNIW24Vw=;
+        b=jmDFmh6oo4eHbYwjTU2k+BkYfrBqsUmpDn8Wsvtpe/2FAVztK5d/hBwkYml59W/AhN
+         7f2/ifrkQ93sNWeJVuHHVhx0DmBD+advGnJlDkdbhdbL+m4MBtFAxbbqbQBgPckMQodq
+         dEoXEdh//gQfBDvLDin0vFzGMsbgwV6vgHww2vq0fVdftb7wMHzW+UJktO/7UAPbSIQ5
+         3JE7C2oCS/nuWSe1wq/ffBJP3mq8R15nIQIDMawf4KRC7P4Hg/Ra7cwEdN4Tg5L/Z55c
+         zWjgt4PVbBtoWzBq1Lkn5Jnblu1e05dS56ylPnKBxsDmv/Elz0AbUIBqHegPH76qZ12Q
+         ltgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789734325; x=1790339125;
+        d=1e100.net; s=20260707; t=1789734322; x=1790339122;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tl5FK/P0IILzUPHeJ1tB9KQK9WXKF1I6DTxx+ou/T/Q=;
-        b=gO6SR8ic/jjRu7DvbTa5J/1kVapYZyzzsPkbw0KYhmVHOejU2TBm/jzPJY9hZ+05V1
-         2W9NpnUfndHk2DngYYi+A55qfN3cQ26mhetIy349G5FR2FO2ugV9kM3p23/Jsxbr9Ylv
-         huiyklWA/mYjukzrxw66XmIAe5kRdY5m1eT9bwEZ7qXaEB2GjQoxn3T8/d/N7j+/NW9y
-         crTN3iJuY4SIAK0krkDK+GIzhcMYai3gcrQuf3suLaO0aOdS/HAef9AQPE4b9Te3+2cp
-         Rce8AvtU9yjGQ7JmCWPgC5aZRyZdowVXRwVyusRYpQezGh7aOO0LdMj/0n5yUqWF6Ydg
-         9A5w==
-X-Forwarded-Encrypted: i=1; AKwUvByJI8XW5EQtmFV7QlykDs1PHewcCwhu/DBTayzpBQl80BUsHDEimkGxA6oFP+QQLkL0sX8L@lists.linux.dev
-X-Gm-Message-State: AFuF++mDrwJVpsHgcvruAlyL85BVc3pXBsD2lp37vqXFkKUEXkDxhvLi
-	gmgpJjQWO+XXgy/GeCESehB882FcfbMk2SDhfxDtnr/EsRoE5uSZ//az
-X-Gm-Gg: AYBFou0o/nnDsN1+npe4aVEGN6Sh7bvm+2ZR45jZXtLFLZjCb/aF2SfeFStRzXPQ5q6
-	d/mGgcmYUZu3qxnz0tOIBWjV4gQpgdQHuil7AsEEv76k9nc7DdqnF8smd2mTTGHgm7V4EARWsW9
-	I/qWiH6CVs46OyZmem3ahOIQ+kj0kwsviQatKexyJx8bZsvjgbuJTFaoRPfDbAp4NwJvxgRZmDM
-	LLr7VXzLJTWiPkPWXmOxdXYicLMq8ZL4uGsXRecTAhUJKEjpOFppIrGLBuaDogYxiWfFjOcTGgZ
-	/ibM8GvKfJWeI0tR8jE7pMKafU9io3lqG5h1nfXaYuCf7vz6VXi+6pPXKON5xB25Lvw1v2drns/
-	6YAa31HRA4PqTRF1ELR9F2SX2HPoBiAaYij5HxerPPnfhrEVz+gst04LK5sX9kVCNrhkZoEVeav
-	dJlnhfV/C/9ynZ0RdkTDFF8G7mMder7BPT7yKssPHYw6xA5t2Pbc9gsUJ6v3xux4vo7542aoMFr
-	5nfRUr+Ln4WxUTdQ7CFc4WUEsEA2X4hOOADr3NUD+X0aOgShGVBdVvduxnhPG8yvXjvjQOhQPj9
-	k1wK
-X-Received: by 2002:a05:6512:6894:20b0:5b8:b331:19b8 with SMTP id 2adb3069b0e04-5b8c184e382mr435418e87.38.1789734325210;
-        Fri, 18 Sep 2026 05:25:25 -0700 (PDT)
+        bh=bIjQv3Ni12nKKfUqhl2wfffLShu1iZGR3QKWNIW24Vw=;
+        b=ywGIQZT+Y6gb6p0b/muGv0hjLy35bG6/fCkvFrNopCbs4huhepg2lCWrv3hZbco7zf
+         CjqnQt594kBkljakC2ebNACTcMV/n1wLrLBn+PMQ5xsYiznVKZsSNamiwVSOhguKtvEP
+         dXCAv/sy+cL/bKyF2OFcVq3YcM8tWd4RXbRyNFf0wuyi1ADCNm+I5FqxrvCMNU151mPO
+         1NsZ2s/9NtavG37aGVQopmqUkbVOPbQaIrxTAo9y9K1EsXfW7LhJRQZaDG09OB72a6wt
+         r3M2Z8iB5Lwo3eZMKWgqAU2jVWr9USFd+a6EA9CRlKXeySNgPg0wEhgoxfZA8x2GbVF7
+         PTCQ==
+X-Forwarded-Encrypted: i=1; AKwUvByNBXnJl/0PaZm9PKPsHM+DjZDqdC3W6+mAwseyeVAUx0LidyAofL2Ezlg9stcSwsSPC8YA@lists.linux.dev
+X-Gm-Message-State: AFuF++mSLKI/XPpVXJKyahHIsxkSBpf9vdnR7LtDQEsFRb4OzrSHNdc2
+	qfaYYKUw2an6SG85mp9QFMz3F9BxDxg10mRRCwV3lsR99uHhQ3ow1ggL
+X-Gm-Gg: AYBFou1ER+lm9nfnamhIwE7id2i39UIxyaEnddYIrja4MxgAcEOnS1+dm2F8poSa++Y
+	qZL0GfQAWwFjeAWMGyEUEJaDFWYDXQcZBBL/Ag/zmHB/G/YjYQqnGlpi1WpxHjfRHEurIV8CfRx
+	8JXTIk98RByve/YVY+Vp6MJkZTzRXtYg9cnqvDH6zM69/ScqWxeDqc9YMxu11+xVptwWA+HWv3b
+	SqHirINYLLifv4zOx2nnwzWqWCJ9DpJ7w5Jv8xWSLbsw/7qxhOrI9Oh2EAuJ4mDncp0cBDMCDeL
+	bTMjE+WQzTk93g1btXQaaTiJ0EQuoKw+vwZJR2nAfm8wEfs+VzuT7yRBIayNDXR4BXBbuJU8tWu
+	hJ7rn4ILpNASpElsF30zl3cgCPGlxaKvKvZdxKhjiFoXsgCKaymoSKeCZzJ6wIRknhxpphnXOHd
+	AHdHPL3LBm9h9YDzhy4+9K6irkBhS+SgvahjcOY6FZ3RpqcPuFyAKcp+3zgiWnlF9bWRubDu2ZW
+	cZBvGoC+gH0N1/Ip9Lu+ZiFfXOeqFvX2OjYBAC206yi6z0kEUEPlaQFUJR3QOAe0NHL8JzitM9x
+	sXJy
+X-Received: by 2002:a05:6512:234e:b0:5b4:ac1b:89bc with SMTP id 2adb3069b0e04-5b8c1818e38mr752954e87.24.1789734321552;
+        Fri, 18 Sep 2026 05:25:21 -0700 (PDT)
 Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8c270ea53sm398549e87.12.2026.09.18.05.25.24
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8c270ea53sm398549e87.12.2026.09.18.05.25.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 05:25:24 -0700 (PDT)
+        Fri, 18 Sep 2026 05:25:21 -0700 (PDT)
 From: Rupesh Majhi <zoone.rupert@gmail.com>
 To: Andy Shevchenko <andy@kernel.org>,
 	Bill Wendling <morbo@google.com>,
@@ -75,9 +75,9 @@ Cc: linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Rupesh Majhi <zoone.rupert@gmail.com>
-Subject: [PATCH v7 06/10] iio: core: add an accessor for scan_timestamp
-Date: Fri, 18 Sep 2026 15:25:13 +0300
-Message-ID: <20260918122517.377565-7-zoone.rupert@gmail.com>
+Subject: [PATCH v7 02/10] iio: pressure: dps310: use a local device pointer in probe
+Date: Fri, 18 Sep 2026 15:25:09 +0300
+Message-ID: <20260918122517.377565-3-zoone.rupert@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260918122517.377565-1-zoone.rupert@gmail.com>
 References: <20260918122517.377565-1-zoone.rupert@gmail.com>
@@ -89,42 +89,53 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-indio_dev->scan_timestamp is __private, so a driver has no way to ask
-whether the timestamp channel is in the current scan. Hide the
-ACCESS_PRIVATE() behind a read-only helper, the way iio_get_masklength()
-already does.
+probe() spells out &client->dev for every devm call. Take it into a local
+instead. Keeps lines short as more calls are added later in this series.
 
-The dps310 FIFO patch later in this series is the first user: that
-hardware does not timestamp entries, so it refuses a buffer with the
-timestamp channel enabled.
+No functional change.
 
-Suggested-by: Jonathan Cameron <jic23@kernel.org>
 Assisted-by: LLM
 Signed-off-by: Rupesh Majhi <zoone.rupert@gmail.com>
 ---
- include/linux/iio/iio.h | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/iio/pressure/dps310.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/iio/iio.h b/include/linux/iio/iio.h
-index 989c1db8fb36..a893e36be988 100644
---- a/include/linux/iio/iio.h
-+++ b/include/linux/iio/iio.h
-@@ -1083,6 +1083,15 @@ static inline unsigned int iio_get_masklength(const struct iio_dev *indio_dev)
- 	return ACCESS_PRIVATE(indio_dev, masklength);
- }
+diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
+index 35260b399390..bd7da4f12749 100644
+--- a/drivers/iio/pressure/dps310.c
++++ b/drivers/iio/pressure/dps310.c
+@@ -845,11 +845,12 @@ static const struct iio_info dps310_info = {
  
-+/**
-+ * iio_scan_timestamp_enabled - Is the timestamp channel in the current scan
-+ * @indio_dev: the IIO device to check
-+ */
-+static inline bool iio_scan_timestamp_enabled(const struct iio_dev *indio_dev)
-+{
-+	return ACCESS_PRIVATE(indio_dev, scan_timestamp);
-+}
-+
- int iio_active_scan_mask_index(struct iio_dev *indio_dev);
+ static int dps310_probe(struct i2c_client *client)
+ {
++	struct device *dev = &client->dev;
+ 	struct dps310_data *data;
+ 	struct iio_dev *iio;
+ 	int rc;
  
- /**
+-	iio = devm_iio_device_alloc(&client->dev,  sizeof(*data));
++	iio = devm_iio_device_alloc(dev, sizeof(*data));
+ 	if (!iio)
+ 		return -ENOMEM;
+ 
+@@ -868,7 +869,7 @@ static int dps310_probe(struct i2c_client *client)
+ 		return PTR_ERR(data->regmap);
+ 
+ 	/* Register to run the device reset when the device is removed */
+-	rc = devm_add_action_or_reset(&client->dev, dps310_reset, data);
++	rc = devm_add_action_or_reset(dev, dps310_reset, data);
+ 	if (rc)
+ 		return rc;
+ 
+@@ -876,7 +877,7 @@ static int dps310_probe(struct i2c_client *client)
+ 	if (rc)
+ 		return rc;
+ 
+-	rc = devm_iio_device_register(&client->dev, iio);
++	rc = devm_iio_device_register(dev, iio);
+ 	if (rc)
+ 		return rc;
+ 
 -- 
 2.43.0
 
