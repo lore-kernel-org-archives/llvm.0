@@ -1,177 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lr2-f12.google.com (mail-lr2-f12.google.com [74.125.230.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEA064B1280;
-	Fri, 18 Sep 2026 12:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0434E1C97
+	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 12:24:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789733736; cv=none; b=TRbHEkZUm9lRj/qS6RgJj4LWGbzb6vcixCwDmQ4UWrTYkAjxqg3ApfaWeOVtmqSK/CW14bfRMxM7BoXMIWS+5Aw4Qib/aJQA4Re+baTVlFvHnMtovtMb7OUVGkNpQHpqmbmNYC1fNtP7anZkxyoVzVFLYiXHhXFJV67ENx9w19I=
+	t=1789734260; cv=none; b=a88YGLRwynzx9Zywyt9pNPjfJcGlH62anDNvqEqTtbWv85nyboQLfYEbsrAnWL4IWoJKgwVR4iazzu88FVIwtDcc+gi9HRV6dHebCOkQ9DULJ8ztKvCxATs5ry64M/SZX857s1BFXNllIEakES5gbg6hAn94ZQjdM70taRwadZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789733736; c=relaxed/simple;
-	bh=T/apRxOiS6EEfsFUMJh7FJWp82q3VzXDa8jFlGB6dos=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hn6y8d0etBmjrgAJCxmRtEfCQub05wkAK3/x3D7g/J+lxBV6RRxIBsj5W3rtSbqgJ9YGJ5mnsbnIDBR+/EkzALea6MdW1tw2QS9RLReesPTx61M7NNdVah3mwph4UGvM0xhr8tyMbswyeJUuZqbbc7Uep4Wq8Z3xiuqSuWM6K7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZlXuPLpW; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1789734260; c=relaxed/simple;
+	bh=maSmLJEiVW4orqk/72EUoaWvFnMBkWSya0UZSf7eKGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FilkTXwyTTiQaF7VLo/qLJMKezZrBSohbRQRHgrDKPxekwx/M4q7Pev5y7v5SmXyulwyqS2d8aEp39tHLRJYl5Ho0H3wsVmGZLYz2Zh+5Ueea4Y2lhMBW/mQtOhyIpvK2kLa/vIY8M+3q+b1tyuhvVzumaOMDGqwBqbk04kO+zM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=tKnOUHlT; arc=none smtp.client-ip=74.125.230.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZlXuPLpW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1789733735; x=1821269735;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T/apRxOiS6EEfsFUMJh7FJWp82q3VzXDa8jFlGB6dos=;
-  b=ZlXuPLpWcnGP9rPUfelThyUuMhTFpLqiKAAvd/lm30uru+vHQp4zpMuk
-   2B7CwwjxgY+W2Na0uIuH+Fir/XZFgsLb9Dl/YbGwnQC8p9kU+NvZIfu0V
-   ZjSDBwjAYdAqxxTU3KqoT15hP69xED0GTCP3Hs4620vj5bQOatdzqpyAH
-   l6KdbXxVk9Iy+7Y9SdgJRWb/zae3RGg6S70QeLFC6CuZnhjnVREnBsMEF
-   TMtPr5h2Ph9pqjLKBuYrJE8RDEryp6rVj/nyGgSAYV/VdyHp7doCRRfel
-   5dxX0l2n6mU2uwjkATAvjbsn26yQhqFONo18XXUMOuwxuc8En0KkCTOIC
-   Q==;
-X-CSE-ConnectionGUID: YBKpepfFQiOI8oKaggxwTA==
-X-CSE-MsgGUID: 1vtSQ9lYSLqwuzPdhrd0lw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11908"; a="90368238"
-X-IronPort-AV: E=Sophos;i="6.27,108,1787036400"; 
-   d="scan'208";a="90368238"
-Received: from fmviesa012.fm.intel.com ([10.60.135.152])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Sep 2026 05:15:34 -0700
-X-CSE-ConnectionGUID: SKLexVT8TM23bbjGa8ylxw==
-X-CSE-MsgGUID: 0OkvWzxQT3G71Y4F2x0OjQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,108,1787036400"; 
-   d="scan'208";a="2565023"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa012.fm.intel.com with ESMTP; 18 Sep 2026 05:15:32 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x7XV3-000000009ll-0fqn;
-	Fri, 18 Sep 2026 12:15:29 +0000
-Date: Fri, 18 Sep 2026 20:14:46 +0800
-From: kernel test robot <lkp@intel.com>
-To: Salah Triki <salah.triki@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="tKnOUHlT"
+Received: by mail-lr2-f12.google.com with SMTP id 38308e7fff4ca-3a2ff176d7eso4803741fa.3
+        for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 05:24:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789734257; x=1790339057; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=maSmLJEiVW4orqk/72EUoaWvFnMBkWSya0UZSf7eKGU=;
+        b=tKnOUHlTUkRjKEVVcKjhFkp2XCJziQsnVGCrRu6FuRSqCE+dcvfipzuWiaC039uAuI
+         wZsskei/NThFkdl9U3iIXANRR4GWkU/AREaurME7J03ZUGjLFyf5aMjCd+1yEAwWqQUz
+         3Bj7q+oqw+F2nmNjiUchin6z077kUjakixV8Yvl+rxxAauaPVFIgi8Fd54mB1UfUvpQ1
+         zgWR87El3joSZNDInp/FouCHq6eVNXvg2dQccDhHqisROCHKLUY+64rH+6crcWOGDtDe
+         lL1a9CzewZlPV633eNtoEhybndhfYUbq7lCYKKRuCE8TXpMXdoNev4i7PBjUAmbTWy76
+         YTbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789734257; x=1790339057;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=maSmLJEiVW4orqk/72EUoaWvFnMBkWSya0UZSf7eKGU=;
+        b=fhNwTgslATPoEc90Ft4goG1FzkpnYtTgMG9Oenk4Y+5/FEuvCzjW7T6JV5xQKopTNA
+         Srvsv3jqxFSNgOaHZfAotsLpPQR7b2Vf/qj2goQHoIZM9agB9T4LWAtp35hmI9iTuX8U
+         Qf2kk5ZscPT0nZulsWsrvlkcX5T6/t/9xGjC/iEYlsggbattm/Epwwg5+Ryges41zn4Y
+         X8P9iyolI4bg4mjcdSAuA/j3A+8ZaDUQ/VWjSr25yxAbr+pnaomg5inl1FXNz8uKSUg3
+         Edxb0zpI7u4CIuRws1i93pM0g7AJ0vc6MQSOE7ZN7iidD7LLO66191JHy3SAxa4eoD+D
+         16zw==
+X-Forwarded-Encrypted: i=1; AKwUvBzEIzAV3ob25mLEMgVgw4mr+GKx7GYJ2PfOWgDmT+o+l7kDNv/F4GSLThE8sY/L9K1HVujI@lists.linux.dev
+X-Gm-Message-State: AFuF++mbAkl01rqPlETkzNakjiAN+/ARaoIJsWzXz+1a+vk83e2rXocn
+	PsEczNTBZ9nGl+U/nWV5Gg+XGpjroSj+McTHc0lEGnaD2v9hDvqk0xsg
+X-Gm-Gg: AYBFou3BzWyGAKUk1FG9KK6dB+nrIyI44Q5Fwq+XjSO/2RTHQJ32lyk4ItFK1GLFfF4
+	YeerhkdoWzPVD0W0Nifwq1i3ZpQEQVTDVa+7AjdKumXlh/zw8BP0YyHAHhaA0dxD2ZrSuweUSs5
+	KQdz+uXgpLgfVKUIxmPswmvr0EvQ5M86pKeTdmC1JH3FZyYHNN+faK/+W5Ld0cekEr+BMJ3wfyr
+	gZkWJZDVfQig9cH9JQasBVQjZyo6vD+hq8t7FY3aNBMfpbdoSJTOZovUSIeEE36GSlC4FoEyTeh
+	NM7ZaCyGezqHG9OUufrkfbcj5oO3XGzWC5NGuRfw2DGmFkYIMnlc/u0lZl1UiSkIslAE8ok9Eq0
+	pDc/X5X1srPZ0nWV7kAXwWBww6SnjusSjuq5AVy20zOBnkPMS0zSzSFvpZ9RBE1l192Yrp8agmm
+	ltvHoi6AxPH0D+yuVYsRpS9PZ/RbYnkA+79l/xzVvYyERJmKzqkkBLNfNgN50jewEcgnsciujOf
+	VkNpyZaNX2oFw+yRFY8Pr2VL7VLlpx035XRumLMJS6pQB1qgJwFIsfXKuOb1M9vuoEscU00ixm7
+	/G1e
+X-Received: by 2002:a05:651c:a393:10b0:3a5:f06c:f897 with SMTP id 38308e7fff4ca-3a5fc0f47b3mr3286371fa.28.1789734256702;
+        Fri, 18 Sep 2026 05:24:16 -0700 (PDT)
+Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a5fd5da086sm4172101fa.4.2026.09.18.05.24.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 05:24:16 -0700 (PDT)
+From: Rupesh Majhi <zoone.rupert@gmail.com>
+To: jic23@kernel.org
+Cc: Andy Shevchenko <andy@kernel.org>,
+	Bill Wendling <morbo@google.com>,
 	David Lechner <dlechner@baylibre.com>,
-	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-	Andy Shevchenko <andy@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Salah Triki <salah.triki@gmail.com>
-Subject: Re: [PATCH v2] iio: temperature: tsys02d: Fix state
- desynchronization on resolution write error
-Message-ID: <202609182052.HpuVt6ba-lkp@intel.com>
-References: <20260917091609.626043-1-salah.triki@gmail.com>
+	Eddie James <eajames@linux.ibm.com>,
+	Joel Stanley <joel@jms.id.au>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v6 4/6] iio: pressure: dps310: add triggered buffer support
+Date: Fri, 18 Sep 2026 15:24:15 +0300
+Message-ID: <20260918122415.375211-1-zoone.rupert@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <178813888150.2788519.17461592150162820073.b4-review@b4>
+References: <20260824201203.396651-1-zoone.rupert@gmail.com> <20260824201203.396651-5-zoone.rupert@gmail.com> <178813888150.2788519.17461592150162820073.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260917091609.626043-1-salah.triki@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Salah,
+On Mon, 31 Aug 2026 02:14:41 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
 
-kernel test robot noticed the following build errors:
+> As this isn't filling in the timestamp, I think you'd be better
+> passing s32 channels[__at_least 2] as that final parameter.
 
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v7.3-rc3 next-20260916]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+There is no __at_least in the tree and nothing in IIO uses [static N], so
+it is a plain s32 channels[2].
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Salah-Triki/iio-temperature-tsys02d-Fix-state-desynchronization-on-resolution-write-error/20260917-101608
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20260917091609.626043-1-salah.triki%40gmail.com
-patch subject: [PATCH v2] iio: temperature: tsys02d: Fix state desynchronization on resolution write error
-config: riscv-randconfig-1000-20260918 (https://download.01.org/0day-ci/archive/20260918/202609182052.HpuVt6ba-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260918/202609182052.HpuVt6ba-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609182052.HpuVt6ba-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/temperature/tsys02d.c:89:2: error: cannot jump from switch statement to this case label
-      89 |         default:
-         |         ^
-   drivers/iio/temperature/tsys02d.c:82:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-      82 |                 guard(mutex)(&dev_data->lock);
-         |                 ^
-   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
-     303 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:93:1: note: expanded from here
-      93 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:99:1: note: expanded from here
-      99 | __UNIQUE_ID_unlock_472
-         | ^
-   drivers/iio/temperature/tsys02d.c:82:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:87:1: note: expanded from here
-      87 | __UNIQUE_ID_guard_471
-         | ^
-   1 error generated.
-
-
-vim +89 drivers/iio/temperature/tsys02d.c
-
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  65  
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  66  static int tsys02d_write_raw(struct iio_dev *indio_dev,
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  67  			     struct iio_chan_spec const *chan,
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  68  			     int val, int val2, long mask)
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  69  {
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  70  	struct ms_ht_dev *dev_data = iio_priv(indio_dev);
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  71  	int i, ret;
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  72  
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  73  	switch (mask) {
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  74  	case IIO_CHAN_INFO_SAMP_FREQ:
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  75  		i = ARRAY_SIZE(tsys02d_samp_freq);
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  76  		while (i-- > 0)
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  77  			if (val == tsys02d_samp_freq[i])
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  78  				break;
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  79  		if (i < 0)
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  80  			return -EINVAL;
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  81  
-3c8dd88f5e71a2 Salah Triki      2026-09-17  82  		guard(mutex)(&dev_data->lock);
-3c8dd88f5e71a2 Salah Triki      2026-09-17  83  
-3c8dd88f5e71a2 Salah Triki      2026-09-17  84  		ret = ms_sensors_write_resolution(dev_data, i);
-3c8dd88f5e71a2 Salah Triki      2026-09-17  85  		if (ret)
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  86  			return ret;
-3c8dd88f5e71a2 Salah Triki      2026-09-17  87  
-3c8dd88f5e71a2 Salah Triki      2026-09-17  88  		dev_data->res_index = i;
-53bf4d067d5115 Ludovic Tancerel 2015-10-01 @89  	default:
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  90  		return -EINVAL;
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  91  	}
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  92  }
-53bf4d067d5115 Ludovic Tancerel 2015-10-01  93  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Rupesh
