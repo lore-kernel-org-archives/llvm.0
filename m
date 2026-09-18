@@ -1,136 +1,366 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx2-f13.google.com (mail-yx2-f13.google.com [74.125.224.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35D113F39E4;
-	Fri, 18 Sep 2026 21:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A75C952E063
+	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 21:53:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789767900; cv=none; b=hF6J8V13ZBvNhN8cS7C391yFicN8g6hY0N5JmoPqMiKPMia7+pB6sfmbdkbOo+Dq4Ph5tn5u8EJOMCYe0Nib1/2E4mDP69VdFa0BYH80WXpcIQDFqWP6JN/c1iXxI7i2Xu/dLXECBNoYDYAXGmEJMkdT50bnnvXfR/43R1+2lcg=
+	t=1789768417; cv=none; b=HqS+4mU9PoJFvk5G4Jgu6dj4ErJLVvXQasll42EAU0E7Z+zQ6NVXJiCAIavS1D22HZ6MUHtdFMn0QLSIuA3QExoqJXlzuPoyd9Q1rVeYAkBr8FH0h7ouVahlXR4m6w7yk1h7B/HzYjy1loHo673oQ+SO2Pbe6BfTC3Dx8tK8TKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789767900; c=relaxed/simple;
-	bh=pB79VHlpA+TkebC+eoaQyn5Kz80rPPXxTUFHDOYD60w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Smkd08Anm5cjISdPCQIwLGRC8KDZ1f7N+RsGp+6Ad+nepSLgH7mknXAwyu0WwwICQpHgDRzihqZ++K5rO+vJNYBoMAEDYfHAgrJzieuZytAa6+RF3e/xeGkwhdpi151PzsAZlnBoh1kS66bnbT1itexvEQ2GPmqH/hwnFUbTzTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eQgYxZq6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789768417; c=relaxed/simple;
+	bh=uwZv/c7tQiEL+ej6aYvVHDvYLKpa83n1lVZNexSFEAI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RxNhr+PL2gxk4QfMOPal2qOvaOCn0yuxlkqbaPTox1rzLSjhfw+ZRXImFTX30vFIOYf0fhtbhJ7EuzURCDpyfuosfGZcHsArfivRGtKgpCAu0Bf/apXzY16Noit1SG8gd44rtfk0F4uZFp8RscSeRISF1JNcAxHTyvQvcGzS0Qw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com; spf=pass smtp.mailfrom=tenstorrent.com; dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b=GcMcSt0y; arc=none smtp.client-ip=74.125.224.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=tenstorrent.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tenstorrent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQgYxZq6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1BC1F000FF;
-	Fri, 18 Sep 2026 21:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789767898;
-	bh=47m5/bJCgqXHCsjMSTXZ8M+LCbGDWvPi6WjYg4kX/jU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=eQgYxZq6FXvKH9oDFtee+HUr1yeIZxSpuhfKzG1seQYttwpI24UKyuXHn7jyDVfKJ
-	 8B3QLdmLhccFogToNJW/mylPAMPCFS9WdkQ84ip47Eji0yUmqQ6oDepD/SqoUvANq9
-	 2lM9+502xtuc/N/I8n57CgkWnk/mXLENx699zyZdqG2PR4ZxKtETI/CX+veFWIC+HI
-	 wuv5zlX6befx13kct1lJOp1DISqgLN96CdJCJ3J6P9HqaSDFNAAnesC6lVHR33lN13
-	 Tdmalrg19iUoGWhuTSmBQGHsLIz/VVwzo53Q4JxgbC7+JvY7iEFw3dDeNQdje3R4Xq
-	 QGTEKWccmhUUA==
-Date: Fri, 18 Sep 2026 14:44:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <n.schier@fritz.com>
-Cc: Kees Cook <kees@kernel.org>, "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
+	dkim=pass (2048-bit key) header.d=tenstorrent.com header.i=@tenstorrent.com header.b="GcMcSt0y"
+Received: by mail-yx2-f13.google.com with SMTP id 956f58d0204a3-66e4aac929eso1236057d50.0
+        for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 14:53:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tenstorrent.com; s=google; t=1789768414; x=1790373214; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=SICfyq893WKBo2pXS1GifsnKMH4aQWw4kYwqMwKqsmQ=;
+        b=GcMcSt0yuiW+fhlzZj0EMxnIH1daKFk8nKaiyiHHx7CrgrWkAg2kRmwZf+EVDT/fPf
+         N3ZezmyiPTgJbGA31zmwGIcY2YFi7oM0YS7PWo0xcgRGP0kQLoQbhegLBTFnq68ULeu3
+         DsoxU1cJMhYGiFaBtpSv7UdQmvengmFnRMuqN0VSPI+5jawQcQ2UNmbQZBGH7b8WtW/0
+         wQ9IGLw9Ku8Zi9Ebthjh4AHEEGzuQcWr0+7Lr69wqrQCUnCim5L7qVhMEFTJFvIzSyZI
+         lXpSaq32QnpByeHcrlbSCvokzlN3E0QslOyG7+Uu/W4l0wyBN4BlZ8IG0+gr7ufq8gTx
+         QEDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789768414; x=1790373214;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=SICfyq893WKBo2pXS1GifsnKMH4aQWw4kYwqMwKqsmQ=;
+        b=ahI7Zs3htZWSM/FLbrTFKd+G+VQXdYIhpCJ2COPHM/Ods6UW5ImANznOcwhsSua9rl
+         Ni1dMv5iIMkhFbHCLQ6uEaPl8Gz6SF7F8mGlcCJjYrGHFSdbc0gddrTX3UR/Smw2IFg5
+         hWCWZIYAxCeHNEbDUvEyEbyAnD1xOrbZuVDB749x7xdkC/abqB3ZCF0Fej8Ref4QIJDo
+         0SDV8h5WG5vlFOz6HecAWTLcA0BzcVo8ctdMCQNk/4//xMgnBKGnLnt847NUSSTnoAd0
+         /DWn9LclIrjPJ5wg6q+X3TdpXKxi63AKMa06w6y4L+zt57hAUc4d+Yb8fdT7+wQuwvT/
+         aV/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBwNsIWP6N8p4ChlngOQBH8x4h4AEZGGI+6Hf4EuHgHEYq/64dOYsGgafo3wGATvuyjimvhU@lists.linux.dev
+X-Gm-Message-State: AFuF++kltn7r1AexQXSy1rUE9Y7vUlNdM3cfyBZqT+hs9Ss9x2b6TitZ
+	e4xVLHFQSbMQ7U5ShSajpvMCsyUgzedxeutva7amoCWhlrL+fuq0M0m9COCL703vKso=
+X-Gm-Gg: AYBFou24FUX/zFwoJukBGLaFZ3Ouf9D3IIJ09H69EqD38q3kqXvBzNU8nKvoL50IwA5
+	Z3VSSGl863xorKEhCCJSD8m/KlEcYdc9UFiXc3e0cYl1AgLVtIOp99bFv/SuWOOBeFNRhFAZ3fO
+	6YwBBFiNovZEnAQsZMAXlNn3038P916hQ4tdN7G4a8Lg9sM1dOMrgGJMk+t0pSRwGLOTYjZYIPE
+	qX5TeHhBm3jprbV3ZVYuXLs81EAnLa+a3Qv7VXFHhpfJs2S9YOGnV3cVH60Ypj0++3qN7m2l440
+	Qxgg1d6b+bUGsJc0XF2jRWAok7F5uwD+tjRtYX0OeAY3OdsH1UybyqE3OnNKx/jBjYrCleaFuIm
+	28HnwsIdzNBCoO7rKolMYtHIarC3ptERnNd9WlH/02bXy1objVhPmBSFyxEpGdJP1LRZsxvQrMn
+	UGDj6T9esLKpz9hPh6dF8GQRLoJ497l2MNam8yx25UFIRK6a1wMAuYMgQGH0B6heFdmBeB1VWh3
+	/aDvOB/GnYwRcfw+N0nyAD7ximtE6JTNkEU
+X-Received: by 2002:a05:690e:4548:20b0:670:fe0f:fe39 with SMTP id 956f58d0204a3-6717fdfd203mr887495d50.88.1789768414543;
+        Fri, 18 Sep 2026 14:53:34 -0700 (PDT)
+Received: from lima-default.tail89d63.ts.net ([12.55.13.134])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-89a45d8fb3csm4017757b3.13.2026.09.18.14.53.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Sep 2026 14:53:34 -0700 (PDT)
+From: Andy Chiu <tchiu@tenstorrent.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexey Gladkov <legion@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 01/20] kbuild: do not allocate .modinfo in vmlinux
-Message-ID: <20260918214445.GA3589065@ax162>
-References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
- <20260917-build-speedup-v3-1-9ecf4163ff36@kernel.org>
- <202609170950.480F90A28@keescook>
- <20260918005142.GA1585590@ax162>
- <20260918-meek-spectral-nightingale-53d88d@l-nschier-aarch64>
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	llvm@lists.linux.dev
+Cc: andybnac@gmail.com,
+	Andy Chiu <tchiu@tenstorrent.com>,
+	dfustini@oss.tenstorrent.com,
+	greentime.hu@sifive.com,
+	Sergey Matyukevich <geomatsi@gmail.com>,
+	Zong Li <zong.li@sifive.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Subject: [PATCH v6 3/8] selftest: riscv: test vectorized user copy
+Date: Fri, 18 Sep 2026 16:51:17 -0500
+Message-ID: <20260918215154.2481482-4-tchiu@tenstorrent.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260918215154.2481482-1-tchiu@tenstorrent.com>
+References: <20260918215154.2481482-1-tchiu@tenstorrent.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260918-meek-spectral-nightingale-53d88d@l-nschier-aarch64>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 18, 2026 at 07:09:30PM +0200, Nicolas Schier wrote:
-> Yes, thanks.  Looks good to me and I think it's a good idea to apply 
-> that patch first.
-> 
-> for Nathans patch:  Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+Add a test that pushes a 1KiB pseudo-random stream through a pipe, so
+write() and read() copy it in and out of the kernel on the vectorized
+uaccess path, and compares the result against the original. Both buffers
+shift every iteration to sweep all relative alignments, and 16 processes
+per online CPU keep the vector unit contended. The compare is a byte at a
+time loop through volatile pointers rather than memcmp(), keeping it scalar
+and independent of the user vector state.
 
-Thanks, I have pushed this to kbuild-next-speedups as
+Assisted-by: Claude-Code:claude-opus-5
+Signed-off-by: Andy Chiu <tchiu@tenstorrent.com>
+---
+Changelog v5:
+ - new patch since v5
+---
+ tools/testing/selftests/riscv/vector/Makefile |   6 +-
+ .../selftests/riscv/vector/v_uaccess_stress.c | 221 ++++++++++++++++++
+ 2 files changed, 226 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/riscv/vector/v_uaccess_stress.c
 
-  36d4a11b56aa ("kbuild: Remove alignment on .modinfo section")
-
-which Lorenzo can base on. I have also tentatively included the patches
-that are basically ready in my eyes based on consensus and review so far
-for initial build testing. I do see some comments on some of those
-patches though, so I will hold off on fully applying them until the next
-revision. If there are any other changes that we should consider taking
-quickly on the next revision, please feel free to point them out, it is
-a bit hard to follow these threads sometimes :)
-
-[1]: https://git.kernel.org/kbuild/l/kbuild-next-speedups
-
-> [ Lorenzo's patch, updated by Nathan ]
-> [...]
-> > diff --git a/scripts/Makefile.vmlinux b/scripts/Makefile.vmlinux
-> > index 6833b517cacb..95b523fe4f9e 100644
-> > --- a/scripts/Makefile.vmlinux
-> > +++ b/scripts/Makefile.vmlinux
-> 
-> [...]
-> > @@ -103,10 +100,7 @@ vmlinux: vmlinux.unstripped FORCE
-> >  # ---------------------------------------------------------------------------
-> >  
-> >  quiet_cmd_modules_builtin_modinfo = GEN     $@
-> > -      cmd_modules_builtin_modinfo = $(cmd_objcopy); \
-> > -                                    chmod -x $@
-> > -
-> > -OBJCOPYFLAGS_modules.builtin.modinfo := -j .modinfo -O binary
-> > +      cmd_modules_builtin_modinfo = $(OBJCOPY) -O binary -j .modinfo --dump-section .modinfo=$@ $< /dev/null
-> 
-> By shifting from "$(cmd_objcopy)" to "$(OBJCOPY) + args", 
-> $(OBJCOPYFLAGS) is dropped.  It this by intention?
-
-I am not sure it matters in this case since I don't think there are
-global OBJCOPYFLAGS, I only see instances that come from specific rules
-but I might be missing something.
-
+diff --git a/tools/testing/selftests/riscv/vector/Makefile b/tools/testing/selftests/riscv/vector/Makefile
+index 7e0017b3fb8b..0ed09b69dd8a 100644
+--- a/tools/testing/selftests/riscv/vector/Makefile
++++ b/tools/testing/selftests/riscv/vector/Makefile
+@@ -2,7 +2,8 @@
+ # Copyright (C) 2021 ARM Limited
+ # Originally tools/testing/arm64/abi/Makefile
+ 
+-TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace
++TEST_GEN_PROGS := v_initval vstate_prctl vstate_ptrace validate_v_ptrace \
++		  v_uaccess_stress
+ TEST_GEN_PROGS_EXTENDED := vstate_exec_nolibc v_exec_initval_nolibc
+ TEST_GEN_LIBS := v_helpers.c sys_hwprobe.c
+ 
+@@ -36,4 +37,7 @@ $(OUTPUT)/vstate_ptrace: vstate_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_hel
+ $(OUTPUT)/validate_v_ptrace: validate_v_ptrace.c $(OUTPUT)/sys_hwprobe.o $(OUTPUT)/v_helpers.o
+ 	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
+ 
++$(OUTPUT)/v_uaccess_stress: v_uaccess_stress.c
++	$(CC) -static -o $@ $(CFLAGS) $(LDFLAGS) $^
++
+ EXTRA_CLEAN += $(TEST_GEN_OBJ)
+diff --git a/tools/testing/selftests/riscv/vector/v_uaccess_stress.c b/tools/testing/selftests/riscv/vector/v_uaccess_stress.c
+new file mode 100644
+index 000000000000..d70e0387e246
+--- /dev/null
++++ b/tools/testing/selftests/riscv/vector/v_uaccess_stress.c
+@@ -0,0 +1,221 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Stress the kernel's user copy path from several processes at once.
++ *
++ * Each child pushes a 1KiB pseudo-random byte stream through a pipe: write()
++ * copies it from user space into the kernel (copy_from_user()) and read()
++ * copies it back out (copy_to_user()). The round trip is repeated 512 times
++ * per child, and every iteration the buffers are shifted so that the copies
++ * cover all of the source/destination alignment combinations.
++ *
++ * On RISC-V those copies may be serviced by kernel-mode vector routines, so
++ * the payload is generated and verified with plain scalar loads and stores
++ * only. The comparison goes through volatile pointers, which keeps both GCC
++ * and clang from turning the loop into a vectorised compare and keeps the
++ * check independent of the user vector state the kernel is supposed to
++ * preserve. memcmp() is avoided for the same reason: the libc version is free
++ * to use vector instructions.
++ */
++
++#include <errno.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/wait.h>
++
++#include "kselftest_harness.h"
++
++#define ITERATIONS	32768
++#define STREAM_SIZE	1024
++#define MAX_SHIFT	16
++#define BUF_SIZE	(STREAM_SIZE + MAX_SHIFT)
++
++#define CONCURRENCY	16
++
++/* xorshift64*, so the payload does not depend on any libc or kernel helper. */
++static unsigned long prng_state;
++
++static unsigned long prng_next(void)
++{
++	prng_state ^= prng_state >> 12;
++	prng_state ^= prng_state << 25;
++	prng_state ^= prng_state >> 27;
++
++	return prng_state * 2685821657736338717UL;
++}
++
++static void fill_random(unsigned char *buf, size_t len)
++{
++	size_t i;
++
++	for (i = 0; i < len; i++)
++		buf[i] = (unsigned char)(prng_next() >> 24);
++}
++
++/*
++ * Scalar, byte at a time comparison. Returns the offset of the first
++ * mismatching byte, or len when the two streams are identical.
++ */
++static size_t scalar_diff(const unsigned char *a, const unsigned char *b,
++			  size_t len)
++{
++	const volatile unsigned char *va = a;
++	const volatile unsigned char *vb = b;
++	size_t i;
++
++	for (i = 0; i < len; i++) {
++		if (va[i] != vb[i])
++			break;
++	}
++
++	return i;
++}
++
++static ssize_t write_all(int fd, const unsigned char *buf, size_t len)
++{
++	size_t done = 0;
++
++	while (done < len) {
++		ssize_t ret = write(fd, buf + done, len - done);
++
++		if (ret < 0) {
++			if (errno == EINTR)
++				continue;
++			return -1;
++		}
++		done += ret;
++	}
++
++	return done;
++}
++
++static ssize_t read_all(int fd, unsigned char *buf, size_t len)
++{
++	size_t done = 0;
++
++	while (done < len) {
++		ssize_t ret = read(fd, buf + done, len - done);
++
++		if (ret < 0) {
++			if (errno == EINTR)
++				continue;
++			return -1;
++		}
++		if (ret == 0)
++			return -1;
++		done += ret;
++	}
++
++	return done;
++}
++
++/* Runs in the child. Returns the exit status to hand back to the parent. */
++static int child_loop(unsigned long seed)
++{
++	unsigned char src[BUF_SIZE], dst[BUF_SIZE];
++	int pipefd[2];
++	int i;
++
++	prng_state = seed;
++
++	if (pipe(pipefd)) {
++		fprintf(stderr, "pid %d: pipe() failed: %s\n",
++			getpid(), strerror(errno));
++		return 1;
++	}
++
++	for (i = 0; i < ITERATIONS; i++) {
++		/*
++		 * Walk the source and destination through every relative
++		 * alignment, including the case where both are equally
++		 * misaligned.
++		 */
++		unsigned char *in = src + (i % MAX_SHIFT);
++		unsigned char *out = dst + ((i / MAX_SHIFT) % MAX_SHIFT);
++		size_t off;
++
++		fill_random(in, STREAM_SIZE);
++		memset(out, 0, STREAM_SIZE);
++
++		if (write_all(pipefd[1], in, STREAM_SIZE) < 0) {
++			fprintf(stderr, "pid %d: iteration %d: write() failed: %s\n",
++				getpid(), i, strerror(errno));
++			return 1;
++		}
++
++		if (read_all(pipefd[0], out, STREAM_SIZE) < 0) {
++			fprintf(stderr, "pid %d: iteration %d: read() failed: %s\n",
++				getpid(), i, strerror(errno));
++			return 1;
++		}
++
++		off = scalar_diff(in, out, STREAM_SIZE);
++		if (off != STREAM_SIZE) {
++			fprintf(stderr,
++				"pid %d: iteration %d: mismatch at byte %zu of %d (in %p, out %p): expected 0x%02x, got 0x%02x\n",
++				getpid(), i, off, STREAM_SIZE, in, out,
++				in[off], out[off]);
++			return 1;
++		}
++	}
++
++	close(pipefd[0]);
++	close(pipefd[1]);
++
++	return 0;
++}
++
++static int nr_children(void)
++{
++	long online = sysconf(_SC_NPROCESSORS_ONLN);
++
++	return online * CONCURRENCY;
++}
++
++TEST(uaccess_round_trip)
++{
++	int nr = nr_children();
++	int failures = 0;
++	pid_t pids[nr];
++	int i;
++
++	ksft_print_msg("%d children, %d iterations of %d bytes each\n",
++		       nr, ITERATIONS, STREAM_SIZE);
++
++	for (i = 0; i < nr; i++) {
++		pids[i] = fork();
++		ASSERT_LE(0, pids[i]) {
++			TH_LOG("fork() failed: %s", strerror(errno));
++		}
++
++		if (pids[i] == 0) {
++			/* A distinct, reproducible stream per child. */
++			_exit(child_loop(0x9e3779b97f4a7c15UL + i));
++		}
++	}
++
++	for (i = 0; i < nr; i++) {
++		int status;
++
++		if (waitpid(pids[i], &status, 0) < 0) {
++			TH_LOG("waitpid(%d) failed: %s", pids[i],
++			       strerror(errno));
++			failures++;
++			continue;
++		}
++
++		if (WIFSIGNALED(status)) {
++			TH_LOG("child %d killed by signal %d", pids[i],
++			       WTERMSIG(status));
++			failures++;
++		} else if (!WIFEXITED(status) || WEXITSTATUS(status)) {
++			TH_LOG("child %d failed", pids[i]);
++			failures++;
++		}
++	}
++
++	ASSERT_EQ(0, failures);
++}
++
++TEST_HARNESS_MAIN
 -- 
-Cheers,
-Nathan
+2.43.0
+
