@@ -1,86 +1,54 @@
-Received: from mail.avm.de (mail.avm.de [212.42.244.120])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6F4A3EC2EF
-	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 19:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.120
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9D8492E54;
+	Fri, 18 Sep 2026 19:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789758881; cv=none; b=nt2QB8jKV2gn7TnUcGlqcEMal0yb59ioW9Pj9hFhhIZ+JdfXIu3KafRNQRdh6ls3QLxO0tyyOprinSjL3BzanQjXQYoqpSNZVoB8VAITNkKncvFn4XmlEe0Ov68z7wrKhLAr1jH7vYzwTLOv2M5Bc3CtZlt+af/m1M0uFMASQy4=
+	t=1789759152; cv=none; b=UPdr1hqiKPHBJr8mhrYsiz/uhRN86bkYQMjBfrODALuhEmbiY8fUNHPN/nFFaCy8n86YYRPdu6JX1PUAI7GNVFxCeWti+kffR21M6H3ZwkIvu57qU6ryAHM3851jTtQL5c//mB6RrLpL0F9Ib6FVW1wveIQIUAytf/d4Dtp5WxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789758881; c=relaxed/simple;
-	bh=1jzcMguIKA5Is93mmoKDoFmH31Cg2L7H6JApxy7LOZY=;
+	s=arc-20240116; t=1789759152; c=relaxed/simple;
+	bh=WqFgs23DKJd3JWYlDTf9n3272/7j/7VLSNlK0S+1jGc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FCdFY6acYTgj1Jr1EvadShGEJD0E1DNtQFOHVVfqBFVNWev4eeil81zNEV5i4P6QxjgvQKjBw2JtjYeys1dcLxex2bi+UKM8AY6+oVsBPgQ04qXBxcFQHtRnB43G5Nr8RUU0ExEXscpmZTse+mlNBUTEsL+eCZnb2ZRnjvcOgHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=iBvlivrQ; arc=none smtp.client-ip=212.42.244.120
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=F85kn1ct1ELr8tmntLk9Zim0bYKbduuTG8k7HJXj3SVxnGZXK5crn+q81NpMrhk9INeI9/g7pOo1xcFjyCqRlTzyWF8Kmxlgv+x/+1p3XcChwZgaAyLLYxwTQTuZhki05Wxhf6wCt5+LrOLMCUEMlXfkLfr+bIqZ7hIjYhs9a64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=G91S9azG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="iBvlivrQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
-	t=1789758868; bh=1jzcMguIKA5Is93mmoKDoFmH31Cg2L7H6JApxy7LOZY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iBvlivrQxoQVIHimQxNZwvRd0auQnJ2cPYzcf290Gf4rAfq8fQ2otWjes9JeDDVOp
-	 9COorSKA8vsE3iFyF1sfG/9oTUzSzrP53FcBlUVHjsNLG9T+7V+4dQ3hfkHI7fTIVm
-	 593kNAFWpPYrvZM/jUo3fNC9lYRinwYFoQEPX4mvgebtHcg+q0/jtPkBOqmycudB5h
-	 lvIMmcnbp2bzPo2XZvx7ZrQ7jQ1t22IlI2k7ztxPumNk/OSxuesoeZCK/V7PWxcyih
-	 T2d17vKvLAtj149Sa0VK3IjL7v6HgkKxjM2do6f5PI+WEYP/REwe6UuFcKm3AGm/bC
-	 anYFuFsiSaK5w==
-Received: from [212.42.244.78] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
-	(envelope-from <n.schier@fritz.com>)
-	id 6aad8d94-0449-7f0000032729-7f000001b58c-1
-	for <multiple-recipients>; Fri, 18 Sep 2026 21:14:28 +0200
-Received: from mail-auth.fritz.com (unknown [212.42.244.78])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Fri, 18 Sep 2026 21:14:28 +0200 (CEST)
-Date: Fri, 18 Sep 2026 21:14:27 +0200
-From: Nicolas Schier <n.schier@fritz.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="G91S9azG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60CB1F000FF;
+	Fri, 18 Sep 2026 19:19:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=G91S9azG
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1789759143;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2RBFia57WNvrXDdvLYcILx6qy8OTo+Na4EmZjhZXk/Q=;
+	b=G91S9azG7hTGwaZ6AuCDCHuq+CYkUPVTCFtm+CgfYp8Qa+2nuFOe4DNgFR6+BAvI5/ScZA
+	BVd50poERrfXTgarzLDQl6dvSJqMMnN7mOUJ3H/bbJH42d9v0Ee0Wa+fV+8nL0gxYJhdde
+	cxSlbApP2ndhbiYM3ZhBmBOL1aOIKVE=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id 159f269a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 18 Sep 2026 19:19:03 +0000 (UTC)
+Date: Fri, 18 Sep 2026 21:19:00 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexey Gladkov <legion@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>, Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 04/20] kbuild: do not sort nm output where the order
- is irrelevant
-Message-ID: <20260918-scrupulous-squirrel-from-nibiru-f017b4@l-nschier-aarch64>
-References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
- <20260917-build-speedup-v3-4-9ecf4163ff36@kernel.org>
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+Message-ID: <aq2OpBZIMVhMZhWW@zx2c4.com>
+References: <20260916-vdso-getrandom-avoid-memset-llvm-24-v1-1-80a92f2e225a@kernel.org>
+ <aquyVkdYceiWdckX@zx2c4.com>
+ <20260917173920.GB356152@ax162>
+ <CAKwvOdkHsw132XEY2zLxO-V4=_RyqBatavQDvLY-MpZ16ZSAdQ@mail.gmail.com>
+ <CAHmME9pcvUdkvYmeUs+Wi+v5Cy5QG=Wo48FmRCdQdL8x1ykDKA@mail.gmail.com>
+ <aq01ud_zTYN-3Zby@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -89,80 +57,181 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260917-build-speedup-v3-4-9ecf4163ff36@kernel.org>
-Organization: FRITZ! Technology GmbH
-x-ms-reactions: disallow
-X-purgate-ID: 149429::1789758868-39FD9965-1B3E940B/0/0
-X-purgate-type: clean
-X-purgate-size: 2955
-X-Notice: Whitelisted
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
-X-pfmilter: host: postfix-mx-01  mail-id: AB603A07F0  external: no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <aq01ud_zTYN-3Zby@zx2c4.com>
 
-On Thu, Sep 17, 2026 at 05:06:14PM +0100, Lorenzo Stoakes (ARM) wrote:
-> Unless instructed otherwise, nm sorts by name.
+On Fri, Sep 18, 2026 at 02:59:37PM +0200, Jason A. Donenfeld wrote:
+> On Fri, Sep 18, 2026 at 10:20:45AM +0200, Jason A. Donenfeld wrote:
+> > On Thu, Sep 17, 2026 at 6:49 PM Nick Desaulniers
+> > <ndesaulniers@google.com> wrote:
+> > >
+> > > On Thu, Sep 17, 2026 at 10:39 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > >
+> > > > On Thu, Sep 17, 2026 at 11:26:46AM +0200, Jason A. Donenfeld wrote:
+> > > > > I don't suspect this is the right change. On x86_64, this changes to
+> > > > > code from:
+> > > > >
+> > > > >     rep stosq
+> > > > >
+> > > > > into:
+> > > > >
+> > > > >     loc_2D9:
+> > > > >     mov     dword ptr [rbx+rax*4+0Ch], 0
+> > > > >     add     rax, 1
+> > > > >     cmp     rax, 0Ch
+> > > > >     jbe     short loc_2D9
+> > >
+> > > /me nods
+> > >
+> > > > >
+> > > > > Which is a lot less compact. It seems like the actual solution is for
+> > > > > gcc&clang to emit this inline memset mnemonic when the platform has a
+> > > > > good one, and otherwise not. But disabling optimizations for all
+> > > > > platforms, because it's broken on one, seems bad.
+> > >
+> > > Ideally, yeah.
+> > > Pragmatically:
+> > > the compiler doesn't know what you will link against or not; so it
+> > > just emits relocations that the linker will (hopefully) resolve.  I've
+> > > definitely looked at how llvm decides when to emit libcalls to
+> > > compiler-rt/libgcc ("the compiler runtime") and thought "I wonder how
+> > > this works with compiler runtime version N-1?"
+> > >
+> > > There's also the requirement gcc and clang have about memcpy, memmove,
+> > > memset, memcmp always being available (-ffreestanding or not) noted
+> > > below.
+> > >
+> > > > > In this case, the compiler is being smart: it identifies a loop and
+> > > > > rightly turns it into memset. But if this isn't a compilation
+> > > > > environment that has an outline function, it should do something else.
+> > > >
+> > > > As I mentioned in the commit message, compilers require all environments
+> > > > (hosted or not) to provide memset(), so the "doing something else" is
+> > > > nothing :)
+> > > >
+> > > >   GCC requires the freestanding environment provide memcpy, memmove,
+> > > >   memset and memcmp.
+> > >
+> > > +1
+> > >
+> > > >
+> > > > I guess another option is to just include a basic memset() like the one
+> > > > in lib/string.c so that it is only used if the compiler makes this sort
+> > > > of transformation, while leaving all other architectures alone.
+> > >
+> > > It's also possible to get GCC to emit the libcall, even in the
+> > > presence of -ffreestanding: https://godbolt.org/z/6hTrYq9z8
+> > >
+> > > And it's not the first time this code in particular has had this issue;
+> > >
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b7bad082e113640fc81200ff869e5c2d7a9c29a2
+> > >
+> > > (is this patch a Fixes: for that?)
+> > >
+> > > Clang has __builtin_memset_inline to avoid explicit libcalls; AFAICT
+> > > GCC does not.  So we could use that here to provide such a guarantee
+> > > with clang; the code would remain brittle and likely break again with
+> > > GCC.
+> > 
+> > It sounds like this is broken currently only on clang on riscv, right?
+> > So maybe we can use __builtin_memset_inline, and get something similar
+> > into gcc, before a future gcc version also breaks? That way it doesn't
+> > break in the future.
 > 
-> There are places where this is unnecessary - an invocation from
-> scripts/sorttable every vmlinux link, scripts/check-function-names.sh run
-> after every vmlinux.o link, and the x86 VOFFSET and ZOFFSET listings
-> between vmlinux and bzImage.
-> 
-> Both GNU nm and llvm-nm accept the same '-p' parameter to disable sorting
-> in these instances, so use that to prevent this unnecessary work.
-> 
-> Each nm run on its own, x86-64, median of 5:
-> 
->                              GNU nm 2.47              llvm-nm 22
->                           before  after   delta    before  after   delta
->   defconfig
->   sorttable, nm -S vmlinux 0.080s 0.039s -0.041s   0.265s 0.113s -0.152s
->   check-function-names.sh  0.072s 0.033s -0.039s   0.244s 0.102s -0.142s
->   VOFFSET                  0.077s 0.034s -0.043s   0.261s 0.113s -0.148s
->   ZOFFSET                  0.007s 0.005s -0.002s   0.005s 0.005s  0.000s
->   TOTAL                                  -0.125s                 -0.442s
-> 
->   allmodconfig
->   sorttable, nm -S vmlinux 0.156s 0.063s -0.093s   0.539s 0.223s -0.316s
->   check-function-names.sh  0.149s 0.054s -0.095s   0.537s 0.217s -0.320s
->   VOFFSET                  0.146s 0.052s -0.094s   0.524s 0.221s -0.303s
->   ZOFFSET                  0.007s 0.005s -0.002s   0.006s 0.004s -0.002s
->   TOTAL                                  -0.284s                 -0.941s
-> 
-> llvm-nm appears to be a lot slower than GNU nm, so these builds naturally
-> improve the most.
-> 
-> The four run one after another in the serial tail of every build that links
-> vmlinux so impact kernel builds directly.
-> 
-> In an allmodconfig the decompressor is built in parallel while the modules,
-> so only the two before the vmlinux link contribute to build time.
-> 
-> The build outputs remain unchanged.
-> 
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
-> 
->                                           before    after     delta
->                                         ---------------------------------
->   x86 defconfig, touch mm/vma.c, gcc        9.7s     9.5s    -0.18s (-2%)
->   x86 defconfig, touch mm/vma.c, clang      9.3s     9.0s    -0.27s (-3%)
->   x86 defconfig, clean, gcc                30.3s    30.1s    -0.16s (-1%)
->   x86 defconfig, clean, clang              31.7s    31.2s    -0.55s (-2%)
->   x86 allmodconfig, touch mm/vma.c, clang  36.4s    35.8s    -0.67s (-2%)
-> 
-> Assisted-by: LLM
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  arch/x86/boot/Makefile            | 2 +-
->  arch/x86/boot/compressed/Makefile | 2 +-
->  scripts/check-function-names.sh   | 3 ++-
->  scripts/link-vmlinux.sh           | 2 +-
->  4 files changed, 5 insertions(+), 4 deletions(-)
-> 
+> There's -finline-stringops=memset for gcc (>=14), which should keep
+> things sane there. So, we can use that on gcc, and alias memset to
+> __builtin_memset_inline on clang. And then we should be good?
 
-Thanks!
+Untested, but putting this all together I suppose looks like this, if
+you want to play around and see:
 
-Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index 7dec05dd33b7..3b98058f95ea 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -41,7 +41,7 @@ CC_FLAGS_REMOVE_VDSO := $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
+ 			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
+ 			-Wmissing-prototypes -Wmissing-declarations
 
--- 
-Nicolas
+-CC_FLAGS_ADD_VDSO := -O2 -mcmodel=tiny -fasynchronous-unwind-tables
++CC_FLAGS_ADD_VDSO := -O2 -mcmodel=tiny -fasynchronous-unwind-tables $(call cc-option,-finline-stringops=memset)
+
+ CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_REMOVE_VDSO)
+ CFLAGS_REMOVE_vgetrandom.o = $(CC_FLAGS_REMOVE_VDSO)
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index 9c9181bb4071..4c6b597a7665 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -16,6 +16,7 @@ ccflags-vdso := \
+ 	$(filter -m64,$(KBUILD_CFLAGS)) \
+ 	$(filter -march=%,$(KBUILD_CFLAGS)) \
+ 	$(filter -m%-float,$(KBUILD_CFLAGS)) \
++	$(call cc-option,-finline-stringops=memset) \
+ 	$(CLANG_FLAGS) \
+ 	-D__VDSO__
+
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index 8dbf2532a573..720f95cd24f8 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -36,6 +36,7 @@ endif
+ ccflags-y := -fno-stack-protector
+ ccflags-y += -DDISABLE_BRANCH_PROFILING
+ ccflags-y += -fno-builtin
++ccflags-y += $(call cc-option,-finline-stringops=memset)
+ ccflags-y += $(KBUILD_BASE_ISA)$(CFI_MARCH)
+ ccflags-y += $(CFI_FULL)
+ asflags-y += $(KBUILD_BASE_ISA)$(CFI_MARCH)
+diff --git a/arch/s390/kernel/vdso/Makefile b/arch/s390/kernel/vdso/Makefile
+index 35c834b895ec..9d0ae1f38388 100644
+--- a/arch/s390/kernel/vdso/Makefile
++++ b/arch/s390/kernel/vdso/Makefile
+@@ -29,6 +29,7 @@ KBUILD_CFLAGS_VDSO := $(filter-out -munaligned-symbols,$(KBUILD_CFLAGS_VDSO))
+ KBUILD_CFLAGS_VDSO := $(filter-out -fno-asynchronous-unwind-tables,$(KBUILD_CFLAGS_VDSO))
+ KBUILD_CFLAGS_VDSO += -fPIC -fno-common -fno-builtin -fasynchronous-unwind-tables
+ KBUILD_CFLAGS_VDSO += -fno-stack-protector $(DISABLE_KSTACK_ERASE)
++KBUILD_CFLAGS_VDSO += $(call cc-option,-finline-stringops=memset)
+ ldflags-y := -shared -soname=linux-vdso.so.1 \
+ 	     --hash-style=both --build-id=sha1 \
+ 	     $(call ld-option, --eh-frame-hdr) -T
+diff --git a/arch/x86/entry/vdso/vdso64/Makefile b/arch/x86/entry/vdso/vdso64/Makefile
+index 7c0790065b5e..751cb6f99b65 100644
+--- a/arch/x86/entry/vdso/vdso64/Makefile
++++ b/arch/x86/entry/vdso/vdso64/Makefile
+@@ -14,7 +14,7 @@ vobjs-$(CONFIG_X86_SGX)			+= vsgx.o
+ vobjs-$(CONFIG_FUTEX_ROBUST_UNLOCK)	+= vfutex.o
+
+ # Compilation flags
+-flags-y				:= -DBUILD_VDSO64 -m64 -mcmodel=small
++flags-y				:= -DBUILD_VDSO64 -m64 -mcmodel=small $(call cc-option,-finline-stringops=memset)
+
+ # The location of this include matters!
+ include $(src)/../common/Makefile.include
+diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+index 2851afa9154f..713e95dfdedc 100644
+--- a/lib/vdso/getrandom.c
++++ b/lib/vdso/getrandom.c
+@@ -29,6 +29,12 @@
+ 	}									\
+ } while (0)
+
++#if __has_builtin(__builtin_memset_inline)
++#define memset(dst, value, size) __builtin_memset_inline(dst, value, size)
++#else
++#define memset(dst, value, size) __builtin_memset(dst, value, size)
++#endif
++
+ static void memcpy_and_zero_src(void *dst, void *src, size_t len)
+ {
+ 	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
+@@ -83,8 +89,7 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
+ 		params->size_of_opaque_state = sizeof(*state);
+ 		params->mmap_prot = PROT_READ | PROT_WRITE;
+ 		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
+-		for (size_t i = 0; i < ARRAY_SIZE(params->reserved); ++i)
+-			params->reserved[i] = 0;
++		memset(params->reserved, 0, sizeof(params->reserved));
+ 		return 0;
+ 	}
+
+
