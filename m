@@ -1,144 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6B545D908;
-	Fri, 18 Sep 2026 05:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417523644DE;
+	Fri, 18 Sep 2026 05:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789710074; cv=none; b=GBV96ukPQaQ532ioWlYAtOAw2Mmg7g7p6zVrFGIoFf453s9vgKt+IwtHAQFMJ37NqnL53gnIP2gZhFTtHyRmzjW3dOUI4zSA/3vgP9nX4GGs6iorIaXaKPE3fTPgV+eO0sKI56dDx3swfaoOVL8zU3F/xtRjg6Qe1wEzaoQJlbM=
+	t=1789711150; cv=none; b=Y7+fEvFqQnvP562K1scob9gv3ZCRrX0kTT2qiRq9tA5dL7WyTIfwocPuUBCAnN0a+VopOWC6R6jCPVJuDS4P6OmtDd2IePmTHUaLs8xcGs6ZcHPRjVYY/vQDPegBitPk4BoWtd6kfVh4LXLCwvsq5684+nnOhO8nRH5ONc54u2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789710074; c=relaxed/simple;
-	bh=q81s4VRJ10fHWXZi7mqz8BJjAODdW6bRd9tOdGWEU3k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qFKx73Uk0Ct8yuow5xNB8V8bfxsWBmMIXhxIdjZfbWprXjiyMGmfkyo2Vkf1rMlDiV5EfmQjCRE2PLD6FyU/ASkaSZo1xKC3NiQVoEEXstOQQg0gmSS5UsE+1ZBrqMiDiFd5k2hYJGzH/smQFU6ITd/A69VoBdxuwUrpx7Lz2Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mm2MU//K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789711150; c=relaxed/simple;
+	bh=mJTN91ugFwjKMz4I9/XHV1un1QzWKvooR+gPxPOhWZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DzCW6jH8+VVO3EwTIPhqLS0UlDIqZYWq0Dgmvzpp8ER7AgHRklJeXTnDAHS8xpAd/GZyAveMPUfuYrmUWnlnzZiw+mfgjOCb6LPydWXAur9aiyMIZYAxO5LX132XyOORst9o7D9HaSbXPECD6kqfkPhf/FKpDbiRWQqgyK6NRsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ncb7ucBQ; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mm2MU//K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20B0C1F000FF;
-	Fri, 18 Sep 2026 05:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789710071;
-	bh=nHd6+0HC/1nPCk+6Tm6Uyj6WwdTzSmqKCRyfLZwz4Js=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Mm2MU//KnClCqSqTzNYerNrxjAq+FvG29dS83BnDmwvFqi3DX6rp174BcDccwAzMy
-	 CnDZJF5NO67EZaqviRLLQizWwNt++tMwZVUv6rve6qhUHE5KkbcL7yoUn4QMwtcMb+
-	 J7/I7DzTEVhddYQS1Hf8p5zoYucUAfWC6iMMd2cy6jJCHzuhcBimIpmeEeeEDGZ/aI
-	 PaAGna5sA0SeZs/ylvheVEeDvmDFnUgqPDcFN5VSGJlo2kXwXfR3QccNRJvloa7vW2
-	 xbeQjifYIbf4BE3igjVi0tGeJsmSDJeZdq55shnuTsF5lSqMT3vJqwEtY1mLnH5c51
-	 AI80yPMRfMhAQ==
-Date: Thu, 17 Sep 2026 22:40:58 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexey Gladkov <legion@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 11/20] kbuild: avoid re-running compiler and linker
- probes
-Message-ID: <20260918054058.GA384222@ax162>
-References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
- <20260917-build-speedup-v3-11-9ecf4163ff36@kernel.org>
- <202609171154.BEA5134F7@keescook>
- <20260918012119.GC1585590@ax162>
- <202609172130.3DF0D66@keescook>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ncb7ucBQ"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68I2VjZx043142;
+	Fri, 18 Sep 2026 05:52:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=OkKG5e
+	Hj/nYQoAmDG+rhMWoq3O/eAaBCq9IsR6KTnK0=; b=Ncb7ucBQiJs7MT8jp9Hogw
+	KABJEWlOfG/dfbLL7sZXrcFtqQHDCdSSDXBhPAMUuhs5npkTH7xSnz/q0jSWnr5c
+	ZCC+Z9ZhJ2KpZ454Fn/KC2n0Cp1UhVDSe8NFhDep6X9wG98D2tZxBsJtHEJV+45S
+	EjULYJaU5L4OoJZA/qL9KCw7HIyFbmDcr8Gxlufr7nBlme16tZiYsBgiSeN/5+3e
+	Nn0Z96JqJXvZkkqBRVQed78H4ZgW5hfnssCzeXUxadsAKb1Eb+ftmmjqeYG8wl3A
+	9m5u+yGoAqzpnXlfik8qPHri7xqtulz88Ch6zS0Mn2/FCTO1TiNWTPWug9fanXnA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gmx846f5r-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Fri, 18 Sep 2026 05:52:57 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68I2ZKuK918969;
+	Fri, 18 Sep 2026 05:52:56 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gr7genjra-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 18 Sep 2026 05:52:56 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68I5qCZX3015250
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 18 Sep 2026 05:52:12 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B0A5E5804E;
+	Fri, 18 Sep 2026 05:52:55 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 876455803F;
+	Fri, 18 Sep 2026 05:52:41 +0000 (GMT)
+Received: from [9.61.58.220] (unknown [9.61.58.220])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 18 Sep 2026 05:52:41 +0000 (GMT)
+Message-ID: <1742b0d0-fbdb-433b-b2c9-b47b5cfd7666@linux.ibm.com>
+Date: Fri, 18 Sep 2026 11:22:39 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202609172130.3DF0D66@keescook>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/3] blk-cgroup: move async bio punt state to blkcg
+To: Yu Kuai <yukuai@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Josef Bacik <josef@toxicpanda.com>, Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Randy Dunlap
+ <rdunlap@infradead.org>, Coly Li <colyli@fygo.io>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Alasdair Kergon
+ <agk@redhat.com>, Mike Snitzer <snitzer@kernel.org>,
+        Mikulas Patocka <mpatocka@redhat.com>,
+        Benjamin Marzinski <bmarzins@redhat.com>, Song Liu <song@kernel.org>,
+        Li Nan <magiclinan@didiglobal.com>, Xiao Ni <xiao@kernel.org>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>,
+        Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>,
+        Baoquan He <baoquan.he@linux.dev>, Barry Song <baohua@kernel.org>,
+        Youngjun Park <youngjun.park@lge.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Bill Wendling
+ <morbo@google.com>,
+        Justin Stitt <justinstitt@google.com>
+Cc: Yu Kuai <yukuai@fygo.io>, Christoph Hellwig <hch@lst.de>,
+        Tao Cui <cuitao@kylinos.cn>, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
+        dm-devel@lists.linux.dev, linux-raid@vger.kernel.org,
+        gfs2@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, llvm@lists.linux.dev
+References: <20260918041744.1526924-1-yukuai@kernel.org>
+ <20260918041744.1526924-4-yukuai@kernel.org>
+Content-Language: en-US
+From: Nilay Shroff <nilay@linux.ibm.com>
+In-Reply-To: <20260918041744.1526924-4-yukuai@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTE4MDA3MiBTYWx0ZWRfX/teiT0wiHNSW
+ JEvRLv8jYQnWWkxliGMH7Y5gxw8A38G2pBCriGrXSm3DN6Pr3l9Oia/Cs3vbs5x2dSUFWw1cfFz
+ f6YEK9tOomOpksip3Jp/NjjN7rrYdt/gOI5v+6Y8AX7cViJK8cnyaAE3PjMik7w12aaXKvh6tPK
+ tFBlkzqye1G3IuT9fAG8wstP9g6OAj+fQK4ugA5oL55w2miRU2d/M5YZzNY15Wjk04uncsH6aDp
+ pnj11j8nfR0QxLHiscSmDcegPweYS/JObE2+bA7JB/xXyGgpQjesnbr/WvDVc+wx6dyVbrWXmva
+ TRZBv+CiIDmwlROqGoPTmI8+6j49IF5vWsKy4421LSK4L8hh5RZqcbHHtqWWNbP4U/H4xAE0VIg
+ qjhdgXfijXio3Cfv4RwZ0wphiapFt2dpjyauojKMPHivJdWmZuJs2lOfIk/cS3ryMpVrfiI0Gg9
+ /PO92Nr18Ody/I9Qj1g==
+X-Proofpoint-ORIG-GUID: IQzOuQqhULLvUviFRAhVAHKgtdnFYey7
+X-Proofpoint-GUID: ZGCkVPtmRng54Q_CssYM4zmrTg3B8e93
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTE4MDA3MiBTYWx0ZWRfX7hqucrhMwMz+
+ TMaoTQdDqBi4VtgFdBweWtZanWLjNVsk/ptq6fmVuMGXmra8Z54mRVbadv0oTv0nx+NSQH+0ts1
+ oIkWCJgjmb268QlqzkGvSbLj1oWUnos=
+X-Authority-Analysis: v=2.4 cv=cY9HPXDM c=1 sm=1 tr=0 ts=6aacd1ba cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
+ a=N7Slw706a9Tpp8ivUyUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-18_01,2026-09-16_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 spamscore=0 bulkscore=0 clxscore=1015 suspectscore=0
+ impostorscore=0 malwarescore=0 phishscore=0 adultscore=0 lowpriorityscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609180072
 
-On Thu, Sep 17, 2026 at 09:44:24PM -0700, Kees Cook wrote:
-> On Thu, Sep 17, 2026 at 06:21:19PM -0700, Nathan Chancellor wrote:
-> > While we could certainly try to cook something like this up, we could
-> > also avoid the split across two files by just defining the flags in
-> > Kconfig directly and using them in the Makefile through their symbol,
-> > like we already do for -Wimplicit-fallthrough. For example, instead of
-> > 
-> >   config CC_HAS_STRICT_FLEX_ARRAYS
-> >       def_bool $(cc-option,-fstrict-flex-arrays=3)
-> > 
-> >   KBUILD_CFLAGS += $(if $(CONFIG_CC_HAS_STRICT_FLEX_ARRAYS),-fstrict-flex-arrays=3)
-> > 
-> > We would just do
-> > 
-> >   config CC_STRICT_FLEX_ARRAYS
-> >       string
-> >       default "-fstrict-flex-arrays=3" if $(cc-option,-fstrict-flex-arrays=3)
-> > 
-> >   KBUILD_CFLAGS += $(CONFIG_CC_STRICT_FLEX_ARRAYS)
-> > 
-> > While we still get the duplication (and we could look at getting rid of
-> > it with your cc-option-str idea or whatever), it is at least contained
-> > to the same location, so out of sync issues should be much rarer. I do
-> > diff Kconfigs so this might make certain issues with checks a little bit
-> > more obvious if something changes on the compiler side.
+On 9/18/26 9:47 AM, Yu Kuai wrote:
+> From: Yu Kuai<yukuai@fygo.io>
 > 
-> Yeah, and note that cc-option-bit already exists. It's just a weird name
-> is all and there isn't an ld-option-bit.
-
-Ah, I see. I worry that the current cc-option-bit is not sufficient for
-all options that we may want to test because it uses '-E' to stop after
-preprocessing (whereas some options may need to get to code generation
-to be validated properly) and it does not use $(CLANG_FLAGS) to properly
-set the target (so we might not get consistent results). I wonder if we
-would be better off refactoring cc-option-bit into cc-option-str that
-shares most of the machinery of cc-option. Then we could just add
-ld-option-str.
-
-> As for naming conventions, I think "CC_OPT_" would be a good prefix. And
-> this works today with no change:
+> blkcg_punt_bio_submit() currently queues punted bios on blkg->async_bios,
+> so it has to call bio_blkg() to find or create a queue-local blkg.  Bios
+> now carry and pin the blkcg css, so punted bio lifetime no longer needs to
+> be anchored by a blkg.
 > 
-> config CC_OPT_STRICT_FLEX_ARRAYS
-> 	string
-> 	default "$(cc-option-bit,-fstrict-flex-arrays=3)"
+> Keeping the punt state in blkg can instantiate a blkg even when no blkcg
+> policy is enabled, just to bounce submission from a shared kthread.  Move
+> async_bio_lock, async_bios and async_bio_work to struct blkcg, and queue
+> punted bios on bio_blkcg() for non-root cgroups.  Root or unassociated bios
+> are submitted directly.
+> 
+> This preserves the priority-inversion avoidance while preventing
+> blkcg_punt_bio_submit() from creating blkgs that are not needed by any
+> policy.
+> 
+> Signed-off-by: Yu Kuai<yukuai@fygo.io>
 
-This does look pretty nice.
-
-> (do we need "def_string" now?)
-
-def_string would certainly make these even nicer.
-
--- 
-Cheers,
-Nathan
+Looks good to me.
+Reviewed-by: Nilay Shroff <nilay@linux.ibm.com>
