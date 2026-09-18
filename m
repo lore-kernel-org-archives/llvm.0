@@ -1,180 +1,170 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D14F2C15A0;
-	Fri, 18 Sep 2026 01:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD3B23859D4
+	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 04:11:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789694498; cv=none; b=dXm/VJJv35REZ6EO1SrGDOGNhbi+5t5llnwB2QpffXVhosmxcHZrvAcqJVU8pd3B8wWMrepoeQxkN/61xRpiM9tmpB0qqrKhMPKsXXxHN6bYUSx2VfHiAZnzDlTQnYtgZWjq+iIHEh27jnw38ET3xY/0Gv7O9OF4WgB+ycXxenw=
+	t=1789704715; cv=none; b=AHYIo5xyN9ygDpsa534b4vZqXYmiFGWRgZKIRp7G11cXoJGK56tzpfvl1uZV56ZYXBEycRrIUF9Aj1W4tWVoJKQF2i3JXJbCzdvIgBi2YIQ9tC9PzCW76lDmVE0aN6TiUA7X3GpDVPJnG5XYjkTPtXizxRPEL2J/H3LyD/I5tMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789694498; c=relaxed/simple;
-	bh=0yZCtWvChQhiTX62NQsXX3heRzS09mB7c3/SHhPSEqU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nYYjMp0U+glM4iUSTbtJrYgdEDTruFWt7Jf4Nqyfz3AaBXray5bmEZdLh+owlWfaaAEx6XhDucQda1hvQu5uvri6XAIEHFLh/dr26eCMCgY7u8nGClyCWhimCSXGEPsGbUi+gJtNMqiu6Ep8EP/8gqZEVNHMAxHibhucKc126K0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aJLTUh8b; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1789704715; c=relaxed/simple;
+	bh=UEUGvWnLmOamu0pTBgkEFgMYD4FBYYk7egJy0kl7eaA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bk9ImnHECRNLOLUz2zWFyjD1GbXqYb2zGW2tN18nVxCSwG1T2hZLK2cYJ9gIl8RUcdDCW3K7fmMJFMOywE4NENaFPcwzG6v0BOVkKSysrk0xYOpQNEftnrEls9gH3r7u+6+FxVmKafp8X7SgyTN2d1DCaYGu/Bc7ztXh7cjh65c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MXmhTPdm; arc=none smtp.client-ip=74.125.227.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aJLTUh8b"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E5521F000FF;
-	Fri, 18 Sep 2026 01:21:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789694493;
-	bh=PKIVsNOUBkTvWGBthw3StTS5zUBeSADLiIKEQwT9Z1M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=aJLTUh8bOmPHIIxbkbTasFPdsby/oj73sfuTs4fHyGjyvO9eay/V8HiFzZVHQ9ZV1
-	 xScG95SmWMyTQLGruGQJM+5ibJCFfHGrAZvF8tTaT82cV5L8vFiCmuej5Ycx/vR/R9
-	 fLy7vVqGyzYP3I4HTgQwiPOxQccMssXco3Ji+DXMnMgHtXRnAk3Y1jiUlALO8D9xJa
-	 zBkdOQYcJ5J9kV47pIeFFXFnrrnL30ex+XvCZs+1CPOq2mehWVhq0nAs9O01FJR9UL
-	 u1/MxWsUZtUrnDJPBmwCl06z+VFrvV8GJi6qiyPK0fq3IA271K+oCOl9VN2o+oJH1Q
-	 FHWIBkcvwIYtg==
-Date: Thu, 17 Sep 2026 18:21:19 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Nicolas Schier <nsc@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MXmhTPdm"
+Received: by mail-pj2-f2.google.com with SMTP id 98e67ed59e1d1-39b2ad83680so147310a91.1
+        for <llvm@lists.linux.dev>; Thu, 17 Sep 2026 21:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1789704714; x=1790309514; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=k+XdyMw/cwUfbmJ3KUmFebC21zCmtXiVZ3PCKhns0RU=;
+        b=MXmhTPdmmIELIgJgIFaGuOH9R84ZbnJeA6ljJoSPz5QdxQa/5kNvSD8DCphjdX54nt
+         ZPStfPblak06J7as72yCg5ZTwJj5E3CSl68KQYK7wu5UAvlrxu4iGc7dKnpliwr8ua2K
+         aGgsmQkS1o1MElnWKXWYYRJoMZVKYfNoPMmjXODertIBhwHAkt3cmWdi0mIsZjzZvVjy
+         mePlsJD1VBxcIKAeoJNx7mehVrkXJreYNS9Anb+VSH+linZm8z8NmAk5BXoPVXa7mc0q
+         56V8Z+COC6oHLEBa5dFv+4lR9mCSJoGKsSroQJUmxzQvsdyuwqEodct1KOrqS59wkZKx
+         c8ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1789704714; x=1790309514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=k+XdyMw/cwUfbmJ3KUmFebC21zCmtXiVZ3PCKhns0RU=;
+        b=VMsMVZGtYFzQeE1P/dbu5JBxGhiaDtq07376XshlFhhBOGoIDiGUXQDhk+wAe6Pi/f
+         X5twxa7NTWAgX6OG7iMVfLfAADHvcqGgXMA79ODWKmpKrPeL5cSbJcrT04pcTtGmOEHH
+         qnAsLUsnG/pfIIED4p/y24xu/ylUvIONj2uvRMdBFAftXoRpyCmQOb2P1Abvm8Eskopr
+         SWXPkU+t1txcxOr9jFJT6QIEOz5RYMmTCpMcnQvorN+aKN+FXiCwXVXd7mbIahtyCtTk
+         kX4UP1uWMcX3k3x1kZrKDzLZ1EF+KhpOlcABlfPJe5HC208xmjMz6AOf9rEMm018KslH
+         Bo5A==
+X-Forwarded-Encrypted: i=1; AKwUvByWZLMLYKJlYfrYKv0c91TLhD3cp6EHdw8taeLWkdOL9A4EcoCR9gQqw1SKGlY+/1qCb8mB@lists.linux.dev
+X-Gm-Message-State: AFuF++mHqmQ1RbQP3DssBwrmqHWlcWjoqdGtMpQgQoEiyZgerSBHx0gW
+	nw9k724EsL+vnjrBbm6X72tBRp/Q/K+3lvBnNwckYtEVb5BEUVj+zin2
+X-Gm-Gg: AYBFou2yq0tnLvvE6Q8+3Go0RR5+6CtuM8fINdbYPGgiP4OTqWFECyOWQL+fy5JUNRn
+	LBfo2py2LXIrkNAjCOokFBtCRDiucNrM70f5QbgE4FtcpirP1gqhCE5wYyovUmee60qpL8byGIY
+	ENbXg9qe3e9aP6qvpPsv4QSCRxC/HCcFb3Mh38i1qFSMEWAf7ioTATckMzRB7uJh9KsAajX8EQq
+	Amel+yp1ysHn9chRYNiZ5HVgF3D+L1H3uxTMkL52VFPgumc8oYPiEELqr+ueGPhNxD/MFUl+YHV
+	K6VftxV9GDlEWHDpu1t7QwjRmdhzXj/8f/iZxyo4kfP5bnn9uY9BqE1jo4IDJa3mYeZEe1HlJVD
+	29Op9s7QLISQu4jTdQysxqkuHeOXmvVvnh1s/aCZjCnfZmDjWP1qT7Inz4wIh06IIbiuRZqpEUV
+	z3mYsjo5bp4i1xi0+jfaT6Pm3lSoc3GuRX1NRYY5b3rz6mU7yOFbeCdT06+vq9mMmzRknJWsFRU
+	rTJyZFX8fJBAUgVAbmGmBgastJ0tywkg6kWdQXx414+CdjH+nF44Ylc/vw4qKiiNNIa1f4+KThK
+	MxXWBxFPSzCIdBOBzzf3e1y6bpukTbHAFc+NJKvQAtUkK3UZugk4DWhbxLk/XqhywA==
+X-Received: by 2002:a17:90b:2b8e:b0:39d:efa9:cd25 with SMTP id 98e67ed59e1d1-39e54c59c74mr5120122a91.2.1789704713961;
+        Thu, 17 Sep 2026 21:11:53 -0700 (PDT)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-144ce046d96sm1126081c88.11.2026.09.17.21.11.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Sep 2026 21:11:53 -0700 (PDT)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Alexey Gladkov <legion@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	Onur =?iso-8859-1?Q?=D6zkan?= <work@onurozkan.dev>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
-	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 11/20] kbuild: avoid re-running compiler and linker
- probes
-Message-ID: <20260918012119.GC1585590@ax162>
-References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
- <20260917-build-speedup-v3-11-9ecf4163ff36@kernel.org>
- <202609171154.BEA5134F7@keescook>
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	llvm@lists.linux.dev
+Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] samples/bpf: remove unused hash_func01.h header
+Date: Thu, 17 Sep 2026 21:11:45 -0700
+Message-ID: <20260918041148.602323-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202609171154.BEA5134F7@keescook>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 17, 2026 at 12:26:48PM -0700, Kees Cook wrote:
-> On Thu, Sep 17, 2026 at 05:06:21PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > Each kernel make invocation begins with ~30 compiler and linker runs each
-> > of which performs duplicate probe for a number of compiler and linker
-> > options.
-> > 
-> > This is useless work - the compiler and its version is known, so use these
-> > to determine which options are available, once.
-> > 
-> > A convention already exists for this - CC_HAS_xxx, LD_HAS_xxx in Kconfig
-> > files (for example, CC_HAS_COUNTED_BY), so convert these probes to Kconfig
-> > options where appropriate.
-> 
-> Yeah, I agree about the rationale here.
-> 
-> It does, however, now drive a long-time annoyance of mine to the top of
-> mind: the repetition of the compiler command-line options in two places:
-> the Kconfig and the Makefile. I dislike that pattern so much that I really
-> really worked hard to use cc-option instead where ever I possibly could
-> (though it continued to add to my growing concern about the repetition
-> of running those checks all the time, so I'm motivated to see something
-> like what you have here actually land).
-> 
-> But I would really like to find a way to avoid the duplication. It's
-> fragile and it's weird and it's split across 2 files that don't always
-> have an obvious relationship. I really don't like it. And with it being
-> used for things that are "detected" (i.e. not part of always required
-> builds), that fragility means typos may go unnoticed, etc.
-> 
-> We've had a need for some kind of kconfig "append to a list" logic that
-> we've been working around in places, e.g. include/linux/lsm_count.h for
-> how "count the list of enabled LSMs" got dealt with. If we could have
-> had:
-> 
-> config LSM_LIST
-> 	list
-> 	separator " "
-> 
-> config SECURITY_SELINUX
-> 	...
-> 	append_to LSM_LIST
-> 	...
-> 
-> We could just parse CONFIG_LSM_LIST directly. And I think we can do the
-> same with this:
-> 
-> config CC_OPTION_LIST
-> 	list
-> 	separator " "
-> 
-> config CC_OPTION_ZERO_INIT_PADDING_BITS
-> 	string
-> 	default "$(cc-option-bit,-fzero-init-padding-bits=all)"
-> 	append_to CC_OPTION_LIST
-> 
-> And the dump all of it into the Makefile in one via CONFIG_CC_OPTION_LIST
-> 
-> (And we'd need to implement ld-option-bit. Though really I think
-> cc-option-bit should be renamed to cc-option-str or something)
-> 
-> But even without the new "list" Kconfig type, it'd be nicer to use the
-> cc-option-bit string default method and dump all the newly created
-> CC_OPTION_... strings into the makefile manually. The "append_to" idea
-> could be a follow-up.
+samples/bpf/hash_func01.h has been unused since commit 91dda69b08de
+("samples/bpf: Remove the xdp_redirect* utilities"). Remove it.
 
-While we could certainly try to cook something like this up, we could
-also avoid the split across two files by just defining the flags in
-Kconfig directly and using them in the Makefile through their symbol,
-like we already do for -Wimplicit-fallthrough. For example, instead of
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ samples/bpf/hash_func01.h | 55 ---------------------------------------
+ 1 file changed, 55 deletions(-)
+ delete mode 100644 samples/bpf/hash_func01.h
 
-  config CC_HAS_STRICT_FLEX_ARRAYS
-      def_bool $(cc-option,-fstrict-flex-arrays=3)
-
-  KBUILD_CFLAGS += $(if $(CONFIG_CC_HAS_STRICT_FLEX_ARRAYS),-fstrict-flex-arrays=3)
-
-We would just do
-
-  config CC_STRICT_FLEX_ARRAYS
-      string
-      default "-fstrict-flex-arrays=3" if $(cc-option,-fstrict-flex-arrays=3)
-
-  KBUILD_CFLAGS += $(CONFIG_CC_STRICT_FLEX_ARRAYS)
-
-While we still get the duplication (and we could look at getting rid of
-it with your cc-option-str idea or whatever), it is at least contained
-to the same location, so out of sync issues should be much rarer. I do
-diff Kconfigs so this might make certain issues with checks a little bit
-more obvious if something changes on the compiler side.
-
+diff --git a/samples/bpf/hash_func01.h b/samples/bpf/hash_func01.h
+deleted file mode 100644
+index 38255812e376..000000000000
+--- a/samples/bpf/hash_func01.h
++++ /dev/null
+@@ -1,55 +0,0 @@
+-/* SPDX-License-Identifier: LGPL-2.1
+- *
+- * Based on Paul Hsieh's (LGPG 2.1) hash function
+- * From: http://www.azillionmonkeys.com/qed/hash.html
+- */
+-
+-#define get16bits(d) (*((const __u16 *) (d)))
+-
+-static __always_inline
+-__u32 SuperFastHash (const char *data, int len, __u32 initval) {
+-	__u32 hash = initval;
+-	__u32 tmp;
+-	int rem;
+-
+-	if (len <= 0 || data == NULL) return 0;
+-
+-	rem = len & 3;
+-	len >>= 2;
+-
+-	/* Main loop */
+-#pragma clang loop unroll(full)
+-	for (;len > 0; len--) {
+-		hash  += get16bits (data);
+-		tmp    = (get16bits (data+2) << 11) ^ hash;
+-		hash   = (hash << 16) ^ tmp;
+-		data  += 2*sizeof (__u16);
+-		hash  += hash >> 11;
+-	}
+-
+-	/* Handle end cases */
+-	switch (rem) {
+-        case 3: hash += get16bits (data);
+-                hash ^= hash << 16;
+-                hash ^= ((signed char)data[sizeof (__u16)]) << 18;
+-                hash += hash >> 11;
+-                break;
+-        case 2: hash += get16bits (data);
+-                hash ^= hash << 11;
+-                hash += hash >> 17;
+-                break;
+-        case 1: hash += (signed char)*data;
+-                hash ^= hash << 10;
+-                hash += hash >> 1;
+-	}
+-
+-	/* Force "avalanching" of final 127 bits */
+-	hash ^= hash << 3;
+-	hash += hash >> 5;
+-	hash ^= hash << 4;
+-	hash += hash >> 17;
+-	hash ^= hash << 25;
+-	hash += hash >> 6;
+-
+-	return hash;
+-}
 -- 
-Cheers,
-Nathan
+2.43.0
+
