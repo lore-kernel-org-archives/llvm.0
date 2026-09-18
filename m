@@ -1,189 +1,141 @@
-Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A6F4EB851
-	for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 12:25:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0E92C0F6D;
+	Fri, 18 Sep 2026 12:59:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789734347; cv=none; b=fQhBo7MYgAVWG3mZW/hAByp95sOYPqOTjgDbuiEaVBHuaiTDtQ/Nd6mY67vVIH5tsvozJ5wreT6kS9wC4XmbprBr5/uvIRWBVavWFag3RKamEUvtgtDlB7J4oUPu+cCqUW3JRhNClaLB81a/Y5Ay959FdZy7c7nw9la2hv1fjUU=
+	t=1789736386; cv=none; b=OWdBmZIRfGmFOupeLBQk8RlkV7FW9uXFqEvybQvXUCtidVXW1HsZb6ZplzSQVuNIH9l/FT2MwVyZV+5S0d4/u9VndUikXsy/qnXIuB56Tp9RYJR6IpEm3y3B4htcXtdXx9O2BPiqUOVH99Vn47nA43mFm8iTk6uMDSe16rjNpOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789734347; c=relaxed/simple;
-	bh=HDxsKpPajvO1pDBGt+Cg3JRzppun/aKifwXpwM5P7LI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BaBOAhCR5JNGMGLCBP1REUQJCLCaBG/lFs/RGGPRG/4h0oIU7VG+OWREnypjOWIZAZa4vNaQveQ25ptpnh8+oUVCrvi30pryxD8gidmSUtRZoq3l4bLJq35nYX4dA0GNryEN/1PdvjcNo1eSM4yuxHknF4uPwFZTwG2KFUkFXWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XYPbiFP5; arc=none smtp.client-ip=74.125.229.204
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789736386; c=relaxed/simple;
+	bh=GtePAYNYADed/61YjwtEUIXiRqHC/FtVFK8+fWCWC/w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V6eDJ22dq+S7MAXtRcYcJUZqPegscCb1Jb4ASy5JbuL4WIRZkp37FyqoQ5yUHAhz0+56O4NCGeNhSB1by6A/+wvSpagW0Kb4mubc685OuoiNT8Rc/P2F6yjJFAcHkNAzSR2YOJFiLLXL8MZYv6taMCA7FqX24qHYNtvcrCmtO7M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=D9A8qhrf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XYPbiFP5"
-Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5b5e4f13d77so747912e87.0
-        for <llvm@lists.linux.dev>; Fri, 18 Sep 2026 05:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789734327; x=1790339127; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=qM09fZNeu0wGJcMJFEcwruCO/xWOafFLtCE4C1cUZM0=;
-        b=XYPbiFP5nUrYCTy0RQANb8uAv5pHtsGA5Mb7Vftoi+ZYFuOhECWTdpfpxWt2o+piR0
-         iqvaGLSxWWVmZ3s4Q8gruAaWzhIU6i5ixHRTt8bBZ3hsQwlohla/PDWIK2Q9zU5jJOIx
-         OhNpEcV/2+KwKQA+6nGAc+1q93u8wKKl12Ek/fE4a0yWj5WVGxlbRsv/f3bmRkY/bnOX
-         m4T3YZC01pgnGDZtFD4jZTUwl44qscBamNNH32SbZsjV76Q/iLKLLnqlOq+LmbuEowtH
-         57yulPG1MHM1asL6YrE5PHBdRoK8MAAcgY95a5xkaDYde/Bxik1dNSm1pJNySDL5Qxft
-         fBOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789734327; x=1790339127;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qM09fZNeu0wGJcMJFEcwruCO/xWOafFLtCE4C1cUZM0=;
-        b=yCVjhpHEqJA4ht3f22KwidBMGU7snk5LDG2+gaBtPNcTJZ2EXqsKffasi4Dr94YA+9
-         z4NRuKTIj68rXx3WfGZ03WDEbMxadWXGokfnL7Dy1vz007sS8XgnX0YSYvi27J3Jdv+6
-         /odF68R6ZUigIxsVF8b/YuwcIr5Orh96N+60NkBEKLkCm7Yfm1DD4iZJD1rksWCDrSOv
-         yazsD11plouQ36Id9sn25DuAEUeq5dRcJ8XoqXbZlYk1NN+oGulFeJj5xP7Xc9UR8SAN
-         x1C1IIW+kUfs0jCjAtYbk86SIP0GDsENLHiKP0TdNzbitZYEy0TOjUnrMwJCkLaq/vW7
-         q/8Q==
-X-Forwarded-Encrypted: i=1; AKwUvBwzzNEwXHDJ7iNWnifmXkeO8IIS1NA+A7W/5CZGlkM7crCeXlmuGxfoTWjIAyQZdAlLXZNx@lists.linux.dev
-X-Gm-Message-State: AFuF++mka57Cr7xL2SBcxIVWyfR9evPOmb24pUHgI3qWPLtmJhK6VUna
-	FbgOKF4yLnxtZ2TAcsCPMj7JAXXABjWJCVl8ANp4CtV2/ecqco6I/qkhUYlchlDA
-X-Gm-Gg: AYBFou0SIQ64B3kGVfuXJWeVmKKg0ir06TzaVfTxtCEaM+AsvD52A1eJrX9fh8iENHk
-	Dzh6kxm2qFT4GzwW7rsWV49pL3clsB5YEGvyKSXxyHN0Ecxxs+fH4cKT3ao30BTKpjBq0qW/8tv
-	gHYUt9aeKGVwHyfcKO5y4oT+dZ7m8urwJ685rNs++iLP/WxyuGD71AGAdxr6BzOKW70+Mr9WiQr
-	YM9dUqNz78WRrdqe6rQxxg6mVlwW5DhyREItNyRgNwJToqA0owXlCUY0KaXHwhAkXYE5m1gh+dF
-	c7ceoFlv58DPukGKO487jUOrLjR/+lhV7mkXR/AJoTLaU2B+Hk5JOvBXzifcVGzHMZlJI4hv/I/
-	BqPx6RDlRedp8lwLu88GRJJ5Q6V3GMJXRAyi54yW0ErC+j2UvIb1A1EwIInIrMy1WFRT3aYjLXf
-	+uiW7SnZPi5VwART328mmcb58e/g5qzvPlTqZur2mYQs9jDGqh/fio+q5BlP69ohDlKQqKrr0GI
-	i0MYGY2u5BqaACzspDhfm2+mekWmroIdi/oWjk5TBlB/lID1wZn9qKQgphGTIdyYfJc9w==
-X-Received: by 2002:a05:6512:158b:b0:5b4:fdc3:d3f1 with SMTP id 2adb3069b0e04-5b8c18057c5mr656114e87.18.1789734327121;
-        Fri, 18 Sep 2026 05:25:27 -0700 (PDT)
-Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b8c270ea53sm398549e87.12.2026.09.18.05.25.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Sep 2026 05:25:26 -0700 (PDT)
-From: Rupesh Majhi <zoone.rupert@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>,
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="D9A8qhrf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 323731F000FF;
+	Fri, 18 Sep 2026 12:59:43 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=D9A8qhrf
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1789736381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0elZGzzvhmy8MdWwXa5hmkM3x/Af4GcgbvgWuo+UbBU=;
+	b=D9A8qhrf1PQk8NdU8xAzlSmJkZo2pspf5sn6nontAmzxeY0NaTkSjd4jaRTsFSDBoJxmA/
+	7b9eEHHhJVYPiuJE6Mln/sxZL0vHZbSzwdddn1JrHHq+ZlhL9m9Vk3SIU1IWzyKz9e+eM7
+	BSQIZwMQ0lYOYCIFn1xImygLtUVGlkM=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id e17657ff (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 18 Sep 2026 12:59:40 +0000 (UTC)
+Date: Fri, 18 Sep 2026 14:59:37 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	Bill Wendling <morbo@google.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Eddie James <eajames@linux.ibm.com>,
-	Joel Stanley <joel@jms.id.au>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
-Cc: linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Rupesh Majhi <zoone.rupert@gmail.com>
-Subject: [PATCH v7 08/10] iio: pressure: dps310: derive the drain interval from the watermark
-Date: Fri, 18 Sep 2026 15:25:15 +0300
-Message-ID: <20260918122517.377565-9-zoone.rupert@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260918122517.377565-1-zoone.rupert@gmail.com>
-References: <20260918122517.377565-1-zoone.rupert@gmail.com>
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: Re: [PATCH] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+Message-ID: <aq01ud_zTYN-3Zby@zx2c4.com>
+References: <20260916-vdso-getrandom-avoid-memset-llvm-24-v1-1-80a92f2e225a@kernel.org>
+ <aquyVkdYceiWdckX@zx2c4.com>
+ <20260917173920.GB356152@ax162>
+ <CAKwvOdkHsw132XEY2zLxO-V4=_RyqBatavQDvLY-MpZ16ZSAdQ@mail.gmail.com>
+ <CAHmME9pcvUdkvYmeUs+Wi+v5Cy5QG=Wo48FmRCdQdL8x1ykDKA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHmME9pcvUdkvYmeUs+Wi+v5Cy5QG=Wo48FmRCdQdL8x1ykDKA@mail.gmail.com>
 
-The drain interval only tracked how fast the FIFO fills, so a small
-watermark still waited half a FIFO for its samples. Take the watermark
-as the number of scans to wait for, but never drain slower than half a
-fill.
+On Fri, Sep 18, 2026 at 10:20:45AM +0200, Jason A. Donenfeld wrote:
+> On Thu, Sep 17, 2026 at 6:49 PM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Thu, Sep 17, 2026 at 10:39 AM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Thu, Sep 17, 2026 at 11:26:46AM +0200, Jason A. Donenfeld wrote:
+> > > > I don't suspect this is the right change. On x86_64, this changes to
+> > > > code from:
+> > > >
+> > > >     rep stosq
+> > > >
+> > > > into:
+> > > >
+> > > >     loc_2D9:
+> > > >     mov     dword ptr [rbx+rax*4+0Ch], 0
+> > > >     add     rax, 1
+> > > >     cmp     rax, 0Ch
+> > > >     jbe     short loc_2D9
+> >
+> > /me nods
+> >
+> > > >
+> > > > Which is a lot less compact. It seems like the actual solution is for
+> > > > gcc&clang to emit this inline memset mnemonic when the platform has a
+> > > > good one, and otherwise not. But disabling optimizations for all
+> > > > platforms, because it's broken on one, seems bad.
+> >
+> > Ideally, yeah.
+> > Pragmatically:
+> > the compiler doesn't know what you will link against or not; so it
+> > just emits relocations that the linker will (hopefully) resolve.  I've
+> > definitely looked at how llvm decides when to emit libcalls to
+> > compiler-rt/libgcc ("the compiler runtime") and thought "I wonder how
+> > this works with compiler runtime version N-1?"
+> >
+> > There's also the requirement gcc and clang have about memcpy, memmove,
+> > memset, memcmp always being available (-ffreestanding or not) noted
+> > below.
+> >
+> > > > In this case, the compiler is being smart: it identifies a loop and
+> > > > rightly turns it into memset. But if this isn't a compilation
+> > > > environment that has an outline function, it should do something else.
+> > >
+> > > As I mentioned in the commit message, compilers require all environments
+> > > (hosted or not) to provide memset(), so the "doing something else" is
+> > > nothing :)
+> > >
+> > >   GCC requires the freestanding environment provide memcpy, memmove,
+> > >   memset and memcmp.
+> >
+> > +1
+> >
+> > >
+> > > I guess another option is to just include a basic memset() like the one
+> > > in lib/string.c so that it is only used if the compiler makes this sort
+> > > of transformation, while leaving all other architectures alone.
+> >
+> > It's also possible to get GCC to emit the libcall, even in the
+> > presence of -ffreestanding: https://godbolt.org/z/6hTrYq9z8
+> >
+> > And it's not the first time this code in particular has had this issue;
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b7bad082e113640fc81200ff869e5c2d7a9c29a2
+> >
+> > (is this patch a Fixes: for that?)
+> >
+> > Clang has __builtin_memset_inline to avoid explicit libcalls; AFAICT
+> > GCC does not.  So we could use that here to provide such a guarantee
+> > with clang; the code would remain brittle and likely break again with
+> > GCC.
+> 
+> It sounds like this is broken currently only on clang on riscv, right?
+> So maybe we can use __builtin_memset_inline, and get something similar
+> into gcc, before a future gcc version also breaks? That way it doesn't
+> break in the future.
 
-Assisted-by: LLM
-Signed-off-by: Rupesh Majhi <zoone.rupert@gmail.com>
----
- drivers/iio/pressure/dps310.c | 35 +++++++++++++++++++++++++++++++----
- 1 file changed, 31 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
-index e63ea7873e5b..024fcdc7f4e7 100644
---- a/drivers/iio/pressure/dps310.c
-+++ b/drivers/iio/pressure/dps310.c
-@@ -114,6 +114,7 @@ struct dps310_data {
- 	s32 *fifo_hold;
- 	unsigned int fifo_hold_max;
- 	unsigned int fifo_held;
-+	unsigned int watermark;
- 	unsigned int drain_interval_ms;
- 	s32 fifo_temp_raw;
- };
-@@ -981,13 +982,28 @@ static int dps310_fifo_set_enable(struct dps310_data *data, bool enable)
-  * No interrupt pin is wired in tree, so drain on a timer. Both measurements
-  * share the entries, so they fill it together.
-  */
--static unsigned int dps310_fifo_interval(int prs_rate, int tmp_rate)
-+static unsigned int dps310_fifo_interval(struct dps310_data *data, int prs_rate,
-+					 int tmp_rate)
- {
--	unsigned int fill_ms;
-+	unsigned int fill_ms, want_ms;
-+	int scan_rate;
- 
- 	fill_ms = MSEC_PER_SEC * DPS310_FIFO_DEPTH / (prs_rate + tmp_rate);
- 
--	return clamp(fill_ms / 2, DPS310_DRAIN_MIN_MS, DPS310_DRAIN_MAX_MS);
-+	/*
-+	 * There is no hardware watermark, so take it as the number of scans
-+	 * the user will wait for and drain at that rate. Scans come from
-+	 * whichever measurement drives them.
-+	 */
-+	if (test_bit(DPS310_SCAN_PRESSURE, data->iio->active_scan_mask))
-+		scan_rate = prs_rate;
-+	else
-+		scan_rate = tmp_rate;
-+
-+	want_ms = data->watermark * MSEC_PER_SEC / scan_rate;
-+
-+	return clamp(min(want_ms, fill_ms / 2), DPS310_DRAIN_MIN_MS,
-+		     DPS310_DRAIN_MAX_MS);
- }
- 
- /* Returns which measurement the entry came from, or a negative error */
-@@ -1189,6 +1205,15 @@ static void dps310_fifo_hold_free(struct dps310_data *data)
- 	data->fifo_hold_max = 0;
- }
- 
-+static int dps310_hwfifo_set_watermark(struct iio_dev *iio, unsigned int val)
-+{
-+	struct dps310_data *data = iio_priv(iio);
-+
-+	data->watermark = clamp(val, 1, DPS310_FIFO_DEPTH);
-+
-+	return 0;
-+}
-+
- static int dps310_buffer_postenable(struct iio_dev *iio)
- {
- 	struct dps310_data *data = iio_priv(iio);
-@@ -1212,7 +1237,7 @@ static int dps310_buffer_postenable(struct iio_dev *iio)
- 	if (rc)
- 		return rc;
- 
--	data->drain_interval_ms = dps310_fifo_interval(prs_rate, tmp_rate);
-+	data->drain_interval_ms = dps310_fifo_interval(data, prs_rate, tmp_rate);
- 
- 	rc = dps310_fifo_hold_alloc(data, prs_rate, tmp_rate);
- 	if (rc)
-@@ -1316,6 +1341,7 @@ static const struct regmap_config dps310_regmap_config = {
- static const struct iio_info dps310_info = {
- 	.read_raw = dps310_read_raw,
- 	.write_raw = dps310_write_raw,
-+	.hwfifo_set_watermark = dps310_hwfifo_set_watermark,
- };
- 
- static int dps310_probe(struct i2c_client *client)
-@@ -1332,6 +1358,7 @@ static int dps310_probe(struct i2c_client *client)
- 	data = iio_priv(iio);
- 	data->client = client;
- 	data->iio = iio;
-+	data->watermark = 1;
- 	mutex_init(&data->lock);
- 	INIT_DELAYED_WORK(&data->fifo_work, dps310_fifo_work);
- 
--- 
-2.43.0
-
+There's -finline-stringops=memset for gcc (>=14), which should keep
+things sane there. So, we can use that on gcc, and alias memset to
+__builtin_memset_inline on clang. And then we should be good?
