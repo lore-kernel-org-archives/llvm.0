@@ -1,141 +1,121 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE901547049;
-	Sat, 19 Sep 2026 17:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF22E2C15A0;
+	Sat, 19 Sep 2026 17:41:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789839095; cv=none; b=Z5bqfmnXCRI1dNY0vqALhRDe+I5BMFbG9JdoRXjzUYQ8+0TD0DK1RlZgcbCz+QHZXew4bPcdUE5Wv5zzqTB7wMPzmOea4RpVuWfOBL8msgd62I3uRqcKRHwYkx/CMjZTvxzlLruCHDg7DwePbx1XJLzb1bag8Sel4XEJcvxFj2w=
+	t=1789839711; cv=none; b=Ts81Bbt6KhzCc+4qY9gVxAQl8EpACbB1xldFZrdOJQMyIkZ5Xywu6l/6+4MML9/C50tHTf/P3VJNL/GiemU5pZhhCRDEFcFQfAp9pHUyJCiHTwIVxm0vvHrOmExijF4h/h1wViKrdOvqKvOX5UYoisD/A4+mzlWfiCi8rXvtFPI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789839095; c=relaxed/simple;
-	bh=Wvr8gctXgL9yDT4gE3G5DK3DvsUqV+WFYYFqDBPfmZY=;
+	s=arc-20240116; t=1789839711; c=relaxed/simple;
+	bh=/5CQfcQ/zVHloFdkLHFmPmEKp+spsSfOo7qRntDD58k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CqM0TPQsnh/Xv+/ZPbEmJ+AFxcFgDtiiSv63tf6gPReURQhLuAJaAUN68arvIYzDM7etNbncR7XZXcYnb0LzW9cpFHdIk5qoxW5B4nDuq8xgNpGvWv9jDETQPVVgNGwD1pnTsHqoJAcV638DOF5vNstobuuuBzl3qvKOBWK78bA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FP/+pD4u; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vti4yVZZhU5R6e7twOp6rpZ3yaIHV/d5DP4nHvCy3wpk3/5EMnozpRfSCiZ9FCucS8zyg1zaetO659lXESbmUfb/jJqAU8xsG/03N550Bx8ksc1U1n1F30K05LSBZhy230yRvLOn4UcATPn+EOKM4T5Se+sPgG75ZhGX6h/ydPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RJ1oWJLG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FP/+pD4u"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6DA51F000FF;
-	Sat, 19 Sep 2026 17:31:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RJ1oWJLG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA30A1F000FF;
+	Sat, 19 Sep 2026 17:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789839093;
-	bh=fVAHOMFqAITEt//POM6bQ9UTJyR9eAZklHX2rYYlXWc=;
+	s=k20260515; t=1789839710;
+	bh=rt1ngzsEC91Xl99ToiwedFB2NPixEdDOoeHFAj65WUA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=FP/+pD4up9yLl7bTC0GWYrOoNDKwzZSUigPYwOJpywqcVMfipIDe8s3Gduvwb4og0
-	 rc+mr1eCvHL0HMLxlIIEaitz+zwOG8ZWJdZACY+xlJu/b05obHcF24GOHFsY9bD1Uq
-	 PGgQpFnBMs/q2RDut3Zs2HMHzgy3xhc6IYch5Z3BIzyPZs5Geuetp56ld++rTjKBUn
-	 +iB5hsrktSXqy6ITQW8NiAbuo+dxwOa9CnixH1MtuaPpaFglPCj/dFNjQN38IIn4FO
-	 s2V0a0EDUbG9rXe5jJ7i5uCxK4oviQ4QEgMXGwIA839jGMovwvZ690hYDBWYZmtGUV
-	 2bi5cG33lD/cw==
-Date: Sat, 19 Sep 2026 18:31:19 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
-	Randy Dunlap <rdunlap@infradead.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 11/20] kbuild: avoid re-running compiler and linker
- probes
-Message-ID: <aq7GOsnTqeHPedUm@gremlin>
-References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
- <20260917-build-speedup-v3-11-9ecf4163ff36@kernel.org>
- <202609171154.BEA5134F7@keescook>
- <20260918012119.GC1585590@ax162>
- <202609172130.3DF0D66@keescook>
- <20260918054058.GA384222@ax162>
+	b=RJ1oWJLGL9wJeCPZnT6D8HEqDlzh/0ogLYDRqv3NsTE9KDD7ljYwThrefrM3nywZ6
+	 p42hh8Qw9Bdo55j8VlBgsgde3i5jXUtokv8+gHNzurkqTdIL+ji/jc9D6b1rXBBnhf
+	 8DyJanEY46793Q3rHo4eCTSOUWqfTDNdPJFvLOP1TGnEtqyM/la2KM9wH7mmbSMeyj
+	 9EhQyxWO0J3/eLwGz5iURUNoTBWe453QIUtIoPRRnDSDDReggJsE4xwvgD9SzmeksD
+	 txNVisUt/e8FTfUk73+JiOscXLzzNVCVEAw6LivAywEN0w+AJ6tYkXi6QWG08jN3Hm
+	 IZ6Dt+s9wbaww==
+Date: Sat, 19 Sep 2026 10:41:48 -0700
+From: Namhyung Kim <namhyung@kernel.org>
+To: Arnaldo Melo <arnaldo.melo@gmail.com>
+Cc: Tengda Wu <wutengda@huaweicloud.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, james.clark@linaro.org,
+	xueshuai@linux.alibaba.com, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+	Li Huafei <lihuafei1@huawei.com>,
+	Kim Phillips <kim.phillips@arm.com>,
+	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
+	Bill Wendling <morbo@google.com>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v6 00/26] perf arm64: Support data type profiling
+Message-ID: <aq7JXGyhWM5M6ubi@z2>
+References: <cover.1789521520.git.wutengda@huaweicloud.com>
+ <aq41dlDILyJlw-77@z2>
+ <EC6E525E-387A-493A-B720-80E6FB38B05B@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260918054058.GA384222@ax162>
+In-Reply-To: <EC6E525E-387A-493A-B720-80E6FB38B05B@gmail.com>
 
-On Thu, Sep 17, 2026 at 10:40:58PM -0700, Nathan Chancellor wrote:
-> On Thu, Sep 17, 2026 at 09:44:24PM -0700, Kees Cook wrote:
-> > On Thu, Sep 17, 2026 at 06:21:19PM -0700, Nathan Chancellor wrote:
-> > > While we could certainly try to cook something like this up, we could
-> > > also avoid the split across two files by just defining the flags in
-> > > Kconfig directly and using them in the Makefile through their symbol,
-> > > like we already do for -Wimplicit-fallthrough. For example, instead of
-> > >
-> > >   config CC_HAS_STRICT_FLEX_ARRAYS
-> > >       def_bool $(cc-option,-fstrict-flex-arrays=3)
-> > >
-> > >   KBUILD_CFLAGS += $(if $(CONFIG_CC_HAS_STRICT_FLEX_ARRAYS),-fstrict-flex-arrays=3)
-> > >
-> > > We would just do
-> > >
-> > >   config CC_STRICT_FLEX_ARRAYS
-> > >       string
-> > >       default "-fstrict-flex-arrays=3" if $(cc-option,-fstrict-flex-arrays=3)
-> > >
-> > >   KBUILD_CFLAGS += $(CONFIG_CC_STRICT_FLEX_ARRAYS)
-> > >
-> > > While we still get the duplication (and we could look at getting rid of
-> > > it with your cc-option-str idea or whatever), it is at least contained
-> > > to the same location, so out of sync issues should be much rarer. I do
-> > > diff Kconfigs so this might make certain issues with checks a little bit
-> > > more obvious if something changes on the compiler side.
+On Sat, Sep 19, 2026 at 08:22:01AM -0300, Arnaldo Melo wrote:
+> 
+> 
+> On September 19, 2026 4:10:46 AM GMT-03:00, Namhyung Kim <namhyung@kernel.org> wrote:
+> >Hello,
 > >
-> > Yeah, and note that cc-option-bit already exists. It's just a weird name
-> > is all and there isn't an ld-option-bit.
->
-> Ah, I see. I worry that the current cc-option-bit is not sufficient for
-> all options that we may want to test because it uses '-E' to stop after
-> preprocessing (whereas some options may need to get to code generation
-> to be validated properly) and it does not use $(CLANG_FLAGS) to properly
-> set the target (so we might not get consistent results). I wonder if we
-> would be better off refactoring cc-option-bit into cc-option-str that
-> shares most of the machinery of cc-option. Then we could just add
-> ld-option-str.
->
-> > As for naming conventions, I think "CC_OPT_" would be a good prefix. And
-> > this works today with no change:
+> >On Wed, Sep 16, 2026 at 01:29:14AM +0000, Tengda Wu wrote:
+> >> This patch series implements data type profiling support for arm64,
+> >> enabling 'perf annotate --data-type' to resolve memory locations and
+> >> variable types on arm64 platforms.
+> >> 
+> >> The main changes since v5 include:
+> >> v5: https://lore.kernel.org/all/cover.1788872630.git.wutengda@huaweicloud.com/
+> >> 
+> >> * __get_dwarf_regnum_arm64 optimization: compute directly based on character
+> >>   judgment, avoiding strtol calls. (Ian Rogers)
+> >> 
+> >> * extract_op_location_arm64 issue fix: support parsing instructions such as
+> >>   'cmp x0, x1, lsl #3'.
+> >> 
+> >> * Instruction tracking part, fixing issues pointed out by Sashiko, including:
+> >>   - adding TSR_KIND_POINTER handling for ldr.
+> >>   - premature returns in add and ldr causing percpu handling to be skipped.
+> >>   - adding a reg != -1 check for stack type propagation, etc.
+> >> 
+> >> Patch organization
+> >> ==================
+> >> 
+> >> The series is organized as follows:
+> >> 
+> >> 1. Fix disassembly mismatches (Patches 01-02)
+> >>    Current perf annotate supports three disassembly backends: llvm,
+> >>    capstone, and objdump. On arm64, inconsistencies between the output
+> >>    of these backends (specifically llvm/capstone vs. objdump) often
+> >>    prevent the tracker from correctly identifying registers and offsets.
+> >>    These patches resolve these mismatches, ensuring consistent instruction
+> >>    parsing across all supported backends.
+> >> 
+> >> 2. Infrastructure for arm64 operand parsing (Patches 03-09)
+> >>    These patches establish the necessary infrastructure for arm64-specific
+> >>    operand handling. This includes implementing new callbacks and data
+> >>    structures to manage arm64's unique addressing modes and register sets.
+> >>    This foundation is essential for the subsequent type-tracking logic.
+> >> 
+> >> 3. ARM SPE event handling (Patches 10-11)
+> >>    Patch 10 automatically deduplicates overlapping ARM SPE events (e.g.,
+> >>    l1d-miss, tlb-access) in 'perf annotate' by retaining only the
+> >>    "instructions" event when data type profiling is enabled. Patch 11
+> >>    defaults  the synthesized event period to 1 for ARM SPE to fix zero
+> >>    'Percent' values in annotate output.
 > >
-> > config CC_OPT_STRICT_FLEX_ARRAYS
-> > 	string
-> > 	default "$(cc-option-bit,-fstrict-flex-arrays=3)"
->
-> This does look pretty nice.
->
-> > (do we need "def_string" now?)
->
-> def_string would certainly make these even nicer.
+> >Thanks for working on this!
+> >
+> >I think it's ready to merge up to this point. 
+> 
+> You mean patches 1-11? 
 
-Agreed :)
+Yes.
 
-Done for v4 (which now cites Kees's series as a dependency and hopefully will
-sit in the kbuild tree soon, maybe after 36d4a11b56aa?).
+Thanks,
+Namhyung
 
-26/29 probes use cc-option-str, there were a few that had other
-conditionals but nice conversion in general!
-
->
-> --
-> Cheers,
-> Nathan
-
---
-Cheers, Lorenzo
