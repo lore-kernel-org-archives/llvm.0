@@ -1,168 +1,230 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E35471425
-	for <llvm@lists.linux.dev>; Sat, 19 Sep 2026 10:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83FB281530;
+	Sat, 19 Sep 2026 10:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789814466; cv=none; b=fK/u3VFWHx604igKfHcLHfVWdIWFuyCn4p0pqVvpx6lp+X1FCJjLBFexDQaJo45rKqm1bhuTJm+tFPc97+tygbTRQDYGgxl39PHHkXAS8ve8hCysI6WTdmvnWUYMtWy7noyDRGeINJiyWukjTpGzucXfpwZKgvg79EyLMc/7neA=
+	t=1789815439; cv=none; b=M25y6rSKYbe4vmPNBcqE6xq0u4fV6vG/19YxRbz8M+yDaRX/+4nfeKrfvXNNGRnnYoeGdUBIEBnhN0LkVK4e/oqxktPamwZsYP9wD/YoYdfohHg9psQt/14hsscxuI7cysfpVWYX5sqoiCic7Sq3InwPDp7k38+LMxFbsUjgHUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789814466; c=relaxed/simple;
-	bh=/zVhl/58ppW4f8bSySDdz7RMQAkYtKlqpvoNw49/sj4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KoOX+YzrJ9FdJx42+dR8cu86OVqABnBAPUzMTJG9KXL04Ajf5nnNxIktSJnifE9+PpdkS5D+6rHki7zClT1ss/lW3xsO7qh5ETjDKTZFkYXrLbTroKCFlDBRsyiFih0zIgnWtNgtUtXRILsVYHVGq27w8lmtAtWud2sITsZD8ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCaACT68; arc=none smtp.client-ip=74.125.225.140
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1789815439; c=relaxed/simple;
+	bh=bRZS8VVOIAgNCMmUGjnejTDRbIq35KOik+rRaWtZXyg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nfFXwV/0Qr/1/Cl2dXrHUXO1tv6ht3ukeddEXpz4iQAbl5eG4Tp+A02YNNlfRbeIAjh+0WKWb9oPa1Krs6yS9oDv+Zsuo2fuA/jcXePowfZAPQX6gHwQR0l+2TP8hkknEFMRztc1dDlEnp7l5qiw3F4L3cf3D9xuF2hnnbFyQbA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=GLuMP5rw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCaACT68"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49b912d3931so11257385e9.3
-        for <llvm@lists.linux.dev>; Sat, 19 Sep 2026 03:41:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1789814463; x=1790419263; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=x47tJsyRRuS9WWsrQkleNMY57Cc3HHS/YjAw1Ng37/U=;
-        b=GCaACT68x1CwjaWdbB5dYE6FnMqm5vO7sOvmHw/4/l7PEGS4E7zVOFz7FISyHJa+Of
-         yxbxw/sjnIUyz5rvs7/u+HqtNuMUXT3M0Z5cUm7QyggoGrFItkhSYCwJJVx1QC/A5U05
-         pYXHTxmmwWwFIjZinyyIj3bcILqs/Y2e5a0gcUbsuTHuRyKsON2RxtP4ErIDAU5UKyqw
-         zm2g8PBxR0OnJrKIqf3P5VFQq/PP/C+QJv4oiyPDbKEGSxKOXVPZEnFb3QpmUm5efHjH
-         vxv4H7aMP8+FHNsl/y63+7ORJDdOl8qQJW2pD7nRTAlKU1E1ZsJtl8BqSIYb+OsdCeK3
-         NMhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1789814463; x=1790419263;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=x47tJsyRRuS9WWsrQkleNMY57Cc3HHS/YjAw1Ng37/U=;
-        b=fcSYo17oPSx4FQyBowdJtrOgVpsPQ8jNGfsaTqkFwk3a5hOpbnECGGh71/4llCRP5I
-         IlDnaP4lgVyy8Yx40ZH8gcJZuaeBhRoWqB5BZeaeOL94Wwv7a87SOxt/wPUHCHe6ryH3
-         o+CPBFu4GxrHlQu+EiQTpDloXztdy2+ntj289aGfnPg/BaaXrozhfUdPWgE+Q8GNuM0B
-         PfgwDpwZwlsUGP/r/Vbe8CFod5Tm1LHZfzQepVp/RAPdnYbJiFVspzJ61tndjyAwHsMF
-         RYbRku8PHyDUn2+YAkNySNc8yT+hFyPbqKy1Lx6G0vVQGKLIRnx3WBhguxXD56LfL5pr
-         IZIA==
-X-Forwarded-Encrypted: i=1; AKwUvByzMBaSnOWxmQ9wJrnF7q5+z6p7r9qp9/ZrtPExppcgGGwXPZImf+lMsMFeSqlj+OgJmqKi@lists.linux.dev
-X-Gm-Message-State: AFuF++km6UNgG+m3Ps7EPOBJKJ2COafNHqzelImnvgNprczu6vOQCUcs
-	2oofTpHYsoxEKKTS2UR56e00QlsKgaHqSStK2NpHwE7OlwUum+2u6p1A
-X-Gm-Gg: AYBFou2bk3Qc7t01+jHCs+grEfi+PQgKhYhYJVSKAVxctfbLVSRzK0/JE9M9OvMdWtw
-	1orsGsB2jDMn5DZLfnhgEf6k6y85BGNyRcx82P5tMaonP+RIi9VUiJ+Bzu7MIekn99sc6o5zYdW
-	LyQ4bvcHdsr8k43KWUQc3rRSgTH/g/y5VolW1W2g0Jttx5vFBPxht2QD9UQsUtjIbo0EsID2u9/
-	fJqetBaxXD+zCxZ+/tnVmRAtt5RlyxFGqoU8jQam0qqf54yDreDxvzjIIlb0dJnDQMlrk6DdsZ8
-	Y8cCjKVZ4k8JTKRL1GDXuOF5SGY4NM+zldgrnFlPomSvdcrWnidU8Th8u42470sNqgfM7OH9PrF
-	wa2WPe+QFRjAVLVf6aoBzlwLEapO3W1NYEiYQM+MxsHPM/4tUT2JALBMTa/Z7jx2yRsjRpD+k2g
-	3+zFwoGMniClO7DLqMrpU/R7xKkagPMT0CWxAo/wNHOND+mn0z7kG8PdJRgCFstzI3oYVYXTobt
-	GdpLaadUVx/dkyo6jF+aZHE6qeVN/ydNNE=
-X-Received: by 2002:a05:600c:8518:b0:49d:28c4:b304 with SMTP id 5b1f17b1804b1-49fc5741563mr73992215e9.29.1789814463336;
-        Sat, 19 Sep 2026 03:41:03 -0700 (PDT)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fc521f5d9sm32797955e9.2.2026.09.19.03.41.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Sep 2026 03:41:03 -0700 (PDT)
-Date: Sat, 19 Sep 2026 11:41:01 +0100
-From: David Laight <david.laight.linux@gmail.com>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Vlastimil Babka <vbabka@kernel.org>, Harry Yoo <harry@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Rasmus Villemoes
- <linux@rasmusvillemoes.dk>, Hao Li <hao.li@linux.dev>, Christoph Lameter
- <cl@gentwo.org>, David Rientjes <rientjes@google.com>, Roman Gushchin
- <roman.gushchin@linux.dev>, Catalin Marinas <catalin.marinas@arm.com>, Kees
- Cook <kees@kernel.org>, "Gustavo A . R . Silva" <gustavoars@kernel.org>,
- Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-hardening@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH v3 1/5] slab: align ZERO_SIZE_PTR to
- ARCH_KMALLOC_MINALIGN
-Message-ID: <20260919114101.34423251@pumpkin>
-In-Reply-To: <20260903203720.63689-2-kmehltretter@gmail.com>
-References: <20260903203720.63689-1-kmehltretter@gmail.com>
-	<20260903203720.63689-2-kmehltretter@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="GLuMP5rw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D08F1F000FF;
+	Sat, 19 Sep 2026 10:57:16 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=GLuMP5rw
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1789815435;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z08u4QvsVEfgamcbLluYRkgXUsFblRlw/2gG817i0ps=;
+	b=GLuMP5rwLf2OR2Pbdx5AExta5wqsRo51b05zCZrbfUWTs5rcvDZJsr/m6nbkTUNqx3bV9V
+	442SKXGmGVPB+zbee4m+17AqWJM0u6i9e+XDJ7j6KL6NoOb5Nua7fP5aK/L+aHxHzwzS16
+	X1iUhR6m7wNWC2h+5Y8VlZR+LdOlc5w=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id d5e2173a (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Sat, 19 Sep 2026 10:57:14 +0000 (UTC)
+Date: Sat, 19 Sep 2026 12:57:10 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+Message-ID: <aq5qhgPT63dY2xg4@zx2c4.com>
+References: <20260916-vdso-getrandom-avoid-memset-llvm-24-v1-1-80a92f2e225a@kernel.org>
+ <aquyVkdYceiWdckX@zx2c4.com>
+ <20260917173920.GB356152@ax162>
+ <CAKwvOdkHsw132XEY2zLxO-V4=_RyqBatavQDvLY-MpZ16ZSAdQ@mail.gmail.com>
+ <CAHmME9pcvUdkvYmeUs+Wi+v5Cy5QG=Wo48FmRCdQdL8x1ykDKA@mail.gmail.com>
+ <aq01ud_zTYN-3Zby@zx2c4.com>
+ <aq2OpBZIMVhMZhWW@zx2c4.com>
+ <20260918210744.GA235304@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260918210744.GA235304@ax162>
 
-On Thu,  3 Sep 2026 22:37:16 +0200
-Karl Mehltretter <kmehltretter@gmail.com> wrote:
-
-> The kmalloc entry points are annotated with __assume_kmalloc_alignment
-> but return ZERO_SIZE_PTR, currently (void *)16, for zero-size requests.
-> This violates the annotation when ARCH_KMALLOC_MINALIGN exceeds 16.
+On Fri, Sep 18, 2026 at 02:07:44PM -0700, Nathan Chancellor wrote:
+> On Fri, Sep 18, 2026 at 09:19:00PM +0200, Jason A. Donenfeld wrote:
+> > Untested, but putting this all together I suppose looks like this, if
+> > you want to play around and see:
 > 
-> This can mislead compiler optimizations. Clang's UBSAN_ALIGNMENT detects
-> the violation on armv5. GCC and Clang retain the ZERO_OR_NULL_PTR() range
-> check but eliminate an exact ZERO_SIZE_PTR comparison after an annotated
-> allocation.
+> Thanks!
 > 
-> Define ZERO_SIZE_PTR as the greater of 16 and ARCH_KMALLOC_MINALIGN,
-> retaining the existing value where it is already aligned. Assert that
-> ARCH_KMALLOC_MINALIGN remains below 0x100, the value of LIST_POISON1
-> when POISON_POINTER_DELTA is zero, so the sentinel remains distinct
-> from that poison pointer.
+> > diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+> > index 2851afa9154f..713e95dfdedc 100644
+> > --- a/lib/vdso/getrandom.c
+> > +++ b/lib/vdso/getrandom.c
+> > @@ -29,6 +29,12 @@
+> >  	}									\
+> >  } while (0)
+> > 
+> > +#if __has_builtin(__builtin_memset_inline)
+> > +#define memset(dst, value, size) __builtin_memset_inline(dst, value, size)
+> > +#else
+> > +#define memset(dst, value, size) __builtin_memset(dst, value, size)
+> > +#endif
+> > +
+> >  static void memcpy_and_zero_src(void *dst, void *src, size_t len)
+> >  {
+> >  	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
+> > @@ -83,8 +89,7 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
+> >  		params->size_of_opaque_state = sizeof(*state);
+> >  		params->mmap_prot = PROT_READ | PROT_WRITE;
+> >  		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
+> > -		for (size_t i = 0; i < ARRAY_SIZE(params->reserved); ++i)
+> > -			params->reserved[i] = 0;
+> > +		memset(params->reserved, 0, sizeof(params->reserved));
+> >  		return 0;
+> >  	}
 > 
-> Fixes: 94a58c360a45 ("slab.h: sprinkle __assume_aligned attributes")
-> Assisted-by: LLM
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
->  include/linux/slab.h | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+> This will regress GCC < 14 because '-finline-stringops=memset' does not
+> exist yet, meaning __builtin_memset() may still generated a call to
+> memset(). Testing GCC 13 with ARCH=riscv defconfig, I get the same error
+> as originally reported up thread. I am not sure we can get rid of the
+> loop for that reason. I tested the following diff that keeps
 > 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index cda126def67a..563dadc16d82 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -262,13 +262,16 @@ enum _slab_flag_bits {
+>   clang (__builtin_memset_inline)
+>   GCC 14+ (-finline-stringops=memset + __builtin_memset)
+>   GCC <14 (simple loop)
+> 
+> happy (and moves the checks into Kconfig, which is being discussed at a
+> wider level [1]) but it is admittedly slightly uglier... That said, it
+> certainly seems more robust.
+> 
+> [1]: https://lore.kernel.org/linux-kbuild/20260917-build-speedup-v3-11-9ecf4163ff36@kernel.org
+> 
+> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+> index 7dec05dd33b7..f6619e1cb2ce 100644
+> --- a/arch/arm64/kernel/vdso/Makefile
+> +++ b/arch/arm64/kernel/vdso/Makefile
+> @@ -41,7 +41,7 @@ CC_FLAGS_REMOVE_VDSO := $(CC_FLAGS_FTRACE) -Os $(CC_FLAGS_SCS) \
+>  			$(CC_FLAGS_LTO) $(CC_FLAGS_CFI) \
+>  			-Wmissing-prototypes -Wmissing-declarations
 >  
->  /*
->   * ZERO_SIZE_PTR will be returned for zero sized kmalloc requests.
-> + * It satisfies the alignment promised by __assume_kmalloc_alignment
-> + * and keeps the historic value 16 where that is already aligned.
->   *
->   * Dereferencing ZERO_SIZE_PTR will lead to a distinct access fault.
->   *
->   * ZERO_SIZE_PTR can be passed to kfree though in the same way that NULL can.
->   * Both make kfree a no-op.
->   */
-> -#define ZERO_SIZE_PTR ((void *)16)
-> +#define ZERO_SIZE_PTR ((void *)(ARCH_KMALLOC_MINALIGN > 16 ? \
-> +				ARCH_KMALLOC_MINALIGN : 16))
-
-If ARCH_KMALLOC_MINALIGN is just a constant (I suspect it has to be)
-this would be better as:
-#if ARCH_KMALLOC_MINALIGN > 16
-#define ZERO_SIZE_PTR ((void *)ARCH_KMALLOC_MINALIGN)
-#else
-#define ARCH_KMALLOC_MINALIGN ((void *)16)
-#endif
-to avoid bloat at all the expansions.
-
-David
-
+> -CC_FLAGS_ADD_VDSO := -O2 -mcmodel=tiny -fasynchronous-unwind-tables
+> +CC_FLAGS_ADD_VDSO := -O2 -mcmodel=tiny -fasynchronous-unwind-tables $(CONFIG_CC_OPT_INLINE_MEMSET)
 >  
->  #define ZERO_OR_NULL_PTR(x) ((unsigned long)(x) <= \
->  				(unsigned long)ZERO_SIZE_PTR)
-> @@ -625,6 +628,13 @@ static inline bool kmem_dump_obj(void *object) { return false; }
->  #define KMALLOC_SHIFT_LOW ilog2(KMALLOC_MIN_SIZE)
->  #endif
+>  CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_REMOVE_VDSO)
+>  CFLAGS_REMOVE_vgetrandom.o = $(CC_FLAGS_REMOVE_VDSO)
+> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+> index 9c9181bb4071..0b84892d084b 100644
+> --- a/arch/loongarch/vdso/Makefile
+> +++ b/arch/loongarch/vdso/Makefile
+> @@ -16,6 +16,7 @@ ccflags-vdso := \
+>  	$(filter -m64,$(KBUILD_CFLAGS)) \
+>  	$(filter -march=%,$(KBUILD_CFLAGS)) \
+>  	$(filter -m%-float,$(KBUILD_CFLAGS)) \
+> +	$(CONFIG_CC_OPT_INLINE_MEMSET) \
+>  	$(CLANG_FLAGS) \
+>  	-D__VDSO__
 >  
-> +/*
-> + * Keep ZERO_SIZE_PTR at most 128, i.e. below 0x100: LIST_POISON1 is
-> + * 0x100 when POISON_POINTER_DELTA is 0, and no architecture currently
-> + * has an ARCH_KMALLOC_MINALIGN above 128.
-> + */
-> +static_assert(ARCH_KMALLOC_MINALIGN < 0x100);
+> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+> index 8dbf2532a573..c023046a3fd7 100644
+> --- a/arch/riscv/kernel/vdso/Makefile
+> +++ b/arch/riscv/kernel/vdso/Makefile
+> @@ -36,6 +36,7 @@ endif
+>  ccflags-y := -fno-stack-protector
+>  ccflags-y += -DDISABLE_BRANCH_PROFILING
+>  ccflags-y += -fno-builtin
+> +ccflags-y += $(CONFIG_CC_OPT_INLINE_MEMSET)
+>  ccflags-y += $(KBUILD_BASE_ISA)$(CFI_MARCH)
+>  ccflags-y += $(CFI_FULL)
+>  asflags-y += $(KBUILD_BASE_ISA)$(CFI_MARCH)
+> diff --git a/arch/s390/kernel/vdso/Makefile b/arch/s390/kernel/vdso/Makefile
+> index 35c834b895ec..54bcf2984ca1 100644
+> --- a/arch/s390/kernel/vdso/Makefile
+> +++ b/arch/s390/kernel/vdso/Makefile
+> @@ -29,6 +29,7 @@ KBUILD_CFLAGS_VDSO := $(filter-out -munaligned-symbols,$(KBUILD_CFLAGS_VDSO))
+>  KBUILD_CFLAGS_VDSO := $(filter-out -fno-asynchronous-unwind-tables,$(KBUILD_CFLAGS_VDSO))
+>  KBUILD_CFLAGS_VDSO += -fPIC -fno-common -fno-builtin -fasynchronous-unwind-tables
+>  KBUILD_CFLAGS_VDSO += -fno-stack-protector $(DISABLE_KSTACK_ERASE)
+> +KBUILD_CFLAGS_VDSO += $(CONFIG_CC_OPT_INLINE_MEMSET)
+>  ldflags-y := -shared -soname=linux-vdso.so.1 \
+>  	     --hash-style=both --build-id=sha1 \
+>  	     $(call ld-option, --eh-frame-hdr) -T
+> diff --git a/arch/x86/entry/vdso/vdso64/Makefile b/arch/x86/entry/vdso/vdso64/Makefile
+> index 7c0790065b5e..c2353a065279 100644
+> --- a/arch/x86/entry/vdso/vdso64/Makefile
+> +++ b/arch/x86/entry/vdso/vdso64/Makefile
+> @@ -14,7 +14,7 @@ vobjs-$(CONFIG_X86_SGX)			+= vsgx.o
+>  vobjs-$(CONFIG_FUTEX_ROBUST_UNLOCK)	+= vfutex.o
+>  
+>  # Compilation flags
+> -flags-y				:= -DBUILD_VDSO64 -m64 -mcmodel=small
+> +flags-y				:= -DBUILD_VDSO64 -m64 -mcmodel=small $(CONFIG_CC_OPT_INLINE_MEMSET)
+>  
+>  # The location of this include matters!
+>  include $(src)/../common/Makefile.include
+> diff --git a/init/Kconfig b/init/Kconfig
+> index 6e82b4957a5d..09251b5f79d4 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -173,6 +173,13 @@ config CC_HAS_ALLOC_TOKEN
+>  config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+>  	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) = { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
+>  
+> +config CC_HAS_OPT_INLINE_MEMSET
+> +	def_bool $(cc-option,-finline-stringops=memset)
 > +
->  /*
->   * Setting ARCH_SLAB_MINALIGN in arch headers allows a different alignment.
->   * Intended for arches that get misalignment faults even for 64 bit integer
+> +config CC_OPT_INLINE_MEMSET
+> +	string
+> +	default "-finline-stringops=memset" if CC_HAS_OPT_INLINE_MEMSET
+> +
+>  config LD_CAN_USE_KEEP_IN_OVERLAY
+>  	# ld.lld prior to 21.0.0 did not support KEEP within an overlay description
+>  	# https://github.com/llvm/llvm-project/pull/130661
+> diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
+> index 2851afa9154f..83831dab08b2 100644
+> --- a/lib/vdso/getrandom.c
+> +++ b/lib/vdso/getrandom.c
+> @@ -29,6 +29,12 @@
+>  	}									\
+>  } while (0)
+>  
+> +#if __has_builtin(__builtin_memset_inline)
+> +#define memset_inline(dst, value, size) __builtin_memset_inline(dst, value, size)
+> +#elif IS_ENABLED(CONFIG_CC_HAS_OPT_INLINE_MEMSET)
+> +#define memset_inline(dst, value, size) __builtin_memset(dst, value, size)
+> +#endif
+> +
+>  static void memcpy_and_zero_src(void *dst, void *src, size_t len)
+>  {
+>  	if (IS_ENABLED(CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS)) {
+> @@ -83,8 +89,12 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
+>  		params->size_of_opaque_state = sizeof(*state);
+>  		params->mmap_prot = PROT_READ | PROT_WRITE;
+>  		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
+> +#ifdef memset_inline
+> +		memset_inline(params->reserved, 0, sizeof(params->reserved));
+> +#else
+>  		for (size_t i = 0; i < ARRAY_SIZE(params->reserved); ++i)
+>  			params->reserved[i] = 0;
+> +#endif
+>  		return 0;
+>  	}
 
+I wonder if it makes more sense to have an "#else static inline void memset(...) { for (...) .. = 0; }"
+in the ifdef defines for memset, rather than cluttering the function
+with an ifdef like that.
+
+Also, I might have left ppc out of my initial commit.
+
+Nick, do you have feelings about this approach?
