@@ -1,368 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01166238C1A;
-	Sat, 19 Sep 2026 07:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97554352027;
+	Sat, 19 Sep 2026 07:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1789801850; cv=none; b=T9COhgCMkretshn/V9uNAGyzJ5C/j0/sKvzNGk2amlz6RgUHsPCRDFVvHjUQUw5dh16F1btCM/l1mKDey9vraPNhsBiENjHQqQEV4qzcd+Z9gqk11LnbDZew1QStmi6CR4gCulMb5wH051QEhIG7MCM5yAaHJ7nCVmmcRDLzX9g=
+	t=1789803318; cv=none; b=DRnEDmnSeyEX2dCqycpYk7yV6fOEDefTbQ5dE4MONH0lKw1OCkgT7kfM96gSv790ZcKympyP5LWZ9gVIE2a29icK/AYonnsxO0nN4OBRL8Ok5mJoHy7MhAr55apCNp0nli/wbHq4/1Jht22wghDnS2PVyK+w2U5/A3SOnnWucFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1789801850; c=relaxed/simple;
-	bh=lWO7F8KUIK2gdV8EcNgvNfvH8tIBH0AxDnZJViUOQ1E=;
+	s=arc-20240116; t=1789803318; c=relaxed/simple;
+	bh=XxiSV9KB15uxRCUse5WjXjM7dc35/5V4z8ZQW4Zp7c8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fTKQUG5/XxVd0xRyE4M5FQNYY+PHGzGYTxYxfWBqlBxUDNfyhN9FTl2SbDEGfy4eCrWV6Op/ZfLYFIr4uK+V6ItgAzQLT8a0thRxeo2HJ6XIG8DOM9bPQu0gLNf9tzhH3yXLuWlD9JX96rDxkF0jT1hyjjB0R9c7Nh3OhWs7DoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K+6mSAUR; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=TdlZg1uzom/CbxNd4BTlVm9d3Ywh69e7uUIOQcIQsogpnikrRw2/wK4Sj8las0yn80tDJvgTdyPOZcy6vwQ0oOd48BOFE8HKk32uQKzqRmU1ZhExRfW1mlxV24LLnaF/W3ecyIjafR1o1XcxZPYV079Z4LeXwRMHcIAjYNZon18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BgNfBydL; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K+6mSAUR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7961F00898;
-	Sat, 19 Sep 2026 07:10:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1789801848;
-	bh=YKGqj+TDsNHE2cPf0wWAuCBTMccJpGB3KdGTBiexiVg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=K+6mSAURVwK4XLGEeWC8e/7HZSegFQxlw1p7RJtH8yKt4YvljJSsxis6rA7tRLnpu
-	 rpblI97QfueR7v8Wv5mmaAqxT0RakXtxbbnmeLGaw6eorcuL/6CpsT60lj/Q04pplp
-	 wKx7moH5rNcs3sbFDiCEzaxtsChMaxAppQ8KEurmS9L9xIaZctLdQgSXsYWglH2V3e
-	 ho/7w9UcVMXOSk7ddUw9P7nFvCfS6VQu091qQCIR1vkx1iJq7fPFTmlbH9Euxiyxss
-	 i+bsi2qHCfAWcQ0eN8mhO1ZJzVk31dWNODLegU5excHHpymPk8ONvFGksuTyDvGnyV
-	 cMRC56I6tyFRA==
-Date: Sat, 19 Sep 2026 00:10:46 -0700
-From: Namhyung Kim <namhyung@kernel.org>
-To: Tengda Wu <wutengda@huaweicloud.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
-	Li Huafei <lihuafei1@huawei.com>,
-	Kim Phillips <kim.phillips@arm.com>,
-	Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
-	Bill Wendling <morbo@google.com>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v6 00/26] perf arm64: Support data type profiling
-Message-ID: <aq41dlDILyJlw-77@z2>
-References: <cover.1789521520.git.wutengda@huaweicloud.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BgNfBydL"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1789803316; x=1821339316;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XxiSV9KB15uxRCUse5WjXjM7dc35/5V4z8ZQW4Zp7c8=;
+  b=BgNfBydLE4BdrbsegmX/JR74P1UEk5Qx1dO96Sx+SDO2ug+pNB8Zd0Dq
+   A/BJoSDHLg0tNLkiYfF63Nceu1+4QNZ/vyeOYHLpCi7JJjwJfEvPdojt2
+   /azMdLutGlQkxSk7ErX6j0K8NlFWXGcq91HhkmcbM5GrMxcwDqrPDqFZT
+   KOBBOv5jgLGER3al2I40ljHTXLDOM8l2rsu0AlhoFshh6t7ZSUMqz0T8l
+   MaoYJK4JgRZ5friOwLCyRThqx3l1c0/+aeTJ67z2ie6PRNXJLlZFXkz9p
+   dbzvw3fU743hUKVllS4SwDY3SxiUAf/qe1WWCTmONujUcLNw3vXITSL3P
+   w==;
+X-CSE-ConnectionGUID: fQI9BmJzSP+T6VRKKZR7aA==
+X-CSE-MsgGUID: CqOoEY50TpOP5yt1fAI8UQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11909"; a="107842585"
+X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
+   d="scan'208";a="107842585"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2026 00:35:14 -0700
+X-CSE-ConnectionGUID: ZLvkaXWbQ1mcTnyE200BSw==
+X-CSE-MsgGUID: O9PN042rRV6YzZkAkRxv0g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,109,1787036400"; 
+   d="scan'208";a="298187384"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 19 Sep 2026 00:35:11 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x7pbI-00000000AjZ-3904;
+	Sat, 19 Sep 2026 07:35:08 +0000
+Date: Sat, 19 Sep 2026 15:34:37 +0800
+From: kernel test robot <lkp@intel.com>
+To: Guangshuo Li <lgs201920130244@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Mathieu Poirier <mathieu.poirier@linaro.org>,
+	Sivaprakash Murugesan <sivaprak@codeaurora.org>,
+	Gokul Sriram Palanisamy <quic_gokulsri@quicinc.com>,
+	Govind Singh <govinds@codeaurora.org>,
+	linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Guangshuo Li <lgs201920130244@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH] remoteproc: qcom: q6v5-wcss: remove all subdevices on
+ unbind
+Message-ID: <202609191513.bywryVFw-lkp@intel.com>
+References: <20260918041321.3532355-1-lgs201920130244@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1789521520.git.wutengda@huaweicloud.com>
+In-Reply-To: <20260918041321.3532355-1-lgs201920130244@gmail.com>
 
-Hello,
+Hi Guangshuo,
 
-On Wed, Sep 16, 2026 at 01:29:14AM +0000, Tengda Wu wrote:
-> This patch series implements data type profiling support for arm64,
-> enabling 'perf annotate --data-type' to resolve memory locations and
-> variable types on arm64 platforms.
-> 
-> The main changes since v5 include:
-> v5: https://lore.kernel.org/all/cover.1788872630.git.wutengda@huaweicloud.com/
-> 
-> * __get_dwarf_regnum_arm64 optimization: compute directly based on character
->   judgment, avoiding strtol calls. (Ian Rogers)
-> 
-> * extract_op_location_arm64 issue fix: support parsing instructions such as
->   'cmp x0, x1, lsl #3'.
-> 
-> * Instruction tracking part, fixing issues pointed out by Sashiko, including:
->   - adding TSR_KIND_POINTER handling for ldr.
->   - premature returns in add and ldr causing percpu handling to be skipped.
->   - adding a reg != -1 check for stack type propagation, etc.
-> 
-> Patch organization
-> ==================
-> 
-> The series is organized as follows:
-> 
-> 1. Fix disassembly mismatches (Patches 01-02)
->    Current perf annotate supports three disassembly backends: llvm,
->    capstone, and objdump. On arm64, inconsistencies between the output
->    of these backends (specifically llvm/capstone vs. objdump) often
->    prevent the tracker from correctly identifying registers and offsets.
->    These patches resolve these mismatches, ensuring consistent instruction
->    parsing across all supported backends.
-> 
-> 2. Infrastructure for arm64 operand parsing (Patches 03-09)
->    These patches establish the necessary infrastructure for arm64-specific
->    operand handling. This includes implementing new callbacks and data
->    structures to manage arm64's unique addressing modes and register sets.
->    This foundation is essential for the subsequent type-tracking logic.
-> 
-> 3. ARM SPE event handling (Patches 10-11)
->    Patch 10 automatically deduplicates overlapping ARM SPE events (e.g.,
->    l1d-miss, tlb-access) in 'perf annotate' by retaining only the
->    "instructions" event when data type profiling is enabled. Patch 11
->    defaults  the synthesized event period to 1 for ARM SPE to fix zero
->    'Percent' values in annotate output.
+kernel test robot noticed the following build errors:
 
-Thanks for working on this!
+[auto build test ERROR on remoteproc/rproc-next]
+[also build test ERROR on linus/master v7.3-rc3 next-20260918]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I think it's ready to merge up to this point.  The instruction tracking
-part needs more review.  I'll do that later but it'd be nice if ARM
-folks and Shuai could review it too.
+url:    https://github.com/intel-lab-lkp/linux/commits/Guangshuo-Li/remoteproc-qcom-q6v5-wcss-remove-all-subdevices-on-unbind/20260918-121321
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
+patch link:    https://lore.kernel.org/r/20260918041321.3532355-1-lgs201920130244%40gmail.com
+patch subject: [PATCH] remoteproc: qcom: q6v5-wcss: remove all subdevices on unbind
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20260919/202609191513.bywryVFw-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 7252edd9aa82ef1c570ff6694ef7f4763a8a5d2f)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260919/202609191513.bywryVFw-lkp@intel.com/reproduce)
 
-Thanks,
-Namhyung
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609191513.bywryVFw-lkp@intel.com/
 
-> 
-> 4. Core instruction tracking (Patches 12-26)
->    These patches implement the core logic for type tracking on arm64,
->    covering several key types of instructions, including:
->    * Memory Access: ldr/str variants (including stack-based access).
->    * Arithmetic & Data Processing: mov, add, and adrp.
->    * Special Access: System register access (mrs) and per-cpu variable
->      tracking.
-> 
-> The implementation draws inspiration from the existing x86 logic while
-> adapting it to the nuances of the AArch64 ISA [2][3]. With these changes,
-> perf annotate can successfully resolve memory locations and register types,
-> providing basic support for data type profiling on arm64 platforms.
-> 
-> Example Result
-> ==============
-> 
-> # perf mem record -a -K -- sleep 1
-> # perf annotate --data-type --stdio --type-stat
-> Annotate data type stats:
-> total 1138, ok 852 (74.9%), bad 286 (25.1%)
-> -----------------------------------------------------------
->          6 : no_sym
->         42 : no_var
->        230 : no_typeinfo
->          8 : bad_offset
->        213 : insn_track
-> 
-> Annotate type: 'struct page' in [kernel.kallsyms] (66948 samples):
-> ============================================================================
->  Percent     offset       size  field
->   100.00          0       0x40  struct page      {
->     9.01          0        0x8      long unsigned int   flags;
->    57.99        0x8       0x28      union        {
->    57.99        0x8       0x28          struct   {
->    33.00        0x8       0x10              union        {
->    33.00        0x8       0x10                  struct list_head        lru {
->    33.00        0x8        0x8                      struct list_head*   next;
->     0.00       0x10        0x8                      struct list_head*   prev;
->                                                 };
->    33.00        0x8       0x10                  struct   {
->    33.00        0x8        0x8                      void*       __filler;
->     0.00       0x10        0x4                      unsigned int        mlock_count;
->    ...
-> 
-> Each patch's type profiling results are as follows:
-> 
-> Patch | Feature                    | no_sym | no_var | no_typeinfo | bad_offset | insn_track | ok(%)
-> ------+----------------------------+--------+--------+-------------+------------+------------+------
-> 0011  | base (default spe period)  | 6      | 493    | -           | -          | -          | 56.2%
-> 0013  | enable insn tracking       | 6      | 42     | 437         | 2          | 12         | 57.2%
-> 0016  | support 'load' insn        | 6      | 42     | 398         | 1          | 52         | 60.7%
-> 0017  | support 'store' insn       | 6      | 42     | 398         | 1          | 52         | 60.7%
-> 0021  | support stack variable     | 6      | 42     | 391         | 1          | 59         | 61.3%
-> 0022  | support 'mov' insn         | 6      | 42     | 372         | 3          | 76         | 62.8%
-> 0023  | support 'add' insn         | 6      | 42     | 318         | 7          | 126        | 67.2%
-> 0024  | support 'adrp' insn        | 6      | 42     | 238         | 8          | 205        | 74.2%
-> 0025  | support per-cpu variable   | 6      | 42     | 233         | 8          | 210        | 74.6%
-> 0026  | support 'mrs' insn         | 6      | 42     | 230         | 8          | 213        | 74.9%
-> 
-> Limitations
-> ===========
-> 
-> * SIMD/FP & SVE Vector Support:
->   Data type profiling currently focuses on General-Purpose (GP) register
->   operations. Vector/SIMD registers (v0-v31, d0-d31, q0-q31) and Scalable
->   Vector Extension (SVE/SME) instructions are not tracked yet.
-> 
-> * Regular Instructions Only:
->   Only regular instructions are currently supported. Instructions following
->   special rules or non-standard patterns are not supported yet. For example,
->   load/store tracking only matches standard variants (ldr/ldur/ldar/ldp and
->   str/stur/stlr/stp) with straightforward semantics; exclusive loads/stores
->   (ldxr, stxr, etc.) and acquire/exclusive combination variants are excluded.
-> 
-> * Compiler Prologue/Epilogue Code:
->   As shown by the previous test results, approximately 14% of the failed
->   type profiling results originate from compiler-generated prologue or
->   epilogue code (e.g., ldp  x19, x20, [sp, #16]). These instructions manage
->   callee-saved registers across function boundaries, propagating type
->   context through these operations requires inter-procedural (cross-function)
->   instruction analysis, which is currently unsupported by the local backward
->   instruction tracker.
-> 
-> Testing
-> =======
-> 
-> Tested on arm64 (all passed):
-> 
->   # perf test -v "perf data type profiling tests"
->   81: perf data type profiling tests                                                                  : Ok
-> 
->   === Test Summary ===
->   Passed main tests : 1
->   Passed subtests   : 0
->   Skipped tests     : 0
->   Failed tests      : 0
-> 
-> Tested on x86. The profiling results show no change before/after applying
-> this patch series:
-> 
->   before : total 880, ok 711 (80.8%), bad 169 (19.2%)
->   after  : total 880, ok 711 (80.8%), bad 169 (19.2%)
-> 
-> Changelog
-> =========
-> v5 -> v6:
->   - v5: https://lore.kernel.org/all/cover.1788872630.git.wutengda@huaweicloud.com/
->   - Fix a potential UAF issue with capstone sym_name.
->   - Optimize __get_dwarf_regnum_arm64 to compute directly based on character
->     judgment, avoiding strtol calls. (Ian Rogers)
->   - Fix an issue in extract_op_location_arm64 when parsing instructions such as
->     'cmp x0, x1, lsl #3'.
->   - Fix several minor issues in instruction tracking. (Sashiko)
-> v4 -> v5:
->   - v4: https://lore.kernel.org/all/20260808122400.2961238-1-wutengda@huaweicloud.com/
->   - Introduce arch_get_reg_offset() to uniformly handle reg offset.
->   - Add support for parsing extension type and shift amount in arm64 instructions.
->   - Refine which instructions to track or skip. (Shuai Xue)
->   - Rename dont_overlap to default_single_event_per_ip and use it in
->     itrace_synth_opts__set_default(). (Adrian Hunter)
->   - Introduce delete_stack_state() to clean up obsolete stack state. (Shuai Xue)
->   - Normalize arch__dwarf_regnum() error return values. (Shuai Xue)
->   - Drop canary support due to unresolved bugs.
->   - Fix various minor issues, such as name memory leaks and header includes.
-> v3 -> v4:
->   - v3: https://lore.kernel.org/all/20260701035355.752944-1-wutengda@huaweicloud.com/
->   - Fix Capstone compilation failure.
->   - Stop adding new pcrel_adrp_addr in LLVM; reuse pcrel_load_addr instead.
->   - Fix parsing issue in arm64_mov__parse.
->   - Add PC-relative load instruction parsing logic to arm64_ldst__parse,
->     and introduce rstrip_space_and_comment to strip comments.
->   - Remove wzr/xzr register parsing (not planning to handle this yet).
->   - Add post-index addressing mode parsing for the '[base], reg' format.
->   - Update built-in implementation of --itrace=i1i to deduplicate early
->     during arm_spe_process_auxtrace_info.
->   - Restrict the "default period to 1" behavior to ARM SPE, instead of
->     applying it to all architectures.
->   - Add register type tracking for function call instructions.
->   - Add dual-register type tracking for load pair and store pair instructions.
->   - Correct stack variable offset calculations.
->   - Add type invalidation upon retry failure.
->   - Reuse imm_value instead of introducing addr for 'adrp' instruction tracking.
->   - Fix potential stale type resolution errors caused by TSR_KIND_GLOBAL_ADDR
->     and TSR_KIND_CONST during stack passing.
->   - Fix a strbuf memory leak during 'mrs' instruction tracking.
->   - Fix stale dieoff issue when debug info changes.
->   - Simplify add type propagation: only propagate offset/imm updates, leave
->     type parsing to chk.
-> v2 -> v3:
->   - v2: https://lore.kernel.org/all/20260403094800.1418825-1-wutengda@huaweicloud.com/
->   - Instead of always parsing the left operand as src and the right operand as
->     dst, set them based on the actual instruction definition. (Namhyung Kim)
->   - Fix refcount leak in print_capstone_detail().
->   - Remove useless '<' check when parsing 'addr <symbol>' in arm64_mov__parse().
->   - Add example comments in arm64_ldst__parse().
->   - Split arch__dwarf_regnum() changes into a separate commit.
->   - Rename annotated_addr_mode enum: INSN_ADDR_* -> PERF_ADDR_MODE_*.
->   - Set caller-saved registers in init_type_state().
->   - For instructions with addressing mode, always goto adjust_reg_index_state()
->     at the end to update the src register state.
->   - Handle TSR_KIND_CONST registers for 'mov' and 'add' instructions.
->   - Invalidate dst register for all other unsupported instructions.
->   - Verify type DIE is task_struct pointer before caching globally.
->   - Enable --itrace=i1i by default for ARM SPE data type profiling in 'perf annotate'
->     to avoid overlapping event counting for the same instruction. (James Clark)
->   - Fix global variable type resolving error in check_matching_type(). (James Clark)
->   - Address review comments from sashiko [1]:
->     - Fix unconditional call to arch->extract_op_location()
->     - Handle multi_regs correctly
->     - Fix invalid register state in error path
->     - Other misc fixes
-> v1 -> v2:
->   - v1: https://lore.kernel.org/all/20250314162137.528204-1-lihuafei1@huawei.com/
->   - Fix inconsistencies in arm64 instruction output across llvm, capstone,
->     and objdump disassembly backends.
->   - Support arm64-specific addressing modes and operand formats. (Leo Yan)
->   - Extend instruction tracking to support mov and add instructions,
->     along with per-cpu and stack variables.
->   - Include real-world examples in commit messages to demonstrate
->     practical effects. (Namhyung Kim)
->   - Improve type-tracking success rate (type stat) from 64.2% to 82.1%.
-> 
-> Please let me know if you have any feedback.
-> 
-> Thanks,
-> Tengda
-> 
-> [1] https://sashiko.dev/#/patchset/20260403094800.1418825-1-wutengda%40huaweicloud.com
-> [2] https://developer.arm.com/documentation/102374/0103
-> [3] https://github.com/flynd/asmsheets/releases/tag/v8
-> 
-> 
-> Tengda Wu (26):
->   perf capstone: Symbolize address operands to match objdump on arm64
->   perf llvm: Fix arm64 adrp instruction disassembly mismatch with
->     objdump
->   perf annotate-arm64: Generalize arm64_mov__parse to support more
->     instructions
->   perf annotate-arm64: Handle load and store instructions
->   perf annotate: Normalize arch__dwarf_regnum() error return values
->   perf annotate: Introduce extract_op_location callback for
->     arch-specific parsing
->   perf dwarf-regs: Adapt get_dwarf_regnum() for arm64
->   perf annotate: Adapt arch__dwarf_regnum() for arm64
->   perf annotate-arm64: Implement extract_op_location() callback
->   perf annotate: Default to --itrace=i1i for data type profiling
->   perf arm-spe: Set default synthesized event period to 1
->   perf annotate-data: Extract invalidate_reg_state() as a common helper
->   perf annotate-arm64: Enable instruction tracking support
->   perf annotate-data: Add arch_get_reg_offset helper
->   perf annotate-arm64: Track return type after call instructions
->   perf annotate-arm64: Support load instruction tracking
->   perf annotate-arm64: Support store instruction tracking
->   perf annotate-data: Expand type_state_reg imm_value to u64
->   perf annotate-data: Track imm_value for stack variables
->   perf annotate-x86: Delete stale stack state on store of untracked
->     register
->   perf annotate-arm64: Support stack variable tracking
->   perf annotate-arm64: Support 'mov' instruction tracking
->   perf annotate-arm64: Support 'add' instruction tracking
->   perf annotate-arm64: Support 'adrp' instruction to track global
->     variables
->   perf annotate-arm64: Support per-cpu variable access tracking
->   perf annotate-arm64: Support 'mrs' instruction to track 'current'
->     pointer
-> 
->  tools/perf/builtin-annotate.c                 |    8 +
->  .../perf/util/annotate-arch/annotate-arm64.c  | 1211 ++++++++++++++++-
->  .../util/annotate-arch/annotate-powerpc.c     |    9 +
->  tools/perf/util/annotate-arch/annotate-x86.c  |  117 +-
->  tools/perf/util/annotate-data.c               |  205 ++-
->  tools/perf/util/annotate-data.h               |   14 +-
->  tools/perf/util/annotate.c                    |  108 +-
->  tools/perf/util/annotate.h                    |   63 +
->  tools/perf/util/arm-spe.c                     |   16 +-
->  tools/perf/util/auxtrace.c                    |   12 +-
->  tools/perf/util/auxtrace.h                    |    7 +-
->  tools/perf/util/capstone.c                    |  186 ++-
->  tools/perf/util/cs-etm.c                      |    2 +-
->  tools/perf/util/disasm.c                      |    5 +
->  tools/perf/util/disasm.h                      |    5 +
->  .../util/dwarf-regs-arch/dwarf-regs-arm64.c   |   25 +
->  tools/perf/util/dwarf-regs.c                  |    2 +-
->  tools/perf/util/include/dwarf-regs.h          |    1 +
->  tools/perf/util/intel-bts.c                   |    2 +-
->  tools/perf/util/intel-pt.c                    |    3 +-
->  tools/perf/util/llvm.c                        |   52 +-
->  21 files changed, 1831 insertions(+), 222 deletions(-)
-> 
-> 
-> base-commit: e6e35979777d646fe3c7c94dca7dd32fb25d45f4
-> -- 
-> 2.34.1
-> 
+All errors (new ones prefixed by >>):
+
+>> drivers/remoteproc/qcom_q6v5_wcss.c:1051:1: error: invalid argument type 'void' to unary expression
+    1051 | +       qcom_remove_ssr_subdev(rproc, &wcss->ssr_subdev);
+         | ^       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+
+
+vim +/void +1051 drivers/remoteproc/qcom_q6v5_wcss.c
+
+  1039	
+  1040	static void q6v5_wcss_remove(struct platform_device *pdev)
+  1041	{
+  1042		struct rproc *rproc = platform_get_drvdata(pdev);
+  1043		struct q6v5_wcss *wcss = rproc->priv;
+  1044	
+  1045		rproc_del(rproc);
+  1046	
+  1047		qcom_q6v5_deinit(&wcss->q6v5);
+  1048		qcom_remove_glink_subdev(rproc, &wcss->glink_subdev);
+  1049		qcom_remove_pdm_subdev(rproc, &wcss->pdm_subdev);
+  1050		qcom_remove_sysmon_subdev(wcss->sysmon);
+> 1051	+	qcom_remove_ssr_subdev(rproc, &wcss->ssr_subdev);
+  1052	}
+  1053	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
