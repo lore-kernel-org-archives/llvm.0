@@ -1,124 +1,150 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB73D35E1CC
-	for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 06:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9115478859;
+	Tue, 22 Sep 2026 09:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790059686; cv=none; b=M/VgKo9sbkO5hvIJyI19pwq1CxmrqEJhy/UNqj7dGYLY8qsaAO4Wy6jpB6MxF/WasaAmWscjyFi0j3X3zt5OM1I3Fu5igH/eRV9Tqugz0XX6uQ+YyuN09FhH1WES1AvNzWTQNen92G7VggCRoAXub8wyDR4CRolBLqR1yJCNUXs=
+	t=1790067976; cv=none; b=jR7aQk2jrCWJa0+lYQY/Zm12J53fxWgf6QM/bXOXMGCPNWcO6F+yhEYIKP0ZVsBwnbKK1UgajBnVyVyVihuMr/hiTabMIIwifPY0LZlkhDmDvBeAK9oLLH9Q3bpSC6XdPTdfu4PqyCWWgREPxvsdP3GZfDWsje6kY5VfBxFnmAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790059686; c=relaxed/simple;
-	bh=cBb7S2vU0uTz3yHUlgmdE8S5TNXufYnkydIn7OHVD5k=;
+	s=arc-20240116; t=1790067976; c=relaxed/simple;
+	bh=EioVh31ovcIoXKm70lu2jzPBUC1Ew7mE2jaz8o7SFLg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=knKjNTVQH5yipvWmGN2hHH2obu2beFMzLyjj/9qBtv/edZxM1IMFd6oxfpLkxC6s3l72pAHGhcx1hGaBpIWK9Dh1HTOE5TkK6rFyw9HOeznJFgaAyrsnm1j5/3OIAU4ZIFE8FVNCi+dKRjJn3GC9fI0p4WRtoFQXx2OZhOyrcRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=c3Xt8HA0; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=ABShdFIzavEkLw0cWsL2gDNwdIV3T9SghMAsLr8avWVIcvsP90nCS0hkJdD5I30jdLfv36EjqSHX86PFhxBo4RjyyIw6yD0bM6HH3pD/CM6Ho8b9DUkvKkCMu5R2mHJ1VnuNsPEH+b48vbk11FiUfza6KX7FOlO1au3KwAs/lgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FGdwsJa8; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="c3Xt8HA0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=R3byElr0T5dtebr3WUNax1uHYhmo+4Ucoy9qEsJjVkM=; b=c3Xt8HA0AS+mAjiIJ40Zoh/UJS
-	6k1f1RyHNVYNuraWhcGdSGScS1d2KhQLCKSdKBum5o1mILolftQ2MBJiqfTc4JRaTinqy+O4+K+lD
-	ggL5kY+CtHi10QfUTg7b5VlQCMFva7LLeT0TjJH1WLjhQ2yyGzSfcAnePqCeYnH0tMNrdKAIGLdZP
-	UjLKBXSTEJ/GmsdBi+aPViTbm+RwjqJTbytVuOg0cM+wOiryFze1OSDQflvd+IT96DIRQqjISgZWX
-	yWmmMNSHz7CNuoGhYNfsOtrQWrA/r10tw5dMgomPZZjYhytggDDuKYTsQvk16cZkyyPDDEbjMon3A
-	9TqZylnw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1x8uHw-00000007NfL-0I3B;
-	Tue, 22 Sep 2026 06:47:36 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 9CCD9300708; Tue, 22 Sep 2026 08:47:35 +0200 (CEST)
-Date: Tue, 22 Sep 2026 08:47:35 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
-	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
-	chleroy@kernel.org, ritesh.list@gmail.com, sshegde@linux.ibm.com,
-	pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com,
-	agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-	svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com,
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-	hpa@zytor.com, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net,
-	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org,
-	aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org,
-	daniel.almeida@collabora.com, tamird@kernel.org,
-	acourbot@nvidia.com, work@onurozkan.dev, nathan@kernel.org,
-	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
-	jszhang@kernel.org, japo@linux.ibm.com, jpoimboe@kernel.org,
-	seanjc@google.com, pmladek@suse.com, thuth@redhat.com,
-	ynorov@nvidia.com, joelagnelf@nvidia.com, david@davidgow.net,
-	fujita.tomonori@gmail.com, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC] rust: kernel: Add KUnit tests for ARCH_WARN_ASM bug table
- emission
-Message-ID: <20260922064735.GS4121339@noisy.programming.kicks-ass.net>
-References: <20260922054959.955093-2-mkchauras@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FGdwsJa8"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 069B31F000FF;
+	Tue, 22 Sep 2026 09:06:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790067974;
+	bh=CL9p8oAwo1crfQMWT3WgokRQnTrKkgMRfNiucR/BKyc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=FGdwsJa8/IRiDiXqu5im9UYEKsBW8xKPj8UeyC1zG50ICzIqoaS4sBV5uWR6ySljY
+	 Wz1QwM7ElBxL98PaNnSCTjPhanEq8KXo+IkM7KxVyNgGKUB1r0GFZvHtEhtSofBU5c
+	 4VTIrdtA6vzaIUg8etnNBBES2NLReY7mu8Xdo3wUU039vDzRbQBsxcv06PHQfhmuUd
+	 Gz1UmGbN9kIDO7bpH2UzpB2zlu20T3+GJqJbBP4ibpnSmxA97SOaRunJBW3uINc6Ts
+	 ajL0SgRxi2ONttf0op7dKynauL25bY890dZT7JNNwz06ehY0EDaZ+7z7MlqJ/FhK1i
+	 VoPZDvngT8CnQ==
+Date: Tue, 22 Sep 2026 10:05:59 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Josh Poimboeuf <jpoimboe@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
+	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
+	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
+	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
+	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
+	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
+	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v3 15/20] objtool: cache relocations, do less work,
+ eliminate relocation hash
+Message-ID: <arI0sqCSIJKjbu0C@gremlin>
+References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
+ <20260917-build-speedup-v3-15-9ecf4163ff36@kernel.org>
+ <arG07kfxJCmnVPY4@jpoimboe>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260922054959.955093-2-mkchauras@gmail.com>
+In-Reply-To: <arG07kfxJCmnVPY4@jpoimboe>
 
-On Tue, Sep 22, 2026 at 11:20:00AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
-> Verify that the __bug_table entry emitted by ARCH_WARN_ASM has a correct
-> bug_addr displacement — i.e. the arch's trap label reference resolves to
-> the trap instruction — by calling find_bug() with the exact virtual address
-> of the trap, mirroring what the real trap handler does.
-> 
-> To support all architectures, each arch that implements ARCH_WARN_ASM now
-> defines ARCH_WARN_ASM_TRAP_LABEL, a string constant naming the local label
-> at which the trap instruction is placed:
-> 
->   x86       "1"     (ud2 at label 1:)
->   powerpc   "1"     (twi at label 1:)
->   riscv     "1"     (ebreak at label 1:)
->   arm64     "14471" (brk placed at 14471: by __BUG_ENTRY_END)
->   s390      "0"     (mc at label 0:)
-> 
-> The label is used consistently: in ARCH_WARN_ASM itself, in the
-> bug_addr back-reference inside __BUG_ENTRY / _EMIT_BUG_ENTRY, 
+On Mon, Sep 21, 2026 at 09:16:21PM -0700, Josh Poimboeuf wrote:
+> On Thu, Sep 17, 2026 at 05:06:25PM +0100, Lorenzo Stoakes (ARM) wrote:
+> > This relies upon the entries within a section being sorted, which is the
+> > case for all sections supplied to objtool by the link step during the
+> > kernel build.
+>
+> This is wrong (or at least actively misleading).  Objtool doesn't *only*
+> run on linked objects.  In some configs it runs on individual .o files.
+> And GCC doesn't sort relocs:
+>
+>   Relocation section '.rela.text' at offset 0xc0d0 contains 724 entries:
+>       Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+>       ...
+>   0000000000005c50  0000009000000004 R_X86_64_PLT32         0000000000000000 _raw_spin_lock - 4
+>   0000000000005c65  0000009100000004 R_X86_64_PLT32         0000000000000000 _raw_spin_unlock - 4
+>   0000000000005c6d  0000019f00000004 R_X86_64_PLT32         0000000000000000 put_files_struct - 4
+>   000000000000004d  0000008f00000004 R_X86_64_PLT32         0000000000000000 __x86_return_thunk - 4
+>   0000000000000075  0000008f00000004 R_X86_64_PLT32         0000000000000000 __x86_return_thunk - 4
+>   00000000000000cd  0000008f00000004 R_X86_64_PLT32         0000000000000000 __x86_return_thunk - 4
+>
+> (JMP target relocations are emitted in a second pass, for whatever
+> reason)
+>
+> So the hash may actually be needed as a fallback after all.  Or some
+> other scheme.
 
+Ack, that's fair enough.
 
-> diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
-> index 23ab05438269..6cca8880660e 100644
-> --- a/arch/x86/include/asm/bug.h
-> +++ b/arch/x86/include/asm/bug.h
-> @@ -62,8 +62,9 @@ extern void __WARN_trap(struct bug_entry *bug, ...);
->  #define HAVE_ARCH_BUG_FORMAT_ARGS
->  #endif
->  
-> +#define ARCH_WARN_ASM_TRAP_LABEL "1"
->  #define __BUG_ENTRY(format, file, line, flags)				\
-> -	"\t.long 1b - ."	"\t# bug_entry::bug_addr\n"		\
-> +	"\t.long " ARCH_WARN_ASM_TRAP_LABEL "b - ." "\t# bug_entry::bug_addr\n" \
->  	__BUG_ENTRY_FORMAT(format)					\
->  	__BUG_ENTRY_VERBOSE(file, line)					\
->  	"\t.word " flags	"\t# bug_entry::flags\n"
-> @@ -101,7 +102,7 @@ do {									\
->  	"99:\n"								\
->  	"\t.string \"\"\n"						\
->  	".popsection\n"							\
-> -	"1:\t " ASM_UD2 "\n"						\
-> +	ARCH_WARN_ASM_TRAP_LABEL ":\t " ASM_UD2 "\n"			\
->  	_BUG_FLAGS_ASM("99b", file, line, flags, size, "")
->  
->  #else
+Definitely need something that isn't the linear scan as a truly worst case can
+be horrible.
 
-Not really a fan of that. And I can't really tell what you're doing with
-it either. The kunit is in Rust and thus unreadable :-(
+I think the hash can be avoided though, Do the read_relocs() without ordering,
+track whether things are in order, on decode if sorted then just read from
+relocs[], if not can allocate an order[] array and qsort() and build the index
+over that.
 
-I would rather you fix up is_valid_bugaddr(), some architectures seem to
-have an always true stub because of the callchains always being from the
-break instruction.
+So O(n lg n) at that point, but avoids bothering to sort for anything not looked
+up, works similarly for added sections.
+
+So still avoids all of the hash stuff, but efficient when things are actually
+out of order.
+
+>
+> Either way it's overkill to have more than a single fallback.  No second
+> fallback for "just in case".  Attempting to search an unhashed section
+> (DWARF) can just be a fatal error instead of the "just in case"
+> WARN+linear fallback thing.
+
+Honestly this is what I instinctively preferred, but objtool is not my realm so
+I worried there'd be some odd outlier thing that it'd somehow break!
+
+>
+> > @@ -1168,19 +1286,26 @@ static int read_relocs(struct elf *elf)
+> >  				return -1;
+> >  			}
+> >
+> > -			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+> >  			set_sym_next_reloc(reloc, sym->relocs);
+> >  			sym->relocs = reloc;
+> >
+> >  			nr_reloc++;
+> >  		}
+> >  		max_reloc = max(max_reloc, nr_reloc);
+> > +
+> > +		/* DWARF relocs are never looked up, so are not worth indexing. */
+> > +		if (is_dwarf_section(rsec->base))
+> > +			continue;
+>
+> This DWARF reloc skipping is a standalone improvement, can you split
+> this out to another patch?
+
+Ack will do!
+
+>
+> --
+> Josh
+
+--
+Cheers, Lorenzo
