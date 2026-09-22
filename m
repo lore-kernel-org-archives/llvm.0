@@ -1,151 +1,105 @@
-Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284465304BD
-	for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 10:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790071992; cv=pass; b=qmB5YtR4X2FT+5CgH7YVpJm1tB3/XFDzqpj98pB7QvpjvZOMDXcZCqRQjvUjrEnF87exalMRLFiP06UAfJ6ji7jaIc6+WEAp7f0Bz7tq7CFOBVZWUdOkrs19o1igr63WjB9b2K99hFBbDcaz+Wf7etkTTant2dRsN0Wu/eZVnuc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790071992; c=relaxed/simple;
-	bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iBb37jbVhl7jOmHhjZFE8Onhzm9Pspa3QWtX0a5jVf28/86YhK2RxtRWpu1CF2t9PeK4KBD/uh2sYz0iHlQU2rrBmRf7nBuWpk+/hXz5xBksrhXjnlyNez/unu0CiWs0Mp/l1ilIGabfBjsDJC7drfxL/gv/zo/XeMglNUrGuL0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eBBOvu/q; arc=pass smtp.client-ip=209.85.221.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B246B4F55AC;
+	Tue, 22 Sep 2026 11:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790077369; cv=none; b=k8GdhAuxiLb7b3dGaWwSlV9XipqNPJkXy+TmMtmNYyT2JVmk/GqPOz/B/mpE6I4xnRbrpsUvd++3SZfkH1zEwHxznKcCvqADyNLI72lA0XHFc58qMnlm41Bw3XMwPMHjje/mS46hDmWJw2PGKJKUUhcUGw8mU5NpFZ88fkIvjnE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790077369; c=relaxed/simple;
+	bh=S0++69ePo7g/MmsErIJ/Rb3kuTNAbdMFQ4A4zEseqPY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GppDW9t6G25pN/+yOpuqsquNZ6b70cyvOA9gF1k7gqRMTtXnFn9ZtUoq1Vl957LYEzDwXTTYVQQ9dhBKpsqh+qMqdCPq7De3qe7dmM+c+feEe0eweI68Gz+xC6nQfvQJcBUj/u25ae2TxSAPx7RHHywT3Xh7OjI248D4qix6Iy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H/c040ZC; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBBOvu/q"
-Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5c985f055b9so861809e0c.0
-        for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 03:13:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790071989; cv=none;
-        d=google.com; s=arc-20260327;
-        b=aq2/z0odLOWGcn0J0ZiIEkJnppfQv+++lItN6VlHW/Ko9mMFSNRcg9kmaShRgAh/PO
-         m3eGkFmFBCI+X5UO8uX3AaTCOWv+U7AzjrUjMnV6wI3mExsTPuIT5s/FrpoZR9SYdYu2
-         WnXwVRwWD8GCo+EizUwggjcaUPArzYye5VshAZaYAcA2r3WnZLX5SigbRK98QuQj0Z97
-         QI+zQtOuc6RDdOM8vvk7GVD5cGG918v9SZkyGoP+m6CRr6xyD3X+s+d57odzF6rcYUu6
-         O9fmqTIYcEKDrj2wasQXEmv00AhVDbNw0kh3aJzKfOIRy5qmZQbZ4QxpES/wtaI7zTfQ
-         wWdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
-        fh=mwrBtINp0c2AZ/B5KhMymquHa2j88fHXRiKPG+6idgo=;
-        b=Jnb4z6fGTCPW/3gVf5gC1/vSDrKvXHGEi/qQoK8O+2I44n5lcWlI/03j99olReflfq
-         SBfrYctNGqYigHZzNG2gf73JI4RX500kUZX/+YpLqPi8FQVUXA36RtwCEVMzuBTh7/Pu
-         9HJGCDgBzsecqkdN5rglP5KoFYwP3xsM7VZi9oX9F1aOKNPj10zOvilhC/KoeX5eoJcu
-         wAciTGEu0k+TjZcnHx+Gzr20u+M8uqWUYh/y/zcHpXuOOWbuD1vVFgl2ko0MoyGwn9tA
-         VtrHG7h/E3L8szI/SOuUDlQZcQOAyV55eEXDJn2Hc5FjZ9IFBPycGA/FfBSUsF0/4Y/J
-         MCRQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790071989; x=1790676789; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
-        b=eBBOvu/qBNrQktUxvEnr7rNcIiFiTXMC/j0DWuShhF9rFlrZtpjn+SU0d+elttlvjG
-         l8eCr5vDL/cxyRzVdsdqIPBfEtOHfbytcz13lIO60WLW1rmESrG/KLi5Ikb95K9Zp1CM
-         duopueOf3DktY2DzLL21WIJPKZg/qKjcBQnBGBd/8DuZlG0UZs5UNjxodsOmdcEgn0Pw
-         pW3v/FNS1nBgfIxtMzXbXI4AZwTcNDxIlK1YIlj7fI+t/0/3ILnwuhRHkBU/qpELrYTb
-         O47yL615mAwaRckZwb85TJkHC/ILj01iEyorA9fncV3eWvMwlsvEwnxgVIjqRArbxN02
-         azdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790071989; x=1790676789;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
-        b=R0doYWlTwutZ/hfKtvkKnhvdAYPPuHg9UaFZiGUpPdQ7LJ5I7Q+ZThpX2UaldXsTw1
-         XYfLOqAwMf7fe8rG8UOst0LrTP0MoVv82XBJUwuTjGTw/whCQaLICir+BXQMYa69/9oS
-         evXF+f9hgKvEjKI8zU0kSY89R2LeMU7b5ZfEIfZvOI/eK5OVbYE8f2+4VOa8y4VgbqGZ
-         XClIpRhEw0J0zGVo8iZAtoir7YzZGaX+w7WnWfzAtHUvLwckMturt2tvAn9fF2s/I5Bd
-         jxef0H8N00OrwtBhaRZ28G5lV465/PCoCBufmWZvpIPEHNSTSMrOMuIZorOO2+xa17lI
-         n31Q==
-X-Forwarded-Encrypted: i=1; AKwUvBw+iMcgjTzV+p9LGDGboP8kB4y0C4cnYlqtaZhmeoXsvSAGG/yLe/Nv3KqHyQKoyeaQK2HS@lists.linux.dev
-X-Gm-Message-State: AFuF++mUSPtXWDtJUUmp5H8OxeOnhPYfFUBmV042uce2iJWYW/XkdXdU
-	5JAOypXEc/Xr19uYH9Ql3h8itqNRzzPwtfDaqLGkHuONwZiARxBZpylweG734rHAZHwIWSV76/C
-	0tTZ/0kU18x71hqaH7XO3NZ9aP9g/xtQ=
-X-Gm-Gg: AYBFou2vepvRJHcyZk0I3UmDIwcmZG5Ua4fp3Os2cp2OQAIk+6o2WHTW6s1K2NdjAr3
-	lpOZWU+ufbCnbsO0NHcpTb8+7XopwvPCV8MiOBjQl6D6sOMy5EFZb8iFRez2ltWu514xM9XRiX/
-	Q4ASTaMBuHNHGTTcfifnUn/iG/sRtqwr8KLIq9WMT//wZoFv2CLyAgNuBrHu4xWvdNBUm84CY1G
-	0oZH1IYKusDHFFHZzzbfXaWGrbwfwzTeezuVZ9B3cykJgIoJjhUPsZyF7jXbcoPYoiPPVVvqnoa
-	8vnueMn7D76qONzUJa7AjrsDXIh0m/HnvBZmkct1303HmAi1O1gkkw==
-X-Received: by 2002:a05:6122:2b8a:b0:5c9:9f03:cb07 with SMTP id
- 71dfb90a1353d-5c9e343983fmr1483343e0c.2.1790071988975; Tue, 22 Sep 2026
- 03:13:08 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H/c040ZC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790077366; x=1821613366;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=S0++69ePo7g/MmsErIJ/Rb3kuTNAbdMFQ4A4zEseqPY=;
+  b=H/c040ZCEbTdlhERrFHsbXFxOSXUfeiCCbfMFMRqtRxmZkVulNoNwYZv
+   54n7DesxC55LjIAi/Y+KvCINsu+aIiwI15T2oRQvklU8xC7HTosRktjQg
+   2Rie9Dj3ACZbKJ8141LyHiAVGTWMDhCrrVRFox3g0YKLNTlfMYJJ0nE8m
+   3b4ixfcT0Yh3DKsV2GddFimIBN0/xR5Utc9i0YBo+R4hdIYQIoi2Bk1my
+   DM2mp5BrVbXvOmoLZ9hAWUPF9XxyWeFviRA/ZZ8vUibVx7szfITnQw4ej
+   XFMNe//xDq7CAhamFPNdnG3JIwKXnEN10LrJxAvy30mTgAb2i5r2Fgr8I
+   w==;
+X-CSE-ConnectionGUID: W686txEvTn+uQwLTS8tj2g==
+X-CSE-MsgGUID: /rbwd/QxTderKXMmv5Zylw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11912"; a="90693781"
+X-IronPort-AV: E=Sophos;i="6.27,116,1787036400"; 
+   d="scan'208";a="90693781"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2026 04:42:46 -0700
+X-CSE-ConnectionGUID: HdBW68K3TISlc0uels9N3g==
+X-CSE-MsgGUID: tkw5HldkRAuFuwD+hqUfxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,116,1787036400"; 
+   d="scan'208";a="271655138"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 22 Sep 2026 04:42:44 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x8ytV-00000000FR4-3MmQ;
+	Tue, 22 Sep 2026 11:42:41 +0000
+Date: Tue, 22 Sep 2026 19:42:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexey Dobriyan <adobriyan@gmail.com>, akpm@linux-foundation.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Dmitry Antipov <dmantipov@yandex.ru>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] kstrtox: delete saturation in case of overflow
+Message-ID: <202609221929.OSikd7q0-lkp@intel.com>
+References: <a396f2ea-8de8-4eca-a216-ff69bc40fe85@p183>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260916235200.20712-1-ansuelsmth@gmail.com> <20260921135933.7e8857ba@kernel.org>
-In-Reply-To: <20260921135933.7e8857ba@kernel.org>
-From: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>
-Date: Tue, 22 Sep 2026 12:12:56 +0200
-X-Gm-Features: AcwNN1XO-IQtQQeBFy8m7z0RqgCFyAn_vcQf_nLSSDZxar5hmkBbTIMafTrhl4Q
-Message-ID: <CA+_ehUwy9RUKCCHDnqoED3AMVnErgGr9RCrCR4ceg5QONq1wOQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v16 00/12] net: pcs: Introduce support for fwnode PCS
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a396f2ea-8de8-4eca-a216-ff69bc40fe85@p183>
 
-Il giorno lun 21 set 2026 alle ore 22:59 Jakub Kicinski
-<kuba@kernel.org> ha scritto:
->
-> On Thu, 17 Sep 2026 01:51:26 +0200 Christian Marangi wrote:
-> > This series introduce a most awaited feature that is correctly
-> > provide PCS with fwnode without having to use specific export symbol
-> > and additional handling of PCS in phylink.
-> >
-> > At times there were 2 different implementation (this and the one
-> > from Sean) but Sean agreed that this can be picked and used in favor
-> > of his implementation as long as his case with race condition is
-> > correctly handled.
->
-> Looks like the review for one of the patches failed so it won't be
-> emailed out:
-> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260916235200.20712-2-ansuelsmth@gmail.com
->
-> Are all of the issues invalid?
+Hi Alexey,
 
-Only one is relevant, but expected.
+kernel test robot noticed the following build errors:
 
-The remark on the fwnode patch are invalid. The driver is expected
-to return those error as probe defer is not supported.
-(a notifier and late attach/detach is used to align to phylink logic)
+[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
+[also build test ERROR on akpm-mm/mm-everything linus/master v7.3-rc4 next-20260921]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-For the specific Airoha PCS driver it's really speculation from the AI
-but HW doesn't work as described by AI.
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexey-Dobriyan/kstrtox-delete-saturation-in-case-of-overflow/20260917-191707
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
+patch link:    https://lore.kernel.org/r/a396f2ea-8de8-4eca-a216-ff69bc40fe85%40p183
+patch subject: [PATCH] kstrtox: delete saturation in case of overflow
+config: s390-allnoconfig (https://download.01.org/0day-ci/archive/20260922/202609221929.OSikd7q0-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5dc57157f12f0ff676e823d9b4d98b45c07e5df2)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260922/202609221929.OSikd7q0-lkp@intel.com/reproduce)
 
-The only real comment that is valid is about the alternative way
-to give supported interface with the .get_capabilites OP.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609221929.OSikd7q0-lkp@intel.com/
 
-This is currently not supported as there isn't any user and it will
-be implemented as soon as there will be one. It's really to limit
-the patch delta of this change and to progress further.
+All errors (new ones prefixed by >>):
 
-Maybe FIXME might be suitable?
+>> ld.lld: error: undefined symbol: _parse_integer_fixup_radix
+   >>> referenced by cmdline.c
+   >>>               arch/s390/boot/cmdline.o:(memparse)
+--
+>> ld.lld: error: undefined symbol: _parse_integer_limit
+   >>> referenced by cmdline.c
+   >>>               arch/s390/boot/cmdline.o:(memparse)
 
->
-> Once the AI review is cleared, some human will have to review this
-> and vouch for you as a maintainer. Better still be your co-maintainer.
-
-I think some revision ago there was Andrew that reviewed some code.
-Anyway thank a lot for checking this once in a while, I feel it's a pretty
-important change but I understand it's complex to handle as it does
-introduce a whole new subsystem.
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
