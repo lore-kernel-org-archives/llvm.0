@@ -1,165 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f172.google.com (mail-vk1-f172.google.com [209.85.221.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4C6E4E7816;
-	Tue, 22 Sep 2026 09:44:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790070243; cv=none; b=Y+LXhBg9aQZ2jMGOME4FCy4wLcQXRor/OAopbrPRf7bGn8gdbYPn0BkVAOJ7CKyoFHbgt74w2Slt4CKQREmRL9RnwQDVIg9ArkekAX4yQS+Yuuamc+dcPOVUJxohPx18Lmb7smwjY5nNUALnz3xKgW9fKYkxfk4CYz2G1G11PXk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790070243; c=relaxed/simple;
-	bh=crbT9+5MObVWuFXEa9N+TkXuUnbKPdLY1NFH+JJ4wGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FiJaH39KMXbxO1e7IJvZVdzY8PxMqnKXNbNMwI5eaZx0Ts1DXCm22aWkzoIc0E6Rz174mwmoesdsNtgqXfXmE4dQzPzGaTTjRh2yvhFRO0ofY1dHX5O/BEd5cw/RXmjrlJ6mn1XPVIyvadJZ+RcoTNYxXDsGkeSM6Y6Df332nl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jy3U+Jxc; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284465304BD
+	for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 10:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790071992; cv=pass; b=qmB5YtR4X2FT+5CgH7YVpJm1tB3/XFDzqpj98pB7QvpjvZOMDXcZCqRQjvUjrEnF87exalMRLFiP06UAfJ6ji7jaIc6+WEAp7f0Bz7tq7CFOBVZWUdOkrs19o1igr63WjB9b2K99hFBbDcaz+Wf7etkTTant2dRsN0Wu/eZVnuc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790071992; c=relaxed/simple;
+	bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iBb37jbVhl7jOmHhjZFE8Onhzm9Pspa3QWtX0a5jVf28/86YhK2RxtRWpu1CF2t9PeK4KBD/uh2sYz0iHlQU2rrBmRf7nBuWpk+/hXz5xBksrhXjnlyNez/unu0CiWs0Mp/l1ilIGabfBjsDJC7drfxL/gv/zo/XeMglNUrGuL0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eBBOvu/q; arc=pass smtp.client-ip=209.85.221.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jy3U+Jxc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113741F0089A;
-	Tue, 22 Sep 2026 09:43:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790070240;
-	bh=YTT+dkVu7tWPKjS3DFi060r/rlKRC0HzmitVIec+iIU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=jy3U+JxcId7zmfYkIr1r7u3noV5oRtTv3+3FbbQxFWzLtL+STTIwAbXmdb0Ene9HI
-	 1+a7y9W33iqDoUkRTyaFkdEdhyxU4mtChStxqOWiYEMJ8Jqg7m0YmoABhfoSe9DgVF
-	 pi4hN43C7Rs7zg5iDpGuqFUPaDmHfpRsFefjZ/gma6zPCY0usIXBeI1wBK+qR6PYJH
-	 iesQMJwGVINhl3cSO+pgnPecINN1L34B75FLiqqDn/ulF582FizRK6GnDfJw2+2hPD
-	 rsneXl39GgR4xuDRTGTeKge+B4Zs7cN7OXc3v+uw4jHCi4Yw/YppZ87MJ321hS8QYh
-	 xNfZ0IyAbqvAw==
-Date: Tue, 22 Sep 2026 10:43:45 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
-	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Tamir Duberstein <tamird@kernel.org>, 
-	Alexandre Courbot <acourbot@nvidia.com>, Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, 
-	Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
-	Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, linux-doc@vger.kernel.org, 
-	Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v3 17/20] objtool: decode instructions and resolve branch
- targets in parallel
-Message-ID: <arJFPXN5SsrkUyJY@gremlin>
-References: <20260917-build-speedup-v3-0-9ecf4163ff36@kernel.org>
- <20260917-build-speedup-v3-17-9ecf4163ff36@kernel.org>
- <arICcrXVFLVzO-Jx@jpoimboe>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eBBOvu/q"
+Received: by mail-vk1-f172.google.com with SMTP id 71dfb90a1353d-5c985f055b9so861809e0c.0
+        for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 03:13:09 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790071989; cv=none;
+        d=google.com; s=arc-20260327;
+        b=aq2/z0odLOWGcn0J0ZiIEkJnppfQv+++lItN6VlHW/Ko9mMFSNRcg9kmaShRgAh/PO
+         m3eGkFmFBCI+X5UO8uX3AaTCOWv+U7AzjrUjMnV6wI3mExsTPuIT5s/FrpoZR9SYdYu2
+         WnXwVRwWD8GCo+EizUwggjcaUPArzYye5VshAZaYAcA2r3WnZLX5SigbRK98QuQj0Z97
+         QI+zQtOuc6RDdOM8vvk7GVD5cGG918v9SZkyGoP+m6CRr6xyD3X+s+d57odzF6rcYUu6
+         O9fmqTIYcEKDrj2wasQXEmv00AhVDbNw0kh3aJzKfOIRy5qmZQbZ4QxpES/wtaI7zTfQ
+         wWdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
+        fh=mwrBtINp0c2AZ/B5KhMymquHa2j88fHXRiKPG+6idgo=;
+        b=Jnb4z6fGTCPW/3gVf5gC1/vSDrKvXHGEi/qQoK8O+2I44n5lcWlI/03j99olReflfq
+         SBfrYctNGqYigHZzNG2gf73JI4RX500kUZX/+YpLqPi8FQVUXA36RtwCEVMzuBTh7/Pu
+         9HJGCDgBzsecqkdN5rglP5KoFYwP3xsM7VZi9oX9F1aOKNPj10zOvilhC/KoeX5eoJcu
+         wAciTGEu0k+TjZcnHx+Gzr20u+M8uqWUYh/y/zcHpXuOOWbuD1vVFgl2ko0MoyGwn9tA
+         VtrHG7h/E3L8szI/SOuUDlQZcQOAyV55eEXDJn2Hc5FjZ9IFBPycGA/FfBSUsF0/4Y/J
+         MCRQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790071989; x=1790676789; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
+        b=eBBOvu/qBNrQktUxvEnr7rNcIiFiTXMC/j0DWuShhF9rFlrZtpjn+SU0d+elttlvjG
+         l8eCr5vDL/cxyRzVdsdqIPBfEtOHfbytcz13lIO60WLW1rmESrG/KLi5Ikb95K9Zp1CM
+         duopueOf3DktY2DzLL21WIJPKZg/qKjcBQnBGBd/8DuZlG0UZs5UNjxodsOmdcEgn0Pw
+         pW3v/FNS1nBgfIxtMzXbXI4AZwTcNDxIlK1YIlj7fI+t/0/3ILnwuhRHkBU/qpELrYTb
+         O47yL615mAwaRckZwb85TJkHC/ILj01iEyorA9fncV3eWvMwlsvEwnxgVIjqRArbxN02
+         azdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790071989; x=1790676789;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=UWyw6GenqzB0Wv/KjUzt8dv4Hf93e69h31+KA7jwNuM=;
+        b=R0doYWlTwutZ/hfKtvkKnhvdAYPPuHg9UaFZiGUpPdQ7LJ5I7Q+ZThpX2UaldXsTw1
+         XYfLOqAwMf7fe8rG8UOst0LrTP0MoVv82XBJUwuTjGTw/whCQaLICir+BXQMYa69/9oS
+         evXF+f9hgKvEjKI8zU0kSY89R2LeMU7b5ZfEIfZvOI/eK5OVbYE8f2+4VOa8y4VgbqGZ
+         XClIpRhEw0J0zGVo8iZAtoir7YzZGaX+w7WnWfzAtHUvLwckMturt2tvAn9fF2s/I5Bd
+         jxef0H8N00OrwtBhaRZ28G5lV465/PCoCBufmWZvpIPEHNSTSMrOMuIZorOO2+xa17lI
+         n31Q==
+X-Forwarded-Encrypted: i=1; AKwUvBw+iMcgjTzV+p9LGDGboP8kB4y0C4cnYlqtaZhmeoXsvSAGG/yLe/Nv3KqHyQKoyeaQK2HS@lists.linux.dev
+X-Gm-Message-State: AFuF++mUSPtXWDtJUUmp5H8OxeOnhPYfFUBmV042uce2iJWYW/XkdXdU
+	5JAOypXEc/Xr19uYH9Ql3h8itqNRzzPwtfDaqLGkHuONwZiARxBZpylweG734rHAZHwIWSV76/C
+	0tTZ/0kU18x71hqaH7XO3NZ9aP9g/xtQ=
+X-Gm-Gg: AYBFou2vepvRJHcyZk0I3UmDIwcmZG5Ua4fp3Os2cp2OQAIk+6o2WHTW6s1K2NdjAr3
+	lpOZWU+ufbCnbsO0NHcpTb8+7XopwvPCV8MiOBjQl6D6sOMy5EFZb8iFRez2ltWu514xM9XRiX/
+	Q4ASTaMBuHNHGTTcfifnUn/iG/sRtqwr8KLIq9WMT//wZoFv2CLyAgNuBrHu4xWvdNBUm84CY1G
+	0oZH1IYKusDHFFHZzzbfXaWGrbwfwzTeezuVZ9B3cykJgIoJjhUPsZyF7jXbcoPYoiPPVVvqnoa
+	8vnueMn7D76qONzUJa7AjrsDXIh0m/HnvBZmkct1303HmAi1O1gkkw==
+X-Received: by 2002:a05:6122:2b8a:b0:5c9:9f03:cb07 with SMTP id
+ 71dfb90a1353d-5c9e343983fmr1483343e0c.2.1790071988975; Tue, 22 Sep 2026
+ 03:13:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <arICcrXVFLVzO-Jx@jpoimboe>
+References: <20260916235200.20712-1-ansuelsmth@gmail.com> <20260921135933.7e8857ba@kernel.org>
+In-Reply-To: <20260921135933.7e8857ba@kernel.org>
+From: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>
+Date: Tue, 22 Sep 2026 12:12:56 +0200
+X-Gm-Features: AcwNN1XO-IQtQQeBFy8m7z0RqgCFyAn_vcQf_nLSSDZxar5hmkBbTIMafTrhl4Q
+Message-ID: <CA+_ehUwy9RUKCCHDnqoED3AMVnErgGr9RCrCR4ceg5QONq1wOQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v16 00/12] net: pcs: Introduce support for fwnode PCS
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Sep 21, 2026 at 09:27:33PM -0700, Josh Poimboeuf wrote:
-> On Thu, Sep 17, 2026 at 05:06:27PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > During a kernel build objtool is used to decode vmlinux.o's instructions
-> > and resolve every jump and call destination.
-> >
-> > This forms a large part of the work objtool does during the build process,
-> > and it is all done in serial.
-> >
-> > Decode these in parallel at a function granularity to speed things up, but
-> > limit this to invocations that pass --link, and only where the there is 8
-> > MiB or more text to justify it.
-> >
-> > In practice this limits this to processing vmlinux.o in the kernel build
-> > and modules are processed as they were before.
-> >
-> > Only the instruction hash is shared between the threads and nothing is ever
-> > removed from it, so an insertion is a compare-and-swap on the bucket head.
-> >
-> > Threading is limited to decoding and the jump pass, so the gain flattens
-> > out at 16 threads and any further threads were found to only add overhead.
-> >
-> > When performing an allmodconfig build, the clang invocation of objtool when
-> > processing vmlinux.o took 5.93s on 1 thread, 4.56s on 8, 4.51s on
-> > 16 and 4.63s on 128.
-> >
-> > Therefore cap the thread count at 16 or the number of CPUs, whichever is
-> > fewer.
-> >
-> > The output of objtool before and after this change was confirmed to be
-> > byte-for-byte identical for x86_64 defconfig and allmodconfig with gcc and
-> > clang, and for a loongarch defconfig, where objtool runs on every object.
-> >
-> > On a 128-thread machine, objtool on the clang allmodconfig vmlinux.o goes
-> > from 5.2s to 4.4s (6.5s to 4.4s together with the previous two patches),
-> > and on defconfig from 1.99s to 1.38s.
-> >
-> > objtool on vmlinux.o is on the serial tail of every build that links
-> > vmlinux, no-op builds are unchanged.
-> >
-> > Whole build, 128-thread Threadripper 9980X, best of N runs:
-> >
-> >                                          before   after     delta
-> >                                          -------------------------------
-> >   x86 defconfig, touch mm/vma.c, gcc        8.2s     7.7s    -0.55s (-7%)
-> >   x86 defconfig, touch mm/vma.c, clang      7.3s     6.9s    -0.44s (-6%)
-> >   x86 defconfig, clean, gcc                28.6s    28.2s    -0.47s (-2%)
-> >   x86 defconfig, clean, clang              29.1s    28.7s    -0.45s (-2%)
-> >   x86 allmodconfig, touch mm/vma.c, gcc    25.7s    23.7s     -2.0s (-8%)
-> >   x86 allmodconfig, touch mm/vma.c, clang  24.1s    22.5s     -1.6s (-7%)
-> >
-> > Assisted-by: LLM
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
-> >  tools/objtool/Makefile  |   2 +-
-> >  tools/objtool/check.c   | 717 ++++++++++++++++++++++++++++++++++++------------
-> >  tools/objtool/objtool.c |  14 +-
-> >  3 files changed, 546 insertions(+), 187 deletions(-)
+Il giorno lun 21 set 2026 alle ore 22:59 Jakub Kicinski
+<kuba@kernel.org> ha scritto:
 >
-> This is an interesting patch, but I'm not really convinced it's worth
-> the pain.
+> On Thu, 17 Sep 2026 01:51:26 +0200 Christian Marangi wrote:
+> > This series introduce a most awaited feature that is correctly
+> > provide PCS with fwnode without having to use specific export symbol
+> > and additional handling of PCS in phylink.
+> >
+> > At times there were 2 different implementation (this and the one
+> > from Sean) but Sean agreed that this can be picked and used in favor
+> > of his implementation as long as his case with race condition is
+> > correctly handled.
+>
+> Looks like the review for one of the patches failed so it won't be
+> emailed out:
+> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260916235200.20712-2-ansuelsmth@gmail.com
+>
+> Are all of the issues invalid?
 
-Obviously I defer to you as the maintainer :)
+Only one is relevant, but expected.
 
-But I think the numbers are pretty significant, certainly for allmodconfig
-incremental it's a fairly significant chunk of the improvement.
+The remark on the fwnode patch are invalid. The driver is expected
+to return those error as probe defer is not supported.
+(a notifier and late attach/detach is used to align to phylink logic)
 
-Yes it's a relatively large-ish change but it's sensible and
-straight-forward one and certainly in the direction you'd expect to see
-changes in (parallelise things we can do less work where possible).
+For the specific Airoha PCS driver it's really speculation from the AI
+but HW doesn't work as described by AI.
 
-And note that the work is limited only to those tasks which have
-singificant data to process and only if --link is specified, so the scope
-is relatively small.
+The only real comment that is valid is about the alternative way
+to give supported interface with the .get_capabilites OP.
 
-We could add a flag for this also potentially?
+This is currently not supported as there isn't any user and it will
+be implemented as soon as there will be one. It's really to limit
+the patch delta of this change and to progress further.
 
-Obviously if you feel firmly that this isn't something you want I can also
-drop it but I think it is worth having.
-
-One thing to note is that I went through a (bloody painful :) process of
-dropping everything that felt like bad RoI which the LLM came up with, it
-started at something crazy like 30-35 patches :)
-
-(This was prior to reworking code, checking everything, etc. - gawd the
-schloppers have it easy not doing all that! :)
-
-Anyway let me know what makes sense.
+Maybe FIXME might be suitable?
 
 >
-> --
-> Josh
+> Once the AI review is cleared, some human will have to review this
+> and vouch for you as a maintainer. Better still be your co-maintainer.
 
---
-Cheers, Lorenzo
+I think some revision ago there was Andrew that reviewed some code.
+Anyway thank a lot for checking this once in a while, I feel it's a pretty
+important change but I understand it's complex to handle as it does
+introduce a whole new subsystem.
