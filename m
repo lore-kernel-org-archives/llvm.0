@@ -1,134 +1,96 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3551551CF48
-	for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 12:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E94353E313;
+	Tue, 22 Sep 2026 13:09:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790081420; cv=none; b=aIHk/Zaclymo69Bg0uzZU44DEv1TuURq0hj5wdUxshMT6n5plQjRQFCwVdOwPsJ4nqtw0x4rCrUoyNBAz6SBZHe5ukTzweKLctD0M+2UEd1oG1SVqV8V4YziYDYXrbLIipL8RU9PHPqf5r/RATbrelFoi+aL0wrR3URZD2kbDpM=
+	t=1790082579; cv=none; b=H9mCJO9Bl7E44XAhl8KQQ255pKRuyPZ6hptAoBIjsQBVZH6Cez+8+GQ8I8Ntia2fiHWhkv97xIR9PHjLTY1fTR3AhjV3xUV8mgMzCV1zWgxC7ON2SzOuHTpTyRDUAiChfvylV+cfzm2I3injNp+kVUX1gNLR1Bp9lYcyqPHa+ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790081420; c=relaxed/simple;
-	bh=3GHTJrgcGpWkQfsap4SwWOsGxwKhu+V/arurGwl6nIU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rfx2OmWaYsik9sYCgBfulzi25O0M4sIDb6Cy2r3oYIMcqW9or2rp06cP+uIf955zhIfpf7QQk6MW1rgzs85ZvwIotwH+XhNbFN0T1150BdRS7IDvit1QyGi/QRacrhU9TztaJNm/bm9/rkkm0jL16tZKLiz+c7JgviTQjy4t0ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SMWmOhVc; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1790082579; c=relaxed/simple;
+	bh=AgYRKeGx6YrxHo5tLOfYUAdJiIfBFhEsQpTA/20bgCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EmCsgFVgTlNW0Lx7HUbYewalUroonFo1ztFGFVBlssabeCxOG+THkLsdIZE3+Y8GchhmM3dXNO5fQihxhQL8LGkoud+YbggHqdrktmPke4L+LNEUgilT48jMdyZvSy0KpzBrbNn8yM1ejhNEmOj3w8h+FzBMeBmEmGxDkAEh7G4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MtUom7eB; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SMWmOhVc"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 6921C4E41035;
-	Tue, 22 Sep 2026 12:50:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 20F0160580;
-	Tue, 22 Sep 2026 12:50:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 645F4103289FC;
-	Tue, 22 Sep 2026 14:49:58 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1790081409; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=Pp7mzsLIsbavEPfem5dhuoLyc27UEuONp1Ueoff5SSI=;
-	b=SMWmOhVcC5GkK+X8WZA70hvKKa1Ea1wfG8B8tKZVFCR7esnlKTgnDlY00+AKd/7poPloHR
-	lR4szN4Oz0HMmVM7SP1/j32iV/h2Uq917H6w8dkEjAohMivLHrGDR8Fw+6fUzrnnKNxdjQ
-	4xhNMo2FEdhN08NkltOWX+XkLxiMMc7ufK5UWQhsAdd6lR3tGFmyCoD2TZgRrFK+0I1xcn
-	TURJ6ab/JM9OX1x7Ch01AlIaPajCgUzc6U1MwPCAnwjSMPy8y4AEVW2IeKXCqscj2IIPXj
-	vEq7eaXP0k8jH2rJO/Cw8oKlRfsmb2MZuRrwyqrTY9XcfRn6NR8FbuDvLmERog==
-Message-ID: <033fc935-c37a-4b0f-8b79-68248e45da8f@bootlin.com>
-Date: Tue, 22 Sep 2026 14:49:57 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MtUom7eB"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 037D31F000FF;
+	Tue, 22 Sep 2026 13:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790082578;
+	bh=AgYRKeGx6YrxHo5tLOfYUAdJiIfBFhEsQpTA/20bgCU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=MtUom7eBTFRpDBmC5PC16C5qIL5Ywu9NH+SE0K9c1jgXsItXNIbsoXLlqLDE9nyLi
+	 fD7w9uOE4hQ6p5C3WrqxT9iCd0Ti9bY1Yp11pFK8cfEu4cnBoF7cmLzyf7YGb6puUL
+	 ACqI1nfguAjSKdnRWZ4sCh5yWXK6a8eUMMQdhCtTvyURYIw0gBPNcz4vv6YhkLixLP
+	 tucoL78ZEps4VrU6pRz+AsOmtwsdrdrlTDmZVX01Ew2uILwbH/zWwnPkDwKfCO6QOS
+	 DpTalaKpOS69IVpTTWiDFgWTYeUf916M1x0zOQ/73Ce0EJamJnVZsGD0S0GuuSE19p
+	 nfnZlw89sqKgA==
+Date: Tue, 22 Sep 2026 14:09:22 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Petr Pavlu <petr.pavlu@suse.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Alexey Gladkov <legion@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Arnd Bergmann <arnd@arndb.de>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+	Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Jonathan Corbet <corbet@lwn.net>, 
+	Randy Dunlap <rdunlap@infradead.org>, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 13/21] modpost: emit module descriptors as assembly
+Message-ID: <arJ9QwpjQq5Z512z@gremlin>
+References: <20260914-build-speedup-v2-0-39817ec5db23@kernel.org>
+ <20260914-build-speedup-v2-13-39817ec5db23@kernel.org>
+ <95baacfb-d8d9-4d2f-bc89-592df6f6f8e3@suse.com>
+ <arEZrFmXeCO4hZpP@gremlin>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v16 00/12] net: pcs: Introduce support for fwnode
- PCS
-To: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Simon Horman <horms@kernel.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Randy Dunlap <rdunlap@infradead.org>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Heiner Kallweit <hkallweit1@gmail.com>, Russell King
- <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- llvm@lists.linux.dev, Coia Prant <coiaprant@gmail.com>
-References: <20260916235200.20712-1-ansuelsmth@gmail.com>
- <20260921135933.7e8857ba@kernel.org>
- <CA+_ehUwy9RUKCCHDnqoED3AMVnErgGr9RCrCR4ceg5QONq1wOQ@mail.gmail.com>
-Content-Language: en-US
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-In-Reply-To: <CA+_ehUwy9RUKCCHDnqoED3AMVnErgGr9RCrCR4ceg5QONq1wOQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <arEZrFmXeCO4hZpP@gremlin>
 
-Hi,
+On Mon, Sep 21, 2026 at 12:57:57PM +0100, Lorenzo Stoakes (ARM) wrote:
+> On Mon, Sep 21, 2026 at 01:25:09PM +0200, Petr Pavlu wrote:
+> > If the <module>.mod.S files are fully self-contained and do not even use
+> > something like KBUILD_MODNAME, would it be possible to name them
+> > <module>.mod.s and skip the C preprocessor as well?
+>
+> Ack will do for v4!
+>
 
-On 9/22/26 12:12, Christian Marangi (Ansuel) wrote:
-> Il giorno lun 21 set 2026 alle ore 22:59 Jakub Kicinski
-> <kuba@kernel.org> ha scritto:
->>
->> On Thu, 17 Sep 2026 01:51:26 +0200 Christian Marangi wrote:
->>> This series introduce a most awaited feature that is correctly
->>> provide PCS with fwnode without having to use specific export symbol
->>> and additional handling of PCS in phylink.
->>>
->>> At times there were 2 different implementation (this and the one
->>> from Sean) but Sean agreed that this can be picked and used in favor
->>> of his implementation as long as his case with race condition is
->>> correctly handled.
->>
->> Looks like the review for one of the patches failed so it won't be
->> emailed out:
->> https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260916235200.20712-2-ansuelsmth@gmail.com
->>
->> Are all of the issues invalid?
-> 
-> Only one is relevant, but expected.
-> 
-> The remark on the fwnode patch are invalid. The driver is expected
-> to return those error as probe defer is not supported.
-> (a notifier and late attach/detach is used to align to phylink logic)
-> 
-> For the specific Airoha PCS driver it's really speculation from the AI
-> but HW doesn't work as described by AI.
-> 
-> The only real comment that is valid is about the alternative way
-> to give supported interface with the .get_capabilites OP.
-> 
-> This is currently not supported as there isn't any user and it will
-> be implemented as soon as there will be one. It's really to limit
-> the patch delta of this change and to progress further.
-> 
-> Maybe FIXME might be suitable?
-> 
->>
->> Once the AI review is cleared, some human will have to review this
->> and vouch for you as a maintainer. Better still be your co-maintainer.
-> 
-> I think some revision ago there was Andrew that reviewed some code.
-> Anyway thank a lot for checking this once in a while, I feel it's a pretty
-> important change but I understand it's complex to handle as it does
-> introduce a whole new subsystem.
+Unfortunately this broke because the build passes flags that are only
+meaningful to the preprocessor (esp. on an LLVM=1 build) and
+-Qunused-arguments was removed from kbuild in commit 8d9acfce3332 ("kbuild:
+Stop using '-Qunused-arguments' with clang") purposefully.
 
-I'm attending a Rust training until thursday, I'll see if I can squeeze in some
-time to re-test on mvpp2 :(
+And some flags are needed and others not so keeping track of which is which
+just for this is asking for things to be fragile/break, esp. on the rando
+arches.
 
-There're a few series pending for rockchip and S32 on stmmac that deal with
-PCS support and their PCS handle. It would be nice to have some stmmac glue
-maintainers that are using complex PCS to help with maintainance or at least
-testing, maybe Coia can help with the tests ?
+The win here isn't very much overall so I think I will revert this change
+for v4.
 
-Maxime
+(All your other requests have already been applied for v4 :)
 
-
+--
+Cheers, Lorenzo
