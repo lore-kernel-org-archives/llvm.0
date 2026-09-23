@@ -1,133 +1,145 @@
-Received: from mail-qk2-f13.google.com (mail-qk2-f13.google.com [74.125.230.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A231432B126
-	for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 08:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.205
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790152327; cv=pass; b=ucizLmiOgbiGAaP3/5RSm8Og2pzKVe6VbM7goT2AvYNpImfgog+YmKCp6LQAI6YmzBBbJNJMjJ8jhJ2I4/P9g463Uoxfw/0gzNV8FPyjcG9eakUM5AKASRLMVLwo4MjeF8mUyA8hFB2NRCsFVSEIg2a6Q/9g9SoVROcSZ5Cocdk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790152327; c=relaxed/simple;
-	bh=hLbf5wdEcfSfArgGglezKU7/4be8aZs+31yfBhWP598=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mMaWIqIbpR0Sm+PuL6Lclv5eBdei09khOrX+EkOxWBdqK7JMbOB9BPZgdEOxSmyE5+MEHq7LQ5wtH16re3jhkgkz8ns4yUvOiG1fuOXwHZ1XvhdS+PASTaHwVmnPngZyM90vUMu1qbQbmzkQM7LMNOEKb/OZUUxGKlPfVmE0GJA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vs4iyLwt; arc=pass smtp.client-ip=74.125.230.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF843B3EF;
+	Wed, 23 Sep 2026 09:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790155191; cv=none; b=Tsz6Tz7mi6XP8KC2396rYbV5IVrbV7t3P97Ot0siaxauzt6z13twdxuecEVWuIMGgOv0dyUcYnLoNUwnTwNp15/Xnmbvc7XDCTW2vGNsx/MnprHlw0YoJNezIdQp7ul9MGx0Qnsl9bEziOnwOLb5xRSiWjLYTMe4V3tbaXXeI4I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790155191; c=relaxed/simple;
+	bh=QoOgO/A2U5dtm7QoQT4ErByB/CY9vpIhJBSi3Us/+JE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f88xMqq3cjWElRLMXj/7zkUanEwLNUL/uZBFqrcQSmWL+G99azVuDPFcBZLJOG5nMlHgAUDo3bTkV+N6zZyDy4f9nWGuV/BEW6QNu4RARBIooi0bK/DdMEjH8zspJwrRZlFyc0idKA6/1jcsoe9J4EUmWVIzMPBanNuBVmqdvqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i935KHZ0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vs4iyLwt"
-Received: by mail-qk2-f13.google.com with SMTP id d75a77b69052e-530fa0716f6so8665581cf.3
-        for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 01:32:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790152321; cv=none;
-        d=google.com; s=arc-20260327;
-        b=nG+RfKJ3+WAbYhVUnfvh/7y9o0NAV2q5GHOhjsT2tSzRa9qCAZffCv5F6aOGi3utne
-         LeBa3UewPfBFov/Z1TFayKaCxHGD3RwVBjlYjlTq1xlHkffC5zMOOceY6qD/zLSxELHl
-         7wphZtleva3qRHreb+Y8Tt+T+2D47ElEF58Y62+34n+3LBelPnYCVyHtz4KNdNilpimr
-         zl/0x7SCnDX1Yw66ZmoJ6dhzUqR21osCA09vLhvlK2Neo9703ZbbIPneHQfDls65FMo6
-         YDvHOLP9fHItzkitWxGvZ/Y9/HtYgLo9mQnfbySFX5ExmssOxw1tTkyaR8er/RUvg7N7
-         GOUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=hLbf5wdEcfSfArgGglezKU7/4be8aZs+31yfBhWP598=;
-        fh=r6GTtCbTeQ4AqY3gez38ioNF6IXzWNYmicv0sFry1IU=;
-        b=K1DN85anqw5fjxXhtZQ5JRJF9dPUGl7FbittXPkEeOEzHaOQH4JoJuiv2UNjcKzy7C
-         1IWmn/Fxa+i5xMvQuN8HwwUyyKuZ/ynuPJEwsJF9Lx/ix3t04pr5tFOGkLXzB6gOLKVw
-         8fwrqgG92u0snHxaB6jWAWmnkvYNJiCAaSAAaVnWcRVlTTcLVsPbPWsBlpubl8N/EpxM
-         I/dg1BczMSCb+I6r+CtYNewpyk/SZdU6x82KFCsYO3J76zMsgBvpI2ruTirmxkPljYXT
-         kZEiX6mS8hr2BLbpWJT0u4f7VSxig8xu5xZgyHyjE/+aijm6rFG0Rpq+3vX+9xl2zFIn
-         loxA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790152321; x=1790757121; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hLbf5wdEcfSfArgGglezKU7/4be8aZs+31yfBhWP598=;
-        b=Vs4iyLwtKSktibH2SbLUuSdCHl2kZTmfNHM+Gh6Saj7s171GxFhOxKMN323RbhcKps
-         eQyVZLrkjYBRwLbxNkZupUWzCSEVMbo6hjgiAEkk0jIrQvNOKzpPMZj9D8HSiN2xfpxs
-         OraBrAA+SqC5kh0GvPA5pWfpy7rtsfR2xWT/EGwnHyV6AkPMDEAIERO+1yFls/NBd4ys
-         /qXCpVbNZLZhiIvEJJXN7gjN36b7+x6jLVMoRNBOiktuKkDtujRIFJvcwufQg7gXuv2x
-         3b6S+KdjvsxRVVVXkOD5OAb3FbuLMEdKE2GwREtzu4847H0MTWeoiECKr86M2rVXW4wW
-         Iklg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790152321; x=1790757121;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=hLbf5wdEcfSfArgGglezKU7/4be8aZs+31yfBhWP598=;
-        b=ibl35sWkHAMLBSSVrd0x0fTxE9jkuAimWkxmhOj10MunilP+Xg0tT3JW8Sd0qvOMTS
-         K+HhWUtrteoHYT4XJNi3Wrd8SyzBrKOPqFZuu320JSJHlGy1JwYbLVJIDM1h3MYOD07I
-         ere21I1gqlBHdS4Zv4AUX+xTnUdtUcCJJ5yW5hJfK+IB5va1kXZEMvZeGFCN2cOz3dwv
-         URfPvgCjx7Wb/PJfiCUnnFNMgz51HWhyQsz3y8DoXNEbc49bl77JKPG1wfkvEFdgzNqG
-         3wdO1wPO/+wO69CkbbTOm1DCykdZFkFUwmVXs3wlRYYL3ly60FRJgt2/cNuGjzd7iu3n
-         Pr/g==
-X-Forwarded-Encrypted: i=1; AKwUvByn6yiM2n5aPbLa0VJozvj6CLkpwyfodhXJYdUjf1hKLyapKZ3MQapoZ2CojToWgFyG0tH+@lists.linux.dev
-X-Gm-Message-State: AFuF++ncRHl9gnREThlZG+Vk+aw1RnPZApVPwopus0fX0h2Kbf8oCp7y
-	ls5j593XBQXYv9tMJgIvFTnZqnk1l9xdl34cdOm5GVPgeJimXVeaZjNuvYwuli/mRcmn2GjIoae
-	9mZyZ+K5/5Y2jDENgv2e82WsgZuRIRWQ=
-X-Gm-Gg: AYBFou0JjgdvR4042yRxAoH+y+PGksPEK5c1IuNmLIbmtKUnOxc9CtmgQ15b3OisCqB
-	MwDlHfbCsI4DhleSnAN97Yy9v9Z12ttcoFbaN/cgPZ0lpWE/8v89iojOdAH/IPurgIM402zVCqO
-	sbyd+LsnuptD2EQvHR+6gw4m/9G/+k/f663V6Dt2ymQYr/xJ7RS0HGnaW/HSeXDvn9ahwBetnOO
-	1lw7IBRFOzBVWYX+nTPWYfiMyhX08/Z8Zodjdl6CySqb8fmdtuRTCS/1ZGIVYFKuS1y643lfYlV
-	KQL8HvJX1vgXBO9a2stFrKgf1GI7e39pl8cnOjrAqDmHVjW/rH0gHtjtgt9ytyjq
-X-Received: by 2002:a05:620a:6017:b0:93a:2d15:f84 with SMTP id
- af79cd13be357-93c2511c2b1mr290767285a.33.1790152321118; Wed, 23 Sep 2026
- 01:32:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i935KHZ0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465CD1F000FF;
+	Wed, 23 Sep 2026 09:19:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790155189;
+	bh=szozd7BSlCRG6SBcZcvnaC59iOuE2gZVQMEdYxaAPfg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=i935KHZ03UQCOH4iIXqvpXzISRCnQkyg/7sekoDfNzFScbwNm9ckk0hABoKJ4MivO
+	 4PVX5vSdjD8HGmskfgBtcNDkI8qvRU8v5/w3PkwoUvgmZ17uCo75xWaxQaK9Mleuhh
+	 78BPW4fvbSD9Fzat6DcWvAb4K7OFR3z+TnYuIFxAI7BLwiiLTnLA+fvF/Xxogg9kWu
+	 ojjUK6uDDp1zJyv/DcHgGv0bvoIqwp9lKyFkmCn8PCT4za8eUYdsIcaxYcgADguYMm
+	 F6cIZ8f+dI4Uyue/PLV1oc1e2KAMFSYI+UoZCHFacoLvBgH9vLGXzpBDyqachCkMFz
+	 wvxTQ0rPS6eag==
+Date: Wed, 23 Sep 2026 12:19:34 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: Guenter Roeck <linux@roeck-us.net>
+Cc: Marco Elver <elver@google.com>, Vlastimil Babka <vbabka@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	David Hildenbrand <david@kernel.org>,
+	David Rientjes <rientjes@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Matteo Rizzo <matteorizzo@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Suren Baghdasaryan <surenb@google.com>,
+	linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
+	Hao Li <hao.li@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
+	Alexander Potapenko <glider@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
+	Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: Re: csky ICe (was: Re: [PATCH v4 2/3] slab: improve
+ KMALLOC_PARTITION_RANDOM randomness)
+Message-ID: <arOZpqat_rT6rExk@kernel.org>
+References: <20260511200136.3201646-1-elver@google.com>
+ <20260511200136.3201646-2-elver@google.com>
+ <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260916235200.20712-1-ansuelsmth@gmail.com> <20260921135933.7e8857ba@kernel.org>
- <CA+_ehUwy9RUKCCHDnqoED3AMVnErgGr9RCrCR4ceg5QONq1wOQ@mail.gmail.com> <20260922172514.7feb6e7c@kernel.org>
-In-Reply-To: <20260922172514.7feb6e7c@kernel.org>
-From: "Christian Marangi (Ansuel)" <ansuelsmth@gmail.com>
-Date: Wed, 23 Sep 2026 10:31:49 +0200
-X-Gm-Features: AclHuK8jGec2XT5CWPXvYVvV1bFvl8hmA75zakqIakpr84shp0cAZGnoi6_G1Gs
-Message-ID: <CA+_ehUyFKZzd0uP4akgZxaLLJTwcvGGKz5ppCYsB++fn92Dn9w@mail.gmail.com>
-Subject: Re: [PATCH net-next v16 00/12] net: pcs: Introduce support for fwnode PCS
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Maxime Chevallier <maxime.chevallier@bootlin.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Heiner Kallweit <hkallweit1@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, netdev@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
 
-Il giorno mer 23 set 2026 alle ore 02:25 Jakub Kicinski
-<kuba@kernel.org> ha scritto:
->
-> On Tue, 22 Sep 2026 12:12:56 +0200 Christian Marangi (Ansuel) wrote:
-> > The remark on the fwnode patch are invalid. The driver is expected
-> > to return those error as probe defer is not supported.
-> > (a notifier and late attach/detach is used to align to phylink logic)
-> >
-> > For the specific Airoha PCS driver it's really speculation from the AI
-> > but HW doesn't work as described by AI.
-> >
-> > The only real comment that is valid is about the alternative way
-> > to give supported interface with the .get_capabilites OP.
-> >
-> > This is currently not supported as there isn't any user and it will
-> > be implemented as soon as there will be one. It's really to limit
-> > the patch delta of this change and to progress further.
-> >
-> > Maybe FIXME might be suitable?
->
-> FWIW no preference here, I defer to the human reviewer.
-> We can treat the AI review as a hint if human reviewer thinks the code
-> is fine as is.
+On Tue, Sep 22, 2026 at 07:58:56AM -0700, Guenter Roeck wrote:
+> Hi,
+> 
+> On Mon, May 11, 2026 at 10:00:49PM +0200, Marco Elver wrote:
+> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
+> > to identify the allocation site. _RET_IP_, however, evaluates to the
+> > caller's parent's instruction pointer rather than the actual allocation
+> > site; this would lead to collisions where a function performs multiple
+> > allocations.
+> > 
+> > With the generalization to kmalloc_token_t, we now generate the token at
+> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
+> > 
+> > Unfortunately, the generic implementation of _THIS_IP_ relies on taking
+> > the address of a local label, which is considered broken by both GCC [1]
+> > and Clang [2] because label addresses are only expected to be used with
+> > computed gotos. While the generic version more or less works today, it
+> > is known to be brittle. For example, Clang -O2 always returns 1 when
+> > this function is inlined:
+> > 
+> >         static inline unsigned long get_ip(void)
+> >         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
+> > 
+> > To provide a reliable unique identifier without breaking architectures
+> > relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
+> > to _THIS_IP_ where architectures provide a safe implementation, and
+> > falls back to a zero-cost static marker where _THIS_IP_ is broken.
+> > 
+> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
+> > Link: https://github.com/llvm/llvm-project/issues/138272 [2]
+> > Signed-off-by: Marco Elver <elver@google.com>
+> 
+> With this patch in the tree, I get ICE erors when trying to build
+> csky:allmodconfig.
+> 
+> Example:
+> 
+> Error log:
+> sound/core/oss/mixer_oss.c: In function 'snd_mixer_oss_proc_write':
+> sound/core/oss/mixer_oss.c:1202:1: error: could not split insn
+>  1202 | }
+>       | ^
+> (insn 183 400 184 (set (reg:SI 0 a0 [orig:307 _55 ] [307])
+>         (xor:SI (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
+>             (const:SI (plus:SI (symbol_ref:SI ("*.LANCHOR0") [flags 0x182])
+>                     (const_int 132 [0x84]))))) "include/linux/slab.h":759:52 288 {cskyv2_xorsi3}
+>      (expr_list:REG_DEAD (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
+>         (nil)))
+> during RTL pass: final
+> sound/core/oss/mixer_oss.c:1202:1: internal compiler error: in final_scan_insn_1, at final.cc:2813
+> 0x779b51e2a1c9 __libc_start_call_main
+> 	../sysdeps/nptl/libc_start_call_main.h:58
+> 0x779b51e2a28a __libc_start_main_impl
+> 	../csu/libc-start.c:360
+> 
+> This happens with lots of files, not just this one. It is seen with all
+> versions of gcc starting with at least v13.x. Reverting this patch fixes
+> the problem. Bisect log is attached for reference.
+> 
+> Any idea what I could do to avoid the problem other than stopping to build
+> csky:allmodconfig ?
 
-Soo should I send v17 to fix AI that failed review?
-I think I didn't got this detail.
+Maybe it's time to say goodbye to csky? ;-)
+ 
+> Thanks,
+> Guenter
+
+-- 
+Sincerely yours,
+Mike.
