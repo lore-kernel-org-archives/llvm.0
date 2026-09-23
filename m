@@ -1,348 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511A33E765A;
-	Wed, 23 Sep 2026 17:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A822F568FD9;
+	Wed, 23 Sep 2026 19:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790184182; cv=none; b=pRdZ0QyEsJ55ZnVy0gfHVqEq3E6LQgEmkYtjE0hlCxJ6a1Li+kBzZQ+ZzrBvE7MMDA++Ki6gEVKrX38CSVdFphXrzdyDW0dmA+yG7LbLvbPXDKR4rC3AUMAjUWPLEsYFVAAY//SFblftV1sfelhvYqP8+pb1UKtYuURvCY2ZFaU=
+	t=1790192188; cv=none; b=k5MqOdbVenB8Mm55bBtS4FwFFEYKZjaQAo4A0whYtJdzWYK2qUuAAgOeKZndgwT/RaRR76rrsDMyAr3Pl/xzyIFhHq/PqRK343eqWLwyk01aV00Ik5gxzYYYxlL4xizvXeeU5tKWxhZR7cCRDjEIni6hEh0LZAEuT7ypUzCYbmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790184182; c=relaxed/simple;
-	bh=1zmsc9ZHF8+CoyT22YKQnfv42K05Raj82AafGLUVoSU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EWkh55CVFzRpWePuAGod207nqTMkTL84zB8yvmcEBDP64zArc4YD58xLx0n13lfIhLSG8OGlL4tbBUpsjwzRr3LGm0HEOmUBo+CkMrJEXyIxRtS0xlVuUnPOTfdVm5QUZbCFBXEVUZLsUpwMxQUBS6FQvQkwCAO2gfET8WykR38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HjH3hQsw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790192188; c=relaxed/simple;
+	bh=qbyegVfPVisMftvM9w19I2vmSLxDxgBL+oYOVHk7UT8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=b6HEXQiNhpgH0bMgoo2wFSdjXpLDVRWvmM/LSzJlj0VhNZcuX22NjbFnWvM0GkqLBm+TKYSuWEE6+NZLZONkYMY/a7U1O0LogTi0jCd81C+KRHjlicxhh3LYS08WjKSHm/0wbN4Yg7PQuTeicBZg7jwiIbxkkLDryn5nT0HWWtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gk2L7gGs; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HjH3hQsw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6C4D1F000FF;
-	Wed, 23 Sep 2026 17:22:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790184181;
-	bh=7TYGk1JizHGrlBrKc7yi6wYeMXYeC/fB2mICtyHAjKk=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=HjH3hQswPOEhNyh+0EJsK+8lvQLgcr3wY90IiS4ycWSZkKP4z3Hz+F195NNzsn+5H
-	 DOCkRcOHx0XQmfWCxL0x2y7voJVSjw3iitplwzqupe10mATAJ94nar2ZrZLegTO4JS
-	 ETtXjajIE2KLsZcE7sBFgxZBdNXyA1Ui0aXWQOwgkE1w/tZITBr7PoBhDuwFP74eUc
-	 WozytBVTBGoOUfLjCdhu0GJ4gkB/LxwycdUHuH4s++EAWyVpU4ahOzUm5ZmQo5G+RK
-	 1kvSqlb7dOOveB0AuROR0K/Kr/FbInyTO+eq9TdAUubQQtYWoivr4mLpirXiuhGEUN
-	 uOG9C8cUl0w/A==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Wed, 23 Sep 2026 18:18:11 +0100
-Subject: [PATCH v4 22/22] kbuild: compress the kernel with pigz if
- available
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gk2L7gGs"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790192186; x=1821728186;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=qbyegVfPVisMftvM9w19I2vmSLxDxgBL+oYOVHk7UT8=;
+  b=Gk2L7gGs3MUpjNaygCBme6le3VQ+UyFdX4koLHlZnivvG4uta9PEShBs
+   eiMT4lq3/NKJoztMK1vcV6EnORppWw5Ce667GFjMKxE/06HkLRWRhCyYE
+   D4CQnUvYafwfm/NSgQwBayYhG5HS71IlcgjuXxKfA1ay4apa5R6nWs/wr
+   wJ9njTxH/vOb1YUvH+xgGw7bAjVYNmZWaMb2eQ3IbMdlt9wDtlxwLyw8S
+   8+fQ8FJZ778hNujGazYQX+itOYGuI+50AMQEVUk06PKsIhT4QE7Tp5kCs
+   FYp34rZUHRcO2r9JNgZZ+TpAdXn64iTLTOc50d8clqVlQjF2t0YOizRme
+   A==;
+X-CSE-ConnectionGUID: 4iaPERtLTNmuSiV3HRWAcA==
+X-CSE-MsgGUID: DGvlEnIxQ4+z0DAyQoJ7RQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11914"; a="94745865"
+X-IronPort-AV: E=Sophos;i="6.27,119,1787036400"; 
+   d="scan'208";a="94745865"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 12:36:25 -0700
+X-CSE-ConnectionGUID: V7WQAby/SG+8UCxdRYJ8CA==
+X-CSE-MsgGUID: rL2ba/rySBKoESyRt8MCQQ==
+X-ExtLoop1: 1
+Received: from smtp.ostc.intel.com ([10.54.69.131])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Sep 2026 12:36:24 -0700
+Received: from cwf-2s5.sh.intel.com (cwf-2s5.sh.intel.com [10.239.48.132])
+	by smtp.ostc.intel.com (Postfix) with ESMTP id 813186393;
+	Wed, 23 Sep 2026 12:36:20 -0700 (PDT)
+From: Shreshth Srivastava <shreshth.srivastava@intel.com>
+To: Juergen Gross <jgross@suse.com>,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	linux-coco@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-hyperv@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	llvm@lists.linux.dev
+Cc: tglx@kernel.org,
+	mingo@redhat.com,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	hpa@zytor.com,
+	xin@zytor.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	jpoimboe@kernel.org,
+	peterz@infradead.org,
+	boris.ostrovsky@oracle.com,
+	xen-devel@lists.xenproject.org
+Subject: Re: [PATCH v5 00/17] x86/msr: Inline rdmsr/wrmsr instructions
+Date: Wed, 23 Sep 2026 15:36:17 -0400
+Message-ID: <20260923193619.1408940-1-shreshth.srivastava@intel.com>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260911084211.3149957-1-jgross@suse.com>
+References: <20260911084211.3149957-1-jgross@suse.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260923-build-speedup-v4-22-73128809a4a4@kernel.org>
-References: <20260923-build-speedup-v4-0-73128809a4a4@kernel.org>
-In-Reply-To: <20260923-build-speedup-v4-0-73128809a4a4@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Ard Biesheuvel <ardb@kernel.org>, 
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>, 
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org, 
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>, 
- linux-hardening@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>, 
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>, 
- Manuel Ebner <manuelebnerli@mailbox.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10892; i=ljs@kernel.org;
- h=from:subject:message-id; bh=1zmsc9ZHF8+CoyT22YKQnfv42K05Raj82AafGLUVoSU=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLK2cF5V+qM6cZ+XtAW/Br/evglRvqvu6e0zclxt91O6Y
- amPfU9PRykLgxgXg6yYIsvzL+L7g0TC5nVe8HeDmcPKBDKEgYtTACbyi5vhv+d/B+Uu/+nK57e4
- nd2/yvm3zewtAVnVk7TF4gzeHOM+JcnwP/6o3UdeXaZzG7hDLTxuVGcyNE/nLWEp03YunaVyTfg
- kPwA=
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+Content-Transfer-Encoding: 8bit
 
-The gzip step of a kernel build is very lengthy, especially for larger
-builds such as allmodconfig.
+On 11.09.26 10:41, Juergen Gross wrote:
+> When building a kernel with CONFIG_PARAVIRT_XXL the paravirt
+> infrastructure will always use functions for reading or writing MSRs,
+> even when running on bare metal.
 
-gzip itself cannot be run in parallel, however an alternative tool exists
-that can, providing the same feature set as gzip itself - pigz - which
-works as a drop-in replacement.
+Hi Juergen,
 
-On a 128-core Threadripper, gzip -9 of a 36 MiB x86-64 vmlinux.bin takes
-1.6s, and with pigz it takes 0.09s, so the performance increase is
-significant.
+This doesn't build with CONFIG_PARAVIRT_XXL=y. 16/17 and 17/17 are where
+it breaks, but the cause is the .byte fallbacks: ASM_WRMSRNS_IMM from
+08/17 and ASM_RDMSR_IMM from 10/17 don't end in a separator, unlike the
+.insn variants above them.
 
-Therefore introduce the KPGZIP build variable which specifies the
-compressor to use for the kernel image and default it to pigz if available,
-or KGZIP otherwise (which itself defaults to gzip).
+  #define ASM_RDMSR_IMM				\
+	" .byte 0xc4,0xe7,0x7b,0xf6,0xc0; .long %c[msr]"
 
-Modules, packaging and the embedded kernel configuration (CONFIG_IKCONFIG)
-continue to use KGZIP which defaults to a single-threaded gzip instance.
+That worked while they were only ever the last argument of an
+ALTERNATIVE(), which appends its own newline. 16/17 concatenates them
+with ASM_CLRERR:
 
-Module compression is run in parallel by make, so pigz offers no benefit
-there, packaging sits outside the build and the embedded configuration is
-too small to matter.
+	ASM_RDMSR_IMM ASM_CLRERR, X86_FEATURE_MSR_IMM,	\
 
-pigz is executed using scripts/jobserver-exec, which reserves the job slots
-make has free - necessary, as otherwise pigz would just grab unbounded
-CPUs.
+so the .long operand runs into the xor. From
+make arch/x86/kernel/cpu/common.s:
 
-The kernel image compression step is always performed at the end of the
-build so should typically have all job slots available.
+	.byte 0xc4,0xe7,0x7b,0xf6,0xc0; .long 266xor %rdx,%rdx
 
-pigz always provides byte-for-byte identical output across runs regardless
-of thread count, but pigz and gzip are not guaranteed to generate the same
-binary output, so reproducible builds must use the same tools consistently.
+  paravirt-msr.h:165: Error: junk at end of line, first unrecognized character is `x'
 
-Also update Documentation/kbuild/kbuild.rst to describe KPGZIP and
-Documentation/process/changes.rst to list the optional pigz dependency.
+clang reports "error: unexpected token" in the same place. 71 objects
+fail, the same 71 either way, no vmlinux.
 
-While there, add entries for the other compressor programs.
+msr.h chooses between the .insn form and the .byte fallback with:
 
-Finally, update scripts/ver_linux to include the pigz version there.
+	#if defined(CONFIG_AS_IS_GNU) && CONFIG_AS_VERSION >= 24100
 
-Every x86 build ends with the compression of vmlinux.bin, 36MB for
-defconfig and over 200MB for allmodconfig, no-op builds are unchanged.
+Two kinds of toolchain end up on the .byte side of that test:
 
-Whole build, 128-thread Threadripper 9980X, best of N runs:
+  - GNU as older than 2.41. RHEL 9 and CentOS Stream 9 ship 2.35, and
+    Documentation/process/changes.rst sets the minimum at 2.30, so this
+    is a supported configuration rather than an old outlier.
+  - clang, any version. CONFIG_AS_IS_GNU is never set for clang, so the
+    && short-circuits and the version comparison is never reached. Your
+    08/17 comment already notes that clang has no .insn support.
 
-                                         before   after     delta
-                                         -------------------------------
-  x86 defconfig, touch mm/vma.c, gcc        7.7s     6.0s     -1.7s (-22%)
-  x86 defconfig, touch mm/vma.c, clang      6.9s     5.4s     -1.5s (-21%)
-  x86 defconfig, clean, gcc                28.2s    26.3s     -1.8s (-6%)
-  x86 defconfig, clean, clang              28.7s    27.2s     -1.5s (-5%)
-  x86 allmodconfig, touch mm/vma.c, gcc    23.7s    15.4s     -8.3s (-35%)
-  x86 allmodconfig, touch mm/vma.c, clang  22.5s    15.6s     -7.0s (-31%)
-  x86 allmodconfig, clean, gcc            294.1s   278.6s     -15.5s (-5%)
-  x86 allmodconfig, clean, clang          283.9s   266.8s     -17.1s (-6%)
+gcc with binutils 2.41 or newer takes the .insn path, where both macros
+do end in a separator, and is unaffected.
 
-Suggested-by: Kees Cook <kees@kernel.org>
-Link: https://zlib.net/pigz/
-Assisted-by: LLM
-Reviewed-by: Manuel Ebner <manuelebnerli@mailbox.org>
-Reviewed-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- Documentation/kbuild/kbuild.rst   | 17 +++++++++++++++++
- Documentation/process/changes.rst |  8 ++++++++
- Makefile                          |  5 ++++-
- kernel/Makefile                   |  6 +++++-
- scripts/Makefile.lib              |  4 ++--
- scripts/jobserver-exec            |  3 ++-
- scripts/ver_linux                 |  1 +
- tools/lib/python/jobserver.py     | 13 +++++++++++++
- 8 files changed, 52 insertions(+), 5 deletions(-)
+Reproduced on v7.3-rc2 with your v3 00/13, v2 0/5 and v5 00/17 applied in
+that order, x86_64 defconfig plus HYPERVISOR_GUEST, PARAVIRT, XEN and
+XEN_PV. gcc 11.5.0 with GNU as 2.35.2, and clang 21.1.7.
 
-diff --git a/Documentation/kbuild/kbuild.rst b/Documentation/kbuild/kbuild.rst
-index 5a9013bacfb7..e71a692a559a 100644
---- a/Documentation/kbuild/kbuild.rst
-+++ b/Documentation/kbuild/kbuild.rst
-@@ -110,6 +110,23 @@ HOSTLDLIBS
- ----------
- Additional libraries to link against when building host programs.
- 
-+KGZIP
-+-----
-+The gzip program used for compressed modules, packaging and the embedded
-+kernel configuration. Defaults to gzip.
-+
-+KPGZIP
-+------
-+The gzip program used for the compressed kernel image. Defaults to pigz (a
-+parallel implementation of gzip), run under scripts/jobserver-exec so that it
-+uses the job slots make has free, if pigz is installed, otherwise to
-+``KGZIP``. Set ``KPGZIP=`` on the make command line to use another program.
-+
-+KBZIP2, KLZOP, LZMA, LZ4, XZ, ZSTD
-+----------------------------------
-+The compressor programs for the other formats. Each defaults to the program
-+of the same name.
-+
- .. _userkbuildflags:
- 
- USERCFLAGS
-diff --git a/Documentation/process/changes.rst b/Documentation/process/changes.rst
-index 0aa232b117b5..28f2ca63318e 100644
---- a/Documentation/process/changes.rst
-+++ b/Documentation/process/changes.rst
-@@ -55,6 +55,7 @@ nfs-utils              1.0.5            showmount --version
- openssl & libcrypto    1.0.0            openssl version
- pahole                 1.26             pahole --version
- pcmciautils            004              pccardctl -V
-+pigz (optional)        2.4              pigz --version
- PPP                    2.4.0            pppd --version
- procps                 3.2.0            ps --version
- Python                 3.9.x            python3 --version
-@@ -206,6 +207,13 @@ GNU AWK
- GNU AWK is needed if you want kernel builds to generate address range data for
- builtin modules (CONFIG_BUILTIN_MODULE_RANGES).
- 
-+pigz (optional)
-+---------------
-+
-+pigz is a parallel implementation of gzip. If it is installed the compressed
-+kernel image is produced with it rather than with gzip, see ``KPGZIP`` in
-+Documentation/kbuild/kbuild.rst.
-+
- System utilities
- ****************
- 
-diff --git a/Makefile b/Makefile
-index f0502b02408f..ba71483f7f14 100644
---- a/Makefile
-+++ b/Makefile
-@@ -568,6 +568,9 @@ LZMA		= lzma
- LZ4		= lz4
- XZ		= xz
- ZSTD		= zstd
-+# The kernel image is compressed with pigz, on the job slots make has free,
-+# if it is installed. Everything else uses KGZIP.
-+KPGZIP		:= $(if $(shell command -v pigz 2>/dev/null),$(PYTHON3) $(abs_srctree)/scripts/jobserver-exec pigz -p %PARALLELISM%,$(KGZIP))
- TAR		= tar
- 
- CHECKFLAGS     := -D__linux__ -Dlinux -D__STDC__ -Dunix -D__unix__ \
-@@ -648,7 +651,7 @@ export RUSTC RUSTDOC RUSTFMT RUSTC_OR_CLIPPY_QUIET RUSTC_OR_CLIPPY BINDGEN LLVM_
- export HOSTRUSTC KBUILD_HOSTRUSTFLAGS
- export CPP AR NM STRIP OBJCOPY OBJDUMP READELF PAHOLE RESOLVE_BTFIDS LEX YACC AWK INSTALLKERNEL
- export PERL PYTHON3 CHECK CHECKFLAGS MAKE UTS_MACHINE HOSTCXX
--export KGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD TAR
-+export KGZIP KPGZIP KBZIP2 KLZOP LZMA LZ4 XZ ZSTD TAR
- export KBUILD_HOSTCXXFLAGS KBUILD_HOSTLDFLAGS KBUILD_HOSTLDLIBS KBUILD_PROCMACROLDFLAGS LDFLAGS_MODULE
- export KBUILD_USERCFLAGS KBUILD_USERLDFLAGS
- 
-diff --git a/kernel/Makefile b/kernel/Makefile
-index 1e1a31673577..c64c82c96b40 100644
---- a/kernel/Makefile
-+++ b/kernel/Makefile
-@@ -153,9 +153,13 @@ obj-$(CONFIG_SCF_TORTURE_TEST) += scftorture.o
- 
- $(obj)/configs.o: $(obj)/config_data.gz
- 
-+# .config is small, so it is compressed with gzip rather than the image compressor.
-+quiet_cmd_gzip_config = GZIP    $@
-+      cmd_gzip_config = cat $(real-prereqs) | $(KGZIP) -n -f -9 > $@
-+
- targets += config_data config_data.gz
- $(obj)/config_data.gz: $(obj)/config_data FORCE
--	$(call if_changed,gzip)
-+	$(call if_changed,gzip_config)
- 
- filechk_cat = cat $<
- 
-diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
-index 2f447bc25e7b..8936925d4d50 100644
---- a/scripts/Makefile.lib
-+++ b/scripts/Makefile.lib
-@@ -332,11 +332,11 @@ quiet_cmd_ar = AR      $@
- quiet_cmd_objcopy = OBJCOPY $@
- cmd_objcopy = $(OBJCOPY) $(OBJCOPYFLAGS) $(OBJCOPYFLAGS_$(@F)) $< $@
- 
--# Gzip
-+# Gzip, for the kernel image
- # ---------------------------------------------------------------------------
- 
- quiet_cmd_gzip = GZIP    $@
--      cmd_gzip = cat $(real-prereqs) | $(KGZIP) -n -f -9 > $@
-+      cmd_gzip = cat $(real-prereqs) | $(KPGZIP) -n -f -9 > $@
- 
- # Bzip2
- # ---------------------------------------------------------------------------
-diff --git a/scripts/jobserver-exec b/scripts/jobserver-exec
-index 21b319e6c9a5..89119acb1b9e 100755
---- a/scripts/jobserver-exec
-+++ b/scripts/jobserver-exec
-@@ -4,7 +4,8 @@
- """
- Determines how many parallel tasks "make" is expecting, as it is
- not exposed via any special variables, reserves them all, runs a subprocess
--with PARALLELISM environment variable set, and releases the jobs back again.
-+with PARALLELISM environment variable set and any %PARALLELISM% in its
-+arguments replaced by the count, and releases the jobs back again.
- 
- See:
-     https://www.gnu.org/software/make/manual/html_node/POSIX-Jobserver.html#POSIX-Jobserver
-diff --git a/scripts/ver_linux b/scripts/ver_linux
-index 00bdaf30d590..e06d7c650710 100755
---- a/scripts/ver_linux
-+++ b/scripts/ver_linux
-@@ -57,6 +57,7 @@ BEGIN {
- 	printversion("pahole", version("pahole --version"))
- 	printversion("Pcmcia-cs", version("cardmgr -V"))
- 	printversion("pcmciautils", version("pccardctl -V"))
-+	printversion("pigz", version("pigz --version"))
- 	printversion("PPP", version("pppd --version"))
- 	printversion("procps", version("ps --version"))
- 	printversion("Python", version("python3 -V"))
-diff --git a/tools/lib/python/jobserver.py b/tools/lib/python/jobserver.py
-index 0b1ffdf9f7a3..7e94635bf7d9 100755
---- a/tools/lib/python/jobserver.py
-+++ b/tools/lib/python/jobserver.py
-@@ -29,6 +29,10 @@ $claim child to do the actual work.
- The end goal here is to keep the total number of build tasks under the
- limit established by the initial ``make -j$n_proc`` call.
- 
-+A command that takes its thread count on the command line rather than from
-+the environment can use the ``%PARALLELISM%`` token in its arguments, which
-+is replaced by the count, or by 1 when there is no jobserver.
-+
- See:
-     https://www.gnu.org/software/make/manual/html_node/POSIX-Jobserver.html#POSIX-Jobserver
- """
-@@ -38,6 +42,8 @@ import os
- import subprocess
- import sys
- 
-+PARALLELISM_TOKEN = "%PARALLELISM%"
-+
- def warn(text, *args):
-     print(f'WARNING: {text}', *args, file = sys.stderr)
- 
-@@ -182,6 +188,9 @@ class JobserverExec:
-         Run a command setting PARALLELISM env variable to the number of
-         available job slots (claim) + 1, e.g. it will reserve claim slots
-         to do the actual build work, plus one to monitor its children.
-+
-+        Any %PARALLELISM% in the command's arguments is replaced by the same
-+        number, or by 1 when there is no jobserver.
-         """
-         self.open()             # Ensure that self.claim is set
- 
-@@ -192,4 +201,8 @@ class JobserverExec:
-         if self.claim:
-             os.environ["PARALLELISM"] = str(self.claim)
- 
-+        if not isinstance(cmd, str):
-+            parallelism = str(self.claim or 1)
-+            cmd = [arg.replace(PARALLELISM_TOKEN, parallelism) for arg in cmd]
-+
-         return subprocess.call(cmd, *args, **pwargs)
+Terminating both fallbacks fixes it, and both toolchains then build
+vmlinux with no errors or warnings:
 
--- 
-2.55.0
+diff --git a/arch/x86/include/asm/msr.h b/arch/x86/include/asm/msr.h
+index eba325ecfe4c..529c13553c63 100644
+--- a/arch/x86/include/asm/msr.h
++++ b/arch/x86/include/asm/msr.h
+@@ -78,9 +78,9 @@ static inline void do_trace_rdpmc(u32 msr, u64 val, int failed) {}
+  * form MSR access instructions reference %rax as the register operand.
+  */
+ #define ASM_RDMSR_IMM				\
+-	" .byte 0xc4,0xe7,0x7b,0xf6,0xc0; .long %c[msr]"
++	" .byte 0xc4,0xe7,0x7b,0xf6,0xc0; .long %c[msr]\n\t"
+ #define ASM_WRMSRNS_IMM				\
+-	" .byte 0xc4,0xe7,0x7a,0xf6,0xc0; .long %c[msr]"
++	" .byte 0xc4,0xe7,0x7a,0xf6,0xc0; .long %c[msr]\n\t"
+ #endif
 
+ #define RDMSR_AND_SAVE_RESULT			\
+
+ASM_WRMSRNS needs no change, _ASM_BYTES() already emits a semicolon.
+
+The WRMSRNS line belongs in 08/17 and the RDMSR line in 10/17.
+
+Thanks,
+Shreshth
