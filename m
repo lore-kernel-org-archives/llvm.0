@@ -1,145 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f43.google.com (mail-pz2-f43.google.com [74.125.228.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFF843B3EF;
-	Wed, 23 Sep 2026 09:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5004A2A72
+	for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 14:23:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790155191; cv=none; b=Tsz6Tz7mi6XP8KC2396rYbV5IVrbV7t3P97Ot0siaxauzt6z13twdxuecEVWuIMGgOv0dyUcYnLoNUwnTwNp15/Xnmbvc7XDCTW2vGNsx/MnprHlw0YoJNezIdQp7ul9MGx0Qnsl9bEziOnwOLb5xRSiWjLYTMe4V3tbaXXeI4I=
+	t=1790173389; cv=none; b=C7hjV/jP64oPIjScK+WK0GvbaAmaVSAFzlOQ6L7DGcOxYpDtyWQ//oSzL6ic+MYKEhg4k04e2DXw6eYCbfxVlqsCB9cutFkbcjGBeZworWwFsuL6iHS9qo2HwTYC5XsBboTsD1yd9IDn45LAl4hhrKfjaqb1rk5U2db1DDLfC5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790155191; c=relaxed/simple;
-	bh=QoOgO/A2U5dtm7QoQT4ErByB/CY9vpIhJBSi3Us/+JE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f88xMqq3cjWElRLMXj/7zkUanEwLNUL/uZBFqrcQSmWL+G99azVuDPFcBZLJOG5nMlHgAUDo3bTkV+N6zZyDy4f9nWGuV/BEW6QNu4RARBIooi0bK/DdMEjH8zspJwrRZlFyc0idKA6/1jcsoe9J4EUmWVIzMPBanNuBVmqdvqg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i935KHZ0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790173389; c=relaxed/simple;
+	bh=vHF/4Rebpf1RbmlVp0v2ZLMX/ypaFMtdvlrlz1+PRak=;
+	h=From:Date:Subject:To:Cc:Message-ID:MIME-Version:Content-Type; b=WFNj8g/iUf4WgM3IpGwDU8XzmtkYTVz+fJMAy6bm/EE41tEAHVD6opoN7dhz5WLtiU/pvuh3cv4d3m6czNJ0BAvsxottcPLMruPRyIv/NxlPpW1p5eDSeLhMbaRPvfxZHTV2YGbHsEwOnRFFUDvpeh4W+noRJWUQ3TAltPMA53U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b1RAt6UB; arc=none smtp.client-ip=74.125.228.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i935KHZ0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465CD1F000FF;
-	Wed, 23 Sep 2026 09:19:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790155189;
-	bh=szozd7BSlCRG6SBcZcvnaC59iOuE2gZVQMEdYxaAPfg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=i935KHZ03UQCOH4iIXqvpXzISRCnQkyg/7sekoDfNzFScbwNm9ckk0hABoKJ4MivO
-	 4PVX5vSdjD8HGmskfgBtcNDkI8qvRU8v5/w3PkwoUvgmZ17uCo75xWaxQaK9Mleuhh
-	 78BPW4fvbSD9Fzat6DcWvAb4K7OFR3z+TnYuIFxAI7BLwiiLTnLA+fvF/Xxogg9kWu
-	 ojjUK6uDDp1zJyv/DcHgGv0bvoIqwp9lKyFkmCn8PCT4za8eUYdsIcaxYcgADguYMm
-	 F6cIZ8f+dI4Uyue/PLV1oc1e2KAMFSYI+UoZCHFacoLvBgH9vLGXzpBDyqachCkMFz
-	 wvxTQ0rPS6eag==
-Date: Wed, 23 Sep 2026 12:19:34 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Marco Elver <elver@google.com>, Vlastimil Babka <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	David Hildenbrand <david@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Matteo Rizzo <matteorizzo@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Suren Baghdasaryan <surenb@google.com>,
-	linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
-	Hao Li <hao.li@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
-	Alexander Potapenko <glider@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
-	Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: csky ICe (was: Re: [PATCH v4 2/3] slab: improve
- KMALLOC_PARTITION_RANDOM randomness)
-Message-ID: <arOZpqat_rT6rExk@kernel.org>
-References: <20260511200136.3201646-1-elver@google.com>
- <20260511200136.3201646-2-elver@google.com>
- <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b1RAt6UB"
+Received: by mail-pz2-f43.google.com with SMTP id d2e1a72fcca58-85469e25187so424759b3a.2
+        for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 07:23:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790173387; x=1790778187; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:message-id:cc
+         :to:subject:date:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hOAfnEJCG2dfje1lhj2D/yy4s3DfFqXgRx5oeJiylnY=;
+        b=b1RAt6UBi0Lar/Bmprsq6wVXrSXFHDHx2jQ3X5Hwt3rMO8qjVQjwqbFgI0Her00fBw
+         u1lIv3e0BenmQjyKOwS4DFxS+e/UMQRNZUNeACTNDfc5xuw5SylfhAEMZp8tJMEVr3xq
+         UESBhNz1m9x7eXuFy0cUu2MkWsUW3dbB6i+Mdu3n+6MTFUUvrAas+8uVliwwKGv4SfSP
+         EJyhF7Pr0tsy1dR02kQUH5a3HfF6Jtds20AHOQLeVGRFuAy3s6HnE6geVaMfiUz8K0im
+         FhopezTJsGco6mlQqityTQySWrfkPQyQcuG8UM2ar2jVv93fjp3y6dmgkGTFCnUCnyDk
+         0nYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790173387; x=1790778187;
+        h=content-transfer-encoding:content-type:mime-version:message-id:cc
+         :to:subject:date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=hOAfnEJCG2dfje1lhj2D/yy4s3DfFqXgRx5oeJiylnY=;
+        b=Iwvk7btK2PeMW8ZaXhO/ZJJ+cKbIqVwSfoLFSFtPKud4IdefSLc8O4dURaUhPqP7A2
+         ZFJ1pNuhTlrfB4ks94wdBD/b8NuV40dAcNiDcEL+6/yYqt7eA9GDCeZAYfU54wYn+2bu
+         Yc7+g1N9Ha9Nj+OJ0+7E/OJmAd17K8Mba+JG00REt5QfixWD+f/ukFQDUmFP6wbofWZK
+         wDCWBUYkgj6Vc6y58DLm0ZTQQg42kMcAjdZxnFV3XqkwuwlKY6lbAW+Kb27U4FHnYdY3
+         gVBWYqDKLlhTYjplFPiKFBALrOuafiPDkTqGWwe5ALp3KScxLI+K9g84aa5UujshBKel
+         O9jQ==
+X-Gm-Message-State: AFuF++mWmSadfnFJ3UFzUxM9NBqH56x6OJcPYJdOCQDkVL1D5I7aGFmO
+	MSh0Qp0SFjvkp8m7agy7oFkp7Wu360jtXnKd5VyZ1cfA8B7qiwmebXdi
+X-Gm-Gg: AYBFou134UpiwWulstNMaRV9B7s2MrbdZtd/KC3fnYP1criCq1PKjUPo7vv9e+TjHoV
+	xMjwqiJNXfoz9Zx9nTA6bgczog8w/x+ZdpEIVBG67qNeDTum/x5jLk8SZtK49KoVfdCXaKkVFhx
+	C10RAExN4UJvSwJ8swaafnzj2vfogYCA3PrQ+zn+FO/xZLDE88rC0KMtWChn2me9laItAgVCVQz
+	uKBy3oe+oHLNKbT3dpFAxb6kD8zAlZdUk7EKRfHX7uVH3zyobned1YggGPPenqbnbefC4X8Yhw6
+	13E93ouevJMptdFfizKaxqLOFsf2pSyx/5iAlZjcFH76+Qkz6nqq9ZtqFxQxFzNQ60bOnqya3+w
+	aGX5WZAeHOxag2hBY51jciowmYknbjVmogQmxPPZKJnz7rTkUr953uryzYy0psRq92qAcULzDyn
+	VpqSSXQgVQOLtYBok2OIhd6/APLxshz11LmFL01qQlQY0zzX2gkhKwXqT2KSFzFP1OfYk3pZDjt
+	X7P0httTh8hb0trF//0KE9rwc1IwnA9bEFSIjHaJqr1y+qfw8hjxzql9J4G8HlpogIxzpCHCvoR
+	lZN7CkiCnigyGDMibJJ1oaQ9leU5GOarFOaELHG5Cj45zw==
+X-Received: by 2002:a05:6a00:3912:b0:874:705d:f63b with SMTP id d2e1a72fcca58-87d1c1c833dmr2392179b3a.29.1790173387247;
+        Wed, 23 Sep 2026 07:23:07 -0700 (PDT)
+Received: from [172.16.0.2] ([2a09:bac5:d58e:323::50:1d4])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-87d1e0f4fbbsm1403313b3a.52.2026.09.23.07.23.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 23 Sep 2026 07:23:06 -0700 (PDT)
+From: houtinghang <ue081723@gmail.com>
+Date: Wed, 23 Sep 2026 22:22:59 +0800
+Subject: [PATCH] clang-tools: Import os for broken pipe handling
+To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Message-ID: <179017337986.52388.7943687183785012868@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 22, 2026 at 07:58:56AM -0700, Guenter Roeck wrote:
-> Hi,
-> 
-> On Mon, May 11, 2026 at 10:00:49PM +0200, Marco Elver wrote:
-> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
-> > to identify the allocation site. _RET_IP_, however, evaluates to the
-> > caller's parent's instruction pointer rather than the actual allocation
-> > site; this would lead to collisions where a function performs multiple
-> > allocations.
-> > 
-> > With the generalization to kmalloc_token_t, we now generate the token at
-> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
-> > 
-> > Unfortunately, the generic implementation of _THIS_IP_ relies on taking
-> > the address of a local label, which is considered broken by both GCC [1]
-> > and Clang [2] because label addresses are only expected to be used with
-> > computed gotos. While the generic version more or less works today, it
-> > is known to be brittle. For example, Clang -O2 always returns 1 when
-> > this function is inlined:
-> > 
-> >         static inline unsigned long get_ip(void)
-> >         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
-> > 
-> > To provide a reliable unique identifier without breaking architectures
-> > relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
-> > to _THIS_IP_ where architectures provide a safe implementation, and
-> > falls back to a zero-cost static marker where _THIS_IP_ is broken.
-> > 
-> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
-> > Link: https://github.com/llvm/llvm-project/issues/138272 [2]
-> > Signed-off-by: Marco Elver <elver@google.com>
-> 
-> With this patch in the tree, I get ICE erors when trying to build
-> csky:allmodconfig.
-> 
-> Example:
-> 
-> Error log:
-> sound/core/oss/mixer_oss.c: In function 'snd_mixer_oss_proc_write':
-> sound/core/oss/mixer_oss.c:1202:1: error: could not split insn
->  1202 | }
->       | ^
-> (insn 183 400 184 (set (reg:SI 0 a0 [orig:307 _55 ] [307])
->         (xor:SI (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
->             (const:SI (plus:SI (symbol_ref:SI ("*.LANCHOR0") [flags 0x182])
->                     (const_int 132 [0x84]))))) "include/linux/slab.h":759:52 288 {cskyv2_xorsi3}
->      (expr_list:REG_DEAD (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
->         (nil)))
-> during RTL pass: final
-> sound/core/oss/mixer_oss.c:1202:1: internal compiler error: in final_scan_insn_1, at final.cc:2813
-> 0x779b51e2a1c9 __libc_start_call_main
-> 	../sysdeps/nptl/libc_start_call_main.h:58
-> 0x779b51e2a28a __libc_start_main_impl
-> 	../csu/libc-start.c:360
-> 
-> This happens with lots of files, not just this one. It is seen with all
-> versions of gcc starting with at least v13.x. Reverting this patch fixes
-> the problem. Bisect log is attached for reference.
-> 
-> Any idea what I could do to avoid the problem other than stopping to build
-> csky:allmodconfig ?
+The BrokenPipeError handler in run-clang-tools.py calls os.open() and
+os.dup2() without importing os. When the analysis pool raises this
+exception, the handler raises NameError instead of redirecting stdout
+and exiting with status 1.
 
-Maybe it's time to say goodbye to csky? ;-)
+Import os and add a regression test that injects BrokenPipeError from
+Pool.map(), then checks the redirection and exit status.
+
+Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python scripts")
+Assisted-by: LLM
+Signed-off-by: houtinghang <ue081723@gmail.com>
+---
+Testing: python scripts/clang-tools/run-clang-tools_test.py -v
+The test fails before the import with NameError and passes after it.
+Tested with Python 3.13 on Windows using exception injection; no complete
+kernel build or real clang-tidy pipeline test was performed.
+
+AI disclosure: Codex found the missing import, wrote the fix and test,
+ran the test, reviewed the diff, and drafted this message in response to
+a request to find, fix, review and submit a Linux kernel bug.
+
+ scripts/clang-tools/run-clang-tools.py      |  1 +
+ scripts/clang-tools/run-clang-tools_test.py | 41 +++++++++++++++++++++
+ 2 files changed, 42 insertions(+)
+ create mode 100644 scripts/clang-tools/run-clang-tools_test.py
+
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index e78be82..79d58b3 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -12,6 +12,7 @@ compile_commands.json.
+ import argparse
+ import json
+ import multiprocessing
++import os
+ import subprocess
+ import sys
  
-> Thanks,
-> Guenter
+diff --git a/scripts/clang-tools/run-clang-tools_test.py b/scripts/clang-tools/run-clang-tools_test.py
+new file mode 100644
+index 0000000..207b866
+--- /dev/null
++++ b/scripts/clang-tools/run-clang-tools_test.py
+@@ -0,0 +1,41 @@
++#!/usr/bin/env python3
++# SPDX-License-Identifier: GPL-2.0
++
++"""Tests for run-clang-tools.py."""
++
++import importlib.util
++import os
++from pathlib import Path
++import unittest
++from unittest import mock
++
++
++spec = importlib.util.spec_from_file_location(
++    "run_clang_tools", Path(__file__).with_name("run-clang-tools.py"))
++run_clang_tools = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(run_clang_tools)
++
++
++class TestRunClangTools(unittest.TestCase):
++    def test_broken_pipe_redirects_stdout_and_exits(self):
++        args = mock.Mock(path="compile_commands.json")
++        with mock.patch.object(run_clang_tools, "parse_arguments", return_value=args), \
++             mock.patch("builtins.open", mock.mock_open(read_data="[]")), \
++             mock.patch.object(run_clang_tools.multiprocessing, "Lock"), \
++             mock.patch.object(run_clang_tools.multiprocessing, "Pool") as pool, \
++             mock.patch("os.open", return_value=42) as open_devnull, \
++             mock.patch("os.dup2") as dup2, \
++             mock.patch.object(run_clang_tools.sys, "stdout") as stdout:
++            pool.return_value.__enter__.return_value.map.side_effect = BrokenPipeError
++            stdout.fileno.return_value = 1
++
++            with self.assertRaises(SystemExit) as raised:
++                run_clang_tools.main()
++
++            self.assertEqual(raised.exception.code, 1)
++            open_devnull.assert_called_once_with(os.devnull, os.O_WRONLY)
++            dup2.assert_called_once_with(42, 1)
++
++
++if __name__ == "__main__":
++    unittest.main()
 
+base-commit: fe2ec83746e501645709761605c2464a44fd2929
 -- 
-Sincerely yours,
-Mike.
+2.52.0.windows.1
+
