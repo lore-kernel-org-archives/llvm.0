@@ -1,123 +1,158 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E388C3EB0E3;
-	Wed, 23 Sep 2026 06:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9429E43DA20
+	for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 06:28:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790144699; cv=none; b=oEvE97Le6qeVJLQ6Nfl+iSHUi2DUV63MRMW9RJYjso4cJIhNzPZ0cR0NVKphQ1k2KBMDWacvfls+HCas9RRAE5GZ+n9YpEeySc/Dg07P7jLkRsw9ML2jK5hLtTrxtMyT5RS0PHcEpSfMMpNa3bXF+CycnxXnSmcdAlBNHzGrCEw=
+	t=1790144912; cv=none; b=qK8xYwPfwQrCazR/vu8pXmV71D6qwXcq6PVBk9txoC02xpqLdEvQ3o37hCBliozbIc9+z89aSQ+luyqBOHXrUXQf62R2U4rVVIyj7ECZxsbFL9oxhJKmMKe0eIedY+JJrgt6fjJNoN/cN91BkJlvzCAhrqnb9DLSCzy33uk34rY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790144699; c=relaxed/simple;
-	bh=lD6+yLX71r5nIqY8V+8HiWHK9OWG1lfP5YeWPdHFRE4=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=kD6uIc0yKTMMpcNgUv/kGpIghaupavr7f9MQUCs6U4EGTPGAw5IviPYemAJTdIfIUIoPaK7tXEmLlL/8w/m+Ye/08gs21Yvreo+CNgTsjXTqGHqNKrZdsSgd3DAyv1HhY1oHW0GbKyKg27q7Pr6K84FfXdPXbgr0pAREQeYA0ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VH5qoLyp; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790144912; c=relaxed/simple;
+	bh=4G5stfYL+d2I3arosXAulfA419oGwxz6L8v47Lllkwk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KToRfnSjhRoP4Ytym39tzuvVYSeSrxaTnyDQyfr1sNl714f6Rx2Y6a4gQ9CVEDzlmeiU7aTlKsMq1AVI2Kzymw/HexfCwXyHeJddkSPGYL94/mEw/PdqkL5u/3bqRq7BGBBwcsPjBLXTfRkwd9rNczInrmYjv4enuNCl175M7cM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fdwzPrmk; arc=none smtp.client-ip=74.125.229.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VH5qoLyp"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790144698; x=1821680698;
-  h=date:from:to:cc:subject:message-id;
-  bh=lD6+yLX71r5nIqY8V+8HiWHK9OWG1lfP5YeWPdHFRE4=;
-  b=VH5qoLypnZWzni6NNnejPW0AaPpNYJ0tgq/IiS7+35/BcASLhvHZ0I74
-   tU+F6MBhjHSnb2CaFR22RTQ0AJoFHHlqD1UKZ36KpjdpZDo3cpF3Dq8xX
-   uGDGBKkYvKjbFEVKityygs9Hv1dVRgXeLB+Xo6fkvCf/aeDwxS8NKfpZS
-   VSGDYzTxRUlawnmoovKhASx9JpLMai0iQ1Li121UclbbVOAxOSkWesmjQ
-   1Xx/+IWJRJ5jlsCNrjDAHXcntvtNHDCePZj1xZrbEqsh8Fx3q3iTfZBvk
-   5vHt67Jd25VRkvQ98MpXi8UzFmANUUpMcgyG1myqRQ8VYmKaaY8hqOijo
-   w==;
-X-CSE-ConnectionGUID: l3PbuL0ITaW5kNnGRny4TQ==
-X-CSE-MsgGUID: 8aseiNWfTLOiBiQyYhrwtg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11913"; a="93309290"
-X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
-   d="scan'208";a="93309290"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2026 23:24:55 -0700
-X-CSE-ConnectionGUID: eWta8OSDTDSQLM4JBWKRiQ==
-X-CSE-MsgGUID: UvYU8FOsQRmk8InlE0QLQQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,118,1787036400"; 
-   d="scan'208";a="301384404"
-Received: from igk-lkp-server01.igk.intel.com (HELO 1bbc298b9a73) ([10.211.93.152])
-  by fmviesa001.fm.intel.com with ESMTP; 22 Sep 2026 23:24:53 -0700
-Received: from kbuild by 1bbc298b9a73 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x9GPT-000000000YD-0PZi;
-	Wed, 23 Sep 2026 06:24:51 +0000
-Date: Wed, 23 Sep 2026 08:24:48 +0200
-From: kernel test robot <lkp@intel.com>
-To: Miklos Szeredi <mszeredi@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- fuse-devel@lists.sourceforge.net
-Subject: [mszeredi-fuse:extent-map 15/18] fs/fuse/inode.c:438:44:
- error: no member named 'vdax' in 'struct fuse_conn'
-Message-ID: <202609230803.9KZ4KBNg-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fdwzPrmk"
+Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-32dbbe82e13so482418eec.0
+        for <llvm@lists.linux.dev>; Tue, 22 Sep 2026 23:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790144910; x=1790749710; darn=lists.linux.dev;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=2hUFOEJST1qHgvJkQDivOVNilsD3f7PYYgSWMm8/mzk=;
+        b=fdwzPrmkMNsICInvUqF9e4k/pCeJX1Y9o9c8FB68Le004lTS7uZ1s+cNvzicWwXcC9
+         YP+ZcjuYFU9Wk6F7IJbxJic1Q+gtuvY8hogveUXj00vsxpu41cNQbl4pjpCQkL8aD6IH
+         nyrMKlNMF2hkenKZyn1ZzYWDWZqiFwSuK736PHPL79jcsp900F0zG/1fLBH6V++AEKpH
+         2eC+222+DmIqjVlxLM/z5leyp8wN7Yb54yd44ykPyqgXGjk+fbKiXTyhdqsQdCTZuPix
+         PyhBuC3L07Yw/pIy6uZPoR6NIpg8EdTtx/pXW2EYOXeYTqNgLQfb3j0P1rTE0rUP0qY4
+         jj7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790144910; x=1790749710;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :content-type:mime-version:references:message-id:subject:cc:to:from
+         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=2hUFOEJST1qHgvJkQDivOVNilsD3f7PYYgSWMm8/mzk=;
+        b=001JOW5HxwI3hoZpolxUgxTJrJlABGE1G22nj8JMj8h+0ZCqpCIzARbYGXkNAB18aa
+         OSlAANNfToVCO3gILZtO8QRGZmBlHPXKDMA12iOYGK+fkhfPCbnU7CF7eBdRXJ/9b11S
+         IWBHanee7Bdw0Tto+CcqIyvVjXVgWz5lddCzd0AnJWgFX9YgtdKdHvVtXl0xtut38BDC
+         TM4fDDaGRjroc9EEOBJ0qxtgZrRoNi60UyRfb/onZ3TgmIt0deKOgV3n6CCDbkrDtDGO
+         SYONLGRlKF8tSQ2tvgJzRZgiBKnli/ZT6crrtKz4Am/KgiN5bvZoKZkc510S2yvZXU1L
+         0SSQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwvqiAm0/p03TWZTrg2eENNXFmaQTv5qd/rGAvGuLVpxqIn2UWpp3bt8ALSTAl50hCn2VSZ@lists.linux.dev
+X-Gm-Message-State: AFuF++nZJRH0sqJ2BxHSqNY5b4qZaUFAidHRoNWGNd9tBYFoQjkmAug2
+	V0XBaKvhL64/WG1QS8yuOX7vygPlnSqzy7bl4SOWEkkP1MONQ17R4mxv
+X-Gm-Gg: AYBFou2vzyi8gAieZbcsxOzU5nhnEA9hLr8czRtAY3ALBeLQ4NqzBWTM96aWWltvx4t
+	Qh7JbrqgethM2udujAnLG6FWs8UKBzDiUyfuF57N3jE+qtG8agaYiPEiNweH56T8NF+F+/1LPzg
+	BHiJUzrzV50hGIzdaq1ynvmQU5L7KzH+GOK1gUXR0qq2+75Vvp6ScatkqOw79O6do/0aM0sUvOd
+	Kodbtj+u5kSPgGdm2KrQcAAqPBK/DGQ1b6BW01zNW5WTz8htuV/zs+96IV3IJjkpMqoEVnAndYy
+	zLb4LuGlcq/VMC53PpbNqKbmk8VzLoV7zOJj53qkn/pVEEqVy/+RoD3LYi316oS3DYkK31TVxKO
+	GLU4F3B+VsB1h1P3MWwcDf3+gsX/W9XFJDJ17IIr/GkYZ8wqbNk12z1ctJWunSXOCimadR4bpEj
+	tKrcJ5J30ObOL+YayiUTFBLESZvTNEfN68zTGGNc9nwBeqW3zI8D4vdSqt6ID+PVW5N3m9r3j48
+	aB5FCGB8ke7vQvyQEOd5VI5S2xp+6DS8s4JemdCWy/7Mx6zZnjuUQ==
+X-Received: by 2002:a05:7301:3a86:b0:33e:5c4f:f46e with SMTP id 5a478bee46e88-33e8d8d2598mr1603719eec.30.1790144909601;
+        Tue, 22 Sep 2026 23:28:29 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([129.41.58.4])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-33e97236754sm3074867eec.29.2026.09.22.23.28.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Sep 2026 23:28:29 -0700 (PDT)
+Date: Wed, 23 Sep 2026 11:58:13 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com, 
+	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, 
+	ritesh.list@gmail.com, sshegde@linux.ibm.com, pjw@kernel.org, palmer@dabbelt.com, 
+	aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com, 
+	agordeev@linux.ibm.com, borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org, 
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, 
+	hpa@zytor.com, ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, 
+	bjorn3_gh@protonmail.com, lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, 
+	tmgross@umich.edu, dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org, 
+	acourbot@nvidia.com, work@onurozkan.dev, nathan@kernel.org, ndesaulniers@google.com, 
+	morbo@google.com, justinstitt@google.com, jszhang@kernel.org, japo@linux.ibm.com, 
+	jpoimboe@kernel.org, seanjc@google.com, pmladek@suse.com, thuth@redhat.com, 
+	ynorov@nvidia.com, joelagnelf@nvidia.com, david@davidgow.net, 
+	fujita.tomonori@gmail.com, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC] rust: kernel: Add KUnit tests for ARCH_WARN_ASM bug table
+ emission
+Message-ID: <arNxAn7I7NCVWmD1@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260922054959.955093-2-mkchauras@gmail.com>
+ <20260922064735.GS4121339@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260922064735.GS4121339@noisy.programming.kicks-ass.net>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mszeredi/fuse.git extent-map
-head:   70caed148725b4dd32916ecfe906977e2f79aff1
-commit: 343c66361a8e8ab509910030bf19eab3357555b2 [15/18] fuse: add support for opening dax device as backing
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260923/202609230803.9KZ4KBNg-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260923/202609230803.9KZ4KBNg-lkp@intel.com/reproduce)
+On Tue, Sep 22, 2026 at 08:47:35AM +0200, Peter Zijlstra wrote:
+> On Tue, Sep 22, 2026 at 11:20:00AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
+> > Verify that the __bug_table entry emitted by ARCH_WARN_ASM has a correct
+> > bug_addr displacement — i.e. the arch's trap label reference resolves to
+> > the trap instruction — by calling find_bug() with the exact virtual address
+> > of the trap, mirroring what the real trap handler does.
+> > 
+> > To support all architectures, each arch that implements ARCH_WARN_ASM now
+> > defines ARCH_WARN_ASM_TRAP_LABEL, a string constant naming the local label
+> > at which the trap instruction is placed:
+> > 
+> >   x86       "1"     (ud2 at label 1:)
+> >   powerpc   "1"     (twi at label 1:)
+> >   riscv     "1"     (ebreak at label 1:)
+> >   arm64     "14471" (brk placed at 14471: by __BUG_ENTRY_END)
+> >   s390      "0"     (mc at label 0:)
+> > 
+> > The label is used consistently: in ARCH_WARN_ASM itself, in the
+> > bug_addr back-reference inside __BUG_ENTRY / _EMIT_BUG_ENTRY, 
+> 
+> 
+> > diff --git a/arch/x86/include/asm/bug.h b/arch/x86/include/asm/bug.h
+> > index 23ab05438269..6cca8880660e 100644
+> > --- a/arch/x86/include/asm/bug.h
+> > +++ b/arch/x86/include/asm/bug.h
+> > @@ -62,8 +62,9 @@ extern void __WARN_trap(struct bug_entry *bug, ...);
+> >  #define HAVE_ARCH_BUG_FORMAT_ARGS
+> >  #endif
+> >  
+> > +#define ARCH_WARN_ASM_TRAP_LABEL "1"
+> >  #define __BUG_ENTRY(format, file, line, flags)				\
+> > -	"\t.long 1b - ."	"\t# bug_entry::bug_addr\n"		\
+> > +	"\t.long " ARCH_WARN_ASM_TRAP_LABEL "b - ." "\t# bug_entry::bug_addr\n" \
+> >  	__BUG_ENTRY_FORMAT(format)					\
+> >  	__BUG_ENTRY_VERBOSE(file, line)					\
+> >  	"\t.word " flags	"\t# bug_entry::flags\n"
+> > @@ -101,7 +102,7 @@ do {									\
+> >  	"99:\n"								\
+> >  	"\t.string \"\"\n"						\
+> >  	".popsection\n"							\
+> > -	"1:\t " ASM_UD2 "\n"						\
+> > +	ARCH_WARN_ASM_TRAP_LABEL ":\t " ASM_UD2 "\n"			\
+> >  	_BUG_FLAGS_ASM("99b", file, line, flags, size, "")
+> >  
+> >  #else
+> 
+> Not really a fan of that. And I can't really tell what you're doing with
+> it either. The kunit is in Rust and thus unreadable :-(
+> 
+> I would rather you fix up is_valid_bugaddr(), some architectures seem to
+> have an always true stub because of the callchains always being from the
+> break instruction.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609230803.9KZ4KBNg-lkp@intel.com/
+Hey Peter,
 
-All errors (new ones prefixed by >>):
+thanks for the suggestion. I will fix up the is_valid_bugaddr for
+powerpc. I am not very good with other archs asm but i can do it for
+ppc32 and ppc64.
 
->> fs/fuse/inode.c:438:44: error: no member named 'vdax' in 'struct fuse_conn'
-     438 |         if ((attr->flags & FUSE_ATTR_DAX) && !fc->vdax) {
-         |                                               ~~  ^
-   1 error generated.
-
-
-vim +438 fs/fuse/inode.c
-
-   409	
-   410	static void fuse_init_inode(struct inode *inode, struct fuse_attr *attr,
-   411				    struct fuse_conn *fc)
-   412	{
-   413		inode->i_mode = attr->mode & S_IFMT;
-   414		inode->i_size = attr->size;
-   415		inode_set_mtime(inode, attr->mtime, attr->mtimensec);
-   416		inode_set_ctime(inode, attr->ctime, attr->ctimensec);
-   417		if (S_ISREG(inode->i_mode)) {
-   418			fuse_init_common(inode);
-   419			fuse_init_file_inode(inode, attr->flags);
-   420		} else if (S_ISDIR(inode->i_mode))
-   421			fuse_init_dir(inode);
-   422		else if (S_ISLNK(inode->i_mode))
-   423			fuse_init_symlink(inode);
-   424		else if (S_ISCHR(inode->i_mode) || S_ISBLK(inode->i_mode) ||
-   425			 S_ISFIFO(inode->i_mode) || S_ISSOCK(inode->i_mode)) {
-   426			fuse_init_common(inode);
-   427			init_special_inode(inode, inode->i_mode,
-   428					   new_decode_dev(attr->rdev));
-   429		} else
-   430			BUG();
-   431		/*
-   432		 * Ensure that we don't cache acls for daemons without FUSE_POSIX_ACL
-   433		 * so they see the exact same behavior as before.
-   434		 */
-   435		if (!fc->posix_acl)
-   436			inode->i_acl = inode->i_default_acl = ACL_DONT_CACHE;
-   437	
- > 438		if ((attr->flags & FUSE_ATTR_DAX) && !fc->vdax) {
-   439			inode->i_flags |= S_DAX;
-   440			inode->i_data.a_ops = &fuse_dax_aops;
-   441		}
-   442	}
-   443	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Mukesh
