@@ -1,71 +1,72 @@
-Received: from mail-pj2-f12.google.com (mail-pj2-f12.google.com [74.125.227.140])
+Received: from mail-pj2-f13.google.com (mail-pj2-f13.google.com [74.125.227.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 504844ACC8F
-	for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 15:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F725616BB
+	for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 15:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790176295; cv=none; b=QH5SaDKsJlVXBfbl/LM2C16XMEi2bvZCfqVJngyPXRe/aQIXz3qfkVtfFqeZ7MQvStvM68M0sFc8V4kpgPIL7m2xAp2e0//wZyFv7TOFPjvhP0zcESoMiWmJ1QC+Wqj9bUZxYjRl+LDirmId8kxM20Wx35e0xdaMOEi1W6iWsac=
+	t=1790177231; cv=none; b=dp0btBoU/vxK6cI2Z1gBBy2x1sER0SKolwfjiCKUp/rsXdPiiu+Yh3JJjln3J4ebC8oXNXlKHF3pV9xcCZ6MzXj8XYC8A3J42FoaEeF7Kj58YP/741gfJZbin5gibA1syh3/BEv7p5FH3xSxOm/xzWJEO8utKKioMy8Pv2eICRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790176295; c=relaxed/simple;
-	bh=C9qn60KBUlNxQRCS8x3xK66DGDOtLcw0xXbt5/UHVvg=;
-	h=From:Date:Subject:To:Cc:Message-ID:MIME-Version:Content-Type; b=URWyFHKbQ8JQYEebjgULNaAjrrPmpWEaBl3JdEIM+cbg38ASygJnZjWw2vrm5oZZCh4f06FGosPq+8xo2Jy0UmVYCVDLNSN8uOcFOJqIwpQ/ZJbJ3Rh48Wo9GAxTlcQfS22b0Mla5KuzVNA63LNaGTUeTsBFlY4y+l4ibmK4Gc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AKY2Ku9R; arc=none smtp.client-ip=74.125.227.140
+	s=arc-20240116; t=1790177231; c=relaxed/simple;
+	bh=ZE1AO8NjDCDoum7rwOUEcxpDlgjbbiQ4+FdSK7ehaHY=;
+	h=From:Date:Subject:To:Cc:Message-ID:MIME-Version:Content-Type; b=DEIP8LKqerxdw7T38rVWoUG3kHcuveZeg/SWlGb71ris9HCG+BF8JiUk8FSFxXwacknsaBnkbTb7vWquBMQHzD55NNCpYWKV3mpMnx7MThp6IV9NuEHW2+8NNZ0dRQ6GmFVqgn7yHcneRcdtUDdjLAwFXmO0h5+3EdB2VC/u6bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SQZw2atS; arc=none smtp.client-ip=74.125.227.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AKY2Ku9R"
-Received: by mail-pj2-f12.google.com with SMTP id 98e67ed59e1d1-398c066106cso656208a91.1
-        for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 08:11:33 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SQZw2atS"
+Received: by mail-pj2-f13.google.com with SMTP id 98e67ed59e1d1-396ccafb74fso737818a91.3
+        for <llvm@lists.linux.dev>; Wed, 23 Sep 2026 08:27:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790176292; x=1790781092; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1790177224; x=1790782024; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:mime-version:message-id:cc
          :to:subject:date:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=GEtPIsJ5V/EJrCtn9VfRrKZ0RKdts5k/dzxQR2ZKwFU=;
-        b=AKY2Ku9RKqQ49QJjIsongVDEM+tAvSMn/vJHyLeMhYw7EaOJ/q2TvW001tya8J49lS
-         iUSyHbzhNNimG76Lv0xWkA/DQpWZNd+Ai0/la7EIoGUtSTIvLHJCq786aS9bqbRLn03V
-         +jOzXLBTmztoD9yiOR4vY4/o/Cyj1fMZANQL+3QEoM4d1TawDAKNvDV1AOVcGeR+0eE5
-         77PzcvPI8qPQn0NADogUC3JCj3cniGrHFHuI7M9OnGhrOl3WTxYAQOD4omIegbNK3mfN
-         9tCuVaOgctZSKVtjd4FLGhriJdUljxASpS3YpLobMRn8YQ3DX0kLM/mVYXwB734ORaqL
-         6toQ==
+        bh=grLXnCQQweMhLmDpYBV4MKF8n4Dw3i39obyyBfGlpSw=;
+        b=SQZw2atSkmc5ltR4rfcnaE+lGJv3dnygbgZ3t2j+y8/4G78b86Xk9yjRnDNUVBb9Jg
+         BvmHU/3w6OnEM1UHgX64ViMnEoEuYl8aoLs47mN3W8SoyqloO4l1Z/M9FhsHXnx3L6Ps
+         MMtDUsF07oPxYD2bOX1XyLKRNbElYJXH8NfvYCQQINpRWOB80Hp9btWOrrgGRgWhfx8P
+         iG8Q7R4HMZaBE6nOWtvwKWUnDSODAFBTafoyZxQR8LFs5KlsulK+QrPTdlofePS0H780
+         FVqFnAl2S6uwK5z6WZaz6ITLZBRvMw4bGuV9LPxcx5rqBIAfXcYQxKXetsLNNnYVh0f3
+         Qb+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790176292; x=1790781092;
+        d=1e100.net; s=20260707; t=1790177224; x=1790782024;
         h=content-transfer-encoding:content-type:mime-version:message-id:cc
          :to:subject:date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=GEtPIsJ5V/EJrCtn9VfRrKZ0RKdts5k/dzxQR2ZKwFU=;
-        b=dTY10hgqNHl0WC0+FmVgKE/6+kQL4ZCEN3Lpv8+WtRa8GFf/JB0HAAfJfjel16eygV
-         d/A43oqeMoX68sLLUJKXOm+w5TkCqQsOuMRokgKPNvVekQATIIIu8jPi0GhFpgMYasrZ
-         79JmpyFmBbUDKAz2Soy0K5u1XlPlovFYtuZkIgF7NTWBSQG5oUe/E4KhSjhCGIoUHouY
-         UB07cXnY/NjOYUa9wA5UHFSe/+WRiBhVCC8aYauAikL6Ao7xyrlAF22Q1zQNswDyKwm3
-         5OT/PK45IDZBA6fPnQ9i/SPablQVElNtIXYAhWRikuzr4WeaXN4TEtinnZqoD/4aaeZ2
-         5osA==
-X-Gm-Message-State: AFuF++k4pJQulvHaKTBlfOZ82VUNeYAgSjoB6qR7KB6dRCFXXJWYsNqZ
-	BH7Kcp2TW8FAP1oohSua57jWqwGv6HekBuwBNDccSWTKvEvUOl15BgDz
-X-Gm-Gg: AYBFou367uAZTdpL/u22wzAt+g4tJSRuVW09IxfXJeuWF99WhP0ruxVDqEZ6tyuv/Uw
-	bDS5ZCjIjHtcAvii+MqrSEyyUWb+mswB2b0B6bsMWlSNk+CMVs/0DfZlbDureu60nMYtp04mRhy
-	oNLJAG3weAffggIIG130E76bQE6mDU3M1nZN8/bFUohb67feFbEqKF3KFs2iSyKqxLllIiT8Ewd
-	501aKwFsw6y2RPBjlrBtNoJ9dvj3UF8almTKvGEkPIo+9ArQXsosYQ4spQnIM6lEP5CnWydeY7D
-	C6mNVOGhT7tRK92IURwbBbk2/ocHgS0mtAeqZ0jmAvUnM2zk9FuTi8BXjNzxILMlCm0MpvsPmoo
-	uy31+B5o/59SXI9J0W3DSUi7WPn7/FliI9EFiBeX0qXi2Xqkw0h5DSf2/aukBQ9hTRl99wV3bEZ
-	MNl+L+DXcBdeqfz4clrz11Ik9rveSGt2pplvrEmdZD1ufp8vcQjT9PMi3QfAAqF2jZ1VRnimEQY
-	fAW6FebLG/tNBfr7Ry/TjQlxx5XvGm2jcYf9niuBTf9a5gfXn40WnnoiqFiJXjlNzV2EVBhj5os
-	sO7OKuwsuF7UomzCD/9K0UyM+HdSg/TC2U4=
-X-Received: by 2002:a17:90b:4d0f:b0:39e:6a81:c922 with SMTP id 98e67ed59e1d1-3a07e641099mr2688756a91.21.1790176292422;
-        Wed, 23 Sep 2026 08:11:32 -0700 (PDT)
+        bh=grLXnCQQweMhLmDpYBV4MKF8n4Dw3i39obyyBfGlpSw=;
+        b=ETAUY+RgRoTBKT9A2gJI/W0OV9fdlUtSlQBeWvwRRyxq9sw98aTzIqoXSQLXOZmN5O
+         oi4tshx8xZQRaeoo0OK0Yag1Uo+3wWMa/G5QBXTAPNRQOH76V/RM8FAqEJsnP3dYm6ta
+         +tZkPyo21lqLhqLXwfwZmFa3PQk2KW4qUEppw6Q4pLE1jP+pAEDsvx8XG1JOVrxxTT2e
+         yHKglG8mbmeA8ntBXwALv4zBQcbKX626JdEAyBGadK8x9XbGJaBOKMFWzwgdMdRGqBny
+         Bbieay0k3eQ544pOcMP2R6tGXnr4fS7NTiB6+o4bu6fxh4Sqw4bXHYZE/Dj3SnURvJj+
+         buLQ==
+X-Gm-Message-State: AFuF++kUy4BYxSQgVc8hOSgX+ta8VvzzDZLJp35hO45nWBEJOKfYNnDb
+	LNUvqa/zzCkUTol14S+jcs7klJQ4C/qnmdf2WG+MM2QN4ymbjKesx5Nb
+X-Gm-Gg: AYBFou3x/13D2j9qE9ruIQYp6mZtizJrIXORmsYtxPQQVsdIWIaKeqa9sEilCcddvYU
+	PYbALdXduag++FnSSRH7+RNiNcmtTqb2JBLxevCClB/ZFE0fI4f624CttkrqObtZr4NlH2yFl1T
+	dMRgJ8vQgWgv7PV7lwi9rGu+ShFn3J4lp5dkySjlUpQcu5GZ0PIAcKIbqh/HXqioUyB6CyQfqNj
+	apChb+n8P5s1VIUwxnDHRth8EyiJpY2FB7HKf5dlc5GTROhwWhZ2qBQlNr8XubOYHKd2ThL+LBO
+	5KCtWVnyATOOMEyjj6fR5JAD0Jask8UDV1nx/JMPEpjsSf8m9VYoPxuSpBNKXqwfpjotqtfuWAk
+	1WM/xKZqKXQM+BnEPNBGMjmqFlRbJoHiCfIQAnN1nbtszwE3gMwQIkX/eCU0iLV5Djs0HYqcBNQ
+	07ZlzeAKzWhUYP8t5+EuBymG98po7ePvLDiD5lXQKCkza8eOyXWCBhxcl9ow54NZymYwaM1weci
+	gz88QqvZl6g8XSNwtcIf8oYN7LthCQ+0agCGzUVni3QPLBEAE8ni/HgvMZcqOQszGMfiAJ03Scu
+	KFt39v9UNdl7QX7VAie2s3lSDsrv7gx/Myw=
+X-Received: by 2002:a17:90b:1344:b0:381:6c5:3f63 with SMTP id 98e67ed59e1d1-3a07e51cf13mr2310705a91.6.1790177223646;
+        Wed, 23 Sep 2026 08:27:03 -0700 (PDT)
 Received: from [172.16.0.2] ([2a09:bac5:d58e:323::50:1d4])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc75f3d6954sm1280260a12.16.2026.09.23.08.11.30
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0812c87e9sm1822061a91.3.2026.09.23.08.27.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 23 Sep 2026 08:11:32 -0700 (PDT)
+        Wed, 23 Sep 2026 08:27:03 -0700 (PDT)
 From: houtinghang <ue081723@gmail.com>
-Date: Wed, 23 Sep 2026 23:10:55 +0800
-Subject: [PATCH] clang-tools: Decode dollar escaping in compile commands
+Date: Wed, 23 Sep 2026 23:26:33 +0800
+Subject: [PATCH] clang-tools: Resolve compilation database paths before
+ changing directory
 To: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>
 Cc: llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
  linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Message-ID: <179017625539.54044.4066773916071097354@gmail.com>
+Message-ID: <179017719332.59156.6125068848526895246@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,120 +76,131 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Kbuild doubles dollar signs when saving commands in .cmd files, but
-process_line() only decodes $(pound). Consequently, the compilation
-database retains doubled dollar signs in compiler arguments. It also
-corrupts a literal $(pound), saved as $$(pound), into $#.
+run-clang-tools.py opens the compilation database relative to the caller,
+but passes the same path to clang-tidy while running it in each entry's
+build directory. If these directories differ, a relative database path
+no longer points to the selected database. clang-tidy then falls back to
+running without flags, or can pick up a different database.
 
-Decode $$ and $(pound) in a single pass, matching how Make reads the
-saved command. A single pass avoids interpreting a decoded dollar sign
-as the start of another escape.
+For example, invoking the script with database/compile_commands.json
+from the parent of the build directory makes clang-tidy look under
+build/database/compile_commands.json. A source file that requires a
+macro defined in the selected database then reports a compiler error.
 
-Add CLI regression coverage for ordinary text, dollar signs, hash signs
-and adjacent escapes. Four of the six cases fail before this change;
-all six pass after it. The expected values were also checked against
-GNU Make using scripts/Kbuild.include.
+Convert the database argument to an absolute path when parsing it, before
+starting the worker pool. This preserves the caller's selected database
+when subprocess.run() changes the working directory.
 
-Fixes: b30204640192 ("scripts: add a tool to produce a compile_commands.json file")
+Add a regression test using real clang-tidy with C and C++ inputs. Cover
+both analysis modes and absolute, relative, dot-prefixed and parent
+component paths, including a database directory containing spaces.
+
+Fixes: 6ad7cbc01527 ("Makefile: Add clang-tidy and static analyzer support to makefile")
 Assisted-by: LLM
 Signed-off-by: houtinghang <ue081723@gmail.com>
 ---
-Testing on Ubuntu with GCC 13.3.0, Clang/clangd 18.1.3 and Make 4.3:
-- x86-64 GCC, x86-64 Clang and ARM64 Clang defconfig builds of the kernel
-  image and configured modules passed without compiler warnings.
-- All three native make compile_commands.json targets passed.
-- 17,084 ordinary compilation database entries match the original tool.
-- 432 Kbuild/CLI/shell/compiler cases produced identical objects.
-- 259 mixed escape cases agree with Make for each compiler test run.
-- 22 clangd macro checks and real x86/ARM64 kernel checks passed.
-- The original tool fails the integration and clangd negative controls.
-- Six CLI cases pass on Linux/Python 3.12.3 and Windows/Python 3.13.
+Testing with Python 3.12.3 and clang-tidy 18.1.3 on Ubuntu:
+- Eight CLI invocations cover both analysis modes and four path forms,
+  each processing C and C++ inputs. Six fail before the fix; all pass
+  after it.
+- Real x86 and ARM64 Clang init/main.c analyses match the output from
+  the original script with an absolute database path, with no compiler
+  errors. Existing analyzer warnings remain identical.
+- GCC database diagnostics also match, but clang-tidy cannot fully
+  process the GCC configuration; this is not a clean analysis result.
 
-AI disclosure: Codex identified the issue, wrote the fix and regression
-test, verified CLI output and Make semantics, reviewed the diff, and
-drafted this patch after a request to find another Linux kernel bug.
+AI disclosure: Codex found and reproduced the path bug, wrote the fix
+and regression test, reviewed the changes, ran the tests and drafted
+this patch in response to a request to find another kernel issue.
 
- scripts/clang-tools/gen_compile_commands.py   | 10 ++--
- .../clang-tools/gen_compile_commands_test.py  | 47 +++++++++++++++++++
- 2 files changed, 52 insertions(+), 5 deletions(-)
- create mode 100644 scripts/clang-tools/gen_compile_commands_test.py
+ .../clang-tools/run-clang-tools-path-test.py  | 56 +++++++++++++++++++
+ scripts/clang-tools/run-clang-tools.py        |  3 +-
+ 2 files changed, 58 insertions(+), 1 deletion(-)
+ create mode 100644 scripts/clang-tools/run-clang-tools-path-test.py
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 8d14b81..d11d15b 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -166,11 +166,11 @@ def process_line(root_directory, command_prefix, file_path):
-         ValueError: Could not find the extracted file based on file_path and
-             root_directory or file_directory.
-     """
--    # The .cmd files are intended to be included directly by Make, so they
--    # escape the pound sign '#' as '$(pound)'. The compile_commands.json file
--    # is not interepreted by Make, so this code replaces the escaped version
--    # with '#'.
--    prefix = command_prefix.replace('$(pound)', '#')
-+    # Undo the escaping performed by make-cmd in scripts/Kbuild.include.
-+    # Decode both escapes in one pass to preserve a literal '$(pound)'.
-+    prefix = re.sub(r'\$\$|\$\(pound\)',
-+                    lambda match: '$' if match.group() == '$$' else '#',
-+                    command_prefix)
- 
-     # Return the canonical path, eliminating any symbolic links encountered in the path.
-     abs_path = os.path.realpath(os.path.join(root_directory, file_path))
-diff --git a/scripts/clang-tools/gen_compile_commands_test.py b/scripts/clang-tools/gen_compile_commands_test.py
+diff --git a/scripts/clang-tools/run-clang-tools-path-test.py b/scripts/clang-tools/run-clang-tools-path-test.py
 new file mode 100644
-index 0000000..fe259af
+index 0000000..87baba5
 --- /dev/null
-+++ b/scripts/clang-tools/gen_compile_commands_test.py
-@@ -0,0 +1,47 @@
++++ b/scripts/clang-tools/run-clang-tools-path-test.py
+@@ -0,0 +1,56 @@
 +#!/usr/bin/env python3
 +# SPDX-License-Identifier: GPL-2.0
 +
-+"""Command-line regression tests for gen_compile_commands.py."""
++"""Exercise compilation database paths with the real clang-tidy executable."""
 +
 +import json
 +from pathlib import Path
++import shutil
 +import subprocess
 +import sys
 +import tempfile
 +import unittest
 +
 +
-+SCRIPT = Path(__file__).with_name("gen_compile_commands.py")
++SCRIPT = Path(__file__).with_name("run-clang-tools.py")
 +
 +
-+class TestCompileCommands(unittest.TestCase):
-+    def test_make_escaping(self):
-+        cases = [
-+            ("plain", "plain"),
-+            ("$$value", "$value"),
-+            ("$$$$", "$$"),
-+            ("$(pound)value", "#value"),
-+            ("$$(pound)", "$(pound)"),
-+            ("$$$(pound)", "$#"),
-+        ]
++@unittest.skipUnless(shutil.which("clang-tidy"), "clang-tidy is required")
++class TestDatabasePath(unittest.TestCase):
++    def test_database_path(self):
 +        with tempfile.TemporaryDirectory() as directory:
 +            root = Path(directory)
-+            (root / "test.c").write_text("int test;\n", encoding="utf-8")
-+            for escaped, original in cases:
-+                with self.subTest(escaped=escaped):
-+                    prefix = "gcc -DVALUE='\"{}\"' -c -o test.o "
-+                    (root / ".test.o.cmd").write_text(
-+                        "savedcmd_test.o := " + prefix.format(escaped)
-+                        + "test.c\n", encoding="utf-8")
-+                    output = root / "compile_commands.json"
-+                    subprocess.run(
-+                        [sys.executable, str(SCRIPT), "-d", str(root),
-+                         "-o", str(output)], check=True, capture_output=True)
-+                    entries = json.loads(output.read_text(encoding="utf-8"))
-+                    self.assertEqual(len(entries), 1)
-+                    self.assertEqual(entries[0]["command"],
-+                                     prefix.format(original) + "test.c")
++            build = root / "build"
++            database = root / "database with spaces"
++            build.mkdir()
++            database.mkdir()
++            entries = []
++            for suffix in ("c", "cpp"):
++                source = build / ("test." + suffix)
++                source.write_text(
++                    "#ifndef REQUIRED\n#error compilation flags lost\n"
++                    "#endif\nint test;\n", encoding="utf-8")
++                entries.append({
++                    "directory": str(build), "file": str(source),
++                    "arguments": ["clang", "-DREQUIRED", "-c", str(source)],
++                })
++            path = database / "compile_commands.json"
++            path.write_text(json.dumps(entries), encoding="utf-8")
++            paths = [str(path), str(path.relative_to(root)),
++                     "./" + str(path.relative_to(root)),
++                     "build/../" + str(path.relative_to(root))]
++            for analysis in ("clang-tidy", "clang-analyzer"):
++                for value in paths:
++                    with self.subTest(analysis=analysis, path=value):
++                        result = subprocess.run(
++                            [sys.executable, str(SCRIPT.resolve()), analysis,
++                             value], cwd=root, capture_output=True, text=True)
++                        self.assertEqual(result.returncode, 0, result.stderr)
++                        self.assertNotIn("compilation flags lost", result.stderr)
++                        self.assertNotIn("Running without flags", result.stderr)
++                        self.assertNotIn("Error while trying to load",
++                                         result.stderr)
 +
 +
 +if __name__ == "__main__":
 +    unittest.main()
-
-base-commit: fe2ec83746e501645709761605c2464a44fd2929
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index e78be82..230db50 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -12,6 +12,7 @@ compile_commands.json.
+ import argparse
+ import json
+ import multiprocessing
++import os
+ import subprocess
+ import sys
+ 
+@@ -31,7 +32,7 @@ def parse_arguments():
+                         choices=["clang-tidy", "clang-analyzer"],
+                         help=type_help)
+     path_help = "Path to the compilation database to parse"
+-    parser.add_argument("path", type=str, help=path_help)
++    parser.add_argument("path", type=os.path.abspath, help=path_help)
+ 
+     checks_help = "Checks to pass to the analysis"
+     parser.add_argument("-checks", type=str, default=None, help=checks_help)
 -- 
 2.52.0.windows.1
 
