@@ -1,83 +1,54 @@
-Received: from mail-pj2-f43.google.com (mail-pj2-f43.google.com [74.125.227.171])
+Received: from mta1.migadu.com (out-22.mta1.migadu.com [95.215.58.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12BBC4A5C2F
-	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 17:31:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14B4442CB01
+	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 18:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790271068; cv=none; b=LHsTpUpEFhh7yAf/4lS53FsoS/pqyFsFUBe2l8Rh7dfxUShF0OzZhDOs0Q7DiQ0pS6CkYWf3Wlu9oT+HZEQpCI+ahf5s82eXH5Aio/YBI1HYZtx+3Uc1i2c3PC4PzYq80jefNvmYsX8Hts62tExuCssXtVM4fLg7xShkHEF449E=
+	t=1790275686; cv=none; b=c/6p2zMyUB1ac5dTe9eHgqPpZa+fDQJVbrxljBWAmQ5HZ8oEqlZRSWCL7r7ji9qy7bXoaZpQ33l2ZulD0FgIoiKEg45529c0phaW3rvFyy+podXhWq8QoFPDa8bScuKla8R4KqGMdMlXs+jhhIpbIegJOVJRM3j7ko409Wd2Z6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790271068; c=relaxed/simple;
-	bh=8k0pAYunK0C/ZEASjnYOeevtTRfrL6thzTwkzzYEkFs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M5PH2XTgn+sUjzGAsCy3rHLeuZuMyFBNWtFhgcWpcnkYGOuFn0q5FRX1WA4PVPh1SbciMDmINzkKCDlaDftiEKQ+dV9jWTcXnnCbT6b3C3pTyKVeM7/WDsrdQL/9Su4op79ooeQTSTkT0D15TCrUjLG9217BS0grpbMfALyh9CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com; spf=pass smtp.mailfrom=trailofbits.com; dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b=K8vsX+f3; arc=none smtp.client-ip=74.125.227.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=trailofbits.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=trailofbits.com
+	s=arc-20240116; t=1790275686; c=relaxed/simple;
+	bh=jBoLVDijjVY3+JudgElb6XvSda0egt/f17ov+qEY2iY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e61rwsLwF7CUV/utHdfuyk+IQICFaaLGKLZSW5wg0kzDEx2+G64X40MCKg9BRfyMwoX0ArCsTIGTyKbWAtq0V0yw+v8VvCVG+qBqgHfOKEqnuudncvQQi2uV8eu3RggVWipYR2xV7l6Rn5G3n03BTORZO8Axbczd3B/LTlWmlMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mWTwYqqZ; arc=none smtp.client-ip=95.215.58.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=trailofbits.com header.i=@trailofbits.com header.b="K8vsX+f3"
-Received: by mail-pj2-f43.google.com with SMTP id 98e67ed59e1d1-39b910bdf2eso97655a91.2
-        for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 10:31:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=trailofbits.com; s=google; t=1790271066; x=1790875866; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ap6pakDUJlnHSF/aqYwnk2uDwDP9NpWN5G+PbeaxTVk=;
-        b=K8vsX+f3WfnEZju66ADYTkhmNSQZPkYuTQiUJ81iP9PtLdm9DGgOtBap5rgNmmTWd2
-         cgGBA4ELf8vskH28RjgNcSCl4MzqRNjknJobgR3WK0a5/KzO07zxQqQJT1ioKHJVsVXb
-         4fAau9Mly7/YLC3MDELdvQz/yoFlJtYojwaBtFOHQ1ctL+PMMcyhkh8SA0R6p0yYrHMt
-         /Lo5y7eLfL56nWYU4dc++a8Ok9sWHSVSH/MN/3fBDh3AoJu7tONDB/sGK1uEtsRor8is
-         vxX519kFnmgSBGwil6dXiJj71X1Z0ELRGjNSiM1e3bYIU8QY1XinPAj/Wscrhlp8VMYD
-         kTVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790271066; x=1790875866;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ap6pakDUJlnHSF/aqYwnk2uDwDP9NpWN5G+PbeaxTVk=;
-        b=F+fFaIP+PwzWtwWzSg5OTqkERRdJbbohCsl75/ckuT/Xji4VsgbW3TXENXICfhO75B
-         SIlhmdUfZEN7i++YbYjcKk2ITs9l3aoxPkvFgyq5EZoik7Z8m0+J4PoDRUTS4vUQnx3U
-         ORAYnGeOMBpLsw7ps1qCV7o7wx5udp9hWto94jbnYRiJKs7emcVEcO53/F2GgeeaiwSw
-         gx9NP1MoveXMlenr4dDRfRn4leIDMbOiElZWoQCpx5uGuwconHagz3QaK3Faj8SegZty
-         tnriesJayxraxoehSllNOvhm8V4SEeanc5uhSDZr3BwEZ5FbLoAh7Cfzdq+t1lU2thx+
-         TrTw==
-X-Forwarded-Encrypted: i=1; AKwUvBzpMPLzXToxqLJthzrU6+be8WlTiORTgqu0Kwnu8A++aE+7AgFgSd6F1rvneVk94tZcjf1P@lists.linux.dev
-X-Gm-Message-State: AFuF++lU5KCTsD4rJnCAK6J8Vx2azTR9v45qYW9+2ZvlsL/QrIng/RTE
-	hSrvWQMf+dLBX9le1HJ70f+MZFq4B5JQ0Jo8zw6hMoNG87Mjix0gEziyWE8yCvfrJd8=
-X-Gm-Gg: AYBFou3kIB842T6jTR1jdLpy7SXBMQqcxdz6/RSFLaqmIH7kBDv6TsCeqNrlWwGeKRZ
-	xso5YZeqdAx2+ENZOFVS233M85FdNdRXcA5d2xmBMwgdLz5nI+m1AtLgatl2/Ho70cWNz6ZcykT
-	Clg8J30l012xbz2Go2CmiWXdEb9fi/3XwGNbNcODat/S22fVKjme/RzszMr7eOgb18HAhEOWSQD
-	acoerxC61Bbqv0CFZ/TU40PyE0x3671oTxRvjxN7aTJA/9BfeLvgUHYAwHk5sgQLk8wqhAvZI2F
-	nV5x0Fv0i7oU5HUHvFK66jhyHF1MBrq0r6usgkoT0VHZw7LATrKwk40ugx9HnQKu7UQCwpiSsmB
-	hqCeQVemTfBWNb1nXEgBy9Wq8SBT69dGv7sTAd+oPU0EQuo6fUKiXIoPH/xufBT9oFiv2dBs1Cg
-	RAJxIXI5XvueWoNQb6yc0XgDhr6LTOiVRInXRLsmoDKBrfgzxoqMf5Y8wexDdOq32Pe7i1mMLHg
-	BEwTo6jEi2g/zSaLOTDPWiy+3SFYaALk4GJlIcD61r5gAsXOvODh/zT8odSdHN8EXAbVBI=
-X-Received: by 2002:a17:90b:2e4e:b0:3a0:a515:c450 with SMTP id 98e67ed59e1d1-3a0a515c806mr1763774a91.27.1790271065988;
-        Thu, 24 Sep 2026 10:31:05 -0700 (PDT)
-Received: from localhost.localdomain ([2603:8001:5f01:8bab:f875:3165:4649:e818])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a09733f48fsm6082456a91.11.2026.09.24.10.31.04
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 24 Sep 2026 10:31:05 -0700 (PDT)
-From: Artem Dinaburg <artem@trailofbits.com>
-To: stable@vger.kernel.org
-Cc: Artem Dinaburg <artem@trailofbits.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Tom Rix <trix@redhat.com>,
-	linuxppc-dev@lists.ozlabs.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mWTwYqqZ"
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=jBoLVDijjVY3+JudgElb6XvSda0egt/f17ov+qEY2iY=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1790275671; v=1; x=1790880471;
+ b=mWTwYqqZYuxLC+fqWXZZomOqCdenDLf831E+3KfS2jb4nUuNbU4AgA5BlDO0VXJR0pkFpi4T
+ djLe+o7XAjoqpYCzKlzTHDj/Ure7TZDQDUzTYcOKlWbGP5piO7eMAF+chznvzxh9bITi6etEwxk
+ MqQZ9lwu6X1wtlE0dhUAWdA8=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by mta10.migadu.com with ESMTPS id 5003015ae02132ac;
+	Thu, 24 Sep 2026 18:47:51 +0000
+X-Mizu-Trace-ID: 5003015ae02132ac
+X-Migadu-Flow: FLOW_OUT
+From: Usama Arif <usama.arif@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	justinstitt@google.com,
+	linux-crypto@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
-	"Peter Zijlstra (Intel)" <peterz@infradead.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: [PATCH 6.1.y] start_kernel: Add __no_stack_protector function attribute
-Date: Thu, 24 Sep 2026 13:30:59 -0400
-Message-ID: <20260924173100.87358-1-artem@trailofbits.com>
-X-Mailer: git-send-email 2.55.0
+	morbo@google.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	Thomas Graf <tgraf@suug.ch>,
+	nickolay.lysenko@gmail.com,
+	peterz@infradead.org,
+	rostedt@goodmis.org,
+	sched-ext@lists.linux.dev,
+	tj@kernel.org
+Cc: Usama Arif <usama.arif@linux.dev>
+Subject: [PATCH] rhashtable: specialize default comparison for constant parameters
+Date: Thu, 24 Sep 2026 11:47:33 -0700
+Message-ID: <20260924184733.2317353-1-usama.arif@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -86,116 +57,122 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: "ndesaulniers@google.com" <ndesaulniers@google.com>
+The inline lookup and insert helpers receive the rhashtable parameters by
+value. With a static const parameter block, key_offset and key_len are
+compile-time constants at the call site.
 
-[ Upstream commit 514ca14ed5444b911de59ed3381dfd195d99fe4b ]
+The default comparison throws that information away by reading both fields
+back from ht->p. Fixed-size keys consequently load the parameters and call
+bcmp() for every object in the bucket, even when the compiler could use
+scalar comparisons instead.
 
-Back during the discussion of
-commit a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
-we discussed the need for a function attribute to control the omission
-of stack protectors on a per-function basis; at the time Clang had
-support for no_stack_protector but GCC did not. This was fixed in
-gcc-11. Now that the function attribute is available, let's start using
-it.
+The commit "sched_ext: Specialize the DSQ hashtable compare" [1] resulted
+in a 2.9x faster DSQ lookup after replacing this path for its u64 key
+with a scalar comparison. Doing that through obj_cmpfn requires every
+fixed-key user to provide its own callback.
 
-Callers of boot_init_stack_canary need to use this function attribute
-unless they're compiled with -fno-stack-protector, otherwise the canary
-stored in the stack slot of the caller will differ upon the call to
-boot_init_stack_canary. This will lead to a call to __stack_chk_fail()
-then panic.
+Pass the call-site parameters to rhashtable_compare(), as
+rht_key_get_hash() already does. Use them when key_len is a compile-time
+constant. Retain the ht->p path for dynamic parameter blocks. A constant
+zero key_len continues to take the runtime length from ht->p.key_len.
 
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=94722
-Link: https://lore.kernel.org/all/20200316130414.GC12561@hirez.programming.kicks-ass.net/
-Tested-by: Nathan Chancellor <nathan@kernel.org>
-Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-Acked-by: Miguel Ojeda <ojeda@kernel.org>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-Link: https://lore.kernel.org/r/20230412-no_stackp-v2-1-116f9fe4bbe7@google.com
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
+This specializes the default comparison for all fixed-size users. With
+Clang 22 on x86-64, bcmp() disappears from sched_ext, mac80211, NFSd,
+TIPC, NFQUEUE, VFS superblock, pidfs, SysV IPC and hardware-breakpoint
+table paths. The affected build_policy.o, sta_info.o and nfsd filecache.o
+text shrinks by 512, 400 and 352 bytes respectively. Four- and eight-byte
+keys become direct scalar comparisons; six-byte MAC addresses become a
+four-byte and a two-byte comparison.
 
-Signed-off-by: ndesaulniers@google.com <ndesaulniers@google.com>
+Measure the VFS case with ustat() on a mounted ramfs. This exercises
+user_get_super() and its super_dev lookup. Across ten interleaved baseline
+and patched VM boot pairs, with five 3 million call samples per boot, the
+average per-boot median latency drops from 477.2 to 462.6 ns per call, or
+3.0%. All ten pairs improved.
 
-[ Backport to 6.1.y: retain this tree's start_kernel() signature, which
-  predates its upstream __noreturn annotation, and add
-  __no_stack_protector. ]
-Assisted-by: LLM
-Signed-off-by: Artem Dinaburg <artem@trailofbits.com>
+No functional change intended.
+
+[1] https://lore.kernel.org/all/20260921171928.1639407-1-usama.arif@linux.dev/
+
+Suggested-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
+Signed-off-by: Usama Arif <usama.arif@linux.dev>
 ---
-Hi Greg, Sasha, and kernel and powerpc maintainers,
+ include/linux/rhashtable.h | 20 +++++++++++++++-----
+ lib/rhashtable.c           |  5 +++--
+ 2 files changed, 18 insertions(+), 7 deletions(-)
 
-I am continuing CVE backports still missing from 6.1.y.
-This fix is inherited by v6.6 and every later mainline release, but 6.1.y
-still has the affected code. The target-specific adjustment is described
-in the bracketed note above.
-
-Could you please queue it for 6.1.y?
-
-Thanks,
-Artem Dinaburg
-
-CVE: CVE-2023-53491
-
-Build validation: The touched powerpc allmodconfig objects built
-with CONFIG_WERROR=y, and the patched functions had no stack_chk_fail
-reference.
-
-AI assistance: An LLM helped find, adapt, and validate this
-backport; I reviewed the patch and test output.
-
- arch/powerpc/kernel/smp.c           |  1 +
- include/linux/compiler_attributes.h | 12 ++++++++++++
- init/main.c                         |  3 ++-
- 3 files changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/arch/powerpc/kernel/smp.c b/arch/powerpc/kernel/smp.c
-index 980f2bc832d98d..fa17fdcc55a3de 100644
---- a/arch/powerpc/kernel/smp.c
-+++ b/arch/powerpc/kernel/smp.c
-@@ -1608,6 +1608,7 @@ static void add_cpu_to_masks(int cpu)
- }
+diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
+index 57a2a29bef0e8..c9872965b753c 100644
+--- a/include/linux/rhashtable.h
++++ b/include/linux/rhashtable.h
+@@ -598,13 +598,23 @@ static inline void rht_assign_unlock(struct bucket_table *tbl,
+ 	for (pos = list; pos && rht_entry(tpos, pos, member);		\
+ 	     pos = rcu_dereference_all(pos->next))
  
- /* Activate a secondary processor. */
-+__no_stack_protector
- void start_secondary(void *unused)
- {
- 	unsigned int cpu = raw_smp_processor_id();
-diff --git a/include/linux/compiler_attributes.h b/include/linux/compiler_attributes.h
-index ab1fe28162b5e8..b9778e13b0a085 100644
---- a/include/linux/compiler_attributes.h
-+++ b/include/linux/compiler_attributes.h
-@@ -277,6 +277,18 @@
-  */
- #define __noreturn                      __attribute__((__noreturn__))
- 
+-static inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
+-				     const void *obj)
 +/*
-+ * Optional: only supported since GCC >= 11.1, clang >= 7.0.
-+ *
-+ *   gcc: https://gcc.gnu.org/onlinedocs/gcc/Common-Function-Attributes.html#index-no_005fstack_005fprotector-function-attribute
-+ *   clang: https://clang.llvm.org/docs/AttributeReference.html#no-stack-protector-safebuffers
++ * Use constant params from inlined callers to specialize memcmp(). If params
++ * isn't constant, it must be equal to ht->p.
 + */
-+#if __has_attribute(__no_stack_protector__)
-+# define __no_stack_protector		__attribute__((__no_stack_protector__))
-+#else
-+# define __no_stack_protector
-+#endif
++static __always_inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
++					      const void *obj,
++					      const struct rhashtable_params params)
+ {
+ 	struct rhashtable *ht = arg->ht;
+ 	const char *ptr = obj;
+ 
+-	return memcmp(ptr + ht->p.key_offset, arg->key, ht->p.key_len);
++	if (!__builtin_constant_p(params.key_len))
++		return memcmp(ptr + ht->p.key_offset, arg->key,
++			      ht->p.key_len);
 +
- /*
-  * Optional: not supported by gcc.
-  * Optional: not supported by icc.
-diff --git a/init/main.c b/init/main.c
-index 50b84f1f9ff38a..6acfd5a78bd7a5 100644
---- a/init/main.c
-+++ b/init/main.c
-@@ -908,7 +908,8 @@ static void __init print_unknown_bootoptions(void)
- 	memblock_free(unknown_options, len);
++	return memcmp(ptr + params.key_offset, arg->key,
++		      params.key_len ? : ht->p.key_len);
  }
  
--asmlinkage __visible void __init __no_sanitize_address start_kernel(void)
-+asmlinkage __visible __init __no_sanitize_address __no_stack_protector
-+void start_kernel(void)
- {
- 	char *command_line;
- 	char *after_dashes;
+ /* Internal function, do not use. */
+@@ -632,7 +642,7 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
+ 		rht_for_each_rcu_from(he, __rht_ptr_rcu(bkt, freq), tbl, hash) {
+ 			if (params.obj_cmpfn ?
+ 			    params.obj_cmpfn(&arg, rht_obj(ht, he)) :
+-			    rhashtable_compare(&arg, rht_obj(ht, he)))
++			    rhashtable_compare(&arg, rht_obj(ht, he), params))
+ 				continue;
+ 			return he;
+ 		}
+@@ -797,7 +807,7 @@ static __always_inline void *__rhashtable_insert_fast(
+ 		if (!key ||
+ 		    (params.obj_cmpfn ?
+ 		     params.obj_cmpfn(&arg, rht_obj(ht, head)) :
+-		     rhashtable_compare(&arg, rht_obj(ht, head)))) {
++		     rhashtable_compare(&arg, rht_obj(ht, head), params))) {
+ 			pprev = &head->next;
+ 			continue;
+ 		}
+diff --git a/lib/rhashtable.c b/lib/rhashtable.c
+index 6362896e4f099..9d9f03b59c823 100644
+--- a/lib/rhashtable.c
++++ b/lib/rhashtable.c
+@@ -548,7 +548,7 @@ static void *rhashtable_lookup_one(struct rhashtable *ht,
+ 		if (!key ||
+ 		    (ht->p.obj_cmpfn ?
+ 		     ht->p.obj_cmpfn(&arg, rht_obj(ht, head)) :
+-		     rhashtable_compare(&arg, rht_obj(ht, head)))) {
++		     rhashtable_compare(&arg, rht_obj(ht, head), ht->p))) {
+ 			pprev = &head->next;
+ 			continue;
+ 		}
+@@ -710,7 +710,8 @@ static struct rhash_head *__rhashtable_next_in_table(
+ 		rht_for_each_rcu(he, tbl, b) {
+ 			bool match = params.obj_cmpfn
+ 				     ? !params.obj_cmpfn(&arg, rht_obj(ht, he))
+-				     : !rhashtable_compare(&arg, rht_obj(ht, he));
++				     : !rhashtable_compare(&arg, rht_obj(ht, he),
++						   params);
+ 			if (found) {
+ 				if (match)
+ 					continue;
 -- 
-2.39.5
+2.53.0-Meta
+
