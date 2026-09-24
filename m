@@ -1,38 +1,38 @@
-Received: from mta1.migadu.com (out-190.mta1.migadu.com [95.215.58.190])
+Received: from mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C14B440632
-	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 22:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E957412C0D
+	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 22:42:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790289490; cv=none; b=a4JVRuhNklSKBR+5LQux4RUWy85AZgQ3ZSoQD9IwFjJuTMCAxX3WVYgjqcE5ICJN7Q9uk7bEdv4rgucnjmakJgKQjNAojLvONa+8z7NgqhqxTvH7a/WMvDuJIsjC2cOqBB3XL+nUthuQC7v11tc/eWrI5HEmVaRGK3JQlBuUiog=
+	t=1790289769; cv=none; b=TPqlKDwP9S189RuE9vvNfScmB+NuGFZYDqsHIQtrYNRM9SkrrZujrxvFIxQ56l06kIACnhC+CpnU9p0QHVO5rzrfE4k0/I1l1M4/hYxeBrYwL+/MVoMLqgZAu05d04WGSk1iq665E22zpHh2bLhB3BkDHVbxYZpydnS1C0Z1oek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790289490; c=relaxed/simple;
-	bh=vil181D960QvjzpQda7p1iELcQx+1UUMUXoKj0Sxk4U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kSaHkxIGClivJ3O+D68VOTojM8wkY+o7t3sBM5s/cjz8o0MfKiBj1TntbQymWMEK1etrZfPIrINqHW1f9+qRu9LCZtIEXlwuBpj8NQyZWBn2VIZVTkf14SKoruDefZTPLEVExBXTUNQvKQYrjbJKXtGR4zHLQy1KmwBAyoI+plU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kfhNpjwN; arc=none smtp.client-ip=95.215.58.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790289769; c=relaxed/simple;
+	bh=WRPL/H0LrA/BKC4g71mMipRThq8ER0G25bE1inVY1ww=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=BnALNLg3G2ZefvDwUjg2Z/utE7ED6iyN/z0SkNNH9tlTYRqBh3P6CgNdDLbOjBO76MznX38OoHgKR69Fl/WGCzc+OIhTxLqZ+NEKEBxCzqTjbArP8a7FMQWCQIm41+meoGTVRZDUfVScFy8UD1+M1b7EcDdlv8/AOUIt4ovy0hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cressey.dev; spf=pass smtp.mailfrom=cressey.dev; dkim=pass (2048-bit key) header.d=cressey.dev header.i=@cressey.dev header.b=M8uxa+x1; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cressey.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cressey.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kfhNpjwN"
+	dkim=pass (2048-bit key) header.d=cressey.dev header.i=@cressey.dev header.b="M8uxa+x1"
 X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=vil181D960QvjzpQda7p1iELcQx+1UUMUXoKj0Sxk4U=;
- c=simple/simple; d=linux.dev;
+DKIM-Signature: a=rsa-sha256; bh=WRPL/H0LrA/BKC4g71mMipRThq8ER0G25bE1inVY1ww=;
+ c=simple/simple; d=cressey.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790289486; v=1; x=1790894286;
- b=kfhNpjwNZnN1jdo2y4Mf+IT97SRfjT4PX5j0UpZrUdK/jQ3roq7fo2R0TSSYzqmERGiES12h
- 4TC8e9xCQw/uE9uPeL+7DxJyMdDPFn94wK8nRiwnd6uN7p1lXhZxXgKWhbZpfmaJ4CWhXRkC7Ca
- zSwV6sBZwkV34eU0CWfvRhkk=
+ t=1790289764; v=1; x=1790894564;
+ b=M8uxa+x1EgcdMivO9OwY+7QaX6MRK+r6ztKF+95QExiaFoS9Iq2uxFuSFzvWFZIsPw8FHyJl
+ 55HOpmJpG9mO6EL5dasJFrMiO7ToSHdJ9K9dUCmcc/zTsQH7bc8CkYH/kNZzD8+/yHQU0iWzpmL
+ OUJR/k6PPfC/MAL+AMJinC3iuVXwXq4JDq/TLXkLqSSKBxoTFI+D7CTmOSGRaPIn5sFk0fwV5uI
+ MyINjT1Q74dmu2b/AO4UBPkCvdc5Cgr6H2TuBiQRZthPpbgBTopw1MMUsSfMVvpE8oXVSNeGtvB
+ 3BoB2y+RTihECm+J62I47Sc1ZqmcKprYI9nQ1kD1c35tg==
 X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id f8d638709f166d64;
-	Thu, 24 Sep 2026 22:38:05 +0000
-X-Mizu-Trace-ID: f8d638709f166d64
+Received: by smtp.migadu.com with ESMTPS id 9c16178fdf9bcaa3;
+	Thu, 24 Sep 2026 22:42:34 +0000
+X-Mizu-Trace-ID: 9c16178fdf9bcaa3
 X-Migadu-Flow: FLOW_OUT
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Date: Thu, 24 Sep 2026 22:35:53 +0000
-Subject: [PATCH v2 9/9] arm64: ftrace: Allow CALL_OPS on kCFI kernels built
- with Rust
+From: Ben Cressey <ben@cressey.dev>
+Date: Thu, 24 Sep 2026 22:42:30 +0000
+Subject: [PATCH] arm64: kexec: mark machine_kexec() __nocfi
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -41,122 +41,83 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260924-b4-arm64-callops-kcfi-v2-9-587865b6d991@linux.dev>
-References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
-In-Reply-To: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
-To: Steven Rostedt <rostedt@goodmis.org>, 
- Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+Message-Id: <20260924-arm64-kexec-nocfi-v1-1-bbae2e2eadc8@cressey.dev>
+X-B4-Tracking: v=1; b=H4sIAFWntWoC/2XMQQ6CMBCF4auQWTsRa63iVYyLMj5kNBbSqiEh3
+ N1Wly6/ybx/poSoSHSsZop4a9IhZGxWFUnvwxWsl2wytXF1Yyz7+HCW75ggHAbplG3j4Ox2tz8
+ IKO/GiE6nb/N0/jm92hvkWULlo/UJ3EYfpC+nwvVfl5blA0MBvFyeAAAA
+X-Change-ID: 20260924-arm64-kexec-nocfi-496e643578ce
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Nathan Chancellor <nathan@kernel.org>, 
  Nick Desaulniers <ndesaulniers@google.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
- Ard Biesheuvel <ardb@kernel.org>, 
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, 
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Tamir Duberstein <tamird@kernel.org>, 
- Alexandre Courbot <acourbot@nvidia.com>, 
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
- Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>
-Cc: Leon Hwang <leon.hwang@linux.dev>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
- linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
- Ben Cressey <ben@cressey.dev>, 
- "Florent Revest (Anthropic)" <florent.revest@linux.dev>, 
- "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
+ Pasha Tatashin <pasha.tatashin@soleen.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>, 
+ Kees Cook <kees@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>, 
+ kexec@lists.infradead.org, stable@vger.kernel.org, 
+ Ben Cressey <ben@cressey.dev>
 X-Mailer: b4 0.15.2
 
-Pass -Zpatchable-function-entry=M,M,.discard.patchable_function_entries
-to rustc when CFI and CALL_OPS are both enabled, so Rust functions get
-the same prefix NOPs as C functions. The section argument needs
-Rust 1.98 [1]. Probe for it, and let ARM64_CFI_PERMITS_CALL_OPS
-accept RUST=y when the probe passes.
+When the loaded image needs relocation, machine_kexec() makes an
+indirect call into the copy of arm64_relocate_new_kernel in the control
+page:
 
-[1] https://github.com/rust-lang/rust/pull/157445
+	kernel_reloc = (void *)kimage->arch.kern_reloc;
+	kernel_reloc(kimage);
 
-Suggested-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Ben Cressey <ben@cressey.dev>
-Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
+With CONFIG_CFI=y the kCFI check on this call loads a type hash from
+kern_reloc - 4. arm64_relocate_new_kernel is SYM_CODE_START and carries
+no hash. Its copy also sits at the start of the control page, which is
+all that TTBR0 maps at this point, so the load faults and the kernel
+oopses after "Bye!" instead of entering the new kernel:
+
+ Unable to handle kernel paging request at virtual address 00000000544bfffc
+ Internal error: Oops: 0000000096000007 [#1]  SMP
+ pc : machine_kexec+0x104/0x274
+ Code: d5182008 d5033fdf aa1303e0 f9418a68 (b85fc110)
+
+b85fc110 is "ldur w16, [x8, #-4]" with x8 = kimage->arch.kern_reloc.
+The crash kernel and images loaded in place take the IND_DONE path
+through cpu_soft_restart() instead, which is SYM_TYPED_FUNC_START in
+.idmap.text and not affected.
+
+arm64_relocate_new_kernel cannot be given a type hash, since the linker
+script asserts that the relocation code starts at that symbol and a
+hash would have to precede it. Mark machine_kexec() __nocfi instead, as
+commit e2f8216ca2d8 ("arm64: Set __nocfi on swsusp_arch_resume()") did
+for the same pattern on the hibernate path and commit 2114796ca041
+("x86/kexec: Mark machine_kexec() with __nocfi") did on x86.
+
+Fixes: efc2d0f20a9d ("arm64: kexec: keep MMU enabled during kexec relocation")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ben Cressey <ben@cressey.dev>
 Assisted-by: LLM
-Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
 ---
- arch/arm64/Kconfig  | 7 ++++++-
- arch/arm64/Makefile | 3 +++
- rust/Makefile       | 7 ++++++-
- 3 files changed, 15 insertions(+), 2 deletions(-)
+Functional check only, under QEMU TCG (-M virt,gic-version=3,its=off
+-cpu max -smp 2), v7.3-rc4 defconfig plus CONFIG_CFI=y, clang 21:
+"kexec -l" or "kexec -s -l" of the same Image then "kexec -e" oopses as
+above without the patch and reaches the second kernel with it.
+"kexec -p" plus sysrq-c reaches the crash kernel either way.
+---
+ arch/arm64/kernel/machine_kexec.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index afa566e0fa86c..cad2bdf3456ff 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -282,11 +282,16 @@ config CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
- 	# https://github.com/llvm/llvm-project/pull/131230
- 	def_bool $(cc-option,-fpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
- 
-+config RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
-+	# The section argument needs Rust 1.98.0 or later:
-+	# https://github.com/rust-lang/rust/pull/157445
-+	def_bool $(rustc-option,-Zpatchable-function-entry=1$(comma)1$(comma).discard.patchable_function_entries)
-+
- config ARM64_CFI_PERMITS_CALL_OPS
- 	def_bool y
- 	depends on CFI
- 	depends on CC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
--	depends on !RUST
-+	depends on !RUST || RUSTC_HAS_PATCHABLE_FUNCTION_ENTRY_SECTION
- 
- config ARM64_FUNCTION_PREFIX_NOPS
- 	int
-diff --git a/arch/arm64/Makefile b/arch/arm64/Makefile
-index 653c1ed6ef38f..b23430e2b8567 100644
---- a/arch/arm64/Makefile
-+++ b/arch/arm64/Makefile
-@@ -152,6 +152,9 @@ ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_CALL_OPS),y)
- 			 -DCC_USING_PATCHABLE_FUNCTION_PREFIX=$(prefix_nops)
-     KBUILD_CFLAGS += $(CFI_PREFIX_CFLAGS)
-     export CFI_PREFIX_CFLAGS
-+    # Rust functions are not patched by ftrace, but they are called indirectly
-+    # from C and make indirect calls themselves, so they need the same prefix.
-+    KBUILD_RUSTFLAGS += -Zpatchable-function-entry=$(prefix_nops),$(prefix_nops),.discard.patchable_function_entries
-   endif
- else ifeq ($(CONFIG_DYNAMIC_FTRACE_WITH_ARGS),y)
-   KBUILD_CPPFLAGS += -DCC_USING_PATCHABLE_FUNCTION_ENTRY
-diff --git a/rust/Makefile b/rust/Makefile
-index da1a7409d9845..b402ab768f729 100644
---- a/rust/Makefile
-+++ b/rust/Makefile
-@@ -511,7 +511,12 @@ endif
- # prototypes for functions like `memcpy` -- if this flag is not passed,
- # `bindgen`-generated prototypes use `c_ulong` or `c_uint` depending on
- # architecture instead of generating `usize`.
--bindgen_c_flags_final = $(bindgen_c_flags_lto) -fno-builtin -D__BINDGEN__
-+#
-+# Do not pass -fpatchable-function-entry to bindgen: its libclang may not
-+# support the section argument (Clang >= 21), and removing the flag does not
-+# change the ABI.
-+bindgen_c_flags_final = $(filter-out -fpatchable-function-entry=%, \
-+	$(bindgen_c_flags_lto)) -fno-builtin -D__BINDGEN__
- 
- # `--rust-target` points to our minimum supported Rust version.
- quiet_cmd_bindgen = BINDGEN $@
+diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+index 8f9bc2327dc85..7d218339b84a6 100644
+--- a/arch/arm64/kernel/machine_kexec.c
++++ b/arch/arm64/kernel/machine_kexec.c
+@@ -160,7 +160,7 @@ int machine_kexec_post_load(struct kimage *kimage)
+  *
+  * Called from the core kexec code for a sys_reboot with LINUX_REBOOT_CMD_KEXEC.
+  */
+-void machine_kexec(struct kimage *kimage)
++void __nocfi machine_kexec(struct kimage *kimage)
+ {
+ 	bool in_kexec_crash = (kimage == kexec_crash_image);
+ 	bool stuck_cpus = cpus_are_stuck_in_kernel();
 
--- 
-2.52.0
+---
+base-commit: 93f51579e7df248780214094418f205253383cc5
+change-id: 20260924-arm64-kexec-nocfi-496e643578ce
 
