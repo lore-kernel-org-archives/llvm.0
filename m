@@ -1,225 +1,155 @@
-Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4578C2FE56A
-	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 12:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78E8247ECC8
+	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 12:47:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790253416; cv=none; b=WLzxFm5hR46e9J3oHa/F+p0ewpFxbOh1zJMn/l2fc7ahep8vntwse+ltSvnTz9DC8meCVuWFLMUAQp34VN2zad+HMIDbGHoE1Q7psS5cvuli94wqQD8ci2Iqybx3Yu1xwXr8aH+30GF9UiKpLfEwK4mDxXgBcTO3AbapeYfAaNs=
+	t=1790254030; cv=none; b=W8e7lxRBYr8BY8iecVla91iFu/edlWzCyFyyzF9dj8k7t2EUKNJ9xY5AFGHVQdqqlz6psU8w+13Vo7cKzoOtQE3FYwtt62k9LGRHhcn4Ej1wIl7D0f5tQVwnCRl2AWoKUqNKUhEkBDjp0y06xwakWR+rDhP+6yAfNo1Osdi1Ubw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790253416; c=relaxed/simple;
-	bh=CLLX1WGSyy5uutnydf7E+boNfhnOuNdZ5bWoEr7Diic=;
+	s=arc-20240116; t=1790254030; c=relaxed/simple;
+	bh=aLsBzLjrp1DcDn6DWeVaafFM2AupnjMYo0e+qs0lkyk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vfr8vI4EbL4yB7YrxmlxT54iW56hCX6R5tTaCSc9/j/D7Q5dACVaz3YKG6roAUIbMDaprWiXA+WAN2UnFpotdhiDlRSzTl8+wVVpIyDjhHo8Sze/jYyldNToGasWjXeoK5fK4ZRguTR37zZPXJxB6+kPkrzm7IDsmfPYVhs4bQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tCX689gV; arc=none smtp.client-ip=74.125.225.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=sSjwz2TngtWLulBU+R9kztt81/A5H21r1/vF/KIxTEvQzR8aOWAU6EBZ/5SuZ2rh/I25wDuz//eWras/MgSUM0+ShGA3KXpuc8baBxZ8BWR8YxI4k1dLGhoVSZx4rqdJf9QgEXSh8UhwrsKp/fjkf+pm6KCDHaeCPCCfbAbUJ+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qS3yws8A; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tCX689gV"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49cd4ba9f68so22841385e9.1
-        for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 05:36:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790253413; x=1790858213; darn=lists.linux.dev;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=gAR7nTOPxRo/mfR2u3OdcokbjHynlMhWcl3pdNDsUgo=;
-        b=tCX689gVYDcS54Y6ko7c4qpL1V96B+LtV+Lz/u/q26uvxAb3Z0B0VpFS2jEjvFsR0X
-         KoWpEP1I7A2eLPd5ks4etTFKWKsAVUFRi+A1kV8M5wpV3sOn7UJyKCNJj1gLAHTu/JJx
-         GjeqOR7Ekxg/xolR+D9YNmOLEnztJ9GMn1HRNxHBm3v4r9Ybhq8UIQF2TdqGC3e9mCJh
-         cJvJxkCjdooTGxW9wkXIvhdqfwNVoDSpkGG8QijYnqmbcALkPe+y0fdNzcra1sOqTTSn
-         0Pl+I2iwKd+RQFNcS9vGOxnRIpatfNAJ8oaGfxxWOp87oTVCaxRMqPA4QcUfcy50hFiK
-         pbpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790253413; x=1790858213;
-        h=user-agent:in-reply-to:content-disposition:content-type
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gAR7nTOPxRo/mfR2u3OdcokbjHynlMhWcl3pdNDsUgo=;
-        b=1/ilaHH8Y+k2j5evDqCiG/wVBVXTRgWo/0X6qRmGYrC/PDHDum+JzkUaYk6tYTUXh/
-         24dfCsJk6j6trru+l8mKmEmjVTPd48OpliEYDTFxc6RxWB+q+qpvqGfbAT+N6DEhZYQZ
-         +mZPXlBEjA52VPz4iugCMoZTOGCJJazxlGYqS8laUfbzWa/jL4j2KBCGt3ZLHWow1jBQ
-         d2KfoQBFH6buGuteX/fbvV4n7kAd/svJbysnsldd2+E7k0U2KZERk8Vb2a5FfHfwcJcG
-         THfZ91ZZS9iRjmeh1ySifQGJ3dXclT7mPV4FfxQ0GsnGYIotl0PvAgaamsphUysRrRW3
-         pK8w==
-X-Forwarded-Encrypted: i=1; AKwUvBxAa2IXCjOhWPAJ3i2a1bJ5xhTvNiV7uFzsshuw5QrR7yRI1mr95VVF5eHEWZqAhhxqtjB9@lists.linux.dev
-X-Gm-Message-State: AFuF++mF0jb6+JcejAfGFflLKLTNdJZ8tQP3RLGgBuxxy/NfSg4MJRbJ
-	9pH/i/xPpOJhxRDUChn0ijraudmkeKM48nJ5QP/wxUZmESZlafa6LQ0y4uN1eEL7VA==
-X-Gm-Gg: AYBFou05AKuUgx7MB16SF15IFVFnxYBJfik3taunemR6oPUDm7zF34wEPcWSd54yAaH
-	rjJm2EpwYA94d7OZ+1jtkibnH6Ysd669763r8LtuFVIxCtTMzOCNT5x6harw4i3rLl+oafNaZna
-	HfN94OOI5L1p/joiJYE8a8JwDCmR/jhW7EQa3VksLGbcdsXjb1ne1WRqBKrGm12I1S/gl8gzllv
-	c1LAVkpYAuCFgZXuMGXSI+0raq9OAF61ZPkia3WaWjZi+UVMVhAkCtFgURYrt5rQTLNLQwuYYHz
-	ikdtzOVnrMunHCMKZ8Ye0HOaxRHmrjJaMqSFqEmN0Zes+33/FeJiRfmwlF4KF1O0vrVPAfEviUY
-	nJBcMBenGUEnbSmjGF/205lPKQRHN0y3AbHLQ66zea3MAaPZH2XZeaVIb7kM1rFKh1MAsWuaYpD
-	1rlBFnlkiH2IXRFnHqNDlpm4nBcq1ceZgmpP1ioTIXUNVr1vFDNzaCh0w37X1tCpm3cJOOoaZBn
-	Frf44xLAwYOMaJNghIQv8SB3Xy1Os123HNlsZcmyw==
-X-Received: by 2002:a05:600c:3514:b0:49f:ce72:e931 with SMTP id 5b1f17b1804b1-49fe6701e7emr38631215e9.35.1790253412640;
-        Thu, 24 Sep 2026 05:36:52 -0700 (PDT)
-Received: from elver.google.com (17.83.155.104.bc.googleusercontent.com. [104.155.83.17])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49fe0c4cc01sm56905385e9.3.2026.09.24.05.36.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 05:36:47 -0700 (PDT)
-Date: Thu, 24 Sep 2026 12:36:40 +0000
-From: Marco Elver <elver@google.com>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Vlastimil Babka <vbabka@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	David Hildenbrand <david@kernel.org>,
-	David Rientjes <rientjes@google.com>,
-	Dmitry Vyukov <dvyukov@google.com>, Jann Horn <jannh@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	KP Singh <kpsingh@kernel.org>, Kees Cook <kees@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Matteo Rizzo <matteorizzo@google.com>,
-	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Suren Baghdasaryan <surenb@google.com>,
-	linux-hardening@vger.kernel.org, Nicolas Schier <nsc@kernel.org>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>, Harry Yoo <harry@kernel.org>,
-	Hao Li <hao.li@linux.dev>, "Liam R. Howlett" <liam@infradead.org>,
-	Alexander Potapenko <glider@google.com>,
-	Miguel Ojeda <ojeda@kernel.org>, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kasan-dev@googlegroups.com, llvm@lists.linux.dev,
-	Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org
-Subject: Re: csky ICe (was: Re: [PATCH v4 2/3] slab: improve
- KMALLOC_PARTITION_RANDOM randomness)
-Message-ID: <arUZWKjKr5I5tlOj@elver.google.com>
-References: <20260511200136.3201646-1-elver@google.com>
- <20260511200136.3201646-2-elver@google.com>
- <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qS3yws8A"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 54612152B;
+	Thu, 24 Sep 2026 05:47:04 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3F7A03F86C;
+	Thu, 24 Sep 2026 05:47:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790254027; bh=aLsBzLjrp1DcDn6DWeVaafFM2AupnjMYo0e+qs0lkyk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qS3yws8ARWxyQ1+ftpRPaMpKdtTTqu44bLMcI+dQ5YtFKmjLG0C1X4YEq9s7GpDps
+	 QgQoCK7B8qUrIu+1Q7wIkRxMaXhUEFpkXZltly9wUzAAbIRJPgRBC8r5ZJRrcXrM5P
+	 giKPrhw3skc7Z/BVVwLCIIOEY3xT3cPCUtPBhDbQ=
+Date: Thu, 24 Sep 2026 13:46:59 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>, catalin.marinas@arm.com,
+	will@kernel.org, maddy@linux.ibm.com, mpe@ellerman.id.au,
+	npiggin@gmail.com, chleroy@kernel.org, ritesh.list@gmail.com,
+	sshegde@linux.ibm.com, pjw@kernel.org, palmer@dabbelt.com,
+	aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com,
+	gor@linux.ibm.com, agordeev@linux.ibm.com,
+	borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, ojeda@kernel.org, boqun@kernel.org,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+	dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org,
+	acourbot@nvidia.com, work@onurozkan.dev, nathan@kernel.org,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	jszhang@kernel.org, japo@linux.ibm.com, jpoimboe@kernel.org,
+	seanjc@google.com, pmladek@suse.com, thuth@redhat.com,
+	ynorov@nvidia.com, joelagnelf@nvidia.com, david@davidgow.net,
+	fujita.tomonori@gmail.com, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [RFC] rust: kernel: Add KUnit tests for ARCH_WARN_ASM bug table
+ emission
+Message-ID: <arUbw_TIA0Uj7oXT@J2N7QTR9R3>
+References: <20260922054959.955093-2-mkchauras@gmail.com>
+ <20260922064735.GS4121339@noisy.programming.kicks-ass.net>
+ <arNxAn7I7NCVWmD1@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <20260924111557.GP1837346@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <6106aefa-47c7-4bda-a51f-8a2fba3bf715@roeck-us.net>
-User-Agent: Mutt/2.3.2 (2026-04-26)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260924111557.GP1837346@noisy.programming.kicks-ass.net>
 
-On Tue, Sep 22, 2026 at 07:58AM -0700, Guenter Roeck wrote:
-> Hi,
-> 
-> On Mon, May 11, 2026 at 10:00:49PM +0200, Marco Elver wrote:
-> > When using CONFIG_KMALLOC_PARTITION_RANDOM, _RET_IP_ was previously used
-> > to identify the allocation site. _RET_IP_, however, evaluates to the
-> > caller's parent's instruction pointer rather than the actual allocation
-> > site; this would lead to collisions where a function performs multiple
-> > allocations.
+On Thu, Sep 24, 2026 at 01:15:57PM +0200, Peter Zijlstra wrote:
+> On Wed, Sep 23, 2026 at 11:58:13AM +0530, Mukesh Kumar Chaurasiya wrote:
+> > On Tue, Sep 22, 2026 at 08:47:35AM +0200, Peter Zijlstra wrote:
+> > > On Tue, Sep 22, 2026 at 11:20:00AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
+> > > > Verify that the __bug_table entry emitted by ARCH_WARN_ASM has a correct
+> > > > bug_addr displacement — i.e. the arch's trap label reference resolves to
+> > > > the trap instruction — by calling find_bug() with the exact virtual address
+> > > > of the trap, mirroring what the real trap handler does.
+> > > > 
+> > > > To support all architectures, each arch that implements ARCH_WARN_ASM now
+> > > > defines ARCH_WARN_ASM_TRAP_LABEL, a string constant naming the local label
+> > > > at which the trap instruction is placed:
+> > > > 
+> > > >   x86       "1"     (ud2 at label 1:)
+> > > >   powerpc   "1"     (twi at label 1:)
+> > > >   riscv     "1"     (ebreak at label 1:)
+> > > >   arm64     "14471" (brk placed at 14471: by __BUG_ENTRY_END)
+> > > >   s390      "0"     (mc at label 0:)
+> > > > 
+> > > > The label is used consistently: in ARCH_WARN_ASM itself, in the
+> > > > bug_addr back-reference inside __BUG_ENTRY / _EMIT_BUG_ENTRY, 
+
+> > > Not really a fan of that. And I can't really tell what you're doing with
+> > > it either. The kunit is in Rust and thus unreadable :-(
+> > > 
+> > > I would rather you fix up is_valid_bugaddr(), some architectures seem to
+> > > have an always true stub because of the callchains always being from the
+> > > break instruction.
 > > 
-> > With the generalization to kmalloc_token_t, we now generate the token at
-> > the outermost macro, and using _THIS_IP_ would fix this for all cases.
+> > Hey Peter,
 > > 
-> > Unfortunately, the generic implementation of _THIS_IP_ relies on taking
-> > the address of a local label, which is considered broken by both GCC [1]
-> > and Clang [2] because label addresses are only expected to be used with
-> > computed gotos. While the generic version more or less works today, it
-> > is known to be brittle. For example, Clang -O2 always returns 1 when
-> > this function is inlined:
-> > 
-> >         static inline unsigned long get_ip(void)
-> >         { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
-> > 
-> > To provide a reliable unique identifier without breaking architectures
-> > relying on the generic _THIS_IP_, introduce _CODE_LOCATION_: it resolves
-> > to _THIS_IP_ where architectures provide a safe implementation, and
-> > falls back to a zero-cost static marker where _THIS_IP_ is broken.
-> > 
-> > Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
-> > Link: https://github.com/llvm/llvm-project/issues/138272 [2]
-> > Signed-off-by: Marco Elver <elver@google.com>
+> > thanks for the suggestion. I will fix up the is_valid_bugaddr for
+> > powerpc. I am not very good with other archs asm but i can do it for
+> > ppc32 and ppc64.
 > 
-> With this patch in the tree, I get ICE erors when trying to build
-> csky:allmodconfig.
+> Untested thingies for arm64 and s390x.
 > 
-> Example:
-> 
-> Error log:
-> sound/core/oss/mixer_oss.c: In function 'snd_mixer_oss_proc_write':
-> sound/core/oss/mixer_oss.c:1202:1: error: could not split insn
->  1202 | }
->       | ^
-> (insn 183 400 184 (set (reg:SI 0 a0 [orig:307 _55 ] [307])
->         (xor:SI (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
->             (const:SI (plus:SI (symbol_ref:SI ("*.LANCHOR0") [flags 0x182])
->                     (const_int 132 [0x84]))))) "include/linux/slab.h":759:52 288 {cskyv2_xorsi3}
->      (expr_list:REG_DEAD (reg:SI 3 a3 [orig:308 random_kmalloc_seed ] [308])
->         (nil)))
-> during RTL pass: final
-> sound/core/oss/mixer_oss.c:1202:1: internal compiler error: in final_scan_insn_1, at final.cc:2813
-> 0x779b51e2a1c9 __libc_start_call_main
-> 	../sysdeps/nptl/libc_start_call_main.h:58
-> 0x779b51e2a28a __libc_start_main_impl
-> 	../csu/libc-start.c:360
-> 
-> This happens with lots of files, not just this one. It is seen with all
-> versions of gcc starting with at least v13.x. Reverting this patch fixes
-> the problem. Bisect log is attached for reference.
-> 
-> Any idea what I could do to avoid the problem other than stopping to build
-> csky:allmodconfig ?
+> diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
+> index 914282016069..3d8a969eab5f 100644
+> --- a/arch/arm64/kernel/traps.c
+> +++ b/arch/arm64/kernel/traps.c
+> @@ -987,14 +987,13 @@ void do_serror(struct pt_regs *regs, unsigned long esr)
+>  #ifdef CONFIG_GENERIC_BUG
+>  int is_valid_bugaddr(unsigned long addr)
+>  {
+> -	/*
+> -	 * bug_brk_handler() only called for BRK #BUG_BRK_IMM.
+> -	 * So the answer is trivial -- any spurious instances with no
+> -	 * bug table entry will be rejected by report_bug() and passed
+> -	 * back to the debug-monitors code and handled as a fatal
+> -	 * unexpected debug exception.
+> -	 */
+> -	return 1;
+> +	u32 insn;
+> +
+> +	if (aarch64_insn_read((u32 *)addr, &insn))
+> +		return 0;
+> +
+> +	/* Match ASM_BUG_FLAGS() / BUG() instructions. */
+> +	return insn == (0xd4200000 | (BUG_BRK_IMM << 5));
+>  }
+>  #endif
 
-No idea what gcc is falling over here, but the below patch could be a
-workaround/fix. Does that work better?
+What problem is this trying to solve?
 
------- >8 ------
+Mukesh's original patch seems to be trying to check whether we compiled
+things correctly (such that the bug_table entry points at the expected
+insturction), and I don't think that warrants a runtime check, but (as
+per my reply to him) I don't understand why that's a thing to check in
+the first place.
 
-From: Marco Elver <elver@google.com>
-Date: Fri, 8 May 2026 14:51:45 +0200
-Subject: [PATCH] csky: Implement _THIS_IP_ using inline asm
+On arm64 we only call is_valid_bugaddr() under do_el1_brk64() ->
+call_el1_break_hook() -> bug_brk_handler(). We only call
+bug_brk_handler() when HW has taken a BRK exception with the BUG_BRK_IMM
+immediate, and that can only be triggered by executing the right
+instruction (BRK #BUG_BRK_IMM), which we ONLY use for BUG(). and WARN().
 
-Both GCC [1] and Clang [2] consider the generic version of _THIS_IP_ to
-be broken:
+So I don't see why any change is necessary here.
 
-        #define _THIS_IP_  ({ __label__ __here; __here: (unsigned long)&&__here; })
+If the HW has somehow taken a BRK exception from any other instruction
+(which would presumably be a HW bug), there won't be a bug_table entry,
+and so __report_bug() will fail to find an entry, and will return
+BUG_TRAP_TYPE_NONE, same as for the !is_valid_bugaddr() case.
 
-In particular, the address of a label is only expected to be used with a
-computed goto.
-
-While the generic version more or less works today, it is known to be
-brittle and may break with current and future optimizations. For
-example, Clang -O2 always returns 1 when this function is inlined:
-
-        static inline unsigned long get_ip(void)
-        { return ({ __label__ __here; __here: (unsigned long)&&__here; }); }
-
-Fix it by overriding _THIS_IP_ in <asm/linkage.h> (which is included by
-<linux/instruction_pointer.h>) using an architecture-specific inline asm
-version. Additionally, avoiding taking the address of a label prevents
-compilers from emitting spurious indirect branch targets (e.g. ENDBR or
-BTI) under control-flow integrity schemes.
-
-Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=120071 [1]
-Link: https://github.com/llvm/llvm-project/issues/138272 [2]
-Signed-off-by: Marco Elver <elver@google.com>
----
- arch/csky/include/asm/linkage.h | 7 +++++++
- 1 file changed, 7 insertions(+)
- create mode 100644 arch/csky/include/asm/linkage.h
-
-diff --git a/arch/csky/include/asm/linkage.h b/arch/csky/include/asm/linkage.h
-new file mode 100644
-index 000000000000..04afd3583e25
---- /dev/null
-+++ b/arch/csky/include/asm/linkage.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __ASM_CSKY_LINKAGE_H
-+#define __ASM_CSKY_LINKAGE_H
-+
-+#define _THIS_IP_ ({ unsigned long __ip; asm volatile("grs %0, ." : "=r" (__ip)); __ip; })
-+
-+#endif /* __ASM_CSKY_LINKAGE_H */
--- 
-2.56.0.rc1.315.gc6ed9934b7-goog
-
+Mark.  
