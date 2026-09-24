@@ -1,86 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1E847AF4D;
-	Thu, 24 Sep 2026 11:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E627F3BB48
+	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 12:31:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790250699; cv=none; b=KgLcVO6qH4xOrWn9MFBoMQYvsCUIPZLl2C/z6iUi05NmyaN12byLdQI6ICLE94vxqRRyZJX5kU6wGnjWUf7EZ3kbr5svqGKYnLVu/VxeOlUHsvgLo6zF8qJei0soQyBYw3dKHlDboQp4PTgFeZ9qjQlvn/sLxV+jzjpJ0XHZfqQ=
+	t=1790253117; cv=none; b=RPjY9od/5swXzRzzmz43f5NQqF5ZRgRdkm58ea7dpGzGAmpIkXzjEKCPz91mhJ5Seax+4jqR+BKvhYtCb1ulnY5cGxzGQ1g+2TIv/wczwI2x/XGRlCDJxXSLmxKR99sjZy1ZoalavYcSkhMV3+V9mapMQswyTgcryK/pgFuv39Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790250699; c=relaxed/simple;
-	bh=UQLNe0khEYS7GTSfsYRX6JTUGPmWC8SsJLfiDChU0gU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=sqbjG2uDTE30XnhPpNm/SpPq+iLgjh0aLkTESaAw/5276Fd2EHMCH4M+p7+on737zyQ0aWPpx0tdNzYBkx7oRwfNdGO2OiRNgXBC8zljJloobAhQoqHhaaiSUBih1f9kKklIf5MIzg6A+5/FgQD6l5cEJOf5y0Cz2ng2vbXSvQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dyJ/E3rk; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790253117; c=relaxed/simple;
+	bh=tyroa8lBoOqLwHpTeRHuGpjV833qc9sQbRMa/D+dsoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ILxUdjR37BVLUVQK1t4mx3a/Z9msa3+4fijhXc64NdS4QRIL58TilBpSXQh/ekCcA4Coyx+miKjRTiwhaHFJqFmWcYzQiCVlmTyNmt/MYW5g1xKhIj5bIojuh6Q23zxcOURRXDp5hDxDJckgibKD3UW2m8FIh1UL21FSxC3y1/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lz309Dy3; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dyJ/E3rk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790250697; x=1821786697;
-  h=date:from:to:cc:subject:message-id;
-  bh=UQLNe0khEYS7GTSfsYRX6JTUGPmWC8SsJLfiDChU0gU=;
-  b=dyJ/E3rk3LBKUmzqMfF2AYbCiPwraxz9zKPE3nvl6bRqTur8k6vMQV78
-   HsW8XOsvw+rR68JYUP/aaVqiST2GtcPlojfBH7v4hhJbJPnT2kgdCqj0L
-   bJ92rEeVSR+AubQXcIjCvhlBSDxV7fNtaSjH0ogq4YDaT1SLqSPmHxwXr
-   54TJUnUkyG2ORuFPt9Aj+ude1nM/vFjUyE4g4mGhsuWlT4M64BQD+s93D
-   SXcUgS/4dTq6vTsSaDw/NnHrf8vw+QBjQ6W6v7LITGqxmpvKcsKDFoYKg
-   D5DiQYAh+tOCJ00w3fFQtWY3JekdDvmZonDMwkR2TvgzZHJ6MgGoXqeFU
-   A==;
-X-CSE-ConnectionGUID: MhqhmoGqS5moqFnFxDmFow==
-X-CSE-MsgGUID: uAhFETCzTi24F/MJEoSbnQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11914"; a="90140122"
-X-IronPort-AV: E=Sophos;i="6.27,120,1787036400"; 
-   d="scan'208";a="90140122"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 04:51:36 -0700
-X-CSE-ConnectionGUID: gzxn/HBzT+K143zvL86FBg==
-X-CSE-MsgGUID: tPR5q8ftQeqnobkmHIYnLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,120,1787036400"; 
-   d="scan'208";a="272591412"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 24 Sep 2026 04:51:35 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x9hzA-00000000ImO-3dnd;
-	Thu, 24 Sep 2026 11:51:32 +0000
-Date: Thu, 24 Sep 2026 19:51:23 +0800
-From: kernel test robot <lkp@intel.com>
-To: Philip Yang <Philip.Yang@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Alex Deucher <alexander.deucher@amd.com>,
- Felix Kuehling <felix.kuehling@amd.com>
-Subject: [linux-next:master 2193/8910] Warning:
- drivers/gpu/drm/amd/amdgpu/amdgpu_ualink.c:1553 expecting prototype for
- amdgpu_npa_vm_unmap_range(). Prototype was for
- amdgpu_ualink_npa_vm_unmap_range() instead
-Message-ID: <202609241952.zFr1FYRB-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lz309Dy3"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A49A152B;
+	Thu, 24 Sep 2026 05:31:51 -0700 (PDT)
+Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2777F3F86C;
+	Thu, 24 Sep 2026 05:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1790253115; bh=tyroa8lBoOqLwHpTeRHuGpjV833qc9sQbRMa/D+dsoA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=lz309Dy3TlEu+7y1tHZCYfrdPqaWCgtZMoXnPf8tuQOM4LMWKCZ6sgCmYSkYsjvcs
+	 tO7bMRWvAOIpOXYh7A+nfbCx25N76QAhUGvlajWZ3EFwvUyLVK0EAGgwuHLQJWAXUT
+	 QV+kIw/8QJ9o4Wbe1n28zhddNcWmz6QOOLHombIo=
+Date: Thu, 24 Sep 2026 13:31:42 +0100
+From: Mark Rutland <mark.rutland@arm.com>
+To: "Mukesh Kumar Chaurasiya (IBM)" <mkchauras@gmail.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, maddy@linux.ibm.com,
+	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org,
+	ritesh.list@gmail.com, sshegde@linux.ibm.com, pjw@kernel.org,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+	borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org,
+	mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+	x86@kernel.org, hpa@zytor.com, ojeda@kernel.org, boqun@kernel.org,
+	gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org,
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu,
+	dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org,
+	acourbot@nvidia.com, work@onurozkan.dev, nathan@kernel.org,
+	ndesaulniers@google.com, morbo@google.com, justinstitt@google.com,
+	jszhang@kernel.org, japo@linux.ibm.com, peterz@infradead.org,
+	jpoimboe@kernel.org, seanjc@google.com, pmladek@suse.com,
+	thuth@redhat.com, ynorov@nvidia.com, joelagnelf@nvidia.com,
+	david@davidgow.net, fujita.tomonori@gmail.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [RFC] rust: kernel: Add KUnit tests for ARCH_WARN_ASM bug table
+ emission
+Message-ID: <arUYLsJJewE--wqo@J2N7QTR9R3>
+References: <20260922054959.955093-2-mkchauras@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260922054959.955093-2-mkchauras@gmail.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   a8c591ed6b672915e0be57843f943a2a723aff40
-commit: ee9323733acb9a660f2f9065f8c31fdb015c4acb [2193/8910] drm/amdgpu: Add UALink NPA VM mapping for ring buffers
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260924/202609241952.zFr1FYRB-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6e714c8d91116794cb699cdf80c26afe9cda3ef3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260924/202609241952.zFr1FYRB-lkp@intel.com/reproduce)
+On Tue, Sep 22, 2026 at 11:20:00AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
+> Verify that the __bug_table entry emitted by ARCH_WARN_ASM has a correct
+> bug_addr displacement — i.e. the arch's trap label reference resolves to
+> the trap instruction — by calling find_bug() with the exact virtual address
+> of the trap, mirroring what the real trap handler does.
+> 
+> To support all architectures, each arch that implements ARCH_WARN_ASM now
+> defines ARCH_WARN_ASM_TRAP_LABEL, a string constant naming the local label
+> at which the trap instruction is placed:
+> 
+>   x86       "1"     (ud2 at label 1:)
+>   powerpc   "1"     (twi at label 1:)
+>   riscv     "1"     (ebreak at label 1:)
+>   arm64     "14471" (brk placed at 14471: by __BUG_ENTRY_END)
+>   s390      "0"     (mc at label 0:)
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609241952.zFr1FYRB-lkp@intel.com/
+I'm not a fan of exposing such a low-level implementation detail out of
+the architecture code, and I don't think we should expose this.
 
-All warnings (new ones prefixed by >>):
+What exactly are you trying to verify here, and why? Has there been
+some _specific_ issue on powerpc that caused you to look at this?
 
->> Warning: drivers/gpu/drm/amd/amdgpu/amdgpu_ualink.c:1553 expecting prototype for amdgpu_npa_vm_unmap_range(). Prototype was for amdgpu_ualink_npa_vm_unmap_range() instead
-   Warning: drivers/gpu/drm/amd/amdgpu/amdgpu_ualink.c:1643 bad line: 
-   Warning: drivers/gpu/drm/amd/amdgpu/amdgpu_ualink.c:1650 expecting prototype for amdgpu_ualink_gart_npa_addr(). Prototype was for AMDGPU_UALINK_GART_NPA_ADDR_GPUID_SHIFT() instead
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mark.
