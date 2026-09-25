@@ -1,152 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F9E74746A5;
-	Fri, 25 Sep 2026 22:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9850B175A9D;
+	Sat, 26 Sep 2026 00:12:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790376931; cv=none; b=huRi7wuogRdVfPh4aZssihr+YsWAoLqwjsMYUU/bbRU5VX+bfzkmsHl3NYCEJqTxQiZozyVimCf0Rld1arKZR2j866maQk8zmSjLmiPyWlASEw3PNGvw2Miau1PDljon+XN24V+oOo54A29ZzIkLejEUxnMhCD7g66cPwPY0B/8=
+	t=1790381526; cv=none; b=bMx9Yn4dz1Aul//YCh/VJk3UeyMwCAco9yABufuOY61eBwzKb5cd4MTRmEZagKL+KiEn8kyk1lcuNzzXgFJWreBNeD42EbryiPwrTTWYlItirKfpnLploUBYScoi3o7sJqaTzrRXgLjpuYnz3yKAmk63n022H2eCeNHITMlfRL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790376931; c=relaxed/simple;
-	bh=rNZqlsUwu5AcDqGGw2x6D5/p2VA46CHjbMEGjcmXtTQ=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=gFizgCmur5zN0z/qOKz+yrt/LEb9VSql0oLehzXJXhDOqYMvhFN5GNA2YNbQdMJ5nYBy/VeF5H33hwhdn+1rxt47oEySPgm3kg/LKupt7b/jnqYIz3fCaCS6p17hjj6yKL17Q9XZ96O8SaVAQ0kmez5wCq7BSAqphXFeDQfAAGM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZXxJMxk6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790381526; c=relaxed/simple;
+	bh=tFrV9VoXRvd52XhG6YEGxtM234UcygLRPtcLpDJIXv8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U4k57B196N5Wp4hVJ3vaPvqfDELvcI25GcrUcfYg6cxvV83stPfR/G2rDiUkgvPOxeL+1hwUx+XdFfid8e30/TTqYBl2UsSb7aUTWllFVbCr4qXWLE8+Wre+5kbJfL6+20Gh7KvlXq3W1ZpBl+BhE61gzfeIU2Hps0hRMLFH7zI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=ozjqkRou; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZXxJMxk6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7681F000FF;
-	Fri, 25 Sep 2026 22:55:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790376930;
-	bh=ngLQQ0LePKEjAb+Y09tpTefMp22UVAjBFdJzUuRKoWg=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=ZXxJMxk6trS8DhqrV1VW1yHsBK2RGVCDOGwL4c/xCjjBEqxxIDicmlcW1ryfbVu2I
-	 y+xkcuVreApO/j4jOzDIpAmUxTOmpcGV8nvGgC2uxQfrjTdQiBg/sp+ylthYa5NAMQ
-	 efNbZ5OwWJzm5uHC/H7g/PQIrcylQqQJkyAXq+gsy/+DtgQxuboKOlIsLyQnpzRDxQ
-	 SqTMK3mlxr9u+lIq13Te+kkfmI+kgMVhwxPltvRtDU4P5hemyOtrfC5P4UAUqS8ixI
-	 XKso1KU6iNJ4GsVSbKcALYFk50CxzdiYcsbKYUYKlGwHm8bZgiazScNwmBhYii0gWi
-	 CR5FrBEaw6wQA==
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="ozjqkRou"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=o/UFtrNJZa0pVt1clqxet8u/6cXmGN/QycLLwgtr+sE=; 
+	b=ozjqkRou13Cw8oI1PeH4YnshFZHcpeZPN4D0B/8/5SRvNesAi1nyaDWYn07LCg3BA/SYqIoXxfC
+	3jZ/spmirv5nISJaGTcuCNFiWYFnaWiVe/wvqjZLg3T+g8didii+o5FnBKEccxr6b6HBJYS9lzwa2
+	EITCXyf6C24Xm0NQFXockyOGiVZ2pELb/XwhU60eAuSiDOihNYrEbnhI6vqP2WWONYsBmaIpq7TzA
+	Bs91xtR0KM3Mc4AAIi94uHs7JjjhebPxD4rkg580zeTZbHRCYR5qKxUB3ZK7tL2n1wkr0t0X2uBt0
+	uBYWSWEj71Ephzr2jl4KRpnG4cWKgGydfZAQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.98.2 #2 (Debian))
+	id 1xAFee-00000000Nq1-3SVU;
+	Sat, 26 Sep 2026 07:48:37 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 26 Sep 2026 09:48:36 +1000
+Date: Sat, 26 Sep 2026 09:48:36 +1000
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Usama Arif <usama.arif@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, justinstitt@google.com,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org,
+	ndesaulniers@google.com, Thomas Graf <tgraf@suug.ch>,
+	nickolay.lysenko@gmail.com, peterz@infradead.org,
+	rostedt@goodmis.org, sched-ext@lists.linux.dev, tj@kernel.org,
+	yatsenko@meta.com
+Subject: Re: [PATCH] rhashtable: specialize default comparison for constant
+ parameters
+Message-ID: <arcIVDhPR4TD4VFF@gondor.apana.org.au>
+References: <20260924184733.2317353-1-usama.arif@linux.dev>
+ <arW6ibT1RkVCqTdT@gondor.apana.org.au>
+ <840c4c37-99a5-44dd-8b33-67057ee23731@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH] clang-tools: Decode dollar escaping in compile
- commands
-From: Nathan Chancellor <nathan@kernel.org>
-To: houtinghang <ue081723@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-In-Reply-To: <179017625539.54044.4066773916071097354@gmail.com>
-References: <179017625539.54044.4066773916071097354@gmail.com>
-Date: Fri, 25 Sep 2026 23:55:24 +0100
-Message-Id: <179037692488.3985470.2852393421034692930.b4-reply@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4655; i=nathan@kernel.org;
- h=from:subject:message-id; bh=rNZqlsUwu5AcDqGGw2x6D5/p2VA46CHjbMEGjcmXtTQ=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFnbft91fxGucV39XkgHC0ub5xsznWBTznctRrY+mY7SY
- nO9xI07SlkYxLgYZMUUWaofqx43NJxzlvHGqUkwc1iZQIYwcHEKwEQWvmP47xiuqdrwe6//Bq7T
- i+7+Lf5V/iYxzDhmn4j8xp+9hWufOzH809gmqWwv2nw4e90dDfeS5u3aP2wT+mfcOBaT+WXSnN9
- h/AA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <840c4c37-99a5-44dd-8b33-67057ee23731@linux.dev>
 
-On 2026-09-23 23:10 +0800, houtinghang wrote:
-> Kbuild doubles dollar signs when saving commands in .cmd files, but
-> process_line() only decodes $(pound). Consequently, the compilation
-> database retains doubled dollar signs in compiler arguments. It also
+On Fri, Sep 25, 2026 at 10:37:55AM +0100, Usama Arif wrote:
+>
+> That holds for the params given to rhashtable_init(), but not for the
+> params passed to the fast-path helpers. The BPF resizable hashmap
+> passes a constant template with no key_len and no obj_cmpfn
+> (rhtab_params in kernel/bpf/hashtab.c), and sets key_len only in the
+> copy it gives to rhashtable_init(). Without the "?: ht->p.key_len",
+> its lookups would memcmp() zero bytes and return the first object in
+> the bucket. rht_key_get_hash() has the same fallback for this user,
+> see c9429bf56405a. (I added Mykyta the author of that patch in CC.)
 
-While I agree that '$$' should be handled like '$(pound)', I suspect it
-is likely not a problem in practice since most commands that appear to
-use '$$' are for generated files, which should not matter for
-compile_commands.json but I might be mistaken.
+That's quite an eyesore but I guess we're stuck with it for now.
 
-> corrupts a literal $(pound), saved as $$(pound), into $#.
-
-How would this happen, aside from the contrived test?
-
-> Decode $$ and $(pound) in a single pass, matching how Make reads the
-> saved command. A single pass avoids interpreting a decoded dollar sign
-> as the start of another escape.
-> 
-> Add CLI regression coverage for ordinary text, dollar signs, hash signs
-> and adjacent escapes. Four of the six cases fail before this change;
-> all six pass after it. The expected values were also checked against
-> GNU Make using scripts/Kbuild.include.
-> 
-> Fixes: b30204640192 ("scripts: add a tool to produce a compile_commands.json file")
-> Assisted-by: LLM
-> Signed-off-by: houtinghang <ue081723@gmail.com>
-> ---
-> Testing on Ubuntu with GCC 13.3.0, Clang/clangd 18.1.3 and Make 4.3:
-> - x86-64 GCC, x86-64 Clang and ARM64 Clang defconfig builds of the kernel
->   image and configured modules passed without compiler warnings.
-> - All three native make compile_commands.json targets passed.
-> - 17,084 ordinary compilation database entries match the original tool.
-> - 432 Kbuild/CLI/shell/compiler cases produced identical objects.
-> - 259 mixed escape cases agree with Make for each compiler test run.
-> - 22 clangd macro checks and real x86/ARM64 kernel checks passed.
-> - The original tool fails the integration and clangd negative controls.
-> - Six CLI cases pass on Linux/Python 3.12.3 and Windows/Python 3.13.
-> 
-> AI disclosure: Codex identified the issue, wrote the fix and regression
-> test, verified CLI output and Make semantics, reviewed the diff, and
-> drafted this patch after a request to find another Linux kernel bug.
-> 
->  scripts/clang-tools/gen_compile_commands.py   | 10 ++--
->  .../clang-tools/gen_compile_commands_test.py  | 47 +++++++++++++++++++
->  2 files changed, 52 insertions(+), 5 deletions(-)
->  create mode 100644 scripts/clang-tools/gen_compile_commands_test.py
-> 
-> diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-> index 8d14b81..d11d15b 100755
-> --- a/scripts/clang-tools/gen_compile_commands.py
-> +++ b/scripts/clang-tools/gen_compile_commands.py
-> @@ -166,11 +166,11 @@ def process_line(root_directory, command_prefix, file_path):
->          ValueError: Could not find the extracted file based on file_path and
->              root_directory or file_directory.
->      """
-> -    # The .cmd files are intended to be included directly by Make, so they
-> -    # escape the pound sign '#' as '$(pound)'. The compile_commands.json file
-> -    # is not interepreted by Make, so this code replaces the escaped version
-> -    # with '#'.
-> -    prefix = command_prefix.replace('$(pound)', '#')
-> +    # Undo the escaping performed by make-cmd in scripts/Kbuild.include.
-> +    # Decode both escapes in one pass to preserve a literal '$(pound)'.
-
-I think the original comment is more informative. Please just extend it.
-
-  # The .cmd files are intended to be included directly by Make, so they
-  # escape the literal '#' as '$(pound)' and the literal '$' as '$$'. The
-  # compile_commands.json file is not interepreted by Make, so undo this
-  # transformation.
-
-> +    prefix = re.sub(r'\$\$|\$\(pound\)',
-> +                    lambda match: '$' if match.group() == '$$' else '#',
-> +                    command_prefix)
-
-I think it would be more efficient and readable to just use a double
-.replace() over re.sub() here, these strings are not that long.
-
-  prefix = command_prefix.replace('$(pound)', '#').replace('$$', '$')
-
->      # Return the canonical path, eliminating any symbolic links encountered in the path.
->      abs_path = os.path.realpath(os.path.join(root_directory, file_path))
-> diff --git a/scripts/clang-tools/gen_compile_commands_test.py b/scripts/clang-tools/gen_compile_commands_test.py
-> new file mode 100644
-> index 0000000..fe259af
-> --- /dev/null
-> +++ b/scripts/clang-tools/gen_compile_commands_test.py
-
-Same comment on an earlier change, I don't think this test adds much to
-belong in the tree so please drop it.
-
--- 
 Cheers,
-Nathan
-
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
