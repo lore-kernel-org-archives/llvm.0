@@ -1,132 +1,161 @@
-Received: from mail-dy2-f12.google.com (mail-dy2-f12.google.com [74.125.229.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFCD1DDA18
-	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 06:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0496D3921DD;
+	Fri, 25 Sep 2026 06:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790317320; cv=none; b=t6Tg0VdOqiQR/oGw9PP3ftkRx+T/wMi/rTUneDs54B69txV7fe45QF/t3pKpETn6TnZbTb4XQBhCIYs7FWfcWA3dPOEFe+fLp7jLh0bxiYlh1L/9AoCNwScdxkumNDDLBDZ1aIAbBpmZTKCKszPOjKWlL9nW2c+0ZbogBq3NM7U=
+	t=1790317472; cv=none; b=h0KLII13FAq3z7uH7egkGs2YuB4MLCTbWOQrlkzM4uJu7jNAs2Gupekz/wmYfpPKVu4XlwlhI1zWemHuzi0j8V/lFPalzRhpGMP5a3bibKuNcEjpPVH5JXV77nfXZU2FQDDt03AzCy76kCKRfNeAnSzfYULPgx7sjengriPugGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790317320; c=relaxed/simple;
-	bh=UjlgwLbgeh6LAkjBfXyoi1ibUIo+DP0JvbI95ZXgWUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dP+XAwxEIAac5v+AswymnX792DCScD0OViJBcnYORtuvXb40RRjqCsZ/6JnJCMBHI0wHZz/R/6z5H5+4eMTA5dvWV4uRpWghIT9oy9FUjAjX32yx9HeyNL8PDccmio/fhZBuhCFE7Wqe+Um5EjoZumTSCGMlFfX2TbFlzieU9Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i6DxJH6S; arc=none smtp.client-ip=74.125.229.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790317472; c=relaxed/simple;
+	bh=RYwxAXEieuzmAiIxOZsQQZq48JHTZcUCM6yc9NfvMag=;
+	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HcLSu4YpC1SGZZYJENegmhyx3DSyznzL7m+8Esp/27r1Djf88/q+6aQ017W913zonUmkIjcG9fYxyHoFS2qjz9UKpXyRVmJE28xgjV9k/T+GyyZh0oQ1fueOAFXVmV6ogaQLyM50Nu/3XhS0N31PCcUvWYc+D9c7K0WAdmKcBJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iyZfFfHa; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i6DxJH6S"
-Received: by mail-dy2-f12.google.com with SMTP id 5a478bee46e88-3396cec93b6so558679eec.3
-        for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 23:21:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790317315; x=1790922115; darn=lists.linux.dev;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=peRJubAzt5CBA3DlGa/amJu9ZBZekocmcGMZ2nqjKzw=;
-        b=i6DxJH6S4RY6wblKE1K2aawshPNQmNLFDOqv6ZSpBNervaewWnGGZH8VvC500Gj4dF
-         q0fqU+WugsBH7WwA71W2jRbXXpGiM1k1zUmJR5X8re3iiLMog7wHjrgb0b+TLxQPmGhL
-         oaZDt/1zlsyA+RkLJXlrogUlNPa8y259/U2jHOkVElX5g4/bWvh2Fbw5QtpWaX2M0y8v
-         KRGlwDNlMf/T2RMi031zmVfPHpkDFHlTD/mXccbSx3gAhU0CNLLpqXaCFBppzgDJNxNp
-         7dBHyMdSqsrzzHK29+I92ByxzHRrulPuEJfWvmzlDYhrB8yXj2T1RQ0GlpUudkehqoOL
-         SzOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790317315; x=1790922115;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=peRJubAzt5CBA3DlGa/amJu9ZBZekocmcGMZ2nqjKzw=;
-        b=Y0p4QWORDwaxwGfH/PnXUNLeEa8st5Og229z2+qm+Y9DSIiCsuQG2pJsjTbh5KqHvp
-         T4whKQUVKoh2ekXIxbrahtEybXuzykRSxCOnLir3gbgZgMzq0taXHkAXh9yy1t5KXsRn
-         XcZZRpQmQPEseXHgrtIqew3pqrDp3uZpXHp8MkFfs9RFwL1iVx+bzXtmX/rFXxCFO+qI
-         eqcOdLV8WWhd5aGD169BR1zFesqB6rXmDSN55pKPZZrsxuIpaV74xsDAnsEYF8dnN8Po
-         YciLaOFFatKx69C07hLhKpnA8hWj299tl4Sb08eabccl/SxuBte5nbGRMi0p0VUsy6+9
-         xb+A==
-X-Forwarded-Encrypted: i=1; AKwUvBwyb5jCQ4CLFFfa9Te3KAuCWtmKDUJ1CcNJJ73jGOVzTe++4BZwlFB6vsriD7oMpP3CzPON@lists.linux.dev
-X-Gm-Message-State: AFuF++kAaCOZRgXLudPLC1/iylqpXy0KAhndmhjhTfXfBdV5ggAEWoBE
-	pFBXdigbHnSlL7nRGwYieQg9ubuJwbs1eATZZUI1alj/1A4n9jFRukxW
-X-Gm-Gg: AYBFou0+vuwmpODodWZQhm9rtLkEpj3RSRJSwiaes9VCJUYeo496EWCoWA/EruvBNL8
-	vwZmzNRfSUdPmvHV/LOoJLE4UUSowZfK8Uxr+WW77MlgdXQP+bQYJn2beEZdrarsi6cadNbe1TP
-	ATWd6br9kiXiatDcWmp2LyI+HLts4b3s1KinHQdqn5E9IEZF7ylzhIakBOTSp3wVMEWTpxPQzNL
-	FW1iYQillTAPHI+5ZUgunm3nMValcznlvzwBlHl+t3Ytg1ey2QgHpG1kvcvYxtprHm5FKKDSJWR
-	gyPhm3BXeMLuP6VHw9qokiNv3QCv5zQKHarzlT0AennxtJ7mYnAzp8/ZghNaWQRZ6hUz+tTLyG1
-	eKjABLgSODKhobQDJmzcab97uc7I86Zb3yU5rmvroBtb24m1Cb7nKb29WDHW/sCiDuoPr5aw2XU
-	LNe19k/fua+pU+0A24oAi7LUa6gj7dMwrbQsmvxcv7GvyxBYo5CyRlUhuQQOKKbtgBo7dQ+D9AK
-	fKWZxPmk/pEYsA5cgSpMXA+dTkfNyd2i+DE4jh7yCFN
-X-Received: by 2002:a05:7300:dd47:b0:342:94b:aa28 with SMTP id 5a478bee46e88-342095b08cemr188044eec.27.1790317315073;
-        Thu, 24 Sep 2026 23:21:55 -0700 (PDT)
-Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.165.23])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34144172de6sm5598126eec.9.2026.09.24.23.21.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Sep 2026 23:21:54 -0700 (PDT)
-Date: Fri, 25 Sep 2026 11:51:33 +0530
-From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
-To: Mark Rutland <mark.rutland@arm.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, maddy@linux.ibm.com, 
-	mpe@ellerman.id.au, npiggin@gmail.com, chleroy@kernel.org, ritesh.list@gmail.com, 
-	sshegde@linux.ibm.com, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
-	alex@ghiti.fr, hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com, 
-	borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, 
-	bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, 
-	ojeda@kernel.org, boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, 
-	lossin@kernel.org, a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, 
-	dakr@kernel.org, daniel.almeida@collabora.com, tamird@kernel.org, 
-	acourbot@nvidia.com, work@onurozkan.dev, nathan@kernel.org, ndesaulniers@google.com, 
-	morbo@google.com, justinstitt@google.com, jszhang@kernel.org, japo@linux.ibm.com, 
-	peterz@infradead.org, jpoimboe@kernel.org, seanjc@google.com, pmladek@suse.com, 
-	thuth@redhat.com, ynorov@nvidia.com, joelagnelf@nvidia.com, david@davidgow.net, 
-	fujita.tomonori@gmail.com, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, rust-for-linux@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [RFC] rust: kernel: Add KUnit tests for ARCH_WARN_ASM bug table
- emission
-Message-ID: <arYR4GrzNnFko7XO@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
-References: <20260922054959.955093-2-mkchauras@gmail.com>
- <arUYLsJJewE--wqo@J2N7QTR9R3>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iyZfFfHa"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790317470; x=1821853470;
+  h=date:from:cc:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=RYwxAXEieuzmAiIxOZsQQZq48JHTZcUCM6yc9NfvMag=;
+  b=iyZfFfHaD75F+qXhnAUk8zAHTn58PtX8+kscu7MrLuUxRaHzsbrGe6F5
+   7YpnnEi5XFrW+5Fz7IdVfQKB/chenv03NMflUTuXYCC1ayjeqa/az5RRW
+   Qa5aOTGs/2OrSZFvVvypNkAND34EISXTZPFfKI1D0VGRVMnEjo7EChSWv
+   /ba6RPmMwpnUZvGxOzJzJoWUxOzSU1avAnWddO41vpCAsTdFDgE+aOt+Z
+   lwsZ3rfPOEhBqHwBNrtwTsbRV2oJg6QD878KaZVOnjqHK6YbXB9wi+tcr
+   FMhlzUYpHKMsD9LakBlbRTs8S6UDc91Q0r+tUYVjhSAZKKV4BVLGPQox6
+   Q==;
+X-CSE-ConnectionGUID: luGznPOuQWuPUeoCQyTwkw==
+X-CSE-MsgGUID: Sb/KCrjQRgyNl0YgISFE2w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="90006447"
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="90006447"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 23:24:29 -0700
+X-CSE-ConnectionGUID: dr06/A5/QsekUwsIYwpNqg==
+X-CSE-MsgGUID: ioLMoF9GRlSY4xifP17PZg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
+   d="scan'208";a="278959257"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 24 Sep 2026 23:24:28 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1x9zM9-00000000K8Q-3eX8;
+	Fri, 25 Sep 2026 06:24:25 +0000
+Date: Fri, 25 Sep 2026 14:24:15 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re:
+Message-ID: <202609251426.jvxMSRpi-lkp@intel.com>
+References: <202609251426.jvxMSRpi-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <arUYLsJJewE--wqo@J2N7QTR9R3>
+In-Reply-To: <202609251426.jvxMSRpi-lkp@intel.com>
 
-On Thu, Sep 24, 2026 at 01:31:42PM +0100, Mark Rutland wrote:
-> On Tue, Sep 22, 2026 at 11:20:00AM +0530, Mukesh Kumar Chaurasiya (IBM) wrote:
-> > Verify that the __bug_table entry emitted by ARCH_WARN_ASM has a correct
-> > bug_addr displacement — i.e. the arch's trap label reference resolves to
-> > the trap instruction — by calling find_bug() with the exact virtual address
-> > of the trap, mirroring what the real trap handler does.
-> > 
-> > To support all architectures, each arch that implements ARCH_WARN_ASM now
-> > defines ARCH_WARN_ASM_TRAP_LABEL, a string constant naming the local label
-> > at which the trap instruction is placed:
-> > 
-> >   x86       "1"     (ud2 at label 1:)
-> >   powerpc   "1"     (twi at label 1:)
-> >   riscv     "1"     (ebreak at label 1:)
-> >   arm64     "14471" (brk placed at 14471: by __BUG_ENTRY_END)
-> >   s390      "0"     (mc at label 0:)
-> 
-> I'm not a fan of exposing such a low-level implementation detail out of
-> the architecture code, and I don't think we should expose this.
-> 
-> What exactly are you trying to verify here, and why? Has there been
-> some _specific_ issue on powerpc that caused you to look at this?
-> 
-> Mark.
+Hi Guangshuo,
 
-Hey Mark,
+kernel test robot noticed the following build errors:
 
-During implementing ARCH_WARN_ASM for rust I broke the bug entry for
-powerpc so I wrote this to verify. I sent it out mainly for ppc but
-few people wanted that if it needed it should be done for all archs.
-So separated this thing and sent it out as an RFC to check whether
-other archs want this or not.
 
-Regards,
-Mukesh
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guangshuo-Li/pmdomain-imx-gpc-remove-all-initialized-power-domains/20260924-222520
+base:   
+patch link:    https://lore.kernel.org/r/202609251426.jvxMSRpi-lkp%40intel.com
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20260925/202609251426.jvxMSRpi-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6e714c8d91116794cb699cdf80c26afe9cda3ef3)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260925/202609251426.jvxMSRpi-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609251426.jvxMSRpi-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pmdomain/imx/gpc.c:554:1: error: function definition is not allowed here
+     554 | builtin_platform_driver(imx_gpc_driver)
+         | ^
+   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
+     345 |         builtin_driver(__platform_driver, platform_driver_register)
+         |         ^
+   include/linux/device/driver.h:294:41: note: expanded from macro 'builtin_driver'
+     294 | static int __init __driver##_init(void) \
+         |                                         ^
+>> drivers/pmdomain/imx/gpc.c:554:1: error: use of undeclared identifier 'imx_gpc_driver_init'; did you mean 'imx_gpc_driver'?
+     554 | builtin_platform_driver(imx_gpc_driver)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
+     345 |         builtin_driver(__platform_driver, platform_driver_register)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/driver.h:298:17: note: expanded from macro 'builtin_driver'
+     298 | device_initcall(__driver##_init);
+         |                 ^~~~~~~~~~~~~~~
+   <scratch space>:136:1: note: expanded from here
+     136 | imx_gpc_driver_init
+         | ^~~~~~~~~~~~~~~~~~~
+   drivers/pmdomain/imx/gpc.c:546:31: note: 'imx_gpc_driver' declared here
+     546 | static struct platform_driver imx_gpc_driver = {
+         |                               ^
+>> drivers/pmdomain/imx/gpc.c:554:1: error: initializing 'initcall_t' (aka 'int (*)(void)') with an expression of incompatible type 'struct platform_driver'
+     554 | builtin_platform_driver(imx_gpc_driver)
+         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
+     345 |         builtin_driver(__platform_driver, platform_driver_register)
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/device/driver.h:297:3: note: expanded from macro 'builtin_driver'
+     297 | } \
+         |   ^
+     298 | device_initcall(__driver##_init);
+         |                 ~~~~~~~~~~~~~~~
+   include/linux/init.h:306:30: note: expanded from macro '\
+   device_initcall'
+     306 | #define device_initcall(fn)             __define_initcall(fn, 6)
+         |                                         ^                 ~~
+   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
+      15 | #define ___PASTE(a, b) a##b
+         |                        ^
+   <scratch space>:150:1: note: expanded from here
+     150 | __initcall__kmod_gpc__425_554_imx_gpc_driver_init6
+         | ^
+   include/linux/init.h:264:20: note: expanded from macro '____define_initcall'
+     264 |         static initcall_t __name __used                         \
+         |                           ^
+     265 |                 __attribute__((__section__(__sec))) = fn;
+         |                                                       ~~
+>> drivers/pmdomain/imx/gpc.c:554:40: error: expected '}'
+     554 | builtin_platform_driver(imx_gpc_driver)
+         |                                        ^
+   drivers/pmdomain/imx/gpc.c:504:1: note: to match this '{'
+     504 | {
+         | ^
+   4 errors generated.
+
+
+vim +554 drivers/pmdomain/imx/gpc.c
+
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  545  
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17 @546  static struct platform_driver imx_gpc_driver = {
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  547  	.driver = {
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  548  		.name = "imx-gpc",
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  549  		.of_match_table = imx_gpc_dt_ids,
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  550  	},
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  551  	.probe = imx_gpc_probe,
+e70140ba0d2b1a drivers/pmdomain/imx/gpc.c Linus Torvalds 2024-12-01  552  	.remove = imx_gpc_remove,
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  553  };
+721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17 @554  builtin_platform_driver(imx_gpc_driver)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
