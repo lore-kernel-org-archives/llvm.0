@@ -1,100 +1,116 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1027B47276D;
-	Fri, 25 Sep 2026 12:23:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA4149E145;
+	Fri, 25 Sep 2026 13:02:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790338986; cv=none; b=Jph5N59IDg+/7FH4dnznbWz5miZUOQTIcPLKFmr+zOZ9A6b9G4NZtgAJCdcrGVGIobKlH49R3qB4zntqtsE8K/l63JjhhFkNdqPciZc1oYbqz/zbdNB87mG+ahqeSuUucrP6g2+zYjvvatZov6e12r7ZIvroF0CZRm1mFR+kUdM=
+	t=1790341381; cv=none; b=f9/Acgf/HfhhUlLKkeYhvKngfnmtcf4VUwPIKmvIXh79KzC0zvfS/CEYwBb1gWtuzXii9bLCIS74AskiB9VWEnR0czcyqdW6GhWV8Umj6AIivKt9Oq8LUROIoN0MO3UA4FU++0+5OOaiualOZLZ8ktw+zNWmsx2LChxVQJNgKv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790338986; c=relaxed/simple;
-	bh=coP9a8fQeisU6u7ynfg1ML4FLTJj9TRCUaOUZnaLK+A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AbcglklD25LJrhvF9YUkGk7OL4LQekOXJYiZDPRX/QrtNATSM2ZfJg+rOuaTg9wWEkZ8I48QnuyMe+RXi4oJf8XCfbPRwJ/JtIlKSLAJ9RoK3tE+2dNxFTCADZG/V9de9Tqs14UHSQtrQY5NChPzerUsCKElb/iEQ8bpUEF2uuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g+2BHNxA; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790341381; c=relaxed/simple;
+	bh=pV6pLnY9VNbDFSg9wsmygELy03on28x8NoH07KyTAKo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MeFoP7O6BitJw73SmX6jBRltalTJQqozjPNGUUmolzhaThV8ztWOxzoKOvE0qIsElihjgrUYcqMlzrOWevxxS5pwOYZZdTuJobuZ115MXt2hxkqGgXzWTztgwK2myF/2QpWNAFlpk6r7PJwaaek3Hv9D3n8d5JIyfK81v81lxy8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WNlscdXN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g+2BHNxA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790338986; x=1821874986;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=coP9a8fQeisU6u7ynfg1ML4FLTJj9TRCUaOUZnaLK+A=;
-  b=g+2BHNxA2jqcP5JMMNDgBqOajGIRn8DQgtEzBKKXxm2BXLBbVHWt9JRR
-   v3jSSTak6gaAZK6NyJ0vMNSe2z4HUivohe30qx3TVxCsc9LnsZTKghX74
-   l6jcU8ksTWI31AxhWZSSkDQ5tyE4stY4amFG3sYLNFE6iDHu6eNnearDz
-   6b/N5Oq1hJ/582gkEgsYDMVm3dgfH+n9DEhXdOIb/aPw0IgmSWIvbdLcq
-   DgEsr2SoYjhxXfTQjcWP5D0zyYyr9QTKlXN8Oryr5mKT48tfNo4fFkP/B
-   GK5lPvco3HW+w/ZMMc87AY+VpnE7E/rLrPlMhuUPymmMdl+rUvT8lKK15
-   w==;
-X-CSE-ConnectionGUID: 0WXMdfzRT3SrNf3/YaJt4g==
-X-CSE-MsgGUID: Si+Zif0VSHeGaY77sFHWUA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="90341951"
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="90341951"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 05:23:03 -0700
-X-CSE-ConnectionGUID: aoM9QgoQRfmn6A0SmRm5qA==
-X-CSE-MsgGUID: atzN7wkESbGSF+Al7YGOlw==
-X-ExtLoop1: 1
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 25 Sep 2026 05:23:00 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xA4x7-00000000Kao-3MPG;
-	Fri, 25 Sep 2026 12:22:57 +0000
-Date: Fri, 25 Sep 2026 20:22:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: =?utf-8?B?5p6X5r+s5ZOy?= <m18667909625@163.com>,
-	Petr Mladek <pmladek@suse.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	linux-kernel@vger.kernel.org, m18667909625@163.com
-Subject: Re: [PATCH] printk: fold consecutive duplicate messages
-Message-ID: <202609252036.olZsAkQ4-lkp@intel.com>
-References: <20260921050304.73440-1-m18667909625@163.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WNlscdXN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2101F00898;
+	Fri, 25 Sep 2026 13:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790341379;
+	bh=BSVHtbgr7nZGd5dozOxzx685KlCmq8P9tbgu4h3dnZU=;
+	h=From:To:Cc:Subject:Date;
+	b=WNlscdXN90cGNUO5qLV+qUylIQXV1twQZcwaPEvgzo893O5zSrhulbVIZMPPD3tSc
+	 CIE1Zo+FPehfA5Tz9xtSJibZ4mI27225gJrdT3ACPUOw4CB+eb5bVuf0Gsh/BKTbVT
+	 0p22ZY1mRW6pROBFRQYRQ0YvgnLT+Tzv9OqMSvHOSM6+5UpG7kgICT1jt42opK5SB8
+	 hCsYDjXM0k7isT/nMvumZP84dZe24nNRwy0nTcUCUBoiCPNW5AKIJ8pXMv46aqpHxk
+	 o9BRP3KxWIl/cyCBa3kZTurtFeRUOtzJOkMq1UOb0CptJiBb4ujOI/ItL+mUzq5d7Z
+	 DBy7OymJdGuZQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Ravi Jonnalagadda <ravis.opensrc@gmail.com>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH] damon: reduce stack usage further
+Date: Fri, 25 Sep 2026 15:02:46 +0200
+Message-ID: <20260925130254.4022227-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260921050304.73440-1-m18667909625@163.com>
 
-Hi 林濬哲,
+From: Arnd Bergmann <arnd@arndb.de>
 
-kernel test robot noticed the following build errors:
+In a previous patch, I had annotated kdamond_tune_intervals() as
+noinline_for_stack in order to not exceed the stack frame warning
+limit. Unfortunately, my current linux-next randconfig builds show
+a similar problem again with clang-21:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.3-rc4 next-20260923]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+mm/damon/core.c:3953:12: error: stack frame size (1288) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
+ 3953 | static int kdamond_fn(void *data)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/printk-fold-consecutive-duplicate-messages/20260921-130304
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260921050304.73440-1-m18667909625%40163.com
-patch subject: [PATCH] printk: fold consecutive duplicate messages
-config: x86_64-randconfig-1011-20260925 (https://download.01.org/0day-ci/archive/20260925/202609252036.olZsAkQ4-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260925/202609252036.olZsAkQ4-lkp@intel.com/reproduce)
+Do the same thing with kdamond_apply_schemes(), kdamond_merge_regions(),
+and kdamond_split_regions(), which also have individually large stacks.
+This should work to keep the deepest total stack depth down much more
+as well as avoid the warning.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609252036.olZsAkQ4-lkp@intel.com/
+I also tried to reduce the complexity of kdamond_fn() itself by splitting
+out the while() loop into a separate function. While this arguably led
+to slightly more readable code, it had no effect on the total stack
+usage and just made the new function the largest stack user and had
+a nonzero risk of me getting the conversion wrong.
 
-All errors (new ones prefixed by >>):
+Fixes: 5a00cae64de1 ("mm/damon/core: reduce kernel stack usage")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ mm/damon/core.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
->> vmlinux.o: error: objtool: vprintk_emit(): unexpected end of section .text.vprintk_emit
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 4687b909d42c..9803b459a0a4 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -3417,7 +3417,7 @@ static void damos_trace_stat(struct damon_ctx *c, struct damos *s)
+ 	trace_call__damos_stat_after_apply_interval(cidx, sidx, &s->stat);
+ }
+ 
+-static void kdamond_apply_schemes(struct damon_ctx *c)
++static noinline_for_stack void kdamond_apply_schemes(struct damon_ctx *c)
+ {
+ 	struct damon_target *t;
+ 	struct damos *s;
+@@ -3573,8 +3573,9 @@ static void damon_merge_regions_of(struct damon_target *t, unsigned int thres,
+  * while DAMON is running.  For such a case, repeat merging until the limit is
+  * met while increasing @threshold up to possible maximum level.
+  */
+-static void kdamond_merge_regions(struct damon_ctx *c, unsigned int threshold,
+-				  unsigned long sz_limit)
++static noinline_for_stack void kdamond_merge_regions(struct damon_ctx *c,
++						     unsigned int threshold,
++						     unsigned long sz_limit)
+ {
+ 	struct damon_target *t;
+ 	unsigned int nr_regions;
+@@ -3718,7 +3719,7 @@ static void damon_split_some_regions(struct damon_ctx *ctx,
+  * split was unnecessarily made, later 'kdamond_merge_regions()' will revert
+  * it.
+  */
+-static void kdamond_split_regions(struct damon_ctx *ctx)
++static noinline_for_stack void kdamond_split_regions(struct damon_ctx *ctx)
+ {
+ 	struct damon_target *t;
+ 	unsigned long nr_regions = 0;
+-- 
+2.53.0
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
