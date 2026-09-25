@@ -1,58 +1,95 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy2-f18.google.com (mail-dy2-f18.google.com [74.125.229.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0496D3921DD;
-	Fri, 25 Sep 2026 06:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D0B442397
+	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 06:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790317472; cv=none; b=h0KLII13FAq3z7uH7egkGs2YuB4MLCTbWOQrlkzM4uJu7jNAs2Gupekz/wmYfpPKVu4XlwlhI1zWemHuzi0j8V/lFPalzRhpGMP5a3bibKuNcEjpPVH5JXV77nfXZU2FQDDt03AzCy76kCKRfNeAnSzfYULPgx7sjengriPugGY=
+	t=1790317971; cv=none; b=VgIMORI3nn6+7AY3+GQ+OfF3ip3aKh9HP+eD+4tYoSRV0X8JAmYcCsXhF/hl/WqyAS0hfibH5G0pLup9SunK0kj4jQMx3/mcM+xaRygY2Pg04WZiwluGUxBxQq7YuOZm9uSoKTkEqR8CeeceAnnP02GNto9FWa/Ar/Pt0GxB8nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790317472; c=relaxed/simple;
-	bh=RYwxAXEieuzmAiIxOZsQQZq48JHTZcUCM6yc9NfvMag=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HcLSu4YpC1SGZZYJENegmhyx3DSyznzL7m+8Esp/27r1Djf88/q+6aQ017W913zonUmkIjcG9fYxyHoFS2qjz9UKpXyRVmJE28xgjV9k/T+GyyZh0oQ1fueOAFXVmV6ogaQLyM50Nu/3XhS0N31PCcUvWYc+D9c7K0WAdmKcBJI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iyZfFfHa; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790317971; c=relaxed/simple;
+	bh=xOahPn69qqJwSaHXWqegaZpvObEwTRDPSZd6wMIDrN0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ApuQGE6zjalkFHZLtLWj6jPjjYAX4KtsdeRXoRF2ZSlUG51jz/S3o+lmu33a+OmTaYeFjhucEHSifZxGgj/L36/0evp8ptDPLBKvrXGDjnbBPXEDzmuVHFnnsloJjiN5JWrCG+vDiZZ6i2m5g4ofJ52eHAorbByB+VF6TWOb3mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GNSanSrY; arc=none smtp.client-ip=74.125.229.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iyZfFfHa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790317470; x=1821853470;
-  h=date:from:cc:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=RYwxAXEieuzmAiIxOZsQQZq48JHTZcUCM6yc9NfvMag=;
-  b=iyZfFfHaD75F+qXhnAUk8zAHTn58PtX8+kscu7MrLuUxRaHzsbrGe6F5
-   7YpnnEi5XFrW+5Fz7IdVfQKB/chenv03NMflUTuXYCC1ayjeqa/az5RRW
-   Qa5aOTGs/2OrSZFvVvypNkAND34EISXTZPFfKI1D0VGRVMnEjo7EChSWv
-   /ba6RPmMwpnUZvGxOzJzJoWUxOzSU1avAnWddO41vpCAsTdFDgE+aOt+Z
-   lwsZ3rfPOEhBqHwBNrtwTsbRV2oJg6QD878KaZVOnjqHK6YbXB9wi+tcr
-   FMhlzUYpHKMsD9LakBlbRTs8S6UDc91Q0r+tUYVjhSAZKKV4BVLGPQox6
-   Q==;
-X-CSE-ConnectionGUID: luGznPOuQWuPUeoCQyTwkw==
-X-CSE-MsgGUID: Sb/KCrjQRgyNl0YgISFE2w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="90006447"
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="90006447"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2026 23:24:29 -0700
-X-CSE-ConnectionGUID: dr06/A5/QsekUwsIYwpNqg==
-X-CSE-MsgGUID: ioLMoF9GRlSY4xifP17PZg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="278959257"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 24 Sep 2026 23:24:28 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1x9zM9-00000000K8Q-3eX8;
-	Fri, 25 Sep 2026 06:24:25 +0000
-Date: Fri, 25 Sep 2026 14:24:15 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re:
-Message-ID: <202609251426.jvxMSRpi-lkp@intel.com>
-References: <202609251426.jvxMSRpi-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GNSanSrY"
+Received: by mail-dy2-f18.google.com with SMTP id 5a478bee46e88-34213ed0b18so27070eec.1
+        for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 23:32:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790317966; x=1790922766; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ff013h9UPO5JfvQ6KOoQNBZOiCtGEKIOGbWYKhP5c+0=;
+        b=GNSanSrYdcNVKfUrE+AUiXe83MrIq37JnTXnnMy2xLtLukD6cbqJYyio4QpptWPRD8
+         T/k5VyhoEnqhU71UROa4QVPRWm9Uyewuv/4KYdEg/qO6SJUo/ujv1aPLOO84WZwNA69t
+         CHHQWxJSnrlLGlKp8g9TR4q0N1W5aGYcCioq/tyEyKQaJANcBF0NqfLS1XeeREpQ07hj
+         cORfBsl6uhZeLrDSi6K111oSKjmkuh3imfte/Dut1ziYKzrog35K3kxU2zq/2owqzYSu
+         G1eRphC2gk7kNHWJotJUdyOmw4s3jdbZJz/agvBza4gYkSON6fFEUffzO1OLs37Sj/m0
+         CXjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790317966; x=1790922766;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ff013h9UPO5JfvQ6KOoQNBZOiCtGEKIOGbWYKhP5c+0=;
+        b=dpaG5b/zgVbwJj86Sjua9R466xWHMrTyfTKue05MqLa3Y77RdiAGAWlVJPeorW56YZ
+         U0fe3deKrjAdu4X5fvLrU49QQoWLAj39OBs9yPZ4GoDayoJFDuCc+NOQtpu61JlVJ2+/
+         ryWFBaD+kXXHTVL4d7eNkyrrCiZn96XfzQabhgfOCxu6MVwDOsGnUptSbEzxYSe9quIt
+         Cm++XIJj/dSpBClowXlU3fsTlvFQwFh1OP2f9BSixoqvgAJ6Pt4xs1ChHhImqE1OGff2
+         TK0kyVywrvHC3yyM4jPS8DfwJwJr8A5IXU/aJn6RDI7DFZOgy1V6oLORPcfbZJol2um2
+         u6Xg==
+X-Forwarded-Encrypted: i=1; AKwUvBzrBQp6UKLlJhSycjY8Wj6VfUzw3DK1wJy5WyVoyuUJF3gGVFK8mnSDUq2yXurq05J1RMZg@lists.linux.dev
+X-Gm-Message-State: AFuF++lc6kSDVjVnzyMo54slvWHIEFSiEa5iyCZkR9S2CX7mjZM/qdEl
+	pZ5d9JQVjSR9TuDuu4yHad2wwVHOhuSH+ax3G1Yg3n22edbKlxtss6XA
+X-Gm-Gg: AYBFou3ZyXTv3S5Hz0DgVtK+s5t3ItsJW1TKgfERHN2i6Wws00mYGag3sGzwTA0GQ4X
+	igMGtK+bcUXzMJdPWix3AaK+nNkoqRqjTckovmD07G+cvH5AP+uxLLlqvYk7DTEZDdN3T+v8Ete
+	Y5zM8aX81neMNnUxDbrMFN4oy1D/AP2kKwYZUj622fVq/a178fcozHAUYsfuzYuvdTt0pRSfx1V
+	9GFSKeiQnvT6DhPSOa8fzj8x9hCCArse7Jza7zPc+oso2CCBauJbwnvWPBHVjDmHmmdffTOXmYn
+	W8qx9kSJlxggMMqklgwShf53uwAXR8VQmP5Coaa/CjVM1hz7LRwpSXOn65RNqAodhWoD2VH6HOU
+	x9a5uNs4xPVyqouo0CbS70wS42qd0Q89IHugnvjiMYP6wVnHW/7vU1n91SuW7w1k+uj18420YJQ
+	vC8bEuq3iAjRYaS0WCChBkLgqngycDuEe+Pltnk4T/8KSMNW9ABShcJAqELD34uWPfwAXtjKarT
+	b5DHfCydx1qMAGB6pGn2jJ9KrlN5YFNXaheupxtBi41
+X-Received: by 2002:a05:693c:87c3:10b0:33b:c478:a545 with SMTP id 5a478bee46e88-34002be4604mr3482720eec.8.1790317965974;
+        Thu, 24 Sep 2026 23:32:45 -0700 (PDT)
+Received: from li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com ([106.51.165.23])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-34144172de6sm5786357eec.9.2026.09.24.23.32.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 24 Sep 2026 23:32:45 -0700 (PDT)
+Date: Fri, 25 Sep 2026 12:02:24 +0530
+From: Mukesh Kumar Chaurasiya <mkchauras@gmail.com>
+To: Mark Rutland <mark.rutland@arm.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, catalin.marinas@arm.com, 
+	will@kernel.org, maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	chleroy@kernel.org, ritesh.list@gmail.com, sshegde@linux.ibm.com, pjw@kernel.org, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, hca@linux.ibm.com, 
+	gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com, 
+	svens@linux.ibm.com, tglx@kernel.org, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, ojeda@kernel.org, 
+	boqun@kernel.org, gary@garyguo.net, bjorn3_gh@protonmail.com, lossin@kernel.org, 
+	a.hindborg@kernel.org, aliceryhl@google.com, tmgross@umich.edu, dakr@kernel.org, 
+	daniel.almeida@collabora.com, tamird@kernel.org, acourbot@nvidia.com, work@onurozkan.dev, 
+	nathan@kernel.org, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, jszhang@kernel.org, japo@linux.ibm.com, jpoimboe@kernel.org, 
+	seanjc@google.com, pmladek@suse.com, thuth@redhat.com, ynorov@nvidia.com, 
+	joelagnelf@nvidia.com, david@davidgow.net, fujita.tomonori@gmail.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [RFC] rust: kernel: Add KUnit tests for ARCH_WARN_ASM bug table
+ emission
+Message-ID: <arYUiddxIDeLYj8v@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+References: <20260922054959.955093-2-mkchauras@gmail.com>
+ <20260922064735.GS4121339@noisy.programming.kicks-ass.net>
+ <arNxAn7I7NCVWmD1@li-1a3e774c-28e4-11b2-a85c-acc9f2883e29.ibm.com>
+ <20260924111557.GP1837346@noisy.programming.kicks-ass.net>
+ <arUbw_TIA0Uj7oXT@J2N7QTR9R3>
+ <20260924125253.GY776954@noisy.programming.kicks-ass.net>
+ <arUgNdqpA5U8EjjP@J2N7QTR9R3>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,101 +98,62 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202609251426.jvxMSRpi-lkp@intel.com>
+In-Reply-To: <arUgNdqpA5U8EjjP@J2N7QTR9R3>
 
-Hi Guangshuo,
+On Thu, Sep 24, 2026 at 02:05:57PM +0100, Mark Rutland wrote:
+> On Thu, Sep 24, 2026 at 02:52:53PM +0200, Peter Zijlstra wrote:
+> > On Thu, Sep 24, 2026 at 01:46:59PM +0100, Mark Rutland wrote:
+> > > What problem is this trying to solve?
+> > > 
+> > > Mukesh's original patch seems to be trying to check whether we compiled
+> > > things correctly (such that the bug_table entry points at the expected
+> > > insturction), and I don't think that warrants a runtime check, but (as
+> > > per my reply to him) I don't understand why that's a thing to check in
+> > > the first place.
+> > > 
+> > > On arm64 we only call is_valid_bugaddr() under do_el1_brk64() ->
+> > > call_el1_break_hook() -> bug_brk_handler(). We only call
+> > > bug_brk_handler() when HW has taken a BRK exception with the BUG_BRK_IMM
+> > > immediate, and that can only be triggered by executing the right
+> > > instruction (BRK #BUG_BRK_IMM), which we ONLY use for BUG(). and WARN().
+> > > 
+> > > So I don't see why any change is necessary here.
+> > > 
+> > > If the HW has somehow taken a BRK exception from any other instruction
+> > > (which would presumably be a HW bug), there won't be a bug_table entry,
+> > > and so __report_bug() will fail to find an entry, and will return
+> > > BUG_TRAP_TYPE_NONE, same as for the !is_valid_bugaddr() case.
+> > 
+> > Right, so I wasn't at all sure what he was doing, Rust is still mostly
+> > unreadable garbage to me.
+> > 
+> > But I figured I'd much rather see him use is_valid_bugaddr() to do
+> > runtime checks than whatever dodgy games he was playing with that label.
+> > 
+> > So *if* doing runtime checks is what is wanted, then is_valid_bugaddr()
+> > needs to actually work, because then it grows a user outside of the BRK
+> > handler.
+> 
+> Thanks; I think we're aligned. :)
+> 
+> Before we delve into implementation details, I'd like to understand the
+> problem Mukesh is trying to solve.
+> 
+> Mark.
 
-kernel test robot noticed the following build errors:
+Hey Peter and Mark,
 
+It's not as a problem, it's something i faced while implementing the
+ARCH_WARN_ASM, the generated assembly was not correct so i wrote a test
+for it, I sent it out along with the same patch[1] but then the
+discussion led to it being for all archs so I sent it out as an RFC to
+know others opinion.
 
+After Peter's last comment i found is_valid_bugaddr can use a bit more
+work(atleast on ppc) so i think i am going to drop this and go ahead
+with improving is_valid_bugaddr.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Guangshuo-Li/pmdomain-imx-gpc-remove-all-initialized-power-domains/20260924-222520
-base:   
-patch link:    https://lore.kernel.org/r/202609251426.jvxMSRpi-lkp%40intel.com
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20260925/202609251426.jvxMSRpi-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6e714c8d91116794cb699cdf80c26afe9cda3ef3)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260925/202609251426.jvxMSRpi-lkp@intel.com/reproduce)
+Regards,
+Mukesh
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609251426.jvxMSRpi-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pmdomain/imx/gpc.c:554:1: error: function definition is not allowed here
-     554 | builtin_platform_driver(imx_gpc_driver)
-         | ^
-   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
-     345 |         builtin_driver(__platform_driver, platform_driver_register)
-         |         ^
-   include/linux/device/driver.h:294:41: note: expanded from macro 'builtin_driver'
-     294 | static int __init __driver##_init(void) \
-         |                                         ^
->> drivers/pmdomain/imx/gpc.c:554:1: error: use of undeclared identifier 'imx_gpc_driver_init'; did you mean 'imx_gpc_driver'?
-     554 | builtin_platform_driver(imx_gpc_driver)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
-     345 |         builtin_driver(__platform_driver, platform_driver_register)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device/driver.h:298:17: note: expanded from macro 'builtin_driver'
-     298 | device_initcall(__driver##_init);
-         |                 ^~~~~~~~~~~~~~~
-   <scratch space>:136:1: note: expanded from here
-     136 | imx_gpc_driver_init
-         | ^~~~~~~~~~~~~~~~~~~
-   drivers/pmdomain/imx/gpc.c:546:31: note: 'imx_gpc_driver' declared here
-     546 | static struct platform_driver imx_gpc_driver = {
-         |                               ^
->> drivers/pmdomain/imx/gpc.c:554:1: error: initializing 'initcall_t' (aka 'int (*)(void)') with an expression of incompatible type 'struct platform_driver'
-     554 | builtin_platform_driver(imx_gpc_driver)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/platform_device.h:345:2: note: expanded from macro 'builtin_platform_driver'
-     345 |         builtin_driver(__platform_driver, platform_driver_register)
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/device/driver.h:297:3: note: expanded from macro 'builtin_driver'
-     297 | } \
-         |   ^
-     298 | device_initcall(__driver##_init);
-         |                 ~~~~~~~~~~~~~~~
-   include/linux/init.h:306:30: note: expanded from macro '\
-   device_initcall'
-     306 | #define device_initcall(fn)             __define_initcall(fn, 6)
-         |                                         ^                 ~~
-   note: (skipping 5 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:150:1: note: expanded from here
-     150 | __initcall__kmod_gpc__425_554_imx_gpc_driver_init6
-         | ^
-   include/linux/init.h:264:20: note: expanded from macro '____define_initcall'
-     264 |         static initcall_t __name __used                         \
-         |                           ^
-     265 |                 __attribute__((__section__(__sec))) = fn;
-         |                                                       ~~
->> drivers/pmdomain/imx/gpc.c:554:40: error: expected '}'
-     554 | builtin_platform_driver(imx_gpc_driver)
-         |                                        ^
-   drivers/pmdomain/imx/gpc.c:504:1: note: to match this '{'
-     504 | {
-         | ^
-   4 errors generated.
-
-
-vim +554 drivers/pmdomain/imx/gpc.c
-
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  545  
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17 @546  static struct platform_driver imx_gpc_driver = {
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  547  	.driver = {
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  548  		.name = "imx-gpc",
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  549  		.of_match_table = imx_gpc_dt_ids,
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  550  	},
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  551  	.probe = imx_gpc_probe,
-e70140ba0d2b1a drivers/pmdomain/imx/gpc.c Linus Torvalds 2024-12-01  552  	.remove = imx_gpc_remove,
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17  553  };
-721cabf6c6600d drivers/soc/imx/gpc.c      Lucas Stach    2017-02-17 @554  builtin_platform_driver(imx_gpc_driver)
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1]https://lore.kernel.org/all/20260915090453.1227034-1-mkchauras@gmail.com/
