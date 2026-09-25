@@ -1,133 +1,114 @@
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887A84FDE72
-	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 21:26:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E053A7593;
+	Fri, 25 Sep 2026 21:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790371567; cv=none; b=lAtjF5/doOBmIoqjZ3ULrgcSk+a2pMMXZYi5jwqnFJ7EVtp1/gKHO+Eey4fDwb06MFeT2LgKJJJO81cOQy4M7ifSSaATJgiP6HZOmuTu1klR1obkaWuFUkt7HHRNGr1UJGWX8vC2mrfuDHSJuom6/TzkP8F+KQH1Y6pU+tZVGTg=
+	t=1790372370; cv=none; b=p14oiv40vGTADF2MCDf89gemNgQRRjexRh5nYMev36Mcujtbh/Cctsv5QUzncftpagW5IhWbkAEJ/QHAFQqh2z+txDW3i3kcP3VjR968BuTZRNmlryBp6/I9g6QopWd+cuDQ7+JZhlb9pRMarCP1XTiQQx1bKeMCN+geYETiM2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790371567; c=relaxed/simple;
-	bh=lXnrrDdYRQyOlVitpkY8qFZuMpGdYCPpTCZxc/3kPwk=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=uIDgkFqPt2GUmSxCFbg91XFYAd+vjmC3yMlC7jOSZJw3345AzJZdlgtRTLAa8PSf8QsT5tqDBb/nRRyJkpPUb84N6LkbPAPZeb6gIR53EslmG7eAdvoaJRqLokEVa8ugiuUG0nWc4GYi+8g6slIcYd9dL9uF35gLXFB9baUo0yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bj2LZXkF; arc=none smtp.client-ip=209.85.216.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com
+	s=arc-20240116; t=1790372370; c=relaxed/simple;
+	bh=3BiBwcUDkbh+FbP7ofxpEUfVhiDKAwkXAcXzUYOr06U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GL4R13lzTgNPhZoc8xSXmQeNJ4NZlY4wnmx33j3/VC5PQevoPchBY1KMbXjj+N7qUqTn8bVtnv24b6fuT396aiGktZP9Eli5I9gFw8omTFc1ZT7+sIfKlYyRkEDNT5+5rWPaCt4MkUqwXin6KHn/Etw8EGVS8SrVsp8QKIIHJFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Uq3jK6lz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bj2LZXkF"
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-39b6416441eso2356424a91.1
-        for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 14:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790371560; x=1790976360; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=3Jjlm+MZZkSIglDOm6l1bMaXqX1r3Y9qH35a6D/ysA4=;
-        b=bj2LZXkFgIiBsKob7nc61C9VE464UkTQLJe2+cl/ZHG4HIqOCNMaKuE8Ff+SjtVv/K
-         vSNmZ1TGkW/G6Pq1zmbXLDJoflPNMO3TH0VE9gSz/2p+6XdTAhu1Cz7t16Rc7qnbmMP4
-         ux4moQKNNjhB1+jNhFPkltPAU2ElXldCQ/mo2nBY4P3LrHiwipfw1K/kxNsm2nOstTXn
-         jMWOvwatvO3/OedxDe+eyQj0IwvLh/eug+0o0ZSZRBUMvCNqyna8l6RLOkpwLm7s5Yae
-         I2mvACcaIIy15TObmiwnKhSvdzx/bdXHmv5RBtfNc7EQ65w7Xdxs98f+axpc7niBKdo0
-         PR0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790371560; x=1790976360;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=3Jjlm+MZZkSIglDOm6l1bMaXqX1r3Y9qH35a6D/ysA4=;
-        b=pUs/Qgnnu2yn9CYMWhTJzmdEizNluNegg542/7ziuDuHPpWBy/Bc5CDgZ841d4Nfxz
-         alR8CTfL3Ls8zm1misUr9DpAsFVZHF+uh2ipSNxfgdt31ElPOTtAgyTdbpLgQJd7/eWX
-         2Ydg7toF8LaQ2auiDkXXK8b81Qu3ev3Q4hUDraaxo35uTZIEZir4X9Ai9cVAkAdPSUh5
-         /ffhECaKfG0ra/lXpNcTWwFL1y2FwpidSvJtSfmzTGM6vZP5LmpSSsUMtogyAZneaSBg
-         8sbZjDcag2oVHY6hcTJ59BVXGZPAnV5eZ/OP1PUkOOAZJc/uOG78khoEovXLTx5Uj2YJ
-         zPKw==
-X-Forwarded-Encrypted: i=1; AKwUvBwHMbFOh0xdx1S1dH87ti74strwL+4sGQLQCASzNrShkKB6pi0cBKZxp8+x3ZvapuUi8xsO@lists.linux.dev
-X-Gm-Message-State: AFuF++lW+E0hMkLaUmfqiSGvnK5cvyfrMmcHS4MlJZbISYJuPDwWiDvR
-	s4mMn5X03zEDqG2+3NZkCUA945LclzBb0VEGWFCqP3P/Kb9AYgObuS/LO4Xw/kIAfZhsSojCYHs
-	f
-X-Received: from pjbkw17.prod.google.com ([2002:a17:90b:2211:b0:3a0:cd29:5300])
- (user=morbo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:57c6:b0:39e:24ab:9f82
- with SMTP id 98e67ed59e1d1-3a098adeba7mr6300290a91.10.1790371560321; Fri, 25
- Sep 2026 14:26:00 -0700 (PDT)
-Date: Fri, 25 Sep 2026 21:25:52 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Uq3jK6lz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55CA41F000FF;
+	Fri, 25 Sep 2026 21:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790372368;
+	bh=qGAVtFU1ZWDmCtLaT+G7B5o5ljsTh3nqCzq4ca6rlME=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Uq3jK6lzFPBk2mUB+21kzIEJ3e7xo6lES0MeUECU8KDNeBmretRa77Q3OlwhtoQmE
+	 JG8Dx0lTEjtjm2k8juBgSTzHaF2rroNVk1zww7OONmnk0v+x0FA56wC0MjZCrNSV/e
+	 H2pVr0Zo24UJv/vG9L8beZRRHMlmE7YAN/RF7/BIf3sCxDQZGCKJr+E+v3UjzyyNbI
+	 MirHao5U2KikMGzvv4h38MAzkcRcWP7PU8EZ2aiQo71N4cAbsRUfMEcbTXCJ/xYXPz
+	 HyiCZr2awcrNsxXI7Kdq8YVAeSXWzjieQzGLgVnG89GGjnkOohpJbH4QMHQxQzDjRf
+	 Ccal7IQ4ASL7g==
+Date: Fri, 25 Sep 2026 14:39:26 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jens Axboe <axboe@kernel.dk>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,
+	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,
+	Chao Yu <chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Phillip Lougher <phillip@squashfs.org.uk>,
+	Sungguk <sungguk.na@samsung.com>,
+	Jaehoon Chung <jh80.chung@samsung.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-erofs@lists.ozlabs.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH RFC 9/9] MAINTAINERS: add an entry for the LZ4
+ compression library
+Message-ID: <20260925213926.GA1903@quark>
+References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
+ <CGME20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3@eucas1p2.samsung.com>
+ <20260925-lz4-vendor-upstream-v1-9-1c7ffbe21c4b@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
-Message-ID: <20260925212552.125652-1-morbo@google.com>
-Subject: [PATCH] firewire: core: add __counted_by_ptr attribute to struct fw_device
-From: Bill Wendling <morbo@google.com>
-To: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>, linux1394-devel@lists.sourceforge.net, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>, 
-	codemender-patching+linux@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260925-lz4-vendor-upstream-v1-9-1c7ffbe21c4b@samsung.com>
 
-The GCC and Clang attribute '__counted_by_ptr' associates a pointer
-field with an integer field holding its element count. This enables
-runtime bounds checking by KASAN and UBSAN to prevent out-of-bounds
-accesses to the pointer.
+On Fri, Sep 25, 2026 at 01:27:39PM +0200, Michal Wilczynski wrote:
+> lib/lz4/ has never had one: get_maintainer.pl returns only the LKML
+> fallback for every file in it, including include/linux/lz4.h, which eight
+> subsystems build against.
+> 
+> This matters more now than it did. With the previous patches lib/lz4 is
+> vendored upstream sources, and someone has to bump them to new upstream
+> releases and decide what the kernel-side glue may do. I am willing to do
+> that, so add myself as its maintainer.
+> 
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index cc3cae2e378b34aeb705cef654c720ca9f2ba223..989e1b5fab21432dd7042d1e60c4bbad85beb925 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15606,6 +15606,12 @@ S:	Supported
+>  F:	drivers/net/pcs/pcs-lynx.c
+>  F:	include/linux/pcs-lynx.h
+>  
+> +LZ4 COMPRESSION LIBRARY
+> +M:	Michal Wilczynski <m.wilczynski@samsung.com>
+> +S:	Maintained
+> +F:	include/linux/lz4.h
+> +F:	lib/lz4/
+> +
 
-In 'struct fw_device' (defined in 'include/linux/firewire.h'), the
-field 'config_rom' is a pointer to the device's Configuration ROM data,
-and its associated element count is stored in 'config_rom_length'.
+Should this entry cover lib/decompress_unlz4.c and
+include/linux/decompress/unlz4.h as well?
 
-Additionally, update the existing KUnit test in
-'drivers/firewire/device-attribute-test.c' where 'config_rom_length'
-was incorrectly initialized with the byte size
-('sizeof(simple_avc_config_rom)') instead of the element count
-('ARRAY_SIZE(simple_avc_config_rom)'). This ensures the
-'__counted_by_ptr' bounds-checking annotation does not trigger any
-false-positive panics or compile/runtime checks.
-
-Cc: codemender-patching+linux@google.com
-Assisted-by: LLM
-Signed-off-by: Bill Wendling <morbo@google.com>
----
- drivers/firewire/device-attribute-test.c | 4 ++--
- include/linux/firewire.h                 | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/firewire/device-attribute-test.c b/drivers/firewire/device-attribute-test.c
-index 97478a96d1c9..2c482afca8f1 100644
---- a/drivers/firewire/device-attribute-test.c
-+++ b/drivers/firewire/device-attribute-test.c
-@@ -86,7 +86,7 @@ static void device_attr_simple_avc(struct kunit *test)
- 			.type = &fw_device_type,
- 		},
- 		.config_rom = simple_avc_config_rom,
--		.config_rom_length = sizeof(simple_avc_config_rom),
-+		.config_rom_length = ARRAY_SIZE(simple_avc_config_rom),
- 	};
- 	static const struct fw_unit unit0 = {
- 		.device = {
-@@ -168,7 +168,7 @@ static void device_attr_legacy_avc(struct kunit *test)
- 			.type = &fw_device_type,
- 		},
- 		.config_rom = legacy_avc_config_rom,
--		.config_rom_length = sizeof(legacy_avc_config_rom),
-+		.config_rom_length = ARRAY_SIZE(legacy_avc_config_rom),
- 	};
- 	static const struct fw_unit unit0 = {
- 		.device = {
-diff --git a/include/linux/firewire.h b/include/linux/firewire.h
-index fd35a6570cd8..2040b17d86fa 100644
---- a/include/linux/firewire.h
-+++ b/include/linux/firewire.h
-@@ -224,7 +224,7 @@ struct fw_device {
- 	struct mutex client_list_mutex;
- 	struct list_head client_list;
- 
--	const u32 *config_rom;
-+	const u32 *config_rom __counted_by_ptr(config_rom_length);
- 	size_t config_rom_length;
- 	int config_rom_retries;
- 	unsigned is_local:1;
--- 
-2.56.0.rc1.315.gc6ed9934b7-goog
-
+- Eric
