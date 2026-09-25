@@ -1,36 +1,36 @@
-Received: from mta0.migadu.com (out-52.mta0.migadu.com [91.218.175.52])
+Received: from mta0.migadu.com (out-154.mta0.migadu.com [91.218.175.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B059441CB31
-	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 09:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C5347ECEE
+	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 09:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790328737; cv=none; b=L6kCHbIxhhvPGxgRhEN+WiGGic5URpuuJtoXzWmga77y9dv48DzXmEYpmH5AvPGpJUr40B0anBDN7p3vc5IMYmcjzq4h34sekQtBrkZcWPgYYKNhp0vwCZa9N1xF1tTCiy9Vuoy2PYILnQ0iJC1Jy2zwzCziKU0J1o5k5NEQPWI=
+	t=1790329084; cv=none; b=GG4cGjyJ1qkQBYBgL56mQkrDa7V5ffQum+swu/ngQ/3qzJk+taeTxp9H1fLzyZXL4aJ4Hqmk3QFFPRJq8GaxjBy5TEp70YDtuJX1+hKQ7dqyXIgnBtnMfrHwK9dPxjx241EZWqdBKZXUvGQfM5PqesxC/j7xMRxYvnldOQ34GS8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790328737; c=relaxed/simple;
-	bh=G3lOU3SX8aj4e8CXfEFntD+e7GdXsWJztD5qbkcR9DM=;
+	s=arc-20240116; t=1790329084; c=relaxed/simple;
+	bh=GVuf0RwGAnGw1eOY1Wiz9rpD1Ddtfsnx5TiLkQhY7AI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=joFMpbRtic6t38+32wYOcmZo2kJ2wXcBxsh/t8PlHJqQCFP7oDr49MXspNrCz8T8J8Syr1hiKWfeCx6VG0c94fcorBdkGiFkGtVCZoK5uKuGWF4F/TYHshOr+lPVXaHn2oGmhAxzEN8f249VHqwA9PonA+enwViFZSZ8TmTqLX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cj0+phUx; arc=none smtp.client-ip=91.218.175.52
+	 In-Reply-To:Content-Type; b=X5LBrEBr0LwUyU1n0l3i7yAiq6eJtThpF3tMmapkw7c9Gd93BwVgNEtf2K+O+jQdiqqTL78Ci+2JKJmNy9f4zcHLhZ1JeRkEAZ+HIP2Tc98simXGZk9FbKp72cZzXAJ/tNQdgwuPoBLiW/xd/IMPFWKHF3DAY2n7fJp4k7DJZUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IS4Tg+L0; arc=none smtp.client-ip=91.218.175.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cj0+phUx"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IS4Tg+L0"
 X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=G3lOU3SX8aj4e8CXfEFntD+e7GdXsWJztD5qbkcR9DM=;
+DKIM-Signature: a=rsa-sha256; bh=GVuf0RwGAnGw1eOY1Wiz9rpD1Ddtfsnx5TiLkQhY7AI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790328732; v=1; x=1790933532;
- b=cj0+phUxq5a8+ztUzpjqgMKlmONiVER2ZsXI4zVTipUq1Xsu+kj5uZYYQ2iHdZeScXqfjTZP
- 720cxJwqqYUe2CO3n9SaeTS8oiUVZoNvc2NaBb24gAcvfY9BiGnAv2N2PRuo/pSjmlJacTDuMY6
- lM33Lr8uY0SWMMrD+8lKEGUo=
+ t=1790329079; v=1; x=1790933879;
+ b=IS4Tg+L0Kzl7QHAiWW4oxb1DHTs04Bp7GVr2vta6iZPcQ4c8LNPlje+dDUHyb+Ol+wnwOAug
+ 3p11Z2VaYMKQKaFEHCThYsGNrP1HgA0JOLjWmfYwIeDeTNcnZxcGQWJXSMbd33WkRYjYhLR2/1S
+ WyxHpZWeMnTAi6ZAxqIhwrqE=
 X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 9f56d7cf1df32b31;
-	Fri, 25 Sep 2026 09:32:11 +0000
-X-Mizu-Trace-ID: 9f56d7cf1df32b31
+Received: by smtp.migadu.com with ESMTPS id c7f8fb00bf703aa8;
+	Fri, 25 Sep 2026 09:37:59 +0000
+X-Mizu-Trace-ID: c7f8fb00bf703aa8
 X-Migadu-Flow: FLOW_OUT
-Message-ID: <4be2206b-c6b7-49c2-9acc-de4f409e98dd@linux.dev>
-Date: Fri, 25 Sep 2026 10:32:11 +0100
+Message-ID: <840c4c37-99a5-44dd-8b33-67057ee23731@linux.dev>
+Date: Fri, 25 Sep 2026 10:37:55 +0100
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -40,28 +40,25 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] rhashtable: specialize default comparison for constant
  parameters
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Herbert Xu <herbert@gondor.apana.org.au>, justinstitt@google.com,
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Andrew Morton <akpm@linux-foundation.org>, justinstitt@google.com,
  linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
  llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org,
  ndesaulniers@google.com, Thomas Graf <tgraf@suug.ch>,
  nickolay.lysenko@gmail.com, peterz@infradead.org, rostedt@goodmis.org,
- sched-ext@lists.linux.dev, tj@kernel.org
+ sched-ext@lists.linux.dev, tj@kernel.org, yatsenko@meta.com
 References: <20260924184733.2317353-1-usama.arif@linux.dev>
- <20260924221411.0fad5501@pumpkin>
+ <arW6ibT1RkVCqTdT@gondor.apana.org.au>
 Content-Language: en-US
 From: Usama Arif <usama.arif@linux.dev>
-In-Reply-To: <20260924221411.0fad5501@pumpkin>
+In-Reply-To: <arW6ibT1RkVCqTdT@gondor.apana.org.au>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 
 
-On 24/09/2026 22:14, David Laight wrote:
-> On Thu, 24 Sep 2026 11:47:33 -0700
-> Usama Arif <usama.arif@linux.dev> wrote:
-> 
+On 25/09/2026 01:04, Herbert Xu wrote:
+> On Thu, Sep 24, 2026 at 11:47:33AM -0700, Usama Arif wrote:
 >> The inline lookup and insert helpers receive the rhashtable parameters by
 >> value. With a static const parameter block, key_offset and key_len are
 >> compile-time constants at the call site.
@@ -105,7 +102,14 @@ On 24/09/2026 22:14, David Laight wrote:
 >>  include/linux/rhashtable.h | 20 +++++++++++++++-----
 >>  lib/rhashtable.c           |  5 +++--
 >>  2 files changed, 18 insertions(+), 7 deletions(-)
->>
+> 
+> Nice work, I'm glad that someone is looking at the assembly :)
+
+Hi Herbert,
+
+Thanks!
+
+> 
 >> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
 >> index 57a2a29bef0e8..c9872965b753c 100644
 >> --- a/include/linux/rhashtable.h
@@ -135,78 +139,20 @@ On 24/09/2026 22:14, David Laight wrote:
 >> +	return memcmp(ptr + params.key_offset, arg->key,
 >> +		      params.key_len ? : ht->p.key_len);
 > 
-> That looks strange to me.
-> If ht->p.key_len/offset can be different from params.key_len/offset I can't
-> see why that shouldn't happen when params is constant.
+> If there is no obj_cmpfn then there is no obj_hashfn.  If there
+> is no obj_hashfn then params.key_len must be non-zero.  So this
+> could become unconditional, perhaps with a comment.
 
-Hi David,
+That holds for the params given to rhashtable_init(), but not for the
+params passed to the fast-path helpers. The BPF resizable hashmap
+passes a constant template with no key_len and no obj_cmpfn
+(rhtab_params in kernel/bpf/hashtab.c), and sets key_len only in the
+copy it gives to rhashtable_init(). Without the "?: ht->p.key_len",
+its lookups would memcmp() zero bytes and return the first object in
+the bucket. rht_key_get_hash() has the same fallback for this user,
+see c9429bf56405a. (I added Mykyta the author of that patch in CC.)
 
-Thanks for taking a look!
 
-They mustn't differ: the inline helpers take the same params that were
-passed to rhashtable_init(). The only exception is a constant key_len of
-0, which means the length is only known at init time (the BPF resizable
-hashmap does this). That's why the constant arm has "?: ht->p.key_len".
-
-So both arms compare the same bytes, and the split only tells the
-compiler which copy to read. rht_key_get_hash() has done the same since
-de91b25c8011 from Herbert.
-
-> If ht->p is likely to be a pointer to the associated params, you are passed
-> the params, they match and params is constant then you can optimise.
-> But that needs the address compare in the calling code (outside any look).
 > 
-
-ht->p is a copy embedded in struct rhashtable, not a pointer, so there's
-no address to compare. __builtin_constant_p() is resolved at compile
-time, so there's no runtime branch either.
-
-
-> David 
-> 
->>  }
->>  
->>  /* Internal function, do not use. */
->> @@ -632,7 +642,7 @@ static __always_inline struct rhash_head *__rhashtable_lookup(
->>  		rht_for_each_rcu_from(he, __rht_ptr_rcu(bkt, freq), tbl, hash) {
->>  			if (params.obj_cmpfn ?
->>  			    params.obj_cmpfn(&arg, rht_obj(ht, he)) :
->> -			    rhashtable_compare(&arg, rht_obj(ht, he)))
->> +			    rhashtable_compare(&arg, rht_obj(ht, he), params))
->>  				continue;
->>  			return he;
->>  		}
->> @@ -797,7 +807,7 @@ static __always_inline void *__rhashtable_insert_fast(
->>  		if (!key ||
->>  		    (params.obj_cmpfn ?
->>  		     params.obj_cmpfn(&arg, rht_obj(ht, head)) :
->> -		     rhashtable_compare(&arg, rht_obj(ht, head)))) {
->> +		     rhashtable_compare(&arg, rht_obj(ht, head), params))) {
->>  			pprev = &head->next;
->>  			continue;
->>  		}
->> diff --git a/lib/rhashtable.c b/lib/rhashtable.c
->> index 6362896e4f099..9d9f03b59c823 100644
->> --- a/lib/rhashtable.c
->> +++ b/lib/rhashtable.c
->> @@ -548,7 +548,7 @@ static void *rhashtable_lookup_one(struct rhashtable *ht,
->>  		if (!key ||
->>  		    (ht->p.obj_cmpfn ?
->>  		     ht->p.obj_cmpfn(&arg, rht_obj(ht, head)) :
->> -		     rhashtable_compare(&arg, rht_obj(ht, head)))) {
->> +		     rhashtable_compare(&arg, rht_obj(ht, head), ht->p))) {
->>  			pprev = &head->next;
->>  			continue;
->>  		}
->> @@ -710,7 +710,8 @@ static struct rhash_head *__rhashtable_next_in_table(
->>  		rht_for_each_rcu(he, tbl, b) {
->>  			bool match = params.obj_cmpfn
->>  				     ? !params.obj_cmpfn(&arg, rht_obj(ht, he))
->> -				     : !rhashtable_compare(&arg, rht_obj(ht, he));
->> +				     : !rhashtable_compare(&arg, rht_obj(ht, he),
->> +						   params);
->>  			if (found) {
->>  				if (match)
->>  					continue;
-> 
+> Thanks,
 
