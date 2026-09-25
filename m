@@ -1,48 +1,48 @@
-Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2611A267;
-	Fri, 25 Sep 2026 00:04:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14673260565;
+	Fri, 25 Sep 2026 02:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790294686; cv=none; b=BJ745ajz1MNmrHKmui6Y1oWi1CKpB6FGiTHtozviErynmiJLl9dtmPt7IKGIReKmfSXsHrBxKM5ahFtU1+1CD+p+y+XyA0zMHMZp2+3dZ5wWru5GyCIj6/u2bW7PT7fCyX7tTYFLcTZUj6N4J2czakztpkAvUmVomiFL45CM504=
+	t=1790302494; cv=none; b=NHG2txAxTiWGeJ56c19YOdOS2mmlpHcvuPTYwtK1FP54EJMSsoOcDR6L6Ejd9HfKN3daaWc2uSez0EQaND7QlNKH+tZ9vFdGQfUr3Erf0XbNAOONWm0rIHjA1UQSH0twn/T7TL6kdrxR4LQ0nU4Mufu2HZIzQAl96KsIhCs6IFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790294686; c=relaxed/simple;
-	bh=HvsBmvYUBmw+Sy2UkGl81oqHKz8g4fZqaJXTq9WZ5Oo=;
+	s=arc-20240116; t=1790302494; c=relaxed/simple;
+	bh=Vfy3OM5aMKIBYfOxgC1Dl9TLjVYN6dt1uricYc07uh0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R1PtpkS59ndx+eIEbUndCvNqJMgk82IlDuvxggg/dd/CBZpseURXDakab/QZ1mwhVxe+lQnj8fiWErAX4GlhAnKekMv1RCkjgyRu0nO664tj/nTI7sUpmhGaU9L/ArT16pjnZ+qSqoahkhVyg7OGbZbFHumWIJNOEqtdIkB6jzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=PG4XNaZL; arc=none smtp.client-ip=180.181.231.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+	 Content-Type:Content-Disposition:In-Reply-To; b=BkNiSnUwiSG/vpYbjwLV5TfKVi7DKmYzj4K48MI12aLe1ZBk/MsuwxzHmrOCPQCmLcFOg+HVlRlzJ5MCygr4gfrisA741/xXSAHhj8VspZSdqyIz+K7jSGxrYzQpG4ZCauZRCFWKayhLsXaJcsCWpgSqwW+VEuDHCRb9o2NGNvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RtZfvI+0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="PG4XNaZL"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
-	from:content-type:reply-to; bh=GvrPeFIm2JKZW2zlPW0AMx8ld3eL9qOjcIbpnfOK7W4=; 
-	b=PG4XNaZLPb+yZu/5jr6EvKnkqL5Tx9cTnbufAjN+Bnh0U58qf3qsFw+lq9IqnfzaPh5ahJpW/rX
-	LvJcLDEHrpCZH0k06qFdyO1qaQaTXeVXa2UQIBZwqz0nIPzNSfzJmMu/gwPws8iVoncVtE0JAFiXh
-	1SUgxpAlNX3L4tPIL8DK6qu2mx1xbEcFtJezq8MDEsMruaQmIOBvjs/3XOQ0501khN6WI0QBMVTHT
-	/7wZStfm8bfNAkORMm3TNXpTAgIyGJgWeQp+ZhGwnX7TjGCsShHS/45B00rfMPeFO+9VA+SLQH2FK
-	TcSy/DQBMGTCD0DBIJ9SScOM0GYSGhB6bhEg==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.98.2 #2 (Debian))
-	id 1x9tQP-000000003eW-42jT;
-	Fri, 25 Sep 2026 08:04:27 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 25 Sep 2026 10:04:25 +1000
-Date: Fri, 25 Sep 2026 10:04:25 +1000
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Usama Arif <usama.arif@linux.dev>
-Cc: Andrew Morton <akpm@linux-foundation.org>, justinstitt@google.com,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org,
-	ndesaulniers@google.com, Thomas Graf <tgraf@suug.ch>,
-	nickolay.lysenko@gmail.com, peterz@infradead.org,
-	rostedt@goodmis.org, sched-ext@lists.linux.dev, tj@kernel.org
-Subject: Re: [PATCH] rhashtable: specialize default comparison for constant
- parameters
-Message-ID: <arW6ibT1RkVCqTdT@gondor.apana.org.au>
-References: <20260924184733.2317353-1-usama.arif@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RtZfvI+0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A09A71F000FF;
+	Fri, 25 Sep 2026 02:14:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790302492;
+	bh=4NZMBuFlBSPtFWQr/+9V5+/tkqwiVb2mT8iCwcDe+8A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=RtZfvI+0S4V+OekP5WBn1nVIUqDPiXLFh3fdRqN8ZDUwVce/S4asXsblhu3wC7DOE
+	 GbAIh9/C07mr0GF0tbofTmf5Vh0QKmJfWlUDUQKZbx5gDAAcqcXWxm0sgLQc//ypHv
+	 jO9CmqTIYSTr9t9weTOjL/NCQbH2O/ONs0pTwsy/iCX3GdEjutOGBw8JIjznuZF3M5
+	 L9mY4BtABZcPbuC7nChFNUEdrvwSCyUvTACaL1efLT9QKt6flCrcCxo6cKHwv7vxLo
+	 laFfSlVsH6bLZ+kmYF9DAgd+zE2yBn9b2RxyvFW9ozMp74Cn8CBLnSECJFK8Jp0Lj3
+	 67LYDZ+gM9l5Q==
+Date: Thu, 24 Sep 2026 19:14:52 -0700
+From: Kees Cook <kees@kernel.org>
+To: Ben Cressey <ben@cressey.dev>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Pasha Tatashin <pasha.tatashin@soleen.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, Sami Tolvanen <samitolvanen@google.com>,
+	David Woodhouse <dwmw@amazon.co.uk>, kexec@lists.infradead.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] arm64: kexec: mark machine_kexec() __nocfi
+Message-ID: <202609241804.BB23BF10@keescook>
+References: <20260924-arm64-kexec-nocfi-v1-1-bbae2e2eadc8@cressey.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,90 +51,151 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260924184733.2317353-1-usama.arif@linux.dev>
+In-Reply-To: <20260924-arm64-kexec-nocfi-v1-1-bbae2e2eadc8@cressey.dev>
 
-On Thu, Sep 24, 2026 at 11:47:33AM -0700, Usama Arif wrote:
-> The inline lookup and insert helpers receive the rhashtable parameters by
-> value. With a static const parameter block, key_offset and key_len are
-> compile-time constants at the call site.
-> 
-> The default comparison throws that information away by reading both fields
-> back from ht->p. Fixed-size keys consequently load the parameters and call
-> bcmp() for every object in the bucket, even when the compiler could use
-> scalar comparisons instead.
-> 
-> The commit "sched_ext: Specialize the DSQ hashtable compare" [1] resulted
-> in a 2.9x faster DSQ lookup after replacing this path for its u64 key
-> with a scalar comparison. Doing that through obj_cmpfn requires every
-> fixed-key user to provide its own callback.
-> 
-> Pass the call-site parameters to rhashtable_compare(), as
-> rht_key_get_hash() already does. Use them when key_len is a compile-time
-> constant. Retain the ht->p path for dynamic parameter blocks. A constant
-> zero key_len continues to take the runtime length from ht->p.key_len.
-> 
-> This specializes the default comparison for all fixed-size users. With
-> Clang 22 on x86-64, bcmp() disappears from sched_ext, mac80211, NFSd,
-> TIPC, NFQUEUE, VFS superblock, pidfs, SysV IPC and hardware-breakpoint
-> table paths. The affected build_policy.o, sta_info.o and nfsd filecache.o
-> text shrinks by 512, 400 and 352 bytes respectively. Four- and eight-byte
-> keys become direct scalar comparisons; six-byte MAC addresses become a
-> four-byte and a two-byte comparison.
-> 
-> Measure the VFS case with ustat() on a mounted ramfs. This exercises
-> user_get_super() and its super_dev lookup. Across ten interleaved baseline
-> and patched VM boot pairs, with five 3 million call samples per boot, the
-> average per-boot median latency drops from 477.2 to 462.6 ns per call, or
-> 3.0%. All ten pairs improved.
-> 
-> No functional change intended.
-> 
-> [1] https://lore.kernel.org/all/20260921171928.1639407-1-usama.arif@linux.dev/
-> 
-> Suggested-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
-> Signed-off-by: Usama Arif <usama.arif@linux.dev>
-> ---
->  include/linux/rhashtable.h | 20 +++++++++++++++-----
->  lib/rhashtable.c           |  5 +++--
->  2 files changed, 18 insertions(+), 7 deletions(-)
+On Thu, Sep 24, 2026 at 10:42:30PM +0000, Ben Cressey wrote:
+> With CONFIG_CFI=y the kCFI check on this call loads a type hash from
+> kern_reloc - 4. arm64_relocate_new_kernel is SYM_CODE_START and carries
+> no hash. Its copy also sits at the start of the control page, which is
+> all that TTBR0 maps at this point, so the load faults and the kernel
+> oopses after "Bye!" instead of entering the new kernel:
+> [...]
+> arm64_relocate_new_kernel cannot be given a type hash, since the linker
+> script asserts that the relocation code starts at that symbol and a
+> hash would have to precede it. Mark machine_kexec() __nocfi instead, as
+> commit e2f8216ca2d8 ("arm64: Set __nocfi on swsusp_arch_resume()") did
+> for the same pattern on the hibernate path and commit 2114796ca041
+> ("x86/kexec: Mark machine_kexec() with __nocfi") did on x86.
 
-Nice work, I'm glad that someone is looking at the assembly :)
+I think e2f8216ca2d8 made a mistake here; using SYM_TYPED_FUNC_START
+wouldn't have been tautological: the defense is making sure that the
+indirect call itself can't be used with a bad pointer. Fixing this
+correctly isn't so bad: it just needs to decouple the entrypoint from
+the page address.
 
-> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
-> index 57a2a29bef0e8..c9872965b753c 100644
-> --- a/include/linux/rhashtable.h
-> +++ b/include/linux/rhashtable.h
-> @@ -598,13 +598,23 @@ static inline void rht_assign_unlock(struct bucket_table *tbl,
->  	for (pos = list; pos && rht_entry(tpos, pos, member);		\
->  	     pos = rcu_dereference_all(pos->next))
->  
-> -static inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
-> -				     const void *obj)
-> +/*
-> + * Use constant params from inlined callers to specialize memcmp(). If params
-> + * isn't constant, it must be equal to ht->p.
-> + */
-> +static __always_inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
-> +					      const void *obj,
-> +					      const struct rhashtable_params params)
->  {
->  	struct rhashtable *ht = arg->ht;
->  	const char *ptr = obj;
->  
-> -	return memcmp(ptr + ht->p.key_offset, arg->key, ht->p.key_len);
-> +	if (!__builtin_constant_p(params.key_len))
-> +		return memcmp(ptr + ht->p.key_offset, arg->key,
-> +			      ht->p.key_len);
-> +
-> +	return memcmp(ptr + params.key_offset, arg->key,
-> +		      params.key_len ? : ht->p.key_len);
+But, barring that, what I don't like here (and with x86) is that it
+covers the entire function, so _all_ indirect calls go unprotected.
 
-If there is no obj_cmpfn then there is no obj_hashfn.  If there
-is no obj_hashfn then params.key_len must be non-zero.  So this
-could become unconditional, perhaps with a comment.
+Can you pull the call out into an inline helper so that the other
+indirect call (cpu_soft_restart) doesn't lose coverage?
 
-Thanks,
+-Kees
+
+P.S.
+
+Doing the whole SYM_TYPED_FUNC_START change (below, only build tested)
+is larger, but maybe things besides KCFI will want things before the
+entry point?
+
+ arch/arm64/include/asm/kexec.h      |    2 ++
+ arch/arm64/kernel/machine_kexec.c   |   13 +++++++++++--
+ arch/arm64/kernel/relocate_kernel.S |   14 +++++++++-----
+ arch/arm64/kernel/vmlinux.lds.S     |    5 +++--
+ 4 files changed, 25 insertions(+), 9 deletions(-)
+
+
+diff --git a/arch/arm64/include/asm/kexec.h b/arch/arm64/include/asm/kexec.h
+index 892e5bebda957..0be042ec22c1f 100644
+--- a/arch/arm64/include/asm/kexec.h
++++ b/arch/arm64/include/asm/kexec.h
+@@ -100,6 +100,8 @@ void cpu_soft_restart(unsigned long el2_switch, unsigned long entry,
+ 		      unsigned long arg0, unsigned long arg1,
+ 		      unsigned long arg2);
+ 
++void arm64_relocate_new_kernel(struct kimage *kimage);
++
+ int machine_kexec_post_load(struct kimage *image);
+ #define machine_kexec_post_load machine_kexec_post_load
+ #endif
+diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+index 8f9bc2327dc85..1cf4cb135ee2b 100644
+--- a/arch/arm64/kernel/machine_kexec.c
++++ b/arch/arm64/kernel/machine_kexec.c
+@@ -136,9 +136,18 @@ int machine_kexec_post_load(struct kimage *kimage)
+ 	kimage->arch.ttbr1 = __pa(trans_pgd);
+ 	kimage->arch.zero_page = __pa_symbol(empty_zero_page);
+ 
++	/*
++	 * The whole .kexec_relocate.text section is copied to the control
++	 * page, but arm64_relocate_new_kernel is not required to be the first
++	 * thing in it. Allow for whatever precedes it (e.g. a landing pad,
++	 * a kCFI type hash, etc) by carrying its offset within the section
++	 * across the copy.
++	 */
+ 	reloc_size = __relocate_new_kernel_end - __relocate_new_kernel_start;
+ 	memcpy(reloc_code, __relocate_new_kernel_start, reloc_size);
+-	kimage->arch.kern_reloc = __pa(reloc_code);
++	kimage->arch.kern_reloc = __pa(reloc_code) +
++		((unsigned long)arm64_relocate_new_kernel -
++		 (unsigned long)__relocate_new_kernel_start);
+ 	rc = trans_pgd_idmap_page(&info, &kimage->arch.ttbr0,
+ 				  &kimage->arch.t0sz, reloc_code);
+ 	if (rc)
+diff --git a/arch/arm64/kernel/vmlinux.lds.S b/arch/arm64/kernel/vmlinux.lds.S
+index af1d720209764..81540c09a3db8 100644
+--- a/arch/arm64/kernel/vmlinux.lds.S
++++ b/arch/arm64/kernel/vmlinux.lds.S
+@@ -432,6 +432,7 @@ ASSERT(swapper_pg_dir - tramp_pg_dir == TRAMP_SWAPPER_OFFSET,
+ ASSERT(__relocate_new_kernel_end - __relocate_new_kernel_start <= SZ_4K,
+        "kexec relocation code is bigger than 4 KiB")
+ ASSERT(KEXEC_CONTROL_PAGE_SIZE >= SZ_4K, "KEXEC_CONTROL_PAGE_SIZE is broken")
+-ASSERT(__relocate_new_kernel_start == arm64_relocate_new_kernel,
+-       "kexec control page does not start with arm64_relocate_new_kernel")
++ASSERT(arm64_relocate_new_kernel >= __relocate_new_kernel_start &&
++       arm64_relocate_new_kernel < __relocate_new_kernel_end,
++       "kexec relocation entry point is outside the copied region")
+ #endif
+diff --git a/arch/arm64/kernel/machine_kexec.c b/arch/arm64/kernel/machine_kexec.c
+index 1cf4cb135ee2b..90302efebb426 100644
+--- a/arch/arm64/kernel/machine_kexec.c
++++ b/arch/arm64/kernel/machine_kexec.c
+@@ -202,7 +202,7 @@ void machine_kexec(struct kimage *kimage)
+ 		restart(is_hyp_nvhe(), kimage->start, kimage->arch.dtb_mem,
+ 			0, 0);
+ 	} else {
+-		void (*kernel_reloc)(struct kimage *kimage);
++		typeof(arm64_relocate_new_kernel) *kernel_reloc;
+ 
+ 		if (is_hyp_nvhe())
+ 			__hyp_set_vectors(kimage->arch.el2_vectors);
+diff --git a/arch/arm64/kernel/relocate_kernel.S b/arch/arm64/kernel/relocate_kernel.S
+index 6cb4209f5dab5..e3e575c57fe12 100644
+--- a/arch/arm64/kernel/relocate_kernel.S
++++ b/arch/arm64/kernel/relocate_kernel.S
+@@ -8,6 +8,7 @@
+  * Pasha Tatashin <pasha.tatashin@soleen.com>
+  */
+ 
++#include <linux/cfi_types.h>
+ #include <linux/kexec.h>
+ #include <linux/linkage.h>
+ 
+@@ -32,11 +33,14 @@
+  * new image to its final location.  To assure that the
+  * arm64_relocate_new_kernel routine which does that copy is not overwritten,
+  * all code and data needed by arm64_relocate_new_kernel must be between the
+- * symbols arm64_relocate_new_kernel and arm64_relocate_new_kernel_end.  The
+- * machine_kexec() routine will copy arm64_relocate_new_kernel to the kexec
+- * safe memory that has been set up to be preserved during the copy operation.
++ * symbols __relocate_new_kernel_start and __relocate_new_kernel_end.  The
++ * machine_kexec() routine will copy that whole region to the kexec safe
++ * memory that has been set up to be preserved during the copy operation,
++ * and enter it at arm64_relocate_new_kernel's offset within it.
++ *
++ * It is called indirectly, through the copy, so it needs a kCFI type hash.
+  */
+-SYM_CODE_START(arm64_relocate_new_kernel)
++SYM_TYPED_FUNC_START(arm64_relocate_new_kernel)
+ 	/*
+ 	 * The kimage structure isn't allocated specially and may be clobbered
+ 	 * during relocation. We must load any values we need from it prior to
+@@ -98,4 +102,4 @@ SYM_CODE_START(arm64_relocate_new_kernel)
+ 	mov	x2, xzr
+ 	mov	x3, xzr
+ 	br	x28				/* Jumps from el1 */
+-SYM_CODE_END(arm64_relocate_new_kernel)
++SYM_FUNC_END(arm64_relocate_new_kernel)
+
+
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Kees Cook
