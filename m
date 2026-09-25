@@ -1,139 +1,140 @@
-Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from abb.hmeau.com (abb.hmeau.com [180.181.231.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3A354D5983
-	for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 23:40:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2611A267;
+	Fri, 25 Sep 2026 00:04:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=180.181.231.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790293206; cv=none; b=R51c1rB9B53X3WoajsLgAeIRTlfWzD/tJcDMS9oOV1EvqjzbZFRuKu8xJkHA+od80f/8Pj+uBoPuzBMphOW99SKgUTbN+EV3iYpuhcGkG4A5juqGvp7q8YpvxK8kBkAH/4ENlXorLmp1yuX+v6RmECubYglvHDkS1VYZ+etVfjQ=
+	t=1790294686; cv=none; b=BJ745ajz1MNmrHKmui6Y1oWi1CKpB6FGiTHtozviErynmiJLl9dtmPt7IKGIReKmfSXsHrBxKM5ahFtU1+1CD+p+y+XyA0zMHMZp2+3dZ5wWru5GyCIj6/u2bW7PT7fCyX7tTYFLcTZUj6N4J2czakztpkAvUmVomiFL45CM504=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790293206; c=relaxed/simple;
-	bh=4h4cpDObZqi2JEPN69eOCH4YBG2slYUeYHjBIAENU48=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:In-Reply-To:
-	 References:MIME-Version; b=oZ2W8gwYU4JSWesAgNW+foxNpmKs58gJvZ0xANX0ygqtwMLFAV/l80Mv592g3fpq/0cydnbTFRoFkWlfkXFzB7mqbR3cxX72lgZsm2El8GlF1cYrUIIy+Q5NNXphRvd1n/9pwQqfsE6mAeqYW3H3vDurezBCpUSXBVog9ZmXM1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fasBR6D8; arc=none smtp.client-ip=74.125.228.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1790294686; c=relaxed/simple;
+	bh=HvsBmvYUBmw+Sy2UkGl81oqHKz8g4fZqaJXTq9WZ5Oo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R1PtpkS59ndx+eIEbUndCvNqJMgk82IlDuvxggg/dd/CBZpseURXDakab/QZ1mwhVxe+lQnj8fiWErAX4GlhAnKekMv1RCkjgyRu0nO664tj/nTI7sUpmhGaU9L/ArT16pjnZ+qSqoahkhVyg7OGbZbFHumWIJNOEqtdIkB6jzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b=PG4XNaZL; arc=none smtp.client-ip=180.181.231.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fasBR6D8"
-Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc4aa0f1a94so77124a12.2
-        for <llvm@lists.linux.dev>; Thu, 24 Sep 2026 16:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790293204; x=1790898004; darn=lists.linux.dev;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=gn5dD1CJfoor6GODqvLgahaKF8S1PUZ5xI0XuIL5LIc=;
-        b=fasBR6D837UanxRmpUxyMgqFuj8CJX2Sm0DMUbqyGIhDllju+CjfcGmGP3qwhq8XvH
-         qY1Uv4RKeNtOooQx2Umjx4aWDiAcFsiPNWK9Pl8Gf9DYradq0Ut8HCHcn1NGOkOKGsFv
-         R9lAyGf0xahsmJeSsSaJyW8YJbo6NhNMUdLraCGilXvJ4dNZVwiZ1YyxVHpy5Qy6Plhz
-         NA/n5DqYSTGArE37B8NhU1BEos/gOvHtWtEVdUZTMWIxBWDvMKGUcK58kWwlj3uSFYd+
-         DEsZrLO0B5vxClQhvLTkVImW6aJIqcz4AcQ2hMx2WwDBsTFDK/o/qQ7o5QANd32TgDWK
-         v7CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790293204; x=1790898004;
-        h=mime-version:content-transfer-encoding:references:in-reply-to:to
-         :from:subject:cc:message-id:date:content-type:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gn5dD1CJfoor6GODqvLgahaKF8S1PUZ5xI0XuIL5LIc=;
-        b=IeNCAYtlmT3k+hiuYxey/7J5s35dkBHR4dcT58n1jHuZ9i+cjpBr7eCJsAEwzix3yM
-         mkdJ19ODmjEt9DkfYAWdbDa/8NgurqZK39MtOw0InbpSDNz8ryh75b1+t7QKjC56WLg0
-         5sZSegGGiPQL5FjmV3Hu0IvY8Hpdqt4lOiBWs+4O/aj/T4YoYOAoEaEuEzxVbXnewd7h
-         m9+UHy+Fnk8nUbXLKjKRbhlVROXDU00MfNR5rP4GCNJDJkLY3CdoRv/0sVd1nkctvqCi
-         hIrwz/xqPsYCszp3s4+2Qa0pdJAuOXE7sIPb0Q+OEXGOj1uu+bH11YKOXi78krfcxTAe
-         juDQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx21nGQ0V2RIzLl1DttXU60GCMBvYVJLQRrc9ZBrC8jYec3UGjFzwVdvFXtig4zUG0btIBV@lists.linux.dev
-X-Gm-Message-State: AFuF++l/P7a+V0adT7CmTGns7NGZ5SzJClgdai/BAH5mcK3F2UdVh1X4
-	P5tHxTsuqzQKx83Ob9OQi+O3GzUc+BcS+vCW2q5QuR6psLy0XKXsp8K1
-X-Gm-Gg: AYBFou2246jWQ8haOnMwvVFyzxjqQm6KExLIbfdrMokliTGPYBKRNcKXmSvZadBAOKG
-	+qaZQg0y8skxEY8zTRLHv9JMn+wJ3ZHMhW/BdAQVu0WvoL0fUsobR75Rt1rT10ue25PN/umoAR+
-	7VQTyaHY+5TBLElTuFJcGo1QBqjKmX00dSpBT363P4SQ3a945gXLkUJ+tVlnotHLVl8ZCI1y4gn
-	f9okjiJXNZJHkLKTD7b0uU1vjzGYuFPyodPJ5zdEy93tBl7XlQ0hjZmimSi/8cO6DGD+gC0wJwt
-	jvGnfXCRSW05l42mnpeGfzdmsJVOnrv56IKsqnslYXfh7WoIKel14eEoOtR4KKYRXa2+A8TDdCl
-	8IAkynWah5cZ5K5PvIDpq6zAJ9u7knnIiAOGgl2qhPIdmFVi6rfbkGNbQwdM3j9D/BxbM8i32rB
-	Cu46T/EKWAk/EHEVPV/WQZoyFew+vQvBCvsdEKK7A5fU9Wsenf/ozs1r/6cCC9SGknoMd2nEunc
-	VgXkuHIDk/ZoyeIoU6Hic6izCV4P4zqnwOKJo6FENM8lBuBiv6l8WONZGADV3pojb3MvS1A91q/
-	z+0=
-X-Received: by 2002:a17:90b:1648:b0:39e:6c69:34d8 with SMTP id 98e67ed59e1d1-3a098fc574cmr3554656a91.60.1790293203799;
-        Thu, 24 Sep 2026 16:40:03 -0700 (PDT)
-Received: from localhost ([153.61.198.240])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b8efaeb3sm909723a91.2.2026.09.24.16.40.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 24 Sep 2026 16:40:03 -0700 (PDT)
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 24 Sep 2026 23:40:01 +0000
-Message-Id: <DLNXZ2WK7TPD.2RZBUNRS4FA4L@gmail.com>
-Cc: "Leon Hwang" <leon.hwang@linux.dev>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
- <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <linux-trace-kernel@vger.kernel.org>, <linux-kbuild@vger.kernel.org>,
- <llvm@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
- <bpf@vger.kernel.org>, <linux-efi@vger.kernel.org>,
- <rust-for-linux@vger.kernel.org>, "Ben Cressey" <ben@cressey.dev>, "Florent
- Revest (Anthropic)" <florent.revest@linux.dev>
-Subject: Re: [PATCH v2 6/9] arm64: cfi: Use
- CONFIG_ARM64_FUNCTION_PREFIX_NOPS for the type hash offset
-From: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>, "Mathieu Desnoyers"
- <mathieu.desnoyers@efficios.com>, "Nathan Chancellor" <nathan@kernel.org>,
- "Nicolas Schier" <nsc@kernel.org>, "Nick Desaulniers"
- <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
- Stitt" <justinstitt@google.com>, "Catalin Marinas"
- <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>, "Daniel
- Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Puranjay
- Mohan" <puranjay@kernel.org>, "Xu Kuohai" <xukuohai@huaweicloud.com>, "Ard
- Biesheuvel" <ardb@kernel.org>, "Ilias Apalodimas"
- <ilias.apalodimas@linaro.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Boqun
- Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
- <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
- Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Danilo
- Krummrich" <dakr@kernel.org>, "Daniel Almeida"
- <daniel.almeida@collabora.com>, "Tamir Duberstein" <tamird@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>, =?utf-8?q?Onur_=C3=96zkan?=
- <work@onurozkan.dev>, "Sami Tolvanen" <samitolvanen@google.com>, "Kees
- Cook" <kees@kernel.org>
-In-Reply-To: <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
-References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev> <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
-X-Mailer: mkdraft (claude review draft; edit before sending)
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gondor.apana.org.au header.i=@gondor.apana.org.au header.b="PG4XNaZL"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=gondor.apana.org.au; s=h01; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:cc:to:subject:message-id:date:
+	from:content-type:reply-to; bh=GvrPeFIm2JKZW2zlPW0AMx8ld3eL9qOjcIbpnfOK7W4=; 
+	b=PG4XNaZLPb+yZu/5jr6EvKnkqL5Tx9cTnbufAjN+Bnh0U58qf3qsFw+lq9IqnfzaPh5ahJpW/rX
+	LvJcLDEHrpCZH0k06qFdyO1qaQaTXeVXa2UQIBZwqz0nIPzNSfzJmMu/gwPws8iVoncVtE0JAFiXh
+	1SUgxpAlNX3L4tPIL8DK6qu2mx1xbEcFtJezq8MDEsMruaQmIOBvjs/3XOQ0501khN6WI0QBMVTHT
+	/7wZStfm8bfNAkORMm3TNXpTAgIyGJgWeQp+ZhGwnX7TjGCsShHS/45B00rfMPeFO+9VA+SLQH2FK
+	TcSy/DQBMGTCD0DBIJ9SScOM0GYSGhB6bhEg==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.98.2 #2 (Debian))
+	id 1x9tQP-000000003eW-42jT;
+	Fri, 25 Sep 2026 08:04:27 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 25 Sep 2026 10:04:25 +1000
+Date: Fri, 25 Sep 2026 10:04:25 +1000
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Usama Arif <usama.arif@linux.dev>
+Cc: Andrew Morton <akpm@linux-foundation.org>, justinstitt@google.com,
+	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, morbo@google.com, nathan@kernel.org,
+	ndesaulniers@google.com, Thomas Graf <tgraf@suug.ch>,
+	nickolay.lysenko@gmail.com, peterz@infradead.org,
+	rostedt@goodmis.org, sched-ext@lists.linux.dev, tj@kernel.org
+Subject: Re: [PATCH] rhashtable: specialize default comparison for constant
+ parameters
+Message-ID: <arW6ibT1RkVCqTdT@gondor.apana.org.au>
+References: <20260924184733.2317353-1-usama.arif@linux.dev>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260924184733.2317353-1-usama.arif@linux.dev>
 
-On Thu, Sep 24, 2026 at 10:35 PM Jose Fernandez (Anthropic) <jose.fernandez@linux.dev> wrote:
->  static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
+On Thu, Sep 24, 2026 at 11:47:33AM -0700, Usama Arif wrote:
+> The inline lookup and insert helpers receive the rhashtable parameters by
+> value. With a static const parameter block, key_offset and key_len are
+> compile-time constants at the call site.
+> 
+> The default comparison throws that information away by reading both fields
+> back from ht->p. Fixed-size keys consequently load the parameters and call
+> bcmp() for every object in the bucket, even when the compiler could use
+> scalar comparisons instead.
+> 
+> The commit "sched_ext: Specialize the DSQ hashtable compare" [1] resulted
+> in a 2.9x faster DSQ lookup after replacing this path for its u64 key
+> with a scalar comparison. Doing that through obj_cmpfn requires every
+> fixed-key user to provide its own callback.
+> 
+> Pass the call-site parameters to rhashtable_compare(), as
+> rht_key_get_hash() already does. Use them when key_len is a compile-time
+> constant. Retain the ht->p path for dynamic parameter blocks. A constant
+> zero key_len continues to take the runtime length from ht->p.key_len.
+> 
+> This specializes the default comparison for all fixed-size users. With
+> Clang 22 on x86-64, bcmp() disappears from sched_ext, mac80211, NFSd,
+> TIPC, NFQUEUE, VFS superblock, pidfs, SysV IPC and hardware-breakpoint
+> table paths. The affected build_policy.o, sta_info.o and nfsd filecache.o
+> text shrinks by 512, 400 and 352 bytes respectively. Four- and eight-byte
+> keys become direct scalar comparisons; six-byte MAC addresses become a
+> four-byte and a two-byte comparison.
+> 
+> Measure the VFS case with ustat() on a mounted ramfs. This exercises
+> user_get_super() and its super_dev lookup. Across ten interleaved baseline
+> and patched VM boot pairs, with five 3 million call samples per boot, the
+> average per-boot median latency drops from 477.2 to 462.6 ns per call, or
+> 3.0%. All ten pairs improved.
+> 
+> No functional change intended.
+> 
+> [1] https://lore.kernel.org/all/20260921171928.1639407-1-usama.arif@linux.dev/
+> 
+> Suggested-by: Mykola Lysenko <nickolay.lysenko@gmail.com>
+> Signed-off-by: Usama Arif <usama.arif@linux.dev>
+> ---
+>  include/linux/rhashtable.h | 20 +++++++++++++++-----
+>  lib/rhashtable.c           |  5 +++--
+>  2 files changed, 18 insertions(+), 7 deletions(-)
+
+Nice work, I'm glad that someone is looking at the assembly :)
+
+> diff --git a/include/linux/rhashtable.h b/include/linux/rhashtable.h
+> index 57a2a29bef0e8..c9872965b753c 100644
+> --- a/include/linux/rhashtable.h
+> +++ b/include/linux/rhashtable.h
+> @@ -598,13 +598,23 @@ static inline void rht_assign_unlock(struct bucket_table *tbl,
+>  	for (pos = list; pos && rht_entry(tpos, pos, member);		\
+>  	     pos = rcu_dereference_all(pos->next))
+>  
+> -static inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
+> -				     const void *obj)
+> +/*
+> + * Use constant params from inlined callers to specialize memcmp(). If params
+> + * isn't constant, it must be equal to ht->p.
+> + */
+> +static __always_inline int rhashtable_compare(struct rhashtable_compare_arg *arg,
+> +					      const void *obj,
+> +					      const struct rhashtable_params params)
 >  {
-> -	if (IS_ENABLED(CONFIG_CFI))
-> -		emit_u32_data(hash, ctx);
-> +	if (!IS_ENABLED(CONFIG_CFI))
-> +		return;
+>  	struct rhashtable *ht = arg->ht;
+>  	const char *ptr = obj;
+>  
+> -	return memcmp(ptr + ht->p.key_offset, arg->key, ht->p.key_len);
+> +	if (!__builtin_constant_p(params.key_len))
+> +		return memcmp(ptr + ht->p.key_offset, arg->key,
+> +			      ht->p.key_len);
 > +
-> +	emit_u32_data(hash, ctx);
-> +	for (int i = 0; i < CONFIG_ARM64_FUNCTION_PREFIX_NOPS; i++)
-> +		emit(A64_NOP, ctx);
->  }
+> +	return memcmp(ptr + params.key_offset, arg->key,
+> +		      params.key_len ? : ht->p.key_len);
 
-For the series:
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+If there is no obj_cmpfn then there is no obj_hashfn.  If there
+is no obj_hashfn then params.key_len must be non-zero.  So this
+could become unconditional, perhaps with a comment.
 
-unrelated minor issue:
-ctx.offset[] is counted from ro_image, but bpf_prog_fill_jited_linfo()
-adds it to prog->bpf_func which is ro_image + cfi_get_offset().
-So with CFI jited_line_info is already off by one insn.
-After this patch it will be off by 4 or 6.
-s390 does
-	jit.addrs[i] -= cfi_get_offset();
-before the call.
-Would be great to send a follow up eventually.
-
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
