@@ -1,46 +1,44 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA4149E145;
-	Fri, 25 Sep 2026 13:02:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22833F4105;
+	Fri, 25 Sep 2026 13:07:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790341381; cv=none; b=f9/Acgf/HfhhUlLKkeYhvKngfnmtcf4VUwPIKmvIXh79KzC0zvfS/CEYwBb1gWtuzXii9bLCIS74AskiB9VWEnR0czcyqdW6GhWV8Umj6AIivKt9Oq8LUROIoN0MO3UA4FU++0+5OOaiualOZLZ8ktw+zNWmsx2LChxVQJNgKv4=
+	t=1790341676; cv=none; b=O3D+wpiD3iMbPu1k+3VfAPQo4xwoYPNDrIczQSrcnR7x1MwxW5sDWqb5gTXHux7Ux45xk9Oda3BoESiBFeYhgNi5CleLFMFYPPWvcj880tumDPGmT8tIK3/8M18lD+Gki0iEh+BFTPXERA+jr6Ky52encMFsCrgzKiM6JpHEqPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790341381; c=relaxed/simple;
-	bh=pV6pLnY9VNbDFSg9wsmygELy03on28x8NoH07KyTAKo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MeFoP7O6BitJw73SmX6jBRltalTJQqozjPNGUUmolzhaThV8ztWOxzoKOvE0qIsElihjgrUYcqMlzrOWevxxS5pwOYZZdTuJobuZ115MXt2hxkqGgXzWTztgwK2myF/2QpWNAFlpk6r7PJwaaek3Hv9D3n8d5JIyfK81v81lxy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WNlscdXN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790341676; c=relaxed/simple;
+	bh=y8dVLIDW0FBjOm8Ac/nAlZ+eUAH00DbqGnFIzr7xA7w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PRdQRkx3VoJCFJP7Ow71VFrowaL9u4VhcoLrqheDAegRr+mqr0jbDusg4Iv0sh81rGJ2AMOoNqtOMLNm7krrgaGov78Ck3f+CRK5CrdL8gnJja+7gQGu3nh4+Wjiv5uli6MyYT0ezqqHKrfdxIDxJsi7tH4k6v/UwJznNhj+luI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IO8Gg6ut; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WNlscdXN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE2101F00898;
-	Fri, 25 Sep 2026 13:02:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IO8Gg6ut"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9D231F000FF;
+	Fri, 25 Sep 2026 13:07:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790341379;
-	bh=BSVHtbgr7nZGd5dozOxzx685KlCmq8P9tbgu4h3dnZU=;
+	s=k20260515; t=1790341674;
+	bh=y6HeMqcgnpiyhqJXKT+dnKLk1cRC+3OCnQckuwNGxjs=;
 	h=From:To:Cc:Subject:Date;
-	b=WNlscdXN90cGNUO5qLV+qUylIQXV1twQZcwaPEvgzo893O5zSrhulbVIZMPPD3tSc
-	 CIE1Zo+FPehfA5Tz9xtSJibZ4mI27225gJrdT3ACPUOw4CB+eb5bVuf0Gsh/BKTbVT
-	 0p22ZY1mRW6pROBFRQYRQ0YvgnLT+Tzv9OqMSvHOSM6+5UpG7kgICT1jt42opK5SB8
-	 hCsYDjXM0k7isT/nMvumZP84dZe24nNRwy0nTcUCUBoiCPNW5AKIJ8pXMv46aqpHxk
-	 o9BRP3KxWIl/cyCBa3kZTurtFeRUOtzJOkMq1UOb0CptJiBb4ujOI/ItL+mUzq5d7Z
-	 DBy7OymJdGuZQ==
+	b=IO8Gg6utasdzPe12meDEN/aTWLHsNO2hsV5UYcZwj4kvCNqZvQvNDNiuvb7yBizdv
+	 MGuLNs/DLgVdZHJ11NffT5OUIyKuZbhEob1qdkrwtBf7U5I9KfaCAWG4dWwHmrG2a/
+	 7UEfbDYK5QVXF1tGqgq4cBmKF2lEFrx4f9ky8fty+o1GyJWACwpCLffD3lVp6hIPa1
+	 S8anPhWE17L1Oe8IWiYReNxBHZFMskxPQIcMuASJgmShtCRaK6S6ci8YYom92LnSKu
+	 FabXkqjHxjgxpe/9BP4qDlPQAKr5jz/Fo2tZofZNSkV3JhN+1SW8u5Ioq8KHBwfNYa
+	 /+EQgHNsxf33A==
 From: Arnd Bergmann <arnd@kernel.org>
-To: SJ Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Ravi Jonnalagadda <ravis.opensrc@gmail.com>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
+	Kees Cook <kees@kernel.org>,
+	linux-wireless@vger.kernel.org,
+	b43-dev@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] damon: reduce stack usage further
-Date: Fri, 25 Sep 2026 15:02:46 +0200
-Message-ID: <20260925130254.4022227-1-arnd@kernel.org>
+Subject: [PATCH] b43legacy: work around stack frame size warning
+Date: Fri, 25 Sep 2026 15:07:36 +0200
+Message-ID: <20260925130749.4191347-1-arnd@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -52,65 +50,40 @@ Content-Transfer-Encoding: 8bit
 
 From: Arnd Bergmann <arnd@arndb.de>
 
-In a previous patch, I had annotated kdamond_tune_intervals() as
-noinline_for_stack in order to not exceed the stack frame warning
-limit. Unfortunately, my current linux-next randconfig builds show
-a similar problem again with clang-21:
+I came across a rare warning in the b43legacy driver while building
+randconfig kernels using clang-21.1.8, with KASAN enabled:
 
-mm/damon/core.c:3953:12: error: stack frame size (1288) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
- 3953 | static int kdamond_fn(void *data)
+drivers/net/wireless/broadcom/b43legacy/main.c:3250:12: error: stack frame size (1392) exceeds limit (1280) in 'b43legacy_wireless_core_init' [-Werror,-Wframe-larger-than]
+ 3250 | static int b43legacy_wireless_core_init(struct b43legacy_wldev *dev)
+      |            ^
 
-Do the same thing with kdamond_apply_schemes(), kdamond_merge_regions(),
-and kdamond_split_regions(), which also have individually large stacks.
-This should work to keep the deepest total stack depth down much more
-as well as avoid the warning.
+There are no actual large variables on the stack here, just excessive
+spills, and the code looks fine otherwise, so this is really an
+optimization quirk in the compiler. Marking the prepare_phy_data_for_init()
+function as noinline completely avoids the issue, with no function in
+this file using more than 200 bytes of stack space, same as without KASAN.
 
-I also tried to reduce the complexity of kdamond_fn() itself by splitting
-out the while() loop into a separate function. While this arguably led
-to slightly more readable code, it had no effect on the total stack
-usage and just made the new function the largest stack user and had
-a nonzero risk of me getting the conversion wrong.
-
-Fixes: 5a00cae64de1 ("mm/damon/core: reduce kernel stack usage")
+Link: https://pastebin.com/raw/KpV124Ep # .config
+Link: https://pastebin.com/CxWfsBN0 # assembler output, truncated
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- mm/damon/core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/net/wireless/broadcom/b43legacy/main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 4687b909d42c..9803b459a0a4 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -3417,7 +3417,7 @@ static void damos_trace_stat(struct damon_ctx *c, struct damos *s)
- 	trace_call__damos_stat_after_apply_interval(cidx, sidx, &s->stat);
+diff --git a/drivers/net/wireless/broadcom/b43legacy/main.c b/drivers/net/wireless/broadcom/b43legacy/main.c
+index 6b3e0b2bbca7..dfff3710dea3 100644
+--- a/drivers/net/wireless/broadcom/b43legacy/main.c
++++ b/drivers/net/wireless/broadcom/b43legacy/main.c
+@@ -3207,7 +3207,8 @@ static void b43legacy_wireless_core_exit(struct b43legacy_wldev *dev)
+ 	ssb_bus_may_powerdown(dev->dev->bus);
  }
  
--static void kdamond_apply_schemes(struct damon_ctx *c)
-+static noinline_for_stack void kdamond_apply_schemes(struct damon_ctx *c)
+-static void prepare_phy_data_for_init(struct b43legacy_wldev *dev)
++static noinline_for_stack void
++prepare_phy_data_for_init(struct b43legacy_wldev *dev)
  {
- 	struct damon_target *t;
- 	struct damos *s;
-@@ -3573,8 +3573,9 @@ static void damon_merge_regions_of(struct damon_target *t, unsigned int thres,
-  * while DAMON is running.  For such a case, repeat merging until the limit is
-  * met while increasing @threshold up to possible maximum level.
-  */
--static void kdamond_merge_regions(struct damon_ctx *c, unsigned int threshold,
--				  unsigned long sz_limit)
-+static noinline_for_stack void kdamond_merge_regions(struct damon_ctx *c,
-+						     unsigned int threshold,
-+						     unsigned long sz_limit)
- {
- 	struct damon_target *t;
- 	unsigned int nr_regions;
-@@ -3718,7 +3719,7 @@ static void damon_split_some_regions(struct damon_ctx *ctx,
-  * split was unnecessarily made, later 'kdamond_merge_regions()' will revert
-  * it.
-  */
--static void kdamond_split_regions(struct damon_ctx *ctx)
-+static noinline_for_stack void kdamond_split_regions(struct damon_ctx *ctx)
- {
- 	struct damon_target *t;
- 	unsigned long nr_regions = 0;
+ 	struct b43legacy_phy *phy = &dev->phy;
+ 	int i;
 -- 
 2.53.0
 
