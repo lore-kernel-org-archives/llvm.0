@@ -1,130 +1,133 @@
-Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE0CD4E3EF7
-	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 21:26:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.140
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790371565; cv=pass; b=rquvw3yGCUgRnlNUuKSH7PBSXfs9GGONKYsso4Mrvk8nnAfqL20xVdzVXSipwTkSu7sscjyLG/8NA1ZXbrWesPQxe2iJG9wFeCTF3MNyr02VZ2maZfztDjWpse6ayyDdcrLanDZsEWtst2tXvGkfmw+jhDvZwkUf25ZOHyujyz0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790371565; c=relaxed/simple;
-	bh=vVnqE9ewICJyUy6ZNzAvR3l5JpDQPpcbhDYQ9tAgpNc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rijxGCSSrLBxR1wGI7X7XUI1nNoCjtDmn5t+C3Vi5IGuLD9IbuY0FTGoCqOUjgd6HO72sqPuA33nvfvc69RXVrLUYq5CnA1nOW5CvVWTHpeQFT8LSWh1jM9E2yuwZsH5AfTxDNPSJsdGYCX8B+NIpBx5kb318/umsVh+9bT9Af4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eZgUsezt; arc=pass smtp.client-ip=74.125.225.140
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887A84FDE72
+	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 21:26:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790371567; cv=none; b=lAtjF5/doOBmIoqjZ3ULrgcSk+a2pMMXZYi5jwqnFJ7EVtp1/gKHO+Eey4fDwb06MFeT2LgKJJJO81cOQy4M7ifSSaATJgiP6HZOmuTu1klR1obkaWuFUkt7HHRNGr1UJGWX8vC2mrfuDHSJuom6/TzkP8F+KQH1Y6pU+tZVGTg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790371567; c=relaxed/simple;
+	bh=lXnrrDdYRQyOlVitpkY8qFZuMpGdYCPpTCZxc/3kPwk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=uIDgkFqPt2GUmSxCFbg91XFYAd+vjmC3yMlC7jOSZJw3345AzJZdlgtRTLAa8PSf8QsT5tqDBb/nRRyJkpPUb84N6LkbPAPZeb6gIR53EslmG7eAdvoaJRqLokEVa8ugiuUG0nWc4GYi+8g6slIcYd9dL9uF35gLXFB9baUo0yM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bj2LZXkF; arc=none smtp.client-ip=209.85.216.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--morbo.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eZgUsezt"
-Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ffb83bf7aso59335e9.2
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bj2LZXkF"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-39b6416441eso2356424a91.1
         for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 14:26:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790371560; cv=none;
-        d=google.com; s=arc-20260327;
-        b=n1q5QInJScgpwjIujFQTowgu9hLJIOLq6KP7J2SDyQxAXjrKyCMKfQEWoBRaFOBveX
-         J1QqWBboz9w6FdM4wk5XDdHeWJdE0qGlkCW3ET2dVaFnb/p1Xh9MZQ6msE/KG4txZsTD
-         oDRPdJhRWQtSxPsVhIl0MhB27PJuKO70bUDj1UIGGyNDWXVpNHBR2BaZV8CsmILbqbqF
-         AnNUcD1f3xezOlN85WhVUyUqkabPP+AOfxcT2HlPfFwDfXWhQPy9JHGjWRX2/DUkOftA
-         chEfF3vmxj6zC1mhrbICmPcXYJ+CEYY9Uwtksh6Re8vFB2bplkNMZXmbEiB92vB70YRd
-         VnyA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=LZBkr4Ro3niOwydI3OdaV1WcaDVvXJ8dIflx3msX2no=;
-        fh=OqTb5/JrwmMsmyAeczJA38fVD9dgzgcOzIbF7+mQGoU=;
-        b=flvqjp6Ys4HphmTxzQZPal9PlH/wDI6Y86cIPhNeaO5Fdx084U8zIa7HQa77cczkek
-         Tq0o2UI+x2Xf1+2DWHV2AybP++GIrWBiL4FehgmtrvfhC+LfPJ5aXT1uFqd9f1v2dxVm
-         MflolBNrT/EUM1f9gQu0XSY0Nq/+6LJ4Uju0h76bjxw0bwb95zGNMkBfRM31PehCaICY
-         LKrT0HpOBqU26GwOy82AE3ZQRNhQnNKradSoWu/sspKfcCEZHCoApydGen77yD+RDfOc
-         yM6HCBq1SQtlmY8KlYdTQHCEXkSaVv9/poBJS8IM9qnIi2+F4lQ6Yb5M5KDs+8zSgjtr
-         8jiQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20251104; t=1790371560; x=1790976360; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=LZBkr4Ro3niOwydI3OdaV1WcaDVvXJ8dIflx3msX2no=;
-        b=eZgUseztPYekgqF23/k2bpRpq8ct14SWLYDuIRug/HBKRCZszo0BbJRQWvG6MxC+RR
-         SIJVM55KwQBCSCX7wZAFgYir/33D62k1ieGOhsR+PorlMcewmF14L97P6TUCfiLD3GJL
-         tukTK6Efjl7grpohSS4H0FdE2fWwjFT0oS78gawmCbTZ/3ESoGFa/dtgXTokVy7j4nt6
-         HWydZOB8d2khyCcLlwX9/VlZSD/cRhrSGuzkXCRWWJjP8Cemxbb2RyVt6Ew5bzlsY6td
-         5CdTPFN/ZJ0xK0dnxwz06Glgk2bWwnpI/sTrHv2YCnh0XS3Y3mothSbpmQwQr3UQHSEQ
-         KTAA==
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=3Jjlm+MZZkSIglDOm6l1bMaXqX1r3Y9qH35a6D/ysA4=;
+        b=bj2LZXkFgIiBsKob7nc61C9VE464UkTQLJe2+cl/ZHG4HIqOCNMaKuE8Ff+SjtVv/K
+         vSNmZ1TGkW/G6Pq1zmbXLDJoflPNMO3TH0VE9gSz/2p+6XdTAhu1Cz7t16Rc7qnbmMP4
+         ux4moQKNNjhB1+jNhFPkltPAU2ElXldCQ/mo2nBY4P3LrHiwipfw1K/kxNsm2nOstTXn
+         jMWOvwatvO3/OedxDe+eyQj0IwvLh/eug+0o0ZSZRBUMvCNqyna8l6RLOkpwLm7s5Yae
+         I2mvACcaIIy15TObmiwnKhSvdzx/bdXHmv5RBtfNc7EQ65w7Xdxs98f+axpc7niBKdo0
+         PR0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20260707; t=1790371560; x=1790976360;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=LZBkr4Ro3niOwydI3OdaV1WcaDVvXJ8dIflx3msX2no=;
-        b=f3h4rc3aCROGjeAFKzs4aaUDcdKS91WVQxvS4uEstBAjJN0ezk6f69LHEguLiicP/X
-         tLcNun5UtIXimUhDW9YxrivDrV+GmvCUjXf4QclpAVJ6Rs8UFqSGZ51OGXIlRtrX9kiF
-         HIXH/EQ88A9a7R/+3ysdiCGaNikKnX4hSYD0qaEjuP+SF0yM2JZbqXS3kCvfqJ+u8+Bd
-         hsz4LhRihgMKGkNKm9PqVlUCL0A88Ldgg3zSFnQBkbuHIyzbkb4oE2ooRew/xFzI1Lze
-         EjRdXqtd7sVKuADj6kE1ZZjVMBEIeSGdxBmT2yeXBIUJz599+MyAX8/6FyK1Y0xDcH/F
-         Rvvw==
-X-Forwarded-Encrypted: i=1; AKwUvBwlSxkY1r3wHocOxaGJpYqeaK+522ek27HTMyaZHOvBuBGvxPLr8dkVOKjvllYkLLf6h4yC@lists.linux.dev
-X-Gm-Message-State: AFuF++kanxxqgML5vjyFIzu05DU5att6+A9cJZrl/DGxaqNkAWv7MFfN
-	QzCkST+JzeQIAsi+4ow/M/n75tvnPaE2hd02bxc4rxeCDfuXZ0h//Ndww0flQyS3DjRO5PBlTCP
-	TU+w6jKWNRk9RIWIebfpCG6wWfOPJcMOkWZmPcheNT8mc/SZZrpcAfmyo
-X-Gm-Gg: AYBFou0No95jAPzf7xOd/mR78HHjgASfrhFFOFQX8rLgy3+rKWy7Z1IPXcoafXM7nOD
-	e7i07NJW4W0e5KSOt2AX5E2WZWRwU8WV4+ffTjvHnKdux6sbUL7RGZAmXOmsmbo9rBnoFX+joqK
-	Sb/BWyl+lXBLBq6LuvpNI8BdU2K30ZAggniZRznO4OUhncAxJJkurS4tIAjtT1PZfCeh/9d/anp
-	5kh6rbT8lCzhuRDFmFNjvs+hymE8AFHOrr7Ylvf5GGkmze/1xrvzTlz0F9bkdQe971Sba0PbR0p
-	D3g2318qx5kDz8SFMrSjmz3dq/mdH0lMh5V6gO9WS9ErkCapPfIK6CTER1DA/YqKdG17540KQg8
-	HXDy+zvWdv4IL9UJGo8yMvBkjAnkUIo/Wetud/MuC0lRiB8UDqGZqlp8KzdUT1KURNk2ZPGMvN+
-	GeaIuyrg==
-X-Received: by 2002:a05:600c:a16:b0:49f:eddb:bcb1 with SMTP id
- 5b1f17b1804b1-49feddbbe6dmr72387875e9.25.1790371559677; Fri, 25 Sep 2026
- 14:25:59 -0700 (PDT)
+        bh=3Jjlm+MZZkSIglDOm6l1bMaXqX1r3Y9qH35a6D/ysA4=;
+        b=pUs/Qgnnu2yn9CYMWhTJzmdEizNluNegg542/7ziuDuHPpWBy/Bc5CDgZ841d4Nfxz
+         alR8CTfL3Ls8zm1misUr9DpAsFVZHF+uh2ipSNxfgdt31ElPOTtAgyTdbpLgQJd7/eWX
+         2Ydg7toF8LaQ2auiDkXXK8b81Qu3ev3Q4hUDraaxo35uTZIEZir4X9Ai9cVAkAdPSUh5
+         /ffhECaKfG0ra/lXpNcTWwFL1y2FwpidSvJtSfmzTGM6vZP5LmpSSsUMtogyAZneaSBg
+         8sbZjDcag2oVHY6hcTJ59BVXGZPAnV5eZ/OP1PUkOOAZJc/uOG78khoEovXLTx5Uj2YJ
+         zPKw==
+X-Forwarded-Encrypted: i=1; AKwUvBwHMbFOh0xdx1S1dH87ti74strwL+4sGQLQCASzNrShkKB6pi0cBKZxp8+x3ZvapuUi8xsO@lists.linux.dev
+X-Gm-Message-State: AFuF++lW+E0hMkLaUmfqiSGvnK5cvyfrMmcHS4MlJZbISYJuPDwWiDvR
+	s4mMn5X03zEDqG2+3NZkCUA945LclzBb0VEGWFCqP3P/Kb9AYgObuS/LO4Xw/kIAfZhsSojCYHs
+	f
+X-Received: from pjbkw17.prod.google.com ([2002:a17:90b:2211:b0:3a0:cd29:5300])
+ (user=morbo job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:57c6:b0:39e:24ab:9f82
+ with SMTP id 98e67ed59e1d1-3a098adeba7mr6300290a91.10.1790371560321; Fri, 25
+ Sep 2026 14:26:00 -0700 (PDT)
+Date: Fri, 25 Sep 2026 21:25:52 +0000
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260821-ptrace_uapi-v1-1-3de8638a29f2@google.com> <e801211b4c71ddd919fa5d7b9c859b86addf3fb7.camel@sipsolutions.net>
-In-Reply-To: <e801211b4c71ddd919fa5d7b9c859b86addf3fb7.camel@sipsolutions.net>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 25 Sep 2026 14:25:47 -0700
-X-Gm-Features: AclHuK-P_xUsgO3opj_R1RrEcEd0-ijVSs2NhvjFANGxEbSXnfoNvN06zC1Vukc
-Message-ID: <CAKwvOdkMK9Tj=JgsPeQj6_Xtx3FgZK2SWTSJVU_BJ7G17pDC2w@mail.gmail.com>
-Subject: Re: [PATCH] x86: uapi: ptrace: guard register offset macros with
- __ASSEMBLER__ or __FRAME_OFFSETS
-To: Johannes Berg <johannes@sipsolutions.net>, Oleg Nesterov <oleg@redhat.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>, 
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-um@lists.infradead.org, llvm@lists.linux.dev
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.56.0.rc1.315.gc6ed9934b7-goog
+Message-ID: <20260925212552.125652-1-morbo@google.com>
+Subject: [PATCH] firewire: core: add __counted_by_ptr attribute to struct fw_device
+From: Bill Wendling <morbo@google.com>
+To: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux1394-devel@lists.sourceforge.net, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, Bill Wendling <morbo@google.com>, 
+	codemender-patching+linux@google.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 24, 2026 at 7:54=E2=80=AFAM Johannes Berg <johannes@sipsolution=
-s.net> wrote:
->
-> On Fri, 2026-08-21 at 15:45 -0700, Nick Desaulniers wrote:
-> >
-> >  arch/x86/um/asm/ptrace.h               | 4 +---
-> >  arch/x86/um/ptrace_32.c                | 1 +
->
-> This seems like a simple adjustment for what you need to do in x86, so
-> that's OK, but I don't think we'll take this through the UML tree.
+The GCC and Clang attribute '__counted_by_ptr' associates a pointer
+field with an integer field holding its element count. This enables
+runtime bounds checking by KASAN and UBSAN to prevent out-of-bounds
+accesses to the pointer.
 
-Appreciated! I agree, maybe with Oleg's review this can go via the x86 tree=
-?
+In 'struct fw_device' (defined in 'include/linux/firewire.h'), the
+field 'config_rom' is a pointer to the device's Configuration ROM data,
+and its associated element count is stored in 'config_rom_length'.
 
->
-> But for UML you can have my
->
-> Acked-by: Johannes Berg <johannes@sipsolutions.net>
->
-> johannes
+Additionally, update the existing KUnit test in
+'drivers/firewire/device-attribute-test.c' where 'config_rom_length'
+was incorrectly initialized with the byte size
+('sizeof(simple_avc_config_rom)') instead of the element count
+('ARRAY_SIZE(simple_avc_config_rom)'). This ensures the
+'__counted_by_ptr' bounds-checking annotation does not trigger any
+false-positive panics or compile/runtime checks.
 
+Cc: codemender-patching+linux@google.com
+Assisted-by: LLM
+Signed-off-by: Bill Wendling <morbo@google.com>
+---
+ drivers/firewire/device-attribute-test.c | 4 ++--
+ include/linux/firewire.h                 | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/firewire/device-attribute-test.c b/drivers/firewire/device-attribute-test.c
+index 97478a96d1c9..2c482afca8f1 100644
+--- a/drivers/firewire/device-attribute-test.c
++++ b/drivers/firewire/device-attribute-test.c
+@@ -86,7 +86,7 @@ static void device_attr_simple_avc(struct kunit *test)
+ 			.type = &fw_device_type,
+ 		},
+ 		.config_rom = simple_avc_config_rom,
+-		.config_rom_length = sizeof(simple_avc_config_rom),
++		.config_rom_length = ARRAY_SIZE(simple_avc_config_rom),
+ 	};
+ 	static const struct fw_unit unit0 = {
+ 		.device = {
+@@ -168,7 +168,7 @@ static void device_attr_legacy_avc(struct kunit *test)
+ 			.type = &fw_device_type,
+ 		},
+ 		.config_rom = legacy_avc_config_rom,
+-		.config_rom_length = sizeof(legacy_avc_config_rom),
++		.config_rom_length = ARRAY_SIZE(legacy_avc_config_rom),
+ 	};
+ 	static const struct fw_unit unit0 = {
+ 		.device = {
+diff --git a/include/linux/firewire.h b/include/linux/firewire.h
+index fd35a6570cd8..2040b17d86fa 100644
+--- a/include/linux/firewire.h
++++ b/include/linux/firewire.h
+@@ -224,7 +224,7 @@ struct fw_device {
+ 	struct mutex client_list_mutex;
+ 	struct list_head client_list;
+ 
+-	const u32 *config_rom;
++	const u32 *config_rom __counted_by_ptr(config_rom_length);
+ 	size_t config_rom_length;
+ 	int config_rom_retries;
+ 	unsigned is_local:1;
+-- 
+2.56.0.rc1.315.gc6ed9934b7-goog
 
---=20
-Thanks,
-~Nick Desaulniers
