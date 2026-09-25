@@ -1,216 +1,423 @@
-Received: from mail-ua2-f32.google.com (mail-ua2-f32.google.com [74.125.226.224])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 745A72AE76
-	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 19:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.226.224
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790363881; cv=pass; b=WNdE6kyBs8M9wG7BYkssYmBx6HDKG5CGfs09HS9BAT2fxO5vrcxX05T6qjA0La+0mqYgFhNTag0IaEhaoS70EqJOs3BV5H217Hcztm7GROg/xuVTXODa+jRjRWXY+PInFi+5sHrzSmKFeah71r0jWxs7eujesZLhf9KYY09EAIw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790363881; c=relaxed/simple;
-	bh=0YXk1p2g+BspsukgpRLeUnT1mCwteMBiEo6KobR3WE4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RbDbI1NP15zmCm+mNXNSeu4+KprhJXnypbnLE7b6bS3fJgGUAiOEPAXj89lPTIDArChi/BMaXR2/OdD3YHHuDqjjftWhI1M4xtXW+Mb5UKhAsSW8alu/4mEXsiAhl+0dl7Ru5z4t3QxTk4AhGm29wGa5tnAKDft05ZjKmNsy1GY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O57AplVK; arc=pass smtp.client-ip=74.125.226.224
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809F03E00B4;
+	Fri, 25 Sep 2026 21:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790370522; cv=none; b=kzjwOU3Lru8NGrg1IY5CCIPt8eIqxbjKUTr7V31JdG0IyeH4HwGWs5/303MjPjl+D9APQA+Sc/a3cu9rBQWpBytxrHWHJ2zsuJNPXkrp1fRXpx/p/qtXuSWodRrm9skVr9qnWe1ArIlhfxNBuk1Z26Pjr7QujQg1/iKD1MhoP4I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790370522; c=relaxed/simple;
+	bh=MaD5BhqVNzYRlyiUIJfijkXPHi35ATx90c22sedFe1U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jCMlSTKZwpesoGCWqW5PsIfwWJYGikIaw8UnRuFZwVw3kRVD72+vlaaHd++iR7s58ZoNyc2KtvFwE7lQm17YnmJb12FyEvCjDwGrjpANWkmnK/vgF9T8fWb/gPfuHJRoWRp1uP1tuvRpq+oONkTnw7x8FT1MrUFkAATewIGAZxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ijVV+AtY; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O57AplVK"
-Received: by mail-ua2-f32.google.com with SMTP id a1e0cc1a2514c-97e97e2c7d4so723211241.1
-        for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 12:17:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790363878; cv=none;
-        d=google.com; s=arc-20260327;
-        b=YpkwETX049gHJu7QL1YVO53nWo2sWM+2ASHUQ9U6ZVWmdEqmUSFzEPhmDyd0CNKI4t
-         8nqsJ20MpgzmY46Ha/Ow6/q0PUm7vETjkE9cI3LTRrjYFLFDJ7b5NRatALYXG6BwPWqb
-         qJgBzFFuD1Qujt9MHUk3hR5AHSnu1PJYyvxsrANvlhX+/2gEg4rVXsL3FVWNX1VgAz2X
-         SeamNWZCrfrapoMj8fbZTkyVonm7meqOMyvIiOPE8qE8JQ+OhQsZTtzbA9EUeLRzG10u
-         w6Km0/9N8jmVDROrkECDnn3EpXWGObSO1VArB11+bqvxGU4y7L4y5KtohgDiZDwMU9Eg
-         PClw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=68/mkRd1a6DliLdoLvTqX92EpyDhdssnV15ZSAj23lc=;
-        fh=HQOgI4Gi5fXNltgcPhaxQGh/w1mGaFJ1H6v+XYvnzPA=;
-        b=TGYr9rWISpSg+dT2gON486MMZGk3jNm7ocGwPCuIUM89eErRNwfIT5hCZ3nrr5MSg7
-         gD+KMv/Jf3QPFKvitHkSeD/qdSZTxncHH2IsAwLHLW1hkmuQqbUGxXr6PVv4HL7ykxq4
-         UV7GVXv4RlEOfilMfw7VcV7qRDOZeqG1qL1fx0fB2vguP4HiWcZIgYGbCAROUHv52Gmf
-         dKKrQdHTK/G5IyUdRhccrFYFq1x0Wf9tBwWHOjInXjLZ0VXuiAGwYYKL16piX3NGGb6z
-         PMqCb52bcUxylGmHwjx9lu2XcvqGdGY1hpek0ltj46XUvIQ61XKM4RRKhj1n3686t9Pf
-         DOQg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1790363878; x=1790968678; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=68/mkRd1a6DliLdoLvTqX92EpyDhdssnV15ZSAj23lc=;
-        b=O57AplVKDhUEizHON2VT5gM2Cm41t5TReagp/FvTT3ylBHW4tWNkVSh534JBqzRosh
-         zhW91Dv2fD8lYzlzgGR8tRCe7uoegh/21T5WAYqm7PPMgYXPMJsoIApFKqeqpyODMerm
-         +WiBY1wsmeY/+CkD2sTsPcGxwHYrjdnxlwc63fa3w5vOmfo/nfES3pMM2EVxRs7XQQ9m
-         InDVg0OvvBbnAo1YQWheDR7LQncj+TBT1+Whj3u+ebKVYOJoL24vSVR0M8iOFOccy33S
-         EvHysbhoG6CzfkU9M8cNpPzr7HMPeSNwxDijumnMcb9OK3gWxXd6X0M8ozeTaXBwaR3u
-         FRvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790363878; x=1790968678;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=68/mkRd1a6DliLdoLvTqX92EpyDhdssnV15ZSAj23lc=;
-        b=0x6c80Rgz72xk4lq37Dt1579EkXCqeVy1OFhkPjIG83xxKdLp3zeCwZ5i9ddxKEI1P
-         oE5TWLr9eNe7Nzz6PpsPw4LEKf+r2DRMZdpDFlktbu0WQ+a7Zf6zmjbSFV3RvWa7jlWi
-         v4pv/3r5DONXZt1Q61XxK8zjNuHF5bVYLiF+elt+0eTDrO73NBaS5GninLlwrRxBgEnk
-         9Cc4L7GQ9AVCPJ80WWJQcTmZvwvENRDmALqtub8zJgPriPpWjiNiA/oJHdwRFkwihj8m
-         PX8tetJnRRXCUNGaLKFiBhp1tuVlbLC/hGk7xZggL7fm77mmR/a43B+b0vCnqWPiVbDV
-         kOMg==
-X-Forwarded-Encrypted: i=1; AKwUvBw0ucD5A6WgudVSvpRkHYTbfderdHoODZxqKIgGkj4YqLeL/QyiyJYfEN9VmTozNFNqXAXQ@lists.linux.dev
-X-Gm-Message-State: AFuF++nRQXEr5Np466+06SOfJZZnV2z8AC5nXrS/Sl2QgbhezVFIrJRm
-	BifAMDwhtOlDPHo65ClRWcS1SoRBLet2BjH5OrY3wVwi4RXv7U5HMh3blxtG5TIbaj+0877FPbl
-	wSINgr1z3psPArdaSndLjTO1QNf04ufqiHmxkafc=
-X-Gm-Gg: AYBFou2TBp3ceWT/UPsGrJBefmcZ7uhRcgw+xUdRzEFdRekDwR/yJjNU/i8SiNv9mOA
-	msAoRlm5jIMmaBS+d1zrMhixBSTL5ZWhsAofceGuPeFFJwaU81M733cPMySsQrZw6d4WHk4HxR6
-	yX2gyT9CL/GF1vt3ZQZSecjM3DFh+6FtD51rGhprU2gS9tc9MOjjtcuBW80IYschmZ3VMj2zuqw
-	zLb6JNwYSQkRiWIuQm9iykcagAdIGOy8szP2o/GTOi96gi+Z9eyiEBsXoEAih4MDQy+i3T2bhkv
-	PdIM6DSX7vNx73h5kwPzkp7kRavLIOqp089ty1ArjXPqRosbUYoYPEp5IV0Qx05eAAODBKAXx30
-	MxMvNXnis1uZ3w9IZUEO4UJ7FE7mIle/mr7xGBy1S1xlwZpzAT2Un
-X-Received: by 2002:a05:6102:3f06:b0:7a7:3485:33e4 with SMTP id
- ada2fe7eead31-7af1f2fce8cmr3602978137.33.1790363877295; Fri, 25 Sep 2026
- 12:17:57 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ijVV+AtY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790370519; x=1821906519;
+  h=date:from:to:cc:subject:message-id;
+  bh=MaD5BhqVNzYRlyiUIJfijkXPHi35ATx90c22sedFe1U=;
+  b=ijVV+AtYst6xFM4FJzwQWDPfbz0bMDgHYlSrgNaHkOi9AJHuwLynv+pz
+   bFTV8oehgFMqK3RX6pq2CURYdb+P4Tqh2QjvM/zteHknRbRUXrxkCWO5v
+   IppzfDHq46v/8ctdj6QvCrzrEs0dokbwTbS1SahCyIjQ1EC+R17aEuO7M
+   7lsXquFIVM4frWXqmouHWEQDvjuaJX6KbXMMW/vcBTi4fdpAc4W880dgw
+   RtodX8ZBHnL2eBg4b2HVATHpzzWX/f52OWDNQ8D+teSNlPtuaIrUMm5vf
+   JKXI5mZpvpxsWLC2LpJkmMslrbPgZp1yXstM1tMZfWxFKo4kXJzB6+ott
+   w==;
+X-CSE-ConnectionGUID: EUlCnem5RVG9C+4lGmL2Aw==
+X-CSE-MsgGUID: abKu4jTySoWxxoGxqvGiMA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11916"; a="116693074"
+X-IronPort-AV: E=Sophos;i="6.27,123,1787036400"; 
+   d="scan'208";a="116693074"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 14:08:38 -0700
+X-CSE-ConnectionGUID: XPu1ifYlRiaVJ3xDnTxkOw==
+X-CSE-MsgGUID: QzsVVD+mR2KOy02wyM2Vug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,123,1787036400"; 
+   d="scan'208";a="279162069"
+Received: from igk-lkp-server01.igk.intel.com (HELO a88263cc608e) ([10.211.93.152])
+  by fmviesa004.fm.intel.com with ESMTP; 25 Sep 2026 14:08:36 -0700
+Received: from kbuild by a88263cc608e with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xAD9l-000000000tC-167Q;
+	Fri, 25 Sep 2026 21:08:33 +0000
+Date: Fri, 25 Sep 2026 23:07:37 +0200
+From: kernel test robot <lkp@intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [arnd-playground:randconfig-7.3-next 628/673]
+ include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary
+ expression
+Message-ID: <202609252035.roEHB44F-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev> <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
-In-Reply-To: <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
-From: Bill Wendling <morbo@google.com>
-Date: Fri, 25 Sep 2026 12:17:41 -0700
-X-Gm-Features: AclHuK-u3uiT0pgSiQWlUPghLSJFY3GErd8b-v10N2yzXEaY6_RjJUbwQB3czv0
-Message-ID: <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 6/9] arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS
- for the type hash offset
-To: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	Sami Tolvanen <samitolvanen@google.com>, Kees Cook <kees@kernel.org>, 
-	Leon Hwang <leon.hwang@linux.dev>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Josh Poimboeuf <jpoimboe@kernel.org>, live-patching@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, bpf@vger.kernel.org, 
-	linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 24, 2026 at 3:37=E2=80=AFPM Jose Fernandez (Anthropic)
-<jose.fernandez@linux.dev> wrote:
->
-> Make cfi_get_offset(), SYM_TYPED_FUNC_START and the BPF JIT use
-> CONFIG_ARM64_FUNCTION_PREFIX_NOPS instead of hardcoding four bytes. kCFI
-> kernels with CALL_OPS need three NOPs, or five with ThinLTO and BTI.
->
-> CONFIG_ARM64_FUNCTION_PREFIX_NOPS is 0 on every CFI kernel today, so no
-> functional change.
->
-> Reviewed-by: Ben Cressey <ben@cressey.dev>
-> Reviewed-by: Florent Revest (Anthropic) <florent.revest@linux.dev>
-> Assisted-by: LLM
-> Signed-off-by: Jose Fernandez (Anthropic) <jose.fernandez@linux.dev>
-> ---
->  arch/arm64/include/asm/cfi.h     |  8 ++++++++
->  arch/arm64/include/asm/linkage.h | 11 +++++++++++
->  arch/arm64/net/bpf_jit_comp.c    |  8 ++++++--
->  3 files changed, 25 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/cfi.h b/arch/arm64/include/asm/cfi.h
-> index ab90f0351b7ae..03f02d4614c23 100644
-> --- a/arch/arm64/include/asm/cfi.h
-> +++ b/arch/arm64/include/asm/cfi.h
-> @@ -4,4 +4,12 @@
->
->  #define __bpfcall
->
-> +#ifdef CONFIG_CFI
-> +static inline int cfi_get_offset(void)
-> +{
-> +       return 4 + 4 * CONFIG_ARM64_FUNCTION_PREFIX_NOPS;
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git randconfig-7.3-next
+head:   0a1affa74ef2f2c5c5ee74fc604e47a1aefdd286
+commit: 5f609cf4ad6407b1967d07a8d6383a7edb182d45 [628/673] fixup clang __diag
+config: s390-randconfig-2001-20260925 (https://download.01.org/0day-ci/archive/20260925/202609252035.roEHB44F-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 57e112ccb2a509c0e1d36963b187fccdd59566de)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260925/202609252035.roEHB44F-lkp@intel.com/reproduce)
 
-*drive by review* Could you explain the two fours in this equation
-with a comment? (Feel free to ignore this if it's obvious to
-developers.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609252035.roEHB44F-lkp@intel.com/
 
--bw
+All error/warnings (new ones prefixed by >>):
 
-> +}
-> +#define cfi_get_offset cfi_get_offset
-> +#endif /* CONFIG_CFI */
-> +
->  #endif /* _ASM_ARM64_CFI_H */
-> diff --git a/arch/arm64/include/asm/linkage.h b/arch/arm64/include/asm/li=
-nkage.h
-> index d1f7a16729d25..14bc3c67c38b3 100644
-> --- a/arch/arm64/include/asm/linkage.h
-> +++ b/arch/arm64/include/asm/linkage.h
-> @@ -39,6 +39,17 @@
->         SYM_START(name, SYM_L_WEAK, SYM_A_NONE)         \
->         bti c ;
->
-> +/*
-> + * The compiler emits CONFIG_ARM64_FUNCTION_PREFIX_NOPS NOPs between a C
-> + * function's kCFI type hash and its entry point. Callers check the hash
-> + * at that offset.
-> + */
-> +#define __CFI_TYPE(name)                               \
-> +       .4byte __kcfi_typeid_##name ASM_NL              \
-> +       .rept CONFIG_ARM64_FUNCTION_PREFIX_NOPS ASM_NL  \
-> +       nop ASM_NL                                      \
-> +       .endr
-> +
->  #define SYM_TYPED_FUNC_START(name)                             \
->         SYM_TYPED_START(name, SYM_L_GLOBAL, SYM_A_ALIGN)        \
->         bti c ;
-> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.=
-c
-> index c18e005a41dbe..7ad14d9847138 100644
-> --- a/arch/arm64/net/bpf_jit_comp.c
-> +++ b/arch/arm64/net/bpf_jit_comp.c
-> @@ -185,8 +185,12 @@ static inline void emit_bti(u32 insn, struct jit_ctx=
- *ctx)
->
->  static inline void emit_kcfi(u32 hash, struct jit_ctx *ctx)
->  {
-> -       if (IS_ENABLED(CONFIG_CFI))
-> -               emit_u32_data(hash, ctx);
-> +       if (!IS_ENABLED(CONFIG_CFI))
-> +               return;
-> +
-> +       emit_u32_data(hash, ctx);
-> +       for (int i =3D 0; i < CONFIG_ARM64_FUNCTION_PREFIX_NOPS; i++)
-> +               emit(A64_NOP, ctx);
->  }
->
->  /*
->
-> --
-> 2.52.0
->
+   In file included from kernel/kcov.c:11:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/kcov.c:925:7: error: assigning to 'unsigned int' from incompatible type 'void'
+     925 |         mode = context_unsafe(kcov->mode);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/kcov.c:925:30: warning: expression result unused [-Wunused-value]
+     925 |         mode = context_unsafe(kcov->mode);
+         |                               ~~~~  ^~~~
+   1 warning and 2 errors generated.
+--
+>> lib/test_context-analysis.c:24:33: error: invalid operands to binary expression ('void' and 'int')
+      24 |         BUILD_BUG_ON(context_unsafe(3) != 3); /* plain expression */
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/build_bug.h:51:19: note: expanded from macro 'BUILD_BUG_ON'
+      51 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:40:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:705:22: note: expanded from macro 'compiletime_assert'
+     705 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:693:23: note: expanded from macro '_compiletime_assert'
+     693 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:685:9: note: expanded from macro '__compiletime_assert'
+     685 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/test_context-analysis.c:25:42: error: invalid operands to binary expression ('void' and 'int')
+      25 |         BUILD_BUG_ON(context_unsafe((void)2; 3) != 3); /* does not swallow semi-colon */
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/build_bug.h:51:19: note: expanded from macro 'BUILD_BUG_ON'
+      51 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:40:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:705:22: note: expanded from macro 'compiletime_assert'
+     705 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:693:23: note: expanded from macro '_compiletime_assert'
+     693 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:685:9: note: expanded from macro '__compiletime_assert'
+     685 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/test_context-analysis.c:26:42: error: invalid operands to binary expression ('void' and 'int')
+      26 |         BUILD_BUG_ON(context_unsafe((void)2, 3) != 3); /* does not swallow commas */
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
+   include/linux/build_bug.h:51:19: note: expanded from macro 'BUILD_BUG_ON'
+      51 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |         ~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:40:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                     ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+   include/linux/compiler_types.h:705:22: note: expanded from macro 'compiletime_assert'
+     705 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:693:23: note: expanded from macro '_compiletime_assert'
+     693 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:685:9: note: expanded from macro '__compiletime_assert'
+     685 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> lib/test_context-analysis.c:24:30: warning: expression result unused [-Wunused-value]
+      24 |         BUILD_BUG_ON(context_unsafe(3) != 3); /* plain expression */
+         |                                     ^
+   include/linux/compiler-context-analysis.h:218:2: note: expanded from macro 'context_unsafe'
+     218 |         __VA_ARGS__;                    \
+         |         ^~~~~~~~~~~
+   include/linux/build_bug.h:51:19: note: expanded from macro 'BUILD_BUG_ON'
+      51 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |                          ^~~~~~~~~
+   include/linux/build_bug.h:40:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:705:22: note: expanded from macro 'compiletime_assert'
+     705 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:693:23: note: expanded from macro '_compiletime_assert'
+     693 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:685:9: note: expanded from macro '__compiletime_assert'
+     685 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/test_context-analysis.c:25:39: warning: expression result unused [-Wunused-value]
+      25 |         BUILD_BUG_ON(context_unsafe((void)2; 3) != 3); /* does not swallow semi-colon */
+         |                                              ^
+   include/linux/compiler-context-analysis.h:218:2: note: expanded from macro 'context_unsafe'
+     218 |         __VA_ARGS__;                    \
+         |         ^~~~~~~~~~~
+   include/linux/build_bug.h:51:19: note: expanded from macro 'BUILD_BUG_ON'
+      51 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |                          ^~~~~~~~~
+   include/linux/build_bug.h:40:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:705:22: note: expanded from macro 'compiletime_assert'
+     705 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:693:23: note: expanded from macro '_compiletime_assert'
+     693 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:685:9: note: expanded from macro '__compiletime_assert'
+     685 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/test_context-analysis.c:26:39: warning: expression result unused [-Wunused-value]
+      26 |         BUILD_BUG_ON(context_unsafe((void)2, 3) != 3); /* does not swallow commas */
+         |                                              ^
+   include/linux/compiler-context-analysis.h:218:2: note: expanded from macro 'context_unsafe'
+     218 |         __VA_ARGS__;                    \
+         |         ^~~~~~~~~~~
+   include/linux/build_bug.h:51:19: note: expanded from macro 'BUILD_BUG_ON'
+      51 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
+         |                          ^~~~~~~~~
+   include/linux/build_bug.h:40:58: note: expanded from macro 'BUILD_BUG_ON_MSG'
+      40 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
+         |                                                          ^~~~
+   include/linux/compiler_types.h:705:22: note: expanded from macro 'compiletime_assert'
+     705 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |                             ^~~~~~~~~
+   include/linux/compiler_types.h:693:23: note: expanded from macro '_compiletime_assert'
+     693 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |                              ^~~~~~~~~
+   include/linux/compiler_types.h:685:9: note: expanded from macro '__compiletime_assert'
+     685 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   lib/test_context-analysis.c:416:8: warning: expression result unused [-Wunused-value]
+     416 |         (void)unrcu_pointer(d->data);
+         |               ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:500:26: note: expanded from macro 'unrcu_pointer'
+     500 | #define unrcu_pointer(p) __unrcu_pointer(p, __UNIQUE_ID(rcu))
+         |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/rcupdate.h:491:3: note: expanded from macro '__unrcu_pointer'
+     487 | #define __unrcu_pointer(p, local)                                       \
+         |                                                                         ~
+     488 | context_unsafe(                                                         \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     489 |         typeof(*p) *local = (typeof(*p) *__force)(p);                   \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     490 |         rcu_check_sparse(p, __rcu);                                     \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     491 |         ((typeof(*p) __force __kernel *)(local))                        \
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:218:2: note: expanded from macro '\
+   context_unsafe'
+     218 |         __VA_ARGS__;                    \
+         |         ^~~~~~~~~~~
+   4 warnings and 3 errors generated.
+--
+   In file included from lib/stackdepot.c:17:
+   In file included from include/linux/debugfs.h:15:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> lib/stackdepot.c:512:7: error: assigning to 'void *' from incompatible type 'void'
+     512 |         pool = context_unsafe(stack_pools[pool_index]);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> lib/stackdepot.c:512:46: warning: expression result unused [-Wunused-value]
+     512 |         pool = context_unsafe(stack_pools[pool_index]);
+         |                               ~~~~~~~~~~~ ~~~~~~~~~~^
+   1 warning and 2 errors generated.
+--
+   In file included from lib/rhashtable.c:17:
+   In file included from include/linux/irq_work.h:6:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from lib/rhashtable.c:26:
+>> include/linux/rhashtable.h:781:6: error: invalid argument type 'void' to unary expression
+     781 |         if (unlikely(rcu_access_pointer(tbl->future_tbl))) {
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:77:40: note: expanded from macro 'unlikely'
+      77 | # define unlikely(x)    __builtin_expect(!!(x), 0)
+         |                                           ^~~~
+>> lib/rhashtable.c:521:6: error: invalid argument type 'void' to unary expression
+     521 |         if (likely(rcu_access_pointer(tbl->future_tbl)))
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler.h:76:38: note: expanded from macro 'likely'
+      76 | # define likely(x)      __builtin_expect(!!(x), 1)
+         |                                           ^~~~
+>> lib/rhashtable.c:643:3: error: statement requires expression of scalar type ('void' invalid)
+     643 |                 if (rcu_access_pointer(tbl->future_tbl))
+         |                 ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   4 errors generated.
+--
+   In file included from crypto/authencesn.c:12:
+   In file included from include/crypto/internal/hash.h:12:
+   In file included from include/crypto/hash.h:12:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+--
+   In file included from crypto/scompress.c:10:
+   In file included from include/crypto/internal/scompress.h:12:
+   In file included from include/crypto/internal/acompress.h:12:
+   In file included from include/crypto/acompress.h:18:
+   In file included from include/linux/scatterlist.h:8:
+   In file included from include/linux/mm.h:36:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> crypto/scompress.c:101:3: error: statement requires expression of scalar type ('void' invalid)
+     101 |                 if (context_unsafe(scratch->src))
+         |                 ^   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> crypto/scompress.c:101:31: warning: expression result unused [-Wunused-value]
+     101 |                 if (context_unsafe(scratch->src))
+         |                                    ~~~~~~~~~^~~
+   include/linux/compiler-context-analysis.h:218:2: note: expanded from macro 'context_unsafe'
+     218 |         __VA_ARGS__;                    \
+         |         ^~~~~~~~~~~
+   1 warning and 2 errors generated.
+--
+   In file included from block/fops.c:8:
+   In file included from include/linux/mm.h:36:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from block/fops.c:12:
+   In file included from include/linux/buffer_head.h:15:
+>> include/linux/pagemap.h:179:7: error: assigning to 'void *' from incompatible type 'void'
+     179 |         head = rcu_access_pointer(mapping->i_pages.xa_head);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+   In file included from drivers/nvme/host/fc.c:6:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/nvme/host/fc.c:13:
+   In file included from drivers/nvme/host/nvme.h:21:
+   In file included from include/trace/events/block.h:10:
+   In file included from include/linux/buffer_head.h:15:
+>> include/linux/pagemap.h:179:7: error: assigning to 'void *' from incompatible type 'void'
+     179 |         head = rcu_access_pointer(mapping->i_pages.xa_head);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/nvme/host/fc.c:18:
+   In file included from include/scsi/scsi_transport_fc.h:18:
+>> include/scsi/scsi_host.h:793:9: error: returning 'void' from a function with incompatible result type 'enum scsi_host_state'
+     793 |         return context_unsafe(READ_ONCE(shost->shost_state));
+         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler-context-analysis.h:215:30: note: expanded from macro 'context_unsafe'
+     215 | #define context_unsafe(...)             \
+         |                                         ^
+     216 | ({                                      \
+         | ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     217 |         disable_context_analysis();     \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     218 |         __VA_ARGS__;                    \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     219 |         enable_context_analysis()       \
+         |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     220 | })
+         | ~~
+   3 errors generated.
+--
+   In file included from drivers/nvme/host/multipath.c:6:
+   In file included from include/linux/backing-dev.h:13:
+   In file included from include/linux/fs.h:5:
+   In file included from include/linux/fs/super.h:5:
+   In file included from include/linux/fs/super_types.h:13:
+   In file included from include/linux/percpu-rwsem.h:7:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/nvme/host/multipath.c:9:
+   In file included from include/trace/events/block.h:10:
+   In file included from include/linux/buffer_head.h:15:
+>> include/linux/pagemap.h:179:7: error: assigning to 'void *' from incompatible type 'void'
+     179 |         head = rcu_access_pointer(mapping->i_pages.xa_head);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/nvme/host/multipath.c:249:10: error: invalid operands to binary expression ('struct nvme_ns *' and 'void')
+     249 |                 if (ns == rcu_access_pointer(head->current_path[node])) {
+         |                     ~~ ^  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   3 errors generated.
+--
+   In file included from drivers/nvme/host/core.c:7:
+   In file included from include/linux/async.h:14:
+   In file included from include/linux/device.h:32:
+   In file included from include/linux/device/driver.h:21:
+   In file included from include/linux/module.h:20:
+   In file included from include/linux/elf.h:6:
+   In file included from arch/s390/include/asm/elf.h:173:
+   In file included from arch/s390/include/asm/mmu_context.h:11:
+   In file included from arch/s390/include/asm/pgalloc.h:18:
+   In file included from include/linux/mm.h:36:
+>> include/linux/rcuwait.h:23:10: error: invalid argument type 'void' to unary expression
+      23 |         return !!rcu_access_pointer(w->task);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/nvme/host/core.c:27:
+   In file included from drivers/nvme/host/nvme.h:21:
+   In file included from include/trace/events/block.h:10:
+   In file included from include/linux/buffer_head.h:15:
+>> include/linux/pagemap.h:179:7: error: assigning to 'void *' from incompatible type 'void'
+     179 |         head = rcu_access_pointer(mapping->i_pages.xa_head);
+         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/nvme/host/core.c:3944:34: warning: format string is not a string literal (potentially insecure) [-Wformat-security]
+    3944 |         ret = dev_set_name(cdev_device, name);
+         |                                         ^~~~
+   drivers/nvme/host/core.c:3944:34: note: treat the string as an argument to avoid this
+    3944 |         ret = dev_set_name(cdev_device, name);
+         |                                         ^
+         |                                         "%s", 
+   1 warning and 2 errors generated.
+
+
+vim +/void +23 include/linux/rcuwait.h
+
+8f95c90ceb541a Davidlohr Bueso 2017-01-11  16  
+191a43be61d679 Davidlohr Bueso 2020-04-23  17  /*
+191a43be61d679 Davidlohr Bueso 2020-04-23  18   * Note: this provides no serialization and, just as with waitqueues,
+191a43be61d679 Davidlohr Bueso 2020-04-23  19   * requires care to estimate as to whether or not the wait is active.
+191a43be61d679 Davidlohr Bueso 2020-04-23  20   */
+191a43be61d679 Davidlohr Bueso 2020-04-23  21  static inline int rcuwait_active(struct rcuwait *w)
+191a43be61d679 Davidlohr Bueso 2020-04-23  22  {
+febd668d375caf Paolo Bonzini   2020-05-18 @23  	return !!rcu_access_pointer(w->task);
+191a43be61d679 Davidlohr Bueso 2020-04-23  24  }
+191a43be61d679 Davidlohr Bueso 2020-04-23  25  
+
+:::::: The code at line 23 was first introduced by commit
+:::::: febd668d375caf13a7fcd93b3498366854de854a rcuwait: avoid lockdep splats from rcuwait_active()
+
+:::::: TO: Paolo Bonzini <pbonzini@redhat.com>
+:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
