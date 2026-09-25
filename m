@@ -1,105 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC07A3B19DE;
-	Fri, 25 Sep 2026 22:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE8A3F8EB7;
+	Fri, 25 Sep 2026 22:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790374771; cv=none; b=ODZvRlcbsE22qsU9YQM/y9inqqoegFwmzfBBkrgLNvrPusDfx6xGR4wwOOt2cCyxdeD6uBfUvzIk6idyb2QxdVKPQgmDVOMmeElPbet4s3uqOMSQLu1w7o4QP2WB6i/8O3jU5ggR2H3A+UIgnTPcjJ4bfx7vY4tMfJXZouHy2Ic=
+	t=1790375662; cv=none; b=bZo0tFI6U8K2NyqICSXIUSzWYi2VzyDP/gnCJqttZBeOwlMmc94I0SdCRdUKGaq6Ksu9+PJBrwFfDAqgkqLooNFVxKe9YSRt5igK0/zTzSv5O1aTRKZkeV3EFRug6qwWeoewZqK+Ya8wrfBOJI9PMPgTNxrQkY59Ios0LcX8bWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790374771; c=relaxed/simple;
-	bh=zSRb9x++qabLIT7ciB+i17Qwgp6yEv3v3XcxPYd1UhM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHoBHC72C3txYtGEwQL2xmI5804GFcCwwccyKGSaFAWVKO77DuWHar33NlA2EqJ2Xoqx59I/wvwsfjj9qDRo2hYKwuKZzNgdNowo7YUTa4nt7iATewmi+2fLyHIBtnGq7qj6NsPmEV6WYyyt1q4AwSCy22dzKNXZiUEsr/2KY5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQxXz8Bq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790375662; c=relaxed/simple;
+	bh=tX1ZUsz/e3rGKGnfkJVQfG1XgBOccNslQa8RBduFZ2A=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=U3i01fPN+0ekbjRf4f2cCjDFRCprpk+yCexEE8YSFLGYp9bRlx5yPaqdmcbaHbJ0lHfFpU6oawwUDF6BDd2qorzIYENh7qwJUPb9y4FUBGB3HeNn8q2qWP2JG8avGhElSznVo5rkkIz23sCB+5loDtTeFsZMV6IYjGsRxC/IFCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S07rFfqi; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQxXz8Bq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFD91F00893;
-	Fri, 25 Sep 2026 22:19:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S07rFfqi"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD8531F000FF;
+	Fri, 25 Sep 2026 22:34:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790374770;
-	bh=Ub6l+gGnhbpnVJSf1sECQFZws1/JGSNU3EBgSX0gJT0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PQxXz8Bqrp5fZyfGD0+JAGV/Kt9gf1keLvC0fg5oDg0FbTEbVJGuxWGMfLX4a64tp
-	 AWVr2a0nGnUzgI0wEPXnVpyWA2bs9xiS75lcfbRaZsj6SsbeBpDWwM2a1brofqNtc/
-	 PMVzMywMMPqnL/kNGdSX9F63rKLKf3sNQoadBGdYyIoJVHaFD9o2FxX3/eeZttbdAW
-	 inqLQvas8M54Ltq6wI4sRbZF3B+T/RIAJD3NcO6l0rUleguc0EzcHCV7vzFkNvo/WV
-	 yh0CnZKvY/rQthUclqO6rQJbXjy8+yJDamlNxOKl56QmZxkkB7YCoqP8hpwRiy5WMz
-	 6mMauv2SHxwSg==
-Date: Fri, 25 Sep 2026 23:19:21 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
- reserved in __cvdso_getrandom_data()
-Message-ID: <20260925221921.GA2296912@ax162>
-References: <20260925-vdso-getrandom-avoid-memset-llvm-24-v2-1-ce640f872393@kernel.org>
- <CAKwvOdmuvn0LZkYEsH84hnOGTYhTtzuWs3wMARtWdTeL6dD9sA@mail.gmail.com>
- <CAKwvOdnxKVpn=nAFaqP+9PTx4PqgHsUVWv6e60Pcr29W_eZrpQ@mail.gmail.com>
- <CAKwvOdmNZL3eFvV3v77GXDzL+XLgz+BT9TA=my0yTnbsHqVeSg@mail.gmail.com>
+	s=k20260515; t=1790375661;
+	bh=aITeuYia8itF4SMTQUZnXmogWzeqC/Cn61W96CfNPLs=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=S07rFfqi+H+8UNNSCOjpX0krnknUgrcRQGjE4D1LGyV1XWXKQjDQwe+MY2KN+cfUw
+	 ZRwvDbwvE8lSobwoDwRWk6XB2q9S/9LbXaDhf+lccJp2Tzt0UGD+gaxEWKl2uh8RqA
+	 NlcmJT0p8g4+g7ZICepgQ4zrm2cKRMo/Yxw4mHmR6mPB4Cc76ZzDGqZXiQKYFUpI/g
+	 NAJS8iQQTCoqban+Wrur77C0vShFn/29hG4C/TF1QLlK7OL9PAby9HiT+aePd95k2R
+	 xkD4Yz/mDHGwFPQtTTcTykgdmj/CoQqIYHRoJ5OhXyon3PYvNCPOc+ZhrdWdXRvCuZ
+	 a2h+jpvhv1xqA==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdmNZL3eFvV3v77GXDzL+XLgz+BT9TA=my0yTnbsHqVeSg@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] clang-tools: Import os for broken pipe handling
+From: Nathan Chancellor <nathan@kernel.org>
+To: houtinghang <ue081723@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+In-Reply-To: <179017337986.52388.7943687183785012868@gmail.com>
+References: <179017337986.52388.7943687183785012868@gmail.com>
+Date: Fri, 25 Sep 2026 23:34:15 +0100
+Message-Id: <179037565553.3985470.12035061965740287126.b4-reply@b4>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2132; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=tX1ZUsz/e3rGKGnfkJVQfG1XgBOccNslQa8RBduFZ2A=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFnbvj0vfRZrfvFE58VpKz/OOVEm92/xwUWmZW9mbv1Tv
+ it94dfuHR2lLAxiXAyyYoos1Y9VjxsazjnLeOPUJJg5rEwgQxi4OAVgIodlGP7HSLx/37XY5/q1
+ Ywd0Xugxvri0rW/y/BMrOQ7JCT4OXLfNiuE3q6q0cJbuHcODM9/XBf8KZK78kPaBk9d+6cPvR5b
+ PlNrGCwA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Fri, Sep 25, 2026 at 03:00:46PM -0700, Nick Desaulniers wrote:
-> > > > +static inline void *memset_inline(void *dst, int value, size_t size)
-> > > > +{
-> > > > +       char *d = dst;
-> > > > +
-> > > > +       while (size--)
-> > > > +               *d++ = value;
-> > > > +
-> > > > +       return d;
-> > > > +}
-> > >
-> > > Does this work?
-> > > https://godbolt.org/z/Tx6EaGMfb
-> >
-> > Hmmm...possibly.
-> > https://godbolt.org/z/ec9rzd9Yf
-> > I don't get it...
+On 2026-09-23 22:22 +0800, houtinghang wrote:
+> The BrokenPipeError handler in run-clang-tools.py calls os.open() and
+> os.dup2() without importing os. When the analysis pool raises this
+> exception, the handler raises NameError instead of redirecting stdout
+> and exiting with status 1.
 > 
-> Just keep it under 2 pages, it will be fine:
-> https://godbolt.org/z/qqoMqfxev
+> Import os and add a regression test that injects BrokenPipeError from
+> Pool.map(), then checks the redirection and exit status.
+> 
+> Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python scripts")
+> Assisted-by: LLM
+> Signed-off-by: houtinghang <ue081723@gmail.com>
+> ---
+> Testing: python scripts/clang-tools/run-clang-tools_test.py -v
+> The test fails before the import with NameError and passes after it.
+> Tested with Python 3.13 on Windows using exception injection; no complete
+> kernel build or real clang-tidy pipeline test was performed.
+> 
+> AI disclosure: Codex found the missing import, wrote the fix and test,
+> ran the test, reviewed the diff, and drafted this message in response to
+> a request to find, fix, review and submit a Linux kernel bug.
+> 
+>  scripts/clang-tools/run-clang-tools.py      |  1 +
+>  scripts/clang-tools/run-clang-tools_test.py | 41 +++++++++++++++++++++
+>  2 files changed, 42 insertions(+)
+>  create mode 100644 scripts/clang-tools/run-clang-tools_test.py
+> 
+> diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+> index e78be82..79d58b3 100755
+> --- a/scripts/clang-tools/run-clang-tools.py
+> +++ b/scripts/clang-tools/run-clang-tools.py
+> @@ -12,6 +12,7 @@ compile_commands.json.
+>  import argparse
+>  import json
+>  import multiprocessing
+> +import os
+>  import subprocess
+>  import sys
+>  
+> diff --git a/scripts/clang-tools/run-clang-tools_test.py b/scripts/clang-tools/run-clang-tools_test.py
 
-Yeah, it might be worth a comment that this is only safe for small
-values of size so it should not be blindly copied elsewhere (although I
-guess if it is, the outlined version exists in the majority of other
-places).
+The change to run-clang-tools.py is obviously correct but I am not sure
+this test really adds much other than noise. Please drop it and resend
+with an adjusted commit message. Additionally, please adjust your name
+in the signoff to be a "known identity" per the Documentation.
 
 -- 
 Cheers,
 Nathan
+
