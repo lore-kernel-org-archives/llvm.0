@@ -1,124 +1,146 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C3B242A154;
-	Fri, 25 Sep 2026 11:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2920449A3D5
+	for <llvm@lists.linux.dev>; Fri, 25 Sep 2026 11:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790334717; cv=none; b=TLLArrZmNQuxb3qKSz/ERrqrew0HyaA9f8bqPe+9p1U2Ja+GLN6j/pyBTR+F5KDbutqob7MIr37UVO7M5BZuPSyUJdhgFzcwLm3LEHKnOtS3GECKdaveu3FtuG5vB2ep010XTbuU3xzeLtue3EFJ+cc72qAlSBraEqKtor14d9k=
+	t=1790336099; cv=none; b=gtJqkOP6emWp6fMSUAle9Q5r51yIu+8KdWnZuFP5Kob48g4zjsZJJUrhP1aTQ4WVQeX3n3LLzHqf1JvssI3rfDexJK+6rmYt5YZrU6n6MzCoCYZJ7b5VpSXeDD4KRJHFZG109lROrOmzUUiA4b5MseAOY9RrYQGyAMjT/Fqfzzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790334717; c=relaxed/simple;
-	bh=a0mtBeQnsn5xdQ+v4nZmwL1q5eg+Si1BJLhqYC8maSY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=bllAG/0tllhiog2Z0uhAWHNUvCVF0l/qzBEOvmW3LWPdeYvDTwNoGSvHvhcDhSl+lLw8ArHCcugr99aYqRI1tC2dZh6QR/Gl/ccfQ3ywnh4ls5maAPSlr4kSMVIBaXFtxp1YfMnxCIus1JcMKTaMWi7skKSA4KpASFJBtSPFUpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TuCol7qa; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790336099; c=relaxed/simple;
+	bh=wMVojsfuYF9eT5q5rMs2c29qyYKzm0LcLr4isls1UTQ=;
+	h=From:Date:Subject:MIME-Version:Message-Id:In-Reply-To:To:Cc:
+	 Content-Type:References; b=Ssn7xgSP2XSOsn8Lyfq9ifAdCc+j/1QXAi0nsqka/lkRud2cSXI7zbQYqXl7UrzI4VxCw9SBJ35RLljvlQEU4UKazDcmFZO+5CewABKSpol7nNYzsYp8i8jk3hx2Duglxw0CgE3TVvCzrwVi8I5V9Fu8PgY01m9C6ctdHE9aXhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=HT2us8FY; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TuCol7qa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790334716; x=1821870716;
-  h=date:from:to:cc:subject:message-id;
-  bh=a0mtBeQnsn5xdQ+v4nZmwL1q5eg+Si1BJLhqYC8maSY=;
-  b=TuCol7qamtrQl3cnrzzrSaWZMQXKzZfT+aFpLTiavNR4ikWDQqoRkJZy
-   /r7UMi/xm55No22m3etfbXORbtSZwsZ/lIUKqEtZwZyC3A+vOtzRzQ5Sj
-   Pbtp0Y4U0DO7B+nBE9xnUADMxy5T4mdOnzQtLkCgQHu7vcHfbMxlnjkVt
-   hQvWTPwiePJjYF+huoVOVDVPt8HUOZNXwrBgfO0ouwh5IB3ZDUmz9+Qe1
-   WInf1TOXRinfIVJH6y2p7+60TemoOCuz9q3tTo2HpQru3l+ibnn/KHGN3
-   P9I/rxfMO1DjmHJ7cEQL6+vLm+95/3q5q43+8lwBRbisdPfFqqYk9HO8V
-   A==;
-X-CSE-ConnectionGUID: hOG0gL/2RHqJHWGWv/XS6g==
-X-CSE-MsgGUID: myvdGb8mQMyUvOTpvlSwYA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11915"; a="90025778"
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="90025778"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 04:11:54 -0700
-X-CSE-ConnectionGUID: akHjtHCiRZOUzJj5vb+V6g==
-X-CSE-MsgGUID: w2VPciMPQziGqdbSVXaVBQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="273803663"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 25 Sep 2026 04:11:53 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xA3qI-00000000KVK-3SRw;
-	Fri, 25 Sep 2026 11:11:50 +0000
-Date: Fri, 25 Sep 2026 19:11:00 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [arnd-playground:randconfig-7.3-next 610/673]
- include/asm-generic/io.h:1099:9: error: call to undeclared function '__pa';
- ISO C99 and later do not support implicit function declarations
-Message-ID: <202609251944.whUSNQ5N-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="HT2us8FY"
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20260925113454euoutp029aba4d7652769b32aa244658574edba9~YjTFViDYa0681106811euoutp02X;
+	Fri, 25 Sep 2026 11:34:54 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20260925113454euoutp029aba4d7652769b32aa244658574edba9~YjTFViDYa0681106811euoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1790336094;
+	bh=nO41lh/H4SzcoCdayvonqkq9okmqSnTubMvlLylaa1w=;
+	h=From:Date:Subject:In-Reply-To:To:Cc:References:From;
+	b=HT2us8FYPCD02Bqr6zxqNELSXegcdUB71/GiSE79vPh0ddbcgSd4gYAdoEzE+9FfU
+	 aXibiNf7aXZYzd8naEbWeqtRvgyMmH39N++134vhhtm7ENQIBAGk9Lb7PSqTDSnY5A
+	 fdjlRPG2x+BJwq2hJNUpKlor5WltkEwRd9KhMQsU=
+Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20260925113454eucas1p1ffe6b62a29086943a60137ed7e1f42ef~YjTFCnGhF0249002490eucas1p1k;
+	Fri, 25 Sep 2026 11:34:54 +0000 (GMT)
+Received: from AMDC4942.eu.corp.samsungelectronics.net (unknown
+	[106.210.136.40]) by eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20260925113452eusmtip215fd236cce7ebc09bee5052a2af6141d~YjTDfNwYs0229302293eusmtip2L;
+	Fri, 25 Sep 2026 11:34:52 +0000 (GMT)
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+Date: Fri, 25 Sep 2026 13:27:32 +0200
+Subject: [PATCH RFC 2/9] lib/lz4: backport upstream's -Wmissing-prototypes
+ fix
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260925-lz4-vendor-upstream-v1-2-1c7ffbe21c4b@samsung.com>
+In-Reply-To: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>,  Nathan Chancellor
+	<nathan@kernel.org>,  Nick Desaulniers <ndesaulniers@google.com>,  Bill
+	Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,  Russell
+	King <linux@armlinux.org.uk>,  Thomas Bogendoerfer
+	<tsbogend@alpha.franken.de>,  "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>,  Helge Deller <deller@gmx.de>,
+	Heiko Carstens <hca@linux.ibm.com>,  Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>,  Christian Borntraeger
+	<borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>, Thomas
+	Gleixner <tglx@kernel.org>,  Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>,  Sergey
+	Senozhatsky <senozhatsky@chromium.org>, Jens Axboe <axboe@kernel.dk>, 
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>,  Nick
+	Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>,  Chao Yu
+	<chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>,  Herbert Xu
+	<herbert@gondor.apana.org.au>,  Phillip Lougher <phillip@squashfs.org.uk>,
+	Sungguk <sungguk.na@samsung.com>,  Jaehoon Chung <jh80.chung@samsung.com>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org, 
+	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
+X-Mailer: b4 0.15-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2100;
+	i=m.wilczynski@samsung.com; h=from:subject:message-id;
+	bh=wMVojsfuYF9eT5q5rMs2c29qyYKzm0LcLr4isls1UTQ=;
+	b=owEBbQGS/pANAwAKASw99I2nQptuAcsmYgBqtlxRhAkB7TyATBVr/4+ZvB5W43K313iDQp6Eo
+	GaNSuSsmEuJATMEAAEKAB0WIQR2xBTdTO5XfoUTSOYsPfSNp0KbbgUCarZcUQAKCRAsPfSNp0Kb
+	bqqICAChUCgNeDyv3RGoQ6NgJobTPJZsAhZENmNk+sFHRrRm6s6yXgvJuRHnzHz67u44q3G2aUJ
+	/w62OUYZhnqPXdGHG01nPAl/of1ajK7KLqRJZtwlq76hT4q/T3bD7HTJyl07fgzoJcWA3FJeoQC
+	1ODZi0rz3jnFdvvowe7eSTcTvlQ7A4X+H/saBtEhuoKsMAlE3scE8X1i/kj0dRRcx8yrOhXE433
+	ExlndGyD/0UTmNLSkn9uACbJR7e7T83b1n4lRCzw5cW9WKelHdl7gxKHn3nCqO43ppJbweGga2A
+	TmrhwDJsGXJ9NmpfsGfz7Gd6ImCi+0CtxVH3d3CbdbEGiCeL
+X-Developer-Key: i=m.wilczynski@samsung.com; a=openpgp;
+	fpr=76C414DD4CEE577E851348E62C3DF48DA7429B6E
+X-CMS-MailID: 20260925113454eucas1p1ffe6b62a29086943a60137ed7e1f42ef
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260925113454eucas1p1ffe6b62a29086943a60137ed7e1f42ef
+X-EPHeader: CA
+X-CMS-RootMailID: 20260925113454eucas1p1ffe6b62a29086943a60137ed7e1f42ef
+References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
+	<CGME20260925113454eucas1p1ffe6b62a29086943a60137ed7e1f42ef@eucas1p1.samsung.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/arnd/playground.git randconfig-7.3-next
-head:   0a1affa74ef2f2c5c5ee74fc604e47a1aefdd286
-commit: d217cdb672619041e213243f6f352cb6422d3a59 [610/673] Revert "simplify asm/io.h"
-config: um-allnoconfig (https://download.01.org/0day-ci/archive/20260925/202609251944.whUSNQ5N-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260925/202609251944.whUSNQ5N-lkp@intel.com/reproduce)
+v1.10.0 defines LZ4_loadDict_internal() in lz4.c and LZ4HC_searchExtDict()
+in lz4hc.c with external linkage and no prototype, which the kernel's
+-Wmissing-prototypes rejects. The first also prevents linking, since
+lz4_compress.c and lz4_decompress.c both include lz4.c and would each
+define it.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609251944.whUSNQ5N-lkp@intel.com/
+Neither can be forward declared static in lz4_deps.h like the other bare
+helpers, because their signatures use types declared inside the .c files.
 
-All errors (new ones prefixed by >>):
+Take the two hunks of upstream commit 5ef1f16929b5
+("fix -Wmissing-prototypes warnings") that apply to the files we vendor.
+This is the only deviation from the tag, and goes away at the next
+re-sync.
 
-   In file included from lib/iomem_copy.c:8:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
->> include/asm-generic/io.h:1099:9: error: call to undeclared function '__pa'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1099 |         return __pa((unsigned long)address);
-         |                ^
->> include/asm-generic/io.h:1107:9: error: call to undeclared function '__va'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1107 |         return __va(address);
-         |                ^
->> include/asm-generic/io.h:1107:9: error: incompatible integer to pointer conversion returning 'int' from a function with result type 'void *' [-Wint-conversion]
-    1107 |         return __va(address);
-         |                ^~~~~~~~~~~~~
-   3 errors generated.
+Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+---
+ lib/lz4/upstream/lz4.c   | 2 +-
+ lib/lz4/upstream/lz4hc.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/lib/lz4/upstream/lz4.c b/lib/lz4/upstream/lz4.c
+index a2f7abee19fb9a5c768f2a6c266acf5b571f0855..0d474be0236a698d297ab9a430f5082485eb3709 100644
+--- a/lib/lz4/upstream/lz4.c
++++ b/lib/lz4/upstream/lz4.c
+@@ -1584,7 +1584,7 @@ int LZ4_freeStream (LZ4_stream_t* LZ4_stream)
+ 
+ typedef enum { _ld_fast, _ld_slow } LoadDict_mode_e;
+ #define HASH_UNIT sizeof(reg_t)
+-int LZ4_loadDict_internal(LZ4_stream_t* LZ4_dict,
++static int LZ4_loadDict_internal(LZ4_stream_t* LZ4_dict,
+                     const char* dictionary, int dictSize,
+                     LoadDict_mode_e _ld)
+ {
+diff --git a/lib/lz4/upstream/lz4hc.c b/lib/lz4/upstream/lz4hc.c
+index 4d8c36a6978fcae09e4c4a936572b4b271513466..32b29f382268d961d65383b24c7225494d9044ad 100644
+--- a/lib/lz4/upstream/lz4hc.c
++++ b/lib/lz4/upstream/lz4hc.c
+@@ -360,7 +360,7 @@ typedef struct {
+     int back;  /* negative value */
+ } LZ4HC_match_t;
+ 
+-LZ4HC_match_t LZ4HC_searchExtDict(const BYTE* ip, U32 ipIndex,
++static LZ4HC_match_t LZ4HC_searchExtDict(const BYTE* ip, U32 ipIndex,
+         const BYTE* const iLowLimit, const BYTE* const iHighLimit,
+         const LZ4HC_CCtx_internal* dictCtx, U32 gDictEndIndex,
+         int currentBestML, int nbAttempts)
 
-vim +/__pa +1099 include/asm-generic/io.h
+-- 
+2.34.1
 
-5820acdc34867d Arnd Bergmann 2026-05-08  1090  
-5820acdc34867d Arnd Bergmann 2026-05-08  1091  /*
-5820acdc34867d Arnd Bergmann 2026-05-08  1092   * Change virtual addresses to physical addresses and vv.
-5820acdc34867d Arnd Bergmann 2026-05-08  1093   * These are pretty trivial
-5820acdc34867d Arnd Bergmann 2026-05-08  1094   */
-5820acdc34867d Arnd Bergmann 2026-05-08  1095  #ifndef virt_to_phys
-5820acdc34867d Arnd Bergmann 2026-05-08  1096  #define virt_to_phys virt_to_phys
-5820acdc34867d Arnd Bergmann 2026-05-08  1097  static inline unsigned long virt_to_phys(volatile void *address)
-5820acdc34867d Arnd Bergmann 2026-05-08  1098  {
-5820acdc34867d Arnd Bergmann 2026-05-08 @1099  	return __pa((unsigned long)address);
-5820acdc34867d Arnd Bergmann 2026-05-08  1100  }
-5820acdc34867d Arnd Bergmann 2026-05-08  1101  #endif
-5820acdc34867d Arnd Bergmann 2026-05-08  1102  
-5820acdc34867d Arnd Bergmann 2026-05-08  1103  #ifndef phys_to_virt
-5820acdc34867d Arnd Bergmann 2026-05-08  1104  #define phys_to_virt phys_to_virt
-5820acdc34867d Arnd Bergmann 2026-05-08  1105  static inline void *phys_to_virt(unsigned long address)
-5820acdc34867d Arnd Bergmann 2026-05-08  1106  {
-5820acdc34867d Arnd Bergmann 2026-05-08 @1107  	return __va(address);
-5820acdc34867d Arnd Bergmann 2026-05-08  1108  }
-5820acdc34867d Arnd Bergmann 2026-05-08  1109  #endif
-5820acdc34867d Arnd Bergmann 2026-05-08  1110  
-
-:::::: The code at line 1099 was first introduced by commit
-:::::: 5820acdc34867db3abad330764e2069a3fb15216 Revert "asm/io.h: move virt_to_phys/phys_to_virt"
-
-:::::: TO: Arnd Bergmann <arnd@arndb.de>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
