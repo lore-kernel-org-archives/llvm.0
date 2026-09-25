@@ -1,96 +1,106 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF2B837B010;
-	Fri, 25 Sep 2026 15:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812E34C150A;
+	Fri, 25 Sep 2026 15:49:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.117.225.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790349928; cv=none; b=aUZURXCyxeeqYgJVVRMawlg4gxNCaq2hRxKWXroOpTqBlaMz7tGkW+MhbZSRm8gmmmB65Nh1qRb2Wkkw8+V+bSieAdrAKU2qS/sikpjrAbM3tsyZiPm06ef02lY3VIspuqeOYJkfTJuVwvnFoTxb6JV/J4dqxnq4MEPaSCj9kUA=
+	t=1790351398; cv=none; b=R992ED8yH5hKzYrTO1I2uirH5Tz3oB8MEvbRj2IzyhvBNwEdKFYk5ZgYoTD8RjOlaUU6yxtlxC1SLgtWGuz2SI9diEFmG6cnZqYYevgJ/MNchErK7LAR+/H7+jkKv3ubePLfJMZOlWT0WSS6XjMuW+lbt/BR11tLB0XuVe7KcYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790349928; c=relaxed/simple;
-	bh=q3X2P4WMDh6Ao+dyfL77r71gHFNOtCFZtV6OiZrXnGE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=VXB80eFd15j4NUhvIVhM3yIff+KeKYUa0xKzlWwlj0pVhPjuglJFRVZgIA6FraYi52O6a+07baEaKT/CjiHhn/WdhWvj8/r8iNr2yUsaCHRG6Ufq/FWn/w3NyKIZ5uu27aZH+oEndSipACIrm9FaENvlYpp2tQ/Om3AMi8wbe84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mcIMWr5u; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790351398; c=relaxed/simple;
+	bh=F4ibQWODzZomGlt2ywAO+0t4ahK0XWx4HOEa5XUaYEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RaxP9V58g/XjuzRlVq/f9Ioh0p59BI1nKVkBKLE3Yf8xjVWFzzkUVdc+VcOr3tKS5GRQ8RbEDq/t1aXmzJXvo1xC4HRQmXtuEzMRJvG4br/WsIGrBmyTpVW+yiFj4pq5LhuZTr37KG3EwLTICdHi0HHJCxNCsEV2cNNhMF3mqaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com; spf=pass smtp.mailfrom=virtuozzo.com; dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b=oIcJh32C; arc=none smtp.client-ip=130.117.225.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=virtuozzo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=virtuozzo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mcIMWr5u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790349927; x=1821885927;
-  h=date:from:to:cc:subject:message-id;
-  bh=q3X2P4WMDh6Ao+dyfL77r71gHFNOtCFZtV6OiZrXnGE=;
-  b=mcIMWr5upyN81qjLDJi66kOBgl3iGKlkLS3CV+MVrVKl5HYRKHkoU5y9
-   0VrPNduzhHjDlQKpgqaCJ6pCXM5cVHGtIXC/bE440yBTnZHoivlk9oYVh
-   GXFxQ1FwWCSdxcg/5yPenkLUDG/G1gjE+w5yUVigN46IqkNX7+qCkeGbq
-   xAvWKsjPWnIPvlKGpJ24hKSdod0943vpsv5FZ8VsNMkLfEn84XCVzdj5v
-   TNy+v1ICrgQvvLOgd9hGsfGqutCRfOJN3SCFMy/VAfKUmZYjJ0FC7Dqzs
-   PiczQbMu+DRAVK8DqsjZr2F/Z4+/EQFqLpUlfrlVMGzbbQQ99DDVj4rBE
-   A==;
-X-CSE-ConnectionGUID: n4IRGXnwSXqjWCnvty531A==
-X-CSE-MsgGUID: PDghPj8BQ16+ukNnvri8Uw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11916"; a="100470348"
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="100470348"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Sep 2026 08:25:27 -0700
-X-CSE-ConnectionGUID: nIbuaHDoQQWbEn7ZfrqIYQ==
-X-CSE-MsgGUID: /E0OV6qhRT67KjIhKlm/4A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,122,1787036400"; 
-   d="scan'208";a="272500311"
-Received: from igk-lkp-server01.igk.intel.com (HELO a88263cc608e) ([10.211.93.152])
-  by orviesa010.jf.intel.com with ESMTP; 25 Sep 2026 08:25:25 -0700
-Received: from kbuild by a88263cc608e with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xA7nc-000000000nU-3P4s;
-	Fri, 25 Sep 2026 15:25:20 +0000
-Date: Fri, 25 Sep 2026 17:25:13 +0200
-From: kernel test robot <lkp@intel.com>
-To: Sean Christopherson <seanjc@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [sean-jc:tdx/triple_fault_on_pending_sept 93/95]
- include/linux/kvm_host.h:2529:8: error: no member named 'mmio_needed' in
- 'struct kvm_vcpu'
-Message-ID: <202609251734.J8cFxevw-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=virtuozzo.com header.i=@virtuozzo.com header.b="oIcJh32C"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=virtuozzo.com; s=relay; h=MIME-Version:Message-ID:Date:Subject:From:
+	Content-Type; bh=GTNAdLGCgHPXPJLlo0W13sa5PuyffoSxT/9I12DHV2Y=; b=oIcJh32CDxe0
+	nWinriNHkKqSTACHNHnZAwuny9zRdlY0BwfKKNIRbWYMjIf4WEwEAZmxLVPPZFeDiQZZC8pBHu+Cw
+	ISb6TMo55Z67NZyPVRBbwX1dg+m8T4C4Mu51NzLkJJgXF6gk6KvJT/x0BQtV6FX5994L06BDc6yhr
+	fI56LUN28PTEseXuWCsvFHRe4a5JwRArBkrZ2Bfpe4CR1JszX4aHQ+KxPJE/sJ0+ZAqsVI6vLQ2Aa
+	s1cWweyU6GRxeya7hcwGc94OMezPkz5Xvr4JM6XRJzByjbra7dMKkK89ANsSMkhnyJ5DpGO379+9g
+	ggF6t3l7Id57TrGzpQXdYg==;
+Received: from ch-vpn.virtuozzo.com ([130.117.225.6] helo=LekKit-T14)
+	by relay.virtuozzo.com with esmtp (Exim 4.96)
+	(envelope-from <eva.kurchatova@virtuozzo.com>)
+	id 1xA88H-00B2AA-33;
+	Fri, 25 Sep 2026 17:49:42 +0200
+From: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org,
+	Eva Kurchatova <eva.kurchatova@virtuozzo.com>,
+	bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next] samples/bpf: build the BPF programs with -fms-extensions
+Date: Fri, 25 Sep 2026 18:49:19 +0300
+Message-ID: <20260925154937.3677406-1-eva.kurchatova@virtuozzo.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-tree:   https://github.com/sean-jc/linux tdx/triple_fault_on_pending_sept
-head:   bdd6b6c0176b2b8645c34a3326f6aa5b9cb66d14
-commit: c238f70d432aeea545b2d74b7d9815386530474d [93/95] KVM: x86: Add a helper to prepare vcpu->run for a SHUTDOWN exit to userspace
-config: s390-randconfig-2001-20260925 (https://download.01.org/0day-ci/archive/20260925/202609251734.J8cFxevw-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 7e4b8ae111298941e0c31052a7124ab36f5365b5)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260925/202609251734.J8cFxevw-lkp@intel.com/reproduce)
+Commit 835a50753579 ("selftests/bpf: Add -fms-extensions to bpf build
+flags") gave the selftests the flag because the kernel is built with
+it, and the generated vmlinux.h carries anonymous members declared by
+tag:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609251734.J8cFxevw-lkp@intel.com/
+  struct slab {
+  	...
+  	struct freelist_counters;
+  };
 
-All errors (new ones prefixed by >>):
+samples/bpf did not get it. clang without the flag reads such a line as
+a declaration that declares nothing, one warning per line for every
+sample that includes vmlinux.h:
 
-   In file included from arch/s390/kernel/nmi.c:24:
->> include/linux/kvm_host.h:2529:8: error: no member named 'mmio_needed' in 'struct kvm_vcpu'
-    2529 |         vcpu->mmio_needed = 0;
-         |         ~~~~  ^
-   1 error generated.
+  ./vmlinux.h:34528:3: warning: declaration does not declare anything
+  [-Wmissing-declarations]
 
+and lays the struct out without the member, so the BTF of the object
+describes a struct the kernel does not have, and a program that touches
+the member does not build at all.
 
-vim +2529 include/linux/kvm_host.h
+Add the flag, and -Wno-microsoft-anon-tag with it, the way the
+selftests do.
 
-  2525	
-  2526	static inline void kvm_prepare_shutdown_exit(struct kvm_vcpu *vcpu)
-  2527	{
-  2528		vcpu->run->exit_reason = KVM_EXIT_SHUTDOWN;
-> 2529		vcpu->mmio_needed = 0;
-  2530	}
-  2531	
+Signed-off-by: Eva Kurchatova <eva.kurchatova@virtuozzo.com>
+---
+ samples/bpf/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+index 95a4fa1f1e44..c28e65046986 100644
+--- a/samples/bpf/Makefile
++++ b/samples/bpf/Makefile
+@@ -342,6 +342,7 @@ $(obj)/xdp_router_ipv4.bpf.o: $(obj)/xdp_sample.bpf.o
+ $(obj)/%.bpf.o: $(src)/%.bpf.c $(obj)/vmlinux.h $(src)/xdp_sample.bpf.h $(src)/xdp_sample_shared.h
+ 	@echo "  CLANG-BPF " $@
+ 	$(Q)$(CLANG) -g -O2 --target=bpf -D__TARGET_ARCH_$(SRCARCH) \
++		-fms-extensions -Wno-microsoft-anon-tag \
+ 		-Wno-compare-distinct-pointer-types -I$(srctree)/include \
+ 		-I$(srctree)/samples/bpf -I$(srctree)/tools/include \
+ 		-I$(LIBBPF_INCLUDE) $(CLANG_SYS_INCLUDES) \
+-- 
+2.55.0
+
