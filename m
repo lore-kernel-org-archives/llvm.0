@@ -1,106 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EBE1D416C;
-	Sat, 26 Sep 2026 12:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFDE3E40F9
+	for <llvm@lists.linux.dev>; Sat, 26 Sep 2026 12:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790425178; cv=none; b=UJjUy9azHVu0cfn0dgNO58he2F+p35L1LKbT+UU9zlejtu/JQWjv7ximMm3TEtHRDbEa1tFws+uRr1j/Tj9x0ZfRKlBmpvgL6GowHJR7s19Krmwrg3qdMgXBe+c++xFSa2zeQEnM5pL8HOJzO80ugVjqOb1GodWrXT+e/MJUbfQ=
+	t=1790425210; cv=none; b=KCdEf/a7UeBRsydSybs2nm46kQPhbK0TPHhit/Dc/zl5VqGkeLsOU11rldBBoW/QRSQGSAox6UAZINmVQqARo2wCU8JZd3ktkleFCkLER0btFz0Q5LiUIiHhHn0i+ocZ8092jy7i+drkeI6qXHzdkF7he1YbqmjcX4AK79SyQPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790425178; c=relaxed/simple;
-	bh=qlGSy0PTIhBUGANsbdLhCUouY4VF8b69xbG82UNGlAI=;
+	s=arc-20240116; t=1790425210; c=relaxed/simple;
+	bh=WtQ9d9s0/x7zIw8G4gHljWmH7whIqxmzeOdsYOhYWUs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KLTLWvv20wusF9oXBEapX2mMt9N9P8CqN9JqrZUJXMw3EaCveqBmTMMr/NiLkvLeKhklcw3PJSyUoclLUNBKEHO5Os2rMOfj5IJgul+a9RyskdTsWMfFqWRnwb6Bki8KXwbekFF1EdGR0IVC9YjhV6Gz18kuFtfPL6lseg588cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUXIg6Sj; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type:Content-Disposition; b=bOKyJQyqxYiFKaZYbW0IN6JQ2aGhTNebZoxYV02pcqgP+r2dMh8PW0+oNHg1vT6itlW1Wfh6Q3jj87dC0PYPcxpbQV+zXlcmuGa8gX18SUSaKXNNAMK1qTE9pe4+hwutv5GksQ83rXLtAa4MjdlISrgdQVuYt8UEJT2yrauP11A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=X3Yq3sFE; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUXIg6Sj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C6B1F000FF;
-	Sat, 26 Sep 2026 12:19:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790425176;
-	bh=fX1UOorzk2WNkUzS8vq28akGhPcRScYxSKIHc7khZsE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=fUXIg6SjJk+Qr1M0g3x4kQiPdWY0pMcyzGHOa/cNhZMob/KEO2PpiVHQtdd6QWG3x
-	 dZ1y+306fsaJBZodcxplS8L82NhW9YwwaaW61njzxIIsMh2aygiTjvDyx579LwgTlk
-	 TiNEAn/LIYOFBCadmux7/TrQTROL8C9DBsngCTXN5FvYS+wlAGeerAjS/qGI8F8zSt
-	 zNqskNZyO093mE4xSamxYt4pPd91MQE+lyJXBwlx8zyyl/XlWLoHwQD1qUMS1tbOL6
-	 bgAKynwX99Ez+3lc/SWDJSSB8c5kqNCTcs0gDxMX99zbcw5tfAFyKVemNQNOkTs/aX
-	 D6EfHEKDJYwZw==
-Date: Sat, 26 Sep 2026 13:19:27 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Andreas Schwab <schwab@linux-m68k.org>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-	Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="X3Yq3sFE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1790425207;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=E31FkanMbaQ1+vpIZy6aCtCgHErmsnWwaF2nf7eFp48=;
+	b=X3Yq3sFEgeWSh2UvJyLdIACU8fMvcpqCpBwPPnTA2+HVwEa1UUzicjjlYTLoPptA0uKaJV
+	AgSOc9K3ppsBaPYvVVPCVie8G5zOeUKqvC2F7stW5ZA8YL6n2LkEkfJ7uIDdT8ZRvZ6cdS
+	IU9upG189YgAykUApEXRN+DTVQLS2yU=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-684-dhKzXkF0NC-wbTvPgHRU7w-1; Sat,
+ 26 Sep 2026 08:20:03 -0400
+X-MC-Unique: dhKzXkF0NC-wbTvPgHRU7w-1
+X-Mimecast-MFC-AGG-ID: dhKzXkF0NC-wbTvPgHRU7w_1790425201
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BDBD4195394B;
+	Sat, 26 Sep 2026 12:19:59 +0000 (UTC)
+Received: from fedora (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 6410C30001A2;
+	Sat, 26 Sep 2026 12:19:53 +0000 (UTC)
+Received: by fedora (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Sat, 26 Sep 2026 14:19:59 +0200 (CEST)
+Date: Sat, 26 Sep 2026 14:19:52 +0200
+From: Oleg Nesterov <oleg@redhat.com>
+To: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
 	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
- reserved in __cvdso_getrandom_data()
-Message-ID: <20260926121927.GA1486962@ax162>
-References: <20260925-vdso-getrandom-avoid-memset-llvm-24-v2-1-ce640f872393@kernel.org>
- <87zex4ic68.fsf@linux-m68k.org>
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-um@lists.infradead.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] x86: uapi: ptrace: guard register offset macros with
+ __ASSEMBLER__ or __FRAME_OFFSETS
+Message-ID: <are4aAD2ckM4FMT3@redhat.com>
+References: <20260821-ptrace_uapi-v1-1-3de8638a29f2@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+In-Reply-To: <20260821-ptrace_uapi-v1-1-3de8638a29f2@google.com>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+X-Mimecast-MFC-PROC-ID: zk4Tyrh1kqvYqaOop1rDwMzGAXGUPd_H0QrUWW5WcQs_1790425201
+X-Mimecast-Originator: redhat.com
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87zex4ic68.fsf@linux-m68k.org>
 
-On Sat, Sep 26, 2026 at 11:39:43AM +0200, Andreas Schwab wrote:
-> On Sep 25 2026, Nathan Chancellor wrote:
-> 
-> > +#if __has_builtin(__builtin_memset_inline)
-> > +#define memset_inline(dst, value, size) __builtin_memset_inline(dst, value, size)
-> > +#elif IS_ENABLED(CONFIG_CC_HAS_OPT_INLINE_MEMSET)
-> > +#define memset_inline(dst, value, size) __builtin_memset(dst, value, size)
-> > +#else
-> > +static inline void *memset_inline(void *dst, int value, size_t size)
-> > +{
-> > +	char *d = dst;
-> > +
-> > +	while (size--)
-> > +		*d++ = value;
-> > +
-> > +	return d;
-> > +}
-> > +#endif
-> > +
-> 
-> memset actually returns the original pointer, not the incremented one.
-> Nothing uses the return value of memset_inline here, but it is
-> confusing.
+On 08/21, Nick Desaulniers wrote:
+>
+> The register offset macros in <asm/ptrace-abi.h> are guarded by
+> `defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)` for 64-bit, but
+> were left unguarded for 32-bit. This causes havoc for userspace that
+> happens to use identifiers colliding with these short macro names
+> (e.g., EBX, ECX, EAX, DS, ES, FS, GS, CS, SS). Without this guard,
+> userspace is forced to be super extra careful with include ordering to
+> minimize the chance of collision.
+>
+> Wrap both the 32-bit and 64-bit register definitions under
+> `#if defined(__ASSEMBLER__) || defined(__FRAME_OFFSETS)`, and ensure
+> User-Mode Linux (UML) defines `__FRAME_OFFSETS` for 32-bit as well.
+>
+> Assisted-by: Gemini
+> Link: https://github.com/llvm/llvm-project/issues/217413
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  arch/x86/include/uapi/asm/ptrace-abi.h | 4 ++--
+>  arch/x86/um/asm/ptrace.h               | 4 +---
+>  arch/x86/um/ptrace_32.c                | 1 +
+>  3 files changed, 4 insertions(+), 5 deletions(-)
 
-Whoops, good catch, I guess my fingers gave up on those last two
-characters :) I will fix this for v3 once there has been some time for
-further review.
+Acked-by: Oleg Nesterov <oleg@redhat.com>
 
--- 
-Cheers,
-Nathan
