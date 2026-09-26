@@ -1,68 +1,68 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B97B839D6FA;
-	Sat, 26 Sep 2026 11:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64EBE1D416C;
+	Sat, 26 Sep 2026 12:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790420948; cv=none; b=pKgJg9H6iz+hgSKKR274rIoy9yVKI6x/GkAPIB/jImyHMHNBwdlAX0Qv/NqsBWONNFfvJz1oavUg3OW8oUMMDtoSRnpVRCUZi8zHBmspUUZHUpShmA0gi5XKk7IU4AkpH+rwqeMHVZuSH6xWoEA3qk+uT51WK8XQVfgLNmKgW1g=
+	t=1790425178; cv=none; b=UJjUy9azHVu0cfn0dgNO58he2F+p35L1LKbT+UU9zlejtu/JQWjv7ximMm3TEtHRDbEa1tFws+uRr1j/Tj9x0ZfRKlBmpvgL6GowHJR7s19Krmwrg3qdMgXBe+c++xFSa2zeQEnM5pL8HOJzO80ugVjqOb1GodWrXT+e/MJUbfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790420948; c=relaxed/simple;
-	bh=DKiUHwOK/x73XxFXAzjap/JskM7x2k2D+Zd1wUoYq4Y=;
+	s=arc-20240116; t=1790425178; c=relaxed/simple;
+	bh=qlGSy0PTIhBUGANsbdLhCUouY4VF8b69xbG82UNGlAI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c725DZPVrXBXQYKkqyux1HqmwPI3IKyFKmda8XseY5kAsCopShTZ81b1+8UEUR/b4/jN7vXWuogd0JWwGoTeihVmlHZ3YbC51Z772+DON+ivcZj7aJX4Hr9bOgDsDl3ZaDM9Rl6wM87Ay+4b9av95Co+gBbfME2Qnf8n49x6XwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LLUKHm4g; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=KLTLWvv20wusF9oXBEapX2mMt9N9P8CqN9JqrZUJXMw3EaCveqBmTMMr/NiLkvLeKhklcw3PJSyUoclLUNBKEHO5Os2rMOfj5IJgul+a9RyskdTsWMfFqWRnwb6Bki8KXwbekFF1EdGR0IVC9YjhV6Gz18kuFtfPL6lseg588cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fUXIg6Sj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LLUKHm4g"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790420947; x=1821956947;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DKiUHwOK/x73XxFXAzjap/JskM7x2k2D+Zd1wUoYq4Y=;
-  b=LLUKHm4gvF86h3z0DDrQeKu1cxbKm7AfL2N9csA+WWUsBRzJyb5mz9bD
-   sWPjq5BikJ2f29b58oepoNUERotwHv2Eidyy1bkq0Elvy4Ku0Dz+sgdnF
-   Gm1MPBpyGS8zgJ6j7RM+TCGu2DPX2iQ13289Lb6R15GRgt/xCthaNYK7H
-   EiuHErmmeTBCWde6d5XLsu/y21qkY8l87b/WXoPvCLBovCMb1HQxZvUxK
-   KYR83ZbsTcIit+Qchn7PR7cQTqUdOLyr9+8VJiVX6rbF3mORZHEGTgzxV
-   V70pKKaMUAudCIWTlT8W9wcJY3C04aDw4jHQPVWVOw4s8/n6vzyBtmu+1
-   Q==;
-X-CSE-ConnectionGUID: tEFD/cNnR1S/8A0mAeLg+Q==
-X-CSE-MsgGUID: ME/+l6vhQ9mi1dzfx6LWWw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11916"; a="107570099"
-X-IronPort-AV: E=Sophos;i="6.27,124,1787036400"; 
-   d="scan'208";a="107570099"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2026 04:09:07 -0700
-X-CSE-ConnectionGUID: JkIKC/OmQoms6DP43x8YKQ==
-X-CSE-MsgGUID: EhbnnXAWQReuHjusOFEfSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,124,1787036400"; 
-   d="scan'208";a="302499075"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 26 Sep 2026 04:09:02 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xAQH5-00000000Ljh-3rNY;
-	Sat, 26 Sep 2026 11:08:59 +0000
-Date: Sat, 26 Sep 2026 19:08:25 +0800
-From: kernel test robot <lkp@intel.com>
-To: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-	intel-wired-lan@lists.osuosl.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, anthony.l.nguyen@intel.com,
-	przemyslaw.kitszel@intel.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de,
-	aleksandr.loktionov@intel.com, horms@kernel.org,
-	grzegorz.nitka@intel.com, vgrinber@redhat.com,
-	zoltan.fodor@intel.com,
-	Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-	Sunitha Mekala <sunithax.d.mekala@intel.com>
-Subject: Re: [iwl-next v15] ice: add support for unmanaged DPLL on E830 NIC
-Message-ID: <202609261833.lptlCpVW-lkp@intel.com>
-References: <20260922132946.3241002-1-arkadiusz.kubalewski@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fUXIg6Sj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C6B1F000FF;
+	Sat, 26 Sep 2026 12:19:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790425176;
+	bh=fX1UOorzk2WNkUzS8vq28akGhPcRScYxSKIHc7khZsE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=fUXIg6SjJk+Qr1M0g3x4kQiPdWY0pMcyzGHOa/cNhZMob/KEO2PpiVHQtdd6QWG3x
+	 dZ1y+306fsaJBZodcxplS8L82NhW9YwwaaW61njzxIIsMh2aygiTjvDyx579LwgTlk
+	 TiNEAn/LIYOFBCadmux7/TrQTROL8C9DBsngCTXN5FvYS+wlAGeerAjS/qGI8F8zSt
+	 zNqskNZyO093mE4xSamxYt4pPd91MQE+lyJXBwlx8zyyl/XlWLoHwQD1qUMS1tbOL6
+	 bgAKynwX99Ez+3lc/SWDJSSB8c5kqNCTcs0gDxMX99zbcw5tfAFyKVemNQNOkTs/aX
+	 D6EfHEKDJYwZw==
+Date: Sat, 26 Sep 2026 13:19:27 +0100
+From: Nathan Chancellor <nathan@kernel.org>
+To: Andreas Schwab <schwab@linux-m68k.org>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Theodore Ts'o <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+Message-ID: <20260926121927.GA1486962@ax162>
+References: <20260925-vdso-getrandom-avoid-memset-llvm-24-v2-1-ce640f872393@kernel.org>
+ <87zex4ic68.fsf@linux-m68k.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,31 +71,36 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260922132946.3241002-1-arkadiusz.kubalewski@intel.com>
+In-Reply-To: <87zex4ic68.fsf@linux-m68k.org>
 
-Hi Arkadiusz,
+On Sat, Sep 26, 2026 at 11:39:43AM +0200, Andreas Schwab wrote:
+> On Sep 25 2026, Nathan Chancellor wrote:
+> 
+> > +#if __has_builtin(__builtin_memset_inline)
+> > +#define memset_inline(dst, value, size) __builtin_memset_inline(dst, value, size)
+> > +#elif IS_ENABLED(CONFIG_CC_HAS_OPT_INLINE_MEMSET)
+> > +#define memset_inline(dst, value, size) __builtin_memset(dst, value, size)
+> > +#else
+> > +static inline void *memset_inline(void *dst, int value, size_t size)
+> > +{
+> > +	char *d = dst;
+> > +
+> > +	while (size--)
+> > +		*d++ = value;
+> > +
+> > +	return d;
+> > +}
+> > +#endif
+> > +
+> 
+> memset actually returns the original pointer, not the incremented one.
+> Nothing uses the return value of memset_inline here, but it is
+> confusing.
 
-kernel test robot noticed the following build errors:
+Whoops, good catch, I guess my fingers gave up on those last two
+characters :) I will fix this for v3 once there has been some time for
+further review.
 
-[auto build test ERROR on 1562ff70880100d14a32b6b68eef044f1a334df1]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Arkadiusz-Kubalewski/ice-add-support-for-unmanaged-DPLL-on-E830-NIC/20260922-152945
-base:   1562ff70880100d14a32b6b68eef044f1a334df1
-patch link:    https://lore.kernel.org/r/20260922132946.3241002-1-arkadiusz.kubalewski%40intel.com
-patch subject: [iwl-next v15] ice: add support for unmanaged DPLL on E830 NIC
-config: x86_64-randconfig-1014-20260926 (https://download.01.org/0day-ci/archive/20260926/202609261833.lptlCpVW-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260926/202609261833.lptlCpVW-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609261833.lptlCpVW-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: drivers/net/ethernet/intel/ice/ice.ko: symbol 'ice_cgu_get_num_pins' undefined!
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
