@@ -1,89 +1,197 @@
-Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 570C93DEAC4
-	for <llvm@lists.linux.dev>; Sun, 27 Sep 2026 14:05:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1623B3BE6;
+	Sun, 27 Sep 2026 15:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.69.130.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790517955; cv=none; b=pCtT92hp3DYkyCjf8g5EMU1NHpIfaogijr2Y2aTP8cSXWh3zMt36dOqHqrQLZKGsFmCHEqf+cvLf+3pTcLGxM/F11NtFYyrRLp1wqPOQVYauh25+giCESkrBNHJZJuKZsruCDuBHrKRiwloZrgEhNTY6CVt4a7fdPXNZJm8vtAY=
+	t=1790524324; cv=none; b=cLKU1K/bTkAYIdhVUFKMDFFrod1jLyEkpsznUlLKe0TuAtefYr4AcPk+1Jn6BCXDRDc/AVO87pyxrmb0iEyNE0C2hYKDwuD7hs6x/Zrz+5w3v3UlCY6P0rfvmcPDKm/SK+C3hzW+yuhXJof85ARnSd8YaTlam4ReO7pRzcG9wnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790517955; c=relaxed/simple;
-	bh=JE5rHMFVp1ASSitG2+LEzV8irkI3ba+nPxRmpmzRXKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nK29h+fPMS94UHzeghRv6bxGQ0MUQ3fv0/vwJ8HkRnAldgtuxxi5BCLtrsMd4fFRlQiKap7poLFZbMfPc+/a6Iv9tKxHk7cld0PGxwavrgZLz1KvKPRJ2wK3jJKksp2oF5sxJgT008bTUtJIcR4OpaijK+00IVeqoBsO+mUiOHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I+25hmf7; arc=none smtp.client-ip=95.215.58.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1790524324; c=relaxed/simple;
+	bh=qkDnRaqd/9JlIYr7Azgc2RsUjiCp8PBKmzRkhgfJ8MY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=l6IkfT7SSVErWs1G3o9bpTXy+tdsOU/ofMMf4b9oBish7dyo6WjfOt2/FbLrI/VFdJ7ac/7WyQQ9PPPNyoad5l1Py8nBfbPgP+/CWfbPCDOj9eZDAcv8o61O4JQ0elMKBrQziDF3Mc0RV/NgVcSSNZqDiW8sdaPNOtQryrNNrwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=wCEMVHDl; arc=none smtp.client-ip=158.69.130.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I+25hmf7"
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=JE5rHMFVp1ASSitG2+LEzV8irkI3ba+nPxRmpmzRXKs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1790517951; v=1; x=1791122751;
- b=I+25hmf7Jpd7fmPqfAQFwOEkFyDI7/b8FMmpHIvxAV9hIwJb5PKtxmb7OAe7aPrCjvQ3F3WA
- yWzz9S4rsdVvcU23pU37cwNopLGsaX3gbCF0GDQ1tzxiJ5FHmNe1X9AHcDREQ4UZ3hj6THwA893
- ISmDZ24aVgzqJIUH8Srx7o0U=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 9e0e383a7683fddd;
-	Sun, 27 Sep 2026 14:05:50 +0000
-X-Mizu-Trace-ID: 9e0e383a7683fddd
-X-Migadu-Flow: FLOW_OUT
-Date: Sun, 27 Sep 2026 14:05:38 +0000
-From: "Jose Fernandez (Anthropic)" <jose.fernandez@linux.dev>
-To: Bill Wendling <morbo@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nicolas Schier <nsc@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Ard Biesheuvel <ardb@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Sami Tolvanen <samitolvanen@google.com>, 
-	Kees Cook <kees@kernel.org>, Leon Hwang <leon.hwang@linux.dev>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Josh Poimboeuf <jpoimboe@kernel.org>, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	bpf@vger.kernel.org, linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Ben Cressey <ben@cressey.dev>, "Florent Revest (Anthropic)" <florent.revest@linux.dev>
-Subject: Re: [PATCH v2 6/9] arm64: cfi: Use CONFIG_ARM64_FUNCTION_PREFIX_NOPS
- for the type hash offset
-Message-ID: <arkimpxRmauCfcn8@linux.dev>
-References: <20260924-b4-arm64-callops-kcfi-v2-0-587865b6d991@linux.dev>
- <20260924-b4-arm64-callops-kcfi-v2-6-587865b6d991@linux.dev>
- <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="wCEMVHDl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+	s=smtpout1; t=1790524309;
+	bh=LbCPjRPiehEgYsY0LkPAes0gDEo2YYOkyfyk4XJZWkk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=wCEMVHDlweoSmmOHKAQYYmzKsJiAUEPYfaQlVtcVzqs6FqO1kpxtsyI0zyw557FQK
+	 Qmd2ExybNHV8uZqs4X/OV9IIQZquC0TxowYydwZGp1vHpsNcY9AHjhjXn9kdfp83Ma
+	 SCLl2inf69bbqXHH7JUDxmO/EfNS9TiRwElm/8eBN7lGltxPLRlF5iLsgGuFb35qF4
+	 XsNKhQicROmq2Pyigp4oDddRQbGB0tCgTj7nypCoBW+1J7NolaXV7SKU1fNwk98f+f
+	 LBXEV+vUyhyZL1FFF5i1ayu4FaN+NsNLwqH8ddFfJjwrNuyx3W90FyYoyOi4XkDJWf
+	 t5p4u9vGpuoTw==
+Received: from compudjdev.. (mtl.efficios.com [216.120.195.104])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4ht87n5L08zhH0;
+	Sun, 27 Sep 2026 11:51:49 -0400 (EDT)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: "Paul E . McKenney" <paulmck@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Joel Fernandes <joel@joelfernandes.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Will Deacon <will@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	John Stultz <jstultz@google.com>,
+	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang1211@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Waiman Long <longman@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	maged.michael@gmail.com,
+	Mateusz Guzik <mjguzik@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>,
+	rcu@vger.kernel.org,
+	linux-mm@kvack.org,
+	lkmm@lists.linux.dev,
+	Nikita Popov <github@npopov.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH hazptr 3/4] Documentation: RCU: Refer to ptr_eq()
+Date: Sun, 27 Sep 2026 11:51:30 -0400
+Message-ID: <20260927155134.4740-4-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260927155134.4740-1-mathieu.desnoyers@efficios.com>
+References: <20260927155134.4740-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGG=3QVs=e5JtAs-D98vDsj2ax9H0gH-_rPc0oKhx-vNpq_RyQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 25, 2026 at 12:17 PM Bill Wendling wrote:
-> > +       return 4 + 4 * CONFIG_ARM64_FUNCTION_PREFIX_NOPS;
->
-> *drive by review* Could you explain the two fours in this equation
-> with a comment? (Feel free to ignore this if it's obvious to
-> developers.)
+Refer to ptr_eq() in the rcu_dereference() documentation.
 
-The first is the type hash and the second is the size of a NOP. For v3
-I'll spell the second one out and add a comment for the first.
+ptr_eq() is a mechanism that preserves address dependencies when
+comparing pointers, and should be favored when comparing a pointer
+obtained from rcu_dereference() against another pointer.
 
-	/* The 4-byte type hash sits before the prefix NOPs. */
-	return 4 + CONFIG_ARM64_FUNCTION_PREFIX_NOPS * AARCH64_INSN_SIZE;
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: John Stultz <jstultz@google.com>
+Cc: Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>
+Cc: Joel Fernandes <joel@joelfernandes.org>
+Cc: Josh Triplett <josh@joshtriplett.org>
+Cc: Uladzislau Rezki <urezki@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+Cc: Zqiang <qiang.zhang1211@gmail.com>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Waiman Long <longman@redhat.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: maged.michael@gmail.com
+Cc: Mateusz Guzik <mjguzik@gmail.com>
+Cc: Gary Guo <gary@garyguo.net>
+Cc: Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>
+Cc: rcu@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: lkmm@lists.linux.dev
+Cc: Nikita Popov <github@npopov.com>
+Cc: llvm@lists.linux.dev
+---
+Changes since v1:
+- Include feedback from Paul E. McKenney.
 
-- Jose
+Changes since v0:
+- Include feedback from Alan Stern.
+---
+ Documentation/RCU/rcu_dereference.rst | 38 +++++++++++++++++++++++----
+ 1 file changed, 33 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/RCU/rcu_dereference.rst b/Documentation/RCU/rcu_dereference.rst
+index 5bc3785ebfc2..85b5f79ebf14 100644
+--- a/Documentation/RCU/rcu_dereference.rst
++++ b/Documentation/RCU/rcu_dereference.rst
+@@ -104,11 +104,12 @@ readers working properly:
+ 	after such branches, but can speculate loads, which can again
+ 	result in misordering bugs.
+ 
+--	Be very careful about comparing pointers obtained from
+-	rcu_dereference() against non-NULL values.  As Linus Torvalds
+-	explained, if the two pointers are equal, the compiler could
+-	substitute the pointer you are comparing against for the pointer
+-	obtained from rcu_dereference().  For example::
++-	Use operations that preserve address dependencies (such as
++	"ptr_eq()") to compare pointers obtained from rcu_dereference()
++	against non-NULL pointers. As Linus Torvalds explained, if the
++	two pointers are equal, the compiler could substitute the
++	pointer you are comparing against for the pointer obtained from
++	rcu_dereference().  For example::
+ 
+ 		p = rcu_dereference(gp);
+ 		if (p == &default_struct)
+@@ -125,6 +126,29 @@ readers working properly:
+ 	On ARM and Power hardware, the load from "default_struct.a"
+ 	can now be speculated, such that it might happen before the
+ 	rcu_dereference().  This could result in bugs due to misordering.
++	Performing the comparison with "ptr_eq()" ensures the compiler
++	does not perform such transformation.
++
++	If the comparison is against another pointer, the compiler is
++	allowed to use either pointer for the following accesses, which
++	loses the address dependency and allows weakly-ordered
++	architectures such as ARM and PowerPC to speculate the
++	address-dependent load before rcu_dereference().  For example::
++
++		p1 = READ_ONCE(gp);
++		p2 = rcu_dereference(gp);
++		if (p1 == p2)  /* BUGGY!!! */
++			do_default(p2->a);
++
++	The compiler can use p1->a rather than p2->a, destroying the
++	address dependency.  Performing the comparison with "ptr_eq()"
++	ensures the compiler preserves the address dependencies.
++	Corrected code::
++
++		p1 = READ_ONCE(gp);
++		p2 = rcu_dereference(gp);
++		if (ptr_eq(p1, p2))
++			do_default(p2->a);
+ 
+ 	However, comparisons are OK in the following cases:
+ 
+@@ -204,6 +228,10 @@ readers working properly:
+ 		comparison will provide exactly the information that the
+ 		compiler needs to deduce the value of the pointer.
+ 
++	When in doubt, use operations that preserve address dependencies
++	(such as "ptr_eq()") to compare pointers obtained from
++	rcu_dereference() against non-NULL pointers.
++
+ -	Disable any value-speculation optimizations that your compiler
+ 	might provide, especially if you are making use of feedback-based
+ 	optimizations that take data collected from prior runs.  Such
+-- 
+2.43.0
+
