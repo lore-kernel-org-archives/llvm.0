@@ -1,135 +1,207 @@
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AD9286A4
-	for <llvm@lists.linux.dev>; Sun, 27 Sep 2026 01:49:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 318FF35F5E3;
+	Sun, 27 Sep 2026 03:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790473774; cv=none; b=o01yM8V1M+CbPr6DkeRnva+PaaWJA3C3MAS5zqD0AczPBwA5VcnFSGpnBTy7XI45D1pZf7Fa8+W6LLr/nBSPBNfJlZcwEvoCBYG0aCBs/8+eTdmOLTZxjMDE/vSmO89q1xMZsakRgM9ZH7VszHHaBmKPdCF8rXVSxhMQipRF+BI=
+	t=1790481260; cv=none; b=XoRFxhQWa1Eh3QlkZhYm/Jn7isPjIWygxD6+sz/nwIJJ2x/0k/zdut1bIdV5QOyeztXS1qYgN+T8REHaw/s5pt7rmm3d7fhKw5mKMMqI7OqT2/7NF0nBT3w49MPLqtqaq7Z47q4e4cNTjNVeGNXIA8dFR2lmRrjEv43bxtgn2PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790473774; c=relaxed/simple;
-	bh=J2EjSK4GYCP9UonLY0FnYK7LFQsBJBbcc8GokYxw6uE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=taJJL4QAYp8Yfaw/GGeniyH+95tgxBPe4y5GD3akMI5DgrRNhFWlqr11zhTS/6UmPnhl8HZazOxiDFYMyWErFF8IOQwNDHTGNosvwGrIT2ft5ekjwkrZarXNmYilfYRLpHX4HnqhbP4CUkw0K/jad1Xl0wTWmMH70tqXpk59gYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp; spf=pass smtp.mailfrom=sakamocchi.jp; dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b=LzPL2/+n; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tHNWO0xW; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sakamocchi.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sakamocchi.jp
+	s=arc-20240116; t=1790481260; c=relaxed/simple;
+	bh=HBMrCmfyLRkn72Zc1YBPchN1HtvbA66vn+t8ej3QZnk=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=iI9dTE2Nrg8g9StbV5865fAWy8T4KmAaBIEiiOytIJWimkxusjUbQgOpdUJeI6t3jDkYPQ4dVgMSAdepdqa7Lj9IFwW7j21ijoh6M1SfjGf6NaprHlOVGd9YmLAEhTLB4I9ExyQyN1nG3CzGmY5UERr3K67wbC15aDsm5IxoWts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UWXN9HOr; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sakamocchi.jp header.i=@sakamocchi.jp header.b="LzPL2/+n";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tHNWO0xW"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.stl.internal (Postfix) with ESMTP id 979E61D00073;
-	Sat, 26 Sep 2026 21:49:31 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Sat, 26 Sep 2026 21:49:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1790473771; x=
-	1790560171; bh=rA4LSxCVQPuct0fsk7/K44YfG8wp4yBOm4ZEsSk0LG4=; b=L
-	zPL2/+nSqmacqfU+pP+weBayNYxcQQQD1iomlGUghRM5AU/ZrSjeeOb9twWQ5JiB
-	qBvI3GICXvG7fvSgwWJMO5n6HcfEuYyiy22/RJwnrDd/JvlaytqIjvsUeq6M+x1C
-	Dq5EVl7t9GeRkipjQ2Z1BySsiMv03gh57eJ2k/vkgX5lqYKfCccRN4jG591/T2Ig
-	UNZTfjjUmjhtJReZKvwtCcrb/G71RfKhEJEomecv/2mdPXgU0Y/W7WBwkvMpXqQy
-	tvtCXIxix2mTmyInQgWU3u8+y1EOjEq1tB2wxBpLa0IVEl/iSoNAOZEt9Jf3tp6o
-	e8xptOFoWNyN30m+rqKdQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1790473771; x=1790560171; bh=rA4LSxCVQPuct0fsk7/K44YfG8wp4yBOm4Z
-	EsSk0LG4=; b=tHNWO0xWjSKY+9dPihBJx55Xt8twJ3R5cZ05lPavuVzgPJM3mCK
-	MR4liOHINL9suYu44+FayyblqX936PKelPaPZZCGfuETkhoyKSWGUecpVq/KZp0k
-	IaZDmvutw5giXoQRROZzLw0GIR0VCbk8/f4tYa+zTTpTT0MbAcq5QNW1LQCQoT/5
-	/JMk/xd2CKflOFt+3Aywej/wWFup/YTqxK6QSxK7fvugYT4b8xIbBi9X6H8yF9fL
-	9bLoArh8k0ZBGXf0cAATf6MGHaeEoXWuS+HX7DSqLsvv01XomQGVkMxYjN4us7SN
-	WWNJbm/5luRu6FNAXzPQfSKl5szaMYmH2Iw==
-X-ME-Sender: <xms:K3a4amjL98eNNELjka8IFLDoJ9htQbnltsyuEepuvOk9l2QHorrikg>
-    <xme:K3a4ai12UjbL-kP7XJxYxk8vq5mX04icJnLaTprvHhVkW91QmCLsz2SddduGbrnug
-    _CysXyGQgVrkzI8Zw6EltWVDcRZCozRUEQIQLIBezPd6PJ3AMlLG9cF>
-X-ME-Received: <xmr:K3a4apf4FfdEV1LuCDlYPCxTdFcte-OTDJaU6aTQV7pgQOc0dr7lTCadVtGUedNFyNwir6m_C8NNIznUoCpic0s_4dHVcg>
-X-ME-Proxy-Cause: dmFkZTFnQ57NGncRnmBI3BkhWhFtNBO/q5DQ0aOxPo0phctjA38R7yQSje04TRLCD1R0U5
-    a/VQiP7RnC+3OtH4iKh9eG4HRKaiSU7kvKYUSexmV5j6C+UmXZ+222uU/KOONHUxfEm4k1
-    JPHJCU030jxTnprLucdt1VS1zMUCYRmU6YziR6+ytQc/WT47ZQJdU8rZQ5mD+2gu0NDRJn
-    OeMKBBF52j7/zCEdJJQ7oXXhquV0O5Ug/o4RgTKyn4FEX/AODMiYEtYZtJP6syB5vbPBzR
-    q1fycm03968BX4vO5gwdKEEvZpCRObuD74E7Na8anzkSKRFV16tkbyegzKM7KM9PdfeoJc
-    orLdy3OCW6bKuAMuub3C5CpFCmm16HPEMto7phbNHBwLoLruca1/zEFEfXpROKbD2YDE4C
-    iYEvOJCamCthomtncHUrOQppbs/Q/Rt9ZHrHZPCUu5enHEvG304+LUymaW5g0CL3fXll8s
-    A6EF4cTP/h4/Uf4aGTdeA1GCuuGVCkWxjzfXBv7cfAtdeeOZQQWWfPDWqCR/91n1Q5oeGt
-    U9MEFMnfsSjc7iJPMnRZ1LiE8YNqavgy18TJcBYONaeRu91vqmPSP6PWwqoLP5qZmaBsbk
-    fSQKDgAX2Wfh/xNhrGe0MG+/zPkjZltp3oBb4xZ0vO2m9/5PAs2tJiKhxg3A
-X-ME-Proxy: <xmx:K3a4aoy_lEFbaqrEjBUR-Yi-pOAS5GsMzdFDFce27Q_6LMhbOB8TSw>
-    <xmx:K3a4ahztB9RLNqdtMwYr36rzB_5gK1WlLbmrC_wRkM4tzxU9I-9_SQ>
-    <xmx:K3a4apbuNW9Gkb4nlF7fVbKnd9NxZGyZUiAaUV4eN9fMbH3QZzr40w>
-    <xmx:K3a4aq1nMp7hOamoF8wtHjDgELx-nJ4V3rGRyeEFHpsKOa10a3vrhA>
-    <xmx:K3a4anFkfq2WxUmjeYLSQR1YD9UPOkDVBFxz2SVGDuY4vJkDeqjRmpit>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 26 Sep 2026 21:49:28 -0400 (EDT)
-Date: Sun, 27 Sep 2026 10:49:26 +0900
-From: Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To: Bill Wendling <morbo@google.com>
-Cc: Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	codemender-patching+linux@google.com
-Subject: Re: [PATCH] firewire: core: add __counted_by_ptr attribute to struct
- fw_device
-Message-ID: <20260927014926.GC9201@sakamocchi.jp>
-Mail-Followup-To: Bill Wendling <morbo@google.com>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-	codemender-patching+linux@google.com
-References: <20260925212552.125652-1-morbo@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UWXN9HOr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790481258; x=1822017258;
+  h=date:from:to:cc:subject:message-id;
+  bh=HBMrCmfyLRkn72Zc1YBPchN1HtvbA66vn+t8ej3QZnk=;
+  b=UWXN9HOrBtyX/8SJMnN1IU1n85HJygey9Z3cv7HhxikWbgGFaByb2/wz
+   cJF3xsJegyaq0e2sYf1WrKjaDIU4whRvXWESLKkA6hlnKetmybQ9XH2X3
+   ER8cCsrcyzHoaPGoX7Y9V1sFQrejhFSDta6d77OhgwJXaEONMiHLmdYzS
+   QgZiCAdmArf1vjl6jEiwUT2qJiL1xfdY8s9T811iWW0gnTjxzAMgC22Yv
+   IIVilSj5osPTpEbFfO8l7d3XXePxylbtQ3TirrzhHuV9w0JAk+lSDp07p
+   yDIfBjEgkfm8XS/Che1DeJxKNBx/+qcPnjGICVC7rICZjRd4tYmslSXwi
+   w==;
+X-CSE-ConnectionGUID: eGz5cPtcQISVUwZ5T/5eKw==
+X-CSE-MsgGUID: 2Nn8zvg2Se6LNXf+hRB3Jw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11917"; a="116744990"
+X-IronPort-AV: E=Sophos;i="6.27,125,1787036400"; 
+   d="scan'208";a="116744990"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2026 20:54:17 -0700
+X-CSE-ConnectionGUID: qCnYkZWIT72awc47WClnQg==
+X-CSE-MsgGUID: LphVB5tLSOGp5FWsjgsBVg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,125,1787036400"; 
+   d="scan'208";a="274244925"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa007.fm.intel.com with ESMTP; 26 Sep 2026 20:54:15 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xAfxs-00000000MOP-2GoI;
+	Sun, 27 Sep 2026 03:54:12 +0000
+Date: Sun, 27 Sep 2026 11:53:43 +0800
+From: kernel test robot <lkp@intel.com>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Dmitry Baryshkov <lumag@kernel.org>,
+ Neil Armstrong <neil.armstrong@linaro.org>
+Subject: drivers/gpu/drm/bridge/ssd2825.c:484:13: warning: stack
+ frame size (20088) exceeds limit (8192) in 'ssd2825_bridge_atomic_pre_enable'
+Message-ID: <202609271111.XAPJ85Dc-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260925212552.125652-1-morbo@google.com>
 
-On Fri, Sep 25, 2026 at 09:25:52PM +0000, Bill Wendling wrote:
-> The GCC and Clang attribute '__counted_by_ptr' associates a pointer
-> field with an integer field holding its element count. This enables
-> runtime bounds checking by KASAN and UBSAN to prevent out-of-bounds
-> accesses to the pointer.
-> 
-> In 'struct fw_device' (defined in 'include/linux/firewire.h'), the
-> field 'config_rom' is a pointer to the device's Configuration ROM data,
-> and its associated element count is stored in 'config_rom_length'.
-> 
-> Additionally, update the existing KUnit test in
-> 'drivers/firewire/device-attribute-test.c' where 'config_rom_length'
-> was incorrectly initialized with the byte size
-> ('sizeof(simple_avc_config_rom)') instead of the element count
-> ('ARRAY_SIZE(simple_avc_config_rom)'). This ensures the
-> '__counted_by_ptr' bounds-checking annotation does not trigger any
-> false-positive panics or compile/runtime checks.
-> 
-> Cc: codemender-patching+linux@google.com
-> Assisted-by: LLM
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
->  drivers/firewire/device-attribute-test.c | 4 ++--
->  include/linux/firewire.h                 | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+Hi Svyatoslav,
 
-Thank you to correct the KUnit tests as well. Applied to for-next branch.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   6812ce4e4379ffc99c52401ec28f0d7ffbc36206
+commit: 55023abe6a2921a8916b623c24208e1971b88729 drm: bridge: Add support for Solomon SSD2825 RGB/DSI bridge
+date:   1 year, 2 months ago
+config: x86_64-randconfig-1007-20260927 (https://download.01.org/0day-ci/archive/20260927/202609271111.XAPJ85Dc-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260927/202609271111.XAPJ85Dc-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 55023abe6a29 ("drm: bridge: Add support for Solomon SSD2825 RGB/DSI bridge")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609271111.XAPJ85Dc-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from <built-in>:3:
+   In file included from include/linux/compiler_types.h:171:
+   include/linux/compiler-clang.h:28:9: warning: '__SANITIZE_ADDRESS__' macro redefined [-Wmacro-redefined]
+      28 | #define __SANITIZE_ADDRESS__
+         |         ^
+   <built-in>:353:9: note: previous definition is here
+     353 | #define __SANITIZE_ADDRESS__ 1
+         |         ^
+>> drivers/gpu/drm/bridge/ssd2825.c:484:13: warning: stack frame size (20088) exceeds limit (8192) in 'ssd2825_bridge_atomic_pre_enable' [-Wframe-larger-than]
+     484 | static void ssd2825_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+         |             ^
+   2 warnings generated.
 
 
-Thanks
+vim +/ssd2825_bridge_atomic_pre_enable +484 drivers/gpu/drm/bridge/ssd2825.c
 
-Takashi Sakamoto
+   483	
+ > 484	static void ssd2825_bridge_atomic_pre_enable(struct drm_bridge *bridge,
+   485						     struct drm_atomic_state *state)
+   486	{
+   487		struct ssd2825_priv *priv = bridge_to_ssd2825(bridge);
+   488		struct mipi_dsi_device *dsi_dev = priv->output.dev;
+   489		const struct drm_crtc_state *crtc_state;
+   490		const struct drm_display_mode *mode;
+   491		struct drm_connector *connector;
+   492		struct drm_crtc *crtc;
+   493		u32 input_bus_flags = bridge->timings->input_bus_flags;
+   494		u16 flags = 0, config;
+   495		u8 pixel_format;
+   496		int ret;
+   497	
+   498		/* Power Sequence */
+   499		ret = clk_prepare_enable(priv->tx_clk);
+   500		if (ret)
+   501			dev_err(priv->dev, "error enabling tx_clk (%d)\n", ret);
+   502	
+   503		ret = regulator_bulk_enable(ARRAY_SIZE(ssd2825_supplies), priv->supplies);
+   504		if (ret)
+   505			dev_err(priv->dev, "error enabling regulators (%d)\n", ret);
+   506	
+   507		usleep_range(1000, 2000);
+   508	
+   509		ssd2825_hw_reset(priv);
+   510	
+   511		/* Perform SW reset */
+   512		ssd2825_write_reg(priv, SSD2825_OPERATION_CTRL_REG, 0x0100);
+   513	
+   514		/* Set pixel format */
+   515		switch (dsi_dev->format) {
+   516		case MIPI_DSI_FMT_RGB565:
+   517			pixel_format = 0x00;
+   518			break;
+   519		case MIPI_DSI_FMT_RGB666_PACKED:
+   520			pixel_format = 0x01;
+   521			break;
+   522		case MIPI_DSI_FMT_RGB666:
+   523			pixel_format = 0x02;
+   524			break;
+   525		case MIPI_DSI_FMT_RGB888:
+   526		default:
+   527			pixel_format = 0x03;
+   528			break;
+   529		}
+   530	
+   531		connector = drm_atomic_get_new_connector_for_encoder(state, bridge->encoder);
+   532		crtc = drm_atomic_get_new_connector_state(state, connector)->crtc;
+   533		crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
+   534		mode = &crtc_state->adjusted_mode;
+   535	
+   536		/* Set panel timings */
+   537		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_1,
+   538				  ((mode->vtotal - mode->vsync_end) << 8) |
+   539				  (mode->htotal - mode->hsync_end));
+   540		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_2,
+   541				  ((mode->vtotal - mode->vsync_start) << 8) |
+   542				  (mode->htotal - mode->hsync_start));
+   543		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_3,
+   544				  ((mode->vsync_start - mode->vdisplay) << 8) |
+   545				  (mode->hsync_start - mode->hdisplay));
+   546		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_4, mode->hdisplay);
+   547		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_5, mode->vdisplay);
+   548	
+   549		if (mode->flags & DRM_MODE_FLAG_PHSYNC)
+   550			flags |= SSD2825_HSYNC_HIGH;
+   551	
+   552		if (mode->flags & DRM_MODE_FLAG_PVSYNC)
+   553			flags |= SSD2825_VSYNC_HIGH;
+   554	
+   555		if (dsi_dev->mode_flags & MIPI_DSI_MODE_VIDEO)
+   556			flags |= SSD2825_NON_BURST_EV;
+   557	
+   558		if (input_bus_flags & DRM_BUS_FLAG_PIXDATA_SAMPLE_POSEDGE)
+   559			flags |= SSD2825_PCKL_HIGH;
+   560	
+   561		ssd2825_write_reg(priv, SSD2825_RGB_INTERFACE_CTRL_REG_6, flags | pixel_format);
+   562		ssd2825_write_reg(priv, SSD2825_LANE_CONFIGURATION_REG, dsi_dev->lanes - 1);
+   563		ssd2825_write_reg(priv, SSD2825_TEST_REG, 0x0004);
+   564	
+   565		/* Call PLL configuration */
+   566		ssd2825_setup_pll(priv, mode);
+   567	
+   568		usleep_range(10000, 11000);
+   569	
+   570		config = SSD2825_CONF_REG_HS | SSD2825_CONF_REG_CKE | SSD2825_CONF_REG_DCS |
+   571			 SSD2825_CONF_REG_ECD | SSD2825_CONF_REG_EOT;
+   572	
+   573		if (dsi_dev->mode_flags & MIPI_DSI_MODE_LPM)
+   574			config &= ~SSD2825_CONF_REG_HS;
+   575	
+   576		if (dsi_dev->mode_flags & MIPI_DSI_MODE_NO_EOT_PACKET)
+   577			config &= ~SSD2825_CONF_REG_EOT;
+   578	
+   579		/* Initial DSI configuration register set */
+   580		ssd2825_write_reg(priv, SSD2825_CONFIGURATION_REG, config);
+   581		ssd2825_write_reg(priv, SSD2825_VC_CTRL_REG, 0);
+   582	
+   583		if (priv->output.panel)
+   584			drm_panel_enable(priv->output.panel);
+   585	}
+   586	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
