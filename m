@@ -1,245 +1,168 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E064EE840;
-	Mon, 28 Sep 2026 16:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E10E84F0522
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 16:37:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790612561; cv=none; b=amsq4m0d2VPCV2oLxp3keiw4pfOWLbsoFS7FdpbqEfEyNHAtI2FMWvj5X6LzYJvVutGHBedii8SElYt6jdgcb90ea8kAwS+YapUSAtR2k32IHZ9oaIO0uzvZ2g3flc4KrUmhyqP3JAcuDnxYkpjYHKqS2QUZ0FpGQc54megf76c=
+	t=1790613439; cv=none; b=uaOvW4MoPC9j75HxebyDQ6uyw7e9IBHANvUp9q7URKwChUqYL4WfNdkysk8e6D0yxKpbZ1axkGreZ+Iyj8+XfiknkFGQaVqZcJNYKTlw3DvfCDt3DqSUyzYBnMqJ9F404EejOH0XqxLRU0KkTyhrb3yh0cEQyqfRIHnobpGJ2zU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790612561; c=relaxed/simple;
-	bh=ZYgZYD7JpbqT97KHtSk4iVbtoENcGyke2ICgcF7Yk+A=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Giptu7O2xjSSFxyJ5fmHotJnUZ6XCgjfexQn6z3NpHfWLCF6g1WescZ9uwgyeAqmKSSmXp7Uq9gwO2OqAS+z47+u2n4B2evDT2AEDfl7Feby9JvkGX5/GA7POdN/ABsv5QLjRPLnIaEqs0wJdUwJ+w526jIAoRVxRq5dDW0mKmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=exUCF+uo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790613439; c=relaxed/simple;
+	bh=79ekLGQx1Tor6z02KqQn9lGJBkxxAMsnhhsc0gv/Pv4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RJuUKWQaEDvnnqUJ0BBiXfeyR5c76KxA5YR4dxfvLYwRTGQABZa8f9rwF5dv5cO6i7Bx7q24ZzOX8I1tT9PAwEDJxKh1/LclV70v1zvqFLdwpx4Ky0CLRkoBsxpI3mfC49RLCp67Lo3QbMWJ/vdUsK9cTU5CwaomQtP7X6gK5hE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=tgwwdITK; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="exUCF+uo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243E21F00893;
-	Mon, 28 Sep 2026 16:22:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790612557;
-	bh=WuyZUjLenwsCfwS9QKli7wzxywUnFb57xoXkqL2ZFHg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=exUCF+uoC3LJPEFvKkr/Iyg+urdpecMJmq7SPUSTT5u92JP60c4PWpugRa0IgDGSF
-	 wun3g+u/KBxDs1HuGZcR2mE01wHfBRE3ulSnkwPsj6lYbwQXmX12FqM2pSshmzJ8CH
-	 s9G351I/gGdlu/uSY0hop3Lv0NdBwkm9JgliyyP5KXPcfzv6nNpnkRUJ4vodk+X+Bl
-	 g6SkFxdgjDohjlrXzzOP0z68xkaGHWjdZtpTUQhcAoUOTzxmrAdm6ZcYqTl5o8n8qG
-	 U2jmlW8PLPGNpG7/IYBhw1abW6NZP4kRCxkh+NJKE85073awxYlqp0W4Ijn9YctkHo
-	 4IHKt3sA3IwLQ==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 28 Sep 2026 18:22:06 +0200
-Subject: [PATCH DO NOT MERGE 6/6] arm64: dts: broadcom: Add Raspberry Pi
- ILI9881C DSI panel overlays
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="tgwwdITK"
+Received: from killaraus.ideasonboard.com (2001-14ba-70f3-e800--a06.rev.dnainternet.fi [IPv6:2001:14ba:70f3:e800::a06])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id D2BE68FD;
+	Mon, 28 Sep 2026 18:35:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1790613323;
+	bh=79ekLGQx1Tor6z02KqQn9lGJBkxxAMsnhhsc0gv/Pv4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tgwwdITKp4bfEl3NckTRce+gdM4AqUQST43w9pHEv3HmzcSUOqUmik84htz5qPg3X
+	 OcLpOr9Mikj4IUIaukMWgueo2gjofH/ExaxDKh1qFqsWzuUQvNYFgZg4MLBuMKQJqT
+	 zLI18YDW8IyTiyPLslMQtK6pLIx4CdsGLPz0oBLc=
+Date: Mon, 28 Sep 2026 19:37:11 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+	Jessica Zhang <jesszhan0024@gmail.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Andrzej Hajda <andrzej.hajda@intel.com>,
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Albert Esteve <aesteve@redhat.com>,
+	Dave Stevenson <dave.stevenson@raspberrypi.com>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Message-ID: <20260928163711.GA210522@killaraus.ideasonboard.com>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260928-drm-mipi-dsi-panel-ebpf-v1-6-5244926aace4@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>, 
- Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
-Cc: Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Albert Esteve <aesteve@redhat.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
- Maxime Ripard <mripard@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4776; i=mripard@kernel.org;
- h=from:subject:message-id; bh=ZYgZYD7JpbqT97KHtSk4iVbtoENcGyke2ICgcF7Yk+A=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDFm7phj/0Lt4cMNSEx3jk6zlPks2G0z0vnmIvUGP9Z7fy
- u3s8zU/d0xlYRDmZJAVU2R5IhN2enn74ioH+5U/YOawMoEMYeDiFICJrBRnrI88+bCp864+x7H1
- ngWGbVyysas3C8hxqfK0afGeXl0ayPK67Ze6Lf8hHq365hWSQvrTGesUvyR/Eo1k/vPO/Xgg178
- qFr+C+UuPxSmxPjELvb1vUjnbtLn7JudIzVA/1Kq82yigzwEA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-Add device tree overlays for the Raspberry Pi 5-inch and 7-inch
-MIPI-DSI panels (ILI9881C) on the Raspberry Pi 4 Model B.
+Hi Maxime,
 
-Both panels share the same I2C-connected display MCU at 0x45 on
-i2c0_1, which provides GPIO and PWM for reset and backlight
-control. The common parts are in a shared dtsi. Each panel overlay
-includes it and adds only the panel-specific compatible string, physical
-dimensions, and timing.
+On Mon, Sep 28, 2026 at 06:22:00PM +0200, Maxime Ripard wrote:
+> Hi,
+> 
+> Panels in general, and MIPI-DSI panels in particular, are pretty
+> difficult to support and require pretty much a panel driver for each
+> panel produced. Most of them are pretty simple, and require an opaque
+> initialization sequence that is usually poorly documented.
+> 
+> This creates a tension between OEMs and distros because OEMs will
+> typically get a new panel to react to a sourcing issue during
+> production, and thus need some swift turnaround between getting their
+> new panel and it being operational in the OS. Distributions on the other
+> hand can take years to ship a kernel with that new panel driver.
+> 
+> To solve this, I followed the example of HID-BPF and wrote a panel
+> driver that will rely on BPF programs to perform the panel
+> initialization. That way, we can ship the programs separately from the
+> kernel, and with a different lifecycle. If this driver is accepted, the
+> plan is to have a userspace component started by udev to identify and
+> load the right BPF program for the panels found on the device.
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- arch/arm64/boot/dts/broadcom/Makefile              |  8 +++
- .../bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso         | 22 ++++++++
- .../bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso         | 22 ++++++++
- .../dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi  | 65 ++++++++++++++++++++++
- 4 files changed, 117 insertions(+)
+Interesting idea.
 
-diff --git a/arch/arm64/boot/dts/broadcom/Makefile b/arch/arm64/boot/dts/broadcom/Makefile
-index 01ecfa304184..d717dc8c4071 100644
---- a/arch/arm64/boot/dts/broadcom/Makefile
-+++ b/arch/arm64/boot/dts/broadcom/Makefile
-@@ -13,8 +13,16 @@ dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-400.dtb \
- 			      bcm2837-rpi-3-b.dtb \
- 			      bcm2837-rpi-3-b-plus.dtb \
- 			      bcm2837-rpi-cm3-io3.dtb \
- 			      bcm2837-rpi-zero-2-w.dtb
- 
-+dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b-dsi-ili9881-5inch.dtb
-+bcm2711-rpi-4-b-dsi-ili9881-5inch-dtbs := bcm2711-rpi-4-b.dtb \
-+	bcm2711-rpi-4-b-dsi-ili9881-5inch.dtbo
-+
-+dtb-$(CONFIG_ARCH_BCM2835) += bcm2711-rpi-4-b-dsi-ili9881-7inch.dtb
-+bcm2711-rpi-4-b-dsi-ili9881-7inch-dtbs := bcm2711-rpi-4-b.dtb \
-+	bcm2711-rpi-4-b-dsi-ili9881-7inch.dtbo
-+
- subdir-y	+= bcmbca
- subdir-y	+= northstar2
- subdir-y	+= stingray
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso
-new file mode 100644
-index 000000000000..99aac1105ac6
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso
-@@ -0,0 +1,22 @@
-+/dts-v1/;
-+/plugin/;
-+
-+#include "bcm2711-rpi-4-b-dsi-ili9881.dtsi"
-+
-+&panel {
-+	compatible = "raspberrypi,dsi-5inch", "panel-mipi-dsi-bpf";
-+	width-mm = <62>;
-+	height-mm = <110>;
-+
-+	panel-timing {
-+		clock-frequency = <83333000>;
-+		hactive = <720>;
-+		vactive = <1280>;
-+		hfront-porch = <110>;
-+		hsync-len = <12>;
-+		hback-porch = <95>;
-+		vfront-porch = <100>;
-+		vsync-len = <2>;
-+		vback-porch = <100>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso
-new file mode 100644
-index 000000000000..809d9b354b89
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso
-@@ -0,0 +1,22 @@
-+/dts-v1/;
-+/plugin/;
-+
-+#include "bcm2711-rpi-4-b-dsi-ili9881.dtsi"
-+
-+&panel {
-+	compatible = "raspberrypi,dsi-7inch", "panel-mipi-dsi-bpf";
-+	width-mm = <90>;
-+	height-mm = <151>;
-+
-+	panel-timing {
-+		clock-frequency = <83330000>;
-+		hactive = <720>;
-+		vactive = <1280>;
-+		hfront-porch = <239>;
-+		hsync-len = <33>;
-+		hback-porch = <50>;
-+		vfront-porch = <20>;
-+		vsync-len = <2>;
-+		vback-porch = <30>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi
-new file mode 100644
-index 000000000000..bd08e22581a3
---- /dev/null
-+++ b/arch/arm64/boot/dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi
-@@ -0,0 +1,65 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Common DSI infrastructure for Raspberry Pi ILI9881C panels
-+ * (backlight, i2c mux, display MCU, DSI1 port wiring)
-+ *
-+ * Each panel overlay includes this and extends &panel with its own
-+ * compatible, dimensions, and panel-timing.
-+ */
-+
-+#include <dt-bindings/gpio/gpio.h>
-+
-+&{/} {
-+	panel_backlight: panel_backlight {
-+		compatible = "pwm-backlight";
-+		brightness-levels = <0 31>;
-+		num-interpolated-steps = <31>;
-+		default-brightness-level = <15>;
-+		pwms = <&display_mcu 0 200000 0>;
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+};
-+
-+&i2c0mux {
-+	status = "okay";
-+};
-+
-+&i2c0_1 {
-+	status = "okay";
-+
-+	display_mcu: display_mcu@45 {
-+		compatible = "raspberrypi,touchscreen-panel-regulator-v2";
-+		reg = <0x45>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		#pwm-cells = <3>;
-+	};
-+};
-+
-+&dsi1 {
-+	status = "okay";
-+
-+	panel: panel@0 {
-+		reg = <0>;
-+		reset-gpios = <&display_mcu 0 GPIO_ACTIVE_LOW>;
-+		backlight = <&panel_backlight>;
-+		dsi-lanes = <2>;
-+		mode-video;
-+		mode-lpm;
-+
-+		port {
-+			panel_in: endpoint {
-+				remote-endpoint = <&dsi1_out>;
-+			};
-+		};
-+	};
-+
-+	port {
-+		dsi1_out: endpoint {
-+			remote-endpoint = <&panel_in>;
-+		};
-+	};
-+};
+How would that work for devices that want early display support ? In
+particular, how does it interact with your recent work on "fastboot"
+support (with the kernel drivers taking over a running display
+configured by the boot loader) ?
+
+I'm also wondering about the incentives for vendors to upstream the
+code. How will we avoid having a proliferation of out-of-tree drivers ?
+
+> This driver is fully functional and works with both 5" and 7" Touch
+> Display 2 panels for the RaspberryPi. However, it breaks away from the
+> typical panel driver in multiple ways:
+> 
+> - BPF programs can only be loaded by userspace. This leaves us with two
+>   choices: 
+> 
+>   * We prevent the driver from loading until the script itself is
+>     loaded. This has the side effect of preventing any other output to
+>     be used until the initramfs is ran at the earliest, and possibly
+>     ever if the loader isn't installed for example.
+> 
+>   * Or we probe the driver all the time, but only report it as connected
+>     once a program has been registered. This is somewhat unconventional,
+>     but allows the other outputs to be functional, *and* allows the user
+>     to force the output if their panel doesn't require any
+>     initialization or during debugging. I chose this solution.
+> 
+> - It's not a panel driver, but a bridge one, which is also pretty
+>   unconventional. This is required because panel drivers don't have
+>   access to a detect callback that is required for the above, but I also
+>   think that the recent work from Luca blurs the line from panels and
+>   bridges and we'll end up going that road anyway.
+> 
+> Let me know what you think,
+> Maxime
+> 
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> ---
+> Maxime Ripard (6):
+>       dt-bindings: display: Add panel-mipi-dsi-bpf generic panel binding
+>       drm/panel: Add generic MIPI-DSI panel driver with BPF init sequences
+>       drm/panel: dsi-bpf: Add BPF program build infrastructure and helper header
+>       drm/panel: dsi-bpf: Add Raspberry Pi 7-inch panel BPF program
+>       drm/panel: dsi-bpf: Add Raspberry Pi 5-inch panel BPF program
+>       [DO NOT MERGE] arm64: dts: broadcom: Add Raspberry Pi ILI9881C DSI panel overlays
+> 
+>  .../bindings/display/panel/panel-mipi-dsi-bpf.yaml | 184 +++++++++
+>  arch/arm64/boot/dts/broadcom/Makefile              |   8 +
+>  .../bcm2711-rpi-4-b-dsi-ili9881-5inch.dtso         |  22 +
+>  .../bcm2711-rpi-4-b-dsi-ili9881-7inch.dtso         |  22 +
+>  .../dts/broadcom/bcm2711-rpi-4-b-dsi-ili9881.dtsi  |  65 +++
+>  drivers/gpu/drm/panel/Kconfig                      |   3 +
+>  drivers/gpu/drm/panel/Makefile                     |   1 +
+>  drivers/gpu/drm/panel/bpf/Kconfig                  |  28 ++
+>  drivers/gpu/drm/panel/bpf/Makefile                 |  10 +
+>  .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-core.c    | 452 +++++++++++++++++++++
+>  .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-kfuncs.c  | 278 +++++++++++++
+>  drivers/gpu/drm/panel/bpf/panel-bpf-mipi-dsi-ops.c | 242 +++++++++++
+>  .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-trace.c   |   4 +
+>  .../gpu/drm/panel/bpf/panel-bpf-mipi-dsi-trace.h   | 246 +++++++++++
+>  drivers/gpu/drm/panel/bpf/panel-bpf-mipi-dsi.h     | 264 ++++++++++++
+>  drivers/gpu/drm/panel/bpf/progs/Makefile           |  93 +++++
+>  .../panel/bpf/progs/Raspberrypi__dsi-5inch.bpf.c   | 266 ++++++++++++
+>  .../panel/bpf/progs/Raspberrypi__dsi-7inch.bpf.c   | 271 ++++++++++++
+>  .../gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h   |  95 +++++
+>  19 files changed, 2554 insertions(+)
+> ---
+> base-commit: 6e375de99d0c420169481fcd36064177ab55b09d
+> change-id: 20260928-drm-mipi-dsi-panel-ebpf-d78b72a9c47f
 
 -- 
-2.55.0
+Regards,
 
+Laurent Pinchart
