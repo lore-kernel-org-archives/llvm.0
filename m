@@ -1,54 +1,53 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4AA4E50AF;
-	Mon, 28 Sep 2026 17:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4CE2BEC52;
+	Mon, 28 Sep 2026 17:32:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790616272; cv=none; b=ZrjK/hUiF1e68cdxAWxgXOvcdk1f/aRDVD4WUVfgYjkHFCXJ6OM5ffITzwrJaje8RgJXCeTrnm5SziD5mJ+yqZeK3A6NwYg8xdaZX3PLxFX86UAJyswPaGnM22h/HYIlc5MMmi/+t6yGF/pBGo5xKt0d27Nnm6rq+kztrLhFbmQ=
+	t=1790616729; cv=none; b=hBpax8Ipe5VQLGcgFCN0ONhWTPB+eCJl/Vz+n48z6a9M86TbOT+450NIH6rXlkB3HDbi92xlwYzhjYLL4D11BxrI9nfpJa28qEnsE4XHQY1or3TZIE5ffItvCAer3f/fTtUJVZSHRBRctp/pIg8rGIIU7/ranR5RpNPShzyiBk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790616272; c=relaxed/simple;
-	bh=A4sGNxmkOrAHQZrCx4hlTt8pCr3WBaG5i7z5E4gUzm8=;
+	s=arc-20240116; t=1790616729; c=relaxed/simple;
+	bh=UiypJmqqftjwWJQbCeECB92FHMjHzyFn0BqCt6hipjA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRq9OiulSVvmekQFbQ9G0cA6DDf4bUte2WmW3SMCeQYb3JKTgCOQ4JYE1WCaunLRw8kovIFlA4B4wTnzMqGibmHABzEJDtK/yB+tvoMhDjO/WL99BFcNYpaqbvDMlu+e0hY1wW7xGSBnD9z4ektt4wf32Gdsp0FoTtZWyjMm4rY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BTTnwgHo; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nb60KjRt+2M0M/nCyv43ycXOIoNiju/EOrR6Wh8bN1Y4tjQ3FsCtCJiWAgcVUZo5QiOipGbu5CCDHXzOoOuUdrcq0EY3mCzje8hKccFWmwsNYC3i/wBGZSlB9VcZXvNP8h+7EGBk5TrroB4Tgc5PekWNIFQ06Ai3jB3xbLSLJmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dTTJOcwp; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BTTnwgHo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2A4B1F000FF;
-	Mon, 28 Sep 2026 17:24:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dTTJOcwp"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1831F000FF;
+	Mon, 28 Sep 2026 17:32:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790616271;
-	bh=CzE2GE5JN/tI9+vf5ceSYktDtLDt2Ax4ATT81DGIpY4=;
+	s=k20260515; t=1790616727;
+	bh=DVCYORH83Mdl0Gt8ikYu58Tz+uRUhq9ZJzLJhMmXjZQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=BTTnwgHo3e7c9o0rEnQRB7ZYUXhkhD5eIFXOeC520HyCwUZwp8jntGIY9n5YsIix9
-	 /Ym50PIIpYqM37fQQXINrRbjumZpkwgpqOull3Vidwl2FElBE4K/ZGUVeOGKt8cKu4
-	 a+UKkqCjaVec32acLq750VC4ry62UJhA1lTT4gGp/y+DstTdzx6MC0BJ24rg7StUJf
-	 dgv845cDIgkefff7Lc7OjPDgek/7/hApSlYTBXj74Uhnqg/3FzAsZ6YruF/Wkt4mBa
-	 F4lCS7i9EpYsGaacidhpQDKTKg3WlYFlUrNt18dgBccYqZ94wbeGNi0MRC87EwDbH+
-	 BDQNjNC1bQU2A==
-Date: Mon, 28 Sep 2026 19:24:21 +0200
+	b=dTTJOcwptb6dtMZSchc1Lofu3hSLpnFiqMkVGzX4i24kCkCaG/iGddLmgAfy9dhOP
+	 V9T7CrALeOpd+ch2q5TE2cqbRaRBjJzAmaFRijbYMnvL6hjtTUbOqrX9fT7Mq1xJGd
+	 beM7+4/VqZ7tJJh75zo1CBfH5u/yroD9KDXRfiDuksUIlJn5qDJHGjOiClin0XRGq3
+	 hGuB4dbwy36SVluamPU6mYLjAVxoLWYf+/DYtu6XVi6QDofA6r3epPv++vQBPfJipa
+	 seLWVZJYEXdq31uGKgrMQolSe2cfPDeW2Z8O2EK7e1tLe54GzD52cWpP/EVFTOL3b4
+	 48SEqu6ci+0JQ==
+Date: Mon, 28 Sep 2026 19:31:59 +0200
 From: Benjamin Tissoires <bentiss@kernel.org>
-To: Neil Armstrong <neil.armstrong@linaro.org>
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 Cc: Maxime Ripard <mripard@kernel.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
+	Robert Foss <rfoss@kernel.org>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Albert Esteve <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Javier Martinez Canillas <javierm@redhat.com>, dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev, 
+	linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
 Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <arqhwHiVf00j94J7@beelink>
+Message-ID: <arqi0etVHGajQAMe@beelink>
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+ <20260928163711.GA210522@killaraus.ideasonboard.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -57,12 +56,12 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+In-Reply-To: <20260928163711.GA210522@killaraus.ideasonboard.com>
 
-On Sep 28 2026, Neil Armstrong wrote:
-> Hi,
+On Sep 28 2026, Laurent Pinchart wrote:
+> Hi Maxime,
 > 
-> On 9/28/26 18:22, Maxime Ripard wrote:
+> On Mon, Sep 28, 2026 at 06:22:00PM +0200, Maxime Ripard wrote:
 > > Hi,
 > > 
 > > Panels in general, and MIPI-DSI panels in particular, are pretty
@@ -83,59 +82,31 @@ On Sep 28 2026, Neil Armstrong wrote:
 > > plan is to have a userspace component started by udev to identify and
 > > load the right BPF program for the panels found on the device.
 > 
-> This is kind of late for serious applications except if we manage to
-> solve the bootloader to Linux display engine transition.
+> Interesting idea.
 > 
-> > 
-> > This driver is fully functional and works with both 5" and 7" Touch
-> > Display 2 panels for the RaspberryPi. However, it breaks away from the
-> > typical panel driver in multiple ways:
-> > 
-> > - BPF programs can only be loaded by userspace. This leaves us with two
-> >    choices:
-> > 
-> >    * We prevent the driver from loading until the script itself is
-> >      loaded. This has the side effect of preventing any other output to
-> >      be used until the initramfs is ran at the earliest, and possibly
-> >      ever if the loader isn't installed for example.
-> 
-> This adds a dependency on user-space behavior and if somehow the
-> initramfs doesn't load for a reason we won't have a way to display
-> an error.
-> 
-> > 
-> >    * Or we probe the driver all the time, but only report it as connected
-> >      once a program has been registered. This is somewhat unconventional,
-> >      but allows the other outputs to be functional, *and* allows the user
-> >      to force the output if their panel doesn't require any
-> >      initialization or during debugging. I chose this solution.
-> 
-> Both options are not really great...
-> 
-> > 
-> > - It's not a panel driver, but a bridge one, which is also pretty
-> >    unconventional. This is required because panel drivers don't have
-> >    access to a detect callback that is required for the above, but I also
-> >    think that the recent work from Luca blurs the line from panels and
-> >    bridges and we'll end up going that road anyway.
-> 
-> On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
-> the panel and the DDIC. So being a bridge is fine, but in a general way we lack
-> a proper way to describe the display/panel/monitor independently of the DDIC.
-> 
-> At first glance it's a nice driver, but moving the timings into a blob moves something
-> into possible proprietary binaries with possible closed licence and distribution
-> restriction so it's a downgrade for the same of bringing up a panel faster.
+> How would that work for devices that want early display support ? In
 
-Quick answer on this, because I had the very same questions regarding
-HID-BPF:
-- in BPF, you can require (and by default it does) that only GPL
-	compatible BPF programs are loaded, closing the argument of "closed
-	licence and distribution restriction"
-- also, a BPF program can be disassembled much easier than a binary
-	blob, and I remember Alexei showing me an example where you get almost
-	the source code from the BPF object in just one pass.
+Brain fart... Include a bpf VM in the bootloader? :)
+
+> particular, how does it interact with your recent work on "fastboot"
+> support (with the kernel drivers taking over a running display
+> configured by the boot loader) ?
+> 
+> I'm also wondering about the incentives for vendors to upstream the
+> code. How will we avoid having a proliferation of out-of-tree drivers ?
+
+My 2 cents here from the HID-BPF point of view:
+- as mentioned in my reply to Neil, the kernel enforce GPL licensed BPF
+	only
+- so vendors have to publish their code somewhere
+- in HID-BPF, I decided to provide an "official" list of HID-BPF sources
+	as part of the kernel (see drivers/hid/bpf/progs). I try to sync them
+	with the userspace tree when time permits
+
+So basically, distributions can say "we ship only BPF objects compiled
+from the kernel tree". It doesn't mean they have to be in a released
+kernel already to remove the friction, but in the process of being
+released could be sufficient.
 
 Cheers,
 Benjamin
-
