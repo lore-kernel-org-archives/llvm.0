@@ -1,200 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A580D3C1D65;
-	Sun, 27 Sep 2026 22:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2FC3368B0
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 00:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790547718; cv=none; b=HpTX1OXrU8ybiQa9zDER9l9DYwjcxdR/vuBE3WlJeCuqwo8Ep1IKp4djx9Vv8lMmHl2XwTCC/ssQkQ18O36aCvXDjMrvNL7+iZWVPTzF0Nq6Gk1HiVM9kXo10OeHDQsZkQAPxaTKZS2OEdZiXu1NcEWCl/FcUExKzEgQd4ySTxY=
+	t=1790556901; cv=none; b=B5mbeRiSHP2tLOvIBXzkJIkzR2Q6lPsVYpCeszLMvX9RVbpZ+18+ojBMDr+YEvtU7LJgixCtBKW2eohPIXrDnxM6l/AbwsW2UI1qIWxBdV8meEr7fMrR0SQKYTG3zw21u/kHCQeKHZ70zTvONb/sq3aZUqqFJpDOJL1vK0+8W6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790547718; c=relaxed/simple;
-	bh=fWhs364igXTuulNnR4CZinClylBrVpIY0tOSXS9Vgf0=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L8m7jBF9reu9Ivlniayk4tn3/wxD1ycEBHrcRBWtFT0TInOxt0XszM8/e9sLTq5utW4wVU/Hn9h0qbRFp4VUYPBY0DcuNGbLudFrw+brz8b2f1U10d+SYPfBIoFkFBWh9qY4Nv6R33SUwMuIKKUnJ3WQ+JpXlErO+zMXbc3i7zs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=emQtwVtV; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="emQtwVtV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790547714; x=1822083714;
-  h=date:from:cc:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=fWhs364igXTuulNnR4CZinClylBrVpIY0tOSXS9Vgf0=;
-  b=emQtwVtVk8x/YOxhfn7cby7AB2+PRt4GYCpr5AUdF6v3E/xpyNgg800v
-   z77sHLb12BGQPJWzhqiQJjgqsrAHJdkzgabfoSqlwSpNY+FqmaGMrvsYi
-   D73YxIWErr0KcH2QzbF/+ohZdalDUYZRIvZvHFAX9TIkzF82go5u/jb/6
-   nSIim0A9JY6AQBs1NgJOeDbMSfjP9XIwElbibTOIhdln1KENWoBtCY5ix
-   j6jfHOwb2auipyKRqlv8U5Xsi5ClpaXVhjM2NwX8hCIhpaN4EA1XA/mKG
-   8VnCv7Yv78yq7f3Dq3I/pHZjyxm/HQajRxttZRt7D7WBRD8fpDNCSgC2N
-   w==;
-X-CSE-ConnectionGUID: +xnloQIOQkyotvom0/XHog==
-X-CSE-MsgGUID: fqz21rCLTxq5R9lbXbsoMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11918"; a="101817918"
-X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
-   d="scan'208";a="101817918"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2026 15:21:53 -0700
-X-CSE-ConnectionGUID: ZEoB/6KRSd2nYu3U4weRrg==
-X-CSE-MsgGUID: 59Fz3Xy2Rmeuc0QahsokVQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
-   d="scan'208";a="274409872"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 27 Sep 2026 15:21:52 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xAxFl-00000000NDm-3j73;
-	Sun, 27 Sep 2026 22:21:49 +0000
-Date: Mon, 28 Sep 2026 06:21:19 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: squashfs: fix leaked page locks when page actor allocation fails
-Message-ID: <202609280655.spyNjO2a-lkp@intel.com>
-References: <202609280655.spyNjO2a-lkp@intel.com>
+	s=arc-20240116; t=1790556901; c=relaxed/simple;
+	bh=94q9IW61AIF+y+RIMJqITcbS5KT1KHCCdYJJazbRI1A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LunHA3rPaqtvZGpVCUdpF4rP4/VpRxUb/OhrtD0Pf5VY9pE8r8ME4iXcsL23zxZIlkGPYUUloXULQ3XBBCLqEbVV6mWYjgB8vcJCROCDzDWq36QJASJ+naaXhcciUctNA2fuORFdthwKSGy/eag1dQ7EUw/zVGOtnLpiXhMNx8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.170])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4htN9f5XrHzKHMPk
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 08:54:14 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.112])
+	by mail.maildlp.com (Postfix) with ESMTP id 084934056E
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 08:54:48 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP1 (Coremail) with UTF8SMTPA id cCh0CgA3sPrWurlqyimdBw--.21204S2;
+	Mon, 28 Sep 2026 08:54:47 +0800 (CST)
+Message-ID: <124497c6-806d-4b64-9d1a-bb5d35189fbb@huaweicloud.com>
+Date: Mon, 28 Sep 2026 08:54:46 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202609280655.spyNjO2a-lkp@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] perf llvm: Fix memory leak of args->fileloc in
+ symbol__disassemble_llvm()
+To: Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc: "Steinar H. Gunderson" <sesse@google.com>,
+ Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
+ xueshuai@linux.alibaba.com, Adrian Hunter <adrian.hunter@intel.com>,
+ Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Li Huafei <lihuafei1@huawei.com>, Kim Phillips <kim.phillips@arm.com>,
+ Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
+ Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+ Ian Rogers <irogers@google.com>
+References: <20260917125802.1198419-1-wutengda@huaweicloud.com>
+ <CAP-5=fVOdeA-cf1NRJxQ_YFeYKu3F1PJ3ykXR5Gtx7r0MtsUtA@mail.gmail.com>
+ <arZFMCzEiHbTL6IK@x2> <arZF_Mphl3Rim0Gw@x2>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <arZF_Mphl3Rim0Gw@x2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:cCh0CgA3sPrWurlqyimdBw--.21204S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7GF17Aw45Gr47trWUtr18Krg_yoWkWrb_GF
+	1I9r1DCw47Ga12ya1qkrW2vrZrGF1ktryrAw4IgFs7Z3s3AFWkCF1xXFyrCw1jqwsFgr9x
+	GrySvF9FvryavjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbxkYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
+	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
+	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x02
+	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxV
+	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Hi Nguyen,
-
-kernel test robot noticed the following build warnings:
 
 
+On 2026/9/25 17:59, Arnaldo Carvalho de Melo wrote:
+> On Fri, Sep 25, 2026 at 11:56:04AM +0200, Arnaldo Carvalho de Melo wrote:
+>> On Mon, Sep 21, 2026 at 11:36:08AM -0700, Ian Rogers wrote:
+>>> On Thu, Sep 17, 2026 at 5:58 AM Tengda Wu <wutengda@huaweicloud.com> wrote:
+>>>> In symbol__disassemble_llvm(), after calling llvm_addr2line(), if the
+>>>> subsequent disasm_line__new() fails, the code directly jumps to 'err'
+>>>> without freeing args->fileloc, leading to a memory leak.
+>>
+>>>> Fix this by explicitly calling free(args->fileloc) before jumping to
+>>>> the error handling path when disasm_line__new() fails.
+>>
+>>>> Fixes: 048856817888 ("perf annotate: LLVM-based disassembler")
+>>>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>>
+>>> Reviewed-by: Ian Rogers <irogers@google.com>
+>>
+>> I replaced the free() with a zfree(&), minor.
+> 
+> I understand why you didn't use zfree(), to make it consistent with the
+> other free, will keep it and leave the zfree() for later.
+> 
+> Sorry about the noise,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Nguyen-Ngoc-Thang/squashfs-fix-leaked-page-locks-when-page-actor-allocation-fails/20260927-130541
-base:   
-patch link:    https://lore.kernel.org/r/202609280655.spyNjO2a-lkp%40intel.com
-config: x86_64-randconfig-1003-20260928 (https://download.01.org/0day-ci/archive/20260928/202609280655.spyNjO2a-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260928/202609280655.spyNjO2a-lkp@intel.com/reproduce)
+No worries at all, thanks for applying the fix.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609280655.spyNjO2a-lkp@intel.com/
+Best regards,
+Tengda
 
-All warnings (new ones prefixed by >>):
+> 
+> - Arnaldo
 
->> fs/squashfs/file_direct.c:121:1: warning: unused label 'out' [-Wunused-label]
-     121 | out:
-         | ^~~~
-   1 warning generated.
-
-
-vim +/out +121 fs/squashfs/file_direct.c
-
-0d455c12c642864 Phillip Lougher         2013-11-13   20  
-0d455c12c642864 Phillip Lougher         2013-11-13   21  /* Read separately compressed datablock directly into page cache */
-2a7aea59cf4dd4a Matthew Wilcox (Oracle  2024-12-20   22) int squashfs_readpage_block(struct folio *folio, u64 block, int bsize,
-a3f94cb99a854fa Phillip Lougher         2018-08-02   23  		int expected)
-0d455c12c642864 Phillip Lougher         2013-11-13   24  {
-2a7aea59cf4dd4a Matthew Wilcox (Oracle  2024-12-20   25) 	struct page *target_page = &folio->page;
-2a7aea59cf4dd4a Matthew Wilcox (Oracle  2024-12-20   26) 	struct inode *inode = folio->mapping->host;
-0d455c12c642864 Phillip Lougher         2013-11-13   27  	struct squashfs_sb_info *msblk = inode->i_sb->s_fs_info;
-12427de9439d68b Phillip Lougher         2023-11-13   28  	loff_t file_end = (i_size_read(inode) - 1) >> PAGE_SHIFT;
-09cbfeaf1a5a67b Kiryl Shutsemau         2016-04-01   29  	int mask = (1 << (msblk->block_log - PAGE_SHIFT)) - 1;
-7f73fcde4d93072 Phillip Lougher         2024-08-19   30  	loff_t start_index = folio->index & ~mask;
-12427de9439d68b Phillip Lougher         2023-11-13   31  	loff_t end_index = start_index | mask;
-d31638ff6c5437c Phillip Lougher         2024-10-21   32  	loff_t index;
-d31638ff6c5437c Phillip Lougher         2024-10-21   33  	int i, pages, bytes, res = -ENOMEM;
-7f73fcde4d93072 Phillip Lougher         2024-08-19   34  	struct page **page, *last_page;
-0d455c12c642864 Phillip Lougher         2013-11-13   35  	struct squashfs_page_actor *actor;
-0d455c12c642864 Phillip Lougher         2013-11-13   36  	void *pageaddr;
-0d455c12c642864 Phillip Lougher         2013-11-13   37  
-0d455c12c642864 Phillip Lougher         2013-11-13   38  	if (end_index > file_end)
-0d455c12c642864 Phillip Lougher         2013-11-13   39  		end_index = file_end;
-0d455c12c642864 Phillip Lougher         2013-11-13   40  
-0d455c12c642864 Phillip Lougher         2013-11-13   41  	pages = end_index - start_index + 1;
-0d455c12c642864 Phillip Lougher         2013-11-13   42  
-14694888db2c1f7 Fabian Frederick        2014-08-06   43  	page = kmalloc_array(pages, sizeof(void *), GFP_KERNEL);
-0d455c12c642864 Phillip Lougher         2013-11-13   44  	if (page == NULL)
-0d455c12c642864 Phillip Lougher         2013-11-13   45  		return res;
-0d455c12c642864 Phillip Lougher         2013-11-13   46  
-0d455c12c642864 Phillip Lougher         2013-11-13   47  	/* Try to grab all the pages covered by the Squashfs block */
-d31638ff6c5437c Phillip Lougher         2024-10-21   48  	for (i = 0, index = start_index; index <= end_index; index++) {
-d31638ff6c5437c Phillip Lougher         2024-10-21   49  		page[i] = (index == folio->index) ? target_page :
-2a7aea59cf4dd4a Matthew Wilcox (Oracle  2024-12-20   50) 			grab_cache_page_nowait(folio->mapping, index);
-0d455c12c642864 Phillip Lougher         2013-11-13   51  
-1bb1a07afad9730 Phillip Lougher         2022-06-11   52  		if (page[i] == NULL)
-0d455c12c642864 Phillip Lougher         2013-11-13   53  			continue;
-0d455c12c642864 Phillip Lougher         2013-11-13   54  
-0d455c12c642864 Phillip Lougher         2013-11-13   55  		if (PageUptodate(page[i])) {
-0d455c12c642864 Phillip Lougher         2013-11-13   56  			unlock_page(page[i]);
-09cbfeaf1a5a67b Kiryl Shutsemau         2016-04-01   57  			put_page(page[i]);
-1bb1a07afad9730 Phillip Lougher         2022-06-11   58  			continue;
-0d455c12c642864 Phillip Lougher         2013-11-13   59  		}
-0d455c12c642864 Phillip Lougher         2013-11-13   60  
-1bb1a07afad9730 Phillip Lougher         2022-06-11   61  		i++;
-0d455c12c642864 Phillip Lougher         2013-11-13   62  	}
-0d455c12c642864 Phillip Lougher         2013-11-13   63  
-1bb1a07afad9730 Phillip Lougher         2022-06-11   64  	pages = i;
-1bb1a07afad9730 Phillip Lougher         2022-06-11   65  
-f268eedddf3595e Phillip Lougher         2022-06-11   66  	/*
-f268eedddf3595e Phillip Lougher         2022-06-11   67  	 * Create a "page actor" which will kmap and kunmap the
-f268eedddf3595e Phillip Lougher         2022-06-11   68  	 * page cache pages appropriately within the decompressor
-f268eedddf3595e Phillip Lougher         2022-06-11   69  	 */
-2258e22f05aff58 Phillip Lougher         2024-08-19   70  	actor = squashfs_page_actor_init_special(msblk, page, pages, expected,
-2258e22f05aff58 Phillip Lougher         2024-08-19   71  						start_index << PAGE_SHIFT);
-f268eedddf3595e Phillip Lougher         2022-06-11   72  	if (actor == NULL)
-3d998ec2d6828d8 Nguyen Ngoc Thang       2026-09-27   73  		goto mark_errored;
-f268eedddf3595e Phillip Lougher         2022-06-11   74  
-0d455c12c642864 Phillip Lougher         2013-11-13   75  	/* Decompress directly into the page cache buffers */
-0d455c12c642864 Phillip Lougher         2013-11-13   76  	res = squashfs_read_data(inode->i_sb, block, bsize, NULL, actor);
-f268eedddf3595e Phillip Lougher         2022-06-11   77  
-7f73fcde4d93072 Phillip Lougher         2024-08-19   78  	last_page = squashfs_page_actor_free(actor);
-f268eedddf3595e Phillip Lougher         2022-06-11   79  
-0d455c12c642864 Phillip Lougher         2013-11-13   80  	if (res < 0)
-0d455c12c642864 Phillip Lougher         2013-11-13   81  		goto mark_errored;
-0d455c12c642864 Phillip Lougher         2013-11-13   82  
-84e0e03b308816a Phillip Lougher         2024-08-23   83  	if (res != expected || IS_ERR(last_page)) {
-a3f94cb99a854fa Phillip Lougher         2018-08-02   84  		res = -EIO;
-a3f94cb99a854fa Phillip Lougher         2018-08-02   85  		goto mark_errored;
-a3f94cb99a854fa Phillip Lougher         2018-08-02   86  	}
-a3f94cb99a854fa Phillip Lougher         2018-08-02   87  
-1bb1a07afad9730 Phillip Lougher         2022-06-11   88  	/* Last page (if present) may have trailing bytes not filled */
-09cbfeaf1a5a67b Kiryl Shutsemau         2016-04-01   89  	bytes = res % PAGE_SIZE;
-7f73fcde4d93072 Phillip Lougher         2024-08-19   90  	if (end_index == file_end && last_page && bytes) {
-7f73fcde4d93072 Phillip Lougher         2024-08-19   91  		pageaddr = kmap_local_page(last_page);
-09cbfeaf1a5a67b Kiryl Shutsemau         2016-04-01   92  		memset(pageaddr + bytes, 0, PAGE_SIZE - bytes);
-1bb1a07afad9730 Phillip Lougher         2022-06-11   93  		kunmap_local(pageaddr);
-0d455c12c642864 Phillip Lougher         2013-11-13   94  	}
-0d455c12c642864 Phillip Lougher         2013-11-13   95  
-0d455c12c642864 Phillip Lougher         2013-11-13   96  	/* Mark pages as uptodate, unlock and release */
-0d455c12c642864 Phillip Lougher         2013-11-13   97  	for (i = 0; i < pages; i++) {
-0d455c12c642864 Phillip Lougher         2013-11-13   98  		flush_dcache_page(page[i]);
-0d455c12c642864 Phillip Lougher         2013-11-13   99  		SetPageUptodate(page[i]);
-0d455c12c642864 Phillip Lougher         2013-11-13  100  		unlock_page(page[i]);
-0d455c12c642864 Phillip Lougher         2013-11-13  101  		if (page[i] != target_page)
-09cbfeaf1a5a67b Kiryl Shutsemau         2016-04-01  102  			put_page(page[i]);
-0d455c12c642864 Phillip Lougher         2013-11-13  103  	}
-0d455c12c642864 Phillip Lougher         2013-11-13  104  
-0d455c12c642864 Phillip Lougher         2013-11-13  105  	kfree(page);
-0d455c12c642864 Phillip Lougher         2013-11-13  106  
-0d455c12c642864 Phillip Lougher         2013-11-13  107  	return 0;
-0d455c12c642864 Phillip Lougher         2013-11-13  108  
-0d455c12c642864 Phillip Lougher         2013-11-13  109  mark_errored:
-bbf45b7e6855556 Matthew Wilcox (Oracle  2024-04-20  110) 	/* Decompression failed.  Target_page is
-0d455c12c642864 Phillip Lougher         2013-11-13  111  	 * dealt with by the caller
-0d455c12c642864 Phillip Lougher         2013-11-13  112  	 */
-0d455c12c642864 Phillip Lougher         2013-11-13  113  	for (i = 0; i < pages; i++) {
-6d565409503f4e1 Phillip Lougher         2013-11-24  114  		if (page[i] == NULL || page[i] == target_page)
-0d455c12c642864 Phillip Lougher         2013-11-13  115  			continue;
-0d455c12c642864 Phillip Lougher         2013-11-13  116  		flush_dcache_page(page[i]);
-0d455c12c642864 Phillip Lougher         2013-11-13  117  		unlock_page(page[i]);
-09cbfeaf1a5a67b Kiryl Shutsemau         2016-04-01  118  		put_page(page[i]);
-0d455c12c642864 Phillip Lougher         2013-11-13  119  	}
-0d455c12c642864 Phillip Lougher         2013-11-13  120  
-0d455c12c642864 Phillip Lougher         2013-11-13 @121  out:
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
