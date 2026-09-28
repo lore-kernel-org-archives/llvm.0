@@ -1,59 +1,91 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f39.google.com (mail-pj2-f39.google.com [74.125.227.167])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D14F31AABC;
-	Mon, 28 Sep 2026 05:23:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A44C3B42FE
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 05:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.167
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790573014; cv=none; b=SuDY/u4KzFcJG2L/aNzoDDaWLrAIZJdTqCKIEY6qnyRW8eLWRU5PS9xIVdrVXoGpX2WFZOfonjmC9JM5mj6T6HP/Ig++eUXqnOZj70f9sNgyPxHMpxuPBzks//LQBvbUJ4iNvY45DPDHL7itqEvoggo0QVVmqLvFxyrz28pOx9c=
+	t=1790574510; cv=none; b=Wbc/6IUxuxNpq8vgfPHdK5/eP/3CjS2rQuFN5rnJl05x8vKUaWNcGW9C5Cq8qspTaiCKZ6/A9nfDPErMFcvcB1+/OYKCe2AN3c4XSBWbd61D2igwQwahfg29YpSRDfvaNhBjilq5bBaXcUqWPbBlkm1ckz94yPfXc/ZfgMbs6dI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790573014; c=relaxed/simple;
-	bh=Fcf2iIHjsRRicCV3m07hib4lh/jRAWvO15ac/fC9YD0=;
+	s=arc-20240116; t=1790574510; c=relaxed/simple;
+	bh=iMYszCd2Q2GkfRGunaTTlbLJABOPePOXot6uhYku9yA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hCI14My2VRqgJToGoaFKFhsdpecFHd7LP/a+Vujs2rDGOwsknr1gZOrs/VoL0vx1wbQrDxGc5ZmBUdZLDw0uE/H4HImCiI/D8tskex9kVW5UGWUzICkNvsl8UBEgVCxOcjThA98brVw+rn5TQzF2KtWCzyNZHHtYNeeIQ4o/cF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OIq1fzLI; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=szWjHyPoM2epnBDe9xT3ROx5lDV8KHLAeXIcgx6IGIbOAkebUiVU+7FijdpdAT7MRHHjvQDrWeRECY2W0a9I5r78izynvsVOvKqQg1PAJ/rOEhIay2Gg6itM3WlYIHzP3/nAK6LvCOvr8sd+63dUTkwzilZfD9M5TGre0fEwARo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JteTbOyF; arc=none smtp.client-ip=74.125.227.167
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OIq1fzLI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790573012; x=1822109012;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Fcf2iIHjsRRicCV3m07hib4lh/jRAWvO15ac/fC9YD0=;
-  b=OIq1fzLIRr/Wj7WRPzGseWq3AZ+xkj8DO0yCTtvWqEEQ+E0qQWjyMQmT
-   uG2MIHBZyAo1zbALg2lpN8GE83KAoWf7hro0ats9/Rc4L48adaM+L1Pfz
-   tJ75FbxeCzO28baaKydvfSoXA3swC8S+45vUHdbsPSeiskPq/8HBMlHgS
-   chQwp8iMu/c86nnjF8WQXl+Ign4YVR13TqnfARqMuQYDge0E4K39pRMIG
-   idxX579YgYAHc+9Vpx5biRQS9noXzix10ZhN45DLjTmryc+insO9ExvZb
-   C/5rn13iW7OcK3ea/KFXamXWuQI07C1FCBOFXw9SKwqk+25cLaYfch1yt
-   w==;
-X-CSE-ConnectionGUID: adRR5XDAT5KxsGY9KtE78A==
-X-CSE-MsgGUID: spx6Fr5YTUWe/pdrp494bg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11918"; a="101921567"
-X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
-   d="scan'208";a="101921567"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2026 22:23:31 -0700
-X-CSE-ConnectionGUID: NqVgcno9S6yrfHp2BkteSg==
-X-CSE-MsgGUID: R+dO3/lsRimfHgFUmrl2Ug==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
-   d="scan'208";a="274998139"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 27 Sep 2026 22:23:31 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xB3po-00000000NZD-0AQp;
-	Mon, 28 Sep 2026 05:23:28 +0000
-Date: Mon, 28 Sep 2026 13:22:44 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH] security: Allow dropping bounding set process-wide
-Message-ID: <202609281347.3heKlnv9-lkp@intel.com>
-References: <20260922095816.1191799-1-ruanjinjie@huawei.com>
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JteTbOyF"
+Received: by mail-pj2-f39.google.com with SMTP id 98e67ed59e1d1-3a4805e15cfso42997a91.0
+        for <llvm@lists.linux.dev>; Sun, 27 Sep 2026 22:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1790574505; x=1791179305; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=kWV/wHWLQfhp6L6mSocYwp2pbMQ9zmUarPxSrrFDYg8=;
+        b=JteTbOyFc+g9SymaIaPio01xvMClJpkC+EPc6ykcGuvofl3fQbVPkUprYKpnWk2MzA
+         RO2QIMa2gHVYMa2CDYGNrVAPbvizUq3HM6cfqiAB5/Mgm/dmGGPHTdoj25qXFcHClXMD
+         65TMe/aqgbjjlLbbBBcgMjuzeE7c4fkRRfUd8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790574505; x=1791179305;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kWV/wHWLQfhp6L6mSocYwp2pbMQ9zmUarPxSrrFDYg8=;
+        b=PVwwtDXRQ4mmU9FP1Rxch13hn8mejZzHtTM91QSjQsaoGeHF8St70HtYq5VdcrSJ72
+         RaxaHH3Snl0FwU2NgDbSvuAPlt11zpPDn6Inx1LvLQRVuSp/drp/aOSk6N1cIAF809cS
+         lDCtptuJR68N69aC2SL3GUHXrfZU4K9UX32KlRtQqfXheYYpEEgE767jwqhuIuN+qSmZ
+         4uvKxUr0ZprLWjZJONk5oIUQ7NI/tCR/WgUSeU4PKRJLRobpomC4Aqn5tJN+URQLGOle
+         W6McqUBn01ofceZEytxlMGzIKBtB42JGUjMCO1dEgr38FtpNvoe02xSYzytfnfknEm+8
+         KrTQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzkwGQlg6pllcTI2DyJq9CmiS5ohDohq6OZhfYQJfcKSe8LOKsPSmppNQQ7hOB6SPP688fZ@lists.linux.dev
+X-Gm-Message-State: AFq9FYLvyOGcRacTG5YwoYUAZgx1TbrWZaGX5rlrsEnb4STlq354I29E
+	nS7+8orWtTfuT4OqEEuOgQuYaQztF0vKAEQWTfwA+aHy5E/EgLbxBsAc3ovqSHs+Ng==
+X-Gm-Gg: AYBFou0PJleDj/cbg7LYiMGRq+enWEd3laFiSYC30juV2RJjBTjGY7mNyhnO35j3YCb
+	pg+ogDpg0UBPEzs6pfa8XAxvSwZCW5nQ6zeX/uMhlXVtMNjB/cScKPQzINXd7yR60KdUi/5EFHu
+	vVnyY93OU+3WQvrM6svtX5i126NZqM4WfYPbnVHSn75ww/CND1zxA5aJScN5ap/yVYmytRXZKqc
+	4OEzlbd/qRWELj82rUb/kb/YCf9BRWRlw2e66qNArp1l4YdLOauugd1jmUdslvRlLbg7MLErwqU
+	QjRtjMMor0AHSggWfUpc2SJkbWJxhZxI4Y0f/V80Tk6+mIYGlwZ8xkloKJqWmUN8VUmzm9zSUpV
+	1wfkpsjrRO7wqd1Cd0kuQ9qFWjgba0W/eKv940/EhlG4Gb67fWxeKzRUnQlqgGtlJD5wfo9WVAa
+	EY/4BLESzn60mOnZJgLRAz2CLYDm/QoS3KwDVfR0exX5oWofkVSrBWrhMaN6hyZwv5SdfZpdp40
+	ZOYtXD3MmjSzDw8tKuDxFN+QEQ5zqfN9ae3TeMu9qUW2IrU+g==
+X-Received: by 2002:a17:90b:3888:b0:3a0:cc33:2287 with SMTP id 98e67ed59e1d1-3a0cc3324ccmr6256726a91.6.1790574505299;
+        Sun, 27 Sep 2026 22:48:25 -0700 (PDT)
+Received: from google.com ([2a00:79e0:2031:6:fdbe:318b:98fe:bd96])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0bec30aaasm17853889a91.15.2026.09.27.22.48.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 22:48:24 -0700 (PDT)
+Date: Mon, 28 Sep 2026 14:48:15 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Minchan Kim <minchan@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, 
+	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Phillip Lougher <phillip@squashfs.org.uk>, Sungguk <sungguk.na@samsung.com>, 
+	Jaehoon Chung <jh80.chung@samsung.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH RFC 3/9] lib/lz4: add the build environment for the
+ vendored sources
+Message-ID: <arn9tK5MxxxfH7OW@google.com>
+References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
+ <CGME20260925113456eucas1p136c3cd1f08be7201ad6b3f7b0e8ff02d@eucas1p1.samsung.com>
+ <20260925-lz4-vendor-upstream-v1-3-1c7ffbe21c4b@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -62,61 +94,14 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260922095816.1191799-1-ruanjinjie@huawei.com>
+In-Reply-To: <20260925-lz4-vendor-upstream-v1-3-1c7ffbe21c4b@samsung.com>
 
-Hi Jinjie,
+On (26/09/25 13:27), Michal Wilczynski wrote:
+[..]
+> +
+> +/* LZ4_decompress_fast() and LZ4_resetStream() are still kernel API. */
+> +#define LZ4_DISABLE_DEPRECATE_WARNINGS 1
 
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on pcmoore-selinux/next]
-[also build test ERROR on linus/master v7.3-rc4 next-20260925]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/security-Allow-dropping-bounding-set-process-wide/20260922-175816
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
-patch link:    https://lore.kernel.org/r/20260922095816.1191799-1-ruanjinjie%40huawei.com
-patch subject: [RFC PATCH] security: Allow dropping bounding set process-wide
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260928/202609281347.3heKlnv9-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260928/202609281347.3heKlnv9-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609281347.3heKlnv9-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> security/commoncap.c:1399:22: error: call to undeclared function 'mk_kernel_cap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    1399 |         kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
-         |                             ^
->> security/commoncap.c:1399:15: error: initializing 'kernel_cap_t' with an expression of incompatible type 'int'
-    1399 |         kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
-         |                      ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-
-vim +/mk_kernel_cap +1399 security/commoncap.c
-
-  1396	
-  1397	static int cap_prctl_drop_mask(unsigned long low, unsigned long high)
-  1398	{
-> 1399		kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
-  1400	
-  1401		if (cap_isclear(mask))
-  1402			return 0;
-  1403	
-  1404		if (!ns_capable(current_user_ns(), CAP_SETPCAP))
-  1405			return -EPERM;
-  1406	
-  1407		return cap_bset_drop_process(mask);
-  1408	}
-  1409	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Is this upstream code?  As far as I understand it, LZ4_decompress_fast*()
+deprecated upstream and are strongly discouraged.  Do we want to suppress
+deprecation warnings?
