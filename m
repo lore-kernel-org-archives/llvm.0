@@ -1,90 +1,59 @@
-Received: from mail-pj2-f41.google.com (mail-pj2-f41.google.com [74.125.227.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17012369D47
-	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 05:19:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D14F31AABC;
+	Mon, 28 Sep 2026 05:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790572753; cv=none; b=nBilliDx9cgWY4n43kQSfFQU8OeE1eJzgkG7y8EDVueFL4lHhqOAxvwppQzG5Oek5zC9A05/TtGnPsrZclG0cfv4m/BYAizcylOWTT8LZgRMRbOKD/I2MFFfLO2+eArc8CmvPipSjdbEVvjYgm4kvhvgpt3iV9wHDZoh6FVqtlg=
+	t=1790573014; cv=none; b=SuDY/u4KzFcJG2L/aNzoDDaWLrAIZJdTqCKIEY6qnyRW8eLWRU5PS9xIVdrVXoGpX2WFZOfonjmC9JM5mj6T6HP/Ig++eUXqnOZj70f9sNgyPxHMpxuPBzks//LQBvbUJ4iNvY45DPDHL7itqEvoggo0QVVmqLvFxyrz28pOx9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790572753; c=relaxed/simple;
-	bh=If6eyZW189bAWCED7HJ77WUzjEmoh3HbC+AtCUG98As=;
+	s=arc-20240116; t=1790573014; c=relaxed/simple;
+	bh=Fcf2iIHjsRRicCV3m07hib4lh/jRAWvO15ac/fC9YD0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nsR7h4Sxhm0JjuOLnKPMjRX1PDMNt4hWnsM1n7erldWEbU899n/jJVXiALRl64xINcgJ3P+qvapmCnRMqG8X9I3NyR0wVHkJGPaOl5N+q7nulHriDe83VQhZ9JesQzkjs7qvH3gccD5fsz4gS7WPePUVepmWWQSypdTFxxp0IXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=HvQQ0R5X; arc=none smtp.client-ip=74.125.227.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=hCI14My2VRqgJToGoaFKFhsdpecFHd7LP/a+Vujs2rDGOwsknr1gZOrs/VoL0vx1wbQrDxGc5ZmBUdZLDw0uE/H4HImCiI/D8tskex9kVW5UGWUzICkNvsl8UBEgVCxOcjThA98brVw+rn5TQzF2KtWCzyNZHHtYNeeIQ4o/cF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OIq1fzLI; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="HvQQ0R5X"
-Received: by mail-pj2-f41.google.com with SMTP id 98e67ed59e1d1-3a0b6200eb0so1932490a91.2
-        for <llvm@lists.linux.dev>; Sun, 27 Sep 2026 22:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1790572751; x=1791177551; darn=lists.linux.dev;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aE4CNeMPjoyGqhac0qEjC0MrhT1ea2sjSdxYtuXCv0E=;
-        b=HvQQ0R5XmDVjo4lMLFHMlUULE5ePieeOEnks7BKRY16LrUtEWSAaQ+9vkiRa4qd/Kp
-         zdwKROmRbrqtVfclE/B4etHykbd82W8v3PSr333Y6245C1x/aC6xfCB50PHfv+cZQy6X
-         WjiHvVac0xKHbzli83ltnlGutqyZhvI7BZRaQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790572751; x=1791177551;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aE4CNeMPjoyGqhac0qEjC0MrhT1ea2sjSdxYtuXCv0E=;
-        b=UE4RS/n2jqzngQY4IAGB31ld7Bc35dEgKYedIXK5Hh5/KM8fYV8nYplvznwCueCYwe
-         ucfYdemeX6Gw63PLdedIN9iDFtsffGFC+MP4nylMBXxgFmEUbGQl8ZJPk8zvZNy4PICp
-         6+hFZnUAZZ3DnNYGfcoOWMKVCkdMht/6uFXoh4/W+nlhrEY9YbePVH7oQH/XjsHS/18f
-         I1MYqcIW0HN4D2W9VnCk+97mkb5SnSM3QTXqb++7WVW4I9xp5HKHhi0QRyE+2F4NaLa1
-         hwriTxtRpcs4nTJCWruirxc0bCAHJ9Pr4BI2Fr3ItOPz/CnBfn9bH0rHq43qZCqsbX79
-         U2RQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxWeN3HiIXk6qR23xvtl6dNzUhJITEq9DMMrfswBkqkVoO1LApP7o/26yKh7xmfVgX+P6eK@lists.linux.dev
-X-Gm-Message-State: AFq9FYIoX576cSqh2lfaECeVsDiDJZOyqHt8bnabnouyTRMALxfVz8bQ
-	QEnfkMO3NOTpVj8JyK0sGs878aUzmICECDIiBklxRTJckSNi+jwiq2d8rKcK4U1YaQ==
-X-Gm-Gg: AYBFou154Oo/o+hrXBPkmmC2oOJbwMX7cVgImz4EWyNLTEbNmp3SbVOrNsO9ez1DdkF
-	oacZgIZml4viXou9FzdSUKEzieiM/S3xSgUxEpEcr/uE8ZTC9vqGQLWalWblu9p+IP7H+J/9uFH
-	6scStN5Tq65yr7x+BrPf4hoqUG4o25+8SwPaTIfpB/lWcJ5L86E9YJDnCHkJFGXVnMV7dmI0jup
-	8V6aL4rysTeQFvsLzZETs6QlE6Eh8zy11aka5TdkFsOG5OSIeCTOB8MKWudeXcC9FgXSKzilvOY
-	IUJz4itIBu1YnZgAPEG5QZOr8auDdWPe+uHAz/ekqqZsDGNtweJDF5cwfYTRywEHBEqMmSaXEN9
-	Xa9NC8WwMHX4qy2JlLZOTGMjpkXT0+3qBJERriRvIh3jrrv8nWiXz16OMuSzqBx61HXYAYUchre
-	JjGWZC2yaas4smL6tHmzbKhjcy/ozv1RJH2M8YEI3P4vZ0qkKVx3NgF8BnAB3eMKw6XRtCqm3mT
-	RAPS32tK/qDUpcaOAdorzqh7g5zWJVu2ljYJfk=
-X-Received: by 2002:a17:90a:597:b0:3a0:a055:1759 with SMTP id 98e67ed59e1d1-3a0bb60e55amr5032133a91.40.1790572751469;
-        Sun, 27 Sep 2026 22:19:11 -0700 (PDT)
-Received: from google.com ([2a00:79e0:2031:6:fdbe:318b:98fe:bd96])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0b94936ddsm18408378a91.7.2026.09.27.22.19.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Sep 2026 22:19:10 -0700 (PDT)
-Date: Mon, 28 Sep 2026 14:19:02 +0900
-From: Sergey Senozhatsky <senozhatsky@chromium.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
-	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Minchan Kim <minchan@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
-	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, 
-	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, 
-	Jaegeuk Kim <jaegeuk@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	Phillip Lougher <phillip@squashfs.org.uk>, Sungguk <sungguk.na@samsung.com>, 
-	Jaehoon Chung <jh80.chung@samsung.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
-	linux-crypto@vger.kernel.org
-Subject: Re: [PATCH RFC 1/9] lib/lz4: import upstream LZ4 sources verbatim
-Message-ID: <arn3TC7BgjTXWmdG@google.com>
-References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
- <CGME20260925113452eucas1p170bfdb34dfbf670a14a6f8f0c2f5094a@eucas1p1.samsung.com>
- <20260925-lz4-vendor-upstream-v1-1-1c7ffbe21c4b@samsung.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OIq1fzLI"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790573012; x=1822109012;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Fcf2iIHjsRRicCV3m07hib4lh/jRAWvO15ac/fC9YD0=;
+  b=OIq1fzLIRr/Wj7WRPzGseWq3AZ+xkj8DO0yCTtvWqEEQ+E0qQWjyMQmT
+   uG2MIHBZyAo1zbALg2lpN8GE83KAoWf7hro0ats9/Rc4L48adaM+L1Pfz
+   tJ75FbxeCzO28baaKydvfSoXA3swC8S+45vUHdbsPSeiskPq/8HBMlHgS
+   chQwp8iMu/c86nnjF8WQXl+Ign4YVR13TqnfARqMuQYDge0E4K39pRMIG
+   idxX579YgYAHc+9Vpx5biRQS9noXzix10ZhN45DLjTmryc+insO9ExvZb
+   C/5rn13iW7OcK3ea/KFXamXWuQI07C1FCBOFXw9SKwqk+25cLaYfch1yt
+   w==;
+X-CSE-ConnectionGUID: adRR5XDAT5KxsGY9KtE78A==
+X-CSE-MsgGUID: spx6Fr5YTUWe/pdrp494bg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11918"; a="101921567"
+X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
+   d="scan'208";a="101921567"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2026 22:23:31 -0700
+X-CSE-ConnectionGUID: NqVgcno9S6yrfHp2BkteSg==
+X-CSE-MsgGUID: R+dO3/lsRimfHgFUmrl2Ug==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
+   d="scan'208";a="274998139"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 27 Sep 2026 22:23:31 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xB3po-00000000NZD-0AQp;
+	Mon, 28 Sep 2026 05:23:28 +0000
+Date: Mon, 28 Sep 2026 13:22:44 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH] security: Allow dropping bounding set process-wide
+Message-ID: <202609281347.3heKlnv9-lkp@intel.com>
+References: <20260922095816.1191799-1-ruanjinjie@huawei.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -93,20 +62,61 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260925-lz4-vendor-upstream-v1-1-1c7ffbe21c4b@samsung.com>
+In-Reply-To: <20260922095816.1191799-1-ruanjinjie@huawei.com>
 
-On (26/09/25 13:27), Michal Wilczynski wrote:
-[..]
-> +int LZ4_compress_fast_extState(void* state, const char* source, char* dest, int inputSize, int maxOutputSize, int acceleration)
-> +{
-> +    LZ4_stream_t_internal* const ctx = & LZ4_initStream(state, sizeof(LZ4_stream_t)) -> internal_donotuse;
-> +    assert(ctx != NULL);
+Hi Jinjie,
 
-Probably in some other places as well:
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-LZ4_initStream() can return NULL, but the code immediately derefs
-the pointer.  The assert() check seems to be misplaced, unless I'm
-missing something.
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on linus/master v7.3-rc4 next-20260925]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I suppose those need to be decoupled.  First LZ4_initStream() call and
-NULL check, then stream->internal_donotuse.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/security-Allow-dropping-bounding-set-process-wide/20260922-175816
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/20260922095816.1191799-1-ruanjinjie%40huawei.com
+patch subject: [RFC PATCH] security: Allow dropping bounding set process-wide
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20260928/202609281347.3heKlnv9-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260928/202609281347.3heKlnv9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609281347.3heKlnv9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> security/commoncap.c:1399:22: error: call to undeclared function 'mk_kernel_cap'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1399 |         kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
+         |                             ^
+>> security/commoncap.c:1399:15: error: initializing 'kernel_cap_t' with an expression of incompatible type 'int'
+    1399 |         kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
+         |                      ^      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+
+
+vim +/mk_kernel_cap +1399 security/commoncap.c
+
+  1396	
+  1397	static int cap_prctl_drop_mask(unsigned long low, unsigned long high)
+  1398	{
+> 1399		kernel_cap_t mask = mk_kernel_cap((u32)low, (u32)high);
+  1400	
+  1401		if (cap_isclear(mask))
+  1402			return 0;
+  1403	
+  1404		if (!ns_capable(current_user_ns(), CAP_SETPCAP))
+  1405			return -EPERM;
+  1406	
+  1407		return cap_bset_drop_process(mask);
+  1408	}
+  1409	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
