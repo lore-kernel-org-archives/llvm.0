@@ -1,134 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lr2-f9.google.com (mail-lr2-f9.google.com [74.125.230.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F843B42DC;
-	Mon, 28 Sep 2026 20:43:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790628193; cv=none; b=TyIuDJ44GXESE65tH7r7Bf7wOpRV2qF49ZcQEThDoDn/7z92cu/zYh5CLIWreLRAW5pAZYJiFF4/XmplcGLa1mjq5ER+ZnE/pv39Myfle2pJa/7Tm9AwniXYQ6TMIV2AdWTEcJUKwUb8q+HvMNOqjNtiSd8hXajXjegqUomZKyw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790628193; c=relaxed/simple;
-	bh=nzULWlUEi/8D+7chD0vg6TGk/QoEy9GkrbB6dZ22mPM=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=hXVMPEhijp+mOXFV9C1foKc1MftusTrdqhFQVeiG96RobXwVh8Vgj1ZNBc3SdkZJmO9KAFfPl/00AY6RhBoOwX9F1SNKJRxX2Jwvn8ca9H+/zLGLTeMXuOm6X+7/TxMkTSNPJ7uxW2JuNz8XEpACXfFiOaBrr0yLe2Woo31ESMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V9yTpaR3; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752DF376A0B
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 23:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790639186; cv=pass; b=YBdr6IUZDqOOc60+j3vTGa/oKvLifHp+3wxav0gSXSUErsAwMnY1UphKAfHp1P/Al8n/TGMpdlL6z6R7f2iQjuC9KjgtWVpzQFkGiZSyq4FDTA/dwTzzmddFWm+hNnL7idOUUJlotcN/UlbwyjuAh5qVKTwlvAzmn0/PoTePOnA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790639186; c=relaxed/simple;
+	bh=hNIG1O9b63uQZMDwp54n4u8BYZPfc6xLK2wlOe6uGrY=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=U92IHr3i1bCBQesvP5nx9x7YhzuT6nzqdADHy7Q7rvJLyPvYizeDRXiIJ2cIR52JgyXS8LonOoeo3aO1JaP8t0Qt8eD2vVsF6i8HvaOxXnAhJXW4FKXgKJYf0xvjxQ16klOFBW0EotTURfPyb7C01WWkgNmCwZ+omX0/IotW3O4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UfuDRFZo; arc=pass smtp.client-ip=74.125.230.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V9yTpaR3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 155151F000FF;
-	Mon, 28 Sep 2026 20:43:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790628192;
-	bh=ySK103NdmXThiEDTZ/VGv2U3ZqCbXnaKRgtixyhWCVU=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject;
-	b=V9yTpaR355fDUEtRGbAbCHYCkgs8W6ffIstAbBudBRSSbpPmO9RUjPPGvxgiGmnOr
-	 xd8fxTqEao2zof0FOaNDB2Y2pc+TQ6ETvq6GgCch1vr3C7D8M4lXuUaM4TAeSDSH5p
-	 hFtVqjNIkhEnZA93FIUdeyc7ipHBNEPZlemnik/aS4jlaBbHUDhzuKMwpi2GsUV14J
-	 QVXdxj+pEGE+HjfLhLbzNAtDkUVFBdySk7Fq+bTvZvnWjokebUYYDcD+3Q6R44ldrh
-	 DbIjWYKRfM4aOiYKVwJwThPh6fL1+zAenlTDvgj7Qi6UHgJ9koDsghVdlyg1zykoey
-	 Ha5HJghAyVQMw==
-Date: Mon, 28 Sep 2026 15:43:10 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UfuDRFZo"
+Received: by mail-lr2-f9.google.com with SMTP id 38308e7fff4ca-3a650281d5fso21467111fa.1
+        for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 16:46:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790639183; cv=none;
+        d=google.com; s=arc-20260327;
+        b=MD2zNgZ/ZtG28cXqZzTVhPpSQ3sTPWpuJnD86654zDlBid4EsDnEopjxYIb7dBLBGe
+         jT713+hDynjn6OjUwzvdni8JBaGHz19B7MFlUg2W0HU63iAzsW/ZBIeaUMDvkwbbqxfi
+         Vr4blxyZeqortz7NoKVLdJTYFcF7WOJjYLjV4YXPMLVjckp0mG/SVh7AyEtQt3xO6eEU
+         fu7/rFR96qWbwqO57XbTraG+1UxBHKzB0RgQNzBqUhntVl8GFPT+bYA0U+ugyWzqCIh5
+         FpBwxhA/LLwt308vWAH/+Gc3EgQXwBCpHs/y/xFe8mmP/GpmfwBUlDJgENqd5rYL5C0C
+         dbyg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
+        bh=CMxKgsjn1fg7B3Ca3OwqQwP+r38CuhXvirJYtgLgTps=;
+        fh=iIWJ+IyDiPERtaHyWpe+qq8LZ3cCz11iNvlDyJhT4gU=;
+        b=fswf93ZohOC+gVhJcwGPKabYIKbjm6Dowmb8DTQHJevU8s43zS2fQkNTxH9JvuA8Sb
+         iUvyMQ4/4a3hcErD44EqcdZ4NM+vLslY6WvSMN8flQzXHgpolsIMC24R61umhNoHBiU/
+         3rykWn3+glI3zxIpmgjIgr+zlRtXvKPW1jVGIn63e8iqI48eoVcy+wWwNq8LC6ENMqs6
+         3IplE/AWdmsvotffbQQf8GB7AScELURAiNuLNO0S1aa7ijfhudATSp5Lm3bO+Z4pMGnP
+         wI9qZLBEUjPdePkJeS2wXEtks2M5dZAPXhWml+BgoUe9yJbn8R3ab6A4I/tfF9SCB9VT
+         rt9w==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790639183; x=1791243983; darn=lists.linux.dev;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CMxKgsjn1fg7B3Ca3OwqQwP+r38CuhXvirJYtgLgTps=;
+        b=UfuDRFZoqUE/AZDARbFxvT+Y0LI3/++XjH3gaXIL9t2a4aiLxRBAzH/UZtiLZOAZ19
+         o003zan2t9CNw6zOJ28AQcVU0RJsckLkxyY4QJfjFoPqqdc1G/XDHqXlrKn0ajGafc4T
+         kBmxYlg2+8ThP3Rpo88maJdEPqNS5WMX4+7ATorHHJ4Si/RdKjSLP08QCH2FFyytpFm9
+         0tPG+vpwVgcqLTyIJNVimcbRpHPL1TkXfsI7eF2ppxQP8ZPckPlcYYNtT6TRgLiVAjJa
+         AeFvUo7RQgscEIzhSTx4QPYkrswLLD3VomauJanrB2sbclZtlyO7SMpM/ueZS6cwscAf
+         OL5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790639183; x=1791243983;
+        h=content-type:cc:to:subject:message-id:date:from:mime-version
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=CMxKgsjn1fg7B3Ca3OwqQwP+r38CuhXvirJYtgLgTps=;
+        b=lLO+PN/LZbFYSjxd0vbnGhw++6ds3oi2boRyeM9z8WzuMlSZQST4XxM1CwB9b41EaN
+         /2LG8xEg6jES3ajLXmnrWy3qq6xiV8UFJ67B4ekypUStEJT1GLuQemiHJB27G1e9vPV7
+         DwJZsw5BNWWV038fjUDDhRXndxiJmMy7eso7zn+lxqwbfgT9q3f9S/wJEe3eYItc/rVK
+         WbIOA1mKOfT3gsTsRms6PyyEtWpdatpklgES0C9FMglpYLUhU9O2AdSj+zNcmkCCiIVA
+         1knfvuSRvvlijWULnEwMtdJ5Z9vAZSw0ujK+2wsUl6io2kyBQ3Xdif6DOgKbnyDUnSTO
+         tjiQ==
+X-Forwarded-Encrypted: i=1; AKwUvBySQQDGa8qhVnstFZGHsSrwN1kjGLvv0jh5ad/iGBsdMkhlwdZVjVCbA5B7rZisl5Ho9Mfg@lists.linux.dev
+X-Gm-Message-State: AFq9FYINyZnhmGJJZSDzWuHuc4lECHk2NaWSZIIHMLa6dd4gYU82yQVs
+	xkXC6igPvymc/QfLGWrc5j1lR3ZU+EJtz1Nnv3ApCLFzwqVglWoqV3+KioBb/BD6nS43/aB4Bq+
+	z4428gQBmohbUk1iU+HY4xaW5N9i56jU=
+X-Gm-Gg: AYBFou0bMrOI+EXIl7XKMzwqLrBhimb8LL0bedlr6Ra3afaueAyWlSkdhWsCuwph1Bn
+	vbEfyo3bbrwnbKtGWyK0wBWBRkxEGEvNqwo/M+SjbEK8HclDV26xToRdQJlWKjL7RizftF4Dpmt
+	Wr5uOnqFXsFXw1aDq+2IgiiBp1wuTqheTBuHvex1Sv98Jsd1GaxWGLvrfSqcIMsuZSHyW17jaT8
+	e2+nnMNxZD7vsDbjTvx2jWIl9QqI5ZBibl8eFqylqKRcFQT1R+eIer5xgKz4ftWFaKbBYDEe75c
+	wqMwTgU1IfU8nPpoTzL8/KXO55PmKZz4gwP8Di9KKgQ5PSuRvWlYAznptkeSKuqdsHLP7EQdxVD
+	ikZYkM++D4veomS737MXPnQB+xhY8A9xBHSgZP6a89vbZc6GWTygPL3QsmE3mKMi4mYlGYaA=
+X-Received: by 2002:a2e:be9f:0:b0:3a5:f041:d7c4 with SMTP id
+ 38308e7fff4ca-3a63c0f46admr39352421fa.17.1790639183488; Mon, 28 Sep 2026
+ 16:46:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Florian Fainelli <florian.fainelli@broadcom.com>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, 
- linux-rpi-kernel@lists.infradead.org, 
- Javier Martinez Canillas <javierm@redhat.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, dri-devel@lists.freedesktop.org, 
- linux-kernel@vger.kernel.org, Jessica Zhang <jesszhan0024@gmail.com>, 
- Albert Esteve <aesteve@redhat.com>, linux-arm-kernel@lists.infradead.org, 
- Jonas Karlman <jonas@kwiboo.se>, Bill Wendling <morbo@google.com>, 
- David Airlie <airlied@gmail.com>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- devicetree@vger.kernel.org, bpf@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>, Simona Vetter <simona@ffwll.ch>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, llvm@lists.linux.dev, 
- Justin Stitt <justinstitt@google.com>, Conor Dooley <conor+dt@kernel.org>, 
- Nathan Chancellor <nathan@kernel.org>
-To: Maxime Ripard <mripard@kernel.org>
-In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
-Message-Id: <179062735517.517724.11732368847046080988.robh@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf
- generic panel binding
+From: omer zalman <omerzalman42@gmail.com>
+Date: Mon, 28 Sep 2026 19:46:11 -0400
+X-Gm-Features: AclHuK_QFUDt0E9-fjXxsSQFCCr3a-hEiLPNvrKPEYlNc4wywi6m7hPtYcI0vtM
+Message-ID: <CAGLNFZfd65P3C7wd=ShsG3BwVqx56-3FTXRARvFXVoXEJmj6Lg@mail.gmail.com>
+Subject: [PATCH] scripts: gen_compile_commands: accept object file paths
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: nsc@kernel.org, ndesaulniers@google.com, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/mixed; boundary="000000000000740802065c93ac3a"
 
+--000000000000740802065c93ac3a
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, 28 Sep 2026 18:22:01 +0200, Maxime Ripard wrote:
-> Most MIPI-DSI panel drivers follow an identical pattern: acquire
-> regulators and GPIOs, perform a reset pulse with specific timing,
-> send a vendor-supplied sequence of DSI commands, then enable the
-> display. The only truly panel-specific part is the init sequence
-> and power-on/off timing.
-> 
-> The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
-> with a single generic driver whose panel-specific behavior is
-> provided by BPF programs loaded from userspace at runtime,
-> following the HID-BPF model. This enables new panel support
-> without kernel patches.
-> 
-> Panel DT nodes use a two-entry compatible with the panel-specific
-> string first and "panel-mipi-dsi-bpf" as fallback. The generic
-> driver matches on the fallback, while the first compatible is used
-> to identify which BPF program to load.
-> 
-> Six normalized optional regulator supplies cover ~95% of existing
-> MIPI-DSI panels: vcc (IC core), iovcc (I/O interface), avdd/avee
-> (positive/negative analog), and elvdd/elvss (OLED EL driver).
-> 
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> ---
->  .../bindings/display/panel/panel-mipi-dsi-bpf.yaml | 184 +++++++++++++++++++++
->  1 file changed, 184 insertions(+)
-> 
+The command-line help lists *.o among supported path arguments,
+but main() rejects every object path as an unknown file type. Map
+an object path to its matching .cmd file so the documented input
+produces a compile database entry.
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Signed-off-by: Omer Zalman <omerzalman42@gmail.com>
 
-yamllint warnings/errors:
+The exact git-format-patch file is attached because Gmail's web
+composer removes tabs from inline diffs.
 
-dtschema/dtc warnings/errors:
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (elida,kd35t133): 'dsi-lanes', 'height-mm', 'mode-lpm', 'mode-video', 'mode-video-burst', 'panel-timing', 'vcc-supply', 'width-mm' do not match any of the regexes: '^pinctrl-[0-9]+$'
-	from schema $id: http://devicetree.org/schemas/display/panel/elida,kd35t133.yaml
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (elida,kd35t133): compatible: ['elida,kd35t133', 'panel-mipi-dsi-bpf'] is too long
-	from schema $id: http://devicetree.org/schemas/display/panel/elida,kd35t133.yaml
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (elida,kd35t133): 'vdd-supply' is a required property
-	from schema $id: http://devicetree.org/schemas/display/panel/elida,kd35t133.yaml
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (boe,bf060y8m-aj0): 'dsi-lanes', 'iovcc-supply', 'mode-video', 'panel-timing' do not match any of the regexes: '^pinctrl-[0-9]+$'
-	from schema $id: http://devicetree.org/schemas/display/panel/boe,bf060y8m-aj0.yaml
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (boe,bf060y8m-aj0): compatible: ['boe,bf060y8m-aj0', 'panel-mipi-dsi-bpf'] is too long
-	from schema $id: http://devicetree.org/schemas/display/panel/boe,bf060y8m-aj0.yaml
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (boe,bf060y8m-aj0): 'vci-supply' is a required property
-	from schema $id: http://devicetree.org/schemas/display/panel/boe,bf060y8m-aj0.yaml
-Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.example.dtb: panel@0 (boe,bf060y8m-aj0): 'vddio-supply' is a required property
-	from schema $id: http://devicetree.org/schemas/display/panel/boe,bf060y8m-aj0.yaml
+--000000000000740802065c93ac3a
+Content-Type: application/octet-stream; 
+	name="04-compile-commands-object-input.patch"
+Content-Disposition: attachment; 
+	filename="04-compile-commands-object-input.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_mulwblys0>
+X-Attachment-Id: f_mulwblys0
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.kernel.org/project/devicetree/patch/20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+RnJvbSBmOGRkY2EwYzMwMzk3OGEyNzMxNGM2MjMxY2ExMTliNmIyYzE2MGZhIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBPbWVyIFphbG1hbiA8b21lcnphbG1hbjQyQGdtYWlsLmNvbT4K
+RGF0ZTogU3VuLCAyNyBTZXAgMjAyNiAwODo0MToxMCAtMDQwMApTdWJqZWN0OiBbUEFUQ0hdIHNj
+cmlwdHM6IGdlbl9jb21waWxlX2NvbW1hbmRzOiBhY2NlcHQgb2JqZWN0IGZpbGUgcGF0aHMKVG86
+IE5hdGhhbiBDaGFuY2VsbG9yIDxuYXRoYW5Aa2VybmVsLm9yZz4KQ2M6IE5pY29sYXMgU2NoaWVy
+IDxuc2NAa2VybmVsLm9yZz4sIE5pY2sgRGVzYXVsbmllcnMgPG5kZXNhdWxuaWVyc0Bnb29nbGUu
+Y29tPiwgbGx2bUBsaXN0cy5saW51eC5kZXYsIGxpbnV4LWtidWlsZEB2Z2VyLmtlcm5lbC5vcmcs
+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcKCkZyb206IE9tZXIgWmFsbWFuIDxvbWVyemFs
+bWFuNDJAZ21haWwuY29tPgoKVGhlIGNvbW1hbmQtbGluZSBoZWxwIGxpc3RzICoubyBhbW9uZyBz
+dXBwb3J0ZWQgcGF0aCBhcmd1bWVudHMsCmJ1dCBtYWluKCkgcmVqZWN0cyBldmVyeSBvYmplY3Qg
+cGF0aCBhcyBhbiB1bmtub3duIGZpbGUgdHlwZS4gTWFwCmFuIG9iamVjdCBwYXRoIHRvIGl0cyBt
+YXRjaGluZyAuY21kIGZpbGUgc28gdGhlIGRvY3VtZW50ZWQgaW5wdXQKcHJvZHVjZXMgYSBjb21w
+aWxlIGRhdGFiYXNlIGVudHJ5LgoKU2lnbmVkLW9mZi1ieTogT21lciBaYWxtYW4gPG9tZXJ6YWxt
+YW40MkBnbWFpbC5jb20+Ci0tLQogc2NyaXB0cy9jbGFuZy10b29scy9nZW5fY29tcGlsZV9jb21t
+YW5kcy5weSB8IDIgKysKIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMoKykKCmRpZmYgLS1n
+aXQgYS9zY3JpcHRzL2NsYW5nLXRvb2xzL2dlbl9jb21waWxlX2NvbW1hbmRzLnB5IGIvc2NyaXB0
+cy9jbGFuZy10b29scy9nZW5fY29tcGlsZV9jb21tYW5kcy5weQppbmRleCA4ZDE0YjgxLi5kZWNm
+ODI0IDEwMDY0NAotLS0gYS9zY3JpcHRzL2NsYW5nLXRvb2xzL2dlbl9jb21waWxlX2NvbW1hbmRz
+LnB5CisrKyBiL3NjcmlwdHMvY2xhbmctdG9vbHMvZ2VuX2NvbXBpbGVfY29tbWFuZHMucHkKQEAg
+LTIwMyw2ICsyMDMsOCBAQCBkZWYgbWFpbigpOgogICAgICAgICAgICAgY21kZmlsZXMgPSBjbWRm
+aWxlc19pbl9kaXIocGF0aCkKICAgICAgICAgZWxpZiBvcy5wYXRoLmJhc2VuYW1lKHBhdGgpID09
+ICdsaWJnY2MuYSc6CiAgICAgICAgICAgICBjbWRmaWxlcyA9IFtdCisgICAgICAgIGVsaWYgcGF0
+aC5lbmRzd2l0aCgnLm8nKToKKyAgICAgICAgICAgIGNtZGZpbGVzID0gW3RvX2NtZGZpbGUocGF0
+aCldCiAgICAgICAgIGVsaWYgcGF0aC5lbmRzd2l0aCgnLmEnKToKICAgICAgICAgICAgIGNtZGZp
+bGVzID0gY21kZmlsZXNfZm9yX2EocGF0aCwgYXIpCiAgICAgICAgIGVsaWYgcGF0aC5lbmRzd2l0
+aCgnbW9kdWxlcy5vcmRlcicpOgo=
+--000000000000740802065c93ac3a--
