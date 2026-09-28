@@ -1,85 +1,117 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pz2-f42.google.com (mail-pz2-f42.google.com [74.125.228.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325903264E7;
-	Mon, 28 Sep 2026 03:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BA41344021
+	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 04:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790567367; cv=none; b=EeVocNuzXBiwmRHPYbTPv4OGAVbEabzIowWBs3jnsChlH0JoeWKFzCUMLzX47mIkBnXk6JX9yqcllhnuu+Z6+uFlmyzcomWRG/4UaZ1sEckygjDhSSoy6xYAbOkDPhM/yIZ9Lt2MpoUctMyzuM6jiWGmoYYjzlg2aTnLRRAFCM4=
+	t=1790568755; cv=none; b=hko0JxpHxX14dx9Kqh7vcsbby2KQT9Kf3zMIMwCJ2a9lkIsJY2zRn26e9c5eQpZ8twZrokglU1DqNJRsTxbu2rGeK7S3AkamV4H5qOU0e/nV6NhpTnZyugQgzTbkYYCSe64DXZ+8qZAwAgKaBaGL6uoGNhkRXaCqAjTxkJBbhsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790567367; c=relaxed/simple;
-	bh=y755B27tkopzUeTAkO7I065UxHoDIem1o51RhqnDwok=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=SHdPNboeBVle8lQpuZK7AC2YbrXXFawR0jiHs9cgcKNPfleveu1axfoFcZ/iFCJCYgTK+9Uat1T7+eryKaJv0fUNMer6wrm6cE9BQpL35+PVNGd0sLYlaYwRmWXQoDl3KtbrAlEGG9Zu/4cdEO9BsqNtAqVEBcULlqURnxN+JVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TuJAr174; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790568755; c=relaxed/simple;
+	bh=/sOtv+Jy0VfC/zdAlOtrQTC1fDfCRtKdJKUcnFIpFsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q+Vnfym3aMztj/Kq6KRPLIzS6dH9ZiRNuXU8tbep9PC8izyH4UamFd3h1cr45Rky33WAmPnsbIMoAjbqUU4zEYWO72qw3j3FoCzaUtHMBeGGGwc3ZqhhReIGwpKNUK3Ns4mgrBP5vG9sNAbjVhYhhZcnItfMw0IrF6cDYQqnyfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=bOolv6g2; arc=none smtp.client-ip=74.125.228.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TuJAr174"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790567366; x=1822103366;
-  h=date:from:to:cc:subject:message-id;
-  bh=y755B27tkopzUeTAkO7I065UxHoDIem1o51RhqnDwok=;
-  b=TuJAr1741nM+BDGlfPF3tFbV5+m7dO/5IHF1Ig9W2f5m01xUa7NkknXo
-   xf4/Uj3y+aLArVIF4vJrXA1MADK+/FTf1zS6/YbBJt5TgfkKmbTFxEnDs
-   6J6DKdpGXbOvylci27xEmBQkzrI9s7JfZIG5gc0cG7ivU+XJIuHxmAF42
-   xglec40ic4J+TK0jHyXhKEgzonM+GFgTLQ9J3a8ORF1xhrSUnADEFdOSO
-   241V+oKKoG9AaVL0ZHsJ1+1aLTW6BxSPcwhU+bo4wyeRe4PwbOB7+fUNF
-   j1zk0DBpX9ItWgroCtareqCD6nms/z88Y2nO4Ylcyv/iYx2IdV+uh1BrA
-   w==;
-X-CSE-ConnectionGUID: g4As94v3RVijctnE8vwlpQ==
-X-CSE-MsgGUID: oLKT41tSTDShSMjoTe7gfA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11918"; a="78819607"
-X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
-   d="scan'208";a="78819607"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2026 20:49:25 -0700
-X-CSE-ConnectionGUID: 4mHCk4lMRS6/ezRLn9mhtw==
-X-CSE-MsgGUID: nK+NtNdrR023vnN8+AI98g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
-   d="scan'208";a="279659353"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 27 Sep 2026 20:49:24 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xB2Mj-00000000NTq-0k8t;
-	Mon, 28 Sep 2026 03:49:21 +0000
-Date: Mon, 28 Sep 2026 11:48:55 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
- Nicolas Schier <n.schier@fritz.com>
-Subject: [kbuild:kbuild-next-speedups 10/21] llvm-objcopy: error:
- 'vmlinux.unstripped': section '.modinfo' not found
-Message-ID: <202609281114.YdStyybd-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="bOolv6g2"
+Received: by mail-pz2-f42.google.com with SMTP id 41be03b00d2f7-cc797656e69so571560a12.0
+        for <llvm@lists.linux.dev>; Sun, 27 Sep 2026 21:12:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1790568753; x=1791173553; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bXDScwdKbt28kFhjEDV73RhbSo3l7UPBxj8GidcV6Ck=;
+        b=bOolv6g2Bz5UsO+xkIeBe5dvnlXBim51h5QxjEjuVuM/lqLtwxh5mwqVcLNZ0m374W
+         rie/b5PNH0rskkbvbej74KMW3NwDrY8I/q5wI1zjXGG3Dzkis+F3Rik03PXR6rGALI+x
+         CkjZlqkkSIOstw/ujL6uGziiLIrIcNC4lrHzo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790568753; x=1791173553;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bXDScwdKbt28kFhjEDV73RhbSo3l7UPBxj8GidcV6Ck=;
+        b=W+ddXDgSNXm8mI51UyiozB46iWETXCtoU5M0obx8iKHVSKMgGRiMPuktOQtahW2uvU
+         YPZAX5azWGEPyGA6xJJbSzii9y5PZQy9C6mat5bqIQbIxCu+xkT/RU1Xs1V79coaCLjf
+         T4Mih/Zy5WqcC9ywNIRDxxngnY6jio0x72Dd5IIMiucckXLdfaxF8nN0tWrKox/g2GVv
+         vZlEMLIefB1Okb38WWgkNN2jwjm+Kt2OKA05BhRacBxKWNX4Ixn4qYqy7FBLKEKjj4Bf
+         EuZf04f8yHQ+k78sqjkULZu/s6tE436gEiEZtwgu/2AXquQDgNH0UQBrJY1sjUYFPUJ4
+         V7hA==
+X-Forwarded-Encrypted: i=1; AKwUvBysj4LiyQXe6e0H/SxsVHBPAmpdZTY/4HuzmQapl0736rilFHdteLLbj3aJNwnqsBts3c2m@lists.linux.dev
+X-Gm-Message-State: AFq9FYLO9Q85XIIbr2Ii79MGWAQTnJYUWcwN3bwvmdjcIwo8OEOghbLs
+	c5BttpgcHWfep22e9tuds9nlsIxAzSuzSCDM+Fa7Nq0uo9OCQ24t29Qj+2tXH3LOmg==
+X-Gm-Gg: AYBFou3xyH/4B0JrT1QJtdFKbnAQrzD1arRE4MMPPNSATUAOC9sU6Tmh0SYgLyjZET8
+	nT1eKcAcpNAz+PdjSTkCfFOp9R5ApOELK1RpztJTtb2ZxjIH/tgIxUBAmw+wdiZd2lnwuOJvVF4
+	AKMRTpAiMuKsi6NjzURsUz4839UBEDBfn1PFADcdTtoV39CDQQtyrVgrWpu5EQw+WoxIQNF0A1T
+	XM0h8s351XkZA6V7hlfjTe4X0Soe93KodvSz59BKyDp0QFCscy8EuvYmUXmLveF6FWaIiH4L4v4
+	K2EToWXSZnAVA/iOXFGBud6kh6Wyc3oJRtNokmADkgqoFYuw+O3M0PKQO9HiI4SrjWMOIqSfsA8
+	vgNeaPvFOU2xEtwaerHs2z4acu9c5Yqx5fqf445K+rM0oDp6IH92HztmChnRNfYQpC7S611A72Q
+	5xgYBtJrvlD48Fy7ECb0Sb0sxUYZrQ2Oq4tpwwlm2I5kXX142vSrWd+XtWnIJhyqlz8dWSnwCBH
+	knm2756sSexowUCT28nxQTdT2RlpvFwUPiKifw=
+X-Received: by 2002:a17:90b:1c82:b0:3a0:7d97:37c1 with SMTP id 98e67ed59e1d1-3a098aaba1dmr10891588a91.59.1790568752817;
+        Sun, 27 Sep 2026 21:12:32 -0700 (PDT)
+Received: from google.com ([2a00:79e0:2031:6:fdbe:318b:98fe:bd96])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3a0bec30aaasm17381254a91.15.2026.09.27.21.12.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Sep 2026 21:12:32 -0700 (PDT)
+Date: Mon, 28 Sep 2026 13:12:24 +0900
+From: Sergey Senozhatsky <senozhatsky@chromium.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Minchan Kim <minchan@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org, 
+	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, 
+	Nick Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Jaegeuk Kim <jaegeuk@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	Phillip Lougher <phillip@squashfs.org.uk>, Sungguk <sungguk.na@samsung.com>, 
+	Jaehoon Chung <jh80.chung@samsung.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net, 
+	linux-crypto@vger.kernel.org
+Subject: Re: [PATCH RFC 1/9] lib/lz4: import upstream LZ4 sources verbatim
+Message-ID: <arnosKlQYVIdmTR7@google.com>
+References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
+ <CGME20260925113452eucas1p170bfdb34dfbf670a14a6f8f0c2f5094a@eucas1p1.samsung.com>
+ <20260925-lz4-vendor-upstream-v1-1-1c7ffbe21c4b@samsung.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260925-lz4-vendor-upstream-v1-1-1c7ffbe21c4b@samsung.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next-speedups
-head:   a98db7418797bc27bef53c861b97ac748f598414
-commit: 5fe4dd59664105a9ea1a9468aa7391806b80364a [10/21] kbuild: do not allocate .modinfo in vmlinux
-config: arm-randconfig-1002-20260928 (https://download.01.org/0day-ci/archive/20260928/202609281114.YdStyybd-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5f609f950d2e80addf5566623013db68394334db)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260928/202609281114.YdStyybd-lkp@intel.com/reproduce)
+On (26/09/25 13:27), Michal Wilczynski wrote:
+[..]
+> +#ifndef LZ4_FAST_DEC_LOOP
+> +#  if defined __i386__ || defined _M_IX86 || defined __x86_64__ || defined _M_X64
+> +#    define LZ4_FAST_DEC_LOOP 1
+> +#  elif defined(__aarch64__) && defined(__APPLE__)
+> +#    define LZ4_FAST_DEC_LOOP 1
+> +#  elif defined(__aarch64__) && !defined(__clang__)
+> +     /* On non-Apple aarch64, we disable this optimization for clang because
+> +      * on certain mobile chipsets, performance is reduced with clang. For
+> +      * more information refer to https://github.com/lz4/lz4/pull/707 */
+> +#    define LZ4_FAST_DEC_LOOP 1
+> +#  else
+> +#    define LZ4_FAST_DEC_LOOP 0
+> +#  endif
+> +#endif
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609281114.YdStyybd-lkp@intel.com/
-
-Note: the kbuild/kbuild-next-speedups HEAD a98db7418797bc27bef53c861b97ac748f598414 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
->> llvm-objcopy: error: 'vmlinux.unstripped': section '.modinfo' not found
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I just checked https://github.com/lz4/lz4/pull/707 and it seems that
+LZ4_FAST_DEC_LOOP is enabled on aarch64 now, but we still disable it.
+Am I missing something?
