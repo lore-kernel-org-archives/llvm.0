@@ -1,109 +1,85 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2FC3368B0
-	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 00:54:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 325903264E7;
+	Mon, 28 Sep 2026 03:49:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790556901; cv=none; b=B5mbeRiSHP2tLOvIBXzkJIkzR2Q6lPsVYpCeszLMvX9RVbpZ+18+ojBMDr+YEvtU7LJgixCtBKW2eohPIXrDnxM6l/AbwsW2UI1qIWxBdV8meEr7fMrR0SQKYTG3zw21u/kHCQeKHZ70zTvONb/sq3aZUqqFJpDOJL1vK0+8W6U=
+	t=1790567367; cv=none; b=EeVocNuzXBiwmRHPYbTPv4OGAVbEabzIowWBs3jnsChlH0JoeWKFzCUMLzX47mIkBnXk6JX9yqcllhnuu+Z6+uFlmyzcomWRG/4UaZ1sEckygjDhSSoy6xYAbOkDPhM/yIZ9Lt2MpoUctMyzuM6jiWGmoYYjzlg2aTnLRRAFCM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790556901; c=relaxed/simple;
-	bh=94q9IW61AIF+y+RIMJqITcbS5KT1KHCCdYJJazbRI1A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LunHA3rPaqtvZGpVCUdpF4rP4/VpRxUb/OhrtD0Pf5VY9pE8r8ME4iXcsL23zxZIlkGPYUUloXULQ3XBBCLqEbVV6mWYjgB8vcJCROCDzDWq36QJASJ+naaXhcciUctNA2fuORFdthwKSGy/eag1dQ7EUw/zVGOtnLpiXhMNx8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.170])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4htN9f5XrHzKHMPk
-	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 08:54:14 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.112])
-	by mail.maildlp.com (Postfix) with ESMTP id 084934056E
-	for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 08:54:48 +0800 (CST)
-Received: from [10.67.110.36] (unknown [10.67.110.36])
-	by APP1 (Coremail) with UTF8SMTPA id cCh0CgA3sPrWurlqyimdBw--.21204S2;
-	Mon, 28 Sep 2026 08:54:47 +0800 (CST)
-Message-ID: <124497c6-806d-4b64-9d1a-bb5d35189fbb@huaweicloud.com>
-Date: Mon, 28 Sep 2026 08:54:46 +0800
+	s=arc-20240116; t=1790567367; c=relaxed/simple;
+	bh=y755B27tkopzUeTAkO7I065UxHoDIem1o51RhqnDwok=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=SHdPNboeBVle8lQpuZK7AC2YbrXXFawR0jiHs9cgcKNPfleveu1axfoFcZ/iFCJCYgTK+9Uat1T7+eryKaJv0fUNMer6wrm6cE9BQpL35+PVNGd0sLYlaYwRmWXQoDl3KtbrAlEGG9Zu/4cdEO9BsqNtAqVEBcULlqURnxN+JVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TuJAr174; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TuJAr174"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790567366; x=1822103366;
+  h=date:from:to:cc:subject:message-id;
+  bh=y755B27tkopzUeTAkO7I065UxHoDIem1o51RhqnDwok=;
+  b=TuJAr1741nM+BDGlfPF3tFbV5+m7dO/5IHF1Ig9W2f5m01xUa7NkknXo
+   xf4/Uj3y+aLArVIF4vJrXA1MADK+/FTf1zS6/YbBJt5TgfkKmbTFxEnDs
+   6J6DKdpGXbOvylci27xEmBQkzrI9s7JfZIG5gc0cG7ivU+XJIuHxmAF42
+   xglec40ic4J+TK0jHyXhKEgzonM+GFgTLQ9J3a8ORF1xhrSUnADEFdOSO
+   241V+oKKoG9AaVL0ZHsJ1+1aLTW6BxSPcwhU+bo4wyeRe4PwbOB7+fUNF
+   j1zk0DBpX9ItWgroCtareqCD6nms/z88Y2nO4Ylcyv/iYx2IdV+uh1BrA
+   w==;
+X-CSE-ConnectionGUID: g4As94v3RVijctnE8vwlpQ==
+X-CSE-MsgGUID: oLKT41tSTDShSMjoTe7gfA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11918"; a="78819607"
+X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
+   d="scan'208";a="78819607"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2026 20:49:25 -0700
+X-CSE-ConnectionGUID: 4mHCk4lMRS6/ezRLn9mhtw==
+X-CSE-MsgGUID: nK+NtNdrR023vnN8+AI98g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,127,1787036400"; 
+   d="scan'208";a="279659353"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 27 Sep 2026 20:49:24 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xB2Mj-00000000NTq-0k8t;
+	Mon, 28 Sep 2026 03:49:21 +0000
+Date: Mon, 28 Sep 2026 11:48:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
+ Nicolas Schier <n.schier@fritz.com>
+Subject: [kbuild:kbuild-next-speedups 10/21] llvm-objcopy: error:
+ 'vmlinux.unstripped': section '.modinfo' not found
+Message-ID: <202609281114.YdStyybd-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf llvm: Fix memory leak of args->fileloc in
- symbol__disassemble_llvm()
-To: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: "Steinar H. Gunderson" <sesse@google.com>,
- Namhyung Kim <namhyung@kernel.org>, james.clark@linaro.org,
- xueshuai@linux.alibaba.com, Adrian Hunter <adrian.hunter@intel.com>,
- Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
- Li Huafei <lihuafei1@huawei.com>, Kim Phillips <kim.phillips@arm.com>,
- Mark Rutland <mark.rutland@arm.com>, Ingo Molnar <mingo@redhat.com>,
- Bill Wendling <morbo@google.com>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Zecheng Li <zli94@ncsu.edu>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
- Ian Rogers <irogers@google.com>
-References: <20260917125802.1198419-1-wutengda@huaweicloud.com>
- <CAP-5=fVOdeA-cf1NRJxQ_YFeYKu3F1PJ3ykXR5Gtx7r0MtsUtA@mail.gmail.com>
- <arZFMCzEiHbTL6IK@x2> <arZF_Mphl3Rim0Gw@x2>
-Content-Language: en-US
-From: Tengda Wu <wutengda@huaweicloud.com>
-In-Reply-To: <arZF_Mphl3Rim0Gw@x2>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:cCh0CgA3sPrWurlqyimdBw--.21204S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GF17Aw45Gr47trWUtr18Krg_yoWkWrb_GF
-	1I9r1DCw47Ga12ya1qkrW2vrZrGF1ktryrAw4IgFs7Z3s3AFWkCF1xXFyrCw1jqwsFgr9x
-	GrySvF9FvryavjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbxkYFVCjjxCrM7AC8VAFwI0_Xr0_Wr1l1xkIjI8I6I8E6xAIw20E
-	Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwV
-	A0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x02
-	67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
-	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
-	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
-	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
-	s2-5UUUUU==
-X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next-speedups
+head:   a98db7418797bc27bef53c861b97ac748f598414
+commit: 5fe4dd59664105a9ea1a9468aa7391806b80364a [10/21] kbuild: do not allocate .modinfo in vmlinux
+config: arm-randconfig-1002-20260928 (https://download.01.org/0day-ci/archive/20260928/202609281114.YdStyybd-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5f609f950d2e80addf5566623013db68394334db)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260928/202609281114.YdStyybd-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609281114.YdStyybd-lkp@intel.com/
 
-On 2026/9/25 17:59, Arnaldo Carvalho de Melo wrote:
-> On Fri, Sep 25, 2026 at 11:56:04AM +0200, Arnaldo Carvalho de Melo wrote:
->> On Mon, Sep 21, 2026 at 11:36:08AM -0700, Ian Rogers wrote:
->>> On Thu, Sep 17, 2026 at 5:58 AM Tengda Wu <wutengda@huaweicloud.com> wrote:
->>>> In symbol__disassemble_llvm(), after calling llvm_addr2line(), if the
->>>> subsequent disasm_line__new() fails, the code directly jumps to 'err'
->>>> without freeing args->fileloc, leading to a memory leak.
->>
->>>> Fix this by explicitly calling free(args->fileloc) before jumping to
->>>> the error handling path when disasm_line__new() fails.
->>
->>>> Fixes: 048856817888 ("perf annotate: LLVM-based disassembler")
->>>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
->>
->>> Reviewed-by: Ian Rogers <irogers@google.com>
->>
->> I replaced the free() with a zfree(&), minor.
-> 
-> I understand why you didn't use zfree(), to make it consistent with the
-> other free, will keep it and leave the zfree() for later.
-> 
-> Sorry about the noise,
+Note: the kbuild/kbuild-next-speedups HEAD a98db7418797bc27bef53c861b97ac748f598414 builds fine.
+      It only hurts bisectability.
 
-No worries at all, thanks for applying the fix.
+All errors (new ones prefixed by >>):
 
-Best regards,
-Tengda
+>> llvm-objcopy: error: 'vmlinux.unstripped': section '.modinfo' not found
 
-> 
-> - Arnaldo
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
