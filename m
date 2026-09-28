@@ -1,58 +1,56 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 246B54EF13A;
-	Mon, 28 Sep 2026 19:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA01353A7F;
+	Mon, 28 Sep 2026 19:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790624086; cv=none; b=JtZLcRgMfFpMeqP4XGHc5XPhMFWwsEmbN6z8B2jiOQwpHZh10cBToe8uHGJiSLJgBPPFLFomNZxGVMvrP8cXHs71zJsbN1IcgVMRqf46/C3BT19Y6A+C7fCiE1cHEAKseWhqYNL3zBmD0zN9TCwFe2/nl6rPRp+SmB7hGaYRBY0=
+	t=1790624949; cv=none; b=Y2ZMWy0w7bD3XjWrnei81/ix8l/Ou547lY1rMvQZYeVEzqMdnvU38z/s+mYrzS9UeWmK2jCUeOGA1VmdSe0h4JRiD8gaxePqq8U7WjdnKtE985Wa/xM3PGe7igNCn+Z8RNoZ2rSSHy6Or/mJk6mAQuKY2R3jNbMKMWT3kq9ACTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790624086; c=relaxed/simple;
-	bh=V/YXGiGxhcBrgsAqqJgs/KU2Y2HCiZumCGJxED0jrQ4=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bw4o//fGdbzIaMsKPK+7Zk6j+3yWzqEO8bImxg6G3+Dpw9NIFATs7eObQNN1KqTy3/jXGAszxVJxhX8VIw/7s+0o0MpDaHBSZkR20f4/XkuywZU9NTa874eCcdprIsJkbPLN1f+Qz8N6f7oIHh6qu3Iicc2qCB0QU86uIrkzyK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TQ1KNE5M; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1790624949; c=relaxed/simple;
+	bh=+n0gYPk+JRkIbFK1wIkwVMj03UuedrHR7yRES1xA1fs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HG/U3AAx5RchT9ukSC0Qvv5CQucFUO4Ln8pfeeJFZi9rP4+PkrrotGe6tq7x4STcZxc6wM/ek2vRiJUl5ymqtxSdHttrROwSk0XeW/Jyy7VMODkD7pZdkvhVyFUGd+rwIW6FiDfNnBW7lJgxB4QRoCVdpr646AGBCIUArGC8t48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K1UpVHdb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TQ1KNE5M"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790624084; x=1822160084;
-  h=date:from:cc:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=V/YXGiGxhcBrgsAqqJgs/KU2Y2HCiZumCGJxED0jrQ4=;
-  b=TQ1KNE5MEJ5jDyNE0MFsZ9tJB+OJaCvEBlTLLpQAKrGZkd6iVc4TQEtz
-   5uljMjaprDbdMNhHi1jhLBIn3hFNyQY3ur650CFXMUY6jTqrhRb7FUOVr
-   zID/EClYCsx831Sf53i5l+cwudXZfKI2a/QXlEqextuldf0W5hSaCNGXp
-   B11759gzlGtaSZ/DOT6ASp66BXNqtWXfOawE6ooI15LA1DfHGjEJDKJVJ
-   gp7dtNhw8D/SgRekLHux8oYZVI+kmCm43anotRW8uaf+lxdujHUhMmm8A
-   Ltu6/PPY9+9lnJXnDZgYGL4AstnQgCXNQSy2qsAwjkUVGJEkUteTuD48U
-   g==;
-X-CSE-ConnectionGUID: QUnVGAtoT0ilKsoJOsJVsQ==
-X-CSE-MsgGUID: QEcW+bSiT0iptVtXMw45bA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11919"; a="113120740"
-X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
-   d="scan'208";a="113120740"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2026 12:34:43 -0700
-X-CSE-ConnectionGUID: hHZiQKJ0T1C6dni9FOtN2A==
-X-CSE-MsgGUID: vKJdrH/RRh6W29E7s4fodA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
-   d="scan'208";a="304644055"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 28 Sep 2026 12:34:42 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xBH7Y-00000000OP1-35U9;
-	Mon, 28 Sep 2026 19:34:40 +0000
-Date: Tue, 29 Sep 2026 03:33:54 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: gpiolib: annotate struct acpi_gpio_mapping with __counted_by_ptr
-Message-ID: <202609290353.Ok95CKe3-lkp@intel.com>
-References: <202609290353.Ok95CKe3-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K1UpVHdb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9F91F000FF;
+	Mon, 28 Sep 2026 19:49:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790624947;
+	bh=jdHpFCmsfbMWILh+4zQbXzTgvExVPPbHVQNyp37fwu8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=K1UpVHdbtKLuk0b6PGJwnkcMiQQc3FOtgp5i3jPSjc03nPPVWKJdRDDdCcoeo/JYz
+	 ab6rp54bO+xE+cQVGENaJOpeQHykZTq08O5djVbP1x6QarrPDCUT6usoart9BrVN8P
+	 exFxTaGfz1qKavaskz0rXWSPeg8og50p0Yd/s1iUTGKI0czkfywCXDWKIZQH9p/Kyb
+	 U+SNhQ4ngEIfBnXPjoH1p7KE++RQn4cu3SYKv52+Aud9Gjy8+4689hKOj+Xw1S4OAy
+	 KbiSdHV0nazW5sHdc5wG7ljabqYltoksk0H4xkxQGCHQwgr1RlxClJ9oaGn3DC6olh
+	 jRna+5Lr3DITQ==
+Date: Mon, 28 Sep 2026 21:48:58 +0200
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Neil Armstrong <neil.armstrong@linaro.org>
+Cc: Maxime Ripard <mripard@kernel.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+Message-ID: <arrAqg5n87INTHE6@beelink>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
+ <arqhwHiVf00j94J7@beelink>
+ <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,62 +59,157 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202609290353.Ok95CKe3-lkp@intel.com>
+In-Reply-To: <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
 
-Hi Bill,
+On Sep 28 2026, Neil Armstrong wrote:
+> On 9/28/26 19:24, Benjamin Tissoires wrote:
+> > On Sep 28 2026, Neil Armstrong wrote:
+> > > Hi,
+> > > 
+> > > On 9/28/26 18:22, Maxime Ripard wrote:
+> > > > Hi,
+> > > > 
+> > > > Panels in general, and MIPI-DSI panels in particular, are pretty
+> > > > difficult to support and require pretty much a panel driver for each
+> > > > panel produced. Most of them are pretty simple, and require an opaque
+> > > > initialization sequence that is usually poorly documented.
+> > > > 
+> > > > This creates a tension between OEMs and distros because OEMs will
+> > > > typically get a new panel to react to a sourcing issue during
+> > > > production, and thus need some swift turnaround between getting their
+> > > > new panel and it being operational in the OS. Distributions on the other
+> > > > hand can take years to ship a kernel with that new panel driver.
+> > > > 
+> > > > To solve this, I followed the example of HID-BPF and wrote a panel
+> > > > driver that will rely on BPF programs to perform the panel
+> > > > initialization. That way, we can ship the programs separately from the
+> > > > kernel, and with a different lifecycle. If this driver is accepted, the
+> > > > plan is to have a userspace component started by udev to identify and
+> > > > load the right BPF program for the panels found on the device.
+> > > 
+> > > This is kind of late for serious applications except if we manage to
+> > > solve the bootloader to Linux display engine transition.
+> > > 
+> > > > 
+> > > > This driver is fully functional and works with both 5" and 7" Touch
+> > > > Display 2 panels for the RaspberryPi. However, it breaks away from the
+> > > > typical panel driver in multiple ways:
+> > > > 
+> > > > - BPF programs can only be loaded by userspace. This leaves us with two
+> > > >     choices:
+> > > > 
+> > > >     * We prevent the driver from loading until the script itself is
+> > > >       loaded. This has the side effect of preventing any other output to
+> > > >       be used until the initramfs is ran at the earliest, and possibly
+> > > >       ever if the loader isn't installed for example.
+> > > 
+> > > This adds a dependency on user-space behavior and if somehow the
+> > > initramfs doesn't load for a reason we won't have a way to display
+> > > an error.
+> > > 
+> > > > 
+> > > >     * Or we probe the driver all the time, but only report it as connected
+> > > >       once a program has been registered. This is somewhat unconventional,
+> > > >       but allows the other outputs to be functional, *and* allows the user
+> > > >       to force the output if their panel doesn't require any
+> > > >       initialization or during debugging. I chose this solution.
+> > > 
+> > > Both options are not really great...
+> > > 
+> > > > 
+> > > > - It's not a panel driver, but a bridge one, which is also pretty
+> > > >     unconventional. This is required because panel drivers don't have
+> > > >     access to a detect callback that is required for the above, but I also
+> > > >     think that the recent work from Luca blurs the line from panels and
+> > > >     bridges and we'll end up going that road anyway.
+> > > 
+> > > On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
+> > > the panel and the DDIC. So being a bridge is fine, but in a general way we lack
+> > > a proper way to describe the display/panel/monitor independently of the DDIC.
+> > > 
+> > > At first glance it's a nice driver, but moving the timings into a blob moves something
+> > > into possible proprietary binaries with possible closed licence and distribution
+> > > restriction so it's a downgrade for the same of bringing up a panel faster.
+> > 
+> > Quick answer on this, because I had the very same questions regarding
+> > HID-BPF:
+> > - in BPF, you can require (and by default it does) that only GPL
+> > 	compatible BPF programs are loaded, closing the argument of "closed
+> > 	licence and distribution restriction"
+> > - also, a BPF program can be disassembled much easier than a binary
+> > 	blob, and I remember Alexei showing me an example where you get almost
+> > 	the source code from the BPF object in just one pass.
+> 
+> Right, it "solve" one of my question, but doesn't really solve the issue
+> of vendors providing "GPL" bpf programs with source available "somewhere".
+> 
+> Another big issue is the API, I don't want to keep the current API as-is,
+> we plan to support more advanced panel features and use try to use the
+> atomic states to support rate switching for example, and I'm not confident
+> it's a good idea since there's no "simple" and "forever valid" API
+> to initialize panels...
+> 
 
-kernel test robot noticed the following build errors:
+That's exactly where BPF shines. The simple rule of thumb is: there is
+no API stability guaranteed. Basically, thanks to the verifier and CORE
+(Compile Once Run Everywhere), you don't need to keep the API stable and
+available forever. There are multiple ways of dealing with it, but the
+gist is that if a BPF is trying to load an "old" API, it will be
+rejected by the verifier.
 
+Then it's a matter of being nice enough in the kernel and provide ways
+to deal with those.
 
+To give you a few examples:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bill-Wendling/gpiolib-annotate-struct-acpi_gpio_mapping-with-__counted_by_ptr/20260928-063824
-base:   
-patch link:    https://lore.kernel.org/r/202609290353.Ok95CKe3-lkp%40intel.com
-config: x86_64-randconfig-1011-20260928 (https://download.01.org/0day-ci/archive/20260929/202609290353.Ok95CKe3-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260929/202609290353.Ok95CKe3-lkp@intel.com/reproduce)
+- in HID-BPF, in userspace, we keep old versions of APIs in separate
+	compiled objects. Each is incremented (by 10 so we have a little bit
+	of room in the middle). Then the loader tries first
+	0020-device-with-new-api.bpf.o, and if it fails, it tries
+	0010-device-with-old-api.bpf.o
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609290353.Ok95CKe3-lkp@intel.com/
+	I'm not saying we should do the same here, but that's one idea
 
-All errors (new ones prefixed by >>):
+- recently, a BPF commit broke the ABI of a function while removing
+	implicits: bpf_wq_set_callback_impl() was replaced by
+	bpf_wq_set_callback() with a different number of arguments. I simply
+	had to add a new function in my header which basically does:
 
-   In file included from drivers/firmware/efi/libstub/smbios.c:5:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:18:
-   In file included from include/linux/nvmem-provider.h:16:
->> include/linux/gpio/consumer.h:670:55: error: use of undeclared identifier 'size'; did you mean 'ksize'?
-     670 |         const struct acpi_gpio_params *data __counted_by_ptr(size);
-         |                                                              ^~~~
-         |                                                              ksize
-   include/linux/compiler_types.h:392:64: note: expanded from macro '__counted_by_ptr'
-     392 | #define __counted_by_ptr(member)        __attribute__((__counted_by__(member)))
-         |                                                                       ^~~~~~
-   include/linux/slab.h:602:8: note: 'ksize' declared here
-     602 | size_t ksize(const void *objp);
-         |        ^
-   In file included from drivers/firmware/efi/libstub/smbios.c:5:
-   In file included from include/linux/efi.h:20:
-   In file included from include/linux/rtc.h:18:
-   In file included from include/linux/nvmem-provider.h:16:
->> include/linux/gpio/consumer.h:670:55: error: 'counted_by' requires a non-boolean integer type argument
-     670 |         const struct acpi_gpio_params *data __counted_by_ptr(size);
-         |                                                              ^~~~
-   2 errors generated.
+	static inline int
+	hid_bpf_wq_set_callback(struct bpf_wq *wq,
+	                        int (*callback_fn)(void *, int *, void *),
+	                        unsigned int flags)
+	{
+      if (bpf_ksym_exists(bpf_wq_set_callback))
+              return bpf_wq_set_callback(wq, callback_fn, flags);
+      if (bpf_ksym_exists(bpf_wq_set_callback_impl))
+              return bpf_wq_set_callback_impl(wq, callback_fn, flags, NULL);
+  }
 
+  And then I changed the bpf.c to use hid_bpf_wq_set_callback() and the
+  bpf is compatible with both APIs
 
-vim +670 include/linux/gpio/consumer.h
+- with CORE, struct fields are relocated on the fly when you load the BPF
+ 
+  So for instance, if my BPF only accesses fields .name, .phys and .id
+  in the BPF, I can define:
+  struct hid_device {
+    char                       name[128];
+    char                       phys[64];
+    unsigned int               id;
+  }
 
-   667	
-   668	struct acpi_gpio_mapping {
-   669		const char *name;
- > 670		const struct acpi_gpio_params *data __counted_by_ptr(size);
-   671		unsigned int size;
-   672	
+  Then when loading the bpf, the verifier replaces all offset to the
+  ones actually used by the running kernel, and the program loads
+  transparently, even if you add fields before/after or change the
+  fields order in the kernel.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Changing the mindset is the hardest part of it. But once you are making
+the shift, it's actually much better to work with. It doesn't mean you
+can go yolo. You still need to be careful in your choices knowing the
+impact on your users. But the API at version 0 is not frozen and you
+don't need to maintain it forever, especially if you control the loader
+and the headers used to compile the BPFs.
+
+Cheers,
+Benjamin
