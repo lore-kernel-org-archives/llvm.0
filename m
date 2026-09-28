@@ -1,142 +1,121 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ED8489FB9;
-	Mon, 28 Sep 2026 09:05:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD26434E35;
+	Mon, 28 Sep 2026 11:15:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790586310; cv=none; b=XhNwTMafT5E3MfRG5NCi3jtl+hTQiJ9tlacY/Ud8kZijyiIOICnqMfu4Z4kZ0Y3ojumRsFA+GZWXyiOROMLsa2GqssnQX0dvzeH1xj9IftWbxTqSURsx2NFa0hio00oQTMVr6ZuDBaQrUP0aBgBZAW2ZQaL6UrmLLvhPTqd+ThM=
+	t=1790594154; cv=none; b=mVuFE/AGJ0flGjc/A7/wJcAhZhRi4SsCFK6QkWym6c5atuo8xpAV3dd9p6Xrq7Zy5EwX5YHguSLrtzg5qWhdFjtbb2btrd2eZtcTbi7SVfIh777NBu3s1efBSRla0LngSY9/SvfgvmvuzjdYkrtXV9WUOFlCyWlKmimkyMSeqng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790586310; c=relaxed/simple;
-	bh=vNtEj+ubrWxEDvC0iF7iOA826qvz7hqHSStAzP5CaL0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DNtLj0JHoGqr4vo1FIQ7mI7qbK2YRRd3OWQ/a/xJxvZPbGVax7YzGQm/iVhQlDqeLNyVmOGOvyNO7+Xeu2etfFIBsBzF11niyyhr3KXAm/i2/I5Z/CiQvHVgWvi+nh5DPjbl97SEYf1D1LrIzzoviNrBcVQdsZGLIpwLeMpH0LQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gD3v0Vez; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1790594154; c=relaxed/simple;
+	bh=/rEQ5tR0s7tCO9TBNoWnBlkcTDT0Tbc/AZQQ+6eJ3YE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FOE59PU7uoe1aRzqFL/1dqjA2zS21thWkYHXSisgkcmOCWxKMSiRrQ2r6PUfo/21dXQ+eMgBefu3MumC5R5g8+4QEioothJtFxyenGxfsRufu2dGACbaA36eTlg00eRn3LDmDPTsnW0ygb/S7bBTOzqYKmr7r8/FRAGRZRKMxZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QIOuwvHj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gD3v0Vez"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68S85O8b2949303;
-	Mon, 28 Sep 2026 09:05:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=a4MRcj
-	b33bBlwhEko/pqRaFeOUHnAq7kenU5/C+mC2U=; b=gD3v0VezbiesNlyedeScHs
-	cCdkehniTw0X/rNng7rBOryIlm8kZkqFGO5DrOkNqGA0FR5mZbbKGmJaQ9NGtId7
-	z1BmCCertQpJvFuBcCAZ49Sh4AQjdjchEXko7hp+Q04rNW42z2Bb/6ZoSdiiZj97
-	2L5yzq7+wS2g6LL7GCNWnYN/jIAJ9q9o7PTZ0nDBED3sd4A+po6Sn+zDtEEDIcDX
-	KKFfn19zjpR5A61kyCp76AyscHEbcLW/wcrg6Nw/ZptoTIH/+TtS9y885ZFprdFZ
-	ohQCq7sacCaVBxY4gnauDb1MWduVaRwP14lMl0MJolFZcYpAdpHlT8Z3RwKSJdcA
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5qr0ab8-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 28 Sep 2026 09:05:06 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68S82VpF3996662;
-	Mon, 28 Sep 2026 09:05:05 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gxsck4gdt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 28 Sep 2026 09:05:05 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68S953VR41484782
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 28 Sep 2026 09:05:03 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B1BAE20040;
-	Mon, 28 Sep 2026 09:05:03 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 606F92004B;
-	Mon, 28 Sep 2026 09:05:02 +0000 (GMT)
-Received: from [9.124.213.68] (unknown [9.124.213.68])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 28 Sep 2026 09:05:02 +0000 (GMT)
-Message-ID: <ae3e35d6-8dfb-43fe-aa69-0a60b51b2f9b@linux.ibm.com>
-Date: Mon, 28 Sep 2026 14:35:01 +0530
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QIOuwvHj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4B01F000FF;
+	Mon, 28 Sep 2026 11:15:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790594152;
+	bh=qKgEuv9CkeatwMaEoVWwIZzAsZrjAYsxRirMIYaZdag=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=QIOuwvHjPRav9eT8nF7YfNLLqJ8z0AQt1yewPmRegf+oH5eRgNJIhbn1v1/Q+2o0X
+	 nPUarDfalGrAaN9D1k51LHg6iQRCc0U2OaF7tkOiq7GrZXB87kSf/U3dIi5r8P3+rn
+	 K4uoZoDZlBzDBtSl8TkWII13sSk5xAuw4ybHFFNxjLwfjnZOW8l3gk3uavcQ03fYzt
+	 A4jwuaoPWpccsxO+V5Jbp/p027RhnKRzkXX9yS9xIvLtvDf0Q3eMqXghDMs3mwv4Ro
+	 IGj0LRAD7WdzX30gEYUznsFq9Xa01QdmuiuaDgt/y1aEojl6qc2wscTH1JvBMYmBkD
+	 N9uS42sU1xGSA==
+Date: Mon, 28 Sep 2026 12:15:46 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Sasha Levin <sashal@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Nicolas Schier <nsc@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
+	Masahiro Yamada <masahiroy@kernel.org>, Kees Cook <kees@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] kbuild: keep .modinfo when vmlinux is linked with
+ --gc-sections
+Message-ID: <arpLoeLVATRCXm5E@gremlin>
+References: <20260927161227.1179863-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linuxppc:next-test 3/13] ld.lld: error: undefined symbol:
- irq_proc_emit_counts
-To: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-References: <202609271531.8kf2NTjK-lkp@intel.com>
-Content-Language: en-US
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-In-Reply-To: <202609271531.8kf2NTjK-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI4MDAzNiBTYWx0ZWRfXw0llwUiZSEM6
- P3GS2OgSASbdcvMuK80nf7hbtxWSRWKqp0ePMO0HROKq836+5XvvGeHRvcasKxg3NzLsj06AoEV
- ArQVCC7DSeC+qJdNTWTV3piFcNPbukb7roAugS+yonJZCiH8Ar+kj2ZPqmynRvTeYuhvOrTA4Kq
- +s2shqKJ28zJGb+46S6b6unhyDSSQDFePxMgc88zgeLKA/lOEuhcXlgMdR313oBO0rWgToYW90d
- /4WjldLlHiHL2cL5gdPygKRA+I+GKcAQEOsNCbpD8LPCbzmqVse92szaSbpnjxDF+17+7JlIwJ6
- EhGX4V0s8KBKMg7KM7Z0y2B3hukm3wELbXcTKh5pq0WRjuneNst3HTVDcU9Uc8qjasfp3aQk+l5
- I1hVT5pLpGOd8REV5i/IyGGA7k0ybEzAmz179LUnIH2kyla514MnYCa3EK4TwuAJZQ1FWnVam6r
- zlq+maajyaZ5H+75T+Q==
-X-Authority-Analysis: v=2.4 cv=SPbXx+vH c=1 sm=1 tr=0 ts=6aba2dc2 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=NEAV23lmAAAA:8
- a=i3X5FwGiAAAA:8 a=QyXUC8HyAAAA:8 a=VwQbUJbxAAAA:8 a=3b4A4PtVvGKcaD17NK0A:9
- a=QEXdDO2ut3YA:10 a=mmqRlSCDY2ywfjPLJ4af:22
-X-Proofpoint-ORIG-GUID: QGBWTX5yOHur_Dix1fvjA1gxRBpDqBUG
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI4MDAzNiBTYWx0ZWRfXwxgfHoa4ovkn
- bGCOAXKG4jkQAIYEpITLAQFt85zhxnscp10dc6V4MfR+uIUedGoMgcnTMdEgTfcX2munSjFvXnE
- djI35JQoRzfNatcvTfUgZapRd3antNk=
-X-Proofpoint-GUID: QGBWTX5yOHur_Dix1fvjA1gxRBpDqBUG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-28_01,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 clxscore=1011 spamscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 impostorscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
- definitions=main-2609280036
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260927161227.1179863-1-sashal@kernel.org>
 
-Thanks for the report.
+On Sun, Sep 27, 2026 at 12:12:27PM -0400, Sasha Levin wrote:
+> Builds with CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y, such as arm
+> allmodconfig, now fail while extracting modules.builtin.modinfo:
+>
+>   arm-linux-gnueabihf-objcopy: vmlinux.unstripped: can't dump section
+>   '.modinfo' - it does not exist: file format not recognized
+>   /bin/sh: 1: cannot open modules.builtin.modinfo: No such file
+>
+> or, with LLVM:
+>
+>   llvm-objcopy: error: 'vmlinux.unstripped': section '.modinfo' not
+>   found
+>
+> Nothing references the MODULE_INFO() strings, so --gc-sections
+> discards every .modinfo input section and vmlinux.unstripped ends up
+> with no .modinfo data. This is not new: ever since
+> modules.builtin.modinfo started being extracted from
+> vmlinux.unstripped, these builds have silently produced an empty
+> file, losing the modinfo of every built-in module. An arm
+> multi_v7_defconfig build with LD_DEAD_CODE_DATA_ELIMINATION on current
+> mainline yields a 0 byte modules.builtin.modinfo. The switch to
+> --dump-section only turned that into a build error.
 
-On 9/27/26 1:12 PM, kernel test robot wrote:
-> tree:   https://github.com/linuxppc/linux next-test
-> head:   12d238d584ba485a99e02e033746100fc7099184
-> commit: fbb22ceaaf8f9c6786e6ff5da1962fe6ac0fc904 [3/13] powerpc/irq: Make irqstats array based
-> config: powerpc64-randconfig-1001-20260927 (https://download.01.org/0day-ci/archive/20260927/202609271531.8kf2NTjK-lkp@intel.com/config)
-> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260927/202609271531.8kf2NTjK-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202609271531.8kf2NTjK-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->>> ld.lld: error: undefined symbol: irq_proc_emit_counts
->     >>> referenced by irq.c:116 (arch/powerpc/kernel/irq.c:116)
->     >>>               arch/powerpc/kernel/irq.o:(arch_show_interrupts) in archive vmlinux.a
->     >>> referenced by irq.c:116 (arch/powerpc/kernel/irq.c:116)
->     >>>               arch/powerpc/kernel/irq.o:(arch_show_interrupts) in archive vmlinux.a
->     >>> referenced by irq.c:116 (arch/powerpc/kernel/irq.c:116)
->     >>>               arch/powerpc/kernel/irq.o:(arch_show_interrupts) in archive vmlinux.a
->     >>> referenced 5 more times
-> 
+Yikes, so an existing bug but now exposed by my series.
 
-I believe this happened due to below.
-# CONFIG_PROC_FS is not set
+>
+> Wrap the input section in KEEP() so that the linker retains it. The
+> output section is still (INFO), so nothing is allocated for it. With
+> the same arm config, modules.builtin.modinfo now has 14119 entries,
+> and on x86_64 defconfig, where nothing is garbage collected, it is
+> byte-identical before and after this change.
 
-Likely fix is gate with it. similar to x86. Will try to recreate and fix it soon.
+Sounds reasonable.
 
+>
+> Found by KernelCI builds of the linus-next tree.
+>
+> Fixes: 39cfd5b12160 ("kbuild: extract modules.builtin.modinfo from vmlinux.unstripped")
+> Fixes: 5fe4dd596641 ("kbuild: do not allocate .modinfo in vmlinux")
+> Assisted-by: LLM
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
+Nathan - do you want me to fold this into the 1st patch of my series on respin
+or fine to treat separately?
+
+> ---
+>  include/asm-generic/vmlinux.lds.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index a6730d34e8c67..7a3e9f00d6283 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -855,7 +855,7 @@
+>  		KLP_SYMID
+>
+>  #define MODINFO								\
+> -		.modinfo (INFO) : { *(.modinfo) }
+> +		.modinfo (INFO) : { KEEP(*(.modinfo)) }
+>
+>  #ifdef CONFIG_GENERIC_BUG
+>  #define BUG_TABLE							\
 > --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+> 2.53.0
+>
 
+--
+Cheers, Lorenzo
