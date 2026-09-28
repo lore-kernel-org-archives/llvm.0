@@ -1,130 +1,142 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EF2F484896;
-	Mon, 28 Sep 2026 08:40:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70ED8489FB9;
+	Mon, 28 Sep 2026 09:05:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790584812; cv=none; b=mvyCfZnaPT2PBEYOigusZmkN9LGXnDaCDD0VZUSZFHp/UJp7yUEqsBMZFPqmlluN+2/HDy8z9eyFYSkDyP+x3uqNka67mhXjTsnx+Mas80vTK3b6wodOb/QMy3PWFTVX9rhC2H8ITgL2af/J+MvcBbeSyHrAwnvzRsVX7nrWzhI=
+	t=1790586310; cv=none; b=XhNwTMafT5E3MfRG5NCi3jtl+hTQiJ9tlacY/Ud8kZijyiIOICnqMfu4Z4kZ0Y3ojumRsFA+GZWXyiOROMLsa2GqssnQX0dvzeH1xj9IftWbxTqSURsx2NFa0hio00oQTMVr6ZuDBaQrUP0aBgBZAW2ZQaL6UrmLLvhPTqd+ThM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790584812; c=relaxed/simple;
-	bh=Ux+XRLdHH3mqzmbeYYP+7+dygvmdySbKleSnyBkwwnc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=B+mjHM9sU1AB/jYDYelexOHc6CNd5qPJN/SSHRJL8O4y5Kp2VYubY4WY8PjS2JkQisWyKezadV/lwLatVwSW9qM1ezs6nOTKIUZxEsblvx9TDfkL49Kw6DnCqt93cltcpTesBeE15kWvYZu/z52BIZF7DwGMOnpwSp8BEdFce14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DjfX74fr; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790586310; c=relaxed/simple;
+	bh=vNtEj+ubrWxEDvC0iF7iOA826qvz7hqHSStAzP5CaL0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DNtLj0JHoGqr4vo1FIQ7mI7qbK2YRRd3OWQ/a/xJxvZPbGVax7YzGQm/iVhQlDqeLNyVmOGOvyNO7+Xeu2etfFIBsBzF11niyyhr3KXAm/i2/I5Z/CiQvHVgWvi+nh5DPjbl97SEYf1D1LrIzzoviNrBcVQdsZGLIpwLeMpH0LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gD3v0Vez; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DjfX74fr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 878901F00893;
-	Mon, 28 Sep 2026 08:40:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790584811;
-	bh=bGJHJrOH+riYBdOov+lE8FQ5rx8dbnRY2szuLD404PY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DjfX74frxAWYMyUFQtctBiJmVvoieVS4KbUstf41uWpfgYe9XU6SBJTiYPEKy05bW
-	 Av6Wp2MbeN2MAsvyTLwige6CW21NJtEDMHa2kdPHER7QdvkknnBTXJOeCZp7q/it3u
-	 NTpy71mDmE3en438Lq4teRmKUMT6yYkwMaoWwwUHGYL8Ah+dg3rnV8uw85z27obf7p
-	 jmekeMJEeBwZuUXwjPAhfQg42yx3VaiHsbZDX7lUAIAnT9ey6SmZqIDRSmMSnIqwSO
-	 zD7wRSvydvw4xPprUp8m9oyr53dTKoIyjDm7whej4IbvWgTpOJF0hoKWWlvoe6TEO/
-	 +EKCMXDJ7ubmA==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Ravi Jonnalagadda <ravis.opensrc@gmail.com>,
-	SJ Park <sj@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	llvm@lists.linux.dev
-Subject: [PATCH 2/3] mm/damon/core: reduce stack usage further
-Date: Mon, 28 Sep 2026 01:39:56 -0700
-Message-ID: <20260928083959.4030-3-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260928083959.4030-1-sj@kernel.org>
-References: <20260928083959.4030-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gD3v0Vez"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68S85O8b2949303;
+	Mon, 28 Sep 2026 09:05:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=a4MRcj
+	b33bBlwhEko/pqRaFeOUHnAq7kenU5/C+mC2U=; b=gD3v0VezbiesNlyedeScHs
+	cCdkehniTw0X/rNng7rBOryIlm8kZkqFGO5DrOkNqGA0FR5mZbbKGmJaQ9NGtId7
+	z1BmCCertQpJvFuBcCAZ49Sh4AQjdjchEXko7hp+Q04rNW42z2Bb/6ZoSdiiZj97
+	2L5yzq7+wS2g6LL7GCNWnYN/jIAJ9q9o7PTZ0nDBED3sd4A+po6Sn+zDtEEDIcDX
+	KKFfn19zjpR5A61kyCp76AyscHEbcLW/wcrg6Nw/ZptoTIH/+TtS9y885ZFprdFZ
+	ohQCq7sacCaVBxY4gnauDb1MWduVaRwP14lMl0MJolFZcYpAdpHlT8Z3RwKSJdcA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5qr0ab8-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 28 Sep 2026 09:05:06 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68S82VpF3996662;
+	Mon, 28 Sep 2026 09:05:05 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gxsck4gdt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 28 Sep 2026 09:05:05 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68S953VR41484782
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 28 Sep 2026 09:05:03 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B1BAE20040;
+	Mon, 28 Sep 2026 09:05:03 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 606F92004B;
+	Mon, 28 Sep 2026 09:05:02 +0000 (GMT)
+Received: from [9.124.213.68] (unknown [9.124.213.68])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 28 Sep 2026 09:05:02 +0000 (GMT)
+Message-ID: <ae3e35d6-8dfb-43fe-aa69-0a60b51b2f9b@linux.ibm.com>
+Date: Mon, 28 Sep 2026 14:35:01 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linuxppc:next-test 3/13] ld.lld: error: undefined symbol:
+ irq_proc_emit_counts
+To: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+References: <202609271531.8kf2NTjK-lkp@intel.com>
+Content-Language: en-US
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+In-Reply-To: <202609271531.8kf2NTjK-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI4MDAzNiBTYWx0ZWRfXw0llwUiZSEM6
+ P3GS2OgSASbdcvMuK80nf7hbtxWSRWKqp0ePMO0HROKq836+5XvvGeHRvcasKxg3NzLsj06AoEV
+ ArQVCC7DSeC+qJdNTWTV3piFcNPbukb7roAugS+yonJZCiH8Ar+kj2ZPqmynRvTeYuhvOrTA4Kq
+ +s2shqKJ28zJGb+46S6b6unhyDSSQDFePxMgc88zgeLKA/lOEuhcXlgMdR313oBO0rWgToYW90d
+ /4WjldLlHiHL2cL5gdPygKRA+I+GKcAQEOsNCbpD8LPCbzmqVse92szaSbpnjxDF+17+7JlIwJ6
+ EhGX4V0s8KBKMg7KM7Z0y2B3hukm3wELbXcTKh5pq0WRjuneNst3HTVDcU9Uc8qjasfp3aQk+l5
+ I1hVT5pLpGOd8REV5i/IyGGA7k0ybEzAmz179LUnIH2kyla514MnYCa3EK4TwuAJZQ1FWnVam6r
+ zlq+maajyaZ5H+75T+Q==
+X-Authority-Analysis: v=2.4 cv=SPbXx+vH c=1 sm=1 tr=0 ts=6aba2dc2 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=NEAV23lmAAAA:8
+ a=i3X5FwGiAAAA:8 a=QyXUC8HyAAAA:8 a=VwQbUJbxAAAA:8 a=3b4A4PtVvGKcaD17NK0A:9
+ a=QEXdDO2ut3YA:10 a=mmqRlSCDY2ywfjPLJ4af:22
+X-Proofpoint-ORIG-GUID: QGBWTX5yOHur_Dix1fvjA1gxRBpDqBUG
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI4MDAzNiBTYWx0ZWRfXwxgfHoa4ovkn
+ bGCOAXKG4jkQAIYEpITLAQFt85zhxnscp10dc6V4MfR+uIUedGoMgcnTMdEgTfcX2munSjFvXnE
+ djI35JQoRzfNatcvTfUgZapRd3antNk=
+X-Proofpoint-GUID: QGBWTX5yOHur_Dix1fvjA1gxRBpDqBUG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-28_01,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 clxscore=1011 spamscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609280036
 
-From: Arnd Bergmann <arnd@arndb.de>
+Thanks for the report.
 
-In a previous patch, I had annotated kdamond_tune_intervals() as
-noinline_for_stack in order to not exceed the stack frame warning
-limit. Unfortunately, my current linux-next randconfig builds show
-a similar problem again with clang-21:
+On 9/27/26 1:12 PM, kernel test robot wrote:
+> tree:   https://github.com/linuxppc/linux next-test
+> head:   12d238d584ba485a99e02e033746100fc7099184
+> commit: fbb22ceaaf8f9c6786e6ff5da1962fe6ac0fc904 [3/13] powerpc/irq: Make irqstats array based
+> config: powerpc64-randconfig-1001-20260927 (https://download.01.org/0day-ci/archive/20260927/202609271531.8kf2NTjK-lkp@intel.com/config)
+> compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260927/202609271531.8kf2NTjK-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202609271531.8kf2NTjK-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+>>> ld.lld: error: undefined symbol: irq_proc_emit_counts
+>     >>> referenced by irq.c:116 (arch/powerpc/kernel/irq.c:116)
+>     >>>               arch/powerpc/kernel/irq.o:(arch_show_interrupts) in archive vmlinux.a
+>     >>> referenced by irq.c:116 (arch/powerpc/kernel/irq.c:116)
+>     >>>               arch/powerpc/kernel/irq.o:(arch_show_interrupts) in archive vmlinux.a
+>     >>> referenced by irq.c:116 (arch/powerpc/kernel/irq.c:116)
+>     >>>               arch/powerpc/kernel/irq.o:(arch_show_interrupts) in archive vmlinux.a
+>     >>> referenced 5 more times
+> 
 
-mm/damon/core.c:3953:12: error: stack frame size (1288) exceeds limit (1280) in 'kdamond_fn' [-Werror,-Wframe-larger-than]
- 3953 | static int kdamond_fn(void *data)
+I believe this happened due to below.
+# CONFIG_PROC_FS is not set
 
-Do the same thing with kdamond_apply_schemes(), kdamond_merge_regions(),
-and kdamond_split_regions(), which also have individually large stacks.
-This should work to keep the deepest total stack depth down much more
-as well as avoid the warning.
+Likely fix is gate with it. similar to x86. Will try to recreate and fix it soon.
 
-I also tried to reduce the complexity of kdamond_fn() itself by splitting
-out the while() loop into a separate function. While this arguably led
-to slightly more readable code, it had no effect on the total stack
-usage and just made the new function the largest stack user and had
-a nonzero risk of me getting the conversion wrong.
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
 
-Fixes: 5a00cae64de1 ("mm/damon/core: reduce kernel stack usage")
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Bill Wendling <morbo@google.com>
-Cc: Justin Stitt <justinstitt@google.com>
-Cc: Ravi Jonnalagadda <ravis.opensrc@gmail.com>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: SJ Park <sj@kernel.org>
-Signed-off-by: SJ Park <sj@kernel.org>
----
-Changes from v1
-- v1: https://lore.kernel.org/20260925130254.4022227-1-arnd@kernel.org
-- Collect R-b: from SJ.
-- Rebase to the latest mm-new.
-- Update subject prefix.
-
- mm/damon/core.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 733025b36745..0e375f4445fd 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -3433,7 +3433,7 @@ static void damos_trace_stat(struct damon_ctx *c, struct damos *s)
- 	trace_call__damos_stat_after_apply_interval(cidx, sidx, &s->stat);
- }
- 
--static void kdamond_apply_schemes(struct damon_ctx *c)
-+static noinline_for_stack void kdamond_apply_schemes(struct damon_ctx *c)
- {
- 	struct damon_target *t;
- 	struct damos *s;
-@@ -3589,8 +3589,9 @@ static void damon_merge_regions_of(struct damon_target *t, unsigned int thres,
-  * while DAMON is running.  For such a case, repeat merging until the limit is
-  * met while increasing @threshold up to possible maximum level.
-  */
--static void kdamond_merge_regions(struct damon_ctx *c, unsigned int threshold,
--				  unsigned long sz_limit)
-+static noinline_for_stack void kdamond_merge_regions(struct damon_ctx *c,
-+						     unsigned int threshold,
-+						     unsigned long sz_limit)
- {
- 	struct damon_target *t;
- 	unsigned int nr_regions;
-@@ -3734,7 +3735,7 @@ static void damon_split_some_regions(struct damon_ctx *ctx,
-  * split was unnecessarily made, later 'kdamond_merge_regions()' will revert
-  * it.
-  */
--static void kdamond_split_regions(struct damon_ctx *ctx)
-+static noinline_for_stack void kdamond_split_regions(struct damon_ctx *ctx)
- {
- 	struct damon_target *t;
- 	unsigned long nr_regions = 0;
--- 
-2.47.3
