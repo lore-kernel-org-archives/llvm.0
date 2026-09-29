@@ -1,145 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f12.google.com (mail-wr2-f12.google.com [74.125.225.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D01B3DAABB;
-	Tue, 29 Sep 2026 04:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790654437; cv=none; b=Y9HhybfjCrdkhquYFPAbRTBOC2bb77KUadAjgKXUzosu6x9XKqFpKw6/hbiVgID7gq2QRk0EVSM8kuqXCX/3pmSV+FJZBN7e0doH1NxPdn9noVB/Pb6OTtqPkDaB4rwr9YgUGOG993jS0bL1wtUdEKn3eyKbPYNSJHVGKkQSm2s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790654437; c=relaxed/simple;
-	bh=GdyCnW29NVqEhZpy534MCoD6Z2SnKC6FIk5b2avDU/I=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lP0h19Cznh9wBwafESQO5cy7WB/sA96fDbcBGcIOUWNAtdf1ufE4dh1VD5vfSqhDcE213+s6sD0osYZBxFJp4Apaaqgc8ZbeYa3oaZoRhgB2VFx2Xz2PtKCjz3Z8TA3rV673qU5bkPWb1FB/ldBBul1OEVXH7nuhOifh1uvFLPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YB6wPsyZ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6DD03A1689
+	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 05:06:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.225.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790658377; cv=pass; b=dSVlXecp/7YS2JsbhcMriGpchdVcz20Dv0QNdDNOQZNFc+gtBHFOBOJtJ4nvxCukz/vqiIZRaacQlh5ZJ/UtrhTmx23DKP/1IvbX7NIVPxXpbRW8MuOq5qTtwbpa3k0ZHejVUQ34aAWHCmTMZ1+olcGkRHXYE66ea6o14nGIWxk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790658377; c=relaxed/simple;
+	bh=lQceDshmIcxnm5pr2ANM4Bj9m14zZHt/Rqa4vniZwo4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XMu520dVZi0GHpcO9V8Jb4axVPwIND6wif5GXEnr9LkEMbwdmRKnRximhx7rbaFg2600iKJftI/6jmW+N5oMKRqQlQlrXonj6YalK/LFseBso8R3W6sKPn7tvkRIIRlJw+l21YsPIdCrXtnqJ2BIWyhC2Km8IF+GdL9I0jBfBzs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y1Qf3XC0; arc=pass smtp.client-ip=74.125.225.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YB6wPsyZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790654434; x=1822190434;
-  h=date:from:to:cc:subject:message-id;
-  bh=GdyCnW29NVqEhZpy534MCoD6Z2SnKC6FIk5b2avDU/I=;
-  b=YB6wPsyZIVtv1HIkH35aHgoRCCNDN7MBhY+XKtF+LAXHdWmlHjubttVK
-   ED7kYjquu+kidCtglqFQGAcOixHvkKfXNCtrtE2ClwUT+rpa28V3xqT/z
-   FWziaLC5y/8JvivkE39Ry4aABOT8bhUd1GW9mrkXia0Z3EzY4kYzxvoBv
-   wAde380UDu+k9cmbqXvU9+ovjBE3AO5Ekv84y6kfsdYydSrnMPelpG/Ua
-   YdJuNonyNRdb8qNf8WvdIvmHKbZ4Lt3mqkq4s4g5c1S3h0JXlpWFCxXiL
-   GFl97MDXueRlo/tkGEsB+zPKyYS4h1/rqWOnQbrLmET1On7/uWFl8h5BB
-   w==;
-X-CSE-ConnectionGUID: M1FuAN5TSfScJArqfQhLkQ==
-X-CSE-MsgGUID: vk2MUQviRoWrVDnnQONP1Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11919"; a="90494632"
-X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
-   d="scan'208";a="90494632"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2026 21:00:30 -0700
-X-CSE-ConnectionGUID: Q1HsEHBwSrKioAweeMJZ6A==
-X-CSE-MsgGUID: QlGv2Z66Th6pJG98rTjckA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,129,1787036400"; 
-   d="scan'208";a="275271272"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 28 Sep 2026 21:00:29 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xBP10-00000000Ov7-2tdV;
-	Tue, 29 Sep 2026 04:00:26 +0000
-Date: Tue, 29 Sep 2026 11:59:45 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [linux-next:master 11138/11456]
- drivers/gpu/drm/verisilicon/vs_bridge.c:306:9: error: call to undeclared
- function 'devm_drm_of_get_bridge'; ISO C99 and later do not support implicit
- function declarations
-Message-ID: <202609291109.OIsGTysr-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y1Qf3XC0"
+Received: by mail-wr2-f12.google.com with SMTP id ffacd0b85a97d-485984ebf5cso2979928f8f.0
+        for <llvm@lists.linux.dev>; Mon, 28 Sep 2026 22:06:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1790658374; cv=none;
+        d=google.com; s=arc-20260327;
+        b=TYJWUFrBP3jxwtneNKKNDOGgs8/SpGH3366YIlb23Y1Y8i01yHZ/DcGDSKdFTAwW4G
+         CmsVTV2f71zFp/dbMw/KBPjokhZoD5/YiKTOoKj4J6PYWrek6bv/7CLhPv5+JXxECO42
+         NBdEIA1bY7DTBYdpfzAwfauo44Py/3MzFnkukgvFXghHwif3+9vmEtEFg0jUm8UBUNPZ
+         e38HeoSH6SFPVQUwvLiOpfUgFCw3NHz1XK7Z6n+qzk0iGP3tb1gHGVdLY8AuNuXy7LRG
+         CiGmKH8ovwHj2eM8z8nQdlcOotHbND339Kqhg9kJmaGVrTWr824W74KrnHJ/FFNP6grp
+         5Mxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lQceDshmIcxnm5pr2ANM4Bj9m14zZHt/Rqa4vniZwo4=;
+        fh=NvBN161CaXgPRS85dp0qQ2TNCz/q7UlGFuZP+CrePko=;
+        b=EGbAakeqvGxEzGEcVBKK3yaIwOYZLOaiJW6cn40kNdj4N/jgl9Ecmks0bkJB6Quwq7
+         qsj/Itq+KuLPDnmxE4K0gW2vq9kDz5Lqm9EaigiLuDpNQdEBT6ORaeXsB1ZKF+905ayI
+         hMz7xyJDug5FpIMddiOTLj4nj1VlzkP64iumKN4dErtI6ojTje6fYO1vBPMHqpWKPF3I
+         USpDhgiSjAGQSzZpI2K4+on3w7L1oJs9MPVD90GbFwzByemnDIZyd7e8Bszyk1vmLi2U
+         pwNdeQezG90hYv3pyN1AUWiCGVzeBwCVECqIahfPFnmtZ3ka32zV0pPRzEblo8qjd6ZT
+         aGjg==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790658374; x=1791263174; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=lQceDshmIcxnm5pr2ANM4Bj9m14zZHt/Rqa4vniZwo4=;
+        b=Y1Qf3XC0ofcDRDhNgHIcLLjd+rnYfc21Q/EhI9sSDb/LLaaGDcq/7uDcMYbOF5yDmJ
+         gNb/a8Kgsbi6gZTJXPhNHSVX4GnhHI41UMRp73jTSMteBozBK9CC7KtS+Nv/yMabf0OI
+         Zug9lAijl0in7LN1q8t70krjhVmes/m7sNsA2SJzitCJjQtPZLKcl+vxkLvScAeu35f6
+         0D0MniIpdkwyKH+TtJiRChcvmmvYBwXEY4h51mL4hgtFYpPTGFrUmYisOnzDURAl/3l8
+         8PSU6qE8Szj7Us+vP/AAFPMJcRQvKSFVB17OawGfCmqIvcWi8m8NFxCUxwlew0msqLy6
+         uqUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790658374; x=1791263174;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lQceDshmIcxnm5pr2ANM4Bj9m14zZHt/Rqa4vniZwo4=;
+        b=vQCRGnZniXa+QDoT+It1bUg/ivQ97Gg6xOJlUCwNXesQ8+pEhnTMaNkRjWf8dUo6VZ
+         YShjCPM0WaLzaaK3QTDs487n29CMRREWoq5F9CmMNV1VqOqpHGdVaHCImBwopnfzLoUu
+         em79qpLCQViI5C1/UviDxZBPNdjxzpLAdzuVtYcGMfv/dQ/xY+r2SL4B0sgI8LjBXcEq
+         ZVuRl7xOB0cPQOYKxJ1ORq8w+aiET0cm8czTysMNFenhRacO73z+FVNlpx60hpISCoI8
+         eYJdXrrhKmIlSfYL3RlG5EnawNXWqK2uMwKyCPQ1DynpfKn+hk7D/rwubZab0p+7y3A6
+         wHTQ==
+X-Forwarded-Encrypted: i=1; AKwUvByhtVz78Fr0P63GRklEOv18Ep+5iaa8KQR/UJVGa4N+Yfust1Xk5v+g9n9f2ex2YpVVGcKi@lists.linux.dev
+X-Gm-Message-State: AFq9FYLz1Im/PLLb6gXeEep6v42EeAVpqZUApDdNbj1Ygz/w+pqqVYdN
+	kc5lpf2ONjbNY9kWCZA6m4xdLzJz1ntnYPcDn9R5ZrSI5iSt8d7auLfrNFtEezGQ2yoRU5WFK2i
+	dJ2lvRF+jJUtbNtJETo9NBGtKj5M+Qxiygrzb53+F
+X-Gm-Gg: AYBFou0m0mtPhLYSLoLtS03k9ZFS+g9XrYprhxgACCpNl6zTdOMrbkhVAobf4X8q25a
+	xxQ63gtNhQ1YnnNYFZUX0FyNQC4yW659eNWRYX987Kp1u+gA0H85g7OfMNo6jb52sovUNfd9y1J
+	yTDtr5MdTQ4efTkex9Z8odNIo7BHnAX4hMsu9S/hfEtCREzofS3/6Cf3veGYlekJ4umKFFvO9hB
+	wTlwEEEg3YfgXRDCueX6gaZk8/H6wbuMT/LWmKi5O76CD0JaY4adYPZfRIJ32NaYHR5gFHboM7S
+	3VeBbYs6yHAygSOYWyZNCOBV6FflyhxO0iLi+q/0LJpdWV14OEbDDyexJcd0MItdXCxGc/kk/TY
+	Gau7j5/1GUX6AvsgMAT9uDKDhfF0/xBTiQXg9se4nxlcMbN7FV+m6mIqKnvGKh9e2/uf1DA==
+X-Received: by 2002:a05:6000:400f:b0:486:f856:1975 with SMTP id
+ ffacd0b85a97d-48872a7ed6emr28989136f8f.22.1790658373306; Mon, 28 Sep 2026
+ 22:06:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+References: <CAGLNFZfd65P3C7wd=ShsG3BwVqx56-3FTXRARvFXVoXEJmj6Lg@mail.gmail.com>
+In-Reply-To: <CAGLNFZfd65P3C7wd=ShsG3BwVqx56-3FTXRARvFXVoXEJmj6Lg@mail.gmail.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Mon, 28 Sep 2026 22:06:01 -0700
+X-Gm-Features: AclHuK-G3nC4fZFb5XTwTm_Ndg0dN9k5HC4ZdnEzBSe__7iBSOMXfWozEdeSNPY
+Message-ID: <CAKwvOdnmU0qt1--_1pO=8F=D39W-EEPHojc544APimtartFo+w@mail.gmail.com>
+Subject: Re: [PATCH] scripts: gen_compile_commands: accept object file paths
+To: omer zalman <omerzalman42@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, nsc@kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Luca,
+On Mon, Sep 28, 2026 at 4:46=E2=80=AFPM omer zalman <omerzalman42@gmail.com=
+> wrote:
+>
+> The command-line help lists *.o among supported path arguments,
+> but main() rejects every object path as an unknown file type. Map
+> an object path to its matching .cmd file so the documented input
+> produces a compile database entry.
+>
+> Signed-off-by: Omer Zalman <omerzalman42@gmail.com>
+>
+> The exact git-format-patch file is attached because Gmail's web
+> composer removes tabs from inline diffs.
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+Do the instructions at
+https://nickdesaulniers.github.io/blog/2017/05/16/submitting-your-first-pat=
+ch-to-the-linux-kernel-and-responding-to-feedback/
+still work?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-head:   6375e61c01e93e35ee7acd336a689ac1fae4b509
-commit: aa8a8c7e4641ebcef02dd6fa387ca334857367f4 [11138/11456] drm/bridge: panel: move all code to drm_panel.c
-config: i386-buildonly-randconfig-1005-20260929 (https://download.01.org/0day-ci/archive/20260929/202609291109.OIsGTysr-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260929/202609291109.OIsGTysr-lkp@intel.com/reproduce)
+Otherwise please checkout `b4`.
+https://b4.docs.kernel.org/en/latest/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609291109.OIsGTysr-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/verisilicon/vs_bridge.c:306:9: error: call to undeclared function 'devm_drm_of_get_bridge'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     306 |         next = devm_drm_of_get_bridge(drm_dev->dev, drm_dev->dev->of_node,
-         |                ^
-   drivers/gpu/drm/verisilicon/vs_bridge.c:306:9: note: did you mean 'devm_drm_put_bridge'?
-   include/drm/drm_bridge.h:1525:6: note: 'devm_drm_put_bridge' declared here
-    1525 | void devm_drm_put_bridge(struct device *dev, struct drm_bridge *bridge);
-         |      ^
->> drivers/gpu/drm/verisilicon/vs_bridge.c:306:7: error: incompatible integer to pointer conversion assigning to 'struct drm_bridge *' from 'int' [-Wint-conversion]
-     306 |         next = devm_drm_of_get_bridge(drm_dev->dev, drm_dev->dev->of_node,
-         |              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     307 |                                       output, intf);
-         |                                       ~~~~~~~~~~~~~
-   2 errors generated.
---
->> drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c:336:11: error: call to undeclared function 'devm_drm_of_get_bridge'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     336 |         bridge = devm_drm_of_get_bridge(dsi->dev, dsi->dev->of_node, 1, 0);
-         |                  ^
-   drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c:336:11: note: did you mean 'devm_drm_put_bridge'?
-   include/drm/drm_bridge.h:1525:6: note: 'devm_drm_put_bridge' declared here
-    1525 | void devm_drm_put_bridge(struct device *dev, struct drm_bridge *bridge);
-         |      ^
->> drivers/gpu/drm/bridge/synopsys/dw-mipi-dsi.c:336:9: error: incompatible integer to pointer conversion assigning to 'struct drm_bridge *' from 'int' [-Wint-conversion]
-     336 |         bridge = devm_drm_of_get_bridge(dsi->dev, dsi->dev->of_node, 1, 0);
-         |                ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   2 errors generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
-   Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
-   Selected by [y]:
-   - COMMON_CLK_MT8173_MFGTOP [=y] && COMMON_CLK [=y] && (ARCH_MEDIATEK || COMPILE_TEST [=y]) && COMMON_CLK_MT8173 [=y] && PM [=y]
-
-
-vim +/devm_drm_of_get_bridge +306 drivers/gpu/drm/verisilicon/vs_bridge.c
-
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  288  
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  289  struct vs_bridge *vs_bridge_init(struct drm_device *drm_dev,
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  290  				 struct vs_crtc *crtc)
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  291  {
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  292  	unsigned int output = crtc->id;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  293  	struct vs_bridge *bridge;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  294  	struct drm_bridge *next;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  295  	enum vs_bridge_output_interface intf;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  296  	const struct drm_bridge_funcs *bridge_funcs;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  297  	int ret, enctype;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  298  
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  299  	intf = vs_bridge_detect_output_interface(drm_dev->dev->of_node,
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  300  						 output);
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  301  	if (intf == -ENODEV) {
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  302  		drm_dbg(drm_dev, "Skipping output %u\n", output);
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  303  		return NULL;
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  304  	}
-dbf21777caa8b8c Icenowy Zheng 2026-01-29  305  
-dbf21777caa8b8c Icenowy Zheng 2026-01-29 @306  	next = devm_drm_of_get_bridge(drm_dev->dev, drm_dev->dev->of_node,
-
-:::::: The code at line 306 was first introduced by commit
-:::::: dbf21777caa8b8c88c12f7f036b01208fec0d55a drm: verisilicon: add a driver for Verisilicon display controllers
-
-:::::: TO: Icenowy Zheng <uwu@icenowy.me>
-:::::: CC: Thomas Zimmermann <tzimmermann@suse.de>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
