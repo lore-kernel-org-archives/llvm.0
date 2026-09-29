@@ -1,210 +1,213 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022137.outbound.protection.outlook.com [40.107.193.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A1425B08D;
-	Tue, 29 Sep 2026 14:58:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790693912; cv=none; b=HdX17PDg1ZfObcMvyK0GvME5IkuRJpKKpCKVqc8wdrl8RvWVIr6qWB4GGWSu56MrrE+JR1op9b4xtyi+61Fvd/eogntrGWuWX/q4IckFNctdJqwqgBKoK+AXzcl0Q2RtvCGGmbV4mMM8673mGM8t9Cw2sDgteYpr4CpbWwdLCL8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790693912; c=relaxed/simple;
-	bh=DqeI++b161KtjAHzethdo3fEox1c19TAWzryZUcs3tE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=as4win80LZtCRamsrXqvWfMXD/QrhY6D8ZMAavSThFoli1LFUnHys8YvUNm05Mf0sITpJ6RjH7zXS8nQ7otootw7TukT6t7bOSOocfP5D7A4XCbvz9ZcQjDIQb9XPFGpdLNxhc8NaYN7V3fKOCg6KYC34cUpyBdiczI7RoidorQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XvvrqjJq; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEEF52CCC1;
+	Tue, 29 Sep 2026 15:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.193.137
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790694265; cv=fail; b=dYKatvsOkxj0ixinNhnm2KxLC1SnCcBtlfSzh5IRvdgyeEDAS4/QdcKA8rCHt/K6YgAK2ca/TvpZ/EalvECDeeUcRrcUAIgR8Fhuxm+kjipXYvu1a2XPWlX/X0gzx7Ji250tIbYhGu+55wHn1ktaPAxGVyFxmLG56uJHpRwrF9k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790694265; c=relaxed/simple;
+	bh=YoPIc6ezMTpRtGdTnPOiPbn1yL8Z18c7rK4pEvUTTXY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=jifXTXlpL+LrU5BTPlSxN0IUiVVHfAkNKAkQ3reOQjrGoL8Y6Mrx378L9yYLYRBJau5eNOPEqQlmModaDA9f0IWvWB46FgpHXtLhBtUIn3jKtRE10SIsfsrbhQmvwESnTqlei/KoH+0OTf81tVUz9qgFPG7ThzDHhm4q9d3pfHY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=PqtbbY37; arc=fail smtp.client-ip=40.107.193.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XvvrqjJq"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68TB6GLY2189632;
-	Tue, 29 Sep 2026 14:57:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=R6JfXv
-	ppDwndtGpHNaqd1NG4kbQK5XAbphIjZn2QMB4=; b=XvvrqjJqEMZ89mSdXaLySS
-	CjMLp6MTIbywHpMoH9g+y4QVCQAscidvC84BgYYBCsDGT1/Z6vuQQOy4iZIfCCOY
-	WdK0UuxJrJ5UWKZ53D7fFcS/UIRk4Gq3HYZzy/bKf6CmZ2+0LV53SLbm1//1UPUS
-	ctXPDId3zJAV1Wakmxi7nI/NSrZ6DeedMlmA/ecpgei04M2kmKvbBa1n2PZmOsPJ
-	8O8K7cpFPeSvlrPp6PBGtS+umhzQUvgFZ8EGvyt2CXr4KgVGL9E7T6DMOVymFHGT
-	Wb0SPsavtNZKUxSrUk51KyQBHexVefyUFtjdF1wlw3M3VLxWclBDZY5dU2OHk4ow
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5qr7mf1-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Tue, 29 Sep 2026 14:57:30 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68TAlU6r1667670;
-	Tue, 29 Sep 2026 14:57:29 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gxsvhj493-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 29 Sep 2026 14:57:29 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68TEvPqG50397614
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 29 Sep 2026 14:57:25 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 05FBF20043;
-	Tue, 29 Sep 2026 14:57:25 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EC00D20040;
-	Tue, 29 Sep 2026 14:57:14 +0000 (GMT)
-Received: from [9.124.214.246] (unknown [9.124.214.246])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 29 Sep 2026 14:57:14 +0000 (GMT)
-Message-ID: <4cd3d839-ac67-43ac-9b22-0ded9c3d1f41@linux.ibm.com>
-Date: Tue, 29 Sep 2026 20:27:13 +0530
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="PqtbbY37"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=i6vpcU6IkmTrWt6QWp4qVb2js9lRbfXWk+70qnWdpNkWcEOvBr3FH5/4EqkzZ9uzmfaBs/vlD9aJDpolrFmpXGKLENdDFFEfsWUpdH+UgJEOhFmFvBJ+mdjrtQg7CIIbOg22QDgwO09MW+LBrRRR2kI9oZV/eEhUPkw29SuhmtQ2+3SpzZFZVlDkAdDKytipk3lD3/PIAMHJI1nI9a0bfuAVKvyZjNwEvrCEmFlWBGDVp/M2OA0Kh+wyS7Ooh9ppLd1zaM1IZoFzupd3HTo8EnzjV77U6tYqDpalF8yhtVjY3qON06biEZViwYOFZXlv1yy7srBttXMSeJjUhfQuqA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S85K70cy2lM3PzPMsCC3unyEbX7a+ze2kkU2NHUSgq4=;
+ b=N+NtQS3ln5cf1zCo26nx/2WqAUSlW10RIsO1CVquhcv58KO0n87kKrC1MxviXJDt9sObjMKACowMTK3hsokVJb2wBXRRSVD9PmxvH4fPujdTF5Wl5EeHJYKn2pBp0Mgb5jCdkpA5TGrQDLoHPQqmkQCfrjdbkpV9loJEyYXt5zpBT0+eNjidMeUWRz0v/CL4zEWJ87FDOXZBB1EffXpNo+SeUuWPwDYG1sClBXQWe1Yv5Nbd/osUMbyTkBGHnsTQnHqxsm3u3Tv3h9avyaAFm7rhAUKEK/BFDn9sGWIZpsmyN1EyKBUN/zYtNIcUVmKXxXQ5vFTAfGrrVldCU58KJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S85K70cy2lM3PzPMsCC3unyEbX7a+ze2kkU2NHUSgq4=;
+ b=PqtbbY37SKigorixk/G5fnbVXd1IxRUTYERgP0jYQPOyz2O73X8kFs5tlSStsxnsMz/1vMx/Q+AnWqT9S41Z/cK7Pk9o3jrMDDPgBhGFmGAYOHoRWCe6Io3dLe4G7U1uPX8r7G/QPaiA1OkMlBRLnUCO9L8WfA561G0i2tzSLRgZZkFOPqko+TtXtfdwpwhoj9F167rzmM1uZwlIdSkXeqZQpPiVh08TgOjNJf8f8fIdIEhY3ylNVFOsiunC9vDJCAEikfmpxGhs7owYyTi/Bh4VgYM6KrqRQphwhOhvn6d1rZIHlQCN9EJa+IoUUa4aROXQsHWfD5rcGXXF7tQ/gw==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YT6PR01MB309022.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1c2::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.25; Tue, 29 Sep
+ 2026 15:04:08 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0451.026; Tue, 29 Sep 2026
+ 15:04:08 +0000
+Message-ID: <133ca8de-cf30-4bf5-9539-d0b73e347b22@efficios.com>
+Date: Tue, 29 Sep 2026 11:04:07 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH hazptr 2/4] compiler.h: Introduce ptr_eq() to preserve
+ address dependency
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+ Boqun Feng <boqun.feng@gmail.com>, Joel Fernandes <joel@joelfernandes.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ John Stultz <jstultz@google.com>, Frederic Weisbecker <frederic@kernel.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com,
+ Mateusz Guzik <mjguzik@gmail.com>, Gary Guo <gary@garyguo.net>,
+ rcu@vger.kernel.org, linux-mm@kvack.org, lkmm@lists.linux.dev,
+ Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
+References: <20260927155134.4740-1-mathieu.desnoyers@efficios.com>
+ <20260927155134.4740-3-mathieu.desnoyers@efficios.com>
+ <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YT1PR01CA0138.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:2f::17) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 09/13] sched/debug: Add migration stats due to non
- preferred CPUs
-From: Shrikanth Hegde <sshegde@linux.ibm.com>
-To: Nathan Chancellor <nathan@kernel.org>, peterz@infradead.org
-Cc: linux-kernel@vger.kernel.org, mingo@kernel.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, yury.norov@gmail.com,
-        kprateek.nayak@amd.com, iii@linux.ibm.com, corbet@lwn.net,
-        meted@linux.ibm.com, ynorov@nvidia.com, tglx@kernel.org,
-        gregkh@linuxfoundation.org, pbonzini@redhat.com, seanjc@google.com,
-        vschneid@redhat.com, huschle@linux.ibm.com, rostedt@goodmis.org,
-        dietmar.eggemann@arm.com, maddy@linux.ibm.com, srikar@linux.ibm.com,
-        hdanton@sina.com, chleroy@kernel.org, vineeth@bitbyteword.org,
-        frederic@kernel.org, arighi@nvidia.com, pauld@redhat.com,
-        christian.loehle@arm.com, tj@kernel.org, tommaso.cucinotta@gmail.com,
-        maz@kernel.org, rafael@kernel.org, rdunlap@infradead.org,
-        kernellwp@gmail.com, linux-doc@vger.kernel.org, jgross@suse.com,
-        virtualization@lists.linux.dev, sunlightlinux@gmail.com,
-        Marco Elver <elver@google.com>, llvm@lists.linux.dev
-References: <20260928053728.797539-1-sshegde@linux.ibm.com>
- <20260928053728.797539-10-sshegde@linux.ibm.com>
- <20260929121838.GA1814129@ax162>
- <2964a7d8-8765-435c-af9e-a38024fca877@linux.ibm.com>
-Content-Language: en-US
-In-Reply-To: <2964a7d8-8765-435c-af9e-a38024fca877@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI5MDA1OCBTYWx0ZWRfX8QE/bA12ixhQ
- GGCKHdguXOu1egtpLmNkSa72JDnNMUZZ2Nmdt/wi83+3+cOVbAa2IpqRkuF7MOcB8GvpIImbYbU
- /aCAv+pPZakCSsC1GlsvoT/gCc9aOb59pG2Rx0+IKXxlZTfOt7ZL/SheaULLw+dWbMZ87UvRl4V
- VN0912Q/srwuFVnIEGjB2c04S8HBrELYySY2GNulZSMXYXoFoaD8BhjkksgcGH9xejrkckPVSXd
- vTj14oAZFjUZqAj+p3j9mA2NLBMVN2u5DIBo5wg53YTM8zhoubcH8fjxEqqPMNfsy66lyCh9qPQ
- x4HPZzxdQlnj417zp1Zt154lkdDESxmR/7xHkSzuG7w0Eg4sUciwy1KBe0AhOHhbjMfxf6H3x28
- vClA6jrMbejcXQH6K8RLy4eXh5PYG0+NHPVgSA0uj01b8XzXUeTuzqJkdvLfx+yujh84XYgwW8x
- 9qZMiUZ1g5tD8mAH+dA==
-X-Authority-Analysis: v=2.4 cv=SPbXx+vH c=1 sm=1 tr=0 ts=6abbd1db cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
- a=dZdlNAd9hR_1z_CP-BwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: mldWp8I46kJ4NJJmp9bnC7Hus2sjzBBG
-X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI5MDA1OCBTYWx0ZWRfX01DnDrelLr55
- 9G7RaKzPyTtiTdojcqqAUfqUz2rKVRzPClp7+lgC8uZqV83DRtWhwwgLx0fYqxCFTaEF4HbsXUx
- Mbl++ljY7hRH8BlRm78TNcWAhW0HNhQ=
-X-Proofpoint-GUID: GtyHGCHu9-nvngSu4wczeaSac3lOIR3C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-09-29_04,2026-09-21_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 impostorscore=0
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
- definitions=main-2609290058
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YT6PR01MB309022:EE_
+X-MS-Office365-Filtering-Correlation-Id: e2bee8a9-14c0-4d20-5854-08df1e3ae963
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|10067099003|56012099006|4143699003|3023799007|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	PWqZEan2pySRm4WxkEPjh3j90f+p96WlpItLNsOaWZVIFBl4ZT7Zfi0tu9ghCyZkH2BoKc1gCU4RrJb3DCgtC6rGfrtGaRTYtvvwDe0Ou9uW55iafU3rmbppTNBSB/WczVqmJim70eOq5mx1m2CiaLnPiGRTyDljGcI2eHcDfVpHAsIgzvR80HEz73mPXEIv3IyaGoNx8EvNbb2/AE1fCNhcYk2Y5hGyijYLIYrt7orNtWvWesiLbp/hh4nwoOm41Wci5SFuhyEu2tnPfDul/3w8B61NBR5DP2M7/YHzoo1hEukk4UJtmswf13lDcDOUy5rxZaNV1LgNmIf0NK7t7lliWvTME1BZeJsJGky3kfirnIzbw+DqUnh3t1mgyAVCIgb5Swc038PNIRz0mAr0VYPDPzWlZ+nsw+GXWHm/+61SU1txpHfn2/lP6hJEgyds99AtJkj93OFErhfGNAJbr5TuEEW3Q8PJyzh7nZElVwOYt0YwQUBcB9LGIzPpRWzPsmhO6nVFQ2ZBmvbbi8JB7rJ+8dwp/MK1Bp4x847nMHCAws2tFhJ/shRG5AtSwRhYb1EdsDerMZrVpz0vhjduwyOODchwWPSwyWJAeUaPUEQ=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(10067099003)(56012099006)(4143699003)(3023799007)(22082099003)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NEpIQTkxTm5kVGV0UHB2MHlNOVJPTGJjSzlEK3lUYzZlWlZXbVNITHF6aGl0?=
+ =?utf-8?B?UkcxYm5SMmx4ZlUzbTNjMVdIRDhESjdMR05ZYnhBdGFPWmdCaEYwR2N3UGpQ?=
+ =?utf-8?B?aDFkOG1SOUhoQk5aT09tcE0wT2VOOHB0aUliMjA2b2hKbHhrdStveHUyLzdE?=
+ =?utf-8?B?OHFEYXNhRjh0NzJYSkhNZFBsdDBWQUkzYU02UDd4bTBzSVROc3NuY3dIRjN3?=
+ =?utf-8?B?aVlUQVhVREU0OGpSY0N4MVJwUUd2MVI2YVYybFlTeFJXS1JjQWsyRG84bnlq?=
+ =?utf-8?B?aWhGQW1KZ2JER0xlV1V1S0c1MENJMEg0akFTSTQwQTI1Rk1HTjFIUUhCQ281?=
+ =?utf-8?B?TE1LUDV6di9pWGVKNWI5Zmh0VjdBVEdiRklxZG0veW94Qm1rOXpCNkhlWGRi?=
+ =?utf-8?B?R3hoK09xeTFuMDd1NVcrQU9lK1k4Q01GZlNEMG9FZzhXWlVLc3JYeU13cWJZ?=
+ =?utf-8?B?NGhFcUl3alhuR3Z1QjJOOXVXcVhYV3piSXoyeGJmZTd5WjNjbG1nS3FNVGt2?=
+ =?utf-8?B?NEYxS0JSdEw0Y1VKWVJKcmlxeEphT1dXVlRpWTZOTGM4dzJMeE1UTldBWnVw?=
+ =?utf-8?B?MnZwQm9DNisrMURGWit6OFlrNllZb2pIdGtvcUNISGVZVVdEQ2VlaEU2WjlY?=
+ =?utf-8?B?K0RURjB5NkVNNmRBelZxek9va2FycXRNMHJuNmFJRERBdHQ4aXhwWFdXTngz?=
+ =?utf-8?B?NXd2OVkrMTNNU3ZVOS8xTURPcDNpVTY5ZWJzYUcrYk9HaTJSbUI1VUxvUytT?=
+ =?utf-8?B?Wnd3cTRpRGNzbFI0SFdDVGx0enV5K2NKWWJXWFRSYVBEZnlsZHNpUHEvbUdC?=
+ =?utf-8?B?dHVwWHo3eENVUGJheVIySFZIYXNILzRGMkNYQU1VUFZoajM2eTh4U1dKQk1q?=
+ =?utf-8?B?dFNlS2p1ZGhNVlRVQ3dXemc1TjNSRDBtMlJodmVLQjdPcjVQQkwyOXFLcDhh?=
+ =?utf-8?B?TlYzQWFxYk5uMW9iQnVCbEdjZ3hCV0JuVGxXY3ZZRVQ0NzM2VzRFb3hlR1BQ?=
+ =?utf-8?B?YTdlN1FyRms5SHV2b3BTR29FQng1R1Y4NGN0dTZiZno0dThGczlXeHpSd240?=
+ =?utf-8?B?SzJOMTJvR2pBekFyaGt3YlcvL0plTFBLUXNSZHdxTnFaSGJrVkV5YmhxRUNm?=
+ =?utf-8?B?Y3VBL3FoYzd1VDNkYmE4Q2xrL1BYOUlENjFnMExFRDV2T1hnR291dG9QcnZz?=
+ =?utf-8?B?VVFXaEFia0tPT2YzZlgrM3FFb09tbFc2L0l1dThMZytGSmRidDJXWnluTk9I?=
+ =?utf-8?B?d0N3OWhsL2FkTTV3K2FiOW9xU1IvcEJBTisyTWoxYXhZOHYzR2srdlRqcHdu?=
+ =?utf-8?B?cUtvaXBxTTVUTEJzUC9wL3JzY2xSZWlKTnVUMVlPK2J3ZEllbU9tM3VVM20x?=
+ =?utf-8?B?YzBNekhiQWFWcTF3MWlqbHNGeXBiSXZCZnpBRDM3QmgzVGIzMkRLZDZVQmUz?=
+ =?utf-8?B?cHFxdkZJc1JVa2RRbHUzQndhY3hOZFlsMFJJSTlKRTF2OHFxUlo2aVVRSzZY?=
+ =?utf-8?B?bi90TEJBSm9qUm9TUXZabXhCajFMTHFOdGR0dzVMZUdnK2VSQ1hCc3lwMHlx?=
+ =?utf-8?B?MmZVYm9zY2RqbmVHTzgyaEdURVNVVlZXelJrK2JrK3lOOE9xZlhmekYrQktv?=
+ =?utf-8?B?WTZ5L0tNZURkYm1xYXZ1cDAwb0VHbVRYK1Y0aVJTOXpSTlJONHc2MHpDMXdR?=
+ =?utf-8?B?TnJJNFpKbE9YNFVVYWVKN1VqMUhVVnQvZ0gyN1Z3MTdwcWt2M3UzQUlEZzIr?=
+ =?utf-8?B?NVMwVjNBWGJObEhRc3FRa01IZ1I4cjRidVJvTXJjT0ZsUWthbVljZlNESVh3?=
+ =?utf-8?B?akRHb3VzMXlkN1labzBSRVNSRlpvSHR1UDFUaUhzc0YxZUorRDR4YXpYdTJX?=
+ =?utf-8?B?UWhhYkRpYmpkdlF2Z1hjSDVIZzJDdGk2cE1Hd0c3S2hURzJDOEhYNDl3a3R0?=
+ =?utf-8?B?R2FXbG5FandKRCs1T3RuVE82RGV2VTVLd1dwOGxCTDduNVcxVm8yMnRHb0hp?=
+ =?utf-8?B?RTNTNDE1a1FCY1ZHcFc1UWY1bzU5R2JuTm1UOFpJMXU3OEcwdTNpRGp6NTRU?=
+ =?utf-8?B?eWNKYy80MFZkRi9jbFNOU1M2ODhHWVNkZmlEQWJtclkwbkorWXI5Q1pXWVNq?=
+ =?utf-8?B?cVp5QVR1dmdEbWQrNXA5QTZhY2lsanVJL2ZUSHZzdHZwV09pYitiSkZEOTFy?=
+ =?utf-8?B?UHpHT1RjMUNzajVmZXVoc3BIczF2NmZrTVo3cnlVOXl2L0NqVkNKNDhweVNa?=
+ =?utf-8?B?SlRqc3RHU1poT1U4VVkyZERPN1Bza3Vidmd2ODR6dDFOaUEzL2tOSjRNVHNF?=
+ =?utf-8?B?LzZYeDFGWUdrUFVTTGtoTXljZUJES3JlMUFIV0NtVDJ3QkloSDlZcUhzdlh5?=
+ =?utf-8?Q?i2/tqz3p5ECq4rXs=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e2bee8a9-14c0-4d20-5854-08df1e3ae963
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 15:04:08.3592
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 21uhG9b/R4ra6C8ANFKT5BLfL4KkH8HpQPxddDaNoc/BKWwyyUpDoLxsOu8wnXA18+7KYvn59eNldwyTUfirJ5mNYq8wnk2mNYhudnVu7/s=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT6PR01MB309022
 
-Hi Nathan.
-
-On 9/29/26 6:13 PM, Shrikanth Hegde wrote:
-> Hi Nathan. Thanks for report.
+On 2026-09-29 10:47, Linus Torvalds wrote:
+> On Sun, 27 Sept 2026 at 08:51, Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> +static __always_inline
+>> +int ptr_eq(const volatile void *a, const volatile void *b)
+>> +{
+>> +       OPTIMIZER_HIDE_VAR(a);
+>> +       OPTIMIZER_HIDE_VAR(b);
+>> +       return a == b;
+>> +}
 > 
-> On 9/29/26 5:48 PM, Nathan Chancellor wrote:
->> On Mon, Sep 28, 2026 at 11:07:24AM +0530, Shrikanth Hegde wrote:
->>> Add a new per-task stat,
->>> - nr_migrations_cpu_non_preferred: number of push migrations while the
->>>    CPU is non-preferred.
->>>
->>> Since this new stat is per-task, it changes only /proc/<pid>/sched.
->>> It doesn't update /proc/schedstat. Hence increasing the schedstat version
->>> is not necessary.
->>>
->>> Signed-off-by: Shrikanth Hegde <sshegde@linux.ibm.com>
->> ...
->>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
->>> index 5049eff58fb7..7465c983e6f6 100644
->>> --- a/kernel/sched/core.c
->>> +++ b/kernel/sched/core.c
->>> @@ -11236,8 +11236,13 @@ static int sched_non_preferred_cpu_push_stop(void *arg)
->>>           update_rq_clock(rq);
->>>           context_unsafe_alias(rq);
->>> -        if (task_rq(p) == rq && task_on_rq_queued(p))
->>> -            rq = __migrate_task(rq, &rf, p, cpu);
->>> +        if (task_rq(p) == rq && task_on_rq_queued(p)) {
->>> +            struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
->>> +
->>> +            if (rq != dest_rq)
->>> +                schedstat_inc(p->stats.nr_migrations_cpu_non_preferred);
->>> +            rq = dest_rq;
->>> +        }
->>>           rq_unlock(rq, &rf);
->>>       }
->>
->> This breaks the build for me with clang-23+ (which have context analysis
->> enabled by default), although it bisects to the final patch of the
->> series since this is under CONFIG_PREFERRED_CPU and it is not selected
->> until then.
->>
->>    kernel/sched/core.c:11292:25: error: calling function '__migrate_task' requires holding raw_spinlock 'rq_lockp(rq)' exclusively [-Werror,-Wthread-safety-analysis]
->>     11292 |                         struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
->>           |                                              ^
->>    kernel/sched/core.c:11298:3: error: releasing raw_spinlock 'rq_lockp(rq)' that was not held [-Werror,-Wthread-safety-analysis]
->>     11298 |                 rq_unlock(rq, &rf);
->>           |                 ^
->>    kernel/sched/core.c:11303:1: error: raw_spinlock 'rq_lockp(__this_rq())' is not held on every path through here [-Werror,-Wthread-safety-analysis]
->>     11303 | }
->>           | ^
->>    kernel/sched/core.c:11286:3: note: raw_spinlock acquired here
->>     11286 |                 rq_lock(rq, &rf);
->>           |                 ^
->>    3 errors generated.
->>
->> Not sure what the proper fix for this is, maybe another
->> context_unsafe_alias()? cc Marco just in case
->>
+> I had to think about why I hate this so much.
 > 
-> I suspect it is due to using of dest_rq = rq and rq is changing context.
+> It's probably entirely senseless, but this just rubs me the wrong way.
+> Those OPTIMIZER_HIDE_VAR() statements are hiding the wrong thing. They
+> are telling the compiler to treat valid information (the pointers) as
+> if they had changed, so then the compiler will have to just reload
+> those pointers when they are used later (and "used later" is part of
+> the whole *point* of this, after all).
 > 
-> let me try locally and see the fix.
-> One fix is use rq->cpu instead of rq comparison to see if migration happened.
+> But it was never the pointer values that needed hiding from the
+> compiler. It's always just the comparison. And while the "optimal"
+> thing would be to just do something like
+> 
+>    static __always_inline bool ptr_eq(const volatile void *a, const
+> volatile void *b)
+>    {
+>          bool ret;
+>          asm("cmpq %0,%1":"=@ccz" (ret):"r" (a),"r"(b))
+>          return ret;
+>    }
+> 
+> that is an architecture-specific thing - and then have that
+> OPTIMIZER_HIDE_VAR() available as a fallback.
+> 
+> I don't know if it's really worth it, but I really do despise that
+> "hide the wrong values" thing that generates two new values just to
+> compare them and throw them away, and adds register pressure for no
+> good reason.
 
-Well, it was rather due to Patch 8/13 which had rq marked as context_unsafe_alias
-after acquiring it.
+I agree that doing it in asm would generate better code. Also, I've
+been told that clang now preserves the address dependency in this
+scenario, so perhaps we'd want to use preprocessor conditionals to
+select how to implement ptr_eq based on:
 
-I have tried below and that helps to fix the warnings.
-I will write a changelog and send it across soon.
+- architecture (allowing asm implementation overrides),
+- compiler (e.g. if compiler is clang >= version X, just do a plain
+   comparison). Likewise for gcc if it ever decides to fix this
+   behavior.
 
-Let me know if it works for you.
+I think this "hide var" hack is a fallback which can be used as a
+starting point, and then we can specialize based on architecture and
+compiler.
 
----
+Or do you prefer this in a different order ?
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 0bb86a43a592..23677d76f9d2 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11283,10 +11283,10 @@ static int sched_non_preferred_cpu_push_stop(void *arg)
-  		 * safely bail out.
-  		 */
-  		cpu = select_fallback_rq(rq->cpu, p);
-+		context_unsafe_alias(rq);
-  		rq_lock(rq, &rf);
-  		rq->npc_push_work_pending = false;
-  		update_rq_clock(rq);
--		context_unsafe_alias(rq);
-  
-  		if (task_rq(p) == rq && task_on_rq_queued(p)) {
-  			struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
