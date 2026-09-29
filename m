@@ -1,139 +1,210 @@
-Received: from mail-ej2-f42.google.com (mail-ej2-f42.google.com [74.125.228.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E496653A88E
-	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 14:47:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66A1425B08D;
+	Tue, 29 Sep 2026 14:58:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790693245; cv=none; b=j+bi31Y9B9/AjtYpamTpiP63GgFbGt/qye3iuOGd56DjPZg/dAXLKoje+k6yougPEca87nggCZipPlehsg5/RRbfTll7CjxMdKqiftC66VZVVFxeorluYbHuPLuI75ZWFDsd9Wb/11EdXdodo0vgSHCMFYfOi5xCNs6eenjbYk0=
+	t=1790693912; cv=none; b=HdX17PDg1ZfObcMvyK0GvME5IkuRJpKKpCKVqc8wdrl8RvWVIr6qWB4GGWSu56MrrE+JR1op9b4xtyi+61Fvd/eogntrGWuWX/q4IckFNctdJqwqgBKoK+AXzcl0Q2RtvCGGmbV4mMM8673mGM8t9Cw2sDgteYpr4CpbWwdLCL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790693245; c=relaxed/simple;
-	bh=SLmPCj6Drkarz6MGesiMP1GtPbh4rsUc3J8b1Kcoqwg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uoCBr/5CylsKuvc6S2sbFFD18919zbIvcroMyvUbn/Ifuqp7YfCWtlYknoBJyezLdIaF3KjeZIHtMNYpZ1VbZCJZp2SaPMsUJVVnmxzKS3v3Rnqq+RKdVHEE0T0AluyjPMbGGZyByV2S58VA7V3sWUoIsvKjj1E1FQPvT8zIRd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=gbsNV5sp; arc=none smtp.client-ip=74.125.228.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1790693912; c=relaxed/simple;
+	bh=DqeI++b161KtjAHzethdo3fEox1c19TAWzryZUcs3tE=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=as4win80LZtCRamsrXqvWfMXD/QrhY6D8ZMAavSThFoli1LFUnHys8YvUNm05Mf0sITpJ6RjH7zXS8nQ7otootw7TukT6t7bOSOocfP5D7A4XCbvz9ZcQjDIQb9XPFGpdLNxhc8NaYN7V3fKOCg6KYC34cUpyBdiczI7RoidorQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XvvrqjJq; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="gbsNV5sp"
-Received: by mail-ej2-f42.google.com with SMTP id a640c23a62f3a-c2dbdcb4f59so445538666b.0
-        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 07:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1790693242; x=1791298042; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IP+IFTLJhHPOzVgLZORkj6YpvpTLDjx8asIrhC/8Liw=;
-        b=gbsNV5spPzZQHeWLkU5PH7HIexFDvcGwNbSMs5Y+kKkVRjgUw3/P0LBONdAYIX8iZJ
-         qWk1y4qxuABsVwM/i7pkg/ziqGMPaUwJbPKEpxRfNdYZKEpLHzaxp1UNSniIdzs8jBK1
-         yzYY0Z2iyvi3jihiSvjPSHgyEIZJfcoTBnvhs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790693242; x=1791298042;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=IP+IFTLJhHPOzVgLZORkj6YpvpTLDjx8asIrhC/8Liw=;
-        b=deW1nkDW8NM9p1u5sb2drCtSEj4A6uyUUOr3ByNj4Q5XfmwgZ/PyYJO0U01eK/QiTU
-         dpgvNyvS6MH7H/XXnlMRdYIThLHK05dEXrl0KJykqOzwfO7rBS2wDdZBXhV/3c2gKjA6
-         OO/4lwvB7W7yf/2NzT0F46bd1aDDNYh+qkkRYncXTTzNDJXGjlIoiWoiB6VK1JDAtg5h
-         kFG+CmR2fPzscYpCoU6GIkhrJE90VNQOQTfa5uoy6kJXjHuux89rKBaQgoxewjJzhCgx
-         zN5Swq2WJKn3qhXX2FuWY78dD4sr3tFr/Lxj4359Dc6BsH1uuQt8aLq1XajP+FF/cwyU
-         s59A==
-X-Forwarded-Encrypted: i=1; AKwUvBxczD8xv8YlW7jENfEDtCY0CtYl3hmbNKEXBTHoKC9DtQ1CTWjHj82FE9ysaBnybHE+L0Vg@lists.linux.dev
-X-Gm-Message-State: AFuF++lP20eundeVECXd2cd+6REEt9RR/S15E2Zsx8pz9/Hu7rt10jsH
-	dndO3ANHWoFCZgXDZC8hGlFYWm4z3kYrYnl6AX00iqoOhvjQhZNpAsKR3lrwE/FHkFAPcVfUHgj
-	fDbl5/Ug=
-X-Gm-Gg: AYBFou2v7ePB0NHTEkB+rdlcFzx2I+quhNvNIx1uanFFKIlMUIFakOL6GFnNFeCBKJ0
-	3SSz4yUQyOCoNU+HI7lJPstVKGh9fwoXH4rCLYHVjGmdZOt+XCqEFrQLDLXFrM2Fdc4XNlU18gh
-	aqGb2du9h3zLWOssMN2y3xJXzBcKBgmTFKu3dl1ve5vM1buiSHaYoAxNqCNXB1jr9FxUJpKUnrb
-	80W/TpY359ZiVG6pplT1BSjoNCCAE+m95b+dbIm9t06VFQNHGTE/Yg/hmyx+7DtovP+9U3JbpM9
-	dbJhquAs87rRtYFdtzcLBE3FHy8bo+sOj4vFasLN6cKdurDGSC29PZrD2FGNshTwoD1oKwQ1pbK
-	b5I+ejSEWLXKEN/tyDKyh+domvg4EEO92KQ2rF+WMZHJZwAi/Odzc4MoE7XmeKsvNQrRQ6h4d7s
-	brt1DGPa4yCBWFGizdsz1PLQkkgj4Qsugs2daUH4wWSqpHSuYNzvIVEOjknQdY2zsmMNIK7Pod1
-	FjZ/NucpOf45CCoYbVQYw3E7U4GGDEKkDecmeqxj+NoCg4tftw=
-X-Received: by 2002:a17:906:9fd0:b0:c2d:d71c:c2cc with SMTP id a640c23a62f3a-c2dd71d261cmr540395366b.48.1790693241064;
-        Tue, 29 Sep 2026 07:47:21 -0700 (PDT)
-Received: from mail-ej2-f43.google.com (mail-ej2-f43.google.com. [74.125.228.171])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2dbd3bcac3sm448943166b.73.2026.09.29.07.47.17
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2026 07:47:20 -0700 (PDT)
-Received: by mail-ej2-f43.google.com with SMTP id a640c23a62f3a-c2af43c5b0cso553576566b.1
-        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 07:47:17 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz366pNE3Ku9q9mzCZAVDaQsnTGZZHVHbZDhNXE4An1ny+XngnxsIWpgiJvqf6y9UhuBPRn@lists.linux.dev
-X-Received: by 2002:a17:907:c491:b0:c26:1648:a06f with SMTP id
- a640c23a62f3a-c2ac253fd57mr1427153166b.42.1790693237251; Tue, 29 Sep 2026
- 07:47:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XvvrqjJq"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68TB6GLY2189632;
+	Tue, 29 Sep 2026 14:57:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=R6JfXv
+	ppDwndtGpHNaqd1NG4kbQK5XAbphIjZn2QMB4=; b=XvvrqjJqEMZ89mSdXaLySS
+	CjMLp6MTIbywHpMoH9g+y4QVCQAscidvC84BgYYBCsDGT1/Z6vuQQOy4iZIfCCOY
+	WdK0UuxJrJ5UWKZ53D7fFcS/UIRk4Gq3HYZzy/bKf6CmZ2+0LV53SLbm1//1UPUS
+	ctXPDId3zJAV1Wakmxi7nI/NSrZ6DeedMlmA/ecpgei04M2kmKvbBa1n2PZmOsPJ
+	8O8K7cpFPeSvlrPp6PBGtS+umhzQUvgFZ8EGvyt2CXr4KgVGL9E7T6DMOVymFHGT
+	Wb0SPsavtNZKUxSrUk51KyQBHexVefyUFtjdF1wlw3M3VLxWclBDZY5dU2OHk4ow
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5qr7mf1-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 29 Sep 2026 14:57:30 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68TAlU6r1667670;
+	Tue, 29 Sep 2026 14:57:29 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gxsvhj493-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 29 Sep 2026 14:57:29 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68TEvPqG50397614
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 29 Sep 2026 14:57:25 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 05FBF20043;
+	Tue, 29 Sep 2026 14:57:25 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EC00D20040;
+	Tue, 29 Sep 2026 14:57:14 +0000 (GMT)
+Received: from [9.124.214.246] (unknown [9.124.214.246])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 29 Sep 2026 14:57:14 +0000 (GMT)
+Message-ID: <4cd3d839-ac67-43ac-9b22-0ded9c3d1f41@linux.ibm.com>
+Date: Tue, 29 Sep 2026 20:27:13 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260927155134.4740-1-mathieu.desnoyers@efficios.com> <20260927155134.4740-3-mathieu.desnoyers@efficios.com>
-In-Reply-To: <20260927155134.4740-3-mathieu.desnoyers@efficios.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 29 Sep 2026 07:47:00 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
-X-Gm-Features: AclHuK-hIyKMMCYq0m6RbVGEdDaE41y87jUOezwgP_JOLXBYBmnHdH3WXkY-n-A
-Message-ID: <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
-Subject: Re: [PATCH hazptr 2/4] compiler.h: Introduce ptr_eq() to preserve
- address dependency
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org, 
-	Boqun Feng <boqun.feng@gmail.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, John Stultz <jstultz@google.com>, 
-	Neeraj Upadhyay <Neeraj.Upadhyay@amd.com>, Frederic Weisbecker <frederic@kernel.org>, 
-	Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan <jiangshanlai@gmail.com>, 
-	Zqiang <qiang.zhang1211@gmail.com>, Ingo Molnar <mingo@redhat.com>, 
-	Waiman Long <longman@redhat.com>, Mark Rutland <mark.rutland@arm.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com, 
-	Mateusz Guzik <mjguzik@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Jonas Oberhauser <jonas.oberhauser@huaweicloud.com>, rcu@vger.kernel.org, linux-mm@kvack.org, 
-	lkmm@lists.linux.dev, Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 09/13] sched/debug: Add migration stats due to non
+ preferred CPUs
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+To: Nathan Chancellor <nathan@kernel.org>, peterz@infradead.org
+Cc: linux-kernel@vger.kernel.org, mingo@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, yury.norov@gmail.com,
+        kprateek.nayak@amd.com, iii@linux.ibm.com, corbet@lwn.net,
+        meted@linux.ibm.com, ynorov@nvidia.com, tglx@kernel.org,
+        gregkh@linuxfoundation.org, pbonzini@redhat.com, seanjc@google.com,
+        vschneid@redhat.com, huschle@linux.ibm.com, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, maddy@linux.ibm.com, srikar@linux.ibm.com,
+        hdanton@sina.com, chleroy@kernel.org, vineeth@bitbyteword.org,
+        frederic@kernel.org, arighi@nvidia.com, pauld@redhat.com,
+        christian.loehle@arm.com, tj@kernel.org, tommaso.cucinotta@gmail.com,
+        maz@kernel.org, rafael@kernel.org, rdunlap@infradead.org,
+        kernellwp@gmail.com, linux-doc@vger.kernel.org, jgross@suse.com,
+        virtualization@lists.linux.dev, sunlightlinux@gmail.com,
+        Marco Elver <elver@google.com>, llvm@lists.linux.dev
+References: <20260928053728.797539-1-sshegde@linux.ibm.com>
+ <20260928053728.797539-10-sshegde@linux.ibm.com>
+ <20260929121838.GA1814129@ax162>
+ <2964a7d8-8765-435c-af9e-a38024fca877@linux.ibm.com>
+Content-Language: en-US
+In-Reply-To: <2964a7d8-8765-435c-af9e-a38024fca877@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI5MDA1OCBTYWx0ZWRfX8QE/bA12ixhQ
+ GGCKHdguXOu1egtpLmNkSa72JDnNMUZZ2Nmdt/wi83+3+cOVbAa2IpqRkuF7MOcB8GvpIImbYbU
+ /aCAv+pPZakCSsC1GlsvoT/gCc9aOb59pG2Rx0+IKXxlZTfOt7ZL/SheaULLw+dWbMZ87UvRl4V
+ VN0912Q/srwuFVnIEGjB2c04S8HBrELYySY2GNulZSMXYXoFoaD8BhjkksgcGH9xejrkckPVSXd
+ vTj14oAZFjUZqAj+p3j9mA2NLBMVN2u5DIBo5wg53YTM8zhoubcH8fjxEqqPMNfsy66lyCh9qPQ
+ x4HPZzxdQlnj417zp1Zt154lkdDESxmR/7xHkSzuG7w0Eg4sUciwy1KBe0AhOHhbjMfxf6H3x28
+ vClA6jrMbejcXQH6K8RLy4eXh5PYG0+NHPVgSA0uj01b8XzXUeTuzqJkdvLfx+yujh84XYgwW8x
+ 9qZMiUZ1g5tD8mAH+dA==
+X-Authority-Analysis: v=2.4 cv=SPbXx+vH c=1 sm=1 tr=0 ts=6abbd1db cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VnNF1IyMAAAA:8
+ a=dZdlNAd9hR_1z_CP-BwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: mldWp8I46kJ4NJJmp9bnC7Hus2sjzBBG
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI5MDA1OCBTYWx0ZWRfX01DnDrelLr55
+ 9G7RaKzPyTtiTdojcqqAUfqUz2rKVRzPClp7+lgC8uZqV83DRtWhwwgLx0fYqxCFTaEF4HbsXUx
+ Mbl++ljY7hRH8BlRm78TNcWAhW0HNhQ=
+X-Proofpoint-GUID: GtyHGCHu9-nvngSu4wczeaSac3lOIR3C
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-29_04,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 malwarescore=0 adultscore=0 bulkscore=0 impostorscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2609040000
+ definitions=main-2609290058
 
-On Sun, 27 Sept 2026 at 08:51, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> +static __always_inline
-> +int ptr_eq(const volatile void *a, const volatile void *b)
-> +{
-> +       OPTIMIZER_HIDE_VAR(a);
-> +       OPTIMIZER_HIDE_VAR(b);
-> +       return a == b;
-> +}
+Hi Nathan.
 
-I had to think about why I hate this so much.
+On 9/29/26 6:13 PM, Shrikanth Hegde wrote:
+> Hi Nathan. Thanks for report.
+> 
+> On 9/29/26 5:48 PM, Nathan Chancellor wrote:
+>> On Mon, Sep 28, 2026 at 11:07:24AM +0530, Shrikanth Hegde wrote:
+>>> Add a new per-task stat,
+>>> - nr_migrations_cpu_non_preferred: number of push migrations while the
+>>>    CPU is non-preferred.
+>>>
+>>> Since this new stat is per-task, it changes only /proc/<pid>/sched.
+>>> It doesn't update /proc/schedstat. Hence increasing the schedstat version
+>>> is not necessary.
+>>>
+>>> Signed-off-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+>> ...
+>>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>>> index 5049eff58fb7..7465c983e6f6 100644
+>>> --- a/kernel/sched/core.c
+>>> +++ b/kernel/sched/core.c
+>>> @@ -11236,8 +11236,13 @@ static int sched_non_preferred_cpu_push_stop(void *arg)
+>>>           update_rq_clock(rq);
+>>>           context_unsafe_alias(rq);
+>>> -        if (task_rq(p) == rq && task_on_rq_queued(p))
+>>> -            rq = __migrate_task(rq, &rf, p, cpu);
+>>> +        if (task_rq(p) == rq && task_on_rq_queued(p)) {
+>>> +            struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
+>>> +
+>>> +            if (rq != dest_rq)
+>>> +                schedstat_inc(p->stats.nr_migrations_cpu_non_preferred);
+>>> +            rq = dest_rq;
+>>> +        }
+>>>           rq_unlock(rq, &rf);
+>>>       }
+>>
+>> This breaks the build for me with clang-23+ (which have context analysis
+>> enabled by default), although it bisects to the final patch of the
+>> series since this is under CONFIG_PREFERRED_CPU and it is not selected
+>> until then.
+>>
+>>    kernel/sched/core.c:11292:25: error: calling function '__migrate_task' requires holding raw_spinlock 'rq_lockp(rq)' exclusively [-Werror,-Wthread-safety-analysis]
+>>     11292 |                         struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
+>>           |                                              ^
+>>    kernel/sched/core.c:11298:3: error: releasing raw_spinlock 'rq_lockp(rq)' that was not held [-Werror,-Wthread-safety-analysis]
+>>     11298 |                 rq_unlock(rq, &rf);
+>>           |                 ^
+>>    kernel/sched/core.c:11303:1: error: raw_spinlock 'rq_lockp(__this_rq())' is not held on every path through here [-Werror,-Wthread-safety-analysis]
+>>     11303 | }
+>>           | ^
+>>    kernel/sched/core.c:11286:3: note: raw_spinlock acquired here
+>>     11286 |                 rq_lock(rq, &rf);
+>>           |                 ^
+>>    3 errors generated.
+>>
+>> Not sure what the proper fix for this is, maybe another
+>> context_unsafe_alias()? cc Marco just in case
+>>
+> 
+> I suspect it is due to using of dest_rq = rq and rq is changing context.
+> 
+> let me try locally and see the fix.
+> One fix is use rq->cpu instead of rq comparison to see if migration happened.
 
-It's probably entirely senseless, but this just rubs me the wrong way.
-Those OPTIMIZER_HIDE_VAR() statements are hiding the wrong thing. They
-are telling the compiler to treat valid information (the pointers) as
-if they had changed, so then the compiler will have to just reload
-those pointers when they are used later (and "used later" is part of
-the whole *point* of this, after all).
+Well, it was rather due to Patch 8/13 which had rq marked as context_unsafe_alias
+after acquiring it.
 
-But it was never the pointer values that needed hiding from the
-compiler. It's always just the comparison. And while the "optimal"
-thing would be to just do something like
+I have tried below and that helps to fix the warnings.
+I will write a changelog and send it across soon.
 
-  static __always_inline bool ptr_eq(const volatile void *a, const
-volatile void *b)
-  {
-        bool ret;
-        asm("cmpq %0,%1":"=@ccz" (ret):"r" (a),"r"(b))
-        return ret;
-  }
+Let me know if it works for you.
 
-that is an architecture-specific thing - and then have that
-OPTIMIZER_HIDE_VAR() available as a fallback.
+---
 
-I don't know if it's really worth it, but I really do despise that
-"hide the wrong values" thing that generates two new values just to
-compare them and throw them away, and adds register pressure for no
-good reason.
-
-               Linus
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 0bb86a43a592..23677d76f9d2 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11283,10 +11283,10 @@ static int sched_non_preferred_cpu_push_stop(void *arg)
+  		 * safely bail out.
+  		 */
+  		cpu = select_fallback_rq(rq->cpu, p);
++		context_unsafe_alias(rq);
+  		rq_lock(rq, &rf);
+  		rq->npc_push_work_pending = false;
+  		update_rq_clock(rq);
+-		context_unsafe_alias(rq);
+  
+  		if (task_rq(p) == rq && task_on_rq_queued(p)) {
+  			struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
