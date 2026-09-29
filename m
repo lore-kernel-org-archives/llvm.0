@@ -1,212 +1,143 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020093.outbound.protection.outlook.com [52.101.196.93])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85093B9D83;
-	Tue, 29 Sep 2026 16:22:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790698963; cv=fail; b=CP1yVsm63ia+AMG6mlvBqmSaTZmhotYsn/NweFGtUUTPoPMPpWT5N4wsEaXQPR4s3nfyWb4sZuLlTXpIUriGRRFCiqTps0OZmKrYU2H3FzcmfZwMnNF8jz/m9uR4asGUtvvb7RhtQVRHcHKqbzLPMpCY4NLXbUDv8Jfk81QRpDY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790698963; c=relaxed/simple;
-	bh=Tg6c6KIzN+QbgFKSDM2l93loMhbkgvl4vq+d2sqjyO0=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=A/uvcFo0GaI7JguRge4a4aUj3ypNWqmb5aEh1s5U6ZV89Pr7d10nwaNnKdQzMG6SN0W9FxcsJ7pF6dJA+sD1IPkn17VsjU6WA6nBn83OAn6oq3fuNFrTBeXkSVz79esaq0/52Y6L7V7PodLl3uCwcm4tbOdZcGGdfsLigQ6FJeQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=nq+YAuZk; arc=fail smtp.client-ip=52.101.196.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8501C3DB330
+	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 16:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790700466; cv=none; b=coaIYE2vGREW5EPeahxUKw9d4cBM+QQkwkqpLmL14+g7VEIiIAl0V40GxvDRR6YZjBSrlrpKf6Vpnty2mUty7IS0oj7h+pCnyvLX72NONuF5JS+kKRpR6UrwrjoAbQL+OkDQj4/3gdzvYX8VIyHRtPBbOo0csbtbCpnY57U3A2s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790700466; c=relaxed/simple;
+	bh=N9BsgCfXNS6LgrDy+6OUjxhiGTmVw8ZoB8nAhYxzmSY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KrhVwFeo5v/m76c3HWsc4wIPVFrcnK2TxMUZb7YeEBA73ak7Ju5EvyEptCSZJ3bFyCAr/yc6gko+U65zAOnDInKK2C4kaLgJfueV4T05PhWQSOY0QuDwMH/bebiB6seWdMiOuiziB13I1gtpRp7yLPPfkUtfocKflCBfnX1GwsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BsoIpDHf; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="nq+YAuZk"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eC2/f7/8rrZwo4KTrEc+gYUhONDOXpnRRgY7uUKEaHmhc0dM8Lmm2LWo8vg54fNbWqqhAv3Gu5PgzJeFg51ZvSyxxewc1/rmS891u3UAmS3VjjeGnNMWWfKKQoGqb3T05bUTucUhlrYfU3QvYgKLohSNxN7+HBEVmN7VVcgqrxu8XUhMEHbD3NP8qpvZX3j8UVpzs5jWlcGGCSKltHdjUvUg8Ba2hT7gCkrKrC/Qu06CoJX4cn85Q5wywFOMrbnx+ebYQB8dzlIQhERIQ/VUIkNtK/i7bBbHHNXtEZXb/bGQ+vYkHxafkFiPTRdpsvlbm8X26XS5eVTw1qhpZPy0Vg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ufuXTadR9DPcTzh3xS/ESgi+Gktq+/Faf4mTBxAbCFk=;
- b=O66c9dKJwmTWwnhgHs0rQwNDWu7HwdyQzmBVkHlrFBqsNnNRgYRbIU+SFUCgycBZQwLt8JHhLIOX/KgCi6SCcoIGYhKTFNweDX8wBlO8KGrPeWGFJ05jYaSbvs+aodor6H1vJzNGeZW1E5cLDxwP87Tj5J8ST+oy7liXU29KxdSSBixdMViLK9eeN0BOuhbs1+fvDsDtRwB3ybBdPL/5Z6UGoxHVMKFQVM83uBW3b/KujTCa9wA7IO5XA8tB0kgPhKGHH6rmZel0twBsWECkef5jAEOnvz1WeqNzet6+zGRl/8YTAQ46nhnaxPGSgM735cfmebDnqK/ucBHXjOvoEQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ufuXTadR9DPcTzh3xS/ESgi+Gktq+/Faf4mTBxAbCFk=;
- b=nq+YAuZkF2QSnuHPAHFoFnYwkpN7vmOVPaXQQCasuA4/TzVAZE55lOfHGqFnfVZSuyEFOmOLgZc8T3SzelD16YNwgvb2saSa8RW6by+qA2/iHxSOvHvgc9hQzmpNVqOzDm4vwk1vFc6WWjK24LJRXWuGdNKt8l90b7zj5JwjiYc=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
- by LO0P265MB3225.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:155::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.24; Tue, 29 Sep
- 2026 16:22:36 +0000
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1%6]) with mapi id 15.21.0451.024; Tue, 29 Sep 2026
- 16:22:36 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 29 Sep 2026 17:22:35 +0100
-Message-Id: <DLRXSVQZP07Z.3QSBVR1B2JO9S@garyguo.net>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>,
- <linux-kernel@vger.kernel.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Joel
- Fernandes" <joel@joelfernandes.org>, "Alan Stern"
- <stern@rowland.harvard.edu>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, "Sebastian Andrzej Siewior"
- <bigeasy@linutronix.de>, "Will Deacon" <will@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "John Stultz" <jstultz@google.com>, "Frederic
- Weisbecker" <frederic@kernel.org>, "Josh Triplett" <josh@joshtriplett.org>,
- "Uladzislau Rezki" <urezki@gmail.com>, "Steven Rostedt"
- <rostedt@goodmis.org>, "Lai Jiangshan" <jiangshanlai@gmail.com>, "Zqiang"
- <qiang.zhang1211@gmail.com>, "Ingo Molnar" <mingo@redhat.com>, "Waiman
- Long" <longman@redhat.com>, "Mark Rutland" <mark.rutland@arm.com>, "Thomas
- Gleixner" <tglx@linutronix.de>, "Vlastimil Babka" <vbabka@suse.cz>,
- <maged.michael@gmail.com>, "Mateusz Guzik" <mjguzik@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, <rcu@vger.kernel.org>, <linux-mm@kvack.org>,
- <lkmm@lists.linux.dev>, "Nikita Popov" <github@npopov.com>,
- <llvm@lists.linux.dev>
-Subject: Re: [PATCH hazptr 2/4] compiler.h: Introduce ptr_eq() to preserve
- address dependency
-From: "Gary Guo" <gary@garyguo.net>
-To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Linus Torvalds"
- <torvalds@linux-foundation.org>
-X-Mailer: aerc 0.22.0
-References: <20260927155134.4740-1-mathieu.desnoyers@efficios.com>
- <20260927155134.4740-3-mathieu.desnoyers@efficios.com>
- <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
- <133ca8de-cf30-4bf5-9539-d0b73e347b22@efficios.com>
- <CAHk-=wi7BkCuzMe_zWi6KHUs09UQWJpCVNvuFg5wh_CAu5dgow@mail.gmail.com>
- <5a695b14-d25d-4c11-87f4-83c8d299d79f@efficios.com>
-In-Reply-To: <5a695b14-d25d-4c11-87f4-83c8d299d79f@efficios.com>
-X-ClientProxiedBy: LO4P123CA0620.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:294::16) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:4ab::19)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BsoIpDHf"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68TB5M1e4059995;
+	Tue, 29 Sep 2026 16:47:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=VoVozP49h13sqmExeIlGReg/E2LYwmRl9ePEfAxbI
+	ao=; b=BsoIpDHfrocRF3+HJiNz/MZvPxTbjYca8NJZ1UNvklq+8E0aVnMucFo0t
+	y20LVX2GubuQ7zwjtoUHDoL6/gtCTPrRqXf37u5xLdJjV3b9s65MRyxEbo7hxjJz
+	96d7m5hec3hE5lJMZahIGVzVu1WHeVowD6aAldS70mYoZ5MtpZqLFPkgs3uRqUHD
+	lRJIxc7azuMLf2C0JRuBJIV8AQW2425cQTXfdQqU8my94akKZMTDLoVzgN/NNfO0
+	5aIxSTA8aWeJ/EZBsEoo16kMiRuNclRM0QF+weew015EDAtqyL96rgI6WwhqF8FE
+	fhjpS45dtF7a7LQ6shRL6NywuO5EA==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5j589qb-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 29 Sep 2026 16:47:31 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68TF1t9D1617010;
+	Tue, 29 Sep 2026 16:47:30 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4gxrrwapfb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 29 Sep 2026 16:47:30 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68TGlPoc51380610
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 29 Sep 2026 16:47:25 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BF1032004B;
+	Tue, 29 Sep 2026 16:47:25 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A0C9820043;
+	Tue, 29 Sep 2026 16:47:20 +0000 (GMT)
+Received: from li-7bb28a4c-2dab-11b2-a85c-887b5c60d769.ibm.com.com (unknown [9.124.214.246])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 29 Sep 2026 16:47:20 +0000 (GMT)
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+To: linux-kernel@vger.kernel.org, mingo@kernel.org, peterz@infradead.org,
+        llvm@lists.linux.dev, nathan@kernel.org
+Cc: sshegde@linux.ibm.com, juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        tglx@kernel.org, yury.norov@gmail.com, kprateek.nayak@amd.com,
+        vschneid@redhat.com, iii@linux.ibm.com, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, elver@google.com
+Subject: [PATCH] sched/core: Fix context analysis errors in non-preferred CPU push
+Date: Tue, 29 Sep 2026 22:17:12 +0530
+Message-ID: <20260929164712.1054883-1-sshegde@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|LO0P265MB3225:EE_
-X-MS-Office365-Filtering-Correlation-Id: 56d70115-dc68-4d56-ba6b-08df1e45dfd6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|10070799003|23010399003|366016|1800799024|4143699003|56012099006|10067099003|22082099003|18002099003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	bhwN+3r2LpDKOEjduI7sg31tXXt2h8hrOJcV69LoN2p/V0T7vL8SYItUsLw9OoncgP1bS6BQXI+RH72LAWqEvcKMvK+W5/6/W/GVlXJ1MRFJCoCyILAPbzDsBpJliJ6h/HRxSnSzn688n9BJ6Mpl1TQDFPOXJBiLeFLZkhQCfPkdqMLRIl619NJ2FVGdm6XoSlT9UE+dqSJ+Me6WWiSyH9WYr8F9xH0q/2HYjdLHh5byHvyFYXlRtKt85zYjXp4he5kHcvZaqH2wM1sfSaUs/ag8LcFcLq74p8gsDjRDiXMGR2SC1YTX1r7lubFfZN7rE+s9gk+t2n1nAwxhzFi8zNy+fE4R6kqsNXt3Y5UhpyJa71sFBJ3B645JEcd334urR9+7ylRwEM+8eFFL3iGM8Zwj2yTbxynpwd0MgvAx0/J1kVBMUXg+P14pIzi9NvvsQ9cEF8XBdJTeFpaJP7M/iVJjwYYjskE4irlofCI6AhrRHUQr1HKzq+X2uuqZqyU2wKAfY/S+pVpprTeVfr8KldR0EDyhWEYfmhyQ3+V9J4eLMFErz2vMp4jqean+H6JmhSn9DJ/3XkavTCmofx3IkmrWr2UIboXXHvW4WeeQiFCql6YGjRGU1RxLypIJ5bSXhPonYXOiYbn7NtrzFTAiss05Oh6wl1bfB1uHxJg1p+Q=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(23010399003)(366016)(1800799024)(4143699003)(56012099006)(10067099003)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OHFsK0wzYzBEbTNNczJFZ2NqQUFVS2lManNSbjJXNElQVjRXQmxCNTFLd3VZ?=
- =?utf-8?B?ODFSdk1vTUpDYW1nbUFRR2NsN2RUa0VGRlk2OTBoVGpVK2FjUjhjcG4wVndJ?=
- =?utf-8?B?WXF1R3F3bjQ2V2lCNUtHZVZFMm80TFpmVEkvYlJneUdNMXhlbHRuaGZNMnlD?=
- =?utf-8?B?WSttcEF2TkxYR242bm1NS25kTFJHTFJBRTVZOGtsS3d0bHN0b3R5N0YxRGt6?=
- =?utf-8?B?NkJSeUd2dFgwT1o3S3dCUkMrMlBHemhXK3dCeFk0VXBiQUcvNmtrbUY5UU03?=
- =?utf-8?B?VkRXZkdkNGRHYnZuN1BWOHRQSHNkeGJPY1BEdDB3dXN6R3ZJM3J1ZVZnWTFk?=
- =?utf-8?B?bkFaNk00Z296MFVod0Y3WUNCYWhxR2Z2ZTA5V2IyQUJNblB0emsyS05Keldn?=
- =?utf-8?B?SFZaSmJyZ0NMV2pBMW1WcjQwK2x5OWNqbU8wY0oza1JmRnVTZW1QV0NMMWhW?=
- =?utf-8?B?WVFCNVl5VHd3Ry80bWdEMHZCWFBRMjc0OUJaT1YySGNoM3NsWTdPUEY4WXJ1?=
- =?utf-8?B?QWJuSHk4WitmTlJmK013aTZuOFFGcTBQUUhZODBrK3BvL01yam5TNnd4clcy?=
- =?utf-8?B?VFVzdUFXSUVHMVVtTzJSRktYRXd6cnRubXhUWVF4ZmJUZ0Q5SnZ1QkpPdmlk?=
- =?utf-8?B?d1RXYzdtdS9ybTdUNHhJRWwxVG96L3FRN2twZ3U1c3J5SmozeTNDcVZtc1NW?=
- =?utf-8?B?K2JHbm9jckdDVW5RcUE3Wlp2K3RERkxOZzVLb3IzU3JxS0RTc3lieGN4SUcr?=
- =?utf-8?B?aUNXOEt5OFU3a01DdWJXQXdaMmRKbHBwOVlNa292anQ1TytlR3JuQXcyaWZa?=
- =?utf-8?B?LzBad2JPdVdib0Vhd3lmWFIxSDZvcWYvb3ByMmNvVWNSNndsaGVqTXE1dGVt?=
- =?utf-8?B?MCsvWFFGMC9vTlhzRHo2WVdZL3dqR2xackVpNHVKM0ZwMmFxczIyU0J1SUR4?=
- =?utf-8?B?WWpucm1pMEo5bUpRWXRySTIvVHRJN0RWQWErSmRNMlUvTGZjamp5alFjeFZY?=
- =?utf-8?B?dlVXUnloODFEaUNhckRVU21YSnlFSlNVWGsxTDhjU0dsdmRHUC9MVHhKR1lx?=
- =?utf-8?B?OGQ4UGNkTnVtdmJMa1pPV2pwK3hRbmRhVXdrV05ZV05YcVhZZ2hBOVBVYlVV?=
- =?utf-8?B?Vmxod3hBajlhYnZHYVZuMW1zNlBkSG9Ebm5rSERtMHBlNmVqVWxTMjN6b0pW?=
- =?utf-8?B?eEhxN0VQYzF0R2FkWkpJRGlDN2tmcmFYWDhKOUhLbFdqWlgvZWl1MDhXeW5Y?=
- =?utf-8?B?WUk5QnJaaTFGRTZtUzFhY2I2UW1Fand1TkhYTHBjWWRJc3JBUmd6Y3p0R2Z0?=
- =?utf-8?B?TGxvUFg1aW1OTndabndpOThFMFExejF4L095N2ZqUng1ZnRaTjFFbXZGNXdk?=
- =?utf-8?B?YTJRQUxzNnFqOFNZNjJicUtHd0V5SUVsTUxYYVpVWEUvRy9UNy9wb3NpVUlR?=
- =?utf-8?B?RVhDaHJmVEZlODRxMnd5eitGaTF6MzB3cmNYcTZCcDh1WWloT0lCVzVuREJH?=
- =?utf-8?B?dTF6WjBzckJrbnc3TkdJdVFYaWdzSDhMeWQxek0ya3Y3Ky80VVRUMjFHOWl0?=
- =?utf-8?B?bVhYNDQ3c256bnI0dGZIMkQ5Q0FXZzJjSnhjWnkrQ0dkUE9MK25PMTlMNDBK?=
- =?utf-8?B?REJ3d0NJS1E0MU01dG05S2E5QWx4UmVzNXNtdElGWTFzOHFORzcxK212Q0l3?=
- =?utf-8?B?YWtDRVhRMVpmYzYyd2x0S29sMmNxTWJ6Y2x4bFlXem40TkJ1WDdrWmtWQXdE?=
- =?utf-8?B?eEpIQ3ZiNlBCN3ZEdVEvVFpIelBWdjRhWnloNU9TRzA4NEFTWU1uUzRHUkFw?=
- =?utf-8?B?WmxHeTYvNU1NMStYckdGdXpjNThFdUgvRUE1QWR4dCtBTkxVZmkxcStyM3Ez?=
- =?utf-8?B?VGh5VUtzdTQ1STkrZmZhU2UyRVRkY2FDeFZpUmVpV242VXF3d3VSVjU1TTBH?=
- =?utf-8?B?cGRrU0RGR3cxdlRuOVpHOHFGR1ljbDczZE8rQm8vcG54UmtaOWRqTzgyS0oz?=
- =?utf-8?B?eWZ5bmU5VDdxMEwzYWQ2QlY2c2FPLys5WE5RLzdha0FCR3gwQ3Y1SjhTWnBv?=
- =?utf-8?B?bGdqdXo2MjdjV2xndVNraEEwbXJVMlllWTVVNmdzbjM2K0ltaTFNV2g5WExQ?=
- =?utf-8?B?V21KN1hVS01WamdDbHBrTmZFNXNLV0dWOGw2QVF6WkdQT2MvN2FhV3FoVzVR?=
- =?utf-8?B?SWI2TzdJTytKSnkzaGlhbGNOMk9jYXN0SmZ2M2pyeldyTDJqNjBrWGV1S0th?=
- =?utf-8?B?VTF6YXFYNDMwQUM2L1NTU2h6bzlRYWZlNEdvaU5aVG1WR0JEKzlMQU1jTzF1?=
- =?utf-8?B?anh1TGUvWVBBeVF3bzZZdGRWV1hzOTk1QVBwai9YaHVFeHN6Y0VwZz09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 56d70115-dc68-4d56-ba6b-08df1e45dfd6
-X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 16:22:36.7559
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bIL9xwM0Jsdsd+awx6FFg4OVCyavW5i8KhM2h/IQtyYhnB/2MXwcznxhDrlCw4aBDNKIKHQ8HzraJMU8zYbPhQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB3225
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI5MDA2NiBTYWx0ZWRfX3dROm87Wfw4p
+ Ii+87R6zSfmt9mNjDivd6PUIlUC8XDQOS3ZmHUmRd704y3dbiBk+ngLf/7C6CHZeS4rKHE1gyfU
+ j74pdR9YRARUqafyoL+xE3cGM3YDM0s=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI5MDA2NiBTYWx0ZWRfX3koUZ/pNmXMb
+ E3HYk1brGDS/VwQfuKSp8gUzGeK2iW8vXr2T45Aqos1erqIEV40DIA7UXjRdPvRSSeZrilhRefk
+ VAdroQv5ToYwGIR1Vd62dktTAFoz9q1kPx2zD761Zi3IOYC4sI9bMPrKyGyE6TApItOTgaCDylW
+ NqOVRVPZLxICN+wua+HWyKL7okIo0cQ3AAUUn5H3yMwh8BVyYgawg5lftjY1j5XrzjxmR3BGJaE
+ xat+Uew3YM+owC7AnzTZ+Wz8jatFQJxceyfklvvbZCJMQfl3wQ6p39mqH+5y21MA1HpDRVuSVTc
+ jTaobiI7s5aVZ1QK4/slDumVkYzzeZY9jHB5rf33ylmelv9OWz3JA3B2RON9WXRaQ0oLNhBvbpt
+ sFc0ntHp8kc52Lx1O9C2ZZxmYUNe1oaakNOU+BfN2aJGUp2go1+bUxJyxhi3s1IfJcK/uHKPDm0
+ KcCJOPh5egFFPHUlqBA==
+X-Proofpoint-GUID: xRmHktG5Ks4uYC-49UnQekYhqAeS6FN0
+X-Authority-Analysis: v=2.4 cv=RKcmjIi+ c=1 sm=1 tr=0 ts=6abbeba3 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=iQ6ETzBq9ecOQQE5vZCe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=_XkI2SlThOc_OxJ9TIcA:9
+X-Proofpoint-ORIG-GUID: QNcRT8z7AX3TpUa2h2SumYlU8z71b8f6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-29_04,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 spamscore=0 bulkscore=0 impostorscore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609290066
 
-On Tue Sep 29, 2026 at 4:42 PM BST, Mathieu Desnoyers wrote:
-> On 2026-09-29 11:16, Linus Torvalds wrote:
->> On Tue, 29 Sept 2026 at 08:04, Mathieu Desnoyers
->> <mathieu.desnoyers@efficios.com> wrote:
->>>
->>> I agree that doing it in asm would generate better code. Also, I've
->>> been told that clang now preserves the address dependency in this
->>> scenario, so perhaps we'd want to use preprocessor conditionals to
->>> select how to implement ptr_eq based on:
->>>
->>> - architecture (allowing asm implementation overrides),
->>> - compiler (e.g. if compiler is clang >=3D version X, just do a plain
->>>     comparison). Likewise for gcc if it ever decides to fix this
->>>     behavior.
->>>
->>> I think this "hide var" hack is a fallback which can be used as a
->>> starting point, and then we can specialize based on architecture and
->>> compiler.
->>>
->>> Or do you prefer this in a different order ?
->>=20
->> Oh, if there's some sane way to tell that the compiler already honors
->> address dependencies, then that should be done first and the whole
->> thing should just become a simple
->>=20
->>   (a) =3D=3D (b)
->>=20
->> for that situation - allowing the compiler then the freedom to do
->> whatever (which can involve not using a register at all, but a compare
->> to memory, or whatever - the compiler might have reasons to avoid the
->> 'cmp' and use another sequence entirely)
->
-> For the records, here is the relevant compiler discussion:
->
-> https://github.com/llvm/llvm-project/issues/34577
->
-> and it seems like they still have unfixed scenarios,
-> which may or may not affect the hazptr use-case:
->
-> https://github.com/llvm/llvm-project/issues/220206
->
-> Considering this, I would not be inclined to jump to the conclusion
-> that using the compiler compare for hazptr acquire load/test/reload
-> is safe today without a careful analysis.
+Nathan reported build failure with clang23 when CONFIG_PREFERRED_CPU=y.
 
-Out of the existing cases I think the only problematic one for hazptr is th=
-e
-comparison against costant global. Which isn't going to be a problem for us=
-ers
-that don't depend on a fixed adress.
+  kernel/sched/core.c:11298:3: error: releasing raw_spinlock 'rq_lockp(rq)' that was not held [-Werror,-Wthread-safety-analysis]
+   11298 |                 rq_unlock(rq, &rf);
+         |                 ^
+  kernel/sched/core.c:11303:1: error: raw_spinlock 'rq_lockp(__this_rq())' is not held on every path through here [-Werror,-Wthread-safety-analysis]
 
-But it might be a problem for the lockdep case.
+context_unsafe_alias(rq) was placed after rq_lock(), by which point it had
+already associated the lock with the original rq alias.
 
-If we use inline asm for ptr_eq I think there's very little optimization
-potentials left for compilers, so I think unconditionally using asm would b=
-e
-fine.
+Move the alias barrier before rq_lock() so that the changing rq alias is
+accounted for before acquiring the lock.
 
-Best,
-Gary
+Fixes: 74699f56ebcf ("sched/core: Push current task from non preferred CPU")
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Closes: https://lore.kernel.org/all/20260929121838.GA1814129@ax162/
+Signed-off-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+---
+base commit: tip/sched/core
+1fb28c664a19 ("virt/steal_governor: Enable the driver")
+
+ kernel/sched/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 0bb86a43a592..23677d76f9d2 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -11283,10 +11283,10 @@ static int sched_non_preferred_cpu_push_stop(void *arg)
+ 		 * safely bail out.
+ 		 */
+ 		cpu = select_fallback_rq(rq->cpu, p);
++		context_unsafe_alias(rq);
+ 		rq_lock(rq, &rf);
+ 		rq->npc_push_work_pending = false;
+ 		update_rq_clock(rq);
+-		context_unsafe_alias(rq);
+ 
+ 		if (task_rq(p) == rq && task_on_rq_queued(p)) {
+ 			struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
+-- 
+2.52.0
 
