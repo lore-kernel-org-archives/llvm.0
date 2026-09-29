@@ -1,134 +1,209 @@
-Received: from mail-pz2-f12.google.com (mail-pz2-f12.google.com [74.125.228.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from YT6PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11022085.outbound.protection.outlook.com [40.107.193.85])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5CEA53F6A9
-	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 15:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790695049; cv=none; b=pSRw4Di09/R2J35gv0Rhlfxi7RZmKIoUXifl4aTYIHkLr8ynYja6djE/pR053yepXRjmZkaYzH3WNHhanS+Pe5+3KRA9t32gIvEAP4qdF4jpyeqvN5ZyCkdj+KEIMqOShxsXxWkwIOCxhNuN7ildCoMGrJ3w6H0bvV8Qr7WvXfQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790695049; c=relaxed/simple;
-	bh=UyqxTJzFsBHiwpgeaPtT2Qc3mjNuoQ6QFEr9V0LfDYM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WKbzIjR29AY9EF/y7K4JsZdfB+Q7QHurNIBaQl3Bs9agwGed8C+gLYWNXSTiL0gaZtNQZUdJWV9r3j6k7c2/gd/ratg62EuCmhD0uWUIXFZULl7wSTOzY00dhc2ewspNYqVNHwFaiVbGE8e/mMEtfxR93xGNmauXcyQrKdkt5bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=NckCZhjX; arc=none smtp.client-ip=74.125.228.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD7973D1A81;
+	Tue, 29 Sep 2026 15:42:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.193.85
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790696572; cv=fail; b=AOz4VG3Js+JKl43Rr0PBvM5TQ3g7BP851c6dxKX7T2D6MAEoFP4QIn776isRRpFrxTVTjBFdx0O6oLMhrmG2ZUQDqYbEGfGonMnDHDRv+UVB3NYUzS4O6HkYTV4BrXSXO9EyikR6SGnMzwcDhDzuO7t2wLS3L5L8EeYyjcQOJdE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790696572; c=relaxed/simple;
+	bh=kQtd4NM5YGAVSLcQNoexSmIDLgko4qaYXtr6vnA5DDQ=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=t95juQo2ExjTu6qJOW4qrAepVV6TSVo03X3Vz7wibJkYSSK+x7LsM81NN5LeK2qEl+HrC7bHmFDSAQ6JlSMnuZcQUzl22CT345xJgR3FNBLVOO46cJA0KkRqw9i4aQGu5Uv5aY1ygnjAXzGwpMwZ5zYbYp0pYVPykNa8PVixHaQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=BJAhbuYa; arc=fail smtp.client-ip=40.107.193.85
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="NckCZhjX"
-Received: by mail-pz2-f12.google.com with SMTP id d2e1a72fcca58-8693af0d7c4so2538149b3a.3
-        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 08:17:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1790695033; x=1791299833; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9eZZFPBNxtfOlsCifhs9U8AcK3CT+8uiPgj0yDOTXkc=;
-        b=NckCZhjXDni824KOL0FIoKh/wzElaPDf1MfkGmKfVebmv22HAhC/oDrxvWi+xqIVOd
-         22XF/aGZFq5bnRQLox02/AGUGjrHjBChmcaJEw6RxT6RJZxnyyng5j39q2qWMxaa4KPL
-         DMNSILFubT6b+flaZNoomcu1uV4F4uNBn2ohY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790695033; x=1791299833;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=9eZZFPBNxtfOlsCifhs9U8AcK3CT+8uiPgj0yDOTXkc=;
-        b=Ofin3C/DnBLO1aeT5/6aWRTapepq+ZqIuqnitv8wLl5ro9cRhSycPqlxQ33n+d3rhx
-         /OWccvxn73hF3xqsDCcgX4pukXFBrViYhfBlIqNyXyKZGFXWNBJKwydZyP3JXRjyyarr
-         GaJm9DKU4XhFWI9FsL58WjmXlF0rjoRPYCANyVfRY5Ka9nmb4KZBBXTnzFDKGJAR6Zbw
-         XYnOqJqpqxy3rUM5iOTZpr3mNKO1TshUnSF1QcNOlhxdJK2SrJIPW2WECSymAzzoXVAt
-         kzsLb36GAukH2QG2+czOs0eZFU1bohWxg70iADl9tZ3O2GsBHXXoQLjUz3D2DrfRrrxV
-         ql0A==
-X-Forwarded-Encrypted: i=1; AKwUvBxu9jv4IwQStccOKJhku5BFeiuPua8J/dSQpNHC036H3/pDFLpDHr1sFpbhOTYsmwqOOKQO@lists.linux.dev
-X-Gm-Message-State: AFuF++m+y3YFJgBm7hCO52MkaHJZquSizu+kHYjLQsJADL8wjTdhK0ci
-	4WkDhrDkDJjLaRW8uA/HY2+rDxx5sIUr/gNFyJ4NbpaQ8e285UcXBP/12vk0DW1t469chhZe+2t
-	onRGo5es=
-X-Gm-Gg: AYBFou0OvQCV7JWT2AMRW5wuAQ4Wn0EW8VdosOxBVJnDjjCTOh4J8vxNo2/Dgt+JI2z
-	/TUChvEx229hSTXp8kCoU9DBbCUZltMk4f8F5d3KZAsspC1ggeq74CVTZtgcEtWOLZkGd355i2Y
-	jmbaIZ1ss2f/uIZRlXpEKdr6GXfbSsNNIfbQH0hGcQOehnIIbg5PuAtiHc0/PdjOd8vxsa0Nn9c
-	pXm4vHFPAvPxjbFsllbgnNYMf3ec3VoyFCKcebtIsyvMWARrcFuyrIywjBGX617WC+dJaL+W3wh
-	8/V+YLhLQInUUYMNf8lbUBFJZH49Q0IOZ3kfy0xruMkznIscrpn7/t5l/Hd9afR+IHw1x+ig68S
-	z8CZuhS7zMR+QROd2UqjBxEorsBn2YRNWexadyBm8wADDO1UYpwNqw209xXD/kUpiOB1SnHe7AL
-	AuumQy+9xtpksqjMZdsD4Hn/xWhbdWMBIfuuPaC+ejK12CDaMRDSg6FRXCGEsJpGHfXtjXKlGZc
-	YdZYQPaaqV4CfcXUHpmxgpijM0V19NGuqy9jl2MujrR4e5mOA==
-X-Received: by 2002:a05:6a00:37cf:b0:883:96f0:da3b with SMTP id d2e1a72fcca58-88397003773mr4727736b3a.22.1790695033481;
-        Tue, 29 Sep 2026 08:17:13 -0700 (PDT)
-Received: from mail-pj2-f26.google.com (mail-pj2-f26.google.com. [74.125.227.154])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8868baf8879sm104155b3a.28.2026.09.29.08.17.13
-        for <llvm@lists.linux.dev>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 29 Sep 2026 08:17:13 -0700 (PDT)
-Received: by mail-pj2-f26.google.com with SMTP id d9443c01a7336-2d8fb334e72so17565855ad.1
-        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 08:17:13 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBz1eCoYAu5+ynqD2J38JM+T9S+Nt26rliv/GVawZyXnSXyMpKnHgnbo0CwRIH/0iyvQshk6@lists.linux.dev
-X-Received: by 2002:a17:902:d483:b0:2dd:ad73:5b68 with SMTP id
- d9443c01a7336-2df7da85639mr143411375ad.24.1790695032383; Tue, 29 Sep 2026
- 08:17:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="BJAhbuYa"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pdvEEnHKAsp7eEYPTrI3rETlJwYdC/jifM08Z4rRIQwTwstaIiLIa/ty8ETfOxGSfF6btdK5wEy8IFmVDTWdcyeVXAZi7/hYT4Inw2kADWOVBvKnrxnBnJ78kJq+8imhHEZpZ+Aeeo8k29gdWTWf+rCZt2GZjj3ICLKCX6mkvLl9r3+2fqZdmLwba5+KzHjeUhaWNVn9EXR7BeRt+rF71s953chz3YrSCV4M7KRNgBT4fp8KlbPXtIcH2ysOlumbzR7+OyCr3odTVQm4IcMaStkgOSlN7I657lPG1V2z4Z0hmFxjon8zaxnyGHkSANqwj8NqB93gny7tezvRndYhwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wC/U1LK3fB0NRovELjkcJdZ/E0d5pUUAOefJqICWYNk=;
+ b=q4V7KyFqxiCB6wLqeBkdnVCPzXowDNQ7YHoI3MvooG0jBZu8swr1Wqc+VCaS42FCbw1+dJhKbTtDKP5DEhtxU6BBM8DCNDm7n3r46gFOEASkkf6gbkH2AYskcYKm6RcxU5HOHw13ILn2xi7wQi64PrzPJQ4CP849LUU9q9O6oJelvCrguyTAqaDRjSi57BfK33MHZ4kPYDV35/Q/cta+u8LtEDby3LRBu5EEgY67NNMil4lguBx3VSBwuWe9ZKdElyjuF34jZhaMUoBzpGaO4921OTroZvz+b1ya14EVeVUF7oyqYItF9RCziSVn7MIa9B3PmnX3luFxKboYF4wSNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
+ dkim=pass header.d=efficios.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wC/U1LK3fB0NRovELjkcJdZ/E0d5pUUAOefJqICWYNk=;
+ b=BJAhbuYaRuBpyfbVWst6Kn1lB66H410s7sz2Q4CiGASSEYd27jBXumYxQQnwpMp7LM2sORWZgM6fjxFklQMI2u2EhT75Qea/tGTTLq2ydEmsUywAN5L6SSdA/H+7d/9C1wPZzx6IA4+OZzYZxCG/gpHdV50bk0pQ/4IgoXgy5sjlLFz/Ecs0iVHsRWlwt9+UZCfjxgvWLmRoiFFnB0ylyUV8N1cT7xYyLvkHyand5Hccx9cH5m0alifliflm54dfBanpg9SA4hhuU5OstuTEkwxdL0+sUU5xbTyThJ0PcuMWdHXcWminDf1wc/SH7ypm4HzfK5iG3MGgyVOcJ3PuEg==
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=efficios.com;
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10) by YQBPR01MB10534.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:71::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.451.25; Tue, 29 Sep
+ 2026 15:42:43 +0000
+Received: from YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc]) by YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ ([fe80::6b9e:a901:67c5:7ddc%6]) with mapi id 15.21.0451.026; Tue, 29 Sep 2026
+ 15:42:42 +0000
+Message-ID: <5a695b14-d25d-4c11-87f4-83c8d299d79f@efficios.com>
+Date: Tue, 29 Sep 2026 11:42:41 -0400
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH hazptr 2/4] compiler.h: Introduce ptr_eq() to preserve
+ address dependency
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: "Paul E . McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org,
+ Boqun Feng <boqun.feng@gmail.com>, Joel Fernandes <joel@joelfernandes.org>,
+ Alan Stern <stern@rowland.harvard.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Will Deacon <will@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ John Stultz <jstultz@google.com>, Frederic Weisbecker <frederic@kernel.org>,
+ Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Lai Jiangshan
+ <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>,
+ Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>,
+ Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com,
+ Mateusz Guzik <mjguzik@gmail.com>, Gary Guo <gary@garyguo.net>,
+ rcu@vger.kernel.org, linux-mm@kvack.org, lkmm@lists.linux.dev,
+ Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
+References: <20260927155134.4740-1-mathieu.desnoyers@efficios.com>
+ <20260927155134.4740-3-mathieu.desnoyers@efficios.com>
+ <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
+ <133ca8de-cf30-4bf5-9539-d0b73e347b22@efficios.com>
+ <CAHk-=wi7BkCuzMe_zWi6KHUs09UQWJpCVNvuFg5wh_CAu5dgow@mail.gmail.com>
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Content-Language: en-US
+In-Reply-To: <CAHk-=wi7BkCuzMe_zWi6KHUs09UQWJpCVNvuFg5wh_CAu5dgow@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR01CA0155.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:7e::18) To YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:1d0::10)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20260927155134.4740-1-mathieu.desnoyers@efficios.com>
- <20260927155134.4740-3-mathieu.desnoyers@efficios.com> <CAHk-=wgQyCdrWH3ZuSajOxZqiups6jYbPtqY8JR8OeS7yi49Mg@mail.gmail.com>
- <133ca8de-cf30-4bf5-9539-d0b73e347b22@efficios.com>
-In-Reply-To: <133ca8de-cf30-4bf5-9539-d0b73e347b22@efficios.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 29 Sep 2026 08:16:53 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi7BkCuzMe_zWi6KHUs09UQWJpCVNvuFg5wh_CAu5dgow@mail.gmail.com>
-X-Gm-Features: AclHuK92qcnFUvMDyEty0mgzRt4zpmui3HdPCBaHPsJjfcUlLFRzvquKppDzHHE
-Message-ID: <CAHk-=wi7BkCuzMe_zWi6KHUs09UQWJpCVNvuFg5wh_CAu5dgow@mail.gmail.com>
-Subject: Re: [PATCH hazptr 2/4] compiler.h: Introduce ptr_eq() to preserve
- address dependency
-To: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: "Paul E . McKenney" <paulmck@kernel.org>, linux-kernel@vger.kernel.org, 
-	Boqun Feng <boqun.feng@gmail.com>, Joel Fernandes <joel@joelfernandes.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Will Deacon <will@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, John Stultz <jstultz@google.com>, 
-	Frederic Weisbecker <frederic@kernel.org>, Josh Triplett <josh@joshtriplett.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang1211@gmail.com>, 
-	Ingo Molnar <mingo@redhat.com>, Waiman Long <longman@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, Thomas Gleixner <tglx@linutronix.de>, 
-	Vlastimil Babka <vbabka@suse.cz>, maged.michael@gmail.com, Mateusz Guzik <mjguzik@gmail.com>, 
-	Gary Guo <gary@garyguo.net>, rcu@vger.kernel.org, linux-mm@kvack.org, 
-	lkmm@lists.linux.dev, Nikita Popov <github@npopov.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: YT6PR01MB491026:EE_|YQBPR01MB10534:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9648738-b104-437e-47b1-08df1e404cee
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|23010399003|7416014|366016|4143699003|10067099003|56012099006|22082099003|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	Al4ACkzm0A+vCt6IhpyO48bwJc2EW/DPOkWyrV+sK6D5CLM73OHTJlIw3eQDGgEaoQlLc4egcnmvK0sB7eSmphZNZZLxsPbA+M8j9YBBQqp8wqILkbV58GT6tgOkG9Fz8DhP12BWlEMrR9Zp2I1tWFqtYeZ6WS39aPpz5FvfB5YLb8Oz87TzTYOoYuxXo6JXvuDwq0dHT9ujS6eetVlEl2aureJntJ0EdZNeuWKmQ8ZbD7IEdRCTxBBI7pa0fLwse06g6uiH+sTvcpR8st/yJuXCMoZpXHzRkUyC/Og+7IdsA27hAXkmwzfOUZ0fPPIhspZkIhOl2J+YZf2iLxv3YGd2hd9KVO1URqY8rTyqHo+UWgSgNFKhpruLDWTjJInILbN1lG09hnT+5Sn1jPZyk0S0RnpR3EyOC+vvhL/EF2rxLVmbLifDALKqr4zFestBWNnHgsMlxloKbzDftOTrFSAvsTBErlEiSz2BrCHIwMuJhkpmxP/NI+komwf6QfePKl2/XURtvGsDYwxOQwHwghB+GqoUzlVyR+wDifsa3+pDbFHXVYtLE/wUMaTw3M2GmOUtawpxglt8EmRJsBfQGz0U5y2Zn03pixHLpHfWBuE=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(23010399003)(7416014)(366016)(4143699003)(10067099003)(56012099006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?eCsrUWduUjZ5WFIyNWVtbndndDV6WGRFS1VFNWpteW5Ec1pNNmNjdFZ4TjJ3?=
+ =?utf-8?B?Vmk1ZSt1OE9IQnJSZ0RJdjF5NEc2RGhHbGxqQ00vdUJZUjhaS1poUnhFRUht?=
+ =?utf-8?B?RHF0Qjc2NWRCcjNEdU1tUk42ZXdkbFg4cXQxd0xrZDB6dmVKNVgxRU1xZm9L?=
+ =?utf-8?B?U1JMc29jMlV2ZjBkdlZwNWFkVFdGRFBzNWJzak5tZE55ZVdNY211RFozYkI3?=
+ =?utf-8?B?T0RLdFlxRU51VExlcWJWS1N4QWoyTHRZdVluM2NTQ3pjU296L0tma0RoM3U3?=
+ =?utf-8?B?WUVycjR0SEEzTFRRazZRbmtNaFJDMldPZEFoSVd0eTFielN5ZlNYeThxVGR6?=
+ =?utf-8?B?ZmZ3UmcwWTNwTmRZT1FwSllnT0JTejNqNkxvTm5VZW1hejlMdEtPbUpiMzdv?=
+ =?utf-8?B?SDJONDRHN3kxcWZ3a0p0d2xEMWcwNnFpbnZtSjZyUk9BSGNCQ0F1bUZzdnFy?=
+ =?utf-8?B?bUVtK1lVRFFqNjk2cFhXNDRQc2twRDhidGh2Zm9OcFNsOXR3TlBPV01GNlRx?=
+ =?utf-8?B?UVkvU3dLOW9yRENjOTRqVEFrdUNCT2oxWERCcjFDV2doQm9KTW5iZ085S3Ro?=
+ =?utf-8?B?RVBiRU00VTVCK1Z2aVVrYVJZWHVBdi9RMzBnM3Z3K1FVTHA0czFuTks3dDhS?=
+ =?utf-8?B?aG5ybVZRVjdHM3V6eWs0bXZxR1hSWDlHZXFZUjVyczVvblIyM3g0RDUyMTk5?=
+ =?utf-8?B?Tmdxc1NMUjhvZW5ha1NTK2tidFIwYWZSVVJXQklaVEx3U2V4ZXQ0QjVZQUto?=
+ =?utf-8?B?Y3I0dGt0a1g1ancrVVdjOFNQdm9SYzQrT3dXbXBhYUFYcG1vY2dKTkliK3Jt?=
+ =?utf-8?B?RDcwY09nRFpYalNvOWVEMXh3LzlwSkFaTi91NXFNODEwZ1BHdHd0VGFiUU01?=
+ =?utf-8?B?TUI2UHFDeGJxSDBnL3BIU2lNK05xR3BpRXoyczVRU05sajBLZE9KaWp5Y0cw?=
+ =?utf-8?B?NUlFa3hRU2U2aThSWEVRQlFsVHdZa0o0V3hWaTg3MkFRWUkwaWc3NSsxS3ZE?=
+ =?utf-8?B?Y2QwaHlKZDhtRU9OVkpjVmtQN2VVNEEzRXM3WmoyL1V0RFZHbGF6Rzdya1V0?=
+ =?utf-8?B?ellHZVFEcDFWangwTFRLRktlQjlJN0hvWlRINEUzOURGbEY2M3JoY0tKb09S?=
+ =?utf-8?B?U09FOGxVa2V3MDZBcmZYQ252S1NsdER4OXVhSTkyanZDb2ozWll4Q3czcFNC?=
+ =?utf-8?B?QkdBTmZUNEZlczNyRHV1OHlKbzFPQnVTTXhBbU5kb3lpcm9sekhMTGtxWnkw?=
+ =?utf-8?B?MkpkT3I5b2xCWDVtODR3eWY0ZjloQUNOTElqYXRJczA5d3FGMlg2dzhBNUNM?=
+ =?utf-8?B?SjN2YXNrUmZQQ2psbnVNRUZLTlo5WE0zcTYwU3l4UmU5RHo1SmxYQjA1Mjk3?=
+ =?utf-8?B?VzZBNm5JWXltSmhpUytvem5GSFpVQ1JZZ1pzVTdUT2NqTjVNbU14RnpNbXpW?=
+ =?utf-8?B?eElxSnh1S003RHJuWGNrNkFUQjdjd0hpMFFwTFdqU2hLU0V5WHdyQWJuVE5C?=
+ =?utf-8?B?c05rd1lwdXFReVk4RUNlbkJJMS9EeU1KWmlJKzNqWmlQNkFVOU9xSUwxVm50?=
+ =?utf-8?B?ZFFwZUxuWHNMNHQ1UWlOTmVGdGNxWWVxeDYzU0FTejgwZ0FWR1pReGk0a1g4?=
+ =?utf-8?B?S2hIZ2lkeTY0eExEeCtDSUNYaERxM2I5cXhIbVpJMDdSZTRiSVNsRlpjQW8v?=
+ =?utf-8?B?TDZsSmhLMDMwa2tQMVJsS29BVjRuS2Fod3g4VVJKUzluSDk5K2UrcWZJbEYv?=
+ =?utf-8?B?MTdyTVBTUW41L3FFUitQTWxkK01BdnJ4WFFZK0ZRb0lXQ1V2TVZ2OTRDU2Ra?=
+ =?utf-8?B?WHNTbjJSOHJUd3phTmFPN2tOUHdSUy9yUXNld0NhZTdVYXBkK0trM1pMYmYw?=
+ =?utf-8?B?Nll6MnhGaGtTSy9Qb0RzRkFPZFIvbTM3VzFMVUlEbGY5R3NTRHlpZU4xajdq?=
+ =?utf-8?B?Yi9RNStoaW1MVU0rckxicmlYVFZrZEdrOXVwZnFVSnlKNUFzNy9VQlNRK1FF?=
+ =?utf-8?B?WlE2V3RIa1kyMVc3azJjZ2wrSUtUZmRwM3A4MjVUQWdXNlY4eHlPUEtzOU1W?=
+ =?utf-8?B?dE4zWkNTclh5OEFJc211TzUvNWNtRmYxZnpwRlVWanNQeGhNSytWK3VxVW5R?=
+ =?utf-8?B?QzdHOTJ0QTRCNGNkZ1d4MFlWTExVKzBidlNQcnhxM0VHQUZPWjFxZmw0ZGNw?=
+ =?utf-8?B?bGw0bWZEeTdxK1VPRG5aV250TEpzNExOTllCdk94bEprVWZjV2g0N3Q2Rndj?=
+ =?utf-8?B?Vk9pZG9BZWVzNHZXNVVxQjBYcDRnSnFPcmNuV0pvUG5GSFFsSWJZcDB5S2dF?=
+ =?utf-8?B?dTIxRUovb1BYelcvSC9HWXVrcTlCeGdoS0JKempUeFJJMFlLVXIybXNpUzhS?=
+ =?utf-8?Q?kaddFx7LjBMmZXWc=3D?=
+X-OriginatorOrg: efficios.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9648738-b104-437e-47b1-08df1e404cee
+X-MS-Exchange-CrossTenant-AuthSource: YT6PR01MB491026.CANPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2026 15:42:42.8962
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: jJxgPl7F0SJRJHxX5Tlc9zUuG6JXk6EgfErhjsGYy+YWp4X2FbpQRREPjlHO1p68jWTnuIWEm2qg9/qE87/trEt7aSvyvfoAtHKY7JQJV0Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQBPR01MB10534
 
-On Tue, 29 Sept 2026 at 08:04, Mathieu Desnoyers
-<mathieu.desnoyers@efficios.com> wrote:
->
-> I agree that doing it in asm would generate better code. Also, I've
-> been told that clang now preserves the address dependency in this
-> scenario, so perhaps we'd want to use preprocessor conditionals to
-> select how to implement ptr_eq based on:
->
-> - architecture (allowing asm implementation overrides),
-> - compiler (e.g. if compiler is clang >= version X, just do a plain
->    comparison). Likewise for gcc if it ever decides to fix this
->    behavior.
->
-> I think this "hide var" hack is a fallback which can be used as a
-> starting point, and then we can specialize based on architecture and
-> compiler.
->
-> Or do you prefer this in a different order ?
+On 2026-09-29 11:16, Linus Torvalds wrote:
+> On Tue, 29 Sept 2026 at 08:04, Mathieu Desnoyers
+> <mathieu.desnoyers@efficios.com> wrote:
+>>
+>> I agree that doing it in asm would generate better code. Also, I've
+>> been told that clang now preserves the address dependency in this
+>> scenario, so perhaps we'd want to use preprocessor conditionals to
+>> select how to implement ptr_eq based on:
+>>
+>> - architecture (allowing asm implementation overrides),
+>> - compiler (e.g. if compiler is clang >= version X, just do a plain
+>>     comparison). Likewise for gcc if it ever decides to fix this
+>>     behavior.
+>>
+>> I think this "hide var" hack is a fallback which can be used as a
+>> starting point, and then we can specialize based on architecture and
+>> compiler.
+>>
+>> Or do you prefer this in a different order ?
+> 
+> Oh, if there's some sane way to tell that the compiler already honors
+> address dependencies, then that should be done first and the whole
+> thing should just become a simple
+> 
+>   (a) == (b)
+> 
+> for that situation - allowing the compiler then the freedom to do
+> whatever (which can involve not using a register at all, but a compare
+> to memory, or whatever - the compiler might have reasons to avoid the
+> 'cmp' and use another sequence entirely)
 
-Oh, if there's some sane way to tell that the compiler already honors
-address dependencies, then that should be done first and the whole
-thing should just become a simple
+For the records, here is the relevant compiler discussion:
 
- (a) == (b)
+https://github.com/llvm/llvm-project/issues/34577
 
-for that situation - allowing the compiler then the freedom to do
-whatever (which can involve not using a register at all, but a compare
-to memory, or whatever - the compiler might have reasons to avoid the
-'cmp' and use another sequence entirely)
+and it seems like they still have unfixed scenarios,
+which may or may not affect the hazptr use-case:
 
-Then a "if we have an architecture fallback".
+https://github.com/llvm/llvm-project/issues/220206
 
-And then that OPTIMIZER_HIDE_VAR() thing as a last fallback.
+Considering this, I would not be inclined to jump to the conclusion
+that using the compiler compare for hazptr acquire load/test/reload
+is safe today without a careful analysis.
 
-               Linus
+> 
+> Then a "if we have an architecture fallback".
+> 
+> And then that OPTIMIZER_HIDE_VAR() thing as a last fallback.
+
+OK,
+
+Thanks!
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
