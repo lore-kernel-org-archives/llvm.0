@@ -1,196 +1,158 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AF643655EE;
-	Tue, 29 Sep 2026 22:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88EFD280A56;
+	Tue, 29 Sep 2026 23:44:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790720905; cv=none; b=FE71H8YMXypGuzJxvwoZYVyyeoWSWw6kLgV9JlZivjeFdua2FyqGROyefhlY/Ha0nChMfhNqn02IEOa5CYUdsfVhJiJpvkrZoncHyM2JngGLF7WyuBscChODUPc9xRGlWbMxoG8eeBIyBbL8ZOX8T9o4ZJCkDbhwHTN/s7NiCd8=
+	t=1790725488; cv=none; b=pnXjxsvucD0/x84b0zkUB5MtNNaZcPCML/9c96VfwoFZjj2ofC0D+CmJ0ULXcw5l+EIOp6dqTL331XDahF9ciBVm52rGqMn2pPSdIGHmNxSq4C++O6OZe7EA6gSuxAPTBwNprRGgYxm5XIX1tSfV36vx4ElPbzjptokBFoHib+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790720905; c=relaxed/simple;
-	bh=IjJFkVoow9lHuhMr+xYKiGwuAIazdHHcppA/oWYAze8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fm1mV4W/68JejNuf78ywC66ysWghKgdGumvxpeFAVLJ4BkpO7VR3Gqq4G1bRmwIw1FwTFCoX6NX6y8K94NaQ7ldDThBsjlnnmOxFZTthDH111tXhKJWpmlcccuDJJKoEn3wt7wkH/tMZ76h2PcRxlEjZblUww2KwLfDJBKpKWC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NNnxeGjE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790725488; c=relaxed/simple;
+	bh=1a7q26AUiSJfJhnLWkDe/E6QUJLPL8uPOwMxAmLWoIs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pOQVW3rhu8HSq1LP2sGLZ6Q1jE8mY+eRexzKqkqSLIBgZTLxOdSsCe5Bh8YsL5SPhIJoisOlwHdqLm75IdRDwls79LTHMMbAixD+ljfNQJxhwi8dE7SWYIlJHGIviWJWzCmtVR0oHLWq9ZJQhk0O9AtXnSHMS12K5giql8fj/fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RPOXNofF; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NNnxeGjE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9861D1F000FF;
-	Tue, 29 Sep 2026 22:28:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RPOXNofF"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB7A1F000FF;
+	Tue, 29 Sep 2026 23:44:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790720903;
-	bh=rXq3sk0b5j6u45a9CW2UEsFy+jV3+6YxcNYu19hQgAM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NNnxeGjEGa2lNFXQY4Jt8RsbdsDI2wc8Zt4KAWsug0FBbZjoRZzn8arTtFcgouBrS
-	 l+sfIQE8bWIkRCtjSKTe2ld6W2GKOJAHd7i1fLUnhKNB8PHZIhUMakbFnyGcBE8GNK
-	 eZYJysdjyAXMPFHJp2MNckOIGNE1znNiNefIUcRngdEcAoWA768zqTorf/lOl49rxS
-	 YORcCbRLMNwWEiHkpcKWjD5G8R2zA7QeOR8LplKWQALfyhKKeRSY5NzDIpG0o6Bapo
-	 s7SGsU5WGHJ7Wql0St4LqfGFJxvE6K9HztquQ/4T4rgw7UdsYi0cl5G/bHlHMe1jlL
-	 peOZDphH/qfxw==
-Date: Tue, 29 Sep 2026 17:28:22 -0500
-From: Rob Herring <robh@kernel.org>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <jesszhan0024@gmail.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Albert Esteve <aesteve@redhat.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-Message-ID: <20260929222822.GA2933878-robh@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
- <20260928204059.GA515872-robh@kernel.org>
- <artyl8fD3zzng8Uh@houat>
+	s=k20260515; t=1790725487;
+	bh=q2vPaj70yTFF+nCTHOa1lt+SyViZlBiPKXQR9Adb58c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=RPOXNofFRqkcQuogCKfEIrqLH/O4qWMCVjTZxPeEtTkXTpTSudAIKMfHWE2IcO6kI
+	 Jiwu3bHTRgMX2r3LxA/0g8nG+qX77tRrELkRYC4GqB6i7ntUd2A9Z6kRpACYYyWK59
+	 xOh91Xbkv6RPMHOFB1GtRBAFpQH750wER7jt4H9gOTUZxtYvmkQ9029uOahWlFBGdS
+	 srP7Jflk/E5/4H3hp/3BiCjf7oL9O1DfM3Cx3DowLg8pAzraqnn+JY8e2i+U4IpMRs
+	 XFnwzbxifKnGopNwBPZ+AYsywJNBqiDEQ+cYTFvyuJ4azZEjvenBX+eiCSDEw7lI4d
+	 KawC3aw36Rc7A==
+Content-Type: multipart/mixed; boundary="===============4708192409122229443=="
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <artyl8fD3zzng8Uh@houat>
+Message-Id: <7e3ff8952daf06c86b01ff0e115fb6684231f3d666570bd79d93e6a914beaba6@mail.kernel.org>
+In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic panel binding
+From: bot+bpf-ci@kernel.org
+To: mripard@kernel.org,neil.armstrong@linaro.org,jesszhan0024@gmail.com,airlied@gmail.com,simona@ffwll.ch,maarten.lankhorst@linux.intel.com,tzimmermann@suse.de,robh@kernel.org,krzk+dt@kernel.org,conor+dt@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,florian.fainelli@broadcom.com,bcm-kernel-feedback-list@broadcom.com
+Cc: andrzej.hajda@intel.com,neil.armstrong@linaro.org,rfoss@kernel.org,Laurent.pinchart@ideasonboard.com,jonas@kwiboo.se,jernej.skrabec@gmail.com,luca.ceresoli@bootlin.com,aesteve@redhat.com,dave.stevenson@raspberrypi.com,javierm@redhat.com,dri-devel@lists.freedesktop.org,devicetree@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,llvm@lists.linux.dev,linux-rpi-kernel@lists.infradead.org,linux-arm-kernel@lists.infradead.org,mripard@kernel.org,bentiss@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue, 29 Sep 2026 23:44:45 +0000 (UTC)
 
-On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
-> Hi,
-> 
-> I'll merge the two discussions in that thread.
-> 
-> On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
-> > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
-> > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
-> > > regulators and GPIOs, perform a reset pulse with specific timing,
-> > > send a vendor-supplied sequence of DSI commands, then enable the
-> > > display. The only truly panel-specific part is the init sequence
-> > > and power-on/off timing.
-> > > 
-> > > The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
-> > > with a single generic driver whose panel-specific behavior is
-> > > provided by BPF programs loaded from userspace at runtime,
-> > > following the HID-BPF model. This enables new panel support
-> > > without kernel patches.
-> > > 
-> > > Panel DT nodes use a two-entry compatible with the panel-specific
-> > > string first and "panel-mipi-dsi-bpf" as fallback. The generic
-> > > driver matches on the fallback, while the first compatible is used
-> > > to identify which BPF program to load.
-> > 
-> > If you need the 1st compatible anyways, what is the point of the
-> > second one?
-> 
-> The whole point of this driver is that you don't need to modify the
-> kernel when you add support for a new panel.
+--===============4708192409122229443==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-What reads the most specific compatible?
+> diff --git a/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.yaml b/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.yaml
+> new file mode 100644
+> index 000000000000..9a20a21cf70e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/panel/panel-mipi-dsi-bpf.yaml
+> @@ -0,0 +1,184 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/panel/panel-mipi-dsi-bpf.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Generic MIPI-DSI panel with BPF init sequences
+> +
+> +maintainers:
+> +  - Maxime Ripard <mripard@kernel.org>
+> +
+> +description: |
+> +  A generic MIPI-DSI panel driver where the panel-specific power sequencing
+> +  and DSI init commands are provided by BPF programs.
+> +
+> +  Panel DT nodes use a fallback compatible so the generic driver matches on
+> +  "panel-mipi-dsi-bpf" while the first compatible identifies the specific
+> +  panel for BPF program matching.
+> +
+> +allOf:
+> +  - $ref: panel-common.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - description: Panel-specific compatible string
+> +      - const: panel-mipi-dsi-bpf
 
-> > Also, I assume there is at least some panel supported in the kernel
-> > you might want to convert to this. That panel would not have the
-> > fallback (and the DT is fixed).
-> 
-> Yeah, that's true. I'd still need to identify the parts though. I guess
-> using a generic compatible but a specific model would work?
+Rob Herring raised concerns about this dual compatible string design in
+the v1 discussion: "If you need the 1st compatible anyways, what is the
+point of the second one?"
 
-What? You can't add a generic compatible in these cases.
+He also pointed out a compatibility issue with existing panels: "I assume
+there is at least some panel supported in the kernel you might want to
+convert to this. That panel would not have the fallback (and the DT is
+fixed)."
 
-> 
-> > And I agree with Neil's comment. At least until we start embedding BPF 
-> > into DT directly. ;)
-> 
-> And from Neil:
-> 
-> > I don't see how this can be a valid hardware description, bfp is a
-> > software implementation and has nothing to do in the bindings.
-> 
-> I'm quite a bit surprised by that argument though.
-> 
-> We have in the main dt-schema repos bindings like:
-> 
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/options/u-boot.yaml
+In the follow-up discussion, Rob stated: "What? You can't add a generic
+compatible in these cases."
 
-Self contained in a node that's specifically not h/w.
+How does this binding handle the case where existing in-kernel panels are
+converted to use this driver, given that their device trees are already
+deployed without the panel-mipi-dsi-bpf fallback compatible?
 
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/bootph.yaml
-> https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/post-init-providers.yaml
+Neil Armstrong also raised a fundamental concern about including BPF in the
+hardware description: "I don't see how this can be a valid hardware
+description, bfp is a software implementation and has nothing to do in the
+bindings."
 
-Extra hints that are safe to ignore.
+Should the binding be redesigned to avoid referencing the software
+implementation mechanism (BPF) in what is meant to be a hardware
+description?
 
-> 
-> Or, in Linux:
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/misc/google,android-pipe.yaml
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description: DSI virtual channel
+> +
+> +  backlight: true
+> +  enable-gpios: true
+> +  height-mm: true
+> +  port: true
+> +  reset-gpios: true
+> +  rotation: true
+> +  width-mm: true
+> +
+> +  vcc-supply:
+> +    description: IC core supply, typically 2.8-3.3V (charge pump input)
+> +
+> +  iovcc-supply:
+> +    description: I/O interface supply, typically 1.8V (MIPI logic level)
+> +
+> +  avdd-supply:
+> +    description: Positive analog supply for source/gate driver, typically +5V
+> +
+> +  avee-supply:
+> +    description: Negative analog supply for source/gate driver, typically -5V
+> +
+> +  elvdd-supply:
+> +    description: OLED EL positive supply
+> +
+> +  elvss-supply:
+> +    description: OLED EL negative supply
 
-Virtual h/w which tends to have special needs.
+Rob Herring questioned the approach of defining multiple optional supplies
+to cover different panel types: "That one [panel-mipi-dbi-spi] defines a
+single supply. Any other MIPI SPI panel with different supplies or GPIO
+controls probably has its own binding. Trying to parameterize that in DT
+doesn't work. We've rejected trying to do that in DT over and over. What's
+your story here for that?"
 
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+How does this binding address the longstanding kernel policy against
+parameterizing hardware variations through optional DT properties?
 
-Shrug. Weird Qcom shit...
-
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/sound/simple-card.yaml
-
-Just a container... Though I can't say I really like any of the audio 
-bindings.
-
-All really irrelevant to this discussion other than the panel binding...
-
-> 
-> All of them have been reviewed or acked by you, and yet none of them
-> relate to any hardware description.
-
-There are things which aren't h/w, but this is h/w and we've already 
-made decisions about how panels in particular are represented. We of 
-course have some remanents of how we don't want to do things.
-
-> panel-mipi-dsi-spi is a generic panel that will load a firmware, and
-> quite similar to this one. google,android-pipe and qcom,fastrpc don't
-> attach to anything and will just open a tunnel to userspace, which is
-> somewhat equivalent but more dramatic than what this driver is doing.
-> simple-card or its variations will just instantiate a kernel driver from
-> the DT and is used pretty much everywhere.
-> 
-> I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
-> by rob, and acked by a panel maintainer, and 4 years ago, so we're way
-> past the "oh but we didn't know what we were doing back then" argument.
-> 
-> So, let's phrase this differently: what's different about the
-> description than panel-mipi-dsi-spi, or any other binding already in
-> tree?
-
-There's all of 3 panels supported. Compared to all the other panels we 
-have, hardly the rule over the exception. You can always fine "bad" 
-examples or exceptions.
-
-That one defines a single supply. Any other MIPI SPI panel with 
-different supplies or GPIO controls probably has its own binding. Trying 
-to parameterize that in DT doesn't work. We've rejected trying to do 
-that in DT over and over. What's your story here for that?
+[ ... ]
 
 
-> If it's the BPF part, BPF is not Linux-only, and there's hardware with
-> direct BPF support these days, so it can be considered OS-agnostic and
-> not an implementation detail.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-Really that's the least of my concerns.
-
-Rob
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36644629998
+--===============4708192409122229443==--
