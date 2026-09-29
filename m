@@ -1,85 +1,174 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0DD53B603;
-	Tue, 29 Sep 2026 19:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45C0A3B71B2
+	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 20:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790712001; cv=none; b=YdRZeW+g3c1noZLPEQ6r8zPw9Bz37xA3XvLDTokP+4I8tZWJUfV0g+croBiAUtMaTtH1+Mgi+b0Kbuz8bkkdrcrXtF/+5Qxk8+/u6G3uXa3jH4M1iIzEdnO3btE0CM9AAP4XtEokCBIziNd9iIrxHM466fDJGVOCIk37AcFp+DQ=
+	t=1790712493; cv=none; b=JDX1jvf238LjfgMrAtTtOSgi2a/nCfyYHfl7cb6BPlBOHYN5HDj5TyePoN0+pzVpjqFgSrDMrT5M3f6FwRYCRQPmqSklDktqV8oeDMBHYOKG1WlkkyD/zBPC3SaCeNoY6ngJJ89kLH11MThTezeAyNiXCfbEcB0NJ1INkjppMoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790712001; c=relaxed/simple;
-	bh=BHZIDW5MC/I2vncUVsPMoybZl+cU4d/ASq3TG+iYXBw=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=oD3H5dBn3AjWS+2wx9/s4ZLdwZShdHfLqSvLwzEoqCHUWsTAGLNtbSBIlrFGMgR0t2Cgu9xLcfpN4xrdDPBcDH2NESdFRGWcqsx0RDom5eB/FZ+vR53g9dYc4kLN4ZZ7bAjvI6/u4PG2cHqbxH9iKsj+Zx6+WKjcKZoDTKh6+5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5pJq00c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790712493; c=relaxed/simple;
+	bh=gwh/pPh375u9p5DNQBbUCo0K4wZPDp6sLcgyGcFrx30=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZzCxnQ3YpICng5i1lx9STmfh2D4ldN+I0F3mtOUKJsvWrx23b3TxyIFO942z/efeO4o/9h5gXN/83Fqmm1Z/iu6Tw8IBaUuBeo8pipCzynpPsetNUJfzgqKFU/UZbUSXZIDIGK+3F2prj+yF4qkVyoARSqX4/cJPw8sTGkZY6E0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oHI7Ewz9; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5pJq00c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D761F000FF;
-	Tue, 29 Sep 2026 19:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790711999;
-	bh=z2oa1OcDtqfJYCrJ3lsWN9bBLTjM9ok0eOwKjWlgV04=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=h5pJq00cLWLqy+pgZKxCIvZCY3qPuGjY1/niwFtITAHarht8XoCxt38A93iFfze2K
-	 j/6mQNjxtXTwnxZ+8r/D9/uTtO0F/6gvLxx0u/N+qJwtTDSeXw27CnJ4DpVwz6Bqhu
-	 wO6vzDmyFtu+OmSyqPqPBttuJBLqnNSdPW6YJXLofUpZ8Vw6cnXh1pnyXlSFXwN2e/
-	 4UG0yvKI8MzJAGUJCg5GlwHyCaSruIv0rQMGKGCFeqVJ4L6C3PXavgt6kLIl0ghhD+
-	 04TAgQBu8V5ZNinVlYFfDSZl+72XrPBhXLTlHSFNwTRf0pCL7+qjgcFyHE4+hI/lUo
-	 j5r6qFIVudMyw==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oHI7Ewz9"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790712492; x=1822248492;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=gwh/pPh375u9p5DNQBbUCo0K4wZPDp6sLcgyGcFrx30=;
+  b=oHI7Ewz9y0EByEtF1ih74McH9vODs7YBx7OBYXTknU5URs5bQu+wTRT0
+   VapCVB9s6nesS/pYJfFb6aRyuzYZZ0z/45CSYhDs/PexfUlSblzjkPIIv
+   DlQvjzysw3a3TuZLDdkAb4Oezf06slu0TLOfqY0+nYwwsdb8corv+SOd2
+   eRfWN7MfQub9m2OdtPPqEkD7smPNWMM+jp7fbaJCzZfAtb364FH9jk6ra
+   bbqVsQ52oeQupoQnioIcmrH99XUVFx7UkPuRnc5CJOjx7w0ENttoAYdcc
+   1GA8jC4uwTJlnDBYarO3Gb4x6s6IcaIevFSKyBo+V+F7Fl0HPLCUmeAV4
+   A==;
+X-CSE-ConnectionGUID: UNtiACWuTBup7Tw+/noaKA==
+X-CSE-MsgGUID: UcvioCWsRzmJhMM84/wUMQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11920"; a="90661224"
+X-IronPort-AV: E=Sophos;i="6.27,130,1787036400"; 
+   d="scan'208";a="90661224"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2026 13:08:12 -0700
+X-CSE-ConnectionGUID: JwyhR5AJQZKjdzIASOvAJw==
+X-CSE-MsgGUID: CHKO1bdKQAy0LRqczSX0wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,130,1787036400"; 
+   d="scan'208";a="274675769"
+Received: from schen9-mobl4.amr.corp.intel.com (HELO [10.125.111.124]) ([10.125.111.124])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2026 13:08:10 -0700
+Message-ID: <7790ab6c5da3aeac42f6878f0a167c6cddebb354.camel@linux.intel.com>
+Subject: Re: [PATCH] sched/cache: Honor asym packing over cache aware
+ scheduling on hybrid system
+From: Tim Chen <tim.c.chen@linux.intel.com>
+To: Kayra Cizmeci <kayracizmeci@gmail.com>
+Cc: KPrateek.Nayak@amd.com, Vishal.Badole@amd.com, justinstitt@google.com, 
+	klaus.kusche@computerix.info, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, 	mario.limonciello@amd.com, mingo@redhat.com,
+ morbo@google.com, nathan@kernel.org, 	ndesaulniers@google.com,
+ peterz@infradead.org, 	platform-driver-x86@vger.kernel.org,
+ ricardo.neri@intel.com, 	stable@vger.kernel.org, x86@kernel.org,
+ yu.c.chen@intel.com
+Date: Tue, 29 Sep 2026 13:08:09 -0700
+In-Reply-To: <20260929182137.196669-1-kayracizmeci@gmail.com>
+References: <d7cd3f7d528dff79d2a702543e7d97a44c0c078b.camel@linux.intel.com>
+	 <20260929182137.196669-1-kayracizmeci@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] clang-tools: Import os for broken pipe handling
-From: Nathan Chancellor <nathan@kernel.org>
-To: =?utf-8?q?14=E4=BE=AF=E5=BB=B7=E7=BF=B0?= <ue081723@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-In-Reply-To: <CA+NtrhRdnuZOOFpBXvnfOXFs-HA8q+2sLvR0BxH=BjzVAEZBzw@mail.gmail.com>
-References: <179017337986.52388.7943687183785012868@gmail.com>
- <179037565553.3985470.12035061965740287126.b4-reply@b4>
- <CA+NtrhRdnuZOOFpBXvnfOXFs-HA8q+2sLvR0BxH=BjzVAEZBzw@mail.gmail.com>
-Date: Tue, 29 Sep 2026 21:59:52 +0200
-Message-Id: <179071199261.2735405.15944114878466249879.b4-reply@b4>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=870; i=nathan@kernel.org;
- h=from:subject:message-id; bh=BHZIDW5MC/I2vncUVsPMoybZl+cU4d/ASq3TG+iYXBw=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDFl7JHbseRAdfN9mt5lyqF7J+VWJ7LaXot3uWN7d+8o21
- 1vIf9KpjhIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRbAGG73E9M7KFOLuzv337
- 5Hwhl0HlqpqSiPwWlQ5zHv+8rapPGBmuHbx57HS6rOeXhlumdzenbXG/ZrnswvSPf87+3HEr7ud
- WNgA=
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On 2026-09-26 08:52 +0800, 14侯廷翰 wrote:
-> From: Ting-Han Hou <ue081723@gmail.com>
-> 
-> The BrokenPipeError handler in run-clang-tools.py calls os.open() and
-> os.dup2() without importing os. If this handler is reached, it raises
-> NameError instead of redirecting stdout and exiting with status 1.
-> 
-> Import os so the handler can work as intended.
-> 
-> Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python scripts")
-> Assisted-by: LLM
-> Signed-off-by: Ting-Han Hou <ue081723@gmail.com>
-> ---
->  scripts/clang-tools/run-clang-tools.py | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/scripts/clang-tools/run-clang-tools.py
-> b/scripts/clang-tools/run-clang-tools.py
+On Tue, 2026-09-29 at 21:21 +0300, Kayra Cizmeci wrote:
+> Hi Tim :>,
+>=20
+> > > Let's say when entering can_migrate_llc_task(), dst_cpu is CPU0, whil=
+e src_cpu is CPU1.
+> > > And CPU0 has a bigger asym_prio than CPU1. No SMT. When entering can_=
+migrate_llc_task() and sched_asym()
+> > > from there sched_use_asym_prio() returns true without checking if the=
+ core is fully idle or not.
+>=20
+> > sched_asym() does check whether the destination core is idle in sched_u=
+se_asym_prio() for non SMT domain.
+> >=20
+> >                   (false for non-SMT sd)           (check idle core)
+> >        return sd->flags & SD_SHARE_CPUCAPACITY || is_core_idle(cpu);
+> >=20
+> > That is also a pre-condition for setting group_asym_packing.
+>=20
+> Sorry for not showing the code earlier, here it is:=20
+>=20
+> static inline bool is_core_idle(int cpu)
+> {
+> 	int sibling;
+>=20
+> 	for_each_cpu(sibling, cpu_smt_mask(cpu)) {
+> 		if (cpu =3D=3D sibling)
+> 			continue;
+>=20
+> 		if (!idle_cpu(sibling))
+> 			return false;
+> 	}
+>=20
+> 	return true;
+> }
+> static bool sched_use_asym_prio(struct sched_domain *sd, int cpu)
+> {
+> 	if (!(sd->flags & SD_ASYM_PACKING))
+> 		return false;
+>=20
+> 	if (!sched_smt_active())
+> 		return true;
+>=20
+> 	return sd->flags & SD_SHARE_CPUCAPACITY || is_core_idle(cpu);
+> }
+>=20
+> On sched_use_asym_prio(), before the idle check a CPU without SMT returns=
+ true.
+> But I'm actually wrong on that one because on that one we're laying
+> on the idle protection outside to the CPU. If there are not any
+> other brothers, and I'm idle then my brother-family
+> is idle... Ah I messed up describing this.
+>=20
+> But is there are any idle protection outside? I couldn't
+> find any. I could be missing something tho.
 
-Your patch is mangled, so it cannot be applied (maybe you send it with a
-different client from your v1?). Please resend properly.
+Actually idle cpu is being checked as a pre-condition for setting
+asym_packing.
 
--- 
-Cheers,
-Nathan
+               /* Check if dst CPU is idle and preferred to this group */
+                if (env->idle && sgs->sum_h_nr_running &&
+                    sched_group_asym(env, sgs, group))
+                        sgs->group_asym_packing =3D 1;
 
+Are you saying that we should update the first chunk to add an env->idle ch=
+eck
+to match the asym_packing migration pre-requisite? Like below?
+
+@@ -10847,6 +10849,10 @@ static enum llc_mig can_migrate_llc_task(struct lb=
+_env *env,
+ 	if (cpu < 0 || cpus_share_cache(src_cpu, dst_cpu))
+ 		return mig_unrestricted;
+=20
++	/* Prioritize asym packing over cache awareness */
++	if (env->idle && sched_asym(env->sd, dst_cpu, src_cpu))
++		return mig_unrestricted;
++ =20
+
+I think this is a valid point.
+
+Tim
+
+>=20
+> > > And sched_asym_prefer() comes back true too, so sched_asym() returns =
+true and, we just returned mig_unrestricted.
+> > >=20
+> > > I could be missing something, If I'm not tho is that on purpose? If i=
+t is, the last paragraph needs to change
+> > > since it says that "asym packing tries to migrate task to an empty co=
+re" and after that "higher performing idle core"
+>=20
+> > I think I did try to point out the idle core aspect in my commit log:
+>=20
+> > "When asym packing tries to migrate task to an empty
+> > core that has higher priority than source cpu, let asym packing win.
+> > Moving tasks to a higher performing idle core will buy more
+> > performance than cache co-location."
+>=20
+> I know. I was trying to say that if we're not choosing an idle
+> core this needs to change.
+>=20
+> Thanks,
+> Kayra
+>=20
