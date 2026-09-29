@@ -1,158 +1,174 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E653AE1BC
-	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 07:55:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A803475349;
+	Tue, 29 Sep 2026 08:39:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790668562; cv=none; b=ZD+NRXdWXKiEX8I6DWsvQqyWmvSJ0nWJqBkcPW4R9Hv78m9NSg3RFKMTk4lR7WwlM1eZknTA4Y96+x2vdJSV2ckFV+b/zN2HIMFZtiaudIxsP1cEXltFIE1tVHs8+ClN4HCS1PITO2sYZjJOcBy+LWknBkbJM0RuoyDgK2B/o1U=
+	t=1790671169; cv=none; b=PSQRo4xskuk/c0bz+gGm+qkdvACfTD/tzhmfEqkCK46U9BG4hTWG/PI7uaj3X57IuW/kqLCoY9FeMie7E67+Kl7i7USv4ehDHKsATkWrTo+vOa6Q9X2VEI3rzxaQvHHciTz7Sg/j9cGd4rRx0Tq17u6flNnbAs5ZMKCAQ+owLA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790668562; c=relaxed/simple;
-	bh=FZSe8HgfY7ih+9qZIOV1xDysbmaDeK5MObFJHVmEAsg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VkjgQ7uQU66irOxvJLZ/O3Rg6uIzb/UoNT225PYaz3V26TECRDFPlb7RB4WXexDhWdfi3rv+hwVGBMkJ0mZKfDpThs7Y16+Xzi/Fy6+9GPuhTJdntXfkXyArXSxLhylv/0C2ugmo+jRRfSTImcHoQp4iKRNWXDhB58EjtUIwYP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QFe/6gBz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790671169; c=relaxed/simple;
+	bh=vHaUtZ3yE9ZiHYbJMJ7LMgQCwamNYBySvviYFUnXHXg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IUcelLslPKn5kvEzsJCe6w6Mu/7WUiQqRYreXLBV4UM8btED73SjWyUomRMEG81JE5RffiDDwxMi1p5JzmMMfzvYdpX3jLVHGx55ygM/2DEWZWUIluEmR5BLBHyg1Lyhvfhz67Z81hNHsDEhJkNcALq2vXFOinA0qRxbAiVcQBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyMSysAv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QFe/6gBz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790668558;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=RTJ7TuOM9LkPJunaWpeCcattfbluIgbJm2Adgvc46zA=;
-	b=QFe/6gBzFuc+XqWjyQ4UHHj5MNYd5nY1wwrGFbHxJsdZPswNvKMSawZxnvfzIYOYnf4KKS
-	TzQhxl23NVbrGV9ykJyF8GDZW0ZZjlczmgNvB4jRDIGhIfnAvZ1QouwKXLbNpOVrcnQJxG
-	j9SR8GGnpnIIWDxT5k8rjuBI794u7ZM=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-341-VZP83KShMpO07y5DKVNNPg-1; Tue, 29 Sep 2026 03:55:57 -0400
-X-MC-Unique: VZP83KShMpO07y5DKVNNPg-1
-X-Mimecast-MFC-AGG-ID: VZP83KShMpO07y5DKVNNPg_1790668556
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-486f9d150c3so2169675f8f.3
-        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 00:55:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790668556; x=1791273356;
-        h=content-type:mime-version:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RTJ7TuOM9LkPJunaWpeCcattfbluIgbJm2Adgvc46zA=;
-        b=X3QM7aIZn71zsb8tPzt6dCswnc1hmXh+nPfZl88BezA1P6SXGDOxOOyq3kfoVY2jE+
-         NR/xRxgg3kItbvPNmEe9EW2BVoGM4VoXp8mUzn5PhfbitcSgdScaO5OBr4yhpV8sxRtD
-         OwekLVbwWXPCDgxPp9wSR0r1ub1MWCK79TsPAnN/h/6n8+93VrSEc5q+XSmVJ2CSbfcF
-         ZtT+tfXevHBfJvIJ7HuPu4ZaDF+6oEfOp5ndYfOiDZSZ7NSJoJCCfnSE659axVLjhGiv
-         POQisS4GGvV6eAPEFtoqrZFZaJvHNmY54i4gv8Hf5O7ubRGcc+oXOhcsSqfvZw8l5WkE
-         YHyA==
-X-Forwarded-Encrypted: i=1; AKwUvBzWC5Fl0unlB37yJhOiQfjXCHfgtDRdBGL/IfTCCcdtp8j06RLA25NdAzEYow9fMVBatbLH@lists.linux.dev
-X-Gm-Message-State: AFq9FYJ7vCcUl8PxmjBK/kaj4FqEenhSYZxcSY7wfSML3ryFr4wzj4ld
-	nsYCH3DG4yp+/b0ReWFKgKLBT9RFMm+5Qvg6JxVcYAR89Oa90QHDDzRXMfxHAaXuqw/dfQiI1XA
-	aftxWRzRpSPX8ZzD7z/GH2BpZOa28dRmeORwqrphRyDr/ALVXd0YLGwc=
-X-Gm-Gg: AYBFou2wHO7SDapFBH0UAZC9BNBFhbuOpzDVulQjjX2d+NHN6grk2kbrbk1IuppfykE
-	UJX+1EbWxDiJEr3u99rTOndSkjZWHo5kgAqRERjm7exBvsaJL5ROoE5cYfnZD1VzJSAblvu7jr4
-	rw+1ni/ODpAcIW+2z6oQMS8lxRCjiCjo8TCWDKI/uMjsEFaFBynUU8gkEoOogEqrDktzYWDR8aS
-	lMwbietiAiExIP+EaMnJwZC86/wUTVZ7qz5zbK2nUtPerZEdCB4wnY+j3ox7TIyurR7tpVnH00Y
-	PRD79WyuU7TAWBCi2E4NKWuT6gnN5JYN7RTJmWW2OicxPGde5ccd0fwA9sSmWEjvKdSWsbjqsht
-	T2za+7cz2aT8kGorVkOMQJsshKtm64zBxhvbfB3P9J/aQ2UixDlGRyAIjeJGpy2Nqow==
-X-Received: by 2002:a05:6000:614:b0:487:22c6:a623 with SMTP id ffacd0b85a97d-4887166d7eemr27549844f8f.8.1790668555912;
-        Tue, 29 Sep 2026 00:55:55 -0700 (PDT)
-X-Received: by 2002:a05:6000:614:b0:487:22c6:a623 with SMTP id ffacd0b85a97d-4887166d7eemr27549769f8f.8.1790668555384;
-        Tue, 29 Sep 2026 00:55:55 -0700 (PDT)
-Received: from localhost (62-151-111-63.jazzfree.ya.com. [62.151.111.63])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48af4f88352sm2268962f8f.4.2026.09.29.00.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 00:55:54 -0700 (PDT)
-From: Javier Martinez Canillas <javierm@redhat.com>
-To: Maxime Ripard <mripard@kernel.org>, Neil Armstrong
- <neil.armstrong@linaro.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Jessica Zhang
- <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda
- <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Luca
- Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-In-Reply-To: <artpBMeM13Dd0lLy@houat>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyMSysAv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AAC01F000FF;
+	Tue, 29 Sep 2026 08:39:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790671167;
+	bh=vHaUtZ3yE9ZiHYbJMJ7LMgQCwamNYBySvviYFUnXHXg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=VyMSysAvAo7ngdUGShaeaSS7dNAOWwUOlTJuYF0veHDkZPuwBGplCxkq3zYfmMXso
+	 /zwdaYLvq0ftT23TrtAk+3Q/V507oCqtKiCaTTa3dU+SPoJfI6z5TEMDwY4f2FboHw
+	 sLiQOF8ZyUV+QafHjHlodL/KuvuTwUt11h1537m7TDAiuUmK+N7DYsgklbj5HWVVdd
+	 qFKGSRvAvZFoogC74Yzbmqp4YKJ42qAt7YcwtMXwwNEDLY8WHX9fs1dB1x3Z2YlSxi
+	 DznitOMAhJeq5fTWgmuwINB1mdpeXesqzXKCKJgoYsc4bj4ZlorP346HLkA6U2tMSr
+	 YL3DYq2Kc+dMQ==
+Date: Tue, 29 Sep 2026 10:39:24 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+Message-ID: <artyl8fD3zzng8Uh@houat>
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
- <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
- <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat>
-Date: Tue, 29 Sep 2026 09:55:53 +0200
-Message-ID: <xlv1wls4ebjq.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+ <20260928204059.GA515872-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: w_9drI1njbtEIrfzaoFa1gIOJR7W4m7Gw52Pgz7RF6Q_1790668556
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="gzxryrlughoococo"
+Content-Disposition: inline
+In-Reply-To: <20260928204059.GA515872-robh@kernel.org>
 
-Maxime Ripard <mripard@kernel.org> writes:
 
-> On Mon, Sep 28, 2026 at 10:36:18PM +0200, Neil Armstrong wrote:
->> On 9/28/26 21:48, Benjamin Tissoires wrote:
->> > On Sep 28 2026, Neil Armstrong wrote:
->> > > On 9/28/26 19:24, Benjamin Tissoires wrote:
->> > > > On Sep 28 2026, Neil Armstrong wrote:
->> > > > > Hi,
->> > > > > 
->> > > > > On 9/28/26 18:22, Maxime Ripard wrote:
->> > > > > > Hi,
->> > > > > > 
->> > > > > > Panels in general, and MIPI-DSI panels in particular, are pretty
->> > > > > > difficult to support and require pretty much a panel driver for each
->> > > > > > panel produced. Most of them are pretty simple, and require an opaque
->> > > > > > initialization sequence that is usually poorly documented.
->> > > > > > 
->> > > > > > This creates a tension between OEMs and distros because OEMs will
->> > > > > > typically get a new panel to react to a sourcing issue during
->> > > > > > production, and thus need some swift turnaround between getting their
->> > > > > > new panel and it being operational in the OS. Distributions on the other
->> > > > > > hand can take years to ship a kernel with that new panel driver.
->> > > > > > 
->> > > > > > To solve this, I followed the example of HID-BPF and wrote a panel
->> > > > > > driver that will rely on BPF programs to perform the panel
->> > > > > > initialization. That way, we can ship the programs separately from the
->> > > > > > kernel, and with a different lifecycle. If this driver is accepted, the
->> > > > > > plan is to have a userspace component started by udev to identify and
->> > > > > > load the right BPF program for the panels found on the device.
->> > > > > 
->> > > > > This is kind of late for serious applications except if we manage to
->> > > > > solve the bootloader to Linux display engine transition.
->> > > > > 
+--gzxryrlughoococo
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+MIME-Version: 1.0
 
-Besides what Maxime already mentioned (that most general purpose Linux distributions
-built the drivers as modules anyways), it doesn't have to be mutually exclusive.
+Hi,
 
-A simple panel could be supported using this BPF-based driver and then a panel driver
-added to the kernel, if is found that some applications need to have it built-in and
-earlier in the boot path.
+I'll merge the two discussions in that thread.
 
-I don't see why this would be any different than HDI-BPF or other BPF-based infra,
-such as sched_ext.
+On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
+> On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
+> > Most MIPI-DSI panel drivers follow an identical pattern: acquire
+> > regulators and GPIOs, perform a reset pulse with specific timing,
+> > send a vendor-supplied sequence of DSI commands, then enable the
+> > display. The only truly panel-specific part is the init sequence
+> > and power-on/off timing.
+> >=20
+> > The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
+> > with a single generic driver whose panel-specific behavior is
+> > provided by BPF programs loaded from userspace at runtime,
+> > following the HID-BPF model. This enables new panel support
+> > without kernel patches.
+> >=20
+> > Panel DT nodes use a two-entry compatible with the panel-specific
+> > string first and "panel-mipi-dsi-bpf" as fallback. The generic
+> > driver matches on the fallback, while the first compatible is used
+> > to identify which BPF program to load.
+>=20
+> If you need the 1st compatible anyways, what is the point of the
+> second one?
 
--- 
-Best regards,
+The whole point of this driver is that you don't need to modify the
+kernel when you add support for a new panel.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
+> Also, I assume there is at least some panel supported in the kernel
+> you might want to convert to this. That panel would not have the
+> fallback (and the DT is fixed).
 
+Yeah, that's true. I'd still need to identify the parts though. I guess
+using a generic compatible but a specific model would work?
+
+> And I agree with Neil's comment. At least until we start embedding BPF=20
+> into DT directly. ;)
+
+And from Neil:
+
+> I don't see how this can be a valid hardware description, bfp is a
+> software implementation and has nothing to do in the bindings.
+
+I'm quite a bit surprised by that argument though.
+
+We have in the main dt-schema repos bindings like:
+
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/opti=
+ons/u-boot.yaml
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/boot=
+ph.yaml
+https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/post=
+-init-providers.yaml
+
+Or, in Linux:
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/devicetree/bindings/misc/google,android-pipe.yaml
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/Documentation/devicetree/bindings/sound/simple-card.yaml
+
+All of them have been reviewed or acked by you, and yet none of them
+relate to any hardware description.
+
+panel-mipi-dsi-spi is a generic panel that will load a firmware, and
+quite similar to this one. google,android-pipe and qcom,fastrpc don't
+attach to anything and will just open a tunnel to userspace, which is
+somewhat equivalent but more dramatic than what this driver is doing.
+simple-card or its variations will just instantiate a kernel driver from
+the DT and is used pretty much everywhere.
+
+I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
+by rob, and acked by a panel maintainer, and 4 years ago, so we're way
+past the "oh but we didn't know what we were doing back then" argument.
+
+So, let's phrase this differently: what's different about the
+description than panel-mipi-dsi-spi, or any other binding already in
+tree?
+
+If it's the BPF part, BPF is not Linux-only, and there's hardware with
+direct BPF support these days, so it can be considered OS-agnostic and
+not an implementation detail.
+
+Maxime
+
+--gzxryrlughoococo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCart5NwAKCRAnX84Zoj2+
+dq+3AXsHKGDW5rCG290Y1fx+OohFSBUrfr+SjWPzYJbv3AsWDJ+tyk6pJ0aj+C5d
+QReuRzgBf1XMASoAKO+JAW9hFCf/nZfVfklcUBc5TR6bE1h5DcpFLGIlYksltuZo
+cQcGQ3gsrw==
+=YrNa
+-----END PGP SIGNATURE-----
+
+--gzxryrlughoococo--
