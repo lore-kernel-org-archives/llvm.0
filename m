@@ -1,144 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F224FECF5;
-	Tue, 29 Sep 2026 12:28:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5036B51A14F;
+	Tue, 29 Sep 2026 12:44:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790684933; cv=none; b=nkPhmQuL0ZI54NV3StiqDl1rxVJO0c5Yizu21a3Fj/gbazwQr5Nqjd4XmgojgqpX6g0pGhgMxoA/VLh+CX0kZJ2E0iercTdIdUoJAJ0aBWrW4xr8MTt3aPhx3+3FjZO+M59aRgHsrOKxoWQBwEOCotsh0WWnshUrdr+QSSFxUNs=
+	t=1790685877; cv=none; b=XN3rrW+LWClGIQUNzcelIG1bahdu0otaA83IAMSaD9B+o0wucEuWbyiolLimZl+4x/bmfauN0zKRKgzJFt0xWNKEdNsoZciEXF/y62sxDBnvicofLsN0qcWT8NttlSvhYEVd/YXfB9P7fT0UrICrNj5zgI5a//FQZcGDRqHiFS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790684933; c=relaxed/simple;
-	bh=Rya2/xvwmnG+LUNaAktFCoDG7sJ7+awgSLfG71+jbJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fAkrYsYEgy9LfDNLA1ayVhjq9KAa5eN6laQ5gcMClqw8EAFpVK1W5zyUt+uH8R0MqMc+1SnPLO9ebtIvfK5LGwHLn+9InM4RrrpJcwBiu5+0qvNIhiUQrQfd5jD+Rq22VpOPr1doYhj6a7mfGn1G9XrVE9KrLF1IskS+JFdH9vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KDgs52RD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790685877; c=relaxed/simple;
+	bh=7zCbF+GpwDZQ+pFSCsOJspW29PsvmAYHAjabl9nsyhs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sgEOrfhuTPj3QR1peS6nLEMobIiDquroCO7H98J+6lmLWOdor7xZLpIsVnN0Hu5YRpLyJBuV+BZkx9aUut1R7fEU1JByP/K+59TcS9EK/iTMexkJ5XorKgtsHqp6T5/LqAuUxH95XDnVMxUuAQAlPxTBMhx4UWQiT8UqEMAXCeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=CC9TfELS; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KDgs52RD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F8E61F000FF;
-	Tue, 29 Sep 2026 12:28:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790684927;
-	bh=Rya2/xvwmnG+LUNaAktFCoDG7sJ7+awgSLfG71+jbJ8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KDgs52RDTx6mh31I7eMF9UWgZiSg1uUMHsWF7NmqCu8jGXUdqsG5RRco4NAQ1yybk
-	 xQ+m+bbw1/UwtG3KjfgwVgTA5CaoLUfvpIS8lFDoTctzuu7VSyBxeowIx5ueXoinnE
-	 8tKck5octUTdRzH9FOQQ5rKCVgLBSz3czzpqXIl3DCc+gA8SVFh5ujozuK/cQlWlr3
-	 laRfPA3ooCYxIdbhJVJPI51VwDjiItiCpStTQWukUYuWtEtyJAROcrFDWye7LIwjKJ
-	 BEx8eFAfDOOrw/HeBkx0lBbtw4Jx8mATUrz9BoFpYrTbqm0g4vGPopfAaieDMB8Iyg
-	 sD/aDTz9tWV9g==
-Date: Tue, 29 Sep 2026 14:28:43 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-Message-ID: <arut8kWzqX5YW5wE@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <054ef52478fc93fc213a9dae23ea77f73094aaf2@intel.com>
- <aruD5kwOEsvFhW2e@beelink>
- <42cfa3fb2246c66d69e45d7d9b8d6aaadc0da4c4@intel.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="CC9TfELS"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 68TB5LpF4059980;
+	Tue, 29 Sep 2026 12:44:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=RjSlzM
+	2R9aIL6cDN07DKGdujqs1Abkvok6iYg663e5o=; b=CC9TfELSHSpvuJUf+qTFhV
+	7jn+SciJ9rvtC0Nore2qWTSDYdVbGXGmp9c35tmn7umhF5E28bmcmV9pIYvoFdJ3
+	4Iod/mXFHSYZv6THmWCRKijVdgvR4AAQCjVCIirDdZtXdmQGNozWzXEvMFRDBS9P
+	jB1mV/9yIUA+/c+X+z7lD0MiKQactWj726JEwTNxY42yPcSVy/MnRTdI4tvx4NAr
+	geMnNxImTOnPajvImMdL26zMb5PCVK6Zf3fIRCZZz7Q+jCep7008tWPXjCiP4ogS
+	kA6bebs9mR9pMstfcRb04ww1Ad0HC/d9HXrFdnU4ei3y+7Z8TtqXTia/eZJhOpQA
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gx5j5743q-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Tue, 29 Sep 2026 12:44:14 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.11/8.18.1.11) with ESMTP id 68TAlrZo1657706;
+	Tue, 29 Sep 2026 12:44:13 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gxrcpsw37-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 29 Sep 2026 12:44:13 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 68TCi9iJ48038178
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 29 Sep 2026 12:44:09 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9E77B2004E;
+	Tue, 29 Sep 2026 12:44:09 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 49AC42004B;
+	Tue, 29 Sep 2026 12:43:59 +0000 (GMT)
+Received: from [9.124.214.246] (unknown [9.124.214.246])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 29 Sep 2026 12:43:58 +0000 (GMT)
+Message-ID: <2964a7d8-8765-435c-af9e-a38024fca877@linux.ibm.com>
+Date: Tue, 29 Sep 2026 18:13:58 +0530
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="tn7gfu35hmfimxib"
-Content-Disposition: inline
-In-Reply-To: <42cfa3fb2246c66d69e45d7d9b8d6aaadc0da4c4@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 09/13] sched/debug: Add migration stats due to non
+ preferred CPUs
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: linux-kernel@vger.kernel.org, mingo@kernel.org, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        yury.norov@gmail.com, kprateek.nayak@amd.com, iii@linux.ibm.com,
+        corbet@lwn.net, meted@linux.ibm.com, ynorov@nvidia.com,
+        tglx@kernel.org, gregkh@linuxfoundation.org, pbonzini@redhat.com,
+        seanjc@google.com, vschneid@redhat.com, huschle@linux.ibm.com,
+        rostedt@goodmis.org, dietmar.eggemann@arm.com, maddy@linux.ibm.com,
+        srikar@linux.ibm.com, hdanton@sina.com, chleroy@kernel.org,
+        vineeth@bitbyteword.org, frederic@kernel.org, arighi@nvidia.com,
+        pauld@redhat.com, christian.loehle@arm.com, tj@kernel.org,
+        tommaso.cucinotta@gmail.com, maz@kernel.org, rafael@kernel.org,
+        rdunlap@infradead.org, kernellwp@gmail.com, linux-doc@vger.kernel.org,
+        jgross@suse.com, virtualization@lists.linux.dev,
+        sunlightlinux@gmail.com, Marco Elver <elver@google.com>,
+        llvm@lists.linux.dev
+References: <20260928053728.797539-1-sshegde@linux.ibm.com>
+ <20260928053728.797539-10-sshegde@linux.ibm.com>
+ <20260929121838.GA1814129@ax162>
+Content-Language: en-US
+From: Shrikanth Hegde <sshegde@linux.ibm.com>
+In-Reply-To: <20260929121838.GA1814129@ax162>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-Spam-Info: AW1haW4tMjYwOTI5MDA1MCBTYWx0ZWRfX+ViTAVSY9C6d
+ Zh0y9/HMm55PExuQ9TJYLIo+RkAoxM619VhzjRtApFwP/DLPkb+/S25VG7vOjSV052bxFXe5mNg
+ ESlE7zXQmfoOw7gs+RWGmrdl/teSQ1s=
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwOTI5MDA1MCBTYWx0ZWRfX0TkZHcNRl/Iq
+ KytfmOj6R1bmuveywVoH5xN8IWcLEBFb7NPO1GTxq+V+rm/Z1t3RUPFGFPSrReWe07FiKR9/cvx
+ t9Cs3GIAAHL4HomcmXHt9g0qc6pYAi8VYS9ZrHmApZ8leJe82I+ZlUnSCxM+6csoM+Z7wMOLMss
+ XinnxIBU/ZbT7LqBqH8MlzZyGGu3v3Q2nPD6YCzJksL6jVgUrd41yURw76JeaBoHuNR6YV2Ni6d
+ DWQHnmBlKi16GjpTtXF/k9kUFmAfAsuIEuWAyBGAvWf/eWU9mxJSDrnPRrJAR6k1UNGnHp0xGZP
+ c0H7+SJSyeMdENXUJeTJ/m91XKMr8m81oZAbqdJXeQLT2s3L9RAOie/iSPaOBs4wqAMzRsIsHbn
+ s99WBKgrgbEWL0mcWqPyWqlE/vrvoBdl8T20devzd6AnUd+1Tt8llQGugX/WBwx8VoRPbbyOBmg
+ u3vpLW7VvlgK0jRrZLw==
+X-Proofpoint-GUID: STRPcxzn_YxRri8O88Y7Azr011y4-RGd
+X-Authority-Analysis: v=2.4 cv=RKcmjIi+ c=1 sm=1 tr=0 ts=6abbb29f cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=VdqzKS8jKosA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=iQ6ETzBq9ecOQQE5vZCe:22 a=VnNF1IyMAAAA:8
+ a=MBmL4KyaN2R1Ztbd2Z8A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: 70JjiqjWJBATLuNceMBWnv0wpvJ1SX2G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-09-29_04,2026-09-21_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 spamscore=0 bulkscore=0 impostorscore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2609040000 definitions=main-2609290050
 
+Hi Nathan. Thanks for report.
 
---tn7gfu35hmfimxib
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-MIME-Version: 1.0
+On 9/29/26 5:48 PM, Nathan Chancellor wrote:
+> On Mon, Sep 28, 2026 at 11:07:24AM +0530, Shrikanth Hegde wrote:
+>> Add a new per-task stat,
+>> - nr_migrations_cpu_non_preferred: number of push migrations while the
+>>    CPU is non-preferred.
+>>
+>> Since this new stat is per-task, it changes only /proc/<pid>/sched.
+>> It doesn't update /proc/schedstat. Hence increasing the schedstat version
+>> is not necessary.
+>>
+>> Signed-off-by: Shrikanth Hegde <sshegde@linux.ibm.com>
+> ...
+>> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+>> index 5049eff58fb7..7465c983e6f6 100644
+>> --- a/kernel/sched/core.c
+>> +++ b/kernel/sched/core.c
+>> @@ -11236,8 +11236,13 @@ static int sched_non_preferred_cpu_push_stop(void *arg)
+>>   		update_rq_clock(rq);
+>>   		context_unsafe_alias(rq);
+>>   
+>> -		if (task_rq(p) == rq && task_on_rq_queued(p))
+>> -			rq = __migrate_task(rq, &rf, p, cpu);
+>> +		if (task_rq(p) == rq && task_on_rq_queued(p)) {
+>> +			struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
+>> +
+>> +			if (rq != dest_rq)
+>> +				schedstat_inc(p->stats.nr_migrations_cpu_non_preferred);
+>> +			rq = dest_rq;
+>> +		}
+>>   		rq_unlock(rq, &rf);
+>>   	}
+> 
+> This breaks the build for me with clang-23+ (which have context analysis
+> enabled by default), although it bisects to the final patch of the
+> series since this is under CONFIG_PREFERRED_CPU and it is not selected
+> until then.
+> 
+>    kernel/sched/core.c:11292:25: error: calling function '__migrate_task' requires holding raw_spinlock 'rq_lockp(rq)' exclusively [-Werror,-Wthread-safety-analysis]
+>     11292 |                         struct rq *dest_rq = __migrate_task(rq, &rf, p, cpu);
+>           |                                              ^
+>    kernel/sched/core.c:11298:3: error: releasing raw_spinlock 'rq_lockp(rq)' that was not held [-Werror,-Wthread-safety-analysis]
+>     11298 |                 rq_unlock(rq, &rf);
+>           |                 ^
+>    kernel/sched/core.c:11303:1: error: raw_spinlock 'rq_lockp(__this_rq())' is not held on every path through here [-Werror,-Wthread-safety-analysis]
+>     11303 | }
+>           | ^
+>    kernel/sched/core.c:11286:3: note: raw_spinlock acquired here
+>     11286 |                 rq_lock(rq, &rf);
+>           |                 ^
+>    3 errors generated.
+> 
+> Not sure what the proper fix for this is, maybe another
+> context_unsafe_alias()? cc Marco just in case
+> 
 
-On Tue, Sep 29, 2026 at 01:16:41PM +0300, Jani Nikula wrote:
-> On Tue, 29 Sep 2026, Benjamin Tissoires <bentiss@kernel.org> wrote:
-> > Ouch. This immediately raises the "let's implement a parser in the
-> > kernel" flag, or "let's create a new langage".
->=20
-> Fair.
->=20
-> > You'd still need a dedicated driver for your new blob parser, with far
-> > fewer people who had had a look at it than BPF who has been working on
-> > for several years.
->=20
-> Fair.
+I suspect it is due to using of dest_rq = rq and rq is changing context.
 
-Also, it's kind of what we had with panel-mipi-dbi:
-https://github.com/notro/panel-mipi-dbi/wiki
-
-It didn't really take off.
-
-> > The integration of BPF and the kernel is honestly transparent nowaday:
-> > calling a struct_ops BPF function is just a function call away, and from
-> > the bpf calling anything in the kernel is also just a call away.
->=20
-> I don't know if I'm just being overly conservative here, but it seems to
-> me BPF provides too much flexibility for the use case. But maybe the
-> point is completely moot, and you should just ignore me. ;)
->=20
-> > See Maxime's answers: yes, falling back to dedicated driver is still
-> > encouraged.
->=20
-> [Moved the above to go with below.]
->=20
-> > Isn't that what Maxime wants to have? One driver for a plethora of DSI
-> > panels, with the same ability the BIOS has to also do function calls to
-> > set things up?
->=20
-> I suppose this is something that could use some clarification. Is the
-> idea that most (simple) dedicated panel drivers eventually get converted
-> to BPF?
-
-I don't think most of the existing panels will be converted, if only
-because it would require a different DT binding for most of them. We
-should totally fix the "what happens the panel is supported by a driver
-and the bpf driver" situation Rob (I think?) pointed out though, because
-I do think some will be converted still.
-
-> Or is the idea that BPF is easy for prototyping and development
-> using stable kernels and short time to market, and most of them would
-> eventually get converted to dedicated panel drivers?
-
-Even though it does make prototyping easier, I totally expect this to be
-a production-grade driver, just like any other panel driver.
-
-> The story wrt display before userspace is up and running also needs
-> clarification.
-
-Yeah, I'll work on an in-kernel loader for v2.
-
-Maxime
-
---tn7gfu35hmfimxib
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCaruu+wAKCRAnX84Zoj2+
-dvaDAYDbgFmn3VTPnwMmRkcBxrTVtKlQ2i2nTFTQqsY6+h83dQfdgZBSKyv4PaD8
-t21q8pIBgLJeTlsC72CRcfaSgL7zPCcpR02uuJQEdtsW57i6k17jJYgTCB0r9j+y
-8X+t6kZwEw==
-=GOdP
------END PGP SIGNATURE-----
-
---tn7gfu35hmfimxib--
+let me try locally and see the fix.
+One fix is use rq->cpu instead of rq comparison to see if migration happened.
