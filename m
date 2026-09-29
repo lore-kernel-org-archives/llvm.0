@@ -1,117 +1,155 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C36751CF4B
-	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 17:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648EA548563
+	for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 17:44:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790701545; cv=none; b=mmd3cwgelzV0NfigCjtbBReRWL9B8UGjVWWeeUSHajHyEYWUwqgteX3pnqZZWxBG1+GtGsp1Q2uUlU5wu34GMV99Tcs2YSXRTq24rJm4iqhFnBMtJ1KrbLiQeOD2tT4hP3VNGp5WqvIS8HjC/pOBw0QkbtrRcRQO+n4DtHTA8qg=
+	t=1790703868; cv=none; b=IRGZq675Apni3U7fusFKa8zLLK3cFBIBAFD4RoFMT34m4Fzj3lbLNhkOB/4VU6+c69DaYlBYqnEAMNV8QjUkItbXUSSD4oJtaPVaURtYuJRHcUaFoi4yGaV4XqZpr7LmcgGcOJn5luv1ktzlVL0W4ARxtdMofb5M+xZH7kErFm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790701545; c=relaxed/simple;
-	bh=JV8h3XKKL4iKc1z0q0ZRCkZ4gT3Y6S4Dns2ilEa3XNY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=VlwSKJX2zusWx1D518YkaGUAMkaf9pFcBWJCX2eBoSTn9NfSiO74jm+L2sOgPgjveSk3okLsYVnyjY6GVdY7EJm0rGWmJcO0uclqvYWJ9PkjEg6ZdBrO6sKxwM14O4atNlF0kSdLSDKKpTv6+Wmj8VYkcvGhuJFAUvZ1z0ZOjac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VKdzLDDj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790703868; c=relaxed/simple;
+	bh=0xBkcPblbpjG4vkQkMpJRewja3D/3gtloFXrU9YBVy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dfryeynxYwxpX1503w4K4Pcq5+JzZ72G2yHpHBuPX0JDNY51KQR9FxOULi/Qrfs64B6JaoGBw+Ky1A/wMf2JnSlGYJJc5bsoqf0MR1S5Ay7hH8QgombJ5a37xFTkQNnQAJkGcSfSUZEaWWhtNIsHHmPENIFb/7eupwosw27mRTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f2M/WdWh; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VKdzLDDj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790701543;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6J6pIvhEE+BADOBuoPnseFgbyAffm02tcOvxzUPEbqk=;
-	b=VKdzLDDj2MHjWsBiEiq8z/7jeh2VziesCrbAQ6IxgCInnYIVI1JBQ0eZcD2O2I+b6lXkJQ
-	aH72jra+bfvxPE7oa1CUTdo5bGwpjvXSsDxvZ/opYGBHs245IL1Z9g1IWXMVdHijJ74SQx
-	Vx7A8fHz4KeBsdVX6q+C4yz5V5nNtoE=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-140-SXC0qrK8OGClfQvcxaLwrw-1; Tue, 29 Sep 2026 13:05:40 -0400
-X-MC-Unique: SXC0qrK8OGClfQvcxaLwrw-1
-X-Mimecast-MFC-AGG-ID: SXC0qrK8OGClfQvcxaLwrw_1790701540
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-93c5e9c2ec1so206400785a.0
-        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 10:05:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f2M/WdWh"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ff9621c5dso24600925e9.0
+        for <llvm@lists.linux.dev>; Tue, 29 Sep 2026 10:44:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790703864; x=1791308664; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=k31zVVbNicpwi9YDlhFvR6Wyco71XCVxmV3/xYq3pxI=;
+        b=f2M/WdWhjvYeUw4INxVoYvctqz2nqxBhbvt4rliPkoI8tQYNLD/EUwOUH1R/81UNas
+         IXn3G6i4sY2c/36jspUK8WwOlOqlfe2kdNCnoZ3i2qv8Dy1GFcr9jOVPHLLanhhDKeQX
+         +wY+Nzj3gjtv8tBLCwQTOUSEPzkPjL9UDwAt90e/D4g+HmqDc9X1AsK2mspa7YGg0Kev
+         OcF2tcYWRrCHcUOizkq2imyuyDydiXzZqEAYunLOWjGPGGSn5LpQzQgxgOsdTOLQd+y1
+         BoMYNyztcj8cRTJ1MPUemqKq/NmBrGURzU+mI78waS21ZtecTrZJvSjPudnrVJCHxQuZ
+         rwkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790701540; x=1791306340;
-        h=content-transfer-encoding:content-type:mime-version:date:message-id
-         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+        d=1e100.net; s=20260707; t=1790703864; x=1791308664;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6J6pIvhEE+BADOBuoPnseFgbyAffm02tcOvxzUPEbqk=;
-        b=F9T4JIAyHUC9mKHYzBtQnoM8etrhe+8olgAT5oqaCBFtgD8LCuZSf51zaR0IB/RrTA
-         s28yvHd1B8hOyOgOqSUeOorYd343aK0kIvLFStSZMAJwHPT4eyURLI4I1PtnjBbVsgOR
-         S5Lut7n/qOQqy7uATt9E0UC2LIQifAVwYxkJ9KNIl7qKprdW+6Bf4h0uucPaYK+NJ2UJ
-         wlTMnzreg/rojHdemCPi+elUQsRPAx4mMVCF9+R/djCrHCv0yNoDMrzh4sDO9L9xayqv
-         QSIBnjfJ/GD8/zu8sJboPL+pgCyVH0Htb2VnOZs5Se22wVRTxkVbrPzJ0+MvmcaEtUW8
-         16qg==
-X-Forwarded-Encrypted: i=1; AKwUvBxIR81YeYhQ2VQlTWzT0ZUyT/AFdAG39FXA2OtLCXNSvvzwCFwSztpgCryQuv6/DTZCLmrT@lists.linux.dev
-X-Gm-Message-State: AFuF++k31YiQzyLYM91TXAIyBwUY9zWlJOF42aK+fEnXIoG3DHUuJZ7c
-	ctH2RYl6tTgVBbjcKz7tacNJ7uYL8eVbnURrX713j8Nq0P/zhxY32HKYhX6AnKaW5AapNf0LtOx
-	IqIUVofRgR/SqwCgPPtjb18RRbLyWLmb0hV6Au8VsfnNP63aRPWlm6ho=
-X-Gm-Gg: AYBFou0HoIHlj9rRAw0UjarvlaQkRdgV9z9NgX5BYKXsk1dAMlZkh+j95vIpy4GBn6v
-	HAZ+d6z509+XG1hSZ1WBRrUwOIFjhBHux42BoE4W5BfkZCnk2rjXkck2RL0nElp2006GPyxcEWY
-	RFiCdYNxumNQArfUF+yS3fPO4yGw/78f0C/YHARO3s7t/5pUmlHn5xWnbBb/gFQIAw6W5ha/Jnq
-	DGf9y5f2HcCwonzO4eBuCtiGMTmyqu/lc7v+mtCxOetQ1A0KqhFj5rkI1w1EERC48kTc/bHuhu9
-	gWz8mRzVDqkq8dQByHlRGrYFkPi+00RoxlXYmQ95fOPZR8/fZkil42gyHTwHAnHtaTW3GKV3sDg
-	1SxFzMZkvBDZ4zf+2+uC67B8Vp8Fsz+wutuWPhbYpqYi5+8zT71k=
-X-Received: by 2002:a05:620a:6988:b0:939:7e23:b2f2 with SMTP id af79cd13be357-93c9fa5fc59mr25256585a.25.1790701540237;
-        Tue, 29 Sep 2026 10:05:40 -0700 (PDT)
-X-Received: by 2002:a05:620a:6988:b0:939:7e23:b2f2 with SMTP id af79cd13be357-93c9fa5fc59mr25248485a.25.1790701539617;
-        Tue, 29 Sep 2026 10:05:39 -0700 (PDT)
-Received: from bmasney-x1.rmtuswv.csb (c-73-183-53-213.hsd1.pa.comcast.net. [73.183.53.213])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93c9f541cfasm14451085a.38.2026.09.29.10.05.37
+        bh=k31zVVbNicpwi9YDlhFvR6Wyco71XCVxmV3/xYq3pxI=;
+        b=uy/RDtROyMfaijl4T76o38C7o8UVa8BCDQ5D74tPhSl77WENHB3qV5FNjE3ZIqbuUt
+         wrkWhypdMZ72Cw9jkaG2EWloMPq6YuBbPqhVquVqDrzPsAFJtEY6Z/nS4F0LagF14DEx
+         aDNfejYg6YEPyPVvj/gigCWFpHjhjqpmcNaO2pQEqsFcn5rHtw9+s1v/AlBnv+z5GJhG
+         8te8jnaIT5Wk7vb9KC6b+MRq5WZhxMlulfSkFT5Vqt+wL41Hf4A5LQW8TxH5sBJ3KVcZ
+         WuqZ3haAHrTEntagpC47Tx6faK1+IQ8esF/VEhGEWKPTJbvAQ73dNw+zQCw4eLMHT/sV
+         Gnww==
+X-Forwarded-Encrypted: i=1; AKwUvByo/GvEgqlxQq/pacD4znt8P32damL/G2miMmEmxY7pTCecm8DeZeyFNpXG81D6CDq04uGU@lists.linux.dev
+X-Gm-Message-State: AFuF++nGGTRx/aE4d+QvkuCVWyS1+Y2y2/w68ShnTn9prwwgtgx502ji
+	X+EJ6PQery78OBArIZ2P4F3l1knbZwLR7VIhEM7nk6gLKXCcpP1ZFRBj
+X-Gm-Gg: AYBFou0wTzK/5R4wFFd3THb/fSerQtleL56HnatXjkJ6AMUyO0CyB7d27fKTFVNqyN2
+	poItd+ZJui6vtG1fNCB1PIfiRUdqVxS2NxWxE1jYzE0PA5QwmiNPj7vjyH5V5VjG78lUwOLrLG8
+	aot9weyqL+OXcmp+Dk61W/VX+ENjTVUuVtXTI+seWtxV/NGGhuXXRKaTnDu/smHuF8EmaBUNHqp
+	3PPUOUJMOtjeDNs/t/6Vvoy6/AVekO1dw3SdX8kQwevhwOP028ummgRGTrZJBo3hwEW2JamdTr0
+	qWcjFleXbn+QTPYmdB7fmLZN5HocmKw+ghb7Z34Y8wVarZ9St/PTkFZcIn4o2A3kvPXgZARoGHr
+	lZjWK+s1xVhXR8R5SsJOCQxVN1bQZXG8XGKdNu6HspuNHr0uflYzS91tnHbh4E0BNoeIsBtkt4S
+	WQJ5+qLSdGXHQuEXhz7ycn44nDz7Ckzh1OtAfZLuflVAol4UkXnsKIDQOW9AjenK3DekzTbVWEG
+	iHpkfb4mi9V28WkjEjTJR3NWD7OC1MoMUs=
+X-Received: by 2002:a05:600c:4e12:b0:49d:1842:f001 with SMTP id 5b1f17b1804b1-49fe66b6e0emr305056015e9.14.1790703863276;
+        Tue, 29 Sep 2026 10:44:23 -0700 (PDT)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a00cfae123sm103285395e9.13.2026.09.29.10.44.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 29 Sep 2026 10:05:38 -0700 (PDT)
-From: Brian Masney <bmasney@redhat.com>
-To: linux-clk@vger.kernel.org, Rosen Penev <rosenp@gmail.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, 
- =?utf-8?q?Duje_Mihanovi=C4=87?= <duje@dujemihanovic.xyz>, 
- Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- llvm@lists.linux.dev
-In-Reply-To: <20260719214349.734351-1-rosenp@gmail.com>
-References: <20260719214349.734351-1-rosenp@gmail.com>
-Subject: Re: [PATCH] clk: mmp: allow COMPILE_TEST builds
-Message-Id: <179070151857.199845.8103237122518687447.b4-ty@b4>
-Date: Tue, 29 Sep 2026 13:05:18 -0400
+        Tue, 29 Sep 2026 10:44:22 -0700 (PDT)
+Date: Tue, 29 Sep 2026 18:44:15 +0100
+From: David Laight <david.laight.linux@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>, Andreas Schwab
+ <schwab@linux-m68k.org>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner
+ <tglx@kernel.org>, Theodore Ts'o <tytso@mit.edu>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens
+ <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
+ <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Ingo
+ Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>,
+ x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+Message-ID: <20260929184415.1920fe91@pumpkin>
+In-Reply-To: <20260929165939.GA1890629@ax162>
+References: <20260925-vdso-getrandom-avoid-memset-llvm-24-v2-1-ce640f872393@kernel.org>
+	<87zex4ic68.fsf@linux-m68k.org>
+	<20260926121927.GA1486962@ax162>
+	<are7cfMIHZZn6jLz@zx2c4.com>
+	<20260927080225.37534e7c@pumpkin>
+	<20260929165939.GA1890629@ax162>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=273; i=bmasney@redhat.com;
- s=20250903; h=from:subject:message-id;
- bh=oS1ZL6IKxW4hwmHG7GbpdJ7kavjzT5ERg1L4wiG0veU=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGLJ2v39wNLTMfKFGZMxiweX9O+933NBfv1/6+p+T/DNtz
- EW3HmRw6ShlYRDjYpAVU2RZkmtUEJG6yvbeHU0WmDmsTCBDGLg4BWAi220YGQ4tX3Py89/Ee1N+
- vs88PJ9ZKPPO+wfFNtIVaaacdV5vVpczMqw+96OJZcb/Txn7FTd4np/zIujURX8e388xaxe3XFl
- 2fgY7AA==
-X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
- fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: K1Fro3pDpTniJaJ4qDgNIGCUAq8O6K2WTWYlUtJK0Go_1790701540
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Tue, 29 Sep 2026 18:59:39 +0200
+Nathan Chancellor <nathan@kernel.org> wrote:
 
-On Sun, 19 Jul 2026 14:43:49 -0700, Rosen Penev wrote:
-> clk: mmp: allow COMPILE_TEST builds
+> On Sun, Sep 27, 2026 at 08:02:25AM +0100, David Laight wrote:
+> > On Sat, 26 Sep 2026 14:32:49 +0200
+> > "Jason A. Donenfeld" <Jason@zx2c4.com> wrote:  
+> > > Do we even need to return a value at all? Might as well just make the
+> > > function two lines:
+> > > 
+> > > +       for (char *d = dst; size--;)
+> > > +               *d++ = value;  
+> > 
+> > Wouldn't it be better to add a barrier() or similar in there to
+> > stop the compiler playing unwanted games>  
+> 
+> Wouldn't that just result in the same code generation issue that Jason
+> pointed out on my v1?
+> 
+>   https://lore.kernel.org/aquyVkdYceiWdckX@zx2c4.com/
 
-Applied, thanks!
+I missed that one going past....
+You only get 'rep stosq' because the compiler first converts it to memset(). 
 
-[1/1] clk: mmp: allow COMPILE_TEST builds
-      commit: d0b72c88671b3c46342bbebc9b90280890436c98
+> Maybe that doesn't matter because modern compilers have better options?
 
-Best regards,
--- 
-Brian Masney <bmasney@redhat.com>
+A lot of cpu will run the 'rep stosq' very slowly (it has a big fixed cost).
+
+At a guess the loop is 3 clocks (possibly 2; but that usually needs
+you to use negative offsets from the end - and gcc doesn't like that).
+That is comparable to a mispredicted branch (and you might get two of them).
+It still might actually be faster than the 'rep stosq' version!
+
+I suspect the fastest code is to unroll the loop.
+	xor %eax, %eax
+	movl %eax, 12(%rbx)
+	movq %rax, 16(%rbx)
+	movq %rax, 24(%rbx)
+	movq %rax, 32(%rbx)
+	movq %rax, 40(%rbx)
+	movq %rax, 48(%rbx)
+	movq %rax, 56(%rbx)
+8 clocks on old cpu, 4 on newer ones.
+But more likely to be limited be I-cache reads.
+
+If you are going to use 'rep stos' then you might as well write
+13 32bit words.
+
+David
 
