@@ -1,93 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F9255C305;
-	Tue, 29 Sep 2026 18:50:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0DD53B603;
+	Tue, 29 Sep 2026 19:59:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790707820; cv=none; b=YKIzEliCjfdvYKq/JgbYFkOnZY+QbcUfSTa2wELkITWRaGtnGJBf1efX+Br12RMxG0f6+ElfH1g/7ApERPImJaBaaJVLGg977WKYgax2IRZdFeXac7wOgCOJTh8FXyEbs1x7jUkqd7et3V9L+O1n2BOVXA5Mdd3q4rgO83G6+Tk=
+	t=1790712001; cv=none; b=YdRZeW+g3c1noZLPEQ6r8zPw9Bz37xA3XvLDTokP+4I8tZWJUfV0g+croBiAUtMaTtH1+Mgi+b0Kbuz8bkkdrcrXtF/+5Qxk8+/u6G3uXa3jH4M1iIzEdnO3btE0CM9AAP4XtEokCBIziNd9iIrxHM466fDJGVOCIk37AcFp+DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790707820; c=relaxed/simple;
-	bh=a0j9ZYPE0kpuxcGqfOeJqb1F8DjbAgg+aDr2TDXJr2k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EDv2RLoUMXUceJD8SbUvs7l7UEbtke0Eut+mGUOhiG8Cf7x6ABe4avXb51jDUER/9SeS8jVEvUD23C4EIneZO8tXaGJg48U8ULex8jdS1KV1epsudvSgKqTxfdpDzRVXPCZJ4/UTEPU1PD22iZMKC4H7Hr6PsnFbsEFqqTBVZq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKL/NQJo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790712001; c=relaxed/simple;
+	bh=BHZIDW5MC/I2vncUVsPMoybZl+cU4d/ASq3TG+iYXBw=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=oD3H5dBn3AjWS+2wx9/s4ZLdwZShdHfLqSvLwzEoqCHUWsTAGLNtbSBIlrFGMgR0t2Cgu9xLcfpN4xrdDPBcDH2NESdFRGWcqsx0RDom5eB/FZ+vR53g9dYc4kLN4ZZ7bAjvI6/u4PG2cHqbxH9iKsj+Zx6+WKjcKZoDTKh6+5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h5pJq00c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKL/NQJo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C211F000FF;
-	Tue, 29 Sep 2026 18:50:18 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h5pJq00c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D761F000FF;
+	Tue, 29 Sep 2026 19:59:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790707818;
-	bh=a0j9ZYPE0kpuxcGqfOeJqb1F8DjbAgg+aDr2TDXJr2k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=AKL/NQJoQyB/VbLk21OaTs+Mad4FePYdN1yez5LipKrQ8ppXndkJ5NvSAie+kvhQ7
-	 Yqyl0+b/kdqogNgUALIq95bXiZ9mFnXgC+4UviSh6lZef0lMj6jNLORKe9IN31zuNT
-	 Vu8/t9RdpxSVVjF9Al3+GYkpLpqdUtRfCxKhcz0Wriu/JQRqpMn8u5EoboVp/bfF4C
-	 cAB0XC1Pnny4KkDArsPRqCbt9dFO62WiZa9rNGDOdAyit5ChZkRHAy8b14ZbocdFUt
-	 CA+EzLSqc4y19uaW8WZ9YTKy0iq3H/SVKVhdX4xUFyS1KmdYw5GkoFZzzmgjoSkYbO
-	 7CDUOnBLTgKsA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Yury Norov <ynorov@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Yury Norov <ynorov@nvidia.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Matthew Wilcox
- <willy@infradead.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar
- <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng
- <boqun@kernel.org>, Waiman Long <longman@redhat.com>, Dennis Zhou
- <dennis@kernel.org>, Tejun Heo <tj@kernel.org>, Christoph Lameter
- <cl@gentwo.org>, "Paul E. McKenney" <paulmck@kernel.org>, Frederic
- Weisbecker <frederic@kernel.org>, Neeraj Upadhyay
- <neeraj.upadhyay@kernel.org>, Joel Fernandes <joelagnelf@nvidia.com>, Josh
- Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Lai Jiangshan <jiangshanlai@gmail.com>,
- Zqiang <qiang.zhang@linux.dev>, Onur =?utf-8?Q?=C3=96zkan?=
- <work@onurozkan.dev>, Kees Cook
- <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>, Anna-Maria
- Behnsen <anna-maria@linutronix.de>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Ben Segall <bsegall@google.com>, Mel Gorman
- <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, K Prateek
- Nayak <kprateek.nayak@amd.com>, Mike Rapoport <rppt@kernel.org>, "Liam R.
- Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, Vlastimil
- Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>, Pedro Falcato
- <pfalcato@suse.de>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang
- <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Eugenio
- =?utf-8?Q?P=C3=A9rez?= <eperezma@redhat.com>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers
- <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
- <justinstitt@google.com>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, wireguard@lists.zx2c4.com,
- netdev@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- rcu@vger.kernel.org, virtualization@lists.linux.dev,
- linux-rt-devel@lists.linux.dev, llvm@lists.linux.dev, Yury Norov
- <yury.norov@gmail.com>
-Subject: Re: [PATCH 12/17] timers: assert static storage for DEFINE_TIMER()
-In-Reply-To: <20260915031334.1194975-7-ynorov@nvidia.com>
-References: <20260915030336.1192299-1-ynorov@nvidia.com>
- <20260915031334.1194975-7-ynorov@nvidia.com>
-Date: Tue, 29 Sep 2026 20:50:15 +0200
-Message-ID: <87o6dfj3iw.ffs@fw13>
+	s=k20260515; t=1790711999;
+	bh=z2oa1OcDtqfJYCrJ3lsWN9bBLTjM9ok0eOwKjWlgV04=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=h5pJq00cLWLqy+pgZKxCIvZCY3qPuGjY1/niwFtITAHarht8XoCxt38A93iFfze2K
+	 j/6mQNjxtXTwnxZ+8r/D9/uTtO0F/6gvLxx0u/N+qJwtTDSeXw27CnJ4DpVwz6Bqhu
+	 wO6vzDmyFtu+OmSyqPqPBttuJBLqnNSdPW6YJXLofUpZ8Vw6cnXh1pnyXlSFXwN2e/
+	 4UG0yvKI8MzJAGUJCg5GlwHyCaSruIv0rQMGKGCFeqVJ4L6C3PXavgt6kLIl0ghhD+
+	 04TAgQBu8V5ZNinVlYFfDSZl+72XrPBhXLTlHSFNwTRf0pCL7+qjgcFyHE4+hI/lUo
+	 j5r6qFIVudMyw==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] clang-tools: Import os for broken pipe handling
+From: Nathan Chancellor <nathan@kernel.org>
+To: =?utf-8?q?14=E4=BE=AF=E5=BB=B7=E7=BF=B0?= <ue081723@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+In-Reply-To: <CA+NtrhRdnuZOOFpBXvnfOXFs-HA8q+2sLvR0BxH=BjzVAEZBzw@mail.gmail.com>
+References: <179017337986.52388.7943687183785012868@gmail.com>
+ <179037565553.3985470.12035061965740287126.b4-reply@b4>
+ <CA+NtrhRdnuZOOFpBXvnfOXFs-HA8q+2sLvR0BxH=BjzVAEZBzw@mail.gmail.com>
+Date: Tue, 29 Sep 2026 21:59:52 +0200
+Message-Id: <179071199261.2735405.15944114878466249879.b4-reply@b4>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=870; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=BHZIDW5MC/I2vncUVsPMoybZl+cU4d/ASq3TG+iYXBw=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDFl7JHbseRAdfN9mt5lyqF7J+VWJ7LaXot3uWN7d+8o21
+ 1vIf9KpjhIWBjEuBlkxRZbqx6rHDQ3nnGW8cWoSzBxWJpAhDFycAjCRbAGG73E9M7KFOLuzv337
+ 5Hwhl0HlqpqSiPwWlQ5zHv+8rapPGBmuHbx57HS6rOeXhlumdzenbXG/ZrnswvSPf87+3HEr7ud
+ WNgA=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-On Mon, Sep 14 2026 at 23:13, Yury Norov wrote:
-> DEFINE_TIMER() marks a timer as statically initialized for debugobjects.
-> An automatic local timer instead needs timer_setup_on_stack() and the
-> corresponding on-stack destruction before leaving scope.
->
-> Add ASSERT_STATIC_STORAGE() to catch automatic declarations at compile
-> time. The timer lockdep key is already static; this check enforces the
-> debugobjects storage contract. Leave __TIMER_INITIALIZER() unchanged.
->
-> Assisted-by: OpenAI Codex
-> Signed-off-by: Yury Norov <ynorov@nvidia.com>
+On 2026-09-26 08:52 +0800, 14侯廷翰 wrote:
+> From: Ting-Han Hou <ue081723@gmail.com>
+> 
+> The BrokenPipeError handler in run-clang-tools.py calls os.open() and
+> os.dup2() without importing os. If this handler is reached, it raises
+> NameError instead of redirecting stdout and exiting with status 1.
+> 
+> Import os so the handler can work as intended.
+> 
+> Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python scripts")
+> Assisted-by: LLM
+> Signed-off-by: Ting-Han Hou <ue081723@gmail.com>
+> ---
+>  scripts/clang-tools/run-clang-tools.py | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/scripts/clang-tools/run-clang-tools.py
+> b/scripts/clang-tools/run-clang-tools.py
 
-Reviewed-by: Thomas Gleixner <tglx@kernel.org>
+Your patch is mangled, so it cannot be applied (maybe you send it with a
+different client from your v1?). Please resend properly.
+
+-- 
+Cheers,
+Nathan
+
