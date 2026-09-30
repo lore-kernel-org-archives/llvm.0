@@ -1,187 +1,113 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8254F85AB;
-	Tue, 29 Sep 2026 23:44:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F2330DD2F;
+	Wed, 30 Sep 2026 01:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790725491; cv=none; b=W+L7IpOyvhtQSWPMWfC+XBEemsNxMkmQG5dvhh+ghamXNseBCb9s85j85mku5rvPUm9xoIU+fmGOuFZEdtJUviLnjV5ziRa1YyuGEu1oLmx0WiibgUdcniD0KE4acvpDLIqF1gkKbDn8Cr52IpWRqK0tYwptRPYdY3PBIIGc9hY=
+	t=1790731989; cv=none; b=cOXiKVjRx7/fKGWB8NafYSEri+cEy0aaIFh+4Z5EITUSyZ5E02z7Tepl8MYXmY4gqIvttU9VPyHpvE+DH/PpwduiRQbscFSUcqYOSkoamQZ7+r3fyhtm5fmCfpu7hKmqPGvYs5APYgKVaLpk6Wajd5hPx06oDw3jPm+H68r8T78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790725491; c=relaxed/simple;
-	bh=wmuPQ7oXrSt+so7RfqDmzHxHZ4H+cR4pqu18ofpQW9I=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CCsh/iqXiSB1M1hVjDFsPSnqsTM06W7K8m16Bgmycrb6jDmX040Dt1gnQK5SsLX1w/0tHhx2tEIG7n+R1ciOs8/CU+QWI4CVfpQmj7nuF299jJE0o6lh9b2MXXMAj/ntMGfnCx6C0/Unp+fj2S+Hadzf9LgLwseQbEh2deLXSjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QwyawEuO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790731989; c=relaxed/simple;
+	bh=mEVczxqhoWIHjtJRVnlraq1vd7L61iBUG1ngt/aikAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=g1eqNz8T66Ndsm0OLoImTwPhPjHnaF50NLZoWpwguwWlFvvCZzMdO9urF38bGeRAk/7vuD3VmRu+67rnrcHZ/03zLaVGNg/P0ITclK27EDPEdA67RyucZwkYJcGYjtHtFRD4LTHjMyRuDVKWjTWzIkL5WnCBNqSdgYPJR4x0jUw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JM+sYz85; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QwyawEuO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 786CC1F00893;
-	Tue, 29 Sep 2026 23:44:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JM+sYz85"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C9C71F000FF;
+	Wed, 30 Sep 2026 01:33:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790725490;
-	bh=YNLY9h/lESi+DJlGbg7hdoABGxfqloa2+qriVaM34lg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=QwyawEuOSXJhWe1rKmIBygCQtqJ84CZXc7XkiZ/r9UiCWX8ZbRwxK/XF94ZRJG3g3
-	 XykA1gCrLKF0r46vluzPiXkYdXh7M0p6Enuvx8TIMiAyEdvxTSYQ7C1GGsDl74tcAc
-	 MIVZaaP6MtBfjsh1vIQ0damlciywgP2IOu1QThcx8N3TQLEk4JN8lN6wPiQ828R22o
-	 1zNKK0gRaJSKrL9izB8ljUNnKoOw26VqWmuEI8vVtdkcSheZmY0Ibxeacok7R1yiKq
-	 AU2oD+k+UfWXUnbkMSrWbgWP1CRa1RbeC5wPXxqlbrsMsMmyK6HPtpw7NKQBobqPi5
-	 GCn7abJjXVIHw==
-Content-Type: multipart/mixed; boundary="===============3190992738228849883=="
+	s=k20260515; t=1790731987;
+	bh=E9LFBu3yJsDQ69TLBDzRvOENcK1uacHJ+6beUmMVpe8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=JM+sYz85EuQ1Pc/ToqHwjyyrWQ5qhidcHK9+vHBv+X7ngHQWkQZRKjoh+Wr8soW/w
+	 NTuJWuYafs2kVosOh4Y7o39wnniNajmM8M74eKQQHwVLyCPiFGZj+O88KRg8n0Qd4L
+	 LZM3KNyJcsj772lBhwVM54vOk1DJZtO46jwJQhnHNApkEQY6PtqjiphyIkaGpcibbE
+	 3193lTulW2YDMNQfbygaldH06RuZOju+p92y7soxpbWLHiI+u+/ePHRVnThchZuYm4
+	 lD4kvzzptU1HIMytqiANY1luTHfm0qLMV0qI2KH5aLz4Vb2ueJIFwny9NW18+N0TdH
+	 mZoHF4G4UzYxA==
+Date: Tue, 29 Sep 2026 18:33:06 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Demian Shulhan <demyansh@gmail.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Eric Biggers
+ <ebiggers@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, Marco
+ Elver <elver@google.com>, Ard Biesheuvel <ardb@kernel.org>, Robin Murphy
+ <robin.murphy@arm.com>, David Gow <davidgow@google.com>, Brendan Higgins
+ <brendan.higgins@linux.dev>, Nathan Chancellor <nathan@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kunit-dev@googlegroups.com, netdev@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH 0/2] arm64: csum: Add fused copy and Internet checksum
+Message-ID: <20260929183306.24a26c74@kernel.org>
+In-Reply-To: <20260927131838.6774-1-demyansh@gmail.com>
+References: <20260927131838.6774-1-demyansh@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <052fc5fccb1cfb3a9bb4751e68080c92bc0e1759be9d1dc42972f2fe6f822976@mail.kernel.org>
-In-Reply-To: <20260928-drm-mipi-dsi-panel-ebpf-v1-3-5244926aace4@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-3-5244926aace4@kernel.org>
-Subject: Re: [PATCH 3/6] drm/panel: dsi-bpf: Add BPF program build infrastructure and helper header
-From: bot+bpf-ci@kernel.org
-To: mripard@kernel.org,neil.armstrong@linaro.org,jesszhan0024@gmail.com,airlied@gmail.com,simona@ffwll.ch,maarten.lankhorst@linux.intel.com,tzimmermann@suse.de,robh@kernel.org,krzk+dt@kernel.org,conor+dt@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com,florian.fainelli@broadcom.com,bcm-kernel-feedback-list@broadcom.com
-Cc: andrzej.hajda@intel.com,neil.armstrong@linaro.org,rfoss@kernel.org,Laurent.pinchart@ideasonboard.com,jonas@kwiboo.se,jernej.skrabec@gmail.com,luca.ceresoli@bootlin.com,aesteve@redhat.com,dave.stevenson@raspberrypi.com,javierm@redhat.com,dri-devel@lists.freedesktop.org,devicetree@vger.kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,llvm@lists.linux.dev,linux-rpi-kernel@lists.infradead.org,linux-arm-kernel@lists.infradead.org,mripard@kernel.org,bentiss@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue, 29 Sep 2026 23:44:48 +0000 (UTC)
-
---===============3190992738228849883==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/drivers/gpu/drm/panel/bpf/progs/Makefile b/drivers/gpu/drm/panel/bpf/progs/Makefile
-> new file mode 100644
-> index 000000000000..74190ee618ab
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/bpf/progs/Makefile
+On Sun, 27 Sep 2026 15:17:56 +0200 Demian Shulhan wrote:
+> arm64 currently uses the generic csum_partial_copy_nocheck(), which
+> performs memcpy() followed by a second pass for csum_partial(). This
+> double pass exerts unnecessary pressure on the L1 cache.
+> 
+> Replace it with a single-pass implementation. The new implementation
+> provides a general-purpose register path for short buffers and atomic
+> contexts, and a kernel-mode NEON path for lengths >= 1024 bytes.
+> 
+> Measured in-kernel on an Ampere Altra (Neoverse-N1):
+> - Scalar path: 1.2x-1.6x faster for lengths < 1024 bytes.
+> - NEON path: 1.2x faster at 1024 bytes, scaling up to 1.6x-1.8x at
+>   4096 bytes.
+> On Apple M-series cores, gains are 1.3-1.7x below 1024 bytes and
+> 1.6-2.4x above. No length or alignment regresses on either
+> microarchitecture.
+> 
+> Patch 1 implements the fused routines and the dispatcher.
+> Patch 2 adds KUnit test coverage for the new API and internal paths.
+> 
+> Tested: in-kernel benchmark module on Neoverse-N1 with both
+> implementations cross-checked (0 mismatches); KUnit suite under QEMU
+> (with/without KASAN, with PREEMPT_RT), exhaustive and random userspace
+> testing of both routines against a naive reference with PROT_NONE guard
+> pages, gcc 13 and clang 18 W=1 builds, checkpatch --strict.
+> 
+NIPA CI flagged a regression from this patch: the new "checksum" KUnit
+suite fails on the x86-64 test kernel (ARCH=x86_64, qemu). Specifically:
 
-[ ... ]
+  test_csum_copy_small_all_alignments  (len=0, src_off=0, dst_off=0)
+  test_csum_copy_patterns              (len=1, src_off=0, dst_off=0)
+  test_csum_copy_zero_len
 
-> @@ -0,0 +1,93 @@
-> +VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
-> +		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
-> +		     ../../../../../../vmlinux				\
-> +		     /sys/kernel/btf/vmlinux				\
-> +		     /boot/vmlinux-$(shell uname -r)
-> +VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
+All three failures involve a zero-length (or very short) copy. Digging
+into it, x86-64's csum_partial_copy_generic() (arch/x86/lib/csum-copy_64.S)
+seeds its accumulator with -1 (0xffffffff) rather than 0:
 
-[ ... ]
+    movl  $-1, %eax
+    ...
+    cmpl  $8, %ecx
+    jb    .Lshort
 
-> +vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
-> +ifeq ($(VMLINUX_H),)
-> +	$(call msg,GEN,,$@)
-> +	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-> +else
-> +	$(call msg,CP,,$@)
-> +	$(Q)cp "$(VMLINUX_H)" $@
-> +endif
+For len == 0 (and other very short lengths that never execute an
+add/adc against the seed) it returns that -1 unmodified, which folds to
+0. The naive reference used by the new tests, and csum_partial()'s own
+convention for an empty input, instead treat the "empty checksum" as raw
+sum 0, which folds to 0xffff. So the new tests' expectations don't match
+the pre-existing x86-64 assembly implementation for these edge cases.
 
-Does this build work when CONFIG_DRM_PANEL_BPF_MIPI_DSI=m?
+It looks like the tests were validated against the new arm64
+implementation and against memcpy()+csum_partial() under QEMU on arm64,
+but not run against x86-64's existing csum_partial_copy_nocheck()
+implementation, which is what our CI kunit runner builds by default.
 
-The Makefile generates vmlinux.h from vmlinux BTF only. The BPF programs
-need types defined in the panel driver: struct drm_panel_dsi_bpf_ops,
-struct panel_bpf_mipi_dsi_ctx, and the panel_bpf_mipi_dsi_supply and
-panel_bpf_mipi_dsi_gpio enums.
+Could you take a look at either:
+  - adjusting the zero/short-length expectations in the new test to
+    match the existing (documented?) x86-64 behavior, or
+  - treating this as a real x86-64 bug and fixing
+    csum_partial_copy_generic()'s handling of very short lengths,
 
-DRM_PANEL_BPF_MIPI_DSI is tristate and becomes =m when CONFIG_DRM=m
-(the case in arch/arm64/configs/defconfig, the Raspberry Pi target).
-With =m, these types exist only in the module's split BTF at
-/sys/kernel/btf/panel_bpf_mipi_dsi, not in vmlinux BTF.
-
-panel-bpf-mipi-dsi.h declares PANEL_BPF_MIPI_DSI_OPS(x) which expands
-to "struct drm_panel_dsi_bpf_ops x", and uses PANEL_BPF_MIPI_DSI_SUPPLY_*
-and PANEL_BPF_MIPI_DSI_GPIO_* enum values. Without the module BTF dump,
-the struct is incomplete and the enums are undeclared. The panel programs
-added later in the series would fail to compile.
-
-The commit message says the Makefile follows drivers/hid/bpf/progs/, but
-that works because HID_BPF is bool and its types always land in vmlinux
-BTF.
-
-You could either dump the module BTF:
-
-  bpftool btf dump file /sys/kernel/btf/panel_bpf_mipi_dsi \
-    -B $(VMLINUX_BTF) format c >> vmlinux.h
-
-or define the ABI types directly in panel-bpf-mipi-dsi.h, as the bpf_testmod
-selftests do.
-
-> diff --git a/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h b/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h
-> new file mode 100644
-> index 000000000000..e2b03afef2c8
-> --- /dev/null
-> +++ b/drivers/gpu/drm/panel/bpf/progs/panel-bpf-mipi-dsi.h
-
-[ ... ]
-
-> diff --git a/include/drm/drm_panel_dsi_bpf.h b/include/drm/drm_panel_dsi_bpf.h
-> deleted file mode 100644
-> index 02d4707fd0a0..000000000000
-> --- a/include/drm/drm_panel_dsi_bpf.h
-> +++ /dev/null
-> @@ -1,50 +0,0 @@
-> -/* SPDX-License-Identifier: GPL-2.0 */
-> -#ifndef __DRM_PANEL_DSI_BPF_H__
-> -#define __DRM_PANEL_DSI_BPF_H__
-> -
-> -#include <linux/bpf.h>
-> -
-> -struct mipi_dsi_device;
-> -struct drm_panel;
-> -
-> -#define DSI_BPF_PANEL_ID_LEN	64
-> -
-> -/**
-> - * struct dsi_bpf_ctx - Context passed to BPF panel programs
-> - * @panel: The drm_panel this callback operates on (private)
-> - */
-> -struct dsi_bpf_ctx {
-> -	struct drm_panel *panel;
-> -};
-> -
-> -/**
-> - * struct drm_panel_dsi_bpf_ops - BPF struct_ops for MIPI-DSI panels
-> - * @panel_id: Device identifier for matching. On DT systems this holds
-> - *	the panel's compatible string. Firmware-agnostic to allow future
-> - *	ACPI support. Written before load, immutable after.
-> - * @panel_prepare: Called to power on the panel and send init commands.
-> - *	Must enable regulators, toggle GPIOs, and send the DSI init
-> - *	sequence. Sleepable.
-> - * @panel_unprepare: Called to power off the panel. Must send shutdown
-> - *	commands, assert reset, and disable regulators. Sleepable.
-> - * @panel_enable: Optional. Called after video stream starts, for panels
-> - *	that need post-video-start DSI commands. Sleepable.
-> - * @panel_disable: Optional. Called before video stream stops. Sleepable.
-> - * @set_brightness: Optional. Called to set backlight brightness via DSI
-> - *	commands. Sleepable.
-> - */
-> -struct drm_panel_dsi_bpf_ops {
-> -	char			panel_id[DSI_BPF_PANEL_ID_LEN];
-> -
-> -	/* private: internal bookkeeping */
-> -	struct drm_panel	*panel;
-> -
-> -	/* public: */
-> -	int (*panel_prepare)(struct dsi_bpf_ctx *ctx);
-> -	int (*panel_unprepare)(struct dsi_bpf_ctx *ctx);
-> -	int (*panel_enable)(struct dsi_bpf_ctx *ctx);
-> -	int (*panel_disable)(struct dsi_bpf_ctx *ctx);
-> -	int (*set_brightness)(struct dsi_bpf_ctx *ctx, u32 brightness);
-> -};
-> -
-> -#endif /* __DRM_PANEL_DSI_BPF_H__ */
-
-The commit message describes adding the BPF-side header and Makefile, but
-doesn't mention removing include/drm/drm_panel_dsi_bpf.h. The header was
-added one patch earlier by 095e3b42d5ca and contains a stale ABI definition
-(struct drm_panel_dsi_bpf_ops with dsi_bpf_ctx) that conflicts with the
-real definition in drivers/gpu/drm/panel/bpf/panel-bpf-mipi-dsi.h.
-
-Why is the file being removed as a side effect here rather than being
-excluded from the earlier patch?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/36644629998
---===============3190992738228849883==--
+whichever is judged correct? Happy to share the full kunit log if useful.
