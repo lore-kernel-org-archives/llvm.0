@@ -1,104 +1,125 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34D34B827E
-	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 15:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0693D7D94
+	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 19:07:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790781422; cv=none; b=cHAPw+2uY7g5y8jZ16bzOp+uusdy+HrAaprC97Kraa7N7VIt3DcEfCiZEJNRqC9ZD766UcMM4Jt1rvmc65jFYmhQWT+Mcqnv4Uou4p09xwkSx0hhjSRCqySEEFwuUvXRcDZqE3+aZByGGkMl9j7eeGWC6Kxh5Op0WzakLW0wLqA=
+	t=1790795275; cv=none; b=c/rt1re+fvFOQGHYz9HdWb5oig+CsXJywrnvK+gCcCN9i2w6Bq28yyisRhhd64rjof78mFWJcLquugzLKexKBsLwkLPaIB6UovFz3Biz4Tf6/tUYXlTqEjxZbHUoE9QNMPcdzhk7IiI7KR9ZA4x7jTE4Gwti4vcPsCRBP5GpBMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790781422; c=relaxed/simple;
-	bh=yDrsOb4hwWXIN+T6cItrahv2HmKPc/RBpYKbK6q2uSE=;
+	s=arc-20240116; t=1790795275; c=relaxed/simple;
+	bh=bxJY6r7hmtQQbaUp+jGo9ojcTYyECOaox7wsG7JzNr0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MBnU12L2KtM5a2efkPDrbHeS4mOu+gbRZKLRHETmKXN/NSjKchJjpLzS2XWOpogI7Hub8YBAML4cbtorramQ4wDMn80rmGhsCzjl5ourOpFl4LB9V8E3zjEF56qR8Amv+A/ExK/0dt3B8N1BVhoY6y8+ASTcBJMsRrQNazvnCA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=lif9OX7R; arc=none smtp.client-ip=100.103.45.18
+	 To:Cc:Content-Type; b=G8NYewZkQ2d6mxp7Ua53YUCCPE02DXkYP0B3PaytCiaFS5QQqvgrs4hQH0x1VuB/DOk9tYcQlmn3FBnQwhlegPUPk/o7uyYucEz2QoQrXKKH9crfIt/Y/30ZrP5lbdSJHeEa5mfbcK7EXEX65F5MIE2IDmaz/ZgddmjTPJvY414=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WGTKgsCU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="lif9OX7R"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 212FE1F000FF
-	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 15:16:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=lif9OX7R
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1790781409;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3YhJg/Vg0kUrlQnIKq6WPQNTQH9OtFetyfT9AbDxDuA=;
-	b=lif9OX7RWafdyPA2vmfDWOKBdoGlxav5sM0R59juNsSHRGOJ3cLGwIQADccYOr0Es7uHaM
-	U2JHgEuRoM4HW2gbTSyzrG61iftYLSVR+tHEfiptGXjcTCXFxk1AM8v9PuFV6tI2DiwHi2
-	rpAspPBUZghSjKDFVGIGFAwuxgjbmY0=
-Received: 
-	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id eb04c6bd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-	for <llvm@lists.linux.dev>;
-	Wed, 30 Sep 2026 15:16:49 +0000 (UTC)
-Received: by mail-ej2-f32.google.com with SMTP id a640c23a62f3a-c2e27d11f43so35406066b.0
-        for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 08:16:48 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvByn7aU7t83YnexZpNnkujSJ9LdkuX6tUNua2rpLrO8rgDpS9KJfA0BazptlETkl8itl9qo2@lists.linux.dev
-X-Gm-Message-State: AFuF++niKlJCnTUhoZQBBBo2LrPRxCpUhdzkqrOUP8tZoCYWrliKEmrp
-	fQJtYwnV4nZdw/lkG/CpUMj+lOFEhlTi5gK1rlbbXl52dvBUF+9UYoFNUbvPSMQeXnBleHPMlIo
-	t9MpD90ZkMv3cMykx0Uy0Vy7dKjmZd/A=
-X-Received: by 2002:a17:907:6095:b0:c29:c575:de84 with SMTP id
- a640c23a62f3a-c2e240ee3f5mr135965366b.8.1790781405942; Wed, 30 Sep 2026
- 08:16:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WGTKgsCU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DF901F008A1
+	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 19:07:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790795273;
+	bh=bxJY6r7hmtQQbaUp+jGo9ojcTYyECOaox7wsG7JzNr0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=WGTKgsCU+/7tSbH0RgCXBxO0ozmDxYzlLDwec2n1uK5vKG2u+Di5y2WS6iaRioeHA
+	 2HQe+XnO1uJ4CYhwINzo8cjLvNqjNXCxbsf3+JY7DHNsj5meQBk7iK2fww7Th4TV6i
+	 kkU7y7Et3fGZqOvDiMtxgUEgFwaPoRwmgHaXCfNEC2tlCG2i5It8RQNIVw5uvFKrUC
+	 XChF332jlPqD8AXn0mXF0TdpqcDviisUqsmHyxFw/K52bPBpJEZyqZkDAJcx9W9Ctx
+	 wNhktvmN49L3hqx5qTmfX02sCiNCyjvFtFvqmwbcNor4vRdzJXOT4Q1zfnuuJSa4ri
+	 xPBPjhV5LjBFA==
+Received: by mail-ej2-f41.google.com with SMTP id a640c23a62f3a-c2e315287c9so59840866b.0
+        for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 12:07:53 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvByVljEnW25U7xG2IyYs9r3kRfzTWHr10QIxhs5RiP78J7ixdw4xAkJ/B70bF9Zwr8WrStuc@lists.linux.dev
+X-Gm-Message-State: AFuF++mQeO68/2vR8zx8B3xI/npUC9RZcMzt/apu+yovHGaUaKgQOQtd
+	cb9N8cJO+ETtZGJJripz7oTg90Qjfvq7fTxOk6g8KCbiCyHWSP3s4kFhF13NPtIaT9QpAZaiLwD
+	smcXSkNZ1U00tJShUfxP1GKOI0qcelg==
+X-Received: by 2002:a17:906:7308:b0:c29:566f:531c with SMTP id
+ a640c23a62f3a-c2e23d64e23mr209463766b.31.1790795271560; Wed, 30 Sep 2026
+ 12:07:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <CAKwvOdmuvn0LZkYEsH84hnOGTYhTtzuWs3wMARtWdTeL6dD9sA@mail.gmail.com>
- <CAKwvOdnxKVpn=nAFaqP+9PTx4PqgHsUVWv6e60Pcr29W_eZrpQ@mail.gmail.com>
- <CAKwvOdmNZL3eFvV3v77GXDzL+XLgz+BT9TA=my0yTnbsHqVeSg@mail.gmail.com>
- <areYMjNcaqe86ds4@zx2c4.com> <9d1c338b-368f-4ea2-a12e-c28d49adff5e@kernel.org>
- <are6s5e6On3hpD3M@zx2c4.com> <CAKwvOd=BrMfFT88jsvBPhh383qqk5G+J07CsofNu0MVkziyhCg@mail.gmail.com>
- <20260930133813.GA3142230@ax162> <ar0a4b9CjL2YHCkY@zx2c4.com>
- <ar0gTS71qxnx9AkW@zx2c4.com> <20260930151337.GD3142230@ax162>
-In-Reply-To: <20260930151337.GD3142230@ax162>
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date: Wed, 30 Sep 2026 17:16:34 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pA+AntJ6hWoFYpTVjh-NUSd0ZGXp5XiUuhQcq3HjQT3g@mail.gmail.com>
-X-Gm-Features: AclHuK-3j-Oh9f_5JCjhD5NbddIhsNHXCyGk_sGVp-iO-7Ny0UWZ0eR4ti5Aiu0
-Message-ID: <CAHmME9pA+AntJ6hWoFYpTVjh-NUSd0ZGXp5XiUuhQcq3HjQT3g@mail.gmail.com>
-Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
- reserved in __cvdso_getrandom_data()
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	"Theodore Ts'o" <tytso@mit.edu>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+ <20260928204059.GA515872-robh@kernel.org> <artyl8fD3zzng8Uh@houat>
+ <20260929222822.GA2933878-robh@kernel.org> <ary8IdL9zVXfS2fA@houat>
+In-Reply-To: <ary8IdL9zVXfS2fA@houat>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 30 Sep 2026 14:07:39 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
+X-Gm-Features: AclHuK_KrCZYndoX88-SUyUMhWpLte5mG0GRB_AK8DozaFWQdrOZypWv12h1FtM
+Message-ID: <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, Jessica Zhang <jesszhan0024@gmail.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
 	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	llvm@lists.linux.dev
+	Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Albert Esteve <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+	Javier Martinez Canillas <javierm@redhat.com>, dri-devel@lists.freedesktop.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 30, 2026 at 5:13=E2=80=AFPM Nathan Chancellor <nathan@kernel.or=
-g> wrote:
+On Wed, Sep 30, 2026 at 3:04=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
+wrote:
 >
-> On Wed, Sep 30, 2026 at 04:44:29PM +0200, Jason A. Donenfeld wrote:
-> > Nathan, would this be okay with you?
-> > https://git.zx2c4.com/linux-rng/commit/?id=3Dd216701724b7d8209ff4215065=
-8ad5c712bdb503
->
-> Can you stick
->
->   Cc: stable@vger.kernel.org # v6.12+
->   Closes: https://github.com/ClangBuiltLinux/linux/issues/2183
->
-> on that? Otherwise, looks good to me, that's basically what I had for my
-> v3 locally.
+> On Tue, Sep 29, 2026 at 05:28:22PM -0500, Rob Herring wrote:
+> > On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
+> > > On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
+> > > > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
+> > > > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
+> > > > > regulators and GPIOs, perform a reset pulse with specific timing,
+> > > > > send a vendor-supplied sequence of DSI commands, then enable the
+> > > > > display. The only truly panel-specific part is the init sequence
+> > > > > and power-on/off timing.
 
-Sure, done. Also removed the now-unused array_size.h include.
+[snip a bunch of irrelevant shit]
 
-Jason
+> > > So, let's phrase this differently: what's different about the
+> > > description than panel-mipi-dsi-spi, or any other binding already in
+> > > tree?
+> >
+> > There's all of 3 panels supported. Compared to all the other panels we
+> > have, hardly the rule over the exception. You can always fine "bad"
+> > examples or exceptions.
+> >
+> > That one defines a single supply. Any other MIPI SPI panel with
+> > different supplies or GPIO controls probably has its own binding. Tryin=
+g
+> > to parameterize that in DT doesn't work. We've rejected trying to do
+> > that in DT over and over. What's your story here for that?
+>
+> Sigh... Look, I really don't care about an argument DT maintainers use
+> at their discretion for this. We both know full well that it's been and
+> still is inconsistenly applied, and you also know that it's not like
+> I've been playing the DT game since pretty much the beginning (on ARM
+> anyway). So it's not like I don't want to make it work, I do. But what I
+> care about is enabling that driver to work.
+>
+> I reused exactly the same binding than the last major binding that was
+> merged for panels, and support about the same number of panels. I guess
+> that was a mistake, so sorry for that.
+>
+> I'm fine with reworking the binding any way you want as long as it still
+> allows for the same use-case, but I would have hoped for a better
+> feedback on how to do so than "oh what a huge pile of shit this is".
+
+When you can answer my question above rather than make up shit I
+didn't say, maybe I'll reply again on this thread. Otherwise I'm done
+here. I don't need this abuse for the thankless job of DT
+maintainership.
+
+Rob
