@@ -1,180 +1,244 @@
-Received: from mail-qk2-f42.google.com (mail-qk2-f42.google.com [74.125.230.234])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D668245562A
-	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 07:58:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.230.234
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790755135; cv=pass; b=jw9lwvgnPpH3CmxTg6rRyzmObVzHBG2QWf9ObtmDk/omBarpqEfaCmdsAphXxNGtXEJ/V6waqPVWv7xDXv2xEeICP9qeUX8jluudXBdJMt53OOawqjviHPAj5zSey50pz2lyxJ1Uk5P6xS+cCi+C4XrJj7Up5syCHF4qCYeRAc8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790755135; c=relaxed/simple;
-	bh=GQ67D7m6aGzZahEWTzQMkof7xobtH+TCj5JbR+ns31I=;
-	h=MIME-Version:From:In-Reply-To:References:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I7Z6j1SwA0wOPdRuBzikMqvReSCD6y50NXkVhhDxtq+vwXt4oPfFhkcxUh1TE8h5b0zOKQcKyDeOT95lGVfguns2nkboenKZ0vcNO0iyd/KfijMm/DsS2ipCijuRpkWrg+5gFMKJYzcy7q3cIFhK/sgFcM8TSSTdOK0nwzgjDC0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XcPTCMi6; arc=pass smtp.client-ip=74.125.230.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE883F9A13;
+	Wed, 30 Sep 2026 08:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1790755485; cv=none; b=KIhu48lwLFBG/rJjVUMlxJGGm+AqYKHuvYva1CIzl9VgLifoudxEUezMuE3e0ZMrH5LeCN5aY8KAeb/9jEF4W1TvLAhsmShIh/WFJKvC6gSR9Li5vgOKZJDSCBkuopXCuAWwCffjVc8mmQCk6FfEcFuZGblRLqoFK4+RmdKYwDQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1790755485; c=relaxed/simple;
+	bh=lAhm/IRtE5TnsstmivWqwHlXEeHp6zXLoKL6Dpf/08M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U+K+EdJLURN66C9WTL4MuR9fGirVYAfms0/hiUN8GCKbJ7iy/N2yer8AXQzvRESJTbzBFm7ZZbsTa3N6FIgkGDR7Ofm/EKiERicj7coCsZLT1bzzRX4q5cVeBaCbUMbPByDnFbYDuTlgHyfo4ZG1AKaQXECwkxogpj7j2b1d5Do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJ1Jkh88; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XcPTCMi6"
-Received: by mail-qk2-f42.google.com with SMTP id af79cd13be357-93be29bb454so723460585a.1
-        for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 00:58:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1790755133; cv=none;
-        d=google.com; s=arc-20260327;
-        b=FX6W0iS5qn3iNCJ+9IJRXtnb2gwDR4++Wk6KTc04rW72R6VzQzUXG3xQqhDdqZqaqQ
-         d5LHEmmbVErv8Nc2kBDhG6R/0EnVOENzX6lFEOXhuEsbsiuedcwz+P7ZJoPwyomiVdwk
-         xJE2QXAxmR/QpiaWALiftXgJkXdzBZJyIdGEXS5t8jlROl8OYJLenYG3tHCsupoWtFLE
-         9EElCR8oRrrbaSGT5FB5yUoz9KcJv0phCEGIM+gEuDFBDmUpUU/RTW21NOr48vDPBLsC
-         FIy+K4c0jHCud0g3jvoyocpGg14Csi/hV4vLeweG4GktAORNj/YWef2icNLYsUaBrYSU
-         k/4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:references
-         :in-reply-to:from:mime-version:dkim-signature;
-        bh=IQcCwsO64O6tzTlMCE1fWnctbm/KS4UpXxHtRBcS6lE=;
-        fh=tgBAGNRN9jCH+Q7iHjahpfHrTUrPW2ZM1HoSLB4Kxxc=;
-        b=Jj2vnuorMnG9c+GwAkysqy97LJNA8l9rMYA5I0OZEdtgGtyCseT0usPJGzRTsF2LBh
-         uGq7zomLlUHnCQvO6dZiWPgqgv9XY1Vmka5UbAGUllA5LjzZg1fTaUVuXS1fdAUPhmee
-         2HKPOyxOnYWOMQku7MXqhh/fJUYM7IfMoMlbnSLEhI1hHC3l6fHA82vD4qYICW2kUFaI
-         cJMp0KKkV23m9kSvijMJA4FxksYjACSgxQcOHqBruUap3lilv1aPJ5MF1UrCJkqvfvRv
-         KYv5UoLlCRL5Xsn0hVdtN4G8foChR+diw80AuGsE3UPbbgku6Xd7SsAmOcOmAL5hYlDJ
-         7/jw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1790755133; x=1791359933; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IQcCwsO64O6tzTlMCE1fWnctbm/KS4UpXxHtRBcS6lE=;
-        b=XcPTCMi6Ee+u+MoSkrQyeeLTe5SgxGdMxZS94MjxqVwsTW1DRPtHhd3iHiV2Zc6SDN
-         aWSJSvesgqL5vCF8B43IZXv4SA+8YV5Rcb5MKSYBPTt6LyK1AAj01vpCtg/3IsiLNGqx
-         CGg6ZlFwRhqR+eTakGUWeMJDiNZh7ET0WXzid1kRTE0ksARcURKlWemGbjlfPTd5VPEc
-         9ERRzX8BAjTF678SQlCso1un7GQxq42kfsL2NR4W9lA0OkIVhj9NgWFq+wAg/rlLO+rI
-         V76ieN3YAr4OQvEpiORjRw1og1tso4Ml9I8G7p7hrnXICLjwO3uZidVlh4vz5d4awxVo
-         JBPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790755133; x=1791359933;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:references:in-reply-to:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IQcCwsO64O6tzTlMCE1fWnctbm/KS4UpXxHtRBcS6lE=;
-        b=SgvHZOT8DyviqVRM3nMyDmdJi29Fjp9oITW3QLA5heDkuUnEJEMzreV3u1EvtJzmfn
-         VU9pFHbNJ1UcJS2THLtZJaBtobBlcDPGJvPnDBCHKnMcGLo9CT8NGmjQQLvDYEpmcVbm
-         QXqBhlpUFcYlw70XG/1Vat/lU4cuV6tf/6Q5kLkthMPb98LaDnHItl92EfCmLXXuMoy6
-         zLoxjeM27bvFM+/kkufzVbSyiT3VfionymZDTzhq2omFLO8SlnCyi96CPI0dFx3RgEh6
-         mdOsVkfurvmF49QD5QNQY0aGeB3tZ+7yjBM75Cq7Fvi+lMxAW5VyhyIR+UzyMbILzvY5
-         YP4g==
-X-Forwarded-Encrypted: i=1; AKwUvBzXK91tAbpf2qPpeWx4p1One5aP2iLd+IVOdOBOv/QEanunmaVuCHWgtzdbtguGv3luX91q@lists.linux.dev
-X-Gm-Message-State: AFuF++linZbOC503Ubj81yquoZJuuw+z7Iv1YUREQZhQ1V6K0bdm4YNn
-	P5HoCAIo11QCtCHTt9pmbheOfPKHXu94SgnUMnp8T2oCMQKNTO0p1Lt5uxt1ExQIzvRt21fvmJs
-	M1JwJD8CZeZ2Pm2KslhnD5Iji199Vx/w=
-X-Gm-Gg: AYBFou3ZzmLpXYGJLzHpoIaq90+ZZwuMmqBcewrEYOhlb+NlqyGa8j9Kv4qt+XZkRsz
-	UocaPFuEk7vZxe5n8DIWgwuqNzn7GppmG6Mw/JDCy5wTktMBM9+TM6PZTOTtr+cYFYHv8uR0UUy
-	11tEraan3erjcQDTkzUb01p6JopJ/vAWgaRlCgSwYxyKv6gLINnwnsQU3Hygdm44hJYa9wRYvTP
-	LBDc6X0M2U8R8rpwI1IG5SoJNG4tA6dLHpBQvOCQzpcJe6UEiWiSZaD5IcM1HT8iCwfG04EA4se
-	ODnOsB3tYkFm8y4hbFYIKCMuXOL1jwLeKzu4hczv5Q0b9vD3Yx0XdMhfaPXV38G9m5TJDKha5ro
-	M/rnOVVVpTZCvb+9BPs+BFyHA5UhY8C5B1Bz+BWqvlerNsgmsI5mb680URN1ltwc7Quz/LaBeIS
-	VyDJJiIOODmrgDxAH7pEiXKyhieG7GH50Aro92+njNcfmxsA3aU+YTO407D3OSFVSbLTqLyiZNt
-	dEhRQ0CBJGqTsE=
-X-Received: by 2002:a05:620a:454b:b0:939:b099:d52f with SMTP id
- af79cd13be357-93ca9650a87mr80148785a.20.1790755132822; Wed, 30 Sep 2026
- 00:58:52 -0700 (PDT)
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 30 Sep 2026 00:58:52 -0700
-Received: from 77377267392 named unknown by gmailapi.google.com with HTTPREST;
- Wed, 30 Sep 2026 00:58:52 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJ1Jkh88"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A8A1F000FF;
+	Wed, 30 Sep 2026 08:04:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790755483;
+	bh=lAhm/IRtE5TnsstmivWqwHlXEeHp6zXLoKL6Dpf/08M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=QJ1Jkh88NS099T5XThWkiHUyHFMuaUi05aDIb0DuSfK6cbpnRq28RDtuRmH0kFGSv
+	 NZBn9sJRMspdyRlciqW7jBwuSJhhmVl+ihgUSFAiPw2uKl7PbI1UZnfLJPikMcnOyU
+	 ovoPJtoyeUD0pBgYjEK81upp+9g5hXAzTVbnwNByddsnhUHGbTh4oyjWwPnTpHoiyE
+	 W+veZ7MG2gdJLu5Tu2tBbHeKkaorg36xo5setYHOfmWCoJ7iQrrSg5BXX6WjPsfC16
+	 p8iXs5bEn9clABquAKOv4qGbKnFg2BCrgrFqzkP/nj5meGWrDZhxZks/v9wThWHD3f
+	 jOxH1OsmTZDig==
+Date: Wed, 30 Sep 2026 10:04:39 +0200
+From: Maxime Ripard <mripard@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
+	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
+	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
+	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
+	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+Message-ID: <ary8IdL9zVXfS2fA@houat>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
+ <20260928204059.GA515872-robh@kernel.org>
+ <artyl8fD3zzng8Uh@houat>
+ <20260929222822.GA2933878-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-From: Ting-Han Hou <ue081723@gmail.com>
-In-Reply-To: <179071199261.2735405.15944114878466249879.b4-reply@b4>
-References: <179017337986.52388.7943687183785012868@gmail.com>
- <179037565553.3985470.12035061965740287126.b4-reply@b4> <CA+NtrhRdnuZOOFpBXvnfOXFs-HA8q+2sLvR0BxH=BjzVAEZBzw@mail.gmail.com>
- <179071199261.2735405.15944114878466249879.b4-reply@b4>
-Date: Wed, 30 Sep 2026 00:58:52 -0700
-X-Gm-Features: AclHuK_l14BgBlQAEUqwBjjdsg8HswhmB8XtP7bRP6Z064JojK65_GlLOUveE00
-Message-ID: <CA+NtrhQeOacYz+nGqevB778YW01sREPyndzh6QOsKxQR3ON6RA@mail.gmail.com>
-Subject: Re: [PATCH] clang-tools: Import os for broken pipe handling
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nsc@kernel.org>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha384;
+	protocol="application/pgp-signature"; boundary="k3ccvqemgn4avxba"
+Content-Disposition: inline
+In-Reply-To: <20260929222822.GA2933878-robh@kernel.org>
+
+
+--k3ccvqemgn4avxba
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
+ panel binding
+MIME-Version: 1.0
 
-From: Ting-Han Hou <ue081723@gmail.com>
-Date: Sat, 26 Sep 2026 08:52:24 +0800
-Subject: [PATCH] clang-tools: Import os for broken pipe handling
+On Tue, Sep 29, 2026 at 05:28:22PM -0500, Rob Herring wrote:
+> On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
+> > On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
+> > > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
+> > > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
+> > > > regulators and GPIOs, perform a reset pulse with specific timing,
+> > > > send a vendor-supplied sequence of DSI commands, then enable the
+> > > > display. The only truly panel-specific part is the init sequence
+> > > > and power-on/off timing.
+> > > >=20
+> > > > The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
+> > > > with a single generic driver whose panel-specific behavior is
+> > > > provided by BPF programs loaded from userspace at runtime,
+> > > > following the HID-BPF model. This enables new panel support
+> > > > without kernel patches.
+> > > >=20
+> > > > Panel DT nodes use a two-entry compatible with the panel-specific
+> > > > string first and "panel-mipi-dsi-bpf" as fallback. The generic
+> > > > driver matches on the fallback, while the first compatible is used
+> > > > to identify which BPF program to load.
+> > >=20
+> > > If you need the 1st compatible anyways, what is the point of the
+> > > second one?
+> >=20
+> > The whole point of this driver is that you don't need to modify the
+> > kernel when you add support for a new panel.
+>=20
+> What reads the most specific compatible?
 
-The BrokenPipeError handler in run-clang-tools.py calls os.open() and
-os.dup2() without importing os. If this handler is reached, it raises
-NameError instead of redirecting stdout and exiting with status 1.
+The BPF loader, so either in kernel loader or userspace loader through
+uevents, depending on how the driver discussions are going.
 
-Import os so the handler can work as intended.
+> > > Also, I assume there is at least some panel supported in the kernel
+> > > you might want to convert to this. That panel would not have the
+> > > fallback (and the DT is fixed).
+> >=20
+> > Yeah, that's true. I'd still need to identify the parts though. I guess
+> > using a generic compatible but a specific model would work?
+>=20
+> What? You can't add a generic compatible in these cases.
 
-Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python scripts")
-Assisted-by: LLM
-Signed-off-by: Ting-Han Hou <ue081723@gmail.com>
----
-Hi Nathan,
+generic-*hci all have a generic component *and* a platform specific part
+for quirks, and yet none of them require a platform specific compatible
+to be added to work. PCI has that too.
 
-Sorry about the formatting issue. The diff header was wrapped in my
-previous email. Here is the corrected patch; the code change is
-unchanged.
+This driver has a generic part and a platform specific part for quirks.
 
-Thanks,
-Ting-Han
+> > > And I agree with Neil's comment. At least until we start embedding BPF
+> > > into DT directly. ;)
+> >=20
+> > And from Neil:
+> >=20
+> > > I don't see how this can be a valid hardware description, bfp is a
+> > > software implementation and has nothing to do in the bindings.
+> >=20
+> > I'm quite a bit surprised by that argument though.
+> >=20
+> > We have in the main dt-schema repos bindings like:
+> >=20
+> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/=
+options/u-boot.yaml
+>=20
+> Self contained in a node that's specifically not h/w.
+>=20
+> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/=
+bootph.yaml
+> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/=
+post-init-providers.yaml
+>=20
+> Extra hints that are safe to ignore.
+>=20
+> >=20
+> > Or, in Linux:
+> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
+> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/Documentation/devicetree/bindings/misc/google,android-pipe.yaml
+>=20
+> Virtual h/w which tends to have special needs.
 
- scripts/clang-tools/run-clang-tools.py | 1 +
- 1 file changed, 1 insertion(+)
+How is that not a description of the binding we're discussing?
 
-diff --git a/scripts/clang-tools/run-clang-tools.py
-b/scripts/clang-tools/run-clang-tools.py
-index e78be82..79d58b3 100755
---- a/scripts/clang-tools/run-clang-tools.py
-+++ b/scripts/clang-tools/run-clang-tools.py
-@@ -12,6 +12,7 @@ compile_commands.json.
- import argparse
- import json
- import multiprocessing
-+import os
- import subprocess
- import sys
+> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
+>=20
+> Shrug. Weird Qcom shit...
 
+Cool. What can I do to add this binding to the list of "weird Maxime
+shit" or is this kind of exception only for Qualcomm?
 
-base-commit: fe2ec83746e501645709761605c2464a44fd2929
---=20
-2.52.0.windows.1
+Or should we do it the other way and ship the binding anyway, and in two
+years, when it will have been in device tree in the wild and
+we-cannot-change-it-we-swear, we will be able to upstream it?
 
+And in the process reward the ones *not* playing the upstream game.
 
-On Tue, 29 Sep 2026 21:59:52 +0200, Nathan Chancellor <nathan@kernel.org> w=
-rote:
-> On 2026-09-26 08:52 +0800, 14=E4=BE=AF=E5=BB=B7=E7=BF=B0 wrote:
-> > From: Ting-Han Hou <ue081723@gmail.com>
-> >
-> > The BrokenPipeError handler in run-clang-tools.py calls os.open() and
-> > os.dup2() without importing os. If this handler is reached, it raises
-> > NameError instead of redirecting stdout and exiting with status 1.
-> >
-> > Import os so the handler can work as intended.
-> >
-> > Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python script=
-s")
-> > Assisted-by: LLM
-> > Signed-off-by: Ting-Han Hou <ue081723@gmail.com>
-> > ---
-> >  scripts/clang-tools/run-clang-tools.py | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/scripts/clang-tools/run-clang-tools.py
-> > b/scripts/clang-tools/run-clang-tools.py
->
-> Your patch is mangled, so it cannot be applied (maybe you send it with a
-> different client from your v1?). Please resend properly.
->
-> --
-> Cheers,
-> Nathan
+> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
+tree/Documentation/devicetree/bindings/sound/simple-card.yaml
+>=20
+> Just a container... Though I can't say I really like any of the audio=20
+> bindings.
+>=20
+> All really irrelevant to this discussion other than the panel binding...
+
+Not really. The discussion was "but you're describing something that
+isn't hardware". And none of the above are. And were acked. Some
+recently.
+
+> > All of them have been reviewed or acked by you, and yet none of them
+> > relate to any hardware description.
+>=20
+> There are things which aren't h/w, but this is h/w and we've already=20
+> made decisions about how panels in particular are represented. We of=20
+> course have some remanents of how we don't want to do things.
+>=20
+> > panel-mipi-dsi-spi is a generic panel that will load a firmware, and
+> > quite similar to this one. google,android-pipe and qcom,fastrpc don't
+> > attach to anything and will just open a tunnel to userspace, which is
+> > somewhat equivalent but more dramatic than what this driver is doing.
+> > simple-card or its variations will just instantiate a kernel driver from
+> > the DT and is used pretty much everywhere.
+> >=20
+> > I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
+> > by rob, and acked by a panel maintainer, and 4 years ago, so we're way
+> > past the "oh but we didn't know what we were doing back then" argument.
+> >=20
+> > So, let's phrase this differently: what's different about the
+> > description than panel-mipi-dsi-spi, or any other binding already in
+> > tree?
+>=20
+> There's all of 3 panels supported. Compared to all the other panels we=20
+> have, hardly the rule over the exception. You can always fine "bad"=20
+> examples or exceptions.
+>=20
+> That one defines a single supply. Any other MIPI SPI panel with=20
+> different supplies or GPIO controls probably has its own binding. Trying=
+=20
+> to parameterize that in DT doesn't work. We've rejected trying to do=20
+> that in DT over and over. What's your story here for that?
+
+Sigh... Look, I really don't care about an argument DT maintainers use
+at their discretion for this. We both know full well that it's been and
+still is inconsistenly applied, and you also know that it's not like
+I've been playing the DT game since pretty much the beginning (on ARM
+anyway). So it's not like I don't want to make it work, I do. But what I
+care about is enabling that driver to work.
+
+I reused exactly the same binding than the last major binding that was
+merged for panels, and support about the same number of panels. I guess
+that was a mistake, so sorry for that.
+
+I'm fine with reworking the binding any way you want as long as it still
+allows for the same use-case, but I would have hoped for a better
+feedback on how to do so than "oh what a huge pile of shit this is".
+
+Maxime
+
+--k3ccvqemgn4avxba
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCarzCkwAKCRAnX84Zoj2+
+dpc3AYDOB9XdH/2zapSanqxE4H56ffYrbVAeb+qx5XxwVM0vnMt7lzv9vg5HaAOo
+S/xSzu0Bfi/5SfsSXC39fs4ZPIdQyMs+eNZexW71Ze0mJnl6LF6ImBE4OXEw7pa4
+QGknAZNTfg==
+=jVxm
+-----END PGP SIGNATURE-----
+
+--k3ccvqemgn4avxba--
