@@ -1,69 +1,69 @@
-Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
+Received: from mail-oo2-f36.google.com (mail-oo2-f36.google.com [74.125.231.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA0D4F5E15
-	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 13:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51DFF46D2B5
+	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 13:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.164
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775983; cv=none; b=i5ofg4w+Waf5O7abtVCaP1E/gdC9WYD9sE0OF8Hm//FU1elJInFUTp+Xl6uFxXRuV+UcPdOhM77CvdKHmolAmdWRxbh1lAA2+9XqHSuPmx/dyDu4OiY7todWAoauwuEPPo0S8JuthAofib7+zd2rYttFn5k67cC9d1rRz6j58y8=
+	t=1790776170; cv=none; b=PrRuFum7yhBGcs1pUS96IiXQFjNdahwCfNEcxmRoHe+UYnixKIp37I6SXPGhahh9C7mQ7qKOOnNHj1eREaqBPgwFfBoYZdpMd5DJHoUNHi7thbwnswxlfd01kXd0w8RF+A9Hh6eyfenyLe97oz+vT4zdCsBZUymsA50X9BzW5pc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775983; c=relaxed/simple;
-	bh=7Nh6EI3LZQzPWseqkE8KELp9TSy2sy0wDOC/Rv8pmcU=;
+	s=arc-20240116; t=1790776170; c=relaxed/simple;
+	bh=vns+8oesrCaNm7+0DgAsIp383/EmirBpC6z8L/AgF7M=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=jhc8u96mjvnHRNVjBex2j+RFxTrpkR7xVj+qQ4ATkx3vKDzUegAqOIINH6PSrZmjuNx8rr3m3KABqazGAKkW8y4bQM13x3pYZ6UW8CQwL9yikiGZ4w9tvfMi4wEOQVWup8JGRekxxvlgvyVpQ1RPro7vaehv4gsE1GDFuL8MpQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZoTN1/BR; arc=none smtp.client-ip=74.125.225.98
+	 In-Reply-To:Content-Type; b=i9PbJG+eXb3Z/IIMlq9Ow4r4JMs/wAcPaikz5EUsDpwUdfh/Qg/o8wxSiR0mhjXGRu5oyhWg8WBiiH3zMKeG4u25hNcAr8vn865jORFk5iAVYo5XI4DjeUAaYPrg/OlxBk4kLFRftHREluDqYFsQFr0Z6vRnNXGcvvmgjVNLpFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fjfURBlR; arc=none smtp.client-ip=74.125.231.164
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZoTN1/BR"
-Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48b01c41135so468006f8f.0
-        for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 06:46:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fjfURBlR"
+Received: by mail-oo2-f36.google.com with SMTP id 006d021491bc7-6d77aa5735aso2365378eaf.1
+        for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 06:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790775972; x=1791380772; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1790776157; x=1791380957; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:in-reply-to:organization
          :autocrypt:content-language:references:cc:to:subject:reply-to:from
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=CHcqKszk+BLOaoNOEO2+3FAWySZdw8cPx3mMZwkgNqk=;
-        b=ZoTN1/BRkqmwj0j1EtZR7/BMK5HeKHrcV6Lo/ocKzK+jMBGBDH6KQx5y1iY4rWKIJv
-         o4UJZAVfS8bQt2cF3i6Y7d5jQ3NaWX6w4Mzww9yqK2kZIKILinrgs6S2ucIIgUAKM2Go
-         rrl2l+CqhIsohEU75R5Pm1+J1pxgYYvWyamwJSv6pXfNABthdIXjZRVG7Pn3WM0oDbAK
-         79++zBmyC0/ohl9I4TBIJPTnGZh973nNsHMm6j14zLIAIu/n9zUBXmdU7YSRnQOHOooj
-         MaDK1tN1q498tac0kZH+wojPoCsdtsZXs4qGlg/Z1WRIioFs5iRLJPdft9QfVSHo4V6h
-         EGRg==
+        bh=9WE422/LqnhCl3fPXNYCzqJOoTlv5wcGeIDmvarusck=;
+        b=fjfURBlR9E/iKxLfhuj+u9/P6l1PrHLb7mKLFRMdNtLFDalTQCxU+V+M4nP89lRIy0
+         jNjjvizOX+5z62a5tvRJhZ5jhPtBlKmGlWcRwwF5PHUuJL02O0WUWe9P8Ahrt2rGXgpG
+         Z453KnywLCly80Hy1CVViza/hFVh5TOlfbknz3YDzxWuZHt2hqIOlkDE8IejVRzuv0JZ
+         chIUZ2axAh+tpcDxuA/WGZYFqUBuURlgLuP/2IziDsKYV2nVuNHZjEU3ZxcNMRUHjd7z
+         w2STz0OOlkMEcCHK03MqvUV0sl0rqxcg7S5d+TNOzB+4yq7C/dAJ9S2yoklXrk9XKdmc
+         GFAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790775972; x=1791380772;
+        d=1e100.net; s=20260707; t=1790776157; x=1791380957;
         h=content-transfer-encoding:content-type:in-reply-to:organization
          :autocrypt:content-language:references:cc:to:subject:reply-to:from
          :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CHcqKszk+BLOaoNOEO2+3FAWySZdw8cPx3mMZwkgNqk=;
-        b=nYJv0wDyGVLU7d86B++bRpAPfVzmlwIQ9txqlgeEdjAdNahJUjzKf+zfH3C8u+Jl0F
-         yu2VfO6bynhFwOwNqgk4neh+XT9BpA+7klb4f6KPZFx6n3OOjP6fHoqT0JdkxfO3xXix
-         8fqzzA0Sidd96L4AHPRRBOXSzduEHi1XzFkGVV3DOKYOfvHLh6RPhIB4Gl9Y0X5RylJv
-         cUszmBUheYRootJWpnAyX+tO5ypJFH58vytFWJrkY0hy3qe4HaDDhJbXIoiI5ezjvrV5
-         DdtRvZclX+22NFksot/KVythcLwrrhqfjGNLOBqr3oBPhiaB7llN5BxF3FExR+uOvAM7
-         UaIg==
-X-Forwarded-Encrypted: i=1; AKwUvBwOBuX5giFSka8uj5b1eCY+aGOaUUNIrqnBcQ1DoGk2Ufg/BtX28OYOB2akPjvSQ+yL83rb@lists.linux.dev
-X-Gm-Message-State: AFq9FYISyoAhYAYBjrDsSXhH+8FC0TihmxYAnUijNuBjlzTxQAZbXCkX
-	zilmEuUoYCZIYjwz48ZzSctXUTzLykXN/bG8x7yLsAYNk8+ipS225Mj3a0nBSk9Ex9E=
-X-Gm-Gg: AYBFou2jj0Nikp+S/ZLqYWYJPb13FaUNraV4XfW5lHp0hLyBBw593fRMMoVncKJUa3V
-	EzYGaLimo1KSk0DU8Hq6F7jAqh/BNgly7EGU/3beI/OOtmV8324+8bjdSlE+B2JbY6be22hJsx+
-	yZ17JrCV8m1NAqTAU5W/5UWko3R4q4cvDkHPlDVP7QumtrpxBcScBp00iaABk92mGT5gJ6xKO/S
-	NUjA6WlOWuOe27F3368wsoPjj33wciNVRpsixqstCenRp/MlolGHD7Agi4ujm5GsX0EbIL4QB/F
-	Y4piavQGgk4vDpHUs0NiUopx6nzhx7EhqjkqGfaPlqZNNtPVhClZPTRa1vlvN3oiXVLv6U5fExt
-	94HjOL2Dkt4RnopqGahZR9KZxlRCwnuO10de+wXQv7kgAFGzNwau0eNsNWyGs4nhWc49z5+eJwp
-	TXQjHPsWx27j+oYq8HPU1CBBKjfEKJTIZlN4fEC+WXx42ynRBeBWn6i/UEGH0zVI1myRJ0XR61a
-	bos+3SyK1ajSoYqeX8U+b7VstlQFyii8uaA0rDbOtmFR1JvJTw5QRkNYmOrzCXo4bSQ3M4P1l+i
-	jw9yuOs=
-X-Received: by 2002:a5d:5f81:0:b0:488:84e2:cb0b with SMTP id ffacd0b85a97d-48b02549be8mr3355158f8f.51.1790775971655;
-        Wed, 30 Sep 2026 06:46:11 -0700 (PDT)
+        bh=9WE422/LqnhCl3fPXNYCzqJOoTlv5wcGeIDmvarusck=;
+        b=xabfNBkJM+EQ5MwBss2FiyXUZ4nWThnDX+a7seE+edxaKZSNd4X4VS0jFgut0J24x3
+         gs73vA15CIPuLDHn0lIp0C25NEIz3NJJou6HdBPMw7lwuzyNgFfsoSrsB4KR2d8ojQRm
+         BaL8GI0zMKP5Xkt9/yTqlgik4Upv2IMpuGLta+jWSEiowk1RNiMdsqSF3mmYeKTslSps
+         Gzu61vWjqM2rAst1UH5th0BihK9OpzAJniQ8MekvwaGCnKst13IZgwxzwR/BNDoJLck+
+         HJfYCnIdrHP16bvTD7qDtCwddHY0TfMpFAetXMAhZCAjHFqO0MWH8bHqGZNEdBqVjNhB
+         DSGw==
+X-Forwarded-Encrypted: i=1; AKwUvBwH/8li9MDm7JpHtT0amN87lcNWfOXo4CW2JL7bLVQm7gNcotJpPdIpDSGqErPuKgJklfS1@lists.linux.dev
+X-Gm-Message-State: AFuF++m62xxaHRpLfVfUx9Pjb92veUA9hb+7/1zDX9941l+p5kMLalO8
+	4seLN5wgF6VfJfl/xeIwo+qJe+5WJrasp5Ik3jkYi2wveFnheE5Jm3W6drslNHTfYyI=
+X-Gm-Gg: AYBFou0ecsV6cZnVNlrLLiLag70PZh0gHp4nrnWQXIvAVi9tmBwUBKtG1ZchHKceTR6
+	+WQZrGp1peAOcqrzepBmOpLcKQADonINVEFI6sfc/mZLhgaLTK0X95EHS3TCNVEI/1a4455sMuw
+	f6Mr01ZvOaOTvB7T5y5pZHrVfrEjSASC0qD5w4dVi6iyCmf0D7xsqTmIk6t1bNKCeGfAWHhgBwx
+	XjJpfyo8e4cXn2ScTNz7U7QNRlG9GxkE1MItLPizk6HjaZ4ZxjBhU2JIznnydDOJ3WzzBid+Lw4
+	0bMgWWiissbQzIKUJKfrhPMcZx4SDDf/q71gQm2/JD6+R3mC88x6gFlDsMVK45VD5LTMX4hiXP4
+	OBbMWyyNFOyE2InDiihtZ5ks8apw9hzEspRoGWftze26EqX8LNIq+yrnzmmloKKzwlU7eNsNsaq
+	HJ+6Q9/tjV5zS5jcyBl5NiGGZ2sHE8jeja/ZPG6fr5l2co21GOedamN7pctuR3dJaOewUi+Vyai
+	6ls3LQ6u+pzuC+S/4VndEsmCicORSPWycQ6GcgS00vl8F6wwVrHC64kyo7gERT9DYC/NhddNxVk
+	DAerXgU=
+X-Received: by 2002:a05:6820:1c98:b0:6dc:e1c3:b2c1 with SMTP id 006d021491bc7-6dcf5b2761cmr1487919eaf.56.1790776156586;
+        Wed, 30 Sep 2026 06:49:16 -0700 (PDT)
 Received: from [10.21.51.184] (ipagstaticip-88fc351e-cb28-db3e-3f52-ad13c70f08da.sdsl.bell.ca. [142.127.77.63])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b029e51b8sm3780276f8f.20.2026.09.30.06.46.06
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6dd98ccc807sm52578eaf.15.2026.09.30.06.49.13
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Sep 2026 06:46:10 -0700 (PDT)
-Message-ID: <c75feb5d-055d-403a-8dba-3c187cdb8e7d@linaro.org>
-Date: Wed, 30 Sep 2026 15:46:04 +0200
+        Wed, 30 Sep 2026 06:49:15 -0700 (PDT)
+Message-ID: <27bc999f-ef3a-450d-a4ea-57ac45508705@linaro.org>
+Date: Wed, 30 Sep 2026 15:49:12 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -75,7 +75,8 @@ From: Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
 Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
 To: Maxime Ripard <mripard@kernel.org>
-Cc: Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
+Cc: Benjamin Tissoires <bentiss@kernel.org>,
+ Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
  Simona Vetter <simona@ffwll.ch>,
  Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
  Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
@@ -94,10 +95,10 @@ Cc: Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
  Javier Martinez Canillas <javierm@redhat.com>,
  dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Benjamin Tissoires <bentiss@kernel.org>
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <artgrTe6wvKxnUOG@houat>
+ <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
+ <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <artlIYhgbskRJXDQ@houat>
 Content-Language: en-US, fr
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -124,130 +125,131 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro
-In-Reply-To: <artgrTe6wvKxnUOG@houat>
+In-Reply-To: <artlIYhgbskRJXDQ@houat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/29/26 09:13, Maxime Ripard wrote:
-> Hi Neil,
-> 
-> On Mon, Sep 28, 2026 at 06:39:58PM +0200, Neil Armstrong wrote:
->> On 9/28/26 18:22, Maxime Ripard wrote:
->>> Panels in general, and MIPI-DSI panels in particular, are pretty
->>> difficult to support and require pretty much a panel driver for each
->>> panel produced. Most of them are pretty simple, and require an opaque
->>> initialization sequence that is usually poorly documented.
+On 9/29/26 09:27, Maxime Ripard wrote:
+> On Mon, Sep 28, 2026 at 09:20:12PM +0200, Neil Armstrong wrote:
+>> On 9/28/26 19:24, Benjamin Tissoires wrote:
+>>> On Sep 28 2026, Neil Armstrong wrote:
+>>>> Hi,
+>>>>
+>>>> On 9/28/26 18:22, Maxime Ripard wrote:
+>>>>> Hi,
+>>>>>
+>>>>> Panels in general, and MIPI-DSI panels in particular, are pretty
+>>>>> difficult to support and require pretty much a panel driver for each
+>>>>> panel produced. Most of them are pretty simple, and require an opaque
+>>>>> initialization sequence that is usually poorly documented.
+>>>>>
+>>>>> This creates a tension between OEMs and distros because OEMs will
+>>>>> typically get a new panel to react to a sourcing issue during
+>>>>> production, and thus need some swift turnaround between getting their
+>>>>> new panel and it being operational in the OS. Distributions on the other
+>>>>> hand can take years to ship a kernel with that new panel driver.
+>>>>>
+>>>>> To solve this, I followed the example of HID-BPF and wrote a panel
+>>>>> driver that will rely on BPF programs to perform the panel
+>>>>> initialization. That way, we can ship the programs separately from the
+>>>>> kernel, and with a different lifecycle. If this driver is accepted, the
+>>>>> plan is to have a userspace component started by udev to identify and
+>>>>> load the right BPF program for the panels found on the device.
+>>>>
+>>>> This is kind of late for serious applications except if we manage to
+>>>> solve the bootloader to Linux display engine transition.
+>>>>
+>>>>>
+>>>>> This driver is fully functional and works with both 5" and 7" Touch
+>>>>> Display 2 panels for the RaspberryPi. However, it breaks away from the
+>>>>> typical panel driver in multiple ways:
+>>>>>
+>>>>> - BPF programs can only be loaded by userspace. This leaves us with two
+>>>>>      choices:
+>>>>>
+>>>>>      * We prevent the driver from loading until the script itself is
+>>>>>        loaded. This has the side effect of preventing any other output to
+>>>>>        be used until the initramfs is ran at the earliest, and possibly
+>>>>>        ever if the loader isn't installed for example.
+>>>>
+>>>> This adds a dependency on user-space behavior and if somehow the
+>>>> initramfs doesn't load for a reason we won't have a way to display
+>>>> an error.
+>>>>
+>>>>>
+>>>>>      * Or we probe the driver all the time, but only report it as connected
+>>>>>        once a program has been registered. This is somewhat unconventional,
+>>>>>        but allows the other outputs to be functional, *and* allows the user
+>>>>>        to force the output if their panel doesn't require any
+>>>>>        initialization or during debugging. I chose this solution.
+>>>>
+>>>> Both options are not really great...
+>>>>
+>>>>>
+>>>>> - It's not a panel driver, but a bridge one, which is also pretty
+>>>>>      unconventional. This is required because panel drivers don't have
+>>>>>      access to a detect callback that is required for the above, but I also
+>>>>>      think that the recent work from Luca blurs the line from panels and
+>>>>>      bridges and we'll end up going that road anyway.
+>>>>
+>>>> On this point, DDIC _are_ bridges, but in the current panel API we blur the line between
+>>>> the panel and the DDIC. So being a bridge is fine, but in a general way we lack
+>>>> a proper way to describe the display/panel/monitor independently of the DDIC.
+>>>>
+>>>> At first glance it's a nice driver, but moving the timings into a blob moves something
+>>>> into possible proprietary binaries with possible closed licence and distribution
+>>>> restriction so it's a downgrade for the same of bringing up a panel faster.
 >>>
->>> This creates a tension between OEMs and distros because OEMs will
->>> typically get a new panel to react to a sourcing issue during
->>> production, and thus need some swift turnaround between getting their
->>> new panel and it being operational in the OS. Distributions on the other
->>> hand can take years to ship a kernel with that new panel driver.
->>>
->>> To solve this, I followed the example of HID-BPF and wrote a panel
->>> driver that will rely on BPF programs to perform the panel
->>> initialization. That way, we can ship the programs separately from the
->>> kernel, and with a different lifecycle. If this driver is accepted, the
->>> plan is to have a userspace component started by udev to identify and
->>> load the right BPF program for the panels found on the device.
+>>> Quick answer on this, because I had the very same questions regarding
+>>> HID-BPF:
+>>> - in BPF, you can require (and by default it does) that only GPL
+>>> 	compatible BPF programs are loaded, closing the argument of "closed
+>>> 	licence and distribution restriction"
+>>> - also, a BPF program can be disassembled much easier than a binary
+>>> 	blob, and I remember Alexei showing me an example where you get almost
+>>> 	the source code from the BPF object in just one pass.
 >>
->> This is kind of late for serious applications except if we manage to
->> solve the bootloader to Linux display engine transition.
+>> Right, it "solve" one of my question, but doesn't really solve the issue
+>> of vendors providing "GPL" bpf programs with source available "somewhere".
 > 
-> Virtually all "generic" distributions are shipping the panel as modules
-> today anyway, because anything else is nothing but impractical. But
-> maybe you don't consider them serious enough. Also, applications live in
-> userspace already, so can be ran after this driver would be initialized
-> anyway.
+> Would you be ok if I was to make a tool to decompile a BPF program into its
+> source file equivalent?
 
-So what would this exactly solve ? keeping out-of-tree BPF driver + bindings
-driver forever and never upstreaming then ? Is this what we really want ?
+Not really, I don't see the point TBH.
 
 > 
->>> This driver is fully functional and works with both 5" and 7" Touch
->>> Display 2 panels for the RaspberryPi. However, it breaks away from the
->>> typical panel driver in multiple ways:
->>>
->>> - BPF programs can only be loaded by userspace. This leaves us with two
->>>     choices:
->>>
->>>     * We prevent the driver from loading until the script itself is
->>>       loaded. This has the side effect of preventing any other output to
->>>       be used until the initramfs is ran at the earliest, and possibly
->>>       ever if the loader isn't installed for example.
->>
->> This adds a dependency on user-space behavior and if somehow the
->> initramfs doesn't load for a reason we won't have a way to display
->> an error.
+>> Another big issue is the API, I don't want to keep the current API as-is,
+>> we plan to support more advanced panel features and use try to use the
+>> atomic states to support rate switching for example, and I'm not confident
+>> it's a good idea since there's no "simple" and "forever valid" API
+>> to initialize panels...
 > 
-> Yes, if an error happens before the DRM driver loads, it won't be shown
-> on the screen. This is already the case for any panel driver today on
-> any major !embedded distribution. And with built-in drivers, this can
-> also happen before or while the DRM driver loads.
-> 
-> The solution is always the same though: load simpledrm first, move to
-> the proper DRM device once it's functional. It still works with this
-> solution.
+> So, a couple of things here. First, I really don't think we should
+> extend the panel API, like at all. But let's discuss that at Plumbers, I
+> don't think it's very relevant to this discussion anyway.
 
-Module != bpf programs, maybe one day it will change.
+It is, and I'll expose why we need to get out of this deprecated API
+as soon as possible, we are seriously keeping the ability to provide
+support for advanced panel features which are implemented in vendor
+kernels.
+
+The API was ok when DSI was added and we didn't have generalized atomic
+modesetting, why would you not want panels to embrace atomic ?
+
+I don't understand, please elaborate.
 
 > 
->>>
->>>     * Or we probe the driver all the time, but only report it as connected
->>>       once a program has been registered. This is somewhat unconventional,
->>>       but allows the other outputs to be functional, *and* allows the user
->>>       to force the output if their panel doesn't require any
->>>       initialization or during debugging. I chose this solution.
->>
->> Both options are not really great...
+> Second, you don't have to use this driver, like, at all. For anything
+> more complicated than what this driver can provide, I totally expect to
+> still merge dedicated panel drivers if it makes sense. I also expect
+> that this driver would be enough for 90% of our panel drivers and
+> would allow us to support most of the cruft.
 > 
-> Feel free to make any suggestions
-> 
->>>
->>> - It's not a panel driver, but a bridge one, which is also pretty
->>>     unconventional. This is required because panel drivers don't have
->>>     access to a detect callback that is required for the above, but I also
->>>     think that the recent work from Luca blurs the line from panels and
->>>     bridges and we'll end up going that road anyway.
->>
->> On this point, DDIC _are_ bridges,
-> 
-> I have no idea what a DDIC mean.
-
-The DDIC is the Display Driver Interface Controller, basically the
-IC which received DSI packets and physically drives the display.
-
-It's basically a bridge to the panel, and this is mainly what we program.
-
-> 
->> but in the current panel API we blur the line between the panel and
->> the DDIC. So being a bridge is fine, but in a general way we lack a
->> proper way to describe the display/panel/monitor independently of the
->> DDIC.
->>
->> At first glance it's a nice driver, but moving the timings into a blob
-> 
-> Let's not kid ourselves, it's *already* a blob. We just sugar-coated it
-> enough that we can be happy and call it GPL.
-
-It's the case for most drivers, but since we don't get proper
-documentation we're stuck using registers list and can't
-implement advanced features. And moving this to a bpf won't solve
-but enhance the problem by a large factor.
-
-> 
->> moves something into possible proprietary binaries with possible
->> closed licence and distribution restriction so it's a downgrade for
->> the same of bringing up a panel faster.
-> 
-> We can already make a proprietary, out-of-tree, panel driver today. That
-> being said, the only license we allow for BPF programs here is GPL, so
-> if anything it would be less of a concern for this than it would be for
-> regular panels.
-
-So you're on to facilitate keeping panel driver out-of-tree and never
-upstream them ? this is awkward TBH.
-
+> Finally, the BPF API is flexible. You can extend it later on and old
+> programs would still work. The verifier would fail only if a program
+> uses a new function in a kernel that doesn't support it. I was kind of
+> expecting to put drm_display_mode in there at some point, if the state
+> makes sense then why not.
 > 
 > Maxime
 
