@@ -1,132 +1,253 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr2-f34.google.com (mail-wr2-f34.google.com [74.125.225.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6753B4FC8CD;
-	Wed, 30 Sep 2026 13:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA0D4F5E15
+	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 13:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790775515; cv=none; b=Mm5Bt3fjQYJW28CBHvF+jFZj2JenQ/2t29XaPOkTziYOgS2g6ebLLvL1LGvB28wCrTk0N4Xr9e09KRDWuEiGXT9kplZj5/OP77Zm9xnKNEogHOHCXQWoB3GTJtfpVgzMGg18t0XLLbpgKR6gI+4Aniwh7MDQM/osuYZB6jA/nIc=
+	t=1790775983; cv=none; b=i5ofg4w+Waf5O7abtVCaP1E/gdC9WYD9sE0OF8Hm//FU1elJInFUTp+Xl6uFxXRuV+UcPdOhM77CvdKHmolAmdWRxbh1lAA2+9XqHSuPmx/dyDu4OiY7todWAoauwuEPPo0S8JuthAofib7+zd2rYttFn5k67cC9d1rRz6j58y8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790775515; c=relaxed/simple;
-	bh=Z/y/h04Kuor6b1R5DzL4Dbxlj9a2OKgjlPvSGbDTUxE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oiRY/QAAbRUAyL11LboFX7535LxtYg2+v0mHZOvcEKSb4xHCHkRKcazrv3Zr7adukrqlVbY2X/OxrWQMeyNoZf1N0u1u5my2BKkHEviMGkG5tbr2618mbaqKNmFRAMTH/P8Gz9cpQhxjUd/wGXJUe8oJ3F7+0FZETNgrI4QUQ70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f+lk879y; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790775983; c=relaxed/simple;
+	bh=7Nh6EI3LZQzPWseqkE8KELp9TSy2sy0wDOC/Rv8pmcU=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=jhc8u96mjvnHRNVjBex2j+RFxTrpkR7xVj+qQ4ATkx3vKDzUegAqOIINH6PSrZmjuNx8rr3m3KABqazGAKkW8y4bQM13x3pYZ6UW8CQwL9yikiGZ4w9tvfMi4wEOQVWup8JGRekxxvlgvyVpQ1RPro7vaehv4gsE1GDFuL8MpQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZoTN1/BR; arc=none smtp.client-ip=74.125.225.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f+lk879y"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBD6B1F000FF;
-	Wed, 30 Sep 2026 13:38:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790775502;
-	bh=Ig13N2tfIjFRsSeqDuP4ixyXHADT+oxuPpwsFpsBiHk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=f+lk879yO1tcwpxTCZ8Vu9BSZUmqzoN86ot1Geu5VLUsqPRG9EiYd59TtYmDI/DQx
-	 b8PpR9XUHRj0fTYkMmqXQuU21rsM9TF4RTV+0y9feymcUMVNsiCzbuBPKCg7LcBInO
-	 A8qletS7Fjls0KgPrzllrFG2yFr3jSqVabH3BfItoBP22iHLl1D1M+B10unFPxeYbS
-	 DoBEprp5b4czipy9XTDOYyQwloYcLFKkBr+bQORPpJFN8w65Cv7oGrANxZ7mpBtWFH
-	 X/3FQ1hd+ZdBx+IV0FxW43+cOBuEql4F0qrdZWn1SclMvfp5mjwnEyjv/+mEW0gQs2
-	 c0/P6Q0/ruZRw==
-Date: Wed, 30 Sep 2026 15:38:13 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
- reserved in __cvdso_getrandom_data()
-Message-ID: <20260930133813.GA3142230@ax162>
-References: <20260925-vdso-getrandom-avoid-memset-llvm-24-v2-1-ce640f872393@kernel.org>
- <CAKwvOdmuvn0LZkYEsH84hnOGTYhTtzuWs3wMARtWdTeL6dD9sA@mail.gmail.com>
- <CAKwvOdnxKVpn=nAFaqP+9PTx4PqgHsUVWv6e60Pcr29W_eZrpQ@mail.gmail.com>
- <CAKwvOdmNZL3eFvV3v77GXDzL+XLgz+BT9TA=my0yTnbsHqVeSg@mail.gmail.com>
- <areYMjNcaqe86ds4@zx2c4.com>
- <9d1c338b-368f-4ea2-a12e-c28d49adff5e@kernel.org>
- <are6s5e6On3hpD3M@zx2c4.com>
- <CAKwvOd=BrMfFT88jsvBPhh383qqk5G+J07CsofNu0MVkziyhCg@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZoTN1/BR"
+Received: by mail-wr2-f34.google.com with SMTP id ffacd0b85a97d-48b01c41135so468006f8f.0
+        for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 06:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1790775972; x=1791380772; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CHcqKszk+BLOaoNOEO2+3FAWySZdw8cPx3mMZwkgNqk=;
+        b=ZoTN1/BRkqmwj0j1EtZR7/BMK5HeKHrcV6Lo/ocKzK+jMBGBDH6KQx5y1iY4rWKIJv
+         o4UJZAVfS8bQt2cF3i6Y7d5jQ3NaWX6w4Mzww9yqK2kZIKILinrgs6S2ucIIgUAKM2Go
+         rrl2l+CqhIsohEU75R5Pm1+J1pxgYYvWyamwJSv6pXfNABthdIXjZRVG7Pn3WM0oDbAK
+         79++zBmyC0/ohl9I4TBIJPTnGZh973nNsHMm6j14zLIAIu/n9zUBXmdU7YSRnQOHOooj
+         MaDK1tN1q498tac0kZH+wojPoCsdtsZXs4qGlg/Z1WRIioFs5iRLJPdft9QfVSHo4V6h
+         EGRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790775972; x=1791380772;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:content-language:references:cc:to:subject:reply-to:from
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CHcqKszk+BLOaoNOEO2+3FAWySZdw8cPx3mMZwkgNqk=;
+        b=nYJv0wDyGVLU7d86B++bRpAPfVzmlwIQ9txqlgeEdjAdNahJUjzKf+zfH3C8u+Jl0F
+         yu2VfO6bynhFwOwNqgk4neh+XT9BpA+7klb4f6KPZFx6n3OOjP6fHoqT0JdkxfO3xXix
+         8fqzzA0Sidd96L4AHPRRBOXSzduEHi1XzFkGVV3DOKYOfvHLh6RPhIB4Gl9Y0X5RylJv
+         cUszmBUheYRootJWpnAyX+tO5ypJFH58vytFWJrkY0hy3qe4HaDDhJbXIoiI5ezjvrV5
+         DdtRvZclX+22NFksot/KVythcLwrrhqfjGNLOBqr3oBPhiaB7llN5BxF3FExR+uOvAM7
+         UaIg==
+X-Forwarded-Encrypted: i=1; AKwUvBwOBuX5giFSka8uj5b1eCY+aGOaUUNIrqnBcQ1DoGk2Ufg/BtX28OYOB2akPjvSQ+yL83rb@lists.linux.dev
+X-Gm-Message-State: AFq9FYISyoAhYAYBjrDsSXhH+8FC0TihmxYAnUijNuBjlzTxQAZbXCkX
+	zilmEuUoYCZIYjwz48ZzSctXUTzLykXN/bG8x7yLsAYNk8+ipS225Mj3a0nBSk9Ex9E=
+X-Gm-Gg: AYBFou2jj0Nikp+S/ZLqYWYJPb13FaUNraV4XfW5lHp0hLyBBw593fRMMoVncKJUa3V
+	EzYGaLimo1KSk0DU8Hq6F7jAqh/BNgly7EGU/3beI/OOtmV8324+8bjdSlE+B2JbY6be22hJsx+
+	yZ17JrCV8m1NAqTAU5W/5UWko3R4q4cvDkHPlDVP7QumtrpxBcScBp00iaABk92mGT5gJ6xKO/S
+	NUjA6WlOWuOe27F3368wsoPjj33wciNVRpsixqstCenRp/MlolGHD7Agi4ujm5GsX0EbIL4QB/F
+	Y4piavQGgk4vDpHUs0NiUopx6nzhx7EhqjkqGfaPlqZNNtPVhClZPTRa1vlvN3oiXVLv6U5fExt
+	94HjOL2Dkt4RnopqGahZR9KZxlRCwnuO10de+wXQv7kgAFGzNwau0eNsNWyGs4nhWc49z5+eJwp
+	TXQjHPsWx27j+oYq8HPU1CBBKjfEKJTIZlN4fEC+WXx42ynRBeBWn6i/UEGH0zVI1myRJ0XR61a
+	bos+3SyK1ajSoYqeX8U+b7VstlQFyii8uaA0rDbOtmFR1JvJTw5QRkNYmOrzCXo4bSQ3M4P1l+i
+	jw9yuOs=
+X-Received: by 2002:a5d:5f81:0:b0:488:84e2:cb0b with SMTP id ffacd0b85a97d-48b02549be8mr3355158f8f.51.1790775971655;
+        Wed, 30 Sep 2026 06:46:11 -0700 (PDT)
+Received: from [10.21.51.184] (ipagstaticip-88fc351e-cb28-db3e-3f52-ad13c70f08da.sdsl.bell.ca. [142.127.77.63])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b029e51b8sm3780276f8f.20.2026.09.30.06.46.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 30 Sep 2026 06:46:10 -0700 (PDT)
+Message-ID: <c75feb5d-055d-403a-8dba-3c187cdb8e7d@linaro.org>
+Date: Wed, 30 Sep 2026 15:46:04 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOd=BrMfFT88jsvBPhh383qqk5G+J07CsofNu0MVkziyhCg@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
+ Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
+ <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ Benjamin Tissoires <bentiss@kernel.org>
+References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
+ <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <artgrTe6wvKxnUOG@houat>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <artgrTe6wvKxnUOG@houat>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 29, 2026 at 11:24:11AM -0700, Nick Desaulniers wrote:
-> arch/arm64/kvm/hyp/nvhe/Makefile has this pattern for exactly the same
-> problem I suspect.  Maybe that's the right tool in the toolbox?
+On 9/29/26 09:13, Maxime Ripard wrote:
+> Hi Neil,
 > 
-> ```
-> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-> index 8dbf2532a573..27fa72d8fb86 100644
-> --- a/arch/riscv/kernel/vdso/Makefile
-> +++ b/arch/riscv/kernel/vdso/Makefile
-> @@ -27,7 +27,7 @@ asflags-y += -DVDSO_CFI=1
->  endif
+> On Mon, Sep 28, 2026 at 06:39:58PM +0200, Neil Armstrong wrote:
+>> On 9/28/26 18:22, Maxime Ripard wrote:
+>>> Panels in general, and MIPI-DSI panels in particular, are pretty
+>>> difficult to support and require pretty much a panel driver for each
+>>> panel produced. Most of them are pretty simple, and require an opaque
+>>> initialization sequence that is usually poorly documented.
+>>>
+>>> This creates a tension between OEMs and distros because OEMs will
+>>> typically get a new panel to react to a sourcing issue during
+>>> production, and thus need some swift turnaround between getting their
+>>> new panel and it being operational in the OS. Distributions on the other
+>>> hand can take years to ship a kernel with that new panel driver.
+>>>
+>>> To solve this, I followed the example of HID-BPF and wrote a panel
+>>> driver that will rely on BPF programs to perform the panel
+>>> initialization. That way, we can ship the programs separately from the
+>>> kernel, and with a different lifecycle. If this driver is accepted, the
+>>> plan is to have a userspace component started by udev to identify and
+>>> load the right BPF program for the panels found on the device.
+>>
+>> This is kind of late for serious applications except if we manage to
+>> solve the bootloader to Linux display engine transition.
 > 
->  # Files to link into the vdso
-> -obj-vdso = $(patsubst %, %.o, $(vdso-syms)) note.o
-> +obj-vdso = $(patsubst %, %.o, $(vdso-syms)) note.o ../../lib/memset.o
+> Virtually all "generic" distributions are shipping the panel as modules
+> today anyway, because anything else is nothing but impractical. But
+> maybe you don't consider them serious enough. Also, applications live in
+> userspace already, so can be ran after this driver would be initialized
+> anyway.
+
+So what would this exactly solve ? keeping out-of-tree BPF driver + bindings
+driver forever and never upstreaming then ? Is this what we really want ?
+
 > 
->  ifdef CONFIG_VDSO_GETRANDOM
->  obj-vdso += vgetrandom-chacha.o
-> ```
-> Fixes `make -skj"$(nproc)" ARCH=riscv LLVM=1 mrproper allmodconfig
-> vdso_prepare` for me, as per
-
-For the record, this also happens with the 32-bit PowerPC vDSO, as I
-noted in the commit message of v2. I should update the issue too, I only
-realized this after wider testing. So if this is the route we want to
-go, we would need a memset() for that vDSO as well.
-
-> https://github.com/ClangBuiltLinux/linux/issues/2183
-> (Nathan, don't forget to link to that in the commit message)
-
-Yes, thanks, I have added it for v3.
-
-> I'm surprised I didn't need -fno-semantic-interposition (or one of the
-> related flags... -fvisibility=hidden)
+>>> This driver is fully functional and works with both 5" and 7" Touch
+>>> Display 2 panels for the RaspberryPi. However, it breaks away from the
+>>> typical panel driver in multiple ways:
+>>>
+>>> - BPF programs can only be loaded by userspace. This leaves us with two
+>>>     choices:
+>>>
+>>>     * We prevent the driver from loading until the script itself is
+>>>       loaded. This has the side effect of preventing any other output to
+>>>       be used until the initramfs is ran at the earliest, and possibly
+>>>       ever if the loader isn't installed for example.
+>>
+>> This adds a dependency on user-space behavior and if somehow the
+>> initramfs doesn't load for a reason we won't have a way to display
+>> an error.
 > 
-> If we want to get better, (if performance matters here and we want to
-> trade source+build system complexity for absolute code perf) I would
-> start with that, then worry about clawing back performance via things
-> like:
-> - __builtin_memset_inline
-> - -finline-stringops=memset
-> - -ffunction-sections+-Wl,--gc-sections to dead code eliminate the out
-> of line copy of memset, though IIRC there's potential for wasted space
-> due to alignment requirements (maybe the out of line copy of memset is
-> smaller...idk)
+> Yes, if an error happens before the DRM driver loads, it won't be shown
+> on the screen. This is already the case for any panel driver today on
+> any major !embedded distribution. And with built-in drivers, this can
+> also happen before or while the DRM driver loads.
+> 
+> The solution is always the same though: load simpledrm first, move to
+> the proper DRM device once it's functional. It still works with this
+> solution.
 
-Yeah, I guess it is ultimately up to the maintainers what route they
-prefer.
+Module != bpf programs, maybe one day it will change.
 
--- 
-Cheers,
-Nathan
+> 
+>>>
+>>>     * Or we probe the driver all the time, but only report it as connected
+>>>       once a program has been registered. This is somewhat unconventional,
+>>>       but allows the other outputs to be functional, *and* allows the user
+>>>       to force the output if their panel doesn't require any
+>>>       initialization or during debugging. I chose this solution.
+>>
+>> Both options are not really great...
+> 
+> Feel free to make any suggestions
+> 
+>>>
+>>> - It's not a panel driver, but a bridge one, which is also pretty
+>>>     unconventional. This is required because panel drivers don't have
+>>>     access to a detect callback that is required for the above, but I also
+>>>     think that the recent work from Luca blurs the line from panels and
+>>>     bridges and we'll end up going that road anyway.
+>>
+>> On this point, DDIC _are_ bridges,
+> 
+> I have no idea what a DDIC mean.
+
+The DDIC is the Display Driver Interface Controller, basically the
+IC which received DSI packets and physically drives the display.
+
+It's basically a bridge to the panel, and this is mainly what we program.
+
+> 
+>> but in the current panel API we blur the line between the panel and
+>> the DDIC. So being a bridge is fine, but in a general way we lack a
+>> proper way to describe the display/panel/monitor independently of the
+>> DDIC.
+>>
+>> At first glance it's a nice driver, but moving the timings into a blob
+> 
+> Let's not kid ourselves, it's *already* a blob. We just sugar-coated it
+> enough that we can be happy and call it GPL.
+
+It's the case for most drivers, but since we don't get proper
+documentation we're stuck using registers list and can't
+implement advanced features. And moving this to a bpf won't solve
+but enhance the problem by a large factor.
+
+> 
+>> moves something into possible proprietary binaries with possible
+>> closed licence and distribution restriction so it's a downgrade for
+>> the same of bringing up a panel faster.
+> 
+> We can already make a proprietary, out-of-tree, panel driver today. That
+> being said, the only license we allow for BPF programs here is GPL, so
+> if anything it would be less of a concern for this than it would be for
+> regular panels.
+
+So you're on to facilitate keeping panel driver out-of-tree and never
+upstream them ? this is awkward TBH.
+
+> 
+> Maxime
+
