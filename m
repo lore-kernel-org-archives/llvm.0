@@ -1,117 +1,85 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FE936B91A;
-	Wed, 30 Sep 2026 03:13:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 305CB38DC4C;
+	Wed, 30 Sep 2026 04:13:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790737996; cv=none; b=KVCEyl06uiqqG19vDs5sk2eL1QpJV4Cgtc8DKZ4ocp2dgC1kwWDyX9AGawd/EwPxHtFUy62M+QGBUeRhQoaV18JGhdDABZozYy/IDIn2V3l2eT+VkNjeLwOBd4QFpmPAhNe/RBN1ZH3cZNSPr4z7xSkdZmFaFb2Lm+s1hU6mxbo=
+	t=1790741616; cv=none; b=HqM5RPs2xMmENuuLCp95MCB2/20TqzedxEEk3gLGhWxIsyBLVrsG6THzCD/LtPlpPeFDoAvLx1PF/HueOigUqm/ICU5nqDcNy5AosWCPoNKYw1rF5Endw18sZCiaya/pF21KsvXTd3X3qrorp0zD4mAgQph8caUlOrUAEiab88I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790737996; c=relaxed/simple;
-	bh=Y8sMSiM0CwHjELQY+48fl+cPz4X1ku8Gic5rLpc8v8k=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=CcM3wvYRr8EqHb1Gx1GO8pqkIa7dj4BitDk+VyN+qlF/C9tC6l3EnZ63d/4LtajywUKS4wC+0upFtrYGaLEyKjrzR7T/7/ePIGciH4JE4jQyQFRa9JHeidD171rgsrZMQ7xfHbrd4iSSYWC0M16XH0XC9Wz3gl/xXgTkFscU8Ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cJwjybPe; arc=none smtp.client-ip=198.175.65.21
+	s=arc-20240116; t=1790741616; c=relaxed/simple;
+	bh=OKGhc222T/6SQoBifAhYIW1HPUk01jmKVzugbVifYy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hogKOsLKTaZSy/8nZ1GcOHLqpbae+/fSLm88bhUYcWq/fbpYn8up3xGvngngcodRLYpTgkEJZLEv3/mujT83Fdpi/2YUIX4LLgtFN99IOem1OWm57mVvF0sXAWZdnVkEOIgown/F4saScgn2eKOWs277nKm+wzep38byjBPS82o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l/o2kcFw; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cJwjybPe"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l/o2kcFw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790737995; x=1822273995;
-  h=date:from:to:cc:subject:message-id;
-  bh=Y8sMSiM0CwHjELQY+48fl+cPz4X1ku8Gic5rLpc8v8k=;
-  b=cJwjybPedQmHaRdsSohGlG1avqESrcSuxFPwfQFqA4i/3yYdv8cH7Qnx
-   DG6imZplr1SmBpyOTG2L+tAQoKHGwXTzlJ1ON/1rnExLqH61Mq4MNtgnS
-   iYmofLHbuNLulNFDQLRqSjK8sUCUhKrH4p0GUgHsUMOqcOKRcVe3VLn0i
-   I7/8h7xZ6nPHyUWpBeslGHplPqnUAYgzDl++alH/MC3kFjPE7B/cIeihw
-   OsYR3JKeYMCtK6WJCDtcpjHhaDZYMX1NvBrIRI0DHLz7cY8q2I5gHrZvE
-   0Ud3TSk8CYIvgj6VixCy61xENrzzILfqQXkJAeomeJ2BXIxjSbEFkIhtQ
-   A==;
-X-CSE-ConnectionGUID: eGeTO+4eT/OQn5j2Zs5/Ag==
-X-CSE-MsgGUID: IeoeddcmTIGJ47dQGn0MbA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11920"; a="90329125"
+  t=1790741615; x=1822277615;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=OKGhc222T/6SQoBifAhYIW1HPUk01jmKVzugbVifYy0=;
+  b=l/o2kcFwlGvj2seK2nRSpN5XWumVw2sLM/TMUIrkrOsmdBJ+tsJIy5kf
+   IbJorSGeN5NWJR5oQYySsFosFz1zGUmznhE/x6yxZ8Y9Q3q1FMwz3ITg/
+   o5MutCPucWWp25tckvf7zokVFNUoTcjrkBrsizaujTZn5edGPadZia2Iv
+   Yvi+5EFH94m8lZW/UtlM9ma0aY7d/tAM9ci+sMDkOqQmn4gQygrrb0EFA
+   Fa7O2fOY29xHtzIyV/X6vN+jyms6M0BaL4MAaptyuqMaJk/IQJ+4l+dfQ
+   ILJQJ65HZI6FUM8YZTUY2bdVUXP1K6xu5r9ilesQV8zMjWNZutrT6zQKP
+   Q==;
+X-CSE-ConnectionGUID: vzHVTG9HQjq0IPeXDMwhfA==
+X-CSE-MsgGUID: Ngiuhiw6TnK6ptuGwcZIBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11920"; a="90236447"
 X-IronPort-AV: E=Sophos;i="6.27,130,1787036400"; 
-   d="scan'208";a="90329125"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2026 20:13:15 -0700
-X-CSE-ConnectionGUID: TqOBY+PHTLGK1XIeg29r9g==
-X-CSE-MsgGUID: pJ4FUA8yTriJ/Qz0jhfnrw==
+   d="scan'208";a="90236447"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2026 21:13:34 -0700
+X-CSE-ConnectionGUID: W9xKD2jQQVGLAQRU7snVKg==
+X-CSE-MsgGUID: sr93k6YwSWCMdi4Gy8ydPA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,130,1787036400"; 
-   d="scan'208";a="301809559"
+   d="scan'208";a="275124506"
 Received: from igk-lkp-server01.igk.intel.com (HELO 04362d00df5a) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 29 Sep 2026 20:13:13 -0700
+  by fmviesa007.fm.intel.com with ESMTP; 29 Sep 2026 21:13:32 -0700
 Received: from kbuild by 04362d00df5a with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xBkko-000000001ia-43st;
-	Wed, 30 Sep 2026 03:13:10 +0000
-Date: Wed, 30 Sep 2026 05:12:25 +0200
+	id 1xBlhB-000000001jr-1LDZ;
+	Wed, 30 Sep 2026 04:13:29 +0000
+Date: Wed, 30 Sep 2026 06:12:28 +0200
 From: kernel test robot <lkp@intel.com>
-To: "Abd-Alrhman Masalkhi" <abd.masalkhi@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: drivers/md/md-ctl.c:47:26: error: call to undeclared library
- function 'isdigit' with type 'int (int)'; ISO C99 and later do not support
- implicit function declarations
-Message-ID: <202609300507.5HFYs9aS-lkp@intel.com>
+To: Johannes Berg <johannes.berg@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [linux-next:master 8923/12096]
+ =?us-ascii?Q?/usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/?=
+ =?us-ascii?Q?bin/ld:./arch/um/kernel/vmlinux.lds:167:?= syntax error
+Message-ID: <202609300549.Vy4VMT1M-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Abd-Alrhman-Masalkhi/md-make-mddev-lookup-and-ioctl-helpers-non-static/20260928-201223
-head:   6b0c58a68cb9e72a888a76dac60d49a88d347118
-commit: 6b0c58a68cb9e72a888a76dac60d49a88d347118 md: add a control device for array management
-date:   31 hours ago
-config: s390-randconfig-2000-20260930 (https://download.01.org/0day-ci/archive/20260930/202609300507.5HFYs9aS-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+head:   6474fa070f2b8013b4b87350b775b8c3be6e8aac
+commit: 779c65ede6800595ec620b0b10aae7d5a5469cbd [8923/12096] um: link .lbss/.ldata/.lrodata correctly
+config: um-randconfig-2000-20260930 (https://download.01.org/0day-ci/archive/20260930/202609300549.Vy4VMT1M-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 7615da10b75c57286a4032eac8bb43c1b8d2ba46)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260930/202609300507.5HFYs9aS-lkp@intel.com/reproduce)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260930/202609300549.Vy4VMT1M-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609300507.5HFYs9aS-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609300549.Vy4VMT1M-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/md/md-ctl.c:47:26: error: call to undeclared library function 'isdigit' with type 'int (int)'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      47 |         if (name[2] != '_' && (!isdigit(name[2]) ||
-         |                                 ^
-   drivers/md/md-ctl.c:47:26: note: include the header <ctype.h> or explicitly provide a declaration for 'isdigit'
-   1 error generated.
-
-
-vim +47 drivers/md/md-ctl.c
-
-    38	
-    39	static struct mddev *get_mddev_name(const char *name)
-    40	{
-    41		unsigned long minor;
-    42		struct mddev *mddev, *ret = NULL;
-    43	
-    44		if (strncmp(name, "md", 2))
-    45			return ERR_PTR(-EINVAL);
-    46	
-  > 47		if (name[2] != '_' && (!isdigit(name[2]) ||
-    48				       kstrtoul(&name[2], 10, &minor) ||
-    49				       minor > MINORMASK))
-    50			return ERR_PTR(-EINVAL);
-    51	
-    52		spin_lock(&all_mddevs_lock);
-    53		list_for_each_entry(mddev, &all_mddevs, all_mddevs) {
-    54			if (mddev->gendisk &&
-    55			    strcmp(mddev->gendisk->disk_name, name) == 0) {
-    56				ret = mddev_get(mddev);
-    57				break;
-    58			}
-    59		}
-    60		spin_unlock(&all_mddevs_lock);
-    61	
-    62		return ret ? ret : ERR_PTR(-ENODEV);
-    63	}
-    64	
+   /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld:./arch/um/kernel/vmlinux.lds:167: ignoring invalid character `*' in script
+>> /usr/lib/gcc/i686-linux-gnu/14/../../../../i686-linux-gnu/bin/ld:./arch/um/kernel/vmlinux.lds:167: syntax error
+   clang: error: linker command failed with exit code 1 (use -v to see invocation)
 
 --
 0-DAY CI Kernel Test Service
