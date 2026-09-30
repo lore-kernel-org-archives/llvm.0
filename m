@@ -1,244 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE883F9A13;
-	Wed, 30 Sep 2026 08:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB5C5466AE5;
+	Wed, 30 Sep 2026 08:15:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790755485; cv=none; b=KIhu48lwLFBG/rJjVUMlxJGGm+AqYKHuvYva1CIzl9VgLifoudxEUezMuE3e0ZMrH5LeCN5aY8KAeb/9jEF4W1TvLAhsmShIh/WFJKvC6gSR9Li5vgOKZJDSCBkuopXCuAWwCffjVc8mmQCk6FfEcFuZGblRLqoFK4+RmdKYwDQ=
+	t=1790756106; cv=none; b=BRR6+8qGnLURyKtEByM8kK2E5rCCon5Qmxr6TAip06TnHVKKSarLy76Q7eRIw1YJIh6PyUCk5UsXcBU9ZqC8ct+sDTt8EWSEo8bcA9JNxMhu4TQXnjoxIqORquTehaEY2QTbnDxiAxCR1nofbLaaxtfPWYc3uBkAPvOShZDl2zA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790755485; c=relaxed/simple;
-	bh=lAhm/IRtE5TnsstmivWqwHlXEeHp6zXLoKL6Dpf/08M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U+K+EdJLURN66C9WTL4MuR9fGirVYAfms0/hiUN8GCKbJ7iy/N2yer8AXQzvRESJTbzBFm7ZZbsTa3N6FIgkGDR7Ofm/EKiERicj7coCsZLT1bzzRX4q5cVeBaCbUMbPByDnFbYDuTlgHyfo4ZG1AKaQXECwkxogpj7j2b1d5Do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QJ1Jkh88; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790756106; c=relaxed/simple;
+	bh=BWrZ6yMivpp14WpUba3Trbm72Gkex04IeJblW4SgEI4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=jMFV+r/gUOnUAKS3ffkzAujYC2asYRuhp0yD8hgB8ewseXLbr8B5hwn+CN0tYocgrOeuDylM8QEWSxsRovqTj1xzlRE/1dEAtHrxXTqUFuhzwvoedhjqCVKqEyk0VSgF4c2pxJ48a88TCtD+V4mJ1OJr0JHmqhORjG9yH8P9Ido=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MsNViFFq; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QJ1Jkh88"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A8A1F000FF;
-	Wed, 30 Sep 2026 08:04:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790755483;
-	bh=lAhm/IRtE5TnsstmivWqwHlXEeHp6zXLoKL6Dpf/08M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=QJ1Jkh88NS099T5XThWkiHUyHFMuaUi05aDIb0DuSfK6cbpnRq28RDtuRmH0kFGSv
-	 NZBn9sJRMspdyRlciqW7jBwuSJhhmVl+ihgUSFAiPw2uKl7PbI1UZnfLJPikMcnOyU
-	 ovoPJtoyeUD0pBgYjEK81upp+9g5hXAzTVbnwNByddsnhUHGbTh4oyjWwPnTpHoiyE
-	 W+veZ7MG2gdJLu5Tu2tBbHeKkaorg36xo5setYHOfmWCoJ7iQrrSg5BXX6WjPsfC16
-	 p8iXs5bEn9clABquAKOv4qGbKnFg2BCrgrFqzkP/nj5meGWrDZhxZks/v9wThWHD3f
-	 jOxH1OsmTZDig==
-Date: Wed, 30 Sep 2026 10:04:39 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-Message-ID: <ary8IdL9zVXfS2fA@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
- <20260928204059.GA515872-robh@kernel.org>
- <artyl8fD3zzng8Uh@houat>
- <20260929222822.GA2933878-robh@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MsNViFFq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790756103; x=1822292103;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=BWrZ6yMivpp14WpUba3Trbm72Gkex04IeJblW4SgEI4=;
+  b=MsNViFFqKYuM38emgFCCuRVftmVFiFlyGsY/BTYujQgRbEpcbFVLJuXU
+   AwpsWZXcdQ2CNS1BosLwWYcy8YRB63cQwWJqjpSaVL+CIDkAkSYZEYczV
+   gfjUnt9Go4gq8dbz3f0G/C8vivyuihxw0UnmNe+FS+1Al/dJjnRu0LwJu
+   mUz2vwg84z1/WsSJzA9xWJU7IvNTwaZ4tnwvk92IKfwWbMhacACOkzRHG
+   GkwdXV3Pd/1UF/JUQkv6Y8E1g1PASg3RH9vUfBjnXOhHVxvWGwzvV25Ov
+   B/SI7YjhlKtoo1JeuUdlJuxd5ZZDHW4q8W/rEfeRPjS2k3zLo3lmS71Ch
+   g==;
+X-CSE-ConnectionGUID: zjKv12ebQhySqlw+1bus/Q==
+X-CSE-MsgGUID: Wu53EKIOTu+M52fxVE4eXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11920"; a="95298339"
+X-IronPort-AV: E=Sophos;i="6.27,132,1787036400"; 
+   d="scan'208";a="95298339"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2026 01:15:02 -0700
+X-CSE-ConnectionGUID: ALMYOA1OSR6vl0n0H8bnMA==
+X-CSE-MsgGUID: MLKk/A6rT5+kA0deIE5pZA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,132,1787036400"; 
+   d="scan'208";a="274751140"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 30 Sep 2026 01:15:01 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xBpSs-00000000QMk-00kz;
+	Wed, 30 Sep 2026 08:14:58 +0000
+Date: Wed, 30 Sep 2026 16:14:46 +0800
+From: kernel test robot <lkp@intel.com>
+To: Zhan Xusheng <zhanxusheng1024@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org,
+ Thomas Gleixner <tglx@kernel.org>,
+ "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <thomas.weissschuh@linutronix.de>
+Subject: [tip:timers/vdso 4/4]
+ arch/sparc/include/uapi/../../../../lib/vdso/gettimeofday.c:288:24: error:
+ call to undeclared function 'BITS_PER_TYPE'; ISO C99 and later do not support
+ implicit function declarations
+Message-ID: <202609301648.OQYqz8q1-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="k3ccvqemgn4avxba"
-Content-Disposition: inline
-In-Reply-To: <20260929222822.GA2933878-robh@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
+head:   ca46a07c4b68246c4e400ce3649ab7228a878d8f
+commit: ca46a07c4b68246c4e400ce3649ab7228a878d8f [4/4] vdso/gettimeofday: Assert that the clockid fits into the u32 bitmask
+config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20260930/202609301648.OQYqz8q1-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5f609f950d2e80addf5566623013db68394334db)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260930/202609301648.OQYqz8q1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202609301648.OQYqz8q1-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from arch/sparc/vdso/vclock_gettime.c:22:
+>> arch/sparc/include/uapi/../../../../lib/vdso/gettimeofday.c:288:24: error: call to undeclared function 'BITS_PER_TYPE'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     288 |         BUILD_BUG_ON(clock >= BITS_PER_TYPE(msk));
+         |                               ^
+   1 error generated.
 
 
---k3ccvqemgn4avxba
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-MIME-Version: 1.0
+vim +/BITS_PER_TYPE +288 arch/sparc/include/uapi/../../../../lib/vdso/gettimeofday.c
 
-On Tue, Sep 29, 2026 at 05:28:22PM -0500, Rob Herring wrote:
-> On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
-> > On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
-> > > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
-> > > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
-> > > > regulators and GPIOs, perform a reset pulse with specific timing,
-> > > > send a vendor-supplied sequence of DSI commands, then enable the
-> > > > display. The only truly panel-specific part is the init sequence
-> > > > and power-on/off timing.
-> > > >=20
-> > > > The panel-mipi-dsi-bpf driver replaces per-panel kernel modules
-> > > > with a single generic driver whose panel-specific behavior is
-> > > > provided by BPF programs loaded from userspace at runtime,
-> > > > following the HID-BPF model. This enables new panel support
-> > > > without kernel patches.
-> > > >=20
-> > > > Panel DT nodes use a two-entry compatible with the panel-specific
-> > > > string first and "panel-mipi-dsi-bpf" as fallback. The generic
-> > > > driver matches on the fallback, while the first compatible is used
-> > > > to identify which BPF program to load.
-> > >=20
-> > > If you need the 1st compatible anyways, what is the point of the
-> > > second one?
-> >=20
-> > The whole point of this driver is that you don't need to modify the
-> > kernel when you add support for a new panel.
->=20
-> What reads the most specific compatible?
+   273	
+   274	static __always_inline bool
+   275	__cvdso_clock_gettime_common(const struct vdso_time_data *vd, clockid_t clock,
+   276				     struct __kernel_timespec *ts)
+   277	{
+   278		const struct vdso_clock *vc = vd->clock_data;
+   279		u32 msk;
+   280	
+   281		if (!vdso_clockid_valid(clock))
+   282			return false;
+   283	
+   284		/*
+   285		 * Convert the clockid to a bitmask and use it to check which
+   286		 * clocks are handled in the VDSO directly.
+   287		 */
+ > 288		BUILD_BUG_ON(clock >= BITS_PER_TYPE(msk));
+   289		msk = 1U << clock;
+   290		if (likely(msk & VDSO_HRES))
+   291			vc = &vc[CS_HRES_COARSE];
+   292		else if (msk & VDSO_COARSE)
+   293			return do_coarse(vd, &vc[CS_HRES_COARSE], clock, ts);
+   294		else if (msk & VDSO_RAW)
+   295			vc = &vc[CS_RAW];
+   296		else if (msk & VDSO_AUX)
+   297			return do_aux(vd, clock, ts);
+   298		else
+   299			return false;
+   300	
+   301		return do_hres(vd, vc, clock, ts);
+   302	}
+   303	
 
-The BPF loader, so either in kernel loader or userspace loader through
-uevents, depending on how the driver discussions are going.
-
-> > > Also, I assume there is at least some panel supported in the kernel
-> > > you might want to convert to this. That panel would not have the
-> > > fallback (and the DT is fixed).
-> >=20
-> > Yeah, that's true. I'd still need to identify the parts though. I guess
-> > using a generic compatible but a specific model would work?
->=20
-> What? You can't add a generic compatible in these cases.
-
-generic-*hci all have a generic component *and* a platform specific part
-for quirks, and yet none of them require a platform specific compatible
-to be added to work. PCI has that too.
-
-This driver has a generic part and a platform specific part for quirks.
-
-> > > And I agree with Neil's comment. At least until we start embedding BPF
-> > > into DT directly. ;)
-> >=20
-> > And from Neil:
-> >=20
-> > > I don't see how this can be a valid hardware description, bfp is a
-> > > software implementation and has nothing to do in the bindings.
-> >=20
-> > I'm quite a bit surprised by that argument though.
-> >=20
-> > We have in the main dt-schema repos bindings like:
-> >=20
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/=
-options/u-boot.yaml
->=20
-> Self contained in a node that's specifically not h/w.
->=20
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/=
-bootph.yaml
-> > https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/=
-post-init-providers.yaml
->=20
-> Extra hints that are safe to ignore.
->=20
-> >=20
-> > Or, in Linux:
-> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
-> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/Documentation/devicetree/bindings/misc/google,android-pipe.yaml
->=20
-> Virtual h/w which tends to have special needs.
-
-How is that not a description of the binding we're discussing?
-
-> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/Documentation/devicetree/bindings/misc/qcom,fastrpc.yaml
->=20
-> Shrug. Weird Qcom shit...
-
-Cool. What can I do to add this binding to the list of "weird Maxime
-shit" or is this kind of exception only for Qualcomm?
-
-Or should we do it the other way and ship the binding anyway, and in two
-years, when it will have been in device tree in the wild and
-we-cannot-change-it-we-swear, we will be able to upstream it?
-
-And in the process reward the ones *not* playing the upstream game.
-
-> > https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/=
-tree/Documentation/devicetree/bindings/sound/simple-card.yaml
->=20
-> Just a container... Though I can't say I really like any of the audio=20
-> bindings.
->=20
-> All really irrelevant to this discussion other than the panel binding...
-
-Not really. The discussion was "but you're describing something that
-isn't hardware". And none of the above are. And were acked. Some
-recently.
-
-> > All of them have been reviewed or acked by you, and yet none of them
-> > relate to any hardware description.
->=20
-> There are things which aren't h/w, but this is h/w and we've already=20
-> made decisions about how panels in particular are represented. We of=20
-> course have some remanents of how we don't want to do things.
->=20
-> > panel-mipi-dsi-spi is a generic panel that will load a firmware, and
-> > quite similar to this one. google,android-pipe and qcom,fastrpc don't
-> > attach to anything and will just open a tunnel to userspace, which is
-> > somewhat equivalent but more dramatic than what this driver is doing.
-> > simple-card or its variations will just instantiate a kernel driver from
-> > the DT and is used pretty much everywhere.
-> >=20
-> > I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
-> > by rob, and acked by a panel maintainer, and 4 years ago, so we're way
-> > past the "oh but we didn't know what we were doing back then" argument.
-> >=20
-> > So, let's phrase this differently: what's different about the
-> > description than panel-mipi-dsi-spi, or any other binding already in
-> > tree?
->=20
-> There's all of 3 panels supported. Compared to all the other panels we=20
-> have, hardly the rule over the exception. You can always fine "bad"=20
-> examples or exceptions.
->=20
-> That one defines a single supply. Any other MIPI SPI panel with=20
-> different supplies or GPIO controls probably has its own binding. Trying=
-=20
-> to parameterize that in DT doesn't work. We've rejected trying to do=20
-> that in DT over and over. What's your story here for that?
-
-Sigh... Look, I really don't care about an argument DT maintainers use
-at their discretion for this. We both know full well that it's been and
-still is inconsistenly applied, and you also know that it's not like
-I've been playing the DT game since pretty much the beginning (on ARM
-anyway). So it's not like I don't want to make it work, I do. But what I
-care about is enabling that driver to work.
-
-I reused exactly the same binding than the last major binding that was
-merged for panels, and support about the same number of panels. I guess
-that was a mistake, so sorry for that.
-
-I'm fine with reworking the binding any way you want as long as it still
-allows for the same use-case, but I would have hoped for a better
-feedback on how to do so than "oh what a huge pile of shit this is".
-
-Maxime
-
---k3ccvqemgn4avxba
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCarzCkwAKCRAnX84Zoj2+
-dpc3AYDOB9XdH/2zapSanqxE4H56ffYrbVAeb+qx5XxwVM0vnMt7lzv9vg5HaAOo
-S/xSzu0Bfi/5SfsSXC39fs4ZPIdQyMs+eNZexW71Ze0mJnl6LF6ImBE4OXEw7pa4
-QGknAZNTfg==
-=jVxm
------END PGP SIGNATURE-----
-
---k3ccvqemgn4avxba--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
