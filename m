@@ -1,85 +1,156 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE08C2D1F77;
-	Wed, 30 Sep 2026 10:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BA92DFA4A
+	for <llvm@lists.linux.dev>; Wed, 30 Sep 2026 10:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790763822; cv=none; b=ABdMjx8/ZgcB4x1vVV9eJxW8HsFBrjpsNPdOmI3Grwmiy4q5db2Zl6OO/K1Pzte6NgS/QEuKB1Az+jpCWerz7mhlyOtgv+Ew/BpfQ26vuiwoMlgtCjCq+dVm69OuKB67Idr7+437GbxyV9Q8VYF+zdUhVxgSzBDbEokRgTUHOcM=
+	t=1790764521; cv=none; b=qTgBg+uDK8d+WV3fjUW2jPTqrXsU+C7z1iXSBdudhBOSP8YodinmKpmHNIx3swRq1L3G4rsNlpTc3qvlJeiAz+KEMF1isTam691+woZFWmba4erCRPtawoQPgbwP8qcU6rnFocOT26hKqwNVqBU3nB8QLe0TgESv6qqR55KctDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790763822; c=relaxed/simple;
-	bh=ZVeAmWbEH938LqNMzvNvgLRoNVwYbNEiTpRXzJoR1SE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ZAc7dSnGy+p+uENuLXnRdEn8Cn6uHe3mgr9FduM8KURCw98IWHaJEnUApUO4QqvBJbsiZB04m3Ziaq57zw7hlsip+HwyGcHAFl/qaaBE58ah6JhV9w/zGRq51oixp8YdRo498jPHFEWIk1kKwvgxDSbfFpbzUyR8K+8eFNdX42A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k2jrEkm+; arc=none smtp.client-ip=192.198.163.13
+	s=arc-20240116; t=1790764521; c=relaxed/simple;
+	bh=hv0C92Rh1ksdG89sw30/t5qoFJ2gTwBipcVvty9eSFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OTH01ockOMhklUntPNi9sRSeZJc3/viuUMJWL4wXJ02ld8/FALbtfITp6SQZ3QUojK8EbKUmN4bowx1QqffQ2oWPoIAMtuleMP2010O8r906DPUTCUxeIUuJnzAOmaIVPwNtKH+XBEXm4OOZ/IaYE5IVEOvp8ghfXQnjn7zucf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=S9PXmf+v; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k2jrEkm+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="S9PXmf+v"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790763820; x=1822299820;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZVeAmWbEH938LqNMzvNvgLRoNVwYbNEiTpRXzJoR1SE=;
-  b=k2jrEkm+jO0eX4FPC2JkMxIe0crrEmNXgg1VEExYisbK44VZGQa7sgew
-   nd9sHVrq9a6lT2TzFTHvqJasDxcCTKXFZuyl+Pz5IG7HV6J6MUiwp895d
-   nvMteMa3GAFi4Xnjty01qrRUb22oWCydojRQVlY2VUWsBrmjYpEcDHFwq
-   fNeOY6oxs/iqnq4ihxAr68qfCjHuvlE7VhmTszmiUBcLMMvNUzPR5kMPd
-   vGGXI4M0BEl/VmpCn9/pFhR/UNwLSdSraIyeIILjfnCMJ46AASIERwt5V
-   6ijzrzS8EA2M+4uqE62gczfStFnSZfpJ+6N8neQxe+Qoaraam/Yztkq5w
-   g==;
-X-CSE-ConnectionGUID: GPQd4DIuST2WMaR/kzkSiw==
-X-CSE-MsgGUID: TfYc4LXBR6K/6Q/vEo98Zw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11920"; a="93983958"
+  t=1790764519; x=1822300519;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hv0C92Rh1ksdG89sw30/t5qoFJ2gTwBipcVvty9eSFg=;
+  b=S9PXmf+vp9G/hXEjeqgfvgU0hZMP4m178kJHAjDGPJ/djKrdisHPINjV
+   bVMKqU1lXFi9nTYL9wgb5/DeFUpPK68bKWrvxVhCSrvB0YqlKP0WK/put
+   6M9O+etdrJsqkAXVrsYoKFMXsXvMS5ZKyqtaJwGVlttQbOe5hrOf11r5c
+   PHkIBAmMe6Thc+3rDTRSOI+5p0t6KlIY+8DthVNmCzVTQEx+knORmSa2+
+   dOWeXzpIatm5y+xHxz7c4XMVZJ7Wc4JGOL/iaZWY5s6uEB5ig5U1yKtRt
+   U2hxpEapGmZphbN8f/oP853FlsC4RJV3VbVCGGNTAOl5YttpPWZNzAXkB
+   Q==;
+X-CSE-ConnectionGUID: 2A6OuZlWQXiQvOa1pL7TEg==
+X-CSE-MsgGUID: Uf78m/VSQLuKNoVpxTvM0w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11920"; a="91517114"
 X-IronPort-AV: E=Sophos;i="6.27,132,1787036400"; 
-   d="scan'208";a="93983958"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2026 03:23:38 -0700
-X-CSE-ConnectionGUID: 50/EaQRjTJ+Uwu6bt7URNQ==
-X-CSE-MsgGUID: bkoBo/3WSyCk9s82HvB3jg==
+   d="scan'208";a="91517114"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2026 03:35:18 -0700
+X-CSE-ConnectionGUID: zNPcY9sJTDSddwirHiwkPA==
+X-CSE-MsgGUID: yapkq3TbRJ+ofQAaztaWfw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,132,1787036400"; 
-   d="scan'208";a="313586386"
-Received: from igk-lkp-server01.igk.intel.com (HELO 04362d00df5a) ([10.211.93.152])
-  by orviesa001.jf.intel.com with ESMTP; 30 Sep 2026 03:23:38 -0700
-Received: from kbuild by 04362d00df5a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xBrTL-000000001p9-09t7;
-	Wed, 30 Sep 2026 10:23:35 +0000
-Date: Wed, 30 Sep 2026 12:23:26 +0200
-From: kernel test robot <lkp@intel.com>
-To: Bart Van Assche <bvanassche@acm.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- 0day robot <lkp@intel.com>
-Subject: Warning: drivers/scsi/ipr.c:5016 function parameter 'host'
- not described in 'ipr_device_reset'
-Message-ID: <202609301243.BBNZR0RS-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+   d="scan'208";a="275697169"
+Received: from spandruv-desk1.amr.corp.intel.com (HELO localhost) ([10.245.245.137])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2026 03:35:14 -0700
+Date: Wed, 30 Sep 2026 13:35:12 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Rupesh Majhi <zoone.rupert@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>, Bill Wendling <morbo@google.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v10 1/4] iio: pressure: dps310: read buffered samples
+ from the hardware FIFO
+Message-ID: <arzl4DK8vhP0g8Hg@ashevche-desk.local>
+References: <20260930100158.957977-1-zoone.rupert@gmail.com>
+ <20260930100158.957977-2-zoone.rupert@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260930100158.957977-2-zoone.rupert@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-tree:   https://github.com/intel-lab-lkp/linux/commits/Bart-Van-Assche/PCI-Convert-to_pci_dev-into-an-inline-function/20260925-112539
-head:   fdfe48ef6987903539e62ab539dc21f4108e43e8
-commit: 669d147a81f263a639a829da93b7dd8793679904 scsi: ipr: Pass the host pointer directly to several functions
-date:   5 days ago
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260930/202609301243.BBNZR0RS-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260930/202609301243.BBNZR0RS-lkp@intel.com/reproduce)
+On Wed, Sep 30, 2026 at 01:01:55PM +0300, Rupesh Majhi wrote:
+> DPS310 has a 32-entry FIFO shared by both measurements. Drain it from a
+> work item and push what it held, so buffered capture needs no trigger.
+> Nothing in tree wires the interrupt pin, so the work rearms itself at
+> half the FIFO fill time.
+> 
+> Each entry carries one measurement, so a pressure entry is compensated
+> with the temperature ahead of it. Pressure read before a session's first
+> temperature is held until one arrives rather than dropped, so the first
+> push can wait a temperature period.
+> 
+> FIFO entries are not timestamped, so postenable refuses the timestamp
+> channel unless a trigger is attached.
+> 
+> Tested on a DPS310 on a BeagleBone Black.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202609301243.BBNZR0RS-lkp@intel.com/
+...
 
-All warnings (new ones prefixed by >>):
+> +/* The drain rearms itself, so stop it even if the buffer never disabled */
+> +static void dps310_cancel_fifo_work(void *action_data)
+> +{
+> +	struct dps310_data *data = action_data;
+> +
+> +	cancel_delayed_work_sync(&data->fifo_work);
+> +}
 
->> Warning: drivers/scsi/ipr.c:5016 function parameter 'host' not described in 'ipr_device_reset'
->> Warning: drivers/scsi/ipr.c:5056 function parameter 'host' not described in '__ipr_eh_dev_reset'
->> Warning: drivers/scsi/ipr.c:5016 function parameter 'host' not described in 'ipr_device_reset'
->> Warning: drivers/scsi/ipr.c:5056 function parameter 'host' not described in '__ipr_eh_dev_reset'
+...
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>  	mutex_init(&data->lock);
+
+This has to be devm_mutex_init().
+
+...
+
+> +	INIT_DELAYED_WORK(&data->fifo_work, dps310_fifo_work);
+
+Can't we use devm-helpers.h for this?
+
+...
+
+> +	/*
+> +	 * Both modes advertised: the core picks TRIGGERED with a trigger
+> +	 * attached and falls back to SOFTWARE, which the FIFO path uses.
+> +	 */
+> +	iio->modes = INDIO_DIRECT_MODE | INDIO_BUFFER_TRIGGERED |
+> +		     INDIO_BUFFER_SOFTWARE;
+
+I would rearrange this as
+
+	iio->modes = INDIO_BUFFER_TRIGGERED | INDIO_BUFFER_SOFTWARE |
+		     INDIO_DIRECT_MODE;
+
+...
+
+>  	/*
+> -	 * The device measures continuously in background mode, so a capture is
+> -	 * just a read of the latest results. The trigger is not aligned with
+> -	 * the measurements, so the timestamp is taken in the handler.
+> +	 * The device measures continuously in background mode, so a triggered
+> +	 * capture is just a read of the latest results. The setup ops run the
+> +	 * FIFO drain when no trigger is attached. The trigger is not aligned
+> +	 * with the measurements, so the timestamp is taken in the handler.
+>  	 */
+>  	rc = devm_iio_triggered_buffer_setup(dev, iio, NULL,
+> -					     dps310_trigger_handler, NULL);
+> +					     dps310_trigger_handler,
+> +					     &dps310_buffer_setup_ops);
+> +	if (rc)
+> +		return rc;
+
+> +	rc = devm_add_action_or_reset(dev, dps310_cancel_fifo_work, data);
+>  	if (rc)
+>  		return rc;
+
+Are you sure it's in the correct location?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
