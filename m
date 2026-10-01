@@ -1,183 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F31C3C0613;
-	Thu,  1 Oct 2026 16:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E834A49DBB9;
+	Thu,  1 Oct 2026 16:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790870610; cv=none; b=rlbIE/5Ka0bw+701eLrLKx4nbN8RGVIZAOomoAzRiN9TAAgLN1Y7JzxRbSqUS8jGMeTs9FwQnDaxvoiuLAebEwuQFKO53Xg9uN5MZX58HHyCXTTGsvRrMc/5ACw+006rgntEO0honRBnzLS1G0Ak17DqGEkplETMQbnx2nEQgnM=
+	t=1790873950; cv=none; b=WTZnIWqsLCAeLYTUaODng1siXIbmS8QRifUJNM5f3NttSpffbsoRaCA/CScewXmHMyMcUaJ9z0BibULjMEryujaOC6XwTQEnA3zACzru2qAintKZ4OH2p6VbfavqWREdvT4kIfcr9LsM70sZu1eBNAnlAL+KlHrMGLwP11N1aow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790870610; c=relaxed/simple;
-	bh=nskYxzRXvoYDqQVGluvdNkiOtftZA5IrMEvhzK+9snQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KaMQqZ13ftueYf6sdiDe/rNBQjT1ZDYlapfBEa7O8lAjIrDN/8BmQIu8iSNWgxj50dtFbMgLwHCp9J8+Goos8iAVPQll3DGZgiEknCPNGlgR2KrlAO6ghqcBBaFI1Wr0KowmqM1wWCcrDYxQLeHUIYu6Kh62Un0vx++QTkI48HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K/WOfh/6; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790873950; c=relaxed/simple;
+	bh=US636mPlqMTdVvPy6JexEbt2KEXiPNgJhzptFT4MmDM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=sprgK3fmfgBflbSZ+OVO7+/HDkIkMKEsyghLUY81lfvRy3bzwCTGthtO0YhnX2mc2i0ufJ6TXTSa+7PKZAKxtBp11IMBdXjRZVuxIwNZnGA77JlNBf9esvJlo6MudgByxXHsrZ4WhHGW9e5kF5jSoWG9HYivhCHfBmemo+ceRcQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UZZN0Y3y; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K/WOfh/6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3D301F000FF;
-	Thu,  1 Oct 2026 16:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790870609;
-	bh=OSUIn2vvgZY9nja7L+v/qJsWqMEJTAmZepfV/Nzm4+g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=K/WOfh/6qDstRLC9ZRaNs7cNIQQwjOtWjnTQtkFB6PNQpgptrztf0vSZh4DTnZump
-	 ufgp5zI8dj1FfYTNwcct0yW+pbJ1cnXRsx64fvIJT7k/mTHFbB7QbfmdWqlgA2okEj
-	 MqOQaSGg/aeB4V2gt+drRL1DnXmxFWq04iX9rTbWvptKsLY/gt1wHPRSKfeVtnuziW
-	 ICrWJnbBeXEXGsj90XEOLMUTGz++GUwx2BKWLFPOO3CIMQdxaXRTsMjkVK05zO/J+W
-	 hMhw3abDTOyagZDekqC93G3fX0z6NIHa5uJorfvpgC75831IR/qGvdzjKV+I6P0zg9
-	 xksO8IEdJu0iw==
-Date: Thu, 1 Oct 2026 11:03:27 -0500
-From: Rob Herring <robh@kernel.org>
-To: Maxime Ripard <mripard@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	Jessica Zhang <jesszhan0024@gmail.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Andrzej Hajda <andrzej.hajda@intel.com>,
-	Robert Foss <rfoss@kernel.org>,
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Albert Esteve <aesteve@redhat.com>,
-	Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Javier Martinez Canillas <javierm@redhat.com>,
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-Message-ID: <20261001160327.GA512699-robh@kernel.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
- <20260928204059.GA515872-robh@kernel.org>
- <artyl8fD3zzng8Uh@houat>
- <20260929222822.GA2933878-robh@kernel.org>
- <ary8IdL9zVXfS2fA@houat>
- <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
- <ar4HOuO-vox9VIKZ@houat>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UZZN0Y3y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790873949; x=1822409949;
+  h=date:from:to:cc:subject:message-id;
+  bh=US636mPlqMTdVvPy6JexEbt2KEXiPNgJhzptFT4MmDM=;
+  b=UZZN0Y3yG1DZUI3XRnNPFQXDuXRo7MKAnEIvat36pyNQaDytc+P3QcqI
+   plg4jLimBXtzHZwKt1x6+ctjJ356xt26dcvBSj+gyZG+tC5dSe2lab3Sr
+   ggNAc/8c5VCfyzRbsd3n3MqkPHKCyvfHd3qLsowztk6MC8zNeuYwFU6+f
+   nJoE85B02TszeWS6M6qJQFIhPutz+fQP9nvtoSW8KJPSa4siipRr6MNW0
+   4tjQKR5YvVYto1I8vnKyCXAqzKi2UXvOT+cEAv0+ZFLYGLKKU354/I0tM
+   8JGSwKpS/+Rfoi9XRx+Xu5aLrbGCnFYWRAhLQq6nypb86d0DCx0dgZzx2
+   w==;
+X-CSE-ConnectionGUID: iTVXhCZQTkeM/2f6LnwJCA==
+X-CSE-MsgGUID: pdFGoz5ORDKCCimJF7XvqQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="108020350"
+X-IronPort-AV: E=Sophos;i="6.27,134,1787036400"; 
+   d="scan'208";a="108020350"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Oct 2026 09:59:08 -0700
+X-CSE-ConnectionGUID: rYRZyl/1QFGIOBt9VDJHPg==
+X-CSE-MsgGUID: reHRoPHbS7iOMJxqdTXEIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,134,1787036400"; 
+   d="scan'208";a="279344887"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3fb566d470b1) ([10.211.93.152])
+  by orviesa004.jf.intel.com with ESMTP; 01 Oct 2026 09:59:07 -0700
+Received: from kbuild by 3fb566d470b1 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xCK7a-0000000009L-0P4T;
+	Thu, 01 Oct 2026 16:59:02 +0000
+Date: Thu, 01 Oct 2026 18:58:14 +0200
+From: kernel test robot <lkp@intel.com>
+To: Fernando Fernandez Mancera <fmancera@suse.de>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ 0day robot <lkp@intel.com>
+Subject: include/net/route.h:176:63: warning: omitting the parameter
+ name in a function definition is a C2x extension
+Message-ID: <202610011836.LY2TSmkY-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ar4HOuO-vox9VIKZ@houat>
 
-On Thu, Oct 01, 2026 at 09:22:48AM +0200, Maxime Ripard wrote:
-> On Wed, Sep 30, 2026 at 02:07:39PM -0500, Rob Herring wrote:
-> > On Wed, Sep 30, 2026 at 3:04 AM Maxime Ripard <mripard@kernel.org> wrote:
-> > >
-> > > On Tue, Sep 29, 2026 at 05:28:22PM -0500, Rob Herring wrote:
-> > > > On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
-> > > > > On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
-> > > > > > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
-> > > > > > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
-> > > > > > > regulators and GPIOs, perform a reset pulse with specific timing,
-> > > > > > > send a vendor-supplied sequence of DSI commands, then enable the
-> > > > > > > display. The only truly panel-specific part is the init sequence
-> > > > > > > and power-on/off timing.
-> > 
-> > [snip a bunch of irrelevant shit]
-> > 
-> > > > > So, let's phrase this differently: what's different about the
-> > > > > description than panel-mipi-dsi-spi, or any other binding already in
-> > > > > tree?
-> > > >
-> > > > There's all of 3 panels supported. Compared to all the other panels we
-> > > > have, hardly the rule over the exception. You can always fine "bad"
-> > > > examples or exceptions.
-> > > >
-> > > > That one defines a single supply. Any other MIPI SPI panel with
-> > > > different supplies or GPIO controls probably has its own binding. Trying
-> > > > to parameterize that in DT doesn't work. We've rejected trying to do
-> > > > that in DT over and over. What's your story here for that?
-> > >
-> > > Sigh... Look, I really don't care about an argument DT maintainers use
-> > > at their discretion for this. We both know full well that it's been and
-> > > still is inconsistenly applied, and you also know that it's not like
-> > > I've been playing the DT game since pretty much the beginning (on ARM
-> > > anyway). So it's not like I don't want to make it work, I do. But what I
-> > > care about is enabling that driver to work.
-> > >
-> > > I reused exactly the same binding than the last major binding that was
-> > > merged for panels, and support about the same number of panels. I guess
-> > > that was a mistake, so sorry for that.
-> > >
-> > > I'm fine with reworking the binding any way you want as long as it still
-> > > allows for the same use-case, but I would have hoped for a better
-> > > feedback on how to do so than "oh what a huge pile of shit this is".
-> > 
-> > When you can answer my question above rather than make up shit I
-> > didn't say, maybe I'll reply again on this thread. Otherwise I'm done
-> > here. I don't need this abuse for the thankless job of DT
-> > maintainership.
-> 
-> It's been the whole tone of the reviews, so I'm sorry if you were caught
-> in the crossfire and you didn't mean that. And I'm sorry it made your DT
-> maintainership work harder than it already is.
-> 
-> I do mean what I said before though. I have no problem changing the
-> binding the way you want, but I need to know what to change in the first
-> place, otherwise it's really no better than a NAK, or we're bound to
-> have the same exchange for the v2, and I'd rather not.
-> 
-> I indeed missed your question, but now I'm not sure I understand what
-> you mean by "paremeterize that in DT"? The supplies in the binding are
-> an aggregate of all the possible supplies a panel can take. They are not
-> a wildcard, but they all have their own semantics that are used by
-> panels right now.
+tree:   https://github.com/intel-lab-lkp/linux/commits/Fernando-Fernandez-Mancera/ipv4-introduce-CONFIG_IPV4-to-decouple-the-IPv4-stack/20260928-212957
+head:   9699ec4e92ef081fbb0e1a4247538ba53e5b17bf
+commit: 809c9f483b87854f5b7ede3ce9ac6e372855169c net: core: add IPv4 fallback stubs and guards for CONFIG_IPV4=n
+date:   3 days ago
+config: um-randconfig-2000-20261001 (https://download.01.org/0day-ci/archive/20261001/202610011836.LY2TSmkY-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261001/202610011836.LY2TSmkY-lkp@intel.com/reproduce)
 
-I read a bit more of the series and understand it a bit better now.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610011836.LY2TSmkY-lkp@intel.com/
 
-> I don't expect any new supply to be introduced, unless there's a major
-> panel technology change such as the one we had with the introduction of
-> OLED.
-> 
-> Would you prefer to reduce the number of supplies to the minimum we need
-> right now, and extend it as needed?
+All warnings (new ones prefixed by >>):
 
-No. You've defined some arbitrary list of supply names not just in the 
-binding, but in the kernel. I think both are a mistake. Can't the BPF 
-prog define the supply names and pass those to the kernel? Then when you 
-have a panel with 'foo' and 'bar' supplies, you don't need a kernel 
-change or some remapping to the existing set of names. The only real 
-exception we have there is if it's a single supply, just use 
-'power-supply'. It's the same issue with GPIOs, but there's generally 
-less variability with them.
+   In file included from fs/eventpoll.c:23:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:9:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+   In file included from fs/eventpoll.c:42:
+   In file included from include/net/busy_poll.h:18:
+   In file included from include/net/ip.h:30:
+>> include/net/route.h:176:63: warning: omitting the parameter name in a function definition is a C2x extension [-Wc2x-extensions]
+     176 | static inline struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
+         |                                                               ^
+   2 warnings generated.
 
-The whole point of requiring specific compatibles and not doing "generic 
-bindings" is that's the only way the OS implementation can evolve 
-without changing the DT. You can have a specific driver or a generic 
-driver or a generic driver using BPF and which one can change over time 
-if needed, but from a DT perspective we don't care.
 
-So first, make this BPF stuff work with any existing panels (or some 
-defined set). I'm not saying convert everything, only that you could. 
-Otherwise you've failed the test of if the driver implementation 
-changes, does the binding have to change.
+vim +176 include/net/route.h
 
-After that, the remaining problem is only how do you make it 
-work with unknown panels (only unknown to the kernel as any new panel 
-still needs a binding). There's 2 ways we can solve that. Either make 
-the kernel be able to bind to a generic driver without a compatible 
-match or have a fallback compatible. The former could be done by 
-userspace (though I saw gregkh added a taint for userspace bind 
-recently) or we could somehow make the kernel bind to any DSI child 
-devices without a match.
+   171	
+   172	#if IS_ENABLED(CONFIG_IPV4)
+   173	struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
+   174					    const struct sock *sk);
+   175	#else
+ > 176	static inline struct rtable *ip_route_output_flow(struct net *, struct flowi4 *flp,
+   177							  const struct sock *sk)
+   178	{
+   179		return ERR_PTR(-EAFNOSUPPORT);
+   180	}
+   181	#endif
+   182	struct dst_entry *ipv4_blackhole_route(struct net *net,
+   183					       struct dst_entry *dst_orig);
+   184	
 
-Rob
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
