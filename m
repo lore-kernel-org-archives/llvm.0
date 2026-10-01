@@ -1,164 +1,161 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B772A547059;
-	Thu,  1 Oct 2026 07:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A5A41A4EF;
+	Thu,  1 Oct 2026 09:25:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790839382; cv=none; b=bmBtKIZOU8c6MREeoIS/T39d4lhKzK9y22x0M1JWBtmn+9kDmMnB9LmC3kpz+OGNqGKDX+gN/Q8uFgHf+R5pIArCF2lyUTKhZmTTOaJq5PdhWTemQFESLcOt+NNV5VpjtBB9ROe61lZBVRcWWvX02WR2e5UR/H3WFhD1iwGNewQ=
+	t=1790846747; cv=none; b=YOeOlpF5ebj3R6O8CJnachJ1eaa1rJi28ANNaoa4wAVjrpN7F4efRUFoVA6gEFDijxLWaIXQEsS8XsW27TQbltSjaaEBhAIaqtUqmWlHPD/YWr3cHLcdJrcn4saCb2+7hq2MWFUUJkdfW8IXmWkp/VjmNt4OBq13+jKF+iEskH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790839382; c=relaxed/simple;
-	bh=vYPo30L+yzg4zdvP/9QG8tpdh1hu1GaLdI0m5fTJPic=;
+	s=arc-20240116; t=1790846747; c=relaxed/simple;
+	bh=HUYkGqcZQJs3k4zIDyWA4OZP7ikrl14JcASJcrAM4ZA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GgGPaEd/cVGmunUW8FNg0hgK9MEZltYm027T/HfQtb6RhpzrSWJ45U1Rd0fzdP5SgCzkhbUYDwIfddhqLLXeLQxj4IdgHLLbaZI9c0SJxPcPCh7noQrRSTSU21CwOxiOtSvKzkbvbU94DGc+5YnLEMUwH++0pWdjRjKFvr/JtAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XJ2wVMP6; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=p0MOPm0Vajpjls8sBN09shnGXPDz/YWylOpIXIaiZ7rq0h7MPJNXzSTUrj2Z2w3pg+J9tSNHVj28OoBNaC0XYEh1SYAgzuRUg8k75JIYi8Nqm7yYk1m0P/CcDRwrMrWAt9JHLxtqfT/W5awCgWHtueL8OnoLCG4D+KIWn9bc5Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=WWTEvHs+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XJ2wVMP6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F1281F000FF;
-	Thu,  1 Oct 2026 07:22:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790839372;
-	bh=vYPo30L+yzg4zdvP/9QG8tpdh1hu1GaLdI0m5fTJPic=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XJ2wVMP6oeCv2GMjeOm0YD3l3EXN0xvYQRaArKhqbXcJi/lNWtYs7qDSfg4TNpFHp
-	 tcHiVxH+QjxL8CjN1f+z89ZIvf1Hou6pJ+j3Gi4E0x7pkQH9tWnm9d/UEcIoEotgFM
-	 jEramHJxTxiy5ABlYpKM8jY/3lCZctNaM4HAj0ioXvpnzhunNw8rs1zD+Y1lvpO0ah
-	 zySagzh5ov5stXJ4/RdnmgKqzpmBViqdr2Aw/xyL+lqBNt0GxrcBa8WKGCkeNfiEa0
-	 KgL8Iw7YwmuN/1nwxruU2fGL9KgLKqXzIBVRIXaif+Z96HE8O2YrtJvwiBfYJm0ITH
-	 1rxAUcnnoRAVQ==
-Date: Thu, 1 Oct 2026 09:22:48 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, 
-	Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Robert Foss <rfoss@kernel.org>, Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>, 
-	Dave Stevenson <dave.stevenson@raspberrypi.com>, Javier Martinez Canillas <javierm@redhat.com>, 
-	dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, llvm@lists.linux.dev, linux-rpi-kernel@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, Benjamin Tissoires <bentiss@kernel.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-Message-ID: <ar4HOuO-vox9VIKZ@houat>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
- <20260928204059.GA515872-robh@kernel.org>
- <artyl8fD3zzng8Uh@houat>
- <20260929222822.GA2933878-robh@kernel.org>
- <ary8IdL9zVXfS2fA@houat>
- <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WWTEvHs+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC6E1F000FF;
+	Thu,  1 Oct 2026 09:25:41 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key, unprotected) header.d=zx2c4.com header.i=@zx2c4.com header.a=rsa-sha256 header.s=20210105 header.b=WWTEvHs+
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1790846740;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dRiq/gc/1/v3q1z4vqQ1Z479kjp0uI+oeZqHFxoYK3k=;
+	b=WWTEvHs+Glx9cwBY3B1J4eFsMVayAa8DZTePcEN0LwV8619xjbZb+A3Te+DbQ8bzZJ95Rl
+	nakLPPxk3P6NpEgkw8BAvLRde47zWZGiGtwlUURKwXZEieW6g5dYOrgW3q1U+6OPmcgwQQ
+	/6QP7vXzfWvWvdrBScZiV3GjkkHM4XE=
+Received: 
+	by mail.zx2c4.com (OpenSMTPD) with ESMTPSA id d847d3a4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Thu, 1 Oct 2026 09:25:39 +0000 (UTC)
+Date: Thu, 1 Oct 2026 11:25:35 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+Message-ID: <ar4nD8aRH7wEvTMt@zx2c4.com>
+References: <areYMjNcaqe86ds4@zx2c4.com>
+ <9d1c338b-368f-4ea2-a12e-c28d49adff5e@kernel.org>
+ <are6s5e6On3hpD3M@zx2c4.com>
+ <CAKwvOd=BrMfFT88jsvBPhh383qqk5G+J07CsofNu0MVkziyhCg@mail.gmail.com>
+ <20260930133813.GA3142230@ax162>
+ <ar0a4b9CjL2YHCkY@zx2c4.com>
+ <ar0gTS71qxnx9AkW@zx2c4.com>
+ <20260930151337.GD3142230@ax162>
+ <CAHmME9pA+AntJ6hWoFYpTVjh-NUSd0ZGXp5XiUuhQcq3HjQT3g@mail.gmail.com>
+ <ede392d7-3104-4a0f-9fa1-99b22552dcd6@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="eh5wavyv7nnca5rg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAL_JsqJCoWQmdBKEbekXb5LeLn1KcMiP2iG30r+npssJSZB5LA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ede392d7-3104-4a0f-9fa1-99b22552dcd6@kernel.org>
 
+On Thu, Oct 01, 2026 at 06:41:20AM +0200, Christophe Leroy (CS GROUP) wrote:
+> Hi,
+> 
+> Le 30/09/2026 à 17:16, Jason A. Donenfeld a écrit :
+> > On Wed, Sep 30, 2026 at 5:13 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> >>
+> >> On Wed, Sep 30, 2026 at 04:44:29PM +0200, Jason A. Donenfeld wrote:
+> >>> Nathan, would this be okay with you?
+> >>> https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.zx2c4.com%2Flinux-rng%2Fcommit%2F%3Fid%3Dd216701724b7d8209ff42150658ad5c712bdb503&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C8f69935bffb344bf0ddc08df1f05e358%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639263782324080837%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=BA7Fyr0%2FynggvBnR%2FpiCvNCQHtNBagqvSb0i11AvoLU%3D&reserved=0
+> >>
+> >> Can you stick
+> >>
+> >>    Cc: stable@vger.kernel.org # v6.12+
+> >>    Closes: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FClangBuiltLinux%2Flinux%2Fissues%2F2183&data=05%7C02%7Cchristophe.leroy2%40cs-soprasteria.com%7C8f69935bffb344bf0ddc08df1f05e358%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639263782324110679%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=6C8%2FAEQoh%2B8pfgfYQkL7qf5Ue%2F5sAGtfqRptzsSG0CM%3D&reserved=0
+> >>
+> >> on that? Otherwise, looks good to me, that's basically what I had for my
+> >> v3 locally.
+> > 
+> > Sure, done. Also removed the now-unused array_size.h include.
+> 
+> I'm still very sceptic with this patch. You are degrading the behaviour 
+> with GCC for a problem with CLANG. Why ?
+> 
+> Before the patch, with both GCC 13 and GCC 16 on powerpc32 I get a 
+> pretty standard optimised loop that clears words 4 by 4 (with auto 
+> increment of pointer) which is the most optimal on powerpc:
+> 
+>   3f0:	39 00 00 0c 	li      r8,12
+>   3f4:	35 08 ff fc 	addic.  r8,r8,-4
+>   3f8:	91 49 00 04 	stw     r10,4(r9)
+>   3fc:	91 49 00 08 	stw     r10,8(r9)
+>   400:	91 49 00 0c 	stw     r10,12(r9)
+>   404:	95 49 00 10 	stwu    r10,16(r9)
+>   408:	40 82 ff ec 	bne     3f4 <__c_kernel_getrandom+0x3f4>
+> 
+> With the patch,
+> 
+> With GCC 13 I get a very suboptimal loop copying bytes one by one
+> 
+>   3d8:	39 40 00 34 	li      r10,52
+> ...
+>   3e4:	39 20 00 00 	li      r9,0
+>   3e8:	7d 49 03 a6 	mtctr   r10
+>   3ec:	9d 3e 00 01 	stbu    r9,1(r30)
+>   3f0:	42 00 ff fc 	bdnz    3ec <__c_kernel_getrandom+0x3ec>
+> 
+> With GCC 16 I get something a bit better but not as good as before, it 
+> is a loop clearing words only one by one and incrementing pointer with 
+> an additional insn instead of using auto-increment instruction stwu.
+> 
+>   3e0:	39 40 00 0d 	li      r10,13
+> ...
+>   3f0:	7d 49 03 a6 	mtctr   r10
+>   3f4:	91 3f 00 00 	stw     r9,0(r31)
+>   3f8:	3b ff 00 04 	addi    r31,r31,4
+>   3fc:	42 00 ff f8 	bdnz    3f4 <__c_kernel_getrandom+0x3f4>
+> 
+> Please restrict the patch to clang builds.
 
---eh5wavyv7nnca5rg
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
-MIME-Version: 1.0
+Darn. Yea. The naive memset kills optimizations.
 
-On Wed, Sep 30, 2026 at 02:07:39PM -0500, Rob Herring wrote:
-> On Wed, Sep 30, 2026 at 3:04=E2=80=AFAM Maxime Ripard <mripard@kernel.org=
-> wrote:
-> >
-> > On Tue, Sep 29, 2026 at 05:28:22PM -0500, Rob Herring wrote:
-> > > On Tue, Sep 29, 2026 at 10:39:24AM +0200, Maxime Ripard wrote:
-> > > > On Mon, Sep 28, 2026 at 03:40:59PM -0500, Rob Herring wrote:
-> > > > > On Mon, Sep 28, 2026 at 06:22:01PM +0200, Maxime Ripard wrote:
-> > > > > > Most MIPI-DSI panel drivers follow an identical pattern: acquire
-> > > > > > regulators and GPIOs, perform a reset pulse with specific timin=
-g,
-> > > > > > send a vendor-supplied sequence of DSI commands, then enable the
-> > > > > > display. The only truly panel-specific part is the init sequence
-> > > > > > and power-on/off timing.
->=20
-> [snip a bunch of irrelevant shit]
->=20
-> > > > So, let's phrase this differently: what's different about the
-> > > > description than panel-mipi-dsi-spi, or any other binding already in
-> > > > tree?
-> > >
-> > > There's all of 3 panels supported. Compared to all the other panels we
-> > > have, hardly the rule over the exception. You can always fine "bad"
-> > > examples or exceptions.
-> > >
-> > > That one defines a single supply. Any other MIPI SPI panel with
-> > > different supplies or GPIO controls probably has its own binding. Try=
-ing
-> > > to parameterize that in DT doesn't work. We've rejected trying to do
-> > > that in DT over and over. What's your story here for that?
-> >
-> > Sigh... Look, I really don't care about an argument DT maintainers use
-> > at their discretion for this. We both know full well that it's been and
-> > still is inconsistenly applied, and you also know that it's not like
-> > I've been playing the DT game since pretty much the beginning (on ARM
-> > anyway). So it's not like I don't want to make it work, I do. But what I
-> > care about is enabling that driver to work.
-> >
-> > I reused exactly the same binding than the last major binding that was
-> > merged for panels, and support about the same number of panels. I guess
-> > that was a mistake, so sorry for that.
-> >
-> > I'm fine with reworking the binding any way you want as long as it still
-> > allows for the same use-case, but I would have hoped for a better
-> > feedback on how to do so than "oh what a huge pile of shit this is".
->=20
-> When you can answer my question above rather than make up shit I
-> didn't say, maybe I'll reply again on this thread. Otherwise I'm done
-> here. I don't need this abuse for the thankless job of DT
-> maintainership.
+Okay, new strategy:
 
-It's been the whole tone of the reviews, so I'm sorry if you were caught
-in the crossfire and you didn't mean that. And I'm sorry it made your DT
-maintainership work harder than it already is.
+- on clang, pass `-mllvm -max-store-memset=4294967295`
+- on gcc, pass `-finline-stringops=memset`
 
-I do mean what I said before though. I have no problem changing the
-binding the way you want, but I need to know what to change in the first
-place, otherwise it's really no better than a NAK, or we're bound to
-have the same exchange for the v2, and I'd rather not.
+And keep the same code. (Or, better, see if those options generate good
+code with b7bad082e113640fc81200ff869e5c2d7a9c29a2 reverted; I would
+prefer that simpler initializer.)
 
-I indeed missed your question, but now I'm not sure I understand what
-you mean by "paremeterize that in DT"? The supplies in the binding are
-an aggregate of all the possible supplies a panel can take. They are not
-a wildcard, but they all have their own semantics that are used by
-panels right now.
+Nathan, do these work?
 
-I don't expect any new supply to be introduced, unless there's a major
-panel technology change such as the one we had with the introduction of
-OLED.
-
-Would you prefer to reduce the number of supplies to the minimum we need
-right now, and extend it as needed?
-
-Maxime
-
---eh5wavyv7nnca5rg
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCar4KSAAKCRAnX84Zoj2+
-drKVAYDR/ZDwDXBZxoJ1vN0aVjc4QVJvpsXjDFhzm6g8ERdGmINbKbE3z4HYkf8L
-rASKMl0BfRPGtCXfDtr+Ev35B1QViTxFnNv9Js2+WdypHe0kKGcY7E/8p6hiGNzS
-J8y0tgD50Q==
-=lNbO
------END PGP SIGNATURE-----
-
---eh5wavyv7nnca5rg--
+Jason
