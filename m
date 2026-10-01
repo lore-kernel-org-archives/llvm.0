@@ -1,436 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2CE417993;
-	Thu,  1 Oct 2026 03:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263E8386568;
+	Thu,  1 Oct 2026 04:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790825021; cv=none; b=M2P/gqZnLgBXEW43N4KorV5e9eho7/xLrDjMqrczkwKkzZ4qwSzGuKpFt41vDhIM5tGiKKa30Yu/wqN2jMlS9FNlDIk/lagEGsBSUJo5LhJsBtCVMutWohgUowg4wdxYpHNzaT559TatLAXls8nZNZUsUpSokZGPLaCl7L/lUgU=
+	t=1790828265; cv=none; b=nWy3z2nlElIp+j5iKb9RTXaXW1d3p84vDO9iOXq98JaAg6s1vQrjyljOsI5nLNGJCeD3VevsCurPxA+tbgmHHBWIBp4bmu0206MqScLbjO19TgIUudclHwwXftsuQRuO+hnCrupQVET88Xl9AQ0MK5sxrM+g1H/i7yp0eLZjg4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790825021; c=relaxed/simple;
-	bh=n0VQUkM7psVneHq6eE2kgJarDqW8jDcm13ZW76pLkeY=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VUfY0zIcizeLhL5K8RM7IgvWzgr56jMaI4OQ/i0PlFeBZPRyDFRPOief1jrXieL4amRDGKI0dolDw1v4EcRwQXxD6Udjeca9ZanT7pbDgoHPXHmtB5DXNxuVk0vvpkdgEKosMpKjSy5EGMqDSkdMPocTQutbbSDEMu8CLB+E+Oo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k9ixlXPN; arc=none smtp.client-ip=198.175.65.16
+	s=arc-20240116; t=1790828265; c=relaxed/simple;
+	bh=c0l5bASEFBCSvyX+R6uc7HIWQlCgDmVnjysmFEiKLVg=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Y5PIdIIFojeDZEZM+3RukTmyXfLAvL40tvBgid66NL/5GLkLCORS3j5fI7WA2dKEE1sEQ4A7KlWJnyG7x4VY6eB7yrqXKqvKXFiFFmzoX0qBsHQaMLljk3Gk52844bA+Jgrde4lXvG0Uzi2QtgiaRa8vHOs/AIu2lJyvO/h3/7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eFXvKA+m; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k9ixlXPN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eFXvKA+m"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1790825019; x=1822361019;
-  h=date:from:cc:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=n0VQUkM7psVneHq6eE2kgJarDqW8jDcm13ZW76pLkeY=;
-  b=k9ixlXPNt7DgWeEbS7cEyCXINjdpkIXt9p/dh/byeemZs/owpfYsMuIX
-   +CsrnZwjnivGvncL9E5PGwZYQygg5zHhN2ZDhPLOfdWlrowBeFdjrkT2m
-   fbL3j4h4rk/i/Ov1bBQlTqhzycL1VBm3Fvdud1tBTGNTEEiDOiwBJ1+O5
-   xWaQ0dEY/SDJbSZOQbP5CV9WXQ69kt5HGeMglCzM3TGVwHJjC8HAKHY2X
-   r5awJUjiW8/M4LsPp+VScEWl4sIyW9BoBYteRzwz5b0PHeTyjo7Z6QJTK
-   wqiZi+RE24ADfRmMpV/Ysg88Ax8M52EtxtL8k65r7j7GlI69I36zLq/PB
+  t=1790828263; x=1822364263;
+  h=date:from:to:cc:subject:message-id;
+  bh=c0l5bASEFBCSvyX+R6uc7HIWQlCgDmVnjysmFEiKLVg=;
+  b=eFXvKA+mu7uy4/elZXITzULVvwBJrIpfP8lf51VLjsNVvjYpjCTC90Uj
+   HImBKOSkItwTQQRAcbwJEUjeH0RaBT1O5rr+5q0KyKK2lajXyLWBXxDsQ
+   iX2AaHw3c2EUnhJJm8Be39bxdI7RRTlQ8ULnJsywl4UBmm/pi9bGfHumr
+   BsgwctIMqCajXTIqIpiyf0B42eDnSH91n1z07UKLWI+DaSqWDx6JKkWOH
+   KFl1B4F7oj4U5HQK6MLHun+J6U4lrHta3UIypyxtmM2iPbODIy9wUE0ZW
+   sSKYLjwDgTw6YwyWXkZ+2IAedJuoq5F8HDf5DC9VFE79K9VAYe4f4rvXc
    g==;
-X-CSE-ConnectionGUID: nwxAaAE5SymQTxrckjcMGw==
-X-CSE-MsgGUID: 882v1VBgQAC40kaeoBlhOw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11921"; a="90786325"
+X-CSE-ConnectionGUID: BAjUf73+SEeOIatfKT6AgQ==
+X-CSE-MsgGUID: Mssb7DA1Q76w4QTWuYxT5g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11921"; a="109059202"
 X-IronPort-AV: E=Sophos;i="6.27,133,1787036400"; 
-   d="scan'208";a="90786325"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2026 20:23:39 -0700
-X-CSE-ConnectionGUID: 8plhJ/9eTPal6t+DJrxbdQ==
-X-CSE-MsgGUID: 5JI6zPWvRimmmlEsNKyTzA==
+   d="scan'208";a="109059202"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2026 21:17:42 -0700
+X-CSE-ConnectionGUID: injziqaGRPS1ttMvyoTksw==
+X-CSE-MsgGUID: KEE03gbeQkWhC7uLwbvXYw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,133,1787036400"; 
-   d="scan'208";a="275417031"
+   d="scan'208";a="279097123"
 Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 30 Sep 2026 20:23:37 -0700
+  by orviesa003.jf.intel.com with ESMTP; 30 Sep 2026 21:17:41 -0700
 Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xC7OQ-00000000RRv-3Qxr;
-	Thu, 01 Oct 2026 03:23:34 +0000
-Date: Thu, 1 Oct 2026 11:22:56 +0800
+	id 1xC8Ek-00000000RUZ-3owK;
+	Thu, 01 Oct 2026 04:17:38 +0000
+Date: Thu, 01 Oct 2026 12:16:51 +0800
 From: kernel test robot <lkp@intel.com>
+To: Jiri Pirko <jiri@nvidia.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: tracing: Make branch profiler counters atomic
-Message-ID: <202610011126.EYAl850m-lkp@intel.com>
-References: <202610011126.EYAl850m-lkp@intel.com>
+Subject: [jpirko-mlxsw:wip_attestation_pre_rfc_draft1 13/26] clang:
+ warning: no such include directory: 'kbuild/src/drivers/ctlv/tests'
+Message-ID: <202610011213.U0mDcSyt-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202610011126.EYAl850m-lkp@intel.com>
 
-Hi nanshuaibo,
-
-kernel test robot noticed the following build warnings:
-
-
-
-url:    https://github.com/intel-lab-lkp/linux/commits/nanshuaibo/tracing-Make-branch-profiler-counters-atomic/20260930-110728
-base:   
-patch link:    https://lore.kernel.org/r/202610011126.EYAl850m-lkp%40intel.com
-config: s390-randconfig-1001-20260930 (https://download.01.org/0day-ci/archive/20261001/202610011126.EYAl850m-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261001/202610011126.EYAl850m-lkp@intel.com/reproduce)
+tree:   https://github.com/jpirko/linux_mlxsw wip_attestation_pre_rfc_draft1
+head:   a18af4e1b514bf11f88ca42d29b7b68f3b375378
+commit: 7a94cd6833db466aa5cf2896495ef3692cd75429 [13/26] ctlv: Add the KUnit tests as their own module
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261001/202610011213.U0mDcSyt-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5f609f950d2e80addf5566623013db68394334db)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261001/202610011213.U0mDcSyt-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610011126.EYAl850m-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610011213.U0mDcSyt-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> arch/s390/kernel/nmi.c:63:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-      63 |         if (!nmi_needs_mcesa())
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
->> arch/s390/kernel/nmi.c:63:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   arch/s390/kernel/nmi.c:66:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-      66 |         if (cpu_has_gs())
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   arch/s390/kernel/nmi.c:66:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   arch/s390/kernel/nmi.c:76:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-      76 |         if (!nmi_needs_mcesa())
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   arch/s390/kernel/nmi.c:76:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   arch/s390/kernel/nmi.c:79:11: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-      79 |         origin = kmalloc(size, GFP_KERNEL);
-         |                  ^
-   include/linux/slab.h:1056:32: note: expanded from macro 'kmalloc'
-    1056 | #define kmalloc(size, flags)                    alloc_hooks(kmalloc_noprof(size, flags))
-         |                                                 ^
-   include/linux/alloc_tag.h:270:2: note: expanded from macro 'alloc_hooks'
-     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |         ^
-   include/linux/alloc_tag.h:257:2: note: expanded from macro 'alloc_hooks_tag'
-     257 |         if (mem_alloc_profiling_enabled()) {                            \
-         |         ^
-   note: (skipping 1 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   arch/s390/kernel/nmi.c:79:11: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/slab.h:1056:32: note: expanded from macro 'kmalloc'
-    1056 | #define kmalloc(size, flags)                    alloc_hooks(kmalloc_noprof(size, flags))
-         |                                                 ^
-   include/linux/alloc_tag.h:270:2: note: expanded from macro 'alloc_hooks'
-     270 |         alloc_hooks_tag(&_alloc_tag, _do_alloc);                        \
-         |         ^
-   include/linux/alloc_tag.h:257:2: note: expanded from macro 'alloc_hooks_tag'
-     257 |         if (mem_alloc_profiling_enabled()) {                            \
-         |         ^
+>> clang: warning: no such include directory: 'kbuild/src/drivers/ctlv/tests' [-Wmissing-include-dirs]
 --
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:589:3: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     589 |                 if (IS_ERR(hw_ptr)) {
-         |                 ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:589:3: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:597:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     597 |         if (ret)
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:597:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   In file included from drivers/clk/clk-rpmi.c:10:
-   In file included from include/linux/mailbox_client.h:10:
-   In file included from include/linux/device.h:31:
-   include/linux/device/devres.h:175:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     175 |         if (ret)
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   In file included from drivers/clk/clk-rpmi.c:10:
-   In file included from include/linux/mailbox_client.h:10:
-   In file included from include/linux/device.h:31:
-   include/linux/device/devres.h:175:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   In file included from drivers/clk/clk-rpmi.c:11:
->> include/linux/mailbox/riscv-rpmi-message.h:234:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     234 |         if (ret < 0)
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   In file included from drivers/clk/clk-rpmi.c:11:
->> include/linux/mailbox/riscv-rpmi-message.h:234:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:158:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     158 |         if (ret)
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:158:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:162:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     162 |         if (!resp || resp->status)
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   drivers/clk/clk-rpmi.c:162:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:80:4: note: expanded from macro '__trace_if_value'
-      80 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[0]), 0);\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   In file included from drivers/clk/clk-rpmi.c:8:
-   In file included from include/linux/clk-provider.h:10:
-   In file included from include/linux/of.h:15:
-   In file included from include/linux/bitops.h:6:
-   In file included from include/linux/bits.h:32:
-   include/linux/overflow.h:353:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-     353 |         if (check_add_overflow(addend1, addend2, &bytes))
-         |         ^
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-   include/linux/compiler.h:79:4: note: expanded from macro '__trace_if_value'
-      79 |                 (ftrace_branch_counter_inc(__if_trace.miss_hit[1]), 1) :\
-         |                  ^
-   include/linux/compiler.h:24:2: note: expanded from macro 'ftrace_branch_counter_inc'
-      24 |         __atomic_fetch_add(&(counter), 1, __ATOMIC_RELAXED)
-         |         ^
-   In file included from drivers/clk/clk-rpmi.c:8:
-   In file included from include/linux/clk-provider.h:10:
-   In file included from include/linux/of.h:15:
-   In file included from include/linux/bitops.h:6:
-   In file included from include/linux/bits.h:32:
-   include/linux/overflow.h:353:2: warning: misaligned atomic operation may incur significant performance penalty; the expected alignment (8 bytes) exceeds the actual alignment (4 bytes) [-Watomic-alignment]
-   include/linux/compiler.h:65:28: note: expanded from macro 'if'
-      65 | #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
-         |                            ^
-   include/linux/compiler.h:67:69: note: expanded from macro '__trace_if_var'
-      67 | #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
-         |                                                                     ^
-
-
-vim +63 arch/s390/kernel/nmi.c
-
-6c81511ca1f52a Martin Schwidefsky 2017-10-12  60  
-c7ed509b21b656 Alexander Gordeev  2021-12-10  61  void __init nmi_alloc_mcesa_early(u64 *mcesad)
-6c81511ca1f52a Martin Schwidefsky 2017-10-12  62  {
-6c81511ca1f52a Martin Schwidefsky 2017-10-12 @63  	if (!nmi_needs_mcesa())
-6c81511ca1f52a Martin Schwidefsky 2017-10-12  64  		return;
-c7ed509b21b656 Alexander Gordeev  2021-12-10  65  	*mcesad = __pa(&boot_mcesa);
-42805261fcea80 Heiko Carstens     2025-02-07  66  	if (cpu_has_gs())
-c7ed509b21b656 Alexander Gordeev  2021-12-10  67  		*mcesad |= ilog2(MCESA_MAX_SIZE);
-6c81511ca1f52a Martin Schwidefsky 2017-10-12  68  }
-6c81511ca1f52a Martin Schwidefsky 2017-10-12  69  
+>> clang: warning: no such include directory: 'kbuild/src/drivers/ctlv/tests' [-Wmissing-include-dirs]
+   drivers/ctlv/tests/event_kunit.c:18:10: error: 'linux/ctlv_fixture_gen.h' file not found with <angled> include; use "quotes" instead
+      18 | #include <linux/ctlv_fixture_gen.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |          "linux/ctlv_fixture_gen.h"
+   1 error generated.
+--
+>> clang: warning: no such include directory: 'kbuild/src/drivers/ctlv/tests' [-Wmissing-include-dirs]
+   drivers/ctlv/tests/message_kunit.c:18:10: error: 'linux/ctlv_fixture_gen.h' file not found with <angled> include; use "quotes" instead
+      18 | #include <linux/ctlv_fixture_gen.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |          "linux/ctlv_fixture_gen.h"
+   1 error generated.
+--
+>> clang: warning: no such include directory: 'kbuild/src/drivers/ctlv/tests' [-Wmissing-include-dirs]
+   drivers/ctlv/tests/metadata_kunit.c:17:10: error: 'linux/ctlv_fixture_child_gen.h' file not found with <angled> include; use "quotes" instead
+      17 | #include <linux/ctlv_fixture_child_gen.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |          "linux/ctlv_fixture_child_gen.h"
+   In file included from drivers/ctlv/tests/metadata_kunit.c:17:
+   drivers/ctlv/tests/linux/ctlv_fixture_child_gen.h:18:10: fatal error: 'linux/ctlv_fixture_gen.h' file not found
+      18 | #include <linux/ctlv_fixture_gen.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
+--
+>> clang: warning: no such include directory: 'kbuild/src/drivers/ctlv/tests' [-Wmissing-include-dirs]
+   drivers/ctlv/tests/registration_kunit.c:25:10: error: 'linux/ctlv_fixture_child_gen.h' file not found with <angled> include; use "quotes" instead
+      25 | #include <linux/ctlv_fixture_child_gen.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+         |          "linux/ctlv_fixture_child_gen.h"
+   In file included from drivers/ctlv/tests/registration_kunit.c:25:
+   drivers/ctlv/tests/linux/ctlv_fixture_child_gen.h:18:10: fatal error: 'linux/ctlv_fixture_gen.h' file not found
+      18 | #include <linux/ctlv_fixture_gen.h>
+         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   2 errors generated.
 
 --
 0-DAY CI Kernel Test Service
