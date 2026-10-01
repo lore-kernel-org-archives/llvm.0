@@ -1,121 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lr2-f33.google.com (mail-lr2-f33.google.com [74.125.230.97])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5733515DC;
-	Thu,  1 Oct 2026 11:03:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609C547C0F2
+	for <llvm@lists.linux.dev>; Thu,  1 Oct 2026 11:25:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.230.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790852606; cv=none; b=M44MAABGO3AWgEO9OpEiBzWKltKATxChcNaCkByLfYYrDMfbUbguLkDSlGbwB259/bTY3ZWv5tWPIgCCcUhYlqgX8s4ZsJIrIqpu9wFNc4jiPr8W8NJF21Zpns/JLuRYuXOl7UvdE2FpDZnZdJwXZIWGs+dRlViRPlJ7+MR7nTk=
+	t=1790853940; cv=none; b=UAruZRuVW6x5nDrYbjJLRz+9h+La/AyoPwRFnRSmrcptv3iMGPVwiNsyK9LDMSnPXWwcFWlErSwLFQtPxzUAudffOV1/oFjCwPL4btjz6co2t0yncHOSN0/mJq9RZ0PMGKZYIvW8ppBZ+BBTuOTm7dDwL6pkWfR30Oh/1IL3O1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790852606; c=relaxed/simple;
-	bh=O0/QxFdl2ndjhanTRY3quUScKMNB9fvz4AQnihf9wkQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dqXs/ZtKDFEpWdpdq23lxBLMZHuCCtu4LP3lxqRZiAf0ZKf675BXAqM7E+d/EkxT8Uj/r0kQEkpgAOX6Uj6h3D8s1rksYSnX1kZ9hnCvKe8tmAhRQiJVZZ7+F9vprf3McHT1i0lLGDTjtcHMgCrnUoGvcJvWynjGWWnM0DfoAgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilyZfZwc; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790853940; c=relaxed/simple;
+	bh=XXJE9lpazIypG2rFZXwci5NBfeM4Y59+X+ByKH1vibk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=R0dudZ7ZoAOjC2IjKmoZg8Lu9qtIrMATTRCw1TNYrhXfYfKDQSgIZdNY8nETjvHL49h93OxIW0gnob1438RfLOnwkQgKaaAg+5uol+5HiLqj8UIL7605Y5HfGCJRrK56qPDnKvKHz23cogTOAp0iS51UdZzVAZY5bvB3uEjh5F8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c4SOn/FO; arc=none smtp.client-ip=74.125.230.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilyZfZwc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E9AB1F00899;
-	Thu,  1 Oct 2026 11:03:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790852600;
-	bh=6Fz/XiVPQbxeCrS6Ooyx7iK8DZuaZzJa+GXwQ5Vs63Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ilyZfZwcyiaalOxi9FuCnkRKhUhFz2Rp84s1uKKcWMtsnqyjRTK4chwYRwfKNBpcG
-	 xSWBcawjlZQB5N6YjSTxTcpFx29bHpXUFY+OWY1TkZB40Znnbzavrt+0sofMnIlCUg
-	 Od59qfNTDltB+xCARwtpINaIAgDE6VSmDVPbipxbZz19xRjIq2SM0ui5Q0u18s0Gtl
-	 NeQeaadbEMr4KuuuBha6lwUTBYKyOGuVxY1TXFcDAM/cJYztQkrdJjzWvC7M2HCZFM
-	 aTGy5tCkS+EUw48u7uFYxLL2NBl9H+HwOLOBoQLTpCYdKAAi0YFeiPNJ2tJBVrTE2s
-	 KBIVWg2Z/PAVA==
-Date: Thu, 1 Oct 2026 13:03:10 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c4SOn/FO"
+Received: by mail-lr2-f33.google.com with SMTP id 38308e7fff4ca-3a7847d8aadso5839061fa.2
+        for <llvm@lists.linux.dev>; Thu, 01 Oct 2026 04:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1790853936; x=1791458736; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=0q1MEXEb22UrsB8iQVi8Js6TB9YSw4vDK0ti4byYbGo=;
+        b=c4SOn/FO/wdw0zSd7TllXBDAAYrWhU9O+oCcr3JyBmRmJfSmTGgbHLjTh1AVZfouF8
+         Q2hWgNYeZro1rd4Yznftx0ioCgArrA7NF+s5EaDwT3WUR+60TJMSG0VonOLesKooXYF4
+         NtGswd1Msr/V4JGLQSXzlcA7UpJ6nbI0g81DGgwUb1bYyC6/KyL1cY0exCpu7qFkHsFU
+         133jR8Y606uHdlbR589I6ptpP4ZUOtlXfRHbU4lzCU9q6VFFzWm5UETZkqrvuFwdM/Uw
+         /weOj/kfQdqszh6RHmVrEXl8W5RKZuYptjlN1sYMfbDd6ODX9A9pH7hoX/IqtqWAvJRs
+         EtcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790853936; x=1791458736;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=0q1MEXEb22UrsB8iQVi8Js6TB9YSw4vDK0ti4byYbGo=;
+        b=uiHd+CUqJaX2SWcO0eOX662stAV+urvx1Fkn7fbdYabPo25j2KJGuDxCAOTJ/xUeLl
+         6luNoMuzwDz0av65wRtPGiTJZ/Br/UVeckw4hI7RLBY5vb2PGD9EzpjxTtwWHyf6aMkI
+         ymmJkSuHIGPkLqO0hsymeS5Qw/sKpbBGyjihAtcJ2Gp+v+F0FxXjR3GiTLM8xciS8io8
+         OWnJwHKyPwFf23rKnXUupXeUp63xyOm5Da570VrTtcjnE/VtZnhRIf2C+PDSh+tc17dm
+         FCWDyzxyE+GCVJF9mvlF0Ydek4pO2J0yeM2PjcCn0pmGkDflXoho0oQyp2wK+DV9bZaH
+         QHSw==
+X-Forwarded-Encrypted: i=1; AKwUvBwnO9QuSdXktwBOBguLpodSoCG+2fqif85aBohMu/wgxHJ7SZRtRGC4u0ttoEIHLUMHEn2a@lists.linux.dev
+X-Gm-Message-State: AFq9FYJzBfG0+j8D6KH+kzS810FZeuz+VsmJc8FXFlJOb7V48Xstiiqp
+	je0Cn4VmtaDknsHMEA9bv3566OfxrGOT05S9pSUoU9pqKH0z44447Z1V
+X-Gm-Gg: AYBFou3tzHAf9qS+/ZegF4hYyxr4OWl05mf4iy/2HSHVqHu+OKhGlsBTtkZed+yQt/2
+	r4i0JIzOG5ejE6RiTIJarQTfC/hWqM2ghZzluO9pPXg8Ay+Gy3DEnlyf+UfO3Zj+Uh4MjsfFpVQ
+	7UuRDp17Rl5z+Bbe47UzjUD82GVlS0wyC++sS/56XjE31zegy9+p4HpQ22MF4/3xdIl+1P9nvcZ
+	6bryK95SPvMbJTI8OL8uf+7d5nQtr7UCzy54e6cgxeMpRDpyKtvHy5sEC7hP58Nzz1BtO8DgNZV
+	b4e4Eih598AH5h5/0eCRfzJ14jqD7guazsZ2LqU0/LdAsnXlQdPkhOYxW4lAq4v/OtNbOLSFaXG
+	yCezj8fIyfo5wV8Q1E/urZ1rZ6Robn1e6rA6XNN+gKfapt8lgF9Q5Eik/M3dx8ba8JNFRDvb0gp
+	JewbIxdtSCwrp5dOpozCYcQoaofcIlX9VnEhZthyEUYmSE1RK8JxzOv/ULF83ktGpV7Xvvf+LUI
+	YEd5rh1wvXUeUpK94XiEDWrfaSuajlqBTwbWM1urhDqIdtIyGAkdzopinBI0oIi+jBMPg==
+X-Received: by 2002:a2e:b814:0:b0:3a7:6f09:76c8 with SMTP id 38308e7fff4ca-3a779251d2amr9219071fa.24.1790853936130;
+        Thu, 01 Oct 2026 04:25:36 -0700 (PDT)
+Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a7717bd2a0sm14889991fa.8.2026.10.01.04.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Oct 2026 04:25:35 -0700 (PDT)
+From: Rupesh Majhi <zoone.rupert@gmail.com>
+To: andriy.shevchenko@intel.com
+Cc: Andy Shevchenko <andy@kernel.org>,
 	Bill Wendling <morbo@google.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Jonathan Cameron <jic23@kernel.org>,
 	Justin Stitt <justinstitt@google.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>, Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
- reserved in __cvdso_getrandom_data()
-Message-ID: <20261001110310.GA138012@ax162>
-References: <CAKwvOd=BrMfFT88jsvBPhh383qqk5G+J07CsofNu0MVkziyhCg@mail.gmail.com>
- <20260930133813.GA3142230@ax162>
- <ar0a4b9CjL2YHCkY@zx2c4.com>
- <ar0gTS71qxnx9AkW@zx2c4.com>
- <20260930151337.GD3142230@ax162>
- <CAHmME9pA+AntJ6hWoFYpTVjh-NUSd0ZGXp5XiUuhQcq3HjQT3g@mail.gmail.com>
- <ede392d7-3104-4a0f-9fa1-99b22552dcd6@kernel.org>
- <ar4nD8aRH7wEvTMt@zx2c4.com>
- <20261001102059.GA4176271@ax162>
- <ar46ap4jzLWyP92C@zx2c4.com>
+Subject: Re: [PATCH v10 1/4] iio: pressure: dps310: read buffered samples from the hardware FIFO
+Date: Thu,  1 Oct 2026 14:25:30 +0300
+Message-ID: <20261001112530.14594-1-zoone.rupert@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <arzl4DK8vhP0g8Hg@ashevche-desk.local>
+References: <20260930100158.957977-1-zoone.rupert@gmail.com> <20260930100158.957977-2-zoone.rupert@gmail.com> <arzl4DK8vhP0g8Hg@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ar46ap4jzLWyP92C@zx2c4.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 01, 2026 at 12:48:10PM +0200, Jason A. Donenfeld wrote:
-> On Thu, Oct 01, 2026 at 12:20:59PM +0200, Nathan Chancellor wrote:
-> > control. The change that introduced -max-store-memset only did it to
-> > "allow fine-tuning of the inlining threshold for performance analysis
-> > and optimization". If they decide to remove it for whatever reason,
-> > we're back to square one.
-> 
-> I suppose all the more reason to get -finline-stringops=memset added to
-> clang. Then the dual-default thing you came up with below will naturally
-> start choosing the first option when it becomes available.
+On Wed, Sep 30, 2026 at 01:35:12PM +0300, Andy Shevchenko wrote:
+> On Wed, Sep 30, 2026 at 01:01:55PM +0300, Rupesh Majhi wrote:
 
-Fair point, I can file an issue with LLVM upstream.
+...
 
-> > I know something like below would be uglier due to the ifdef but it
-> > would avoid changing anything for GCC while clearing up the issue at
-> > hand for clang in a guaranteed stable and succinct manner.
-> 
-> But then we're back to the byte-by-byte codegen that Christophe pointed
-> out.
+> > +	rc = devm_add_action_or_reset(dev, dps310_cancel_fifo_work, data);
+>
+> Are you sure it's in the correct location?
 
-I thought that was only because the fallback memset_inline() from v2 was
-doing a byte-by-byte initialization? With my suggested diff, nothing
-should change for GCC, as it does not have __builtin_memset_inline(), so
-the "Before the patch" code generation that Christophe showed should
-still be present.
+Yes, it has to run before the buffer is freed, since the work pushes
+into it. devm_delayed_work_autocancel() goes here in v11.
 
-> > If that is not acceptable, something like the following does appear to
-> > work for me.
-> 
-> Okay, great, let's do that.
-> 
-> Does this commit seem okay with you? I used the diff you sent below and
-> adjusted the commit message: https://git.zx2c4.com/linux-rng/commit/?id=56ff95ee85715047eb5b5220243778af657778c8
-
-Yeah, that seems fine to me, thanks for taking care of it!
-
--- 
-Cheers,
-Nathan
+Rupesh
