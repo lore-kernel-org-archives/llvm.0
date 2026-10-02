@@ -1,159 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com [209.85.167.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE683431E6;
-	Fri,  2 Oct 2026 18:22:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D461835DA64
+	for <llvm@lists.linux.dev>; Fri,  2 Oct 2026 19:12:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790965323; cv=none; b=MMt0AeyjnkLSL6OLpsOA5EdFTjwgvSiwZGC6LZwxi8MhTy+zjWfCijn8C/zlRtIaXl4rPHNoRX2xhxD7heZX1IHVvwG2fXg7Hb8TdTwHVdzCiGCt685YLGJ2ZJgA0M7Ob3Y/KyjUAITNJCiwXvBsfWMfSTdfBfyaPXw8P5gzHIk=
+	t=1790968378; cv=none; b=nF+JkMPg2VVSUQRmk8JXgNDfD3ETDdyY+cyt4vtzHVLb5Uk0xJqrqHRrdZnYz0QK+fWyGBKSjXhhXUVsc7v9DiuzQjCqtrcsILsW/uGEfwBdC7bLBjpZDljYGiuSSJ3wLHCFU1ABI+FtICLgH7wWJBeSlmdnDW6gUrSBB/7Y+1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790965323; c=relaxed/simple;
-	bh=uMBQhmDVpYAchsflbsSrypZqCGz7fzSiXPVqr4wXquc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gumKmMqR9wc6AU89w/HIzL/l27uFKv3ovfDeUtimF/wp+av9UxbajoniO/fLtA1WCB+iC7S2iP2uOogDHQrMUKTmZaK/8hoNcP/pzJAMeILhZ9GuPLj9Mn/t5gENJ3SUpMuj8Pz+jsYHFMIUTxcs0cZTf/Xt47WwYNs/U4UcpTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QXsaGbmn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790968378; c=relaxed/simple;
+	bh=VXYscRPCLO7/B51vHKehDNHl1fFhWkTSNPgHZbmLDBE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Ila/9AsW5S62xkqpT/w8j6UM0JJikxmZleyiLhqUo22ZEk8bIa71PcELZuX0q7fli1tX+4QXn3XsRVL+qUHngHsggG9X3u2VR4u+vTuWnMd106uvTgHNBkq0WZ1Eaf4awNFeqzw4taliIF42nQSwtcMVT1X6JN4uVwI8BjKQuXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qhvQnSIc; arc=none smtp.client-ip=209.85.167.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--justinstitt.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QXsaGbmn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3496D1F000FF;
-	Fri,  2 Oct 2026 18:21:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790965321;
-	bh=DRNHZG+0rjn+MS3ZH0CrvoAZYe+hwRcWZ5W/r+K9L0c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=QXsaGbmntNXtf8qGXbZm0VEFHH+Ktxq2NycVl9EA2UFJL5xoZ/7d0KfIdhvM22cGE
-	 5Br3otgO+SIMvA5iH1BDByi0k1+DbOmVY77NPu8uIBzzMghHQETQUbBZPcYRFv0a8z
-	 DRT4z9LSccwooBqwo4wg0YXKYC/2UL07N1MZQ4w/MUtqRI2DC5QYE+9qvmyD6dutEL
-	 pmpMLRcOBj6u8ddAC/t2x5aZ1IapKtAA4XNzeDWqBXI76qzsqx+oc5+bkxEYoavYYe
-	 /Q3H+GcrB9mDK4EhLPYavMssqFQA/PeSVeY0TOuLGECUEB+VovTtunZjz65tDBhUi5
-	 0EAsTq4zf3ulw==
-Message-ID: <2618625a-864d-43a4-b151-100e0d76ff87@kernel.org>
-Date: Fri, 2 Oct 2026 20:21:47 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qhvQnSIc"
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-4b26d8d2498so12091979b6e.2
+        for <llvm@lists.linux.dev>; Fri, 02 Oct 2026 12:12:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1790968375; x=1791573175; darn=lists.linux.dev;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ju7lYd5Yw64Z3Dvl1ezRi6rNcZFkDznJ7WatWUwaWnE=;
+        b=qhvQnSIcJnm5b4I66TFzjq8o7kXDvTwWKQOTphQZ7mtWp0vmxUN+8wkZiHx+sodWi5
+         htX1K3CddWe3br+zomfV4ozRLU4pl6xvfkBIwgLZvSW7v2vTAvsIM3A6Wf06BFl46/Ck
+         g1DPJwgXeaRFTBHzj8Hlki9L8xrpabIG8sQYt6Kw+QJleinMXk4AJISifUgiKBBDMuMn
+         voCsBbiVPEmcam+gFXSFxpvAaPaYrE+K2aUFCZwwWwIgnXjEZUXHMF28nC1DrIpWug1U
+         RcGlDZ48G7U4eQkXmDuaEqZ9G2H+P2NNo/Ayn0LG32Sb6r712yqQ/vq42chBd7pE7ZPE
+         LV4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1790968375; x=1791573175;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ju7lYd5Yw64Z3Dvl1ezRi6rNcZFkDznJ7WatWUwaWnE=;
+        b=bicuxrN2uwPpdsOu8/jpzjS992pOKAqRD8Oml9V1Va5wmeGj/7J5JcHQvamT4nr1Ip
+         2EpQwG1bHUi7Ct/bVBU+JEk7pfLSzuKKcoZifCbjdCgLAYkaES5NcAhSqs8y563M4d7G
+         dlem5sV4jMxpDsJOdVfl2jkH+q2KczAN71LvVSb5nIpfn8hmchaoBWp1plj/g2ymh/pt
+         Zf56tiaqmHF/rTyaO8SZMIzwMkxwebnqhePasUe9sgSXFO0QTB1I7jrzKwv9RrhBAFB0
+         CoM0pRbXwLrQVUUjqmrWT1ia7CHxvNCU4CjRTrpuMIFD7P8BhWKJ7DmkFCYa5b3qNtFs
+         fZgA==
+X-Forwarded-Encrypted: i=1; AKwUvBxZnezPQn97ToYDatEPIbqDBkESY7BTeCbP1NXWVbrjNDeckGWNn2dbISka28eVh1DhEvPf@lists.linux.dev
+X-Gm-Message-State: AFuF++lDdo/PXxdH9ruYLpV06pnmW1MUBRtx+8LYMhvqk/jlNLyaYSyp
+	Q8ZWjxChrLFttqXpdvXCwoL4MJ1rno36nNsyy/0Y+seuS6yQgMmqACPGViNDuibhr4zi8Biu4fx
+	HoAYOGf4ArPzw6thJxV6BJXQElg==
+X-Received: from jaso12.prod.google.com ([2002:a05:6638:124c:b0:5f9:6f05:3fd8])
+ (user=justinstitt job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6808:6409:b0:4d5:2b09:a6a8 with SMTP id 5614622812f47-4f67bb70fd6mr326114b6e.66.1790968374329;
+ Fri, 02 Oct 2026 12:12:54 -0700 (PDT)
+Date: Fri, 2 Oct 2026 12:12:53 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
- reserved in __cvdso_getrandom_data()
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Nathan Chancellor <nathan@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Theodore Ts'o <tytso@mit.edu>, Vincenzo Frascino
- <vincenzo.frascino@arm.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- llvm@lists.linux.dev
-References: <ar0a4b9CjL2YHCkY@zx2c4.com> <ar0gTS71qxnx9AkW@zx2c4.com>
- <20260930151337.GD3142230@ax162>
- <CAHmME9pA+AntJ6hWoFYpTVjh-NUSd0ZGXp5XiUuhQcq3HjQT3g@mail.gmail.com>
- <ede392d7-3104-4a0f-9fa1-99b22552dcd6@kernel.org>
- <ar4nD8aRH7wEvTMt@zx2c4.com> <20261001102059.GA4176271@ax162>
- <ar46ap4jzLWyP92C@zx2c4.com> <20261001110310.GA138012@ax162>
- <20261002094932.GA3435055@ax162> <ar-Dx-deXN93M24v@zx2c4.com>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <ar-Dx-deXN93M24v@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXM0QpAQBCF4VfRXNvanQ3lVeTCMhiKbQcpeXeLy
+ 6/+cy4QCkwCZXJBoIOF1yXCpAm0Y7MMpLiLBtSYG61RzeK9MpgpS7YhdE6bwkLMfaCez++qqn/ L7iZqt3cP9/0AJ59dH2wAAAA=
+X-Change-Id: 20261002-kspp-125-3e3ae2bb0173
+X-Developer-Key: i=justinstitt@google.com; a=openpgp; fpr=E8700888482CBCD3779E67F32D8CB922E382C412
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4319; i=justinstitt@google.com;
+ h=from:subject:message-id; bh=CMxtKQblFVuOs9yO0cOd0qjokWPxJqtBuipzA4VLqOk=;
+ b=owEBbQKS/ZANAwAKAS2MuSLjgsQSAcsmYgBqwAE2r0gF8ef+9zrb/Tnx5YDs+uDLCUy900v6U
+ kKaVNpzhvWJAjMEAAEKAB0WIQTocAiISCy803eeZ/MtjLki44LEEgUCasABNgAKCRAtjLki44LE
+ EruhEACo681vlkH22FDTfWSqCvpuIODD+WjYFnnSK5TVc/3YmBNBVYd34ULTGijvGhh39H7Z5bh
+ D5zUjNlbu7NXvlXE5QqoacRc/RPi3BQdxkrC+YGjiaS53nyoWkkFBsW+No4r11gRw1Pbu0UATKs
+ JgXyMbb4ev3Ep/c2eDhTgywCsvURzhy3rU/sCKgmZ+WuUtIwa0IGHuQKrwy/+iZxpLDnYlYzEl3
+ cigkyHDf1igCYUdh/vk24sBixs/AI+jWoy1+bHoOJsZt7jUwdd0/gZ9WRmflqhcHFRk+Dn6UdVY
+ uye+kEyRR45nNTnju6tfHs+dr2fJGjM/iJRrYpvbyJ83iwwjDSjiHLYZ+bYzndYwkhzTcYT/BZH
+ UEz580uo3+nA57hgzSjpX5vPQ2HcGlfTt6MC05E9TXMm4DKF8+5OTjc48EHSf1WTANbFtOnVJG0
+ iLvEv4eVD8lol8YXkv/dVdXM2rSpcM30sb3fUN6nFPiaLgJ0+ra7I9KF/3g+m5EMjfbV+UkFfVz
+ PDRP/fj+L2t/z0OKL29LkKqEcO05ZfW39dHP+ADHcI9wz5jx+LluT16T465qcdeAaMzfSsz4iqo
+ vervsLOV9SxujrHtS0bx/m2SyWMo4i45eCL3jyTtCj6JYM/j6ZCn2ytvyN/sxhTzUau88EK4uzr jmAdEgNtYEPzPBA==
+X-Mailer: b4 0.15.2
+Message-ID: <20261002-kspp-125-v1-1-91286a454fda@google.com>
+Subject: [PATCH] kunit/stackinit: Cover declarations bypassed by goto and switch
+From: Justin Stitt <justinstitt@google.com>
+To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>
+Cc: linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kselftest@vger.kernel.org, 
+	Justin Stitt <justinstitt@google.com>
+Content-Type: text/plain; charset="us-ascii"
 
+From: Justin Stitt <justinstitt@google.com>
 
+Under -ftrivial-auto-var-init= the initialization is emitted where a
+variable is declared. A switch dispatch that reaches a case label below
+the declaration, or a goto that jumps past it, never reaches that point,
+so the variable was left uninitialized.
 
-Le 02/10/2026 à 12:13, Jason A. Donenfeld a écrit :
-> On Fri, Oct 02, 2026 at 11:49:32AM +0200, Nathan Chancellor wrote:
->> On Thu, Oct 01, 2026 at 01:03:10PM +0200, Nathan Chancellor wrote:
->>> On Thu, Oct 01, 2026 at 12:48:10PM +0200, Jason A. Donenfeld wrote:
->>>> Does this commit seem okay with you? I used the diff you sent below and
->>>> adjusted the commit message: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.zx2c4.com%2Flinux-rng%2Fcommit%2F%3Fid%3D56ff95ee85715047eb5b5220243778af657778c8&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227648970%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=H27VGYLdNkvQiA6l%2BJNnEModMbEySwTMXpLAt8iAFiI%3D&reserved=0
->>>
->>> Yeah, that seems fine to me, thanks for taking care of it!
->>
->> Can you adjust the LLVM value by one from 4294967295 to 4294967294? ~0U
->> is actually a special value, so we hit an assertion in the SystemZ
->> backend.
->>
->>    https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fblob%2F3f48e22a1f321d5d3341bd812803694cea588785%2Fllvm%2Flib%2FCodeGen%2FSelectionDAG%2FSelectionDAG.cpp%23L9547&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227670583%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=u8petgY9wU9ur%2By4kaOrb6VFKL%2FNf4tcCIUL%2BcUcDfs%3D&reserved=0
->>    https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fblob%2F3f48e22a1f321d5d3341bd812803694cea588785%2Fllvm%2Flib%2FTarget%2FSystemZ%2FSystemZISelLowering.cpp%23L1470-L1471&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227686571%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=cSwt%2BTJdYa%2Bbwe8HyO6FsIq6oU6YNplRlwCa0upif9Q%3D&reserved=0
->>
->> clang: llvm/lib/Target/SystemZ/SystemZISelLowering.cpp:1471: virtual bool llvm::SystemZTargetLowering::findOptimalMemOpLowering(LLVMContext &, std::vector<EVT> &, unsigned int, const MemOp &, unsigned int, unsigned int, const AttributeList &, EVT *) const: Assertion `Limit != ~0U && "Expected EmitTargetCodeForMemXXX() to handle AlwaysInline cases."' failed.
->> PLEASE submit a bug report to https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fissues%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227701575%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=%2F3q8laZb%2FDhCWp117N9EtyxLIc5lq%2FzEN2l0z%2BXwDHY%3D&reserved=0 and include the crash backtrace and dumped files.
->> Stack dump:
->> 0.      Program arguments: ...
->> 1.      <eof> parser at end of file
->> 2.      Code generation
->> 3.      Running pass 'Function Pass Manager' on module 'arch/s390/kernel/vdso/vgetrandom.c'.
->> 4.      Running pass 'SystemZ DAG->DAG Pattern Instruction Selection' on function '@__kernel_getrandom'
->> ...
-> 
-> Holy smokes. Sure, fixed:  https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.zx2c4.com%2Flinux-rng%2Fcommit%2F%3Fid%3Deb13a1ff271b0d180687eebb30611b0b276d5193&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227716550%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=WcnFE6S72OrDTNNvU1T06BtUTyI1sDx%2F%2Btz%2FkpGslMA%3D&reserved=0
-> 
-> 
->  From eb13a1ff271b0d180687eebb30611b0b276d5193 Mon Sep 17 00:00:00 2001
-> From: Nathan Chancellor <nathan@kernel.org>
-> Date: Fri, 25 Sep 2026 22:46:32 +0100
-> Subject: [PATCH] random: vDSO: avoid call to memset() when zeroing reserved
->   parameter
-> 
-> After a recent change in LLVM [1], builds with the random vDSO
-> implementation, such as PowerPC and RISC-V, fail when checking the vDSO:
-> 
->    arch/powerpc/kernel/vdso/vdso32.so.dbg: dynamic relocations are not supported
->    arch/riscv/kernel/vdso/vdso.so.dbg: dynamic relocations are not supported
-> 
-> memset() is now generated when zeroing params->reserved for some builds
-> because LLVM has an optimization (now run in more instances) that can
-> recognize at compile time when it is assigning a static value to a
-> contiguous area of memory and turn that into a call to memset(). Both
-> clang and GCC assume memset() is always available [2].
-> 
-> Clang has an internal fiddly hook, -max-store-memset, which we can set
-> to a high number, to disable generating out of line memset calls [3].
-> Similarly, GCC has -finline-stringops=memset to do the same [4], should
-> this issue ever hit future version of GCC. While these options wouldn't
-> make sense for normal kernel code, it is fine for the extremely limited
-> and intentionally compact vDSO code.
-> 
-> Link: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fcommit%2F90cebef1411617fc3eedd359bdf00cb44b1c2439&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227732238%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=cYZ2nUalY%2F6yarydfMIlcGpDVlztXRBeg7UG7tpCO9g%3D&reserved=0 [1]
-> Link: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgcc.gnu.org%2Fonlinedocs%2Fgcc-16.2.0%2Fgcc%2FStandards.html%23index-ffreestanding&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227748542%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=vRl%2BQgL5GJ0wowXAIlRIczC5XqUXyOFUvFVe5C8XWAc%3D&reserved=0 [2]
-> Link: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fllvm%2Fllvm-project%2Fcommit%2Fb28eeb28bea39148738dc375e8a97072a1907e64&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227762721%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=nt59J3%2BOoiEKYGzfFfAq7WoAnEMAimt6vKDaJjhvHtg%3D&reserved=0 [3]
-> Link: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgcc.gnu.org%2Fonlinedocs%2Fgcc%2FOptimize-Options.html%23index-finline-stringops&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227777215%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=fyZA9XC%2FwSAUc346VWT%2FmyeqddqeTo62dBKtiJilR9U%3D&reserved=0 [4]
-> Closes: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2FClangBuiltLinux%2Flinux%2Fissues%2F2183&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C4caf8956c2d94439c19a08df206dd40b%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639265328227792263%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=49HfUDlzn%2FLUeISQ7%2BFR5jE7lZkqfORaqjauLn8cdm0%3D&reserved=0
-> Cc: stable@vger.kernel.org # v6.12+
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Commit 9cf016e6b49b ("lib: test_stackinit.c: XFAIL switch variable init
+tests") marked test_switch_1_none and test_switch_2_none as expected
+failures, noting the test should be retained "so that we can evaluate
+compiler fixes". Clang 24 emits the initialization on the jumps that
+bypass the declaration, so make the expectation depend on the compiler
+version instead of failing unconditionally.
 
-Ok, I checked the version that is in the rng tree, namely commit 
-eb13a1ff271b ("random: vDSO: avoid call to memset() when zeroing 
-reserved parameter"). Looks similar to this mail.
+Add test_goto_none as well. The existing cases only cover a declaration
+sitting between a switch and its first case label, while the compiler
+change covers plain goto too.
 
-It looks ok, no change to generated loop on powerpc32 neither with gcc 
-13 nor gcc 16.
+GCC continues to initialize only at the declaration, and reports as much
+with -Wtrivial-auto-var-init, so it keeps the expected-failure path.
 
-Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+Link: https://github.com/llvm/llvm-project/pull/181937
+Link: https://github.com/KSPP/linux/issues/125
+Link: https://llvm.org/pr44916
+Assisted-by: LLM
+Signed-off-by: Justin Stitt <justinstitt@google.com>
+---
+ lib/tests/stackinit_kunit.c | 53 ++++++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 47 insertions(+), 6 deletions(-)
 
-> ---
->   arch/arm64/kernel/vdso/Makefile     | 2 +-
->   arch/loongarch/vdso/Makefile        | 1 +
->   arch/powerpc/kernel/vdso/Makefile   | 1 +
->   arch/riscv/kernel/vdso/Makefile     | 1 +
->   arch/s390/kernel/vdso/Makefile      | 1 +
->   arch/x86/entry/vdso/vdso64/Makefile | 2 +-
->   init/Kconfig                        | 5 +++++
->   7 files changed, 11 insertions(+), 2 deletions(-)
-> 
+diff --git a/lib/tests/stackinit_kunit.c b/lib/tests/stackinit_kunit.c
+index ff2784769772..a0029f3b894d 100644
+--- a/lib/tests/stackinit_kunit.c
++++ b/lib/tests/stackinit_kunit.c
+@@ -493,6 +493,36 @@ static int noinline __leaf_switch_none(int path, bool fill)
+ 	return 0;
+ }
+ 
++static noinline int __leaf_goto_none(bool fill)
++{
++	goto bypass;
++	/*
++	 * This declaration is jumped over by the goto above, so it is
++	 * never reached. Compilers that initialize only at the point of
++	 * declaration leave this variable untouched.
++	 */
++	uint64_t var[10];
++
++bypass:
++	target_start = &var;
++	target_size = sizeof(var);
++	if (fill) {
++		fill_start = &var;
++		fill_size = sizeof(var);
++
++		memset(fill_start, (forced_mask | 0x55) & FILL_BYTE, fill_size);
++	}
++	memcpy(check_buf, target_start, target_size);
++
++	return 0;
++}
++
++static noinline int leaf_goto_none(unsigned long sp, bool fill,
++					  uint64_t *arg)
++{
++	return __leaf_goto_none(fill);
++}
++
+ static noinline int leaf_switch_1_none(unsigned long sp, bool fill,
+ 					      uint64_t *arg)
+ {
+@@ -506,13 +536,23 @@ static noinline int leaf_switch_2_none(unsigned long sp, bool fill,
+ }
+ 
+ /*
+- * These are expected to fail for most configurations because neither
+- * GCC nor Clang have a way to perform initialization of variables in
+- * non-code areas (i.e. in a switch statement before the first "case").
+- * https://llvm.org/pr44916
++ * A declaration whose definition point is jumped over, either by a switch
++ * dispatch reaching a "case" label below it or by a goto, used to be left
++ * uninitialized: the initialization is emitted where the variable is
++ * declared, and that point is never reached.
++ *
++ * Clang 24 and later emit the initialization on the jumps that bypass the
++ * declaration instead. GCC still initializes only at the declaration, and
++ * says so with -Wtrivial-auto-var-init.
+  */
+-DEFINE_TEST_DRIVER(switch_1_none, uint64_t, SCALAR, ALWAYS_FAIL);
+-DEFINE_TEST_DRIVER(switch_2_none, uint64_t, SCALAR, ALWAYS_FAIL);
++#if defined(CONFIG_CC_IS_CLANG) && CONFIG_CLANG_VERSION >= 240000
++# define BYPASS_PASS	WANT_SUCCESS
++#else
++# define BYPASS_PASS	XFAIL
++#endif
++DEFINE_TEST_DRIVER(switch_1_none, uint64_t, SCALAR, BYPASS_PASS);
++DEFINE_TEST_DRIVER(switch_2_none, uint64_t, SCALAR, BYPASS_PASS);
++DEFINE_TEST_DRIVER(goto_none, uint64_t, SCALAR, BYPASS_PASS);
+ 
+ #define KUNIT_test_scalars(init)			\
+ 		KUNIT_CASE(test_u8_ ## init),		\
+@@ -568,6 +608,7 @@ static struct kunit_case stackinit_test_cases[] = {
+ 	KUNIT_test_scalars(none),
+ 	KUNIT_CASE(test_switch_1_none),
+ 	KUNIT_CASE(test_switch_2_none),
++	KUNIT_CASE(test_goto_none),
+ 	/* STRUCTLEAK_BYREF should cover from here down. */
+ 	KUNIT_test_structs(none),
+ 	/* STRUCTLEAK will only cover this. */
+
+---
+base-commit: 5e0f8396d4805a3e7f753fa58c8c55f1f3cc2160
+change-id: 20261002-kspp-125-3e3ae2bb0173
+
+Best regards,
+--  
+Justin Stitt <justinstitt@google.com>
+
