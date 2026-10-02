@@ -1,205 +1,137 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD583DAAA8
-	for <llvm@lists.linux.dev>; Fri,  2 Oct 2026 09:04:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725DF470456;
+	Fri,  2 Oct 2026 09:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790931876; cv=none; b=q2YUJE2XTcdrPzjNzumsfPe3FlnD/LUsDtvKvP6HocWeocUxilhcDR87k9rdKcUtXw4vU6iC14VPDSlI4xEHVtaALpNtgylP29gEq7txMiyd2siShpA/pGiyCT/1asoioMCEHwujbIbylXBDQdQTYSqJkEuxTKN+uVSWr64zG6o=
+	t=1790932739; cv=none; b=XyeOzRTZSe2inKlrdAJF1DdsjW6RDfIOsBbnWaSb4rZYhovW/akuXwa6Ll5I6ZQtHBQQm0oW5kIiPbMPqP9jt6GcN82yNFQtl+Rj53U4zxRNAIr3grvcOJZUBp2JNlRUjvCBhPls+D6Rmj7FPei57GH/nXq4XTmwTw1A8Tov65A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790931876; c=relaxed/simple;
-	bh=tY9Wy2XAqCoXDTllUI2mZDj2RZgUx8/BhiDsHcHrl5o=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=oTfzbxGJDSlMD9nsfqhKlhyyons9L/zdNE0aMC+mKVVg9c1HuyqNGNbu+eoSq9CSqZFZkh8KCECVpn2dEGMTklXqEb1hpshKzBSxE3pijDjm8otiHA+YlITjNELXw1fneGGBDdb+t1EdHGjLy0r+YURfI88cScIJABT3LHFDdLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KAnj1HCx; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1790932739; c=relaxed/simple;
+	bh=suekEUMK13TAHHU4Cf2etsAqCGbQmsK5+r24aKbCtI4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gyByd98LZHdwDb6yM2MrFJwcm9PJUiDVZsrU908X7ViUQWMyxZfdRr5PIEjjk7rMgJerBhNFbKJc5wIeqjHMlCE3OSaiuMgXSvQXk1KgjfDXNJCF76xSPbVMHYYE6CtO/dcD6sgK+ZCiQtRRsk/K8RkjfpFWvfNGI8agl+ESMxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bib7a0PM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KAnj1HCx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1790931873;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OAmOlflbJV02//t0PYsWYtP2AS3mBRNwN6t9PgpiJVo=;
-	b=KAnj1HCxnkEkRYdl0O4l+7z31/Bm+Z+yt5BZxSBFKB73Ho8ykSUG8cGn4lu/MUvuLNpnKb
-	SMTtatkfcE3w8qpwyh9fr/3Ad3VMkwP9Xjlk1f7HG+qnhIhiN3HpUVfaxGKaE8mBkZ2zhO
-	UWs4fxvAWzAnsvhRVWDDtBbUDDHHZCY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-633-wL8yjLxzO4yb2DWeJfZafA-1; Fri, 02 Oct 2026 05:04:32 -0400
-X-MC-Unique: wL8yjLxzO4yb2DWeJfZafA-1
-X-Mimecast-MFC-AGG-ID: wL8yjLxzO4yb2DWeJfZafA_1790931871
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4a021b1b561so11729065e9.1
-        for <llvm@lists.linux.dev>; Fri, 02 Oct 2026 02:04:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790931871; x=1791536671;
-        h=content-type:mime-version:message-id:date:references:in-reply-to
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=OAmOlflbJV02//t0PYsWYtP2AS3mBRNwN6t9PgpiJVo=;
-        b=jJwnrrgHNVYIi3HEG9A+uXcrDUOHnEWrRBSKlJiXGseJmYwAp3lE9gV1G+wXaETmdr
-         0Nml9kQLVNPmznZusKvKA8Mmllowvbc+CX6SfFkSR57W1c9H/V20AWF16b/pf0kUQXDA
-         xRKXt+NNfAiDt1w4aVcgBa066EzvVlUY/ffSC1neD9AS+NMPOxqkavMGJE3zehlUVSYE
-         QmA8DnTA0jwOakeFE8GCMCLJi+wOVJpJZkrelZMhkIao5TgYfSWNFDQg6o7QytdeO+fg
-         TIeSXkcKOS4tGhM0aefBowPKMPZmBCgEMYQD9/tp8UP3w2uOG9jbJvs3znd+HsJaL1on
-         hFTA==
-X-Forwarded-Encrypted: i=1; AKwUvBwJbFK8+nWed6JRDH2OBnAEBs49ljUfCzviyL30PFBRSkEum1Ynt+Pis5kBVQ1WfJb7ECxj@lists.linux.dev
-X-Gm-Message-State: AFuF++mtFJKukiQAXePkqwen3VErDucDq8E5V5AW53ZzIbJK9Xu9nUMC
-	ePDDbzqJnViZI5y2U8rbJPAgquVmWx77QDkW//rlXwdG9G+7/6Vcz7jhk6wXLRys4Ue3HRJNc6S
-	aW/rMFyclPTEIw4tCul2gI9m9ZmrSwREe6+Win53oHg5+5wDaiux4Amo=
-X-Gm-Gg: AYBFou2nFh78Ge+llcJ/jagjxUUnqDe85Jv6LmH4P4ePPlyoC9njjJnvEDVTr+g19rO
-	7dqlPaKmope4oc7xLfdza5Rr02R9Dp5SksUyKGL1R3g36NNIKjgNWQm9x6XDe6KOAuAZ1axJSsS
-	mL7HT0Vc0d6YTmEtLycdNOTVsIkjAgfS7cB0rYOekq9s0PB5pJUfHDTBY7sOc08kikYBfTlfJCX
-	/oZ3TqqWtcGMmtfDquHY9+n2gTatuOwA52/n+kbWrVY+VqvfSJOaoM2XBx/W6/Yjg85FbAUqX1Y
-	uirP0k9u7Ip77zeq0PN1S0HTfK7P07gBvR8AEo4+2uxn5F+XlCD5gfRMoX5CGSJwDzmHr3vaQGt
-	D0+APsTHw1D+aNn0sEdIjKmcLi5sEM8jw6OXA1QXnbFGTzwRAJlXbe9QoXLS9aQnk4A==
-X-Received: by 2002:a05:600c:4e42:b0:49e:6050:9fbe with SMTP id 5b1f17b1804b1-4a027586525mr39355085e9.15.1790931871156;
-        Fri, 02 Oct 2026 02:04:31 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e42:b0:49e:6050:9fbe with SMTP id 5b1f17b1804b1-4a027586525mr39354405e9.15.1790931870651;
-        Fri, 02 Oct 2026 02:04:30 -0700 (PDT)
-Received: from localhost (62-151-111-63.jazzfree.ya.com. [62.151.111.63])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a027f2a4c4sm67197175e9.2.2026.10.02.02.04.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 02 Oct 2026 02:04:29 -0700 (PDT)
-From: Javier Martinez Canillas <javierm@redhat.com>
-To: Neil Armstrong <neil.armstrong@linaro.org>, Maxime Ripard
- <mripard@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>, Jessica Zhang
- <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nick
- Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Florian Fainelli
- <florian.fainelli@broadcom.com>, Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>, Andrzej Hajda
- <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>, Laurent
- Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman
- <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, Luca
- Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve <aesteve@redhat.com>,
- Dave Stevenson <dave.stevenson@raspberrypi.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-In-Reply-To: <a92aa0bb-d50f-4b67-a645-942090d4fe79@linaro.org>
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org>
- <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org>
- <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat>
- <xlv1wls4ebjq.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
- <828c9108-2db1-45a6-9301-19159a094301@linaro.org> <ar4CRTMQGs5_nGKY@houat>
- <2bd17843-4a65-49b0-9e10-7b73afb206b6@linaro.org>
- <xlv1cxtsft8e.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
- <a92aa0bb-d50f-4b67-a645-942090d4fe79@linaro.org>
-Date: Fri, 02 Oct 2026 11:04:28 +0200
-Message-ID: <xlv1a4owfp7n.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bib7a0PM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 854CD1F000FF;
+	Fri,  2 Oct 2026 09:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1790932738;
+	bh=kUPal21B/mSeq/i2I0fVbafYDiAiPgFaWqso5GBNYgw=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Bib7a0PM9uB/Juf5Fvu+oSR5+RsFmNc22FbQ3W8GIqtnemb+ACt71CTBw2sib4s92
+	 fFnF4433pDjiEGcg7x5zAEvURZ47Q+qrMo2IYrA95mk7vxbQjDv/9+rywF+rGaZ2P7
+	 MWKHtnnqTQ8pjgpyCRbNP4t/CulAsggec5uV/Q4dsuX2d3LyZTJU72PUMvHEvpTwms
+	 bQHF6mNjpQkROI+pb8cwG0OWRm4RbVW2IZfgTwGPNyr7ZCIRlyeoMH50oI1zzLRcfH
+	 fUDv5QFMQ3ZAiDD1vUKWIdfRDKrY3rzo4o2Sj1ojPFTeN/KT1OBRSYQl++2ya2NmOw
+	 blTAYWLPs3B3Q==
+Message-ID: <83a874fb-db66-4dc2-8e14-68c7e28ae27c@kernel.org>
+Date: Fri, 2 Oct 2026 11:18:51 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: 2-9NeMIAC87cYr0lzi4mJlfV2otHoyirHxIt0Ab8H_A_1790931871
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] random: vDSO: Avoid call to memset() when zeroing
+ reserved in __cvdso_getrandom_data()
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Theodore Ts'o <tytso@mit.edu>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>, Huacai Chen <chenhuacai@kernel.org>,
+ WANG Xuerui <kernel@xen0n.name>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <are6s5e6On3hpD3M@zx2c4.com>
+ <CAKwvOd=BrMfFT88jsvBPhh383qqk5G+J07CsofNu0MVkziyhCg@mail.gmail.com>
+ <20260930133813.GA3142230@ax162> <ar0a4b9CjL2YHCkY@zx2c4.com>
+ <ar0gTS71qxnx9AkW@zx2c4.com> <20260930151337.GD3142230@ax162>
+ <CAHmME9pA+AntJ6hWoFYpTVjh-NUSd0ZGXp5XiUuhQcq3HjQT3g@mail.gmail.com>
+ <ede392d7-3104-4a0f-9fa1-99b22552dcd6@kernel.org>
+ <ar4nD8aRH7wEvTMt@zx2c4.com> <20261001102059.GA4176271@ax162>
+ <ar46ap4jzLWyP92C@zx2c4.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <ar46ap4jzLWyP92C@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-Hello Neil,
 
-Neil Armstrong <neil.armstrong@linaro.org> writes:
+Le 01/10/2026 à 12:48, Jason A. Donenfeld a écrit :
+> On Thu, Oct 01, 2026 at 12:20:59PM +0200, Nathan Chancellor wrote:
+>> control. The change that introduced -max-store-memset only did it to
+>> "allow fine-tuning of the inlining threshold for performance analysis
+>> and optimization". If they decide to remove it for whatever reason,
+>> we're back to square one.
+> 
+> I suppose all the more reason to get -finline-stringops=memset added to
+> clang. Then the dual-default thing you came up with below will naturally
+> start choosing the first option when it becomes available.
+> 
+>> I know something like below would be uglier due to the ifdef but it
+>> would avoid changing anything for GCC while clearing up the issue at
+>> hand for clang in a guaranteed stable and succinct manner.
+> 
+> But then we're back to the byte-by-byte codegen that Christophe pointed
+> out.
+>   
+>> If that is not acceptable, something like the following does appear to
+>> work for me.
+> 
+> Okay, great, let's do that.
+> 
+> Does this commit seem okay with you? I used the diff you sent below and
+> adjusted the commit message: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgit.zx2c4.com%2Flinux-rng%2Fcommit%2F%3Fid%3D56ff95ee85715047eb5b5220243778af657778c8&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7Cd89b4de22ff94b6be71208df1fa9839a%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C639264485055490029%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=Vxf8xRCdLavtw4Dmi%2B49FY1lJDWtm%2BjKv7f8BxKTGq4%3D&reserved=0
+> 
 
-> On 10/2/26 09:37, Javier Martinez Canillas wrote:
->> Neil Armstrong <neil.armstrong@linaro.org> writes:
->> 
->> Hello Neil,
->> 
->>> On 10/1/26 08:50, Maxime Ripard wrote:
->> 
->> [...]
->> 
->>>>>
->>>>> I don't want to add a supplementary maintenance burden for the sake of using a cool
->>>>> technology which has serious drawbacks and dependencies on user-space even if looks
->>>>> really cool.
->>>>
->>>> Spoiler alert: v2 won't. I've got the in-kernel loader to work and thus
->>>> you can have a built-in panel driver that works without user-space
->>>> intervention. So this is not a topic of discussion anymore.
->>>
->>> It will still have users-space dependency, meaning the BPF files will need to
->>> exist in the fs when drivers probes.
->>>
->> 
->> It doesn't have to AFAIU. The BPF programs could be built into the kernel
->> image, just like firmware binaries could be built-in as well.
->
-> Right so my main question still is: what does it solve exactly ?
->
-> All the descriptions I saw so far is that it simply moves
-> the panel C code to a BPF code with no other additions.
->
-> I still don't have a clear view of what is precisely solves.
->
-> It adds some complexity to load those BPF driver, adds some
-> maintenance complexities since with every API change we will
-> need validate BPF still works in addition to C (and maybe one day Rust).
->
+The commit message says: Similarly, GCC has -finline-stringops=memset to 
+do the same [4], should this issue ever hit future version of GCC.
 
-https://www.kernel.org/doc/Documentation/bpf/bpf_design_QA.rst doc makes
-it clear that BPF programs can't expect the in-kernel API to be stable,
-so you as mantainer don't have constraints due the panel API being used
-by BPF programs.
+Why default "-finline-stringops=memset" if 
+$(cc-option,-finline-stringops=memset), have we identified cases where 
+build fail without that or is it just for future provision ?
 
-In other words, this shouldn't cause additional burden to you (other than
-the code in drm/panel/bpf/, but that is also true for any panel driver).
+As shown in my previous email, with GCC 16 on powerpc32 we get a 
+slightly better code without this option.
 
-> As the maintainer of the panels, merging a bunch of new panels at each
-> releases and helping migrating to newer and modern way to interact
-> with panels, I think I have the right to express my interrogations.
->
+---
+diff --git a/init/Kconfig b/init/Kconfig
+index 8583d9f06c52..98d8d7fa64c5 100644
+--- a/init/Kconfig
++++ b/init/Kconfig
+@@ -173,6 +173,11 @@ config CC_HAS_ALLOC_TOKEN
+  config CC_HAS_MULTIDIMENSIONAL_NONSTRING
+  	def_bool $(success,echo 'char tag[][4] __attribute__((__nonstring__)) 
+= { };' | $(CC) $(CLANG_FLAGS) -x c - -c -o /dev/null -Werror)
 
-Absolutely.
-
-> I'm clearly not the oldest kernel contributor & maintainer around here,
-> but the main interrogation I have when submitting, reviewing and
-> merging is : does it really solve something efficiently.
->
-
-It does. As mentioned, this could make it easier to have some panels
-working with an existing kernel without any modifications (or out-of-tree
-modules). I wouldn't say to prototype it, because as Maxime said, it could
-even be a proper support. But you get the idea.
-
-So just like sched_ext can be used to extend the scheduler (and some of
-those extensions might even end in some of the scheduling classes once
-are found to be generally useful), this driver could be used to quickly
-add support for new panels.
-
-> I don't want people to be frustrated by my review and question,
-> but I feel I'm allowed to say I'm not convinced about this solution.
->
-
-Yes, of course. From a bystander, I think making assumptions or taking
-a decision prior to understanding the use case is what might had caused
-frustration. But as Maxime said, it would be helpful to have these
-discussions in person next week at LPC.
-
-I'll also be there, I'm looking forward to meet you in person.
-
-> Neil
->
-
--- 
-Best regards,
-
-Javier Martinez Canillas
-Core Platforms
-Red Hat
++config CC_OPT_INLINE_MEMSET
++	string
++	default "-finline-stringops=memset" if 
+$(cc-option,-finline-stringops=memset)
++	default "-mllvm -max-store-memset=4294967295" if $(cc-option,-mllvm 
+-max-store-memset=4294967295)
++
+  config LD_CAN_USE_KEEP_IN_OVERLAY
+  	# ld.lld prior to 21.0.0 did not support KEEP within an overlay 
+description
+  	# https://github.com/llvm/llvm-project/pull/130661
 
