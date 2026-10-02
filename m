@@ -1,79 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2328497B97;
-	Fri,  2 Oct 2026 13:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6290B470EB1;
+	Fri,  2 Oct 2026 13:41:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790948163; cv=none; b=mJqxFmiQiB59sK6dBVFlR76PVjwEywLGW7x4hdI6mP8W2nCgN1P25utmpgQbubqg0QiOwdMGx2Ayw8YZRGX7beNdgyhW691nU+nImaR+l3jWNMq6AoFkqtvxgo3ozBPprprR4+LjC4KIwOyOJSV8IIehfoU2Z4J4V+k5GE9IZ2E=
+	t=1790948473; cv=none; b=niw7WXYtmfj5LaKN3XDnbwxtxh3GsQC/ROrAiJzN3sCTaP7zLWhFOUJaCq1tyHwoRJfoLZYAewvIzqmxGlou83P5DJm1EzQwZnVU0sqkDvpGL6y68KUF410C2k3l8XqBv4LL7G+6k1bRaj22tjap+xexRcmEfTM/B7l8J+/dm18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790948163; c=relaxed/simple;
-	bh=5bULqvI0XbbfXWCWHEn/inHGt2Q7HhkEwuvDJJMqTFc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qL6WedtDlLX+IJvtiw1dfETvuy6IRExd9kMEKcBBfHJ63gE0do4GJw+SwcX1M0IhByaBhwHXsNyjr1Px45WsEunNEzECl6nTWBicyO0LJlEQFIUO3ts4kOUL87EPPXxc+2MUgAETD1taYJTpIUk0beks97zSR8uCIeKvQlcnzKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DBJpr6EE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1790948473; c=relaxed/simple;
+	bh=/xDkvlh5pUUk66Tu4SclvOxqA0SlPbhGAdFW0Qiiv9w=;
+	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qzly1Ui/G6A6x+Rw3ILDMIk20jMoBPG7LKKGkDoaZ0OUkJ+0s2H0brSXAmIo5UtwVkKywYWbp5j+iimMbVGg1YndxOhkmsLVB0zYpJBDqk8WuLFqnwEL5iaJLEIjJEkdUksqfDOLB9LYR+XO59tGgMMG8J/4rHVo4m2NhvWknIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chhPuW+i; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DBJpr6EE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0AB41F000FF;
-	Fri,  2 Oct 2026 13:35:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1790948161;
-	bh=yjbi9/c1VrImWNtJEnP+BlHeSMxTK9lWfNpXD7dyXn4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=DBJpr6EEspHlhw3V+cgQv5AtHdoUAjDZ+NvGoFmXvakvXHMf/y8FQaUlrebt+chyu
-	 qOlXWV2L/di5rTJ+TGwrrwrmdPkWECJ+/oiAuRTSH8DmKVZtEWv/TwUpYOdTuVLBkt
-	 jxk7RrvHHtfcHMjymiP+flXfKrFqsu8qLCBulLgxQ8TD/97axXTX/yUJvsEhw1AoCd
-	 l0L9/TkJCVSSZnCKxHFmoOltPP9y/UuwAC6egNNM0A99rTaPppXLIkyRqevCf/7SCV
-	 C3orf732YFpueQK+jI5XFvyst54YP82P1vmUWbaruSCvAhynt5o8zykhiRSWMelPkw
-	 7Jzsw6iW4HAgw==
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-To: Bill Wendling <morbo@google.com>
-Cc: Christophe Leroy <chleroy@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
-	codemender-patching+linux@google.com
-Subject: Re: [PATCH] bus: fsl-mc: Annotate fsl_mc_io.portal_virt_addr with __counted_by_ptr
-Date: Fri,  2 Oct 2026 15:35:47 +0200
-Message-ID: <179094814058.161441.1021426703218235186.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260922223538.2287676-1-morbo@google.com>
-References: <20260922223538.2287676-1-morbo@google.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chhPuW+i"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790948470; x=1822484470;
+  h=date:from:cc:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=/xDkvlh5pUUk66Tu4SclvOxqA0SlPbhGAdFW0Qiiv9w=;
+  b=chhPuW+iN5gKqtpkxCfG5PDcHS+npTqtQBknKIkNLVyFrB+Ua2NX4q+F
+   xg8H+Okn6QrTO/23FNKWbnF8msC9r6/cBPoW9kv9W/8ynmHsTutOFD/Od
+   C4vF9OkYM66wsdB4J9APNXeeB4uIugJeLOp1lbr3fjaU572ZYCe3BzSAo
+   0iH6QRM3sSSmodizuhqE62YxUYLBfxcdxhns8jtzpkdrIBo2BBp3pJ9Iu
+   FzMYrcvlPqk8BIABOBdYX+DK/9gB7V+E0q21ymj8a5mNUk/FnbrUuNmzD
+   VltU/XDDbJAwbohpxlAWIGiMyOXk9Xor6+Me2cUSXlL+ifBhuJgRkk2s1
+   Q==;
+X-CSE-ConnectionGUID: RldwDYuTQlK3/lvu6/YYGA==
+X-CSE-MsgGUID: otqujt4UQkOQ2nPiMuJExw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11923"; a="102235827"
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="102235827"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 06:41:09 -0700
+X-CSE-ConnectionGUID: dHoA7//bSxKUJ14v1yFTZg==
+X-CSE-MsgGUID: MwAFSdB+SqOAZ6+UTyuCMw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="274341163"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 02 Oct 2026 06:41:08 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xCdVZ-00000000T5p-3qCf;
+	Fri, 02 Oct 2026 13:41:05 +0000
+Date: Fri, 2 Oct 2026 21:40:13 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: staging: greybus: audio: Fix no terminating newline in sysfs emit
+Message-ID: <202610022114.wXqBfrwZ-lkp@intel.com>
+References: <202610022114.wXqBfrwZ-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=704; i=chleroy@kernel.org; h=from:subject:message-id; bh=FzGXoQmG9DwM4d/cV6mXr3MHN7XZR/N+SpZKV92FTfw=; b=owGbwMvMwCV2d0KB2p7V54MZT6slMWTt32zsfK8k2dpj28ZjnnFLohdU2pRd+5TqcqyrJDI3b vUXpe8cHaUsDGJcDLJiiizH/3PvmtH1JTV/6i59mDmsTCBDGLg4BWAiHxUZGfa+/OR2M5D9n7zJ p/JtUo8OHXt4eN6Wb6kzV156+Uc+jPU9I8PMHUsEJ+pZJjO883r71Cvuqn7FVFXjJ9Of2C1ZUBB /JZIPAA==
-X-Developer-Key: i=chleroy@kernel.org; a=openpgp; fpr=10FFE6F8B390DE17ACC2632368A92FEB01B8DD78
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202610022114.wXqBfrwZ-lkp@intel.com>
+
+Hi Raiden,
+
+kernel test robot noticed the following build errors:
 
 
-On Tue, 22 Sep 2026 22:35:38 +0000, Bill Wendling wrote:
-> The GCC and Clang compilers provide the __counted_by_ptr attribute,
-> which is used by KASAN and compiler bounds-checking to detect
-> out-of-bounds accesses to pointer fields.
-> 
-> In "struct fsl_mc_io", the "portal_virt_addr" pointer points to the MC
-> command portal virtual address. The size of this allocated portal in
-> bytes is tracked by the "portal_size" field within the same structure.
-> 
-> [...]
 
-Applied, thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/Raiden-Horner/staging-greybus-audio-Fix-no-terminating-newline-in-sysfs-emit/20261001-111458
+base:   
+patch link:    https://lore.kernel.org/r/202610022114.wXqBfrwZ-lkp%40intel.com
+config: x86_64-randconfig-1006-20261002 (https://download.01.org/0day-ci/archive/20261002/202610022114.wXqBfrwZ-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261002/202610022114.wXqBfrwZ-lkp@intel.com/reproduce)
 
-[1/1] bus: fsl-mc: Annotate fsl_mc_io.portal_virt_addr with __counted_by_ptr
-      commit: df0fd0f5af4ddd84a76e21da8e6b489928c5e300
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610022114.wXqBfrwZ-lkp@intel.com/
 
-Best regards,
--- 
-Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+All errors (new ones prefixed by >>):
+
+>> drivers/staging/greybus/audio_manager_module.c:180:46: error: passing 'char *const[7]' to parameter of type 'char **' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+     180 |         kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
+         |                                                     ^~~~
+   include/linux/kobject.h:283:10: note: passing argument to parameter 'envp' here
+     283 |                         char *envp[]);
+         |                               ^
+   1 error generated.
+
+
+vim +180 drivers/staging/greybus/audio_manager_module.c
+
+8db00736d365b7 Svetlin Ankov    2016-01-13  151  
+8db00736d365b7 Svetlin Ankov    2016-01-13  152  static void send_add_uevent(struct gb_audio_manager_module *module)
+8db00736d365b7 Svetlin Ankov    2016-01-13  153  {
+8db00736d365b7 Svetlin Ankov    2016-01-13  154  	char name_string[128];
+8db00736d365b7 Svetlin Ankov    2016-01-13  155  	char vid_string[64];
+8db00736d365b7 Svetlin Ankov    2016-01-13  156  	char pid_string[64];
+d0af1bd5f6f449 Pankaj Bharadiya 2016-10-16  157  	char intf_id_string[64];
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  158  	char ip_devices_string[64];
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  159  	char op_devices_string[64];
+8db00736d365b7 Svetlin Ankov    2016-01-13  160  
+757f49b7d08da4 Raiden Horner    2026-10-01  161  	char * const envp[] = {
+8db00736d365b7 Svetlin Ankov    2016-01-13  162  		name_string,
+8db00736d365b7 Svetlin Ankov    2016-01-13  163  		vid_string,
+8db00736d365b7 Svetlin Ankov    2016-01-13  164  		pid_string,
+d0af1bd5f6f449 Pankaj Bharadiya 2016-10-16  165  		intf_id_string,
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  166  		ip_devices_string,
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  167  		op_devices_string,
+8db00736d365b7 Svetlin Ankov    2016-01-13  168  		NULL
+8db00736d365b7 Svetlin Ankov    2016-01-13  169  	};
+8db00736d365b7 Svetlin Ankov    2016-01-13  170  
+8db00736d365b7 Svetlin Ankov    2016-01-13  171  	snprintf(name_string, 128, "NAME=%s", module->desc.name);
+8db00736d365b7 Svetlin Ankov    2016-01-13  172  	snprintf(vid_string, 64, "VID=%d", module->desc.vid);
+8db00736d365b7 Svetlin Ankov    2016-01-13  173  	snprintf(pid_string, 64, "PID=%d", module->desc.pid);
+d0af1bd5f6f449 Pankaj Bharadiya 2016-10-16  174  	snprintf(intf_id_string, 64, "INTF_ID=%d", module->desc.intf_id);
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  175  	snprintf(ip_devices_string, 64, "I/P DEVICES=0x%X",
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  176  		 module->desc.ip_devices);
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  177  	snprintf(op_devices_string, 64, "O/P DEVICES=0x%X",
+a9234bfd6cec44 Vaibhav Agarwal  2016-03-30  178  		 module->desc.op_devices);
+8db00736d365b7 Svetlin Ankov    2016-01-13  179  
+8db00736d365b7 Svetlin Ankov    2016-01-13 @180  	kobject_uevent_env(&module->kobj, KOBJ_ADD, envp);
+8db00736d365b7 Svetlin Ankov    2016-01-13  181  }
+8db00736d365b7 Svetlin Ankov    2016-01-13  182  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
