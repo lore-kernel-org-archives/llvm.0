@@ -1,68 +1,68 @@
 Received: from mail-wm2-f13.google.com (mail-wm2-f13.google.com [74.125.225.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E4B4189C2
-	for <llvm@lists.linux.dev>; Fri,  2 Oct 2026 07:29:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ACE7412C0F
+	for <llvm@lists.linux.dev>; Fri,  2 Oct 2026 07:30:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790926145; cv=none; b=ovvrScTisOI0oHiNnjFvFjR8fmz5dLLvmWZdVjkMNc7bUSOdA3gDCpqU2yHiGjAdRhxLs+GMJ0Ed9sVhU0wXKgWkX0a8jeQFU5mBvmmGl5IK6M1JmPfqrep+5XDWCEhFdEm+G+5gD7/tUt98/YBKTHZrnf3l1SSzT29BJ5pUFEk=
+	t=1790926216; cv=none; b=a1dsd+TTGfyWrtVqaBpPhhHcc0IKEnTXIP9GEJBxqkQ1yve1Eim+FAI2ud2FECFNHzYzrpr2HqAuw1R4R7SVB5se7QY2YP2Bj4dDL9/jjkR3YxwFHw/0znb5uhO1afxErTcvdGsZkXBhxe7Rs/RUNOs40FA6QuxVL3hboDrHOlE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790926145; c=relaxed/simple;
-	bh=BTuGr8m9qHOpmcjHfKxzvSU/3vPYu8rA2unWoXylLKk=;
+	s=arc-20240116; t=1790926216; c=relaxed/simple;
+	bh=wMMtCDXpiqei1jhiGiPdThCggE5+d/NY6xuXJoVy9Pk=;
 	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Dd/dwIy+TbQg5Cd08S5+lahwyxPyXumoIlIgNO44xp9u2eAfAnmsRYQkkPJ+39oa4b5cHichZapHM51BGhHChwDlo5pc40UEHYh2+6zyiHrXyEHRPWT5fgHpJVSFOh3DFkNe2MaZynaqUE75f/ntr41zzMAg8V6otgPxfunvHnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U5oSqwiq; arc=none smtp.client-ip=74.125.225.141
+	 In-Reply-To:Content-Type; b=hCbldK8TZh0nIHMPbj6vLYuoc3Wdj4yYFEL+1GR3B2uYzO3fVepT07ryMdHDoLwjqghAWKx4wor0sUbxZo0bcvxznYspJV+ELVW6hsI1MM6ZKwLy5GKkiyQkZ58tX7w8jQJpP43V2LBKYwsgT2X0bruM2Dx9D84oXFk0qIjr2tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Hw4/RHO3; arc=none smtp.client-ip=74.125.225.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U5oSqwiq"
-Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49d1fb0cf5eso66160145e9.3
-        for <llvm@lists.linux.dev>; Fri, 02 Oct 2026 00:29:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Hw4/RHO3"
+Received: by mail-wm2-f13.google.com with SMTP id 5b1f17b1804b1-49e7bcb94d3so55538595e9.2
+        for <llvm@lists.linux.dev>; Fri, 02 Oct 2026 00:30:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790926141; x=1791530941; darn=lists.linux.dev;
+        d=linaro.org; s=google; t=1790926212; x=1791531012; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:in-reply-to:organization
          :autocrypt:content-language:references:cc:to:subject:reply-to:from
          :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=6zplr7QU6lV0JIsmwOjHD1EDA7HxZc99c9t5ZOt0FqI=;
-        b=U5oSqwiqmKt7l+KIb6SJSIkl8G7hylgbV9Dp+/LeKrQOx0Xqxi0kVElWz3AQR6vquO
-         nqw+u9uyD0Y2CXnhxqrKZygWBqRsAA1DUFODSqjU6aqKKtMoap8fpFZJfIQ3BYoBK1CN
-         9MXBJKEC6a4gbYyGS2QKQWYIGnZLy4Nw11s6sbRjwmOIm6DxeaoFfOUQ+pjrdyqNM+OR
-         pvfjGoa3Oph9M+uX2CdbnSNrW3UrvF9I0VPso4kDCwHnTQWPSIv1xQRY99V/neEl+aQD
-         enP6BMAsJZe2g06AB+lXZ2TYM5uErYvi1KDSFUvbF86AgQ4/fBa9nW318kn/4NA6sq7j
-         IwgA==
+        bh=pk49vmsIM+yCxOu67mrioHkagQNao6fvAH0GFEMFZCU=;
+        b=Hw4/RHO3drfWtMwOjcNgOIFZ8AKZRSsi1g46sVkttSJ6MRcBASvd2tSk0wy4cBsWj0
+         B8WOerPpwWW4yInBbdnnSZUlbqnFdGn5b3MRj+Z5P7mPzxQ9j+oBXHU7+9cCuvpM6jWA
+         4hvAC46hEcTwm0yzL5V0bCYKM0p6G0cps35TEmVt9h0UYZdH6hTdiCmhthTsMesdXOo4
+         OM9Ea2vaCcbyH/oRLMYob85NFkqtmMHdSHRYnu1ArVTC9Y3wM+2wKRzb5Am2FcWKjnYo
+         mIA57gBSUyP1GnmwrAen0J+ey6uC5uSiMEUnLiuSaiHkxnXSHINQW8oz9oSalMzIUtSi
+         T/8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790926141; x=1791530941;
+        d=1e100.net; s=20260707; t=1790926212; x=1791531012;
         h=content-transfer-encoding:content-type:in-reply-to:organization
          :autocrypt:content-language:references:cc:to:subject:reply-to:from
          :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=6zplr7QU6lV0JIsmwOjHD1EDA7HxZc99c9t5ZOt0FqI=;
-        b=rzokAzz3834if8wBPNVXyBmSqKLo9LLSe5Ri3c9Ua+dr/YHPcgIuB75aVUtfTNXJ0u
-         iMb9D2Xtwa+ee4MqnO1Qvao5/7dfCcVA2bYP4h0SVSk1upDWh0cPmkqNR6DbBeBjRFot
-         YZNb7COAKux4w1aiKih/t8pMoz0uwNUqV3kdLsReRMqDiLqb6NRtJvGg30k7Nqn1IKNF
-         O8mrLspob/faGBtUQh/n2NljehmtocZCbi2B4adjTAIW7Fd4y1LHltmcFdhL3T5kw7go
-         YPfFhgZiU6eAEb8i/FZH0ZuBNvPUHdegHj/MNq80JTR5mNpm4sqM2v1D+S0gUjiYnVi4
-         mPbQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzLsH5ScNOr+BQUuuRxHQ+G1j3lQbTe2wD/jW2ofPtpv2Zmylfq5NYjvVDOi5fmTbm9zoW/@lists.linux.dev
-X-Gm-Message-State: AFuF++lVgwIGiv6LJHgU+0oIO+rbmARTZB6EYfWkUEkVL5n5yFQ2F9tq
-	y3zegT47hJ6giS7v3jQmgxzb4teCDjF9uqxF28tF5Dx+CrKubVvviucpi2Wvh53SrHc=
-X-Gm-Gg: AYBFou2tFjfzD1fC6hFlzC4UerXmCaB65VbneMi5GedTP4DFYYuDru67CftYepJrWxA
-	WM9PJdGKh/vUpw+FroY79ZSdv0f/f5PuB+4VWV5BPNm1LgxukbpR5WbTDNDu6DYRuyJD/lorW9F
-	mDs2USdV72sK3v5mQmB3cw5yEvtVlZMijLjnqvPk4eePcqs93uVgDAj9KSYh95zvq/xNLmwWnMj
-	ysnCrX1Swb4Pbt26njCAXFuWY6PoA1uUb9xU7Xi3ufkWHJh/YuWUvx9qy+LCz+vlehw3w0EtnwU
-	fyj18S8AkQLhOwZlQn0oTxekV3aDhhp1Vl7T/4ewdEXZSuQslNLJ2WO73hUOvU/xcIT7L3Pqw3E
-	jNxoKKTCW/M9ZgHxxxRQ7kXEdieK1r/caCoY2jOyKPSRaHX9i/xW8Mmmp1XU5uV+xOmILfR1tPO
-	osOCArhgIDovFHF+hWHZWrCjGdtALlWlIj/wDFNFtT2TSmZRv5QEmZzHXjOMk9OfrCeNxNe2gln
-	yk5+6zuPgxAW+Rgv6CdDEO+aQCYk27gqFFjug9Dskr7LkPjABZiWb8otbCSLA==
-X-Received: by 2002:a05:600c:1911:b0:499:b65e:49c9 with SMTP id 5b1f17b1804b1-4a02756643dmr30178595e9.10.1790926141218;
-        Fri, 02 Oct 2026 00:29:01 -0700 (PDT)
+        bh=pk49vmsIM+yCxOu67mrioHkagQNao6fvAH0GFEMFZCU=;
+        b=1mW2iMsKhu/WuRpWG6AkccoRX8jou5v7XeFeOPiJarf3WxRxcxqnzdgeT0ljGaTxNX
+         kgNJb+l0IHDZZcAh/4jeWizSY95R9X2CI1uZBArsdDckPy28PzQfhRaTkE06exeTId6l
+         FGDKbF1IqJQqJF5ZIZkbEdb7CLZ/VHW6K4g7WKCAl3vmgp0OIXnc6BrJpOksOgmk5pf2
+         IKYM+x/vfYyaTkIAAjiAOSsS0B+vEyJOWX3ULnNfum11+/431JnNQ0TGJXoMQ4S36UJE
+         LY5qJj5iZWIRNi4VmZt1DjRzzcTLctKQxR68dacAkDrYoeI6puJkmY0aF/mUFgqtTOCW
+         7OvQ==
+X-Forwarded-Encrypted: i=1; AKwUvByUBcmaOigoa+RnQWLXwaaQuF/rba9s1FfapbbTYDtX1lvQMB7r6kFP6ee3spJwOFyYFy82@lists.linux.dev
+X-Gm-Message-State: AFuF++k88BZ1TmKyEjrYi2FPK92mpAaeEhZETLepK/MiBg1BL+chrDO/
+	hBp7YDIPFxtmxXMwgYI4wOFChEqDBg2ZVZixODcDsDte4gHWyuoqiiBVH/shipM2cJQ=
+X-Gm-Gg: AYBFou1TgdDdHLmjdOf3y7cGHKIcCOUuE3vUFqsSKO+fgAQkxbsdrmQUouEZuDmo7IE
+	hMlDsD3kZltUrND5Mn7XA1DPgi6WWWpSJLqLQkzyWkX7OcTpQFv+J+/zTI24Yg7O9l24on999O+
+	+CEhArDfLntTtcIs5J/qLKPvILIUbiqIG6g5qPVUnA/KPmv1ne4kA2XbXoJafleACMni+WnqWsU
+	2T/FFN/PgzgpEjKpcVE3QpyUzSdKeKSqRi2rboe/6/h/RCLaYQ46xhRErtLkNNDMh+tkRsFZdV9
+	4O+i2hXMzpJd9AOq3NJUObkTn7ybzyNn0EISEHjF5kqq846OuNe33Im9dn0dteJE/cmHwq+1glN
+	QY2+A2Lb45fMebnLp8MROxj04y1Qnrq4MVY8pgjAf/yutnHFE93EvxDqRQCKLeuux6ZlRuk5EeW
+	tocqejm2bzzxe8srNzm4pEo6o8KQqErArgQz8H1hcoLnPBPvdScObKJ1YaoBYUyunSh+wpr9w5m
+	o+9ftslR5rSCRVr6eXU96RoZK5c0VUEKcAp0MhnBwVj0FkxrS1P
+X-Received: by 2002:a05:600c:1911:b0:49c:ffab:551f with SMTP id 5b1f17b1804b1-4a0275657a1mr32220045e9.22.1790926211263;
+        Fri, 02 Oct 2026 00:30:11 -0700 (PDT)
 Received: from ?IPV6:2a01:e0a:106d:1080:2f62:6d3:721b:8c9e? ([2a01:e0a:106d:1080:2f62:6d3:721b:8c9e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a039505568sm42454685e9.3.2026.10.02.00.28.59
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b38104e07sm3611058f8f.31.2026.10.02.00.30.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 00:29:00 -0700 (PDT)
-Message-ID: <ebe0714e-cb96-4091-a718-97dd9c081710@linaro.org>
-Date: Fri, 2 Oct 2026 09:28:59 +0200
+        Fri, 02 Oct 2026 00:30:10 -0700 (PDT)
+Message-ID: <2bd17843-4a65-49b0-9e10-7b73afb206b6@linaro.org>
+Date: Fri, 2 Oct 2026 09:30:09 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -72,13 +72,14 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 From: Neil Armstrong <neil.armstrong@linaro.org>
 Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 1/6] dt-bindings: display: Add panel-mipi-dsi-bpf generic
- panel binding
+Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
 To: Maxime Ripard <mripard@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Jessica Zhang <jesszhan0024@gmail.com>,
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+Cc: Javier Martinez Canillas <javierm@redhat.com>,
+ Benjamin Tissoires <bentiss@kernel.org>,
+ Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
  Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>,
+ Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
  Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
@@ -91,15 +92,15 @@ Cc: Rob Herring <robh@kernel.org>, Jessica Zhang <jesszhan0024@gmail.com>,
  Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
  Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
  <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- Javier Martinez Canillas <javierm@redhat.com>,
  dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- Benjamin Tissoires <bentiss@kernel.org>
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
 References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <20260928-drm-mipi-dsi-panel-ebpf-v1-1-5244926aace4@kernel.org>
- <20260928204059.GA515872-robh@kernel.org> <artyl8fD3zzng8Uh@houat>
- <742d5bab-51cc-49f0-825a-f299a055bb1e@linaro.org> <ar4G864IgYTvfNNy@houat>
+ <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
+ <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <arrAqg5n87INTHE6@beelink>
+ <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat>
+ <xlv1wls4ebjq.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
+ <828c9108-2db1-45a6-9301-19159a094301@linaro.org> <ar4CRTMQGs5_nGKY@houat>
 Content-Language: en-US, fr
 Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
@@ -126,58 +127,73 @@ Autocrypt: addr=neil.armstrong@linaro.org; keydata=
  4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
  QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
 Organization: Linaro
-In-Reply-To: <ar4G864IgYTvfNNy@houat>
+In-Reply-To: <ar4CRTMQGs5_nGKY@houat>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/1/26 09:09, Maxime Ripard wrote:
-> On Wed, Sep 30, 2026 at 03:32:19PM +0200, Neil Armstrong wrote:
->> On 9/29/26 10:39, Maxime Ripard wrote:
->>> Hi,
+On 10/1/26 08:50, Maxime Ripard wrote:
+> On Wed, Sep 30, 2026 at 03:37:58PM +0200, Neil Armstrong wrote:
+>> On 9/29/26 09:55, Javier Martinez Canillas wrote:
+>>> Maxime Ripard <mripard@kernel.org> writes:
 >>>
+>>>> On Mon, Sep 28, 2026 at 10:36:18PM +0200, Neil Armstrong wrote:
+>>>>> On 9/28/26 21:48, Benjamin Tissoires wrote:
+>>>>>> On Sep 28 2026, Neil Armstrong wrote:
+>>>>>>> On 9/28/26 19:24, Benjamin Tissoires wrote:
+>>>>>>>> On Sep 28 2026, Neil Armstrong wrote:
+>>>>>>>>> Hi,
+>>>>>>>>>
+>>>>>>>>> On 9/28/26 18:22, Maxime Ripard wrote:
+>>>>>>>>>> Hi,
+>>>>>>>>>>
+>>>>>>>>>> Panels in general, and MIPI-DSI panels in particular, are pretty
+>>>>>>>>>> difficult to support and require pretty much a panel driver for each
+>>>>>>>>>> panel produced. Most of them are pretty simple, and require an opaque
+>>>>>>>>>> initialization sequence that is usually poorly documented.
+>>>>>>>>>>
+>>>>>>>>>> This creates a tension between OEMs and distros because OEMs will
+>>>>>>>>>> typically get a new panel to react to a sourcing issue during
+>>>>>>>>>> production, and thus need some swift turnaround between getting their
+>>>>>>>>>> new panel and it being operational in the OS. Distributions on the other
+>>>>>>>>>> hand can take years to ship a kernel with that new panel driver.
+>>>>>>>>>>
+>>>>>>>>>> To solve this, I followed the example of HID-BPF and wrote a panel
+>>>>>>>>>> driver that will rely on BPF programs to perform the panel
+>>>>>>>>>> initialization. That way, we can ship the programs separately from the
+>>>>>>>>>> kernel, and with a different lifecycle. If this driver is accepted, the
+>>>>>>>>>> plan is to have a userspace component started by udev to identify and
+>>>>>>>>>> load the right BPF program for the panels found on the device.
+>>>>>>>>>
+>>>>>>>>> This is kind of late for serious applications except if we manage to
+>>>>>>>>> solve the bootloader to Linux display engine transition.
+>>>>>>>>>
 >>>
->> <snip>
+>>> Besides what Maxime already mentioned (that most general purpose Linux distributions
+>>> built the drivers as modules anyways), it doesn't have to be mutually exclusive.
+>>>
+>>> A simple panel could be supported using this BPF-based driver and then a panel driver
+>>> added to the kernel, if is found that some applications need to have it built-in and
+>>> earlier in the boot path.
+>>>
+>>> I don't see why this would be any different than HDI-BPF or other BPF-based infra,
+>>> such as sched_ext.
 >>
->>>
->>> panel-mipi-dsi-spi is a generic panel that will load a firmware, and
->>> quite similar to this one. google,android-pipe and qcom,fastrpc don't
->>> attach to anything and will just open a tunnel to userspace, which is
->>> somewhat equivalent but more dramatic than what this driver is doing.
->>> simple-card or its variations will just instantiate a kernel driver from
->>> the DT and is used pretty much everywhere.
->>>
->>> I reused the binding from panel-mipi-dsi-spi for this. It was reviewed
->>> by rob, and acked by a panel maintainer, and 4 years ago, so we're way
->>> past the "oh but we didn't know what we were doing back then" argument.
->>>
->>> So, let's phrase this differently: what's different about the
->>> description than panel-mipi-dsi-spi, or any other binding already in
->>> tree?
->>
->> The panel-mipi-dsi-spi still describes a class of H/W control interface,
->> not a pure software driver implementation type.
->>
->> "panel-mipi-dsi-bpf" or "panel-mipi-dsi-rust" or "panel-mipi-dsi-cplusplus"
->> would be the same problem.
+>> I don't want to add a supplementary maintenance burden for the sake of using a cool
+>> technology which has serious drawbacks and dependencies on user-space even if looks
+>> really cool.
 > 
-> Rob explicitly said the bpf part wasn't the problem. Also, I don't care
-> for the compatible itself, so what would be an acceptable compatible for
-> you?
-> 
->>> If it's the BPF part, BPF is not Linux-only, and there's hardware with
->>> direct BPF support these days, so it can be considered OS-agnostic and
->>> not an implementation detail.
->>
->> If somehow panels used a standardized MIPI firmware we could define this
->> in DT, but here we're basically inventing our own type of firmware from
->> thin air.
-> 
-> That's not what panel-mipi-dsi-spi is.
+> Spoiler alert: v2 won't. I've got the in-kernel loader to work and thus
+> you can have a built-in panel driver that works without user-space
+> intervention. So this is not a topic of discussion anymore.
 
-What you describe is how it's implemented in software
+It will still have users-space dependency, meaning the BPF files will need to
+exist in the fs when drivers probes.
 
 Neil
 
 > 
 > Maxime
+> 
+> 
+> will work
 
