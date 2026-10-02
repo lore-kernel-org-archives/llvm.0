@@ -1,189 +1,284 @@
-Received: from mail-wr2-f35.google.com (mail-wr2-f35.google.com [74.125.225.99])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E5F4334AD
-	for <llvm@lists.linux.dev>; Fri,  2 Oct 2026 07:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.99
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B20543DEBC
+	for <llvm@lists.linux.dev>; Fri,  2 Oct 2026 07:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1790927593; cv=none; b=POcn7BbEkSQoD3afYkZdz77+2noaAsDA1UrZFHKZ2YH+KuULhn6d8Xu/5Qk89Hbv+bJvwVmpL9H+L6VIaDmcBCneuLcqwagBBr/8MuF3gyaaxVL8ovAqSpnm7XWY5LvBoZAnLxRG1Zy0EoZzt/e87Kl0ZmfF4EfA7f6UcmLLPLk=
+	t=1790927607; cv=none; b=erVwxorbdaqJj6e3Zf2ZUJC30TY+3bFQvRYMw20qTyAtkQ0fKV0TrQlYL0gr8bpmVNjQ6ewo0ZUqzMxqHQ4fbqg7Ah++WpS1JnlKNbuiq42jp8Mtv9CRr1jV2xk4Z/+4MPQyowiHjQzb/Mb2lkglYm/9Zo1pEvOYoE1Pp/PB/Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1790927593; c=relaxed/simple;
-	bh=ag+sZnjQWuyPSA4K+zz6QgF7pFR9QYHKz6IJ/tFAQLQ=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=O86vhInXQRS9Y46cZWb7/pMJEsUn1YaTfUIDf1eHQaea8BxIB9ZOmf9y3/N2TeSk6E3uyk1r4aouIiToB1WKZezjyvklXi/mNEyAHbvtOFfnfxBXsgkFm8c3Abj5AriIxnnfKFYlSyaF5GvJZ0mrTak1tfyPi+FjO763DcXCC6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LW3pd3dG; arc=none smtp.client-ip=74.125.225.99
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+	s=arc-20240116; t=1790927607; c=relaxed/simple;
+	bh=OfplhBT++WQsNhZIkkqJQlDrbFhJnMQOYEBvuh5N+d0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UrPNYJDUTMp3OPoCHP+l+wY69CgbO+ZNSxoBNmdPkvQJFtGI7isb0SiNUdu0ZU1ABN1Y04+WRCGIgeVuDNnUFieDjAlq6jDMfF42rfqgjbR1ihihi20ubHFwkDScMO/K/RSFuQzlQEsdO6lFKTNJzVqOswNgCtekDh/yVfhyeb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TSU6gF8m; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LW3pd3dG"
-Received: by mail-wr2-f35.google.com with SMTP id ffacd0b85a97d-48882c1f2baso2621300f8f.1
-        for <llvm@lists.linux.dev>; Fri, 02 Oct 2026 00:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1790927590; x=1791532390; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=URK5hJaiby1L1KtEXv2HgCyxpcy+Et12hnj8ni1/g3I=;
-        b=LW3pd3dGTIdu6otet1KJDXTSFS/laJ2ljOr8yKjSJt0MJnvOiXYCTCyFZs4Qr0trvG
-         k6241PwHr2EEg81KMzSG/5UZIGNhuU9mNpZcNCIBVMrxVK/JcrXX6GO34UeJXGSdth2I
-         Ob8JpzVXT4pa/AqWUfyk0JxOuDBXcvcn/NkC77Fl/La1Worf2APdfWvhCU0A3mg5HuUo
-         s00Xi1y+3VauFp5iqROpZKe7s1iA4AzFY/5ky5mN370IXaHCOYvwLJ9mHZq/rgkwO4uh
-         UZXO37xXpmRAEteBxGTS5vocLj9EAxbV6ygFtztO4k6Xk8xacTlO9oQJCgHqBt99Lcwd
-         9Kfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1790927590; x=1791532390;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:content-language:references:cc:to:subject:reply-to:from
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=URK5hJaiby1L1KtEXv2HgCyxpcy+Et12hnj8ni1/g3I=;
-        b=dq9bnW2wUQl/LNQW19misfY11kRPUitQ0Zj2vTtTQ5rXWD0YNHgJ6lObKpewpx3tj+
-         Hq8FIMOwHK1itDJM/cqH5w4cwM7lsyBieoiaqOtYYguyQxyeneVHklAGZXsJC/sCTNnq
-         0Q3JcSK9DdRB7W1VbkcEX1dnTsqTAEBHWPwIkdxBGNNu3h15QYRjwLia3/4LcOi2x+6Q
-         IaaIiIUpHubZFv28FGeQh0l2nbKBexnIeNgGjoc+CmRBcVBGMyFW5LXToGQWFohHBKY0
-         AE0UGUph1eJS6dAcq2hLzykVlDlWWnYQVXZ6hozxBoLjPU2Z2aRyytUwvpb3hV7DMqgU
-         F/cQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxS/rBZwlJ8HOs0f1jFFmbRHAgdII6JbencV1VR1mFB4QZXdJ/m5GdIYg/R+UOImlJ8zXi6@lists.linux.dev
-X-Gm-Message-State: AFq9FYIR5QvpjtnpBkU2Mt5WoEMt9w3zcIoySoBSRiBvthXUnnOzfdze
-	Vb0I0f/oPVxVwSt3Iunaq4j/jkq34Gt6v+1XacUr5yxtMc0o0gYSmJBHIjCyHKXtmX4=
-X-Gm-Gg: AYBFou3jT92/XPT5mL1R+Z5ZlNidd5Iz6/I8Z/Ah6OsA8glful86U4iRUUg64N4es3f
-	htxM8PDcn/wweHPHzfWcs+eFHDAxQDqNdvnpD5uDDlVs+8sNUShZIcrK8ZBI8ELHme7bq1gPbc0
-	oTn5d46NuWpIGNga/aH5N/KYRT5ZIXuQYPAug558SsrJq6eg5IuDf+GCeSpBPt6Nm1t3TpgCYDE
-	SkQ2SWPEhUUCeUDrEy/fv8rPoAfj2fgD/3avmatkj+qF6tZ/FHF/TFTQ0R/W/k1uU/u5OGvp2oN
-	h1OIJ2NGxLjbJEAdEGFjnvrVVIWNIzDJJ6WbtS7DoA+FbjjzNQH89955dG4Xg7VfplM2FCVI+r6
-	qVUnazODpDR29E+9Fuw18ZijELiAwyZndF0/+sb/HYOcSufGGud8beeXOzvU0qu6MowRFP/gI36
-	xfKecLc4t7sGyqkNs0jo21h7ipDVt8IMbahwdOLsksDZuXZQZjedRTxRsXaq0HMV3Lk7cDzzpbL
-	FPZ87j7DLqYRsibi0d6kfHmxp2sew33seSauxt/9zNes4sPbE8O
-X-Received: by 2002:a05:6000:46da:b0:48b:68:592e with SMTP id ffacd0b85a97d-48b126c2526mr2669376f8f.4.1790927590269;
-        Fri, 02 Oct 2026 00:53:10 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:106d:1080:2f62:6d3:721b:8c9e? ([2a01:e0a:106d:1080:2f62:6d3:721b:8c9e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48b380f0ab7sm3840821f8f.7.2026.10.02.00.53.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Oct 2026 00:53:09 -0700 (PDT)
-Message-ID: <a92aa0bb-d50f-4b67-a645-942090d4fe79@linaro.org>
-Date: Fri, 2 Oct 2026 09:53:07 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TSU6gF8m"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1790927606; x=1822463606;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OfplhBT++WQsNhZIkkqJQlDrbFhJnMQOYEBvuh5N+d0=;
+  b=TSU6gF8mh8/ENfYSIcNtu5n0T2xiaUH9Ct6VI9NnYuaE9MBGgNo+FejH
+   LmlaFezsK1atcKDWxuK40OhTycuTeDGLaVgw0LvJ12UKYQLxJmZjMES7R
+   PZL381DXns+dHLzJb1QsL6NB0uxdsqIRlsAk18/C6sT8Uh7WSscWPe7Di
+   LN3E57Ypaw9Hrmb05oF+YCy4oKw8XKkuKioiqEmMAYKC4ZYa+uZLWK3Gw
+   PJUywICbnsBIzRwSeU0JZuKfqUMz7ArcfZJiQ9T7PQmbMmuHbTbT3qBXY
+   3mFbsg+BUppDA0tFVqJB2MXhkjhQyfdfDpNzGfQDTwCHUkHkSKvl7hX7t
+   g==;
+X-CSE-ConnectionGUID: wGCpq81HTrqBwdGSFz1Ujg==
+X-CSE-MsgGUID: 7C2ubWiwR36eX9vXrFWOlA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11922"; a="90904758"
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="90904758"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 00:53:25 -0700
+X-CSE-ConnectionGUID: eQy9liTuRqmN7AUTTXl6rw==
+X-CSE-MsgGUID: Fyl2DyfpRi+yjO5idWO8Iw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,136,1787036400"; 
+   d="scan'208";a="314178670"
+Received: from conormcd-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.188])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2026 00:53:22 -0700
+Date: Fri, 2 Oct 2026 10:53:20 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Rupesh Majhi <zoone.rupert@gmail.com>
+Cc: Andy Shevchenko <andy@kernel.org>, Bill Wendling <morbo@google.com>,
+	David Lechner <dlechner@baylibre.com>,
+	Eddie James <eajames@linux.ibm.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v11 2/5] iio: pressure: dps310: read buffered samples
+ from the hardware FIFO
+Message-ID: <ar9i8D9OTQpD80Lw@ashevche-desk.local>
+References: <20261002072526.250081-1-zoone.rupert@gmail.com>
+ <20261002072526.250081-3-zoone.rupert@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH 0/6] drm/bridge: Add a BPF-based MIPI-DSI panel driver
-To: Javier Martinez Canillas <javierm@redhat.com>,
- Maxime Ripard <mripard@kernel.org>
-Cc: Benjamin Tissoires <bentiss@kernel.org>,
- Jessica Zhang <jesszhan0024@gmail.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Thomas Zimmermann <tzimmermann@suse.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Andrzej Hajda <andrzej.hajda@intel.com>, Robert Foss <rfoss@kernel.org>,
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>, Albert Esteve
- <aesteve@redhat.com>, Dave Stevenson <dave.stevenson@raspberrypi.com>,
- dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
- linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-References: <20260928-drm-mipi-dsi-panel-ebpf-v1-0-5244926aace4@kernel.org>
- <6b80cb97-6706-412a-b013-9423f6f75153@linaro.org> <arqhwHiVf00j94J7@beelink>
- <0259fe4b-3118-4ab0-9b62-55101bfd7f33@linaro.org> <arrAqg5n87INTHE6@beelink>
- <674314b4-6b80-4b3a-ac15-eefd31cea607@linaro.org> <artpBMeM13Dd0lLy@houat>
- <xlv1wls4ebjq.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
- <828c9108-2db1-45a6-9301-19159a094301@linaro.org> <ar4CRTMQGs5_nGKY@houat>
- <2bd17843-4a65-49b0-9e10-7b73afb206b6@linaro.org>
- <xlv1cxtsft8e.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
-Content-Language: en-US, fr
-Autocrypt: addr=neil.armstrong@linaro.org; keydata=
- xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
- GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
- BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
- qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
- 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
- AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
- OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
- Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
- YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
- GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
- UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
- GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
- yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
- QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
- SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
- 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
- Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
- oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
- M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
- 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
- KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
- 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
- QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
-Organization: Linaro
-In-Reply-To: <xlv1cxtsft8e.fsf@fmartine-thinkpadx1carbongen12.rmtes.csb>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261002072526.250081-3-zoone.rupert@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On 10/2/26 09:37, Javier Martinez Canillas wrote:
-> Neil Armstrong <neil.armstrong@linaro.org> writes:
+On Fri, Oct 02, 2026 at 10:25:23AM +0300, Rupesh Majhi wrote:
+> DPS310 has a 32-entry FIFO shared by both measurements. Drain it from a
+> work item and push what it held, so buffered capture needs no trigger.
+> Nothing in tree wires the interrupt pin, so the work rearms itself at
+> half the FIFO fill time.
 > 
-> Hello Neil,
+> Each entry carries one measurement, so a pressure entry is compensated
+> with the temperature ahead of it. Pressure read before a session's first
+> temperature is held until one arrives rather than dropped, so the first
+> push can wait a temperature period.
 > 
->> On 10/1/26 08:50, Maxime Ripard wrote:
+> FIFO entries are not timestamped, so postenable refuses the timestamp
+> channel unless a trigger is attached.
 > 
-> [...]
-> 
->>>>
->>>> I don't want to add a supplementary maintenance burden for the sake of using a cool
->>>> technology which has serious drawbacks and dependencies on user-space even if looks
->>>> really cool.
->>>
->>> Spoiler alert: v2 won't. I've got the in-kernel loader to work and thus
->>> you can have a built-in panel driver that works without user-space
->>> intervention. So this is not a topic of discussion anymore.
->>
->> It will still have users-space dependency, meaning the BPF files will need to
->> exist in the fs when drivers probes.
->>
-> 
-> It doesn't have to AFAIU. The BPF programs could be built into the kernel
-> image, just like firmware binaries could be built-in as well.
+> Tested on a DPS310 on a BeagleBone Black.
 
-Right so my main question still is: what does it solve exactly ?
+...
 
-All the descriptions I saw so far is that it simply moves
-the panel C code to a BPF code with no other additions.
+> +{
+> +	u8 val[3];
+> +	s32 raw;
+> +	int rc;
+> +
+> +	/* Entries come out of the pressure registers whichever made them */
+> +	rc = regmap_bulk_read(data->regmap, DPS310_PRS_BASE, val, sizeof(val));
+> +	if (rc < 0)
+> +		return rc;
+> +
+> +	raw = get_unaligned_be24(val);
+> +	if (raw == DPS310_FIFO_EMPTY_VAL)
+> +		return DPS310_FIFO_EMPTY;
+> +
+> +	*value = sign_extend32(raw, 23);
+> +
+> +	return raw & DPS310_FIFO_TAG_PRS ? DPS310_FIFO_PRESSURE :
+> +					   DPS310_FIFO_TEMP;
 
-I still don't have a clear view of what is precisely solves.
+Make it a single line (yes, 83 characters).
 
-It adds some complexity to load those BPF driver, adds some
-maintenance complexities since with every API change we will
-need validate BPF still works in addition to C (and maybe one day Rust).
+> +}
 
-As the maintainer of the panels, merging a bunch of new panels at each
-releases and helping migrating to newer and modern way to interact
-with panels, I think I have the right to express my interrogations.
+...
 
-I'm clearly not the oldest kernel contributor & maintainer around here,
-but the main interrogation I have when submitting, reviewing and
-merging is : does it really solve something efficiently.
+> +static unsigned int dps310_fifo_push_held(struct dps310_data *data)
+> +	__must_hold(&data->lock)
+> +{
+> +	unsigned int pushed = 0;
+> +	unsigned int i;
+> +
+> +	for (i = 0; i < data->fifo_held; i++) {
 
-I don't want people to be frustrated by my review and question,
-but I feel I'm allowed to say I'm not convinced about this solution.
+	for (unsigned int i = 0; i < data->fifo_held; i++) {
 
-Neil
+> +		if (!dps310_fifo_push_scan(data, data->fifo_temp_raw,
+> +					   data->fifo_hold[i]))
+> +			pushed++;
+> +	}
+> +
+> +	data->fifo_held = 0;
+> +
+> +	return pushed;
+> +}
 
-> 
->> Neil
->>
-> 
+...
+
+> +/*
+> + * Read the batch out before compensating it, so a pressure entry pairs with
+> + * the temperature preceding it rather than the last one in the batch.
+> + *
+> + * Returns scans pushed.
+> + */
+> +static int dps310_fifo_drain(struct dps310_data *data)
+> +	__must_hold(&data->lock)
+> +{
+> +	bool pressure_enabled = test_bit(DPS310_SCAN_PRESSURE,
+> +					 data->iio->active_scan_mask);
+> +	u8 kind[DPS310_FIFO_DEPTH];
+> +	s32 raw[DPS310_FIFO_DEPTH];
+> +	unsigned int pushed = 0;
+> +	unsigned int cnt, i;
+> +	int rc;
+> +
+> +	for (cnt = 0; cnt < DPS310_FIFO_DEPTH; cnt++) {
+
+Ditto.
+
+> +		rc = dps310_fifo_read_entry(data, &raw[cnt]);
+> +		if (rc < 0)
+> +			return rc;
+> +
+> +		if (rc == DPS310_FIFO_EMPTY)
+> +			break;
+> +
+> +		kind[cnt] = rc;
+> +	}
+> +
+> +	for (i = 0; i < cnt; i++) {
+
+Ditto.
+
+> +		if (kind[i] == DPS310_FIFO_TEMP) {
+> +			data->fifo_temp_raw = raw[i];
+> +			data->fifo_temp_valid = true;
+> +
+> +			if (pressure_enabled)
+> +				pushed += dps310_fifo_push_held(data);
+> +			else if (!dps310_fifo_push_scan(data, raw[i], 0))
+> +				pushed++;
+> +			continue;
+> +		}
+> +
+> +		if (!pressure_enabled)
+> +			continue;
+> +
+> +		if (!data->fifo_temp_valid) {
+> +			dps310_fifo_hold(data, raw[i]);
+> +			continue;
+> +		}
+> +
+> +		if (!dps310_fifo_push_scan(data, data->fifo_temp_raw, raw[i]))
+> +			pushed++;
+> +	}
+> +
+> +	return pushed;
+> +}
+
+...
+
+> +static void dps310_fifo_work(struct work_struct *work)
+> +{
+> +	struct dps310_data *data = container_of(to_delayed_work(work),
+> +						struct dps310_data, fifo_work);
+> +	int rc;
+> +
+> +	mutex_lock(&data->lock);
+> +	rc = dps310_fifo_drain(data);
+> +	mutex_unlock(&data->lock);
+
+What's wrong with scoped_guard()?
+
+> +	if (rc < 0)
+> +		dev_dbg(&data->client->dev, "FIFO drain failed: %d\n", rc);
+> +
+> +	schedule_delayed_work(&data->fifo_work,
+> +			      msecs_to_jiffies(data->drain_interval_ms));
+> +}
+
+...
+
+> +static int dps310_buffer_postenable(struct iio_dev *iio)
+> +{
+> +	struct dps310_data *data = iio_priv(iio);
+> +	int rc, prs_rate, tmp_rate;
+> +
+> +	/* An attached trigger drives the capture instead, FIFO stays off */
+> +	if (iio_device_get_current_mode(iio) == INDIO_BUFFER_TRIGGERED)
+> +		return 0;
+> +
+> +	/* Entries are not timestamped and the drain timer is no substitute */
+> +	if (iio_scan_timestamp_enabled(iio))
+> +		return -EINVAL;
+
+> +	mutex_lock(&data->lock);
+
+Refactor this to make one use guard()() and the inner one to use kfree().
+
+> +	rc = dps310_get_pres_samp_freq(data, &prs_rate);
+> +	if (rc)
+> +		goto err_unlock;
+> +
+> +	rc = dps310_get_temp_samp_freq(data, &tmp_rate);
+> +	if (rc)
+> +		goto err_unlock;
+> +
+> +	data->drain_interval_ms = dps310_fifo_interval(prs_rate, tmp_rate);
+> +
+> +	rc = dps310_fifo_hold_alloc(data, prs_rate, tmp_rate);
+> +	if (rc)
+> +		goto err_unlock;
+> +
+> +	/* Drop whatever accumulated before enable */
+> +	rc = dps310_fifo_hw_flush(data);
+> +	if (rc)
+> +		goto err_hold;
+> +
+> +	rc = dps310_fifo_set_enable(data, true);
+> +	if (rc)
+> +		goto err_hold;
+> +
+> +	schedule_delayed_work(&data->fifo_work,
+> +			      msecs_to_jiffies(data->drain_interval_ms));
+> +
+> +	mutex_unlock(&data->lock);
+> +
+> +	return 0;
+> +
+> +err_hold:
+> +	kfree(data->fifo_hold);
+> +err_unlock:
+> +	mutex_unlock(&data->lock);
+> +
+> +	return rc;
+> +}
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
