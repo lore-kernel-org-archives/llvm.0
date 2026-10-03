@@ -1,62 +1,64 @@
-Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
+Received: from mail-lf2-f12.google.com (mail-lf2-f12.google.com [74.125.229.204])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B3147ACD4
-	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 19:50:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7017B493D4F
+	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 19:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.204
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791057019; cv=none; b=Xm7wXKptI6ndOCDKu/iCNK4h/zqjWYHWT5klVWWseEQRlED28mAgVbItkgZFmATKvmhPBeWxLInIOpZAqtpmMcMvZPMKVbZXlS2QGv653Cgaz+MI/RxHAkWaoLi2KwVNeLUSL5AZodQByu+7QJiae9m0qCWWv9ESDfWS3lv/aI4=
+	t=1791057025; cv=none; b=YIegsuhpIXkbqifq7W4TmDjZ8brS2FLmQUfZg5rTY4Vzuc72fOUjjhiEZ8spMnfb2TaMEv2XEcxWuI++9sEj67DC7ADdoecCxzuOz5z6OWtqEI7fnuYafmMnC/z4lzHRRj4XXp1BNRIFzi5dZxooDXEFwmmG72Gf6vE8whxVLD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791057019; c=relaxed/simple;
-	bh=eeV3CiqVqLEdOwuQRHoVaunyWI6kSVjOdbtx1bppoXU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mg3dI1E7itQO5CY/VqNcnHvsk9K62alyprSlyK9Dc7Z07NTvYYSh/S6ZwVCwFn/DIqS2nOpkOrEw/Q4qKTRMtz/QaCCSePMdXz5oijXwpKMqPPTqfKvX1ZUPwxha9TwqIxT0reNzLt0LhQtaHvZd8QUQdTKmJaHT/hvESjyGciI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VZKkamzA; arc=none smtp.client-ip=74.125.229.205
+	s=arc-20240116; t=1791057025; c=relaxed/simple;
+	bh=/4d9OigCORtvJ5aTr4LsAeb4hgeXIO/CJ8vO4HGEp18=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RcArm1010uhLi+CPKGhL0a4hSdRPU3jHITA+OUUr//uxNLW5mh4Rm8ouFO20wTvyGCwpZz28bKF2o6BrKUaBBdFKt4D8ekp+p5AT5eR0k9NLcQUrMc25i8NM6Qm6UxXWVR+ed8Xjb++x1H9Q0GIBjFXANOpJ9mr1p7lZDoCoOfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZwfloLNq; arc=none smtp.client-ip=74.125.229.204
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VZKkamzA"
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5ba418c79ccso299040e87.1
-        for <llvm@lists.linux.dev>; Sat, 03 Oct 2026 12:50:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZwfloLNq"
+Received: by mail-lf2-f12.google.com with SMTP id 2adb3069b0e04-5ba3d90ac37so413308e87.3
+        for <llvm@lists.linux.dev>; Sat, 03 Oct 2026 12:50:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791057016; x=1791661816; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=2xA2NLj6ds9nMunLFHFPpvFZmRFdu7AG9PlEOdmxqkM=;
-        b=VZKkamzAalNi816RFE1iSr6TXxcCdVBQfetvoJJU1kEk4rnj/aMumhvCw/8RbaxdRh
-         WSP8+b6Fy52RbzOBN4mk9CXJ8FD4o24QeBkmAFJLkZFCr5zvZw4JzZ0Y+mihuBhwttI2
-         qqRfZRI7RREtrQlqS7849FG74an1QmQOOfGLiO+DgIVrFviUSrhwmWpKwnKlMiRWE26Z
-         08bYA/pWAnXD0/Np2sbiXbcPHkNSz4dnBaxa8mzFu7InMhkw8OY4O/7XyHZq8IJ/EwzG
-         lXetAKB3HrRBHXZ5PSaZqLz0W203e3XIaXe7na8h0S3xDsy1p3k4VmvuQ72w69XoS2qM
-         hHWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791057016; x=1791661816;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1791057021; x=1791661821; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2xA2NLj6ds9nMunLFHFPpvFZmRFdu7AG9PlEOdmxqkM=;
-        b=cSF/7EKOU1ktSwCAZsH2ROep36NQvdg8ZMHYkgUeHDeg2IkXCH4i3O8JimpM3vc+PC
-         A4DCv5B8ctPZ6mj/78FbTl50K7kv2bcB9Y8R2AnZQcWSd0PMOIoPM3Se1Jyrll4Y/QuH
-         /eo5qadtaeCUqzHNcRuUr0YZK68vU5lXO1SlHLxbnL4XxxA9MXF1J0a7q0ZTfIVJoluD
-         PbYRlXDaWuauHxdWkg62WTXwMHglkhSRSlSAzS25OIGwny1pDclMjBK1H5k/uihOHnIT
-         9t05LvGbFqR0G+PPHDm/O1ykECjUAv1DvVs69j1aVtbc+ugb/5//XROA/GdKVE/OpWbs
-         ckGw==
-X-Forwarded-Encrypted: i=1; AKwUvBwpZn8GnV/MkEpBihCT3QwaOrPNnGTWY8+44QTeicOoZ4wGwF0FEC7w60MFGAwrYrgszPPO@lists.linux.dev
-X-Gm-Message-State: AFq9FYKsC2sSYk8wCxHD+zMT442ny+2MMeM9Fy/3hvDgNCF7oDdSkda9
-	KgRiriRTFcKx5hPvTDs9CHA8DsC6+tnpAUHxP5hw94uboVcgiwjwoQ/3
-X-Gm-Gg: AYBFou1KTzl3Jk4f1wOA44ea8H9S4ixBElRlyLDg6tmH49/QI/7vtGKW0zKuozoIwj6
-	RkJvfFthp0SKEviLpxrk/rd5gFpvWVRNZyzOO7eLQVoTEqwIQD1ysSHybVQ9cmXKrBGgBRfBxBk
-	njRnxUcUGNSuIQ4dDUvXruGwgoxz0HdxBhwURaUiPYCon6BOVIlo65vZDAWt1iPi+oeQkt/j/Xp
-	Nb2MhvM/tfuZnApcwF2SmDgpxLmVYoAtkrfnw0MD2p39tP6nldYDpNYO86+/6tAQvM9WATCXLX5
-	CpTP/Q0k3CMzwQ1qWYfefJehJe3PL4GeZOFrM8rXLQrZdFdaCqCbzE8aGoTeX1qS2eN9vz1UXDr
-	CZChhP5/BelS6OuTrJZsk+CW6xee79sRJZC8q+vrl3UFLliqOMPy18GMdag1NrsFYOkyVuiYZ0l
-	i+QH0pzsrcnksx892NdLAACAMXvC+ayQGbO6HXXTuxIjF8BZLo6cf0PvSSRKgVCcLYxaWGqdmWZ
-	1W8PhzS0c0BaSbT22IPQ9CUo3Mwak4UWcsfjT2XB7rvKT9dVNTb6pQ2zF9jI+fHGDbA/1E=
-X-Received: by 2002:a05:6512:340f:b0:5b8:f333:db97 with SMTP id 2adb3069b0e04-5bb86e73f99mr2404170e87.0.1791057015678;
-        Sat, 03 Oct 2026 12:50:15 -0700 (PDT)
+        bh=GJ/7i28s7Zko07cbEXOC8Ix74/xugwD/hhTUjA8RBs8=;
+        b=ZwfloLNqloOuOJ7Jt3WY9Tbt4362KYbKeIZpVB1CBT9CQt9SGB/7zyJioWcaPLp51M
+         zyfl7akDdNt9GFc01927ekUieBNt+WlQXRwyCRFHGm4+S0j56JI1Y4Bi60TK6xSJUFN1
+         G+EKttlj067NGB1zOenVHwTtuKjLTc9W3vYLxLP6ixQQqdp2bHdpGrhMyOGIO1SdZgq0
+         qqhOA7eHPj8CZIF4nV4cYX+WUvM185nF1VSMRYgBSL8T45nFzqJMTtMtbaLtibgmS5t2
+         AXwv/IWIWSLKSZl6Se4Z/fzJH+7BWZAb1uDddeLFxZIDENHHsMgrVdUXRhrvYFmoI1ko
+         u3cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791057021; x=1791661821;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=GJ/7i28s7Zko07cbEXOC8Ix74/xugwD/hhTUjA8RBs8=;
+        b=RqhV4GuyFvr92GGFbsqfcvrNqfWtA2h7ILBPDV0JLJYmeSTxL60lQjMexkM07gWwHt
+         0K/bCA8ROLEy2J+oXysFLA2BEjXCbDMIp/DbLGw4xboy+D7LKTGJWRP+UZXA6CURaDyd
+         Jj0HxOfWip58fweI3BO2SDNLuUvCPXW3sZt/JqFV/VLipFDqyt7RCaFKXaE5GuUarFPI
+         bYITarWoYgrivD4wgJ0hQd1BLgQlNjm69LnJNkLDFOFJjdIUv0dz0EIzXtb83LaJ025m
+         ng+5FcyWSpiS/hHbb5qqS5Jyr/v6jy5jtzzk1iyuGodNvAJyfYpcVqDehi6SE0wconId
+         N+7w==
+X-Forwarded-Encrypted: i=1; AKwUvBwNX991R7vL0qCQqYiFJ5ZAyEgnPs8CyJVXikXriKVuD5iHGbf4/KvCnbTRsjmmSO2HWKw3@lists.linux.dev
+X-Gm-Message-State: AFq9FYJGy5sRaZSOA+hXYSn6cbjHxw8siABK343+Pfbolaal7KwRjDUU
+	C8vQU4sA9SfTi6EURgMKjdyKKTCPuaoPUCuy4CSwZD1/qCNEfENaqq3N
+X-Gm-Gg: AYBFou05xbg+nhuDh/krY7LnGum+RiyPtTy8K/qQYsNpR/c2IRaEP4vZi01gJpV3PKV
+	9IuF2mix36aqS3fbYAa4EmwBrkda2wiQY8PUuX6Lpe2jsIPNk4PNbFxFilrgtOWNh9HeHT9Zl6q
+	cjh0BuxAUQzUJMQQFv3FL38DpRve+RYnI79B/iTMz+Y5cvLn0BbEwjt8ODuA7X9Ooi5Jdxmnakm
+	j0+TC2IB1Cg/cg5Xuw0OSNU/IJTkdkngwpndnndvBqgN/pInQZDDu97uKQjscE8i8PGEJwVBslY
+	W5Lzi+4meGLgiMhLQqFQtcIOMYCwarI0qpLmRlQzyOPZ03NP2W666sijdHv/Cegz42vHSWFygSd
+	m0Ph2eSxqtfYXxmMBJJEiLesLcQxlmVONE0YEjhd5zI1Cu+3HjQwhmPvMlXLmM6oHVzO/Ji5LjU
+	LOBzvu0sTc0fkZzUxp9eUdxXnLIEIld6gXEEhFPAXwmXvGZIU3tPM6AnFij+z/2qNvzKuGECen1
+	V11tlkgUQOxcjAgsyzVBB4DoXMFDwwFAAJgcQHMlIpfA/aXZ4iYvN+u54riOmmwTUhFHg==
+X-Received: by 2002:ac2:4839:0:b0:5ba:3d7f:6ef9 with SMTP id 2adb3069b0e04-5bb9bc468damr1943914e87.48.1791057020991;
+        Sat, 03 Oct 2026 12:50:20 -0700 (PDT)
 Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bb7c7abdbfsm1762608e87.65.2026.10.03.12.50.14
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bb7c7abdbfsm1762608e87.65.2026.10.03.12.50.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2026 12:50:15 -0700 (PDT)
+        Sat, 03 Oct 2026 12:50:19 -0700 (PDT)
 From: Rupesh Majhi <zoone.rupert@gmail.com>
 To: Andy Shevchenko <andy@kernel.org>,
 	Bill Wendling <morbo@google.com>,
@@ -70,11 +72,14 @@ To: Andy Shevchenko <andy@kernel.org>,
 Cc: linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
-	Rupesh Majhi <zoone.rupert@gmail.com>
-Subject: [PATCH v12 0/5] iio: pressure: dps310: hardware FIFO support
-Date: Sat,  3 Oct 2026 22:50:06 +0300
-Message-ID: <20261003195012.92948-1-zoone.rupert@gmail.com>
+	Rupesh Majhi <zoone.rupert@gmail.com>,
+	Andy Shevchenko <andriy.shevchenko@intel.com>
+Subject: [PATCH v12 1/5] iio: pressure: dps310: use devm_mutex_init()
+Date: Sat,  3 Oct 2026 22:50:07 +0300
+Message-ID: <20261003195012.92948-2-zoone.rupert@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20261003195012.92948-1-zoone.rupert@gmail.com>
+References: <20261003195012.92948-1-zoone.rupert@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -83,40 +88,40 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rest of FIFO series, on iio/togreg which has 1-6 and 10 of v8.
+Destroy the mutex on unbind so CONFIG_DEBUG_MUTEXES can check it.
 
-Since v11:
- - patch 1: blank line, Reviewed-by Andy
- - patch 2: guard() in postenable, setup moved to a helper that kfree()s
-   on error, scoped_guard() in fifo_work, loop counters in the for,
-   ternary on one line, two comments trimmed. The first loop in
-   fifo_drain keeps cnt outside, it is used after the loop.
- - patch 3: signature wrapped
- - patch 4: drain comment and commit message trimmed
- - patch 5: Suggested-by Andy back, assert in the new helper too, still
-   optional
+Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Assisted-by: LLM
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@intel.com>
+Signed-off-by: Rupesh Majhi <zoone.rupert@gmail.com>
+---
+ drivers/iio/pressure/dps310.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-Pressure overflow fix is now at v4:
-https://lore.kernel.org/linux-iio/20261003185716.32732-1-zoone.rupert@gmail.com/
-Patches 1 and 5 conflict trivially with it. I can rebase on whichever
-goes in first.
-
-Retested on DPS310 with BeagleBone Black. Lockdep run under QEMU.
-
-v11: https://lore.kernel.org/linux-iio/20261002072526.250081-1-zoone.rupert@gmail.com/
-
-Rupesh Majhi (5):
-  iio: pressure: dps310: use devm_mutex_init()
-  iio: pressure: dps310: read buffered samples from the hardware FIFO
-  iio: pressure: dps310: derive the drain interval from the watermark
-  iio: pressure: dps310: implement .hwfifo_flush_to_buffer()
-  iio: pressure: dps310: assert the lock at runtime too
-
- drivers/iio/pressure/dps310.c | 441 +++++++++++++++++++++++++++++++++-
- 1 file changed, 430 insertions(+), 11 deletions(-)
-
-
-base-commit: a3b3580713f3ac5a32dc2874ee546828977a1d68
+diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
+index 85df58ac1809..5c8af216ece4 100644
+--- a/drivers/iio/pressure/dps310.c
++++ b/drivers/iio/pressure/dps310.c
+@@ -19,6 +19,7 @@
+ #include <linux/limits.h>
+ #include <linux/math64.h>
+ #include <linux/module.h>
++#include <linux/mutex.h>
+ #include <linux/regmap.h>
+ #include <linux/unaligned.h>
+ 
+@@ -996,7 +997,10 @@ static int dps310_probe(struct i2c_client *client)
+ 
+ 	data = iio_priv(iio);
+ 	data->client = client;
+-	mutex_init(&data->lock);
++
++	rc = devm_mutex_init(dev, &data->lock);
++	if (rc)
++		return rc;
+ 
+ 	iio->name = DPS310_DEV_NAME;
+ 	iio->channels = dps310_channels;
 -- 
 2.43.0
 
