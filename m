@@ -1,132 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A498439BFED;
-	Sat,  3 Oct 2026 21:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3972384CC6
+	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 22:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791062068; cv=none; b=IBGOcfbFHkfhid4jWG2oFH18ezcdTpnZXR4Qza8qT9stCftAsbSLdFCFuNP0Y36iCXRNMpbCLuxoF7Z10aALoSJHuNEpd+YqsJ4uZ0mRMNnvfKi0zgygIeF4MPlTUxIzjXdJK7dV8C3orqrdN3aPIuDtcAlJwFmhkH0MtYFnHgI=
+	t=1791067514; cv=none; b=EsbAtFZDLOI+GlefQibFmfL4iKwR0rS6suNoxpSAUCYsQA1K2d/0FqR8Owjp2TDqAqPdxrs0rEEUTWIz1YKTG8BpByVhkG9fN7wKv+4GEgQXt8akKb7L5r2DL680z7EXtSRngnoueTd7aCyAH0Gbf3q63mmSVOz8yHbHKZNoioM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791062068; c=relaxed/simple;
-	bh=CJ6c5Zd1uYQq/ti9meGO7cyRW6CJGI8tPRrhWTQG0m4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mVMhLOXq4T1mkA7t41lgfZDBxkv94arfzM/ynBo/RfdBPhdPmiybr3yzmgZqM/h6L/J8tdGXRj4evG0O/7nRTGznQk7AKw1Jn/TTo/+9teoCyPdlLtgUvY1loht3H4CRbeS5qi5MSxbZhAtEmfhKF3XMWQLzPJnrvBk5PT8EUVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ltMCYBJh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791067514; c=relaxed/simple;
+	bh=W21SRaEwpj9rNXOhq+Ty48iMmU1uKpvKeWtWaSSd1JM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=Yd2s5+em7/cHyHJ8lqtHLH+nvZErrnsaMB8YAVOsNpGjDqs47hALOXkzv64UY9jtqS0+bKyFOhMwlck9soZabG9v1roCjaph6OmOLD15oi72qZxA5ADrJlQ1K7yrRLnrAMAyLT5RiJISbtru61oV2VMatCi99F4csbrr/qnv+IM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=RLbFDHwu; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ltMCYBJh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333431F0089B;
-	Sat,  3 Oct 2026 21:14:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791062067;
-	bh=91Re1ki5i06ImfQ2WQcYkJL+cFX6XDihWfIGyXVk9j8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ltMCYBJhrHGywMCwYCJ9iRp6v+aDzPtsuVq2HKqfaurd57oEobFkLFNFD5tiGhRK6
-	 6mCP1gWhsYHLavzgdTNI+TJrrxsMt7jVNJW6grUR4JBpRhVI/Y4XWsLTvXw/RPrIIK
-	 pP08cv3FpCr8lM7nLmTw+UmWiJ/fMloU23eW+C1z0o3CItNgmi4vq6zp8BLjHJMnS0
-	 1ZIEZyeAIC4iQzaP130AYyCzvbqZ7D/PJ/pFk1rTLCx7lkMYVszdtHqwknkrTw57Ji
-	 xRUwAVeLYWfSHSdCudnhgyuaxAU9dP7HTIqOxxFwxYoeqyD+Lq0ccQ9ImMsvqjOEtF
-	 cCLMjIb+uciFg==
-Date: Sat, 3 Oct 2026 23:14:21 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: Sasha Levin <sashal@kernel.org>
-Cc: James Morse <james.morse@arm.com>, Ben Horgan <ben.horgan@arm.com>,
-	Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>,
-	Andre Przywara <andre.przywara@arm.com>,
-	Gavin Shan <gshan@redhat.com>,
-	"kernelci.org bot" <bot@kernelci.org>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Fenghua Yu <fenghuay@nvidia.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] arm_mpam: make the mon_sel guard conditional only
-Message-ID: <20261003211421.GA1389115@ax162>
-References: <20261003121251.3942666-1-sashal@kernel.org>
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="RLbFDHwu"
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20261003224508euoutp02c41c30b489eaee9363e860f2478d6027~bJmji_WXc2979329793euoutp02u;
+	Sat,  3 Oct 2026 22:45:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20261003224508euoutp02c41c30b489eaee9363e860f2478d6027~bJmji_WXc2979329793euoutp02u
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1791067508;
+	bh=vFhGMCg6Ji/JXdFQ3B6wXXIZQgQ9xvpb3HvqRmvxgSk=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=RLbFDHwuh3NRChlB5DbAnpf5fbQ/9VI4LqGu4llTjFUiXPQ562rniZUJozx7F6f0C
+	 O998yLIejmOOpMfO2undeRdQGMIbbwvHHW6qvrglXgdLXRekz3Vq8zAZ0mrAGgSxG4
+	 yLsO68CPN7a6ZuBi2t//4zMj/AdCV8fhYFGTexlA=
+Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20261003224507eucas1p200ece20a05f4aac2eeb0180f041df0fe~bJmigAu1f3080530805eucas1p2D;
+	Sat,  3 Oct 2026 22:45:07 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20261003224505eusmtip1f6ac4f841c43fd74cce4c31cdfba487f~bJmg3wbbL2072920729eusmtip1D;
+	Sat,  3 Oct 2026 22:45:05 +0000 (GMT)
+Message-ID: <9c5913c0-11c8-4db8-844b-ea2ef29bf5db@samsung.com>
+Date: Sun, 4 Oct 2026 00:45:05 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261003121251.3942666-1-sashal@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 9/9] MAINTAINERS: add an entry for the LZ4
+ compression library
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
+	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
+	<justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, Thomas
+	Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, Heiko
+	Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
+	Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+	<borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
+	Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>, Sergey
+	Senozhatsky <senozhatsky@chromium.org>, Jens Axboe <axboe@kernel.dk>, Andrew
+	Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-block@vger.kernel.org, Yann Collet
+	<yann.collet.73@gmail.com>, Nick Terrell <terrelln@meta.com>, Gao Xiang
+	<xiang@kernel.org>, Chao Yu <chao@kernel.org>, Jaegeuk Kim
+	<jaegeuk@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, Phillip
+	Lougher <phillip@squashfs.org.uk>, Sungguk <sungguk.na@samsung.com>, Jaehoon
+	Chung <jh80.chung@samsung.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
+	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-crypto@vger.kernel.org
+Content-Language: en-US
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <20260925213926.GA1903@quark>
+Content-Transfer-Encoding: 7bit
+X-CMS-MailID: 20261003224507eucas1p200ece20a05f4aac2eeb0180f041df0fe
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3
+X-EPHeader: CA
+X-CMS-RootMailID: 20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3
+References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
+	<CGME20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3@eucas1p2.samsung.com>
+	<20260925-lz4-vendor-upstream-v1-9-1c7ffbe21c4b@samsung.com>
+	<20260925213926.GA1903@quark>
 
-On Sat, Oct 03, 2026 at 08:12:48AM -0400, Sasha Levin wrote:
-> Building arm64 allmodconfig with clang fails:
+
+
+On 9/25/26 23:39, Eric Biggers wrote:
+> On Fri, Sep 25, 2026 at 01:27:39PM +0200, Michal Wilczynski wrote:
+>> lib/lz4/ has never had one: get_maintainer.pl returns only the LKML
+>> fallback for every file in it, including include/linux/lz4.h, which eight
+>> subsystems build against.
+>>
+>> This matters more now than it did. With the previous patches lib/lz4 is
+>> vendored upstream sources, and someone has to bump them to new upstream
+>> releases and decide what the kernel-side glue may do. I am willing to do
+>> that, so add myself as its maintainer.
+>>
+>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+>> ---
+>>  MAINTAINERS | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index cc3cae2e378b34aeb705cef654c720ca9f2ba223..989e1b5fab21432dd7042d1e60c4bbad85beb925 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -15606,6 +15606,12 @@ S:	Supported
+>>  F:	drivers/net/pcs/pcs-lynx.c
+>>  F:	include/linux/pcs-lynx.h
+>>  
+>> +LZ4 COMPRESSION LIBRARY
+>> +M:	Michal Wilczynski <m.wilczynski@samsung.com>
+>> +S:	Maintained
+>> +F:	include/linux/lz4.h
+>> +F:	lib/lz4/
+>> +
 > 
->   drivers/resctrl/mpam_internal.h:207:7: error: ignoring return value
->   of function declared with 'warn_unused_result' attribute
->   [-Werror,-Wunused-result]
->     207 |              mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
+> Should this entry cover lib/decompress_unlz4.c and
+> include/linux/decompress/unlz4.h as well?
+
+Yes I'll add both in v2.
+Thanks a lot for looking at the series as a whole.
+
 > 
-> mpam_mon_sel_lock() is __must_check and can fail: for an MSC accessed
-> through the MPAM-Fb firmware interface it returns false when called
-> from a context that cannot sleep. The mon_sel guard was defined with
-> DEFINE_GUARD(), which calls it unconditionally and discards the
-> result, so a guard(mon_sel) user would carry on without the lock and
-> release it on scope exit.
-
-I wondered why we do not see the same warning with GCC since it seems
-like it should also warn on the same construct...
-
-> The unconditional guard only exists as the base for the conditional
-> mon_sel_lock variant, which is the one actually used.
-
-but this is why: GCC may not emit warnings for dead code due to some
-warnings being emitted from the middle end after optimizations happen
-but clang will always warn because its semantic analysis runs in the
-front end before optimizations occur.
-
-> Define mon_sel_lock directly as a conditional guard class instead, as
-> posix-timers does for lock_timer: the constructor returns NULL when
-> the lock cannot be taken, and the destructor only releases a lock
-> that was taken. ACQUIRE(mon_sel_lock, ...) works as before, including
-> ACQUIRE_ERR() returning -EBUSY on failure, and there is no
-> unconditional variant left to misuse.
-
-These macros make my head hurt but this seems correct to me (though not
-enough to give a formal review tag).
-
-> Reported-by: kernelci.org bot <bot@kernelci.org>
-> Closes: https://d.kernelci.org/i/maestro:66f869ecbbb5b8592562ffd89f049c5ddf682547
-> Closes: https://d.kernelci.org/i/maestro:647269216758644837afcaac8e67d8dbe713a0e2
-> Fixes: 0db1715e4c9c ("arm_mpam: propagate MSC access errors for hw_probe functions")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-
-Thanks, this fixes the build for me as well.
-
-Tested-by: Nathan Chancellor <nathan@kernel.org> # build
-
-> ---
->  drivers/resctrl/mpam_internal.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/resctrl/mpam_internal.h b/drivers/resctrl/mpam_internal.h
-> index ee7c3953a9b6c..be1795b29aca2 100644
-> --- a/drivers/resctrl/mpam_internal.h
-> +++ b/drivers/resctrl/mpam_internal.h
-> @@ -203,9 +203,10 @@ static inline int mpam_mon_sel_lock_init(struct device *dev,
->  	return devm_mutex_init(dev, &msc->mon_sel_mutex);
->  }
->  
-> -DEFINE_GUARD(mon_sel, struct mpam_msc *,
-> -	     mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
-> -DEFINE_GUARD_COND(mon_sel, _lock, mpam_mon_sel_lock(_T), _RET);
-> +DEFINE_CLASS(mon_sel_lock, struct mpam_msc *,
-> +	     _T ? mpam_mon_sel_unlock(_T) : (void)0,
-> +	     mpam_mon_sel_lock(msc) ? msc : NULL, struct mpam_msc *msc);
-> +DEFINE_CLASS_IS_COND_GUARD(mon_sel_lock);
->  
->  /* Bits for mpam features bitmaps */
->  enum mpam_device_features {
-> -- 
-> 2.53.0
+> - Eric
 > 
 
+Best regards,
 -- 
-Cheers,
-Nathan
+Michal Wilczynski <m.wilczynski@samsung.com>
