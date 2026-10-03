@@ -1,203 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm2-f12.google.com (mail-wm2-f12.google.com [74.125.225.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AC2337E2E6;
-	Sat,  3 Oct 2026 07:51:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9140F3D7D77
+	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 09:38:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791013919; cv=none; b=AtfBTdE7iWG3ntBNH+KkpABcCNFC8dhTv2JMFEYmZindxiubDdTTvUuoPCuiyEWD9tIHFT8vaPen8vQJnKM8tWGls18DzZTtjZr4lxK7GR9TBU2oJAHFGMuJtGNoxArnzpVK4NEdZn2VYqVpIRzk/Rn+im9WO5uoZRekKBPAgX8=
+	t=1791020317; cv=none; b=fVNaGmIbDIQKEDmDHbKEFroxtjcCalj0PzK2QF8QbMdFHItuUbY/CpUsCpl54A85X6DSQLiq2nyTBdpqkPDRsGk5T9+dVKGGsYsJxxpj7u10J9wcRPrQ1+cT6Bxpi2Kq2hbfEORE4quHwadau4SoZY2DkXGJ8oleQ6Kq7tibalY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791013919; c=relaxed/simple;
-	bh=UOoeCiPnhu3pRDP1rjcyanJT3DLHqPLfbHISk4Wmpl8=;
-	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MFXmW46Ns+khUDhIIPRNkMmPJj/iB5EyMkGjH+XhoqbNPFV9mxQmJNh+qjhtkhL3uHY4ecO2RiyGD2HwcbIp2sN+FQ5d7QIzlA+VdZ6qKZXoFvYbw5zyGzCtfo7JEvCt0xXlVPBJHmFNF1j6nIYYHlRMKC+UAgKQoHqoqICTzYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SrVZ4vX9; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791020317; c=relaxed/simple;
+	bh=HgwWgfAn32S0WUYg+phTBo9McyRRLx+6LXyBgReCFog=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HDiNlvSbEXaUkFRNq7+GZtUGmYnNt4n2UJ/ByxNllNK/10eCLMvCOzpHYsKa88Dzvd4VHbTehFC7vYAt3nmnFitIm4jk1lsC1r8gdf8s7b7EUO7QBNtISHLkOx7fmu2V4PYYu/c00y8TZ6WsvAs7pxT3ku8ySzuEMsVHkz9wCcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=pzVZb3q/; arc=none smtp.client-ip=74.125.225.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SrVZ4vX9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791013918; x=1822549918;
-  h=date:from:cc:subject:message-id:references:mime-version:
-   in-reply-to;
-  bh=UOoeCiPnhu3pRDP1rjcyanJT3DLHqPLfbHISk4Wmpl8=;
-  b=SrVZ4vX9+Kfrco9bNjA0e5aI2SfbaBRPjydUbsqWcRMg/I+H9v9rhxy1
-   vawGiFJfbO3j5hqjn+LwctQGAv+SBZ9mdkIQtsixM7FvrQBcY8jr4l0q3
-   tF+Ul+DgHIxkPwpeWr9QEBRzyTJYK5dG0PXzPr/woh/76q6sStUV8pkku
-   ZDFvgecXyT9yErj275v2BKEW8r8/3Dt/jdyfgyeI0XWQx1HQ03yXJBnv0
-   iQU1UkE/nmPr+1Nd4JHCDtxiNNDK1v6BlfEsY9s7UpB2nw9JRA7WMwUTR
-   Fy/OKU3ZeNa4vZrxZbSqYyn5dbOyoZ8T9GgkKJtbTlimF9m+QFjzWqsqr
-   A==;
-X-CSE-ConnectionGUID: PavscfAWQLiAp1E1mHVDqQ==
-X-CSE-MsgGUID: eUnJp7PLQDGNL+iEPEMI6w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11923"; a="95583344"
-X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
-   d="scan'208";a="95583344"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2026 00:51:57 -0700
-X-CSE-ConnectionGUID: xS0ZKmROQAWzD+0rb1MtiQ==
-X-CSE-MsgGUID: sicuxPdSRx2BGiOwQvH7cg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
-   d="scan'208";a="284478562"
-Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 03 Oct 2026 00:51:56 -0700
-Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xCuXB-00000000ToD-3OYF;
-	Sat, 03 Oct 2026 07:51:53 +0000
-Date: Sat, 3 Oct 2026 15:51:01 +0800
-From: kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: powerpc64: move preempt count to paca
-Message-ID: <202610031540.BVG5ql3j-lkp@intel.com>
-References: <202610031540.BVG5ql3j-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="pzVZb3q/"
+Received: by mail-wm2-f12.google.com with SMTP id 5b1f17b1804b1-49ffde3cec6so3041295e9.3
+        for <llvm@lists.linux.dev>; Sat, 03 Oct 2026 02:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791020314; x=1791625114; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KvxVLxua6Tw50aLhIwUcC7cdFZF352a+MrKefzPbwHs=;
+        b=pzVZb3q/Ie4na2d3iErRYYPamyx350icBpxogxWpOWwSK0X/ZADkQs4dds2+5iUQc2
+         63uOSx8jKnU/qXYzCnoSo48Gq8BmvOwHa4p4Hqy1zlGfMLXzz9xbyCPi8UoFalPTxr63
+         BwLvE8oQouqFJXBndL5ujGiA0Q4szuOmq0WL8sS9ZZC6abeHjuz0c4519BXLHoHOlI9f
+         HhEmruKGML6fyMSVXLdEu+r/h9rJHWq7r3RuabCgmcjDNT4mUhQbFrb2f3J7GAsxBjCR
+         xcf4sXfFwzS8PXL2v3I7voUIcBb954szN0O/8FNb/VzS9LrNh2H2p0EFZkRaOT0YOSTM
+         Iqnw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791020314; x=1791625114;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KvxVLxua6Tw50aLhIwUcC7cdFZF352a+MrKefzPbwHs=;
+        b=SoBQ7iPcwRMEqwdGsX7LyY1sQOMIzlqfFfM0oBFCF6t6bnxENJz6H4I6H5mEGQURya
+         0iL1di3SpvVJyUpCAnHiHZXAiDQd2u6YjyIzEW5fIyhX3dNgtv8twvnA2HbiXr96ACwM
+         9sHGNMRTLN58EW0duhjP+BmFLKx6S/qsiX1XshJxQBmTQTzN6BXVV75yyzwDAQi2uPhZ
+         8zeWDCAeSthDhDXfS5U36K0nMObInbqtC89wBUA5yeYeZ6J+h6ZtMrk0fmo4qvIi2uTd
+         rKxUj06ojRPdXVHHybZ4C6sMyzc9pKUsaUamToGiHx8hody6TKwPlbDAo95/M+4u9MGp
+         uZWw==
+X-Forwarded-Encrypted: i=1; AKwUvByoT8K5UVN4KSnlSaQs0yZGayv8q8MaMiNrK4HwGB4uOydtR94hqx+ETkA3XdIdE02N+J3J@lists.linux.dev
+X-Gm-Message-State: AFuF++kZhbHSOZfR9oFqnMD0n5yprXsLlprZci25TifFj75UWFSLfzDm
+	opN1nxrmZse/dFczNNF48fK4BbtQt3AeUYatcwpIPP/amG7Z/eX77W5u
+X-Gm-Gg: AYBFou29DlxtC9xHwGQInT82SadDmdnhY3LTKpOPhhlpWdNPCwDz+xVmSAuZtgmJ0eG
+	eIrIQq07JR+jqUifcIIg/ZxCGKePJcimiRrVQvTq9fASeOjz7QM4PaHYbLqFhDxJCthYB2NG6C9
+	0pb7RxSIXjzP+5c95p2FUZUWtFIlvnSxID8NnWHgdx6O+pzSiUzvmSNJ9ohzCzspVgh0CrIXVaF
+	EnnTNOuf9lkNHI+P/ZpD1XliJFa/dDlwNI+Mlf5+7sR3GQHQf8MjKbpQLf79B0tJmT2RO0eV+eX
+	lPTF0BvxLqquTee+C3IS02hzNOCrcQ3Trwe+1xG7/1t3QZzQ16t+K7FkOpQQY78F1NipBJFxvxz
+	OE3dggkEIbqiFPFC1XGId/He3YwG+dX3/+lfjeBgcjlqRpPXXpCSDyqngxPwv23M82ueCMwRKa8
+	fRubt+MaMPE67kuD27lffaIvx674zgsAr+wU6YLzmSFm/x6I+bNP9TFyafqvwkwfjPIXga45d8B
+	p0+Mr1uCIi/PgQrRx96DfSWJAJt4IldElpILuOvVDMZKFMDnkQQdhWhWMZkdNFJJDZx2Q/V7/q3
+	FVmtb/lRd5ag0BKUHCiuawHXhOSDjQbCldrdRb+o6YqJ3x0L8oSiUvkqYRaSOPP/m17EuKNTeia
+	7+a6bd7Y=
+X-Received: by 2002:a05:600c:4505:b0:4a1:62b8:9e8c with SMTP id 5b1f17b1804b1-4a162b8ae34mr55253055e9.33.1791020313486;
+        Sat, 03 Oct 2026 02:38:33 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-b2e2-2001-c47f-5a89-3d9a-cd2d.310.pool.telefonica.de. [2a02:3100:b2e2:2001:c47f:5a89:3d9a:cd2d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a02770e8f2sm136528375e9.6.2026.10.03.02.38.31
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 03 Oct 2026 02:38:33 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Russell King <linux@armlinux.org.uk>,
+	Miguel Ojeda <ojeda@kernel.org>
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Linus Walleij <linusw@kernel.org>,
+	Christian Schrefl <chrisi.schrefl@gmail.com>,
+	Bradley Morgan <brads@mainlining.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-arm-kernel@lists.infradead.org,
+	rust-for-linux@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] ARM: rust: Enable Rust support for ARMv5TE
+Date: Sat,  3 Oct 2026 11:38:25 +0200
+Message-Id: <20261003093827.77857-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202610031540.BVG5ql3j-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Shrikanth,
+Rust is currently limited to ARMv7 on 32-bit ARM. This series extends
+it to ARMv5TE.
 
-kernel test robot noticed the following build warnings:
+Linus Walleij asked for older ARM cores during review of the ARMv7
+support [1]. Christian Schrefl tried ARMv5 with the armv5te-none-eabi
+target at the time [2]. He hit missing core atomics, missing
+__aeabi_mem* symbols and a floating-point helper reached from
+pr_info!() formatting. None of these show up anymore. The kernel crate
+now implements atomics through the C helpers, and the
+armv5te-unknown-linux-gnueabi target used here keeps the Linux EABI.
+
+The only remaining problem was a link error. Pre-ARMv6 __arch_xchg()
+has no 2-byte case, which the Rust Atomic<i16> helpers need. Patch 1
+adds it the way the other pre-ARMv6 atomics work, with interrupts
+disabled. Patch 2 enables Rust for ARMv5TE.
+
+Bradley Morgan's two-byte cmpxchg() emulation series [3] does not
+overlap with this. Its ARMv6 part was dropped in v2 and it never
+covered xchg() or pre-ARMv6.
+
+Tested on v7.3-rc1 with clang 22.1.8, rustc 1.99.0 and bindgen 0.73.2.
+
+- QEMU versatilepb (ARM926EJ-S). The Rust samples, all Rust KUnit
+  suites and 355 doctests pass.
+- Microchip SAM9X75 Curiosity board (ARM926EJ-S), at91_dt_defconfig
+  without the ARMv4T AT91RM9200. The samples, all Rust KUnit suites and
+  356 doctests pass. The Rust sample modules (rust_minimal, rust_print,
+  rust_misc_device, rust_driver_faux) load and unload cleanly.
+- Build test with every Rust driver, abstraction and sample that can be
+  selected on ARMv5TE (rnull, binder, the two PHY drivers, cpufreq-dt,
+  the DRM panic QR code). PWM_TH1520 is the exception. It uses a native
+  u64 division, which does not link on 32-bit ARM.
+
+As a further test I ported the Atmel PWM driver to Rust and ran it next
+to the C driver on the SAM9X75 board. The port is not part of this
+series. The comparison found a prescaler bug in the C driver for
+periods of 2^32 clock cycles or more [4].
+
+I plan to get a Raspberry Pi 1 Model B+ and then add ARMv6K support as
+a separate patch.
+
+The ARMv7 enablement went in through Russell's patch system as
+"ARM: 9441/1". Unless someone prefers another route I would submit
+this series there after review.
+
+[1] https://lore.kernel.org/rust-for-linux/CACRpkdYF0sVB2-qgy=GzETSR3+2sagVQPGdunDQDJrn8KqJorA@mail.gmail.com/
+[2] https://lore.kernel.org/rust-for-linux/b13d37bd-ec68-4713-94e5-e9ed4d6a6354@gmail.com/
+[3] https://lore.kernel.org/lkml/20260922173354.14404-1-brads@mainlining.org/
+[4] https://lore.kernel.org/linux-pwm/20261003083036.21584-1-kmehltretter@gmail.com/
+
+Karl Mehltretter (2):
+  ARM: cmpxchg: support 2-byte xchg() on pre-ARMv6 CPUs
+  ARM: rust: Enable Rust support for ARMv5TE
+
+ Documentation/rust/arch-support.rst |  2 +-
+ arch/arm/Kconfig                    |  2 +-
+ arch/arm/Makefile                   |  4 ++++
+ arch/arm/include/asm/cmpxchg.h      | 14 +++++++++++---
+ 4 files changed, 17 insertions(+), 5 deletions(-)
 
 
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+-- 
+2.39.5 (Apple Git-154)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Shrikanth-Hegde/powerpc64-move-preempt-count-to-paca/20261002-221617
-base:   
-patch link:    https://lore.kernel.org/r/202610031540.BVG5ql3j-lkp%40intel.com
-config: powerpc64-randconfig-1000-20261003 (https://download.01.org/0day-ci/archive/20261003/202610031540.BVG5ql3j-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5f609f950d2e80addf5566623013db68394334db)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261003/202610031540.BVG5ql3j-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610031540.BVG5ql3j-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/sched/core.c:7502:22: warning: no previous prototype for function 'dynamic_preempt_schedule' [-Wmissing-prototypes]
-    7502 | void __sched notrace dynamic_preempt_schedule(void)
-         |                      ^
-   kernel/sched/core.c:7502:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    7502 | void __sched notrace dynamic_preempt_schedule(void)
-         | ^
-         | static 
->> kernel/sched/core.c:7575:22: warning: no previous prototype for function 'dynamic_preempt_schedule_notrace' [-Wmissing-prototypes]
-    7575 | void __sched notrace dynamic_preempt_schedule_notrace(void)
-         |                      ^
-   kernel/sched/core.c:7575:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-    7575 | void __sched notrace dynamic_preempt_schedule_notrace(void)
-         | ^
-         | static 
-   2 warnings generated.
-
-
-vim +/dynamic_preempt_schedule +7502 kernel/sched/core.c
-
-009f60e2763568 Oleg Nesterov          2014-10-05  7491  
-2c9a98d3bc8087 Peter Zijlstra (Intel  2021-01-18  7492) #ifdef CONFIG_PREEMPT_DYNAMIC
-b7ebb758568b60 Ingo Molnar            2025-05-28  7493  # ifdef CONFIG_HAVE_PREEMPT_DYNAMIC_CALL
-8a69fe0be143b0 Mark Rutland           2022-02-14  7494  #  ifndef preempt_schedule_dynamic_enabled
-8a69fe0be143b0 Mark Rutland           2022-02-14  7495  #   define preempt_schedule_dynamic_enabled	preempt_schedule
-8a69fe0be143b0 Mark Rutland           2022-02-14  7496  #   define preempt_schedule_dynamic_disabled	NULL
-8a69fe0be143b0 Mark Rutland           2022-02-14  7497  #  endif
-8a69fe0be143b0 Mark Rutland           2022-02-14  7498  DEFINE_STATIC_CALL(preempt_schedule, preempt_schedule_dynamic_enabled);
-ef72661e28c64a Peter Zijlstra         2021-01-25  7499  EXPORT_STATIC_CALL_TRAMP(preempt_schedule);
-99cf983cc8bca4 Mark Rutland           2022-02-14  7500  # elif defined(CONFIG_HAVE_PREEMPT_DYNAMIC_KEY)
-99cf983cc8bca4 Mark Rutland           2022-02-14  7501  static DEFINE_STATIC_KEY_TRUE(sk_dynamic_preempt_schedule);
-99cf983cc8bca4 Mark Rutland           2022-02-14 @7502  void __sched notrace dynamic_preempt_schedule(void)
-99cf983cc8bca4 Mark Rutland           2022-02-14  7503  {
-99cf983cc8bca4 Mark Rutland           2022-02-14  7504  	if (!static_branch_unlikely(&sk_dynamic_preempt_schedule))
-99cf983cc8bca4 Mark Rutland           2022-02-14  7505  		return;
-99cf983cc8bca4 Mark Rutland           2022-02-14  7506  	preempt_schedule();
-99cf983cc8bca4 Mark Rutland           2022-02-14  7507  }
-99cf983cc8bca4 Mark Rutland           2022-02-14  7508  NOKPROBE_SYMBOL(dynamic_preempt_schedule);
-99cf983cc8bca4 Mark Rutland           2022-02-14  7509  EXPORT_SYMBOL(dynamic_preempt_schedule);
-99cf983cc8bca4 Mark Rutland           2022-02-14  7510  # endif
-b7ebb758568b60 Ingo Molnar            2025-05-28  7511  #endif /* CONFIG_PREEMPT_DYNAMIC */
-2c9a98d3bc8087 Peter Zijlstra (Intel  2021-01-18  7512) 
-009f60e2763568 Oleg Nesterov          2014-10-05  7513  /**
-4eaca0a887eaee Frederic Weisbecker    2015-06-04  7514   * preempt_schedule_notrace - preempt_schedule called by tracing
-009f60e2763568 Oleg Nesterov          2014-10-05  7515   *
-009f60e2763568 Oleg Nesterov          2014-10-05  7516   * The tracing infrastructure uses preempt_enable_notrace to prevent
-009f60e2763568 Oleg Nesterov          2014-10-05  7517   * recursion and tracing preempt enabling caused by the tracing
-009f60e2763568 Oleg Nesterov          2014-10-05  7518   * infrastructure itself. But as tracing can happen in areas coming
-009f60e2763568 Oleg Nesterov          2014-10-05  7519   * from userspace or just about to enter userspace, a preempt enable
-009f60e2763568 Oleg Nesterov          2014-10-05  7520   * can occur before user_exit() is called. This will cause the scheduler
-009f60e2763568 Oleg Nesterov          2014-10-05  7521   * to be called when the system is still in usermode.
-009f60e2763568 Oleg Nesterov          2014-10-05  7522   *
-009f60e2763568 Oleg Nesterov          2014-10-05  7523   * To prevent this, the preempt_enable_notrace will use this function
-009f60e2763568 Oleg Nesterov          2014-10-05  7524   * instead of preempt_schedule() to exit user context if needed before
-009f60e2763568 Oleg Nesterov          2014-10-05  7525   * calling the scheduler.
-009f60e2763568 Oleg Nesterov          2014-10-05  7526   */
-4eaca0a887eaee Frederic Weisbecker    2015-06-04  7527  asmlinkage __visible void __sched notrace preempt_schedule_notrace(void)
-009f60e2763568 Oleg Nesterov          2014-10-05  7528  {
-009f60e2763568 Oleg Nesterov          2014-10-05  7529  	enum ctx_state prev_ctx;
-009f60e2763568 Oleg Nesterov          2014-10-05  7530  
-009f60e2763568 Oleg Nesterov          2014-10-05  7531  	if (likely(!preemptible()))
-009f60e2763568 Oleg Nesterov          2014-10-05  7532  		return;
-009f60e2763568 Oleg Nesterov          2014-10-05  7533  
-009f60e2763568 Oleg Nesterov          2014-10-05  7534  	do {
-47252cfbac0364 Steven Rostedt         2016-03-21  7535  		/*
-47252cfbac0364 Steven Rostedt         2016-03-21  7536  		 * Because the function tracer can trace preempt_count_sub()
-47252cfbac0364 Steven Rostedt         2016-03-21  7537  		 * and it also uses preempt_enable/disable_notrace(), if
-47252cfbac0364 Steven Rostedt         2016-03-21  7538  		 * NEED_RESCHED is set, the preempt_enable_notrace() called
-47252cfbac0364 Steven Rostedt         2016-03-21  7539  		 * by the function tracer will call this function again and
-47252cfbac0364 Steven Rostedt         2016-03-21  7540  		 * cause infinite recursion.
-47252cfbac0364 Steven Rostedt         2016-03-21  7541  		 *
-47252cfbac0364 Steven Rostedt         2016-03-21  7542  		 * Preemption must be disabled here before the function
-47252cfbac0364 Steven Rostedt         2016-03-21  7543  		 * tracer can trace. Break up preempt_disable() into two
-47252cfbac0364 Steven Rostedt         2016-03-21  7544  		 * calls. One to disable preemption without fear of being
-47252cfbac0364 Steven Rostedt         2016-03-21  7545  		 * traced. The other to still record the preemption latency,
-47252cfbac0364 Steven Rostedt         2016-03-21  7546  		 * which can also be traced by the function tracer.
-47252cfbac0364 Steven Rostedt         2016-03-21  7547  		 */
-3d8f74dd4ca1da Peter Zijlstra         2015-09-28  7548  		preempt_disable_notrace();
-47252cfbac0364 Steven Rostedt         2016-03-21  7549  		preempt_latency_start(1);
-009f60e2763568 Oleg Nesterov          2014-10-05  7550  		/*
-009f60e2763568 Oleg Nesterov          2014-10-05  7551  		 * Needs preempt disabled in case user_exit() is traced
-009f60e2763568 Oleg Nesterov          2014-10-05  7552  		 * and the tracer calls preempt_enable_notrace() causing
-009f60e2763568 Oleg Nesterov          2014-10-05  7553  		 * an infinite recursion.
-009f60e2763568 Oleg Nesterov          2014-10-05  7554  		 */
-009f60e2763568 Oleg Nesterov          2014-10-05  7555  		prev_ctx = exception_enter();
-b4bfa3fcfe3b82 Thomas Gleixner        2021-08-15  7556  		__schedule(SM_PREEMPT);
-009f60e2763568 Oleg Nesterov          2014-10-05  7557  		exception_exit(prev_ctx);
-009f60e2763568 Oleg Nesterov          2014-10-05  7558  
-47252cfbac0364 Steven Rostedt         2016-03-21  7559  		preempt_latency_stop(1);
-3d8f74dd4ca1da Peter Zijlstra         2015-09-28  7560  		preempt_enable_no_resched_notrace();
-009f60e2763568 Oleg Nesterov          2014-10-05  7561  	} while (need_resched());
-009f60e2763568 Oleg Nesterov          2014-10-05  7562  }
-4eaca0a887eaee Frederic Weisbecker    2015-06-04  7563  EXPORT_SYMBOL_GPL(preempt_schedule_notrace);
-009f60e2763568 Oleg Nesterov          2014-10-05  7564  
-2c9a98d3bc8087 Peter Zijlstra (Intel  2021-01-18  7565) #ifdef CONFIG_PREEMPT_DYNAMIC
-99cf983cc8bca4 Mark Rutland           2022-02-14  7566  # if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
-8a69fe0be143b0 Mark Rutland           2022-02-14  7567  #  ifndef preempt_schedule_notrace_dynamic_enabled
-8a69fe0be143b0 Mark Rutland           2022-02-14  7568  #   define preempt_schedule_notrace_dynamic_enabled	preempt_schedule_notrace
-8a69fe0be143b0 Mark Rutland           2022-02-14  7569  #   define preempt_schedule_notrace_dynamic_disabled	NULL
-2c9a98d3bc8087 Peter Zijlstra (Intel  2021-01-18  7570) #  endif
-8a69fe0be143b0 Mark Rutland           2022-02-14  7571  DEFINE_STATIC_CALL(preempt_schedule_notrace, preempt_schedule_notrace_dynamic_enabled);
-ef72661e28c64a Peter Zijlstra         2021-01-25  7572  EXPORT_STATIC_CALL_TRAMP(preempt_schedule_notrace);
-99cf983cc8bca4 Mark Rutland           2022-02-14  7573  # elif defined(CONFIG_HAVE_PREEMPT_DYNAMIC_KEY)
-99cf983cc8bca4 Mark Rutland           2022-02-14  7574  static DEFINE_STATIC_KEY_TRUE(sk_dynamic_preempt_schedule_notrace);
-99cf983cc8bca4 Mark Rutland           2022-02-14 @7575  void __sched notrace dynamic_preempt_schedule_notrace(void)
-c597bfddc9e9e8 Frederic Weisbecker    2021-09-14  7576  {
-99cf983cc8bca4 Mark Rutland           2022-02-14  7577  	if (!static_branch_unlikely(&sk_dynamic_preempt_schedule_notrace))
-99cf983cc8bca4 Mark Rutland           2022-02-14  7578  		return;
-99cf983cc8bca4 Mark Rutland           2022-02-14  7579  	preempt_schedule_notrace();
-c597bfddc9e9e8 Frederic Weisbecker    2021-09-14  7580  }
-99cf983cc8bca4 Mark Rutland           2022-02-14  7581  NOKPROBE_SYMBOL(dynamic_preempt_schedule_notrace);
-99cf983cc8bca4 Mark Rutland           2022-02-14  7582  EXPORT_SYMBOL(dynamic_preempt_schedule_notrace);
-99cf983cc8bca4 Mark Rutland           2022-02-14  7583  # endif
-2c9a98d3bc8087 Peter Zijlstra (Intel  2021-01-18  7584) #endif
-c597bfddc9e9e8 Frederic Weisbecker    2021-09-14  7585  
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
