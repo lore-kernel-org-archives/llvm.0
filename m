@@ -1,304 +1,223 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D37497381
-	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 19:50:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67815382F08
+	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 20:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791057033; cv=none; b=OVWnPuV5QRMvsmxQlw1iYfGNXz3vBqQTRcwKWT5U+avTdmCPkqIqheNMPAxjw5CreEEHjdrhnsba+wOnaz6nkO9Ynhi9NZNDNRQ+m17EhtFneqhx95nnJ12ZRn19rpIQyC4Ya5I1oy1F8U/D5sI8Xsh5mjD9vywWjEjrd6jpQ48=
+	t=1791060920; cv=none; b=A/QiI31COHi8DtIyL7dc1XAvaVKY7UZo7oKMOUYVy82vtFGytaeZaXT+AZZEcuiXmCeOxMy/Wa915r1wCmQMzksMN8mB7+rC7rnonmcm3fboPdQwornv5aASm4Y1clllaHez+p3woUmVuGSFR9uZR3o29wbdKACWPZLlyXsiMwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791057033; c=relaxed/simple;
-	bh=wzKMDeKGTtEp9oc6X/r1ye9YtAdC96LVQHmGGkSU3MA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IWOGC+LS6iEnuFOMdFjRrHwcSbJOVquunhlOy0B9f9dOG/9gUSKVrVpTVd5zRegM+m+FA/ow0Chd7Vjzg85aYckxhiN+gGErnsiIJakMyXspkO32ZqmT8KhCCakUBs2IR+woRjjvUs6Z+55jAraGCirvTDTMrFzr+pTjItGIWRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dI3XcbRb; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791060920; c=relaxed/simple;
+	bh=ik7SfSihSd7srhBjbKZLRLCC+5A0g+MU1oxC+qFg0bs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=UlHotXkZLjIWIGatYi6Xudg268bZFHeomX7PmWzaQiy3n9+OZq3XLfma/6Dm/0M4bWRiwspovtsF6tsZ/gpNHO6wall5Sv5tIt1q0VdqcZg9n4rcx4jyrEu4n3DtVPn4cIgHZoS1Q9sc1OauPEepQvnS3Qj+YxLk2h4UwZ83d5o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Ky8EfLvX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=S7fsTYLj; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dI3XcbRb"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-3a87e23860cso8128591fa.0
-        for <llvm@lists.linux.dev>; Sat, 03 Oct 2026 12:50:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791057027; x=1791661827; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IXn6S94b33P25ufvgJkMunPhNjIZY13JTvQoBrLLnq0=;
-        b=dI3XcbRbXiWnjvPnvDaXBqRcUzcqJ3KZcBw6nch/YOk+C/WF+uamK9XywExMhwWv5P
-         asXv3MMNuJxBhjQRDGy/neX7/ZGeyMVoYivqDeBhI6k+6p8+08r9YsqVlRlXORTzK2v+
-         5wniQZXr1Xm6pvvvf4dYjVYjHWL9g8Ws7MtSGvE9R3QW/KelU7WAOiGKOTC1CfaETq1H
-         WuB037QJw7n9iB5Ubg2amqGiV6WuRLHD2teAtQt+siEpfVk7yF1+myJceTiF18lLS+0U
-         5MDqJ1tK+O1rtPWqgbWoZrgT9jMBNfsetCRcxGej/gLozXkRuDiXY82A77aYksMRCeow
-         22ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791057027; x=1791661827;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IXn6S94b33P25ufvgJkMunPhNjIZY13JTvQoBrLLnq0=;
-        b=Mo6sE3bDb/GyLVyew9pzezDUoMex+CnVbspsUZyE+jff92gqg+4trybbep54jjt1D4
-         BiAd0Per8DF1kCD26b3qstxso1BRRkQq/sFodh0AuwqLrveKFMRderJX5IwXo6qwmKHt
-         HGsOsDyeuMkMbd1WGxUW0Fb1NWxm19kzp+ffAZ4cvCwsf+SueMnV2yqqjZYmSdM4qiHw
-         ThmBAdYVjC5nXCS84H1CCkb3/TWY3lL6jkNfRntD35JqIcwt06dwUtEEuw+tI4Cv/bYl
-         poL40ldp23xACKExDz7Rp/mAhysbOADVwcUDIuD3xH5/4468pcm4ElxZH8E7XwduyqXC
-         MX1g==
-X-Forwarded-Encrypted: i=1; AKwUvBxLR28+pY9noLpfzH5BQ8opdrEkgY8Cst2p8EZKx/2xepDWoNi2Y4MbdIkxmG75xMBs1MUJ@lists.linux.dev
-X-Gm-Message-State: AFq9FYKI/Mhp+PyY9F6JM+q81Mi0gzincANEjzwpON2lERqKjasSNFDm
-	e0ZfsSgGxSvF70Y/osBKB/1lQ1aWYBacKWm+fexg+yNYWyudxcQLh4gs
-X-Gm-Gg: AYBFou2+zi4ezBKFFHzTwijmjbaz9E+q7WdOG52pE4bds8GYdJj0Ryfo9R42HB0n0b2
-	zRqQ1mnKxVI4/jCQ3UKZbHj8F9P+WzN5goYydE1KAeIaPOz5Ry0kUy1zX+fQmz3U1cBv5jBAetr
-	/Ag/QShQkaZ7NohGierMkqu7GgHQI3WKRdd1bGHI741JjO62QoyO0PmYHFxr2isOsgUoq9Jua4r
-	ukFew62e/RlcdTazmZ02qzURvVyT5V+GlyleX/Btak3FAAOvdU5bWOtJkX56Yq3EA/s0rq6KiGE
-	nUnOPziWPHglUBcMoHLQo5ddLE2Ui8zaJF1c7iafTWcrLDHkWpltfVsnSK7KpvQA828f35UJSZm
-	QuySVD04/iG0DYAqKW1F9ReEBwn3E567b9nmcUu3efYUThhLndEvMmkDfXClWVty3LPeAnh1/WZ
-	a9jTHd0zLrEc21LOzkY1tcdcceoRZw5ATKqUhdaGmzpRqPPXb69ezhGk3lSWeDJmXgmbSaKJN9T
-	XH59n8npZEqnTeHvdd0Cr08u/J1MoQkU8FfqrhltpsE7GSzCb5K5HqwIAE8rbNRAnQf1lo=
-X-Received: by 2002:a05:651c:15cb:10b0:3a7:812b:ce2 with SMTP id 38308e7fff4ca-3a783457b10mr17076801fa.23.1791057026701;
-        Sat, 03 Oct 2026 12:50:26 -0700 (PDT)
-Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bb7c7abdbfsm1762608e87.65.2026.10.03.12.50.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2026 12:50:26 -0700 (PDT)
-From: Rupesh Majhi <zoone.rupert@gmail.com>
-To: Andy Shevchenko <andy@kernel.org>,
-	Bill Wendling <morbo@google.com>,
-	David Lechner <dlechner@baylibre.com>,
-	Eddie James <eajames@linux.ibm.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Justin Stitt <justinstitt@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	=?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
-Cc: linux-iio@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Rupesh Majhi <zoone.rupert@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: [PATCH v12 5/5] iio: pressure: dps310: assert the lock at runtime too
-Date: Sat,  3 Oct 2026 22:50:11 +0300
-Message-ID: <20261003195012.92948-6-zoone.rupert@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261003195012.92948-1-zoone.rupert@gmail.com>
-References: <20261003195012.92948-1-zoone.rupert@gmail.com>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Ky8EfLvX";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="S7fsTYLj"
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 1B1C71400071
+	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 16:55:17 -0400 (EDT)
+Received: from ams-imap-03 ([10.64.2.23])
+  by ams-compute-02.internal (MEProxy); Sat, 03 Oct 2026 16:55:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1791060907;
+	 x=1791147307; bh=OfNciX7Kzw3HdRiwwkOeKUPFQ5qprTv16kcShTgN2+k=; b=
+	Ky8EfLvXf0aC70x9f/nMD3WXA+ORYs4sALykdU2/byvq1nv0BBPHigAlpyAP/IqT
+	4t4a7B77kJO33ETFg577Mcm1C64uJsiFhrOptkCHBDnhPOfOea06xKJxjoslPhny
+	NU+6qCa4F9+i9LzVBCvpV59SwtCK0r6xZhlgkxCmxYytfqSon6hMPRqBlfGRttq2
+	ErA4CulWUqFIR9sVNSk7cbv3os5GA3YemXOoMUiynnz3wdDzkfhE1tNXhzBkSDEP
+	UgVbe+Yjvd0RpNOs4wuAcJXeyT6DUbaTOG0NHShsqP1wM7fExvHLA8M7iUXHdb4I
+	5s2KK8dHRxOOXT4edsnK2Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1791060907; x=
+	1791147307; bh=OfNciX7Kzw3HdRiwwkOeKUPFQ5qprTv16kcShTgN2+k=; b=S
+	7fsTYLjnnNjAFIpV9EYHI9P4fZ8SL2NOH5xYHEmAezgIIrMGOKSjeIEgCvU0ro5k
+	ceV6IEcXiw3jha2BPJwisPBO39rUSdXGa6M2nMqQldGF8uGfextNKsuROszwTUoi
+	dVoDDQtAanLiF2lgALIhV9qoh4Y1Nj693i+Iy/rZQ4uiWe0iCrdysGCbXJwT3uEk
+	K9SgzUGGWaJnBfNREMdKTKQ2jTiDyG5TZ+1GwhSKU+QO7sTNOPUeW6XE9lSmRic2
+	ZB0UV7XHXfPXeP7bKDxJdci4fks4pKwTV3+elT9JJUnYlZ+mAkbqRhWJwqr2Sbfd
+	9RYX0/1QQFWUk6TU4f93A==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-09-30; sw=lmtpprox;
+	action=sign d=arndb.de a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1791060907; d=arndb.de;
+	mf=PGFybmRAYXJuZGIuZGU+; rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm1:rsa-sha256:mZ+JwKS8Sh5FRNdBdbbTO5GkIlqqrf7idfcsTyLFEMVwt6W
+	w5Pzbv4Px50TD3jjVkEyYw+VtIeV2xBPeqQkKmQ7amkZz4zrnp5M3IQoUsnzPLjc
+	FFToOLP+fZqJHa8kfsiEIuLMkK+nDYzCioMyOLlCxok6WJwdvyW3ic+VbV/N9WX4
+	S7TY/QaVtfzoYiqukaEtKrD+XgRu51zxiw+DKl95QIh2Njfj4cCGuoB58csambsm
+	alwfN39nurmu5R4JpAKXINzfNPm0yPWysMs5dBUoNhDMnFBsfrJ8kjydMaQ2WxIR
+	SxpxGbK0v6dzLdGudDpHrs+zWZEhPu1LaK2d5pA==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-09-30; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-transfer-encoding,content-type,date,feedback-id,
+	from,in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:GyCnERTPxeQJXOVuBs4/3L4C1Z0l5VIWw1a73NTjPwk=:ik7SfSihSd7srhBjbKZLRLCC+5A0g+MU1oxC+qFg0bs=;
+X-ME-Sender: <xms:omvBauSuhQ9ggYy7989JCPhwB6R-s7ru-2oqUNtMJuJlcqt_drIV_w>
+    <xme:omvBaukiy4RtVekt9T-yEl6ngW4FNAbq5hY6x1nS_MzUEkZ1LH80gpQuVS5z-rJEX
+    ulZRvyDbtuqhWHFaQe7TrOO57-ZhP9pUGdvaab0E4BfIb_JVAVZETU>
+X-ME-Proxy-Cause: dmFkZTGqH8D9AZ6i468pJhQ4wce95TqgvWhQCyTKZkCG4CrneDArON+7/8DMt2wEyyJ7OD
+    D3pMjg1tDeDiOgWCeMuJ1436+gm3Us7QCtRXM6sLINq66msbS3UsULBA6yhM3Q7fnWFHb9
+    N5i6fPBFDRCnd8M6jh7BeeFKr1WvING5wnczFTvlr12bejiGMrRnKq53guQRIJkf3sfbjv
+    Z6jLx8VvQdtwlxix5W09SkU/bLFM4BeUQtlfLuAMzxVNy5goDBeDFqLs+0GzF2OMA8rTuq
+    pDDPsid/yCcdhRBdYsMj/XKICHStxjoecO5Cc2TN0apwn1EEF8TUtps7HjyOJF5nWWRihe
+    gVmvANIo9weSefu3A7KOOmck9frk3x8YsjLZgPBi9/KGkAXyFujXcKWPK4Unqqdd88F7uE
+    RT4uzvp4dgWgsIH3Lc527rWyvdTGQrPBFj9ElH8RMnr9rezUz8kRcoy4WRqyBQw7PHhf0R
+    O/HnmN4GzSW2Vn+VZv8titcAqBOuzlm25EA++2DeUln4VezeM63EY3qv9jKkic+gi79V5L
+    T9wnwnzwtwVWc1/hztNmYbR64lDrBjl28EO7whK3Jh+QtkjBOcEwtBqTgYHy3f2nElM2B7
+    oDxzOh1bkURtFbvfuCi4lXdUvZcxDFZHq8rGh/s5qOmE90PtoBkSSnz06A6Q
+X-ME-Proxy: <xmx:p2vBai5fGbqic6xOPaGn7iuoMwyr8WkQ1Cax7uQWG-mDOJl1L4hGoQ>
+    <xmx:p2vBalheBCeok7JKOnC49lqszB57hW1aDK4w7eAEsISLrtf5t71UdA>
+    <xmx:p2vBak6jJP8_83eqUPlZg8VIIEIwR3qWHMvFYiy4QW3RvKIccFM1bQ>
+    <xmx:p2vBamB8QStobUsUf2LgrNhs1Sb_6kP3ctE7Ya2atwurpH18c7Oz-A>
+    <xmx:q2vBajK4fHg2k9GM_8swAZyfBQok5fZlrrX7qFBzzNoZQWYPACbz5o8N>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id AEE9032A008A; Sat,  3 Oct 2026 16:54:58 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A-PcLBAcdglw
+Date: Sat, 03 Oct 2026 22:54:28 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Karl Mehltretter" <kmehltretter@gmail.com>
+Cc: "Russell King" <linux@armlinux.org.uk>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>,
+ "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <lossin@kernel.org>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ "Danilo Krummrich" <dakr@kernel.org>,
+ "Daniel Almeida" <daniel.almeida@collabora.com>,
+ "Tamir Duberstein" <tamird@kernel.org>,
+ "Alexandre Courbot" <acourbot@nvidia.com>,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
+ "Linus Walleij" <linusw@kernel.org>,
+ "Christian Schrefl" <chrisi.schrefl@gmail.com>,
+ "Bradley Morgan" <brads@mainlining.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Bill Wendling" <morbo@google.com>,
+ "Justin Stitt" <justinstitt@google.com>,
+ linux-arm-kernel@lists.infradead.org, rust-for-linux@vger.kernel.org,
+ llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <3436fcef-a052-4261-afb5-677b0bbf28c2@app.fastmail.com>
+In-Reply-To: <asEzZ1wOQ_MbgEsk@gmail.com>
+References: <20261003093827.77857-1-kmehltretter@gmail.com>
+ <20261003093827.77857-3-kmehltretter@gmail.com>
+ <33197b82-3eff-4c87-b370-c677ca31a02a@app.fastmail.com>
+ <asEzZ1wOQ_MbgEsk@gmail.com>
+Subject: Re: [PATCH 2/2] ARM: rust: Enable Rust support for ARMv5TE
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-__must_hold() is clang only and does nothing in GCC builds. Add
-lockdep_assert_held() next to each, so lockdep catches a missing lock
-too.
+On Sat, Oct 3, 2026, at 19:07, Karl Mehltretter wrote:
+> On Sat, Oct 03, 2026 at 12:45:07PM +0100, Arnd Bergmann wrote:
+>>
+>> > Kernels that also contain ARMv4 or ARMv4T CPUs are built for the
+>> > lowest architecture and stay excluded. CPU_32v5 also covers the ARMv5T
+>> > ARM1020. C code is already built with -march=armv5te there, so Rust
+>> > matches.
+>> 
+>> None of this makes sense to me: The target should not control
+>> the instruction set, that is what the -march= flag is needed for.
+>> Does that not get passed for Rust?
+>
+> No. arch/arm/Makefile only passes --target=arm-unknown-linux-gnueabi,
+> no CPU or feature flags. That target has "+v6" built in, so Rust code
+> in an ARMv7 kernel is built as ARMv6 today.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-Assisted-by: LLM
-Signed-off-by: Rupesh Majhi <zoone.rupert@gmail.com>
----
- drivers/iio/pressure/dps310.c | 43 +++++++++++++++++++++++++++++++++++
- 1 file changed, 43 insertions(+)
+How do you build ARMv7-A rust code in user space? If the default is
+ARMv6, doesn't that rule out things like thumb2, vfpv3 and sensible
+(inlined) atomics?
 
-diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
-index d70a0fa69c25..adfab5e3ac40 100644
---- a/drivers/iio/pressure/dps310.c
-+++ b/drivers/iio/pressure/dps310.c
-@@ -13,6 +13,7 @@
- #include <linux/devm-helpers.h>
- #include <linux/i2c.h>
- #include <linux/limits.h>
-+#include <linux/lockdep.h>
- #include <linux/math64.h>
- #include <linux/module.h>
- #include <linux/mutex.h>
-@@ -359,6 +360,8 @@ static int dps310_set_pres_precision(struct dps310_data *data, int val)
- 	int rc;
- 	u8 shift_en;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	if (val < 0 || val > 128)
- 		return -EINVAL;
- 
-@@ -378,6 +381,8 @@ static int dps310_set_temp_precision(struct dps310_data *data, int val)
- 	int rc;
- 	u8 shift_en;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	if (val < 0 || val > 128)
- 		return -EINVAL;
- 
-@@ -396,6 +401,8 @@ static int dps310_set_pres_samp_freq(struct dps310_data *data, int freq)
- {
- 	u8 val;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	if (freq < 0 || freq > 128)
- 		return -EINVAL;
- 
-@@ -410,6 +417,8 @@ static int dps310_set_temp_samp_freq(struct dps310_data *data, int freq)
- {
- 	u8 val;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	if (freq < 0 || freq > 128)
- 		return -EINVAL;
- 
-@@ -509,6 +518,8 @@ static int dps310_ready(struct dps310_data *data, int ready_bit, int timeout)
- {
- 	int rc;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = dps310_ready_status(data, ready_bit, timeout);
- 	if (rc) {
- 		if (rc == -ETIMEDOUT && !data->timeout_recovery_failed) {
-@@ -539,6 +550,8 @@ static int dps310_read_pres_raw_locked(struct dps310_data *data)
- 	int timeout;
- 	u8 val[3];
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = dps310_get_pres_samp_freq(data, &rate);
- 	if (rc)
- 		return rc;
-@@ -565,6 +578,8 @@ static int dps310_read_temp_ready(struct dps310_data *data)
- 	int rc;
- 	u8 val[3];
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = regmap_bulk_read(data->regmap, DPS310_TMP_BASE, val, sizeof(val));
- 	if (rc < 0)
- 		return rc;
-@@ -581,6 +596,8 @@ static int dps310_read_temp_raw_locked(struct dps310_data *data)
- 	int rate;
- 	int timeout;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = dps310_get_temp_samp_freq(data, &rate);
- 	if (rc)
- 		return rc;
-@@ -602,6 +619,8 @@ static void dps310_refresh_temp_locked(struct dps310_data *data)
- 	int rc;
- 	int t_ready;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = regmap_read(data->regmap, DPS310_MEAS_CFG, &t_ready);
- 	if (rc)
- 		return;
-@@ -707,6 +726,8 @@ static int dps310_calculate_pressure(struct dps310_data *data, int *val)
- 	s64 kp;
- 	s64 kt;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = dps310_get_pres_k(data, &kpi);
- 	if (rc)
- 		return rc;
-@@ -832,6 +853,8 @@ static int dps310_calculate_temp(struct dps310_data *data, int *val)
- 	s64 t;
- 	int kt, rc;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = dps310_get_temp_k(data, &kt);
- 	if (rc)
- 		return rc;
-@@ -940,6 +963,8 @@ static int dps310_fill_channels(struct dps310_data *data,
- 	unsigned int i;
- 	int rc;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	/* Compensation needs a temperature, so it is sampled either way */
- 	rc = dps310_read_temp_raw_locked(data);
- 	if (rc)
-@@ -970,12 +995,16 @@ static int dps310_fill_channels(struct dps310_data *data,
- static int dps310_fifo_hw_flush(struct dps310_data *data)
- 	__must_hold(&data->lock)
- {
-+	lockdep_assert_held(&data->lock);
-+
- 	return regmap_write(data->regmap, DPS310_RESET, DPS310_FIFO_FLUSH);
- }
- 
- static int dps310_fifo_set_enable(struct dps310_data *data, bool enable)
- 	__must_hold(&data->lock)
- {
-+	lockdep_assert_held(&data->lock);
-+
- 	return regmap_assign_bits(data->regmap, DPS310_CFG_REG, DPS310_FIFO_EN,
- 				  enable);
- }
-@@ -1014,6 +1043,8 @@ static int dps310_fifo_read_entry(struct dps310_data *data, s32 *value)
- 	s32 raw;
- 	int rc;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	/* Entries come out of the pressure registers whichever made them */
- 	rc = regmap_bulk_read(data->regmap, DPS310_PRS_BASE, val, sizeof(val));
- 	if (rc < 0)
-@@ -1037,6 +1068,8 @@ static int dps310_fifo_push_scan(struct dps310_data *data, s32 temp_raw,
- 	unsigned int i;
- 	int rc;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	/* Direct-mode claim keeps sysfs reads off these */
- 	data->temp_raw = temp_raw;
- 	data->pressure_raw = pressure_raw;
-@@ -1063,6 +1096,8 @@ static int dps310_fifo_push_scan(struct dps310_data *data, s32 temp_raw,
- static void dps310_fifo_hold(struct dps310_data *data, s32 pressure_raw)
- 	__must_hold(&data->lock)
- {
-+	lockdep_assert_held(&data->lock);
-+
- 	if (data->fifo_held < data->fifo_hold_max)
- 		data->fifo_hold[data->fifo_held++] = pressure_raw;
- }
-@@ -1073,6 +1108,8 @@ static unsigned int dps310_fifo_push_held(struct dps310_data *data)
- {
- 	unsigned int pushed = 0;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	for (unsigned int i = 0; i < data->fifo_held; i++) {
- 		if (!dps310_fifo_push_scan(data, data->fifo_temp_raw,
- 					   data->fifo_hold[i]))
-@@ -1105,6 +1142,8 @@ static int dps310_fifo_drain(struct dps310_data *data, unsigned int max_scans)
- 	bool is_pressure;
- 	int rc;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	for (cnt = 0; cnt < DPS310_FIFO_DEPTH; cnt++) {
- 		if (max_scans && scans >= max_scans)
- 			break;
-@@ -1175,6 +1214,8 @@ static int dps310_fifo_hold_alloc(struct dps310_data *data, int prs_rate,
- 				  int tmp_rate)
- 	__must_hold(&data->lock)
- {
-+	lockdep_assert_held(&data->lock);
-+
- 	data->fifo_temp_valid = false;
- 	data->fifo_held = 0;
- 	data->fifo_hold = NULL;
-@@ -1222,6 +1263,8 @@ static int dps310_fifo_start(struct dps310_data *data)
- {
- 	int rc, prs_rate, tmp_rate;
- 
-+	lockdep_assert_held(&data->lock);
-+
- 	rc = dps310_get_pres_samp_freq(data, &prs_rate);
- 	if (rc)
- 		return rc;
--- 
-2.43.0
+In the kernel, we don't normally allow neon code, but it sounds like
+we may need to make rust depend on !CONFIG_THUMB2_KERNEL, as that
+may be problematic when linking with v6 code.
 
+> I tried the generic target with CPU flags (libcore for versatile on
+> v7.3-rc1, rustc 1.99.0, CPU arch from the build attributes of core.o):
+>
+>   --target=arm-unknown-linux-gnueabi
+>       ARMv6, uses uxtb/uxth/sxth/rev
+>   --target=arm-unknown-linux-gnueabi -Ctarget-cpu=arm926ej-s
+>       still ARMv6
+>   --target=arm-unknown-linux-gnueabi -Ctarget-cpu=arm926ej-s
+
+Ok, so I guess this is more like -mtune= in clang and gcc?
+
+>  -Ctarget-feature=-v6
+>      ARMv5TE, but every rustc call warns
+>      "unstable feature specified for `-Ctarget-feature`: `v6`"
+...
+> So -Ctarget-cpu can add features but does not remove the +v6. The
+> generic target also declares 64-bit atomics, armv5te and armv4t only
+> 32 bit. Below ARMv6 I only see the separate targets.
+
+Maybe this should be "+v7-a" instead of "-v6" to allow allow the
+compiler to use all ARMv7-A features instead? It would be surprising
+if they added 32-bit Arm support to Rust without a way to target what
+is in almost every single chip and Linux distro today.
+
+>> I don't see what part of rust would depend on ARMv5 instructions,
+>> it should just work on ARMv4T as well, though ARMv4 may be
+>> trickier because missing bx instructions etc.
+>
+> Agreed. !CPU_32v4T only came from the armv5te target, which emits clz
+> and blx. With the armv4t target it can go. ARMv4 has no rustc target.
+
+Ok, makes sense.
+
+>> This looks wrong, the choice between armv5 and armv7 should work
+>> the same way as the choice between armv6 and armv7/v8, if I read
+>> the rustc docs correctly, this should be using the target-cpu=
+>> argument on the generic arm-unknown-linux-gnueabi target.
+>
+> There is no choice between ARMv6 and ARMv7 today. Both get the generic
+> target without flags and so ARMv6 code. And target-cpu= on the generic
+> target does not get below ARMv6, see the table above. That is why I
+> used a separate target for ARMv5.
+>
+> For a v2 of this I would
+>
+> - pick the rustc target next to the -march lines: armv4t for
+>   CPU_32v4T, armv5te for CPU_32v5, the generic one from ARMv6K upwards
+> - select HAVE_RUST for everything except CPU_32v4 and plain CPU_V6
+
+I would leave out CPU_V7M as well, it's not worth trying to
+support, and likely going away soon. It's probably not supported
+by rust either, as this requires building with -march=armv7 or
+-march=armv7-m and is definitely incompatible with -march=armv7-a
+and -march=armv6k.
+
+> - make arch-support.rst say the same
+>
+> I have this running in QEMU on v7.3-rc1 with
+> - sx1 (OMAP310, ARM925T, ARMv4T), omap1_defconfig
+> - versatilepb (ARM926EJ-S), versatile_defconfig
+> - raspi0 (ARM1176), bcm2835_defconfig without ARCH_MULTI_V7
+>
+> Would that be ok for you?
+
+Yes, sounds fine to me, though I would still hope to get native
+ARMv7-A support in place of "build for v6 and hope for the best"
+approach eventually. 
+
+      Arnd
