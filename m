@@ -1,133 +1,188 @@
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3972384CC6
-	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 22:45:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FB331618B;
+	Sat,  3 Oct 2026 23:05:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791067514; cv=none; b=EsbAtFZDLOI+GlefQibFmfL4iKwR0rS6suNoxpSAUCYsQA1K2d/0FqR8Owjp2TDqAqPdxrs0rEEUTWIz1YKTG8BpByVhkG9fN7wKv+4GEgQXt8akKb7L5r2DL680z7EXtSRngnoueTd7aCyAH0Gbf3q63mmSVOz8yHbHKZNoioM=
+	t=1791068733; cv=none; b=Gv7bx+cWKacV9k5+K7RQ+o9boEupHGx23R3vXL2Ue0p68fT/nA3YOGW0u/nAtnSkh0uSNTsAX7VSLs3PChcxh53c4KnoQ8v4LXMhQAu4P/gZojitZYZu2h56pBZ64ZN9fBNJfJ7AaRxyPz+DuZys1GvObh+nsL5mOIg1R24zqGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791067514; c=relaxed/simple;
-	bh=W21SRaEwpj9rNXOhq+Ty48iMmU1uKpvKeWtWaSSd1JM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=Yd2s5+em7/cHyHJ8lqtHLH+nvZErrnsaMB8YAVOsNpGjDqs47hALOXkzv64UY9jtqS0+bKyFOhMwlck9soZabG9v1roCjaph6OmOLD15oi72qZxA5ADrJlQ1K7yrRLnrAMAyLT5RiJISbtru61oV2VMatCi99F4csbrr/qnv+IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=RLbFDHwu; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1791068733; c=relaxed/simple;
+	bh=7sij8abg9R7n3Nga00K9KM2YBNWRn3pFuIvQi+scEeI=;
+	h=Date:From:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ud5lVP1JMfKhYrehGTp0M97KWjIxTIQJEvsE4u5zJ0GIR5H1Lq6+TuCk5DyALBiigDPKJFl00WrJT7hBNl/dhKJxxOzGziQXlrp9sCP7H/3bnXxEdoB2QUR2QZO/Ze+GU9CClwjwYad0pX+tb+EJSOG9SvgoH3iGvRtEYVy2KXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BxBqs6pW; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="RLbFDHwu"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20261003224508euoutp02c41c30b489eaee9363e860f2478d6027~bJmji_WXc2979329793euoutp02u;
-	Sat,  3 Oct 2026 22:45:08 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20261003224508euoutp02c41c30b489eaee9363e860f2478d6027~bJmji_WXc2979329793euoutp02u
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1791067508;
-	bh=vFhGMCg6Ji/JXdFQ3B6wXXIZQgQ9xvpb3HvqRmvxgSk=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=RLbFDHwuh3NRChlB5DbAnpf5fbQ/9VI4LqGu4llTjFUiXPQ562rniZUJozx7F6f0C
-	 O998yLIejmOOpMfO2undeRdQGMIbbwvHHW6qvrglXgdLXRekz3Vq8zAZ0mrAGgSxG4
-	 yLsO68CPN7a6ZuBi2t//4zMj/AdCV8fhYFGTexlA=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20261003224507eucas1p200ece20a05f4aac2eeb0180f041df0fe~bJmigAu1f3080530805eucas1p2D;
-	Sat,  3 Oct 2026 22:45:07 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20261003224505eusmtip1f6ac4f841c43fd74cce4c31cdfba487f~bJmg3wbbL2072920729eusmtip1D;
-	Sat,  3 Oct 2026 22:45:05 +0000 (GMT)
-Message-ID: <9c5913c0-11c8-4db8-844b-ea2ef29bf5db@samsung.com>
-Date: Sun, 4 Oct 2026 00:45:05 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BxBqs6pW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791068731; x=1822604731;
+  h=date:from:cc:subject:message-id:references:mime-version:
+   in-reply-to;
+  bh=7sij8abg9R7n3Nga00K9KM2YBNWRn3pFuIvQi+scEeI=;
+  b=BxBqs6pWSQsVVAIXTHnztWFYuZ3b6cyyM+KUhKn6iWpxA62Juwxz12Oc
+   mKKNSn7kciOJKuds270O5AnQV9jAjMxfAxwb+bsCuOkb3qCMkzjyg66NZ
+   HhRnfr5VAb/hy2XcVagDKQN5DsO+2pD8U68w7hdMrkayPoLqvNu1W4PUZ
+   EQR+6/kZGwMY5VQOjdRDwD4gN4/ykhVN0kLpAjQsZqsZHgmcsoHVROOSj
+   FRWHvzhrwIi5+N5n3+UyM2Eode14Ub8B/vdfSwTHSQEhR8rR/uhmE2j+H
+   nyjC6gDdhKAOb65WfP3kbxUqNP8sF/Q3BUzUwuQ6uzQn6yZAj3NuNCfFv
+   Q==;
+X-CSE-ConnectionGUID: +u/r4uQiTCK+XLgogFIMAQ==
+X-CSE-MsgGUID: 9pN98yb7R2aR2jRY4V0uOA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11924"; a="102370495"
+X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
+   d="scan'208";a="102370495"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2026 16:05:30 -0700
+X-CSE-ConnectionGUID: iG94rTVoSNuvw6+e0qmTLA==
+X-CSE-MsgGUID: rkXB7qMaTgy+bwgzP/Sz5w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
+   d="scan'208";a="504079"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa013.fm.intel.com with ESMTP; 03 Oct 2026 16:05:29 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xD8nG-00000000UGl-3fW8;
+	Sat, 03 Oct 2026 23:05:26 +0000
+Date: Sun, 4 Oct 2026 07:05:06 +0800
+From: kernel test robot <lkp@intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: wifi: mt76: mt7996: add thermal zone device registration
+Message-ID: <202610040604.2y7T17Mw-lkp@intel.com>
+References: <202610040604.2y7T17Mw-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 9/9] MAINTAINERS: add an entry for the LZ4
- compression library
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
-	<justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, Thomas
-	Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, Heiko
-	Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
-	Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
-	Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>, Sergey
-	Senozhatsky <senozhatsky@chromium.org>, Jens Axboe <axboe@kernel.dk>, Andrew
-	Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-block@vger.kernel.org, Yann Collet
-	<yann.collet.73@gmail.com>, Nick Terrell <terrelln@meta.com>, Gao Xiang
-	<xiang@kernel.org>, Chao Yu <chao@kernel.org>, Jaegeuk Kim
-	<jaegeuk@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, Phillip
-	Lougher <phillip@squashfs.org.uk>, Sungguk <sungguk.na@samsung.com>, Jaehoon
-	Chung <jh80.chung@samsung.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
-	linux-erofs@lists.ozlabs.org, linux-f2fs-devel@lists.sourceforge.net,
-	linux-crypto@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <20260925213926.GA1903@quark>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20261003224507eucas1p200ece20a05f4aac2eeb0180f041df0fe
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3
-X-EPHeader: CA
-X-CMS-RootMailID: 20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3
-References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
-	<CGME20260925113507eucas1p2ddb94f2077b679426aa86dd1d492eaf3@eucas1p2.samsung.com>
-	<20260925-lz4-vendor-upstream-v1-9-1c7ffbe21c4b@samsung.com>
-	<20260925213926.GA1903@quark>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202610040604.2y7T17Mw-lkp@intel.com>
+
+Hi Ryan,
+
+kernel test robot noticed the following build errors:
 
 
 
-On 9/25/26 23:39, Eric Biggers wrote:
-> On Fri, Sep 25, 2026 at 01:27:39PM +0200, Michal Wilczynski wrote:
->> lib/lz4/ has never had one: get_maintainer.pl returns only the LKML
->> fallback for every file in it, including include/linux/lz4.h, which eight
->> subsystems build against.
->>
->> This matters more now than it did. With the previous patches lib/lz4 is
->> vendored upstream sources, and someone has to bump them to new upstream
->> releases and decide what the kernel-side glue may do. I am willing to do
->> that, so add myself as its maintainer.
->>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
->> ---
->>  MAINTAINERS | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index cc3cae2e378b34aeb705cef654c720ca9f2ba223..989e1b5fab21432dd7042d1e60c4bbad85beb925 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -15606,6 +15606,12 @@ S:	Supported
->>  F:	drivers/net/pcs/pcs-lynx.c
->>  F:	include/linux/pcs-lynx.h
->>  
->> +LZ4 COMPRESSION LIBRARY
->> +M:	Michal Wilczynski <m.wilczynski@samsung.com>
->> +S:	Maintained
->> +F:	include/linux/lz4.h
->> +F:	lib/lz4/
->> +
-> 
-> Should this entry cover lib/decompress_unlz4.c and
-> include/linux/decompress/unlz4.h as well?
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Leung-via-B4-Relay/wifi-mt76-mt7996-add-thermal-zone-device-registration/20261003-041935
+base:   
+patch link:    https://lore.kernel.org/r/202610040604.2y7T17Mw-lkp%40intel.com
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261004/202610040604.2y7T17Mw-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261004/202610040604.2y7T17Mw-lkp@intel.com/reproduce)
 
-Yes I'll add both in v2.
-Thanks a lot for looking at the series as a whole.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610040604.2y7T17Mw-lkp@intel.com/
 
-> 
-> - Eric
-> 
+All errors (new ones prefixed by >>):
 
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+>> drivers/net/wireless/mediatek/mt76/mt7996/init.c:262:3: error: call to undeclared function 'thermal_of_zone_unregister'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     262 |                 thermal_of_zone_unregister(phy->tzone);
+         |                 ^
+   drivers/net/wireless/mediatek/mt76/mt7996/init.c:262:3: note: did you mean 'devm_thermal_of_zone_unregister'?
+   include/linux/thermal.h:202:6: note: 'devm_thermal_of_zone_unregister' declared here
+     202 | void devm_thermal_of_zone_unregister(struct device *dev, struct thermal_zone_device *tz);
+         |      ^
+>> drivers/net/wireless/mediatek/mt76/mt7996/init.c:303:15: error: call to undeclared function 'thermal_of_zone_register'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     303 |         phy->tzone = thermal_of_zone_register(phy->dev->mt76.dev,
+         |                      ^
+   drivers/net/wireless/mediatek/mt76/mt7996/init.c:303:15: note: did you mean 'devm_thermal_of_zone_register'?
+   include/linux/thermal.h:199:29: note: 'devm_thermal_of_zone_register' declared here
+     199 | struct thermal_zone_device *devm_thermal_of_zone_register(struct device *dev, int id, void *data,
+         |                             ^
+>> drivers/net/wireless/mediatek/mt76/mt7996/init.c:303:13: error: incompatible integer to pointer conversion assigning to 'struct thermal_zone_device *' from 'int' [-Wint-conversion]
+     303 |         phy->tzone = thermal_of_zone_register(phy->dev->mt76.dev,
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     304 |                                               phy->mt76->band_idx, phy,
+         |                                               ~~~~~~~~~~~~~~~~~~~~~~~~~
+     305 |                                               &mt7996_tz_ops);
+         |                                               ~~~~~~~~~~~~~~~
+   3 errors generated.
+
+
+vim +/thermal_of_zone_unregister +262 drivers/net/wireless/mediatek/mt76/mt7996/init.c
+
+   255	
+   256	static void mt7996_unregister_thermal(struct mt7996_phy *phy)
+   257	{
+   258		struct wiphy *wiphy = phy->mt76->hw->wiphy;
+   259		char name[sizeof("cooling_deviceXXX")];
+   260	
+   261		if (phy->tzone) {
+ > 262			thermal_of_zone_unregister(phy->tzone);
+   263			phy->tzone = NULL;
+   264		}
+   265	
+   266		if (!phy->cdev)
+   267			return;
+   268	
+   269		snprintf(name, sizeof(name), "cooling_device%d", phy->mt76->band_idx);
+   270		sysfs_remove_link(&wiphy->dev.kobj, name);
+   271		thermal_cooling_device_unregister(phy->cdev);
+   272		phy->cdev = NULL;
+   273	}
+   274	
+   275	static int mt7996_thermal_init(struct mt7996_phy *phy)
+   276	{
+   277		struct wiphy *wiphy = phy->mt76->hw->wiphy;
+   278		char cname[sizeof("cooling_deviceXXX")];
+   279		struct thermal_cooling_device *cdev;
+   280		struct device *hwmon;
+   281		const char *name;
+   282	
+   283		name = devm_kasprintf(&wiphy->dev, GFP_KERNEL, "mt7996_%s.%d",
+   284				      wiphy_name(wiphy), phy->mt76->band_idx);
+   285		if (!name)
+   286			return -ENOMEM;
+   287	
+   288		snprintf(cname, sizeof(cname), "cooling_device%d", phy->mt76->band_idx);
+   289	
+   290		cdev = thermal_cooling_device_register(name, phy, &mt7996_thermal_ops);
+   291		if (!IS_ERR(cdev)) {
+   292			if (sysfs_create_link(&wiphy->dev.kobj, &cdev->device.kobj,
+   293					      cname) < 0)
+   294				thermal_cooling_device_unregister(cdev);
+   295			else
+   296				phy->cdev = cdev;
+   297		}
+   298	
+   299		/* initialize critical/maximum high temperature */
+   300		phy->throttle_temp[MT7996_CRIT_TEMP_IDX] = MT7996_CRIT_TEMP;
+   301		phy->throttle_temp[MT7996_MAX_TEMP_IDX] = MT7996_MAX_TEMP;
+   302	
+ > 303		phy->tzone = thermal_of_zone_register(phy->dev->mt76.dev,
+   304						      phy->mt76->band_idx, phy,
+   305						      &mt7996_tz_ops);
+   306		if (IS_ERR(phy->tzone)) {
+   307			if (PTR_ERR(phy->tzone) != -ENODEV)
+   308				dev_warn(phy->dev->mt76.dev,
+   309					 "failed to register thermal zone %d: %ld\n",
+   310					 phy->mt76->band_idx, PTR_ERR(phy->tzone));
+   311			phy->tzone = NULL;
+   312		}
+   313	
+   314		if (!IS_REACHABLE(CONFIG_HWMON))
+   315			return 0;
+   316	
+   317		hwmon = devm_hwmon_device_register_with_groups(&wiphy->dev, name, phy,
+   318							       mt7996_hwmon_groups);
+   319	
+   320		if (IS_ERR(hwmon)) {
+   321			mt7996_unregister_thermal(phy);
+   322			return PTR_ERR(hwmon);
+   323		}
+   324	
+   325		return 0;
+   326	}
+   327	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
