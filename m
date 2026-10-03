@@ -1,64 +1,64 @@
-Received: from mail-lf2-f13.google.com (mail-lf2-f13.google.com [74.125.229.205])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2704493D52
-	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 19:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.229.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50868495049
+	for <llvm@lists.linux.dev>; Sat,  3 Oct 2026 19:50:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791057028; cv=none; b=eU8z+Ik1Q1A1tXUXRAAY7lJ7K1DS9Fdhs0jP7w2JRBynNqKlczJ2I8dNLv5pXvZwBOwN326rUvKQ2tectr+u+L5p8VoyFSrZxIEkOyI7ctKS5jmrb+/uxXQdqEI5PsBdUObqbRsHFP7orfUKnQtpE1FjZfIMdvA0A3JNIUdFTU0=
+	t=1791057030; cv=none; b=IfSmfJQZQgHAl8O8calR4RGz75caU2p5A3QQN769WCd298hL5GbxyWMOE3W3TJqb4zpWplPxUFWO1vby71pa1LYjPr9wg78qzFc35AVU4qyOppcQDSTEMyHkBffdCwS628NTwQOoMeSYndfE3daHFN7y68gpYNWyxiJ71KiFueM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791057028; c=relaxed/simple;
-	bh=e4QC/6+aGN9kOyKq0Nyqm+TJNMC7eFKd/DvPyCHBUEA=;
+	s=arc-20240116; t=1791057030; c=relaxed/simple;
+	bh=yKZ3RAuB9c8QvP51Mnfq7TMJVSdVuwbAyl129LQ9ebY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tvvUeIcZg7IGep+GB4KJ0T8IZ5vlOeVclZCCg5pE81S8NVTgK1/31lUDABmU4lbVbIZFEoCVY/70ZVDVjhxGotWgfqhpiQLiXwKdXuY5BZojwCsFXf/1l3YKNQcLX/sIGoRMHN1scMHTdZxM+ltX9cCgvHEaG7J1pB/RmEbzfz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VKYXgDNM; arc=none smtp.client-ip=74.125.229.205
+	 MIME-Version; b=E+6cMS1szjOZ/G4UIm67SbJ5d21DgcyMynCk9oAyyu237MDCdwrN6O9Z2fKJcn53gHjsOFfBLAdmngNNgo5ciaJW//+KeO1lmRuOGhFgO8OpgzCw5/IUWy+imKSMTQa81E889axQ+9VhVV0VETSxvnOZQRucOiGguArHsL7nQ5c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VcxsHm17; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VKYXgDNM"
-Received: by mail-lf2-f13.google.com with SMTP id 2adb3069b0e04-5ba4415869aso399043e87.2
-        for <llvm@lists.linux.dev>; Sat, 03 Oct 2026 12:50:25 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VcxsHm17"
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5bcb4f23ddeso347618e87.3
+        for <llvm@lists.linux.dev>; Sat, 03 Oct 2026 12:50:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791057023; x=1791661823; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1791057025; x=1791661825; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=GIPGiD1mGnpbdDtOLO/e1mH349pW3rywVssdfvgQfUc=;
-        b=VKYXgDNMpS3+lWnzpX1pQwn/NQOudpsY0j648U2nTXklH0Zmpzc7rpVQngDghgQDxe
-         jyYYvPehvjghwdqbnh+vWbbheliolc0L7cqC5TkTIKFW1gLBpTJK88SI0AgxwKA4+IPM
-         Wl1dXR2Al/mUa41fhj5AWPlu1U5NCMkuoSWMjM/kJhrY1LwToEqyByADKLWIVHosoDlB
-         mybe6/ZCOH48PsE+Mc9Ljf8T07pgSiQ3gDlGhYAgbHZtNnGa5T8cUPDLhanVHiXBnHy8
-         wdFriGGCVxdVZpW0lJHWPXVDvUUrRECQnXUuFO4VL0dVnTvneKVpdo3YIrY1NG1JwcwC
-         9xsg==
+        bh=+5x87dEIj4ZkmRs3wXiwE88rd8/NOqK6OzoSInLWsrs=;
+        b=VcxsHm174ebgHABr5SjXyJ+Cbw5Q59x6bfLE+3cUeZJc2fM10kyUHfVPODBK1HKD4C
+         yJY3d4g0EpaNUXPZcH2wa54Gl4YZnoccF0Wk1bAZvppssSauhkjz7CqJpPR3dWO+RAaf
+         SsZyNKfavmjFIXD0c2Ao/q04+FzT+FWAT/NnPdDH31t6kiWkKMIFPgaHXfKB8P3IiT/6
+         hjYt9GQAPpqxfFaIQLnFEIr4kMcWiAWlk7vOa2lcS+xARu18SCNZTnvwyi7ZoYDmrvhx
+         zFKyZcQJtPWhpuSkL0IVEcW0DWBK+5xNkS5VgE42Sp3qUAPCf1WIA/fgTum07p0qDOzO
+         kVTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791057023; x=1791661823;
+        d=1e100.net; s=20260707; t=1791057025; x=1791661825;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=GIPGiD1mGnpbdDtOLO/e1mH349pW3rywVssdfvgQfUc=;
-        b=VI7Q63fkTEWPLEYbywA5gMblh8nYkqd5UbU5dwq8xQgG2s4ek/kG9aCsg1nAPUiTDZ
-         ZyW3XLxjcawfbkT1m0JylftHG1uijazTZP62yOMrfeJ5HLQtgMP0pB7hskAtzBGlVWOn
-         y/HctXHpHgcp2ktBJgsQiu47POSeAamaTlla+98inWbyWN1KXszo7FqM7Gi2dcVM6B3L
-         aLslCSqAZKWhejpRsrLf6rFvEUqvr75Z7H8U/EKj5//HK65Xsl8pFJz5FDoUtLqAeqNm
-         3esxYJffFfShj0sTkajzTQgZc41aUd/vFZUBDFOG9Jiiwy72pmKmJ50XiHh1NRG+Tlx2
-         BmRg==
-X-Forwarded-Encrypted: i=1; AKwUvBzO+dR1QJsmP6hq1lxvoeV5A3NnX32K4oB/mzhoH3waCbmvAQK/vdUAmoWmdoahxyj/R4TC@lists.linux.dev
-X-Gm-Message-State: AFq9FYKq5M01kQTYjHJ/aZDjp3nCDLlOhaddB27Qi9ySSYwBL2H2iDI7
-	R9r7TgUOnipEPcOqOR0lfsVUJNYrZlZ1D2vxFpg4+bvcVCv9lO966p/h
-X-Gm-Gg: AYBFou34QaR5G3l4BOtgx1Q3x3X2PcXLpWYzliyS5ee33xbCUQrc7/LglVI9IuJVD+I
-	TPhG3aKpLAuTRBVwcL4OtgFKGxo/k2n81DVGWJm6GoL4kTKnrQCkbSb+6yC6m7DzSUbaLtHwg4x
-	9+t6N0n2OIlJSo+E9/j4zi+93nEQ+QWFMpgD4nM/ifgWqYAHF2d/RyDIjJ35S+7AzNjFRs9XBFM
-	V20nWuHugthB2sSIuxyIrcpZ3Oxil5AgeubiSguiKjSzQNt+/VB5uyw04abieYi7ncKnfEqUzeu
-	bwX2QAluBnPLOWtdwCluxdA5P6kttztYNSPjWtYcuNOFAcv62qayUT8PRjW7jDJ1udQ4DV55SWd
-	UPXl2bKI9h+isBFEUr9wlHGsoIHGyP/VssfhfVeU/xYwEXMw4f2dvEzRj5lDR8kbxh5jAztkj/W
-	4Z8fVBqjSueIncHccS74BmuRt+u59qPqESXJYymYVuEoL2Ztq2tSTv7iYHG3weFruOG3K1iRqqA
-	JTBEUxlLJWfBh/xwNqA2NuW9c7BAoG9w6186/idLna3kchEBxYfaKMaoL5YL0UwdVOrfw==
-X-Received: by 2002:a05:6512:2528:b0:5bc:b091:e98e with SMTP id 2adb3069b0e04-5bcb091ea2fmr2148344e87.46.1791057023212;
-        Sat, 03 Oct 2026 12:50:23 -0700 (PDT)
+        bh=+5x87dEIj4ZkmRs3wXiwE88rd8/NOqK6OzoSInLWsrs=;
+        b=ytuHadlGzlIZNBx2A+eKCcDo7zdRMLL0jNg7gi+wQdHyZ8UdTzAkSS243FjmExGDCW
+         mmepY3up1wYxnY7albgaitDBY4KylasOWMuelvsRsEctN+7crTVCMYHie9nTDlbAyDs2
+         riYMjqsDh3DChH7YbMirVjGc3OdbCbaK10qTysLcU3287FmK2ZTzyaqvIgec/uuNl/pP
+         BjeWgVP7POY9OhyPKJUNBBS7P32ejTHISf3C735NpYwoS0qGP6a0QMaYe4cDuMYliTWZ
+         LBZs5S5yk9Gxov00PBF0x47mBZV4uLFp2gKrhw4EQXoc4VoC6wKNPvjbmWM9LrVfeBVK
+         8ZeQ==
+X-Forwarded-Encrypted: i=1; AKwUvBy9VXOtccehsKuY9x8M8go+4EOPlMqBQKJrZExN/xTA0FUcWMfL+DYtGC5WvnbPs6yeQZcM@lists.linux.dev
+X-Gm-Message-State: AFq9FYJt839vJq2vpTHKNOdEiOu0nM8J+hlEwCkGTrNlINfvZCAY2QoK
+	nBD8uy2+JRkJE8b4upW5L5vKovf+WK+6W+vb2o9yGDeqdzUr1Fb0xCiQ
+X-Gm-Gg: AYBFou2AhrZYMBtUVh069Egx3GTwHQVT0q5TcBXxen82nNrpFYOiLvhYGfoWIatHugp
+	x47ULV8i6ToMav2ZLTxFsm124YEl+b4t3G1UyvoV08Sw1bieGyFjSfrdh6Vp7jodJydFEFtB+no
+	xzpj6ICalT3bsrn5/50P3M2ysJF8aHvVyjaKX1TEUW7NqC4B6lVKs5+zc/J63GFqSTQL8IW6ukp
+	NBSjoHSoqcUR/SPk6udbyCtR6bs/+HSR0CXOOL1pFrAmYyA9wEqekWfX7JPf+DnjlFAXm9plW7G
+	qB4S741ND62bAZgbJV/iJ0v+CFFR1SGBdhY9k7cMXCgrlHGHlfA6dRgDO6HOUeWvsvUUIE2ZGUX
+	foJo0w577vmiep2cgq7sePJbD3nERNlCpvJsEO4IdEi8qaRp4pnm1UNPQnu+50rJ/+EYfluSaNN
+	t6aX/e8WbKjWp9fvNe/P+/uaVo+vDGwdEmadMENUOsR2gy9Fr53LhmkiS1Oz9+cB7/h+eY7IwkE
+	81dJekjrI7WwcK+nVQSAnTmtyn47RhqTEKNpCQR5U2K4YK4O5zAnjnmsCL79i1Ym0TNCw==
+X-Received: by 2002:a05:6512:110c:b0:5b8:f7fc:959e with SMTP id 2adb3069b0e04-5bcb546ac23mr1367126e87.34.1791057025052;
+        Sat, 03 Oct 2026 12:50:25 -0700 (PDT)
 Received: from yantra.. (dsl-trebng21-58c187-236.dhcp.inet.fi. [88.193.135.236])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bb7c7abdbfsm1762608e87.65.2026.10.03.12.50.22
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5bb7c7abdbfsm1762608e87.65.2026.10.03.12.50.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 03 Oct 2026 12:50:22 -0700 (PDT)
+        Sat, 03 Oct 2026 12:50:23 -0700 (PDT)
 From: Rupesh Majhi <zoone.rupert@gmail.com>
 To: Andy Shevchenko <andy@kernel.org>,
 	Bill Wendling <morbo@google.com>,
@@ -73,9 +73,9 @@ Cc: linux-iio@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Rupesh Majhi <zoone.rupert@gmail.com>
-Subject: [PATCH v12 3/5] iio: pressure: dps310: derive the drain interval from the watermark
-Date: Sat,  3 Oct 2026 22:50:09 +0300
-Message-ID: <20261003195012.92948-4-zoone.rupert@gmail.com>
+Subject: [PATCH v12 4/5] iio: pressure: dps310: implement .hwfifo_flush_to_buffer()
+Date: Sat,  3 Oct 2026 22:50:10 +0300
+Message-ID: <20261003195012.92948-5-zoone.rupert@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261003195012.92948-1-zoone.rupert@gmail.com>
 References: <20261003195012.92948-1-zoone.rupert@gmail.com>
@@ -87,103 +87,107 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The drain interval only tracked how fast the FIFO fills, so a small
-watermark still waited half a FIFO for its samples. Take the watermark
-as the number of scans to wait for, but never drain slower than half a
-fill.
+Let userspace drain the FIFO on demand rather than only from the
+periodic drain.
+
+Hold the mode across the drain, so a concurrent buffer disable cannot
+free active_scan_mask while it runs.
 
 Assisted-by: LLM
 Signed-off-by: Rupesh Majhi <zoone.rupert@gmail.com>
 ---
- drivers/iio/pressure/dps310.c | 36 +++++++++++++++++++++++++++++++----
- 1 file changed, 32 insertions(+), 4 deletions(-)
+ drivers/iio/pressure/dps310.c | 35 ++++++++++++++++++++++++++++++++---
+ 1 file changed, 32 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/iio/pressure/dps310.c b/drivers/iio/pressure/dps310.c
-index b782b187ccce..528dc9283738 100644
+index 528dc9283738..d70a0fa69c25 100644
 --- a/drivers/iio/pressure/dps310.c
 +++ b/drivers/iio/pressure/dps310.c
-@@ -116,6 +116,7 @@ struct dps310_data {
- 	s32 *fifo_hold;
- 	unsigned int fifo_hold_max;
- 	unsigned int fifo_held;
-+	unsigned int watermark;
- 	unsigned int drain_interval_ms;
- 	s32 fifo_temp_raw;
- };
-@@ -980,13 +981,29 @@ static int dps310_fifo_set_enable(struct dps310_data *data, bool enable)
- }
+@@ -1086,22 +1086,29 @@ static unsigned int dps310_fifo_push_held(struct dps310_data *data)
  
- /* No interrupt pin is wired in tree, so drain on a timer */
--static unsigned int dps310_fifo_interval(int prs_rate, int tmp_rate)
-+static unsigned int dps310_fifo_interval(struct dps310_data *data,
-+					 int prs_rate, int tmp_rate)
+ /*
+  * Read the batch out before compensating it, so a pressure entry pairs with
+- * the temperature preceding it rather than the last one in the batch.
++ * the temperature preceding it rather than the last one in the batch. Stop
++ * at max_scans, as reading an entry removes it from the FIFO. Zero means no
++ * limit.
+  *
+  * Returns scans pushed.
+  */
+-static int dps310_fifo_drain(struct dps310_data *data)
++static int dps310_fifo_drain(struct dps310_data *data, unsigned int max_scans)
+ 	__must_hold(&data->lock)
  {
--	unsigned int fill_ms;
-+	unsigned int drain_interval_ms, fill_ms, want_ms;
-+	int scan_rate;
+ 	bool pressure_enabled = test_bit(DPS310_SCAN_PRESSURE,
+ 					 data->iio->active_scan_mask);
+ 	u8 kind[DPS310_FIFO_DEPTH];
+ 	s32 raw[DPS310_FIFO_DEPTH];
++	unsigned int scans = 0;
+ 	unsigned int pushed = 0;
+ 	unsigned int cnt;
++	bool is_pressure;
+ 	int rc;
  
- 	fill_ms = MSEC_PER_SEC * DPS310_FIFO_DEPTH / (prs_rate + tmp_rate);
+ 	for (cnt = 0; cnt < DPS310_FIFO_DEPTH; cnt++) {
++		if (max_scans && scans >= max_scans)
++			break;
++
+ 		rc = dps310_fifo_read_entry(data, &raw[cnt]);
+ 		if (rc < 0)
+ 			return rc;
+@@ -1109,7 +1116,12 @@ static int dps310_fifo_drain(struct dps310_data *data)
+ 		if (rc == DPS310_FIFO_EMPTY)
+ 			break;
  
--	return clamp(fill_ms / 2, DPS310_DRAIN_MIN_MS, DPS310_DRAIN_MAX_MS);
-+	/*
-+	 * There is no hardware watermark, so take it as the number of scans
-+	 * the user will wait for and drain at that rate. Scans come from
-+	 * whichever measurement drives them.
-+	 */
-+	if (test_bit(DPS310_SCAN_PRESSURE, data->iio->active_scan_mask))
-+		scan_rate = prs_rate;
-+	else
-+		scan_rate = tmp_rate;
++		is_pressure = rc == DPS310_FIFO_PRESSURE;
+ 		kind[cnt] = rc;
 +
-+	want_ms = data->watermark * MSEC_PER_SEC / scan_rate;
-+
-+	drain_interval_ms = min(want_ms, fill_ms / 2);
-+
-+	return clamp(drain_interval_ms, DPS310_DRAIN_MIN_MS, DPS310_DRAIN_MAX_MS);
- }
++		/* Only the measurement that drives the scans counts */
++		if (is_pressure == pressure_enabled)
++			scans++;
+ 	}
  
- /* Returns which measurement the entry came from, or a negative error */
-@@ -1163,6 +1180,15 @@ static int dps310_fifo_hold_alloc(struct dps310_data *data, int prs_rate,
+ 	for (unsigned int i = 0; i < cnt; i++) {
+@@ -1146,7 +1158,7 @@ static void dps310_fifo_work(struct work_struct *work)
+ 	int rc;
+ 
+ 	scoped_guard(mutex, &data->lock)
+-		rc = dps310_fifo_drain(data);
++		rc = dps310_fifo_drain(data, 0);
+ 
+ 	if (rc < 0)
+ 		dev_dbg(&data->client->dev, "FIFO drain failed: %d\n", rc);
+@@ -1180,6 +1192,22 @@ static int dps310_fifo_hold_alloc(struct dps310_data *data, int prs_rate,
  	return 0;
  }
  
-+static int dps310_hwfifo_set_watermark(struct iio_dev *iio, unsigned int val)
++static int dps310_hwfifo_flush(struct iio_dev *iio, unsigned int count)
 +{
 +	struct dps310_data *data = iio_priv(iio);
 +
-+	data->watermark = clamp(val, 1, DPS310_FIFO_DEPTH);
++	/* Holding the mode keeps active_scan_mask alive across the drain */
++	IIO_DEV_GUARD_CURRENT_MODE(iio);
 +
-+	return 0;
++	/* A trigger drives the capture instead and leaves the FIFO empty */
++	if (iio_device_get_current_mode(iio) != INDIO_BUFFER_SOFTWARE)
++		return 0;
++
++	guard(mutex)(&data->lock);
++
++	return dps310_fifo_drain(data, count);
 +}
 +
- static int dps310_fifo_start(struct dps310_data *data)
- 	__must_hold(&data->lock)
+ static int dps310_hwfifo_set_watermark(struct iio_dev *iio, unsigned int val)
  {
-@@ -1176,7 +1202,7 @@ static int dps310_fifo_start(struct dps310_data *data)
- 	if (rc)
- 		return rc;
- 
--	data->drain_interval_ms = dps310_fifo_interval(prs_rate, tmp_rate);
-+	data->drain_interval_ms = dps310_fifo_interval(data, prs_rate, tmp_rate);
- 
- 	rc = dps310_fifo_hold_alloc(data, prs_rate, tmp_rate);
- 	if (rc)
-@@ -1288,6 +1314,7 @@ static const struct regmap_config dps310_regmap_config = {
- static const struct iio_info dps310_info = {
+ 	struct dps310_data *data = iio_priv(iio);
+@@ -1315,6 +1343,7 @@ static const struct iio_info dps310_info = {
  	.read_raw = dps310_read_raw,
  	.write_raw = dps310_write_raw,
-+	.hwfifo_set_watermark = dps310_hwfifo_set_watermark,
+ 	.hwfifo_set_watermark = dps310_hwfifo_set_watermark,
++	.hwfifo_flush_to_buffer = dps310_hwfifo_flush,
  };
  
  static int dps310_probe(struct i2c_client *client)
-@@ -1304,6 +1331,7 @@ static int dps310_probe(struct i2c_client *client)
- 	data = iio_priv(iio);
- 	data->client = client;
- 	data->iio = iio;
-+	data->watermark = 1;
- 
- 	rc = devm_mutex_init(dev, &data->lock);
- 	if (rc)
 -- 
 2.43.0
 
