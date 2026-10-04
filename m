@@ -1,130 +1,293 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C51468C33;
-	Sun,  4 Oct 2026 14:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DD147DD4E;
+	Sun,  4 Oct 2026 18:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791125846; cv=none; b=M0Z4f906YcPLnp1C3kKhL5qlv5Xy4qGJEJ4d2tAtPyfwL6aAWhwn6T93LTQtffr8MEZOY+A5pooJ40PZKLu3wr6e0EkE0S4lOXByj02gBrSjGjBqEAeSwlh+9PISnQKmTT4bxYFJZLqy7mvrmQDwGrmTD/54f5DRb9sDHGpX/E4=
+	t=1791137196; cv=none; b=E7cHt6caCSBfw3574K2OjHx/6r0OrOKrHRjoXGxwMg/qXQqoELnpJvRA/FI76dmol4KbvzcdksFS690I0iBYWQbAKWmzWN2W/N7UYPjEahr302CPt+lyNxPGNWdUxQhcpLgFgYDjsMrIh8miz6bRTievDiLinredfQlu4H2KW60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791125846; c=relaxed/simple;
-	bh=jKRDeQWHATNQKguOq+DACJaAb5fWymP47mTILZgh/pw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=XJjrC0gcfULCNGdskjCcK9w91y2YlCvv0MMyoXYklGmYay0wk649R2FICbPtE6ETWtqoB7iCt3oIlmt90IJKudPGDkNvXSB71g/iEz/ZGJ8qUqYpBx1yEL55GhYtUsUyqI6gAfFfLzNzKKFMx/SPQO4TRBYq51sMV7v4d6Fab9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cfW+upAc; arc=none smtp.client-ip=198.175.65.15
+	s=arc-20240116; t=1791137196; c=relaxed/simple;
+	bh=txKpiZj/vFaH3TyDauuUkNKayFxBlAtwL6eqxCEGI40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hZED/LPl1l8HGaeLpG1yU43rH4V+hOaeZS/xQBHgZyx3FNMSuN66nn7PbBY5oWRCeQdl24P6xvRDOkBnOsj0uV3ptI7piyFVYFGul429pDdbbdmfEWL/bNokvtpWaCuYzQGbfpBh0dtuNPBjGTIC5P45PFvKaSJNnCRqj+hM4bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I2WnkAn6; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cfW+upAc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I2WnkAn6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791125842; x=1822661842;
-  h=date:from:to:cc:subject:message-id;
-  bh=jKRDeQWHATNQKguOq+DACJaAb5fWymP47mTILZgh/pw=;
-  b=cfW+upAcXHqbFQ+F1gGuO3j2tXvLajngenslrTaO/9p1//V+vVMcUB39
-   4+/PlD8hhNbWpUjh7x/rXRu3NTR1GoKdW4BCZ/Zp8Ok+sNzj9DYACH1FM
-   kfMuy6OGwkhJfd5Q00iR4QiEqE4HTCw5wYgaiopXWu+29RYFGTPPUgNpN
-   PfpPjnkayxQe0hyWR68uj+INRr7VeeP7QfQa969/K0IFkas73CwXKXZAi
-   JtEVPGp/hd0NpPERI12DUZfAhLt23c1qDaim/AxwBSbjo02TBi182bI+D
-   GGEiSNbLyOdxjeW3Dlkge1rjdQqCKdcQcBw/iEeutrK6yEPMOx83GvgSa
+  t=1791137192; x=1822673192;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=txKpiZj/vFaH3TyDauuUkNKayFxBlAtwL6eqxCEGI40=;
+  b=I2WnkAn6XqMjJeolRDWcDRqCl31o9p7dy0C+2S/L0QOgNoEaAPODrHJo
+   p9pcZGwbz+z4Flbavdghs95tFk2fwFr6WSQlNEvuwa3HLsWSHlKLdJJ5y
+   fM5piT3Q2jz6KVrZCKaXziMpiQDvnZ3eCi4eaY/rHvo09VdCVjnHTd2J0
+   pFUaWFC+cjX3MSHYJaX/xFjp/QrD+sQdVZ1yV4Bm7+smsrl3qg6Oy7qaI
+   fHDmrlrtUPgHbhVZ0r6ltqFrEBTpuAX6JjrfpsYObXSsQK6pq/uaZL8jH
+   VX2XPVafUwD9GTM4ESv8Yx7WAep5Ecac5J5CpD4n8CJpjNFoCxLWU8eWq
    Q==;
-X-CSE-ConnectionGUID: 73hwZmJkSfStnaorP9rhQg==
-X-CSE-MsgGUID: 6ugIptUwT+WHg4zeYUuEpw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11925"; a="94524591"
+X-CSE-ConnectionGUID: HPh+NwzUQxKmbtx6/NAI+w==
+X-CSE-MsgGUID: 95fRcnXfRLyxffHev2f0hg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11925"; a="90851608"
 X-IronPort-AV: E=Sophos;i="6.27,139,1787036400"; 
-   d="scan'208";a="94524591"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 07:57:18 -0700
-X-CSE-ConnectionGUID: ww61SwTSSHGfFlJVdNpdkw==
-X-CSE-MsgGUID: AYkCI+9SRoCWIdNc5Jnbqw==
+   d="scan'208";a="90851608"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 11:06:31 -0700
+X-CSE-ConnectionGUID: F/pVaMaBTWKDdKfLZr7Mmg==
+X-CSE-MsgGUID: umG+elnYTu2Tf+LBMwQPlA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,139,1787036400"; 
-   d="scan'208";a="284698988"
+   d="scan'208";a="304601979"
 Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 04 Oct 2026 07:57:16 -0700
+  by fmviesa001.fm.intel.com with ESMTP; 04 Oct 2026 11:06:26 -0700
 Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xDNeL-00000000Uoj-3IxK;
-	Sun, 04 Oct 2026 14:57:13 +0000
-Date: Sun, 04 Oct 2026 22:56:54 +0800
+	id 1xDQbP-00000000Uxh-2gjf;
+	Sun, 04 Oct 2026 18:06:23 +0000
+Date: Mon, 5 Oct 2026 02:06:14 +0800
 From: kernel test robot <lkp@intel.com>
-To: Bjorn Helgaas <helgaas@kernel.org>
+To: Birger Koblitz <mail@birger-koblitz.de>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Heiner Kallweit <hkallweit1@gmail.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Eric Dumazet <edumazet@kernel.org>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-pci@vger.kernel.org
-Subject: [pci:next 20/29]
- drivers/pci/controller/dwc/pcie-rcar-gen4.c:307:30: error: use of undeclared
- identifier 'PCIE_PORT_LANE_SKEW'
-Message-ID: <202610042255.a8dle5HM-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+	Jianhui Xu <neuromoments@gmail.com>,
+	Birger Koblitz <mail@birger-koblitz.de>
+Subject: Re: [PATCH net-next v16 04/13] ax88179_178a: Add HW support for
+ AX179A-based chips
+Message-ID: <202610050104.tjRXtbIC-lkp@intel.com>
+References: <20261004-ax88179a-v16-4-2a9ae4e68f7b@birger-koblitz.de>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261004-ax88179a-v16-4-2a9ae4e68f7b@birger-koblitz.de>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-head:   372b7a0d9c7c0cb724b259db9d39c785ad9dec74
-commit: 9bab7146bd9ef2700f42d705d8e01d7d95362d0f [20/29] Merge branch 'pci/controller/dwc-rcar-gen4'
-config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20261004/202610042255.a8dle5HM-lkp@intel.com/config)
+Hi Birger,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 071876fd50482a68603a9460d80dd6dd58827ee1]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Birger-Koblitz/phylink-Add-phylink_mac_interrupt/20261004-073905
+base:   071876fd50482a68603a9460d80dd6dd58827ee1
+patch link:    https://lore.kernel.org/r/20261004-ax88179a-v16-4-2a9ae4e68f7b%40birger-koblitz.de
+patch subject: [PATCH net-next v16 04/13] ax88179_178a: Add HW support for AX179A-based chips
+config: arm-defconfig (https://download.01.org/0day-ci/archive/20261005/202610050104.tjRXtbIC-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 5f609f950d2e80addf5566623013db68394334db)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261004/202610042255.a8dle5HM-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261005/202610050104.tjRXtbIC-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610042255.a8dle5HM-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610050104.tjRXtbIC-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/pci/controller/dwc/pcie-rcar-gen4.c:307:30: error: use of undeclared identifier 'PCIE_PORT_LANE_SKEW'
-     307 |         val = dw_pcie_readl_dbi(dw, PCIE_PORT_LANE_SKEW);
-         |                                     ^~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-rcar-gen4.c:311:25: error: use of undeclared identifier 'PCIE_PORT_LANE_SKEW'
-     311 |         dw_pcie_writel_dbi(dw, PCIE_PORT_LANE_SKEW, val);
-         |                                ^~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-rcar-gen4.c:338:30: error: use of undeclared identifier 'PCIE_PORT_LANE_SKEW'
-     338 |         val = dw_pcie_readl_dbi(dw, PCIE_PORT_LANE_SKEW);
-         |                                     ^~~~~~~~~~~~~~~~~~~
-   drivers/pci/controller/dwc/pcie-rcar-gen4.c:342:25: error: use of undeclared identifier 'PCIE_PORT_LANE_SKEW'
-     342 |         dw_pcie_writel_dbi(dw, PCIE_PORT_LANE_SKEW, val);
-         |                                ^~~~~~~~~~~~~~~~~~~
-   4 errors generated.
+>> drivers/net/usb/ax88179a_devices.c:783:24: warning: shift count >= width of type [-Wshift-count-overflow]
+     783 |         tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+         |                    ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/ax88179_lib.h:251:29: note: expanded from macro 'AX179A_TX_DESC_MSS'
+     251 | #define AX179A_TX_DESC_MSS              GENMASK(46, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
+      48 |              (type_max(t) << (l) &                              \
+         |                           ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/usb/ax88179a_devices.c:783:24: warning: shift count >= width of type [-Wshift-count-overflow]
+     783 |         tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+         |                    ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/ax88179_lib.h:251:29: note: expanded from macro 'AX179A_TX_DESC_MSS'
+     251 | #define AX179A_TX_DESC_MSS              GENMASK(46, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
+      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+         |                           ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/usb/ax88179a_devices.c:783:24: warning: shift count >= width of type [-Wshift-count-overflow]
+     783 |         tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+         |                    ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/ax88179_lib.h:251:29: note: expanded from macro 'AX179A_TX_DESC_MSS'
+     251 | #define AX179A_TX_DESC_MSS              GENMASK(46, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
+      48 |              (type_max(t) << (l) &                              \
+         |                           ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/usb/ax88179a_devices.c:783:24: warning: shift count >= width of type [-Wshift-count-overflow]
+     783 |         tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+         |                    ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/ax88179_lib.h:251:29: note: expanded from macro 'AX179A_TX_DESC_MSS'
+     251 | #define AX179A_TX_DESC_MSS              GENMASK(46, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
+      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+         |                           ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/usb/ax88179a_devices.c:783:24: warning: shift count >= width of type [-Wshift-count-overflow]
+     783 |         tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+         |                    ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/ax88179_lib.h:251:29: note: expanded from macro 'AX179A_TX_DESC_MSS'
+     251 | #define AX179A_TX_DESC_MSS              GENMASK(46, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:48:20: note: expanded from macro 'GENMASK_TYPE'
+      48 |              (type_max(t) << (l) &                              \
+         |                           ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+>> drivers/net/usb/ax88179a_devices.c:783:24: warning: shift count >= width of type [-Wshift-count-overflow]
+     783 |         tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+         |                    ~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/usb/ax88179_lib.h:251:29: note: expanded from macro 'AX179A_TX_DESC_MSS'
+     251 | #define AX179A_TX_DESC_MSS              GENMASK(46, 32)
+         |                                         ^
+   include/linux/bits.h:51:24: note: expanded from macro 'GENMASK'
+      51 | #define GENMASK(h, l)           GENMASK_TYPE(unsigned long, h, l)
+         |                                 ^
+   include/linux/bits.h:49:20: note: expanded from macro 'GENMASK_TYPE'
+      49 |               type_max(t) >> (BITS_PER_TYPE(t) - 1 - (h)))))
+         |                           ^
+   note: (skipping 4 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
+   include/linux/compiler_types.h:702:22: note: expanded from macro 'compiletime_assert'
+     702 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+         |         ~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:690:23: note: expanded from macro '_compiletime_assert'
+     690 |         __compiletime_assert(condition, msg, prefix, suffix)
+         |         ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/compiler_types.h:682:9: note: expanded from macro '__compiletime_assert'
+     682 |                 if (!(condition))                                       \
+         |                       ^~~~~~~~~
+   6 warnings generated.
 
 
-vim +/PCIE_PORT_LANE_SKEW +307 drivers/pci/controller/dwc/pcie-rcar-gen4.c
+vim +783 drivers/net/usb/ax88179a_devices.c
 
-0d0c551011df45 Yoshihiro Shimoda 2023-10-18  294  
-eeeb72fab4a569 Marek Vasut       2026-09-21  295  static int rcar_gen4_v4h_v4m_pcie_init(struct rcar_gen4_pcie *rcar)
-eeeb72fab4a569 Marek Vasut       2026-09-21  296  {
-eeeb72fab4a569 Marek Vasut       2026-09-21  297  	struct dw_pcie *dw = &rcar->dw;
-eeeb72fab4a569 Marek Vasut       2026-09-21  298  	u32 val;
-eeeb72fab4a569 Marek Vasut       2026-09-21  299  	int ret;
-eeeb72fab4a569 Marek Vasut       2026-09-21  300  
-eeeb72fab4a569 Marek Vasut       2026-09-21  301  	/* R-Car Gen4 common initialization. */
-eeeb72fab4a569 Marek Vasut       2026-09-21  302  	ret = rcar_gen4_pcie_common_init(rcar);
-eeeb72fab4a569 Marek Vasut       2026-09-21  303  	if (ret)
-eeeb72fab4a569 Marek Vasut       2026-09-21  304  		return ret;
-eeeb72fab4a569 Marek Vasut       2026-09-21  305  
-eeeb72fab4a569 Marek Vasut       2026-09-21  306  	/* R-Car V4H and V4M specific additional initialization. */
-eeeb72fab4a569 Marek Vasut       2026-09-21 @307  	val = dw_pcie_readl_dbi(dw, PCIE_PORT_LANE_SKEW);
-eeeb72fab4a569 Marek Vasut       2026-09-21  308  	val &= ~PORT_LANE_SKEW_INSERT_MASK;
-eeeb72fab4a569 Marek Vasut       2026-09-21  309  	if (dw->num_lanes < 4)
-eeeb72fab4a569 Marek Vasut       2026-09-21  310  		val |= BIT(6);
-eeeb72fab4a569 Marek Vasut       2026-09-21  311  	dw_pcie_writel_dbi(dw, PCIE_PORT_LANE_SKEW, val);
-eeeb72fab4a569 Marek Vasut       2026-09-21  312  
-eeeb72fab4a569 Marek Vasut       2026-09-21  313  	val = readl(rcar->base + PCIEPWRMNGCTRL);
-eeeb72fab4a569 Marek Vasut       2026-09-21  314  	val |= APP_CLK_REQ_N | APP_CLK_PM_EN;
-eeeb72fab4a569 Marek Vasut       2026-09-21  315  	writel(val, rcar->base + PCIEPWRMNGCTRL);
-eeeb72fab4a569 Marek Vasut       2026-09-21  316  
-eeeb72fab4a569 Marek Vasut       2026-09-21  317  	return 0;
-eeeb72fab4a569 Marek Vasut       2026-09-21  318  }
-eeeb72fab4a569 Marek Vasut       2026-09-21  319  
-
-:::::: The code at line 307 was first introduced by commit
-:::::: eeeb72fab4a569c1cc547c9bf220c808dd37f83d PCI: rcar-gen4: Rework .additional_common_init() into .init()
-
-:::::: TO: Marek Vasut <marek.vasut+renesas@mailbox.org>
-:::::: CC: Bjorn Helgaas <bhelgaas@google.com>
+   770	
+   771	static struct sk_buff *ax88179a_tx_fixup(struct usbnet *dev, struct sk_buff *skb, gfp_t flags)
+   772	{
+   773		u64 tx_desc = skb->len & AX179A_TX_DESC_LEN_MASK;
+   774		int frame_size = dev->maxpacket;
+   775		struct sk_buff *ax_skb;
+   776		u64 *tx_desc_ptr;
+   777		int padding_size;
+   778		int headroom;
+   779		int tailroom;
+   780		u16 tci = 0;
+   781	
+   782		/* TSO MSS */
+ > 783		tx_desc |= FIELD_PREP(AX179A_TX_DESC_MSS, (u64)skb_shinfo(skb)->gso_size);
+   784	
+   785		headroom = (skb->len + sizeof(tx_desc)) % 8;
+   786		padding_size = headroom ? 8 - headroom : 0;
+   787	
+   788		if (((skb->len + sizeof(tx_desc) + padding_size) % frame_size) == 0) {
+   789			padding_size += 8;
+   790			tx_desc |= AX179A_TX_DESC_DROP_PADD;
+   791		}
+   792	
+   793		if ((dev->net->features & NETIF_F_HW_VLAN_CTAG_TX) && (vlan_get_tag(skb, &tci) >= 0)) {
+   794			tx_desc |= AX179A_TX_DESC_VLAN;
+   795			tx_desc |= FIELD_PREP(AX179A_TX_DESC_VLAN_ID, (u64)tci);
+   796		}
+   797	
+   798		if (!dev->can_dma_sg && (dev->net->features & NETIF_F_SG) && skb_linearize(skb)) {
+   799			dev_kfree_skb_any(skb);
+   800			return NULL;
+   801		}
+   802	
+   803		headroom = skb_headroom(skb);
+   804		tailroom = skb_tailroom(skb);
+   805	
+   806		if (!(headroom >= sizeof(tx_desc) && tailroom >= padding_size)) {
+   807			ax_skb = skb_copy_expand(skb, sizeof(tx_desc), padding_size, flags);
+   808			dev_kfree_skb_any(skb);
+   809			skb = ax_skb;
+   810			if (!skb)
+   811				return NULL;
+   812		}
+   813		if (padding_size != 0)
+   814			skb_put_zero(skb, padding_size);
+   815		/* Copy TX header */
+   816		tx_desc_ptr = skb_push(skb, sizeof(tx_desc));
+   817		put_unaligned_le64(tx_desc, tx_desc_ptr);
+   818	
+   819		usbnet_set_skb_tx_stats(skb, 1, 0);
+   820	
+   821		return skb;
+   822	}
+   823	
 
 --
 0-DAY CI Kernel Test Service
