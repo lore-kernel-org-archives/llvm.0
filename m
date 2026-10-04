@@ -1,110 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj2-f38.google.com (mail-pj2-f38.google.com [74.125.227.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6B7C353A6D;
-	Sun,  4 Oct 2026 22:04:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A500F30EF91
+	for <llvm@lists.linux.dev>; Sun,  4 Oct 2026 23:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791151443; cv=none; b=IYWXv0+zBD6Vb1KdoyaB11lbbGXwxT0usHk0k84Kuzfg4tHJyNnOfnLAIvmrqUcrwM4u6SUECGXBdkAlJI2c8ZYwq1crRRN12PwgL0j5JNxOem+UXGAdTpTEwY/zGux6yCXH+Gz8HPZXIdDyTR2JZv+/OunnRMEGSAsVbY+IbY0=
+	t=1791157711; cv=none; b=pcFYYlhFMuyPcEPF0X85LsS8AV1DokL/LJj6K4PfAHHWRQvMrPrym+ZMwb6M1Cj4PsOrY2e6c0u8I9iXwM9EApG9dHoIwjUmV8C1/74l+VofzbmbXW8MnY2VXEPNfxNr9Wic/VtojAlqH1rBeo84TdNM48HM1xyhMfLl7qwf9AU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791151443; c=relaxed/simple;
-	bh=OYncZyWlgurZajrfhAJgPQQ5zbIU9aawOtL7dvK/Xw8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=B7QVp27XKGQILeYC/+f9BxEi13Km1G0BgB+B01Rr3dn1wjIHJ9rHChHg/VsLptUuAf25+zgndNuS8yiAIuPipZqN9kmi6T0oRj232/Z6lq2WSAKcjk6D3TpC+NQmIx8w88Ss2KoQqtU9gbFh0qxgXypPiZjHEVo1q0j4XlPKfuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yd5Coiei; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791157711; c=relaxed/simple;
+	bh=Yakr+ipymN7ZnA+Xz4TDokUUTt0zx6UpbPqxI12sIzE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WRUc6vX2zZmFxcs6vH6JLwiPnNW2CC6R+GbXfHDJ/9wpjmKQFbfh+J0jQ1FXGX5biKjOZxvOpbvsAYkrkpuQNo6qP6JHKqcUXnVeyIglSXJoJyqpfjvhoSmn0EAr9kCo6icEgviB2HPikitKn1z0a9pdhYMJWueYaE6/5WH7VNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q3L1QAa6; arc=none smtp.client-ip=74.125.227.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yd5Coiei"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791151441; x=1822687441;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OYncZyWlgurZajrfhAJgPQQ5zbIU9aawOtL7dvK/Xw8=;
-  b=Yd5CoieiODolLVR6nkt7p5qkaVKPOHGeLn/x7mvi9rDdFI9ngGU4gBjP
-   Oo6M4raPxcBlRYGcqUFSUUejdmHP84y/7vTuoyLVN1lol7Fj0w5AfAV4T
-   b+takH+YqoGpSZHpbjgp2GF4KUllP5gR/MH0Hq3OOGVQnqFy1udWsK9/8
-   Yic2TjpidRyXMqv8UMiuGNTVjXfxXyf5eqfCh/kTDeRvMKJZtN2zWsr3+
-   +XPmB3fyD1K+3JtGiqS735lk4xBnXWPl21zxhMqjNsA37e5/bgeW9YBm9
-   OjJriaCB6yMKqXUCq9Jl/Tgt4wB8fsVniSbtzd6L14FGGTonrl2XGGjaB
-   A==;
-X-CSE-ConnectionGUID: pnscoQI3RyWIKbAt4Za6Hw==
-X-CSE-MsgGUID: Qzfzb/BcSv2dSUNf81c8Sw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11925"; a="91034317"
-X-IronPort-AV: E=Sophos;i="6.27,141,1787036400"; 
-   d="scan'208";a="91034317"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2026 15:04:01 -0700
-X-CSE-ConnectionGUID: QUn2CHRATI+2gFh2VPIN/g==
-X-CSE-MsgGUID: oDyJkbRvT52YmuJK3dub9Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,141,1787036400"; 
-   d="scan'208";a="276814819"
-Received: from igk-lkp-server01.igk.intel.com (HELO 3a02ec7efc9f) ([10.211.93.152])
-  by fmviesa008.fm.intel.com with ESMTP; 04 Oct 2026 15:03:59 -0700
-Received: from kbuild by 3a02ec7efc9f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xDUJJ-000000000R2-1V05;
-	Sun, 04 Oct 2026 22:03:57 +0000
-Date: Mon, 05 Oct 2026 00:03:35 +0200
-From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/rust-kunit-assertion 11/13]
- lib/kunit/string-stream.c:111:47: warning: diagnostic behavior may be
- improved by adding the 'format(printf, 2, 3)' attribute to the declaration of
- 'kunit_string_stream_add'
-Message-ID: <202610042350.99INxpQ7-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3L1QAa6"
+Received: by mail-pj2-f38.google.com with SMTP id d9443c01a7336-2e2dd05994cso2603455ad.2
+        for <llvm@lists.linux.dev>; Sun, 04 Oct 2026 16:48:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791157710; x=1791762510; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=dO6qiiwJ5mjkpx+bVW9ukEfz8rnMpwLVr276QlZKmZE=;
+        b=Q3L1QAa6r/+zFkoWkcwQTUYokXiIHdVokHKZvRtHir2J8+iot4hlqhudlIU6fuSVYX
+         ZRzdtWO0ULNWu0JEoyMyu15l8ylgtO0l+PjyFLraiiuKI2+bLHuG37i5I7PnlqQGmYiB
+         O+Zz+cdeE6+D1Dcq+mJAd8fpuO37ySOeR7SUxE0UWa2Wbcyg+fetG91K4Mv6LSV4k9/X
+         xqy22s5BzF9pwPvfqDuyWBstFc+vtMOKCkJqxQol5iowvyIB2AaVzhvUFYf9MUMCVqev
+         3renMFxLBC2c/X3dvqcmcOUjWmRqEnva4q1/swp7jcwpy49L4H6XfAtvMY94yHgv8wfJ
+         JRfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791157710; x=1791762510;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=dO6qiiwJ5mjkpx+bVW9ukEfz8rnMpwLVr276QlZKmZE=;
+        b=qvM2ZtUF7SZziLM7hbsc9z3PNilcCjvWWqwfR6STo4FItfdm4/D/HokIdOL+kZjtsb
+         OdtuzaY5q2731byGCROmIlZnDH1PYd0tycZGzw+Z85BPXJPw42ykmutS8Sq4dhuarpFl
+         96ntuH3//Z7iR3092abf48iT/t3CmotCAZfxKKCnAcJbW/iJRbUQiXZDyBUUAaYWtvoS
+         CCdmyEVJQzUbSAibTmZEA5nEitsMtxUw9JmVYIIJyB2ZdnHSr1fdZRGOcyooQLbC4e4x
+         GxSiJG/QJlXiiPKEvsQMtaOUfNBELHtl5AE5gi8YDg5nBE1YUGMOxvZVHatY8Z233O1k
+         Sq/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBzQ/ETwXvuIXXEFdfX6FpoYwk1Tq/7hO2A021oPh9YgICFYrb1Mxo6lCToVFjH1V1HY75HP@lists.linux.dev
+X-Gm-Message-State: AFq9FYIM5Lb9dnab2MWq7J37TD9G96C5dNt0vGO32L5QalJWW/IOXb+/
+	GvYp2SqzMgvjIMO8tKXAr05Fxl5rBL1jFL54krPemOfW9Bu19dXl2w/k
+X-Gm-Gg: AYBFou1TydW/egaC9jNzytAv3GaNKZg+JOgPTL8ojdRSENO+yyjNTVE7P8B5CG6inXm
+	kR08UZV7xL4/lGPUrq/5hLlr++saD1QGCizaNhKYdG+tZqGvezN/BOmSX3jCK216JXhB35JafC8
+	AkfgByiIQkVKpelm+2FhZpYl/mkaxXoFumoR5kEfkx1g/HkmYdsK/p1dbqGywOaB3a1oIjgsoXG
+	z8AvZoeUaSzasuVtLqd75Rr4DC0eLW9Cstf9BUCzbWj9+UIbthJ8n+hRQ2kxTwPcmDB2xgMMqqt
+	7Jx1j+lKsm96Xo3Ug5DjC6LaKUTXIBFabK5MbjfcCdSJK+0QJv3I4pv6qY0AjvYm1qIncpaEEF8
+	zh8e8484AtD7HCXgVAGhwUKR7ZM+vGemNozF9IfDBQm9sSjfaRESOKzY6uo16kY5VrO1+lP2LC0
+	vMWTYG+gPsPUjFilTuteXpGGSau65v/J5rGEGggsz+gAxsVrx7gN+Y7ORfTUPynu1phJvrJA/aM
+	Kr2KSwuTWCvyYaFWjPPgdly98H8aa4I4Fa4K0zwWrSIdto1P28tw6KfVe14gKx5MzoN6BhoOtw7
+	20syLiA4HGOapIU3eibGxRnkmkXExvD0/obSxR4tTCXC4JFg+zz+oZ2c+rs=
+X-Received: by 2002:a17:903:8c3:b0:2dd:c0ff:e727 with SMTP id d9443c01a7336-2e49b65f04emr81741455ad.57.1791157709961;
+        Sun, 04 Oct 2026 16:48:29 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e35])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e49f6cd764sm26207215ad.48.2026.10.04.16.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 04 Oct 2026 16:48:29 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-mips@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Paul Burton <paulburton@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] MIPS: Avoid dead code/data elimination when using recordmcount
+Date: Sun,  4 Oct 2026 16:48:26 -0700
+Message-ID: <20261004234826.541468-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/rust-kunit-assertion
-head:   f72cd14d37a9483b1e310e75dc9e583adb82a6d2
-commit: 99770826688f8794d7f46b2d703adf3270ed8744 [11/13] prep: string stream
-config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261004/202610042350.99INxpQ7-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261004/202610042350.99INxpQ7-lkp@intel.com/reproduce)
+CONFIG_LD_DEAD_CODE_DATA_ELIMINATION builds with -ffunction-sections,
+placing every function in its own section. recordmcount refuses to use
+weak symbols as section bases, as a strong definition could override
+them, so a weak function alone in its section, such as the generic
+pcibios_fixup_bus() stub, breaks the build:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610042350.99INxpQ7-lkp@intel.com/
+  Cannot find symbol for section 88: .text.pcibios_fixup_bus.
+  drivers/pci/probe.o: failed
 
-All warnings (new ones prefixed by >>):
+MIPS always records mcount locations with recordmcount, so this hits
+any config with the function tracer and dead code elimination enabled,
+e.g. malta_defconfig built with LLVM=1.
 
->> lib/kunit/string-stream.c:111:47: warning: diagnostic behavior may be improved by adding the 'format(printf, 2, 3)' attribute to the declaration of 'kunit_string_stream_add' [-Wmissing-format-attribute]
-     111 |         result = string_stream_vadd(stream, fmt, args);
-         |                                                      ^
-   include/kunit/assert.h:232:5: note: 'kunit_string_stream_add' declared here
-     232 | int kunit_string_stream_add(struct string_stream *stream, const char *fmt, ...);
-         |     ^
-   1 warning generated.
+Only offer dead code elimination when recordmcount is not used, as
+powerpc does since commit f8b2336f15f3 ("powerpc: Avoid dead code/data
+elimination when using recordmcount"). In practice this makes it
+unavailable together with the function tracer on MIPS.
 
+Fixes: c0436b503591 ("MIPS: Enable dead code elimination")
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ arch/mips/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-vim +111 lib/kunit/string-stream.c
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index ddabe25d6bf7..f4f82bd75b66 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -79,7 +79,7 @@ config MIPS
+ 	select HAVE_IRQ_TIME_ACCOUNTING
+ 	select HAVE_KPROBES
+ 	select HAVE_KRETPROBES
+-	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION
++	select HAVE_LD_DEAD_CODE_DATA_ELIMINATION if !FTRACE_MCOUNT_USE_RECORDMCOUNT
+ 	select HAVE_MOD_ARCH_SPECIFIC
+ 	select HAVE_NMI
+ 	select HAVE_PAGE_SIZE_4KB if !CPU_LOONGSON2EF && !CPU_LOONGSON64
+-- 
+2.56.0
 
-   103	
-   104	#if IS_ENABLED(CONFIG_RUST)
-   105	int kunit_string_stream_add(struct string_stream *stream, const char *fmt, ...)
-   106	{
-   107		va_list args;
-   108		int result;
-   109	
-   110		va_start(args, fmt);
- > 111		result = string_stream_vadd(stream, fmt, args);
-   112		va_end(args);
-   113	
-   114		return result;
-   115	}
-   116	#endif
-   117	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
