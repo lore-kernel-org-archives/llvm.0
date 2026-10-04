@@ -1,111 +1,95 @@
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B002EB0F
-	for <llvm@lists.linux.dev>; Sun,  4 Oct 2026 00:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAB0243956;
+	Sun,  4 Oct 2026 04:07:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791072316; cv=none; b=isHMWm5nEFO4RluD4PWVFFmEVcL0zAR12X1n27xhvzMIH2HanC7tstzXzRCXboMV7OoaZqElGbCy2JHAsbyojC15SpdfoxT9pFHFoZeRov5Qpuqnua+WUBLKqOzUCaAsOhOKN267xuQCexFL//bgLfsG9ysJLq/pQsXsWaGitDo=
+	t=1791086869; cv=none; b=RvvVki8sZ7eKMAMafFgkRH50B6cNXAFuB/wfY4k0MJvm95CBHTmYlao/J/sVFGlYcagbzGh+xawO8ANzDB7v9emefKTsTDB5Rn/zMv88WxsN8Wfy2xNcuiIOlOHQqHfuxhgX4+5SSY2sPDb7dNZnlsqP5O+ia7g9nxu6NuJety0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791072316; c=relaxed/simple;
-	bh=wUOiMs0DspmDIltKjRve6iQy32gxZsqIXTx3Sugvn/Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=ay2FAkHEJKQr+o7y4QI4oUGBurcffbdvvzVVKOjl/9/HHl6RqFJFXkq82m1W7f+t0UNcv43LgluyohJ0NdaN2nccSjFe2r0bmPCy36gLfDc8rFLmYPjTGR7MhAbTrFuehPtH5AhDbR9qUWjPot2Hav9i0rodeYmuIhxfw3dlqtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=KFP5LNkz; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+	s=arc-20240116; t=1791086869; c=relaxed/simple;
+	bh=8HQJr2QEyQMraJ3mh4bm0Lknr2yqYpaSMrC22G/ty8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=AmbIwfeorEXxJ1xnUZ5i1oqUM9549s1TcC93MN5AOvkG9IZWRDJcTlRC9roJXk6mn42CW0lWWDXvEvn6JPy/DzMU98a3TrnKDGQRZs1k+xgcSeJHsLEh/XgOvDoWEI+cj4fBb9w0vkqxvbCpdMGb4Zs6pVIo2SzKmfQMOKu8KdM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UC5Midex; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="KFP5LNkz"
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20261004000510euoutp013ee4f267ec7b07e822726f0b5d88d0fa~bKsbKQ__B2163921639euoutp01V;
-	Sun,  4 Oct 2026 00:05:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20261004000510euoutp013ee4f267ec7b07e822726f0b5d88d0fa~bKsbKQ__B2163921639euoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1791072310;
-	bh=ZJZTrL5SQnYa6gvVNuN2LjMawlbBBC4EWuE7TxWcKx8=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=KFP5LNkza8OoBtj5HTuawzDRYYYBZ/WrfFMAfjXatZRd5ZwpmRtkrpGNteNnFAcFW
-	 a+pvo77kefjxlg+J0Kbo3aGXfUJFkeO4mBIkzt4cVg0+G6B7j2sqT1cGqS4uI3Kd2H
-	 +7VeWQwlvnZ97NOV2yx7DRYeXvD3SKk6JpL6yeyc=
-Received: from eusmtip2.samsung.com (unknown [203.254.199.222]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20261004000509eucas1p12b906a44a576ad1b1bf6f8099f081cdd~bKsaNgMf72285022850eucas1p1h;
-	Sun,  4 Oct 2026 00:05:09 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20261004000507eusmtip2934e51491ae1d0ccbd9db1e873d1df61~bKsYgse7o0742707427eusmtip2n;
-	Sun,  4 Oct 2026 00:05:07 +0000 (GMT)
-Message-ID: <ff30763b-d39b-450f-82ef-cba10d221ae6@samsung.com>
-Date: Sun, 4 Oct 2026 02:05:06 +0200
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UC5Midex"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791086867; x=1822622867;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=8HQJr2QEyQMraJ3mh4bm0Lknr2yqYpaSMrC22G/ty8c=;
+  b=UC5Midex6RvEnzoC2cKTbMgB0Gaq+yrQvFOepBHar9bYuPkTfy4Kv1Cf
+   GiuJuMHEeGMSwQuHd6yIGwus9m28D5ivUQy1FGsItvi5ZSthmxvjf1NwE
+   m1JSD1bCaCtiVj27EwyjN43aQbT5AVJrw22H8V78GpZfQrp7v6E0pGsHh
+   ZKJ0SpQ+zUi8u4WuSzLe1sWWXrj5+VK0ZMYKcBdhIro7RG7vWDnY7BC8x
+   nin32W6/SL1oynDkXCIQdpDpM9eaDgSQGoqhXEVjrycLGJI0Nu9pXiW7o
+   yRAQZhnll25skSYDi/VineiCi+OHPkuNfNE++8LSYEOlbhhsasspGTGuS
+   w==;
+X-CSE-ConnectionGUID: 0PSFdKTaTCGuznjxY8Rw+g==
+X-CSE-MsgGUID: PKpNR1ehRYGecYvJDfQFGg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11924"; a="90693282"
+X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
+   d="scan'208";a="90693282"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Oct 2026 21:07:46 -0700
+X-CSE-ConnectionGUID: 4BprZQPXTqWofE4Ny9djLA==
+X-CSE-MsgGUID: Qnr9kLuLRqS2fsz76kXY+w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,138,1787036400"; 
+   d="scan'208";a="570113"
+Received: from lkp-server01.sh.intel.com (HELO 462990a40a85) ([10.239.97.150])
+  by fmviesa012.fm.intel.com with ESMTP; 03 Oct 2026 21:07:45 -0700
+Received: from kbuild by 462990a40a85 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xDDVn-00000000URb-0co0;
+	Sun, 04 Oct 2026 04:07:43 +0000
+Date: Sun, 04 Oct 2026 12:06:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/rust-kunit-assertion 15/15] error:
+ literal out of range for `i32`
+Message-ID: <202610041200.BnpXhO0V-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 3/9] lib/lz4: add the build environment for the
- vendored sources
-To: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers
-	<ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, Justin Stitt
-	<justinstitt@google.com>, Russell King <linux@armlinux.org.uk>, Thomas
-	Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
-	<James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, Heiko
-	Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
-	Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
-	<borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
-	Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Minchan Kim <minchan@kernel.org>, Jens
-	Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>,
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
-	linux-block@vger.kernel.org, Yann Collet <yann.collet.73@gmail.com>, Nick
-	Terrell <terrelln@meta.com>, Gao Xiang <xiang@kernel.org>, Chao Yu
-	<chao@kernel.org>, Jaegeuk Kim <jaegeuk@kernel.org>, Herbert Xu
-	<herbert@gondor.apana.org.au>, Phillip Lougher <phillip@squashfs.org.uk>,
-	Sungguk <sungguk.na@samsung.com>, Jaehoon Chung <jh80.chung@samsung.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>, linux-erofs@lists.ozlabs.org,
-	linux-f2fs-devel@lists.sourceforge.net, linux-crypto@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <arn9tK5MxxxfH7OW@google.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20261004000509eucas1p12b906a44a576ad1b1bf6f8099f081cdd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20260925113456eucas1p136c3cd1f08be7201ad6b3f7b0e8ff02d
-X-EPHeader: CA
-X-CMS-RootMailID: 20260925113456eucas1p136c3cd1f08be7201ad6b3f7b0e8ff02d
-References: <20260925-lz4-vendor-upstream-v1-0-1c7ffbe21c4b@samsung.com>
-	<CGME20260925113456eucas1p136c3cd1f08be7201ad6b3f7b0e8ff02d@eucas1p1.samsung.com>
-	<20260925-lz4-vendor-upstream-v1-3-1c7ffbe21c4b@samsung.com>
-	<arn9tK5MxxxfH7OW@google.com>
+Content-Type: text/plain; charset=us-ascii
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/rust-kunit-assertion
+head:   694018da3a2ec9356bb827e371b124feaad71569
+commit: 694018da3a2ec9356bb827e371b124feaad71569 [15/15] kunit: msg
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20261004/202610041200.BnpXhO0V-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261004/202610041200.BnpXhO0V-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610041200.BnpXhO0V-lkp@intel.com/
 
-On 9/28/26 07:48, Sergey Senozhatsky wrote:
-> On (26/09/25 13:27), Michal Wilczynski wrote:
-> [..]
->> +
->> +/* LZ4_decompress_fast() and LZ4_resetStream() are still kernel API. */
->> +#define LZ4_DISABLE_DEPRECATE_WARNINGS 1
-> 
-> Is this upstream code?  As far as I understand it, LZ4_decompress_fast*()
-> deprecated upstream and are strongly discouraged.  Do we want to suppress
-> deprecation warnings?
-> 
+All errors (new ones prefixed by >>):
 
-It's ours lz4_deps.h but upstream's lz4.c sets the same switch for
-itself lz4.c, since its own code calls deprecated functions. We
-include lz4.h before lz4.c, so we have to set it first.
+>> error: literal out of range for `i32`
+   --> rust/kernel/drm/gem/shmem.rs:686:39
+   |
+   686 |         assert_eq!(vmap.read32(0x20), 0xFEDCBA98);
+   |                                       ^^^^^^^^^^
+   |
+   = note: the literal `0xFEDCBA98` (decimal `4275878552`) does not fit into the type `i32` and will become `-19088744i32`
+   = help: consider using the type `u32` instead
+   = note: `#[deny(overflowing_literals)]` on by default
+   help: to use as a negative number (decimal `-19088744`), consider using the type `u32` for the literal and cast it to `i32`
+   |
+   686 |         assert_eq!(vmap.read32(0x20), 0xFEDCBA98u32 as i32);
+   |                                                 ++++++++++
 
-I agree on the direction. The only in-tree _fast() user is the pre boot
-path of lib/decompress_unlz4.c, so as a follow-up I'd move it to
-LZ4_decompress_safe_partial() and drop the three _fast exports.
-
-Best regards,
--- 
-Michal Wilczynski <m.wilczynski@samsung.com>
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
