@@ -1,120 +1,148 @@
-Received: from mail-vs2-f37.google.com (mail-vs2-f37.google.com [74.125.227.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545BF1A6822
-	for <llvm@lists.linux.dev>; Mon,  5 Oct 2026 20:39:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDF13DC4BC;
+	Mon,  5 Oct 2026 21:25:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791232776; cv=none; b=H9NVPXJCSiH7BUJdolnPTjSeIZG4LYyXZFKkZM/rx9AhabX3pnuS2b8HMKkAwDJRlRcrUn+3nb68/aX/u33mPs7uKEEsopC5V8VTOi0yoE76cNtXupIM/Ootu98ShB6Tay2FEmEz9OFNhzdjLr36KQbbVLOgkFKbNtebGB0VAGo=
+	t=1791235550; cv=none; b=KCVGLpqt5+O+kRMqLvULEsHK2Z5qC46ji5tfmTmT/HjyN9upDyiw3pfRHCelFR+W2Iar/xc6UwaZ9qy4cu9jm+ZDwVRgjYWCdlzWpPFHMh7NYxmLpmT3S7gyEvi4uC/F98ecTQyWDGRe8T3DjHqVWqANOdNleOHwV6qmk7xoK7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791232776; c=relaxed/simple;
-	bh=W8+JkQSMqBDxJZXNAx4qDJE766xaxIYGmX4KE6Hx2As=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jDb2+evlFenACuo/q5lOxqtid9AR5+8V6+2U//Xd93uaLbQ78VtCGq3jNR1r0fUoH2WZ5UdAn8d3ymKSgELyagFaUHLHLKWnc7G1wbw9ru8vd6xlwHA3vLMvwMiqOcsMFxm6ZSlh4oLo/x4LB7PnBbtNCEjakDeYA+v065Qkqac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gru6ZwAl; arc=none smtp.client-ip=74.125.227.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791235550; c=relaxed/simple;
+	bh=oWoI7KU51zem5IclY14yT1yhw3LIz47deEPyi4Qi3cE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=YJKbJOonLYdrNPz3Egayk5lMtRgs6qKhg2YS6Xw/O1EVMKkusCdZ1qaDlWNlLw4wvJN08JYoRIGrXWkI1JEMc/Xvpr3b1bzr3V0RGT1/ytB+R1CRp93HH9XpO+jxtYipgJ64ENhAvHlQB8zYOhJFQd/FH5ShMjtnJ7qJEyVx20Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CTyoFfQM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gru6ZwAl"
-Received: by mail-vs2-f37.google.com with SMTP id 71dfb90a1353d-5e29744c11eso480911e0c.2
-        for <llvm@lists.linux.dev>; Mon, 05 Oct 2026 13:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791232774; x=1791837574; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=AxI9jOWrXLzRQeo91PfnufO4X1292wU3kDq7ULz84yY=;
-        b=Gru6ZwAl9tBs6LBXur0LXJRuxNpUPZPJRIHVpUPeih0tQZjMDBfrH5bunoeB+++Phe
-         rua5n6tgkxUbdDXxSKM5pvxkKwC4PG68WLsDkKg+NGrnYDvbQS5ahxSCrs2XalqHE9HP
-         81KFGG4ZF7KhKVHazIO6sksuJSNTrx1A9ESRt6NJQNAE8TSzzEvjJ8rHix8ONnNzBm26
-         3fZi87G0OvLOE6MUTlPYVlFneuh80LtfByQ+5e6ELHoTSKRwRZHyLK38wfUPTqBeqxTs
-         5OiI3q6+teRdWo70f8pqnLSPCcuGjG9We2QqMnt5av6R5/gYpeDhBkJ8TopWzHeY8ll2
-         SnYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791232774; x=1791837574;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=AxI9jOWrXLzRQeo91PfnufO4X1292wU3kDq7ULz84yY=;
-        b=wt2UyosLoJJeawavi2vEzI1F6bbEf+31jWtvoY7YkzB+lR5zgFR8NGpgrgP2nNQwyr
-         AlBZCJJlOy5jqywIGOu9V+9lLPEb28vkQJlTgzGSQsCyK/mm2b4p07DaSlHRBD2cnhql
-         Jnd3CgQw7N9pzXW8k78rAtDkZWs9bPfho54bNxuUqb0iK9F0svdXhfVVaIwtPyLOe/LV
-         GpLoQiXKsID0nOKzSgO+xsebaR3YIolWlqOxDTuETXBj7JioAUh+slpPCa/08I4j58+H
-         OaLcEZzrdiCXfI6sU4u1nEtAMTr2UXDkfzakmKTEsXoZz3KiJ5eFc+v83a9yNefTMzkW
-         Pa7w==
-X-Forwarded-Encrypted: i=1; AKwUvBzSKYmHiH8xiaSYlE0/bQghUTtifG7BmbKaT1AL9BxdrNT1tKO375aX2RfguCnLEgQR32ih@lists.linux.dev
-X-Gm-Message-State: AFq9FYKNnAV5zOno6af+08VWFmq1uwrAu3C7AoagJR8YJuGoZChB/jNH
-	PzDrxkq2cnBC7mjImTJlqsip+iMkVZgoObbBlQPMY/x7xHOfblu93hvY
-X-Gm-Gg: AYBFou3EWZ8ZaM1sifhBONofv4XwR+LefZuER08AucH+TP12LqWTS9sh3J0tBQ5vjbs
-	XA2rhdvp1AkiIcL9H0Jf+uF0i+IkwR8vn3TIO3YclRVJs1ln5ndjhOWqGs2BEqgTACjFHWUV49u
-	tsQtLbk3m//xxNXZ1zBggxUkrLUgJeyFOFMRysCUPmdtxIA0VC8dJL13YhUIBRdLEd+JVaCApf4
-	mjsI5xXvdJAK9dp5a199uJsT706LH/x0sMVg6i7WPPmxEBtUOZXZRnvq8kz4XiCK1x4XuE3W5T/
-	YE20XZOQ8OQDsJRTG/RGeDB1tUXNyyeL4VmOKRRyVf+lv9QECdQiDEK/WgKza8cS7uirzTjqB20
-	dRpaCEi2uKzd18c8mBUzPD9UyRcKFZ608jSnc3Kv8jUQOA+DNmW9921X67dKZzH3avNUgbuwgBq
-	f05h33rcPp37MmBOYNLp/p493lX2DTDAbSmgTvYMdsMurSYvv/BCMu6FDJ7oOwGGE55qdfvaHaL
-	vO6mUCQ6fbFY+cjWo9ydIrwbZUj1D68PedH5UMD1/1fJ6wYTf9ApWViNkx8M5BlzIO6GKYHnWxW
-	34amgfCWSscEGRM00eRiLgoOVW/6E333yWFu9+dyfsK+ol2n
-X-Received: by 2002:a05:6122:d0b:b0:5c9:c60e:3a4a with SMTP id 71dfb90a1353d-5dab3263c43mr4109827e0c.22.1791232773813;
-        Mon, 05 Oct 2026 13:39:33 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e35])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5e54e8006d9sm542088e0c.4.2026.10.05.13.39.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Oct 2026 13:39:33 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: sparclinux@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] sparc64: Define p4d_page() instead of stubbing it to NULL
-Date: Mon,  5 Oct 2026 13:39:30 -0700
-Message-ID: <20261005203930.246598-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CTyoFfQM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48EED1F00893;
+	Mon,  5 Oct 2026 21:25:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791235549;
+	bh=NVtCSF04+5hQftrDStv64+G8kBj0wfQzjaUvoe2fK1M=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=CTyoFfQMxyRDu8dCRnxTUJFOMYpC/a1QO3xq/5eVia+1aL2iHETv7cMP1XKR8g4/H
+	 Z4wccSaPxEcAJe50sBlpO5v4HW41usqLzGov0Q0NgJ97RurCKMZ4Nb3CM0zOZc885R
+	 Y910QwMtvj2CjHOv79IDntEKLj6s5D+r5okw0OLFbrExd6AJHdcnR2+bLn69uXJyv+
+	 EDIK5A8LXdW0PWAZ+kTRwoc+ArD4Tnwx7aiNqnXWD9DjR3EEyuziKxAMFmJyot61gC
+	 Sl0mKQpfw7DV7O1Bw0cqSqBn16I0dSRco8xjftzUADN6BEfvSOT9cPrA/ncq9/dyQC
+	 +b18/ZEMed0uw==
+Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
+	by mailfauth.ams.internal (Postfix) with ESMTP id ABC7E198003A;
+	Mon,  5 Oct 2026 17:25:46 -0400 (EDT)
+Received: from ams-imap-11 ([10.64.2.31])
+  by ams-compute-02.internal (MEProxy); Mon, 05 Oct 2026 17:25:46 -0400
+X-ME-Sender: <xms:2BXEak90g0Y2gyHWeyFmRp1Df0-iIO2rP0B5FXQ6CalaZu5ot50A4g>
+    <xme:2BXEanhT2rbLSIDCEIqmIcgC2Z85mXieEz_KNcWf1hfeeJSzun8YeqKsOYdzlMPzB
+    tvt37kmd8Wbvv5ZydmCxS-IsPwhWwc7wGx4a061bdHjmkuFeJDXo5GC>
+X-ME-Proxy-Cause: dmFkZTFYRYK7kCIdTUdiTrNjDf+K1m4N+n/n7BpfpOY/qFXuim304FuhNPbM9hfWJR3s0y
+    v7AZ+ywbG3UH2scS8AH+M0BvWEO5jr4Fq05tizrbLM206uLlpSKcHFjjh6Fol5a/Ad6k8A
+    BvytjI72RlVdjPc0h+tOvENrJQKR+WzEKigCkg6koAtBAYI/6hWKZEU2rKwuy61o0JJFw8
+    UN4T1G4Br4BvSr/S9EFpiAEabmc2rBSxBQUVnLjKrkph5KD6elP72eWsOJYASh0X0yOy4Y
+    GII4gzUasYApQH6tS+I+R7qhwuWHoR/H5yWA4eAlQ/yEiYkUXstYyRbFXrNkltmlXbFDMW
+    5Ez36r3DmZSv5Q+HDXOYsTL58jV9fT5ESYmINJOe2bKjIVLB8UZtR38KxwKPYgfPEFtl0+
+    G9oqZkSXRPMC4qr20RGDOfT75ZW4+GPU2Vvln9eHIXL0CoYJVACxPWTrgIn1+SEpjOOyYp
+    lCJGib/AF3mO8vAroxWagcrjq7mhxPYgBDIXb5v5fIPLj6hhpVzDvFin8n4EsGU9TFrqhz
+    ZTyPEG3969fLxIigtZNEFzMMc00Bo7md6mzEUXS3naL7D0xYhfTGavM1KMtdlqNDV0vRNw
+    Au7p0PGH606Tk4qgNRthbFB9olSr9F3B/yMbGE9PqrvpCOPuX5zESzWN6eug
+X-ME-Proxy: <xmx:2hXEavu9ic04Ng2petmdVSC2GvXWSAT1WuVpBybw4ByZTGYjCzVAvw>
+    <xmx:2hXEaq167pjSLZPl8reQhiwYFT-EOf6KjkRpencLhiCemRBD_W0MuQ>
+    <xmx:2hXEao5JBCoWivkhw0Rio8XM8uNmWEENEIKO1WvINu-fdfYuEIeYMA>
+    <xmx:2hXEapUJOMxK2BtDYT4M9rj9Ikld3WQ3qXKdeHa9uEdmWecBL5tPbA>
+    <xmx:2hXEaoj3_uvdGJs_VK2sqb79Q6Jfj-hJbMYJJRtA-AYdINwrsQ6aPTxX>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 0506DF80093; Mon,  5 Oct 2026 17:25:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Mon, 05 Oct 2026 23:25:22 +0200
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Bill Wendling" <morbo@google.com>, "Kees Cook" <kees@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>,
+ "Nick Desaulniers" <ndesaulniers@google.com>,
+ "Justin Stitt" <justinstitt@google.com>, "Mark Brown" <broonie@kernel.org>,
+ "Marco Elver" <elver@google.com>, alan.maguire@oracle.com,
+ namjain@linux.microsoft.com, "Peter Zijlstra" <peterz@infradead.org>,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev
+Message-Id: <3176a197-baf8-4e5f-96a0-8c79d32a168c@app.fastmail.com>
+In-Reply-To: <20261005192052.2589382-1-morbo@google.com>
+References: <20261005102518.2400984-1-morbo@google.com>
+ <20261005192052.2589382-1-morbo@google.com>
+Subject: Re: [PATCH v3] compiler_types: Allow opting out of __counted_by and
+ __counted_by_ptr
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-A sparc64 allmodconfig build with LLVM fails in vmalloc_to_page():
 
-  mm/vmalloc.c: error: performing pointer arithmetic on a null pointer
-  has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
 
-sparc64 defines p4d_page() as NULL, on the assumption that it is only
-used by stubbed out hugetlb gup code. Generic code now uses it in
-vmalloc_to_page(), ptdump and KASAN. In vmalloc_to_page() the NULL is
-used in pointer arithmetic, which clang diagnoses even though the
-branch is unreachable on sparc64.
+On Mon, 5 Oct 2026, at 21:20, Bill Wendling wrote:
+> Code that runs outside the kernel proper, such as the EFI stub, gets
+> nothing out of the counted_by annotations: the bounds checks they feed
+> (FORTIFY_SOURCE, UBSAN_BOUNDS) are already disabled there.
+>
+> The annotations can also break the build. A __counted_by_ptr() that
+> names a member declared after the pointer needs Clang's
+> '-fexperimental-late-parse-attributes', which the top-level Makefile
+> adds to 'KBUILD_CFLAGS'. The x86 EFI stub builds its own cflags and does
+> not get that flag, so it fails as soon as such a struct is pulled in
+> through a common header.
+>
+> Overriding the __counted_by_ptr macro from a Makefile doesn't work:
+> 'compiler_types.h' is pulled in with '-include', which is processed
+> after all -D/-U options, so it re-establishes the definitions. Follow
+> the '__NO_FORTIFY' precedent instead: let a build define
+> '__NO_COUNTED_BY_PTR' to turn the corresponding annotation into a no-op.
+>
+> Assisted-by: LLM
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+> v2: Only specify __NO_COUNTED_BY_PTR. Leave __NO_COUNTED_BY until we need it.
+> v3: Add the version to the Subject line.
+> ---
+>  include/linux/compiler_types.h | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/linux/compiler_types.h 
+> b/include/linux/compiler_types.h
+> index c5921f139007..8bde6798b4ec 100644
+> --- a/include/linux/compiler_types.h
+> +++ b/include/linux/compiler_types.h
+> @@ -387,8 +387,13 @@ struct ftrace_likely_data {
+>   *
+>   *   gcc: 
+> https://gcc.gnu.org/pipermail/gcc-patches/2025-April/681727.html
+>   * clang: 
+> https://clang.llvm.org/docs/AttributeReference.html#counted-by-counted-by-or-null-sized-by-sized-by-or-null
+> + *
+> + * Code that runs outside the kernel proper (e.g. the EFI stub) can 
+> define
+> + * __NO_COUNTED_BY_PTR to drop the annotation. Such code may also lack 
+> the flag
+> + * Clang needs to parse a reference to a later-declared member
+> + * (-fexperimental-late-parse-attributes).
+>   */
+> -#ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
+> +#if defined(CONFIG_CC_HAS_COUNTED_BY_PTR) && 
+> !defined(__NO_COUNTED_BY_PTR)
+>  #define 
+> __counted_by_ptr(member)	__attribute__((__counted_by__(member)))
+>  #else
+>  #define __counted_by_ptr(member)
 
-Define p4d_page() in terms of p4d_pgtable(), the same way pud_page() is
-defined in terms of pud_pgtable(). sparc64 has no p4d leaf mappings, so
-there is no functional change.
+Apologies, I may have been unclear.
 
-Assisted-by: LLM
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- arch/sparc/include/asm/pgtable_64.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+What I would like to see here is something like
 
-diff --git a/arch/sparc/include/asm/pgtable_64.h b/arch/sparc/include/asm/pgtable_64.h
-index 35a217bf6e5c..c5eff6efe514 100644
---- a/arch/sparc/include/asm/pgtable_64.h
-+++ b/arch/sparc/include/asm/pgtable_64.h
-@@ -850,8 +850,7 @@ static inline pmd_t *pud_pgtable(pud_t pud)
- #define p4d_present(p4d)		(p4d_val(p4d) != 0U)
- #define p4d_clear(p4dp)			(p4d_val(*(p4dp)) = 0UL)
- 
--/* only used by the stubbed out hugetlb gup code, should never be called */
--#define p4d_page(p4d)			NULL
-+#define p4d_page(p4d)			virt_to_page((void *)p4d_pgtable(p4d))
- 
- #define pud_leaf pud_leaf
- static inline bool pud_leaf(pud_t pud)
--- 
-2.56.0
-
+#ifndef __NO_COUNTED_BY
+#define __counted_by(member)  __attribute__((....))
+#define __counted_by_ptr(member)  __attribute__((....))
+#else
+#define __counted_by(member)
+#define __counted_by_ptr(member)
+#endif
