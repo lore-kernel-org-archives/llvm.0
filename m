@@ -1,148 +1,125 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDF13DC4BC;
-	Mon,  5 Oct 2026 21:25:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23D583515FA;
+	Mon,  5 Oct 2026 21:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791235550; cv=none; b=KCVGLpqt5+O+kRMqLvULEsHK2Z5qC46ji5tfmTmT/HjyN9upDyiw3pfRHCelFR+W2Iar/xc6UwaZ9qy4cu9jm+ZDwVRgjYWCdlzWpPFHMh7NYxmLpmT3S7gyEvi4uC/F98ecTQyWDGRe8T3DjHqVWqANOdNleOHwV6qmk7xoK7o=
+	t=1791236537; cv=none; b=VBwns/Be9AOaIo81tRHi9ZVREjehg55k7fX0cDjTk4qXLKtEJdpguAG6xSuaOEHzmIR6QdyrNmPPhHDS6SmFS5zlpzUtCp5Pph0h99ZpT7StlVavRZt44K5nxUXp2w+jobp0JDD8BGenuIwC0FeXNTqR50CpHTEeYaa3LfXZ9SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791235550; c=relaxed/simple;
-	bh=oWoI7KU51zem5IclY14yT1yhw3LIz47deEPyi4Qi3cE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=YJKbJOonLYdrNPz3Egayk5lMtRgs6qKhg2YS6Xw/O1EVMKkusCdZ1qaDlWNlLw4wvJN08JYoRIGrXWkI1JEMc/Xvpr3b1bzr3V0RGT1/ytB+R1CRp93HH9XpO+jxtYipgJ64ENhAvHlQB8zYOhJFQd/FH5ShMjtnJ7qJEyVx20Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CTyoFfQM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791236537; c=relaxed/simple;
+	bh=d0p63z1XCpSBm9OwrW68pYfgxFLv7BQ75z9Kpd9NBsI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qBmIRROXH6gz9cjDcs7odaBW4WtWHkjoAmuhse6qZbLwVFS5Sg6ogRJfR4eP4tToocmR49O8XVsiE8oQrjf+CBx/y+jWBmn2e/vrqaHhNnwJKTcpZ5pphXlN5stjLGM6Ji4hHTPJJkQoaqii0aH9CKIut39xsxzqnerMKdf/RJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ft7lBNuc; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CTyoFfQM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48EED1F00893;
-	Mon,  5 Oct 2026 21:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791235549;
-	bh=NVtCSF04+5hQftrDStv64+G8kBj0wfQzjaUvoe2fK1M=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=CTyoFfQMxyRDu8dCRnxTUJFOMYpC/a1QO3xq/5eVia+1aL2iHETv7cMP1XKR8g4/H
-	 Z4wccSaPxEcAJe50sBlpO5v4HW41usqLzGov0Q0NgJ97RurCKMZ4Nb3CM0zOZc885R
-	 Y910QwMtvj2CjHOv79IDntEKLj6s5D+r5okw0OLFbrExd6AJHdcnR2+bLn69uXJyv+
-	 EDIK5A8LXdW0PWAZ+kTRwoc+ArD4Tnwx7aiNqnXWD9DjR3EEyuziKxAMFmJyot61gC
-	 Sl0mKQpfw7DV7O1Bw0cqSqBn16I0dSRco8xjftzUADN6BEfvSOT9cPrA/ncq9/dyQC
-	 +b18/ZEMed0uw==
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfauth.ams.internal (Postfix) with ESMTP id ABC7E198003A;
-	Mon,  5 Oct 2026 17:25:46 -0400 (EDT)
-Received: from ams-imap-11 ([10.64.2.31])
-  by ams-compute-02.internal (MEProxy); Mon, 05 Oct 2026 17:25:46 -0400
-X-ME-Sender: <xms:2BXEak90g0Y2gyHWeyFmRp1Df0-iIO2rP0B5FXQ6CalaZu5ot50A4g>
-    <xme:2BXEanhT2rbLSIDCEIqmIcgC2Z85mXieEz_KNcWf1hfeeJSzun8YeqKsOYdzlMPzB
-    tvt37kmd8Wbvv5ZydmCxS-IsPwhWwc7wGx4a061bdHjmkuFeJDXo5GC>
-X-ME-Proxy-Cause: dmFkZTFYRYK7kCIdTUdiTrNjDf+K1m4N+n/n7BpfpOY/qFXuim304FuhNPbM9hfWJR3s0y
-    v7AZ+ywbG3UH2scS8AH+M0BvWEO5jr4Fq05tizrbLM206uLlpSKcHFjjh6Fol5a/Ad6k8A
-    BvytjI72RlVdjPc0h+tOvENrJQKR+WzEKigCkg6koAtBAYI/6hWKZEU2rKwuy61o0JJFw8
-    UN4T1G4Br4BvSr/S9EFpiAEabmc2rBSxBQUVnLjKrkph5KD6elP72eWsOJYASh0X0yOy4Y
-    GII4gzUasYApQH6tS+I+R7qhwuWHoR/H5yWA4eAlQ/yEiYkUXstYyRbFXrNkltmlXbFDMW
-    5Ez36r3DmZSv5Q+HDXOYsTL58jV9fT5ESYmINJOe2bKjIVLB8UZtR38KxwKPYgfPEFtl0+
-    G9oqZkSXRPMC4qr20RGDOfT75ZW4+GPU2Vvln9eHIXL0CoYJVACxPWTrgIn1+SEpjOOyYp
-    lCJGib/AF3mO8vAroxWagcrjq7mhxPYgBDIXb5v5fIPLj6hhpVzDvFin8n4EsGU9TFrqhz
-    ZTyPEG3969fLxIigtZNEFzMMc00Bo7md6mzEUXS3naL7D0xYhfTGavM1KMtdlqNDV0vRNw
-    Au7p0PGH606Tk4qgNRthbFB9olSr9F3B/yMbGE9PqrvpCOPuX5zESzWN6eug
-X-ME-Proxy: <xmx:2hXEavu9ic04Ng2petmdVSC2GvXWSAT1WuVpBybw4ByZTGYjCzVAvw>
-    <xmx:2hXEaq167pjSLZPl8reQhiwYFT-EOf6KjkRpencLhiCemRBD_W0MuQ>
-    <xmx:2hXEao5JBCoWivkhw0Rio8XM8uNmWEENEIKO1WvINu-fdfYuEIeYMA>
-    <xmx:2hXEapUJOMxK2BtDYT4M9rj9Ikld3WQ3qXKdeHa9uEdmWecBL5tPbA>
-    <xmx:2hXEaoj3_uvdGJs_VK2sqb79Q6Jfj-hJbMYJJRtA-AYdINwrsQ6aPTxX>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 0506DF80093; Mon,  5 Oct 2026 17:25:44 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ft7lBNuc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791236536; x=1822772536;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d0p63z1XCpSBm9OwrW68pYfgxFLv7BQ75z9Kpd9NBsI=;
+  b=ft7lBNuchB7fFujNjXgIU27YSiF6yoOg4dVc7LyYaCMm/NDuLE+0QCKt
+   sr+8X8LqVH4wXRnZNq8M8dvYdV9ElcUStuBwjle2e+SfeLt4EJPO2TqwO
+   MqSNa6AA3Er4Se75pXoWeqF1SIyfzqq82yq+W7VQDByPbqEab6r4izTlg
+   3FeEFoYZlDKMIIA/t74ijB8VHmahg7MCOTF7VvWQEW1sy9lqjeHaMiSpO
+   RLNxb/DMy3SjtZo1Re6UyX+RmKbf69byO9zSWw1AXKVQP3FoSSZGp7QTx
+   /2Y5ce5ezwsc1LugTYoH5YXydZvbroofTXDgze1I4gFWfcdaz41xG8gWT
+   A==;
+X-CSE-ConnectionGUID: doMTFt/fTx6AC2nugbooUQ==
+X-CSE-MsgGUID: apzSRu2WTTKsAJybALK49w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11926"; a="101240881"
+X-IronPort-AV: E=Sophos;i="6.27,142,1787036400"; 
+   d="scan'208";a="101240881"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2026 14:42:15 -0700
+X-CSE-ConnectionGUID: HaWRJfgQRiaH7vaSc63+Cw==
+X-CSE-MsgGUID: rI0nLmMOSi+a9+LZOhvGQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,142,1787036400"; 
+   d="scan'208";a="303197126"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Oct 2026 14:42:14 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xDqRn-000000000sa-0D5A;
+	Mon, 05 Oct 2026 21:42:11 +0000
+Date: Tue, 6 Oct 2026 05:41:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Damien Le Moal <dlemoal@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+	linux-block@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+	linux-scsi@vger.kernel.org,
+	"Martin K . Petersen" <martin.petersen@oracle.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH 7/7] scsi: sd_zbc: define storage element management
+ operations
+Message-ID: <202610060512.08JQbDV4-lkp@intel.com>
+References: <20261005094632.580753-8-dlemoal@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Date: Mon, 05 Oct 2026 23:25:22 +0200
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Bill Wendling" <morbo@google.com>, "Kees Cook" <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- "Nathan Chancellor" <nathan@kernel.org>,
- "Nick Desaulniers" <ndesaulniers@google.com>,
- "Justin Stitt" <justinstitt@google.com>, "Mark Brown" <broonie@kernel.org>,
- "Marco Elver" <elver@google.com>, alan.maguire@oracle.com,
- namjain@linux.microsoft.com, "Peter Zijlstra" <peterz@infradead.org>,
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
- llvm@lists.linux.dev
-Message-Id: <3176a197-baf8-4e5f-96a0-8c79d32a168c@app.fastmail.com>
-In-Reply-To: <20261005192052.2589382-1-morbo@google.com>
-References: <20261005102518.2400984-1-morbo@google.com>
- <20261005192052.2589382-1-morbo@google.com>
-Subject: Re: [PATCH v3] compiler_types: Allow opting out of __counted_by and
- __counted_by_ptr
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261005094632.580753-8-dlemoal@kernel.org>
+
+Hi Damien,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on axboe/for-next]
+[also build test ERROR on next-20261005]
+[cannot apply to mkp-scsi/for-next jejb-scsi/for-next linus/master v7.3-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Damien-Le-Moal/block-fail-reads-to-offline-zones-early/20261005-184626
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
+patch link:    https://lore.kernel.org/r/20261005094632.580753-8-dlemoal%40kernel.org
+patch subject: [PATCH 7/7] scsi: sd_zbc: define storage element management operations
+config: sparc64-defconfig (https://download.01.org/0day-ci/archive/20261006/202610060512.08JQbDV4-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 80cd965b6323b208519f8ab1d5ee86e4ea9862f4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261006/202610060512.08JQbDV4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610060512.08JQbDV4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/scsi/sd.c:3940:14: error: cannot take the address of an rvalue of type 'void *'
+    3940 |         .se_ops                 = &sd_zbc_se_ops,
+         |                                   ^~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +3940 drivers/scsi/sd.c
 
-On Mon, 5 Oct 2026, at 21:20, Bill Wendling wrote:
-> Code that runs outside the kernel proper, such as the EFI stub, gets
-> nothing out of the counted_by annotations: the bounds checks they feed
-> (FORTIFY_SOURCE, UBSAN_BOUNDS) are already disabled there.
->
-> The annotations can also break the build. A __counted_by_ptr() that
-> names a member declared after the pointer needs Clang's
-> '-fexperimental-late-parse-attributes', which the top-level Makefile
-> adds to 'KBUILD_CFLAGS'. The x86 EFI stub builds its own cflags and does
-> not get that flag, so it fails as soon as such a struct is pulled in
-> through a common header.
->
-> Overriding the __counted_by_ptr macro from a Makefile doesn't work:
-> 'compiler_types.h' is pulled in with '-include', which is processed
-> after all -D/-U options, so it re-establishes the definitions. Follow
-> the '__NO_FORTIFY' precedent instead: let a build define
-> '__NO_COUNTED_BY_PTR' to turn the corresponding annotation into a no-op.
->
-> Assisted-by: LLM
-> Signed-off-by: Bill Wendling <morbo@google.com>
-> ---
-> v2: Only specify __NO_COUNTED_BY_PTR. Leave __NO_COUNTED_BY until we need it.
-> v3: Add the version to the Subject line.
-> ---
->  include/linux/compiler_types.h | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/compiler_types.h 
-> b/include/linux/compiler_types.h
-> index c5921f139007..8bde6798b4ec 100644
-> --- a/include/linux/compiler_types.h
-> +++ b/include/linux/compiler_types.h
-> @@ -387,8 +387,13 @@ struct ftrace_likely_data {
->   *
->   *   gcc: 
-> https://gcc.gnu.org/pipermail/gcc-patches/2025-April/681727.html
->   * clang: 
-> https://clang.llvm.org/docs/AttributeReference.html#counted-by-counted-by-or-null-sized-by-sized-by-or-null
-> + *
-> + * Code that runs outside the kernel proper (e.g. the EFI stub) can 
-> define
-> + * __NO_COUNTED_BY_PTR to drop the annotation. Such code may also lack 
-> the flag
-> + * Clang needs to parse a reference to a later-declared member
-> + * (-fexperimental-late-parse-attributes).
->   */
-> -#ifdef CONFIG_CC_HAS_COUNTED_BY_PTR
-> +#if defined(CONFIG_CC_HAS_COUNTED_BY_PTR) && 
-> !defined(__NO_COUNTED_BY_PTR)
->  #define 
-> __counted_by_ptr(member)	__attribute__((__counted_by__(member)))
->  #else
->  #define __counted_by_ptr(member)
+  3926	
+  3927	static const struct block_device_operations sd_fops = {
+  3928		.owner			= THIS_MODULE,
+  3929		.open			= sd_open,
+  3930		.release		= sd_release,
+  3931		.ioctl			= sd_ioctl,
+  3932		.getgeo			= sd_getgeo,
+  3933		.compat_ioctl		= blkdev_compat_ptr_ioctl,
+  3934		.check_events		= sd_check_events,
+  3935		.unlock_native_capacity	= sd_unlock_native_capacity,
+  3936		.report_zones		= sd_zbc_report_zones,
+  3937		.get_unique_id		= sd_get_unique_id,
+  3938		.free_disk		= scsi_disk_free_disk,
+  3939		.pr_ops			= &sd_pr_ops,
+> 3940		.se_ops			= &sd_zbc_se_ops,
+  3941	};
+  3942	
 
-Apologies, I may have been unclear.
-
-What I would like to see here is something like
-
-#ifndef __NO_COUNTED_BY
-#define __counted_by(member)  __attribute__((....))
-#define __counted_by_ptr(member)  __attribute__((....))
-#else
-#define __counted_by(member)
-#define __counted_by_ptr(member)
-#endif
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
