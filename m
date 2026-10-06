@@ -1,173 +1,110 @@
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACF1456E11
-	for <llvm@lists.linux.dev>; Tue,  6 Oct 2026 13:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791294392; cv=pass; b=YNCEcwjtTFHdbDT0nQpawEljZU80QeAW17jC1iaEio1ZW1BNDE3pbRUJK0dKRvmyrVpW+40ScXcPbvk2OvcaatMNRw3QRuT+cz8neuTpuOg4+ynMXHDV05x3tIXcSWSelorqiG0J7mKC2L2lWbCOBmtTfchRe9cTMkDtk5hoEC0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791294392; c=relaxed/simple;
-	bh=C4ZK4y5jqDlopKlvsMqwakPYMQHAT0xpUCwWJwaY68c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o5EE+RBENM2UQdmksdj6IWGzLiWPAIHACQsh3PkUVE+oW09pBvn4fcNXFYAxQdigd/PMPrtL8W2vEX2TO1NJ8X1HCgME+Rq6/w4dGaA2OuKuRxqDyQqpIWhim4VEdIYDo8TUhc+uyvdOPg8KzKqhFyLXjtPaDiAXXeAedXrq6aM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r+kAtKnQ; arc=pass smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329AF456E12;
+	Tue,  6 Oct 2026 14:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791295929; cv=none; b=VQxHzkxcbDQvf/0qsZCv0TF8qx9svBVycOsSn1gKr8OnEBXkzIX57kKVxEwLRNrpUXpCb4T+ijJ0WOYSgMYxACpcg/MS6D6c8GSBmkuOd+83jzJ70iDcmDF9+Q/lyIw8UuUWtJtiKpXAEcG+JSUaweDMSEN7aPyiw8/55m0Mk1g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791295929; c=relaxed/simple;
+	bh=6btDlvHwBwnl8QJVoMY0bmEA6MybxcPQW3nb9CbBxJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=G/XjbRehIRay9VtucMS4WjR7s+3F5/NifVrFSEzfdsbPrZ6PkhMQg/kos0hQdR/pUzFnUOnKYxy2DYBh4S2MqwYv8QEd3vSPfQSbmiVcLCb9/JSB09Ii+tfnZkoGP1xG3XTqno/SaeF42JgouAFAsserIQbNJH6BqpUup9ZpRKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JBfzHk1F; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r+kAtKnQ"
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5ce65316337so2149325e0c.3
-        for <llvm@lists.linux.dev>; Tue, 06 Oct 2026 06:46:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791294390; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SPpcmuQETzfVdg/10OxsepzrQ+WCHVIsTJLaTMqF9AmFDqEXwFyDFL+vvVk16tMUYu
-         4RHAwQHsR5wm9QZr8MowO/DfZepY3c7Jd3H6iqMiqjZgogzXbMMN5cGP/zagN3hw4IeQ
-         1N5gVU/S3Jwyh3JOoelpAmpZo35T9eUvrEcb8PQ1hoc1TUMW/snj7NmISiDM7ugB9RQy
-         wRhtIgbq7gLVR02XYarx3YhEeXsa9YpwwxGwtszjZxmc3SkNL+wzPxDaUO4dsphW3jM6
-         nUUDKGmXLhVsR1nKTnCkAs2z2439oln4JIEzn4nL4Ba7cvnW9a9MbXXQ9niNMacaq1gX
-         8ngQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Pm8zUZvlBkdi0wY1ju+p+rWxMJ6Dlo5Q1LwsdfKGfK8=;
-        fh=77tPuiCmQA/kjN9zOIZDORgVAHN6xQJc/qyozOZIGc8=;
-        b=YOHtxj2P7m9V3kX6dUeE+NO6rmxJ0dey5tz5+sBNWjEx69bDa4F2KfDBWg41SGyPq9
-         mtYJXUC9V7JQleaT5Usj/XfVAJWvVzm4KiiPLqAZ7MgMix632PSogloHehhd50368C2d
-         w31mlofOSYOxNLdcPkhBlx5aMI0Vl0AQcmAEUJiOvgLwRs5fdJ+ikX30l3tdOCetGA7L
-         WXdLKY0flHbG9yiCqn2uCA8g4m8CS0OA6T91wHo54oBTZ0FPC1tstWJlGOzzHf3hAXXM
-         w9j/udBKBiR7geIhcnsKe4G/VzwbH1A4MV7UVw5PaLB9ZE7gRxnwYX/kzcuCOtc4SVOe
-         LXZQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791294390; x=1791899190; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Pm8zUZvlBkdi0wY1ju+p+rWxMJ6Dlo5Q1LwsdfKGfK8=;
-        b=r+kAtKnQo2n/89wjG/gDnswOT9AkVfophlPaAxNKQ1N/NZ2OQiYdnluD1wnpNLt2OZ
-         5IHrqBuOLHcAH2WCizmiFtHSGvy5tVQomdKzAxZEK5mk80DalifLoXO8WQb20OzofnnZ
-         Ax+sGoT2J623CmswJwHKUp6Mddqa/Pw/2223JhIsImxmOLp/peBBfdfJnaFJl4Ak47rw
-         X5bC63ymbA4C55fOPMUEOmOdNEzuQjfNmrEyvzfVzwAvsevcn0d6v01lSuy3eK69Luny
-         fSi4YWXnsUmQ+G341MUNdGc11oNHy2fT0zLisrGr9f6AigKbgcRlUle/k5hk0apxTgn6
-         g5jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791294390; x=1791899190;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Pm8zUZvlBkdi0wY1ju+p+rWxMJ6Dlo5Q1LwsdfKGfK8=;
-        b=XywsGnLhDKVE2/f2Da7xCKZSAiub9tZHtW2X5zPKbM8HEB6X8ONejuWaxNwYI6H6wL
-         FsxW2WHhvu/Uvdh0fRv95kVIIqnxO/z1MiOpA/qH6J0kd7QS1iUWL73LnqEju/8Hy9E5
-         O3fVEVvyaOETyTUHSFgiOnnUQMYEe8216mZL4OAPa9yU04ThcTPM+obVBxjJpSWF2Rd0
-         dsN3gm8dPgi1TKZ1KIMp7fCli8yz804AarvdYn/TkEO6SWKIYm+JXJIq8r+fVq2/i4j5
-         ncrTI1ekf58vQKpeYpyNQt24lclai0BBqsebdSlwwwpeeMWBqYkC2y2ItQMpiLDy5g2k
-         yAQg==
-X-Forwarded-Encrypted: i=1; AKwUvBwfTIEPLbg76DsiEbLdo5oYv7cDE4kOmFcT/gyI4SQU40ObBcNMgApef4v9eyTBTbC9Swu1@lists.linux.dev
-X-Gm-Message-State: AFq9FYK2XHY1zTFWyVpq5juSYeLTyXl1w2PR5P7DyYImZFN572lFoDD/
-	2xvbTSdqtrt3hdLbgSCxoRptO4VRRta2suUQSpy5c5KrvoGflz0qEULzGVaRRvXw5KMb/TpGT9F
-	GUPMI7S9y8x1snJEB4x3JT2AzTsixcr+D+57WxWo=
-X-Gm-Gg: AYBFou1uYFxVYpnpxsOZFeddMbX14Kk3a/+DfiT+waN+GVw3x7ab7NFGkTR4CiugZPr
-	wc8GIqAG4qjvZdCQygBESBeIHs+ORTKHPAvn6z8HOX3dhvHskwlTMzzzyviOpAfv/ZIph2cM2rE
-	VMkMlGJ0GRin0tnNnYkY/16GgmELekPL9B3eonf836DCyDeaDhauoea0/ps6v3CTlxqKzc0m4p7
-	96cAwetC34vQE8YgsacGWSiVhEn1/86UemUXQmyVDWkth6UJabwlhlF/g3VoyQ1WIDA9px5wF3d
-	mcy6WmvOY7jPI/15eJ6GyuTBii8y8F6dHbHIsvU/8xivOwrtcktPfQHA+EuACYHS3L4whOlJE8x
-	uJeqamyfD4fcY7S+wIBjR
-X-Received: by 2002:a05:6122:d22:b0:5c9:c60e:5cf6 with SMTP id
- 71dfb90a1353d-5de6d6ad882mr3678253e0c.20.1791294388970; Tue, 06 Oct 2026
- 06:46:28 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JBfzHk1F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67601F000FF;
+	Tue,  6 Oct 2026 14:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791295927;
+	bh=zUsVfvyVtNgk99RyjipDDevgTZGzhtwz6DXLUIWe1a4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=JBfzHk1FBxuCViejFOyT24cYGpJeOHIzE4MIEH9K1OGLtGcG82viVKe9eGY3wb039
+	 Ah7Zanax6gmVKPPaYcC6dYe0v53Wt0zcKDOFc7kfBLTZZXLJsHc1aiNbWVwF76+8F0
+	 v9Xe3NY3hZ7hxX9R06KzDsOiwNVkJmqKeK0VOnrBhFil0HT/FPS0GNWzH1NWUvGeke
+	 SngQO8ZEwwf82d6mM/l4iZRJN1p29hdWgJR0chSoOPhUeLDNe76dpXM7u1n+YP2qBO
+	 WbkMtrsWE4ldGpiyBWiC4XU4W6eobSykslgdV4ggSiBnZBaI+2KuD+5kKI6fFqVstA
+	 HBSDEpT9s2x3A==
+Date: Tue, 6 Oct 2026 07:12:07 -0700
+From: Kees Cook <kees@kernel.org>
+To: ardb@kernel.org, nathan@kernel.org, Bill Wendling <morbo@google.com>
+Cc: gustavoars@kernel.org, ndesaulniers@google.com, justinstitt@google.com,
+	broonie@kernel.org, elver@google.com, alan.maguire@oracle.com,
+	namjain@linux.microsoft.com, peterz@infradead.org,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH v4] compiler_types: Allow opting out of __counted_by and
+ __counted_by_ptr
+Message-ID: <202610060642.7C4125F@keescook>
+References: <20261005102518.2400984-1-morbo@google.com>
+ <20261006094358.2948476-1-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261005102518.2400984-1-morbo@google.com> <20261006094358.2948476-1-morbo@google.com>
- <3cd11b18-30da-4dc1-9585-1112778aba38@app.fastmail.com>
-In-Reply-To: <3cd11b18-30da-4dc1-9585-1112778aba38@app.fastmail.com>
-From: Bill Wendling <morbo@google.com>
-Date: Tue, 6 Oct 2026 06:46:12 -0700
-X-Gm-Features: AclHuK-xrMb5bRM8C1f3tnWgdVCw-4GPt92q5ifPXVanSRIoA_ArhDjbqKs1NeA
-Message-ID: <CAGG=3QWxG9m1gde+RVwqEfDHSizfNP_hOV5UpQUdA5aTbx_8Eg@mail.gmail.com>
-Subject: Re: [PATCH v4] compiler_types: Allow opting out of __counted_by and __counted_by_ptr
-To: Ard Biesheuvel <ardb@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Mark Brown <broonie@kernel.org>, 
-	Marco Elver <elver@google.com>, alan.maguire@oracle.com, namjain@linux.microsoft.com, 
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261006094358.2948476-1-morbo@google.com>
 
-On Tue, Oct 6, 2026 at 3:09=E2=80=AFAM Ard Biesheuvel <ardb@kernel.org> wro=
-te:
->
->
->
-> On Tue, 6 Oct 2026, at 11:43, Bill Wendling wrote:
-> > Code that runs outside the kernel proper, such as the EFI stub, gets
-> > nothing out of the counted_by annotations: the bounds checks they feed
-> > (FORTIFY_SOURCE, UBSAN_BOUNDS) are already disabled there.
-> >
-> > The annotations can also break the build. A __counted_by_ptr() that
-> > names a member declared after the pointer needs Clang's
-> > '-fexperimental-late-parse-attributes', which the top-level Makefile
-> > adds to 'KBUILD_CFLAGS'. The x86 EFI stub builds its own cflags and doe=
-s
-> > not get that flag, so it fails as soon as such a struct is pulled in
-> > through a common header.
-> >
-> > Overriding the macros from a Makefile doesn't work:
-> > 'compiler_types.h' is pulled in with '-include', which is processed
-> > after all -D/-U options, so it re-establishes the definitions. Follow
-> > the '__NO_FORTIFY' precedent instead: let a build define
-> > '__NO_COUNTED_BY' to turn the corresponding annotation into a no-op.
-> >
-> > Assisted-by: LLM
-> > Signed-off-by: Bill Wendling <morbo@google.com>
-> > ---
-> > v2: Only specify __NO_COUNTED_BY_PTR. Leave __NO_COUNTED_BY until we ne=
-ed it.
-> > v3: Add the version to the Subject line.
-> > v4: Use __NO_COUNTED_BY to reduce churn later on.
-> > ---
-> >  include/linux/compiler_types.h | 7 ++++++-
-> >  1 file changed, 6 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/compiler_types.h b/include/linux/compiler_ty=
-pes.h
-> > index c5921f139007..05e2b637f1cd 100644
-> > --- a/include/linux/compiler_types.h
-> > +++ b/include/linux/compiler_types.h
-> > @@ -371,8 +371,13 @@ struct ftrace_likely_data {
-> >   *
-> >   * __bdos on clang < 19.1.3 can be off by 4:
-> >   * https://github.com/llvm/llvm-project/pull/112636
-> > + *
-> > + * Code that runs outside the kernel proper (e.g. the EFI stub) can de=
-fine
-> > + * __NO_COUNTED_BY to drop the annotation, since it gains nothing from=
- the
-> > + * bounds checks. __NO_COUNTED_BY should be used sparingly, because th=
-ere are
-> > + * better options for opting out of bounds checking.
-> >   */
-> > -#ifdef CONFIG_CC_HAS_COUNTED_BY
-> > +#if defined(CONFIG_CC_HAS_COUNTED_BY) && !defined(__NO_COUNTED_BY)
-> >  # define __counted_by(member)                __attribute__((__counted_=
-by__(member)))
-> >  #else
-> >  # define __counted_by(member)
->
->
-> What happened to counted_by_ptr() now? __NO_COUNTED_BY should disable tha=
-t too.
->
-I realized that just now. *sigh* I'd take up basketweaving, but I'd
-probably get splinters that would fester and I'd lose fingers.
+On Tue, Oct 06, 2026 at 09:43:58AM +0000, Bill Wendling wrote:
+> Code that runs outside the kernel proper, such as the EFI stub, gets
+> nothing out of the counted_by annotations: the bounds checks they feed
+> (FORTIFY_SOURCE, UBSAN_BOUNDS) are already disabled there.
+> 
+> The annotations can also break the build. A __counted_by_ptr() that
+> names a member declared after the pointer needs Clang's
+> '-fexperimental-late-parse-attributes', which the top-level Makefile
+> adds to 'KBUILD_CFLAGS'. The x86 EFI stub builds its own cflags and does
+> not get that flag, so it fails as soon as such a struct is pulled in
+> through a common header.
 
-Fixed in v5.
+We have a distinction between parsing and output (instrumentation,
+linkage, etc). FORTIFY_SOURCE and UBSAN_BOUNDS (and lots of other
+things) control output (e.g. fortify alternative linkages, ubsan
+instrumentation). We don't normally have parsing issues, as that kind
+of thing is usually controlled by compiler flag options (like here). For
+example, if a transparent struct ever leaked into a header that libstub
+includes, we would explode as well, due to x86's resulting lack of
+-fms-extensions.
 
--bw
+So, I this should _not_ be managed with a NO_* flag, as that has been
+traditionally about suppressing output. I don't think we want to mix
+that idiom with parsing issues.
+
+And other architectures solve this problem by not wiping KBUILD_CFLAGS in
+the first place. :P So if we want to continue to accept the x86 exception
+(which I would argue is the actual problem), we likely need to, instead,
+construct an explicit export that is used to collect parsing control
+options so that it can be re-included here. Today, I can think of
+-fms-extensions besides -fexperimental-late-parse-attributes.
+
+KBUILD_PARSE_CFLAGS += -fms-extensions
+...
+KBUILD_PARSE_CFLAGS += -fexperimental-late-parse-attributes
+...
+export KBUILD_PARSE_CFLAGS
+KBUILD_CFLAGS += $(KBUILD_PARSE_CFLAGS)
+...
+
+We already do something like this for CLANG_FLAGS, which, given
+-fexperimental-late-parse-attributes being Clang-specific, perhaps we
+ignore my -fms-extensions future-proofing, and just add it there, but
+it doesn't look like that is how scripts/Makefile.clang was intended to
+be used.
+
+But, again, I think the problem is x86's wipe of the flags. In fact, I
+see an explicit problem with that today, which is the loss of
+-fauto-trivial-var-init, which all the other arch's stub gain (it's an
+output flag, but it happens to neither change linkage nor create hooked
+instrumentation). So x86 efi stub lacks stack var zeroing but all the
+other archs have it.
+
+Can we just fix x86 correctly to use filter-out, etc, there?
+
+-Kees
+
+-- 
+Kees Cook
