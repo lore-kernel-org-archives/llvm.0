@@ -1,117 +1,139 @@
-Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
+Received: from flow-b5-smtp.messagingengine.com (flow-b5-smtp.messagingengine.com [202.12.124.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBFC3DDDDD
-	for <llvm@lists.linux.dev>; Tue,  6 Oct 2026 14:49:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7B23286A4
+	for <llvm@lists.linux.dev>; Tue,  6 Oct 2026 15:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791298144; cv=none; b=F7rBIx0Rcr2EM6gIprxl4Moukxor/0I2UNcrksb51XKBNEJd6JGKeJ652AV4sjeCP40GcR1wrSoCnompjQ6VHGDscYUE/IMj/z0ZKcEaLB5fdghoeNQ4OxL/RxFo5beTXFr9crhPxIuXNFCOwSp7NHrRumuK1SsVluoXRfoJN9o=
+	t=1791299694; cv=none; b=kcf4C+B/EqZ/8pROMMI6G6EsoQOPj4lGs1OjrcZu+Sk3mIBk361npFeBjJcQcSHTnN04zHuHEIgy+6VXtelxGtjs4oI036yz1WbyBMHexRwSa3XPD1JWRkGvckS6COG9ZXhDIXrqRIfNl7l4C+CzYrthj5VVTNp9cAq/gd3PSqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791298144; c=relaxed/simple;
-	bh=4X1Vvp5rp+7dv6kgDluoOVz7aVwaiJATABVivOetwjw=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=l2cjSU9TOqUcVRKkIpDV7TOwbKHq4NdxrNvNDbK/S3TR6VS2mbUjf3wFKBbzILh2gWwNFQnc8I02lC2z2Frvg6kB55dzOF9W+h5DlAPz2d7x4VqZIlfp+hjeswv8UfkPkq8JSSkZJi55IZXgKXFInr3PkjKV7di7TRXenl98s+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.helo=mail.mainlining.org; arc=none smtp.client-ip=5.75.144.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.helo=mail.mainlining.org
-Date: Tue, 06 Oct 2026 15:48:59 +0100
-From: Bradley Morgan <brads@mainlining.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Miguel Ojeda <ojeda@kernel.org>
-CC: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
- =?ISO-8859-1?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>,
- Alexandre Courbot <acourbot@nvidia.com>,
- =?ISO-8859-1?Q?Onur_=D6zkan?= <work@onurozkan.dev>,
- Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
- Christian Schrefl <chrisi.schrefl@gmail.com>,
- "Paul E . McKenney" <paulmck@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org,
- rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] ARM: cmpxchg: support 2-byte xchg() on pre-ARMv6 CPUs
-In-Reply-To: <20261003093827.77857-2-kmehltretter@gmail.com>
-References: <20261003093827.77857-1-kmehltretter@gmail.com> <20261003093827.77857-2-kmehltretter@gmail.com>
-Message-ID: <61F2A44F-8A05-41FA-8A9A-8483A229E607@mainlining.org>
+	s=arc-20240116; t=1791299694; c=relaxed/simple;
+	bh=nrpoUjeGhXa3Jx6nQrwBvc6YjkiO96rVglBerQeILKs=;
+	h=MIME-Version:Date:From:To:Message-Id:Subject:Content-Type; b=uftLAhqvwANqODeuQ8sH7+cxQkeM4w/pcqm17hKhvOezLYvS1lEG823tmq6UF4FJRTQ78+gLNRS4LPDWq/UHfapPcb+rVYvIBxAyqFH/EAspax6OPhfLyKo71WOenDW8M91ygmhaCPThyz8KU8itK/dtTM24fsOz4TkGnQWo3ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net; spf=pass smtp.mailfrom=wolber.net; dkim=pass (2048-bit key) header.d=wolber.net header.i=@wolber.net header.b=es/4M4p7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kYzDHpf3; arc=none smtp.client-ip=202.12.124.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wolber.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wolber.net
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wolber.net header.i=@wolber.net header.b="es/4M4p7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kYzDHpf3"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailflow.stl.internal (Postfix) with ESMTP id 07292130098F
+	for <llvm@lists.linux.dev>; Tue,  6 Oct 2026 11:14:52 -0400 (EDT)
+Received: from phl-imap-03 ([10.202.2.93])
+  by phl-compute-03.internal (MEProxy); Tue, 06 Oct 2026 11:14:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wolber.net; h=cc
+	:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to; s=fm3; t=1791299686; x=1791306886; bh=nrpoUjeGhX
+	a3Jx6nQrwBvc6YjkiO96rVglBerQeILKs=; b=es/4M4p7L48TZi0rOQK7DCLqAx
+	e3t+pJ6IcbLmok1HFzqJd9V/IuujTjl0yuWJQnEOztg1g+YiK2Aux9u1Rr5eo85g
+	hnVIZZmehyGgvygArQ+AHG132EYKfX0xAjLc2URwnrFcQFABk217tgheCWNePor8
+	hDMl/FhKo7Yv+FUx7LZkC/lw8WPEZw8LmLKCRHOK6GlNdE1c10lz8sgGTIR5nRf6
+	DydIzFbzq5j91W6qvnr6wuLiHNRhQu0DIEe38HF9YD27gc0Pll9PkRqoZ4MArChf
+	hcRI0Tb7D2jVJwGoFEZMXivfX5tJer4kDr3cOpOYlI0bjCKyURs36T9e7SXw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1791299686; x=1791306886; bh=nrpoUjeGhXa3Jx6nQrwBvc6YjkiO96rVglB
+	erQeILKs=; b=kYzDHpf3THRnM2zfN5O/hsIaFhd402s5TeiYovsBwwF7PWege5M
+	LyEhlazPavsDx56AlvU2tD3uONqYdqif6rRwyQgGMTIEeVgjH8ycsokYER9PkpGa
+	F90xTjStRDUUv8HK26TeefwT2gkA28Htnh12Xyr2X3r+0t2Ah0GbQvSltI5DnUDw
+	1wXCE/LSPx59wOzbTi3QRjDgs9r4064KA9qmjibGopLEWKAzIgxWGBqIcdiIrK14
+	/Qtmg3i/KQ8PEK+XuTG11xweUDQCxxcWkJ1NNkyyPvhVgA6GSlC9xxU/Dl7JgeoU
+	wzUb0+vXHcojbrUl8K7I+OB2ATbD37P3QIw==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=sign d=wolber.net a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1791299686; d=wolber.net;
+	mf=PGNodWNrQHdvbGJlci5uZXQ+;
+	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm3:rsa-sha256:FA+aBfUV4JNn0UqjODcM3xEI3JB1BiG++Xm8iqAna/YDfeS
+	LrNZPdICIzzIMba49C4d2isG3fxsNPlU4xeO9dyZXjeuK6KafuakaOdfabgSGyfp
+	e4vAtF3zb8/pdMmQi/uf2yB1R+JnKFvOuezRpAny0UM8ghuc6+du5YBvxAJeRBwk
+	Tj2QPEcH7gHu7t0RYbYLoJQJVsdTGZ4dmO/msqBsmDcZsojKIDZgB3i7shTGun1J
+	I12xZtMGGVV7t/M3h5sM5IalhqiGe58y6K/M0o6SsCo8EjZZjaiPsX6MMX869pJi
+	2pN32pAJHD6+GVDxaHdq8mrvxU5SsTegKfCz8WQ==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=mi-m=1; hc=9;
+	hn=content-transfer-encoding,content-type,date,feedback-id,from,
+	message-id,mime-version,subject,to;
+Message-Instance: m=1; h=sha256:WChpd7i0wHWsLYVItBldyt7OGlmrwUkdH5bDeWvy/MI=:nrpoUjeGhXa3Jx6nQrwBvc6YjkiO96rVglBerQeILKs=;
+X-ME-Sender: <xms:YxDFatoBAj23ZS8XTzksOuL38eDSs8mFdmEukrGIudgVPEvOaTa69g>
+    <xme:YxDFaqd5C2Ql363Q-q5IqMaRrgHfxzmU17k1_8PV6_hl3qHRss3vvrJlpE_Ma6lBP
+    r3PZK8wS4MAXYGLiZWF1EFOdNizLt29VJo_e8cpsBfPQ7g5YvIOqZZu>
+X-ME-Proxy-Cause: dmFkZTFy8oI7AfTvE04zGVwLG2tUuj9jaUQLHwirElC4ORN1NUE3+pb2NAW9hifkaPD49+
+    eBAKpjh7FWCdul/sTjKKD1DMtJwrmP7oEb2aeN9euV0usbkhzB+gW0OZUSaU1UoOE63K2W
+    2A5GHMDlYXtC9ffCGK4i5sZ8go7hdnVmEpB50EmhywySR3j2zlBvpv/TICjGdUK8iDRMhc
+    IFOWmsVE4QTzmLt70dv/inbEdSr7GZnbfM5EsufFPTZt9PYMnsi8oXvlUFTnYBnI67aNyc
+    1FMRHLLaI2EjmOZ58qhHuA4DYVOdrcgUX8JsgRJSiioxtIWZHxgic5kc/iX7fgA/0y5DHY
+    3s9LU2iPyM3WvY/K3YlTYQcOX/Cf548eNMR7pyTwiKKSbAzb5zTJuWPRYcpdTW9Z7l+WNv
+    +C0S9saqoSn/GRNrFysG673VPazpNCpEhMENIimWbccBR8IjNJprlfRHtdpKsiQYs9a1lT
+    TO31/Fru5z60I2pUWx9M48KGp4mv5Z9Rrwns3//zqAFU2Tt7x00yD9XgyvDWtfXD99agfC
+    7gqEzHj3czAvT7aklQCCEYdlKaYO1mAFYGNWVbpTjoS+6LhmFL31LxBE3fOZjt4tX+4TyA
+    LZdWz6uPxkM/yJTfp+Sqa8TOYpRhFNn/Xvl3qZt5m5RDV2ZSndKUlp0XC9cQ
+X-ME-Proxy: <xmx:YxDFanzlpFSU09mL-fr1Xsr4D0B7gJrPmAGWBKA-e8tqECSxiVUZaw>
+    <xmx:YxDFagw6eggw4BhdTV9snjA_9TCnMxK-ZuPVXH1BPDt7zBKd-ggL0Q>
+    <xmx:YxDFap8NWgxE1yZY2NrowQzN0-3Aw96xR_1o5UrAP4E7TeVTO7P9Cw>
+    <xmx:YxDFaji5geDStHerljuenqt1kmVRnyNiPIzks_DqiI7Ko5j0nK2GBA>
+    <xmx:ZhDFagkMfsZ0OZvmIUTBeTItShUtN5SnOoEpMLpcKbkJqKrkBr8cSAuS>
+Feedback-ID: i5cf64821:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id B59CB18E0071; Tue,  6 Oct 2026 11:14:43 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A8p1gvDKPv03
+Date: Tue, 06 Oct 2026 15:14:23 +0000
+From: "Chuck Wolber" <chuck@wolber.net>
+To: kasan-dev@googlegroups.com, nathan@kernel.org, akpm@linux-foundation.org,
+ anton.ivanov@cambridgegreys.com, oberpar@linux.ibm.com, ardb@kernel.org,
+ arnd@arndb.de, bhelgaas@google.com, bp@alien8.de,
+ dave.hansen@linux.intel.com, dvyukov@google.com, hpa@zytor.com,
+ jinghao7@illinois.edu, johannes@sipsolutions.net, jpoimboe@kernel.org,
+ justinstitt@google.com, kees@kernel.org, kent.overstreet@linux.dev,
+ linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ llvm@lists.linux.dev, luto@kernel.org, marinov@illinois.edu,
+ masahiroy@kernel.org, maskray@google.com, mathieu.desnoyers@efficios.com,
+ mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
+ ndesaulniers@google.com, paulmck@kernel.org, richard@nod.at,
+ rostedt@goodmis.org, samitolvanen@google.com, tglx@linutronix.de,
+ tingxur@illinois.edu, tyxu@illinois.edu, wentaoz5@illinois.edu,
+ x86@kernel.org, peterz@infradead.org, sashal@kernel.org,
+ elver@google.com
+Message-Id: <00ed0b57-ad05-4c5d-b152-7c81df94b23a@app.fastmail.com>
+Subject: [PROPOSAL] Replace gcov and kcov with llvm-cov
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On 3 October 2026 10:38:26 BST, Karl Mehltretter <kmehltretter@gmail.com>
-wrote:
->Pre-ARMv6 CPUs have no halfword swp, so __arch_xchg() only handles 1-
->and 4-byte exchanges there and turns any other size into a link error
->via __bad_xchg().
->
->No C code needs a 16-bit xchg() on these CPUs, but the Rust atomic
->helpers in rust/helpers/atomic_ext.c provide xchg() for Atomic<i16>
->unconditionally, so building with CONFIG_RUST=y for ARMv5 fails:
->
->  ld.lld: error: undefined symbol: __bad_xchg
->  >>> referenced by helpers.c
->  >>>               rust/helpers/helpers.o:(rust_helper_atomic_i16_xchg)
->
->Implement the 2-byte case with interrupts disabled, as the pre-ARMv6
->atomic_t operations already do. This is safe because SMP requires
->ARMv6K or later.
->
->Assisted-by: LLM
 
-Reviewed-by: Bradley Morgan <brads@mainlining.org>
+Stemming from some hallway track conversations with maintainers at LPC
+2026, I propose replacing gcov and kcov in the kernel with llvm-cov.
 
+llvm-cov instruments at the AST which enables precise mapping back to
+source code regardless of optimization level.
 
->Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
->---
-> arch/arm/include/asm/cmpxchg.h | 14 +++++++++++---
-> 1 file changed, 11 insertions(+), 3 deletions(-)
->
->diff --git a/arch/arm/include/asm/cmpxchg.h b/arch/arm/include/asm/cmpxchg.h
->index 9beb64d30586..3077f7d7f520 100644
->--- a/arch/arm/include/asm/cmpxchg.h
->+++ b/arch/arm/include/asm/cmpxchg.h
->@@ -31,11 +31,10 @@ __arch_xchg(unsigned long x, volatile void *ptr, int size)
-> {
-> 	extern void __bad_xchg(volatile void *, int);
-> 	unsigned long ret;
->-#ifdef swp_is_buggy
->-	unsigned long flags;
->-#endif
-> #if __LINUX_ARM_ARCH__ >= 6
-> 	unsigned int tmp;
->+#else
->+	unsigned long flags;
-> #endif
-> 
-> 	prefetchw((const void *)ptr);
->@@ -106,6 +105,15 @@ __arch_xchg(unsigned long x, volatile void *ptr, int size)
-> 			: "r" (x), "r" (ptr)
-> 			: "memory", "cc");
-> 		break;
->+#endif
->+#if __LINUX_ARM_ARCH__ < 6
->+	case 2:
->+		/* swp has no halfword form. Pre-ARMv6 is never SMP. */
->+		raw_local_irq_save(flags);
->+		ret = *(volatile unsigned short *)ptr;
->+		*(volatile unsigned short *)ptr = x;
->+		raw_local_irq_restore(flags);
->+		break;
-> #endif
-> 	default:
-> 		/* Cause a link-time error, the xchg() size is not supported */
->
+We have a set of patches [1] that implements kernel based llvm-cov. They
+need to be updated and some additional patches are required to address
+some stubs that are missing noinstr annotation. But otherwise I should
+be able to send a full set of patches (including taking on the
+maintainer role) to remove gcov and kcov and replace it with llvm-cov in
+fairly short order.
 
---- Thanks!
-"I'm not a very positive person" - Linus torvalds
+If there is a desire to take this in pieces or implement other
+intermediate steps, let me know. Otherwise I can generate a monolithic
+set all at once.
+
+[1] https://lore.kernel.org/lkml/20240905043245.1389509-1-wentaoz5@illinois.edu/
+
+Thank you,
+
+..Ch:W..
