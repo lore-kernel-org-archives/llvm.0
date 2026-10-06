@@ -1,110 +1,117 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329AF456E12;
-	Tue,  6 Oct 2026 14:12:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBFC3DDDDD
+	for <llvm@lists.linux.dev>; Tue,  6 Oct 2026 14:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791295929; cv=none; b=VQxHzkxcbDQvf/0qsZCv0TF8qx9svBVycOsSn1gKr8OnEBXkzIX57kKVxEwLRNrpUXpCb4T+ijJ0WOYSgMYxACpcg/MS6D6c8GSBmkuOd+83jzJ70iDcmDF9+Q/lyIw8UuUWtJtiKpXAEcG+JSUaweDMSEN7aPyiw8/55m0Mk1g=
+	t=1791298144; cv=none; b=F7rBIx0Rcr2EM6gIprxl4Moukxor/0I2UNcrksb51XKBNEJd6JGKeJ652AV4sjeCP40GcR1wrSoCnompjQ6VHGDscYUE/IMj/z0ZKcEaLB5fdghoeNQ4OxL/RxFo5beTXFr9crhPxIuXNFCOwSp7NHrRumuK1SsVluoXRfoJN9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791295929; c=relaxed/simple;
-	bh=6btDlvHwBwnl8QJVoMY0bmEA6MybxcPQW3nb9CbBxJA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G/XjbRehIRay9VtucMS4WjR7s+3F5/NifVrFSEzfdsbPrZ6PkhMQg/kos0hQdR/pUzFnUOnKYxy2DYBh4S2MqwYv8QEd3vSPfQSbmiVcLCb9/JSB09Ii+tfnZkoGP1xG3XTqno/SaeF42JgouAFAsserIQbNJH6BqpUup9ZpRKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JBfzHk1F; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JBfzHk1F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67601F000FF;
-	Tue,  6 Oct 2026 14:12:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791295927;
-	bh=zUsVfvyVtNgk99RyjipDDevgTZGzhtwz6DXLUIWe1a4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JBfzHk1FBxuCViejFOyT24cYGpJeOHIzE4MIEH9K1OGLtGcG82viVKe9eGY3wb039
-	 Ah7Zanax6gmVKPPaYcC6dYe0v53Wt0zcKDOFc7kfBLTZZXLJsHc1aiNbWVwF76+8F0
-	 v9Xe3NY3hZ7hxX9R06KzDsOiwNVkJmqKeK0VOnrBhFil0HT/FPS0GNWzH1NWUvGeke
-	 SngQO8ZEwwf82d6mM/l4iZRJN1p29hdWgJR0chSoOPhUeLDNe76dpXM7u1n+YP2qBO
-	 WbkMtrsWE4ldGpiyBWiC4XU4W6eobSykslgdV4ggSiBnZBaI+2KuD+5kKI6fFqVstA
-	 HBSDEpT9s2x3A==
-Date: Tue, 6 Oct 2026 07:12:07 -0700
-From: Kees Cook <kees@kernel.org>
-To: ardb@kernel.org, nathan@kernel.org, Bill Wendling <morbo@google.com>
-Cc: gustavoars@kernel.org, ndesaulniers@google.com, justinstitt@google.com,
-	broonie@kernel.org, elver@google.com, alan.maguire@oracle.com,
-	namjain@linux.microsoft.com, peterz@infradead.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH v4] compiler_types: Allow opting out of __counted_by and
- __counted_by_ptr
-Message-ID: <202610060642.7C4125F@keescook>
-References: <20261005102518.2400984-1-morbo@google.com>
- <20261006094358.2948476-1-morbo@google.com>
+	s=arc-20240116; t=1791298144; c=relaxed/simple;
+	bh=4X1Vvp5rp+7dv6kgDluoOVz7aVwaiJATABVivOetwjw=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=l2cjSU9TOqUcVRKkIpDV7TOwbKHq4NdxrNvNDbK/S3TR6VS2mbUjf3wFKBbzILh2gWwNFQnc8I02lC2z2Frvg6kB55dzOF9W+h5DlAPz2d7x4VqZIlfp+hjeswv8UfkPkq8JSSkZJi55IZXgKXFInr3PkjKV7di7TRXenl98s+Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org; spf=pass smtp.helo=mail.mainlining.org; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.helo=mail.mainlining.org
+Date: Tue, 06 Oct 2026 15:48:59 +0100
+From: Bradley Morgan <brads@mainlining.org>
+To: Karl Mehltretter <kmehltretter@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Miguel Ojeda <ojeda@kernel.org>
+CC: Boqun Feng <boqun@kernel.org>, Gary Guo <gary@garyguo.net>,
+ =?ISO-8859-1?Q?Bj=F6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+ Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>,
+ Alexandre Courbot <acourbot@nvidia.com>,
+ =?ISO-8859-1?Q?Onur_=D6zkan?= <work@onurozkan.dev>,
+ Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>,
+ Christian Schrefl <chrisi.schrefl@gmail.com>,
+ "Paul E . McKenney" <paulmck@kernel.org>,
+ Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
+ Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org,
+ rust-for-linux@vger.kernel.org, llvm@lists.linux.dev,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ARM: cmpxchg: support 2-byte xchg() on pre-ARMv6 CPUs
+In-Reply-To: <20261003093827.77857-2-kmehltretter@gmail.com>
+References: <20261003093827.77857-1-kmehltretter@gmail.com> <20261003093827.77857-2-kmehltretter@gmail.com>
+Message-ID: <61F2A44F-8A05-41FA-8A9A-8483A229E607@mainlining.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261006094358.2948476-1-morbo@google.com>
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Oct 06, 2026 at 09:43:58AM +0000, Bill Wendling wrote:
-> Code that runs outside the kernel proper, such as the EFI stub, gets
-> nothing out of the counted_by annotations: the bounds checks they feed
-> (FORTIFY_SOURCE, UBSAN_BOUNDS) are already disabled there.
+On 3 October 2026 10:38:26 BST, Karl Mehltretter <kmehltretter@gmail.com>
+wrote:
+>Pre-ARMv6 CPUs have no halfword swp, so __arch_xchg() only handles 1-
+>and 4-byte exchanges there and turns any other size into a link error
+>via __bad_xchg().
+>
+>No C code needs a 16-bit xchg() on these CPUs, but the Rust atomic
+>helpers in rust/helpers/atomic_ext.c provide xchg() for Atomic<i16>
+>unconditionally, so building with CONFIG_RUST=y for ARMv5 fails:
+>
+>  ld.lld: error: undefined symbol: __bad_xchg
+>  >>> referenced by helpers.c
+>  >>>               rust/helpers/helpers.o:(rust_helper_atomic_i16_xchg)
+>
+>Implement the 2-byte case with interrupts disabled, as the pre-ARMv6
+>atomic_t operations already do. This is safe because SMP requires
+>ARMv6K or later.
+>
+>Assisted-by: LLM
+
+Reviewed-by: Bradley Morgan <brads@mainlining.org>
+
+
+>Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+>---
+> arch/arm/include/asm/cmpxchg.h | 14 +++++++++++---
+> 1 file changed, 11 insertions(+), 3 deletions(-)
+>
+>diff --git a/arch/arm/include/asm/cmpxchg.h b/arch/arm/include/asm/cmpxchg.h
+>index 9beb64d30586..3077f7d7f520 100644
+>--- a/arch/arm/include/asm/cmpxchg.h
+>+++ b/arch/arm/include/asm/cmpxchg.h
+>@@ -31,11 +31,10 @@ __arch_xchg(unsigned long x, volatile void *ptr, int size)
+> {
+> 	extern void __bad_xchg(volatile void *, int);
+> 	unsigned long ret;
+>-#ifdef swp_is_buggy
+>-	unsigned long flags;
+>-#endif
+> #if __LINUX_ARM_ARCH__ >= 6
+> 	unsigned int tmp;
+>+#else
+>+	unsigned long flags;
+> #endif
 > 
-> The annotations can also break the build. A __counted_by_ptr() that
-> names a member declared after the pointer needs Clang's
-> '-fexperimental-late-parse-attributes', which the top-level Makefile
-> adds to 'KBUILD_CFLAGS'. The x86 EFI stub builds its own cflags and does
-> not get that flag, so it fails as soon as such a struct is pulled in
-> through a common header.
+> 	prefetchw((const void *)ptr);
+>@@ -106,6 +105,15 @@ __arch_xchg(unsigned long x, volatile void *ptr, int size)
+> 			: "r" (x), "r" (ptr)
+> 			: "memory", "cc");
+> 		break;
+>+#endif
+>+#if __LINUX_ARM_ARCH__ < 6
+>+	case 2:
+>+		/* swp has no halfword form. Pre-ARMv6 is never SMP. */
+>+		raw_local_irq_save(flags);
+>+		ret = *(volatile unsigned short *)ptr;
+>+		*(volatile unsigned short *)ptr = x;
+>+		raw_local_irq_restore(flags);
+>+		break;
+> #endif
+> 	default:
+> 		/* Cause a link-time error, the xchg() size is not supported */
+>
 
-We have a distinction between parsing and output (instrumentation,
-linkage, etc). FORTIFY_SOURCE and UBSAN_BOUNDS (and lots of other
-things) control output (e.g. fortify alternative linkages, ubsan
-instrumentation). We don't normally have parsing issues, as that kind
-of thing is usually controlled by compiler flag options (like here). For
-example, if a transparent struct ever leaked into a header that libstub
-includes, we would explode as well, due to x86's resulting lack of
--fms-extensions.
-
-So, I this should _not_ be managed with a NO_* flag, as that has been
-traditionally about suppressing output. I don't think we want to mix
-that idiom with parsing issues.
-
-And other architectures solve this problem by not wiping KBUILD_CFLAGS in
-the first place. :P So if we want to continue to accept the x86 exception
-(which I would argue is the actual problem), we likely need to, instead,
-construct an explicit export that is used to collect parsing control
-options so that it can be re-included here. Today, I can think of
--fms-extensions besides -fexperimental-late-parse-attributes.
-
-KBUILD_PARSE_CFLAGS += -fms-extensions
-...
-KBUILD_PARSE_CFLAGS += -fexperimental-late-parse-attributes
-...
-export KBUILD_PARSE_CFLAGS
-KBUILD_CFLAGS += $(KBUILD_PARSE_CFLAGS)
-...
-
-We already do something like this for CLANG_FLAGS, which, given
--fexperimental-late-parse-attributes being Clang-specific, perhaps we
-ignore my -fms-extensions future-proofing, and just add it there, but
-it doesn't look like that is how scripts/Makefile.clang was intended to
-be used.
-
-But, again, I think the problem is x86's wipe of the flags. In fact, I
-see an explicit problem with that today, which is the loss of
--fauto-trivial-var-init, which all the other arch's stub gain (it's an
-output flag, but it happens to neither change linkage nor create hooked
-instrumentation). So x86 efi stub lacks stack var zeroing but all the
-other archs have it.
-
-Can we just fix x86 correctly to use filter-out, etc, there?
-
--Kees
-
--- 
-Kees Cook
+--- Thanks!
+"I'm not a very positive person" - Linus torvalds
