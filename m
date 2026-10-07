@@ -1,75 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C5041D228;
-	Wed,  7 Oct 2026 09:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F4AA488206
+	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 10:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791366113; cv=none; b=aWUXvuJkI+C4OVk+suleC6Qq6bENZRvYJC5XjovEGK73qarnG75zg/Im+ylabPc0kEeG7P78x2NwKQzf5QDi6ORd1bHuqEkc52+/sG0kmU+88fywgaPQMYPbBmuu3WrTGnblcMMtKKFO/iWliMSY//jGOERmfc2a3A0whZoLABs=
+	t=1791369684; cv=none; b=ZR7uJ0sawuV4eRGO2RclR1HmsFx5ZQUJGga+8iLFqBiQgrDbJ6UHLg3JhKHNFVE0zpYK7rWoEx9HWDVzkF/OPVnT9ZPQDTaFOHrzflVcblk23LbNK8dg6DaQeFbqJIv6AiJAqBpsfcUahdXEuHJL2hLBgCXxRoqi51ClEBNDr1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791366113; c=relaxed/simple;
-	bh=WK9vhPgzSth+kJw3yIz3GCDJcb2aZvBnFXRqEEdiY/8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+G9XrCDnZVOabrmQdY2LSlRVxZqhaPBz6YXt8/gDJ71HDud6XmcvaQY7/4Ilu3Q2AG0OXkmJkIdmzyH4oEoRZ53OOQ+3ID5u2rtsGkx0EYI74DWWYId80TWe5ZwIrI3b3ExtFsefaxxqkJgE4fdz+mPKarISmfr55QR2BQL1VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZfI59p1C; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791369684; c=relaxed/simple;
+	bh=+F/9OZO/aZ5xfG9xyxkGlHXRyzNQp168Xt0vScQpKew=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=D4xHjzdy3K9j0Xq8Ci8XwrMRRSfOS8djtdzYthbT/N3VWsLCLyn2ZM8FyTcA4ies3qkbkTLSoAiyCuoe+Wfuhy2M6hxnf2+UE9NAthEjOhabp0mGCSHVvx+xejHTi7OZgPLlvS2vxvLTuA32HuM9hN/85924SHGF6bWb+cEoyyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Xunggp8f; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZfI59p1C"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B413A1F0089B;
-	Wed,  7 Oct 2026 09:41:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791366105;
-	bh=dg0m5pCV+kHWbFQxgfAVP5N/SaUbE4+F9mJpEm2Zr9g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ZfI59p1CCXGQBkUuHoUrJGA8YsBmBzORm+uLYregJRivh0ufO0WJ88BL+Vw3/JF3A
-	 JYtkz4iOv4TDC7CFVECfQ1s6bTKircJ8Uz4ZNPMJJ7vilIVX2OJx/Uj7Xxn6cthqnF
-	 xjJCgW+/AQq6Vs70U3IQIJTkroLwft+ri4z7hRdLykSTgNeAOhOXBoBjv9B3OCJGq4
-	 dXPlMHGGhOYMJ1PlRgOQahvVH7KwvKEj1rEQ6MENRF3WaIFZcdUGRy2FomBbxosqYl
-	 ex6qehdY2BjJ+wevdoDuQ9AFIFNXejHJp4l0yF0bo6EwKLtkAonigeZynerNbqMNnZ
-	 9Ciok8D8KAbwQ==
-Date: Wed, 7 Oct 2026 11:41:41 +0200
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: Kjetil Oftedal <oftedal@gmail.com>, sparclinux@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Subject: Re: [PATCH] sparc64: Define p4d_page() instead of stubbing it to NULL
-Message-ID: <20261007094141.GA1527675@ax162>
-References: <20261005203930.246598-1-rosenp@gmail.com>
- <CALMQjD-udSokCKS07VFWauBQzac5BTPJqbORhskxgddsuX1vLw@mail.gmail.com>
- <20261006083103.GA3041473@ax162>
- <CAKxU2N-ZE7dwiGzVgxDYFvm2R0BE0nah2WehGcjpym=Kq68dYw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Xunggp8f"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 12477152B;
+	Wed,  7 Oct 2026 03:40:48 -0700 (PDT)
+Received: from [192.168.178.24] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BE5EF3F86F;
+	Wed,  7 Oct 2026 03:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1791369651; bh=+F/9OZO/aZ5xfG9xyxkGlHXRyzNQp168Xt0vScQpKew=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Xunggp8fRg8SY1Ank32l2ofzcNfDVSm4vHDRvYHTjASnNNtDU4KN7ESQMzSuavU0i
+	 5sWDUFnM38lXq3ve3FT171Mz65F/aK07oBI0e1YOKX4meNEdm5o4dZIWqLIg2Jw0y5
+	 l/hiN+pNmlJddW05178Ty4VsAliHKs7MpgH/vzTE=
+Message-ID: <b370a7c3-73e1-4a2c-875b-c2f0b496b96a@arm.com>
+Date: Wed, 7 Oct 2026 12:40:47 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKxU2N-ZE7dwiGzVgxDYFvm2R0BE0nah2WehGcjpym=Kq68dYw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm_mpam: make the mon_sel guard conditional only
+To: Sasha Levin <sashal@kernel.org>, James Morse <james.morse@arm.com>,
+ Ben Horgan <ben.horgan@arm.com>, Nathan Chancellor <nathan@kernel.org>,
+ Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>,
+ Gavin Shan <gshan@redhat.com>
+Cc: "kernelci.org bot" <bot@kernelci.org>,
+ Reinette Chatre <reinette.chatre@intel.com>, Fenghua Yu
+ <fenghuay@nvidia.com>, Nick Desaulniers <ndesaulniers@google.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <20261003121251.3942666-1-sashal@kernel.org>
+Content-Language: en-GB
+From: Andre Przywara <andre.przywara@arm.com>
+In-Reply-To: <20261003121251.3942666-1-sashal@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 06, 2026 at 05:00:30PM -0700, Rosen Penev wrote:
-> LLM suggests as an alternative:
+Hi Sasha,
+
+many thanks for doing this!
+
+On 10/3/26 14:12, Sasha Levin wrote:
+> Building arm64 allmodconfig with clang fails:
 > 
-> /* sparc64 has no p4d leaf mappings, so this is never called */
-> static inline struct page *p4d_page(p4d_t p4d)
-> {
->       return NULL;
-> }
+>    drivers/resctrl/mpam_internal.h:207:7: error: ignoring return value
+>    of function declared with 'warn_unused_result' attribute
+>    [-Werror,-Wunused-result]
+>      207 |              mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
+
+Ooops, I indeed tested this only with GCC.
+
+> mpam_mon_sel_lock() is __must_check and can fail: for an MSC accessed
+> through the MPAM-Fb firmware interface it returns false when called
+> from a context that cannot sleep. The mon_sel guard was defined with
+> DEFINE_GUARD(), which calls it unconditionally and discards the
+> result, so a guard(mon_sel) user would carry on without the lock and
+> release it on scope exit. The unconditional guard only exists as the
+> base for the conditional mon_sel_lock variant, which is the one
+> actually used.
+
+Yes, that was the idea I had to model this particular lock, though I 
+wasn't entirely happy with it, but didn't dare to create a whole new 
+class. Turns out my solution was not only slightly less elegant, but 
+also broken ;-) So many thanks for pointing this out and providing the 
+proper solution.
+
+> Define mon_sel_lock directly as a conditional guard class instead, as
+> posix-timers does for lock_timer: the constructor returns NULL when
+> the lock cannot be taken, and the destructor only releases a lock
+> that was taken. ACQUIRE(mon_sel_lock, ...) works as before, including
+> ACQUIRE_ERR() returning -EBUSY on failure, and there is no
+> unconditional variant left to misuse.
 > 
-> Not sure how to proceed.
+> Reported-by: kernelci.org bot <bot@kernelci.org>
+> Closes: https://d.kernelci.org/i/maestro:66f869ecbbb5b8592562ffd89f049c5ddf682547
+> Closes: https://d.kernelci.org/i/maestro:647269216758644837afcaac8e67d8dbe713a0e2
+> Fixes: 0db1715e4c9c ("arm_mpam: propagate MSC access errors for hw_probe functions")
+> Assisted-by: LLM
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
+> ---
+>   drivers/resctrl/mpam_internal.h | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/resctrl/mpam_internal.h b/drivers/resctrl/mpam_internal.h
+> index ee7c3953a9b6c..be1795b29aca2 100644
+> --- a/drivers/resctrl/mpam_internal.h
+> +++ b/drivers/resctrl/mpam_internal.h
+> @@ -203,9 +203,10 @@ static inline int mpam_mon_sel_lock_init(struct device *dev,
+>   	return devm_mutex_init(dev, &msc->mon_sel_mutex);
+>   }
+>   
+> -DEFINE_GUARD(mon_sel, struct mpam_msc *,
+> -	     mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
+> -DEFINE_GUARD_COND(mon_sel, _lock, mpam_mon_sel_lock(_T), _RET);
+> +DEFINE_CLASS(mon_sel_lock, struct mpam_msc *,
+> +	     _T ? mpam_mon_sel_unlock(_T) : (void)0,
+> +	     mpam_mon_sel_lock(msc) ? msc : NULL, struct mpam_msc *msc);
+> +DEFINE_CLASS_IS_COND_GUARD(mon_sel_lock);
 
-That seems like a more reasonable fix to me, as it is still obvious this
-is not supported while hiding the NULL value from clang's frontend that
-emits the warning. It could be worth a comment that it is an inline
-function and not a macro to avoid the warning but I guess that is up to
-the sparc maintainers.
+Ah, that's ... nice, I guess, though I share that headache argument with 
+Nathan ;-)
+So that looks superficially right, but the details go a bit above my 
+head, although I tested it to both still work and to fix the LLVM build 
+error, so:
 
--- 
-Cheers,
-Nathan
+Tested-by: Andre Przywara <andre.przywara@arm.com>
+
+Thanks,
+Andre
+
+>   
+>   /* Bits for mpam features bitmaps */
+>   enum mpam_device_features {
+
