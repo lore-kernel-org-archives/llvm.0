@@ -1,199 +1,383 @@
-Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010021.outbound.protection.outlook.com [40.93.198.21])
+Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47EEC3FD960;
-	Wed,  7 Oct 2026 18:58:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791399501; cv=fail; b=uXF87h+A65iL98+d8vf8vXt/r6B9LR/tKYhisZNJhAIBTzwr4xtfdVce13lEwZ0zfi4TmX4RG6YuCeQHOKjDS0lui0ThSHJqOefH6R2HRSJrduUIfQgAhw0MZrYSaVSJ2qGCLGrVkEacm2+fRh+Ry9cyKwtt8bBNt/KLwg1V3fU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791399501; c=relaxed/simple;
-	bh=9J/lPyvYen4M8J54xHbxx37ISBrL9ISY+UE/c3LtloY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=AJYsE8Ks01FfQULoKz9htdgYeNnuxUeOxPY6Z1NHBR/lM020g94emNkRdEctrLsFJjKTx0lt3zhGwa3D6bARpVaoJcdaWeTo+AbLcPpxcHJA9ZRdz+gRCYbejQMvsmGgcc1agYnn7V8GUOderiRDioCqESpborFeIXxGX8EOeQQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oAOhUaJw; arc=fail smtp.client-ip=40.93.198.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED6C41685C
+	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 20:10:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791403838; cv=none; b=eJ4ISu0gyCNsW19vtEMUrdJXEw3fHEc3sc0tM1ZHchFTB8TTRSDc7IXbrKqRhZC4Nz4JZib3MJt3CeTSy6aRCUX1UL8lcrc5s/28fzrgzmpcwMVNU+QzhGsFp+FftjbT54ONhAMRlZyWS7haMdJJR8sFPADL7EuqPoOuF6OEyWU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791403838; c=relaxed/simple;
+	bh=Tcno/iCJyHeHq1vpc4Y7zIIm3Gc1BTssIyu+tQMw7YM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=o6FRCHvTGUT6xqwdQ3m6AI7KNOFkI9/lGiyBNYzvI+g5FkHBi67iOxNIoDjd3p+qs9+dk0W1ajyyE8+63hJbPjDmuFa4w/kEZnOLmIFK8kcNp3FFfa4J9kMAq2J4ZQUW72U/SsSE9n6M/ZIDArQcNOTshkSbtv4qzoZg1aqPH4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=cBBWUH8Q; arc=none smtp.client-ip=199.89.1.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oAOhUaJw"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=diZe8xMi+e34p5RL6niL23UveGkQrUEYa26x3TOMPCmP4ozgYk/E28DKDbTPinLvi83fJYpzcj+TAJ7GgwlcWecFxaqkE5a8C30QEChebjluqbY+mSh0KUpM8R6wQTLtiiUo1VRFg62/0uY7XFiYNlx+N/ZyGFiUPieuSN3tjrC6NOmF+dM/sqTXg5O3jTZFAjKYm5+trirsg4PNmodkYGtHpaBS2YpuMsFfr+Ol0jlxeutWPe2v1dcPbg3C5i5DpGLN+2/zWx3ESP2b3wniQZGZ8XCv88epqjSHTwh5ia7lCDht7cQKV97rSBAhQGWsQLxwoee9Se6yVBDfso9rbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UNTBad831l2/inXBznQ/GDVm005QmSgHz3Tz5Ypc0nM=;
- b=yexhBcshC0G8/zr0FjJ71emRCWXHUbnJYW/cGvwBrBScvvHrZ9YTwf2O/5KJgz4TyONrmSZJsyqrf80W6Xx1AJUaQw2VZwMcc7i2mN+cljCKLN1gYEIDLKcvqbwyN/joXkFHYKbsRR7ogXjgKeB9sEWFR8pvd+glvKrOfqU1lTTIPlCH55JX8Vegvfcep/k3A2NTP8CyTpM/z/IZ6CuS2p3yMlANCvD5DZk2omE4Pl5ke4LrhStFNG+v3KxL85/QKZ3qJvRTInAtozUi2KOuImmdsdRxSLqWLisPWxWk2nF3S48IrH2xTG0iqpKfbyTkGqa6JSSQtiCqL7fNcku18g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UNTBad831l2/inXBznQ/GDVm005QmSgHz3Tz5Ypc0nM=;
- b=oAOhUaJwuoucyKU2DqH2tdp7FV8JBqCfJ8HRFB7m/0BPMSUiD88gFhXJsSMEetz5zkV76OIKlJUDxbN8XkI6QyF7rmeQx7OyB6uqBwcWb1SaEUwZiBAbXMVlbkSK5Gks7HH9yMPfnhut3hX0GUBonw5i6+X3qdBh56civHQUBa5dhimIaZUiMh8VC2OeUbeDm0JHHhcw0lMX+cejvSrD6Pb0GnjkS9aCAmczu6brxO4nogWbr+p80eWLiAV6FQbKYIZuNplAJXNjWRNIhoqpDbHt6LuCzpAZADXNUyd6NawYZBe8aufu2nXtMcw/YPvwyMX2xldFLT4s5Z7i72Mv5A==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com (2603:10b6:8:c5::21) by
- SA1PR12MB8723.namprd12.prod.outlook.com (2603:10b6:806:385::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.472.16; Wed, 7 Oct
- 2026 18:58:10 +0000
-Received: from DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33]) by DS0PR12MB6486.namprd12.prod.outlook.com
- ([fe80::88a9:f314:c95f:8b33%6]) with mapi id 15.21.0496.010; Wed, 7 Oct 2026
- 18:58:09 +0000
-Message-ID: <038a4b64-3f7d-47f7-9ba9-a962c265e0e8@nvidia.com>
-Date: Wed, 7 Oct 2026 14:58:04 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 16/17] rcu: assert static storage for RCU sync and SRCU
- definitions
-To: Yury Norov <ynorov@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "Jason A. Donenfeld" <Jason@zx2c4.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Matthew Wilcox <willy@infradead.org>, Peter Zijlstra <peterz@infradead.org>,
- Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
- Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
- Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
- Christoph Lameter <cl@gentwo.org>, "Paul E. McKenney" <paulmck@kernel.org>,
- Frederic Weisbecker <frederic@kernel.org>,
- Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
- Josh Triplett <josh@joshtriplett.org>, Uladzislau Rezki <urezki@gmail.com>,
- Steven Rostedt <rostedt@goodmis.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
- =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, Kees Cook
- <kees@kernel.org>, Joel Granados <joel.granados@kernel.org>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>,
- Thomas Gleixner <tglx@kernel.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>, Ben Segall
- <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
- Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>, Mike Rapoport <rppt@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>, "Michael S. Tsirkin" <mst@redhat.com>,
- Jason Wang <jasowangio@gmail.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- =?UTF-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Clark Williams <clrkwllms@kernel.org>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- wireguard@lists.zx2c4.com, netdev@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, rcu@vger.kernel.org,
- virtualization@lists.linux.dev, linux-rt-devel@lists.linux.dev,
- llvm@lists.linux.dev, Yury Norov <yury.norov@gmail.com>
-References: <20260915030336.1192299-1-ynorov@nvidia.com>
- <20260915031334.1194975-11-ynorov@nvidia.com>
- <20261007184105.GA3837481@joelbox> <asaUECwON5PS98M8@yury>
-Content-Language: en-US
-From: Joel Fernandes <joelagnelf@nvidia.com>
-In-Reply-To: <asaUECwON5PS98M8@yury>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BN8PR04CA0051.namprd04.prod.outlook.com
- (2603:10b6:408:d4::25) To DS0PR12MB6486.namprd12.prod.outlook.com
- (2603:10b6:8:c5::21)
+	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="cBBWUH8Q"
+Received: from localhost (localhost [127.0.0.1])
+	by 011.lax.mailroute.net (Postfix) with ESMTP id 4j0PPm6Sbyz1XLwWr;
+	Wed,  7 Oct 2026 20:10:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
+	content-transfer-encoding:content-type:content-type:in-reply-to
+	:from:from:content-language:references:subject:subject
+	:user-agent:mime-version:date:date:message-id:received:received;
+	 s=mr01; t=1791403830; x=1793995831; bh=jzZ+KAvZg+H0LXnTr/qiJovo
+	qPGSdqJMAl2y7KfzeRI=; b=cBBWUH8Qag7RO/+HUSa1INIK9fcDKWqUZ427Y/Ua
+	RIWP9ejdA7S40W4CrusIe67Co8/Qdc/9YgILaxHMUtgxYOxOq9A7XRV9fJLTNXqc
+	X5IYPoDNcIcLDYQzyCurKM9zXf7rAGmG/ToWmZcL9R/ca5fFrmg7CovoP3sJbGOG
+	MySi0I8cQh1Oi2nxhYDAdmRp1v/jwfd9II31AY3wS6tuc0YF9uHxNkl0NlRxxuvF
+	rBaprLvmSBo1EQPACzFdMr8DzsBroSO+dv1fpzioA3pErdRqb4nfG2gfcAXtsJbW
+	hcGVWfTYWYP8nRVtfkhERdE6AM95h94bPFWIZEHOWAr1WQ==
+X-Virus-Scanned: by MailRoute
+Received: from 011.lax.mailroute.net ([127.0.0.1])
+ by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
+ id k0r9hNA3pJjh; Wed,  7 Oct 2026 20:10:30 +0000 (UTC)
+Received: from [IPV6:2a00:79e0:2ed2:d:d224:603c:1a28:dc62] (unknown [104.135.182.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: bvanassche@acm.org)
+	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4j0PPc697Vz1XM0pk;
+	Wed,  7 Oct 2026 20:10:28 +0000 (UTC)
+Message-ID: <cf697d5c-1b5d-4e3a-983b-f710eb41b5b6@acm.org>
+Date: Wed, 7 Oct 2026 13:10:27 -0700
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB6486:EE_|SA1PR12MB8723:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf668440-b0e8-43fb-bf25-08df24a4ee0f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|366016|23010399003|10067099003|56012099006|3023799007|4143699003|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	421eAfrguhnyzMb5VnpgE8yWymDanFTnxgGUExLCMmwXuI4rTJlW8Px7jH1giYUmKNFdjnArWNOuIaorrI1YwaTWGPoHdDvXH5A4OAVEE0Hyzo3L4FKULLXFmd8BIpY52YJ27HFCJzg2zoWrvHkf8D/z3+cKkkSH8+UvOlEXOsuq55VuK2a0YXpGhu0x18CGPDn60HKnnYqsSqyLeQz0T0I0ntbL8BNiqaV82kPVAuaQRn5ajmZSdRKqPhBSqdXDpeNi2Q6zQ8Hvqw2lq2iQaBzH6OpceovjXrusQ8lNAJQfgNVxwlPciyrvgR1PaBFkuPqZd+MEuMIk/SrUL9n5+L5wPEU4gzeWji22KRVFjH6IzjGph8i7mszT0u+xk5ULaWyChK+xkTBIePPg+wttscAE/f5dCeJevwQG5zgQbQNJ+5BwvE56hKZbnCGC8/z/4BKpqUuVUoNao402zH8dyfAQ+Gh3A3ega/1DOOgqtSzmWUeM4XjovCcvmXA4bjfhRkyxhdnX8YRiCkg8Fwwx+HKtuAI7Tl4P/t1M23GyN17euY0lTBTuTC0zLg/mUEEMwo/F0PnQLkvg0DWLEeOSmg7A+vSRolCAr4VDk7dsoLHOwMdZVgvL+UPJB7Wc2/xeJrS9bxhwt5pt3pChueFIqYtK+dulAxdW3rPfzY8nzY8=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB6486.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(23010399003)(10067099003)(56012099006)(3023799007)(4143699003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?U21QRUt6UXA4QktJV2Y3a2Z6dTlDdDNRQkVQMER0bnB2YWwyWW9mdU13MVZx?=
- =?utf-8?B?anBNYWpHWlZpODVIaXp4S1Y4UGgrN0k0c2lzcUUyeHVWSXpjOFR3TWpvR3Bx?=
- =?utf-8?B?aERqYitFT0lyRi9NVStwcFlacytQNVA3QUpVVFl4NVFkV0oycTFoUnVOTFFW?=
- =?utf-8?B?bWxnb0VWRzc4VDJxdHpwK2hmREZlZWVaVTdsWnI1OUJCcVZLeGlPWEdGcmli?=
- =?utf-8?B?anZ2dmc1Y0U2eGE5eWNuMS9TeGU1YXYvM2EvS24wdkRoalNMQXNsa25KUEFF?=
- =?utf-8?B?ajJLK2JEdDQ4K0xyM0ozTHpaSTJ1ZE1OMHNEYlJzN2lEamk4UmtwU2xFYXRy?=
- =?utf-8?B?RkJkU3ZhZysyMHMzNTZoT1hmOTIxUUlVVlBHbHJ6am5VbTFQSCt6bGNxckFW?=
- =?utf-8?B?S01ENFlyV1N3bmx1a0pObEVPSHI3N2ZwOHp4emFpYWlJMmxxY3ltR2U0bFFi?=
- =?utf-8?B?clMrdFJsRHo4ZW96b2piek81TVFjQkw0bXI4ZzNrblpOeTlXRXZJWk4wVG5E?=
- =?utf-8?B?bGc0VkNCMlFBNW9uNzFGK0hMT0JHRWgzQlRxOGM2K3N4ZjkyaS9BTHorQ09y?=
- =?utf-8?B?WjNyZzRYcjBnNXVGQ2lyTEpERW5rZCszZjVjT1ZkZEV4emdZZlZuNlBFTjJW?=
- =?utf-8?B?QjBMY2NCK2oyTHJnV2l4ekZmL2w3VjcyYUZEVDJGSUNpQm11VDZnS3ZDSUNE?=
- =?utf-8?B?NStVdDFicVdJRHVlc2ZRbE1lVFBYb0YxaHFLWVgvT2orYkJVbjZEY05XSU9Y?=
- =?utf-8?B?UTcvQXA2R0ZoWEJkaHpDSnVWU1E3UldZQVErYjN5MDQ1Ykk1VllZVHN6RmlY?=
- =?utf-8?B?MDRvNndZSXRRZFUvSkJWZ1ZiMXhJMEhSckZKQkM4ZThxSUE3aExhMkNzTWM0?=
- =?utf-8?B?bS9mdStWR09XSDgwMi9CYWdnamhTK0FTZGdMc3ZUaFBzYVl5K3A2aHdzcG1k?=
- =?utf-8?B?SGZibCthTnU2SEd3blhPT3hSbUxXUVBLTmhmSU1ISFY2SkdmWmJOVXpPRXFk?=
- =?utf-8?B?Q1YvZllGS0FoYk80VXhWTm9yUUZWOFo5YWFhdXlOK3AzQ0Q3TmdWamw0ckFl?=
- =?utf-8?B?OXdiejVXMUV0TGJseGJXUDkrWVdIYlRjcVkxL3Q3NFFERGNzUEpiOU14Yk5P?=
- =?utf-8?B?OERPTm4xaGxGZDdld0M5ZnJvVExiNytzYWhkU1JHcnZwbmpkaEFVOUxSaHc5?=
- =?utf-8?B?UVdFNnVHa1R3UkxnN3p1RUNEam1EYmV4MzE3b3o1Y0tBcUVIQWtzY294ZnJQ?=
- =?utf-8?B?WmFmVmRiQ01aR3BOZHRIOVowQmxyVFlhVEUwZXpnYzZ1TWJWNGtOUUFqR1JU?=
- =?utf-8?B?cnJCU3QzM3ZvMU9TaWdrVmFKRmtvZDJtRTJ1U0YvS2VySUs4YWlFUE5lbWll?=
- =?utf-8?B?TkFJODEwNVg4M0lqekV6bHp4ajRSY3FEVFpidS9rM2trZEQxL0NnbVNtU3g1?=
- =?utf-8?B?b2ZUdno4dm5zbUdKUlk4aFlpcFhtUFBJaWlaeXF2eGI4YTAremJibTVTRk9n?=
- =?utf-8?B?a2c2cjJZdWNiYU5WMWpsY3UxZ3Q4L3A0L2lMMVhTd2YyZTUxWEgrL1FKcUR0?=
- =?utf-8?B?WjVqVE9BQi9JMlBRNHozZVF4R1NlMElFa09XS3laeE1DTjZONWI5Z0llTmJ5?=
- =?utf-8?B?K1RFaThOVmNWUmpGeU91SU5XNEpJUUQ2alZoMHRzQ2lkcmMycWFsaURZWFIy?=
- =?utf-8?B?VHh6c01tVGgzdm52WlllRGJTY2VTbG42K21lcHdPSFZaNmhDWXlnMkt4OEZl?=
- =?utf-8?B?dElBaFlOd0JRWXRwOWFyRGZsb1oxcm1IVWYvS1V3bVBmTDBlOFM1b2RaQmxD?=
- =?utf-8?B?KzRmelNNVGNuZ095NHpvYy9aSlcxUWJjdFpkSWNUek1LK000VkowU2s0OTBp?=
- =?utf-8?B?bDVOOUJUVGxIQVVIaUN2ZkVFdkJyVGlsNWtJSGZ5aWlyOElrVkFETnF6M0Zj?=
- =?utf-8?B?cldUT1p1ZXFMdThXdDdJOVdnUWl0amd2cVhPMjVBY3ZNRFlQRUR2Y2dXL3p6?=
- =?utf-8?B?TVhlbTlIQUpqNDdrZk8wNGh2Q05ubU1QM0swL0Jlc2lMR0pWZGpqQ1RCemhn?=
- =?utf-8?B?cUZHdDVyeHZRdit2Yll0eGcvcVFMRkFZci9FVWJ5UmxualNuYlJnclcxTWZz?=
- =?utf-8?B?Q29LZUxOMmVseXJYUTRvRGRhaCtVZzBMQUJhR2ZJVVRrRzg1KzJ4UmNlbTQ0?=
- =?utf-8?B?Z2RvaUVmQlkzZDdLMWMzSW5qTE54VmhMZ3BYR3hDbVlhOHFMYndsTk9jOEpW?=
- =?utf-8?B?ZktibUZoeXVKSm1pNVRHeGpMOE5mL0c2UUcySk1nKzl6TCtFN1N1dEorQVdR?=
- =?utf-8?B?SmVkUFYxbkRwSk43TFpMelp3M1A0eWxaWmZXYnJTOS81dWI2aXZWUT09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf668440-b0e8-43fb-bf25-08df24a4ee0f
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB6486.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2026 18:58:09.8614
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pWeCOYfpw2qqy3ftpTMrz04yc6pmjptUYgQ/QNA12Fn2ybkYus4tgKDiPvUCa1kWIWsaP2xssmwjFW+gm8wsGg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8723
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/8] scsi: scsi_debug: Improve lock context annotations
+To: Christoph Hellwig <hch@lst.de>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
+ linux-scsi@vger.kernel.org, John Garry <john.g.garry@oracle.com>,
+ Marco Elver <elver@google.com>, llvm@lists.linux.dev
+References: <cover.1791349129.git.bvanassche@acm.org>
+ <765bf3683555f3d7fbe8510cde1eb50d5f6d0c6f.1791349129.git.bvanassche@acm.org>
+ <20261007131411.GE30647@lst.de>
+Content-Language: en-US
+From: Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20261007131411.GE30647@lst.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 10/7/2026 2:48 PM, Yury Norov wrote:
-> On Wed, Oct 07, 2026 at 02:41:05PM -0400, Joel Fernandes wrote:
->> On Mon, Sep 14, 2026 at 11:13:31PM -0400, Yury Norov wrote:
->>> DEFINE_RCU_SYNC() contains a statically initialized wait queue. SRCU
->>> static definitions similarly rely on persistent lockdep keys and, in
->>> Tiny SRCU, a statically initialized work item.
->>>
->>> Add ASSERT_STATIC_STORAGE() to DEFINE_RCU_SYNC(), both Tree SRCU
->>> __DEFINE_SRCU() variants and Tiny SRCU's common DEFINE_SRCU() declaration.
->>> This covers the non-static FAST and FAST_UPDOWN wrappers too. Tiny SRCU's
->>> explicitly static declarations already enforce the required duration.
->>> The existing per-CPU restrictions on Tree SRCU declarations still apply.
->>>
->>> Assisted-by: OpenAI Codex
->>> Signed-off-by: Yury Norov <ynorov@nvidia.com>
->>
->> All the changes make sense to me. I'm ok with carrying this for -rcu 7.5
->> unless you want to take it.
->>
->> Reviewed-by: Joel Fernandes <joelagnelf@nvidia.com>
+On 10/7/26 6:14 AM, Christoph Hellwig wrote:
+> On Tue, Oct 06, 2026 at 10:07:29PM -0700, Bart Van Assche wrote:
+>>   static inline void
+>>   sdeb_read_lock(rwlock_t *lock)
+>> +	__acquires_shared(lock)
+>> +	__context_unsafe(/*conditional locking*/)
+>>   {
+>> -	if (sdebug_no_rwlock)
+>> -		__acquire(lock);
+>> -	else
+>> +	if (!sdebug_no_rwlock)
+>>   		read_lock(lock);
+>>   }
 > 
-> Thanks Joel, carrying it with the RCU branch is the preferred route IMO.
-Ok, applying this patch for -rcu 7.5, thanks!
+> Is there no way we can make the spare-style __acquire/__release work for
+> clang?  That would be this and similar patterns so much better and
+> safer than the blanket __context_unsafe.
 
-thanks,
+Hi Christoph,
 
-Joel Fernandes
+Do you like the alternative below better? If so then I will replace
+patch 7/8 with the changes below.
+
+Thanks,
+
+Bart.
+
+
+diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
+index b339f022af26..e8d8b693751e 100644
+--- a/drivers/scsi/scsi_debug.c
++++ b/drivers/scsi/scsi_debug.c
+@@ -4052,42 +4052,47 @@ static inline struct sdeb_store_info 
+*devip2sip(struct sdebug_dev_info *devip,
+
+  static inline void
+  sdeb_read_lock(rwlock_t *lock)
++	__acquires_shared(lock)
+  {
+-	if (sdebug_no_rwlock)
+-		__acquire(lock);
+-	else
++	if (!sdebug_no_rwlock)
+  		read_lock(lock);
++	else
++		__acquire_shared(lock);
+  }
+
+  static inline void
+  sdeb_read_unlock(rwlock_t *lock)
++	__releases_shared(lock)
+  {
+-	if (sdebug_no_rwlock)
+-		__release(lock);
+-	else
++	if (!sdebug_no_rwlock)
+  		read_unlock(lock);
++	else
++		__release_shared(lock);
+  }
+
+  static inline void
+  sdeb_write_lock(rwlock_t *lock)
++	__acquires(lock)
+  {
+-	if (sdebug_no_rwlock)
+-		__acquire(lock);
+-	else
++	if (!sdebug_no_rwlock)
+  		write_lock(lock);
++	else
++		__acquire(lock);
+  }
+
+  static inline void
+  sdeb_write_unlock(rwlock_t *lock)
++	__releases(lock)
+  {
+-	if (sdebug_no_rwlock)
+-		__release(lock);
+-	else
++	if (!sdebug_no_rwlock)
+  		write_unlock(lock);
++	else
++		__release(lock);
+  }
+
+  static inline void
+  sdeb_data_read_lock(struct sdeb_store_info *sip)
++	__acquires_shared(&sip->macc_data_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4096,6 +4101,7 @@ sdeb_data_read_lock(struct sdeb_store_info *sip)
+
+  static inline void
+  sdeb_data_read_unlock(struct sdeb_store_info *sip)
++	__releases_shared(&sip->macc_data_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4104,6 +4110,7 @@ sdeb_data_read_unlock(struct sdeb_store_info *sip)
+
+  static inline void
+  sdeb_data_write_lock(struct sdeb_store_info *sip)
++	__acquires(&sip->macc_data_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4112,6 +4119,7 @@ sdeb_data_write_lock(struct sdeb_store_info *sip)
+
+  static inline void
+  sdeb_data_write_unlock(struct sdeb_store_info *sip)
++	__releases(&sip->macc_data_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4120,6 +4128,7 @@ sdeb_data_write_unlock(struct sdeb_store_info *sip)
+
+  static inline void
+  sdeb_data_sector_read_lock(struct sdeb_store_info *sip)
++	__acquires_shared(&sip->macc_sector_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4128,6 +4137,7 @@ sdeb_data_sector_read_lock(struct sdeb_store_info 
+*sip)
+
+  static inline void
+  sdeb_data_sector_read_unlock(struct sdeb_store_info *sip)
++	__releases_shared(&sip->macc_sector_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4136,6 +4146,7 @@ sdeb_data_sector_read_unlock(struct 
+sdeb_store_info *sip)
+
+  static inline void
+  sdeb_data_sector_write_lock(struct sdeb_store_info *sip)
++	__acquires(&sip->macc_sector_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4144,6 +4155,7 @@ sdeb_data_sector_write_lock(struct sdeb_store_info 
+*sip)
+
+  static inline void
+  sdeb_data_sector_write_unlock(struct sdeb_store_info *sip)
++	__releases(&sip->macc_sector_lck)
+  {
+  	BUG_ON(!sip);
+
+@@ -4165,102 +4177,122 @@ sdeb_data_sector_write_unlock(struct 
+sdeb_store_info *sip)
+
+  static inline void
+  sdeb_data_lock(struct sdeb_store_info *sip, bool atomic)
++	__acquires(&sip->macc_data_lck)
+  {
+-	if (atomic)
++	if (atomic) {
+  		sdeb_data_write_lock(sip);
+-	else
++	} else {
+  		sdeb_data_read_lock(sip);
++		__release_shared(&sip->macc_data_lck);
++		__acquire(&sip->macc_data_lck);
++	}
+  }
+
+  static inline void
+  sdeb_data_unlock(struct sdeb_store_info *sip, bool atomic)
++	__releases(&sip->macc_data_lck)
+  {
+-	if (atomic)
++	if (atomic) {
+  		sdeb_data_write_unlock(sip);
+-	else
++	} else {
++		__release(&sip->macc_data_lck);
++		__acquire_shared(&sip->macc_data_lck);
+  		sdeb_data_read_unlock(sip);
++	}
+  }
+
+  /* Allow many reads but only 1x write per sector */
+  static inline void
+  sdeb_data_sector_lock(struct sdeb_store_info *sip, bool do_write)
++	__acquires(&sip->macc_sector_lck)
+  {
+-	if (do_write)
++	if (do_write) {
+  		sdeb_data_sector_write_lock(sip);
+-	else
++	} else {
+  		sdeb_data_sector_read_lock(sip);
++		__release_shared(&sip->macc_sector_lck);
++		__acquire(&sip->macc_sector_lck);
++	}
+  }
+
+  static inline void
+  sdeb_data_sector_unlock(struct sdeb_store_info *sip, bool do_write)
++	__releases(&sip->macc_sector_lck)
+  {
+-	if (do_write)
++	if (do_write) {
+  		sdeb_data_sector_write_unlock(sip);
+-	else
++	} else {
++		__release(&sip->macc_sector_lck);
++		__acquire_shared(&sip->macc_sector_lck);
+  		sdeb_data_sector_read_unlock(sip);
++	}
+  }
+
+  static inline void
+  sdeb_meta_read_lock(struct sdeb_store_info *sip)
++	__acquires_shared(&sip->macc_meta_lck)
+  {
+-	if (sdebug_no_rwlock) {
+-		if (sip)
+-			__acquire(&sip->macc_meta_lck);
+-		else
+-			__acquire(&sdeb_fake_rw_lck);
+-	} else {
+-		if (sip)
++	if (!sdebug_no_rwlock) {
++		if (sip) {
+  			read_lock(&sip->macc_meta_lck);
+-		else
++		} else {
+  			read_lock(&sdeb_fake_rw_lck);
++			__release_shared(&sdeb_fake_rw_lck);
++			__acquire_shared(&sip->macc_meta_lck);
++		}
++	} else {
++		__acquire_shared(&sip->macc_meta_lck);
+  	}
+  }
+
+  static inline void
+  sdeb_meta_read_unlock(struct sdeb_store_info *sip)
++	__releases_shared(&sip->macc_meta_lck)
+  {
+-	if (sdebug_no_rwlock) {
+-		if (sip)
+-			__release(&sip->macc_meta_lck);
+-		else
+-			__release(&sdeb_fake_rw_lck);
+-	} else {
+-		if (sip)
++	if (!sdebug_no_rwlock) {
++		if (sip) {
+  			read_unlock(&sip->macc_meta_lck);
+-		else
++		} else {
++			__acquire_shared(&sdeb_fake_rw_lck);
+  			read_unlock(&sdeb_fake_rw_lck);
++			__release_shared(&sip->macc_meta_lck);
++		}
++	} else {
++		__release_shared(&sip->macc_meta_lck);
+  	}
+  }
+
+  static inline void
+  sdeb_meta_write_lock(struct sdeb_store_info *sip)
++	__acquires(&sip->macc_meta_lck)
+  {
+-	if (sdebug_no_rwlock) {
+-		if (sip)
+-			__acquire(&sip->macc_meta_lck);
+-		else
+-			__acquire(&sdeb_fake_rw_lck);
+-	} else {
+-		if (sip)
++	if (!sdebug_no_rwlock) {
++		if (sip) {
+  			write_lock(&sip->macc_meta_lck);
+-		else
++		} else {
+  			write_lock(&sdeb_fake_rw_lck);
++			__release(&sdeb_fake_rw_lck);
++			__acquire(&sip->macc_meta_lck);
++		}
++	} else {
++		__acquire(&sip->macc_meta_lck);
+  	}
+  }
+
+  static inline void
+  sdeb_meta_write_unlock(struct sdeb_store_info *sip)
++	__releases(&sip->macc_meta_lck)
+  {
+-	if (sdebug_no_rwlock) {
+-		if (sip)
+-			__release(&sip->macc_meta_lck);
+-		else
+-			__release(&sdeb_fake_rw_lck);
+-	} else {
+-		if (sip)
++	if (!sdebug_no_rwlock) {
++		if (sip) {
+  			write_unlock(&sip->macc_meta_lck);
+-		else
++		} else {
++			__acquire(&sdeb_fake_rw_lck);
+  			write_unlock(&sdeb_fake_rw_lck);
++			__release(&sip->macc_meta_lck);
++		}
++	} else {
++		__release(&sip->macc_meta_lck);
+  	}
+  }
+
 
