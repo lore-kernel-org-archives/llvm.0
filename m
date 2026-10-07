@@ -1,239 +1,254 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA28D3B2D39;
-	Wed,  7 Oct 2026 20:35:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791405325; cv=none; b=GZiJ2yUFpSyfMy/FIvV4RfRpE6ipnq8rwZzGO4eTnUSYTrG47svfXdEwFMbvOrmQi2U+JlnCZc8n+vdQiL8lNsVrnrZ4C5K7fzm/KtKJuZu5LlqkaCD3wYxvroCsR0jdRmr4CJd5CgVClaMrGhmdS1rJTSveLoQtEpv5xUJyl6Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791405325; c=relaxed/simple;
-	bh=JbeNIEU4iUQ8SYi2b45GJTIYlcE248gtt7WfKvw82fI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YPFEdvIv0qlpFmGTn9RhUOzsx8mFqlRjy735D/h5NDhdJPvnDA0gbfZjksLO1Vyg+qAx6kZKmW7svxBJqql/lsjVVG8PkrT9bdiP3tR00TMKTz7UFUPY30bMi1tMVceXsBdyUb+RQcGVh8pogkaqw3iqtOhMLAb95VZYnFZBa7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DC5Y2+OO; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD97384243
+	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 21:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791409784; cv=pass; b=TZIUGqK3v/snybnrz9ZpWyNobmAIX8XQTFJSQZnHOEUs7A7X32RM+BXQsPH/C0VXb5n/UIjWs04bkxKoYWx6KBoKuthtV80ejocCsCjic2DasKslyRzuaTaJpMPLWS7Y4qqiKmBdPPxHS63WOl4jZGHku6jZKeF3XWN3bWJz1gY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791409784; c=relaxed/simple;
+	bh=iUfeVPFcJRl2l483RVn1FexTtf702f8k8YD91745DT0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=pF1RL4MXaidUL51nJmfXhN8AKD5thBRpitu18unAmIbz0GmcP19vGsnfAr4LjngimqO/VfIymF55PodroFZHAMppz0GqfW9AInr4PKBIeSLYCIdsugtgWaZiKuJQB4Wx8dlCVMqKBEtVFfFz0A/Q8s0t15GVa7MTOUQziUc4fKs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ES5kpuJN; arc=pass smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DC5Y2+OO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791405324; x=1822941324;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JbeNIEU4iUQ8SYi2b45GJTIYlcE248gtt7WfKvw82fI=;
-  b=DC5Y2+OOkTncnidSfuDTpDg6t/YCuPG+begr281onJjqxHFHBTT0n5Xb
-   zKivWLlyn7CGTl7P8CD+SMhtpu0dSIBqjJ8JEj6TdL5R1BtzaE1cdiC35
-   v2fcwmutsTwXVGkXWWFrt6f9q+0lhtKE0tTn4h8DYDS38JAZ+3wEIHzWX
-   i+N7eDifuIOHyd+PaaMaUyeOdqk/kVu8dmQzlW4moO0DcbgffVmkM2LLl
-   fCODqkRvEPpFVnugQKVqfcU6Wi4443l3IGxwA/+Qlaz3aERXocuPA7Tz8
-   PjaNspHgSNZQ8SsTr/6FqcN8uVsVA8QrZMm/rDdDZwlmVwmZpI0QbSHot
-   A==;
-X-CSE-ConnectionGUID: 9Fr+ACoDQ32HKyvAlxOLXg==
-X-CSE-MsgGUID: DtosrHEwTtGP1gGRhagAqw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="197569"
-X-IronPort-AV: E=Sophos;i="6.27,145,1787036400"; 
-   d="scan'208";a="197569"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2026 13:35:23 -0700
-X-CSE-ConnectionGUID: 5+0X6H5+RjqXJ0za8As3dQ==
-X-CSE-MsgGUID: mK0Qw6jLTKS+Hhk4m333jg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,145,1787036400"; 
-   d="scan'208";a="285468564"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 07 Oct 2026 13:35:19 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xEYM8-000000003Vo-1pez;
-	Wed, 07 Oct 2026 20:35:16 +0000
-Date: Thu, 8 Oct 2026 04:35:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Muhammad Usama Anjum <usama.anjum@arm.com>,
-	linux-s390@vger.kernel.org, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v8 14/15] mm/kasan: Introduce helpers for lazy MMU mode
- sanitizer
-Message-ID: <202610080433.XoFeDwjr-lkp@intel.com>
-References: <e42d9f02ec1f8478a50fce424b95d0e7ff6a359f.1791365932.git.agordeev@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ES5kpuJN"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-487048857f6so1956758f8f.3
+        for <llvm@lists.linux.dev>; Wed, 07 Oct 2026 14:49:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791409780; cv=none;
+        d=google.com; s=arc-20260327;
+        b=kFsjeQDi5OVmsBJXvzN6iiQyQBOf/o4C2gq3Z3sjPsHtFhj6qf+3w9LCSviIk85K9D
+         yC6vPHXVlT7iQajFJW4R4rkA17jM6+8GUpwtWLb7WYpGc1IFcwKY0tgadNml7XspvBP+
+         EA62QfcSu7uHoriqxwBJwY0hvjjOtyyIc9kiuTw+Z9HJOLqDUKIdw+dtUxp4bWzE7bEE
+         68ISwkkjrPpUZBSULYqJH4HL26af1N7RIP6xWHRSZ9fx8F2nPg/fwyB9RrKHxTodfInm
+         l61tW+keEUNarB0+EZwG8hua9hdPF1H0hC6p14LVHDuBYkZsUjOGl8X1pHNQfISNX2WT
+         qrsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Dz2+W8ZDe1ZO58k707wXjnIbgkdV89r041+gMmUvvKQ=;
+        fh=nDBPYWvCQxFa93atcriwRRWJOcXKyvOA4V52c7H+gYw=;
+        b=HIyzY/TDDHRDqrbsaj0mGzZ1dlbox9vL9+3a3ohj3CP4nwg875Hi/6gK1WwwvA/RQv
+         KXLoVn9oR29BvjJkbgScg5KIBXSWnLnoUXthlCDBWzrtIzIyyb/VNOpnkvZQw3pDFaP6
+         5TAM5Eonn2RR40XDCDYLpKm6cOwfs2OeIjyzd1S1WJe2NmG1u6QwmheKHgKp0MHqkmmh
+         gBjumE+7B1VOoH3EWZhV0Xu1Ozk7GcN8FYghcijw5hmG2wU+QfJMWFzFtUgOFluBzUnq
+         RUhRqwv/o5+30ic1cT4c2xaYTEyNf50AqbFCjW3iHt0lSqg5MoUaoukg9aegXLDkX82C
+         Ar9g==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791409780; x=1792014580; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Dz2+W8ZDe1ZO58k707wXjnIbgkdV89r041+gMmUvvKQ=;
+        b=ES5kpuJNk9MN9hzGMgU76KWFQ+hYyQPuJB4KdUntXYMrEHHsxpS4BR2i2u9Mh79rAO
+         UtKzVGuaFqxb1nzCoBoxrs5n7deF6O3HKLwcW3Exb7hW4E8JwXl9vOzFeTbrZnM0upmg
+         QrAryM4jkILBx9oiR32pO3cs3Va2FB6UW3NSY6G5Zij2AQXjJVZewxbdOiQG0lRCWEKM
+         68szHLwk41cXnGFWph0mASKyM+MadcXTGwEuAhTsZrXXR61pjcgM3K2iKz8lGez9HXqy
+         bdMhXdVhhEoEffx4iuYcxyjOm5n1S8+9W2i2+RbxbGbBRkZHE+Y2VcVHI9hiJ3BCQvQ1
+         e2Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791409780; x=1792014580;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Dz2+W8ZDe1ZO58k707wXjnIbgkdV89r041+gMmUvvKQ=;
+        b=wobgbaQupisUDHzWtIOJAc9tKJW4NTu0WGaW5ri0oFwHzRSLFXr/dxE3+1nTTMK2cP
+         lTwnAovjtQSUEg4AuZXuhlpr5jy89rUcOn4vOAKirAdt3h8exJLcIupLbwKB53hjXz/+
+         caXdTtF6SsJBYjOFa9bF870HDMRUqUonMyNK6hA6iIU7a6RRNvC8aFFqWFAQUe4nKzO5
+         pdLTTYGwYKXbCXaQETGKvOor67lIJKqot5833BX+0rSgzhyxH2HyHitJYh6ICxYcJ5qf
+         eZ3gDr1yS4xgmgRxWm9WJW/u4xf1M+s3Dst0nspUq24vtleWpekXuodTkKjQkMmnqRkY
+         IuzA==
+X-Forwarded-Encrypted: i=1; AKwUvByKo0kzRmBS0oMBd+DWfv9zBuWgqwnoPSrqDx1mk27gg4DHD2Phgdc4z8GzQJyglqfjPdWj@lists.linux.dev
+X-Gm-Message-State: AFq9FYL1HNjsMNwZGjbSL3mqy8fI+eq0yCY899WQ78mracuiGvHWY2Yw
+	a05HqX9IGaGL/sDrNy2Af+JhfqVHtoEHse/tgP604yv9E964QGt971sF03ZABWe4lIkAsAGgmWE
+	6ManEtUG+zAiRW67lq1lpoz+fze8dDWVjX4JyBd3g
+X-Gm-Gg: AYBFou2WxeJZslnP2J7rZZBiPoKrKlRaQTsKea+bIC1Yzu9DOcsbEy79CJV+oTUKBlt
+	icQq1D1UkytDLJMnu2VhhW5mAehjLSZX3NUaTErq1EHDPIJjrlKk+/PQudewBjs+5GcvDyqQ4pJ
+	l4k/1fcKW47w7CwYr2tFoHb7GefrQWKD5B+rOdqInBwCNC4L0pLNl/bIJy0jkT4ktNil+WQhpiD
+	ybeaFDAaAYsQoK+8/uJLulo3+7tVpWz8EBQGt9r+Jd4uDlKoi9Ad7GixkNz8NDUOaXUm6tZBLKH
+	fACA7G5SSlW8iMwAWZJGbycG3YETIRmkZWYBXPo/3SWZW1MlIHRiocs5CsH7PRUCWKbG3nNJ9p0
+	OHgjz0urEcRiD99acF3UoMRUUPPUkSxlbKSSZwl26pmj+vgUPiS+tgIaDulvUfGuoMw+ydDleGR
+	df7w==
+X-Received: by 2002:a5d:64c4:0:b0:48b:f92:1f75 with SMTP id
+ ffacd0b85a97d-48c7289726emr6747670f8f.48.1791409779287; Wed, 07 Oct 2026
+ 14:49:39 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e42d9f02ec1f8478a50fce424b95d0e7ff6a359f.1791365932.git.agordeev@linux.ibm.com>
+References: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
+In-Reply-To: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 7 Oct 2026 14:49:28 -0700
+X-Gm-Features: AclHuK-XtGI88zcQiAtV3bin7-xktDfZZWB8sWf-q8RSqTy-N84xG7PdKD2ogLk
+Message-ID: <CAKwvOd=nPgEm=AZbEu12Eb90GtRUThY6YAjSiHHuNVHP8TZHwg@mail.gmail.com>
+Subject: Re: [PATCH] landlock: Move the domain layer counter out of the
+ anonymous union
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>, Bill Wendling <morbo@google.com>, 
+	Tingmao Wang <m@maowtm.org>, Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>
+Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, Justin Stitt <justinstitt@google.com>, 
+	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Alexander,
+On Wed, Oct 7, 2026 at 9:28=E2=80=AFAM Abel Vesa <abel.vesa@oss.qualcomm.co=
+m> wrote:
+>
+> With Clang 20 and CONFIG_FORTIFY_SOURCE, stacking Landlock domains can
+> trigger a fortify panic in the handled_masks copy in inherit_ruleset():
+>
+>   __fortify_panic
+>   landlock_merge_ruleset
+>   __arm64_sys_landlock_restrict_self
+>
+> Clang miscalculates the location of the __counted_by counter in the
 
-kernel test robot noticed the following build errors:
+Thanks for the patch.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.3-rc6]
-[cannot apply to akpm-mm/mm-everything s390/features kvms390/next next-20261006]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Would you consider this a bug in clang, or an error in how the
+__counted_by attribute is applied?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Gordeev/mm-introduce-hw_pte_t-for-PTE-table-storage/20261007-134144
-base:   linus/master
-patch link:    https://lore.kernel.org/r/e42d9f02ec1f8478a50fce424b95d0e7ff6a359f.1791365932.git.agordeev%40linux.ibm.com
-patch subject: [PATCH v8 14/15] mm/kasan: Introduce helpers for lazy MMU mode sanitizer
-config: arm-allnoconfig (https://download.01.org/0day-ci/archive/20261008/202610080433.XoFeDwjr-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261008/202610080433.XoFeDwjr-lkp@intel.com/reproduce)
+If the former, then a bug report against upstream llvm-project/ and a
+link to that bug report would be appreciated.  Then Bill can take a
+look.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610080433.XoFeDwjr-lkp@intel.com/
+Or if this was a known issue specific to clang 20, then we should have
+a link to the fix (or consider bumping counted_by support to the
+compiler version that is bug free).
 
-All errors (new ones prefixed by >>):
+> anonymous structure nested inside the domain's union.  In an arm64 build,
+> __builtin_dynamic_object_size(domain->handled_masks, 1) reads offset 40
+> (the first handled_masks entry) instead of offset 36 (num_layers).
+> Because the destination domain is zero-initialized and its masks have not
+> yet been populated, FORTIFY sees a zero-sized destination and rejects the
+> copy of the parent's layers.
+>
+> Move num_layers and handled_masks to the top level of landlock_domain so
+> that Clang uses the correct counter.
+>
+> Assisted-by: LLM
+> Fixes: bd3a19800dd1 ("landlock: Add counted_by in landlock_domain")
+> Reported-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Co-developed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
+> ---
+> Move the domain layer counter and flexible array out of the anonymous
+> union to work around Clang 20 reading the wrong counter for __counted_by.
+> This fixes the FORTIFY panic when copying the parent domain's layer stack=
+.
+>
+> Based on next-20260930. Validated arm64 Landlock object builds with
+> Clang 20 and GCC 14, with CONFIG_FORTIFY_SOURCE enabled, and checked the
+> counter load in Clang-generated code. Not boot-tested.
+> ---
+>  security/landlock/domain.h | 48 +++++++++++++++++++---------------------=
+------
+>  1 file changed, 20 insertions(+), 28 deletions(-)
+>
+> diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+> index caa3d19d2c43..5e65ab004f62 100644
+> --- a/security/landlock/domain.h
+> +++ b/security/landlock/domain.h
+> @@ -216,37 +216,29 @@ struct landlock_domain {
+>                 /**
+>                  * @work_free: Enables to free a domain within a lockless
+>                  * section.  This is only used by landlock_put_domain_def=
+erred()
+> -                * when @usage reaches zero.  The fields @usage, @num_lay=
+ers and
+> -                * @handled_masks are then unused.
+> +                * when @usage reaches zero.  The field @usage is then un=
+used.
+>                  */
+>                 struct work_struct work_free;
+> -               struct {
+> -                       /**
+> -                        * @usage: Number of credentials referencing this
+> -                        * domain.
+> -                        */
+> -                       refcount_t usage;
+> -                       /**
+> -                        * @num_layers: Number of layers that are used in=
+ this
+> -                        * domain.  This enables to check that all the la=
+yers
+> -                        * allow an access request.
+> -                        */
+> -                       u32 num_layers;
+> -                       /**
+> -                        * @handled_masks: Contains the subset of filesys=
+tem and
+> -                        * network actions that are restricted by a domai=
+n.  A
+> -                        * domain saves all layers of merged rulesets in =
+a stack
+> -                        * (FAM), starting from the first layer to the la=
+st one.
+> -                        * These layers are used when merging rulesets, f=
+or user
+> -                        * space backward compatibility (i.e. future-proo=
+f), and
+> -                        * to properly handle merged rulesets without
+> -                        * overlapping access rights.  These layers are s=
+et once
+> -                        * and never changed for the lifetime of the doma=
+in.
+> -                        */
+> -                       struct access_masks
+> -                               handled_masks[] __counted_by(num_layers);
+> -               };
+> +               /**
+> +                * @usage: Number of credentials referencing this domain.
+> +                */
+> +               refcount_t usage;
+>         };
+> +       /**
+> +        * @num_layers: Number of layers that are used in this domain.  T=
+his
+> +        * enables to check that all the layers allow an access request.
+> +        */
+> +       u32 num_layers;
+> +       /**
+> +        * @handled_masks: Contains the subset of filesystem and network =
+actions
+> +        * that are restricted by a domain.  A domain saves all layers of=
+ merged
+> +        * rulesets in a stack (FAM), starting from the first layer to th=
+e last
+> +        * one.  These layers are used when merging rulesets, for user sp=
+ace
+> +        * backward compatibility (i.e. future-proof), and to properly ha=
+ndle
+> +        * merged rulesets without overlapping access rights.  These laye=
+rs are
+> +        * set once and never changed for the lifetime of the domain.
+> +        */
+> +       struct access_masks handled_masks[] __counted_by(num_layers);
+>  };
+>
+>  static inline access_mask_t
+>
+> ---
+> base-commit: 6c2cb8b8b843d216ab549b678a0d8831c43153e0
+> change-id: 20261007-b4-landlock-fix-domain-fortify-panic-510367f8cfe3
+>
+> Best regards,
+> --
+> Abel Vesa <abel.vesa@oss.qualcomm.com>
+>
 
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:31:
-   In file included from include/linux/pgtable.h:6:
-   In file included from arch/arm/include/asm/pgtable.h:16:
-   In file included from arch/arm/include/asm/pgtable-nommu.h:13:
-   In file included from include/linux/slab.h:276:
->> include/linux/kasan.h:430:37: error: unknown type name 'hw_pte_t'
-     430 | static inline void kasan_poison_pte(hw_pte_t *pte, int nr) {}
-         |                                     ^
-   include/linux/kasan.h:431:39: error: unknown type name 'hw_pte_t'
-     431 | static inline void kasan_unpoison_pte(hw_pte_t *pte, int nr) {}
-         |                                       ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[2]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:11: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:114:27: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     114 |                 return  (set1->sig[3] == set2->sig[3]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:5: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:115:21: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     115 |                         (set1->sig[2] == set2->sig[2]) &&
-         |                                          ^         ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:8: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 2 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:138:24: note: expanded from macro '_SIG_SET_BINOP'
-     138 |                 a3 = a->sig[3]; a2 = a->sig[2];                         \
-         |                                      ^      ~
-   arch/arm/include/asm/signal.h:17:2: note: array 'sig' declared here
-      17 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/arm/kernel/asm-offsets.c:14:
-   In file included from include/linux/mm.h:36:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:157:1: warning: array index 3 is past the end of the array (that has type 'const unsigned long[2]') [-Warray-bounds]
-     157 | _SIG_SET_BINOP(sigorsets, _sig_or)
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/signal.h:139:8: note: expanded from macro '_SIG_SET_BINOP'
-     139 |                 b3 = b->sig[3]; b2 = b->sig[2];                         \
 
-
-vim +/hw_pte_t +430 include/linux/kasan.h
-
-   420	
-   421	static inline void kasan_unpoison_range(const void *address, size_t size) {}
-   422	static inline void kasan_poison_pages(struct page *page, unsigned int order,
-   423					      bool init) {}
-   424	static inline bool kasan_unpoison_pages(struct page *page, unsigned int order,
-   425						bool init)
-   426	{
-   427		return false;
-   428	}
-   429	static inline void kasan_poison_slab(struct slab *slab) {}
- > 430	static inline void kasan_poison_pte(hw_pte_t *pte, int nr) {}
-   431	static inline void kasan_unpoison_pte(hw_pte_t *pte, int nr) {}
-   432	static inline void kasan_unpoison_new_object(struct kmem_cache *cache,
-   433						void *object) {}
-   434	static inline void kasan_poison_new_object(struct kmem_cache *cache,
-   435						void *object) {}
-   436	static inline void *kasan_init_slab_obj(struct kmem_cache *cache,
-   437					const void *object)
-   438	{
-   439		return (void *)object;
-   440	}
-   441	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--=20
+Thanks,
+~Nick Desaulniers
