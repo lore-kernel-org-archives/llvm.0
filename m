@@ -1,254 +1,157 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAD97384243
-	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 21:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791409784; cv=pass; b=TZIUGqK3v/snybnrz9ZpWyNobmAIX8XQTFJSQZnHOEUs7A7X32RM+BXQsPH/C0VXb5n/UIjWs04bkxKoYWx6KBoKuthtV80ejocCsCjic2DasKslyRzuaTaJpMPLWS7Y4qqiKmBdPPxHS63WOl4jZGHku6jZKeF3XWN3bWJz1gY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791409784; c=relaxed/simple;
-	bh=iUfeVPFcJRl2l483RVn1FexTtf702f8k8YD91745DT0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pF1RL4MXaidUL51nJmfXhN8AKD5thBRpitu18unAmIbz0GmcP19vGsnfAr4LjngimqO/VfIymF55PodroFZHAMppz0GqfW9AInr4PKBIeSLYCIdsugtgWaZiKuJQB4Wx8dlCVMqKBEtVFfFz0A/Q8s0t15GVa7MTOUQziUc4fKs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ES5kpuJN; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D128335C6B2;
+	Wed,  7 Oct 2026 22:39:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791412771; cv=none; b=IZuysI5CqfjrppCy+hs7Hk597EGJWtDm2+k7SwQUq0SKtYfSd/y4WigYj77qLclOpj2GGjPmFO98tCKoVDLW27pDep/KwN84URXa84LWlvR9SkWg5EMFyx09hsH/vk+HYIvHvlJ0JasieN4vIoHO3RJG6E9iaivKIH4t9X0YoBM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791412771; c=relaxed/simple;
+	bh=n/11dE+Hqvxay7KIteozvAYrLerLin/yUxCHGlbzTY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=uEgYBobf1paiC0g5IFUKh/ygh04yMArXx0Gp4/MWFIsg3araTKWLPZ5EAy2v7RF1Uw9bYKzd2X/S4qFiZfHPAOUmE8sBAseVgN536/Puf6ghlGXe18UWcn8NMcf1n3gdvwIMk9y2/lxcK+KCdent7/tYieN5fdvpUsJa0S2+cAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T6mqA0UR; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ES5kpuJN"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-487048857f6so1956758f8f.3
-        for <llvm@lists.linux.dev>; Wed, 07 Oct 2026 14:49:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791409780; cv=none;
-        d=google.com; s=arc-20260327;
-        b=kFsjeQDi5OVmsBJXvzN6iiQyQBOf/o4C2gq3Z3sjPsHtFhj6qf+3w9LCSviIk85K9D
-         yC6vPHXVlT7iQajFJW4R4rkA17jM6+8GUpwtWLb7WYpGc1IFcwKY0tgadNml7XspvBP+
-         EA62QfcSu7uHoriqxwBJwY0hvjjOtyyIc9kiuTw+Z9HJOLqDUKIdw+dtUxp4bWzE7bEE
-         68ISwkkjrPpUZBSULYqJH4HL26af1N7RIP6xWHRSZ9fx8F2nPg/fwyB9RrKHxTodfInm
-         l61tW+keEUNarB0+EZwG8hua9hdPF1H0hC6p14LVHDuBYkZsUjOGl8X1pHNQfISNX2WT
-         qrsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Dz2+W8ZDe1ZO58k707wXjnIbgkdV89r041+gMmUvvKQ=;
-        fh=nDBPYWvCQxFa93atcriwRRWJOcXKyvOA4V52c7H+gYw=;
-        b=HIyzY/TDDHRDqrbsaj0mGzZ1dlbox9vL9+3a3ohj3CP4nwg875Hi/6gK1WwwvA/RQv
-         KXLoVn9oR29BvjJkbgScg5KIBXSWnLnoUXthlCDBWzrtIzIyyb/VNOpnkvZQw3pDFaP6
-         5TAM5Eonn2RR40XDCDYLpKm6cOwfs2OeIjyzd1S1WJe2NmG1u6QwmheKHgKp0MHqkmmh
-         gBjumE+7B1VOoH3EWZhV0Xu1Ozk7GcN8FYghcijw5hmG2wU+QfJMWFzFtUgOFluBzUnq
-         RUhRqwv/o5+30ic1cT4c2xaYTEyNf50AqbFCjW3iHt0lSqg5MoUaoukg9aegXLDkX82C
-         Ar9g==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791409780; x=1792014580; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Dz2+W8ZDe1ZO58k707wXjnIbgkdV89r041+gMmUvvKQ=;
-        b=ES5kpuJNk9MN9hzGMgU76KWFQ+hYyQPuJB4KdUntXYMrEHHsxpS4BR2i2u9Mh79rAO
-         UtKzVGuaFqxb1nzCoBoxrs5n7deF6O3HKLwcW3Exb7hW4E8JwXl9vOzFeTbrZnM0upmg
-         QrAryM4jkILBx9oiR32pO3cs3Va2FB6UW3NSY6G5Zij2AQXjJVZewxbdOiQG0lRCWEKM
-         68szHLwk41cXnGFWph0mASKyM+MadcXTGwEuAhTsZrXXR61pjcgM3K2iKz8lGez9HXqy
-         bdMhXdVhhEoEffx4iuYcxyjOm5n1S8+9W2i2+RbxbGbBRkZHE+Y2VcVHI9hiJ3BCQvQ1
-         e2Ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791409780; x=1792014580;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Dz2+W8ZDe1ZO58k707wXjnIbgkdV89r041+gMmUvvKQ=;
-        b=wobgbaQupisUDHzWtIOJAc9tKJW4NTu0WGaW5ri0oFwHzRSLFXr/dxE3+1nTTMK2cP
-         lTwnAovjtQSUEg4AuZXuhlpr5jy89rUcOn4vOAKirAdt3h8exJLcIupLbwKB53hjXz/+
-         caXdTtF6SsJBYjOFa9bF870HDMRUqUonMyNK6hA6iIU7a6RRNvC8aFFqWFAQUe4nKzO5
-         pdLTTYGwYKXbCXaQETGKvOor67lIJKqot5833BX+0rSgzhyxH2HyHitJYh6ICxYcJ5qf
-         eZ3gDr1yS4xgmgRxWm9WJW/u4xf1M+s3Dst0nspUq24vtleWpekXuodTkKjQkMmnqRkY
-         IuzA==
-X-Forwarded-Encrypted: i=1; AKwUvByKo0kzRmBS0oMBd+DWfv9zBuWgqwnoPSrqDx1mk27gg4DHD2Phgdc4z8GzQJyglqfjPdWj@lists.linux.dev
-X-Gm-Message-State: AFq9FYL1HNjsMNwZGjbSL3mqy8fI+eq0yCY899WQ78mracuiGvHWY2Yw
-	a05HqX9IGaGL/sDrNy2Af+JhfqVHtoEHse/tgP604yv9E964QGt971sF03ZABWe4lIkAsAGgmWE
-	6ManEtUG+zAiRW67lq1lpoz+fze8dDWVjX4JyBd3g
-X-Gm-Gg: AYBFou2WxeJZslnP2J7rZZBiPoKrKlRaQTsKea+bIC1Yzu9DOcsbEy79CJV+oTUKBlt
-	icQq1D1UkytDLJMnu2VhhW5mAehjLSZX3NUaTErq1EHDPIJjrlKk+/PQudewBjs+5GcvDyqQ4pJ
-	l4k/1fcKW47w7CwYr2tFoHb7GefrQWKD5B+rOdqInBwCNC4L0pLNl/bIJy0jkT4ktNil+WQhpiD
-	ybeaFDAaAYsQoK+8/uJLulo3+7tVpWz8EBQGt9r+Jd4uDlKoi9Ad7GixkNz8NDUOaXUm6tZBLKH
-	fACA7G5SSlW8iMwAWZJGbycG3YETIRmkZWYBXPo/3SWZW1MlIHRiocs5CsH7PRUCWKbG3nNJ9p0
-	OHgjz0urEcRiD99acF3UoMRUUPPUkSxlbKSSZwl26pmj+vgUPiS+tgIaDulvUfGuoMw+ydDleGR
-	df7w==
-X-Received: by 2002:a5d:64c4:0:b0:48b:f92:1f75 with SMTP id
- ffacd0b85a97d-48c7289726emr6747670f8f.48.1791409779287; Wed, 07 Oct 2026
- 14:49:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T6mqA0UR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791412769; x=1822948769;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=n/11dE+Hqvxay7KIteozvAYrLerLin/yUxCHGlbzTY8=;
+  b=T6mqA0URiL1Tkm4kpxbtxjsgjtR2h3eH9oGyNmCUeNx5+m/EDo9evdYl
+   0jvkZgWr8q414BPA1PymCy0PhJhaVPxjm2pg3QCoZAt/yjDVby1RY5dr3
+   6+SO3eUEeYHRX7G09MHIRCpcJEki/yL/deIy5B+mOe1BMYoSBtRUbFm/U
+   G+Le1JdHNzGAOCfOF9QOTKsrcon89JLyixx34QKfj+4HOGngkoikwZWt2
+   t2Cmlm1lgfiNiBqBuVV03Nmncx+JqO7+xnSjdagkzxIXOWDAGYD1L10Ew
+   P8GlBgxRzP5rtgYuT8Ztvb8y6WGYoesaixhnZ6aHVXZgfDpXvD3n34+at
+   g==;
+X-CSE-ConnectionGUID: hqUoZtw5R8CyE9sBpuWhHw==
+X-CSE-MsgGUID: cG1IUYj9StWfMvUj5u1sRw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="296235"
+X-IronPort-AV: E=Sophos;i="6.27,145,1787036400"; 
+   d="scan'208";a="296235"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2026 15:39:28 -0700
+X-CSE-ConnectionGUID: q+U4hnxTSJ+oOq/9JMK6ZA==
+X-CSE-MsgGUID: pC/HfWlnRxaCpyMIMe4PEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,145,1787036400"; 
+   d="scan'208";a="285509759"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 07 Oct 2026 15:39:26 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xEaIG-000000003dC-19ZR;
+	Wed, 07 Oct 2026 22:39:24 +0000
+Date: Thu, 08 Oct 2026 06:38:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stefandoesinger-zx297520:dlink 131/142]
+ drivers/misc/cardreader/infineon_usim.c:697:61: warning: format specifies
+ type 'unsigned int' but the argument has type 'unsigned long'
+Message-ID: <202610080635.Tej6yJe8-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
-In-Reply-To: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Wed, 7 Oct 2026 14:49:28 -0700
-X-Gm-Features: AclHuK-XtGI88zcQiAtV3bin7-xktDfZZWB8sWf-q8RSqTy-N84xG7PdKD2ogLk
-Message-ID: <CAKwvOd=nPgEm=AZbEu12Eb90GtRUThY6YAjSiHHuNVHP8TZHwg@mail.gmail.com>
-Subject: Re: [PATCH] landlock: Move the domain layer counter out of the
- anonymous union
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>, Bill Wendling <morbo@google.com>, 
-	Tingmao Wang <m@maowtm.org>, Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>, Justin Stitt <justinstitt@google.com>, 
-	linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, llvm@lists.linux.dev, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
 
-On Wed, Oct 7, 2026 at 9:28=E2=80=AFAM Abel Vesa <abel.vesa@oss.qualcomm.co=
-m> wrote:
->
-> With Clang 20 and CONFIG_FORTIFY_SOURCE, stacking Landlock domains can
-> trigger a fortify panic in the handled_masks copy in inherit_ruleset():
->
->   __fortify_panic
->   landlock_merge_ruleset
->   __arm64_sys_landlock_restrict_self
->
-> Clang miscalculates the location of the __counted_by counter in the
+tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
+head:   7998b6e929bb20ed66acafa33720d8e3533e1598
+commit: e70fe7818c4a351f59b891ad4189e1454ea4ea2e [131/142] Sloppy APDU
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261008/202610080635.Tej6yJe8-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261008/202610080635.Tej6yJe8-lkp@intel.com/reproduce)
 
-Thanks for the patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610080635.Tej6yJe8-lkp@intel.com/
 
-Would you consider this a bug in clang, or an error in how the
-__counted_by attribute is applied?
+All warnings (new ones prefixed by >>):
 
-If the former, then a bug report against upstream llvm-project/ and a
-link to that bug report would be appreciated.  Then Bill can take a
-look.
-
-Or if this was a known issue specific to clang 20, then we should have
-a link to the fix (or consider bumping counted_by support to the
-compiler version that is bug free).
-
-> anonymous structure nested inside the domain's union.  In an arm64 build,
-> __builtin_dynamic_object_size(domain->handled_masks, 1) reads offset 40
-> (the first handled_masks entry) instead of offset 36 (num_layers).
-> Because the destination domain is zero-initialized and its masks have not
-> yet been populated, FORTIFY sees a zero-sized destination and rejects the
-> copy of the parent's layers.
->
-> Move num_layers and handled_masks to the top level of landlock_domain so
-> that Clang uses the correct counter.
->
-> Assisted-by: LLM
-> Fixes: bd3a19800dd1 ("landlock: Add counted_by in landlock_domain")
-> Reported-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Co-developed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Abel Vesa <abel.vesa@oss.qualcomm.com>
-> ---
-> Move the domain layer counter and flexible array out of the anonymous
-> union to work around Clang 20 reading the wrong counter for __counted_by.
-> This fixes the FORTIFY panic when copying the parent domain's layer stack=
-.
->
-> Based on next-20260930. Validated arm64 Landlock object builds with
-> Clang 20 and GCC 14, with CONFIG_FORTIFY_SOURCE enabled, and checked the
-> counter load in Clang-generated code. Not boot-tested.
-> ---
->  security/landlock/domain.h | 48 +++++++++++++++++++---------------------=
-------
->  1 file changed, 20 insertions(+), 28 deletions(-)
->
-> diff --git a/security/landlock/domain.h b/security/landlock/domain.h
-> index caa3d19d2c43..5e65ab004f62 100644
-> --- a/security/landlock/domain.h
-> +++ b/security/landlock/domain.h
-> @@ -216,37 +216,29 @@ struct landlock_domain {
->                 /**
->                  * @work_free: Enables to free a domain within a lockless
->                  * section.  This is only used by landlock_put_domain_def=
-erred()
-> -                * when @usage reaches zero.  The fields @usage, @num_lay=
-ers and
-> -                * @handled_masks are then unused.
-> +                * when @usage reaches zero.  The field @usage is then un=
-used.
->                  */
->                 struct work_struct work_free;
-> -               struct {
-> -                       /**
-> -                        * @usage: Number of credentials referencing this
-> -                        * domain.
-> -                        */
-> -                       refcount_t usage;
-> -                       /**
-> -                        * @num_layers: Number of layers that are used in=
- this
-> -                        * domain.  This enables to check that all the la=
-yers
-> -                        * allow an access request.
-> -                        */
-> -                       u32 num_layers;
-> -                       /**
-> -                        * @handled_masks: Contains the subset of filesys=
-tem and
-> -                        * network actions that are restricted by a domai=
-n.  A
-> -                        * domain saves all layers of merged rulesets in =
-a stack
-> -                        * (FAM), starting from the first layer to the la=
-st one.
-> -                        * These layers are used when merging rulesets, f=
-or user
-> -                        * space backward compatibility (i.e. future-proo=
-f), and
-> -                        * to properly handle merged rulesets without
-> -                        * overlapping access rights.  These layers are s=
-et once
-> -                        * and never changed for the lifetime of the doma=
-in.
-> -                        */
-> -                       struct access_masks
-> -                               handled_masks[] __counted_by(num_layers);
-> -               };
-> +               /**
-> +                * @usage: Number of credentials referencing this domain.
-> +                */
-> +               refcount_t usage;
->         };
-> +       /**
-> +        * @num_layers: Number of layers that are used in this domain.  T=
-his
-> +        * enables to check that all the layers allow an access request.
-> +        */
-> +       u32 num_layers;
-> +       /**
-> +        * @handled_masks: Contains the subset of filesystem and network =
-actions
-> +        * that are restricted by a domain.  A domain saves all layers of=
- merged
-> +        * rulesets in a stack (FAM), starting from the first layer to th=
-e last
-> +        * one.  These layers are used when merging rulesets, for user sp=
-ace
-> +        * backward compatibility (i.e. future-proof), and to properly ha=
-ndle
-> +        * merged rulesets without overlapping access rights.  These laye=
-rs are
-> +        * set once and never changed for the lifetime of the domain.
-> +        */
-> +       struct access_masks handled_masks[] __counted_by(num_layers);
->  };
->
->  static inline access_mask_t
->
-> ---
-> base-commit: 6c2cb8b8b843d216ab549b678a0d8831c43153e0
-> change-id: 20261007-b4-landlock-fix-domain-fortify-panic-510367f8cfe3
->
-> Best regards,
-> --
-> Abel Vesa <abel.vesa@oss.qualcomm.com>
->
+   drivers/misc/cardreader/infineon_usim.c:191:14: warning: unused variable 'i' [-Wunused-variable]
+     191 |         size_t len, i;
+         |                     ^
+>> drivers/misc/cardreader/infineon_usim.c:697:61: warning: format specifies type 'unsigned int' but the argument has type 'unsigned long' [-Wformat]
+     697 |                 dev_err(usim->dev, "ioctl 0x%08x, powerup %x\n", command, INFINEON_USIM_IOC_POWER_UP);
+         |                                                           ~~              ^~~~~~~~~~~~~~~~~~~~~~~~~~
+         |                                                           %lx
+   include/linux/dev_printk.h:154:65: note: expanded from macro 'dev_err'
+     154 |         dev_printk_index_wrap(_dev_err, KERN_ERR, dev, dev_fmt(fmt), ##__VA_ARGS__)
+         |                                                                ~~~     ^~~~~~~~~~~
+   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+         |                              ~~~    ^~~~~~~~~~~
+   include/uapi/linux/infineon_usim.h:39:36: note: expanded from macro 'INFINEON_USIM_IOC_POWER_UP'
+      39 | #define INFINEON_USIM_IOC_POWER_UP _IOWR(INFINEON_USIM_IOC_MAGIC, 0x0, struct infineon_usim_power_up)
+         |                                    ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/ioctl.h:48:29: note: expanded from macro '_IOWR'
+      48 | #define _IOWR(type,nr,size) _IOC(_IOC_READ|_IOC_WRITE,(type),(nr),sizeof(size))
+         |                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/include/uapi/asm/ioctl.h:40:9: note: expanded from macro '_IOC'
+      40 |         (((dir)  << _IOC_DIRSHIFT) | \
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      41 |          ((type) << _IOC_TYPESHIFT) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      42 |          ((nr)   << _IOC_NRSHIFT) | \
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      43 |          ((size) << _IOC_SIZESHIFT))
+         |          ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/misc/cardreader/infineon_usim.c:716:13: error: incompatible function pointer types initializing 'int (*)(struct inode *, struct file *)' with an expression of type 'ssize_t (struct inode *, struct file *)' (aka 'long (struct inode *, struct file *)') [-Wincompatible-function-pointer-types]
+     716 |         .release = usim_release,
+         |                    ^~~~~~~~~~~~
+   2 warnings and 1 error generated.
 
 
---=20
-Thanks,
-~Nick Desaulniers
+vim +697 drivers/misc/cardreader/infineon_usim.c
+
+   669	
+   670	static long usim_ioctl(struct file *file, unsigned int command, unsigned long argument)
+   671	{
+   672		struct usim_drv *usim = file->private_data;
+   673		void __user *argp = (void __user *)argument;
+   674		long ret;
+   675	
+   676		dev_dbg(usim->dev, "USIM IOCTL 0x%x\n", command);
+   677		mutex_lock(&usim->lock);
+   678	
+   679		switch (command) {
+   680		case INFINEON_USIM_IOC_POWER_UP:
+   681			ret = usim_power_up(usim, argp);
+   682			break;
+   683	
+   684		case INFINEON_USIM_IOC_POWER_DOWN:
+   685			ret = usim_power_down(usim);
+   686			break;
+   687	
+   688		case INFINEON_USIM_IOC_RESET:
+   689			ret = usim_reset(usim, argp);
+   690			break;
+   691	
+   692		case INFINEON_USIM_IOC_TRANSMIT:
+   693			ret = usim_transmit(usim, argp);
+   694			break;
+   695	
+   696		default:
+ > 697			dev_err(usim->dev, "ioctl 0x%08x, powerup %x\n", command, INFINEON_USIM_IOC_POWER_UP);
+   698			ret = -ENOTTY;
+   699			break;
+   700		}
+   701	
+   702		mutex_unlock(&usim->lock);
+   703		dev_dbg(usim->dev, "ioctl 0x%x ret %ld\n", command, ret);
+   704	
+   705		return ret;
+   706	}
+   707	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
