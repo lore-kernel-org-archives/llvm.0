@@ -1,126 +1,99 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EDF33D47BF
-	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 14:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791383549; cv=pass; b=ijt32bUeAjH15Koc4PmND+trUdniWgX6IGqkmB8C4kjCkNXFz8lVwtCSptW9o6BSUlC3Fr2m8UQkZ0aON/sQ0m7K3syVilgNKNwi+ueUktnPI+a/L6+d6UdOnIlKFj9sWDsNE25dekCTBFaBRl9AyNXzOIre4i5i3lszVf6we5U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791383549; c=relaxed/simple;
-	bh=kAAKOOjaAvYZaAHOUTCAOnLdyRNj6P0W/vYfaghxTeQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hwoLAcXu2V/ffMjixq641QYE7hA2hKNVsc0lX6DXedXayMBjsUdJSEsMENiLl4sZ0kgu25pOegp0XZ8XNm74Xukz1t21rv61DT4su/Yd1kJo1bamEcTvvxjHB7yD1BSFej9E3xjos4ydg5KncD5QLhfZFVN0sbe55jt9XaYYNtc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RRRxeCaQ; arc=pass smtp.client-ip=74.125.82.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AE23A6B8D;
+	Wed,  7 Oct 2026 16:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791389575; cv=none; b=KgF1yI3Z3Y5/rJkcCi882LwrwrtxfEqU/znHmUXgUmHvBTyKrm6wd3uIhgjCXet4gUFh3QHZCe6uQVN0jhDnGv3xX+C6pxaCZFpcryCSXIAwYZKzEOakpcMKL71RK81ty9KLs2QP3Hqrarc9mymZRMk8SfCjGhtdBGe/c2ALDS4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791389575; c=relaxed/simple;
+	bh=+rPRKC9umesGDdCt2yETq7Z4hnDy6Z3LHceoUeY/+TI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OIwd27l130LTsr2fiNkbXz+6QLzJ2ABw9mvzqLxLKRzusTZfVOrpgK2FlQJCOXoU91smRHX+aWCjf3Zp889JDJ6UEnTwo6IrCd/lE2bO/IXI+9Wo1ydSlHnpE9aB8oPySrS1jMWIoqDecdoiIQGz4BS6PQheX7c97LMDDpKpTsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UIw2pCnf; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RRRxeCaQ"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-3516c82e96cso542988eec.0
-        for <llvm@lists.linux.dev>; Wed, 07 Oct 2026 07:32:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791383544; cv=none;
-        d=google.com; s=arc-20260327;
-        b=JxEiGLrla8nt/VoVXlfkot5Af/VdPocibxxWPxQUSZJfmTvPSqm65My7imPSOzqpRs
-         NSvPF28SddAGVwciJ5F72ODISK2ne38zBECcxg+eTTMMelIfvfWgdeZWoRD8eKJAGWkP
-         o8WVZy7kQOkgf+/jY1B3YVK4IJ/6fOmnyJzqQ3jhxgt4KcIFMZ+vZm0aK7IFNShv+FMN
-         kJzctMt0QIRzOXy6+yhtkfZZJQvI0Q2x4g2NGp4EGAKW4Pzv5+xpPyqm3Fy1ttE4sZby
-         mlZTLBydmfC0TEFZ4pjRQeXV341N4n/lk+dmIJHARrEjD19FPhpYpzu67EV71sGY7X0+
-         nQkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=wNM9t3jtIo/GYt2tLLZSJbMvnD5utEjM7/ofYn8Iatc=;
-        fh=D1Pbtth2oAA+0KoUWO2Uo2Q6qTuWjBLzeT0GpcBDbOw=;
-        b=EwyKDAshNGVN3lqMKJMX2ERRO9cx75DAy6nTkppKUOYReluNG+TFAON1vypyY4BgpB
-         ZlhhWcjtLzmu0SsE7DSfDiwqiZQ192YOcGXajYbIB7OwCqHvv1ijUqDqi75mYd8Uy6is
-         1/GrVrHVr8Rjl2sANxC3RNmkEP3uSgXiMckv4fBoYOyTsgLNH18OBdAs68NxWhjld3R7
-         FQe7V+FXcAB2QMs7lhEuQ+/LJxtqa5lnDn1vU4iuzariCpH//qH5IyKySApQMtw+p2bz
-         h+FQrHPiZp2TD2D6X9B2gMMqSFUdscwSMNbAQfEvU38qc0lRM3DUKUC8P3Sm2kV4ATeU
-         QiSw==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791383544; x=1791988344; darn=lists.linux.dev;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wNM9t3jtIo/GYt2tLLZSJbMvnD5utEjM7/ofYn8Iatc=;
-        b=RRRxeCaQIGVS9NeXFuNBuSO+pxXtuyXXVdGJ/5r9bhlm0SNNB8EigyljE7gDIR8oYF
-         aFTgcj0dWm8W7j5+P/5bTm7t1+UwKoQTRUbHpFFCP9fH9IQ+KuaUJOGDuVz1hNnGgrT/
-         ygKrwvCZ+wZT7U5zRXT/xQee/SGoCNCLqd66XbA8hzLwlXh1FgwhqNR/b2yR3qNBS0kY
-         5BBqfkY3wGNyaxpjZqlQQp2fXRaWpPFnk24FvD2Rlwqe9SyIpCDS6OZZjfGgBHb7f0rO
-         aGx2XfesKGytcsyYqyl6IsXLz+I44X6ot2/lqmXc5R9b8tSzKugQIwcUM4BcpSZeBBKO
-         jwAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791383544; x=1791988344;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=wNM9t3jtIo/GYt2tLLZSJbMvnD5utEjM7/ofYn8Iatc=;
-        b=J53EtL6R8OWmt2V2XE/0K6F1UpeqdDSkWeKaXpSr+fAqM0JuoXDxaHo4FjNgIv/Isr
-         lnq1DFOZdR8r8QvA6PUmU8ZJ/MSfaD/ky2XvvNb19jLITgJWMPgBti011Z5E22NE+qnP
-         /mtizH9JlqhOOjvlVVZYtT4heab9pVpPMvSeRuWc1Gfr/FyGklC2r/nkEGTPsZWptP4Q
-         EQeKDDMiUG0xEv7muwY4INaSsSmw0XkhN5pe60QgKUkVc+gEsV5ue78RHvCBvnYJ2CuS
-         xu2LPbM82fNY+OREQsU8ffJ0Cq6ClRYAosdk7yj2/Uj8puZlyhIbJiB/TNSFEIjkv0A8
-         oBEw==
-X-Forwarded-Encrypted: i=1; AKwUvBySRIQgkC6y/5B3tqZLfy4XGczVmyi/0OoJv8kpDEKl5sGQMO3f4mMYqHqiyzqCib4n+2UL@lists.linux.dev
-X-Gm-Message-State: AFuF++k2pK6zBOnS9fV9w8VS2wmxo0XBsDr79AH4uaFLtmrGoeN44T7z
-	abE48C47fJb5M1TdApFCksmJSIvT7Xj91M/j11CZkiQOsfPfX+Swa1Ov3l0SJoHq1alQKxR6JJj
-	PmGhlwdg1yFPe9Ix0afU/I2Q2Bu1i3xfZ4wT4aBPq
-X-Gm-Gg: AYBFou0J4UcDTgj8lAUh5lAof1ur+Jj3sexr5qk6BtoUrq7TaH1bwj71dzJ91D16WJv
-	xjoUg7B9rpEyG1b8y78CM6GNuGbXuqewWVLdLFYkzCa+LfbJKm9rAzU4akoJIZI2tt79MqSZlWe
-	oSFm7mTW0hmj4D/sFAyhXEYulzHYUzncwbiqiiuXI7Tmq4YuylijQvBzqu4c4/7WTwBOamsI1/I
-	wqWeZk8fAY6VQG/N9X7B1tapHX24wKDZpo9797ZvtfIH7TFW1KfpX7uKPD35pUd67R4rGhqnM1z
-	ayi2pWybYU3k5xGEbJu4102uvDTYHatra+R30O3jnZ08fbubNmcJvNQQj9Wy9rEWPlX0YX5sIwi
-	QP2D9BPPL2mXm3wcdHQMM2g==
-X-Received: by 2002:a05:701b:458d:b0:14c:d84c:7182 with SMTP id
- a92af1059eb24-16205ead94bmr2126585c88.22.1791383543226; Wed, 07 Oct 2026
- 07:32:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UIw2pCnf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791389575; x=1822925575;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=+rPRKC9umesGDdCt2yETq7Z4hnDy6Z3LHceoUeY/+TI=;
+  b=UIw2pCnfXv9GTPm/FMjk3dcIi/VGranamldvMiVzFsWbc8Vfz4Xqh/KL
+   HqSpggNAgfh7NQhWQ1PP0Cgzb1r9WbTmQEus3g5IAlOMH0mbZtkfPrUn6
+   9fPsgvJLabXEF4/H7fq4a4uVnJSG2rUDzaT3mgRNXXbKx1AxE1RtFqBc+
+   k+YoudBe1H+E3IZ0pGCHcDkQ+TRkI0oD4S9urhHGOhjCfFrm0v6SG3MBy
+   Rp85FRbUnODLOIS9ZW+3wjbfqg8VRKGAbmmDcKMdvEjtOIZGl5q8zIGUC
+   Eaa2roszola/7JBE443JfFxdfzOtQ+upyfpsecFfyTTd43UrUqWMm9oq9
+   g==;
+X-CSE-ConnectionGUID: Sed4DPvcTMS9OHxPdnEGIw==
+X-CSE-MsgGUID: Wp73K950QrqWSDIlHXLTbw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="161556"
+X-IronPort-AV: E=Sophos;i="6.27,144,1787036400"; 
+   d="scan'208";a="161556"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2026 09:12:54 -0700
+X-CSE-ConnectionGUID: AQIp6U06QQmC36F2L9srOw==
+X-CSE-MsgGUID: jpN8VxnlTGWo+FfH4ja4Qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,144,1787036400"; 
+   d="scan'208";a="285575091"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 07 Oct 2026 09:12:52 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xEUG9-000000003FA-45Yc;
+	Wed, 07 Oct 2026 16:12:49 +0000
+Date: Thu, 8 Oct 2026 00:12:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Isma=EFl?= Bahloul <i.bahloul01@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [RFC PATCH v6 7/8] ALSA: usb: babyfacepro: add the hardware DSP
+ EQ
+Message-ID: <202610080058.z8dKl0F8-lkp@intel.com>
+References: <20261003194137.86176-8-i.bahloul01@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <cover.1791349129.git.bvanassche@acm.org> <765bf3683555f3d7fbe8510cde1eb50d5f6d0c6f.1791349129.git.bvanassche@acm.org>
- <20261007131411.GE30647@lst.de>
-In-Reply-To: <20261007131411.GE30647@lst.de>
-From: Marco Elver <elver@google.com>
-Date: Wed, 7 Oct 2026 16:31:45 +0200
-X-Gm-Features: AclHuK9avBQrZLO05u7yyi3tvHf6fXRKzgFjjrsP78FV-9q7VTnQzI8J5lXgpbw
-Message-ID: <CANpmjNOUKf49YsujdfA-c553mx7G7+NWEPJjwNxCyTWafDZBOg@mail.gmail.com>
-Subject: Re: [PATCH v4 7/8] scsi: scsi_debug: Improve lock context annotations
-To: Christoph Hellwig <hch@lst.de>
-Cc: Bart Van Assche <bvanassche@acm.org>, "Martin K . Petersen" <martin.petersen@oracle.com>, 
-	linux-scsi@vger.kernel.org, John Garry <john.g.garry@oracle.com>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20261003194137.86176-8-i.bahloul01@gmail.com>
 
-On Wed, 7 Oct 2026 at 15:14, Christoph Hellwig <hch@lst.de> wrote:
->
-> On Tue, Oct 06, 2026 at 10:07:29PM -0700, Bart Van Assche wrote:
-> >  static inline void
-> >  sdeb_read_lock(rwlock_t *lock)
-> > +     __acquires_shared(lock)
-> > +     __context_unsafe(/*conditional locking*/)
-> >  {
-> > -     if (sdebug_no_rwlock)
-> > -             __acquire(lock);
-> > -     else
-> > +     if (!sdebug_no_rwlock)
-> >               read_lock(lock);
-> >  }
->
-> Is there no way we can make the spare-style __acquire/__release work for
-> clang?  That would be this and similar patterns so much better and
-> safer than the blanket __context_unsafe.
+Hi Ismaïl,
 
-__acquire/__release/etc. fake acquire/release functions do already
-work with Clang Context Analysis. I spent quite a while making them
-work because of patterns like above, and lots of macros which rely on
-them. See definition of context_lock_struct() in
-include/linux/compiler-context-analysis.h where they are implemented
-(tldr; they are "overloaded" empty inline functions which exist per
-context lock type).
+[This is a private test report for your RFC patch.]
+kernel test robot noticed the following build errors:
 
-Thanks,
--- Marco
+[auto build test ERROR on tiwai-sound/for-next]
+[also build test ERROR on tiwai-sound/for-linus linus/master v7.3-rc6 next-20261006]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Isma-l-Bahloul/ALSA-usb-add-RME-Babyface-Pro-driver-core-probe-PCM-stream/20261003-214130
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20261003194137.86176-8-i.bahloul01%40gmail.com
+patch subject: [RFC PATCH v6 7/8] ALSA: usb: babyfacepro: add the hardware DSP EQ
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261008/202610080058.z8dKl0F8-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 80cd965b6323b208519f8ab1d5ee86e4ea9862f4)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261008/202610080058.z8dKl0F8-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610080058.z8dKl0F8-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: sound/usb/babyfacepro/snd-usb-babyface-pro.ko: symbol '__hexagon_udivdi3' undefined!
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
