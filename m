@@ -1,383 +1,174 @@
-Received: from 011.lax.mailroute.net (011.lax.mailroute.net [199.89.1.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED6C41685C
-	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 20:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C950535E93C;
+	Wed,  7 Oct 2026 20:24:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791403838; cv=none; b=eJ4ISu0gyCNsW19vtEMUrdJXEw3fHEc3sc0tM1ZHchFTB8TTRSDc7IXbrKqRhZC4Nz4JZib3MJt3CeTSy6aRCUX1UL8lcrc5s/28fzrgzmpcwMVNU+QzhGsFp+FftjbT54ONhAMRlZyWS7haMdJJR8sFPADL7EuqPoOuF6OEyWU=
+	t=1791404663; cv=none; b=pjJ5J1vTnbIx9HFuLwVeKmgp9uwfEuXePXcrrnpulbJJ1Qx2B+SxQ/ygKljhWwe8tw3fSWZ35D20FlvbAzEO7AcTeup9qttqeG0gbOd4SII5qf9In2ZV1DAzPSuykF4ikT8h30TBhWEX0rU0w9q10ruVI9+WmpbLhvQg8mBqA90=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791403838; c=relaxed/simple;
-	bh=Tcno/iCJyHeHq1vpc4Y7zIIm3Gc1BTssIyu+tQMw7YM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o6FRCHvTGUT6xqwdQ3m6AI7KNOFkI9/lGiyBNYzvI+g5FkHBi67iOxNIoDjd3p+qs9+dk0W1ajyyE8+63hJbPjDmuFa4w/kEZnOLmIFK8kcNp3FFfa4J9kMAq2J4ZQUW72U/SsSE9n6M/ZIDArQcNOTshkSbtv4qzoZg1aqPH4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=cBBWUH8Q; arc=none smtp.client-ip=199.89.1.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1791404663; c=relaxed/simple;
+	bh=N9l9ulXCPIg0gc7OkBVvGgXXOJRlDx+6Pbz/KdymAdM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=admxzYGky1oXTBt+w9W9ZAKkWwbCFOJs05Ip8azmmyKsyRsNZpGaW48zTt9VEWko7ZM7L1OK2Irlnl60u7jje4x4oMGI89EqQHfNS4boZQbnsoKag9ng7/Dd72JgULKPdbjjxBwb/Pv8sZy1KybUJ/HDwQZnoBL8h5J1IWEg6xQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SHOoH7+4; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="cBBWUH8Q"
-Received: from localhost (localhost [127.0.0.1])
-	by 011.lax.mailroute.net (Postfix) with ESMTP id 4j0PPm6Sbyz1XLwWr;
-	Wed,  7 Oct 2026 20:10:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1791403830; x=1793995831; bh=jzZ+KAvZg+H0LXnTr/qiJovo
-	qPGSdqJMAl2y7KfzeRI=; b=cBBWUH8Qag7RO/+HUSa1INIK9fcDKWqUZ427Y/Ua
-	RIWP9ejdA7S40W4CrusIe67Co8/Qdc/9YgILaxHMUtgxYOxOq9A7XRV9fJLTNXqc
-	X5IYPoDNcIcLDYQzyCurKM9zXf7rAGmG/ToWmZcL9R/ca5fFrmg7CovoP3sJbGOG
-	MySi0I8cQh1Oi2nxhYDAdmRp1v/jwfd9II31AY3wS6tuc0YF9uHxNkl0NlRxxuvF
-	rBaprLvmSBo1EQPACzFdMr8DzsBroSO+dv1fpzioA3pErdRqb4nfG2gfcAXtsJbW
-	hcGVWfTYWYP8nRVtfkhERdE6AM95h94bPFWIZEHOWAr1WQ==
-X-Virus-Scanned: by MailRoute
-Received: from 011.lax.mailroute.net ([127.0.0.1])
- by localhost (011.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id k0r9hNA3pJjh; Wed,  7 Oct 2026 20:10:30 +0000 (UTC)
-Received: from [IPV6:2a00:79e0:2ed2:d:d224:603c:1a28:dc62] (unknown [104.135.182.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 011.lax.mailroute.net (Postfix) with ESMTPSA id 4j0PPc697Vz1XM0pk;
-	Wed,  7 Oct 2026 20:10:28 +0000 (UTC)
-Message-ID: <cf697d5c-1b5d-4e3a-983b-f710eb41b5b6@acm.org>
-Date: Wed, 7 Oct 2026 13:10:27 -0700
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SHOoH7+4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791404661; x=1822940661;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N9l9ulXCPIg0gc7OkBVvGgXXOJRlDx+6Pbz/KdymAdM=;
+  b=SHOoH7+4VQydMN8Vyb6BxbUZ0Df462MwBNM14q3eo0WcXbsEi6XwkKNG
+   PoezOQr4IhiigztkDhq1B0aGTLIORR9UHliYN4sjVkLRuka0bL/oCiKIP
+   y0wLghqNBzZ3K1YOfOCw3OG3cgd9zpNJzisVTquctv5eUTXBjSeF3IYKB
+   b99CzuS1X1A8BAQ4owjD5X6XW1Rq87HAt7JGksYQWBvQcRTQZ8kaCtTUt
+   SXSHchELN86lXZWBNjV3G/8WUGQQDR+g4Wz74T31eO2/GqQkvM89qODoa
+   ZLtYw4YflN9EKv500/SYJrHFkYf3jE0A+mFVYMH85X1dFpmNjxpc0a8Nw
+   Q==;
+X-CSE-ConnectionGUID: 2c1KrD/OSXy9datTPi+RyQ==
+X-CSE-MsgGUID: AVW3DR+fRm+7iao9NZyznw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="63069"
+X-IronPort-AV: E=Sophos;i="6.27,144,1787036400"; 
+   d="scan'208";a="63069"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2026 13:24:21 -0700
+X-CSE-ConnectionGUID: WcP3pJg/QSGJ+Mlx0LNeSA==
+X-CSE-MsgGUID: bqLGbVI7S1mkD+FD7SJiBw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,144,1787036400"; 
+   d="scan'208";a="315569616"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 07 Oct 2026 13:24:18 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xEYBS-000000003VM-41fP;
+	Wed, 07 Oct 2026 20:24:14 +0000
+Date: Thu, 8 Oct 2026 04:24:14 +0800
+From: kernel test robot <lkp@intel.com>
+To: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Muhammad Usama Anjum <usama.anjum@arm.com>,
+	linux-s390@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v8 14/15] mm/kasan: Introduce helpers for lazy MMU mode
+ sanitizer
+Message-ID: <202610080445.ZlyXFoBC-lkp@intel.com>
+References: <e42d9f02ec1f8478a50fce424b95d0e7ff6a359f.1791365932.git.agordeev@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/8] scsi: scsi_debug: Improve lock context annotations
-To: Christoph Hellwig <hch@lst.de>
-Cc: "Martin K . Petersen" <martin.petersen@oracle.com>,
- linux-scsi@vger.kernel.org, John Garry <john.g.garry@oracle.com>,
- Marco Elver <elver@google.com>, llvm@lists.linux.dev
-References: <cover.1791349129.git.bvanassche@acm.org>
- <765bf3683555f3d7fbe8510cde1eb50d5f6d0c6f.1791349129.git.bvanassche@acm.org>
- <20261007131411.GE30647@lst.de>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20261007131411.GE30647@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e42d9f02ec1f8478a50fce424b95d0e7ff6a359f.1791365932.git.agordeev@linux.ibm.com>
 
-On 10/7/26 6:14 AM, Christoph Hellwig wrote:
-> On Tue, Oct 06, 2026 at 10:07:29PM -0700, Bart Van Assche wrote:
->>   static inline void
->>   sdeb_read_lock(rwlock_t *lock)
->> +	__acquires_shared(lock)
->> +	__context_unsafe(/*conditional locking*/)
->>   {
->> -	if (sdebug_no_rwlock)
->> -		__acquire(lock);
->> -	else
->> +	if (!sdebug_no_rwlock)
->>   		read_lock(lock);
->>   }
-> 
-> Is there no way we can make the spare-style __acquire/__release work for
-> clang?  That would be this and similar patterns so much better and
-> safer than the blanket __context_unsafe.
+Hi Alexander,
 
-Hi Christoph,
+kernel test robot noticed the following build errors:
 
-Do you like the alternative below better? If so then I will replace
-patch 7/8 with the changes below.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.3-rc6]
+[cannot apply to akpm-mm/mm-everything s390/features kvms390/next next-20261006]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
+url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Gordeev/mm-introduce-hw_pte_t-for-PTE-table-storage/20261007-134144
+base:   linus/master
+patch link:    https://lore.kernel.org/r/e42d9f02ec1f8478a50fce424b95d0e7ff6a359f.1791365932.git.agordeev%40linux.ibm.com
+patch subject: [PATCH v8 14/15] mm/kasan: Introduce helpers for lazy MMU mode sanitizer
+config: mips-bmips_stb_defconfig (https://download.01.org/0day-ci/archive/20261008/202610080445.ZlyXFoBC-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261008/202610080445.ZlyXFoBC-lkp@intel.com/reproduce)
 
-Bart.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610080445.ZlyXFoBC-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
 
-diff --git a/drivers/scsi/scsi_debug.c b/drivers/scsi/scsi_debug.c
-index b339f022af26..e8d8b693751e 100644
---- a/drivers/scsi/scsi_debug.c
-+++ b/drivers/scsi/scsi_debug.c
-@@ -4052,42 +4052,47 @@ static inline struct sdeb_store_info 
-*devip2sip(struct sdebug_dev_info *devip,
-
-  static inline void
-  sdeb_read_lock(rwlock_t *lock)
-+	__acquires_shared(lock)
-  {
--	if (sdebug_no_rwlock)
--		__acquire(lock);
--	else
-+	if (!sdebug_no_rwlock)
-  		read_lock(lock);
-+	else
-+		__acquire_shared(lock);
-  }
-
-  static inline void
-  sdeb_read_unlock(rwlock_t *lock)
-+	__releases_shared(lock)
-  {
--	if (sdebug_no_rwlock)
--		__release(lock);
--	else
-+	if (!sdebug_no_rwlock)
-  		read_unlock(lock);
-+	else
-+		__release_shared(lock);
-  }
-
-  static inline void
-  sdeb_write_lock(rwlock_t *lock)
-+	__acquires(lock)
-  {
--	if (sdebug_no_rwlock)
--		__acquire(lock);
--	else
-+	if (!sdebug_no_rwlock)
-  		write_lock(lock);
-+	else
-+		__acquire(lock);
-  }
-
-  static inline void
-  sdeb_write_unlock(rwlock_t *lock)
-+	__releases(lock)
-  {
--	if (sdebug_no_rwlock)
--		__release(lock);
--	else
-+	if (!sdebug_no_rwlock)
-  		write_unlock(lock);
-+	else
-+		__release(lock);
-  }
-
-  static inline void
-  sdeb_data_read_lock(struct sdeb_store_info *sip)
-+	__acquires_shared(&sip->macc_data_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4096,6 +4101,7 @@ sdeb_data_read_lock(struct sdeb_store_info *sip)
-
-  static inline void
-  sdeb_data_read_unlock(struct sdeb_store_info *sip)
-+	__releases_shared(&sip->macc_data_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4104,6 +4110,7 @@ sdeb_data_read_unlock(struct sdeb_store_info *sip)
-
-  static inline void
-  sdeb_data_write_lock(struct sdeb_store_info *sip)
-+	__acquires(&sip->macc_data_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4112,6 +4119,7 @@ sdeb_data_write_lock(struct sdeb_store_info *sip)
-
-  static inline void
-  sdeb_data_write_unlock(struct sdeb_store_info *sip)
-+	__releases(&sip->macc_data_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4120,6 +4128,7 @@ sdeb_data_write_unlock(struct sdeb_store_info *sip)
-
-  static inline void
-  sdeb_data_sector_read_lock(struct sdeb_store_info *sip)
-+	__acquires_shared(&sip->macc_sector_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4128,6 +4137,7 @@ sdeb_data_sector_read_lock(struct sdeb_store_info 
-*sip)
-
-  static inline void
-  sdeb_data_sector_read_unlock(struct sdeb_store_info *sip)
-+	__releases_shared(&sip->macc_sector_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4136,6 +4146,7 @@ sdeb_data_sector_read_unlock(struct 
-sdeb_store_info *sip)
-
-  static inline void
-  sdeb_data_sector_write_lock(struct sdeb_store_info *sip)
-+	__acquires(&sip->macc_sector_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4144,6 +4155,7 @@ sdeb_data_sector_write_lock(struct sdeb_store_info 
-*sip)
-
-  static inline void
-  sdeb_data_sector_write_unlock(struct sdeb_store_info *sip)
-+	__releases(&sip->macc_sector_lck)
-  {
-  	BUG_ON(!sip);
-
-@@ -4165,102 +4177,122 @@ sdeb_data_sector_write_unlock(struct 
-sdeb_store_info *sip)
-
-  static inline void
-  sdeb_data_lock(struct sdeb_store_info *sip, bool atomic)
-+	__acquires(&sip->macc_data_lck)
-  {
--	if (atomic)
-+	if (atomic) {
-  		sdeb_data_write_lock(sip);
--	else
-+	} else {
-  		sdeb_data_read_lock(sip);
-+		__release_shared(&sip->macc_data_lck);
-+		__acquire(&sip->macc_data_lck);
-+	}
-  }
-
-  static inline void
-  sdeb_data_unlock(struct sdeb_store_info *sip, bool atomic)
-+	__releases(&sip->macc_data_lck)
-  {
--	if (atomic)
-+	if (atomic) {
-  		sdeb_data_write_unlock(sip);
--	else
-+	} else {
-+		__release(&sip->macc_data_lck);
-+		__acquire_shared(&sip->macc_data_lck);
-  		sdeb_data_read_unlock(sip);
-+	}
-  }
-
-  /* Allow many reads but only 1x write per sector */
-  static inline void
-  sdeb_data_sector_lock(struct sdeb_store_info *sip, bool do_write)
-+	__acquires(&sip->macc_sector_lck)
-  {
--	if (do_write)
-+	if (do_write) {
-  		sdeb_data_sector_write_lock(sip);
--	else
-+	} else {
-  		sdeb_data_sector_read_lock(sip);
-+		__release_shared(&sip->macc_sector_lck);
-+		__acquire(&sip->macc_sector_lck);
-+	}
-  }
-
-  static inline void
-  sdeb_data_sector_unlock(struct sdeb_store_info *sip, bool do_write)
-+	__releases(&sip->macc_sector_lck)
-  {
--	if (do_write)
-+	if (do_write) {
-  		sdeb_data_sector_write_unlock(sip);
--	else
-+	} else {
-+		__release(&sip->macc_sector_lck);
-+		__acquire_shared(&sip->macc_sector_lck);
-  		sdeb_data_sector_read_unlock(sip);
-+	}
-  }
-
-  static inline void
-  sdeb_meta_read_lock(struct sdeb_store_info *sip)
-+	__acquires_shared(&sip->macc_meta_lck)
-  {
--	if (sdebug_no_rwlock) {
--		if (sip)
--			__acquire(&sip->macc_meta_lck);
--		else
--			__acquire(&sdeb_fake_rw_lck);
--	} else {
--		if (sip)
-+	if (!sdebug_no_rwlock) {
-+		if (sip) {
-  			read_lock(&sip->macc_meta_lck);
--		else
-+		} else {
-  			read_lock(&sdeb_fake_rw_lck);
-+			__release_shared(&sdeb_fake_rw_lck);
-+			__acquire_shared(&sip->macc_meta_lck);
-+		}
-+	} else {
-+		__acquire_shared(&sip->macc_meta_lck);
-  	}
-  }
-
-  static inline void
-  sdeb_meta_read_unlock(struct sdeb_store_info *sip)
-+	__releases_shared(&sip->macc_meta_lck)
-  {
--	if (sdebug_no_rwlock) {
--		if (sip)
--			__release(&sip->macc_meta_lck);
--		else
--			__release(&sdeb_fake_rw_lck);
--	} else {
--		if (sip)
-+	if (!sdebug_no_rwlock) {
-+		if (sip) {
-  			read_unlock(&sip->macc_meta_lck);
--		else
-+		} else {
-+			__acquire_shared(&sdeb_fake_rw_lck);
-  			read_unlock(&sdeb_fake_rw_lck);
-+			__release_shared(&sip->macc_meta_lck);
-+		}
-+	} else {
-+		__release_shared(&sip->macc_meta_lck);
-  	}
-  }
-
-  static inline void
-  sdeb_meta_write_lock(struct sdeb_store_info *sip)
-+	__acquires(&sip->macc_meta_lck)
-  {
--	if (sdebug_no_rwlock) {
--		if (sip)
--			__acquire(&sip->macc_meta_lck);
--		else
--			__acquire(&sdeb_fake_rw_lck);
--	} else {
--		if (sip)
-+	if (!sdebug_no_rwlock) {
-+		if (sip) {
-  			write_lock(&sip->macc_meta_lck);
--		else
-+		} else {
-  			write_lock(&sdeb_fake_rw_lck);
-+			__release(&sdeb_fake_rw_lck);
-+			__acquire(&sip->macc_meta_lck);
-+		}
-+	} else {
-+		__acquire(&sip->macc_meta_lck);
-  	}
-  }
-
-  static inline void
-  sdeb_meta_write_unlock(struct sdeb_store_info *sip)
-+	__releases(&sip->macc_meta_lck)
-  {
--	if (sdebug_no_rwlock) {
--		if (sip)
--			__release(&sip->macc_meta_lck);
--		else
--			__release(&sdeb_fake_rw_lck);
--	} else {
--		if (sip)
-+	if (!sdebug_no_rwlock) {
-+		if (sip) {
-  			write_unlock(&sip->macc_meta_lck);
--		else
-+		} else {
-+			__acquire(&sdeb_fake_rw_lck);
-  			write_unlock(&sdeb_fake_rw_lck);
-+			__release(&sip->macc_meta_lck);
-+		}
-+	} else {
-+		__release(&sip->macc_meta_lck);
-  	}
-  }
+   In file included from arch/mips/kernel/asm-offsets.c:14:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:45:
+   In file included from include/linux/slab.h:276:
+   In file included from include/linux/kasan.h:9:
+   In file included from include/linux/pgtable.h:6:
+   In file included from arch/mips/include/asm/pgtable.h:14:
+   In file included from arch/mips/include/asm/pgtable-32.h:22:
+   In file included from arch/mips/include/asm/highmem.h:24:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/mips/include/asm/hardirq.h:16:
+   In file included from include/asm-generic/hardirq.h:17:
+   include/linux/irq.h:1211:2: error: call to undeclared function 'kfree'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1211 |         kfree(gc);
+         |         ^
+   In file included from arch/mips/kernel/asm-offsets.c:14:
+   In file included from include/linux/compat.h:17:
+   In file included from include/linux/fs.h:45:
+>> include/linux/slab.h:595:6: error: conflicting types for 'kfree'
+     595 | void kfree(const void *objp);
+         |      ^
+   include/linux/irq.h:1211:2: note: previous implicit declaration is here
+    1211 |         kfree(gc);
+         |         ^
+   In file included from arch/mips/kernel/asm-offsets.c:26:
+   In file included from include/linux/kvm_host.h:5:
+   In file included from include/linux/entry-virt.h:7:
+   In file included from include/linux/syscalls.h:95:
+   In file included from include/trace/syscall.h:7:
+   In file included from include/linux/trace_events.h:6:
+   In file included from include/linux/ring_buffer.h:6:
+   include/linux/poll.h:134:27: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                         ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   include/linux/poll.h:134:39: warning: division by zero is undefined [-Wdivision-by-zero]
+     134 |                 M(RDNORM) | M(RDBAND) | M(WRNORM) | M(WRBAND) |
+         |                                                     ^~~~~~~~~
+   include/linux/poll.h:132:32: note: expanded from macro 'M'
+     132 | #define M(X) (__force __poll_t)__MAP(val, POLL##X, (__force __u16)EPOLL##X)
+         |                                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/poll.h:118:51: note: expanded from macro '__MAP'
+     118 |         (from < to ? (v & from) * (to/from) : (v & from) / (from/to))
+         |                                                          ^ ~~~~~~~~~
+   2 warnings and 2 errors generated.
+   make[3]: *** [scripts/Makefile.build:185: arch/mips/kernel/asm-offsets.s] Error 1
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1425: prepare0] Error 2
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
+vim +/kfree +595 include/linux/slab.h
+
+7bd230a26648ac Suren Baghdasaryan 2024-03-21  594  
+72d67229f522e3 Kees Cook          2021-11-05 @595  void kfree(const void *objp);
+af92793e52c3a9 Alexei Starovoitov 2025-09-08  596  void kfree_nolock(const void *objp);
+72d67229f522e3 Kees Cook          2021-11-05  597  void kfree_sensitive(const void *objp);
+05a940656e1eb2 Kees Cook          2022-09-23  598  
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
