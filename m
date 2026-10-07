@@ -1,144 +1,89 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97C401E0E14
-	for <llvm@lists.linux.dev>; Wed,  7 Oct 2026 00:00:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791331244; cv=pass; b=Vztw/Zv6MKMsP+AYn4P3Lqzbq1CBVw/id6nnlWhojpq0lo1bnRN1PywzWISXuAP84mfjjehMS9JhzWQZQ8fJWYf1QNqwnOwLdexTZQOGNo9EBDfQomz8+bgUKMzD1P6gOl12UMqdywYy/d9Sr/z/flBEZDZKKKLBy6ao9FpF2sI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791331244; c=relaxed/simple;
-	bh=PIdZWKk7UsAxCtN4qvwS3WBKKGf+fKTzUBUtZtSSqJY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rl4E7piLp01LlG9Iyj2Jb1DL4DMVdi4iZ6wyRRNFMsj/gDBk5+nx5aODHphxHJh2mu0mWiIX36RB27TaABD9V7GeJQ0H/+9cvVZbzlQNMT/+OjUAN/99/WjBfQU+GD3+tbh2vlLOKrYzWujkI+fgNxunFjX4Rf6zM5I0/U0mWdQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WTNELbrP; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C143360EF2;
+	Wed,  7 Oct 2026 02:30:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791340257; cv=none; b=A5L8l5fjQ4SrDCYojLmxUlPXxQ/IqZhdEJjh8pLNRxiJ+fbl2DPMFFNp13FWgw7E+uTuBT0hlyKPQLrLANJ+XBSq7GjEUcpj62QBdsDkcuy6K0GHNIro3fEkH2H8RcNL9iLkaUindZcehenNvP2avVJVV86UXLgG6Nf4rys2cOM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791340257; c=relaxed/simple;
+	bh=8tVV+/gTeRhfiqd4sBW3kFM6n9rW/QNFT1XXavd2IfQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-Id; b=ror171Ca+MQLf3IjEdxApymB0IQ3bMvx54mFwN/00eEHrzUTVgT9fwd9jfW7Zje52c4MMzeMcRngxiip5WmRdS9a6M+DMsHzXTPJgZai/SlfzBVYkjNVoZJ3vL42aoVM/bNhh5MYEz+wTLxEvEyLrGkV2FXgL0GDCQd9riXYoPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J9Fpa3Lc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WTNELbrP"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6a0a4aa99bdso1734785a12.1
-        for <llvm@lists.linux.dev>; Tue, 06 Oct 2026 17:00:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791331242; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AhNp2BB2lJdrNMDMsK4tTlE+YJ9mhPO9dXGjXdMl1XgLMMmsX3tqQtSmrV6VYm8Sm1
-         dNS5/nRKPYc+IodT3tZyMwIsX/licDWBBKbQRBKyCJbQ1sPGHaVSmIHHWrzn0nOdhuuA
-         STdl75+rFtNPmjyNRL1EchM7jiksWKBF8ejW2J7cLuB9h56xHy+iHWsigHMhtT/xhdks
-         DJwd3e92NRjuhg5XpWFVpMHZrhnk0fDIgRtMV7njYSWlv3vX4sFnBG0zNcc65ByCDqeo
-         fggXcP0v0McC2/7pFcZ0aE/i9C8gXfc7RSCOAEWZkLNoKiKf3ra//xlmdZcedpNcec0q
-         VHlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NCYMrF1COiQ5G1aO6E9q5ZQQkQbwsyS+9CvbT88FRDo=;
-        fh=D5C5XLNtFLpz7jBL9Xd7+9xtqaMc9jNsFcteI7JF7UM=;
-        b=GaykMTHaumiFvwumblnMCY0QPb/evRN+8iWjKHW46xE5BxDFu2m2wzbLFwl0iKfV0H
-         XZgpZshUe9t3iIpwXidhj+GUmFgWsTonTE0Lnxit0rDjdkoGSYQQJ3nNuTDTZSnhD++M
-         BVTlX2irb7D/Z7zMGTy60/YaI1Jl8b4z/j5PNs8jixs16qENJRxKj9SS3INgjEAerp5V
-         QcIdLK/c7cQjt2JLC50Ebt3hR9fr8CRhNgwF08ERjwtH5UqYFi7IRTtjdTNqQImMiXO2
-         4ZRJzJyYOr+2b0XipVcXTHzqElO+hxsDrw0k1aUaD9HzaDzujBiJ3AJmzfSsW6jKt6hW
-         1MLA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791331242; x=1791936042; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NCYMrF1COiQ5G1aO6E9q5ZQQkQbwsyS+9CvbT88FRDo=;
-        b=WTNELbrP84j2GW5vQ+6zyTBvnWFC29jtVwaAVBCrtffKa2z1OSls3annPPdw8GNmoO
-         KlcTI/UkYmuNu05bivQoqQeonoKiPxUedSdbquUWSFkVe+XqO/ud0S2o+wvSAvgTAi6w
-         KMddMDrxmXq4KR/4CfY0AjGwyzgmxonH91Sr5Q8lD3fOX55HyAzsZFtP0e9oK/0ITOAw
-         y2KiA6VLBAwLOh02WeeBJ0PJE+M0Y/Trf4SuHOLSbrtkcMqcZS/9hJnHDmnEqh8vJwOd
-         vM6MjPkbLbJ2syRIBeHtwKJ0Qv1B0j/V5C8geFFvTUpLJZ00HOXV7DjYN4OUskJy0Z8g
-         s8Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791331242; x=1791936042;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NCYMrF1COiQ5G1aO6E9q5ZQQkQbwsyS+9CvbT88FRDo=;
-        b=LXWj6G4sMshhj3/lGMcDJI+Bm9efBPfR1fd3Xb8CzLqstHL3jzocWzmsp80FV/eszL
-         eJ72i1NufafSi2gILNLjlLIqqaJ2bV9WJaI1Ud6lZI6FymTrewkpvpRdSH8fgFiQ21Fv
-         OOTE/xsjMjE83qPSlZ4UfQnKF+A26ZmLaIUmborlS+2EZhcHze086rlpd9hzaNYJ4WhQ
-         6hyjeect8+4hoJvVf2/22aB6dgBdbJjrFC8DrUaKStVk9fzCSUhbCTDgbw9VtDb+8KJr
-         TUoOHiRrmzOyna56yLQRtTIpQbThXOg78UMjgQFp5FDRGT+cyeaYTMbkQyvy639RA59T
-         HvcQ==
-X-Forwarded-Encrypted: i=1; AKwUvByS3w/N8mU1KFUTnCnZ5zWmN/0iCW93+2UO4VwTtFLYFUA7ZmNEvi1YOhbCIUs/vAkDlU9P@lists.linux.dev
-X-Gm-Message-State: AFq9FYIeqLJ6qS4m/YZxBpenaWxyP4tEk8KrfdMR0p73Ho6OJicnIPmQ
-	b3s9r78YqArEvYDpk9sTpHd5AkyEngxIpRFFoDaSt9UyBrzcDQgVL7kP5cSsB2Gl68ed3KbGkQx
-	Vlh8/HBArqsAj+AkemRuxyK/Qgj39RLE=
-X-Gm-Gg: AYBFou1s99Qgd9aUhivpJ5BeZXkVv6WQIwBl/vGBN1hS/6IUmadsQ8mbiT7FqakaNKL
-	5trNJeRJcaSBGHRnGWB1MCWeQjlmclB5AwG7f4h1A69dXbdjRAPHLi44vTgTz2ELLnzLTbwBJM0
-	AoL/9y2rJzWIDi9U1xuwIRnoXfdHMxAZ6IVWBRXcpd7OXMBfkAxlA/gjpMZ0CsM6D4RwmJku/PK
-	KAqGN01OPcgUdzBJwYabbKA6RlagZWZtEk/GQ/5Un0CK2XeBh7UPUY1tc51tLA31QnRfc8yE74q
-	jLSvx7S07hGbRCFxhryjjbzRza9rBuqZTL1VzJmotpBmAuf5SJK/B4vpM5SozoVenkCk34tbfiV
-	/yzhUMsU23RXO4hKuXmw0IM2xPEoPhHQN8RNjl4fo/0nb5IRR2+UPMuoogaIkaUB45YiilvyeQS
-	Q2T/GNRGuVvAJGRxZuk6AaWGbZwm0to2VBhupCQnH32WN8XkGOTmcZQK3ENVFiAEn2Qg==
-X-Received: by 2002:a05:6402:13d2:b0:6aa:fc60:60d0 with SMTP id
- 4fb4d7f45d1cf-6aff47a079cmr524195a12.33.1791331241682; Tue, 06 Oct 2026
- 17:00:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J9Fpa3Lc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04BD71F0089B;
+	Wed,  7 Oct 2026 02:30:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791340255;
+	bh=u9Jzggo5Sk1RIZ8WfB+NnbFsVZN8V/kovGtc4d+jfE4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=J9Fpa3LcaeRJJ0NN9pOs90uK8L5DfSIm6mAjBw3gmroRxWWWbxFb2QBY7xicSVbTY
+	 kbT+6EbbrPeXqPTzIZSl5/gq1BAb/eOayV7XE6ey3RwmBfWTB/v8VEyyTyoAPPCrA0
+	 cri8dcOXQ4A0qnYtSKy+NgeB4uPoFvN8orlfSO6E0eSFWRtrdwF2a402XVtWbKvh06
+	 lRSjh3VEzncBxVqPnfDnS6lW0nafLoHm9hnGRK/TzY+qZEDFBRoQzJvP8LcOcuGEQ4
+	 hQFNwpwttAKu5D3ATtRtUDpP6pXX3rhBtplR2oet7NU6iXQYKvGbkYwoqZeZiWZCOd
+	 Nvx4c87Puw11A==
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: chuck@wolber.net
+Cc: Marco Elver <elver@google.com>, kasan-dev@googlegroups.com,
+ nathan@kernel.org, akpm@linux-foundation.org, anton.ivanov@cambridgegreys.com,
+ oberpar@linux.ibm.com, ardb@kernel.org, arnd@arndb.de, bhelgaas@google.com,
+ bp@alien8.de, dave.hansen@linux.intel.com, dvyukov@google.com, hpa@zytor.com,
+ jinghao7@illinois.edu, johannes@sipsolutions.net, jpoimboe@kernel.org,
+ justinstitt@google.com, kees@kernel.org, kent.overstreet@linux.dev,
+ linux-arch@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-um@lists.infradead.org,
+ llvm@lists.linux.dev, luto@kernel.org, marinov@illinois.edu,
+ masahiroy@kernel.org, maskray@google.com, mathieu.desnoyers@efficios.com,
+ mhiramat@kernel.org, mingo@redhat.com, morbo@google.com,
+ Nick Desaulniers <ndesaulniers@google.com>,
+ "Paul E. McKenney" <paulmck@kernel.org>, richard@nod.at,
+ Steven Rostedt <rostedt@goodmis.org>, samitolvanen@google.com,
+ tglx@linutronix.de, tingxur@illinois.edu, tyxu@illinois.edu,
+ wentaoz5@illinois.edu, x86@kernel.org, peterz@infradead.org,
+ Sasha Levin <sashal@kernel.org>, Aleksandr Nogikh <nogikh@google.com>,
+ Taras Madan <tarasmadan@google.com>, Alexander Potapenko <glider@google.com>
+Subject: Re: [PROPOSAL] Replace gcov and kcov with llvm-cov
+Date: Wed, 07 Oct 2026 02:30:42 +0000
+In-Reply-To: <41913a77-5c57-4967-8166-765dd5dde1bf@app.fastmail.com>
+References: 00ed0b57-ad05-4c5d-b152-7c81df94b23a@app.fastmail.com
+ CANpmjNOaykC4McAj=gZghqPSQc9aGBP_CjgKmp3n2yjeJTxDSA@mail.gmail.com
+ <41913a77-5c57-4967-8166-765dd5dde1bf@app.fastmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261005203930.246598-1-rosenp@gmail.com> <CALMQjD-udSokCKS07VFWauBQzac5BTPJqbORhskxgddsuX1vLw@mail.gmail.com>
- <20261006083103.GA3041473@ax162>
-In-Reply-To: <20261006083103.GA3041473@ax162>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Tue, 6 Oct 2026 17:00:30 -0700
-X-Gm-Features: AclHuK9oSm_T0yaj7kOWt6PgPFJ1d7MNcK17mxS5H3gv7-Ov32c6fYi7L19EGq0
-Message-ID: <CAKxU2N-ZE7dwiGzVgxDYFvm2R0BE0nah2WehGcjpym=Kq68dYw@mail.gmail.com>
-Subject: Re: [PATCH] sparc64: Define p4d_page() instead of stubbing it to NULL
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kjetil Oftedal <oftedal@gmail.com>, sparclinux@vger.kernel.org, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:CLANG/LLVM BUILD SUPPORT:Keyword:b(?i:clang|llvm)b" <llvm@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <20261007023045.04BD71F0089B@smtp.kernel.org>
 
-On Tue, Oct 6, 2026 at 1:31=E2=80=AFAM Nathan Chancellor <nathan@kernel.org=
-> wrote:
->
-> On Tue, Oct 06, 2026 at 09:59:19AM +0200, Kjetil Oftedal wrote:
-> > On Mon, 5 Oct 2026 at 22:41, Rosen Penev <rosenp@gmail.com> wrote:
-> > >
-> > > A sparc64 allmodconfig build with LLVM fails in vmalloc_to_page():
-> > >
-> > >   mm/vmalloc.c: error: performing pointer arithmetic on a null pointe=
-r
-> > >   has undefined behavior [-Werror,-Wnull-pointer-arithmetic]
-> > >
-> > > sparc64 defines p4d_page() as NULL, on the assumption that it is only
-> > > used by stubbed out hugetlb gup code. Generic code now uses it in
-> > > vmalloc_to_page(), ptdump and KASAN. In vmalloc_to_page() the NULL is
-> > > used in pointer arithmetic, which clang diagnoses even though the
-> > > branch is unreachable on sparc64.
-> > >
+On Tue, 06 Oct 2026 16:27:11 +0000, Chuck Wolber <chuck@wolber.net> wrote:
+> On Tue, Oct 6, 2026, at 4:10 PM, Marco Elver wrote:
+> > On Tue, 6 Oct 2026 at 17:14, Chuck Wolber <chuck@wolber.net> wrote:
+
+> >> If there is a desire to take this in pieces or implement other
+> >> intermediate steps, let me know. Otherwise I can generate a
+> >> monolithic set all at once.
+> >>
+> >> [1] https://lore.kernel.org/lkml/20240905043245.1389509-1-wentaoz5@illinois.edu/
 > >
-> > Has this been reported as a bug to the clang project?
-> > As it throwing an error on a rather obviously unreachable branch.
+> > llvm-cov is generally useful to have; llvm-cov is closest to gcov, so
+> > that might make sense to replace.
 >
-> Technically the error part is self-inflicted on the part of the kernel
-> since allmodconfig enables CONFIG_WERROR. That said, while it might be
-> nice for the compiler not to warn in any case of dead code, that's just
-> not how it works for either GCC or clang (none of these should be
-> visible if that were the case):
-LLM suggests as an alternative:
+> Swapping llvm-cov for gcov to start with is pretty straightforward, so I
+> can aim my initial patch set there.
 
-/* sparc64 has no p4d leaf mappings, so this is never called */
-static inline struct page *p4d_page(p4d_t p4d)
-{
-      return NULL;
-}
+Hmm, is it necessary to remove gcov? Would it be difficult to simply add
+support for llvm-cov and enable (make kconfig selectable) one or the other
+depending on the compiler?
 
-Not sure how to proceed.
->   https://godbolt.org/z/K3nfW4n5f
->
-> --
-> Cheers,
-> Nathan
+Thanks,
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
