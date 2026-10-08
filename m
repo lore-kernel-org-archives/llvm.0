@@ -1,59 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33E33B4EAB;
-	Thu,  8 Oct 2026 17:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58AB842050;
+	Thu,  8 Oct 2026 17:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791481516; cv=none; b=n4S0uS61Jbr6tmeOb9RwTo2ve66j/ImsUxGi+VCvNzMCUz8fV6NIEZC2g6sq6XR54eo+EOIy0yWVt2wVHQkxyqw4GKVB4WdTiPLIUZoIKi5aFtrryhOd9SYcBwAL/MWM8TLGRbv1eFALfrePK3E7icFbIAs4Z0jxensHrpBIknc=
+	t=1791481904; cv=none; b=k+stXpkj2w18cGFGJiv2dP+/GMNoP3IlZ+ywqgmq3ssd3cJuIjxtksoHOFfkFZUWoXMLJBg5mRAzc6Rgl+7nEQG64uytX8vvr1ZhXGnFR1lUneTOMhfeLY9mJtBXbeKzJBLIGN7fXwMroyOW0baCI8wEjpmwvY/ud4pHIeoqgUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791481516; c=relaxed/simple;
-	bh=51aa0ttBuBa51YhcQTg/bGmdJ3OKYBtXypCqo+SQeRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=rTfA/aZviyeHlbfec36xRe9X13TVBTfhF9KN/LJ3E/aBS/LtQW4fh1X+kqi29WdT9CT/OrP+qSDivyvH2ka0vMf7pi/npoE6aH5HiJKye0YkZTZfcBNrCV15rYU45LzTRGa7q+oV0BrMo7YZvhmBKQwNTe2DKjnYXQZ7VeuMEUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=evk1gj8h; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791481904; c=relaxed/simple;
+	bh=rBFWQbhkH900ZEQUv0RU4iR949i2ZbAFgh+zqLo3xVE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XFpXL0lhPL7XaoGO41QPXZx1lSQlSlFQumxxvj35QymRex7bPee1UnRyMRYSiAk5bYOG1BhR9BYnj9oi+d+XmAgyloyvcRagJ1JAfSGC2Brq6nDsAt65ShnBybhBkdKXX2oTRHsZT8zV1uVvmvCxuxMbTLmJz7Ae4TU4PV7iMCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cr6aMcxY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="evk1gj8h"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791481514; x=1823017514;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=51aa0ttBuBa51YhcQTg/bGmdJ3OKYBtXypCqo+SQeRM=;
-  b=evk1gj8hmlrUWsOP8IQshj1idNRDJRtJSbeZTz0wnp0UBnj/9AGb9arm
-   8WBfn099h2FR28UP/sCNKqHk15kem4TuQwc3nbz+PdfX63U9AEqdojTBD
-   1ZGLjSIUiqenUw0UGAzHuD25LkRQnL+OYzID6ydUNYVaRWa0ONNZIheFt
-   mpoECi4ZHCv/MGLrYOxNPcvjyFazz2rKYl0FQlNnYTlrVteTSQORdYswL
-   6bOhN7INPN0q3oAbmwoPZZxqIc8AC5SZ6zGirMAi/Mx/JBWk4BbUCFIK+
-   KgsCBNDRW7nRJK6MGBZE09tEZbLIoKLLKqO7gXVbiVwVmo1gfX/Ov+AAI
-   g==;
-X-CSE-ConnectionGUID: 4K2ODENQSTmXNU4y2QoOKQ==
-X-CSE-MsgGUID: KYKAbXTLRjSb4PMnsVNS8w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="174130"
-X-IronPort-AV: E=Sophos;i="6.27,146,1787036400"; 
-   d="scan'208";a="174130"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 10:45:13 -0700
-X-CSE-ConnectionGUID: 66un1TyzShuWsRgqWGbmdQ==
-X-CSE-MsgGUID: /NeWR6PIQTamqGlGgVmWlg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,146,1787036400"; 
-   d="scan'208";a="47106"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Oct 2026 10:45:12 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xEsB3-000000004ku-152B;
-	Thu, 08 Oct 2026 17:45:09 +0000
-Date: Fri, 09 Oct 2026 01:44:34 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [stefandoesinger-zx297520:dlink 69/142]
- drivers/rpmsg/zx29_smd.c:239:52: warning: cast to smaller integer type
- 'unsigned int' from 'u8 *' (aka 'unsigned char *')
-Message-ID: <202610090126.utqNiMAt-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cr6aMcxY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43D001F000FF;
+	Thu,  8 Oct 2026 17:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791481902;
+	bh=QHmYeC2UpPFyvVtZ5YJtR7pkqTeCTUBI7PeV4rONroM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=Cr6aMcxYQHQByuaI/HcZkCnFmVrN4zG8lckY1rUcNZxPl7T6BpjdKyJYcB/EkrCZ2
+	 1jQc6J/U1JrO0aL974lLwihVJibYvKVtPv+5lbuwkXx7v6EqEfLk27x4Il/3YuoRlV
+	 dZQw06RGn0EkQpSD/Tei5nqLKlmbUFMAtFVE6eU0i66O3N9x4s5KfrIdOf+AUw1yjr
+	 SfpHf/cQFUFj7Aiu7S71xKJxV5OTjfkmbdQ0Mdc574G8Ik0FZP1KKXWt9MpYE4TTM/
+	 /PI2o5D91GunuWSRYOXLMwVJJP4W0HRcRhd92Tc7jAGt02NhEDdmhzs/P4I8gEpRYg
+	 6RGLQ+qN5+BqQ==
+Date: Thu, 8 Oct 2026 19:51:36 +0200
+From: Nathan Chancellor <nathan@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: Emerson Busson <emersonbusson@gmail.com>, mhklinux@outlook.com,
+	llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+	decui@microsoft.com, andrew+netdev@lunn.ch, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-hyperv@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH v2 10/14] hv: vmbus: pin buffer pages across UIO mmap to
+ close the reclaim race
+Message-ID: <20261008175136.GA3580170@ax162>
+References: <20261007190752.336426-11-emersonbusson@gmail.com>
+ <202610090058.hvXsWpoT-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,154 +48,43 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202610090058.hvXsWpoT-lkp@intel.com>
 
-tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
-head:   7998b6e929bb20ed66acafa33720d8e3533e1598
-commit: fcc80da512bd8aa06a383a655eaf0bed6df90b43 [69/142] more mbox stuff stuff
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261009/202610090126.utqNiMAt-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261009/202610090126.utqNiMAt-lkp@intel.com/reproduce)
+On Fri, Oct 09, 2026 at 12:49:37AM +0800, kernel test robot wrote:
+> Hi Emerson,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on char-misc/char-misc-testing]
+> [also build test WARNING on char-misc/char-misc-next char-misc/char-misc-linus linus/master v7.3-rc6 next-20261008]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Emerson-Busson/hv-vmbus-convert-ring-backing-through-the-chunk-allocator/20261007-160739
+> base:   char-misc/char-misc-testing
+> patch link:    https://lore.kernel.org/r/20261007190752.336426-11-emersonbusson%40gmail.com
+> patch subject: [PATCH v2 10/14] hv: vmbus: pin buffer pages across UIO mmap to close the reclaim race
+> config: i386-randconfig-1001-20261008 (https://download.01.org/0day-ci/archive/20261009/202610090058.hvXsWpoT-lkp@intel.com/config)
+> compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261009/202610090058.hvXsWpoT-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202610090058.hvXsWpoT-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    In file included from drivers/uio/uio_hv_generic.c:428:
+> >> drivers/uio/uio_hv_generic_mmap_test.c:36:34: warning: implicit conversion from 'u64' (aka 'unsigned long long') to 'unsigned long' changes value from 18446744073709551615 to 4294967295 [-Wconstant-conversion]
+>       36 |                            hv_uio_mmap_range_valid(8, U64_MAX, 1));
+>          |                            ~~~~~~~~~~~~~~~~~~~~~~~    ^~~~~~~
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610090126.utqNiMAt-lkp@intel.com/
+GCC also warns in the same way. Should probably be ULONG_MAX since
+'pgoff_t' is 'unsigned long'?
 
-All warnings (new ones prefixed by >>):
-
-   drivers/rpmsg/zx29_smd.c:178:13: warning: variable 'ptr' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     178 |         } else if (!send_pos) {
-         |                    ^~~~~~~~~
-   drivers/rpmsg/zx29_smd.c:193:37: note: uninitialized use occurs here
-     193 |         zx29_smd->ept.cb(&zx29_smd->rpdev, ptr, len, zx29_smd->ept.priv, RPMSG_ADDR_ANY);
-         |                                            ^~~
-   drivers/rpmsg/zx29_smd.c:178:9: note: remove the 'if' if its condition is always true
-     178 |         } else if (!send_pos) {
-         |                ^~~~~~~~~~~~~~
-     179 |                 dev_info(&zx29_smd->pdev->dev, "send_pos == 0\n");
-     180 |                 ptr = zx29_smd->data_r + zx29_smd->recv->recv_pos;
-     181 |                 len = zx29_smd->recv->size - zx29_smd->recv->recv_pos;
-     182 |         } else {
-         |           ~~~~~~
-     183 |                 dev_info(&zx29_smd->pdev->dev, "wraparound\n");
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     184 |                 len = zx29_smd->recv->size - zx29_smd->recv->recv_pos + send_pos;
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     185 |                 alloc = kzalloc(len, GFP_KERNEL);
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     186 | 
-     187 |                 memcpy(alloc, zx29_smd->data_r + zx29_smd->recv->recv_pos,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     188 |                        zx29_smd->recv->size - zx29_smd->recv->recv_pos);
-         |                        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     189 |                 memcpy(alloc + zx29_smd->recv->size - zx29_smd->recv->recv_pos, zx29_smd->data_r,
-         |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     190 |                        send_pos);
-         |                        ~~~~~~~~~~
-     191 |         }
-         |         ~
-   drivers/rpmsg/zx29_smd.c:155:9: note: initialize the variable 'ptr' to silence this warning
-     155 |         u8 *ptr, *alloc = NULL;
-         |                ^
-         |                 = NULL
->> drivers/rpmsg/zx29_smd.c:239:52: warning: cast to smaller integer type 'unsigned int' from 'u8 *' (aka 'unsigned char *') [-Wpointer-to-int-cast]
-     239 |         dev_info(&pdev->dev, "zx29_smd->data_r 0x%08x\n", (unsigned int)zx29_smd->data_r);
-         |                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/rpmsg/zx29_smd.c:262:52: warning: cast to smaller integer type 'unsigned int' from 'u8 *' (aka 'unsigned char *') [-Wpointer-to-int-cast]
-     262 |         dev_info(&pdev->dev, "zx29_smd->data_s 0x%08x\n", (unsigned int)zx29_smd->data_s);
-         |                                                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:160:67: note: expanded from macro 'dev_info'
-     160 |         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                                                          ^~~~~~~~~~~
-   include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/rpmsg/zx29_smd.c:146:13: warning: unused function 'zx29_smd_release_device' [-Wunused-function]
-     146 | static void zx29_smd_release_device(struct device *dev)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings generated.
-
-
-vim +239 drivers/rpmsg/zx29_smd.c
-
-   203	
-   204	static int zx29_smd_probe(struct platform_device *pdev)
-   205	{
-   206		struct device *dev = &pdev->dev;
-   207		struct zx29_smd *zx29_smd;
-   208		struct device_node *sram;
-   209		struct resource res;
-   210		u32 channel;
-   211		int ret;
-   212	
-   213		ret = of_property_read_u32(pdev->dev.of_node, "zte,rpmsg-channel", &channel);
-   214		if (ret) {
-   215			dev_err(&pdev->dev, "Invalid rpmsg channel entry\n");
-   216			return ret;
-   217		}
-   218	
-   219		zx29_smd = devm_kzalloc(dev, sizeof(*zx29_smd), GFP_KERNEL);
-   220		if (!zx29_smd)
-   221			return -ENOMEM;
-   222		zx29_smd->pdev = pdev;
-   223		dev_info(&pdev->dev, "Hello rpmsg\n");
-   224	
-   225		sram = of_parse_phandle(pdev->dev.of_node, "sram", 0);
-   226		if (!sram) {
-   227			dev_info(dev, "no sram\n");
-   228			return -EINVAL;
-   229		}
-   230		of_address_to_resource(sram, 0, &res);
-   231		zx29_smd->recv = devm_memremap(dev, res.start + channel * sizeof(struct zx29_channel_hdr),
-   232					       sizeof(struct zx29_channel_hdr), MEMREMAP_WB);
-   233	
-   234		if (!(zx29_smd->recv->flags & 1)) {
-   235			dev_info(&pdev->dev, "Receive channel not created by remote end\n");
-   236			return -ENODEV;
-   237		}
-   238		zx29_smd->data_r = devm_memremap(dev, zx29_smd->recv->base, zx29_smd->recv->size, MEMREMAP_WB);
- > 239		dev_info(&pdev->dev, "zx29_smd->data_r 0x%08x\n", (unsigned int)zx29_smd->data_r);
-   240	
-   241		zx29_smd->rpdev.ops = &zx29_smd_device_ops;
-   242		zx29_smd->rpdev.src = channel;
-   243		zx29_smd->rpdev.dst = channel;
-   244		zx29_smd->rpdev.announce = true;
-   245		strscpy(zx29_smd->rpdev.id.name, "rpmsg-tty", RPMSG_NAME_SIZE);
-   246		zx29_smd->rpdev.dev.parent = &pdev->dev;
-   247	
-   248		sram = of_parse_phandle(pdev->dev.of_node, "sram", 1);
-   249		if (!sram)
-   250			return -EINVAL;
-   251		of_address_to_resource(sram, 0, &res);
-   252		zx29_smd->send = devm_memremap(dev, res.start + channel * sizeof(struct zx29_channel_hdr),
-   253					       sizeof(struct zx29_channel_hdr), MEMREMAP_WB);
-   254	
-   255		/* FIXME: Create channel infrastructure. */
-   256		zx29_smd->send->base = 0x82000000;
-   257		zx29_smd->send->recv_pos = zx29_smd->send->send_pos = 0;
-   258		zx29_smd->send->size = 0x20;
-   259		zx29_smd->send->flags = 1;
-   260		zx29_smd->send->end = 0;
-   261		zx29_smd->data_s = devm_memremap(dev, zx29_smd->send->base, zx29_smd->send->size, MEMREMAP_WB);
-   262		dev_info(&pdev->dev, "zx29_smd->data_s 0x%08x\n", (unsigned int)zx29_smd->data_s);
-   263	
-   264		zx29_smd->mbox_client.dev = &pdev->dev;
-   265		zx29_smd->mbox_client.rx_callback = zx29_smd_rx_callback;
-   266		zx29_smd->mbox_client.tx_block = true;
-   267		zx29_smd->mbox_client.tx_tout = 500;
-   268		zx29_smd->mbox_client.tx_done = txdone;
-   269		zx29_smd->mbox_client.knows_txdone = false;
-   270	
-   271		return rpmsg_register_device(&zx29_smd->rpdev);
-   272	}
-   273	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Cheers,
+Nathan
