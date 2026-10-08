@@ -1,65 +1,60 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB94C45563C;
-	Thu,  8 Oct 2026 21:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DAEC48F852;
+	Thu,  8 Oct 2026 23:17:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791494317; cv=none; b=gYl0a2YqqHwUXkehXzQAbf74bfpmwim9uveWSJc7SKcNcn84KvLDJDt8VOjjcn3dzKAKMnv+mR91l7BoFCCbnLAPVKrMyDZh24R9q7gIeEx86zMPPjPreg41wVQvFUx340DrbHcQSxQiuumdHNRNa/pVtfyp5lJ1sdJJFvVfvUM=
+	t=1791501473; cv=none; b=to+peXO6M9oA9AudKC2z/VBw7ZPNMyc7VYHBSlz8UJyCbWlpzipgJTLYmcMcd4i/FjsOftr7nvKxlLrIlBb1jT6ZrZidg/xb4iJNXS0PgF3hg+z7Tx5fIUqzOHpqwvee0oOW6/MVfT+P8hrzYTSE5IoYRFv18s1ESNCkWNXA8IE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791494317; c=relaxed/simple;
-	bh=O0xRsH1+GO6yWhQ5iXZ2vAKeNw+97F5kBSTCSn41Z/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QtICxEIiETJq+w+B2Z3oP1FDXQcKM+RblJrt1QOcJG8OdaEsh+76Wh+qx66x5p5L9jNU6PFvhC39xX7Qewjl1TuVROsq9ESYf8dfywASwnEvlcRFf3RjQdCUlL9NDLe2VaQFqfm9G2mOCTmkUyQJbgU+KPf3/SFmzba/dEse6xY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FBVpopMu; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1791501473; c=relaxed/simple;
+	bh=7IMyrLIyHxUk3/oM1yPSEktkn7NowIaxNojwvnWjw28=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=lVoI1ZI/o3ojl6vvrJHMJFkON0tOzlFXcOoGxhGwzQEanyMEqxhL9KToPPbSun/PasqiDoNxb42MU446/2rFKlk9RM3RqR9tS++gP1M+2BMCjte8bAhAYZ1EVzNRGvxNNX6xT/ZKOViLjAbBFn8VhrIeoDmWKPS5pZbfRLYsPeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JmQSr6Ld; arc=none smtp.client-ip=192.198.163.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FBVpopMu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JmQSr6Ld"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791494312; x=1823030312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=O0xRsH1+GO6yWhQ5iXZ2vAKeNw+97F5kBSTCSn41Z/k=;
-  b=FBVpopMugj6wK50YlmOjPaEHaXWPgfFsqTrBx8fGkqxdOsAIRL7p/e6F
-   7IrzqItzDLESgH9jfNs2x/vTURLNLYFeT/+CY4uzMRovEtCvwWvzcvkBC
-   slvlLgyOxWMPS4qL+c6IzH9sM66nBfUOj4SvBPwajRiUNtbrEQmzEjPg8
-   WTdWqlNWhotPSZT6IwUSXf3ffQ59HGyGlnlxuYaDI6YRf+q9XIlXlMw88
-   xiwKMZ00nlH2tjyFlamK8CrC1bJud4tz0z3ZSIRSGzXYV9wJzLoCumOus
-   l9TDTRlNUxqnRu+3UT45ph/5z/yb9gJrfRKFuVTF+YoUqgw1feQg22qKG
-   Q==;
-X-CSE-ConnectionGUID: n/GfbCKLQf+usJ2ekV9VWg==
-X-CSE-MsgGUID: t6QTc98gSN6A+ZuEuhzl1g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11929"; a="400592"
+  t=1791501472; x=1823037472;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=7IMyrLIyHxUk3/oM1yPSEktkn7NowIaxNojwvnWjw28=;
+  b=JmQSr6LdjvQm12Il57zuHoC/9VnovJV2v7lqZ1Ny6PjK9duzThnIlKuG
+   JjfS43fVhVD8DFpAQRvCQ0BWTW2UZ44F2o81pDCZD0BXj+DhKsb01Sb72
+   rR1rpMiI9xB6mzRBNSulrrxijwpASnIHSXl3ZYmrFYp8QDbwqegoJI4PN
+   5CH64hXA5GQC/FRI22MB1S6JBWq0/PF7nbeW4EwsH4s1tOV4NIQh0nRQ/
+   H1EHaWoyNovgemAy0uID56Xy3nobhfCIdhtNt7fZrP7ASnDA2aWeCi3cf
+   EeBWu90wTmqt3QHmjKE7Nuy/fWGOMSGslCQJLa9HHGvLMJzc3Pm41dJMp
+   g==;
+X-CSE-ConnectionGUID: XCoszsLlQYaKzKaJfqnsIg==
+X-CSE-MsgGUID: C7aeWv9IScq6Bhqa/ZDxKQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11929"; a="300833"
 X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="400592"
+   d="scan'208";a="300833"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 14:18:32 -0700
-X-CSE-ConnectionGUID: 4Of94Tx2QvWMINYkF7txHw==
-X-CSE-MsgGUID: rN9904TAR1SK1l6dJmhGMQ==
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 16:17:51 -0700
+X-CSE-ConnectionGUID: ZEA085jMRUSHhGZKyDbrWw==
+X-CSE-MsgGUID: l1un7IepT3qk3GxcWn4hWA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="144384"
+   d="scan'208";a="169067"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 08 Oct 2026 14:18:27 -0700
+  by orviesa005.jf.intel.com with ESMTP; 08 Oct 2026 16:17:49 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xEvVQ-000000004tk-1vnJ;
-	Thu, 08 Oct 2026 21:18:24 +0000
-Date: Fri, 9 Oct 2026 05:17:40 +0800
+	id 1xExMw-0000000052k-4036;
+	Thu, 08 Oct 2026 23:17:46 +0000
+Date: Fri, 09 Oct 2026 07:17:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: Emerson Busson <emersonbusson@gmail.com>, mhklinux@outlook.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, kys@microsoft.com,
-	haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: Re: [PATCH v2 02/14] hv: vmbus: validate chunk buffer allocation and
- cleanup
-Message-ID: <202610090551.ezkWePE5-lkp@intel.com>
-References: <20261007190752.336426-3-emersonbusson@gmail.com>
+To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [stefandoesinger-zx297520:dlink 77/142]
+ drivers/spi/spi-zx.c:477:17: warning: implicit conversion from 'unsigned
+ long' to 'u32' (aka 'unsigned int') changes value from 18446744073709551614
+ to 4294967294
+Message-ID: <202610090757.KEcVFziz-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -67,42 +62,36 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261007190752.336426-3-emersonbusson@gmail.com>
 
-Hi Emerson,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on char-misc/char-misc-testing]
-[also build test ERROR on char-misc/char-misc-next char-misc/char-misc-linus linus/master v7.3-rc6 next-20261008]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Emerson-Busson/hv-vmbus-convert-ring-backing-through-the-chunk-allocator/20261007-160739
-base:   char-misc/char-misc-testing
-patch link:    https://lore.kernel.org/r/20261007190752.336426-3-emersonbusson%40gmail.com
-patch subject: [PATCH v2 02/14] hv: vmbus: validate chunk buffer allocation and cleanup
-config: i386-randconfig-1005-20261008 (https://download.01.org/0day-ci/archive/20261009/202610090551.ezkWePE5-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261009/202610090551.ezkWePE5-lkp@intel.com/reproduce)
+tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
+head:   7998b6e929bb20ed66acafa33720d8e3533e1598
+commit: 4fa1d7e70e05f781c1e9a1876619ad78b3297e19 [77/142] zx29 qspi driver
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20261009/202610090757.KEcVFziz-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261009/202610090757.KEcVFziz-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610090551.ezkWePE5-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610090757.KEcVFziz-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> ld.lld: error: undefined symbol: kunit_unary_assert_format
-   >>> referenced by vmbus_buffer_test.c:48 (drivers/hv/vmbus_buffer_test.c:48)
-   >>>               drivers/hv/vmbus_buffer_test.o:(vmbus_ring_fallback_order_zero_test) in archive vmlinux.a
-   >>> referenced by vmbus_buffer_test.c:49 (drivers/hv/vmbus_buffer_test.c:49)
-   >>>               drivers/hv/vmbus_buffer_test.o:(vmbus_ring_fallback_order_zero_test) in archive vmlinux.a
-   >>> referenced by vmbus_buffer_test.c:61 (drivers/hv/vmbus_buffer_test.c:61)
-   >>>               drivers/hv/vmbus_buffer_test.o:(vmbus_buffer_failed_teardown_leaks_test) in archive vmlinux.a
-   >>> referenced 3 more times
+>> drivers/spi/spi-zx.c:477:17: warning: implicit conversion from 'unsigned long' to 'u32' (aka 'unsigned int') changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
+     477 |         writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
+         |         ~~~~~~~~~~~~~~ ^~~~~~~~~~~
+   1 warning generated.
+
+
+vim +477 drivers/spi/spi-zx.c
+
+   473	
+   474	static void zx_qspi_remove(struct platform_device *pdev)
+   475	{
+   476		struct zx_qspi *qspi = platform_get_drvdata(pdev);
+ > 477		writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
+   478	}
+   479	
 
 --
 0-DAY CI Kernel Test Service
