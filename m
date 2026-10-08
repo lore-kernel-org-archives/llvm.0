@@ -1,160 +1,258 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A558C3BBFB0
-	for <llvm@lists.linux.dev>; Thu,  8 Oct 2026 05:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CB2282F0C;
+	Thu,  8 Oct 2026 06:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791437894; cv=none; b=feyp49PrJ4vCMc9HidhHT1vxjUEtVSU9GtGmP+51LI18HNncfN7LPY9MRn3kmjv4VHE2eqd6ikI6KiPB69GFvpTT0qjcvZnMLZhz7dMMYQqFMDh30Rva1yOPs2fvWAowW5nh4xk8K1f/aWo1FJhqn2Lbpe2I8zk0VCfl8EjdpvI=
+	t=1791440550; cv=none; b=B4L9kd9jnurwQoICuM6peemsW6PAK1M81npLagt8C31AqvfAeWUdYAR4vuuAE7ZIVNrqnQqUM9DkQ/lhH5S9/IHUhRfFUgA9r+amqd00MiJn7oq+hjiOF8ppgPrTFU83MTFbDMMWn1y9aYF9tRrNzNEQasZl7GroiAh5Ct1n+ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791437894; c=relaxed/simple;
-	bh=kSOdu2D/uPkkscs5ntFbdrqzzlXt7Gw83S0FPlHcMNY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=o3WkgX2j04BlOch3DtuwszaJqs+HHp8/dM+H55D1I207+GzKTuRtl74lZbOGrapXrnrzc2ENguK2mgaRSf9UjWjN/Z1JDoiDMyFXtZNLC09ZgwEEj374QF2QcRXEh3E6MP3SubSILTCnypjeX7O8WzUmZkdFmpSwRzriLDb7W00=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DB/TMkTZ; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791440550; c=relaxed/simple;
+	bh=fgY7qN/jX3W2aO9QuJqIpQuePJTqp6pAjiV9WdeRb68=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=sNktTqkXsDj1edv8AZjcWK0dygs5pdCCQIBbC9c3JCQQ1HKBx4wpH4kv08o0ZnaONmC+wPHNRPOm+ApT/zNBJpxxBvxUns2OsXCrUTXDSVgFeytCe4tvf/u8yrZZKkQShBvTJF7MzPI3jf+0mYFy+HGP+5EX3n5sGlqd7uETiYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c679qDKB; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DB/TMkTZ"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4a17baef589so18674515e9.0
-        for <llvm@lists.linux.dev>; Wed, 07 Oct 2026 22:38:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791437887; x=1792042687; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MtBoeOQA/ziEGpOBjK5f/vKkxIKhAQnTnwERrUlvuXc=;
-        b=DB/TMkTZBLr99+pLY/eQt52OdyKIf5v1RaIMq+4ZSIKrz4U5JFqzzqMvUPMu1hZ/JV
-         hUtfO/gGyX0UgjCasVBkOXBehODfbuZjT/zbyd6SWk7qBcMSBrDMrPdfSNWcjAEipGUQ
-         n/RFsumNCrTxvwNGltmHm933gTHtxeEVK1pdNp/WGcSr5rOr++K0wVU5u7MdSQl4sDQ2
-         rCH7jxXmBuq14lzANtmxcLEPUZc0yGmKQR3bPbEQaJQRfzbyWDiKG7gYeGHqDw/1qTsi
-         f/uIVgANlyjSMwSIZrIxECaTljWvqzzUHk39tSXcJsFyYrq1dxL4Q/v2MMLFJQXAgvzM
-         t7lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791437887; x=1792042687;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=MtBoeOQA/ziEGpOBjK5f/vKkxIKhAQnTnwERrUlvuXc=;
-        b=qN2JKRdftXolsSvWQOVIxGmegHOjxwF4LKRMkkQ8RcfNlYP/XtyUg/yz59cPvfdd8e
-         08fBApZYXecVeQqJM1juxwHOMxPOe40PMWeMnGC8p12F0Rwba1acA2OU+/p56xGxl4a1
-         5uZ4Y/UA2ci5kMdUtno4B4QC8nBHiatsnwST+RzLDz/H1XpqdnEPXE6SVouYV7VpDO79
-         uj9TzEC11Fbiy9ank4R/R5DEmWi7/CqFWzhbLVSLgdsq6yPRZKVNwhCKB99PAb+N6v7H
-         dh+pfKrrH32NTykfPjHtFkDOeVv9ghCHNHD1a+iqegDOoUTVLgXtg1eD5FAzmlSVhubA
-         098g==
-X-Forwarded-Encrypted: i=1; AKwUvByN1jKMSfU8KtkJEhDVLc+Ji+7GU+n0H+2N8QFuNr1guQb66teRomdDr8u5ESnue9Wsg1id@lists.linux.dev
-X-Gm-Message-State: AFuF++mJNRIDjaXoqDs9Fkpy7hAlBx6wiFXP3yJztfP7qCy6J37pCOIs
-	Z2tcVf6KVo2nzPAJ8BbNyiMI6mNcinye0X0yD4gYo9nV7dcwCKkjF9en
-X-Gm-Gg: AYBFou1fsSXd039RpjWa/TARm6X+tlJ+uKdgC2ayhdy686g137IzrwtqUfLV/xBctVl
-	nJAJsJplOqgIgoC3AjE1pcWIqEv/+xdcAcKjoJfHdxwE15V2x7k316YLFWvNLYDTVBEXzxK6BkZ
-	/JOC1GiQzfxx++1AZt0e0yF2S6X5Lh4Y4L/S2sliF9TvQklI3ZV0/2uW8PbfrVtqEWwiNBBaU3c
-	ORNjjuPBuzRcwCAE/WJB3YOuaY3JCq3bD0oeqBKwQ0eV1dAym/dklqs4pOYlWdbb4ApTTnkbaV9
-	PxbdnNOKrLhDcw+3WJXxQ4uxMj3BvLmsfdWESDVKz0lHB43MaRyjWLGigYzsaBNOYncK0miR09K
-	aiM/Yf6U41zyrX3M0x//wRvNi78w7RxBM1LrMXPmoptYBDYlrwoILBkA7EKOmz+YeyvCKjVoCxY
-	+K4M3qFWZD+dhFDg63KG32EJ81F4zeyL86eViSDAKl86oZI7gpblt5yI3L636WZh3P0oJlCDvYa
-	Y2ULppNVU16ck77gB8bhDjBUmimr/3+GOeJxySSCEwHDQmwhw9Zkh9InzaZd2B1urRb4HYWkQlR
-	NwCI9SFYwlCVA5qE0VgqlKq0BvPWCQyCqQdYt/cA5bIfPnldU3xUsLBQ3WwGhLvPtB4lbklexWK
-	BnO9u56M=
-X-Received: by 2002:a05:600c:8b6e:b0:4a1:714d:eed with SMTP id 5b1f17b1804b1-4a180649453mr74925515e9.14.1791437886819;
-        Wed, 07 Oct 2026 22:38:06 -0700 (PDT)
-Received: from localhost.localdomain (dynamic-2a02-3100-ad61-5a01-743c-891f-b33c-cae7.310.pool.telefonica.de. [2a02:3100:ad61:5a01:743c:891f:b33c:cae7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1f8fbsm8458219f8f.33.2026.10.07.22.38.04
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 07 Oct 2026 22:38:06 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Russell King <linux@armlinux.org.uk>,
-	Miguel Ojeda <ojeda@kernel.org>
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Boqun Feng <boqun@kernel.org>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <lossin@kernel.org>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Trevor Gross <tmgross@umich.edu>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Daniel Almeida <daniel.almeida@collabora.com>,
-	Tamir Duberstein <tamird@kernel.org>,
-	Alexandre Courbot <acourbot@nvidia.com>,
-	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Linus Walleij <linusw@kernel.org>,
-	Christian Schrefl <chrisi.schrefl@gmail.com>,
-	Bradley Morgan <brads@mainlining.org>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-arm-kernel@lists.infradead.org,
-	rust-for-linux@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] ARM: rust: Build Rust code for ARMv7 on ARMv7 kernels
-Date: Thu,  8 Oct 2026 07:37:46 +0200
-Message-Id: <20261008053746.49631-7-kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <20261008053746.49631-1-kmehltretter@gmail.com>
-References: <20261008053746.49631-1-kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c679qDKB"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791440548; x=1822976548;
+  h=date:from:to:cc:subject:message-id;
+  bh=fgY7qN/jX3W2aO9QuJqIpQuePJTqp6pAjiV9WdeRb68=;
+  b=c679qDKBs/QyWWiNI5cYNrgdxB9V9wYadlpBW9rFf75QXVw5sFfwpW3C
+   0eQD1tg+GcYNK4dI3H7XrwMugZmOBAP5i610l+6UrLlEdc+h0VXpr2rap
+   0R4ZFKGPAFE31LXdVOE8ZRASC6zGjhx5ed0iaDzHImQ3Al4XVl+7q4nrB
+   1uNVYuLN0EmZfbJrWKByIdIoonOzYNcVo5HxO8CK8/l8Dikla/FaX6W6S
+   NLXhWs1ijMrdx58wQ8TmIe4/xtG7zYRLI7h1jm9pMVv8jOqF9056kOm90
+   nK7b3UTvbFy0mieYQByr7dX6eHv62awChanM95vdYKEf9NmHfYadXGoAE
+   g==;
+X-CSE-ConnectionGUID: a3Vy6zBMT86J2pHESg/sHA==
+X-CSE-MsgGUID: Ei4NauAKSpO9WQp+Dt0l5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="223046"
+X-IronPort-AV: E=Sophos;i="6.27,145,1787036400"; 
+   d="scan'208";a="223046"
+Received: from fmviesa012.fm.intel.com ([10.60.135.152])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2026 23:22:27 -0700
+X-CSE-ConnectionGUID: vNadQmI5T7+9uApGfnI4Vg==
+X-CSE-MsgGUID: tEYw3BUoSD6pqHKemVZ3Pg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,145,1787036400"; 
+   d="scan'208";a="1764117"
+Received: from igk-lkp-server01.igk.intel.com (HELO d0de6c2a75a7) ([10.211.93.152])
+  by fmviesa012.fm.intel.com with ESMTP; 07 Oct 2026 23:22:26 -0700
+Received: from kbuild by d0de6c2a75a7 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xEhWJ-000000004vX-2dbl;
+	Thu, 08 Oct 2026 06:22:23 +0000
+Date: Thu, 08 Oct 2026 08:21:33 +0200
+From: kernel test robot <lkp@intel.com>
+To: Jisheng Zhang <jszhang@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Paul Walmsley <pjw@kernel.org>,
+ Conor Dooley <conor.dooley@microchip.com>
+Subject: [pjw-riscv:temp-testing 22/25]
+ arch/riscv/kernel/cpufeature.c:943:7: error: use of undeclared identifier
+ '_pgtable_l4_enabled'; did you mean 'pgtable_l4_enabled'?
+Message-ID: <202610080839.GUd6iQe9-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-The arm-unknown-linux-gnueabi target builds ARMv6 code. An ARMv7 kernel
-gets that as well, because no CPU flags are passed to rustc. Its Rust
-code cannot use movw/movt or any other ARMv7 instruction.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/pjw/riscv.git temp-testing
+head:   f3f4d80eb6b19a2998ed935716e592955eab319f
+commit: 016fdf4cebe05b68f13128f1eb12537b10a89d66 [22/25] riscv: support early isa ext and use it to optimize pgtable_l4|l5_enabled
+config: riscv-randconfig-2000-20261008 (https://download.01.org/0day-ci/archive/20261008/202610080839.GUd6iQe9-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project dbeca9a3a3ba0b46471efb339b0ea8f2194f6f68)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261008/202610080839.GUd6iQe9-lkp@intel.com/reproduce)
 
-Use rustc's armv7-unknown-linux-gnueabi target when the kernel is built
-with -march=armv7-a. It is ARMv7-A with the soft-float EABI and NEON
-disabled. Unlike the generic target, it does not set +strict-align.
-This allows unaligned word and halfword accesses, matching C code on
-MMU-enabled ARMv7 kernels. A kernel that also contains an ARMv6K CPU
-is built with -march=armv6k and keeps the generic target.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610080839.GUd6iQe9-lkp@intel.com/
 
-This builds the Rust code for the same architecture level as the C
-code. In the tested Raspberry Pi 400 configuration, Rust text grows
-by 1.9 %. Six small benchmarks range from 10 % shorter to 5 % longer
-runtimes.
+All errors (new ones prefixed by >>):
 
-The generic target would turn a full memory barrier from
-core::sync::atomic into the deprecated CP15 operation. The armv7 target
-emits dmb. No kernel Rust code uses these atomics today, so this is not
-a fix.
+>> arch/riscv/kernel/cpufeature.c:943:7: error: use of undeclared identifier '_pgtable_l4_enabled'; did you mean 'pgtable_l4_enabled'?
+     943 |                 if (_pgtable_l4_enabled)
+         |                     ^~~~~~~~~~~~~~~~~~~
+         |                     pgtable_l4_enabled
+   arch/riscv/include/asm/pgtable-32.h:36:20: note: 'pgtable_l4_enabled' declared here
+      36 | static inline bool pgtable_l4_enabled(void) { return false; }
+         |                    ^
+   arch/riscv/kernel/cpufeature.c:943:7: warning: address of function 'pgtable_l4_enabled' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     943 |                 if (_pgtable_l4_enabled)
+         |                 ~~  ^~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/cpufeature.c:943:7: note: prefix with the address-of operator to silence this warning
+     943 |                 if (_pgtable_l4_enabled)
+         |                     ^
+         |                     &
+   arch/riscv/kernel/cpufeature.c:943:7: note: suffix with parentheses to turn this into a function call
+     943 |                 if (_pgtable_l4_enabled)
+         |                     ^                  
+         |                                        ()
+>> arch/riscv/kernel/cpufeature.c:945:7: error: use of undeclared identifier '_pgtable_l5_enabled'; did you mean 'pgtable_l5_enabled'?
+     945 |                 if (_pgtable_l5_enabled)
+         |                     ^~~~~~~~~~~~~~~~~~~
+         |                     pgtable_l5_enabled
+   arch/riscv/include/asm/pgtable-32.h:37:20: note: 'pgtable_l5_enabled' declared here
+      37 | static inline bool pgtable_l5_enabled(void) { return false; }
+         |                    ^
+   arch/riscv/kernel/cpufeature.c:945:7: warning: address of function 'pgtable_l5_enabled' will always evaluate to 'true' [-Wpointer-bool-conversion]
+     945 |                 if (_pgtable_l5_enabled)
+         |                 ~~  ^~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/cpufeature.c:945:7: note: prefix with the address-of operator to silence this warning
+     945 |                 if (_pgtable_l5_enabled)
+         |                     ^
+         |                     &
+   arch/riscv/kernel/cpufeature.c:945:7: note: suffix with parentheses to turn this into a function call
+     945 |                 if (_pgtable_l5_enabled)
+         |                     ^                  
+         |                                        ()
+   arch/riscv/kernel/cpufeature.c:1108:7: error: use of undeclared identifier '_pgtable_l4_enabled'; did you mean 'pgtable_l4_enabled'?
+    1108 |                 if (_pgtable_l4_enabled)
+         |                     ^~~~~~~~~~~~~~~~~~~
+         |                     pgtable_l4_enabled
+   arch/riscv/include/asm/pgtable-32.h:36:20: note: 'pgtable_l4_enabled' declared here
+      36 | static inline bool pgtable_l4_enabled(void) { return false; }
+         |                    ^
+   arch/riscv/kernel/cpufeature.c:1108:7: warning: address of function 'pgtable_l4_enabled' will always evaluate to 'true' [-Wpointer-bool-conversion]
+    1108 |                 if (_pgtable_l4_enabled)
+         |                 ~~  ^~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/cpufeature.c:1108:7: note: prefix with the address-of operator to silence this warning
+    1108 |                 if (_pgtable_l4_enabled)
+         |                     ^
+         |                     &
+   arch/riscv/kernel/cpufeature.c:1108:7: note: suffix with parentheses to turn this into a function call
+    1108 |                 if (_pgtable_l4_enabled)
+         |                     ^                  
+         |                                        ()
+   arch/riscv/kernel/cpufeature.c:1110:7: error: use of undeclared identifier '_pgtable_l5_enabled'; did you mean 'pgtable_l5_enabled'?
+    1110 |                 if (_pgtable_l5_enabled)
+         |                     ^~~~~~~~~~~~~~~~~~~
+         |                     pgtable_l5_enabled
+   arch/riscv/include/asm/pgtable-32.h:37:20: note: 'pgtable_l5_enabled' declared here
+      37 | static inline bool pgtable_l5_enabled(void) { return false; }
+         |                    ^
+   arch/riscv/kernel/cpufeature.c:1110:7: warning: address of function 'pgtable_l5_enabled' will always evaluate to 'true' [-Wpointer-bool-conversion]
+    1110 |                 if (_pgtable_l5_enabled)
+         |                 ~~  ^~~~~~~~~~~~~~~~~~~
+   arch/riscv/kernel/cpufeature.c:1110:7: note: prefix with the address-of operator to silence this warning
+    1110 |                 if (_pgtable_l5_enabled)
+         |                     ^
+         |                     &
+   arch/riscv/kernel/cpufeature.c:1110:7: note: suffix with parentheses to turn this into a function call
+    1110 |                 if (_pgtable_l5_enabled)
+         |                     ^                  
+         |                                        ()
+   4 warnings and 4 errors generated.
 
-Tested on a Raspberry Pi 400 (Cortex-A72, LPAE) with clang 22.1.8 and
-in QEMU virt (Cortex-A15) with the minimum tool versions. Rust modules
-load with the movw/movt relocations.
 
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
-Assisted-by: LLM
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
----
- arch/arm/Makefile | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+vim +943 arch/riscv/kernel/cpufeature.c
 
-diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index a72843890241..28eb8484ff82 100644
---- a/arch/arm/Makefile
-+++ b/arch/arm/Makefile
-@@ -73,9 +73,11 @@ arch-$(CONFIG_CPU_32v4T)	:=-march=armv4t
- arch-$(CONFIG_CPU_32v4)		:=-march=armv4
- arch-$(CONFIG_CPU_32v3)		:=-march=armv3m
- 
--# The rustc target fixes the instruction set. -Ctarget-cpu cannot remove
--# the +v6 of the generic target, so older CPUs need their own target.
-+# The rustc target fixes the instruction set, so pick it like -march above.
-+# The generic target builds ARMv6 code. -Ctarget-cpu cannot remove its +v6.
- rust-target-y				:=arm-unknown-linux-gnueabi
-+rust-target-$(CONFIG_CPU_32v7)		:=armv7-unknown-linux-gnueabi
-+rust-target-$(CONFIG_CPU_32v6)		:=arm-unknown-linux-gnueabi
- rust-target-$(CONFIG_CPU_32v5)		:=armv5te-unknown-linux-gnueabi
- rust-target-$(CONFIG_CPU_32v4T)	:=armv4t-unknown-linux-gnueabi
- 
--- 
-2.39.5 (Apple Git-154)
+   882	
+   883	static void __init riscv_fill_hwcap_from_isa_string(unsigned long *isa2hwcap)
+   884	{
+   885		struct device_node *node;
+   886		const char *isa;
+   887		int rc;
+   888		struct acpi_table_header *rhct;
+   889		acpi_status status;
+   890		unsigned int cpu;
+   891		u64 boot_vendorid;
+   892		u64 boot_archid;
+   893	
+   894		if (!acpi_disabled) {
+   895			status = acpi_get_table(ACPI_SIG_RHCT, 0, &rhct);
+   896			if (ACPI_FAILURE(status))
+   897				return;
+   898		}
+   899	
+   900		boot_vendorid = riscv_get_mvendorid();
+   901		boot_archid = riscv_get_marchid();
+   902	
+   903		for_each_possible_cpu(cpu) {
+   904			struct riscv_isainfo *isainfo = &hart_isa[cpu];
+   905			unsigned long this_hwcap = 0;
+   906			DECLARE_BITMAP(source_isa, RISCV_ISA_EXT_MAX) = { 0 };
+   907	
+   908			if (acpi_disabled) {
+   909				node = of_cpu_device_node_get(cpu);
+   910				if (!node) {
+   911					pr_warn("Unable to find cpu node\n");
+   912					continue;
+   913				}
+   914	
+   915				rc = of_property_read_string(node, "riscv,isa", &isa);
+   916				of_node_put(node);
+   917				if (rc) {
+   918					pr_warn("Unable to find \"riscv,isa\" devicetree entry\n");
+   919					continue;
+   920				}
+   921			} else {
+   922				rc = acpi_get_riscv_isa(rhct, cpu, &isa);
+   923				if (rc < 0) {
+   924					pr_warn("Unable to get ISA for the hart - %d\n", cpu);
+   925					continue;
+   926				}
+   927			}
+   928	
+   929			riscv_parse_isa_string(isa, source_isa);
+   930	
+   931			/*
+   932			 * These ones were as they were part of the base ISA when the
+   933			 * port & dt-bindings were upstreamed, and so can be set
+   934			 * unconditionally where `i` is in riscv,isa on DT systems.
+   935			 */
+   936			if (acpi_disabled) {
+   937				set_bit(RISCV_ISA_EXT_ZICSR, source_isa);
+   938				set_bit(RISCV_ISA_EXT_ZIFENCEI, source_isa);
+   939				set_bit(RISCV_ISA_EXT_ZICNTR, source_isa);
+   940				set_bit(RISCV_ISA_EXT_ZIHPM, source_isa);
+   941			}
+   942	
+ > 943			if (_pgtable_l4_enabled)
+   944				set_bit(RISCV_ISA_EXT_SV48, source_isa);
+ > 945			if (_pgtable_l5_enabled)
+   946				set_bit(RISCV_ISA_EXT_SV57, source_isa);
+   947	
+   948			/*
+   949			 * "V" in ISA strings is ambiguous in practice: it should mean
+   950			 * just the standard V-1.0 but vendors aren't well behaved.
+   951			 * Many vendors with T-Head CPU cores which implement the 0.7.1
+   952			 * version of the vector specification put "v" into their DTs.
+   953			 * CPU cores with the ratified spec will contain non-zero
+   954			 * marchid.
+   955			 */
+   956			if (acpi_disabled && boot_vendorid == THEAD_VENDOR_ID && boot_archid == 0x0)
+   957				clear_bit(RISCV_ISA_EXT_V, source_isa);
+   958	
+   959			riscv_resolve_isa(source_isa, isainfo->isa, &this_hwcap, isa2hwcap);
+   960	
+   961			/*
+   962			 * All "okay" hart should have same isa. Set HWCAP based on
+   963			 * common capabilities of every "okay" hart, in case they don't
+   964			 * have.
+   965			 */
+   966			if (elf_hwcap)
+   967				elf_hwcap &= this_hwcap;
+   968			else
+   969				elf_hwcap = this_hwcap;
+   970	
+   971			if (bitmap_empty(riscv_isa, RISCV_ISA_EXT_MAX))
+   972				bitmap_copy(riscv_isa, isainfo->isa, RISCV_ISA_EXT_MAX);
+   973			else
+   974				bitmap_and(riscv_isa, riscv_isa, isainfo->isa, RISCV_ISA_EXT_MAX);
+   975		}
+   976	
+   977		if (!acpi_disabled && rhct)
+   978			acpi_put_table((struct acpi_table_header *)rhct);
+   979	}
+   980	
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
