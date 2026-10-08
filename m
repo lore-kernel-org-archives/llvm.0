@@ -1,66 +1,66 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DB23BBA09
-	for <llvm@lists.linux.dev>; Thu,  8 Oct 2026 05:37:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33EF3BE178
+	for <llvm@lists.linux.dev>; Thu,  8 Oct 2026 05:38:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791437880; cv=none; b=mZN+n6FRZ2jzp5p/ICr+DkjwZx0X3zkWgbCRCER9t/iaDrvLJL3GNSi+s2isf1w1Ems7QD4kScyLwKWKVfSqHeSA17T6PcEs8YTbcscGvH1yZwB70FAZI4LB7yro3kJeYtRvhMnGu5nBNrBIsjMlcdPS3sm8E1Ov8AaXMU/VndU=
+	t=1791437882; cv=none; b=QDWA8UJlKh5u+ciOY1WHT/98P7p/nkempK49H69RlExnd5IXKbfS/qg+JfK+3Vmchc3fM6gtRHT9j63Z+RZGprVm10aZnV2kLyr+RXmkhOE/rxOHixWAE/63KK5RAmAxGoQt8reJ1UZoUOBGwnRJuQ37LNSpPTTjlC84kZ3A4SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791437880; c=relaxed/simple;
-	bh=1Es+O5gUAfmFViPOKvPNBGlel3oVhwqYtDml3CwM+Lo=;
+	s=arc-20240116; t=1791437882; c=relaxed/simple;
+	bh=rvDjT6+rkk/VmCiFIRydEcSy1yOMxPWIRLLIGRibt+E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=i1Thza5VbKnjEmOKJ6hZuRo9DG7ozakyTcjskWPfhIqeHc/oLSgcawf0Yz9I9IAvnmmnoHz97UOXRgLMy7qfM2yGqIMvaMo8a79fy4GbLy3nhAbpX9lj4jvK6KA3SbczuLkAPHzt8WMOLtn8cFZlLnM0sKWbCsx3HGERzSXCVXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E00QdHoR; arc=none smtp.client-ip=209.85.221.47
+	 MIME-Version; b=RFidmNI0jGCwAX1jEp74vyoOcUnfz3Q2MCBxf5VJJN/FF6fGLH19dmDDakysNNvBjrQMnZjUAWDw7DMEtGepJWJOEEv0MIQQMrEKF9sbDwdCsqS789rkVb8XXD8odIkXM7S1bR0D5Q+cdiDjFySUI58hQeYp54M9hmJ//byfmsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kw56Gewz; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E00QdHoR"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-48af4d4e61fso1619144f8f.2
-        for <llvm@lists.linux.dev>; Wed, 07 Oct 2026 22:37:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kw56Gewz"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-48c4d99c32bso2090726f8f.1
+        for <llvm@lists.linux.dev>; Wed, 07 Oct 2026 22:38:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791437877; x=1792042677; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1791437879; x=1792042679; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=RrJHqVEE809VPtPoK85AUD6Bvdktoej0RW32RmBaNCM=;
-        b=E00QdHoRmGW7+TZ/iyaBtBnRrFsOdjgaw3QKK7ZgkFOpTM4q8EPEdrhpma5SD+AizX
-         eyzo1AIBgv4w8ASIEYT4MjkWm2smHn7ZWkNEM2PQCrFdmSF0g54I4C2lqLBkOlHS4nb3
-         0kTVNM51J9pEGxuecYZByMxQiiOqXCQoGzwtNssng8iAeWLUP40t/ZC3/17iCVl1yvuQ
-         1Xgxf9QN6JumMRajXAQi6Ctkt2ypKQeTLGJK84DHXEXo7RumEKT5+jHg4WH5dVZKPca7
-         WjjI8l8Xjnlx8nxmkLVCqztyXCNPv58JLoauC5+w3cjnXWQfwTMd/swpxPyZMpJumbVD
-         KUkg==
+        bh=FsH0cWn1LlvsmNG6WCJYq22XE9O6pVl1IRSuRFpVGDU=;
+        b=kw56GewzvaciKihjng39XNR+hSRLoL6UkEYf48s/XIS/27z6eA4LVajKLJEZrruQZU
+         ksB3o3RsOXt11C24h/s5bSCj7SXR4bzTgWkiXorGsjW/Z+W1fEofSYwWkabFEh5kQOuE
+         GjCtO4jQKsGqt0OgNUoKsTGhWbpHy4IxUIZqsyukgU7W/4WDnajs9DHpREH0SOzk9DpD
+         B8LE6XrHxHhuVGCzjBHTtPKCGRSvXyySzb7zIcEHDz+sWCvh3YdCSlhQuclXOAKZKc/f
+         N8lmZej1UGBc+YAIWv+hxdcdxSZ6qN8hdz2q0SfK84gbVgfF1lATx/w+lZwh7InYuOAE
+         9oow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791437877; x=1792042677;
+        d=1e100.net; s=20260707; t=1791437879; x=1792042679;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=RrJHqVEE809VPtPoK85AUD6Bvdktoej0RW32RmBaNCM=;
-        b=kMqLaGoRteeRfaylfND48NV+6dshX93l4g4EOUaX7yqPJigoV8ITQJYvLaXRFflQYw
-         TfzUO6/C3pUx5vjxfycYzfYj4CHI2egVE8XNL0cydpuO4q/KlaewX9R8IV+9NjV3H+Vr
-         Q6U5je1/EWBq1upNekt9ue9+6W81OzsH6QVVYH/1kdJswmduXwTBfGBhZ2MSQNASJ2Fj
-         qPbHttQC3fEpQijPYZqtMAwrDkMh0EzRNUt5qmFDnfOc+ISdU4rD5aKAlVOV0XJUKghd
-         wEwrfAcEFsEutht9jv7FWTTjKYcHv2fCuS162gSTu463Ecobt/9nqcnxLX7b1nVTcgHU
-         pdmQ==
-X-Forwarded-Encrypted: i=1; AKwUvByt9iQ4hxkCKOgY3zN2Gzi83MMRAGB/rB4QbrD7euU4HLxd6U0wQ4j1I/ANDHkSJJuYAdJO@lists.linux.dev
-X-Gm-Message-State: AFq9FYIJAjnc9PizxoF5HPs5ycayE2PEKPSB7d5dwQKZQf6cCyOL3lT7
-	hzozBsBL/2/bpfCXL6UEC49GY4QaL9uYGxlEMGU6USkL3evLsVNKVToK
-X-Gm-Gg: AYBFou0CtDUv8fKSM8pfyJea85x1uTjBiEAdch0aZFANaEQ4chjoNH3CFn/fFIaFmQ/
-	NB3NANy6zkpZ0exQynqofyvJIAjmadl9bwp2gnjwfBRSulyS+jnALwY/93mjsniJysZ2MluOVcR
-	5dQO4+qsMz4g9Q53LqqsOonbB8by8BzAAdHhoVU6rVaYF7P4XkupaoFpZTyPUoWBUQpC2rsFnwH
-	WXv6ha9NWcQg+2QcAzePJ55WZzO7FXx8XuPxh59GTOtzIWJ2VFlXH7A+ijiJbEZObOFQQmBbzJa
-	OT1z617CuVxLZwHFBrks85Hdq9+EJY7Ld6s7sD7l7Q0VvTubpL9LwK355UgA6nzbkTB1r04Y4dk
-	dYsvuskWc8q0Iy7FVkeOy0i1V+HblobRK5iUZKSNL5BEzWrNxZHwFOH1tp15q/mPgDG/vdf4xr5
-	f8YnMgU+OuUV482G1EFjnVH0E+cyGB0I4aSE322aRhvwAT2C56jQqM8G0A3tlnCiDb2vppam4B7
-	M1Adc2+ChhFdGTTWtnqGOJFYzQENmXztGrTfluLt+WLzcbWSNUHf2Sz7M036w3hKyrCn3h7s8cN
-	Y7aWP2tUeSUVqMWveP0Tq9f4NobXH888GBKm7fie1jwvhTJYHnv3Tv11edwmC1hzVCruu3bnln8
-	vBg/K8ro=
-X-Received: by 2002:a05:6000:2281:b0:488:89c7:31aa with SMTP id ffacd0b85a97d-48c728852dfmr8353187f8f.39.1791437876591;
-        Wed, 07 Oct 2026 22:37:56 -0700 (PDT)
+        bh=FsH0cWn1LlvsmNG6WCJYq22XE9O6pVl1IRSuRFpVGDU=;
+        b=ScXojFYJOLtAvXOsGPzFqv8z4wI1WU5Jppu2uCHODjOajdmTbA4w9FsSJmYXzlScqO
+         uJnHjJHAaDpxtPCOa6NRgBYem18K08ymvwldo5R5psVDmXNqMdxRmeSUNuLavuDzJAMp
+         R/4TEmLsPPQrOA2hutAipEW4XyEl1dL7oXSurJVwQXJ/vo0Z9nip/A5Dmyb0aEhiwEEa
+         VVy3CCbEPXmSwoM5fOMLDaIfM7XoJSyjVb9DtbW+8p0nF5ZkNmWm5sdTs1lPBtWut4kG
+         9+JF4Kg4eQwHgnHVjztT+Eie4WBGCvpOsB8gtXPXsGYGZcplbbq2YZKPiQTYXVMJQnUJ
+         acXA==
+X-Forwarded-Encrypted: i=1; AKwUvBxv7MoarGKT4H+sZkpm2yorze4TZht7YYpO6J+4CAbEj7GbIzfcQpgWc0iHMH5Ia9hQ9oj2@lists.linux.dev
+X-Gm-Message-State: AFq9FYLt5mJnDVeqBXRhOYCu13Qhwcqd3y0BKd1suKp+ly3QMuOY6TwF
+	2XlEa5fA5EjpE297QaFjyC2XAkBz/ItdRo24wOr332cn6UApiSg6Je/Q
+X-Gm-Gg: AYBFou24A9SqwXZ9OoMhCsybtsl7+M1/7WEIC0v8TPkiCsT0B+2RlrShHb51ngX4L52
+	QsGe6EAEj63o7JpDOKmEZhjhn/HP/nJ8buWp1BfQyWJna5hZu3q9MtCTMygtocAe6t53DokI+lm
+	EuSfPHkY85sT7TLzb2xC89a7zMtjIUKLjRr4Vr0Y7vX17X2K4mMP3EDbuhTZlTCee3+TuA2zZyz
+	ZdfJOVvgRZUap/Nvap7aF2IiLdtNeHoOgQJRABqHakFvV1uzDIIWiETjYWxljt54cBk0D75Kdnn
+	a125y0vITvpsxppl7sg9FuJiFyoCwHw2nzMfaP1gANRTnPBSl/fCHaQP5WTOqEnh1Qeg5iXVI2w
+	t0QhT047FK4HE1SzY4LHfW0nsAdhoUkY8MQxoagcI1E4SCxoAq6JajLz3ixba7Foi9AhDFNE67O
+	Gs8ctEr6K/sm0gGBDvM4jBU0RUm+w7VbURuWQpQfL+szXEwnI9/cPAOW5/QgJSNzcbWUYMt1VkO
+	gLvS7RfsNoN97vulNTfaDKAYuvzasastjbi+ZhsYqfy5xlvC+1kQcVbEODRjOZH4EI2f/eSS/r8
+	K8Z9k5Lj/5r42eHBVhZTQAsOvvFmmZrI1Kb80dCvLu7bH5IRgwGlzH9BMWZMlf+o/2xuGECHVoF
+	wbRoVP8I=
+X-Received: by 2002:a05:6000:2407:b0:48a:fcf9:aca5 with SMTP id ffacd0b85a97d-48c72779796mr7901474f8f.11.1791437878835;
+        Wed, 07 Oct 2026 22:37:58 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-ad61-5a01-743c-891f-b33c-cae7.310.pool.telefonica.de. [2a02:3100:ad61:5a01:743c:891f:b33c:cae7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1f8fbsm8458219f8f.33.2026.10.07.22.37.54
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48c71d1f8fbsm8458219f8f.33.2026.10.07.22.37.56
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 07 Oct 2026 22:37:55 -0700 (PDT)
+        Wed, 07 Oct 2026 22:37:58 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Russell King <linux@armlinux.org.uk>,
 	Miguel Ojeda <ojeda@kernel.org>
@@ -91,9 +91,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	llvm@lists.linux.dev,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/6] ARM: cmpxchg: always inline __arch_xchg() and __cmpxchg()
-Date: Thu,  8 Oct 2026 07:37:41 +0200
-Message-Id: <20261008053746.49631-2-kmehltretter@gmail.com>
+Subject: [PATCH v2 2/6] ARM: cmpxchg: support 2-byte xchg() on pre-ARMv6 CPUs
+Date: Thu,  8 Oct 2026 07:37:42 +0200
+Message-Id: <20261008053746.49631-3-kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20261008053746.49631-1-kmehltretter@gmail.com>
 References: <20261008053746.49631-1-kmehltretter@gmail.com>
@@ -105,76 +105,70 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-__arch_xchg(), __cmpxchg() and __cmpxchg_local() end in a default case
-that calls an undefined function. That turns an unsupported size into a
-link error. It relies on the functions being inlined, so that the
-compiler can drop the default case for a constant size.
+Pre-ARMv6 CPUs have no halfword swp, so __arch_xchg() only handles 1-
+and 4-byte exchanges there and turns any other size into a link error
+via __bad_xchg().
 
-They are only marked inline. gcc 8.1.0 with CC_OPTIMIZE_FOR_SIZE does
-not inline them in rust/helpers/helpers.c, which calls xchg() and
-cmpxchg() from many small helpers. The out-of-line copies keep the
-default case and the link fails.
+No C code needs a 16-bit xchg() on these CPUs, but the Rust atomic
+helpers in rust/helpers/atomic_ext.c provide xchg() for Atomic<i16>
+unconditionally, so building with CONFIG_RUST=y for ARMv5 fails:
 
-  helpers.c:(.text+0x424): undefined reference to `__bad_xchg'
-  helpers.c:(.text+0x4ac): undefined reference to `__bad_cmpxchg'
+  ld.lld: error: undefined symbol: __bad_xchg
+  >>> referenced by helpers.c
+  >>>               rust/helpers/helpers.o:(rust_helper_atomic_i16_xchg)
 
-Seen with bcm2835_defconfig and CONFIG_RUST=y on v7.3-rc1. The same
-config links with CONFIG_RUST=n. It also links with gcc 15.2.0 and
-with clang.
+Implement the 2-byte case with interrupts disabled, as the pre-ARMv6
+atomic_t operations already do. This is safe because a kernel built
+for ARMv5 or older is never SMP.
 
-v6.19 links. Commit ab717dd98bee ("rust: helpers: Add i8/i16 atomic
-xchg_acquire helpers") in v7.0 triggers __bad_xchg. Commit
-ac8f06ade38a ("rust: sync: atomic: Add Atomic<*{mut,const} T> support")
-in v7.1 also triggers __bad_cmpxchg.
+ARMv6 before ARMv6K (ARM1136r0) has no 16-bit exclusive access either.
+It is not handled here. Rust stays disabled for those kernels, and
+they cannot be SMP since commit d70242427110 ("ARM: rework ARM11 CPU
+selection logic").
 
-Mark the functions __always_inline.
-
-Fixes: ab717dd98bee ("rust: helpers: Add i8/i16 atomic xchg_acquire helpers")
-Fixes: ac8f06ade38a ("rust: sync: atomic: Add Atomic<*{mut,const} T> support")
-Cc: stable@vger.kernel.org
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Reviewed-by: Linus Walleij <linusw@kernel.org>
+Reviewed-by: Bradley Morgan <brads@mainlining.org>
 Assisted-by: LLM
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- arch/arm/include/asm/cmpxchg.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/include/asm/cmpxchg.h | 14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
 
 diff --git a/arch/arm/include/asm/cmpxchg.h b/arch/arm/include/asm/cmpxchg.h
-index 9beb64d30586..0ce5225af442 100644
+index 0ce5225af442..18555ae22893 100644
 --- a/arch/arm/include/asm/cmpxchg.h
 +++ b/arch/arm/include/asm/cmpxchg.h
-@@ -26,7 +26,7 @@
- #define swp_is_buggy
- #endif
- 
--static inline unsigned long
-+static __always_inline unsigned long
- __arch_xchg(unsigned long x, volatile void *ptr, int size)
+@@ -31,11 +31,10 @@ __arch_xchg(unsigned long x, volatile void *ptr, int size)
  {
  	extern void __bad_xchg(volatile void *, int);
-@@ -155,8 +155,8 @@ extern void __bad_cmpxchg(volatile void *ptr, int size);
-  * cmpxchg only support 32-bits operands on ARMv6.
-  */
- 
--static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
--				      unsigned long new, int size)
-+static __always_inline unsigned long
-+__cmpxchg(volatile void *ptr, unsigned long old, unsigned long new, int size)
- {
- 	unsigned long oldval, res;
- 
-@@ -220,9 +220,9 @@ static inline unsigned long __cmpxchg(volatile void *ptr, unsigned long old,
- 				      sizeof(*(ptr)));			\
- })
- 
--static inline unsigned long __cmpxchg_local(volatile void *ptr,
--					    unsigned long old,
--					    unsigned long new, int size)
-+static __always_inline unsigned long
-+__cmpxchg_local(volatile void *ptr, unsigned long old, unsigned long new,
-+		int size)
- {
  	unsigned long ret;
+-#ifdef swp_is_buggy
+-	unsigned long flags;
+-#endif
+ #if __LINUX_ARM_ARCH__ >= 6
+ 	unsigned int tmp;
++#else
++	unsigned long flags;
+ #endif
  
+ 	prefetchw((const void *)ptr);
+@@ -106,6 +105,15 @@ __arch_xchg(unsigned long x, volatile void *ptr, int size)
+ 			: "r" (x), "r" (ptr)
+ 			: "memory", "cc");
+ 		break;
++#endif
++#if __LINUX_ARM_ARCH__ < 6
++	case 2:
++		/* swp has no halfword form. Pre-ARMv6 is never SMP. */
++		raw_local_irq_save(flags);
++		ret = *(volatile unsigned short *)ptr;
++		*(volatile unsigned short *)ptr = x;
++		raw_local_irq_restore(flags);
++		break;
+ #endif
+ 	default:
+ 		/* Cause a link-time error, the xchg() size is not supported */
 -- 
 2.39.5 (Apple Git-154)
 
