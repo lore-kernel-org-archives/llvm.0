@@ -1,122 +1,105 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31886489FAC
-	for <llvm@lists.linux.dev>; Thu,  8 Oct 2026 09:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 329163D1CAE;
+	Thu,  8 Oct 2026 10:11:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791451079; cv=none; b=j1f9PZay919LwIR9fd344CYWaYf4b397XwrGkI7e9Ft0fNf8TJl/nb/aTry2N5it2eT2REqNn4Wly7+QpnSnkFCQOcmZSnvGWlvz7KdobaaydEQ283l3tjqiPlhnPnunkkJxdQpLPwHWju/CuQTjtTJbULst7jCLhd/tpr4B/lk=
+	t=1791454261; cv=none; b=gnrq+xlO7uiOVWrkuBP+C1N9lHffATjQy/zC8AVt6AUoEHVCgTqvhgxwcKqSsqZ5ybWaa6b7JsGGRzpRe0ivVVBqUDGzYiQtcNwOx9av+Q1b/+EWj9JtWH0V86qtXzw5gNWcwUqHDJxNC0TcRahPWOzE9jorzgOq9Ds+Rsk9C8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791451079; c=relaxed/simple;
-	bh=BythzgJZcCsED2Q0dVtAj8TkAWAh4Q0vRRYNVZq7wi8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SnfUy0D+Vis0ZFMeXnwFDXjMcQ0kgZWqoXK1KHyJ5altTTWnppY+iVahB3jV0+8wWu1qeO90VYNMOVpPgpJqTBE/YPF46AA/bJ0IMI8kj32LN6QPO1ZYEoUM0708FlEL+G6YfLzaJckXZujUo+/C1RZdIXYgH+tRx0raC+Rt98k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=C4HJQnHZ; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1791454261; c=relaxed/simple;
+	bh=Ve29xGws9ObLnNv+1Drlon8wCGymFhsD6OD8owNuXBY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CA6KL01i4JQpMNUCPk+8iWHMVj9QgBSGrJgLWBKFPmybIS1aPrByYcmTFRE/SZFrloAHDD9GyDoODtcirAhohxA44/Am9Af0c5PgzYc1Rjzpm2HmYROFmdzlTYeDE0OF/15bOFzw+14+PXBYlRYlIZIB4J7yOaa7wFZEAq+kq6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jds53j/6; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="C4HJQnHZ"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A3121477;
-	Thu,  8 Oct 2026 02:17:42 -0700 (PDT)
-Received: from [10.211.55.3] (unknown [10.57.55.7])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DDD83F959;
-	Thu,  8 Oct 2026 02:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791451065; bh=BythzgJZcCsED2Q0dVtAj8TkAWAh4Q0vRRYNVZq7wi8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=C4HJQnHZA+/S0SAYFkSRCDzEWC0XS1yVIvox5ZhV0zkchd1+inr9I9jZSEyjrQZrP
-	 2Kaa1b8L1T7/yFaJ2sPVT3jKJqDcLhQTf5PkJgj1Tp38m/fjOWckzEbz3WIBPZeBMk
-	 lqfnAo95OEYylCQitjOkr5e03w61sDRZ8hr7ZMoc=
-Message-ID: <7490d5e6-ac9b-4f23-b58d-60eec2882e60@arm.com>
-Date: Thu, 8 Oct 2026 10:17:33 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jds53j/6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791454261; x=1822990261;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ve29xGws9ObLnNv+1Drlon8wCGymFhsD6OD8owNuXBY=;
+  b=Jds53j/64ZLkeWGMI86KCEEFy1vz2On+IDYUTI1eu++gLHfQBaO2ZDcb
+   ZDgd3IgQs8i46wM0hx881hraMC1sA1MRwDobo0bz4sRyLst1vX3SEg3py
+   VZv74N990ZFVFdC3sYMifKzLO7yX1F1zWRMOal5FaxlxTClx5/xDrKEsV
+   f7iKSBBl+9WtsdKsU3AcbsvBYfvNHT76uDKK9rpPqKwzJthBqCaOhq5zg
+   POykaU0MXWv4HcSA5IohdqppeJ9kdtWO5UHWEBbQakyg/o7YFK9EbYz37
+   0dFB7Pgixsm2vFH7UciCxxLgih1frGdeTQItb2GgnzF41jdSgaOit8BIx
+   w==;
+X-CSE-ConnectionGUID: Ko6jTDIxTR214LuMbGkT8g==
+X-CSE-MsgGUID: aYZRKS3iSjij+8ciCYc+ig==
+X-IronPort-AV: E=McAfee;i="6800,10657,11928"; a="239620"
+X-IronPort-AV: E=Sophos;i="6.27,146,1787036400"; 
+   d="scan'208";a="239620"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 03:11:00 -0700
+X-CSE-ConnectionGUID: dZlUOiglTrS40/koRBLTUw==
+X-CSE-MsgGUID: 3Mp+bY1rSfy1uxR/zSkSJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,146,1787036400"; 
+   d="scan'208";a="108420"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 08 Oct 2026 03:10:56 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xEl5R-000000004Gu-00T4;
+	Thu, 08 Oct 2026 10:10:53 +0000
+Date: Thu, 8 Oct 2026 18:10:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mieczyslaw Nalewaj <namiltd@yahoo.com>, linusw@kernel.org,
+	alsi@bang-olufsen.dk, andrew@lunn.ch, olteanv@gmail.com,
+	kuba@kernel.org, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, linux@armlinux.org.uk, luizluca@gmail.com,
+	maxime.chevallier@bootlin.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH net-next 8/8] net: dsa: realtek: rtl8365mb: re-latch the
+ family D SerDes
+Message-ID: <202610081722.Zoeli0ix-lkp@intel.com>
+References: <7e3518aa-4f99-4aae-bd9b-3984bdc4b548@yahoo.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Thunderbird Daily
-Subject: Re: [PATCH] arm_mpam: make the mon_sel guard conditional only
-To: Sasha Levin <sashal@kernel.org>, James Morse <james.morse@arm.com>,
- Nathan Chancellor <nathan@kernel.org>,
- Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>,
- Andre Przywara <andre.przywara@arm.com>, Gavin Shan <gshan@redhat.com>
-Cc: "kernelci.org bot" <bot@kernelci.org>,
- Reinette Chatre <reinette.chatre@intel.com>, Fenghua Yu
- <fenghuay@nvidia.com>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20261003121251.3942666-1-sashal@kernel.org>
-Content-Language: en-US
-From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <20261003121251.3942666-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e3518aa-4f99-4aae-bd9b-3984bdc4b548@yahoo.com>
 
-Hi Sasha,
+Hi Mieczyslaw,
 
-Thanks for the report and fix.
+kernel test robot noticed the following build warnings:
 
-On 03/10/2026 13:12, Sasha Levin wrote:
-> Building arm64 allmodconfig with clang fails:
-> 
->   drivers/resctrl/mpam_internal.h:207:7: error: ignoring return value
->   of function declared with 'warn_unused_result' attribute
->   [-Werror,-Wunused-result]
->     207 |              mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
-> 
-> mpam_mon_sel_lock() is __must_check and can fail: for an MSC accessed
-> through the MPAM-Fb firmware interface it returns false when called
-> from a context that cannot sleep. The mon_sel guard was defined with
-> DEFINE_GUARD(), which calls it unconditionally and discards the
-> result, so a guard(mon_sel) user would carry on without the lock and
-> release it on scope exit. The unconditional guard only exists as the
-> base for the conditional mon_sel_lock variant, which is the one
-> actually used.
-> 
-> Define mon_sel_lock directly as a conditional guard class instead, as
-> posix-timers does for lock_timer: the constructor returns NULL when
-> the lock cannot be taken, and the destructor only releases a lock
-> that was taken. ACQUIRE(mon_sel_lock, ...) works as before, including
-> ACQUIRE_ERR() returning -EBUSY on failure, and there is no
-> unconditional variant left to misuse.
-> 
-> Reported-by: kernelci.org bot <bot@kernelci.org>
-> Closes: https://d.kernelci.org/i/maestro:66f869ecbbb5b8592562ffd89f049c5ddf682547
-> Closes: https://d.kernelci.org/i/maestro:647269216758644837afcaac8e67d8dbe713a0e2
-> Fixes: 0db1715e4c9c ("arm_mpam: propagate MSC access errors for hw_probe functions")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
-> ---
->  drivers/resctrl/mpam_internal.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/resctrl/mpam_internal.h b/drivers/resctrl/mpam_internal.h
-> index ee7c3953a9b6c..be1795b29aca2 100644
-> --- a/drivers/resctrl/mpam_internal.h
-> +++ b/drivers/resctrl/mpam_internal.h
-> @@ -203,9 +203,10 @@ static inline int mpam_mon_sel_lock_init(struct device *dev,
->  	return devm_mutex_init(dev, &msc->mon_sel_mutex);
->  }
->  
-> -DEFINE_GUARD(mon_sel, struct mpam_msc *,
-> -	     mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
-> -DEFINE_GUARD_COND(mon_sel, _lock, mpam_mon_sel_lock(_T), _RET);
-> +DEFINE_CLASS(mon_sel_lock, struct mpam_msc *,
-> +	     _T ? mpam_mon_sel_unlock(_T) : (void)0,
+[auto build test WARNING on net-next/main]
 
-Could this line be an if statement? That looks to be common in other
-users of DEFINE_CLASS().
+url:    https://github.com/intel-lab-lkp/linux/commits/Mieczyslaw-Nalewaj/net-dsa-realtek-rtl8365mb-detect-RTL8367S-VB/20261007-223615
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/7e3518aa-4f99-4aae-bd9b-3984bdc4b548%40yahoo.com
+patch subject: [PATCH net-next 8/8] net: dsa: realtek: rtl8365mb: re-latch the family D SerDes
+config: i386-randconfig-1000-20261008 (https://download.01.org/0day-ci/archive/20261008/202610081722.Zoeli0ix-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261008/202610081722.Zoeli0ix-lkp@intel.com/reproduce)
 
-if (_T) mpam_mon_sel_unlock(_T)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610081722.Zoeli0ix-lkp@intel.com/
 
-Thanks,
+All warnings (new ones prefixed by >>):
 
-Ben
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_lock' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_relatch' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_relatch_count' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_misc_target_val' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_lock' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_relatch' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_relatch_count' not described in 'rtl8365mb'
+>> Warning: drivers/net/dsa/realtek/rtl8365mb_main.c:981 struct member 'sds_misc_target_val' not described in 'rtl8365mb'
 
-> +	     mpam_mon_sel_lock(msc) ? msc : NULL, struct mpam_msc *msc);
-> +DEFINE_CLASS_IS_COND_GUARD(mon_sel_lock);
->  
->  /* Bits for mpam features bitmaps */
->  enum mpam_device_features {
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
