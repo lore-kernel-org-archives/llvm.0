@@ -1,123 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5602D4C9E19;
-	Fri,  9 Oct 2026 15:22:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 654EB4EDCAC;
+	Fri,  9 Oct 2026 16:21:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791559373; cv=none; b=gYSi3qQc7XnOqv94bnrIm8MtvU8vBWNLqJU1L87d9X4QZsg8FTRgKpBBHcZxX3kmdoaQ3vMhqqU0NVaysAEZ8YFHNfvPQE8RHy68B+Jy8wcg1PSVVwqkV6qIiAbN2MT57pB23j3L3F8MYPIxqHOH3EKfuaoUFV+w+MedpYZJNMQ=
+	t=1791562866; cv=none; b=MYjtSpESX49NLURMwFh3F9N7vwTc2jXjj8DDYdzAyrk0lg8UbzvWtx9CWZ7pGGCq9jJ/ss/r0HOc8qznb1WZWPvZRnqrUxP1DSAJKmaLELLVILArZgcj8GmtDU0/Fru/Mjb8sI3qKArozLQYClfr4ZSuy66MNBO8x8P0s5KNnhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791559373; c=relaxed/simple;
-	bh=GTQovboIcNR9R/ScPbWLBEgm3nP1UkZmiJO85XmTewY=;
-	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=fjhtzSpK+FcJWQHOg8SKJ+tF6pJQs9sWW81wn5dNb9MkvfnNsh6TNI9QzzhzhhPM+xqFvwHz6A8ZtqBbPyyCXx/R6f7QS5fU71bYM2aYYE1k4M8pvYo1HtAMKyjEdO1g9SFKKR5qebWZKNNjSikDAlf/6WJgjqls+aXVYSJtnW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYnHCYZ0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791562866; c=relaxed/simple;
+	bh=gsJ/8HUiw+/ntCHZuU0jjeW3L80Z+FUKEdpD7y86gqw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tkaM7Gi55QiSKTuUYu8rMBPn4O4anywTHcPkUsXI1JHe5TEn9NRlH5yaJckVa/SMufXncoPczCGehYYKHonsvDj7TS0QQD2BnQRRJPSuDtooeTYh2faGcp3IQWcNIG3o+s+NzpTz75SBNTUCdXxg6VWT3x67Axx3RuA65OIvEVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dW8tbKG2; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYnHCYZ0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F081F000FF;
-	Fri,  9 Oct 2026 15:22:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791559372;
-	bh=GX1M42bQqDDZSQDRtAUu5Zivv8JFp+0LgJlH2BZUFXk=;
-	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=nYnHCYZ0sNaBtLQQcRCDsE3J65iTFMqD6OWiuUJsmbP1vRj7HteFD40PuUYd1hb8a
-	 VwtZZpz/fIkVpu4k9kd7DFYgn+ochjKne8Tsl0sDf6a9vJxDlJkvxSfcqTq7qOvFZf
-	 X9WfmoDcSQhp5sSbQ8aEs4jkJHdMUuQBR4gC3Fwm+jz5nvTBCJPgnEvizwuAPMpVVV
-	 fWNMML8uZd6kbYWSZZoH3aS3X4ruW9vQg9A8lCPll9BUh9zPZgDSKi+K9Cbo+KuyqS
-	 aeBxLnSX09lZcWxKWsF4bxCB/Qn7BUvxjE9X1I6wRWiEfE28sgMCpcp/YQLdNHAsX6
-	 Gpzy7LekF2YSA==
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dW8tbKG2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791562862; x=1823098862;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gsJ/8HUiw+/ntCHZuU0jjeW3L80Z+FUKEdpD7y86gqw=;
+  b=dW8tbKG2r5UNRZGQPiPeQIhl0Lh24ELQGTjrgex5dhGAmyqVG64uMBWn
+   1SwOIHUHcqBa3cLVX5uZonG5058eh2pKmKdPwfcTzBRhgOt4/qFytjYrY
+   9SOwgwh+LhSCi/4ewHaKea/snjuEXSk4fDIOdFA1IOSlcL1aI19CMl96w
+   gsjbl7K7emMGi7PvMY4NHAtxqZAkAHR2m4dnL+sJe4x6HOi4uEvWvZwS1
+   K9hJCunCJLV39LDsYyD/INMrpVFncpgbjiugtDktqY8eXogs3gVyC1HN3
+   dfoZ7ML9NGM87GktLMlLHje5blj3AOnT6Dqtu1kuX7Ek8g072XpH55aTv
+   Q==;
+X-CSE-ConnectionGUID: VCmIeYQFTdyKv/5KwKoZRg==
+X-CSE-MsgGUID: YBOwesg2QXGTsr4uCrEvWQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="369149"
+X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
+   d="scan'208";a="369149"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 09:21:01 -0700
+X-CSE-ConnectionGUID: dn6Xe7yeQyqvBT75D8pYAA==
+X-CSE-MsgGUID: Jt+nk3KNRQK7ishZzw2+7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
+   d="scan'208";a="290053"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 09 Oct 2026 09:20:58 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xFDL5-000000005zY-0JHI;
+	Fri, 09 Oct 2026 16:20:55 +0000
+Date: Sat, 10 Oct 2026 00:20:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: FUJITA Tomonori <tomo@flapping.org>, ojeda@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	a.hindborg@kernel.org, acourbot@nvidia.com, aliceryhl@google.com,
+	bjorn3_gh@protonmail.com, boqun@kernel.org, dakr@kernel.org,
+	daniel.almeida@collabora.com, gary@garyguo.net, lossin@kernel.org,
+	tamird@kernel.org, tmgross@umich.edu, work@onurozkan.dev,
+	rust-for-linux@vger.kernel.org,
+	FUJITA Tomonori <fujita.tomonori@gmail.com>
+Subject: Re: [PATCH v3] rust: compiler_builtins: Fix silent trap in
+ prohibited intrinsics
+Message-ID: <202610100054.UyoZyPQ5-lkp@intel.com>
+References: <20261008114717.992497-1-tomo@flapping.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v1 2/2] kbuild: Mark the initcall ordering recipe as
- recursive
-From: Nicolas Schier <nsc@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, linux-kbuild@vger.kernel.org, 
- llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
- linux-hardening@vger.kernel.org
-In-Reply-To: <20261009062733.3119731-2-kees@kernel.org>
-References: <20261009062722.i.253-kees@kernel.org>
- <20261009062733.3119731-2-kees@kernel.org>
-Date: Fri, 09 Oct 2026 17:20:08 +0200
-Message-Id: <179155920867.324725.17951375258235191243.b4-review@b4>
-X-Mailer: b4 0.17-dev-fde28
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2184; i=nsc@kernel.org;
- s=20250924; h=from:subject:message-id;
- bh=GTQovboIcNR9R/ScPbWLBEgm3nP1UkZmiJO85XmTewY=;
- b=owEBbQKS/ZANAwAKAQdSCnAWJhJpAcsmYgBqyQYqFIQQe5/qniOD7Rlw7CxUH3+lrC6zZMj0p
- cQ34w/ACs+JAjMEAAEKAB0WIQSHQTenhzckp4G+wsYHUgpwFiYSaQUCaskGKgAKCRAHUgpwFiYS
- aXONEACmdGYim7uibnq49CJrqpJOQSsZJAAeyMTuKqhMCsmQ8Eh8et4IF/N6D05rV64gbR9MBfy
- 1XooFqyQzqFqfvvQICO9IjYwt9xOgSuQf58KtqVSfwiqzrNNbkgZr2BTNR9k8SiNjcYhQPpzVUK
- BnRj9kVmiVVQCDg61spbGfDxbLeVI4hxv73BFkmBbwNwXTLBhIAoOnTk1k4ertt1wnmkaN/pMQB
- u7imubmMS7mKbq5GdKnhvKRteH+mwuFmTdQ+Bbd1EPM+FuSW/ro9kq2yITa7IsVBlSAxa/cU3jd
- SXkkIXCR178A7FC/0hPSgGY+dGSrvZjc6X3VZZoD4Iyuqq7wNNgW48X1ASr+i3Z36MahY06dBB7
- JJBLoXuN7OTG9+mnb1AM+I9+cXEwo/zwx6uyeVn+WTv0mxwA7It/Sv/BG815xDxrGtJdDmbSZw4
- 6AMbq35PgztGo8+XSOSUCigX+eqVTzmOSc+4u4XaT7M66jpPs4h9fSx9oqM1OhUJY3LAUYbZOqG
- Xy8/wYMjtiRwcIb8nkcFtCbN8u8yMXTVPQVvzLd1IA0EW3z5w0NALNJ7ZfGHRyZkiZeoNnt4nf+
- vFVWt2dax7CQPsmYvWjfZlSAxhjwVLMKmNV+yI+c0xvOtQi+JvLCawCd+4LugfX6sdvNWrbKBGL
- H67nI0D4mSBCJAw==
-X-Developer-Key: i=nsc@kernel.org; a=openpgp;
- fpr=18ED52DBE34F860EE9FBC82B7D97093255A0CE7F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261008114717.992497-1-tomo@flapping.org>
 
-> generate_initcall_order.pl, which orders initcalls for Clang LTO, forks
-> a child per input file, up to the job count scripts/jobserver-exec
-> passes it in PARALLELISM. It used to run from link-vmlinux.sh, which
-> the top-level Makefile invokes as a recursive recipe, but
-> commit 5d45950dfbb15 ("kbuild: move vmlinux.o link to
-> scripts/Makefile.vmlinux_o") moved it into a recipe without "+".
-> 
-> GNU Make passes the jobserver pipe only to recipes it treats as
-> recursive, and the make 4.3 in CentOS Stream 9 also hides it in
-> sub-makes (a backport of the fix for GNU Make bug 58232), so
-> jobserver-exec cannot open it and prints:
-> 
->   WARNING: Unable to reopen jobserver read-side pipe: FileNotFoundError(2, 'No such file or directory')
-> 
-> PARALLELISM is then left unset, and the script caps its children at the
-> number of online CPUs instead of the free job slots.
-> 
-> Mark the recipe as recursive again.
-> 
-> Tested ARCH=x86_64 defconfig with CONFIG_LTO_CLANG_THIN=y, LLVM=1
-> (Clang 24.0.0git), and GNU Make 4.3 plus CentOS Stream 9's
-> make-4.3-cloexec.patch.
-> 
-> Fixes: 5d45950dfbb15 ("kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o")
-> Assisted-by: LLM
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->  scripts/Makefile.vmlinux_o | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-> index 24a3a4fd271c..0b37bd5dc3a4 100644
-> --- a/scripts/Makefile.vmlinux_o
-> +++ b/scripts/Makefile.vmlinux_o
-> @@ -19,7 +19,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
->  
->  .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
->  		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
-> -	$(call if_changed,gen_initcalls_lds)
-> +	+$(call if_changed,gen_initcalls_lds)
+Hi FUJITA,
 
-b4 hinted me on [1], where a similar fix was rejected; but as we know
-have more arguments to generate_initcall_order.pl
-($(KBUILD_VMLINUX_LIBS)), the situation is slightly different.
+kernel test robot noticed the following build warnings:
 
-Thanks!
+[auto build test WARNING on 2dee3d3adcadcc57d62ba6608cd02f50b0c10264]
 
-Reviewed-by: Nicolas Schier <n.schier@fritz.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/FUJITA-Tomonori/rust-compiler_builtins-Fix-silent-trap-in-prohibited-intrinsics/20261008-204717
+base:   2dee3d3adcadcc57d62ba6608cd02f50b0c10264
+patch link:    https://lore.kernel.org/r/20261008114717.992497-1-tomo%40flapping.org
+patch subject: [PATCH v3] rust: compiler_builtins: Fix silent trap in prohibited intrinsics
+config: x86_64-rhel-9.4-rust (https://download.01.org/0day-ci/archive/20261010/202610100054.UyoZyPQ5-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261010/202610100054.UyoZyPQ5-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610100054.UyoZyPQ5-lkp@intel.com/
 
-[1]: https://lore.kernel.org/all/CAK7LNARCM=rUm8mA8GRQ7ufeyfneGf4OEvHmESKt=zuxs2KrHw@mail.gmail.com/
+All warnings (new ones prefixed by >>):
 
--- 
-Nicolas
+>> vmlinux.o: warning: objtool: _RNvNtNtCsjYlAz7NZ3Sw_4core3fmt3num8exp_u128+0x7d: __rust__udivti3() missing __noreturn in .c/.h or NORETURN() in noreturns.h
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
