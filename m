@@ -1,163 +1,155 @@
-Received: from sonic.asd.mail.yahoo.com (sonic-usea1-0019.asd.mail.yahoo.com [34.2.64.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2ADB6448394
-	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 06:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.2.64.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC4D3537D2;
+	Fri,  9 Oct 2026 06:52:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791527672; cv=none; b=msRc3ygvDm0ph4fQ2Luh6V6r5EYY35rQUzIcqgbe54J/CpGJfmcMWadbAgBRIxF+A9nx89ZJN7+qS7ZZvoNjlIPkHvF9ovPc1JsyXQM4Q8aq4co7vlS5f0OgFvV1Y15rCKTx4wLry6SalOCkLdVGYs5xwVvPoktSlK+GW/0QHnU=
+	t=1791528768; cv=none; b=KoRwQ+V7EEp5nXu781jRoOD1igdHj5DZ70QbTMe5YrDefuCu7EILQ9TEa9GuUsW1Wl7b6t1hfDs62oNntOfny79k3RAY54iJDpvYvXTIwtQ74i3Ej1RVTY1GL29+uLlAe5FyY1O+FmQSSEtGs0/6pP/bNQNbQXHHeqJuOgGrnRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791527672; c=relaxed/simple;
-	bh=RBiqQ+1JOIjRLJ2qPLzzWrhZ+V5A3kv6qj66FnkpEeM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 Content-Type:MIME-Version; b=VSjK5osLcLsGzjl159D5iB3VmI2gYvDKJXf4ewoKsphpwf7nYJNpit4yI3qG2MGtSYuKdsMv3wpsuVrb7KmXzID67qobjCUlY9PEsdX9f+Z7aV921YINyRPKC7fyS+RtWxV5H2ny5a5gSibhbRaGad74sBoqqqzcUT2enCeDNF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=UBgFPZSF; arc=none smtp.client-ip=34.2.64.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+	s=arc-20240116; t=1791528768; c=relaxed/simple;
+	bh=H1+FpJ79sK0uwFTJ3AfplsqD0q6SPMdFpNjloq56mGU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k4oUqKq0eOdD+BeMa6nOl1KYNKu3/Lo7klbSWr1co1IYg/9wJJJSFN9A84CCo+vCsGuOfz1XrzYbuKNfirKecwcs57oManngIdoA7I4g448qmRWeuIc2xiV3654T0/qGLcw9rJmY+9h67yb6zmYbablqspfYorfvyuaq/rS6CSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EzYFVJwE; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="UBgFPZSF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791527670; bh=53F8eeZQg3g1Nqk6SIiKM9bUNM7Hn0PGxCtMlom1If0=; h=From:To:Cc:Subject:In-Reply-To:References:Date:From:Subject:Reply-To; b=UBgFPZSFju7HOd1z+ho2EmlQLYaFvndsTPVjD5QF94xMVRlOW56x4xmYmJo3nwAA7qpkvAQRbtBG/yLwF1CS5zds5cUWrH9qZg99AS+R8KrOyq3JswspF0o3j2kfbQnTjmRzkgfQKpm+nTOaHq5Ve6dC1j5fCW9ZM/SiyN4WasONFV5X27m+/wXjUI6Sda253R9CM1NW2fM8xW2hivw3wi57ICOlEYKj3/LkQj5tsQ6Lho/R00JzAYlvR+K1ejsEgJrPDgFRzEQA6C6lw9CLTJHNR7fy35rVXSeDsnPuE2BMKpuV5kpyvM0VK0CJtqS+N5w9CryalCRmVZb6Ru0bpA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791527670; bh=G8FnG61slJSrLsnZtJnhkqzfzmrElK3JWnf83kE32pM=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=gK5N3k86gqvxfgCf/X6w7xwtjS1bVsElrxmFWH6nH7b1ZCBQJKgRSdbHC8sb0ilKm++OVHFFKLg5tAlSb4biK+gBclKJlkiioeOIqKAK4C2BsKFdNJyqUI+g2asFKQ4uNVHf0mGB6X13hKFGU651AiowFMXaH94h7cNqNAS2nZQ2NTRyB87jBxj/Nw0Hi/ym4AWX3pRrSiprFQSJ8atnMxbvnvhnFcVX4RnX4EvzeSPsUxgZEvyvKs/HViW2BIfbNdYkOFC8h194BTFjJQy8ECFMO2JskleuohnVKDJyISPEfaVkaVZOwuAUpn4Aj+WpCEFlHKWanMEZF0XvnEG0xQ==
-X-YMail-OSG: seHmNZIVM1nkfqqNvwtHcWmHQHqnphrWihU8eMmzVSuyS_RuQ2j.WDpUsRSavaU
- jZYfRatP1_4DA4f5KUios8OJz1tdtRvSLo3dUe5QdQCPyocBgjmsPQwtirVOqLHJ_RUQvuHXV6sM
- gd5ExRd1fsASC3LMFmZPq73krtwxAGawILY6ZXKqFGmshYJyj65KZF1nptAf.8USkkuCWuZiRY1p
- o082CsTR4w3.wIygu1h7hYKpG_GRK18sdPCHojfEVqVKG1aq6w.qixlx.lxhFpFGAU5eaGQ4YXhJ
- wBuuUNRxY.vT5Bc_AABN6_njxEFydpQroSGfUQZkLKVMg4bQqDOcEuj8SYv5j7NRAFw2I4mQEsxW
- 2ufI6ScADggGo1J0sY1wu75wnZU1t.ZT380QqtzwzsgOMp75xTHPVzCyPQbVMI.1Z.6Zwsv3DJ1r
- buS4IXCb7JBgkORah9pXNUFJNvfYvBFqmKo87oDCnajnX.as2BKxQLcijHjt6HLF7m4GxR271MhJ
- HgajYuYQj2152Wk2wUt5sOzxSVyPdbSd5kFT86kl0NR8w9xIdQiqfNqviJKkGzhzVFiWJiwOwWA9
- e9Gb4k9_IWwMoc6PTIWdXQn0f7Y_T6Iew2u6IYqDiDwqoDGpQtPHsvX1YX0UupKJ3exeRy3mwgLs
- xypQzSqsT4LuG3vFAUhT5yar1Ca0_SELMOmfznOQrUx9K2WwLKP9oHNyk0SPj2Mhd7veylOEW.XN
- biYjAmgTW57x_eHYUehbadMm33w5e1Anridq5yjDPRwgNcz7iMobMptpt.8JY_b4Ld9yqUnIFPM6
- kWlDq7nDiJvv9SNvnKoYe2kZtPOWVe1JZ_GsSA6GbtxcXHRqk9XUg07JG_dd8pN5dasD5Vca6UmY
- _MMYTB.ncp9vriGX1lyQgW22OqYreNcaggxTCd9jvgOtE7WVKMqTr5HRNrTguV4SALW3AYx_iZIy
- bRl2qOqhI_Ot6bGeEHZu.cV5nWvnoaTcQsQNpoP08NGbKWpeG82MiBI4vaX_vmAEDryzjpHGREw6
- ETV5KQO3ttNig8mW9xXhVlJPKvoycJNPbo3lhVAP9xOhHorDIAc5q02i9MLXdQx8A3P32RaG5_Vv
- Ws5D5.t2o5L6CP2dnBrvHG0cnsVfi.OnbfG2B0xEve7MTb6mes8TrlgYtOxw_JyVsWjo.TerftFy
- KCQY6I8dRjZJMN583sYvZYV2Tawp5Yh02hZrx4wTxALAAfVN1k_XbbofXtyxPfYhBn0DVcEAVaOz
- HoJpnEy4ocEvum0mt0MN7.vf8t19a8cpcfFbOBtD3RQ1RECeJSvkVb.VPoQKPlJddOpGZcpIkf0K
- RXD1rBkdxPAav5d8.f8w3AhjxOpTbaYzEIE11hMNXO9vN8W2C6UuQ.VSmSBhmnqlBuDDeZ2o3wq.
- GP05skzBvCztwh24uPfm1veqfBNdpYAF2hRNa7iQt66TBGmrlMeQUn_8IZf1YSSP5c1IkoaIf1YF
- _Sx9zSwtxUJg02nUscQ8nEsJ4dKpwPeQMyk5mA9fIRy9JKsUfuITETERC2njJ1bFNh8TC07bYBHe
- amIaHHWvnaa1RwKtYgi83m5dVG.iQVp0aGkTG5KFlXUWucJUofSHBNz8AIxaBWdys6DcK0VIY6uz
- EH2MogkL80MyOODhabyo1bJ4rH12ocw60LTQb0xp5FV591hhiotiffFTNKogREL9Smp5A5Gk8o5M
- PEOdJ8OZhqMUPvBxkfBU8lvRVQnVXfsfIzgJcIiS63NRd0tOOezBJ5UURhV9j7TETD8j622oCqwm
- L5r5hZJ.6.Wjvsak97WltV9DMvxyLcwYjH03brYZhqHFf2VoxnhOvWCqLk7foGObXzAfeX3AbYz6
- CnfwfPbk5s1DA.K77VR65LBDAli3FHxUPj1ZqxiBWQ6_yqTDVAtEH0UllQo86UZLXmRWTcdaSC9D
- asgEYe3l.4tVfRpw6uf6M7RSQKlV3KdSKtZBNQGbP7KhEsgYERZTOripn2c42wdyahpsw4cdzq5V
- Wl7f4nUK1tuFRZxtuo5mSbwBm_dGn
-X-Sonic-MF: <Capitain_Jack@yahoo.com>
-X-Sonic-ID: 49b055a9-9390-4c2c-a8a1-4757ae31f10a
-Received: from sonic.gate.mail.ne1.yahoo.com by mail-asdoutdeli-p-cin-usea1-prod-sonicconsumer-svc-101 with HTTP; Fri, 9 Oct 2026 06:34:30 +0000
-Received: from dip104.lsn.bf1.yahoo.com ([67.195.177.113])
-          by hello (SMTP) with SMTP ID b587e42b02226132a0e74996d08f2e41;
-          Fri, 09 Oct 2026 06:34:27 +0000 (UTC)
-From: Daniel Campos Ramos <Capitain_Jack@yahoo.com>
-To: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Melissa Wen <melissa.srw@gmail.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Luca Ceresoli <luca.ceresoli@bootlin.com>,
- Kory Maincent <kory.maincent@bootlin.com>, victoria@system76.com,
- sebastian.wick@redhat.com, thomas.petazzoni@bootlin.com,
- dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v5 37/38] drm/vkms: Add connector parent configuration in
- vkms_config
-In-Reply-To: <20260627-vkms-all-config-v5-37-854aa0840926@bootlin.com>
-References: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
- <20260627-vkms-all-config-v5-37-854aa0840926@bootlin.com>
-Date: Fri, 09 Oct 2026 03:34:21 -0300
-Message-ID: <179152766117.1436711.17646397822774209185@yahoo.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EzYFVJwE"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791528767; x=1823064767;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=H1+FpJ79sK0uwFTJ3AfplsqD0q6SPMdFpNjloq56mGU=;
+  b=EzYFVJwEY6sTeZaLQ4yU1dzdThH3NfAiA0lVUP/zCXRJTCd7gb8GqHk3
+   2xQlSXt0VqgfwoS1yJgGHpMTnAZvIFk9QvJwJxPSeL91RgovHUhn974PB
+   zmKe0qITnuDHU26umLMGPCMJ7HfWTSq20cTr8oiQerwcMjCBAgsHHaTIi
+   MgdCcI2eIIkVyviP8ER0F+c9qbJ+0LeqHqjZJdqwbDJVn93KH3jPskW3p
+   0XexxFk8navlQSKXyhWFiqha8BtoJBIfTXZ4+s87bihD9p/h+RycvbX6L
+   eEJo5/FYPe199xb3qCsESjCs/PEYfZgGwJUKvJfbgO0L+eXyIZ+U0gEc2
+   A==;
+X-CSE-ConnectionGUID: 8BDcwE+mTnejV/zJBlXaPw==
+X-CSE-MsgGUID: NjHpfb/hRme/xtnWegW1PA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11929"; a="332498"
+X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
+   d="scan'208";a="332498"
+Received: from fmviesa013.fm.intel.com ([10.60.135.153])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 23:52:46 -0700
+X-CSE-ConnectionGUID: VX1XhK7RTrmDhvfTgjEN9Q==
+X-CSE-MsgGUID: wSiI1/5YQqWBUWtYpU0ucQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
+   d="scan'208";a="1977362"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa013.fm.intel.com with ESMTP; 08 Oct 2026 23:52:42 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xF4T8-000000005QG-17al;
+	Fri, 09 Oct 2026 06:52:38 +0000
+Date: Fri, 9 Oct 2026 14:52:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Bryan O'Donoghue <bod@kernel.org>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+	Loic Poulain <loic.poulain@oss.qualcomm.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+	Daniel Scally <dan.scally@ideasonboard.com>,
+	Keke Li <keke.li@amlogic.com>,
+	Richard Acayan <mailingradian@gmail.com>,
+	Hans Verkuil <hverkuil@kernel.org>,
+	Gjorgji Rosikopulos <quic_grosikop@quicinc.com>,
+	Radoslav Tsvetkov <quic_rtsvetko@quicinc.com>,
+	Robert Foss <rfoss@kernel.org>,
+	Milen Mitkov <quic_mmitkov@quicinc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-media@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 19/74] media: qcom: camss: vfe: Represent output as an
+ array instead of a singleton
+Message-ID: <202610091417.UPY6v8H3-lkp@intel.com>
+References: <20261005-linux-mainline-7-2-sm8650-hdk-rfc-0-v1-19-ed985aefd611@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Mailer: WebService/1.1.26668 mail.core.serving.mcws.prd.acl:role.token.mcws.jsmtp.yahoo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261005-linux-mainline-7-2-sm8650-hdk-rfc-0-v1-19-ed985aefd611@kernel.org>
 
-Hi Louis,
+Hi Bryan,
 
-On Sat, 27 Jun 2026 05:30:54 +0200, Louis Chauvet wrote:
-> @@ -150,6 +220,8 @@ static int __must_check vkms_connector_init(struct vkms_connector *connector,
->  		}
->  	}
->  
-> +	drm_object_attach_property(&connector->base.base, connector->base.dev->mode_config.path_property, 0);
-> +
->  	return 0;
->  }
+kernel test robot noticed the following build errors:
 
-With this, every VKMS connector has a PATH property, and a connector
-without a parent keeps the value 0, no blob. IGT reads a PATH property
-as "this connector has a path blob": kmstest_get_path_blob() asserts
-the blob whenever the property exists, and igt_display_require()
-reaches it through igt_output_refresh(), so IGT tests built on
-igt_display stop before their first subtest.
+[auto build test ERROR on 8d3ae59288f1e7d58d76558a6ee96d533bc5019f]
 
-Measured in QEMU on your base commit with v5 applied, IGT master of
-2026-10-08, on the default VKMS device: kms_atomic fails with
+url:    https://github.com/intel-lab-lkp/linux/commits/Bryan-O-Donoghue/media-qcom-camss-vfe-Rename-gen3-back-to-vfe780/20261005-191331
+base:   8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+patch link:    https://lore.kernel.org/r/20261005-linux-mainline-7-2-sm8650-hdk-rfc-0-v1-19-ed985aefd611%40kernel.org
+patch subject: [PATCH 19/74] media: qcom: camss: vfe: Represent output as an array instead of a singleton
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261009/202610091417.UPY6v8H3-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 242243a5814307de825db3428662d67b064e2cbc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261009/202610091417.UPY6v8H3-lkp@intel.com/reproduce)
 
-  igt_kms-CRITICAL: Test assertion failure function kmstest_get_path_blob, file ../igt/lib/igt_kms.c:2287:
-  igt_kms-CRITICAL: Failed assertion: path_blob
-  ...
-    #3 ../igt/lib/igt_kms.c:2618 igt_output_refresh()
-    #4 ../igt/lib/igt_kms.c:2953 igt_display_reset_outputs()
-    #5 ../igt/lib/igt_kms.c:3244 igt_display_require()
-    #6 ../igt/tests/kms_atomic.c:1470 __igt_unique____real_main1460()
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610091417.UPY6v8H3-lkp@intel.com/
 
-The vkms:none job of drivers/gpu/drm/ci runs IGT on that device.
+All errors (new ones prefixed by >>):
 
-Drivers attach PATH to MST connectors only, and set the blob at the
-same time. With the change below, which attaches PATH only to
-connectors that have a parent, kms_atomic plane-primary-legacy passes
-on the default device and on a configfs device with an HDMI-A
-connector, and kms_3d passes with the stereo series I am about to
-post. A parent can only be linked while the connector is disabled,
-and enabling a connector goes through vkms_connector_init() again, so
-the property is there whenever a connector has a parent.
+>> drivers/media/platform/qcom/camss/camss-vfe-17x.c:395:9: error: incompatible pointer types assigning to 'struct vfe_output *' from 'struct vfe_output (*)[1]' [-Wincompatible-pointer-types]
+     395 |         output = &line->output;
+         |                ^ ~~~~~~~~~~~~~
+   1 error generated.
 
--- >8 --
-From: Daniel Campos Ramos <Capitain_Jack@yahoo.com>
-Subject: [PATCH] drm/vkms: Attach PATH only to connectors that have a parent
 
-Every VKMS connector gets the PATH property, but only connectors with a
-parent ever get a path blob, so a connector without a parent exposes
-PATH = 0. Drivers attach PATH to MST connectors only, and set the blob
-with it, and IGT relies on that: kmstest_get_path_blob() asserts a
-blob whenever the property exists, so igt_display_require() and
-kmstest_get_connector_config() fail on every VKMS device, and with
-them kms_atomic and kms_3d.
+vim +395 drivers/media/platform/qcom/camss/camss-vfe-17x.c
 
-Attach PATH only to connectors that have a parent.
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  385  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  386  static int vfe_get_output(struct vfe_line *line)
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  387  {
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  388  	struct vfe_device *vfe = to_vfe(line);
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  389  	struct vfe_output *output;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  390  	unsigned long flags;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  391  	int wm_idx;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  392  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  393  	spin_lock_irqsave(&vfe->output_lock, flags);
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  394  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16 @395  	output = &line->output;
+8ce158c1be981bf drivers/media/platform/qcom/camss/camss-vfe-170.c Milen Mitkov 2022-12-09  396  	if (output->state > VFE_OUTPUT_RESERVED) {
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  397  		dev_err(vfe->camss->dev, "Output is running\n");
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  398  		goto error;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  399  	}
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  400  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  401  	output->wm_num = 1;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  402  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  403  	wm_idx = vfe_reserve_wm(vfe, line->id);
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  404  	if (wm_idx < 0) {
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  405  		dev_err(vfe->camss->dev, "Can not reserve wm\n");
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  406  		goto error_get_wm;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  407  	}
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  408  	output->wm_idx[0] = wm_idx;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  409  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  410  	output->drop_update_idx = 0;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  411  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  412  	spin_unlock_irqrestore(&vfe->output_lock, flags);
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  413  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  414  	return 0;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  415  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  416  error_get_wm:
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  417  	vfe_release_wm(vfe, output->wm_idx[0]);
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  418  	output->state = VFE_OUTPUT_OFF;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  419  error:
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  420  	spin_unlock_irqrestore(&vfe->output_lock, flags);
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  421  
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  422  	return -EINVAL;
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  423  }
+7319cdf189bb643 drivers/media/platform/qcom/camss/camss-vfe-170.c Robert Foss  2021-03-16  424  
 
-Assisted-by: LLM
-Signed-off-by: Daniel Campos Ramos <Capitain_Jack@yahoo.com>
----
- drivers/gpu/drm/vkms/vkms_connector.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/vkms/vkms_connector.c b/drivers/gpu/drm/vkms/vkms_connector.c
-index 3449c4c213..5d43201cff 100644
---- a/drivers/gpu/drm/vkms/vkms_connector.c
-+++ b/drivers/gpu/drm/vkms/vkms_connector.c
-@@ -222,7 +222,9 @@ static int __must_check vkms_connector_init(struct vkms_connector *connector,
- 		}
- 	}
- 
--	drm_object_attach_property(&connector->base.base, connector->base.dev->mode_config.path_property, 0);
-+	if (vkms_config_connector_get_parent(connector_cfg))
-+		drm_object_attach_property(&connector->base.base,
-+					   connector->base.dev->mode_config.path_property, 0);
- 
- 	return 0;
- }
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
