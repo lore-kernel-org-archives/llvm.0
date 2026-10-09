@@ -1,99 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic.asd.mail.yahoo.com (sonic-usea1-0019.asd.mail.yahoo.com [34.2.64.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C0F84432F5;
-	Fri,  9 Oct 2026 06:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AE8446055
+	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 06:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.2.64.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791527256; cv=none; b=M5686jprNV71uBgm5rmzvhVfr/PKxTz+W6W8kw26U+Jjwf9Y6FkW6m9x7ExK/FqxM1q0jxA3BQmaLH23LKWiP9lb5W4qRKUarsKiV2vkkFeRUg3hD+/9L+BVQdutlMZHJJ5FRApluHYqJ/RKGJ9rWsDuXkAScHg8F+TE8uD7PN4=
+	t=1791527655; cv=none; b=n7enrRlhPRJoMGCXLp6ztXKypRNzKuhHulZmFMOO/zP0v1vkSdECoRBft1TqXdEA5BecEfA1Jrwd1sIas1PTmvcHEkwanxFkp+rqdkmnMjtp23eGBY9anIMCsAoaEmuUPdUi3VFzMqhGl48BfihiUA20njG1K1FpE7UvNZV5XH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791527256; c=relaxed/simple;
-	bh=Ou6T9IYNd58AY4rXiZP4j6dFf/TA3MEpH+4ENptCD70=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QaiS2/CROvrnvIpHY9oKHE9bR69LelPqSi6+HPEWtlnU0WOzXzB4SVQTpeXwLalTRe4o6F9tZbHDqUm7tMZHkGj/sOm8GabQTZ2YbTaegcjop3+Za0V8oxTaW2UZExDV5k/saRYUXRwhq5uQHzoyvTGJddZUHv6Rfzc15mLg360=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7yerwHB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791527655; c=relaxed/simple;
+	bh=oSk7Vdi7Gq/dNVx3VSMUN/xhAqAHju+O1Vvv9xUer00=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 Content-Type:MIME-Version; b=Wgk+zJrnN5WOm5BvoT09Tcd+ABm9aG5N6nlDF8IC2EqpB9asFxnS0tECxKIqLhVI0Iu6qih0X7o1MGZkh+fnSaN3YtnL1eoGdxl2CRHtOcsKIU9FmLTEteZLvz5mKzTdSXRbDMGmwplHNYA7rrlm5vBjF12ieLmP9TsihVdja14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=UVNigtKA; arc=none smtp.client-ip=34.2.64.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7yerwHB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242D21F00898;
-	Fri,  9 Oct 2026 06:27:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791527254;
-	bh=JlF3Kjq74l11rQ0rauivIkipzjLi4Zy802cOB/jxEDY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=X7yerwHBTctt8iediODeR+lKZv8OVH7ZGF8bwa3az/KLpmLQXTGeSNqfcokX/s8In
-	 uDoVqMCLNlsFkJdBQgA7qcymsXgTecA0qfgmcN+PnPakAK2nLm/yw4awYr+5HOrSlb
-	 vUpccvR7C4v3Vq6NsSs3zNKa6G3Vqaesw77Yiswd4JxffLJhM5cC3y4hu5jnqncvzI
-	 avQu1q9HX21M9vl4yMDHhbvocE5hmGRSZ/Tl2uVDidVhuGKp6I99NngZptV3fQoArU
-	 0BhX5qyjO+o7HCh7syguSZInpS7yUVRHPr4brP936clCvP0BfvhG3oHm4KvDn1V1Ts
-	 m3ICpknFTJ9Qw==
-From: Kees Cook <kees@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kbuild@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org
-Subject: [PATCH v1 2/2] kbuild: Mark the initcall ordering recipe as recursive
-Date: Thu,  8 Oct 2026 23:27:31 -0700
-Message-ID: <20261009062733.3119731-2-kees@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20261009062722.i.253-kees@kernel.org>
-References: <20261009062722.i.253-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="UVNigtKA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791527653; bh=zoqJwTIshs9G4DvjFBPzzu4t8DddL4XLXAp2ZmUNtgE=; h=From:To:Cc:Subject:In-Reply-To:References:Date:From:Subject:Reply-To; b=UVNigtKAm8QxY1B6HNyhuKYkmtIWEqCeJUgijtTJlMv0Xez8NnoBl2wNJ8b6Bz607PmMi2vDemRIDb66UxJ4kLXHRT7DArJiiNf7klTt3FYjUpPQReFDOKTLHdrQdbtHcO87LELzuWuXrdLPNfimus/xV/d0oTetS7MNaqECCPUD1PJFxkcg3YsNC6NL5aO9gXF9pr8pBInJMCHqUy6KWyqxM9QpvYg1bCG7qevaA6CuRAeJYFsZSvC2fWimD6bPmRQzDWBNmjsqjqQr5IZesZDqfqaanPMvCgPxl4pZrwS73MAZ1ci1+sPOi1lzyuO7JNK5TZAl0fg0DYku2ZBDNA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791527653; bh=eTCVOCM/1pAN9RZDe/NdxxAtFQvhNJb8IIwb0RFzmSR=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=U/wZMRajc8suEUJt7juBriiWeQyW2kxLkYQB29EeTyWlNmea0Y0cHPpZVnXMlTqjnCJoAVS0iMYaSJf2aQJ3HWmp06KTdt8t81WJvod+UwoRZDapRYwluO/nsHm2FSIlrcADyjP6uL6r2He+TBGID/iwyTyrY8HR+IlA5KB6JjsEHVmKIiDzphGE99ew94chDLUl4t5GgMrD6U5nKpqEliRRLlV/eQGsdFLaTC1WlgWRozG3YstB/MH623l6J9Qd+FDSxn0/ysjF9n2aIZuYa+J457TUk+LL1MwQaXdhOI8SyCSd/HIYPQqYuPv2qZMBoZQLPNsKNleK6EEjerUZ0g==
+X-YMail-OSG: zvpY.ZEVM1nYy3ivwGJc7PA7t4f3TVbqq0wJyW.tQTD8qMpfdVHFzSBKJuE6xcD
+ b.91SA3b5NWXShxwg7rM6Na3tt.goJ.PGbWYWgRgpXWHlEr_z4ja09jgLCfLZ4t_L3WrPZaIY4EG
+ a4AMS.4ZFp8uw2yoQhnZ_WSe8.8vffy7qavyDIJM0Pj6MR.ww9ZJnR7UtXA_.wrZw5V0u7ZOxVlY
+ 2G7PinlkspJTFUXb6rU4xYx5GOmEkUUctBtlJlWMYqcIolTvoLJDwQRsG0ArJYqZ5z6L2Ggw.Aw6
+ l8v_vg87Vz2504ehNHqfwP_BMHxbjLHouEJbT3e5hteXMqT1FyxMpbDX3wyjbpU0Rhb7syqIFP_O
+ fRSqB35qCUh4Hf8LoB1ussaDEQm0bTqdNsOJC3kvq_dBz6oib71.Vqao9p43cRSzifkIZdYTkXOX
+ EMsIJwf.XHs3ldjArk_H3ygg6gof3qCfyakBBz1R4PIwRZIF7EkSkdH8bzCv033Aevq_1yfI1ON4
+ I74GsGATI2lu615dK_TfeoXepe5SsWZe7ERdGStt54mePPpqP9vHjyZLi1TmgBD2sIi_vxI1.MS8
+ KlblD7PpzX7GadeluKMFjy_C.IpAT9Y616LpKasdAbtQWvp4GdX8uHyDAdbP1T_LWLOMz3d3jfBY
+ wcENBh1w4ywOrFkDG6UKfVfSr0dsv3EzjTuzxsNqDSosb5jm_HRfcD.vZmPY7ifvXGRFoDd9xpNq
+ 9gmqqtK6H5.XtWnBGtmDM4dXdA1A3BMl8dHk78Kr2TB0Q3up_VUjPkb67iRwCdWpJrwbINUh6Wfk
+ UrjcakGNViHLnPf92W7G8u3L0qjbtZ6zitBhh8wKxNACCwDEioHAa25cIDfTmORhTT.puQf9b39B
+ piuTJd3YsdlkmmKTcdRNa0faCYJzMzCpIBXo7Cy6G10xrLqx_uopQLXlWpVX3ylMdc9edFmI95H2
+ glV6oou1yz7Qn92Yd_2oZMYQ9vdJYm3vs9VsKJJ0iKypM60eJWp1FtWyE0vkyZzFdN_OXc9jLk36
+ xI9_jO_CAEJzIEPC1Q.vaKxJUmSgS5Ob9F6B7wPnuDvLCE3rILgfdrh3J2Cx9bg3K7GVCFXO9T2r
+ Rv4PyM0h06tHShEIXxvb8jbeV1TGUzGwJFUmg_r69vR4070GgmGOIZrHZOWuwLUCtbxcirw7oGzS
+ dpgIzVZ9lf7iehsmlQ2GWYiRNc0EoPyuFO2EkSfvNzRiQH_XMQXEsRtNW5a1MBAJjZzY7GQGOl.Y
+ ygPVnFHJ3Pa.2y6R8BWx_U3aRX.HiE3QRD8Sr0CiHxmF.oJWwa0WnhrnRlBxsAC330gi8TwSmtrj
+ NU2gg9YmaaVv7byDIDSk0T5_M1tVxQZj_vWAz7P13cLOAE5njw9eLIB15YVRiTKkpmprYPziHUib
+ Z7B4Of6KS9M5Vtz_fGqtu2RGYKxEwZyzK5vZBHI_P3Ir8H3.nse1PAUe.daNzK2D5rOtSY7AdUTH
+ eTfPR7rByawmtpKcgYGVOt9xGPliXP_oPoXFcVX3lzUBkLquyoBh94lKj2VYrOrO8OTf2K4B1UPT
+ wF_Z013fso5uGHl9jOBlZFY8GuAzOpv5ww4vJojHwvOVdL1ghkkOJMonx0VqbaY6w2dZ4Y.2R7wA
+ 0c8MA8eLUitz7TBihTFzfraYGCXauQBb5V6DLp8aLFRsHznixCj8cP4MZOutfgxHSe68oY3LcEc4
+ SA6uu1JAprYpUEF9CTB_ZQxEzx.9tK.lFA3h0ykAyamTXu3f1pBnCcVaydSHbIaFZ85XZUXR5pac
+ mZjSdtsZJlzBj3G4pJbcBmoNznM5dqYAs1_eaVcqhiN8JgWqxQebEijxa5Go5WLsFyDr_tSLMkbu
+ .yVJJChXHBTzZr1Oy8luH.Asn3XmqB6df.SCM2w8cOlEF8a48iUZ_vxABS6kA_jeVSTcIJKFDsgC
+ 0uA1xuPP9cQkR_FSEMBJGVMQ_Zuggc3LxXbXH0M2yXrJkFeBACBb.4gpsnZCddTS3GRAf1cKSlob
+ y9g--
+X-Sonic-MF: <Capitain_Jack@yahoo.com>
+X-Sonic-ID: 54bcac01-f489-4771-a68f-d2597017b96d
+Received: from sonic.gate.mail.ne1.yahoo.com by mail-asdoutdeli-p-cin-usea1-prod-sonicconsumer-svc-102 with HTTP; Fri, 9 Oct 2026 06:34:13 +0000
+Received: from dip101.lsn.bf1.yahoo.com ([67.195.177.110])
+          by hello (SMTP) with SMTP ID 3afe77cf69c240796f55b68abbd20cef;
+          Fri, 09 Oct 2026 06:34:11 +0000 (UTC)
+From: Daniel Campos Ramos <Capitain_Jack@yahoo.com>
+To: Louis Chauvet <louis.chauvet@bootlin.com>
+Cc: Haneen Mohammed <hamohammed.sa@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Melissa Wen <melissa.srw@gmail.com>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ David Airlie <airlied@gmail.com>, jose.exposito89@gmail.com,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Luca Ceresoli <luca.ceresoli@bootlin.com>,
+ Kory Maincent <kory.maincent@bootlin.com>, victoria@system76.com,
+ sebastian.wick@redhat.com, thomas.petazzoni@bootlin.com,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH v5 32/38] drm/vkms: Introduce config for connector EDID
+In-Reply-To: <20260627-vkms-all-config-v5-32-854aa0840926@bootlin.com>
+References: <20260627-vkms-all-config-v5-0-854aa0840926@bootlin.com>
+ <20260627-vkms-all-config-v5-32-854aa0840926@bootlin.com>
+Date: Fri, 09 Oct 2026 03:34:03 -0300
+Message-ID: <179152764385.1436711.6215580184547295403@yahoo.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1783; i=kees@kernel.org; h=from:subject; bh=Ou6T9IYNd58AY4rXiZP4j6dFf/TA3MEpH+4ENptCD70=; b=owGbwMvMwCVmps19z/KJym7G02pJDFknOoNnuMtL3z1/y9TBoSb0yqz7p1+rOYc9X3rSu8y4X tGu3s6+o5SFQYyLQVZMkSXIzj3OxeNte7j7XEWYOaxMIEMYuDgFYCIq8owMb18uFfjyRnRmZkqc z7qFDxIlc99sE0j9xRnD3cVyvvlFIiPDeomYtdOjRUz3iXA8VpFIfbtAaKXdlc8CqnX7mKYY/Sv jAwA=
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.26668 mail.core.serving.mcws.prd.acl:role.token.mcws.jsmtp.yahoo
 
-generate_initcall_order.pl, which orders initcalls for Clang LTO, forks
-a child per input file, up to the job count scripts/jobserver-exec
-passes it in PARALLELISM. It used to run from link-vmlinux.sh, which
-the top-level Makefile invokes as a recursive recipe, but
-commit 5d45950dfbb15 ("kbuild: move vmlinux.o link to
-scripts/Makefile.vmlinux_o") moved it into a recipe without "+".
+Hi Louis,
 
-GNU Make passes the jobserver pipe only to recipes it treats as
-recursive, and the make 4.3 in CentOS Stream 9 also hides it in
-sub-makes (a backport of the fix for GNU Make bug 58232), so
-jobserver-exec cannot open it and prints:
+I use the EDID attributes of this series to give a VKMS connector the
+EDID of a 3D display, for tests of HDMI 3D modes without one (RFC to
+follow). Running it with kmemleak showed one leak in this patch.
 
-  WARNING: Unable to reopen jobserver read-side pipe: FileNotFoundError(2, 'No such file or directory')
+On Sat, 27 Jun 2026 05:30:49 +0200, Louis Chauvet wrote:
+> +static inline void
+> +vkms_config_connector_set_edid(struct vkms_config_connector *connector_cfg,
+> +			       const u8 *edid, unsigned int len)
+> +{
+> +	if (len) {
+> +		void *edid_tmp = krealloc(connector_cfg->edid, len, GFP_KERNEL);
 
-PARALLELISM is then left unset, and the script caps its children at the
-number of online CPUs instead of the free job slots.
+Nothing frees this copy when the connector configuration goes away:
+vkms_config_destroy_connector() frees the configuration, not
+connector_cfg->edid. Sashiko's review of this patch pointed at it too.
 
-Mark the recipe as recursive again.
+Measured in QEMU on your base commit with v5 applied and kmemleak on:
+eight configfs connectors, each given a 256-byte EDID and removed
+again, left eight unreferenced 256-byte objects allocated through
+connector_edid_store(). With the change below, the same run leaves
+none.
 
-Tested ARCH=x86_64 defconfig with CONFIG_LTO_CLANG_THIN=y, LLVM=1
-(Clang 24.0.0git), and GNU Make 4.3 plus CentOS Stream 9's
-make-4.3-cloexec.patch.
+Feel free to squash it into this patch.
 
-Fixes: 5d45950dfbb15 ("kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o")
+-- >8 --
+From: Daniel Campos Ramos <Capitain_Jack@yahoo.com>
+Subject: [PATCH] drm/vkms: Free the connector EDID with its configuration
+
+vkms_config_connector_set_edid() keeps a copy of the EDID in the
+connector configuration, but vkms_config_destroy_connector() never
+frees it, so the copy leaks each time a connector that has an EDID is
+removed from configfs or its device is destroyed. Free it with the rest
+of the connector configuration.
+
 Assisted-by: LLM
-Signed-off-by: Kees Cook <kees@kernel.org>
+Signed-off-by: Daniel Campos Ramos <Capitain_Jack@yahoo.com>
 ---
- scripts/Makefile.vmlinux_o | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/vkms/vkms_config.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
-index 24a3a4fd271c..0b37bd5dc3a4 100644
---- a/scripts/Makefile.vmlinux_o
-+++ b/scripts/Makefile.vmlinux_o
-@@ -19,7 +19,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
+diff --git a/drivers/gpu/drm/vkms/vkms_config.c b/drivers/gpu/drm/vkms/vkms_config.c
+index b9d5a2e44f..04a3019317 100644
+--- a/drivers/gpu/drm/vkms/vkms_config.c
++++ b/drivers/gpu/drm/vkms/vkms_config.c
+@@ -1008,6 +1008,7 @@ void vkms_config_destroy_connector(struct vkms_config *config,
  
- .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
- 		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
--	$(call if_changed,gen_initcalls_lds)
-+	+$(call if_changed,gen_initcalls_lds)
- 
- targets := .tmp_initcalls.lds
- 
--- 
-2.55.0
-
+ 	xa_destroy(&connector_cfg->possible_encoders);
+ 	list_del(&connector_cfg->link);
++	kfree(connector_cfg->edid);
+ 	kfree(connector_cfg);
+ }
+ EXPORT_SYMBOL_IF_KUNIT(vkms_config_destroy_connector);
