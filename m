@@ -1,179 +1,123 @@
-Received: from mail-dl1-f72.google.com (mail-dl1-f72.google.com [74.125.82.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB574CA28B
-	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 13:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5602D4C9E19;
+	Fri,  9 Oct 2026 15:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791551250; cv=none; b=EmYSu7L46ZTytLu4Xw9ekNK7+PwCI6/GeWhqcIqAj4fflAqAATwNPWUN2ieWR9nV9Vja41SXeCrA4b/DLgBsPyET/eHeZhnASdrpbWuQkLdczpR9IxryWRbmW26RWDwq0Q5n+mhjXHjStziL8IJRjCYZ0941YA6KDX28D5ihkhI=
+	t=1791559373; cv=none; b=gYSi3qQc7XnOqv94bnrIm8MtvU8vBWNLqJU1L87d9X4QZsg8FTRgKpBBHcZxX3kmdoaQ3vMhqqU0NVaysAEZ8YFHNfvPQE8RHy68B+Jy8wcg1PSVVwqkV6qIiAbN2MT57pB23j3L3F8MYPIxqHOH3EKfuaoUFV+w+MedpYZJNMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791551250; c=relaxed/simple;
-	bh=iXFR9ZDroPC8hYwDTlPabrPWPRrxx7mtix5YVkBAALU=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=bLVXP128iTO81RuIlU9NCJFOCxjByO1zAxYEYXVETc//5/4EPUivro666PJmaX0wdXESXzdSkyz8YplTdEWhSRr5PYrYuvcQvMoniDn+eJz/7J0CzfUImqYeJawPYx4OIDnj946lIDy7iZVG+vpoIFZduHSMi6uEEa08cJEZy60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZscysmHK; arc=none smtp.client-ip=74.125.82.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
+	s=arc-20240116; t=1791559373; c=relaxed/simple;
+	bh=GTQovboIcNR9R/ScPbWLBEgm3nP1UkZmiJO85XmTewY=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=fjhtzSpK+FcJWQHOg8SKJ+tF6pJQs9sWW81wn5dNb9MkvfnNsh6TNI9QzzhzhhPM+xqFvwHz6A8ZtqBbPyyCXx/R6f7QS5fU71bYM2aYYE1k4M8pvYo1HtAMKyjEdO1g9SFKKR5qebWZKNNjSikDAlf/6WJgjqls+aXVYSJtnW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nYnHCYZ0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZscysmHK"
-Received: by mail-dl1-f72.google.com with SMTP id a92af1059eb24-139b62317d0so22536766c88.0
-        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 06:07:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791551248; x=1792156048; darn=lists.linux.dev;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=qyTZpLrCNrdls8dQU2/vvTYjILyrcRuksigXYBXy3Ak=;
-        b=ZscysmHKlL3f9Jg4szwI6RliTTWe+b4ubm2N40MrfdRqt2Jrw34SGsArhdHMYpyHs7
-         +rn6S0vgrR/5muO4Xm78ta9eAJfEMMJKazo04pJFok33aKyCF4yFY7s2dC/VnlNZx6RP
-         AGBxwDvVR8tHdzvMXXYGIKil0/P1JyFpvVLUonOZblqPMLF8EGxl83TT4SP51V5VZZ0A
-         2mQV5fPclSNx6L3NNqboLy3ZJ5VStDGIYmgI4Xb6xKCF2egxgu03IlRi7b5BLg0M7GAo
-         kDzmM6ia9xY0qRagBls/A+/x3mNNrKWFZz9ReJT/iCC2Zk9cUW7iKRhSKs0QDrhtEUGk
-         uEog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791551248; x=1792156048;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=qyTZpLrCNrdls8dQU2/vvTYjILyrcRuksigXYBXy3Ak=;
-        b=v5xbw4KZXcpFpcRMgaiyG0jNTYsKgecUVK4ftf8s2Qq9Kmr2RDoIjLhXfIJ49OY47g
-         +APr/H9KSCZmaonvjFbtCE7/Cbb/CICfUB19B+4SR/+gLfKplkuITRt0eO0Y1gNOCp1w
-         UYxlJnBd6vxAXNlKKC6cDp/9UbJf/c4HrjKieNOX+G/kR8X+46bOVLx8lxin+ORSD6JD
-         ZZEyMcBr5n8UgceRzmTG3WF4zs61KGVqQUg0W5TgkuDcwClRPDQVPeB8gbbh9Nb5d0uH
-         lFnGJj+iS54XG+RzbSsPnkcyfBoMb0rfbdna56uvvZTKNfk7Lh0EBxQNbuiQmclblGnd
-         XSFQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwDvtl/bj3O33JP5HObNkOncvIAAWDO5cPfIAH1cPlJU1KnIQqnH/IYerLq5aMCjRC8yNNx@lists.linux.dev
-X-Gm-Message-State: AFuF++kjECHZgg7ub+/Y8l4imVaYqSZeLYOtD//rFupIjB0SGby6TpKN
-	nfQoO19LU0xU/bNWS/oPTgs9D9U7W6vBV7t3AgLYUDCKRAqJwbWVlpmgd9UoY27y8SHnMf48azL
-	T9RVDiWtKKlbfww==
-X-Received: from dlec7-n2.prod.google.com ([2002:a05:701b:4287:20b0:162:60dc:8d82])
- (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:701b:2910:b0:143:6080:668f with SMTP id a92af1059eb24-16a61789c7cmr1870158c88.7.1791551247889;
- Fri, 09 Oct 2026 06:07:27 -0700 (PDT)
-Date: Fri,  9 Oct 2026 06:07:08 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nYnHCYZ0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9F081F000FF;
+	Fri,  9 Oct 2026 15:22:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791559372;
+	bh=GX1M42bQqDDZSQDRtAUu5Zivv8JFp+0LgJlH2BZUFXk=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=nYnHCYZ0sNaBtLQQcRCDsE3J65iTFMqD6OWiuUJsmbP1vRj7HteFD40PuUYd1hb8a
+	 VwtZZpz/fIkVpu4k9kd7DFYgn+ochjKne8Tsl0sDf6a9vJxDlJkvxSfcqTq7qOvFZf
+	 X9WfmoDcSQhp5sSbQ8aEs4jkJHdMUuQBR4gC3Fwm+jz5nvTBCJPgnEvizwuAPMpVVV
+	 fWNMML8uZd6kbYWSZZoH3aS3X4ruW9vQg9A8lCPll9BUh9zPZgDSKi+K9Cbo+KuyqS
+	 aeBxLnSX09lZcWxKWsF4bxCB/Qn7BUvxjE9X1I6wRWiEfE28sgMCpcp/YQLdNHAsX6
+	 Gpzy7LekF2YSA==
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.56.0.385.gd3acb90ef8-goog
-Message-ID: <20261009130708.1370675-1-wusamuel@google.com>
-Subject: [PATCH bpf-next] libbpf: Resolve typeless ksyms in the kernel
-From: Samuel Wu <wusamuel@google.com>
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>
-Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v1 2/2] kbuild: Mark the initcall ordering recipe as
+ recursive
+From: Nicolas Schier <nsc@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+ Sami Tolvanen <samitolvanen@google.com>, linux-kbuild@vger.kernel.org, 
+ llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-hardening@vger.kernel.org
+In-Reply-To: <20261009062733.3119731-2-kees@kernel.org>
+References: <20261009062722.i.253-kees@kernel.org>
+ <20261009062733.3119731-2-kees@kernel.org>
+Date: Fri, 09 Oct 2026 17:20:08 +0200
+Message-Id: <179155920867.324725.17951375258235191243.b4-review@b4>
+X-Mailer: b4 0.17-dev-fde28
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2184; i=nsc@kernel.org;
+ s=20250924; h=from:subject:message-id;
+ bh=GTQovboIcNR9R/ScPbWLBEgm3nP1UkZmiJO85XmTewY=;
+ b=owEBbQKS/ZANAwAKAQdSCnAWJhJpAcsmYgBqyQYqFIQQe5/qniOD7Rlw7CxUH3+lrC6zZMj0p
+ cQ34w/ACs+JAjMEAAEKAB0WIQSHQTenhzckp4G+wsYHUgpwFiYSaQUCaskGKgAKCRAHUgpwFiYS
+ aXONEACmdGYim7uibnq49CJrqpJOQSsZJAAeyMTuKqhMCsmQ8Eh8et4IF/N6D05rV64gbR9MBfy
+ 1XooFqyQzqFqfvvQICO9IjYwt9xOgSuQf58KtqVSfwiqzrNNbkgZr2BTNR9k8SiNjcYhQPpzVUK
+ BnRj9kVmiVVQCDg61spbGfDxbLeVI4hxv73BFkmBbwNwXTLBhIAoOnTk1k4ertt1wnmkaN/pMQB
+ u7imubmMS7mKbq5GdKnhvKRteH+mwuFmTdQ+Bbd1EPM+FuSW/ro9kq2yITa7IsVBlSAxa/cU3jd
+ SXkkIXCR178A7FC/0hPSgGY+dGSrvZjc6X3VZZoD4Iyuqq7wNNgW48X1ASr+i3Z36MahY06dBB7
+ JJBLoXuN7OTG9+mnb1AM+I9+cXEwo/zwx6uyeVn+WTv0mxwA7It/Sv/BG815xDxrGtJdDmbSZw4
+ 6AMbq35PgztGo8+XSOSUCigX+eqVTzmOSc+4u4XaT7M66jpPs4h9fSx9oqM1OhUJY3LAUYbZOqG
+ Xy8/wYMjtiRwcIb8nkcFtCbN8u8yMXTVPQVvzLd1IA0EW3z5w0NALNJ7ZfGHRyZkiZeoNnt4nf+
+ vFVWt2dax7CQPsmYvWjfZlSAxhjwVLMKmNV+yI+c0xvOtQi+JvLCawCd+4LugfX6sdvNWrbKBGL
+ H67nI0D4mSBCJAw==
+X-Developer-Key: i=nsc@kernel.org; a=openpgp;
+ fpr=18ED52DBE34F860EE9FBC82B7D97093255A0CE7F
 
-libbpf resolves typeless symbols by parsing /proc/kallsyms, which
-dominates load time for BPF programs with typeless symbols. This mostly
-comes from needing to do thousands of syscalls and a linear scan of
-kallsyms.
+> generate_initcall_order.pl, which orders initcalls for Clang LTO, forks
+> a child per input file, up to the job count scripts/jobserver-exec
+> passes it in PARALLELISM. It used to run from link-vmlinux.sh, which
+> the top-level Makefile invokes as a recursive recipe, but
+> commit 5d45950dfbb15 ("kbuild: move vmlinux.o link to
+> scripts/Makefile.vmlinux_o") moved it into a recipe without "+".
+> 
+> GNU Make passes the jobserver pipe only to recipes it treats as
+> recursive, and the make 4.3 in CentOS Stream 9 also hides it in
+> sub-makes (a backport of the fix for GNU Make bug 58232), so
+> jobserver-exec cannot open it and prints:
+> 
+>   WARNING: Unable to reopen jobserver read-side pipe: FileNotFoundError(2, 'No such file or directory')
+> 
+> PARALLELISM is then left unset, and the script caps its children at the
+> number of online CPUs instead of the free job slots.
+> 
+> Mark the recipe as recursive again.
+> 
+> Tested ARCH=x86_64 defconfig with CONFIG_LTO_CLANG_THIN=y, LLVM=1
+> (Clang 24.0.0git), and GNU Make 4.3 plus CentOS Stream 9's
+> make-4.3-cloexec.patch.
+> 
+> Fixes: 5d45950dfbb15 ("kbuild: move vmlinux.o link to scripts/Makefile.vmlinux_o")
+> Assisted-by: LLM
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>  scripts/Makefile.vmlinux_o | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/scripts/Makefile.vmlinux_o b/scripts/Makefile.vmlinux_o
+> index 24a3a4fd271c..0b37bd5dc3a4 100644
+> --- a/scripts/Makefile.vmlinux_o
+> +++ b/scripts/Makefile.vmlinux_o
+> @@ -19,7 +19,7 @@ quiet_cmd_gen_initcalls_lds = GEN     $@
+>  
+>  .tmp_initcalls.lds: $(srctree)/scripts/generate_initcall_order.pl \
+>  		vmlinux.a $(KBUILD_VMLINUX_LIBS) FORCE
+> -	$(call if_changed,gen_initcalls_lds)
+> +	+$(call if_changed,gen_initcalls_lds)
 
-Call bpf_kallsyms_lookup_name() from BPF_PROG_TYPE_SYSCALL, such that
-the resolution can be done with a couple of syscalls and a binary
-search. This is a similar approach to what the light skeleton does. The
-fast path passes the name and result through ctx, which requires commit
-ae5ef001aa98 ("bpf: Support variable offsets for syscall PTR_TO_CTX").
+b4 hinted me on [1], where a similar fix was rejected; but as we know
+have more arguments to generate_initcall_order.pl
+($(KBUILD_VMLINUX_LIBS)), the situation is slightly different.
 
-Any fast path error (e.g. kernels without ae5ef001aa98) falls back to
-the legacy /proc/kallsyms scan, including strong misses, since the
-kernel doesn't match LTO "<name>.llvm.<hash>" symbols. Weak misses
-default to zero.
+Thanks!
 
-Depending on the device, I see ~9-11x loading speedup when resolving a
-BPF program with 11 typeless lock externs.
-  - x86_64 VM, 6.18 + ae5ef001aa98: 147ms -> 17ms
-  - ARM64 phone, 7.1: 626ms -> 55ms
+Reviewed-by: Nicolas Schier <n.schier@fritz.com>
 
-Signed-off-by: Samuel Wu <wusamuel@google.com>
----
- tools/lib/bpf/libbpf.c | 59 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 58 insertions(+), 1 deletion(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index cb09ded90773..7564ec6bde64 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9590,6 +9590,58 @@ static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
- 	return libbpf_kallsyms_parse(kallsyms_cb, obj);
- }
- 
-+static int bpf_object__resolve_ksyms_in_kernel(struct bpf_object *obj)
-+{
-+	struct extern_desc *ext;
-+	int i, prog_fd, err = 0;
-+	struct {
-+		__u64 addr;
-+		char name[512];
-+	} ctx = {};
-+	LIBBPF_OPTS(bpf_prog_load_opts, opts, .prog_flags = BPF_F_SLEEPABLE);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts, .ctx_in = &ctx, .ctx_size_in = sizeof(ctx));
-+	/* bpf_kallsyms_lookup_name(ctx.name, sizeof(ctx.name), 0, &ctx.addr) */
-+	static const struct bpf_insn insns[] = {
-+		BPF_MOV64_REG(BPF_REG_4, BPF_REG_1),
-+		BPF_ALU64_IMM(BPF_ADD, BPF_REG_1, 8),
-+		BPF_MOV64_IMM(BPF_REG_2, sizeof(ctx.name)),
-+		BPF_MOV64_IMM(BPF_REG_3, 0),
-+		BPF_EMIT_CALL(BPF_FUNC_kallsyms_lookup_name),
-+		BPF_EXIT_INSN(),
-+	};
-+
-+	if (obj->gen_loader || obj->token_fd)
-+		return -EOPNOTSUPP;
-+
-+	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL",
-+				insns, ARRAY_SIZE(insns), &opts);
-+	if (prog_fd < 0)
-+		return prog_fd;
-+
-+	for (i = 0; i < obj->nr_extern; i++) {
-+		ext = &obj->externs[i];
-+		if (ext->type != EXT_KSYM || ext->ksym.type_id)
-+			continue;
-+		if (snprintf(ctx.name, sizeof(ctx.name), "%s", ext->name) >= sizeof(ctx.name)) {
-+			err = -ENAMETOOLONG;
-+			break;
-+		}
-+		err = bpf_prog_test_run_opts(prog_fd, &topts) ?: (int)topts.retval;
-+		if (err == -ENOENT && ext->is_weak) {
-+			err = 0;
-+			continue;
-+		}
-+		if (err)
-+			break;
-+		ext->is_set = true;
-+		ext->ksym.addr = ctx.addr;
-+		pr_debug("extern (ksym) '%s': resolved in kernel to 0x%llx\n",
-+			 ext->name, ext->ksym.addr);
-+	}
-+	close(prog_fd);
-+	return err;
-+}
-+
- static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
- 			    __u16 kind, struct btf **res_btf,
- 			    struct module_btf **res_mod_btf)
-@@ -9863,7 +9915,12 @@ static int bpf_object__resolve_externs(struct bpf_object *obj,
- 			return -EINVAL;
- 	}
- 	if (need_kallsyms) {
--		err = bpf_object__read_kallsyms_file(obj);
-+		err = bpf_object__resolve_ksyms_in_kernel(obj);
-+		if (err) {
-+			pr_debug("failed to resolve ksyms in kernel: %s, falling back to /proc/kallsyms\n",
-+				 errstr(err));
-+			err = bpf_object__read_kallsyms_file(obj);
-+		}
- 		if (err)
- 			return -EINVAL;
- 	}
+[1]: https://lore.kernel.org/all/CAK7LNARCM=rUm8mA8GRQ7ufeyfneGf4OEvHmESKt=zuxs2KrHw@mail.gmail.com/
+
 -- 
-2.56.0.385.gd3acb90ef8-goog
+Nicolas
 
