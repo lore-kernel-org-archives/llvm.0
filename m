@@ -1,68 +1,79 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8696F3546D3;
-	Fri,  9 Oct 2026 16:43:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B9E3B42C4
+	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 16:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791564188; cv=none; b=XpT2GpmShMbMXcQsBBXAot7ARwM7+Q5+ap8LRvflH7AD8wEDblFDZfBVb0AzFZsoLNJZFYgHacs0aE5ekuyN1wiGngXoKkvzixqepK7P3TIc4kFDERvgZGIUdg1xVljORdXBxy2Uh+X8+xcMd+LSQmf5CzN+JroCARZYda8vmg8=
+	t=1791565148; cv=none; b=gb62vV/r0w/6Nv5Ps/ouoz99+41CbkBKBaf/AS4P118Kqfi//FUZ6JT6sOYBxNI0SSi4vJ2JlvR9C6c9YMCrr1yFEgd2js8J6BwCSr9ZOyDfxrTxLHpgx+7gs39+qEGKLwMzqMP/hdKJCkWxB6Yv5Z4KLmk4IEdCE+0PyCK35q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791564188; c=relaxed/simple;
-	bh=HL4dLnQazmu9eond2oaF2ZCcsFOHB8BI0FASnIbUEk8=;
+	s=arc-20240116; t=1791565148; c=relaxed/simple;
+	bh=VsmwVWOVpvaJ+Q3nzqPlKtsId4STg45BTDnclVHfZ5A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HIoJUrnsv7J2BDm3yqBINUftakb1RRt3aPbT+ZePOoG/LA6nDAJXkV6c83DuQoqwGrtRycShuA1xDTQwzEKvkmSIHbm3VZ04l9FfA+P8PDyZs453PSJL/4fhY62gfYsVgdatas7E1Xp5JwASjecKZuu8NIGoDjVgSsEYQvAHh/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=drO0Mp0r; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9xN9pHOBAhdZC6pkjUE92wK06LPKmrixizFzJsxU/n7g57VsrDeH9eKjIfoYgVKAK2Kuuc0qFTWCiqpbDe6GxEFf/7H8HRAFR9FgcZYHvHux+Wivo0fMu9W/s6WGrISbkK3tG1iLRbWuuwg3p0WsGmt1aL7PPt7C2PlwaqPTvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f7tTV8iv; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="drO0Mp0r"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791564186; x=1823100186;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=HL4dLnQazmu9eond2oaF2ZCcsFOHB8BI0FASnIbUEk8=;
-  b=drO0Mp0rpBtNc6uIThJsJKdGp5RjJ0VNoigfdMonSUgCwFa1UblGbR1k
-   G7m3MrFx4sF4Jyf9TMgztRkHUNb9xPFyl+fXrSdxiBVU1cPki0rcqDy3q
-   AyQYN3tmpNci8o++Eh0HCkmr5VQzemhw65K5fQq0hrSd3F5tf51GHJX44
-   z5t+62BoC7+s9lWimZ3RXyWOXtqchimQiuBA8j/p7nnnB4nj09SMxfhpB
-   509s2hldYDR9S/i6dL9i/Dy+0u+kLKDp3ijD2OdUf4yGtz93dKFlkY0rT
-   hfQtkSOqRSmlu/zYbTrBBKpLgPwd1RKzysEqWMy0vfqH63t73PgFZVJ5A
-   Q==;
-X-CSE-ConnectionGUID: v5R9gWcBTe+zOhANKqvSXQ==
-X-CSE-MsgGUID: M5FzHXKKS6G3G4AAkNVN5w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="259599"
-X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
-   d="scan'208";a="259599"
-Received: from fmviesa013.fm.intel.com ([10.60.135.153])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 09:43:05 -0700
-X-CSE-ConnectionGUID: tUi5YPRHSZWPTE6paRwA/Q==
-X-CSE-MsgGUID: QM0uw6PORcuqyvHNUpy+Pg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
-   d="scan'208";a="2094648"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa013.fm.intel.com with ESMTP; 09 Oct 2026 09:43:02 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xFDgR-0000000061U-0JFK;
-	Fri, 09 Oct 2026 16:42:59 +0000
-Date: Sat, 10 Oct 2026 00:42:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Haotian Zhang <vulab@iscas.ac.cn>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Joerg Roedel <jroedel@suse.de>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/exynos: fix NULL pointer dereference on
- device_link_add() failure
-Message-ID: <202610100049.FvaUUeCb-lkp@intel.com>
-References: <20261009034539.3073100-1-vulab@iscas.ac.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f7tTV8iv"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e541dc9cb9so21649105ad.3
+        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 09:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791565146; x=1792169946; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8x+7zuv7UzMaKL/3w5sC9AGLBUyDe21tWW+wJXFpe54=;
+        b=f7tTV8ivKfUkLnEM4OOIgi8PkBcJzFU2OIlyO4dv98tw2mFtxXlsFly3j+hdpUI/L4
+         zG72rPtkVK9MfzjoRTGjZ3RLq1QQyuGWPAx7y+3ybujrYgOFk7UhsBGKqd68PItASWCd
+         SY79rBT2/Ng9wQgwTWMzkotP2Fn7jb7KahriE05PAv1nWz3Sm3aWj0SPyRaQ5SncHyjf
+         cU0usXoyxhS0UN31tZze4ODOiYVg+SkD6nTEmWBS8DE8pSdvE9VxEZ2VOY9TG8lCIOBV
+         qQ8okAkJLCkCY3dPUMnfKHPDdfqVTjjLTKmMSpxzqB0tqjs1G+BKXIHWx/9GRMQHg/d7
+         UiuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791565146; x=1792169946;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8x+7zuv7UzMaKL/3w5sC9AGLBUyDe21tWW+wJXFpe54=;
+        b=Ax8ZM8TX8sZ0wfzkpWQ0w8kSuii8FfMLBfZv3bt4at1lotJwKBQ+me6W3Ql5abpzh/
+         bFJ9f/j0qdQU6JyzukdD5ANUmZ6xsCc5K+rDoqvjEkH3NFTf2V2zXscwlRgqeKsqLJPo
+         Z8KfuqQ1mX9TtGgTn8mq/3McQxQYF9LUgP8hELQOO/hnrfIySkbOQw+iU+oq2AppMgpP
+         iKQq0WW6kRJ4H4aThO7JEREdYnP2iAhVMJ6mDiKBKp4rK8jhMWzEC+sE9lY4p1l7bjZF
+         YsmcJscV1WqWS+5jr/O9p6/UXiL5VwYmIDYfmIr2IW2ABo1E2TTIq0JnQ4IjHVIB0j1e
+         nifg==
+X-Forwarded-Encrypted: i=1; AKwUvBxXb9Lxbwrb6F40b0Jx4kwSWTI4oQzOm04L8SxhpsxjxAN4kFh2GJPo9LH7FiyYxkO2j+Qr@lists.linux.dev
+X-Gm-Message-State: AFq9FYJLs0Wf2+kUEtaOJvapcGDFO5lq6l7hDX9i4hH+h95VRs+f02Y6
+	ri8PngN8r2MryJzpUDPVSbPfWct7Ct7K1EKInsQdWyXnmlkTPHlJCmWp
+X-Gm-Gg: AYBFou1zzHaozNmB6MCYtWaMBq8+rTteAjceMLZ2nM1H8nDMDNxAjWLAcjWOmz7r1XD
+	C97O/8vPk5WkUG2Zyvsn7k4u6CNIgEfLthgL/jL9GUutKoq9HId4A7xqYlfNFv1wY5FzdLs0QDg
+	q+Prqd52AcEp/Dzv92FBgJkTD3cpxe189m7tCu2BRrUJJSIljvU5PWCbfftGHHjg7Y0jSJ0Xwe0
+	M0Qik5KUX4jodj1yM7LOxHAzRGxogDTgSPE6oSBRwJlOERyy8Q9DOLfTNV7ajlb2F72yDeUGZf5
+	DWm+Tw7qksyp79to0OL11tt6hkTAD05aRQrfc1IjPl3h6oYCFW3wCLwB0Xbxaz6EwdFuQwntrzm
+	gpL/UEncUR5g/7bms2Gn0JQrvoEF9d693lAdS6walwLcGNUpVhLjTeJumPAK0SklENEVCsNx4Jj
+	VoN7fmHfWeqLNn6xnSLxeo17jeeOY9mUXUQwrBJFJX7g9H6W+aFPp/lCc7uJg3vO46a+tm5KzLC
+	n7hXK1hPgLjPiRU25XzK4Vp0yDgG4YNCg==
+X-Received: by 2002:a17:903:160c:b0:2e2:d9fe:51fb with SMTP id d9443c01a7336-2e84280aeecmr22910215ad.4.1791565146067;
+        Fri, 09 Oct 2026 09:59:06 -0700 (PDT)
+Received: from google.com (61-230-52-229.dynamic-ip.hinet.net. [61.230.52.229])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e8422e2570sm14453055ad.79.2026.10.09.09.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 09:59:05 -0700 (PDT)
+Date: Sat, 10 Oct 2026 00:59:01 +0800
+From: Kuan-Wei Chiu <visitorckw@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] lib/base64: Silence clang-24 -Wconstant-conversion with
+ diag pragmas
+Message-ID: <askdVfevxztHMyGN@google.com>
+References: <20261008-base64-silence-clang-24-constant-conversion-v1-1-0858b60b23c8@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -71,85 +82,104 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261009034539.3073100-1-vulab@iscas.ac.cn>
+In-Reply-To: <20261008-base64-silence-clang-24-constant-conversion-v1-1-0858b60b23c8@kernel.org>
 
-Hi Haotian,
+On Thu, Oct 08, 2026 at 01:08:49PM +0200, Nathan Chancellor wrote:
+> After a recent change in clang to warn on signed char conversions within
+> array initializers [1], there are several instances of this warning from
+> base64_rev_maps in lib/base64.c, which can break the build with W=e or
+> CONFIG_WERROR=y:
+> 
+>   lib/base64.c:58:18: error: implicit conversion from 'int' to 's8' (aka 'signed char') changes value from 131 to -125 [-Werror,-Wconstant-conversion]
+>      58 |         [BASE64_IMAP] = BASE64_REV_INIT('+', ',')
+>         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>   lib/base64.c:52:2: note: expanded from macro 'BASE64_REV_INIT'
+>      48 | #define BASE64_REV_INIT(ch_62, ch_63) { \
+>         |                                       ~
+>      49 |         [0 ... 0x1f] = -1, \
+>      50 |         INIT_32(0x20, ch_62, ch_63), \
+>      51 |         INIT_32(0x40, ch_62, ch_63), \
+>      52 |         INIT_32(0x60, ch_62, ch_63), \
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   ...
+>   lib/base64.c:34:42: note: expanded from macro 'INIT_1'
+>      34 |                 : (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
+>         |                                              ~~~~~~~~~~^~~~
+>   lib/base64.c:58:18: error: implicit conversion from 'int' to 's8' (aka 'signed char') changes value from 130 to -126 [-Werror,-Wconstant-conversion]
+>      58 |         [BASE64_IMAP] = BASE64_REV_INIT('+', ',')
+>         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+>   lib/base64.c:52:2: note: expanded from macro 'BASE64_REV_INIT'
+>      48 | #define BASE64_REV_INIT(ch_62, ch_63) { \
+>         |                                       ~
+>      49 |         [0 ... 0x1f] = -1, \
+>      50 |         INIT_32(0x20, ch_62, ch_63), \
+>      51 |         INIT_32(0x40, ch_62, ch_63), \
+>      52 |         INIT_32(0x60, ch_62, ch_63), \
+>         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+>   ...
+>   lib/base64.c:34:42: note: expanded from macro 'INIT_1'
+>      34 |                 : (v) >= '0' && (v) <= '9' ? (v) - '0' + 52 \
+>         |                                              ~~~~~~~~~~^~~~
+>   ...
+> 
+> These are false positives, as the branch where the wraparound could
+> happen is unreachable with the values that clang reports. This is not
+> considered a bug by some clang folks [2][3], so silence the warnings
+> using the __diag macros the kernel has to workaround compiler warnings
+> when necessary.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: c4eb7ad32eab ("lib/base64: optimize base64_decode() with reverse lookup tables")
+> Closes: https://github.com/ClangBuiltLinux/linux/issues/2181
+> Link: https://github.com/llvm/llvm-project/commit/a5ef934a8d295dc03be3960f2b3744ec2e53238e [1]
+> Link: https://github.com/llvm/llvm-project/issues/223923#issuecomment-6056856245 [2]
+> Link: https://github.com/llvm/llvm-project/pull/226775#pullrequestreview-5454407389 [3]
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-kernel test robot noticed the following build warnings:
+Acked-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 
-[auto build test WARNING on krzk/for-next]
-[also build test WARNING on arm-perf/for-next/perf pinctrl-samsung/for-next linus/master v7.3-rc6 next-20261008]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reading the issue comment in the link, it seems somewhat subjective and
+controversial whether the compiler should emit a warning in this
+scenario. I'm not a compiler expert, but from a user's perspective,
+it's a bit disappointing when we have to deal with this. When we are
+confident that the code is correct and have provided the compiler with
+enough context to determine that there is no runtime issue, suddenly
+getting a new warning after an upgrade is a bit frustrating. But
+anyway, let's go with this workaround to keep the compiler happy.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Haotian-Zhang/iommu-exynos-fix-NULL-pointer-dereference-on-device_link_add-failure/20261009-114539
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
-patch link:    https://lore.kernel.org/r/20261009034539.3073100-1-vulab%40iscas.ac.cn
-patch subject: [PATCH] iommu/exynos: fix NULL pointer dereference on device_link_add() failure
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20261010/202610100049.FvaUUeCb-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 242243a5814307de825db3428662d67b064e2cbc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261010/202610100049.FvaUUeCb-lkp@intel.com/reproduce)
+Regards,
+Kuan-Wei
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610100049.FvaUUeCb-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iommu/exynos-iommu.c:1434:39: warning: variable 'tmp' is uninitialized when used here [-Wuninitialized]
-    1434 |         list_for_each_entry_continue_reverse(tmp, &owner->controllers,
-         |                                              ^~~
-   drivers/iommu/exynos-iommu.c:1406:35: note: initialize the variable 'tmp' to silence this warning
-    1406 |         struct sysmmu_drvdata *data, *tmp;
-         |                                          ^
-         |                                           = NULL
-   1 warning generated.
-
-
-vim +/tmp +1434 drivers/iommu/exynos-iommu.c
-
-  1402	
-  1403	static struct iommu_device *exynos_iommu_probe_device(struct device *dev)
-  1404	{
-  1405		struct exynos_iommu_owner *owner = dev_iommu_priv_get(dev);
-  1406		struct sysmmu_drvdata *data, *tmp;
-  1407	
-  1408		if (!has_sysmmu(dev))
-  1409			return ERR_PTR(-ENODEV);
-  1410	
-  1411		list_for_each_entry(data, &owner->controllers, owner_node) {
-  1412			/*
-  1413			 * SYSMMU will be runtime activated via device link
-  1414			 * (dependency) to its master device, so there are no
-  1415			 * direct calls to pm_runtime_get/put in this driver.
-  1416			 */
-  1417			data->link = device_link_add(dev, data->sysmmu,
-  1418						     DL_FLAG_STATELESS |
-  1419						     DL_FLAG_PM_RUNTIME);
-  1420			if (!data->link) {
-  1421				dev_err(dev, "Unable to link %s\n",
-  1422					dev_name(data->sysmmu));
-  1423				goto err_unlink;
-  1424			}
-  1425		}
-  1426	
-  1427		/* There is always at least one entry, see exynos_iommu_of_xlate() */
-  1428		data = list_first_entry(&owner->controllers,
-  1429					struct sysmmu_drvdata, owner_node);
-  1430	
-  1431		return &data->iommu;
-  1432	
-  1433	err_unlink:
-> 1434		list_for_each_entry_continue_reverse(tmp, &owner->controllers,
-  1435						     owner_node)
-  1436			device_link_del(tmp->link);
-  1437	
-  1438		return ERR_PTR(-ENODEV);
-  1439	}
-  1440	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  lib/base64.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/lib/base64.c b/lib/base64.c
+> index 325c7332b049..e46be3a55585 100644
+> --- a/lib/base64.c
+> +++ b/lib/base64.c
+> @@ -52,11 +52,14 @@ static const char base64_tables[][65] = {
+>  	INIT_32(0x60, ch_62, ch_63), \
+>  	[0x80 ... 0xff] = -1 }
+>  
+> +__diag_push();
+> +__diag_ignore(clang, all, "-Wconstant-conversion", "https://github.com/llvm/llvm-project/issues/223923");
+>  static const s8 base64_rev_maps[][256] = {
+>  	[BASE64_STD] = BASE64_REV_INIT('+', '/'),
+>  	[BASE64_URLSAFE] = BASE64_REV_INIT('-', '_'),
+>  	[BASE64_IMAP] = BASE64_REV_INIT('+', ',')
+>  };
+> +__diag_pop();
+>  
+>  #undef BASE64_REV_INIT
+>  #undef INIT_32
+> 
+> ---
+> base-commit: 0c2669a9f4a1d607e7591ae50ccf3c432a0aff08
+> change-id: 20261008-base64-silence-clang-24-constant-conversion-b682c6bbf563
+> 
+> Best regards,
+> --  
+> Cheers,
+> Nathan
+> 
