@@ -1,116 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E00554EFFBB;
-	Fri,  9 Oct 2026 16:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8574EE864;
+	Fri,  9 Oct 2026 16:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791563567; cv=none; b=uRH8/k13GlSGsKvY4BW86xJFzInxjcs7SE3VU88d/Ipz9G2WAjiK5x15yVqEG3RVVh6PHbDlbEMyromCc6X95M/KV0mD9W3irj4CaoAHbqcJMgfC1wD+6Kr+ScNot6o/FN7s72i8wnn0vSgp1dGYMXQ3lvFSOCJkcqmbYfNTKYg=
+	t=1791564185; cv=none; b=AUl8R06kkgAKaqyI+Hk6QPgEWwhHccZFJdCnjmbi5jrtRW0BthBuKV2CWjT2OPfhGsOTWo0gKcZuyeFn0RBaA7HQx3CHFltiBMUyfJcUOdghSO24CXJ8po+9w2Hi805A+yy0+7vFnTnfRDi5U5lRa50qhQ5nY3VOsK0g7PeNYw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791563567; c=relaxed/simple;
-	bh=mws7jpAgCcmHzyfVSY20/vYOYikF9/+iGzSgCB/KISc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MoeI80IJP01GrW0TWwiG0Qw9Szlh2YoBJHFeFRLpKriaMBBtNwLAXo1M2vmmSitX4NIoCw/pHCf0GYnELWJs43uiiNE+7vAZofTiuvlkKb6GFIrVPFskd5RBI1eRAYNcayIUDAB6uCAADZZbfeAOvT5fWihLb2iFHfJwb9jjIvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a3m9XDKv; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791564185; c=relaxed/simple;
+	bh=K/cajdbtsIt9U5lXvxI7xYePbmdBQQVQc1yd4hMG8kY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=grM2J0bZNRUVXWQpjmcTxWWx4Dm8wPJQlR4YOOHLMMKtY1aEtP94Rn8fEZh9W2P/fy+5FISCKOXJ0W761p+bo1bZToSvaKLIcKXhSp1YbN/GXr8cosb+jK7PQis1p8bbZ4gbBVjmQwgvqADv6u9Hqh3NbJwnx7DdxzDuheq0yBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=P6Sr/5uW; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a3m9XDKv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4318B1F00893;
-	Fri,  9 Oct 2026 16:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791563561;
-	bh=v8UB6+jjpF31hb+q4x1Zq5hI5lb352r6B0Ghit+olxY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=a3m9XDKv8NyKyGJwhSs5E1Y7xeGJ8giPb8g2D37BVYZQe+v/FHxL+NB9OXxSegkcN
-	 ikFwO5EaQP2Sq3LAXZeqnRB71inx5yQvqqx2luLo6kicVIhwu8NzoWSWdZMmAn5m7W
-	 EuLEkdyyecO6Wm61UyTYtg8U7Kh8WjhUX2fewdhubhHWklOuAtLLZ9OcGGxIRqo92I
-	 an0oP5xsjH3lDXY6WYJOrjyJ3h2uy5pYRmSY9iYuTqSURqjBt2UL0rNPrgJKv6ow08
-	 aoPftfKd86VW+7hjTQAb1wmpBKLkg2xZQArWTlpFkNSKhrKJ1cmAncOQE7ilLp8ess
-	 KADbSLx/KQkiA==
-From: Sasha Levin <sashal@kernel.org>
-To: ben.horgan@arm.com
-Cc: andre.przywara@arm.com,
-	bot@kernelci.org,
-	fenghuay@nvidia.com,
-	gshan@redhat.com,
-	james.morse@arm.com,
-	jonathan.cameron@oss.qualcomm.com,
-	justinstitt@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	morbo@google.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	reinette.chatre@intel.com,
-	Sasha Levin <sashal@kernel.org>
-Subject: [PATCH v2] arm_mpam: make the mon_sel guard conditional only
-Date: Fri,  9 Oct 2026 12:32:35 -0400
-Message-ID: <20261009163235.3-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <7490d5e6-ac9b-4f23-b58d-60eec2882e60@arm.com>
-References: <7490d5e6-ac9b-4f23-b58d-60eec2882e60@arm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="P6Sr/5uW"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791564184; x=1823100184;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=K/cajdbtsIt9U5lXvxI7xYePbmdBQQVQc1yd4hMG8kY=;
+  b=P6Sr/5uWTGiRu4KMGje6sGQjGSHggQcLKcAC+YZUaL1H0iYaOzE7emR6
+   1tOzKAgAj74WlxSNCLuRvltEIcmKxcC0wK6hY8P9rFny7zhL0ysZPB+Du
+   rLingLc30N5uVddnTps+/4FJn1qk4lDd+gBEi3Uz6tTGHexE/aRF7VTAp
+   DrEO5/gNMVzXrBQh3dCgHx5eSBFZMJwriKnvsjL2CMUQiG/tElQsWQfsE
+   Nj8PIJSnxOzen/xqjFFKPZnksNqKQQ0t0PMT6HFWjstr2002870PeCIQO
+   +bOLbDbo+9RO3ATepEDrGWE5k73u2autuCRUwAzKCLtUPrtZ5wUQZRgEY
+   g==;
+X-CSE-ConnectionGUID: yaZwc7/lRxq8x04IJZskog==
+X-CSE-MsgGUID: u08l+LKoROqbJR6ra1xddA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="381231"
+X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
+   d="scan'208";a="381231"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 09:43:03 -0700
+X-CSE-ConnectionGUID: xugH/SOWTLmRLqCns8NYGw==
+X-CSE-MsgGUID: qz2JKaP0Ss6tHysRo5SVHQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,148,1787036400"; 
+   d="scan'208";a="668523"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 09 Oct 2026 09:43:02 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xFDgR-0000000061h-1nKZ;
+	Fri, 09 Oct 2026 16:42:59 +0000
+Date: Sat, 10 Oct 2026 00:42:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [thomas-weissschuh:b4/rust-kunit-assertion 15/16] ld.lld:
+ error: undefined symbol: kunit_string_stream_add
+Message-ID: <202610100031.yvgHqzdD-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
 
-Building arm64 allmodconfig with clang fails:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/rust-kunit-assertion
+head:   e8ef2ab596ea6cb29ff501ab4abf4757bf950871
+commit: b1f6b44f2151569e88b5bb5e652e31aebffa0d19 [15/16] kunit: msg
+config: arm64-allmodconfig (https://download.01.org/0day-ci/archive/20261010/202610100031.yvgHqzdD-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 80cd965b6323b208519f8ab1d5ee86e4ea9862f4)
+rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261010/202610100031.yvgHqzdD-lkp@intel.com/reproduce)
 
-  drivers/resctrl/mpam_internal.h:207:7: error: ignoring return value
-  of function declared with 'warn_unused_result' attribute
-  [-Werror,-Wunused-result]
-    207 |              mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610100031.yvgHqzdD-lkp@intel.com/
 
-mpam_mon_sel_lock() is __must_check and can fail: for an MSC accessed
-through the MPAM-Fb firmware interface it returns false when called
-from a context that cannot sleep. The mon_sel guard was defined with
-DEFINE_GUARD(), which calls it unconditionally and discards the
-result, so a guard(mon_sel) user would carry on without the lock and
-release it on scope exit. The unconditional guard only exists as the
-base for the conditional mon_sel_lock variant, which is the one
-actually used.
+All errors (new ones prefixed by >>):
 
-Define mon_sel_lock directly as a conditional guard class instead, as
-posix-timers does for lock_timer: the constructor returns NULL when
-the lock cannot be taken, and the destructor only releases a lock
-that was taken. ACQUIRE(mon_sel_lock, ...) works as before, including
-ACQUIRE_ERR() returning -EBUSY on failure, and there is no
-unconditional variant left to misuse.
+>> ld.lld: error: undefined symbol: kunit_string_stream_add
+   >>> referenced by kunit.rs:57 (rust/kernel/kunit.rs:57)
+   >>>               rust/kernel.o:(kernel::kunit::kunit_rust_assert_format) in archive vmlinux.a
+   >>> referenced by kunit.rs:57 (rust/kernel/kunit.rs:57)
+   >>>               rust/kernel.o:(kernel::kunit::kunit_rust_assert_format) in archive vmlinux.a
+--
+>> ld.lld: error: undefined symbol: kunit_assert_print_msg
+   >>> referenced by kunit.rs:64 (rust/kernel/kunit.rs:64)
+   >>>               rust/kernel.o:(kernel::kunit::kunit_rust_assert_format) in archive vmlinux.a
 
-Reported-by: kernelci.org bot <bot@kernelci.org>
-Closes: https://d.kernelci.org/i/maestro:66f869ecbbb5b8592562ffd89f049c5ddf682547
-Closes: https://d.kernelci.org/i/maestro:647269216758644837afcaac8e67d8dbe713a0e2
-Fixes: 0db1715e4c9c ("arm_mpam: propagate MSC access errors for hw_probe functions")
-Assisted-by: LLM
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-Changes in v2:
-- Use an if statement in the destructor, as suggested by Ben Horgan.
-
- drivers/resctrl/mpam_internal.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/resctrl/mpam_internal.h b/drivers/resctrl/mpam_internal.h
-index ee7c3953a9b6c..1f86cc158100b 100644
---- a/drivers/resctrl/mpam_internal.h
-+++ b/drivers/resctrl/mpam_internal.h
-@@ -203,9 +203,10 @@ static inline int mpam_mon_sel_lock_init(struct device *dev,
- 	return devm_mutex_init(dev, &msc->mon_sel_mutex);
- }
- 
--DEFINE_GUARD(mon_sel, struct mpam_msc *,
--	     mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
--DEFINE_GUARD_COND(mon_sel, _lock, mpam_mon_sel_lock(_T), _RET);
-+DEFINE_CLASS(mon_sel_lock, struct mpam_msc *,
-+	     if (_T) mpam_mon_sel_unlock(_T),
-+	     mpam_mon_sel_lock(msc) ? msc : NULL, struct mpam_msc *msc);
-+DEFINE_CLASS_IS_COND_GUARD(mon_sel_lock);
- 
- /* Bits for mpam features bitmaps */
- enum mpam_device_features {
--- 
-2.53.0
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
