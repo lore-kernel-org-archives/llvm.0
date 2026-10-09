@@ -1,119 +1,127 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771A13B6BF0
-	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 16:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791565184; cv=none; b=ClPs5XSerzKYyK9bKyf5gzjLe6a5cy/IN7LLshiQ6twWwxDUSopbmMdw0sb4oiUZdcUkITGx2NBqwFotaRvFwPu+8zxva/QZqtIk/Xmw77OKw/hJxC0H0oektbxDFtq2eFxap9uj2XBrhrs6V4RQWUU6+XZBUu1Q8YwIIrdnz2U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791565184; c=relaxed/simple;
-	bh=Wm/4n7hq3w7tWKgh4LCSdmhnbLipyzt6kn0TkU1RTiM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J6NXzQppGmjeJuQTM/SqkgqMJXzO/v9MoM9eu9KaauDmG64665feOz8k8HI7cnPbv/Acz6S/e1gyPCcmUIxM2bgh2VbLK17AFxEeNnAEVjswI+LEXbxziBMpa6A6a5KBtcxLXnhdJTj+dDPzYLrY+tX0I0QZqO242ulAD5MfqQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=W/JbgZKX; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DDD3B0ADE
+	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 17:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791566610; cv=pass; b=UEk0taZ1LSDcdeKsnTtWZfzBz5owhwMBlK4lk+TFqQ8EM5CRJkb38ejrgUR8lCOFAdtsopQ2+dJbbYq0LxhGIWbL6rYs1RPxt3XjNTja5dFYz7cAZa5JCCReYzHFgPyN1XNsek42Egy6/NItFQKu7Faqm50clc0+CGbyNAoV9Ps=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791566610; c=relaxed/simple;
+	bh=Ju7gwhPhe+gDtBXlanX2ZOcJL4sUKBXDC/LuKD7vhrw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JlMiKpGoBsbzVqNLjaZWHMcDbb9V/Zo8dPp+2pHqr2eTpHqs06Bd4s9z14YK3f4cGA1fapyJbZsXycscFudvki+yOpix1tXY7hvQlK8w+9Sf8U85pO4HFKxOYsbiDUAOBk2MhPITavJEZppJfbG34958A0BMYLDuwjS7ybcZi14=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d42oUjze; arc=pass smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="W/JbgZKX"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6CCED1D14;
-	Fri,  9 Oct 2026 09:59:38 -0700 (PDT)
-Received: from [10.211.55.3] (unknown [10.57.54.134])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49B1D3F66F;
-	Fri,  9 Oct 2026 09:59:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1791565181; bh=Wm/4n7hq3w7tWKgh4LCSdmhnbLipyzt6kn0TkU1RTiM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=W/JbgZKX151jsNiz1uavL74a1MyLB13JRnA5FdGOqftL7vJtE+ylL2jPe8OmT3IuJ
-	 2dz3HTyVI+HO3i7kL21ab84u7byLq53AVE6mDdpyR65jDfQN7Rsyo4jMWjaVU8fDi0
-	 YLT8bK1V1kYikYOcDfoHcCuDr2RSSd1uTIdwDrTs=
-Message-ID: <18df4643-4213-4e0f-94e7-b1e43adcb5c3@arm.com>
-Date: Fri, 9 Oct 2026 17:59:37 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d42oUjze"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48bbb06e746so17626f8f.3
+        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 10:23:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791566607; cv=none;
+        d=google.com; s=arc-20260327;
+        b=io4WL/j4BjsVznWdd4ks+w8sQTxr5Ou2y//NaFbQwyMpIpNqOIvQK3Q+ANAT1I4FCQ
+         duxbOtQ5Qrw0L1tZxM1lkWrCi1nmUXkMo+cJ8vvcMPYS/CBiXcRvkt62nq6i2Ur6HzQM
+         1tY59+hhytwoHpCaMdF5XD3lvVaAbZkvss7xibFxl9IMYMcRedEPPBCGa4HmsXXo4R+a
+         NG8XQTcec0/Fs8oA+n1qJQyKYOmi81zmXB2AW0eR3bg6Xp89EZrvLr3PlCtQ87HrCd5X
+         FWk6YdyVgD6A0lAnt4gtH1v+Cj6JrpHcC9b69jxulzRQsT90I9Ghde+O/Fhjp9UuCPFU
+         TYAQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UviV7uLa4QuU9wMqSrfcZ2tk7TpFd3xUn6hAcyKbZrA=;
+        fh=RaJuzHcuXeT4WgWr0noMD3QB3a09es3MixBEQICaWTs=;
+        b=WzEYJrADNy5/jCE7To0tMICSWu71zL4/fSWkGY9adbYd7Bl4jhYe3gY44ionQyju6/
+         t/qieP3zjysrA4tR+j3VgGcv8NFC9y9ooZZLL0NBvKMBOUDgsTgq8JTP+bko+381JDmv
+         ry4GTXoPa8Nl7/aI3mNicmw/zPBZvq/V40J6/Y2CBsib37tH/iVCP/YpGgFD3qWqoMnQ
+         d3HdwNW8L+zmmdHtjfGiwOJQYgRkwF6/nq4jO3XP4Fr17v/4/T+Xjrc6G7iJXPnWL62b
+         wGyHGM5qgP+lmNfSAddLtvCQbt/Lqire1o+Uhp+R0JYWndz6aeH3H5ewIq6stYNHrSIT
+         gTEA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791566607; x=1792171407; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=UviV7uLa4QuU9wMqSrfcZ2tk7TpFd3xUn6hAcyKbZrA=;
+        b=d42oUjzedQzw3jw/POI+wSAY4TwAemC5oxjsYv8CUxAB/1kcqAWw/X/F2L3AUAtWcn
+         1yJ9lnmrZfAdPTog1aug9UzcvrwjKWWFOntSv3sn7mYIg5ECFosoy5YxAPapzsClYguK
+         eVUvq8D2unUd3qmIBL54Rh5wv6pA0JD5h1XjbZXHXg/G/lTUH0pmBxETJpiO+P7l2acL
+         uxfFgTfMP1up9LQLx0oZk7QZwD9LRSbCCs/bVEgyKlc6KqSdxFxjPvUzonJhVveD4bKw
+         WDkcSmHXAgGJY9mBH2PQlK4yuJjKCqK+4nX1v0H+VPsc0lyoLo/hikIzikfdt8JI+yra
+         L2OA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791566607; x=1792171407;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UviV7uLa4QuU9wMqSrfcZ2tk7TpFd3xUn6hAcyKbZrA=;
+        b=ctdHxBW4B/zUoa4OJ3w8WzRoHW6KdCjkc1BIQwAEZW2PJJcny3nE9TqUkOZpYGkwHX
+         8XoJZOb+ca0/QLtEY1zaef1J0doAQEy6eIMog3j2bO8o/HqglvNuixCurFFO0BXnpF4A
+         n12WClp89gj5ogXXRZbyOodOrpBJ4QMFNU8io1ABe7cnu1cCH/0ocfogGjcSJO6xnzPg
+         geQ5qxKQz0ToGZ1s8IUDnCO0UbeejUm5Hmgk5lICtheun5IBp973AxBi0pt5pGtCwJw+
+         g5ka43iIiM/VW8FGO5EygA1pi6nWshjx2kw1ay9Keh45a9bQTCETXC0UxBMeHJzwlB2c
+         6kMQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzx5iu4PoWa34oakDTXKrQlxcAHoUsiXb66EAqmDBHxgDvwZRyXCqC9+uPMeDfMQHr7CcMM@lists.linux.dev
+X-Gm-Message-State: AFuF++lLXsNrdn6Sh5Ch1HuhGCHTbuSpOPqL0jzVy8YN6xz9UUBPyBLa
+	YnMIFsB8/jFxzKuorL0GeGUq8CMejrwD4PJuaeFaBEx00bnrPENvFgxfLoRX1upmQW8dXDXrC2f
+	YhOeJCS7cjPz8esU97bzEnDcrE3WoaPjRjak64489
+X-Gm-Gg: AYBFou2FkrXKykRcun+/h3QSSoUrbEUnW5anGX66sVWxsaHT7705ykf1KURCSu/DWb2
+	XBwJqlaL/5P8mGHkVaG9FYRrht4ezKRtcaQX2PFHsJ5uezw4T7N0Fmv/8Myv1Qk3e+aIIF4l9Iq
+	VOHYD5oZaSGbqi3aq8CPqJ4Xc1aq5yowObZl2CHLq7GYV/VzrzdXx19lfR9M/R+dNUOh41TX1oK
+	vpLpsQkJs6ai8MvRTOCskv4sUI9+lSSA7GfLKZUDmPmZdBwWWBWpsGp0+bmc8rMv6zUazmSd4qz
+	HORHzYDu33r0zQYvxgcdhnJz3JR2rq9PO5LkAdvvRLVe/AVSjx0F8CuFsKutf/CGN/aE7y/QXz9
+	I/xBeVF1Xu6nidNiceiuGLS7Q/MnRRyjNgxfQsCaKH0ambtmUp2f7X55p+i2SjojjazU8WWUbJP
+	lgMfOVri/0JKN61CcbS+PIIv21PSPTIdnqNDNE50hfw9yD/marxtthdDfb
+X-Received: by 2002:a05:600c:628b:b0:4a0:251f:dabd with SMTP id
+ 5b1f17b1804b1-4a18e48edd5mr43689545e9.16.1791566606839; Fri, 09 Oct 2026
+ 10:23:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Thunderbird Daily
-Subject: Re: [PATCH v2] arm_mpam: make the mon_sel guard conditional only
-To: Sasha Levin <sashal@kernel.org>
-Cc: andre.przywara@arm.com, bot@kernelci.org, fenghuay@nvidia.com,
- gshan@redhat.com, james.morse@arm.com, jonathan.cameron@oss.qualcomm.com,
- justinstitt@google.com, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, morbo@google.com,
- nathan@kernel.org, ndesaulniers@google.com, reinette.chatre@intel.com
-References: <7490d5e6-ac9b-4f23-b58d-60eec2882e60@arm.com>
- <20261009163235.3-1-sashal@kernel.org>
-Content-Language: en-US
-From: Ben Horgan <ben.horgan@arm.com>
-In-Reply-To: <20261009163235.3-1-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
+ <CAKwvOd=nPgEm=AZbEu12Eb90GtRUThY6YAjSiHHuNVHP8TZHwg@mail.gmail.com> <66usntltyie7ii2rrqajy3izxrvwubwf2vqnery552v3akhwo2@xwb4t76d37wx>
+In-Reply-To: <66usntltyie7ii2rrqajy3izxrvwubwf2vqnery552v3akhwo2@xwb4t76d37wx>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Fri, 9 Oct 2026 10:23:14 -0700
+X-Gm-Features: AclHuK-CLR4BQdqBSfFuLWEHCSgtnQKEmsz-7EKl2ZGIqsJwmtfHX25-OeazvEY
+Message-ID: <CAKwvOd=E7wgGPf+kgOY8sGi0xO-cFMAJK4PMBFknoEupJi1CXw@mail.gmail.com>
+Subject: Re: [PATCH] landlock: Move the domain layer counter out of the
+ anonymous union
+To: Abel Vesa <abel.vesa@oss.qualcomm.com>, Bill Wendling <morbo@google.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>
+Cc: Tingmao Wang <m@maowtm.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
+	Justin Stitt <justinstitt@google.com>, linux-security-module@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+	michael.bommarito@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sasha,
+On Thu, Oct 8, 2026 at 4:49=E2=80=AFAM Abel Vesa <abel.vesa@oss.qualcomm.co=
+m> wrote:
+>
+> On 26-10-07 14:49:28, Nick Desaulniers wrote:
+> > Would you consider this a bug in clang, or an error in how the
+> > __counted_by attribute is applied?
+> >
+> It turns out Amaan Qureshi has already reported exactly this Landlock
+> issue and proposed an LLVM fix:
+>
+>   https://github.com/llvm/llvm-project/pull/228309
 
-On 10/9/26 17:32, Sasha Levin wrote:
-> Building arm64 allmodconfig with clang fails:
-> 
->   drivers/resctrl/mpam_internal.h:207:7: error: ignoring return value
->   of function declared with 'warn_unused_result' attribute
->   [-Werror,-Wunused-result]
->     207 |              mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
-> 
-> mpam_mon_sel_lock() is __must_check and can fail: for an MSC accessed
-> through the MPAM-Fb firmware interface it returns false when called
-> from a context that cannot sleep. The mon_sel guard was defined with
-> DEFINE_GUARD(), which calls it unconditionally and discards the
-> result, so a guard(mon_sel) user would carry on without the lock and
-> release it on scope exit. The unconditional guard only exists as the
-> base for the conditional mon_sel_lock variant, which is the one
-> actually used.
-> 
-> Define mon_sel_lock directly as a conditional guard class instead, as
-> posix-timers does for lock_timer: the constructor returns NULL when
-> the lock cannot be taken, and the destructor only releases a lock
-> that was taken. ACQUIRE(mon_sel_lock, ...) works as before, including
-> ACQUIRE_ERR() returning -EBUSY on failure, and there is no
-> unconditional variant left to misuse.
-> 
-> Reported-by: kernelci.org bot <bot@kernelci.org>
-> Closes: https://d.kernelci.org/i/maestro:66f869ecbbb5b8592562ffd89f049c5ddf682547
-> Closes: https://d.kernelci.org/i/maestro:647269216758644837afcaac8e67d8dbe713a0e2
-> Fixes: 0db1715e4c9c ("arm_mpam: propagate MSC access errors for hw_probe functions")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+In that case, I would _not_ work around the compiler bug like this and
+instead wait for that fix to land in clang, then bump the required
+version of clang for counted-by.
 
-Looks good to me.
-
-Reviewed-by: Ben Horgan <ben.horgan@arm.com>
-
+Kees and Nathan are traveling for LPC, so I don't expect quick
+feedback from them, but they should confirm whether they agree with my
+proposal.
+--=20
 Thanks,
-
-Ben
-
-> ---
-> Changes in v2:
-> - Use an if statement in the destructor, as suggested by Ben Horgan.
-> 
->  drivers/resctrl/mpam_internal.h | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/resctrl/mpam_internal.h b/drivers/resctrl/mpam_internal.h
-> index ee7c3953a9b6c..1f86cc158100b 100644
-> --- a/drivers/resctrl/mpam_internal.h
-> +++ b/drivers/resctrl/mpam_internal.h
-> @@ -203,9 +203,10 @@ static inline int mpam_mon_sel_lock_init(struct device *dev,
->  	return devm_mutex_init(dev, &msc->mon_sel_mutex);
->  }
->  
-> -DEFINE_GUARD(mon_sel, struct mpam_msc *,
-> -	     mpam_mon_sel_lock(_T), mpam_mon_sel_unlock(_T));
-> -DEFINE_GUARD_COND(mon_sel, _lock, mpam_mon_sel_lock(_T), _RET);
-> +DEFINE_CLASS(mon_sel_lock, struct mpam_msc *,
-> +	     if (_T) mpam_mon_sel_unlock(_T),
-> +	     mpam_mon_sel_lock(msc) ? msc : NULL, struct mpam_msc *msc);
-> +DEFINE_CLASS_IS_COND_GUARD(mon_sel_lock);
->  
->  /* Bits for mpam features bitmaps */
->  enum mpam_device_features {
-
+~Nick Desaulniers
