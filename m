@@ -1,127 +1,120 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DDD3B0ADE
-	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 17:23:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791566610; cv=pass; b=UEk0taZ1LSDcdeKsnTtWZfzBz5owhwMBlK4lk+TFqQ8EM5CRJkb38ejrgUR8lCOFAdtsopQ2+dJbbYq0LxhGIWbL6rYs1RPxt3XjNTja5dFYz7cAZa5JCCReYzHFgPyN1XNsek42Egy6/NItFQKu7Faqm50clc0+CGbyNAoV9Ps=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791566610; c=relaxed/simple;
-	bh=Ju7gwhPhe+gDtBXlanX2ZOcJL4sUKBXDC/LuKD7vhrw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JlMiKpGoBsbzVqNLjaZWHMcDbb9V/Zo8dPp+2pHqr2eTpHqs06Bd4s9z14YK3f4cGA1fapyJbZsXycscFudvki+yOpix1tXY7hvQlK8w+9Sf8U85pO4HFKxOYsbiDUAOBk2MhPITavJEZppJfbG34958A0BMYLDuwjS7ybcZi14=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d42oUjze; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AB3D3446A6
+	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 17:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791568734; cv=none; b=LMSP4oRoRaxtuUKg4ivNPL1KD5+oL7fW9ocaGH2ygR1OV/q/VEtspbNrn1QuzJ1KIVVzgNisq4cQkzCiFPrtT8j8jrfnME0jey+NN4Zhabdcs8uB+e9FMcNNH0s0prIt5irK5wFCWJQ+BPtuk2v+yVQt06a3ABsF4uhi4xkMwtk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791568734; c=relaxed/simple;
+	bh=TRAbFOmIuXO7lFa2+5mHt2V6HZzH9UnQ+dCDMXHXAdo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TmeSANeKij5VVIPovmvazfifa//zr0PT1Lhx/XbPtLufMtrDdU7F5cImCErELoN5TL3oAqN4ZeYMe6cWWoXakU6t9y5A30QpKzbHq7FY5MCfMzBF4YjP4Oovuebdr7ks9EJXjM1eKb45nng5Bk/jdQra/W2g6uPvYspu7kuyhHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQYlnyo2; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d42oUjze"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-48bbb06e746so17626f8f.3
-        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 10:23:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791566607; cv=none;
-        d=google.com; s=arc-20260327;
-        b=io4WL/j4BjsVznWdd4ks+w8sQTxr5Ou2y//NaFbQwyMpIpNqOIvQK3Q+ANAT1I4FCQ
-         duxbOtQ5Qrw0L1tZxM1lkWrCi1nmUXkMo+cJ8vvcMPYS/CBiXcRvkt62nq6i2Ur6HzQM
-         1tY59+hhytwoHpCaMdF5XD3lvVaAbZkvss7xibFxl9IMYMcRedEPPBCGa4HmsXXo4R+a
-         NG8XQTcec0/Fs8oA+n1qJQyKYOmi81zmXB2AW0eR3bg6Xp89EZrvLr3PlCtQ87HrCd5X
-         FWk6YdyVgD6A0lAnt4gtH1v+Cj6JrpHcC9b69jxulzRQsT90I9Ghde+O/Fhjp9UuCPFU
-         TYAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=UviV7uLa4QuU9wMqSrfcZ2tk7TpFd3xUn6hAcyKbZrA=;
-        fh=RaJuzHcuXeT4WgWr0noMD3QB3a09es3MixBEQICaWTs=;
-        b=WzEYJrADNy5/jCE7To0tMICSWu71zL4/fSWkGY9adbYd7Bl4jhYe3gY44ionQyju6/
-         t/qieP3zjysrA4tR+j3VgGcv8NFC9y9ooZZLL0NBvKMBOUDgsTgq8JTP+bko+381JDmv
-         ry4GTXoPa8Nl7/aI3mNicmw/zPBZvq/V40J6/Y2CBsib37tH/iVCP/YpGgFD3qWqoMnQ
-         d3HdwNW8L+zmmdHtjfGiwOJQYgRkwF6/nq4jO3XP4Fr17v/4/T+Xjrc6G7iJXPnWL62b
-         wGyHGM5qgP+lmNfSAddLtvCQbt/Lqire1o+Uhp+R0JYWndz6aeH3H5ewIq6stYNHrSIT
-         gTEA==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQYlnyo2"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3ab67ff8f16so464962a91.3
+        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 10:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791566607; x=1792171407; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=UviV7uLa4QuU9wMqSrfcZ2tk7TpFd3xUn6hAcyKbZrA=;
-        b=d42oUjzedQzw3jw/POI+wSAY4TwAemC5oxjsYv8CUxAB/1kcqAWw/X/F2L3AUAtWcn
-         1yJ9lnmrZfAdPTog1aug9UzcvrwjKWWFOntSv3sn7mYIg5ECFosoy5YxAPapzsClYguK
-         eVUvq8D2unUd3qmIBL54Rh5wv6pA0JD5h1XjbZXHXg/G/lTUH0pmBxETJpiO+P7l2acL
-         uxfFgTfMP1up9LQLx0oZk7QZwD9LRSbCCs/bVEgyKlc6KqSdxFxjPvUzonJhVveD4bKw
-         WDkcSmHXAgGJY9mBH2PQlK4yuJjKCqK+4nX1v0H+VPsc0lyoLo/hikIzikfdt8JI+yra
-         L2OA==
+        d=gmail.com; s=20251104; t=1791568733; x=1792173533; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eFMcmEx2+Bmb7Wycj6pYJAy5yt+ElDaMMm24XjvbUJI=;
+        b=jQYlnyo2avGXWN1Dt1LgbaNZCCUY0tCHsEyAVYKKkzJ6RdjRJBkvBs4SkYnX2pVWYy
+         yGs2NLkJccrrybemoj0T2G7LEocSXJybkUsK0hPbmg3GNoFJX8957BJxov/cvv/oPwfG
+         oWhYSMHx/Y8fTBX6WSFd6ksW8mA/Y5rzmoxN392DlDwxQ6O1wlYanANKPolnDxxSOBs5
+         p9+3FDlEGZC5kwlyEhsuucuQxITh6br/xp7MSBNW/YLLC/ZC3Q7E2QPFLKCOvCY5oC0K
+         5mKXt/ka0uUAtCFrVcoT+ypt7OAqcrQsKtpvUYXYTLtTzRbU6qiQCoSRXZ3UFRz1UMgm
+         rybw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791566607; x=1792171407;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UviV7uLa4QuU9wMqSrfcZ2tk7TpFd3xUn6hAcyKbZrA=;
-        b=ctdHxBW4B/zUoa4OJ3w8WzRoHW6KdCjkc1BIQwAEZW2PJJcny3nE9TqUkOZpYGkwHX
-         8XoJZOb+ca0/QLtEY1zaef1J0doAQEy6eIMog3j2bO8o/HqglvNuixCurFFO0BXnpF4A
-         n12WClp89gj5ogXXRZbyOodOrpBJ4QMFNU8io1ABe7cnu1cCH/0ocfogGjcSJO6xnzPg
-         geQ5qxKQz0ToGZ1s8IUDnCO0UbeejUm5Hmgk5lICtheun5IBp973AxBi0pt5pGtCwJw+
-         g5ka43iIiM/VW8FGO5EygA1pi6nWshjx2kw1ay9Keh45a9bQTCETXC0UxBMeHJzwlB2c
-         6kMQ==
-X-Forwarded-Encrypted: i=1; AKwUvBzx5iu4PoWa34oakDTXKrQlxcAHoUsiXb66EAqmDBHxgDvwZRyXCqC9+uPMeDfMQHr7CcMM@lists.linux.dev
-X-Gm-Message-State: AFuF++lLXsNrdn6Sh5Ch1HuhGCHTbuSpOPqL0jzVy8YN6xz9UUBPyBLa
-	YnMIFsB8/jFxzKuorL0GeGUq8CMejrwD4PJuaeFaBEx00bnrPENvFgxfLoRX1upmQW8dXDXrC2f
-	YhOeJCS7cjPz8esU97bzEnDcrE3WoaPjRjak64489
-X-Gm-Gg: AYBFou2FkrXKykRcun+/h3QSSoUrbEUnW5anGX66sVWxsaHT7705ykf1KURCSu/DWb2
-	XBwJqlaL/5P8mGHkVaG9FYRrht4ezKRtcaQX2PFHsJ5uezw4T7N0Fmv/8Myv1Qk3e+aIIF4l9Iq
-	VOHYD5oZaSGbqi3aq8CPqJ4Xc1aq5yowObZl2CHLq7GYV/VzrzdXx19lfR9M/R+dNUOh41TX1oK
-	vpLpsQkJs6ai8MvRTOCskv4sUI9+lSSA7GfLKZUDmPmZdBwWWBWpsGp0+bmc8rMv6zUazmSd4qz
-	HORHzYDu33r0zQYvxgcdhnJz3JR2rq9PO5LkAdvvRLVe/AVSjx0F8CuFsKutf/CGN/aE7y/QXz9
-	I/xBeVF1Xu6nidNiceiuGLS7Q/MnRRyjNgxfQsCaKH0ambtmUp2f7X55p+i2SjojjazU8WWUbJP
-	lgMfOVri/0JKN61CcbS+PIIv21PSPTIdnqNDNE50hfw9yD/marxtthdDfb
-X-Received: by 2002:a05:600c:628b:b0:4a0:251f:dabd with SMTP id
- 5b1f17b1804b1-4a18e48edd5mr43689545e9.16.1791566606839; Fri, 09 Oct 2026
- 10:23:26 -0700 (PDT)
+        d=1e100.net; s=20260707; t=1791568733; x=1792173533;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=eFMcmEx2+Bmb7Wycj6pYJAy5yt+ElDaMMm24XjvbUJI=;
+        b=r1brzIP12pCBQmKUo5ShLfuO6GRhyZ4VEtct+xI8Yn05F6fVPfxP3uDH2CUrx6Dm7r
+         zkEcR0sOt/c2ivcnC5Y7f08SpBMWkSWeB7uHtOgKsYij6XY0DnjBEklGfTLIjeD6CJGq
+         j4UKhthwhULnwIxB13Lx4J4FESDEcIa+M9yg2XIdsu4LVITuPHycZ4TqB+PP0sB/DYCh
+         Antw66xC/oxUhuQzEQDfedW2It5Ct57jvdrZpIupkTGv+5+uYRYX7Ap2kjCxKKnFUpfc
+         jWXg8aqOBOYJKy/ba0c2hEHiPCPxcQYXzHWUOCA4Uk63mqr10Qf0Pes+GtLm3oNhHDgX
+         3mBQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzoftGX5PvFaEUjy2c5QP6k7c7T2+kjgdzVMVu7LEUdwrBLP24STBqLd+1/Si7Z1xwcetYC@lists.linux.dev
+X-Gm-Message-State: AFq9FYIbQbOwPOc4NiazpLi5z0FpCugeN/4xSi4qoak2IBEhlGLrIsYd
+	G9aKzTKrz2MWcEIqyWiyUI1XH41YEsELZm95pqCmgxPUBNsyCrKB103v
+X-Gm-Gg: AYBFou2emCrIJQBZ7a4pxE5RDvZOY7swdVOULt3ZjARDW+6BpEA4/1Q0C5yU5XPKpzJ
+	NVjtVlN7EeIDNczR+bsEgCTcedz9Ltn0LNtUbnVVz8WA4St/31DKBHaEVUUgRoZueje457q+WIp
+	+XUOznafSfNVyKa6gWhsyJK2BwVRJlwWJ+fE2mxozW1R5kVHd6FvRTVm22RtlxWDuF3S/nGbNAQ
+	bgzlJLwQhLLUB/s4eQ4hjQSQKgF8U+QOweG0Mxd3Xc0mrl9z0dG8lt/hk4u/bnihLtZl0onfBv0
+	2cnyaRSlAEYuuW6qA1/4+Drk0RMbs31qprQS/oyC8g15hTxabEu2BkMduJsF91IDQo1Hcty7M12
+	XmyZ6FXhf19va6FQhfaRjRWQDnIYkT0+9NEQltDfIOnp0if4QAW/FrIDGzfpELL2mrUx10axPb9
+	dUDdVgjmfpv5eeIMmMjOwxnwBo28hsopZNIjpQWk6NPH9UpXs0Guju960VQSihLrtUl/RDAthGz
+	UU7M30Z5XYetjzcNYqAAG8VI8lYPow5b4uJHrzTzjud5QclEPT5Lb5Ub0ShplNVIpmIBw+Tqrzm
+	18g55I31VMFyCVazbnLShM0eagdw1YHkSrYYvPfdKl2t44mKEgMPzjaYnLOaFQpYi9RlpxAYWXy
+	GJLPJoj7vHn+l6+vjOg==
+X-Received: by 2002:a17:90b:3c8e:b0:3a6:fc30:ce16 with SMTP id 98e67ed59e1d1-3ab3ae696c8mr1964314a91.51.1791568732651;
+        Fri, 09 Oct 2026 10:58:52 -0700 (PDT)
+Received: from localhost.localdomain ([2a09:bac5:d58d:323::50:f5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab36f8277bsm4415918a91.11.2026.10.09.10.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 10:58:52 -0700 (PDT)
+From: Ting-Han Hou <ue081723@gmail.com>
+To: Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] clang-tools: Import os for broken pipe handling
+Date: Sat, 10 Oct 2026 01:58:32 +0800
+Message-ID: <20261009175836.2277-1-ue081723@gmail.com>
+X-Mailer: git-send-email 2.52.0.windows.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
- <CAKwvOd=nPgEm=AZbEu12Eb90GtRUThY6YAjSiHHuNVHP8TZHwg@mail.gmail.com> <66usntltyie7ii2rrqajy3izxrvwubwf2vqnery552v3akhwo2@xwb4t76d37wx>
-In-Reply-To: <66usntltyie7ii2rrqajy3izxrvwubwf2vqnery552v3akhwo2@xwb4t76d37wx>
-From: Nick Desaulniers <ndesaulniers@google.com>
-Date: Fri, 9 Oct 2026 10:23:14 -0700
-X-Gm-Features: AclHuK-CLR4BQdqBSfFuLWEHCSgtnQKEmsz-7EKl2ZGIqsJwmtfHX25-OeazvEY
-Message-ID: <CAKwvOd=E7wgGPf+kgOY8sGi0xO-cFMAJK4PMBFknoEupJi1CXw@mail.gmail.com>
-Subject: Re: [PATCH] landlock: Move the domain layer counter out of the
- anonymous union
-To: Abel Vesa <abel.vesa@oss.qualcomm.com>, Bill Wendling <morbo@google.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>
-Cc: Tingmao Wang <m@maowtm.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	michael.bommarito@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Oct 8, 2026 at 4:49=E2=80=AFAM Abel Vesa <abel.vesa@oss.qualcomm.co=
-m> wrote:
->
-> On 26-10-07 14:49:28, Nick Desaulniers wrote:
-> > Would you consider this a bug in clang, or an error in how the
-> > __counted_by attribute is applied?
-> >
-> It turns out Amaan Qureshi has already reported exactly this Landlock
-> issue and proposed an LLVM fix:
->
->   https://github.com/llvm/llvm-project/pull/228309
+The BrokenPipeError handler in run-clang-tools.py calls os.open() and
+os.dup2() without importing os. If this handler is reached, it raises
+NameError instead of redirecting stdout and exiting with status 1.
 
-In that case, I would _not_ work around the compiler bug like this and
-instead wait for that fix to land in clang, then bump the required
-version of clang for counted-by.
+Import os so the handler can work as intended.
 
-Kees and Nathan are traveling for LPC, so I don't expect quick
-feedback from them, but they should confirm whether they agree with my
-proposal.
---=20
-Thanks,
-~Nick Desaulniers
+Fixes: 87c7ee67deb7 ("scripts: handle BrokenPipeError for python scripts")
+Assisted-by: LLM
+Signed-off-by: Ting-Han Hou <ue081723@gmail.com>
+---
+Changes in v2:
+- Drop the regression test and adjust the commit message (Nathan)
+- Use my full name in the Signed-off-by
+- v1: https://lore.kernel.org/r/179017337986.52388.7943687183785012868@gmail.com/
+
+Sorry for the mangled resend in the meantime; this one is sent with
+git send-email.
+
+ scripts/clang-tools/run-clang-tools.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/scripts/clang-tools/run-clang-tools.py b/scripts/clang-tools/run-clang-tools.py
+index e78be82..79d58b3 100755
+--- a/scripts/clang-tools/run-clang-tools.py
++++ b/scripts/clang-tools/run-clang-tools.py
+@@ -12,6 +12,7 @@ compile_commands.json.
+ import argparse
+ import json
+ import multiprocessing
++import os
+ import subprocess
+ import sys
+ 
+
+base-commit: fe2ec83746e501645709761605c2464a44fd2929
+-- 
+2.52.0.windows.1
+
