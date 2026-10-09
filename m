@@ -1,333 +1,129 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021093.outbound.protection.outlook.com [52.101.95.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A5073D669D;
-	Fri,  9 Oct 2026 21:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791582969; cv=fail; b=F+58Ck0Zi/RaQzJIu4nllg7FcdBsvTls5UJi+9jMt75CclQda40TNm+9NoRCa+6UmjNgMpQKFGESbSXEZq+bs1U4rK7bo9sCcS2gsqUrklSI6WVbSvsQI6fPy+u76gbuk6YP/nHNOh5HuJtn5v/JzW666ZaBaVnXoGL0HjNcrFY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791582969; c=relaxed/simple;
-	bh=46eeMNJOr9Oa6r0zsdcjF0nx+83fZvXyugEHOQKZ5gA=;
-	h=Content-Type:Date:Message-Id:To:Cc:Subject:From:References:
-	 In-Reply-To:MIME-Version; b=p7uJ0pWa3/2PT/mKUSqrS4ukadaX87jMBLnrLMqARHQPOMSwmSu5b0/Xg0wuL+K6lC/UQIJDxpb8nwluBZhlPvXJCxvoaHyjPSHHXUl9grTIkGLTn412I27J2uDgVTuixYMOCefoAyRQ0ivs+67pmxG3fzPFy1cix7kRaZLaOXs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=l3QQTq4n; arc=fail smtp.client-ip=52.101.95.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C41E3EA967
+	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 23:29:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791588542; cv=none; b=mRahHglWeRsCDW5bbquGs9GIwu7KJ6ubgHjogKuJQLL36B2Llw0Qu4g1YTSRLt3CCWc13Njxx+r2kqu+dslQQBG79pUE7ciBqL3Sb/XTOeu3qtZKCFZbKW+9oWY/LnfJ9MbLZAz7kr7ANP/PvEI0YYW/fSPcRHncNdTnCBEH+P0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791588542; c=relaxed/simple;
+	bh=mLqMNkEfqZixT18rfTh2xaYltQQWNBAMspvKIAef3Ec=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J6li+NIh2Gppq0q61DKkuHr4XQe2jK6/r9wTC1S8np7+PAJerRCl/uzJ/RZpQ4wA2NisLBA+MU/K6n8E9f/n3QTT47p84H634CyZn+bBenf5Dy4GqxkQ/HPVSSjDrbKAYnxtMLvvgLgQBWM0Y0f5wXHluMxL+GR83oXdSpgvH0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LoTVZbH3; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="l3QQTq4n"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=r8r67xD0daZ8TM+DWhGJeiL33ih0z+9yYaMDB0o1WI6tal9xOZ1PuffYoh1VSO4nrYI+9bhlWlpxdbNKSgCt3jmLjHa87o2oQPiTcOy6UE8xR2L5gT5tJt+B448lm308yR8OtoW3zpAV9RrPNd5nRQlHdiMJTfxHhJM4bHoceo2t65dfLadEVG7+s0zrfOaAesW5j+m9VmGaPB0mEOMn9KqZOLiOesyCupASgcETJ0oJwNgSk5r2Ajr9WaGmDRxFj+L6BEmUV1kfO/7BXb9lG2oB99p05LKsGsNs1ne1wn4cTe8K0yarTMUOXNbDhCZIkA/zxOdAmnEcw8UqytKgdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dh4YcTw8JbaNUhW/j/fMV1f/mSLIk4EOiM7Jyoi4eX4=;
- b=sjcFxc6oDathWllHCk3/f+KnNCV63KmB0s8a/HsvLuTVSbE5vpUC93sCLLoQeAfvesqa7i2GchN9CvU7IMSJ77e9qiYvzt6TsgyQC7zkOMMcWyUkJxezgw8lWRqBUi+F4sqNUfe68PpQ1VhDrhY+RMK4OJHwhv43Z3gPuRCCUanH0csFqJa2MbrpY6tskvNlW1k0QHZnWSZ0rBkAOWie65DIS/azhCb1vaRL/+Br8IHvlVzatQpB+djq9WkMRF+k4Kh2FoZl7eAGIgHp1ZXVaaA7jb8UYI84rOqm4GMknk3Yjdln2jNCwGGv3CEWj/7ueRLur2OqkIxAtcCs3tCWjw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dh4YcTw8JbaNUhW/j/fMV1f/mSLIk4EOiM7Jyoi4eX4=;
- b=l3QQTq4nvoEmPKX0BYeFNJWQ2l5DkKIm9v1hFZDTm2aFphuhOt8aI/kv7LY96f74P5K5tG9aAdSRZG/CoQblPOP0n/YsFi4XyfErEHouXllj82hzlatDShy3YCvPNelmoSqAsmAIZ7RmzS8qGp2ydV8oXjOrakjN3ZnnMTc8iyA=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
- by CWLP265MB6184.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:182::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.18; Fri, 9 Oct
- 2026 21:56:02 +0000
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1%6]) with mapi id 15.21.0496.015; Fri, 9 Oct 2026
- 21:56:02 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 09 Oct 2026 22:55:58 +0100
-Message-Id: <DM0N5L0LG9P0.6IFXMJX60P92@garyguo.net>
-To: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, "Paul E .
- McKenney" <paulmck@kernel.org>
-Cc: <linux-kernel@vger.kernel.org>, "Linus Torvalds"
- <torvalds@linux-foundation.org>, "Boqun Feng" <boqun.feng@gmail.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Sebastian Andrzej Siewior"
- <bigeasy@linutronix.de>, "Will Deacon" <will@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Alan Stern" <stern@rowland.harvard.edu>, "John
- Stultz" <jstultz@google.com>, "Frederic Weisbecker" <frederic@kernel.org>,
- "Joel Fernandes" <joel@joelfernandes.org>, "Josh Triplett"
- <josh@joshtriplett.org>, "Uladzislau Rezki" <urezki@gmail.com>, "Steven
- Rostedt" <rostedt@goodmis.org>, "Lai Jiangshan" <jiangshanlai@gmail.com>,
- "Zqiang" <qiang.zhang1211@gmail.com>, "Ingo Molnar" <mingo@redhat.com>,
- "Waiman Long" <longman@redhat.com>, "Mark Rutland" <mark.rutland@arm.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Vlastimil Babka" <vbabka@suse.cz>,
- <maged.michael@gmail.com>, "Mateusz Guzik" <mjguzik@gmail.com>, "Gary Guo"
- <gary@garyguo.net>, <rcu@vger.kernel.org>, <linux-mm@kvack.org>,
- <lkmm@lists.linux.dev>, "Nikita Popov" <github@npopov.com>,
- <llvm@lists.linux.dev>, "Lian Wang" <lianux.mm@gmail.com>, "Kunwu Chan"
- <kunwu.chan@gmail.com>
-Subject: Re: [PATCH hazptr v2 2/4] ptreq.h: Introduce ptr_eq() to preserve
- address dependency
-From: "Gary Guo" <gary@garyguo.net>
-X-Mailer: aerc 0.22.0
-References: <20261009182142.6311-1-mathieu.desnoyers@efficios.com>
- <20261009182142.6311-3-mathieu.desnoyers@efficios.com>
-In-Reply-To: <20261009182142.6311-3-mathieu.desnoyers@efficios.com>
-X-ClientProxiedBy: LO4P123CA0537.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:2c5::17) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:4ab::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LoTVZbH3"
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e618db81c0so1782835ad.2
+        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 16:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791588541; x=1792193341; darn=lists.linux.dev;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=oSlxszekxGveYsrL4DF7hT5F5fsZN6SpIJIkMN18hKw=;
+        b=LoTVZbH3Oq6sgJrDrwdAcSTutqjA7Qhy88kJkvdKmZmgsGMkIdPBf0FdvOiMvABrkr
+         qocZ8/TOKpWTropvwbwCoOJNp7lSW27UAWhPUcVO77NQda49lzgUONDlaKcN0P9yFW30
+         ceJuN5nXM6RgSQ7jYm3uSB/BoOI2Rg/429n33ZjykjhOeHkBL+7Ux9jHFKTpyhNp85rA
+         q+FrqXHoK89abmv9kgTT/uU31FdkwYnpKoKh2VDEWFuluVR8kLdrfh/52W4MM1kkN6ht
+         5AIAvHDAstcS1t52bv5tQAhIxvK1IAjVE7S883z51+uDLjOZCYkdrRM1toOmNsU9WMID
+         Eftw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791588541; x=1792193341;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=oSlxszekxGveYsrL4DF7hT5F5fsZN6SpIJIkMN18hKw=;
+        b=hlFz1zcTp6F807DIqpp6+Bttxo86U3RnT0XZ1xwr4HDhSpHrhXgJvyw2xpi0UkChYr
+         y+X1qsv8CLkNXWkelO/T02XX9e+eiCQSwSaNao3a3ZAN4JZaC+Opp3kFzuApSK+b4FA6
+         3q3pZuROqBDVZyMkPdoPsih47Wojoy+hi/dXQiUUtT+4Gx27/O+q7Mh0u4uRtzKv2KGM
+         C1I3nTC6fEnTZju6lP1YhJDsVxIeZqEm/pf3I3HMNk9Fv5qZLpUQqslz5Z3O7vgYOOl3
+         3wfHUHbzSFJ2of4vx2Y0GFAHjN6ygBQAJ4ZWRleBfWDB3//JpCOF6NlxIyIzMyFncH6I
+         gnEw==
+X-Forwarded-Encrypted: i=1; AKwUvBx1XZvgs9tpoTBl9dEXElUtPx34lVYreP8SpFDIjb9le7u3GJoluREeOOFkAh+zKeRTpASD@lists.linux.dev
+X-Gm-Message-State: AFq9FYIgH9OLXAX5sWu0hhKHs6tdBU7El1rXOS3/Scf3U/WIyTm+cp40
+	eat5q8GXmlzimW8KEa5TqkReTmgF6zNlUGTF5/kRyc6gjjIt6BbeKAz5
+X-Gm-Gg: AYBFou0qKOF4kWA4xGfzN1wug+VeNKx80c6DAHGbxU7+DcOL9i/83GfqyH9UxAIHoX3
+	DuQdcVaSYrJwEPuM7cV6H0CEiZja/Cc4zxDVWHts5GgS4Ak+ZRu8/ssJSNErQAAEwjlW/qaJ7WL
+	nA8TplCSKMasc2jTH+DsUtwkLNji1k2O7p9U0bUZdVlapcQDYl08HTS0UFHLDS0lhFQXf7RsUY7
+	mqZJlX53eeGCBptfCd6P4c6W9kYV/rVvekfXdnFqh1AJzAg9WI+j+uy6g9k/IqI5ElAz9py8y5/
+	wbAbOnvj8WaHL4CC8ByC5iprLseLVGfpOaOMvDY1OYmkEz5o2mUL7qRYyTnjFGGJuV8NC16xgXs
+	ZzTj8A7Lcv3vhowmpy9qwST4a3dz6tNP2Qa9AF45AfUKFeXjYXryzsyjJwWfWzB7Fot7YNPj9lF
+	OdCcU3xtsDsbhRkTHjZEziY3HfFMj/B+1IXU6P7W+utHT59V/gHTrD1sgRIvKp0DyaknKOtTT5c
+	/SSwFAspAAjy4VBAN653WVbuM19fuEbhh+aM7NuuSj3I3wv6Ce0xaFtEs3TQNVMsPmob6XUUIFU
+	16wFnftGgvQ5gVd7ltjun+xv9Ru+1bhr7zpIqD/0cErt7hsGquHgZCrM+4g=
+X-Received: by 2002:a17:90b:2645:b0:3a8:10e2:ad08 with SMTP id 98e67ed59e1d1-3ab3ace48edmr3043646a91.48.1791588540601;
+        Fri, 09 Oct 2026 16:29:00 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8000:7a86::e34])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab39533ee7sm3396362a91.4.2026.10.09.16.28.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 09 Oct 2026 16:29:00 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-mips@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
+Subject: [PATCH] MIPS: boot: compressed: place .rodata.* and discard .MIPS.abiflags
+Date: Fri,  9 Oct 2026 16:28:57 -0700
+Message-ID: <20261009232857.655265-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.56.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|CWLP265MB6184:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19e20ae1-a5e7-4a6a-233b-08df26501c54
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|23010399003|366016|1800799024|56012099006|4143699003|10067099003|18002099003|22082099003|6133799003|3023799007;
-X-Microsoft-Antispam-Message-Info:
-	xwRm4U2dhMOkdXaI1PH9ZFAjLsSJ3Y/kmQk49jKfxIZHut9asaA+uBsDwEoEHZz5uQSXQSkNLKW/JWbBONVxzRvOXP93wNcTeXojRO8h8h1vwn3qGf09Emsqo2vbxFHwgQMhJImNHQ6SE+HCQRNHkyx8IUSq19LmOjmYfVih8YbCzA7W1JAq4xfu+c+SWPYId/wvmUsDlZgGhPhHBNll+R4lwJpDkp/bFK7Cp6A8aMBmDVstnZVjz1h4PWz5KeHem4pE2igNHqHuTf0q8elKI/w+XyFVEN//QiU+eF48ftywP8SSW4bd3dFqzUyrTnI6ijclQ7shwOUQD+3BiPGKQnnmuwO2rhsXPagJFwoptea5kl0RhT5fmaSdsX4QSspqmI/iLKynzA8iBfbCOJ8cm/G0rByZ0g2PIrGvin/KAJmUqJQ//ZP0bjhWFnk7FlGw4Mi6lXWyK+XMzLv88UGxaTDE5p7dYoF68e4UfWqfVncAdDE+MOD56EpDHfgQf9w0p1EFFbAH4vdg7/xezveHUe/G5gZGtI3FEYHnCuG9Z+A9LlsbRAC33SdjVz/FC7aP0ZLyf/0OD5PHR+avCkoQzajCQ7+XTz6TcdMnKGmwpV3HszXop/VJ2s5biGKyCfdF092L2ZL0bR0qtfopECchMqbutBxX0FkP9mTZyVmS8Yg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(366016)(1800799024)(56012099006)(4143699003)(10067099003)(18002099003)(22082099003)(6133799003)(3023799007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SGE2V0toT05mL1FRWnY3TlFYTE1UcCswdGV3blhlSE5KSWFELzRmUE8vOGlZ?=
- =?utf-8?B?L0tBR3p4cWI5ZXd2bnhQV0c4VFlNamRXb0FMWFJVWDFJYUMyWE9rM3BrRjd6?=
- =?utf-8?B?QW9aclMzUXliaTM3NSt6TEZJazJZSXd4ZjNBcGcydXdKa1hVUnYzKzZBZlJU?=
- =?utf-8?B?YnVZbDFMVVk3QVlmbzNqT2E3THJNb3FVMTlNUkJoUW1NYkV5R1Z1WXdsNFV2?=
- =?utf-8?B?OEZDQit0OEhlRGRxRDlVekYvQ1c0bGFwRzFYUEVZK0pnQm5SQnMrVDhYZ2Nq?=
- =?utf-8?B?ZDJSNUg2MXB6cUxBZytPWVByclpXSVN6WTBHSjM1ZTlEaCs0WUFYVzZ3OVkx?=
- =?utf-8?B?ck1hVGRtNWxqNVVmZHJiSk16RTY5SERmNGxRMnJ5WGxPSDhCcmZQWDFpTWZt?=
- =?utf-8?B?Y0lubXMyYWMvSi9BSzdkUCtEL2NqMVpVdzg1YytFemdvdWJFZGJYbVZWN3pD?=
- =?utf-8?B?NXFDVzg1aXBiTUwwaS9sNUFJa21WSW1TSVVReldrZEhwYzl0R0lFb3JoaExv?=
- =?utf-8?B?VVVsM3NQYmo5NFo0Tjgwa0daRkc4NEdReFNFcUtFSDVJK253bEk1VkNIZ2lV?=
- =?utf-8?B?SmgzNFJJTG5ReGdjZithdEQvNnU0blF5cUxibllvS0ZPKzhpazVXeU4rK0xN?=
- =?utf-8?B?NHdMcS9COTJWcGc0djQrOVBuTWZiOHY5emNDWTc1ei83OU1PbXg5a1UyV1Zo?=
- =?utf-8?B?cTNjTzVpZTE0Q05UMVIraFFMYXZZNU9tcCs5ZVh5SityL3JJM3R1bFE2dXpY?=
- =?utf-8?B?VjM1a2g4bzV2NWQwYzdQN0kyVldTVVY5aC9LZ2Y0ZXRNdVF3QUNwVWFCc3Fu?=
- =?utf-8?B?T1JhOUI5TmdLclR1Yk5LQWdrWG1tTkRYT05QWExVLzAwYTdGTzVEelVjajVF?=
- =?utf-8?B?alJQMU9XMFhCMmJQOW5ITGdtR1I1dDd0ODVjS3VaZDVjdWdSWUJXdkdvQmJw?=
- =?utf-8?B?bVZnZjFQTjBZcmdpTnNIYzc4MUJTZmgxYVBURmNrckk1MU0yQmE3TFFOSGJG?=
- =?utf-8?B?cDdwSU1sUldVK3ZDZFArSW1MOFVXMXVqMFVmaFA0UVJiYzVmcElOSDhFaG52?=
- =?utf-8?B?clFENFRMYW55NlhRYmNLZWlzQ1NUZStlakg4dEhBYW5ZNFllbWprYkZEaUM4?=
- =?utf-8?B?NzBKK1J3Vk9kVEhETmxObFRtUHY1TXFuVy9oV1RYUExIVVVpUEdnNDRLKzE4?=
- =?utf-8?B?NTBybzdyZlNZaFg2bUE3dityVENLNTc1b2xqQUpwSStnSUZCdVpGRHZaZy9C?=
- =?utf-8?B?emluell4Z2RHSWJzMHA1LzZOclNvZkQ2blBscHl3WHlNVkcyU1RYbHI4KzFU?=
- =?utf-8?B?cUJDNnJMUnlYQ29ES0x1SGo5cGFRRk1nOGRkOHJYZCtNNXRQZXVvQ2g0R3RI?=
- =?utf-8?B?WkJOWG9BcjJuUkV4VEVrZVE3QUJybEkrVGQydXhoZnM5SE9KT2xDS3VCMHp0?=
- =?utf-8?B?Q2FZK1VLdldPQlVJYXBpSGovb1JaOXB4VTNuTjBDSkNUcENQN0hSd05zUkNS?=
- =?utf-8?B?d2YveEE5QW42Si96Yy9GRTZLQTAzV0hOWlhlNk5GbDRVRFY2aEtCc2huWE9j?=
- =?utf-8?B?U045aVJWU3Z0dlRNaGowSTFXNjJoVUN5SGJqWXVnejBOZU9QMENzQS96YUVx?=
- =?utf-8?B?ZXFXMzM4UGdsc3p2cWEzcU1acldhZlRIRmx1b2NseTd2TlMremxvcGxhOE9P?=
- =?utf-8?B?ZWlzSlBTbFhWVzdCenpnRkM2b25razdEcDRQV05SSnVRd3d6YzNhUStMMllq?=
- =?utf-8?B?ZWZlZFcwVDNpTDdGU2xaWmNzNFk0THZNUXFYOWF6a3VhTURlazRkUnhtekhh?=
- =?utf-8?B?aHJlUjk1Q3pURXlKbDJnamFCZEEwNkhZenU5bXAxTTFhUFRydVVHV2NTTC93?=
- =?utf-8?B?MVRwOXJZMS9McUZUS3o4ZEhRSUJScnphZ09TRkprNWVud0o4T2tUUlUzcGZy?=
- =?utf-8?B?RXdtdmRtUVBVTzV5dWZoMU43eG9mZlJiaXFyMjR6ZE12ZFhmZnV4N1E5Mmhr?=
- =?utf-8?B?NUh5RUNxOGt4L1M2V04wNTNDbDNaeGhUWmRLbG1jdkh1aVk1OGRkWmtiWTc0?=
- =?utf-8?B?S01OakE1Q0ZQMW5ZQ1RzYlowZkloT3BDeG1lS1c5OWRhZTd0SmFXbTZXVFhq?=
- =?utf-8?B?Lzd3UGRvbWkyZHBwd0J0TENHOGpOaHh6SVV4WGZFS0U4NlNoK01KVkM2K0xn?=
- =?utf-8?B?VjRLRlF0Tm9GZWVMYkZGZEN4S3J5WThMbVVFWHBtUnlwVkpkb21lM1NzRWtK?=
- =?utf-8?B?MWtOb0s0Ny96MnQ5S05WL0FYb29ZRVY0MTRlTU5nc1E1UWpTSGovdlZrYVQ2?=
- =?utf-8?Q?yFXglUqAtC/Fw4k48N?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19e20ae1-a5e7-4a6a-233b-08df26501c54
-X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2026 21:56:02.5485
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HFPUYYWwsv3nCiaJRAowTMwdXGNnG/Z3HxTRRavqlevQcYKyZKE8lzO/CVtPc7vo+FvNXvC9cqo788ERUJHiNg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWLP265MB6184
+Content-Transfer-Encoding: 8bit
 
-On Fri Oct 9, 2026 at 7:21 PM BST, Mathieu Desnoyers wrote:
-> Compiler CSE and SSA GVN optimizations can cause the address dependency
-> of addresses returned by rcu_dereference to be lost when comparing those
-> pointers with either constants or previously loaded pointers.
->
-> Introduce ptr_eq() to compare two addresses while preserving the address
-> dependencies for later use of the address. It should be used when
-> comparing an address returned by rcu_dereference().
->
-> This is needed to prevent the compiler CSE and SSA GVN optimizations
-> from using @a (or @b) in places where the source refers to @b (or @a)
-> based on the fact that after the comparison, the two are known to be
-> equal, which does not preserve address dependencies and allows the
-> following misordering speculations:
->
-> - If @b is a constant, the compiler can issue the loads which depend
->   on @a before loading @a.
-> - If @b is a register populated by a prior load, weakly-ordered
->   CPUs can speculate loads which depend on @a before loading @a.
->
-> The same logic applies with @a and @b swapped.
->
-> The header "linux/ptreq.h" is the expected include target. It
-> contains the documentation of the ptr_eq() API.
->
-> An architecture specific implementation of the pointer comparison
-> can be implemented by each architecture as asm/ptreq.h. The x86
-> implementation is provided initially. If no implementation header is
-> present for the architecture, an arch-agnostic fallback based on
-> OPTIMIZER_HIDE_VAR is included from asm-generic.
->
-> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-> Suggested-by: Boqun Feng <boqun.feng@gmail.com>
-> Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Alan Stern <stern@rowland.harvard.edu>
-> Cc: John Stultz <jstultz@google.com>
-> Cc: Linus Torvalds <torvalds@linux-foundation.org>
-> Cc: Boqun Feng <boqun.feng@gmail.com>
-> Cc: Frederic Weisbecker <frederic@kernel.org>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Cc: Josh Triplett <josh@joshtriplett.org>
-> Cc: Uladzislau Rezki <urezki@gmail.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-> Cc: Zqiang <qiang.zhang1211@gmail.com>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Waiman Long <longman@redhat.com>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: maged.michael@gmail.com
-> Cc: Mateusz Guzik <mjguzik@gmail.com>
-> Cc: Gary Guo <gary@garyguo.net>
-> Cc: rcu@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Cc: lkmm@lists.linux.dev
-> Cc: Nikita Popov <github@npopov.com>
-> Cc: llvm@lists.linux.dev
-> Cc: Lian Wang <lianux.mm@gmail.com>
-> Cc: Kunwu Chan <kunwu.chan@gmail.com>
-> ---
-> Changes since v1:
-> - Move to linux/ptreq.h, implement x86-specific comparison
->   and asm-generic header (fallback).
->
-> Changes since v0:
-> - Include feedback from Alan Stern.
-> ---
->  arch/x86/include/asm/ptreq.h | 16 +++++++++
->  include/asm-generic/Kbuild   |  1 +
->  include/asm-generic/ptreq.h  | 16 +++++++++
+The decompressor linker script only collects .rodata. Clang emits the
+decompressor's strings in .rodata.str1.1 and also produces a
+.MIPS.abiflags section. GNU ld places such orphans next to similar
+sections, but ld.lld puts them after .bss:
 
-I agree with Boqun that this should be ptr_eq. There is no need to save tha=
-t
-character :)
+  [ 5] .bss            NOBITS   809246c0 5346b8 402010
+  [ 6] .MIPS.abiflags  ...      80d266d0 9366d0 000018
+  [ 7] .rodata.str1.1  PROGBITS 80d266e8 9366e8 000164
 
->  include/linux/ptreq.h        | 63 ++++++++++++++++++++++++++++++++++++
->  4 files changed, 96 insertions(+)
->  create mode 100644 arch/x86/include/asm/ptreq.h
->  create mode 100644 include/asm-generic/ptreq.h
->  create mode 100644 include/linux/ptreq.h
->
-> diff --git a/arch/x86/include/asm/ptreq.h b/arch/x86/include/asm/ptreq.h
-> new file mode 100644
-> index 000000000000..593b45f80451
-> --- /dev/null
-> +++ b/arch/x86/include/asm/ptreq.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef _ASM_X86_PTREQ_H
-> +#define _ASM_X86_PTREQ_H
-> +
-> +#include <linux/types.h>
-> +#include <asm/asm.h>
-> +
-> +static __always_inline
-> +bool ptr_eq(const volatile void *a, const volatile void *b)
-> +{
-> +	bool ret;
-> +	asm(__ASM_SIZE(cmp) " %1,%2" : "=3D@ccz" (ret) : "r" (a), "r" (b));
-> +	return ret;
-> +}
-> +
-> +#endif	/* _ASM_X86_PTREQ_H */
-> diff --git a/include/asm-generic/Kbuild b/include/asm-generic/Kbuild
-> index 2bc00c67dc54..e1d95dea09d5 100644
-> --- a/include/asm-generic/Kbuild
-> +++ b/include/asm-generic/Kbuild
-> @@ -47,6 +47,7 @@ mandatory-y +=3D percpu.h
->  mandatory-y +=3D percpu_types.h
->  mandatory-y +=3D pgalloc.h
->  mandatory-y +=3D preempt.h
-> +mandatory-y +=3D ptreq.h
->  mandatory-y +=3D rqspinlock.h
->  mandatory-y +=3D runtime-const.h
->  mandatory-y +=3D rwonce.h
-> diff --git a/include/asm-generic/ptreq.h b/include/asm-generic/ptreq.h
-> new file mode 100644
-> index 000000000000..db5a88628b1e
-> --- /dev/null
-> +++ b/include/asm-generic/ptreq.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_GENERIC_PTREQ_H
-> +#define __ASM_GENERIC_PTREQ_H
-> +
-> +#include <linux/types.h>
-> +#include <linux/compiler.h>
-> +
-> +static __always_inline
-> +bool ptr_eq(const volatile void *a, const volatile void *b)
+This pulls the 4 MB of .bss (mostly the boot heap) into the file and
+leaves the strings beyond _end. For BCM47XX vmlinuz grows from 5.4 MB
+to 9.6 MB.
 
-I suppose this is `const volatile` to take advantage of implicit conversion=
- that
-adds cv-qualifiers to be added implicitly. Might worth a mention in somewhe=
-re
-(commit message maybe) because I was confused for a second on why this need=
-s
-to be volatile.
+Collect .rodata.* with .rodata, and discard .MIPS.abiflags and
+.gnu.attributes as arch/mips/kernel/vmlinux.lds.S does.
 
-> +{
-> +	OPTIMIZER_HIDE_VAR(a);
-> +	OPTIMIZER_HIDE_VAR(b);
-> +	return a =3D=3D b;
-> +}
+Assisted-by: LLM
+Signed-off-by: Rosen Penev <rosenp@gmail.com>
+---
+ arch/mips/boot/compressed/ld.script | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-One thought on inline assembly. For RISC-V, branching with comparison is a
-single instruction, but there's no instruction for obtaining the boolean fo=
-r
-a =3D=3D b.
-
-One option is to do
-
-    static __always_inline
-    bool ptr_eq_likely(const volatile void *a, const volatile void *b) {
-        asm goto ("bne %0, %1, %l2" : : "r" (a), "r" (b) :: not_eq);
-        return true;
-    not_eq:
-        return likely(false);
-    }
-
-and then the optimizer can turn a ptr_eq call + a branch to a single
-instruction. This, however, would require likely + unlikely variants.
-
-Alternatively, we can just not have all the complexity, and just emit one e=
-xtra
-instruction:
-
-    static __always_inline
-    bool ptr_eq(const volatile void *a, const volatile void *b) {
-        unsigned long diff;
-        asm("xor %0, %1, %2" : "=3Dr" (diff) : "r" (a), "r" (b));
-        return diff =3D=3D 0;
-    }
-
-Thoughts?
-
-Best,
-Gary
+diff --git a/arch/mips/boot/compressed/ld.script b/arch/mips/boot/compressed/ld.script
+index 0ebb667274d6..c45be18c6f0d 100644
+--- a/arch/mips/boot/compressed/ld.script
++++ b/arch/mips/boot/compressed/ld.script
+@@ -17,7 +17,7 @@ SECTIONS
+ 	/* . = VMLINUZ_LOAD_ADDRESS; */
+ 	.text : {
+ 		*(.text)
+-		*(.rodata)
++		*(.rodata .rodata.*)
+ 	}: text
+ 	/* End of text section */
+ 
+@@ -50,7 +50,9 @@ SECTIONS
+ 
+ 	/* Sections to be discarded */
+ 	/DISCARD/ : {
++		*(.MIPS.abiflags)
+ 		*(.MIPS.options)
++		*(.gnu.attributes)
+ 		*(.options)
+ 		*(.pdr)
+ 		*(.reginfo)
+-- 
+2.56.0
 
