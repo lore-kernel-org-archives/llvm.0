@@ -1,59 +1,89 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2793442AA9;
-	Fri,  9 Oct 2026 01:14:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0197233946
+	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 01:17:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791508445; cv=none; b=Aqbf/SlRH6Ws6AUQ7YKz/MtdVpWDiqZU/q4EO/3bHvgiXuakXAyG+S/FkxYZWWoqHnPhGCvaSzY+4AgwtbAyTa3vpWHPtcRnX3LcpyVbjP2hol0kb7kTL2cxYFGQQZv8dBKOSXnvkmL/+JWeBxTcI8gNsf8RHZFDVMuFYFBe5+Q=
+	t=1791508629; cv=none; b=Hthl23AKf9yVXkkJzs5hGW1J8+GGh02uuaOgsixVdwEeeIjoCMNCQUnNF0qUgriOo5jAC0Z9+krFcc0K4KhY6hVgPqbc9A5RnR34N0h6Cks0NOeeCIpr9BJiAZep5oWNOHmTXj00HIzqFxM5geJ/PEwitGUU4uNy5IeFnUE2HlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791508445; c=relaxed/simple;
-	bh=WRP8wfySnMMIoXZLEo1e5ePdgi8q++dELZY14r2YO+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=Yg3zzvbATkzGCtIqB3XpVLV/pbNNjsr5Mh7XdDAmmYRQedsiFPLTLcHE/h0eQoRy6fTzTZZaH0xoEfXueUibjczO+vLzNANvQOcn0FgR8JG00XJB8Wv2/L4QhQ5UGnQNyfQ21DQrnjY6e0AxCQpPR5gmDy5RPd/Vq5EsKwZUDj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWembBtg; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791508629; c=relaxed/simple;
+	bh=MMzdOh6zuM2zcV+/w8InyvA3igLjaY5u/Frz2zXgL3s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gRl+9C7z0ZV0XMlzJfAEw0StZLwfEctFPvzCZEbh/Oc5uORw0IetcUip8HmJyDQxJH4co9aYSN/fGlzoLFyZNoTkRAasnxPdLL2q5HPTYa5NG3iHG9QuSYY0kbMvV/RSNXgOn08n4iqrWY7p2P9BUudtdSM1a+Ox79aUySQrLwc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qHiKxL18; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWembBtg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791508443; x=1823044443;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WRP8wfySnMMIoXZLEo1e5ePdgi8q++dELZY14r2YO+o=;
-  b=dWembBtgjM28JTUfB6rCk8hblEb8+x1P+VbTyIKYtdgDwVPh1VNWbVD0
-   OcV7cPnn1AvLCr1IsD0hX7BbHuzKN1SJ/ohoZHnkPIgA1edpBXYalCTe/
-   63H6+8gvLHLs15K0DqfPV3530bdNdNdhPLaGq/e2MVElrC+clDnyLqxYE
-   aXtvaTn+bTkMykrw4Jadw9nj+jcYXCvn/IcVIzlALkWCX/5vOEkzgjguI
-   dicMEtVorPwahaktDN8L1j6c729i7Mf3IUrhQtK4tdQ2JuetZ1b44QNWg
-   68wIu0nAIe90E8S8S4Dzb7ggw3mRc5rLpfeH2MbxjqLeetuCL28gqS5jy
-   Q==;
-X-CSE-ConnectionGUID: K8DLBsFPQpaR1ThI4kGPpA==
-X-CSE-MsgGUID: YQK4sv9FSRGMo5C9h3ydJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11929"; a="314034"
-X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="314034"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2026 18:14:02 -0700
-X-CSE-ConnectionGUID: UboS+KvQQk6oBvzb2JG7ow==
-X-CSE-MsgGUID: YJEN0onEQ0OoXNmccfl4/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,147,1787036400"; 
-   d="scan'208";a="269551"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 08 Oct 2026 18:14:01 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xEzBO-0000000058C-37cq;
-	Fri, 09 Oct 2026 01:13:58 +0000
-Date: Fri, 09 Oct 2026 09:13:58 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Stefan =?utf-8?Q?D=C3=B6singer"?= <stefandoesinger@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [stefandoesinger-zx297520:dlink 23/142]
- arch/arm/kernel/head.S:129:2: error: invalid instruction, any one of the
- following would fix this:
-Message-ID: <202610090931.MTCqZgr1-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qHiKxL18"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a02718da81so27183595e9.1
+        for <llvm@lists.linux.dev>; Thu, 08 Oct 2026 18:17:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791508626; x=1792113426; darn=lists.linux.dev;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4zJZcyCxNs35dQHZgRkxwA5yHjhyI7WkTssIiSVzh8w=;
+        b=qHiKxL18oJN34KAA9QccWJJTly9SxUMr8ycuxXkhvb/MWsx9wxzNjXdPbhYQFyCLkf
+         GJRCIxvYAt+FrBACiHu7FKYlppny+WXPO1zV9rVfB+LD0PaBobzozrqQI9E+KMTY8zl7
+         ukhZJVReTTHV8fJy8kxkre3XoreCUoPFPiTOIc0YQjiHXzttb+3eqe30CXV7IGD1gdWl
+         v8uJLb6vtgfW+Oyv5iHrJfJQfyag4HMaDy8RpztgtfmOimII+jH++NGFH7shtsgMb+di
+         ZSrmZr/tNPhw/BtjANcMax5dHkXozb+49LGktJByVxqElb9ZRGLijYyucubYl9W+eNpR
+         QYVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791508626; x=1792113426;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4zJZcyCxNs35dQHZgRkxwA5yHjhyI7WkTssIiSVzh8w=;
+        b=ae+kZg6c3lcBS9bEjck+cHDdj/LraUTU99hTXAPJGkac8xoz2PVDdsQfpThN+K9S/L
+         dkxPEEumaMKCmcLm0re788nyZuafSph06Z6Jf80kKm2+WaECew/GzthfqGm8l2kmc8Nw
+         XkuiL6TqGJjAUhiwsclAy2jJ0nnpDYsfkM1NDNJM4PT6ad14PWD8ZOnf999+wWYwCpey
+         pwN4aJ2gfwBmBTfFmk0g8WgFJJiTTRVMeMN7B299qQDW7W81/IcFjDpp6QhH5lnuLM1V
+         qqhxGtmAZrodVEmMe8qUUUrF+7GW9WZaDmw2RyN/CejDyqWzrM3w0TzVErfK9iHbgk25
+         3fWQ==
+X-Forwarded-Encrypted: i=1; AKwUvBxYtCLFUQEisCzc77o8H03TJrHqpF1ga2fLYzbKMrnOeIR1roOxCRZVHjJw9Vhe3MxgySIS@lists.linux.dev
+X-Gm-Message-State: AFuF++mLHzRiE7PFT8+br6EUQMX6eQHk6FXnpRV5F5FyM8c/GFeXYFdY
+	cyClkkXf/zYFqvJmFZJaK/76TaYN7WFFxR8QZrkATWgYzdZklPlBk5Lj
+X-Gm-Gg: AYBFou1E3wGTx25bQ+c6L81dGYg4/pEjutHc8N0B2hxK5n40LxCnTEN3DiuvnaCBc4K
+	LZ3d5Wpv8+k5yHsSMRdN0JbA0uZSdsGXmhj1tfVmvMLz3O/alpAF8tbleK4DZZ42J9aIVfFUHW9
+	FeW3Ph4jcfmTZXQcevdJXz7xCGmMkp205RSQXn1APwiwIy6/v8h+vyT1cpa2X4wrCvH44K2Ve8V
+	uuqbW8I9dTt5rObzXGm6pasD47o5AK7atHdncaiaVpGPEMM0TGEZqt1seJEK1Y4VBBkLHxMgqeR
+	DQkFCnfIfeMLgHvjEDCzzEgHEWXsGuw3667wYHYz/n6whxG9Niap+eMtH9K1p6OxLmjWDAeM79v
+	4cBWsyG/hsWV0q/jNVFKZZn4w8+CO5QoJEIykp0uC6dYKfmRgfS34iHDu8qYqA9YjR/n3Wjxn4h
+	4nUoeh+8CYJLhjUt19E2MOuUyP5awF9nXPxGsrLi0os9ZSWJvLYUoBg9DLwmjcHyQ/2/HRQzmKy
+	fnbJMBdsymZNdoAHhpz9eUPJ6Il63sbs4hOYhFc32/P7JZ3NdPfcZM/A1QlM2OKcHROVEkNd3xX
+	XP8pdBhw5MWXSfOMwt7/fSRHhsRXypGKlMPxLxHbJuIxLVUkLPN8LakblddQbrRKaanqsG0y0WQ
+	KwtyfJSLk4zopm0r5lymzdw==
+X-Received: by 2002:a05:600c:19ca:b0:4a0:2484:2800 with SMTP id 5b1f17b1804b1-4a18e4464famr4244415e9.3.1791508625763;
+        Thu, 08 Oct 2026 18:17:05 -0700 (PDT)
+Received: from MacBook-Pro-von-Karl.localdomain (dynamic-2a02-3100-a128-aa01-297a-7094-853e-a20c.310.pool.telefonica.de. [2a02:3100:a128:aa01:297a:7094:853e:a20c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a18be8c601sm19861285e9.3.2026.10.08.18.17.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Oct 2026 18:17:02 -0700 (PDT)
+Date: Fri, 9 Oct 2026 03:17:00 +0200
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Gary Guo <gary@garyguo.net>
+Cc: Russell King <linux@armlinux.org.uk>, Miguel Ojeda <ojeda@kernel.org>, 
+	Boqun Feng <boqun@kernel.org>, =?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
+	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
+	Onur =?utf-8?B?w5Z6a2Fu?= <work@onurozkan.dev>, Arnd Bergmann <arnd@arndb.de>, Linus Walleij <linusw@kernel.org>, 
+	Christian Schrefl <chrisi.schrefl@gmail.com>, Bradley Morgan <brads@mainlining.org>, 
+	"Paul E . McKenney" <paulmck@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-arm-kernel@lists.infradead.org, 
+	rust-for-linux@vger.kernel.org, llvm@lists.linux.dev, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] ARM: cmpxchg: always inline __arch_xchg() and
+ __cmpxchg()
+Message-ID: <asg-nSs2cg7O-znd@gmail.com>
+References: <20261008053746.49631-1-kmehltretter@gmail.com>
+ <20261008053746.49631-2-kmehltretter@gmail.com>
+ <DLZC239PAA53.3S5GIQRJNU1V2@garyguo.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -61,101 +91,42 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DLZC239PAA53.3S5GIQRJNU1V2@garyguo.net>
 
-tree:   https://gitlab.com/stefandoesinger/zx297520-kernel dlink
-head:   7998b6e929bb20ed66acafa33720d8e3533e1598
-commit: 43b934983d6f2811702f80419b92a1c62988fb7e [23/142] ARM: zte: HACK: Set up GICv3.
-config: arm-spear3xx_defconfig (https://download.01.org/0day-ci/archive/20261009/202610090931.MTCqZgr1-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 242243a5814307de825db3428662d67b064e2cbc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261009/202610090931.MTCqZgr1-lkp@intel.com/reproduce)
+On Thu, Oct 08, 2026 at 11:01:32AM +0100, Gary Guo wrote:
+> > v6.19 links. Commit ab717dd98bee ("rust: helpers: Add i8/i16 atomic
+> > xchg_acquire helpers") in v7.0 triggers __bad_xchg. Commit
+> > ac8f06ade38a ("rust: sync: atomic: Add Atomic<*{mut,const} T> support")
+> > in v7.1 also triggers __bad_cmpxchg.
+> 
+> I think the issue is that when you get multiple function calls in a function,
+> GCC starts to think that not inlining can result in code deduplication where
+> that is not actually true.
+> 
+> But I am surprised that it hasn't been seen in the past, perhaps there're only
+> calls with single size from any translation unit previously?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610090931.MTCqZgr1-lkp@intel.com/
+The sizes were already mixed. It is the number of callers.
 
-All errors (new ones prefixed by >>):
+Commit 5dbc0a692459 ("rust: helpers: Add i8/i16 atomic xchg helpers")
+has 1-, 2- and 4-byte xchg() in helpers.c and no __bad_xchg. The next
+commit, ab717dd98bee, adds two more callers of the same sizes, the
+xchg_acquire helpers, and has it.
 
->> arch/arm/kernel/head.S:129:2: error: invalid instruction, any one of the following would fix this:
-    mov r3, #0x131 @ non-secure
-    ^
-   arch/arm/kernel/head.S:129:11: note: invalid operand for instruction
-    mov r3, #0x131 @ non-secure
-             ^
-   arch/arm/kernel/head.S:129:11: note: operand must be a register in range [r0, r15]
-    mov r3, #0x131 @ non-secure
-             ^
-   arch/arm/kernel/head.S:129:2: note: instruction requires: armv6t2
-    mov r3, #0x131 @ non-secure
-    ^
+> The fix LGTM, but Sashiko's report is worth looking into.
 
+It's a valid concern. __generic_cmpxchg_local() has the same weakness
+and patch 1 does not touch it. No file in the tree fails today. A test
+file triggers it on ARMv5 with gcc 8.1.0 and CC_OPTIMIZE_FOR_SIZE:
 
-vim +129 arch/arm/kernel/head.S
+- 12 valid cmpxchg_local() callers link
+- 24 leave an undefined reference to wrong_size_cmpxchg
+- __always_inline on __generic_cmpxchg_local() removes it
 
-   105	
-   106		@ FIXME: This needs to go into the bootloader, it has no business being here.
-   107		@ zx297520v3 has essentially an ARMv8 CPU with a GICv3 and secure mode support, but there's
-   108		@ no ARM TrustZone firmware. So we have to set up the CPU and GIC according to arm64 boot
-   109		@ requirements specified in Documentation/arch/arm64/booting.rst.
-   110		@ Leave r0, r1 and r2 alone to preserve the DTB pointer.
-   111	
-   112		@ This allows EL1 to handle ints hat are normally handled by EL2/3.
-   113		@ Detect sane bootloaders and skip the hack
-   114		ldr	r3, =0xf2000000
-   115		ldr	r3, [r3]
-   116		ldr	r4, =(GICD_CTLR_ARE_NS | GICD_CTLR_DS)
-   117		cmp	r3, r4
-   118		beq	skip_zx_hack
-   119		ldr	r3, =0xf2000000
-   120		str	r4, [r3]
-   121	
-   122		cps	#MON_MODE
-   123	
-   124		@ Work in non-secure physical addres space: SCR_EL3.NS = 1. At least the UART seems to
-   125		@ respond only to non-secure addresses. I have taken insipiration from Raspberry pi's
-   126		@ armstub7.S here.
-   127		@
-   128		@ ARM docs say modify this bit in monitor mode only...
- > 129		mov	r3, #0x131			@ non-secure
-   130		mcr	p15, 0, r3, c1, c1, 0
-   131	
-   132		@ AP_PPI_MODE_REG: Configure timer PPIs (10, 11, 13, 14) to active-low.
-   133		ldr	r3, =0xF22020a8
-   134		ldr	r4, =0x50
-   135		str	r4, [r3]
-   136		ldr	r3, =0xF22020ac
-   137		ldr	r4, =0x14
-   138		str	r4, [r3]
-   139	
-   140		@ Enable EL access to ICC_SRE (bit 3, ICC_SRE_EL3.Enable). Enable system reg access to
-   141		@ GICv3 registers (bit 0, ICC_SRE_EL3.SRE).
-   142		mrc	p15, 6, r3, c12, c12, 5		@ ICC_SRE_EL3
-   143		orr	r3, #0x9			@ FIXME: No defines for SRE_EL3 values?
-   144		mcr	p15, 6, r3, c12, c12, 5
-   145		mrc	p15, 0, r3, c12, c12, 5		@ ICC_SRE_EL1
-   146		orr	r3, #(ICC_SRE_EL1_SRE)
-   147		mcr	p15, 0, r3, c12, c12, 5
-   148	
-   149		@ Like ICC_SRE_EL3, enable non-secure access and allow register based access.
-   150		mrc	p15, 4, r3, c12, c9, 5		@ ICC_SRE_EL2 aka ICC_HSRE
-   151		orr	r3, r3, #(ICC_SRE_EL2_ENABLE | ICC_SRE_EL2_SRE)
-   152		mcr	p15, 4, r3, c12, c9, 5
-   153		isb
-   154	
-   155		@ Back to SVC mode. TODO: Doesn't safe_svcmode_maskall do this for us anyway?
-   156		cps	#SVC_MODE
-   157	skip_zx_hack:
-   158	
-   159		@ ensure svc mode and all interrupts masked
-   160		safe_svcmode_maskall r9
-   161	
-   162		mrc	p15, 0, r9, c0, c0		@ get processor id
-   163		bl	__lookup_processor_type		@ r5=procinfo r9=cpuid
-   164		movs	r10, r5				@ invalid processor (r5=0)?
-   165	 THUMB( it	eq )		@ force fixup-able long branch encoding
-   166		beq	__error_p			@ yes, error 'p'
-   167	
+helpers.c stays below that. The ARMv4T and ARMv5TE kernels of this
+series link with gcc 8.1.0. I will send this asm-generic change as a
+separate patch.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Karl
