@@ -1,129 +1,98 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C41E3EA967
-	for <llvm@lists.linux.dev>; Fri,  9 Oct 2026 23:29:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC49B497B88;
+	Fri,  9 Oct 2026 23:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791588542; cv=none; b=mRahHglWeRsCDW5bbquGs9GIwu7KJ6ubgHjogKuJQLL36B2Llw0Qu4g1YTSRLt3CCWc13Njxx+r2kqu+dslQQBG79pUE7ciBqL3Sb/XTOeu3qtZKCFZbKW+9oWY/LnfJ9MbLZAz7kr7ANP/PvEI0YYW/fSPcRHncNdTnCBEH+P0=
+	t=1791589949; cv=none; b=Sf6FtRW9fikSFKGwLlDmkz2r6Qpft7tEDxkovfOT9hl6H9q/5u6kg8li+RN1zaaMradVTLQWzhrxVHD1UgI6x5mdHiLoglPh7qCZ26cW1inEkCcQNhgh7pDGk6VnBXoSARkIxl+qPc4D7Z9ZmJo+Tre/ULLqKm6c9OXk7L5RbFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791588542; c=relaxed/simple;
-	bh=mLqMNkEfqZixT18rfTh2xaYltQQWNBAMspvKIAef3Ec=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J6li+NIh2Gppq0q61DKkuHr4XQe2jK6/r9wTC1S8np7+PAJerRCl/uzJ/RZpQ4wA2NisLBA+MU/K6n8E9f/n3QTT47p84H634CyZn+bBenf5Dy4GqxkQ/HPVSSjDrbKAYnxtMLvvgLgQBWM0Y0f5wXHluMxL+GR83oXdSpgvH0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LoTVZbH3; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1791589949; c=relaxed/simple;
+	bh=0rX668ssqaTJGdN6tZAXjyniXgmiQ0A+ZljUjfEVTH8=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=dD3nOkXPZfpD179S471hB6DJ4YvRe8K+tdzkpcn6rlmpiVce5IUrj0cjbmzS9So74u8qc+K1EcHyC0PIbW7Y+ta5wNVESIB3wAPRwWNqFgFC6Yf3yT0QSywq4y5/+ZwnRUVBShLRtCFTSQJUxVSctEltXgONJLuz6kz5vpPByNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WU0Cfv6e; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LoTVZbH3"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2e618db81c0so1782835ad.2
-        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 16:29:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791588541; x=1792193341; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oSlxszekxGveYsrL4DF7hT5F5fsZN6SpIJIkMN18hKw=;
-        b=LoTVZbH3Oq6sgJrDrwdAcSTutqjA7Qhy88kJkvdKmZmgsGMkIdPBf0FdvOiMvABrkr
-         qocZ8/TOKpWTropvwbwCoOJNp7lSW27UAWhPUcVO77NQda49lzgUONDlaKcN0P9yFW30
-         ceJuN5nXM6RgSQ7jYm3uSB/BoOI2Rg/429n33ZjykjhOeHkBL+7Ux9jHFKTpyhNp85rA
-         q+FrqXHoK89abmv9kgTT/uU31FdkwYnpKoKh2VDEWFuluVR8kLdrfh/52W4MM1kkN6ht
-         5AIAvHDAstcS1t52bv5tQAhIxvK1IAjVE7S883z51+uDLjOZCYkdrRM1toOmNsU9WMID
-         Eftw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791588541; x=1792193341;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oSlxszekxGveYsrL4DF7hT5F5fsZN6SpIJIkMN18hKw=;
-        b=hlFz1zcTp6F807DIqpp6+Bttxo86U3RnT0XZ1xwr4HDhSpHrhXgJvyw2xpi0UkChYr
-         y+X1qsv8CLkNXWkelO/T02XX9e+eiCQSwSaNao3a3ZAN4JZaC+Opp3kFzuApSK+b4FA6
-         3q3pZuROqBDVZyMkPdoPsih47Wojoy+hi/dXQiUUtT+4Gx27/O+q7Mh0u4uRtzKv2KGM
-         C1I3nTC6fEnTZju6lP1YhJDsVxIeZqEm/pf3I3HMNk9Fv5qZLpUQqslz5Z3O7vgYOOl3
-         3wfHUHbzSFJ2of4vx2Y0GFAHjN6ygBQAJ4ZWRleBfWDB3//JpCOF6NlxIyIzMyFncH6I
-         gnEw==
-X-Forwarded-Encrypted: i=1; AKwUvBx1XZvgs9tpoTBl9dEXElUtPx34lVYreP8SpFDIjb9le7u3GJoluREeOOFkAh+zKeRTpASD@lists.linux.dev
-X-Gm-Message-State: AFq9FYIgH9OLXAX5sWu0hhKHs6tdBU7El1rXOS3/Scf3U/WIyTm+cp40
-	eat5q8GXmlzimW8KEa5TqkReTmgF6zNlUGTF5/kRyc6gjjIt6BbeKAz5
-X-Gm-Gg: AYBFou0qKOF4kWA4xGfzN1wug+VeNKx80c6DAHGbxU7+DcOL9i/83GfqyH9UxAIHoX3
-	DuQdcVaSYrJwEPuM7cV6H0CEiZja/Cc4zxDVWHts5GgS4Ak+ZRu8/ssJSNErQAAEwjlW/qaJ7WL
-	nA8TplCSKMasc2jTH+DsUtwkLNji1k2O7p9U0bUZdVlapcQDYl08HTS0UFHLDS0lhFQXf7RsUY7
-	mqZJlX53eeGCBptfCd6P4c6W9kYV/rVvekfXdnFqh1AJzAg9WI+j+uy6g9k/IqI5ElAz9py8y5/
-	wbAbOnvj8WaHL4CC8ByC5iprLseLVGfpOaOMvDY1OYmkEz5o2mUL7qRYyTnjFGGJuV8NC16xgXs
-	ZzTj8A7Lcv3vhowmpy9qwST4a3dz6tNP2Qa9AF45AfUKFeXjYXryzsyjJwWfWzB7Fot7YNPj9lF
-	OdCcU3xtsDsbhRkTHjZEziY3HfFMj/B+1IXU6P7W+utHT59V/gHTrD1sgRIvKp0DyaknKOtTT5c
-	/SSwFAspAAjy4VBAN653WVbuM19fuEbhh+aM7NuuSj3I3wv6Ce0xaFtEs3TQNVMsPmob6XUUIFU
-	16wFnftGgvQ5gVd7ltjun+xv9Ru+1bhr7zpIqD/0cErt7hsGquHgZCrM+4g=
-X-Received: by 2002:a17:90b:2645:b0:3a8:10e2:ad08 with SMTP id 98e67ed59e1d1-3ab3ace48edmr3043646a91.48.1791588540601;
-        Fri, 09 Oct 2026 16:29:00 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8000:7a86::e34])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ab39533ee7sm3396362a91.4.2026.10.09.16.28.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Oct 2026 16:29:00 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-mips@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org (open list),
-	llvm@lists.linux.dev (open list:CLANG/LLVM BUILD SUPPORT:Keyword:\b(?i:clang|llvm)\b)
-Subject: [PATCH] MIPS: boot: compressed: place .rodata.* and discard .MIPS.abiflags
-Date: Fri,  9 Oct 2026 16:28:57 -0700
-Message-ID: <20261009232857.655265-1-rosenp@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WU0Cfv6e"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E0E1F000FF;
+	Fri,  9 Oct 2026 23:52:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791589948;
+	bh=QOyR2wzQX5F16zI7w1wBHqwvXHPsPL0DrGCxPm2PHy0=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References;
+	b=WU0Cfv6eCvB/nsvhThv5tFbOcqtGP3njYstGZmpbkgKxmXUHgPdzzz/xuIXA2YfaO
+	 xSSFurMVf0VmzUsQ44deyY+sOlSBCKmY+/yYMJLqUm/m1e47Q5W/XP+dQU8T9JPMP/
+	 32R04NLM15ge2xxQXsEibb1umC0xHwZgz2x6jTn2YfWQwjI3VGjoj3vDd8Erp4U6rG
+	 I2DYvCUvwXypHlC+G3XVmNS9MQ/o2wE/2K6HRyp7zK3Vw4lT93opD02P4OYzQC5cO7
+	 39RL1uxmc61zQUZA3IBCg+v1iFzEiAJ2SUHPqWM15n4MrZljcCC/97yUPuA05AEPmY
+	 Xcvnof81HlTfg==
+Date: Fri, 09 Oct 2026 16:52:24 -0700
+From: Kees Cook <kees@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>
+CC: Abel Vesa <abel.vesa@oss.qualcomm.com>, Bill Wendling <morbo@google.com>,
+ Tingmao Wang <m@maowtm.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+ Justin Stitt <justinstitt@google.com>, linux-security-module@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+ llvm@lists.linux.dev, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ michael.bommarito@gmail.com
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_landlock=3A_Move_the_domain_l?=
+ =?US-ASCII?Q?ayer_counter_out_of_the_anonymous_union?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20261009204554.GA778522@ax162>
+References: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com> <CAKwvOd=nPgEm=AZbEu12Eb90GtRUThY6YAjSiHHuNVHP8TZHwg@mail.gmail.com> <66usntltyie7ii2rrqajy3izxrvwubwf2vqnery552v3akhwo2@xwb4t76d37wx> <CAKwvOd=E7wgGPf+kgOY8sGi0xO-cFMAJK4PMBFknoEupJi1CXw@mail.gmail.com> <20261009204554.GA778522@ax162>
+Message-ID: <EF8E7F67-39BF-4382-AB18-98E9D6111CA5@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The decompressor linker script only collects .rodata. Clang emits the
-decompressor's strings in .rodata.str1.1 and also produces a
-.MIPS.abiflags section. GNU ld places such orphans next to similar
-sections, but ld.lld puts them after .bss:
 
-  [ 5] .bss            NOBITS   809246c0 5346b8 402010
-  [ 6] .MIPS.abiflags  ...      80d266d0 9366d0 000018
-  [ 7] .rodata.str1.1  PROGBITS 80d266e8 9366e8 000164
 
-This pulls the 4 MB of .bss (mostly the boot heap) into the file and
-leaves the strings beyond _end. For BCM47XX vmlinuz grows from 5.4 MB
-to 9.6 MB.
+On October 9, 2026 1:45:54 PM PDT, Nathan Chancellor <nathan@kernel=2Eorg>=
+ wrote:
+>On Fri, Oct 09, 2026 at 10:23:14AM -0700, Nick Desaulniers wrote:
+>> On Thu, Oct 8, 2026 at 4:49=E2=80=AFAM Abel Vesa <abel=2Evesa@oss=2Equa=
+lcomm=2Ecom> wrote:
+>> >
+>> > On 26-10-07 14:49:28, Nick Desaulniers wrote:
+>> > > Would you consider this a bug in clang, or an error in how the
+>> > > __counted_by attribute is applied?
+>> > >
+>> > It turns out Amaan Qureshi has already reported exactly this Landlock
+>> > issue and proposed an LLVM fix:
+>> >
+>> >   https://github=2Ecom/llvm/llvm-project/pull/228309
+>>=20
+>> In that case, I would _not_ work around the compiler bug like this and
+>> instead wait for that fix to land in clang, then bump the required
+>> version of clang for counted-by=2E
+>>=20
+>> Kees and Nathan are traveling for LPC, so I don't expect quick
+>> feedback from them, but they should confirm whether they agree with my
+>> proposal=2E
+>
+>Bill/Kees/Justin should review that patch upstream but bumping the
+>required version for __counted_by to clang-24 (or maybe 23=2E1=2Ex if it =
+can
+>land in release/23=2Ex) kind of sucks :/ but if this is a big enough
+>footgun that we don't want to continuously workaround, I guess we have
+>no choice=2E
 
-Collect .rodata.* with .rodata, and discard .MIPS.abiflags and
-.gnu.attributes as arch/mips/kernel/vmlinux.lds.S does.
+I'm still catching up from travel, so apologies if this already got checke=
+d, but has this been verified against GCC as well? Is it only a Clang probl=
+em?
 
-Assisted-by: LLM
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- arch/mips/boot/compressed/ld.script | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Regardless, if counted_by is not working for a given compiler version we'l=
+l need to exclude its use by version=2E :(
 
-diff --git a/arch/mips/boot/compressed/ld.script b/arch/mips/boot/compressed/ld.script
-index 0ebb667274d6..c45be18c6f0d 100644
---- a/arch/mips/boot/compressed/ld.script
-+++ b/arch/mips/boot/compressed/ld.script
-@@ -17,7 +17,7 @@ SECTIONS
- 	/* . = VMLINUZ_LOAD_ADDRESS; */
- 	.text : {
- 		*(.text)
--		*(.rodata)
-+		*(.rodata .rodata.*)
- 	}: text
- 	/* End of text section */
- 
-@@ -50,7 +50,9 @@ SECTIONS
- 
- 	/* Sections to be discarded */
- 	/DISCARD/ : {
-+		*(.MIPS.abiflags)
- 		*(.MIPS.options)
-+		*(.gnu.attributes)
- 		*(.options)
- 		*(.pdr)
- 		*(.reginfo)
--- 
-2.56.0
+-Kees
 
+
+--=20
+Kees Cook
