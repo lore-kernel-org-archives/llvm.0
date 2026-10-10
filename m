@@ -1,121 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 182E93603EE;
-	Sat, 10 Oct 2026 07:37:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36A603803D6;
+	Sat, 10 Oct 2026 08:19:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791617875; cv=none; b=f2RJHPlC5kz8l3a+MErlTkp3I5cNDyAFn158huWHcNzsv/EpifmapS81FnE9jvufTe25rjC0d2M+dOKwxewtezocYg1bVnNWJ+b0k6KEesGBaMbtX22nV9dkLNdgQSRaKPc2jdECyxknDdueAudN/I0J/yb2rO1bUF8FkU40FmY=
+	t=1791620356; cv=none; b=OAjw0IgafiHaC1MN1NKymBQ1Hao6GrTy2fXXKLfXzTu/PJV+3J4CHe/PUDI4LzCHXcQHehWgfx04BbCE0mwytVci1Ql5sF3B2H9tdGpFaOwDPkohdmDnQSqA0moGBZhtYb9RpPLP5Q0bXo9pd0MCdOprqqnO3wzAnhAnT8/haH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791617875; c=relaxed/simple;
-	bh=81zzneQkm9DlTp2+i9sm+Fq6tE2dxkQHQWLTPITQrYE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gyo4GEJ9lDXxpk+UR2bZ+Gn+YD2qMm29ZlXfbTdpGSj6izozcQjl+hAhEwBGAZiHLUX0ilOv/bZH9k46NekWqEpuB5Gv42seOpo+Qk+5vuJe70UfOK4vDy+T/mvo3f1i2pPbT4H2lN4wlEKIPlzS511w9ksnNk1UZNiYbzCcRxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=la0eLuY3; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791620356; c=relaxed/simple;
+	bh=CJdFI5tM99j1PTiSqCvE2zGotTzWe12j2fmi96550Qc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TxFD6+y/qYWep6hmDG9QN5sK0BIsptWJbh0IUdEJuPTKiZhGbEzqUtMKENiooJ+M4Z53g5c0gNmx0PB4uxf1pfPOjm28GAQLSJMsG6ozqm6xJADxqz31kzeKLGRuNBYNxQMaxD/P2OM9DHpY5siRBLxsc+GG8Kid73mqupOVq70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KSuEpLVC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="la0eLuY3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791617874; x=1823153874;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=81zzneQkm9DlTp2+i9sm+Fq6tE2dxkQHQWLTPITQrYE=;
-  b=la0eLuY3bHbtYD8iu+JakZJWeke36IoFb7FiusRiQYihcEXVD96YrOgz
-   rWZbOSaCBrbD8QltULiendX9bSIGxDxYyUU6+sOsLOxPEt3FHwQca31PY
-   RFIQ0zk6BHrzx7YsmZYbpLfVLoyu05kq5n3PEN6zCZjQMJZjrEq1+W8RG
-   w3N8JpaLU/V445mo5hZSAR7Mqzv7VTuutQwP5QKlQYPfX4cpYOdqK/OKJ
-   KPuPNkU8GbI115XuBe2JnsXqYc6F4Fm+x0C09BSq2OXtTf9yTQPxsxC+r
-   HJ1rpUdzC5pC43v6SGSBJdEi2Bsx5i+eJ4Xm8Su9TLOWDGO/dopflCCZU
-   g==;
-X-CSE-ConnectionGUID: 48JhWtIbR9y0z/eOxN8q0A==
-X-CSE-MsgGUID: KDLo9EZsRZ+Ggjo3HNBPWg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="315255"
-X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="315255"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2026 00:37:51 -0700
-X-CSE-ConnectionGUID: MVngr4iYR46NYRTVANZLzA==
-X-CSE-MsgGUID: dk+EyF3nRXm9B3HDHcseyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
-   d="scan'208";a="571998"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 10 Oct 2026 00:37:48 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xFReL-000000006z9-2hTs;
-	Sat, 10 Oct 2026 07:37:45 +0000
-Date: Sat, 10 Oct 2026 15:37:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Christian Marangi <ansuelsmth@gmail.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>, linux-sound@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v3 2/2] ASoC: airoha: Add support for AN7581 PCM driver
-Message-ID: <202610101524.PIlCqVIG-lkp@intel.com>
-References: <20261009111334.23522-3-ansuelsmth@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KSuEpLVC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D78E11F00893;
+	Sat, 10 Oct 2026 08:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791620354;
+	bh=atUk/iE+0iiA/VdpGoR6DI11A5fY/jwMQiV7IPOyXjQ=;
+	h=From:To:Cc:Subject:Date;
+	b=KSuEpLVChEuoaD39qZXaasD0tks35j8dDqFDbiz0n9eynm18IaGf77dZP5Xyz9RxI
+	 QQbZLOsPpfZjDrNLMFditHwDkNI0gNZ2U95YtqQeFn65mPdgUzNQ7DT8Hx6AMUuyn0
+	 LJj6Lj9wXpqkjwCeCvjo8ZDaf3ia3/NkzbWt2XJUdaeK0Q0HTnyKOOmU40YP/7bEtK
+	 UVayCEcg6HfwFZwv51Hw4AwNVhw3xw1nIbPPM3MTpaRoD8r8v8ReTXVFCw57j4WYSj
+	 TuysWew9Ze1Y5UaN7gdSQZIftnZFj7PHdNEkMM6ShlkfZtlGFoHFEyAvI61NCBxFyT
+	 JGZ7ezKu7jYXQ==
+From: Kees Cook <kees@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Nicolas Schier <nsc@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Manuel Ebner <manuelebnerli@mailbox.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Nicolas Schier <n.schier@fritz.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kbuild@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH v2 0/2] kbuild: Give jobserver-exec recipes the jobserver
+Date: Sat, 10 Oct 2026 01:19:09 -0700
+Message-ID: <20261010081910.stay.092-kees@kernel.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261009111334.23522-3-ansuelsmth@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2930; i=kees@kernel.org; h=from:subject:message-id; bh=CJdFI5tM99j1PTiSqCvE2zGotTzWe12j2fmi96550Qc=; b=owGbwMvMwCVmps19z/KJym7G02pJDFknv/yTuLl40/6Wo6ZnSuRnVSwvymb1Vz17IOdd6sU9v l9Xh8pbd5SyMIhxMciKKbIE2bnHuXi8bQ93n6sIM4eVCWQIAxenAEzEcR0jQxfD95TNh659tTuv Hu1kVKqs3Llklh9/isfhvWfU33O6mDD8z/78TCrr4pcvGzP3PPMVEp98aNWLfToTFk5htlvv5l2 txgUA
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-Hi Christian,
+Hi!
 
-kernel test robot noticed the following build errors:
+Paul reported a build failure on CentOS Stream 9 with linux-next[1]: the
+kernel builds, but scripts/jobserver-exec prints
 
-[auto build test ERROR on broonie-sound/for-next]
-[also build test ERROR on next-20261009]
-[cannot apply to linus/master v7.3-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+  WARNING: Unable to reopen jobserver read-side pipe: FileNotFoundError(2, 'No such file or directory')
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/ASoC-dt-bindings-airoha-Add-AN7581-PCM-controller/20261009-131331
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-patch link:    https://lore.kernel.org/r/20261009111334.23522-3-ansuelsmth%40gmail.com
-patch subject: [PATCH v3 2/2] ASoC: airoha: Add support for AN7581 PCM driver
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261010/202610101524.PIlCqVIG-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 242243a5814307de825db3428662d67b064e2cbc)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261010/202610101524.PIlCqVIG-lkp@intel.com/reproduce)
+and rcutorture's build check counts the "Error" in that line. CentOS's
+make 4.3 carries a backport of the fix for GNU Make bug 58232, so
+sub-makes, like the top-level make, give the jobserver pipe only to
+recipes marked recursive, while MAKEFLAGS still names it. The new pigz
+steps (1/2), for the kernel image, the built-in initramfs, and the other
+gzip rules, and the older Clang LTO initcall ordering step (2/2) run
+jobserver-exec from recipes without "+", so pigz gets one thread and the
+initcall script caps its children at the CPU count instead of the free
+job slots. Mark these recipes recursive, as was done for rustc.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610101524.PIlCqVIG-lkp@intel.com/
+Thanks!
 
-All errors (new ones prefixed by >>):
+-Kees
 
->> sound/soc/airoha/an7581-pcm.c:618:3: error: field designator 'pcm_construct' does not refer to any field in type 'const struct snd_soc_component_driver'
-     618 |         .pcm_construct = an7581_pcm_new,
-         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   sound/soc/airoha/an7581-pcm.c:778:14: warning: unused variable 'connection_type' [-Wunused-variable]
-     778 |         const char *connection_type;
-         |                     ^~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+ v2:
+ - 1/2: also mark the gzip rules that choose gzip through a variable,
+   including the built-in initramfs in usr/Makefile, which rcutorture's
+   kvm.sh builds and v1 missed (Paul)
+ - 1/2: update the gzip entry in Documentation/kbuild/makefiles.rst
+   (Nicolas)
+ - 2/2: cite Masahiro's earlier version of this change and say when the
+   script gets more than one archive (Nicolas)
+ - v1..v2 diff: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/diff/?id=dev/next-20261001/pigz-recursive/v2&id2=dev/next-20261001/pigz-recursive/v1
+ v1: https://lore.kernel.org/all/20261009062722.i.253-kees@kernel.org/
 
+[1] https://lore.kernel.org/all/0ddb5e5e-f801-444c-aa98-0cfe814a3026@paulmck-laptop/
 
-vim +618 sound/soc/airoha/an7581-pcm.c
+Kees Cook (2):
+  kbuild: Mark the gzip recipes as recursive
+  kbuild: Mark the initcall ordering recipe as recursive
 
-   614	
-   615	static const struct snd_soc_component_driver an7581_pcm_platform = {
-   616		.name = "an7581-pcm-audio",
-   617		.pointer = an7581_pcm_pointer,
- > 618		.pcm_construct = an7581_pcm_new,
-   619	};
-   620	
+ arch/alpha/boot/Makefile                    | 4 ++--
+ arch/arc/boot/Makefile                      | 2 +-
+ arch/arm/boot/compressed/Makefile           | 2 +-
+ arch/arm64/boot/Makefile                    | 2 +-
+ arch/csky/boot/Makefile                     | 2 +-
+ arch/microblaze/boot/Makefile               | 2 +-
+ arch/mips/boot/Makefile                     | 2 +-
+ arch/mips/boot/compressed/Makefile          | 2 +-
+ arch/nios2/boot/Makefile                    | 2 +-
+ arch/parisc/boot/compressed/Makefile        | 2 +-
+ arch/riscv/boot/Makefile                    | 2 +-
+ arch/s390/boot/Makefile                     | 2 +-
+ arch/sh/boot/Makefile                       | 2 +-
+ arch/sh/boot/compressed/Makefile            | 2 +-
+ arch/sparc/boot/Makefile                    | 4 ++--
+ arch/x86/boot/compressed/Makefile           | 2 +-
+ arch/xtensa/boot/Makefile                   | 2 +-
+ usr/Makefile                                | 2 +-
+ drivers/firmware/efi/libstub/Makefile.zboot | 2 +-
+ scripts/Makefile.vmlinux_o                  | 2 +-
+ Documentation/kbuild/makefiles.rst          | 7 +++++--
+ 21 files changed, 27 insertions(+), 24 deletions(-)
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+2.55.0
+
