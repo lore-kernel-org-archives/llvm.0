@@ -1,103 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB282AEF5;
-	Sat, 10 Oct 2026 21:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC7C926ED37;
+	Sat, 10 Oct 2026 21:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791666434; cv=none; b=qgXn5mIrGBjhb8dG8hCXesSXj9tTv3eGI7uufOZqv7vCXJdbIF+v0miT/NLh4QykD8yUHp8o/jv5dQBX1+ahf9bmueYlVm6DnlDCoF6s7/L0G4JJcrvq7CwBt1KYsL+zemt2r+VOwjh5eqyYvY/VxIAJoOn/vPqJZ6+W7cml8a0=
+	t=1791666744; cv=none; b=m1QTe3aLpZumqIhoJM70Q6POBWT1iGqbr/g8Erg+7fQnKll/DI0EnfcR43Bu6Oy1vEVowukWHvqcj7NHa5d8FGjy2dLFJ1+cfAIYz7mI/4BiTUSFPV/Aw2xr2DOZGaZR2aJlav8bmsRuWcJsbXNHEPP+YTudXi646anYCmyjndw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791666434; c=relaxed/simple;
-	bh=MWZiC3YF8lC1P/vq25ned+nViiOEFs1+9yT1a2pIu1g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B6w7v3R+4zkETcdvRu35Ltfiosm37bchBj5Oy7Hu/b153N02a/WcFIHFmQgpACEFEGyuz1qn/oArtyv2navo5mFYswsItVKnKMp2Mj/hrRzbrcgCIjU5uJ9aHxnnHHizkJIhllYLokfg3WwM3aCn/Bc5g8+HzGFw17WbBil/08k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XA9iqnjI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791666744; c=relaxed/simple;
+	bh=T9oX7cdhaIhJH49AxnsK6BFI+vFiwMX4K4dG9IscGKY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=C3b5chdPmX2ZqeNhsCJq3Il/dXvoSqgYiqhInJKDmVyyDTPz2KJM8Ia5D7nkyZTNB0aJufQTDizFodWZxX+nInKSDM01jolTjaDgCvmAGDt4iGwuXlnoxHhMZsrHfvIqT3/NyIU0lVjzpoCOwj83R6907H0UFV/hpEFWgCZEdqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YlT54a2c; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XA9iqnjI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DA61F000FF;
-	Sat, 10 Oct 2026 21:07:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791666432;
-	bh=30R/GaKM4NcrAVJrORuimlAImIftgrnprkvMkO/yUgg=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
-	b=XA9iqnjIx/r6wwwwda3prpgPyj/69mnTZ8cbORV5B4zzBQx+fgSyvmqh7TXiwYyAv
-	 yH1CFblXaja1iFKTNaTzKuI6uZr5mIKhTVIlMA82x4BAVukM3Yjs4WU8kARRn0Mj1X
-	 C7wZ8/dkrmUWBef3Vp08Mw2utIleVh6MNyYLzHzMEmOVE80EK71ZxpVQWqInuKPDy4
-	 d9nwLWeW5KYn7BXgWcuW5lPfxBRjIQ23VdnvBrUb/d3ZdQHpZ/KLzI5mlGwOxUHun1
-	 Sm+3aJP/5y3szWvdvYblhR1m83TTjiVMYgVXHB+rigrqkaPwtX+ZN9ehCT9H8s1BTC
-	 ZnjRlq8kK69nA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id C57A8CE397D; Sat, 10 Oct 2026 14:07:11 -0700 (PDT)
-Date: Sat, 10 Oct 2026 14:07:11 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Kees Cook <kees@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Manuel Ebner <manuelebnerli@mailbox.org>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Nicolas Schier <n.schier@fritz.com>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2 0/2] kbuild: Give jobserver-exec recipes the jobserver
-Message-ID: <69b782ee-69c3-410f-8bcd-01a7be5d9295@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20261010081910.stay.092-kees@kernel.org>
- <20261010134829.GB1853402@ax162>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YlT54a2c"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791666742; x=1823202742;
+  h=date:from:to:cc:subject:message-id;
+  bh=T9oX7cdhaIhJH49AxnsK6BFI+vFiwMX4K4dG9IscGKY=;
+  b=YlT54a2cLlSa6Wmux87tjQapZOBzYZavk3nwbEAsnf0M8ogNBEFhOfVV
+   T7cJKDXHXeVpgi4UX5FdC4XhOvm25Vb2OEyN9TRCJGZnszeKlSbma6Lux
+   nfok1xSKZNiC8efaYuh3XArXm+yndqy5e9kHAC1tAuOKCZ/U9R6lJwkSV
+   gHL2XobEd2wwS7pzZeuHaq7tvhSkymjPGXUg5Nh0wlvs4aDt0gDCuucuV
+   XdjC3eY8osPWfoaOERA49Lx9rH77IVmJ8pJ/fOwp6ou0HZf00djBtGYm+
+   MCuOXdGpWWVv2WBs0C2Vam5UxtuKQiBKUfBbeT8RCuPHLDOK7SnorB+C9
+   Q==;
+X-CSE-ConnectionGUID: RdWie5zhSPCkODtSKt0UQQ==
+X-CSE-MsgGUID: xYDwyr3+Q6SNt+DcQ/uM4Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11931"; a="421003"
+X-IronPort-AV: E=Sophos;i="6.27,150,1787036400"; 
+   d="scan'208";a="421003"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2026 14:12:21 -0700
+X-CSE-ConnectionGUID: xPnlXTeyTeK0lgHwU3ISUQ==
+X-CSE-MsgGUID: 6hUtmiFPTN+3D89xSuY0IQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,150,1787036400"; 
+   d="scan'208";a="892097"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 10 Oct 2026 14:12:19 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xFeMb-00000000A5K-0uYY;
+	Sat, 10 Oct 2026 21:12:17 +0000
+Date: Sun, 11 Oct 2026 05:11:20 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sakari Ailus <sakari.ailus@linux.intel.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-media@vger.kernel.org
+Subject: [sailus-media-tree:ipu6-more 3/5]
+ drivers/media/pci/intel/ipu6/ipu6-isys-queue.c:485:7: warning: variable 'ret'
+ is used uninitialized whenever 'if' condition is true
+Message-ID: <202610110422.Ds1dqsa4-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261010134829.GB1853402@ax162>
 
-On Sat, Oct 10, 2026 at 02:48:29PM +0100, Nathan Chancellor wrote:
-> On Sat, Oct 10, 2026 at 01:19:09AM -0700, Kees Cook wrote:
-> > Hi!
-> > 
-> > Paul reported a build failure on CentOS Stream 9 with linux-next[1]: the
-> > kernel builds, but scripts/jobserver-exec prints
-> > 
-> >   WARNING: Unable to reopen jobserver read-side pipe: FileNotFoundError(2, 'No such file or directory')
-> > 
-> > and rcutorture's build check counts the "Error" in that line. CentOS's
-> > make 4.3 carries a backport of the fix for GNU Make bug 58232, so
-> > sub-makes, like the top-level make, give the jobserver pipe only to
-> > recipes marked recursive, while MAKEFLAGS still names it. The new pigz
-> > steps (1/2), for the kernel image, the built-in initramfs, and the other
-> > gzip rules, and the older Clang LTO initcall ordering step (2/2) run
-> > jobserver-exec from recipes without "+", so pigz gets one thread and the
-> > initcall script caps its children at the CPU count instead of the free
-> > job slots. Mark these recipes recursive, as was done for rustc.
-> > 
-> > Thanks!
-> > 
-> > -Kees
-> > 
-> >  v2:
-> >  - 1/2: also mark the gzip rules that choose gzip through a variable,
-> >    including the built-in initramfs in usr/Makefile, which rcutorture's
-> >    kvm.sh builds and v1 missed (Paul)
-> >  - 1/2: update the gzip entry in Documentation/kbuild/makefiles.rst
-> >    (Nicolas)
-> >  - 2/2: cite Masahiro's earlier version of this change and say when the
-> >    script gets more than one archive (Nicolas)
-> >  - v1..v2 diff: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/diff/?id=dev/next-20261001/pigz-recursive/v2&id2=dev/next-20261001/pigz-recursive/v1
-> >  v1: https://lore.kernel.org/all/20261009062722.i.253-kees@kernel.org/
-> > 
-> > [1] https://lore.kernel.org/all/0ddb5e5e-f801-444c-aa98-0cfe814a3026@paulmck-laptop/
-> > 
-> > Kees Cook (2):
-> >   kbuild: Mark the gzip recipes as recursive
-> >   kbuild: Mark the initcall ordering recipe as recursive
-> 
-> I've kicked these into -next, I will formally apply them to
-> kbuild-next-speedups once Paul can confirm that it resolves his
-> regression. Thanks a lot for the assist here!
+tree:   git://linuxtv.org/sailus/media_tree.git ipu6-more
+head:   80de48e2cab73a7c38171de3de224456c804f6bc
+commit: 5793439341f94991ce1f137ce1e5fdb616d2e23a [3/5] media: ipu6: Prevent starting streaming if ISYS needs reset
+config: x86_64-randconfig-1009-20261010 (https://download.01.org/0day-ci/archive/20261011/202610110422.Ds1dqsa4-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261011/202610110422.Ds1dqsa4-lkp@intel.com/reproduce)
 
-And it works!!!  ;-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610110422.Ds1dqsa4-lkp@intel.com/
 
-Tested-by: Paul E. McKenney <paulmck@kernel.org>
+All warnings (new ones prefixed by >>):
+
+>> drivers/media/pci/intel/ipu6/ipu6-isys-queue.c:485:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+     485 |                 if (av->isys->need_reset)
+         |                     ^~~~~~~~~~~~~~~~~~~~
+   drivers/media/pci/intel/ipu6/ipu6-isys-queue.c:527:9: note: uninitialized use occurs here
+     527 |         return ret;
+         |                ^~~
+   drivers/media/pci/intel/ipu6/ipu6-isys-queue.c:485:3: note: remove the 'if' if its condition is always false
+     485 |                 if (av->isys->need_reset)
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~
+     486 |                         goto out_return_buffers;
+         |                         ~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/media/pci/intel/ipu6/ipu6-isys-queue.c:478:9: note: initialize the variable 'ret' to silence this warning
+     478 |         int ret;
+         |                ^
+         |                 = 0
+   1 warning generated.
+
+
+vim +485 drivers/media/pci/intel/ipu6/ipu6-isys-queue.c
+
+   469	
+   470	static int start_streaming(struct vb2_queue *q, unsigned int count)
+   471	{
+   472		struct ipu6_isys_queue *aq = vb2_queue_to_isys_queue(q);
+   473		struct ipu6_isys_video *av = ipu6_isys_queue_to_video(aq);
+   474		struct device *dev = &av->isys->adev->auxdev.dev;
+   475		const struct ipu6_isys_pixelformat *pfmt =
+   476			ipu6_isys_get_isys_format(ipu6_isys_get_format(av), 0);
+   477		struct media_pad *source_pad, *remote_pad;
+   478		int ret;
+   479	
+   480		dev_dbg(dev, "stream: %s: width %u, height %u, css pixelformat %u\n",
+   481			av->vdev.name, ipu6_isys_get_frame_width(av),
+   482			ipu6_isys_get_frame_height(av), pfmt->css_pixelformat);
+   483	
+   484		scoped_guard(mutex, &av->isys->mutex) {
+ > 485			if (av->isys->need_reset)
+   486				goto out_return_buffers;
+   487		}
+   488	
+   489		remote_pad = media_pad_remote_pad_unique(&av->pad);
+   490		if (IS_ERR(remote_pad)) {
+   491			dev_dbg(dev, "failed to get remote pad\n");
+   492			ret = PTR_ERR(remote_pad);
+   493			goto out_return_buffers;
+   494		}
+   495	
+   496		source_pad = media_pad_remote_pad_unique(&remote_pad->entity->pads[0]);
+   497		if (IS_ERR(source_pad)) {
+   498			dev_dbg(dev, "No external source entity\n");
+   499			ret = PTR_ERR(source_pad);
+   500			goto out_return_buffers;
+   501		}
+   502	
+   503		ret = video_device_pipeline_alloc_start(&av->vdev);
+   504		if (ret < 0)
+   505			goto out_return_buffers;
+   506	
+   507		ret = ipu6_isys_link_fmt_validate(aq);
+   508		if (ret) {
+   509			dev_dbg(dev,
+   510				"%s: link format validation failed (%d)\n",
+   511				av->vdev.name, ret);
+   512			goto out_pipeline_stop;
+   513		}
+   514	
+   515		ret = ipu6_isys_stream_start(av);
+   516		if (ret)
+   517			goto out_pipeline_stop;
+   518	
+   519		return 0;
+   520	
+   521	out_pipeline_stop:
+   522		ipu6_isys_stream_cleanup(av);
+   523	
+   524	out_return_buffers:
+   525		return_buffers(aq, VB2_BUF_STATE_QUEUED);
+   526	
+   527		return ret;
+   528	}
+   529	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
