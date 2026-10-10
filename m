@@ -1,296 +1,165 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9148713A258;
-	Sat, 10 Oct 2026 17:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 807A830CD95;
+	Sat, 10 Oct 2026 18:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791652494; cv=none; b=S+IumixpbHIuUtDZCPc4jQCfMMVEiaH1IXezIi1ogWbjTTZTnPsUUkoOydbbjYk38k8/fK5meDTRtlbYfafTjjplTZqcVB/khNTlvNYPScgva6ZOWs3wXggrJH7KskaRThn7vtQjqunmjzSsDpUT0FL84P9K4OeIFTjMhAb5mvM=
+	t=1791655555; cv=none; b=MVcGLdg9nhM3MvDUJ6UcJBmaEDxkzlVqW2ynCkDaR+5voaLAQH7+i0EXo2I4sv9UJrCGEWitA5qrmVU1vCQ0s9TrEciPdSBdoGJz695V+Z7zmGGOHgVr30gsUPTczjuqz6s7tOlKBHfOz5i5U7Q2CMphzMIxX1nXL/+3dKMZSnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791652494; c=relaxed/simple;
-	bh=Xju8/M6E2whzp9BF6dkJEwRtyRY4J70IeGaP64oTfx8=;
+	s=arc-20240116; t=1791655555; c=relaxed/simple;
+	bh=fRErfaj82Xt3ikHCFtmpu+BlicxkEXdkU/jXvK2nqv8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ISvrK6OG1aoaxHSGTSpl0+2Ue1Ycs/NgNzxMcBIk393ieLnmS+KikyS9J/5iVpGxRMjz5GEPxCQXZwcbfAew8dHFuxQLqYHvQ/BJK6vP+SwVdZNuBlONObfBxmScaOMyvK44U6wbV6qkcs3AxYY1v9NYSD0mvvB0qKQEIwWi4BE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RXWSmZGN; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=dbdmRX4KHGZ1IhxumYI0yh0bQsurmx1Mdnqa1EN0X50uGqQzpVUorux2HrO0nFLQaPO+nHDhDwySuRq+310e6h7lxSmm/vcA2HQd3yInL85R25xRwxFqQMXyrom1G3f52knynxqJakAQFbMvKWXnHYB8OGWJTMqkRp99RVmBC8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UB1744li; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RXWSmZGN"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791652492; x=1823188492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Xju8/M6E2whzp9BF6dkJEwRtyRY4J70IeGaP64oTfx8=;
-  b=RXWSmZGNrYGs1JK4Ig58Yiaflj+43can+bi8VFa3jHB/4U0TUgqodJ/V
-   fT9U8TamM5ML3PmtqqfJisxa9Chu10oFUzVrvgXQdebI8PFAuKqcRxrPd
-   QlPuo7tY7j+bYWvlUl5CXypIICRhkXDX5u4J0uWSsfN21ls1WPUGBb4bc
-   afZHuLzvv2RsK2pUuz+HrbmWYX9DXPO3UygzPB6w1oGFnexk+pSgMjuwv
-   fIPG3YJhWiLs3eBm65wlQSg6g0vMIcb6vvpugLaVWtX2lUMk1E+0CJ1Em
-   tQtSGl4uAPPgqXy6Yv61GivuZnd8L6fFj1w0r/m87btUBO4sKAh7BDF2R
-   Q==;
-X-CSE-ConnectionGUID: DT/TB5bfQ+6m4WUsGf+gvQ==
-X-CSE-MsgGUID: CxOUCB0TQ7K+Hjve5EmKzA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11931"; a="323097"
-X-IronPort-AV: E=Sophos;i="6.27,150,1787036400"; 
-   d="scan'208";a="323097"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2026 10:14:51 -0700
-X-CSE-ConnectionGUID: JhwBzl5sRoSQGsmKQEW8JQ==
-X-CSE-MsgGUID: Lkd9rOJQQHa8Ec6MP39bbQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,150,1787036400"; 
-   d="scan'208";a="485437"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 10 Oct 2026 10:14:50 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xFaem-000000009xE-1KRs;
-	Sat, 10 Oct 2026 17:14:48 +0000
-Date: Sun, 11 Oct 2026 01:14:11 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rik van Riel <riel@surriel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: Re: [RFC PATCH 3/5] mm/page_alloc: convert any movable pageblock on
- a non-movable allocation
-Message-ID: <202610110115.cCikSIza-lkp@intel.com>
-References: <20261007021250.1665929-4-riel@surriel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UB1744li"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E51131F000FF;
+	Sat, 10 Oct 2026 18:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791655554;
+	bh=edFpq9EBQn1xiwhLheS6F85LgTZr7TGSR64qSZhkUMw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=UB1744liFqupjCSEgUKZT4avu12/qtoEWgIwArr7nFZjb/W7sYexJC8xY7w0MCNpc
+	 RbwfiQSJpfaozp+i0S6Nf/jD6BnzuaR+Iu23EDCD9WzDYsC/igG+LNZsqgVo/wqdrw
+	 aCY95ntVzVOGlOAiexaDGv6wzpKTlMHveHChFx36w3f6mp44WH3rvsrXa6OTdrebIH
+	 p2PbtZcIxh78fxATQBU6cSj/kaOK7AvnnkJSJmzwP/Qxrm6+fZLNRXls2osUdJElOf
+	 ypIEG8T/Vr09VZ6NGHUxoMCvuNvQvTDEFiusYigZRcE4ALPNTeSVaIJNdiK0EkOaP/
+	 fifOsauX+cKfg==
+Date: Sat, 10 Oct 2026 20:05:48 +0200
+From: Alejandro Colomar <alx+linux-hardening@kernel.org>
+To: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Tingmao Wang <m@maowtm.org>, 
+	linux-security-module@vger.kernel.org, Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, syzbot+a0eecb22de4d821a9e5d@syzkaller.appspotmail.com
+Subject: Re: [PATCH] landlock: Drop __counted_by from landlock_domain.layers
+Message-ID: <asp9mzpa4eJWvij0@debian>
+References: <6ac91e98.bbc4c7f9.15faa7.0023.GAE@google.com>
+ <20261010164450.194439-1-ngocthang2710.1999@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7xx4jggh23ryewkr"
 Content-Disposition: inline
-In-Reply-To: <20261007021250.1665929-4-riel@surriel.com>
-
-Hi Rik,
-
-[This is a private test report for your RFC patch.]
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 67f0943b394d920b6c142aad8c6af94340342ae7]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Rik-van-Riel/mm-page_alloc-count-guard-pages-as-free-again-when-their-buddy-merges/20261006-221246
-base:   67f0943b394d920b6c142aad8c6af94340342ae7
-patch link:    https://lore.kernel.org/r/20261007021250.1665929-4-riel%40surriel.com
-patch subject: [RFC PATCH 3/5] mm/page_alloc: convert any movable pageblock on a non-movable allocation
-config: x86_64-randconfig-1006-20261010 (https://download.01.org/0day-ci/archive/20261011/202610110115.cCikSIza-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261011/202610110115.cCikSIza-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610110115.cCikSIza-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1237:24: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1237 |         unsigned long start = pageblock_start_pfn(pfn);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:78:52: note: expanded from macro 'pageblock_start_pfn'
-      78 | #define pageblock_start_pfn(pfn)        ALIGN_DOWN((pfn), pageblock_nr_pages)
-         |                                                           ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1237:24: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1237 |         unsigned long start = pageblock_start_pfn(pfn);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:78:52: note: expanded from macro 'pageblock_start_pfn'
-      78 | #define pageblock_start_pfn(pfn)        ALIGN_DOWN((pfn), pageblock_nr_pages)
-         |                                                           ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1237:24: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1237 |         unsigned long start = pageblock_start_pfn(pfn);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:78:52: note: expanded from macro 'pageblock_start_pfn'
-      78 | #define pageblock_start_pfn(pfn)        ALIGN_DOWN((pfn), pageblock_nr_pages)
-         |                                                           ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1237:24: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1237 |         unsigned long start = pageblock_start_pfn(pfn);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:78:52: note: expanded from macro 'pageblock_start_pfn'
-      78 | #define pageblock_start_pfn(pfn)        ALIGN_DOWN((pfn), pageblock_nr_pages)
-         |                                                           ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1237:24: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1237 |         unsigned long start = pageblock_start_pfn(pfn);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:78:52: note: expanded from macro 'pageblock_start_pfn'
-      78 | #define pageblock_start_pfn(pfn)        ALIGN_DOWN((pfn), pageblock_nr_pages)
-         |                                                           ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
->> include/linux/mmzone.h:1237:24: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1237 |         unsigned long start = pageblock_start_pfn(pfn);
-         |                               ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:78:52: note: expanded from macro 'pageblock_start_pfn'
-      78 | #define pageblock_start_pfn(pfn)        ALIGN_DOWN((pfn), pageblock_nr_pages)
-         |                                                           ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1240:17: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1240 |                start + pageblock_nr_pages <= zone_end_pfn(zone);
-         |                        ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:9:
-   In file included from include/linux/crypto.h:18:
-   In file included from include/linux/slab.h:17:
-   In file included from include/linux/gfp.h:7:
-   include/linux/mmzone.h:1240:17: error: use of undeclared identifier 'HPAGE_PMD_ORDER'
-    1240 |                start + pageblock_nr_pages <= zone_end_pfn(zone);
-         |                        ^~~~~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:75:36: note: expanded from macro 'pageblock_nr_pages'
-      75 | #define pageblock_nr_pages      (1UL << pageblock_order)
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/pageblock-flags.h:66:46: note: expanded from macro 'pageblock_order'
-      66 | #define pageblock_order         MIN_T(unsigned int, HPAGE_PMD_ORDER, PAGE_BLOCK_MAX_ORDER)
-         |                                                     ^~~~~~~~~~~~~~~
-   In file included from arch/x86/kernel/asm-offsets.c:10:
-   In file included from include/crypto/aria.h:22:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:11: warning: array index 3 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:10:
-   In file included from include/crypto/aria.h:22:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:98:25: warning: array index 2 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      98 |                 return (set->sig[3] | set->sig[2] |
-         |                                       ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:10:
-   In file included from include/crypto/aria.h:22:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
-   In file included from include/linux/compat.h:17:
-   In file included from include/linux/fs.h:5:
-   In file included from include/linux/fs/super.h:5:
-   In file included from include/linux/fs/super_types.h:13:
-   In file included from include/linux/percpu-rwsem.h:7:
-   In file included from include/linux/rcuwait.h:6:
-   In file included from include/linux/sched/signal.h:6:
-   include/linux/signal.h:99:4: warning: array index 1 is past the end of the array (that has type 'unsigned long[1]') [-Warray-bounds]
-      99 |                         set->sig[1] | set->sig[0]) == 0;
-         |                         ^        ~
-   arch/x86/include/asm/signal.h:24:2: note: array 'sig' declared here
-      24 |         unsigned long sig[_NSIG_WORDS];
-         |         ^
-   In file included from arch/x86/kernel/asm-offsets.c:10:
-   In file included from include/crypto/aria.h:22:
-   In file included from include/linux/module.h:20:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/x86/include/asm/elf.h:10:
-   In file included from arch/x86/include/asm/ia32.h:7:
+In-Reply-To: <20261010164450.194439-1-ngocthang2710.1999@gmail.com>
 
 
-vim +/HPAGE_PMD_ORDER +1237 include/linux/mmzone.h
+--7xx4jggh23ryewkr
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+From: Alejandro Colomar <alx+linux-hardening@kernel.org>
+To: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>
+Cc: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Tingmao Wang <m@maowtm.org>, 
+	linux-security-module@vger.kernel.org, Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org, 
+	llvm@lists.linux.dev, syzbot+a0eecb22de4d821a9e5d@syzkaller.appspotmail.com
+Subject: Re: [PATCH] landlock: Drop __counted_by from landlock_domain.layers
+Message-ID: <asp9mzpa4eJWvij0@debian>
+References: <6ac91e98.bbc4c7f9.15faa7.0023.GAE@google.com>
+ <20261010164450.194439-1-ngocthang2710.1999@gmail.com>
+MIME-Version: 1.0
+In-Reply-To: <20261010164450.194439-1-ngocthang2710.1999@gmail.com>
 
-  1229	
-  1230	/*
-  1231	 * Whether the pageblock holding @pfn lies wholly inside @zone. Zone
-  1232	 * spans are not pageblock-aligned, so the edge pageblocks of a zone
-  1233	 * can straddle into the next zone; those never change type.
-  1234	 */
-  1235	static inline bool zone_spans_pageblock(const struct zone *zone, unsigned long pfn)
-  1236	{
-> 1237		unsigned long start = pageblock_start_pfn(pfn);
-  1238	
-  1239		return zone->zone_start_pfn <= start &&
-  1240		       start + pageblock_nr_pages <= zone_end_pfn(zone);
-  1241	}
-  1242	
+Hello Nguyen,
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Date: 2026-10-10 23:44:49+0700
+> From: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>
+>
+> With clang 22 and CONFIG_FORTIFY_SOURCE, the second
+> landlock_restrict_self() call hits a bogus fortify report in
+> inherit_ruleset():
+>=20
+>   memcpy: detected buffer overflow: 16 byte read of buffer size 0
+>   Call Trace:
+>    __fortify_panic
+>    landlock_merge_ruleset+0xc46/0xc90
+>    __se_sys_landlock_restrict_self+0x2bc/0xd40
+>=20
+> layers[] lives in an anonymous struct inside the anonymous union
+> that overlays work_free.  For such a flexible array, clang computes the
+> address of the __counted_by counter as the start of the array instead of
+> &num_layers.  The bound is then read from layers[0], i.e. from
+> the first layer's configuration, which is not a count.  The same layout
+> crashes clang itself in a standalone test.
+>=20
+> The annotation was added as documentation, so drop it rather than
+> restructure the union.  Keep the information in the member comment.
+>=20
+> Reported-by: syzbot+a0eecb22de4d821a9e5d@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3Da0eecb22de4d821a9e5d
+> Fixes: bd3a19800dd1 ("landlock: Add counted_by in landlock_domain")
+> Signed-off-by: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>
+> ---
+> Reproduced with clang 22.1.8 and FORTIFY_SOURCE on mic/next (64b9e6eff524=
+):
+> the second landlock_restrict_self() hits the report, while 16 nested
+> restricts run clean with this patch.  Micka=C3=ABl, if you prefer to just=
+ drop
+> bd3a19800dd1 from next, that works as well.
+
+Is this reproducible with Clang 23 or later?
+
+Should __counted_by() expand to nothing for bogus versions of Clang?
+That would allow using it, and just ignore Clang when it's broken,
+rather than not using safety features.
+
+
+Have a lovely day!
+Alex
+
+>  security/landlock/domain.h | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/security/landlock/domain.h b/security/landlock/domain.h
+> index 60e8eb2d6ac2..4bf1555a4349 100644
+> --- a/security/landlock/domain.h
+> +++ b/security/landlock/domain.h
+> @@ -246,8 +246,12 @@ struct landlock_domain {
+>  			 * properly handle merged rulesets without overlapping
+>  			 * access rights.  These layers are set once and never
+>  			 * changed for the lifetime of the domain.
+> +			 *
+> +			 * Not annotated with __counted_by(@num_layers): clang
+> +			 * miscomputes the counter address for a FAM nested in an
+> +			 * anonymous struct within a union, which trips FORTIFY.
+>  			 */
+> -			struct layer_config layers[] __counted_by(num_layers);
+> +			struct layer_config layers[];
+>  		};
+>  	};
+>  };
+> --=20
+> 2.43.0
+>=20
+>=20
+
+--=20
+<https://www.alejandro-colomar.es>
+
+--7xx4jggh23ryewkr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEES7Jt9u9GbmlWADAi64mZXMKQwqkFAmrKfnUACgkQ64mZXMKQ
+wqm1jRAAmHJsIzz4I506kwsrlw9CLFxJAs+PK6VqViVhVKmiW+798wiQr8NvreBC
+Lkd7R8mEMk6g69lDckvT7z+RSj/mT5OGgwsTf5pj1m5T8IjgfaHmpmn8NfZ6LnO4
+hDuanhpYjL0zPNburDThkxOxhwNVPwDc4h93lIyfXfbPH93QBbbwuMeTPNtZU/Vl
+zFqE98Pg+OS7K7Gf8seeMFCYvp06U/b+tnamosRBp2Q5edQFa3W9u0ggszOhtLQ9
+59/OyivN3dvWIyOfVBcYURPDzoOXNQDXH+ZssoadkvXldfoQIJCSMqgnMav5wuvB
+vBsmODVylTUQ2Ulb+HjjxTeWCrYA/Fe1VwueLPGnReljYRyplKfkSj+v77sSfbE1
+eXe5Rtx07LiweNZrI5LA6hV1NrVqB6f6OKg02g1tYzTkIIw+NCqQVbuxMO2JmXJt
+IzC8UD0K0QTYkCBeFoYmCfWw7di6SfqTGbHvTXkPgheOFmOZt5a8wasp4hllPvaQ
+DXNSskB4f/Bel2DpxML1eOyVBm2o11EpW8MyGa4PpNEA3lWO4GxDKLVCtfMwUkid
+YYWHBNrwF/COM/6WnG/7tDPHM59tlXznre1rQCt/3cvw0lsT4rJYSHPAeN2kxXYY
+7AXO22nrJhiIV/MOnelFdgcBeD2HscvDxH9ntbIZ07GAnw1fICc=
+=OLoS
+-----END PGP SIGNATURE-----
+
+--7xx4jggh23ryewkr--
