@@ -1,136 +1,156 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35C323655C4;
-	Sat, 10 Oct 2026 18:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791658007; cv=none; b=UyyPsem3zLhMpaQQS7t/zTr6M1alTVbISXVQL/cezrP3RCdJqClaCqbJoDQJqA42iACImPtyq+KMgXtdwU72GWiw45GqXTA9xx0b3I4Hwj3WjrQRSvnZVBDtv/wfOChCk0oEuT908f49GhiM+b8mt9lz713NZWkptQczLhXMdPo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791658007; c=relaxed/simple;
-	bh=y1L05zcKgA73pU3ZnElg/HftGoD1JHs1cE2H1AU+dSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q84k7Eq5BmQyvmKZeEKw+Jvq2WLT9g+enP8uioMsyssufQZDFRdIKaHCpP8ekMZtRE1sX+0+ZiQRFqk9tf+DfN7Gjp3/JXjczhZmPvX7yW8mXM7zvJYSjOxWs138yMpAirMlnEHvLLGI2o7DDgwoclOMJt3d8/MA5bSVUlj9qUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ggJ6FbSO; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 063584B1B42
+	for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 18:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791658163; cv=pass; b=PUJRzyD9EPnHfEoIyTB09AMJWPSFW3yO1ANe67lL8CI+9wEkvXVmnyNe1dYUDFc16YgvlsSuZE86TR4KB0LVA2MHh6WeOhOBg3+Zt4EbSCBuUmET8yMs9EogZASPwcOyCrnhuANyE3cVRu84E7xnzNIT0FnoKZ5Dfl8mj2Y4t+M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791658163; c=relaxed/simple;
+	bh=oQPmF2vNcsU+aqyGKsT8E36dPC78v/n+IE9l6gTjd8Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IsHXKQltBmPqp6wGuYZKnadF5OKnsUQCAkD1u4LJTmTDRSKnEScRFAmm2ag0d140Dd+RwGjx/4iiBlyMBCsxV/qyhCWdJc1BfSS3ZJ7Q4ChxRfpFpCaIgLuiq10fFS6XOtr0KV/V+AMkWU+iBOop6wy7nz9eHbQxxuOS4Ok0+kY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LsyWF/GF; arc=pass smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ggJ6FbSO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D8731F000FF;
-	Sat, 10 Oct 2026 18:46:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791658005;
-	bh=C98FiK+YL3y0X4TbHtA7usT/gRc7m/onuo4oq/5kBx0=;
-	h=Date:From:List-Id:To:Cc:Subject:References:In-Reply-To;
-	b=ggJ6FbSOeOrX+/e9InmRNEZnbyoeVzsz2AgASzHScQgv4RkT9MTrY/1I3+57/X+cS
-	 O8+vWKQ4VW+tHqSl6331fOkVkLPT+FMxzgfeM4acaEAB0ILhaHC+ajs1rcp6DgvRzJ
-	 7OzS5L22Gol/RjEikj2Lgs1hCzsB8xZSA1yTgiWuDtzmIp/Kp8N/RCtNXLwCza4ZTc
-	 ZmSoSmK9NdTYs2tH8uBUE9TjRtzHZzGjuz+6VlgQIS29dPVaUWHUzaeRqUXA+KDU6C
-	 4A/Ykf4iqtc4PNxeiJsPpGbHtt1zlB8h8csEWcabToupAAwrAe29Ycov17CZVebguJ
-	 kXMp+vG2tCjRA==
-Date: Sat, 10 Oct 2026 19:46:40 +0100
-From: Nathan Chancellor <nathan@kernel.org>
-To: Alejandro Colomar <alx+linux-hardening@kernel.org>
-Cc: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Tingmao Wang <m@maowtm.org>, linux-security-module@vger.kernel.org,
-	Kees Cook <kees@kernel.org>, linux-hardening@vger.kernel.org,
-	llvm@lists.linux.dev,
-	syzbot+a0eecb22de4d821a9e5d@syzkaller.appspotmail.com
-Subject: Re: [PATCH] landlock: Drop __counted_by from landlock_domain.layers
-Message-ID: <20261010184640.GA40038@ax162>
-References: <6ac91e98.bbc4c7f9.15faa7.0023.GAE@google.com>
- <20261010164450.194439-1-ngocthang2710.1999@gmail.com>
- <asp9mzpa4eJWvij0@debian>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LsyWF/GF"
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-6aae147ef9dso3376a12.0
+        for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 11:49:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791658160; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Yn0Zp9kvNo5WYMXEWeDeoJEWNiB4yTECC9XLqgFizvYDJbT624Kj0QnvZUbfHzASDP
+         cwyIVgYzIE1Bx+Nv0d3Z0dSFVmSHP325jlrCJY2T8rccE5xHDU+quxg1zWKp9+r4/sDd
+         6FwwwkW1HbYTXgKRf3y2mIXiBRyjAh4nUBUc5WRGe1fxuJ67oURT1/lfD1bUZfe8riIJ
+         t3fFI7hdKYABmJaUgI6YOH+51C3hQl/saB6cKzZzbfuSf/zzQFCL8ttXX+g/uezOeRfd
+         4tCn3fa9N/rHF0nceberBCLvlXYXei9XhNTLKEnnKUL4dDN0n3pB7QqnmB3suWm4+l/B
+         lsgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=xzViJlfng9ygGmV1Zx8fkcrOlZMfym9liXR+dzM/BZk=;
+        fh=qf++hCxo0Tl5OA+emDqd7ONRXh2gRftC1uwM5jygRTc=;
+        b=THwY0mOnWxFyBmVdEnIKfYrBILcD6CiwCs6ejmil8VG5/oItpMLmW5UiSKWF7r32SA
+         mTUBDbiA+3y6BdZnpdBTBvgXzimHYM7omx3aB+3QfIXoAdG97wncDXukseoSapuZyBPx
+         tbDNRO34jQZRa6I0yMfKT3N798bidUm67xOoamIhH/9vpW41eL2TJANBa21vqXOXGzAR
+         MgroSzNTVpbH5mqGi2y5ZjyYtKtySgRmMzn6F6Ldj6Duj5mbtzHpu+KZ3VrPp6CFT2zz
+         qTRaQzWwW9QmOizu2Vi96ClEbPhqXGwO4NolYSA/Di4EWuL5i5FutodiqR2dTooXLudM
+         ejHQ==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1791658160; x=1792262960; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=xzViJlfng9ygGmV1Zx8fkcrOlZMfym9liXR+dzM/BZk=;
+        b=LsyWF/GFQNg3loBNl9dCOdCl9C+tBuzluQ7wMuab5kme2PTTiMCnTWKOaNUQkpPsFc
+         bT/WOYGt/orevRQLgUeDoYNURTpt7pvwuRsYB3PE89Wsmw0RwD37aYyn7Rsg/D8PF4np
+         PTi9NhHJq7rmUxjTnXseS/BTXYCurwQt+asx7NBoYxWiLAHs2M6VnNXVdDW6vhQaIB6B
+         WCjSkR/2jf5uQWdgmGSG9Tp1tq/kEE+I6WfVtIyISiMEt8u0RQhL2vanIh/fpfCaET5U
+         RQkUotVrjLZuIMCDlHSeGxbGxRLquvvG99zE8d5QeATy+9pLDaQg2/19x0d/HGyYSma3
+         7TUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791658160; x=1792262960;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xzViJlfng9ygGmV1Zx8fkcrOlZMfym9liXR+dzM/BZk=;
+        b=aIlZ3OI5zCIB50i/wCnb6xO/Qczn7MhJLg0CYgRJ6brF1l/LpWg7sNuFToqBZEXkAW
+         nXyRzP3g32m+KAOH7ZpXsQ18QrvAEamzi+xTMfszPrT63fe+YtHQTQWGt9bYQWzRBufD
+         oy+myjFeW7Eve9Dq4dVBSf8ZBTPA5fZ1wk+JF4EbHdrU3sRrezCdDMV+TB5JPkx4GDPi
+         e9aOFDFNPJOC0lthnJIybjCaRdscwzezAWtuHtRbbox7PxsIvxx8a6BX754+uKYbUldc
+         f2XkBElMSwI+jl8tBJxAbjPAyi8my/GU0NF08cNASqaCEqs/CajaC06YBKzhIBtohhq7
+         8lmg==
+X-Forwarded-Encrypted: i=1; AKwUvBy1glv0dne1Lfk1Y7lBFrkssNL2A+vlaxHEljdDyQBg+qpGBM8LLR+Vd+zR3VJTJqdVGR0O@lists.linux.dev
+X-Gm-Message-State: AFq9FYI33qpYRQ1Ma5dIldoMBvZRZmiW1QRgADGuuIzr1OJKiDnITDeV
+	ZxYeN8puyrJBS66Yvc3pLBEVfv6qVs+X/SDJ+u6TxpHM+AAxY90TWXON/ebRh/EXnxuozAs5Dwg
+	fGU2BfNDdaRSRXj9YZjgrVH7Y2B1y7T/jnFY/6w3fO5Tv+NjX8Jge9RqQGutf0A==
+X-Gm-Gg: AYBFou38iQSwQ1lH8Qufxy6mrGH/KuFg6iZYR4svdxfFp5h8wVW+bu1nLGqSrMhmrHC
+	7zY+nTJ/BIwb7mWagEmkRNPAAuNUKeHRvlK0FXoJMCW4i17ZIwDOAniAEyj4fuukFd2XGO0qOV1
+	Ekg5YoM8SD+gardw4gi8IyMGQRmVO+GPC0+JTD5Vl4DkSO/NrVZSXXJ59yXD71GCpGu9jM4k4Lg
+	H4k7dyt02iv/D7FDGqD4eIYOpdVbcxvi5ovP2Xf/3aWF4KFAASM6h9Vtk/RMZXaw38g2GhlW24P
+	96nL2YUSrf9E9s4faxGwuhNEJnJgmhilh7TnGjCZO7Uxl29zrD6eWA==
+X-Received: by 2002:a05:6402:2082:10b0:69c:39f5:7e36 with SMTP id
+ 4fb4d7f45d1cf-6b19876fb1dmr15796a12.0.1791658159479; Sat, 10 Oct 2026
+ 11:49:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <asp9mzpa4eJWvij0@debian>
+References: <20261009214501.GA905361@ax162> <CAF1bQ=Qq66JuvYrbR-7GgegZuWPSjxDOgerUSD2NOp9W0BauZw@mail.gmail.com>
+In-Reply-To: <CAF1bQ=Qq66JuvYrbR-7GgegZuWPSjxDOgerUSD2NOp9W0BauZw@mail.gmail.com>
+From: Rong Xu <xur@google.com>
+Date: Sat, 10 Oct 2026 20:49:08 +0200
+X-Gm-Features: AclHuK-ozuuUaiksMjkRlpS60NF8BtTRb-Oo-GWjNU3407m-ON6-M4dsU8PWDMA
+Message-ID: <CAF1bQ=TcBqvu7v5fXK0xkf=ak=APt_i0aXCtTSM1MZiOvQqoQw@mail.gmail.com>
+Subject: Re: Build breakage from renamed '-split-machine-functions' plugin option
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Han Shen <shenhan@google.com>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Oct 10, 2026 at 08:05:48PM +0200, Alejandro Colomar wrote:
-> Hello Nguyen,
-> 
-> > Date: 2026-10-10 23:44:49+0700
-> > From: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>
-> >
-> > With clang 22 and CONFIG_FORTIFY_SOURCE, the second
-> > landlock_restrict_self() call hits a bogus fortify report in
-> > inherit_ruleset():
-> > 
-> >   memcpy: detected buffer overflow: 16 byte read of buffer size 0
-> >   Call Trace:
-> >    __fortify_panic
-> >    landlock_merge_ruleset+0xc46/0xc90
-> >    __se_sys_landlock_restrict_self+0x2bc/0xd40
-> > 
-> > layers[] lives in an anonymous struct inside the anonymous union
-> > that overlays work_free.  For such a flexible array, clang computes the
-> > address of the __counted_by counter as the start of the array instead of
-> > &num_layers.  The bound is then read from layers[0], i.e. from
-> > the first layer's configuration, which is not a count.  The same layout
-> > crashes clang itself in a standalone test.
-> > 
-> > The annotation was added as documentation, so drop it rather than
-> > restructure the union.  Keep the information in the member comment.
-> > 
-> > Reported-by: syzbot+a0eecb22de4d821a9e5d@syzkaller.appspotmail.com
-> > Closes: https://syzkaller.appspot.com/bug?extid=a0eecb22de4d821a9e5d
-> > Fixes: bd3a19800dd1 ("landlock: Add counted_by in landlock_domain")
-> > Signed-off-by: Nguyen Ngoc Thang <ngocthang2710.1999@gmail.com>
-> > ---
-> > Reproduced with clang 22.1.8 and FORTIFY_SOURCE on mic/next (64b9e6eff524):
-> > the second landlock_restrict_self() hits the report, while 16 nested
-> > restricts run clean with this patch.  Mickaël, if you prefer to just drop
-> > bd3a19800dd1 from next, that works as well.
-> 
-> Is this reproducible with Clang 23 or later?
-> 
-> Should __counted_by() expand to nothing for bogus versions of Clang?
-> That would allow using it, and just ignore Clang when it's broken,
-> rather than not using safety features.
-
-This is actively being discussed/investigated in another thread but yes,
-we will be marking clang versions affected by this problem as broken for
-__counted_by:
-
-  https://lore.kernel.org/20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com/
-
-> >  security/landlock/domain.h | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/security/landlock/domain.h b/security/landlock/domain.h
-> > index 60e8eb2d6ac2..4bf1555a4349 100644
-> > --- a/security/landlock/domain.h
-> > +++ b/security/landlock/domain.h
-> > @@ -246,8 +246,12 @@ struct landlock_domain {
-> >  			 * properly handle merged rulesets without overlapping
-> >  			 * access rights.  These layers are set once and never
-> >  			 * changed for the lifetime of the domain.
-> > +			 *
-> > +			 * Not annotated with __counted_by(@num_layers): clang
-> > +			 * miscomputes the counter address for a FAM nested in an
-> > +			 * anonymous struct within a union, which trips FORTIFY.
-> >  			 */
-> > -			struct layer_config layers[] __counted_by(num_layers);
-> > +			struct layer_config layers[];
-> >  		};
-> >  	};
-> >  };
-> > -- 
-> > 2.43.0
-> > 
-> > 
-> 
-> -- 
-> <https://www.alejandro-colomar.es>
+Sorry that if you receive duplicated email.
 
 
 
--- 
-Cheers,
-Nathan
+Thanks,
+
+-Rong
+
+
+On Sat, Oct 10, 2026 at 8:46=E2=80=AFPM Rong Xu <xur@google.com> wrote:
+>
+> Hi Nathan,
+>
+> Thanks for bringing this to our attention. We will need to rename the opt=
+ion accordingly.
+>
+> We need this option for ThinLTO (though not distributed ThinLTO). During =
+a ThinLTO build, LD is called directly when building vmlinux.o, so the Clan=
+g driver change will not apply in this case.
+>
+> Please note that I am currently on vacation and may be slow to respond.
+>
+> Thanks,
+>
+> -Rong
+>
+>
+> On Fri, Oct 9, 2026 at 11:45=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
+org> wrote:
+>>
+>> Hi Rong and Han,
+>>
+>> LLVM recently landed a commit renaming the '-split-machine-functions'
+>> plugin option to '-function-splitting=3Dall':
+>>
+>>   https://github.com/llvm/llvm-project/commit/3e6acc87c58843e551d6e8e4bf=
+06c26712b04622
+>>
+>> This breaks builds with CONFIG_AUTOFDO and CONFIG_LTO_CLANG_THIN with:
+>>
+>>   ld.lld: error: -plugin-opt=3D-: ld.lld: Unknown command line argument =
+'-split-machine-functions'.  Try: 'ld.lld --help'
+>>
+>> Obviously, we can handle this rename but I noticed that the combination
+>> of '-flto -fsplit-machine-functions' should add the corresponding
+>> '-plugin-opt=3D' since LLVM 15:
+>>
+>>   https://github.com/llvm/llvm-project/commit/72acd042bad35f78232f17addc=
+02196a7af1a6e9
+>>
+>> So is this even necessary? Should we just remove
+>>
+>>   KBUILD_LDFLAGS +=3D -plugin-opt=3D-split-machine-functions
+>>
+>> from scripts/Makefile.autofdo and rely on '-fsplit-machine-functions' to
+>> do the right thing or am I missing something here?
+>>
+>> --
+>> Cheers,
+>> Nathan
