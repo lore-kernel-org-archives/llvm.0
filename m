@@ -1,87 +1,103 @@
-Received: from sonic316-20.consmr.mail.ne1.yahoo.com (sonic316-20.consmr.mail.ne1.yahoo.com [66.163.187.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510293033F7
-	for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 19:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EB282AEF5;
+	Sat, 10 Oct 2026 21:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791661072; cv=none; b=OIduwYe6BeWdUc7P+zHK06Y32gVZ7bAXYSJGMioNRuhnFlIsqphGR2wv3Js1zo8joTU/BlmyKaBG2xAFGZsAqHk7JenZaMmBwqjD1UMMCPPXsp7BLKaXcyHNDCW/GFYCmWC8+CCcIWm/e3c8YvN5pbtHYV/1ezMgHC1J1CxS7Zc=
+	t=1791666434; cv=none; b=qgXn5mIrGBjhb8dG8hCXesSXj9tTv3eGI7uufOZqv7vCXJdbIF+v0miT/NLh4QykD8yUHp8o/jv5dQBX1+ahf9bmueYlVm6DnlDCoF6s7/L0G4JJcrvq7CwBt1KYsL+zemt2r+VOwjh5eqyYvY/VxIAJoOn/vPqJZ6+W7cml8a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791661072; c=relaxed/simple;
-	bh=xwjbSYgn6KXQ9wka03ZWzOM3dY+f7vtWb04ux/4AmUg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KEtcNA1MzTmhYpiUR/aVUnOSIR7Tubf5gfNrVfjXChr9UGEWyFL5f+1De9QRvsyC2CYpTWZ4vuqE4Z0T8kn5WnZBX70M3+MHnqFN9C86mDfHS3xJvzCRCoK+5s7y8AyhivgA/sxfxHFNzxNKMUqlhru09xnLhvTFNMltHvrujTg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=tQRh5XPo; arc=none smtp.client-ip=66.163.187.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
+	s=arc-20240116; t=1791666434; c=relaxed/simple;
+	bh=MWZiC3YF8lC1P/vq25ned+nViiOEFs1+9yT1a2pIu1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B6w7v3R+4zkETcdvRu35Ltfiosm37bchBj5Oy7Hu/b153N02a/WcFIHFmQgpACEFEGyuz1qn/oArtyv2navo5mFYswsItVKnKMp2Mj/hrRzbrcgCIjU5uJ9aHxnnHHizkJIhllYLokfg3WwM3aCn/Bc5g8+HzGFw17WbBil/08k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XA9iqnjI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="tQRh5XPo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791661069; bh=xwjbSYgn6KXQ9wka03ZWzOM3dY+f7vtWb04ux/4AmUg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=tQRh5XPo7RyVOzZ0LdGFgDVt2LHOuELd+1uyUgOtIIGmbcJaAw0GDx3+8C0ylPhWSl7X/ZDovnB3ldEiU5NkUkUzz6hecbVMXoaDgQFtVVV4TK1oXX6z3LzR5Acir2iCKq1CG4dBj8t0hqkWSk87nAB2EXY38R7GfiOSf6uqwsSQ+1fGittRoptsX9POTAirYv2cKe7cSIWzhLLRaGrifK+RtzFnEldA7Z6lqGHJI3Ev1nMw1M5SsTxvli/d+vqsPFtG/4g8TDgXs8pl/rxw27sds1T3tNmZEEwwDVEFmMH6Yu0MqIse50g0o1beS4G7d7E0q8uhgvKRe0Nefse2Aw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791661069; bh=Fx63iG8m+9E5Paf38198y8WWcFOof17JiNPtjfSHNbt=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PyBbRFiKvStbW5H93qmRPgBp/gh/QnVx1wA9+uK44VtR3Ehbd4XE5tljILm2JcMlKUxQG1GdIO0r7bGJ55zEMm2Jrtz7b6Ice6jQ6Q2r4Q9E9KXR7IU2odYP5CbG6PFLZUoIBzPOmfnLikQbAeNIrR8B3W77H7N/rkJb/bKmBb8IwfA0WSnhortDeN3YIFYukpFnfCuWcmvz5jvNLeQd/U1JdWVwk4XsJ2SgUdXoQe7c7JiUd1GTJA5osbJKveNwvx63duitOrRf3wQAAweqmjpuUprqZ4pE2aweAVDpsPVDiGKTumlHgrRane4Sr3uB5mvfmJPDwhMoqouIP6XGfg==
-X-YMail-OSG: 6rQKzBEVM1nWxOL3GIDBNLJqYkiNN.Q.52v.rnfxY5oVukunkkhyp5xOoRoIO6Y
- hg1tIUQ8M2VzswZeXWC3QpSvuAnkzCe6Z5Al4z2bk466jIHWmMLXwcsYmsDOEX2qQVeQqUTysmVc
- rGUB9pU0YkHBr.WaIfCTfXvSmyULVf.EZk0_NBWjbhb1GmVhohBDZAUCXrBTTMYbuXBj6Pcup9dA
- pwgkzZb9HrYl_fvgBjNCIwy0slp3miP8Oolx70P_7FCY1XsSS3XggmOv.I_WKWKI4LyLNXHjF1ti
- RrKXFu1nkQBuu3KO_ndltGOQrRdj2WTVvDeCEroVEfvF9rwnLm7Rci8DgHV38c_4tgaidUYCNdoy
- .IXeCgPPy7zENWuoeoUoKNeV_TWBD9qQgPdKQ5L.bORRiiakOBkEhd.VvF0.lB7HmvcXmrY1Ze_Y
- CL0YpiScehDa1Ww7IGWhlmrPr4tqbmyb_Am0qJbbCaL0qDyjJwR_Ps4rrrquAGY1L6Ha09lviOSz
- h4wy9fc6XaRNKnCdjCK26GiZaQ1NU.EfGRaMKNZTSB0MRgxHbH3UrMXVq7EhufSnM_Sgztcmae60
- PRqbypnD_oE.1tuSqx2xdpebOFbcUt_cr2Ngu0t9l8FYF55VFwvgt5AupcEoO1KFdojcNPCrHOr5
- F_1H0c.DfErKa06pLDYpkgofBf5STSWe7HZmSuQi9yuSO68Cifh7EAl.V4W28ga8l1bJAVczeHw6
- MrMEqYP5ySOPbI5PbPAZAJFwPNZ1OPOQZ2sPXc0X7FyWG85KzQWWx1L42HKyqnGSdfKD1Cp4Gklv
- s.yjyIFWh2b4TbpxtU3d3zpT8GHlJsUKEe_JAsvtoQ2JfQ2hSWZAwUO7kZkw3wZd65lTrj4CHSs7
- lFAOazCwoNl5BPyjQT5arUxpI7cFmLg8SD1Ki4BFGimxD2VdOplmG7AYfCn6ZIIwnNh9Y.WCC2YD
- 4WHLmarLpHKhy_3j3OYEWg4fMJpOLH6c.fNT2r5y1s2oNfWAHPBA9BuTgqXE4W.v3agB2vRSvCyK
- HdZY_dMYUfLw.fz7yPc3qAH7ih_l5wOcBVIiF2sOLgc7WFCDcU4j_aG3otUjCQd2XQYWfM8oJDU2
- 2k__lCD7y3R57FazAtodBlKG9v.Qp1GEHeX27JCCgyanHa.xQtlOk5vc_nv6lhPwwSA2K9GmCbhG
- SO9kXqS7CKH0KejL1gKzdIR28xB_y1QDCxgG.R9kWV1Wc.5NnGUUmu1gOVz3bfH_XnGe95DZkCu.
- CHDLFU8Gm8bSoUeX9K7HPfLPD7YaqlOPGU5mawJ8Qs3TpijlXNDI1mDMaXwBH_gGJzAJJW4CpsDh
- VaoPiI6hmns8SNP48u9B0IPIOJbOzGvVi3V1bWz.hQuDtsIn0jy6OABCl7t5ShvPzcKsUi19mjuW
- GisI1myvV5iwVAio_W3v6N91CZWXI7jp3T0oBmvDw9L.DRfKnxK7S_wZhuNqzvgJaTjfOE8k39kE
- gU.hV518xLKdBECCwCOV.ZLJQlvV9M7dufaigCBvTHzdEpl8JDqi79DRb95fxjsELVSmZX3fyT0O
- HQ6xFqzykyx0ne_5IaR0XlTVsJ8392LXP5llW4w.gTj0fFiLqwUx6uQS4iUS6HaCo7m.3dt1dU48
- 3zdu43.3yYOptPhBnR5Pyiidgz79bvhJh79MB.lDqQuTzBC_uaMW78jLiuoQ_aT4kIh4pwI0slOO
- czpyosTFFDjj48d4H5K4KO4D39C7iMttTUBHfXSB1WYxcH83Q9A5x2MDiAvwGHXuYgbA2pwQxX7N
- y9xnYPnX6Cltz7Ws9bZbIBM9nlTdxYv8.jXgsVvZJi6ep_nJhLMte1z3FkO3yysYpXmH.nGNOLQZ
- XFnKLYguTo54NKRG.bQ1XKhJPZVUqggR.2VM8W9CuoyTx2b8BLKpaqy4Bzy4IiSQnNiUrP4g5HZT
- pNFNKEkgvNyVgckZbtzjzwwLhUHPC3q6H0Xh4PUx7AjmePNCxgPqeZQS_Xv.PVjHuNTW4hX.S2yf
- azHhy1WHlZHZAZx69T5iyCy0hLr1JS9h_ODXqRMcjucV6LzMgVhBAhzfwl14uEvCgWO1nScsAMWY
- seahDmaOQ.zIolt7vWJ92fq03zA7uKgtihlL8CvPCnv_1l20qXEA3S6zBsFeBe7dLXiB4i86cg1i
- dFHhB1OmXcXx1g.ntAGpxT0qFtHNBwOnkN4TgfHabokOEDx8uMt6OBFaeA3dR77TdfFyQU12OI8P
- gVHK.nrBk91kcU99_zbwH3lS6drTGl0Gz57ysTybFlKMRqnBv.a9x0vVdz4rXU79dXiVLxdie04A
- pcMMp.tKe1aUEdYlyQlqYiEzJhkytmNlH4HkKMNQVUcQlpfZj1HE-
-X-Sonic-MF: <namiltd@yahoo.com>
-X-Sonic-ID: dfd437aa-a2be-430d-af91-2298abfa9816
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Sat, 10 Oct 2026 19:37:49 +0000
-Received: by hermes--production-ir2-5dd9bf4598-nf4w7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 07f6395ff3499c6cf6e6a1a81cc87afc;
-          Sat, 10 Oct 2026 19:27:29 +0000 (UTC)
-Message-ID: <3dc433ad-f0c4-4679-ad8a-b4676cd7255c@yahoo.com>
-Date: Sat, 10 Oct 2026 21:27:26 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XA9iqnjI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DA61F000FF;
+	Sat, 10 Oct 2026 21:07:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791666432;
+	bh=30R/GaKM4NcrAVJrORuimlAImIftgrnprkvMkO/yUgg=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To;
+	b=XA9iqnjIx/r6wwwwda3prpgPyj/69mnTZ8cbORV5B4zzBQx+fgSyvmqh7TXiwYyAv
+	 yH1CFblXaja1iFKTNaTzKuI6uZr5mIKhTVIlMA82x4BAVukM3Yjs4WU8kARRn0Mj1X
+	 C7wZ8/dkrmUWBef3Vp08Mw2utIleVh6MNyYLzHzMEmOVE80EK71ZxpVQWqInuKPDy4
+	 d9nwLWeW5KYn7BXgWcuW5lPfxBRjIQ23VdnvBrUb/d3ZdQHpZ/KLzI5mlGwOxUHun1
+	 Sm+3aJP/5y3szWvdvYblhR1m83TTjiVMYgVXHB+rigrqkaPwtX+ZN9ehCT9H8s1BTC
+	 ZnjRlq8kK69nA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id C57A8CE397D; Sat, 10 Oct 2026 14:07:11 -0700 (PDT)
+Date: Sat, 10 Oct 2026 14:07:11 -0700
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Manuel Ebner <manuelebnerli@mailbox.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Nicolas Schier <n.schier@fritz.com>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	linux-kbuild@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] kbuild: Give jobserver-exec recipes the jobserver
+Message-ID: <69b782ee-69c3-410f-8bcd-01a7be5d9295@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20261010081910.stay.092-kees@kernel.org>
+ <20261010134829.GB1853402@ax162>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 8/8] net: dsa: realtek: rtl8365mb: re-latch the
- family D SerDes
-To: kernel test robot <lkp@intel.com>, linusw@kernel.org,
- alsi@bang-olufsen.dk, andrew@lunn.ch, olteanv@gmail.com, kuba@kernel.org,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- linux@armlinux.org.uk, luizluca@gmail.com, maxime.chevallier@bootlin.com,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev-bot+sashiko@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-References: <7e3518aa-4f99-4aae-bd9b-3984bdc4b548@yahoo.com>
- <202610081722.Zoeli0ix-lkp@intel.com>
-Content-Language: pl
-From: Mieczyslaw Nalewaj <namiltd@yahoo.com>
-In-Reply-To: <202610081722.Zoeli0ix-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.26668 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261010134829.GB1853402@ax162>
 
-Thanks for the review. The issues are valid; I will respin as v3.
+On Sat, Oct 10, 2026 at 02:48:29PM +0100, Nathan Chancellor wrote:
+> On Sat, Oct 10, 2026 at 01:19:09AM -0700, Kees Cook wrote:
+> > Hi!
+> > 
+> > Paul reported a build failure on CentOS Stream 9 with linux-next[1]: the
+> > kernel builds, but scripts/jobserver-exec prints
+> > 
+> >   WARNING: Unable to reopen jobserver read-side pipe: FileNotFoundError(2, 'No such file or directory')
+> > 
+> > and rcutorture's build check counts the "Error" in that line. CentOS's
+> > make 4.3 carries a backport of the fix for GNU Make bug 58232, so
+> > sub-makes, like the top-level make, give the jobserver pipe only to
+> > recipes marked recursive, while MAKEFLAGS still names it. The new pigz
+> > steps (1/2), for the kernel image, the built-in initramfs, and the other
+> > gzip rules, and the older Clang LTO initcall ordering step (2/2) run
+> > jobserver-exec from recipes without "+", so pigz gets one thread and the
+> > initcall script caps its children at the CPU count instead of the free
+> > job slots. Mark these recipes recursive, as was done for rustc.
+> > 
+> > Thanks!
+> > 
+> > -Kees
+> > 
+> >  v2:
+> >  - 1/2: also mark the gzip rules that choose gzip through a variable,
+> >    including the built-in initramfs in usr/Makefile, which rcutorture's
+> >    kvm.sh builds and v1 missed (Paul)
+> >  - 1/2: update the gzip entry in Documentation/kbuild/makefiles.rst
+> >    (Nicolas)
+> >  - 2/2: cite Masahiro's earlier version of this change and say when the
+> >    script gets more than one archive (Nicolas)
+> >  - v1..v2 diff: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/diff/?id=dev/next-20261001/pigz-recursive/v2&id2=dev/next-20261001/pigz-recursive/v1
+> >  v1: https://lore.kernel.org/all/20261009062722.i.253-kees@kernel.org/
+> > 
+> > [1] https://lore.kernel.org/all/0ddb5e5e-f801-444c-aa98-0cfe814a3026@paulmck-laptop/
+> > 
+> > Kees Cook (2):
+> >   kbuild: Mark the gzip recipes as recursive
+> >   kbuild: Mark the initcall ordering recipe as recursive
+> 
+> I've kicked these into -next, I will formally apply them to
+> kbuild-next-speedups once Paul can confirm that it resolves his
+> regression. Thanks a lot for the assist here!
 
-pw-bot: cr
+And it works!!!  ;-)
+
+Tested-by: Paul E. McKenney <paulmck@kernel.org>
