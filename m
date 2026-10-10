@@ -1,125 +1,132 @@
-Received: from mail-yx1-f52.google.com (mail-yx1-f52.google.com [74.125.224.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01457547074
-	for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 00:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791590537; cv=pass; b=fddcYrBPbcFJlIsdvA51VIpJlX7Jt+YoQYwGP9ruH7f8mxg1d5vpOs9PEPlE4rT0Pbcb/Vou12OYtVF6fhji9p1G8LdxEUN3ytaoGG1JYEL9HbJG+2t8t851aR5qnTll4r6xTUYsTE4YjLVKnwzJXzOn1NAW2Cb/BzzAPKFdH+0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791590537; c=relaxed/simple;
-	bh=hXTeWRoHLQjJuetkdFQnlbxkl4pZIcomCQcGCLyZ9N8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZypEw6anwZGlf+3bz43M53S+lJHn1vvO7myJvLwX/x6tCs08BPV5ub4eRU4rzm09hsYO+OIybEgo4bEy4bKWkxyyrM4Oo8RRKBHbY8E9b3WUIvnpHhlK9WiuoBtew2oaZEbaK+zWiFXuALK47BSN7KpFyGLE/bjcRDl0BBjf0Z0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hjE6fry/; arc=pass smtp.client-ip=74.125.224.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2115B27473;
+	Sat, 10 Oct 2026 00:12:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791591162; cv=none; b=jKU9+x6t+Sh+PKN737RNlKs+l4DANzXBXzgg1TcbOBpkbeKKutVsSmowQDctyd76QGOoV+waVXrT/JlpBW8wFb6R7FahGg6OiPriRa1tcHAXcrA+JxkySbR2Ff906dvi8yKyyE16hh/vsaVkSHJ6QceVNJLX3QtNcEz2rlIzUUo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791591162; c=relaxed/simple;
+	bh=1Ay9bN2eGeWUpHZsJ2AYo8jafOcl8zrShs1l3EUrEE0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZyAD/gCN4mcw++OdIc8xwEt/L3kpjm8ZYL0Cwg+0qcRDnNb9SbbIjcq/NZBrDdPItKppw6XxTgY2PHroSbA2si04NpGB6yTMlh0CNitbyzwueaPD/0+7xdxjA5I/mVdsAxtZLEiY5WmMYaGh2g+WHMW7chvF/maLw/8jlwgyw1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i8hCaN6V; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hjE6fry/"
-Received: by mail-yx1-f52.google.com with SMTP id 956f58d0204a3-67687f279b3so197233d50.0
-        for <llvm@lists.linux.dev>; Fri, 09 Oct 2026 17:02:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791590535; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KnPEIodZtEJcYHoO36tEh4/Vd2sdxxND/8T6caxJNRW7S/v2FkXFBOgMtkaiL7XTO7
-         rqMGIu43BQrjcTi0NFdk3ufO/9YK3k1KRZ7+8Y+lYvEgo6GocMNw8HeRkV1BJoKWtg2/
-         jei1EZyAvmtuqlv9xTuoKbVd6eknsL5QVvIoGwJ8cCHCdc2FM09Iz/E2JRx5IpSkPU/o
-         ykVKwXNQhyc9hSgNnoGUXVBrpI5idCv3lSu0w1PgF1PBxOt2xWIFbQXzxyy0vYjvF78c
-         YYKtHcYVv9HAkzk3gSVTdU5Q7deU0hnQKMZb11/YwZitWkwh8jJM3nl7UKnIxebOLRLh
-         J8VA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=I99AZGsC3feH3Hx+ZXc5ABTbclG1gdclkr+/K7Qjuzk=;
-        fh=REyzW+AgXgUrZxP/ScWgpIBU2YeKm6lVLGux+RWZ0nc=;
-        b=Sxhzv1Isb9/MwJX2HEulV0gfCTtuiwGCjlSV6mE4d0HfmBsw7S6s+kpiOPPqtN3gGY
-         m9MiNyUz0AGgJd33t0gnUZ/DZ2K6IUIXWpIbPVkzrA89Z2Q4RMj87j+kRXsITnMr6t0X
-         2bT+ypDa6A3kiCqPGHo3JkzEDw1n77AWp6MJefd/65VOFVWDDxKtWzCq7zL4df8xdeBt
-         OYf3WHoIo9FfQ5zUiD4rO44VBEKLJFrAxB8dgWGibs6zeT3g285BsltpB1CGg5xux7bC
-         AuW2sM8MhLbBVt8InpSjO2yL/5ZCdwXWsANR6uxUpnfwBFy5QtyeGdW/2bHesLKlYKRK
-         QstQ==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791590535; x=1792195335; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=I99AZGsC3feH3Hx+ZXc5ABTbclG1gdclkr+/K7Qjuzk=;
-        b=hjE6fry/bKNpC9Ej9USBOV89EBqNsub7Pr2xBFopdtRDIEF+4fAkLjZ9a3FZy96YGg
-         9qTbB3pvyNiY8vutDE8Agdw/rGNrqMwh8aq4oI2Jl/KMHdn3YbuEQy/O8G0S/S4PaSUJ
-         r+MatJ0Dh2aQhhh+XZvQ0iIPUWswOzITM/WIze0GLTx66GRktFiTKImlOdjsQWG5TGEO
-         K8ksyDp9q3mNCS2YjYgf1yKXGkMoQDU5764c2D5tpx0BtfMxIgZJRidaQjg+VFVEC7zS
-         kDW+Ea1u6+v3av1h4KHe3LHEOAssWKxcJQfzt8xmyyczCpBncZHDMVz7YQyAvcje3z2r
-         BVOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791590535; x=1792195335;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=I99AZGsC3feH3Hx+ZXc5ABTbclG1gdclkr+/K7Qjuzk=;
-        b=UDDDzo3eS2CL/btGcqqLRlHyzp2L9e9x48rXoUqgUKbM2NX4uKiaHOtbdpu/JYaW9V
-         TaW4J0mVL03qb/8NgFe2Ki5BZFNQq+wAF/rk1gDmgMFgzuZS8o/1W6dNPDS2i9vggRQr
-         QQE7vaq5OwY9zqnbsn7SsoY5CBlmrs471lrgt/ASx9f8bLiEMygNFtV/5A5UbEAFiogn
-         EqBD63Sc6WxqLngz3gWCreMcZhBMzi3x3aZ2z1rH+wWxT56MbsUN7nuVvCyjJcsU8kFX
-         2wFi877ofUmz7t5MAhSiEBsJnlCCh+I7SAgMCZTehsw+WXGAKLRbviK/szBN9fUnqkMo
-         Affg==
-X-Forwarded-Encrypted: i=1; AKwUvBwsMGJJxdZWS0upSqlZsjF6o1bvgnYM5gnfHj9KCtCXpW47HVaDRjC8cW5Ecayej7e5eGF/@lists.linux.dev
-X-Gm-Message-State: AFq9FYJovU+PsQzcc8mxhECAppfQcUzbvkXyme302LPQ7IIecjzKY4oi
-	X+7/n1fLe0/Q0W4jnkDtHCBQJBJyVSL38P0QWwTULvivhg5LzwJeMcQOGVqybzYXO9oEIBbklfv
-	mp5xAEmgOlSYX8OOLShkK5PYzXhn7W+w=
-X-Gm-Gg: AYBFou0I6DT54754g6nTdbAu+NK3H6y4etyQ2yv2lbK8o7Q0rs9/lnNe3dCB30OU1xC
-	FBTCCduD+agjYza2MZRLVuUjjEGZAiEMrFOFVeuuNWiELn7XjiOfaA4k1yWss+xOIIKKcbPpM1G
-	8wCVBAMzqJs/CzH0ztj+8pMWoAq7UUH+L/ItJ/8rE2fDg4DAK7kX1Kjub7BDR+Nc+43rYWBIA7T
-	J7Y9ADOKKdlLHlMSgQf5ArS3UJwsQnsTd0ZC+jmOMqlSPw04qeANs4lHQdHUh+EyYw6pPvv85vm
-	J6lI7XUzsRXoTQvuyfTUE09b8JWFi3wGG2uihvkVwyQx/sbaaWtx4Y16hbisioR6xO7PoUpq/ua
-	fB0X6DxrH
-X-Received: by 2002:a05:690e:bc9:b0:677:c43e:c81b with SMTP id
- 956f58d0204a3-67936059eeamr1294555d50.59.1791590534633; Fri, 09 Oct 2026
- 17:02:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i8hCaN6V"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791591161; x=1823127161;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=1Ay9bN2eGeWUpHZsJ2AYo8jafOcl8zrShs1l3EUrEE0=;
+  b=i8hCaN6VZKrqg6VcWttxSnoK1rReJCLrz+GysGmqCZpTSBkFM4XbF/6Z
+   XhiLJeiG6fCWJDyZpwl6HKjXia6tV8u6JrEKVtZc7UliZpXcWFJqSQPxT
+   jPXpLEFdp42S+6A99Uz3NUcDFeypBo6S/0iL0ZvJ7yLO557XeV2zTYXqi
+   wvXdkPG4o+ZWYlO/6hvsWB7PFpismPRBs3rleGPB7noyyG00kJ90fc+RY
+   U/At9Plh1xuZ0dpARlPR97iObqLuA2z2azdId+kYmJyM3dX3ff/yqbJNE
+   yELXiyg9w4tLFFm0C0ECt8RSIoqJy1Oy9KR512ePSF/iJh6sZpEv3Fh2L
+   w==;
+X-CSE-ConnectionGUID: KauTyskdSjO8oaP95kGkxg==
+X-CSE-MsgGUID: StrXQnSCTxeNJwC22RP8wg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11930"; a="284075"
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="284075"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2026 17:12:40 -0700
+X-CSE-ConnectionGUID: 4Vg5DPiuSQaBNImMGjKKmA==
+X-CSE-MsgGUID: FM/fDYzmT6WuED4Lfm5WYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,149,1787036400"; 
+   d="scan'208";a="529746"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 09 Oct 2026 17:12:38 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xFKhX-000000006KK-2sl6;
+	Sat, 10 Oct 2026 00:12:35 +0000
+Date: Sat, 10 Oct 2026 08:11:55 +0800
+From: kernel test robot <lkp@intel.com>
+To: Wong Boon Jhee <wongboonjhee52@gmail.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, horms@kernel.org,
+	kuba@kernel.org, Wong Boon Jhee <wongboonjhee52@gmail.com>
+Subject: Re: [PATCH v9] net/ncsi: Fix use-after-free in NCSI teardown
+Message-ID: <202610100859.YrkmZvhQ-lkp@intel.com>
+References: <20261009082201.1424955-1-wongboonjhee52@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261007-b4-landlock-fix-domain-fortify-panic-v1-1-042e9108f5f8@oss.qualcomm.com>
- <CAKwvOd=nPgEm=AZbEu12Eb90GtRUThY6YAjSiHHuNVHP8TZHwg@mail.gmail.com>
- <66usntltyie7ii2rrqajy3izxrvwubwf2vqnery552v3akhwo2@xwb4t76d37wx>
- <CAKwvOd=E7wgGPf+kgOY8sGi0xO-cFMAJK4PMBFknoEupJi1CXw@mail.gmail.com>
- <20261009204554.GA778522@ax162> <EF8E7F67-39BF-4382-AB18-98E9D6111CA5@kernel.org>
-In-Reply-To: <EF8E7F67-39BF-4382-AB18-98E9D6111CA5@kernel.org>
-From: Michael Bommarito <michael.bommarito@gmail.com>
-Date: Fri, 9 Oct 2026 20:02:02 -0400
-X-Gm-Features: AclHuK8tNFqb0iNpuhNaBpJsUFdnB_vd8X2cSDcjR__CA8pNTmkEAbFNAUmPMiA
-Message-ID: <CAJJ9bXzLgzZG+836_2+pUVOWzndSFNoOh8Xu8Pw++_i1RMJzOg@mail.gmail.com>
-Subject: Re: [PATCH] landlock: Move the domain layer counter out of the
- anonymous union
-To: Kees Cook <kees@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Abel Vesa <abel.vesa@oss.qualcomm.com>, Bill Wendling <morbo@google.com>, 
-	Tingmao Wang <m@maowtm.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, 
-	Justin Stitt <justinstitt@google.com>, linux-security-module@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	llvm@lists.linux.dev, Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261009082201.1424955-1-wongboonjhee52@gmail.com>
 
-On Fri, Oct 9, 2026 at 7:52=E2=80=AFPM Kees Cook <kees@kernel.org> wrote:
-> I'm still catching up from travel, so apologies if this already got check=
-ed, but has this been verified against GCC as well? Is it only a Clang prob=
-lem?
->
-> Regardless, if counted_by is not working for a given compiler version we'=
-ll need to exclude its use by version. :(
+Hi Wong,
 
-It is only clang, not gcc.  See my comparison between gcc 15 and clang
-21.1.8 output in [1].  I didn't test clang
- 20 or 23 like Abel did, but it seems like we can't gate on any
-available clang version.
+kernel test robot noticed the following build errors:
 
-[1] https://github.com/llvm/llvm-project/pull/228309#issuecomment-608047508=
-6
+[auto build test ERROR on net/main]
+[also build test ERROR on net-next/main linus/master v7.3-rc6 next-20261008]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
-Mike
+url:    https://github.com/intel-lab-lkp/linux/commits/Wong-Boon-Jhee/net-ncsi-Fix-use-after-free-in-NCSI-teardown/20261009-162201
+base:   net/main
+patch link:    https://lore.kernel.org/r/20261009082201.1424955-1-wongboonjhee52%40gmail.com
+patch subject: [PATCH v9] net/ncsi: Fix use-after-free in NCSI teardown
+config: i386-buildonly-randconfig-1005-20261010 (https://download.01.org/0day-ci/archive/20261010/202610100859.YrkmZvhQ-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261010/202610100859.YrkmZvhQ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610100859.YrkmZvhQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> net/ncsi/ncsi-manage.c:2101:19: error: use of undeclared identifier 'nc'
+    2101 |                                                       &np, &nc);
+         |                                                             ^~
+   net/ncsi/ncsi-manage.c:2103:38: error: use of undeclared identifier 'nc'
+    2103 |                         ncsi_send_netlink_timeout(nr, np, nc);
+         |                                                           ^~
+   2 errors generated.
+
+
+vim +/nc +2101 net/ncsi/ncsi-manage.c
+
+  2078	
+  2079	void ncsi_unregister_dev(struct ncsi_dev *nd)
+  2080	{
+  2081		struct ncsi_dev_priv *ndp = TO_NCSI_DEV_PRIV(nd);
+  2082		struct ncsi_package *np, *tmp;
+  2083		struct vlan_vid *vlan, *vlan_tmp;
+  2084		unsigned long flags;
+  2085		int i;
+  2086	
+  2087		ncsi_unregister_dev_prepare(nd);
+  2088		for (i = 0; i < ARRAY_SIZE(ndp->requests); i++) {
+  2089			struct ncsi_request *nr = &ndp->requests[i];
+  2090	
+  2091			if (!nr->used)
+  2092				continue;
+  2093	
+  2094			if (nr->flags == NCSI_REQ_FLAG_NETLINK_DRIVEN && nr->cmd) {
+  2095				struct ncsi_cmd_pkt *cmd = (struct ncsi_cmd_pkt *)
+  2096					skb_network_header(nr->cmd);
+  2097	
+  2098				rcu_read_lock();
+  2099				ncsi_find_package_and_channel(ndp,
+  2100							      cmd->cmd.common.channel,
+> 2101							      &np, &nc);
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
