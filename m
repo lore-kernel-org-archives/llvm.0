@@ -1,160 +1,87 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from sonic316-20.consmr.mail.ne1.yahoo.com (sonic316-20.consmr.mail.ne1.yahoo.com [66.163.187.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80A0539CCF9
-	for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 18:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791658226; cv=pass; b=JOJHj+DQO8P3cqkliGCYyqrb95Q7lKltFH6Ual3GxfsIfsKGRpPaazqlasTb6hwNG7UNBuRYow1etxMf3GrX90jEijPdgPUFZMmmxyyinOMi18o+ptYzKFMoFrO5yREfRB07oqG97a283fBMF6bBmobfw+k30kOlC79EnPLtT34=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791658226; c=relaxed/simple;
-	bh=qr18RvOXBpCqRo15c2cqUJX8bvTpVRYiKMUfReneauE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fyg16mcd2tOKZnPtjor6I+IDwCV7DIGImvv2qTfUzKYpZf+fOzPNYwIN2v/rJJRXQGUg5s2VyMT7kyJ5nGY1moQaPHMD+0VAxCJBbiZcddRfKsuiA1jIKRZbPKPIOvyRQaAiy2eKbGlTxWxFMk0ht+hmhPFniYPH51grpL6y6xU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=B2H+ME7T; arc=pass smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 510293033F7
+	for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 19:37:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.163.187.146
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1791661072; cv=none; b=OIduwYe6BeWdUc7P+zHK06Y32gVZ7bAXYSJGMioNRuhnFlIsqphGR2wv3Js1zo8joTU/BlmyKaBG2xAFGZsAqHk7JenZaMmBwqjD1UMMCPPXsp7BLKaXcyHNDCW/GFYCmWC8+CCcIWm/e3c8YvN5pbtHYV/1ezMgHC1J1CxS7Zc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1791661072; c=relaxed/simple;
+	bh=xwjbSYgn6KXQ9wka03ZWzOM3dY+f7vtWb04ux/4AmUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KEtcNA1MzTmhYpiUR/aVUnOSIR7Tubf5gfNrVfjXChr9UGEWyFL5f+1De9QRvsyC2CYpTWZ4vuqE4Z0T8kn5WnZBX70M3+MHnqFN9C86mDfHS3xJvzCRCoK+5s7y8AyhivgA/sxfxHFNzxNKMUqlhru09xnLhvTFNMltHvrujTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com; spf=pass smtp.mailfrom=yahoo.com; dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b=tQRh5XPo; arc=none smtp.client-ip=66.163.187.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=yahoo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yahoo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="B2H+ME7T"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6b1aa36fc0eso356a12.0
-        for <llvm@lists.linux.dev>; Sat, 10 Oct 2026 11:50:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791658224; cv=none;
-        d=google.com; s=arc-20260327;
-        b=bwvb+8SMzGgWldWIwf3wVeZmiOFnUVJpVdfYzuv5Uk23F5EqF3h4QrLZJx7+y2dhdV
-         hBME1sTXVY6uBuHydW3xeEmJc6wYh8vTQWWc86ZVA7odX8vh1Nb/ykdLsXRXHsrgqWyZ
-         8nPg1ej/MpuhrU4ueCXuekQnknmCUtJkWwR0V3qA2aQGpVlS4esRRKDrzB0iR/KzVvY9
-         kbfhUuol4OoWnUm1VrR9ib+dxVc5vhdqdkA47w0iPMSQNz+H87gGYCjhT/IUBy+Ew0zt
-         QFt/2fhlPo/Nh5Ndx3MZTr9pZPpsKF+G/PfuK/6fHt17Gcn7Q0kBDwANQZ0El9wG92ID
-         YL6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RCAct7EWAduPCLZ2QGVMtJLjx5OgSp/kpcoOzmSgPLs=;
-        fh=QtiyMnAGXoduGjsKxzL+Xvk/vV3mTBnI1mCSPifX31E=;
-        b=OPreK1HxjKejj15LWvA3x26CEWYAO4cDJ4r/2KHGH7xpSyYsTnjnmWREwjyX2/nAYp
-         ptra2HjfbncKnKjRffb8l1LP6ylFK0PMJhdVLlPFy4k8HAIqUOvJtPtrS5UNBfChzgal
-         p7ToIpMDSQaWvP4HW5wYe/eCCNNqN9qddWjksZWP4OFyVoVTAcgi4pHm5yeI97pudtxe
-         UTtiyfGLgO9YnlsoWZQr+IwOXeMWCS4XXiCAS0tShyMl78qg33c6uIeKit18YjPmwVN8
-         w5m8guVjFh0d5fnJp+nijOteByObnthqoJJ3imPS6BR/AFE5GgCHSJUmFbM61KGW1djE
-         SDeg==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791658224; x=1792263024; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=RCAct7EWAduPCLZ2QGVMtJLjx5OgSp/kpcoOzmSgPLs=;
-        b=B2H+ME7TM+Mun//lZk/qmum9nBxcIQ2aPb1bzNp7cFkmH0zQViqpcZ5Ge8eVDl4Neu
-         il8ptSC2GC7WE/haOpXuZIj/t9s8A1Ke80WZZrWqNyu9APO6a03649LTyGJijXvgsv30
-         ymJonA7d02eOJQ9RAmOK79tZfq3thua/pCIX6eu6kVWgpSliPR5AkPEj9msNOEgT5ZHG
-         +xwOrbJYbMFizkfzDiek07lxXjW2++AOkAObrLO97HhJw2fjMQJ2gLAU+8Y1zKKzwipq
-         LsPQv8+PYd3KD+KZ2v0yatFgZlJvPb+FzoQv05QrB1gWyUEh+qRhpMXffFoFD1k7I8Fg
-         0Bmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791658224; x=1792263024;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=RCAct7EWAduPCLZ2QGVMtJLjx5OgSp/kpcoOzmSgPLs=;
-        b=VY0Coxwsc1seok/J3GejT/cLYQRH5aYVl2X+S66S8/+Q/M+l8OXEeLuHjdc3W6OLIT
-         T+S+2zTW6NZsOTM5S2xb/uhE04PUAD5/YRjwFYnmiMaXhum2vPDXgwMsk43Tq0cZY8Pg
-         5GRx0Yus0wA3AyMEcai7tT11KU0Vo32rwiiMPY8pWAWmN4iqNGc1jK7lWvy2o67HHeIG
-         iYcYREYzudaBmY+nsXWLbWPL7IZRU5g8gxfp7y0XYDX+G+ZzMtM0N2CXPxhALeWUC6Ed
-         ZnlBX3ejYYsyYooxVjX4iN9qEjHlhT9td9pg5ElSWfp5//FVgKM/T/67FCzJJJHcszYR
-         O1Og==
-X-Forwarded-Encrypted: i=1; AKwUvBw3ZSjOmZMVM4VHHBloqtasYLSuXSBjsfnpZLO0p5iKIO6+JH2DzmpDD6BW7myawtrC1UUP@lists.linux.dev
-X-Gm-Message-State: AFq9FYIWJWv9sTwJfxHAirGEnAQU8kJgJ4Z4FaUSVuCbf1YAn9vStN1M
-	LfWAHL4Trd5JNApL7PXRZDKGbRPzQI0zKj0xzYovL/5HK3t0Wg58wf7ZTaNSA0o6ezDdJcSZrKg
-	/7Gb7wVZOoKPnn8axWI0z4d6fGcLEFsiKhOFmVPZ4DjVrbUzyuxzzEQW7QXcVxA==
-X-Gm-Gg: AYBFou3YC8sLxBDX8eVQFhDr8vYm9UxL6P62/mC4STJYYlm+FMeB97RMlwqhCoPXPYp
-	nVA/UB/seyvFpMTUlyFWsb1SDAMfp9GdjUlGv4dq7uTOPYGD9s8jVlxEq9HHNeetD//7xenEf/b
-	ApvWjj+XmziX96UfP6vbcP83zhjc9v2KUBJBqU67agY18J6J4o1jVO0SB2GWP3IkiQuy3UlZmqR
-	rR4d48iHh90792ZiyOAnW/EBTWiX/0GHxN+ctE4N9UHUsq3VSpD7XNJ4ukQ1ycLNghVUS/jk+AL
-	od+A2ImhuEBberoJLg6MyRR9QDsl3BPZM1pLAfF6fpXulshAzTW/ZA==
-X-Received: by 2002:aa7:df8c:0:b0:6a6:8513:7e14 with SMTP id
- 4fb4d7f45d1cf-6b1999f0a81mr27065a12.9.1791658223134; Sat, 10 Oct 2026
- 11:50:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="tQRh5XPo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791661069; bh=xwjbSYgn6KXQ9wka03ZWzOM3dY+f7vtWb04ux/4AmUg=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=tQRh5XPo7RyVOzZ0LdGFgDVt2LHOuELd+1uyUgOtIIGmbcJaAw0GDx3+8C0ylPhWSl7X/ZDovnB3ldEiU5NkUkUzz6hecbVMXoaDgQFtVVV4TK1oXX6z3LzR5Acir2iCKq1CG4dBj8t0hqkWSk87nAB2EXY38R7GfiOSf6uqwsSQ+1fGittRoptsX9POTAirYv2cKe7cSIWzhLLRaGrifK+RtzFnEldA7Z6lqGHJI3Ev1nMw1M5SsTxvli/d+vqsPFtG/4g8TDgXs8pl/rxw27sds1T3tNmZEEwwDVEFmMH6Yu0MqIse50g0o1beS4G7d7E0q8uhgvKRe0Nefse2Aw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1791661069; bh=Fx63iG8m+9E5Paf38198y8WWcFOof17JiNPtjfSHNbt=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=PyBbRFiKvStbW5H93qmRPgBp/gh/QnVx1wA9+uK44VtR3Ehbd4XE5tljILm2JcMlKUxQG1GdIO0r7bGJ55zEMm2Jrtz7b6Ice6jQ6Q2r4Q9E9KXR7IU2odYP5CbG6PFLZUoIBzPOmfnLikQbAeNIrR8B3W77H7N/rkJb/bKmBb8IwfA0WSnhortDeN3YIFYukpFnfCuWcmvz5jvNLeQd/U1JdWVwk4XsJ2SgUdXoQe7c7JiUd1GTJA5osbJKveNwvx63duitOrRf3wQAAweqmjpuUprqZ4pE2aweAVDpsPVDiGKTumlHgrRane4Sr3uB5mvfmJPDwhMoqouIP6XGfg==
+X-YMail-OSG: 6rQKzBEVM1nWxOL3GIDBNLJqYkiNN.Q.52v.rnfxY5oVukunkkhyp5xOoRoIO6Y
+ hg1tIUQ8M2VzswZeXWC3QpSvuAnkzCe6Z5Al4z2bk466jIHWmMLXwcsYmsDOEX2qQVeQqUTysmVc
+ rGUB9pU0YkHBr.WaIfCTfXvSmyULVf.EZk0_NBWjbhb1GmVhohBDZAUCXrBTTMYbuXBj6Pcup9dA
+ pwgkzZb9HrYl_fvgBjNCIwy0slp3miP8Oolx70P_7FCY1XsSS3XggmOv.I_WKWKI4LyLNXHjF1ti
+ RrKXFu1nkQBuu3KO_ndltGOQrRdj2WTVvDeCEroVEfvF9rwnLm7Rci8DgHV38c_4tgaidUYCNdoy
+ .IXeCgPPy7zENWuoeoUoKNeV_TWBD9qQgPdKQ5L.bORRiiakOBkEhd.VvF0.lB7HmvcXmrY1Ze_Y
+ CL0YpiScehDa1Ww7IGWhlmrPr4tqbmyb_Am0qJbbCaL0qDyjJwR_Ps4rrrquAGY1L6Ha09lviOSz
+ h4wy9fc6XaRNKnCdjCK26GiZaQ1NU.EfGRaMKNZTSB0MRgxHbH3UrMXVq7EhufSnM_Sgztcmae60
+ PRqbypnD_oE.1tuSqx2xdpebOFbcUt_cr2Ngu0t9l8FYF55VFwvgt5AupcEoO1KFdojcNPCrHOr5
+ F_1H0c.DfErKa06pLDYpkgofBf5STSWe7HZmSuQi9yuSO68Cifh7EAl.V4W28ga8l1bJAVczeHw6
+ MrMEqYP5ySOPbI5PbPAZAJFwPNZ1OPOQZ2sPXc0X7FyWG85KzQWWx1L42HKyqnGSdfKD1Cp4Gklv
+ s.yjyIFWh2b4TbpxtU3d3zpT8GHlJsUKEe_JAsvtoQ2JfQ2hSWZAwUO7kZkw3wZd65lTrj4CHSs7
+ lFAOazCwoNl5BPyjQT5arUxpI7cFmLg8SD1Ki4BFGimxD2VdOplmG7AYfCn6ZIIwnNh9Y.WCC2YD
+ 4WHLmarLpHKhy_3j3OYEWg4fMJpOLH6c.fNT2r5y1s2oNfWAHPBA9BuTgqXE4W.v3agB2vRSvCyK
+ HdZY_dMYUfLw.fz7yPc3qAH7ih_l5wOcBVIiF2sOLgc7WFCDcU4j_aG3otUjCQd2XQYWfM8oJDU2
+ 2k__lCD7y3R57FazAtodBlKG9v.Qp1GEHeX27JCCgyanHa.xQtlOk5vc_nv6lhPwwSA2K9GmCbhG
+ SO9kXqS7CKH0KejL1gKzdIR28xB_y1QDCxgG.R9kWV1Wc.5NnGUUmu1gOVz3bfH_XnGe95DZkCu.
+ CHDLFU8Gm8bSoUeX9K7HPfLPD7YaqlOPGU5mawJ8Qs3TpijlXNDI1mDMaXwBH_gGJzAJJW4CpsDh
+ VaoPiI6hmns8SNP48u9B0IPIOJbOzGvVi3V1bWz.hQuDtsIn0jy6OABCl7t5ShvPzcKsUi19mjuW
+ GisI1myvV5iwVAio_W3v6N91CZWXI7jp3T0oBmvDw9L.DRfKnxK7S_wZhuNqzvgJaTjfOE8k39kE
+ gU.hV518xLKdBECCwCOV.ZLJQlvV9M7dufaigCBvTHzdEpl8JDqi79DRb95fxjsELVSmZX3fyT0O
+ HQ6xFqzykyx0ne_5IaR0XlTVsJ8392LXP5llW4w.gTj0fFiLqwUx6uQS4iUS6HaCo7m.3dt1dU48
+ 3zdu43.3yYOptPhBnR5Pyiidgz79bvhJh79MB.lDqQuTzBC_uaMW78jLiuoQ_aT4kIh4pwI0slOO
+ czpyosTFFDjj48d4H5K4KO4D39C7iMttTUBHfXSB1WYxcH83Q9A5x2MDiAvwGHXuYgbA2pwQxX7N
+ y9xnYPnX6Cltz7Ws9bZbIBM9nlTdxYv8.jXgsVvZJi6ep_nJhLMte1z3FkO3yysYpXmH.nGNOLQZ
+ XFnKLYguTo54NKRG.bQ1XKhJPZVUqggR.2VM8W9CuoyTx2b8BLKpaqy4Bzy4IiSQnNiUrP4g5HZT
+ pNFNKEkgvNyVgckZbtzjzwwLhUHPC3q6H0Xh4PUx7AjmePNCxgPqeZQS_Xv.PVjHuNTW4hX.S2yf
+ azHhy1WHlZHZAZx69T5iyCy0hLr1JS9h_ODXqRMcjucV6LzMgVhBAhzfwl14uEvCgWO1nScsAMWY
+ seahDmaOQ.zIolt7vWJ92fq03zA7uKgtihlL8CvPCnv_1l20qXEA3S6zBsFeBe7dLXiB4i86cg1i
+ dFHhB1OmXcXx1g.ntAGpxT0qFtHNBwOnkN4TgfHabokOEDx8uMt6OBFaeA3dR77TdfFyQU12OI8P
+ gVHK.nrBk91kcU99_zbwH3lS6drTGl0Gz57ysTybFlKMRqnBv.a9x0vVdz4rXU79dXiVLxdie04A
+ pcMMp.tKe1aUEdYlyQlqYiEzJhkytmNlH4HkKMNQVUcQlpfZj1HE-
+X-Sonic-MF: <namiltd@yahoo.com>
+X-Sonic-ID: dfd437aa-a2be-430d-af91-2298abfa9816
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.ne1.yahoo.com with HTTP; Sat, 10 Oct 2026 19:37:49 +0000
+Received: by hermes--production-ir2-5dd9bf4598-nf4w7 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 07f6395ff3499c6cf6e6a1a81cc87afc;
+          Sat, 10 Oct 2026 19:27:29 +0000 (UTC)
+Message-ID: <3dc433ad-f0c4-4679-ad8a-b4676cd7255c@yahoo.com>
+Date: Sat, 10 Oct 2026 21:27:26 +0200
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261009214501.GA905361@ax162> <CAF1bQ=Qq66JuvYrbR-7GgegZuWPSjxDOgerUSD2NOp9W0BauZw@mail.gmail.com>
-In-Reply-To: <CAF1bQ=Qq66JuvYrbR-7GgegZuWPSjxDOgerUSD2NOp9W0BauZw@mail.gmail.com>
-From: Rong Xu <xur@google.com>
-Date: Sat, 10 Oct 2026 20:50:12 +0200
-X-Gm-Features: AclHuK9XW8_fm_qLinjw3mJ_6Xz_X6pL-OrYahnEsVuiKXgP4DpOW6u5trcIM0Y
-Message-ID: <CAF1bQ=TGW3VK7LK-d0JeYhEc3WgTjypVhQc22CxxvRq=VqS5YQ@mail.gmail.com>
-Subject: Re: Build breakage from renamed '-split-machine-functions' plugin option
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Han Shen <shenhan@google.com>, llvm@lists.linux.dev, linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 8/8] net: dsa: realtek: rtl8365mb: re-latch the
+ family D SerDes
+To: kernel test robot <lkp@intel.com>, linusw@kernel.org,
+ alsi@bang-olufsen.dk, andrew@lunn.ch, olteanv@gmail.com, kuba@kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ linux@armlinux.org.uk, luizluca@gmail.com, maxime.chevallier@bootlin.com,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev-bot+sashiko@kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+References: <7e3518aa-4f99-4aae-bd9b-3984bdc4b548@yahoo.com>
+ <202610081722.Zoeli0ix-lkp@intel.com>
+Content-Language: pl
+From: Mieczyslaw Nalewaj <namiltd@yahoo.com>
+In-Reply-To: <202610081722.Zoeli0ix-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.26668 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-Hi Nathan,
+Thanks for the review. The issues are valid; I will respin as v3.
 
-Thanks for bringing this to our attention. We will need to rename the
-option accordingly.
-
-We need this option for ThinLTO (though not distributed ThinLTO).
-During a ThinLTO build, LD is called directly when building vmlinux.o,
-so the Clang driver change will not apply in this case.
-
-Please note that I am currently on vacation and may be slow to respond.
-
--Rong
-
-On Sat, Oct 10, 2026 at 8:46=E2=80=AFPM Rong Xu <xur@google.com> wrote:
->
-> Hi Nathan,
->
-> Thanks for bringing this to our attention. We will need to rename the opt=
-ion accordingly.
->
-> We need this option for ThinLTO (though not distributed ThinLTO). During =
-a ThinLTO build, LD is called directly when building vmlinux.o, so the Clan=
-g driver change will not apply in this case.
->
-> Please note that I am currently on vacation and may be slow to respond.
->
-> Thanks,
->
-> -Rong
->
->
-> On Fri, Oct 9, 2026 at 11:45=E2=80=AFPM Nathan Chancellor <nathan@kernel.=
-org> wrote:
->>
->> Hi Rong and Han,
->>
->> LLVM recently landed a commit renaming the '-split-machine-functions'
->> plugin option to '-function-splitting=3Dall':
->>
->>   https://github.com/llvm/llvm-project/commit/3e6acc87c58843e551d6e8e4bf=
-06c26712b04622
->>
->> This breaks builds with CONFIG_AUTOFDO and CONFIG_LTO_CLANG_THIN with:
->>
->>   ld.lld: error: -plugin-opt=3D-: ld.lld: Unknown command line argument =
-'-split-machine-functions'.  Try: 'ld.lld --help'
->>
->> Obviously, we can handle this rename but I noticed that the combination
->> of '-flto -fsplit-machine-functions' should add the corresponding
->> '-plugin-opt=3D' since LLVM 15:
->>
->>   https://github.com/llvm/llvm-project/commit/72acd042bad35f78232f17addc=
-02196a7af1a6e9
->>
->> So is this even necessary? Should we just remove
->>
->>   KBUILD_LDFLAGS +=3D -plugin-opt=3D-split-machine-functions
->>
->> from scripts/Makefile.autofdo and rely on '-fsplit-machine-functions' to
->> do the right thing or am I missing something here?
->>
->> --
->> Cheers,
->> Nathan
+pw-bot: cr
