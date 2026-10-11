@@ -1,197 +1,98 @@
-Received: from smtpout.efficios.com (smtpout.efficios.com [158.69.130.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25669443AB4;
-	Sun, 11 Oct 2026 19:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=158.69.130.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D671C33262B;
+	Sun, 11 Oct 2026 21:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791748156; cv=none; b=eLH6ZfrFMJs7XN7wde2BPmKhFrQdFn9MDgEppEbsbM/Cd/rI34YAO/FqfApmwSpT2o7EBw32BT7GelXV/+9Wsg1gWrnj9n9hkhjzzBrDO6hOzHV1Lo3W/UmaR6gjcYtajTQct45/VfE/3AY+BdBrxGTCvTgJ43jLxqc54++hKyI=
+	t=1791754544; cv=none; b=b4EzZhlN/Xbyqv31SSKEfK6/72MWZFCZBqdYA/r1H37FuCoF2L96Re7ijmJ3kbV42y1WP1BVhvfkEUrJ0hxOtBxY4ReXWeVvx0Lg+N9nJziFVEhee9bCTbXUOmNkIKKO1QomrZq3UX2ImHcYQIDh6e6CB/EHoumcdMK+Fmk9Rto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791748156; c=relaxed/simple;
-	bh=TtAWIJVotRhFVc5/Zcr6qtyk4ouWT3OIWNJrLpOLAOQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Axa3IyUuG8/a2vBXMtNPuc1qSGJqz7PklCBnWar5vwxo1Y9G/vpRfzIxxSXTvWZlpr1y/d+X0TzpOBXFpQUZDuYZvWteHHdDqa35Tp+mSL/gWNwNHKMjmpxxxdp0QreHxg4U/Iuz7byO/tT1G/hpaHhl77oexyIdVPnZoETzBBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=kMCbYXah; arc=none smtp.client-ip=158.69.130.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+	s=arc-20240116; t=1791754544; c=relaxed/simple;
+	bh=+pjj0FeaXMYUm+V+cqoYAftZoLBbqLSQOkzEKvz3EJs=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=J+TgI0oeYZpmyvih0N7lTBbLkos8ctunPx1WIsJw/OtxXlqRYQuAw1N+wOdB4eZmPHJzQ0lKiz71DYiLSu/x3Ik1zQ9o0DlE/NkmQ1mBaXQeRdOesCfmWV1ZRB4VMJ50iIVxoV5p90bEhqEgDC0jFvcM7E+bvJvhf+1yUcUNMww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XVVtk2gG; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="kMCbYXah"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-	s=smtpout1; t=1791748146;
-	bh=RkhbRL4OIsL1Dxt9Yr/GvUlPu9lfUGNaz88z9suH4Ns=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kMCbYXahriyssY8V5buxaBdgsSDoErBOedhxeP2HfnUOwrM4o6GxxL6DQ28q2V4eN
-	 XFKxC6nVEIJ6n7UGljg13vOhmhQoxSzLJBheymUKnGb7/UDz8Jar/JaJp057NwVcfn
-	 aTgVKyH31JIETSyE3zaNIBwGaO5EZkPL8to1xvx7u3thlJbZbA9RK1CLdzaO1iykos
-	 TK7tn7ABZkbUOhyM4eFm+uQUoiUOQsKwfLiXmUeWKzBP0KlWtR74k9v9jI/XGWxAo5
-	 hzrDy0zl80PfSMppGDDkegZVnt6AhkNjSB/Dph7JqbZXSRC/38V+vrMebAUc2Xuanx
-	 V/fxkmqxZEqwg==
-Received: from compudjdev.. (mtl.efficios.com [216.120.195.104])
-	by smtpout.efficios.com (Postfix) with ESMTPSA id 4j2rl65Wr0zlsh;
-	Sun, 11 Oct 2026 15:49:06 -0400 (EDT)
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To: "Paul E . McKenney" <paulmck@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Will Deacon <will@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	John Stultz <jstultz@google.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang1211@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Waiman Long <longman@redhat.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	maged.michael@gmail.com,
-	Mateusz Guzik <mjguzik@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	rcu@vger.kernel.org,
-	linux-mm@kvack.org,
-	lkmm@lists.linux.dev,
-	Nikita Popov <github@npopov.com>,
-	llvm@lists.linux.dev,
-	Lian Wang <lianux.mm@gmail.com>,
-	Kunwu Chan <kunwu.chan@gmail.com>
-Subject: [PATCH hazptr v3 3/4] Documentation: RCU: Refer to ptr_eq()
-Date: Sun, 11 Oct 2026 15:48:49 -0400
-Message-ID: <20261011194902.97364-4-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261011194902.97364-1-mathieu.desnoyers@efficios.com>
-References: <20261011194902.97364-1-mathieu.desnoyers@efficios.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XVVtk2gG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791754542; x=1823290542;
+  h=date:from:to:cc:subject:message-id;
+  bh=+pjj0FeaXMYUm+V+cqoYAftZoLBbqLSQOkzEKvz3EJs=;
+  b=XVVtk2gGJdSb/W/t2iOyBrJfSNj2BX8p08220Bgl1cRMBCzehD0o+JAz
+   TF1v/7wRyb93tWcYDUkGtJpEVYo8L/IFkd20iAXA/VBbm9jR71GrBOOpa
+   FA60CAl/mWwvaKuI+AumpzUZj082vSjfKLqDr75T3jot2qgA/ERszMnMK
+   CK/HTgLtxGicQiWrd8/RzPKypp469XKxvjXCuZJlReCY9kZgFuqCxjI1x
+   2+FiZIY35vpDvWWCiZ9vadxoDIM7JhV5vvAfRGUxGNPHIGpG+xjLEbzhY
+   IbL60aUUvfW5NKk8Qh+UpKCLzeAOwdrFdWGXMnVFgJdYcKSzi8XBO7Mxn
+   A==;
+X-CSE-ConnectionGUID: UJD0OZoIQliq+R21uXT+5Q==
+X-CSE-MsgGUID: WyBFYITQTueFszovyAGMNA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11932"; a="360737"
+X-IronPort-AV: E=Sophos;i="6.27,152,1787036400"; 
+   d="scan'208";a="360737"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2026 14:35:41 -0700
+X-CSE-ConnectionGUID: hAAtQ9E7RgC5gggq/kmmLw==
+X-CSE-MsgGUID: uTyPzQByTueVWkV9Kcs6jw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,152,1787036400"; 
+   d="scan'208";a="666731"
+Received: from igk-lkp-server01.igk.intel.com (HELO d0de6c2a75a7) ([10.211.93.152])
+  by orviesa007.jf.intel.com with ESMTP; 11 Oct 2026 14:35:40 -0700
+Received: from kbuild by d0de6c2a75a7 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xG1Ci-000000009eV-2jk1;
+	Sun, 11 Oct 2026 21:35:36 +0000
+Date: Sun, 11 Oct 2026 23:35:31 +0200
+From: kernel test robot <lkp@intel.com>
+To: Kees Cook <kees@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>,
+ Nathan Chancellor <nathan@kernel.org>
+Subject: ld.lld: error: undefined symbol:
+ __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
+Message-ID: <202610112311.o9XQsWsa-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Refer to ptr_eq() in the rcu_dereference() documentation.
+Hi Kees,
 
-ptr_eq() is a mechanism that preserves address dependencies when
-comparing pointers, and should be favored when comparing a pointer
-obtained from rcu_dereference() against another pointer.
+FYI, the error/warning still remains.
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
-Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Will Deacon <will@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Alan Stern <stern@rowland.harvard.edu>
-Cc: John Stultz <jstultz@google.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Frederic Weisbecker <frederic@kernel.org>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Josh Triplett <josh@joshtriplett.org>
-Cc: Uladzislau Rezki <urezki@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Lai Jiangshan <jiangshanlai@gmail.com>
-Cc: Zqiang <qiang.zhang1211@gmail.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Waiman Long <longman@redhat.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: maged.michael@gmail.com
-Cc: Mateusz Guzik <mjguzik@gmail.com>
-Cc: Gary Guo <gary@garyguo.net>
-Cc: rcu@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: lkmm@lists.linux.dev
-Cc: Nikita Popov <github@npopov.com>
-Cc: llvm@lists.linux.dev
-Cc: Lian Wang <lianux.mm@gmail.com>
-Cc: Kunwu Chan <kunwu.chan@gmail.com>
----
-Changes since v1:
-- Include feedback from Paul E. McKenney.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d6d3455d8751854e0d1820f14184682e23ac4475
+commit: 23ef9d439769d5f35353650e771c63d13824235b kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI
+date:   1 year, 1 month ago
+config: x86_64-randconfig-2000-20261011 (https://download.01.org/0day-ci/archive/20261011/202610112311.o9XQsWsa-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261011/202610112311.o9XQsWsa-lkp@intel.com/reproduce)
 
-Changes since v0:
-- Include feedback from Alan Stern.
----
- Documentation/RCU/rcu_dereference.rst | 38 +++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 5 deletions(-)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Fixes: 23ef9d439769 ("kcfi: Rename CONFIG_CFI_CLANG to CONFIG_CFI")
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610112311.o9XQsWsa-lkp@intel.com/
 
-diff --git a/Documentation/RCU/rcu_dereference.rst b/Documentation/RCU/rcu_dereference.rst
-index 5bc3785ebfc2..85b5f79ebf14 100644
---- a/Documentation/RCU/rcu_dereference.rst
-+++ b/Documentation/RCU/rcu_dereference.rst
-@@ -104,11 +104,12 @@ readers working properly:
- 	after such branches, but can speculate loads, which can again
- 	result in misordering bugs.
- 
---	Be very careful about comparing pointers obtained from
--	rcu_dereference() against non-NULL values.  As Linus Torvalds
--	explained, if the two pointers are equal, the compiler could
--	substitute the pointer you are comparing against for the pointer
--	obtained from rcu_dereference().  For example::
-+-	Use operations that preserve address dependencies (such as
-+	"ptr_eq()") to compare pointers obtained from rcu_dereference()
-+	against non-NULL pointers. As Linus Torvalds explained, if the
-+	two pointers are equal, the compiler could substitute the
-+	pointer you are comparing against for the pointer obtained from
-+	rcu_dereference().  For example::
- 
- 		p = rcu_dereference(gp);
- 		if (p == &default_struct)
-@@ -125,6 +126,29 @@ readers working properly:
- 	On ARM and Power hardware, the load from "default_struct.a"
- 	can now be speculated, such that it might happen before the
- 	rcu_dereference().  This could result in bugs due to misordering.
-+	Performing the comparison with "ptr_eq()" ensures the compiler
-+	does not perform such transformation.
-+
-+	If the comparison is against another pointer, the compiler is
-+	allowed to use either pointer for the following accesses, which
-+	loses the address dependency and allows weakly-ordered
-+	architectures such as ARM and PowerPC to speculate the
-+	address-dependent load before rcu_dereference().  For example::
-+
-+		p1 = READ_ONCE(gp);
-+		p2 = rcu_dereference(gp);
-+		if (p1 == p2)  /* BUGGY!!! */
-+			do_default(p2->a);
-+
-+	The compiler can use p1->a rather than p2->a, destroying the
-+	address dependency.  Performing the comparison with "ptr_eq()"
-+	ensures the compiler preserves the address dependencies.
-+	Corrected code::
-+
-+		p1 = READ_ONCE(gp);
-+		p2 = rcu_dereference(gp);
-+		if (ptr_eq(p1, p2))
-+			do_default(p2->a);
- 
- 	However, comparisons are OK in the following cases:
- 
-@@ -204,6 +228,10 @@ readers working properly:
- 		comparison will provide exactly the information that the
- 		compiler needs to deduce the value of the pointer.
- 
-+	When in doubt, use operations that preserve address dependencies
-+	(such as "ptr_eq()") to compare pointers obtained from
-+	rcu_dereference() against non-NULL pointers.
-+
- -	Disable any value-speculation optimizations that your compiler
- 	might provide, especially if you are making use of feedback-based
- 	optimizations that take data collected from prior runs.  Such
--- 
-2.43.0
+All errors (new ones prefixed by >>):
 
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_encrypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1345 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1345)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_encrypt_32way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_decrypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1370 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1370)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_decrypt_32way)
+--
+>> ld.lld: error: undefined symbol: __kcfi_typeid_aria_aesni_avx2_gfni_ctr_crypt_32way
+   >>> referenced by aria-aesni-avx2-asm_64.S:1395 (arch/x86/crypto/aria-aesni-avx2-asm_64.S:1395)
+   >>>               vmlinux.o:(__cfi_aria_aesni_avx2_gfni_ctr_crypt_32way)
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
