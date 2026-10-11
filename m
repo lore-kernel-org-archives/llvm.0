@@ -1,50 +1,45 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9DAC466B66;
-	Sun, 11 Oct 2026 22:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B30446C832;
+	Sun, 11 Oct 2026 22:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791758065; cv=none; b=ukbashPB0sd5ZcfPtp9hqyPacsbaIfBDFinfwD76G+EU+aGHqCwCFNMOODFRiV8tONMsUjw0TH4xm0kmJUUqc0RcrWpXNNIfCoEc8TOKrP7de2YrFLekhn24JE5MFf+IulHHSHTuESuwY2v4DLdE007rAdY6NbYVSYP3Ah2DoOA=
+	t=1791758067; cv=none; b=jwqvgCLhnUMN/UbntfjoLRZ+WrzGDDhwWdFsBz3Z8saG8UZy6tfnvYvnFIxPsKAKEOb8cltkUNmhJ7djWc8Qcdk/tksB9OaRe3T8zL+DuKuGs+koTLU/Vgj/MEIc/2X/yVXnlhKHibg037J97HMmPrZSbQFuQPHfTomdA5LXGV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791758065; c=relaxed/simple;
-	bh=vKHfQJH7q8NsLRwBDeVe3ncyqb8RyOUGpEadzNk2PgA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Uc1vfPXMgYk7eLL3dJitLa4J3QVErUC0VbfiLAFM+WzRldHhlRfb1Luv5n9MtxkSXebT0lAjT3BjnwkJt6xqbVZtbtQbKqPUzwnghnGa3RrrIc3wRctXIYfl6vd61Q43rfKlQr8hgtouPdwXUcaaL5VtKukSiovUEEYncqARxVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UZ3wBnZX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791758067; c=relaxed/simple;
+	bh=iFWSeXt4IkuSPGBClUsUtxNeKD3QE1xQ34dzJ1oOdTw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eaGhpKo8A+vXrATzm3KlJoJSkPXsUD27oZ6T/LWj6zAkkzUkPhGm8TqrC97VNKjsiVLq966F+gIGUm7AkkKDSdAgERnXOq5EvwFxnWL636d/QsqGhl7qJ70dyi2Mb+7u7OwLv/GKzkqh7EFUEtii1/rY0rSXK67+hPbRQcTbWtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BRH+o2LY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UZ3wBnZX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F59A1F0089D;
-	Sun, 11 Oct 2026 22:34:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BRH+o2LY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662831F0089B;
+	Sun, 11 Oct 2026 22:34:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791758064;
-	bh=pBF0WeX0/lVbx/8CGIC1rTeqX0LSx6Yl8hI9Hq/vKlU=;
+	s=k20260515; t=1791758066;
+	bh=ByMa4MaE6Y8d0cyku8fCUd0wmoUCAmy7PZy2XLjvv2w=;
 	h=From:To:Cc:Subject:Date;
-	b=UZ3wBnZXoSh4sztMcQe++jJPR4XJw5k5jFVq0fZdiIV8t8Dza4uR/7qexL1URNSHQ
-	 Enb2UX1AKFTeubYZd7xXvHRufj+aJV+wq+nsSal5GpvFK6zAFRglJ/VTtkKk6/EFpa
-	 c+UwdYrVR2AFzWFjoQxtzIqxria/DJA+9InakCTzwP2m8NNeWgSOTZWnHN2sHZO1ou
-	 uYx338dkJZwKtJSOSUWAZ7admkFLD3eH538S3e2Fm2mk1fggSyLKCcKcVRo0v0dw1a
-	 Kb23MWai8bqucLRlRiTLY3bFLLP1Uk4eip9ooVj1gjIeAy1OgWwsuur9oyNtI3NoYx
-	 OtMBuR7sGISlQ==
+	b=BRH+o2LY0exKrfiaHEXnrq5LjWgTTgUX2eJgbg9v8R4umH1yN9Q8cq8hd/ZE/HI5P
+	 CydM+2EgRNETvwCL/YD12fQVF1sZ1GO1BWGxdUbdsqVBIXqFIeZO+aHokPz2o+RDjr
+	 LZ7zAh4OSDoVwf0XcG+34oqLwEvwYfnKTejdNfI9BZ6Nw4iGcq2Df2SMwyPTVs5DiR
+	 +z+7QY7lffoamg/4t4Lcq56GaNXY5f7k+2hPQXYXcZ7xlSoO43pO4/+575NUFayMrr
+	 JgnvgUjhFdoxFO0TM1zjkEQZc+5HMXKoH/PGOESCHPJmorUxy23mQzJK0x0+5Reo/D
+	 E/xeVSJ0T2VSQ==
 From: Sasha Levin <sashal@kernel.org>
-To: "K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>,
-	Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
+To: Masami Hiramatsu <mhiramat@kernel.org>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
-	Mary Hardy <maryhardy@microsoft.com>,
-	Saurabh Sengar <ssengar@linux.microsoft.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+	Ben Hutchings <benh@debian.org>
 Cc: Sasha Levin <sashal@kernel.org>,
-	linux-hyperv@vger.kernel.org,
+	stable@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH] tools: hv: remove unused rte_smp_mb()
-Date: Sun, 11 Oct 2026 18:33:40 -0400
-Message-ID: <20261011223358.2327625-12-sashal@kernel.org>
+Subject: [PATCH] bootconfig: give the footer size static_assert a message
+Date: Sun, 11 Oct 2026 18:33:41 -0400
+Message-ID: <20261011223358.2327625-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -54,38 +49,34 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-rte_smp_mb() has never been used, and its "static inline __always_inline"
-declares inline twice, so clang warns:
+static_assert() without a message is a C23 feature, so clang warns:
 
-  vmbus_bufring.c:61:15: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
-  vmbus_bufring.c:62:1: warning: unused function 'rte_smp_mb' [-Wunused-function]
+  main.c:498:56: warning: '_Static_assert' with no message is a C23 extension [-Wc23-extensions]
 
-Remove it.
+Add a message.
 
-Fixes: 45bab4d746510 ("tools: hv: Add vmbus_bufring")
+Fixes: 6ed5e20466c79 ("bootconfig: Fix unaligned access when building footer")
+Cc: stable@vger.kernel.org
 Assisted-by: LLM
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/hv/vmbus_bufring.c | 6 ------
- 1 file changed, 6 deletions(-)
+ tools/bootconfig/main.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/hv/vmbus_bufring.c b/tools/hv/vmbus_bufring.c
-index bac32c1109df8..23542e59a2ee9 100644
---- a/tools/hv/vmbus_bufring.c
-+++ b/tools/hv/vmbus_bufring.c
-@@ -58,12 +58,6 @@ void vmbus_br_setup(struct vmbus_br *br, void *buf, unsigned int blen)
- 	br->dsize = blen - sizeof(struct vmbus_bufring);
- }
+diff --git a/tools/bootconfig/main.c b/tools/bootconfig/main.c
+index 17d971d47f879..df05340358578 100644
+--- a/tools/bootconfig/main.c
++++ b/tools/bootconfig/main.c
+@@ -495,7 +495,8 @@ static int apply_xbc(const char *path, const char *xbc_path)
+ 	footer.size = htole32(size);
+ 	footer.csum = htole32(csum);
+ 	memcpy(footer.magic, BOOTCONFIG_MAGIC, BOOTCONFIG_MAGIC_LEN);
+-	static_assert(sizeof(footer) == BOOTCONFIG_FOOTER_SIZE);
++	static_assert(sizeof(footer) == BOOTCONFIG_FOOTER_SIZE,
++		      "bootconfig footer size mismatch");
+ 	memcpy(data + size, &footer, BOOTCONFIG_FOOTER_SIZE);
  
--static inline __always_inline void
--rte_smp_mb(void)
--{
--	asm volatile("lock addl $0, -128(%%rsp); " ::: "memory");
--}
--
- static inline int
- rte_atomic32_cmpset(volatile uint32_t *dst, uint32_t exp, uint32_t src)
- {
+ 	total_size = size + BOOTCONFIG_FOOTER_SIZE;
 -- 
 2.53.0
 
