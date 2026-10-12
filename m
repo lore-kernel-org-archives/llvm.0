@@ -1,58 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C953B18DB1A;
-	Mon, 12 Oct 2026 08:50:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE88246DFEE;
+	Mon, 12 Oct 2026 08:53:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795013; cv=none; b=PuCiDCswK2WtK7V5SnIjXNuUXX2z/vdQZP4ZFPeql19xxVsd2d32gYhhxUzWecXg0mDK0s8JjpQPNqWXw67SKAELLuj+506tQWGGBMGXMbNVPHGMQxUJqQlvgr2LheSHl2wdCTE/RuZVD6F+CR35eJF0D0ZkWlLFqNiCOGXZhis=
+	t=1791795192; cv=none; b=DtiGcZLd2AcOdseAXe5/3LPQF306O3meGFgRf5L1QsQL5bLPUYb/ROTtr4Ei05teWwib843dPruX6JS1PW19dzPHNH9hvj/85r0QRDGwPt81RKVuUvk++gYV66zNUd0Tk9VYhL5eEh/wenqr6N/7dnzwFKB58M59/Gp0MIWEBug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795013; c=relaxed/simple;
-	bh=7ISCil6EtesuDmXpsnwTWhFBP9AJy83KsX+CKGxVGeo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=j6ZENZKwx+HwDKldzrouAVKJYaIba/6EZsZIZ/IbqR7HaseBcHsQk/D4bhqkf4+40689T+cbby8ZsS7SaSy19A+3ocVAEsxRsWP1sSsoYcjgVhmUdaeuYcmJnfxW2SiL8NWJgcIXn0uV5rCPRsMMu8bv7vem7F3Ds/TVJ9tIHkU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fxTUUhgQ; arc=none smtp.client-ip=192.198.163.10
+	s=arc-20240116; t=1791795192; c=relaxed/simple;
+	bh=+s7hEjworOHhNb0b2A452OZm1DnkwBzB1PdtrLn27VM=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=RsaS+sQT8czWv3mxuCy5Yw6Mm7zGIR3eHyKG6viPFcfwNJMCoxt+pH+bYiMXj4SDI/MzBNqwAPOnSW5BJvOpoJb9NYQeQdGNMav+3AcJfagZz1g6zd23FQDMu+KBAeqvkBYGFICGVQ6qmRMyypFXcg0wM2S9OIwXasHZyn8atyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SXsQxkK6; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fxTUUhgQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SXsQxkK6"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791795011; x=1823331011;
+  t=1791795191; x=1823331191;
   h=date:from:to:cc:subject:message-id;
-  bh=7ISCil6EtesuDmXpsnwTWhFBP9AJy83KsX+CKGxVGeo=;
-  b=fxTUUhgQz/aKcnUrRmoGY1OG7dffP0bQOfE/sAr/Rnx6UB8zSXc5re0C
-   OGWEP0A10NEz3XW58Z6gnp531sssAb7nJMJLmr1VdRU5wY93EcpWiCPrI
-   CJELPWtklBnDLdPq++UCOmNRSgY24FRmxadvlBulZ1bbPfHxqaWwVnBVQ
-   xrdxVpbpoJ6mv0q3Q3ynIEUVeWGm/KhITQ8A/S4XUO9wwC+VD5kB5puvZ
-   /BS06+UPh5PK/Rhx46e9BavbPEV47awXk4uLo5r01HWE2jTCBuGCcj8yP
-   bzbkOPKAAI+P59B2TOJrpB33psHV3uo1vAjL7z57tOuf9vnwARVKeONXM
-   w==;
-X-CSE-ConnectionGUID: DJtUv2hBRDyy1ghPfItA9g==
-X-CSE-MsgGUID: QXiB+y7dR466UYH1jUwFVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11932"; a="405827"
+  bh=+s7hEjworOHhNb0b2A452OZm1DnkwBzB1PdtrLn27VM=;
+  b=SXsQxkK6zWK0Kg/mzb4o92Bsg0GZPiIXTIirYzf8yYSWDIFkGQwi3JdH
+   Vbna86nq+5tW1zdvtqZmIsRGE6i5BFI4ryy2ikWoEv29TntZY6UwawbUL
+   WtQV5xMELUhJ5oM8zbHgub5yzEfDw/9UqgPlhU3pTTW11nYPyUr0kdX/j
+   1Z/yqwAxvAECKcZn4U0XdWMmp3KI8eTb997bqjWqdQ+PXQJI66zq5KSbi
+   UDfDobUAXH1TsmY6wCXygIKor3HJv+EFJb0EcrGOcrKQ+OKTTqs6WNGwX
+   6HOZh57QOtDjy/z/n5t2Mns3Ws+hR8pQlpQc01Sa3xtgeM5ACcYiUvs3H
+   g==;
+X-CSE-ConnectionGUID: 8jX9oqueSjm8u92OKb2LeQ==
+X-CSE-MsgGUID: woOgcAkRTUuFbxL4eEh3tg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11932"; a="383182"
 X-IronPort-AV: E=Sophos;i="6.27,153,1787036400"; 
-   d="scan'208";a="405827"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 01:50:10 -0700
-X-CSE-ConnectionGUID: J5OBVFvgS2mYXYqdTVRUeQ==
-X-CSE-MsgGUID: MxEyQm6gTFqmQYA/tnhELw==
+   d="scan'208";a="383182"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 01:53:10 -0700
+X-CSE-ConnectionGUID: RIDsohrxSC+sHHbzshCCPg==
+X-CSE-MsgGUID: 6hGqDbTgTWiAIlNIeggCWQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,153,1787036400"; 
-   d="scan'208";a="757948"
+   d="scan'208";a="821385"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Oct 2026 01:50:08 -0700
+  by orviesa002.jf.intel.com with ESMTP; 12 Oct 2026 01:53:09 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xGBjS-00000000BG5-1wdQ;
-	Mon, 12 Oct 2026 08:50:06 +0000
-Date: Mon, 12 Oct 2026 16:49:16 +0800
+	id 1xGBmM-00000000BGL-37mu;
+	Mon, 12 Oct 2026 08:53:06 +0000
+Date: Mon, 12 Oct 2026 16:52:29 +0800
 From: kernel test robot <lkp@intel.com>
 To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
 Subject: [dhowells-fs:netfs-crypt 30/30]
- fs/netfs/direct_write.c:128:7: warning: variable 'fpos2' is used
- uninitialized whenever 'if' condition is true
-Message-ID: <202610121609.YtjUCNyA-lkp@intel.com>
+ fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used
+ uninitialized whenever 'if' condition is false
+Message-ID: <202610121621.oAIK4kei-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -63,18 +63,18 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
 head:   870d31c7b4cbee9e73019466181a2e0c2c1094f8
 commit: 870d31c7b4cbee9e73019466181a2e0c2c1094f8 [30/30] netfs: Support encryption on unbuffered/DIO write
-config: x86_64-randconfig-1006-20261012 (https://download.01.org/0day-ci/archive/20261012/202610121609.YtjUCNyA-lkp@intel.com/config)
+config: x86_64-randconfig-1007-20261012 (https://download.01.org/0day-ci/archive/20261012/202610121621.oAIK4kei-lkp@intel.com/config)
 compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261012/202610121609.YtjUCNyA-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261012/202610121621.oAIK4kei-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610121609.YtjUCNyA-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610121621.oAIK4kei-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/netfs/direct_write.c:128:7: warning: variable 'fpos2' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
+   fs/netfs/direct_write.c:128:7: warning: variable 'fpos2' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
      128 |                 if (before && part <= 2 * PAGE_SIZE) {
          |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    fs/netfs/direct_write.c:171:53: note: uninitialized use occurs here
@@ -111,7 +111,7 @@ All warnings (new ones prefixed by >>):
          |                                 ~~~~~~~~~~~~~~
      143 |                                 slot = 0;
          |                                 ~~~~~~~~~
-   fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+>> fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
      125 |         if (to == end && subreq->start + subreq->len < to) {
          |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
    fs/netfs/direct_write.c:171:53: note: uninitialized use occurs here
@@ -120,7 +120,7 @@ All warnings (new ones prefixed by >>):
    fs/netfs/direct_write.c:125:2: note: remove the 'if' if its condition is always true
      125 |         if (to == end && subreq->start + subreq->len < to) {
          |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
+   fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
      125 |         if (to == end && subreq->start + subreq->len < to) {
          |             ^~~~~~~~~
    fs/netfs/direct_write.c:171:53: note: uninitialized use occurs here
@@ -133,7 +133,7 @@ All warnings (new ones prefixed by >>):
      103 |         uoff_t fpos1, fpos2;
          |                            ^
          |                             = 0
->> fs/netfs/direct_write.c:563:22: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+   fs/netfs/direct_write.c:563:22: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
      563 |                 stream->buffered = ret;
          |                                    ^~~
    fs/netfs/direct_write.c:475:13: note: initialize the variable 'ret' to silence this warning
@@ -143,7 +143,7 @@ All warnings (new ones prefixed by >>):
    4 warnings generated.
 
 
-vim +128 fs/netfs/direct_write.c
+vim +125 fs/netfs/direct_write.c
 
     93	
     94	/*
@@ -180,7 +180,7 @@ vim +128 fs/netfs/direct_write.c
  > 125		if (to == end && subreq->start + subreq->len < to) {
    126			size_t part = end - subreq->start;
    127	
- > 128			if (before && part <= 2 * PAGE_SIZE) {
+   128			if (before && part <= 2 * PAGE_SIZE) {
    129				struct bvecq *bq;
    130				size_t page0 = PAGE_SIZE - before->bv[0].bv_offset;
    131				int slot;
