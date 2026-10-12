@@ -1,48 +1,47 @@
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F277C348C7C
-	for <llvm@lists.linux.dev>; Mon, 12 Oct 2026 17:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A964D956D;
+	Mon, 12 Oct 2026 18:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791827501; cv=none; b=FBtX494EAgwTwCYsKhEdkbcu2s0xvd+qZZma5NDKw5s5Me3BZElZEnAbeBKhz2ZPuzLjbd+y6aXiOUb2M1QTqS/sqHP02VG1jhPLtsayodNFh+jImnBqeiEpsYAonreLIp4mDwi1tG3Lk19oJT/JtKwA2H0GV1Ulyh7olZipAME=
+	t=1791830465; cv=none; b=p3x+dZNIcvkOrPvnt0lsDl/9pxFhBR5gO9/YpgZOqzLBokdNPgM+J7lJMPcrE1rjGstOdq3hnKPd9rm9LDdQa59lorKsDyirtRDv7o+MMNpKQyxx80chuzQDnA9ntIAAqcRo/XC+mFmdpq0sOVbK4dSfreYFg2OC5NeT0fy8pok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791827501; c=relaxed/simple;
-	bh=8EEBTF511ETJq4Mm9C2quPFvfKDHChn8bxjmp5fFzN8=;
+	s=arc-20240116; t=1791830465; c=relaxed/simple;
+	bh=2RYhboUm294LPHQVALh9L0eDB51UX/1aKGwNysxu+R8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CvWuOs6UIqg1gIwHDcUsyfQKfzzKmrPDWYnsKCZIEBhhGlLrfahzws/eLGHVqSk2A6JkbSZNNZ7cvx04ha0PMUJuQ88DnD/hffnRa5gOmEl5JmkPyAujasuSuzvZQIFC1BD/DVs9ljmlyWwW6jyKhhWOfIrWR6jDXfe1evEj0vc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=fB5YgU/Y; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=jlaKZFWbtcgFip8muwZDA8d9nAhUNwwZlzpY/YNRzgmfFGGqDOk2CnVkKv/uR6mKAFyVqHf/eFDXAeUHRF/nMbJ6Jj21v2Uc/MH4loEni5skCl7F+dSZtVsEO7CIuMRZOMbnreISywAnpbnwad+6UFGHf0r4tcrglaarPIoWBhc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TrBZQGyz; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="fB5YgU/Y"
-Received: by linux.microsoft.com (Postfix, from userid 1216)
-	id 0F87F20B7166; Mon, 12 Oct 2026 10:51:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 0F87F20B7166
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1791827496;
-	bh=pxy81f68wAn9b0dFCG+7MRKSJwe2CfB3+1h/k+wpJRg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fB5YgU/Y1p1kCuW3/V8u2f4+qHDDKszWxISSF8lALOVg2y8+x34DczdjNYyRd00l4
-	 y7RQI6WvMJ7Nkgq3JzKNrCLKCMg50Js8FWXxvdY7sVNMCCImlDzHDiB6J+rYCKvoMA
-	 mC72qManyABYfvYS6VV7lruZ1npDiO6fvqm0/FHA=
-Date: Mon, 12 Oct 2026 13:51:36 -0400
-From: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
-To: Sasha Levin <sashal@kernel.org>
-Cc: "K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Long Li <longli@microsoft.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TrBZQGyz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CAA1F0089B;
+	Mon, 12 Oct 2026 18:41:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791830463;
+	bh=4TdtsTHdQ41W4OUZCv5jF0QWzU8uLyAJ8WWWW/d1wkE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=TrBZQGyzdNz1wh7v9M+LQDrDEs9hXGL+bsP+UEGwwJ6lVYwOKEaJlgg6QG7Wzrcjl
+	 TA+Mn/YJarxFxJ1hqraPMH9GkK6veZUKAfKJraXwrODq6r80BCWdXJE+SPM+mZUD7L
+	 INLjdud2Cj8nXhB9+0dvotOuoL+X264H/3ke9iAQSQgKaH4rYExs9K01ehsnPdXsQU
+	 vDvsr53/ja16Ouo+mhK395MCF79WnfxKL6SO4G+m38meozxCYWpQdrscEvwTS9eOYh
+	 TqXwzBqnW8cdnDmahjzHzn7ZAQct57PKhOTfNfRRRvBYVYn60cWeXFM73RSXpEbJJK
+	 FKpE4oaKz1y6w==
+Date: Mon, 12 Oct 2026 11:41:03 -0700
+From: Kees Cook <kees@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Mary Hardy <maryhardy@microsoft.com>,
-	Saurabh Sengar <ssengar@linux.microsoft.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] tools: hv: remove unused rte_smp_mb()
-Message-ID: <as0eKHYtyIYSlfKP@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <20261011223358.2327625-12-sashal@kernel.org>
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 3/3] objtool: Skip jump table jumps in the kCFI indirect
+ call check
+Message-ID: <20261012183925.ca026d-kees@kernel.org>
+References: <20261012090424.i.497-kees@kernel.org>
+ <20261012090436.1676525-3-kees@kernel.org>
+ <20261012092250.GO4121339@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -51,44 +50,41 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261011223358.2327625-12-sashal@kernel.org>
+In-Reply-To: <20261012092250.GO4121339@noisy.programming.kicks-ass.net>
 
-On Sun, Oct 11, 2026 at 06:33:40PM -0400, Sasha Levin wrote:
-> rte_smp_mb() has never been used, and its "static inline __always_inline"
-> declares inline twice, so clang warns:
-> 
->   vmbus_bufring.c:61:15: warning: duplicate 'inline' declaration specifier [-Wduplicate-decl-specifier]
->   vmbus_bufring.c:62:1: warning: unused function 'rte_smp_mb' [-Wunused-function]
-> 
-> Remove it.
-> 
-> Fixes: 45bab4d746510 ("tools: hv: Add vmbus_bufring")
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Mon, Oct 12, 2026 at 11:22:50AM +0200, Peter Zijlstra wrote:
+> I am confused.. I don't see a computed goto in __bpf_prog_run(), and we
+> build with -fno-jump-tables.
 
-Reviewed-by: Hamza Mahfooz <hamzamahfooz@linux.microsoft.com>
+It's the interpreter, ___bpf_prog_run() (three underscores) in
+kernel/bpf/core.c, not the __bpf_prog_run() wrapper in filter.h:
 
-> ---
->  tools/hv/vmbus_bufring.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/tools/hv/vmbus_bufring.c b/tools/hv/vmbus_bufring.c
-> index bac32c1109df8..23542e59a2ee9 100644
-> --- a/tools/hv/vmbus_bufring.c
-> +++ b/tools/hv/vmbus_bufring.c
-> @@ -58,12 +58,6 @@ void vmbus_br_setup(struct vmbus_br *br, void *buf, unsigned int blen)
->  	br->dsize = blen - sizeof(struct vmbus_bufring);
->  }
->  
-> -static inline __always_inline void
-> -rte_smp_mb(void)
-> -{
-> -	asm volatile("lock addl $0, -128(%%rsp); " ::: "memory");
-> -}
-> -
->  static inline int
->  rte_atomic32_cmpset(volatile uint32_t *dst, uint32_t exp, uint32_t src)
->  {
-> -- 
-> 2.53.0
-> 
+	static const void * const jumptable[256] __annotate_jump_table = {
+		[0 ... 255] = &&default_label,
+		...
+	};
+	...
+	select_insn:
+		goto *jumptable[insn->code];
+
+So it's a manually constructed jump table, not the "normal"
+table-from-switch stuff that -fno-jump-tables suppresses (though see
+below about Clang). objtool already knows about it, with annotations
+added back in 2019 in commit e55a73251da33 ("bpf: Fix ORC unwinding in
+non-JIT BPF code").
+
+With retpolines, GCC emits a single dispatch that every handler uses:
+
+	movzbl (%rbx),%esi
+	movzbl %sil,%edx
+	mov    jumptable(,%rdx,8),%rdx
+	jmp    __x86_indirect_thunk_rdx
+
+Clang never has this jump: with retpolines, LLVM's IndirectBrExpand pass
+turns the label addresses into indexes and the "goto *" into a switch,
+which Clang's -fno-jump-tables then makes a compare tree. So it's only
+constructed this way under GCC, but since now we can turn on kCFI with
+GCC, the objtool warning about indirects without kcfi protection trips.
+
+-- 
+Kees Cook
