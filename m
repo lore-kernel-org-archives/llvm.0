@@ -1,69 +1,72 @@
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010043.outbound.protection.outlook.com [52.101.201.43])
+Received: from BYAPR05CU005.outbound.protection.outlook.com (mail-westusazon11010015.outbound.protection.outlook.com [52.101.85.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E58D4BF956
-	for <llvm@lists.linux.dev>; Mon, 12 Oct 2026 17:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB4184C224E
+	for <llvm@lists.linux.dev>; Mon, 12 Oct 2026 17:37:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.85.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791826648; cv=fail; b=ttiqbDEmyVccE6c9WozrtCOseUv4FNGG+ZgGTsOVmr8Q+UeY1/sJoYGSJMvpQSDYPzzZL3SP9tsP4/EKTg2LfoAj1huoAo8y5iD591HiuEDT4XNcbXRsHvbCgAexl8h9Pf6D7fPDQxVRUXd734ArVeSKcXjVd0cOjRLNAoT3Y1U=
+	t=1791826658; cv=fail; b=r5wxctEOULTkEIMdmRbotxYo1XZBe8ipwX5c5aiPJ4phxzwgnEboIy+kXQogt+grmU07G0VKA3VR0/hkkL4jqH0AVmBlGtmNoBNe/bCK2UX68xfDfrfRw7v7Bnqrc0AhH0NQ4Ey08FLr6Jg14NkVLmm/c8beX1BONsSemML4XTQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791826648; c=relaxed/simple;
-	bh=AiSaZ/C2OmjOGTRsPMFY72KacCvJ3c8WvmuQfRoNMK4=;
+	s=arc-20240116; t=1791826658; c=relaxed/simple;
+	bh=YgVAVExV0c6fXyC+9CxFOrQ06n5DLu72+iUJPFvKICQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=u5yoT3Ck6t6sEjw5wmh/UuIfq4/e7D1K5RKFuRt1iiJgtVdz++0is/dvZFB7xUeCP8r+ZZ2lnlS4SB7W18xvy//JqjhHeO3nuMZgUsS+Eayu3yLmtDivaiwNw3pMnmK3/WxiMEyrgvR7p0RUPETHYFK1Db+Ufr4qIsUHx8x9pVU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aEH6Me14; arc=fail smtp.client-ip=52.101.201.43
+	 Content-Type:MIME-Version; b=lp0SPfnKTCJn3VFAdZPo3qLbgkfFSPF6LaEjuqUYgJGSGwWOA2GHps5xRP/jtDQtOHLKPGA8/sMlQrLBIEx06PamlxptfrLdlN1IN5FWoNEhzQJi9fJEbEmoo3ILO5scwryzNzIMI6inCshQI9uQMaCpfCqcwr50hjZ4Gh2FaJo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=GCnKnedm; arc=fail smtp.client-ip=52.101.85.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aEH6Me14"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="GCnKnedm"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=hUD7tYEdWbpUApql1TXvOGUBXmu21AlYMdfBW9g0QWxLsAQTLtsX4fJyhLDjAFe4PnNog+bg5XL+8aaS5MV9xQsB2ZsYudUqCXs5kxA5ckJZ6/Wmq8y+wZbSQgQWsdx1CxJCj9wXWrPZjx0g5v+JNS7wR6xNOmCBew6/GBawJes5n8EhI4dRErKXIZLsVOJvBwoLNRw4H864YVXFbAagAKwvDEaTzO2zvhxGf8+4V47gG13i7fmLwRAGPZdAkwWflB4Jg7Pf6DropELK2XrSCgDG9dDKTZJ3jT0P1TZNDUqQX0evV2NnbbzeUpB/MW7uSn3sFvIxywl92l7+fVCJ2g==
+ b=QgDaOBuMVsc4Ly0GtnUNUtdBD9bw83YXXnkje99zQYjHd4c9Y+gUz5h/mtBZjbwpjIr6kpMIeWONVHs2FxA3GdiqEuJCuklaABblpF8De9tbnRzbwWD8dMG0ZZVxhUh44+XRNGsHMGmCIoImyl/2YXuk7KFk/wZeg+qxBuIaPAe7Sels9i32kVgxUpsEh8bJghyqVxxjaNda1HRUATHcvCBez6jtRfy/yDOoL+MXIRgh8z7EUG+5E//XKQzgMg9yaqtgHXejDuNETZQ3HIZvp95jgBU5yu4WaynkLkcjdTufH0v3EA2LcQ/vc4Rm3cRAEYGgUHp+DYR4XJBSb4me8A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UzBUXhEpV5V9cVqnsUHC6ZmFrFbgQgpOxvenOvcRoxA=;
- b=JCSuzQMrG/b1GZVap8RfmHup85HIW6+KzU8CXxPA6qbwQe+vVqCP8U4iilezM5VmpcXQkS8SW4oRqSnYh7oIh8ztOb/RwLcy+Q3HYU1+0ohnk1GFq/uHVOR1JKUs6oRqWKjl60sJkmdB+yP5VwqOqUG/QXTfXLhDzzWgL6IDbIJcZrR27PpFzVzOHLFWhjy+lX89Ya/8879t9X002tzmDUcmZbv3+cNP1LGlmss2BBd6KKs7bF5wIUfeZ6dpmnFdeZVCBkW7djFuY6shIU2eSSFo1TUE0Rxi5QR5Q6t62Iccvhu9fXO9x3cHZgJ8qrMan0GOmYQqZacMOfxWIFtVLg==
+ bh=H8xlZ1FFyklhVhbnVvjx/1C/9nuc+i1NUOTPufy4oqc=;
+ b=Nx7KvjDZgDLkKMlrsD5bWI6QQnwnoxnpv88UpOs6P8PUoqMgQFFGUQzd3ES790QEyct602Mm6OcEyW6Bme3RyMshl7tJhz8EDJfHcrTk9w1meReIyu7YKkmW8bkzcv/4/8kK3GP+suyt4qlyi9tAryJ4VICoI3eAPZoYP3p5CfKfBgEssF5IvluaD0XWdFRgUDpDpbKzlWBjE1afbAFSDAGa4kU35w+J86YPer50uiOGpUuPcNwUerpOgWHUNM4s/KycQBT5ptNQ5w8WGRyMkGuHdnvubPXkV6DPFyFe8H8NSFHE0mnkZwUZkBMVS/kSpNuJWOHHw5sOQo/BBzfA0A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UzBUXhEpV5V9cVqnsUHC6ZmFrFbgQgpOxvenOvcRoxA=;
- b=aEH6Me14vQeVQWKtbfB8XKhpGpnfTKbg8Y1oZa0kG3Xe28/Cc4UvVAguqc+uBLTOMvS57dzfYvKYqkbelhbwGSMGEXpqxNfLGuUHuE5UMEV4T436aKwW7igJxi5TID90hr69yK2h75RCEvrF45jZZgS/szp+Zb3YRHBKlX32EGriCsve/s2DYS1IezQ5E7l2sr9Fv4E7ENCB8X9AS6X7dUDa+7TQNXeI/uOhEgK5lgbwxuydezvUWNjP9b0iRV2S15eaFNxr9MDL6ck6fIri6GgmSjRziOv5EMNvmBSND/662xb9b1nxNDK5DQLTK2HOl94muOngwLrp5xPREHE6wg==
+ bh=H8xlZ1FFyklhVhbnVvjx/1C/9nuc+i1NUOTPufy4oqc=;
+ b=GCnKnedm2BjW8uNfoHE2vUHfb3ce5pY5TuUKFSEH8c5arDNOHOblLk1u1sbvUNYyjJOjKpUWzaaQI8Jj1W2B6YQdVx5jDkWSmSjq5tMrIYeqsJvGLBL6TKT+GGirPpnGaO/FwUOmenguh+5tPCHpcz59yYrHa9SPkHNe89RsLIJcGIRpJXX3hBQrav6CEW3f3xW/Ka9xHlmQdmIRYZQOmdFFg44zRdfFXKfkuskCI+97BYIxAahVN72ac/nFMpEkUnVNoacYGRGiw+6q3dE59pH02cWyPabczZ/nNZg2doRpahZybLYgo2IIrre38ZCgKcBRYGED3hZSsagk7tzmnA==
 Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19)
  by PH0PR12MB7012.namprd12.prod.outlook.com (2603:10b6:510:21c::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.496.23; Mon, 12 Oct
- 2026 17:37:20 +0000
+ 2026 17:37:28 +0000
 Received: from PH7PR12MB5974.namprd12.prod.outlook.com
  ([fe80::f5a5:bbc3:e9da:f8a0]) by PH7PR12MB5974.namprd12.prod.outlook.com
  ([fe80::f5a5:bbc3:e9da:f8a0%3]) with mapi id 15.21.0496.010; Mon, 12 Oct 2026
- 17:37:20 +0000
+ 17:37:28 +0000
 From: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
-To: Mark Brown <broonie@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
 Cc: Donald Shannon <donalds@nvidia.com>,
 	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
 	Bill Wendling <morbo@google.com>,
 	Justin Stitt <justinstitt@google.com>,
 	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
+	linux-serial@vger.kernel.org,
 	linux-usb@vger.kernel.org,
 	llvm@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 09/11] spi: Add NVIDIA LSTP SPI driver
-Date: Mon, 12 Oct 2026 20:36:07 +0300
-Message-ID: <20261012-lstp-usb-adapter-v1-9-aambrozewicz@nvidia.com>
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Johan Hovold <johan@kernel.org>,
+	Oliver Neukum <oneukum@suse.com>
+Subject: [PATCH 10/11] tty: Add NVIDIA LSTP UART driver
+Date: Mon, 12 Oct 2026 20:36:08 +0300
+Message-ID: <20261012-lstp-usb-adapter-v1-10-aambrozewicz@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com>
 References: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: PN0PR01CA0003.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:4f::8) To PH7PR12MB5974.namprd12.prod.outlook.com
+X-ClientProxiedBy: PN1PEPF000067EF.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c04::2b) To PH7PR12MB5974.namprd12.prod.outlook.com
  (2603:10b6:510:1d9::19)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -73,361 +76,898 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PH7PR12MB5974:EE_|PH0PR12MB7012:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68396378-36e4-4eb0-7db6-08df28877775
+X-MS-Office365-Filtering-Correlation-Id: d2bd1612-736b-4ce2-cb26-08df28877c1c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|5023799004|11063799006|56012099006|22082099003|18002099003|261009221227099003|261009223027099003|3023799007|10067099003;
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|5023799004|11063799006|56012099006|22082099003|18002099003|6133799003|261009221227099003|261009223027099003|3023799007|10067099003;
 X-Microsoft-Antispam-Message-Info:
-	81GknjKYc2YEHcJAe0Cf1CJtjp6M6xEy+Ihlnq1MbdAOyO+L+4gbaSY7bL5xl1sgJlGz0RBDNkChTWguV53ljnuVry12S1USt3yQihupfNXD12iXy0zqhF19T4stZoKjZyFT3bWd3BwME7aeahodsHDXtrLkHmKdHYuMGUUp1qyJXKULa7o6pEfNNXjqAxj+OYGhC9/waVJfaL7U5/22rPV+hjGnIpP+Hr7GvJeywpJcOICax3nJwnrbEovA/p6jA3BqLpwg/AjgaI/kc3jkvGylg0QAHdVaZMi2zp/VHbxtyHjETqBWE8oRaAuGhSmkfuuk21LfwV75Zq+8AcvOMDQrn0MM8hriSyiYeDj3+QzqMyIZcT5lV8/s/iqShsiqe8YErYkEiqtGmoiO0Z1HXfAOtQ0JD52tS0ZLcFw1Aep3yJ6783Tx1BGUq6THD+hZYiAb+cX88nt6tkq/b8vMUEbJFpggiAtfRHOBohF01K3lGFJyiTOI+V3P5DNLUr9OeoDeHnV96ouxSYdbxf4vaD8pOKkzvmWYLDG6xRkOd0vKTH97+cRNt1iLZzb35wZoiEVi8MFeSkChgZpvhDlvSUpFPjE0zfWp303QpctmuUWVMfP7KOTBmI9ptJOdts3Uv7rtS82fDQjHk1TYiUPB6sO8vD7IyZvAsGpCWDOMXm8=
+	AnUJs0bTpDY0KmuUMBNN8QCQlwYyOfdAc3bJgh92cjNk2j2Ftdk48ss30ZV2ZwMfdllrX9lRL90/Uh7PqIK9D7awxpDZOeVx1D7feO3rPMVu/5/os8e9VKkAIy6hRlcftUixRQsVCp/sC6bNSF0MRYMpb/gIS/+0SsVzTxYFqgv+9tDKYk5Q7wL6lR8AJziZv2ExtYaG1SXKcKSqwISKM0BfA9tSfed041byhN3D/J2QcuR4QdvpO+Ch7nOQq5W3P1qPQNu6J0B23TfvSzqR0TRXW3naN12tsRcvK5JQGWBZaLOeOMNa4nrdATHKyX0h0VgVuNvz7u75fPjD/uGGCoH4GOIepb1LTGGCot41dbtQogy6nIgHsr6SGXGJvvhK/1/hA+DietI9zFNevOEfmiBxW2o3r/yjapOpaZCw5jri8Rlfg0+pgQdAm2otwFq/H3IQ9/hApsygJokt7RDCjIM3wE1yj3DqpZJRWiU2Jxzzyba3uPe8EIWBTup7/JhpK1VsnW3qFygy5QsXHTMbmi9qM/zMLloEyATFNgx8rC3PJW+EMeAArhqSO9Lkwh/1xnd12ksMUTfQb0xl5Rq8siFpl/dRJpzyVuvloVFdnCTvYurumJkAxur7XRB4lXw5/mMIW0E4IQ4P5syswQ8MpAYDtaa4jRb+CGHTUwWfEa0=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5974.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(5023799004)(11063799006)(56012099006)(22082099003)(18002099003)(261009221227099003)(261009223027099003)(3023799007)(10067099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5974.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(5023799004)(11063799006)(56012099006)(22082099003)(18002099003)(6133799003)(261009221227099003)(261009223027099003)(3023799007)(10067099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?gXaYB1lE0nK6LpBhb/BJKZQPZDM+BECuKqHRxOVAm/9QLIwt5x3EpgXZDUa+?=
- =?us-ascii?Q?+t5Bx6eTKt8fGKy4IcUngFXLD1w+cW+v83ydCz3Wy2odIfv9vRsP86W1EVNS?=
- =?us-ascii?Q?lnIsnk51JjGvQ/2U2VmS6YnRSfNuUFN0WcZ3qjVZ8yMoUdCNWUf5s2SN9C32?=
- =?us-ascii?Q?jOVh+ONdeeVouQhDt25VCOdM7tyA58duZsVH+56Xe5W8N3JM7yILLK/P9V7D?=
- =?us-ascii?Q?OyZXW/m3PSLyxe4kvAL7Lnryv1/pV7FQJPWaod2OLXQqmRYtdQjj4CHrgJLZ?=
- =?us-ascii?Q?uNM14+VQXdaHG2RwhVCWmwu2iP2EdEqyRw1KJfisCPmvUTTnUhWjC+jOE2yP?=
- =?us-ascii?Q?d97bPKQgmuafumdGC1cuCOGCI5DH8MUX+9pLghll9+/aiUtQ75go2jyQhNci?=
- =?us-ascii?Q?8ucFd/FZNJJwNN9AEYSewzZH8vK7LLuicRrKSdmq7TpeKFaPNOzoWM3BPq++?=
- =?us-ascii?Q?5eiDTb9tW7ykvL4uZgCopmrCxqZcXTXd6cRlI7ZnEFmI7avcxKhT5AO1IrQ3?=
- =?us-ascii?Q?UmGKHfPJ3vIaGKlngNRlLt6TdyFkq6ZAHsWgUNVByTjPnyqUSh5JZLZ2O7rB?=
- =?us-ascii?Q?k2gVqoYGhD+vN5IHZSsqHoKLgC9gq+e73OC3dU/jXYgexfoov9SdTcBFjPcT?=
- =?us-ascii?Q?MUmqUIJE9JyMjHE7ogQobLYqJUB1KN9j6LMDy+gIC8Si1ontbR2dbRmXsGAZ?=
- =?us-ascii?Q?bymr/pthbhxacCdfKWHulpiPkAksaWbBTvHjix4QrZDf8nnmI7o/zRM3gN6k?=
- =?us-ascii?Q?r2KVSV8fgzd2++Bo0ubwdrlP1q2I4tpih+xejlD8d60221oKRAHKnjSvSZ5L?=
- =?us-ascii?Q?73wzjAgX5dvNEySnSHYn/9suYWznaCXKJe2c1Ht9xc5fqaonROYMwtoI/Z2D?=
- =?us-ascii?Q?ksAQmLaiGpHr1YL4ImVl3TMDPqRIhMfv7Uxs9WfBlA9EY4FQ4dKo5Tt4MYhq?=
- =?us-ascii?Q?juy7kEGaLctG8j/DupWl0qAJZIVwEd9bnKLvEBd7u0XCdS0znFdcuXR0PpLW?=
- =?us-ascii?Q?teCrhAyf3HUBFIy2VGQmskUvD1PVx0NB+JGxrN97Okmvf0p/x/Vw1qNCsx50?=
- =?us-ascii?Q?99ePkMw56adMhy6XQJXl4i1aC3y1hkuRP4OFlJ5TwvgkyoyIe105l26mSVRZ?=
- =?us-ascii?Q?tF/Cg/0fesQDi4RKFO3mYZ9kTj2GGhf6M2Cpr90sUtRkY2ooNnhWfYFjAJwT?=
- =?us-ascii?Q?wAIATqJlLuKQYgn9b+bpb3viIYQzYU9fo9zbBu+LE2PZG0DQbTDdJae7Ez8u?=
- =?us-ascii?Q?5E2pG+5xwCD8j8TERet3eC620BiCT5M0Fk/G0nHdMkYjg/As20SfcUw4GFbl?=
- =?us-ascii?Q?u2e0Mq3zp+labfAYvE4MWBLyoIax4GJR62MaVZdyOlAhNdaAFgTo9WekRdIY?=
- =?us-ascii?Q?70e8REqTCw/T0JhgS16ohdtlZwijHu29FOXPsONFv7u1VnFH0UjXIPnwO3CM?=
- =?us-ascii?Q?W+ELlSnLKgMHpUkFa0/PsdATCDuAGNKCo9UBUfnu11fw+XT18PAfJwqf62sv?=
- =?us-ascii?Q?94+47ehOuoE71JeYVAD5QNyTOGa/G0U0CLd1lC6uNw3qLFMCBNQspfv/Slgp?=
- =?us-ascii?Q?gjWFIyVJqWM2pbn4tkmz/pcdrdlnud/xmeCZ+q22Z4EGpRbEED23jcCpwCfs?=
- =?us-ascii?Q?42/8pKlgDJ6cutAFNxaQb8sq2GBUZVrAu52G2zeFw9QeV6OHfCV5Yl2CY3+E?=
- =?us-ascii?Q?JdIT2gHjIEMrfiqsNfgWcleKvvzd2joM9BQ61FYDjqEVitcadSFS1IWUGPpb?=
- =?us-ascii?Q?fFUwhQ37Rg=3D=3D?=
+	=?utf-8?B?cnBiQnlkNlZDNFNTWTJ0Yld3YW55eTVRaVowcDArSG9iUzd5MTVYUWFBcjFx?=
+ =?utf-8?B?TW9qbWhBQmhTVDhpclhrT09PSUIrRjFjcXBjWisra1RkLy9hbHROZ1k5cVZq?=
+ =?utf-8?B?QXdLWVI4bmpNSDFzamdlQW9aS2RSd1lsVnprbHVra0Jsd2htY2EzbW96OGxz?=
+ =?utf-8?B?ajlIS0cwM28zNnFjNmJxN3pGNDBMdW5CYnZJMHIrWkVucGhuR1RMWE1tVG9T?=
+ =?utf-8?B?SzllTDQ3VmJKRVRGeTd3REVmRUVPUTNVMjhvN3UzcWw2U2hyQmlLckRNd25X?=
+ =?utf-8?B?VVMrLzBTSHMzVitxVjRXZFlnQXdxR0VETXRFbElpcy8zNGVvNC93anRWMk9J?=
+ =?utf-8?B?a01mNGZiUFlJWFFIT0toaHN0OUtibTVNVm5Yd01oWmRMa1VaeG5CbUIyUm1Z?=
+ =?utf-8?B?Zk83ZDQvWlN6cldOcTAwUG1zTnl3ZytQT0pPQzNPdml5ZVVpQ0U5TlJsSDF6?=
+ =?utf-8?B?bUVmQjk5bUZZVEV2WkhPbGVyL1ROdVBMQXhiWU9SMFBHY2hTKzlUcERTVk96?=
+ =?utf-8?B?UUFxL1hvOGVvd0s1UTZ1NVhsZTVpYW03WDFvcE1UYmdtTUNjM3FaanlnSUli?=
+ =?utf-8?B?OFkveDAwcW9oQkpzS3VBK3RjVWkvZkpVQlFkSEJJeFFXcmMvNldYQ2VERm1H?=
+ =?utf-8?B?RmNyVDBmUG9WcVVPUURBUEZhYXNUUGpvajhrc0E2SXBoSnBKcDlIaUZBNTE0?=
+ =?utf-8?B?R2J0Myt6NVRhVVc4OE5oZTZ1UUVHMG9iS3hnMHNuaWIzeTYzOUlxblBVN3o2?=
+ =?utf-8?B?YTZ2cXNXWXZQSWZlSnFmSDVmQkRLVmFuc2owMllwS25ZeWNnSDgzZ25UQXNi?=
+ =?utf-8?B?QzBjcXdjdlVNVHBNSVlyeUVFTkRRek5xaTVvSmRNeXI1Tk5SYXh0NThqOFNu?=
+ =?utf-8?B?Sm5qN0ljZDNqS3Nha3RZN3ZwOEJueFlTblhBV2R3TGhNdG93YnhyYmpkSzJH?=
+ =?utf-8?B?Z2kvL1dFMUJ3bjEzYUliRTB0eVg2VUdlSW9lUlNwUUpkcVc5WWlpZWsrZUpS?=
+ =?utf-8?B?NUVZcXk4ZWYyOEZtdEV1d1Fia2ptWjB2dUF3alliYVh1Qnd5UEkxWXg5Y001?=
+ =?utf-8?B?bmVKS2h3N2tXaTdKR3B2RTEvZ3llcEYwU1hZMHpIWnZpcjlVZ005VXM1WDA2?=
+ =?utf-8?B?YmM3MitNdUVIRW12c0pBVkF4ZmJtVFhuTnFlSUNRSWxRc21SUkF5RlVsZk90?=
+ =?utf-8?B?TGhweUNLNXNsOXpBNkdIQnRKOWJXTU9MZ0U5STV0eEdBU0U2WnA0OXcxMGx0?=
+ =?utf-8?B?aTdjSllSZnZlUWdkeG9rVHBrYTczTjhpTUVyMEJkcnJaanhLQ2RLTnBnYS9n?=
+ =?utf-8?B?Vk1Md2RIdm90ek0zMm96cGNJSStGOTJzcTUvb1YzWll1Z1ZpY3NPTlZCem9j?=
+ =?utf-8?B?MTlPQTRwQzRVdVpyM052anYrdnY2d3JrN1JzQ0o2UFRaQ0FiTUtGaDBLeHFO?=
+ =?utf-8?B?eU5CMm5GSnMycitVSmtOcVZ1T0ViaGUyb1lmdGdoU2Uwc1pwdnNNdjBQa2t4?=
+ =?utf-8?B?NnlPZVk5MWZzL2dHaXczK0hoaWlyS2JhVkVKVytOV01XMCtqUFhzWU9ONlFS?=
+ =?utf-8?B?N3VneitJRmNYNUtuUDNTVGpLMlFQa1JERklvQXE0WXQxOTA1WWdGM1JmSkU3?=
+ =?utf-8?B?UStOdFNtb0J4U3hwckgzUkc2d2JUNDc3WGgycldQMGwycW1xNWE3c2VaZHU5?=
+ =?utf-8?B?SG9UTUVUYkViMDRCRWZrb0VBVFNkdDl3b3UzWndRTkVuYXNZLzRyaUV6OXZO?=
+ =?utf-8?B?ZVJ1OS91eFphcDlDWWhlOTAxUXBEK01EbG5Tc1lLVFA5MmVKb09xaWJiNkZy?=
+ =?utf-8?B?bVFuai9JNFg3a1FVVFhjL0tNRHVlblhPbkUvUmxHMzdhTGN1WEYraUoxNnVl?=
+ =?utf-8?B?RjZYMFUzT2c2b0RDdGxxWGNyY0dMb29wUkswb29JVDVLa1k1cXdWYXdVMDdu?=
+ =?utf-8?B?dE5YZ3BGdFNtSDNlRGVUM3kwZ2xtNHNQYS8zSVRIUmhNSzFiM1hnL0J6S2lr?=
+ =?utf-8?B?bG14OUx1akxLV2MyNjFPT3B1ZHplakd0cW1XZUpremRUOXZIZW1HaXFSeUty?=
+ =?utf-8?B?STZSNTRJS1gxdFYzTGRFVHh2VksxeWlwSDBTcXRsZFcxZGJ2ZE9EOVdlSlda?=
+ =?utf-8?B?UVRwb2w5bWs1UWFDWEdjNy9vNGdzTHVuTWlmTjY5L20xci9JeWJQZ04ra0ht?=
+ =?utf-8?B?d2F4cjNrUGdRWVVCOHU4dmFMdld2R2ZBQUtQZVhtSEZSaHBZOElrc3J4S0Fl?=
+ =?utf-8?B?NHRnTVNvMWNjdjNhTG40WVM2YzdsbktISi9ScUFYajhpcTI4dTJsV0JsV29s?=
+ =?utf-8?B?akNHczlCcWd5dS9UZmxITUpNTVZoT2pSVmNoemRkMTllUGdQY1Z3UT09?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68396378-36e4-4eb0-7db6-08df28877775
+X-MS-Exchange-CrossTenant-Network-Message-Id: d2bd1612-736b-4ce2-cb26-08df28877c1c
 X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5974.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2026 17:37:20.2554
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2026 17:37:28.2162
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DJvLYoje5WWr9iYfnt+ye1SKE/2Akw51RYe915eyHNgn7GqOIjtPWfMfmej+D70iBNwXn2/CRLRniggsv+xXOA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZNr8ELJ1g7A2szpuABUxdPlGQufVb+fjgl0VXohehChmJuHJpKuTRHIlN6bhnhcyNV+/AoxZzJ7ISgk2oC1w0A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7012
 
-Add a driver for the SPI controller channels of NVIDIA LSTP USB
-adapters. Each channel is registered as an SPI host controller; devices
-behind it can be described by device tree or ACPI, or created from
-userspace through the controller's new_device attribute. The firmware
-reports the chip selects and the bus speed.
+Add a driver for the UART channels of NVIDIA LSTP USB adapters. Each
+channel is registered as a tty device, ttyLSTP<n>, whose parent is the
+channel's auxiliary device.
+
+The device firmware owns the line: baud rate, framing, parity and flow
+control are provisioned on the device and only read at probe. The host
+cannot read or set modem control lines; it can send a fixed-length
+break, and a carrier loss reported by the device hangs the tty up unless
+CLOCAL is set. Most of serial_core's uart_ops would be stubs, so the
+driver registers a plain tty_driver with one tty_port per channel, as
+cdc-acm, the greybus UART and sdio_uart do for UARTs reached through
+another bus. set_termios keeps the hardware fields at the firmware's
+values, so stty reports the real line settings.
 
 Signed-off-by: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
 ---
  MAINTAINERS            |   1 +
- drivers/spi/Kconfig    |  13 ++
- drivers/spi/Makefile   |   1 +
- drivers/spi/spi-lstp.c | 316 +++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 331 insertions(+)
- create mode 100644 drivers/spi/spi-lstp.c
+ drivers/tty/Kconfig    |  13 +
+ drivers/tty/Makefile   |   1 +
+ drivers/tty/lstp_tty.c | 829 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 844 insertions(+)
+ create mode 100644 drivers/tty/lstp_tty.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 082c4b3a0eb6..081e3f32c840 100644
+index 081e3f32c840..8e58895b7d5a 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -19580,6 +19580,7 @@ F:	Documentation/firmware-guide/acpi/lstp.rst
- F:	drivers/gpio/gpio-lstp.c
+@@ -19581,6 +19581,7 @@ F:	drivers/gpio/gpio-lstp.c
  F:	drivers/i2c/busses/i2c-lstp.c
  F:	drivers/leds/leds-lstp.c
-+F:	drivers/spi/spi-lstp.c
+ F:	drivers/spi/spi-lstp.c
++F:	drivers/tty/lstp_tty.c
  F:	drivers/usb/misc/lstp.c
  F:	include/linux/usb/lstp.h
  
-diff --git a/drivers/spi/Kconfig b/drivers/spi/Kconfig
-index a0f37e2df716..e76abaac825c 100644
---- a/drivers/spi/Kconfig
-+++ b/drivers/spi/Kconfig
-@@ -694,6 +694,19 @@ config SPI_LJCA
- 	  This driver can also be built as a module. If so, the module
- 	  will be called spi-ljca.
+diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
+index 5d6b0dd4d423..34a86259b537 100644
+--- a/drivers/tty/Kconfig
++++ b/drivers/tty/Kconfig
+@@ -406,6 +406,19 @@ config RPMSG_TTY
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called rpmsg_tty.
  
-+config SPI_LSTP
-+	tristate "NVIDIA LSTP SPI support"
++config LSTP_TTY
++	tristate "NVIDIA LSTP UART support"
 +	depends on USB_LSTP
 +	default USB_LSTP
 +	help
-+	  Say Y or M here to support the SPI channels of NVIDIA LSTP USB
-+	  adapters. Each channel is registered as an SPI host controller,
-+	  and the devices behind it can be described by device tree, ACPI
-+	  or created through spidev.
++	  Say Y or M here to support the UART channels of NVIDIA LSTP USB
++	  adapters. Each channel is registered as a tty device named
++	  ttyLSTP<n>, so the usual serial tools and line disciplines work
++	  on top of it.
 +
 +	  This driver can also be built as a module. If so, the module
-+	  will be called spi-lstp.
++	  will be called lstp_tty.
 +
- config SPI_MA35D1_QSPI
- 	tristate "Nuvoton MA35D1 QSPI controller"
- 	depends on ARCH_MA35 || COMPILE_TEST
-diff --git a/drivers/spi/Makefile b/drivers/spi/Makefile
-index a18814fbde93..c0b1ea6491dd 100644
---- a/drivers/spi/Makefile
-+++ b/drivers/spi/Makefile
-@@ -86,6 +86,7 @@ obj-$(CONFIG_SPI_LOONGSON_CORE)		+= spi-loongson-core.o
- obj-$(CONFIG_SPI_LOONGSON_PCI)		+= spi-loongson-pci.o
- obj-$(CONFIG_SPI_LOONGSON_PLATFORM)	+= spi-loongson-plat.o
- obj-$(CONFIG_SPI_LP8841_RTC)		+= spi-lp8841-rtc.o
-+obj-$(CONFIG_SPI_LSTP)			+= spi-lstp.o
- obj-$(CONFIG_SPI_MA35D1_QSPI)		+= spi-ma35d1-qspi.o
- obj-$(CONFIG_SPI_MESON_SPICC)		+= spi-meson-spicc.o
- obj-$(CONFIG_SPI_MESON_SPIFC)		+= spi-meson-spifc.o
-diff --git a/drivers/spi/spi-lstp.c b/drivers/spi/spi-lstp.c
+ endif # TTY
+ 
+ source "drivers/tty/serdev/Kconfig"
+diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
+index c6a063a541fd..c352adda5cfc 100644
+--- a/drivers/tty/Makefile
++++ b/drivers/tty/Makefile
+@@ -26,3 +26,4 @@ obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
+ obj-$(CONFIG_MIPS_EJTAG_FDC_TTY) += mips_ejtag_fdc.o
+ obj-$(CONFIG_VCC)		+= vcc.o
+ obj-$(CONFIG_RPMSG_TTY)		+= rpmsg_tty.o
++obj-$(CONFIG_LSTP_TTY)		+= lstp_tty.o
+diff --git a/drivers/tty/lstp_tty.c b/drivers/tty/lstp_tty.c
 new file mode 100644
-index 000000000000..7aa908e6c398
+index 000000000000..64894eca16ee
 --- /dev/null
-+++ b/drivers/spi/spi-lstp.c
-@@ -0,0 +1,316 @@
++++ b/drivers/tty/lstp_tty.c
+@@ -0,0 +1,829 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * SPI driver for LSTP USB interface.
++ * UART driver for LSTP USB interface.
 + *
 + * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
 + */
 +
-+#include <linux/spi/spi.h>
-+#include <linux/acpi.h>
++#include <linux/bits.h>
++#include <linux/cleanup.h>
++#include <linux/delay.h>
 +#include <linux/err.h>
++#include <linux/init.h>
 +#include <linux/module.h>
-+#include <linux/of.h>
-+#include <linux/property.h>
++#include <linux/mutex.h>
++#include <linux/serial.h>
++#include <linux/termios.h>
++#include <linux/tty.h>
++#include <linux/tty_buffer.h>
++#include <linux/tty_driver.h>
++#include <linux/tty_flip.h>
++#include <linux/workqueue.h>
++#include <linux/xarray.h>
 +
 +#include <linux/usb/lstp.h>
 +
-+enum lstp_spi_cmd {
-+	LSTP_SPI_CMD_READ = 0x01,
-+	LSTP_SPI_CMD_WRITE = 0x02,
-+	LSTP_SPI_CMD_WRITE_READ = 0x03,
-+	LSTP_SPI_CMD_POSTED_WRITE = 0x04
++enum lstp_uart_cmd {
++	LSTP_UART_CMD_WRITE = 0x00,
++};
++
++struct lstp_uart_config {
++	__le32 speed;
++	u8 data_bits;
++	u8 stop_bits;
++	u8 parity_flow; /* [3:0] parity, [7:4] flow control */
++} __packed;
++
++#define LSTP_UART_CFG_PARITY(pf) ((pf) & 0x0F)
++#define LSTP_UART_CFG_FLOW(pf) (((pf) >> 4) & 0x0F)
++
++enum lstp_uart_parity {
++	LSTP_UART_PARITY_NONE = 0,
++	LSTP_UART_PARITY_ODD = 1,
++	LSTP_UART_PARITY_EVEN = 2,
++	LSTP_UART_PARITY_MARK = 3,
++	LSTP_UART_PARITY_SPACE = 4,
++};
++
++enum lstp_uart_flow {
++	LSTP_UART_FLOW_NONE = 0,
++	LSTP_UART_FLOW_XONXOFF = 1,
++	LSTP_UART_FLOW_RTSCTS = 2,
++	LSTP_UART_FLOW_DTRDSR = 3,
 +};
 +
 +/* clang-format off */
-+enum lstp_spi_cmd_cs_toggle {
-+	LSTP_SPI_CMD_CS_ASSERT = 0x20,
-+	LSTP_SPI_CMD_CS_DEASSERT = 0x10
++
++/* Tag bits OR'd into the WRITE command byte. */
++#define LSTP_UART_TAG_CARRIER_DOWN BIT(6) /* dev→host: carrier lost */
++#define LSTP_UART_TAG_TX_OVERRUN   BIT(5) /* dev→host: TX data dropped */
++#define LSTP_UART_TAG_BREAK_DET    BIT(4) /* dev→host: break detected */
++#define LSTP_UART_TAG_GEN_BREAK    BIT(3) /* host→dev: send break */
++
++/* clang-format on */
++
++/* Bits [1:0] = command; [6:2] = tags; [7] = req/resp flag. */
++#define LSTP_UART_CMD_MASK GENMASK(1, 0)
++
++/* Firmware NACKs WRITE on a full TX FIFO; 5 x 10 ms covers a 500-byte drain at 115200. */
++#define LSTP_UART_NAK_MAX_RETRIES 5
++#define LSTP_UART_NAK_RETRY_DELAY_MS 10
++
++#define LSTP_UART_MINORS 256
++
++/* TX coalesces: lstp_tty_write() appends to @coal_buf, write_work drains @tx_snapshot. */
++struct lstp_uart_ctx {
++	struct tty_port port;
++	struct lstp_channel *ch;
++	int minor;
++	bool registered; /* tty device live for @minor; under lstp_minors_lock */
++	size_t max_payload;
++	tcflag_t hw_cflag;
++	tcflag_t hw_iflag;
++
++	spinlock_t write_lock; /* protects the TX fields below and @iocount.tx */
++	u8 *coal_buf;
++	u8 *tx_snapshot; /* stable copy handed to lstp_request() */
++	size_t coal_len;
++	size_t tx_inflight_len;
++	bool tx_in_flight;
++	struct work_struct write_work;
++
++	/*
++	 * Each field is written under one lock -- @write_lock for tx, the
++	 * channel's irq_cb_lock for the rest -- and read under neither by
++	 * lstp_tty_get_icount(), so writes use WRITE_ONCE() and reads READ_ONCE().
++	 */
++	struct serial_icounter_struct iocount;
 +};
 +
-+enum lstp_spi_cmd_cs_sel {
-+	LSTP_SPI_CMD_CS0 = 0x00,
-+	LSTP_SPI_CMD_CS1 = 0x40
-+};
++static struct tty_driver *lstp_tty_driver;
 +
-+static const u8 lstp_spi_cs_map[] = {
-+	LSTP_SPI_CMD_CS0,
-+	LSTP_SPI_CMD_CS1
-+}; /* clang-format on */
++static DEFINE_XARRAY_ALLOC(lstp_minors);
++/* Nests inside tty_lock; never hold it across tty_vhangup(), which takes tty_lock. */
++static DEFINE_MUTEX(lstp_minors_lock);
 +
-+struct lstp_spi_read_req {
-+	__le32 len;
-+} __packed;
-+
-+struct lstp_spi_config {
-+	u8 num_devices;
-+	__le32 speed_hz;
-+} __packed;
-+
-+struct lstp_spi_priv {
-+	struct spi_controller *ctrl;
-+	u32 current_speed_hz;
-+};
-+
-+/* A transfer without data still sends a zero-length WRITE when @cs_flags moves CS. */
-+static int lstp_spi_do_transfer(struct lstp_channel *ch, struct spi_transfer *xfer, u8 cs_bits,
-+				u8 cs_flags)
++static int lstp_alloc_minor(struct lstp_uart_ctx *ctx)
 +{
-+	struct lstp_spi_priv *priv = ch->priv;
-+
-+	if (xfer->word_delay.value)
-+		dev_warn_once(ch->dev, "%s: ch_%d: word_delay not supported, ignoring\n", __func__,
-+			      ch->ch_id);
-+
-+	xfer->error = SPI_TRANS_FAIL_NO_START;
-+	xfer->effective_speed_hz = priv->current_speed_hz;
-+
-+	if (xfer->len && !xfer->tx_buf && !xfer->rx_buf) {
-+		dev_err_ratelimited(ch->dev, "%s: ch_%d: Transfer of %u bytes has no buffer\n",
-+				    __func__, ch->ch_id, xfer->len);
-+		return -EINVAL;
-+	}
-+	if (xfer->tx_buf && xfer->len > ch->max_tx_payload) {
-+		dev_err_ratelimited(ch->dev,
-+				    "%s: ch_%d: TX transfer length %u exceeds capacity %zu\n",
-+				    __func__, ch->ch_id, xfer->len, ch->max_tx_payload);
-+		return -EINVAL;
-+	}
-+	if (xfer->rx_buf && xfer->len > ch->max_rx_payload) {
-+		dev_err_ratelimited(ch->dev,
-+				    "%s: ch_%d: RX transfer length %u exceeds capacity %zu\n",
-+				    __func__, ch->ch_id, xfer->len, ch->max_rx_payload);
-+		return -EINVAL;
-+	}
-+
++	u32 minor;
 +	int ret;
 +
-+	if (xfer->tx_buf && xfer->rx_buf) {
-+		u8 cmd = LSTP_SPI_CMD_WRITE_READ | cs_bits | cs_flags;
-+
-+		ret = lstp_request(ch, cmd, xfer->tx_buf, xfer->len, xfer->rx_buf, xfer->len, NULL,
-+				   NULL);
-+	} else if (xfer->tx_buf) {
-+		u8 cmd = LSTP_SPI_CMD_WRITE | cs_bits | cs_flags;
-+
-+		ret = lstp_request(ch, cmd, xfer->tx_buf, xfer->len, NULL, 0, NULL, NULL);
-+	} else if (xfer->rx_buf) {
-+		struct lstp_spi_read_req req = { .len = cpu_to_le32(xfer->len) };
-+		u8 cmd = LSTP_SPI_CMD_READ | cs_bits | cs_flags;
-+
-+		ret = lstp_request(ch, cmd, &req, sizeof(req), xfer->rx_buf, xfer->len, NULL, NULL);
-+	} else if (cs_flags) {
-+		u8 cmd = LSTP_SPI_CMD_WRITE | cs_bits | cs_flags;
-+
-+		ret = lstp_request(ch, cmd, NULL, 0, NULL, 0, NULL, NULL);
-+	} else {
-+		/* No data and no CS change; only the caller's delay is left to do. */
-+		ret = 0;
-+	}
-+
-+	if (ret) {
-+		if (ret != -ENODEV)
-+			dev_err_ratelimited(ch->dev, "%s: ch_%d: Transfer failed (%pe)\n", __func__,
-+					    ch->ch_id, ERR_PTR(ret));
-+		xfer->error = SPI_TRANS_FAIL_IO;
-+		return ret;
-+	}
-+
-+	xfer->error = 0;
-+	return 0;
++	guard(mutex)(&lstp_minors_lock);
++	ret = xa_alloc(&lstp_minors, &minor, ctx, XA_LIMIT(0, LSTP_UART_MINORS - 1), GFP_KERNEL);
++	return ret ? ret : minor;
 +}
 +
 +/*
-+ * CS edges ride in each transfer's command byte rather than in a set_cs callback, which would
-+ * cost a USB round trip per edge.
++ * Called only from lstp_port_destruct(), so the minor stays reserved for the
++ * life of the port: recycling it earlier would let an open of the reused
++ * index resolve through driver->ttys[] to the previous port's tty.
 + */
-+static int lstp_spi_transfer_one_message(struct spi_controller *ctrl, struct spi_message *mesg)
++static void lstp_free_minor(struct lstp_uart_ctx *ctx)
 +{
-+	struct lstp_channel *ch = spi_controller_get_devdata(ctrl);
-+	struct spi_transfer *xfer;
-+	u8 chip_select = spi_get_chipselect(mesg->spi, 0);
++	guard(mutex)(&lstp_minors_lock);
++
++	if (ctx->minor < 0)
++		return;
++
++	xa_erase(&lstp_minors, ctx->minor);
++	ctx->minor = -1;
++}
++
++/*
++ * Resolve a live port by minor, taking a tty_port reference under the lock
++ * lstp_port_destruct() erases the entry under. The context pins its channel,
++ * so @ctx->ch is valid while the reference is held. The entry outlives
++ * @registered: a minor between unbind and destruction is found and refused.
++ */
++static struct lstp_uart_ctx *lstp_get_by_minor(unsigned int minor)
++{
++	guard(mutex)(&lstp_minors_lock);
++	struct lstp_uart_ctx *ctx = xa_load(&lstp_minors, minor);
++
++	if (!ctx || !ctx->registered || lstp_channel_disconnected(ctx->ch))
++		return NULL;
++
++	/* Fails once the last put is in, ahead of the destructor's erase. */
++	if (!tty_port_get(&ctx->port))
++		return NULL;
++	return ctx;
++}
++
++/* clang-format off */
++static speed_t lstp_baud_to_speed(u32 baud)
++{
++	static const struct {
++		u32     baud;
++		speed_t speed;
++	} map[] = {
++		{      50, B50      }, {      75, B75      }, {     110, B110     },
++		{     134, B134     }, {     150, B150     }, {     200, B200     },
++		{     300, B300     }, {     600, B600     }, {    1200, B1200    },
++		{    1800, B1800    }, {    2400, B2400    }, {    4800, B4800    },
++		{    9600, B9600    }, {   19200, B19200   }, {   38400, B38400   },
++		{   57600, B57600   }, {  115200, B115200  }, {  230400, B230400  },
++		{  460800, B460800  }, {  500000, B500000  }, {  576000, B576000  },
++		{  921600, B921600  }, { 1000000, B1000000 }, { 1152000, B1152000 },
++		{ 1500000, B1500000 }, { 2000000, B2000000 }, { 2500000, B2500000 },
++		{ 3000000, B3000000 }, { 3500000, B3500000 }, { 4000000, B4000000 },
++	};
++
++	for (size_t i = 0; i < ARRAY_SIZE(map); i++)
++		if (map[i].baud == baud)
++			return map[i].speed;
++
++	return B0;
++}
++
++/* clang-format on */
++
++static tcflag_t lstp_build_cflag(const struct lstp_uart_config *cfg)
++{
++	tcflag_t cflag = CREAD | HUPCL | CLOCAL;
++	u8 parity = LSTP_UART_CFG_PARITY(cfg->parity_flow);
++	u8 flow = LSTP_UART_CFG_FLOW(cfg->parity_flow);
++
++	cflag |= lstp_baud_to_speed(le32_to_cpu(cfg->speed));
++
++	switch (cfg->data_bits) {
++	case 5:
++		cflag |= CS5;
++		break;
++	case 6:
++		cflag |= CS6;
++		break;
++	case 7:
++		cflag |= CS7;
++		break;
++	default:
++		cflag |= CS8;
++		break;
++	}
++
++	if (cfg->stop_bits == 2)
++		cflag |= CSTOPB;
++
++	switch (parity) {
++	case LSTP_UART_PARITY_ODD:
++		cflag |= PARENB | PARODD;
++		break;
++	case LSTP_UART_PARITY_EVEN:
++		cflag |= PARENB;
++		break;
++	case LSTP_UART_PARITY_MARK:
++		cflag |= PARENB | PARODD | CMSPAR;
++		break;
++	case LSTP_UART_PARITY_SPACE:
++		cflag |= PARENB | CMSPAR;
++		break;
++	}
++
++	if (flow == LSTP_UART_FLOW_RTSCTS)
++		cflag |= CRTSCTS;
++
++	return cflag;
++}
++
++static tcflag_t lstp_build_iflag(const struct lstp_uart_config *cfg)
++{
++	if (LSTP_UART_CFG_FLOW(cfg->parity_flow) == LSTP_UART_FLOW_XONXOFF)
++		return IXON | IXOFF;
++	return 0;
++}
++
++static int lstp_uart_parse_config(struct lstp_uart_ctx *ctx, struct lstp_channel *ch,
++				  const struct lstp_uart_config *cfg)
++{
++	static const char parity_chars[] = "NOEMS";
++	u8 parity = LSTP_UART_CFG_PARITY(cfg->parity_flow);
++
++	ctx->hw_cflag = lstp_build_cflag(cfg);
++	ctx->hw_iflag = lstp_build_iflag(cfg);
++
++	dev_dbg(ch->dev, "%s: ch_%d: %u baud, %u%c%c, parity %u, flow %u\n", __func__, ch->ch_id,
++		le32_to_cpu(cfg->speed), cfg->data_bits, cfg->stop_bits == 2 ? '2' : '1',
++		parity < sizeof(parity_chars) - 1 ? parity_chars[parity] : '?', parity,
++		LSTP_UART_CFG_FLOW(cfg->parity_flow));
++
++	return 0;
++}
++
++static int lstp_uart_send_with_retry(struct lstp_uart_ctx *ctx, u8 cmd, const void *payload,
++				     size_t len)
++{
++	struct lstp_channel *ch = ctx->ch;
++	int lstp_status = LSTP_NACK;
 +	int ret = 0;
-+	bool cs_active = false;
++	int attempt;
 +
-+	if (chip_select >= ctrl->num_chipselect) {
-+		dev_err_ratelimited(ch->dev, "%s: ch_%d: Invalid chip select %u (max %u)\n",
-+				    __func__, ch->ch_id, chip_select, ctrl->num_chipselect - 1);
-+		ret = -EINVAL;
-+		goto finalize;
++	for (attempt = 0; lstp_status == LSTP_NACK && attempt < LSTP_UART_NAK_MAX_RETRIES;
++	     attempt++) {
++		if (attempt)
++			fsleep(LSTP_UART_NAK_RETRY_DELAY_MS * USEC_PER_MSEC);
++
++		ret = lstp_request(ch, cmd, payload, len, NULL, 0, NULL, &lstp_status);
 +	}
 +
-+	u8 cs_bits = lstp_spi_cs_map[chip_select];
++	if (ret && ret != -ENODEV)
++		dev_warn_ratelimited(ch->dev,
++				     "%s: ch_%d: Failed to write after %d attempt(s) (%pe)\n",
++				     __func__, ch->ch_id, attempt, ERR_PTR(ret));
 +
-+	list_for_each_entry(xfer, &mesg->transfers, transfer_list) {
-+		u8 cs_flags = 0;
-+		bool is_last = list_is_last(&xfer->transfer_list, &mesg->transfers);
-+		bool no_data = !xfer->tx_buf && !xfer->rx_buf;
-+
-+		if (!cs_active) {
-+			cs_flags |= LSTP_SPI_CMD_CS_ASSERT;
-+			cs_active = true;
-+		}
-+
-+		if ((is_last && !xfer->cs_change) || (!is_last && xfer->cs_change)) {
-+			cs_flags |= LSTP_SPI_CMD_CS_DEASSERT;
-+			cs_active = false;
-+		}
-+
-+		/* A data transfer fuses delay and CS edge into one command; CS-only waits first. */
-+		if (no_data)
-+			spi_transfer_delay_exec(xfer);
-+
-+		ret = lstp_spi_do_transfer(ch, xfer, cs_bits, cs_flags);
-+		if (ret)
-+			break;
-+
-+		mesg->actual_length += xfer->len;
-+
-+		if (!is_last && xfer->cs_change)
-+			spi_transfer_cs_change_delay_exec(mesg, xfer);
-+
-+		if (!no_data)
-+			spi_transfer_delay_exec(xfer);
-+	}
-+
-+finalize:
-+	mesg->status = ret;
-+	spi_finalize_current_message(ctrl);
 +	return ret;
 +}
 +
-+/* spi_setup() path: firmware owns CS, so cs_setup/cs_hold/cs_inactive are only warned about. */
-+static int lstp_spi_set_cs_timing(struct spi_device *spi)
++/* @tx_snapshot is written only here, so it stays stable across the retry loop. */
++static void lstp_uart_write_work(struct work_struct *work)
 +{
-+	struct lstp_channel *ch = spi_controller_get_devdata(spi->controller);
++	struct lstp_uart_ctx *ctx = container_of(work, struct lstp_uart_ctx, write_work);
++	size_t len;
 +
-+	if (spi->cs_setup.value || spi->cs_hold.value || spi->cs_inactive.value)
++	scoped_guard(spinlock_irqsave, &ctx->write_lock) {
++		len = ctx->coal_len;
++		if (len == 0)
++			return;
++		memcpy(ctx->tx_snapshot, ctx->coal_buf, len);
++		ctx->coal_len = 0;
++		ctx->tx_in_flight = true;
++		ctx->tx_inflight_len = len;
++	}
++
++	tty_port_tty_wakeup(&ctx->port);
++
++	int ret = lstp_uart_send_with_retry(ctx, LSTP_UART_CMD_WRITE, ctx->tx_snapshot, len);
++
++	scoped_guard(spinlock_irqsave, &ctx->write_lock) {
++		ctx->tx_in_flight = false;
++		if (!ret)
++			WRITE_ONCE(ctx->iocount.tx, ctx->iocount.tx + len);
++		if (ctx->coal_len > 0)
++			schedule_work(&ctx->write_work);
++	}
++
++	tty_port_tty_wakeup(&ctx->port);
++}
++
++/* ops->irq_packet: push RX into the flip buffer, NACKing when full so firmware retries. */
++static void lstp_uart_irq_callback(struct lstp_channel *ch, struct lstp_packet *pkt)
++{
++	struct lstp_uart_ctx *ctx = ch->priv;
++	u16 rx_len = le16_to_cpu(pkt->hdr.length);
++	u8 cmd = pkt->hdr.cmd;
++	bool have_break = cmd & LSTP_UART_TAG_BREAK_DET;
++	bool carrier_down = cmd & LSTP_UART_TAG_CARRIER_DOWN;
++	bool tx_overrun = cmd & LSTP_UART_TAG_TX_OVERRUN;
++	size_t need_room = rx_len + (have_break ? 1 : 0);
++	u8 status = LSTP_SUCCESS;
++
++	if ((cmd & LSTP_UART_CMD_MASK) != LSTP_UART_CMD_WRITE) {
++		dev_warn_ratelimited(ch->dev, "%s: ch_%d: unexpected UART command 0x%02x\n",
++				     __func__, ch->ch_id, cmd);
++		lstp_send_irq_resp(ch, LSTP_NOT_SUPP);
++		return;
++	}
++
++	size_t room = tty_buffer_request_room(&ctx->port, need_room);
++
++	if (room < need_room) {
++		WRITE_ONCE(ctx->iocount.buf_overrun, ctx->iocount.buf_overrun + 1);
++		status = LSTP_NACK;
++	} else {
++		if (have_break) {
++			WRITE_ONCE(ctx->iocount.brk, ctx->iocount.brk + 1);
++			tty_insert_flip_char(&ctx->port, 0, TTY_BREAK);
++		}
++		if (rx_len) {
++			tty_insert_flip_string(&ctx->port, pkt->payload, rx_len);
++			WRITE_ONCE(ctx->iocount.rx, ctx->iocount.rx + rx_len);
++		}
++		tty_flip_buffer_push(&ctx->port);
++	}
++
++	if (tx_overrun) {
++		WRITE_ONCE(ctx->iocount.overrun, ctx->iocount.overrun + 1);
 +		dev_warn_ratelimited(ch->dev,
-+				     "%s: ch_%d: CS timing delays not supported, ignoring\n",
++				     "%s: ch_%d: RX overrun on link (firmware dropped bytes)\n",
 +				     __func__, ch->ch_id);
++	}
++
++	if (carrier_down) {
++		WRITE_ONCE(ctx->iocount.dcd, ctx->iocount.dcd + 1);
++		/* Honors CLOCAL: no-op when userspace asked to ignore carrier. */
++		tty_port_tty_hangup(&ctx->port, true);
++	}
++
++	lstp_send_irq_resp(ch, status);
++}
++
++static int lstp_port_activate(struct tty_port *port, struct tty_struct *tty)
++{
++	struct lstp_uart_ctx *ctx = container_of(port, struct lstp_uart_ctx, port);
++
++	/*
++	 * Re-test @registered: .install() resolved it under tty_mutex, which
++	 * the core drops before .open. lstp_uart_stop() clears the flag before
++	 * it samples @port->tty, so an open that gets past here has already
++	 * published its tty and stop() will hang it up.
++	 */
++	scoped_guard(mutex, &lstp_minors_lock)
++		if (!ctx->registered)
++			return -ENODEV;
++
++	tty->termios.c_cflag = ctx->hw_cflag;
++	tty->termios.c_iflag = ctx->hw_iflag;
++
++	/* TTY_NO_WRITE_SPLIT: let N_TTY pass a whole write down, not byte at a time. */
++	set_bit(TTY_NO_WRITE_SPLIT, &tty->flags);
 +	return 0;
 +}
 +
-+static size_t lstp_spi_max_xfer_size(struct spi_device *spi)
++static void lstp_port_shutdown(struct tty_port *port)
 +{
-+	struct lstp_channel *ch = spi_controller_get_devdata(spi->controller);
++	struct lstp_uart_ctx *ctx = container_of(port, struct lstp_uart_ctx, port);
 +
-+	return min(ch->max_tx_payload, ch->max_rx_payload);
-+}
++	cancel_work_sync(&ctx->write_work);
 +
-+/*
-+ * Device tree lists peripherals as children of the channel node, so an empty node is an
-+ * incomplete description. ACPI resolves SpiSerialBus() resources from anywhere in the namespace,
-+ * and the SPI core enumerates nothing from a software node.
-+ */
-+static void lstp_spi_enumerate(struct lstp_channel *ch, struct spi_controller *ctrl)
-+{
-+	if (is_of_node(ch->fwnode)) {
-+		unsigned int child_count = 0;
-+		struct fwnode_handle *child;
-+
-+		fwnode_for_each_available_child_node(ch->fwnode, child)
-+			child_count++;
-+
-+		if (child_count == 0) {
-+			dev_warn(ch->dev,
-+				 "%s: ch_%d: Firmware node present but defines no SPI devices\n",
-+				 __func__, ch->ch_id);
-+		} else {
-+			dev_info(ch->dev, "%s: ch_%d: Firmware node present with %u SPI devices\n",
-+				 __func__, ch->ch_id, child_count);
-+		}
-+	} else if (is_acpi_node(ch->fwnode)) {
-+		dev_info(ch->dev,
-+			 "%s: ch_%d: ACPI describes this channel; its peripherals resolve from the namespace\n",
-+			 __func__, ch->ch_id);
-+	} else if (ch->fwnode) {
-+		dev_warn(ch->dev,
-+			 "%s: ch_%d: Software node describes this channel, so no SPI devices are enumerated for it\n",
-+			 __func__, ch->ch_id);
++	/*
++	 * Normally already empty. What survives the close drain and the hangup
++	 * flush is a drain still stalled when closing_wait expires: bytes queued
++	 * with no worker after the cancel above, so write_room() would stay
++	 * short by that much for the life of the port.
++	 */
++	scoped_guard(spinlock_irqsave, &ctx->write_lock) {
++		ctx->coal_len = 0;
++		ctx->tx_inflight_len = 0;
 +	}
 +}
 +
-+static int lstp_spi_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
++static void lstp_port_destruct(struct tty_port *port)
++{
++	struct lstp_uart_ctx *ctx = container_of(port, struct lstp_uart_ctx, port);
++	struct lstp_channel *ch = ctx->ch;
++
++	lstp_free_minor(ctx);
++	kfree(ctx->tx_snapshot);
++	kfree(ctx->coal_buf);
++	kfree(ctx);
++	lstp_channel_put(ch);
++}
++
++static const struct tty_port_operations lstp_port_ops = {
++	.activate = lstp_port_activate,
++	.shutdown = lstp_port_shutdown,
++	.destruct = lstp_port_destruct,
++};
++
++static int lstp_tty_install(struct tty_driver *driver, struct tty_struct *tty)
++{
++	struct lstp_uart_ctx *ctx = lstp_get_by_minor(tty->index);
++
++	if (!ctx)
++		return -ENODEV;
++
++	/*
++	 * tty_port_install(), as it sets tty->port: tty_init_dev() would use
++	 * driver->ports[], which tty_unregister_device() leaves naming the
++	 * minor's last context.
++	 */
++	int ret = tty_port_install(&ctx->port, driver, tty);
++
++	if (ret) {
++		tty_port_put(&ctx->port);
++		return ret;
++	}
++
++	/*
++	 * The tty now owns the lookup's reference; lstp_tty_cleanup() drops it.
++	 * @driver_data is the context, not the channel, so this tty never
++	 * reaches a later bind's context.
++	 */
++	tty->driver_data = ctx;
++	return 0;
++}
++
++static int lstp_tty_open(struct tty_struct *tty, struct file *filp)
++{
++	return tty_port_open(tty->port, tty, filp);
++}
++
++static void lstp_tty_close(struct tty_struct *tty, struct file *filp)
++{
++	tty_port_close(tty->port, tty, filp);
++}
++
++static void lstp_tty_hangup(struct tty_struct *tty)
++{
++	tty_port_hangup(tty->port);
++}
++
++static void lstp_tty_cleanup(struct tty_struct *tty)
++{
++	/* Drops what .install was handed. Runs for every installed tty. */
++	tty_port_put(tty->port);
++}
++
++static ssize_t lstp_tty_write(struct tty_struct *tty, const unsigned char *buf, size_t count)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++	struct lstp_channel *ch = ctx->ch;
++
++	if (!count)
++		return 0;
++
++	guard(spinlock_irqsave)(&ctx->write_lock);
++
++	if (lstp_channel_disconnected(ch))
++		return -EIO;
++
++	size_t room = ctx->max_payload - ctx->coal_len;
++
++	if (!room)
++		return 0;
++
++	count = min(count, room);
++	memcpy(ctx->coal_buf + ctx->coal_len, buf, count);
++	ctx->coal_len += count;
++
++	schedule_work(&ctx->write_work);
++
++	return count;
++}
++
++static unsigned int lstp_tty_write_room(struct tty_struct *tty)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++	struct lstp_channel *ch = ctx->ch;
++
++	guard(spinlock_irqsave)(&ctx->write_lock);
++
++	if (lstp_channel_disconnected(ch))
++		return 0;
++	return ctx->max_payload - ctx->coal_len;
++}
++
++static unsigned int lstp_tty_chars_in_buffer(struct tty_struct *tty)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++	struct lstp_channel *ch = ctx->ch;
++
++	guard(spinlock_irqsave)(&ctx->write_lock);
++
++	if (lstp_channel_disconnected(ch))
++		return 0;
++
++	unsigned int count = ctx->coal_len;
++
++	if (ctx->tx_in_flight)
++		count += ctx->tx_inflight_len;
++	return count;
++}
++
++static void lstp_tty_flush_buffer(struct tty_struct *tty)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++
++	scoped_guard(spinlock_irqsave, &ctx->write_lock)
++		ctx->coal_len = 0;
++	/* Does not cancel an already in-flight TX. */
++	cancel_work(&ctx->write_work);
++}
++
++/*
++ * Firmware config is fixed. tty_termios_copy_hw() restores the speeds and all
++ * of c_cflag but CREAD, HUPCL and CLOCAL; it leaves c_iflag alone, so the
++ * flow-control bits are restored by hand below.
++ */
++static void lstp_tty_set_termios(struct tty_struct *tty, const struct ktermios *old_termios)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++
++	tty_termios_copy_hw(&tty->termios, old_termios);
++
++	/* XON/XOFF is a property of the link, not something stty may change. */
++	tty->termios.c_iflag &= ~(IXON | IXOFF | IXANY);
++	tty->termios.c_iflag |= ctx->hw_iflag & (IXON | IXOFF | IXANY);
++}
++
++/* Firmware fires a fixed-duration break; any non-zero state fires it, as cdc-acm does. */
++static int lstp_tty_break_ctl(struct tty_struct *tty, int state)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++
++	if (!state)
++		return 0;
++
++	/* Hangup clears initialized under port->mutex, so it waits out a break in flight. */
++	guard(mutex)(&ctx->port.mutex);
++	if (!tty_port_initialized(&ctx->port))
++		return -EIO;
++
++	return lstp_uart_send_with_retry(ctx, LSTP_UART_CMD_WRITE | LSTP_UART_TAG_GEN_BREAK, NULL,
++					 0);
++}
++
++static int lstp_tty_get_icount(struct tty_struct *tty, struct serial_icounter_struct *icount)
++{
++	struct lstp_uart_ctx *ctx = tty->driver_data;
++
++	/* tty_get_icount() has zeroed *icount; these are the fields the driver counts. */
++	icount->dcd = READ_ONCE(ctx->iocount.dcd);
++	icount->rx = READ_ONCE(ctx->iocount.rx);
++	icount->tx = READ_ONCE(ctx->iocount.tx);
++	icount->overrun = READ_ONCE(ctx->iocount.overrun);
++	icount->brk = READ_ONCE(ctx->iocount.brk);
++	icount->buf_overrun = READ_ONCE(ctx->iocount.buf_overrun);
++	return 0;
++}
++
++static const struct tty_operations lstp_ops = {
++	.install = lstp_tty_install,
++	.open = lstp_tty_open,
++	.close = lstp_tty_close,
++	.cleanup = lstp_tty_cleanup,
++	.hangup = lstp_tty_hangup,
++	.write = lstp_tty_write,
++	.write_room = lstp_tty_write_room,
++	.chars_in_buffer = lstp_tty_chars_in_buffer,
++	.flush_buffer = lstp_tty_flush_buffer,
++	.set_termios = lstp_tty_set_termios,
++	.break_ctl = lstp_tty_break_ctl,
++	.get_icount = lstp_tty_get_icount,
++};
++
++/*
++ * Set up the tty_port, coalescing buffers and minor for one bind. The bind
++ * holds the port's initial reference, dropped by lstp_uart_remove(), and each
++ * installed tty another, so the context and its minor last until the later of
++ * the unbind and the last close.
++ */
++static int lstp_uart_init(struct lstp_channel *ch, const struct lstp_channel_init_info *info)
++{
++	if (info->config_len < sizeof(struct lstp_uart_config)) {
++		dev_err(ch->dev, "%s: ch_%d: UART config too short: %zu < %zu\n", __func__,
++			ch->ch_id, info->config_len, sizeof(struct lstp_uart_config));
++		return -EINVAL;
++	}
++
++	struct lstp_uart_ctx *ctx = kzalloc_obj(*ctx);
++
++	if (!ctx)
++		return -ENOMEM;
++
++	/* From here the only unwind is tty_port_put(); lstp_port_destruct() frees the rest. */
++	tty_port_init(&ctx->port);
++	ctx->port.ops = &lstp_port_ops;
++	ctx->minor = -1;
++	ctx->max_payload = ch->max_tx_payload;
++	ctx->ch = lstp_channel_get(ch);
++	spin_lock_init(&ctx->write_lock);
++
++	int ret = lstp_uart_parse_config(ctx, ch, info->config);
++
++	if (ret)
++		goto err_put_port;
++
++	ctx->coal_buf = kzalloc(ctx->max_payload, GFP_KERNEL);
++	if (!ctx->coal_buf) {
++		ret = -ENOMEM;
++		goto err_put_port;
++	}
++
++	ctx->tx_snapshot = kzalloc(ctx->max_payload, GFP_KERNEL);
++	if (!ctx->tx_snapshot) {
++		ret = -ENOMEM;
++		goto err_put_port;
++	}
++
++	ret = lstp_alloc_minor(ctx);
++	if (ret < 0) {
++		dev_err(ch->dev, "%s: ch_%d: Failed to allocate minor (%pe)\n", __func__, ch->ch_id,
++			ERR_PTR(ret));
++		goto err_put_port;
++	}
++	ctx->minor = ret;
++
++	INIT_WORK(&ctx->write_work, lstp_uart_write_work);
++	ch->priv = ctx;
++
++	dev_dbg(ch->dev, "%s: ch_%d: Initialized as %s\n", __func__, ch->ch_id, ch->display_name);
++	return 0;
++
++err_put_port:
++	tty_port_put(&ctx->port);
++	return ret;
++}
++
++static int lstp_uart_start(struct lstp_channel *ch)
++{
++	struct lstp_uart_ctx *ctx = ch->priv;
++
++	/*
++	 * Mark registered before publishing: tty_port_register_device() adds
++	 * the cdev and emits the uevent that sends udev straight to open(),
++	 * and lstp_tty_install() refuses a minor that is not marked. No node
++	 * exists at this index yet, so nothing can reach the map early.
++	 */
++	scoped_guard(mutex, &lstp_minors_lock)
++		ctx->registered = true;
++
++	struct device *tty_dev =
++		tty_port_register_device(&ctx->port, lstp_tty_driver, ctx->minor, ch->dev);
++
++	if (IS_ERR(tty_dev)) {
++		dev_err(ch->dev, "%s: ch_%d: Could not register TTY (%pe)\n", __func__, ch->ch_id,
++			tty_dev);
++		scoped_guard(mutex, &lstp_minors_lock)
++			ctx->registered = false;
++		return PTR_ERR(tty_dev);
++	}
++
++	/* Nothing below may fail: really_probe() skips .remove() when .probe() errors. */
++	dev_info(ch->dev, "%s: ch_%d: Started as %s\n", __func__, ch->ch_id, ch->display_name);
++	return 0;
++}
++
++/*
++ * Hang up the tty and unregister its device node, from the aux_driver
++ * .remove(). The minor and its map entry stay with the context until its last
++ * reference goes; clearing @registered is what refuses opens in between.
++ */
++static void lstp_uart_stop(struct lstp_channel *ch)
++{
++	struct lstp_uart_ctx *ctx = ch->priv;
++
++	/*
++	 * Clear @registered before sampling @port->tty, not after:
++	 * tty_port_open() publishes the tty before it calls .activate(), so an
++	 * open can go live between a sample and a later clear and never be
++	 * hung up here.
++	 */
++	scoped_guard(mutex, &lstp_minors_lock)
++		ctx->registered = false;
++
++	struct tty_struct *tty = tty_port_tty_get(&ctx->port);
++
++	if (tty) {
++		/*
++		 * Synchronous: fds move to hung_up_tty_fops and lstp_port_shutdown()
++		 * cancels write_work, so no write is submitted after this returns.
++		 */
++		tty_vhangup(tty);
++		tty_kref_put(tty);
++	}
++
++	tty_unregister_device(lstp_tty_driver, ctx->minor);
++}
++
++/*
++ * Nodes come and go with channel binds. The core drops a minor's saved termios
++ * when it is re-registered, so termios does not survive an unbind/bind cycle.
++ */
++static int __init lstp_uart_module_setup(void)
++{
++	lstp_tty_driver =
++		tty_alloc_driver(LSTP_UART_MINORS, TTY_DRIVER_REAL_RAW | TTY_DRIVER_DYNAMIC_DEV);
++	if (IS_ERR(lstp_tty_driver))
++		return PTR_ERR(lstp_tty_driver);
++
++	lstp_tty_driver->driver_name = "lstp";
++	lstp_tty_driver->name = "ttyLSTP";
++	lstp_tty_driver->major = 0;
++	lstp_tty_driver->minor_start = 0;
++	lstp_tty_driver->type = TTY_DRIVER_TYPE_SERIAL;
++	lstp_tty_driver->subtype = SERIAL_TYPE_NORMAL;
++	lstp_tty_driver->init_termios = tty_std_termios;
++	/* Overridden per-device in port_activate; this is the visible default. */
++	lstp_tty_driver->init_termios.c_cflag = B115200 | CS8 | CREAD | HUPCL | CLOCAL;
++	tty_set_operations(lstp_tty_driver, &lstp_ops);
++
++	int ret = tty_register_driver(lstp_tty_driver);
++
++	if (ret) {
++		tty_driver_kref_put(lstp_tty_driver);
++		return ret;
++	}
++
++	return 0;
++}
++
++static void lstp_uart_module_teardown(void)
++{
++	tty_unregister_driver(lstp_tty_driver);
++	tty_driver_kref_put(lstp_tty_driver);
++	xa_destroy(&lstp_minors);
++}
++
++static int lstp_uart_probe(struct auxiliary_device *auxdev, const struct auxiliary_device_id *id)
 +{
 +	struct lstp_channel *ch = lstp_channel_from_auxdev(auxdev);
 +	const struct lstp_channel_init_info *info = dev_get_platdata(&auxdev->dev);
@@ -435,81 +975,71 @@ index 000000000000..7aa908e6c398
 +	if (!info)
 +		return -ENODEV;
 +
-+	if (info->config_len < sizeof(struct lstp_spi_config)) {
-+		dev_err(ch->dev, "%s: ch_%d: SPI config too short: %zu < %zu\n", __func__,
-+			ch->ch_id, info->config_len, sizeof(struct lstp_spi_config));
-+		return -EINVAL;
-+	}
++	int ret = lstp_uart_init(ch, info);
 +
-+	const struct lstp_spi_config *config = info->config;
-+	struct lstp_spi_priv *priv = devm_kzalloc(ch->dev, sizeof(*priv), GFP_KERNEL);
-+
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	struct spi_controller *ctrl = devm_spi_alloc_host(ch->dev, 0);
-+
-+	if (!ctrl)
-+		return -ENOMEM;
-+
-+	u8 num_devices = config->num_devices;
-+	u32 speed_hz = le32_to_cpu(config->speed_hz);
-+
-+	if (num_devices == 0 || num_devices > ARRAY_SIZE(lstp_spi_cs_map)) {
-+		dev_err(ch->dev, "%s: ch_%d: Invalid num_devices %u (max %zu)\n", __func__,
-+			ch->ch_id, num_devices, ARRAY_SIZE(lstp_spi_cs_map));
-+		return -EINVAL;
-+	}
-+
-+	if (speed_hz == 0) {
-+		dev_err(ch->dev, "%s: ch_%d: Device returned SPI speed of %u Hz\n", __func__,
-+			ch->ch_id, speed_hz);
-+		return -EINVAL;
-+	}
-+
-+	spi_controller_set_devdata(ctrl, ch);
-+	ctrl->bus_num = -1;
-+	ctrl->num_chipselect = num_devices;
-+	ctrl->transfer_one_message = lstp_spi_transfer_one_message;
-+	ctrl->max_transfer_size = lstp_spi_max_xfer_size;
-+	ctrl->set_cs_timing = lstp_spi_set_cs_timing;
-+
-+	device_set_node(&ctrl->dev, ch->fwnode);
-+
-+	priv->ctrl = ctrl;
-+	priv->current_speed_hz = speed_hz;
-+	/* Registration probes peripherals, which may transfer at once; transfers read @ch->priv. */
-+	ch->priv = priv;
-+
-+	int ret = devm_spi_register_controller(ch->dev, ctrl);
-+
-+	if (ret) {
-+		dev_err(ch->dev, "%s: ch_%d: Could not register SPI controller (%pe)\n", __func__,
-+			ch->ch_id, ERR_PTR(ret));
++	if (ret)
 +		return ret;
-+	}
 +
-+	lstp_spi_enumerate(ch, ctrl);
++	struct lstp_uart_ctx *ctx = ch->priv;
 +
-+	dev_info(ch->dev, "%s: ch_%d: Started as %s (devices=%u, speed=%u Hz)\n", __func__,
-+		 ch->ch_id, ch->display_name, ctrl->num_chipselect, priv->current_speed_hz);
-+	return 0;
++	ret = lstp_uart_start(ch);
++	if (ret)
++		tty_port_put(&ctx->port);
++	return ret;
 +}
 +
-+static const struct auxiliary_device_id lstp_spi_id_table[] = { { .name = "lstp.spi" }, {} };
-+MODULE_DEVICE_TABLE(auxiliary, lstp_spi_id_table);
++/* A tty still installed keeps the context until its cleanup. */
++static void lstp_uart_remove(struct auxiliary_device *auxdev)
++{
++	struct lstp_channel *ch = lstp_channel_from_auxdev(auxdev);
++	struct lstp_uart_ctx *ctx = ch->priv;
 +
-+static struct lstp_auxiliary_driver lstp_spi_drv = {
-+	.adrv = {
-+		.name = "spi",
-+		.probe = lstp_spi_probe,
-+		.id_table = lstp_spi_id_table,
-+	},
++	lstp_uart_stop(ch);
++	tty_port_put(&ctx->port);
++}
++
++static const struct lstp_ops lstp_uart_ops = {
++	.irq_packet = lstp_uart_irq_callback,
 +};
-+module_lstp_auxiliary_driver(lstp_spi_drv);
++
++static const struct auxiliary_device_id lstp_uart_id_table[] = { { .name = "lstp.uart" }, {} };
++MODULE_DEVICE_TABLE(auxiliary, lstp_uart_id_table);
++
++static struct lstp_auxiliary_driver lstp_uart_drv = {
++	.adrv = {
++		.name = "uart",
++		.probe = lstp_uart_probe,
++		.remove = lstp_uart_remove,
++		.id_table = lstp_uart_id_table,
++	},
++	.ops = &lstp_uart_ops,
++};
++
++/* The tty_driver goes first: a probe registers its channel's tty device on it. */
++static int __init lstp_uart_module_init(void)
++{
++	int ret = lstp_uart_module_setup();
++
++	if (ret)
++		return ret;
++
++	ret = lstp_auxiliary_driver_register(&lstp_uart_drv);
++	if (ret)
++		lstp_uart_module_teardown();
++
++	return ret;
++}
++module_init(lstp_uart_module_init);
++
++static void __exit lstp_uart_module_exit(void)
++{
++	lstp_auxiliary_driver_unregister(&lstp_uart_drv);
++	lstp_uart_module_teardown();
++}
++module_exit(lstp_uart_module_exit);
 +
 +MODULE_IMPORT_NS("LSTP");
-+MODULE_DESCRIPTION("LSTP SPI driver");
++MODULE_DESCRIPTION("LSTP UART driver");
 +MODULE_LICENSE("GPL");
 -- 
 2.43.0
