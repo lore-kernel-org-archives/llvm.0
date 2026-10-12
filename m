@@ -1,70 +1,116 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01690367B6E;
-	Mon, 12 Oct 2026 03:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8357314B6D;
+	Mon, 12 Oct 2026 07:13:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791776095; cv=none; b=DFKleMT026Cmp7ZtA17M1nWPtvMwkGMN7r6ta3zMScW82EKWMHUdRHQYEsg417Ochv3IZFuB75jK9cGx0Q1ZSwBdKXt+4muoavpOgurMucumM+IBc/V+FIEjAAbyDhUHJgSYgQ9t3RVNBsPpHYel+RFWa9i5RgngOd/6lBizdw8=
+	t=1791789183; cv=none; b=bXMZ0C+Ne/tS6prXmF5enhZ8zL079TP55iZd7ofe0V4m6c3fIJAYBmJKt3c6g87eyKK8vmRlUDKL7LmjZX1vKIX9NgnBeBp/P8knMzOCIX/Xh4NwKjzjCv+YiRxYgrZ+cfZe+D5vjAnnugvTpq6a/5fiyvHMyDMoGNG7eyIs+2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791776095; c=relaxed/simple;
-	bh=niR6lxxPfj7rUlV6aFum9mpPv9YPbw1ezycBYAmU8MY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-Id; b=V22gJq8gKVK6u2CJNTywg8PMplY7GFFUYxdCqjxGxw8/24Xoo+H3T0zuEPaLcLwPdSw/sZSMGDUnARVNHMxVkzQ5KoQO55k6lBoDe2Q8oOfMtEBlP45y2DoIoPqjpmfBUduTIaD9uqmmn2ejxkxuPsV1UXnkeDhrEq8XUtRRbg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lLo5OulB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791789183; c=relaxed/simple;
+	bh=yY7FYvyH3pznj2ZBnBu3oDtQjq5p2qbLcDoRRd2NEEk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jAIgtG0YfHzRURf1s5JeT2NrRl6Ju6o/gfFVdysr89OvwTOjHCFA9GdGL9864Em9Ei4jspdbtkXEvNKLRK8ORnr+v+Mid3UdlrWnKCuENBPAHt1KiT/lqF+6snsfbF/mfF+OOY8DJARxMDJLcb4qHdpsf9WMqX30vHFcpe5PzGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OgnZJUgz; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lLo5OulB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC521F0089B;
-	Mon, 12 Oct 2026 03:34:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791776094;
-	bh=9j/8LRg3nbIXkmteXtvyJePgEJ8EH3SPQezus5FZ7FY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lLo5OulBIQeymnR7QQjd+VQBj59jtIixM6lvUh0BsNAHc53rUJwGfLdRGNP2lBvpT
-	 ZsHcl7Xy1rz40oKmCFQBwOydbEQEA0iGnZnx+t1V7Wl+cAU9gfkFFEnYee/5ddVaKT
-	 g0M0BJlFG/S05kmY7miUxNTswkqGwpb4W++kaKKFp4HAZ2/kzyFGYhf5v+wF//SR5m
-	 zscSJzJBa8grNMy8nzG73jMax9Zki1+72Mpr+kxoxm/BPIVHPs3DYeXIPESB/SVT18
-	 Etdbc1J7igdb/sQlUk6WyZ2Hcvyasp4HBudNusUpscYitUVd+wLBB1+BMOnvUujrVE
-	 RztC0KLfxw86w==
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: sashal@kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>,
- Justin Stitt <justinstitt@google.com>, Ben Hutchings <benh@debian.org>,
- Sasha Levin <sashal@kernel.org>, stable@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-Subject: Re: [PATCH] bootconfig: give the footer size static_assert a message
-Date: Mon, 12 Oct 2026 12:34:49 +0900
-X-Mailer: UndineD 0.1
-In-Reply-To: <20261011223358.2327625-13-sashal@kernel.org>
-References: 20261011223358.2327625-13-sashal@kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OgnZJUgz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791789182; x=1823325182;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yY7FYvyH3pznj2ZBnBu3oDtQjq5p2qbLcDoRRd2NEEk=;
+  b=OgnZJUgzRV7JhVxKUcmcVqdX8X69YC/1RidFH68HPH/HM22x+WxAz/Qi
+   xa15XvYWmgOP6zdT1MtV+6LSIr3m1+Q7WJhqxprOgXFygzygTKcTRdjWn
+   fgvox8gHrt9/5oDldtECIfYm6g1aR8wMzV/wzhKpPvjvTOo6Vggve7k5S
+   BwSGgc7TsBs+N/1cn1eo3kPPbNgHJV/w3l/iBgHgDg6chnr/XnrmQxnuO
+   /gYSSQAk8z1sgWyRpSoRzqjNaBjU/ayMUUQeIBqsD/tTJ79JP2wqN1zoF
+   XU9r/z7qVDY+LngDT8iF4H808tqv3bWQmnx05+vuIKP3LMYcaBBm62rcs
+   Q==;
+X-CSE-ConnectionGUID: SCmiHrX6RxejDL6LDbmszw==
+X-CSE-MsgGUID: D5T4+eoxR4a8OFVXNAlbpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11932"; a="363960"
+X-IronPort-AV: E=Sophos;i="6.27,153,1787036400"; 
+   d="scan'208";a="363960"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 00:13:02 -0700
+X-CSE-ConnectionGUID: shkb1Eh4SD+agw/q7GVb0Q==
+X-CSE-MsgGUID: sbEVSBfYS7idPxHZg3vtZw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,153,1787036400"; 
+   d="scan'208";a="920325"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 12 Oct 2026 00:12:57 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xGADN-00000000B8n-2VTv;
+	Mon, 12 Oct 2026 07:12:53 +0000
+Date: Mon, 12 Oct 2026 15:12:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mingyou Chen <qby140326@gmail.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilya Gladyshev <ilya.gladyshev@linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	KentoNion <kento@kekto.ru>, platform-driver-x86@vger.kernel.org,
+	ted eric <ericted8810@gmail.com>, Armin Wolf <W_Armin@gmx.de>,
+	linux-kernel@vger.kernel.org, Chris Taraszka <chris@miget.com>,
+	Matias Civadda <matias.civadda2342001@gmail.com>,
+	=?utf-8?B?6auYIOS/iuaWhw==?= <btx342@gmail.com>,
+	powerfullz <wleizc7319@gmail.com>,
+	=?utf-8?B?5a2ZIOiqiemTrQ==?= <wolf109909@outlook.com>,
+	=?utf-8?B?TWlsb8Wh?= Vlku <vlku.milos.fun@gmail.com>,
+	Rsplwe <i@rsplwe.com>, Bozhen Peng <bozhenpeng93@gmail.com>,
+	Anton Karasev <uselessfire@gmail.com>,
+	Jame Jao <jaojame6@gmail.com>, Mingyou Chen <qby140326@gmail.com>
+Subject: Re: [PATCH v10 5/5] platform/x86: bitland-mifs-wmi: Add quirks table
+Message-ID: <202610121535.VUNgWVii-lkp@intel.com>
+References: <20261011135748.11792-6-qby140326@gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Message-Id: <20261012033451.EEC521F0089B@smtp.kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261011135748.11792-6-qby140326@gmail.com>
 
-On Sun, 11 Oct 2026 18:33:41 -0400, Sasha Levin <sashal@kernel.org> wrote:
-> static_assert() without a message is a C23 feature, so clang warns:
->
->   main.c:498:56: warning: '_Static_assert' with no message is a C23 extension [-Wc23-extensions]
->
-> Add a message.
->
-> Fixes: 6ed5e20466c79 ("bootconfig: Fix unaligned access when building footer")
-> Cc: stable@vger.kernel.org
-> Assisted-by: LLM
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+Hi Mingyou,
 
-Looks good to me. Let me pick it.
+kernel test robot noticed the following build errors:
 
-Thanks!
+[auto build test ERROR on 98f039265e580291d5e76a11b2072541fbb1c393]
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+url:    https://github.com/intel-lab-lkp/linux/commits/Mingyou-Chen/MAINTAINERS-Add-maintainer-entry-of-bitland-mifs-wmi-driver/20261011-215744
+base:   98f039265e580291d5e76a11b2072541fbb1c393
+patch link:    https://lore.kernel.org/r/20261011135748.11792-6-qby140326%40gmail.com
+patch subject: [PATCH v10 5/5] platform/x86: bitland-mifs-wmi: Add quirks table
+config: x86_64-randconfig-1005-20261012 (https://download.01.org/0day-ci/archive/20261012/202610121535.VUNgWVii-lkp@intel.com/config)
+compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261012/202610121535.VUNgWVii-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610121535.VUNgWVii-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/platform/x86/bitland-mifs-wmi.c:136:1: error: extraneous closing brace ('}')
+     136 | };
+         | ^
+   1 error generated.
+
+
+vim +136 drivers/platform/x86/bitland-mifs-wmi.c
+
+   135	
+ > 136	};
+   137	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
