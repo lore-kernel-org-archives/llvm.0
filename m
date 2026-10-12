@@ -1,90 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A964D956D;
-	Mon, 12 Oct 2026 18:41:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DD13A543A;
+	Mon, 12 Oct 2026 18:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791830465; cv=none; b=p3x+dZNIcvkOrPvnt0lsDl/9pxFhBR5gO9/YpgZOqzLBokdNPgM+J7lJMPcrE1rjGstOdq3hnKPd9rm9LDdQa59lorKsDyirtRDv7o+MMNpKQyxx80chuzQDnA9ntIAAqcRo/XC+mFmdpq0sOVbK4dSfreYFg2OC5NeT0fy8pok=
+	t=1791831058; cv=none; b=vEz1CVTLL7Pc6em/kSS2cBdGuXBKfYcHNSHqcDs45sTGgQ1KlHiEeDMQwY9/6l4fUDJei/FcOAf5/WUgORqUrHX33WQWmZ5RWgUoR/XBJSrX/ddL/OeqzcSPSWMS+QuLnvRN0wN3CJXr2orQbR1anWom5aA3lo94gjO0Nh8+4Zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791830465; c=relaxed/simple;
-	bh=2RYhboUm294LPHQVALh9L0eDB51UX/1aKGwNysxu+R8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jlaKZFWbtcgFip8muwZDA8d9nAhUNwwZlzpY/YNRzgmfFGGqDOk2CnVkKv/uR6mKAFyVqHf/eFDXAeUHRF/nMbJ6Jj21v2Uc/MH4loEni5skCl7F+dSZtVsEO7CIuMRZOMbnreISywAnpbnwad+6UFGHf0r4tcrglaarPIoWBhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TrBZQGyz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791831058; c=relaxed/simple;
+	bh=XswTEJBaB9wjb1TZEn4D0Wv15ymgz6LEKQZXH21JWL4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=YOYlw8BL8ruXmCkzZOtTycaUevOFhow5YCfnRCnHNNH92PxgmKdt1yv6rpqAGtG0vyw9vg9oDp8u2s1KUOrrlI0YagceXYw+HtkSRTijZfnrUSprB6c8iFKVNhcNWq6UyD+muHiQkSdgAd6X6NqZ5CtAy3v3z8DYPPnvn8okpOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9tIEBVS; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TrBZQGyz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0CAA1F0089B;
-	Mon, 12 Oct 2026 18:41:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791830463;
-	bh=4TdtsTHdQ41W4OUZCv5jF0QWzU8uLyAJ8WWWW/d1wkE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=TrBZQGyzdNz1wh7v9M+LQDrDEs9hXGL+bsP+UEGwwJ6lVYwOKEaJlgg6QG7Wzrcjl
-	 TA+Mn/YJarxFxJ1hqraPMH9GkK6veZUKAfKJraXwrODq6r80BCWdXJE+SPM+mZUD7L
-	 INLjdud2Cj8nXhB9+0dvotOuoL+X264H/3ke9iAQSQgKaH4rYExs9K01ehsnPdXsQU
-	 vDvsr53/ja16Ouo+mhK395MCF79WnfxKL6SO4G+m38meozxCYWpQdrscEvwTS9eOYh
-	 TqXwzBqnW8cdnDmahjzHzn7ZAQct57PKhOTfNfRRRvBYVYn60cWeXFM73RSXpEbJJK
-	 FKpE4oaKz1y6w==
-Date: Mon, 12 Oct 2026 11:41:03 -0700
-From: Kees Cook <kees@kernel.org>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-	Sami Tolvanen <samitolvanen@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 3/3] objtool: Skip jump table jumps in the kCFI indirect
- call check
-Message-ID: <20261012183925.ca026d-kees@kernel.org>
-References: <20261012090424.i.497-kees@kernel.org>
- <20261012090436.1676525-3-kees@kernel.org>
- <20261012092250.GO4121339@noisy.programming.kicks-ass.net>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9tIEBVS"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1791831057; x=1823367057;
+  h=date:from:to:cc:subject:message-id;
+  bh=XswTEJBaB9wjb1TZEn4D0Wv15ymgz6LEKQZXH21JWL4=;
+  b=d9tIEBVS5vQLwtAhhfUTH0mOhi+6fyqp6U0cKqU5UrYmSX+VNelLuIvN
+   xi6cMBmXtIVwwfY7B4Rc4pynSosfv/F/Do0tJ2IXN+koVgMSSbU14D4OY
+   TPewIBoXqwjEPKd7PLvHGUxh1KsFpuUKdsWgmFrPKT7xRALIYlrspdhCn
+   ZkleWD9rBgIaefmPysYQFVs6b9+DEamnzXfOSZmGjWxjOLWZCD4QEJ30n
+   y6wAiZQ/miZutNrOdlwrwm6zIyiPh8DzKXiDIi2nNsFqPe9yxTzmqpWZ6
+   9vKiBY3kr36VgAUVUCFQPpjwakcS+Co8CaivU3bv9a4wPD1rnzAVyX1c+
+   Q==;
+X-CSE-ConnectionGUID: o3qM6d49Qsy7pilIa4KUcw==
+X-CSE-MsgGUID: 50DQEsSKRPG1rQpbf9h74w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11933"; a="430716"
+X-IronPort-AV: E=Sophos;i="6.27,154,1787036400"; 
+   d="scan'208";a="430716"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 11:50:57 -0700
+X-CSE-ConnectionGUID: FP7j9GTjT0u9xitgufCesg==
+X-CSE-MsgGUID: ACzFs30FTwySrHg6WPAwKg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,154,1787036400"; 
+   d="scan'208";a="926799"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 12 Oct 2026 11:50:55 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xGL6r-00000000Bzw-26Fo;
+	Mon, 12 Oct 2026 18:50:53 +0000
+Date: Tue, 13 Oct 2026 02:50:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [jlayton:kdevops 2/2] fs/f2fs/file.c:1104:17: error: cannot
+ assign to variable 'attr' with const-qualified type 'const struct iattr *'
+Message-ID: <202610130215.eJAMJB4X-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261012092250.GO4121339@noisy.programming.kicks-ass.net>
 
-On Mon, Oct 12, 2026 at 11:22:50AM +0200, Peter Zijlstra wrote:
-> I am confused.. I don't see a computed goto in __bpf_prog_run(), and we
-> build with -fno-jump-tables.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jlayton/linux.git kdevops
+head:   664d401caf1306ec655f7e729082dfccd36dc5da
+commit: 664d401caf1306ec655f7e729082dfccd36dc5da [2/2] f2fs: opt in to multigrain timestamps
+config: arm-randconfig-1001-20261012 (https://download.01.org/0day-ci/archive/20261013/202610130215.eJAMJB4X-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261013/202610130215.eJAMJB4X-lkp@intel.com/reproduce)
 
-It's the interpreter, ___bpf_prog_run() (three underscores) in
-kernel/bpf/core.c, not the __bpf_prog_run() wrapper in filter.h:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610130215.eJAMJB4X-lkp@intel.com/
 
-	static const void * const jumptable[256] __annotate_jump_table = {
-		[0 ... 255] = &&default_label,
-		...
-	};
-	...
-	select_insn:
-		goto *jumptable[insn->code];
+All errors (new ones prefixed by >>):
 
-So it's a manually constructed jump table, not the "normal"
-table-from-switch stuff that -fno-jump-tables suppresses (though see
-below about Clang). objtool already knows about it, with annotations
-added back in 2019 in commit e55a73251da33 ("bpf: Fix ORC unwinding in
-non-JIT BPF code").
+>> fs/f2fs/file.c:1104:17: error: cannot assign to variable 'attr' with const-qualified type 'const struct iattr *'
+    1104 |         attr->ia_valid &= ~ATTR_MODE;
+         |         ~~~~~~~~~~~~~~ ^
+   fs/f2fs/file.c:1100:48: note: variable 'attr' declared const here
+    1100 |                            struct inode *inode, const struct iattr *attr)
+         |                                                 ~~~~~~~~~~~~~~~~~~~~^~~~
+   fs/f2fs/file.c:1113:18: error: cannot assign to variable 'attr' with const-qualified type 'const struct iattr *'
+    1113 |                 attr->ia_valid |= ATTR_MODE;
+         |                 ~~~~~~~~~~~~~~ ^
+   fs/f2fs/file.c:1100:48: note: variable 'attr' declared const here
+    1100 |                            struct inode *inode, const struct iattr *attr)
+         |                                                 ~~~~~~~~~~~~~~~~~~~~^~~~
+   2 errors generated.
 
-With retpolines, GCC emits a single dispatch that every handler uses:
 
-	movzbl (%rbx),%esi
-	movzbl %sil,%edx
-	mov    jumptable(,%rdx,8),%rdx
-	jmp    __x86_indirect_thunk_rdx
+vim +1104 fs/f2fs/file.c
 
-Clang never has this jump: with retpolines, LLVM's IndirectBrExpand pass
-turns the label addresses into indexes and the "goto *" into a switch,
-which Clang's -fno-jump-tables then makes a compare tree. So it's only
-constructed this way under GCC, but since now we can turn on kCFI with
-GCC, the objtool warning about indirects without kcfi protection trips.
+  1097	
+  1098	#ifdef CONFIG_F2FS_FS_POSIX_ACL
+  1099	static void __setattr_copy(struct mnt_idmap *idmap,
+  1100				   struct inode *inode, const struct iattr *attr)
+  1101	{
+  1102		unsigned int ia_valid = attr->ia_valid;
+  1103	
+> 1104		attr->ia_valid &= ~ATTR_MODE;
+  1105	
+  1106		setattr_copy(idmap, inode, attr);
+  1107		if (ia_valid & ATTR_MODE) {
+  1108			umode_t mode = attr->ia_mode;
+  1109	
+  1110			if (!in_group_or_capable(idmap, inode, i_gid_into_vfsgid(idmap, inode)))
+  1111				mode &= ~S_ISGID;
+  1112			set_acl_inode(inode, mode);
+  1113			attr->ia_valid |= ATTR_MODE;
+  1114		}
+  1115	}
+  1116	#else
+  1117	#define __setattr_copy setattr_copy
+  1118	#endif
+  1119	
 
--- 
-Kees Cook
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
