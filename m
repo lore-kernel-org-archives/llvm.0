@@ -1,236 +1,100 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE88246DFEE;
-	Mon, 12 Oct 2026 08:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00B7E46EF6A;
+	Mon, 12 Oct 2026 09:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791795192; cv=none; b=DtiGcZLd2AcOdseAXe5/3LPQF306O3meGFgRf5L1QsQL5bLPUYb/ROTtr4Ei05teWwib843dPruX6JS1PW19dzPHNH9hvj/85r0QRDGwPt81RKVuUvk++gYV66zNUd0Tk9VYhL5eEh/wenqr6N/7dnzwFKB58M59/Gp0MIWEBug=
+	t=1791795878; cv=none; b=Jh1qMBWfw47JLD+qTf06e+4nRc0EwEEKaPHl811N2boniFqQBCPHEocvuZPvi7FDLU3Prbp0hzYouakY6qnQpXnzUjNEiiRWRaP6JkJvX/vSrMCqE6jkeZdwO1w9W38sIXHdZd4WsMjvfrPtkIX6V2P+Qe4GSrffOdyFnEDBPGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791795192; c=relaxed/simple;
-	bh=+s7hEjworOHhNb0b2A452OZm1DnkwBzB1PdtrLn27VM=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=RsaS+sQT8czWv3mxuCy5Yw6Mm7zGIR3eHyKG6viPFcfwNJMCoxt+pH+bYiMXj4SDI/MzBNqwAPOnSW5BJvOpoJb9NYQeQdGNMav+3AcJfagZz1g6zd23FQDMu+KBAeqvkBYGFICGVQ6qmRMyypFXcg0wM2S9OIwXasHZyn8atyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SXsQxkK6; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1791795878; c=relaxed/simple;
+	bh=F+hU7zwvoM4jrDZHnAy/AVYIpxeYgHOwQ6w9X6A+J/4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZuFQ94aIk5ohtk4xN87TxyXFV5qNUaY8ZxXwPfTOukKOIVjjaTMlb13X0Q3hLY+X9o6XMYioBGAzSaaqLBZGiJozhIw6aMbNMRcS4dpgGkjKot+cs0V6Obxq9LG2UM1+E9C+tWE6ZEVsh0oTQhfPJDRzgzzVzOqWBIYdVhT8/WM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MU553+qa; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SXsQxkK6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791795191; x=1823331191;
-  h=date:from:to:cc:subject:message-id;
-  bh=+s7hEjworOHhNb0b2A452OZm1DnkwBzB1PdtrLn27VM=;
-  b=SXsQxkK6zWK0Kg/mzb4o92Bsg0GZPiIXTIirYzf8yYSWDIFkGQwi3JdH
-   Vbna86nq+5tW1zdvtqZmIsRGE6i5BFI4ryy2ikWoEv29TntZY6UwawbUL
-   WtQV5xMELUhJ5oM8zbHgub5yzEfDw/9UqgPlhU3pTTW11nYPyUr0kdX/j
-   1Z/yqwAxvAECKcZn4U0XdWMmp3KI8eTb997bqjWqdQ+PXQJI66zq5KSbi
-   UDfDobUAXH1TsmY6wCXygIKor3HJv+EFJb0EcrGOcrKQ+OKTTqs6WNGwX
-   6HOZh57QOtDjy/z/n5t2Mns3Ws+hR8pQlpQc01Sa3xtgeM5ACcYiUvs3H
-   g==;
-X-CSE-ConnectionGUID: 8jX9oqueSjm8u92OKb2LeQ==
-X-CSE-MsgGUID: woOgcAkRTUuFbxL4eEh3tg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11932"; a="383182"
-X-IronPort-AV: E=Sophos;i="6.27,153,1787036400"; 
-   d="scan'208";a="383182"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 01:53:10 -0700
-X-CSE-ConnectionGUID: RIDsohrxSC+sHHbzshCCPg==
-X-CSE-MsgGUID: 6hGqDbTgTWiAIlNIeggCWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,153,1787036400"; 
-   d="scan'208";a="821385"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 12 Oct 2026 01:53:09 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xGBmM-00000000BGL-37mu;
-	Mon, 12 Oct 2026 08:53:06 +0000
-Date: Mon, 12 Oct 2026 16:52:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Howells <dhowells@redhat.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [dhowells-fs:netfs-crypt 30/30]
- fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used
- uninitialized whenever 'if' condition is false
-Message-ID: <202610121621.oAIK4kei-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MU553+qa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17491F0089E;
+	Mon, 12 Oct 2026 09:04:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791795876;
+	bh=qCxhAANfVhEXP/8xHY5Cud2Gow55mujn4jh7Fzm4A04=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=MU553+qaNz6AzM0rba9oPDtYAkVfgFIRPAleDgwX/MJuDW4F3MO5Ab1lel9UKN+rw
+	 8wl2G7QX1trbND/URMezfF6ZQh0fNHdBP7EKcNIK0DpVft9LYaG38OkB1kU1o8sq7m
+	 2WTbwTnCB63x69o0EnbCyUD5co5Yqgsu/Gt11p/2sMSf3IrWFjCQeBarvkjLonb1Fd
+	 i4u9RiQ8BBPw/e0uUOY5yOqsxBSxTR+6f4y2BgxA6z1c7q1Duw3hgYE0ocqEnp603B
+	 uHVJBd+tgxo6VcR/195SnRZAf9liKGrNAy/ge9eDKHpYpWU+KcXR6VZ3T79p0apd1h
+	 EMZ7V9TV1li8Q==
+From: Kees Cook <kees@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Kees Cook <kees@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org
+Subject: [PATCH 3/3] objtool: Skip jump table jumps in the kCFI indirect call check
+Date: Mon, 12 Oct 2026 02:04:26 -0700
+Message-ID: <20261012090436.1676525-3-kees@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20261012090424.i.497-kees@kernel.org>
+References: <20261012090424.i.497-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1669; i=kees@kernel.org; h=from:subject; bh=F+hU7zwvoM4jrDZHnAy/AVYIpxeYgHOwQ6w9X6A+J/4=; b=owGbwMvMwCVmps19z/KJym7G02pJDFlnFs3irS5IOrOg6v9TTQuP5Rqrvq1Zvv+axBbOLyd4M /escGG27ShlYRDjYpAVU2QJsnOPc/F42x7uPlcRZg4rE8gQBi5OAZiIxxVGhrcL3flNC4N2T147 oYJ/ptxj1QrPgKMXHhrIzTVaELaojYeR4eRGPpY4x1RLh/iDHbUTWP0l/55VEvl0aXam2sGr1q2 VjAA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git netfs-crypt
-head:   870d31c7b4cbee9e73019466181a2e0c2c1094f8
-commit: 870d31c7b4cbee9e73019466181a2e0c2c1094f8 [30/30] netfs: Support encryption on unbuffered/DIO write
-config: x86_64-randconfig-1007-20261012 (https://download.01.org/0day-ci/archive/20261012/202610121621.oAIK4kei-lkp@intel.com/config)
-compiler: clang version 22.1.3 (https://github.com/llvm/llvm-project e9846648fd6183ee6d8cbdb4502213fcf902a211)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261012/202610121621.oAIK4kei-lkp@intel.com/reproduce)
+With MITIGATION_RETPOLINE=y, GCC lowers the computed goto in
+___bpf_prog_run() to a jump through __x86_indirect_thunk_rdx. objtool
+puts that jump on the retpoline call list along with the indirect calls,
+so with CONFIG_CFI=y the kCFI check wants a UD2 before it:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610121621.oAIK4kei-lkp@intel.com/
+  vmlinux.o: warning: objtool: ___bpf_prog_run+0x1e: no-cfi indirect call!
 
-All warnings (new ones prefixed by >>):
+The jump goes through the "jumptable" array, which objtool already reads
+from .data.rel.ro.c_jump_table, so its targets stay inside the function
+and need no kCFI check. Skip jump table jumps in the check. Clang does
+not emit this jump: with retpolines, it lowers the computed goto without
+an indirect jump.
 
-   fs/netfs/direct_write.c:128:7: warning: variable 'fpos2' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     128 |                 if (before && part <= 2 * PAGE_SIZE) {
-         |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/direct_write.c:171:53: note: uninitialized use occurs here
-     171 |         ret = netfs_rmw_read(wreq, before ?: after, fpos1, fpos2);
-         |                                                            ^~~~~
-   fs/netfs/direct_write.c:128:3: note: remove the 'if' if its condition is always false
-     128 |                 if (before && part <= 2 * PAGE_SIZE) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     129 |                         struct bvecq *bq;
-         |                         ~~~~~~~~~~~~~~~~~
-     130 |                         size_t page0 = PAGE_SIZE - before->bv[0].bv_offset;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     131 |                         int slot;
-         |                         ~~~~~~~~~
-     132 | 
-     133 |                         if (part <= page0) {
-         |                         ~~~~~~~~~~~~~~~~~~~~
-     134 |                                 before->bv[0].bv_len = part;
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     135 |                                 bvecq_filled_to(before, 1);
-         |                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     136 |                                 goto do_it;
-         |                                 ~~~~~~~~~~~
-     137 |                         }
-         |                         ~
-     138 | 
-     139 |                         bq = wreq->encrypt_cursor.bvecq;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     140 |                         slot = wreq->encrypt_cursor.slot + 1;
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-     141 |                         if (slot > bq->nr_slots) {
-         |                         ~~~~~~~~~~~~~~~~~~~~~~~~~~
-     142 |                                 bq = bq->next;
-         |                                 ~~~~~~~~~~~~~~
-     143 |                                 slot = 0;
-         |                                 ~~~~~~~~~
->> fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-     125 |         if (to == end && subreq->start + subreq->len < to) {
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/direct_write.c:171:53: note: uninitialized use occurs here
-     171 |         ret = netfs_rmw_read(wreq, before ?: after, fpos1, fpos2);
-         |                                                            ^~~~~
-   fs/netfs/direct_write.c:125:2: note: remove the 'if' if its condition is always true
-     125 |         if (to == end && subreq->start + subreq->len < to) {
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   fs/netfs/direct_write.c:125:6: warning: variable 'fpos2' is used uninitialized whenever '&&' condition is false [-Wsometimes-uninitialized]
-     125 |         if (to == end && subreq->start + subreq->len < to) {
-         |             ^~~~~~~~~
-   fs/netfs/direct_write.c:171:53: note: uninitialized use occurs here
-     171 |         ret = netfs_rmw_read(wreq, before ?: after, fpos1, fpos2);
-         |                                                            ^~~~~
-   fs/netfs/direct_write.c:125:6: note: remove the '&&' if its condition is always true
-     125 |         if (to == end && subreq->start + subreq->len < to) {
-         |             ^~~~~~~~~~~~
-   fs/netfs/direct_write.c:103:21: note: initialize the variable 'fpos2' to silence this warning
-     103 |         uoff_t fpos1, fpos2;
-         |                            ^
-         |                             = 0
-   fs/netfs/direct_write.c:563:22: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-     563 |                 stream->buffered = ret;
-         |                                    ^~~
-   fs/netfs/direct_write.c:475:13: note: initialize the variable 'ret' to silence this warning
-     475 |         ssize_t ret, n;
-         |                    ^
-         |                     = 0
-   4 warnings generated.
+Build tested ARCH=x86_64 defconfig with CONFIG_LKDTM=y and CONFIG_CFI=y,
+with GCC 17.0.0 (experimental, with the kCFI series).
 
+Assisted-by: LLM
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+ tools/objtool/check.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-vim +125 fs/netfs/direct_write.c
+diff --git a/tools/objtool/check.c b/tools/objtool/check.c
+index 464f6c9d9ff0..d35c5305075f 100644
+--- a/tools/objtool/check.c
++++ b/tools/objtool/check.c
+@@ -4199,6 +4199,14 @@ static int validate_retpoline(struct objtool_file *file)
+ 	list_for_each_entry(insn, &file->retpoline_call_list, call_node) {
+ 		struct symbol *sym = insn_sym(insn);
+ 
++		/*
++		 * A jump through a jump table stays inside the function, so
++		 * it has no kCFI check.  GCC turns the computed goto in
++		 * ___bpf_prog_run() into one under MITIGATION_RETPOLINE.
++		 */
++		if (is_jump_table_jump(insn))
++			continue;
++
+ 		if (sym && (is_notype_sym(sym) ||
+ 			    is_func_sym(sym)) && !sym->nocfi) {
+ 			struct instruction *prev =
+-- 
+2.55.0
 
-    93	
-    94	/*
-    95	 * Read gaps at either end of the bounce buffer that need to be filled for an
-    96	 * RMW cycle.
-    97	 */
-    98	static ssize_t netfs_unbuffered_rmw(struct netfs_io_request *wreq,
-    99					    struct netfs_io_subrequest *subreq,
-   100					    uoff_t to, uoff_t end)
-   101	{
-   102		struct bvecq *before = NULL, *after = NULL;
-   103		uoff_t fpos1, fpos2;
-   104		size_t bsize = wreq->crypto_bsize;
-   105		int ret;
-   106	
-   107		_enter("%llx,%llx", to, end);
-   108	
-   109		/* Build a buffer chain to cover the gaps.  If we have two gaps, they
-   110		 * must be discontiguous and so we will need two separate bvecqs for
-   111		 * that; however, if the entire write spans at most two pages, just do
-   112		 * one read for both gaps plus the middle.
-   113		 */
-   114		if (subreq->start < wreq->start) {
-   115			before = bvecq_alloc_one(2, wreq->gfp, false);
-   116			if (!before)
-   117				return -ENOMEM;
-   118			fpos1 = subreq->start;
-   119			before->bv[0] = wreq->encrypt_cursor.bvecq->bv[wreq->encrypt_cursor.slot];
-   120			before->bv[0].bv_offset += wreq->encrypt_cursor.offset;
-   121			before->bv[0].bv_len = bsize;
-   122			bvecq_filled_to(before, 1);
-   123		}
-   124	
- > 125		if (to == end && subreq->start + subreq->len < to) {
-   126			size_t part = end - subreq->start;
-   127	
-   128			if (before && part <= 2 * PAGE_SIZE) {
-   129				struct bvecq *bq;
-   130				size_t page0 = PAGE_SIZE - before->bv[0].bv_offset;
-   131				int slot;
-   132	
-   133				if (part <= page0) {
-   134					before->bv[0].bv_len = part;
-   135					bvecq_filled_to(before, 1);
-   136					goto do_it;
-   137				}
-   138	
-   139				bq = wreq->encrypt_cursor.bvecq;
-   140				slot = wreq->encrypt_cursor.slot + 1;
-   141				if (slot > bq->nr_slots) {
-   142					bq = bq->next;
-   143					slot = 0;
-   144				}
-   145	
-   146				before->bv[0].bv_len = page0;
-   147				before->bv[1] = bq->bv[slot];
-   148				before->bv[1].bv_len = part - page0;
-   149				bvecq_filled_to(before, 2);
-   150				goto do_it;
-   151			}
-   152	
-   153			after = bvecq_alloc_one(1, wreq->gfp, false);
-   154			if (!after) {
-   155				ret = -ENOMEM;
-   156				goto out;
-   157			}
-   158			fpos2 = to - bsize;
-   159			after->bv[0] = wreq->bounce_alloc.bvecq->bv[wreq->bounce_alloc.slot];
-   160			after->bv[0].bv_offset = to & (PAGE_SIZE - 1);
-   161			after->bv[0].bv_len = bsize;
-   162			bvecq_filled_to(after, 1);
-   163		}
-   164	
-   165		if (before && after) {
-   166			before->next = after;
-   167			after->prev = before;
-   168		}
-   169	
-   170	do_it:
-   171		ret = netfs_rmw_read(wreq, before ?: after, fpos1, fpos2);
-   172	
-   173	out:
-   174		bvecq_put(before ?: after);
-   175		return ret;
-   176	}
-   177	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
