@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D9451993B
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 13:28:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597974FD7A2
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 13:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791898129; cv=none; b=AHyb8X5L4DSHiwxak8ixnepENkDlKjTUECiVOG++I9l2whGoi2ssKPvb/xm0X6CBtKSlweuiteGqx0rWbpB+XG+HcRh4ZZ05LKLV5ppiXuxDGQjxrGqqtv1G1AvEfj4Jel4GIVeudMCJnhQBMh7iCN35Edy3/lOvAUr8bNpSQIE=
+	t=1791898129; cv=none; b=uJBrzlV+N9cai3a26zaG4fzutdEE7eneyYZyw0SSGMBOS/P5NPFzDks0wJC8egMcd3GxdeoPJUMQSEkNwbMXtc16VYISbiGMwfTuE5T6GyQ86Quts8278f3PudxeEOalcyaqp3d9uO3aHCUZ0ohiS0FYuojMV+DB7HVGxH5+Bxk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791898129; c=relaxed/simple;
-	bh=B0D+aN+QUFrBwgGGGOTTAbMI5VW0+UZY1YqX+asNCFg=;
+	bh=9eAauM5lsxFIOVjoaPZhEGI4ewJV+Ipx9zM7v3QISK8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=U68+7fjXZjvdIK+mS1FjbBDjQNr573AFn0aG7ttG8/cKXNhSp6MVVBnoGif7H+zXO+kjEn1lSBVsAlnojCzAvn6ReNGB18yiM1inlR7MSkpjNJO25l3f1Fbj/sJaBUtYKeej3R9FQFYe+jX4l51P5qczCAD6rmNWjt9kpSDqchE=
+	 MIME-Version; b=Qk/QWCXhBmqd14rvomA6gbtvhrfLXd51GzXoetxOgs781n4yTUEntNe2TKNiCvjIN7lS2A5fl7V2NWJHrBQhDxjUQBpkSrS0NLooEDYxEvswzMduXa7H6IHEWgFVd4GuJkHC6GJjstnQkoG5Rz7/mT510LRhB0t3HM7OMO6wpho=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.177])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j3wBB0xKmzYQvDy
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:27:46 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.198])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j3wB92tXCzYQvFf
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:27:45 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 6774340AC0
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:28:37 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id AE29340576
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:28:36 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnIvL3Mc5qfU4wAQ--.7133S16;
-	Tue, 13 Oct 2026 21:28:37 +0800 (CST)
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnIvL3Mc5qfU4wAQ--.7133S10;
+	Tue, 13 Oct 2026 21:28:36 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v7 14/15] perf annotate-arm64: Support per-cpu variable access tracking
-Date: Tue, 13 Oct 2026 13:28:12 +0000
-Message-Id: <f278f8e0a13ec9d39dfdf601d679471dc0fbd58f.1791629326.git.wutengda@huaweicloud.com>
+Subject: [PATCH v7 08/15] perf annotate-data: Track imm_value for stack variables
+Date: Tue, 13 Oct 2026 13:28:06 +0000
+Message-Id: <17d6b9f6545a0af1053a308db4a2b539fb93be03.1791629326.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1791629326.git.wutengda@huaweicloud.com>
 References: <cover.1791629326.git.wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnIvL3Mc5qfU4wAQ--.7133S16
-X-Coremail-Antispam: 1UD129KBjvJXoW3Xr15KrWDAw18Zr45CF13CFg_yoWxZrW7p3
-	95Kry5uwnYqrsxuws3tr4UXryF9a93Gas2k34Ykw1a9ry29w18G397KrW5KFWUGrnay3W7
-	tr98trZrXr1qkaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgDnIvL3Mc5qfU4wAQ--.7133S10
+X-Coremail-Antispam: 1UD129KBjvJXoWxGF1UtF1UCw4DGrWxCrWkXrb_yoW7Jw4Dpr
+	yDWFy2g3W7Wr4IqrsxJF4UXr93Gws2gr1Fk3s0qFn3tFyxtr1fG3s7tFW5tF47Cryvyw17
+	Jwn0kr4DXw47KaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -72,207 +72,143 @@ X-Coremail-Antispam: 1UD129KBjvJXoW3Xr15KrWDAw18Zr45CF13CFg_yoWxZrW7p3
 	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
 	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
 	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
 	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
 	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state_arm64() to handle per-cpu variable addressing.
+Currently, imm_value is tracked in registers but dropped when values
+are saved to or loaded from stack variables during type profiling.
+If a register of type TSR_KIND_CONST is stored to the stack, its value
+will be lost.
 
-On arm64, per-cpu variables are accessed by adding a per-cpu offset
-(typically from the '__per_cpu_offset' array) to the address of a global
-variable or a structure field with '__percpu' modifier (e.g.,
-'s32 __percpu *counters' in struct percpu_counter). This results in
-instruction patterns like:
+Add an imm_value field to struct type_state_stack and update
+set_stack_state() and findnew_stack_state() to accept and preserve the
+immediate value when updating stack state.
 
-  ldr   x0, [x6, x5]   // Pattern A: direct load per-cpu instance
-  add   x0, x6, x5     // Pattern B: compute per-cpu address
-
-where x6 holds the per-cpu offset retrieved from:
-
-  adrp  x4, <page>
-  add   x4, x4, #offset          // x4 = &__per_cpu_offset
-  ldr   x6, [x4, w0, sxtw #3]    // x6 = __per_cpu_offset[cpu]
-
-And x5 holds the base address being offset, which can come from one of
-two cases:
-
-  Case 1: global variable
-    adrp  x5, <page>
-    add   x5, x5, #offset        // x5 = &global_var
-
-  Case 2: '__percpu' field embedded in a structure
-    ldr   x5, [x25, #32]         // x5 = &percpu_field
-
-To handle such cases:
-
-1. Identify per-cpu base initialization: Detect 'adrp + ldr' pairs that
-   resolve to the '__per_cpu_offset' symbol and mark the destination
-   register as TSR_KIND_PERCPU_BASE.
-2. Propagate type information: During subsequent 'ldr' or 'add'
-   instructions, if one register is TSR_KIND_PERCPU_BASE, attempt to
-   resolve the type from the other register.
-
-A real-world example is shown below:
-
-  ffff8000808f2d28 <cppc_set_perf>:
-  ffff8000808f2d38:  adrp  x2, ffff800082033000
-  ffff8000808f2d3c:  add   x5, x2, #0x3f8         // x5 = &__per_cpu_offset
-  ffff8000808f2d44:  adrp  x2, ffff800081f73000
-  ffff8000808f2d48:  add   x2, x2, #0x6b8         // x2 = &cpu_pcc_subspace_idx
-  ffff8000808f2d6c:  ldr   x5, [x5, w0, sxtw #3]  // x5 = __per_cpu_offset[cpu]
-* ffff8000808f2d80:  ldr   w23, [x5, x2]          // per_cpu_var(cpu_pcc_subspace_idx)
-
-Before this commit, the tracker could not link x5 back to a per-cpu
-context, resulting in an incorrect data type resolution:
-
-  adrp [10] global addr=0xffff800082033000 -> reg2
-  add [14] global 0x3f8(reg2) -> reg5
-  adrp [1c] global addr=0xffff800081f73000 -> reg2
-  add [20] global 0x6b8(reg2) -> reg2
-  ldr [44] global (reg5, reg0) -> reg5 type='long unsigned int[]' size=0x1000
-  chk [58] reg5 offset=0 ok=1 kind=1 (long unsigned int[]) : Good!
-  found by insn track: 0(reg5, reg2) type-offset=0
-  final result:  type='long unsigned int' size=0x8
-
-After this commit, the tracker correctly identifies the per-cpu flow and
-resolves the actual variable type:
-
-  ldr [44] global (reg5, reg0) -> reg5 percpu base
-  chk [58] reg5 offset=0 ok=1 kind=2 percpu var : retry
-  chk [58] reg2 offset=0 ok=1 kind=7 global addr : Good!
-  found by insn track: 0(reg5, reg2) type-offset=0
-  final result:  type='int' size=0x4
-
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+Reviewed-by: Ian Rogers <irogers@google.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 25 ++++++++++++-
- tools/perf/util/annotate-data.c               | 36 +++++++++++++++----
- 2 files changed, 54 insertions(+), 7 deletions(-)
+ tools/perf/util/annotate-arch/annotate-x86.c |  8 ++++++--
+ tools/perf/util/annotate-data.c              | 13 +++++++------
+ tools/perf/util/annotate-data.h              |  5 +++--
+ 3 files changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index f34b944dd285..5683215f0770 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -12,6 +12,7 @@
- #include "../disasm.h"
- #include "../annotate-data.h"
- #include "../debug.h"
-+#include "../dso.h"
- #include "../map.h"
- #include "../symbol.h"
+diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
+index f5e40cef08ab..21729e153fa0 100644
+--- a/tools/perf/util/annotate-arch/annotate-x86.c
++++ b/tools/perf/util/annotate-arch/annotate-x86.c
+@@ -591,6 +591,7 @@ static void update_insn_state_x86(struct type_state *state,
+ 				tsr->type = stack->type;
+ 				tsr->kind = stack->kind;
+ 				tsr->offset = stack->ptr_offset;
++				tsr->imm_value = stack->imm_value;
+ 				tsr->ok = true;
+ 			} else if (die_get_member_type(&stack->type,
+ 						       offset - stack->offset,
+@@ -598,6 +599,7 @@ static void update_insn_state_x86(struct type_state *state,
+ 				tsr->type = type_die;
+ 				tsr->kind = TSR_KIND_TYPE;
+ 				tsr->offset = 0;
++				tsr->imm_value = 0;
+ 				tsr->ok = true;
+ 			} else {
+ 				invalidate_reg_state(tsr);
+@@ -773,10 +775,12 @@ static void update_insn_state_x86(struct type_state *state,
+ 				 */
+ 				if (!stack->compound)
+ 					set_stack_state(stack, offset, tsr->kind,
+-							&tsr->type, tsr->offset);
++							&tsr->type, tsr->offset,
++							tsr->imm_value);
+ 			} else {
+ 				findnew_stack_state(state, offset, tsr->kind,
+-						    &tsr->type, tsr->offset);
++						    &tsr->type, tsr->offset,
++						    tsr->imm_value);
+ 			}
  
-@@ -645,13 +646,23 @@ static int propagate_load_reg_state(struct type_state *state,
- 		u64 ip = dloc->ms->sym->start + dl->al.offset;
- 		u64 addr = src_tsr->imm_value + reg_offset;
- 		int offset;
-+		u8 kind;
-+		const char *var_name = NULL;
-+
-+		/* it might be per-cpu offset */
-+		if (dso__kernel(map__dso(dloc->ms->map)) &&
-+		    get_global_var_info(dloc, addr, &var_name, &offset) &&
-+		    !strcmp(var_name, "__per_cpu_offset"))
-+			kind = TSR_KIND_PERCPU_BASE;
-+		else
-+			kind = TSR_KIND_TYPE;
- 
- 		if (!get_global_var_type(cu_die, dloc, ip, addr, &offset, &type_die) ||
- 		    !die_get_member_type(&type_die, offset, &type_die))
- 			return -1;
- 
- 		tsr->type = type_die;
--		tsr->kind = TSR_KIND_TYPE;
-+		tsr->kind = kind;
- 		tsr->offset = 0;
- 		tsr->imm_value = 0;
- 		tsr->ok = true;
-@@ -667,6 +678,12 @@ static int propagate_load_reg_state(struct type_state *state,
- 		return 0;
- 	}
- 
-+	/*
-+	 * If src_tsr->kind is TSR_KIND_PERCPU_BASE, treat it as an array.
-+	 * No special handling is needed here; just fall through to retry
-+	 * and resolve the type from the second register.
-+	 */
-+
- load_non_regoff:
- 	/* Try another register if any */
- 	if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2 &&
-@@ -964,6 +981,12 @@ static void update_add_insn_state(struct type_state *state,
- 		return;
- 	}
- 
-+	/*
-+	 * If src_tsr->kind is TSR_KIND_PERCPU_BASE, treat it as an array.
-+	 * No special handling is needed here; just fall through to retry
-+	 * and resolve the type from the second register.
-+	 */
-+
- add_non_regoff:
- 	/* Try another register if any */
- 	if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2 &&
+ 			if (dst->reg1 == fbreg) {
 diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 43cd09c0662a..b3de1ca688a2 100644
+index 24d82739b2ec..9ed0780d6244 100644
 --- a/tools/perf/util/annotate-data.c
 +++ b/tools/perf/util/annotate-data.c
-@@ -1307,13 +1307,17 @@ int arch_get_reg_offset(const struct arch *arch, struct annotated_op_loc *op_loc
+@@ -704,7 +704,7 @@ struct type_state_stack *find_stack_state(struct type_state *state,
+ }
  
- 		/*
- 		 * For register-based addressing without shift/extension,
--		 * reg2 may be a constant offset. Use its value as the offset
--		 * from the base register.
-+		 * derive the offset from the type of reg2.
- 		 */
- 		reg2 = op_loc->reg1 == breg ? op_loc->reg2 : op_loc->reg1;
--		if (has_reg_type(state, reg2) && state->regs[reg2].ok &&
--			state->regs[reg2].kind == TSR_KIND_CONST) {
--			*offset = (s64)state->regs[reg2].imm_value;
-+		if (has_reg_type(state, reg2) && state->regs[reg2].ok) {
-+			if (state->regs[reg2].kind == TSR_KIND_CONST)
-+				*offset = (s64)state->regs[reg2].imm_value;
-+			else if (state->regs[reg2].kind == TSR_KIND_PERCPU_BASE)
-+				*offset = 0;  /* it does not contribute to the offset */
-+			else
-+				return -1;
-+
- 			return 0;
- 		}
+ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+-			    Dwarf_Die *type_die, int ptr_offset)
++			    Dwarf_Die *type_die, int ptr_offset, u64 imm_value)
+ {
+ 	int tag;
+ 	Dwarf_Word size;
+@@ -721,8 +721,9 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+ 	stack->offset = offset;
+ 	stack->ptr_offset = ptr_offset;
+ 	stack->kind = kind;
++	stack->imm_value = imm_value;
  
-@@ -1448,11 +1452,31 @@ static enum type_match_result check_matching_type(struct type_state *state,
+-	if (kind == TSR_KIND_POINTER) {
++	if (kind == TSR_KIND_POINTER || kind == TSR_KIND_CONST) {
+ 		stack->compound = false;
+ 		return;
+ 	}
+@@ -743,18 +744,18 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+ struct type_state_stack *findnew_stack_state(struct type_state *state,
+ 						    int offset, u8 kind,
+ 						    Dwarf_Die *type_die,
+-						    int ptr_offset)
++						    int ptr_offset, u64 imm_value)
+ {
+ 	struct type_state_stack *stack = find_stack_state(state, offset);
+ 
+ 	if (stack) {
+-		set_stack_state(stack, offset, kind, type_die, ptr_offset);
++		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
+ 		return stack;
  	}
  
- 	if (state->regs[reg].kind == TSR_KIND_PERCPU_BASE) {
--		u64 var_addr = (s64) offset;
-+		u64 var_addr;
- 		int var_offset;
+ 	stack = malloc(sizeof(*stack));
+ 	if (stack) {
+-		set_stack_state(stack, offset, kind, type_die, ptr_offset);
++		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
+ 		list_add(&stack->list, &state->stack_vars);
+ 	}
+ 	return stack;
+@@ -1058,7 +1059,7 @@ static void update_var_state(struct type_state *state, struct data_loc_info *dlo
+ 				continue;
  
- 		pr_debug_dtp("percpu var");
+ 			findnew_stack_state(state, offset, TSR_KIND_TYPE,
+-					    &mem_die, /*ptr_offset=*/0);
++					    &mem_die, /*ptr_offset=*/0, /*imm_value=*/0);
  
-+		if (arch__is_arm64(dloc->arch)) {
-+			int reg2;
-+
-+			if (!retry || !dloc->op->multi_regs ||
-+			    dloc->op->reg1 == dloc->op->reg2 ||
-+			    dloc->op->extend_type || dloc->op->shift_type)
-+				return PERF_TMR_BAIL_OUT;
-+
-+			reg2 = dloc->op->reg2;
-+			if (!has_reg_type(state, reg2) || !state->regs[reg2].ok)
-+				return PERF_TMR_NO_TYPE;
-+
-+			pr_debug_dtp(" : retry\n");
-+			retry = false;
-+			reg = reg2;
-+			goto again;
-+		}
-+
-+		var_addr = (s64) offset;
-+
- 		if (dloc->op->multi_regs) {
- 			int reg2 = dloc->op->reg2;
+ 			if (var->reg == state->stack_reg) {
+ 				pr_debug_dtp("var [%"PRIx64"] %#x(reg%d)",
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index 12b5b6db5f57..dccd56759cea 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -208,6 +208,7 @@ struct type_state_stack {
+ 	int size;
+ 	bool compound;
+ 	u8 kind;
++	u64 imm_value;
+ };
  
+ /*
+@@ -262,9 +263,9 @@ bool has_reg_type(struct type_state *state, int reg);
+ struct type_state_stack *findnew_stack_state(struct type_state *state,
+ 						int offset, u8 kind,
+ 						Dwarf_Die *type_die,
+-						int ptr_offset);
++						int ptr_offset, u64 imm_value);
+ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+-				Dwarf_Die *type_die, int ptr_offset);
++				Dwarf_Die *type_die, int ptr_offset, u64 imm_value);
+ struct type_state_stack *find_stack_state(struct type_state *state,
+ 						int offset);
+ void invalidate_reg_state(struct type_state_reg *reg);
 -- 
 2.34.1
 
