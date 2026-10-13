@@ -1,80 +1,209 @@
-Received: from 013.lax.mailroute.net (013.lax.mailroute.net [199.89.1.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E303C3438
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 23:18:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECCE34ABBC4
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 23:25:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791933537; cv=none; b=bZBW1K4Xi9ps7T6IWvkvQV+Pqn90yUQUWqa3IgsayAaqIGUBOsni3yj+enWVWIDJR3+E+FAAi9GUSUpLan99Nw9y7Um6QN2doTXT68Z6rMZyTYS7wOOpstLS94Cd6Gr3a553MrvVc2D7x1hm10kASRehJjg3trRVvozqd49Idz4=
+	t=1791933916; cv=none; b=AkD54waiuXtoNpTavlYRJCwS7nN5+omUVBVsvImDMT7I9v6g0W6+jNQhDvmSYJFEIrikRuNdCrCf26uRZrVD/sTvra9lFNMUClYPwj5xR2G9t593PYAMCxkkmQEESELsXpSPhHK03+MeWgrjtsljyhqaFMzgtdfVK4+WLPP5aWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791933537; c=relaxed/simple;
-	bh=gaxZAFGU6xceCJLiStkWFMvFEc8zbfPX9b1tRC31zMM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hOvneRHHZv87YJn52SuA8b+Qty3p0gIftOxgd10tBjfbAV/UmxJs9v0DQviUOwGJeqoO5itK5ULueaeAG5alSX3LnaIjjor/6wZprU5NzGxvGEeAAbqHKEmT5NyESJlY5KA86vlyGyI3Lwn2EV7xZ0D6L96+OoVLzTeFJv3m6bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=TLVi7u7b; arc=none smtp.client-ip=199.89.1.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
+	s=arc-20240116; t=1791933916; c=relaxed/simple;
+	bh=pyp25QtKyLM8BrmBaxXVfW+c86ZxFuXNe529PVbugRo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hnYtjyXwh1SG+Gf9CXPDuvsThTguNAlsqTgpE3IA9kfw0fz0GX5xO3jS2UB1AiYp6UJQtE9FBJTZrj6qola4s8VdbooomrVvZNOY+WxNtWVu0/atDEuEY/t0sHwJjNComzrW6Y9b0YxSuZhfhiwHE+5rf7tklooUU08YiQzsubc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lHc+HFoI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="TLVi7u7b"
-Received: from localhost (localhost [127.0.0.1])
-	by 013.lax.mailroute.net (Postfix) with ESMTP id 4j49JH71d4zlfvpK;
-	Tue, 13 Oct 2026 23:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1791933531; x=1794525532; bh=gaxZAFGU6xceCJLiStkWFMvF
-	Ec8zbfPX9b1tRC31zMM=; b=TLVi7u7bAnPOjzOutrFS95RLd382MwV1NyEr9vi6
-	jeR41qJN2cjaXXGxNWaS7WJ7Agtm5BB3qQnBOcC+MveTiKP5pYj7AShWVZw1vtGM
-	PbjmqbhGWFSwOzl5l7xN68Qgd4cFyhL4ARs4MS2/uu/IXFjoC+4SuV+7mYhW0D/a
-	9v9TbsUsnu2OGZYXAyufCOlwdOFlG9j3AORTh8q9nj50exRa6aoFFozvQ/VKhVAh
-	dmirKqWb2WHOgaxaSZrYK8lawRPWEFC2Iu8lCUr1z4vLR/ae1Vz5FBFmCLdacVfx
-	3j8Pr3QO1GZTokEU2yD+EoOn4TVk9sVkJUscGy6ka8dwcw==
-X-Virus-Scanned: by MailRoute
-Received: from 013.lax.mailroute.net ([127.0.0.1])
- by localhost (013.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id mPbmFxJa9yDL; Tue, 13 Oct 2026 23:18:51 +0000 (UTC)
-Received: from [192.168.51.14] (c-24-6-239-25.hsd1.ca.comcast.net [24.6.239.25])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 013.lax.mailroute.net (Postfix) with ESMTPSA id 4j49J94k4XzlfvpH;
-	Tue, 13 Oct 2026 23:18:49 +0000 (UTC)
-Message-ID: <0e572032-5e5a-4a4f-a362-16ad48f2f02b@acm.org>
-Date: Tue, 13 Oct 2026 16:18:48 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lHc+HFoI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 861FC1F008A1
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 23:25:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791933914;
+	bh=bF+W4sghZSTsd+ZdP1W6Me6PZqk4DiSPea7R/+7acVg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=lHc+HFoIiIZdyHrYvGHCmk1Y68/+4V1TwAFb/64uLVSVRLfYYFmwTlT59RWrkryTI
+	 TwdY62kwHmD8VHOxvTE2vR2I6RO1jBYXRvC/TwUAnDcIgTcCb/a91uY+NOFp9NIaIG
+	 LQD0L6VPX5DK+CXT0XPWvBslR27YhMmrIRo1PPEgBB7DilKUMChL2WDm6UeVLoBsa2
+	 7BZ8dPvD/bVGgk9aQP5+vuVZb0DZlGh4f39fq2zbYF4yR2rAO6jWCQBOHpQNdLEdUQ
+	 NFtGj1gq7xOn4FcCxO6vIdaqTRHy0HIUsGHfmajYeJFsvOURsCXx3k4vdBqNWeyYoH
+	 rs/KBnW3Y7I3A==
+Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-3a75f960be3so5662801fa.2
+        for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 16:25:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvByj8VOBeOhD150ix4mfVh0MyR1gdrZcaHE6zRumFyot79LWj0GEMqksw92l48Zj2pE6s9MR@lists.linux.dev
+X-Gm-Message-State: AFq9FYIjQx8m6RLl9px9zdHqTa/rqD/+h+z2gb9uPbHl2a85XlcO4VW/
+	FP7WMrWwgXqKRbLA0AI3/s4AmR9DUfnE3V+n3Bm2QWcjyThDXdYhn5v12SZDAD2A42/ejB5Ch9C
+	sa596Ex+qxBRK0SLMckiPdm9DplrwIME=
+X-Received: by 2002:a05:6512:3d8a:b0:5b8:f048:473d with SMTP id
+ 2adb3069b0e04-5bcde35cad4mr4274371e87.7.1791933913215; Tue, 13 Oct 2026
+ 16:25:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 00/10] tools/perf: Adopt kernel
- compiler-context-analysis.h annotations
-To: Ian Rogers <irogers@google.com>
-Cc: acme@kernel.org, elver@google.com, namhyung@kernel.org,
- adrian.hunter@intel.com, james.clark@linaro.org, jolsa@kernel.org,
- justinstitt@google.com, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, ljs@kernel.org, llvm@lists.linux.dev,
- mingo@redhat.com, morbo@google.com, nathan@kernel.org,
- ndesaulniers@google.com, peterz@infradead.org
-References: <20261013182458.1234616-1-irogers@google.com>
- <20261013222622.1822619-1-irogers@google.com>
- <3f57ddf4-b1a7-4c91-8983-c8cd83d0f25c@acm.org>
- <CAP-5=fX3e4HRaLXxQhCwEHRuXZdpC0zEEh2pozEEegQBxgc5xw@mail.gmail.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <CAP-5=fX3e4HRaLXxQhCwEHRuXZdpC0zEEh2pozEEegQBxgc5xw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com> <20261012-lstp-usb-adapter-v1-6-aambrozewicz@nvidia.com>
+In-Reply-To: <20261012-lstp-usb-adapter-v1-6-aambrozewicz@nvidia.com>
+From: Linus Walleij <linusw@kernel.org>
+Date: Wed, 14 Oct 2026 01:25:00 +0200
+X-Gmail-Original-Message-ID: <CAD++jLkru2AL2_7ieOdbYrePAhNSFaa3wwEzCagiPsALgG2GwQ@mail.gmail.com>
+X-Gm-Features: AclHuK8aDJrbMFX2SY9BpZEACe6CGzBOm9_cURajb8zp_6_hmnV2osIeBJ4Fdic
+Message-ID: <CAD++jLkru2AL2_7ieOdbYrePAhNSFaa3wwEzCagiPsALgG2GwQ@mail.gmail.com>
+Subject: Re: [PATCH 06/11] gpio: Add NVIDIA LSTP GPIO driver
+To: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
+Cc: Bartosz Golaszewski <brgl@kernel.org>, Donald Shannon <donalds@nvidia.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, linux-usb@vger.kernel.org, llvm@lists.linux.dev, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/13/26 4:09 PM, Ian Rogers wrote:
-> Which mailing list is objecting to the frequent emails?
-This is a policy that applies to all Linux kernel related mailing
-lists. From Documentation/process/submitting-patches.rst: "Wait for a
-minimum of one week before resubmitting or pinging reviewers - possibly
-longer during busy times like merge windows."
+Hi Adrian,
 
-Bart.
+thanks for your patch!
 
+On Mon, Oct 12, 2026 at 7:37=E2=80=AFPM Adrian Ambrozewicz
+<aambrozewicz@nvidia.com> wrote:
+
+> Add a driver for the GPIO channels of NVIDIA LSTP USB adapters. Each
+> channel is registered as a GPIO chip with an interrupt controller for
+> its pins; every line access is a USB transaction, so the chip can
+> sleep. Pins the firmware reports as LEDs are not GPIO lines: the driver
+> hands them to the LED driver as an auxiliary device.
+>
+> At probe the driver reads each pin's interrupt configuration from the
+> device. A reply that misses the response timeout can answer a later
+> request and shift every following pin's state by one, so a single read
+> cannot simply be retried. After a timeout the driver reads all pins
+> again, alternating ascending and descending order, until two
+> consecutive passes without a timeout agree: at most five passes, ending
+> within 10 s of the first timeout, after which the probe fails as
+> before. The probe runs in the context that added the device, often the
+> hub's worker, hence the bound.
+>
+> Signed-off-by: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
+(...)
+> +++ b/drivers/gpio/Kconfig
+> @@ -2051,6 +2051,20 @@ config GPIO_USBIO
+>           This driver can also be built as a module. If so, the module
+>           will be called gpio_usbio.
+>
+> +config GPIO_LSTP
+
+GPIO_USBIO ... GPIO_LSTP?
+
+These should be in alphabetical order.
+
+> +#include <linux/atomic.h>
+> +#include <linux/bitmap.h>
+> +#include <linux/build_bug.h>
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/err.h>
+> +#include <linux/gpio/driver.h>
+> +#include <linux/irq.h>
+> +#include <linux/jiffies.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/seq_file.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +#include <linux/wait_bit.h>
+> +#include <linux/workqueue.h>
+> +#include <uapi/linux/gpio.h>
+
+Do you really need all this?
+Certainly <uapi/linux/gpio.h> is a mistake, look over all of these.
+
+> +/* clang-format off */
+
+I beg your pardon? What is this?
+
+> +enum lstp_gpio_direction {
+> +       LSTP_GPIO_OUTPUT =3D 0x00,
+> +       LSTP_GPIO_INPUT =3D 0x01
+> +} __packed;
+> +enum lstp_gpio_pin_state {
+> +       LSTP_GPIO_LOW =3D 0x00,
+> +       LSTP_GPIO_HIGH =3D 0x01
+> +} __packed;
+> +enum lstp_gpio_drive_config {
+> +       LSTP_GPIO_PUSH_PULL =3D 0x00,
+> +       LSTP_GPIO_OPEN_DRAIN =3D 0x01,
+> +       LSTP_GPIO_OPEN_SOURCE =3D 0x02
+> +} __packed;
+> +enum lstp_gpio_bias_config {
+> +       LSTP_GPIO_NO_PULL =3D 0x00,
+> +       LSTP_GPIO_PULL_UP =3D 0x01,
+> +       LSTP_GPIO_PULL_DOWN =3D 0x02
+> +} __packed;
+> +enum lstp_gpio_led_support {
+> +       LSTP_GPIO_NOT_LED =3D 0x00,
+> +       LSTP_GPIO_LED_MODE_HOLD =3D 0x01, /* pattern brightness jumps bet=
+ween steps */
+> +       LSTP_GPIO_LED_MODE_INTERPOLATE =3D 0x02, /* pattern brightness in=
+terpolates between steps */
+> +} __packed; /* clang-format on */
+
+This  looks very dense too..
+
+At least a newline between the enums?
+
+What's with the clang-format thing? I don't get it.
+
+> +struct lstp_gpio_priv {
+
+Just call it lstp_gpio
+
+> +       struct lstp_channel *ch;
+> +       struct gpio_chip gc;
+
+Why? Normally drivers get the state container from the
+chip not the other way around.
+
+> +static int lstp_gpio_get_direction(struct gpio_chip *gc, unsigned int pi=
+n)
+> +{
+> +       struct lstp_gpio_priv *priv =3D gpiochip_get_data(gc);
+> +       u8 direction;
+> +
+> +       int ret =3D lstp_gpio_read_direction(priv, pin, &direction);
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       if (direction =3D=3D LSTP_GPIO_INPUT)
+> +               return GPIO_LINE_DIRECTION_IN;
+> +
+> +       return GPIO_LINE_DIRECTION_OUT;
+> +}
+> +
+> +static int lstp_gpio_direction_input(struct gpio_chip *gc, unsigned int =
+pin)
+> +{
+> +       struct lstp_gpio_priv *priv =3D gpiochip_get_data(gc);
+> +
+> +       return lstp_gpio_require_direction(priv, pin, LSTP_GPIO_INPUT);
+> +}
+> +
+> +static int lstp_gpio_direction_output(struct gpio_chip *gc, unsigned int=
+ pin, int value)
+> +{
+> +       struct lstp_gpio_priv *priv =3D gpiochip_get_data(gc);
+> +       int ret =3D lstp_gpio_require_direction(priv, pin, LSTP_GPIO_OUTP=
+UT);
+> +
+> +       if (ret)
+> +               return ret;
+> +
+> +       return lstp_gpio_set_value(gc, pin, value);
+> +}
+
+It seems some pins are only input and some are only output.
+
+Have you considered using serialized register access over
+regmap and use regmap-gpio with fixed direction bitmaps?
+
+Yours,
+Linus Walleij
