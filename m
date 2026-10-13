@@ -1,56 +1,56 @@
-Received: from mail-dy1-f198.google.com (mail-dy1-f198.google.com [74.125.82.198])
+Received: from mail-dy1-f197.google.com (mail-dy1-f197.google.com [74.125.82.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C135632BF
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 22:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6243568531
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 22:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791931238; cv=none; b=WHa+MhJJWLuyV0nA707eCM4LPvP2f8JB4emnb2vfcpxfIfWQA9ae6Nq9DXD0AdCWQEnOuut1MHLQMnbUh7UNpUZM0BI9FuP7zib1kocW0PBzFr7FrC/WlcNE6lWd+W56Fx8klb8+LfKu+DG6S8RDXg+xYgTh80L4RRFx4oRMVwQ=
+	t=1791931241; cv=none; b=Q4ZEKoFkmcYK6URkmBIzHhpki1gt74HQQH56trifE/k1DgJNqj4/jj2ywDMlfPxY9NsGFNQokFdCMipxwOMJckdhNW/QANQVhn5FzdvHmOfRs8285HIJSxCxXYn62ziXi3vnhJ5/wmFcwq8ir1LumrXYtmSMf/J+8h2ZuRAAVsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791931238; c=relaxed/simple;
-	bh=GRIZQKuwWcuCjR8A0ylF/V4G5/ojiWDtGgUJc8zlstU=;
+	s=arc-20240116; t=1791931241; c=relaxed/simple;
+	bh=yGWlUBd3WHI6EIBVLEUjSDo5J54V9OXwWHfKf5QXzl4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SXRHUgXbIcpnW4SKfxhVmHAJqRK5eBCkJSGGG36OXvCC7fjw4WQ3qt8lYe63v91JKUWJGvVSQKYgO0L3b0Z8XhWB/eX+h7CaT+pl8MaeNFTVtbBazm2ndzHMhn/65N5iO8wvQAE5Bmjslgg4nUGjlw8TXnWa8r0LxjlyGvHn1eU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ai1t/+eq; arc=none smtp.client-ip=74.125.82.198
+	 To:Cc:Content-Type; b=FHQJ/ZjkBxke8OQkIf5cK6Bmqso5DaBCUhZQQzireA+s4lpAfeYd1Rvo2xd1heTyRXHxUier0EGYCylb8szD/IzOYgxs8H4RzbLBTmwIgqB7mgipNPh4C5U9gCcPEZjX79sxUL3ArbP3grKUGbH2eaH427mkWiUvyrIFBvv2LWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VumNPHHi; arc=none smtp.client-ip=74.125.82.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--irogers.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ai1t/+eq"
-Received: by mail-dy1-f198.google.com with SMTP id 5a478bee46e88-30c0d568830so7230439eec.1
-        for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 15:40:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VumNPHHi"
+Received: by mail-dy1-f197.google.com with SMTP id 5a478bee46e88-35d4538fd74so1601271eec.1
+        for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 15:40:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791931227; x=1792536027; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1791931230; x=1792536030; darn=lists.linux.dev;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=zqg4bcg4yTM1CSL1NV7gzxaOXxYgsDcagY96onRKZWw=;
-        b=Ai1t/+eqUT+KGnrtqISTY8Cq8nfVdDXxPMlzIWHxQfZaPjtGxvTeAxaQdgdqgYvevM
-         xay74ZPR4R02YhN6tQYpu+ExL3WmxkzzX1BpUF/ucjhaz5TLalByHRwyiZXsbzLKETbG
-         08quJd4IUnuR2mB4+Ek8vRariv+rV7/bCTZJgWBQjVg9gLCBPXFJlFZ72cp0aeSqt+jM
-         NxcsLBqhMRzLLZUC70pUTcjGUf2rCELIRwXXI3XngxCW1mjM1icHODhqNfYE8zxRT3Qc
-         6J5KGQsFaDRGUR5RGcS9eyL6cJ41oMWruCb8otmsECtrOEN8uv4Aoqnbm7VBXZ+ukh6T
-         HRhw==
+        bh=SzuEQJa4uF6wSn0s7ZpxNvjcEHFt9KB4NkbiARikmlQ=;
+        b=VumNPHHiMV0PQdtYx4nlSku+XBQVR7K/R8wfSFj5TWV6fjtl067QxS+uWsOzJQKbGN
+         KY4lG6dHHNTC2CwlNCGS2bbJttryUM91P1nxldmmX+6nR34hRzLHLaM98eiCRwX2U4j2
+         tQuGW7/XSlNxhyFKIn98KClwqIRn8M8JYnvEr0u7EAirZYPeG97jSkaXo5zPKFtpWLZg
+         YX3ZecYmdfihjsr0uLdOBwct5Pt/uyUzf+YP5hoZsHuYQitvFZ4Vfnr8AT74CfMyo8/m
+         4tLqMwmTgPCVTiyAY9/2GR+yWIDmEE6GzlR5q9IA7aB6oxRzf2GxEUPJnEyMki/nkqqI
+         UOUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791931227; x=1792536027;
+        d=1e100.net; s=20260707; t=1791931230; x=1792536030;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=zqg4bcg4yTM1CSL1NV7gzxaOXxYgsDcagY96onRKZWw=;
-        b=YQtIEV6/JE1qrS35nqU4H0cvdaxeUmrW7bY69SQXZEiDcTO5l24b5NQ1MUXO6i8poE
-         fo7Y0HNG/AnYPBq5IiZizpZgq/5aH0j1dwsU5Lnhky/hDHdKMwgx0gVXm0WmYJX0+R3+
-         Q1zEg3eeVDcHZ3LnkZrGbRpJYiQwtZFRaijEqKdL9JDjJxLaXQOqobUmd9Drx0XZa6fJ
-         7bbZwBYQSsTJF42lQ2GmXr8ztlpgwGKbO0hYZNdJ3RVW3e4EVpvRfyjnlstKUCMohcDB
-         cvx9//2/0dbdxo3GRXYclK/DF2US8pNY/FWsb2sR5a8QvWVCz7qyiXOT8nqWkx+1YTsO
-         fgzQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx1loICN/dbZvOuwURudURuVnPDbT0tcR3jx3TLZwYIeNmWeIqYfgajyxBjTeVF+bibn1qp@lists.linux.dev
-X-Gm-Message-State: AFq9FYK9UmRRVz3mClcVSu7aY4gJNXUWOKY30QRtwWK+NdBYM7yNo9M2
-	0f/szoja5phEcchxU1hEFDCvJxxU2Qzcu/5deSQFjKKE7EIEhh2j7ommDahbawoRUtU1PSKZb8u
-	v8PW23kR12Q==
-X-Received: from dldyq19-n1.prod.google.com ([2002:a05:701b:4553:10b0:164:47f8:a96a])
- (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:701b:4286:10b0:144:c128:4c4b
- with SMTP id a92af1059eb24-16a5e49c474mr18578865c88.36.1791931226644; Tue, 13
- Oct 2026 15:40:26 -0700 (PDT)
-Date: Tue, 13 Oct 2026 15:39:41 -0700
+        bh=SzuEQJa4uF6wSn0s7ZpxNvjcEHFt9KB4NkbiARikmlQ=;
+        b=0HloSNkw0tsRsBcdlu0Jy2U67EjMrC7yeWw4/GOdD4wQ2AnduIOKxp2Wt4Y4FANbPI
+         odRPckN5xsfvyPN67nT8e73/u90jSp+nJYhL0tMx6DIaGrc6JpLYqNFwKQlVxo98CULc
+         TFD3Wj7uI/pOtHZFMejGjRaWQVlq6c+hnNEcLCAbOcgVOvUcn+097nLCX1uksPwufnwV
+         vaA23OVvpjbIBKUMr4EgfHNZ/ZObehW0mxLfQvDhCGW8KWySsj3J2i2wmedXpeY2+ekF
+         BVwCyM16snucxwKf/I1bgFhpus2tiWBReuc/5ipy1A7Cf0HaiWrqOQfQs1f+R66dkEqf
+         4/Zg==
+X-Forwarded-Encrypted: i=1; AKwUvBzaMOZDjPswZ+ah1Fzt05oZZJeLfBQtSc7NL47N4PQw3wBTHGip65bzYkwRp6689bmYQkdI@lists.linux.dev
+X-Gm-Message-State: AFq9FYL3tv75aDfcx1/xyrnuLe1sD86yZKrLVFV+ZS7CnS0wmBMz8DoH
+	/f1L8zPU0iUSf2Mvp9qBbOhGz8xq7YWaBol9qk2KuQvwnwdnQsD6Y8K2CphFOTVi/01E2d3+UwC
+	xEGGr1rZT+w==
+X-Received: from dybmf44.prod.google.com ([2002:a05:7301:92c:b0:358:41fa:f46f])
+ (user=irogers job=prod-delivery.src-stubby-dispatcher) by 2002:a05:7300:c8c2:b0:35a:8dad:6724
+ with SMTP id 5a478bee46e88-35a8dad7ec8mr9213311eec.22.1791931228757; Tue, 13
+ Oct 2026 15:40:28 -0700 (PDT)
+Date: Tue, 13 Oct 2026 15:39:42 -0700
 In-Reply-To: <20261013223946.1836757-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,8 +60,8 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 Mime-Version: 1.0
 References: <20261013223946.1836757-1-irogers@google.com>
 X-Mailer: git-send-email 2.56.0.385.gd3acb90ef8-goog
-Message-ID: <20261013223946.1836757-7-irogers@google.com>
-Subject: [PATCH 06/11] dlm: Free dlm_ls in kobject release callback
+Message-ID: <20261013223946.1836757-8-irogers@google.com>
+Subject: [PATCH 07/11] xen/sys-hypervisor: Add release callback to hyp_sysfs_kobj_type
 From: Ian Rogers <irogers@google.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
 	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, Kees Cook <kees@kernel.org>, 
@@ -90,88 +90,40 @@ Cc: Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>
 	Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-struct dlm_ls embeds a struct kobject (ls_kobj), but dlm_ktype lacked a
-.release callback and dlm freed the lockspace structure directly via
-kfree(ls). With CONFIG_DEBUG_KOBJECT_RELEASE=y, freeing ls before the
-kobject release runs causes a use-after-free.
+hypervisor_init() in drivers/base/hypervisor.c creates hypervisor_kobj
+with kobject_create_and_add() (which allocates a dynamic kobject using
+dynamic_kobj_ktype), and hypervisor_subsys_init() in
+drivers/xen/sys-hypervisor.c then overwrites hypervisor_kobj->ktype with
+&hyp_sysfs_kobj_type, which had no .release callback.
 
-Add dlm_ls_release() to free struct dlm_ls when the last reference to
-ls_kobj is dropped, use kobject_del() in release_lockspace(), and drop
-the final kobject reference in free_lockspace().
+Add hyp_sysfs_release() calling kfree(kobj) to preserve the dynamic
+kobject release behavior.
 
-Fixes: 3514faca19a6 ("kobject: remove struct kobj_type from struct kset")
+Fixes: cff7e81b3dd7 ("xen: add /sys/hypervisor support")
 Assisted-by: Antigravity:gemini-3.1-pro
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- fs/dlm/lockspace.c | 19 +++++++++++++------
- 1 file changed, 13 insertions(+), 6 deletions(-)
+ drivers/xen/sys-hypervisor.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/dlm/lockspace.c b/fs/dlm/lockspace.c
-index a9c98b4f378f..1d226b27d8e6 100644
---- a/fs/dlm/lockspace.c
-+++ b/fs/dlm/lockspace.c
-@@ -179,7 +179,15 @@ static const struct sysfs_ops dlm_attr_ops = {
- 	.store = dlm_attr_store,
+diff --git a/drivers/xen/sys-hypervisor.c b/drivers/xen/sys-hypervisor.c
+index 91923242a5ae..0e8a2cd69fd6 100644
+--- a/drivers/xen/sys-hypervisor.c
++++ b/drivers/xen/sys-hypervisor.c
+@@ -659,7 +659,13 @@ static const struct sysfs_ops hyp_sysfs_ops = {
+ 	.store = hyp_sysfs_store,
  };
  
-+static void dlm_ls_release(struct kobject *kobj)
++static void hyp_sysfs_release(struct kobject *kobj)
 +{
-+	struct dlm_ls *ls = container_of(kobj, struct dlm_ls, ls_kobj);
-+
-+	kfree(ls);
++	kfree(kobj);
 +}
 +
- static struct kobj_type dlm_ktype = {
-+	.release        = dlm_ls_release,
- 	.default_groups = dlm_groups,
- 	.sysfs_ops     = &dlm_attr_ops,
+ static const struct kobj_type hyp_sysfs_kobj_type = {
++	.release = hyp_sysfs_release,
+ 	.sysfs_ops = &hyp_sysfs_ops,
  };
-@@ -355,7 +363,7 @@ static void free_lockspace(struct work_struct *work)
- 	 */
- 	rhashtable_free_and_destroy(&ls->ls_rsbtbl, rhash_free_rsb, NULL);
  
--	kfree(ls);
-+	kobject_put(&ls->ls_kobj);
- }
- 
- static int new_lockspace(const char *name, const char *cluster,
-@@ -436,6 +444,8 @@ static int new_lockspace(const char *name, const char *cluster,
- 	atomic_set(&ls->ls_count, 0);
- 	init_waitqueue_head(&ls->ls_count_wait);
- 	ls->ls_flags = 0;
-+	ls->ls_kobj.kset = dlm_kset;
-+	kobject_init(&ls->ls_kobj, &dlm_ktype);
- 
- 	if (ops && dlm_config.ci_recover_callbacks) {
- 		ls->ls_ops = ops;
-@@ -567,9 +577,7 @@ static int new_lockspace(const char *name, const char *cluster,
- 	wait_event(ls->ls_recover_lock_wait,
- 		   test_bit(LSFL_RECOVER_LOCK, &ls->ls_flags));
- 
--	ls->ls_kobj.kset = dlm_kset;
--	error = kobject_init_and_add(&ls->ls_kobj, &dlm_ktype, NULL,
--				     "%s", ls->ls_name);
-+	error = kobject_add(&ls->ls_kobj, NULL, "%s", ls->ls_name);
- 	if (error)
- 		goto out_recoverd;
- 	kobject_uevent(&ls->ls_kobj, KOBJ_ADD);
-@@ -615,7 +623,6 @@ static int new_lockspace(const char *name, const char *cluster,
- 	rhashtable_destroy(&ls->ls_rsbtbl);
-  out_lsfree:
- 	kobject_put(&ls->ls_kobj);
--	kfree(ls);
-  out:
- 	module_put(THIS_MODULE);
- 	return error;
-@@ -759,7 +766,7 @@ static int release_lockspace(struct dlm_ls *ls, unsigned int release_option)
- 
- 	dlm_delete_debug_file(ls);
- 
--	kobject_put(&ls->ls_kobj);
-+	kobject_del(&ls->ls_kobj);
- 
- 	xa_destroy(&ls->ls_recover_xa);
- 	kfree(ls->ls_recover_buf);
 -- 
 2.56.0.385.gd3acb90ef8-goog
 
