@@ -1,27 +1,27 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B92516148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8AE251614C
 	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 13:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791898125; cv=none; b=Ixbj42RSQyf1P+hzrqNa+7Q0JkcPO/itADwroTiBfBY5YMBn6gj2QwNORo10UjXY73+UpBQ8livhm5ACouuTks/jfO+0E7IHZQ/ZdfOsEcUjB2AOlaU9+69YHI3EGGFH0StThZQ1Ej7pVmdZ1PQsM1m95vJt2rlxQfz8K45mL7k=
+	t=1791898127; cv=none; b=TofMzjY2yZg+VZ3tC9ejVKDwQ96K96eflaj0DwCeHUblK2bIA3o50YMsl6V20WRlNDuxyXOAP4tun4C7xin+TxCmDv40WtLkPfJw7MvWSJwyII9GagnxuTJ2yYe6/oR9a2AMqXdKdsQZi08jg5vpHy5OG8Seu6jdukMuVSfnQiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791898125; c=relaxed/simple;
-	bh=yR1dTvLS1XWrsVK+6JCO6KazEkGRS06qEQ+BctICr+4=;
+	s=arc-20240116; t=1791898127; c=relaxed/simple;
+	bh=NtOEPAcUYzQu/0fYRvagTWFlBrqMZdNu5dO8kh6uClM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cDR206LMLs8MCbgl2/0ci+Dv2tDT0qIq7uNu9ZeO6UqXfktLE914VSO+jow8/3/KN0ZQMwcIjZbQaIoN9v30aE2FPN9E7iFHJ1kbm/aEP6BpF5CbjTJSoe/LI7o7oehz4qA2Pst57DbNuhOIbSyptIgzZI8XXCkO1NtRfZwQZSg=
+	 MIME-Version; b=lepYJCanSbRbBqwZcXXxMN8QZsN9/QQgjlTefPqgncW5SpFSCmY/vdFkieFxnxUrESwUgrUOjQSQEbxr/xUhYWascKOvCGZ1Mkv10VQaQAVNV0boOTpwFj6oa8W2JvGUjeePyrmfNBHh/LKJyc4sWRpCzCg46M69JgOOWUAoiqc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j3wB91Nd1zYQvFD
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j3wB92F0tzYQv4p
 	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:27:45 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id 7801F40578
+	by mail.maildlp.com (Postfix) with ESMTP id 97851409A8
 	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:28:36 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnIvL3Mc5qfU4wAQ--.7133S8;
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnIvL3Mc5qfU4wAQ--.7133S9;
 	Tue, 13 Oct 2026 21:28:36 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v7 06/15] perf annotate-arm64: Support store instruction tracking
-Date: Tue, 13 Oct 2026 13:28:04 +0000
-Message-Id: <eb44bbf4b74555bc43f3659f4733faff403debbf.1791629326.git.wutengda@huaweicloud.com>
+Subject: [PATCH v7 07/15] perf annotate-data: Expand type_state_reg imm_value to u64
+Date: Tue, 13 Oct 2026 13:28:05 +0000
+Message-Id: <4582a236d6a0ead429a602fec2c8fbbb0916d382.1791629326.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1791629326.git.wutengda@huaweicloud.com>
 References: <cover.1791629326.git.wutengda@huaweicloud.com>
@@ -57,14 +57,14 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnIvL3Mc5qfU4wAQ--.7133S8
-X-Coremail-Antispam: 1UD129KBjvJXoWxXryUtF13Jr17XFykCFyxAFb_yoW5Gr4kpr
-	Z8Cw1Ygr4Utr4Ig3Z3XF4I9r9I9a1fGw4Ykr9rt397AF47trn3trZ3Ka13tFW8JrZ3uw15
-	tF4qkr4DWayjyaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgDnIvL3Mc5qfU4wAQ--.7133S9
+X-Coremail-Antispam: 1UD129KBjvJXoWxJr18try5GrW7ZF1DCr4kZwb_yoW8ZrWfp3
+	90k34UJw1UWr4YgrnxtFWrZFyrur13Za4rG34Ygw1fZFWfJrn3tryIqr4YyFW8X3s7Cw1U
+	Jwn0qr4Dt3ykGaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
 	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x02
 	67AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
 	80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
@@ -77,67 +77,54 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxXryUtF13Jr17XFykCFyxAFb_yoW5Gr4kpr
 	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Extend update_insn_state_arm64() to handle standard store instructions
-(str, stur, stlr, stp). Exclusive stores (e.g., stxr, stxp) are omitted
-as they exhibit different operand semantics.
+The arm64 'adrp + add/ldr' instruction pair involves global variable address
+calculation and passing, which requires storing the 64-bit address in
+type_state_reg. Currently, there is no field in type_state_reg that can
+hold such an address. The most likely candidate for reuse is imm_value,
+but it is defined as u32, which limits the size of values it can carry.
 
-Unlike load instructions, a store instruction sets a value in the struct
-within the memory where the destination register resides, and does not
-alter its type. Therefore, no processing is required for the transfer.
-
-The only point to note is that store instructions support pre-index and
-post-index addressing modes, so calling adjust_reg_index_state() is still
-necessary to handle their addressing.
+To address this, expand imm_value from u32 to u64. Also update related
+compilation warnings and fix the sign-extension issue introduced by this
+change.
 
 Reviewed-by: Ian Rogers <irogers@google.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- .../perf/util/annotate-arch/annotate-arm64.c  | 25 +++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ tools/perf/util/annotate-arch/annotate-x86.c | 4 ++--
+ tools/perf/util/annotate-data.h              | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
-index fb48bf95b32f..54d9928b536f 100644
---- a/tools/perf/util/annotate-arch/annotate-arm64.c
-+++ b/tools/perf/util/annotate-arch/annotate-arm64.c
-@@ -661,6 +661,20 @@ static void update_load_insn_state(struct type_state *state,
- 	adjust_reg_index_state(state, dloc, dl, src);
- }
+diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
+index aa381d25a63b..f5e40cef08ab 100644
+--- a/tools/perf/util/annotate-arch/annotate-x86.c
++++ b/tools/perf/util/annotate-arch/annotate-x86.c
+@@ -536,11 +536,11 @@ static void update_insn_state_x86(struct type_state *state,
  
-+/*
-+ * Match standard store variants (str, stur, stlr, stp) that follow
-+ * straightforward store semantics: source registers on the left (read-only)
-+ * and memory target on the right. Excludes exclusive stores (stxr, stxp, etc.)
-+ * which have status/result register side effects.
-+ */
-+static bool is_standard_store_insn(const char *name)
-+{
-+	return !strncmp(name, "str", 3)  ||  /* str, strb, strh */
-+	       !strncmp(name, "stur", 4) ||  /* stur, sturb, sturh */
-+	       !strncmp(name, "stlr", 4) ||  /* stlr, stlrb, stlrh */
-+	       !strncmp(name, "stp", 3);     /* stp */
-+}
-+
- static void update_insn_state_arm64(struct type_state *state,
- 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
- 				    struct disasm_line *dl)
-@@ -742,6 +756,17 @@ static void update_insn_state_arm64(struct type_state *state,
- 	/* Memory to register transfers */
- 	if (is_standard_load_insn(dl->ins.name))
- 		update_load_insn_state(state, dloc, dl, src, dst);
-+	/* Register to memory transfers */
-+	else if (is_standard_store_insn(dl->ins.name)) {
-+		/*
-+		 * Ignore transfers since it'd set a value in a struct
-+		 * and won't change the type.
-+		 *
-+		 * Needs to update the pre-index and post-index addressing
-+		 * modes for the destination register.
-+		 */
-+		adjust_reg_index_state(state, dloc, dl, dst);
-+	}
- }
- #endif
+ 		if (src->imm) {
+ 			tsr->kind = TSR_KIND_CONST;
+-			tsr->imm_value = src->offset;
++			tsr->imm_value = (s64)src->offset;
+ 			tsr->offset = 0;
+ 			tsr->ok = true;
  
+-			pr_debug_dtp("mov [%x] imm=%#x -> reg%d\n",
++			pr_debug_dtp("mov [%x] imm=%#"PRIx64" -> reg%d\n",
+ 				     insn_offset, tsr->imm_value, dst->reg1);
+ 			return;
+ 		}
+diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
+index 453efdf6afa6..12b5b6db5f57 100644
+--- a/tools/perf/util/annotate-data.h
++++ b/tools/perf/util/annotate-data.h
+@@ -182,7 +182,7 @@ extern struct annotated_data_stat ann_data_stat;
+  */
+ struct type_state_reg {
+ 	Dwarf_Die type;
+-	u32 imm_value;
++	u64 imm_value;
+ 	/*
+ 	 * The offset within the struct that the register points to.
+ 	 * A value of 0 means the register points to the beginning.
 -- 
 2.34.1
 
