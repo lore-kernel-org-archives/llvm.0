@@ -1,28 +1,28 @@
 Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 597974FD7A2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB5251992E
 	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 13:28:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791898129; cv=none; b=uJBrzlV+N9cai3a26zaG4fzutdEE7eneyYZyw0SSGMBOS/P5NPFzDks0wJC8egMcd3GxdeoPJUMQSEkNwbMXtc16VYISbiGMwfTuE5T6GyQ86Quts8278f3PudxeEOalcyaqp3d9uO3aHCUZ0ohiS0FYuojMV+DB7HVGxH5+Bxk=
+	t=1791898129; cv=none; b=tK8gNUW1YE1DZW1ji9g9Z2eyOgxz36MY2FK2gr9ChN+SLIkOW3iy3i2BUqRW/uUGEJlA7elN3w4TdQ593J9zXDIxLlxq1GryZqkScBvsWXFbwiyKcM+OrOmfspDuE82tguNaA0nNsidrZdDmxteQIZ/aXoFDMU9QuZmiH1Kd3vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1791898129; c=relaxed/simple;
-	bh=9eAauM5lsxFIOVjoaPZhEGI4ewJV+Ipx9zM7v3QISK8=;
+	bh=8661ET9XUzWzJM1n7qxEK+a+Rxc6g/bZOMZWuTUoERY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Qk/QWCXhBmqd14rvomA6gbtvhrfLXd51GzXoetxOgs781n4yTUEntNe2TKNiCvjIN7lS2A5fl7V2NWJHrBQhDxjUQBpkSrS0NLooEDYxEvswzMduXa7H6IHEWgFVd4GuJkHC6GJjstnQkoG5Rz7/mT510LRhB0t3HM7OMO6wpho=
+	 MIME-Version; b=cTTxMcChmLq7rGTcGn0cTf9QWehTQwdvzwCvfhn91F0BWWsDg7K8Krbb0mnmSt7uEIhCBIE5bpw9bH+m9n/bcMRHAT+NG7NThJmWgAd2uTNmd2dDE5BX/HFmNZnljQOhEgGDZH/NqaTzZ6eurf6j7uecH21J07q5wghx4Cx6TNk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j3wB92tXCzYQvFf
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:27:45 +0800 (CST)
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j3wBB082TzYQvG8
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:27:46 +0800 (CST)
 Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id AE29340576
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:28:36 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 4D6D040576
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 21:28:37 +0800 (CST)
 Received: from huawei.com (unknown [10.67.174.45])
-	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnIvL3Mc5qfU4wAQ--.7133S10;
-	Tue, 13 Oct 2026 21:28:36 +0800 (CST)
+	by APP4 (Coremail) with UTF8SMTPA id gCh0CgDnIvL3Mc5qfU4wAQ--.7133S15;
+	Tue, 13 Oct 2026 21:28:37 +0800 (CST)
 From: Tengda Wu <wutengda@huaweicloud.com>
 To: Namhyung Kim <namhyung@kernel.org>,
 	james.clark@linaro.org,
@@ -44,9 +44,9 @@ Cc: Peter Zijlstra <peterz@infradead.org>,
 	linux-kernel@vger.kernel.org,
 	llvm@lists.linux.dev,
 	Tengda Wu <wutengda@huaweicloud.com>
-Subject: [PATCH v7 08/15] perf annotate-data: Track imm_value for stack variables
-Date: Tue, 13 Oct 2026 13:28:06 +0000
-Message-Id: <17d6b9f6545a0af1053a308db4a2b539fb93be03.1791629326.git.wutengda@huaweicloud.com>
+Subject: [PATCH v7 13/15] perf annotate-arm64: Support 'adrp' instruction to track global variables
+Date: Tue, 13 Oct 2026 13:28:11 +0000
+Message-Id: <b4fd436fc48e085ae95e06f0cc41107b99a62df7.1791629326.git.wutengda@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1791629326.git.wutengda@huaweicloud.com>
 References: <cover.1791629326.git.wutengda@huaweicloud.com>
@@ -57,10 +57,10 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgDnIvL3Mc5qfU4wAQ--.7133S10
-X-Coremail-Antispam: 1UD129KBjvJXoWxGF1UtF1UCw4DGrWxCrWkXrb_yoW7Jw4Dpr
-	yDWFy2g3W7Wr4IqrsxJF4UXr93Gws2gr1Fk3s0qFn3tFyxtr1fG3s7tFW5tF47Cryvyw17
-	Jwn0kr4DXw47KaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+X-CM-TRANSID:gCh0CgDnIvL3Mc5qfU4wAQ--.7133S15
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF4UZr1xXrWfGr13CF17ZFb_yoWDJFyrpF
+	yDC34UW39rJr4Sgrs3JFWUXr9I9ws7Ga4jkryqvwsayFW7trn3GayktFWaqFW5GF95Zw13
+	Jw4qgr4DXw42kF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
 	9KBjDU0xBIdaVrnRJUUUHFb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
 	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
 	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
@@ -72,143 +72,277 @@ X-Coremail-Antispam: 1UD129KBjvJXoWxGF1UtF1UCw4DGrWxCrWkXrb_yoW7Jw4Dpr
 	CY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY1x0264kExVAvwVAq07x20xyl
 	42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
 	WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAK
-	I48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
+	I48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4UJV
 	WxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF
 	0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjTRQYFCDUUUU
 X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-Currently, imm_value is tracked in registers but dropped when values
-are saved to or loaded from stack variables during type profiling.
-If a register of type TSR_KIND_CONST is stored to the stack, its value
-will be lost.
+Extend update_insn_state_arm64() to track global variable types
+calculated via page-relative addressing.
 
-Add an imm_value field to struct type_state_stack and update
-set_stack_state() and findnew_stack_state() to accept and preserve the
-immediate value when updating stack state.
+On arm64, global variables are typically accessed by first calculating
+the page address using 'adrp', followed by an 'add' or 'ldr' to get the
+specific symbol address. Without tracking 'adrp', the instruction
+tracker loses the base address, making it impossible to resolve
+global symbols and their associated DWARF types.
 
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+Introduce TSR_KIND_GLOBAL_ADDR to represent a partial global address
+state. When encountering 'adrp', store the page-aligned target address
+in the register's type state. Upon a subsequent 'add' or 'ldr'
+instruction that references a TSR_KIND_GLOBAL_ADDR register, combine
+the page address with the immediate offset.
+
+A real-world example is shown below:
+
+  ffff80008032e008 <folios_put_refs>:
+  ffff80008032e048:  adrp  x24, ffff80008202f000 <nr_cpu_ids>
+  ffff80008032e050:  add   x24, x24, #0xd40
+* ffff80008032e078:  ldr   x0, [x24]
+
+Before this commit, x24 was unknown, leading to no type information:
+
+  chk [70] reg24 offset=0 ok=0 kind=0 cfa : no type information
+  final result: no type information
+
+After this commit, the tracker correctly follows the adrp/add flow:
+
+  adrp [40] global addr=0xffff80008202f000 -> reg24
+  add [48] global 0xd40(reg24) -> reg24
+  chk [70] reg24 offset=0 ok=1 kind=7 global addr : Good!
+  final result: type='struct folio*'
+
 Reviewed-by: Ian Rogers <irogers@google.com>
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
 ---
- tools/perf/util/annotate-arch/annotate-x86.c |  8 ++++++--
- tools/perf/util/annotate-data.c              | 13 +++++++------
- tools/perf/util/annotate-data.h              |  5 +++--
- 3 files changed, 16 insertions(+), 10 deletions(-)
+ .../perf/util/annotate-arch/annotate-arm64.c  | 83 +++++++++++++++++--
+ tools/perf/util/annotate-data.c               | 25 +++++-
+ tools/perf/util/annotate-data.h               |  1 +
+ 3 files changed, 99 insertions(+), 10 deletions(-)
 
-diff --git a/tools/perf/util/annotate-arch/annotate-x86.c b/tools/perf/util/annotate-arch/annotate-x86.c
-index f5e40cef08ab..21729e153fa0 100644
---- a/tools/perf/util/annotate-arch/annotate-x86.c
-+++ b/tools/perf/util/annotate-arch/annotate-x86.c
-@@ -591,6 +591,7 @@ static void update_insn_state_x86(struct type_state *state,
- 				tsr->type = stack->type;
- 				tsr->kind = stack->kind;
- 				tsr->offset = stack->ptr_offset;
-+				tsr->imm_value = stack->imm_value;
- 				tsr->ok = true;
- 			} else if (die_get_member_type(&stack->type,
- 						       offset - stack->offset,
-@@ -598,6 +599,7 @@ static void update_insn_state_x86(struct type_state *state,
- 				tsr->type = type_die;
- 				tsr->kind = TSR_KIND_TYPE;
- 				tsr->offset = 0;
-+				tsr->imm_value = 0;
- 				tsr->ok = true;
- 			} else {
- 				invalidate_reg_state(tsr);
-@@ -773,10 +775,12 @@ static void update_insn_state_x86(struct type_state *state,
- 				 */
- 				if (!stack->compound)
- 					set_stack_state(stack, offset, tsr->kind,
--							&tsr->type, tsr->offset);
-+							&tsr->type, tsr->offset,
-+							tsr->imm_value);
- 			} else {
- 				findnew_stack_state(state, offset, tsr->kind,
--						    &tsr->type, tsr->offset);
-+						    &tsr->type, tsr->offset,
-+						    tsr->imm_value);
- 			}
+diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+index e27ba26f3b8a..f34b944dd285 100644
+--- a/tools/perf/util/annotate-arch/annotate-arm64.c
++++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+@@ -531,7 +531,7 @@ static bool is_standard_load_insn(const char *name)
+  * which is added to the reg offset.
+  */
+ static int propagate_load_reg_state(struct type_state *state,
+-				    struct data_loc_info *dloc,
++				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				    struct disasm_line *dl, int dreg,
+ 				    struct annotated_op_loc *src,
+ 				    struct type_state_reg **src_states,
+@@ -640,6 +640,33 @@ static int propagate_load_reg_state(struct type_state *state,
+ 		return 0;
+ 	}
  
- 			if (dst->reg1 == fbreg) {
-diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
-index 24d82739b2ec..9ed0780d6244 100644
---- a/tools/perf/util/annotate-data.c
-+++ b/tools/perf/util/annotate-data.c
-@@ -704,7 +704,7 @@ struct type_state_stack *find_stack_state(struct type_state *state,
++	/* Or check if it's a global variable */
++	if (src_tsr->kind == TSR_KIND_GLOBAL_ADDR) {
++		u64 ip = dloc->ms->sym->start + dl->al.offset;
++		u64 addr = src_tsr->imm_value + reg_offset;
++		int offset;
++
++		if (!get_global_var_type(cu_die, dloc, ip, addr, &offset, &type_die) ||
++		    !die_get_member_type(&type_die, offset, &type_die))
++			return -1;
++
++		tsr->type = type_die;
++		tsr->kind = TSR_KIND_TYPE;
++		tsr->offset = 0;
++		tsr->imm_value = 0;
++		tsr->ok = true;
++
++		if (src->multi_regs) {
++			pr_debug_dtp("%s [%x] global (reg%d, reg%d) -> reg%d",
++				     dl->ins.name, insn_offset, src->reg1, src->reg2, dreg);
++		} else {
++			pr_debug_dtp("%s [%x] global (reg%d) -> reg%d",
++				     dl->ins.name, insn_offset, sreg, dreg);
++		}
++		pr_debug_type_name(&tsr->type, tsr->kind);
++		return 0;
++	}
++
+ load_non_regoff:
+ 	/* Try another register if any */
+ 	if (src->multi_regs && src->reg1 != src->reg2 && sreg != src->reg2 &&
+@@ -653,7 +680,7 @@ static int propagate_load_reg_state(struct type_state *state,
  }
  
- void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
--			    Dwarf_Die *type_die, int ptr_offset)
-+			    Dwarf_Die *type_die, int ptr_offset, u64 imm_value)
- {
- 	int tag;
- 	Dwarf_Word size;
-@@ -721,8 +721,9 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- 	stack->offset = offset;
- 	stack->ptr_offset = ptr_offset;
- 	stack->kind = kind;
-+	stack->imm_value = imm_value;
+ static void update_load_insn_state(struct type_state *state,
+-				   struct data_loc_info *dloc,
++				   struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				   struct disasm_line *dl,
+ 				   struct annotated_op_loc *src,
+ 				   struct annotated_op_loc *dst)
+@@ -687,7 +714,7 @@ static void update_load_insn_state(struct type_state *state,
  
--	if (kind == TSR_KIND_POINTER) {
-+	if (kind == TSR_KIND_POINTER || kind == TSR_KIND_CONST) {
+ 	/* Handle the first destination register */
+ 	if (has_reg_type(state, dst->reg1)) {
+-		if (propagate_load_reg_state(state, dloc, dl, dst->reg1,
++		if (propagate_load_reg_state(state, dloc, cu_die, dl, dst->reg1,
+ 					     src, src_states, mem_spacing))
+ 			invalidate_reg_state(&state->regs[dst->reg1]);
+ 	}
+@@ -702,7 +729,7 @@ static void update_load_insn_state(struct type_state *state,
+ 		mem_spacing = arm64__reg_size(dl->ops.target.raw);
+ 
+ 	if (mem_spacing < 0 ||
+-	    propagate_load_reg_state(state, dloc, dl, dst->reg2,
++	    propagate_load_reg_state(state, dloc, cu_die, dl, dst->reg2,
+ 				     src, src_states, mem_spacing))
+ 		invalidate_reg_state(&state->regs[dst->reg2]);
+ 
+@@ -909,14 +936,16 @@ static void update_add_insn_state(struct type_state *state,
+ 	if (arch_get_reg_offset(dloc->arch, src, sreg, state, false, &reg_offset))
+ 		goto add_non_regoff;
+ 
+-	if (src_tsr.kind == TSR_KIND_CONST) {
++	if (src_tsr.kind == TSR_KIND_CONST || src_tsr.kind == TSR_KIND_GLOBAL_ADDR) {
+ 		tsr->kind = src_tsr.kind;
++		/* For 'adrp + add' pair: resolve the full global variable address. */
+ 		tsr->imm_value = src_tsr.imm_value + reg_offset;
+ 		tsr->offset = 0;
+ 		tsr->ok = src_tsr.ok;
+ 
+-		pr_debug_dtp("add [%x] imm %#x(reg%d) -> reg%d\n",
+-			     insn_offset, reg_offset, sreg, dreg);
++		pr_debug_dtp("add [%x] %s %#x(reg%d) -> reg%d\n",
++			     insn_offset, src_tsr.kind == TSR_KIND_CONST ?
++			     "imm" : "global", reg_offset, sreg, dreg);
+ 		return;
+ 	}
+ 
+@@ -945,6 +974,39 @@ static void update_add_insn_state(struct type_state *state,
+ 	invalidate_reg_state(tsr);
+ }
+ 
++static void update_adrp_insn_state(struct type_state *state,
++				   struct disasm_line *dl,
++				   struct annotated_op_loc *dst)
++{
++	struct type_state_reg *tsr;
++	u32 insn_offset = dl->al.offset;
++	int dreg = dst->reg1;
++
++	if (!has_reg_type(state, dreg))
++		return;
++
++	tsr = &state->regs[dreg];
++	tsr->copied_from = -1;
++
++	if (!dl->ops.source.addr) {
++		invalidate_reg_state(tsr);
++		return;
++	}
++
++	tsr->kind = TSR_KIND_GLOBAL_ADDR;
++	/*
++	 * Stores a partial page-relative address. The full absolute address
++	 * of the global variable will be resolved when a subsequent 'add' or
++	 * 'ldr' instruction consumes this register.
++	 */
++	tsr->imm_value = dl->ops.source.addr;
++	tsr->offset = 0;
++	tsr->ok = true;
++
++	pr_debug_dtp("adrp [%x] global addr=%#"PRIx64" -> reg%d\n",
++		     insn_offset, tsr->imm_value, dreg);
++}
++
+ static void update_insn_state_arm64(struct type_state *state,
+ 				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
+ 				    struct disasm_line *dl)
+@@ -1011,6 +1073,7 @@ static void update_insn_state_arm64(struct type_state *state,
+ 	 * prevent stale type info from propagating to subsequent instructions.
+ 	 */
+ 	if (has_reg_type(state, dst->reg1) && !dst->mem_ref &&
++	    strcmp(dl->ins.name, "adrp") &&
+ 	    strcmp(dl->ins.name, "add") && strcmp(dl->ins.name, "mov") &&
+ 	    !is_standard_load_insn(dl->ins.name)) {
+ 		pr_debug_dtp("%s [%x] invalidate reg%d",
+@@ -1024,14 +1087,16 @@ static void update_insn_state_arm64(struct type_state *state,
+ 		return;
+ 	}
+ 
+-	if (!strcmp(dl->ins.name, "add"))
++	if (!strcmp(dl->ins.name, "adrp"))
++		update_adrp_insn_state(state, dl, dst);
++	else if (!strcmp(dl->ins.name, "add"))
+ 		update_add_insn_state(state, dloc, dl, src, dst);
+ 	/* Register to register or imm value to register transfers */
+ 	else if (!strcmp(dl->ins.name, "mov"))
+ 		update_mov_insn_state(state, dl, src, dst);
+ 	/* Memory to register transfers */
+ 	else if (is_standard_load_insn(dl->ins.name))
+-		update_load_insn_state(state, dloc, dl, src, dst);
++		update_load_insn_state(state, dloc, cu_die, dl, src, dst);
+ 	/* Register to memory transfers */
+ 	else if (is_standard_store_insn(dl->ins.name))
+ 		update_store_insn_state(state, dloc, dl, src, dst);
+diff --git a/tools/perf/util/annotate-data.c b/tools/perf/util/annotate-data.c
+index 1d47db3a9dd9..43cd09c0662a 100644
+--- a/tools/perf/util/annotate-data.c
++++ b/tools/perf/util/annotate-data.c
+@@ -71,6 +71,9 @@ void pr_debug_type_name(Dwarf_Die *die, enum type_state_kind kind)
+ 	case TSR_KIND_CANARY:
+ 		pr_info(" stack canary\n");
+ 		return;
++	case TSR_KIND_GLOBAL_ADDR:
++		pr_info(" global address\n");
++		return;
+ 	case TSR_KIND_TYPE:
+ 	default:
+ 		break;
+@@ -723,7 +726,8 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
+ 	stack->kind = kind;
+ 	stack->imm_value = imm_value;
+ 
+-	if (kind == TSR_KIND_POINTER || kind == TSR_KIND_CONST) {
++	if (kind == TSR_KIND_POINTER || kind == TSR_KIND_CONST ||
++	    kind == TSR_KIND_GLOBAL_ADDR) {
  		stack->compound = false;
  		return;
  	}
-@@ -743,18 +744,18 @@ void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
- struct type_state_stack *findnew_stack_state(struct type_state *state,
- 						    int offset, u8 kind,
- 						    Dwarf_Die *type_die,
--						    int ptr_offset)
-+						    int ptr_offset, u64 imm_value)
- {
- 	struct type_state_stack *stack = find_stack_state(state, offset);
- 
- 	if (stack) {
--		set_stack_state(stack, offset, kind, type_die, ptr_offset);
-+		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
- 		return stack;
+@@ -1474,6 +1478,25 @@ static enum type_match_result check_matching_type(struct type_state *state,
+ 		if (offset < 0 && reg != state->stack_reg && reg != dloc->fbreg)
+ 			goto check_kernel;
  	}
- 
- 	stack = malloc(sizeof(*stack));
- 	if (stack) {
--		set_stack_state(stack, offset, kind, type_die, ptr_offset);
-+		set_stack_state(stack, offset, kind, type_die, ptr_offset, imm_value);
- 		list_add(&stack->list, &state->stack_vars);
- 	}
- 	return stack;
-@@ -1058,7 +1059,7 @@ static void update_var_state(struct type_state *state, struct data_loc_info *dlo
- 				continue;
- 
- 			findnew_stack_state(state, offset, TSR_KIND_TYPE,
--					    &mem_die, /*ptr_offset=*/0);
-+					    &mem_die, /*ptr_offset=*/0, /*imm_value=*/0);
- 
- 			if (var->reg == state->stack_reg) {
- 				pr_debug_dtp("var [%"PRIx64"] %#x(reg%d)",
++
++	if (state->regs[reg].kind == TSR_KIND_GLOBAL_ADDR) {
++		u64 var_addr = state->regs[reg].imm_value + offset;
++		int var_offset;
++
++		pr_debug_dtp("global addr");
++
++		/*
++		 * The register holds the address of a global variable. Try to
++		 * find the variable by the address and get its type.
++		 */
++		if (get_global_var_type(cu_die, dloc, dloc->ip, var_addr,
++					&var_offset, type_die)) {
++			dloc->type_offset = var_offset;
++			return PERF_TMR_OK;
++		}
++		/* No need to retry global variables */
++		return PERF_TMR_BAIL_OUT;
++	}
+ check_non_register:
+ 	if (reg == dloc->fbreg || reg == state->stack_reg) {
+ 		struct type_state_stack *stack;
 diff --git a/tools/perf/util/annotate-data.h b/tools/perf/util/annotate-data.h
-index 12b5b6db5f57..dccd56759cea 100644
+index 425d9ddfad41..eee1f8dae3dc 100644
 --- a/tools/perf/util/annotate-data.h
 +++ b/tools/perf/util/annotate-data.h
-@@ -208,6 +208,7 @@ struct type_state_stack {
- 	int size;
- 	bool compound;
- 	u8 kind;
-+	u64 imm_value;
+@@ -37,6 +37,7 @@ enum type_state_kind {
+ 	TSR_KIND_PERCPU_POINTER,
+ 	TSR_KIND_POINTER,
+ 	TSR_KIND_CANARY,
++	TSR_KIND_GLOBAL_ADDR,
  };
  
- /*
-@@ -262,9 +263,9 @@ bool has_reg_type(struct type_state *state, int reg);
- struct type_state_stack *findnew_stack_state(struct type_state *state,
- 						int offset, u8 kind,
- 						Dwarf_Die *type_die,
--						int ptr_offset);
-+						int ptr_offset, u64 imm_value);
- void set_stack_state(struct type_state_stack *stack, int offset, u8 kind,
--				Dwarf_Die *type_die, int ptr_offset);
-+				Dwarf_Die *type_die, int ptr_offset, u64 imm_value);
- struct type_state_stack *find_stack_state(struct type_state *state,
- 						int offset);
- void invalidate_reg_state(struct type_state_reg *reg);
+ /**
 -- 
 2.34.1
 
