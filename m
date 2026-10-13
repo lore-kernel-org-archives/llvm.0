@@ -1,66 +1,66 @@
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B824FC8F7
-	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 20:32:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F34654EECD
+	for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 20:32:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791923532; cv=none; b=ddFVjoDIFO+TlQMbpeQzRNWJR1Po+gukGEKowW1EXeelpWP0TASX5K6iOxwtxxK+pQAdOGWOcwnDjMbi10QeQwCiGn+8ccIVZl2VEALfw2vPGXTvSgMHuk2wuPE424dNG57PS2+ArknCz6MT2g4sF//8r2EMAlnMSo6E4eP9ovk=
+	t=1791923541; cv=none; b=lMcc2Nh5X8fPZmJ5iQwSsowV2euUzvwTm+uEDHVfAsy+hm+qQj+mVynO7VjFdDMAfXhIvwNFjvWEdLRC9ztXzOtRsOqCk/SXuPfzbIL/HU6XtGo5zTgLFZ3ay7qXxCo1pn3DItf9MRBPxVkPru2jpa6MWFhIpIFWzDnZ1+RrMWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791923532; c=relaxed/simple;
-	bh=6jzevAkptcRlNrutookFDiIxJyIEnbNFeuEECc13Y58=;
+	s=arc-20240116; t=1791923541; c=relaxed/simple;
+	bh=f7ap597eqe9kIeMvfJIQIfj+KMtkVG+gOZihvU7+3hs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=DMDtneRiJITi2xJuYbqPB61Yl9aUgqkqwh5zaSjhPMO+c2BmgbgM4cPD0rvV8NNHTHfESqia3iW0N7w57RGoSJB/P9ZvxERw+0GhXKIXPdKnG10MvHVD7H8DlW/WHSzmahI1/fijjXU/P/06I4nnP6UcGJ14nleMpI8MEYdpXZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ELXrrqxh; arc=none smtp.client-ip=209.85.128.47
+	 MIME-Version; b=hDF1V5i47V/f5Y/KY7pPr0ZvM4/XCpJNX2vYA9mR1nMz/F+J7pdto+mGz3MpIuIY4qo32jGHw40c4vtrSYhHrtPSw9LeyAvav78U33s2hZDlQhC6FIYshPROjziAOnoWoAdNGxqQpKPa0QP4GR8VmWJ7Zn86dzTLFDTglYx8h64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xuu2l5VR; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ELXrrqxh"
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-49fbb2acc90so29460695e9.2
-        for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 13:32:10 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xuu2l5VR"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4a1880e1bf1so2824005e9.1
+        for <llvm@lists.linux.dev>; Tue, 13 Oct 2026 13:32:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1791923529; x=1792528329; darn=lists.linux.dev;
+        d=gmail.com; s=20251104; t=1791923537; x=1792528337; darn=lists.linux.dev;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=VTwlneqj3qr3pDNWamOjPtbvpbl/6xcVvo91j7W6eTk=;
-        b=ELXrrqxhiYVTHd1IyhDBByggNdEZvndtkHR7uAYsiPjKNwl7RblMdKf5XVsr9JLJYT
-         63K+7n9j5LaH//LkdA5K5zZmnuZJAHgyjVSJQL2h+8rDBkUEpBI7saujn8FJBw9wyKgN
-         S9+6Gejb+7Wz11oja1E7O2k1FbutM8ksIYuTorCm6pxaUo/gtt/92Jrlg9lGifRA8VP+
-         UpNDO55wQXiP5nLgNDCxbYNA77yLVGZP7CfkN3vDkXtWxg6VWL/bNiLaDNiBZQlxXBJp
-         huTlWxcG9kEd40mjK26zx4b5JKrvRNZvMlZtiZlCJkWMTEF14c/dOl/0tJodY3A4yQTY
-         1zAA==
+        bh=WP9XjF/+vFS48q37kPsonW+eIbmBaevH/xXvYsyzl+Y=;
+        b=Xuu2l5VRk1cx79FZdCAZPJRszsMBlMox4STFhP8xVpjWKWYuUvVhdAkzzqNZN3cGln
+         Q9PFE8I+BVZVpXeBYMTBpiclkaMICMNNZbyen9qxMi00CTmFtfqcy7qaqUeXzkW/Oosq
+         WWX7jkYh847X1iNTXKVk+homhSOG1ehN7871l6zOaNhTCaOio//vP+AE+wymMHuFnrT1
+         mgop6zmSe3Da5LM0Au9xXelLvgwUl/aZCkf1fL0t2UQ1Mufq8arHsNi3tahBWKeLErJh
+         addGuq/v9PMsaVC7UPlXc4NpnXYNtOMvOE7EksbnQO+U8bRy5dd+hbilFI/X3gi8MMbQ
+         Kx1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791923529; x=1792528329;
+        d=1e100.net; s=20260707; t=1791923537; x=1792528337;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=VTwlneqj3qr3pDNWamOjPtbvpbl/6xcVvo91j7W6eTk=;
-        b=hA2gFh59mmL+4Zw6wiIjdfPcXgf4FnwjkBR7KhroGaveAmQKA+wiMj2N0AQsh2iysN
-         EO+AqvQPYrlGcnCDSJ2Gxrr2CcBYVtP4m0eMi8+AxL/xRX/2KRGnh7MTL7YiiHDTm1Jm
-         Qy6nFtrx5KZ1YjmkM670rIylblqnk+Wt3pmQjPFoyfOsURg77guMxxHbirXlbvHFLD6N
-         vpkE6oQMG9zTZ1P42dBiYoCh04Cn14rUokN+uBKKiJJy43L5RniduFCspHhh7rgq6m5A
-         zdIUSVAwAq3SS8XNklp1MhXGPWXV0mcvjP31ClsY0IHnQvmjDPW+QMmh/Vjf05MONjc3
-         6SGQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwnP24mhvdnCDNzeB/pQfo/hfLry4iOhfqDWxg/vvPisYAyk5GbwiNf1GtYipNMlpZ4lWOY@lists.linux.dev
-X-Gm-Message-State: AFq9FYIXtVtgwF1q3RmuTpcQrGU86BvLUOGWFuQqxWPVaM727lvMkPV3
-	o7FQxyCQ/05TePso/02bYPZXOlb1cm6ClGhDDC6ylUOR2xP5DKH89K0I
-X-Gm-Gg: AYBFou3kB+9QWZFQJgWUqgHuKsvUg5+zarkZs4uZha/vHwgpFGJWf76fej8XEl3N7J6
-	as8ZozLpA0Hjyx1j81EAjx6XUt94JUNYqBrjfZKDY9+IB96kI2wbj/EJf+ZMsr76LQlxGsktaTz
-	dqy2R/37Tc2MbeEGV2uWu12XKiow9XzY2xuMaedLhZMcPYYejmBfFfemlwQyJcb2S1eQ5jxoPn4
-	0Qt5+syJhrODUqMLrtFx9mXTJeoyn1MqZzWhGsFw+mT9Rwmk+raEuZinPpnSzG6mAJUWLdP4P5R
-	C9dld45VT4gs5+HJ7eRzKqkCDfi0Yrvv+AU6rvGg4K74j2aBqpPa/GYdEvxIwaHW3y+lwoQr60C
-	NLa6PMy91l9ljJH+x049mucG0bOuIO5585CG0dejqZBlbYz5VC7ljnFA0Ao1Ma5WDFN71k07h73
-	EdmcMSlGM8QDxs/3nYS0JwsjBL0vRTbHPuQIBAh2U7aztVhcV9m7DBiyNLcQV/96UXWZG/UTm0V
-	vnb4EbdYix3bq/E0cV50yYNo6Kb9nmh1lNFw6xK0URGG8V/TA9Dp9URu+u0S2LKlxUDIW3xET8v
-	sDAw/9NGqZupUqDMqKthIP1pmIZ13uZKW56LYmxFeGC0YEKRzmMIp/Qgzd75bLveTWjVVFXnPrB
-	rf3+cJw==
-X-Received: by 2002:a05:600c:3111:b0:4a0:1e87:910 with SMTP id 5b1f17b1804b1-4a18e4cb7a9mr279439145e9.20.1791923528844;
-        Tue, 13 Oct 2026 13:32:08 -0700 (PDT)
+        bh=WP9XjF/+vFS48q37kPsonW+eIbmBaevH/xXvYsyzl+Y=;
+        b=bD9GGO8WG7ydn3WCuM067kyeTodxZjVR5VsrOxR+LO0AUBIozmkMMQe3neBJ0oI1Zd
+         Hdg+rWIsm8FYfk49EHPONAJgL9XMauCxu8xeTkTL4YNk0kusLcb+keVsSoc8EtlMO2UW
+         K8Cav5NnwhiX+u4ye6Jlooky9lLK4sZBwwif1qixJPhrc4pRqBlT0Mct8AlSh1RFbqBL
+         Pf4nOSpWEz2LiBxleARJ7cQFYPF/EuGhtXQiZMZs8WFyYgljbBuUIatgj0tVYZhh1Gqb
+         utrxr7VpeRUoC0cQE9RYQ3zTrdRY0jyNPz2hT51kx3HTccDf/ZMlLVr1CSWfh9H4F3kC
+         kOPg==
+X-Forwarded-Encrypted: i=1; AKwUvBz2ok5vjtMawUHTYvU0XKmTN+1mRi2oWG6Nn5VWphq9Gk32dR6o7wSw6CXa/7jHEiJJFxo3@lists.linux.dev
+X-Gm-Message-State: AFq9FYIvfpKn0/3J4fWPg6Y9TMP+9py95q7omp3Mkp8lOKDEEARqRnej
+	7ZDzQLx2oQHqYUhVJ/1UDwxtavHnOUTLAGnd1mTFsSOGEy24IeQoCfRo
+X-Gm-Gg: AYBFou3eN1FHjVZjnsZoUlVU8mU7e/FHXzTvFY3adWguW8Dc6HpR9RyS3WB9r1gEZtI
+	pw4x2nSJ1NijuBY+34z2EXk97cIc4JIeI/ztQANHeHzn5caIvD5ci4YBglLaGAf133d2rHfUiHE
+	ojymgw7/QEpHBp35VbizVtOdcjr/BngC0voGMBuB4QwK854Hy2c1UKRlLvNHVw4PIWQ8ie5oDMB
+	NJJ9vOb5Zhc8EstkndxtsqE/3ijlIkLRwStbwDPQLVhesn9U0U6BotlDEOJyuoxNJF/9wcEUXRt
+	NSCMDm9X1Y1f5GkSk3RfHlQZgkscVsaDlHilwwUlf8I2pmI9bNHof70rt/h/Io25Lg6hwogqXXv
+	4hLSZ3jRLgZ0s82owoZ+tH4C2F/1eYzbX1Y8sVj+RHTXTjZvQKoYqaNvHp2pzb+3QCQgyyADIRH
+	9eEln2DZCFD2bvaW7T/GlStyVCH9fjdyZa+4IAmzO8pR/K5Lj5HOlfiUU1DqDp0Hpqr/sTWQeh2
+	2JMbQrdjZMrAE1VUYpocuas1GYaU0yWGSrtbElnlbe4USRmj+PMb9ls5RXatjcaSEvcvMc5DjOQ
+	ZoXlmcYho0ymsajFDkgeNeeCuKCiliaglvIcn79NO+R84/SEiEKi4QoUUmVorZKLqR+VfTppRpp
+	cwZWRNw==
+X-Received: by 2002:a05:600c:6383:b0:4a1:a6e0:4ce4 with SMTP id 5b1f17b1804b1-4a1a6e04d7cmr72732765e9.33.1791923537100;
+        Tue, 13 Oct 2026 13:32:17 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a02-3100-a189-2701-8c58-155a-0279-7389.310.pool.telefonica.de. [2a02:3100:a189:2701:8c58:155a:279:7389])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b481b7f8sm5237345e9.3.2026.10.13.13.32.00
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1b481b7f8sm5237345e9.3.2026.10.13.13.32.09
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 13 Oct 2026 13:32:04 -0700 (PDT)
+        Tue, 13 Oct 2026 13:32:12 -0700 (PDT)
 From: Karl Mehltretter <kmehltretter@gmail.com>
 To: Russell King <linux@armlinux.org.uk>,
 	Miguel Ojeda <ojeda@kernel.org>
@@ -93,9 +93,9 @@ Cc: Karl Mehltretter <kmehltretter@gmail.com>,
 	llvm@lists.linux.dev,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/6] ARM: rust: Enable Rust support for ARMv5TE
-Date: Tue, 13 Oct 2026 22:31:38 +0200
-Message-Id: <20261013203140.31741-5-kmehltretter@gmail.com>
+Subject: [PATCH v3 5/6] ARM: rust: Enable Rust support for ARMv4T
+Date: Tue, 13 Oct 2026 22:31:39 +0200
+Message-Id: <20261013203140.31741-6-kmehltretter@gmail.com>
 X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 In-Reply-To: <20261013203140.31741-1-kmehltretter@gmail.com>
 References: <20261013203140.31741-1-kmehltretter@gmail.com>
@@ -107,99 +107,75 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The arm-unknown-linux-gnueabi target enables +v6 and emits instructions
-that ARMv5 does not support. -Ctarget-cpu=arm926ej-s does not remove
-+v6, while -Ctarget-feature=-v6 produces an unstable-feature warning.
+The armv5te target emits clz and blx, which ARMv4T lacks. Use rustc's
+armv4t-unknown-linux-gnueabi target for CPU_32v4T. A combined ARMv4T and
+ARMv5 kernel then uses ARMv4T code for both C and Rust.
 
-Use armv5te-unknown-linux-gnueabi for CPU_32v5. It uses the Linux
-soft-float EABI, requires strict alignment and declares 32-bit atomics.
-Select it alongside -march so Rust and C follow the same CPU selection.
-Kernels containing ARMv4 or ARMv4T CPUs remain excluded. CPU_32v5 also
-covers ARM1020, for which C already uses -march=armv5te.
+Plain ARMv4 remains excluded because rustc has no matching Linux target.
+This also depends on the preceding 16-bit xchg() support for pre-ARMv6
+CPUs.
 
-The kernel crate implements atomics through C helpers. The preceding
-patch supplies the missing 2-byte xchg() on pre-ARMv6 CPUs.
-core::sync::atomic remains unusable because LLVM lowers its operations
-to __sync_* libcalls that the kernel does not provide. No in-tree code
-uses them.
+Tested the Rust samples, KUnit suites and doctests in QEMU sx1 (ARM925T)
+with omap1_defconfig and on a Microchip SAM9X75 Curiosity board with
+at91_dt_defconfig.
 
-Tested the Rust samples, KUnit suites and doctests in QEMU versatilepb
-with versatile_defconfig and on a Microchip SAM9X75 Curiosity board.
-
-Link: https://lore.kernel.org/rust-for-linux/CACRpkdYF0sVB2-qgy=GzETSR3+2sagVQPGdunDQDJrn8KqJorA@mail.gmail.com/
-Link: https://lore.kernel.org/rust-for-linux/b13d37bd-ec68-4713-94e5-e9ed4d6a6354@gmail.com/
 Assisted-by: LLM
 Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
 ---
- Documentation/rust/arch-support.rst | 2 +-
- arch/arm/Kconfig                    | 8 +++++++-
- arch/arm/Makefile                   | 7 ++++++-
- 3 files changed, 14 insertions(+), 3 deletions(-)
+ Documentation/rust/arch-support.rst | 8 ++++----
+ arch/arm/Kconfig                    | 2 +-
+ arch/arm/Makefile                   | 1 +
+ 3 files changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/Documentation/rust/arch-support.rst b/Documentation/rust/arch-support.rst
-index bdc42a24bf30..d6d1bef44c8f 100644
+index d6d1bef44c8f..3f39cf55b6f4 100644
 --- a/Documentation/rust/arch-support.rst
 +++ b/Documentation/rust/arch-support.rst
-@@ -15,7 +15,7 @@ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
- =============  ================  ==============================================
+@@ -12,15 +12,15 @@ which uses ``libclang``.
+ Below is a general summary of architectures that currently work. Level of
+ support corresponds to ``S`` values in the ``MAINTAINERS`` file.
+ 
+-=============  ================  ==============================================
++=============  ================  ======================================================
  Architecture   Level of support  Constraints
- =============  ================  ==============================================
--``arm``        Maintained        ARMv6K and ARMv7, Little Endian only.
-+``arm``        Maintained        ARMv5TE, ARMv6K and ARMv7, Little Endian only.
+-=============  ================  ==============================================
+-``arm``        Maintained        ARMv5TE, ARMv6K and ARMv7, Little Endian only.
++=============  ================  ======================================================
++``arm``        Maintained        ARMv4T, ARMv5TE, ARMv6K and ARMv7, Little Endian only.
  ``arm64``      Maintained        Little Endian only.
  ``loongarch``  Maintained        \-
  ``riscv``      Maintained        ``riscv64`` and LLVM/Clang only.
+ ``s390``       Maintained        ``CONFIG_EXPOLINE`` must be disabled.
+ ``um``         Maintained        \-
+ ``x86``        Maintained        ``x86_64`` only.
+-=============  ================  ==============================================
++=============  ================  ======================================================
+ 
 diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index b5816f28783a..9275a85f95e9 100644
+index 9275a85f95e9..cf782fc04872 100644
 --- a/arch/arm/Kconfig
 +++ b/arch/arm/Kconfig
-@@ -138,7 +138,7 @@ config ARM
- 	select MMU_GATHER_RCU_TABLE_FREE if SMP && ARM_LPAE
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
--	select HAVE_RUST if CPU_LITTLE_ENDIAN && CPU_32v6K && !CPU_V6 && !KASAN
-+	select HAVE_RUST if CPU_LITTLE_ENDIAN && ARM_RUST_TARGET && !KASAN
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_UID16
-@@ -172,6 +172,12 @@ config ARM
- 	  Europe.  There is an ARM Linux project with a web page at
- 	  <http://www.arm.linux.org.uk/>.
+@@ -176,7 +176,7 @@ config ARM
+ config ARM_RUST_TARGET
+ 	def_bool y
+ 	depends on (CPU_32v6K && !CPU_V6) || \
+-		   (CPU_32v5 && !CPU_32v4T && !CPU_32v4)
++		   ((CPU_32v5 || CPU_32v4T) && !CPU_32v4)
  
-+# The CPU selections for which rustc has a matching target
-+config ARM_RUST_TARGET
-+	def_bool y
-+	depends on (CPU_32v6K && !CPU_V6) || \
-+		   (CPU_32v5 && !CPU_32v4T && !CPU_32v4)
-+
  config ARM_HAS_GROUP_RELOCS
  	def_bool !COMPILE_TEST
- 	help
 diff --git a/arch/arm/Makefile b/arch/arm/Makefile
-index 573813ef5e77..168779e9e93d 100644
+index 168779e9e93d..a72843890241 100644
 --- a/arch/arm/Makefile
 +++ b/arch/arm/Makefile
-@@ -73,6 +73,11 @@ arch-$(CONFIG_CPU_32v4T)	:=-march=armv4t
- arch-$(CONFIG_CPU_32v4)		:=-march=armv4
- arch-$(CONFIG_CPU_32v3)		:=-march=armv3m
+@@ -77,6 +77,7 @@ arch-$(CONFIG_CPU_32v3)		:=-march=armv3m
+ # the +v6 of the generic target, so older CPUs need their own target.
+ rust-target-y				:=arm-unknown-linux-gnueabi
+ rust-target-$(CONFIG_CPU_32v5)		:=armv5te-unknown-linux-gnueabi
++rust-target-$(CONFIG_CPU_32v4T)	:=armv4t-unknown-linux-gnueabi
  
-+# The rustc target fixes the instruction set. -Ctarget-cpu cannot remove
-+# the +v6 of the generic target, so older CPUs need their own target.
-+rust-target-y				:=arm-unknown-linux-gnueabi
-+rust-target-$(CONFIG_CPU_32v5)		:=armv5te-unknown-linux-gnueabi
-+
  # Note that GCC does not numerically define an architecture version
  # macro, but instead defines a whole series of macros which makes
- # testing for a specific architecture or later rather impossible.
-@@ -150,7 +155,7 @@ endif
- KBUILD_CPPFLAGS	+=$(cpp-y)
- KBUILD_CFLAGS	+=$(CFLAGS_ABI) $(CFLAGS_ISA) $(arch-y) $(tune-y) $(call cc-option,-mshort-load-bytes,$(call cc-option,-malignment-traps,)) -msoft-float -Uarm
- KBUILD_AFLAGS	+=$(CFLAGS_ABI) $(AFLAGS_ISA) -Wa,$(arch-y) $(tune-y) -include $(srctree)/arch/arm/include/asm/unified.h -msoft-float
--KBUILD_RUSTFLAGS += --target=arm-unknown-linux-gnueabi
-+KBUILD_RUSTFLAGS += --target=$(rust-target-y)
- 
- CHECKFLAGS	+= -D__arm__
- 
 -- 
 2.39.5 (Apple Git-154)
 
