@@ -1,246 +1,152 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2F733A1690;
-	Tue, 13 Oct 2026 01:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99B353EBF1A;
+	Tue, 13 Oct 2026 02:20:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791855260; cv=none; b=TQtA5betR+kc3zlQGdxKgiqDu3GrTvTE5U6/LBdHXhSfppsF0H4AUylRQP13cpUoCtGZG0spOhQ2ta6MroGhsu511brruN/6XoECAw66LnNspxKq0lxviAwpOWtx2HxHKBhtVOYUUuU8ZpfCUR1/t3IRtA2oBR2ca82cfhjeO7Y=
+	t=1791858037; cv=none; b=rTPVA2Hpc6Hp+E2/yWDOD994j51vGITY8BMzMd7tFH5NsE1qef1pK8h/TnTdaUrrwUGyYusKWo/hZwzVeI3x9xVCLzbGlmJ5J0gzGvYf/Aqiu5D7/f7G4GUG5yVydfRd24zCI/hcVwDEanJXanhKP5HR3vkYMgMRBlJ5m/gTXa8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791855260; c=relaxed/simple;
-	bh=9Sn4J2Qi5biZEbub9Fr0LR+1NfCb8ePeAvdfpspcvZU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=hGmYdAT/vJp6+jjNWUcjdr9jtM44hAvnsFzvvWIbLhwdcH1jTBDV/5SpOmHMjpQcanXRFuRLd6DbdeepYfVD3ysAGh9qMpbMozd0oRQ9gkdJZjiy2dhRbnxTCnJ8tfR8uDocS3Idw4JWx87uij+Y6wMo8ydeQN5wV1aNMram6QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BQSg7NXC; arc=none smtp.client-ip=198.175.65.9
+	s=arc-20240116; t=1791858037; c=relaxed/simple;
+	bh=kBPNfyQcChunT1JOmgMyn3mDkWcbfxmQmpiBTDujKn4=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=cuFqEpKz4SHeZE5fewOJjQXGBCSmuVLu9ONFWubZgsGjZNEIF8Y8/8oLWepdBN05Mi361W6vedXDMx4gwZGY0DvecXS7kmNweKxiS/W+ZmfQs69igOjSWwlyusDS7+AMSpaqnsd7/FB9S0wkrDh+vAUJl+5Dt3QXtEsdof8viEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YgEb+3dh; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BQSg7NXC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YgEb+3dh"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1791855258; x=1823391258;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9Sn4J2Qi5biZEbub9Fr0LR+1NfCb8ePeAvdfpspcvZU=;
-  b=BQSg7NXC3fks41J4Te50CVuhYhX+8nmAcgthiNU331q5Eydtr939EGh0
-   u6MvyLo/swUBw57DKRuWJHjo1tIH2IHy9BVOq0y5TLk5QO0OxuFJk9itA
-   7UXCKyTMmElcXP2gLL9+bs1pk5FtI9eNs+5Ed/zSTWSVWqIld4oKTLyPu
-   Lltpq93+shiALRc0gATQaYZ7lxPfD9QoyJmfW3rozCJJh3adW33oUPY3c
-   r1J5vsm8RLQjDU6WBa9fndnxjwEZhsZz8WCqXJA0aOJwQzC2+5TGKP3Er
-   kWo5YNpRn+m2/BzF6bASr/CrYSe+iltrDfSJ1YMx3qhFk33W4pCa+BZCB
-   A==;
-X-CSE-ConnectionGUID: 5hv+vxMTQXisp+UYDN3aQQ==
-X-CSE-MsgGUID: 1sk626/jRm6dAZtsztzCVw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11933"; a="456834"
+  t=1791858036; x=1823394036;
+  h=date:from:to:cc:subject:message-id;
+  bh=kBPNfyQcChunT1JOmgMyn3mDkWcbfxmQmpiBTDujKn4=;
+  b=YgEb+3dhxEAi37ebxx0l0wUhnrt38LU/31OF9/Hw6oJfqFAav8T7v4H4
+   64MoU98judEvklGCrua1bzUvHh8d3ApmOBrEVs9RJyvT7EULP/Ly72Dlv
+   ZDQCm/ZORYnntacGe6ACCoMggg+MaMQCltOtNnmNS0mR5IPBytX0suEig
+   nIiV5EuABmfdKcfWfOxjST7uoLfayA9zurAqL36zl+fsgQl7lyJlaAPJN
+   78QdtqDfr7V95aRT0EER5g1V0QHql/ORyfujC23qF/9U7jgvgzFPp4eGD
+   zxnbXLGR6oeK/7pl5n0SV38buH81pfhFMQew4Xur6+4wNlo52KCYS+bNk
+   g==;
+X-CSE-ConnectionGUID: s6HkmAP7SmmNBCtJB8Fnrw==
+X-CSE-MsgGUID: GwfeeHbERYy4zLGPTQWAqA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11933"; a="453444"
 X-IronPort-AV: E=Sophos;i="6.27,154,1787036400"; 
-   d="scan'208";a="456834"
-Received: from fmviesa011.fm.intel.com ([10.60.135.151])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 18:34:17 -0700
-X-CSE-ConnectionGUID: MAU8hMn+SBSWdnXSXHprDw==
-X-CSE-MsgGUID: 82aQGqlzRZK7cgkETbLpow==
+   d="scan'208";a="453444"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Oct 2026 19:20:36 -0700
+X-CSE-ConnectionGUID: US9zDQ+DRyaCGjx7wdLJrg==
+X-CSE-MsgGUID: 2LJPiDn3Q0CY5AbJWU4mgQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,154,1787036400"; 
-   d="scan'208";a="2875601"
+   d="scan'208";a="1157664"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa011.fm.intel.com with ESMTP; 12 Oct 2026 18:34:16 -0700
+  by fmviesa002.fm.intel.com with ESMTP; 12 Oct 2026 19:20:34 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xGRPB-00000000CMA-24a5;
-	Tue, 13 Oct 2026 01:34:13 +0000
-Date: Tue, 13 Oct 2026 09:34:01 +0800
+	id 1xGS7z-00000000CPY-1QBp;
+	Tue, 13 Oct 2026 02:20:31 +0000
+Date: Tue, 13 Oct 2026 10:20:09 +0800
 From: kernel test robot <lkp@intel.com>
-To: "Thomas =?utf-8?Q?Wei=C3=9Fschuh"?= <linux@weissschuh.net>
+To: David Howells <dhowells@redhat.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [thomas-weissschuh:b4/rust-dyndbg 14/16] error[E0425]:
- cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-Message-ID: <202610130904.gpqVPnQD-lkp@intel.com>
+Subject: [dhowells-fs:ceph-iter 32/68] net/ceph/databuf.c:63:23:
+ warning: variable 'part' is uninitialized when used within its own
+ initialization
+Message-ID: <202610131048.aC2zOPgx-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.git b4/rust-dyndbg
-head:   20c3aae54d617189168dfe8539a9086baeab6d39
-commit: ba27e0dd2dfd3ac15e54eb9d375fc34d5de33004 [14/16] x
-config: arm64-randconfig-1003-20261013 (https://download.01.org/0day-ci/archive/20261013/202610130904.gpqVPnQD-lkp@intel.com/config)
-compiler: clang version 21.1.8 (https://github.com/llvm/llvm-project 2078da43e25a4623cab2d0d60decddf709aaea28)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261013/202610130904.gpqVPnQD-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git ceph-iter
+head:   c67464ec28da31de31fe4358eb13c2771a280cb7
+commit: 8a641e79bed7f15b432c0cdeebe6399dc1846aa4 [32/68] libceph: Add a new data container type, ceph_databuf
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261013/202610131048.aC2zOPgx-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261013/202610131048.aC2zOPgx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610130904.gpqVPnQD-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610131048.aC2zOPgx-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/driver.rs:75:13
-   |
-   75 |             dev_dbg!(pdev, "Probe Nova Core GPU driver.\n");
-   |             ----------------------------------------------- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 |   macro_rules! dev_dbg {
-   |   -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                           $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                             ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/firmware/booter.rs:96:9
-   |
-   96 | /         dev_dbg!(
-   97 | |             dev,
-   98 | |             "loaded {} firmware v{}\n",
-   99 | |             fw_name,
-   100 | |             tlv.get_string(b"VERS")?
-   101 | |         );
-   | |_________- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/fsp.rs:541:9
-   |
-   541 |         dev_dbg!(dev, "Starting FSP boot sequence for {}\n", args.chipset);
-   |         ------------------------------------------------------------------ in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/fsp.rs:547:9
-   |
-   547 |         dev_dbg!(dev, "FSP Chain of Trust completed successfully\n");
-   |         ------------------------------------------------------------ in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gpu.rs:398:21
-   |
-   398 |                     dev_dbg!(dev, "Usable FB regions:\n");
-   |                     ------------------------------------- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gpu.rs:400:25
-   |
-   400 |                         dev_dbg!(dev, "  - {:#x?}\n", region);
-   |                         ------------------------------------- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 |   macro_rules! dev_dbg {
-   |   -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                           $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                             ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gpu.rs:403:21
-   |
-   403 | /                     dev_dbg!(
-   404 | |                         dev,
-   405 | |                         "Total usable VRAM: {} MiB\n",
-   406 | |                         info.usable_fb_regions.iter().fold(0u64, |res, region| res
-   407 | |                             .saturating_add(region.end - region.start))
-   408 | |                             / u64::SZ_1M
-   409 | |                     );
-   | |_____________________- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gsp/boot.rs:74:9
-   |
-   74 |         dev_dbg!(pdev, "RISC-V active? {}\n", gsp_falcon.is_riscv_active(),);
-   |         -------------------------------------------------------------------- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gsp/hal/gh100.rs:80:5
-   |
-   80 |     dev_dbg!(dev, "Waiting for GSP lockdown release\n");
-   |     --------------------------------------------------- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gsp/hal/gh100.rs:110:5
-   |
-   110 |     dev_dbg!(dev, "GSP lockdown released\n");
-   |     ---------------------------------------- in this macro invocation
---
->> error[E0425]: cannot find function `__dynamic_dev_dbg` in crate `$crate::bindings`
-   --> rust/kernel/device.rs:926:43
-   |
-   917 | macro_rules! dev_dbg {
-   | -------------------- in this expansion of `dev_dbg!`
-   ...
-   926 |                         $crate::bindings::__dynamic_dev_dbg(desc, dev.as_ref().as_raw(), c"%pA".as_char_ptr(), &raw const args)
-   |                                           ^^^^^^^^^^^^^^^^^ not found in `$crate::bindings`
-   |
-   ::: drivers/gpu/nova-core/gsp/hal/gh100.rs:155:9
-   |
-   155 |         dev_dbg!(dev, "{:#x?}\n", fb_sizes);
-   |         ----------------------------------- in this macro invocation
-..
+>> net/ceph/databuf.c:63:23: warning: variable 'part' is uninitialized when used within its own initialization [-Wuninitialized]
+      63 |                         size_t part = umin(part, enc->space);
+         |                                ~~~~        ^~~~
+   include/linux/minmax.h:121:22: note: expanded from macro 'umin'
+     121 |         __careful_cmp(min, (x) + 0u + 0ul + 0ull, (y) + 0u + 0ul + 0ull)
+         |                             ^
+   include/linux/minmax.h:98:25: note: expanded from macro '__careful_cmp'
+      98 |         __careful_cmp_once(op, x, y, __UNIQUE_ID(x_), __UNIQUE_ID(y_))
+         |                                ^
+   include/linux/minmax.h:92:13: note: expanded from macro '__careful_cmp_once'
+      92 |         auto ux = (x); auto uy = (y);                   \
+         |                    ^
+   1 warning generated.
+
+
+vim +/part +63 net/ceph/databuf.c
+
+    44	
+    45	/**
+    46	 * ceph_bvecq_append - Append some data onto a buffer
+    47	 * @enc: The encoding context
+    48	 * @data: The data to append
+    49	 * @len: The length of the data
+    50	 *
+    51	 * Add some data onto the end of the encoding buffer's occupied region.  This
+    52	 * will expand the maximum size of the buffer if necessary.
+    53	 *
+    54	 * If ENOMEM is encountered, enc->nomem is set to true and all future appends
+    55	 * will do nothing.
+    56	 */
+    57	void ceph_bvecq_append(struct ceph_encode *enc, const void *data, size_t len)
+    58	{
+    59		for (;;) {
+    60			struct bvecq *bq;
+    61	
+    62			if (likely(len <= enc->space)) {
+  > 63				size_t part = umin(part, enc->space);
+    64	
+    65				memcpy(enc->p, data, len);
+    66				enc->p += len;
+    67				enc->space -= len;
+    68				enc->len += len;
+    69	
+    70				if (part >= len)
+    71					return;
+    72				data += part;
+    73				len -= part;
+    74			}
+    75	
+    76			if (enc->p)
+    77				kunmap_local(enc->p);
+    78	
+    79			if (unlikely(enc->nomem))
+    80				return;
+    81			if (ceph_bvecq_reserve(enc, len) < 0) {
+    82				enc->p = NULL;
+    83				enc->nomem = true;
+    84				return;
+    85			}
+    86	
+    87			enc->slot++;
+    88			bq = enc->bq;
+    89			if (enc->slot >= bq->nr_slots) {
+    90				bq = bq->next;
+    91				enc->bq = bq;
+    92				enc->slot = 0;
+    93			}
+    94			enc->space = bq->bv[enc->slot].bv_len;
+    95			enc->p = kmap_local_bvecq(enc->bq, 0);
+    96		}
+    97	}
+    98	EXPORT_SYMBOL(ceph_bvecq_append);
+    99	
 
 --
 0-DAY CI Kernel Test Service
