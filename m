@@ -1,199 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8505338642C;
-	Tue, 13 Oct 2026 05:49:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56921384242;
+	Tue, 13 Oct 2026 06:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791870593; cv=none; b=PoJBTqGH1tnwN7rdY7ylhhv7ABedgFmHY80gUG4FVcE2JfZm1FsjNm/uaIKcQIAoUDnX5hQbU1WHdxJgxt7CMWlhikCKNu1gw/R3i7FpCyBJnQLwlaKXxR93Wli8tRaCrNev+dHGF2sFC2GdwS/BPf0MKW8Xj6qmrON44a2y4R4=
+	t=1791873853; cv=none; b=J0OQkYsXgxx42b0mcP5TuMjhXlrXmKXeNp8qJSNG5lxe1B2egg5zcO9fV9hk3sLsCpNIXcFMIm10byIqDeV4sy8EI7oKlp2NCAqpAzUegal6yKB9fkQr4u+t8D7dDCZF0yMKZdlQjCceYqiK/yypT/oFT/favDJ5Q0jzduDJ6CE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791870593; c=relaxed/simple;
-	bh=wuRY5p+5BrzZUH6eJDHauD3cZJW0aNAJikIfR7tCCd8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RrkvXfyME6Q1vzejdYD7CqqovtK1MeM5FZm07NRXSMv7HahhHWrHg5ibNxtyjOPM+BUEvcFNhGxq2HSbstkx1r6PoI+Rw3MZCKpCcNbOSzgRVTSykszKe41qwilM25QLLnYPIkCKgZDJU0J63Flq/WEq5si/fu7XwMgLytoTeVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOM7OoZN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1791873853; c=relaxed/simple;
+	bh=vrSavS8p7pUR78E2HEuhtydxzFGUu7iY/A0/B0lAOIQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PCQGD/o+mJcCSzTCY0LcT9ffMOwqvuU6SvRKwr6n8PYVwy/30eF0tt0kbC7Vo1pNwIC/MmCXP+UXW94qyV+v3f8nE5bDasutW/ecdWTFrmTwmt5BUEoKLRNsaBJoLv1BLsMryRSfqjWJJcwMmLBoqdEkBcKZO+I6BWynV8m+NPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=pass smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=IfgQKdEf; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOM7OoZN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A9FE1F000FF;
-	Tue, 13 Oct 2026 05:49:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1791870592;
-	bh=11l6/oERXgMW/KfZBlSq4z+sWH/hdPWsPSIDxfpMm/I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=kOM7OoZNkeQoeZUBmGA9S1uzERXrskTIHg0Dlh4HAYCrI3BAKKGjCcjiWIl1RCJyC
-	 BZiJOvFz0c8t5bh6t6eUnpw/VLARFyplhuj51o5LaxqqWt/oWzTXah++nRmhWS6Cs9
-	 Jyc9GHqTJ7d+JBOTWytsy+x+HvT3gNTq4Zyr9fLa3RpCIqYsrwI5BjYuH0ULwuBDiL
-	 agitrCz3TUWqpmVJiLzg9wjtqUJnjgA84Hdd8vo6Jkmn5Hfo6S/Vd2vVjIaFcRa4UJ
-	 bCEc3W0/65OPvP76z0CcDL4uR/WI0ELdUaxL9yncxwDv+GqCoccRPiDPSdZdAS4LN/
-	 Bsw1R7pYzLzgg==
-Message-ID: <558332ed-b93e-4f0d-abb0-942ca63b0cd6@kernel.org>
-Date: Tue, 13 Oct 2026 07:49:47 +0200
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="IfgQKdEf"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=+4sQpvtGl8rbG3DbVItMctIXcxgPZJH09YxXRKbkwvU=; b=IfgQKdEfl9R7LR8+vnN3pB1F1G
+	mJBfAzdHrzDOBqzOc7XL+xnjQTnRqGY1GA7ewTFPklo9jrywi89bXQMH7KQTEbRY3ONWeRotV+4BN
+	h18kM73ewhIQaHjVog2bCvFmPTRQ2xIhqtSBl0LPPLSdEV/Awba7SbAjVGAdFvbNnNIwz1kIOzaBO
+	2W9GO3EZXWbWId9xeRan9ezzNSy3q8DLkFlBzLUrYxfQG652QThr3K540FTV37fTLnG28ZvWoJEX/
+	9Ha0FJ6r4iVfl9KlR1yjymvLrZj3WUK5YycBNlg1ichGZCSx6YQ1NhBg3+tF+YPkpV33yM9pUvuAC
+	zFlfSWlQ==;
+Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1xGWF4-0000000Bobs-3VoA;
+	Tue, 13 Oct 2026 06:44:06 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 068F930045A; Tue, 13 Oct 2026 08:44:06 +0200 (CEST)
+Date: Tue, 13 Oct 2026 08:44:05 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Kees Cook <kees@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+	Sami Tolvanen <samitolvanen@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 3/3] objtool: Skip jump table jumps in the kCFI indirect
+ call check
+Message-ID: <20261013064405.GY2009045@noisy.programming.kicks-ass.net>
+References: <20261012090424.i.497-kees@kernel.org>
+ <20261012090436.1676525-3-kees@kernel.org>
+ <20261012092250.GO4121339@noisy.programming.kicks-ass.net>
+ <20261012183925.ca026d-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/11] tty: Add NVIDIA LSTP UART driver
-To: Adrian Ambrozewicz <aambrozewicz@nvidia.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Donald Shannon <donalds@nvidia.com>, Nathan Chancellor
- <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-usb@vger.kernel.org, llvm@lists.linux.dev,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>
-References: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com>
- <20261012-lstp-usb-adapter-v1-10-aambrozewicz@nvidia.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <20261012-lstp-usb-adapter-v1-10-aambrozewicz@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261012183925.ca026d-kees@kernel.org>
 
-Hi,
+On Mon, Oct 12, 2026 at 11:41:03AM -0700, Kees Cook wrote:
+> On Mon, Oct 12, 2026 at 11:22:50AM +0200, Peter Zijlstra wrote:
+> > I am confused.. I don't see a computed goto in __bpf_prog_run(), and we
+> > build with -fno-jump-tables.
+> 
+> It's the interpreter, ___bpf_prog_run() (three underscores) in
 
-On 12. 10. 26, 19:36, Adrian Ambrozewicz wrote:
-> --- /dev/null
-> +++ b/drivers/tty/lstp_tty.c
-> @@ -0,0 +1,829 @@
-...
-> +/* clang-format off */
-> +static speed_t lstp_baud_to_speed(u32 baud)
+Durr, clearly I wasn't wearing my glasses or something.
 
-Maybe implement this in drivers/tty/tty_baudrate.c on the top of 
-baud_table + baud_bits?
+> kernel/bpf/core.c, not the __bpf_prog_run() wrapper in filter.h:
+> 
+> 	static const void * const jumptable[256] __annotate_jump_table = {
+> 		[0 ... 255] = &&default_label,
+> 		...
+> 	};
+> 	...
+> 	select_insn:
+> 		goto *jumptable[insn->code];
+> 
+> So it's a manually constructed jump table, not the "normal"
+> table-from-switch stuff that -fno-jump-tables suppresses (though see
+> below about Clang). objtool already knows about it, with annotations
+> added back in 2019 in commit e55a73251da33 ("bpf: Fix ORC unwinding in
+> non-JIT BPF code").
+> 
+> With retpolines, GCC emits a single dispatch that every handler uses:
+> 
+> 	movzbl (%rbx),%esi
+> 	movzbl %sil,%edx
+> 	mov    jumptable(,%rdx,8),%rdx
+> 	jmp    __x86_indirect_thunk_rdx
+> 
+> Clang never has this jump: with retpolines, LLVM's IndirectBrExpand pass
+> turns the label addresses into indexes and the "goto *" into a switch,
+> which Clang's -fno-jump-tables then makes a compare tree. So it's only
+> constructed this way under GCC, but since now we can turn on kCFI with
+> GCC, the objtool warning about indirects without kcfi protection trips.
 
-> +{
-> +	static const struct {
-> +		u32     baud;
-> +		speed_t speed;
-> +	} map[] = {
-> +		{      50, B50      }, {      75, B75      }, {     110, B110     },
-> +		{     134, B134     }, {     150, B150     }, {     200, B200     },
-> +		{     300, B300     }, {     600, B600     }, {    1200, B1200    },
-> +		{    1800, B1800    }, {    2400, B2400    }, {    4800, B4800    },
-> +		{    9600, B9600    }, {   19200, B19200   }, {   38400, B38400   },
-> +		{   57600, B57600   }, {  115200, B115200  }, {  230400, B230400  },
-> +		{  460800, B460800  }, {  500000, B500000  }, {  576000, B576000  },
-> +		{  921600, B921600  }, { 1000000, B1000000 }, { 1152000, B1152000 },
-> +		{ 1500000, B1500000 }, { 2000000, B2000000 }, { 2500000, B2500000 },
-> +		{ 3000000, B3000000 }, { 3500000, B3500000 }, { 4000000, B4000000 },
-> +	};
-> +
-> +	for (size_t i = 0; i < ARRAY_SIZE(map); i++)
-> +		if (map[i].baud == baud)
-> +			return map[i].speed;
-> +
-> +	return B0;
-> +}
-...
-> +static int lstp_uart_start(struct lstp_channel *ch)
-> +{
-> +	struct lstp_uart_ctx *ctx = ch->priv;
-> +
-> +	/*
-> +	 * Mark registered before publishing: tty_port_register_device() adds
-> +	 * the cdev and emits the uevent that sends udev straight to open(),
-> +	 * and lstp_tty_install() refuses a minor that is not marked. No node
-> +	 * exists at this index yet, so nothing can reach the map early.
-> +	 */
-> +	scoped_guard(mutex, &lstp_minors_lock)
-> +		ctx->registered = true;
-> +
-> +	struct device *tty_dev =
-> +		tty_port_register_device(&ctx->port, lstp_tty_driver, ctx->minor, ch->dev);
-> +
-> +	if (IS_ERR(tty_dev)) {
-> +		dev_err(ch->dev, "%s: ch_%d: Could not register TTY (%pe)\n", __func__, ch->ch_id,
-> +			tty_dev);
-> +		scoped_guard(mutex, &lstp_minors_lock)
-> +			ctx->registered = false;
-> +		return PTR_ERR(tty_dev);
-> +	}
-> +
-> +	/* Nothing below may fail: really_probe() skips .remove() when .probe() errors. */
-> +	dev_info(ch->dev, "%s: ch_%d: Started as %s\n", __func__, ch->ch_id, ch->display_name);
+OK, then the next question; do we *want* to allow a 'naked' indirect
+branch to survive?
 
-We usually print nothing in case everything went well.
-
-> +	return 0;
-> +}
-...
-> +static void lstp_uart_stop(struct lstp_channel *ch)
-> +{
-> +	struct lstp_uart_ctx *ctx = ch->priv;
-> +
-> +	/*
-> +	 * Clear @registered before sampling @port->tty, not after:
-> +	 * tty_port_open() publishes the tty before it calls .activate(), so an
-> +	 * open can go live between a sample and a later clear and never be
-> +	 * hung up here.
-> +	 */
-> +	scoped_guard(mutex, &lstp_minors_lock)
-> +		ctx->registered = false;
-> +
-> +	struct tty_struct *tty = tty_port_tty_get(&ctx->port);
-> +
-> +	if (tty) {
-> +		/*
-> +		 * Synchronous: fds move to hung_up_tty_fops and lstp_port_shutdown()
-> +		 * cancels write_work, so no write is submitted after this returns.
-> +		 */
-> +		tty_vhangup(tty);
-> +		tty_kref_put(tty);
-
-tty_port_tty_vhangup()?
-
-> +	}
-> +
-> +	tty_unregister_device(lstp_tty_driver, ctx->minor);
-> +}
-thanks,
--- 
-js
-suse labs
+We can simply disable the whole interpreter when kcfi=y. Isn't that
+thing recommended disabled anyway?
