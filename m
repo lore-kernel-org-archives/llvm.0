@@ -1,147 +1,135 @@
-Received: from mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A198559C98
-	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 16:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3601414400;
+	Wed, 14 Oct 2026 16:37:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791994858; cv=none; b=URfnGP1/8r3oT7brun11OHzJtGoYp4Tx0J9J/1z0igKpmQBp3SRI75jsUn0jlF5Ly6kbwh74N46RLhpu0sTMSOptyhn7w4KhOWOQddyQmihyzMlKdA0YAMK3s8sSY7gYiKYNZKXAPqpQfF7drSVSq60AKHC7EKaavjFzKH1OeY4=
+	t=1791995833; cv=none; b=cteATwv31FuPonr3oYuPISEx3+nyqPNXTj0ggD4XBX8LSQLnjME6P65aTJzmPIcQz8Yr4r5y5v7rUYLHsW9l3sjPlW55lMAoXIAWXyLVcc/9JyU7IFk116uROxu+mPU+TDoUmlwrWK/ZUpNyorrh/WN0KvvxDc26oVLy8MGr2hQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791994858; c=relaxed/simple;
-	bh=rKvGD/uQgvEu1y9QYyQ3BOrlGUecI24T5itI4gKAr8A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jdMa71DlAHtGizoJ7uXXnPx6o4SRvZxvv4TJkIkrn8kmfX8X5zb05iIX7nTP13e8elMl7W7Wq9TTkIiZAMrKiYmNuRazucWiFge8gC2UFJxRgwy/HWODV6Cd+w31oXYoicAGiYE2k3iTN4A/qv/rfGzMje4xBiGsXXM4m0TKnsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ih/ZlP0B; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1791995833; c=relaxed/simple;
+	bh=xvcQd7gINQECA0pEoMrNUQEomIL78zM5m7K4ujDNY3k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lUoMlX6zOxnT019lxR2ZJFeu+JOU+B0nrl4diRJC1dbPejGZwX0QTP1h8I5RUFRT8AC+AbZSgofD0/lgGZxHpKyjo2kYQgblDugYRqXUxForNZCpvJB2dkCeXOreSlqn3/2gEysjC5UXQTzj6bmb2fSvYM97rjHwqDkQTTObDCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9IplbiX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ih/ZlP0B"
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=rKvGD/uQgvEu1y9QYyQ3BOrlGUecI24T5itI4gKAr8A=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791994853; v=1; x=1792599653;
- b=ih/ZlP0BMkDZDRlvf+S1KeZwWaUhrpp2qQQb8IROHURJ8N76LQjAtPEQ/a/HZmpvdxss1rAJ
- VuVmcOCfj/MUP2pvlQCJFaVmfdEJ9PD8IXLVbcnTVahF1MRnWS32eWawNXNjn35ggp0bNRy+HtX
- rmOOiTX4Fh3/IvGRraBCinPs=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by smtp.migadu.com with ESMTPS id 1e510aac7886c557;
-	Wed, 14 Oct 2026 16:20:53 +0000
-X-Mizu-Trace-ID: 1e510aac7886c557
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b6ca5327e6263cc3b6c0e381d502ce8b5570d413.camel@linux.dev>
-Subject: Re: [PATCH bpf-next v2 7/7] selftests/bpf: Skip compare_text
- subtest when stdout is not saved
-From: KaFai Wan <kafai.wan@linux.dev>
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com,  martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org,  emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, nathan@kernel.org, 
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com, 
- donggeunyoo.kernel@gmail.com, leon.hwang@linux.dev,
- menglong8.dong@gmail.com,  yatsenko@meta.com, jiangfeng@kylinos.cn,
- bjorn@kernel.org, puranjay@kernel.org,  vineet.gupta@linux.dev,
- mykolal@fb.com, bpf@vger.kernel.org,  linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org,  llvm@lists.linux.dev
-Cc: martin.lau@kernel.org, mason@kernel.org
-Date: Thu, 15 Oct 2026 00:20:30 +0800
-In-Reply-To: <b66b343a0a91711a6a520e11b284941771cbb23ad8c8f1bd5f831594b567b5fa@mail.kernel.org>
-References: <20261014113043.640435-8-kafai.wan@linux.dev>
-	 <b66b343a0a91711a6a520e11b284941771cbb23ad8c8f1bd5f831594b567b5fa@mail.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1.1 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9IplbiX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 258481F000C4;
+	Wed, 14 Oct 2026 16:37:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1791995832;
+	bh=D0qFplMD3JegnW7i3iVJkwgfMDmyoOPsyHFrtj+nxBA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=n9IplbiX+93nceH23XmnKeZ5oYecY++a3sP1FSp8/eoJQHlwosXybufpa8S8KQDs4
+	 JSOYDlE3dW0Tstqig9001fDQnyF55nygDlSOHNkJdYmGR6xIoM+nl1dQhuyjrtkVwj
+	 EuXqe73P+3VZ6BDKW7wiUBDkX32NJU8qFo902yMRcaug/7BAm5oKbDw4gxCh7LxUqC
+	 Y7NxYDYR/y/z28DqpEx8zGTH0dUYz2jKMESyevlBsADLYmloXFD5sbjroBfTPOb1YO
+	 EAaIr8VM2TPJc/hDXYqOW71XwpeyatwvwVWF6WB1T2qG0eJVVmvgIrJgOh3HFB8l/2
+	 2qpSERGwTKhRA==
+Date: Wed, 14 Oct 2026 09:37:11 -0700
+From: Kees Cook <kees@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Ian Rogers <irogers@google.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <chleroy@kernel.org>,
+	Nayna Jain <nayna@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	David Teigland <teigland@redhat.com>,
+	Alexander Aring <aahringo@redhat.com>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Richard Weinberger <richard@nod.at>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Felix Kuehling <Felix.Kuehling@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	driver-core@lists.linux.dev, llvm@lists.linux.dev,
+	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
+	gfs2@lists.linux.dev, xen-devel@lists.xenproject.org,
+	linux-s390@vger.kernel.org, linux-mtd@lists.infradead.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/11] kobject: Require explicit initialization of struct
+ kobj_type::release
+Message-ID: <202610140932.5F9CFCE5@keescook>
+References: <20261013223946.1836757-1-irogers@google.com>
+ <2026101425-why-boring-4f2d@gregkh>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2026101425-why-boring-4f2d@gregkh>
 
-On Wed, 2026-10-14 at 12:08 +0000, bot+bpf-ci@kernel.org wrote:
-> > selftests/bpf: Skip compare_text subtest when stdout is not saved
->=20
-> TL;DR: Nit only: the new test__skip() in the compare_text_mismatch subtes=
-t
-> gives no reason for skipping; a short comment or stderr message might hel=
-p.
-> The skip logic itself looks correct.
->=20
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framewor=
-k.c
-> > b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-> > index b4cd7c7ff439..ddb6cdc1579f 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
->=20
-> [ ... ]
->=20
-> > @@ -203,14 +203,18 @@ void test_prog_tests_framework_compare_text(void)
-> > =C2=A0	}
-> >=20
-> > =C2=A0	if (test__start_subtest("compare_text_mismatch")) {
-> > -		err =3D compare_text_to_expected("line two\n", "line one\n");
-> > -		fflush(stdout);
-> > +		if (!env.subtest_state->stdout_saved) {
-> > +			test__skip();
-> > +		} else {
-> > +			err =3D compare_text_to_expected("line two\n", "line one\n");
-> > +			fflush(stdout);
-> >=20
-> > -		ASSERT_EQ(err, -1, "mismatch_rc");
-> > -		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
-> > -				=C2=A0 "diff_has_expected");
-> > -		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
-> > -				=C2=A0 "diff_has_actual");
-> > +			ASSERT_EQ(err, -1, "mismatch_rc");
-> > +			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
-> > +					=C2=A0 "diff_has_expected");
-> > +			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
-> > +					=C2=A0 "diff_has_actual");
-> > +		}
-> > =C2=A0		test__end_subtest();
-> > =C2=A0	}
-> > =C2=A0}
->=20
-> This isn't a bug, but could the skip in the compare_text_mismatch subtest
-> carry an explanation?
->=20
-> 	if (!env.subtest_state->stdout_saved) {
-> 		test__skip();
-> 	}
->=20
-> A subsystem guideline flags selftests that skip silently with no message,
-> and test__skip() here prints nothing about why the subtest was skipped.
-> The same condition covers -v in non-parallel mode, a libc without
-> open_memstream() support, and an open_memstream() failure, so the reason =
-is
-> not obvious from the test output alone.
->=20
-> For context, the skip itself looks correct: env.subtest_state is non-NULL
-> inside the subtest, test__skip() sets subtest_state->skipped, and
-> test__end_subtest() handles a NULL stdout_saved.
->=20
-> The other skips in this file are also bare test__skip() calls, and
-> test__skip() takes no reason argument, so the guideline may not map clean=
-ly
-> onto test_progs.=C2=A0 If a reason is wanted, would a short comment above=
- the
-> test__skip() call, or a separate message printed to env.stderr_saved, be
-> appropriate?
->=20
-just one line for this, we can print why the test skipped. and short commen=
-t for patch#6
->=20
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->=20
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/385595=
-67568
+On Wed, Oct 14, 2026 at 07:36:41AM +0200, Greg Kroah-Hartman wrote:
+> On Tue, Oct 13, 2026 at 03:39:35PM -0700, Ian Rogers wrote:
+> > Clang supports the 'require_explicit_initialization' attribute on struct
+> > fields to enforce that the field is explicitly initialized when an
+> > aggregate object is constructed, emitting -Wuninitialized-explicit-init
+> > (enabled by default) if the field is omitted.
+> > 
+> > Following discussion at the Linux Plumbers Conference [1], this series
+> > introduces __require_explicit_initialization in
+> > include/linux/compiler_attributes.h and applies it to
+> > struct kobj_type::release.
+> 
+> Cool, sorry I missed that talk.
 
---=20
-Thanks,
-KaFai
+Yeah, I'm really liking these compile-time checks. :)
+
+> 
+> > As Documentation/core-api/kobject.rst notes:
+> >   "One important point cannot be overstated: every kobject must have a
+> >   release() method, and the kobject must persist (in a consistent state)
+> >   until that method is called. If these constraints are not met, the code
+> >   is flawed."
+> > 
+> > Annotating struct kobj_type::release caught 30 struct kobj_type
+> > definitions across the tree that omitted .release:
+> > - Patches 2-10 fix 10 struct kobj_type definitions where dynamically
+> >   allocated kobjects, ksets, or enclosing structures were either leaked on
+> >   kobject_put() or freed prematurely before kobject release (risking a
+> >   use-after-free when CONFIG_DEBUG_KOBJECT_RELEASE=y).
+> > - Patch 11 annotates struct kobj_type::release with
+> >   __require_explicit_initialization and explicitly sets .release = NULL
+> >   (with explanatory comments) on the remaining legacy struct kobj_type
+> >   definitions whose kobjects are static, per-CPU, or embedded in devm- or
+> >   parent-managed structures.
+> 
+> Sounds great, but let's fix up the users before adding the attribute.
+> Looks like some of these need another version so it might take a bit of
+> time to get them all merged.
+
+I'd really like to have the attribute available, and I've got at least
+one user I can apply today that don't require fix-ups (seq_file), so
+if Miguel is okay with it, I'd like to snag patch 1 and send it with
+my seq_file "first user" for this coming merge window so it's available
+starting with v7.4-rc1, and we don't end up needing to wait 10 weeks for
+other subsystems to be able to use it. And the kobj fixups can continue
+in parallel. Does that sounds okay?
+
+-- 
+Kees Cook
