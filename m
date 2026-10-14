@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-198.mta1.migadu.com [95.215.58.198])
+Received: from mta1.migadu.com (out-206.mta1.migadu.com [95.215.58.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F43D47D95C
-	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 11:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24ED84A3D3F
+	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 11:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791977536; cv=none; b=V5nCIMdZTnjUotZAHl0EOBjEPBkb8anz43KeT0KZzq/IizDyzWTbKIChIRwAeaPEWdg0j8Emat9OzZ92hMX+clev1+BCRkoFo0tj2GKM1tDES565eJf6lImaqNcur87cY20VCxjYw2xmzubiWcLsIrvWMv+RxlOjmT3LjHuWXdU=
+	t=1791977545; cv=none; b=bd31qtNSd3aEa8IiWXntsUNnEe8GCzMPbVvTGsaPCXhWXNLlvurCtK6rZ3OPxL4iXy6ptrWP1KrwOvhPo6anZKf/vU9o+j0FIgVLj2XwjOT4IqWnRxWhKp5VrE/PceIPanWyBd9P+VLxFJnBkNvKYkWh64GlkIuiumLcXRaBhng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791977536; c=relaxed/simple;
-	bh=LoMHMOtdlnxaox6Rxr22rfVmrJVa+1s0wpe4gtcjIaw=;
+	s=arc-20240116; t=1791977545; c=relaxed/simple;
+	bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mdKgRUMaL8WU4QgpxwlWA245265MLechDJi/OJTfIcwuuMGLo0Pyc8cXGgFE9GCy0rlVjFe3q6feIE99fbAUdqIvDnxfyqf0UXw6DNLS8emJ6JsvOrM+p+Lae5akaaXH2Zqci14wea+nACSITMVb4WwzGjFUzmwU+7wl3jCBjHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I25uXRfC; arc=none smtp.client-ip=95.215.58.198
+	 MIME-Version; b=LxwajbOZU1LFOK0hcBNGs5fO6Tkk2FbAtgni9gclzSf5Tzbr3Ta8CtU55aCCGjouLRShP+NyFYHrDBbKHqS0IDaGTbZndUpzB2tytmV39Gz22l2CrzGdGgaN7vMqNxi6Q5CdTqt6dugKQEjt5pZ0NCKdGqgIkoMRO4LrPIqv3Rw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lyXiVX0m; arc=none smtp.client-ip=95.215.58.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I25uXRfC"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lyXiVX0m"
 X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=LoMHMOtdlnxaox6Rxr22rfVmrJVa+1s0wpe4gtcjIaw=;
+DKIM-Signature: a=rsa-sha256; bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791977532; v=1; x=1792582332;
- b=I25uXRfCoQuPnSKowTE6IPdKbUabOY/XWJLhzKErIKSK4nN+YaRuJYyzqxx7FRCLKUyIpjXh
- HGLxZuIe2v/iZrvVn0cF0JcURzGOxZBKOu+NnxhAcKabYcBLYY97tAGSUXL+kXGFcg7TL36U0Fw
- ivUvNNVm+rh186++EpyCfiGA=
+ t=1791977541; v=1; x=1792582341;
+ b=lyXiVX0m3l/Nve+FeMQknNPQdcOrP2LouF6GKz9Oph16HcOLq/PWcxJWi9PfN8fjtddBFKCx
+ GuESX3rb3MYOJ6BqbtMPXDsImgpc0gxe/lj2mLwydPyDPb/hvqAWWKP4LNqgePTPB7nt4cwlxbP
+ 6vzUmeSKS33JioFVLu9zhYHE=
 X-Envelope-To: llvm@lists.linux.dev
-Received: by mta12.migadu.com with ESMTPS id 44e70a3378976f04;
-	Wed, 14 Oct 2026 11:32:11 +0000
-X-Mizu-Trace-ID: 44e70a3378976f04
+Received: by mta12.migadu.com with ESMTPS id cd36cf2322652c1b;
+	Wed, 14 Oct 2026 11:32:20 +0000
+X-Mizu-Trace-ID: cd36cf2322652c1b
 X-Migadu-Flow: FLOW_OUT
 From: KaFai Wan <kafai.wan@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v2 3/7] selftests/bpf: Fix stack arg pruning test JOIN log expectation
-Date: Wed, 14 Oct 2026 19:30:39 +0800
-Message-ID: <20261014113043.640435-4-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next v2 4/7] selftests/bpf: Use _exit() in uprobe_multi_test clone-ed child
+Date: Wed, 14 Oct 2026 19:30:40 +0800
+Message-ID: <20261014113043.640435-5-kafai.wan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261014113043.640435-1-kafai.wan@linux.dev>
 References: <20261014113043.640435-1-kafai.wan@linux.dev>
@@ -75,37 +75,57 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Commit f414d20879ae ("bpf: Save DFS postorder numbers for program
-instructions") changed bpf_compute_postorder() to use a real DFS, which
-changes the postorder of this test's instructions and thus the insn edge
-the arg track join at insn 10 is reported on:
+child_func() terminates with exit(), but spawn_child_flag() also starts
+it via clone(CLONE_VM), which shares the parent's address space. That
+exit() then runs atexit handlers and static destructors against globals
+the parent is still using.
 
-  arg JOIN insn 8 -> 10 r1: _ + fp0-8 => fp0-8|fp0+0
-  arg JOIN insn 8 -> 10 sa0: _ + fp0-8 => fp0-8|fp0+0
+LLVM commit `3c3ed59c6a2a ("[llvm] Add format check for
+MCSubtargetFeatures")` [1], included in the LLVM 23.1 releases, added
+Target::isValidFeatureListFormat() with a function-local static holding
+the compiled regex:
 
-Update the r1 and sa0 expectations to the new output.
+	static const llvm::Regex pattern("^([+-][^,]+)(,[+-][^,]+)*,?$");
+	return pattern.match(Features);
 
-Fixes: f414d20879ae ("bpf: Save DFS postorder numbers for program instructions")
+The child exit destroys that static while its guard variable still marks
+it as initialized, so the regex is never rebuilt in the parent. From that
+point on, get_jited_program_text() gets NULL from
+LLVMCreateDisasmCPUFeatures(), so every jited program text check in the
+tests running after filter_clone_vm fails, e.g. "verifier_jit_convergence",
+"verifier_private_stack", "verifier_tailcall_jit" and "verifier_jit_inline".
+
+Use _exit(), which runs neither atexit handlers nor static destructors, as
+uprobe_syscall.c already does for its own CLONE_VM child.
+
+[1] https://github.com/llvm/llvm-project/pull/180943
+Fixes: d2520bdb1932f ("selftests/bpf: Add uprobe multi pid filter test for clone-ed processes")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- tools/testing/selftests/bpf/progs/verifier_stack_arg.c | 4 ++--
+ tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-index f6a4a6aa0e617..b9f799f6e4051 100644
---- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-@@ -117,8 +117,8 @@ SEC("tc")
- __description("stack_arg: pruning with different stack arg types")
- __failure __log_level(2)
- __flag(BPF_F_TEST_STATE_FREQ)
--__msg("arg JOIN insn 9 -> 10 r1: fp0-8 + _ => fp0-8|fp0+0")
--__msg("arg JOIN insn 9 -> 10 sa0: fp0-8 + _ => fp0-8|fp0+0")
-+__msg("arg JOIN insn 8 -> 10 r1: _ + fp0-8 => fp0-8|fp0+0")
-+__msg("arg JOIN insn 8 -> 10 sa0: _ + fp0-8 => fp0-8|fp0+0")
- __msg("R{{[0-9]}} invalid mem access 'scalar'")
- __naked void stack_arg_pruning_type_mismatch(void)
- {
+diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+index f0baf5738b751..7fbcfddc3cc36 100644
+--- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+@@ -94,14 +94,14 @@ static int child_func(void *arg)
+ 	/* wait for parent's kick */
+ 	err = read(child->go[0], &c, 1);
+ 	if (err != 1)
+-		exit(err);
++		_exit(err);
+ 
+ 	uprobe_multi_func_1();
+ 	uprobe_multi_func_2();
+ 	uprobe_multi_func_3();
+ 	usdt_trigger();
+ 
+-	exit(errno);
++	_exit(errno);
+ }
+ 
+ static int spawn_child_flag(struct child *child, bool clone_vm)
 -- 
 2.43.0
 
