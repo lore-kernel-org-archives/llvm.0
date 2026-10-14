@@ -1,192 +1,134 @@
-Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668B85349D0
-	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 16:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33033F23DB
+	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 16:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791996101; cv=pass; b=egKdyNHRQwcObBY2rqYqNnumNwTKpDaJa4ZzUL/plO4g6JeI/AyKkPDbcSZZ8m3DQqFHL8XB72TbdfSuJptr/eg6LtvaDYp+twDTW/i4ZGUtSq2lQeL7agRbXTgubHRZRCRF4yvdV2/eM1IpgZciBzN+5bdoX7xPP9zLR7K9Cjk=
+	t=1791996168; cv=pass; b=Tki21VonP3pKzBDtqkoW/xqGahBB+iUT+x0u9RCOXwdQwKP0yDKqO+z4TS/wOB6p+sJ01wxzBiOwzQ9C/EtnM/RkdKmv0O+eemaBdDRcZmwXwiK3feSigeaCClrySruEXpOvhmJB4OlZHbq6jdAhJtOqRMnYFJJnJL9syhSkHKU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791996101; c=relaxed/simple;
-	bh=3mwSDPTFjJGkaatL1Lo6Mh8o6JdUk3CgZRH07sGguXo=;
+	s=arc-20240116; t=1791996168; c=relaxed/simple;
+	bh=rKi6pIGi82k0LBkwFIDIO88q817cjLLfthYLujR5pLw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a5lta3BKxoD45/kdQhjnfNzBF079UCz3i5kQw2R9bnvBNvKtoRinI84Le0IuKOlXJHQuCmOBTG+MpUiWKSI2bnDRzvkQCr6H2E9ebpxEF1L3c/FFKOClD1FARVglSRnXMwgqBp0VNxd/1VxFdElWe6gnNBeEm5j11dRS8W6L3ss=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ly1skk7c; arc=pass smtp.client-ip=209.85.160.177
+	 To:Cc:Content-Type; b=PkRpoG+HGeEo6+ILqxB+VX2AnKhiD3z0g9NU+wse2H1bT3w+RSStaiFIhGKbRyal6E7pUrSPsKy6sqLZCEwzCSbJDEqMKmQTRpTGnmYTOvG4HE3acBHpsPUolxkdWOGLC2/l550Vc4iyetH3OpexhYOluYtf2a2pTXVKnIyEYW8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=otVNmYe2; arc=pass smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ly1skk7c"
-Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-535f598d126so605761cf.1
-        for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 09:41:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1791996098; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="otVNmYe2"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-48c4be28b82so780582f8f.2
+        for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 09:42:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1791996164; cv=none;
         d=google.com; s=arc-20260327;
-        b=BjCSpB2Brn38nRZWF06RRgnu+ISC08juf6R0tUQfREJadksTQXR/7mlzC09N/SzpGB
-         zMVE6Ou4UzrH5lXR0JhEdHw3mdVJbmGcpqZ/u8MYtHzmuJJuMJE9j+4LfqBdFsqUrKCH
-         4krAGMGAoe27T8gd9EWDKbbyDUuuMLDGddO2aiM7YaIrB+ukvzD2CurcoyUbfQyf72uB
-         oFzPsllpJgF4FRTZuJSDAZaj5TnrMwtAK/kO6703M+UVqoYB1bmw2kJXFT6vxc49LuUU
-         unl9rZL/qChDhUUeuYTD/ZQOFDhL2Fl8jjoJjH++TsI8AuXQ9cDqt2ziM8tH+vxgxI9o
-         6H1w==
+        b=Irn6GX02srnoWkDGsh+6UZLg+8fhSqwEKYjESW49P+ohPNYvwCOsDV/K0QOyyvbhYo
+         GVQyTq6hAimBLvi3bX5e9S2MHvucCNMbpCp0IX617lfPXQjTD4PxTOjvfdZUu3kvY3W7
+         Ur15dX/AVeawQ8e2nwt90xJa+D2jOqNbYHeF59WtJrIaZHDhHHR5H06to1AA3weRqPwH
+         0Oh8QOPOK4AGIZZvgU7ZfNz4STpOnJKK6TOqu2F/0+/w/l3gvs+sPn7QCdv1MFA7/al5
+         3tA8hcd5vGdr4JOlLlXRm1eU1FMZFEmHVfU8jLDhI215skx086eHguHLqzaHn61D7GrV
+         mfKA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=NIItl0pCQ/aBq2U1h8kgQBz3yZb99mdO46VMaoMNnUw=;
-        fh=BBZ4iyxQtZE44w/Sc+a4pEyUhifxYURWj9wrAK2nDt4=;
-        b=XnBrwd1ugu4yR4VhXbBvqxKeaVs0aqxieV10EkartosAvXYM7b7M0HWEzuBaJJf5pl
-         6kRiCfbNj6U0dgluoFc2afXS8MxDO7a602lyErNX1Ujd6N5z9GReaK4ukSbrQLwm0DEE
-         LqjtPMEJ/uMsakl97tnMWNsPtJ7iC1LS81kp0qoUphti76CZPSX4sD0lUYPxzfouBvml
-         MUgu4vn8nr0A3atXW55dgWk2dQLxu6M1wni4l7EVGnzIpDuPSEhAthRaQfLoUYcW64Nx
-         rl6sEo7Y9w6+z1hqvGe+BhiDJIzPvJpTmYTP1kYNRdEK8UI/8G+sq8mFX0hzUGFXb2hv
-         Bgow==;
+        bh=v6p8wLsPj+VDCmBDPQwmg7rxehQ7WvfbYU3RH6s6NRw=;
+        fh=Xe9Hil6NZtS2Eoy0mZ/UKxgZG+ZzW0cwyIiORciDSQ0=;
+        b=OgOoG4w5QOS1+ZUVh+Mj1tTZCl+AaM5udZiMtq3vVFbsbiJJY5URibhfEex1VgnwQ7
+         NNfa2LScig+WnrUq2uAnKHBHEYax949DdPEwFwdRWs7Ol7HJmfSna4S4Y5h6IpYU4j6o
+         xwcpryVMdPTZj8Aen3rLlI1ywXn622rI9acjmIb1ciyoWKBiRf/Jb2B8x90HbI7UK4sI
+         vH0btMoA4OAtbCGXbsosO8sXrR8J5rsVUiqrxAUsFECMGBGqtIu6S3dMNXluL2tSw1ic
+         xAQ6EKKqiRbOMBeyXEXB4/+cy3aTYmcSa1K00uh2jjiEvJqRZC9YgWZyqmG67QSQvlUq
+         clGQ==;
         darn=lists.linux.dev
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1791996098; x=1792600898; darn=lists.linux.dev;
+        d=google.com; s=20251104; t=1791996164; x=1792600964; darn=lists.linux.dev;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NIItl0pCQ/aBq2U1h8kgQBz3yZb99mdO46VMaoMNnUw=;
-        b=ly1skk7c4C5vtGV3cbo6BSQX4GNtmVPw0XKFFqv41FTNFWMCFyrmg2Fyxjf3VThmPR
-         pgyjJocF+SdPMjLhEDzXX/DDorCTBQsIS2ld+8NZjNXG+cRbdk4M6Ggj/0MU6t2h/PmA
-         lQmvSRlD7VjLpdXiOr9pQ7pI4sgy8yw8mFD6GPYaUs0E32YXG/7gxYXYiqFmB+ui1z9L
-         1piWxiV7AIaycSJxubTi0hrzY05OL6MVX/vqIn36SCETJ/PVIiVcGFu3jZcl/m1ACgxH
-         SRF9A62AY75MB2EGWgs4H7zxDhJHLXn5obq4bDg5/XAw6UJGguMcbYmdZqq47IWcvHXU
-         meeg==
+        bh=v6p8wLsPj+VDCmBDPQwmg7rxehQ7WvfbYU3RH6s6NRw=;
+        b=otVNmYe2BrOjK0jKgqMhirGqDp+jrKUfcIValPtLMYXoqN62Qg2UvW1RhexKwNr1vS
+         wa8rUJ4f6lN3i8KXkjuJfNEfsX8bjChPh9BD/94OTjqK/PIWXBwwgA9KSTxMZQeaUwZ+
+         SQG6ryKK6DR22lzRk2sGBMGG3hTLzt9Fgl/e98WzFMAImyG+y2OscceZKP1ahEcXZLNJ
+         b0kgtZVccCTHqg6jnMEmTZFpLVpJhNG2zMDv7EOpvxc+u/NQ078UW0aYIMeB10sbGl3a
+         V5kQW9PcwUc4yaC9fGs4hTxu4GZKWYA8pHU3qcbMsvl/jByKCcAdnPJL4xqnNMy09ATl
+         E9hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1791996098; x=1792600898;
+        d=1e100.net; s=20260707; t=1791996164; x=1792600964;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NIItl0pCQ/aBq2U1h8kgQBz3yZb99mdO46VMaoMNnUw=;
-        b=MXb+KHmFkw4FaGS1eTaFLpPQvRHwcGU13Hl2SEcDoapbq8oTmghpiY5WF232OEgxd+
-         j2a+0emBm/4NIL5P7FY/yxphElOGTYJPza5n1aZMdjZ6eTl4cu5yWd25xbfax5L+oAGX
-         ToVNr0V92aeIVz+bQMhnYTSBtT2PIvhy3io8WhhgPXQM8CZXqN/MafVh9MO0P7dRaaMX
-         rRr9ZXEpCkfzS7t1k7RKu/7bEp7sd5EB2MiJmGjLILrika0hAj+j2Z1pMouzDM4YwH8s
-         2FXRCdk2I3T1nN3ORd257tMQg8iYQF4R3hSdRxSzzBXnvu5G8PYrCIN+S0uVqEKDiAq7
-         FOsQ==
-X-Forwarded-Encrypted: i=1; AKwUvBx5A517HajNWUaTnaB70I7O8C2gb722/AzkyMXd/LRtye1+9r9ZGEtOBuvaoSF9IhCG6ZhO@lists.linux.dev
-X-Gm-Message-State: AFq9FYLBt9WZFXIdQDaIuZs7AFhwL5E/+5te5Klitpl1BtMHVDb7DZcF
-	C+pOdgeOSK5RMlYSl6ifiMa+wfVHzV5NoF9nOs3hLBdnP1zmFASCuU0jcW3drQTBUzVovGHm/DB
-	ufRSULDjAiXbc8THcTv7wXeqpINR7vOfacoei0vaP
-X-Gm-Gg: AYBFou1PPAr2VWw76umzpLdJCRBb/+Wuufyb6QC/R7MY0QuwmNbri7lA+2tgy3C/qov
-	jedqfxVDhesBmPS4OCgVnaUm5hzP0sTuA5NBG/epxkzu5Tmx3gQLCp5dWVhuMHKbNnLkp0VcpfN
-	3En9iUoVmJjx9g2mmAMCwfLZcIgK1ZR2mZaDCkU0vmBbJCnZmbcuIgaOSdem09mHpafgPyYfVGZ
-	HxxsIHbezTDAyPaNH3wamgnTr8cvkc131PK0nKq675+mAYHRXbKzfA1GhcaycETQnZfVj8jUSSj
-	mnJDakaF6JP9LfuiFW6++KDM9jouIin4Z0Vp6/96tNq0qWiHWVlnrjJsh7agKNfOuLYsokM3vQM
-	JDgmYxyauIQ==
-X-Received: by 2002:a05:622a:1108:b0:533:9746:9a86 with SMTP id
- d75a77b69052e-5360573c96fmr14813151cf.5.1791996097367; Wed, 14 Oct 2026
- 09:41:37 -0700 (PDT)
+        bh=v6p8wLsPj+VDCmBDPQwmg7rxehQ7WvfbYU3RH6s6NRw=;
+        b=OYpHz0Hal2hC2Acvt6GgWrfN6T4ZLxQi8IP2BmoOnuCgEFz6GwMyT62+ruuVA0H/3Z
+         HfraBy/netugt2H2sJZp5Ol3opQIsFDIPO9SIncyJIoyfymh0TLbwfdpqCGOZHBPLvxZ
+         IK29RFOMclpqylMAv/CJ7puyVS+V4sKVmMozBm/1Ln9Gc834z7hscK4Z8zJx+FaiIsOO
+         qINdjriFtHGx5FqczwafLDu/GR5vhxPOwSggeN1H0+5rH/LMPCi6n7kz6crKSVUpSXzS
+         fMTv8hjIZe0f0KcEESgGpFKKAQMhPghP8UTV0Qg+zfBfX6jz5//fOS1NiMuwoiPGeGbR
+         +3ag==
+X-Forwarded-Encrypted: i=1; AKwUvBzwDdAOV9iN+XTi3lRdWSOzDK7XIrglP1mcUPwE2M/8PdUQpyplyZ7ctEb+2uM/trYdC2jV@lists.linux.dev
+X-Gm-Message-State: AFq9FYIq8u0gpwkpoyYrQ7Qq5oLZwLBTiXYvWB38fQD9CK1jGHYVEn6o
+	hq87eBkCkBHruBV0QfHWXR2O8JzfhC+MnX1e3Jf+d+iimdR5khPDDU5e1Xp9+lwMwijY4MfFK83
+	5BPirtVjHPn325J+NTfcylqdzY1r2gnVuy1i4zaNL68s0wmgc6GHlsb6d4iA=
+X-Gm-Gg: AYBFou1GxDWkohqBpiOJiNAHFxp2DZuIgOYQsZrtCqtBbFNZqX9ZIEVdGN72MD0H84g
+	jhQWKApyU1RhfaEiZvHI+Ns0o+Tnke5j+zlZxjUNG9qbLguEcvrvUThzCVIhXXVZBQRciSebUKE
+	3LMAaXFzXaHA8vcWKztFdmOToZ5LSJdNdc4kfwZKmQ7VYDQiGmmIDurHm7bUcgKmCEMEOQx1wDL
+	wKCVmNkCLbsCpE/0/ZsvDlEV+EKcHDiZoKf5BPR0RKoYrslKPwqLyxndZJbBQoc/uota+R4x4zb
+	nUYqZwDUxVmKiLPDBV0W7yhawp//4EdKglPl514/w9b8n93CDecFX7+nc65DhXDa8vJ7Unn+Vc+
+	sFBZuv3mFKbGkywAAfbMuF1dZG2b5yrjOuy4R/hlY33LtRoMniLtqHT5e+mZkBwrPn9aYeYsM9d
+	pSA+s9SG6dcc0o+twFqVZ4r3/HU9OLZCMRLFWyB6bF83GNVXOWfx6C
+X-Received: by 2002:a05:600c:4e89:b0:4a1:96cd:2f64 with SMTP id
+ 5b1f17b1804b1-4a196cd312cmr283584205e9.1.1791996163311; Wed, 14 Oct 2026
+ 09:42:43 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261013223946.1836757-1-irogers@google.com> <2026101425-why-boring-4f2d@gregkh>
- <202610140932.5F9CFCE5@keescook>
-In-Reply-To: <202610140932.5F9CFCE5@keescook>
-From: Ian Rogers <irogers@google.com>
-Date: Wed, 14 Oct 2026 09:41:25 -0700
-X-Gm-Features: AclHuK8_g-YOJgMR77fEpf5RTsveF4u_ERdXz6lvoN6wh_uF7KP8ZsaUSV1ti8A
-Message-ID: <CAP-5=fVLWh4uay2HGy6DOpZmtTr5WAd-TehAkN+P-pQgq_BZhg@mail.gmail.com>
-Subject: Re: [PATCH 00/11] kobject: Require explicit initialization of struct kobj_type::release
-To: Kees Cook <kees@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+References: <20261013-kselftest-deps-llvm-v1-1-f2ee70ae1b79@kernel.org>
+ <CAKwvOdmQkYy3xqTsumSxLdHpaXnt1Hb9g++DVmAYcx=cvjFBeg@mail.gmail.com> <38d31a6b-b3d0-4b15-9b24-62d2bd6f9040@sirena.org.uk>
+In-Reply-To: <38d31a6b-b3d0-4b15-9b24-62d2bd6f9040@sirena.org.uk>
+From: Nick Desaulniers <ndesaulniers@google.com>
+Date: Wed, 14 Oct 2026 09:42:30 -0700
+X-Gm-Features: AclHuK9Ord4aUgNPJNBcBx9FYXt-xGJSQPIiEoaEK27XDm7YBaJzhLkX1ABzBeU
+Message-ID: <CAKwvOdnoZfE3bqNnRBTR4G805V4-iooe9YwS8ZO0ka2h9bgDQg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: kselftest_deps.sh: Support LLVM
+To: Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
 	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <chleroy@kernel.org>, Nayna Jain <nayna@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	David Teigland <teigland@redhat.com>, Alexander Aring <aahringo@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, Stefano Stabellini <sstabellini@kernel.org>, 
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Richard Weinberger <richard@nod.at>, Zhihao Cheng <chengzhihao1@huawei.com>, 
-	Felix Kuehling <Felix.Kuehling@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	driver-core@lists.linux.dev, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org, gfs2@lists.linux.dev, 
-	xen-devel@lists.xenproject.org, linux-s390@vger.kernel.org, 
-	linux-mtd@lists.infradead.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, Guillaume Tucker <guillaume.tucker@collabora.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 14, 2026 at 9:37=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+On Tue, Oct 13, 2026 at 3:01=E2=80=AFPM Mark Brown <broonie@kernel.org> wro=
+te:
 >
-> On Wed, Oct 14, 2026 at 07:36:41AM +0200, Greg Kroah-Hartman wrote:
-> > On Tue, Oct 13, 2026 at 03:39:35PM -0700, Ian Rogers wrote:
-> > > Clang supports the 'require_explicit_initialization' attribute on str=
-uct
-> > > fields to enforce that the field is explicitly initialized when an
-> > > aggregate object is constructed, emitting -Wuninitialized-explicit-in=
-it
-> > > (enabled by default) if the field is omitted.
-> > >
-> > > Following discussion at the Linux Plumbers Conference [1], this serie=
-s
-> > > introduces __require_explicit_initialization in
-> > > include/linux/compiler_attributes.h and applies it to
-> > > struct kobj_type::release.
-> >
-> > Cool, sorry I missed that talk.
+> On Tue, Oct 13, 2026 at 02:07:28PM -0700, Nick Desaulniers wrote:
+> > On Tue, Oct 13, 2026 at 12:40=E2=80=AFPM Mark Brown <broonie@kernel.org=
+> wrote:
 >
-> Yeah, I'm really liking these compile-time checks. :)
+> > > +       clang_target[riscv]=3Driscv64-linux-gnu
+> > > +       clang_target[s390]=3Ds390x-linux-gnu
+> > > +       clang_target[x86]=3Dx86_64-linux-gnu
 >
-> >
-> > > As Documentation/core-api/kobject.rst notes:
-> > >   "One important point cannot be overstated: every kobject must have =
-a
-> > >   release() method, and the kobject must persist (in a consistent sta=
-te)
-> > >   until that method is called. If these constraints are not met, the =
-code
-> > >   is flawed."
-> > >
-> > > Annotating struct kobj_type::release caught 30 struct kobj_type
-> > > definitions across the tree that omitted .release:
-> > > - Patches 2-10 fix 10 struct kobj_type definitions where dynamically
-> > >   allocated kobjects, ksets, or enclosing structures were either leak=
-ed on
-> > >   kobject_put() or freed prematurely before kobject release (risking =
-a
-> > >   use-after-free when CONFIG_DEBUG_KOBJECT_RELEASE=3Dy).
-> > > - Patch 11 annotates struct kobj_type::release with
-> > >   __require_explicit_initialization and explicitly sets .release =3D =
-NULL
-> > >   (with explanatory comments) on the remaining legacy struct kobj_typ=
-e
-> > >   definitions whose kobjects are static, per-CPU, or embedded in devm=
-- or
-> > >   parent-managed structures.
-> >
-> > Sounds great, but let's fix up the users before adding the attribute.
-> > Looks like some of these need another version so it might take a bit of
-> > time to get them all merged.
+> > ^ should this be either i386-linux-gnu or i686-linux-gnu, or does
+> > `-m32` get set somewhere?
 >
-> I'd really like to have the attribute available, and I've got at least
-> one user I can apply today that don't require fix-ups (seq_file), so
-> if Miguel is okay with it, I'd like to snag patch 1 and send it with
-> my seq_file "first user" for this coming merge window so it's available
-> starting with v7.4-rc1, and we don't end up needing to wait 10 weeks for
-> other subsystems to be able to use it. And the kobj fixups can continue
-> in parallel. Does that sounds okay?
+> Hrm, that'll just be a cut'n'paste from lib.mk which does not so far as
 
-I'm happy with that. I'm working to address/incorporate the other
-feedback for a v2 of this series, but I can drop individual patches
-that have already been merged. Thanks, everyone, for the positive
-reception in getting this landed, I plan to follow up with patch
-series for the other uses I found.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/too=
+ls/testing/selftests/lib.mk
 
-Thanks!
-Ian
+> I can see set -m32 - it sets i386-linux-gnu for _i386.  Does that need a
+> fix too, or am I missing something with how it works?
 
-> --
-> Kees Cook
+Ah, no looking at
+commit 624c60f326c6 ("selftests: fix LLVM build for i386 and x86_64")
+
+it looks like selftests have i386, x86, and x86_64 where x86 is x86_64
+IIUC.  I see you also have a distinct i386 target.  My bad.
+
+Acked-by: Nick Desaulniers <ndesaulniers@google.com>
+--=20
+Thanks,
+~Nick Desaulniers
