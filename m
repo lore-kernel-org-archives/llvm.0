@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-222.mta1.migadu.com [95.215.58.222])
+Received: from mta0.migadu.com (out-140.mta0.migadu.com [91.218.175.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A634EA39A
-	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 11:32:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9FE54F68C7
+	for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 11:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1791977562; cv=none; b=VNGlJkbX98AcfmT5zXy/Y3NXwZ7ebt9gryIIswm5PuSUuu43ulzmwQ31C76JiLbYoDszywUa1Yx4boRHHqoP/DG+m7QaOXjG0CTPCHuEfesrDaoRF7CkTtIQ8dCv76345D4fVCkEFMFXfWKX1m3rDDDJW1r7fSyvZA6/jYVZa1g=
+	t=1791977572; cv=none; b=PfHVdQhHbqs6r0URNE490JfKDlN3jUMEt36S8jbhgnAn1GT76BULhwuPpLTkS/1cZH0Oevu+q1oxlTc9OO+WxTTiZ1JAviuuxlFjhN/UDzp2VdFZ5yHUHGouxFlukhUrxuNvmcSqS+Vb/VcApagnYXsaGBViLFoHJp2MK9ToT7s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1791977562; c=relaxed/simple;
-	bh=q1t5fcZzAYFKqt3LhN+ssOmb56MabTPb4Toqhe2bfxM=;
+	s=arc-20240116; t=1791977572; c=relaxed/simple;
+	bh=rUpy9MyFtwRHnMTDPYO12dfwaXHBB/auGnEe6vnVHzg=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mVfnxlXLjMnfj4C8FQZSJxrMDdwdD929LQ+Nso4o9CqPd7tJPTpewB9Xpjr54V+ee6W2XSZa9KYfbvbQvYXVfCgzDS4oEmoArHHeLKekwRGQULcjg1u1N4xGH1oP3fPjJz4oINWXWjM1ZRLlYA0/CGYosvKWy3cXn+zEjbeBJ7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xxgRWFjU; arc=none smtp.client-ip=95.215.58.222
+	 MIME-Version; b=QpOniNNUh+vZHnTWTs662x74GCfiI3QB1WCoVKqxoDdEkeub/GJYmP8tD0YKApcO/zJF0UvKkOLhoWxSe04oX+O2eZm+XPqKSxkbGd21jv5b9CiMdIcwyFzaCqqfJJgO0AGOfvxSycbgnD/Ud6MThRI3PxFQrmWZGLjC4NjmS9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P9FYMKVL; arc=none smtp.client-ip=91.218.175.140
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xxgRWFjU"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P9FYMKVL"
 X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=q1t5fcZzAYFKqt3LhN+ssOmb56MabTPb4Toqhe2bfxM=;
+DKIM-Signature: a=rsa-sha256; bh=rUpy9MyFtwRHnMTDPYO12dfwaXHBB/auGnEe6vnVHzg=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1791977559; v=1; x=1792582359;
- b=xxgRWFjU6LhCM7x+Sdw+vxdMQQYcIsWMd5+97+bRWVc55okNh4weOCRtD7sZbkijPcW2EEEI
- 1T90Mpv0aN6Ij+nspf92NcTeFiLN5jmiRG4zm5+dU9Em0FX6JKcBmocWFFvM2O6c5s9WqOtc4SW
- IMbM4gy+G8edH3GhjSapR16k=
+ t=1791977567; v=1; x=1792582367;
+ b=P9FYMKVLLALjWOrxUT4bKbUD6OoiP/feWGc2526J9KlnuKlMvFmWE4d//x6TEbrNgLt5xHga
+ p2OJe62g0O/Q5+IIi1+TmjbfVbmbYpg/gvzthgx0AIzDjSHnePb78s8QbRBnNCmyTcaXpTI0fOC
+ 2Cvasuj+a+iRnZjMZeekYn1U=
 X-Envelope-To: llvm@lists.linux.dev
-Received: by mta12.migadu.com with ESMTPS id 76c3b445136a24b3;
-	Wed, 14 Oct 2026 11:32:38 +0000
-X-Mizu-Trace-ID: 76c3b445136a24b3
+Received: by mta12.migadu.com with ESMTPS id a4a3fb094b9cd429;
+	Wed, 14 Oct 2026 11:32:46 +0000
+X-Mizu-Trace-ID: a4a3fb094b9cd429
 X-Migadu-Flow: FLOW_OUT
 From: KaFai Wan <kafai.wan@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
@@ -61,9 +61,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v2 6/7] selftests/bpf: Skip expected_msgs subtests when stdout is not saved
-Date: Wed, 14 Oct 2026 19:30:42 +0800
-Message-ID: <20261014113043.640435-7-kafai.wan@linux.dev>
+Subject: [PATCH bpf-next v2 7/7] selftests/bpf: Skip compare_text subtest when stdout is not saved
+Date: Wed, 14 Oct 2026 19:30:43 +0800
+Message-ID: <20261014113043.640435-8-kafai.wan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20261014113043.640435-1-kafai.wan@linux.dev>
 References: <20261014113043.640435-1-kafai.wan@linux.dev>
@@ -78,32 +78,45 @@ Content-Transfer-Encoding: 8bit
 stdio_hijack_init() does not set subtest_state->stdout_saved when
 running with -v in non-parallel mode, since output goes straight to
 stdout. In that case subtest_state->log_buf is left NULL, so the
-expected-messages subtests crash when inspecting it. Skip them when
+compare_text_mismatch subtest crashes when inspecting it. Skip it when
 stdout was not saved.
 
-Fixes: 34c513be3dad ("selftests/bpf: __not_msg() tag for test_loader framework")
+Fixes: bd71904697c6 ("selftests/bpf: Add compare_text_to_expected() helper")
 Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
 ---
- .../testing/selftests/bpf/prog_tests/prog_tests_framework.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ .../bpf/prog_tests/prog_tests_framework.c      | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-index 53347f3799245..b4cd7c7ff4391 100644
+index b4cd7c7ff4391..ddb6cdc1579f1 100644
 --- a/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
 +++ b/tools/testing/selftests/bpf/prog_tests/prog_tests_framework.c
-@@ -169,6 +169,12 @@ void test_prog_tests_framework_expected_msgs(void)
+@@ -203,14 +203,18 @@ void test_prog_tests_framework_compare_text(void)
+ 	}
  
- 	for (i = 0; i < ARRAY_SIZE(cases); i++) {
- 		if (test__start_subtest(cases[i].name)) {
-+			if (!env.subtest_state->stdout_saved) {
-+				test__skip();
-+				test__end_subtest();
-+				continue;
-+			}
-+
- 			error_cnt = env.subtest_state->error_cnt;
- 			msgs.patterns = cases[i].pats;
- 			msgs.cnt = 0;
+ 	if (test__start_subtest("compare_text_mismatch")) {
+-		err = compare_text_to_expected("line two\n", "line one\n");
+-		fflush(stdout);
++		if (!env.subtest_state->stdout_saved) {
++			test__skip();
++		} else {
++			err = compare_text_to_expected("line two\n", "line one\n");
++			fflush(stdout);
+ 
+-		ASSERT_EQ(err, -1, "mismatch_rc");
+-		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
+-				  "diff_has_expected");
+-		ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
+-				  "diff_has_actual");
++			ASSERT_EQ(err, -1, "mismatch_rc");
++			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "-line one",
++					  "diff_has_expected");
++			ASSERT_HAS_SUBSTR(env.subtest_state->log_buf, "+line two",
++					  "diff_has_actual");
++		}
+ 		test__end_subtest();
+ 	}
+ }
 -- 
 2.43.0
 
