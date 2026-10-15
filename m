@@ -1,248 +1,270 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73D3F3845C1
-	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 15:42:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29C52941C
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 16:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792078984; cv=none; b=RVvV5HJ36TTPj6fKjR5iHQHH8xzWwNIk74ysLLATWNM38YUDW1uUlXLcZbYO1/aeSTNlUiQj/FJNioxgn6a/Rk0mckZsbYJeINMhLUkKGI/876nzL3x4oWppvojDQnWOK0tjB5/g65d8gFPD4DvEEEWDhuuSAQ3MUrGSE79l+hQ=
+	t=1792082525; cv=none; b=anekS9VGQjR0KcG1npKMKllQnx37EZP3s9QVWPeUtKvSpJw3tH5SQGXwlKoi3+1xtruqrwSsQJ93mYkEiTzGTdoo/5YTrgzRcPEiVa0MbpW0NsGwaSyCercaqStlZOErcuEIhp8B25DARlEsvbwvFYvP0q636LmJ/sib+V6gBpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792078984; c=relaxed/simple;
-	bh=1fUOi+Usxn2LQcFzjoDicMxQvfperVSbtfIS6t3a0mM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YZGB8zCEbPDjD3+456Gb0oM+xbRjAgJ9B7QbqejVm8fOkVrXnNAudPQZdD/nTEPaiMtd/cKbCK1KA4X5lh0rJPCVt67dzJBd8HVPTFI4mF9NeDKqVET6Z5gDZXIR2IhZC7xzKt+5uGyLC15cmmGc98oJswLqKKnHk/xeLUoy3nU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=FERv6evq; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1792082525; c=relaxed/simple;
+	bh=odYsqb6qlvwr9ql2stmc54Jy9XrBQEgexBY+u0gq+rY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PqTV7XF8r9vT/KVr9CKCz34PX81FxlOfYkhMZyNerO0LaIoLUVTG6fqtsjf8EKFEeT5O6EuNf/L7DOnmWkHzbBmdAJV6HhLW3fEjVuzb7iHBGvChW1oDLW0DOqZYy3M5kq/0NtjZHI+9hCQMq6uCaNkuzms493SfZaSjV6Omsds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNZ9x2Jp; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="FERv6evq"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4a16af2a232so43164695e9.1
-        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 08:42:49 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNZ9x2Jp"
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e5fb79ce82so31803265ad.0
+        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 09:41:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1792078967; x=1792683767; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1792082514; x=1792687314; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=8EVUVXTF9B/pmjVEVo0zfJaBGiZoNVg7V5lse2RyO7M=;
-        b=FERv6evqyTcAqY25zKlwW/E9xIwfOtoWbdEE7pA6kd3Uo9sPTban2p0lTkgfohsWVD
-         AT5XKTTK758hKfSDvDo2LDzo4Q/UuJfTZFIY+/azs4GkZRO2IhNaplX+fB/sDxU8zRY5
-         Y96MGc5kiFEMLuSnVb35IJnm3nqJ03QHF0/sJljlvUnSw8iqWMcoJceuXdefT9514Jpy
-         Y4JCOrz1v89S3ETFB83DYSlkKbSzbo1cpSNxMYRdczNnQlytGGffmd/ja6RNJtgeWzNh
-         X6kydXp3jY3A9AftRm/PeEXxqo6Awpol6hh7tZs/KOTqyns+z0JFcjU06cpXVhXsBRvG
-         LLPg==
+        bh=y81tg7aS+OL7WL9uwzHmpXBtWhblGVNn9iU+ZHCLidI=;
+        b=nNZ9x2JpBHetToBDTTmSFt5z57N+NYq+CwIWCBa1ofiF2AaI0QYaM4kWY0qsLJk3uR
+         fjt/gXEZy04LUayW8xFuB7OvBMpJ9IQfXW0NWjqWs8NAkXR1DAMBeAu+XFIKNhWn01kR
+         /GrvLyZH/bT5sSH5GvZew9z0z0gsiBmeXX/150edzDUqmbEaISjnBOKHZMHWGIkIMf+3
+         xdNbh0jd6k8F/tT4CM02wyM79cm0FEvXVp7sJY1CvVbkrDoWJt8K8DNF2bTueTONY8D/
+         60X5c04Zx0o7Woa0gwnLqncPXN6jGYsLmJzx7c+H8KUqBRVJD5VT/myRufMe+dCP/chK
+         R4Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792078967; x=1792683767;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=8EVUVXTF9B/pmjVEVo0zfJaBGiZoNVg7V5lse2RyO7M=;
-        b=n6EWEE5gqDjABIcw/bKu+5sMcj2eXMIT3VrcV7AEPzeUNf041+PVKwhQYKrNJrGxEd
-         oHlVfda5yJkBm4mrTWmXOeZudTZIAP0hgQMe8NfjfXjKnS5HkaI9YS6puHHd512fZW0K
-         B20AszgchK2YtqNPNgrT+cxB/NyocnwSabbrlwINqpu9DzjyFnF+1AHqh6kxCk7nxXeL
-         YTfs8+yMFkBFhJpWJjgHRf0I0ln/DBpS70NZuJAiY83FErlxIthaU5HKjXFuDyHUYsol
-         v5HFN84d1By1OlSkQ0L2bl1MdABBUlRPzcv6ChowogXJJIftw2J27B/k1XZPrrNO59CN
-         OlSw==
-X-Forwarded-Encrypted: i=1; AKwUvBzSwMCVxmJlZdwR1AxCqnGgMK1M5Va6LU3itNmrQeuqk3FdPNNExPHFwqA7v/qzzcdGJ9kL@lists.linux.dev
-X-Gm-Message-State: AFq9FYLM8ca2Fc87PcSZTZoo2AMeC52nCdVhpvjU89M7WZlN0ecvglfS
-	4xHedMWbwHcuB99Iat/w9X0qNw0s5aXtNS/HI5kmUrd3wnCIDXP5G55aTD4HzIWaYwU=
-X-Gm-Gg: AYBFou3wNEdXmrbqr3VqIBq408YPMGTbxKGUnWKTFhnO1Xv4pTIQ1xpGa85XKUGY2A5
-	8ymg12l+Ly60WsXOxJJ1r/7/B5TRalOhBIidTnkkBEo094h+jYymZlwg9i+1uPHZsJdMq7rtibL
-	13wZiYN5Ny1YA/+xXt+UBk2TfkbLTVeB9fFs4anscvz5KegrKW7VB5UKtvl6uxJrDnQrYTu4FqY
-	TyUjsyaLprd06drUnlBpBQ0hbG+tlXZqfhA6G8gRs5Z6qPx34HujnUvBqzQAU7XcGTfqRoHPQsC
-	ZWseDDqIZRP037uZVEYDTTXTtYmzX7p1w6DvFo7DsewLYVty714cvCHhnBkaOBkc60Yxc5HhYTK
-	QvzRhwqOXBO8zPoMswa0H2kZxjThQ3V892Z2tKAqqXTpiulmg/pEsJMtVOVEtSIUBKCrIyHFYNK
-	tRyTvkrjcirYlYkzlXbs0e6pOZ2zg9636gWYVmt6v7IQ5QWza64cqKesdZ/z5Fo8DnLFDP0ZoBK
-	5J+OLJvG2G26pXqtovXHtf2ZOPCglNIJyHGUeXC7nWwyQ==
-X-Received: by 2002:a05:600c:8b82:b0:49f:fd2d:23c7 with SMTP id 5b1f17b1804b1-4a18e4b887amr354993855e9.27.1792078967287;
-        Thu, 15 Oct 2026 08:42:47 -0700 (PDT)
-Received: from ?IPV6:2a07:de40:8100:0:89a9:fd0e:583d:4a53? ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4a1bd66c5e6sm52172585e9.2.2026.10.15.08.42.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Oct 2026 08:42:46 -0700 (PDT)
-Message-ID: <d17b00f9-2a6c-425f-9697-6bc8f31f7a7a@suse.com>
-Date: Thu, 15 Oct 2026 17:42:45 +0200
+        d=1e100.net; s=20260707; t=1792082514; x=1792687314;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=y81tg7aS+OL7WL9uwzHmpXBtWhblGVNn9iU+ZHCLidI=;
+        b=X2sg9vpAsZY5nVp/oUNw7k1lmynpsIW0J/8MwPftkA5qTsRmHR4cURs4ECUycklr0M
+         hDc01qGqv6XgU/zvWP9KFjOdlDiDWTfMk3+4id4vmTb/OD0u0TnzXB84IDyrGUJnlFVl
+         MU9gkQfAQyPFApF1dae6D2bIZJR2p+HfvHgIuZ1bzaPcu8n1bvKw4RbfNRLX4hf4yem1
+         juI1tkCLhCN2jLjnqXwnxaI+Z9qD4GZjS7Bj1jLoVu8wCKkcACl7xyhZCJ8evSb6Dzwx
+         7ywIzhf7Xb4t10ZfwThGzUef7X/umGpEMB3795UwD/ormxWNKbkj+wNBH2RCj1IryzOD
+         N97w==
+X-Forwarded-Encrypted: i=1; AKwUvBzAvkTI6zcUvnnIfZ/6BkSHsXZa8sQeQ0OpzteyxjBEvmkduyyXb7ZnrthF19t+/by2VSf9@lists.linux.dev
+X-Gm-Message-State: AFq9FYI1BJufqiCvZTp1StXbXmH8IUNVI2+nVShEeEi2whYG0pyGYvl3
+	4jykxjUGpqSFc4YAXGxTksxdHkPeXkpRt3ju1baLIEY1eR7BE6LfLVmR
+X-Gm-Gg: AYBFou2s5kI9ZOjqnuKmNiO4tzHHAV6n9yfgme9npTdHnveylnF5MKdG2KUvrqne7o7
+	Ax22AlQtc7ntELJlqwhnoD2xnB6zl9xdlmNJaAj8hTnQhxIqRvBhpoGj+5a9Dch8oeUZaZ5+FEb
+	7eW+eef6A0NxV9hnpQQAY4NVGUpQuPkJUNE2HcZpK2dFCiyR580cGu0Yj6dn8bKZU0uVEf1K997
+	ofTgpfTUZtItgJprqolak9vCMRT5X2GbpWAIJYNAZ02NqAqyo7wRiV2gUti2J7cB+EmDe0Gn+pp
+	NtjEGP3JiFWzJZDsonmXFgIEVjnJTyRS5i31dtORheAFuyCMSERoTgzJWSOi2TYQ0Wu5lTI4FDh
+	XrKdleI6gQ29G3pbSdIlIkG27h0D8FPInMcmWcAvRP2ED2NPZmLcUls44nHBU1jtz2p9eo/V8t2
+	ErzUDMsvLE5LQ7u2TSP4aW0pCcFrxa/CWGfZrnCABoU9q9VcJSJ7bz9dDUSZasG4uyEnI=
+X-Received: by 2002:a17:903:38cd:b0:2e9:660a:793a with SMTP id d9443c01a7336-2e9660a7b0bmr21795855ad.36.1792082514044;
+        Thu, 15 Oct 2026 09:41:54 -0700 (PDT)
+Received: from localhost ([111.228.63.84])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e95cf92dfesm11245915ad.11.2026.10.15.09.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Oct 2026 09:41:53 -0700 (PDT)
+From: Cen Zhang <zzzccc427@gmail.com>
+To: marcel@holtmann.org,
+	luiz.dentz@gmail.com,
+	nathan@kernel.org,
+	ndesaulniers@google.com,
+	morbo@google.com,
+	justinstitt@google.com,
+	johan.hedberg@nokia.com,
+	padovan@profusion.mobi
+Cc: linux-bluetooth@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	baijiaju1990@gmail.com,
+	jjzuming@gmail.com,
+	zzzccc427@gmail.com,
+	lkp@intel.com
+Subject: [PATCH v2] Bluetooth: MGMT: Serialize power-on with power-off completion
+Date: Fri, 16 Oct 2026 00:41:46 +0800
+Message-Id: <pm-bluetooth-objects-candidate-0063-v11-a70581b6877e5fe118a3@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 13/22] modpost: cache section relocation mismatch state
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
- Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
- Arnd Bergmann <arnd@arndb.de>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Ard Biesheuvel <ardb@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
- Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
- Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
- Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
- Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
- <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>,
- Jonathan Corbet <corbet@lwn.net>, Randy Dunlap <rdunlap@infradead.org>,
- Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-riscv@lists.infradead.org,
- linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-efi@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-doc@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
- linux-hardening@vger.kernel.org
-References: <20260923-build-speedup-v4-0-73128809a4a4@kernel.org>
- <20260923-build-speedup-v4-13-73128809a4a4@kernel.org>
-Content-Language: en-US
-From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260923-build-speedup-v4-13-73128809a4a4@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/23/26 7:18 PM, Lorenzo Stoakes (ARM) wrote:
-> For every relocation modpost invokes check_section_mismatch() to determine
-> whether there is any kind of mismatch between the source and destination,
-> and if so which classification applies.
-> 
-> Each time it does this it invokes section_mismatch() which iterates
-> through the sectioncheck[] array every time it's called.
-> 
-> When walked a relocation section the source is fixed and there aren't many
-> targets, so the same names are looked up over and over again.
-> 
-> Therefore cache not only mismatch categorisation but also whether a
-> mismatch even exists for a given section and look up the sections in the
-> cache.
-> 
-> Special indices (undefined, absolute, common) take the uncached path as
-> before.
-> 
-> This results in very significant speed ups for allmodconfig incremental
-> builds.
-> 
-> modpost is on the serial tail of every build that links vmlinux.
-> 
-> Whole build, 128-thread Threadripper 9980X, best of N runs:
-> 
->                                          before   after     delta
->                                          -------------------------------
->   x86 defconfig, touch mm/vma.c, gcc        8.5s     8.3s    -0.14s (-2%)
->   x86 defconfig, touch mm/vma.c, clang      7.7s     7.6s    -0.13s (-2%)
->   x86 allmodconfig, touch mm/vma.c, gcc    33.9s    29.4s     -4.5s (-13%)
->   x86 allmodconfig, touch mm/vma.c, clang  31.9s    27.9s     -4.0s (-13%)
-> 
-> Assisted-by: LLM
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+mgmt_set_powered_complete() must only consume the pending command for
+its own request. However, __mgmt_power_off() removes and frees the
+SET_POWERED command before the request's destroy callback runs, and
+mgmt_pending_valid() identifies outstanding commands only by address.
 
-This looks mostly ok to me. Below are some nits you might want to
-consider addressing.
+When a powered controller is switched off and another management socket
+requests power-on, the allocator can reuse the old command's address:
 
-> ---
->  scripts/mod/modpost.c | 66 +++++++++++++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 64 insertions(+), 2 deletions(-)
-> 
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 75374c64b8cc..0fd43c8a89ea 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1155,12 +1155,67 @@ static void check_export_symbol(struct module *mod, struct elf_info *elf,
->  			 name);
->  }
->  
-> +/*
-> + * mismatch_cache[section index] ->
-> + *   0 - uncached.
-> + *  -1 - no mismatch.
-> + *  >0 - mismatch index + 1.
-> + */
-> +static int *mismatch_cache;
+  Power-off request worker          Power-on management handler
+  ------------------------          ---------------------------
+  __mgmt_power_off(): free cmd
+  hci_dev_close_sync(): unlock
+  set_powered_sync(): return
+                                    set_powered(): lock hdev
+                                    allocate and link replacement
+  mgmt_pending_valid(): unlink
+    replacement at old address
+  read replacement's cp->val = 1
+  wait for hdev->lock
+                                    submit fails: remove/free cmd
+                                    unlock hdev
+  acquire hdev->lock
+  read freed cmd->opcode
 
-It might be cleaner to maintain this cache per elf_info, since it
-logically belongs to the processing of an individual ELF file. This
-would also be consistent with the existing symsearch cache, which uses
-elf::symsearch.
+The old callback can respond through and free the new command instead of
+completing its own request. If hci_cmd_sync_submit() fails to allocate
+its work entry after the callback has unlinked the replacement,
+set_powered() removes and frees it again while still holding hdev->lock.
+The old callback then acquires that lock and reads the freed command.
 
-The description could use 'to_secndx' instead of 'section index' to
-clarify whether it refers to the source or destination section of
-a relocation.
+Serialize power-on publication with the existing request mutex, which
+hci_cmd_sync_work() holds across the request function and its destroy
+callback. Hold it through submission and error cleanup so the
+replacement cannot be published before the old callback finishes.
+Acquire it before hdev->lock to preserve the worker's lock order.
+Power-off retains its existing cancellation path.
 
-> +
-> +static void init_mismatch_cache(unsigned int num_sections)
-> +{
-> +	mismatch_cache = xcalloc(num_sections, sizeof(*mismatch_cache));
-> +}
-> +
-> +static void reset_mismatch_cache(unsigned int num_sections)
-> +{
-> +	memset(mismatch_cache, 0, num_sections * sizeof(*mismatch_cache));
-> +}
-> +
-> +static void free_mismatch_cache(void)
-> +{
-> +	free(mismatch_cache);
-> +	mismatch_cache = NULL;
-> +}
-> +
-> +static const struct sectioncheck
-> +*cache_mismatch(unsigned int secndx, const struct sectioncheck *mismatch)
+Put the shared command path in a helper and acquire the request mutex
+unconditionally around the power-on call. Keeping acquisition and
+release in the same control-flow path also allows Clang context analysis
+to verify balanced locking.
 
-Similarly here, s/secndx/to_secndx/.
+KASAN report as below:
 
-> +{
-> +	if (!mismatch) {
-> +		mismatch_cache[secndx] = -1;
-> +		return NULL;
-> +	}
-> +
-> +	mismatch_cache[secndx] = (mismatch - sectioncheck) + 1;
-> +	return mismatch;
-> +}
-> +
-> +static const struct sectioncheck *get_section_mismatch(const char *fromsec,
-> +		const struct elf_info *elf, unsigned int secndx)
+        BUG: KASAN: slab-use-after-free in
+    mgmt_set_powered_complete+0x450/0x4d0
+    Read of size 2 at addr ffff88810921ab10 by task kworker/u17:0/500
 
-s/secndx/to_secndx/, and the fromsec and elf arguments could be swapped
-for consistency with the rest of the code.
+    Workqueue: hci0 hci_cmd_sync_work
+    Call Trace:
+     <TASK>
+     dump_stack_lvl+0x93/0xd0
+     print_report+0xce/0x630
+     ? mgmt_set_powered_complete+0x450/0x4d0
+     ? srso_alias_return_thunk+0x5/0xfbef5
+     ? __virt_addr_valid+0x20d/0x410
+     ? mgmt_set_powered_complete+0x450/0x4d0
+     kasan_report+0xe0/0x110
+     ? mgmt_set_powered_complete+0x450/0x4d0
+     mgmt_set_powered_complete+0x450/0x4d0
+     ? __pfx_mgmt_set_powered_complete+0x10/0x10
+     hci_cmd_sync_work+0x207/0x450
+     ? __pfx_mgmt_set_powered_complete+0x10/0x10
+     process_one_work+0x908/0x19c0
+     ? __pfx_process_one_work+0x10/0x10
+     ? srso_alias_return_thunk+0x5/0xfbef5
+     ? lock_is_held_type+0x8f/0x100
+     ? srso_alias_return_thunk+0x5/0xfbef5
+     worker_thread+0x65c/0xe40
+     ? __pfx_worker_thread+0x10/0x10
+     kthread+0x34f/0x460
+     ? srso_alias_return_thunk+0x5/0xfbef5
+     ? __pfx_kthread+0x10/0x10
+     ret_from_fork+0x659/0x940
+     ? __pfx_ret_from_fork+0x10/0x10
+     ? srso_alias_return_thunk+0x5/0xfbef5
+     ? __switch_to+0x74f/0xf80
+     ? __pfx_kthread+0x10/0x10
+     ret_from_fork_asm+0x1a/0x30
+     </TASK>
 
-> +{
-> +	int cached;
-> +
-> +	if (secndx >= elf->num_sections)
-> +		return section_mismatch(fromsec, sec_name(elf, secndx));
-> +
-> +	cached = mismatch_cache[secndx];
-> +	if (cached < 0)
-> +		return NULL;
-> +	if (cached > 0)
-> +		return &sectioncheck[cached - 1];
-> +
-> +	return cache_mismatch(secndx,
-> +			      section_mismatch(fromsec, sec_name(elf, secndx)));
-> +}
-> +
->  static void check_section_mismatch(struct module *mod, struct elf_info *elf,
->  				   Elf_Sym *sym,
->  				   unsigned int fsecndx, const char *fromsec,
->  				   Elf_Addr faddr, Elf_Addr taddr)
->  {
-> -	const char *tosec = sec_name(elf, get_secindex(elf, sym));
-> +	const unsigned int to_secndx = get_secindex(elf, sym);
+    Allocated by task 531:
+     kasan_save_stack+0x33/0x60
+     kasan_save_track+0x14/0x30
+     __kasan_kmalloc+0xaa/0xb0
+     __kmalloc_cache_noprof+0x251/0x610
+     mgmt_pending_new+0x60/0x230
+     mgmt_pending_add+0x3b/0x180
+     set_powered+0x2a8/0x7e0
+     hci_sock_sendmsg+0x128b/0x22e0
+     __sys_sendto+0x425/0x470
+     __x64_sys_sendto+0xe5/0x1c0
+     do_syscall_64+0x115/0x6a0
+     entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-The const qualifier can be dropped from the to_secndx definition to
-match the usual kernel style.
+    Freed by task 531:
+     kasan_save_stack+0x33/0x60
+     kasan_save_track+0x14/0x30
+     kasan_save_free_info+0x3b/0x60
+     __kasan_slab_free+0x5f/0x80
+     kfree+0x307/0x580
+     set_powered+0x336/0x7e0
+     hci_sock_sendmsg+0x128b/0x22e0
+     __sys_sendto+0x425/0x470
+     __x64_sys_sendto+0xe5/0x1c0
+     do_syscall_64+0x115/0x6a0
+     entry_SYSCALL_64_after_hwframe+0x77/0x7f
+    ==================================================================
 
--- 
-Thanks,
-Petr
+Fixes: eec8d2bcc841 ("Bluetooth: Add support for set_powered management command")
+Assisted-by: LLM
+Signed-off-by: Cen Zhang <zzzccc427@gmail.com>
+---
+Changes in v2:
+- Move the common set_powered command path into a helper and acquire
+  req_lock in the explicit power-on branch, fixing Clang context-analysis
+  errors.
+- Preserve req_lock -> hdev->lock ordering and keep power-off cancellation
+  outside req_lock.
+- Rebase onto current bluetooth-next.
+
+Link to v1: https://lore.kernel.org/r/pm-bluetooth-objects-candidate-0063-v7-35a6680c94a332fea155@gmail.com
+
+diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
+index 3b9c82bd2f027..90686ebec2399 100644
+--- a/net/bluetooth/mgmt.c
++++ b/net/bluetooth/mgmt.c
+@@ -1395,19 +1395,13 @@ static int set_powered_sync(struct hci_dev *hdev, void *data)
+ 	return hci_set_powered_sync(hdev, cp.val);
+ }
+ 
+-static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
+-		       u16 len)
++static int __set_powered(struct sock *sk, struct hci_dev *hdev,
++			 void *data, u16 len)
+ {
+ 	struct mgmt_mode *cp = data;
+ 	struct mgmt_pending_cmd *cmd;
+ 	int err;
+ 
+-	bt_dev_dbg(hdev, "sock %p", sk);
+-
+-	if (cp->val != 0x00 && cp->val != 0x01)
+-		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_POWERED,
+-				       MGMT_STATUS_INVALID_PARAMS);
+-
+ 	hci_dev_lock(hdev);
+ 
+ 	if (!cp->val) {
+@@ -1454,6 +1448,32 @@ static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
+ 	return err;
+ }
+ 
++static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
++		       u16 len)
++{
++	struct mgmt_mode *cp = data;
++	int err;
++
++	bt_dev_dbg(hdev, "sock %p", sk);
++
++	if (cp->val != 0x00 && cp->val != 0x01)
++		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_POWERED,
++				       MGMT_STATUS_INVALID_PARAMS);
++
++	if (!cp->val)
++		return __set_powered(sk, hdev, data, len);
++
++	/*
++	 * Wait for the previous power-off completion before publishing a
++	 * new command that could reuse its freed pending-command address.
++	 */
++	hci_req_sync_lock(hdev);
++	err = __set_powered(sk, hdev, data, len);
++	hci_req_sync_unlock(hdev);
++
++	return err;
++}
++
+ int mgmt_new_settings(struct hci_dev *hdev)
+ {
+ 	return new_settings(hdev, NULL);
