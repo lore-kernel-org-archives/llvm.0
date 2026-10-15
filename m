@@ -1,96 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A9B4443E3B;
-	Thu, 15 Oct 2026 21:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792099531; cv=none; b=DZ2ZAtS12dWyyznnMbR/q3uFiLLkhKnyNLsPVQRhEtdQXYsQcAglsfoFNGhTBLjX4SbPP4RQv7PYzTVj8vk5gzEoaf05MeUFKVTJ57OFifvZJ5EVf6Lm1Eh0UMgmbTvAJS8A6ux4nvDaAhd60QP9pubtLZuwApuZvdP5uZ59MVg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792099531; c=relaxed/simple;
-	bh=jgHtsMpPFB4Z9TWMvS6irJPcZDzd0toIbmE5qbqa/Us=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G/LZiuq1R0u45ezPnJX8fJN0W0G8cT6zNVQyi4TNVN6YdVtAwxzfBOcAmv/egi6RgVyvdiAMgBxaUJcdE+iUIb4H3CrXTLDUdNuBF/Eu+bFassRqBtKB7Gc/COkFsSGpKrCc1J1QOvUSXLxRDRTuap9qPzIiN+EhosfvR1B5Ggs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UmI3HG99; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E63D93B83E0
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 22:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792103369; cv=pass; b=oyQOfXVOm3oq4h3u9u/NEH47IwxF52BK5c6kPTVvxTUExGhTcir4BawWToRLkDsxkaP97eUEiYxtFSLF1ZXtDYGcKzzt6wHr23x/SpQhRRBwc0L1FgAz+8gBiABwh2xBV9wvVJV2bnUYb2O5S8mfNB4bdrUit6DesTvDdU2V1TI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792103369; c=relaxed/simple;
+	bh=AXRRS22uutXkOu3guPUe2GbkmsWxR1BXKHyZbsJzLy4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TWT562wexlkLOLVi/xKODlDntsalpRiKfavLz3sM4IHi86jgl0yEZBQoijd4J0SeZOjtkAedGjulrwzZJx9pjAyMsZNbprljsJr1+jKOKsr3W3jmFUcJEh/jDOA8uJYIyLpOnz0DpWSa/4HxyUo2msgImt8dSNQrd3ZE+5lErR4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d8Hmz6am; arc=pass smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UmI3HG99"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E5371F000C4;
-	Thu, 15 Oct 2026 21:25:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792099530;
-	bh=JtlG37bFDT1nJGArYVo1/AEcEyqGhLzCSN7KTgGMzBk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=UmI3HG99wlr47IcaLawHsU/ZmxyrsxU2dpyCm3mJe6O4RnExTHiafIYdkOWr61eo8
-	 X9C8oxMZ7ylKM6WOtJXzuRtywcIiPT0WIoZ0/s2WvtK6DkrplnrRvID4RItxnk4HPv
-	 SPvEIIUgsOsD1Jo4HTWcxXVciEh76w77YHnBWqzxMc+jEubgLfzRXh4vtl/b86ubJs
-	 MuuXzJt7zxZq5mz4R8ttG1yopj4DalhTiyV5BsLXGMhZgV1KiaRK5hqxzxizOb2ag0
-	 ioSnjncTvc0d+gLM8hvXoRKZLY4fYxpi+OFm55KLxHqPcLjKFQKu9zP7gGBVelip9f
-	 I6HClOU07AUkw==
-Date: Thu, 15 Oct 2026 14:25:25 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Rong Xu <xur@google.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	kernel test robot <lkp@intel.com>
-Subject: Re: <inline asm>:1:275: error: invalid instruction mnemonic 'brk'
-Message-ID: <20261015212525.GA322951@ax162>
-References: <202609040258.xw9R4qaZ-lkp@intel.com>
- <20261008162013.GA1660409@ax162>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d8Hmz6am"
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-533202fe429so120461cf.0
+        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 15:29:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792103367; cv=none;
+        d=google.com; s=arc-20260327;
+        b=gDOMcxmfRe7mbXr3aHxtyVR2eF0sibzPMWFqeWuAuiE8qUX59Z8VjgklVU8Ur9rSsP
+         Df5E5VIoF/rRQAzDCKEaYLRiOjzjcJ0MJFusdodtOHINvx8lKCbP7z5CL8nZ3StMH4FB
+         TXKFe/urrcWGYxACM+KRJcI7IEbZGQd1WPw09QHnus6VpgFEDQfTfkY6kIR1RXF8pTep
+         QRPbs5E/9ywJJ6g5htzt66FCamH8wLhD2cdeSbfFWfFzUXZVN4ejN4CznVTNMJC+Bewq
+         SOaRSfCIgkpuZEOFD8HlnAfnlzqp4HxeCZNmwwOqOvCx7ctzBKN8lYzPa3ZOoIRn/LDC
+         NcNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Fx0meqXkpmqmZ+T0ZUXv6LFbVHDOrz59U8bjk3O4KlE=;
+        fh=uw7z+eBVjO0BlPcdmGkjeG7JO7CsbYCjV3tDOL0OYc4=;
+        b=GZqnARdVA5EHTQBi2F3KWCptTFOhie+H7iGw7ebd1M8wIKCOOxtHgmOxA2U7v3A/PL
+         SrfUeYnAZNTGHOp4gQWiPWLrH19xfI0SHJyGUzGfFrOmhuij6ND8/UqsjLhEDa7kqCvo
+         b9Cib0iADT3DPUOK+JPJp43pxgKXVyuFI4AXkD2hXqqCHqdFJbb0L/2mYg2iL4hwTxuD
+         Icl4oLjv5OMyDxd4Su6oeDIo0gOEo+C+am3hjxSWDipgH10X6Ui0+UVqyvflEvW8RsMn
+         rfpIkSu5XAkGv/BLEZFdE7/fuaLauDSrmQukU49Cul3LACPdO1jjdMVdAZKnOrLdMZsL
+         6UeA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1792103367; x=1792708167; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Fx0meqXkpmqmZ+T0ZUXv6LFbVHDOrz59U8bjk3O4KlE=;
+        b=d8Hmz6ameRWSWKW63ylKFPmypAQfmYBE9zwlmqwBjEWj3y0ZPexC41DC+5Sm3tbP0U
+         F+n267x2wdlM14Sd/udYOG9gQw+f/UrgfcEHTKxuvJ4YQ5eUWymhgpN+frRK+dt8IHmJ
+         MQglI5stsxEv5mGbu8jLItydbJvBDgW2/nOAxzLvxZUf+QmMICvaiAT1bZGoXqpFzMbJ
+         BUIo+tr70D5kjZK0JZdg3knBhe/Ro/4woZiAxtazkISnNfBl1kZZrCicVZuH4yTNAcIE
+         gyq0i+3mZz4Hvei9bMh1KrYKEOXzG1b7lv1pu3nnc5HKaWOkM+HSfRRl9Ahhu11he6Kf
+         EmVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792103367; x=1792708167;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Fx0meqXkpmqmZ+T0ZUXv6LFbVHDOrz59U8bjk3O4KlE=;
+        b=cLXRrCu1z7f8tHKCrFdp5vNVVVARqdnrNm3aFWwDjrZTYtEHwZ7j8lQoUxxPOmm2VV
+         hIGt3oVd5wBZ5fD2kCFYc8y/D2SjI6t2ZTGoSh6YVUEmkGUf9rKBUOfvxggU3e68E4Qg
+         fz3hQB9pocylgPb5u+HnU4H6Ojh756BlDn3ukv7QvuI3G9Z6zoUMavAJ0S0RgNw8ytdh
+         oKu+2TNrh9yQWZKMUkBKfDP4Wuxt2RK3Q+L2oZoGfN4n0XPIn2kXbL4LEm/PxAXdKEG8
+         tmL+IYN9yP9nyCwsAKnw+RD10J8tI14OcfDilNAvaVgKpHPatJM6IdfN14luvUWeJBEq
+         RT/Q==
+X-Forwarded-Encrypted: i=1; AKwUvBz1+UQnL0qOO4BTmw7kZUEe1a8i9LEKGqnpPahxpL2mGU4fwZ8iVxmF1Dtm8MUroAmvnA9V@lists.linux.dev
+X-Gm-Message-State: AFq9FYJIy4IIvXKnNgURbAK97C2xXsxBN5nui8E01bIB8DjrI586Gc5M
+	t4iQcYCkNHNc3NfXfQiK73j++J6B2LLxHqqRBNCSIEKURcSgDVj/V//g2klWt0XzNL9EeqYZ1Cp
+	pM1pXlTViUrOVv9Qskm4Bte7Df+x6TwqToiHShxZg
+X-Gm-Gg: AYBFou0AjU6VU2DSd8mnh/rGD26p0/zBSzxNpk1N9Qbet1A9OE23zIEK9fqMek0X7xO
+	LVZ5AHmPUfZOZsRhCaGsfkcq3OWq5431EkzSt9ihaVbVXI4O93h2IfVElJ4+XaZxFPgHvHRijZE
+	9ItTixt/9luNG2+Ka29L6w2toE/BXRrUIuxEF0O8fX1haBuErcggNOB/PymzjpjR0wDZFiQCd4K
+	D7baCSRLkQROhElKdfqI7J0rIcODkMlY+BI8DLuzJpBRPR0qTUEvUpdjGHvnpWv/3D3Tcf8QhTi
+	aK89anM/wwhI/XUB9SkQj+s2+V8+coAHC7efD2CKKyKx/jNve4C5uI6/MpG4fBUxpaKq7psB4o8
+	5RXO0U3jbDQ==
+X-Received: by 2002:a05:622a:1a89:b0:535:30a:76c7 with SMTP id
+ d75a77b69052e-536297d3336mr5010261cf.3.1792103366183; Thu, 15 Oct 2026
+ 15:29:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261008162013.GA1660409@ax162>
+References: <20261014225811.i.852-kees@kernel.org> <20261014225818.3457479-2-kees@kernel.org>
+ <2026101517-profane-opponent-4523@gregkh> <CANiq72m_iyquf4Lc8AWvbsBp++ASz4+C_MQ5iYQW-fHd_MNDxA@mail.gmail.com>
+ <C46E97AC-3722-4264-B541-04EBC3091E00@kernel.org> <2026101532-fantastic-deafness-e04c@gregkh>
+ <CANiq72=wS5NJyeKKaYiHKWhDq2Wjk728qkCUNq4xVoHrPEPCRw@mail.gmail.com> <2026101515-oversleep-related-e4dd@gregkh>
+In-Reply-To: <2026101515-oversleep-related-e4dd@gregkh>
+From: Ian Rogers <irogers@google.com>
+Date: Thu, 15 Oct 2026 15:29:13 -0700
+X-Gm-Features: AclHuK_bhqpBXC-6cMMrPjeFLsPs6nuRXrMV9IFwDJ4QNHEyGqQj-Q86H0SV0Zk
+Message-ID: <CAP-5=fX72cGXtOVYFK0Fr-XMWtr5nfmdr0y3dwVeUcuAueW3Xg@mail.gmail.com>
+Subject: Re: [PATCH 2/2] seq_file: Require explicit initialization of struct seq_operations
+To: Greg KH <greg@kroah.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Kees Cook <kees@kernel.org>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-fsdevel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 08, 2026 at 06:20:17PM +0200, Nathan Chancellor wrote:
-> Hi Rong,
-> 
-> This is the build report I mentioned at LPC, please take a look. The
-> original report is available at:
-> 
->   https://lore.kernel.org/202609040258.xw9R4qaZ-lkp@intel.com/
-> 
-> but I have also included it below.
+On Thu, Oct 15, 2026 at 1:50=E2=80=AFAM Greg KH <greg@kroah.com> wrote:
+>
+> On Thu, Oct 15, 2026 at 09:47:34AM +0200, Miguel Ojeda wrote:
+> > On Thu, Oct 15, 2026 at 9:11=E2=80=AFAM Greg KH <greg@kroah.com> wrote:
+> > >
+> > > __must_init might be smaller?
+> >
+> > That sounds fine too. I like that it says that something *has* to be
+> > done (like the original name did). Hmm... On the other hand, I guess
+> > "must" could sound like one has to initialize the field "somehow",
+> > i.e. writing:
+> >
+> >   struct S s =3D {};
+> >
+> > definitely initializes it, yet the compiler would warn. Would
+> > "explicit" hint a bit more at the fact that one has to actually
+> > "write" the field, even if it may have been initialized anyway?
+>
+> "explicit" is a description, "must" is an action that tells the reader
+> what they have to do, so maybe "must" is better?
+>
+> Anyway, I don't care, naming is hard, either is fine with me, I'll let
+> the authors of the patch here pick what they want :)
 
-This should be fixed by commit 4bcfe2902199 ("iommupt/kunit: Use
-if_changed_rule for the kunit") in Linus's tree (same root cause,
-different error from what I can tell).
+Fwiw, I like __must_init for being both short and intention revealing.
+I'll hold off sending my v2 for kobject::release to avoid renaming the
+attribute.
 
-  https://git.kernel.org/linus/4bcfe29021993cb167fd9bbdb849f7d7247a166f
-
-> On Fri, Sep 04, 2026 at 02:32:03AM +0800, kernel test robot wrote:
-> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> > head:   940de590b839f71d6dc846160534bf202401b8b7
-> > commit: 9f2aee8f7d1842be08da860e45265d30dba0d1f7 kbuild: distributed build support for Clang ThinLTO
-> > date:   3 months ago
-> > config: arm64-randconfig-003-20260830 (https://download.01.org/0day-ci/archive/20260904/202609040258.xw9R4qaZ-lkp@intel.com/config)
-> > compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260904/202609040258.xw9R4qaZ-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Fixes: 9f2aee8f7d18 ("kbuild: distributed build support for Clang ThinLTO")
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202609040258.xw9R4qaZ-lkp@intel.com/
-> > 
-> > All error/warnings (new ones prefixed by >>):
-> > 
-> >    warning: overriding the module target triple with x86_64-unknown-linux-gnu [-Woverride-module]
-> > >> warning: linking module 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o': Linking two modules of different target triples: 'arch/arm64/mm/init.o' is 'aarch64-unknown-linux-gnu' whereas 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o' is 'x86_64-unknown-linux-gnu'
-> >     [-Wlinker-warnings]
-> > >> warning: linking module 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o': Linking two modules of different target triples: 'lib/kunit/test.o' is 'aarch64-unknown-linux-gnu' whereas 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o' is 'x86_64-unknown-linux-gnu'
-> >     [-Wlinker-warnings]
-> > >> warning: linking module 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o': Linking two modules of different target triples: 'lib/kunit/try-catch.o' is 'aarch64-unknown-linux-gnu' whereas 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o' is 'x86_64-unknown-linux-gnu'
-> >     [-Wlinker-warnings]
-> > >> warning: linking module 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o': Linking two modules of different target triples: 'lib/maple_tree.o' is 'aarch64-unknown-linux-gnu' whereas 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o' is 'x86_64-unknown-linux-gnu'
-> >     [-Wlinker-warnings]
-> > >> warning: linking module 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o': Linking two modules of different target triples: 'mm/vmstat.o' is 'aarch64-unknown-linux-gnu' whereas 'drivers/iommu/generic_pt/fmt/kunit_iommu_riscv64.o' is 'x86_64-unknown-linux-gnu'
-
--- 
-Cheers,
-Nathan
+Thanks,
+Ian
