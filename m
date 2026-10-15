@@ -1,146 +1,149 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9707046C4C5
-	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 13:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD9D53C3C9;
+	Thu, 15 Oct 2026 14:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792072706; cv=none; b=C7CqzfPq8tRb5lR8tJd/4xEHBPMJVURu6ntNfO2T+STEsDfcGrYcF/B05EGhNX5uKpu0esDsLvGq9RTuNhciwPRmhpWXIsjJa7EqkPfVk/oDMFVJzcZOXZFmQ/pvr68clsqTp+OgXxWFhadeWESEo/Hrc0GhpQwGme7XLnsWn4M=
+	t=1792074582; cv=none; b=aLSo+zevjPtSlX3CY3rneD8r+MYvoxx2YdkUE0EO6aoLfqJy0zZGvp4Wqi81GTsa2GoGf55dYIfLOJJvoawMGi087rTf9EbUWPFCwxed2/pmzvjpb1eoaZ+kheQTfxwVnjVzVLHRR//oA/YNMB505deypiUHFcseRrwBFl9eQsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792072706; c=relaxed/simple;
-	bh=Ho9YjB7reTrmZ0D9XSI3KdhGFFfKLwxERh2NVVcc4zg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=g9KYqas0fgBItMunRt269rTr+4cl+bHHdDdBRLjevKUmHzeOLjRvKaOdn2t1EIyn6qEUy3QuWd8X5ycCcRekhLYkk3WHFxafS/siMvnk6uUO4Bccv0MXbq6ROCL3IYwA6QqNo8QAiP3EtmzGsAhEW0Al345IA5lF8KqsXkYE6Wg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VSPUpZzg; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1792074582; c=relaxed/simple;
+	bh=uncBtlF1xpx3h5ek9X8UOtwJsZFpqeJZ3skgqWBmY1w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sEKNt2zCQSi7O1/9P0SmAlmCWZ4UmTtRSdd6AozzJOpBrBqt451bLGteIJPUNc/k5rIT7PXPXMe1C64/IXiXgqEUQ1QGpsgDwWzNRAjVeYI1LtYhdjv3Mx/8aenGJBr9DcNW+vuFDLR9rawqzCrUhx5OK84Jq418X3ORowkErAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZANMjyoH; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VSPUpZzg"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-3acb512a7a0so117218a91.1
-        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 06:58:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792072704; x=1792677504; darn=lists.linux.dev;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=lPZUBNn4GPGhvhNrbIpHNNxTG5Tr+rGqMQM1UOtv2Wk=;
-        b=VSPUpZzgfLCizGebcVYWYUkoAEivUeD974qVBZZzA3fk7lkNBLWR0X8P9ws0ZUkkO/
-         +sPbQA8muyu7BUrKL0C6VQFxzn9CfirrJRk/yrD6u0xsIUrbbP8qyZ6SozdndQeezjSe
-         haVfjrN2EAbSOz05kL33UsOk/NO/nm5o2MgLs2YTMMU7D3Mvt7fnBDo6mIfPTqvGvpLn
-         Jt/fzA9oBU1AjN8WEOFDZcuJtPpX1GliOw6d/KZ8MB5caQFfX0uMh2b++8Z01LEAyyPt
-         h6mBRbqJm5elOQ0qyEr446QWTpJlnr73bVkF0dbuY8kgFFD/LWQ8myRonAvrzasY00hA
-         9K8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792072704; x=1792677504;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lPZUBNn4GPGhvhNrbIpHNNxTG5Tr+rGqMQM1UOtv2Wk=;
-        b=prUSL6cGlk9RC1KPCOYuJbYB2/t4VbZgIvWHL3KItp/tR/7fRAvXp1oUgAlAx42Ov5
-         BS/0Aa91W2GbFTurdx6sTmHY7Ezw0YhhQI6GvbKpp2Ap8Ffp0x/vQApra/xr5lBpIGF4
-         jkDAfNihvojLOlG3wsSSAp+XLDbTRbgYCn6B62hjZ6Sde2EAyJkkCmRuNEawHJ32bqwF
-         dWmmzz7QAbyDWcQSKE2mLZolikiTfeawuvC6wVpqBvAxCv9RgICQQ1BZUrYKAC/w2aew
-         t3bbp3owoK+5anOMtLDuvgIkTYJI59gjVSHBWJdXKkD5yoHtGjfgbCuaXkq1WL+aVfOb
-         KRaw==
-X-Forwarded-Encrypted: i=1; AKwUvBzOVr22lvKFXOuF42iWOToNpNlLynEzMvaHfLsW+b75ZidbgXKnAuRy9Hyg1pDCVxUcQe7q@lists.linux.dev
-X-Gm-Message-State: AFq9FYLnjdE1U1M2vnjQZTBlQGNPIRwpp2PJWY5/HyZ96okKVjl6nXI0
-	ZeX1ToM+/hAAP+oxqyVnQ2T4/ZP0HIJdE6ep2aOvfjKezGa56gg+UnMN
-X-Gm-Gg: AYBFou1xeJDjNK+UPX4TJYdVfgmHT+RqDBru39SvoTIh3W3+FEvKT0qRhtin7Y1Mtzs
-	iC8KvIN/8w43EmLXI12GJCCnJ3ZHxt3NKVSlA12UprMy/DrUqe3gy5UfkWQwPg4NKrPtDpwSTgL
-	U1S+0zVCJC7/kKcWE5SNiyQP+eavw6+nP37pQopwn1Gz8jq+fipDSi0heGxxwU1sNtpxWWyGLYn
-	w4tZTUj3FcqCEpqa5+TjjTwykkhsWsdkd+pbNMxrpUs/ZYwhupn879UERAl59qcx9v5QgYeZd8J
-	hWMWas5zAwLsx6L19IKgu3H6G/q6IKZAVkaEaBMUz2RydlbN8XkvevGeXjAKWftoWGgMpYjHZiM
-	uxapyiYtL7D8CkdbLFvnBt9c6yOMMH+Mt32IMzxcG3y5XMADcuoQP4Z/gX1dgBm6GQbzJuP52Cd
-	ULBNnGR8re0vxB3jgjEEw80IyKYRzZZtsMxoO/IHJLY3JcIUiVD+A6t22cR7oUPUCYoHAzNnkJa
-	4j97S1R7HoEaHxf7tGKmBJtIw==
-X-Received: by 2002:a17:90b:4d88:b0:3ab:189b:6980 with SMTP id 98e67ed59e1d1-3ab3a79cf22mr17057046a91.39.1792072703840;
-        Thu, 15 Oct 2026 06:58:23 -0700 (PDT)
-Received: from localhost.localdomain ([113.165.144.92])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3ac94794dd9sm4566857a91.12.2026.10.15.06.58.20
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 15 Oct 2026 06:58:23 -0700 (PDT)
-From: vngocvan <vngocvan@gmail.com>
-To: nathan@kernel.org,
-	nsc@kernel.org
-Cc: ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	masahiroy@kernel.org,
-	llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] gen_compile_commands: honor the build directory for modules
-Date: Thu, 15 Oct 2026 20:57:52 +0700
-Message-ID: <20261015135752.17028-1-vngocvan@gmail.com>
-X-Mailer: git-send-email 2.56.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZANMjyoH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792074581; x=1823610581;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uncBtlF1xpx3h5ek9X8UOtwJsZFpqeJZ3skgqWBmY1w=;
+  b=ZANMjyoHYUlmgA1wBkNLeVMCkarPUYn6cI7iXAy5fizqqFcyQCF87jD1
+   w5ohGjPH25BBFWXbrc/EAK1+s/cbUYf6ZqiTDcwYvruk7B2ypEP6ug1Kn
+   p0T1MF2GmSkFWG5okl2Oo0YU0USzZ+HCyYdOIoUvgl0TRg5aVZFO1MD9I
+   91GcWEHq+lEh6HO1C0WZQKfByfGIxAeTi3MSj+InnOl/GJFhe2hH/E76C
+   xKyBj82zgdyhrMnL1m45vatWY4fPMaUgyzvBuG5zBSkTyy5oxCvBxFK+y
+   C97N2JUo7cOoqmNy8SX6wj3tMURNzU+t/A0ZRdUOEbbwXu7PoT6E5BNew
+   g==;
+X-CSE-ConnectionGUID: vlNK7n5gQk+naD30f/t+7g==
+X-CSE-MsgGUID: wKiIYtoYS5mrfq2GNRxjeQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="877375"
+X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
+   d="scan'208";a="877375"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 07:29:40 -0700
+X-CSE-ConnectionGUID: 8PmyWNjKR/O4xRfeUXALaw==
+X-CSE-MsgGUID: AlEmYPTcTUqHmbTg0onzOQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
+   d="scan'208";a="1617077"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2026 07:29:37 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xHMSc-00000000GeM-2PJ0;
+	Thu, 15 Oct 2026 14:29:34 +0000
+Date: Thu, 15 Oct 2026 22:29:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Potnuri Bharat Teja <bharat@chelsio.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, bharat@chelsio.com
+Subject: Re: [PATCH net-next v4 11/12] cxgb4: extend debugfs support for T7
+ adapters
+Message-ID: <202610152254.VdQcytWi-lkp@intel.com>
+References: <20261014221257.436789-12-bharat@chelsio.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014221257.436789-12-bharat@chelsio.com>
 
-When invoked from outside the build tree with -d and a modules.order
-argument, the script opens .mod files relative to the current directory
-instead of the specified build directory. This can fail with
-FileNotFoundError or collect commands from unrelated artifacts in the
-current directory.
+Hi Potnuri,
 
-Pass the build directory to cmdfiles_for_modorder() and resolve both
-the .mod files and their associated .cmd files relative to it. Absolute
-paths continue to work, and the output location is unchanged.
+kernel test robot noticed the following build errors:
 
-Fixes: ecca4fea1ede ("gen_compile_commands: support *.o, *.a, modules.order in positional argument")
-Signed-off-by: vngocvan <vngocvan@gmail.com>
----
- scripts/clang-tools/gen_compile_commands.py | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.3-rc7 next-20261012]
+[cannot apply to horms-ipvs/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/clang-tools/gen_compile_commands.py
-index 8d14b81efd73..149135f85f19 100755
---- a/scripts/clang-tools/gen_compile_commands.py
-+++ b/scripts/clang-tools/gen_compile_commands.py
-@@ -124,7 +124,7 @@ def cmdfiles_for_a(archive, ar):
-         yield to_cmdfile(obj)
- 
- 
--def cmdfiles_for_modorder(modorder):
-+def cmdfiles_for_modorder(modorder, root_directory):
-     """Generate the iterator of .cmd files associated with the modules.order.
- 
-     Parse the given modules.order, and yield every .cmd file used to build the
-@@ -132,6 +132,7 @@ def cmdfiles_for_modorder(modorder):
- 
-     Args:
-         modorder: The modules.order file to parse
-+        root_directory: The directory where the objects were built
- 
-     Yields:
-         The path to every .cmd file found
-@@ -142,11 +143,11 @@ def cmdfiles_for_modorder(modorder):
-             base, ext = os.path.splitext(obj)
-             if ext != '.o':
-                 sys.exit('{}: module path must end with .o'.format(obj))
--            mod = base + '.mod'
-+            mod = os.path.join(root_directory, base + '.mod')
-             # Read from *.mod, to get a list of objects that compose the module.
-             with open(mod) as m:
-                 for mod_line in m:
--                    yield to_cmdfile(mod_line.rstrip())
-+                    yield os.path.join(root_directory, to_cmdfile(mod_line.rstrip()))
- 
- 
- def process_line(root_directory, command_prefix, file_path):
-@@ -206,7 +207,7 @@ def main():
-         elif path.endswith('.a'):
-             cmdfiles = cmdfiles_for_a(path, ar)
-         elif path.endswith('modules.order'):
--            cmdfiles = cmdfiles_for_modorder(path)
-+            cmdfiles = cmdfiles_for_modorder(path, directory)
-         else:
-             sys.exit('{}: unknown file type'.format(path))
- 
+url:    https://github.com/intel-lab-lkp/linux/commits/Potnuri-Bharat-Teja/cxgb4-add-T7-hardware-definitions-and-firmware-interfaces/20261014-181246
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20261014221257.436789-12-bharat%40chelsio.com
+patch subject: [PATCH net-next v4 11/12] cxgb4: extend debugfs support for T7 adapters
+config: x86_64-kexec (https://download.01.org/0day-ci/archive/20261015/202610152254.VdQcytWi-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261015/202610152254.VdQcytWi-lkp@intel.com/reproduce)
 
-base-commit: 0fcb05b72344f40806cbe810de8872f1698bf053
--- 
-2.56.0
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610152254.VdQcytWi-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c:4365:18: error: use of undeclared identifier 'clip_tbl_fops'
+    4365 |                 { "clip_tbl", &clip_tbl_fops, 0400, 0 },
+         |                                ^~~~~~~~~~~~~
+>> drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c:4390:5: error: invalid application of 'sizeof' to an incomplete type 'struct t4_linux_debugfs_entry[]'
+    4390 |                                 ARRAY_SIZE(cxgb4_debugfs_files));
+         |                                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   2 errors generated.
+
+
+vim +/clip_tbl_fops +4365 drivers/net/ethernet/chelsio/cxgb4/cxgb4_debugfs.c
+
+  4355	
+  4356	int cxgb4_setup_debugfs(struct adapter *adap)
+  4357	{
+  4358		static struct t4_linux_debugfs_entry cxgb4_debugfs_files[] = {
+  4359			{ "blocked_fl", &blocked_fl_fops, 0600 },
+  4360	#ifdef CONFIG_CHELSIO_T4_DCB
+  4361			{ "dcb_info", &dcb_info_debugfs_fops, 0400, 0 },
+  4362			#endif /* CONFIG_CHELSIO_T4_DCB */
+  4363			{ "resources", &resources_fops, 0400, 0 },
+  4364			{ "sge_qinfo", &sge_qinfo_debugfs_fops, 0400, 0 },
+> 4365			{ "clip_tbl", &clip_tbl_fops, 0400, 0 },
+  4366			{ "tids", &tid_info_fops, 0400, 0 },
+  4367			{ "trace0", &mps_trc_debugfs_fops, 0600, 0 },
+  4368			{ "trace1", &mps_trc_debugfs_fops, 0600, 1 },
+  4369			{ "trace2", &mps_trc_debugfs_fops, 0600, 2 },
+  4370			{ "trace3", &mps_trc_debugfs_fops, 0600, 3 },
+  4371			{ "l2t", &t4_l2t_fops, 0400, 0 },
+  4372			{ "crypto", &chcr_stats_fops, 0400, 0 },
+  4373		};
+  4374	
+  4375		static struct t4_linux_debugfs_entry cxgb4_t7_debugfs_files[] = {
+  4376			{ "trace4", &mps_trc_debugfs_fops, 0600, 4 },
+  4377			{ "trace5", &mps_trc_debugfs_fops, 0600, 5 },
+  4378			{ "trace6", &mps_trc_debugfs_fops, 0600, 6 },
+  4379			{ "trace7", &mps_trc_debugfs_fops, 0600, 7 },
+  4380		};
+  4381	
+  4382		if (IS_ERR_OR_NULL(adap->debugfs_root))
+  4383			return -1;
+  4384	
+  4385	#ifdef CONFIG_DEBUG_FS
+  4386		t4_setup_debugfs(adap);
+  4387	#endif
+  4388	
+  4389		cxgb4_add_debugfs_files(adap, cxgb4_debugfs_files,
+> 4390					ARRAY_SIZE(cxgb4_debugfs_files));
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
