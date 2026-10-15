@@ -1,125 +1,204 @@
-Received: from mail-dy1-f170.google.com (mail-dy1-f170.google.com [74.125.82.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F366A4A6CFA
-	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 07:47:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792050471; cv=pass; b=RVZL1dw/oTD2Vlg0zzeDrI3AVxtQgHCoER8Ff8wCxzzZBq04svK9rgkYoadqYwD05RRCd1i2nh1n+9+xUtW1Ns273Yl1W9p5QKpoLckfjLbOLt+aqL9Gaf5zKxXXdv0nax+Y42bgwWomuAoru/D6gwo8NyLm+EWvZfurVlL7nZk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792050471; c=relaxed/simple;
-	bh=qrhbYvBNv/N0VI8PEYpw8zABc5tgbspPTRKzj2j/IcY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OIRPLKELKKChMPwT8uCZH+xLKTBmZIuzvJsFeL6EsbeFkFjiUYPPVCE2kQmrWtKBlkS+VsE9aMiJPTIIUTJ8jIQIbp2jx4ldSdYngpX1yf0TBmUa+awhSFmi4TOqGUwmBW7oamTwufav/5RvpIAIn+/hM41yzthqQOiRaicFkT8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSbQmNt7; arc=pass smtp.client-ip=74.125.82.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCBC39EF12;
+	Thu, 15 Oct 2026 08:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792053883; cv=none; b=cu8qsfLDERq3FadG3U4+FxNeVScvZXUgS9udDoQWwaRaRSujLH8wy7EsrlBESlqmKEvNom5m6AuOvoJZqT/DXUqArUcIuPsgL908gNY2mGqVqNhm42FlM8yMckrWr8dtF1XfhpH2CmsR1/5rmVgL/doaSIhGLlpMQOxOP9aJYuY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792053883; c=relaxed/simple;
+	bh=bZkLoYIQQjVUK4XHgnMXsLjSW9f51PKOjGdxmTBIdGc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BJ//20MvAxWFkRPpdwYe+3C/VU6TMRnr+LdW+HhvDyxmPXdEpBpEar13EygLzWwdiw924GMs3eWQrrFIQBNLsW6VOJVHAL+W3905nHDqfUxMiqznPP3tuehpfRV0QbuYU2s94sU8Gwa+PKn0UjaZhKKmDJb9SUHEMsy+K0XAYa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QseqCGbK; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSbQmNt7"
-Received: by mail-dy1-f170.google.com with SMTP id 5a478bee46e88-313bab9cfe7so603543eec.3
-        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 00:47:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1792050468; cv=none;
-        d=google.com; s=arc-20260327;
-        b=hLiubcinY2j4VdlCDktrpytC+IsWNSBANnwC6Gf+QHRBE6lUwPtXkkmUKkINAa1Ykd
-         gGxqWvGmjrGekQASzYXXiOgiVtUN0VIUOB6mMwT5EbovVLWZvSWoXxyBPzHzKTz1gy7k
-         8EsEgBVkjGZQT1NDcbBMBzqFLy7O6eQblqSI401w1JEWlyrcAYd+wQHxhudl25gorqRh
-         7Tcm/Sn9suzHTl0VI5jiBm77dzo1Tcc5Pyg4nSwB5w5xgwcLgBNyNS2qsLhTS9F1Tge4
-         yx6QNx5ZeoMBn0eHy7ltqxLH6/l+mP+PM65wKZobR7uq5HlPb+k7efPIQA3IIUm47voo
-         uWIQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=aZLy1FDhAffyNHLdSNSc3Bq3qLESgLIT723DgtaMR+Q=;
-        fh=yWFPQOrF3Qh1Fnu1pC0PhuRQ4lJPthKqU2BYhy7DTME=;
-        b=oVlVH225qMBY4MAcv+gzwM0HhM1hoAgCQmUhH8Ki8iARRpALj08FPISFQ2g7OQ4/6t
-         eR21w2H50YODRUIbuWnnyHVkce9x1JAzYcr1Nk+KseCZXo7k7JE2GwK6t4/ORgqrgXm8
-         cOvgRXPgr6P0JOObze69tk18II8NtqMTjVIKSZ3pfwLgMzgto0HiqCEL9H3xB2qLk99M
-         zY9at/m2fLropXXgUuxN4G4CxmwTSiaQW5N3YuC+ytmyzaxErmMSpoA+eQ3UwQ1n4Ik3
-         vNqBp2+mgwRw6CzivWYFEpiP67scWWkhzilE0grJJWrxG6iuj7dFWwW792BDFAq/k8TK
-         pJ/g==;
-        darn=lists.linux.dev
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792050468; x=1792655268; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=aZLy1FDhAffyNHLdSNSc3Bq3qLESgLIT723DgtaMR+Q=;
-        b=iSbQmNt7JPTmNe+sBtJ990Up3n/eTUrR9v33GwgLuTH7PtdqFOpByniofB7XVue7ur
-         N8dWA1lZ0AfIlTmq1VHwXrUBvJGZ+y8K9PDqIjcTEnkvaxxkgbiwMyBn0B8ELjd/o+yx
-         odoTUIhARYGhuTgyKz4TtaIU4CPpWCakIf6TPkYTmbFYmf266RFNMKyTTxIFvHKamHDp
-         6zaQneMfWxHBI/4FWoMu84l9QUr2qQwEwdv8EI+24S5g1VTkZaqQK+sA7Htm1h5I3TbW
-         /roQ3gKjMMHcJUT/e/SHJJAuegii20QLQU3Frj6Xgx5/1Ba5KpAULgEl6+HaUbh6SccJ
-         /uiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792050468; x=1792655268;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=aZLy1FDhAffyNHLdSNSc3Bq3qLESgLIT723DgtaMR+Q=;
-        b=EsOcWUtwbIlIkVoCf8iZgGFrWzVtODDynnrRtKosUMdk/gbaElzFjN3oH44QYxOSPj
-         ETna4Nkz75OPvPrrbXklDYPNIuyfy7p7OZHYYxK9ahy3wzN76JhDvxofGoXu0opcowzj
-         CegflB72/bPW6zVi4wI+FUU7ECxaaym3ya5i++il7FoGIHRX4uL598dX0qAuZkd63dSq
-         Z1l/vWw4uV6ModB9h+T2fuGcbeljs9fnFVK3/aL7kM59C7LPmPn58cH9fEbMt1X2DLaT
-         hg78r3SNmtk5PUqkV3xrgMV+FJAeeevCuICOg1hNsPzmVDk7XfYr4f6G38pMdVCHOTwc
-         ayjw==
-X-Forwarded-Encrypted: i=1; AKwUvBwoqV1Vv8H0YqWyY/8Td9W+Au4kbvvgSHmwX6INi3CpYf29kSsBHwnfDvaRXzEyetlYrtjD@lists.linux.dev
-X-Gm-Message-State: AFq9FYLdJwy1XI5xKgAUWUDNCV9YZNOqMoF3wOGtUTX7gghdJwvgt/UJ
-	ifl3M98BqTbjQBwPe8J/BYIAZ9sjsjL9UmKAZUJwvxvJ7HwKL93vV46uef+f1uStuurf4pMF1X3
-	cshklW318HbDCMX9kCqSSK2HP/MxNuao=
-X-Gm-Gg: AYBFou3kJ/4eeZbyLJBnkVlZsz0OKv+j4qA3G/+AwM6ma4pizc617TMjc1PUc0dzKdh
-	X1V84stJci3l85OIkwzcO79sYj7wfzuWCnA9CCetlNUXda9HuCe346RiiRJ+YNuqR2iJ+CjL4nw
-	Ugd8+nBnjv67L0XsQ7QJEXGkwl8DBVbxO55HF5HuGUBBMxgPdyiq88ziBbt4DGdpbtCYMCToFJP
-	XJ+iXqDMe6Xwzaow2YNyCWp3mJEM3lqMCxgo5ttRpij2T4B5JTYilrLCh76vtvD8jtAUovvlfT4
-	L0FPU7uKmZlmrXQASDUFsPunRUei0etdPyRuMmXVzHRoa08rP7ClMCNwcSs133JplzF/jHUoRf1
-	15fDOXVrSmXLUfXDhrndGJXGwM5CAiSE9gcAdea71SY6A0u7JM9CwTsuxP8OjlfMH+4caw/WeDd
-	ExR6sL2uETrlV9blfssZTuzOLlLZ6CYq21WmzRNqEvHG75mNqg0Bs=
-X-Received: by 2002:a05:7300:f3c8:b0:351:7883:bf47 with SMTP id
- 5a478bee46e88-3537dc8e9c0mr38650196eec.0.1792050467352; Thu, 15 Oct 2026
- 00:47:47 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QseqCGbK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792053880; x=1823589880;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bZkLoYIQQjVUK4XHgnMXsLjSW9f51PKOjGdxmTBIdGc=;
+  b=QseqCGbKZZpSazTWS/JX92E31oTTW/uaSRB/KgyYE++FKmVJqq/iZEHj
+   Qm3qIcOqlTUcFp2Ah6DaRWLiTjc+jKCzJumsns6CrUfSDogyn7RykuUFd
+   nh9UHzyWdlGmyf8x2GhAEzeELVKUXaS7zw0Zz6XSh0dr98Qh1BTJcea7t
+   TY8Ce5U8HEQqNFbmA4lthTX8jFczI/mSm1qjgykRSkINR9+jhnfCphOK1
+   5A6Jdw9ZX2YFaMs5mJ0jdWnrXP+Z0rcCFRp/IWrfBD1nnHSLtxGtrXYZO
+   9oxFj1m7PvB3v7/QRRjIIN6dqbltDlkQqetPR3jzwYDWmC5nenvm+Ta8Y
+   Q==;
+X-CSE-ConnectionGUID: sRd0U2aOQJmxrBtxxlUAIQ==
+X-CSE-MsgGUID: E3uEARJjT0+D3pkCiuApXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="848212"
+X-IronPort-AV: E=Sophos;i="6.27,159,1787036400"; 
+   d="scan'208";a="848212"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 01:44:40 -0700
+X-CSE-ConnectionGUID: wGs0T18cRx2rtVYfmexHUA==
+X-CSE-MsgGUID: +Cukhbh6TOyI157YdPCwvQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,159,1787036400"; 
+   d="scan'208";a="1576023"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 15 Oct 2026 01:44:36 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xHH4j-00000000G7W-2o18;
+	Thu, 15 Oct 2026 08:44:33 +0000
+Date: Thu, 15 Oct 2026 16:43:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Claudiu Manoil <claudiu.manoil@nxp.com>, netdev@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, s32@nxp.com,
+	linux-kernel@vger.kernel.org,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Eric Dumazet <edumazet@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, imx@lists.linux.dev,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/5] net: enetc: Add pseudo-MAC support for
+ ENETCv4 Ports via a fixed-link node
+Message-ID: <202610151650.UHqL0Sb7-lkp@intel.com>
+References: <d7b51cb29758538a4c68a700dd8cd41b6e7e08b6.1791908694.git.claudiu.manoil@nxp.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-References: <20261014225811.i.852-kees@kernel.org> <20261014225818.3457479-2-kees@kernel.org>
- <2026101517-profane-opponent-4523@gregkh> <CANiq72m_iyquf4Lc8AWvbsBp++ASz4+C_MQ5iYQW-fHd_MNDxA@mail.gmail.com>
- <C46E97AC-3722-4264-B541-04EBC3091E00@kernel.org> <2026101532-fantastic-deafness-e04c@gregkh>
-In-Reply-To: <2026101532-fantastic-deafness-e04c@gregkh>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 15 Oct 2026 09:47:34 +0200
-X-Gm-Features: AclHuK8JUch3-LLJNkG2OM0JVExMlV2wP7uKNynE1Z6fAhzs1hBzwjLh_wcCofk
-Message-ID: <CANiq72=wS5NJyeKKaYiHKWhDq2Wjk728qkCUNq4xVoHrPEPCRw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] seq_file: Require explicit initialization of struct seq_operations
-To: Greg KH <greg@kroah.com>
-Cc: Kees Cook <kees@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-fsdevel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d7b51cb29758538a4c68a700dd8cd41b6e7e08b6.1791908694.git.claudiu.manoil@nxp.com>
 
-On Thu, Oct 15, 2026 at 9:11=E2=80=AFAM Greg KH <greg@kroah.com> wrote:
->
-> __must_init might be smaller?
+Hi Claudiu,
 
-That sounds fine too. I like that it says that something *has* to be
-done (like the original name did). Hmm... On the other hand, I guess
-"must" could sound like one has to initialize the field "somehow",
-i.e. writing:
+kernel test robot noticed the following build errors:
 
-  struct S s =3D {};
+[auto build test ERROR on net-next/main]
 
-definitely initializes it, yet the compiler would warn. Would
-"explicit" hint a bit more at the fact that one has to actually
-"write" the field, even if it may have been initialized anyway?
+url:    https://github.com/intel-lab-lkp/linux/commits/Claudiu-Manoil/net-enetc-Add-pseudo-MAC-support-for-ENETCv4-Ports-via-a-fixed-link-node/20261013-201245
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/d7b51cb29758538a4c68a700dd8cd41b6e7e08b6.1791908694.git.claudiu.manoil%40nxp.com
+patch subject: [PATCH net-next v2 1/5] net: enetc: Add pseudo-MAC support for ENETCv4 Ports via a fixed-link node
+config: x86_64-buildonly-randconfig-1004-20261015 (https://download.01.org/0day-ci/archive/20261015/202610151650.UHqL0Sb7-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261015/202610151650.UHqL0Sb7-lkp@intel.com/reproduce)
 
-(Of course, if one knows that the attribute only applies to fields,
-then it doesn't make much of a difference)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610151650.UHqL0Sb7-lkp@intel.com/
 
-Cheers,
-Miguel
+All errors (new ones prefixed by >>):
+
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:963:2: error: call to undeclared function 'of_changeset_revert'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     963 |         of_changeset_revert(priv->ppm_ocs);
+         |         ^
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:964:2: error: call to undeclared function 'of_changeset_destroy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     964 |         of_changeset_destroy(priv->ppm_ocs);
+         |         ^
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:992:2: error: call to undeclared function 'of_changeset_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     992 |         of_changeset_init(ocs);
+         |         ^
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:994:15: error: call to undeclared function 'of_changeset_create_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     994 |         fixed_link = of_changeset_create_node(ocs, np, "fixed-link");
+         |                      ^
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:994:13: error: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+     994 |         fixed_link = of_changeset_create_node(ocs, np, "fixed-link");
+         |                    ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:1000:8: error: call to undeclared function 'of_changeset_add_prop_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1000 |         err = of_changeset_add_prop_u32(ocs, fixed_link, "speed", speed);
+         |               ^
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:1004:8: error: call to undeclared function 'of_changeset_add_prop_bool'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1004 |         err = of_changeset_add_prop_bool(ocs, fixed_link, "full-duplex");
+         |               ^
+>> drivers/net/ethernet/freescale/enetc/enetc4_pf.c:1008:8: error: call to undeclared function 'of_changeset_apply'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1008 |         err = of_changeset_apply(ocs);
+         |               ^
+   drivers/net/ethernet/freescale/enetc/enetc4_pf.c:1020:2: error: call to undeclared function 'of_changeset_destroy'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+    1020 |         of_changeset_destroy(ocs);
+         |         ^
+   9 errors generated.
+
+
+vim +/of_changeset_revert +963 drivers/net/ethernet/freescale/enetc/enetc4_pf.c
+
+   957	
+   958	static void enetc4_put_ppm_fixed_link(struct enetc_ndev_priv *priv)
+   959	{
+   960		if (!priv->ppm_ocs)
+   961			return;
+   962	
+ > 963		of_changeset_revert(priv->ppm_ocs);
+ > 964		of_changeset_destroy(priv->ppm_ocs);
+   965		kfree(priv->ppm_ocs);
+   966		priv->ppm_ocs = NULL;
+   967	}
+   968	
+   969	/* Pseudo-MAC ports have no real PHY; the link is fixed, with the operating
+   970	 * speed set at probe time from PCR[PSPEED]. Describe this with a fixed-link
+   971	 * subnode synthesized at runtime onto the port's own OF node, so phylink
+   972	 * picks it up through dev_fwnode() exactly as if it came from static DT.
+   973	 */
+   974	static int enetc4_add_ppm_fixed_link(struct enetc_ndev_priv *priv)
+   975	{
+   976		struct device_node *np = dev_of_node(priv->dev);
+   977		struct device_node *fixed_link;
+   978		struct of_changeset *ocs;
+   979		int speed, err;
+   980	
+   981		if (!np)
+   982			return dev_err_probe(priv->dev, -ENODEV,
+   983					     "Missing of_node for Pseudo-MAC port\n");
+   984	
+   985		enetc4_get_pcr_speed(&priv->si->hw, &speed);
+   986		speed = enetc_phylink_match_pseudo_mac_speed(speed);
+   987	
+   988		ocs = kzalloc_obj(*ocs);
+   989		if (!ocs)
+   990			return -ENOMEM;
+   991	
+ > 992		of_changeset_init(ocs);
+   993	
+ > 994		fixed_link = of_changeset_create_node(ocs, np, "fixed-link");
+   995		if (!fixed_link) {
+   996			err = -ENOMEM;
+   997			goto err_destroy;
+   998		}
+   999	
+> 1000		err = of_changeset_add_prop_u32(ocs, fixed_link, "speed", speed);
+  1001		if (err)
+  1002			goto err_put_node;
+  1003	
+> 1004		err = of_changeset_add_prop_bool(ocs, fixed_link, "full-duplex");
+  1005		if (err)
+  1006			goto err_put_node;
+  1007	
+> 1008		err = of_changeset_apply(ocs);
+  1009		if (err)
+  1010			goto err_put_node;
+  1011	
+  1012		of_node_put(fixed_link);
+  1013		priv->ppm_ocs = ocs;
+  1014	
+  1015		return 0;
+  1016	
+  1017	err_put_node:
+  1018		of_node_put(fixed_link);
+  1019	err_destroy:
+  1020		of_changeset_destroy(ocs);
+  1021		kfree(ocs);
+  1022	
+  1023		return dev_err_probe(priv->dev, err,
+  1024				     "Failed to add fixed-link node\n");
+  1025	}
+  1026	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
