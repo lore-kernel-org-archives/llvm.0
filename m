@@ -1,50 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E6FD3FA5E9;
-	Wed, 14 Oct 2026 23:44:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B796221DAE;
+	Thu, 15 Oct 2026 01:26:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792021492; cv=none; b=YNETRWgQTKIv+Gpdz46t/akUvzfuTIeZenKY7UQOThcc7izGVXqgABuKLV+N6R6FRikU7N3MPQf1tC8GXL2DsNPK7RIELkB+zX8gTuO8PMLXLK6oiGoiMr0hePlfujRzxaUuQyPQY9nAGQApxKvvW7tdGZHL1MnWXvouTPOBMj8=
+	t=1792027570; cv=none; b=Tal8nkJyHS25v3KDYiuQ7uWoWUnRK1yapEeBzWQrJIWweorzto923ucT4NYmA8DKLaG/LX80Lt1Gtaraxn4GtGRF32QcxU6dom4Hhx7H76EgESq1zSIL3vnDwGkNje1TtD585x9RQ0ZS7nqvbJAOvo9sO+/UCJz3cH9FPZXF0tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792021492; c=relaxed/simple;
-	bh=2tQhN29/ettj8MvVtb3MCzfWA7J40BXpsadZ2mPhSEw=;
+	s=arc-20240116; t=1792027570; c=relaxed/simple;
+	bh=aARRQkKeZqCI8RoUsnyZ/pmuEQMAh/Nvzrz6WlyENj0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G/JZcJK/IuezTDSPZeOB5ORFMTrrD7Fx4M/BIy6z8c6VvCNJhO522t1R3PopIoVMqbYp/AhrnxWpC169IxqOuv4tlyuzs2h6WBOzHAgp9/dozOl2daHi/8BRKSO/RsK37Xww0D1GXEvkejVaAp+Z6OMDPTQ3V1pje1/nfogAHD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QcMvEtJx; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=PtDBZaag8M6aowIuU4mZ+U5GtyX1zdU34cIS3yMXJIuy6EiiJjvtqmMTB3nX5wvnfeUfMGXIUyODHXmzeZDwCSWG3CM8pGD8RufygH4Xcbj95FmZ9Md07l7b9+ojK+896ERLL0mUvv/0Kuvqndv1rqoZx5z1o1CZMM71IqOwDtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hlbsqdDY; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QcMvEtJx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D5011F000C4;
-	Wed, 14 Oct 2026 23:44:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792021490;
-	bh=xwEMDdQ5390h8jFpcnvdtF9Q8xygdupduQZ85MMzDhs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=QcMvEtJxSceJ9dht4Im1wSwg1qBmNBlh4NY7B7IHIsSJ+taVS/b+bJ83l27mO9qkI
-	 ANNM0w5bMLmOjdkO4uMwYPgz+LSYlpKKexaK5HpOsMxI6psSbPbd7V6RSfDHcc7pPD
-	 Uj5R4DNb6IrMRSYNQbOv71WU8ZsNpI1dQw+xnEv/8lNMO8YLkjBgDLW3o8xdhQkeF6
-	 ++JRBQqi1egnr/oooLksHexWqSzeDJFFCH5OGIuK40hoHz6u/GJtKEBiF8a+0tKgfY
-	 nu4Ok3vozy6MjCnO+4VMDCIPVIP4qmI0endFbvXXzDZASJaq5D1rZPSIPzE0TjWF8C
-	 24jI96Tmcz5Pg==
-Date: Wed, 14 Oct 2026 16:44:45 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Ian Rogers <irogers@google.com>,
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hlbsqdDY"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792027568; x=1823563568;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=aARRQkKeZqCI8RoUsnyZ/pmuEQMAh/Nvzrz6WlyENj0=;
+  b=hlbsqdDYy6x7cZhKfbCt1j3NsuBGMUt1ELOALhVsYfgBT0/K2KamhtRw
+   WfB5DSn6GwwntVixs7FzIF4HnCau9H6yro8G9Cb7C+7xj+oCxkXfE/KjY
+   Dq8X1Jtd9ASXKdpgQ/0xL8j6b48JFG71xH6bGWQyhY4La91h7IYraN7hN
+   PWO2zxCpQok18zjxTHmZMjJ+Y/3tHT+zMvaHiToyLLXwhPANSI3xuBgwY
+   bvLzaBwMS46tyqbBOeE6HD3Jnv/1ATMl6wmf3Uw2ysA4V2le7WRPVWEN9
+   Ut16OO4mAMDsIiKM2gvzq06zli9dcO1e2Nv4HqarAVdv+SIxXDI4JgPXk
+   g==;
+X-CSE-ConnectionGUID: xKM1xjccQD+4hauWRzgvHQ==
+X-CSE-MsgGUID: 6R4nRfXdTjW5ILxlwmtmcg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="694768"
+X-IronPort-AV: E=Sophos;i="6.27,158,1787036400"; 
+   d="scan'208";a="694768"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 18:26:07 -0700
+X-CSE-ConnectionGUID: sBsw+8WWRdeSx+jswklIyw==
+X-CSE-MsgGUID: 4P0rxJFlQ9qBS2jErxIH1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,158,1787036400"; 
+   d="scan'208";a="1536954"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 14 Oct 2026 18:26:04 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xHAEL-00000000FUN-1kv7;
+	Thu, 15 Oct 2026 01:26:01 +0000
+Date: Thu, 15 Oct 2026 09:25:36 +0800
+From: kernel test robot <lkp@intel.com>
+To: Adrian Ambrozewicz <aambrozewicz@nvidia.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
-	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	llvm@lists.linux.dev, linux-doc@vger.kernel.org,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Donald Shannon <donalds@nvidia.com>,
+	Nathan Chancellor <nathan@kernel.org>,
 	Nick Desaulniers <ndesaulniers@google.com>,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] Compiler Attributes: Add
- __require_explicit_initialization macro
-Message-ID: <20261014234445.GA182939@ax162>
-References: <20261014225811.i.852-kees@kernel.org>
- <20261014225818.3457479-1-kees@kernel.org>
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Johan Hovold <johan@kernel.org>, Oliver Neukum <oneukum@suse.com>
+Subject: Re: [PATCH 10/11] tty: Add NVIDIA LSTP UART driver
+Message-ID: <202610150927.WhzTb6WS-lkp@intel.com>
+References: <20261012-lstp-usb-adapter-v1-10-aambrozewicz@nvidia.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
@@ -53,37 +72,80 @@ List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20261014225818.3457479-1-kees@kernel.org>
+In-Reply-To: <20261012-lstp-usb-adapter-v1-10-aambrozewicz@nvidia.com>
 
-On Wed, Oct 14, 2026 at 03:58:15PM -0700, Kees Cook wrote:
-> From: Ian Rogers <irogers@google.com>
-> 
-> Clang supports the 'require_explicit_initialization' attribute on struct
-> fields to indicate that a field must be initialized explicitly by the
-> user when the object is constructed. When an aggregate initializer or
-> uninitialized variable omits an annotated field, Clang emits a
-> -Wuninitialized-explicit-init warning (enabled by default).
-> 
-> Add the __require_explicit_initialization macro to
-> include/linux/compiler_attributes.h (which is included by
-> include/linux/compiler_types.h and include/linux/compiler.h) so kernel
-> structs with error-prone initialization (such as mandatory callbacks or
-> cleanup handlers) can enforce explicit initialization at compile time,
-> as discussed at the Linux Plumbers Conference.
-> 
-> Also teach Sphinx (Documentation/conf.py), kernel-doc
-> (tools/lib/python/kdoc/xforms_lists.py), and checkpatch.pl about the new
-> attribute macro.
-> 
-> Link: https://lpc.events/event/20/contributions/2392/
-> Assisted-by: Antigravity:gemini-3.1-pro
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-> Signed-off-by: Kees Cook <kees@kernel.org>
+Hi Adrian,
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+kernel test robot noticed the following build errors:
 
--- 
-Cheers,
-Nathan
+[auto build test ERROR on bbf6b99a57b2479bf51c3c8ad0946f4b8c33ed69]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Adrian-Ambrozewicz/dt-bindings-gpio-Add-NVIDIA-LSTP-GPIO/20261012-203559
+base:   bbf6b99a57b2479bf51c3c8ad0946f4b8c33ed69
+patch link:    https://lore.kernel.org/r/20261012-lstp-usb-adapter-v1-10-aambrozewicz%40nvidia.com
+patch subject: [PATCH 10/11] tty: Add NVIDIA LSTP UART driver
+config: sparc64-allmodconfig (https://download.01.org/0day-ci/archive/20261015/202610150927.WhzTb6WS-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261015/202610150927.WhzTb6WS-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610150927.WhzTb6WS-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/tty/lstp_tty.c:167:60: error: use of undeclared identifier 'B2500000'
+     167 |                 { 1500000, B1500000 }, { 2000000, B2000000 }, { 2500000, B2500000 },
+         |                                                                          ^
+>> drivers/tty/lstp_tty.c:168:14: error: use of undeclared identifier 'B3000000'
+     168 |                 { 3000000, B3000000 }, { 3500000, B3500000 }, { 4000000, B4000000 },
+         |                            ^
+>> drivers/tty/lstp_tty.c:168:37: error: use of undeclared identifier 'B3500000'
+     168 |                 { 3000000, B3000000 }, { 3500000, B3500000 }, { 4000000, B4000000 },
+         |                                                   ^
+>> drivers/tty/lstp_tty.c:168:60: error: use of undeclared identifier 'B4000000'
+     168 |                 { 3000000, B3000000 }, { 3500000, B3500000 }, { 4000000, B4000000 },
+         |                                                                          ^
+>> drivers/tty/lstp_tty.c:171:25: error: invalid application of 'sizeof' to an incomplete type 'const struct (unnamed struct at drivers/tty/lstp_tty.c:155:15)[]'
+     171 |         for (size_t i = 0; i < ARRAY_SIZE(map); i++)
+         |                                ^~~~~~~~~~~~~~~
+   include/linux/array_size.h:11:32: note: expanded from macro 'ARRAY_SIZE'
+      11 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]) + __must_be_array(arr))
+         |                                ^~~~~
+   5 errors generated.
+
+
+vim +/B2500000 +167 drivers/tty/lstp_tty.c
+
+   151	
+   152	/* clang-format off */
+   153	static speed_t lstp_baud_to_speed(u32 baud)
+   154	{
+   155		static const struct {
+   156			u32     baud;
+   157			speed_t speed;
+   158		} map[] = {
+   159			{      50, B50      }, {      75, B75      }, {     110, B110     },
+   160			{     134, B134     }, {     150, B150     }, {     200, B200     },
+   161			{     300, B300     }, {     600, B600     }, {    1200, B1200    },
+   162			{    1800, B1800    }, {    2400, B2400    }, {    4800, B4800    },
+   163			{    9600, B9600    }, {   19200, B19200   }, {   38400, B38400   },
+   164			{   57600, B57600   }, {  115200, B115200  }, {  230400, B230400  },
+   165			{  460800, B460800  }, {  500000, B500000  }, {  576000, B576000  },
+   166			{  921600, B921600  }, { 1000000, B1000000 }, { 1152000, B1152000 },
+ > 167			{ 1500000, B1500000 }, { 2000000, B2000000 }, { 2500000, B2500000 },
+ > 168			{ 3000000, B3000000 }, { 3500000, B3500000 }, { 4000000, B4000000 },
+   169		};
+   170	
+ > 171		for (size_t i = 0; i < ARRAY_SIZE(map); i++)
+   172			if (map[i].baud == baud)
+   173				return map[i].speed;
+   174	
+   175		return B0;
+   176	}
+   177	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
