@@ -1,270 +1,119 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC29C52941C
-	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 16:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792082525; cv=none; b=anekS9VGQjR0KcG1npKMKllQnx37EZP3s9QVWPeUtKvSpJw3tH5SQGXwlKoi3+1xtruqrwSsQJ93mYkEiTzGTdoo/5YTrgzRcPEiVa0MbpW0NsGwaSyCercaqStlZOErcuEIhp8B25DARlEsvbwvFYvP0q636LmJ/sib+V6gBpE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792082525; c=relaxed/simple;
-	bh=odYsqb6qlvwr9ql2stmc54Jy9XrBQEgexBY+u0gq+rY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PqTV7XF8r9vT/KVr9CKCz34PX81FxlOfYkhMZyNerO0LaIoLUVTG6fqtsjf8EKFEeT5O6EuNf/L7DOnmWkHzbBmdAJV6HhLW3fEjVuzb7iHBGvChW1oDLW0DOqZYy3M5kq/0NtjZHI+9hCQMq6uCaNkuzms493SfZaSjV6Omsds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nNZ9x2Jp; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA933B3880
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 17:12:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792084374; cv=pass; b=ry0fzSS1tCotlWwNjfsM624CjXF5R099AldPKT5YrCUjjwf3y9DV58dalo6eQZ2YRiXmUnx0Lk1InW9Y1e0ATe8xdNbCvmB+tMh/mpCR840/urzRL2gFXBjBwWtNtpsV2RLsf8c6NpJVVwJ3yvFFDwBIegAKRc2FFRFrlf09CSE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792084374; c=relaxed/simple;
+	bh=nD4KsEaXnEP1yIinbRyVG2yxCHKl9vThb6+0s0ZuEkc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QpwNh80W92NdYHer/fnpKnqWZWLNXLwDGzPUPMhRMuN6Q3tEPjdpc6FZfPZSFI3yWWEBcvXJwxnM7v/pRI4NEBLqIIeH5I9Rpjp7ndIEZA2JJXDXtpiF4Y5PZagmdLa/BtpMwvx6/ZeZ8nL5yRgAUtkSzNdPlrPUvEd3wTiNvbc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=citD7WFA; arc=pass smtp.client-ip=209.85.208.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nNZ9x2Jp"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2e5fb79ce82so31803265ad.0
-        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 09:41:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="citD7WFA"
+Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-3a913a6ceb5so8807411fa.0
+        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 10:12:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792084354; cv=none;
+        d=google.com; s=arc-20260327;
+        b=YlWU+EfWG8dGHBPXweA+L+jLwjkPHFrdovmsn8rfYXdg5S6V3onpFno6oDHjUggoDS
+         QZ2h5c6bjntsc1zFZoZUOYAo2dCMdTyoJewl/QozK55qKgeV1CdxcJyXUjHOkR+J9sNR
+         QRv0C0a08n4rH7CxMARPw5PASxHWnRz5OKrdac4E59X4rKZkij0qTyriTqU/lJlUqcd5
+         sHS2E/Y3Xg7pgzwH0ih/3TJHoQVnub23n33UmWR2XAACd1cOfDhi8T9MfDK1m+q90FpQ
+         65SZCY+z1NxcM19/O56UmeLZlTdQnfvNeo79RlNEVFh7lyj1TvNPhu9CJ4usc4M3k5Rl
+         JhkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=nD4KsEaXnEP1yIinbRyVG2yxCHKl9vThb6+0s0ZuEkc=;
+        fh=+osfa/ezuuSfuuZMXmgz8ac8SZN09C5wygH0v9KJtT4=;
+        b=pXY271HzDnBITGs4uYQOu4dn65Ae0SAaMrxAQTehgDHMBvY4wDzlwpuPT89akcWaVn
+         Gd1z8Z+52foaAcS/84U7pEkRSYkmaP7znfX+gnBUmIpvSm6afcuADTq7VlXUel/bm02+
+         FHvmSufoqjWesA35Qh6667UVra3aIuz/phLebUrsOoRhKwoV0MUgOb+CQm1qxwIvTkQS
+         RQzS9V0r2bghq8NK0I1Nr/Fe/hBCOZYRy+4EPcwqTyebzO81T+8ep9gmetRTW8luDkVY
+         FA0ja7VgPx2MC12gJ1e9fFDwBrVBS9f0GgkeflRWmdA5PYAFM6IbACNJL/wIfJ7kCCPU
+         w4zA==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1792082514; x=1792687314; darn=lists.linux.dev;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=y81tg7aS+OL7WL9uwzHmpXBtWhblGVNn9iU+ZHCLidI=;
-        b=nNZ9x2JpBHetToBDTTmSFt5z57N+NYq+CwIWCBa1ofiF2AaI0QYaM4kWY0qsLJk3uR
-         fjt/gXEZy04LUayW8xFuB7OvBMpJ9IQfXW0NWjqWs8NAkXR1DAMBeAu+XFIKNhWn01kR
-         /GrvLyZH/bT5sSH5GvZew9z0z0gsiBmeXX/150edzDUqmbEaISjnBOKHZMHWGIkIMf+3
-         xdNbh0jd6k8F/tT4CM02wyM79cm0FEvXVp7sJY1CvVbkrDoWJt8K8DNF2bTueTONY8D/
-         60X5c04Zx0o7Woa0gwnLqncPXN6jGYsLmJzx7c+H8KUqBRVJD5VT/myRufMe+dCP/chK
-         R4Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20260707; t=1792082514; x=1792687314;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1792084354; x=1792689154; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=y81tg7aS+OL7WL9uwzHmpXBtWhblGVNn9iU+ZHCLidI=;
-        b=X2sg9vpAsZY5nVp/oUNw7k1lmynpsIW0J/8MwPftkA5qTsRmHR4cURs4ECUycklr0M
-         hDc01qGqv6XgU/zvWP9KFjOdlDiDWTfMk3+4id4vmTb/OD0u0TnzXB84IDyrGUJnlFVl
-         MU9gkQfAQyPFApF1dae6D2bIZJR2p+HfvHgIuZ1bzaPcu8n1bvKw4RbfNRLX4hf4yem1
-         juI1tkCLhCN2jLjnqXwnxaI+Z9qD4GZjS7Bj1jLoVu8wCKkcACl7xyhZCJ8evSb6Dzwx
-         7ywIzhf7Xb4t10ZfwThGzUef7X/umGpEMB3795UwD/ormxWNKbkj+wNBH2RCj1IryzOD
-         N97w==
-X-Forwarded-Encrypted: i=1; AKwUvBzAvkTI6zcUvnnIfZ/6BkSHsXZa8sQeQ0OpzteyxjBEvmkduyyXb7ZnrthF19t+/by2VSf9@lists.linux.dev
-X-Gm-Message-State: AFq9FYI1BJufqiCvZTp1StXbXmH8IUNVI2+nVShEeEi2whYG0pyGYvl3
-	4jykxjUGpqSFc4YAXGxTksxdHkPeXkpRt3ju1baLIEY1eR7BE6LfLVmR
-X-Gm-Gg: AYBFou2s5kI9ZOjqnuKmNiO4tzHHAV6n9yfgme9npTdHnveylnF5MKdG2KUvrqne7o7
-	Ax22AlQtc7ntELJlqwhnoD2xnB6zl9xdlmNJaAj8hTnQhxIqRvBhpoGj+5a9Dch8oeUZaZ5+FEb
-	7eW+eef6A0NxV9hnpQQAY4NVGUpQuPkJUNE2HcZpK2dFCiyR580cGu0Yj6dn8bKZU0uVEf1K997
-	ofTgpfTUZtItgJprqolak9vCMRT5X2GbpWAIJYNAZ02NqAqyo7wRiV2gUti2J7cB+EmDe0Gn+pp
-	NtjEGP3JiFWzJZDsonmXFgIEVjnJTyRS5i31dtORheAFuyCMSERoTgzJWSOi2TYQ0Wu5lTI4FDh
-	XrKdleI6gQ29G3pbSdIlIkG27h0D8FPInMcmWcAvRP2ED2NPZmLcUls44nHBU1jtz2p9eo/V8t2
-	ErzUDMsvLE5LQ7u2TSP4aW0pCcFrxa/CWGfZrnCABoU9q9VcJSJ7bz9dDUSZasG4uyEnI=
-X-Received: by 2002:a17:903:38cd:b0:2e9:660a:793a with SMTP id d9443c01a7336-2e9660a7b0bmr21795855ad.36.1792082514044;
-        Thu, 15 Oct 2026 09:41:54 -0700 (PDT)
-Received: from localhost ([111.228.63.84])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2e95cf92dfesm11245915ad.11.2026.10.15.09.41.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Oct 2026 09:41:53 -0700 (PDT)
-From: Cen Zhang <zzzccc427@gmail.com>
-To: marcel@holtmann.org,
-	luiz.dentz@gmail.com,
-	nathan@kernel.org,
-	ndesaulniers@google.com,
-	morbo@google.com,
-	justinstitt@google.com,
-	johan.hedberg@nokia.com,
-	padovan@profusion.mobi
-Cc: linux-bluetooth@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	baijiaju1990@gmail.com,
-	jjzuming@gmail.com,
-	zzzccc427@gmail.com,
-	lkp@intel.com
-Subject: [PATCH v2] Bluetooth: MGMT: Serialize power-on with power-off completion
-Date: Fri, 16 Oct 2026 00:41:46 +0800
-Message-Id: <pm-bluetooth-objects-candidate-0063-v11-a70581b6877e5fe118a3@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=nD4KsEaXnEP1yIinbRyVG2yxCHKl9vThb6+0s0ZuEkc=;
+        b=citD7WFAyqXcoBML29428rVoq524I46FBB9LtkaJWvlGVU07rnRnpoUYhp3D6aTOnx
+         ZFWqEqhf9jtc0oHjC6tZnC/l34Zqs0mZA/ay5VMxoHAqvHGwbp55XrabPZ5BEIWsz8p1
+         BspfXbPfpkCLty2BkgPEle+tWaW0iMMNJ/vntv0/wDNyZVVkxmCjBEFkc6wJKyKkZ5wm
+         q2zPGi2o6o5ql7dc+QvCvDhd15qyrU+g1CVz1+tzijzxF8ER1WMYxQrhHO7GFt2p3m0X
+         mQtg4metaEyd3k+Q7VyuHP7tJIk8jFVMtJfQb58GrcANCF7D7A2ez5mJD2dweO/YISdX
+         qGVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792084354; x=1792689154;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nD4KsEaXnEP1yIinbRyVG2yxCHKl9vThb6+0s0ZuEkc=;
+        b=fIEfO4Id2jpjCFpBG+/yFGRwDosxCW+5Np3YAYSooSC96qoq3oH5qJ7Y8fh5skUHNQ
+         cts2uhj7qtDWtkdHmu/AhkrMIeveRDZenqN8nCEQhagPlUQ8tVowOmxzdDsy0eqEWY17
+         lsHSfkiyIcAM6UI9U/youwU25FgfdOTJubaEBYqEpCNV+na8w7+MDxDmt+F+5/17Kfum
+         TujBHEhZGg44iJKoJueyipMzl2Sg2JDFqsnanyGss5Zy78bLpEJNz1Ub/KuhtQUcyYZ8
+         /V34QL527tFWSoGj0ClMhGRlMRwljgNfQv9blMXpI1BZyyh1dRG7s7o+VLPw5wPN4yjw
+         ghFA==
+X-Gm-Message-State: AFq9FYKGn2eoOP0HXij8sJBuJgZp1E0svQHkrIjOh8Crj+8Ibwu8qya/
+	bSKiQfGPb0R2HDlO1u9zb2T+sMJzUw4NFGy2ueqkHCKKI4qqj2dKcftmkotrndIb/FdEM08oxX6
+	1NVyOS20jpVG3arKFSDbIx/LW6B08nRWrt0I+
+X-Gm-Gg: AYBFou3UvhHddJ+tyoPVpgAK9IGxmNJnrPvmwV3O3Oi0FeqZixVt65uMZaAZ7e8hm9f
+	MmOzNryTGHC8RXXiCUZjwDRavpZKYJtPfFd9rtrXkkiA6fmqZf1sOBziadAqO64+l0F6YbKGwit
+	Tu2cjtWuAYnWkb/TrvkOhinmPIrZtzaRVH8W1BTslI8UkmX9B07QbPewopivNcjRgxmnPa2Y0Qx
+	un2x0XcqabwnKqoH+mk4vQxkX6tzg0NXyaPooooavVQ4tzjUf1y6X74X28voaiT4CX+1LZecJhj
+	g0hUj7He/QSvcIK8+4IPdlkfD8dnQgA2wmwhc6kMeV2Byog/vn+XmlkVKt+mu1AlgERYmXh13oD
+	unO/FbZkskt1PHJV7hxuII+9l3ybL+phJJJGx3Jvs3FVLJ/0JkSG8k+LuEwfP+XZyGt4+tfQpFA
+	+xaj3itp1epkNEHiN0p58V5laRWcInHkoZhMaU+j/hDgGvj1p3P/o=
+X-Received: by 2002:a05:6512:6882:10b0:5bc:e27a:5f91 with SMTP id
+ 2adb3069b0e04-5bce27a618amr4033303e87.5.1792084354377; Thu, 15 Oct 2026
+ 10:12:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20261014232030.GA3382959@ax162>
+In-Reply-To: <20261014232030.GA3382959@ax162>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 15 Oct 2026 19:12:19 +0200
+X-Gm-Features: AclHuK-rFLQqM9_y82j8Ip7FLTl4UEhuh7F41F3OQw90CnQLbJzYm_7TdNUyycs
+Message-ID: <CANiq72m14wLrcr5rfN2SADH+D6oQDp1o6R=d_NNkPkarS--ZGw@mail.gmail.com>
+Subject: Re: Prebuilt LLVM 23.1.2 and 23.1.3 uploaded
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: llvm@lists.linux.dev, linux-kernel@vger.kernel.org, ojeda@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-mgmt_set_powered_complete() must only consume the pending command for
-its own request. However, __mgmt_power_off() removes and frees the
-SET_POWERED command before the request's destroy callback runs, and
-mgmt_pending_valid() identifies outstanding commands only by address.
+On Thu, Oct 15, 2026 at 1:20=E2=80=AFAM Nathan Chancellor <nathan@kernel.or=
+g> wrote:
+>
+> I have built and uploaded LLVM 23.1.2 and 23.1.3 to
+> https://mirrors.edge.kernel.org/pub/tools/llvm/.
+>
+> If there are any issues found, please let us know via email or
+> https://github.com/ClangBuiltLinux/linux/issues/new, so that we have an
+> opportunity to get them fixed in main and backported before the 23.x
+> series is no longer supported.
 
-When a powered controller is switched off and another management socket
-requests power-on, the allocator can reuse the old command's address:
+It seems to work in my usual test:
 
-  Power-off request worker          Power-on management handler
-  ------------------------          ---------------------------
-  __mgmt_power_off(): free cmd
-  hci_dev_close_sync(): unlock
-  set_powered_sync(): return
-                                    set_powered(): lock hdev
-                                    allocate and link replacement
-  mgmt_pending_valid(): unlink
-    replacement at old address
-  read replacement's cp->val = 1
-  wait for hdev->lock
-                                    submit fails: remove/free cmd
-                                    unlock hdev
-  acquire hdev->lock
-  read freed cmd->opcode
+Tested-by: Miguel Ojeda <ojeda@kernel.org>
 
-The old callback can respond through and free the new command instead of
-completing its own request. If hci_cmd_sync_submit() fails to allocate
-its work entry after the callback has unlinked the replacement,
-set_powered() removes and frees it again while still holding hdev->lock.
-The old callback then acquires that lock and reads the freed command.
+By the way, the `rust/` folder is fixed on Rust 1.97 which uses LLVM
+22 -- not sure if we discussed it.
 
-Serialize power-on publication with the existing request mutex, which
-hci_cmd_sync_work() holds across the request function and its destroy
-callback. Hold it through submission and error cleanup so the
-replacement cannot be published before the old callback finishes.
-Acquire it before hdev->lock to preserve the worker's lock order.
-Power-off retains its existing cancellation path.
+Thanks!
 
-Put the shared command path in a helper and acquire the request mutex
-unconditionally around the power-on call. Keeping acquisition and
-release in the same control-flow path also allows Clang context analysis
-to verify balanced locking.
-
-KASAN report as below:
-
-        BUG: KASAN: slab-use-after-free in
-    mgmt_set_powered_complete+0x450/0x4d0
-    Read of size 2 at addr ffff88810921ab10 by task kworker/u17:0/500
-
-    Workqueue: hci0 hci_cmd_sync_work
-    Call Trace:
-     <TASK>
-     dump_stack_lvl+0x93/0xd0
-     print_report+0xce/0x630
-     ? mgmt_set_powered_complete+0x450/0x4d0
-     ? srso_alias_return_thunk+0x5/0xfbef5
-     ? __virt_addr_valid+0x20d/0x410
-     ? mgmt_set_powered_complete+0x450/0x4d0
-     kasan_report+0xe0/0x110
-     ? mgmt_set_powered_complete+0x450/0x4d0
-     mgmt_set_powered_complete+0x450/0x4d0
-     ? __pfx_mgmt_set_powered_complete+0x10/0x10
-     hci_cmd_sync_work+0x207/0x450
-     ? __pfx_mgmt_set_powered_complete+0x10/0x10
-     process_one_work+0x908/0x19c0
-     ? __pfx_process_one_work+0x10/0x10
-     ? srso_alias_return_thunk+0x5/0xfbef5
-     ? lock_is_held_type+0x8f/0x100
-     ? srso_alias_return_thunk+0x5/0xfbef5
-     worker_thread+0x65c/0xe40
-     ? __pfx_worker_thread+0x10/0x10
-     kthread+0x34f/0x460
-     ? srso_alias_return_thunk+0x5/0xfbef5
-     ? __pfx_kthread+0x10/0x10
-     ret_from_fork+0x659/0x940
-     ? __pfx_ret_from_fork+0x10/0x10
-     ? srso_alias_return_thunk+0x5/0xfbef5
-     ? __switch_to+0x74f/0xf80
-     ? __pfx_kthread+0x10/0x10
-     ret_from_fork_asm+0x1a/0x30
-     </TASK>
-
-    Allocated by task 531:
-     kasan_save_stack+0x33/0x60
-     kasan_save_track+0x14/0x30
-     __kasan_kmalloc+0xaa/0xb0
-     __kmalloc_cache_noprof+0x251/0x610
-     mgmt_pending_new+0x60/0x230
-     mgmt_pending_add+0x3b/0x180
-     set_powered+0x2a8/0x7e0
-     hci_sock_sendmsg+0x128b/0x22e0
-     __sys_sendto+0x425/0x470
-     __x64_sys_sendto+0xe5/0x1c0
-     do_syscall_64+0x115/0x6a0
-     entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-    Freed by task 531:
-     kasan_save_stack+0x33/0x60
-     kasan_save_track+0x14/0x30
-     kasan_save_free_info+0x3b/0x60
-     __kasan_slab_free+0x5f/0x80
-     kfree+0x307/0x580
-     set_powered+0x336/0x7e0
-     hci_sock_sendmsg+0x128b/0x22e0
-     __sys_sendto+0x425/0x470
-     __x64_sys_sendto+0xe5/0x1c0
-     do_syscall_64+0x115/0x6a0
-     entry_SYSCALL_64_after_hwframe+0x77/0x7f
-    ==================================================================
-
-Fixes: eec8d2bcc841 ("Bluetooth: Add support for set_powered management command")
-Assisted-by: LLM
-Signed-off-by: Cen Zhang <zzzccc427@gmail.com>
----
-Changes in v2:
-- Move the common set_powered command path into a helper and acquire
-  req_lock in the explicit power-on branch, fixing Clang context-analysis
-  errors.
-- Preserve req_lock -> hdev->lock ordering and keep power-off cancellation
-  outside req_lock.
-- Rebase onto current bluetooth-next.
-
-Link to v1: https://lore.kernel.org/r/pm-bluetooth-objects-candidate-0063-v7-35a6680c94a332fea155@gmail.com
-
-diff --git a/net/bluetooth/mgmt.c b/net/bluetooth/mgmt.c
-index 3b9c82bd2f027..90686ebec2399 100644
---- a/net/bluetooth/mgmt.c
-+++ b/net/bluetooth/mgmt.c
-@@ -1395,19 +1395,13 @@ static int set_powered_sync(struct hci_dev *hdev, void *data)
- 	return hci_set_powered_sync(hdev, cp.val);
- }
- 
--static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
--		       u16 len)
-+static int __set_powered(struct sock *sk, struct hci_dev *hdev,
-+			 void *data, u16 len)
- {
- 	struct mgmt_mode *cp = data;
- 	struct mgmt_pending_cmd *cmd;
- 	int err;
- 
--	bt_dev_dbg(hdev, "sock %p", sk);
--
--	if (cp->val != 0x00 && cp->val != 0x01)
--		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_POWERED,
--				       MGMT_STATUS_INVALID_PARAMS);
--
- 	hci_dev_lock(hdev);
- 
- 	if (!cp->val) {
-@@ -1454,6 +1448,32 @@ static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
- 	return err;
- }
- 
-+static int set_powered(struct sock *sk, struct hci_dev *hdev, void *data,
-+		       u16 len)
-+{
-+	struct mgmt_mode *cp = data;
-+	int err;
-+
-+	bt_dev_dbg(hdev, "sock %p", sk);
-+
-+	if (cp->val != 0x00 && cp->val != 0x01)
-+		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_SET_POWERED,
-+				       MGMT_STATUS_INVALID_PARAMS);
-+
-+	if (!cp->val)
-+		return __set_powered(sk, hdev, data, len);
-+
-+	/*
-+	 * Wait for the previous power-off completion before publishing a
-+	 * new command that could reuse its freed pending-command address.
-+	 */
-+	hci_req_sync_lock(hdev);
-+	err = __set_powered(sk, hdev, data, len);
-+	hci_req_sync_unlock(hdev);
-+
-+	return err;
-+}
-+
- int mgmt_new_settings(struct hci_dev *hdev)
- {
- 	return new_settings(hdev, NULL);
+Cheers,
+Miguel
