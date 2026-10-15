@@ -1,141 +1,120 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780AA53E310;
-	Thu, 15 Oct 2026 14:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662A94C6531
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 14:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792074584; cv=none; b=SWOPbWOflovb4tfTSHZKKq7YxHkBQt0UqCqrQtt9epaYjMuEnx83okM1nwFnG4UDHcLSDUu+Keax/ZvyEuGNuwPQ0dU0K/amHSWc2uaOmmA3RzedzTj1GrCEgiFNdHj2olxluphFHBNpALa4f+w7EqIwZBG6bRNUZuzfiIPUgss=
+	t=1792076240; cv=none; b=uomTgtOexT2I8IATsfZaZRjhnpwmlxMEh/MU7nKbdJez7Gj+0p4O5Af+vohKxLzhk7zwV7XTGYcSAZ0BdwDzfc/Tj+lmqtuVp+UEiNYxhimj+S2Zs82qDxm52Db36jZhvG8D3lrfl6T5ctKvgQ9tNPpYHO2GHr/CN7Jso0u7Z6c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792074584; c=relaxed/simple;
-	bh=Ux8bYPBf+tPZGPkVOGqIDc2hrCy5YoJwGkED1by+PtM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H6oTtO0YLoSwT+EMWaOEu7PfQCpBrawiQw3neS4DR6TGWfm9ZMnhbCNXVsnjqZvdigIpW94IMg0C3bNkGHabucLTdq+3bcWLxGR2NWAInyLaWVpTIhiMUPj83W6B/T7xA9TSfcEWB0i9wdQuG+VqtDesHutk/MrrqnwRiXdhfs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TQPuBZDW; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1792076240; c=relaxed/simple;
+	bh=8E8Fes01P0FnMokny4ycUlekwWtVOnV9rLiH+P2xHXs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lejjz0GDliR1Ewi4H4+rvw6yD05KWHcAcF7rQ2eIq07lXYhauwb0grLb1DG55zD5PNhoC7nutY00XLWabqcmHznZ1mRw7TYcqVeWHDZv+ua5iQ4bSfIqmUhmhXpXZ1ctFLGgbs5qSdupMAKa60lW5YqUcrmC7vsjBGmYTU5PmPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UUqvguUE; arc=none smtp.client-ip=209.85.160.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TQPuBZDW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792074583; x=1823610583;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ux8bYPBf+tPZGPkVOGqIDc2hrCy5YoJwGkED1by+PtM=;
-  b=TQPuBZDWL8H2aVaMztnh2BbmNs5RRZY2/525KUrhr5VEv7mzRcNAUxlA
-   GPT7aVoXkpLcs4pWb9bTQGEu9Yi17Fbj4aogZgq4KJA6AQGZ1qB0IrUcC
-   xt1TPLEtVNXuUQNiwaPg0RwLrI9JvzU7hGiykXEo+DP/v/NJkDq+NDBiU
-   BR7CaHCvsCW5U8Sgd/HQwbfZgFKpNy8L1uUVbTNQUYT3+YWP4M/8MPczt
-   Z0lDlNYEXGKcyWQXD+LOR9Rsq2SpvmZwj0mp/5/168f9PKPFwldVzFUvj
-   Ar1VSgZJeM4C1QRePI8uOjH1npJqCMgabwUtD/itMr5JcGFjccGJ3hcpS
-   A==;
-X-CSE-ConnectionGUID: WP5RQwEaQveKfiRtq/2LYw==
-X-CSE-MsgGUID: Gq3fqCsbQPaVlHZoIO/w0g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="877384"
-X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
-   d="scan'208";a="877384"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 07:29:40 -0700
-X-CSE-ConnectionGUID: 57vUb34KTa2iHrVIj9ofiA==
-X-CSE-MsgGUID: oKxPacBOQyOt9AEtHla1/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,160,1787036400"; 
-   d="scan'208";a="1617076"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa005.jf.intel.com with ESMTP; 15 Oct 2026 07:29:37 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xHMSc-00000000GeO-2Uqv;
-	Thu, 15 Oct 2026 14:29:34 +0000
-Date: Thu, 15 Oct 2026 22:29:09 +0800
-From: kernel test robot <lkp@intel.com>
-To: Navid Ghahremani <ghahramani.navid@gmail.com>,
-	linux-arm-kernel@lists.infradead.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, arnd@arndb.de,
-	stefandoesinger@gmail.com, krzk@kernel.org,
-	Navid Ghahremani <ghahramani.navid@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Subject: Re: [PATCH v2 20/24] spi: zx: Add ZTE ZX family SPI flash controller
- driver
-Message-ID: <202610152215.xgWnk9aT-lkp@intel.com>
-References: <20261014072109.1759502-21-ghahramani.navid@gmail.com>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UUqvguUE"
+Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-5350c1b9e0dso18299891cf.0
+        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 07:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1792076235; x=1792681035; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=mdMD7NIIHUonWBQ7tMxlfEgdY/tQZaBr/YCC0/JY/pM=;
+        b=UUqvguUEjpcZhSRUNOx6njOEx6d2AyxDOjNhMvz0pZQGjPyQbG/w763IqaWI4Z/J8S
+         cOX1kxC2rGX7aNaikqaowiWS97njZpBZ7AKeQFkvfTDlzsitVERq4zUTCYXSRs3o4x9d
+         C35rFyulAkiiBsM+823IreUP9TzvchZoAgAbc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792076235; x=1792681035;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=mdMD7NIIHUonWBQ7tMxlfEgdY/tQZaBr/YCC0/JY/pM=;
+        b=kRLedjHf73S+xmKOmjgTOlPQ9f6kTiW0IPlq8bYPM+6AcZpwaeIytJCahGFgp7DqfV
+         KXFnYb8Ji4Mc59GzAP92vvm1r/O8D/3p8eqqlLry8O6r+34bBKDh/+Di/iwpZIAtZffe
+         ZiJVwDqYo5OrVeNc99lRi+/+bXwIpSlRIIuPc48KOl9adAFd8IEul5rNd1vwQnmqHxMS
+         qHmDxlsMuczml/0qe/W+NUmzXL9NyO0JP7iFXi+F9gipQols7st47/zicbxsGwzPB0hx
+         p38ePlWh7Bc+oToep/zRmtg+jHcNXGRAc2XT2sH+w4HzMW8y9QPBMf2vE8nWbT/WEBFE
+         EbMA==
+X-Forwarded-Encrypted: i=1; AKwUvByw78P+lYoftiCYDcvEkIiCs2nmerzeL54tyQ8TRemdevuCZ+MOJiCXB2h1NnadL3GCghJV@lists.linux.dev
+X-Gm-Message-State: AFq9FYIEIgFJNVac837Tbb5dIC6+eboBKsUUBG/vgm0mOuFw/u6VRC2+
+	O3SqPq3/ylopuO2sCdylhRf0Dym9h62ezOrW3+3H8bGajQaY3E2l2d/mu64eTk8yCxw=
+X-Gm-Gg: AYBFou0TFHoldricIqS3wzy4lJ9r+qo7pF/X7cuidYTOVYdtyJHt/zZhIRfJ681SvGJ
+	otG9ngofkAR7yQsN3vTJ8oOGnO059bSsJqUCS/GVDZCgu1JAZ1XR5kR9sw1SWLnDgR/2iprhkwz
+	lhI+en6BzuikLEWoKd985veCTz1lfFxWKePREfrYoHC2qj1BMmMYMr+3229t0+ERovKyZooDHsA
+	b2ZHh5i1b/NPTiv+Lk75gEKJAizody+cICBp8rwcYX9YvzoHH6aFq6PFv91geFxCFU0UewETuhm
+	b+eGEae8EQXxAk6uWSJd4ikDly+vZjhPGXj56dy6A6IMSqSoKsUYJsRNUWDK+JKMsBaPbseXz65
+	XII9ouHcpBKAq0R6/gp4V1t8HVIkaFdeg2Qz8rAbIgsLeXOKfasAfyetUnzwNVSipBxynrarpdK
+	42sevhkhBhMIKJRbQdPCF5mH7FZHr6QyHYEvNepse00ztVgZFQQqX0IgKhVMAwFKB5H73wBEC7t
+	6+MME/y
+X-Received: by 2002:ac8:5f92:0:b0:535:92a6:22e7 with SMTP id d75a77b69052e-5359fb4794cmr295144001cf.42.1792076235184;
+        Thu, 15 Oct 2026 07:57:15 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-53612830ec3sm27558151cf.27.2026.10.15.07.57.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 15 Oct 2026 07:57:14 -0700 (PDT)
+Message-ID: <8aad13a4-1097-40d1-a0ed-c44ef84838b4@linuxfoundation.org>
+Date: Thu, 15 Oct 2026 08:57:10 -0600
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014072109.1759502-21-ghahramani.navid@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: kselftest_deps.sh: Support LLVM
+To: Nick Desaulniers <ndesaulniers@google.com>,
+ Mark Brown <broonie@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, Guillaume Tucker <guillaume.tucker@collabora.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20261013-kselftest-deps-llvm-v1-1-f2ee70ae1b79@kernel.org>
+ <CAKwvOdmQkYy3xqTsumSxLdHpaXnt1Hb9g++DVmAYcx=cvjFBeg@mail.gmail.com>
+ <38d31a6b-b3d0-4b15-9b24-62d2bd6f9040@sirena.org.uk>
+ <CAKwvOdnoZfE3bqNnRBTR4G805V4-iooe9YwS8ZO0ka2h9bgDQg@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CAKwvOdnoZfE3bqNnRBTR4G805V4-iooe9YwS8ZO0ka2h9bgDQg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Navid,
+On 10/14/26 10:42, Nick Desaulniers wrote:
+> On Tue, Oct 13, 2026 at 3:01 PM Mark Brown <broonie@kernel.org> wrote:
+>>
+>> On Tue, Oct 13, 2026 at 02:07:28PM -0700, Nick Desaulniers wrote:
+>>> On Tue, Oct 13, 2026 at 12:40 PM Mark Brown <broonie@kernel.org> wrote:
+>>
+>>>> +       clang_target[riscv]=riscv64-linux-gnu
+>>>> +       clang_target[s390]=s390x-linux-gnu
+>>>> +       clang_target[x86]=x86_64-linux-gnu
+>>
+>>> ^ should this be either i386-linux-gnu or i686-linux-gnu, or does
+>>> `-m32` get set somewhere?
+>>
+>> Hrm, that'll just be a cut'n'paste from lib.mk which does not so far as
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/lib.mk
+> 
+>> I can see set -m32 - it sets i386-linux-gnu for _i386.  Does that need a
+>> fix too, or am I missing something with how it works?
+> 
+> Ah, no looking at
+> commit 624c60f326c6 ("selftests: fix LLVM build for i386 and x86_64")
+> 
+> it looks like selftests have i386, x86, and x86_64 where x86 is x86_64
+> IIUC.  I see you also have a distinct i386 target.  My bad.
+> 
+> Acked-by: Nick Desaulniers <ndesaulniers@google.com>
 
-kernel test robot noticed the following build warnings:
+Thank you. Applied kselftest next for 7.4-rc1
 
-[auto build test WARNING on robh/for-next]
-[also build test WARNING on soc/for-next linus/master v7.3-rc7]
-[cannot apply to clk/clk-next next-20261012]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+thanks,
+-- Shuah
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Navid-Ghahremani/dt-bindings-arm-Add-ZTE-ZX279128S-platform-descriptions/20261014-082042
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20261014072109.1759502-21-ghahramani.navid%40gmail.com
-patch subject: [PATCH v2 20/24] spi: zx: Add ZTE ZX family SPI flash controller driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20261015/202610152215.xgWnk9aT-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-rustc: rustc 1.96.0 (ac68faa20 2026-05-25)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261015/202610152215.xgWnk9aT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610152215.xgWnk9aT-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/spi/spi-zx.c:473:4: warning: cast to smaller integer type 'unsigned int' from 'struct zx_qspi *' [-Wpointer-to-int-cast]
-     473 |                         (unsigned int)qspi);
-         |                         ^~~~~~~~~~~~~~~~~~
-   include/linux/dev_printk.h:165:39: note: expanded from macro 'dev_dbg'
-     165 |         dynamic_dev_dbg(dev, dev_fmt(fmt), ##__VA_ARGS__)
-         |                                              ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:285:19: note: expanded from macro 'dynamic_dev_dbg'
-     285 |                            dev, fmt, ##__VA_ARGS__)
-         |                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:261:59: note: expanded from macro '_dynamic_func_call'
-     261 |         _dynamic_func_call_cls(_DPRINTK_CLASS_DFLT, fmt, func, ##__VA_ARGS__)
-         |                                                                  ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:259:65: note: expanded from macro '_dynamic_func_call_cls'
-     259 |         __dynamic_func_call_cls(__UNIQUE_ID(ddebug), cls, fmt, func, ##__VA_ARGS__)
-         |                                                                        ^~~~~~~~~~~
-   include/linux/dynamic_debug.h:231:15: note: expanded from macro '__dynamic_func_call_cls'
-     231 |                 func(&id, ##__VA_ARGS__);                       \
-         |                             ^~~~~~~~~~~
->> drivers/spi/spi-zx.c:706:17: warning: implicit conversion from 'unsigned long' to 'unsigned int' changes value from 18446744073709551614 to 4294967294 [-Wconstant-conversion]
-     706 |         writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
-         |         ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/x86/include/asm/io.h:88:39: note: expanded from macro 'writel_relaxed'
-      88 | #define writel_relaxed(v, a) __writel(v, a)
-         |                              ~~~~~~~~ ^
-   2 warnings generated.
-
-
-vim +706 drivers/spi/spi-zx.c
-
-   701	
-   702	static void zx_qspi_remove(struct platform_device *pdev)
-   703	{
-   704		struct zx_qspi *qspi = platform_get_drvdata(pdev);
-   705	
- > 706		writel_relaxed(~ZX_QSPI_EN, qspi->io_base + ZX_QSPI_EN_REG);
-   707	}
-   708	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
