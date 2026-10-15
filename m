@@ -1,128 +1,168 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2116A38238C;
-	Thu, 15 Oct 2026 05:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1DC3E3C50
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 05:21:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792041557; cv=none; b=d2eG/dWe3PTx/ng9gy6M2FnFTxwLj9JY3pJ3QHBYdcmKDVsgnasqSjZqavwG3yjNX+BysImuQ2A1NcoT8JirZErTfLLT+SgjAQl2udWS3LqqkkiZ5Q+kO2+jppT+BvRdzyR98WW1Oyk9l+iyRO8GIN3jUmkZPxw04Nwpib2c3YM=
+	t=1792041695; cv=none; b=kNLJ2C7npUAgbMUuxblYrtsIazeOssQayMg40p5ooz5N/+W0wuRo1X2E4n94k2h1eDXHANXWxIjKucvExlqA2hfHuhBwbK0CYV6uXmd+O2hoU4bahd/aThkNRvlrvuYbMx0k57Vdqt1ehvp/Q25Hyh1uTC/ZGZD+wTqc546iV80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792041557; c=relaxed/simple;
-	bh=FoeawiQPoWwDwsqwIARaIt2YgnZv7MYMcEPPmiNLyRo=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=M6grIeC7LeNPPHtpB/+ivg1FTC54crpXL7s4o4+o85gc5ck7wDPjwLPYmiEa0AKSWAkD0vipmJ/VkhJ9B2VTrHxm4snfOb3N5x2tueH3wiKqFLFRT7+hDncZxawtTp/qqZp08biA4/tSIzRH4vh9IvhNRWV14rgntFERS3Od4Vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fhXYbtiG; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1792041695; c=relaxed/simple;
+	bh=fT+Id2LA74s+kmxJ2r3rEYU7QJ7EFtpYf9vc/1kTxZ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lNrvToDEKvvep8PZtbISkCUqYil8KUgaslN5Cw8fER4O98dgwUjIT9c+hekQLmjeQyCDpkGqtbbii/719R/4Bcnhu2SQ5YMO38pcsF5vrTpzA7/Y1gGthdiKXBh9KFbcxiAJpF6T04EOPA9ZFVLVlp1rPphCtitAQB/zTLfNpLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=AdLcoK9d; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=sMlwvS3T; arc=none smtp.client-ip=202.12.124.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fhXYbtiG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792041557; x=1823577557;
-  h=date:from:to:cc:subject:message-id;
-  bh=FoeawiQPoWwDwsqwIARaIt2YgnZv7MYMcEPPmiNLyRo=;
-  b=fhXYbtiGk5ejlnHCSXy5aIBqixGHmjkjewqNPK5QKdzHrlQ+TvTZzZuS
-   HPILu9GeDeCubbUlHTu7WedM/ex7Ij2Wm4fUkc9eqbLHcihsTjik5bN7E
-   K9uEY3vflNCHOXH2dplrOtpXw4jECbEb10qF7StBCKcUdE6EXBpbWM6+J
-   wwKP8OTaNyospHABZ8dQoRMUB+wHCJybGG8BhMoT5Wfc7Q4lytxQJAkGc
-   ULcK4ZLwstYQdUq+/4U1dsFY3jAOVngmOZi8QPkIuKCoVRi4eUMkZfpSi
-   ABjSSRJMfsk6daV8W+x/T+8pbqu73zEBMXfHqXNGNDfaKIk3lgjgD6rf1
-   g==;
-X-CSE-ConnectionGUID: CWKQ4cqPQ8SxRKK3MgXEJg==
-X-CSE-MsgGUID: vlu5QQuZR+anrFAjoawjMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="803072"
-X-IronPort-AV: E=Sophos;i="6.27,159,1787036400"; 
-   d="scan'208";a="803072"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2026 22:19:13 -0700
-X-CSE-ConnectionGUID: l4ASfIbiQM+qQy4uWzxu9Q==
-X-CSE-MsgGUID: AgcJu14ARHehCEP70EaoQA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,159,1787036400"; 
-   d="scan'208";a="1704473"
-Received: from igk-lkp-server01.igk.intel.com (HELO d0de6c2a75a7) ([10.211.93.152])
-  by fmviesa002.fm.intel.com with ESMTP; 14 Oct 2026 22:19:12 -0700
-Received: from kbuild by d0de6c2a75a7 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xHDrx-00000000Bd9-1xzG;
-	Thu, 15 Oct 2026 05:19:09 +0000
-Date: Thu, 15 Oct 2026 07:18:54 +0200
-From: kernel test robot <lkp@intel.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
-Subject: [broonie-ci:arm64-gcs-store-gcscre0 6/6]
- arch/arm64/kernel/signal.c:753:22: error: no member named 'gcs_el0_mode' in
- 'struct thread_struct'; did you mean 'gcs_el0_locked'?
-Message-ID: <202610150747.IICDPmuf-lkp@intel.com>
-User-Agent: s-nail v14.9.25
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="AdLcoK9d";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="sMlwvS3T"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailflow.stl.internal (Postfix) with ESMTP id 3688E1300CC7
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 01:21:33 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Thu, 15 Oct 2026 01:21:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-type:content-type:date:date:from:from:in-reply-to
+	:in-reply-to:message-id:mime-version:references:reply-to:subject
+	:subject:to:to; s=fm2; t=1792041691; x=1792048891; bh=YZbXf8XMHi
+	MYDDe4CyAaIrQ1ZOnpEZtXM5Qp9HfiN1Y=; b=AdLcoK9dMpoRAJNea6yrKCITSv
+	O2qWtAhjjSLfwZggoB6ei4EBSZGSCI4iYEiS2AHlz7IWpsyURPvJxT8zr3nL/NMe
+	NlnGZVeSw1Zjg72Sjc9rDb44U8pWdqRUXH9GP501Y52wpjx0I3Q58+p0BCpQbaTM
+	wk0abjowaYYUwHWiC9fNdwUmLkn/5UqYvM599+HkrO+9gtKu7JNo06H+PcbwemxV
+	Ymg1Pyzov++NKDoujH4MPnC/mNqMyM7qiaJWWBN1eMo5GJ0OVIbIxiWPHZ/g66s2
+	xvLamBZC3/GRLU+ZZD7ejCOMk/TQFGf5XjuwdDYOAPgS0tM7mx5XlH9523NA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1792041691; x=1792048891; bh=YZbXf8XMHiMYDDe4CyAaIrQ1ZOnpEZtXM5Q
+	p9HfiN1Y=; b=sMlwvS3T1qO/lPAf1RchbwPOK9KdNVgQ4aKrkIgKErmyrFZLKhI
+	r77yCruC7m2QdzQaEvWMbI+hcDg2C1qIvw9wZwQWvgPGe8Thivhi7gyyhjbsqt1y
+	G7JuE5ZT1xULOQLxGGJy9mWvSJcRerMj2rY1BnRczYTS81THSVfssHyIxHywn+VJ
+	+SpjYfzk6kb5uQTYrH9do0KQhjhCek0OtcYU8sPKjHn2jQDF1JO3+h9E9dCn0Lj/
+	JZaW6xFzQJ7DSWYiBYaMd1oR0M47TuTvjxvzWTroliXqWgsdxqCm2g4sMCrUgRrW
+	0o10v7r557nDTTRfb6rdw1VxbGaCRMBmp/w==
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=sign d=kroah.com a=rsa-sha256;
+DKIM2-Signature: i=1; m=1; t=1792041691; d=kroah.com;
+	mf=PGdyZWdAa3JvYWguY29tPg==;
+	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
+	s=fm2:rsa-sha256:VbyBDSwkIY+hKheJu0GvtFLU698DYKP3s0kZFmU76o3yBNJ
+	TqZ3ZI2NXgVckWfx0vvUT0+VoWCON8FBKfYKyAhWCnYgCLQ8ivHzNAfpL7bextO8
+	0TwKfLkMQrD98ivlR+5W9jV+1B4Yi68uY5QVAB632F/vSEuc4+psRDH9CsIDe4r5
+	hCMDXbU92XzMTLkZ4yFGnBrK2CS8ZXZezltUy7DU0tYW39x8M9ZyjOIr8waOgHfa
+	5LJPnR5CWQAjYz3rCl84X1Vx4bax52xR86fmuR5hle1MjOQfrM86SLD6S0GvdoMZ
+	vl3HUyzsRm95rYpMahuEUsIeJMGqY5RWQ191VBA==;
+X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
+	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
+	action=mi-m=1; hc=12;
+	hn=cc,content-disposition,content-type,date,feedback-id,from,
+	in-reply-to,message-id,mime-version,references,subject,to;
+Message-Instance: m=1; h=sha256:hf9AztGCgIRnregB6E6yn/9k05lnr1mC3auL3T/Ps8g=:fT+Id2LA74s+kmxJ2r3rEYU7QJ7EFtpYf9vc/1kTxZ4=;
+X-ME-Sender: <xms:22LQaoctltF2g0XaJmXad11XIXqcrOVXElcGG3OxJQ14AnIjDAXa8A>
+    <xme:22LQarb_b3EyeprQ9rkTc_GwYRM8WB2tJKXAJLEnFINvvcnNpqHFTlvC6ReXy7t-L
+    a52OHEzZi7i0eqkAvBVxncF7kFMROHjLOPJt0tl9TO2X_UPYxc>
+X-ME-Received: <xmr:22LQap9O8GD3F5pCi_3NSxY6E62q-5uUe4McD4YCYFOMn3mRAnt5LFhs5GfgnrWSLj9W5ovfyj1fSkVLtZv6nDA8ohjs62TNWRNoumQAT8w>
+X-ME-Proxy-Cause: dmFkZTEijNWx0cSRy+etHUy1Usc70/NSIPvkJ5iC/hOONowf61UWNZoFG2yenVsGW3xUdm
+    OuOrBTQH9C1zt8QTb3VyZLYiXR8cIZ5kUyG5tijMhlA8jkk4gq5L4NjkzEdquFndv48208
+    ltG2exExMojOk2ZqCqjwN7ICcgjxGcen1H123fzvNF1WToix1u8u4TGVs+/bVbJKUAUKro
+    jVd9MhBj8QjgEd2TEUfwzegeuZHv4KugbkGtnhjkRPZtbGrQUgmiRxmHQrW5z1N6N5deHK
+    bSt21eVraH67bjTMAuWSCriT+VkletTYOl5cj1stZcI++yDd9EcLFsBDplzCkoq6Acm1R9
+    YSccsQq0p06t13unhafYhu2LvHS7xZViO29WAMoTQl4pwdwuekbxDmQDzyS8u7Hq3kwMy4
+    RxdXV6sURH0Mvk8FyOUG3EvdPmoZBb7XTud51WAo1bF2RNu1Cirly3t7FPriS7y8GKD+kf
+    Vex4zvo691tj02ZAT0qxKw+o9o4/qhVlSW9a+/K+Z0jaxkYwqwIzlUZsbs992Unt3SFWRq
+    X/ueS4JTYy15MrSOPb+2q4me3QuaRwYPJm6Tz2WR/J4u94O0nKqc7bxWvZNzqHHCBc3f9e
+    HOHEDLmGrqWBS6N73obzaSsTKeEr4Z8uFcCZMMhzNejiBO9oxyn+wesS7peA
+X-ME-Proxy: <xmx:22LQanXX0wXFRKFwqKEZ46QBqrpYELJE6O1VuzrE1ay85L1tY2ZUdQ>
+    <xmx:22LQaqdCBxFwOnkcBdBiRtFdEXr8lv5CsWgXD4YuQP0HTjX6v34l9w>
+    <xmx:22LQakVL9Xfu6e7z9cCnx1-xps3JoZnXFgNqF6FRkj7b0VhCEQqThg>
+    <xmx:22LQapVog6mxBmXINzHvRfb6IONAnAxsMncbGpvkUdzAFLvezTt4_A>
+    <xmx:22LQakLQlcWi2uU3GotSxqN0eug_7XzPWHq0GzpQmnNwQTI4ZME3YDqe>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 15 Oct 2026 01:21:30 -0400 (EDT)
+Date: Thu, 15 Oct 2026 07:21:28 +0200
+From: Greg KH <greg@kroah.com>
+To: Kees Cook <kees@kernel.org>
+Cc: Miguel Ojeda <ojeda@kernel.org>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 2/2] seq_file: Require explicit initialization of struct
+ seq_operations
+Message-ID: <2026101517-profane-opponent-4523@gregkh>
+References: <20261014225811.i.852-kees@kernel.org>
+ <20261014225818.3457479-2-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261014225818.3457479-2-kees@kernel.org>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/ci.git arm64-gcs-store-gcscre0
-head:   7f99cf9ccec2ef02e83b4cef2449ee2a931448cd
-commit: 7f99cf9ccec2ef02e83b4cef2449ee2a931448cd [6/6] arm64/gcs: Store GCSCRE0_EL1 values instead of userspace mode
-config: arm64-randconfig-2001-20261015 (https://download.01.org/0day-ci/archive/20261015/202610150747.IICDPmuf-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261015/202610150747.IICDPmuf-lkp@intel.com/reproduce)
+On Wed, Oct 14, 2026 at 03:58:16PM -0700, Kees Cook wrote:
+> In the very unlikely chance that a seq_operations didn't get initialized,
+> we wouldn't want them calling some random location. As a first example
+> user of __require_explicit_initialization, annotate them so a missing
+> initializer is a compile-time warning.
+> 
+> Every seq_operations in the tree already sets all four, so no new warnings
+> are added.
+> 
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+>  include/linux/seq_file.h | 13 +++++++++----
+>  1 file changed, 9 insertions(+), 4 deletions(-)
+> 
+> diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
+> index dc0e8c62d9e0..f0e7e52a0905 100644
+> --- a/include/linux/seq_file.h
+> +++ b/include/linux/seq_file.h
+> @@ -28,11 +28,16 @@ struct seq_file {
+>  	void *private;
+>  };
+>  
+> +/* All four are called without checking for NULL. */
+>  struct seq_operations {
+> -	void * (*start) (struct seq_file *m, loff_t *pos);
+> -	void (*stop) (struct seq_file *m, void *v);
+> -	void * (*next) (struct seq_file *m, void *v, loff_t *pos);
+> -	int (*show) (struct seq_file *m, void *v);
+> +	void *(*start)(struct seq_file *m, loff_t *pos)
+> +		__require_explicit_initialization;
+> +	void (*stop)(struct seq_file *m, void *v)
+> +		__require_explicit_initialization;
+> +	void *(*next)(struct seq_file *m, void *v, loff_t *pos)
+> +		__require_explicit_initialization;
+> +	int (*show)(struct seq_file *m, void *v)
+> +		__require_explicit_initialization;
+>  };
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610150747.IICDPmuf-lkp@intel.com/
+Hm, I acked the first patch, but seeing this "in the wild" is
+interesting.  Feels kind of ackward, but I don't really know what to
+suggest instead?  What about just making the lines longer:
 
-All errors (new ones prefixed by >>):
+	void *(*start)(struct seq_file *m, loff_t *pos)		__require_explicit_initialization;
+	void (*stop)(struct seq_file *m, void *v)		__require_explicit_initialization;
+	void *(*next)(struct seq_file *m, void *v, loff_t *pos) __require_explicit_initialization;
+	int (*show)(struct seq_file *m, void *v)		__require_explicit_initialization;
 
->> arch/arm64/kernel/signal.c:753:22: error: no member named 'gcs_el0_mode' in 'struct thread_struct'; did you mean 'gcs_el0_locked'?
-     753 |         if (current->thread.gcs_el0_mode != enabled)
-         |                             ^~~~~~~~~~~~
-         |                             gcs_el0_locked
-   arch/arm64/include/asm/processor.h:200:16: note: 'gcs_el0_locked' declared here
-     200 |         unsigned int            gcs_el0_locked;
-         |                                 ^
-   1 error generated.
+?
 
+Anyway, I don't know.  I like this feature, and maybe it's going to be
+used so infrequently it's not a big deal, but feels clunky.
 
-vim +753 arch/arm64/kernel/signal.c
+thanks,
 
-16f47bb9ac8afe0 Mark Brown 2024-10-01  735  
-16f47bb9ac8afe0 Mark Brown 2024-10-01  736  static int restore_gcs_context(struct user_ctxs *user)
-16f47bb9ac8afe0 Mark Brown 2024-10-01  737  {
-16f47bb9ac8afe0 Mark Brown 2024-10-01  738  	u64 gcspr, enabled;
-16f47bb9ac8afe0 Mark Brown 2024-10-01  739  	int err = 0;
-16f47bb9ac8afe0 Mark Brown 2024-10-01  740  
-16f47bb9ac8afe0 Mark Brown 2024-10-01  741  	if (user->gcs_size != sizeof(*user->gcs))
-16f47bb9ac8afe0 Mark Brown 2024-10-01  742  		return -EINVAL;
-16f47bb9ac8afe0 Mark Brown 2024-10-01  743  
-16f47bb9ac8afe0 Mark Brown 2024-10-01  744  	__get_user_error(gcspr, &user->gcs->gcspr, err);
-16f47bb9ac8afe0 Mark Brown 2024-10-01  745  	__get_user_error(enabled, &user->gcs->features_enabled, err);
-16f47bb9ac8afe0 Mark Brown 2024-10-01  746  	if (err)
-16f47bb9ac8afe0 Mark Brown 2024-10-01  747  		return err;
-16f47bb9ac8afe0 Mark Brown 2024-10-01  748  
-eab95b122151dce Mark Brown 2026-10-14  749  	/*
-eab95b122151dce Mark Brown 2026-10-14  750  	 * Don't allow any mode changes, the signal handler should use
-eab95b122151dce Mark Brown 2026-10-14  751  	 * pcrtl() to disable if it wants to do that.
-eab95b122151dce Mark Brown 2026-10-14  752  	 */
-eab95b122151dce Mark Brown 2026-10-14 @753  	if (current->thread.gcs_el0_mode != enabled)
-16f47bb9ac8afe0 Mark Brown 2024-10-01  754  		return -EINVAL;
-16f47bb9ac8afe0 Mark Brown 2024-10-01  755  
-16f47bb9ac8afe0 Mark Brown 2024-10-01  756  	/*
-16f47bb9ac8afe0 Mark Brown 2024-10-01  757  	 * We let userspace set GCSPR_EL0 to anything here, we will
-16f47bb9ac8afe0 Mark Brown 2024-10-01  758  	 * validate later in gcs_restore_signal().
-16f47bb9ac8afe0 Mark Brown 2024-10-01  759  	 */
-16f47bb9ac8afe0 Mark Brown 2024-10-01  760  	write_sysreg_s(gcspr, SYS_GCSPR_EL0);
-16f47bb9ac8afe0 Mark Brown 2024-10-01  761  
-16f47bb9ac8afe0 Mark Brown 2024-10-01  762  	return 0;
-16f47bb9ac8afe0 Mark Brown 2024-10-01  763  }
-16f47bb9ac8afe0 Mark Brown 2024-10-01  764  
-
-:::::: The code at line 753 was first introduced by commit
-:::::: eab95b122151dce193998db2f05cab3a4b79ceed arm64/gcs: Don't allow any GCS mode changes in signal return
-
-:::::: TO: Mark Brown <broonie@kernel.org>
-:::::: CC: Mark Brown <broonie@kernel.org>
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+greg k-h
