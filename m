@@ -1,137 +1,161 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011013.outbound.protection.outlook.com [40.107.130.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469CC4C14F1;
-	Thu, 15 Oct 2026 12:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792066063; cv=none; b=uSF9TJTgQSCh9RDzxCTERC8Pq0nvQiBcCF1z5fsBpq58hcbKUhXxC37iyTG7QNVq4V2IwTCjoo4Cmix5VOoCEp4RQ2UEspjogJqo6+6U91F/HBqIK6iEUWR5vAsTQoaAgwvxhM36eG2oIhZ8PiGVeu8VFLb3Md31c18lFQUhFN4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792066063; c=relaxed/simple;
-	bh=BwCFbp/zevL9TFCmfYwXvVNxS6Wcegx8/forJCOM8Wo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dlsc0c6z1AxdDNTgSsvNH5S3vlHRW0nqXRFVsH79m629YC7TLTgc3ad+LSPhwfzds/lwHNu4ZvAOQeC+uRs1Bmw/M4A060GbqezTc8wX6XY8mnIhvmrPl21tVrx7XzAwHjAjyYqS+JDGnEXxTntuZiD52zwRVZflrNbrcaEhtNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gll/oAmA; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7559B51DDFE;
+	Thu, 15 Oct 2026 13:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792070769; cv=fail; b=NVJGmu4xuaq4ehqFS1xIMzghFm2CA29ffgWOMTs3JrGCqh3u+e6erX/JsFtxEubeC9bI3KncmeYYr31HvHIbNWQocPCGQDo2d5gQHfqrsAanUYx5rpwInWF8BqJ5+b3Oz4IEo6xSSGbPg2dl0vCLCTIFIovTiEBKZYo61+ZhNJs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792070769; c=relaxed/simple;
+	bh=m4uqxc1yNimz+FLs7Rp8ICmp7lGyg61nMcdUMY4QLXI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=NRdNwOu9fEEZiJavC+sikAMVNUDhIZUX5sufxNss+T9aQIrrYzWOBuObNUVkhc+PV92+Aj/kx/K1M1AQYS3cKcO+5+5OcgC2r9ZjMAsCRE4tv4YnaRYiJ+YJzpqYF/Uh6M9IXceTEoiJ3d/Jjf6OzLb5LQJBayD0e24k5smTR/Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=icx1MzxA; arc=fail smtp.client-ip=40.107.130.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gll/oAmA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792066062; x=1823602062;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BwCFbp/zevL9TFCmfYwXvVNxS6Wcegx8/forJCOM8Wo=;
-  b=Gll/oAmAql850zuBCzFBX/gIsSI4S/aOR0YqzX6snA5WPXB/TEyD6E9t
-   SY5B0Twmd4L9ojvCwagEgu6Rg12Pw5JUi2QZZDeWyWP2m8vL5+RaVP6VC
-   F8ByeBO8IV5oaPTBO5gTD+TiHED91Aq6/GHXXOtHsvjKSqQ1HQlz0lUQZ
-   DwDWqOpLvyvOSqf6mKHTBr0xnaJx1F02bTYa8MFDPjX17opz8Hm0QN90x
-   eRYWwcHi+nWMvWD0gwujKqcnXWkXq3DxLD/OnluQIcXYBZOWRKpphWrev
-   aDBrI9QKAXEy8zD/GfDGCqud1v09Dw2VNFXqeGd2des9mQ17W39r1O3b/
-   g==;
-X-CSE-ConnectionGUID: KfuvK0taRVSoAqozEFgzGg==
-X-CSE-MsgGUID: XTCSVYGSQi6sfh+8JS7XsQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11935"; a="935591"
-X-IronPort-AV: E=Sophos;i="6.27,159,1787036400"; 
-   d="scan'208";a="935591"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 05:07:41 -0700
-X-CSE-ConnectionGUID: uq6FfK3MQCKwsIWeLKgzyw==
-X-CSE-MsgGUID: pK8h2HCVTbSCynzJ8p5hwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,159,1787036400"; 
-   d="scan'208";a="2008254"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 15 Oct 2026 05:07:39 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xHKFE-00000000GQ6-20CF;
-	Thu, 15 Oct 2026 12:07:36 +0000
-Date: Thu, 15 Oct 2026 20:07:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>,
-	netfilter-devel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	julius@bairaktaris.de, ericwouds@gmail.com, razor@blackwall.org
-Subject: Re: [PATCH nf-next] netfilter: flowtable: teardown flow reaching
- bridge port on fdb updates
-Message-ID: <202610152010.2EqEudOw-lkp@intel.com>
-References: <20261014210256.1573072-1-pablo@netfilter.org>
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="icx1MzxA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=wXWmn4IeaUs4rHFJW1Yqpif9rynzkg8nvhyxlGbtwD6kMWrd8RObkAQC+++8m2qZPlPBhc1z44ckzi+KPiQJaosQa8UvaPgGS2EmgzOQXa0Q7wtpStHYaquib5cn7pILIq9/K/IVaaH4g/nBWcbo3+LWnqwDRE0/OBGtKroAiRgGTqK9yyLx7wnPsiqnbqHhb0QSplzKLpZhQKDw2+TnzcQS5OWy5OWstSjIhi7EzXYfuw41hWiNEoDDwWkdfuDDIW0D6QrwUqd/jc6jrqW4wN9C0iOzHj77PM3rWW2Qe/zUoboZVSHAGjnlYo3c/HcvbjZ99E1Q4Bf3KYQBkOYSeg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m4uqxc1yNimz+FLs7Rp8ICmp7lGyg61nMcdUMY4QLXI=;
+ b=TDEKFbrJAYNu/65hOS5b9w2eZrjUT4/NXyxsjNoesBtQeqD/i8y2oykzfysXePxXXkZ2Z8wgCUirTulDfsa8EhhXTEFqL6l2BRURRQwsdw+QIeHbTryonk9GfDP+puDyyw84VSDtaawZ6JDKrVjhHAfyqoaNywrv1u5BBYPNGaGq7wjUuz4VyFrLXeYsTBc3V3fbXrcNd8XTVdaFOdY3fNoE4op3JlxVHdaT0rLxDuzAp0Z//PhoOQdrtkbtbd2OnlCxkbGxVv4TyOA5vHdduehhZ9r3dkbVRyXwOto+3aMv0IXbDj9RFpLH2lTRsRiIufT4bcK9Z0fy52gSUhIs2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m4uqxc1yNimz+FLs7Rp8ICmp7lGyg61nMcdUMY4QLXI=;
+ b=icx1MzxAq5KUpY3nOk6Mlu3dLcC5zAVf6cpfKjNrD2gGWVNT4VVojVsVHu++jglQwQ0K3+qPZaVplXDV4zXHEKsYuf8fC/hZMOgiMx/pMqBhvePwHmu5wZFUoIThtdHBpyv3lHkLuj1N1pGm1+gXvjIgWNUu+hYipMjMTgX6CwbJ2qR9h9691BpcL2iNqPdxC4Xm6uwDQgp5zR+tjoPaUPyRLLdNAkRco7bzigIP3Q3eQ5vx5EvhimEwvyIfnEYL7aAkF8lOP8/+suFmgQUcKDTHd8+Huf5eQH+qd1+lW9Qh0XI6QiubzU06nwROLJLGxfF0027RfINgSjLGP7QOYg==
+Received: from GV2PR04MB11740.eurprd04.prod.outlook.com
+ (2603:10a6:150:2cd::13) by MA6PR04MB441830.eurprd04.prod.outlook.com
+ (2603:10a6:250:57::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.13; Thu, 15 Oct
+ 2026 13:26:04 +0000
+Received: from GV2PR04MB11740.eurprd04.prod.outlook.com
+ ([fe80::ca5f:7e1c:a67a:a490]) by GV2PR04MB11740.eurprd04.prod.outlook.com
+ ([fe80::ca5f:7e1c:a67a:a490%4]) with mapi id 15.21.0522.012; Thu, 15 Oct 2026
+ 13:26:04 +0000
+From: Claudiu Manoil <claudiu.manoil@nxp.com>
+To: kernel test robot <lkp@intel.com>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>
+CC: "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>, dl-S32
+	<S32@nxp.com>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark
+ Wang <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, Eric
+ Dumazet <edumazet@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, Rob Herring <robh@kernel.org>, Saravana Kannan
+	<saravanak@kernel.org>, Russell King <linux@armlinux.org.uk>,
+	"imx@lists.linux.dev" <imx@lists.linux.dev>, "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>
+Subject: RE: [PATCH net-next v2 1/5] net: enetc: Add pseudo-MAC support for
+ ENETCv4 Ports via a fixed-link node
+Thread-Topic: [PATCH net-next v2 1/5] net: enetc: Add pseudo-MAC support for
+ ENETCv4 Ports via a fixed-link node
+Thread-Index: AQHdWzYWe74LlF4VAU2QF0Eh2lZjvrb+TCEAgABOQRA=
+Date: Thu, 15 Oct 2026 13:26:04 +0000
+Message-ID:
+ <GV2PR04MB11740DF323A5E1DCF2E8D6131969C2@GV2PR04MB11740.eurprd04.prod.outlook.com>
+References:
+ <d7b51cb29758538a4c68a700dd8cd41b6e7e08b6.1791908694.git.claudiu.manoil@nxp.com>
+ <202610151650.UHqL0Sb7-lkp@intel.com>
+In-Reply-To: <202610151650.UHqL0Sb7-lkp@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_0d9c909a-577b-4ba2-96de-69ada94b137a_Enabled=True;MSIP_Label_0d9c909a-577b-4ba2-96de-69ada94b137a_SiteId=686ea1d3-bc2b-4c6f-a92c-d99c5c301635;MSIP_Label_0d9c909a-577b-4ba2-96de-69ada94b137a_SetDate=2026-10-15T13:23:45.0000000Z;MSIP_Label_0d9c909a-577b-4ba2-96de-69ada94b137a_Name=NXP
+ Confidential;MSIP_Label_0d9c909a-577b-4ba2-96de-69ada94b137a_ContentBits=3;MSIP_Label_0d9c909a-577b-4ba2-96de-69ada94b137a_Method=Standard
+authentication-results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: GV2PR04MB11740:EE_|MA6PR04MB441830:EE_
+x-ms-office365-filtering-correlation-id: 36e12091-a449-4096-5388-08df2abfdcc7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|19092799006|38070700021|56012099006|4143699003|11063799006|261009223027099003|10067099003|22082099003|18002099003;
+x-microsoft-antispam-message-info:
+ Cbh5iOxOQMf2HdBw1KJaEpYW/qlPfdEqLXKMssDsQxsHqyrtmpPCb/igHotbfLaKJOhHjbdkXrOKTqsMKRjXy55mO2Aoul5AtVBDPkRoLmkC3lmjCak5IJnhs47F1rwWwE7kiCd18rh2oy5+EUX88uHJtxiSdf0d3xwbFThCpll8l/BWeb3DIz1JtCOJHPR9b+A4fNn6zvRMdt4u9f8xuJyQZnAUeoCvMSnXteOITqUbZy/fGW7EHYGm8vwNW7D2yvKGM1zPtcwKgOv1qOJ/LqtAZINp91543XfWdWn1ECxKLTgkIdL5+YEr6bkL+8xNu/ubap+JUehnRqsYmh1bnd9XyCHklF8EPr1P7yr9sR5rrytKZxdtBjTnHrFkLVB/odsrOZQRD3jwgHB8uzkswdd+5qA/zBOaKn9dPg2uBnyM1XtsPb3f4ZP+T5T+yn2E9bDAxKGLtKAv5gYx0zflbIzuzFBZqMUdZo0C3IPJvghxYeW/dQSLB11F/odbQIp8APFOcDftj3kbyTCv7AVQ91d+OuwNlU4xWV6wDQiQv9gDc2d1+0Vo8iwWuE8hSzWOnbUl3m2RyCqe8RtwB4U6Qo2C7jv+Ko3NiNEnYvHhguKJSY3NOgj9QKy23gLhcBzLmTWhLTwQrRCbruz8J9jdo6mCPX6Bmf+fQHe5i5ArTSGgmCpiGoGNyCWrWXgLHVB/D6DRtXtSX9vLfE6gH+Q/sFwgjyaIeN2aB6VbsGDr1BU=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR04MB11740.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(19092799006)(38070700021)(56012099006)(4143699003)(11063799006)(261009223027099003)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?SnNBNCs2am85UGNYcUpFOHdLdFZ4aGlnYmFmRC9XVDJjY3k4RmJ2b2dqczZP?=
+ =?utf-8?B?RVJ3RHNaRkh5LytGU25rVHRYbVBmcXg1MDgrKzRCMmRvTVlMclY4Nmp0M3E3?=
+ =?utf-8?B?MFE4SGI3cnFFaEVjOUtIeHlzcSt6MExnckJHeDZSdzY2Y2tJZWI1RnhtUzNE?=
+ =?utf-8?B?WlF1RjhrZ0pXcTkzeC8zZXU0dzB6YlVrWVlWZkVBUzJLKzExY2ZBbUNiUkdT?=
+ =?utf-8?B?bkRtOHIxZTlFMW9EejBFVG9qVytBOTk2WHkrWXAxY1oyWlA4dko5NFFZZGZK?=
+ =?utf-8?B?b1dTcEFiSHhOMnhPTzROZHlnVHRBUlp1aENuV0hXWHlpZlpkbnNXanJ6RFd4?=
+ =?utf-8?B?VW03NVduc3lmeFpuMDJtM0hpb3FiNEs3UHB5U056RkFKYXdZa1hRV3JXMERM?=
+ =?utf-8?B?ME1RQzV3UEx0MkJZTU1jeDErVlJUc1F3cWpESlBYb0p3bHgrNnM3V0cxUU4w?=
+ =?utf-8?B?UVdNZk0yMHpuemtGRjNpcjErSzZBRFQzR0QrcEh3YnBRSXNIbGdpZ0t5QnJQ?=
+ =?utf-8?B?Tnppd3QvUG51OGk3OVdBUnpXY1F0YjE3TFdhdzNFeUphRmdqVEkwUFRlOHZ6?=
+ =?utf-8?B?MmlOSEtHMG9scmhKSWlQWUhRcURXdFR1aTcrMGp5UFpYWFpOQitPUTMvd0tJ?=
+ =?utf-8?B?d1NpRUhMTmNsQVR2Qk1NVGd3TlZsSHByTjZSYlB5cStPNlc5Qi9PL1ZhdFQ3?=
+ =?utf-8?B?Ris2bGxUTUtiSnB5bFZueTJqOTQzZWFqU3BLTjZNY0o4WTR4UzYybEZjcHIv?=
+ =?utf-8?B?bk1VZjRCZ1ZFcnZlMUszRUVaajRaZzhSbktpZ2RsN0tzOFJFaFZKQTVNbVN3?=
+ =?utf-8?B?eC84L09LTFIwZWlZTUZjbUh0SjZqMlh3R3FEb0wyQ2R2aDFPR2tDWjkxVWpl?=
+ =?utf-8?B?ZXVtK0JjZStLa3I4YkUzYXN4VVBBQWV4WHB5b3MzN1ZjeXpxWnhhbTBGdmJV?=
+ =?utf-8?B?bUxGMlFuQlJBcHVsbHhpWXZ6czBFMnZjamR2VUYzL0dSZjJ3RE5EOS9FKzBI?=
+ =?utf-8?B?bFplQnk5eGdUQ0NHSDh2aG8rcUgzeUUvWUNlblVCT0wwMzRkMzBreDJzQlNB?=
+ =?utf-8?B?N1lqS3l5UkhNbmdBcUF6YWhKRElIL0NBOFJQd3FQRHVpY0dUZlJqWkQ4dno5?=
+ =?utf-8?B?Q29SWE9GWU1QcjE4YWN2OUZMTzBzUnVvd2p6REJ3cEpYZnl3djdQM1FuMWxW?=
+ =?utf-8?B?c2F2Y3lFLzJWZVN6SGJGRFlXL0pta3d5dG5WQmk3d1F2dStXak9HcWs0Z1V0?=
+ =?utf-8?B?MFhHWkhhUHNGcS83M0lUZXNOZDFzOUE0N2liSlZ1OWR3MnNOZUNKa2p4NzJN?=
+ =?utf-8?B?Ny9Sc3NSVENGUVl3K0hOTEx4QXFCaEYzRnhLdExlUUVlU3FmbFQrM1F3aDZY?=
+ =?utf-8?B?US8zd3NRS3VJTzNmNE81cE5YVGg2ZGYrUDR2a0Y3TUlyOEsvQVZ4cU54Ty9U?=
+ =?utf-8?B?OHRLQ2ZpSEVBNnI4OVBTZlptVjlxMHk5WXRpK1lwNDh5WGl4UHlZY0M1Mjhr?=
+ =?utf-8?B?RFpHdjQ0WEJKWk1HWHFSWmtFK3Fab0hTcURvb0o5MTJWL3p1REhab2d1ajJI?=
+ =?utf-8?B?MG9qY1MxN3F6S203ZlJCRzUzUkh3VXU1YUx6RS9uUEVtenpQTFd2RzNJS1ll?=
+ =?utf-8?B?clovb2todnFlblRmWjlvQ3FCTmpybm9Mb0Roellvem1vNXdHTFhPVmt0c2Zq?=
+ =?utf-8?B?d1BxWFY1dGF2L2F5RXk3dDlnTUFXZ2dkTk95eW5yMHJQdExONFFoU09nMDly?=
+ =?utf-8?B?RGZ2R0lFcEZYVXIzdlJhZzFCMTRBY1o0TDZGMnBRK20rczhEYmlJdWlyZmx2?=
+ =?utf-8?B?WVE3OHFDbGdCcElwd0g1ZCszb2g3T0tINlV6NnhjUXR0S1hlREhQczRManMy?=
+ =?utf-8?B?b1BibjlETnNhWVRZNEFpUFlGMlBFZXVwSy8zc2xOZTZZdWdqWUZjazNuMU10?=
+ =?utf-8?B?TnN5ZDNXeVQxVEdQNXBENzFsdEhlbkJJMU9rd1hkU21SVlUzMjdhWGhyQlQ3?=
+ =?utf-8?B?aXNPQmR0Ky9zZnpaQ1NKeitNUkd1REE5WlZGeGlDc0UreHFYQTRKWkZxQSt3?=
+ =?utf-8?B?djBHWllvWk04WDNnMTUyTUt6aWhGZUxwWTF2ZTF4cGlxMWRsNDg2ODlNWmNR?=
+ =?utf-8?B?SitaZlQ2ZENqVWpHUThlM0hiZEd0bVR0VU4vTFd6SVB3ZUJQb011QWdya3Br?=
+ =?utf-8?B?bTlrQUhTd3oySzM5dVBNaDhPZGZMZjIvMldrU2pzWEpTOTg4K2RGRndhaERK?=
+ =?utf-8?B?eURwZWt1OVNTRGhiTVQ5b0ZIQjQ0SVN4dWgxV1dEY2FsS2d6VXRxamJScFBR?=
+ =?utf-8?B?dU5VT1llQktaeTIyTGRpQzdNSCtPYWJWencrWmIzR3dPMEF0WnI5Zz09?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014210256.1573072-1-pablo@netfilter.org>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GV2PR04MB11740.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 36e12091-a449-4096-5388-08df2abfdcc7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2026 13:26:04.0222
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: NB1fCj0DhGyAtjfdY6mqxcIjEhU4GuNjunn2yRYx5SX2UltwznWlMDcpMgxBoe3PR70+178Ab3u4G+vC9NPx+A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MA6PR04MB441830
 
-Hi Pablo,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on nf-next/main]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pablo-Neira-Ayuso/netfilter-flowtable-teardown-flow-reaching-bridge-port-on-fdb-updates/20261014-230256
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf-next.git main
-patch link:    https://lore.kernel.org/r/20261014210256.1573072-1-pablo%40netfilter.org
-patch subject: [PATCH nf-next] netfilter: flowtable: teardown flow reaching bridge port on fdb updates
-config: hexagon-randconfig-1000-20261015 (https://download.01.org/0day-ci/archive/20261015/202610152010.2EqEudOw-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261015/202610152010.2EqEudOw-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610152010.2EqEudOw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/bridge/br_nf_utils.c:32:6: error: assigning to 'const struct net_bridge_port *' from incompatible type 'typeof_unqual (f->dst)' (aka 'struct net_bridge_dst')
-      32 |         dst = READ_ONCE(f->dst);
-         |             ^ ~~~~~~~~~~~~~~~~~
-   1 error generated.
-
-
-vim +32 net/bridge/br_nf_utils.c
-
-     8	
-     9	static bool nf_br_fdb_valid_dst(struct net *net, int ifindex,
-    10					const unsigned char *addr, __u16 vid)
-    11	{
-    12		const struct net_bridge_port *dst;
-    13		struct net_device *dev, *upper;
-    14		struct net_bridge_fdb_entry *f;
-    15		struct net_bridge *br;
-    16	
-    17		rcu_read_lock();
-    18		dev = dev_get_by_index_rcu(net, ifindex);
-    19		if (!dev || !netif_is_bridge_port(dev))
-    20			goto out;
-    21	
-    22		upper = netdev_master_upper_dev_get_rcu(dev);
-    23		if (!upper)
-    24			goto out;
-    25	
-    26		br = netdev_priv(upper);
-    27	
-    28		f = br_fdb_find_rcu(br, addr, vid);
-    29		if (!f)
-    30			goto out;
-    31	
-  > 32		dst = READ_ONCE(f->dst);
-    33		if (dst && dst->dev->ifindex == ifindex) {
-    34			rcu_read_unlock();
-    35			return true;
-    36		}
-    37	out:
-    38		rcu_read_unlock();
-    39	
-    40		return false;
-    41	}
-    42	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+DQpOWFAgQ29uZmlkZW50aWFsDQpGcm9tOiBrZXJuZWwgdGVzdCByb2JvdCA8bGtwQGludGVsLmNv
+bT4NClNlbnQ6IFRodXJzZGF5LCBPY3RvYmVyIDE1LCAyMDI2IDExOjQ0IEFNDQpbLi4uXQ0KPiBT
+dWJqZWN0OiBSZTogW1BBVENIIG5ldC1uZXh0IHYyIDEvNV0gbmV0OiBlbmV0YzogQWRkIHBzZXVk
+by1NQUMgc3VwcG9ydCBmb3INCj4gRU5FVEN2NCBQb3J0cyB2aWEgYSBmaXhlZC1saW5rIG5vZGUN
+Cj4NCj4gSGkgQ2xhdWRpdSwNCj4NCj4ga2VybmVsIHRlc3Qgcm9ib3Qgbm90aWNlZCB0aGUgZm9s
+bG93aW5nIGJ1aWxkIGVycm9yczoNCj4NCj4gW2F1dG8gYnVpbGQgdGVzdCBFUlJPUiBvbiBuZXQt
+bmV4dC9tYWluXQ0KPg0KPg0KDQpbLi4uXQ0KDQo+ID4+IGRyaXZlcnMvbmV0L2V0aGVybmV0L2Zy
+ZWVzY2FsZS9lbmV0Yy9lbmV0YzRfcGYuYzo5NjM6MjogZXJyb3I6IGNhbGwNCj4gPj4gdG8gdW5k
+ZWNsYXJlZCBmdW5jdGlvbiAnb2ZfY2hhbmdlc2V0X3JldmVydCc7IElTTyBDOTkgYW5kIGxhdGVy
+IGRvDQo+ID4+IG5vdCBzdXBwb3J0IGltcGxpY2l0IGZ1bmN0aW9uIGRlY2xhcmF0aW9ucw0KPiA+
+PiBbLVdpbXBsaWNpdC1mdW5jdGlvbi1kZWNsYXJhdGlvbl0NCj4gICAgICA5NjMgfCAgICAgICAg
+IG9mX2NoYW5nZXNldF9yZXZlcnQocHJpdi0+cHBtX29jcyk7DQo+ICAgICAgICAgIHwgICAgICAg
+ICBeDQoNCkknbSBsb29raW5nIGludG8gdGhpcywgcHJvYmFibHkgSSBuZWVkIHRvIGd1YXJkIHRo
+ZSBvZl9jaGFuZ2VzZXRfKiBjYWxscyB3aXRoDQojaWZkZWZzIGluc2lkZSB0aGUgZHJpdmVyLg0K
