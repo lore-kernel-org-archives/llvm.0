@@ -1,168 +1,115 @@
-Received: from flow-b6-smtp.messagingengine.com (flow-b6-smtp.messagingengine.com [202.12.124.141])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f169.google.com (mail-dy1-f169.google.com [74.125.82.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D1DC3E3C50
-	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 05:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.141
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792041695; cv=none; b=kNLJ2C7npUAgbMUuxblYrtsIazeOssQayMg40p5ooz5N/+W0wuRo1X2E4n94k2h1eDXHANXWxIjKucvExlqA2hfHuhBwbK0CYV6uXmd+O2hoU4bahd/aThkNRvlrvuYbMx0k57Vdqt1ehvp/Q25Hyh1uTC/ZGZD+wTqc546iV80=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792041695; c=relaxed/simple;
-	bh=fT+Id2LA74s+kmxJ2r3rEYU7QJ7EFtpYf9vc/1kTxZ4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNrvToDEKvvep8PZtbISkCUqYil8KUgaslN5Cw8fER4O98dgwUjIT9c+hekQLmjeQyCDpkGqtbbii/719R/4Bcnhu2SQ5YMO38pcsF5vrTpzA7/Y1gGthdiKXBh9KFbcxiAJpF6T04EOPA9ZFVLVlp1rPphCtitAQB/zTLfNpLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=AdLcoK9d; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=sMlwvS3T; arc=none smtp.client-ip=202.12.124.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FB93D954F
+	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 05:46:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.169
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792043178; cv=pass; b=cf2d9DdaDTqyeTEVUW0TrUw0NkGkJwymZ76PjHRdZfSpI2rekjDyiebcuQvj40q8yy1iQWmHEy+ZV/v50SDhcs97Mjlgx0BJM1MQew+texcZhM6qnUo+9n53PPhiQtEgdMmtPsTRVciBlWsEYqqPJXmTi6kTJduPUs3BW3eUenU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792043178; c=relaxed/simple;
+	bh=qezJc4NEIZrhsd5+TuSsc3OnyYFh7Gr+9COlR9C28hQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QHT5Z/44YccDGz3loheQINhocppt3LbCQTOcAEur+VTmwbVXHBwDLuoflDrxYGkF/4dm3xnff3Vry/4DaEFYjYDQLc7Pm2E7R06I6/89Ev/BiVMDqImb/cLfUpqLtu5A6Bb6okWTg89+7c+TwJv4p8W//RwvvmZb1JmqjaYzba8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oWmzXBct; arc=pass smtp.client-ip=74.125.82.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="AdLcoK9d";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="sMlwvS3T"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.stl.internal (Postfix) with ESMTP id 3688E1300CC7
-	for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 01:21:33 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Thu, 15 Oct 2026 01:21:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1792041691; x=1792048891; bh=YZbXf8XMHi
-	MYDDe4CyAaIrQ1ZOnpEZtXM5Qp9HfiN1Y=; b=AdLcoK9dMpoRAJNea6yrKCITSv
-	O2qWtAhjjSLfwZggoB6ei4EBSZGSCI4iYEiS2AHlz7IWpsyURPvJxT8zr3nL/NMe
-	NlnGZVeSw1Zjg72Sjc9rDb44U8pWdqRUXH9GP501Y52wpjx0I3Q58+p0BCpQbaTM
-	wk0abjowaYYUwHWiC9fNdwUmLkn/5UqYvM599+HkrO+9gtKu7JNo06H+PcbwemxV
-	Ymg1Pyzov++NKDoujH4MPnC/mNqMyM7qiaJWWBN1eMo5GJ0OVIbIxiWPHZ/g66s2
-	xvLamBZC3/GRLU+ZZD7ejCOMk/TQFGf5XjuwdDYOAPgS0tM7mx5XlH9523NA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1792041691; x=1792048891; bh=YZbXf8XMHiMYDDe4CyAaIrQ1ZOnpEZtXM5Q
-	p9HfiN1Y=; b=sMlwvS3T1qO/lPAf1RchbwPOK9KdNVgQ4aKrkIgKErmyrFZLKhI
-	r77yCruC7m2QdzQaEvWMbI+hcDg2C1qIvw9wZwQWvgPGe8Thivhi7gyyhjbsqt1y
-	G7JuE5ZT1xULOQLxGGJy9mWvSJcRerMj2rY1BnRczYTS81THSVfssHyIxHywn+VJ
-	+SpjYfzk6kb5uQTYrH9do0KQhjhCek0OtcYU8sPKjHn2jQDF1JO3+h9E9dCn0Lj/
-	JZaW6xFzQJ7DSWYiBYaMd1oR0M47TuTvjxvzWTroliXqWgsdxqCm2g4sMCrUgRrW
-	0o10v7r557nDTTRfb6rdw1VxbGaCRMBmp/w==
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=sign d=kroah.com a=rsa-sha256;
-DKIM2-Signature: i=1; m=1; t=1792041691; d=kroah.com;
-	mf=PGdyZWdAa3JvYWguY29tPg==;
-	rt=PGxsdm1AbGlzdHMubGludXguZGV2Pg==;
-	s=fm2:rsa-sha256:VbyBDSwkIY+hKheJu0GvtFLU698DYKP3s0kZFmU76o3yBNJ
-	TqZ3ZI2NXgVckWfx0vvUT0+VoWCON8FBKfYKyAhWCnYgCLQ8ivHzNAfpL7bextO8
-	0TwKfLkMQrD98ivlR+5W9jV+1B4Yi68uY5QVAB632F/vSEuc4+psRDH9CsIDe4r5
-	hCMDXbU92XzMTLkZ4yFGnBrK2CS8ZXZezltUy7DU0tYW39x8M9ZyjOIr8waOgHfa
-	5LJPnR5CWQAjYz3rCl84X1Vx4bax52xR86fmuR5hle1MjOQfrM86SLD6S0GvdoMZ
-	vl3HUyzsRm95rYpMahuEUsIeJMGqY5RWQ191VBA==;
-X-DKIM2-Info: draft=ietf-dkim-dkim2-spec-06;
-	repo=github.com/dkim2wg/interop; date=2026-10-04; sw=lmtpprox;
-	action=mi-m=1; hc=12;
-	hn=cc,content-disposition,content-type,date,feedback-id,from,
-	in-reply-to,message-id,mime-version,references,subject,to;
-Message-Instance: m=1; h=sha256:hf9AztGCgIRnregB6E6yn/9k05lnr1mC3auL3T/Ps8g=:fT+Id2LA74s+kmxJ2r3rEYU7QJ7EFtpYf9vc/1kTxZ4=;
-X-ME-Sender: <xms:22LQaoctltF2g0XaJmXad11XIXqcrOVXElcGG3OxJQ14AnIjDAXa8A>
-    <xme:22LQarb_b3EyeprQ9rkTc_GwYRM8WB2tJKXAJLEnFINvvcnNpqHFTlvC6ReXy7t-L
-    a52OHEzZi7i0eqkAvBVxncF7kFMROHjLOPJt0tl9TO2X_UPYxc>
-X-ME-Received: <xmr:22LQap9O8GD3F5pCi_3NSxY6E62q-5uUe4McD4YCYFOMn3mRAnt5LFhs5GfgnrWSLj9W5ovfyj1fSkVLtZv6nDA8ohjs62TNWRNoumQAT8w>
-X-ME-Proxy-Cause: dmFkZTEijNWx0cSRy+etHUy1Usc70/NSIPvkJ5iC/hOONowf61UWNZoFG2yenVsGW3xUdm
-    OuOrBTQH9C1zt8QTb3VyZLYiXR8cIZ5kUyG5tijMhlA8jkk4gq5L4NjkzEdquFndv48208
-    ltG2exExMojOk2ZqCqjwN7ICcgjxGcen1H123fzvNF1WToix1u8u4TGVs+/bVbJKUAUKro
-    jVd9MhBj8QjgEd2TEUfwzegeuZHv4KugbkGtnhjkRPZtbGrQUgmiRxmHQrW5z1N6N5deHK
-    bSt21eVraH67bjTMAuWSCriT+VkletTYOl5cj1stZcI++yDd9EcLFsBDplzCkoq6Acm1R9
-    YSccsQq0p06t13unhafYhu2LvHS7xZViO29WAMoTQl4pwdwuekbxDmQDzyS8u7Hq3kwMy4
-    RxdXV6sURH0Mvk8FyOUG3EvdPmoZBb7XTud51WAo1bF2RNu1Cirly3t7FPriS7y8GKD+kf
-    Vex4zvo691tj02ZAT0qxKw+o9o4/qhVlSW9a+/K+Z0jaxkYwqwIzlUZsbs992Unt3SFWRq
-    X/ueS4JTYy15MrSOPb+2q4me3QuaRwYPJm6Tz2WR/J4u94O0nKqc7bxWvZNzqHHCBc3f9e
-    HOHEDLmGrqWBS6N73obzaSsTKeEr4Z8uFcCZMMhzNejiBO9oxyn+wesS7peA
-X-ME-Proxy: <xmx:22LQanXX0wXFRKFwqKEZ46QBqrpYELJE6O1VuzrE1ay85L1tY2ZUdQ>
-    <xmx:22LQaqdCBxFwOnkcBdBiRtFdEXr8lv5CsWgXD4YuQP0HTjX6v34l9w>
-    <xmx:22LQakVL9Xfu6e7z9cCnx1-xps3JoZnXFgNqF6FRkj7b0VhCEQqThg>
-    <xmx:22LQapVog6mxBmXINzHvRfb6IONAnAxsMncbGpvkUdzAFLvezTt4_A>
-    <xmx:22LQakLQlcWi2uU3GotSxqN0eug_7XzPWHq0GzpQmnNwQTI4ZME3YDqe>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 15 Oct 2026 01:21:30 -0400 (EDT)
-Date: Thu, 15 Oct 2026 07:21:28 +0200
-From: Greg KH <greg@kroah.com>
-To: Kees Cook <kees@kernel.org>
-Cc: Miguel Ojeda <ojeda@kernel.org>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-fsdevel@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 2/2] seq_file: Require explicit initialization of struct
- seq_operations
-Message-ID: <2026101517-profane-opponent-4523@gregkh>
-References: <20261014225811.i.852-kees@kernel.org>
- <20261014225818.3457479-2-kees@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oWmzXBct"
+Received: by mail-dy1-f169.google.com with SMTP id 5a478bee46e88-33c30fcf33fso595754eec.1
+        for <llvm@lists.linux.dev>; Wed, 14 Oct 2026 22:46:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792043176; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XAbTZ7lByDs2/fUMcQIiKeeZcZ12mIK3Jc6eWE7UCOtiZXnKVvtSK0dLg2PlfQeGXD
+         Mg3+yNjsBTbmXUnjkKknDq8fZAoHZS3NulQM9HMHLCEO+x0RPPmEWhOPDrt2Njp04oiS
+         Z6qUmWNBrtFMr/X7vWZpoJQABWh/s1RX4KTdyDWFa3Hf4IysXuIps0/UE053F8FKmbSk
+         E9Dd7zO5kxU4t6M/P8rvXbT3p1DnzjEWMEcLxxdz9/jlSl8Dr28/9HPJyC/y3n7tGkBZ
+         iPI6L0SEOvuxXoqdeGeXz6z4eOU9u+sbI2Vp1POy6/NRVuJaP+6dgxVN8gCltG8wh3HB
+         AEDw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=HeI0uiM52DuAwWHa/ijjOCM64Bu6o2GU+woYi97808c=;
+        fh=ZSh9v5oDpIEUhzoFEMhzBeugS84lnj1AfHU7PP/lBxM=;
+        b=lvGLHrjpFRPgUCZe6C7HOu9ZCHFpgcrTLi9baMsEIHP5kTlyiNnPd7S1NqCJouiwHI
+         zaX0jHOf9FyYRsj3To4u0egiaPW1ye3yOLk/DRQlXraJ8JrtBUW9PYNwhhD6s2m1e9Us
+         SWVYJK0h2mzoOirq216EDfFo9Yc3IWJCvB7nnS9hgsKoDGVryW3vUOdd+J2RxkbPVC7k
+         ob7LWHL9e4oV157J761O3cZefHLvMDFQouvRiR5UkoPHsQZ4i3l/l9x3N7/cRRwUIpRR
+         lHrCCz2ogXQ7qNeRnmwuUIHEYCq0mbyo2iVFqdNBdIWmwUU69GU5RivNFm0iuE6sQaJp
+         e9uw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792043176; x=1792647976; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HeI0uiM52DuAwWHa/ijjOCM64Bu6o2GU+woYi97808c=;
+        b=oWmzXBct6Vgz8Zt3BsvQ8eZAoevSNtB/Uv2T57REi6DAEY5sf+qj80MYOj4D8LbC/r
+         7GXkfFWnkmAEdkpIGwaT/IgAfOp1Uogh6YRQvFeZs9iaLZ2zf2YZZtLzNSThF8Djdw1b
+         CvPvtoW3AFeKRBCGMVCuNtJM7BaxO4/nfMsAuJqwUZ63ZXZDVzmfsdT3B4dHlnG0FJUe
+         A8lqVKbajyVaK8WxxnMGdOloyYW6pzN4TrgfdHc7Jo9gUb1h0VauVe27MR7lKlhfLvx4
+         xFkp5zfRFac1hnjdrtfalBaSQ3fMoSpTu1BlanMuXXAAlf9HgLyZ57GNeXw/ik2ikiCH
+         xVvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792043176; x=1792647976;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HeI0uiM52DuAwWHa/ijjOCM64Bu6o2GU+woYi97808c=;
+        b=orH3GL06xCW1Wwh/gEQxn/KVIbvSVK90sh4Cyt82DiWHJJKQ6SQK3u4gCAsj2Brc5G
+         ul4NP9qr/FHxn0JZA+l+qph8Cp9Ub4U+LHnyU/NwQy9qbRJBM6Rsl5NMxZnIPmS8vIeQ
+         bP5iE+WZpn2SFcKxKTdE6uF9xgM62YQPCP2dE5oXCTUtYxHfpJ/TT7KbHC/1rOtAoDFs
+         uwiarZNichlceJSlwzzgfxhre82okuTzfat+/Y28fFAaQiNPGtFzE1TmsbINQehnK3fW
+         K04f3/eUc7Yc6jBojwXKLSvZkMHWu4GvzMnS9STzTQidquvh27+QahDm7ffwbDt4Xpec
+         G0mw==
+X-Forwarded-Encrypted: i=1; AKwUvByh+IGWiTtbZsee96k0hw/FEUSUtjpgysuYUaJxm50e0Iv2OZCYN4A5OjhEcmQwMtYOcMQ4@lists.linux.dev
+X-Gm-Message-State: AFq9FYLWxNESkRIs5+P/zWW/ib2YasI1VVaMeL2oz5ZDSmOKmgEdLgO5
+	DLfhvAn9jFlR2QvMC2f0UJO8dpensD2HezHu7KbkCJIcXWC7WW6zPbtOig1Ox2B9BaNLSnJyQLj
+	dT2TAm2kbmgY0Q09Rr6dUZb6ZaeoIZtU=
+X-Gm-Gg: AYBFou0LdvxG7gYN2SO33HWc8gNMIMOJddpb4D1scvArU2cUYROFHBckxDswCOGFzNX
+	vHJLxATkzwyROsjTbPHJE4tHBteuwFOSXHFVHBJ64TLcOxx+TjpoqjYrvwg6w6k49gItA5EUMwv
+	t8x2qAeTOxfoV1O7HfTMEqQK84Jo3GVXmuGkcnFnskWl0ckotszgAPCE8PPlYr4TcvaiJ8IP6zr
+	jSEDIS/pMiOgSH9yoVQFqlVZUdZi5ndMofOwfKmrqxVWZnJXwgGuQqrOvIrlP54U1D0+5+k7Ssi
+	o6NksKndigSM0viu0UhQ4saJpiwc+UkknxfpBTAu1wwhi/5o7hmFB6fQchc9ZhfySqssWDwsweK
+	whQ4xyvMHEwKxNfSxrUI1njTEfRBOhIxyh1ndunF1JcMydQIMGsylMpa+m7kGTF3kOCF7pgWWhF
+	6Ks2r5EzPFb2Ip4hfTZ5znMkonqlDuGQObfEGHpgVtbNMj66hjHpY=
+X-Received: by 2002:a05:7300:da12:b0:35d:4c5b:766c with SMTP id
+ 5a478bee46e88-35d4c5b7a5cmr10711045eec.2.1792043176087; Wed, 14 Oct 2026
+ 22:46:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261014225818.3457479-2-kees@kernel.org>
+References: <20261014225811.i.852-kees@kernel.org> <20261014225818.3457479-2-kees@kernel.org>
+ <2026101517-profane-opponent-4523@gregkh>
+In-Reply-To: <2026101517-profane-opponent-4523@gregkh>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Thu, 15 Oct 2026 07:46:02 +0200
+X-Gm-Features: AclHuK9JUbZ8Kk1BEvh1a9rSCsQ_67UzDaXAR0CwzEKJckJP8Us1pVzDHAMPGB4
+Message-ID: <CANiq72m_iyquf4Lc8AWvbsBp++ASz4+C_MQ5iYQW-fHd_MNDxA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] seq_file: Require explicit initialization of struct seq_operations
+To: Greg KH <greg@kroah.com>
+Cc: Kees Cook <kees@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-fsdevel@vger.kernel.org, 
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Oct 14, 2026 at 03:58:16PM -0700, Kees Cook wrote:
-> In the very unlikely chance that a seq_operations didn't get initialized,
-> we wouldn't want them calling some random location. As a first example
-> user of __require_explicit_initialization, annotate them so a missing
-> initializer is a compile-time warning.
-> 
-> Every seq_operations in the tree already sets all four, so no new warnings
-> are added.
-> 
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
->  include/linux/seq_file.h | 13 +++++++++----
->  1 file changed, 9 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
-> index dc0e8c62d9e0..f0e7e52a0905 100644
-> --- a/include/linux/seq_file.h
-> +++ b/include/linux/seq_file.h
-> @@ -28,11 +28,16 @@ struct seq_file {
->  	void *private;
->  };
->  
-> +/* All four are called without checking for NULL. */
->  struct seq_operations {
-> -	void * (*start) (struct seq_file *m, loff_t *pos);
-> -	void (*stop) (struct seq_file *m, void *v);
-> -	void * (*next) (struct seq_file *m, void *v, loff_t *pos);
-> -	int (*show) (struct seq_file *m, void *v);
-> +	void *(*start)(struct seq_file *m, loff_t *pos)
-> +		__require_explicit_initialization;
-> +	void (*stop)(struct seq_file *m, void *v)
-> +		__require_explicit_initialization;
-> +	void *(*next)(struct seq_file *m, void *v, loff_t *pos)
-> +		__require_explicit_initialization;
-> +	int (*show)(struct seq_file *m, void *v)
-> +		__require_explicit_initialization;
->  };
+On Thu, Oct 15, 2026 at 7:21=E2=80=AFAM Greg KH <greg@kroah.com> wrote:
+>
+> Anyway, I don't know.  I like this feature, and maybe it's going to be
+> used so infrequently it's not a big deal, but feels clunky.
 
-Hm, I acked the first patch, but seeing this "in the wild" is
-interesting.  Feels kind of ackward, but I don't really know what to
-suggest instead?  What about just making the lines longer:
+Perhaps we could call it something shorter, like `__explicit_init` or
+similar -- I don't see that substring (even without the double
+underscores) used anywhere.
 
-	void *(*start)(struct seq_file *m, loff_t *pos)		__require_explicit_initialization;
-	void (*stop)(struct seq_file *m, void *v)		__require_explicit_initialization;
-	void *(*next)(struct seq_file *m, void *v, loff_t *pos) __require_explicit_initialization;
-	int (*show)(struct seq_file *m, void *v)		__require_explicit_initialization;
-
-?
-
-Anyway, I don't know.  I like this feature, and maybe it's going to be
-used so infrequently it's not a big deal, but feels clunky.
-
-thanks,
-
-greg k-h
+Cheers,
+Miguel
