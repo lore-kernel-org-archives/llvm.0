@@ -1,149 +1,333 @@
-Received: from mail.avm.de (mail.avm.de [212.42.244.119])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86F4C8C7B
-	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 13:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.119
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE15531AE5;
+	Fri, 16 Oct 2026 16:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792158529; cv=none; b=R/TelbzK2zkUt5nfd9pgyokpOI7pQbwdi955sQJRBklMfU00fqgZHpxBlKyvW6Y871ZQ1fCtOpdzBiGpGzlwaYBEG4OpaTWMElQH9D0SkPuD/OeZK+Lj3GoHZa6IX82fEmG/+Z/vgghoTyYbuU1KheXeCVLexQ2NyyuJaun3Zqc=
+	t=1792167902; cv=none; b=sD6ubcoKVvaMHYW35sK5SsqZWiFBMk/sv46ivFu5oSkh2q3+vShCADlc8biLm5HkkCXL1Z4LikhLNYeHJ91TM02GMYSuqhwoDOzBcO3Pypgui23ap+IjUhS7e17Z8e9CbkkkLK08DrYT6th9IYRT6mmDg5KmJ398Qv/f1WnPnAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792158529; c=relaxed/simple;
-	bh=zlQWcttho1vyPbsQg0Xn2LU8NAcWx23gixdtx0PGqHU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gHn775xdSpKgJXzbK04kCdxZpUaFhL+HiFm4sKdwfK8riNC7SkNekiPNARfxrnunfmKaRmR39GsAcNDKY7YQGtDUPROErDOrhTiPI5yXuWLShDRsRUfZNG5sj6v/k/jKMC9OQ/LchY+ZuIWzhykTfHdcZHZvsl5OBKbiPTZ7fPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=FfWVDKYA; arc=none smtp.client-ip=212.42.244.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
+	s=arc-20240116; t=1792167902; c=relaxed/simple;
+	bh=mZpW+60wwlUtmET5MzQNCtl0ej+kiRbnUimDHtPmbhU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=afMKx87azKhjvMBcd7D2mF+uixYyFhBmIOebYM+BT17K8tjOdMr5qQmcGu+AmdUaaIWHy05F0OufSt8GWuIiXIgEACBCp7h3JEU33m5d2lBs2Rn/1WiMfUqrkaOICZNiONYAEN/iWD7rqzLEv3gTmUJRrwuGsNBdUVLaRYGi/ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O4bYZ7bK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="FfWVDKYA"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
-	t=1792158167; bh=zlQWcttho1vyPbsQg0Xn2LU8NAcWx23gixdtx0PGqHU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FfWVDKYAiOIYpMdsxizgJ8SripUI215Sy5onHIqmI32OzRHKt/Q0Z4y7qZcFEoDcy
-	 usNqeelRXIwcsAy+AU0OKgqQEU8eiszqresIFhFFHUCVkl9+ho6u5CxmuNTJ17TCmJ
-	 wTE1z2EFcSHLJOl5tdTt8APo3I7+RBUw4jiwEdA/sr8E7dr+W+8DcwagYjU1o+nOMl
-	 QOScddDUQyl2mBtV+TCj+bOU9V2AUdSHn8a/0Pci1Z6hv+lLPqelIGW7J3JxeAfPwl
-	 0xDmSBvN33ZNR8bnG++Bz0449Xux1s8oHr8LInwL8yqyDehH0QiDC+DFnJpgN354EH
-	 ZQb0pl92Eg9AA==
-Received: from [2001:bf0:244:244::78] (helo=mail.avm.de)
-	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
-	(envelope-from <n.schier@fritz.com>)
-	id 6ad229d7-c83a-7f0000032729-7f000001ea90-1
-	for <multiple-recipients>; Fri, 16 Oct 2026 15:42:47 +0200
-Received: from mail-auth.fritz.com (unknown [IPv6:2001:bf0:244:244::78])
-	by mail.avm.de (Postfix) with ESMTPS;
-	Fri, 16 Oct 2026 15:42:47 +0200 (CEST)
-Date: Fri, 16 Oct 2026 15:42:46 +0200
-From: Nicolas Schier <n.schier@fritz.com>
-To: Van Vo <vngocvan@gmail.com>
-Cc: Nathan Chancellor <nathan@kernel.org>, ndesaulniers@google.com,
-	morbo@google.com, justinstitt@google.com, masahiroy@kernel.org,
-	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gen_compile_commands: honor the build directory for
- modules
-Message-ID: <20261016-fast-lyrical-frigatebird-dcd303@l-nschier-aarch64>
-References: <20261015135752.17028-1-vngocvan@gmail.com>
- <20261016012148.GD3329673@ax162>
- <CAJavoFk+zgySyNps5tuKmntmvuAyev=kKL640TFrfCc-njeWBw@mail.gmail.com>
- <CAJavoFkpO29P_oD_YLBkkp6_k080mN-ctRPXSvB+oj_-vpcR0w@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4bYZ7bK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4197A1F000C4;
+	Fri, 16 Oct 2026 16:24:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1792167898;
+	bh=Rm4u+qRGGIqZlcsNn/N/M2BE0iir8BZS4bhQe6SA5eo=;
+	h=From:To:Cc:Subject:Date;
+	b=O4bYZ7bKis2JJ39409LuneJNdGzAT9/Acm/2lKs6/anoZ7fydIZfR26X2Mp2Uwubp
+	 hzOIcMYwruxBmUVoGs8tMZqVMtP1gfpwkyAtr+hXy5IX+prIXZEbFiKIK1ZhrHE1DT
+	 i38xA9pd7u9NdqCJq+WR66NPHhkxCuWwsVY4sdAOdcKOcWSNnI6k2bViby+ep6BUUH
+	 ZAge7LnOh+P5ZB5bPTNVtcaXVAknQ2vJoLmy2GeoZRZVzuUO+mdYVQRIeZ5PqwpU3X
+	 vHouarUa7e3n7/8FqqwLy9kflUwZ2eNVdh37Bxj5yuT9c/JLTFQt2/49SXPRXo/OOR
+	 mP/qsF3NHpoNQ==
+From: Miguel Ojeda <ojeda@kernel.org>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>
+Cc: Boqun Feng <boqun@kernel.org>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <lossin@kernel.org>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Daniel Almeida <daniel.almeida@collabora.com>,
+	Tamir Duberstein <tamird@kernel.org>,
+	Alexandre Courbot <acourbot@nvidia.com>,
+	=?UTF-8?q?Onur=20=C3=96zkan?= <work@onurozkan.dev>,
+	rust-for-linux@vger.kernel.org,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	llvm@lists.linux.dev
+Subject: [PATCH v3 1/2] rust: std_vendor: add `likely()`, `unlikely()` and `cold_path()`
+Date: Fri, 16 Oct 2026 18:24:45 +0200
+Message-ID: <20261016162446.121509-1-ojeda@kernel.org>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJavoFkpO29P_oD_YLBkkp6_k080mN-ctRPXSvB+oj_-vpcR0w@mail.gmail.com>
-Organization: FRITZ! Technology GmbH
-x-ms-reactions: disallow
-X-purgate-ID: 149429::1792158167-3CFFB515-A91D54D9/0/0
-X-purgate-type: clean
-X-purgate-size: 3158
-X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
-X-purgate: clean
-X-pfmilter: host: postfix-mx-02  mail-id: 52EEDA03FD  external: no
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 16, 2026 at 01:25:33PM +0700, Van Vo wrote:
-> Hi Nathan,
-> 
-> > How was this discovered?
-> 
-> This came from code inspection of standalone use of -d with an explicit
-> modules.order argument, followed initially by a constructed reproducer.
-> It was not a failure encountered through Kbuild's compile_commands.json
-> target.
-> 
-> I have now reproduced it using real Kbuild-generated artifacts from
-> 0fcb05b72344f40806cbe810de8872f1698bf053 on Linux/aarch64, with Python
-> 3.11.13 and GCC 12.2.0. This was a partial lib/ build with CONFIG_TEST_LKM=m.
-> 
-> The following uses a disposable source tree at that base. The guards
-> prevent overwriting an existing output directory or result file:
-> 
->     (
->         set -eu
->         test ! -e out
->         test ! -e outside.json
->         test ! -e inside.json
->         make O=out -j1 allnoconfig
->         bash scripts/config --file out/.config --enable MODULES \
->             --enable RUNTIME_TESTING_MENU --module TEST_LKM
->         make O=out -j1 olddefconfig
->         make O=out -j1 V=1 lib/
-> 
->         outside_exit=0
->         python3 -B scripts/clang-tools/gen_compile_commands.py -a ar \
->             -d out -o outside.json out/lib/modules.order ||
->             outside_exit=$?
->         printf 'outside_exit=%s\n' "$outside_exit"
-> 
->         inside_exit=0
->         (cd out &&
->          python3 -B ../scripts/clang-tools/gen_compile_commands.py -a ar \
->              -o ../inside.json lib/modules.order) ||
->             inside_exit=$?
->         printf 'inside_exit=%s\n' "$inside_exit"
->         test "$outside_exit" -eq 1
->         test "$inside_exit" -eq 0
->         python3 -c \
->             'import json; assert len(json.load(open("inside.json"))) == 1'
->     )
-> 
-> Kbuild generated lib/test_module.o, lib/test_module.mod,
-> lib/.test_module.o.cmd and lib/modules.order under out/. Both .mod and
-> modules.order contain lib/test_module.o.
-> 
-> The old script's invocation from the source directory fails with:
-> 
->     FileNotFoundError: [Errno 2] No such file or directory:
-> 'lib/test_module.mod'
->     outside_exit=1
-> 
-> The same artifacts work when the old script is invoked from out/:
-> 
->     inside_exit=0
-> 
-> The successful invocation produces one JSON entry for lib/test_module.c.
-> The patched script succeeds from the source directory and produces an
-> identical entry. The old script also fails with absolute paths for -d
-> and modules.order; the patched script succeeds with those paths too.
-> 
-> Only the standalone generator invocation is outside the build directory;
-> compilation itself runs under out/. This is not a full kernel build or
-> a boot/runtime test.
+`{un,}likely()` are commonly used macros on the C side -- there are
+more than 25k occurrences in the tree. Rust is likely going to provide
+functions (not macros) for the same purpose: `core::hint::{un,}likely()`.
+Currently they are unstable under `feature(likely_unlikely)` [1].
 
-Thanks for the detailed reproducer.
+For instance, given:
 
-Quoting from Nathan:
-| How was this discovered? This cannot happen within Kbuild because this
-| script is always invoked from within the build folder, so was it a
-| manual invocation or something else?
+    fn f1(a: i32) -> i32 {
+        if a < 0 {
+            return 123;
+        }
 
-So, if I get youre reply correctly, the issue this was not discovered 
-"in the wild" but can only be reproduced by manual use of 
-gen_compile_commands.py.
+        42
+    }
 
--- 
-Nicolas
+    fn f2(a: i32) -> i32 {
+        if likely(a < 0) {
+            return 124;
+        }
+
+        42
+    }
+
+    fn f3(a: i32) -> i32 {
+        if unlikely(a < 0) {
+            return 125;
+        }
+
+        42
+    }
+
+LLVM emits code equivalent to the one it would for similar C functions:
+
+    f1:
+            test   %edi,%edi
+            mov    $0x7b,%ecx
+            mov    $0x2a,%eax
+            cmovs  %ecx,%eax
+            ret
+
+    f2:
+            mov    $0x7c,%eax
+            test   %edi,%edi
+        /-- jns    <f2+0xa>
+        |   ret
+        \-> mov    $0x2a,%eax
+            ret
+
+    f3:
+            mov    $0x2a,%eax
+            test   %edi,%edi
+        /-- js     <f3+0xa>
+        |   ret
+        \-> mov    $0x7d,%eax
+            ret
+
+Thus vendor (essentially) the `core` library code to provide the same
+API (so that we may use `core`'s directly in the future).
+
+We do so by implementing `{un,}likely()` like `core`'s `intrinsics` do
+(to save a layer) and based on calling our own `cold_path()` instead of
+using `core`'s (which is stable since 1.95.0 [2][3]).
+
+It turns out that simply using `#[cold]` to emulate `cold_path()`,
+suggested by Gary [4], works in the cases I tested across all supported
+versions so far, so we can avoid the complexity of having one more Kconfig
+and conditionally enabling the feature in callers (since `cold_path()`
+was added in Rust 1.86.0 [5]).
+
+We could optionally call `cold_path()` for Rust >= 1.86.0 within our own
+`cold_path()`, but it seems that it is not needed, and anyway since Rust
+1.98.0 `cold_path()` is itself `#[cold]` so that it works even if the
+MIR inliner can't inline it [6].
+
+Even if we find that it is not optimal in some cases, it can be improved,
+and meanwhile we will have the means to annotate these cases already.
+
+Apart from that, the only differences with `core`'s version are the
+usual changes (`pr_*!` calls and their `\n`, imports, attributes, lint
+cleanup), plus a fix for a polarity typo (I sent a fix upstream [7])
+and removal of unneeded code documentation.
+
+In addition, add them to the prelude (inlined, so that the documentation
+is rendered at least there, until we can use `core`'s).
+
+Link: https://github.com/rust-lang/rust/issues/151619 [1]
+Link: https://github.com/rust-lang/rust/issues/136873 [2]
+Link: https://github.com/rust-lang/rust/pull/151576 [3]
+Link: https://lore.kernel.org/rust-for-linux/DGA6GUR58QJ7.1XZZ0P4VZNW86@garyguo.net/ [4]
+Link: https://github.com/rust-lang/rust/pull/133695 [5]
+Link: https://github.com/rust-lang/rust/pull/156863 [6]
+Link: https://github.com/rust-lang/rust/pull/164374 [7]
+Assisted-by: LLM
+Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+---
+v3: I used Gary's `#[cold]` suggestion, and thus removed the Kconfig.
+I rebased and made sure the code is up to date with `core`, tested a
+bunch of things, compared again with C and the assembly generated, found
+a strange behavior on Clang I will report separately, a polarity typo in
+`core` (fixed here) and inlined the docs in the prelude to get it
+rendered somewhere until we bump the MSRV. I think the potential issue
+I found in v2's discussion may have been with `-Os`, but it happens the
+same way with `core`'s, so it does not matter.
+
+Alice, Gary: I removed your Reviewed-by's just in case. It is pretty
+similar to last time, but the commit message is reworded, and the commit
+is simpler.
+
+ rust/kernel/prelude.rs    |   7 ++
+ rust/kernel/std_vendor.rs | 136 ++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 143 insertions(+)
+
+diff --git a/rust/kernel/prelude.rs b/rust/kernel/prelude.rs
+index edaf1e4c174b..de5a5aad16a1 100644
+--- a/rust/kernel/prelude.rs
++++ b/rust/kernel/prelude.rs
+@@ -133,3 +133,10 @@
+ // `super::std_vendor` is hidden, which makes the macro inline for some reason.
+ #[doc(no_inline)]
+ pub use super::dbg;
++
++#[doc(inline)]
++pub use super::std_vendor::{
++    cold_path,
++    likely,
++    unlikely, //
++};
+diff --git a/rust/kernel/std_vendor.rs b/rust/kernel/std_vendor.rs
+index abbab5050cc5..8738c387fb4a 100644
+--- a/rust/kernel/std_vendor.rs
++++ b/rust/kernel/std_vendor.rs
+@@ -162,3 +162,139 @@ macro_rules! dbg {
+         ($($crate::dbg!($val)),+,)
+     };
+ }
++
++/// Hints to the compiler that a branch condition is likely to be true.
++/// Returns the value passed to it.
++///
++/// It can be used with `if` or boolean `match` expressions.
++///
++/// When used outside of a branch condition, it may still influence a nearby branch, but
++/// probably will not have any effect.
++///
++/// It can also be applied to parts of expressions, such as `likely(a) && unlikely(b)`, or to
++/// compound expressions, such as `likely(a && b)`. When applied to compound expressions, it has
++/// the following effect:
++/// ```text
++///     likely(!a) => !unlikely(a)
++///     likely(a && b) => likely(a) && likely(b)
++///     likely(a || b) => a || likely(b)
++/// ```
++///
++/// See also the function [`cold_path()`] which may be more appropriate for idiomatic Rust code.
++///
++/// # Examples
++///
++/// ```
++/// fn foo(x: i32) {
++///     if likely(x > 0) {
++///         pr_info!("this branch is likely to be taken\n");
++///     } else {
++///         pr_info!("this branch is unlikely to be taken\n");
++///     }
++///
++///     match likely(x > 0) {
++///         true => pr_info!("this branch is likely to be taken\n"),
++///         false => pr_info!("this branch is unlikely to be taken\n"),
++///     }
++///
++///     // Use outside of a branch condition may still influence a nearby branch
++///     let cond = likely(x != 0);
++///     if cond {
++///         pr_info!("this branch is likely to be taken\n");
++///     }
++/// }
++/// ```
++#[inline(always)]
++pub const fn likely(b: bool) -> bool {
++    if b {
++        true
++    } else {
++        cold_path();
++        false
++    }
++}
++
++/// Hints to the compiler that a branch condition is unlikely to be true.
++/// Returns the value passed to it.
++///
++/// It can be used with `if` or boolean `match` expressions.
++///
++/// When used outside of a branch condition, it may still influence a nearby branch, but
++/// probably will not have any effect.
++///
++/// It can also be applied to parts of expressions, such as `likely(a) && unlikely(b)`, or to
++/// compound expressions, such as `unlikely(a && b)`. When applied to compound expressions, it has
++/// the following effect:
++/// ```text
++///     unlikely(!a) => !likely(a)
++///     unlikely(a && b) => a && unlikely(b)
++///     unlikely(a || b) => unlikely(a) || unlikely(b)
++/// ```
++///
++/// See also the function [`cold_path()`] which may be more appropriate for idiomatic Rust code.
++///
++/// # Examples
++///
++/// ```
++/// fn foo(x: i32) {
++///     if unlikely(x > 0) {
++///         pr_info!("this branch is unlikely to be taken\n");
++///     } else {
++///         pr_info!("this branch is likely to be taken\n");
++///     }
++///
++///     match unlikely(x > 0) {
++///         true => pr_info!("this branch is unlikely to be taken\n"),
++///         false => pr_info!("this branch is likely to be taken\n"),
++///     }
++///
++///     // Use outside of a branch condition may still influence a nearby branch
++///     let cond = unlikely(x != 0);
++///     if cond {
++///         pr_info!("this branch is unlikely to be taken\n");
++///     }
++/// }
++/// ```
++#[inline(always)]
++pub const fn unlikely(b: bool) -> bool {
++    if b {
++        cold_path();
++        true
++    } else {
++        false
++    }
++}
++
++/// Hints to the compiler that given path is cold, i.e., unlikely to be taken. The compiler may
++/// choose to optimize paths that are not cold at the expense of paths that are cold.
++///
++/// Note that like all hints, the exact effect to codegen is not guaranteed. Using `cold_path`
++/// can actually *decrease* performance if the branch is called more than expected. It is advisable
++/// to perform benchmarks to tell if this function is useful.
++///
++/// # Examples
++///
++/// ```
++/// fn foo(x: &[i32]) {
++///     if let Some(first) = x.first() {
++///         // this is the fast path
++///     } else {
++///         // this path is unlikely
++///         cold_path();
++///     }
++/// }
++///
++/// fn bar(x: i32) -> i32 {
++///     match x {
++///         1 => 10,
++///         2 => 100,
++///         3 => { cold_path(); 1000 }, // this branch is unlikely
++///         _ => { cold_path(); 10000 }, // this is also unlikely
++///     }
++/// }
++/// ```
++///
++/// See also the [`likely()`] and [`unlikely()`] functions, which are similar to the C side macros.
++#[inline(always)]
++#[cold]
++pub const fn cold_path() {}
+
+base-commit: 7c306f00835a237a70024a8f968dbc3bc8db8fcf
+--
+2.56.0
