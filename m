@@ -1,203 +1,201 @@
-Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013020.outbound.protection.outlook.com [40.107.201.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543673C108A
-	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 08:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792138807; cv=fail; b=OfoGPhHr2+EjfXjnU6FqmhIssK9n4NCoVLsReqLV31u2Hb+kRwZ0KQ7icBaDMJe64YAZmbVxovbE/MD901NL89H1Hr/J9VURjgT9xfnsnAzMdYPMZTCAj7qyyCYTtoleIueyw4acA5nu4/ha8VXuABoOFRFGVjFW8Jx6/JQWGx0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792138807; c=relaxed/simple;
-	bh=kRqwh81LdtWZ5VZDgOrFPgMonKee22m7T1Mt0ktviRs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AP1cGzJAA87XaBC4KqlOv7RkqcvQOLxXGeh5R+1NS3oPir8qolfG1AZo8aFAOdfggVzPZxC95i9M9TcKztOaAjb7B0RHUNX2XR+VohzDvLnnS11dDO7w+f56FMu3or6UNBiPUc+9A5TwgFoc2jDwHepXDIMzdFeOFcRltdGjjDk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dSxhpysn; arc=fail smtp.client-ip=40.107.201.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7D4396B9D;
+	Fri, 16 Oct 2026 08:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792139147; cv=none; b=qffEZL3swmZYK3hv8FnA8thR3JEYKhdGHfq73JO9FV0yn+xq96jLC+u2yHr3JxF6or2j+O5LCOqAN535BemW2wE2+yNkOonKnugiQjjtdyB+TwehlPMWV+DZQxHcmvVHh5PIIFeeg/WmlMS1Yp1nrmkJP4r+7ioo8/u3Te6baW8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792139147; c=relaxed/simple;
+	bh=KAfd8tRH2E+vvJpLkFEh63/NAmBOZN4lDvDMX9uzf5s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gi/XvUgdEax3kCdfGILZS4OA+sW3AG0qu5VhsyWkxCt8fnzM8UmnlSC5+696oSQlNnGcs90M0zCBVTcau6fegMZGsZ/1jTk+SdvLN/acJrIfwz5UeswCvr4P+qVfKu9cXkZeJ+RZUcVRtl7+ZZGY5fy4LplvXuu91Pxfv4fUEEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AoR2383t; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dSxhpysn"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wnijo2hHkGxG6FoJg1qgVTWJAm2cJ/HJlPDSxTBjH0NxdoGYalafx7QA8Q+UNcOiPYkxtqa+8b50BTj+omuF6fzsN5yyhNla4SiSrRJMjgvHVRE7KlpPRuhm1cF8vqji4PfIg5f1HU8ZVhGg7PAjW3EcqvAtAex77hyLpUIfFE4Jcb93TYaGd+g80n8d1EXhvlQEiKodZQpbs4JtJFYEeVQZhnlMx5IaLIhkBGT8LzQLUGcfEkbOGU+Zzioi/KBVpQH+GPd11lrOUDeFZJFoPIYhhFHTlhXPWf+jBWGKjazRzqtZSnHSQGVbskPxL/SQolk/o/2J8hqDZ4unvHkyxg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EopJUlpVqSWWIZFZQe6IUHaluhe35Y242TFyqebHYco=;
- b=fCZa25OGmGr/pcrewk1ZtjDeztXar6ZdNhXx5w1QPgSDLlUfbwt8BQwNJ/3hIkDzEUIb+CE2YpMcSNTpOFH/EdzrfvpZM4xgBnN97OvKvEg2m18861YePXXLi631MF1jDk3elyfMWdp54E4/GbfNpLVqle+gT5D8MRcMVH6AkmnLykRkY6TGNWk/XCrYgojCbFdR0OoY4IAovNan3pd/hJWDAH/ccX4A53uMbuwgm4Thy5K2f3GI0RjTyzuXPUGgN26IWvwcK6ZIKR7kSneoHOdGQUddjQNg255kFxaZCbnDtdSZ8GlES/f5Xi99fRheTadxtFRcfj4U3ISsSUz1UQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EopJUlpVqSWWIZFZQe6IUHaluhe35Y242TFyqebHYco=;
- b=dSxhpysnDDUUc6J1+5Bi3rQlZTi7Jj7L2R/7zJrr9HKLwe8yYDyo7Xo9YwMBQsmG5Qqx6DL0bRK09RX/hl19XXVI+TnY2P0vK4YC4Ghs1+HefuzK9fta505Im7fQ3Esna2aUmkWfyrfXKoqYJGaz9tFg6Q7NYIfQObj0744AlEAunYXjNIGl4UVda92F/mXSWsGDgeFkmVORRR1z60qB5u9GCmXmYambURJgq9LMDKV8n0t6lfwW99WygJY9f0Cb8yfJQ0u+mpxK5uYUEyuv1K2BG/pGhXZ5IhrATWKjNe4aLKmFGzJ2UrMEbxF7b/96TV7Vsu0eMql7PWPILPmqcA==
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH7PR12MB5974.namprd12.prod.outlook.com (2603:10b6:510:1d9::19)
- by IA1PR12MB6330.namprd12.prod.outlook.com (2603:10b6:208:3e4::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.13; Fri, 16 Oct
- 2026 08:19:33 +0000
-Received: from PH7PR12MB5974.namprd12.prod.outlook.com
- ([fe80::f5a5:bbc3:e9da:f8a0]) by PH7PR12MB5974.namprd12.prod.outlook.com
- ([fe80::f5a5:bbc3:e9da:f8a0%3]) with mapi id 15.21.0522.012; Fri, 16 Oct 2026
- 08:19:33 +0000
-From: Adrian Ambrozewicz <aambrozewicz@nvidia.com>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Bartosz Golaszewski <brgl@kernel.org>,
-	Donald Shannon <donalds@nvidia.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	llvm@lists.linux.dev,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH 06/11] gpio: Add NVIDIA LSTP GPIO driver
-Date: Fri, 16 Oct 2026 11:19:16 +0300
-Message-ID: <20261016081917.1958681-4-aambrozewicz@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAD++jLkru2AL2_7ieOdbYrePAhNSFaa3wwEzCagiPsALgG2GwQ@mail.gmail.com>
-References: <20261012-lstp-usb-adapter-v1-0-aambrozewicz@nvidia.com> <20261012-lstp-usb-adapter-v1-6-aambrozewicz@nvidia.com> <CAD++jLkru2AL2_7ieOdbYrePAhNSFaa3wwEzCagiPsALgG2GwQ@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: TL2P290CA0012.ISRP290.PROD.OUTLOOK.COM
- (2603:1096:950:2::16) To PH7PR12MB5974.namprd12.prod.outlook.com
- (2603:10b6:510:1d9::19)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AoR2383t"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792139146; x=1823675146;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KAfd8tRH2E+vvJpLkFEh63/NAmBOZN4lDvDMX9uzf5s=;
+  b=AoR2383tIJnDYyU0qzY3sDPTyeKQOpgfCgFPtjKL4/lNhDCP580XnG+U
+   Sohew1udjwNOdLkyE17mvquC0a1wePHYSy67fUowHCWaXylNw9GBgr48O
+   C97ngCow8v7TC1EIp/sj0By3znjYii9RVpkfKiZgIjlDIc5miv6pUT9dh
+   qiKeb4rgbm5xEddgJ5/14SA0BMigBOacifGvWtV+NruHdqfNITXpLj1wX
+   3+UJh3N0shlYeEQiZW8Tw0HCP4oRQBYdAPijJfMBIxemzv30IG8PWJrvp
+   sWXEj9/gNJvtrpRy5ZGDlsCQ6fqCK0+oLZZYsmxVrFTOOHr8YK8Qtp5xa
+   Q==;
+X-CSE-ConnectionGUID: xCkuKGpfR2GMF8K5hslBXw==
+X-CSE-MsgGUID: /FX5izdURLWXpsPi5RZMrQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="812315"
+X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
+   d="scan'208";a="812315"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 01:23:27 -0700
+X-CSE-ConnectionGUID: u5J2rt91RgyRRrpNhQby/w==
+X-CSE-MsgGUID: kNfHIRW4RAm85ARoSZ/D7A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
+   d="scan'208";a="2143052"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 16 Oct 2026 01:23:20 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xHdDg-00000000HtS-105i;
+	Fri, 16 Oct 2026 08:23:16 +0000
+Date: Fri, 16 Oct 2026 16:23:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sairaj Kodilkar <sarunkod@amd.com>, "H. Peter Anvin" <hpa@zytor.com>,
+	"Joerg Roedel (AMD)" <joro@8bytes.org>,
+	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Kiryl Shutsemau <kas@kernel.org>,
+	Li RongQing <lirongqing@baidu.com>, Marco Elver <elver@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Vasant Hegde <vasant.hegde@amd.com>, Will Deacon <will@kernel.org>,
+	iommu@lists.linux.dev, kvm@vger.kernel.org,
+	linux-coco@lists.linux.dev
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v5 7/7] iommu/amd: Provide kernel command line option to
+ enable GAPPI
+Message-ID: <202610161625.7iSczyVo-lkp@intel.com>
+References: <20261015064515.10700-8-sarunkod@amd.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR12MB5974:EE_|IA1PR12MB6330:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9037e53-fe2c-41ec-993c-08df2b5e358f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|23010399003|7416014|376014|1800799024|6133799003|22082099003|18002099003|10067099003|3023799007|4143699003|261009223027099003|11063799006|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	ExKOhod+rmxF2za8tFM42zxfQIjJlxGt5ch2cBel//dO6dfDha+e54UnOn/hnymJavzXWdszGXyJG4Fm0bjnbcnXkL537bhsOZZYY/BOmNnP3NOm/5hbT8uYB7S0TBETu15wka2Qjy/yo1wfxo3zgY3ly+FMxMNI/MfN5PGVg4YVcjd22mZmoTaBD43F9FUJtfKzVhruWm16lfW/0X6XYBTDg/qrrRGVxnNvC3IG88G8CNz3DFK90USsPb4MUmATrfQdW4hJxQ8aKcobgLqen7fVGdHqjsB/T5Y4k3aVT9k+XUDk8GQ+7ng9Kfs/dutQnJWSpIu5ZhK27TKRe5TwspkfEYbDR9S88JNR+reOFlZmhGm8SH6aloG3aNbXOgv+HkwOC/n4I4X1XwKkIkjpLRBuTO6Jj5pJsrC2xCQreQf3kstU6eENn8Vv+R98tIKkBwMXiOWp0LVdOhdUWZ9PTuZWaOsZEcphMTijQBHf7WZpfeG/2TDhOVX9c7iZ9C0cq0KyuDHitafRLElErFfsghFk0hsJbzuCPli7Wwa5BHK0pLhD1pVRVBcTSAOrKNO+Yx5x9ozES3txrR9UntlPQhVuqYyLSevzHdqwZsoFLTZn9Vyo6T7umvqK26XUamflGdqJS13ePIz6EKUIPZRVAzcqlkQu/kuonFNmO63LAww=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5974.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(7416014)(376014)(1800799024)(6133799003)(22082099003)(18002099003)(10067099003)(3023799007)(4143699003)(261009223027099003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?fZBR7bAup1pvHsYwDVBIFFtj2SucZgYscylEs2Mr6RPzD6Gf1iDCYnbz4bB9?=
- =?us-ascii?Q?8lc/Q3B8d9uUyWwSNntXqg5u2Sc/30UhXQKY5iaJosN/4T3abMZqPACcF7Kt?=
- =?us-ascii?Q?TpRyMAxPaBulrPBUFZpo/r8xWFXOK676eulKLJEhNRFqIigzae6dsAeXxB1/?=
- =?us-ascii?Q?4Bu2QUB60PARR2gjSl5+5fErnIs6of2Ox4GMoS8KwsFdLPcNa52B92UpknZX?=
- =?us-ascii?Q?gRuy/LmEniL2lsiXcF4+kP9esmakozxyEygxKKqrKpq8V6i0F6HE6UtwvGBX?=
- =?us-ascii?Q?CyReQ3rS5LCmtDy36bXkPqZS+FgxBNNSQa7e30Cn+nT6iGdSNpocHxnmZ+vq?=
- =?us-ascii?Q?7/oJzQExDkOlEI7uHjEfdTL9MHBjHxvBCussSBbomPD12eXTssC2dJtHHRxV?=
- =?us-ascii?Q?eVWlms8+uOwaPS2rTgcwKrZM5dMFnw6IMsp7ImzPY/BLouBG+XcXq6tlLsaR?=
- =?us-ascii?Q?/nXedrodJsyr8RORolrTtxi2t1oKhS+BQDCBz5KZohCx+vAVwxTAhtOkaW4+?=
- =?us-ascii?Q?eV7OPXcl4p3OWWVBSH5SnV0/bJWTh7dozPfivAiN8sZNDPSoq3ndlodF6ysN?=
- =?us-ascii?Q?ANyA1SLrbzXEXOvE+wh+02lQfs5HeuZw1dX4k6RL/hcmz06hQhEQdGhoDrk4?=
- =?us-ascii?Q?94SHX79bDNes9F4ILdab86DZoGDsz8auW3931kpQrHf/VUCN+RBJZp9LNxZs?=
- =?us-ascii?Q?xVGCfYw+frMq//DREY7FnzqUPCzrHu+hfxX5IL+vm71LTnyUtimi6TSJeD/P?=
- =?us-ascii?Q?bVSu35CW/Ljn9Zd78RMq/hlOrKkol2ZVJSXbOaIalgeWcXIIFPS4+BDn6a4t?=
- =?us-ascii?Q?2FtenlGOVVLk2IiG4p/e07WYixcYN+l+kQOJECfbDMUTP0huneXPnyar/+N0?=
- =?us-ascii?Q?4qymH2NPNGz02k5kumbCbumhbPZMFittLKXHkgzhCpLNOHlJm8K4ZYDm6OSb?=
- =?us-ascii?Q?ccM+dmSSjdUuo7AWkKpRqh3SpiGR3llYQNcWj9DKNfpVBQyXh4+Fsxg/WyMB?=
- =?us-ascii?Q?RlytPVx9j+JvpJCKXViIjx4iwYWY5O4kPHu31cAYG/vuq4Sf8lDed0OR0Coq?=
- =?us-ascii?Q?iZAUarJdA7X4LLWVMYtVE0MaK4Rx5Cuoz8XxshfXSSqG97OiyBKjPRovImzW?=
- =?us-ascii?Q?/8qpEzLK4aEKG1KOVwDA9HZQ0KvFBFGB4XGoy4JdYUNr/B0aF9dg3EFdPY7p?=
- =?us-ascii?Q?HxBDrRLnAKvor5HVClKli0BtFXvn3M4Pt5HcvPmqz8zI97ivEbtItLA4YFo2?=
- =?us-ascii?Q?16T1QeE9QRe8rfpBSi0MZxuS+rsHS3/OYZDJDP/WsX31LzG1DNd4ff/Jjsqe?=
- =?us-ascii?Q?FSeZY8HC2JnBEPvzX2b83JNaV2hacy6ETdbLbqbpDSYxdasXOunNd20rvacu?=
- =?us-ascii?Q?U/ICnvUaMx1p5mPZV94fcFG7K354Ov3XfRMvlIojUWg0ipww4ZSkrBguyYDJ?=
- =?us-ascii?Q?gWRqojl1k0e9D+Rju5OArD6QAWt65c4STj0IwVVm4VRj7xFVE5pAxuSAZD5d?=
- =?us-ascii?Q?zxaVS8W243MjJUS1/9pbEkkINfdONHD62uDErCELxhFxAbT7J5fmHAu/T3gM?=
- =?us-ascii?Q?TkG1VXbf/Qkz5y2ChRYS7FvN+6Oh4qq5DMYIBIbJqCt+imRAWiK1sX5lWXs2?=
- =?us-ascii?Q?GTQeipEmSAc0H/POCFTddcG5xMUG6NjXYuGDw17XXLKZ+6FBStRA4dURXiIw?=
- =?us-ascii?Q?Io0DvnHm13J336+YBL9a4yUpuv4N1ozQhRZ/gNBw4KL1atVObGDCjM2xohPr?=
- =?us-ascii?Q?oltZuTyeIw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9037e53-fe2c-41ec-993c-08df2b5e358f
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5974.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2026 08:19:33.6466
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PkBbQR2wiI2VY9oqBYcs5+1GwamnQ1FAxTQD0vif+H+N5kh6vNs0lD5RmOgDbBMXCNzZTdXwhdojXqL8fues2A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6330
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20261015064515.10700-8-sarunkod@amd.com>
 
-Hi Linus,
+Hi Sairaj,
 
-Thanks for the review.
+kernel test robot noticed the following build errors:
 
-On Wed, Oct 14, 2026 at 1:25 AM Linus Walleij <linusw@kernel.org> wrote:
->> +config GPIO_LSTP
->
-> GPIO_USBIO ... GPIO_LSTP?
->
-> These should be in alphabetical order.
+[auto build test ERROR on 4056b3c9d3c92ea45955641dbafeb9b960e146ef]
 
-Will fix, and check the other Kconfig hunks in the series.
+url:    https://github.com/intel-lab-lkp/linux/commits/Sairaj-Kodilkar/iommu-amd-KVM-SVM-Rename-cpu-to-apicid-in-IOMMU-interface/20261015-121509
+base:   4056b3c9d3c92ea45955641dbafeb9b960e146ef
+patch link:    https://lore.kernel.org/r/20261015064515.10700-8-sarunkod%40amd.com
+patch subject: [PATCH v5 7/7] iommu/amd: Provide kernel command line option to enable GAPPI
+config: x86_64-randconfig-1017-20261016 (https://download.01.org/0day-ci/archive/20261016/202610161625.7iSczyVo-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261016/202610161625.7iSczyVo-lkp@intel.com/reproduce)
 
->> +#include <uapi/linux/gpio.h>
->
-> Do you really need all this?
-> Certainly <uapi/linux/gpio.h> is a mistake, look over all of these.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610161625.7iSczyVo-lkp@intel.com/
 
-It was there for GPIO_MAX_NAME_SIZE, for a name truncation warning the
-driver does not need. Both go, and I'll trim the rest of the includes
-here and in the other drivers.
+All errors (new ones prefixed by >>):
 
->> +/* clang-format off */
->
-> I beg your pardon? What is this?
+   drivers/iommu/amd/init.c:163:6: error: redefinition of 'false' as different kind of symbol
+     163 | bool amd_iommu_gappi;
+         |      ^
+   include/linux/amd-iommu.h:65:25: note: expanded from macro 'amd_iommu_gappi'
+      65 | #define amd_iommu_gappi false
+         |                         ^
+   include/linux/stddef.h:11:2: note: previous definition is here
+      11 |         false   = 0,
+         |         ^
+   drivers/iommu/amd/init.c:164:15: error: redefinition of 'false' as different kind of symbol
+     164 | EXPORT_SYMBOL(amd_iommu_gappi);
+         |               ^
+   include/linux/amd-iommu.h:65:25: note: expanded from macro 'amd_iommu_gappi'
+      65 | #define amd_iommu_gappi false
+         |                         ^
+   include/linux/stddef.h:11:2: note: previous definition is here
+      11 |         false   = 0,
+         |         ^
+   drivers/iommu/amd/init.c:164:1: error: cannot take the address of an rvalue of type 'int'
+     164 | EXPORT_SYMBOL(amd_iommu_gappi);
+         | ^             ~~~~~~~~~~~~~~~
+   include/linux/export.h:89:29: note: expanded from macro 'EXPORT_SYMBOL'
+      89 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
+         |                                         ^              ~~~
+   include/linux/export.h:86:38: note: expanded from macro '_EXPORT_SYMBOL'
+      86 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
+         |                                         ^               ~~~
+   include/linux/export.h:77:2: note: expanded from macro '__EXPORT_SYMBOL'
+      77 |         __ADDRESSABLE(sym)                                      \
+         |         ^             ~~~
+   include/linux/compiler.h:276:2: note: expanded from macro '__ADDRESSABLE'
+     276 |         ___ADDRESSABLE(sym, __section(".discard.addressable"))
+         |         ^              ~~~
+   include/linux/compiler.h:273:63: note: expanded from macro '___ADDRESSABLE'
+     273 |         __UNIQUE_ID(__PASTE(addressable_, sym)) = (void *)(uintptr_t)&sym;
+         |                                                                      ^~~~
+>> drivers/iommu/amd/init.c:3804:20: error: expression is not assignable
+    3804 |                         amd_iommu_gappi = true;
+         |                         ~~~~~~~~~~~~~~~ ^
+   4 errors generated.
 
-Markers that stopped clang-format from reflowing hand-formatted blocks.
-They don't belong in posted code; they are gone in the next version.
 
-> This  looks very dense too..
->
-> At least a newline between the enums?
+vim +3804 drivers/iommu/amd/init.c
 
-Will do.
+  3775	
+  3776	static int __init parse_amd_iommu_options(char *str)
+  3777	{
+  3778		if (!str)
+  3779			return -EINVAL;
+  3780	
+  3781		while (*str) {
+  3782			if (strncmp(str, "fullflush", 9) == 0) {
+  3783				pr_warn("amd_iommu=fullflush deprecated; use iommu.strict=1 instead\n");
+  3784				iommu_set_dma_strict();
+  3785			} else if (strncmp(str, "force_enable", 12) == 0) {
+  3786				amd_iommu_force_enable = true;
+  3787			} else if (strncmp(str, "off", 3) == 0) {
+  3788				amd_iommu_disabled = true;
+  3789			} else if (strncmp(str, "force_isolation", 15) == 0) {
+  3790				amd_iommu_force_isolation = true;
+  3791			} else if (strncmp(str, "pgtbl_v1", 8) == 0) {
+  3792				amd_iommu_pgtable = PD_MODE_V1;
+  3793			} else if (strncmp(str, "pgtbl_v2", 8) == 0) {
+  3794				amd_iommu_pgtable = PD_MODE_V2;
+  3795			} else if (strncmp(str, "irtcachedis", 11) == 0) {
+  3796				amd_iommu_irtcachedis = true;
+  3797			} else if (strncmp(str, "nohugepages", 11) == 0) {
+  3798				pr_info("Restricting V1 page-sizes to 4KiB");
+  3799				amd_iommu_pgsize_bitmap = AMD_IOMMU_PGSIZES_4K;
+  3800			} else if (strncmp(str, "v2_pgsizes_only", 15) == 0) {
+  3801				pr_info("Restricting V1 page-sizes to 4KiB/2MiB/1GiB");
+  3802				amd_iommu_pgsize_bitmap = AMD_IOMMU_PGSIZES_V2;
+  3803			} else if (strncmp(str, "gappi", 5) == 0) {
+> 3804				amd_iommu_gappi = true;
+  3805			} else {
+  3806				pr_notice("Unknown option - '%s'\n", str);
+  3807			}
+  3808	
+  3809			str += strcspn(str, ",");
+  3810			while (*str == ',')
+  3811				str++;
+  3812		}
+  3813	
+  3814		return 1;
+  3815	}
+  3816	
 
->> +struct lstp_gpio_priv {
->
-> Just call it lstp_gpio
-
-Will do.
-
->> +       struct lstp_channel *ch;
->> +       struct gpio_chip gc;
->
-> Why? Normally drivers get the state container from the
-> chip not the other way around.
-
-The gpio_chip callbacks do get it from the chip, with
-gpiochip_get_data(). The channel pointer is the handle every request
-to the device goes through. The only lookup the other way round is the
-interrupt event callback: the LSTP core calls it with the channel, so
-it takes the state from the channel's private pointer.
-
-> It seems some pins are only input and some are only output.
->
-> Have you considered using serialized register access over
-> regmap and use regmap-gpio with fixed direction bitmaps?
-
-Yes, the device configuration fixes each pin's direction. I looked at
-gpio-regmap: a regmap bus with one register per pin would cover get,
-set and the fixed directions. Two parts don't fit well, though.
-gpio-regmap has no get_multiple/set_multiple, while the device takes
-several pins in one request, so an array access would become one USB
-round trip per pin. And interrupts arrive as event packets the device
-sends on its own, not as status registers to read, so regmap-irq does
-not apply and the irq_chip would stay as it is.
-
-What I would take from it is reading the directions once at probe into
-bitmaps, instead of asking the device on every call. Would that be
-acceptable, or would you still prefer gpio-regmap despite the lost
-batching?
-
-Thanks,
-Adrian
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
