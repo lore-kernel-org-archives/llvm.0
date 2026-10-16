@@ -1,120 +1,149 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.avm.de (mail.avm.de [212.42.244.119])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 810663403E9;
-	Fri, 16 Oct 2026 13:22:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C86F4C8C7B
+	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 13:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.42.244.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792156928; cv=none; b=ZAabxF4emaGpkG4xMcvdyIVxYVsRDLtsRuc8DDG9wcQL59DuJDDwp+qKjlMG2GaULWWiTYNsHw/mWVjNChOWjqBIafdJKcgtxGh5T7MRntE4KB993f9HsVsTJ0MMmeTeTuTQImWRoSCa42PgjXOXj06WHuLPLdoKwGT6Ty6G+qI=
+	t=1792158529; cv=none; b=R/TelbzK2zkUt5nfd9pgyokpOI7pQbwdi955sQJRBklMfU00fqgZHpxBlKyvW6Y871ZQ1fCtOpdzBiGpGzlwaYBEG4OpaTWMElQH9D0SkPuD/OeZK+Lj3GoHZa6IX82fEmG/+Z/vgghoTyYbuU1KheXeCVLexQ2NyyuJaun3Zqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792156928; c=relaxed/simple;
-	bh=A7txyVYnucQ+mXIF45spbjwttKKlMtGxt+1t/z8ssrA=;
+	s=arc-20240116; t=1792158529; c=relaxed/simple;
+	bh=zlQWcttho1vyPbsQg0Xn2LU8NAcWx23gixdtx0PGqHU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FSlaK0QzTbYsEspOSws11kpQ+5yZzDM+VwyeLtq/A9+ir9KOSV9IO9Ld00Zw9Dkj6wgkn0c03UYXxcZ+hxa3iVwaKvagCu/8ewvTdNplEBeEBGiyVWl2hGp1ccPZ24Ht8WnFiRWQ1apuRUFLV2H4F9ZaI6KsreeBoWFQWJ1ikRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YDu/F3sz; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=gHn775xdSpKgJXzbK04kCdxZpUaFhL+HiFm4sKdwfK8riNC7SkNekiPNARfxrnunfmKaRmR39GsAcNDKY7YQGtDUPROErDOrhTiPI5yXuWLShDRsRUfZNG5sj6v/k/jKMC9OQ/LchY+ZuIWzhykTfHdcZHZvsl5OBKbiPTZ7fPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com; spf=pass smtp.mailfrom=fritz.com; dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b=FfWVDKYA; arc=none smtp.client-ip=212.42.244.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fritz.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fritz.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YDu/F3sz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792156927; x=1823692927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=A7txyVYnucQ+mXIF45spbjwttKKlMtGxt+1t/z8ssrA=;
-  b=YDu/F3szXkxDMNkM4rpmV4HNY7tjTr7HzUD+TnwOLWlZyx/re1Bct/F5
-   6BPNRMsKk75r+4HGFNcsoktxRcC2CHCP27nIvcX3vLHSRacTkUWLuHJ90
-   Srg9BpMx8o6b2yjfWMcQ0KO0jRRjOdNOtY/RFj/n7prY4pNFuGp62g5lu
-   OXLnnSWwhWYPEgXRhBr99P144qttT0k3taPtsM0xLI9nYTiQMfD5J/OzF
-   Wc9ynpXheniTitIbLSruq1Nn38cT0YROcnPF6GjFIiK68HSGuAKt2qFCj
-   J1aqG2f4y8SCpBd5ejblMMR3kZLdYQej4y705fc3frmbWjBXIgdvtcckW
-   w==;
-X-CSE-ConnectionGUID: 6URUrOeiSqSInUI5tcHqjQ==
-X-CSE-MsgGUID: 1oOeGdqTRSCcL3mGGBfOpA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="820271"
-X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
-   d="scan'208";a="820271"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 06:22:06 -0700
-X-CSE-ConnectionGUID: NG1UJPDCSDKpNOKt4UMv+A==
-X-CSE-MsgGUID: 7F3DT3sORvSDv1o3mBLYiA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
-   d="scan'208";a="1831994"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 16 Oct 2026 06:22:03 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xHhsl-00000000IAU-1WH4;
-	Fri, 16 Oct 2026 13:21:59 +0000
-Date: Fri, 16 Oct 2026 21:21:14 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jarkko Sakkinen <jarkko@kernel.org>, keyrings@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <david@davidgow.net>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Linux Memory Management List <linux-mm@kvack.org>,
-	Rae Moar <raemoar63@gmail.com>,
-	Ryota Sakamoto <sakamo.ryota@gmail.com>,
-	Kuan-Wei Chiu <visitorckw@gmail.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Pasha Tatashin <pasha.tatashin@soleen.com>,
-	Kir Chou <note351@hotmail.com>, Petr Mladek <pmladek@suse.com>,
-	Dmitry Antipov <dmantipov@yandex.ru>,
-	Guan-Chun Wu <409411716@gms.tku.edu.tw>,
-	linux-kernel@vger.kernel.org,
-	"(open list:KERNEL UNIT TESTING FRAMEWORK \\(KUnit\\))" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH] lib/tests: kunit for associative array
-Message-ID: <202610162123.hSusVMnq-lkp@intel.com>
-References: <20261014160144.1835860-1-jarkko@kernel.org>
+	dkim=pass (2048-bit key) header.d=fritz.com header.i=@fritz.com header.b="FfWVDKYA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fritz.com; s=mail;
+	t=1792158167; bh=zlQWcttho1vyPbsQg0Xn2LU8NAcWx23gixdtx0PGqHU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=FfWVDKYAiOIYpMdsxizgJ8SripUI215Sy5onHIqmI32OzRHKt/Q0Z4y7qZcFEoDcy
+	 usNqeelRXIwcsAy+AU0OKgqQEU8eiszqresIFhFFHUCVkl9+ho6u5CxmuNTJ17TCmJ
+	 wTE1z2EFcSHLJOl5tdTt8APo3I7+RBUw4jiwEdA/sr8E7dr+W+8DcwagYjU1o+nOMl
+	 QOScddDUQyl2mBtV+TCj+bOU9V2AUdSHn8a/0Pci1Z6hv+lLPqelIGW7J3JxeAfPwl
+	 0xDmSBvN33ZNR8bnG++Bz0449Xux1s8oHr8LInwL8yqyDehH0QiDC+DFnJpgN354EH
+	 ZQb0pl92Eg9AA==
+Received: from [2001:bf0:244:244::78] (helo=mail.avm.de)
+	by mail.avm.de with ESMTP (eXpurgate 4.57.1)
+	(envelope-from <n.schier@fritz.com>)
+	id 6ad229d7-c83a-7f0000032729-7f000001ea90-1
+	for <multiple-recipients>; Fri, 16 Oct 2026 15:42:47 +0200
+Received: from mail-auth.fritz.com (unknown [IPv6:2001:bf0:244:244::78])
+	by mail.avm.de (Postfix) with ESMTPS;
+	Fri, 16 Oct 2026 15:42:47 +0200 (CEST)
+Date: Fri, 16 Oct 2026 15:42:46 +0200
+From: Nicolas Schier <n.schier@fritz.com>
+To: Van Vo <vngocvan@gmail.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, ndesaulniers@google.com,
+	morbo@google.com, justinstitt@google.com, masahiroy@kernel.org,
+	llvm@lists.linux.dev, linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] gen_compile_commands: honor the build directory for
+ modules
+Message-ID: <20261016-fast-lyrical-frigatebird-dcd303@l-nschier-aarch64>
+References: <20261015135752.17028-1-vngocvan@gmail.com>
+ <20261016012148.GD3329673@ax162>
+ <CAJavoFk+zgySyNps5tuKmntmvuAyev=kKL640TFrfCc-njeWBw@mail.gmail.com>
+ <CAJavoFkpO29P_oD_YLBkkp6_k080mN-ctRPXSvB+oj_-vpcR0w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20261014160144.1835860-1-jarkko@kernel.org>
+In-Reply-To: <CAJavoFkpO29P_oD_YLBkkp6_k080mN-ctRPXSvB+oj_-vpcR0w@mail.gmail.com>
+Organization: FRITZ! Technology GmbH
+x-ms-reactions: disallow
+X-purgate-ID: 149429::1792158167-3CFFB515-A91D54D9/0/0
+X-purgate-type: clean
+X-purgate-size: 3158
+X-purgate: This mail is considered clean (visit https://www.eleven.de for further information)
+X-purgate: clean
+X-pfmilter: host: postfix-mx-02  mail-id: 52EEDA03FD  external: no
 
-Hi Jarkko,
+On Fri, Oct 16, 2026 at 01:25:33PM +0700, Van Vo wrote:
+> Hi Nathan,
+> 
+> > How was this discovered?
+> 
+> This came from code inspection of standalone use of -d with an explicit
+> modules.order argument, followed initially by a constructed reproducer.
+> It was not a failure encountered through Kbuild's compile_commands.json
+> target.
+> 
+> I have now reproduced it using real Kbuild-generated artifacts from
+> 0fcb05b72344f40806cbe810de8872f1698bf053 on Linux/aarch64, with Python
+> 3.11.13 and GCC 12.2.0. This was a partial lib/ build with CONFIG_TEST_LKM=m.
+> 
+> The following uses a disposable source tree at that base. The guards
+> prevent overwriting an existing output directory or result file:
+> 
+>     (
+>         set -eu
+>         test ! -e out
+>         test ! -e outside.json
+>         test ! -e inside.json
+>         make O=out -j1 allnoconfig
+>         bash scripts/config --file out/.config --enable MODULES \
+>             --enable RUNTIME_TESTING_MENU --module TEST_LKM
+>         make O=out -j1 olddefconfig
+>         make O=out -j1 V=1 lib/
+> 
+>         outside_exit=0
+>         python3 -B scripts/clang-tools/gen_compile_commands.py -a ar \
+>             -d out -o outside.json out/lib/modules.order ||
+>             outside_exit=$?
+>         printf 'outside_exit=%s\n' "$outside_exit"
+> 
+>         inside_exit=0
+>         (cd out &&
+>          python3 -B ../scripts/clang-tools/gen_compile_commands.py -a ar \
+>              -o ../inside.json lib/modules.order) ||
+>             inside_exit=$?
+>         printf 'inside_exit=%s\n' "$inside_exit"
+>         test "$outside_exit" -eq 1
+>         test "$inside_exit" -eq 0
+>         python3 -c \
+>             'import json; assert len(json.load(open("inside.json"))) == 1'
+>     )
+> 
+> Kbuild generated lib/test_module.o, lib/test_module.mod,
+> lib/.test_module.o.cmd and lib/modules.order under out/. Both .mod and
+> modules.order contain lib/test_module.o.
+> 
+> The old script's invocation from the source directory fails with:
+> 
+>     FileNotFoundError: [Errno 2] No such file or directory:
+> 'lib/test_module.mod'
+>     outside_exit=1
+> 
+> The same artifacts work when the old script is invoked from out/:
+> 
+>     inside_exit=0
+> 
+> The successful invocation produces one JSON entry for lib/test_module.c.
+> The patched script succeeds from the source directory and produces an
+> identical entry. The old script also fails with absolute paths for -d
+> and modules.order; the patched script succeeds with those paths too.
+> 
+> Only the standalone generator invocation is outside the build directory;
+> compilation itself runs under out/. This is not a full kernel build or
+> a boot/runtime test.
 
-kernel test robot noticed the following build errors:
+Thanks for the detailed reproducer.
 
-[auto build test ERROR on akpm-mm/mm-nonmm-unstable]
-[also build test ERROR on linus/master v7.3-rc7]
-[cannot apply to next-20261012]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Quoting from Nathan:
+| How was this discovered? This cannot happen within Kbuild because this
+| script is always invoked from within the build folder, so was it a
+| manual invocation or something else?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jarkko-Sakkinen/lib-tests-kunit-for-associative-array/20261014-190138
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-nonmm-unstable
-patch link:    https://lore.kernel.org/r/20261014160144.1835860-1-jarkko%40kernel.org
-patch subject: [PATCH] lib/tests: kunit for associative array
-config: i386-randconfig-1010-20261016 (https://download.01.org/0day-ci/archive/20261016/202610162123.hSusVMnq-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261016/202610162123.hSusVMnq-lkp@intel.com/reproduce)
+So, if I get youre reply correctly, the issue this was not discovered 
+"in the wild" but can only be reproduced by manual use of 
+gen_compile_commands.py.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610162123.hSusVMnq-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_iterate' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_gc' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_insert' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_cancel_edit' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_delete' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_clear' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_apply_edit' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_destroy' undefined!
->> ERROR: modpost: lib/tests/assoc_array_kunit.ko: symbol 'assoc_array_find' undefined!
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+Nicolas
