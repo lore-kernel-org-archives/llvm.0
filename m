@@ -1,160 +1,373 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61A212F6188;
-	Fri, 16 Oct 2026 04:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792126556; cv=none; b=Bz93yNZkasQll/0oAkAMZ9kAk4vaxDzIPKVtpLH+ejGa0rDVTDt9b4UNIZMWbiy+DP0CWA2YPb3Ufg7GgnLFBESbUS/hw10FO4tXe0N2oo4XGKB5BzGKl6EpkYI03Lq9YbxvCRu6qVeF4r2hZ4mL6BUaktSMLsN6yw8RgSzLGWQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792126556; c=relaxed/simple;
-	bh=MM1H5CppfKe9TFwEMwX1JK9hEtOIhOo/5H8CuYa9jW8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YT5SkFbhYJ9m8hA5Rx0uQYPpcprxsXlcmIp1IOYhpxEo5CbOYMy9DvFRXHw+MOAFe3LZ7ha4zlvAK94sMepiJsNi6UWYAp9wRURfHTjALulX413/ksI9WsFJQanpW0QYdKG8qeuxWxFdOjhsvfYhhmmpC50IZwTuA48eLIdoR3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Lvu4Vs+Y; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423391E260C
+	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 06:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1792131949; cv=pass; b=iIuEC5MTijxUVCLfmst8niQ/Ou3MuqaW5IOm7hy6lDlbp+jqhhdKwHx52KIDPUJ+Rb83ftU4ITm5X1Uf4iWpEcXsBUTdyiS+a2aUSxRj+/26hOYRg/MzrdE09u2YD47AsEiYBWhpgIpgqUK2O2LZtBPiecXQKtXh/I1KYeXWcwY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1792131949; c=relaxed/simple;
+	bh=mFA9Q2FmqawUFaWLuwiXo5/4OEiBaFAX67xYIrf45uc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=s80j7ts/MBkjzEqWMEgvFblvpNshZMnBRn2Mhpdc5fTDDrnbLyTwZBfOAkKw687XhwDiYF9uOmlPxJKCZz9T+GwIcygfWPTYtQAUcRXE2bFNRxBInM5FRbcdNItbvF4IpYsjjVpcTipVlMl9Bjamp884OIwQq9erKtz3v2LMY5k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dAsfWu5N; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Lvu4Vs+Y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792126554; x=1823662554;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MM1H5CppfKe9TFwEMwX1JK9hEtOIhOo/5H8CuYa9jW8=;
-  b=Lvu4Vs+YV1NbPs3dU19GI3fZN/HgCP/Ye7N3cicc5uXdVRP3q7QtUAOC
-   xcVOt0IkE+Cz8DnvJwpgDuJbUezV6KggyhW7hW5s6q5pZI7Ud0yFpNCAw
-   jiUvANj7/JkYfAnmYgTsPeXJmiSNx6bdmDhnUjAjvvjq1Ie1gkbu2+k/n
-   l32lTpIPZrOk2tbUV/dxRr48N5NrzSt+s4Z996erktWBvAtO2K4PWwA3h
-   13rQMKut/wslr4QEbnULh9+GO6JuI5JX1EONkgnG6aVZt243b2jfTuEAj
-   10KRQYCJ7k3hIT73xCoId4CnE+jtxpSWUyH+rnZFw6/sPDpkH4FWKjVlM
-   Q==;
-X-CSE-ConnectionGUID: fIzl9Ct9QkamVjI1pyhZ+A==
-X-CSE-MsgGUID: CMNolirpRJCj5BYMHmm1HQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11936"; a="798382"
-X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
-   d="scan'208";a="798382"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2026 21:55:53 -0700
-X-CSE-ConnectionGUID: YMJcPrrdS6OhA32mx6YObA==
-X-CSE-MsgGUID: xpfQAwhUTNmbU4hYwfo8Nw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,161,1787036400"; 
-   d="scan'208";a="1814166"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 15 Oct 2026 21:55:48 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xHZyq-00000000Hcw-0SDE;
-	Fri, 16 Oct 2026 04:55:44 +0000
-Date: Fri, 16 Oct 2026 12:54:51 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sairaj Kodilkar <sarunkod@amd.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	"Joerg Roedel (AMD)" <joro@8bytes.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	Ingo Molnar <mingo@redhat.com>, Jakub Kicinski <kuba@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Kiryl Shutsemau <kas@kernel.org>,
-	Li RongQing <lirongqing@baidu.com>, Marco Elver <elver@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Vasant Hegde <vasant.hegde@amd.com>, Will Deacon <will@kernel.org>,
-	iommu@lists.linux.dev, kvm@vger.kernel.org,
-	linux-coco@lists.linux.dev
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v5 4/7] iommu/amd: Program guest-mode IRTEs for GAPPI
- wakeup when IRTE[IsRun] = 0
-Message-ID: <202610161241.OoInPYLr-lkp@intel.com>
-References: <20261015064515.10700-5-sarunkod@amd.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dAsfWu5N"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6b1f4d8e09aso1970110a12.1
+        for <llvm@lists.linux.dev>; Thu, 15 Oct 2026 23:25:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1792131946; cv=none;
+        d=google.com; s=arc-20260327;
+        b=BgoZAXj+ugL8nS6R+dzafyApgjTmBxi/kSD7FPuuZHEb/IgTGAv8APR6dmA0muX8+Q
+         PFRyfYWYa1Rk6Y1FvYR4eDNjiTsYUrumUzAxZMhWaVwDbvHD2NYUIcvYUhywQcRYY4Ac
+         Sa0T5+r+Z8yU751qtC70dTKCIGrnaQ+gco9vSlGmkkZmIp5hMwLYtfUyBRM6s4wR+cc2
+         5Sb/5fPWtDwp8eifCsoS/mgQDSqFALb50cztne23ctvNPDZ+N6xvQ+D+a34KnLoFkXE5
+         BaId6nrKKigpy7pXc+uv0uSriPv/kGH/Xh/jZ+p2XKvXInxIM66iv1DgHxwdDIlJWZwh
+         M5wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=AYkBVAxBwxemaXNK/O+MVQ6M8BBzDgxhjefXexxmn+8=;
+        fh=ntqJkRlel8G04YnG1ZfXGPJCIAqHPPpF90vfUnB8F2w=;
+        b=tBrPh7NjUONRoy7psRsEMld6TT+zbp4OViz1MGqrnUd4bHdJq5gqGk8+PxPaQNScu+
+         OWx4+/2AGO/nJgHeTFCUsFr6kZtDEvllJEP8v+oVUdIS6HcVhR4WdKeOeG9oEQSPU5VE
+         Ji8ZAzk2hQ/NXv3NTjEIHOoF/SAL53moKYNLYuqgFG8rmYiti43VS7AAHopQzgJpXl3i
+         AfGHBaoAQLOCadUayrBjwpxUbzukdy0FDyGNapDkd7juihTD6kIYhbI493gGuG58Xo9X
+         RHHdVuBV4ThwYDqdij04XVzZBf0PWgSmM////F8o/bKZTwKSKROwaBhaH5GeCCC6yR7X
+         dahw==;
+        darn=lists.linux.dev
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1792131946; x=1792736746; darn=lists.linux.dev;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AYkBVAxBwxemaXNK/O+MVQ6M8BBzDgxhjefXexxmn+8=;
+        b=dAsfWu5N/7BTipLWGSEbUc0qneVCs8T7t/rSTCVpylHr84fzPRRr3c7EFM1f8+itAT
+         irENKLhx47f3V+bEXd6SOb3TaX4fKPcBQUK1zfJM1EmaiZHeVutH6DiItZdKoixXMf6M
+         wYlvndjjrAhKv+mXBb7qzbC3TDFzM/PbpnQ8HYnTpiYqIVpA538DBonEOiD53SSKQQWv
+         OZiQTD5bxOXQkNDOaQjRY7kCltUFH/XwzCxETWCk3Vw1ycade7oWueDL41rdpmSWjqPs
+         7YfnzQBc0RrqvssRYY2g0W977AwNDt7+8X3Z5ax5ZB7MNh3lZHxA6IZeEKp8gbFJiXWH
+         Fm7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1792131946; x=1792736746;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AYkBVAxBwxemaXNK/O+MVQ6M8BBzDgxhjefXexxmn+8=;
+        b=xQWLdvncXYLbJC0JT9xPQ9D+ydGZnCWXfAeXNOpfDdDRwscs8Nmvv+quWq0RXoyJZ6
+         ZrAcZkUA/BuNCmgjYAO7Sqxfjw1tHuQpSoBUyTgpV8XxMDleJzqgQdtpQjZ8FNkD3/1D
+         5/7dgadg510gqj5GIN3nv/RAO/SuZhXS2JSWpxVWW7sZI4NYBD9hURzH/97Ww6ie4J9Y
+         qyk7Spwuwv6egTelCXBc6xqrAuDekMSzueSOJb5EyxyJqjO68nmClj81hSKUJFnBxwy+
+         y3dF5kxCSvU3euwQgWf0w2yehTjOyut1b8GHuXPF6Szf70PwIoLUjYbNJjYK70LB1owj
+         G4VQ==
+X-Forwarded-Encrypted: i=1; AKwUvByrrhTxpTSm3XA3ZFLZp3QcOtya6dv3gYZNLeFhS0pxiJI7sfPxbEvnYgDDLQGIAMjPCtmI@lists.linux.dev
+X-Gm-Message-State: AFq9FYKbHtKHZOy+DnPtFwNI1kSSN1SnWQuq45wJbEz3IzJ1x90+xXAG
+	n7IoEUnx/gHF6KGC5a9w7vjy6kU3nWyH4ArLcwi9c/4H5Cvdo4/AfuHjBAk31RSDRSERDJyVhHX
+	nwBfm6/W5g3sO0sg68PbpcIRsdpQHa6w=
+X-Gm-Gg: AYBFou1le3JPaQtQ9dwuAi+WN2BHbB7Kc4NiaSSHUYnpHE/BFa42JJ+vyVQAPuZgwIy
+	S4mFHPFfW1FXRb9vuXq91LYoE9VsR/YsX/23L5bIJ5xdqAl2YcqUc92Nn+YmCTy3JGS+VtpDBss
+	wFTzqiNP9zGFBSHAwPMRL1T+qGAVetq1yp1uF//QsawFtxSnbamNVZPUnwCa1OBDdfcLlSPVrAP
+	6McVd7rO4Ozbi+NqJqii6jQvqg+7I6Qd7MffhuTeFBIiAYwBgHgXOqXc12KRjkvT6io0jne0zpr
+	Xz2/MgEuTMNlkeeMaR54ZJJUHJ93pA4gDdrhpM/QefvOl7P5hU3vd8Xaa8gY324Ic4qMlyxw4tt
+	k1Mr0PM4i9DrFF7yn2iRxALO6bD+mQvzB0EcSNw3FMmikAb/5
+X-Received: by 2002:a05:6402:4554:b0:6b1:ced2:dfd4 with SMTP id
+ 4fb4d7f45d1cf-6b1ced2e477mr7532991a12.21.1792131946100; Thu, 15 Oct 2026
+ 23:25:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261015064515.10700-5-sarunkod@amd.com>
+References: <20261015135752.17028-1-vngocvan@gmail.com> <20261016012148.GD3329673@ax162>
+ <CAJavoFk+zgySyNps5tuKmntmvuAyev=kKL640TFrfCc-njeWBw@mail.gmail.com>
+In-Reply-To: <CAJavoFk+zgySyNps5tuKmntmvuAyev=kKL640TFrfCc-njeWBw@mail.gmail.com>
+From: Van Vo <vngocvan@gmail.com>
+Date: Fri, 16 Oct 2026 13:25:33 +0700
+X-Gm-Features: AclHuK9hFvot4yht4VqK2mVl9LZdXL_L1i4Fwbnceb4ZXgxpDMQaKbSEhgkboxA
+Message-ID: <CAJavoFkpO29P_oD_YLBkkp6_k080mN-ctRPXSvB+oj_-vpcR0w@mail.gmail.com>
+Subject: Re: [PATCH] gen_compile_commands: honor the build directory for modules
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: nsc@kernel.org, ndesaulniers@google.com, morbo@google.com, 
+	justinstitt@google.com, masahiroy@kernel.org, llvm@lists.linux.dev, 
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Sairaj,
+Hi Nathan,
 
-kernel test robot noticed the following build errors:
+> How was this discovered?
 
-[auto build test ERROR on 4056b3c9d3c92ea45955641dbafeb9b960e146ef]
+This came from code inspection of standalone use of -d with an explicit
+modules.order argument, followed initially by a constructed reproducer.
+It was not a failure encountered through Kbuild's compile_commands.json
+target.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sairaj-Kodilkar/iommu-amd-KVM-SVM-Rename-cpu-to-apicid-in-IOMMU-interface/20261015-121509
-base:   4056b3c9d3c92ea45955641dbafeb9b960e146ef
-patch link:    https://lore.kernel.org/r/20261015064515.10700-5-sarunkod%40amd.com
-patch subject: [PATCH v5 4/7] iommu/amd: Program guest-mode IRTEs for GAPPI wakeup when IRTE[IsRun] = 0
-config: x86_64-randconfig-1017-20261016 (https://download.01.org/0day-ci/archive/20261016/202610161241.OoInPYLr-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261016/202610161241.OoInPYLr-lkp@intel.com/reproduce)
+I have now reproduced it using real Kbuild-generated artifacts from
+0fcb05b72344f40806cbe810de8872f1698bf053 on Linux/aarch64, with Python
+3.11.13 and GCC 12.2.0. This was a partial lib/ build with CONFIG_TEST_LKM=
+=3Dm.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610161241.OoInPYLr-lkp@intel.com/
+The following uses a disposable source tree at that base. The guards
+prevent overwriting an existing output directory or result file:
 
-All errors (new ones prefixed by >>):
+    (
+        set -eu
+        test ! -e out
+        test ! -e outside.json
+        test ! -e inside.json
+        make O=3Dout -j1 allnoconfig
+        bash scripts/config --file out/.config --enable MODULES \
+            --enable RUNTIME_TESTING_MENU --module TEST_LKM
+        make O=3Dout -j1 olddefconfig
+        make O=3Dout -j1 V=3D1 lib/
 
->> drivers/iommu/amd/init.c:163:6: error: redefinition of 'false' as different kind of symbol
-     163 | bool amd_iommu_gappi;
-         |      ^
-   include/linux/amd-iommu.h:65:25: note: expanded from macro 'amd_iommu_gappi'
-      65 | #define amd_iommu_gappi false
-         |                         ^
-   include/linux/stddef.h:11:2: note: previous definition is here
-      11 |         false   = 0,
-         |         ^
-   drivers/iommu/amd/init.c:164:15: error: redefinition of 'false' as different kind of symbol
-     164 | EXPORT_SYMBOL(amd_iommu_gappi);
-         |               ^
-   include/linux/amd-iommu.h:65:25: note: expanded from macro 'amd_iommu_gappi'
-      65 | #define amd_iommu_gappi false
-         |                         ^
-   include/linux/stddef.h:11:2: note: previous definition is here
-      11 |         false   = 0,
-         |         ^
->> drivers/iommu/amd/init.c:164:1: error: cannot take the address of an rvalue of type 'int'
-     164 | EXPORT_SYMBOL(amd_iommu_gappi);
-         | ^             ~~~~~~~~~~~~~~~
-   include/linux/export.h:89:29: note: expanded from macro 'EXPORT_SYMBOL'
-      89 | #define EXPORT_SYMBOL(sym)              _EXPORT_SYMBOL(sym, "")
-         |                                         ^              ~~~
-   include/linux/export.h:86:38: note: expanded from macro '_EXPORT_SYMBOL'
-      86 | #define _EXPORT_SYMBOL(sym, license)    __EXPORT_SYMBOL(sym, license, "")
-         |                                         ^               ~~~
-   include/linux/export.h:77:2: note: expanded from macro '__EXPORT_SYMBOL'
-      77 |         __ADDRESSABLE(sym)                                      \
-         |         ^             ~~~
-   include/linux/compiler.h:276:2: note: expanded from macro '__ADDRESSABLE'
-     276 |         ___ADDRESSABLE(sym, __section(".discard.addressable"))
-         |         ^              ~~~
-   include/linux/compiler.h:273:63: note: expanded from macro '___ADDRESSABLE'
-     273 |         __UNIQUE_ID(__PASTE(addressable_, sym)) = (void *)(uintptr_t)&sym;
-         |                                                                      ^~~~
-   3 errors generated.
+        outside_exit=3D0
+        python3 -B scripts/clang-tools/gen_compile_commands.py -a ar \
+            -d out -o outside.json out/lib/modules.order ||
+            outside_exit=3D$?
+        printf 'outside_exit=3D%s\n' "$outside_exit"
 
+        inside_exit=3D0
+        (cd out &&
+         python3 -B ../scripts/clang-tools/gen_compile_commands.py -a ar \
+             -o ../inside.json lib/modules.order) ||
+            inside_exit=3D$?
+        printf 'inside_exit=3D%s\n' "$inside_exit"
+        test "$outside_exit" -eq 1
+        test "$inside_exit" -eq 0
+        python3 -c \
+            'import json; assert len(json.load(open("inside.json"))) =3D=3D=
+ 1'
+    )
 
-vim +/false +163 drivers/iommu/amd/init.c
+Kbuild generated lib/test_module.o, lib/test_module.mod,
+lib/.test_module.o.cmd and lib/modules.order under out/. Both .mod and
+modules.order contain lib/test_module.o.
 
-   162	
- > 163	bool amd_iommu_gappi;
- > 164	EXPORT_SYMBOL(amd_iommu_gappi);
-   165	
+The old script's invocation from the source directory fails with:
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+    FileNotFoundError: [Errno 2] No such file or directory:
+'lib/test_module.mod'
+    outside_exit=3D1
+
+The same artifacts work when the old script is invoked from out/:
+
+    inside_exit=3D0
+
+The successful invocation produces one JSON entry for lib/test_module.c.
+The patched script succeeds from the source directory and produces an
+identical entry. The old script also fails with absolute paths for -d
+and modules.order; the patched script succeeds with those paths too.
+
+Only the standalone generator invocation is outside the build directory;
+compilation itself runs under out/. This is not a full kernel build or
+a boot/runtime test.
+
+> I think you can omit the final sentence here, it does not add much value
+> in my opinion.
+
+I'll drop that sentence and clarify the standalone scope in v2.
+
+> Please fix your name, this needs to be a known identity.
+
+I'll use V=C3=B5 Ng=E1=BB=8Dc V=C4=83n for the author and sign-off in v2.
+
+> os.path -> pathlib.Path but it should definitely be done as a separate
+> patch.
+
+I'll keep the pathlib conversion as a separate follow-up patch.
+
+Thanks,
+V=C3=B5 Ng=E1=BB=8Dc V=C4=83n
+
+On Fri, Oct 16, 2026 at 10:53=E2=80=AFAM Van Vo <vngocvan@gmail.com> wrote:
+>
+> Hi Nathan,
+>
+> > How was this discovered?
+>
+> This came from code inspection of standalone use of -d with an explicit
+> modules.order argument, followed initially by a constructed reproducer.
+> It was not a failure encountered through Kbuild's compile_commands.json
+> target.
+>
+> I have now reproduced it using real Kbuild-generated artifacts from
+> 0fcb05b72344f40806cbe810de8872f1698bf053 on Linux/aarch64, with Python
+> 3.11.13 and GCC 12.2.0. This was a partial lib/ build with CONFIG_TEST_LK=
+M=3Dm.
+>
+> The following uses a disposable source tree at that base. The guards
+> prevent overwriting an existing output directory or result file:
+>
+>     (
+>         set -eu
+>         test ! -e out
+>         test ! -e outside.json
+>         test ! -e inside.json
+>         make O=3Dout -j1 allnoconfig
+>         bash scripts/config --file out/.config --enable MODULES \
+>             --enable RUNTIME_TESTING_MENU --module TEST_LKM
+>         make O=3Dout -j1 olddefconfig
+>         make O=3Dout -j1 V=3D1 lib/
+>
+>         outside_exit=3D0
+>         python3 -B scripts/clang-tools/gen_compile_commands.py -a ar \
+>             -d out -o outside.json out/lib/modules.order ||
+>             outside_exit=3D$?
+>         printf 'outside_exit=3D%s\n' "$outside_exit"
+>
+>         inside_exit=3D0
+>         (cd out &&
+>          python3 -B ../scripts/clang-tools/gen_compile_commands.py -a ar =
+\
+>              -o ../inside.json lib/modules.order) ||
+>             inside_exit=3D$?
+>         printf 'inside_exit=3D%s\n' "$inside_exit"
+>         test "$outside_exit" -eq 1
+>         test "$inside_exit" -eq 0
+>         python3 -c \
+>             'import json; assert len(json.load(open("inside.json"))) =3D=
+=3D 1'
+>     )
+>
+> Kbuild generated lib/test_module.o, lib/test_module.mod,
+> lib/.test_module.o.cmd and lib/modules.order under out/. Both .mod and
+> modules.order contain lib/test_module.o.
+>
+> The old script's invocation from the source directory fails with:
+>
+>     FileNotFoundError: [Errno 2] No such file or directory: 'lib/test_mod=
+ule.mod'
+>     outside_exit=3D1
+>
+> The same artifacts work when the old script is invoked from out/:
+>
+>     inside_exit=3D0
+>
+> The successful invocation produces one JSON entry for lib/test_module.c.
+> The patched script succeeds from the source directory and produces an
+> identical entry. The old script also fails with absolute paths for -d
+> and modules.order; the patched script succeeds with those paths too.
+>
+> Only the standalone generator invocation is outside the build directory;
+> compilation itself runs under out/. This is not a full kernel build or
+> a boot/runtime test.
+>
+> > I think you can omit the final sentence here, it does not add much valu=
+e
+> > in my opinion.
+>
+> I'll drop that sentence and clarify the standalone scope in v2.
+>
+> > Please fix your name, this needs to be a known identity.
+>
+> I'll use V=C3=B5 Ng=E1=BB=8Dc V=C4=83n for the author and sign-off in v2.
+>
+> > os.path -> pathlib.Path but it should definitely be done as a separate
+> > patch.
+>
+> I'll keep the pathlib conversion as a separate follow-up patch.
+>
+> Thanks,
+> V=C3=B5 Ng=E1=BB=8Dc V=C4=83n
+>
+>
+> On Fri, Oct 16, 2026 at 8:21=E2=80=AFAM Nathan Chancellor <nathan@kernel.=
+org> wrote:
+>>
+>> Hi,
+>>
+>> On Thu, Oct 15, 2026 at 08:57:52PM +0700, vngocvan wrote:
+>> > When invoked from outside the build tree with -d and a modules.order
+>> > argument, the script opens .mod files relative to the current director=
+y
+>> > instead of the specified build directory. This can fail with
+>> > FileNotFoundError or collect commands from unrelated artifacts in the
+>> > current directory.
+>>
+>> How was this discovered? This cannot happen within Kbuild because this
+>> script is always invoked from within the build folder, so was it a
+>> manual invocation or something else?
+>>
+>> > Pass the build directory to cmdfiles_for_modorder() and resolve both
+>> > the .mod files and their associated .cmd files relative to it. Absolut=
+e
+>> > paths continue to work, and the output location is unchanged.
+>>
+>> I think you can omit the final sentence here, it does not add much value
+>> in my opinion.
+>>
+>> > Fixes: ecca4fea1ede ("gen_compile_commands: support *.o, *.a, modules.=
+order in positional argument")
+>> > Signed-off-by: vngocvan <vngocvan@gmail.com>
+>>
+>> Please fix your name, this needs to be a known identity.
+>>
+>> > ---
+>> >  scripts/clang-tools/gen_compile_commands.py | 9 +++++----
+>> >  1 file changed, 5 insertions(+), 4 deletions(-)
+>> >
+>> > diff --git a/scripts/clang-tools/gen_compile_commands.py b/scripts/cla=
+ng-tools/gen_compile_commands.py
+>> > index 8d14b81efd73..149135f85f19 100755
+>> > --- a/scripts/clang-tools/gen_compile_commands.py
+>> > +++ b/scripts/clang-tools/gen_compile_commands.py
+>> > @@ -124,7 +124,7 @@ def cmdfiles_for_a(archive, ar):
+>> >          yield to_cmdfile(obj)
+>> >
+>> >
+>> > -def cmdfiles_for_modorder(modorder):
+>> > +def cmdfiles_for_modorder(modorder, root_directory):
+>> >      """Generate the iterator of .cmd files associated with the module=
+s.order.
+>> >
+>> >      Parse the given modules.order, and yield every .cmd file used to =
+build the
+>> > @@ -132,6 +132,7 @@ def cmdfiles_for_modorder(modorder):
+>> >
+>> >      Args:
+>> >          modorder: The modules.order file to parse
+>> > +        root_directory: The directory where the objects were built
+>> >
+>> >      Yields:
+>> >          The path to every .cmd file found
+>> > @@ -142,11 +143,11 @@ def cmdfiles_for_modorder(modorder):
+>> >              base, ext =3D os.path.splitext(obj)
+>> >              if ext !=3D '.o':
+>> >                  sys.exit('{}: module path must end with .o'.format(ob=
+j))
+>> > -            mod =3D base + '.mod'
+>> > +            mod =3D os.path.join(root_directory, base + '.mod')
+>> >              # Read from *.mod, to get a list of objects that compose =
+the module.
+>> >              with open(mod) as m:
+>> >                  for mod_line in m:
+>> > -                    yield to_cmdfile(mod_line.rstrip())
+>> > +                    yield os.path.join(root_directory, to_cmdfile(mod=
+_line.rstrip()))
+>> >
+>> >
+>> >  def process_line(root_directory, command_prefix, file_path):
+>> > @@ -206,7 +207,7 @@ def main():
+>> >          elif path.endswith('.a'):
+>> >              cmdfiles =3D cmdfiles_for_a(path, ar)
+>> >          elif path.endswith('modules.order'):
+>> > -            cmdfiles =3D cmdfiles_for_modorder(path)
+>> > +            cmdfiles =3D cmdfiles_for_modorder(path, directory)
+>> >          else:
+>> >              sys.exit('{}: unknown file type'.format(path))
+>> >
+>> >
+>> > base-commit: 0fcb05b72344f40806cbe810de8872f1698bf053
+>> > --
+>> > 2.56.0
+>> >
+>>
+>> --
+>> Cheers,
+>> Nathan
