@@ -1,60 +1,157 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC1F8248893;
-	Fri, 16 Oct 2026 01:12:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0FC30566D
+	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 01:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792113150; cv=none; b=WcMx2RIzGomNl3l6/bUZ1ksPBn1YZJIhL2FPv4eAEb/iQoN/psZYi2k/xGgNrVhqLXhis8AOLOZmXk8q675AkQptAuJK1+f+V8Dn37xp3oJJ0aL22JXlO2AUrqoYy9kMda0AkqHqNBN+FUTTtl+bC0OgGBBrmk/J36buy6fHIOM=
+	t=1792113265; cv=none; b=c2K85liCEuqmZg1IoQAUvQXn511c0MWa07/BD4OjSoOR/oillCXkXzxhCf+7DTdx4Lff2L5Vj51f/DZXChNCHaA4pJ1/wZHrashBUuYJotRGT5LH4biMAZ2voy8XCIq91uatHh32L+n3Q/VP8yfUxPrA52XuhR3K+KU6KFkYOWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792113150; c=relaxed/simple;
-	bh=CLKAia77oaQ6WDi5H7SO/81OFWAEi9pDUJTQjEGy6Cg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mWLoPeKlvbndh9JutAr+pPSdavCRii0TSv+zC/lGT2lZ+vcmVB0+Dq2x5uUESdrRTSYL8hlzkzxpkzVgOxQXeSY3s1HVh7VGQSixVD2A8ZFUmyg5kHH+afjpeROgL/nTfgOKPJPuWPRhL4svKAsv6fMpu1hicM4vCLdBxeq0LVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nF4kt9T0; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nF4kt9T0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5283B1F000C4;
-	Fri, 16 Oct 2026 01:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792113149;
-	bh=euChcgVWNRizbQAuB4b2E0arVKlEMiysaHFTpcZkDNk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=nF4kt9T0cUzuwiVRD9lGun3MfoqKE0jrKGneQgYFSlqKLuGnhvYvT4B3vW4YCkFqo
-	 dgh9qiRB0nCwyVE1QqifnzX+mI5QjlKQBH41399795zrmQNHWMXMfdk5nKoSdQR0jk
-	 q0A1BM2sbEbHkWS4b1QQaQwSd5goXA7CvetfOHboV9iejKsZuNHTqPU7gMdDBqvIwE
-	 UAN8T94TfrYPzFetjb3pGNvNcNdj9fOtsJMrIyzgNChRp+c0iFprgasV2KCkId6xJM
-	 pFNFF2HKkKJZM9o/uz345+g9sM1CtZ4VrCSFJGa7udLok0ZWbsvYRHqf4njimbEfTI
-	 3B6VTCLQPd0Yw==
-Date: Thu, 15 Oct 2026 18:12:24 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nick Desaulniers <ndesaulniers@google.com>
-Cc: vngocvan <vngocvan@gmail.com>, nsc@kernel.org, morbo@google.com,
-	justinstitt@google.com, masahiroy@kernel.org, llvm@lists.linux.dev,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] gen_compile_commands: honor the build directory for
- modules
-Message-ID: <20261016011224.GC3329673@ax162>
-References: <20261015135752.17028-1-vngocvan@gmail.com>
- <CAKwvOdnkS7AnuJkQr=5-TO6eRL+joSNUKGfqK-mbim9_y0NW=A@mail.gmail.com>
+	s=arc-20240116; t=1792113265; c=relaxed/simple;
+	bh=utYDO2knyr3kTzqHGy2mLzrgeNKbg7RW6hWzjUnMa+I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ursBWK72OHD22zWBmCoGi8b5xUxEE+JvB1Y5KO2xFfqrJRP91FkO3L7gOIDljMzDP/Is/bql5hUiJwft5usq7fi0nwQk52mRt1P6ecChlIP3V/PXukYQyvaBZCmyTOEd9mHwdrp/nSmAfPnqH3i3RAI8IEp51yJB7OkY7xrdAFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout11.his.huawei.com (SkyGuard) with ESMTPS id 4j5RlM1xCqzYQtrN
+	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 09:13:19 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.252])
+	by mail.maildlp.com (Postfix) with ESMTP id D618540947
+	for <llvm@lists.linux.dev>; Fri, 16 Oct 2026 09:14:14 +0800 (CST)
+Received: from [10.67.110.36] (unknown [10.67.110.36])
+	by APP3 (Coremail) with UTF8SMTPA id _Ch0CgBnav1letFqppRiAg--.4825S2;
+	Fri, 16 Oct 2026 09:14:14 +0800 (CST)
+Message-ID: <71090bb4-dd82-415c-a0cd-5ce11841e261@huaweicloud.com>
+Date: Fri, 16 Oct 2026 09:14:13 +0800
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKwvOdnkS7AnuJkQr=5-TO6eRL+joSNUKGfqK-mbim9_y0NW=A@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 06/15] perf annotate-arm64: Support store instruction
+ tracking
+To: Namhyung Kim <namhyung@kernel.org>
+Cc: james.clark@linaro.org, xueshuai@linux.alibaba.com,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>, leo.yan@linux.dev,
+ Li Huafei <lihuafei1@huawei.com>, Ian Rogers <irogers@google.com>,
+ Kim Phillips <kim.phillips@arm.com>, Mark Rutland <mark.rutland@arm.com>,
+ Ingo Molnar <mingo@redhat.com>, Bill Wendling <morbo@google.com>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Zecheng Li <zli94@ncsu.edu>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev
+References: <cover.1791629326.git.wutengda@huaweicloud.com>
+ <eb44bbf4b74555bc43f3659f4733faff403debbf.1791629326.git.wutengda@huaweicloud.com>
+ <atFbbrGdobp83fgA@google.com>
+Content-Language: en-US
+From: Tengda Wu <wutengda@huaweicloud.com>
+In-Reply-To: <atFbbrGdobp83fgA@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:_Ch0CgBnav1letFqppRiAg--.4825S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxJF17WFWxGr18uw15tF4UCFg_yoW5CrWkpr
+	Z8C3W5KF4Utr4IgFnxXF4j9r9I9a1Sgws0kr9rt397AF42yrn3Krs5Ka13KFWrJrZxuw1U
+	ta1DKr1DGayjyaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv2b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6x
+	kF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
+	x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6x
+	CaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0E
+	n4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I
+	0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8
+	ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+	CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+	wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+	7IU0s2-5UUUUU==
+X-CM-SenderInfo: pzxwv0hjgdqx5xdzvxpfor3voofrz/
 
-On Thu, Oct 15, 2026 at 08:33:11AM -0700, Nick Desaulniers wrote:
-> Thanks for the patch. Can we avoid os.path in favor of Path from
-> Pathlib? Here and throughout.
 
-I would not mind seeing some modernization in this script such as
-os.path -> pathlib.Path but it should definitely be done as a separate
-patch.
 
--- 
-Cheers,
-Nathan
+On 2026/10/16 7:02, Namhyung Kim wrote:
+> On Tue, Oct 13, 2026 at 01:28:04PM +0000, Tengda Wu wrote:
+>> Extend update_insn_state_arm64() to handle standard store instructions
+>> (str, stur, stlr, stp). Exclusive stores (e.g., stxr, stxp) are omitted
+>> as they exhibit different operand semantics.
+>>
+>> Unlike load instructions, a store instruction sets a value in the struct
+>> within the memory where the destination register resides, and does not
+>> alter its type. Therefore, no processing is required for the transfer.
+> 
+> But the target location also can be stack which requires type info,
+> right?  Oh, I think you have a patch later to handle that.
+
+Yes, this is supported in the subsequent patch 10 for stack-related loads
+and stores.
+
+Thanks,
+Tengda
+
+> 
+> Thanks,
+> Namhyung
+> >>
+>> The only point to note is that store instructions support pre-index and
+>> post-index addressing modes, so calling adjust_reg_index_state() is still
+>> necessary to handle their addressing.
+>>
+>> Reviewed-by: Ian Rogers <irogers@google.com>
+>> Signed-off-by: Tengda Wu <wutengda@huaweicloud.com>
+>> ---
+>>  .../perf/util/annotate-arch/annotate-arm64.c  | 25 +++++++++++++++++++
+>>  1 file changed, 25 insertions(+)
+>>
+>> diff --git a/tools/perf/util/annotate-arch/annotate-arm64.c b/tools/perf/util/annotate-arch/annotate-arm64.c
+>> index fb48bf95b32f..54d9928b536f 100644
+>> --- a/tools/perf/util/annotate-arch/annotate-arm64.c
+>> +++ b/tools/perf/util/annotate-arch/annotate-arm64.c
+>> @@ -661,6 +661,20 @@ static void update_load_insn_state(struct type_state *state,
+>>  	adjust_reg_index_state(state, dloc, dl, src);
+>>  }
+>>  
+>> +/*
+>> + * Match standard store variants (str, stur, stlr, stp) that follow
+>> + * straightforward store semantics: source registers on the left (read-only)
+>> + * and memory target on the right. Excludes exclusive stores (stxr, stxp, etc.)
+>> + * which have status/result register side effects.
+>> + */
+>> +static bool is_standard_store_insn(const char *name)
+>> +{
+>> +	return !strncmp(name, "str", 3)  ||  /* str, strb, strh */
+>> +	       !strncmp(name, "stur", 4) ||  /* stur, sturb, sturh */
+>> +	       !strncmp(name, "stlr", 4) ||  /* stlr, stlrb, stlrh */
+>> +	       !strncmp(name, "stp", 3);     /* stp */
+>> +}
+>> +
+>>  static void update_insn_state_arm64(struct type_state *state,
+>>  				    struct data_loc_info *dloc, Dwarf_Die *cu_die,
+>>  				    struct disasm_line *dl)
+>> @@ -742,6 +756,17 @@ static void update_insn_state_arm64(struct type_state *state,
+>>  	/* Memory to register transfers */
+>>  	if (is_standard_load_insn(dl->ins.name))
+>>  		update_load_insn_state(state, dloc, dl, src, dst);
+>> +	/* Register to memory transfers */
+>> +	else if (is_standard_store_insn(dl->ins.name)) {
+>> +		/*
+>> +		 * Ignore transfers since it'd set a value in a struct
+>> +		 * and won't change the type.
+>> +		 *
+>> +		 * Needs to update the pre-index and post-index addressing
+>> +		 * modes for the destination register.
+>> +		 */
+>> +		adjust_reg_index_state(state, dloc, dl, dst);
+>> +	}
+>>  }
+>>  #endif
+>>  
+>> -- 
+>> 2.34.1
+>>
+
