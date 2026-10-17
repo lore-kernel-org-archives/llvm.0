@@ -1,58 +1,59 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0815F381B1C;
-	Sat, 17 Oct 2026 03:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D075B3C9891;
+	Sat, 17 Oct 2026 03:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792206196; cv=none; b=ZGxXggcGkm/9Nz5hmgxysY+hPvI6q7Hwdk2fBgyEEbjrTTzfnmQjCIlYrULBy8Dz2n5eumMRJ9k7ejhfhkKTO5kRWY9H0DKyLDGFMHEKdc/7ubJiL5sULahGUKAjXhVaeq8EKnHXAiIywLvVNlmOLjB4OY8OmG1f/rNxogHuQ5o=
+	t=1792208497; cv=none; b=fIqvvCd/fIMMCo6bC8o2wYaZ+gM/CerOYWXy9hpo+5wGX0UDTts4Msq8jnVjcRhgMU7Ae85PreIDF6/tt5vxAhSokOCv1RwfLzIN4ZYH48XHYVZLjm6PeJy7ccP8cIp4l94ezg1cnagcgsDR/EnJscPFl54lYKW9HFT4kZlf6Yg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792206196; c=relaxed/simple;
-	bh=mygFMgWqiSHfafZnQjJ7WAZSC3efl0oJYGIKaHBWrvA=;
-	h=Date:From:Cc:Subject:Message-ID; b=WSZteCEa3xvfQlFk4wbwQBTYiEqw6RDK49l/sTtPKChof3sh8fKXbe9PalhnrL3tcaCkGG3h82Mw/GumN8FEfRW8MReUjZSgV9aqSLl2ealghOTmw9Tbygpmdn1e5eXfHoUum1V7dqxvhYlq7eyVqu52OqtLbm1oZh78RYpGwnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PBFVUFcj; arc=none smtp.client-ip=198.175.65.11
+	s=arc-20240116; t=1792208497; c=relaxed/simple;
+	bh=qyviMIZY4ox7umtLx3YrZA+B6VQau3wATqVWB10qNSc=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=qOgnFj5FQcvJM/8UfVJWYWugZfxiFYhkFrxaogZ4uoZURwXY1SJVB1wjOowSOTGo0sEifUuAKjquXXk+g7kAkYUQI0NrKAxUmdyKs1+NLKit+rntheDpQsc+AniKCYl7MzSiZSrTuGMDzPDEikNeSMZ4hpnLVb53ItGTBj0X7YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mpefkYKO; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PBFVUFcj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mpefkYKO"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792206195; x=1823742195;
-  h=date:from:cc:subject:message-id;
-  bh=mygFMgWqiSHfafZnQjJ7WAZSC3efl0oJYGIKaHBWrvA=;
-  b=PBFVUFcjZCM/5OlENH9dWfor4feBrh9ffeep/uQSSUcE8Kg+w+D4Z22A
-   2hjOl+AyP1QsNT6Odz1EV7CVqvd1HF+vJlNuTff8teZOrzLpSaP/8vYq7
-   gGlsmotBKozInLeb5Kg16VHz2BuS0+TpP4Ln/J1YjYdkCAscmdNW/HjwZ
-   7hG7rrkpkQrDJKqDKx1+FRP2N1STauODzpbWAqoC7Xy4kMnjZDDw0IsRE
-   tKrZDX15j9L+bPZj4qmDG3AxF/2Kh496lwMC/AgA6WZfUdJmyqUtdgxj2
-   187IFNOZWD2d5I9KOM/6Jp/Blnnm7YImEmjKTXeGtRejU5XyN4K9YoNxc
-   g==;
-X-CSE-ConnectionGUID: s3/FHTcITymp8yO5NloHxg==
-X-CSE-MsgGUID: W/X2Iqg2Ss6iBPZc4tbVfQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11937"; a="873977"
+  t=1792208495; x=1823744495;
+  h=date:from:to:cc:subject:message-id;
+  bh=qyviMIZY4ox7umtLx3YrZA+B6VQau3wATqVWB10qNSc=;
+  b=mpefkYKOQBr8z5bNWWlZBUdgWjSXRBAH8NJzg5aGVf79Htpj7PYvGX4K
+   tabJqZyfqg91DRUCUOOjPfQo+3hYaRzTqU/lY+MojgfdF34n2rvkMEh5K
+   V6LD07z2xA8b/H2yu/w91m1LoYr5EfcKMddokDtwRygtc59iE7Mdx6B3i
+   9f1uZPlJsbrb2Hazh9G9DCAiFheLxo8sKU6CwIoDFOkQ+EMe5AYhLKVAI
+   8yJKcbVxHygBojIhzZKl0qjZjhxWGj7Dr2aaYu32gcFlz1TdgHIDj+tRe
+   G6JDpyvpMZmbVYM4219qAz1jqAxtGKmpHuZmYb3hhnDYDUleVpM/aTdSb
+   A==;
+X-CSE-ConnectionGUID: p9Bl+pPlT66vObUYZhuTuw==
+X-CSE-MsgGUID: FgkbOspIRLmdxI2QtPU6DA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11937"; a="890947"
 X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
-   d="scan'208";a="873977"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 20:03:15 -0700
-X-CSE-ConnectionGUID: ulNf+x2nTwO8oINHpuLMrw==
-X-CSE-MsgGUID: k7EgTTSQSNKZEmsE3pk/SA==
+   d="scan'208";a="890947"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2026 20:41:34 -0700
+X-CSE-ConnectionGUID: XwiZvE6HQeqgerIp46znLA==
+X-CSE-MsgGUID: g6e74HY5Q5yieBwoT0sZUg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
-   d="scan'208";a="2086243"
+   d="scan'208";a="3924062"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 16 Oct 2026 20:03:13 -0700
+  by fmviesa011.fm.intel.com with ESMTP; 16 Oct 2026 20:41:33 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xHuhT-00000000Izg-0sSk;
-	Sat, 17 Oct 2026 03:03:11 +0000
-Date: Sat, 17 Oct 2026 11:02:43 +0800
+	id 1xHvIX-00000000J1A-49FC;
+	Sat, 17 Oct 2026 03:41:29 +0000
+Date: Sat, 17 Oct 2026 11:41:25 +0800
 From: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, llvm@lists.linux.dev
-Subject: [tip:sched/core 18/25] ld.lld: error:
- vmlinux.a(drivers/scsi/scsi_trace.o):(function scsi_trace_parse_cdb:
- .text+0xb0): relocation R_RISCV_HI20 out of range: 531330 is not in [-524288,
- 524287]; references '.L.str.1'
-Message-ID: <202610171107.6ZxJvZXv-lkp@intel.com>
+To: Vicki Pfau <vi@endrift.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ linux-input@vger.kernel.org, Jiri Kosina <jikos@kernel.org>,
+ Silvan Jegen <s.jegen@gmail.com>
+Subject: [hid:for-7.4/nintendo 2/5] ld.lld: error: undefined symbol:
+ hid_is_usb
+Message-ID: <202610171134.itp4VPif-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -60,30 +61,23 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-CC: linux-kernel@vger.kernel.org
-CC: x86@kernel.org
-TO: Mark Rutland <mark.rutland@arm.com>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Jinjie Ruan <ruanjinjie@huawei.com>
-CC: Shrikanth Hegde <sshegde@linux.ibm.com>
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git sched/core
-head:   b99b7f60c5b473d374c68b53753153b4aa9e0702
-commit: 5b9a28eeed37513778ca6b636253aa8dcf39d55f [18/25] sched: dynamic: Remove HAVE_PREEMPT_DYNAMIC_{CALL,KEY}
-config: riscv-randconfig-1001-20261017 (https://download.01.org/0day-ci/archive/20261017/202610171107.6ZxJvZXv-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261017/202610171107.6ZxJvZXv-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-7.4/nintendo
+head:   77c7155e2707ba5b1d56f3dc1acead48cf17f98d
+commit: 9417132df63e5cd7230433af05198538e759f3ae [2/5] HID: nintendo: Add preliminary Switch 2 controller driver
+config: i386-randconfig-1005-20261016 (https://download.01.org/0day-ci/archive/20261017/202610171134.itp4VPif-lkp@intel.com/config)
+compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261017/202610171134.itp4VPif-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610171107.6ZxJvZXv-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610171134.itp4VPif-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> ld.lld: error: vmlinux.a(drivers/scsi/scsi_trace.o):(function scsi_trace_parse_cdb: .text+0xb0): relocation R_RISCV_HI20 out of range: 531330 is not in [-524288, 524287]; references '.L.str.1'
-   >>> referenced by scsi_trace.c:0 (drivers/scsi/scsi_trace.c:0)
-   >>> defined in vmlinux.a(drivers/scsi/scsi_trace.o)
+>> ld.lld: error: undefined symbol: hid_is_usb
+   >>> referenced by hid-nintendo.c:3993 (drivers/hid/hid-nintendo.c:3993)
+   >>>               drivers/hid/hid-nintendo.o:(nintendo_hid_probe) in archive vmlinux.a
 
 --
 0-DAY CI Kernel Test Service
