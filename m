@@ -1,129 +1,141 @@
-Received: from mta1.migadu.com (out-1.mta1.migadu.com [95.215.58.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 396FE2EACF2
-	for <llvm@lists.linux.dev>; Sun, 18 Oct 2026 00:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FEF2931F7;
+	Sun, 18 Oct 2026 01:32:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792284957; cv=none; b=GXdxTAZhTzcyOOLjBENdkhmOOFa9RkIkl3gyZB+76zQZmCyLSMbfQW7i0a6xP7ROz0BTYMz5pmcfdgJzXVv05prbZ9wLlxZxgSsO102kI64rtz9dSl+z7vaA3+3VV0zkAiegbVF7dZ76QznzNK3R6RfUUiCNfdqs2Lhy40S9db0=
+	t=1792287162; cv=none; b=a8MPD2SaJaE0M1ugCTk5ASbWIvi5zZmO5CteL3cBdlEAnQv0LV8kPEHb8r4yQgoXrCWzV92/qhhEuaQC4zA2H8Yx3UA+qlCyW4HGrXMCVSsPCSCmA2/pMOvylEZvM+lpbopfqM12G0JP10V6sZrAMtwB5o1BwgKIVj0H530Nlr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792284957; c=relaxed/simple;
-	bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=l7YtYWs3FsznL+wqJEhMZZ5twc/drzFwv5/MZqANy0KhYKv7rT44Fg6rzkixxeyCrceKM6hnoT/ZUqNSWrcFWwACcbFw+Fw+JyNsQFYSwCYyylY4v43T83ZAoxAAFtxIsVzElR4XnBjP9CFZAuh0zKdsDKWH1WSL+xkNNlj6ZXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mM83M+Bt; arc=none smtp.client-ip=95.215.58.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1792287162; c=relaxed/simple;
+	bh=n8EEY+mvGytS/9DOG3kh2xrwZpSAxVZ6DsODBJlTAAA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ppLTD26KEtaUZXnqbczoqWn92TFA7+DL2j41rMv6dB+/NHjlVAKme38mcdkBKJon/28/zERxHLAmw//Sfyfn5mT1zc/IC7z7j178jrP67XiiA3PASUTbnTipsYv0xVgxvQXRBWDtCyL10s3GFCiusn7ETYmRrcobAm9G+VK+us4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ppti0lpJ; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mM83M+Bt"
-X-Envelope-To: llvm@lists.linux.dev
-DKIM-Signature: a=rsa-sha256; bh=APFwl/HiItu/QCD6VtNINOJAd0UoIdFGyY4WR9sMH7o=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1792284954; v=1; x=1792889754;
- b=mM83M+Bt3J7eYmTcQR3Z7zI2VSiN9CGp/GvZCNm1g2LjkyUQGXvQYd+QoGYEEMzpkHqC1667
- Iot8HUEvEMn+kp20aMxZ+AIU/JAnlpUmisXd37cYnwU+kQAZpfugegrB/4QUEQW3nGlKyDif1Ug
- wWopGTSKLNx9jjJA538a9ZDM=
-X-Envelope-To: llvm@lists.linux.dev
-Received: by mta11.migadu.com with ESMTPS id e9275ec6c32b6a9a;
-	Sun, 18 Oct 2026 00:55:53 +0000
-X-Mizu-Trace-ID: e9275ec6c32b6a9a
-X-Migadu-Flow: FLOW_OUT
-From: KaFai Wan <kafai.wan@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	KaFai Wan <kafai.wan@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Feng Jiang <jiangfeng@kylinos.cn>,
-	Vineet Gupta <vineet.gupta@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: Use _exit() in uprobe_multi_test clone-ed child
-Date: Sun, 18 Oct 2026 08:53:48 +0800
-Message-ID: <20261018005348.2195130-5-kafai.wan@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20261018005348.2195130-1-kafai.wan@linux.dev>
-References: <20261018005348.2195130-1-kafai.wan@linux.dev>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ppti0lpJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792287160; x=1823823160;
+  h=date:from:to:cc:subject:message-id;
+  bh=n8EEY+mvGytS/9DOG3kh2xrwZpSAxVZ6DsODBJlTAAA=;
+  b=Ppti0lpJJVBSWW7IjccR/gG4Q7Fck7eHL2ZnjX5eaHKNtAO9jZ7eUJc3
+   p0W9En6bVNb5mJLspFe6n1JuKv3F1TBJGcfcHFUuy4ZVoK6eSxqKs2rrp
+   CNR0UtODrFh1RLzALlB25sfXx5I9xZ/jz/TCux7bPuBIA5LbXwJSXT8Bt
+   e6eMV4CyvUQ5bfyTK6UEc+BKmi3EQX2J9pfMDBvwK7oka+KGZ+pvX4Nuc
+   Vl5u0eOFquMsniLy7YpDcaebceLFtOpzhA49pjCNNBczaahvmYJbidGiP
+   Wn32JlqP8H+hcWep3bX0/CHqDWkgeCKDHp+hByPIkBN452s3i+wOkujI1
+   g==;
+X-CSE-ConnectionGUID: ryxBv+tjQf+KdMHwMarxAw==
+X-CSE-MsgGUID: 8jgkSUNRTdyUStWh50xHEQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="1036305"
+X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
+   d="scan'208";a="1036305"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 18:32:39 -0700
+X-CSE-ConnectionGUID: +qD0d3UKQReYilIaS6zG4w==
+X-CSE-MsgGUID: tDVjDqlEQhCjKhQ7zAwPLw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
+   d="scan'208";a="2239296"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 17 Oct 2026 18:32:38 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xIFlK-00000000Jxi-4Blf;
+	Sun, 18 Oct 2026 01:32:34 +0000
+Date: Sun, 18 Oct 2026 09:32:06 +0800
+From: kernel test robot <lkp@intel.com>
+To: David Woodhouse <dwmw@amazon.co.uk>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [dwmw2:hardpps-filter-soak 32/33]
+ drivers/ptp/ptp_gnss_extint.c:349:27: warning: variable 'raw_pre' set but not
+ used
+Message-ID: <202610180911.5VdX6eyB-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-child_func() terminates with exit(), but spawn_child_flag() also starts
-it via clone(CLONE_VM), which shares the parent's address space. That
-exit() then runs atexit handlers and static destructors against globals
-the parent is still using.
+tree:   git://git.infradead.org/users/dwmw2/linux hardpps-filter-soak
+head:   d2ddff11f0edd8219413b800af3cee8f28aa858d
+commit: 2b23d81ff6919d919634c599e3f9bb18ddc6affb [32/33] [PROTOTYPE] ptp: ptp_gnss_extint: Synthesize a latency-free PPS source
+config: arm-randconfig-1001-20261018 (https://download.01.org/0day-ci/archive/20261018/202610180911.5VdX6eyB-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261018/202610180911.5VdX6eyB-lkp@intel.com/reproduce)
 
-LLVM commit `3c3ed59c6a2a ("[llvm] Add format check for
-MCSubtargetFeatures")` [1], included in the LLVM 23.1 releases, added
-Target::isValidFeatureListFormat() with a function-local static holding
-the compiled regex:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610180911.5VdX6eyB-lkp@intel.com/
 
-	static const llvm::Regex pattern("^([+-][^,]+)(,[+-][^,]+)*,?$");
-	return pattern.match(Features);
+All warnings (new ones prefixed by >>):
 
-The child exit destroys that static while its guard variable still marks
-it as initialized, so the regex is never rebuilt in the parent. From that
-point on, get_jited_program_text() gets NULL from
-LLVMCreateDisasmCPUFeatures(), so every jited program text check in the
-tests running after filter_clone_vm fails, e.g. "verifier_jit_convergence",
-"verifier_private_stack", "verifier_tailcall_jit" and "verifier_jit_inline".
+>> drivers/ptp/ptp_gnss_extint.c:349:27: warning: variable 'raw_pre' set but not used [-Wunused-but-set-variable]
+     349 |         u64 real_pre, real_post, raw_pre, raw_post;
+         |                                  ^
+>> drivers/ptp/ptp_gnss_extint.c:349:36: warning: variable 'raw_post' set but not used [-Wunused-but-set-variable]
+     349 |         u64 real_pre, real_post, raw_pre, raw_post;
+         |                                           ^
+   2 warnings generated.
 
-Use _exit(), which runs neither atexit handlers nor static destructors, as
-uprobe_syscall.c already does for its own CLONE_VM child.
 
-[1] https://github.com/llvm/llvm-project/pull/180943
-Fixes: d2520bdb1932f ("selftests/bpf: Add uprobe multi pid filter test for clone-ed processes")
-Signed-off-by: KaFai Wan <kafai.wan@linux.dev>
----
- tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+vim +/raw_pre +349 drivers/ptp/ptp_gnss_extint.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-index f0baf5738b751..7fbcfddc3cc36 100644
---- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
-@@ -94,14 +94,14 @@ static int child_func(void *arg)
- 	/* wait for parent's kick */
- 	err = read(child->go[0], &c, 1);
- 	if (err != 1)
--		exit(err);
-+		_exit(err);
- 
- 	uprobe_multi_func_1();
- 	uprobe_multi_func_2();
- 	uprobe_multi_func_3();
- 	usdt_trigger();
- 
--	exit(errno);
-+	_exit(errno);
- }
- 
- static int spawn_child_flag(struct child *child, bool clone_vm)
--- 
-2.43.0
+   345	
+   346	static void gnss_extint_pps_work(struct work_struct *work)
+   347	{
+   348		struct gnss_extint *ge = container_of(work, struct gnss_extint, pps_work);
+ > 349		u64 real_pre, real_post, raw_pre, raw_post;
+   350		s64 tgps, delta = 0;
+   351		unsigned long flags;
+   352		bool ok = false;
+   353	
+   354		mutex_lock(&ge->xts_lock);
+   355		reinit_completion(&ge->tm2_done);
+   356	
+   357		local_irq_save(flags);
+   358		gpiod_set_value(ge->extint, 0);		/* warm the set path */
+   359		raw_pre = ktime_get_raw_ns();
+   360		real_pre = ktime_get_real_ns();
+   361		gpiod_set_value(ge->extint, 1);
+   362		real_post = ktime_get_real_ns();
+   363		raw_post = ktime_get_raw_ns();
+   364		local_irq_restore(flags);
+   365	
+   366		if (wait_for_completion_interruptible_timeout(&ge->tm2_done,
+   367						msecs_to_jiffies(1500)) > 0) {
+   368			tgps = ktime_to_ns(ge->tm2_utc);
+   369			delta = NSEC_PER_SEC * div64_s64(tgps + NSEC_PER_SEC / 2,
+   370							 NSEC_PER_SEC) - tgps;
+   371			ok = true;
+   372		}
+   373		gpiod_set_value(ge->extint, 0);
+   374	
+   375		if (ok) {
+   376			struct ptp_clock_event evt = {
+   377				.type = PTP_CLOCK_PPSUSR,
+   378			};
+   379	
+   380			evt.pps_times.ts_real = ns_to_timespec64(
+   381				(real_pre + real_post) / 2 + delta);
+   382	#ifdef CONFIG_NTP_PPS
+   383			evt.pps_times.ts_raw = ns_to_timespec64(
+   384				(raw_pre + raw_post) / 2 + delta);
+   385	#endif
+   386			ptp_clock_event(ge->ptp, &evt);
+   387		}
+   388	
+   389		/* steer the next edge onto the GPS second boundary */
+   390		ge->pps_next = ktime_add_ns(ge->pps_next, NSEC_PER_SEC + delta);
+   391		hrtimer_start(&ge->pps_timer, ge->pps_next, HRTIMER_MODE_ABS);
+   392		mutex_unlock(&ge->xts_lock);
+   393	}
+   394	
 
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
