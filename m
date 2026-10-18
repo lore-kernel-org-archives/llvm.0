@@ -1,105 +1,104 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-194.mta0.migadu.com [91.218.175.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97AAA1A6834;
-	Sun, 18 Oct 2026 00:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03A72DF719
+	for <llvm@lists.linux.dev>; Sun, 18 Oct 2026 00:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792284458; cv=none; b=tvmW3rJSFtMY+s9zYNu/3lXHISyhXMiEbpIZ2NbBBnZ1tA7CWYx+wV54WNcrlAYs/xs9S9uLB1gJdDb/rJRqrMLEg3Jj3u6t6Dyc6ldpsqqnghxpNKZol2DffJMQeFjIOKROqjbgA7SuIhVsy6jPSrS83Ar2kpyhJaeTAuJ7cd8=
+	t=1792284909; cv=none; b=nwniuwlL3ad769aaIWtEXRvvwv4erAxCA4hLMANZTDA0WpvVK5vKWVQ7h3RDHVFK9fp07iIJI4P5j0qKK/xBYeehFti+p7DUSChTLlqxnM9qSPpi+HrPQGX3/d59GIJgXCPrPPdkq0bDcGnfQIh1dp0KQRpBD/nHtYS1pxziEfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792284458; c=relaxed/simple;
-	bh=daoOQm05VwaFoZ0+CpbIgWX8Bo/e4Sr3//Gl6DlQae0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xn7byifXST2JY/sOm7SJXB/qFKTMarno21G3rA0pEHf9PvpGfHOAkDbVfoq3kCIkkDAclzz7/lwQ/DWjDA5l8PY3dBxLuGcGF3JDhq6JT19Z1zw/qTyTrRqbz6GaRChJEW1P8W/MlTFsAY10BiZrLttM7hDWVnhRmfHeV9kAXlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HMMutEn0; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1792284909; c=relaxed/simple;
+	bh=45pvCpoozTCiJIeGIqRoWCtW796yt/btSJjWG4nk5Co=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=G0MRJfMcx9v3PwAZiD7VkDZr8tvdy5PpE2Knau8dUsAD8twTXqSBRH51llsKqk/FZyLxu4It/MaQgpqHPZwyYjZHts5v/h93QAXCeBuILpE9jLaFHxzOzRbPv4oAHUsjV8vfi/VRf2Dwo18/k+vTe97lrjhVFd8YdiJ/kVS6URI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=nDajEzua; arc=none smtp.client-ip=91.218.175.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HMMutEn0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792284455; x=1823820455;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=daoOQm05VwaFoZ0+CpbIgWX8Bo/e4Sr3//Gl6DlQae0=;
-  b=HMMutEn0dC2+LmzXZUxOYKQB+mHXexiDt0HdofvNuL3s/TL3IseUU5q8
-   eDXnfPBfaUFJaHTwTSdtMVc4V0pF3Y0zb2BRCbgRsV4uw37PiYqtj/S9n
-   vKaJ7QFKHetiGUQTva7BnTCKNSCivJ3zQL0tZqwzF2TopZ1q3WqMVQs5L
-   aW/+La8FpP1aLPIDUV9y1k9Wg4PU5hPx2092ezwQgzvrUCg/GQKll9vuK
-   UKiS1J/RkbPlVNGJ6dtbYS++hBagbG3eYQNbN+HQ9ZzPp0Rp0z/rVFNcG
-   WzU7RSzzcg2sFvcE3QWcwouQnyLCEIGNWTMaxrXoVYkV4fAInEYNDM5c4
-   A==;
-X-CSE-ConnectionGUID: nl8mSEraTCSWS87P95dJ4w==
-X-CSE-MsgGUID: 0HfpZ5kJQTGm566wlP3zmg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="1049614"
-X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
-   d="scan'208";a="1049614"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2026 17:47:35 -0700
-X-CSE-ConnectionGUID: 7QNb9IvsTCmVMcmTPGQv7w==
-X-CSE-MsgGUID: IT3zV5cIQzKxka3VbTtNMw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.27,163,1787036400"; 
-   d="scan'208";a="2646600"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 17 Oct 2026 17:47:32 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1xIF3h-00000000Juw-19NP;
-	Sun, 18 Oct 2026 00:47:29 +0000
-Date: Sun, 18 Oct 2026 08:47:15 +0800
-From: kernel test robot <lkp@intel.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heiko Stuebner <heiko@sntech.de>, Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Manivannan Sadhasivam <mani@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Igor Paunovic <royalnet026@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org, linux-phy@lists.infradead.org,
-	kernel@collabora.com,
-	Sebastian Reichel <sebastian.reichel@collabora.com>
-Subject: Re: [PATCH v17 5/7] usb: dwc3: rockchip: add USBDP PHY reset quirk
-Message-ID: <202610180841.U0qsol4i-lkp@intel.com>
-References: <20261016-b4-rockchip-dwc3-rockchip-glue-v17-5-876f96893e2f@collabora.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="nDajEzua"
+X-Envelope-To: llvm@lists.linux.dev
+DKIM-Signature: a=rsa-sha256; bh=45pvCpoozTCiJIeGIqRoWCtW796yt/btSJjWG4nk5Co=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1792284905; v=1; x=1792889705;
+ b=nDajEzua+QfEMTme01CcJFA+NEX40lfBG650dkdeE2CiS5XAlKm8TP0CkYluFbMKkYk4ljng
+ TMQVeJRiDiV1TvRcKajh0M9PnALUlXv09QKzM5LiUnqvoTS105acAMQzDkm2RC9LwE7Z3B4vQZp
+ E3qwgCidTHfG+HS99Y4FmlP8=
+X-Envelope-To: llvm@lists.linux.dev
+Received: by mta11.migadu.com with ESMTPS id 9fe994895f7c21ac;
+	Sun, 18 Oct 2026 00:55:04 +0000
+X-Mizu-Trace-ID: 9fe994895f7c21ac
+X-Migadu-Flow: FLOW_OUT
+From: KaFai Wan <kafai.wan@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Donggeun Yoo <donggeunyoo.kernel@gmail.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Feng Jiang <jiangfeng@kylinos.cn>,
+	Vineet Gupta <vineet.gupta@linux.dev>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH bpf-next v3 0/4] selftests/bpf: Fix selftests fails with clang23
+Date: Sun, 18 Oct 2026 08:53:44 +0800
+Message-ID: <20261018005348.2195130-1-kafai.wan@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261016-b4-rockchip-dwc3-rockchip-glue-v17-5-876f96893e2f@collabora.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Sebastian,
+Building with clang/LLVM 23 breaks several selftests. Patches #1 to #4 fix
+those failures.
 
-kernel test robot noticed the following build warnings:
+Changes in v3:
+ - Remove the patch already applied.
 
-[auto build test WARNING on 8f56fdf3d8cb9f1dbdc93bf9ac816698aa6f70b7]
+Changes in v2:
+ - https://lore.kernel.org/bpf/20261014113043.640435-1-kafai.wan@linux.dev/
+ - Collect the selftest fixes from the two patches in v1
+   patches: #1, #5, #6 and #7.
+ - Add three new patches: #2, #3 and #4.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sebastian-Reichel/phy-rockchip-usbdp-Track-PHY-power-state/20261016-204317
-base:   8f56fdf3d8cb9f1dbdc93bf9ac816698aa6f70b7
-patch link:    https://lore.kernel.org/r/20261016-b4-rockchip-dwc3-rockchip-glue-v17-5-876f96893e2f%40collabora.com
-patch subject: [PATCH v17 5/7] usb: dwc3: rockchip: add USBDP PHY reset quirk
-config: hexagon-randconfig-1000-20261018 (https://download.01.org/0day-ci/archive/20261018/202610180841.U0qsol4i-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261018/202610180841.U0qsol4i-lkp@intel.com/reproduce)
+Changes in v1:
+ - https://lore.kernel.org/bpf/20261012135624.2749743-1-kafai.wan@linux.dev/T/
+ - https://lore.kernel.org/bpf/20261012140202.2754552-1-kafai.wan@linux.dev/T/
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610180841.U0qsol4i-lkp@intel.com/
+---
+KaFai Wan (4):
+  bpf: Determine freplace staticness from BTF linkage
+  selftests/bpf: Fix stack_arg precision backtracking log expectation
+  selftests/bpf: Fix stack arg pruning test JOIN log expectation
+  selftests/bpf: Use _exit() in uprobe_multi_test clone-ed child
 
-All warnings (new ones prefixed by >>):
+ kernel/bpf/verifier.c                                      | 3 ++-
+ tools/testing/selftests/bpf/prog_tests/exceptions.c        | 2 +-
+ tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 4 ++--
+ tools/testing/selftests/bpf/progs/stack_arg_precision.c    | 4 ++--
+ tools/testing/selftests/bpf/progs/verifier_stack_arg.c     | 4 ++--
+ 5 files changed, 9 insertions(+), 8 deletions(-)
 
->> Warning: drivers/usb/dwc3/dwc3-rockchip.c:22 struct member 'dwc_rk' not described in 'dwc3_rk_phy_nb'
->> Warning: drivers/usb/dwc3/dwc3-rockchip.c:22 Excess struct member 'dwc' description in 'dwc3_rk_phy_nb' (did you mean one of: 'dwc_rk')
->> Warning: drivers/usb/dwc3/dwc3-rockchip.c:22 struct member 'dwc_rk' not described in 'dwc3_rk_phy_nb'
->> Warning: drivers/usb/dwc3/dwc3-rockchip.c:22 Excess struct member 'dwc' description in 'dwc3_rk_phy_nb' (did you mean one of: 'dwc_rk')
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+-- 
+2.43.0
