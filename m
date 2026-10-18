@@ -1,145 +1,90 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4823A4F33;
-	Sun, 18 Oct 2026 07:28:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A72F3448D1D;
+	Sun, 18 Oct 2026 07:52:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792308523; cv=none; b=r2CXbPq+MP1mTlQksDpcHgU8EZTVbR2LOkQGOyCk1XhVdsg0sUizBPDCSIEkQOk4yLD9pG7QnudwpSY1YIkPR3r8UIfueGu8kD0+Fi5YeFixL/qjrRkrRgVfdKGbrxTSsG1xawqvvGhJCihnEHwky6cx0uHHmp8MOqfZ3Evi2tg=
+	t=1792309967; cv=none; b=MInDA5Sk68amc0RDEizBBeikW2S1qWf+Qbw+bv6komHV5sJQYqCK+nOhTEHfHHB55w6U4sCnEdYP3cgcyqss5BiuA8QYCC3QCBf326u0pKm0DoXA3vx10n5a7e+o7GRrIjjAnSbD8FYv59oP7ICl+UJb/OU8/nYfTuh4AzACQtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792308523; c=relaxed/simple;
-	bh=W2mGBgnoPDCYHax+4P9Us4ufXUV4ACRjCUQXj0ydjy8=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=ZQZk3M0FWrMsBECuRpSUbwPPxRTsvVtOgQYt5UWTR/WU11KwdHK0/npXY5QRjpfc7pdqQ454WbKgGN+LZnuK6pQrEo5xtiBuVARyACvoXkhfIL1CIGrpmt6jyi0UJu47iy+beTPYNTGMoVYJEtrBOhQ546TtBUa7o8lmwJcG+eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Va1nOlA8; arc=none smtp.client-ip=198.175.65.12
+	s=arc-20240116; t=1792309967; c=relaxed/simple;
+	bh=OKJgmjKos8BeQqOvQHHZfy/Qo2rKCnOBeIDaMRkegwo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=E4k/8FGGyPGC2yC6xczC2UA4kXk8fBef6BVH3DlxipzWNOhOQqSom44Z0Lv0G128XHqYs+5Eary6uP01fae4F033+3yWokaUUjSkcqedB6kcSajWO3Nir6esmrURmC5bhqwUyHo8/huqXpvLyHWvDrt8bQs6ivKfhf7g7zuctn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HJRAJiMF; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Va1nOlA8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HJRAJiMF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792308523; x=1823844523;
-  h=date:from:to:cc:subject:message-id;
-  bh=W2mGBgnoPDCYHax+4P9Us4ufXUV4ACRjCUQXj0ydjy8=;
-  b=Va1nOlA8gZPuTklo6M6nxSsQh1wTFgd/9arOX9hyDXsHL/cRVyMT7GwP
-   I6k7kM+1tZafK5xik2IwBIS9ddz1lnGqaL0RJWvNa/H0LSSm+tDkpJUWF
-   HkeH8X0b6GEcbZiJcbi5KYCGOydNIlpJonNysNm1Tb18Hkk2zvGcXE0O2
-   avGYBBj5eCe3BHdKHoU99G3glSSVBWSf3pAmz8PBVb8vvTa5R+bc7DALh
-   BR3ioWfiEOuv7UedyI3//oejkxFMfaaUrLqk6Wqzwua7Vfll2pYOfBp7Q
-   3NTtmnXpxB6xp9NrIqnnLfq/qLVDWhXd/f4sSK8hJSa6wQd4Bve2nnRHI
-   Q==;
-X-CSE-ConnectionGUID: ClVYLYGmTCO6z0Yx7wq30Q==
-X-CSE-MsgGUID: S7PKsDfKSc+pTX3DEWlZdw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="906347"
+  t=1792309963; x=1823845963;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OKJgmjKos8BeQqOvQHHZfy/Qo2rKCnOBeIDaMRkegwo=;
+  b=HJRAJiMFj+stooe8nCtlw1+wyJAAp+LYnCPnCyJ8S4DbQvPnmhALk6oA
+   5pi9adAiUracwfc5nMSQ2Uq7U3hWgWXiEwukqtDHusDYDP+ya1LQPj3Pi
+   MxnVpZKK4fx7Igxepbsyz3NqIvF+3a+q+WJpcg97EIEiePW29hJFxnuUL
+   zSMpuYS1Ii1niWC6QrZRJdUel9/VDXdtRtp7Aey1MqR6H4+xqKKXu/2+v
+   14WQXevL7bTGQ6EMRUilnHlXW3qpC7rbTGmffvpAfJgbhX65S6U5Rdg5l
+   1pOJdKrSvWPkYYa0Aik8vKdzb3LAn9L4naLd9/GeM94MwNJKeVX6FtvRu
+   g==;
+X-CSE-ConnectionGUID: UfxBqHeVRcC1kZMMT7ZTzw==
+X-CSE-MsgGUID: W+m8OrF6Q4m3ZA2oREOdVA==
+X-URL-LookUp-ScanningError: 1
+X-IronPort-AV: E=McAfee;i="6800,10657,11938"; a="908861"
 X-IronPort-AV: E=Sophos;i="6.27,165,1787036400"; 
-   d="scan'208";a="906347"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2026 00:28:42 -0700
-X-CSE-ConnectionGUID: V+k7cSchTGqVNbqsv1se4A==
-X-CSE-MsgGUID: +ZhlyMxCQv6GuvK9uoZGqQ==
+   d="scan'208";a="908861"
+Received: from fmviesa011.fm.intel.com ([10.60.135.151])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2026 00:52:37 -0700
+X-CSE-ConnectionGUID: RpvKxAz2RS699rYscI3d3A==
+X-CSE-MsgGUID: wyjdF1C2RgKYlE+wycO1Rg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,165,1787036400"; 
-   d="scan'208";a="2624543"
-Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa007.fm.intel.com with ESMTP; 18 Oct 2026 00:28:40 -0700
-Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+   d="scan'208";a="4115558"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3c253b998be3) ([10.211.93.152])
+  by fmviesa011.fm.intel.com with ESMTP; 18 Oct 2026 00:52:36 -0700
+Received: from kbuild by 3c253b998be3 with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xILJt-00000000KEu-1A9i;
-	Sun, 18 Oct 2026 07:28:37 +0000
-Date: Sun, 18 Oct 2026 15:28:02 +0800
+	id 1xILh3-000000004xi-1iCR;
+	Sun, 18 Oct 2026 07:52:33 +0000
+Date: Sun, 18 Oct 2026 09:46:01 +0200
 From: kernel test robot <lkp@intel.com>
-To: sofus <sofus.c@icloud.com>
+To: Jemmy Wong <jemmywong512@gmail.com>
 Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Janne Grunau <j@jannau.net>
-Subject: [asahilinux:bits/240-isp 63/92]
- drivers/media/platform/apple/avd/avd-vp9.c:197:8: error: call to undeclared
- function 'FIELD_PREP'; ISO C99 and later do not support implicit function
- declarations
-Message-ID: <202610181520.1vfRMIBE-lkp@intel.com>
+ linux-kernel@vger.kernel.org, x86@kernel.org,
+ Peter Zijlstra <peterz@infradead.org>
+Subject: [tip:sched/core 35/37] ld.lld: error: relocation refers to a
+ symbol in a discarded section: __UNIQUE_ID_addressable_overflowuid_553
+Message-ID: <202610170544.6hPndDUW-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+MIME-Version: 1.0
+Content-Type: application/octet-stream
+Content-Transfer-Encoding: base64
 
-tree:   https://github.com/AsahiLinux/linux bits/240-isp
-head:   c792edd0ffb515a81db3e039bc6e2a611c51d65b
-commit: 5a2ea5f4d6517dd100d8b717e9eb203e6fa1114e [63/92] media: apple: avd: define static values and bitmasks
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20261018/202610181520.1vfRMIBE-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261018/202610181520.1vfRMIBE-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610181520.1vfRMIBE-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/media/platform/apple/avd/avd-vp9.c:197:8: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     197 |                 push(AVD_REF_FLAG_CONST, "hdr_9c_ref_100");
-         |                      ^
-   drivers/media/platform/apple/avd/avd-inst.h:142:29: note: expanded from macro 'AVD_REF_FLAG_CONST'
-     142 | #define AVD_REF_FLAG_CONST              FIELD_PREP(BIT(24), 1)
-         |                                         ^
-   drivers/media/platform/apple/avd/avd-vp9.c:266:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     266 |         return VP9_FEAT_LVL_ALT_Q(feature_val) | enabled;
-         |                ^
-   drivers/media/platform/apple/avd/avd-vp9.c:42:32: note: expanded from macro 'VP9_FEAT_LVL_ALT_Q'
-      42 | #define VP9_FEAT_LVL_ALT_Q(v)           FIELD_PREP(GENMASK(21, 12), v)
-         |                                         ^
-   drivers/media/platform/apple/avd/avd-vp9.c:281:7: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     281 |         push(AVD_OP_EXEC
-         |              ^
-   drivers/media/platform/apple/avd/avd-inst.h:15:23: note: expanded from macro 'AVD_OP_EXEC'
-      15 | #define AVD_OP_EXEC                     FIELD_PREP(GENMASK(31, 24), 0x2b)
-         |                                         ^
-   drivers/media/platform/apple/avd/avd-vp9.c:434:9: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     434 |                         push(AVD_OP_CODED_DATA |
-         |                              ^
-   drivers/media/platform/apple/avd/avd-inst.h:45:28: note: expanded from macro 'AVD_OP_CODED_DATA'
-      45 | #define AVD_OP_CODED_DATA               FIELD_PREP(GENMASK(31, 20), 0x2d8)
-         |                                         ^
-   4 errors generated.
-
-
-vim +/FIELD_PREP +197 drivers/media/platform/apple/avd/avd-vp9.c
-
-   173	
-   174	static void set_refs(struct avd_ctx *ctx, struct avd_vp9_run *run)
-   175	{
-   176		const struct v4l2_ctrl_vp9_frame *frame = run->decode_params;
-   177		struct avd_dev *avd = ctx->dev;
-   178		struct avd_decoded_buffer *dst, *ref_buf[4];
-   179		dma_addr_t addr;
-   180	
-   181		dst = vb2_to_avd_decoded_buf(&run->base.bufs.dst->vb2_buf);
-   182	
-   183		ref_buf[0] = avd_get_ref_buf(ctx, &dst->base.vb, frame->last_frame_ts);
-   184		ref_buf[1] = avd_get_ref_buf(ctx, &dst->base.vb, frame->golden_frame_ts);
-   185		ref_buf[2] = avd_get_ref_buf(ctx, &dst->base.vb, frame->alt_frame_ts);
-   186	
-   187		push(INST_DMA3, "cm3_dma_config_7");
-   188		push(INST_DMA3, "cm3_dma_config_8");
-   189		push(INST_DMA3, "cm3_dma_config_9");
-   190	
-   191		for (int i = 0; i < V4L2_VP9_NUM_FRAME_CTX - 1; i++) {
-   192	
-   193			addr = vb2_dma_contig_plane_dma_addr(&ref_buf[i]->base.vb.vb2_buf, 0)
-   194				+ (ref_buf[i]->base.vb.planes[0].length - ref_buf[i]->rvra.size);
-   195	
-   196			/* TODO */
- > 197			push(AVD_REF_FLAG_CONST, "hdr_9c_ref_100");
-   198			push(AVD_HDR_HEIGHT(ref_buf[i]->vp9.height - 1) |
-   199					AVD_HDR_WIDTH(ref_buf[i]->vp9.width - 1),
-   200					"hdr_70_ref_height_width");
-   201			push(0x40004000, "hdr_7c_ref_align");
-   202	
-   203			push_rvra(avd, ctx, addr, ref_buf[i]->rvra.offsets);
-   204		}
-   205	}
-   206	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+dHJlZTogICBodHRwczovL2dpdC5rZXJuZWwub3JnL3B1Yi9zY20vbGludXgva2VybmVsL2dpdC90
+aXAvdGlwLmdpdCBzY2hlZC9jb3JlCmhlYWQ6ICAgYjk5YjdmNjBjNWI0NzNkMzc0YzY4YjUzNzUz
+MTUzYjRhYTllMDcwMgpjb21taXQ6IGZjY2ViN2RhOTQ2NTk2OTVkNmNiYTk3MTkwZTE4ZTg3ZDlj
+Y2U4MmMgWzM1LzM3XSBzY2hlZC9jYWNoZTogQXZvaWQgcHVibGlzaGluZyBwYXJ0aWFsIExMQyB1
+dGlsaXphdGlvbgpjb25maWc6IHJpc2N2LXJhbmRjb25maWctMjAwMC0yMDI2MTAxNiAoaHR0cHM6
+Ly9kb3dubG9hZC4wMS5vcmcvMGRheS1jaS9hcmNoaXZlLzIwMjYxMDE3LzIwMjYxMDE3MDU0NC42
+aFBuZERVVy1sa3BAaW50ZWwuY29tL2NvbmZpZykKY29tcGlsZXI6IGNsYW5nIHZlcnNpb24gMjQu
+MC4wZ2l0IChodHRwczovL2dpdGh1Yi5jb20vbGx2bS9sbHZtLXByb2plY3QgOGE2Nzk0NjRmMTlj
+NDI2ZWY3NmFhZDlmNDU4N2I3MDNkZDNlNTg0ZCkKcmVwcm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1
+aWxkKTogKGh0dHBzOi8vZG93bmxvYWQuMDEub3JnLzBkYXktY2kvYXJjaGl2ZS8yMDI2MTAxNy8y
+MDI2MTAxNzA1NDQuNmhQbmREVVctbGtwQGludGVsLmNvbS9yZXByb2R1Y2UpCgpJZiB5b3UgZml4
+IHRoZSBpc3N1ZSBpbiBhIHNlcGFyYXRlIHBhdGNoL2NvbW1pdCAoaS5lLiBub3QganVzdCBhIG5l
+dyB2ZXJzaW9uIG9mCnRoZSBzYW1lIHBhdGNoL2NvbW1pdCksIGtpbmRseSBhZGQgZm9sbG93aW5n
+IHRhZ3MKfCBSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+Cnwg
+Q2xvc2VzOiBodHRwczovL2xvcmUua2VybmVsLm9yZy9vZS1rYnVpbGQtYWxsLzIwMjYxMDE3MDU0
+NC42aFBuZERVVy1sa3BAaW50ZWwuY29tLwoKQWxsIGVycm9ycyAobmV3IG9uZXMgcHJlZml4ZWQg
+YnkgPj4pOgoKPj4gbGQubGxkOiBlcnJvcjogcmVsb2NhdGlvbiByZWZlcnMgdG8gYSBzeW1ib2wg
+aW4gYSBkaXNjYXJkZWQgc2VjdGlvbjogX19VTklRVUVfSURfYWRkcmVzc2FibGVfb3ZlcmZsb3d1
+aWRfNTUzCiAgID4+PiBkZWZpbmVkIGluIHZtbGludXgubwogICA+Pj4gcmVmZXJlbmNlZCBieSAE
+BRQD0gQIrAUGBkoFCQYDAwk6MjM3MTkKICAgPj4+ICAgICAgICAgICAgICAgdm1saW51eC5vOihs
+dGMyNjY0X2RhY19jb2RlX3dyaXRlKQoKLS0KMC1EQVkgQ0kgS2VybmVsIFRlc3QgU2VydmljZQpo
+dHRwczovL2dpdGh1Yi5jb20vaW50ZWwvbGtwLXRlc3RzL3dpa2kK
