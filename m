@@ -1,59 +1,58 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A50C48D874;
-	Mon, 19 Oct 2026 07:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7032494293;
+	Mon, 19 Oct 2026 07:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792395508; cv=none; b=WBGOUKBdbdn0fCOHDrn9DSjNG6yG63L2+n7WrGUF9nEdJ9OApWgqJjkh8vt699WXF6O8Y/+1rgtERL55eedJTz3L8zfw2eG+jyjrTwW5GgFgJqbCMfME4wbTsMTOi/FSRWqCwm8NII4lob3c8Vr6gkjkiTr5Ge6nnipmmY4slN8=
+	t=1792396776; cv=none; b=CIdTWgwfFAsGJoiPS+LRK1oWaT6D9C4ky8ChS+IsnTaWiOxM7ma0uPH6Ph1u7aH/I23DFOb9z2GGHFeORBvDx/BA6mu/ttzvOcOLqMbwjZXVRzENnkliRh7WurczEzc6W40Q/4SbAlLyBlpv6OVWmt8LwOphTHVSZ/QoRRIS8O4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792395508; c=relaxed/simple;
-	bh=vwEhsDoaz94vi3L7HLiRt10cVXXZiZEpuehGWh8MUcE=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=g++EX8YVdfyOm7CtQsnCLwXlNP413qY/RahjdjXnvUm55CJKKLQoFdP/nsPQ1nJoGanznCzjpJGugXf+ID4FuBxYeEe1i57g+Oa347PqAMHINPx5rTPh82z6g5AMUYO8R/lpDjv8yEnVL+DNJOsWtL1iKEB5TAb50+1ye+HEh+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ByynpXcw; arc=none smtp.client-ip=192.198.163.15
+	s=arc-20240116; t=1792396776; c=relaxed/simple;
+	bh=JtgecYBNNqAl9F7F7xUPcE98mYpkdrrmI9zaGsYK7CE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=NwxdvuLRBE4VpanvqJCCZZsWm12lwEVCaf9QA8M+kTW7l3i37DeO0FT4nKxM6jsWjiddX9q8bvpBPILAzPqfG+yQu43rexb88NmS2I0DUTqpkCH64AmJ5HujwkP82bCWeU444tFXjTGSLdpj0ZGhcZifn5UL33a0kZvSKkTl4Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mHK4DDky; arc=none smtp.client-ip=198.175.65.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ByynpXcw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mHK4DDky"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792395506; x=1823931506;
+  t=1792396773; x=1823932773;
   h=date:from:to:cc:subject:message-id;
-  bh=vwEhsDoaz94vi3L7HLiRt10cVXXZiZEpuehGWh8MUcE=;
-  b=ByynpXcw2jMs+KKQzcDO1twvrt3JKKY+L+modHSwdb/R2M32HOwHslhk
-   YUXwH7N8hZGyHHWHLaN+z2E1kH12GJ/1AXtRH/TyNTQ4DL8HJ6+kdWZhA
-   NosYQuquIQUTHSH5QH9AFrYnkOHvPxCafefC8vQp0EqR8LYp42OLMOdLI
-   MTSoffkYk+lfuLdwLKu6oORLEhQVSyS+eFme21OZzmgi1tcsXeyGuTBAf
-   IydkllQTbjFpcsCQpF36EBEMg5hOo06DJ+tMKfYXRN6UhRp+N1/IETDTR
-   PtRen7k45k1+fHArpSzRUo4urtYijL3TrWdsWn4IM33RLQ/NvCzw1iKsb
-   g==;
-X-CSE-ConnectionGUID: EKeab58PScKnGnQo5ou92w==
-X-CSE-MsgGUID: aWp2z6YoQWmN8de16nwEcg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="1084938"
+  bh=JtgecYBNNqAl9F7F7xUPcE98mYpkdrrmI9zaGsYK7CE=;
+  b=mHK4DDkyh4JUMrW/nqWkbnacYkjmJaNEm+oKb8YWIfUJYg2rXkB2Y1gA
+   kuGSTr8DglOpZmWIePeTFCB5g3UiuvayFMWW5+02VIooe7cMYJ8s9ZQ43
+   j5hSQkGlJswYz1fdIM4WTlqfYzMze4DZlA7BQTWvaKdyVG0KNmxg7sYrL
+   NqwgRaoZuOCZuGVVVhll8mFYkDVU1ITdoGJibT/WhmlILU+8OkyPuIyzn
+   nCOvofU3X8tGKVpcXR35ovlNXUH18K9SX/GmoibaKrpGAsoiZgOwPrsi7
+   O3wuGI/vw0SBqLNx3nNWVwnvv9msaMVRJ3airX1aFDaueDCcybFKZN7vb
+   w==;
+X-CSE-ConnectionGUID: +BW+BBXQTG+agOv6wGvDkw==
+X-CSE-MsgGUID: vAZv5xECQRyB2G3l84ityw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="966312"
 X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
-   d="scan'208";a="1084938"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 00:38:25 -0700
-X-CSE-ConnectionGUID: KYurmUuOQJOf3uzvvxgcDg==
-X-CSE-MsgGUID: N4zVDU/1TiqmfuemivamEg==
+   d="scan'208";a="966312"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 00:59:26 -0700
+X-CSE-ConnectionGUID: hoZs0d5+QciE2bi4b9q94Q==
+X-CSE-MsgGUID: U9XMOgEdQzW+9fOTAcdyMg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
-   d="scan'208";a="2532981"
+   d="scan'208";a="2472185"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 19 Oct 2026 00:38:25 -0700
+  by fmviesa004.fm.intel.com with ESMTP; 19 Oct 2026 00:59:24 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xIhwr-00000000LNu-3Pgj;
-	Mon, 19 Oct 2026 07:38:21 +0000
-Date: Mon, 19 Oct 2026 15:37:22 +0800
+	id 1xIiHC-00000000LOU-1QNL;
+	Mon, 19 Oct 2026 07:59:22 +0000
+Date: Mon, 19 Oct 2026 15:58:37 +0800
 From: kernel test robot <lkp@intel.com>
-To: Jinseob Kim <kimjinseob88@gmail.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>
-Subject: [jic23-iio:testing 55/58]
- drivers/iio/sensorhubs/osf/osf_core.c:17:6: warning: stack frame size (1344)
- exceeds limit (1280) in 'osf_core_init'
-Message-ID: <202610191514.fRYyu0HX-lkp@intel.com>
+To: Brian Cain <brian.cain@oss.qualcomm.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [bcain:hexagon 41/82]
+ arch/hexagon/kernel/hexagon_ksyms.c:22:15: error: use of undeclared
+ identifier '__vmhwconfig'
+Message-ID: <202610191541.iE3po1rx-lkp@intel.com>
 User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
@@ -61,43 +60,41 @@ List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-head:   43ffda3c7f8456bbe641ae8249a077a361b97880
-commit: 2da37c28edc66848f7ff302011b765ae66ee8cf2 [55/58] iio: osf: add IIO devices from capability reports
-config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261019/202610191514.fRYyu0HX-lkp@intel.com/config)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/bcain/linux.git hexagon
+head:   35ab1dadb94646b74469738c1741f68e8c6aac3d
+commit: ce5a6b702e8c793c721b2431bae81ef249eb17cc [41/82] hexagon: add the hypervisor's hwconfig call to the VM interface
+config: hexagon-randconfig-1001-20261019 (https://download.01.org/0day-ci/archive/20261019/202610191541.iE3po1rx-lkp@intel.com/config)
 compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610191514.fRYyu0HX-lkp@intel.com/reproduce)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610191541.iE3po1rx-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610191514.fRYyu0HX-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610191541.iE3po1rx-lkp@intel.com/
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/iio/sensorhubs/osf/osf_core.c:17:6: warning: stack frame size (1344) exceeds limit (1280) in 'osf_core_init' [-Wframe-larger-than]
-      17 | void osf_core_init(struct osf_device *osf, struct device *dev)
-         |      ^
-   1 warning generated.
+>> arch/hexagon/kernel/hexagon_ksyms.c:22:15: error: use of undeclared identifier '__vmhwconfig'
+      22 | EXPORT_SYMBOL(__vmhwconfig);
+         |               ^~~~~~~~~~~~
+   1 error generated.
 
 
-vim +/osf_core_init +17 drivers/iio/sensorhubs/osf/osf_core.c
+vim +/__vmhwconfig +22 arch/hexagon/kernel/hexagon_ksyms.c
 
-33efb787fb5f8c Jinseob Kim 2026-10-12  16  
-33efb787fb5f8c Jinseob Kim 2026-10-12 @17  void osf_core_init(struct osf_device *osf, struct device *dev)
-33efb787fb5f8c Jinseob Kim 2026-10-12  18  {
-33efb787fb5f8c Jinseob Kim 2026-10-12  19  	*osf = (struct osf_device) {
-33efb787fb5f8c Jinseob Kim 2026-10-12  20  		.dev = dev,
-33efb787fb5f8c Jinseob Kim 2026-10-12  21  	};
-2da37c28edc668 Jinseob Kim 2026-10-12  22  	mutex_init(&osf->latest_lock);
-2da37c28edc668 Jinseob Kim 2026-10-12  23  }
-2da37c28edc668 Jinseob Kim 2026-10-12  24  
-
-:::::: The code at line 17 was first introduced by commit
-:::::: 33efb787fb5f8cc2053b241375a97c219b399aa3 iio: osf: add UART transport and core receive path
-
-:::::: TO: Jinseob Kim <kimjinseob88@gmail.com>
-:::::: CC: Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>
+    13	
+    14	/* Additional functions */
+    15	EXPORT_SYMBOL(__clear_user_hexagon);
+    16	EXPORT_SYMBOL(raw_copy_from_user);
+    17	EXPORT_SYMBOL(raw_copy_to_user);
+    18	EXPORT_SYMBOL(__vmgetie);
+    19	EXPORT_SYMBOL(vmgetie_cached);
+    20	EXPORT_SYMBOL(vmsetie_cached);
+    21	EXPORT_SYMBOL(__vmyield);
+  > 22	EXPORT_SYMBOL(__vmhwconfig);
+    23	EXPORT_SYMBOL(memcpy);
+    24	EXPORT_SYMBOL(memset);
+    25	
 
 --
 0-DAY CI Kernel Test Service
