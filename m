@@ -1,160 +1,228 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.132
+ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
+	t=1792423628;
+	b=L5BcrbX30WeAwqrKteG5cmLnIg/sqKXlMQ0iPjY0RcJzekmsRUBnCRUsTvAxLRXf5jDN
+	 zMaIc/J6Q8CzmV/WNJwGM5kfHbZVELPgXeI7C2yzh9XcyzvMM7IJmElAgChLD9X+XOd8E
+	 SdH05F/5xlPtNsRrhiYJ9xLRvuMhGE97DyBZqRLq8KXXU1CSFUIKNmjPUnG46FSeGHA1Z
+	 EtVutbzu8K4oToPJdiTuB8quU7YvBh1G9ZvuhiFD5Ae2c+H0dpokuEl3MQPNfcH5Rxd20
+	 2f6J49LX9o2MWPJeljYAvxrQNi0e3eSUgkfyBqriFe1nM9t7NZFBGOJc1DFYGXBVdgQ==
+ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792423628;
+	h=DMARC-Filter:DKIM-Signature:Received:Received:
+	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
+	 From:To:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:
+	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
+	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
+	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
+	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
+	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
+	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
+	 X-MS-Exchange-CrossTenant-Network-Message-Id:
+	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
+	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
+	 X-MS-Exchange-CrossTenant-FromEntityHeader:
+	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
+	 X-MS-Exchange-CrossTenant-UserPrincipalName:
+	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
+	bh=0fFKCtmcV7Z/b/qf9UFqFjiqIaTYbRmHh6zBXGUjDyE=;
+	b=UY0Be8q9fjgn2D1f20XdM19XdevudeWwyvOEc6nmWKs12eztKaAQwhfYmbp5LqzucnLQ
+	 72scUpf3/9cF9fMlVEoTsX0MaRpOCCleWfjCvxA1lrFz+IVmBLyiNzTyVron3j8ZDVVLM
+	 qT6rW5zSlfPIAaP7FWbMtgSj7Z4Q/m8Uz6+CjuO22umQTey1degGfexKzJZCtV3iPNmWj
+	 pF9eD9abko0HfPsKBKQ4da0NkxDUYil/sAuSnppSaBNjEzra2QL66fMCXAoC2vggYnGJt
+	 /h+Ra4gLmQ+krMdet4yOdRHhpLtYnfjZB+wtGYwA8Vs0RGEx073vLSll5xCMk2iHsKQ==
+ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=garyguo.net;
+	spf=pass smtp.mailfrom=garyguo.net;
+	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=r5xqp0B3;
+	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.132
+Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021132.outbound.protection.outlook.com [52.101.95.132])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83F3757084A;
-	Mon, 19 Oct 2026 14:26:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792419974; cv=none; b=OO99EaFUeCH7UpKFWOivViGabKnCBTHGACEC9slnDDUZJOd56CiFwnoSz74oz+XuQSf6wxmvuO+mflYsyLOxIxOpGNCE7GsCdnOxQFgyvDBVxFrvQCv/YNn4ez5XwQTZY4LQa97M7u199Ye21FBLBbFBS+di6lAP01HiF/L4Two=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792419974; c=relaxed/simple;
-	bh=wXaA4Lqd/Sq5Q7tVGx0pHDGgIpUc+OopZZmi8rNrlWM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LSvPyaDEZjhnY+mmOGAbEC+4R34cyzCo5wNxpAOtjfNma9YK0PoQJaKJB+K/QLuGHWOqbCstZ+uYaqfy6Wa1inBSe7i9wQnHoLb67dA+2VQeE8oOP1Ae0hBip9sm9LZfoAlrIrMxz4Uai5hdyezQ0wpIlmeG+BgyA6vClEEhv7I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4yIvsjV; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E1460B39B8
+	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 15:27:07 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6E1460B39B8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4yIvsjV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB301F000C8;
-	Mon, 19 Oct 2026 14:26:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1792419972;
-	bh=DaSM4M9tttPQz83r2q9i9D3CTwdtlsu+SwUsFN6pCCE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=G4yIvsjVmphgJHjlfUfE/6GYYeJx1kXsyQlJW5HuvU2CtXQl2wBMaVfXXAwJh7vwn
-	 keNWffRbKPQt4B7W/kR9vcrB1BlHZe+y8+lnTTqM5TrUPcCAC8fx3bYqolFyam8l8S
-	 2vH/EDK7jYsgGek+QtOlynq06slOd79NxoyuOCPt6Uj+EZYQT7NsWGpiasPp1M1uip
-	 27jDdVVKVhV/9lRqslOPBO9M6gKIF99fOeAEvQBVfY9Kjt2y6Ib4EA4uT2VBHJMELA
-	 4NgAK1xemzmiM36Y1cs6URb0Y+2GGyZ0wZfGs8ZcPbEa3uo9Dh1yTlbBNDSLhZGUbU
-	 8C5WCkb2PDpGw==
-Date: Mon, 19 Oct 2026 16:26:08 +0200
-From: Maxime Ripard <mripard@kernel.org>
-To: Vignesh Raman <vignesh.raman@collabora.com>
-Cc: Helen Koike <helen.fornazier@gmail.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v2] drm/ci: Add CI pipeline for drm-misc branches
-Message-ID: <atYoMnjtOhDLJwza@houat>
-References: <20260911-drm-drm-misc-ci-v2-1-1847f89585cb@kernel.org>
- <9e1fc5c6-53ff-4a4d-9744-77bcf6a0325e@collabora.com>
-Precedence: bulk
+	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=r5xqp0B3
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qViw4gsgVKmH5PPpAVjObylhaSrUMIvyxX8TX54DAgrqerMXhfglVym/X3BD+ApMi3eVyMngPnQ4MieUubnRT/rtYMYu6JCIsIKQPVpZ6NhWHTvrcXb6uA56P51BYpx9IsELhaF1fucf0WqU2jZngl90fXITqcdSXsei/XsN+CVzNeeRMDsXdPyGYQqkp5aD0sg8gaLnzcfWF3aJAfTtBpMQkX4X/D+FFt54Lq/noXMpOVfeXQsZRvKMb9oK0eEdZtez2t891q7O2JUVoT8BT3LcmQAFC/ccNs9OnE1OHhXWfVoxU5Nm2sRsVYjr+stbdKtR8/jcHQvmDUFrrnAE4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0fFKCtmcV7Z/b/qf9UFqFjiqIaTYbRmHh6zBXGUjDyE=;
+ b=Bu2hf23lTIkGrJP2mTACzHEWXt0ioI6nF5gJEJtm3rbvndnMVE9pFfA1Ocmlub9ZgmlhnJxnJwgka1ExBPh9ofgA/lofjBjwxS7yP+nM6Y4zYiFjPRo+FZyBUYrvhUE3VXS6ySuq5sqwHu2nFvNjhcHa66eKQAwJgW6H90OE08ZptM9smmOIgKAyzzD+g2KJa3+dqlWsIzSdb24aF0X+QGiA3damWWzZ7vRZ88stwZiCbZRxFxOKS98vl7XpvVk/Z4g33t11iH7fNLo4219DpirUOTG2rtI7HRXv+NEG6Gq+GSrwhzS1ymEdOXaZTKiapENC1mXlgE/nXzp0SoTSVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0fFKCtmcV7Z/b/qf9UFqFjiqIaTYbRmHh6zBXGUjDyE=;
+ b=r5xqp0B3NOhcyH9W1bfoDUCKJnulSDAvXLdzy5ko1k6tGVyp4fCUYXcMC/AE0XdfdlAY119LGj9/glijyzzRNBut83GNvZYPzNwhbtbjAiIz93vi6cRI8Edw0baEV9Zyl2/JC5HvDeO5xVF7IizzDEHNSQRt/qKSxo2JWInpQ4g=
+Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
+ by LO4P265MB6252.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:27f::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
+ 2026 15:26:50 +0000
+Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::f60b:1537:68d7:4fc1%6]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
+ 15:26:48 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 19 Oct 2026 16:26:47 +0100
+Message-Id: <DM8X51YCN6AA.1HV7J3R3PIYY9@garyguo.net>
+Cc: "Alexander Potapenko" <glider@google.com>, "Boqun Feng"
+ <boqun.feng@gmail.com>, <kasan-dev@googlegroups.com>,
+ <linux-kernel@vger.kernel.org>, "Dmitry Vyukov" <dvyukov@google.com>,
+ "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
+ <skhan@linuxfoundation.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>, "Miguel Ojeda"
+ <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary Guo"
+ <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
+ Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
+ "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
+ "Daniel Almeida" <daniel.almeida@collabora.com>, "Tamir Duberstein"
+ <tamird@kernel.org>, "Alexandre Courbot" <acourbot@nvidia.com>,
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, "Nathan Chancellor"
+ <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Nick Desaulniers"
+ <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
+ Stitt" <justinstitt@google.com>, "Asahi Lina" <lina+kernel@asahilina.net>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Yury Norov" <ynorov@nvidia.com>,
+ "David Gow" <david@davidgow.net>, "Joel Fernandes" <joelagnelf@nvidia.com>,
+ "Alvin Sun" <alvin.sun@linux.dev>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
+ "Petr Mladek" <pmladek@suse.com>, <workflows@vger.kernel.org>,
+ <linux-doc@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ <linux-kbuild@vger.kernel.org>, <llvm@lists.linux.dev>
+Subject: Re: [PATCH v2 1/2] kbuild: rust: enable KCSAN support
+From: "Gary Guo" <gary@garyguo.net>
+To: "Marco Elver" <elver@google.com>
+X-Mailer: aerc 0.22.0
+References: <20261015145714.3327543-1-elver@google.com>
+In-Reply-To: <20261015145714.3327543-1-elver@google.com>
+X-ClientProxiedBy: LO6P123CA0046.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:310::8) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:4ab::19)
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
+List-Post: <mailto:llvm@lists.linux.dev>
+List-Help: <mailto:llvm+help@lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
+List-Owner: <mailto:llvm+owner@lists.linux.dev>
+Precedence: list
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha384;
-	protocol="application/pgp-signature"; boundary="p6yas62h76l2tfcz"
-Content-Disposition: inline
-In-Reply-To: <9e1fc5c6-53ff-4a4d-9744-77bcf6a0325e@collabora.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|LO4P265MB6252:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d7b8ba0-0483-4e9f-defd-08df2df5648a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|10070799003|376014|7416014|23010399003|1800799024|366016|6133799003|22082099003|18002099003|10067099003|56012099006|261009223027099003;
+X-Microsoft-Antispam-Message-Info:
+	OYEzN7B+fIphDFuMDRvVy4BDDFyEwWoGN92tl1r5FN1z4WI69W5OTuVPy2ugogbR5c3DtFWauiiXIEtQ0C9mF2wVx8XBCrb6pjkEqEQoxJM42wymVPUsvlks1bCnR0wSwwnz4LnnWxSELYIId8rskjAz8GWPUCMLQL/R3QqG8lB6j765j8C5f/Pjr4TmcrzGvdWSEiiRDm0r6rqfMB4DI6mYJzgyUDAUw3DqwWCVszPgIGJDLnyh6eqMgFJhOLkji3CKx/2zIzXz4GciEX9U/43aJPX9miN6v2XwJTE43wlZ362lEO0FtRkBgx2hlAHhzkVNqyF8D1hIlEBb/8ot6abRNHk+fIUlWMvnwGfeCJazkv5DToppFMI46zfR00SgxOoo63aSttF3bd+5bT5a3h8S/OLT9T5uXBpJQzK0C3cDXIbgL2oVz6CM6bxKdIMJVh11RhsNQ0BttsJToPVGPdVGw4Na03Wo15tOBIZsrhpYRbprpZUwNp+n2JTLF9n5eiq8l0WJ8xDc7712FpeFpiOalrdJhCHBEae5xDlhZYjLtaYJV9i4ED06lkDUxFMxH504F7WbRzKafkXV59D+w6cULaTs2aK7k35DvJKtYTbMW91tVdLD6YWONUrhiAYL7qb2xNsWrDn7twap0Lc4fFWh0MJHHtro9B07UCpedJg=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(7416014)(23010399003)(1800799024)(366016)(6133799003)(22082099003)(18002099003)(10067099003)(56012099006)(261009223027099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MStBdm9WYVpxUVd2TDB1Vks4YitIL01vWkRLV0FmWUZraTNUSW81a01NZWNS?=
+ =?utf-8?B?Zm1mWkJPL2JZZVJYd1ArZTJKTXByUEVITXpiTUlSUDZCRXR2eEhyc0VPR0lO?=
+ =?utf-8?B?bVMvd2dvOXIwMTV0b1FNbEtxYmRWeW5uZmowak5NL3hVU1ZMV254N0FxUXpn?=
+ =?utf-8?B?N21rc1ZUaWJYeDZDa2t5eTAvMHBZSUZleWY2ZmF5RDdMRGtjdFRyL0lBMHZI?=
+ =?utf-8?B?T3BMZ2ZUbnVRNGpJUHZEdTNIbkpmakZBRkNlS0pqNytQTWpyNUdNRmtSVzZQ?=
+ =?utf-8?B?UCtuZlZPZDZMeFlMcWY5R3dCNjFLN202SG83eVkxOTVIUysvTTZYYTUwcStR?=
+ =?utf-8?B?VTZ2SjhxUlpzZkdkU2FuZGdKNVdrU0hNNjZ6RGtGOEpZSzQwd3Ntek9hdUxs?=
+ =?utf-8?B?OE1jSWVNaUJPbk0reGJJTkxLM2U1Y0YwSzNQRkV5NTVNZU9EQlFaeGZHVDln?=
+ =?utf-8?B?dVRXRnFyeC9jK3dMbW13UElRV2N0SlZIOG4xOGZUUktJU3BtSWk3V09jNXV0?=
+ =?utf-8?B?Wk1jSHRXYjFTdStJNFdJeFFMMU1hL0JRcC94eVd1SDB0SDl2OGFTTVdWeXZU?=
+ =?utf-8?B?NENIc2c3Q1BqQjlwRXFwWmRuZEYxNTNwcC84WWMwWnEvZUFFWFM3eVAwNnNW?=
+ =?utf-8?B?eldZdDB4eWhjYXlISW1NMExoSVVCa2VkYUZ1RjhUUERtWFZZZis0YkpyQlQ2?=
+ =?utf-8?B?NXhVWW1NQ3B0NFp0SGlUcTF4NFJsa2l5dmpXZ3pFWGxWY1AzOXl0WkluMzdH?=
+ =?utf-8?B?eHoxL3NNdnQ5dkV2dDBBOHQ4TFpKd3QwREF5Y3I0ek84OU1HL1NFVE95Qnpv?=
+ =?utf-8?B?NXVmUUZTV2UwSWM1SDJuSHVqa1gzWm10NDNHUHRwMUlCblZPNERtUElnY2l3?=
+ =?utf-8?B?V0g3b2FZMnhka01RZDhqYmtBM3FrenNaL055RnFydlFzMmtFcXZQdUZEM0FN?=
+ =?utf-8?B?b2lTRVQ0WllJTGFnV20yY2NMZFhrbHZjd1JnblIzV0NoV2lJNWwrOW1lNGo5?=
+ =?utf-8?B?VGNBbzRJdHYvSEpaUmRCMXZzRXpzdld4UzVaQkRuVGZ3SHBPZmNMQ3FrRzla?=
+ =?utf-8?B?a3BTRkt0ZEVvVVhSK1VDTXFXN2pZbzBVMG9NMUFzZXVDUWxJbFp6NU5ieVVN?=
+ =?utf-8?B?UEFOTkcxRkU2RW1vNER1cWczcGd0S1I3SlhmSHk5WHFESlNVd2F1VHI3d3pu?=
+ =?utf-8?B?VVNZQzFGMzl1MkVDOEVqcjJYcUZ0WXJ2M2tIS1ozdFp0d1JHd3g0K1preVJT?=
+ =?utf-8?B?Z1Q1a0JFbmVVTDBVNDN6ajZyREJtSnVCVW50ckxCdWtGNnl4VkRySU9hRWZl?=
+ =?utf-8?B?UWc4a0k4N0ZLMFBUdDVTKzNObGpuR3VwK1dSMSt1MVVERE9hUEhIVDZ0azRM?=
+ =?utf-8?B?aHBEWjdLRnM2YXJtaXFvTjZiZnZPem1TSW93aXhuSktnZGlJM0YySXg2b0o3?=
+ =?utf-8?B?cTJBcUxSMmdvaWFmekxyNFNCOE1VYUZZRXRUcGpoeFZlc0o5Wk5uTXBXNCtF?=
+ =?utf-8?B?cW9IMjJGemFKQ0wzUmpENkpkYnYrckZjdE02Qnp0NklkZkZ5SFFxMWtlMDIv?=
+ =?utf-8?B?RFlKNUVybDJHbDJyRjg5UFhsWm5FQ2ZGNHk3Y0Z5OGhyWk1DSFhWbGxkMzMy?=
+ =?utf-8?B?VU5lWmdoU2VlVTc5STVjR3VpcWl2eUFoMEFhc05WMThCenptK0U5aWhZMW5p?=
+ =?utf-8?B?bkZyNWRDOVU0Y1l2cm1qQjZwTkR3YnZiSGNYVG5wL2N2TEhOdDVKUUVpZHVX?=
+ =?utf-8?B?Y1NZMTZ2UUcrK01PMk94Q1ZCT3FES21OYm9xY3BtbGpWc3NqVzBPVW9lbTRo?=
+ =?utf-8?B?YlI3VVl5TzlZQmR5TzhUK00rNDkxYi9Tc09zbGJmTFNUQS9acnFFT3k3ZlFY?=
+ =?utf-8?B?aWFkWGFPYVZkRXdvSFAzK2xlZjRYczlmVHpZUjlma3p5WFZqM2xUY3NwakRu?=
+ =?utf-8?B?eVllL3RIL3RyM1NOSUNTOFFuVkZvUzFNVDNTRXhrMGVnSkxuUXFqdWhqOXZX?=
+ =?utf-8?B?aldIRERDSFJhZ0lsMS9JT0xNMG55S2kzcTVYcUpZK2pHVUUwTGpvRWFCdUZK?=
+ =?utf-8?B?OGVpMmEwYjFMTHZvVGpzM3dId3owakF5Q2Y4Zks1bVYxZm8yS2dXd3VJUE5h?=
+ =?utf-8?B?MTg2ZmJtcERLRy83K0U0c09wVVBFOXQ1NXQ1NU1Hd2lBbm1kR0FYbG1adzFn?=
+ =?utf-8?B?ei9MaFcvYWMwaFlGcFJVVGxIUHJVZ05vMFdMQVRhczNvWUNKcFNtY3JKa3lC?=
+ =?utf-8?B?bUYvYzRhN3JBaU5wdXZtWnI3bzEvdE14alFiWGpNcTl6SkFLTnROSVdiWjhD?=
+ =?utf-8?B?Z3Jhb2UvQXM0SXQ4KzdVVnVjUmNoMm9XUXJIRldldHZOcEpKZS9Hdz09?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d7b8ba0-0483-4e9f-defd-08df2df5648a
+X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 15:26:48.8171
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YCEQnNdAW7F1WWyf8l1Uh5+HcZibVa05mQyl60zmcMYi89poGO1394GYJAwvO9UrZ+5VN5jZH7f2yqUtjBig4g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P265MB6252
 
-
---p6yas62h76l2tfcz
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v2] drm/ci: Add CI pipeline for drm-misc branches
-MIME-Version: 1.0
-
-Hi Vignesh,
-
-On Mon, Oct 19, 2026 at 03:30:54PM +0530, Vignesh Raman wrote:
-> Hi,
+On Thu Oct 15, 2026 at 3:56 PM BST, Marco Elver wrote:
+> Rust supports ThreadSanitizer instrumentation via LLVM, which is what
+> KCSAN relies on; however, Rust code is not currently instrumented.
 >=20
-> On 11/09/26 17:48, Maxime Ripard wrote:
-> > The DRM CI infrastructure builds upon Mesa's CI to run IGT tests on
-> > hardware. Its focus is on functional testing on a selected number of
-> > targets.
-> >=20
-> > The concern for drm-misc is different: it merges a large number of
-> > patches across many platforms, and build or unit test breakages happen
-> > on a regular basis. Adding build and unit testing for drm-misc has been
-> > on the back of our minds, and a first attempt was made last year. The
-> > feedback was to rely more on the existing infrastructure.
-> >=20
-> > Introduce a CI entry point that runs on pushes to drm-misc-next,
-> > drm-misc-fixes, and drm-misc-next-fixes. It reuses kunit.yml,
-> > check-devicetrees.yml, and the freedesktop ci-templates, while defining
-> > build templates inline to avoid pulling in the Mesa pipeline.
-> >=20
-> > A single Debian container with LLVM handles cross-compilation to all
-> > three architectures. The pipeline compiles the kernel using defconfigs
-> > from the drm/tip rerere-cache branch, runs the DRM KUnit tests, and
-> > checks device tree bindings.
-> >=20
-> > Link: https://lore.kernel.org/all/20250319-greedy-sturgeon-from-avalon-=
-ac758f@houat/
-> > Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
-> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
-> > ---
-> > Changes in v2:
-> > - Run dt_bindings_check
-> > - Run on push instead of MR after some discussions with Dave and Sima
-> > - Test run here: https://gitlab.freedesktop.org/mripard/kernel/-/pipeli=
-nes/1744733
-> > - Link to v1: https://lore.kernel.org/r/20260902-drm-drm-misc-ci-v1-1-4=
-9d05e228eab@kernel.org
+> Pass -Zsanitizer=3Dthread and the same TSan backend options used for C
+> code to rustc. Wire up KCSAN_SANITIZE in scripts/Makefile.lib for parity
+> with C (though rustc currently rejects linking crates with mismatched
+> instrumentation).
 >=20
-> Acked-by: Vignesh Raman <vignesh.raman@collabora.com>
+> rustc only accepts -Zsanitizer=3Dthread for targets that declare support
+> for it. Of the targets used by the kernel, this is only possible for the
+> generated x86_64 target specification, so restrict instrumentation of
+> Rust code to x86_64 for now via HAVE_KCSAN_RUSTC. On other architectures
+> Rust code remains uninstrumented as before.
+>=20
+> All TSan options used are supported by the LLVM versions of the minimum
+> supported rustc, so no rustc-option checks are needed (they would also
+> fail, because x86_64-unknown-none used for option checks does not
+> support -Zsanitizer=3Dthread).
+>=20
+> Unlike Clang and GCC, an equivalent to -fno-optimize-sibling-calls is
+> omitted for Rust because rustc provides no corresponding option. While
+> disabling tail-call optimizations helps preserve complete stacks traces
+> in reports, it is optional and not required for KCSAN to function.
+>=20
+> With this enabled we can detect data races in kernel Rust code and
+> between Rust and C code.
+>=20
+> Acked-by: Miguel Ojeda <ojeda@kernel.org>
+> Acked-by: Boqun Feng <boqun@kernel.org>
+> Signed-off-by: Marco Elver <elver@google.com>
 
-Thanks for the review, see below
+Acked-by: Gary Guo <gary@garyguo.net>
 
-> > ---
-> >   drivers/gpu/drm/ci/drm-misc-ci.yml | 147 ++++++++++++++++++++++++++++=
-+++++++++
-> >   1 file changed, 147 insertions(+)
-> >=20
-> > diff --git a/drivers/gpu/drm/ci/drm-misc-ci.yml b/drivers/gpu/drm/ci/dr=
-m-misc-ci.yml
-> > new file mode 100644
-> > index 000000000000..4ab87547794e
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/ci/drm-misc-ci.yml
-> > @@ -0,0 +1,147 @@
-> > +# CI pipeline for drm-misc-next, drm-misc-fixes, and drm-misc-next-fix=
-es.
-> > +#
-> > +# Runs on pushes to drm-misc-next, drm-misc-fixes, and
-> > +# drm-misc-next-fixes. Compiles the kernel for arm, arm64, and
-> > +# x86_64, runs the DRM KUnit tests, and checks device tree bindings.
-> > +#
-> > +# A single container image is built using freedesktop ci-templates with
-> > +# the packages needed for kernel compilation and LLVM for
-> > +# cross-compilation. QEMU is installed at runtime by the KUnit jobs.
-> > +#
-> > +# check-devicetrees.yml and kunit.yml are included directly. build.yml
-> > +# and the Mesa container/build pipelines are not:
-> > +# they pull in hundreds of Mesa-specific jobs and templates that would
-> > +# each need to be individually stubbed or disabled. The build templates
-> > +# (.build:arm32, .build:arm64, .build:x86_64) are defined inline.
-> > +
-> > +variables:
-> > +  CI_TEMPLATES_COMMIT: &ci-templates-commit aec7a6ce7bb38902c70641526f=
-6611e27141784a
-> > +  # Project whose container registry stores the built images
-> > +  FDO_UPSTREAM_REPO: mripard/kernel
-> > +  KERNEL_BUILD_CONTAINER_TAG: "2026-09-11-01"
-> > +  LLVM_VERSION: "19"
+> ---
+> v2:
+> * Add note on -fno-optimize-sibling-calls to commit message.
+> ---
+>  Documentation/dev-tools/kcsan.rst |  7 +++++++
+>  lib/Kconfig.kcsan                 |  7 +++++++
+>  scripts/Makefile.kcsan            | 13 +++++++++++++
+>  scripts/Makefile.lib              |  3 +++
+>  scripts/generate_rust_target.rs   |  2 +-
+>  5 files changed, 31 insertions(+), 1 deletion(-)
 
-I just realised there's still my personal repo being used as the
-container registry. Are you ok if I change it to drm/misc/kernel when
-applying?
-
-Thanks again,
-Maxime
-
---p6yas62h76l2tfcz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJUEABMJAB0WIQTkHFbLp4ejekA/qfgnX84Zoj2+dgUCatYoegAKCRAnX84Zoj2+
-dnkIAYD9emTICkJ8mFFLwtNMnDVkVgaKoJFQXbZOQYfIfJl1SupzOJcfDQCPRIYz
-tnmc9UUBgMsaFLuNBpEovo1gqNoIN982LvHJwBdGMrTqRLSksr/yt68nv12PFWIR
-O33X37wBtA==
-=r0xP
------END PGP SIGNATURE-----
-
---p6yas62h76l2tfcz--
