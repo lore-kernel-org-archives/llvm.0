@@ -1,212 +1,103 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DA2407CEF;
-	Mon, 19 Oct 2026 07:26:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A50C48D874;
+	Mon, 19 Oct 2026 07:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792394790; cv=none; b=qgDg9ur5lRNG4A1biEUy9AiDptdOHX6F2yAo9nkr0wJdlM5ug/sjNnmRNjaLXjBHOPTDDuHcMh5EkXwfR7bkDghypAL1aBfkHhZFL6abAr+c/yS+CBxy3zp4xlvSM9SDKdEnTu6IIuSIjd8f+ucUxFZKi9Lx2n+AXqAYZ1ucfjw=
+	t=1792395508; cv=none; b=WBGOUKBdbdn0fCOHDrn9DSjNG6yG63L2+n7WrGUF9nEdJ9OApWgqJjkh8vt699WXF6O8Y/+1rgtERL55eedJTz3L8zfw2eG+jyjrTwW5GgFgJqbCMfME4wbTsMTOi/FSRWqCwm8NII4lob3c8Vr6gkjkiTr5Ge6nnipmmY4slN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792394790; c=relaxed/simple;
-	bh=ojUZFWP2DlWCiuh9pouK9Gk6Nx7A2KYd43EqxPlj7Ic=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eD12cAO0FaBaTDOx/Pn5xx1ZJtgkFM1bkfo97MB1ztO/xqBVw0HJwzqiij7SwMov0tqqZ5SgKmk1o4kFPMY+Q9rzP3Cjag5XETqx54Re/65sV09VQXfYXAlHZ6l9/0sO2u6VlTIRhJ3DdpMr1+LrBTChQIOh872TzRDb0fAmaU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NggmA4Qo; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1792395508; c=relaxed/simple;
+	bh=vwEhsDoaz94vi3L7HLiRt10cVXXZiZEpuehGWh8MUcE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=g++EX8YVdfyOm7CtQsnCLwXlNP413qY/RahjdjXnvUm55CJKKLQoFdP/nsPQ1nJoGanznCzjpJGugXf+ID4FuBxYeEe1i57g+Oa347PqAMHINPx5rTPh82z6g5AMUYO8R/lpDjv8yEnVL+DNJOsWtL1iKEB5TAb50+1ye+HEh+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ByynpXcw; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NggmA4Qo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ByynpXcw"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1792394788; x=1823930788;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ojUZFWP2DlWCiuh9pouK9Gk6Nx7A2KYd43EqxPlj7Ic=;
-  b=NggmA4QoCwLUe2h6h9hoAZ3c/ERkzbv7wlNuigRqOksWj0E0/6NYmA4P
-   XNnP3qHmRMPPhHAmlxG9gaoWGg+o4fleJN6WX7+2Mt5FCjAJHgInAn84k
-   dh54PR1rRdiV/R4Y8T/1k+fYcJr/uCHuzM20fOPLaAuGHnG0XnOChQb4M
-   zbQU1B6zGBzjSD4zMHd/joIoY2ynQ26+/77eWWN9jnDpic0HOoeQFzZmk
-   klc8Tk6NqWpKH3zwAJ6iVJYDuriD20NiRS0TOMpf2l/15Mz7yi+33C4Uk
-   IWVGP3Low2POG4hENLNsZ/4318ayl/2XtqsY5pr0f1mDaeSV0k6BZbPj2
-   Q==;
-X-CSE-ConnectionGUID: hR6wEmLUSiii0MF/zGDjCw==
-X-CSE-MsgGUID: Q6snWx9oRAisATdZWei7vA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="969293"
+  t=1792395506; x=1823931506;
+  h=date:from:to:cc:subject:message-id;
+  bh=vwEhsDoaz94vi3L7HLiRt10cVXXZiZEpuehGWh8MUcE=;
+  b=ByynpXcw2jMs+KKQzcDO1twvrt3JKKY+L+modHSwdb/R2M32HOwHslhk
+   YUXwH7N8hZGyHHWHLaN+z2E1kH12GJ/1AXtRH/TyNTQ4DL8HJ6+kdWZhA
+   NosYQuquIQUTHSH5QH9AFrYnkOHvPxCafefC8vQp0EqR8LYp42OLMOdLI
+   MTSoffkYk+lfuLdwLKu6oORLEhQVSyS+eFme21OZzmgi1tcsXeyGuTBAf
+   IydkllQTbjFpcsCQpF36EBEMg5hOo06DJ+tMKfYXRN6UhRp+N1/IETDTR
+   PtRen7k45k1+fHArpSzRUo4urtYijL3TrWdsWn4IM33RLQ/NvCzw1iKsb
+   g==;
+X-CSE-ConnectionGUID: EKeab58PScKnGnQo5ou92w==
+X-CSE-MsgGUID: aWp2z6YoQWmN8de16nwEcg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="1084938"
 X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
-   d="scan'208";a="969293"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 00:26:27 -0700
-X-CSE-ConnectionGUID: Z48lC4aNQkO/puS+wgDuUQ==
-X-CSE-MsgGUID: ZBn93RzTQtKRXTscKLBrvA==
+   d="scan'208";a="1084938"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 00:38:25 -0700
+X-CSE-ConnectionGUID: KYurmUuOQJOf3uzvvxgcDg==
+X-CSE-MsgGUID: N4zVDU/1TiqmfuemivamEg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
-   d="scan'208";a="2525540"
+   d="scan'208";a="2532981"
 Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 19 Oct 2026 00:26:24 -0700
+  by orviesa006.jf.intel.com with ESMTP; 19 Oct 2026 00:38:25 -0700
 Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1xIhlF-00000000LNe-2kmD;
-	Mon, 19 Oct 2026 07:26:21 +0000
-Date: Mon, 19 Oct 2026 15:26:00 +0800
+	id 1xIhwr-00000000LNu-3Pgj;
+	Mon, 19 Oct 2026 07:38:21 +0000
+Date: Mon, 19 Oct 2026 15:37:22 +0800
 From: kernel test robot <lkp@intel.com>
-To: Nikhil Gautam <nikhilgtr@gmail.com>, linux-iio@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, jic23@kernel.org,
-	dlechner@baylibre.com, nuno.sa@analog.com, andy@kernel.org,
-	linux-kernel@vger.kernel.org, Nikhil Gautam <nikhilgtr@gmail.com>
-Subject: Re: [PATCH] iio: chemical: ccs811: Make sampling frequency
- configurable
-Message-ID: <202610191533.IG7DYuci-lkp@intel.com>
-References: <20261018170013.79443-1-nikhilgtr@gmail.com>
+To: Jinseob Kim <kimjinseob88@gmail.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+ Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>
+Subject: [jic23-iio:testing 55/58]
+ drivers/iio/sensorhubs/osf/osf_core.c:17:6: warning: stack frame size (1344)
+ exceeds limit (1280) in 'osf_core_init'
+Message-ID: <202610191514.fRYyu0HX-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20261018170013.79443-1-nikhilgtr@gmail.com>
 
-Hi Nikhil,
-
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on jic23-iio/togreg]
-[also build test ERROR on linus/master v7.3 next-20261016]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Nikhil-Gautam/iio-chemical-ccs811-Make-sampling-frequency-configurable/20261018-223013
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git togreg
-patch link:    https://lore.kernel.org/r/20261018170013.79443-1-nikhilgtr%40gmail.com
-patch subject: [PATCH] iio: chemical: ccs811: Make sampling frequency configurable
-config: i386-buildonly-randconfig-1003-20261019 (https://download.01.org/0day-ci/archive/20261019/202610191533.IG7DYuci-lkp@intel.com/config)
-compiler: clang version 22.1.8 (https://github.com/llvm/llvm-project ca7933e47d3a3451d81e72ac174dcb5aa28b59d1)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610191533.IG7DYuci-lkp@intel.com/reproduce)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
+head:   43ffda3c7f8456bbe641ae8249a077a361b97880
+commit: 2da37c28edc66848f7ff302011b765ae66ee8cf2 [55/58] iio: osf: add IIO devices from capability reports
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20261019/202610191514.fRYyu0HX-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610191514.fRYyu0HX-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202610191533.IG7DYuci-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610191514.fRYyu0HX-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All warnings (new ones prefixed by >>):
 
->> drivers/iio/chemical/ccs811.c:389:2: error: cannot jump from switch statement to this case label
-     389 |         default:
-         |         ^
-   drivers/iio/chemical/ccs811.c:371:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-     371 |                 guard(mutex)(&data->lock);
-         |                 ^
-   include/linux/cleanup.h:423:2: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |         ^
-   include/linux/cleanup.h:303:3: note: expanded from macro 'CLASS'
-     303 |                 class_##_name##_constructor
-         |                 ^
-   <scratch space>:136:1: note: expanded from here
-     136 | class_mutex_constructor
-         | ^
-   note: (skipping 3 expansions in backtrace; use -fmacro-backtrace-limit=0 to see all)
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:142:1: note: expanded from here
-     142 | __UNIQUE_ID_unlock_406
-         | ^
-   drivers/iio/chemical/ccs811.c:371:3: note: jump bypasses initialization of variable with __attribute__((cleanup))
-   include/linux/cleanup.h:423:15: note: expanded from macro 'guard'
-     423 |         CLASS(_name, __UNIQUE_ID(guard))
-         |                      ^
-   include/linux/compiler.h:165:2: note: expanded from macro '__UNIQUE_ID'
-     165 |         __PASTE(__UNIQUE_ID_,                                   \
-         |         ^
-   include/linux/compiler_types.h:16:23: note: expanded from macro '__PASTE'
-      16 | #define __PASTE(a, b) ___PASTE(a, b)
-         |                       ^
-   include/linux/compiler_types.h:15:24: note: expanded from macro '___PASTE'
-      15 | #define ___PASTE(a, b) a##b
-         |                        ^
-   <scratch space>:130:1: note: expanded from here
-     130 | __UNIQUE_ID_guard_405
-         | ^
-   1 error generated.
+>> drivers/iio/sensorhubs/osf/osf_core.c:17:6: warning: stack frame size (1344) exceeds limit (1280) in 'osf_core_init' [-Wframe-larger-than]
+      17 | void osf_core_init(struct osf_device *osf, struct device *dev)
+         |      ^
+   1 warning generated.
 
 
-vim +389 drivers/iio/chemical/ccs811.c
+vim +/osf_core_init +17 drivers/iio/sensorhubs/osf/osf_core.c
 
-1a2cae129fb93c Nikhil Gautam            2026-10-18  325  
-fef6da136ef283 Jonathan Cameron         2025-03-31  326  static int ccs811_read_raw(struct iio_dev *indio_dev,
-fef6da136ef283 Jonathan Cameron         2025-03-31  327  			   struct iio_chan_spec const *chan,
-fef6da136ef283 Jonathan Cameron         2025-03-31  328  			   int *val, int *val2, long mask)
-fef6da136ef283 Jonathan Cameron         2025-03-31  329  {
-fef6da136ef283 Jonathan Cameron         2025-03-31  330  	struct ccs811_data *data = iio_priv(indio_dev);
-fef6da136ef283 Jonathan Cameron         2025-03-31  331  	int ret;
-fef6da136ef283 Jonathan Cameron         2025-03-31  332  
-fef6da136ef283 Jonathan Cameron         2025-03-31  333  	switch (mask) {
-fef6da136ef283 Jonathan Cameron         2025-03-31  334  	case IIO_CHAN_INFO_RAW:
-e9786c540804c3 Jonathan Cameron         2025-03-31  335  		if (!iio_device_claim_direct(indio_dev))
-e9786c540804c3 Jonathan Cameron         2025-03-31  336  			return -EBUSY;
-fef6da136ef283 Jonathan Cameron         2025-03-31  337  
-fef6da136ef283 Jonathan Cameron         2025-03-31  338  		ret = ccs811_read_info_raw(data, chan, val, mask);
-fef6da136ef283 Jonathan Cameron         2025-03-31  339  
-e9786c540804c3 Jonathan Cameron         2025-03-31  340  		iio_device_release_direct(indio_dev);
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  341  
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  342  		return ret;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  343  
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  344  	case IIO_CHAN_INFO_SCALE:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  345  		switch (chan->type) {
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  346  		case IIO_VOLTAGE:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  347  			*val = 1;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  348  			*val2 = 612903;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  349  			return IIO_VAL_INT_PLUS_MICRO;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  350  		case IIO_CURRENT:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  351  			*val = 0;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  352  			*val2 = 1000;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  353  			return IIO_VAL_INT_PLUS_MICRO;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  354  		case IIO_CONCENTRATION:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  355  			switch (chan->channel2) {
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  356  			case IIO_MOD_CO2:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  357  				*val = 0;
-8f114acd4e1a9c Narcisa Ana Maria Vasile 2017-12-06  358  				*val2 = 100;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  359  				return IIO_VAL_INT_PLUS_MICRO;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  360  			case IIO_MOD_VOC:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  361  				*val = 0;
-8f114acd4e1a9c Narcisa Ana Maria Vasile 2017-12-06  362  				*val2 = 100;
-8f114acd4e1a9c Narcisa Ana Maria Vasile 2017-12-06  363  				return IIO_VAL_INT_PLUS_NANO;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  364  			default:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  365  				return -EINVAL;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  366  			}
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  367  		default:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  368  			return -EINVAL;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  369  		}
-1a2cae129fb93c Nikhil Gautam            2026-10-18  370  	case IIO_CHAN_INFO_SAMP_FREQ:
-1a2cae129fb93c Nikhil Gautam            2026-10-18  371  		guard(mutex)(&data->lock);
-1a2cae129fb93c Nikhil Gautam            2026-10-18  372  		switch (data->drive_mode) {
-1a2cae129fb93c Nikhil Gautam            2026-10-18  373  		case CCS811_MODE_IAQ_1SEC:
-1a2cae129fb93c Nikhil Gautam            2026-10-18  374  			*val = 1;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  375  			*val2 = 0;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  376  			return IIO_VAL_INT_PLUS_MICRO;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  377  		case CCS811_MODE_IAQ_10SEC:
-1a2cae129fb93c Nikhil Gautam            2026-10-18  378  			*val = 0;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  379  			*val2 = 100000;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  380  			return IIO_VAL_INT_PLUS_MICRO;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  381  		case CCS811_MODE_IAQ_60SEC:
-1a2cae129fb93c Nikhil Gautam            2026-10-18  382  			*val = 0;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  383  			*val2 = 16667;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  384  			return IIO_VAL_INT_PLUS_MICRO;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  385  		default:
-1a2cae129fb93c Nikhil Gautam            2026-10-18  386  			return -EINVAL;
-1a2cae129fb93c Nikhil Gautam            2026-10-18  387  		}
-1a2cae129fb93c Nikhil Gautam            2026-10-18  388  
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17 @389  	default:
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  390  		return -EINVAL;
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  391  	}
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  392  }
-a94c24a712acb2 Narcisa Ana Maria Vasile 2017-07-17  393  
+33efb787fb5f8c Jinseob Kim 2026-10-12  16  
+33efb787fb5f8c Jinseob Kim 2026-10-12 @17  void osf_core_init(struct osf_device *osf, struct device *dev)
+33efb787fb5f8c Jinseob Kim 2026-10-12  18  {
+33efb787fb5f8c Jinseob Kim 2026-10-12  19  	*osf = (struct osf_device) {
+33efb787fb5f8c Jinseob Kim 2026-10-12  20  		.dev = dev,
+33efb787fb5f8c Jinseob Kim 2026-10-12  21  	};
+2da37c28edc668 Jinseob Kim 2026-10-12  22  	mutex_init(&osf->latest_lock);
+2da37c28edc668 Jinseob Kim 2026-10-12  23  }
+2da37c28edc668 Jinseob Kim 2026-10-12  24  
+
+:::::: The code at line 17 was first introduced by commit
+:::::: 33efb787fb5f8cc2053b241375a97c219b399aa3 iio: osf: add UART transport and core receive path
+
+:::::: TO: Jinseob Kim <kimjinseob88@gmail.com>
+:::::: CC: Jonathan Cameron <jonathan.cameron@oss.qualcomm.com>
 
 --
 0-DAY CI Kernel Test Service
