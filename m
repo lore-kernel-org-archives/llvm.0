@@ -1,113 +1,106 @@
-Received: from esa2.hc1455-7.c3s2.iphmx.com (esa2.hc1455-7.c3s2.iphmx.com [207.54.90.48])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635AB4B923E;
-	Mon, 19 Oct 2026 12:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.54.90.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B02D74F5E0F;
+	Mon, 19 Oct 2026 13:08:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1792414484; cv=none; b=MmgdnhrzW2nDkpKUOYDMtDaAFSM14cA2wn5k7kVUV1A9ew08SnhAki+dxpN7Udlegd7kGxzLI/Tz65pQL7LSTkKUVJ6Yn6ZC5f1LTRl0xK7d4JJ8vhIyX/hEjgeq5Pi8neeO9a/LKUYgcNFRlK33fb6Vcw0LS+vQbVU4WWA7a9A=
+	t=1792415312; cv=none; b=PdaXiFQoF6LBdwHDdY7MhoVKZIYdz5OQsCGQn6dcRs8TbOXeLb2eaGOkeVBjWyLuNs0tS/bcgDJWEmBhCARVHAd2x9gj1yRgFANExbGS7Tkq/zqF2axeK9li8IQFc9SqbXhHQYFqacC/L0TRULAOgOkbpOEoEQwmrpeA0vHUzOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1792414484; c=relaxed/simple;
-	bh=lG8ba8f3XvMZ016RxZR1uTEgZGmbv/N4GGCyJVqPUXg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sG0UuE4mkHGEpQqInnZAZ6IgKe8MwEAMRAqF1AyuTOG3NOxQN7oqTWTKi4kr43pNzvb9bdq8tgoK+7nH+g0uwUcp/uIRSIUgmwOzebntCNbSPtM9+iCa5b6fFKofV66PFsdN8BAplPHJYvCmx4QtlXhNv7QrLJvbrQjaKTqAhZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com; spf=pass smtp.mailfrom=fujitsu.com; dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b=Tw5QL/pZ; arc=none smtp.client-ip=207.54.90.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fujitsu.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fujitsu.com
+	s=arc-20240116; t=1792415312; c=relaxed/simple;
+	bh=q+f6QWMl7j8i6E3m6M3J/KJVYkqDsNVCMZSuXAQK3hE=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=GWjEtm+QqJowkvzbdMFkdt6ktWExvJXfJT5/VJljmP7O2RYI6PdEqey+zFYle0diyD9HN/g4smGup3x0yDtNzgO6bPPAKc/X0zbepIgrLiKBUsm4yfUTta5mHwEh+DOpXWuSVBzP98Zl47vSoVZIaaDM7ZcyltNWXP2c9PkDaa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fd5P8V3v; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fujitsu.com header.i=@fujitsu.com header.b="Tw5QL/pZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj2;
-  t=1792414488; x=1823950488;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=lG8ba8f3XvMZ016RxZR1uTEgZGmbv/N4GGCyJVqPUXg=;
-  b=Tw5QL/pZ20tk9BQT1nNGhI6mrrTYb1vfZkMylF3Gv9Gwb9jrAdCDi45S
-   bAA6MwVwTV4F9FWbyBzz9sAgxk1g6x1mP/3OzO0OgEB/OxIBHVwJYUGlX
-   vcpvUeLxRQ8vaI4le/5n6qKUUx5eqQKO3dEIHUyWdBRuBfooeqGzdcNmw
-   VzSTHygkoZsa1wjEr8/3xaYIG7zRLIoV1NQh5zz50gjZ/tCpLDn5x5ENw
-   /L33dBfpxSIRM3yn35yr0Vg6LNqGZ5jVcAIxrzep8umSJZW9PNMnsY2EY
-   5UN/J+KimyGiJOw3PIrdLNapKGZ1qSrsIzDsdwkCoT6970Ggv2zMD7dO3
-   w==;
-X-CSE-ConnectionGUID: CH/9T8XmQBu3VWq370i0ZQ==
-X-CSE-MsgGUID: Hsac6XJjSP2uuEsfIVOX6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="258703255"
-X-IronPort-AV: E=Sophos;i="6.27,167,1786978800"; 
-   d="scan'208";a="258703255"
-Received: from gmgwnl01.global.fujitsu.com ([52.143.17.124])
-  by esa2.hc1455-7.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 21:53:36 +0900
-Received: from az2nlsmgm4.fujitsu.com (unknown [10.150.26.204])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by gmgwnl01.global.fujitsu.com (Postfix) with ESMTPS id 24C201C000CE;
-	Mon, 19 Oct 2026 12:53:30 +0000 (UTC)
-Received: from az2nlsmom4.fujitsu.com (unknown [10.150.26.201])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by az2nlsmgm4.fujitsu.com (Postfix) with ESMTPS id C70211000862;
-	Mon, 19 Oct 2026 12:53:29 +0000 (UTC)
-Received: from FCCLS0092175.localdomain (unknown [10.8.51.148])
-	by az2nlsmom4.fujitsu.com (Postfix) with SMTP id 9EDCE2000233;
-	Mon, 19 Oct 2026 12:53:21 +0000 (UTC)
-Date: Mon, 19 Oct 2026 21:53:20 +0900
-From: Kohei Enju <enju.kohei@fujitsu.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Tomohiro Misono <misono.tomohiro@fujitsu.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Radu Rendec <radu@rendec.net>, 
-	Oliver Upton <oupton@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>, 
-	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, llvm@lists.linux.dev, 
-	oe-kbuild-all@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, linux-perf-users@vger.kernel.org, 
-	kvmarm@lists.linux.dev
-Subject: Re: [PATCH v2 4/4] irqchip/gicv3: Add workaround for FUJITSU-MONAKA
- erratum E#030003
-Message-ID: <atYOKfirjR1VqBZ3@FCCLS0092175.localdomain>
-References: <20261016-monaka-fix-for-upstream-v2-4-fc7ede7f9f48@fujitsu.com>
- <202610171939.VWCcPPra-lkp@intel.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fd5P8V3v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792415311; x=1823951311;
+  h=date:from:to:cc:subject:message-id;
+  bh=q+f6QWMl7j8i6E3m6M3J/KJVYkqDsNVCMZSuXAQK3hE=;
+  b=fd5P8V3v7DPMs1rPkeHyLXM2IA0CG4RZQEqT0fJlB7KYxtEe/GY6nV9L
+   dux1vze6wpfhF6+JUcHiHET4DN0a7si1bEayv1jPJeQ0mHFlNSRLYiaOk
+   4+K6xJsLalthpWy77HNR9srsrRWvV1BG0TLU4APxMj8AsYpexCFH+QxEB
+   ACgDbdjd8UCUQJbDgxXmKTJKsOiSPU9kIQYoLgVERb7ot12bWMZH8aF70
+   6QDQX4gEZI7JGqHuJWTS/o+vxuHyglo8OXXIhU91jXxCo1E1sdirTTOgQ
+   cbk4zqXbeou/MTDLZt1gkwnjIuqObew7Y9J/eQJ2ygnFbE6GVKyeY1ebY
+   A==;
+X-CSE-ConnectionGUID: sH0Eq7Q2Tbipcw041tEXMA==
+X-CSE-MsgGUID: SAj8OEL/T1SHtvFdJLOM3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11939"; a="979358"
+X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
+   d="scan'208";a="979358"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 06:08:30 -0700
+X-CSE-ConnectionGUID: qTe2QUsgTeSw90xHtQ75rA==
+X-CSE-MsgGUID: 3r8Fcl4dRHCSQi6iGL4Jjw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
+   d="scan'208";a="2632378"
+Received: from lkp-server01.sh.intel.com (HELO 0caa9d2d175c) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 19 Oct 2026 06:08:29 -0700
+Received: from kbuild by 0caa9d2d175c with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xIn6I-00000000LiE-0iFW;
+	Mon, 19 Oct 2026 13:08:26 +0000
+Date: Mon, 19 Oct 2026 21:08:10 +0800
+From: kernel test robot <lkp@intel.com>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [ebiggers:wip-rm-ldmxcsr 54/55]
+ lib/raid/xor/x86/xor-sse.c:435:2: error: call to undeclared function
+ 'kernel_fpu_begin_mask'; ISO C99 and later do not support implicit function
+ declarations
+Message-ID: <202610192057.l8bmrIHr-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 Precedence: bulk
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <202610171939.VWCcPPra-lkp@intel.com>
 
-On 10/17 19:48, kernel test robot wrote:
-> Hi Tomohiro,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Tomohiro-Misono/arm64-cputype-Add-FUJITSU-MONAKA-definition/20261016-190045
-> base:   24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
-> patch link:    https://lore.kernel.org/r/20261016-monaka-fix-for-upstream-v2-4-fc7ede7f9f48%40fujitsu.com
-> patch subject: [PATCH v2 4/4] irqchip/gicv3: Add workaround for FUJITSU-MONAKA erratum E#030003
-> config: arm-defconfig (https://download.01.org/0day-ci/archive/20261017/202610171939.VWCcPPra-lkp@intel.com/config)
-> compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261017/202610171939.VWCcPPra-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202610171939.VWCcPPra-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> drivers/irqchip/irq-gic-v3.c:1892:34: error: use of undeclared identifier 'ARM_CPU_IMP_FUJITSU'
->     1892 |         if (read_cpuid_implementor() != ARM_CPU_IMP_FUJITSU ||
->          |                                         ^~~~~~~~~~~~~~~~~~~
-> >> drivers/irqchip/irq-gic-v3.c:1893:34: error: use of undeclared identifier 'FUJITSU_CPU_PART_MONAKA'
->     1893 |             read_cpuid_part_number() != FUJITSU_CPU_PART_MONAKA)
->          |                                         ^~~~~~~~~~~~~~~~~~~~~~~
->    2 errors generated.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git wip-rm-ldmxcsr
+head:   bfbfcfc62eeabb32ed80c920f158a9262aadeb89
+commit: a86e2a52063aaf13992ddd8ba68a42798d6d1faf [54/55] raid: Opt out of initializing MXCSR and 387 state
+config: um-randconfig-1000-20261019 (https://download.01.org/0day-ci/archive/20261019/202610192057.l8bmrIHr-lkp@intel.com/config)
+compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 6719b9e31d6a93099612c474eec76d9f41d0275a)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610192057.l8bmrIHr-lkp@intel.com/reproduce)
 
-Oops, I missed testing this with CONFIG_ARM=y. I will fix this in v3.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610192057.l8bmrIHr-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> lib/raid/xor/x86/xor-sse.c:435:2: error: call to undeclared function 'kernel_fpu_begin_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     435 |         kernel_fpu_begin_mask(0);
+         |         ^
+   lib/raid/xor/x86/xor-sse.c:451:2: error: call to undeclared function 'kernel_fpu_begin_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     451 |         kernel_fpu_begin_mask(0);
+         |         ^
+   2 errors generated.
+--
+>> lib/raid/xor/x86/xor-avx.c:148:2: error: call to undeclared function 'kernel_fpu_begin_mask'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     148 |         kernel_fpu_begin_mask(0);
+         |         ^
+   1 error generated.
+
+
+vim +/kernel_fpu_begin_mask +435 lib/raid/xor/x86/xor-sse.c
+
+   431	
+   432	static void xor_gen_sse(void *dest, void **srcs, unsigned int src_cnt,
+   433				unsigned int bytes)
+   434	{
+ > 435		kernel_fpu_begin_mask(0);
+   436		xor_gen_sse_inner(dest, srcs, src_cnt, bytes);
+   437		kernel_fpu_end();
+   438	}
+   439	
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
