@@ -1,113 +1,77 @@
-Authentication-Results: smtp.subspace.kernel.org; arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.132
-ARC-Seal: i=2; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=pass;
-	t=1792423628;
-	b=L5BcrbX30WeAwqrKteG5cmLnIg/sqKXlMQ0iPjY0RcJzekmsRUBnCRUsTvAxLRXf5jDN
-	 zMaIc/J6Q8CzmV/WNJwGM5kfHbZVELPgXeI7C2yzh9XcyzvMM7IJmElAgChLD9X+XOd8E
-	 SdH05F/5xlPtNsRrhiYJ9xLRvuMhGE97DyBZqRLq8KXXU1CSFUIKNmjPUnG46FSeGHA1Z
-	 EtVutbzu8K4oToPJdiTuB8quU7YvBh1G9ZvuhiFD5Ae2c+H0dpokuEl3MQPNfcH5Rxd20
-	 2f6J49LX9o2MWPJeljYAvxrQNi0e3eSUgkfyBqriFe1nM9t7NZFBGOJc1DFYGXBVdgQ==
-ARC-Message-Signature: i=2; d=subspace.kernel.org; s=arc20261015;
-	a=rsa-sha256; c=relaxed/relaxed; t=1792423628;
-	h=DMARC-Filter:DKIM-Signature:Received:Received:
-	 Content-Transfer-Encoding:Content-Type:Date:Message-Id:Cc:Subject:
-	 From:To:X-Mailer:References:In-Reply-To:X-ClientProxiedBy:
-	 MIME-Version:X-MS-PublicTrafficType:X-MS-TrafficTypeDiagnostic:
-	 X-MS-Office365-Filtering-Correlation-Id:X-MS-Exchange-SenderADCheck:
-	 X-MS-Exchange-AntiSpam-Relay:X-Microsoft-Antispam:
-	 X-Microsoft-Antispam-Message-Info:X-Forefront-Antispam-Report:
-	 X-MS-Exchange-AntiSpam-MessageData-ChunkCount:
-	 X-MS-Exchange-AntiSpam-MessageData-0:X-OriginatorOrg:
-	 X-MS-Exchange-CrossTenant-Network-Message-Id:
-	 X-MS-Exchange-CrossTenant-AuthSource:X-MS-Exchange-CrossTenant-AuthAs:
-	 X-MS-Exchange-CrossTenant-OriginalArrivalTime:
-	 X-MS-Exchange-CrossTenant-FromEntityHeader:
-	 X-MS-Exchange-CrossTenant-Id:X-MS-Exchange-CrossTenant-MailboxType:
-	 X-MS-Exchange-CrossTenant-UserPrincipalName:
-	 X-MS-Exchange-Transport-CrossTenantHeadersStamped;
-	bh=0fFKCtmcV7Z/b/qf9UFqFjiqIaTYbRmHh6zBXGUjDyE=;
-	b=UY0Be8q9fjgn2D1f20XdM19XdevudeWwyvOEc6nmWKs12eztKaAQwhfYmbp5LqzucnLQ
-	 72scUpf3/9cF9fMlVEoTsX0MaRpOCCleWfjCvxA1lrFz+IVmBLyiNzTyVron3j8ZDVVLM
-	 qT6rW5zSlfPIAaP7FWbMtgSj7Z4Q/m8Uz6+CjuO22umQTey1degGfexKzJZCtV3iPNmWj
-	 pF9eD9abko0HfPsKBKQ4da0NkxDUYil/sAuSnppSaBNjEzra2QL66fMCXAoC2vggYnGJt
-	 /h+Ra4gLmQ+krMdet4yOdRHhpLtYnfjZB+wtGYwA8Vs0RGEx073vLSll5xCMk2iHsKQ==
-ARC-Authentication-Results: i=2; smtp.subspace.kernel.org; 
-	dmarc=pass header.from=garyguo.net;
-	spf=pass smtp.mailfrom=garyguo.net;
-	dkim=pass header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=r5xqp0B3;
-	arc=pass header.oldest-pass=0 smtp.remote-ip=52.101.95.132
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021132.outbound.protection.outlook.com [52.101.95.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (secp384r1) server-signature ECDSA (prime256v1) server-digest SHA256)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.remote-ip=198.175.65.21
+ARC-Seal: i=1; d=subspace.kernel.org; s=arc20261015; a=rsa-sha256; cv=none;
+	t=1792433738;
+	b=OS101TMFpjf5fDMEjHGtwsEk904GneNzi0hHLsdl8c+sk7nhtd93DKpJr/kFMBWpCg4A
+	 /JVKHoVrnszXQjzBnufEOMQCcPZzaNlVA7Yb6XzV9Li427kn8lPfEnPYMiBBdtgn2wKF2
+	 ET4Wlv5PPrFliBRuXSyJSnmnblhu0YuX+mKAQlUjxexytOgYsHBPAlW5hwTN1M87Hes2/
+	 h6iz5MwsTXpihcCJ12sD4gbWiJyUBE1cy3HIl1yMT7+ju2fqT1YJBlCV5Sgibjy/qleHg
+	 Zvt2Cjx1YFC0ExYdHT83zcv/rkhkm2nNnsWrbwFFhffBqvbT9PrLW8x1Xrlar6GAWvg==
+ARC-Message-Signature: i=1; d=subspace.kernel.org; s=arc20261015;
+	a=rsa-sha256; c=relaxed/relaxed; t=1792433738;
+	h=DMARC-Filter:DKIM-Signature:X-CSE-ConnectionGUID:X-CSE-MsgGUID:
+	 X-IronPort-AV:X-IronPort-AV:Received:X-CSE-ConnectionGUID:
+	 X-CSE-MsgGUID:X-ExtLoop1:X-IronPort-AV:Received:Received:Date:From:To:
+	 Cc:Subject:Message-ID:User-Agent;
+	bh=nt2LL9iNs+LRx1tp2zepH0wuNxWdy8/XmRxlT4e+uCM=;
+	b=Vt8PY6wMFLOR9f9eHbqFJg8nwD+ZC05lcZ8JHAJWKDXwtU7c2CfaDq4P7lzPW80wgvxN
+	 XvY6r/aHgw5rlM6cQvndcOu+y8bQpK/iKK+ORQfnLSEFK3Cko1jD5BFlQRxa6776rC+2H
+	 vW9r5u5e7xsKQnxU+byVovVFCVxuegR3sYQIRzvW+PcNeoWM1qh1sjlj1SpZdmsFAmCPz
+	 DK39ju8x5Bs9rFrbcT0nQ2O70SJkRixGwV06dB/FeLpObsyTq1GiycjmnlvQIGWXxsOUV
+	 FkTPKEq7I8LXU76CfUJOKz8dkr6WmgUouf4rToRtY8rkHjh7z2oQXj+/+IOJLtlgKDA==
+ARC-Authentication-Results: i=1; smtp.subspace.kernel.org; 
+	dmarc=pass header.from=intel.com;
+	spf=pass smtp.mailfrom=intel.com;
+	dkim=pass header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TPyHE5P8;
+	arc=none smtp.remote-ip=198.175.65.21
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6E1460B39B8
-	for <llvm@lists.linux.dev>; Mon, 19 Oct 2026 15:27:07 +0000 (UTC)
-DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org B6E1460B39B8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28678606A31A;
+	Mon, 19 Oct 2026 18:15:35 +0000 (UTC)
+DMARC-Filter: OpenDMARC Filter v1.4.2 smtp.subspace.kernel.org 28678606A31A
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key, unprotected) header.d=garyguo.net header.i=@garyguo.net header.a=rsa-sha256 header.s=selector1 header.b=r5xqp0B3
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qViw4gsgVKmH5PPpAVjObylhaSrUMIvyxX8TX54DAgrqerMXhfglVym/X3BD+ApMi3eVyMngPnQ4MieUubnRT/rtYMYu6JCIsIKQPVpZ6NhWHTvrcXb6uA56P51BYpx9IsELhaF1fucf0WqU2jZngl90fXITqcdSXsei/XsN+CVzNeeRMDsXdPyGYQqkp5aD0sg8gaLnzcfWF3aJAfTtBpMQkX4X/D+FFt54Lq/noXMpOVfeXQsZRvKMb9oK0eEdZtez2t891q7O2JUVoT8BT3LcmQAFC/ccNs9OnE1OHhXWfVoxU5Nm2sRsVYjr+stbdKtR8/jcHQvmDUFrrnAE4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0fFKCtmcV7Z/b/qf9UFqFjiqIaTYbRmHh6zBXGUjDyE=;
- b=Bu2hf23lTIkGrJP2mTACzHEWXt0ioI6nF5gJEJtm3rbvndnMVE9pFfA1Ocmlub9ZgmlhnJxnJwgka1ExBPh9ofgA/lofjBjwxS7yP+nM6Y4zYiFjPRo+FZyBUYrvhUE3VXS6ySuq5sqwHu2nFvNjhcHa66eKQAwJgW6H90OE08ZptM9smmOIgKAyzzD+g2KJa3+dqlWsIzSdb24aF0X+QGiA3damWWzZ7vRZ88stwZiCbZRxFxOKS98vl7XpvVk/Z4g33t11iH7fNLo4219DpirUOTG2rtI7HRXv+NEG6Gq+GSrwhzS1ymEdOXaZTKiapENC1mXlgE/nXzp0SoTSVQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0fFKCtmcV7Z/b/qf9UFqFjiqIaTYbRmHh6zBXGUjDyE=;
- b=r5xqp0B3NOhcyH9W1bfoDUCKJnulSDAvXLdzy5ko1k6tGVyp4fCUYXcMC/AE0XdfdlAY119LGj9/glijyzzRNBut83GNvZYPzNwhbtbjAiIz93vi6cRI8Edw0baEV9Zyl2/JC5HvDeO5xVF7IizzDEHNSQRt/qKSxo2JWInpQ4g=
-Authentication-Results: mx.microsoft.com 1; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
- by LO4P265MB6252.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:27f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.522.19; Mon, 19 Oct
- 2026 15:26:50 +0000
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1%6]) with mapi id 15.21.0522.017; Mon, 19 Oct 2026
- 15:26:48 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 19 Oct 2026 16:26:47 +0100
-Message-Id: <DM8X51YCN6AA.1HV7J3R3PIYY9@garyguo.net>
-Cc: "Alexander Potapenko" <glider@google.com>, "Boqun Feng"
- <boqun.feng@gmail.com>, <kasan-dev@googlegroups.com>,
- <linux-kernel@vger.kernel.org>, "Dmitry Vyukov" <dvyukov@google.com>,
- "Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan"
- <skhan@linuxfoundation.org>, "Randy Dunlap" <rdunlap@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>, "Miguel Ojeda"
- <ojeda@kernel.org>, "Boqun Feng" <boqun@kernel.org>, "Gary Guo"
- <gary@garyguo.net>, =?utf-8?q?Bj=C3=B6rn_Roy_Baron?=
- <bjorn3_gh@protonmail.com>, "Benno Lossin" <lossin@kernel.org>, "Andreas
- Hindborg" <a.hindborg@kernel.org>, "Alice Ryhl" <aliceryhl@google.com>,
- "Trevor Gross" <tmgross@umich.edu>, "Danilo Krummrich" <dakr@kernel.org>,
- "Daniel Almeida" <daniel.almeida@collabora.com>, "Tamir Duberstein"
- <tamird@kernel.org>, "Alexandre Courbot" <acourbot@nvidia.com>,
- =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>, "Nathan Chancellor"
- <nathan@kernel.org>, "Nicolas Schier" <nsc@kernel.org>, "Nick Desaulniers"
- <ndesaulniers@google.com>, "Bill Wendling" <morbo@google.com>, "Justin
- Stitt" <justinstitt@google.com>, "Asahi Lina" <lina+kernel@asahilina.net>,
- "Lorenzo Stoakes" <ljs@kernel.org>, "Yury Norov" <ynorov@nvidia.com>,
- "David Gow" <david@davidgow.net>, "Joel Fernandes" <joelagnelf@nvidia.com>,
- "Alvin Sun" <alvin.sun@linux.dev>, "Josh Poimboeuf" <jpoimboe@kernel.org>,
- "Petr Mladek" <pmladek@suse.com>, <workflows@vger.kernel.org>,
- <linux-doc@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- <linux-kbuild@vger.kernel.org>, <llvm@lists.linux.dev>
-Subject: Re: [PATCH v2 1/2] kbuild: rust: enable KCSAN support
-From: "Gary Guo" <gary@garyguo.net>
-To: "Marco Elver" <elver@google.com>
-X-Mailer: aerc 0.22.0
-References: <20261015145714.3327543-1-elver@google.com>
-In-Reply-To: <20261015145714.3327543-1-elver@google.com>
-X-ClientProxiedBy: LO6P123CA0046.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:310::8) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:4ab::19)
+	dkim=pass (2048-bit key, unprotected) header.d=intel.com header.i=@intel.com header.a=rsa-sha256 header.s=Intel header.b=TPyHE5P8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1792433736; x=1823969736;
+  h=date:from:to:cc:subject:message-id;
+  bh=mo5/Y5tVyN5jGDU09JXX4sT3WA3U+qL4ZBYcaG7InU4=;
+  b=TPyHE5P8rM+h00F6t9pqfvSdkf5QUKUNy/GREDYqNycKpsEXQipglG2R
+   aP7Exvyt7w7t2qdEwzrEw7CUeoMjYUBrAvmH91NC/vtrKHOGjQah2u2Iy
+   bhIR9e+DhkfMKOpqlNrjJTkAx/rSdjAx5VH2RxQtUbmKxswDhSfaWGca2
+   Tt1tHAdiuGgCR4z/m1EQOybR+wwe53SZ/E/48S0VaagOyUmB9gVT6rgl5
+   S1JKVR7IF5JzrYpO/upbvbrP71QL0kjL3yAMRTUzgFq8G0DLTdWYJxQ/W
+   TXQGarvJliKahnVDXOWabKFTPrrcJMwwTAn9ptfQY1qG6x0iqon2QINEC
+   Q==;
+X-CSE-ConnectionGUID: 33G9Dz0PRy2bkxY7hmzfzA==
+X-CSE-MsgGUID: WMaVAE/nQfm7iJpJ5ySu6g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11940"; a="1227307"
+X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
+   d="scan'208";a="1227307"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Oct 2026 11:15:36 -0700
+X-CSE-ConnectionGUID: C+t4RnS+S8GBJaXBA/7NHg==
+X-CSE-MsgGUID: b+3pWkDtSX6vcqDcopfABQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.27,167,1787036400"; 
+   d="scan'208";a="2705337"
+Received: from igk-lkp-server01.igk.intel.com (HELO 3c253b998be3) ([10.211.93.152])
+  by fmviesa002.fm.intel.com with ESMTP; 19 Oct 2026 11:15:34 -0700
+Received: from kbuild by 3c253b998be3 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1xIrtT-000000005ol-4Ab2;
+	Mon, 19 Oct 2026 18:15:31 +0000
+Date: Mon, 19 Oct 2026 20:14:40 +0200
+From: kernel test robot <lkp@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: [frederic-dynticks:core/hotplug 1/49]
+ include/linux/stop_machine.h:182:47: error: too few arguments to function
+ call, expected 4, have 3
+Message-ID: <202610192042.JQFnS2hD-lkp@intel.com>
+User-Agent: s-nail v14.9.25
 X-Mailing-List: llvm@lists.linux.dev
 List-Id: <llvm.lists.linux.dev>
 List-Post: <mailto:llvm@lists.linux.dev>
@@ -116,113 +80,58 @@ List-Subscribe: <mailto:llvm+subscribe@lists.linux.dev>
 List-Unsubscribe: <mailto:llvm+unsubscribe@lists.linux.dev>
 List-Owner: <mailto:llvm+owner@lists.linux.dev>
 Precedence: list
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|LO4P265MB6252:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d7b8ba0-0483-4e9f-defd-08df2df5648a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|376014|7416014|23010399003|1800799024|366016|6133799003|22082099003|18002099003|10067099003|56012099006|261009223027099003;
-X-Microsoft-Antispam-Message-Info:
-	OYEzN7B+fIphDFuMDRvVy4BDDFyEwWoGN92tl1r5FN1z4WI69W5OTuVPy2ugogbR5c3DtFWauiiXIEtQ0C9mF2wVx8XBCrb6pjkEqEQoxJM42wymVPUsvlks1bCnR0wSwwnz4LnnWxSELYIId8rskjAz8GWPUCMLQL/R3QqG8lB6j765j8C5f/Pjr4TmcrzGvdWSEiiRDm0r6rqfMB4DI6mYJzgyUDAUw3DqwWCVszPgIGJDLnyh6eqMgFJhOLkji3CKx/2zIzXz4GciEX9U/43aJPX9miN6v2XwJTE43wlZ362lEO0FtRkBgx2hlAHhzkVNqyF8D1hIlEBb/8ot6abRNHk+fIUlWMvnwGfeCJazkv5DToppFMI46zfR00SgxOoo63aSttF3bd+5bT5a3h8S/OLT9T5uXBpJQzK0C3cDXIbgL2oVz6CM6bxKdIMJVh11RhsNQ0BttsJToPVGPdVGw4Na03Wo15tOBIZsrhpYRbprpZUwNp+n2JTLF9n5eiq8l0WJ8xDc7712FpeFpiOalrdJhCHBEae5xDlhZYjLtaYJV9i4ED06lkDUxFMxH504F7WbRzKafkXV59D+w6cULaTs2aK7k35DvJKtYTbMW91tVdLD6YWONUrhiAYL7qb2xNsWrDn7twap0Lc4fFWh0MJHHtro9B07UCpedJg=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(7416014)(23010399003)(1800799024)(366016)(6133799003)(22082099003)(18002099003)(10067099003)(56012099006)(261009223027099003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MStBdm9WYVpxUVd2TDB1Vks4YitIL01vWkRLV0FmWUZraTNUSW81a01NZWNS?=
- =?utf-8?B?Zm1mWkJPL2JZZVJYd1ArZTJKTXByUEVITXpiTUlSUDZCRXR2eEhyc0VPR0lO?=
- =?utf-8?B?bVMvd2dvOXIwMTV0b1FNbEtxYmRWeW5uZmowak5NL3hVU1ZMV254N0FxUXpn?=
- =?utf-8?B?N21rc1ZUaWJYeDZDa2t5eTAvMHBZSUZleWY2ZmF5RDdMRGtjdFRyL0lBMHZI?=
- =?utf-8?B?T3BMZ2ZUbnVRNGpJUHZEdTNIbkpmakZBRkNlS0pqNytQTWpyNUdNRmtSVzZQ?=
- =?utf-8?B?UCtuZlZPZDZMeFlMcWY5R3dCNjFLN202SG83eVkxOTVIUysvTTZYYTUwcStR?=
- =?utf-8?B?VTZ2SjhxUlpzZkdkU2FuZGdKNVdrU0hNNjZ6RGtGOEpZSzQwd3Ntek9hdUxs?=
- =?utf-8?B?OE1jSWVNaUJPbk0reGJJTkxLM2U1Y0YwSzNQRkV5NTVNZU9EQlFaeGZHVDln?=
- =?utf-8?B?dVRXRnFyeC9jK3dMbW13UElRV2N0SlZIOG4xOGZUUktJU3BtSWk3V09jNXV0?=
- =?utf-8?B?Wk1jSHRXYjFTdStJNFdJeFFMMU1hL0JRcC94eVd1SDB0SDl2OGFTTVdWeXZU?=
- =?utf-8?B?NENIc2c3Q1BqQjlwRXFwWmRuZEYxNTNwcC84WWMwWnEvZUFFWFM3eVAwNnNW?=
- =?utf-8?B?eldZdDB4eWhjYXlISW1NMExoSVVCa2VkYUZ1RjhUUERtWFZZZis0YkpyQlQ2?=
- =?utf-8?B?NXhVWW1NQ3B0NFp0SGlUcTF4NFJsa2l5dmpXZ3pFWGxWY1AzOXl0WkluMzdH?=
- =?utf-8?B?eHoxL3NNdnQ5dkV2dDBBOHQ4TFpKd3QwREF5Y3I0ek84OU1HL1NFVE95Qnpv?=
- =?utf-8?B?NXVmUUZTV2UwSWM1SDJuSHVqa1gzWm10NDNHUHRwMUlCblZPNERtUElnY2l3?=
- =?utf-8?B?V0g3b2FZMnhka01RZDhqYmtBM3FrenNaL055RnFydlFzMmtFcXZQdUZEM0FN?=
- =?utf-8?B?b2lTRVQ0WllJTGFnV20yY2NMZFhrbHZjd1JnblIzV0NoV2lJNWwrOW1lNGo5?=
- =?utf-8?B?VGNBbzRJdHYvSEpaUmRCMXZzRXpzdld4UzVaQkRuVGZ3SHBPZmNMQ3FrRzla?=
- =?utf-8?B?a3BTRkt0ZEVvVVhSK1VDTXFXN2pZbzBVMG9NMUFzZXVDUWxJbFp6NU5ieVVN?=
- =?utf-8?B?UEFOTkcxRkU2RW1vNER1cWczcGd0S1I3SlhmSHk5WHFESlNVd2F1VHI3d3pu?=
- =?utf-8?B?VVNZQzFGMzl1MkVDOEVqcjJYcUZ0WXJ2M2tIS1ozdFp0d1JHd3g0K1preVJT?=
- =?utf-8?B?Z1Q1a0JFbmVVTDBVNDN6ajZyREJtSnVCVW50ckxCdWtGNnl4VkRySU9hRWZl?=
- =?utf-8?B?UWc4a0k4N0ZLMFBUdDVTKzNObGpuR3VwK1dSMSt1MVVERE9hUEhIVDZ0azRM?=
- =?utf-8?B?aHBEWjdLRnM2YXJtaXFvTjZiZnZPem1TSW93aXhuSktnZGlJM0YySXg2b0o3?=
- =?utf-8?B?cTJBcUxSMmdvaWFmekxyNFNCOE1VYUZZRXRUcGpoeFZlc0o5Wk5uTXBXNCtF?=
- =?utf-8?B?cW9IMjJGemFKQ0wzUmpENkpkYnYrckZjdE02Qnp0NklkZkZ5SFFxMWtlMDIv?=
- =?utf-8?B?RFlKNUVybDJHbDJyRjg5UFhsWm5FQ2ZGNHk3Y0Z5OGhyWk1DSFhWbGxkMzMy?=
- =?utf-8?B?VU5lWmdoU2VlVTc5STVjR3VpcWl2eUFoMEFhc05WMThCenptK0U5aWhZMW5p?=
- =?utf-8?B?bkZyNWRDOVU0Y1l2cm1qQjZwTkR3YnZiSGNYVG5wL2N2TEhOdDVKUUVpZHVX?=
- =?utf-8?B?Y1NZMTZ2UUcrK01PMk94Q1ZCT3FES21OYm9xY3BtbGpWc3NqVzBPVW9lbTRo?=
- =?utf-8?B?YlI3VVl5TzlZQmR5TzhUK00rNDkxYi9Tc09zbGJmTFNUQS9acnFFT3k3ZlFY?=
- =?utf-8?B?aWFkWGFPYVZkRXdvSFAzK2xlZjRYczlmVHpZUjlma3p5WFZqM2xUY3NwakRu?=
- =?utf-8?B?eVllL3RIL3RyM1NOSUNTOFFuVkZvUzFNVDNTRXhrMGVnSkxuUXFqdWhqOXZX?=
- =?utf-8?B?aldIRERDSFJhZ0lsMS9JT0xNMG55S2kzcTVYcUpZK2pHVUUwTGpvRWFCdUZK?=
- =?utf-8?B?OGVpMmEwYjFMTHZvVGpzM3dId3owakF5Q2Y4Zks1bVYxZm8yS2dXd3VJUE5h?=
- =?utf-8?B?MTg2ZmJtcERLRy83K0U0c09wVVBFOXQ1NXQ1NU1Hd2lBbm1kR0FYbG1adzFn?=
- =?utf-8?B?ei9MaFcvYWMwaFlGcFJVVGxIUHJVZ05vMFdMQVRhczNvWUNKcFNtY3JKa3lC?=
- =?utf-8?B?bUYvYzRhN3JBaU5wdXZtWnI3bzEvdE14alFiWGpNcTl6SkFLTnROSVdiWjhD?=
- =?utf-8?B?Z3Jhb2UvQXM0SXQ4KzdVVnVjUmNoMm9XUXJIRldldHZOcEpKZS9Hdz09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d7b8ba0-0483-4e9f-defd-08df2df5648a
-X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Oct 2026 15:26:48.8171
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YCEQnNdAW7F1WWyf8l1Uh5+HcZibVa05mQyl60zmcMYi89poGO1394GYJAwvO9UrZ+5VN5jZH7f2yqUtjBig4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO4P265MB6252
 
-On Thu Oct 15, 2026 at 3:56 PM BST, Marco Elver wrote:
-> Rust supports ThreadSanitizer instrumentation via LLVM, which is what
-> KCSAN relies on; however, Rust code is not currently instrumented.
->=20
-> Pass -Zsanitizer=3Dthread and the same TSan backend options used for C
-> code to rustc. Wire up KCSAN_SANITIZE in scripts/Makefile.lib for parity
-> with C (though rustc currently rejects linking crates with mismatched
-> instrumentation).
->=20
-> rustc only accepts -Zsanitizer=3Dthread for targets that declare support
-> for it. Of the targets used by the kernel, this is only possible for the
-> generated x86_64 target specification, so restrict instrumentation of
-> Rust code to x86_64 for now via HAVE_KCSAN_RUSTC. On other architectures
-> Rust code remains uninstrumented as before.
->=20
-> All TSan options used are supported by the LLVM versions of the minimum
-> supported rustc, so no rustc-option checks are needed (they would also
-> fail, because x86_64-unknown-none used for option checks does not
-> support -Zsanitizer=3Dthread).
->=20
-> Unlike Clang and GCC, an equivalent to -fno-optimize-sibling-calls is
-> omitted for Rust because rustc provides no corresponding option. While
-> disabling tail-call optimizations helps preserve complete stacks traces
-> in reports, it is optional and not required for KCSAN to function.
->=20
-> With this enabled we can detect data races in kernel Rust code and
-> between Rust and C code.
->=20
-> Acked-by: Miguel Ojeda <ojeda@kernel.org>
-> Acked-by: Boqun Feng <boqun@kernel.org>
-> Signed-off-by: Marco Elver <elver@google.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git core/hotplug
+head:   8ff5f866a7c2825213c6aa525a88840cbccf1211
+commit: c7da79bd2c65b3817e4a2ce25fbdcc3bb8c9262f [1/49] stop_machine: Add post function to execute while other CPUs can exit
+config: arm-randconfig-2001-20261019 (https://download.01.org/0day-ci/archive/20261019/202610192042.JQFnS2hD-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20261019/202610192042.JQFnS2hD-lkp@intel.com/reproduce)
 
-Acked-by: Gary Guo <gary@garyguo.net>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202610192042.JQFnS2hD-lkp@intel.com/
 
-> ---
-> v2:
-> * Add note on -fno-optimize-sibling-calls to commit message.
-> ---
->  Documentation/dev-tools/kcsan.rst |  7 +++++++
->  lib/Kconfig.kcsan                 |  7 +++++++
->  scripts/Makefile.kcsan            | 13 +++++++++++++
->  scripts/Makefile.lib              |  3 +++
->  scripts/generate_rust_target.rs   |  2 +-
->  5 files changed, 31 insertions(+), 1 deletion(-)
+All errors (new ones prefixed by >>):
 
+   In file included from kernel/sched/rq-offsets.c:5:
+   In file included from kernel/sched/sched.h:63:
+>> include/linux/stop_machine.h:182:47: error: too few arguments to function call, expected 4, have 3
+     182 |         return stop_machine_cpuslocked(fn, data, cpus);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~               ^
+   include/linux/stop_machine.h:166:28: note: 'stop_machine_cpuslocked' declared here
+     166 | static __always_inline int stop_machine_cpuslocked(cpu_stop_fn_t fn, cpu_stop_fn_t postfn,
+         |                            ^                       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     167 |                                                    void *data, const struct cpumask *cpus)
+         |                                                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
+   make[3]: *** [scripts/Makefile.build:185: kernel/sched/rq-offsets.s] Error 1 shuffle=706584788
+   make[3]: Target 'prepare' not remade because of errors.
+   make[2]: *** [Makefile:1425: prepare0] Error 2 shuffle=706584788
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:248: __sub-make] Error 2 shuffle=706584788
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:248: __sub-make] Error 2 shuffle=706584788
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +182 include/linux/stop_machine.h
+
+9ea09af3bd3090e Heiko Carstens            2008-12-22  178  
+cbf78d85079cee6 Arnd Bergmann             2021-03-12  179  static __always_inline int
+cbf78d85079cee6 Arnd Bergmann             2021-03-12  180  stop_machine(cpu_stop_fn_t fn, void *data, const struct cpumask *cpus)
+fe5595c074005bd Sebastian Andrzej Siewior 2017-05-24  181  {
+fe5595c074005bd Sebastian Andrzej Siewior 2017-05-24 @182  	return stop_machine_cpuslocked(fn, data, cpus);
+fe5595c074005bd Sebastian Andrzej Siewior 2017-05-24  183  }
+fe5595c074005bd Sebastian Andrzej Siewior 2017-05-24  184  
+
+:::::: The code at line 182 was first introduced by commit
+:::::: fe5595c074005bd94f0c7d1644175941149f6768 stop_machine: Provide stop_machine_cpuslocked()
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
